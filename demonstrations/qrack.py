@@ -204,7 +204,7 @@ plt.show()
 #     :target: javascript:void(0);
 
 ##############################################################################
-# If your gate set is restricted to Clifford with general :func:`~.RZ` gates (being mindful of the fact that compilers like Catalyst might optimize such a gate set basis into different gates), the time complexity for measurement samples becomes doubly-exponential with near-Clifford simulation, but the space complexity is almost exactly that of stabilizer simulation for the logical qubits plus an ancillary qubit per (non-optimized) ``RZ`` gate, scaling like the square of the logical plus ancillary qubit count.
+# If your gate set is restricted to Clifford with general :func:`~.RZ` gates (being mindful of the fact that compilers like Catalyst might optimize such a gate set basis into different gates), the time complexity for measurement samples becomes doubly exponential with near-Clifford simulation, but the space complexity is almost exactly that of stabilizer simulation for the logical qubits plus an ancillary qubit per (non-optimized) ``RZ`` gate, scaling like the square of the sum of the count of the logical and ancillary qubits put together.
 #
 # Comparing performance
 # ---------------------
