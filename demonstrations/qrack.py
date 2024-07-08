@@ -208,7 +208,7 @@ plt.show()
 #
 # Comparing performance
 # ---------------------
-# We've already seen, the Qrack device back end can do some tasks that most other simulators, or basically any other simulator, simply can't do, like 60-qubit-wide special cases of the QFT or GHZ state preparation with a Clifford or universal (QBDD) simulation algorithm, for example. However, literally most circuits in the space of all random ("BQP-complete") circuits will tend to be limited to the equivalent performance of state vector simulation, in practice, even for Qrack.
+# We've already seen, the Qrack device back end can do some tasks that most other simulators, or basically any other simulator, simply can't do, like 60-qubit-wide special cases of the QFT or GHZ state preparation with a Clifford or universal (QBDD) simulation algorithm, for example. However, in the worst case for circuit complexity, Qrack will tend perform similarly to state vector simulation.
 #
 # How does Qrack compare for performance with other simulators on a "non-trivial" problem, like the U3 initialization we used above for the QFT algorithm?
 
