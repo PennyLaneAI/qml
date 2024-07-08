@@ -31,7 +31,7 @@ Demonstrating Qrack with the quantum Fourier transform
 
 The :doc:`quantum Fourier transform (QFT) <tutorial_qft>` is a building-block subroutine of many other quantum algorithms. Qrack exhibits unique capability for many cases of the QFT algorithm, and its worst-case performance is competitive with other popular quantum computer simulators (as `reported <https://arxiv.org/abs/2304.14969>`__ in 2023 at IEEE QCE).
 
-In the case of a "trivial" computation basis eigenstate input, Qrack can simulate basically as wide of a QFT as any for which you'd ask. Below, we pick a random eigenstate initialization and perform the QFT across a width of 60 qubits.
+In the case of a "trivial" computational basis eigenstate input, Qrack can simulate basically as wide of a QFT as any for which you'd ask. Below, we pick a random eigenstate initialization and perform the QFT across a width of 60 qubits.
 """
 
 import pennylane as qml
