@@ -124,7 +124,7 @@ for i in range(8):
 #
 #
 # Reusable qubits
-# ~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~
 #
 # The above approach has a drawback. The work wires have been altered, i.e., after applying the operator they have not
 # been returned to state :math:`|0\rangle`. This can cause unwanted behaviors, so we will present the technique shown
