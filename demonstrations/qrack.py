@@ -229,7 +229,7 @@ plt.show()
 # As you can see, Qrack was able to construct the 60-qubit GHZ state (without exceeding memory limitations), and the probability is peaked at bit strings of all 0 and all 1.
 #
 # It's trivial for Qrack to perform large GHZ state preparations with "hybrid" stabilizer or near-Clifford simulation, if Schmidt decomposition is deactivated.
-# QBDD cannot be accelerated by GPU, so its application might be limited, but it is parallel over CPU processing elements, hence it might be particularly well-suited for systems with no GPU at all. Qrack default simulation methods will likely still outperform QBDD on "BQP-complete" problems like random circuit sampling or quantum volume certification.
+# QBDD cannot be accelerated by GPU, so its application might be limited, but it is parallel over CPU processing elements, hence it might be particularly well-suited for systems with no GPU at all. Qrack's default simulation methods will likely still outperform QBDD on BQP-complete problems like random circuit sampling or quantum volume certification.
 #
 
 qubits = 24
