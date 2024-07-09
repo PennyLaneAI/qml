@@ -14,11 +14,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_qrack_catalyst_integration.webp"
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_qrack_catalyst_integration.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_qrack_catalyst_integration.webp"
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_qrack_catalyst_integration.png"
         }
     ],
     "seoDescription": "Quantum JIT compilation (QJIT) using the Qrack device for PennyLane and Catalyst, with GPU-acceleration and novel optimization.",

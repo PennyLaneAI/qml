@@ -2,12 +2,6 @@ r"""
 QJIT compilation with Qrack and Catalyst
 ========================================
 
-.. meta::
-    :property="og:description": Using the Qrack device for PennyLane and Catalyst, with GPU-acceleration and novel optimization.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/qrack/qrack_logo.jpg
-
-*Author: Dan Strano — Posted: 26 June 2024.*
-
 `Qrack <https://github.com/unitaryfund/qrack>`__ is a GPU-accelerated quantum computer simulator with many novel optimizations, and `PyQrack <https://github.com/unitaryfund/pyqrack>`__ is its Python wrapper, written in pure (``ctypes``) Python language standard. Founded in 2017 by Dan Strano and Benn Bollay, Qrack's vision was always to provide the best possible (classical) quantum computer "emulator," targeting the use case of running industrially-relevant quantum "workloads" without recourse to genuine quantum computer hardware.
 
 In this tutorial you will learn how to use the Qrack device back end for PennyLane and quantum just-in-time (QJIT) compilation via PennyLane's `Catalyst <https://docs.pennylane.ai/projects/catalyst/en/stable/index.html>`__. You'll learn certain suggested cases of use where Qrack might particularly excel at delivering lightning-fast performance or minimizing required memory resources — for example, special cases of the quantum or discrete Fourier transform, circuits with predominantly Clifford or classical "preambles," circuits with mid-circuit measurement, and high-width circuits with low-complexity representations in terms of QBDD. (However, Qrack is a "general-purpose" simulator, so users might employ it for all their applications and still see parity with or improvement over available device back ends).
@@ -23,7 +17,7 @@ Particularly for systems that don't rely on GPU-acceleration, Qrack offers a "qu
 
 The Qrack simulator doesn't fit neatly into a single canonical category of quantum computer simulation algorithm: it optionally and by default leverages elements of state vector simulation, tensor network simulation, stabilizer and near-Clifford simulation, and QBDD simulation, often all at once, while it introduces some novel algorithmic "tricks" for Schmidt decomposition of state vectors in a manner similar to "matrix product state" ("MPS") simulation.
 
-.. figure:: ../_static/demonstration_assets/qrack/qrack_catalyst_integration_shelf.webp
+.. figure:: ../_static/demonstration_assets/qrack/qrack_catalyst_integration_shelf.png
     :align: center
     :width: 60%
     :target: javascript:void(0);
