@@ -793,6 +793,25 @@ test = ["Pillow", "contourpy[test-no-images]", "matplotlib"]
 test-no-images = ["pytest", "pytest-cov", "pytest-xdist", "wurlitzer"]
 
 [[package]]
+name = "cotengra"
+version = "0.6.2"
+description = "Hyper optimized contraction trees for large tensor networks and einsums."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "cotengra-0.6.2-py3-none-any.whl", hash = "sha256:524711515cfbaae22ae56a8c6bf3339dfe50485b9b615de52f8f7c330847b196"},
+    {file = "cotengra-0.6.2.tar.gz", hash = "sha256:a56b921d0339d1397e925a7b69029d3301636d09b99b509368751753bda39d24"},
+]
+
+[package.dependencies]
+autoray = "*"
+
+[package.extras]
+docs = ["astroid (<3.0.0)", "furo", "ipython (!=8.7.0)", "myst-nb", "setuptools-scm", "sphinx (>=2.0)", "sphinx-autoapi", "sphinx-copybutton", "sphinx-design"]
+recommended = ["cotengrust (>=0.1.3)", "cytoolz", "kahypar", "networkx", "numpy", "opt-einsum", "optuna", "ray", "tqdm"]
+test = ["altair", "baytune", "chocolate", "dask", "distributed", "kahypar", "matplotlib", "networkx", "nevergrad", "numpy", "opt-einsum", "pytest", "seaborn", "skopt"]
+
+[[package]]
 name = "covalent"
 version = "0.227.0rc0"
 description = "Covalent Workflow Tool"
@@ -893,6 +912,125 @@ files = [
 [package.extras]
 docs = ["ipython", "matplotlib", "numpydoc", "sphinx"]
 tests = ["pytest", "pytest-cov", "pytest-xdist"]
+
+[[package]]
+name = "cytoolz"
+version = "0.12.3"
+description = "Cython implementation of Toolz: High performance functional utilities"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "cytoolz-0.12.3-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:bbe58e26c84b163beba0fbeacf6b065feabc8f75c6d3fe305550d33f24a2d346"},
+    {file = "cytoolz-0.12.3-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:c51b66ada9bfdb88cf711bf350fcc46f82b83a4683cf2413e633c31a64df6201"},
+    {file = "cytoolz-0.12.3-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:e70d9c615e5c9dc10d279d1e32e846085fe1fd6f08d623ddd059a92861f4e3dd"},
+    {file = "cytoolz-0.12.3-cp310-cp310-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:a83f4532707963ae1a5108e51fdfe1278cc8724e3301fee48b9e73e1316de64f"},
+    {file = "cytoolz-0.12.3-cp310-cp310-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "sha256:d028044524ee2e815f36210a793c414551b689d4f4eda28f8bbb0883ad78bf5f"},
+    {file = "cytoolz-0.12.3-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:6c2875bcd1397d0627a09a4f9172fa513185ad302c63758efc15b8eb33cc2a98"},
+    {file = "cytoolz-0.12.3-cp310-cp310-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:131ff4820e5d64a25d7ad3c3556f2d8aa65c66b3f021b03f8a8e98e4180dd808"},
+    {file = "cytoolz-0.12.3-cp310-cp310-musllinux_1_1_aarch64.whl", hash = "sha256:04afa90d9d9d18394c40d9bed48c51433d08b57c042e0e50c8c0f9799735dcbd"},
+    {file = "cytoolz-0.12.3-cp310-cp310-musllinux_1_1_i686.whl", hash = "sha256:dc1ca9c610425f9854323669a671fc163300b873731584e258975adf50931164"},
+    {file = "cytoolz-0.12.3-cp310-cp310-musllinux_1_1_ppc64le.whl", hash = "sha256:bfa3f8e01bc423a933f2e1c510cbb0632c6787865b5242857cc955cae220d1bf"},
+    {file = "cytoolz-0.12.3-cp310-cp310-musllinux_1_1_s390x.whl", hash = "sha256:f702e295dddef5f8af4a456db93f114539b8dc2a7a9bc4de7c7e41d169aa6ec3"},
+    {file = "cytoolz-0.12.3-cp310-cp310-musllinux_1_1_x86_64.whl", hash = "sha256:0fbad1fb9bb47e827d00e01992a099b0ba79facf5e5aa453be066033232ac4b5"},
+    {file = "cytoolz-0.12.3-cp310-cp310-win32.whl", hash = "sha256:8587c3c3dbe78af90c5025288766ac10dc2240c1e76eb0a93a4e244c265ccefd"},
+    {file = "cytoolz-0.12.3-cp310-cp310-win_amd64.whl", hash = "sha256:9e45803d9e75ef90a2f859ef8f7f77614730f4a8ce1b9244375734567299d239"},
+    {file = "cytoolz-0.12.3-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:3ac4f2fb38bbc67ff1875b7d2f0f162a247f43bd28eb7c9d15e6175a982e558d"},
+    {file = "cytoolz-0.12.3-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:0cf1e1e96dd86829a0539baf514a9c8473a58fbb415f92401a68e8e52a34ecd5"},
+    {file = "cytoolz-0.12.3-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:08a438701c6141dd34eaf92e9e9a1f66e23a22f7840ef8a371eba274477de85d"},
+    {file = "cytoolz-0.12.3-cp311-cp311-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:c6b6f11b0d7ed91be53166aeef2a23a799e636625675bb30818f47f41ad31821"},
+    {file = "cytoolz-0.12.3-cp311-cp311-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "sha256:a7fde09384d23048a7b4ac889063761e44b89a0b64015393e2d1d21d5c1f534a"},
+    {file = "cytoolz-0.12.3-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:6d3bfe45173cc8e6c76206be3a916d8bfd2214fb2965563e288088012f1dabfc"},
+    {file = "cytoolz-0.12.3-cp311-cp311-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:27513a5d5b6624372d63313574381d3217a66e7a2626b056c695179623a5cb1a"},
+    {file = "cytoolz-0.12.3-cp311-cp311-musllinux_1_1_aarch64.whl", hash = "sha256:d294e5e81ff094fe920fd545052ff30838ea49f9e91227a55ecd9f3ca19774a0"},
+    {file = "cytoolz-0.12.3-cp311-cp311-musllinux_1_1_i686.whl", hash = "sha256:727b01a2004ddb513496507a695e19b5c0cfebcdfcc68349d3efd92a1c297bf4"},
+    {file = "cytoolz-0.12.3-cp311-cp311-musllinux_1_1_ppc64le.whl", hash = "sha256:fe1e1779a39dbe83f13886d2b4b02f8c4b10755e3c8d9a89b630395f49f4f406"},
+    {file = "cytoolz-0.12.3-cp311-cp311-musllinux_1_1_s390x.whl", hash = "sha256:de74ef266e2679c3bf8b5fc20cee4fc0271ba13ae0d9097b1491c7a9bcadb389"},
+    {file = "cytoolz-0.12.3-cp311-cp311-musllinux_1_1_x86_64.whl", hash = "sha256:9e04d22049233394e0b08193aca9737200b4a2afa28659d957327aa780ddddf2"},
+    {file = "cytoolz-0.12.3-cp311-cp311-win32.whl", hash = "sha256:20d36430d8ac809186736fda735ee7d595b6242bdb35f69b598ef809ebfa5605"},
+    {file = "cytoolz-0.12.3-cp311-cp311-win_amd64.whl", hash = "sha256:780c06110f383344d537f48d9010d79fa4f75070d214fc47f389357dd4f010b6"},
+    {file = "cytoolz-0.12.3-cp312-cp312-macosx_10_9_x86_64.whl", hash = "sha256:86923d823bd19ce35805953b018d436f6b862edd6a7c8b747a13d52b39ed5716"},
+    {file = "cytoolz-0.12.3-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:a3e61acfd029bfb81c2c596249b508dfd2b4f72e31b7b53b62e5fb0507dd7293"},
+    {file = "cytoolz-0.12.3-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:dd728f4e6051af6af234651df49319da1d813f47894d4c3c8ab7455e01703a37"},
+    {file = "cytoolz-0.12.3-cp312-cp312-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:fe8c6267caa7ec67bcc37e360f0d8a26bc3bdce510b15b97f2f2e0143bdd3673"},
+    {file = "cytoolz-0.12.3-cp312-cp312-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "sha256:99462abd8323c52204a2a0ce62454ce8fa0f4e94b9af397945c12830de73f27e"},
+    {file = "cytoolz-0.12.3-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:da125221b1fa25c690fcd030a54344cecec80074df018d906fc6a99f46c1e3a6"},
+    {file = "cytoolz-0.12.3-cp312-cp312-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:1c18e351956f70db9e2d04ff02f28e9a41839250d3f936a4c8a1eabd1c3094d2"},
+    {file = "cytoolz-0.12.3-cp312-cp312-musllinux_1_1_aarch64.whl", hash = "sha256:921e6d2440ac758c4945c587b1d1d9b781b72737ac0c0ca5d5e02ca1db8bded2"},
+    {file = "cytoolz-0.12.3-cp312-cp312-musllinux_1_1_i686.whl", hash = "sha256:1651a9bd591a8326329ce1d6336f3129161a36d7061a4d5ea9e5377e033364cf"},
+    {file = "cytoolz-0.12.3-cp312-cp312-musllinux_1_1_ppc64le.whl", hash = "sha256:8893223b87c2782bd59f9c4bd5c7bf733edd8728b523c93efb91d7468b486528"},
+    {file = "cytoolz-0.12.3-cp312-cp312-musllinux_1_1_s390x.whl", hash = "sha256:e4d2961644153c5ae186db964aa9f6109da81b12df0f1d3494b4e5cf2c332ee2"},
+    {file = "cytoolz-0.12.3-cp312-cp312-musllinux_1_1_x86_64.whl", hash = "sha256:71b6eb97f6695f7ba8ce69c49b707a351c5f46fd97f5aeb5f6f2fb0d6e72b887"},
+    {file = "cytoolz-0.12.3-cp312-cp312-win32.whl", hash = "sha256:cee3de65584e915053412cd178729ff510ad5f8f585c21c5890e91028283518f"},
+    {file = "cytoolz-0.12.3-cp312-cp312-win_amd64.whl", hash = "sha256:9eef0d23035fa4dcfa21e570961e86c375153a7ee605cdd11a8b088c24f707f6"},
+    {file = "cytoolz-0.12.3-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:d9a38332cfad2a91e89405b7c18b3f00e2edc951c225accbc217597d3e4e9fde"},
+    {file = "cytoolz-0.12.3-cp37-cp37m-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:1f501ae1353071fa5d6677437bbeb1aeb5622067dce0977cedc2c5ec5843b202"},
+    {file = "cytoolz-0.12.3-cp37-cp37m-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:56f899758146a52e2f8cfb3fb6f4ca19c1e5814178c3d584de35f9e4d7166d91"},
+    {file = "cytoolz-0.12.3-cp37-cp37m-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "sha256:800f0526adf9e53d3c6acda748f4def1f048adaa780752f154da5cf22aa488a2"},
+    {file = "cytoolz-0.12.3-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:d0976a3fcb81d065473173e9005848218ce03ddb2ec7d40dd6a8d2dba7f1c3ae"},
+    {file = "cytoolz-0.12.3-cp37-cp37m-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:c835eab01466cb67d0ce6290601ebef2d82d8d0d0a285ed0d6e46989e4a7a71a"},
+    {file = "cytoolz-0.12.3-cp37-cp37m-musllinux_1_1_aarch64.whl", hash = "sha256:4fba0616fcd487e34b8beec1ad9911d192c62e758baa12fcb44448b9b6feae22"},
+    {file = "cytoolz-0.12.3-cp37-cp37m-musllinux_1_1_i686.whl", hash = "sha256:6f6e8207d732651e0204779e1ba5a4925c93081834570411f959b80681f8d333"},
+    {file = "cytoolz-0.12.3-cp37-cp37m-musllinux_1_1_ppc64le.whl", hash = "sha256:8119bf5961091cfe644784d0bae214e273b3b3a479f93ee3baab97bbd995ccfe"},
+    {file = "cytoolz-0.12.3-cp37-cp37m-musllinux_1_1_s390x.whl", hash = "sha256:7ad1331cb68afeec58469c31d944a2100cee14eac221553f0d5218ace1a0b25d"},
+    {file = "cytoolz-0.12.3-cp37-cp37m-musllinux_1_1_x86_64.whl", hash = "sha256:92c53d508fb8a4463acc85b322fa24734efdc66933a5c8661bdc862103a3373d"},
+    {file = "cytoolz-0.12.3-cp37-cp37m-win32.whl", hash = "sha256:2c6dd75dae3d84fa8988861ab8b1189d2488cb8a9b8653828f9cd6126b5e7abd"},
+    {file = "cytoolz-0.12.3-cp37-cp37m-win_amd64.whl", hash = "sha256:caf07a97b5220e6334dd32c8b6d8b2bd255ca694eca5dfe914bb5b880ee66cdb"},
+    {file = "cytoolz-0.12.3-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:ed0cfb9326747759e2ad81cb6e45f20086a273b67ac3a4c00b19efcbab007c60"},
+    {file = "cytoolz-0.12.3-cp38-cp38-macosx_11_0_arm64.whl", hash = "sha256:96a5a0292575c3697121f97cc605baf2fd125120c7dcdf39edd1a135798482ca"},
+    {file = "cytoolz-0.12.3-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:b76f2f50a789c44d6fd7f773ec43d2a8686781cd52236da03f7f7d7998989bee"},
+    {file = "cytoolz-0.12.3-cp38-cp38-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:2905fdccacc64b4beba37f95cab9d792289c80f4d70830b70de2fc66c007ec01"},
+    {file = "cytoolz-0.12.3-cp38-cp38-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "sha256:f1ebe23028eac51251f22ba01dba6587d30aa9c320372ca0c14eeab67118ec3f"},
+    {file = "cytoolz-0.12.3-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:96c715404a3825e37fe3966fe84c5f8a1f036e7640b2a02dbed96cac0c933451"},
+    {file = "cytoolz-0.12.3-cp38-cp38-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:9bac0adffc1b6b6a4c5f1fd1dd2161afb720bcc771a91016dc6bdba59af0a5d3"},
+    {file = "cytoolz-0.12.3-cp38-cp38-musllinux_1_1_aarch64.whl", hash = "sha256:37441bf4a2a4e2e0fe9c3b0ea5e72db352f5cca03903977ffc42f6f6c5467be9"},
+    {file = "cytoolz-0.12.3-cp38-cp38-musllinux_1_1_i686.whl", hash = "sha256:f04037302049cb30033f7fa4e1d0e44afe35ed6bfcf9b380fc11f2a27d3ed697"},
+    {file = "cytoolz-0.12.3-cp38-cp38-musllinux_1_1_ppc64le.whl", hash = "sha256:f37b60e66378e7a116931d7220f5352186abfcc950d64856038aa2c01944929c"},
+    {file = "cytoolz-0.12.3-cp38-cp38-musllinux_1_1_s390x.whl", hash = "sha256:ec9be3e4b6f86ea8b294d34c990c99d2ba6c526ef1e8f46f1d52c263d4f32cd7"},
+    {file = "cytoolz-0.12.3-cp38-cp38-musllinux_1_1_x86_64.whl", hash = "sha256:0e9199c9e3fbf380a92b8042c677eb9e7ed4bccb126de5e9c0d26f5888d96788"},
+    {file = "cytoolz-0.12.3-cp38-cp38-win32.whl", hash = "sha256:18cd61e078bd6bffe088e40f1ed02001387c29174750abce79499d26fa57f5eb"},
+    {file = "cytoolz-0.12.3-cp38-cp38-win_amd64.whl", hash = "sha256:765b8381d4003ceb1a07896a854eee2c31ebc950a4ae17d1e7a17c2a8feb2a68"},
+    {file = "cytoolz-0.12.3-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:b4a52dd2a36b0a91f7aa50ca6c8509057acc481a24255f6cb07b15d339a34e0f"},
+    {file = "cytoolz-0.12.3-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:581f1ce479769fe7eeb9ae6d87eadb230df8c7c5fff32138162cdd99d7fb8fc3"},
+    {file = "cytoolz-0.12.3-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:46f505d4c6eb79585c8ad0b9dc140ef30a138c880e4e3b40230d642690e36366"},
+    {file = "cytoolz-0.12.3-cp39-cp39-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:59276021619b432a5c21c01cda8320b9cc7dbc40351ffc478b440bfccd5bbdd3"},
+    {file = "cytoolz-0.12.3-cp39-cp39-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "sha256:e44f4c25e1e7cf6149b499c74945a14649c8866d36371a2c2d2164e4649e7755"},
+    {file = "cytoolz-0.12.3-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:c64f8e60c1dd69e4d5e615481f2d57937746f4a6be2d0f86e9e7e3b9e2243b5e"},
+    {file = "cytoolz-0.12.3-cp39-cp39-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:33c63186f3bf9d7ef1347bc0537bb9a0b4111a0d7d6e619623cabc18fef0dc3b"},
+    {file = "cytoolz-0.12.3-cp39-cp39-musllinux_1_1_aarch64.whl", hash = "sha256:fdddb9d988405f24035234f1e8d1653ab2e48cc2404226d21b49a129aefd1d25"},
+    {file = "cytoolz-0.12.3-cp39-cp39-musllinux_1_1_i686.whl", hash = "sha256:6986632d8a969ea1e720990c818dace1a24c11015fd7c59b9fea0b65ef71f726"},
+    {file = "cytoolz-0.12.3-cp39-cp39-musllinux_1_1_ppc64le.whl", hash = "sha256:0ba1cbc4d9cd7571c917f88f4a069568e5121646eb5d82b2393b2cf84712cf2a"},
+    {file = "cytoolz-0.12.3-cp39-cp39-musllinux_1_1_s390x.whl", hash = "sha256:7d267ffc9a36c0a9a58c7e0adc9fa82620f22e4a72533e15dd1361f57fc9accf"},
+    {file = "cytoolz-0.12.3-cp39-cp39-musllinux_1_1_x86_64.whl", hash = "sha256:95e878868a172a41fbf6c505a4b967309e6870e22adc7b1c3b19653d062711fa"},
+    {file = "cytoolz-0.12.3-cp39-cp39-win32.whl", hash = "sha256:8e21932d6d260996f7109f2a40b2586070cb0a0cf1d65781e156326d5ebcc329"},
+    {file = "cytoolz-0.12.3-cp39-cp39-win_amd64.whl", hash = "sha256:0d8edfbc694af6c9bda4db56643fb8ed3d14e47bec358c2f1417de9a12d6d1fb"},
+    {file = "cytoolz-0.12.3-pp310-pypy310_pp73-macosx_10_9_x86_64.whl", hash = "sha256:55f9bd1ae6c2a27eda5abe2a0b65a83029d2385c5a1da7b8ef47af5905d7e905"},
+    {file = "cytoolz-0.12.3-pp310-pypy310_pp73-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:d2d271393c378282727f1231d40391ae93b93ddc0997448acc21dd0cb6a1e56d"},
+    {file = "cytoolz-0.12.3-pp310-pypy310_pp73-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:ee98968d6a66ee83a8ceabf31182189ab5d8598998c8ce69b6d5843daeb2db60"},
+    {file = "cytoolz-0.12.3-pp310-pypy310_pp73-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:01cfb8518828c1189200c02a5010ea404407fb18fd5589e29c126e84bbeadd36"},
+    {file = "cytoolz-0.12.3-pp310-pypy310_pp73-win_amd64.whl", hash = "sha256:456395d7aec01db32bf9e6db191d667347c78d8d48e77234521fa1078f60dabb"},
+    {file = "cytoolz-0.12.3-pp37-pypy37_pp73-macosx_10_9_x86_64.whl", hash = "sha256:cd88028bb897fba99ddd84f253ca6bef73ecb7bdf3f3cf25bc493f8f97d3c7c5"},
+    {file = "cytoolz-0.12.3-pp37-pypy37_pp73-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:59b19223e7f7bd7a73ec3aa6fdfb73b579ff09c2bc0b7d26857eec2d01a58c76"},
+    {file = "cytoolz-0.12.3-pp37-pypy37_pp73-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:0a79d72b08048a0980a59457c239555f111ac0c8bdc140c91a025f124104dbb4"},
+    {file = "cytoolz-0.12.3-pp37-pypy37_pp73-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:1dd70141b32b717696a72b8876e86bc9c6f8eff995c1808e299db3541213ff82"},
+    {file = "cytoolz-0.12.3-pp37-pypy37_pp73-win_amd64.whl", hash = "sha256:a1445c91009eb775d479e88954c51d0b4cf9a1e8ce3c503c2672d17252882647"},
+    {file = "cytoolz-0.12.3-pp38-pypy38_pp73-macosx_10_9_x86_64.whl", hash = "sha256:ca6a9a9300d5bda417d9090107c6d2b007683efc59d63cc09aca0e7930a08a85"},
+    {file = "cytoolz-0.12.3-pp38-pypy38_pp73-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:be6feb903d2a08a4ba2e70e950e862fd3be9be9a588b7c38cee4728150a52918"},
+    {file = "cytoolz-0.12.3-pp38-pypy38_pp73-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:92b6f43f086e5a965d33d62a145ae121b4ccb6e0789ac0acc895ce084fec8c65"},
+    {file = "cytoolz-0.12.3-pp38-pypy38_pp73-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:534fa66db8564d9b13872d81d54b6b09ae592c585eb826aac235bd6f1830f8ad"},
+    {file = "cytoolz-0.12.3-pp38-pypy38_pp73-win_amd64.whl", hash = "sha256:fea649f979def23150680de1bd1d09682da3b54932800a0f90f29fc2a6c98ba8"},
+    {file = "cytoolz-0.12.3-pp39-pypy39_pp73-macosx_10_9_x86_64.whl", hash = "sha256:a447247ed312dd64e3a8d9483841ecc5338ee26d6e6fbd29cd373ed030db0240"},
+    {file = "cytoolz-0.12.3-pp39-pypy39_pp73-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:ba3f843aa89f35467b38c398ae5b980a824fdbdb94065adc6ec7c47a0a22f4c7"},
+    {file = "cytoolz-0.12.3-pp39-pypy39_pp73-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:582c22f97a380211fb36a7b65b1beeb84ea11d82015fa84b054be78580390082"},
+    {file = "cytoolz-0.12.3-pp39-pypy39_pp73-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:47feb089506fc66e1593cd9ade3945693a9d089a445fbe9a11385cab200b9f22"},
+    {file = "cytoolz-0.12.3-pp39-pypy39_pp73-win_amd64.whl", hash = "sha256:ba9002d2f043943744a9dc8e50a47362bcb6e6f360dc0a1abcb19642584d87bb"},
+    {file = "cytoolz-0.12.3.tar.gz", hash = "sha256:4503dc59f4ced53a54643272c61dc305d1dbbfbd7d6bdf296948de9f34c3a282"},
+]
+
+[package.dependencies]
+toolz = ">=0.8.0"
+
+[package.extras]
+cython = ["cython"]
 
 [[package]]
 name = "dask"
@@ -5077,6 +5215,33 @@ files = [
 ]
 
 [[package]]
+name = "quimb"
+version = "1.8.2"
+description = "Quantum information and many-body library."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "quimb-1.8.2-py3-none-any.whl", hash = "sha256:d1a3412cec0dc0df3d9c942d7331d3c5947bce79434b73fd11cca3ee51eea855"},
+    {file = "quimb-1.8.2.tar.gz", hash = "sha256:f3529770da6b5283f072d8ff41b990b41a418563546376bc489b6ccc7102bec7"},
+]
+
+[package.dependencies]
+autoray = ">=0.6.12"
+cotengra = ">=0.6.1"
+cytoolz = ">=0.8.0"
+numba = ">=0.39"
+numpy = ">=1.17"
+psutil = ">=4.3.1"
+scipy = ">=1.0.0"
+tqdm = ">=4"
+
+[package.extras]
+advanced-solvers = ["mpi4py", "petsc4py", "slepc4py"]
+docs = ["astroid (<3.0.0)", "autoray (>=0.6.12)", "cotengra (>=0.6.1)", "doc2dash (>=2.4.1)", "furo", "ipython (!=8.7.0)", "myst-nb", "setuptools-scm", "sphinx (>=2.0)", "sphinx-autoapi", "sphinx-copybutton", "sphinx-design"]
+tensor = ["matplotlib (>=2.0)", "networkx (>=2.3)"]
+tests = ["coverage", "pytest", "pytest-cov"]
+
+[[package]]
 name = "qulacs"
 version = "0.1.10.1"
 description = "Quantum circuit simulator for research"
@@ -7533,4 +7698,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.10.0"
-content-hash = "5b8901d03a347a4cab3b56f022c0075204f495951f82e4422ca6742bac8ffe9f"
+content-hash = "1822b3f41f5b0b195b8fc5b76140798b4208ee47a771e319dc0868ad75fc4860"
