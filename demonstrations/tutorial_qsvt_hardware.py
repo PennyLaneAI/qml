@@ -1,7 +1,7 @@
 r"""How to implement QSVT on hardware
 =======================================
 
-Performing polynomial transformations on matrices is a task of great interest,
+Performing polynomial transformations on matrices or operators is a task of great interest,
 which we have previously addressed in our introductory demos on :doc:`QSVT </demos/tutorial_intro_qsvt>` and its practical :doc:`applications </demos/tutorial_apply_qsvt>`.
 However, until now, we had focused more on the algebraic aspect rather than on the implementation in real hardware.
 In this how-to guide, you will see how we can implement the QSVT subroutine in a hardware-compatible way,
@@ -17,7 +17,7 @@ fundamental components of the QSVT algorithm:
 - **Block Encoding**: The strategy used to introduce the Hamiltonian into our computer. We will use :class:`~.qml.PrepSelPrep`.
 
 Calculating angles is not a trivial task but there are some frameworks like ``pyqsp`` that do that job for us.
-Let's see how we can find the angles to apply the polynomial :math:`-x + \frac{x^3}{2}+ \frac{x^5}{2}`:
+Let's see how we can find the angles to apply the polynomial :math:`p(x) = -x + \frac{x^3}{2}+ \frac{x^5}{2}`:
 
 """
 
@@ -65,7 +65,7 @@ import pennylane as qml
 coeffs = np.array([0.2, -.7, -.6])
 coeffs /= np.linalg.norm(coeffs, ord = 1) # Normalize the coefficients
 
-obs = [qml.X(3), qml.Z(4), qml.Z(5)]
+obs = [qml.X(3), qml.X(3) @ qml.Z(4), qml.Z(3) @ qml.Y(4)]
 
 H = qml.dot(coeffs, obs)
 
@@ -82,37 +82,6 @@ dev = qml.device("default.qubit")
 
 @qml.qnode(dev)
 def circuit():
-    qml.QSVT(block_encode, projectors)
-    return qml.state()
-
-matrix = qml.matrix(circuit, wire_order = control_wires + H.wires)()[: 2**len(H.wires), :2**len(H.wires)]
-
-print(np.round(matrix,4).real)
-
-######################################################################
-# The real part of the circuit matrix is equivalent to the application of our polynomial to the Hamiltonian.
-# Let's see that we obtained the correct result.
-
-H_mat = qml.matrix(H, wire_order = [3,4,5])
-
-H_poly = -H_mat + 0.5 * np.linalg.matrix_power(H_mat, 3) + 0.5* np.linalg.matrix_power(H_mat, 5)
-
-print(np.round(H_poly,4).real)
-
-######################################################################
-# As we can see, the matrix obtained from the QSVT subroutine is the same as the one obtained by applying the polynomial
-# directly to the Hamiltonian. The great advantage of this approach is that the :class:`~.qml.BlockEncode` operator has not been used,
-# making it possible to decompose the algorithm into basic gates easily.
-#
-# Extracting the real part
-# ------------------------
-#
-# In the previous example we have manually extracted the real part of the matrix to check that it actually worked.
-# However, this is not something we can do in hardware. For this reason we present here a way to extract the real
-# part with the help of an auxiliary qubit:
-
-@qml.qnode(dev)
-def circuit():
 
     qml.Hadamard(0)
     qml.ctrl(qml.QSVT, control=0, control_values=[1])(block_encode, projectors)
@@ -125,10 +94,24 @@ matrix = qml.matrix(circuit, wire_order = [0] + control_wires + H.wires)()[: 2**
 print(np.round(matrix,4))
 
 ######################################################################
-# As we can see, the real part has been correctly encoded into the circuit.
-# The idea behind this circuit is based on the fact that the sum of a complex number and its conjugate gives us
-# its real part. I recommend :doc:`this demo </demos/tutorial_lcu_blockencoding>` to learn more about the structure
-# of the circuit.
+# The idea behind this circuit is that QSVT encodes the desired polinomial :math:`p(x)` but also
+# a polynomial :math:`i q(x)`. To isolate :math:`p(x)` we have made use of an auxiliary qubit and the property that
+# the sum of a complex number and its conjugate gives us twice its real part. We
+# recommend :doc:`this demo </demos/tutorial_lcu_blockencoding>` to learn more about the structure
+# # of the circuit.
+# Finally, we can verify that the results obtained are as expected:
+
+H_mat = qml.matrix(H, wire_order = [3,4])
+
+H_poly = -H_mat + 0.5 * np.linalg.matrix_power(H_mat, 3) + 0.5* np.linalg.matrix_power(H_mat, 5)
+
+print(np.round(H_poly,4))
+
+######################################################################
+# As we can see, the matrix obtained from the QSVT subroutine is the same as the one obtained by applying the polynomial
+# directly to the Hamiltonian. The great advantage of this approach is that the :class:`~.qml.BlockEncode` operator has not been used,
+# making it possible to decompose the algorithm into basic gates easily.
+#
 #
 # Conclusion
 # ----------
