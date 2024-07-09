@@ -149,7 +149,7 @@ plt.show()
 ##############################################################################
 # In this image we have represented only 8 measurement samples so we can visualize it easily.
 #
-# This becomes harder is we request a non-trivial initialization. In general, Qrack will use Schmidt decomposition techniques to try to break up circuits into separable subsystems of qubits to simulate semi-independently, combining them just-in-time (JIT) with Kronecker products when they need to interact, according the user's circuit definition.
+# This becomes harder if we request a non-trivial initialization. In general, Qrack will use Schmidt decomposition techniques to try to break up circuits into separable subsystems of qubits to simulate semi-independently, combining them just-in-time (JIT) with Kronecker products when they need to interact, according the user's circuit definition.
 #
 # The circuit becomes much harder for Qrack if we randomly initialize the input qubits with Haar-random `U3 gates <https://docs.pennylane.ai/en/stable/code/api/pennylane.U3.html>`__, but the performance is still significantly better than the worst case (of `GHZ state <https://en.wikipedia.org/wiki/Greenberger%E2%80%93Horne%E2%80%93Zeilinger_state>`__ initialization).
 
