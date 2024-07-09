@@ -5,7 +5,7 @@ Finding eigenvalues of an operator is a key task in quantum computing. Algorithm
 one, but sometimes we are interested in other eigenvalues. This demo shows you how to implement  Variational
 Quantum Deflation (VQD) in PennyLane
 and find the first excited state energy of the hydrogen molecule. To benefit the most from this tutorial, we recommend
-a familiarization with the Variational Quantum Eigensolver (VQE) `tutorial <https://pennylane.ai/qml/demos/tutorial_vqe/>`_
+a familiarization with the `Variational Quantum Eigensolver (VQE) <https://pennylane.ai/qml/demos/tutorial_vqe/>`_ tutorial.
 
 """
 
@@ -14,19 +14,19 @@ a familiarization with the Variational Quantum Eigensolver (VQE) `tutorial <http
 # Variational Quantum Deflation
 # ------------------------------
 #
-# # VQD algorithm [#Vqd]_ is a method used to find excited states of a quantum system.
+# VQD algorithm [#Vqd]_ is a method used to find excited states of a quantum system.
 # The VQD algorithm is related on the VQE algorithm, which finds the ground state energy of a quantum system.
 # The main idea in VQE is to define an ansatz that depends on adjustable parameters :math:`\theta` and minimizes the energy computed as:
 #
-# .. math:: C_0(\theta) = \left\langle\Psi_0 (\theta)|\hat H |\Psi_0 (\theta) \right\rangle.
+# .. math:: C_0(\theta) = \left\langle\Psi (\theta)|\hat H |\Psi (\theta) \right\rangle,
 #
-# where :math:`\Psi_0` is the ground state. However, this is not enough if we are not looking for the ground state energy.
+# where :math:`\Psi(\theta)` is the ansatz. However, this is not enough if we are not looking for the ground state energy.
 # We must find a function whose minimum is no longer the ground state energy but gives the next excited state.
 # This is possible just by adding a penalty term to the above function that accounts for the orthogonality of the states:
 #
 # .. math:: C_1(\theta) = \left\langle\Psi(\theta)|\hat H |\Psi (\theta) \right\rangle + \beta | \left\langle \Psi (\theta)| \Psi_0 \right\rangle|^2,
 #
-# where :math:`\beta` is a hyperparameter that controls the penalty term and :math:`| \Psi \rangle` is an excited state.
+# where :math:`\beta` is a hyperparameter that controls the penalty term and :math:`| \Psi_0 \rangle` is the ground state.
 # The function can be minimized to give the energy but we are now restricting the new state to be orthogonal to the ground state.
 #
 # Note that the :math:`\beta` should be larger than the energy gap between the ground and excited states.
@@ -196,7 +196,7 @@ print(np.sort(np.linalg.eigvals(H.matrix())))
 #
 # In this tutorial we delved into the capabilities of Variational Quantum Deflation (VQD) using PennyLane to compute not only the ground
 # state but also the excited states of a hydrogen molecule. This illustrated how advanced quantum algorithms can extend beyond basic applications,
-# offering deeper insights into quantum systems.
+# offering deeper insights into quantum systems. We invite you to continue exploring these techniques and find more interesting use cases.
 #
 # References
 # ----------
