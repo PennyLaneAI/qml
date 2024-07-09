@@ -7,8 +7,8 @@ computer simulator with many novel optimizations, and `PyQrack
 <https://github.com/unitaryfund/pyqrack>`__ is its Python wrapper, written in
 pure (``ctypes``) Python language standard. Founded in 2017 by Dan Strano and
 Benn Bollay, Qrack's vision was always to provide the best possible (classical)
-quantum computer "emulator," targeting the use case of running
-industrially-relevant quantum "workloads" without recourse to genuine quantum
+quantum computer emulator, targeting the use case of running
+industrially-relevant quantum workloads without recourse to genuine quantum
 computer hardware. In this tutorial you will learn how to use the Qrack device
 back end for PennyLane and quantum just-in-time (QJIT) compilation via
 PennyLane's `Catalyst
@@ -18,11 +18,11 @@ You'll learn certain suggested cases of use where Qrack might particularly excel
 at delivering lightning-fast performance or minimizing required memory resources
 — for example, special cases of the quantum or discrete :doc:`Fourier transform
 </demos/tutorial_qft/>`, circuits with predominantly :doc:`Clifford
-</demos/tutorial_clifford_circuit_simulations/>` or classical "preambles,"
+</demos/tutorial_clifford_circuit_simulations/>` or classical preambles,
 circuits with :doc:`mid-circuit measurement
 </demos/tutorial_mcm_introduction/>`, and high-width circuits with
 low-complexity representations in terms of a QBDD (quantum binary decision
-diagram). However, Qrack is a "general-purpose" simulator, so you might
+diagram). However, Qrack is a general-purpose simulator, so you might
 employ it for all their applications and still see parity with or improvement
 over available device back ends.
 
@@ -31,7 +31,7 @@ How Qrack works
 
 When developing `Qrack <https://github.com/unitaryfund/qrack>`__, we wanted to
 provide the emulator as open source, free of charge, agnostic to any specific
-GPU or hardware accelerator provider, "backwards compatible" to serve those with
+GPU or hardware accelerator provider, backwards compatible to serve those with
 very limited classical computer hardware resources, but (nonetheless) capable of
 scaling to supercomputer systems, as secure and free of external dependencies as
 possible, and under the reasonably permissive LGPL license, with bindings and
@@ -59,17 +59,17 @@ significantly reduce the memory footprint or execution complexity for circuits
 with low entanglement, as judged by the complexity of a QBDD to represent the
 state. (Qrack's implementation of QBDD is entirely original source code, but it
 is based on reports like `this one <https://arxiv.org/abs/2302.04687>`__
-[#Wille].) Qrack also offers approximation options aimed at trading off minimal
+[#Wille]_.) Qrack also offers approximation options aimed at trading off minimal
 fidelity reduction for maximum reduction in simulation complexity (as opposed to
 models of physical noise), including methods based on the Schmidt decomposition
-rounding parameter (SDRP) [#QCEReport] and the near-Clifford rounding parameter
+rounding parameter (SDRP) [#QCEReport]_ and the near-Clifford rounding parameter
 (NCRP).
 
 The Qrack simulator doesn't fit neatly into a single canonical category of
 quantum computer simulation algorithm: it optionally and by default leverages
 elements of state vector simulation, tensor network simulation, stabilizer and
 near-Clifford simulation, and QBDD simulation, often all at once, while it
-introduces some novel algorithmic "tricks" for the Schmidt decomposition of
+introduces some novel algorithmic tricks for the Schmidt decomposition of
 state vectors in a manner similar to matrix product state (MPS) simulation.
 
 .. figure:: ../_static/demonstration_assets/qrack/qrack_catalyst_integration_shelf.png
@@ -87,7 +87,7 @@ competitive with other popular quantum computer simulators [#QECReport]. In this
 section, you'll be presented with examples of Qrack's uniquely optimal
 performance on the QFT.
 
-In the case of a "trivial" computational basis eigenstate input, Qrack can
+In the case of a *trivial* computational basis eigenstate input, Qrack can
 simulate basically any QFT width. Below, we pick a random eigenstate
 initialization and perform the QFT across a width of 60 qubits.
 """
@@ -149,7 +149,7 @@ plt.show()
 ##############################################################################
 # In this image we have represented only 8 measurement samples so we can visualize it easily.
 #
-# This becomes harder is we request a "non-trivial" initialization. In general, Qrack will use Schmidt decomposition techniques to try to break up circuits into separable subsystems of qubits to simulate semi-independently, combining them just-in-time (JIT) with Kronecker products when they need to interact, according the user's circuit definition.
+# This becomes harder is we request a non-trivial initialization. In general, Qrack will use Schmidt decomposition techniques to try to break up circuits into separable subsystems of qubits to simulate semi-independently, combining them just-in-time (JIT) with Kronecker products when they need to interact, according the user's circuit definition.
 #
 # The circuit becomes much harder for Qrack if we randomly initialize the input qubits with Haar-random `U3 gates <https://docs.pennylane.ai/en/stable/code/api/pennylane.U3.html>`__, but the performance is still significantly better than the worst case (of `GHZ state <https://en.wikipedia.org/wiki/Greenberger%E2%80%93Horne%E2%80%93Zeilinger_state>`__ initialization).
 
