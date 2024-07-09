@@ -3,11 +3,11 @@ r"""How to simulate quantum circuits with tensor networks
 
 :doc:`Tensor networks </demos/tutorial_tn_circuits>` are a powerful computational tool for simulating quantum circuits.
 They provide a way to represent quantum states and operations in a compact form. 
-Unlike the state-vector approach, tensor networks are particularly useful for large-scale simulations of quantum circuits.
+Unlike the state-vector approach, tensor networks are particularly useful for large-scale simulations of `quantum circuits <https://docs.pennylane.ai/en/stable/introduction/circuits.html>`__.
 
 Here, we demonstrate how to simulate quantum circuits using the :class:`~pennylane.devices.default_tensor.DefaultTensor` device in PennyLane.
 The used simulator is based on `quimb <https://quimb.readthedocs.io/en/latest/>`__, a Python library for tensor network manipulations, 
-and we refer to the :class:`documentation <.pennylane.devices.default_tensor.DefaultTensor>` for more details.
+and we refer to the `documentation <https://docs.pennylane.ai/en/latest/code/api/pennylane.devices.default_tensor.DefaultTensor.html#pennylane.devices.default_tensor.DefaultTensor>`__ for more details.
 The ``default.tensor`` device is well-suited for simulations of circuits with tens, hundreds, or even thousands of qubits 
 as long as the degree of entanglement within the circuit remains manageable. In general, the effectiveness of this device 
 depends on the specific circuit structure and the provided keyword arguments.
@@ -19,7 +19,10 @@ Further improvements, new features, and additional tutorials are expected in fut
 Check the latest functionality in the :class:`documentation <.pennylane.devices.default_tensor.DefaultTensor>`
 or pick among other `PennyLane devices <https://pennylane.ai/plugins/#built-in-devices>`__ for your project.
 
-TODO: Insert figure
+##############################################################################
+#.. figure:: ../_static/demonstration_assets/how_to_simulate_quantum_circuits_with_tensor_networks/TN_MPS.gif
+#    :align: center
+#    :width: 90%
 
 """
 
