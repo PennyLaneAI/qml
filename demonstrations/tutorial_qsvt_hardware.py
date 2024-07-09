@@ -7,13 +7,13 @@ However, until now, we had focused more on the algebraic aspect rather than the 
 In this how-to guide, we will show how we can implement the QSVT subroutine in a hardware-compatible way,
 taking your applications to the next level.
 
-Conventions and Angle Calculation 
--------------------------------------
+Angles calculation
+------------------
 
 Our goal is to apply a polynomial transformation to a given Hamiltonian (i.e, :math:`p(\mathcal{H})`). To achieve this, we must consider the two
 fundamental components of the QSVT algorithm:
 
-- **projection angles**: A list of angles that will determine the coefficients of the polynomial to be applied.
+- **Projection angles**: A list of angles that will determine the coefficients of the polynomial to be applied.
 - **Block Encoding**: The strategy used to introduce the Hamiltonian into the quantum computer. We will use :class:`~.qml.PrepSelPrep`.
 
 Calculating angles is not a trivial task but there are some frameworks like ``pyqsp`` that do that job for us.
@@ -32,10 +32,10 @@ print(ang_seq)
 
 ######################################################################
 # The output is a list of angles that we can use to apply the polynomial transformation.
-# However, we are not finished yet. These angles have been calculated assuming one type of encoding following the "Wx"
-# convention while our encoding of the Hamiltonian follows another convention. Moreover, the angles obtained in the
-# context of QSP (the ones given by ``pyqsp``) are different from the ones we have to use in QSVT since these
-# subroutines have different decompositions. That is why we must make a transformation of the angles:
+# However, we are not finished yet: these angles have been calculated following the "Wx"
+# convention, while :class:`~.qml.PrepSelPrep` follows a different one. Moreover, the angles obtained in the
+# context of QSP (the ones given by ``pyqsp``) are not the same from the ones we have to use in QSVT. That is why
+# we must make a transformation of the angles:
 
 def convert_angles(angles):
     num_angles = len(angles)
@@ -95,10 +95,12 @@ matrix = qml.matrix(circuit, wire_order = [0] + control_wires + H.wires)()
 print(np.round(matrix[: 2**len(H.wires), :2**len(H.wires)],4))
 
 ######################################################################
-# The circuit is encoding :math:`p(\mathcal{H})` in the top left block of its matrix. The idea behind this circuit is that QSVT encodes the desired polinomial :math:`p(\mathcal{H})` but also
+# The circuit is encoding :math:`p(\mathcal{H})` in the top left block of its matrix.
+#
+# The idea behind this circuit is that QSVT encodes the desired polinomial :math:`p(\mathcal{H})` but also
 # a polynomial :math:`i q(\mathcal{H})`. To isolate :math:`p(\mathcal{H})` we have used of an auxiliary qubit and the property that
 # the sum of a complex number and its conjugate gives us twice its real part. We
-# recommend :doc:`this demo </demos/tutorial_lcu_blockencoding>` to learn more about the structure
+# recommend :doc:`this demo </demos/tutorial_apply_qsvt>` to learn more about the structure
 # of the circuit.
 # Finally, we can verify that the results obtained are as expected:
 
@@ -110,15 +112,15 @@ print(np.round(H_poly,4))
 
 ######################################################################
 # The matrix obtained from the QSVT subroutine is the same as the one obtained by applying the polynomial
-# directly to the Hamiltonian! The great advantage of this approach is that the :class:`~.qml.BlockEncode` operator has not been used,
-# making it possible to decompose the algorithm into basic gates easily.
+# directly to the Hamiltonian! The great advantage of this approach is that all the templates used can be
+# decomposed into basic gates easily.
 #
 #
 # Conclusion
 # ----------
 # In this brief how-to we have seen how we can apply QSVT on a Hamiltonian. Note that the algorithm is sensitive to
 # the encoding used so make sure that the angles are being converted to the proper format.
-# I hope this how-to will serve as a guide to run your own workflows and experiment with more advanced Hamiltonians and functions.
+# We hope this how-to will serve as a guide to run your own workflows and experiment with more advanced Hamiltonians and functions.
 #
 # About the author
 # ----------------
