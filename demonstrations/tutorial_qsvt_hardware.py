@@ -31,7 +31,7 @@ ang_seq = QuantumSignalProcessingPhases(poly, signal_operator="Wx")
 print(ang_seq)
 
 ######################################################################
-# The output will be a list of angles that we can use to apply the polynomial transformation.
+# The output is a list of angles that we can use to apply the polynomial transformation.
 # However, we are not finished yet. These angles have been calculated assuming one type of encoding following the "Wx"
 # convention while our encoding of the Hamiltonian follows another convention. Moreover, the angles obtained in the
 # context of QSP (the ones given by ``pyqsp``) are different from the ones we have to use in QSVT since these
@@ -51,7 +51,7 @@ angles = convert_angles(ang_seq)
 print(angles)
 
 ######################################################################
-# Great! Now we can start working with the template.
+# Using these angles, we can now start working with the template.
 #
 # QSVT on Hardware
 # -----------------
@@ -126,10 +126,14 @@ print(np.round(matrix,4))
 
 ######################################################################
 # As we can see, the real part has been correctly encoded into the circuit.
-# The idea behind this algorithm is based on the fact that the sum of a complex number and its conjugate gives us
+# The idea behind this circuit is based on the fact that the sum of a complex number and its conjugate gives us
 # its real part. I recommend :doc:`this demo </demos/tutorial_lcu_blockencoding>` to learn more about the structure
 # of the circuit.
 #
+# Conclusion
+# ----------
+# In this brief how-to we have seen how we can apply QSVT on a Hamiltonian. Note that the algorithm is sensitive to
+# the encoding used so make sure that the angles are being converted to the proper format.
 # I hope this how-to will serve as a guide to run your own workflows and experiment with more advanced Hamiltonians and functions.
 #
 # About the author
