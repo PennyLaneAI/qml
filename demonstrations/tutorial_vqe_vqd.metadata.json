@@ -1,5 +1,5 @@
 {
-    "title": "Calculate the excited state energy with VQD",
+    "title": "How to implement VQD with PennyLane",
     "authors": [
         {
             "id": "minh_chau"
