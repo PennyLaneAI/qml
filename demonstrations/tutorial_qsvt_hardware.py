@@ -7,7 +7,7 @@ However, until now, we had focused more on the algebraic aspect rather than on t
 In this how-to guide, you will see how we can implement the QSVT subroutine in a hardware-compatible manner,
 taking your applications to the next level.
 
-Conventions and Angle Calculation
+Conventions and Angle Calculation 
 -------------------------------------
 
 Our goal is to apply a polynomial transformation to a given Hamiltonian. To achieve this, we must consider the two
