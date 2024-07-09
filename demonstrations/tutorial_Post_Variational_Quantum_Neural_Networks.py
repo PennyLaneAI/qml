@@ -215,11 +215,6 @@ def update_step_jit(i, args):
     loss_val, grads = jax.value_and_grad(cost)(params, _data, _targets)
     updates, opt_state = opt.update(grads, opt_state)
     params = optax.apply_updates(params, updates)
-    jax.lax.cond(
-        (jnp.mod(i, 20) == 0),
-        jax.debug.print("Step: {i}  Loss: {loss_val}", i=i, loss_val=loss_val),
-        lambda: None,
-    )
     return (params, opt_state, data, targets, batch_no + 1)
 
 
