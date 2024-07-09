@@ -29,7 +29,7 @@ Jinja2 = "3.0.3"
 markupsafe = "2.1.1"
 numpy = "~1.23"
 pyyaml = "^6.0.1"
-pennylane-sphinx-theme = { git = "https://github.com/PennyLaneAI/pennylane-sphinx-theme.git", branch = "sphinx-update"}
+pennylane-sphinx-theme = { git = "https://github.com/PennyLaneAI/pennylane-sphinx-theme.git", branch = "sphinx-update" }
 pypandoc = "1.5"
 
 [tool.poetry.group.executable-dependencies.dependencies]
@@ -38,11 +38,11 @@ pypandoc = "1.5"
 # These pinned versions of PL are NOT used for Dev builds #
 #      The latest commit from GitHub is used instead      #
 ###########################################################
-pennylane = "0.36.0"
+pennylane = "0.37.0"
 pennylane-cirq = "0.36.0"
-pennylane-qiskit = "0.36.0"
+pennylane-qiskit = "0.37.0"
 pennylane-qulacs = "0.36.0"
-pennylane-catalyst = "0.6.0"
+pennylane-catalyst = "0.7.0"
 ##########################################################
 
 
@@ -83,7 +83,7 @@ torchvision = [
 scikit-learn = { version = "1.3.0", markers = "platform_machine == 'x86_64'" }
 tensorflow = { version = "2.13.0", markers = "platform_machine == 'x86_64'" }
 flamingpy = { version = ">=0.10.1b1", markers = "platform_machine == 'x86_64'" }
-qulacs = {version = "0.1.10.1", markers = "platform_machine == 'x86_64'" }
+qulacs = { version = "0.1.10.1", markers = "platform_machine == 'x86_64'" }
 
 # The following packages are only installed on MacOS for compatibility
 tensorflow-macos = { version = "2.13.0", markers = "sys_platform == 'darwin' and platform_machine == 'arm64'" }
@@ -92,6 +92,6 @@ tensorflow-macos = { version = "2.13.0", markers = "sys_platform == 'darwin' and
 optional = true
 
 [tool.poetry.group.metadata-validation.dependencies]
-jsonschema = {extras = ["format"], version = "~4.17.3"}
+jsonschema = { extras = ["format"], version = "~4.17.3" }
 check-jsonschema = "^0.23.3"
 
