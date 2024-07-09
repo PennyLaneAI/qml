@@ -1,8 +1,20 @@
 r"""Calculate the excited state energy with VQD
 ===============================================================
 
+Finding eigenvalues of an operator is a key task in quantum computing. Algorithms like VQE are used to find the smallest
+one, but sometimes we are interested in other eigenvalues. This demo shows you how to implement  Variational
+Quantum Deflation (VQD) in PennyLane
+and find the first excited state energy of the hydrogen molecule. To benefit the most from this tutorial, we recommend
+a familiarization with the Variational Quantum Eigensolver (VQE) `tutorial <https://pennylane.ai/qml/demos/tutorial_vqe/>`_
+
+"""
+
+######################################################################
 #
-# The Variational Quantum Deflation (VQD) algorithm [#Vqd]_ is a method to find excited states of a quantum system. This demo shows you how to implement  VQD in PennyLane and find the first excited state energy of the hydrogen molecule. To benefit the most from this tutorial, we recommend a familiarization with the Variational Quantum Eigensolver (VQE) `tutorial <https://pennylane.ai/qml/demos/tutorial_vqe/>`_
+# Variational Quantum Deflation
+# ------------------------------
+#
+# # VQD algorithm [#Vqd]_ is a method used to find excited states of a quantum system.
 # The VQD algorithm is related on the VQE algorithm, which finds the ground state energy of a quantum system.
 # The main idea in VQE is to define an ansatz that depends on adjustable parameters :math:`\theta` and minimizes the energy computed as:
 #
@@ -71,8 +83,7 @@ print(f"Ground state energy: {circuit()}")
 #
 # To obtain the excited state we must define our ansatz that generates the state :math:`|\Psi(\theta)\rangle`.
 #
-# the Givens rotation ansatz, which you can find
-# described on `this tutorial <https://pennylane.ai/qml/demos/tutorial_givens_rotations/>`_. Let's define the circuit for finding the excited state.
+# We use an ansatz constructed with Givens rotation described in `this tutorial <https://pennylane.ai/qml/demos/tutorial_givens_rotations/>`_. Let's define the circuit for finding the excited state.
 #
 
 from functools import partial
@@ -183,10 +194,9 @@ print(np.sort(np.linalg.eigvals(H.matrix())))
 # Conclusion
 # ----------
 #
-# We learned how to implement the variational quantum deflation algorithm to find the first excited state energy of the :math:`H_2` molecule.
-#
-# To build up on this work, we recommend readers to run this script with more complex molecules and/or find the energy needed for
-# higher excitation levels. Also do not forget check out other tutorials for Quantum chemistry here in Pennylane. Good luck on your Quantum chemistry journey!
+# In this tutorial we delved into the capabilities of Variational Quantum Deflation (VQD) using PennyLane to compute not only the ground
+# state but also the excited states of a hydrogen molecule. This illustrated how advanced quantum algorithms can extend beyond basic applications,
+# offering deeper insights into quantum systems.
 #
 # References
 # ----------
