@@ -32,7 +32,6 @@ for noisy intermediate-scale quantum (NISQ) devices.
 
 """
 
-
 ######################################################################
 # Introduction
 # ------------
@@ -189,7 +188,6 @@ for noisy intermediate-scale quantum (NISQ) devices.
 
 # initialize a graph for the max cut problem
 import networkx as nx
-from matplotlib import pyplot as plt
 import pennylane as qml
 from pennylane import qaoa
 
@@ -963,7 +961,6 @@ for i in range(300):
 from braket.aws import AwsSession, AwsQuantumJob
 from braket.jobs.config import InstanceConfig
 from braket.jobs.image_uris import Framework, retrieve_image
-import boto3
 
 region_name = AwsSession().region
 image_uri = retrieve_image(Framework.BASE, region_name)
