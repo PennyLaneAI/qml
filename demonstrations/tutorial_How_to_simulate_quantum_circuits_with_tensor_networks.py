@@ -19,10 +19,9 @@ Further improvements, new features, and additional tutorials are expected in fut
 Check the latest functionality in the :class:`documentation <.pennylane.devices.default_tensor.DefaultTensor>`
 or pick among other `PennyLane devices <https://pennylane.ai/plugins/#built-in-devices>`__ for your project.
 
-##############################################################################
-#.. figure:: ../_static/demonstration_assets/how_to_simulate_quantum_circuits_with_tensor_networks/TN_MPS.gif
-#    :align: center
-#    :width: 90%
+.. figure:: ../_static/demonstration_assets/how_to_simulate_quantum_circuits_with_tensor_networks/TN_MPS.gif
+    :align: center
+    :width: 90%
 
 """
 
