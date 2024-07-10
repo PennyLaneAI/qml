@@ -74,6 +74,7 @@ def circuit(index):
 
 qml.draw_mpl(circuit, style = "pennylane")(0)
 plt.show()
+
 ##############################################################################
 # Now we can check that all the outputs are as expected:
 
@@ -97,6 +98,7 @@ def circuit(index):
     qml.QROM(bitstrings, control_wires, target_wires, work_wires = None)
     return qml.sample(wires=target_wires)
 
+##############################################################################
 # Although this approach works correctly, the number of multicontrol gates is high.
 # The decomposition of these gates is expensive and there are numerous works that attempt to simplify this.
 # We highlight reference [#unary]_ which introduces an efficient technique using measurements in the middle
@@ -123,6 +125,7 @@ def circuit(index):
     return qml.sample(wires=control_wires + target_wires + work_wires)
 
 
+##############################################################################
 # Internally, the main idea of this approach is to organize the :math:`U_i` operators in two dimensions,
 # whose positions will be determined by a column index :math:`c` and a row index :math:`r`.
 #
@@ -152,6 +155,7 @@ print(f"target wires: {circuit(5)[3:5]}")
 print(f"work wires: {circuit(5)[5:7]}")
 
 
+##############################################################################
 #
 # Note that with more auxiliary qubits we could make larger groupings of bitstrings reducing the depth of the
 # Select operator. Below we show an example with two columns and four rows:
@@ -192,6 +196,7 @@ for i in range(8):
     print(f"The work wires for that index are in the state: {circuit(i)[2:4]}\n")
 
 
+##############################################################################
 # To achieve this, we follow the technique shown in [#cleanQROM]_ where the proposed circuit is as follows:
 #
 # .. figure:: ../_static/demonstration_assets/qrom/clean_version_2.jpeg
