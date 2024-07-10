@@ -16,15 +16,16 @@ The QROM is an operator that allows us to load classical data into a quantum com
 
 where :math:`|b_i\rangle` is the bitstring associated with the :math:`i`-th computational basis and :math:`m` is the length of the bitstrings. We have assumed all the bistrings are of equal length.
 
-For example, suppose our data consists of four bitstrings, each with three bits: :math:`[011, 101, 111, 100]`. Then, the index register will consist of two
-qubits (:math:`2 = \log_2 4`) and the target register of three qubits (e.g., :math:`m = 3`). In this case, the QROM operator acts as:
+For example, suppose our data consists of four bitstrings, each with three bits: :math:`[01, 11, 11, 00, 01, 11, 11, 00]`. Then, the index register will consist of three
+qubits (:math:`3 = \log_2 8`) and the target register of two qubits (e.g., :math:`m = 2`). For instance, for the
+first four indices, the QROM operator acts as:
 
 .. math::
      \begin{align}
-     \text{QROM}|00\rangle|000\rangle &= |00\rangle|011\rangle \\
-     \text{QROM}|01\rangle|000\rangle &= |01\rangle|101\rangle \\
-     \text{QROM}|10\rangle|000\rangle &= |10\rangle|111\rangle \\
-     \text{QROM}|11\rangle|000\rangle &= |11\rangle|100\rangle
+     \text{QROM}|000\rangle|00\rangle &= |000\rangle|01\rangle \\
+     \text{QROM}|001\rangle|00\rangle &= |001\rangle|11\rangle \\
+     \text{QROM}|010\rangle|00\rangle &= |010\rangle|11\rangle \\
+     \text{QROM}|011\rangle|00\rangle &= |011\rangle|00\rangle
      \end{align}
 
 We will now explain three different implementations of QROM: Select, SelectSwap, and an extension of SelectSwap.
@@ -42,7 +43,7 @@ where :math:`|\phi_i\rangle` is the :math:`i`-th state we want to encode, genera
 QROM can be considered a special case of the Select operator where the encoded states are computational basis states.
 Then the unitaries :math:`U_i` can be simply :math:`X` gates that determine whether each bit is a :math:`0` or a :math:`1`.
 We use :class:`~.pennylane.BasisEmbedding` as a useful template for preparing bitstrings, it places the :math:`X` gates
-in the right position. Let's use a longer string for the following example:
+in the right position. Let's see how it could be implemented:
 
 """
 
@@ -82,33 +83,75 @@ for i in range(8):
 
 ##############################################################################
 # Nice, the outputs match the elements of our initial data list: :math:`[01, 11, 11, 00, 01, 11, 11, 00]`.
-#
-# Although the algorithm works correctly, the number of multicontrol gates is high.
+# The :class:`~.pennylane.QROM` can be used to implement the previous circuit using directly the bitstring
+# without having to calculate the :math:`U_i` gates:
+
+bitstrings = ["01", "11", "11", "00", "01", "11", "11", "00"]
+
+control_wires = [0,1,2]
+target_wires = [3,4]
+
+@qml.qnode(dev)
+def circuit(index):
+    qml.BasisEmbedding(index, wires=control_wires)
+    qml.QROM(bitstrings, control_wires, target_wires, work_wires = None)
+    return qml.sample(wires=target_wires)
+
+# Although this approach works correctly, the number of multicontrol gates is high.
 # The decomposition of these gates is expensive and there are numerous works that attempt to simplify this.
 # We highlight reference [#unary]_ which introduces an efficient technique using measurements in the middle
-# of the circuit. Another clever approach was introduced in [#selectSwap]_ , with a smart structure known as SelectSwap, which we describe below.
+# of the circuit. Another clever approach was introduced in [#selectSwap]_ , with a smart structure known as SelectSwap,
+# which we describe below.
 #
 # SelectSwap
 # ~~~~~~~~~~
 # The goal of the SelectSwap construction is to trade depth for width. That is, using multiple auxiliary qubits,
-# we reduce the circuit depth required to build the QROM. The main idea is to organize the data in two dimensions,
-# with each bitstring labelled by a column index :math:`c` and a row index :math:`r`.
-# The control qubits of the Select block determine the column :math:`c`, while the
-# control qubits of the swap block are used to specify the row index :math:`r`.
+# we reduce the circuit depth required to build the QROM. To apply it, you just have to add ``work_wires`` to
+# the template and PennyLane will do all the work for you automatically:
+#
+
+bitstrings = ["01", "11", "11", "00", "01", "11", "11", "00"]
+
+control_wires = [0,1,2]
+target_wires = [3,4]
+work_wires = [5,6]
+
+@qml.qnode(dev)
+def circuit(index):
+    qml.BasisEmbedding(index, wires=control_wires)
+    qml.QROM(bitstrings, control_wires, target_wires, work_wires = work_wires, clean = False)
+    return qml.sample(wires=control_wires + target_wires + work_wires)
+
+
+# Internally, the main idea of this approach is to organize the :math:`U_i` operators in two dimensions,
+# whose positions will be determined by a column index :math:`c` and a row index :math:`r`.
 #
 # .. figure:: ../_static/demonstration_assets/qrom/select_swap.jpeg
 #    :align: center
 #    :width: 70%
 #    :target: javascript:void(0)
 #
+#
+#
+# For this, the control wires have been divided into two sections:
+# the first one, associated with the Select block, determines the column :math:`c`, while the second one,
+# associated with the Swap block, is used to specify the row index :math:`r`.
+#
 # Let's look at an example by assuming we want to load in the target wires the bitstring with
-# the index :math:`5`, i.e. :math:`b_5 = 11 `.
-# For it, we put as input in the control wires the state :math:`|101\rangle` (5 in binary), where the first two bits refer to the
-# index :math:`c = |10\rangle` and the last one to the index :math:`r = |1\rangle`.  After applying the Select block, we
-# obtain :math:`|101\rangle|01\rangle|11\rangle`, loading the bitstrings :math:`b_4` and :math:`b_5` respectively.
-# Since the third
-# control qubit (i.e., :math:`|r\rangle`) is a :math:`|1\rangle`, it will activate the swap block, generating the state :math:`|101\rangle|11\rangle|01\rangle`
+# the index :math:`5`, i.e. :math:`b_5 = 11`.
+# For it, we put as input in the control wires the state :math:`|101\rangle` (5 in binary): the initial state is :math:`|101\rangle|00\rangle|00\rangle`.
+# The first two bits store the index :math:`c = |10\rangle` and the third qubit store to the index :math:`r = |1\rangle`.
+# The first operator we have to apply is the Select block, which loads the column :math:`c`:  :math:`|101\rangle|01\rangle|11\rangle`,
+# where :math:`01` and :math:`11` are the bitstrings :math:`b_4` and :math:`b_5` respectively.
+# After that we have to apply the Swap block. Since the third
+# control qubit is a :math:`|1\rangle`, we swap the row :math:`1` to the target wires, generating the state :math:`|101\rangle|11\rangle|01\rangle`
 # loading the bitstring :math:`b_5` in the target register.
+
+print(f"control wires: {circuit(5)[:3]}")
+print(f"target wires: {circuit(5)[3:5]}")
+print(f"work wires: {circuit(5)[5:7]}")
+
+
 #
 # Note that with more auxiliary qubits we could make larger groupings of bitstrings reducing the depth of the
 # Select operator. Below we show an example with two columns and four rows:
@@ -127,8 +170,29 @@ for i in range(8):
 # ~~~~~~~~~~~~~~~~ 
 #
 # The above approach has a drawback. The work wires have been altered, i.e., after applying the operator they have not
-# been returned to state :math:`|0\rangle`. This can cause unwanted behaviors, so we will present the technique shown
-# in [#cleanQROM]_ to solve this issue.
+# been returned to state :math:`|0\rangle`. This can cause unwanted behaviors but in PennyLane can be easily solved
+# by setting the parameter ``clean = True``.
+
+
+bitstrings = ["01", "11", "11", "00", "01", "11", "11", "00"]
+
+control_wires = [0, 1, 2]
+target_wires = [3, 4]
+work_wires = [5, 6]
+
+
+@qml.qnode(dev)
+def circuit(index):
+    qml.BasisEmbedding(index, wires=control_wires)
+    qml.QROM(bitstrings, control_wires, target_wires, work_wires=work_wires, clean=True)
+    return qml.sample(wires=target_wires + work_wires)
+
+for i in range(8):
+    print(f"The bitstring stored in index {i} is: {circuit(i)[:2]}")
+    print(f"The work wires for that index are in the state: {circuit(i)[2:4]}\n")
+
+
+# To achieve this, we follow the technique shown in [#cleanQROM]_ where the proposed circuit is as follows:
 #
 # .. figure:: ../_static/demonstration_assets/qrom/clean_version_2.jpeg
 #    :align: center
@@ -160,57 +224,6 @@ for i in range(8):
 #       |c\rangle |r\rangle |0\rangle_0 |0\rangle_1 \dots |b_{cr}\rangle_r \dots |0\rangle_{R-1}
 #
 # That's it! With a last swap we have managed to load the bitstring of column :math:`c` and row :math:`r` in the target wires.
-#
-# QROM in PennyLane
-# -----------------
-# Coding a QROM circuit from scratch can be painful, but with the help of PennyLane you can do it in just one line of code.
-# Let's see an example where we encode longer bitstrings and we will use enough work wires to group four bitstrings per column:
-
-bitstrings = ["01", "11", "11", "00", "01", "11", "11", "00"]
-
-control_wires = [0, 1, 2]
-target_wires = [3, 4]
-work_wires = [5, 6, 7, 8, 9, 10]
-
-@qml.qnode(qml.device("default.qubit", shots = 1))
-def circuit(index):
-
-    qml.BasisEmbedding(index, wires=control_wires)
-
-    qml.QROM(bitstrings, control_wires, target_wires, work_wires, clean = False)
-
-    return qml.sample(wires = target_wires), qml.sample(wires = work_wires)
-
-for i in range(8):
-    print(f"The bitstring stored in index {i} is: {circuit(i)[0]}")
-    print(f"The work wires for that index are in the state: {circuit(i)[1]}\n")
-
-##############################################################################
-# The list has been correctly encoded. However, we can see that the auxiliary qubits have been altered.
-#
-# If we want to use the approach that cleans the work wires, we could set the ``clean`` attribute of QROM to ``True``.
-# Let's see how the circuit looks like:
-
-bitstrings = ["01", "11", "11", "00", "01", "11", "11", "00"]
-
-@qml.qnode(qml.device("default.qubit", shots = 1))
-def circuit(index):
-
-    qml.BasisEmbedding(index, wires=control_wires)
-
-    qml.QROM(bitstrings, control_wires, target_wires, work_wires, clean = True)
-
-    return qml.sample(wires=target_wires), qml.sample(wires=work_wires)
-
-
-for i in range(8):
-    print(f"The bitstring stored in index {i} is: {circuit(i)[0]}")
-    print(f"The work wires for that index are in the state: {circuit(i)[1]}\n")
-
-##############################################################################
-# Great! As you can see the work wires have been cleaned and all outputs are as expected.
-# As a curiosity, this template works with work wires that are not initialized to zero.
-#
 #
 #
 # Conclusion
