@@ -91,7 +91,7 @@ performance on the QFT.
 
 In the case of a *trivial* computational basis eigenstate input, Qrack can
 simulate basically any QFT width. Below, we pick a random eigenstate
-initialization and perform the QFT across a width of 60 qubits, with :function:`~catalyst.qjit`.
+initialization and perform the QFT across a width of 60 qubits, with Catalyst's `qjit <https://docs.pennylane.ai/projects/catalyst/en/latest/code/api/catalyst.qjit.html>`__.
 """
 
 import pennylane as qml
