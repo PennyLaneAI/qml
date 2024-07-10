@@ -1,8 +1,8 @@
-r"""Calculate the excited state energy with VQD
+r"""How to implement VQD with PennyLane
 ===============================================================
 
 Finding eigenvalues of an operator is a key task in quantum computing. Algorithms like VQE are used to find the smallest
-one, but sometimes we are interested in other eigenvalues. This demo shows you how to implement  Variational
+one, but sometimes we are interested in other eigenvalues. This how-to shows you how to implement  Variational
 Quantum Deflation (VQD) in PennyLane
 and find the first excited state energy of the hydrogen molecule. To benefit the most from this tutorial, we recommend
 a familiarization with the `Variational Quantum Eigensolver (VQE) <https://pennylane.ai/qml/demos/tutorial_vqe/>`_ tutorial.
