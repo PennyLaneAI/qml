@@ -3,14 +3,14 @@ r"""How to implement QSVT on hardware
 
 Performing polynomial transformations on matrices or operators is a task of great interest,
 which we have previously addressed in our introductory demos on :doc:`QSVT </demos/tutorial_intro_qsvt>` and its :doc:`practical applications </demos/tutorial_apply_qsvt>`.
-However, until now, we had focused more on the algebraic aspect rather than the implementation in hardware.
+However, until now, we have focused more on the algebraic aspect rather than the implementation in hardware.
 In this how-to guide, we will show how we can implement the QSVT subroutine in a hardware-compatible way,
 taking your applications to the next level.
 
 Angles calculation
 ------------------
 
-Our goal is to apply a polynomial transformation to a given Hamiltonian (i.e, :math:`p(\mathcal{H})`). To achieve this, we must consider the two
+Our goal is to apply a polynomial transformation to a given Hamiltonian (i.e., :math:`p(\mathcal{H})`). To achieve this, we must consider the two
 fundamental components of the QSVT algorithm:
 
 - **Projection angles**: A list of angles that will determine the coefficients of the polynomial to be applied.
@@ -34,12 +34,12 @@ print(ang_seq)
 # The output is a list of angles that we can use to apply the polynomial transformation.
 # However, we are not finished yet: these angles have been calculated following the "Wx"
 # convention, while :class:`~.qml.PrepSelPrep` follows a different one. Moreover, the angles obtained in the
-# context of QSP (the ones given by ``pyqsp``) are not the same from the ones we have to use in QSVT. That is why
-# we must make a transformation of the angles:
+# context of QSP (the ones given by ``pyqsp``) are not the same as the ones we have to use in QSVT. That is why
+# we must transform the angles:
 
 def convert_angles(angles):
     num_angles = len(angles)
-    update_vals = np.empty(num_angles)
+    update_vals = np.zeros(num_angles)
 
     update_vals[0] = 3 * np.pi / 4 - np.pi / 2
     update_vals[1:-1] = np.pi / 2
@@ -97,16 +97,19 @@ print(np.round(matrix[: 2**len(H.wires), :2**len(H.wires)],4))
 ######################################################################
 # The circuit is encoding :math:`p(\mathcal{H})` in the top left block of its matrix.
 #
-# The idea behind this circuit is that QSVT encodes the desired polinomial :math:`p(\mathcal{H})` but also
-# a polynomial :math:`i q(\mathcal{H})`. To isolate :math:`p(\mathcal{H})` we have used of an auxiliary qubit and the property that
+# The idea behind this circuit is that QSVT encodes the desired polynomial :math:`p(\mathcal{H})` but also
+# a polynomial :math:`i q(\mathcal{H})`. To isolate :math:`p(\mathcal{H})` we have used an auxiliary qubit and the property that
 # the sum of a complex number and its conjugate gives us twice its real part. We
 # recommend :doc:`this demo </demos/tutorial_apply_qsvt>` to learn more about the structure
 # of the circuit.
 # Finally, we can verify that the results obtained are as expected:
 
+from numpy.linalg import matrix_power as mpow
+
 H_mat = qml.matrix(H, wire_order = [3,4])
 
-H_poly = -H_mat + 0.5 * np.linalg.matrix_power(H_mat, 3) + 0.5* np.linalg.matrix_power(H_mat, 5)
+# We calculate p(H) = -H + 0.5 * H^3 + 0.5 * H^5
+H_poly = -H_mat + 0.5 * mpow(H_mat, 3) + 0.5* mpow(H_mat, 5)
 
 print(np.round(H_poly,4))
 
@@ -118,10 +121,10 @@ print(np.round(H_poly,4))
 #
 # Conclusion
 # ----------
-# In this brief how-to we have seen how we can apply QSVT on a Hamiltonian. Note that the algorithm is sensitive to
-# the encoding used so make sure that the angles are being converted to the proper format.
-# We hope this how-to will serve as a guide to run your own workflows and experiment with more advanced Hamiltonians and functions.
+# In this brief how-to we have seen how to apply QSVT on a Hamiltonian. Note that the algorithm is sensitive to
+# the encoding used so make sure that the angles are converted to the proper format.
+# We hope this how-to will serve as a guide to running your own workflows and experimenting with more advanced Hamiltonians and functions.
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/guillermo_alonso.txt
+#
