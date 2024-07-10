@@ -63,7 +63,7 @@
         },
         {
             "type": "demonstration",
-            "id": "tutorial_mcm_introduction/",
+            "id": "tutorial_mcm_introduction",
             "weight": 1.0
         }
     ]
