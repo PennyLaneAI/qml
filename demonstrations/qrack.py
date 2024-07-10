@@ -58,7 +58,7 @@ depending upon the classical hardware platform). Qrack also offers so-called
 hybrid stabilizer simulation (with fallback to universal simulation) and
 near-Clifford simulation with a greatly reduced memory footprint on Clifford
 gate sets with the inclusion of the `RZ` variational Pauli Z-axis rotation gate.
-(For more information, see the `QCE'23 report <https://arxiv.org/abs/2304.14969>`__ [#QCEReport] by the Qrack and `Unitary Fund <https://unitary.fund/>`__ teams.)
+(For more information, see the `QCE'23 report <https://arxiv.org/abs/2304.14969>`__ [#QCEReport]_ by the Qrack and `Unitary Fund <https://unitary.fund/>`__ teams.)
 
 Particularly for systems that don't rely on GPU acceleration, Qrack offers a
 quantum binary decision diagram (QBDD) simulation algorithm option that might
@@ -85,7 +85,7 @@ Demonstrating Qrack with the quantum Fourier transform
 The :doc:`quantum Fourier transform (QFT) <tutorial_qft>` is a building-block
 subroutine of many other quantum algorithms. Qrack exhibits unique capability
 for many cases of the QFT algorithm, and its worst-case performance is
-competitive with other popular quantum computer simulators [#QCEReport]. In this
+competitive with other popular quantum computer simulators [#QCEReport]_. In this
 section, you'll be presented with examples of Qrack's uniquely optimal
 performance on the QFT.
 
