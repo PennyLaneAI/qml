@@ -622,7 +622,7 @@ plt.show()
 # .. [#cerezo2021variational]
 #
 #     M. Cerezo, A. Arrasmith, R. Babbush, S. C. Benjamin, S. Endo, K. Fujii, 
-#.    J. R. McClean, K. Mitarai, X. Yuan, L. Cincio, and P. J. Coles, 
+#     J. R. McClean, K. Mitarai, X. Yuan, L. Cincio, and P. J. Coles, 
 #     Variational quantum algorithms, 
 #     `Nat. Rev. Phys. 3, 625, (2021) <https://doi.org/10.1038/s42254-021-00348-9>`__.
 #
