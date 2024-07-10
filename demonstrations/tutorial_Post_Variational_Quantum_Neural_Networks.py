@@ -4,7 +4,7 @@ r"""Post-Variational Quantum Neural Networks
 
 ######################################################################
 # Variational algorithms are proposed to solve optimization problems in chemistry, combinatorial
-# optimization and machine learning, with potential quantum advantage.[#cerezo2021variational]_ Such algorithms operate by
+# optimization and machine learning, with potential quantum advantage. [#cerezo2021variational]_ Such algorithms operate by
 # first encoding data :math:`x` into a :math:`n`-qubit quantum state. The quantum state is then
 # transformed by an Ansatz :math:`U(\theta)`. The parameters :math:`\theta` are optimized by
 # evaluating gradients of the quantum circuit via parameter-shift rules and calculating updates of the
@@ -590,7 +590,7 @@ plt.show()
 
 ######################################################################
 # Conclusion
-# ==========
+# ---------------------
 #
 
 ######################################################################
@@ -619,41 +619,44 @@ plt.show()
 # References
 # ~~~~~~~~~~
 #
-# .. [#huang2024postvariational]
-#
-#     Po-Wei Huang, Patrick Rebentrost. Post-variational quantum neural networks. (2024)
-#     https://arxiv.org/pdf/2307.10560 
-#
-#
 # .. [#cerezo2021variational]
 #
-#     Cerezo, M., Arrasmith, A., Babbush, R. et al. 
-#     Variational quantum algorithms. Nat Rev Phys 3, 625–644 (2021). 
-#     https://doi.org/10.1038/s42254-021-00348-9
-#
-#
-# .. [#mcclean2018barren]
-#
-#     McClean, J.R., Boixo, S., Smelyanskiy, V.N. et al. Barren plateaus in 
-#     quantum neural network training landscapes. Nat Commun 9, 4812 (2018). 
-#     https://doi.org/10.1038/s41467-018-07090-4
-#
-#
-# .. [#du2020expressive]
-#
-#     Du, Yuxuan and Hsieh, Min-Hsiu and Liu, Tongliang and Tao, Dacheng, Expressive power 
-#     of parametrized quantum circuits. Phys. Rev. Research 2, 033125 (2020). 
-#     https://doi.org/10.1103/PhysRevResearch.2.033125
+#     M. Cerezo, A. Arrasmith, R. Babbush, S. C. Benjamin, S. Endo, K. Fujii, 
+#.    J. R. McClean, K. Mitarai, X. Yuan, L. Cincio, and P. J. Coles, 
+#     Variational quantum algorithms, 
+#     `Nat. Rev. Phys. 3, 625, (2021) <https://doi.org/10.1038/s42254-021-00348-9>`__.
 #
 #
 # .. [#schuld2019evaluating]
 #
-#     Schuld, Maria and Bergholm, Ville and Gogolin, Christian and Izaac, Josh and Killoran, Nathan 
-#     Evaluating analytic gradients on quantum hardware. Phys. Rev. A. 99, 032331 (2019). 
-#     https://doi.org/10.1103/PhysRevA.99.032331
+#     M. Schuld, V. Bergholm, C. Gogolin, J. Izaac, and N. Killoran, 
+#     Evaluating analytic gradients on quantum hardware,
+#     `Phys. Rev. A. 99, 032331, (2019) <https://doi.org/10.1103/PhysRevA.99.032331>`__. 
+#     
+#
+# .. [#mcclean2018barren]
+#
+#     J. R. McClean, S. Boixo, V. N. Smelyanskiy, R. Babbush, and H. Neven,
+#     Barren plateaus in quantum neural network training landscapes, 
+#     `Nat. Commun. 9, 4812, (2018) <https://doi.org/10.1038/s41467-018-07090-4>`__.
+#
+#
+# .. [#huang2024postvariational]
+#
+#     P.-W. Huang and P. Rebentrost, 
+#     Post-variational quantum neural networks (2024), 
+#     `arXiv:2307.10560 [quant-ph] <https://arxiv.org/abs/2307.10560>`__.
+#
+#
+# .. [#du2020expressive]
+#
+#     Y. Du, M.-H. Hsieh, T. Liu, and D. Tao,  
+#     Expressive power of parametrized quantum circuits,  
+#     `Phys. Rev. Res. 2, 033125 (2020) <https://doi.org/10.1103/PhysRevResearch.2.033125>`__.
+#
 #
 
 ##############################################################################
-# About the author
+# About the authors
 # ---------------------
 #
