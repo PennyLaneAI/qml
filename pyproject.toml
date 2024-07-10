@@ -67,7 +67,8 @@ zstd = "*"
 dill = "*"
 stim = "*"
 quimb = "1.8.2"
-qiskit = "1.1.1"
+qiskit = ">=1.0.0"
+qiskit-aer = ">=0.14.0"
 
 
 # Install a difference version of torch from PyPI as the one from PyTorch repo is not compatible with MacOS
