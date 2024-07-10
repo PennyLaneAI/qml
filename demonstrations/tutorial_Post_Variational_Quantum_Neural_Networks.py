@@ -239,7 +239,7 @@ print("Testing accuracy: ", acc(params, X_test, y_test))
 
 ######################################################################
 # Observable Construction
-# ~~~~~~~~~~~~~~~~~~~~~~~
+# ---------------------
 #
 
 ######################################################################
@@ -250,11 +250,6 @@ print("Testing accuracy: ", acc(params, X_test, y_test))
 # predefined trial observables :math:`O_1, O_2, \ldots , O_m`. Under this setting, measurement results
 # on the quantum circuits are then combined classically, where the optimal weights of each measurement
 # is computed via feeding our measurements through a classical multilayer perceptron.
-#
-
-######################################################################
-# Generating k-local observables sequence
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
 
 ######################################################################
@@ -337,7 +332,7 @@ plt.show()
 
 ######################################################################
 # Ansatz expansion
-# ================
+# ---------------------
 #
 
 ######################################################################
@@ -452,8 +447,9 @@ plt.show()
 
 ######################################################################
 # Hybrid Strategy
-# ---------------
+# ---------------------
 #
+
 # When taking the strategy of observable construction, one additionally may want to use Ansatz quantum
 # circuits to increase the complexity of the model. Hence, we discuss a simple hybrid strategy that
 # combines both the usage of Ansatz expansion and observable construction. For each feature, we may
@@ -622,6 +618,44 @@ plt.show()
 
 ######################################################################
 # https://arxiv.org/pdf/2307.10560
+#
+#
+# References
+# ~~~~~~~~~~
+#
+# .. [#cerezo2021variational]
+#
+#     Cerezo, M., Arrasmith, A., Babbush, R. et al. 
+#     Variational quantum algorithms. Nat Rev Phys 3, 625–644 (2021). 
+#     https://doi.org/10.1038/s42254-021-00348-9
+#
+#
+# .. [#mcclean2018barren]
+#
+#     McClean, J.R., Boixo, S., Smelyanskiy, V.N. et al. Barren plateaus in 
+#     quantum neural network training landscapes. Nat Commun 9, 4812 (2018). 
+#     https://doi.org/10.1038/s41467-018-07090-4
+#
+#
+# .. [#du2020expressive]
+#
+#     Du, Yuxuan and Hsieh, Min-Hsiu and Liu, Tongliang and Tao, Dacheng, Expressive power 
+#     of parametrized quantum circuits. Phys. Rev. Research 2, 033125 (2020). 
+#     https://journals.aps.org/prresearch/abstract/10.1103/PhysRevResearch.2.033125
+#
+#
+# .. [#schuld2019evaluating]
+#
+#     Schuld, Maria and Bergholm, Ville and Gogolin, Christian and Izaac, Josh and Killoran, Nathan 
+#     Evaluating analytic gradients on quantum hardware. Phys. Rev. A. 99, 032331 (2019). 
+#     https://doi.org/10.1103/PhysRevA.99.032331
+#
+#
+#
+# .. [#huang2024postvariational]
+#
+#     Po-Wei Huang, Patrick Rebentrost. Post-variational quantum neural networks. (2024)
+#     https://doi.org/10.1103/PhysRevA.99.032331
 #
 
 
