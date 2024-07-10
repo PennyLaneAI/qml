@@ -152,7 +152,7 @@ def circuit(index):
 # where the first two qubits store the index :math:`|c\rangle = |10\rangle` and the third qubit store to the index :math:`|r\rangle = |1\rangle`.
 #
 # The first operator we have to apply is the Select block, which loads the column :math:`c`, generating the state  :math:`|101\rangle U_4|00\rangle U_5|00\rangle = |101\rangle |01\rangle |11\rangle`,
-# where :math:`01` and :math:`11` are the bitstrings :math:`b_4` and :math:`b_5` respectively.
+# where :math:`01` and :math:`11` are the bitstrings :math:`b_4` and :math:`b_5`, respectively.
 # After that we have to apply the Swap block. Since the third
 # control qubit is a :math:`|r\rangle = |1\rangle`, we swap the row :math:`1` with the target wires, getting the state :math:`|101\rangle|11\rangle|01\rangle`
 # loading the bitstring :math:`b_5` in the target register.
@@ -211,12 +211,12 @@ for i in range(8):
 #    :width: 90%
 #    :target: javascript:void(0)
 #
-# To see how this circuit works, let's suppose we want to load the bitstring :math:`b_{cr}` in the target wires, where :math:`b_{cr}`
-# is the bitstring whose operator is placed in the c-th column and r-th row.
+# where we denote by :math:`R` the number of rows. To see how this circuit works, let's suppose we want to load the bitstring :math:`b_{cr}` in the target wires, where :math:`b_{cr}`
+# is the bitstring whose operator :math:`U` is placed in the c-th column and r-th row in the two dimensional representation shown in the Select block.
 #
 # We can summarize the idea in a few simple steps:
 #
-# 1. **A uniform superposition is created in the r-th register of the work wires**. To do this, we put the Hadamards in the target wires and move it to the :math:`r` -row with the Swap block. We denote by :math:`R` the number of rows.
+# 1. **A uniform superposition is created in the r-th register of the work wires**. To do this, we put the Hadamards in the target wires and move it to the :math:`r` -row with the Swap block.
 #
 # .. math::
 #       |c\rangle |r\rangle |0\rangle |0\rangle \dots |+\rangle_r \dots |0\rangle.
@@ -237,7 +237,7 @@ for i in range(8):
 # .. math::
 #       |c\rangle |r\rangle |0\rangle |0\rangle \dots |b_{cr}\rangle_r \dots |0\rangle.
 #
-# That's it! With a last Swap we have managed to load the bitstring of column :math:`c` and row :math:`r` in the target wires.
+# 5. **Swap block is applied.** With this, we move :math:`b_{cr}` that is encoded in the :math:`r`-row to the target wires.
 #
 # .. math::
 #       |c\rangle |r\rangle |b_{cr}\rangle |0\rangle \dots |0\rangle_r \dots |0\rangle.
