@@ -148,8 +148,9 @@ def circuit(index):
 #
 # Let's look at an example by assuming we want to load in the target wires the bitstring with
 # the index :math:`5`, i.e. :math:`b_5 = 11`.
-# For it, we put as input in the control wires the state :math:`|101\rangle` (5 in binary), therefore the initial state is :math:`|101\rangle|00\rangle|00\rangle`.
-# The first two qubits store the index :math:`|c\rangle = |10\rangle` and the third qubit store to the index :math:`|r\rangle = |1\rangle`.
+# For it, we put as input in the control wires the state :math:`|101\rangle` (5 in binary), therefore the initial state is :math:`|101\rangle|00\rangle|00\rangle`,
+# where the first two qubits store the index :math:`|c\rangle = |10\rangle` and the third qubit store to the index :math:`|r\rangle = |1\rangle`.
+#
 # The first operator we have to apply is the Select block, which loads the column :math:`c`, generating the state  :math:`|101\rangle U_4|00\rangle U_5|00\rangle = |101\rangle |01\rangle |11\rangle`,
 # where :math:`01` and :math:`11` are the bitstrings :math:`b_4` and :math:`b_5` respectively.
 # After that we have to apply the Swap block. Since the third
@@ -215,28 +216,31 @@ for i in range(8):
 #
 # We can summarize the idea in a few simple steps:
 #
-# 1. **We start by generating the uniform superposition on the r-th register of the work wires**. To do this, we put the Hadamards in the target wires and move it to the :math:`r` -row with the Swap block. We denote by :math:`R` the number of rows.
+# 1. **A uniform superposition is created in the r-th register of the work wires**. To do this, we put the Hadamards in the target wires and move it to the :math:`r` -row with the Swap block. We denote by :math:`R` the number of rows.
 #
 # .. math::
-#       |c\rangle |r\rangle |0\rangle |0\rangle \dots |+\rangle_r \dots |0\rangle
+#       |c\rangle |r\rangle |0\rangle |0\rangle \dots |+\rangle_r \dots |0\rangle.
 #
-# 2. **We apply the Select block.** Note that in the :math:`r`-th position, the Select has no effect since the state :math:`|+\rangle` is not modified by :math:`X` gates.
-#
-# .. math::
-#       |c\rangle |r\rangle |b_{c0}\rangle |b_{c1}\rangle \dots |+\rangle_r \dots |b_{c(R-1)}\rangle
-#
-#
-# 3. **We apply the Hadamard gate to the  r-th register of the work wires.** The two swap blocks and the Hadamard gate applied to the target wires achieve this.
+# 2. **Select block is applied.** Note that in the :math:`r`-th position, the Select has no effect since the state :math:`|+\rangle` is not modified by :math:`X` gates.
 #
 # .. math::
-#       |c\rangle |r\rangle |b_{c0}\rangle |b_{c1}\rangle \dots |0\rangle_r \dots |b_{c(R-1)}\rangle
+#       |c\rangle |r\rangle |b_{c0}\rangle |b_{c1}\rangle \dots |+\rangle_r \dots |b_{c(R-1)}\rangle.
 #
-# 4. **We apply Select again to the state.** Note that loading the bitstring twice in the same register leaves the state as :math:`|0\rangle`. (:math:`X^2 = \mathbb{I}`)
+#
+# 3. **The Hadamard gate is applied to the r-th register of the work wires.** The two Swap blocks and the Hadamard gate applied to the target wires achieve this.
 #
 # .. math::
-#       |c\rangle |r\rangle |0\rangle |0\rangle \dots |b_{cr}\rangle_r \dots |0\rangle
+#       |c\rangle |r\rangle |b_{c0}\rangle |b_{c1}\rangle \dots |0\rangle_r \dots |b_{c(R-1)}\rangle.
 #
-# That's it! With a last swap we have managed to load the bitstring of column :math:`c` and row :math:`r` in the target wires.
+# 4. **Select block is applied.** Note that loading the bitstring twice in the same register leaves the state as :math:`|0\rangle`. (:math:`X^2 = \mathbb{I}`)
+#
+# .. math::
+#       |c\rangle |r\rangle |0\rangle |0\rangle \dots |b_{cr}\rangle_r \dots |0\rangle.
+#
+# That's it! With a last Swap we have managed to load the bitstring of column :math:`c` and row :math:`r` in the target wires.
+#
+# .. math::
+#       |c\rangle |r\rangle |b_{cr}\rangle |0\rangle \dots |0\rangle_r \dots |0\rangle.
 #
 #
 # Conclusion
