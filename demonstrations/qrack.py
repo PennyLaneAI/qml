@@ -58,11 +58,9 @@ depending upon the classical hardware platform). Qrack also offers so-called
 hybrid stabilizer simulation (with fallback to universal simulation) and
 near-Clifford simulation with a greatly reduced memory footprint on Clifford
 gate sets with the inclusion of the `RZ` variational Pauli Z-axis rotation gate.
-(For more information, see the `QCE'23 report
-<https://arxiv.org/abs/2304.14969>`__ [#QCEReport]_ by the Qrack and Unitary Fund
-teams.)
+(For more information, see the `QCE'23 report <https://arxiv.org/abs/2304.14969>`__ [#QCEReport] by the Qrack and `Unitary Fund <https://unitary.fund/>`__ teams.)
 
-Particularly for systems that don't rely on GPU-acceleration, Qrack offers a
+Particularly for systems that don't rely on GPU acceleration, Qrack offers a
 quantum binary decision diagram (QBDD) simulation algorithm option that might
 significantly reduce the memory footprint or execution complexity for circuits
 with low entanglement, as judged by the complexity of a QBDD to represent the
@@ -87,13 +85,13 @@ Demonstrating Qrack with the quantum Fourier transform
 The :doc:`quantum Fourier transform (QFT) <tutorial_qft>` is a building-block
 subroutine of many other quantum algorithms. Qrack exhibits unique capability
 for many cases of the QFT algorithm, and its worst-case performance is
-competitive with other popular quantum computer simulators [#QECReport]. In this
+competitive with other popular quantum computer simulators [#QCEReport]. In this
 section, you'll be presented with examples of Qrack's uniquely optimal
 performance on the QFT.
 
 In the case of a *trivial* computational basis eigenstate input, Qrack can
 simulate basically any QFT width. Below, we pick a random eigenstate
-initialization and perform the QFT across a width of 60 qubits.
+initialization and perform the QFT across a width of 60 qubits, with :function:`~catalyst.qjit`.
 """
 
 import pennylane as qml
@@ -144,19 +142,19 @@ plt.show()
 ##############################################################################
 # .. figure:: ../_static/demonstration_assets/qrack/fig1.png
 #     :align: center
-#     :width: 80%
+#     :width: 90%
 #     :target: javascript:void(0);
 
 ##############################################################################
-# In this image we have represented only 8 measurement samples so we can visualize it easily.
+# In this image we have represented only 8 measurement samples so we can visualize the result more easily.
 #
 # This becomes harder if we request a non-trivial initialization. In general, Qrack will use
 # Schmidt decomposition techniques to try to break up circuits into separable subsystems of
 # qubits to simulate semi-independently, combining them just-in-time (JIT) with Kronecker
-# products when they need to interact, according the user's circuit definition.
+# products when they need to interact, according the used circuit definition.
 #
 # The circuit becomes much harder for Qrack if we randomly initialize the input qubits
-# with Haar-random `U3 gates <https://docs.pennylane.ai/en/stable/code/api/pennylane.U3.html>`__,
+# with Haar-random `U3 gates <https://docs.pennylane.ai/en/stable/code/api/pennylane.U3.html>`__, which you can see below,
 # but the performance is still significantly better than the worst case (of
 # `GHZ state <https://en.wikipedia.org/wiki/Greenberger%E2%80%93Horne%E2%80%93Zeilinger_state>`__ initialization).
 
@@ -185,7 +183,7 @@ plt.show()
 ##############################################################################
 # .. figure:: ../_static/demonstration_assets/qrack/fig2.png
 #     :align: center
-#     :width: 80%
+#     :width: 90%
 #     :target: javascript:void(0);
 
 ##############################################################################
@@ -226,7 +224,7 @@ plt.show()
 ##############################################################################
 # .. figure:: ../_static/demonstration_assets/qrack/fig3.png
 #     :align: center
-#     :width: 80%
+#     :width: 90%
 #     :target: javascript:void(0);
 
 ##############################################################################
@@ -234,7 +232,7 @@ plt.show()
 # exceeding memory limitations), and the probability is peaked at bit strings of all 0 and all 1.
 #
 # It's trivial for Qrack to perform large GHZ state preparations with "hybrid" stabilizer
-# or near-Clifford simulation, if Schmidt decomposition is deactivated.
+# or near-Clifford simulation if Schmidt decomposition is deactivated.
 # QBDD cannot be accelerated by GPU, so its application might be limited, but it is parallel
 # over CPU processing elements, hence it might be particularly well-suited for systems with no GPU at all.
 # Qrack's default simulation methods will likely still outperform QBDD on BQP-complete problems
@@ -265,7 +263,7 @@ plt.show()
 ##############################################################################
 # .. figure:: ../_static/demonstration_assets/qrack/fig4.png
 #     :align: center
-#     :width: 80%
+#     :width: 90%
 #     :target: javascript:void(0);
 
 ##############################################################################
@@ -326,7 +324,7 @@ plt.show()
 ##############################################################################
 # .. figure:: ../_static/demonstration_assets/qrack/fig5.png
 #     :align: center
-#     :width: 80%
+#     :width: 90%
 #     :target: javascript:void(0);
 
 ##############################################################################
@@ -392,7 +390,7 @@ plt.show()
 ##############################################################################
 # .. figure:: ../_static/demonstration_assets/qrack/fig6.png
 #     :align: center
-#     :width: 80%
+#     :width: 90%
 #     :target: javascript:void(0);
 
 ##############################################################################
