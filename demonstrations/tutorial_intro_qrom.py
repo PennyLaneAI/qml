@@ -16,7 +16,7 @@ The QROM is an operator that allows us to load classical data into a quantum com
 
 where :math:`|b_i\rangle` is the bitstring associated with the :math:`i`-th computational basis and :math:`m` is the length of the bitstrings. We have assumed all the bistrings are of equal length.
 
-For example, suppose our data consists of four bitstrings, each with three bits: :math:`[01, 11, 11, 00, 01, 11, 11, 00]`. Then, the index register will consist of three
+For example, suppose our data consists of eight bitstrings, each with two bits: :math:`[01, 11, 11, 00, 01, 11, 11, 00]`. Then, the index register will consist of three
 qubits (:math:`3 = \log_2 8`) and the target register of two qubits (e.g., :math:`m = 2`). For instance, for the
 first four indices, the QROM operator acts as:
 
@@ -84,7 +84,8 @@ for i in range(8):
 
 ##############################################################################
 # Nice, the outputs match the elements of our initial data list: :math:`[01, 11, 11, 00, 01, 11, 11, 00]`.
-# The :class:`~.pennylane.QROM` can be used to implement the previous circuit using directly the bitstring
+#
+# The :class:`~.pennylane.QROM` template can be used to implement the previous circuit using directly the bitstring
 # without having to calculate the :math:`U_i` gates:
 
 bitstrings = ["01", "11", "11", "00", "01", "11", "11", "00"]
@@ -108,7 +109,7 @@ def circuit(index):
 # SelectSwap
 # ~~~~~~~~~~
 # The goal of the SelectSwap construction is to trade depth for width. That is, using multiple auxiliary qubits,
-# we reduce the circuit depth required to build the QROM. To apply it, you just have to add ``work_wires`` to
+# we reduce the circuit depth required to build the QROM. To apply it, we just have to add ``work_wires`` to
 # the template and PennyLane will do all the work for you automatically:
 #
 
@@ -121,7 +122,7 @@ work_wires = [5,6]
 @qml.qnode(dev)
 def circuit(index):
     qml.BasisEmbedding(index, wires=control_wires)
-    qml.QROM(bitstrings, control_wires, target_wires, work_wires = work_wires, clean = False)
+    qml.QROM(bitstrings, control_wires, target_wires, work_wires, clean = False)
     return qml.sample(wires=control_wires + target_wires + work_wires)
 
 
@@ -144,15 +145,17 @@ def circuit(index):
 # the index :math:`5`, i.e. :math:`b_5 = 11`.
 # For it, we put as input in the control wires the state :math:`|101\rangle` (5 in binary): the initial state is :math:`|101\rangle|00\rangle|00\rangle`.
 # The first two bits store the index :math:`c = |10\rangle` and the third qubit store to the index :math:`r = |1\rangle`.
-# The first operator we have to apply is the Select block, which loads the column :math:`c`:  :math:`|101\rangle|01\rangle|11\rangle`,
+# The first operator we have to apply is the Select block, which loads the column :math:`c` generating the state  :math:`|101\rangle|01\rangle|11\rangle`,
 # where :math:`01` and :math:`11` are the bitstrings :math:`b_4` and :math:`b_5` respectively.
 # After that we have to apply the Swap block. Since the third
-# control qubit is a :math:`|1\rangle`, we swap the row :math:`1` to the target wires, generating the state :math:`|101\rangle|11\rangle|01\rangle`
+# control qubit is a :math:`|1\rangle`, we swap the row :math:`1` with the target wires, getting the state :math:`|101\rangle|11\rangle|01\rangle`
 # loading the bitstring :math:`b_5` in the target register.
 
-print(f"control wires: {circuit(5)[:3]}")
-print(f"target wires: {circuit(5)[3:5]}")
-print(f"work wires: {circuit(5)[5:7]}")
+index = 5
+output = circuit(index)
+print(f"control wires: {output[:3]}")
+print(f"target wires: {output[3:5]}")
+print(f"work wires: {output[5:7]}")
 
 
 ##############################################################################
@@ -165,16 +168,14 @@ print(f"work wires: {circuit(5)[5:7]}")
 #    :width: 70%
 #    :target: javascript:void(0)
 #
-# Using the same example, we have that :math:`c = |1\rangle` and :math:`r = |01\rangle`. In this case, the columns are
-# determined by a single index but we need two indexes for the rows. We invite you to check that :math:`b_5` is actually
-# loaded in the target wires.
+# The QROM template will put as many rows as possible using the ``work_wires`` we pass.
 #
 #
 # Reusable qubits
 # ~~~~~~~~~~~~~~~~ 
 #
 # The above approach has a drawback. The work wires have been altered, i.e., after applying the operator they have not
-# been returned to state :math:`|0\rangle`. This can cause unwanted behaviors but in PennyLane can be easily solved
+# been returned to state :math:`|00\rangle`. This can cause unwanted behaviors but in PennyLane can be easily solved
 # by setting the parameter ``clean = True``.
 
 
@@ -188,7 +189,7 @@ work_wires = [5, 6]
 @qml.qnode(dev)
 def circuit(index):
     qml.BasisEmbedding(index, wires=control_wires)
-    qml.QROM(bitstrings, control_wires, target_wires, work_wires=work_wires, clean=True)
+    qml.QROM(bitstrings, control_wires, target_wires, work_wires, clean=True)
     return qml.sample(wires=target_wires + work_wires)
 
 for i in range(8):
@@ -197,17 +198,19 @@ for i in range(8):
 
 
 ##############################################################################
-# To achieve this, we follow the technique shown in [#cleanQROM]_ where the proposed circuit is as follows:
+# Great! To achieve this, we have followed the technique shown in [#cleanQROM]_ where the proposed circuit is as follows:
 #
 # .. figure:: ../_static/demonstration_assets/qrom/clean_version_2.jpeg
 #    :align: center
 #    :width: 90%
 #    :target: javascript:void(0)
 #
-# To see how this circuit works, let's suppose we want to load the bitstring :math:`b_{cr}` in the target wires, where :math:`cr` is the integer whose binary representation is :math:`|c\rangle|r\rangle`.
+# To see how this circuit works, let's suppose we want to load the bitstring :math:`b_{cr}` in the target wires, where :math:`b_{cr}`
+# is the bitstring whose operator is placed in the c-th column and r-th row.
+#
 # We can summarize the idea in a few simple steps:
 #
-# 1. **We start by generating the uniform superposition on the r-th register of the work wires**. To do this, we put the Hadamard in the target wires and move it to the :math:`r` -row with the swap block. We denote by :math:`R` the number of rows.
+# 1. **We start by generating the uniform superposition on the r-th register of the work wires**. To do this, we put the Hadamards in the target wires and move it to the :math:`r` -row with the Swap block. We denote by :math:`R` the number of rows.
 #
 # .. math::
 #       |c\rangle |r\rangle |0\rangle_0 |0\rangle_1 \dots |+\rangle_r \dots |0\rangle_{R-1}
