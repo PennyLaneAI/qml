@@ -431,7 +431,7 @@ execute_with_zne(circuit, executor, factory=factory, scale_noise=fold_global)
 # can load a noise model that represents this device using:
 
 from qiskit_ibm_runtime.fake_provider import FakeLima
-from qiskit_aer import noise
+from qiskit_aer.noise import NoiseModel
 
 backend = FakeLima()
 noise_model = NoiseModel.from_backend(backend)
