@@ -5,8 +5,8 @@
             "id": "isaac_de_vlugt"
         }
     ],
-    "dateOfPublication": "2024-07-01T00:00:00+00:00",
-    "dateOfLastModification": "2024-07-01T00:00:00+00:00",
+    "dateOfPublication": "2024-08-06T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
     "categories": [
         "Quantum Computing"
     ],
@@ -14,6 +14,10 @@
     "previewImages": [
         {
             "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/placeholder_demo_thumbnail.png"
+        },
+        {
+            "type": "large_thumbnail",
             "uri": "/_static/demonstration_assets/regular_demo_thumbnails/placeholder_demo_thumbnail.png"
         }
     ],
@@ -27,6 +31,11 @@
         {
             "type": "demonstration",
             "id": "tutorial_how_to_use_qiskit1_with_pennylane",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_diffable-mitigation",
             "weight": 1.0
         },
         {
