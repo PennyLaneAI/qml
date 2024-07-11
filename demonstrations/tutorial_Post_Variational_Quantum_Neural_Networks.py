@@ -54,6 +54,7 @@ from tqdm import tqdm
 import jax
 from jax import numpy as jnp
 import optax
+from itertools import combinations
 from sklearn.datasets import load_digits
 from sklearn.model_selection import train_test_split
 from sklearn.neural_network import MLPClassifier
