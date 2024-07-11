@@ -67,6 +67,9 @@ zstd = "*"
 dill = "*"
 stim = "*"
 quimb = "1.8.2"
+aiohttp = "3.9.5"
+fsspec = "2024.6.1"
+h5py = "3.11.0"
 
 
 # Install a difference version of torch from PyPI as the one from PyTorch repo is not compatible with MacOS
