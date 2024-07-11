@@ -7,7 +7,7 @@ r"""Post-Variational Quantum Neural Networks
 # optimization and machine learning, with potential quantum advantage. [#cerezo2021variational]_ Such algorithms operate by
 # first encoding data :math:`x` into a :math:`n`-qubit quantum state. The quantum state is then
 # transformed by an Ansatz :math:`U(\theta)`. The parameters :math:`\theta` are optimized by
-# evaluating gradients of the quantum circuit via parameter-shift rules and calculating updates of the
+# evaluating gradients of the quantum circuit via parameter-shift rules [#schuld2019evaluating]_ and calculating updates of the
 # parameter via optimization on classical computers.
 #
 # However, many Ansatze face the barren plateau problem [#mcclean2018barren]_, which leads to difficulty in convergence
@@ -17,13 +17,13 @@ r"""Post-Variational Quantum Neural Networks
 # quantum states.
 #
 # In this demo, we discuss “post-variational strategies”, proposed in this
-# `paper <https://arxiv.org/pdf/2307.10560>`__, where we take the classical combination of multiple
+# `paper <https://arxiv.org/pdf/2307.10560>`__, [#huang2024postvariational]_ where we take the classical combination of multiple
 # fixed quantum circuits and find the optimal combination through feeding our combinations through a
 # classical multilayer perceptron. We shift tunable parameters from the quantum computer to the
 # classical computer, opting for ensemble strategies when optimizing quantum models. This exchanges
-# expressibility of the circuit with trainability of the entire model. Below, we discuss various
+# expressibility [#du2020expressive]_ of the circuit with trainability of the entire model. Below, we discuss various
 # strategies and design principles for constructing individual quantum circuits, where the resulting
-# ensembles can be optimized with classical optimisation methods. [#huang2024postvariational]_
+# ensembles can be optimized with classical optimisation methods. 
 #
 
 ######################################################################
@@ -49,14 +49,7 @@ r"""Post-Variational Quantum Neural Networks
 #
 
 import pennylane as qml
-from pennylane.templates import BasicEntanglerLayers
 from pennylane import numpy as np
-
-######################################################################
-# Data Preprocessing
-# ------------------
-#
-
 from tqdm import tqdm
 import jax
 from jax import numpy as jnp
@@ -66,7 +59,14 @@ from sklearn.model_selection import train_test_split
 from sklearn.neural_network import MLPClassifier
 from sklearn.metrics import log_loss
 import matplotlib.pyplot as plt
-import numpy as np
+import matplotlib.colors
+import warnings
+warnings.filterwarnings("ignore")
+
+######################################################################
+# Data Preprocessing
+# ------------------
+#
 
 ######################################################################
 # We train our models on the digits dataset, which we import using sklearn. The dataset has grescale
@@ -342,9 +342,6 @@ plt.show()
 # ansatz.
 #
 
-import numpy as np
-from itertools import combinations
-
 
 def deriv_params(thetas: int, order: int):
     def generate_shifts(thetas: int, order: int):
@@ -445,7 +442,7 @@ plt.show()
 # Hybrid Strategy
 # ---------------------
 #
-
+######################################################################
 # When taking the strategy of observable construction, one additionally may want to use Ansatz quantum
 # circuits to increase the complexity of the model. Hence, we discuss a simple hybrid strategy that
 # combines both the usage of Ansatz expansion and observable construction. For each feature, we may
@@ -519,7 +516,7 @@ for order in range(1, 4):
     train_accuracies[0][order] = train_accuracies_AE[order - 1]
     test_accuracies[0][order] = test_accuracies_AE[order - 1]
 
-import matplotlib.colors
+
 
 cvals = [0, 0.5, 0.85, 0.95, 1]
 colors = ["black", "#C756B2", "#FF87EB", "#ACE3FF", "#D5F0FD"]
@@ -569,7 +566,7 @@ plt.show()
 
 ######################################################################
 # Experimental Results
-# ====================
+# ---------------------
 #
 
 ######################################################################
@@ -613,8 +610,6 @@ plt.show()
 #
 
 ######################################################################
-# Based on: https://arxiv.org/pdf/2307.10560 [#huang2024postvariational]_
-#
 #
 # References
 # ~~~~~~~~~~
