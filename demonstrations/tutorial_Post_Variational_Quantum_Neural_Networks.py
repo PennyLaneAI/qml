@@ -538,7 +538,7 @@ plt.setp(ax.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
 for i in range(len(locality)):
     for j in range(len(order)):
         text = ax.text(
-            j, i, round(train_accuracies[i, j], 2), ha="center", va="center", color="black"
+            j, i, np.round(train_accuracies[i, j], 2), ha="center", va="center", color="black"
         )
 
 ax.set_title("Training Accuracies")
@@ -557,7 +557,7 @@ plt.setp(ax.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
 for i in range(len(locality)):
     for j in range(len(order)):
         text = ax.text(
-            j, i, round(test_accuracies[i, j], 2), ha="center", va="center", color="black"
+            j, i, np.round(test_accuracies[i, j], 2), ha="center", va="center", color="black"
         )
 
 ax.set_title("Test Accuracies")
