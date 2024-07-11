@@ -30,9 +30,9 @@ of the most widely-used by the community. PennyLane has a few staples that make 
 ######################################################################
 # In this demo, we're going to demonstrate to you the fundamentals of what makes PennyLane awesome with
 # the idea in mind that you're coming from Qiskit. If you want to follow along on your computer, you’ll
-# need to install the PennyLane-Qiskit plugin:
-# 
-# .. code-block:: 
+# need to install the `PennyLane-Qiskit plugin <https://docs.pennylane.ai/projects/qiskit/en/stable/>`__:
+#
+# .. code-block::
 #
 #   pip install -U pennylane-qiskit
 #
@@ -57,7 +57,7 @@ of the most widely-used by the community. PennyLane has a few staples that make 
 #
 # - :func:`~pennylane.from_qiskit_op`: converts a ``SparsePauliOp`` in Qiskit 1.0 to the equivalent operator in
 #   PennyLane.
-# 
+#
 #
 # These two functions give you all that you need to access PennyLane’s features and user-interface
 # starting from the Qiskit side. As an example, let’s say you have the following code in Qiskit that
@@ -66,18 +66,25 @@ of the most widely-used by the community. PennyLane has a few staples that make 
 
 from qiskit import QuantumCircuit
 
-qc = QuantumCircuit(2)
-qc.h(0)
-qc.cx(0, 1)
+def qiskit_circuit():
+    qc = QuantumCircuit(2)
+    qc.h(0)
+    qc.cx(0, 1)
+
+    return qc
+
+qc = qiskit_circuit()
 
 ######################################################################
 # To convert this circuit to PennyLane, you just use ``qml.from_qiskit``:
 #
 
 import pennylane as qml
+import matplotlib.pyplot as plt
 
 pl_func = qml.from_qiskit(qc)
-print(qml.draw_mpl(pl_func, style="pennylane")())
+qml.draw_mpl(pl_func, style="pennylane")()
+plt.show()
 
 ######################################################################
 # Want to measure some expectation values of Pauli operators, as well? Use ``qml.from_qiskit_op`` to
@@ -95,7 +102,8 @@ pl_pauli_op = qml.from_qiskit_op(qiskit_pauli_op)
 #
 
 pl_func = qml.from_qiskit(qc, measurements=[qml.expval(pl_pauli_op)])
-print(qml.draw_mpl(pl_func)())
+qml.draw_mpl(pl_func, style='pennylane')()
+plt.show()
 
 ######################################################################
 # And just like that, you’re in PennyLane land! Now you might be asking: “What is ``pl_func`` and how
@@ -148,7 +156,7 @@ def pl_func():
 # A function like ``pl_func`` is called a **quantum function**. A quantum function in PennyLane just
 # contains quantum gates and (optionally) returns a measurement. Measurements in PennyLane are quite
 # different than in Qiskit 1.0 — we'll touch on how measurements work in PennyLane shortly. But, in our
-# case, :func:`qml.counts(wires=[0, 1]) <pennylane.counts>` is the measurement, which counts the number 
+# case, :func:`qml.counts(wires=[0, 1]) <pennylane.counts>` is the measurement, which counts the number
 # of times each basis state is sampled.
 #
 # If we actually want to execute the circuit and see the result of our measurement, we need to define
@@ -171,9 +179,9 @@ print(pl_circuit())
 #
 # - **A quantum function that contains quantum instructions**. This is ``pl_func``, which just contains
 #   quantum operations (gates) and returns a measurement. In this case, ``qml.counts(wires=1)`` is
-#   the measurement, which counts the number of times each basis state is sampled and returns a dictionary 
+#   the measurement, which counts the number of times each basis state is sampled and returns a dictionary
 #   whose values are NumPy arrays.
-# 
+#
 # - **A device** (e.g., ``qml.device("default.qubit")``). PennyLane has many devices you can choose from, but
 #   ``"default.qubit"`` is our battle-tested Python statevector simulator.
 #
