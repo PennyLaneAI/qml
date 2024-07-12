@@ -17,7 +17,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_implicit_differentiation_variational_quantum_algo.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_implicit_differentiation_variational_quantum_algo.png"
         }
     ],
     "seoDescription": "Implicitly differentiating the the solution of a VQA in PennyLane.",

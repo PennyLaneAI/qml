@@ -19,7 +19,7 @@
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_neutral_atoms.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_neutral_atoms.png"
         }
     ],
     "seoDescription": "Learn how neutral atom quantum devices work using code.",

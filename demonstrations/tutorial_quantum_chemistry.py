@@ -6,7 +6,7 @@ Building molecular Hamiltonians
 .. meta::
     :property="og:description": Learn how to build electronic Hamiltonians of molecules.
 
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//water_structure.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/water_structure.png
 
 .. related::
    tutorial_vqe A brief overview of VQE

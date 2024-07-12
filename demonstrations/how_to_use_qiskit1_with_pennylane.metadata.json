@@ -14,11 +14,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_HowToUseQiskit1WithPL.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_HowToUseQiskit1WithPL.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_HowToUseQiskit1WithPL.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_HowToUseQiskit1WithPL.png"
         }
     ],
     "seoDescription": "Learn how to get started using Qiskit 1.0 with PennyLane",

@@ -19,7 +19,7 @@
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_error-prop_2024-05-01.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_error-prop_2024-05-01.png"
         }
     ],
     "seoDescription": "Learn how to propagate error through quantum circuits.",

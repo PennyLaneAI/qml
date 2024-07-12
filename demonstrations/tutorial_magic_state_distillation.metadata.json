@@ -15,11 +15,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_magic-state-distillation.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_magic-state-distillation.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_magic-state-distillation.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_magic-state-distillation.png"
         }
     ],
     "seoDescription": "Use PennyLane, Catalyst, and QJIT to improve the fidelity of magic T-states.",

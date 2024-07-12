@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_VQE_different_spin_sectors.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_VQE_different_spin_sectors.png"
         }
     ],
     "seoDescription": "Find the lowest-energy states of a Hamiltonian in different spin sectors",

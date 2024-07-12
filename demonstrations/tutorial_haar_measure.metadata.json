@@ -15,7 +15,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_understanding_Haar_measure.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_understanding_Haar_measure.png"
         }
     ],
     "seoDescription": "Learn all about the Haar measure and how to randomly sample quantum states.",

@@ -15,11 +15,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_how_to_collect_mcm_stats.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_how_to_collect_mcm_stats.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_how_to_collect_mcm_stats.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_how_to_collect_mcm_stats.png"
         }
     ],
     "seoDescription": "Learn how to collect statistics about measurements performed during a quantum circuit.",

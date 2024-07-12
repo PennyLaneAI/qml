@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_variationally_optimizing_measurement_protocols.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_variationally_optimizing_measurement_protocols.png"
         }
     ],
     "seoDescription": "Using a variational quantum algorithm to optimize a quantum sensing protocol.",

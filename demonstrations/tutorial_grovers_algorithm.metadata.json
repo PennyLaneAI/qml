@@ -20,7 +20,7 @@
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_grovers_algorithm.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_grovers_algorithm.png"
         }
     ],
     "seoDescription": "Learn how to find an entry in a list using Grover's Algorithm",

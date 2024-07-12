@@ -23,7 +23,7 @@
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_QSVT_for_Matrix_Inversion.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_QSVT_for_Matrix_Inversion.png"
         }
     ],
     "seoDescription": "Applying QSVT for matrix inversion",

@@ -18,7 +18,7 @@
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_equivariant_graph_embedding.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_equivariant_graph_embedding.png"
         }
     ],
     "seoDescription": "Find out more about how to embedd graphs into quantum states.",

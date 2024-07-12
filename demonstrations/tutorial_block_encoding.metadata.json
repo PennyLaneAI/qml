@@ -25,7 +25,7 @@
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_Block_Encodings_Matrix_Oracle.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_Block_Encodings_Matrix_Oracle.png"
         }
     ],
     "seoDescription": "Learn about methods to achieve block-encoding for a given matrix.",

@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_gaussian_transformation.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_gaussian_transformation.png"
         }
     ],
     "seoDescription": "Use quantum machine learning techniques to tune a beamsplitter.",

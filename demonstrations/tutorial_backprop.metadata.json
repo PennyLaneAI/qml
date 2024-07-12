@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_quantum_gradients_backpropagation.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_quantum_gradients_backpropagation.png"
         }
     ],
     "seoDescription": "Using backpropagation can speed up training of quantum circuits compared to the parameter-shift rule—if you are using a simulator.",

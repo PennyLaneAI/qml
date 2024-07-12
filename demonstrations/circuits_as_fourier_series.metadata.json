@@ -19,7 +19,7 @@
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_circuits_as_fourier_series.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_circuits_as_fourier_series.png"
         }
     ],
     "seoDescription": "Learn with this interactive, code-free introduction to the idea of quantum circuits as Fourier series.",

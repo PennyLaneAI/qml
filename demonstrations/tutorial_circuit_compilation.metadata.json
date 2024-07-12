@@ -19,7 +19,7 @@
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_circuit_compilation.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_circuit_compilation.png"
         }
     ],
     "seoDescription": "Learn about circuit transformations and quantum circuit compilation with PennyLane",

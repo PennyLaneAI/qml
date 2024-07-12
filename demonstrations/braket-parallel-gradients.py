@@ -4,7 +4,7 @@ Computing gradients in parallel with Amazon Braket
 
 .. meta::
     :property="og:description": Parallelize gradient calculations with Amazon Braket
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//pl-braket.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/pl-braket.png
 
 .. related::
 

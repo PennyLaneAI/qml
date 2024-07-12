@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_function_fitting_photonic_quantum_neural.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_function_fitting_photonic_quantum_neural.png"
         }
     ],
     "seoDescription": "Fit to noisy data with a variational quantum circuit.",

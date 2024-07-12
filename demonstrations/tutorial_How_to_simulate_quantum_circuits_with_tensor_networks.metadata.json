@@ -18,11 +18,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_how_to_default_tensor.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_how_to_default_tensor.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_how_to_default_tensor.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_how_to_default_tensor.png"
         }
     ],
     "seoDescription": "Learn how to simulate quantum circuits with tensor networks using the default.tensor PennyLane device.",

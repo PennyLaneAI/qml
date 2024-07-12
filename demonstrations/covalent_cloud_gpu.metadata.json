@@ -21,7 +21,7 @@
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_covalent_cloud_gpu.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_covalent_cloud_gpu.png"
         }
     ],
     "seoDescription": "Explore the process of running GPU-accelerated quantum circuit simulations on Covalent Cloud using PennyLane.",

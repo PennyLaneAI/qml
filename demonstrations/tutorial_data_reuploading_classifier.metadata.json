@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail", 
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_data-reuploading_classified.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_data-reuploading_classified.png"
         }
     ],
     "seoDescription": "Implement a single-qubit universal quantum classifier using PennyLane.",

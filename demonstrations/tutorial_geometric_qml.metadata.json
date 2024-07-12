@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_intro_to_geometric_QML.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_intro_to_geometric_QML.png"
         }
     ],
     "seoDescription": "Using the natural symmetries in a quantum learning problem can improve learning",

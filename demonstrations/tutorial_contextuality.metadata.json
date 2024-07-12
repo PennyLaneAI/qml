@@ -18,7 +18,7 @@
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_Contextuality.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_Contextuality.png"
         }
     ],
     "seoDescription": "Train a problem-inspired ansatz on a contextuality-inspired dataset.",

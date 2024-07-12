@@ -17,7 +17,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_quantum_analytic_descent.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_quantum_analytic_descent.png"
         }
     ],
     "seoDescription": "Implement the Quantum analytic descent algorithm for VQE.",

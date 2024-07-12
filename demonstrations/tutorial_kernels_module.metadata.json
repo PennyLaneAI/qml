@@ -29,7 +29,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_training_and_evaluating_quantum_kernels.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_training_and_evaluating_quantum_kernels.png"
         }
     ],
     "seoDescription": "Kernels and alignment training with Pennylane.",
