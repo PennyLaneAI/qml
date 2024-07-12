@@ -5,6 +5,12 @@ Managing data is a crucial task on any computer, and quantum computers are no ex
 In this demonstration, we will discuss the concept of a Quantum Read-Only Memory (QROM), a data structure designed to load classical data on a quantum computer.
 You will also see how easy it is to use this operator in PennyLane through the :class:`~.pennylane.QROM` template.
 
+
+.. figure:: ../_static/demonstration_assets/qrom/qrom_opengraph.png
+    :align: center
+    :width: 50%
+    :target: javascript:void(0)
+
 QROM
 -----
 
@@ -154,7 +160,7 @@ def circuit(index):
 # The first operator we have to apply is the Select block, which loads the column :math:`c`, generating the state  :math:`|101\rangle U_4|00\rangle U_5|00\rangle = |101\rangle |01\rangle |11\rangle`,
 # where :math:`01` and :math:`11` are the bitstrings :math:`b_4` and :math:`b_5`, respectively.
 # After that we have to apply the Swap block. Since the third
-# control qubit is a :math:`|r\rangle = |1\rangle`, we swap the row :math:`1` with the target wires, getting the state :math:`|101\rangle|11\rangle|01\rangle`
+# control qubit is a :math:`|r\rangle = |1\rangle`, we swap the row :math:`1` with the target wires, getting the state :math:`|101\rangle U_5 |00\rangle U_4|00\rangle = |101\rangle|11\rangle|01\rangle`
 # loading the bitstring :math:`b_5 = 11` in the target register.
 
 index = 5
