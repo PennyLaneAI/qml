@@ -155,7 +155,7 @@ pauli_pr
 # `qubit tapering <https://pennylane.ai/qml/demos/tutorial_qubit_tapering>`__ demo.
 # Let's look at an example.
 
-generators = [qml.prod(*[qml.Z(i) for i in range(qubits-1)]), qml.Z(qubits-1)]
+generators = [qml.prod(*[qml.Z(i) for i in range(qubits - 1)]), qml.Z(qubits - 1)]
 paulixops = qml.paulix_ops(generators, qubits)
 paulix_sector = [1, 1]
 taper_op = qml.taper(pauli_pr, generators, paulixops, paulix_sector)
@@ -204,9 +204,10 @@ pauli_bk
 from pennylane import qchem
 from pennylane import numpy as np
 
-symbols  = ['H', 'H']
-geometry = np.array([[0.0, 0.0, -0.69434785],
-                     [0.0, 0.0,  0.69434785]], requires_grad = False)
+symbols = ["H", "H"]
+geometry = np.array(
+    [[0.0, 0.0, -0.69434785], [0.0, 0.0, 0.69434785]], requires_grad=False
+)
 
 mol = qchem.Molecule(symbols, geometry)
 
@@ -266,13 +267,16 @@ singles, doubles = qchem.excitations(electrons, qubits)
 
 singles_fermi = []
 for ex in singles:
-    singles_fermi.append(from_string(f"{ex[1]}+ {ex[0]}-")
-                       - from_string(f"{ex[0]}+ {ex[1]}-"))
+    singles_fermi.append(
+        from_string(f"{ex[1]}+ {ex[0]}-") - from_string(f"{ex[0]}+ {ex[1]}-")
+    )
 
 doubles_fermi = []
 for ex in doubles:
-    doubles_fermi.append(from_string(f"{ex[3]}+ {ex[2]}+ {ex[1]}- {ex[0]}-")
-                       - from_string(f"{ex[0]}+ {ex[1]}+ {ex[2]}- {ex[3]}-"))
+    doubles_fermi.append(
+        from_string(f"{ex[3]}+ {ex[2]}+ {ex[1]}- {ex[0]}-")
+        - from_string(f"{ex[0]}+ {ex[1]}+ {ex[2]}- {ex[3]}-")
+    )
 
 ##############################################################################
 # The fermionic operators are now mapped to qubit operators.
@@ -293,6 +297,7 @@ params = np.array([0.22347661, 0.0, 0.0])
 
 dev = qml.device("default.qubit", wires=qubits)
 
+
 @qml.qnode(dev)
 def circuit(params):
     qml.BasisState(hf_state, wires=range(qubits))
@@ -305,7 +310,8 @@ def circuit(params):
 
     return qml.expval(h_pauli)
 
-print('Energy =', circuit(params))
+
+print("Energy =", circuit(params))
 
 ##############################################################################
 # Using the above circuit, we produce the ground state energy of :math:`H_2` molecule.
