@@ -4,7 +4,7 @@ r"""How to learn quantum dynamics incoherently
 If we have an unknown quantum process ❓ that takes a quantum state as input and outputs
 another state, how can we recreate it or simulate it in a quantum circuit? How do we create a
 model circuit that reproduces the target quantum process? One approach is to learn the
-[dynamics of this process incoherently](https://arxiv.org/abs/2303.12834). In simple terms, this
+`dynamics of this process incoherently <https://arxiv.org/abs/2303.12834>`__. In simple terms, this
 consists of two steps:
 1. Measure the output of the unknown process for many different inputs
 2. Adjust a variational quantum circuit until it produces the same input-output combinations as
@@ -29,8 +29,7 @@ In this tutorial, we will use PennyLane to do the following:
 4. Create a model variational circuit to learn the quantum process.
 5. Train the variational circuit.
 6. Repeat the procedure using the target quantum process and hardware measurements used in
-[The power and limitations of learning quantum dynamics incoherently]
-(https://arxiv.org/abs/2303.12834)
+`The power and limitations of learning quantum dynamics incoherently <https://arxiv.org/abs/2303.12834>`__
 """
 
 ######################################################################
@@ -39,14 +38,14 @@ In this tutorial, we will use PennyLane to do the following:
 # 
 # We can perform a well known quantum process, imaginary time evolution of a Hamiltonian:
 # 
-# $$U(H, t) = e^{-i H t / \hbar}$$
+# .. math:: U(H, t) = e^{-i H t / \hbar}
 #
 # Specifically, we will use the same Hamiltonian as in the paper,
 # a transverse-field Ising Hamiltonian:
 #
-# $$H = \sum _{i=0}^{n-1} Z_iZ_{i+1} + \sum_{i=0}^{n}\alpha_iX_i$$,
+# .. math:: H = \sum_{i=0}^{n-1} Z_iZ_{i+1} + \sum_{i=0}^{n}\alpha_iX_i,
 # 
-# where :math:`n` is the number of qubits and $\alpha$ are randomly generated weights.
+# where :math:`n` is the number of qubits and :math:`\alpha` are randomly generated weights.
 # 
 # We use a Trotterized version of this Hamiltonian through :class:`~pennylane.TrotterProduct`.
 # 
@@ -62,7 +61,7 @@ np.random.seed(0)
 alphas = np.random.normal(0, 0.5, size=n_qubits)
 hamiltonian = qml.sum(
     *[qml.PauliZ(wires=i) @ qml.PauliZ(wires=i + 1) for i in range(n_qubits - 1)]
-)+ qml.sum(*[alphas[i] * qml.PauliX(wires=i) for i in range(n_qubits)])
+)+ qml.dot(alphas, [qml.PauliX(wires=i) for i in range(n_qubits)])
 
 ######################################################################
 # Create random initial states
@@ -77,7 +76,7 @@ hamiltonian = qml.sum(
 # clustered together, our model circuit will not learn to approximate the "unknown" quantum process
 # behavior for states that are very different from our training set.
 #
-# For quantum systems, this means we want to sample [Haar random states](https://en.wikipedia.org/wiki/Haar_measure).
+# For quantum systems, this means we want to sample `Haar random states <https://en.wikipedia.org/wiki/Haar_measure>`__.
 # We will create Haar random states using a procedure from our demo,
 # [Understanding the Haar measure](https://pennylane.ai/qml/demos/tutorial_haar_measure/):
 #
@@ -150,7 +149,7 @@ shadow = qml.ClassicalShadow(bits, recipes)
 # Create model circuit that will learn the target process
 # ---------------------------------------------------------
 #
-# Now that we have the classical shadow measurements, we need to create a `model_circuit` that
+# Now that we have the classical shadow measurements, we need to create a ``model_circuit`` that
 # learns to produce the same output as the target circuit. We will then use the classical shadow
 # measurements to estimate the similarity between the `model_circuit` and the `target_circuit`. 
 #
