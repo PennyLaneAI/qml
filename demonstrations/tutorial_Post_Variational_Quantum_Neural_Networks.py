@@ -602,7 +602,7 @@ plt.show()
 # circuits we can optimize with transpilation and circuit optimization strategies.
 #
 # While our empirical results show that there are cases where the usage of post-variational quantum
-# neural net- works surpass the performance of variational algorithm, we do not make a statement on
+# neural networks surpass the performance of variational algorithm, we do not make a statement on
 # the superiority of variational and post-variational algorithms as different problem settings may
 # lead to different algorithms outperforming the other. We propose post-variational quantum neural
 # networks simply as an alternative implementation of neural networks in the NISQ setting, and leave
