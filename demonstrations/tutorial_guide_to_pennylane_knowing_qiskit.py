@@ -160,9 +160,10 @@ def pl_func():
 # of times each basis state is sampled.
 #
 # If we actually want to execute the circuit and see the result of our measurement, we need to define
-# what the circuit runs on, just like how in Qiskit when we defined a ``Sampler`` instance. PennyLane’s
-# way of doing this is simple: (1) define a device with :func:`qml.device <pennylane.device>` and (2) pair the device with
-# the quantum function with :class:`~pennylane.QNode`.
+# what the circuit runs on, just like how in Qiskit when we defined a ``StatevectorSampler`` instance 
+# (a new `V2 primitive <https://pennylane.ai/qml/glossary/what-are-qiskit-primitives/>`__). PennyLane’s
+# way of doing this is simple: (1) define a device with :func:`qml.device <pennylane.device>` and (2) pair 
+# the device with the quantum function with :class:`~pennylane.QNode`.
 #
 
 dev = qml.device("default.qubit", shots=1024)
@@ -172,25 +173,30 @@ print(pl_circuit())
 
 ######################################################################
 # Now that we have the full picture of how a circuit gets created and executed in PennyLane, let’s take
-# a step back and summarize what’s going on. The first thing you’ll notice is that PennyLane’s primitives
-# are Pythonic and array-like; quantum circuits are *functions*, returning measurements that behave
-# like NumPy arrays. The function ``pl_circuit`` is called a *quantum node* (QNode), which is the sum
-# of two things:
+# a step back and summarize what’s going on. 
+# 
+# The first thing you’ll notice is that PennyLane’s primitives are Pythonic and array-like; quantum circuits 
+# are *functions*, returning measurements that behave like NumPy arrays. The function ``pl_circuit`` is 
+# called a *quantum node* (QNode), which is the sum of two things:
 #
 # - **A quantum function that contains quantum instructions**. This is ``pl_func``, which just contains
 #   quantum operations (gates) and returns a measurement. In this case, ``qml.counts(wires=1)`` is
 #   the measurement, which counts the number of times each basis state is sampled and returns a dictionary
 #   whose values are NumPy arrays.
 #
-# - **A device** (e.g., ``qml.device("default.qubit")``). PennyLane has many devices you can choose from, but
-#   ``"default.qubit"`` is our battle-tested Python statevector simulator.
+# - **A device** (e.g., ``qml.device("default.qubit")``). PennyLane has `many devices you can choose from <https://pennylane.ai/plugins/#built-in-devices>`__, 
+#   but ``"default.qubit"`` is our battle-tested Python statevector simulator.
 #
 #
-# As for measurements in PennyLane, they are quite different from Qiskit's ``EstimatorV2`` and ``SamplerV2``
-# primitives. :doc:`PennyLane's measurement API <introduction/measurements>`
-# comprises ergonomic functions that a QNode can return, like :func:`~pennylane.state` (returns the quantum state),
-# :func:`~pennylane.probs` (returns the probability distribution of the quantum state), and :func:`~pennylane.expval` (returns
-# the expectation value of a provided operator).
+# As for measurements in PennyLane, they are quite different from Qiskit's V2 primitives. 
+# :doc:`PennyLane's measurement API <introduction/measurements>` comprises ergonomic functions that a QNode 
+# can return, including
+# 
+# - :func:`~pennylane.state`: returns the quantum state vector,
+#
+# - :func:`~pennylane.probs`: returns the probability distribution of the quantum state, and
+# 
+# - :func:`~pennylane.expval`: returns the expectation value of a provided observable.
 #
 # All of this allows for a QNode to be called like a regular Python function, executing on the device
 # you specified and returning the measurement you asked for — simple as that 🌈.
@@ -224,7 +230,8 @@ def pl_circuit():
 # There’s so much more to learn about what’s possible in PennyLane, and if you’re coming from Qiskit
 # you’re in good hands. The PennyLane-Qiskit plugin is your personal chaperone to the PennyLane
 # ecosystem. You can dive deeper into what’s possible with the PennyLane-Qiskit plugin by visiting the
-# `plugin homepage <https://docs.pennylane.ai/projects/qiskit/en/stable/>`__.
+# `plugin homepage <https://docs.pennylane.ai/projects/qiskit/en/stable/>`__ or by checking out our
+# :doc:`how-to guide for using Qiskit 1.0 with PennyLane <how_to_use_qiskit1_with_pennylane>`.
 #
 # Another great thing about the PennyLane ecosystem is that we have an `emporium of up-to-date
 # demos <https://pennylane.ai/search/?contentType=DEMO&sort=publication_date>`__ maintained by the

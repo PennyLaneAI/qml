@@ -30,7 +30,7 @@
     "relatedContent": [
         {
             "type": "demonstration",
-            "id": "tutorial_how_to_use_qiskit1_with_pennylane",
+            "id": "how_to_use_qiskit1_with_pennylane",
             "weight": 1.0
         },
         {
