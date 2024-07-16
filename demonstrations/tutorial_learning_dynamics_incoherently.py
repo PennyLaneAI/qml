@@ -33,14 +33,14 @@ In this tutorial, we will use PennyLane to do the following:
 """
 
 ######################################################################
-# Creating the unknown target quantum process
-# --------------------------------------------
+# Creating an unknown target quantum process
+# -------------------------------------------
 # 
-# We can perform a well known quantum process, imaginary time evolution of a Hamiltonian:
+# To create an unknown quantum process, we can start by performing a well-known quantum process, the imaginary time evolution of a Hamiltonian:
 # 
-# .. math:: U(H, t) = e^{-i H t / \hbar}
+# .. math:: U(H, t) = e^{-i H t / \hbar} .
 #
-# Specifically, we will use the same Hamiltonian as in the paper,
+# Specifically, here we will use the same Hamiltonian as in the referenced paper,
 # a transverse-field Ising Hamiltonian:
 #
 # .. math:: H = \sum_{i=0}^{n-1} Z_iZ_{i+1} + \sum_{i=0}^{n}\alpha_iX_i,
@@ -49,7 +49,7 @@ In this tutorial, we will use PennyLane to do the following:
 # 
 # We use a Trotterized version of this Hamiltonian through :class:`~pennylane.TrotterProduct`.
 # 
-# We first create the Hamiltonian. It will be trotterized later when we use it in a quantum circuit.
+# We first create the Hamiltonian. It will be Trotterized later when we use it in a quantum circuit.
 
 import pennylane as qml
 from pennylane import numpy as pnp
@@ -64,12 +64,12 @@ hamiltonian = qml.sum(
 )+ qml.dot(alphas, [qml.PauliX(wires=i) for i in range(n_qubits)])
 
 ######################################################################
-# Create random initial states
-# ------------------------------
+# Creating random initial states
+# --------------------------------
 #
 # The next step in our procedure is to prepare several initial states. We will then apply the
 # "unknown" quantum process to each of these states to create input-output pairs. That is, for each
-# input state, we will be able to measure the output state after appllying the "unknown" quantum
+# input state, we will be able to measure the output state after applying the "unknown" quantum
 # process.
 #
 # Ideally, our input states should be uniformly distributed over the state space. If they are all
@@ -78,7 +78,7 @@ hamiltonian = qml.sum(
 #
 # For quantum systems, this means we want to sample `Haar random states <https://en.wikipedia.org/wiki/Haar_measure>`__.
 # We will create Haar random states using a procedure from our demo,
-# [Understanding the Haar measure](https://pennylane.ai/qml/demos/tutorial_haar_measure/):
+# :doc:`Understanding the Haar measure <https://pennylane.ai/qml/demos/tutorial_haar_measure/>`:
 #
 # .. note ::
 #
@@ -146,8 +146,8 @@ bits, recipes = target_circuit(shots=n_shadows)
 shadow = qml.ClassicalShadow(bits, recipes)
 
 ######################################################################
-# Create model circuit that will learn the target process
-# ---------------------------------------------------------
+# Creating a model circuit that will learn the target process
+# -------------------------------------------------------------
 #
 # Now that we have the classical shadow measurements, we need to create a ``model_circuit`` that
 # learns to produce the same output as the target circuit. We will then use the classical shadow
