@@ -1,13 +1,13 @@
 r"""How to learn quantum dynamics incoherently
 ==========================================
 
-If we have an unknown quantum process ❓ that takes a quantum state as input and outputs
+If we have an unknown quantum process that takes a quantum state as input and outputs
 another state, how can we recreate it or simulate it in a quantum circuit? How do we create a
 model circuit that reproduces the target quantum process? One approach is to learn the
 `dynamics of this process incoherently <https://arxiv.org/abs/2303.12834>`__. In simple terms, this
 consists of two steps:
-1. Measure the output of the unknown process for many different inputs
-2. Adjust a variational quantum circuit until it produces the same input-output combinations as
+#. Measure the output of the unknown process for many different inputs
+#. Adjust a variational quantum circuit until it produces the same input-output combinations as
 the unknown process.
 
 For step 1, we measure classical shadows of the target process output.
@@ -23,12 +23,12 @@ that it's not always possible to port the quantum output of a system directly to
 first measuring it.
 
 In this tutorial, we will use PennyLane to do the following:
-1. Create an "unknown" target quantum process.
-2. Create initial states to feed into the target process.
-3. Measure the classical shadows of the target process.
-4. Create a model variational circuit to learn the quantum process.
-5. Train the variational circuit.
-6. Repeat the procedure using the target quantum process and hardware measurements used in
+#. Create an "unknown" target quantum process.
+#. Create initial states to feed into the target process.
+#. Measure the classical shadows of the target process.
+#. Create a model variational circuit to learn the quantum process.
+#. Train the variational circuit.
+#. Repeat the procedure using the target quantum process and hardware measurements used in
 `The power and limitations of learning quantum dynamics incoherently <https://arxiv.org/abs/2303.12834>`__
 """
 
@@ -52,13 +52,13 @@ In this tutorial, we will use PennyLane to do the following:
 # We first create the Hamiltonian. It will be trotterized later when we use it in a quantum circuit.
 
 import pennylane as qml
-from pennylane import numpy as np
+from pennylane import numpy as pnp
 
 # number of qubits for the Hamiltonian
 n_qubits = 4
 
-np.random.seed(0)
-alphas = np.random.normal(0, 0.5, size=n_qubits)
+pnp.random.seed(0)
+alphas = pnp.random.normal(0, 0.5, size=n_qubits)
 hamiltonian = qml.sum(
     *[qml.PauliZ(wires=i) @ qml.PauliZ(wires=i + 1) for i in range(n_qubits - 1)]
 )+ qml.dot(alphas, [qml.PauliX(wires=i) for i in range(n_qubits)])
@@ -90,17 +90,17 @@ from numpy.linalg import qr
 # reproduced from Understanding the Haar measure:
 def qr_haar(N):
     """Generate a Haar-random matrix using the QR decomposition."""
-    # Step 1
+    # Step 1: generate an N x N matrix Z with normally distributed complex numbers
     A, B = np.random.normal(size=(N, N)), np.random.normal(size=(N, N))
     Z = A + 1j * B
 
-    # Step 2
+    # Step 2: compute a QR decomposition of Z
     Q, R = qr(Z)
 
-    # Step 3
+    # Step 3: create a diagonal matrix  
     Lambda = np.diag([R[i, i] / np.abs(R[i, i]) for i in range(N)])
 
-    # Step 4
+    # Step 4: a Haar-random matrix Q' = Q@Lambda
     return np.dot(Q, Lambda)
 
 random_unitary = qr_haar(2**n_qubits)
@@ -187,7 +187,7 @@ def model_circuit(params, random_state):
             qml.IsingZZ(param, wires=op.wires)
     return [qml.density_matrix(i) for i in range(n_qubits)]
 
-initial_params = np.random.random(size=len(ops), requires_grad=True)
+initial_params = pnp.random.random(size=len(ops), requires_grad=True)
 
 print(qml.draw(model_circuit)(initial_params, random_states[0]))
 
@@ -223,7 +223,7 @@ print("Final cost:", final_cost)
 
 print(model_circuit(params, random_states[0]))
 
-print(np.mean(shadow.local_snapshots(),axis=0))
+print(pnp.mean(shadow.local_snapshots(),axis=0))
 
 ######################################################################
 # Now we repeat using the learning dynamics incoherently dataset
@@ -275,7 +275,7 @@ def cost_dataset(params):
     return cost
 
 
-params = initial_params = np.random.random(size=len(ops), requires_grad=True)
+params = initial_params = pnp.random.random(size=len(ops), requires_grad=True)
 
 cost_dataset(params)
 
@@ -287,6 +287,6 @@ for i in range(steps):
 
 print(final_cost)
 
-print(np.mean(shadow_ds.local_snapshots(wires=[0]), axis=0))
+print(pnp.mean(shadow_ds.local_snapshots(wires=[0]), axis=0))
 
 print(model_circuit(params,ds.training_states[0]))
