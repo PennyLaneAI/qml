@@ -41,11 +41,7 @@ def convert_angles(angles):
     num_angles = len(angles)
     update_vals = np.zeros(num_angles)
 
-    update_vals[0] = 3 * np.pi / 4
-
-    if len(angles) % 2 == 0:
-        update_vals[0] -= np.pi / 2
-
+    update_vals[0] = 3 * np.pi / 4 - (3 + len(angles) % 4) * np.pi / 2
     update_vals[1:-1] = np.pi / 2
     update_vals[-1] = -np.pi / 4
 
