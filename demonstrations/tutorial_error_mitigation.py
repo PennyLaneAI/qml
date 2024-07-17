@@ -195,10 +195,12 @@ mitigated_qnode(w1, w2)
 # :class:`QuantumTape <pennylane.tape.QuantumTape>`, which provides a low-level approach for circuit
 # construction in PennyLane.
 
-circuit = qml.tape.QuantumTape([
-    template(w1, w2, wires=range(n_wires)),
-    qml.adjoint(template(w1, w2, wires=range(n_wires)))
-])
+circuit = qml.tape.QuantumTape(
+    [
+        template(w1, w2, wires=range(n_wires)),
+        qml.adjoint(template(w1, w2, wires=range(n_wires))),
+    ]
+)
 
 ##############################################################################
 # Don't worry, in most situations you will not need to work with a PennyLane
@@ -354,7 +356,9 @@ from mitiq.zne.scaling import fold_gates_at_random as folding
 
 extrapolate = RichardsonFactory.extrapolate
 
-mitigated_qnode = mitigate_with_zne(noisy_qnode, scale_factors, folding, extrapolate, reps_per_factor=100)
+mitigated_qnode = mitigate_with_zne(
+    noisy_qnode, scale_factors, folding, extrapolate, reps_per_factor=100
+)
 
 mitigated_qnode(w1, w2)
 
@@ -500,7 +504,11 @@ for r, phi in zip(distances, params):
     H, _ = qchem.molecular_hamiltonian(molecule)
 
     # Define ansatz circuit
-    ops = [qml.PauliX(0), qml.PauliX(1), qml.DoubleExcitation(phi, wires=range(n_wires))]
+    ops = [
+        qml.PauliX(0),
+        qml.PauliX(1),
+        qml.DoubleExcitation(phi, wires=range(n_wires)),
+    ]
     circuit = qml.tape.QuantumTape(ops)
 
     # Define custom executor that expands Hamiltonian measurement
@@ -515,8 +523,8 @@ for r, phi in zip(distances, params):
         # of Pauli operators. We get a list of circuits to execute
         # and a postprocessing function to combine the results into
         # a single number.
-        circuits, postproc = qml.transforms.hamiltonian_expand(
-            circuit_with_meas, group=False
+        circuits, postproc = qml.transforms.split_non_commuting(
+            circuit_with_meas, grouping_strategy=None
         )
         circuits_executed = qml.execute(circuits, dev_noisy, gradient_fn=None)
         return postproc(circuits_executed)
