@@ -10,6 +10,7 @@ consists of two steps:
 1. Measure the output of the unknown process for many different inputs
 2. Adjust a variational quantum circuit until it produces the same input-output combinations as the unknown process.
 
+
 For step 1, we measure classical shadows of the target process output.
 For step 2, we simulate the model circuit to get its final state. To know how similar the simulated
 state is to the target process output, we use the classical shadows to estimate the overlap of the
@@ -29,6 +30,7 @@ In this tutorial, we will use PennyLane to do the following:
 3. Measure the classical shadows of the target process.
 4. Create a model variational circuit to learn the quantum process.
 5. Train the variational circuit.
+
 
 We can then replicate the investigation in [#Jerbi]_ by using the
 `Learning Dynamics Incoherently dataset <https://pennylane.ai/datasets/other/learning-dynamics-incoherently>`__.
@@ -52,7 +54,7 @@ We can then replicate the investigation in [#Jerbi]_ by using the
 # where :math:`n` is the number of qubits and :math:`\alpha` are randomly generated weights.
 # 
 # We first create the Hamiltonian and Trotterize later in a quantum circuit via
-# :class:`~pennylane.TrotterProduct`_.
+# :class:`~pennylane.TrotterProduct`.
 
 import pennylane as qml
 from pennylane import numpy as pnp
@@ -219,7 +221,7 @@ print(pnp.mean(shadow.local_snapshots(),axis=0))
 #
 # [#Jerbi]_ Performs the procedure described above on a larger, 16-qubit transverse field Ising
 # Hamiltonian and uses classical shadow samples from quantum hardware to estimate the cost function.
-# This data is available in PennyLane through the :class:`qml.data`_ module. More information about
+# This data is available in PennyLane through the :mod:`qml.data` module. More information about
 # the dataset itself is available on the
 # `Learning Dynamics Incoherently dataset page <https://pennylane.ai/datasets/other/learning-dynamics-incoherently>`_.
 # 
