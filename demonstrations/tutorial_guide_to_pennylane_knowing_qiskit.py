@@ -1,16 +1,16 @@
-r"""Your Guide to PennyLane if you know Qiskit
+r"""Your guide to PennyLane if you know Qiskit
 ===================================================
 
-Greetings fellow quantum programmers 👋! Isn’t it such a wonderful world we live in with so many
+Greetings, fellow quantum programmers 👋! Isn’t it such a wonderful world we live in, with so many
 different quantum software development kits (SDKs) at our fingertips? I remember the days of (messy)
 personalized code bases that took hours and hours to develop just *to be able* to start researching
 👴. Nowadays, those tools are there for us to access for free, being developed and maintained by
-savvy open-source software developers around the clock. Again, what a wonderful world!
+`savvy open-source software developers <https://docs.pennylane.ai/en/stable/development/guide/contributing.html>`__ around the clock. Again, what a wonderful world!
 
-When it comes to quantum programming SDKs, PennyLane and Qiskit (``v1.0`` and ``<=v0.46``) are two
+When it comes to quantum programming SDKs, `PennyLane <https://pennylane.ai/install/>`__ and `Qiskit <https://github.com/Qiskit/qiskit>`__ (``v1.0`` and ``<=v0.46``) are two
 of the most widely-used by the community. PennyLane has a few staples that make it so:
 
-- **Hardware agnostic**: PennyLane has no opinions on what hardware or simulator backends you want
+- **Hardware-agnostic**: PennyLane has no opinions on what hardware or simulator backends you want
   to use for your research. You can program an emporium of real hardware and simulator backends all
   from the easy-to-use PennyLane API. This includes IBM’s hardware with the `PennyLane-Qiskit
   plugin <https://docs.pennylane.ai/projects/qiskit/en/stable/>`__.
@@ -20,17 +20,17 @@ of the most widely-used by the community. PennyLane has a few staples that make 
   seamlessly with your favourite machine learning frameworks.
    
 - **Community-focused**: Let’s face it, you’re going to get stuck at some point when you’re
-  researching or learning. That’s why we have a mandate to make our documentation easy to navigate,
-  dedicated teams for creating new demonstrations when we release new features, and an active
-  discussion forum for answering your questions.
+  researching or learning. That’s why we have a mandate to make our `documentation <https://docs.pennylane.ai/en/stable/index.html>`__easy to navigate,
+  dedicated teams for creating :doc:`new demonstrations </demonstrations>` when we release new features, and an active
+  `discussion forum <https://discuss.pennylane.ai/>`__ to answer your questions.
 
    
 """
 
 ######################################################################
-# In this demo, we're going to demonstrate to you the fundamentals of what makes PennyLane awesome with
-# the idea in mind that you're coming from Qiskit. If you want to follow along on your computer, you’ll
-# need to install the `PennyLane-Qiskit plugin <https://docs.pennylane.ai/projects/qiskit/en/stable/>`__:
+# In this demo, we're going to demonstrate to you the fundamentals of PennyLane and all that makes it awesome, with
+# the idea in mind that you're coming from Qiskit. If you want to follow along on your computer, all you’ll
+# need to do is install the `PennyLane-Qiskit plugin <https://docs.pennylane.ai/projects/qiskit/en/stable/>`__:
 #
 # .. code-block::
 #
@@ -45,9 +45,9 @@ of the most widely-used by the community. PennyLane has a few staples that make 
 #
 # With the first stable release of Qiskit in February 2024 — `Qiskit 1.0 <https://github.com/Qiskit/qiskit>`__ —
 # breaking changes were to be expected. Although learning a new language can be hard, PennyLane has very
-# simple tools that will help via the PennyLane-Qiskit plugin: your gateway to the land of PennyLane
-# that even lets you keep your existing Qiskit work without even having to know a ton about how PennyLane
-# works.
+# simple tools that will help via the PennyLane-Qiskit plugin. This is your gateway to the land of PennyLane
+# that even lets you keep your existing Qiskit work, and you don't even have to know a ton about how PennyLane
+# works to use it.
 #
 # There are two functions you need to know about:
 #
@@ -59,7 +59,7 @@ of the most widely-used by the community. PennyLane has a few staples that make 
 #   PennyLane.
 #
 #
-# These two functions give you all that you need to access PennyLane’s features and user-interface
+# These two functions give you all that you need to access PennyLane’s features and user interface
 # starting from the Qiskit side. As an example, let’s say you have the following code in Qiskit that
 # prepares a Bell state.
 #
@@ -107,14 +107,14 @@ plt.show()
 
 ######################################################################
 # And just like that, you’re in PennyLane land! Now you might be asking: “What is ``pl_func`` and how
-# do I use it further?” To answer those questions, we need to get to know PennyLane a little better.
+# could I use it further?” To answer those questions, we need to get to know PennyLane a little better.
 #
 
 ######################################################################
 # Get to Know PennyLane 🌞
 # ------------------------
 #
-# Let’s go back to that Qiskit circuit (``qc``) that we created earlier. If we want to execute that
+# Let’s go back to that Qiskit circuit (``qc``) that we created `earlier <#pennylane-qiskit>`_. If we want to execute that
 # circuit in Qiskit and get some results, we can do this:
 #
 
@@ -146,9 +146,9 @@ def pl_func():
 ######################################################################
 # .. note ::
 #
-#    Qubits in PennyLane are called “wires”. Why? As was mentioned, PennyLane is a hardware agnostic
-#    framework, and “wires” is a hardware agnostic term for quantum degrees of freedom that
-#    quantum computers can be based off of.
+#    Qubits in PennyLane are called *wires*. Why? As was mentioned, PennyLane is a hardware-agnostic
+#    framework, and “wires” is a hardware-agnostic term for quantum degrees of freedom that
+#    quantum computers can be based on.
 #
 #
 
@@ -160,7 +160,7 @@ def pl_func():
 # of times each basis state is sampled.
 #
 # If we actually want to execute the circuit and see the result of our measurement, we need to define
-# what the circuit runs on, just like how in Qiskit when we defined a ``StatevectorSampler`` instance 
+# what the circuit runs on, just like how we defined a ``StatevectorSampler`` instance in Qiskit
 # (a new `V2 primitive <https://pennylane.ai/qml/glossary/what-are-qiskit-primitives/>`__). PennyLane’s
 # way of doing this is simple: (1) define a device with :func:`qml.device <pennylane.device>` and (2) pair 
 # the device with the quantum function with :class:`~pennylane.QNode`.
@@ -176,7 +176,7 @@ print(pl_circuit())
 # a step back and summarize what’s going on. 
 # 
 # The first thing you’ll notice is that PennyLane’s primitives are Pythonic and array-like; quantum circuits 
-# are *functions*, returning measurements that behave like NumPy arrays. The function ``pl_circuit`` is 
+# are *functions*, returning measurements that behave like `NumPy arrays <https://numpy.org/doc/stable/reference/generated/numpy.array.html>`__. The function ``pl_circuit`` is 
 # called a *quantum node* (QNode), which is the sum of two things:
 #
 # - **A quantum function that contains quantum instructions**. This is ``pl_func``, which just contains
@@ -185,7 +185,7 @@ print(pl_circuit())
 #   whose values are NumPy arrays.
 #
 # - **A device** (e.g., ``qml.device("default.qubit")``). PennyLane has `many devices you can choose from <https://pennylane.ai/plugins/#built-in-devices>`__, 
-#   but ``"default.qubit"`` is our battle-tested Python statevector simulator.
+#   but ``"default.qubit"`` is our battle-tested Python state vector simulator.
 #
 #
 # As for measurements in PennyLane, they are quite different from Qiskit's V2 primitives. 
@@ -199,7 +199,7 @@ print(pl_circuit())
 # - :func:`~pennylane.expval`: returns the expectation value of a provided observable.
 #
 # All of this allows for a QNode to be called like a regular Python function, executing on the device
-# you specified and returning the measurement you asked for — simple as that 🌈.
+# you specified and returning the measurement you asked for — as simple as that 🌈.
 #
 # Alternatively, because PennyLane’s primitive is a glorified Python function, wrapping a quantum
 # function with :class:`qml.QNode <pennylane.QNode>` is the same as *decorating* it with :func:`@qml.qnode(dev) <pennylane.qnode>`:
@@ -216,18 +216,18 @@ def pl_circuit():
     return qml.counts(wires=[0, 1])
 
 ######################################################################
-# A minor point, but both approaches work.
+# This is a minor point, but both approaches work.
 #
 # What's great about converting your work in Qiskit to PennyLane is that now you have access to all
-# of PennyLane's plugins, meaning you can run your Qiskit circuit on more than just IBM hardware! All
-# you need to do is install the plugin of interest, and change the name of the device in ``qml.device``.
+# of `PennyLane's plugins <https://pennylane.ai/plugins/>`__, meaning you can run your Qiskit circuit on more than just IBM hardware! All
+# you need to do is install the plugin of interest and change the name of the device in ``qml.device``.
 #
 
 ######################################################################
 # Further resources 📓
 # --------------------
 #
-# There’s so much more to learn about what’s possible in PennyLane, and if you’re coming from Qiskit
+# There’s so much more to learn about what’s possible in PennyLane, and if you’re coming from Qiskit,
 # you’re in good hands. The PennyLane-Qiskit plugin is your personal chaperone to the PennyLane
 # ecosystem. You can dive deeper into what’s possible with the PennyLane-Qiskit plugin by visiting the
 # `plugin homepage <https://docs.pennylane.ai/projects/qiskit/en/stable/>`__ or by checking out our
@@ -240,10 +240,10 @@ def pl_circuit():
 #
 # Now that you’ve used PennyLane, every road in the wonderful world of quantum programming SDKs is
 # open with no set speed limits 🏎️. If you have any questions about the PennyLane-Qiskit plugin,
-# PennyLane, or even Qiskit, drop a question on our `Discussion
+# PennyLane, or even Qiskit, drop us a question on the `PennyLane Discussion
 # Forum <https://discuss.pennylane.ai>`__ and we’ll promptly respond. You can also keep exploring our website,
 # `pennylane.ai <https://pennylane.ai>`__, to see the latest and greatest PennyLane features, demos,
-# and blogs, or follow us on `LinkedIn <https://www.linkedin.com/company/pennylaneai/>`__ or `X
+# and blogs, receive the `monthly Xanadu newsletter <https://xanadu.us17.list-manage.com/subscribe?u=725f07a1d1a4337416c3129fd&id=294b062630>`__, or follow us on `LinkedIn <https://www.linkedin.com/company/pennylaneai/>`__ or `X
 # (formerly Twitter) <https://twitter.com/PennyLaneAI>`__ to stay updated!
 #
 
