@@ -38,12 +38,13 @@ platform. We will learn how to:
 # Currently, there are three devices available — Aer, BasicSim and Remote — that can be initialized
 # as follows:
 import pennylane as qml
+from qiskit_aer import AerSimulator
 
 qubits = 4
 dev_aer = qml.device("qiskit.aer", wires=qubits)
-dev_basicaer = qml.device("qiskit.basicsim", wires=qubits)
+dev_basicsim = qml.device("qiskit.basicsim", wires=qubits)
 try:
-    dev_ibmq = qml.device("qiskit.remote", wires=qubits)
+    dev_remote = qml.device("qiskit.remote", wires=qubits, backend=AerSimulator())
 except Exception as e:
     print(e)
 
@@ -57,14 +58,15 @@ except Exception as e:
 # To specify which machine or computational framework these devices actually connect to, we can
 # use the ``backend`` argument.
 
-dev_aer = qml.device("qiskit.aer", wires=qubits, backend="aer_simulator_statevector")
+dev_aer = qml.device("qiskit.aer", wires=qubits)
 
 ##############################################################################
 # For the Aer device, different quantum computers can be used by changing the backend to the name
 # of the specific simulator method. To see which backends exist, we can call the 
 # ``capabilities`` function:
 
-print(dev_aer.capabilities()["backend"])
+from qiskit_aer import Aer
+Aer.backends()
 
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
@@ -117,19 +119,20 @@ print(dev_aer.capabilities()["backend"])
 # First, we set up our problem as usual, and then retrieve a program ID from IBM, which gives us a
 # place to upload our job
 
-from pennylane import numpy as np
+from pennylane import numpy as pnp
 from qiskit_ibm_runtime import QiskitRuntimeService
 
-symbols = ["H", "H"]
-coordinates = np.array([[0., 0., -0.66140414], [0., 0., 0.66140414]])
-molecule = qml.qchem.Molecule(symbols, coordinates)
+import pennylane as qml
 
-H, qubits = qml.qchem.molecular_hamiltonian(molecule)
+H = qml.data.load("qchem", molname="H2", bondlength=0.742, basis="STO-3G", attributes=["hamiltonian"])[0].hamiltonian
+qubits = 4
 
 service = QiskitRuntimeService()
+# Gets a 127 qubit device from IBM
 backend = service.least_busy(n_qubits=127, simulator=False, operational=True)
 
 try:
+    # Although we only need 4 qubits, our device has 127 qubits, therefore we initialize with wires=127
     dev = qml.device("qiskit.remote", wires=127, backend=backend)
 except Exception as e:
     print(e)
@@ -152,7 +155,7 @@ def four_qubit_ansatz(theta):
     qml.PauliX(wires=1)
 
     # change of basis
-    qml.RX(np.pi / 2, wires=0)
+    qml.RX(pnp.pi / 2, wires=0)
     qml.Hadamard(wires=1)
     qml.Hadamard(wires=2)
     qml.Hadamard(wires=3)
@@ -168,10 +171,40 @@ def four_qubit_ansatz(theta):
     qml.CNOT(wires=[3, 2])
 
     # invert change of basis
-    qml.RX(-np.pi / 2, wires=0)
+    qml.RX(-pnp.pi / 2, wires=0)
     qml.Hadamard(wires=1)
     qml.Hadamard(wires=2)
     qml.Hadamard(wires=3)
+
+##############################################################################
+# Finally, we can run our example VQE algorithm. In order to query the quantum computer iteratively
+# we need to initialize a Qiskit Session and give our VQE algorithm an optimizer. In this case, we
+# will be using the `GradientDescentOptimizer`.
+
+from pennylane_qiskit import qiskit_session
+
+@qml.qnode(dev)
+def cost_fn(theta):
+    four_qubit_ansatz(theta)
+    return qml.expval(H)
+
+max_iterations = 40
+theta = pnp.array(0., requires_grad=True)
+opt = qml.GradientDescentOptimizer(stepsize=0.4)
+energies = []
+
+with qiskit_session(dev) as session:
+    for n in range(max_iterations):
+        theta, prev_energy = opt.step_and_cost(cost_fn, theta)
+        energies.append(prev_energy)
+
+######################################################################
+# .. note ::
+#
+#    This may take a long time depending on how busy the hardware is. Depending on the tier of
+#    your IBM plan, your session may also be interrupted before the optimization can finish. 
+#    Luckily, the rest of the workflow demonstrates how to run VQE with a simulator instead, which
+#    has no restrictions at all.
 
 ##############################################################################
 # Benchmarking
@@ -219,8 +252,8 @@ plt.show()
 stepsize = 0.4
 max_iterations = 40
 opt = qml.GradientDescentOptimizer(stepsize=stepsize)
-theta_1 = np.array(0., requires_grad=True)
-theta_2 = np.array(0., requires_grad=True)
+theta_1 = pnp.array(0., requires_grad=True)
+theta_2 = pnp.array(0., requires_grad=True)
 energies_1 = []
 energies_2 = []
 for n in range(max_iterations):
