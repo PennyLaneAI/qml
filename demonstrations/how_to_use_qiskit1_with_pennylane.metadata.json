@@ -30,6 +30,11 @@
     "relatedContent": [
         {
             "type": "demonstration",
+            "id": "how_to_use_qiskit1_with_pennylane",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
             "id": "tutorial_qubit_rotation",
             "weight": 1.0
         },
