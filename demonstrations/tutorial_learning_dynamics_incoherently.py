@@ -8,13 +8,14 @@ dynamics of this process incoherently [#Jerbi]_. In simple terms, this
 consists of two steps:
 
 1. Measure the output of the unknown process for many different inputs
+
 2. Adjust a variational quantum circuit until it produces the same input-output combinations as the unknown process.
 
 
 For step 1, we measure classical shadows of the target process output.
 For step 2, we simulate the model circuit to get its final state. To know how similar the simulated
 state is to the target process output, we use the classical shadows to estimate the overlap of the
-states. [double check wording here, we aren't exactly estimating the overlap]
+states.
 
 This is different to learning the quantum process *coherently* because it does not require the model
 circuit to be connected to the target quantum process. That is, the model circuit does not receive
@@ -26,9 +27,13 @@ first measuring it.
 In this tutorial, we will use PennyLane to do the following:
 
 1. Create an unknown target quantum process.
+
 2. Create initial states to feed into the target process.
+
 3. Measure the classical shadows of the target process.
+
 4. Create a model variational circuit to learn the quantum process.
+
 5. Train the variational circuit.
 
 
@@ -38,14 +43,14 @@ We can then replicate the investigation in [#Jerbi]_ by using the
 
 ######################################################################
 # 1. Creating an unknown target quantum process
-# -------------------------------------------
+# ----------------------------------------------
 # 
 # For our unknown quantum process, we will use a well-known quantum process,
 # the `time evolution of a Hamiltonian <https://en.wikipedia.org/wiki/Hamiltonian_(quantum_mechanics)#Schr%C3%B6dinger_equation>`_:
 # 
 # .. math:: U(H, t) = e^{-i H t / \hbar} .
 #
-# Specifically, we will use an approximation of :math:`U` via Trotterization.
+# Specifically, we will use an approximation of :math:`U` via `Trotterization <https://en.wikipedia.org/wiki/Hamiltonian_simulation#Product_formulas>`_.
 # For the Hamiltonian, :math:`H`, we choose a transverse-field Ising Hamiltonian, as in the
 # referenced paper [#Jerbi]_:
 #
@@ -67,14 +72,17 @@ n_qubits = 4
 pnp.random.seed(0)
 np.random.seed(0)
 
+#generate random weights
 alphas = pnp.random.normal(0, 0.5, size=n_qubits)
+
+#create the Hamiltonian
 hamiltonian = qml.sum(
     *[qml.PauliZ(wires=i) @ qml.PauliZ(wires=i + 1) for i in range(n_qubits - 1)]
 )+ qml.dot(alphas, [qml.PauliX(wires=i) for i in range(n_qubits)])
 
 ######################################################################
 # 2. Creating random initial states
-# ---------------------------------
+# -----------------------------------
 #
 # The next step in our procedure is to prepare several initial states. We will then apply the
 # unknown quantum process to each of these states to create input-output pairs. That is, for each
@@ -86,7 +94,7 @@ hamiltonian = qml.sum(
 # behavior for states that are very different from our training set.
 #
 # For quantum systems, this means we want to sample `Haar random states <https://en.wikipedia.org/wiki/Haar_measure>`__.
-# We will create Haar random states using a procedure from our demo,
+# For more info, see our demo,
 # `Understanding the Haar measure <https://pennylane.ai/qml/demos/tutorial_haar_measure/>`_:
 #
 # .. note ::
@@ -94,61 +102,55 @@ hamiltonian = qml.sum(
 #    On a personal computer, this method becomes slow (>1 second) around 10 qubits. 
 #    
 
-from numpy.linalg import qr
+from scipy.stats import unitary_group
 
-# reproduced from Understanding the Haar measure:
-def qr_haar(N):
-    """Generate a Haar-random matrix using the QR decomposition."""
-    # Step 1: generate an N x N matrix Z with normally distributed complex numbers
-    A, B = np.random.normal(size=(N, N)), np.random.normal(size=(N, N))
-    Z = A + 1j * B
+n_random_states = 4
 
-    # Step 2: compute a QR decomposition of Z
-    Q, R = qr(Z)
-
-    # Step 3: create a diagonal matrix  
-    Lambda = np.diag([R[i, i] / np.abs(R[i, i]) for i in range(N)])
-
-    # Step 4: a Haar-random matrix Q' = Q@Lambda
-    return np.dot(Q, Lambda)
-
-random_unitary = qr_haar(2**n_qubits)
-
-random_states = [random_unitary[:,0]]
+# Generate several random unitaries
+random_unitaries = unitary_group.rvs(2 ** n_qubits,n_random_states)
+# Take the first column of each unitary
+random_states = [random_unitary[:,0] for random_unitary in random_unitaries]
 
 
 ######################################################################
 # 3. Time evolution and classical shadow measurements
-# --------------------------------------------------
+# ----------------------------------------------------
 #
 # Now we can evolve the initial states using a Trotterized version of the Hamiltonian above. This
 # will approximate the time evolution of the corresponding transverse-field Ising system.
-# Similarly to the paper [#Jerbi]_, we will use a Trotterization with time 0.1, order 1, and 1 step. We then
-# measure classical shadows on this system using :func:`~pennylane.classical_shadow`.
 #
 
 dev = qml.device("default.qubit")
 @qml.qnode(dev)
-def target_circuit():
+def target_circuit(input_state):
     # prepare training state
-    qml.StatePrep(random_states[0], wires=range(n_qubits))
+    qml.StatePrep(input_state, wires=range(n_qubits))
 
     # evolve according to desired hamiltonian
     qml.TrotterProduct(hamiltonian, 2, 1, 1)
     return qml.classical_shadow(wires=range(n_qubits))
 
+print(qml.draw(target_circuit)(random_states[0]))
 
-print(qml.draw(target_circuit)())
+######################################################################
+#
+# Since the circuit returns :func:`~pennylane.classical_shadow` as a measurement,
+# we can run the circuit with a ``shot`` value to obtain the desired number of classical shadow
+# measurements. We create a set of measurements for each initial state:
+#
 
-n_shadows = 1000
+n_measurements = 1000
 
-bits, recipes = target_circuit(shots=n_shadows)
-shadow = qml.ClassicalShadow(bits, recipes)
+shadows=[]
+for random_state in random_states:
+    bits, recipes = target_circuit(random_state,shots=n_measurements)
+    shadow = qml.ClassicalShadow(bits, recipes)
+    shadows.append(shadow)
 
 
 ######################################################################
 # 4. Creating a model circuit that will learn the target process
-# -------------------------------------------------------------
+# ----------------------------------------------------------------
 #
 # Now that we have the classical shadow measurements, we need to create a ``model_circuit`` that
 # learns to produce the same output as the target circuit. We will then use the classical shadow
@@ -168,13 +170,11 @@ shadow = qml.ClassicalShadow(bits, recipes)
 def model_circuit(params, random_state):
     qml.StatePrep(random_state, wires=range(n_qubits))
     # this is a parameterized quantum circuit with the same gate structure as the target Trotterized unitary
-    qml.RX(params[0], wires=0)
-    qml.RX(params[1], wires=1)
-    qml.RX(params[2], wires=2)
-    qml.RX(params[3], wires=3)
-    qml.IsingZZ(params[4], wires=[2,3])
-    qml.IsingZZ(params[5], wires=[1,2])
-    qml.IsingZZ(params[6], wires=[0,1])
+    for i in range(n_qubits):
+        qml.RX(params[i],wires=i)
+
+    for i in reversed(range(n_qubits-1)):
+        qml.IsingZZ(params[n_qubits+i], wires=[i,i+1])
     return [qml.density_matrix(i) for i in range(n_qubits)]
 
 initial_params = pnp.random.random(size=7, requires_grad=True)
@@ -183,37 +183,51 @@ print(qml.draw(model_circuit)(initial_params, random_states[0]))
 
 ######################################################################
 # 5. Training a model circuit using the classical shadows in a cost function
-# ---------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 #
 # We now have to find the optimal parameters for `model_circuit` to mirror the `target_circuit`. 
 # We can estimate the similarity between the circuits according to the cost function provided in 
-# the paper. [insert equation]
+# appendix B of reference [#Jerbi]_.
 #
-# Our cost function is:
+# .. math:: C^l_N(\theta) = 1 - \frac{1}{nN}\sum^N_{j=1}\sum^n_{i=1}Tr[U|\psi^{(j)}\rangle\langle\psi^{(j)}|U^\daggerO^{(j)}_i(\theta)],
+#
+# Where :math:`n` is the number of qubits, :math:`N` is the number of initial states, :math:`\psi^{(j)}`
+# are random states, :math:`U` is our target unitary operation, and :math:`O_i` is the local density
+# matrix for qubit :math:`i` after applying the ``model_circuit``.
+#
+# We can calculate this cost for our system by using the shadow measurements made before to estimate
+# the expectation value of :math:`O_i`. This gives an estimate of the overlap between the state of
+# the target circuit qubits and the model circuit qubits:
 
 
 def cost(params):
     cost = 0.0
-    # for random_state in random_states:
-    observable_mats = model_circuit(params, random_states[0])
-    observable_pauli = [qml.pauli_decompose(observable_mat, wire_order=[qubit]) for qubit, observable_mat in enumerate(observable_mats)]
-    cost = cost - qml.math.sum(shadow.expval(observable_pauli))
+    for idx, random_state in enumerate(random_states):
+        # Obtain the density matrices for each qubit
+        observable_mats = model_circuit(params, random_state)
+        # Convert to a PauliSentence
+        observable_pauli = [qml.pauli_decompose(observable_mat, wire_order=[qubit]) for qubit, observable_mat in enumerate(observable_mats)]
+        # Estimate the overlap for each qubit
+        cost = cost + qml.math.sum(shadows[idx].expval(observable_pauli))
+    cost = 1 - cost/n_qubits/n_random_states
     return cost
 
 print("Initial cost:", cost(initial_params))
 
 params = initial_params
 
-optimizer = qml.GradientDescentOptimizer(stepsize=0.1)
-steps = 100
+optimizer = qml.GradientDescentOptimizer(stepsize=0.5)
+steps = 1000
+cost_history =[]
 for i in range(steps):
     params, final_cost = optimizer.step_and_cost(cost, params)
+    cost_history.append(final_cost)
 
 print("Final cost:", final_cost)
 
-print(model_circuit(params, random_states[0]))
+print(model_circuit(params, random_states[0])[1])
 
-print(pnp.mean(shadow.local_snapshots(),axis=0))
+print(pnp.mean(shadows[0].local_snapshots(),axis=0)[1])
 
 ######################################################################
 # Using the learning dynamics incoherently dataset
@@ -251,7 +265,9 @@ shadow_ds = qml.ClassicalShadow(ds.shadow_meas[0][:n_shadows], ds.shadow_bases[0
 
 ######################################################################
 # 
-# We only need to create the model circuit, cost function, and train:
+# We only need to create the model circuit, cost function, and train.
+# For these we use the same model circuit as above, updated to reflect the increased number
+# of qubits:
 # 
 
 dev = qml.device('default.qubit')
@@ -261,25 +277,36 @@ def model_circuit(params, random_state):
     # this is a parameterized quantum circuit with the same gate structure as the target Trotterized unitary
     qml.StatePrep(random_state, wires=range(16))
     for i in range(16):
-        print(qml.RX(params[i],wires=i))
+        qml.RX(params[i],wires=i)
 
     for i in reversed(range(15)):
-        print(qml.IsingZZ(params[16+i], wires=[i,i+1]))
+        qml.IsingZZ(params[16+i], wires=[i,i+1])
     return [qml.density_matrix(i) for i in range(16)]
 
+initial_params = pnp.random.random(size=31)
+
+print(qml.draw(model_circuit)(initial_params,random_state))
+
+######################################################################
+# 
+# For the cost function we again use the same code as above, updated to reflect that we only use one
+# input state:
+#
 
 def cost_dataset(params):
 
-    cost = 0.0
     observable_mats = model_circuit(params, ds.training_states[0])
     observable_pauli = [qml.pauli_decompose(observable_mat, wire_order=[qubit]) for qubit, observable_mat in enumerate(observable_mats)]
-    cost = cost - qml.math.sum(shadow_ds.expval(observable_pauli))
+    cost = -qml.math.sum(shadow_ds.expval(observable_pauli))/16
     return cost
 
+######################################################################
+# 
+# For the increased number of qubits in the dataset, training the models circuit is computationally
+# expensive:
+#
 
-params = initial_params = pnp.random.random(size=31, requires_grad=True)
-
-cost_dataset(params)
+params = initial_params
 
 optimizer = qml.GradientDescentOptimizer()
 steps = 10
@@ -287,13 +314,14 @@ steps = 10
 for i in range(steps):
     params, final_cost = optimizer.step_and_cost(cost_dataset, params)
 
-print(final_cost)
+print('Initial cost:', cost_dataset(params))
+print('Final cost:', final_cost)
 
 
 ##############################################################################
 # 
 # References
-# ----------
+# ------------
 #
 # .. [#Jerbi]
 #
@@ -304,5 +332,5 @@ print(final_cost)
 
 ##############################################################################
 # About the author
-# ----------------
+# ------------------
 #
