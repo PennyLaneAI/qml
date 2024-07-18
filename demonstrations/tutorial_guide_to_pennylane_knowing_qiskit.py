@@ -20,7 +20,7 @@ of the most widely-used by the community. PennyLane has a few staples that make 
   seamlessly with your favourite machine learning frameworks.
    
 - **Community-focused**: Let’s face it, you’re going to get stuck at some point when you’re
-  researching or learning. That’s why we have a mandate to make our `documentation <https://docs.pennylane.ai/en/stable/index.html>`__easy to navigate,
+  researching or learning. That’s why we have a mandate to make our `documentation <https://docs.pennylane.ai/en/stable/index.html>`__ easy to navigate,
   dedicated teams for creating :doc:`new demonstrations </demonstrations>` when we release new features, and an active
   `discussion forum <https://discuss.pennylane.ai/>`__ to answer your questions.
 .. figure:: ../_static/demonstration_assets/guide_to_pennylane_knowing_qiskit/guide_to_pennylane_knowing_qiskit_thumbnail.png
@@ -108,7 +108,7 @@ qml.draw_mpl(pl_func, style='pennylane')()
 plt.show()
 
 ######################################################################
-# And just like that, you’re in PennyLane land! Now you might be asking: “What is ``pl_func`` and how
+# And just like that, you’re in PennyLaneLand! ... _It's in your ears and in your eyes!_ 🎶 . Now you might be asking: “What is ``pl_func`` and how
 # could I use it further?” To answer those questions, we need to get to know PennyLane a little better.
 #
 
@@ -179,7 +179,7 @@ print(pl_circuit())
 # 
 # The first thing you’ll notice is that PennyLane’s primitives are Pythonic and array-like; quantum circuits 
 # are *functions*, returning measurements that behave like `NumPy arrays <https://numpy.org/doc/stable/reference/generated/numpy.array.html>`__. The function ``pl_circuit`` is 
-# called a *quantum node* (QNode), which is the sum of two things:
+# called a *quantum node* (QNode), which is the union of two things:
 #
 # - **A quantum function that contains quantum instructions**. This is ``pl_func``, which just contains
 #   quantum operations (gates) and returns a measurement. In this case, ``qml.counts(wires=1)`` is
@@ -203,7 +203,7 @@ print(pl_circuit())
 # All of this allows for a QNode to be called like a regular Python function, executing on the device
 # you specified and returning the measurement you asked for — as simple as that 🌈.
 #
-# Alternatively, because PennyLane’s primitive is a glorified Python function, wrapping a quantum
+# Alternatively, wrapping a quantum
 # function with :class:`qml.QNode <pennylane.QNode>` is the same as *decorating* it with :func:`@qml.qnode(dev) <pennylane.qnode>`:
 #
 
@@ -252,5 +252,4 @@ def pl_circuit():
 ######################################################################
 # About the author
 # ----------------
-# .. include:: ../_static/authors/isaac_de_vlugt.txt
 #
