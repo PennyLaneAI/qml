@@ -181,7 +181,7 @@ def four_qubit_ansatz(theta):
 # we need to initialize a Qiskit Session and give our VQE algorithm an optimizer. In this case, we
 # will be using the `GradientDescentOptimizer`.
 
-from pennylane_qiskit import qiskit_session
+# from pennylane_qiskit import qiskit_session
 
 @qml.qnode(dev)
 def cost_fn(theta):
