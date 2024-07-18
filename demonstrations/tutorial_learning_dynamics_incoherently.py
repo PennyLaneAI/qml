@@ -1,20 +1,18 @@
 r"""How to learn quantum dynamics incoherently
 ==========================================
 
-If we have an unknown quantum process that takes a quantum state as input and outputs
-another state, how can we recreate it or simulate it in a quantum circuit? One approach is to learn the
-dynamics of this process incoherently [#Jerbi]_. In simple terms, this
-consists of two steps:
+How can we recreate and simulate an unknown quantum process with a quantum circuit? One approach is to learn the
+dynamics of this process incoherently, as done by Jerbi et al. [#Jerbi]_. Here, we'll reproduce the numerical
+simulations of Jerbi et al. using the authors' data as provided in the
+`Learning Dynamics Incoherently dataset <https://pennylane.ai/datasets/other/learning-dynamics-incoherently>`__. 
 
-1. Measure the output of the unknown process for many different inputs
-
-2. Adjust a variational quantum circuit until it produces the same input-output combinations as the unknown process.
-
-
-For step 1, we measure classical shadows of the target process output.
+In simple terms, learning dynamics incoherently consists of two steps. First, we measure the output
+of the unknown process for many different inputs. Then, we adjust a variational quantum circuit
+until it produces the same input-output combinations as the unknown process. For step 1, we measure
+classical shadows of the target process output.
 For step 2, we simulate the model circuit to get its final state. To know how similar the simulated
-state is to the target process output, we use the classical shadows to estimate the overlap of the
-states.
+state is to the target process output, we estimate the overlap of the states using the classical
+shadows from step 1.
 
 This is different to learning the quantum process *coherently* because it does not require the model
 circuit to be connected to the target quantum process. That is, the model circuit does not receive
@@ -23,20 +21,11 @@ classical information obtained from the classical shadow measurements. One reaso
 that it's not always possible to port the quantum output of a system directly to hardware without
 first measuring it.
 
-In this tutorial, we will use PennyLane to do the following:
+In this tutorial, we will use PennyLane to create an unknown target quantum process and the initial
+states to go into it, simulate classical shadow measurements of the target process, and create and
+train a model variational circuit that approximates the target process.
 
-1. Create an unknown target quantum process.
-
-2. Create initial states to feed into the target process.
-
-3. Measure the classical shadows of the target process.
-
-4. Create a model variational circuit to learn the quantum process.
-
-5. Train the variational circuit.
-
-
-We can then replicate the investigation in [#Jerbi]_ by using the
+We can then replicate the investigation in Jerbi et al. [#Jerbi]_ by using the
 `Learning Dynamics Incoherently dataset <https://pennylane.ai/datasets/other/learning-dynamics-incoherently>`__.
 """
 
@@ -50,8 +39,8 @@ We can then replicate the investigation in [#Jerbi]_ by using the
 # .. math:: U(H, t) = e^{-i H t / \hbar} .
 #
 # Specifically, we will use an approximation of :math:`U` via `Trotterization <https://en.wikipedia.org/wiki/Hamiltonian_simulation#Product_formulas>`_.
-# For the Hamiltonian, :math:`H`, we choose a transverse-field Ising Hamiltonian, as in the
-# referenced paper [#Jerbi]_:
+# For the Hamiltonian, :math:`H`, we choose a transverse-field Ising Hamiltonian, as in
+# Jerbi et al. [#Jerbi]_:
 #
 # .. math:: H = \sum_{i=0}^{n-1} Z_iZ_{i+1} + \sum_{i=0}^{n}\alpha_iX_i,
 # 
@@ -155,7 +144,7 @@ for random_state in random_states:
 # learns to produce the same output as the target circuit. We will then use the classical shadow
 # measurements to estimate the similarity between the ``model_circuit`` and the ``target_circuit``. 
 #
-# As done in [#Jerbi]_, we create a ``model_circuit`` with the same gate structure as the target
+# As done in Jerbi et al. [#Jerbi]_, we create a ``model_circuit`` with the same gate structure as the target
 # structure. If the target quantum process were truly unknown, then we could choose a general
 # variational quantum circuit like in the :doc:`Variational classifier demo <demos/tutorial_variational_classifier>`. 
 #
@@ -186,9 +175,9 @@ print(qml.draw(model_circuit)(initial_params, random_states[0]))
 #
 # We now have to find the optimal parameters for ``model_circuit`` to mirror the ``target_circuit``. 
 # We can estimate the similarity between the circuits according to the cost function provided in 
-# appendix B of reference [#Jerbi]_.
+# appendix B of Jerbi et al. [#Jerbi]_.
 #
-# .. math:: C^l_N(\theta) = 1 - \frac{1}{nN}\sum^N_{j=1}\sum^n_{i=1}Tr[U|\psi^{(j)}\rangle\langle\psi^{(j)}|U^\daggerO^{(j)}_i(\theta)],
+# .. math:: C^l_N(\theta) = 1 - \frac{1}{nN}\sum^N_{j=1}\sum^n_{i=1}Tr[U|\psi^{(j)}\rangle\langle\psi^{(j)}|U^\dagger O^{(j)}_i(\theta)],
 #
 # Where :math:`n` is the number of qubits, :math:`N` is the number of initial states, :math:`\psi^{(j)}`
 # are random states, :math:`U` is our target unitary operation, and :math:`O_i` is the local density
@@ -224,15 +213,22 @@ for i in range(steps):
 
 print("Final cost:", final_cost)
 
-print(model_circuit(params, random_states[0])[1])
+######################################################################
+#
+# After training, we can take a look at the density matrix of a qubit for both the model and the
+# target circuit estimate from the classical shadows. If the training was successful, these should
+# be similar:
+#
 
-print(pnp.mean(shadows[0].local_snapshots(),axis=0)[1])
+print('Model circuit density matrix for qubit 1:\n',model_circuit(params, random_states[0])[1])
+
+print('Target circuit density matrix for qubit 1:\n',pnp.mean(shadows[0].local_snapshots(),axis=0)[1])
 
 ######################################################################
 # Using the learning dynamics incoherently dataset
 # ----------------------------------------------------------------
 #
-# In Jerbi et al. [#Jerbi]_, they performs the procedure described above on a larger, 16-qubit transverse field Ising
+# In Jerbi et al. [#Jerbi]_, the authors perform the procedure described above on a larger, 16-qubit transverse field Ising
 # Hamiltonian and uses classical shadow samples from quantum hardware to estimate the cost function.
 # This data is available in PennyLane through the :mod:`qml.data` module. More information about
 # the dataset itself is available on the
@@ -333,3 +329,4 @@ print('Final cost:', final_cost)
 # About the author
 # ------------------
 #
+# .. include:: ../_static/authors/diego_guala.txt
