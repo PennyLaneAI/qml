@@ -2,8 +2,7 @@ r"""How to learn quantum dynamics incoherently
 ==========================================
 
 If we have an unknown quantum process that takes a quantum state as input and outputs
-another state, how can we recreate it or simulate it in a quantum circuit? How do we create a
-model circuit that reproduces the target quantum process? One approach is to learn the
+another state, how can we recreate it or simulate it in a quantum circuit? One approach is to learn the
 dynamics of this process incoherently [#Jerbi]_. In simple terms, this
 consists of two steps:
 
@@ -154,11 +153,11 @@ for random_state in random_states:
 #
 # Now that we have the classical shadow measurements, we need to create a ``model_circuit`` that
 # learns to produce the same output as the target circuit. We will then use the classical shadow
-# measurements to estimate the similarity between the `model_circuit` and the `target_circuit`. 
+# measurements to estimate the similarity between the ``model_circuit`` and the ``target_circuit``. 
 #
 # As done in [#Jerbi]_, we create a ``model_circuit`` with the same gate structure as the target
 # structure. If the target quantum process were truly unknown, then we could choose a general
-# variational quantum circuit like in the `Variational classifier demo <https://pennylane.ai/qml/demos/tutorial_variational_classifier/>`_. 
+# variational quantum circuit like in the :doc:`Variational classifier demo <demos/tutorial_variational_classifier>`. 
 #
 # .. note ::
 #
@@ -185,7 +184,7 @@ print(qml.draw(model_circuit)(initial_params, random_states[0]))
 # 5. Training a model circuit using the classical shadows in a cost function
 # ----------------------------------------------------------------------------
 #
-# We now have to find the optimal parameters for `model_circuit` to mirror the `target_circuit`. 
+# We now have to find the optimal parameters for ``model_circuit`` to mirror the ``target_circuit``. 
 # We can estimate the similarity between the circuits according to the cost function provided in 
 # appendix B of reference [#Jerbi]_.
 #
@@ -233,7 +232,7 @@ print(pnp.mean(shadows[0].local_snapshots(),axis=0)[1])
 # Using the learning dynamics incoherently dataset
 # ----------------------------------------------------------------
 #
-# [#Jerbi]_ Performs the procedure described above on a larger, 16-qubit transverse field Ising
+# In Jerbi et al. [#Jerbi]_, they performs the procedure described above on a larger, 16-qubit transverse field Ising
 # Hamiltonian and uses classical shadow samples from quantum hardware to estimate the cost function.
 # This data is available in PennyLane through the :mod:`qml.data` module. More information about
 # the dataset itself is available on the
