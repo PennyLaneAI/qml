@@ -24,6 +24,9 @@ of the most widely-used by the community. PennyLane has a few staples that make 
   dedicated teams for creating :doc:`new demonstrations </demonstrations>` when we release new features, and an active
   `discussion forum <https://discuss.pennylane.ai/>`__ to answer your questions.
 
+.. figure:: ../_static/demonstration_assets/guide_to_pennylane_knowing_qiskit/guide_to_pennylane_knowing_qiskit_thumbnail.png
+    :align: center
+    :width: 70%
    
 """
 
