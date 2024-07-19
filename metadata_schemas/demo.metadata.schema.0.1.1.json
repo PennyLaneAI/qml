@@ -51,7 +51,8 @@
             "Quantum Chemistry",
             "Devices and Performance",
             "Quantum Computing",
-            "Quantum Hardware"
+            "Quantum Hardware",
+            "How-To"
           ]
         },
         "minItems": 0
