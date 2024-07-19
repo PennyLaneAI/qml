@@ -109,7 +109,7 @@ qml.draw_mpl(pl_func, style='pennylane')()
 plt.show()
 
 ######################################################################
-# And just like that, you’re in PennyLaneLand! ... _It's in your ears and in your eyes!_ 🎶 . Now you might be asking: “What is ``pl_func`` and how
+# And just like that, you’re in PennyLaneLand! ... *It's in your ears and in your eyes!* 🎶 . Now you might be asking: “What is ``pl_func`` and how
 # could I use it further?” To answer those questions, we need to get to know PennyLane a little better.
 #
 
