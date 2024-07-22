@@ -4,24 +4,21 @@ r"""Post-Variational Quantum Neural Networks
 
 ######################################################################
 # Variational algorithms are proposed to solve optimization problems in chemistry, combinatorial
-# optimization and machine learning, with potential quantum advantage. [#cerezo2021variational]_ Such algorithms operate by
+# optimization and machine learning, with potential quantum advantage [#cerezo2021variational]_. Such algorithms often operate by
 # first encoding data :math:`x` into a :math:`n`-qubit quantum state. The quantum state is then
-# transformed by an Ansatz :math:`U(\theta)`. The parameters :math:`\theta` are optimized by
-# evaluating gradients of the quantum circuit via parameter-shift rules [#schuld2019evaluating]_ and calculating updates of the
-# parameter via optimization on classical computers.
+# transformed by an Ansätz :math:`U(\theta)`. The parameters :math:`\theta` are optimized by
+# evaluating gradients of the quantum circuit [#schuld2019evaluating]_ and calculating updates of the parameter on a classical computer.
 #
-# However, many Ansatze face the barren plateau problem [#mcclean2018barren]_, which leads to difficulty in convergence
-# using gradient-based optimization techniques. With the general difficulty and lack of training
-# gurantees provided by variational algorithms, we discuss alternative strategies derived from the
-# variational method as the theoretical basis for optimisation but avoid tuning the parameterised
-# quantum states.
+# However, many Ansätze face the barren plateau problem [#mcclean2018barren]_, which leads to difficulty in convergence
+# using gradient-based optimization techniques. Due general difficulty and lack of training gurantees of variational algorithms, we develop an 
+# alternative training strategy that does not involve tuning the quantum circuit parameters. However,
+# we continue to use the variational method as the theoretical basis for optimisation.
 #
-# In this demo, we discuss “post-variational strategies”, proposed in this
-# `paper <https://arxiv.org/pdf/2307.10560>`__, [#huang2024postvariational]_ where we take the classical combination of multiple
-# fixed quantum circuits and find the optimal combination through feeding our combinations through a
+# Thus, we discuss “post-variational strategies” proposed in [#huang2024postvariational]_. 
+# We take the classical combination of multiple fixed quantum circuits and find the optimal combination by feeding them through a
 # classical multilayer perceptron. We shift tunable parameters from the quantum computer to the
-# classical computer, opting for ensemble strategies when optimizing quantum models. This exchanges
-# expressibility [#du2020expressive]_ of the circuit with trainability of the entire model. Below, we discuss various
+# classical computer, opting for ensemble strategies when optimizing quantum models. This sacrifices
+# expressibility [#du2020expressive]_ of the circuit for better trainability of the entire model. Below, we discuss various
 # strategies and design principles for constructing individual quantum circuits, where the resulting
 # ensembles can be optimized with classical optimisation methods. 
 #
@@ -71,8 +68,7 @@ warnings.filterwarnings("ignore")
 
 ######################################################################
 # We train our models on the digits dataset, which we import using sklearn. The dataset has grescale
-# images of size :math:`8\times 8` pixels. We only consider the digits ‘3’ and ‘5’, and standardise
-# the labels. There are 273 images for training and 91 images for testing. Each feature is transformed
+# images of size :math:`8\times 8` pixels. There are 273 images for training and 91 images for testing. Each feature is transformed
 # into a 8 by 8 grid, and each target is standardised.
 #
 
@@ -118,8 +114,7 @@ plt.show()
 #    :width: 90%
 
 ######################################################################
-# This Ansatz is also used as the Ansatze generating backbone for the Ansatz expansion and hybrid
-# post-variational strategies. When we set all initial parameters to 0, the Ansatz evaluates to
+# This Ansätz is also used as backbone for all our post-variational strategies. When we set all initial parameters to 0, the Ansätz evaluates to
 # identity.
 #
 
@@ -129,7 +124,7 @@ plt.show()
 #    :width: 90%
 
 ######################################################################
-# We write code for the above ansatz and feature map as shown below.
+# We write code for the above Ansätz and feature map as shown below.
 #
 
 
@@ -155,7 +150,7 @@ def ansatz(params):
 
 
 ######################################################################
-# We then build the quantum node by combining the above feature map and ansatz.
+# We then build the quantum node by combining the above feature map and Ansätz.
 #
 
 dev = qml.device("default.qubit", wires=8)
@@ -242,7 +237,7 @@ print("Testing accuracy: ", acc(params, X_test, y_test))
 ######################################################################
 # We take combinations of outputs of quantum circuits in this post-variational strategy. We generalize
 # the idea of taking classical combinations of quantum states to taking the classical combinations of
-# quantum observables by combining the Ansatz :math:`U(\theta)` and observable :math:`O` into a single
+# quantum observables by combining the Ansätz :math:`U(\theta)` and observable :math:`O` into a single
 # parameterized observable :math:`O(\theta)` and replacing this observable with a collection of
 # predefined trial observables :math:`O_1, O_2, \ldots , O_m`. Under this setting, measurement results
 # on the quantum circuits are then combined classically, where the optimal weights of each measurement
@@ -328,19 +323,19 @@ plt.show()
 #
 
 ######################################################################
-# Ansatz Expansion
+# Ansätz Expansion
 # ---------------------
 #
 
 ######################################################################
-# We can also begin with a variational algorithm and replace the parameterized Ansatz U(θ) with an
-# ensemble of parameterised fixed Ansatze, by subbing our pre-determined parameters into the rotation
-# gates in the ansatz:
+# We can also begin with a variational algorithm and replace the parameterized Ansätz U(θ) with an
+# ensemble of parameterised fixed Ansätze, by subbing our pre-determined parameters into the rotation
+# gates in the Ansätz:
 #
 
 ######################################################################
 # The following code is used to generate a series of fixed parameters that would be encoded into the
-# ansatz.
+# Ansätz.
 #
 
 
@@ -367,7 +362,7 @@ def deriv_params(thetas: int, order: int):
 
 
 ######################################################################
-# We construct the ansatz above and measure the top qubit with Pauli-Z.
+# We construct the Ansätz above and measure the top qubit with Pauli-Z.
 #
 
 n_wires = 8
@@ -444,10 +439,10 @@ plt.show()
 # ---------------------
 #
 ######################################################################
-# When taking the strategy of observable construction, one additionally may want to use Ansatz quantum
+# When taking the strategy of observable construction, one additionally may want to use Ansätz quantum
 # circuits to increase the complexity of the model. Hence, we discuss a simple hybrid strategy that
-# combines both the usage of Ansatz expansion and observable construction. For each feature, we may
-# first expand the ansatz with each of our parameters, then use each k-local observable to conduct
+# combines both the usage of Ansätz expansion and observable construction. For each feature, we may
+# first expand the Ansätz with each of our parameters, then use each k-local observable to conduct
 # measurements.
 #
 # Due to the high number of circuits needed to be computed in this strategy, one may choose to conduct
@@ -506,7 +501,7 @@ for order in range(1, 4):
 
 ######################################################################
 # Upon obtaining our hybrid results, we may now combine these results with that of the observable
-# construction and ansatz expansion menthods, and plot all the post-variational strategies together on
+# construction and Ansätz expansion menthods, and plot all the post-variational strategies together on
 # a heatmap.
 #
 
@@ -583,7 +578,7 @@ plt.show()
 # observables, the inclusion of 1-local and 2-local observables provide a boost in accuracy when used
 # in conjunction with first order derivatives in the hybrid strategy. This implies that the addition
 # of the observable expansion strategy can serve as an heuristic to expand the expressibility to
-# ansatz expansion method but may not be sufficient in itself as a good training strategy.
+# Ansätz expansion method but may not be sufficient in itself as a good training strategy.
 #
 
 ######################################################################
