@@ -6219,7 +6219,7 @@ name = "sphinx-gallery"
 version = "0.17.1"
 description = "A Sphinx extension that builds an HTML gallery of examples from any set of Python scripts."
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.9"
 files = [
     {file = "sphinx_gallery-0.17.1-py3-none-any.whl", hash = "sha256:0a1142a15a9d63169fe7b12167dc028891fb8db31bfc6d7de03ba0d68d591830"},
     {file = "sphinx_gallery-0.17.1.tar.gz", hash = "sha256:c9969abcc5ca8c24496014da8260833b8c3ccdb32c17716b5ba66f2e0a3cc183"},
@@ -6956,7 +6956,7 @@ name = "toolz"
 version = "0.12.1"
 description = "List processing tools and functional utilities"
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.8"
 files = [
     {file = "toolz-0.12.1-py3-none-any.whl", hash = "sha256:d22731364c07d72eea0a0ad45bafb2c2937ab6fd38a3507bf55eae8744aa7d85"},
     {file = "toolz-0.12.1.tar.gz", hash = "sha256:ecca342664893f177a13dac0e6b41cbd8ac25a358e5f215316d43e2100224f4d"},
