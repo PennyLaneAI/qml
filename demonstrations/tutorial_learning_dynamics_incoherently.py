@@ -298,19 +298,33 @@ def cost_dataset(params):
 ######################################################################
 # 
 # For the increased number of qubits in the dataset, training the models circuit is computationally
-# expensive:
+# expensive. The following training could take around 10 minutes.
 #
 
-params = initial_params
+params=initial_params
 
-optimizer = qml.GradientDescentOptimizer()
-steps = 10
+optimizer = qml.GradientDescentOptimizer(stepsize=2)
+steps = 1000
 
+cost_history = []
 for i in range(steps):
     params, final_cost = optimizer.step_and_cost(cost_dataset, params)
+    cost_history.append(final_cost)
 
 print('Initial cost:', cost_dataset(params))
 print('Final cost:', final_cost)
+
+##############################################################################
+# 
+# We can again take a look at the density matrices to confirm that the training was successful:
+#
+
+learned_matrices = model_circuit(params,random_state)
+target_matrices_shadow = np.mean(shadow_ds.local_snapshots(),axis=0)
+
+print(learned_matrices[0])
+print(target_matrices_shadow[0])
+
 
 
 ##############################################################################
