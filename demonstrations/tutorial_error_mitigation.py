@@ -531,8 +531,8 @@ for r, phi in zip(distances, params):
         # of Pauli operators. We get a list of circuits to execute
         # and a postprocessing function to combine the results into
         # a single number.
-        circuits, postproc = qml.transforms.hamiltonian_expand(
-            circuit_with_meas, group=False
+        circuits, postproc = qml.transforms.split_non_commuting(
+            circuit_with_meas, grouping_strategy=None
         )
         circuits_executed = qml.execute(circuits, dev_noisy, gradient_fn=None)
         return postproc(circuits_executed)
