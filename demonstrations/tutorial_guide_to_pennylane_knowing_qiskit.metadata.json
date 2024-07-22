@@ -1,0 +1,47 @@
+{
+    "title": "Your guide to PennyLane if you know Qiskit",
+    "authors": [
+        {
+            "id": "isaac_de_vlugt"
+        }
+    ],
+    "dateOfPublication": "2024-07-22T00:00:00+00:00",
+    "dateOfLastModification": "2024-07-22T00:00:00+00:00",
+    "categories": [
+        "Quantum Computing"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_guide_to_pennylane_knowing_qiskit.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_guide_to_pennylane_knowing_qiskit.png"
+        }
+    ],
+    "seoDescription": "This is your ultimate guide to PennyLane if you already know Qiskit.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_guide_to_pennylane_knowing_qiskit",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "how_to_use_qiskit1_with_pennylane",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_diffable-mitigation",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_qubit_rotation",
+            "weight": 1.0
+        }
+    ]
+}
