@@ -5,8 +5,8 @@
             "id": "isaac_de_vlugt"
         }
     ],
-    "dateOfPublication": "2024-08-06T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
+    "dateOfPublication": "2024-07-22T00:00:00+00:00",
+    "dateOfLastModification": "2024-07-22T00:00:00+00:00",
     "categories": [
         "Quantum Computing"
     ],
@@ -14,11 +14,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/guide_to_pennylane_knowing_qiskit/guide_to_pennylane_knowing_qiskit_thumbnail.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_guide_to_pennylane_knowing_qiskit.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_guide_to_pennylane_knowing_qiskit_largethumbnail.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_guide_to_pennylane_knowing_qiskit.png"
         }
     ],
     "seoDescription": "This is your ultimate guide to PennyLane if you already know Qiskit.",
