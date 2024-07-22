@@ -118,7 +118,7 @@ def target_circuit(input_state):
     qml.TrotterProduct(hamiltonian, 2, 1, 1)
     return qml.classical_shadow(wires=range(n_qubits))
 
-print(qml.draw(target_circuit)(random_states[0]))
+qml.draw_mpl(target_circuit)(random_states[0])
 
 ######################################################################
 #
@@ -127,7 +127,7 @@ print(qml.draw(target_circuit)(random_states[0]))
 # measurements. We create a set of measurements for each initial state:
 #
 
-n_measurements = 1000
+n_measurements = 10000
 
 shadows=[]
 for random_state in random_states:
@@ -167,7 +167,7 @@ def model_circuit(params, random_state):
 
 initial_params = pnp.random.random(size=7, requires_grad=True)
 
-print(qml.draw(model_circuit)(initial_params, random_states[0]))
+qml.draw_mpl(model_circuit)(initial_params, random_states[0])
 
 ######################################################################
 # 5. Training a model circuit using the classical shadows in a cost function
@@ -185,7 +185,7 @@ print(qml.draw(model_circuit)(initial_params, random_states[0]))
 #
 # We can calculate this cost for our system by using the shadow measurements made before to estimate
 # the expectation value of :math:`O_i`. This gives an estimate of the overlap between the state of
-# the target circuit qubits and the model circuit qubits:
+# the target circuit and the model circuit:
 
 
 def cost(params):
@@ -204,12 +204,10 @@ print("Initial cost:", cost(initial_params))
 
 params = initial_params
 
-optimizer = qml.GradientDescentOptimizer(stepsize=0.5)
-steps = 1000
-cost_history =[]
+optimizer = qml.GradientDescentOptimizer(stepsize=5)
+steps = 100
 for i in range(steps):
     params, final_cost = optimizer.step_and_cost(cost, params)
-    cost_history.append(final_cost)
 
 print("Final cost:", final_cost)
 
@@ -220,9 +218,11 @@ print("Final cost:", final_cost)
 # be similar:
 #
 
-print('Model circuit density matrix for qubit 1:\n',model_circuit(params, random_states[0])[1])
+print('Untrained state for qubit 1:\n', model_circuit(initial_params, random_states[0])[1])
 
-print('Target circuit density matrix for qubit 1:\n',pnp.mean(shadows[0].local_snapshots(),axis=0)[1])
+print('Trained state for qubit 1:\n',model_circuit(params, random_states[0])[1])
+
+print('Target state for qubit 1:\n',pnp.mean(shadows[0].local_snapshots(),axis=0)[1])
 
 ######################################################################
 # Using the learning dynamics incoherently dataset
@@ -255,8 +255,8 @@ print(ds.attr_info["hamiltonian"]["doc"])
 
 random_state = ds.training_states[0]
 
-n_shadows = 10
-shadow_ds = qml.ClassicalShadow(ds.shadow_meas[0][:n_shadows], ds.shadow_bases[0][:n_shadows])
+n_measurements = 1000
+shadow_ds = qml.ClassicalShadow(ds.shadow_meas[0][:n_measurements], ds.shadow_bases[0][:n_measurements])
 
 ######################################################################
 # 
@@ -280,50 +280,56 @@ def model_circuit(params, random_state):
 
 initial_params = pnp.random.random(size=31)
 
-print(qml.draw(model_circuit)(initial_params,random_state))
+qml.draw_mpl(model_circuit)(initial_params,random_state)
 
 ######################################################################
 # 
-# For the cost function we again use the same code as above, updated to reflect that we only use one
-# input state:
+# For the cost function, we repeat the same code as above, updated to use a single input state:
 #
 
 def cost_dataset(params):
 
-    observable_mats = model_circuit(params, ds.training_states[0])
+    observable_mats = model_circuit(params, random_state)
     observable_pauli = [qml.pauli_decompose(observable_mat, wire_order=[qubit]) for qubit, observable_mat in enumerate(observable_mats)]
-    cost = -qml.math.sum(shadow_ds.expval(observable_pauli))/16
+    cost = 1-qml.math.sum(shadow_ds.expval(observable_pauli))/16
     return cost
 
 ######################################################################
 # 
-# For the increased number of qubits in the dataset, training the models circuit is computationally
-# expensive. The following training could take around 10 minutes.
+# We can then minimize the cost to train the dataset to output the same states as the target circuit.
 #
 
 params=initial_params
 
-optimizer = qml.GradientDescentOptimizer(stepsize=2)
-steps = 1000
+optimizer = qml.GradientDescentOptimizer(stepsize=5)
+steps = 50
 
 cost_history = []
 for i in range(steps):
     params, final_cost = optimizer.step_and_cost(cost_dataset, params)
     cost_history.append(final_cost)
 
-print('Initial cost:', cost_dataset(params))
+print('Initial cost:', cost_dataset(initial_params))
 print('Final cost:', final_cost)
 
-##############################################################################
+######################################################################
 # 
 # We can again take a look at the density matrices to confirm that the training was successful:
 #
 
+original_matrices = model_circuit(initial_params, random_state)
 learned_matrices = model_circuit(params,random_state)
 target_matrices_shadow = np.mean(shadow_ds.local_snapshots(),axis=0)
 
-print(learned_matrices[0])
-print(target_matrices_shadow[0])
+print('Untrained example output state\n', original_matrices[0])
+print('Trained example output state\n', learned_matrices[0])
+print('Target output state\n',target_matrices_shadow[0])
+
+######################################################################
+# 
+# After training, the model outputs are similar to the target outputs estimated
+# using classical shadows.
+#
 
 
 
