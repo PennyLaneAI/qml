@@ -116,7 +116,7 @@ noisy_qnode = qml.QNode(circuit, dev_noisy)
 ##############################################################################
 # First, we'll visualize the circuit:
 
-print(qml.draw(ideal_qnode, expansion_strategy="device")(w1, w2))
+print(qml.draw(ideal_qnode, level="device")(w1, w2))
 
 ##############################################################################
 # As expected, executing the circuit on an ideal noise-free device gives a result of ``1``.
