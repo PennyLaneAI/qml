@@ -13,6 +13,8 @@ explore how wire registers are constructed and used in PennyLane.
 # pass a dictionary where the keys are the names for our registers and the values are the number of
 # wires for said register:
 
+import pennylane as qml
+
 wire_register = qml.registers({"alice": 1, "bob": 2, "cleo": 3})
 print(wire_register)
 
