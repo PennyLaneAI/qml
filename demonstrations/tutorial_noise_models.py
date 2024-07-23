@@ -8,19 +8,19 @@ r"""How to use noise models in PennyLane
 # evolution of and inference from quantum states under effect of state preparation, measurement and
 # environment-based errors.
 #
-# Here, we introduce how to use the ``noise`` module in PennyLane for constructing and manipulating
-# noise models for performing noisy simulation. PennyLane supports what is called insertion-based
-# noise models that are defined as a mapping from conditions to quantum function-like callables and
-# any additional noise-related metadata. Each condition in the mapping evaluates gate operations in
-# the quantum circuit based on some of its attributes like name, parameter values or wires. Depending
-# on the outcome of the evaluation, the corresponding callable would apply the noise operations for
-# the evaluated gate based on user-provided metadata such as hardware toplogy constraints and
-# relaxation/dephasing times.
+# Here, we introduce how to use the PennyLane :mod:`~pennylane.noise` module for constructing and
+# manipulating noise models for performing noisy simulation. PennyLane supports what is called
+# insertion-based noise models that are defined as a mapping from conditions to quantum function-like
+# callables and any additional noise-related metadata. Each condition in the mapping evaluates gate
+# operations in the quantum circuit based on some of its attributes like name, parameter values or
+# wires. Depending on the outcome of the evaluation, the corresponding callable would apply the noise
+# operations for the evaluated gate based on user-provided metadata such as hardware toplogy constraints
+# and relaxation/dephasing times.
 #
 
 ######################################################################
 # Let’s understand this briefly with help of the following noise model that inserts an ampltitude and
-# phase damping errors for ``RX`` and ``RY`` gates, respectively.
+# phase damping errors for :class:`~.pennylane.RX` and :class:`~.pennylane.RY` gates, respectively.
 #
 # .. figure:: ../_static/demonstration_assets/noise_models/noise_model_short.jpg
 #    :align: center
@@ -52,10 +52,11 @@ r"""How to use noise models in PennyLane
 # Boolean functions
 # ~~~~~~~~~~~~~~~~~
 #
-# We want to implement conditionals as boolean functions that accepts an operation and evaulate it to
-# return a boolean output. In PennyLane such objects are constructed as instances of ``BooleanFn`` and
-# can combined using standard bitwise operations. From the perspective of noise models, we support
-# following type of constructions.
+# We want to implement conditions as boolean functions called ``Conditionals`` that accepts
+# an operation and evaulate it to return a boolean output. In PennyLane such objects are
+# constructed as instances of :class:`~.pennylane.BooleanFn` and can combined using standard
+# bitwise operations. From the perspective of noise models, we support following type of
+# constructions.
 #
 
 ######################################################################
@@ -63,9 +64,9 @@ r"""How to use noise models in PennyLane
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
 # These conditional evaluate an operation based on whether it is a specific type of operation or
-# belongs to a specified set of operations. These can be built with ``OpEq`` and ``OpIn`` helper
-# methods, where the specific set of operation can be provided as a class, instaniated object or by
-# their string representation:
+# belongs to a specified set of operations. These can be built with :class:`~.pennylane.noise.op_eq`
+# and :class:`~.pennylane.noise.op_in` helper methods, where the specific set of operation can be
+# provided as a class, instaniated object or by their string representation:
 #
 
 import pennylane as qml
@@ -86,11 +87,12 @@ print(f"Result for cond2: {cond2(op)}")
 # Wire-based conditionals
 # ^^^^^^^^^^^^^^^^^^^^^^^
 #
-# Unlike operation-based conditionals, these evaluate an operation based on whether its wires are
-# either equal or belongs to a specified set of wires. These can be built with ``WiresEq`` and
-# ``WiresIn`` helper methods, where the specific set of wires can be provided as string or integer
-# inputs. Additionally, one can use already built gate operations and their wires will be
-# automatically extracted for constructing the wire set:
+# Unlike operation-based conditionals, these evaluate an operation based on whether its
+# wires are either equal or belongs to a specified set of wires. These can be built with
+# :class:`~.pennylane.noise.wires_eq` and :class:`~.pennylane.noise.wires_in` helper methods,
+# where the specific set of wires can be provided as string or integer inputs. Additionally,
+# one can use already built gate operations and their wires will be automatically extracted
+# for constructing the wire set:
 #
 
 cond3 = qml.noise.wires_eq("aux")
@@ -110,10 +112,10 @@ print(f"Result for cond4: {cond4(op)}")
 # ^^^^^^^^^^^^^^^^^^^^^^
 #
 # Further precise control over evaluation of operations can be achieved by defining a custom
-# conditionals in a functional form and wrapped with ``BooleanFn`` decorator. Inputs of such custom
-# conditionals must be a single operation for evaluation and optional keyword arguments for accepting
-# metadata. For example, a conditional that evaluates ``True`` for ``RX(\phi)`` gate operations with
-# :math:``\phi < 1.0`` can be constructed as:
+# conditionals in a functional form and wrapped with :class:`~.pennylane.BooleanFn` decorator.
+# Inputs of such custom conditionals must be a single operation for evaluation and optional
+# keyword arguments for accepting metadata. For example, a conditional that evaluates ``True``
+# for ``RX(\phi)`` gate operations with :math:``\phi < 1.0`` can be constructed as:
 #
 
 
@@ -150,19 +152,19 @@ for op in [op1, op2, op3]:
 #
 # If a conditional evaluates to ``True`` on a given operation in the quantum circuit, the
 # corresponding quantum function is evaluated that inserts the noise for that operation. One can
-# either use a helper constructor ``partial_wires`` function for single operation noise insertion or
-# define their own custom quantum function. It should be noted that user-defined functions should have
-# the signature ``fn(op, **metadata)``, allowing for dependency on both the evaluated operation and
-# metadata specified in the noise model.
+# either use a helper constructor :func:`~pennylane.noise.partial_wires` function for single
+# operation noise insertion or define their own custom quantum function. It should be noted
+# that user-defined functions should have the signature ``fn(op, **metadata)``, allowing for
+# dependency on both the evaluated operation and metadata specified in the noise model.
 #
 
 ######################################################################
 # Single-instruction noise via partial_wires
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
-# ``qml.noise.partial_wires`` builds a partially evaluated function based on the given operation with
-# all argument frozen except wires. For example, it can be used to create a constant-valued
-# over-rotation:
+# :func:`~pennylane.noise.partial_wires` builds a partially evaluated function based on
+# the given operation with all argument frozen except wires. For example, it can be
+# used to create a constant-valued over-rotation:
 #
 
 rx_constant = qml.noise.partial_wires(qml.RX(0.1, wires=[0]))
@@ -177,7 +179,7 @@ for wire in [0, 2, "w1"]:
 # There are often times when one would want more parameterized control over the noise operations being
 # applied. This is possible by defining your own quantum-function with the signature we specified
 # above. For example, one can use the following for inserting a thermal relaxation error based on
-# ``T_1`` time provided at runtime as a keyword argument.
+# :math:`T_1` time provided at runtime as a keyword argument.
 #
 
 
@@ -197,9 +199,9 @@ for op, t1 in [(qml.X(0), 0.01), (qml.RZ(1.234, "w1"), 0.02), (qml.S("aux"), 0.0
 # By default the quantum function defined above would result in error being inserted after the
 # operation that evaluates to ``True``. This might not always be ideal and there might be instances
 # where the error needs more felixibility with the order. We can attain this flexibility by specifying
-# the order ourselves and queuing the operation being evaluated via ``qml.appply`` within the function
-# definition. For example, the following noise function sandwiches the target operation within phase
-# rotations.
+# the order ourselves and queuing the operation being evaluated via :func:`~pennylane.apply` within
+# the function definition. For example, the following noise function sandwiches the target operation
+# within phase rotations.
 #
 
 
@@ -219,8 +221,8 @@ for op, t1 in [(qml.RX(6.589, 0), 0.01), (qml.RY(4.237, "w1"), 0.02)]:
 # ~~~~~~~~~~~~
 #
 # Now that we have introduced all the main characters of our story, we can finally introduce them in a
-# single plot, i.e., use them to build a noise model in PennyLane as a ``qml.NoiseModel`` object as
-# given below:
+# single plot, i.e., use them to build a noise model in PennyLane as a :class:`~.pennylane.NoiseModel`
+# object as given below:
 #
 
 # Set up the conditions
@@ -257,8 +259,8 @@ noise_model
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # Now the final remaining ingredient of our story is to learn how to use these noise models. So, a
-# noise model once built can be attached to a circuit or device via the ``qml.add_noise`` transform.
-# For example, consider the following quantum circuit:
+# noise model once built can be attached to a circuit or device via the :func:`~pennylane.add_noise`
+# transform. For example, consider the following quantum circuit:
 #
 
 qml.drawer.use_style("pennylane")
@@ -287,7 +289,7 @@ qml.draw_mpl(noisy_circuit, decimals=2)(params)
 
 ######################################################################
 # Alternatively, one can also attach the noise model instead to the device itself instead of
-# transforming the circuit. For this we can again use the ``add_noise`` transform:
+# transforming the circuit. For this we can again use the :func:`~pennylane.add_noise` transform:
 #
 
 noisy_dev = qml.transforms.add_noise(dev, noise_model)
@@ -352,3 +354,7 @@ plt.show()
 # features in PennyLane, allowing one to develop and test error correction and noise mitigation
 # strategies that will ultimately pave the way towards practical and reliable quantum computations.
 #
+
+######################################################################
+# About the author
+# ----------------
