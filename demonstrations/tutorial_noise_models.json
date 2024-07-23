@@ -1,0 +1,34 @@
+{
+    "title": "How to use noise models in PennyLane",
+    "authors": [
+        {
+            "id": "utkarsh_azad"
+        }
+    ],
+    "dateOfPublication": "2024-07-22T00:00:00+00:00",
+    "dateOfLastModification": "2024-07-22T00:00:00+00:00",
+    "categories": [
+        "Quantum Computing"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_optimizing_noisy_circuits_Cirq.png"
+        }
+    ],
+    "seoDescription": "Learn how noise models can be built and attached to a quantum circuit in PennyLane.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_noise_models",
+    "references": [
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_noisy_circuits",
+            "weight": 1.0
+        }
+    ]
+}
