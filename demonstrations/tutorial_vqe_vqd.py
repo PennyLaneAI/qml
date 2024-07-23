@@ -7,6 +7,11 @@ Quantum Deflation (VQD) in PennyLane
 and find the first excited state energy of the hydrogen molecule. To benefit the most from this tutorial, we recommend
 a familiarization with the `Variational Quantum Eigensolver (VQE) <https://pennylane.ai/qml/demos/tutorial_vqe/>`_ tutorial.
 
+.. figure:: ../_static/demonstration_assets/vqe_vqd/how_to_vqd_pennylane_opengraph.png
+    :align: center
+    :width: 50%
+    :target: javascript:void(0)
+
 """
 
 ######################################################################
