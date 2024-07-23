@@ -72,7 +72,7 @@ cond1 = qml.noise.op_eq("X")
 cond2 = qml.noise.op_in(["X", qml.Y, qml.CNOT([0, 1])])
 
 print(f"cond1: {cond1}")
-print(f"cond2: {cond2}")
+print(f"cond2: {cond2}\n")
 
 op = qml.Y(0)
 print(f"Evaluating conditionals for {op}")
@@ -95,7 +95,7 @@ cond3 = qml.noise.wires_eq("aux")
 cond4 = qml.noise.wires_in([0, "c", qml.RX(0.123, wires=["w1"])])
 
 print(f"cond3: {cond3}")
-print(f"cond4: {cond4}")
+print(f"cond4: {cond4}\n")
 
 op = qml.X("c")
 print(f"Evaluating conditionals for {op}")
@@ -133,7 +133,7 @@ for op in [op1, op2, op3]:
 #
 
 and_cond = cond2 & cond4
-print(and_cond)
+print(f"and_cond: {and_cond}\n")
 
 op1, op2, op3 = qml.X(wires=0), qml.CNOT(wires=[2, 3]), qml.RY(0.23, wires="c")
 
@@ -184,7 +184,7 @@ def thermal_func(op, **kwargs):
 for op, t1 in [(qml.X(0), 0.01), (qml.RZ(1.234, "w1"), 0.02), (qml.S("aux"), 0.03)]:
     with qml.queuing.AnnotatedQueue() as q:
         thermal_func(op, t1=t1)
-    print(f"Error for {op}:\n{q.queue[0]}")
+    print(f"Error for {op}:\n{q.queue[0]}\n")
 
 ######################################################################
 # Custom-ordered noise
@@ -208,7 +208,7 @@ def sandwich_func(op, **kwargs):
 for op, t1 in [(qml.RX(6.589, 0), 0.01), (qml.RY(4.237, "w1"), 0.02)]:
     with qml.queuing.AnnotatedQueue() as q:
         sandwich_func(op, t1=t1)
-    print(f"Error for {op}:\n{q.queue}")
+    print(f"Error for {op}:\n{q.queue}\n")
 
 ######################################################################
 # Noise Models
@@ -245,7 +245,9 @@ def noise3(op, **kwargs):
 
 
 # Set up noise model
-noise_model = qml.NoiseModel({fcond1: noise1, fcond2: noise2, fcond3: noise3}, t1=0.04, t2=0.01)
+noise_model = qml.NoiseModel(
+    {fcond1: noise1, fcond2: noise2, fcond3: noise3}, t1=0.04, t2=0.01
+)
 print(noise_model)
 
 ######################################################################
