@@ -153,7 +153,9 @@ from pennylane.transforms import mitigate_with_zne
 extrapolate = RichardsonFactory.extrapolate
 scale_factors = [1, 2, 3]
 
-mitigated_qnode = mitigate_with_zne(noisy_qnode, scale_factors, fold_global, extrapolate)
+mitigated_qnode = mitigate_with_zne(
+    noisy_qnode, scale_factors, fold_global, extrapolate
+)
 mitigated_qnode(w1, w2)
 
 ##############################################################################
@@ -261,7 +263,9 @@ def executor(circuits, dev=dev_noisy):
 
     # Loop through circuits and add on measurement
     for c in circuits:
-        circuit_with_meas = qml.tape.QuantumTape(c.operations, [qml.expval(qml.PauliZ(0))])
+        circuit_with_meas = qml.tape.QuantumTape(
+            c.operations, [qml.expval(qml.PauliZ(0))]
+        )
         circuits_with_meas.append(circuit_with_meas)
 
     return qml.execute(circuits_with_meas, dev, gradient_fn=None)
@@ -370,7 +374,11 @@ mitigated_qnode(w1, w2)
 # circuits are all folded with a scale factor of :math:`s=1.1`:
 
 for _ in range(3):
-    print(qml.drawer.tape_text(folding(circuit, scale_factor=1.1), decimals=2, max_length=80))
+    print(
+        qml.drawer.tape_text(
+            folding(circuit, scale_factor=1.1), decimals=2, max_length=80
+        )
+    )
 
 ##############################################################################
 # To accommodate for this randomness, we can perform multiple repetitions of random folding for a
@@ -422,8 +430,8 @@ execute_with_zne(circuit, executor, factory=factory, scale_noise=fold_global)
 # hardware. Suppose we want to simulate the ``ibmq_lima`` hardware device available on IBMQ. We
 # can load a noise model that represents this device using:
 
-from qiskit.providers.fake_provider import FakeLima
-from qiskit.providers.aer.noise import NoiseModel
+from qiskit_ibm_runtime.fake_provider import FakeLima
+from qiskit_aer.noise import NoiseModel
 
 backend = FakeLima()
 noise_model = NoiseModel.from_backend(backend)
