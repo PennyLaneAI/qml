@@ -3,7 +3,7 @@ r"""How to learn quantum dynamics incoherently
 
 How can we recreate and simulate an unknown quantum process with a quantum circuit? One approach is to learn the
 dynamics of this process incoherently, as done by Jerbi et al. [#Jerbi]_. Here, we'll reproduce the numerical
-simulations of Jerbi et al. using the authors' data as provided in the
+simulations of [#Jerbi]_ using the authors' data as provided in the
 `Learning Dynamics Incoherently dataset <https://pennylane.ai/datasets/other/learning-dynamics-incoherently>`__. 
 
 In simple terms, learning dynamics incoherently consists of two steps. First, we measure the output
@@ -25,7 +25,7 @@ In this tutorial, we will use PennyLane to create an unknown target quantum proc
 states to go into it, simulate classical shadow measurements of the target process, and create and
 train a model variational circuit that approximates the target process.
 
-We can then replicate the investigation in Jerbi et al. [#Jerbi]_ by using the
+We can then replicate the investigation in [#Jerbi]_ by using the
 `Learning Dynamics Incoherently dataset <https://pennylane.ai/datasets/other/learning-dynamics-incoherently>`__.
 """
 
@@ -40,7 +40,7 @@ We can then replicate the investigation in Jerbi et al. [#Jerbi]_ by using the
 #
 # Specifically, we will use an approximation of :math:`U` via `Trotterization <https://en.wikipedia.org/wiki/Hamiltonian_simulation#Product_formulas>`_.
 # For the Hamiltonian, :math:`H`, we choose a transverse-field Ising Hamiltonian, as in
-# Jerbi et al. [#Jerbi]_:
+# [#Jerbi]_:
 #
 # .. math:: H = \sum_{i=0}^{n-1} Z_iZ_{i+1} + \sum_{i=0}^{n}\alpha_iX_i,
 #
@@ -147,7 +147,7 @@ for random_state in random_states:
 #
 # Now that we have the classical shadow measurements, we need to create a ``model_circuit`` that
 # learns to produce the same output as the target circuit. We will then use the classical shadow
-# measurements to estimate the similarity between the ``model_circuit`` and the ``target_circuit``.
+# As done in [#Jerbi]_, we create a ``model_circuit`` with the same gate structure as the target
 #
 # As done in Jerbi et al. [#Jerbi]_, we create a ``model_circuit`` with the same gate structure as the target
 # structure. If the target quantum process were truly unknown, then we could choose a general
@@ -189,12 +189,14 @@ plt.show()
 #
 # Where :math:`n` is the number of qubits, :math:`N` is the number of initial states, :math:`\psi^{(j)}`
 # are random states, :math:`U` is our target unitary operation, and :math:`O_i` is the local density
-# matrix for qubit :math:`i` after applying the ``model_circuit``.
+# matrix for qubit :math:`i` after applying the ``model_circuit``. That is, the local states
+# :math:`\rho_{i}^{(j)}` are defined by:
+# 
+# .. math:: \rho_{i}^{(j)} =: O_{i}^{(j)}(\theta)
 #
 # We can calculate this cost for our system by using the shadow measurements made before to estimate
 # the expectation value of :math:`O_i`. This gives an estimate of the overlap between the state of
 # the target circuit and the model circuit:
-
 
 def cost(params):
     cost = 0.0
