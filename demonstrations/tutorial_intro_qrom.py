@@ -83,10 +83,12 @@ def circuit(index):
     qml.Select(Ui, control=control_wires)
     return qml.sample(wires=target_wires)
 
-qml.draw_mpl(circuit, style = "pennylane")(0)
+qml.draw_mpl(circuit, style = "pennylane")(3)
 plt.show()
 
 ##############################################################################
+# In this example we are applying Select to index :math:`3`, so we encode the state :math:`|3\rangle = |011\rangle`
+# with two :math:`X` gates.
 # Now we can check that all the outputs are as expected:
 
 for i in range(8):
