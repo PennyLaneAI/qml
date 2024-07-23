@@ -19,35 +19,64 @@ print(wire_register)
 # The wire_register created is a dictionary where the keys are the names of the registers and the
 # values are :class:`~Wires` instances.
 #
-# You can also pass in a dictionary that has nested dictionaries as its values:
+# You can also pass in a dictionary that has nested dictionaries as its values.
 
-nested_register = qml.registers({"alice": 1, "bob": {"bob1": 1, "bob2": 1}, "cleo": 1})
+nested_register = qml.registers(
+    {"all_registers": {"alice": 1, "bob": {"bob1": {"bob1a": 1}, "bob2": 1}, "cleo": 1}}
+)
 print(nested_register)
 
 # Note that :func:`~pennylane.registers` flattens any nested dictionaries, and the order of the
 # elements is based on order of appearance and nestedness. For more details on the ordering, refer
 # to the documentation for :func:`~pennylane.registers`.
 #
+# Accessing elements in your registers is the same as accessing any element in a dictionary.
+
+print(nested_register["alice"])
+print(nested_register["bob1a"])
+
+# You can access a specific wire index via its index in a register.
+
+print(nested_register["all_registers"][2])
+print(nested_register["bob1a"][0])
+
+# You can also create registers using set operations. For more details on what setoperations are
+# supported, refer to the documentation of :func:`~pennylane.registers`.
+
+new_register = nested_register["alice"] | nested_register["cleo"]
+print(new_register)
 ######################################################################
 # A simple example using wire registers
 # -------------------------------------
 #
-# Wire registers help us group qubits and abstract away the finer details of running quantum algorithms.
-# In this example, we demonstrate how to use registers to perform a SWAP test, which is a procedure
-# for testing how alike two quantum states are. The SWAP test requires one ancilla qubit and takes
+# Wire registers help us group qubits and abstract away the finer details of running quantum
+# algorithms. In this example, we compare how we would implement the SWAP test with and without
+# registers. The SWAP test is an algorithm that compares how similar two quantum states are and
+# calculates the squared inner product of said states. It requires one ancilla qubit and takes
 # two input states :math:`|\psi\rangle` and :math:`|\phi\rangle`. We can think of these components
-# as three registers. Suppose states :math:`|\psi\rangle` and :math:`|\phi\rangle` are each represented
-# with 3 wires. In PennyLane code, that would be:
+# as three registers. Suppose states :math:`|\psi\rangle` and :math:`|\phi\rangle` are each
+# represented with 3 wires. Here, we will do a side-by-side comparison of using registers versus
+# not using registers. In PennyLane code, that would be:
 
 import pennylane as qml
 
+# With registers
 swap_register = qml.registers({"ancilla": 1, "psi": 3, "phi": 3})
+
+# Without registers
+ancilla = [0]
+psi = [1, 2, 3]
+phi = [4, 5, 6]
 
 # To perform the SWAP test, we first need to apply the Hadamard gate to our ancilla qubit.
 
 
 def swap_test():
     qml.Hadamard(swap_register["ancilla"])
+
+
+def swap_test_no_regs():
+    qml.Hadamard(ancilla)
 
 
 # We then need to apply a controlled SWAP operation to :math:`|\psi\rangle` and :math:`|\phi\rangle`
@@ -63,6 +92,12 @@ def swap_test():
         )
 
 
+def swap_test_no_regs():
+    qml.Hadamard(ancilla)
+    for i in range(len(psi)):
+        qml.CSWAP([ancilla[0], psi[i], phi[i]])
+
+
 # Finally, we apply the Hadamard gate to our ancilla qubit once again, and measure in the Z basis.
 
 
@@ -74,6 +109,14 @@ def swap_test():
         )
     qml.Hadamard(swap_register["ancilla"])
     return qml.expval(qml.Z(wires=swap_register["ancilla"]))
+
+
+def swap_test_no_regs():
+    qml.Hadamard(ancilla)
+    for i in range(len(psi)):
+        qml.CSWAP([ancilla[0], psi[i], phi[i]])
+    qml.Hadamard(ancilla)
+    return qml.expval(qml.Z(wires=ancilla))
 
 
 ######################################################################
