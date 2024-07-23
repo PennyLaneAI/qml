@@ -61,8 +61,8 @@ r"""How to use noise models in PennyLane
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
 # These conditionals evaluate an operation based on whether it is a specific type of operation or
-# belongs to a specified set of operations. These can be built with :class:`~.pennylane.noise.op_eq`
-# and :class:`~.pennylane.noise.op_in` helper methods, where the specific set of operations can be
+# belongs to a specified set of operations. These can be built with :func:`~.pennylane.noise.op_eq`
+# and :func:`~.pennylane.noise.op_in` helper methods, where the specific set of operations can be
 # provided as a class, instantiated object or by their string representation:
 #
 
@@ -87,7 +87,7 @@ print(f"Result for cond2: {cond2(op)}")
 #
 # Unlike operation-based conditionals, these evaluate an operation based on whether its
 # wires are equal or belong to a specified set of wires. These can be built with
-# :class:`~.pennylane.noise.wires_eq` and :class:`~.pennylane.noise.wires_in` helper methods,
+# :func:`~.pennylane.noise.wires_eq` and :func:`~.pennylane.noise.wires_in` helper methods,
 # where the specific set of wires can be provided as string or integer inputs. Additionally,
 # one can use already built gate operations, and their wires will be automatically extracted
 # for constructing the wire set:
