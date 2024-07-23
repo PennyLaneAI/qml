@@ -114,7 +114,7 @@ print(f"Result for cond4: {cond4(op)}")
 # conditionals in a functional form and wrapping thema  with :class:`~.pennylane.BooleanFn`
 # decorator. Inputs of such custom conditionals must be a single operation for evaluation and
 # optional keyword arguments for accepting metadata. For example, a conditional that evaluates
-# ``True`` for ``RX(\phi)`` gate operations with :math:``\phi < 1.0`` can be constructed as:
+# ``True`` for :math:`RX(\phi)` gate operations with :math:`\phi < 1.0` can be constructed as:
 #
 
 
