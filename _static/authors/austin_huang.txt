@@ -1,0 +1,4 @@
+.. bio:: Austin Huang
+ :photo: ../_static/authors/austin_huang.png
+
+ Austin is a quantum software developer intern at Xanadu. His work focuses on quantum computing and quantum chemistry.
