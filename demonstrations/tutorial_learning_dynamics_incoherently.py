@@ -52,6 +52,7 @@ We can then replicate the investigation in Jerbi et al. [#Jerbi]_ by using the
 import pennylane as qml
 from pennylane import numpy as pnp
 import numpy as np
+import matplotlib.pyplot as plt
 
 # number of qubits for the Hamiltonian
 n_qubits = 4
@@ -122,6 +123,7 @@ def target_circuit(input_state):
 
 
 qml.draw_mpl(target_circuit)(random_states[0])
+plt.show()
 
 ######################################################################
 #
@@ -149,7 +151,7 @@ for random_state in random_states:
 #
 # As done in Jerbi et al. [#Jerbi]_, we create a ``model_circuit`` with the same gate structure as the target
 # structure. If the target quantum process were truly unknown, then we could choose a general
-# variational quantum circuit like in the :doc:`Variational classifier demo <demos/tutorial_variational_classifier>`.
+# variational quantum circuit like in the :doc:`Variational classifier demo </demos/tutorial_variational_classifier>`.
 #
 # .. note ::
 #
@@ -173,6 +175,7 @@ def model_circuit(params, random_state):
 initial_params = pnp.random.random(size=7, requires_grad=True)
 
 qml.draw_mpl(model_circuit)(initial_params, random_states[0])
+plt.show()
 
 ######################################################################
 # 5. Training a model circuit using the classical shadows in a cost function
@@ -359,7 +362,7 @@ print("Target output state\n", target_matrices_shadow[0])
 #
 #     Sofiene Jerbi, Joe Gibbs, Manuel S. Rudolph, Matthias C. Caro, Patrick J. Coles, Hsin-Yuan Huang, Zoë Holmes
 #     "The power and limitations of learning quantum dynamics incoherently"
-#     `arXiv:2303.12834 <https://arxiv.org/abs/quant-ph/0512209>`__, 2005.
+#     `arXiv:2303.12834 <https://arxiv.org/abs/2303.12834>`__, 2005.
 #
 
 ##############################################################################
