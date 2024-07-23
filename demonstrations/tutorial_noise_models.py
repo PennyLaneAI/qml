@@ -19,26 +19,22 @@ r"""How to use noise models in PennyLane
 #
 
 ######################################################################
-# Let’s understand this briefly with the help of the following noise model that inserts
-# amplitude and phase damping errors for :class:`~.pennylane.RX` and :class:`~.pennylane.RY`
-# gates, respectively.
-#
 # .. figure:: ../_static/demonstration_assets/noise_models/noise_model_short.jpg
 #    :align: center
-#    :width: 90%
+#    :width: 100%
 #
 #    ..
 #
-
-######################################################################
-# It will transform the following circuit by inserting the appropriate error operation after each
-# operation that evaluates positively for any of its conditions.
+# Let’s understand this briefly with the help of the above noise model that inserts
+# amplitude and phase damping errors for :class:`~.pennylane.RX` and :class:`~.pennylane.RY`
+# gates, respectively. It will transform the following circuit by inserting the appropriate
+# error operation after each operation that evaluates positively for any of its conditions.
 #
 
 ######################################################################
 # .. figure:: ../_static/demonstration_assets/noise_models/noise_model_long.jpg
 #    :align: center
-#    :width: 80%
+#    :width: 90%
 #
 #    ..
 #
@@ -78,8 +74,9 @@ cond2 = qml.noise.op_in(["X", qml.Y, qml.CNOT([0, 1])])
 print(f"cond1: {cond1}")
 print(f"cond2: {cond2}")
 
-op = qml.Y(0)
+######################################################################
 
+op = qml.Y(0)
 print(f"Evaluating conditionals for {op}")
 print(f"Result for cond1: {cond1(op)}")
 print(f"Result for cond2: {cond2(op)}")
@@ -102,8 +99,9 @@ cond4 = qml.noise.wires_in([0, "c", qml.RX(0.123, wires=["w1"])])
 print(f"cond3: {cond3}")
 print(f"cond4: {cond4}")
 
-op = qml.X("c")
+######################################################################
 
+op = qml.X("c")
 print(f"Evaluating conditionals for {op}")
 print(f"Result for cond3: {cond3(op)}")
 print(f"Result for cond4: {cond4(op)}")
@@ -125,6 +123,8 @@ def rx_condition(op, **metadata):
     return isinstance(op, qml.RX) and op.parameters[0] < 1.0
 
 
+######################################################################
+
 op1, op2, op3 = qml.RX(0.05, wires=0), qml.RY(0.07, wires=2), qml.RX(2.37, wires="a")
 
 for op in [op1, op2, op3]:
@@ -141,6 +141,8 @@ for op in [op1, op2, op3]:
 
 and_cond = cond2 & cond4
 print(and_cond)
+
+######################################################################
 
 op1, op2, op3 = qml.X(wires=0), qml.CNOT(wires=[2, 3]), qml.RY(0.23, wires="c")
 
@@ -264,6 +266,8 @@ print(noise_model)
 # :func:`~pennylane.add_noise` transform. For example, consider the following quantum circuit:
 #
 
+from matplotlib import pyplot as plt
+
 qml.drawer.use_style("pennylane")
 dev = qml.device("default.mixed", wires=2)
 
@@ -279,14 +283,16 @@ def circuit(params):
 
 qcircuit = qml.QNode(circuit, dev)
 params = [0.1, 0.7, 0.8, 0.4]
-qml.draw_mpl(qcircuit, decimals=2)(params);
+qml.draw_mpl(qcircuit, decimals=2)(params)
+plt.show()
 
 ######################################################################
 # Now to attach the noise model to this quantum circuit, we can do the following:
 #
 
 noisy_circuit = qml.transforms.add_noise(qcircuit, noise_model)
-qml.draw_mpl(noisy_circuit, decimals=2)(params);
+qml.draw_mpl(noisy_circuit, decimals=2)(params)
+plt.show()
 
 ######################################################################
 # Alternatively, one can also attach the noise model instead to the device itself instead of
@@ -301,36 +307,27 @@ noisy_dev_circuit = qml.QNode(circuit, noisy_dev)
 #
 
 import numpy as np
-from matplotlib import pyplot as plt
 
 num_shots = 100000
-init_circuit_counts = qcircuit(params, shots=num_shots)
+ideal_circuit_counts = qcircuit(params, shots=num_shots)
 noisy_circuit_counts = noisy_circuit(params, shots=num_shots)
 noist_dev_counts = noisy_dev_circuit(params, shots=num_shots)
-categories = list(noist_dev_counts.keys())
+categories = list(noisy_circuit_counts.keys())
 
 width = 0.2
 bars1 = np.arange(len(categories))
 bars2 = bars1 + width
 bars3 = bars1 + 2 * width
 
+counts_ideal = np.array(list(ideal_circuit_counts.values())) / num_shots
+counts_ncirc = np.array(list(noisy_circuit_counts.values())) / num_shots
+counts_ndevc = np.array(list(noist_dev_counts.values())) / num_shots
+
 # Create the bar plot
 plt.figure(figsize=(10, 6))
-plt.bar(
-    bars1,
-    np.array(list(init_circuit_counts.values())) / num_shots,
-    width=width,
-    label="Initial Results",
-)
-plt.bar(
-    bars2,
-    np.array(list(noisy_circuit_counts.values())) / num_shots,
-    width=width,
-    label="Noisy Circuit",
-)
-plt.bar(
-    bars3, np.array(list(noist_dev_counts.values())) / num_shots, width=width, label="Noisy Device"
-)
+plt.bar(bars1, counts_ideal, width, label="Ideal Results")
+plt.bar(bars2, counts_ncirc, width, label="Noisy Circuit")
+plt.bar(bars3, counts_ndevc, width, label="Noisy Device")
 
 # Add labels, title, and legend
 plt.xlabel("Bitstring")
@@ -351,7 +348,7 @@ plt.show()
 # select the target operation and their corresponding noise operations. These can be
 # constructed with utmost flexibility, as shown above. We also support converting
 # noise models from Qiskit, including the ones from hardware and fake backends to
-# PennyLane via our `pennylane-qiskit <https://docs.pennylane.ai/projects/qiskit/en/latest/>`__ .
+# PennyLane via our `pennylane-qiskit <https://docs.pennylane.ai/projects/qiskit/en/latest/>`__
 # plugin. As such models are instrumental in capturing the working of quantum hardware,
 # we will continue to improve these features in PennyLane, allowing one to develop and
 # test error correction and noise mitigation strategies that will ultimately pave the
