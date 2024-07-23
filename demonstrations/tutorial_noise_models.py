@@ -8,7 +8,7 @@ r"""How to use noise models in PennyLane
 # evolution of and inference from quantum states under the effect of state preparation, measurement
 # and environment-based errors.
 #
-# Here, we introduce how to use the PennyLane :mod:`~.pennylane.noise` module to construct and
+# Here, we introduce how to use the PennyLane :mod:`~pennylane.noise` module to construct and
 # manipulate noise models for noisy simulation. PennyLane supports what is called insertion-based
 # noise models that are defined as a mapping from conditions to quantum function-like
 # callables and any additional noise-related metadata. Each condition in the mapping evaluates gate
@@ -74,8 +74,6 @@ cond2 = qml.noise.op_in(["X", qml.Y, qml.CNOT([0, 1])])
 print(f"cond1: {cond1}")
 print(f"cond2: {cond2}")
 
-######################################################################
-
 op = qml.Y(0)
 print(f"Evaluating conditionals for {op}")
 print(f"Result for cond1: {cond1(op)}")
@@ -99,8 +97,6 @@ cond4 = qml.noise.wires_in([0, "c", qml.RX(0.123, wires=["w1"])])
 print(f"cond3: {cond3}")
 print(f"cond4: {cond4}")
 
-######################################################################
-
 op = qml.X("c")
 print(f"Evaluating conditionals for {op}")
 print(f"Result for cond3: {cond3(op)}")
@@ -122,9 +118,6 @@ print(f"Result for cond4: {cond4(op)}")
 def rx_condition(op, **metadata):
     return isinstance(op, qml.RX) and op.parameters[0] < 1.0
 
-
-######################################################################
-
 op1, op2, op3 = qml.RX(0.05, wires=0), qml.RY(0.07, wires=2), qml.RX(2.37, wires="a")
 
 for op in [op1, op2, op3]:
@@ -141,8 +134,6 @@ for op in [op1, op2, op3]:
 
 and_cond = cond2 & cond4
 print(and_cond)
-
-######################################################################
 
 op1, op2, op3 = qml.X(wires=0), qml.CNOT(wires=[2, 3]), qml.RY(0.23, wires="c")
 
@@ -193,7 +184,7 @@ def thermal_func(op, **kwargs):
 for op, t1 in [(qml.X(0), 0.01), (qml.RZ(1.234, "w1"), 0.02), (qml.S("aux"), 0.03)]:
     with qml.queuing.AnnotatedQueue() as q:
         thermal_func(op, t1=t1)
-    print(f"Error for {op}: {q.queue[0]}")
+    print(f"Error for {op}:\n{q.queue[0]}")
 
 ######################################################################
 # Custom-ordered noise
@@ -217,7 +208,7 @@ def sandwich_func(op, **kwargs):
 for op, t1 in [(qml.RX(6.589, 0), 0.01), (qml.RY(4.237, "w1"), 0.02)]:
     with qml.queuing.AnnotatedQueue() as q:
         sandwich_func(op, t1=t1)
-    print(f"Error for {op}: {q.queue}")
+    print(f"Error for {op}:\n{q.queue}")
 
 ######################################################################
 # Noise Models
