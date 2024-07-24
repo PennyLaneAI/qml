@@ -38,5 +38,10 @@
         "title": "Algorithms",
         "urlFragment": "algorithms",
         "description": "This category will be focused on showing different fundamental algorithms of quantum computing. Here you will also find advanced techniques such as circuit cutting."
+    },
+    {
+        "title": "How-to",
+        "urlFragment": "how-to",
+        "description": "This category contains Demos with grab-and-go code to implement all kinds of techniques and resources with PennyLane."
     }
 ]
