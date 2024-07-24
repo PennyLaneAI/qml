@@ -8,8 +8,8 @@
             "id": "kilian_tscharke"
         }
     ],
-    "dateOfPublication": "",
-    "dateOfLastModification": "",
+    "dateOfPublication": "2024-12-31T00:00:00+00:00",
+    "dateOfLastModification": "2024-12-31T00:00:00+00:00",
     "categories": ["Getting Started", "Quantum Machine Learning", "Quantum Computing", "How-to"],
     "tags": ["Quantum Machine Learning", "QML", "Adversarial attacks", "Quantum security"],
     "previewImages": [
