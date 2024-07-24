@@ -128,7 +128,8 @@ symbols = ["He", "H"]
 geometry = np.array([[0.00000000, 0.00000000, -0.87818361],
                      [0.00000000, 0.00000000,  0.87818362]])
 
-H, qubits = qml.qchem.molecular_hamiltonian(symbols, geometry, charge=1)
+molecule = qml.qchem.Molecule(symbols, geometry, charge=1)
+H, qubits = qml.qchem.molecular_hamiltonian(molecule)
 H
 
 ##############################################################################

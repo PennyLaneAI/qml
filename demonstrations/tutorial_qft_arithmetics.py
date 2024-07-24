@@ -24,7 +24,7 @@ quantum Fourier transform (QFT), which we will demonstrate on a basic level.
 
 In this demo we will not focus on understanding how the QFT is built,
 as we can find a great explanation in the
-`Xanadu Quantum Codebook <https://codebook.xanadu.ai/F.1>`__. Instead, we will develop the
+`PennyLane Codebook </codebook/08-quantum-fourier-transform/01-changing-perspectives/>`__. Instead, we will develop the
 intuition for how it works and how we can best take advantage of it.
 
 Motivation
