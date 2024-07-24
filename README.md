@@ -59,7 +59,7 @@ quantum computing paper/result.
 
   ```python
   ##############################################################################
-  #.. figure:: ../_static/demonstrations_assets/<demo name>/image.png
+  #.. figure:: ../_static/demonstration_assets/<demo name>/image.png
   #    :align: center
   #    :width: 90%
   ```
@@ -104,7 +104,7 @@ quantum computing paper/result.
   - Make sure the file name is `<name of your tutorial>.metadata.json`.
   - The "id" of the author will be the same as the one you chose when creating the bio. 
   - The date of publication and modification. Leave them empty in case you don't know them.
-  - Choose the categories your demo fits into: `"Getting Started"`, `"Optimization"`, `"Quantum Machine Learning"`, `"Quantum Chemistry"`, `"Devices and Performance"`, `"Quantum Computing"`, `"Quantum Hardware"` or `"Algorithms"`. Feel free to add more than one.
+  - Choose the categories your demo fits into: `"Getting Started"`, `"Optimization"`, `"Quantum Machine Learning"`, `"Quantum Chemistry"`, `"Devices and Performance"`, `"Quantum Computing"`, `"Quantum Hardware"`, `"Algorithms"` or `"How-to"`. Feel free to add more than one.
   - In `previewImages` you should simply modify the final part of the file's name to fit the name of your demo. These two images will be sent to you once the review process begins. Once sent, you must upload them to the address indicated in the metadata.
   - `relatedContent` refers to the demos related to yours. You will have to put the corresponding id and set the `weight` to `1.0`. 
   - If there is any doubt with any field, do not hesitate to post a comment to the reviewer of your demo. 

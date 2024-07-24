@@ -66,7 +66,8 @@ from pennylane import numpy as np
 import time
 
 symbols = ["Li", "H"]
-geometry = np.array([0.0, 0.0, 0.0, 0.0, 0.0, 2.969280527])
+geometry = np.array([[0.0, 0.0, 0.0], [0.0, 0.0, 2.969280527]])
+molecule = qchem.Molecule(symbols, geometry)
 
 ##############################################################################
 # We now compute the molecular Hamiltonian in the
@@ -78,8 +79,7 @@ geometry = np.array([0.0, 0.0, 0.0, 0.0, 0.0, 2.969280527])
 # state and all of the excited states.
 
 H, qubits = qchem.molecular_hamiltonian(
-    symbols,
-    geometry,
+    molecule,
     active_electrons=2,
     active_orbitals=5
 )
