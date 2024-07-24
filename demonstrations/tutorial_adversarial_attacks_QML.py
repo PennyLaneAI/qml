@@ -100,7 +100,7 @@ from matplotlib import pyplot as plt
 # pm = qml.data.load('other, name='PlusMinus')
 
 pm = qml.data.Dataset()
-pm.read("./data/PlusMinus.h5")
+pm.read("./adversarial_attacks/data/PlusMinus.h5")
 
 X_train = pm.img_train  # shape (1000,16,16)
 X_test = pm.img_test  # shape (200,16,16)
