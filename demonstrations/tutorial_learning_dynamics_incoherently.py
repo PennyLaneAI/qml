@@ -93,7 +93,7 @@ hamiltonian = qml.sum(
 
 from scipy.stats import unitary_group
 
-n_random_states = 4
+n_random_states = 10
 
 # Generate several random unitaries
 random_unitaries = unitary_group.rvs(2**n_qubits, n_random_states)
