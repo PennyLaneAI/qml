@@ -218,7 +218,7 @@ print(np.sort(np.linalg.eigvals(H.matrix())))
 #     "A variational eigenvalue solver on a photonic quantum processor"
 #     `Nature Communications 5, 1 (2014).: <http://dx.doi.org/10.1038/ncomms5213>`__.
 #
-# About the author
-# ----------------
+# About the authors
+# -----------------
 # .. include:: ../_static/authors/minh_chau.txt
 #
