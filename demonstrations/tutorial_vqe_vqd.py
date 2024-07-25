@@ -193,14 +193,18 @@ print(np.sort(np.linalg.eigvals(H.matrix())))
 ######################################################################
 # We have indeed found an eigenvalue of the Hamiltonian. It may seem that we have skipped the value :math:`-0.5389`,
 # however the eigenvector corresponding to this eigenvalue belongs to a different particle number sector.
-# The correct energy value for the first excited state of hydrogen is `-0.53320939`, consistent with what we obtained with VQD!
+# The correct energy value for the first excited state of hydrogen is :math:`-0.53320939`, consistent with what we obtained with VQD!
 # We have successfully found the first excited state!
 #
 # Conclusion
 # ----------
 #
 # In this tutorial we delved into the capabilities of Variational Quantum Deflation (VQD) using PennyLane to compute not only the ground
-# state but also the excited states of a hydrogen molecule. This illustrated how advanced quantum algorithms can extend beyond basic applications,
+# state but also the excited states of a hydrogen molecule.
+# VQD is a variational method for calculating low-level excited state energies of quantum systems. Leveraging the
+# orthogonality of the eigenstates, it adds a regularization penalty to the cost function to encourage the search for
+# the next excited state from the ground state discovered by VQE.
+# This illustrated how advanced quantum algorithms can extend beyond basic applications,
 # offering deeper insights into quantum systems. We invite you to continue exploring these techniques and find more interesting use cases.
 #
 # References
@@ -211,12 +215,6 @@ print(np.sort(np.linalg.eigvals(H.matrix())))
 #     Higgott, Oscar and Wang, Daochen and Brierley, Stephen
 #     "Variational Quantum Computation of Excited States"
 #     `Quantum 3, 156 (2019).: <https://dx.doi.org/10.22331/q-2019-07-01-156>`__.
-#
-# .. [#vqe]
-#
-#     Peruzzo, Alberto and McClean, Jarrod and Shadbolt, Peter and Yung, Man-Hong and Zhou, Xiao-Qi and Love, Peter J. and Aspuru-Guzik, Alán and O’Brien, Jeremy L.
-#     "A variational eigenvalue solver on a photonic quantum processor"
-#     `Nature Communications 5, 1 (2014).: <http://dx.doi.org/10.1038/ncomms5213>`__.
 #
 # About the authors
 # -----------------
