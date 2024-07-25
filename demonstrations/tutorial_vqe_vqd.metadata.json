@@ -10,7 +10,10 @@
     ],
     "dateOfPublication": "2024-04-17T00:00:00+00:00",
     "dateOfLastModification": "2024-04-17T00:00:00+00:00",
-    "categories": ["Quantum Chemistry"],
+    "categories": [
+        "Quantum Chemistry",
+        "How-to"
+    ],
     "tags": [],
     "previewImages": [
         {
