@@ -22,7 +22,7 @@
             "uri": "/_static/large_demo_thumbnails/how_to_vqd_pennylane_largethumbnail.png"
         }
     ],
-    "seoDescription": "Learn how to use the variational quantum eigensolver and deflation",
+    "seoDescription": "Learn how to use variational quantum deflation (VQD) to find the first excited state energy of the hydrogen molecule.",
     "doi": "",
     "canonicalURL": "/qml/demos/tutorial_vqe_vqd",
     "references": [],
