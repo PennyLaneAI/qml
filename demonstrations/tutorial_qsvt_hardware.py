@@ -19,21 +19,19 @@ fundamental components of the QSVT algorithm:
 Calculating angles is not a trivial task but there are some frameworks like ``pyqsp`` that do that job for us.
 To find the angles to apply the polynomial :math:`p(x) = -x + \frac{x^3}{2}+ \frac{x^5}{2}`, we run this script:
 
-"""
+.. code-block:: python
 
-#
-# .. code-block:: python
-#
-#
-#   from pyqsp.angle_sequence import QuantumSignalProcessingPhases
-#   import numpy as np
-#
-#   # Define the polynomial, the coefficients are in the order of the polynomial degree.
-#   poly = np.array([0,-1, 0, 0.5, 0 , 0.5])
-#
-#   ang_seq = QuantumSignalProcessingPhases(poly, signal_operator="Wx")
-#
-# The angles obtained after execution are as follows:
+   from pyqsp.angle_sequence import QuantumSignalProcessingPhases
+   import numpy as np
+
+   # Define the polynomial, the coefficients are in the order of the polynomial degree.
+   poly = np.array([0,-1, 0, 0.5, 0 , 0.5])
+
+   ang_seq = QuantumSignalProcessingPhases(poly, signal_operator="Wx")
+
+The angles obtained after execution are as follows:
+
+"""
 
 ang_seq = [-1.5115007723754004, 0.6300762184670975, 0.8813995564082947, -2.2601930971815003, 3.7716688720568885, 0.059295554419495855]
 
