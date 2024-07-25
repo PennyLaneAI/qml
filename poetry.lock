@@ -4465,21 +4465,6 @@ files = [
 ]
 
 [[package]]
-name = "pyqsp"
-version = "0.1.6"
-description = "Generate phase angles for quantum signal processing algorithms"
-optional = false
-python-versions = "*"
-files = [
-    {file = "pyqsp-0.1.6.tar.gz", hash = "sha256:2862eeffd7e12f2b955fc25b586927c03c0652e572d4c107ab7534eedbfaf3ec"},
-]
-
-[package.dependencies]
-matplotlib = "*"
-numpy = ">1.19.1"
-scipy = "*"
-
-[[package]]
 name = "pyqubo"
 version = "1.4.0"
 description = "PyQUBO allows you to create QUBOs or Ising models from mathematical expressions."
@@ -7713,4 +7698,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.10.0"
-content-hash = "81e3d9902882f9db1645b14abee4434afab56c1b240edd5c050dfc532c69a7a7"
+content-hash = "1822b3f41f5b0b195b8fc5b76140798b4208ee47a771e319dc0868ad75fc4860"

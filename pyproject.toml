@@ -66,7 +66,6 @@ mitiq = "0.32.0"
 zstd = "*"
 dill = "*"
 stim = "*"
-pyqsp = "*"
 quimb = "1.8.2"
 
 

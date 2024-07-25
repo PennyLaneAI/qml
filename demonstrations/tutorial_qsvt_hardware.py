@@ -17,25 +17,34 @@ fundamental components of the QSVT algorithm:
 - **Block Encoding**: The strategy used to introduce the Hamiltonian into the quantum computer. We will use :class:`~.qml.PrepSelPrep`.
 
 Calculating angles is not a trivial task but there are some frameworks like ``pyqsp`` that do that job for us.
-Let's see how we can find the angles to apply the polynomial :math:`p(x) = -x + \frac{x^3}{2}+ \frac{x^5}{2}`:
+To find the angles to apply the polynomial :math:`p(x) = -x + \frac{x^3}{2}+ \frac{x^5}{2}`, we run this script:
 
 """
 
-from pyqsp.angle_sequence import QuantumSignalProcessingPhases
-import numpy as np
+#
+# .. code-block:: python
+#
+#
+#   from pyqsp.angle_sequence import QuantumSignalProcessingPhases
+#   import numpy as np
+#
+#   # Define the polynomial, the coefficients are in the order of the polynomial degree.
+#   poly = np.array([0,-1, 0, 0.5, 0 , 0.5])
+#
+#   ang_seq = QuantumSignalProcessingPhases(poly, signal_operator="Wx")
+#
+# The angles obtained after execution are as follows:
 
-# Define the polynomial, the coefficients are in the order of the polynomial degree.
-poly = np.array([0,-1, 0, 0.5, 0 , 0.5])
-
-ang_seq = QuantumSignalProcessingPhases(poly, signal_operator="Wx")
-print(ang_seq)
+ang_seq = [-1.5115007723754004, 0.6300762184670975, 0.8813995564082947, -2.2601930971815003, 3.7716688720568885, 0.059295554419495855]
 
 ######################################################################
-# The output is a list of angles that we can use to apply the polynomial transformation.
+# We are going to use this angles to apply the polynomial transformation.
 # However, we are not finished yet: these angles have been calculated following the "Wx"
 # convention, while :class:`~.qml.PrepSelPrep` follows a different one. Moreover, the angles obtained in the
 # context of QSP (the ones given by ``pyqsp``) are not the same as the ones we have to use in QSVT. That is why
 # we must transform the angles:
+
+import numpy as np
 
 def convert_angles(angles):
     num_angles = len(angles)
@@ -57,10 +66,12 @@ print(angles)
 # -----------------
 #
 # The :class:`~.qml.QSVT` template expects two inputs. The first one is the block encoding operator (:class:`~.qml.PrepSelPrep`)
-# and the next one are the projection operators (:class:`~.qml.PCPhase`) that encodes the angles properly. Let's define
-# a Hamiltonian and the operators:
+# and the next one are the projection operators (:class:`~.qml.PCPhase`) that encodes the angles properly.
+# We will see how to apply them later, but first let's define
+# a Hamiltonian and manually apply the polynomial of interest:
 
 import pennylane as qml
+from numpy.linalg import matrix_power as mpow
 
 coeffs = np.array([0.2, -.7, -.6])
 coeffs /= np.linalg.norm(coeffs, ord = 1) # Normalize the coefficients
@@ -69,6 +80,17 @@ obs = [qml.X(3), qml.X(3) @ qml.Z(4), qml.Z(3) @ qml.Y(4)]
 
 H = qml.dot(coeffs, obs)
 
+H_mat = qml.matrix(H, wire_order = [3,4])
+
+# We calculate p(H) = -H + 0.5 * H^3 + 0.5 * H^5
+H_poly = -H_mat + 0.5 * mpow(H_mat, 3) + 0.5* mpow(H_mat, 5)
+
+print(np.round(H_poly,4))
+
+######################################################################
+# Great, we already know what the goal is, let's see how to do this with a quantum circuit.
+# We start by defining the operators and then apply them to the :class:`~.qml.QSVT` template.
+
 # We need |log2(len(coeffs))| = 2 control wires to encode the Hamiltonian
 control_wires = [1,2]
 block_encode = qml.PrepSelPrep(H, control = control_wires)
@@ -76,12 +98,7 @@ block_encode = qml.PrepSelPrep(H, control = control_wires)
 projectors = [qml.PCPhase(angles[i], dim=2**len(H.wires), wires= control_wires + H.wires)
               for i in range(len(angles))]
 
-######################################################################
-# We now have all the pieces to run the algorithm. Let's put it together and see the resulting matrix:
-
-dev = qml.device("default.qubit")
-
-@qml.qnode(dev)
+@qml.qnode(qml.device("default.qubit"))
 def circuit():
 
     qml.Hadamard(0)
@@ -95,29 +112,16 @@ matrix = qml.matrix(circuit, wire_order = [0] + control_wires + H.wires)()
 print(np.round(matrix[: 2**len(H.wires), :2**len(H.wires)],4))
 
 ######################################################################
-# The circuit is encoding :math:`p(\mathcal{H})` in the top left block of its matrix.
+# The matrix obtained from the QSVT subroutine is the same as the one obtained by applying the polynomial
+# directly to the Hamiltonian! That means that the circuit is encoding :math:`p(\mathcal{H})` correctly.
+# The great advantage of this approach is that all the templates used can be
+# decomposed into basic gates easily.
 #
 # The idea behind this circuit is that QSVT encodes the desired polynomial :math:`p(\mathcal{H})` but also
 # a polynomial :math:`i q(\mathcal{H})`. To isolate :math:`p(\mathcal{H})` we have used an auxiliary qubit and the property that
 # the sum of a complex number and its conjugate gives us twice its real part. We
 # recommend :doc:`this demo </demos/tutorial_apply_qsvt>` to learn more about the structure
 # of the circuit.
-# Finally, we can verify that the results obtained are as expected:
-
-from numpy.linalg import matrix_power as mpow
-
-H_mat = qml.matrix(H, wire_order = [3,4])
-
-# We calculate p(H) = -H + 0.5 * H^3 + 0.5 * H^5
-H_poly = -H_mat + 0.5 * mpow(H_mat, 3) + 0.5* mpow(H_mat, 5)
-
-print(np.round(H_poly,4))
-
-######################################################################
-# The matrix obtained from the QSVT subroutine is the same as the one obtained by applying the polynomial
-# directly to the Hamiltonian! The great advantage of this approach is that all the templates used can be
-# decomposed into basic gates easily.
-#
 #
 # Conclusion
 # ----------
