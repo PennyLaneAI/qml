@@ -220,5 +220,4 @@ print(np.sort(np.linalg.eigvals(H.matrix())))
 #
 # About the authors
 # -----------------
-# .. include:: ../_static/authors/minh_chau.txt
 #
