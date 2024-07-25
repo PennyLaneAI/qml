@@ -86,10 +86,6 @@ hamiltonian = qml.sum(
 # For more info, see our demo,
 # `Understanding the Haar measure <https://pennylane.ai/qml/demos/tutorial_haar_measure/>`_:
 #
-# .. note ::
-#
-#    On a personal computer, this method becomes slow (>1 second) around 10 qubits.
-#
 
 from scipy.stats import unitary_group
 
@@ -99,6 +95,12 @@ n_random_states = 10
 random_unitaries = unitary_group.rvs(2**n_qubits, n_random_states)
 # Take the first column of each unitary
 random_states = [random_unitary[:, 0] for random_unitary in random_unitaries]
+
+######################################################################
+# .. note ::
+#
+#    On a personal computer, this method becomes slow (>1 second) around 10 qubits.
+#
 
 
 ######################################################################
@@ -157,7 +159,8 @@ for random_state in random_states:
 #
 #    We will be performing *local* measurements to keep the computational complexity lower and
 #    because classical shadows are well-suited to estimating local observables [#Jerbi]_.
-#    For this reason, the following circuit returns local density matrices for each qubit.
+#    For this reason, the following circuit returns local density matrices for each qubit. In
+#    hardware, the density matrix is obtained via Pauli measurements and state tomography.
 
 
 @qml.qnode(dev)
