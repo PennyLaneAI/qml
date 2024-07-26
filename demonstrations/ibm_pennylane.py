@@ -66,7 +66,7 @@ dev_aer = qml.device("qiskit.aer", wires=qubits)
 # ``capabilities`` function:
 
 from qiskit_aer import Aer
-Aer.backends()
+print(Aer.backends())
 
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
