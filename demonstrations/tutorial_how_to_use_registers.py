@@ -96,15 +96,15 @@ print(swap_test())
 # We won't go over the details of how QPE works here, but you can find a great explanation in our `demo <https://pennylane.ai/qml/demos/tutorial_qpe/>`_.
 # Generally, QPE is described as having two sets of registers. One register is known as the
 # "estimation" (or measurement) register and the other is the state register where we apply our
-# unitary operators :math:`U`. We can define these two registers using registers or with arrays.
+# unitary operators :math:`U`. We can define these two registers using registers or with wires.
 # For comparison in PennyLane code:
 
 import pennylane as qml
 
 wire_register = qml.registers({"state": 4, "estimation": 8})  # registers
 
-state = list(range(4))  # without registers
-estimation = list(range(4, 12))  # without registers
+state = range(4)  # using wires instead
+estimation = range(4, 12)
 
 # To build our unitary operator :math:`U`, there are a variety of options. We can opt to use a
 # straight-forward block encoding, or choose to use a subroutine like qubitization.
@@ -113,9 +113,9 @@ estimation = list(range(4, 12))  # without registers
 
 wire_register = qml.registers({"state": 4, "estimation": 8, "control": 4})  # registers
 
-state = list(range(4))  # without registers
-estimation = list(range(4, 12))  # without registers
-control = list(range(12, 16))  # without registers
+state = range(4)  # using wires instead
+estimation = range(4, 12)
+control = range(12, 16)
 
 # Finally, let's define our Hamiltonian. We'll choose the H2 molecule for simplicitiy, but feel
 # free to try this with any other Hamiltonian you want to find the eigenvalues of.
@@ -160,7 +160,7 @@ def registers_circuit():  # Using registers
 
 
 @qml.qnode(dev)
-def arrays_circuit():  # Using arrays
+def wires_circuit():  # Using wires
     # Initialize state register to Hartree-Fock State
     qml.BasisState(hf_state, wires=state)
 
@@ -182,7 +182,7 @@ def arrays_circuit():  # Using arrays
 # we expect. This should give an eigenvalue of about -1.1359091600247835, which is close to the
 # real value.
 
-results = registers_circuit()  # or arrays_circuit()
+results = registers_circuit()  # or wires_circuit()
 
 lamb = sum([abs(coeff) for coeff in H.terms()[0]])
 
@@ -193,16 +193,16 @@ print(
 )
 
 # Looking at the complete workflow, we can see that the difference between using registers versus
-# arrays is quite small. When you have a static, defined workflow, using registers may not be the
+# wires is quite small. When you have a static, defined workflow, using registers may not be the
 # best solution. However, we can see the power of using registers when we want to tweak our
 # algorithm. For example, changing the number of wires in your estimation register is very easy
-# with registers, but can be very error-prone when using arrays:
+# with registers, but can be very error-prone when using wires:
 
 wire_register = qml.registers({"state": 4, "estimation": 10, "control": 4})
 
-state = list(range(4))  # no change
-estimation = list(range(4, 14))  # change 12 to 14
-control = list(range(14, 18))  # change 12 to 14, 16 to 18
+state = range(4)  # no change
+estimation = range(4, 14)  # change 12 to 14
+control = range(14, 18)  # change 12 to 14, 16 to 18
 
 # Note that this complexity only gets more difficult to manage as you start working with more
 # and more registers. This may feel fine with 3 registers right now, but as you start building
