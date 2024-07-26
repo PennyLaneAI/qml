@@ -53,7 +53,7 @@ r"""How to use noise models in PennyLane
 #
 # These conditionals evaluate a gate operation based on its type. They check whether if it
 # is a specific type of operation or belongs to a specified set of operations. These
-# conditionals can be built with :func:`~.pennylane.noise.op_eq` and:func:`~.pennylane.noise.op_in`
+# conditionals can be built with :func:`~.pennylane.noise.op_eq` and :func:`~.pennylane.noise.op_in`
 # helper methods, where the specific set of operations can be provided as a class,
 # instantiated object or by their string representation:
 #
@@ -102,7 +102,7 @@ print(f"Result for cond4: {cond4(op)}")
 # conditionals in a functional form and wrapping them with a :class:`~.pennylane.BooleanFn`
 # decorator. Inputs of such custom conditionals must be a single operation for evaluation and
 # accept optional keyword arguments for using metadata. For example, a conditional that evaluates
-# ``True`` for :math:`RX(\phi)` gate operations with :math:`\phi < 1.0` can be constructed as:
+# ``True`` for :math:`R_X(\phi)` gate operations with :math:`\phi < 1.0` can be constructed as:
 #
 
 
