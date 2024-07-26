@@ -33,7 +33,7 @@ platform. We will learn how to:
 # -----------------
 # IBM offers access to a variety of devices, both classical simulators and real quantum hardware.
 # By default, these devices are not included in PennyLane, but after installing the
-# `pennylane-qiskit <https://docs.pennylane.ai/projects/qiskit/en/stable/>`__ plugin with the command ``pip install pennylane-qiskit``,
+# `pennylane-qiskit plugin <https://docs.pennylane.ai/projects/qiskit/en/stable/>`__ with the command ``pip install pennylane-qiskit``,
 # they can be used just like any other device offered in PennyLane!
 # Currently, there are three devices available — ``Aer``, ``BasicSim`` and ``Remote`` — that can be initialized
 # as follows:
@@ -118,7 +118,7 @@ print(Aer.backends())
 # account details to run these jobs.
 #
 # First, we set up our problem as usual, and then retrieve a program ID from IBM, which gives us a
-# place to upload our job
+# place to upload our job:
 
 from pennylane import numpy as pnp
 from qiskit_ibm_runtime import QiskitRuntimeService
@@ -352,7 +352,7 @@ plt.show()
 # topology and readout errors.
 #
 # This tutorial has demonstrated how and why to use quantum computing hardware provided by IBM using PennyLane. To read
-# more about the details and possibilities of the Qiskit plugin for PennyLane, `read the documentation <https://docs.pennylane.ai/projects/qiskit/en/latest/index.html>`__
+# more about the details and possibilities of the Qiskit plugin for PennyLane, `read the documentation <https://docs.pennylane.ai/projects/qiskit/en/latest/index.html>`__.
 #
 # About the authors
 # ----------------
