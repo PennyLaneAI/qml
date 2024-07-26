@@ -108,7 +108,7 @@ estimation = list(range(4, 12))  # without registers
 
 # To build our unitary operator :math:`U`, there are a variety of options. We can opt to use a
 # straight-forward block encoding, or choose to use a subroutine like qubitization.
-# For now, we'll use qubitization, which means we have to define another "control" register.
+# We'll use qubitization, which means we have to define another "control" register.
 # Full code block now looks like this:
 
 wire_register = qml.registers({"state": 4, "estimation": 8, "control": 4})  # registers
@@ -203,6 +203,10 @@ wire_register = qml.registers({"state": 4, "estimation": 10, "control": 4})
 state = list(range(4))  # no change
 estimation = list(range(4, 14))  # change 12 to 14
 control = list(range(14, 18))  # change 12 to 14, 16 to 18
+
+# Note that this complexity only gets more difficult to manage as you start working with more
+# and more registers. This may feel fine with 3 registers right now, but as you start building
+# bigger and more complex algorithms, this can quickly become a serious issue!
 
 ######################################################################
 # Conclusion
