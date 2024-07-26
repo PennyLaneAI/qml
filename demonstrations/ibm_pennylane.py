@@ -51,7 +51,7 @@ except Exception as e:
 ##############################################################################
 # The last device (``qiskit.remote``) can cause an error if we don't provide a valid account
 # token through Qiskit. The Remote device is used to access quantum hardware, so it also requires 
-# access to an IBMQ account, which can be specified using an identifying token. You can find your 
+# an IBM Quantum account, which can be specified using an identifying token. You can find your 
 # token by creating or logging into your `IBMQ account <https://quantum-computing.ibm.com>`__. 
 # Be careful not to publish code that reveals your token to other people! One way to avoid this 
 # is by saving your token in a `PennyLane configuration file <https://docs.pennylane.ai/en/stable/introduction/configuration.html>`__.
