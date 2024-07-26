@@ -35,7 +35,7 @@ platform. We will learn how to:
 # By default, these devices are not included in PennyLane, but after installing the
 # pennylane-qiskit plugin with the command ``pip install pennylane-qiskit``, 
 # they can be used just like any other device offered in PennyLane!
-# Currently, there are three devices available — Aer, BasicSim and Remote — that can be initialized
+# Currently, there are three devices available — ``Aer``, ``BasicSim`` and ``Remote`` — that can be initialized
 # as follows:
 import pennylane as qml
 from qiskit_aer import AerSimulator
