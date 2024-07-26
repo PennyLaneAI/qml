@@ -124,7 +124,8 @@ from qiskit_ibm_runtime import QiskitRuntimeService
 
 import pennylane as qml
 
-H = qml.data.load("qchem", molname="H2", bondlength=0.742, basis="STO-3G", attributes=["hamiltonian"])[0].hamiltonian
+[dataset] = qml.data.load("qchem", molname="H2", bondlength=0.742, basis="STO-3G")
+H = dataset.hamiltonian
 qubits = 4
 
 service = QiskitRuntimeService()
