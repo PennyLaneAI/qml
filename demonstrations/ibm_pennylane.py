@@ -49,7 +49,7 @@ except Exception as e:
     print(e)
 
 ##############################################################################
-# The last device (qiskit.remote) can cause an error if we don't provide a valid account
+# The last device (``qiskit.remote``) can cause an error if we don't provide a valid account
 # token through Qiskit. The Remote device is used to access quantum hardware, so it also requires 
 # access to an IBMQ account, which can be specified using an identifying token. You can find your 
 # token by creating or logging into your `IBMQ account <https://quantum-computing.ibm.com>`__. 
