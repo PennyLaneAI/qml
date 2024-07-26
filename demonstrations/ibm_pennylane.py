@@ -33,7 +33,7 @@ platform. We will learn how to:
 # -----------------
 # IBM offers access to a variety of devices, both classical simulators and real quantum hardware.
 # By default, these devices are not included in PennyLane, but after installing the
-# `pennylane-qiskit <https://docs.pennylane.ai/projects/qiskit/en/stable/>`_ plugin with the command ``pip install pennylane-qiskit``,
+# `pennylane-qiskit <https://docs.pennylane.ai/projects/qiskit/en/stable/>`__ plugin with the command ``pip install pennylane-qiskit``,
 # they can be used just like any other device offered in PennyLane!
 # Currently, there are three devices available — ``Aer``, ``BasicSim`` and ``Remote`` — that can be initialized
 # as follows:
