@@ -205,7 +205,7 @@ with qiskit_session(dev) as session:
 #    This may take a long time depending on how busy the hardware is. Depending on the tier of
 #    your IBM plan, your session may also be interrupted before the optimization can finish. 
 #    Luckily, the rest of the workflow demonstrates how to run VQE with a simulator instead, which
-#    has no restrictions at all.
+#    has no such restrictions at all.
 
 ##############################################################################
 # Benchmarking
