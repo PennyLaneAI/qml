@@ -1,8 +1,8 @@
 r"""How to use wire registers
 ====================================
-
-Quantum registers help us group wires that represent different data. In this tutorial, we will
-explore how wire registers are constructed and used in PennyLane.
+Wire registers help us group qubits and abstract away the finer details of running quantum
+algorithms. In this tutorial, we will explore how wire registers are constructed and used
+in PennyLane.
 """
 
 ######################################################################
@@ -51,59 +51,25 @@ print(new_register)
 # A simple example using wire registers
 # -------------------------------------
 #
-# Wire registers help us group qubits and abstract away the finer details of running quantum
-# algorithms. In this example, we compare how we would implement the SWAP test with and without
-# registers. The SWAP test is an algorithm that compares how similar two quantum states are and
-# calculates the squared inner product of said states. It requires one ancilla qubit and takes
-# two input states :math:`|\psi\rangle` and :math:`|\phi\rangle`. We can think of these components
-# as three registers. Suppose states :math:`|\psi\rangle` and :math:`|\phi\rangle` are each
-# represented with 3 wires. Here, we will do a side-by-side comparison of using registers versus
-# not using registers. In PennyLane code, that would be:
+# In this example, we demonstrate how one can implement the SWAP test with registers. Although
+# registers are not strictly needed to implement this algorithm, this simple case can help us
+# familiarize ourselves with the use of registers. The `SWAP test <https://en.wikipedia.org/wiki/Swap_test>`_
+# is an algorithm that compares how similar two quantum states are and calculates the squared inner
+# product of said states. It requires one ancilla qubit and takes two input states :math:`|\psi\rangle`
+# and :math:`|\phi\rangle`. We can think of these components as three registers. Suppose states
+# :math:`|\psi\rangle` and :math:`|\phi\rangle` are each represented with 3 wires. In PennyLane
+# code, that would be:
 
 import pennylane as qml
 
-# With registers
 swap_register = qml.registers({"ancilla": 1, "psi": 3, "phi": 3})
 
-# Without registers
-ancilla = [0]
-psi = [1, 2, 3]
-phi = [4, 5, 6]
-
-# To perform the SWAP test, we first need to apply the Hadamard gate to our ancilla qubit.
-
 
 def swap_test():
-    qml.Hadamard(swap_register["ancilla"])
+    # Prepare phi and psi in some arbitrary state
+    for state in ["phi", "psi"]:
+        qml.BasisState([1, 1, 0], swap_register[state])
 
-
-def swap_test_no_regs():
-    qml.Hadamard(ancilla)
-
-
-# We then need to apply a controlled SWAP operation to :math:`|\psi\rangle` and :math:`|\phi\rangle`
-# with our ancilla qubit as the control qubit. To do so, we need to apply CSWAPs to all the wires
-# in our registers.
-
-
-def swap_test():
-    qml.Hadamard(swap_register["ancilla"])
-    for i in range(len(swap_register["psi"])):
-        qml.CSWAP(
-            swap_register["ancilla"] | swap_register["psi"][i] | swap_register["phi"][i]
-        )
-
-
-def swap_test_no_regs():
-    qml.Hadamard(ancilla)
-    for i in range(len(psi)):
-        qml.CSWAP([ancilla[0], psi[i], phi[i]])
-
-
-# Finally, we apply the Hadamard gate to our ancilla qubit once again, and measure in the Z basis.
-
-
-def swap_test():
     qml.Hadamard(swap_register["ancilla"])
     for i in range(len(swap_register["psi"])):
         qml.CSWAP(
@@ -113,32 +79,43 @@ def swap_test():
     return qml.expval(qml.Z(wires=swap_register["ancilla"]))
 
 
-def swap_test_no_regs():
-    qml.Hadamard(ancilla)
-    for i in range(len(psi)):
-        qml.CSWAP([ancilla[0], psi[i], phi[i]])
-    qml.Hadamard(ancilla)
-    return qml.expval(qml.Z(wires=ancilla))
-
+print(swap_test())
 
 ######################################################################
 # A real world example
 # --------------------
 #
-# In this example, we use Quantum Phase Estimation (QPE) and qubitization to calculate the eigenvalues of a Hamiltonian.
+# Building quantum algorithms often requires working with certain constraints or trade-offs.
+# For example, sometimes one needs to trade circuit depth for qubit count and vice versa. This
+# often means experimenting with a variety of subroutines to benchmark and test the efficiency of
+# a quantum algorithm. Using registers can greatly streamline the process of modifying a workflow
+# by simplifying wire management.
+#
+# In this example, we use Quantum Phase Estimation (QPE) to calculate the eigenvalues of a Hamiltonian
+# and compare how we would define such a workflow with and without using registers.
 # We won't go over the details of how QPE works here, but you can find a great explanation in our `demo <https://pennylane.ai/qml/demos/tutorial_qpe/>`_.
 # Generally, QPE is described as having two sets of registers. One register is known as the
 # "estimation" (or measurement) register and the other is the state register where we apply our
-# unitary operators :math:`U`. Using wire registers, we can define these two registers like so:
+# unitary operators :math:`U`. We can define these two registers using registers or with arrays.
+# For comparison in PennyLane code:
 
 import pennylane as qml
 
-wire_register = qml.registers({"state": 4, "estimation": 10})
+wire_register = qml.registers({"state": 4, "estimation": 10})  # registers
 
-# To make things more interesting, let's build our unitary operator :math:`U` using qubitization.
-# In order to do so, we will need to define an additional "control" register like so:
+state = list(range(4))  # without registers
+estimation = list(range(4, 14))  # without registers
 
-wire_register = qml.registers({"state": 4, "estimation": 10, "control": 4})
+# To build our unitary operator :math:`U`, there are a variety of options. We can opt to use a
+# straight-forward block encoding, or choose to use a subroutine like qubitization.
+# For now, we'll use qubitization, which means we have to define another "control" register.
+# Full code block now looks like this:
+
+wire_register = qml.registers({"state": 4, "estimation": 10, "control": 4})  # registers
+
+state = list(range(4))  # without registers
+estimation = list(range(4, 14))  # without registers
+control = list(range(14, 18))  # without registers
 
 # Finally, let's define our Hamiltonian. We'll choose the H2 molecule for simplicitiy, but feel
 # free to try this with any other Hamiltonian you want to find the eigenvalues of.
@@ -158,13 +135,13 @@ H, qubits = qml.qchem.molecular_hamiltonian(molecule)
 electrons = 2
 hf_state = qml.qchem.hf_state(electrons, qubits)
 
-# With this, we can now define our QPE & qubitization circuit like so:
+# With this, we can now define our QPE circuit like so:
 
 dev = qml.device("lightning.qubit", wires=18)
 
 
 @qml.qnode(dev)
-def circuit():
+def registers_circuit():  # Using registers
     # Initialize state register to Hartree-Fock State
     qml.BasisState(hf_state, wires=wire_register["state"])
 
@@ -182,10 +159,30 @@ def circuit():
     return qml.probs(wires=wire_register["estimation"])
 
 
-# Finally, we can run our circuit to verify that the results of our calculation is close to what
-# we expect:
+@qml.qnode(dev)
+def arrays_circuit():  # Using arrays
+    # Initialize state register to Hartree-Fock State
+    qml.BasisState(hf_state, wires=state)
 
-results = circuit()
+    # Apply Hadamard gate to all wires in estimation register
+    for wire in estimation:
+        qml.Hadamard(wires=wire)
+
+    qml.ControlledSequence(
+        qml.Qubitization(H, control),
+        control=estimation,
+    )
+
+    qml.adjoint(qml.QFT)(wires=estimation)
+
+    return qml.probs(wires=estimation)
+
+
+# Finally, we can run our circuit to verify that the results of our calculation is close to what
+# we expect. This should give an eigenvalue of about -1.1359091600247835, which is close to the
+# real value.
+
+results = registers_circuit()  # or arrays_circuit()
 
 lamb = sum([abs(coeff) for coeff in H.terms()[0]])
 
@@ -195,9 +192,284 @@ print(
     * np.cos(2 * np.pi * np.argmax(results) / 2 ** (len(wire_register["estimation"]))),
 )
 
-# This should give an eigenvalue of about -1.1359091600247835, which is close to the real value.
-# Feel free to change the number of wires in your estimation register to see how the error changes
-# accordingly.
+# Looking at the complete workflow, we can see that the difference between using registers versus
+# arrays is quite small. When you have a static, defined workflow, using registers may not be the
+# best solution. However, we can see the power of using registers when we want to tweak our
+# algorithm. For example, changing the number of wires in your estimation register is very easy
+# with registers, but can be very error-prone when using arrays:
+
+wire_register = qml.registers({"state": 4, "estimation": 8, "control": 4})
+
+state = list(range(4))  # no change
+estimation = list(range(4, 12))  # change 14 to 12
+control = list(range(12, 16))  # change 14 to 12, 18 to 16
+
+# This is further complicated if we wanted to replace qubitization with some other subroutine.
+# From the `qubitization documentation <https://docs.pennylane.ai/en/stable/code/api/pennylane.Qubitization.html>_`,
+# we can see that it encodes a Hamiltonian as a linear combination of unitaries (LCU) using the PrepSelPrep
+# subroutine. We can modify the qubitization to use a different ``Select`` method, such as ``QROM``. This
+# can allow us to reduce gate depth at the cost of more qubits. Let's see this in action.
+######################################################################
+# Implementing qubitization with QROM
+# -----------------------------------
+#
+# Let's start by implementing qubitization manually. We'll cover Qubitization here on a high-level
+# basis, but if you're curious, you can always refer to the `doumentation <https://docs.pennylane.ai/en/stable/code/api/pennylane.Qubitization.html>_` for more details.
+# The PrepSelPrep routine requires us to get the coefficients and operators from our Hamiltonian.
+# We can do this with the following PennyLane code:
+
+new_unitaries = []
+
+coeffs, ops = H.terms()
+
+for op, coeff in zip(ops, coeffs):
+    angle = np.pi * (0.5 * (1 - qml.math.sign(coeff)))
+    new_unitaries.append(op @ qml.GlobalPhase(angle, wires=op.wires))
+
+coeffs, unitaries = qml.math.abs(coeffs), new_unitaries
+
+# Following that, we can define our qubitization subroutine, which encodes our coefficients and
+# unitaries as an LCU using PrepSelPrep followed by a reflection.
+
+
+@qml.prod
+def manual_qubitization(coeffs, unitaries, control):
+    qml.AmplitudeEmbedding(
+        qml.math.sqrt(coeffs), normalize=True, pad_with=0, wires=control
+    )
+    qml.Select(unitaries, control=control)
+    qml.adjoint(
+        qml.AmplitudeEmbedding(
+            qml.math.sqrt(coeffs), normalize=True, pad_with=0, wires=control
+        )
+    )
+    qml.Reflection(qml.Identity(control))
+
+
+# We can check that everything works properly by substituting in ``manual_qubitization()`` for
+# ``qml.Qubitization()``.
+
+
+@qml.qnode(dev)
+def registers_circuit():  # Using registers
+    # Initialize state register to Hartree-Fock State
+    qml.BasisState(hf_state, wires=wire_register["state"])
+
+    # Apply Hadamard gate to all wires in estimation register
+    for wire in wire_register["estimation"]:
+        qml.Hadamard(wires=wire)
+
+    qml.ControlledSequence(
+        manual_qubitization(coeffs, unitaries, wire_register["control"]),
+        control=wire_register["estimation"],
+    )
+
+    qml.adjoint(qml.QFT)(wires=wire_register["estimation"])
+
+    return qml.probs(wires=wire_register["estimation"])
+
+
+@qml.qnode(dev)
+def arrays_circuit():  # Using arrays
+    # Initialize state register to Hartree-Fock State
+    qml.BasisState(hf_state, wires=state)
+
+    # Apply Hadamard gate to all wires in estimation register
+    for wire in estimation:
+        qml.Hadamard(wires=wire)
+
+    qml.ControlledSequence(
+        manual_qubitization(coeffs, unitaries, control),
+        control=estimation,
+    )
+
+    qml.adjoint(qml.QFT)(wires=estimation)
+
+    return qml.probs(wires=estimation)
+
+
+results = registers_circuit()  # or arrays_circuit()
+
+lamb = sum([abs(coeff) for coeff in H.terms()[0]])
+
+print(
+    "E = ",
+    lamb
+    * np.cos(2 * np.pi * np.argmax(results) / 2 ** (len(wire_register["estimation"]))),
+)  # You should still get an eigenvalue of about -1.1359.
+
+# Let's now replace ``Select`` with ``QROM``. Let's go over briefly what QROM allows us to do.
+# QROM allows us to reduce gate depth at the cost of additional wires. To do this, we can
+# specify a certain number of ``work_wires``, which QROM automatically uses to achieve this goal.
+# Let's first define a set of ``work_wires`` for QROM to use.
+
+wire_register = qml.registers(
+    {"state": 4, "estimation": 10, "control": 4, "work": 2}
+)  # registers
+
+state = list(range(4))
+estimation = list(range(4, 14))
+control = list(range(14, 18))
+work = list(range(18, 20))
+
+# Since the ``QROM`` template only takes in bitstrings, we'll also need to define ``qrom``
+# ourselves. We won't go over what the code does in depth, but to give a rough idea, ``qrom``
+# performs a select operation followed by a swap operation. We define our version of ``qrom``
+# in PennyLane code as:
+
+
+def qrom(unitaries, control_wires, target_wires, work_wires, clean):
+    # Utility function for swapping
+    def _multi_swap(wires1, wires2):
+        for wire1, wire2 in zip(wires1, wires2):
+            qml.SWAP(wires=[wire1, wire2])
+
+    swap_wires = target_wires + work_wires
+
+    # number of operators we store per column (power of 2)
+    depth = len(swap_wires) // len(target_wires)
+    depth = int(2 ** np.floor(np.log2(depth)))
+
+    ops = unitaries
+
+    # Select block
+    n_control_select_wires = int(
+        qml.math.ceil(qml.math.log2(2 ** len(control_wires) / depth))
+    )
+    control_select_wires = control_wires[:n_control_select_wires]
+
+    select_ops = []
+    if control_select_wires:
+        select_ops += [qml.Select(ops, control=control_select_wires)]
+    else:
+        select_ops = ops
+
+    # Swap block
+    control_swap_wires = control_wires[n_control_select_wires:]
+    swap_ops = []
+    for ind in range(len(control_swap_wires)):
+        for j in range(2**ind):
+            new_op = qml.prod(_multi_swap)(
+                swap_wires[(j) * len(target_wires) : (j + 1) * len(target_wires)],
+                swap_wires[
+                    (j + 2**ind)
+                    * len(target_wires) : (j + 2 ** (ind + 1))
+                    * len(target_wires)
+                ],
+            )
+            swap_ops.insert(0, qml.ctrl(new_op, control=control_swap_wires[-ind - 1]))
+
+    if not clean:
+        decomp_ops = select_ops + swap_ops
+
+    else:
+        adjoint_swap_ops = swap_ops[::-1]
+        hadamard_ops = [qml.Hadamard(wires=w) for w in target_wires]
+
+        decomp_ops = 2 * (hadamard_ops + adjoint_swap_ops + select_ops + swap_ops)
+
+    for op in decomp_ops:
+        qml.apply(op)
+
+
+# Finally, we can implement qubitization with qrom.
+
+
+@qml.prod
+def qubitization_qrom(coeffs, unitaries, state, control, work, clean):
+    qml.AmplitudeEmbedding(
+        qml.math.sqrt(coeffs), normalize=True, pad_with=0, wires=control
+    )
+    qrom(
+        unitaries,
+        target_wires=state,
+        control_wires=control,
+        work_wires=work,
+        clean=clean,
+    )
+    qml.adjoint(
+        qml.AmplitudeEmbedding(
+            qml.math.sqrt(coeffs), normalize=True, pad_with=0, wires=control
+        )
+    )
+    qml.Reflection(qml.Identity(control))
+
+
+# Running this with 20 wires will likely take a fairly long amount of time. Let's reduce the
+# number of estimation wires down to 8. This will effect our error, so you may get a
+# significantly more inaccurate answer.
+
+wire_register = qml.registers(
+    {"state": 4, "estimation": 8, "control": 4, "work": 2}
+)  # registers
+
+state = list(range(4))
+estimation = list(range(4, 12))
+control = list(range(12, 16))
+work = list(range(16, 18))
+
+dev = qml.device("lightning.qubit", wires=18)
+
+
+@qml.qnode(dev)
+def registers_circuit():
+    # Initialize state register to Hartree-Fock State
+    qml.BasisState(hf_state, wires=wire_register["state"])
+
+    # Apply Hadamard gate to all wires in estimation register
+    for wire in wire_register["estimation"]:
+        qml.Hadamard(wires=wire)
+
+    qml.ControlledSequence(
+        qubitization_qrom(
+            coeffs,
+            unitaries,
+            wire_register["state"],
+            wire_register["control"],
+            wire_register["work"],
+            clean=True,
+        ),
+        control=wire_register["estimation"],
+    )
+
+    qml.adjoint(qml.QFT)(wires=wire_register["estimation"])
+
+    return qml.probs(wires=wire_register["estimation"])
+
+
+# For this to work with arrays, you'll have to cast them as Wires.
+control = qml.wires.Wires(control)
+target = qml.wires.Wires(state)
+work = qml.wires.Wires(work) if work else qml.wires.Wires([])
+
+
+@qml.qnode(dev)
+def arrays_circuit():
+    # Initialize state register to Hartree-Fock State
+    qml.BasisState(hf_state, wires=estimation)
+
+    # Apply Hadamard gate to all wires in estimation register
+    for wire in estimation:
+        qml.Hadamard(wires=wire)
+
+    qml.ControlledSequence(
+        qubitization_qrom(coeffs, unitaries, state, control, work, clean=True),
+        control=estimation,
+    )
+
+    qml.adjoint(qml.QFT)(wires=estimation)
+
+    return qml.probs(wires=estimation)
+
+
+results = registers_circuit()  # or arrays_circuit()
+lamb = sum([abs(coeff) for coeff in H.terms()[0]])
+
+print(
+    "E = ",
+    lamb
+    * np.cos(2 * np.pi * np.argmax(results) / 2 ** (len(wire_register["estimation"]))),
+)
 
 ######################################################################
 # Conclusion
