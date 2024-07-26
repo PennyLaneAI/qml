@@ -33,7 +33,7 @@ platform. We will learn how to:
 # -----------------
 # IBM offers access to a variety of devices, both classical simulators and real quantum hardware.
 # By default, these devices are not included in PennyLane, but after installing the
-# pennylane-qiskit plugin with the command ``pip install pennylane-qiskit``, 
+# `pennylane-qiskit <https://docs.pennylane.ai/projects/qiskit/en/stable/>`_ plugin with the command ``pip install pennylane-qiskit``,
 # they can be used just like any other device offered in PennyLane!
 # Currently, there are three devices available — ``Aer``, ``BasicSim`` and ``Remote`` — that can be initialized
 # as follows:
@@ -50,10 +50,10 @@ except Exception as e:
 
 ##############################################################################
 # The last device (``qiskit.remote``) can cause an error if we don't provide a valid account
-# token through Qiskit. The Remote device is used to access quantum hardware, so it also requires 
-# an IBM Quantum account, which can be specified using an identifying token. You can find your 
-# token by creating or logging into your `IBM Quantum account <https://quantum-computing.ibm.com>`__. 
-# Be careful not to publish code that reveals your token to other people! One way to avoid this 
+# token through Qiskit. The Remote device is used to access quantum hardware, so it also requires
+# an IBM Quantum account, which can be specified using an identifying token. You can find your
+# token by creating or logging into your `IBM Quantum account <https://quantum-computing.ibm.com>`__.
+# Be careful not to publish code that reveals your token to other people! One way to avoid this
 # is by saving your token in a `PennyLane configuration file <https://docs.pennylane.ai/en/stable/introduction/configuration.html>`__.
 # To specify which machine or computational framework these devices actually connect to, we can
 # use the ``backend`` argument.
@@ -62,10 +62,11 @@ dev_aer = qml.device("qiskit.aer", wires=qubits)
 
 ##############################################################################
 # For the Aer device, different quantum computers can be used by changing the backend to the name
-# of the specific simulator method. To see which backends exist, we can call the 
+# of the specific simulator method. To see which backends exist, we can call the
 # ``capabilities`` function:
 
 from qiskit_aer import Aer
+
 print(Aer.backends())
 
 ##############################################################################
@@ -147,7 +148,7 @@ except Exception as e:
 # more parameters when the transpiler attempts to decompose a complicated gate, such as
 # :class:`~pennylane.AllSinglesDoubles`. These types of issues will likely be fixed in the future, but, when in doubt,
 # it is preferable to use simpler gates where possible. We will use a simple four-qubit circuit
-# with one parameter that is designed specifically for the H2 molecule:
+# with one parameter that is designed specifically for the :math:`H_2` molecule:
 
 
 def four_qubit_ansatz(theta):
@@ -177,6 +178,7 @@ def four_qubit_ansatz(theta):
     qml.Hadamard(wires=2)
     qml.Hadamard(wires=3)
 
+
 ##############################################################################
 # Finally, we can run our example VQE algorithm. In order to query the quantum computer iteratively
 # we need to initialize a Qiskit Session and give our VQE algorithm an optimizer. In this case, we
@@ -184,13 +186,15 @@ def four_qubit_ansatz(theta):
 
 from pennylane_qiskit import qiskit_session
 
+
 @qml.qnode(dev)
 def cost_fn(theta):
     four_qubit_ansatz(theta)
     return qml.expval(H)
 
+
 max_iterations = 40
-theta = pnp.array(0., requires_grad=True)
+theta = pnp.array(0.0, requires_grad=True)
 opt = qml.GradientDescentOptimizer(stepsize=0.4)
 energies = []
 
@@ -203,7 +207,7 @@ with qiskit_session(dev) as session:
 # .. note ::
 #
 #    This may take a long time depending on how busy the hardware is. Depending on the tier of
-#    your IBM plan, your session may also be interrupted before the optimization can finish. 
+#    your IBM plan, your session may also be interrupted before the optimization can finish.
 #    Luckily, the rest of the workflow demonstrates how to run VQE with a simulator instead, which
 #    has no such restrictions at all.
 
@@ -237,9 +241,11 @@ def cost_fn_2(theta):
     four_qubit_ansatz(theta)
     return qml.expval(H)
 
+
 # we can also use the qnode to draw the circuit
 import matplotlib.pyplot as plt
-qml.draw_mpl(cost_fn_1, decimals=2)(theta=1.)
+
+qml.draw_mpl(cost_fn_1, decimals=2)(theta=1.0)
 plt.show()
 
 ##############################################################################
@@ -253,8 +259,8 @@ plt.show()
 stepsize = 0.4
 max_iterations = 40
 opt = qml.GradientDescentOptimizer(stepsize=stepsize)
-theta_1 = pnp.array(0., requires_grad=True)
-theta_2 = pnp.array(0., requires_grad=True)
+theta_1 = pnp.array(0.0, requires_grad=True)
+theta_2 = pnp.array(0.0, requires_grad=True)
 energies_1 = []
 energies_2 = []
 for n in range(max_iterations):
