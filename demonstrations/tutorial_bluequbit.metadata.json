@@ -15,11 +15,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/qft/thumbnail_QFT.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_bluequbit-pennylane_device.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_QFT_2024-04-04.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_bluequbit-pennylane_device.png"
         }
     ],
     "seoDescription": "Run large scale quantum simulations with Pennylane and BlueQubit",

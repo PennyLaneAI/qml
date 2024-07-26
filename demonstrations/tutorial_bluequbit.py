@@ -18,9 +18,9 @@ We use a custom build of Pennilane-Lighning to have multi-threading and other co
         pip install bluequbit
 
 
-.. figure:: ../_static/demonstration_assets/qft/socialthumbnail_large_QFT_2024-04-04.png
+.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_bluequbit-pennylane_device.png
     :align: center
-    :width: 60%
+    :width: 70%
     :target: javascript:void(0)
 
 
