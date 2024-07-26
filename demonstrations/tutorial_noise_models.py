@@ -10,22 +10,16 @@ r"""How to use noise models in PennyLane
 #
 # Here, we show how to use the features provided in the :mod:`~pennylane.noise` module of PennyLane
 # to construct and manipulate noise models for enabling noisy simulation. PennyLane supports
-# `insertion`-based noise models. These models are constructed from three main components:
-# conditions for applying noise operations, callables that apply user-defined noise operations and
-# optionally noise-related metadata. Each condition evaluates gate operations in the quantum
+# `insertion`-based noise models. These models are constructed from two main components:
+# conditions for applying noise operations and callables that apply user-defined noise operations
+# with optional noise-related metadata. Each condition evaluates gate operations in the quantum
 # circuit based on specific gate attributes. Depending on the outcome of the evaluation,
 # the corresponding callable would queue the noise operations for the evaluated gate based on the
 # user-provided metadata such as hardware topology constraints and relaxation/dephasing times.
 #
-# Let’s look at an example for a noise model that implements these main components.
-# This model inserts amplitude and phase damping errors for :class:`~.pennylane.RX`
-# and :class:`~.pennylane.RY` gates, respectively. So, the conditions in the model
-# are simple checks for verifying if a circuit gate is any of :class:`~.pennylane.RX`
-# and :class:`~.pennylane.RY` gates and the noise operations are amplitude and phase
-# damping errors with their damping probabilities as some function of rotation angles.
-# The following image shows how the model transforms a sample circuit by inserting
-# the appropriate error operation after each gate that evaluates positively for the
-# model conditions.
+# The following example shows how a noise model transforms a sample circuit by inserting
+# amplitude and phase damping errors for :class:`~.pennylane.RX`
+# and :class:`~.pennylane.RY` gates, respectively.
 #
 
 ######################################################################
@@ -342,8 +336,8 @@ plt.show()
 
 ######################################################################
 # By looking at the closeness of the two noisy results we can confirm
-# the equivalence of the two ways the simulations could be performed
-# using the noise models.
+# the equivalence of the two ways the noise models could be added for
+# noisy simulations.
 #
 
 
