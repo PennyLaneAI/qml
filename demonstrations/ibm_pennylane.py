@@ -181,8 +181,9 @@ def four_qubit_ansatz(theta):
 
 ##############################################################################
 # Finally, we can run our example VQE algorithm. In order to query the quantum computer iteratively
-# we need to initialize a Qiskit Session and give our VQE algorithm an optimizer. In this case, we
-# will be using the :class:`~.pennylane.GradientDescentOptimizer`.
+# we need to initialize a `Qiskit Session <https://docs.quantum.ibm.com/guides/sessions>`__, which
+# allows multiple jobs from a single algorithm to be ran sequentially without interruptions. We
+# also need to provide our VQE algorithm an optimizer. In this case, we will be using the :class:`~.pennylane.GradientDescentOptimizer`.
 
 from pennylane_qiskit import qiskit_session
 
