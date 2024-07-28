@@ -1,4 +1,4 @@
-r"""How to learn quantum dynamics incoherently
+r"""Learning quantum dynamics incoherently: Variational learning using classical shadows
 ==========================================
 
 How can we recreate and simulate an unknown quantum process with a quantum circuit? One approach is to learn the
