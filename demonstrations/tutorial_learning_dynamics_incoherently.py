@@ -14,16 +14,19 @@ For step 2, we simulate the model circuit to get its final state. To know how si
 state is to the target process output, we estimate the overlap of the states using the classical
 shadows from step 1.
 
-This approach is different to learning the quantum process *coherently* because it does not require the model
+This approach is different to learning the quantum process *coherently* [#Huang]_ because it does not require the model
 circuit to be connected to the target quantum process. That is, the model circuit does not receive
 quantum information from the target process directly. Instead, we train the model circuit using
-classical information obtained from the classical shadow measurements. One reason this is useful is
-that it's not always possible to port the quantum output of a system directly to hardware without
-first measuring it.
+classical information obtained from the classical shadow measurements. This is useful because
+it's not always possible to port the quantum output of a system directly to hardware without
+first measuring it. However, depending on the quantum process, an exponential number of classical shadow measurements
+may be required [#Jerbi]_.
 
 In this tutorial, we will use PennyLane to create an unknown target quantum process and the initial
-states to go into it, simulate classical shadow measurements of the target process, and create and
-train a model variational circuit that approximates the target process. Finally, we will use the `Learning Dynamics Incoherently PennyLane Dataset <https://pennylane.ai/datasets/other/learning-dynamics-incoherently>`__ to replicate the investigation.
+states to go into it, simulate shallow classical shadow measurements of the target process, and create and
+train a model variational circuit that approximates the target process.
+Finally, we will use the `Learning Dynamics Incoherently PennyLane Dataset <https://pennylane.ai/datasets/other/learning-dynamics-incoherently>`__
+to replicate part of the original investigation.
 """
 
 ######################################################################
@@ -31,7 +34,7 @@ train a model variational circuit that approximates the target process. Finally,
 # ----------------------------------------------
 #
 # For our unknown quantum process, we will use a well-known quantum process,
-# the `time evolution of a Hamiltonian :doc:<tutorial_qaoa_intro/#circuits-and-hamiltonians>`:
+# the :doc:`time evolution of a Hamiltonian </demos/tutorial_qaoa_intro/#circuits-and-hamiltonians>`:
 #
 # .. math:: U(H, t) = e^{-i H t / \hbar} .
 #
@@ -106,7 +109,7 @@ random_states = [random_unitary[:, 0] for random_unitary in random_unitaries]
 # 3. Time evolution and classical shadow measurements
 # ----------------------------------------------------
 #
-# Now we can evolve the initial states using a Trotterized version of the Hamiltonian above. This
+# Now we can evolve the initial states using a Trotterized version of the Hamiltonian `above <#creating-an-unknown-target-quantum-process>`_. This
 # will approximate the time evolution of the corresponding transverse-field Ising system.
 #
 
@@ -157,7 +160,7 @@ for random_state in random_states:
 #    We will be performing *local* measurements to keep the computational complexity lower and
 #    because classical shadows are well-suited to estimating local observables [#Jerbi]_.
 #    For this reason, the following circuit returns local density matrices for each qubit. In
-#    hardware, the density matrix is obtained via Pauli measurements and state tomography.
+#    hardware, the density matrix is obtained via state tomography using Pauli measurements or classical shadows.
 
 
 @qml.qnode(dev)
@@ -190,13 +193,15 @@ plt.show()
 # where :math:`n` is the number of qubits, :math:`N` is the number of initial states, :math:`\psi^{(j)}`
 # are random states, :math:`U` is our target unitary operation, and :math:`O_i` is the local density
 # matrix for qubit :math:`i` after applying the ``model_circuit``. That is, the local states
-# :math:`\rho_{i}^{(j)}` are defined by:
+# :math:`\rho_{i}^{(j)}` are used as the observables:
 # 
-# .. math:: \rho_{i}^{(j)} =: O_{i}^{(j)}(\theta)
+# .. math:: \rho_{i}^{(j)} =: O_{i}^{(j)}(\theta).
 #
-# We can calculate this cost for our system by using the `shadow measurements <#time-evolution-and-classical-shadow-measurements>`_ to estimate
-# the expectation value of :math:`O_i`. This gives an estimate of the overlap between the state of
-# the target circuit and the model circuit.
+# We can calculate this cost for our system by using the
+# `shadow measurements <#time-evolution-and-classical-shadow-measurements>`_ to estimate
+# the expectation value of :math:`O_i`. Roughly, this cost function measures the fidelity between
+# the model circuit and the target circuit, by proxy of the single-qubit reduced states 
+# :math:`\rho_{i}^{(j)} =: O_{i}^{(j)}(\theta)` of the model over a variety of input-output pairs.
 
 
 def cost(params):
@@ -220,7 +225,7 @@ print("Initial cost:", cost(initial_params))
 params = initial_params
 
 optimizer = qml.GradientDescentOptimizer(stepsize=5)
-steps = 100
+steps = 150
 for i in range(steps):
     params, final_cost = optimizer.step_and_cost(cost, params)
 
@@ -245,9 +250,7 @@ print("Target state for qubit 1:\n", pnp.mean(shadows[0].local_snapshots(), axis
 #
 # In Jerbi et al. [#Jerbi]_, the authors perform this procedure to learn dynamics incoherently on a larger, 16-qubit transverse-field Ising
 # Hamiltonian, and use classical shadow samples from quantum hardware to estimate the cost function.
-# This data is available in PennyLane through the :mod:`qml.data` module. More information about
-# the dataset itself is available on the
-# `Learning Dynamics Incoherently dataset page <https://pennylane.ai/datasets/other/learning-dynamics-incoherently>`_.
+# This data is available in the `Learning Dynamics Incoherently PennyLane Dataset <https://pennylane.ai/datasets/other/learning-dynamics-incoherently>`__ and downloadable through the :mod:`qml.data` module.
 #
 # To use this dataset, we first load it using :func:`~pennylane.data.load`:
 
@@ -300,10 +303,11 @@ def model_circuit(params, random_state):
 initial_params = pnp.random.random(size=31)
 
 qml.draw_mpl(model_circuit)(initial_params, random_state)
+plt.show()
 
 ######################################################################
 #
-# For the cost function, we repeat the same code as above, updated to use a single input state:
+# For the cost function, we repeat the same code as `above <#training-a-model-circuit-using-classical-shadows-in-a-cost-function>`_, updated to use a single input state:
 #
 
 
@@ -366,6 +370,12 @@ print("Target output state\n", target_matrices_shadow[0])
 #     Sofiene Jerbi, Joe Gibbs, Manuel S. Rudolph, Matthias C. Caro, Patrick J. Coles, Hsin-Yuan Huang, Zoë Holmes
 #     "The power and limitations of learning quantum dynamics incoherently"
 #     `arXiv:2303.12834 <https://arxiv.org/abs/2303.12834>`__, 2005.
+#
+# .. [#Huang]
+#
+#     Hsin-Yuan Huang, Michael Broughton, Jordan Cotler, Sitan Chen, Jerry Li, Masoud Mohseni, Hartmut Neven, Ryan Babbush, Richard Kueng, John Preskill, and Jarrod R. McClean
+#     "Quantum advantage in learning from experiments"
+#     `Science <http://dx.doi.org/10.1126/science.abn7293>`__, 2022
 #
 
 ##############################################################################

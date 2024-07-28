@@ -32,6 +32,15 @@
             "authors": "Sofiene Jerbi, Joe Gibbs, Manuel S. Rudolph, Matthias C. Caro, Patrick J. Coles, Hsin-Yuan Huang, and Zoë Holmes",
             "year": "2023",
             "url": "https://arxiv.org/abs/2303.12834"
+        },
+        {
+            "id": "Huang2022Quantum",
+            "type": "article",
+            "title": "Quantum advantage in learning from experiments",
+            "journal": "Science",
+            "authors": "Hsin-Yuan Huang, Michael Broughton, Jordan Cotler, Sitan Chen, Jerry Li, Masoud Mohseni, Hartmut Neven, Ryan Babbush, Richard Kueng, John Preskill, and Jarrod R. McClean",
+            "year": "2022",
+            "url": "http://dx.doi.org/10.1126/science.abn7293"
         }
     ],
     "basedOnPapers": ["10.48550/arXiv.2303.12834"],
