@@ -146,30 +146,11 @@ def registers_circuit():  # Using registers
     return qml.probs(wires=register["estimation"])
 
 
-@qml.qnode(dev)
-def wires_circuit():  # Using wires
-    # Initialize state register to Hartree-Fock State
-    qml.BasisState(hf_state, wires=state)
-
-    # Apply Hadamard gate to all wires in estimation register
-    for wire in estimation:
-        qml.Hadamard(wires=wire)
-
-    qml.ControlledSequence(
-        qml.Qubitization(H, control),
-        control=estimation,
-    )
-
-    qml.adjoint(qml.QFT)(wires=estimation)
-
-    return qml.probs(wires=estimation)
-
-
 # Finally, we can run our circuit to verify that the results of our calculation is close to what
 # we expect. This should give an eigenvalue of about -1.1359091600247835, which is close to the
 # real value.
 
-results = registers_circuit()  # or wires_circuit()
+results = registers_circuit()
 
 lamb = sum([abs(coeff) for coeff in H.terms()[0]])
 
@@ -179,18 +160,10 @@ print(
     * np.cos(2 * np.pi * np.argmax(results) / 2 ** (len(register["estimation"]))),
 )
 
-# Changing the number of wires in your estimation register is very easy
-# with registers, but can be very error-prone when using wires:
-
-register = qml.registers({"state": 4, "estimation": 10, "control": 4})
-
-state = range(4)  # no change
-estimation = range(4, 14)  # change 12 to 14
-control = range(14, 18)  # change 12 to 14, 16 to 18
-
-# The complexity of wire management only gets more difficult as you start working with more
-# and more registers. As you start building
-# bigger and more complex algorithms, this can quickly become a serious issue!
+# Changing the number of wires in your estimation register is very easy with registers, but can
+# be very error-prone when using wires. The complexity of wire management only gets more difficult
+# as you start working with more and more registers. As you start building bigger and more complex
+# algorithms, this can quickly become a serious issue!
 
 ######################################################################
 # Conclusion
