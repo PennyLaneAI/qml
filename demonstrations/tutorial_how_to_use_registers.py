@@ -15,10 +15,10 @@ in PennyLane.
 
 import pennylane as qml
 
-wire_register = qml.registers({"alice": 1, "bob": 2, "charlie": 3})
-print(wire_register)
+register = qml.registers({"alice": 1, "bob": 2, "charlie": 3})
+print(register)
 
-# The wire_register created is a dictionary where the keys are the names of the registers and the
+# The register created is a dictionary where the keys are the names of the registers and the
 # values are :class:`~Wires` instances.
 #
 # You can also pass in a dictionary that has nested dictionaries as its values.
@@ -43,8 +43,8 @@ print(nested_register["all_registers"][2])
 print(nested_register["bob1a"][0])
 
 # You can also create registers using set operations. Here, we use the pipe operator ``|`` to
-# denote the union operation. For more details on what set operations are supported, refer to
-# the documentation of :func:`~pennylane.registers`.
+# perform the union operation on the alice register and the charlie register. For more details on
+# what set operations are supported, refer to the documentation of :func:`~pennylane.registers`.
 
 new_register = nested_register["alice"] | nested_register["charlie"]
 print(new_register)
@@ -85,37 +85,24 @@ print(swap_test())
 # Advanced example
 # --------------------
 #
-# Building quantum algorithms often requires working with certain constraints or trade-offs.
-# For example, sometimes one needs to trade circuit depth for qubit count and vice versa. This
-# often means experimenting with a variety of subroutines to benchmark and test the efficiency of
-# a quantum algorithm. Using registers can greatly streamline the process of modifying a workflow
-# by simplifying wire management.
-#
-# In this example, we use Quantum Phase Estimation (QPE) to calculate the eigenvalues of a Hamiltonian
-# and compare how we would define such a workflow with and without using registers.
-# We won't go over the details of how QPE works here, but you can find a great explanation in our `demo <https://pennylane.ai/qml/demos/tutorial_qpe/>`_.
+# Using registers can greatly streamline the process of modifying a workflow
+# by simplifying wire management. In this example, we use Quantum Phase Estimation (QPE) to
+# calculate the eigenvalues of a Hamiltonian. We won't go over the details of how QPE works here,
+# but you can find a great explanation in our `demo <https://pennylane.ai/qml/demos/tutorial_qpe/>`_.
 # Generally, QPE is described as having two sets of registers. One register is known as the
 # "estimation" (or measurement) register and the other is the state register where we apply our
-# unitary operators :math:`U`. We can define these two registers using registers or with wires.
-# For comparison in PennyLane code:
+# unitary operators :math:`U`. We can define these registers in PennyLane code:
 
 import pennylane as qml
 
-wire_register = qml.registers({"state": 4, "estimation": 8})  # registers
-
-state = range(4)  # using wires instead
-estimation = range(4, 12)
+register = qml.registers({"state": 4, "estimation": 8})
 
 # To build our unitary operator :math:`U`, there are a variety of options. We can opt to use a
 # straight-forward block encoding, or choose to use a subroutine like qubitization.
 # We'll use qubitization, which means we have to define another "control" register.
-# Full code block now looks like this:
+# Our registers now look like this:
 
-wire_register = qml.registers({"state": 4, "estimation": 8, "control": 4})  # registers
-
-state = range(4)  # using wires instead
-estimation = range(4, 12)
-control = range(12, 16)
+register = qml.registers({"state": 4, "estimation": 8, "control": 4})
 
 # Finally, let's define our Hamiltonian. We'll choose the H2 molecule for simplicitiy, but feel
 # free to try this with any other Hamiltonian you want to find the eigenvalues of.
@@ -143,20 +130,20 @@ dev = qml.device("lightning.qubit", wires=16)
 @qml.qnode(dev)
 def registers_circuit():  # Using registers
     # Initialize state register to Hartree-Fock State
-    qml.BasisState(hf_state, wires=wire_register["state"])
+    qml.BasisState(hf_state, wires=register["state"])
 
     # Apply Hadamard gate to all wires in estimation register
-    for wire in wire_register["estimation"]:
+    for wire in register["estimation"]:
         qml.Hadamard(wires=wire)
 
     qml.ControlledSequence(
-        qml.Qubitization(H, wire_register["control"]),
-        control=wire_register["estimation"],
+        qml.Qubitization(H, register["control"]),
+        control=register["estimation"],
     )
 
-    qml.adjoint(qml.QFT)(wires=wire_register["estimation"])
+    qml.adjoint(qml.QFT)(wires=register["estimation"])
 
-    return qml.probs(wires=wire_register["estimation"])
+    return qml.probs(wires=register["estimation"])
 
 
 @qml.qnode(dev)
@@ -189,13 +176,13 @@ lamb = sum([abs(coeff) for coeff in H.terms()[0]])
 print(
     "E = ",
     lamb
-    * np.cos(2 * np.pi * np.argmax(results) / 2 ** (len(wire_register["estimation"]))),
+    * np.cos(2 * np.pi * np.argmax(results) / 2 ** (len(register["estimation"]))),
 )
 
 # Changing the number of wires in your estimation register is very easy
 # with registers, but can be very error-prone when using wires:
 
-wire_register = qml.registers({"state": 4, "estimation": 10, "control": 4})
+register = qml.registers({"state": 4, "estimation": 10, "control": 4})
 
 state = range(4)  # no change
 estimation = range(4, 14)  # change 12 to 14
