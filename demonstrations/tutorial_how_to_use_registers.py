@@ -209,7 +209,7 @@ control = range(14, 18)  # change 12 to 14, 16 to 18
 # ----------
 #
 # Wire registers provide a neat way of organizing and managing wires. Often, algorithms are
-# described as acting upon registers and sub-registers, and using wire registers can greatly
+# described as acting upon registers and sub-registers; using wire registers can greatly
 # streamline the implementation from theory to code. In this demo, we showed how to construct
 # wire registers and use them to implement quantum algorithms.
 #
