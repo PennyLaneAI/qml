@@ -6,10 +6,11 @@
         }
     ],
     "dateOfPublication": "2024-05-03T00:00:00+00:00",
-    "dateOfLastModification": "2024-05-03T00:00:00+00:00",
+    "dateOfLastModification": "2024-07-24T00:00:00+00:00",
     "categories": [
         "Getting Started",
-        "Quantum Computing"
+        "Quantum Computing",
+        "How-to"
     ],
     "tags": ["how to"],
     "previewImages": [
