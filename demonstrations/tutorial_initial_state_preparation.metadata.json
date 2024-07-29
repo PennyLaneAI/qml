@@ -42,13 +42,3 @@
     ]
 }
 
-
-
-
-Trained post-variational quantum neural networks and doing writing for an article for a pennylane code demonstration;
-Used libraries such as jax, qisket, pennylane, sklearn, matplotlib to implement and explain models
-
-Used interpretable methods to reveal patterns behind the inverse design topology for photonics chip design;
-coded classification task with CNN using P and used the Local Interpretable Model-agnostic Explanations (LIME) library to do .
-
-explored how to improve current technology such as the transform and financial market computation using quantum elements 
