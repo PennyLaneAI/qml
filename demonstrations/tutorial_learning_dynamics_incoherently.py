@@ -34,7 +34,7 @@ to replicate part of the original investigation.
 # ----------------------------------------------
 #
 # For our unknown quantum process, we will use a well-known quantum process,
-# the :doc:`time evolution of a Hamiltonian </demos/tutorial_qaoa_intro/#circuits-and-hamiltonians>`:
+# the `time evolution of a Hamiltonian <https://pennylane.ai/qml/demos/tutorial_qaoa_intro/#circuits-and-hamiltonians>`:
 #
 # .. math:: U(H, t) = e^{-i H t / \hbar} .
 #
