@@ -51,11 +51,10 @@ print(new_register)
 # A simple example using wire registers
 # -------------------------------------
 #
-# In this example, we demonstrate how one can implement the SWAP test with registers. Although
-# registers are not strictly needed to implement this algorithm, this simple case can help us
-# familiarize ourselves with the use of registers. The `SWAP test <https://en.wikipedia.org/wiki/Swap_test>`_
-# is an algorithm that compares how similar two quantum states are and calculates the squared inner
-# product of said states. It requires one ancilla qubit and takes two input states :math:`|\psi\rangle`
+# In this example, we demonstrate how one can implement the SWAP test with registers. 
+# The `SWAP test <https://en.wikipedia.org/wiki/Swap_test>`_
+# is an algorithm that calculates the squared inner
+# product of two input states. It requires one ancilla qubit and takes two input states :math:`|\psi\rangle`
 # and :math:`|\phi\rangle`. We can think of these components as three registers. Suppose states
 # :math:`|\psi\rangle` and :math:`|\phi\rangle` are each represented with 3 wires. In PennyLane
 # code, that would be:
