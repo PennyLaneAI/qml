@@ -200,8 +200,8 @@ state = range(4)  # no change
 estimation = range(4, 14)  # change 12 to 14
 control = range(14, 18)  # change 12 to 14, 16 to 18
 
-# Note that this complexity only gets more difficult to manage as you start working with more
-# and more registers. This may feel fine with 3 registers right now, but as you start building
+# The complexity of wire management only gets more difficult as you start working with more
+# and more registers. As you start building
 # bigger and more complex algorithms, this can quickly become a serious issue!
 
 ######################################################################
