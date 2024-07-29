@@ -81,7 +81,7 @@ def swap_test():
 print(swap_test())
 
 ######################################################################
-# A real world example
+# Advanced example
 # --------------------
 #
 # Building quantum algorithms often requires working with certain constraints or trade-offs.
