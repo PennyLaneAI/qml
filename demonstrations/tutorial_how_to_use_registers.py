@@ -15,7 +15,7 @@ in PennyLane.
 
 import pennylane as qml
 
-wire_register = qml.registers({"alice": 1, "bob": 2, "cleo": 3})
+wire_register = qml.registers({"alice": 1, "bob": 2, "charlie": 3})
 print(wire_register)
 
 # The wire_register created is a dictionary where the keys are the names of the registers and the
@@ -24,7 +24,7 @@ print(wire_register)
 # You can also pass in a dictionary that has nested dictionaries as its values.
 
 nested_register = qml.registers(
-    {"all_registers": {"alice": 1, "bob": {"bob1": {"bob1a": 1}, "bob2": 1}, "cleo": 1}}
+    {"all_registers": {"alice": 1, "bob": {"bob1": {"bob1a": 1}, "bob2": 1}, "charlie": 1}}
 )
 print(nested_register)
 
@@ -45,7 +45,7 @@ print(nested_register["bob1a"][0])
 # You can also create registers using set operations. For more details on what set operations are
 # supported, refer to the documentation of :func:`~pennylane.registers`.
 
-new_register = nested_register["alice"] | nested_register["cleo"]
+new_register = nested_register["alice"] | nested_register["charlie"]
 print(new_register)
 ######################################################################
 # A simple example using wire registers
