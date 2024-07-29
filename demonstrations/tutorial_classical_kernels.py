@@ -2,7 +2,7 @@ r"""
 
 .. _classical_kernels:
 
-How to approximate a classical kernel with a quantum computer
+Approximating a classical kernel with a quantum computer
 =============================================================
 
 .. meta::
