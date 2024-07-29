@@ -104,23 +104,20 @@ register = qml.registers({"state": 4, "estimation": 8})
 
 register = qml.registers({"state": 4, "estimation": 8, "control": 4})
 
-# Finally, let's define our Hamiltonian. We'll choose the H2 molecule for simplicitiy, but feel
-# free to try this with any other Hamiltonian you want to find the eigenvalues of.
+# Finally, let's define our Hamiltonian. We'll use the Transverse-Field Ising model from
+# PennyLane's `quantum datasets <https://pennylane.ai/datasets/qspin/transverse-field-ising-model>`_, 
+# but feel free to try this with any other Hamiltonian you want to find the eigenvalues of.
 
 import pennylane as qml
-import numpy as np
 
-symbols = ["H", "H"]
-coordinates = np.array([[0.0, 0.0, -0.66140414], [0.0, 0.0, 0.66140414]])
-molecule = qml.qchem.Molecule(symbols, coordinates)
-H, qubits = qml.qchem.molecular_hamiltonian(molecule)
+[dataset] = qml.data.load("qspin", sysname="Ising", periodicity="open", lattice="chain", layout="1x4")
+H = dataset.hamiltonians[0]
+print(H)
 
 # For QPE to work, we need to initialize the "state" register with an initial state that has good
-# overlap with the eigenstate we want the eigenvalue of. For simplicity's sake, we use the
-# Hartree-Fock state. In PennyLane code:
+# overlap with the eigenstate we want the eigenvalue of. In PennyLane code:
 
-electrons = 2
-hf_state = qml.qchem.hf_state(electrons, qubits)
+initial_state = dataset.ground_states[0]
 
 # With this, we can now define our QPE circuit like so:
 
@@ -128,9 +125,9 @@ dev = qml.device("lightning.qubit", wires=16)
 
 
 @qml.qnode(dev)
-def registers_circuit():  # Using registers
+def circuit():
     # Initialize state register to Hartree-Fock State
-    qml.BasisState(hf_state, wires=register["state"])
+    qml.BasisState(initial_state, wires=register["state"])
 
     # Apply Hadamard gate to all wires in estimation register
     for wire in register["estimation"]:
@@ -144,21 +141,6 @@ def registers_circuit():  # Using registers
     qml.adjoint(qml.QFT)(wires=register["estimation"])
 
     return qml.probs(wires=register["estimation"])
-
-
-# Finally, we can run our circuit to verify that the results of our calculation is close to what
-# we expect. This should give an eigenvalue of about -1.1359091600247835, which is close to the
-# real value.
-
-results = registers_circuit()
-
-lamb = sum([abs(coeff) for coeff in H.terms()[0]])
-
-print(
-    "E = ",
-    lamb
-    * np.cos(2 * np.pi * np.argmax(results) / 2 ** (len(register["estimation"]))),
-)
 
 # Changing the number of wires in your estimation register is very easy with registers, but can
 # be very error-prone when using wires. The complexity of wire management only gets more difficult
