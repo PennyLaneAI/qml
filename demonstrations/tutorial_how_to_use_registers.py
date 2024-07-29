@@ -72,6 +72,7 @@ def swap_test():
 
     qml.Hadamard(swap_register["ancilla"])
     for i in range(len(swap_register["psi"])):
+        # We can use the union operation to assemble our registers on the fly
         qml.CSWAP(
             swap_register["ancilla"] | swap_register["psi"][i] | swap_register["phi"][i]
         )
