@@ -55,7 +55,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # number of qubits for the Hamiltonian
-n_qubits = 4
+n_qubits = 2
 
 # set random seeds for reproducibility
 pnp.random.seed(0)
@@ -91,7 +91,7 @@ hamiltonian = qml.sum(
 
 from scipy.stats import unitary_group
 
-n_random_states = 10
+n_random_states = 100
 
 # Generate several random unitaries
 random_unitaries = unitary_group.rvs(2**n_qubits, n_random_states)
@@ -220,16 +220,29 @@ def cost(params):
     return cost
 
 
-print("Initial cost:", cost(initial_params))
-
 params = initial_params
 
 optimizer = qml.GradientDescentOptimizer(stepsize=5)
-steps = 150
-for i in range(steps):
-    params, final_cost = optimizer.step_and_cost(cost, params)
+steps = 50
+costs = [None]*(steps+1)
+costs[0] = cost(initial_params)
 
-print("Final cost:", final_cost)
+for i in range(steps):
+    params, costs[i+1] = optimizer.step_and_cost(cost, params)
+
+print("Initial cost:", costs[0])
+print("Final cost:", costs[-1])
+
+######################################################################
+#
+# We can also plot the cost over the iterations:
+#
+
+plt.plot(costs, label='Training')
+plt.plot([0,steps], [0.1929,0.1929],'r--',label='Ideal Parameters')
+plt.ylabel('Cost')
+plt.xlabel('Iterations')
+plt.legend()
 
 ######################################################################
 #
