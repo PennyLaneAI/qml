@@ -191,10 +191,7 @@ print(
     * np.cos(2 * np.pi * np.argmax(results) / 2 ** (len(wire_register["estimation"]))),
 )
 
-# Looking at the complete workflow, we can see that the difference between using registers versus
-# wires is quite small. When you have a static, defined workflow, using registers may not be the
-# best solution. However, we can see the power of using registers when we want to tweak our
-# algorithm. For example, changing the number of wires in your estimation register is very easy
+# Changing the number of wires in your estimation register is very easy
 # with registers, but can be very error-prone when using wires:
 
 wire_register = qml.registers({"state": 4, "estimation": 10, "control": 4})
