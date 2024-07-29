@@ -1,0 +1,4 @@
+.. bio:: Joseph Bunao
+   :photo: ../_static/authors/joseph_bunao.jpg
+
+   Joseph is a machine learning specialist at Xanadu. His main focus is to accelerate quantum hardware research and processes using machine learning.
