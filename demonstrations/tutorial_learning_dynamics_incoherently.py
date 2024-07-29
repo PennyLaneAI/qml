@@ -264,18 +264,6 @@ plt.show()
 #
 # the cost :math:`C^l_N(\theta)` is therefore greater than 0.
 #
-# After training, we can take a look at the density matrix of a qubit for both the model and the
-# target circuit estimate from the classical shadows. If the training was successful, these should
-# be similar:
-#
-
-print("Untrained state for qubit 1:\n", model_circuit(initial_params, random_states[0])[1])
-
-print("Trained state for qubit 1:\n", model_circuit(params, random_states[0])[1])
-
-print("Target state for qubit 1:\n", pnp.mean(shadows[0].local_snapshots(), axis=0)[1])
-
-######################################################################
 # Using the learning dynamics incoherently dataset
 # ----------------------------------------------------------------
 #
