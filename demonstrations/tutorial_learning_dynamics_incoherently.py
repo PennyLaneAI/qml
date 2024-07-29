@@ -84,10 +84,6 @@ hamiltonian = qml.sum(
 #
 # For quantum systems, this means we want to sample :doc:`Haar random states <tutorial_haar_measure>`.
 #
-# .. note ::
-#
-#    On a personal computer, this method becomes slow (>1 second) around 10 qubits.
-#
 
 from scipy.stats import unitary_group
 
@@ -267,9 +263,9 @@ plt.show()
 # Since the single-qubit reduced states used in the
 # cost function are mixed states, they have trace less than one:
 #
-# .. math:: Tr[(\rho_{i}^{(j)})^2] < 1,
+# .. math:: Tr[(\rho_{i}^{(j)})^2] < 1.
 #
-# the cost :math:`C^l_N(\theta)` is therefore greater than 0.
+# The ideal cost :math:`C^l_N(\theta)` is therefore greater than 0.
 #
 # Using the learning dynamics incoherently dataset
 # ----------------------------------------------------------------
