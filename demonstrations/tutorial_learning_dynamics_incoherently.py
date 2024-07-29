@@ -238,6 +238,8 @@ print("Final cost:", costs[-1])
 ######################################################################
 #
 # We can also plot the cost over the iterations and compare to the ideal cost.
+#
+
 
 # Find the ideal parameters from the original Trotterized Hamiltonian
 ideal_parameters = [
@@ -366,7 +368,7 @@ print("Final cost:", final_cost)
 
 ######################################################################
 #
-# We can again take a look at the density matrices to confirm that the training was successful:
+# We can take a look at the density matrices to check whether the training was successful:
 #
 
 original_matrices = model_circuit(initial_params, random_state)
