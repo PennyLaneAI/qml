@@ -14,10 +14,10 @@ For step 2, we simulate the model circuit to get its final state. To know how si
 state is to the target process output, we estimate the overlap of the states using the classical
 shadows from step 1.
 
-This approach is different to learning the quantum process *coherently* [#Huang]_ because it does not require the model
+This approach differs from learning the quantum process *coherently* [#Huang]_ because it does not require the model
 circuit to be connected to the target quantum process. That is, the model circuit does not receive
 quantum information from the target process directly. Instead, we train the model circuit using
-classical information obtained from the classical shadow measurements. This is useful because
+classical information from the classical shadow measurements. This is useful because
 it's not always possible to port the quantum output of a system directly to hardware without
 first measuring it. However, depending on the quantum process, an exponential number of classical shadow measurements
 may be required [#Jerbi]_.
@@ -34,7 +34,7 @@ to replicate part of the original investigation.
 # ----------------------------------------------
 #
 # For our unknown quantum process, we will use a well-known quantum process,
-# the `time evolution of a Hamiltonian <https://pennylane.ai/qml/demos/tutorial_qaoa_intro/#circuits-and-hamiltonians>`:
+# the `time evolution of a Hamiltonian <https://pennylane.ai/qml/demos/tutorial_qaoa_intro/#circuits-and-hamiltonians>`_:
 #
 # .. math:: U(H, t) = e^{-i H t / \hbar} .
 #
@@ -116,7 +116,7 @@ def target_circuit(input_state):
     # prepare training state
     qml.StatePrep(input_state, wires=range(n_qubits))
 
-    # evolve according to desired hamiltonian
+    # evolve according to desired Hamiltonian
     qml.TrotterProduct(hamiltonian, 2, 1, 1)
     return qml.classical_shadow(wires=range(n_qubits))
 
@@ -163,7 +163,7 @@ for random_state in random_states:
 @qml.qnode(dev)
 def model_circuit(params, random_state):
     qml.StatePrep(random_state, wires=range(n_qubits))
-    # this is a parameterized quantum circuit with the same gate structure as the target Trotterized unitary
+    # This is a parameterized quantum circuit with the same gate structure as the target Trotterized unitary
     for i in range(n_qubits):
         qml.RX(params[i], wires=i)
 
@@ -183,7 +183,7 @@ plt.show()
 #
 # We now have to find the optimal parameters for ``model_circuit`` to mirror the ``target_circuit``.
 # We can estimate the similarity between the circuits according to this cost function (see
-# appendix B of [#Jerbi]_):
+# Appendix B of [#Jerbi]_):
 #
 # .. math:: C^l_N(\theta) = 1 - \frac{1}{nN}\sum^N_{j=1}\sum^n_{i=1}Tr[U|\psi^{(j)}\rangle\langle\psi^{(j)}|U^\dagger O^{(j)}_i(\theta)],
 #
@@ -232,7 +232,7 @@ print("Final cost:", costs[-1])
 
 ######################################################################
 #
-# We can plot the cost over the iterations and compare to the ideal cost.
+# We can plot the cost over the iterations and compare it to the ideal cost.
 #
 
 
@@ -301,7 +301,7 @@ print(ds.attr_info["hamiltonian"]["doc"])
 
 ######################################################################
 #
-# The unknown target Hamiltonian, Haar-random intial states, and resulting classical shadow
+# The unknown target Hamiltonian, Haar-random initial states, and resulting classical shadow
 # measurements are all already available in the dataset.
 #
 # .. note ::
