@@ -53,7 +53,6 @@ import pennylane as qml
 from pennylane import numpy as pnp
 import numpy as np
 import matplotlib.pyplot as plt
-print("running")
 
 # number of qubits for the Hamiltonian
 n_qubits = 2
@@ -123,7 +122,7 @@ def target_circuit(input_state):
 
 
 qml.draw_mpl(target_circuit)(random_states[0])
-# plt.show()
+plt.show()
 
 ######################################################################
 #
@@ -176,7 +175,7 @@ def model_circuit(params, random_state):
 initial_params = pnp.random.random(size=7, requires_grad=True)
 
 qml.draw_mpl(model_circuit)(initial_params, random_states[0])
-# plt.show()
+plt.show()
 
 ######################################################################
 # 5. Training a model circuit using classical shadows in a cost function
@@ -341,7 +340,7 @@ def model_circuit(params, random_state):
 initial_params = pnp.random.random(size=31)
 
 qml.draw_mpl(model_circuit)(initial_params, random_state)
-# plt.show()
+plt.show()
 
 ######################################################################
 #
