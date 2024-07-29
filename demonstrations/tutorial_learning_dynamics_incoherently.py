@@ -1,5 +1,5 @@
 r"""Learning quantum dynamics incoherently: Variational learning using classical shadows
-==========================================
+====================================================================================
 
 How can we recreate and simulate an unknown quantum process with a quantum circuit? One approach is to learn the
 dynamics of this process incoherently, as done by Jerbi et al. [#Jerbi]_. Here, we'll reproduce the numerical
@@ -115,6 +115,7 @@ random_states = [random_unitary[:, 0] for random_unitary in random_unitaries]
 
 dev = qml.device("default.qubit")
 
+
 @qml.qnode(dev)
 def target_circuit(input_state):
     # prepare training state
@@ -123,6 +124,7 @@ def target_circuit(input_state):
     # evolve according to desired hamiltonian
     qml.TrotterProduct(hamiltonian, 2, 1, 1)
     return qml.classical_shadow(wires=range(n_qubits))
+
 
 qml.draw_mpl(target_circuit)(random_states[0])
 plt.show()
@@ -194,13 +196,13 @@ plt.show()
 # are random states, :math:`U` is our target unitary operation, and :math:`O_i` is the local density
 # matrix for qubit :math:`i` after applying the ``model_circuit``. That is, the local states
 # :math:`\rho_{i}^{(j)}` are used as the observables:
-# 
+#
 # .. math:: O_{i}^{(j)}(\theta) := \rho_{i}^{(j)}.
 #
 # We can calculate this cost for our system by using the
 # `shadow measurements <#time-evolution-and-classical-shadow-measurements>`_ to estimate
 # the expectation value of :math:`O_i`. Roughly, this cost function measures the fidelity between
-# the model circuit and the target circuit, by proxy of the single-qubit reduced states 
+# the model circuit and the target circuit, by proxy of the single-qubit reduced states
 # :math:`\rho_{i}^{(j)}` of the model over a variety of input-output pairs.
 
 
@@ -224,11 +226,11 @@ params = initial_params
 
 optimizer = qml.GradientDescentOptimizer(stepsize=5)
 steps = 50
-costs = [None]*(steps+1)
+costs = [None] * (steps + 1)
 costs[0] = cost(initial_params)
 
 for i in range(steps):
-    params, costs[i+1] = optimizer.step_and_cost(cost, params)
+    params, costs[i + 1] = optimizer.step_and_cost(cost, params)
 
 print("Initial cost:", costs[0])
 print("Final cost:", costs[-1])
@@ -238,15 +240,18 @@ print("Final cost:", costs[-1])
 # We can also plot the cost over the iterations and compare to the ideal cost.
 
 # Find the ideal parameters from the original Trotterized Hamiltonian
-ideal_parameters = [op.decomposition()[0].parameters[0] for op in qml.TrotterProduct(hamiltonian,2,1,1).decomposition()]
-ideal_parameters = ideal_parameters[:n_qubits][::-1]+ideal_parameters[n_qubits:]
+ideal_parameters = [
+    op.decomposition()[0].parameters[0]
+    for op in qml.TrotterProduct(hamiltonian, 2, 1, 1).decomposition()
+]
+ideal_parameters = ideal_parameters[:n_qubits][::-1] + ideal_parameters[n_qubits:]
 
 ideal_cost = cost(ideal_parameters)
 
-plt.plot(costs, label='Training')
-plt.plot([0,steps], [ideal_cost, ideal_cost],'r--',label='Ideal Parameters')
-plt.ylabel('Cost')
-plt.xlabel('Iterations')
+plt.plot(costs, label="Training")
+plt.plot([0, steps], [ideal_cost, ideal_cost], "r--", label="Ideal Parameters")
+plt.ylabel("Cost")
+plt.xlabel("Iterations")
 plt.legend()
 plt.show()
 
@@ -374,8 +379,9 @@ print("Target output state\n", target_matrices_shadow[0])
 
 ######################################################################
 #
-# After training, the model outputs are similar to the target outputs estimated
-# using classical shadows.
+# After training, the model outputs are closer to the target outputs estimated
+# using classical shadows, but not quite the same. This can be improved by using more training
+# states and classical shadow measurements.
 #
 
 
