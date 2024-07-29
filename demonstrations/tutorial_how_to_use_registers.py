@@ -9,9 +9,9 @@ in PennyLane.
 # How to create a wire register
 # -----------------------------
 #
-# The way to construct a wire register is simple, just use :func:`~pennylane.registers`. Here we
-# pass a dictionary where the keys are the names for our registers and the values are the number of
-# wires for said register:
+# The way to construct a wire register is simple --- just use :func:`~pennylane.registers`. Here we
+# pass a dictionary where the keys are the register names and the values are the number of
+# wires for each register:
 
 import pennylane as qml
 
