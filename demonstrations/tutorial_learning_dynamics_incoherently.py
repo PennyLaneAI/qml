@@ -109,7 +109,7 @@ random_states = [random_unitary[:, 0] for random_unitary in random_unitaries]
 # 3. Time evolution and classical shadow measurements
 # ----------------------------------------------------
 #
-# Now we can evolve the initial states using a Trotterized version of the Hamiltonian `above <#creating-an-unknown-target-quantum-process>`_. This
+# Now we can evolve the initial states using a Trotterized version of the `Hamiltonian above <#creating-an-unknown-target-quantum-process>`_. This
 # will approximate the time evolution of the corresponding transverse-field Ising system.
 #
 
@@ -195,13 +195,13 @@ plt.show()
 # matrix for qubit :math:`i` after applying the ``model_circuit``. That is, the local states
 # :math:`\rho_{i}^{(j)}` are used as the observables:
 # 
-# .. math:: \rho_{i}^{(j)} =: O_{i}^{(j)}(\theta).
+# .. math:: O_{i}^{(j)}(\theta) := \rho_{i}^{(j)}.
 #
 # We can calculate this cost for our system by using the
 # `shadow measurements <#time-evolution-and-classical-shadow-measurements>`_ to estimate
 # the expectation value of :math:`O_i`. Roughly, this cost function measures the fidelity between
 # the model circuit and the target circuit, by proxy of the single-qubit reduced states 
-# :math:`\rho_{i}^{(j)} =: O_{i}^{(j)}(\theta)` of the model over a variety of input-output pairs.
+# :math:`\rho_{i}^{(j)}` of the model over a variety of input-output pairs.
 
 
 def cost(params):
@@ -235,16 +235,34 @@ print("Final cost:", costs[-1])
 
 ######################################################################
 #
-# We can also plot the cost over the iterations:
-#
+# We can also plot the cost over the iterations and compare to the ideal cost.
+
+# Find the ideal parameters from the original Trotterized Hamiltonian
+ideal_parameters = [op.decomposition()[0].parameters[0] for op in qml.TrotterProduct(hamiltonian,2,1,1).decomposition()]
+ideal_parameters = ideal_parameters[:n_qubits][::-1]+ideal_parameters[n_qubits:]
+
+ideal_cost = cost(ideal_parameters)
 
 plt.plot(costs, label='Training')
-plt.plot([0,steps], [0.1929,0.1929],'r--',label='Ideal Parameters')
+plt.plot([0,steps], [ideal_cost, ideal_cost],'r--',label='Ideal Parameters')
 plt.ylabel('Cost')
 plt.xlabel('Iterations')
 plt.legend()
+plt.show()
 
 ######################################################################
+# In this case, we see
+# that the ideal cost is greater than 0. This is because for the ideal parameters, the model outputs
+# and target outputs are equal:
+#
+# .. math:: \rho_{i}^{(j)} := O_i = U|\psi^{(j)}\rangle\langle\psi^{(j)}|U^\dagger.
+#
+# Since the single-qubit reduced states used in the
+# cost function are mixed states, they have trace less than one:
+#
+# .. math:: Tr[(\rho_{i}^{(j)})^2] < 1,
+#
+# the cost :math:`C^l_N(\theta)` is therefore greater than 0.
 #
 # After training, we can take a look at the density matrix of a qubit for both the model and the
 # target circuit estimate from the classical shadows. If the training was successful, these should
@@ -320,7 +338,7 @@ plt.show()
 
 ######################################################################
 #
-# For the cost function, we repeat the same code as `above <#training-a-model-circuit-using-classical-shadows-in-a-cost-function>`_, updated to use a single input state:
+# For the cost function, we repeat the same code as `before <#training-a-model-circuit-using-classical-shadows-in-a-cost-function>`_, updated to use a single input state:
 #
 
 
