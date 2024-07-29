@@ -53,6 +53,7 @@ import pennylane as qml
 from pennylane import numpy as pnp
 import numpy as np
 import matplotlib.pyplot as plt
+print("running")
 
 # number of qubits for the Hamiltonian
 n_qubits = 2
@@ -111,7 +112,6 @@ random_states = [random_unitary[:, 0] for random_unitary in random_unitaries]
 
 dev = qml.device("default.qubit")
 
-
 @qml.qnode(dev)
 def target_circuit(input_state):
     # prepare training state
@@ -123,7 +123,7 @@ def target_circuit(input_state):
 
 
 qml.draw_mpl(target_circuit)(random_states[0])
-plt.show()
+# plt.show()
 
 ######################################################################
 #
@@ -176,7 +176,7 @@ def model_circuit(params, random_state):
 initial_params = pnp.random.random(size=7, requires_grad=True)
 
 qml.draw_mpl(model_circuit)(initial_params, random_states[0])
-plt.show()
+# plt.show()
 
 ######################################################################
 # 5. Training a model circuit using classical shadows in a cost function
@@ -233,7 +233,7 @@ print("Final cost:", costs[-1])
 
 ######################################################################
 #
-# We can also plot the cost over the iterations and compare to the ideal cost.
+# We can plot the cost over the iterations and compare to the ideal cost.
 #
 
 
@@ -267,6 +267,22 @@ plt.show()
 #
 # The ideal cost :math:`C^l_N(\theta)` is therefore greater than 0.
 #
+# We can also look at the trace distance between the unitary matrix of the target circuit and the
+# model circuit. If the circuits are similar, we should see a low trace
+# distance value.
+#
+
+import scipy
+
+target_matrix = qml.matrix(qml.TrotterProduct(hamiltonian, 2, 1, 1)@qml.StatePrep(random_states[0],wires=range(n_qubits)),wire_order=range(n_qubits))
+model_matrix = qml.matrix(model_circuit, wire_order=range(n_qubits))(params, random_states[0])
+diff = target_matrix - model_matrix
+
+trace_distance = 0.5* np.trace(scipy.linalg.sqrtm(np.conjugate(np.transpose(diff))@diff))
+
+print(trace_distance)
+
+######################################################################
 # Using the learning dynamics incoherently dataset
 # ----------------------------------------------------------------
 #
@@ -325,7 +341,7 @@ def model_circuit(params, random_state):
 initial_params = pnp.random.random(size=31)
 
 qml.draw_mpl(model_circuit)(initial_params, random_state)
-plt.show()
+# plt.show()
 
 ######################################################################
 #
