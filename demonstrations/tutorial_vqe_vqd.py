@@ -155,7 +155,7 @@ print()
 theta = jax.numpy.array([0.1, 0.2, 0.3])
 beta = 2
 
-# store the values of the cost function
+# Store the values of the cost function
 energy = [loss_f(theta, beta)]
 
 conv_tol = 1e-6
