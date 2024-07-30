@@ -23,7 +23,7 @@ In this tutorial, we'll show you how to use PennyLane to interface with IBM's qu
 platform. We will learn how to:
 
 * discover what kind of devices IBM offers;
-* connect to IBM devices through Pennylane's device class;
+* connect to IBM devices through PennyLane's device class;
 * use Qiskit Runtime to run hybrid algorithms;
 * compare different devices to improve our quantum algorithms.
 """
