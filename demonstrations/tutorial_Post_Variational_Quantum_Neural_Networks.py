@@ -634,7 +634,8 @@ plt.show()
 # different algorithms outperforming the other. We propose post-variational quantum neural networks
 # simply as an alternative implementation of neural networks in the NISQ setting, and leave the
 # determination of case-by-case distinctions on performance evaluations and resource consumption to
-# future work.
+# future work. 
+#
 # 
 
 ######################################################################
