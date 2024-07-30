@@ -100,10 +100,10 @@ register = qml.registers({"state": 4, "estimation": 8})
 
 # To build our unitary operator :math:`U`, there are a variety of options. We can opt to use a
 # straight-forward block encoding, or choose to use a subroutine like qubitization.
-# We'll use `qubitization <https://docs.pennylane.ai/en/stable/code/api/pennylane.Qubitization.html>`_, which means we have to define another "control" register.
+# We'll use `qubitization <https://docs.pennylane.ai/en/stable/code/api/pennylane.Qubitization.html>`_, which means we have to define another "prep" register.
 # Our registers now look like this:
 
-register = qml.registers({"state": 4, "estimation": 8, "control": 4})
+register = qml.registers({"state": 4, "estimation": 8, "prep": 4})
 
 # Finally, let's define our Hamiltonian. We'll use the Transverse-Field Ising model from
 # PennyLane's `quantum datasets <https://pennylane.ai/datasets/qspin/transverse-field-ising-model>`_, 
@@ -135,7 +135,7 @@ def circuit():
         qml.Hadamard(wires=wire)
 
     qml.ControlledSequence(
-        qml.Qubitization(H, register["control"]),
+        qml.Qubitization(H, register["prep"]),
         control=register["estimation"],
     )
 
