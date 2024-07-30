@@ -127,7 +127,7 @@ print(qml.draw(swap_test)(theta))
 print(f"\nOverlap between the ground state and the ansatz: {swap_test(theta)}")
 
 ######################################################################
-# The ``swap_test`` function return the overlap between the generated state and the ground state.
+# The ``swap_test`` function returns the overlap between the generated state and the ground state.
 # In this demo we will not go deeper into this technique but we encourage the reader to explore it further.
 #
 # With this we have all the ingredients to define the loss function that we want to minimize:
