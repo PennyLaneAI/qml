@@ -7,7 +7,7 @@ r"""How to use noise models in PennyLane
 # in a quantum computation, as they allow for simulating the imperfections in state evolution
 # arising from environment-based errors, state preparation routines, measurements, and more.
 #
-# Here, we show how to use the features provided in the PennyLane's :mod:`~.pennylane.noise`
+# Here, we show how to use the features provided in PennyLane's :mod:`~.pennylane.noise`
 # module to construct and manipulate noise models for enabling noisy simulation. In PennyLane,
 # noise models are constructed from two main components:
 #
@@ -305,7 +305,7 @@ keys = list(noisy_qdev_res.keys())
 labels = ["Ideal Results", "Noisy Circuit", "Noisy Device"]
 
 # Create the bar plot
-plt.figure(figsize=(10, 5))
+plt.figure(figsize=(10, 4))
 for idx, res in enumerate([ideal_circ_res, noisy_circ_res, noisy_qdev_res]):
     counts = np.array(list(res.values())) / num_shots
     plt.bar(bars + idx*size, counts, size, label=labels[idx])
