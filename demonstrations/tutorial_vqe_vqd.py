@@ -163,7 +163,7 @@ max_iterations = 100
 
 opt = optax.sgd(learning_rate=0.4)
 
-# store the values of the circuit parameter
+# Store the values of the circuit parameter
 angle = [theta]
 
 opt_state = opt.init(theta)
