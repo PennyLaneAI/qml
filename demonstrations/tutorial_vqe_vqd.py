@@ -16,7 +16,7 @@ a familiarization with the `Variational Quantum Eigensolver (VQE) <https://penny
 
 ######################################################################
 #
-# Variational Quantum Deflation
+# Variational quantum deflation
 # ------------------------------
 #
 # VQD algorithm [#Vqd]_ is a method used to find excited states of a quantum system.
