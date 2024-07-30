@@ -22,7 +22,7 @@
             "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_bluequbit-pennylane_device.png"
         }
     ],
-    "seoDescription": "Run large scale quantum simulations with Pennylane and BlueQubit",
+    "seoDescription": "Run large-scale quantum simulations with PennyLane and BlueQubit.",
     "doi": "",
     "canonicalURL": "/qml/demos/tutorial_bluequbit",
     "references": [],
