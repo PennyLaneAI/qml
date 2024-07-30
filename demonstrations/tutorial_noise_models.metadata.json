@@ -18,7 +18,7 @@
             "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_optimizing_noisy_circuits_Cirq.png"
         }
     ],
-    "seoDescription": "Learn how noise models can be built and attached to a quantum circuit in PennyLane.",
+    "seoDescription": "Learn how noise models can be built and inserted to a quantum circuit in PennyLane.",
     "doi": "",
     "canonicalURL": "/qml/demos/tutorial_noise_models",
     "references": [
