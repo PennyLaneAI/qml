@@ -107,7 +107,8 @@ print(qml.draw(ansatz, decimals = 2)(theta, range(4)))
 
 ######################################################################
 # The ``ansatz`` function is the one that generates the state :math:`|\Psi(\theta)\rangle`.
-# The next step is to calculate the overlap between our generated state and the ground state, using a technique known as SWAP test.
+# The next step is to calculate the overlap between our generated state and the ground state, using a technique
+# known as `SWAP test <https://en.wikipedia.org/wiki/Swap_test>`__.
 
 
 @qml.qnode(dev)
