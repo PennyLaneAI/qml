@@ -131,14 +131,13 @@ for op in [op1, op2, op3]:
 # Callables
 # ~~~~~~~~~
 #
-# Now that we have learned how the conditionals work, let's see how the callables that apply
-# noise operations are defined. These callables are called noise functions, which contain the
-# error operations to be inserted but have no return statements. If a conditional
-# evaluates to ``True`` on a given gate operation in the quantum circuit, the noise function
-# is evaluated and its operations are inserted to the circuit. Each noise function, will
-# have the signature ``fn(op, **metadata)``, allowing for dependency on both the evaluated
-# operation and metadata specified in the noise model. For the noise models, we support
-# following instruction-based noise function constructions.
+# Now, let's see how the callables that apply noise operations are defined. These callables
+# are called noise functions, which contain the error operations to be inserted but have no
+# return statements. If a conditional evaluates to ``True`` on a given gate operation in the
+# quantum circuit, the noise function is evaluated and its operations are inserted to the
+# circuit. Each noise function, will have the signature ``fn(op, **metadata)``, allowing for
+# dependency on both the evaluated operation and metadata specified in the noise model.
+# For the noise models, we support following instruction-based noise function constructions.
 #
 
 ######################################################################
@@ -178,15 +177,15 @@ op = qml.X(0)
 with qml.queuing.AnnotatedQueue() as q:
     thermal_func(op, t1=0.01)
 
-print(f"Error for {op}:\n{q.queue[0]}\n")
+print(f"Error for {op}: {q.queue[0]}")
 
 ######################################################################
 # Custom-ordered noise functions
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
-# By default, noise functions defined above would insert error operations after the gate
-# operation that evaluates to ``True``. More flexibility with insertion order can be
-# achieved by specifying one's own custom order by queuing the operation being evaluated
+# By default, noise functions defined above would insert error operations after the
+# evaluated gate operation. More flexibility with insertion order can be achieved
+# by specifying one's own custom order by queuing the operation being evaluated
 # via :func:`~pennylane.apply` within the function definition as shown below:
 #
 
@@ -200,11 +199,11 @@ def sandwich_func(op, **kwargs):
 # that can again be seen with some example gate operations:
 #
 
-op = qml.RX(6.589, wires=[0])
+op = qml.RX(6.58, wires=[0])
 with qml.queuing.AnnotatedQueue() as q:
     sandwich_func(op)
 
-print(f"Error for {op}:\n{q.queue}\n")
+print(f"Error for {op}:\n{q.queue}")
 
 ######################################################################
 # Noise Models
@@ -306,10 +305,10 @@ keys = list(noisy_qdev_res.keys())
 labels = ["Ideal Results", "Noisy Circuit", "Noisy Device"]
 
 # Create the bar plot
-plt.figure(figsize=(10, 4))
+plt.figure(figsize=(10, 5))
 for idx, res in enumerate([ideal_circ_res, noisy_circ_res, noisy_qdev_res]):
     counts = np.array(list(res.values())) / num_shots
-    plt.bar(bars[idx] + idx*size, counts, size, label=labels[idx])
+    plt.bar(bars + idx*size, counts, size, label=labels[idx])
 
 # Add labels, title, and legend
 plt.xlabel("Bitstring")
@@ -334,10 +333,7 @@ plt.show()
 # Noise models provide a succinct way to describe the impact of the environment on
 # quantum computation. In PennyLane, we define such models as mapping between conditionals
 # that select the target operation and their corresponding noise operations. These can be
-# constructed with utmost flexibility, as shown above. We also support converting
-# noise models from Qiskit, including the ones from hardware and fake backends to
-# PennyLane via our `pennylane-qiskit <https://docs.pennylane.ai/projects/qiskit/en/latest/>`__
-# plugin.
+# constructed with utmost flexibility, as shown above.
 #
 # As such models are instrumental in capturing the working of quantum hardware,
 # we will continue to improve these features in PennyLane, allowing one to
