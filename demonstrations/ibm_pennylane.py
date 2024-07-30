@@ -33,7 +33,7 @@ platform. We will learn how to:
 # -----------------
 # IBM offers access to a variety of devices, both classical simulators and real quantum hardware.
 # By default, these devices are not included in PennyLane, but after installing the
-# `pennylane-qiskit plugin <https://docs.pennylane.ai/projects/qiskit/en/stable/>`__ with the command ``pip install pennylane-qiskit``,
+# `PennyLane-Qiskit plugin <https://docs.pennylane.ai/projects/qiskit/en/stable/>`__ with the command ``pip install pennylane-qiskit``,
 # they can be used just like any other device offered in PennyLane!
 # Currently, there are three devices available — ``Aer``, ``BasicSim`` and ``Remote`` — that can be initialized
 # as follows:
@@ -81,12 +81,12 @@ print(Aer.backends())
 #      'qasm_simulator', 'statevector_simulator', 'unitary_simulator', 'pulse_simulator']
 
 ##############################################################################
-# You can find even more details about these devices directly from the IBMQ platform. You can find
-# information about the size, topology, quantum volume and noise profile of all the devices that they
-# have available. Currently, the smallest device has 5 qubits and the largest has 127. On the IBMQ
-# platform you can also check which devices are free to use and whether any of them are temporarily
-# unavailable. You can even check your active jobs and estimated time in the queue for any programs
-# you execute.
+# You can find even more details about these devices directly from the IBM Quantum platform. You can
+# find information about the size, topology, quantum volume and noise profile of all the devices
+# that they have available. Currently, the smallest device has 5 qubits and the largest has 127. On
+# the IBM Quantum platform you can also check which devices are free to use and whether any of them
+# are temporarily unavailable.  You can even check your active jobs and estimated time in the queue
+# for any programs you execute.
 
 ##############################################################################
 # Qiskit Runtime
@@ -113,9 +113,9 @@ print(Aer.backends())
 ##############################################################################
 # Using Qiskit Runtime
 # --------------------
-# The pennylane-qiskit plugin includes some tools to help create a Qiskit Runtime job. Since using
-# Qiskit Runtime only makes sense when using real quantum hardware, we must again specify our IBMQ
-# account details to run these jobs.
+# The PennyLane-Qiskit plugin includes some tools to help create a Qiskit Runtime job. Since using
+# Qiskit Runtime only makes sense when using real quantum hardware, we must again specify our IBM
+# Quantum account details to run these jobs.
 #
 # First, we set up our problem as usual, and then retrieve a program ID from IBM, which gives us a
 # place to upload our job:
@@ -352,7 +352,7 @@ plt.show()
 # topology and readout errors.
 #
 # This tutorial has demonstrated how and why to use quantum computing hardware provided by IBM using PennyLane. To read
-# more about the details and possibilities of the Qiskit plugin for PennyLane, `read the documentation <https://docs.pennylane.ai/projects/qiskit/en/latest/index.html>`__.
+# more about the details and possibilities of the Pennylane-Qiskit plugin by PennyLane, `read the documentation <https://docs.pennylane.ai/projects/qiskit/en/latest/index.html>`__.
 #
 # About the authors
 # ----------------
