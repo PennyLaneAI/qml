@@ -129,7 +129,7 @@ plt.show()
 ######################################################################
 # We use the following circuit as our Ansatz. This Ansatz is also used as backbone for all our
 # post-variational strategies. When we set all initial parameters to 0, the Ansatz evaluates to
-# identity.
+# identity. 
 # 
 
 ######################################################################
