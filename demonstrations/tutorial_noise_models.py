@@ -24,7 +24,7 @@ r"""How to use noise models in PennyLane
 ######################################################################
 # .. figure:: ../_static/demonstration_assets/noise_models/noise_model_long.jpg
 #    :align: center
-#    :width: 93%
+#    :width: 90%
 #
 #    ..
 #
@@ -96,13 +96,13 @@ print(f"Result for cond4: {cond4(op)}")
 #
 # A further precise control over the evaluation of operations can be achieved by defining custom
 # conditionals in a functional form and wrapping them with a :class:`~.pennylane.BooleanFn`
-# decorator. Inputs of such custom conditionals must be a single operation for evaluation
-# and metadata (keyword arguments). For example, a conditional that evaluates ``True``
-# for :math:`R_X(\phi)` gate operations with :math:`\phi < 1.0` can be constructed as:
+# decorator. Inputs of such custom conditionals must be a single operation for evaluation.
+# For example, a conditional that evaluates ``True`` for :math:`R_X(\phi)` gate operations
+# with :math:`\phi < 1.0` can be constructed as:
 #
 
 @qml.BooleanFn
-def rx_condition(op, **metadata):
+def rx_condition(op):
     return isinstance(op, qml.RX) and op.parameters[0] < 1.0
 
 op1, op2, op3 = qml.RX(0.05, wires=0), qml.RY(0.07, wires=2), qml.RX(2.37, wires="a")
@@ -160,9 +160,9 @@ for wire in [0, 2, "w1"]:
 # User-defined noise functions
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
-# Often, one would want more parameterized control over the noise operations being applied.
-# This is possible by defining your own quantum function with the signature we specified
-# above. For example, one can use the following for inserting a thermal relaxation error
+# More parameterized control over the noise operation being applied is possible by
+# defining your own quantum function with the signature we specified above.
+# For example, one can use the following for inserting a thermal relaxation error
 # based on a :math:`T_1` time provided as a keyword argument (i.e., metadata).
 #
 
@@ -174,8 +174,9 @@ def thermal_func(op, **kwargs):
 # using some example gate operations:
 #
 
+op = qml.X(0)
 with qml.queuing.AnnotatedQueue() as q:
-    thermal_func(qml.X(0), t1=0.01)
+    thermal_func(op, t1=0.01)
 
 print(f"Error for {op}:\n{q.queue[0]}\n")
 
@@ -183,11 +184,11 @@ print(f"Error for {op}:\n{q.queue[0]}\n")
 # Custom-ordered noise functions
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
-# By default, noise functions defined above would result in error operations being
-# inserted after the gate operation that evaluates to ``True``. This might not always be ideal,
-# and there might be instances where the error needs more flexibility with the order. One can
-# specify their own custom order by queuing the operation being evaluated via
-# :func:`~pennylane.apply` within the function definition as shown below:
+# By default, noise functions defined above would insert error operations after the gate
+# operation that evaluates to ``True``. More flexibility with insertion order can be
+# achieved by specifying one's own custom order by queuing the operation being evaluated
+# via :func:`~pennylane.apply` within the function definition as shown below:
+#
 
 def sandwich_func(op, **kwargs):
     qml.RZ(op.parameters[0] * 0.05, op.wires)
@@ -199,8 +200,9 @@ def sandwich_func(op, **kwargs):
 # that can again be seen with some example gate operations:
 #
 
+op = qml.RX(6.589, wires=[0])
 with qml.queuing.AnnotatedQueue() as q:
-    sandwich_func(qml.RX(6.589, wires=[0]))
+    sandwich_func(op)
 
 print(f"Error for {op}:\n{q.queue}\n")
 
@@ -294,30 +296,25 @@ noisy_dev_circuit = qml.QNode(circuit, noisy_dev)
 import numpy as np
 
 num_shots = 100000
-ideal_circuit_counts = qcircuit(params, shots=num_shots)
-noisy_circuit_counts = noisy_circuit(params, shots=num_shots)
-noist_dev_counts = noisy_dev_circuit(params, shots=num_shots)
-categories = list(noisy_circuit_counts.keys())
+ideal_circ_res = qcircuit(params, shots=num_shots)
+noisy_circ_res = noisy_circuit(params, shots=num_shots)
+noisy_qdev_res = noisy_dev_circuit(params, shots=num_shots)
 
-width = 0.2
-bars1 = np.arange(len(categories))
-bars2 = bars1 + width
-bars3 = bars1 + 2 * width
-
-counts_ideal = np.array(list(ideal_circuit_counts.values())) / num_shots
-counts_ncirc = np.array(list(noisy_circuit_counts.values())) / num_shots
-counts_ndevc = np.array(list(noist_dev_counts.values())) / num_shots
+size = 0.2
+bars = np.arange(len(noisy_qdev_res))
+keys = list(noisy_qdev_res.keys())
+labels = ["Ideal Results", "Noisy Circuit", "Noisy Device"]
 
 # Create the bar plot
-plt.figure(figsize=(10, 6))
-plt.bar(bars1, counts_ideal, width, label="Ideal Results")
-plt.bar(bars2, counts_ncirc, width, label="Noisy Circuit")
-plt.bar(bars3, counts_ndevc, width, label="Noisy Device")
+plt.figure(figsize=(10, 4))
+for idx, res in enumerate([ideal_circ_res, noisy_circ_res, noisy_qdev_res]):
+    counts = np.array(list(res.values())) / num_shots
+    plt.bar(bars[idx] + idx*size, counts, size, label=labels[idx])
 
 # Add labels, title, and legend
 plt.xlabel("Bitstring")
 plt.ylabel("Probabilities")
-plt.xticks(bars1 + width / 2, categories)
+plt.xticks(bars + size / 2, keys)
 plt.legend()
 
 # Show the plot
