@@ -255,7 +255,7 @@ print(H)
 ##############################################################################
 # In this case, since we have truncated the basis of molecular orbitals, the resulting
 # observable is an approximation of the Hamiltonian generated in the
-# section :ref:`hamiltonian`.
+# section :ref:`Building the Hamiltonian`.
 #
 # OpenFermion-PySCF backend
 # -------------------------
