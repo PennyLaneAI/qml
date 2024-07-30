@@ -27,8 +27,19 @@
     ],
     "seoDescription": "Learn how to use variational quantum deflation (VQD) to find the first excited state energy of the hydrogen molecule.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_vqe_vqd",
-    "references": [],
+    "canonicalURL": "/qml/demos/tutorial_vqd",
+    "references": [
+        {
+
+            "id": "Higgott2019variationalquantum",
+            "type": "article",
+            "title": "Variational Quantum Computation of Excited States",
+            "authors": "Higgott, Oscar and Wang, Daochen and Brierley, Stephen",
+            "year": "2019",
+            "journal": "Quantum",
+            "url": "https://doi.org/10.22331/q-2019-07-01-156"
+        }
+    ],
     "basedOnPapers": [],
     "referencedByPapers": [],
     "relatedContent": [],
