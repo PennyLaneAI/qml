@@ -6,7 +6,7 @@ Running large scale simulations usually requires lots of memory and compute powe
 Regular laptops already struggle above 20 qubits and most of the time 30+ qubits are a no go.
 Using the BlueQubit device, now Pennylane users can run circuit simulations on souped up machines and go up to 33 qubits!
 
-We use a custom build of Pennilane-Lighning to have multi-threading and other configurations to achieve best possible performance.
+BlueQubit uses a custom build of Pennilane-Lighning to have multi-threading and other configurations to achieve best possible performance.
 
 .. note::
 
@@ -29,7 +29,7 @@ Build your PennyLane circuit
 ----------------------------
 
 Here we will build a simple :doc:`Bell pair </glossary/what-are-bell-states>` and simulate it on the BlueQubit backend.
-Later in this tutorial we will show a larger example — a 26-qubit quantum adder.
+Later in this tutorial we will show a larger example — a 26-qubit circuit that demonstrates the Central Limit Theorem using a `Draper QFT adder <https://pennylane.ai/qml/demos/tutorial_qft_arithmetics>`__.
 
 Here is the example circuit we will be simulating:
 """
@@ -145,6 +145,8 @@ def add_4_6qubit_uniforms():
 res = add_4_6qubit_uniforms()
 plt.figure(figsize=(32, 8))
 bar = plt.bar(np.arange(len(res)), res)
+plt.tick_params(axis='x', labelsize=30)
+plt.tick_params(axis='y', labelsize=30)
 
 #############################################
 # Wow, that looks like a Gaussian distribution! 
