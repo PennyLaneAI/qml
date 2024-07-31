@@ -39,5 +39,12 @@
             "id": "tutorial_qft",
             "weight": 1.0
         }
+    ],
+    "hardware": [
+        {
+            "id": "bluequbit",
+            "link": "https://app.bluequbit.io/",
+            "logo": "/_static/hardware_logos/bluequbit.png"
+        }
     ]
 }
