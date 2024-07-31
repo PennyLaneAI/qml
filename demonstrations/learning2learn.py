@@ -239,8 +239,7 @@ def qaoa_from_graph(graph, n_layers=1):
     def hamiltonian(params, **kwargs):
         """Evaluate the cost Hamiltonian, given the angles and the graph."""
 
-        # We set the default.qubit.tf device for seamless integration with TensorFlow
-        dev = qml.device("default.qubit.tf", wires=len(graph.nodes))
+        dev = qml.device("default.qubit", wires=len(graph.nodes))
 
         # This qnode evaluates the expectation value of the cost hamiltonian operator
         cost = qml.QNode(circuit, dev, diff_method="backprop", interface="tf")
@@ -373,9 +372,7 @@ def recurrent_loop(graph_cost, n_layers=1, intermediate_steps=False):
     # We perform five consecutive calls to 'rnn_iteration', thus creating the
     # recurrent loop. More iterations lead to better results, at the cost of
     # more computationally intensive simulations.
-    out0 = rnn_iteration(
-        [initial_cost, initial_params, initial_h, initial_c], graph_cost
-    )
+    out0 = rnn_iteration([initial_cost, initial_params, initial_h, initial_c], graph_cost)
     out1 = rnn_iteration(out0, graph_cost)
     out2 = rnn_iteration(out1, graph_cost)
     out3 = rnn_iteration(out2, graph_cost)
@@ -1030,9 +1027,7 @@ class QRNN(tf.keras.layers.Layer):
         _params = tf.reshape(new_params, shape=(2, self.qaoa_p))
 
         # Cost evaluation, and reshaping to be consistent with other Keras tensors
-        new_cost = tf.reshape(
-            tf.cast(self.expectation(_params), dtype=tf.float32), shape=(1, 1)
-        )
+        new_cost = tf.reshape(tf.cast(self.expectation(_params), dtype=tf.float32), shape=(1, 1))
 
         return [new_cost, new_params, new_h, new_c]
 
