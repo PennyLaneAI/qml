@@ -275,7 +275,7 @@ print("----------")
 @jax.jit
 def circuit(key, param):
     # Notice how the device construction now happens within the jitted method.
-    dev = qml.device("default.qubit", wires=2, shots=10, prng_key=key)
+    dev = qml.device("default.qubit", wires=2, shots=10, seed=key)
 
     # Now we can create our qnode within the circuit function.
     @qml.qnode(dev, interface="jax", diff_method=None)
