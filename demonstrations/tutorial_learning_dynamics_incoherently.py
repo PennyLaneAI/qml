@@ -1,4 +1,4 @@
-r"""Learning quantum dynamics incoherently: Variational learning using classical shadows
+r"""Learning quantum dynamics incoherently: variational learning using classical shadows
 ====================================================================================
 
 How can we recreate and simulate an unknown quantum process with a quantum circuit? One approach is
@@ -148,12 +148,11 @@ for random_state in random_states:
 # 4. Creating a model circuit that will learn the target process
 # ----------------------------------------------------------------
 #
-# Now that we have the classical shadow measurements, we need to create a ``model_circuit`` that
-# learns to produce the same output as the target circuit. We will then use the classical shadow
-# As done in [#Jerbi]_, we create a ``model_circuit`` with the same gate structure as the target
+# Now that we have the classical shadow measurements, we need to create a model circuit that
+# learns to produce the same output as the target circuit.
 #
-# As done in [#Jerbi]_, we create a ``model_circuit`` with the same gate structure as the target
-# structure. If the target quantum process were truly unknown, then we could choose a general
+# As done in [#Jerbi]_, we create a model circuit with the same gate structure as the target
+# circuit. If the target quantum process were truly unknown, then we would choose a general
 # variational quantum circuit like in the
 # :doc:`Variational classifier demo </demos/tutorial_variational_classifier>`.
 #
@@ -271,8 +270,8 @@ plt.show()
 #
 # The ideal cost :math:`C^l_N(\theta)` is therefore greater than 0.
 #
-# We can also look at the :func:`trace distance <~pennylane.data.load>` between the unitary matrix of the target circuit and the
-# model circuit. If the circuits are similar, we should see a low trace
+# We can also look at the :func:`trace distance <pennylane.math.trace_distance>` between the unitary matrix of the 
+# target circuit and the model circuit. If the circuits are similar, we should see a low trace
 # distance value.
 #
 
@@ -312,18 +311,17 @@ print(ds.attr_info["hamiltonian"]["doc"])
 ######################################################################
 #
 # The unknown target Hamiltonian, Haar-random initial states, and resulting classical shadow
-# measurements are all already available in the dataset.
+# measurements are all available in the dataset.
 #
 # .. note ::
 #
-#    We use few shadows and only one training state to keep the computational time low.
+#    We use few shadows to keep the computational time low and the dataset contains only two
+#    training states.
 
-random_state = ds.training_states[0]
+random_states = ds.training_states
 
-n_measurements = 1000
-shadow_ds = qml.ClassicalShadow(
-    ds.shadow_meas[0][:n_measurements], ds.shadow_bases[0][:n_measurements]
-)
+n_measurements = 10000
+shadows = [qml.ClassicalShadow(shadow_meas[:n_measurements], shadow_bases[:n_measurements]) for shadow_meas, shadow_bases in zip(ds.shadow_meas,ds.shadow_bases)]
 
 ######################################################################
 #
@@ -335,11 +333,9 @@ shadow_ds = qml.ClassicalShadow(
 
 dev = qml.device("default.qubit")
 
-
 @qml.qnode(dev)
 def model_circuit(params, random_state):
-    # this is a parameterized quantum circuit with the same gate structure as the target Trotterized
-    # unitary
+    # this is a parameterized quantum circuit with the same gate structure as the target unitary
     qml.StatePrep(random_state, wires=range(16))
     for i in range(16):
         qml.RX(params[i], wires=i)
@@ -351,32 +347,19 @@ def model_circuit(params, random_state):
 
 initial_params = pnp.random.random(size=31)
 
-qml.draw_mpl(model_circuit)(initial_params, random_state)
+qml.draw_mpl(model_circuit)(initial_params, random_states[0])
 plt.show()
 
 ######################################################################
 #
-# For the cost function, we repeat the same code as
+# We can then minimize the cost to train the model to output the same states as the target circuit.
+# For this, we can use the cost function from
 # `before <#training-a-model-circuit-using-classical-shadows-in-a-cost-function>`_, 
-# updated to use a single input state:
+# as long as we update the number of qubits and the number of random states.
 #
 
-
-def cost_dataset(params):
-
-    observable_mats = model_circuit(params, random_state)
-    observable_pauli = [
-        qml.pauli_decompose(observable_mat, wire_order=[qubit])
-        for qubit, observable_mat in enumerate(observable_mats)
-    ]
-    cost = 1 - qml.math.sum(shadow_ds.expval(observable_pauli)) / 16
-    return cost
-
-
-######################################################################
-#
-# We can then minimize the cost to train the dataset to output the same states as the target circuit.
-#
+n_qubits = 16
+n_random_states = len(ds.training_states)
 
 params = initial_params
 
@@ -385,20 +368,22 @@ steps = 50
 
 cost_history = []
 for i in range(steps):
-    params, final_cost = optimizer.step_and_cost(cost_dataset, params)
+    params, final_cost = optimizer.step_and_cost(cost, params)
     cost_history.append(final_cost)
 
-print("Initial cost:", cost_dataset(initial_params))
+print("Initial cost:", cost(initial_params))
 print("Final cost:", final_cost)
 
 ######################################################################
 #
-# We can take a look at the density matrices to check whether the training was successful:
+# For this number of qubits it becomes prohibitive to obtain the matrix and calculate the trace
+# distance. For a sanity check, we can instead take a look at the density matrices
+# to see whether the training was successful:
 #
 
-original_matrices = model_circuit(initial_params, random_state)
-learned_matrices = model_circuit(params, random_state)
-target_matrices_shadow = np.mean(shadow_ds.local_snapshots(), axis=0)
+original_matrices = model_circuit(initial_params, random_states[0])
+learned_matrices = model_circuit(params, random_states[0])
+target_matrices_shadow = np.mean(shadows[0].local_snapshots(), axis=0)
 
 print("Untrained example output state\n", original_matrices[0])
 print("Trained example output state\n", learned_matrices[0])
@@ -406,9 +391,8 @@ print("Target output state\n", target_matrices_shadow[0])
 
 ######################################################################
 #
-# After training, the model outputs are closer to the target outputs estimated
-# using classical shadows, but not quite the same. This can be improved by using more training
-# states and classical shadow measurements.
+# After training, the model outputs are closer to the target outputs, but not quite the same.
+# This can be improved by using more training states and classical shadow measurements.
 #
 
 
