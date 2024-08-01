@@ -583,7 +583,7 @@ plt.show()
 ######################################################################
 # Experimental Results
 # ====================
-# 
+#  
 
 ######################################################################
 # Our results show that all hybrid methods exceed the variational algorithm while using the same
