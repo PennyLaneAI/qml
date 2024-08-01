@@ -42,8 +42,7 @@ r"""How to use noise models in PennyLane
 # We implement conditions as Boolean functions called `Conditionals` that accept an
 # operation and evaluate it to return a Boolean output. In PennyLane, such objects are
 # constructed as instances of :class:`~.pennylane.BooleanFn` and can be combined using
-# standard bitwise operations. For the noise models, we support the following types of
-# conditionals.
+# standard bitwise operations. We support the following types of conditionals.
 #
 
 ######################################################################
@@ -51,9 +50,9 @@ r"""How to use noise models in PennyLane
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
 # These conditionals evaluate a gate operation based on its ``type``. They check whether
-# it is a specific type of operation or belongs to a specified set of operations. These
-# conditionals can be built with the :func:`~.pennylane.noise.op_eq` and
-# :func:`~.pennylane.noise.op_in` helper methods:
+# it is a specific type of operation or belongs to a specified set of operations. They can
+# be built with the :func:`~.pennylane.noise.op_eq` and :func:`~.pennylane.noise.op_in`
+# helper methods:
 #
 
 import pennylane as qml
@@ -61,34 +60,28 @@ import pennylane as qml
 cond1 = qml.noise.op_eq("RX")
 cond2 = qml.noise.op_in([qml.RX, qml.RY, qml.CNOT([0, 1])])
 
-print(f"cond1: {cond1}")
-print(f"cond2: {cond2}\n")
-
 op = qml.RY(1.23, wires=[0])
 print(f"Evaluating conditionals for {op}")
-print(f"Result for cond1: {cond1(op)}")
-print(f"Result for cond2: {cond2(op)}")
+print(f"Result for {cond1}: {cond1(op)}")
+print(f"Result for {cond2}: {cond2(op)}")
 
 ######################################################################
 # Wire-based conditionals
 # ^^^^^^^^^^^^^^^^^^^^^^^
 #
 # These conditionals evaluate an operation based on its wires by checking if the wires
-# are equal or belong to a specified set of wires. These conditionals can be built with
-# the :func:`~.pennylane.noise.wires_eq` and :func:`~.pennylane.noise.wires_in` helper methods,
+# are equal or belong to a specified set of wires. They can be built with the
+# :func:`~.pennylane.noise.wires_eq` and :func:`~.pennylane.noise.wires_in` helper methods,
 # where the specific set of wires can be provided as string or integer inputs:
 #
 
 cond3 = qml.noise.wires_eq("aux")
 cond4 = qml.noise.wires_in([0, "c", qml.RX(0.123, wires=["w1"])])
 
-print(f"cond3: {cond3}")
-print(f"cond4: {cond4}\n")
-
 op = qml.X("c")
 print(f"Evaluating conditionals for {op}")
-print(f"Result for cond3: {cond3(op)}")
-print(f"Result for cond4: {cond4(op)}")
+print(f"Result for {cond3}: {cond3(op)}")
+print(f"Result for {cond4}: {cond4(op)}")
 
 ######################################################################
 # Arbitrary conditionals
@@ -105,9 +98,7 @@ print(f"Result for cond4: {cond4(op)}")
 def rx_condition(op):
     return isinstance(op, qml.RX) and op.parameters[0] < 1.0
 
-op1, op2, op3 = qml.RX(0.05, wires=0), qml.RY(0.07, wires=2), qml.RX(2.37, wires="a")
-
-for op in [op1, op2, op3]:
+for op in [qml.RX(0.05, wires=0), qml.RX(2.37, wires="a")]:
     print(f"Result for {op}: {rx_condition(op)}")
 
 ######################################################################
@@ -122,22 +113,19 @@ for op in [op1, op2, op3]:
 and_cond = cond2 & cond4
 print(f"and_cond: {and_cond}\n")
 
-op1, op2, op3 = qml.RX(0.42, wires=0), qml.CNOT(wires=[2, 3]), qml.RY(0.23, wires="c")
-
-for op in [op1, op2, op3]:
+for op in [qml.CNOT(wires=[2, 3]), qml.RY(0.23, wires="c")]:
     print(f"Result for {op}: {and_cond(op)}")
 
 ######################################################################
 # Callables
 # ~~~~~~~~~
 #
-# Now, let's see how the callables that apply noise operations are defined. They are referred
-# to as noise functions, whose definition contains the error operations to be inserted but
-# has no return statements. If a conditional evaluates to ``True`` on a given gate operation,
-# the noise function is evaluated and its operations are inserted to the circuit. Each noise
-# function, will have the signature ``fn(op, **metadata)``, allowing for dependency on both
-# the evaluated operation and specified metadata. For the noise models, we support following
-# constructions of noise functions.
+# Callables that apply noise operations are referred to as noise functions, whose definition
+# contains the error operations to be inserted but has no return statements. If a conditional
+# evaluates to ``True`` on a given gate operation, the noise function is evaluated and its
+# operations are inserted to the circuit. Each noise function, will have the signature
+# ``fn(op, **metadata)``, allowing for dependency on both the evaluated operation and
+# specified metadata. We support the following constructions of noise functions.
 #
 
 ######################################################################
@@ -152,7 +140,7 @@ for op in [op1, op2, op3]:
 
 rx_constant = qml.noise.partial_wires(qml.RX, 0.1)
 
-for wire in [0, 2, "w1"]:
+for wire in ["w1", 2]:
     print(f"Over-rotation for {wire}: {rx_constant(wire)}")
 
 ######################################################################
@@ -203,13 +191,13 @@ op = qml.RX(6.58, wires=[0])
 with qml.queuing.AnnotatedQueue() as q:
     sandwich_func(op)
 
-print(f"Error for {op}:\n{q.queue}")
+print(f"Errors for {op}:\n{q.queue}")
 
 ######################################################################
 # Noise Models
 # ~~~~~~~~~~~~
 #
-# Now that we have introduced all the main ingredients for the noise mdoels,
+# Now that we have introduced all the main ingredients for the noise models,
 # we can finally stitch them together to build a PennyLane noise model
 # as a :class:`~.pennylane.NoiseModel` object. First we set up the conditionals
 #
