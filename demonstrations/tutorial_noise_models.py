@@ -131,10 +131,10 @@ for op in [op1, op2, op3]:
 # Callables
 # ~~~~~~~~~
 #
-# Now, let's see how the callables that apply noise operations are defined. These callables
-# are called noise functions, which contain the error operations to be inserted but have no
-# return statements. If a conditional evaluates to ``True`` on a given gate operation, the
-# noise function is evaluated and its operations are inserted to the circuit. Each noise
+# Now, let's see how the callables that apply noise operations are defined. They are referred
+# to as noise functions, whose definition contains the error operations to be inserted but
+# has no return statements. If a conditional evaluates to ``True`` on a given gate operation,
+# the noise function is evaluated and its operations are inserted to the circuit. Each noise
 # function, will have the signature ``fn(op, **metadata)``, allowing for dependency on both
 # the evaluated operation and specified metadata. For the noise models, we support following
 # constructions of noise functions.
@@ -315,8 +315,6 @@ plt.xlabel("Bitstring")
 plt.ylabel("Probabilities")
 plt.xticks(bars + size / 2, keys)
 plt.legend()
-
-# Show the plot
 plt.show()
 
 ######################################################################
