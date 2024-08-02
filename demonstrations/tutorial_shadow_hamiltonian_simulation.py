@@ -43,13 +43,16 @@ In particular, with the trace inner product this amounts to
 
 from which we can read off the matrix elements of :math:`H_S`, i.e.
 
-.. math:: (H_S)_{m m'} = \frac{\text{tr}\left( O_{m'} [H, O_m] \right)}{|| O_{m'} ||^2}.
+.. math:: (H_S)_{m m'} = -\frac{\text{tr}\left( O_{m'} [H, O_m] \right)}{|| O_{m'} ||^2}.
 
-Note that this is just the adjoint representation :math:`\text{ad}_H` of the :doc:`dynamical Lie algebra </demos/tutorial_liealgebra>`
+Note that this corresponds to the adjoint representation :math:`\text{ad}_H` of the :doc:`dynamical Lie algebra </demos/tutorial_liealgebra>`
 :math:`\langle \{ H \} \cup S \rangle_\text{Lie}`. We explain the concept of the adjoint representation in our
 :doc:`demo on g-sim </demos/tutorial_liesim>` that makes extensive use of it. Further, you may see how
-shadow Hamiltonian simulation corresponds to g-sim [#Somma]_ [#Somm2]_ [#Galitski]_ [#Goh]_ for the specific case of simulating
+shadow Hamiltonian simulation corresponds to g-sim [#Somma]_ [#Somma2]_ [#Galitski]_ [#Goh]_ for the specific case of simulating
 :math:`\exp(-i t H)` and encoding the whole process on a quantum computer instead of in classical simulation.
+
+The specificity of running just :math:`\exp(-i t H)` as the only "gate" allows us to reduce the set of required operators :math:`S` from
+the full Lie algebra :math:`\langle \{ H \} \cup S \rangle_\text{Lie}` to just therequired support of :math:`[H, O_m]`, but conceptually everything else is the same.
 
 A simple example
 ----------------
