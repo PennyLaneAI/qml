@@ -34,19 +34,24 @@ the operators in :math:`S = \{O_m\}`. In particular, it is implicitly defined by
 
 Knowing that the Hermitian operators under consideration form a vector space, we can use standard projection
 techniques like 
-:math:`\boldsymbol{v} = \sum_j \frac{\langle \boldsymbol{e}_j, \boldsymbol{v}\rangle}{||\boldsymbol{e}_j||^2} \boldsymbol{e}_j`
-for some vector :math:`\boldsymbol{v}` and an orthogonal basis :math:`\boldsymbol{e}_j` (need not be normalized, hence the normalization factor in the projection).
 
-For operators using the trace inner product this amounts to
+A vector :math:`\boldsymbol{v}` can always be decomposed in an orthogonal basis :math:`\boldsymbol{e}_j` via
+:math:`\boldsymbol{v} = \sum_j \frac{\langle \boldsymbol{e}_j, \boldsymbol{v}\rangle}{||\boldsymbol{e}_j||^2} \boldsymbol{e}_j`.
+Since the operators under consideration are elements of the vector space of Hermitian operators, we can use that to compute :math:`H_S`.
 
-.. math:: [H, O_m] = - \sum_{m'=1}^M \frac{\text{tr}\left( O_{m'}, [H, O_m] \right)}{|| O_{m'} ||^2} O_{m'},
+In particular, with the trace inner product this amounts to
+
+.. math:: [H, O_m] = - \sum_{m'=1}^M \frac{\text{tr}\left( O_{m'} [H, O_m] \right)}{|| O_{m'} ||^2} O_{m'},
 
 from which we can read off the matrix elements of :math:`H_S`, i.e.
 
-.. math:: (H_S)_{m m'} = \frac{\text{tr}\left( O_{m'}, [H, O_m] \right)}{|| O_{m'} ||^2}.
+.. math:: (H_S)_{m m'} = \frac{\text{tr}\left( O_{m'} [H, O_m] \right)}{|| O_{m'} ||^2}.
 
 Note that this is just the adjoint representation :math:`\text{ad}_H` of the :doc:`dynamical Lie algebra </demos/tutorial_liealgebra>`
-:math:`\langle \{ H \} \union S \rangle_\text{Lie}`, see our :doc:`demo on g-sim </demos/tutorial_liesim>` that makes extensive use of the adjoint representation.
+:math:`\langle \{ H \} \cup S \rangle_\text{Lie}`. We explain the concept of the adjoint representation in our
+:doc:`demo on g-sim </demos/tutorial_liesim>` that makes extensive use of it. Further, you may see how
+shadow Hamiltonian simulation corresponds to g-sim [#Somma]_ [#Somm2]_ [#Galitski]_ [#Goh]_ for the specific case of simulating
+:math:`\exp(-i t H)` and encoding the whole process on a quantum computer.
 
 A simple example
 ----------------
