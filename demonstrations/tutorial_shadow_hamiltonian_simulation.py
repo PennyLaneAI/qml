@@ -6,7 +6,8 @@ abstract
 Introduction
 ------------
 
-content
+content  
+mention that this is only loosely related to classical shadows, and more appropriately connected to g-sim (with more on that later, dont need to get into that too deep here)
 
 Shadow Hamiltonian simulation
 -----------------------------
