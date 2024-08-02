@@ -18,7 +18,7 @@ and evolve those according to some shadow Schrödinger equation.
 
 For that, we first need to define the shadow state
 
-.. math:: |\rho\rangle = \frac{1}{\sqrt{A}} \begin{pmatrix} \langle O_1 \\ \vdots \\ O_M \rangle \end{pmatrix}
+.. math:: |\rho\rangle = \frac{1}{\sqrt{A}} \begin{pmatrix} \langle O_1 \\ \vdots \\ \langle O_M \rangle \end{pmatrix}
 
 for a set of operators :math:`S = \{O_m\}` with normalization constant :math:`A = \sum_m \langle O_m \rangle`.
 So we can encode those :math:`M` operator expectation values with :math:`n_S` qubits such that :math:`2^{n_S} >= M`.
