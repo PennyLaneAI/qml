@@ -137,9 +137,13 @@ O_t_standard
 #
 # In shadow Hamiltonian simulation, we encode :math:`4` expectation values in a :math:`2^2 = 4` dimensional
 # quantum state, i.e. :math:`n_S = 2`.
-# (TODO comment on whether or not that is practical. At first it seems
-# redundant, but this technique is allowing new things like sampling from :math:`p_m = \langle O_m \rangle`
-# that we get simultaneously, so no need to perform 3 independent measurements, i.e. saving on measurement resources)
+#
+# For this specific example, the number of operators is larger than the number of qubits, leading to a shadow system that
+# is larger than the original system. This may or may not be a clever choice, but the point here is just to illustrate 
+# the conceptual difference between both approaches. The authors in [#SommaShadow]_ show various examples where
+# the resulting shadow system is significantly smaller. It may also be noted that having a smaller shadow system may not
+# always be its sole purpose, as there are conceptually new avenues one can explore with shadow Hamiltonian simulation such
+# as sampling from the operator expectation value distribution :math:`p_m = |\langle O_m \rangle |^2`.
 #
 # Let us first construct the initial shadow state :math:`\boldsymbol{O}(t=0)` by computing
 # :math:`\langle O_m \rangle_{t=0} = \text{tr}\left(O_m |\psi(0)\rangle \langle \psi(0)| \right)`
