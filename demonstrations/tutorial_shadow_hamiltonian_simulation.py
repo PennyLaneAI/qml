@@ -1,13 +1,34 @@
 r"""Shadow Hamiltonian Simulation
 =================================
 
-abstract
+We provide a beginner friendly introduction to the new kid on the block: shadow Hamiltonian simulation [#SommaShadow]_.
 
 Introduction
 ------------
 
-content  
-mention that this is only loosely related to classical shadows, and more appropriately connected to g-sim (with more on that later, dont need to get into that too deep here)
+Shadow Hamiltonian simulation is a new approach to quantum simulation on quantum computers [#SommaShadow]_.
+Despite its name, it has little to do with :doc:`classical shadows </demos/tutorial_diffable_shadows>`.
+In quantum simulation, the goal is typically to simulate the expectation values of observables 
+:math:`O_m` for :math:`m=1,..,M` under some unitary evolution.
+The common approach is to evolve the wave function :math:`|\psi\rangle` and then measure the desired observables after the evolution.
+
+In shadow Hamiltonian simulation, we instead directly encode the expectation values in a proxy state, the shadow state,
+and evolve that state accordingly. Specifically for time evolution, we can write a shadow Schrödinger equation that governs the
+dynamics of the shadow state.
+
+This is fundamentally different to the common approach as the dimensionality of the 
+shadow system no longer depends on the number of constituents :math:`n` of the system,
+but on the number of observables :math:`M` that we are interested in and require, 
+as there are conditions of completeness for the shadow encoding to succeed (called invariance property in the original paper).
+Further, since the
+expectation values are encoded in the amplitudes of states, we cannot directly measure them anymore, but need to resort to some 
+form of state tomography.
+On the other hand, this gives us entirely new possibilities by letting us sample from :math:`p_m = |\langle O_m \rangle|^2`,
+and, in particular simultaneously all absolute values of observables.
+
+In this demo we are going to introduce the basic concepts of shadow Hamiltonian simulation alongside some easy-to-follow code snippets.
+We will also later see how shadow Hamiltonian simulation comes down to :doc:`demo on g-sim </demos/tutorial_liesim>`, 
+a Lie algebraic classical simulation tool, but run on a quantum computer and with some simplifications due to considering specifically Hamiltonian simulation.
 
 Shadow Hamiltonian simulation
 -----------------------------
@@ -74,6 +95,7 @@ In particular, :math:`H_S` corresponds to the adjoint representation :math:`\tex
 One striking difference is that because
 we only have one specific "gate", we do not need the full Lie closure of the operators that we want to compute the expectation values of.
 Instead, here it is sufficient to choose :math:`O_m` such that they support all :math:`[H, O_m]`.
+This is a significant difference, as the Lie closure in most cases leads to an exponentially large DLA [#Wiersema]_ [#Aguilar]_.
 
 A simple example
 ----------------
@@ -217,9 +239,12 @@ print(O_t_quantum)
 # This is conceptually very different from the second result where
 # :math:`\boldsymbol{O}` is encoded in the state of the shadow system, which we evolve according to :math:`H_S`.
 #
-# In the first case, the measurement is directly obtained, however, in the shadow Hamiltonian simulation, we need to access the amplitudes of the underlying state.
-# This can be done naively with state tomography, but in instances where we know that :math:`\langle O_m \rangle \in [0, 1]`, we can just sample bitstrings according to
-# :math:`p_m = |\langle O_m\rangle|^2`. The ability to sample from such a :math:`p_m = |\langle O_m\rangle|^2` is a unique and new feature to shadow Hamiltonian simulation.
+# In the first case, the measurement is directly obtained, however, 
+# in the shadow Hamiltonian simulation, we need to access the amplitudes of the underlying state (note the return value ``qml.state()`` in the qnode).
+# This can be done naively with state tomography, but in instances where we know 
+# that :math:`\langle O_m \rangle \in [0, 1]`, we can just sample bitstrings according to
+# :math:`p_m = |\langle O_m\rangle|^2`. The ability to sample from such a distribution 
+# :math:`p_m = |\langle O_m\rangle|^2` is a unique and new feature to shadow Hamiltonian simulation.
 #
 # We are making use of the abstract quantum sub-routines :func:`~evolve` and :class:`~StatePrep`, which each warrant their
 # specific implementation. For example, :class:`~StatePrep` can be realized by :class:`~MottonenStatePreparation` and :func:`~evolve` can be realized
@@ -244,7 +269,15 @@ print(O_t_quantum)
 # Conclusion
 # ----------
 #
-# Shadow Hamiltonian simulation is g-sim on a quantum computer.
+# We have introduced the basic concepts of shadow Hamiltonian simulation and seen how this fundamentally differs from the common approach to Hamiltonian simulation.
+#
+# We have seen how classical Hamiltonian simulation is tightly connected to g-sim, but run on a quantum computer.
+# A significant difference comes from the fact that the authors in [#SommaShadow]_ specifically look at Hamiltonian simulation :math:`\exp(-i t H)`
+# which allows us to just look at the support of :math:`[H, O_m]`, instead of the full Lie closure, which in most cases leads to an exponential amount of operators [#Wiersema]_ [#Aguilar]_.
+#
+# In [#SommaShadow]_, the authors specifically consider Hamiltonian simulation :math:`\exp(-i t H)`, which corresponds to just one single
+# "gate", which, in some cases can significantly lower the required dimensionality compared to g-sim that requires the full Lie closure of 
+# the considered observables and operators, as we will later see.
 
 
 
@@ -294,6 +327,13 @@ print(O_t_quantum)
 #     Roeland Wiersema, Efekan Kökcü, Alexander F. Kemper, Bojko N. Bakalov
 #     "Classification of dynamical Lie algebras for translation-invariant 2-local spin systems in one dimension"
 #     `arXiv:2309.05690 <https://arxiv.org/abs/2309.05690>`__, 2023.
+#
+# .. [#Aguilar]
+#
+#     Gerard Aguilar, Simon Cichy, Jens Eisert, Lennart Bittel
+#     "Full classification of Pauli Lie algebras"
+#     `arXiv:2408.00081 <https://arxiv.org/abs/2408.00081>`__, 2024.
+
 #
 # .. [#Mazzola]
 #
