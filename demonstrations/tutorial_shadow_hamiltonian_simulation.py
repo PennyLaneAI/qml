@@ -51,7 +51,7 @@ Note that this is just the adjoint representation :math:`\text{ad}_H` of the :do
 :math:`\langle \{ H \} \cup S \rangle_\text{Lie}`. We explain the concept of the adjoint representation in our
 :doc:`demo on g-sim </demos/tutorial_liesim>` that makes extensive use of it. Further, you may see how
 shadow Hamiltonian simulation corresponds to g-sim [#Somma]_ [#Somm2]_ [#Galitski]_ [#Goh]_ for the specific case of simulating
-:math:`\exp(-i t H)` and encoding the whole process on a quantum computer.
+:math:`\exp(-i t H)` and encoding the whole process on a quantum computer instead of in classical simulation.
 
 A simple example
 ----------------
@@ -83,7 +83,7 @@ def evolve(H, t):
     return [qml.expval(Om) for Om in S]
 
 t = 1.
-res = evolve(H, t)
+res = np.array(evolve(H, t))
 res
 
 ##############################################################################
@@ -98,7 +98,7 @@ res
 # Let us first construct the initial shadow state :math:`\boldsymbol{O}(t=0)` by computing
 # :math:`\langle O_m \rangle_{t=0} = \text{tr}\left(O_m |\psi(0)\rangle \langle \psi(0)| \right)`
 # with :math:`|\psi(0)\rangle = |0\rangle`.
-# The `pauli_rep` of PennyLane operators in form of :class:`~PauliSentence` instances let us efficiently
+# The ``pauli_rep`` of PennyLane operators in form of :class:`~.pennylane.pauli.PauliSentence` instances let us efficiently
 # compute the trace and we use the trick that :math:`|0 \rangle \langle 0| = (I + Z)/2`.
 # 
 
@@ -109,19 +109,21 @@ O_0 = []
 for Om in S_pauli:
     psi0 = (I(0) + Z(0)).pauli_rep
 
-    res = (psi0 @ Om).trace()
-    O_0.append(res)
+    expval_Om = (psi0 @ Om).trace()
+    O_0.append(expval_Om)
 
 O_0 = np.array(O_0)
 A = np.linalg.norm(O_0)
 
+O_0
+
 ##############################################################################
-# There is a variety of method to encode this vector in a qubit basis. We will later just use
-# :class:`~StatePrep` as the focus 
+# There is a variety of methods to encode this vector in a qubit basis. We will later just use
+# :class:`~StatePrep`.
 #
 # We now go on to construct the shadow Hamiltonian :math:`H_S` by means of computing the elements
-# :math:`(H_S)_{m m'} = \frac{\text{tr}\left( O_{m'}, [H, O_m] \right)}{|| O_{m'} ||^2}`.
-# We again make use of :meth:`~PauliSentence.trace`.
+# :math:`(H_S)_{m m'} = \frac{\text{tr}\left( O_{m'} [H, O_m] \right)}{|| O_{m'} ||^2}`.
+# We again make use of the :meth:`~.pennylane.pauli.PauliSentence.trace` method.
 #
 
 H_pauli = H.pauli_rep
@@ -131,9 +133,10 @@ H_S = np.zeros((len(S), len(S)), dtype=complex)
 for m, Om in enumerate(S_pauli):
     com = H_pauli.commutator(Om)
     for mt, Omt in enumerate(S_pauli):
-        # value = (1j * (Omt @ com).trace()).real
+        # v = ∑ (v · e_j / ||e_j||^2) * e_j
+
         value = (Omt @ com).trace()
-        value = value / (Omt @ Omt).trace()  # v = ∑ (v · e_j / ||e_j||^2) * e_j
+        value = value / (Omt @ Omt).trace()  
         H_S[m,mt] = value
 
 H_S = -H_S # definition eq. (2) in [1]
@@ -184,9 +187,14 @@ O_t_quantum = shadow_evolve(H_S_qubit, O_0, t) * A
 res, O_t_quantum
 
 ##############################################################################
-# We see that the results match. The first result is three independent measurements after evolving a quantum state
-# according to the state Hamiltonian :math:`H`. This is conceptually very different from the second result where
+# We see that the results match with both approaches.
+# However, the first result is coming from three independent measurements on a quantum computer after evolution with system Hamiltonian :math:`H`.
+# This is conceptually very different from the second result where
 # :math:`\boldsymbol{O}` is encoded in the state of the shadow system, which we evolve according to `H_S`.
+#
+# In the first case, the measurement is directly obtained, however, in the shadow Hamiltonian simulation, we need to access the amplitudes of the underlyding state.
+# This can be done naively with state tomography, but in instances where we know that :math:`\langle O_m \rangle \in [0, 1]`, we can just sample bitstrings according to
+# :math:`p_m = |\langle O_m\rangle|^2`.
 #
 # We are making use of the abstract quantum sub-routines :func:`~evolve` and :class:`~StatePrep`, which each warrant their
 # specific implementation. For example, :class:`~StatePrep` can be realized by :class:`~MottonenStatePreparation` and :func:`~evolve` can be realized
@@ -198,6 +206,13 @@ res, O_t_quantum
 # --------------
 #
 # Something a bit more involved? I am not sure if this is actually necessary. The above example illustrates the basic concepts already quite nicely and keeps things concise. Happy to hear feedback here.
+
+##############################################################################
+#
+# Green's functions and other correlators
+# ---------------------------------------
+#
+# Perhaps include something about correlators here?
 
 ##############################################################################
 # 
