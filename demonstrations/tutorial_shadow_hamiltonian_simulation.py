@@ -13,6 +13,9 @@ Shadow Hamiltonian simulation
 -----------------------------
 
 In common quantum Hamiltonian simulation, we evolve a state vector :math:`|\psi(t)\rangle` according to the Schrödinger equation
+
+.. math:: \frac{\text{d}}{\text{dt}} |\psi(t)\rangle = -i H |\psi(t)\rangle
+
 by some Hamiltonian :math:`H`, and then compute expectation values of the evolved state through measurement.
 In Shadow Hamiltonian simulation, we encode a set of expectation values in the amplitudes of a quantum state,
 and evolve those according to some shadow Schrödinger equation.
@@ -26,7 +29,7 @@ So we can encode those :math:`M` operator expectation values with :math:`n_S` qu
 
 The shadow state evolves according to its shadow Schrödinger equation
 
-.. math:: \frac{d}{dt} |\rho\rangle = - i H_S |\rho\rangle.
+.. math:: \frac{\text{d}}{\text{dt}} |\rho\rangle = - i H_S |\rho\rangle.
 
 The Hamiltonian matrix :math:`H_S` is given by the commutation relations between the system Hamiltonian :math:`H` and
 the operators in :math:`S = \{O_m\}`. In particular, it is implicitly defined by
