@@ -2,6 +2,7 @@ r"""Shadow Hamiltonian Simulation
 =================================
 
 We provide a beginner friendly introduction to the new kid on the block: shadow Hamiltonian simulation [#SommaShadow]_.
+How does it work, what does it do, and how does it relate to g-sim? All that shall be answered in this quick demo.
 
 Introduction
 ------------
