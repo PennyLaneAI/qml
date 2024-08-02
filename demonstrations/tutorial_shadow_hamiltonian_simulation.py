@@ -75,7 +75,7 @@ Instead, here it is sufficient to choose :math:`O_m` such that they support all 
 A simple example
 ----------------
 
-These abstract concepts are best illustrated with a simple but concrete example.
+The abstract concepts of shadow Hamiltonian simulation are best illustrated with a simple but concrete example.
 We are interested in simulating the Hamiltonian evolution of 
 
 .. math:: H = X + Y
