@@ -191,13 +191,14 @@ print(O_t_quantum)
 
 ##############################################################################
 # We see that the results match with both approaches.
-# However, the first result is coming from three independent measurements on a quantum computer after evolution with system Hamiltonian :math:`H`.
+#
+# The first result is coming from three independent measurements on a quantum computer after evolution with system Hamiltonian :math:`H`.
 # This is conceptually very different from the second result where
-# :math:`\boldsymbol{O}` is encoded in the state of the shadow system, which we evolve according to `H_S`.
+# :math:`\boldsymbol{O}` is encoded in the state of the shadow system, which we evolve according to :math:`H_S`.
 #
 # In the first case, the measurement is directly obtained, however, in the shadow Hamiltonian simulation, we need to access the amplitudes of the underlyding state.
 # This can be done naively with state tomography, but in instances where we know that :math:`\langle O_m \rangle \in [0, 1]`, we can just sample bitstrings according to
-# :math:`p_m = |\langle O_m\rangle|^2`.
+# :math:`p_m = |\langle O_m\rangle|^2`. The ability to sample from such a :math:`p_m = |\langle O_m\rangle|^2` is a unique and new feature to shadow Hamiltonian simulation.
 #
 # We are making use of the abstract quantum sub-routines :func:`~evolve` and :class:`~StatePrep`, which each warrant their
 # specific implementation. For example, :class:`~StatePrep` can be realized by :class:`~MottonenStatePreparation` and :func:`~evolve` can be realized
