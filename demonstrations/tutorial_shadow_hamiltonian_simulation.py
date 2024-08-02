@@ -75,12 +75,12 @@ Instead, here it is sufficient to choose :math:`O_m` such that they support all 
 A simple example
 ----------------
 
-The abstract concepts of shadow Hamiltonian simulation are best illustrated with a simple but concrete example.
+The abstract concepts of shadow Hamiltonian simulation are best illustrated with a simple and concrete example.
 We are interested in simulating the Hamiltonian evolution of 
 
 .. math:: H = X + Y
 
-after :math:`t = 1s` and compute the expectation values of :math:`\{X, Y, Z, I \}`.
+after :math:`t = 1` and compute the expectation values of :math:`\{X, Y, Z, I \}`.
 In the standard formulation we simply evolve the initial quantum state :math:`|\psi(0)\rangle = |0\rangle` by :math:`H` in the
 following way.
 
@@ -102,8 +102,8 @@ def evolve(H, t):
     return [qml.expval(Om) for Om in S]
 
 t = 1.
-res = np.array(evolve(H, t))
-res
+O_t_standard = np.array(evolve(H, t))
+O_t_standard
 
 ##############################################################################
 #
@@ -165,7 +165,7 @@ H_S = -H_S # definition eq. (2) in [1]
 # In order for the shadow evolution to be unitary and implementable on a quantum computer,
 # we need :math:`H_S` to be Hermitian.
 
-H_S == H_S.conj().T
+np.all(H_S == H_S.conj().T)
 
 ##############################################################################
 # Knowing that, we can write the formal solution to the shadow Schrödinger equation as
@@ -204,7 +204,7 @@ def shadow_evolve(H_S_qubit, O_0, t):
 
 O_t_quantum = shadow_evolve(H_S_qubit, O_0, t) * A
 
-print(res)
+print(O_t_standard)
 print(O_t_quantum)
 
 ##############################################################################
@@ -214,7 +214,7 @@ print(O_t_quantum)
 # This is conceptually very different from the second result where
 # :math:`\boldsymbol{O}` is encoded in the state of the shadow system, which we evolve according to :math:`H_S`.
 #
-# In the first case, the measurement is directly obtained, however, in the shadow Hamiltonian simulation, we need to access the amplitudes of the underlyding state.
+# In the first case, the measurement is directly obtained, however, in the shadow Hamiltonian simulation, we need to access the amplitudes of the underlying state.
 # This can be done naively with state tomography, but in instances where we know that :math:`\langle O_m \rangle \in [0, 1]`, we can just sample bitstrings according to
 # :math:`p_m = |\langle O_m\rangle|^2`. The ability to sample from such a :math:`p_m = |\langle O_m\rangle|^2` is a unique and new feature to shadow Hamiltonian simulation.
 #
