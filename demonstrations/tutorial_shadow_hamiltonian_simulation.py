@@ -90,6 +90,7 @@ res
 ##############################################################################
 #
 # We evolved a :math:`2^n = 2` dimensional quantum state and performed :math:`3` independent measurements (non-commuting).
+#
 # In shadow Hamiltonian simulation, we encode :math:`4` expectation values in a :math:`2^2 = 4` dimensional
 # quantum state, i.e. :math:`n_S = 2`.
 # (TODO comment on whether or not that is practical. At first it seems
@@ -185,7 +186,8 @@ def shadow_evolve(H_S_qubit, O_0, t):
 
 O_t_quantum = shadow_evolve(H_S_qubit, O_0, t) * A
 
-res, O_t_quantum
+print(res)
+print(O_t_quantum)
 
 ##############################################################################
 # We see that the results match with both approaches.
