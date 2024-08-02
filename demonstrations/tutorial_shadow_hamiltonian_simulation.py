@@ -274,11 +274,9 @@ print(O_t_quantum)
 #
 # We have seen how classical Hamiltonian simulation is tightly connected to g-sim, but run on a quantum computer.
 # A significant difference comes from the fact that the authors in [#SommaShadow]_ specifically look at Hamiltonian simulation :math:`\exp(-i t H)`
-# which allows us to just look at the support of :math:`[H, O_m]`, instead of the full Lie closure, which in most cases leads to an exponential amount of operators [#Wiersema]_ [#Aguilar]_.
+# which allows us to just look at the support of :math:`[H, O_m]`, instead of the full Lie closure.
+# This is a tremendous difference as the Lie closure in most cases leads to an exponential amount of operators [#Wiersema]_ [#Aguilar]_.
 #
-# In [#SommaShadow]_, the authors specifically consider Hamiltonian simulation :math:`\exp(-i t H)`, which corresponds to just one single
-# "gate", which, in some cases can significantly lower the required dimensionality compared to g-sim that requires the full Lie closure of 
-# the considered observables and operators, as we will later see.
 
 
 
