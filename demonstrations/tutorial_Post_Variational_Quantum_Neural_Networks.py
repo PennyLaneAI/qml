@@ -17,12 +17,16 @@ r"""Post-Variational Quantum Neural Networks
 # We build variational and Post-variational networks through a step-by-step process, and compare their 
 # performance on the digits dataset. 
 # 
+
+######################################################################
+# Background
+# ---------------------
 # Variational algorithms are proposed to solve optimization problems in chemistry, combinatorial
 # optimization and machine learning, with potential quantum advantage. [#cerezo2021variational]_ Such algorithms often operate
 # by first encoding data :math:`x` into a :math:`n`-qubit quantum state. The quantum state is then
 # transformed by an Ansatz :math:`U(\theta)`. The parameters :math:`\theta` are optimized by
 # evaluating gradients of the quantum circuit [#schuld2019evaluating]_ and calculating updates of the parameter on a classical
-# computer. You can find out more about variational algorithms `here <https://pennylane.ai/qml/glossary/variational_circuit/>`__.
+# computer. `Variational algorithms <https://pennylane.ai/qml/glossary/variational_circuit/>`__. are a pre-requisite to this article.
 # 
 # However, many Ansätze in the variational strategy face the barren plateau problem [#mcclean2018barren]_ , which leads to difficulty in convergence
 # using gradient-based optimization techniques. Due general difficulty and lack of training gurantees
@@ -68,7 +72,7 @@ r"""Post-Variational Quantum Neural Networks
 
 ######################################################################
 # The Learning Problem
-# ====================
+# ---------------------
 # 
 
 ######################################################################
@@ -119,7 +123,7 @@ plt.show()
 
 ######################################################################
 # Setting up the Model
-# ====================
+# ---------------------
 # 
 # Here, we will create a simple QML model for our optimization. In particular:
 # 
@@ -179,7 +183,7 @@ def ansatz(params):
 
 ######################################################################
 # Variational Algorithm
-# =====================
+# ---------------------
 # 
 
 ######################################################################
@@ -267,13 +271,8 @@ print("Testing accuracy: ", var_test_acc)
 # 
 
 ######################################################################
-# The Post-Variational Technique
-# ==============================
-# 
-
-######################################################################
-# Observable Construction ---------------------
-# 
+# The Observable Construction Post-Variational Technique
+# ---------------------
 
 ######################################################################
 # We measure the data embedded state on different combinations of Pauli observables in this
@@ -359,8 +358,8 @@ plt.show()
 # 
 
 ######################################################################
-# Ansatz Expansion
-# ================
+# The Ansatz Expansion Post-Variational Technique
+# ---------------------
 # 
 
 ######################################################################
@@ -468,7 +467,7 @@ plt.show()
 
 ######################################################################
 # Hybrid Strategy
-#    --------------
+# ---------------------
 # 
 # #####################################################################
 #    When taking the strategy of observable construction, one additionally may want to use Ansatz
@@ -596,7 +595,7 @@ plt.show()
 
 ######################################################################
 # Experimental Results
-# ====================
+# ---------------------
 #  
 
 ######################################################################
@@ -619,7 +618,7 @@ plt.show()
 
 ######################################################################
 # Conclusion
-# ==========
+# ---------------------
 # 
 
 ######################################################################
