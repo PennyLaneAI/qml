@@ -19,7 +19,7 @@ and evolve those according to some shadow Schrödinger equation.
 
 For that, we first need to define the shadow state
 
-.. math:: |\rho\rangle = \frac{1}{\sqrt{A}} \begin{pmatrix} \langle O_1 \\ \vdots \\ \langle O_M \rangle \end{pmatrix}
+.. math:: |\rho\rangle = \frac{1}{\sqrt{A}} \begin{pmatrix} \langle O_1 \rangle \\ \vdots \\ \langle O_M \rangle \end{pmatrix}
 
 for a set of operators :math:`S = \{O_m\}` with normalization constant :math:`A = \sum_m |\langle O_m \rangle|^2`.
 So we can encode those :math:`M` operator expectation values with :math:`n_S` qubits such that :math:`2^{n_S} \geq M`.
@@ -39,7 +39,7 @@ Since the operators under consideration are elements of the vector space of Herm
 
 In particular, with the trace inner product this amounts to
 
-.. math:: [H, O_m] = - \sum_{m'=1}^M \frac{\text{tr}\left( O_{m'} [H, O_m] \right)}{|| O_{m'} ||^2} O_{m'},
+.. math:: [H, O_m] = \sum_{m'=1}^M \frac{\text{tr}\left( O_{m'} [H, O_m] \right)}{|| O_{m'} ||^2} O_{m'},
 
 from which we can read off the matrix elements of :math:`H_S`, i.e.
 
