@@ -69,7 +69,7 @@ from pennylane import X, Y, Z, I
 dev = qml.device("default.qubit")
 
 n = 1
-S = [X(0), Y(0), Z(0)]
+S = [X(0), Y(0), Z(0), I(0)]
 H = X(0) + Y(0)
 
 @qml.qnode(dev)
