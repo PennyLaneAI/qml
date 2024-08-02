@@ -127,7 +127,7 @@ print(qml.draw(swap_test)(theta))
 print(f"\nOverlap between the ground state and the ansatz: {swap_test(theta)}")
 
 ######################################################################
-# The ``swap_test`` function return the overlap between the generated state and the ground state.
+# The ``swap_test`` function returns the overlap between the generated state and the ground state.
 # In this demo we will not go deeper into this technique but we encourage the reader to explore it further.
 #
 # With this we have all the ingredients to define the loss function that we want to minimize:
@@ -155,7 +155,7 @@ print()
 theta = jax.numpy.array([0.1, 0.2, 0.3])
 beta = 2
 
-# store the values of the cost function
+# Store the values of the cost function
 energy = [loss_f(theta, beta)]
 
 conv_tol = 1e-6
@@ -163,7 +163,7 @@ max_iterations = 100
 
 opt = optax.sgd(learning_rate=0.4)
 
-# store the values of the circuit parameter
+# Store the values of the circuit parameter
 angle = [theta]
 
 opt_state = opt.init(theta)
