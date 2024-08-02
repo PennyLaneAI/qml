@@ -7,14 +7,13 @@ r"""Post-Variational Quantum Neural Networks
 # carefully crafted circuit is finally ready. But oh no—your heart sinks as you realize you're facing 
 # the dreaded barren plateau problem, where gradients vanish and optimization grinds to a halt. 
 # What now? Panic sets in, but then you remember the new technique you read about. You reach into 
-# your toolbox and pull out the "post-variational strategy." This ingenious approach shifts 
-# optimization from quantum to classical, bypassing the the barren plateau problem. By combining 
+# your toolbox and pull out the "post-variational strategy". This approach shifts 
+# optimization from quantum to classical, ensuring the convergence to a local minimum. By combining 
 # fixed quantum circuits with a classical neural network, you can enhance trainability and keep your 
-# research on track. With renewed hope, you dive into this novel method, ready to conquer the 
-# challenges of quantum optimization.
+# research on track.
 # 
-# This tutorial introduces the Post-Variational Quantum Neural Networks with example code from PennyLane.
-# We build variational and Post-variational networks through a step-by-step process, and compare their 
+# This tutorial introduces post-variational quantum neural networks with example code from PennyLane.
+# We build variational and post-variational networks through a step-by-step process, and compare their 
 # performance on the digits dataset. 
 # 
 
