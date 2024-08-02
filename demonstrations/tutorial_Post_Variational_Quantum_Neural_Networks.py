@@ -3,24 +3,38 @@ r"""Post-Variational Quantum Neural Networks
 """
 
 ######################################################################
+# You're sitting in front of your quantum computer, excitement buzzing through your veins as your 
+# carefully crafted circuit is finally ready. But oh no—your heart sinks as you realize you're facing 
+# the dreaded barren plateau problem, where gradients vanish and optimization grinds to a halt. 
+# What now? Panic sets in, but then you remember the new technique you read about. You reach into 
+# your toolbox and pull out the "post-variational strategy." This ingenious approach shifts 
+# optimization from quantum to classical, bypassing the the barren plateau problem. By combining 
+# fixed quantum circuits with a classical neural network, you can enhance trainability and keep your 
+# research on track. With renewed hope, you dive into this novel method, ready to conquer the 
+# challenges of quantum optimization.
+# 
+# This tutorial introduces the Post-Variational Quantum Neural Networks with example code from PennyLane.
+# We build variational and Post-variational networks through a step-by-step process, and compare their 
+# performance on the digits dataset. 
+# 
 # Variational algorithms are proposed to solve optimization problems in chemistry, combinatorial
-# optimization and machine learning, with potential quantum advantage. Such algorithms often operate
+# optimization and machine learning, with potential quantum advantage. [#cerezo2021variational]_ Such algorithms often operate
 # by first encoding data :math:`x` into a :math:`n`-qubit quantum state. The quantum state is then
 # transformed by an Ansatz :math:`U(\theta)`. The parameters :math:`\theta` are optimized by
-# evaluating gradients of the quantum circuit and calculating updates of the parameter on a classical
-# computer.
+# evaluating gradients of the quantum circuit [#schuld2019evaluating]_ and calculating updates of the parameter on a classical
+# computer. You can find out more about variational algorithms `here <https://pennylane.ai/qml/glossary/variational_circuit/>`__.
 # 
-# However, many Ansätze face the barren plateau problem, which leads to difficulty in convergence
+# However, many Ansätze in the variational strategy face the barren plateau problem [#mcclean2018barren]_ , which leads to difficulty in convergence
 # using gradient-based optimization techniques. Due general difficulty and lack of training gurantees
 # of variational algorithms, we develop an alternative training strategy that does not involve tuning
 # the quantum circuit parameters. However, we continue to use the variational method as the
 # theoretical basis for optimisation.
 # 
-# Thus, we discuss “post-variational strategies” proposed in. We take the classical combination of
+# Thus, we discuss “post-variational strategies” proposed in [#huang2024postvariational]_ . We take the classical combination of
 # multiple fixed quantum circuits and find the optimal combination by feeding them through a classical
 # multilayer perceptron. We shift tunable parameters from the quantum computer to the classical
 # computer, opting for ensemble strategies when optimizing quantum models. This sacrifices
-# expressibility of the circuit for better trainability of the entire model. Below, we discuss various
+# expressibility [#du2020expressive]_  of the circuit for better trainability of the entire model. Below, we discuss various
 # strategies and design principles for constructing individual quantum circuits, where the resulting
 # ensembles can be optimized with classical optimisation methods.
 # 
@@ -639,11 +653,48 @@ plt.show()
 # 
 
 ######################################################################
+#
 # References
-# ==========
-# 
+# ---------------------
+#
+# .. [#cerezo2021variational]
+#
+#     M. Cerezo, A. Arrasmith, R. Babbush, S. C. Benjamin, S. Endo, K. Fujii, 
+#     J. R. McClean, K. Mitarai, X. Yuan, L. Cincio, and P. J. Coles, 
+#     Variational quantum algorithms, 
+#     `Nat. Rev. Phys. 3, 625, (2021) <https://doi.org/10.1038/s42254-021-00348-9>`__.
+#
+#
+# .. [#schuld2019evaluating]
+#
+#     M. Schuld, V. Bergholm, C. Gogolin, J. Izaac, and N. Killoran, 
+#     Evaluating analytic gradients on quantum hardware,
+#     `Phys. Rev. A. 99, 032331, (2019) <https://doi.org/10.1103/PhysRevA.99.032331>`__. 
+#     
+#
+# .. [#mcclean2018barren]
+#
+#     J. R. McClean, S. Boixo, V. N. Smelyanskiy, R. Babbush, and H. Neven,
+#     Barren plateaus in quantum neural network training landscapes, 
+#     `Nat. Commun. 9, 4812, (2018) <https://doi.org/10.1038/s41467-018-07090-4>`__.
+#
+#
+# .. [#huang2024postvariational]
+#
+#     P.-W. Huang and P. Rebentrost, 
+#     Post-variational quantum neural networks (2024), 
+#     `arXiv:2307.10560 [quant-ph] <https://arxiv.org/abs/2307.10560>`__.
+#
+#
+# .. [#du2020expressive]
+#
+#     Y. Du, M.-H. Hsieh, T. Liu, and D. Tao,  
+#     Expressive power of parametrized quantum circuits,  
+#     `Phys. Rev. Res. 2, 033125 (2020) <https://doi.org/10.1103/PhysRevResearch.2.033125>`__.
+#
+#
 
-######################################################################
+##############################################################################
 # About the authors
-# =================
-# 
+# ---------------------
+#
