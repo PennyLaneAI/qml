@@ -1,5 +1,5 @@
 {
-    "title": "(g + P)-sim: Extending g-sim by non-DLA observables and gates",
+    "title": "Shadow Hamiltonian Simulation",
     "authors": [
         {
             "id": "korbinian_kottmann"
@@ -22,9 +22,9 @@
             "uri": "/_static/large_demo_thumbnails/thumbnail_large_liesim_extension.png"
         }
     ],
-    "seoDescription": "(g + P)-sim: Extending g-sim by non-DLA observables and gates",
+    "seoDescription": "Shadow Hamiltonian Simulation",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_liesim_extension",
+    "canonicalURL": "/qml/demos/tutorial_shadow_hamiltonian_simulation",
     "references": [
         {
             "id": "Wiersema",
