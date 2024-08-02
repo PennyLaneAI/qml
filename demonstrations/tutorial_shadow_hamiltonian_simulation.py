@@ -252,20 +252,6 @@ print(O_t_quantum)
 # by :class:`TrotterProduct`, though that shall not be the focus of this demo.
 
 ##############################################################################
-#
-# Second example
-# --------------
-#
-# Something a bit more involved? I am not sure if this is actually necessary. The above example illustrates the basic concepts already quite nicely and keeps things concise. Happy to hear feedback here.
-
-##############################################################################
-#
-# Green's functions and other correlators
-# ---------------------------------------
-#
-# Perhaps include something about correlators here?
-
-##############################################################################
 # 
 # Conclusion
 # ----------
