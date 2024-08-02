@@ -33,9 +33,6 @@ the operators in :math:`S = \{O_m\}`. In particular, it is implicitly defined by
 
 .. math:: [H, O_m] = - \sum_{m'=1}^M \left( H_S \right)_{m m'} O_{m'}.
 
-Knowing that the Hermitian operators under consideration form a vector space, we can use standard projection
-techniques like 
-
 A vector :math:`\boldsymbol{v}` can always be decomposed in an orthogonal basis :math:`\boldsymbol{e}_j` via
 :math:`\boldsymbol{v} = \sum_j \frac{\langle \boldsymbol{e}_j, \boldsymbol{v}\rangle}{||\boldsymbol{e}_j||^2} \boldsymbol{e}_j`.
 Since the operators under consideration are elements of the vector space of Hermitian operators, we can use that to compute :math:`H_S`.
