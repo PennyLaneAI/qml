@@ -106,7 +106,7 @@ We are interested in simulating the Hamiltonian evolution of
 
 .. math:: H = X + Y
 
-after :math:`t = 1` and compute the expectation values of :math:`\{X, Y, Z, I \}`.
+after a time :math:`t = 1` and compute the expectation values of :math:`\{X, Y, Z, I \}`.
 In the standard formulation we simply evolve the initial quantum state :math:`|\psi(0)\rangle = |0\rangle` by :math:`H` in the
 following way.
 
@@ -136,7 +136,7 @@ O_t_standard
 # We evolved a :math:`2^n = 2` dimensional quantum state and performed :math:`3` independent measurements (non-commuting).
 #
 # In shadow Hamiltonian simulation, we encode :math:`4` expectation values in a :math:`2^2 = 4` dimensional
-# quantum state, i.e. :math:`n_S = 2`.
+# quantum state, i.e., :math:`n_S = 2`.
 #
 # For this specific example, the number of operators is larger than the number of qubits, leading to a shadow system that
 # is larger than the original system. This may or may not be a clever choice, but the point here is just to illustrate 
@@ -171,7 +171,7 @@ O_0
 # There is a variety of methods to encode this vector in a qubit basis. We will later just use
 # :class:`~StatePrep`.
 #
-# We now go on to construct the shadow Hamiltonian :math:`H_S` by means of computing the elements
+# We now go on to construct the shadow Hamiltonian :math:`H_S` by computing the elements
 # :math:`(H_S)_{m m'} = \frac{\text{tr}\left( O_{m'} [H, O_m] \right)}{|| O_{m'} ||^2}`.
 # We again make use of the :meth:`~.pennylane.pauli.PauliSentence.trace` method.
 #
@@ -209,11 +209,11 @@ O_t
 
 ##############################################################################
 # Up to this point, this is equivalent to :doc:`g-sim </demos/tutorial_liesim>` if we were doing classical simulation.
-# Now the main novelty for shadow Hamiltonian simulation is to perform this on a quantum computer by encoding the 
+# Now, the main novelty for shadow Hamiltonian simulation is to perform this on a quantum computer by encoding the 
 # expectation values of :math:`\langle O_m \rangle` in the amplitude of a quantum state, and to translate :math:`H_S`
 # accordingly.
 #
-# This can be done by decomposing the numerical matrix :math:`H_S` into Pauli operators, which then in turn can
+# This can be done by decomposing the numerical matrix :math:`H_S` into Pauli operators, which in turn can
 # be implemented on a quantum computer.
 #
 
@@ -238,7 +238,7 @@ print(O_t_standard)
 print(O_t_quantum)
 
 ##############################################################################
-# We see that the results match with both approaches.
+# We see that the results of both approaches match.
 #
 # The first result is coming from three independent measurements on a quantum computer after evolution with system Hamiltonian :math:`H`.
 # This is conceptually very different from the second result where
@@ -251,7 +251,7 @@ print(O_t_quantum)
 # :math:`p_m = |\langle O_m\rangle|^2`. The ability to sample from such a distribution 
 # :math:`p_m = |\langle O_m\rangle|^2` is a unique and new feature to shadow Hamiltonian simulation.
 #
-# We are making use of the abstract quantum sub-routines :func:`~evolve` and :class:`~StatePrep`, which each warrant their
+# We should also note that we made use of the abstract quantum sub-routines :func:`~evolve` and :class:`~StatePrep,` which each warrant their
 # specific implementation. For example, :class:`~StatePrep` can be realized by :class:`~MottonenStatePreparation` and :func:`~evolve` can be realized
 # by :class:`TrotterProduct`, though that shall not be the focus of this demo.
 
@@ -260,7 +260,7 @@ print(O_t_quantum)
 # Conclusion
 # ----------
 #
-# We have introduced the basic concepts of shadow Hamiltonian simulation and seen how this fundamentally differs from the common approach to Hamiltonian simulation.
+# In this demo, we introduced the basic concepts of shadow Hamiltonian simulation and learned how this fundamentally differs from the common approach to Hamiltonian simulation.
 #
 # We have seen how classical Hamiltonian simulation is tightly connected to g-sim, but run on a quantum computer.
 # A significant difference comes from the fact that the authors in [#SommaShadow]_ specifically look at Hamiltonian simulation :math:`\exp(-i t H)`
@@ -322,7 +322,6 @@ print(O_t_quantum)
 #     Gerard Aguilar, Simon Cichy, Jens Eisert, Lennart Bittel
 #     "Full classification of Pauli Lie algebras"
 #     `arXiv:2408.00081 <https://arxiv.org/abs/2408.00081>`__, 2024.
-
 #
 # .. [#Mazzola]
 #
