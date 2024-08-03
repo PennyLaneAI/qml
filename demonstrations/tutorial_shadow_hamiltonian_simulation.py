@@ -28,7 +28,7 @@ On the other hand, this gives us entirely new possibilities by letting us sample
 and, in particular simultaneously all absolute values of observables.
 
 In this demo we are going to introduce the basic concepts of shadow Hamiltonian simulation alongside some easy-to-follow code snippets.
-We will also later see how shadow Hamiltonian simulation comes down to :doc:`demo on g-sim </demos/tutorial_liesim>`, 
+We will also later see how shadow Hamiltonian simulation comes down to :doc:`g-sim </demos/tutorial_liesim>`, 
 a Lie algebraic classical simulation tool, but run on a quantum computer and with some simplifications due to considering specifically Hamiltonian simulation.
 
 Shadow Hamiltonian simulation
@@ -69,6 +69,8 @@ In particular, with the trace inner product this amounts to
 from which we can read off the matrix elements of :math:`H_S`, i.e.
 
 .. math:: (H_S)_{m m'} = -\frac{\text{tr}\left( O_{m'} [H, O_m] \right)}{|| O_{m'} ||^2}.
+
+From this we can readily see that the operators :math:`O_m` need to be chosen such that they support :math:`[H, O_m]`.
 
 How this related to g-sim
 ~~~~~~~~~~~~~~~~~~~~~~~~~
