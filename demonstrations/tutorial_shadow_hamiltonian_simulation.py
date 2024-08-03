@@ -21,8 +21,8 @@ as there are conditions of completeness for the shadow encoding to succeed (call
 Further, since the
 expectation values are encoded in the amplitudes of states, we cannot directly measure them anymore, but need to resort to some 
 form of state tomography.
-On the other hand, this gives us entirely new possibilities by letting us sample from :math:`p_m = |\langle O_m \rangle|^2`,
-and, in particular simultaneously all absolute values of observables.
+On the other hand, this gives us entirely new possibilities by letting us sample from the probability distribution
+:math:`p_m = |\langle O_m \rangle|^2` and measure the absolute value of all observables simultaneously.
 
 In this demo, we are going to introduce the basic concepts of shadow Hamiltonian simulation alongside some easy-to-follow code snippets.
 We will also see later how shadow Hamiltonian simulation comes down to :doc:`g-sim </demos/tutorial_liesim>`, 
