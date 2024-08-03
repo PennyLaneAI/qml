@@ -141,12 +141,12 @@ O_t_standard
 # the conceptual difference between both approaches. The authors in [#SommaShadow]_ show various examples where
 # the resulting shadow system is significantly smaller. It may also be noted that having a smaller shadow system may not
 # always be its sole purpose, as there are conceptually new avenues one can explore with shadow Hamiltonian simulation such
-# as sampling from the operator expectation value distribution :math:`p_m = |\langle O_m \rangle |^2`.
+# as sampling from the distribution :math:`p_m = |\langle O_m \rangle |^2`.
 #
 # Let us first construct the initial shadow state :math:`\boldsymbol{O}(t=0)` by computing
 # :math:`\langle O_m \rangle_{t=0} = \text{tr}\left(O_m |\psi(0)\rangle \langle \psi(0)| \right)`
 # with :math:`|\psi(0)\rangle = |0\rangle`.
-# The ``pauli_rep`` of PennyLane operators in form of :class:`~.pennylane.pauli.PauliSentence` instances let us efficiently
+# The ``pauli_rep`` of PennyLane operators in form of :class:`~.pennylane.pauli.PauliSentence` instances lets us efficiently
 # compute the trace and we use the trick that :math:`|0 \rangle \langle 0| = (I + Z)/2`.
 # 
 
