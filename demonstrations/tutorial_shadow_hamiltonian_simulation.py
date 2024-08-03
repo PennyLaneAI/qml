@@ -105,7 +105,7 @@ We are interested in simulating the Hamiltonian evolution of
 
 .. math:: H = X + Y
 
-after a time :math:`t = 1` and compute the expectation values of :math:`\{X, Y, Z, I \}`.
+after a time :math:`t = 1` and compute the expectation values of :math:`S = \{X, Y, Z, I \}`.
 In the standard formulation we simply evolve the initial quantum state :math:`|\psi(0)\rangle = |0\rangle` by :math:`H` in the
 following way.
 
@@ -152,15 +152,13 @@ O_t_standard
 
 S_pauli = [op.pauli_rep for op in S]
 
-O_0 = []
+O_0 = np.zeros(len(S))
 
-for Om in S_pauli:
+for m, Om in enumerate(S_pauli):
     psi0 = (I(0) + Z(0)).pauli_rep
 
-    expval_Om = (psi0 @ Om).trace()
-    O_0.append(expval_Om)
+    O_0[m] = (psi0 @ Om).trace()
 
-O_0 = np.array(O_0)
 A = np.linalg.norm(O_0)
 
 O_0
