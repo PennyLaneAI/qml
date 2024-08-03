@@ -138,10 +138,11 @@ def noise2(op, **kwargs):
 
 ######################################################################
 # Another pair for adding a depolarization error for every :math:`T`
-# and :math:`T^{\dagger}` gates on the wires :math:`\in \{1, 2\}`:
+# and :math:`T^{\dagger} = R_{\phi}(-\pi/4)` gates on the wires
+# :math:`\in \{1, 2\}`:
 #
 
-fcond3 = qml.noise.op_in([qml.T, qml.adjoint(qml.T(0))]) & qml.noise.wires_in([1, 2])
+fcond3 = qml.noise.op_in([qml.T, qml.PhaseShift]) & qml.noise.wires_in([1, 2])
 noise3 = qml.noise.partial_wires(qml.DepolarizingChannel, 0.01)
 
 ######################################################################
@@ -228,7 +229,7 @@ plt.show()
 # To attach the ``noise_model`` to this quantum circuit, we can do the following:
 #
 
-noisy_circuit = qml.add_noise(swap_circuit, noise_model, level=0)
+noisy_circuit = qml.add_noise(swap_circuit, noise_model)
 qml.draw_mpl(noisy_circuit)(0.2, 0.3)
 plt.show()
 
@@ -237,7 +238,7 @@ plt.show()
 # transforming the circuit. For this we can again use the :func:`~pennylane.add_noise` transform:
 #
 
-noisy_dev = qml.add_noise(dev, noise_model, level=0)
+noisy_dev = qml.add_noise(dev, noise_model)
 noisy_dev_circuit = qml.QNode(swap_test, noisy_dev)
 
 ######################################################################
