@@ -9,17 +9,17 @@ Introduction
 
 Shadow Hamiltonian simulation is a new approach to quantum simulation on quantum computers [#SommaShadow]_.
 Despite its name, it has little to do with :doc:`classical shadows </demos/tutorial_diffable_shadows>`.
-In quantum simulation, the goal is typically to simulate the expectation values of observables 
-:math:`O_m` for :math:`m=1,..,M` under some unitary evolution.
+In quantum simulation, the goal is typically to simulate the expectation values of :math:`M` observables 
+:math:`O_m,` for :math:`m=1,\ldots ,M,` under some unitary evolution.
 The common approach is to evolve the wave function :math:`|\psi\rangle` and then measure the desired observables after the evolution.
 
-In shadow Hamiltonian simulation, we instead directly encode the expectation values in a proxy state, the shadow state,
+In shadow Hamiltonian simulation, we instead directly encode the expectation values in a proxy state—the **shadow state**—
 and evolve that state accordingly. Specifically for time evolution, we can write a shadow Schrödinger equation that governs the
 dynamics of the shadow state.
 
-This is fundamentally different to the common approach as the dimensionality of the 
-shadow system no longer depends on the number of constituents :math:`n` of the system,
-but on the number of observables :math:`M` that we are interested in and require, 
+This is fundamentally different to the common approach. The dimensionality of the 
+shadow system no longer depends on the number of constituents :math:`n` of the system. Instead,
+it is dependent on the number of observables :math:`M` that we are interested in and require, 
 as there are conditions of completeness for the shadow encoding to succeed (called invariance property in the original paper).
 Further, since the
 expectation values are encoded in the amplitudes of states, we cannot directly measure them anymore, but need to resort to some 
@@ -27,9 +27,9 @@ form of state tomography.
 On the other hand, this gives us entirely new possibilities by letting us sample from :math:`p_m = |\langle O_m \rangle|^2`,
 and, in particular simultaneously all absolute values of observables.
 
-In this demo we are going to introduce the basic concepts of shadow Hamiltonian simulation alongside some easy-to-follow code snippets.
-We will also later see how shadow Hamiltonian simulation comes down to :doc:`g-sim </demos/tutorial_liesim>`, 
-a Lie algebraic classical simulation tool, but run on a quantum computer and with some simplifications due to considering specifically Hamiltonian simulation.
+In this demo, we are going to introduce the basic concepts of shadow Hamiltonian simulation alongside some easy-to-follow code snippets.
+We will also see later how shadow Hamiltonian simulation comes down to :doc:`g-sim </demos/tutorial_liesim>`, 
+a Lie algebraic classical simulation tool, but run on a quantum computer with some simplifications due to considering specifically Hamiltonian simulation.
 
 Shadow Hamiltonian simulation
 -----------------------------
@@ -39,34 +39,34 @@ In common quantum Hamiltonian simulation, we evolve a state vector :math:`|\psi(
 .. math:: \frac{\text{d}}{\text{dt}} |\psi(t)\rangle = -i H |\psi(t)\rangle
 
 by some Hamiltonian :math:`H`, and then compute expectation values of the evolved state through measurement.
-In Shadow Hamiltonian simulation, we encode a set of expectation values in the amplitudes of a quantum state,
+In shadow Hamiltonian simulation, we encode a set of expectation values in the amplitudes of a quantum state,
 and evolve those according to some shadow Schrödinger equation.
 
 For that, we first need to define the shadow state
 
 .. math:: |\rho\rangle = \frac{1}{\sqrt{A}} \begin{pmatrix} \langle O_1 \rangle \\ \vdots \\ \langle O_M \rangle \end{pmatrix}
 
-for a set of operators :math:`S = \{O_m\}` with normalization constant :math:`A = \sum_m |\langle O_m \rangle|^2`.
-So we can encode those :math:`M` operator expectation values with :math:`n_S` qubits such that :math:`2^{n_S} \geq M`.
+for a set of operators :math:`S = \{O_m\}` and normalization constant :math:`A = \sum_m |\langle O_m \rangle|^2`.
+This means that we can encode these :math:`M` operator expectation values into :math:`n_S` qubits, as long as :math:`2^{n_S} \geq M.`
 
 The shadow state evolves according to its shadow Schrödinger equation
 
 .. math:: \frac{\text{d}}{\text{dt}} |\rho\rangle = - i H_S |\rho\rangle.
 
 The Hamiltonian matrix :math:`H_S` is given by the commutation relations between the system Hamiltonian :math:`H` and
-the operators in :math:`S = \{O_m\}`. In particular, it is implicitly defined by
+the operators in :math:`S = \{O_m\}`. Namely, it is implicitly defined by
 
 .. math:: [H, O_m] = - \sum_{m'=1}^M \left( H_S \right)_{m m'} O_{m'}.
 
-A vector :math:`\boldsymbol{v}` can always be decomposed in an orthogonal basis :math:`\boldsymbol{e}_j` via
+Let us solve for the matrix elements :math:`(H_S)_{m m'}$.  To do this, recall that a vector :math:`\boldsymbol{v}` can always be decomposed in an orthogonal basis :math:`\boldsymbol{e}_j` via
 :math:`\boldsymbol{v} = \sum_j \frac{\langle \boldsymbol{e}_j, \boldsymbol{v}\rangle}{||\boldsymbol{e}_j||^2} \boldsymbol{e}_j`.
 Since the operators under consideration are elements of the vector space of Hermitian operators, we can use that to compute :math:`H_S`.
 
-In particular, with the trace inner product this amounts to
+In particular, with the trace inner product, this amounts to
 
 .. math:: [H, O_m] = \sum_{m'=1}^M \frac{\text{tr}\left( O_{m'} [H, O_m] \right)}{|| O_{m'} ||^2} O_{m'},
 
-from which we can read off the matrix elements of :math:`H_S`, i.e.
+from which we can read off the matrix elements of :math:`H_S`, i.e.,
 
 .. math:: (H_S)_{m m'} = -\frac{\text{tr}\left( O_{m'} [H, O_m] \right)}{|| O_{m'} ||^2}.
 
@@ -95,8 +95,8 @@ In particular, :math:`H_S` corresponds to the adjoint representation :math:`\tex
 :math:`\langle \{ H \} \cup S \rangle_\text{Lie}`. We explain the concept of the adjoint representation in our
 :doc:`demo on g-sim </demos/tutorial_liesim>` that makes extensive use of it.
 
-One striking difference is that because
-we only have one specific "gate", we do not need the full Lie closure of the operators that we want to compute the expectation values of.
+One striking difference is that, because
+we only have one specific "gate", we do not need the full Lie closure of the operators whose expectation values we want to compute.
 Instead, here it is sufficient to choose :math:`O_m` such that they support all :math:`[H, O_m]`.
 This is a significant difference, as the Lie closure in most cases leads to an exponentially large DLA [#Wiersema]_ [#Aguilar]_.
 
@@ -108,7 +108,7 @@ We are interested in simulating the Hamiltonian evolution of
 
 .. math:: H = X + Y
 
-after :math:`t = 1` and compute the expectation values of :math:`\{X, Y, Z, I \}`.
+after a time :math:`t = 1` and compute the expectation values of :math:`\{X, Y, Z, I \}`.
 In the standard formulation we simply evolve the initial quantum state :math:`|\psi(0)\rangle = |0\rangle` by :math:`H` in the
 following way.
 
@@ -138,7 +138,7 @@ O_t_standard
 # We evolved a :math:`2^n = 2` dimensional quantum state and performed :math:`3` independent measurements (non-commuting).
 #
 # In shadow Hamiltonian simulation, we encode :math:`4` expectation values in a :math:`2^2 = 4` dimensional
-# quantum state, i.e. :math:`n_S = 2`.
+# quantum state, i.e., :math:`n_S = 2`.
 #
 # For this specific example, the number of operators is larger than the number of qubits, leading to a shadow system that
 # is larger than the original system. This may or may not be a clever choice, but the point here is just to illustrate 
@@ -173,7 +173,7 @@ O_0
 # There is a variety of methods to encode this vector in a qubit basis. We will later just use
 # :class:`~StatePrep`.
 #
-# We now go on to construct the shadow Hamiltonian :math:`H_S` by means of computing the elements
+# We now go on to construct the shadow Hamiltonian :math:`H_S` by computing the elements
 # :math:`(H_S)_{m m'} = \frac{\text{tr}\left( O_{m'} [H, O_m] \right)}{|| O_{m'} ||^2}`.
 # We again make use of the :meth:`~.pennylane.pauli.PauliSentence.trace` method.
 #
@@ -211,11 +211,11 @@ O_t
 
 ##############################################################################
 # Up to this point, this is equivalent to :doc:`g-sim </demos/tutorial_liesim>` if we were doing classical simulation.
-# Now the main novelty for shadow Hamiltonian simulation is to perform this on a quantum computer by encoding the 
+# Now, the main novelty for shadow Hamiltonian simulation is to perform this on a quantum computer by encoding the 
 # expectation values of :math:`\langle O_m \rangle` in the amplitude of a quantum state, and to translate :math:`H_S`
 # accordingly.
 #
-# This can be done by decomposing the numerical matrix :math:`H_S` into Pauli operators, which then in turn can
+# This can be done by decomposing the numerical matrix :math:`H_S` into Pauli operators, which in turn can
 # be implemented on a quantum computer.
 #
 
@@ -240,7 +240,7 @@ print(O_t_standard)
 print(O_t_quantum)
 
 ##############################################################################
-# We see that the results match with both approaches.
+# We see that the results of both approaches match.
 #
 # The first result is coming from three independent measurements on a quantum computer after evolution with system Hamiltonian :math:`H`.
 # This is conceptually very different from the second result where
@@ -253,7 +253,7 @@ print(O_t_quantum)
 # :math:`p_m = |\langle O_m\rangle|^2`. The ability to sample from such a distribution 
 # :math:`p_m = |\langle O_m\rangle|^2` is a unique and new feature to shadow Hamiltonian simulation.
 #
-# We are making use of the abstract quantum sub-routines :func:`~evolve` and :class:`~StatePrep`, which each warrant their
+# We should also note that we made use of the abstract quantum sub-routines :func:`~evolve` and :class:`~StatePrep,` which each warrant their
 # specific implementation. For example, :class:`~StatePrep` can be realized by :class:`~MottonenStatePreparation` and :func:`~evolve` can be realized
 # by :class:`TrotterProduct`, though that shall not be the focus of this demo.
 
@@ -262,7 +262,7 @@ print(O_t_quantum)
 # Conclusion
 # ----------
 #
-# We have introduced the basic concepts of shadow Hamiltonian simulation and seen how this fundamentally differs from the common approach to Hamiltonian simulation.
+# In this demo, we introduced the basic concepts of shadow Hamiltonian simulation and learned how this fundamentally differs from the common approach to Hamiltonian simulation.
 #
 # We have seen how classical Hamiltonian simulation is tightly connected to g-sim, but run on a quantum computer.
 # A significant difference comes from the fact that the authors in [#SommaShadow]_ specifically look at Hamiltonian simulation :math:`\exp(-i t H)`
@@ -324,7 +324,6 @@ print(O_t_quantum)
 #     Gerard Aguilar, Simon Cichy, Jens Eisert, Lennart Bittel
 #     "Full classification of Pauli Lie algebras"
 #     `arXiv:2408.00081 <https://arxiv.org/abs/2408.00081>`__, 2024.
-
 #
 # .. [#Mazzola]
 #
