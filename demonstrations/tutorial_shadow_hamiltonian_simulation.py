@@ -94,7 +94,7 @@ In particular, :math:`H_S` corresponds to the adjoint representation :math:`\tex
 
 One striking difference is that, because
 we only have one specific "gate", we do not need the full Lie closure of the operators whose expectation values we want to compute.
-Instead, here it is sufficient to choose :math:`O_m` such that they support all :math:`[H, O_m]`.
+Instead, here it is sufficient to choose :math:`O_m` such that they build up the full support for all :math:`[H, O_m]`.
 This is a significant difference, as the Lie closure in most cases leads to an exponentially large DLA [#Wiersema]_ [#Aguilar]_.
 
 A simple example
@@ -117,7 +117,6 @@ from pennylane import X, Y, Z, I
 
 dev = qml.device("default.qubit")
 
-n = 1
 S = [X(0), Y(0), Z(0), I(0)]
 H = X(0) + Y(0)
 
