@@ -40,7 +40,8 @@ r"""How to use noise models in PennyLane
 # We implement conditions as Boolean functions called `Conditionals` that accept an
 # operation and evaluate it to return a Boolean output. In PennyLane, such objects are
 # constructed as instances of :class:`~.pennylane.BooleanFn` and can be combined using
-# standard bitwise operations. We support the following types of conditionals:
+# standard bitwise operations such as ``&``, ``|``, ``^``, or ``~``. We support the
+# following types of conditionals:
 #
 # 1. **Operation-based conditionals:** They evaluate a gate operation based on whether it
 #    is a specific type of operation or belongs to a specified set of operations. They are
@@ -50,10 +51,7 @@ r"""How to use noise models in PennyLane
 #    :func:`~.pennylane.noise.wires_eq` and :func:`~.pennylane.noise.wires_in`.
 # 3. **Arbitrary conditionals:** Custom conditionals can be defined as a function wrapped
 #    with a :class:`~.pennylane.BooleanFn` decorator. Signature for such conditionals must
-#    be ``cond_fn(operation) --> bool``.
-# 4. **Combined conditionals:** Any conditionals can be combined to form a new conditional
-#    using bitwise operations such as ``&``, ``|``, ``^``, or ``~``, that will evaluate a
-#    gate operation based on the order of their combination.
+#    be ``cond_fn(operation) -> bool``.
 #
 # For example, here's how we would define a conditional that checks for :math:`R_X(\phi)`
 # gate operations with :math:`\phi < 1.0` and wires :math:`\in\ \{0, a\}`:
@@ -85,9 +83,9 @@ for op in [qml.RX(0.05, wires=0), qml.RX(2.37, wires="a")]:
 #    use :func:`~pennylane.noise.partial_wires`, which builds a partially evaluated function
 #    based on the given operation with all its arguments frozen except ``wires``.
 # 2. **User-defined noise functions:** For adding more sophesticated noise, one can define
-#    their own quantum function with the signature specified above. This way, they can also
-#    specify their own custom order this way by queing the operation being evaluated via
-#    :func:`~pennylane.apply` within the function definition.
+#    their own quantum function with the signature specified above. This way, one can also
+#    specify their own custom order for inserting the noise by queing the operation being
+#    evaluated via :func:`~pennylane.apply` within the function definition.
 #
 # For example, one can use the following for inserting a thermal relaxation error based on
 # a :math:`T_1` time provided as a keyword argument (i.e., metadata) and see the error that
@@ -115,8 +113,7 @@ print(f"Error for {op}: {q.queue[0]}")
 # the two single-qubit states. So, the first pair we construct is to
 # mimick the thermal relaxation errors encountered during the state
 # preparation based on ``metadata`` containing the dephasing and
-# relaxation times for the qubits and the gate time of the
-# operation:
+# relaxation times for the qubits and the gate time of the operation:
 #
 
 fcond1 = qml.noise.op_eq(qml.StatePrep)
@@ -138,8 +135,7 @@ def noise2(op, **kwargs):
 
 ######################################################################
 # Another pair for adding a depolarization error for every :math:`T`
-# and :math:`T^{\dagger} = R_{\phi}(-\pi/4)` gates on the wires
-# :math:`\in \{1, 2\}`:
+# and :math:`R_{\phi}` gates on the wires :math:`\in \{1, 2\}`:
 #
 
 fcond3 = qml.noise.op_in([qml.T, qml.PhaseShift]) & qml.noise.wires_in([1, 2])
@@ -206,16 +202,16 @@ def swap_test(theta, phi):
     qml.CNOT([1, 2])
     qml.Hadamard(1)
     qml.CNOT([1, 2])
-    qml.adjoint(qml.T)(2)
+    qml.PhaseShift(-np.pi/4, 2)
     qml.CNOT([0, 2])
     qml.T(2)
     qml.CNOT([1, 2])
-    qml.adjoint(qml.T)(2)
+    qml.PhaseShift(-np.pi/4, 2)
     qml.CNOT([0, 2])
     qml.T(1)
     qml.CNOT([0, 1])
     qml.T(0)
-    qml.adjoint(qml.T)(1)
+    qml.PhaseShift(-np.pi/4, 1)
     qml.CNOT([0, 1])
     qml.Hadamard(0)
 
@@ -254,8 +250,8 @@ print(f"Ideal v/s Noisy: {ideal_circ_res} and {noisy_circ_res}")
 print(f"Noisy Circuit v/s Noisy Device: {noisy_circ_res} and {noisy_qdev_res}")
 
 ######################################################################
-# Since, both parameters are equal, the ideal result for the test is
-# :math:`\approx 1.0`. We see that it is no longer the case for the result
+# Since, both the parameters are equal, the ideal result for the SWAP test should
+# be :math:`\approx 1.0`. We see that it is no longer the case for the result
 # obtained from the noisy circuit. Moreover, by looking at the closeness of
 # the two noisy results we can confirm the equivalence of the two ways the
 # noise models could be added for noisy simulations.
