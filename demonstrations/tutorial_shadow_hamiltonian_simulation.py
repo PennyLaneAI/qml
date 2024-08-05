@@ -284,12 +284,15 @@ print(O_t_shadow)
 # We have seen how classical Hamiltonian simulation is tightly connected to g-sim, but run on a quantum computer.
 # A significant difference comes from the fact that the authors in [#SommaShadow]_ specifically look at Hamiltonian simulation, :math:`\exp(-i t H)`,
 # which allows us to just look at operators :math:`O_m` that support all commutators :math:`[H, O_m]`, instead of the full Lie closure.
-# Because the Lie closure typically leads to an exponential amount of operators in most cases [#Wiersema]_ [#Aguilar]_, this sounds like good news.
+# There may be some advantage to this feat, because Lie closure typically leads to an exponential amount of operators in most cases [#Wiersema]_ [#Aguilar]_.
 # However, the scaling of such sets of operators is unclear at this point and needs further investigation.
 #
-# Note that even in the case of an exponentially sized set of operators we have - at least in principle - an exponentially large state vector to store the
+# Note that even in the case of an exponentially sized set of operators, we have - at least in principle - an exponentially large state vector to store the
 # :math:`M \leq 2^{n_S}` values. In the absolute worst case we have :math:`\mathfrak{su}(2^n)` with a dimension of 
 # :math:`2^{2n}-1`, so :math:`n_S = 2n` and thus just doubling the number of qubits.
+#
+# The biggest potential to this new persepctive on Hamiltonian simulation most likely lies in finding interesting applications like [#Babbush]_ that naturally
+# encode the problem and allows for efficient retrieval of all the relevant information.
 #
 
 
@@ -340,6 +343,12 @@ print(O_t_shadow)
 #     Gerard Aguilar, Simon Cichy, Jens Eisert, Lennart Bittel
 #     "Full classification of Pauli Lie algebras"
 #     `arXiv:2408.00081 <https://arxiv.org/abs/2408.00081>`__, 2024.
+#
+# .. [#Babbush]
+#
+#     Ryan Babbush, Dominic W. Berry, Robin Kothari, Rolando D. Somma, Nathan Wiebe
+#     "Exponential quantum speedup in simulating coupled classical oscillators"
+#     `arXiv:2303.13012 <https://arxiv.org/abs/2303.13012>`__, 2023.
 #
 
 
