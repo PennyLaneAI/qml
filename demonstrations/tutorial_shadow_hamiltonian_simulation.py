@@ -184,8 +184,8 @@ for m, Om in enumerate(S_pauli):
 O_0
 
 ##############################################################################
-# There is a variety of methods to encode this vector in a qubit basis. We will later just use
-# :class:`~.pennylane.StatePrep`.
+# There is a variety of methods to encode this vector in a qubit basis, but we will just be using
+# :class:`~.pennylane.StatePrep` later.
 #
 # We now go on to construct the shadow Hamiltonian :math:`H_S` by computing the elements
 # :math:`(H_S)_{m m'} = \frac{\text{tr}\left( O_{m'} [H, O_m] \right)}{|| O_{m'} ||^2}`, and
