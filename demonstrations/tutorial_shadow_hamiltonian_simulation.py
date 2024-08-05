@@ -184,7 +184,7 @@ for m, Om in enumerate(S_pauli):
 O_0
 
 ##############################################################################
-# There is a variety of methods to encode this vector in a qubit basis. We will later just use
+# There are a variety of methods to encode this vector in a qubit basis. We will later just use
 # :class:`~.pennylane.StatePrep`.
 #
 # We now go on to construct the shadow Hamiltonian :math:`H_S` by computing the elements
