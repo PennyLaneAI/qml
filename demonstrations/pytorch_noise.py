@@ -7,7 +7,7 @@ PyTorch and noisy devices
 .. meta::
     :property="og:description": Extend PyTorch with real quantum computing power,
         by using it to optimize a noisy quantum hardware device.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//bloch.gif
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/bloch.gif
 
 .. related::
 

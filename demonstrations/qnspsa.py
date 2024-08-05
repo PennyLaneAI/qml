@@ -4,7 +4,7 @@ Quantum natural SPSA optimizer
 
 .. meta::
     :property="og:description": Introduction to the Quantum natural SPSA optimizer, which reduces the number of quantum measurements in the optimization.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//qnspsa_cover.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/qnspsa_cover.png
 
 .. related::
 
