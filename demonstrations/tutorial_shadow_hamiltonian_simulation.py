@@ -284,8 +284,8 @@ print(O_t_shadow)
 # which allows us to just look at the support of :math:`[H, O_m]`, instead of the full Lie closure.
 # This can make a difference in some cases, as the Lie closure leads to an exponential amount of operators, in most cases [#Wiersema]_ [#Aguilar]_.
 #
-# Note that even in the case of an exponentially sized Lie algebra we have - at least in principle - an exponentially sized register of qubits to store the
-# :math:`M = 2^{n_S}` values. In the absolute worst case we have :math:`\mathfrak{su}(2^n)` with a dimension of 
+# Note that even in the case of an exponentially sized Lie algebra we have - at least in principle - an exponentially large state vector to store the
+# :math:`M \leq 2^{n_S}` values. In the absolute worst case we have :math:`\mathfrak{su}(2^n)` with a dimension of 
 # :math:`2^{2n}-1`, so :math:`n_S = 2n` and thus doubling the size number of qubits.
 #
 
