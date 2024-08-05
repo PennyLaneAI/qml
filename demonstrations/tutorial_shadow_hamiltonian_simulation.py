@@ -181,20 +181,28 @@ O_0
 # We again make use of the :meth:`~.pennylane.pauli.PauliSentence.trace` method.
 #
 
-H_pauli = H.pauli_rep
+def compute_H_S(H):
+    """
+    Construct the shadow Hamiltonian H_S
+    """
+    H_pauli = H.pauli_rep
 
-H_S = np.zeros((len(S), len(S)), dtype=complex)
+    H_S = np.zeros((len(S), len(S)), dtype=complex)
 
-for m, Om in enumerate(S_pauli):
-    com = H_pauli.commutator(Om)
-    for mt, Omt in enumerate(S_pauli):
-        # v = ∑ (v · e_j / ||e_j||^2) * e_j
+    for m, Om in enumerate(S_pauli):
+        com = H_pauli.commutator(Om)
 
-        value = (Omt @ com).trace()
-        value = value / (Omt @ Omt).trace()  
-        H_S[m,mt] = value
+        for mt, Omt in enumerate(S_pauli):
 
-H_S = -H_S # definition eq. (2) in [1]
+            # v = ∑ (v · e_j / ||e_j||^2) * e_j
+            value = (Omt @ com).trace()
+            value = value / (Omt @ Omt).trace()  
+            H_S[m,mt] = value
+
+    H_S = -H_S # definition eq. (2) in [1]
+    return H_S
+
+H_S = compute_H_S(H)
 
 ##############################################################################
 # In order for the shadow evolution to be unitary and implementable on a quantum computer,
