@@ -2040,8 +2040,6 @@ files = [
     {file = "frozendict-2.4.4-cp39-cp39-musllinux_1_1_x86_64.whl", hash = "sha256:d13b4310db337f4d2103867c5a05090b22bc4d50ca842093779ef541ea9c9eea"},
     {file = "frozendict-2.4.4-cp39-cp39-win_amd64.whl", hash = "sha256:b3b967d5065872e27b06f785a80c0ed0a45d1f7c9b85223da05358e734d858ca"},
     {file = "frozendict-2.4.4-cp39-cp39-win_arm64.whl", hash = "sha256:4ae8d05c8d0b6134bfb6bfb369d5fa0c4df21eabb5ca7f645af95fdc6689678e"},
-    {file = "frozendict-2.4.4-py311-none-any.whl", hash = "sha256:705efca8d74d3facbb6ace80ab3afdd28eb8a237bfb4063ed89996b024bc443d"},
-    {file = "frozendict-2.4.4-py312-none-any.whl", hash = "sha256:d9647563e76adb05b7cde2172403123380871360a114f546b4ae1704510801e5"},
     {file = "frozendict-2.4.4.tar.gz", hash = "sha256:3f7c031b26e4ee6a3f786ceb5e3abf1181c4ade92dce1f847da26ea2c96008c7"},
 ]
 
@@ -3102,7 +3100,6 @@ description = "Clang Python Bindings, mirrored from the official LLVM repo: http
 optional = false
 python-versions = "*"
 files = [
-    {file = "libclang-18.1.1-1-py2.py3-none-macosx_11_0_arm64.whl", hash = "sha256:0b2e143f0fac830156feb56f9231ff8338c20aecfe72b4ffe96f19e5a1dbb69a"},
     {file = "libclang-18.1.1-py2.py3-none-macosx_10_9_x86_64.whl", hash = "sha256:6f14c3f194704e5d09769108f03185fce7acaf1d1ae4bbb2f30a72c2400cb7c5"},
     {file = "libclang-18.1.1-py2.py3-none-macosx_11_0_arm64.whl", hash = "sha256:83ce5045d101b669ac38e6da8e58765f12da2d3aafb3b9b98d88b286a60964d8"},
     {file = "libclang-18.1.1-py2.py3-none-manylinux2010_x86_64.whl", hash = "sha256:c533091d8a3bbf7460a00cb6c1a71da93bffe148f172c7d03b1c31fbf8aa2a0b"},
@@ -5532,6 +5529,36 @@ requests = ">=2.19"
 requests-ntlm = ">=1.1.0"
 urllib3 = ">=1.21.1"
 websocket-client = ">=1.5.1"
+
+[[package]]
+name = "qml_benchmarks"
+version = "0.1"
+description = "A package to benchmark quantum machine learning models"
+optional = false
+python-versions = "*"
+files = []
+develop = false
+
+[package.dependencies]
+flax = "*"
+jax = "*"
+jaxlib = "*"
+matplotlib = "*"
+numpy = "*"
+optax = "*"
+pandas = "*"
+pennylane = "*"
+pyyaml = "*"
+scikit_learn = "*"
+scipy = "*"
+seaborn = "*"
+typing-extensions = "*"
+
+[package.source]
+type = "git"
+url = "https://github.com/XanaduAI/qml-benchmarks.git"
+reference = "v0.1"
+resolved_reference = "886648d47f4fff849f386ddcc41c3c76ac601b68"
 
 [[package]]
 name = "quil"
@@ -8097,4 +8124,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.10.0"
-content-hash = "9d79a3c7864580ff575f8eed195b739cca63167e993e57f175bbe0127496a48f"
+content-hash = "3331558e7fcf03e9e86a4065c99b19fdea70689c78daa598214377709f493f62"
