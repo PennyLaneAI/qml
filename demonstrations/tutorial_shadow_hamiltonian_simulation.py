@@ -153,10 +153,8 @@ O_t_standard
 
 ##############################################################################
 # We evolved a :math:`2^n = 2` dimensional quantum state and performed :math:`3` independent (non-commuting) measurements.
-#
 # In shadow Hamiltonian simulation, we encode :math:`4` expectation values in a :math:`2^2 = 4`-dimensional
 # quantum state, i.e., :math:`n_S = 2`.
-#
 # For this specific example, the number of operators is larger than the number of qubits, leading to a shadow system that
 # is larger than the original system. This may or may not be a clever choice, but the point here is just to illustrate 
 # the conceptual difference between both approaches. The authors in [#SommaShadow]_ show various examples where
