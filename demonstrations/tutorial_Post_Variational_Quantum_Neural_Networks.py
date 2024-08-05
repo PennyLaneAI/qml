@@ -25,7 +25,7 @@ r"""Post-Variational Quantum Neural Networks
 # by first encoding data :math:`x` into a :math:`n`-qubit quantum state. The quantum state is then
 # transformed by an Ansatz :math:`U(\theta)`. The parameters :math:`\theta` are optimized by
 # evaluating gradients of the quantum circuit [#schuld2019evaluating]_ and calculating updates of the parameter on a classical
-# computer. `Variational algorithms <https://pennylane.ai/qml/glossary/variational_circuit/>`__. are a pre-requisite to this article.
+# computer. `Variational algorithms <https://pennylane.ai/qml/glossary/variational_circuit/>`__ are a pre-requisite to this article.
 # 
 # However, many Ansätze in the variational strategy face the barren plateau problem [#mcclean2018barren]_ , which leads to difficulty in convergence
 # using gradient-based optimization techniques. Due general difficulty and lack of training gurantees
