@@ -19,7 +19,7 @@ and evolve that state accordingly. Specifically for time evolution, we can write
 dynamics of the shadow state.
 
 This is fundamentally different to the common approach. Foremost, the dimensionality of the 
-shadow system no longer depends on the number of constituents :math:`n` of the system. In fact, the underlying state can be mixed or even infinite dimensional.
+shadow system no longer depends on the number of constituents, :math:`n`, of the system. In fact, the underlying state can be mixed or even infinite-dimensional.
 Instead, the shadow system's size is dependent on the number of observables :math:`M` that we are interested in and require
 (there are conditions of completeness for the shadow encoding to succeed, called invariance property in the original paper).
 Further, since the
@@ -30,32 +30,32 @@ On the other hand, this gives us entirely new possibilities by letting us sample
 
 In this demo, we are going to introduce the basic concepts of shadow Hamiltonian simulation alongside some easy-to-follow code snippets.
 We will also see later how shadow Hamiltonian simulation comes down to :doc:`g-sim </demos/tutorial_liesim>`, 
-a Lie algebraic classical simulation tool, but run on a quantum computer with some simplifications due to considering specifically Hamiltonian simulation.
+a Lie algebraic classical simulation tool, but run on a quantum computer with some simplifications specifically due to considering Hamiltonian simulation.
 
 Shadow Hamiltonian simulation
 -----------------------------
 
-In common quantum Hamiltonian simulation, we evolve a state vector :math:`|\psi(t)\rangle` according to the Schrödinger equation
+In common quantum Hamiltonian simulation, we evolve a state vector :math:`|\psi(t)\rangle` according to the Schrödinger equation,
 
-.. math:: \frac{\text{d}}{\text{dt}} |\psi(t)\rangle = -i H |\psi(t)\rangle
+.. math:: \frac{\text{d}}{\text{dt}} |\psi(t)\rangle = -i H |\psi(t)\rangle,
 
 by some Hamiltonian :math:`H`, and then compute expectation values of the evolved state through measurement.
 In shadow Hamiltonian simulation, we encode a set of expectation values in the amplitudes of a quantum state,
 and evolve those according to some shadow Schrödinger equation.
 
-For that, we first need to define the shadow state
+For that, we first need to define the shadow state,
 
-.. math:: |\rho\rangle = \frac{1}{\sqrt{A}} \begin{pmatrix} \langle O_1 \rangle \\ \vdots \\ \langle O_M \rangle \end{pmatrix}
+.. math:: |\rho\rangle = \frac{1}{\sqrt{A}} \begin{pmatrix} \langle O_1 \rangle \\ \vdots \\ \langle O_M \rangle \end{pmatrix},
 
 for a set of operators :math:`S = \{O_m\}` and normalization constant :math:`A = \sum_m |\langle O_m \rangle|^2`.
 This means that we can encode these :math:`M` operator expectation values into :math:`n_S` qubits, as long as :math:`2^{n_S} \geq M.`
 
-The shadow state evolves according to its shadow Schrödinger equation
+The shadow state evolves according to its shadow Schrödinger equation,
 
 .. math:: \frac{\text{d}}{\text{dt}} |\rho\rangle = - i H_S |\rho\rangle.
 
 The Hamiltonian matrix :math:`H_S` is given by the commutation relations between the system Hamiltonian :math:`H` and
-the operators in :math:`S = \{O_m\}`. Namely, it is implicitly defined by
+the operators in :math:`S = \{O_m\}`,
 
 .. math:: [H, O_m] = - \sum_{m'=1}^M \left( H_S \right)_{m m'} O_{m'}.
 
@@ -119,8 +119,8 @@ We are interested in simulating the Hamiltonian evolution of
 
 .. math:: H = X + Y
 
-after a time :math:`t = 1` and compute the expectation values of :math:`S = \{X, Y, Z, I \}`.
-In the standard formulation we simply evolve the initial quantum state :math:`|\psi(0)\rangle = |0\rangle` by :math:`H` in the
+after a time :math:`t = 1` and computing the expectation values of :math:`S = \{X, Y, Z, I \}`.
+In the standard formulation, we simply evolve the initial quantum state :math:`|\psi(0)\rangle = |0\rangle` by :math:`H` in the
 following way.
 
 """
@@ -144,24 +144,23 @@ O_t_standard = np.array(evolve(H, t))
 O_t_standard
 
 ##############################################################################
+# We evolved a :math:`2^n = 2` dimensional quantum state and performed :math:`3` independent (non-commuting) measurements.
 #
-# We evolved a :math:`2^n = 2` dimensional quantum state and performed :math:`3` independent measurements (non-commuting).
-#
-# In shadow Hamiltonian simulation, we encode :math:`4` expectation values in a :math:`2^2 = 4` dimensional
+# In shadow Hamiltonian simulation, we encode :math:`4` expectation values in a :math:`2^2 = 4`-dimensional
 # quantum state, i.e., :math:`n_S = 2`.
 #
 # For this specific example, the number of operators is larger than the number of qubits, leading to a shadow system that
 # is larger than the original system. This may or may not be a clever choice, but the point here is just to illustrate 
 # the conceptual difference between both approaches. The authors in [#SommaShadow]_ show various examples where
 # the resulting shadow system is significantly smaller than the original system. It may also be noted that having a smaller shadow system may not
-# always be its sole purpose, as there are conceptually new avenues one can explore with shadow Hamiltonian simulation such
+# always be its sole purpose, as there are conceptually new avenues one can explore with shadow Hamiltonian simulation, such
 # as sampling from the distribution :math:`p_m = |\langle O_m \rangle |^2`.
 #
 # Let us first construct the initial shadow state :math:`\boldsymbol{O}(t=0)` by computing
 # :math:`\langle O_m \rangle_{t=0} = \text{tr}\left(O_m |\psi(0)\rangle \langle \psi(0)| \right)`
 # with :math:`|\psi(0)\rangle = |0\rangle`.
-# The ``pauli_rep`` of PennyLane operators in form of :class:`~.pennylane.pauli.PauliSentence` instances lets us efficiently
-# compute the trace and we use the trick that :math:`|0 \rangle \langle 0| = (I + Z)/2`.
+# The ``pauli_rep`` attribute of PennyLane operators returns a :class:`~.pennylane.pauli.PauliSentence` instance and lets us efficiently
+# compute the trace, where we use the trick that :math:`|0 \rangle \langle 0| = (I + Z)/2`.
 # 
 
 S_pauli = [op.pauli_rep for op in S]
@@ -173,7 +172,6 @@ for m, Om in enumerate(S_pauli):
 
     O_0[m] = (psi0 @ Om).trace()
 
-A = np.linalg.norm(O_0)
 
 O_0
 
@@ -182,8 +180,8 @@ O_0
 # :class:`~.pennylane.StatePrep`.
 #
 # We now go on to construct the shadow Hamiltonian :math:`H_S` by computing the elements
-# :math:`(H_S)_{m m'} = \frac{\text{tr}\left( O_{m'} [H, O_m] \right)}{|| O_{m'} ||^2}`.
-# We again make use of the :meth:`~.pennylane.pauli.PauliSentence.trace` method.
+# :math:`(H_S)_{m m'} = \frac{\text{tr}\left( O_{m'} [H, O_m] \right)}{|| O_{m'} ||^2}`, and
+# we again make use of the :meth:`~.pennylane.pauli.PauliSentence.trace` method.
 #
 
 H_pauli = H.pauli_rep
@@ -204,13 +202,15 @@ H_S = -H_S # definition eq. (2) in [1]
 ##############################################################################
 # In order for the shadow evolution to be unitary and implementable on a quantum computer,
 # we need :math:`H_S` to be Hermitian.
+# 
 
 np.all(H_S == H_S.conj().T)
 
 ##############################################################################
 # Knowing that, we can write the formal solution to the shadow Schrödinger equation as
 # 
-# .. math:: \boldsymbol{O}(t) = \exp\left(-i t H_S \right) \boldsymbol{O}(0)
+# .. math:: \boldsymbol{O}(t) = \exp\left(-i t H_S \right) \boldsymbol{O}(0).
+# 
 
 from scipy.linalg import expm
 
@@ -223,7 +223,7 @@ O_t
 # expectation values of :math:`\langle O_m \rangle` in the amplitude of a quantum state, and to translate :math:`H_S`
 # accordingly.
 #
-# This can be done by decomposing the numerical matrix :math:`H_S` into Pauli operators, which in turn can
+# This can be done by decomposing the numerical matrix :math:`H_S` into Pauli operators, which can, in turn,
 # be implemented on a quantum computer.
 #
 
@@ -235,6 +235,7 @@ H_S_qubit
 # For the amplitude encoding, we need to make sure that the state is normalized. We use that normalization factor to then
 # later retrieve the correct result.
 #
+A = np.linalg.norm(O_0)
 
 @qml.qnode(dev)
 def shadow_evolve(H_S_qubit, O_0, t):
@@ -261,7 +262,7 @@ print(O_t_shadow)
 # :math:`p_m = |\langle O_m\rangle|^2`. The ability to sample from such a distribution 
 # :math:`p_m = |\langle O_m\rangle|^2` is a unique and new feature to shadow Hamiltonian simulation.
 #
-# We should also note that we made use of the abstract quantum sub-routines :func:`~.pennylane.evolve` and :class:`~.pennylane.StatePrep` which each warrant their
+# We should also note that we made use of the abstract quantum sub-routines :func:`~.pennylane.evolve` and :class:`~.pennylane.StatePrep`, which each warrant their
 # specific implementation. For example, :class:`~.pennylane.StatePrep` can be realized by :class:`~MottonenStatePreparation` and :func:`~.pennylane.evolve` can be realized
 # by :class:`TrotterProduct`, though that shall not be the focus of this demo.
 
@@ -273,7 +274,7 @@ print(O_t_shadow)
 # In this demo, we introduced the basic concepts of shadow Hamiltonian simulation and learned how it fundamentally differs from the common approach to Hamiltonian simulation.
 #
 # We have seen how classical Hamiltonian simulation is tightly connected to g-sim, but run on a quantum computer.
-# A significant difference comes from the fact that the authors in [#SommaShadow]_ specifically look at Hamiltonian simulation :math:`\exp(-i t H)`
+# A significant difference comes from the fact that the authors in [#SommaShadow]_ specifically look at Hamiltonian simulation, :math:`\exp(-i t H)`,
 # which allows us to just look at the support of :math:`[H, O_m]`, instead of the full Lie closure.
 # This usually makes a tremendous difference as the Lie closure in most cases leads to an exponential amount of operators [#Wiersema]_ [#Aguilar]_.
 #
