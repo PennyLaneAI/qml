@@ -285,7 +285,7 @@ print(O_t_shadow)
 # We have seen how classical Hamiltonian simulation is tightly connected to g-sim, but run on a quantum computer.
 # A significant difference comes from the fact that the authors in [#SommaShadow]_ specifically look at Hamiltonian simulation, :math:`\exp(-i t H)`,
 # which allows us to just look at operators :math:`O_m` that support all commutators :math:`[H, O_m]`, instead of the full Lie closure.
-# There may be some advantage to this feat, because Lie closure typically leads to an exponential amount of operators in most cases [#Wiersema]_ [#Aguilar]_.
+# There may be some advantage to this feat, because Lie algebras in quantum computing typically scale exponentially [#Wiersema]_ [#Aguilar]_.
 # However, the scaling of such sets of operators is unclear at this point and needs further investigation.
 #
 # Note that even in the case of an exponentially sized set of operators, we have - at least in principle - an exponentially large state vector to store the
