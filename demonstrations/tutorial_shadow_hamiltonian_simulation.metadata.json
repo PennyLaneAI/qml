@@ -22,7 +22,7 @@
             "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_shadow_hamiltonian_simulation.png"
         }
     ],
-    "seoDescription": "Shadow Hamiltonian Simulation",
+    "seoDescription": "A user-friendly intro to the contents of 'Shadow Hamiltonian Simulation' by Somma et al (arxiv:2407.21775)",
     "doi": "",
     "canonicalURL": "/qml/demos/tutorial_shadow_hamiltonian_simulation",
     "references": [
@@ -101,6 +101,7 @@
             "year": "2024",
             "publisher": "",
             "journal": "",
+            "doi": "10.48550/arXiv.2407.21775",
             "url": "https://arxiv.org/abs/2407.21775"
         }
     ],
