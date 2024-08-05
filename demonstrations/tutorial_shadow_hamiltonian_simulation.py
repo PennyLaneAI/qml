@@ -28,7 +28,7 @@ On the other hand, this gives us entirely new possibilities by letting us sample
 
 In this demo, we are going to introduce the basic concepts of shadow Hamiltonian simulation alongside some easy-to-follow code snippets.
 We will also see later how shadow Hamiltonian simulation comes down to :doc:`g-sim </demos/tutorial_liesim>`, 
-a Lie algebraic classical simulation tool, but run on a quantum computer with some simplifications specifically due to considering Hamiltonian simulation.
+a Lie-algebraic classical simulation tool, but run on a quantum computer with some simplifications specifically due to considering Hamiltonian simulation.
 
 Shadow Hamiltonian simulation
 -----------------------------
