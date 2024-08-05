@@ -153,13 +153,15 @@ O_t_standard
 
 ##############################################################################
 # We evolved a :math:`2^n = 2` dimensional quantum state and performed :math:`3` independent (non-commuting) measurements.
+#
 # In shadow Hamiltonian simulation, we encode :math:`4` expectation values in a :math:`2^2 = 4`-dimensional
 # quantum state, i.e., :math:`n_S = 2`.
+#
 # For this specific example, the number of operators is larger than the number of qubits, leading to a shadow system that
-# is larger than the original system. This may or may not be a clever choice, but the point here is just to illustrate 
+# is larger than the original system. This may or may not be a clever choice, but the point here is just to illustrate
 # the conceptual difference between both approaches. The authors in [#SommaShadow]_ show various examples where
 # the resulting shadow system is significantly smaller than the original system. It should also be noted that having a smaller shadow system may not
-# always be its sole purpose, as there are conceptually new avenues one can explore with shadow Hamiltonian simulation, such
+# always be its sole purpose, as there are conceptually new avenues one can explore with shadow Hamiltonian simulation, such
 # as sampling from the distribution :math:`p_m = |\langle O_m \rangle |^2`.
 #
 # Let us first construct the initial shadow state :math:`\boldsymbol{O}(t=0)` by computing
@@ -167,7 +169,7 @@ O_t_standard
 # with :math:`|\psi(0)\rangle = |0\rangle`.
 # The ``pauli_rep`` attribute of PennyLane operators returns a :class:`~.pennylane.pauli.PauliSentence` instance and lets us efficiently
 # compute the trace, where we use the trick that :math:`|0 \rangle \langle 0| = (I + Z)/2`.
-# 
+#
 
 S_pauli = [op.pauli_rep for op in S]
 
