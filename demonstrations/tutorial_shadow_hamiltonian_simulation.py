@@ -78,7 +78,7 @@ In the paper this is called the **invariance property**.
 .. note::
 
     Take for example :math:`H = X` and :math:`S = \{Y\}`. Then :math:`[H, Y] = iZ`, so there is no linear combination of elements in :math:`S` that can decompose :math:`[H, Y]`.
-    We need to extend the list such that we have :math:`S = \{Y, Z\}`. Now all results :math:`[H, Y] = iZ` and :math:`[H, Z] = -iY` are supported by :math:`S`. This is similar
+    We need to extend the list such that we have :math:`S = \{Y, Z\}`. Now all results from commutation, :math:`[H, Y] = iZ` and :math:`[H, Z] = -iY`, are supported by :math:`S`. This is similar
     to the Lie closure that we discuss in our :doc:`intro to Lie algebras for quantum practitioners </demos/tutorial_liesim>`, but the requirements are not as strict because
     we only need support with respect to commentators with :math:`H`, and not among all elements in :math:`S`.
 
@@ -116,7 +116,8 @@ with a single, specific gate :math:`U(\theta) = e^{-i \theta H}` and parameter :
 One striking difference is that, because
 we only have one specific "gate", we do not need the full Lie closure of the operators whose expectation values we want to compute.
 Instead, here it is sufficient to choose :math:`O_m` such that they build up the full support for all :math:`[H, O_m]`.
-This is a significant difference, as the Lie closure in most cases leads to an exponentially large DLA [#Wiersema]_ [#Aguilar]_.
+This could potentially be a significant difference, as the Lie closure in most cases leads to an exponentially large DLA [#Wiersema]_ [#Aguilar]_,
+though the scaling of the span of all :math:`[H, O_m]` is unclear at this point.
 
 A simple example
 ----------------
