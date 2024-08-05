@@ -24,7 +24,6 @@ example.
 The task at hand is to optimize two rotation gates in order to flip a single
 qubit from state :math:`\left|0\right\rangle` to state :math:`\left|1\right\rangle`.
 
-A
 
 The quantum circuit
 -------------------

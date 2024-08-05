@@ -119,8 +119,6 @@ To this end we can make use of the following identity which relates the two matr
 where :math:`J_{kl} = \frac{\partial f_k}{\partial \phi_l}` is the Jacobian of :math:`\boldsymbol{f}`.
 
 We now turn to the actual implementation of the scheme.
-
-A
 """
 import pennylane as qml
 from pennylane import numpy as np
