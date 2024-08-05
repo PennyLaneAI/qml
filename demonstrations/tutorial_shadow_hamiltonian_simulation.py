@@ -1,6 +1,10 @@
 r"""Shadow Hamiltonian Simulation
 =================================
 
+.. figure:: ../_static/demonstration_assets/shadow_hamiltonian_simulation/shadow_hamiltonian_simulation_opengraph.png
+    :align: center
+    :width: 75%
+
 Introduction
 ------------
 
