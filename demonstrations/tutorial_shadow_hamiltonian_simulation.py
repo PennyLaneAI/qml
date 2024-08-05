@@ -19,9 +19,10 @@ and evolve that state accordingly. Specifically for time evolution, we can write
 dynamics of the shadow state.
 
 This is fundamentally different to the common approach. Foremost, the dimensionality of the 
-shadow system no longer depends on the number of constituents, :math:`n`, of the system. In fact, the underlying state can be mixed or even infinite-dimensional.
-Instead, the shadow system's size is dependent on the number of observables :math:`M` that we are interested in and require
-(there are conditions of completeness for the shadow encoding to succeed, called invariance property in the original paper).
+shadow system no longer depends on the number of constituents, :math:`n`, of the system.
+In fact, the underlying state can be mixed or even infinite-dimensional.
+Instead, the shadow system's size is dependent on the number of observables :math:`M` that we want to measure 
+(note that there are conditions of completeness on the observables for the shadow encoding to succeed, called invariance property in [#Somma]_).
 Further, since the
 expectation values are encoded in the amplitudes of states, we cannot directly measure them anymore, but need to resort to some 
 form of state tomography.
