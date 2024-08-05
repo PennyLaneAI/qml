@@ -14,19 +14,19 @@ In quantum simulation, the goal is typically to simulate the time evolution of e
 of :math:`M` observables :math:`O_m,` for :math:`m=1,\ldots ,M,`.
 The common approach is to evolve the wave function :math:`|\psi\rangle` and then measure the desired observables after the evolution.
 
-In shadow Hamiltonian simulation, we instead directly encode the expectation values in a proxy state—the **shadow state**—
+In shadow Hamiltonian simulation, we instead directly encode the expectation values in a proxy state — the **shadow state** — 
 and evolve that state accordingly. Specifically for time evolution, we can write a shadow Schrödinger equation that governs the
 dynamics of the shadow state.
 
-This is fundamentally different to the common approach. The dimensionality of the 
-shadow system no longer depends on the number of constituents :math:`n` of the system. Instead,
-it is dependent on the number of observables :math:`M` that we are interested in and require, 
-as there are conditions of completeness for the shadow encoding to succeed (called invariance property in the original paper).
+This is fundamentally different to the common approach. Foremost, the dimensionality of the 
+shadow system no longer depends on the number of constituents :math:`n` of the system. In fact, in principle the underlying state can be infinite dimensional.
+Instead, the shadow system's size is dependent on the number of observables :math:`M` that we are interested in and require
+(there are conditions of completeness for the shadow encoding to succeed, called invariance property in the original paper).
 Further, since the
 expectation values are encoded in the amplitudes of states, we cannot directly measure them anymore, but need to resort to some 
 form of state tomography.
 On the other hand, this gives us entirely new possibilities by letting us sample from the probability distribution
-:math:`p_m = |\langle O_m \rangle|^2` and measure the absolute value of all observables simultaneously.
+:math:`p_m = |\langle O_m \rangle|^2` and measure the absolute value of all observables simultaneously in the standard Z basis.
 
 In this demo, we are going to introduce the basic concepts of shadow Hamiltonian simulation alongside some easy-to-follow code snippets.
 We will also see later how shadow Hamiltonian simulation comes down to :doc:`g-sim </demos/tutorial_liesim>`, 
