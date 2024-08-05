@@ -67,7 +67,8 @@ from which we can read off the matrix elements of :math:`H_S`, i.e.,
 
 .. math:: (H_S)_{m m'} = -\frac{\text{tr}\left( O_{m'} [H, O_m] \right)}{|| O_{m'} ||^2}.
 
-From this we can readily see that the operators :math:`O_m` need to be chosen such that they support :math:`[H, O_m]`.
+From this we can readily see that the operators :math:`O_m` need to be chosen such that
+they support :math:`[H, O_m]`. In the paper this is called the invariance property.
 
 How this relates to g-sim
 -------------------------
