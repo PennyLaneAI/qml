@@ -1,15 +1,15 @@
 r"""How to implement VQD with PennyLane
 ===============================================================
 
-Finding eigenvalues of an operator is a key task in quantum computing. Algorithms like VQE are used to find the smallest
-one, but sometimes we are interested in other eigenvalues. This how-to shows you how to implement  Variational
-Quantum Deflation (VQD) in PennyLane
-and find the first excited state energy of the hydrogen molecule. To benefit the most from this tutorial, we recommend
-a familiarization with the `Variational Quantum Eigensolver (VQE) <https://pennylane.ai/qml/demos/tutorial_vqe/>`_ tutorial.
+Finding eigenvalues of an operator is a key task in quantum computing. Algorithms like the variational quantum eigensolver (VQE) are used to find the smallest
+one, but sometimes we are interested in other eigenvalues. Here we will show you how to implement the variational
+quantum deflation (VQD) algorithm in PennyLane
+and find the first excited state energy of the `hydrogen molecule <https://pennylane.ai/datasets/qchem/h2-molecule>`__. To benefit the most from this tutorial, we recommend
+a familiarization with the `variational quantum eigensolver (VQE) algorithm<https://pennylane.ai/qml/demos/tutorial_vqe/>`_ first.
 
 .. figure:: ../_static/demonstration_assets/vqe_vqd/how_to_vqd_pennylane_opengraph.png
     :align: center
-    :width: 50%
+    :width: 70%
     :target: javascript:void(0)
 
 """
@@ -19,33 +19,31 @@ a familiarization with the `Variational Quantum Eigensolver (VQE) <https://penny
 # Variational quantum deflation
 # ------------------------------
 #
-# VQD algorithm [#Vqd]_ is a method used to find excited states of a quantum system.
-# The VQD algorithm is related on the VQE algorithm, which finds the ground state energy of a quantum system.
-# The main idea in VQE is to define an ansatz that depends on adjustable parameters :math:`\theta` and minimizes the energy computed as:
+# The VQD algorithm [#Vqd]_ is a method used to find the excited states of a quantum system.
+# It is related to the VQE algorithm, which is often used to find the ground state energy of a quantum system.
+# The main idea of the VQE algorithm is to define a quantum state ansatz that depends on adjustable parameters :math:`\theta` and minimizes the energy of the system, computed as:
 #
 # .. math:: C_0(\theta) = \left\langle\Psi (\theta)|\hat H |\Psi (\theta) \right\rangle,
 #
-# where :math:`\Psi(\theta)` is the ansatz. However, this is not enough if we are not looking for the ground state energy.
+# where :math:`\Psi(\theta)` is the ansatz. However, this is not enough if we are interested in states other than the ground state.
 # We must find a function whose minimum is no longer the ground state energy but gives the next excited state.
-# This is possible just by adding a penalty term to the above function that accounts for the orthogonality of the states:
+# This is possible by just adding a penalty term to the above function, which accounts for the orthogonality of the states:
 #
 # .. math:: C_1(\theta) = \left\langle\Psi(\theta)|\hat H |\Psi (\theta) \right\rangle + \beta | \left\langle \Psi (\theta)| \Psi_0 \right\rangle|^2,
 #
 # where :math:`\beta` is a hyperparameter that controls the penalty term and :math:`| \Psi_0 \rangle` is the ground state.
-# The function can be minimized to give the energy but we are now restricting the new state to be orthogonal to the ground state.
-#
 # Note that the :math:`\beta` should be larger than the energy gap between the ground and excited states.
+# This function can be minimized to give the energy, but for now we are restricting the new state to be orthogonal to the ground state.
 # Similarly, we could iteratively calculate the :math:`k`-th excited states by adding the corresponding penalty term to the previous :math:`k - 1` excitation states.
 #
-# As easy as that! Let's see how we can run this using PennyLane
+# As easy as that! Let's see how we can run this using PennyLane.
 #
 #
 # Finding the ground state
 # -------------------------------------------
 #
-# To implement VQD, with first need to know the ground state of our system. The `datasets` package of PennyLane makes it a breeze to find the Hamiltonian and the ground state
-# of several molecules including hydrogen.
-# We use this dataset to obtain the ground state directly:
+# To implement the VQD algorithm, we first need to know the ground state of our system, and it is a breeze to use the data from `PennyLane datasets <https://pennylane.ai/datasets/>`__  to obtain the Hamiltonian and the ground state
+# of the hydrogen molecule:
 #
 
 import pennylane as qml
@@ -88,7 +86,7 @@ print(f"Ground state energy: {circuit()}")
 #
 # To obtain the excited state we must define our ansatz that generates the state :math:`|\Psi(\theta)\rangle`.
 #
-# We use an ansatz constructed with Givens rotation described in `this tutorial <https://pennylane.ai/qml/demos/tutorial_givens_rotations/>`_. Let's define the circuit for finding the excited state.
+# We use an ansatz constructed with :doc:`Givens rotations <tutorial_givens_rotations>`, and we define the circuit for finding the excited state.
 #
 
 from functools import partial
@@ -128,7 +126,6 @@ print(f"\nOverlap between the ground state and the ansatz: {swap_test(theta)}")
 
 ######################################################################
 # The ``swap_test`` function returns the overlap between the generated state and the ground state.
-# In this demo we will not go deeper into this technique but we encourage the reader to explore it further.
 #
 # With this we have all the ingredients to define the loss function that we want to minimize:
 #
