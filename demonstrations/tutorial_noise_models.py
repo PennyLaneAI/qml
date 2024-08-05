@@ -120,8 +120,8 @@ def noise1(op, **kwargs):
     qml.ThermalRelaxationError(0.1, kwargs["t1"], kwargs["t2"], kwargs["tg"], op.wires)
 
 ######################################################################
-# The next pair we construct is to add a sandwiching constant-valued
-# rotation errors for Hadamard gates on the wires :math:`\in \{1, 2\}`:
+# The next pair we construct is to add a sandwiching constant-valued rotation
+# errors for :class:`~.pennylane.Hadamard` gates on the wires :math:`\in \{1, 2\}`:
 #
 
 fcond2 = qml.noise.op_eq("Hadamard") & qml.noise.wires_in([1, 2])
@@ -132,15 +132,16 @@ def noise2(op, **kwargs):
     qml.RY(np.pi / 8, op.wires)
 
 ######################################################################
-# Another pair for adding a depolarization error for every :math:`T`
-# and :math:`R_{\phi}` gates on the wires :math:`\in \{1, 2\}`:
+# Another pair for adding a depolarization error for every :class:`~.pennylane.T`
+# and :class:`~.pennylane.PhaseShift` gates on the wires :math:`\in \{1, 2\}`:
 #
 
 fcond3 = qml.noise.op_in([qml.T, qml.PhaseShift]) & qml.noise.wires_in([1, 2])
 noise3 = qml.noise.partial_wires(qml.DepolarizingChannel, 0.01)
 
 ######################################################################
-# And one last pair for a two-qubit depolarization errors for every :math:`CNOT` gate:
+# And one last pair for a two-qubit depolarization errors for every
+# :class:`~.pennylane.CNOT` gate:
 #
 
 import numpy as np
@@ -159,9 +160,8 @@ def noise4(op, **kwargs):
     )] # Kraus matrices for two-qubit depolarization errors
     qml.QubitChannel(kraus_ops, op.wires)
 
-
 ######################################################################
-# Finally, we build the noise model with some required metadata:
+# Finally, we build the noise model with some required ``metadata``:
 #
 
 metadata = dict(t1=0.02, t2=0.03, tg=0.001, p=0.01)  # times unit: sec
@@ -174,19 +174,19 @@ print(noise_model)
 # Adding noise models to your workflow
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# Now that we have built our noise model, we can learn how to use it. A noise
-# model can be applied to a circuit or device via the :func:`~pennylane.add_noise`
-# transform. For example, consider the following SWAP test circuit that compares
-# two single-qubit states prepared based on parameters:
+# Now that we have built our noise model, we can learn how to use it.
+# A noise model can be applied to a circuit or device via the
+# :func:`~pennylane.add_noise` transform. For example, consider
+# the following `swap test <https://en.wikipedia.org/wiki/Swap_test>`__
+# circuit that compares two single-qubit states prepared based on parameters:
 #
 
 from matplotlib import pyplot as plt
 
 qml.drawer.use_style("pennylane")
 dev = qml.device("default.mixed", wires=3)
-# gives a single-qubit statevector based on a parameter `param`
+# gives a single-qubit statevector based on a parameter "param"
 state = lambda param: np.array([np.cos(-param / 2), 1j * np.sin(-param / 2)])
-
 
 def swap_test(theta, phi):
     # State preparation
