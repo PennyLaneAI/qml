@@ -110,7 +110,6 @@ For further details on the concept of the adjoint representation, see our
 In g-sim, we also evolve expectation vectors :math:`(\vec{g})_i = \langle g_i \rangle`.
 In particular, the circuit of evolving a state according to :math:`U(\theta)` and computing expectation values 
 :math:`\langle g_i \rangle` then corresponds to evolving :math:`\vec{g}` by :math:`\prod_\ell \exp(-i \theta_\ell \text{ad}_{g_\ell})`.
-See :doc:`our demo on g-sim </demos/tutorial_liesim>` for further details.
 
 Shadow Hamiltonian simulation can thus be viewed as g-sim
 with a single, specific gate :math:`U(\theta) = e^{-i \theta H}` and parameter :math:`\theta = t`, and run on a quantum computer.
