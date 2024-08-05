@@ -29,8 +29,8 @@ r"""How to use noise models in PennyLane
 
 ######################################################################
 # In the upcoming sections, we will first cover the underlying components of
-# noise models, and the learn how to use them to construct a typical noise
-# model. Finally, we will use that noise model to perform noisy simulations.
+# noise models and learn how to use them to construct one. Finally, we will use
+# that noise model to perform noisy simulations.
 #
 
 ######################################################################
@@ -51,7 +51,7 @@ r"""How to use noise models in PennyLane
 #    :func:`~.pennylane.noise.wires_eq` and :func:`~.pennylane.noise.wires_in`.
 # 3. **Arbitrary conditionals:** Custom conditionals can be defined as a function wrapped
 #    with a :class:`~.pennylane.BooleanFn` decorator. Signature for such conditionals must
-#    be ``cond_fn(operation) -> bool``.
+#    be ``cond_fn(operation: Operation) -> bool``.
 #
 # For example, here's how we would define a conditional that checks for :math:`R_X(\phi)`
 # gate operations with :math:`\phi < 1.0` and wires :math:`\in\ \{0, a\}`:
@@ -72,12 +72,11 @@ for op in [qml.RX(0.05, wires=0), qml.RX(2.37, wires="a")]:
 # Callables
 # ~~~~~~~~~
 #
-# Callables that apply noise operations are referred to as noise functions, whose definition
-# contains the error operations to be inserted but has no return statements. If a gate
-# operation satisfied a given conditional, the corresponding noise function is evaluated and
-# its operations are inserted to the circuit. Each noise function, will have the signature
-# ``fn(op, **metadata)``, allowing for dependency on both the evaluated operation and
-# specified metadata. We support the following constructions of noise functions:
+# Callables that apply noise operations are referred to as noise functions and have the
+# signature ``fn(op, **metadata) -> None``, allowing for dependency on both the evaluated
+# operation and specified metadata. Their definition has no return statement and contains
+# the error operations that are inserted when a gate operation in the circuit satisfies
+# the corresponding conditional. We support the following construction of noise functions:
 #
 # 1. **Single-instruction noise functions:** For adding a single-instruction noise, one can
 #    use :func:`~pennylane.noise.partial_wires`, which builds a partially evaluated function
@@ -105,15 +104,14 @@ print(f"Error for {op}: {q.queue[0]}")
 # Noise Models
 # ~~~~~~~~~~~~
 #
-# We can now create a PennyLane :class:`~.pennylane.NoiseModel` by
-# stitching together multiple condition-callable pairs that inserts
-# noise operations into the circuit if the given condition is satisfied.
-#
-# We will construct a noise model for performing a noisy SWAP test for
-# the two single-qubit states. So, the first pair we construct is to
-# mimick the thermal relaxation errors encountered during the state
-# preparation based on ``metadata`` containing the dephasing and
-# relaxation times for the qubits and the gate time of the operation:
+# We can now create a PennyLane :class:`~.pennylane.NoiseModel` by stitching together
+# multiple condition-callable pairs that inserts noise operations into the circuit if
+# the given condition is satisfied. We will construct a noise model for performing a
+# noisy `swap test <https://en.wikipedia.org/wiki/Swap_test>`__ for the two single-qubit
+# states. For this purpose, the first pair we construct is to mimick the thermal
+# relaxation errors encountered during the state preparation based on ``metadata``
+# containing the dephasing and relaxation times for the qubits and the gate time of
+# the operation:
 #
 
 fcond1 = qml.noise.op_eq(qml.StatePrep)
@@ -146,21 +144,20 @@ noise3 = qml.noise.partial_wires(qml.DepolarizingChannel, 0.01)
 #
 
 import numpy as np
-import itertools as it
-import functools as ft
+from functools import reduce
+from itertools import product
 
 fcond4 = qml.noise.op_eq("CNOT")
 
-pauli_mats = list(
-    ft.reduce(np.kron, prod, 1.0)
-    for prod in it.product(map(qml.matrix, [qml.I(0), qml.X(0), qml.Y(0), qml.Z(0)]), repeat=2)
-)
+pauli_mats = map(qml.matrix, [qml.I(0), qml.X(0), qml.Y(0), qml.Z(0)])
+kraus_mats = list(reduce(np.kron, prod, 1.0) for prod in product(pauli_mats, repeat=2))
 def noise4(op, **kwargs):
-    kraus_mats = [
+    kraus_ops = [
         np.sqrt(prob) * kraus_op
-        for prob, kraus_op in zip(np.array([1 - kwargs["p"]] + [kwargs["p"] / 15] * 15), pauli_mats)
-    ] # Kraus matrices for two-qubit depolarization errors
-    qml.QubitChannel(kraus_mats, op.wires)
+        for prob, kraus_op in zip(
+            np.array([1 - kwargs["p"]] + [kwargs["p"] / 15] * 15), kraus_mats
+    )] # Kraus matrices for two-qubit depolarization errors
+    qml.QubitChannel(kraus_ops, op.wires)
 
 
 ######################################################################
@@ -192,12 +189,12 @@ state = lambda param: np.array([np.cos(-param / 2), 1j * np.sin(-param / 2)])
 
 
 def swap_test(theta, phi):
-    # State Preparation
+    # State preparation
     qml.StatePrep(state(theta), wires=[1])
     qml.StatePrep(state(phi), wires=[2])
     qml.Barrier([0, 1, 2])
 
-    # With Decomposed Fredkin Gate
+    # Swap test with decomposed Fredkin gate
     qml.Hadamard(0)
     qml.CNOT([1, 2])
     qml.Hadamard(1)
@@ -250,11 +247,11 @@ print(f"Ideal v/s Noisy: {ideal_circ_res} and {noisy_circ_res}")
 print(f"Noisy Circuit v/s Noisy Device: {noisy_circ_res} and {noisy_qdev_res}")
 
 ######################################################################
-# Since, both the parameters are equal, the ideal result for the SWAP test should
-# be :math:`\approx 1.0`. We see that it is no longer the case for the result
-# obtained from the noisy circuit. Moreover, by looking at the closeness of
-# the two noisy results we can confirm the equivalence of the two ways the
-# noise models could be added for noisy simulations.
+# Since, both the parameters are equal, the ideal result for the SWAP test
+# should be :math:`\approx 1.0`. We see that this is not the case for the
+# result obtained from the noisy circuit. Moreover, by looking at the
+# closeness of the two noisy results we can confirm the equivalence of the
+# two ways the noise models could be added for noisy simulations.
 #
 
 
