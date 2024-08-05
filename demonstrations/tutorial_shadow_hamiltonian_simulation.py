@@ -74,7 +74,7 @@ How this relates to g-sim
 -------------------------
 
 In :doc:`g-sim </demos/tutorial_liesim>`
-[#Somma]_ [#Somma2]_ [#Galitski]_ [#Goh]_, we have operators :math:`\{ g_i \}` that are potential generators or observables for a parametrized quantum circuit,
+[#Somma]_ [#Somma2]_ [#Galitski]_ [#Goh]_, we have operators :math:`\{ g_i \}` that are generators or observables for a parametrized quantum circuit,
 e.g. :math:`U(\theta) = \prod_\ell \exp(-i \theta_\ell g_\ell)`.
 For that, we are looking at the so-called dynamical Lie algebra (DLA)
 :math:`\mathfrak{g} = \langle \{ g_i \} \rangle_\text{Lie} = \{ g_1, .., g_{|\mathfrak{g}|} \}` of the circuit as well as
@@ -230,10 +230,10 @@ def shadow_evolve(H_S_qubit, O_0, t):
     qml.evolve(H_S_qubit, t)
     return qml.state()
 
-O_t_quantum = shadow_evolve(H_S_qubit, O_0, t) * A
+O_t_shadow = shadow_evolve(H_S_qubit, O_0, t) * A
 
 print(O_t_standard)
-print(O_t_quantum)
+print(O_t_shadow)
 
 ##############################################################################
 # We see that the results of both approaches match.
