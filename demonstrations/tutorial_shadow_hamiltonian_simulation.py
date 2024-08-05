@@ -79,12 +79,20 @@ How this relates to g-sim
 
 In :doc:`g-sim </demos/tutorial_liesim>`
 [#Somma]_ [#Somma2]_ [#Galitski]_ [#Goh]_, we have operators :math:`\{ g_i \}` that are generators or observables for a parametrized quantum circuit,
-e.g. :math:`U(\theta) = \prod_\ell \exp(-i \theta_\ell g_\ell)`.
+e.g. :math:`U(\theta) = \prod_\ell \exp(-i \theta_\ell g_\ell)` and :math:`\langle g_i \rangle`.
 For that, we are looking at the so-called dynamical Lie algebra (DLA)
 :math:`\mathfrak{g} = \langle \{ g_i \} \rangle_\text{Lie} = \{ g_1, .., g_{|\mathfrak{g}|} \}` of the circuit as well as
 the adjoint representation
 :math:`(-i \text{ad}_{g_\gamma})_{\alpha \beta} = f^\gamma_{\alpha \beta}`, where :math:`f^\gamma_{\alpha \beta}` are the 
 :func:`~pennylane.structure_constants` of the DLA.
+They are computed via
+
+.. math:: f^\gamma_{\alpha \beta} = \frac{\text{tr}\left(g_\gamma [g_\alpha, g_\beta] \right)}{||g_\gamma||^2}.
+
+We see how :math:`H_S` corresponds to the adjoint representation :math:`\text{ad}_H`.
+For further details on the concept of the adjoint representation, see our
+:doc:`demo on g-sim </demos/tutorial_liesim>` that makes extensive use of it.
+
 In g-sim, we also evolve expectation vectors :math:`(\vec{g})_i = \langle g_i \rangle`.
 In particular, the circuit of evolving a state according to :math:`U(\theta)` and computing expectation values 
 :math:`\langle g_i \rangle` then corresponds to evolving :math:`\vec{g}` by :math:`\prod_\ell \exp(-i \theta_\ell \text{ad}_{g_\ell})`.
@@ -92,11 +100,6 @@ See :doc:`our demo on g-sim </demos/tutorial_liesim>` for further details.
 
 Shadow Hamiltonian simulation can thus be viewed as g-sim
 with a single, specific gate :math:`U(\theta) = e^{-i \theta H}` and parameter :math:`\theta = t`, and run on a quantum computer.
-
-In particular, :math:`H_S` corresponds to the adjoint representation :math:`\text{ad}_H` of the 
-:doc:`dynamical Lie algebra </demos/tutorial_liealgebra>`
-:math:`\langle \{ H \} \cup S \rangle_\text{Lie}`. We explain the concept of the adjoint representation in our
-:doc:`demo on g-sim </demos/tutorial_liesim>` that makes extensive use of it.
 
 One striking difference is that, because
 we only have one specific "gate", we do not need the full Lie closure of the operators whose expectation values we want to compute.
