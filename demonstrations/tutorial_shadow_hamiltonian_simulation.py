@@ -184,8 +184,8 @@ for m, Om in enumerate(S_pauli):
 O_0
 
 ##############################################################################
-# There are a variety of methods to encode this vector in a qubit basis. We will later just use
-# :class:`~.pennylane.StatePrep`.
+# There are a variety of methods to encode this vector in a qubit basis, but we will just be using
+# :class:`~.pennylane.StatePrep` later.
 #
 # We now go on to construct the shadow Hamiltonian :math:`H_S` by computing the elements
 # :math:`(H_S)_{m m'} = \frac{\text{tr}\left( O_{m'} [H, O_m] \right)}{|| O_{m'} ||^2}`, and
@@ -284,7 +284,7 @@ print(O_t_shadow)
 # We have seen how classical Hamiltonian simulation is tightly connected to g-sim, but run on a quantum computer.
 # A significant difference comes from the fact that the authors in [#SommaShadow]_ specifically look at Hamiltonian simulation, :math:`\exp(-i t H)`,
 # which allows us to just look at the support of :math:`[H, O_m]`, instead of the full Lie closure.
-# This usually makes a tremendous difference as the Lie closure in most cases leads to an exponential amount of operators [#Wiersema]_ [#Aguilar]_.
+# This usually makes a tremendous difference, as the Lie closure leads to an exponential amount of operators, in most cases [#Wiersema]_ [#Aguilar]_.
 #
 
 
