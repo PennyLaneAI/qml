@@ -92,8 +92,19 @@
             "doi": "10.48550/arXiv.2408.00081",
             "url": "https://arxiv.org/abs/2408.00081"
         }
+        ,
+        {
+            "id": "SommaShadow",
+            "type": "preprint",
+            "title": "Shadow Hamiltonian Simulation",
+            "authors": "olando D. Somma, Robbie King, Robin Kothari, Thomas O'Brien, Ryan Babbush",
+            "year": "2024",
+            "publisher": "",
+            "journal": "",
+            "url": "https://arxiv.org/abs/2407.21775"
+        }
     ],
-    "basedOnPapers": ["10.48550/arXiv.2308.01432"],
+    "basedOnPapers": ["arxi:2407.21775"],
     "referencedByPapers": [],
     "relatedContent": [
         {
