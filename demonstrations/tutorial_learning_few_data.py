@@ -6,7 +6,7 @@ Generalization in QML from few training data
 
 .. meta::
     :property="og:description": Generalization of quantum machine learning models.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//few_data_thumbnail.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/few_data_thumbnail.png
 
 .. related::
 

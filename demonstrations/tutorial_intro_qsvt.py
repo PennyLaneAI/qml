@@ -3,7 +3,7 @@ r"""Intro to QSVT
 
 .. meta::
     :property="og:description": Introduction to the Quantum Singular Value Transformation algorithm
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_intro_qsvt.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/thumbnail_intro_qsvt.png
 
 .. related::
 

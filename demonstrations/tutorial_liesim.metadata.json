@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2024-06-07T00:00:00+00:00",
-    "dateOfLastModification": "2024-06-18T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
     "categories": [
         "Quantum Computing",
         "Getting Started"
@@ -19,7 +19,7 @@
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_gsim.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_gsim.png"
         }
     ],
     "seoDescription": "A differentiable implementation of g-sim in PennyLane",
