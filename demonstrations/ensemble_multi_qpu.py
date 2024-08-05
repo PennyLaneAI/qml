@@ -6,7 +6,7 @@ Ensemble classification with Rigetti and Qiskit devices
     :property="og:description": We demonstrate how two QPUs can be
         combined in parallel to help solve a machine learning classification problem,
         using PyTorch and PennyLane.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//ensemble_diagram.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/ensemble_diagram.png
 
 .. related
 
@@ -16,6 +16,12 @@ Ensemble classification with Rigetti and Qiskit devices
 
 This tutorial outlines how two QPUs can be combined in parallel to help solve a machine learning
 classification problem.
+
+.. warning::
+    This demo does not work with the latest version of Qiskit or the Pennylane-Qiskit plugin.
+    It is compatible with ``qiskit==0.46`` and ``pennylane-qiskit==0.35.1``. Older versions of
+    Qiskit and the Pennylane-Qiskit plugin should not be installed in environments with an
+    existing installation of Qiskit 1.0 or above.
 
 We use the ``rigetti.qvm`` device to simulate one QPU and the ``qiskit.aer`` device to
 simulate another. Each QPU makes an independent prediction, and an ensemble model is

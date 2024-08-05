@@ -4,7 +4,7 @@ Measurement optimization
 
 .. meta::
     :property="og:description": Optimize and reduce the number of measurements required to evaluate a variational algorithm cost function.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//grouping.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/grouping.png
 
 .. related::
 

@@ -9,21 +9,22 @@
         }
     ],
     "dateOfPublication": "2024-04-26T00:00:00+00:00",
-    "dateOfLastModification": "2024-04-26T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning",
         "Optimization",
-        "Quantum Chemistry"
+        "Quantum Chemistry",
+        "How-to"
     ],
     "tags": ["how to"],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_how-to-vqe-qjit.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_how-to-vqe-qjit.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_how-to-vqe-qjit.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_how-to-vqe-qjit.png"
         }
     ],
     "seoDescription": "Learn how to find the ground state of a molecule with VQE using PennyLane, Catalyst, and just-in-time compilation.",

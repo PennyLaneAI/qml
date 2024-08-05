@@ -4,14 +4,12 @@ Quantum detection of time series anomalies
 
 .. meta::
     :property="og:description": Learn how to quantumly detect anomalous behaviour in time series data with the help of Covalent.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_univariate_qvr.jpg
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/thumbnail_tutorial_univariate_qvr.jpg
 
 .. related::
    tutorial_qaoa_intro Intro to QAOA
 
-
 *Authors: Jack Stephen Baker, Santosh Kumar Radha — Posted: 7 February 2023.*
-
 
 Systems producing observable characteristics which evolve with time are 
 almost everywhere we look. The temperature changes as day turns to night, 
