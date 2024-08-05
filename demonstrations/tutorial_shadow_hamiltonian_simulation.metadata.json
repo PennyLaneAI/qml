@@ -15,11 +15,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/shadow_hamiltonian_simulation/shadow_hamiltonian_simulation_thumbnail.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_shadow_hamiltonian_simulation.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/shadow_hamiltonian_simulation_large_thumbnail.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_shadow_hamiltonian_simulation.png"
         }
     ],
     "seoDescription": "Shadow Hamiltonian Simulation",

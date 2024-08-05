@@ -6,7 +6,7 @@ Grover's Algorithm
 
 .. meta::
     :property="og:description": Learn how to find an entry in a list using Grover's algorithm 
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_grovers_algorithm.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/thumbnail_tutorial_grovers_algorithm.png
 
 .. related::
 

@@ -7,7 +7,7 @@ Variational Quantum Linear Solver
 .. meta::
     :property="og:description": Implementing the variational
         quantum linear solver to solve a system of linear equation with a quantum device.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//vqls_zoom.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/vqls_zoom.png
 
 .. related::
 

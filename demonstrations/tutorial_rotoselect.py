@@ -8,7 +8,7 @@ Quantum circuit structure learning
 .. meta::
     :property="og:description": Applying the Rotoselect optimization algorithm to find the minimum in
         a variational quantum algorithm.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//rotoselect_structure.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/rotoselect_structure.png
 
 .. related::
 
