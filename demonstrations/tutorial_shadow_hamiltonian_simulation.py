@@ -29,6 +29,7 @@ On the other hand, this gives us entirely new possibilities by letting us sample
 In this demo, we are going to introduce the basic concepts of shadow Hamiltonian simulation alongside some easy-to-follow code snippets.
 We will also see later how shadow Hamiltonian simulation comes down to :doc:`g-sim </demos/tutorial_liesim>`, 
 a Lie-algebraic classical simulation tool, but run on a quantum computer with some simplifications specifically due to considering Hamiltonian simulation.
+In particular, we have weaker conditions than g-sim and don't require the full dynamical Lie algebra, which typically scales exponentially.
 
 Shadow Hamiltonian simulation
 -----------------------------
@@ -281,7 +282,11 @@ print(O_t_shadow)
 # We have seen how classical Hamiltonian simulation is tightly connected to g-sim, but run on a quantum computer.
 # A significant difference comes from the fact that the authors in [#SommaShadow]_ specifically look at Hamiltonian simulation, :math:`\exp(-i t H)`,
 # which allows us to just look at the support of :math:`[H, O_m]`, instead of the full Lie closure.
-# This usually makes a tremendous difference, as the Lie closure leads to an exponential amount of operators, in most cases [#Wiersema]_ [#Aguilar]_.
+# This can make a difference in some cases, as the Lie closure leads to an exponential amount of operators, in most cases [#Wiersema]_ [#Aguilar]_.
+#
+# Note that even in the case of an exponentially sized Lie algebra we have - at least in principle - an exponentially sized register of qubits to store the
+# :math:`M = 2^{n_S}` values. In the absolute worst case we have :math:`\mathfrak{su}(2^n)` with a dimension of 
+# :math:`2^{2n}-1`, so :math:`n_S = 2n` and thus doubling the size number of qubits.
 #
 
 
