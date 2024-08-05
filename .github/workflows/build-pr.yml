@@ -120,7 +120,7 @@ jobs:
       branch: ${{ github.ref }}
       num_workers: ${{ needs.set_build_params.outputs.num_workers }}
       enable_python_cache: false
-      enable_sphinx_cache: true
+      enable_sphinx_cache: false  # true TODO: Revert this!
       refresh_sphinx_cache: ${{ contains(github.event.pull_request.labels.*.name, 'ci:build-all-qml-demos') }}
       enable_qml_execution_times_cache: true
       skip_execution_times_aggregation: true
