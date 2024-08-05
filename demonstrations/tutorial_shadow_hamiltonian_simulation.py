@@ -72,8 +72,15 @@ from which we can read off the matrix elements of :math:`H_S`, i.e.,
 
 .. math:: (H_S)_{m m'} = -\frac{\text{tr}\left( O_{m'} [H, O_m] \right)}{|| O_{m'} ||^2}.
 
-From this we can readily see that the operators :math:`O_m` need to be chosen such that
-they support :math:`[H, O_m]`. In the paper this is called the **invariance property**.
+Now, we can see that the operators :math:`O_m` need to be chosen such that all potentially 
+new operators :math:`\mathcal{O} = [H, O_m]`, resulting from taking the commutator between :math:`H` and :math:`O_m`, are decomposable
+in terms of :math:`O_m` again. In particular, the operators :math:`O_m` need to form a basis for :math:`\{\mathcal{O} \text{ s.t. } \mathcal{O} = [H, O_m] \}`.
+In the paper this is called the **invariance property**.
+
+Take for example :math:`H = X` and :math:`S = \{Y\}`. Then :math:`[H, Y] = iZ`, so there is no linear combination of elements in :math:`S` that can decompose :math:`[H, Y]`.
+We need to extend the list such that we have :math:`S = \{Y, Z\}`. Now all results :math:`[H, Y] = iZ` and :math:`[H, Z] = -iY` are supported by :math:`S`. This is similar
+to the Lie closure that we discuss in our :doc:`intro to Lie algebras for quantum practitioners </demos/tutorial_liesim>`, but the requirements are not as strict because
+we only need support with respect to commentators with :math:`H`, and not among all elements in :math:`S`.
 
 How this relates to g-sim
 -------------------------
