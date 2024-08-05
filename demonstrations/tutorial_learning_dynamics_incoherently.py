@@ -62,9 +62,10 @@ n_qubits = 2
 
 # set random seed for reproducibility
 pnp.random.seed(7)
+np.random.seed(7)
 
 # generate random weights
-alphas = pnp.random.normal(0, 0.5, size=n_qubits)
+alphas = np.random.normal(0, 0.5, size=n_qubits)
 
 # create the Hamiltonian
 hamiltonian = qml.sum(
@@ -119,9 +120,9 @@ dev = qml.device("default.qubit")
 def target_circuit(input_state):
     # prepare training state
     qml.StatePrep(input_state, wires=range(n_qubits))
-
-    # evolve according to desired Hamiltonian
-    qml.TrotterProduct(hamiltonian, 2, 1, 1)
+    
+    # evolve the Hamiltonian for time=2 in n=1 steps with the order 1 formula
+    qml.TrotterProduct(hamiltonian, time=2, n=1, order=1)
     return qml.classical_shadow(wires=range(n_qubits))
 
 
@@ -154,7 +155,7 @@ for random_state in random_states:
 # As done in [#Jerbi]_, we create a model circuit with the same gate structure as the target
 # circuit. If the target quantum process were truly unknown, then we would choose a general
 # variational quantum circuit like in the
-# :doc:`Variational classifier demo </demos/tutorial_variational_classifier>`.
+# :doc:`variational classifiers demo </demos/tutorial_variational_classifier>`.
 #
 # .. note ::
 #
@@ -225,11 +226,15 @@ params = initial_params
 
 optimizer = qml.GradientDescentOptimizer(stepsize=5)
 steps = 50
-costs = [None] * (steps + 1)
-costs[0] = cost(initial_params)
 
+costs = [None]*(steps+1)
+params_list = [None]*(steps+1)
+
+params_list[0]=initial_params
 for i in range(steps):
-    params, costs[i + 1] = optimizer.step_and_cost(cost, params)
+    params_list[i + 1], costs[i] = optimizer.step_and_cost(cost, params_list[i])
+
+costs[-1] = cost(params_list[-1])
 
 print("Initial cost:", costs[0])
 print("Final cost:", costs[-1])
@@ -252,7 +257,7 @@ ideal_cost = cost(ideal_parameters)
 plt.plot(costs, label="Training")
 plt.plot([0, steps], [ideal_cost, ideal_cost], "r--", label="Ideal Parameters")
 plt.ylabel("Cost")
-plt.xlabel("Iterations")
+plt.xlabel("Training iterations")
 plt.legend()
 plt.show()
 
@@ -270,23 +275,31 @@ plt.show()
 #
 # The ideal cost :math:`C^l_N(\theta)` is therefore greater than 0.
 #
-# We can also look at the :func:`trace distance <pennylane.math.trace_distance>` between the unitary matrix of the 
-# target circuit and the model circuit. If the circuits are similar, we should see a low trace
-# distance value.
+# We can also look at the :func:`trace distance <pennylane.math.trace_distance>` between the unitary
+# matrix of the target circuit and the model circuit. As the circuits become more similar with each
+# training iteration, we should see the trace distance decrease and reach a low value.
 #
 
 import scipy
 
 target_matrix = qml.matrix(
-    qml.TrotterProduct(hamiltonian, 2, 1, 1)
-    @ qml.StatePrep(random_states[0], wires=range(n_qubits)),
+    qml.TrotterProduct(hamiltonian, 2, 1, 1),
     wire_order=range(n_qubits),
 )
-model_matrix = qml.matrix(model_circuit, wire_order=range(n_qubits))(params, random_states[0])
 
-trace_distance = qml.math.trace_distance(target_matrix, model_matrix)
+zero_state = [1] + [0]*(2**n_qubits-1)
 
-print(trace_distance)
+# model matrix using the all-|0> state to negate state preparation effects
+model_matrices = [qml.matrix(model_circuit, wire_order=range(n_qubits))(params, zero_state) for params in params_list]
+trace_distances = [qml.math.trace_distance(target_matrix, model_matrix) for model_matrix in model_matrices] 
+
+plt.plot(trace_distances)
+plt.ylabel("Trace distance")
+plt.xlabel("Training iterations")
+plt.show()
+
+print("The final trace distance is: \n", trace_distances[-1])
+
 
 ######################################################################
 # Using the learning dynamics incoherently dataset
@@ -361,28 +374,28 @@ plt.show()
 n_qubits = 16
 n_random_states = len(ds.training_states)
 
-params = initial_params
-
 optimizer = qml.GradientDescentOptimizer(stepsize=5)
 steps = 50
 
-cost_history = []
+costs = [None]*(steps+1)
+params_list = [None]*(steps+1)
+
+params_list[0]=initial_params
 for i in range(steps):
-    params, final_cost = optimizer.step_and_cost(cost, params)
-    cost_history.append(final_cost)
+    params_list[i + 1], costs[i] = optimizer.step_and_cost(cost, params_list[i])
+
+costs[-1] = cost(params_list[-1])
 
 print("Initial cost:", cost(initial_params))
-print("Final cost:", final_cost)
+print("Final cost:", costs[-1])
 
 ######################################################################
-#
-# For this number of qubits it becomes prohibitive to obtain the matrix and calculate the trace
-# distance. For a sanity check, we can instead take a look at the density matrices
+# As a quick check, we can take a look at the density matrices
 # to see whether the training was successful:
 #
 
 original_matrices = model_circuit(initial_params, random_states[0])
-learned_matrices = model_circuit(params, random_states[0])
+learned_matrices = model_circuit(params_list[-1], random_states[0])
 target_matrices_shadow = np.mean(shadows[0].local_snapshots(), axis=0)
 
 print("Untrained example output state\n", original_matrices[0])
@@ -392,7 +405,10 @@ print("Target output state\n", target_matrices_shadow[0])
 ######################################################################
 #
 # After training, the model outputs are closer to the target outputs, but not quite the same.
-# This can be improved by using more training states and classical shadow measurements.
+# This is due to the limitations of this learning method. Even for a simple circuit like the
+# short-time evolution of a first order single Trotter step, it requires an exponential number of
+# shadow measurements and training states to faithfully reproduce the underlying quantum process.
+# The results can be improved by using more training states and classical shadow measurements.
 #
 
 
