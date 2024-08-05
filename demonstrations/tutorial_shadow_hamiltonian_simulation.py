@@ -89,7 +89,7 @@ They are computed via
 
 .. math:: f^\gamma_{\alpha \beta} = \frac{\text{tr}\left(g_\gamma [g_\alpha, g_\beta] \right)}{||g_\gamma||^2}.
 
-We see how :math:`H_S` corresponds to the adjoint representation :math:`\text{ad}_H`.
+We see how :math:`H_S` corresponds to the adjoint representation :math:`\text{ad}_H` (but we don't require the full Lie algebra here, see below).
 For further details on the concept of the adjoint representation, see our
 :doc:`demo on g-sim </demos/tutorial_liesim>` that makes extensive use of it.
 
