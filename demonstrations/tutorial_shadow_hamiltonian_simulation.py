@@ -3,7 +3,7 @@ r"""Shadow Hamiltonian Simulation
 
 .. figure:: ../_static/demonstration_assets/shadow_hamiltonian_simulation/shadow_hamiltonian_simulation_opengraph.png
     :align: center
-    :width: 75%
+    :width: 35%
 
 Introduction
 ------------
@@ -19,7 +19,7 @@ and evolve that state accordingly. Specifically for time evolution, we can write
 dynamics of the shadow state.
 
 This is fundamentally different to the common approach. Foremost, the dimensionality of the 
-shadow system no longer depends on the number of constituents :math:`n` of the system. In fact, in principle the underlying state can be infinite dimensional.
+shadow system no longer depends on the number of constituents :math:`n` of the system. In fact, the underlying state can be mixed or even infinite dimensional.
 Instead, the shadow system's size is dependent on the number of observables :math:`M` that we are interested in and require
 (there are conditions of completeness for the shadow encoding to succeed, called invariance property in the original paper).
 Further, since the
