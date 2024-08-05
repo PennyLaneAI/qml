@@ -3,7 +3,7 @@
     <img width=60% src="https://raw.githubusercontent.com/PennyLaneAI/qml/master/_static/readme_header.png">
   </a>
 </p>
-
+-
 <p align="center">
   <a href="https://github.com/PennyLaneAI/qml/actions?query=workflow%3Abuild-master">
     <img src="https://img.shields.io/github/actions/workflow/status/PennyLaneAI/qml/build-branch-master.yml?label=master&logo=github&style=flat-square" />
