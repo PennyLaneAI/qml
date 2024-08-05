@@ -280,7 +280,7 @@ print(O_t_shadow)
 # Conclusion
 # ----------
 #
-# In this demo, we introduced the basic concepts of shadow Hamiltonian simulation and learned how it fundamentally differs from the common approach to Hamiltonian simulation.
+# We introduced the basic concepts of shadow Hamiltonian simulation and learned how it fundamentally differs from the common approach to Hamiltonian simulation.
 #
 # We have seen how classical Hamiltonian simulation is tightly connected to g-sim, but run on a quantum computer.
 # A significant difference comes from the fact that the authors in [#SommaShadow]_ specifically look at Hamiltonian simulation, :math:`\exp(-i t H)`,
