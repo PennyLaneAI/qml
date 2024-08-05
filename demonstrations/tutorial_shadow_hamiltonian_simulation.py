@@ -4,7 +4,7 @@ r"""Shadow Hamiltonian Simulation
 Shadow Hamiltonian simulation is a new approach to quantum simulation on quantum computers [#SommaShadow]_.
 Despite its name, it has little to do with :doc:`classical shadows </demos/tutorial_diffable_shadows>`.
 In quantum simulation, the goal is typically to simulate the time evolution of expectation values
-of :math:`M` observables :math:`O_m,` for :math:`m=1,\ldots ,M,`.
+of :math:`M` observables :math:`O_m,` for :math:`m=1,\ldots ,M`.
 The common approach is to evolve the wave function :math:`|\psi\rangle` and then measure the desired observables after the evolution.
 
 In shadow Hamiltonian simulation, we instead directly encode the expectation values in a proxy state — the **shadow state** — 
