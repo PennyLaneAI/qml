@@ -29,7 +29,6 @@ On the other hand, this gives us entirely new possibilities by letting us sample
 In this demo, we are going to introduce the basic concepts of shadow Hamiltonian simulation alongside some easy-to-follow code snippets.
 We will also see later how shadow Hamiltonian simulation comes down to :doc:`g-sim </demos/tutorial_liesim>`, 
 a Lie-algebraic classical simulation tool, but run on a quantum computer with some simplifications specifically due to considering Hamiltonian simulation.
-In particular, we have weaker conditions than g-sim and don't require the full dynamical Lie algebra, which typically scales exponentially [#Wiersema]_ [#Aguilar]_.
 
 Shadow Hamiltonian simulation
 -----------------------------
@@ -285,8 +284,8 @@ print(O_t_shadow)
 # We have seen how classical Hamiltonian simulation is tightly connected to g-sim, but run on a quantum computer.
 # A significant difference comes from the fact that the authors in [#SommaShadow]_ specifically look at Hamiltonian simulation, :math:`\exp(-i t H)`,
 # which allows us to just look at operators :math:`O_m` that support all commutators :math:`[H, O_m]`, instead of the full Lie closure.
-# Because the Lie closure leads to an exponential amount of operators in most cases [#Wiersema]_ [#Aguilar]_, this is first of all good news.
-# However, the scaling of such sets of operators is unclear at this point.
+# Because the Lie closure typically leads to an exponential amount of operators in most cases [#Wiersema]_ [#Aguilar]_, this sounds like good news.
+# However, the scaling of such sets of operators is unclear at this point and needs further investigation.
 #
 # Note that even in the case of an exponentially sized set of operators we have - at least in principle - an exponentially large state vector to store the
 # :math:`M \leq 2^{n_S}` values. In the absolute worst case we have :math:`\mathfrak{su}(2^n)` with a dimension of 
@@ -305,18 +304,6 @@ print(O_t_shadow)
 #     Rolando D. Somma, Robbie King, Robin Kothari, Thomas O'Brien, Ryan Babbush
 #     "Shadow Hamiltonian Simulation"
 #     `arXiv:2407.21775 <https://arxiv.org/abs/2407.21775>`__, 2024.
-#
-# .. [#Wiersema]
-#
-#     Roeland Wiersema, Efekan Kökcü, Alexander F. Kemper, Bojko N. Bakalov
-#     "Classification of dynamical Lie algebras for translation-invariant 2-local spin systems in one dimension"
-#     `arXiv:2309.05690 <https://arxiv.org/abs/2309.05690>`__, 2023.
-#
-# .. [#Aguilar]
-#
-#     Gerard Aguilar, Simon Cichy, Jens Eisert, Lennart Bittel
-#     "Full classification of Pauli Lie algebras"
-#     `arXiv:2408.00081 <https://arxiv.org/abs/2408.00081>`__, 2024.
 #
 # .. [#Somma]
 #
@@ -341,6 +328,18 @@ print(O_t_shadow)
 #     Matthew L. Goh, Martin Larocca, Lukasz Cincio, M. Cerezo, Frédéric Sauvage
 #     "Lie-algebraic classical simulations for variational quantum computing"
 #     `arXiv:2308.01432 <https://arxiv.org/abs/2308.01432>`__, 2023.
+#
+# .. [#Wiersema]
+#
+#     Roeland Wiersema, Efekan Kökcü, Alexander F. Kemper, Bojko N. Bakalov
+#     "Classification of dynamical Lie algebras for translation-invariant 2-local spin systems in one dimension"
+#     `arXiv:2309.05690 <https://arxiv.org/abs/2309.05690>`__, 2023.
+#
+# .. [#Aguilar]
+#
+#     Gerard Aguilar, Simon Cichy, Jens Eisert, Lennart Bittel
+#     "Full classification of Pauli Lie algebras"
+#     `arXiv:2408.00081 <https://arxiv.org/abs/2408.00081>`__, 2024.
 #
 
 
