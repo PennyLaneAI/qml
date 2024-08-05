@@ -80,6 +80,17 @@
             "journal": "",
             "doi": "10.48550/arXiv.1012.2873",
             "url": "https://arxiv.org/abs/1012.2873"
+        },
+        {
+            "id": "Aguilar",
+            "type": "preprint",
+            "title": "Full classification of Pauli Lie algebras",
+            "authors": "Gerard Aguilar, Simon Cichy, Jens Eisert, Lennart Bittel",
+            "year": "2024",
+            "publisher": "",
+            "journal": "",
+            "doi": "10.48550/arXiv.2408.00081",
+            "url": "https://arxiv.org/abs/2408.00081"
         }
     ],
     "basedOnPapers": ["10.48550/arXiv.2308.01432"],

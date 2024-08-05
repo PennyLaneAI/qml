@@ -6,8 +6,8 @@ Introduction
 
 Shadow Hamiltonian simulation is a new approach to quantum simulation on quantum computers [#SommaShadow]_.
 Despite its name, it has little to do with :doc:`classical shadows </demos/tutorial_diffable_shadows>`.
-In quantum simulation, the goal is typically to simulate the expectation values of :math:`M` observables 
-:math:`O_m,` for :math:`m=1,\ldots ,M,` under some unitary evolution.
+In quantum simulation, the goal is typically to simulate the time evolution of expectation values
+of :math:`M` observables :math:`O_m,` for :math:`m=1,\ldots ,M,`.
 The common approach is to evolve the wave function :math:`|\psi\rangle` and then measure the desired observables after the evolution.
 
 In shadow Hamiltonian simulation, we instead directly encode the expectation values in a proxy state—the **shadow state**—
@@ -55,9 +55,9 @@ the operators in :math:`S = \{O_m\}`. Namely, it is implicitly defined by
 
 .. math:: [H, O_m] = - \sum_{m'=1}^M \left( H_S \right)_{m m'} O_{m'}.
 
-Let us solve for the matrix elements :math:`(H_S)_{m m'}$.  To do this, recall that a vector :math:`\boldsymbol{v}` can always be decomposed in an orthogonal basis :math:`\boldsymbol{e}_j` via
+Let us solve for the matrix elements :math:`(H_S)_{m m'}`.  To do this, recall that a vector :math:`\boldsymbol{v}` can always be decomposed in an orthogonal basis :math:`\boldsymbol{e}_j` via
 :math:`\boldsymbol{v} = \sum_j \frac{\langle \boldsymbol{e}_j, \boldsymbol{v}\rangle}{||\boldsymbol{e}_j||^2} \boldsymbol{e}_j`.
-Since the operators under consideration are elements of the vector space of Hermitian operators, we can use that to compute :math:`H_S`.
+Since the operators under consideration are elements of the vector space of Hermitian operators, we can use this to compute :math:`H_S`.
 
 In particular, with the trace inner product, this amounts to
 
@@ -68,7 +68,7 @@ from which we can read off the matrix elements of :math:`H_S`, i.e.,
 .. math:: (H_S)_{m m'} = -\frac{\text{tr}\left( O_{m'} [H, O_m] \right)}{|| O_{m'} ||^2}.
 
 From this we can readily see that the operators :math:`O_m` need to be chosen such that
-they support :math:`[H, O_m]`. In the paper this is called the invariance property.
+they support :math:`[H, O_m]`. In the paper this is called the **invariance property**.
 
 How this relates to g-sim
 -------------------------
@@ -141,7 +141,7 @@ O_t_standard
 # For this specific example, the number of operators is larger than the number of qubits, leading to a shadow system that
 # is larger than the original system. This may or may not be a clever choice, but the point here is just to illustrate 
 # the conceptual difference between both approaches. The authors in [#SommaShadow]_ show various examples where
-# the resulting shadow system is significantly smaller. It may also be noted that having a smaller shadow system may not
+# the resulting shadow system is significantly smaller than the original system. It may also be noted that having a smaller shadow system may not
 # always be its sole purpose, as there are conceptually new avenues one can explore with shadow Hamiltonian simulation such
 # as sampling from the distribution :math:`p_m = |\langle O_m \rangle |^2`.
 #
@@ -258,12 +258,12 @@ print(O_t_shadow)
 # Conclusion
 # ----------
 #
-# In this demo, we introduced the basic concepts of shadow Hamiltonian simulation and learned how this fundamentally differs from the common approach to Hamiltonian simulation.
+# In this demo, we introduced the basic concepts of shadow Hamiltonian simulation and learned how it fundamentally differs from the common approach to Hamiltonian simulation.
 #
 # We have seen how classical Hamiltonian simulation is tightly connected to g-sim, but run on a quantum computer.
 # A significant difference comes from the fact that the authors in [#SommaShadow]_ specifically look at Hamiltonian simulation :math:`\exp(-i t H)`
 # which allows us to just look at the support of :math:`[H, O_m]`, instead of the full Lie closure.
-# This is a tremendous difference as the Lie closure in most cases leads to an exponential amount of operators [#Wiersema]_ [#Aguilar]_.
+# This usually makes a tremendous difference as the Lie closure in most cases leads to an exponential amount of operators [#Wiersema]_ [#Aguilar]_.
 #
 
 
