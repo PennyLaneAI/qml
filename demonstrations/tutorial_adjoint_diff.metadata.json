@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2021-11-23T00:00:00+00:00",
-    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
     "categories": [
         "Getting Started"
     ],
@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_adjoint_differentiation.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_adjoint_differentiation.png"
         }
     ],
     "seoDescription": "Learn how to use the adjoint method to compute gradients of quantum circuits.",

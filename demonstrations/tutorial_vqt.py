@@ -4,7 +4,7 @@ Variational Quantum Thermalizer
 
 .. meta::
     :property="og:description": Using the Variational Quantum Thermalizer to prepare the thermal state of a Heisenberg model Hamiltonian.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_vqt.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/thumbnail_vqt.png
 
 .. related::
 
