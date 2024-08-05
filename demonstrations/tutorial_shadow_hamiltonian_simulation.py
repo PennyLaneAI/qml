@@ -101,9 +101,9 @@ They are computed via
 The operators in :math:`\frak{g}` can always be orthonormalized via the `Gram-Schmidt process <https://en.wikipedia.org/wiki/Gram%E2%80%93Schmidt_process>`__,
 so we can drop the denominator. Further, by means of the cyclic property of the trace, we can rewrite this expression to obtain
 
-.. math:: f^\gamma_{\alpha \beta} = - \text{tr}\left(g_\alpha [g_\gamma, g_\beta] \right).
+.. math:: f^\gamma_{\alpha \beta} = \text{tr}\left(g_\beta [g_\gamma, g_\alpha] \right).
 
-From this, we see how :math:`H_S` corresponds to the adjoint representation :math:`\text{ad}_H` (but we don't require the full Lie algebra here, see below).
+From this, we see how :math:`H_S` corresponds to the adjoint representation :math:`i \text{ad}_H` (but we don't require the full Lie algebra here, see below).
 For further details on the concept of the adjoint representation, see our
 :doc:`demo on g-sim </demos/tutorial_liesim>` that makes extensive use of it.
 
