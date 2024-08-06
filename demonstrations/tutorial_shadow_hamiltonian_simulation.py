@@ -1,7 +1,7 @@
 r"""Shadow Hamiltonian simulation
 =================================
 
-Shadow Hamiltonian simulation is a new approach to quantum simulation on quantum computers [#SommaShadow]_.
+Shadow Hamiltonian simulation is a new approach (published last week) to quantum simulation on quantum computers [#SommaShadow]_.
 Despite its name, it has little to do with :doc:`classical shadows </demos/tutorial_diffable_shadows>`.
 In quantum simulation, the goal is typically to simulate the time evolution of expectation values
 of :math:`M` observables :math:`O_m,` for :math:`m=1,\ldots ,M`.
