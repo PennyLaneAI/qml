@@ -292,8 +292,8 @@ print(O_t_shadow)
 # :math:`M \leq 2^{n_S}` values. In the absolute worst case we have :math:`\mathfrak{su}(2^n)` with a dimension of 
 # :math:`2^{2n}-1`, so :math:`n_S = 2n` and thus just doubling the number of qubits.
 #
-# The biggest potential to this new persepctive on Hamiltonian simulation most likely lies in finding interesting applications like [#Babbush]_ that naturally
-# encode the problem and allows for efficient retrieval of all the relevant information.
+# The biggest potential to this new persepctive on Hamiltonian simulation most likely lies in finding interesting applications like [#Babbush]_ or [#Barthe]_
+# that naturally encode the problem and allows for efficient retrieval of all the relevant information.
 #
 
 
@@ -350,6 +350,12 @@ print(O_t_shadow)
 #     Ryan Babbush, Dominic W. Berry, Robin Kothari, Rolando D. Somma, Nathan Wiebe
 #     "Exponential quantum speedup in simulating coupled classical oscillators"
 #     `arXiv:2303.13012 <https://arxiv.org/abs/2303.13012>`__, 2023.
+#
+# .. [#Barthe]
+#
+#     Alice Barthe, M. Cerezo, Andrew T. Sornborger, Martin Larocca, Diego García-Martín
+#     "Gate-based quantum simulation of Gaussian bosonic circuits on exponentially many modes"
+#     `arXiv:2407.06290 <https://arxiv.org/abs/2407.06290>`__, 2024.
 #
 
 
