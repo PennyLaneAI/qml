@@ -1,0 +1,4 @@
+.. bio:: Kilian Tscharke
+   :photo: ../_static/authors/kilian_tscharke.jpg
+
+   Kilian Tscharke is a researcher at Fraunhofer AISEC and PhD student at Technical University Munich (TUM). His research interests lie at the intersection of quantum computing, machine learning and IT security.
