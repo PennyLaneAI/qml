@@ -153,7 +153,6 @@ fcond4 = qml.noise.op_eq("CNOT")
 pauli_mats = map(qml.matrix, [qml.I(0), qml.X(0), qml.Y(0), qml.Z(0)])
 kraus_mats = list(reduce(np.kron, prod, 1.0) for prod in product(pauli_mats, repeat=2))
 def noise4(op, **kwargs):
-    # Building Kraus matrices for two-qubit depolarization
     probs = np.array([1 - kwargs["p"]] + [kwargs["p"] / 15] * 15).reshape(-1, 1, 1)
     qml.QubitChannel(np.sqrt(probs) * np.array(kraus_mats), op.wires)
 
@@ -220,7 +219,7 @@ plt.show()
 #
 
 noisy_circuit = qml.add_noise(swap_circuit, noise_model)
-print(qml.draw(noisy_circuit, decimals=3, max_length=75)(0.2, 0.3))
+print(qml.draw(noisy_circuit, decimals=3, max_length=80)(0.2, 0.3))
 
 ######################################################################
 # Alternatively, one can also attach the noise model instead to the device itself instead of
