@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2021-03-02T00:00:00+00:00",
-    "dateOfLastModification": "2024-07-03T00:00:00+00:00",
+    "dateOfLastModification": "2024-07-31T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
@@ -21,7 +21,9 @@
     "doi": "",
     "canonicalURL": "/qml/demos/learning2learn",
     "references": [],
-    "basedOnPapers": ["10.48550/arXiv.1907.05415"],
+    "basedOnPapers": [
+        "10.48550/arXiv.1907.05415"
+    ],
     "referencedByPapers": [],
     "relatedContent": [
         {

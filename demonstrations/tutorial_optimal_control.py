@@ -242,6 +242,7 @@ directly implement the product of the two sigmoids in the function ``sigmoid_rec
     R_k(t, (\Omega, t_0, t_1), k)=
     \Omega [1+\exp(-k (t-t_0))+\exp(-k (t_1-t))+\exp(-k(t_1-t_0))]^{-1}.
 """
+
 import jax
 from jax import numpy as jnp
 
@@ -565,6 +566,7 @@ hist = run_adam(profit, grad, params, learning_rate, num_steps)
 colors = {0: "#70CEFF", 1: "#C756B2", 2: "#FDC357"}
 dashes = {"X": [10, 0], "Y": [2, 2, 10, 2], "Z": [6, 2]}
 
+
 def plot_optimal_pulses(hist, pulse_fn, ops, T, target_name):
     _, profit_hist = list(zip(*hist))
     fig, axs = plt.subplots(2, 1, figsize=(10, 9), gridspec_kw={"hspace": 0.0}, sharex=True)
@@ -696,7 +698,7 @@ max_params = params_hist[jnp.argmax(jnp.array(profit_hist))]
 # flip the third qubit, returning a probability of one in the last entry
 # and zeros elsewhere.
 
-dev = qml.device("default.qubit.jax", wires=3)
+dev = qml.device("default.qubit", wires=3)
 
 
 @qml.qnode(dev, interface="jax")
