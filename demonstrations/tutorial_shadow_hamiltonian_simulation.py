@@ -98,7 +98,7 @@ They are computed via
 .. math:: f^\gamma_{\alpha \beta} = \frac{\text{tr}\left(g_\gamma [g_\alpha, g_\beta] \right)}{||g_\gamma||^2}.
 
 The operators in :math:`\frak{g}` can always be orthonormalized via the `Gram-Schmidt process <https://en.wikipedia.org/wiki/Gram%E2%80%93Schmidt_process>`__,
-so we can drop the denominator. Further, by means of the cyclic property of the trace, we can rewrite this expression to obtain
+in which case we can drop the denominator. Further, by means of the cyclic property of the trace, we can rewrite this expression to obtain
 
 .. math:: f^\gamma_{\alpha \beta} = \text{tr}\left(g_\beta [g_\gamma, g_\alpha] \right).
 
