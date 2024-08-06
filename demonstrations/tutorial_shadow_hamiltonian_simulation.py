@@ -293,7 +293,7 @@ print(O_t_shadow)
 # :math:`2^{2n}-1`, so :math:`n_S = 2n` and thus just doubling the number of qubits.
 #
 # The biggest potential to this new persepctive on Hamiltonian simulation most likely lies in finding interesting applications like [#Babbush]_ or [#Barthe]_
-# that naturally encode the problem and allows for efficient retrieval of all the relevant information.
+# that naturally encode the problem and allow for efficient retrieval of all the relevant information.
 #
 
 
