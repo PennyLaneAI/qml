@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2019-11-04T00:00:00+00:00",
-    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
     "categories": [
         "Optimization"
     ],
@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_variationally_quantum_linear_solver.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_variationally_quantum_linear_solver.png"
         }
     ],
     "seoDescription": "Implementing the variational quantum linear solver to solve a system of linear equation with a quantum device.",

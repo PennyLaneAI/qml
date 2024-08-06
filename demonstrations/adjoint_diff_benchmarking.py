@@ -7,7 +7,7 @@ Adjoint Differentiation
 
 .. meta::
     :property="og:description": Benchmarking file for adjoint diff demonstration.
-    :property="og:image": https://pennylane.ai/qml/_static/thumbs/code.png
+    :property="og:image": https://pennylane.ai/qml/_static/demo_thumbnails/opengraph_demo_thumbnails/code.png
 
 
 *Author: Christina Lee — Posted: 23 November 2021. Last updated: 04 July 2024.*

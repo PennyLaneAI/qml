@@ -5,7 +5,7 @@ Qubit tapering
 
 .. meta::
     :property="og:description": Learn how to taper off qubits
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//qubit_tapering.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/qubit_tapering.png
 
 .. related::
     tutorial_quantum_chemistry Building molecular Hamiltonians

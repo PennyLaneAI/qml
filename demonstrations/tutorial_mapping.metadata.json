@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2024-05-06T00:00:00+00:00",
-    "dateOfLastModification": "2024-06-19T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
     "categories": [
         "Algorithms",
         "Quantum Computing",
@@ -20,7 +20,7 @@
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_mapping_2024-06-20.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_mapping_2024-06-20.png"
         }
     ],
     "seoDescription": "Learn how to map fermionic operators to qubit operators",

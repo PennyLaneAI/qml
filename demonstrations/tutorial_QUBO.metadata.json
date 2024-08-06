@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2024-02-29T00:00:00+00:00",
-    "dateOfLastModification": "2024-02-29T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
     "categories": [
         "Optimization"
     ],
@@ -18,7 +18,7 @@
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_QuBO_2024-02-06.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_QuBO_2024-02-06.png"
         }
     ],
     "seoDescription": "Learn how to solve a QUBO problem in a quantum computer.",
