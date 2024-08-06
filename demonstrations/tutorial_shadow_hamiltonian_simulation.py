@@ -1,4 +1,4 @@
-r"""Shadow Hamiltonian Simulation
+r"""Shadow Hamiltonian simulation
 =================================
 
 Shadow Hamiltonian simulation is a new approach to quantum simulation on quantum computers [#SommaShadow]_.
@@ -13,7 +13,7 @@ dynamics of the shadow state.
 
 .. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_shadow_hamiltonian_simulation.png
     :align: center
-    :width: 35%
+    :width: 70%
 
 This is fundamentally different to the common approach. Foremost, the dimensionality of the 
 shadow system no longer depends on the number of constituents, :math:`n`, of the system.
@@ -89,8 +89,8 @@ How this relates to g-sim
 In :doc:`g-sim </demos/tutorial_liesim>`
 [#Somma]_ [#Somma2]_ [#Galitski]_ [#Goh]_, we have operators :math:`\{ g_i \}` that are generators or observables for a parametrized quantum circuit,
 e.g. :math:`U(\theta) = \prod_\ell \exp(-i \theta_\ell g_\ell)` and :math:`\langle g_i \rangle`.
-For that, we are looking at the so-called dynamical Lie algebra (DLA)
-:math:`\mathfrak{g} = \langle \{ g_i \} \rangle_\text{Lie} = \{ g_1, .., g_{|\mathfrak{g}|} \}` of the circuit as well as
+For that, we are looking at the so-called dynamical Lie algebra (DLA) of the circuit,
+:math:`\mathfrak{g} = \langle \{ g_i \} \rangle_\text{Lie} = \{ g_1, .., g_{|\mathfrak{g}|} \}`, as well as
 the adjoint representation
 :math:`(-i \text{ad}_{g_\gamma})_{\alpha \beta} = f^\gamma_{\alpha \beta}`, where :math:`f^\gamma_{\alpha \beta}` are the 
 :func:`~pennylane.structure_constants` of the DLA.
@@ -98,7 +98,7 @@ They are computed via
 
 .. math:: f^\gamma_{\alpha \beta} = \frac{\text{tr}\left(g_\gamma [g_\alpha, g_\beta] \right)}{||g_\gamma||^2}.
 
-The operators in :math:`\frak{g}` can always be orthonormalized via the `Gram-Schmidt process <https://en.wikipedia.org/wiki/Gram%E2%80%93Schmidt_process>`__,
+The operators in :math:`\frak{g}` can always be orthonormalized via the `Gram–Schmidt process <https://en.wikipedia.org/wiki/Gram%E2%80%93Schmidt_process>`__,
 in which case we can drop the denominator. Further, by means of the cyclic property of the trace, we can rewrite this expression to obtain
 
 .. math:: f^\gamma_{\alpha \beta} = \text{tr}\left(g_\beta [g_\gamma, g_\alpha] \right).
@@ -289,9 +289,9 @@ print(O_t_shadow)
 # There may be some advantage to this feat, because Lie algebras in quantum computing typically scale exponentially [#Wiersema]_ [#Aguilar]_.
 # However, the scaling of such sets of operators is unclear at this point and needs further investigation.
 #
-# Note that even in the case of an exponentially sized set of operators, we have - at least in principle - an exponentially large state vector to store the
+# Note that even in the case of an exponentially sized set of operators, we have — at least in principle — an exponentially large state vector to store the
 # :math:`M \leq 2^{n_S}` values. In the absolute worst case we have :math:`\mathfrak{su}(2^n)` with a dimension of 
-# :math:`2^{2n}-1`, so :math:`n_S = 2n` and thus just doubling the number of qubits.
+# :math:`2^{2n}-1`, so :math:`n_S = 2n` and thus it is just doubling the number of qubits.
 #
 # The biggest potential to this new persepctive on Hamiltonian simulation most likely lies in finding interesting applications like [#Babbush]_ or [#Barthe]_
 # that naturally encode the problem and allow for efficient retrieval of all the relevant information.

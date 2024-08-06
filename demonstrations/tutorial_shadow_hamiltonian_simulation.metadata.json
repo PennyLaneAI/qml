@@ -22,7 +22,7 @@
             "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_shadow_hamiltonian_simulation.png"
         }
     ],
-    "seoDescription": "A user-friendly intro to the contents of 'Shadow Hamiltonian Simulation' by Somma et al (arxiv:2407.21775)",
+    "seoDescription": "A user-friendly intro to the contents of shadow Hamiltonian simulation, a technique introduced by by Somma et al (arXiv:2407.21775), with a code implementation.",
     "doi": "",
     "canonicalURL": "/qml/demos/tutorial_shadow_hamiltonian_simulation",
     "references": [
