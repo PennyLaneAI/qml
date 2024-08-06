@@ -274,7 +274,7 @@ print(O_t_shadow)
 #
 # We should also note that we made use of the abstract quantum sub-routines :func:`~.pennylane.evolve` and :class:`~.pennylane.StatePrep`, which each warrant their
 # specific implementation. For example, :class:`~.pennylane.StatePrep` can be realized by :class:`~MottonenStatePreparation` and :func:`~.pennylane.evolve` can be realized
-# by :class:`TrotterProduct`, though that shall not be the focus of this demo.
+# by :class:`TrotterProduct`, though that is not be the focus of this demo.
 
 ##############################################################################
 # 
