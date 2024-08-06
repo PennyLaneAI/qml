@@ -27,7 +27,7 @@ On the other hand, this gives us entirely new possibilities by letting us sample
 :math:`p_m = |\langle O_m \rangle|^2` and measure the absolute value of all observables simultaneously in the standard Z basis.
 
 In this demo, we are going to introduce the basic concepts of shadow Hamiltonian simulation alongside some easy-to-follow code snippets.
-We will also see later how shadow Hamiltonian simulation comes down to :doc:`g-sim </demos/tutorial_liesim>`, 
+We will also see later how shadow Hamiltonian simulation comes down to :doc:`:math:`\mathfrak{g}`-sim </demos/tutorial_liesim>`, 
 a Lie-algebraic classical simulation tool, but run on a quantum computer with some simplifications specifically due to considering Hamiltonian simulation.
 
 Shadow Hamiltonian simulation
@@ -83,10 +83,10 @@ In the paper this is called the **invariance property**.
     to the Lie closure that we discuss in our :doc:`intro to Lie algebras for quantum practitioners </demos/tutorial_liesim>`, but the requirements are not as strict because
     we only need support with respect to commentators with :math:`H`, and not among all elements in :math:`S`.
 
-How this relates to g-sim
+How this relates to :math:`\mathfrak{g}`-sim
 -------------------------
 
-In :doc:`g-sim </demos/tutorial_liesim>`
+In :doc:`:math:`\mathfrak{g}`-sim </demos/tutorial_liesim>`
 [#Somma]_ [#Somma2]_ [#Galitski]_ [#Goh]_, we have operators :math:`\{ g_i \}` that are generators or observables for a parametrized quantum circuit,
 e.g. :math:`U(\theta) = \prod_\ell \exp(-i \theta_\ell g_\ell)` and :math:`\langle g_i \rangle`.
 For that, we are looking at the so-called dynamical Lie algebra (DLA) of the circuit,
@@ -105,13 +105,13 @@ in which case we can drop the denominator. Further, by means of the cyclic prope
 
 From this, we see how :math:`H_S` corresponds to the adjoint representation :math:`i \text{ad}_H` (but we don't require the full Lie algebra here, see below).
 For further details on the concept of the adjoint representation, see our
-:doc:`demo on g-sim </demos/tutorial_liesim>` that makes extensive use of it.
+:doc:`demo on :math:`\mathfrak{g}`-sim </demos/tutorial_liesim>` that makes extensive use of it.
 
-In g-sim, we also evolve expectation vectors :math:`(\vec{g})_i = \langle g_i \rangle`.
+In :math:`\mathfrak{g}`-sim, we also evolve expectation vectors :math:`(\vec{g})_i = \langle g_i \rangle`.
 In particular, the circuit of evolving a state according to :math:`U(\theta)` and computing expectation values 
 :math:`\langle g_i \rangle` then corresponds to evolving :math:`\vec{g}` by :math:`\prod_\ell \exp(-i \theta_\ell \text{ad}_{g_\ell})`.
 
-Shadow Hamiltonian simulation can thus be viewed as g-sim
+Shadow Hamiltonian simulation can thus be viewed as :math:`\mathfrak{g}`-sim
 with a single, specific gate :math:`U(\theta) = e^{-i \theta H}` and parameter :math:`\theta = t`, and run on a quantum computer.
 
 One striking difference is that, because
@@ -227,7 +227,7 @@ O_t = expm(-1j * t * H_S) @ O_0
 O_t
 
 ##############################################################################
-# Up to this point, this is equivalent to :doc:`g-sim </demos/tutorial_liesim>` if we were doing classical simulation.
+# Up to this point, this is equivalent to :doc:`:math:`\mathfrak{g}`-sim </demos/tutorial_liesim>` if we were doing classical simulation.
 # Now, the main novelty for shadow Hamiltonian simulation is to perform this on a quantum computer by encoding the 
 # expectation values of :math:`\langle O_m \rangle` in the amplitude of a quantum state, and to translate :math:`H_S`
 # accordingly.
@@ -283,7 +283,7 @@ print(O_t_shadow)
 #
 # We introduced the basic concepts of shadow Hamiltonian simulation and learned how it fundamentally differs from the common approach to Hamiltonian simulation.
 #
-# We have seen how classical Hamiltonian simulation is tightly connected to g-sim, but run on a quantum computer.
+# We have seen how classical Hamiltonian simulation is tightly connected to :math:`\mathfrak{g}`-sim, but run on a quantum computer.
 # A significant difference comes from the fact that the authors in [#SommaShadow]_ specifically look at Hamiltonian simulation, :math:`\exp(-i t H)`,
 # which allows us to just look at operators :math:`O_m` that support all commutators :math:`[H, O_m]`, instead of the full Lie closure.
 # There may be some advantage to this feat, because Lie algebras in quantum computing typically scale exponentially [#Wiersema]_ [#Aguilar]_.
