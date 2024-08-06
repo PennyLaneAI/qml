@@ -79,8 +79,8 @@ for op in [qml.RX(0.05, wires=0), qml.RX(2.37, wires="a")]:
 # the corresponding conditional. We support the following construction of noise functions:
 #
 # 1. **Single-instruction noise functions:** To add a single-operation noise, one can use
-#    :func:`~pennylane.noise.partial_wires`, which builds a partially evaluated function
-#    based on the given operation with all its arguments frozen except ``wires``.
+#    :func:`~pennylane.noise.partial_wires`. It performs a partial initialization of the
+#    noise operation and queues it on the ``wires`` of the gate operation.
 # 2. **User-defined noise functions:** For adding more sophesticated noise, one can define
 #    their own quantum function with the signature specified above. This way, one can also
 #    specify their own custom order for inserting the noise by queing the operation being
@@ -155,8 +155,7 @@ kraus_mats = list(reduce(np.kron, prod, 1.0) for prod in product(pauli_mats, rep
 def noise4(op, **kwargs):
     # Building Kraus matrices for two-qubit depolarization
     probs = np.array([1 - kwargs["p"]] + [kwargs["p"] / 15] * 15).reshape(-1, 1, 1)
-    kraus_ops = np.sqrt(probs) * np.array(kraus_mats)
-    qml.QubitChannel(kraus_ops, op.wires)
+    qml.QubitChannel(np.sqrt(probs) * np.array(kraus_mats), op.wires)
 
 ######################################################################
 # Finally, we build the noise model with some required ``metadata``:
@@ -221,7 +220,7 @@ plt.show()
 #
 
 noisy_circuit = qml.add_noise(swap_circuit, noise_model)
-print(qml.draw(noisy_circuit)(0.2, 0.3))
+print(qml.draw(noisy_circuit, decimals=3, max_length=75)(0.2, 0.3))
 
 ######################################################################
 # Alternatively, one can also attach the noise model instead to the device itself instead of
