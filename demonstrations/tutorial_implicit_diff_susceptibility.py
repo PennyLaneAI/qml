@@ -6,7 +6,7 @@ Implicit differentiation of variational quantum algorithms
 
 .. meta::
    :property="og:description": Implicitly differentiating the the solution of a VQA in PennyLane.
-   :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//descartes.png
+   :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/descartes.png
 
 .. related::
     tutorial_backprop Quantum gradients with backpropagation

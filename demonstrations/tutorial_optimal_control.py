@@ -4,7 +4,7 @@ Optimal control for gate compilation
 
 .. meta::
     :property="og:description": Optimize pulse programs to obtain digital gates.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_optimal_control.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/thumbnail_tutorial_optimal_control.png
 
 .. related::
 

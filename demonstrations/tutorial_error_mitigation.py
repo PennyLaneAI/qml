@@ -5,7 +5,7 @@ Error mitigation with Mitiq and PennyLane
 .. meta::
     :property="og:description": Learn how to mitigate quantum circuits using Mitiq and PennyLane.
 
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//laptop.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/laptop.png
 
 .. related::
 
