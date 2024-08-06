@@ -30,8 +30,8 @@ In this demo, we are going to introduce the basic concepts of shadow Hamiltonian
 We will also see later how shadow Hamiltonian simulation comes down to :doc:`:math:`\mathfrak{g}`-sim </demos/tutorial_liesim>`, 
 a Lie-algebraic classical simulation tool, but run on a quantum computer with some simplifications specifically due to considering Hamiltonian simulation.
 
-Shadow Hamiltonian simulation
------------------------------
+Shadow Hamiltonian simulation — Definition
+------------------------------------------
 
 In common quantum Hamiltonian simulation, we evolve a state vector :math:`|\psi(t)\rangle` according to the Schrödinger equation,
 
