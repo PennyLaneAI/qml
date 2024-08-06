@@ -22,7 +22,7 @@ r"""How to use noise models in PennyLane
 ######################################################################
 # .. figure:: ../_static/demonstration_assets/noise_models/noise_model_long.jpg
 #    :align: center
-#    :width: 90%
+#    :width: 85%
 #
 #    ..
 #
@@ -54,7 +54,7 @@ r"""How to use noise models in PennyLane
 #    be ``cond_fn(operation: Operation) -> bool``.
 #
 # For example, here's how we would define a conditional that checks for :math:`R_X(\phi)`
-# gate operations with :math:`\phi < 1.0` and wires :math:`\in\ \{0, a\}`:
+# gate operations with :math:`\phi < 1.0` and wires :math:`\in\, \{0, a\}`:
 #
 
 import pennylane as qml
@@ -78,8 +78,8 @@ for op in [qml.RX(0.05, wires=0), qml.RX(2.37, wires="a")]:
 # the error operations that are inserted when a gate operation in the circuit satisfies
 # the corresponding conditional. We support the following construction of noise functions:
 #
-# 1. **Single-instruction noise functions:** For adding a single-instruction noise, one can
-#    use :func:`~pennylane.noise.partial_wires`, which builds a partially evaluated function
+# 1. **Single-instruction noise functions:** To add a single-operation noise, one can use
+#    :func:`~pennylane.noise.partial_wires`, which builds a partially evaluated function
 #    based on the given operation with all its arguments frozen except ``wires``.
 # 2. **User-defined noise functions:** For adding more sophesticated noise, one can define
 #    their own quantum function with the signature specified above. This way, one can also
@@ -87,8 +87,8 @@ for op in [qml.RX(0.05, wires=0), qml.RX(2.37, wires="a")]:
 #    evaluated via :func:`~pennylane.apply` within the function definition.
 #
 # For example, one can use the following for inserting a thermal relaxation error based on
-# a :math:`T_1` time provided as a keyword argument (i.e., metadata) and see the error that
-# gets queued in the circuit using an example gate operation:
+# a :math:`T_1` time provided as a keyword argument and see the error that gets queued in
+# the circuit using an example gate operation:
 #
 
 def thermal_func(op, **kwargs): # Noise Function
@@ -153,11 +153,9 @@ fcond4 = qml.noise.op_eq("CNOT")
 pauli_mats = map(qml.matrix, [qml.I(0), qml.X(0), qml.Y(0), qml.Z(0)])
 kraus_mats = list(reduce(np.kron, prod, 1.0) for prod in product(pauli_mats, repeat=2))
 def noise4(op, **kwargs):
-    kraus_ops = [
-        np.sqrt(prob) * kraus_op
-        for prob, kraus_op in zip(
-            np.array([1 - kwargs["p"]] + [kwargs["p"] / 15] * 15), kraus_mats
-    )] # Kraus matrices for two-qubit depolarization errors
+    # Building Kraus matrices for two-qubit depolarization
+    probs = np.array([1 - kwargs["p"]] + [kwargs["p"] / 15] * 15).reshape(-1, 1, 1)
+    kraus_ops = np.sqrt(probs) * np.array(kraus_mats)
     qml.QubitChannel(kraus_ops, op.wires)
 
 ######################################################################
@@ -223,8 +221,7 @@ plt.show()
 #
 
 noisy_circuit = qml.add_noise(swap_circuit, noise_model)
-qml.draw_mpl(noisy_circuit)(0.2, 0.3)
-plt.show()
+print(qml.draw(noisy_circuit)(0.2, 0.3))
 
 ######################################################################
 # Alternatively, one can also attach the noise model instead to the device itself instead of
@@ -247,8 +244,8 @@ print(f"Ideal v/s Noisy: {ideal_circ_res} and {noisy_circ_res}")
 print(f"Noisy Circuit v/s Noisy Device: {noisy_circ_res} and {noisy_qdev_res}")
 
 ######################################################################
-# Since, both the parameters are equal, the ideal result for the SWAP test
-# should be :math:`\approx 1.0`. We see that this is not the case for the
+# Since, both the parameters are equal, the ideal result for the swap test
+# is :math:`\approx 1.0`. We see that this is not the case for the
 # result obtained from the noisy circuit. Moreover, by looking at the
 # closeness of the two noisy results we can confirm the equivalence of the
 # two ways the noise models could be added for noisy simulations.
@@ -261,8 +258,8 @@ print(f"Noisy Circuit v/s Noisy Device: {noisy_circ_res} and {noisy_qdev_res}")
 #
 # Noise models provide a succinct way to describe the impact of the environment on
 # quantum computation. In PennyLane, we define such models as mapping between conditionals
-# that select the target operation and their corresponding noise operations. These can be
-# constructed with utmost flexibility, as shown above.
+# that select the target operation and their corresponding noise operations. These
+# can be constructed with utmost flexibility, as shown above.
 #
 # As such models are instrumental in capturing the working of quantum hardware,
 # we will continue to improve these features in PennyLane, allowing one to
