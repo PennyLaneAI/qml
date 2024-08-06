@@ -73,7 +73,7 @@ from which we can read off the matrix elements of :math:`H_S`, i.e.,
 Now, we can see that the operators :math:`O_m` need to be chosen such that all potentially 
 new operators :math:`\mathcal{O} = [H, O_m]`, resulting from taking the commutator between :math:`H` and :math:`O_m`, are decomposable
 in terms of :math:`O_m` again. In particular, the operators :math:`O_m` need to form a basis for :math:`\{\mathcal{O} | \mathcal{O} = [H, O_m] \}`.
-Another way to say this is that :math:`\{O_m\}` need to contain all nested commutators :math:`[[[H, O_m], O_m'], .. ]`, which is similar to :func:`~pennylane.lie_closure` but weaker.
+Another way to say this is that :math:`\{O_m\}` need to contain all nested commutators :math:`[[[H, O_m], O_m'], .. ]`, which is similar to :func:`~pennylane.lie_closure` but weaker because it revolves around just :math:`H`.
 In the paper this is called the **invariance property**.
 
 .. note::
