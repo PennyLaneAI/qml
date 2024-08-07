@@ -176,6 +176,9 @@ for r in r_range:
         params, opt_state = update_step(i, params, opt_state)
         energy = circuit(params)
 
+        if jnp.abs(energy - prev_energy) < 1e-6:
+            break
+
         prev_energy = energy
 
 
@@ -337,9 +340,6 @@ for r in r_range:
     for i in range(50):
         params, opt_state = update_step(i, params, opt_state)
         energy = circuit(params)
-
-        if jnp.abs(energy - prev_energy) < 1e-6:
-            break
 
         prev_energy = energy
 
