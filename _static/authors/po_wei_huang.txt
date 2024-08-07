@@ -1,0 +1,4 @@
+.. bio:: Po-Wei Huang
+   :photo: ../_static/authors/po_wei_huang.jpeg
+
+   Po-Wei is a research assistant at CQT and a PhD student at the University of Oxford. He is interested in research on algorithms and machine learning for quantum computation. You can find more about him at georgepwhuang.github.io.
