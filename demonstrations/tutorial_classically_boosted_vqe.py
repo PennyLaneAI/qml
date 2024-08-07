@@ -104,7 +104,8 @@ Let’s get started!
 
 import pennylane as qml
 from pennylane import qchem
-from pennylane import numpy as np
+import numpy as np
+from jax import numpy as jnp
 
 symbols = ["H", "H"]
 coordinates = np.array([[0.0, 0.0, -0.6614], [0.0, 0.0, 0.6614]])
@@ -139,7 +140,9 @@ num_theta = len(singles) + len(doubles)
 
 
 def circuit_VQE(theta, wires):
-    qml.AllSinglesDoubles(weights=theta, wires=wires, hf_state=hf, singles=singles, doubles=doubles)
+    qml.AllSinglesDoubles(
+        weights=theta, wires=wires, hf_state=hf, singles=singles, doubles=doubles
+    )
 
 
 ######################################################################
@@ -147,11 +150,18 @@ def circuit_VQE(theta, wires):
 # define a circuit for the cost function.
 #
 
+import optax
+import jax
+import catalyst
+
+jax.config.update("jax_enable_x64", True)
+
 dev = qml.device("lightning.qubit", wires=qubits)
 
 
-@qml.qnode(dev, interface="autograd")
-def cost_fn(theta):
+@jax.jit
+@qml.qnode(dev, interface="jax")
+def cost(theta):
     circuit_VQE(theta, range(qubits))
     return qml.expval(H)
 
@@ -163,20 +173,35 @@ def cost_fn(theta):
 
 stepsize = 0.4
 max_iterations = 30
-opt = qml.GradientDescentOptimizer(stepsize=stepsize)
-theta = np.zeros(num_theta, requires_grad=True)
+opt = optax.sgd(learning_rate=stepsize)
+init_params = jnp.zeros(num_theta)
 
 
 ######################################################################
 # Finally, we run the algorithm.
 #
 
-for n in range(max_iterations):
-    theta, prev_energy = opt.step_and_cost(cost_fn, theta)
-    samples = cost_fn(theta)
 
-energy_VQE = cost_fn(theta)
-theta_opt = theta
+@qml.qjit
+def update_step(i, params, opt_state):
+    """Perform a single gradient update step"""
+    grads = catalyst.grad(cost)(params)
+    updates, opt_state = opt.update(grads, opt_state)
+    params = optax.apply_updates(params, updates)
+    return (params, opt_state)
+
+
+loss_history = []
+
+opt_state = opt.init(init_params)
+params = init_params
+
+for i in range(30):
+    params, opt_state = update_step(i, params, opt_state)
+    energy = cost(params)
+
+energy_VQE = cost(params)
+theta_opt = params
 
 print("VQE energy: %.4f" % (energy_VQE))
 print("Optimal parameters:", theta_opt)
@@ -418,13 +443,15 @@ wires = range(qubits + 1)
 dev = qml.device("lightning.qubit", wires=wires)
 
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev, interface="jax")
 def hadamard_test(Uq, Ucl, component="real"):
     if component == "imag":
         qml.RX(math.pi / 2, wires=wires[1:])
 
     qml.Hadamard(wires=[0])
-    qml.ControlledQubitUnitary(Uq.conjugate().T @ Ucl, control_wires=[0], wires=wires[1:])
+    qml.ControlledQubitUnitary(
+        Uq.conjugate().T @ Ucl, control_wires=[0], wires=wires[1:]
+    )
     qml.Hadamard(wires=[0])
 
     return qml.probs(wires=[0])
