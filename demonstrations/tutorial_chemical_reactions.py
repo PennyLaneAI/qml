@@ -181,7 +181,6 @@ for r in r_range:
 
         prev_energy = energy
 
-
     # store the converged parameters
     params_old = params
     pes_point = pes_point + 1
