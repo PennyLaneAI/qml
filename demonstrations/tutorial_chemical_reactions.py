@@ -336,9 +336,12 @@ for r in r_range:
     opt_state = opt.init(init_params)
     params = init_params
 
-    for i in range(50):
+    for i in range(60):
         params, opt_state = update_step(i, params, opt_state)
         energy = circuit(params)
+
+        if jnp.abs(energy - prev_energy) < 1e-6:
+            break
 
         prev_energy = energy
 
