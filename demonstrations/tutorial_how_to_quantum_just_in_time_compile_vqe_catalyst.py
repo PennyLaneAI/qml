@@ -66,14 +66,12 @@ hf = dataset.hf_state
 # Define the device, using lightning.qubit device
 dev = qml.device("lightning.qubit", wires=qubits)
 
-
 @qml.qnode(dev, diff_method="adjoint")
 def cost(params):
     qml.BasisState(hf, wires=range(qubits))
     qml.DoubleExcitation(params[0], wires=[0, 1, 2, 3])
     qml.DoubleExcitation(params[1], wires=[0, 1, 4, 5])
     return qml.expval(H)
-
 
 ######################################################################
 # Step 3: Optimize the circuit
@@ -123,7 +121,6 @@ from jax import numpy as jnp
 
 hf = jnp.array(dataset.hf_state)
 
-
 @qml.qjit
 @qml.qnode(dev)
 def cost(params):
@@ -131,7 +128,6 @@ def cost(params):
     qml.DoubleExcitation(params[0], wires=[0, 1, 2, 3])
     qml.DoubleExcitation(params[1], wires=[0, 1, 4, 5])
     return qml.expval(H)
-
 
 init_params = jnp.array([0.0, 0.0])
 
@@ -155,7 +151,6 @@ import optax
 
 opt = optax.sgd(learning_rate=0.4)
 
-
 @qml.qjit
 def update_step(i, params, opt_state):
     """Perform a single gradient update step"""
@@ -163,7 +158,6 @@ def update_step(i, params, opt_state):
     updates, opt_state = opt.update(grads, opt_state)
     params = optax.apply_updates(params, updates)
     return (params, opt_state)
-
 
 loss_history = []
 
@@ -187,13 +181,11 @@ for i in range(10):
 # leading to further performance improvements:
 #
 
-
 @qml.qjit
 def optimization(params):
     opt_state = opt.init(params)
     (params, opt_state) = qml.for_loop(0, 10, 1)(update_step)(params, opt_state)
     return params
-
 
 final_params = optimization(init_params)
 print(f"Final angle parameters: {final_params}")
