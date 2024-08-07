@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2020-08-02T00:00:00+00:00",
-    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
     "categories": [
         "Quantum Chemistry"
     ],
@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_building_molecular_Hamiltonians.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_building_molecular_Hamiltonians.png"
         }
     ],
     "seoDescription": "Learn how to build electronic Hamiltonians of molecules.",

@@ -4,7 +4,7 @@ Classically-boosted variational quantum eigensolver
 
 .. meta::
     :property="og:description": Learn how to implement classically-boosted VQE in PennyLane.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//CB_VQE.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/CB_VQE.png
 
 .. related::
 
@@ -107,15 +107,13 @@ from pennylane import qchem
 from pennylane import numpy as np
 
 symbols = ["H", "H"]
-coordinates = np.array([0.0, 0.0, -0.6614, 0.0, 0.0, 0.6614])
+coordinates = np.array([[0.0, 0.0, -0.6614], [0.0, 0.0, 0.6614]])
 basis_set = "sto-3g"
 electrons = 2
 
-H, qubits = qchem.molecular_hamiltonian(
-    symbols,
-    coordinates,
-    basis=basis_set,
-)
+molecule = qchem.Molecule(symbols, coordinates, basis_name=basis_set)
+
+H, qubits = qchem.molecular_hamiltonian(molecule)
 
 
 ######################################################################
@@ -266,14 +264,12 @@ print("Optimal parameters:", theta_opt)
 #
 
 symbols = ["H", "H"]
-coordinates = np.array([0.0, 0.0, -0.6614, 0.0, 0.0, 0.6614])
+coordinates = np.array([[0.0, 0.0, -0.6614], [0.0, 0.0, 0.6614]])
 basis_set = "sto-3g"
 
-H, qubits = qchem.molecular_hamiltonian(
-    symbols,
-    coordinates,
-    basis=basis_set,
-)
+molecule = qchem.Molecule(symbols, coordinates, basis_name=basis_set)
+
+H, qubits = qchem.molecular_hamiltonian(molecule)
 
 
 ######################################################################

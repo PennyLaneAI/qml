@@ -4,7 +4,7 @@ Using JAX with PennyLane
 
 .. meta::
     :property="og:description": Learn how to use JAX with PennyLane.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//jax.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/jax.png
 
 .. related::
 

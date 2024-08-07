@@ -5,8 +5,8 @@ Grover's Algorithm
 ==================
 
 .. meta::
-    :property="og:description": Learn how to find an entry in a list using Grover's Algorithm 
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_grovers_algorithm.png
+    :property="og:description": Learn how to find an entry in a list using Grover's algorithm 
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/thumbnail_tutorial_grovers_algorithm.png
 
 .. related::
 
@@ -15,7 +15,7 @@ Grover's Algorithm
 *Author: Ludmila Botelho. — Posted: 3 July 2023.*
 
 
-Grover's Algorithm is an `oracle <https://codebook.xanadu.ai/A.2>`__-based quantum
+`Grover's algorithm </codebook/#05-grovers-algorithm>`__ is an `oracle </codebook/04-basic-quantum-algorithms/02-the-magic-8-ball/>`__-based quantum
 algorithm, proposed by Lov Grover [#Grover1996]_. In the original description, the author approaches the
 following problem: suppose that we are searching for a specific phone number in a randomly-ordered
 catalogue containing :math:`N` entries. To find such a number with a probability of
@@ -31,12 +31,12 @@ performs :math:`O(\sqrt{N})` oracular queries to the list with a high probabilit
 answer, whereas any classical algorithm would require :math:`O(N)` queries.
 
 In this tutorial, we are going to implement a search for an n-bit string item using a quantum
-circuit based on Grover's Algorithm.
+circuit based on Grover's algorithm.
 
 The algorithm can be broken down into the following steps:
 
 1. Prepare the initial state
-2. Implement the Oracle
+2. Implement the oracle
 3. Apply the Grover diffusion operator
 4. Repeat steps 2 and 3  approximately :math:`\frac{\pi}{4}\sqrt{N}` times
 5. Measure
@@ -240,8 +240,8 @@ plt.show()
 # Finally, the combination of :math:`U_{\omega}` with :math:`U_D` rotates the state
 # :math:`\vert s \rangle` by an angle of
 # :math:`\theta =2 \arcsin{\tfrac {1}{\sqrt {N}}}`. For more geometric insights
-# about the Oracle and the diffusion operator, please refer to this `codebook
-# section <https://codebook.xanadu.ai/G.2>`__.
+# about the oracle and the diffusion operator, please refer to this `PennyLane Codebook
+# section </codebook/04-basic-quantum-algorithms/02-the-magic-8-ball/>`__.
 #
 #
 # .. figure:: ../_static/demonstration_assets/grovers_algorithm/rotation.gif
@@ -307,7 +307,7 @@ for k, result in results.items():
 #
 # which is easily implemented using :class:`~.pennylane.GroverOperator`.
 #
-# Finally, we have all the tools to build the circuit for Grover's Algorithm, as we can see in the
+# Finally, we have all the tools to build the circuit for Grover's algorithm, as we can see in the
 # code below. For simplicity, we are going to search for the states
 # :math:`\vert 0\rangle ^{\otimes n}` and :math:`\vert 1\rangle ^{\otimes n}`, where
 # :math:`n = \log_2 N` is the number of qubits.
@@ -366,10 +366,10 @@ plt.show()
 #
 # Grover's algorithm in principle can be used to speed up more sophisticated computation, for
 # instance, when used as a subroutine for problems that require extensive search
-# and is the basis of a whole family of algorithms, such as the `Amplitude
-# amplification <https://codebook.xanadu.ai/G.1>`__ technique. 
+# and is the basis of a whole family of algorithms, such as the amplitude
+# amplification technique. 
 # 
-# If you would like to learn more about Grover's Algorithm, check out `this video <https://youtu.be/KeJqcnpPluc>`__! 
+# If you would like to learn more about Grover's algorithm, check out `this video <https://www.youtube.com/watch?v=EfUfwVnicP8>`__! 
 #
 #
 

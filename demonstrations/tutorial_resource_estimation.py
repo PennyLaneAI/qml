@@ -6,7 +6,7 @@ Resource estimation for quantum chemistry
 .. meta::
     :property="og:description": Learn how to estimate the number of qubits and gates needed to
      implement quantum algorithms
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//resource_estimation.jpeg
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/resource_estimation.jpeg
 
 .. related::
     tutorial_quantum_chemistry Quantum chemistry with PennyLane
@@ -218,7 +218,8 @@ print(f'1-norm of the Hamiltonian: {algo.lamb}')
 #
 # First, we construct the molecular Hamiltonian.
 
-H = qml.qchem.molecular_hamiltonian(symbols, geometry)[0]
+molecule = qml.qchem.Molecule(symbols, geometry)
+H = qml.qchem.molecular_hamiltonian(molecule)[0]
 H_coeffs, H_ops = H.terms()
 
 ##############################################################################

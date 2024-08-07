@@ -4,7 +4,7 @@ Quantum natural SPSA optimizer
 
 .. meta::
     :property="og:description": Introduction to the Quantum natural SPSA optimizer, which reduces the number of quantum measurements in the optimization.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//qnspsa_cover.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/qnspsa_cover.png
 
 .. related::
 
@@ -31,7 +31,6 @@ problem size. This preferred scaling makes it a promising candidate for optimiza
 for noisy intermediate-scale quantum (NISQ) devices.
 
 """
-
 
 ######################################################################
 # Introduction
@@ -189,7 +188,6 @@ for noisy intermediate-scale quantum (NISQ) devices.
 
 # initialize a graph for the max cut problem
 import networkx as nx
-from matplotlib import pyplot as plt
 import pennylane as qml
 from pennylane import qaoa
 
@@ -963,7 +961,6 @@ for i in range(300):
 from braket.aws import AwsSession, AwsQuantumJob
 from braket.jobs.config import InstanceConfig
 from braket.jobs.image_uris import Framework, retrieve_image
-import boto3
 
 region_name = AwsSession().region
 image_uri = retrieve_image(Framework.BASE, region_name)

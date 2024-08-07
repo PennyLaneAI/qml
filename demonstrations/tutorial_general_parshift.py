@@ -8,7 +8,7 @@ Generalized parameter-shift rules
 .. meta::
 
     :property="og:description": Reconstruct quantum functions and compute their derivatives.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_genpar.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/thumbnail_genpar.png
 
 .. related::
 
@@ -601,8 +601,8 @@ odd_reconstructions = list(map(odd_reconstruction_equ, cost_functions, Ns))
 #   E_\text{even}(x) &= \sum_{\mu=0}^R E_\text{even}(x_\mu) \hat{D}_\mu(x)\\
 #   \hat{D}_\mu(x) &=
 #   \begin{cases}
-#      \frac{\sin(Rx)}{2R \tan(x/2)} &\text{if } \mu = 0 \\[12pt]
-#      \frac{\sin(R (x-x_\mu))}{2R \tan\left(\frac{1}{2} (x-x_\mu)\right)} + \frac{\sin(R (x+x_\mu))}{2R \tan\left(\frac{1}{2} (x+x_\mu)\right)} & \text{if } \mu \in [R-1] \\[12pt]
+#      \frac{\sin(Rx)}{2R \tan(x/2)} &\text{if } \mu = 0 \\
+#      \frac{\sin(R (x-x_\mu))}{2R \tan\left(\frac{1}{2} (x-x_\mu)\right)} + \frac{\sin(R (x+x_\mu))}{2R \tan\left(\frac{1}{2} (x+x_\mu)\right)} & \text{if } \mu \in [R-1] \\
 #      \frac{\sin(R (x-\pi))}{2R \tan\left(\frac{1}{2} (x-\pi)\right)} & \text{if } \mu = R.
 #   \end{cases}
 #
