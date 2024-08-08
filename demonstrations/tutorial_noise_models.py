@@ -102,14 +102,20 @@ print(f"Error for {op}: {depol_error(op)}")
 # We can now create a PennyLane :class:`~.pennylane.NoiseModel` by stitching together
 # multiple condition-callable pairs, where noisy noise operations are inserted into the
 # circuit when their corresponding given condition is satisfied. We will construct a
-# noise model for a generic three-qubit quantum circuit. The first condition-callable
-# pair we construct will mimic thermal relaxation errors that are encountered during
-# state preparation:
+# noise model for a generic three-qubit quantum circuit. For the first pair, we will
+# use the previously constructed conditional and callable to insert a depolarization
+# error for the :class:`~.pennylane.RX` gates that act on the wires :math:`\in \{0, 1\}`.
 #
 
-fcond1 = qml.noise.op_eq(qml.StatePrep)
+fcond1, noise1 = rx_and_wires_cond, depol_error
 
-def noise1(op, **kwargs):
+######################################################################
+# Next, we construct a pair to mimic the thermal relaxation errors that are
+# encountered during state preparation:
+
+fcond2 = qml.noise.op_eq(qml.StatePrep)
+
+def noise2(op, **kwargs):
     for wire in op.wires:
         qml.ThermalRelaxationError(0.1, kwargs["t1"], kwargs["t2"], kwargs["tg"], wire)
 
@@ -120,24 +126,15 @@ def noise1(op, **kwargs):
 # :math:`\in \{0, 1\}`:
 #
 
-fcond2 = qml.noise.op_eq("Hadamard") & qml.noise.wires_in([0, 1])
+fcond3 = qml.noise.op_eq("Hadamard") & qml.noise.wires_in([0, 1])
 
-def noise2(op, **kwargs):
+def noise3(op, **kwargs):
     qml.RX(np.pi / 16, op.wires)
     qml.apply(op)
     qml.RY(np.pi / 8, op.wires)
 
 ######################################################################
-# Next, we will insert a single-qubit depolarization error for the
-# :class:`~.pennylane.RX` gates that act on the wires :math:`\in \{0, 1\}`.
-# For this we can reuse the previously constructed ``rx_and_wires_cond``
-# and ``depol_error``:
-#
-
-fcond3, noise3 = rx_and_wires_cond, depol_error
-
-######################################################################
-# And have one last pair for a two-qubit depolarization error for every
+# And have one last pair for inserting a two-qubit depolarization error for every
 # :class:`~.pennylane.CNOT` and :class:`~.pennylane.CZ` gates:
 #
 
