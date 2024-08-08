@@ -73,6 +73,7 @@ qiskit = ">=1.0.0"
 qiskit-aer = ">=0.14.0"
 sphinxcontrib-applehelp = "1.0.8"
 sphinx-gallery = "<=0.12.2"
+qml-benchmarks = { git = "https://github.com/XanaduAI/qml-benchmarks.git", tag = "v0.1" }
 
 
 # Install a difference version of torch from PyPI as the one from PyTorch repo is not compatible with MacOS
