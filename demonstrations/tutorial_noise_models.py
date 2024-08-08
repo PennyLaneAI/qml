@@ -91,7 +91,8 @@ for op in [qml.PhaseShift(0.05, wires=0), qml.PhaseShift(-np.pi/4, wires=2)]:
 #
 
 depol_error = qml.noise.partial_wires(qml.DepolarizingChannel, 0.01)
-op = qml.X("aux") # Example operation
+
+op = qml.X('aux') # Example operation
 print(f"Error for {op}: {depol_error(op)}")
 
 ######################################################################
@@ -133,7 +134,7 @@ def noise2(op, **kwargs):
 fcond3, noise3 = qml.noise.op_eq(qml.T) | rphi_and_wires_cond, depol_error
 
 ######################################################################
-# And one last pair for a two-qubit depolarization errors for every
+# And have one last pair for a two-qubit depolarization error for every
 # :class:`~.pennylane.CNOT` gate:
 #
 
@@ -145,11 +146,11 @@ fcond4 = qml.noise.op_eq("CNOT")
 pauli_mats = map(qml.matrix, [qml.I(0), qml.X(0), qml.Y(0), qml.Z(0)])
 kraus_mats = [reduce(np.kron, prod, 1.0) for prod in product(pauli_mats, repeat=2)]
 def noise4(op, **kwargs):
-    probs = np.array([1 - kwargs["p"]] + [kwargs["p"] / 15] * 15).reshape(-1, 1, 1)
+    probs = np.array([1 - kwargs["p"]] + [kwargs["p"] / 15] * 15).reshape((-1, 1, 1))
     qml.QubitChannel(np.sqrt(probs) * np.array(kraus_mats), op.wires)
 
 ######################################################################
-# Finally, we build the noise model with some required ``metadata``:
+# Finally, we can build the noise model with some required ``metadata``:
 #
 
 metadata = dict(t1=0.02, t2=0.03, tg=0.001, p=0.01)  # times unit: sec
@@ -217,8 +218,8 @@ print(qml.draw(noisy_circuit, decimals=None, max_length=320)(0.2, 0.3))
 #
 
 theta, phi = np.pi / 3, np.pi / 3
-ideal_circ_res = swap_circuit(theta, phi)
-noisy_circ_res = noisy_circuit(theta, phi)
+ideal_circ_res = np.round(swap_circuit(theta, phi), 8)
+noisy_circ_res = np.round(noisy_circuit(theta, phi), 8)
 
 print(f"Ideal v/s Noisy: {ideal_circ_res} and {noisy_circ_res}")
 
