@@ -101,9 +101,8 @@ print(f"Error for {op}: {depol_error(op)}")
 #
 # We can now create a PennyLane :class:`~.pennylane.NoiseModel` by stitching together
 # multiple condition-callable pairs, where noisy noise operations are inserted into the
-# circuit when their corresponding given condition is satisfied. We will construct a
-# noise model for a generic three-qubit quantum circuit. For the first pair, we will
-# use the previously constructed conditional and callable to insert a depolarization
+# circuit when their corresponding given condition is satisfied. For the first pair, we
+# will use the previously constructed conditional and callable to insert a depolarization
 # error for the :class:`~.pennylane.RX` gates that act on the wires :math:`\in \{0, 1\}`.
 #
 
