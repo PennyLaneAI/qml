@@ -3,8 +3,8 @@ Using PennyLane with IBM's quantum devices and Qiskit
 ===================================
 
 .. meta::
-    :property="og:description": Learn how to use IBM devices with PennyLane.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_ibm_pennylane.png
+    :property="og:description": Learn how to use IBM devices with Pennylane.
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/thumbnail_tutorial_ibm_pennylane.png
 
 .. related::
 

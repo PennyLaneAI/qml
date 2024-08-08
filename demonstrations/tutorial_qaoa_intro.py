@@ -4,7 +4,7 @@ Intro to QAOA
 
 .. meta::
     :property="og:description": Learn how to implement QAOA with PennyLane
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//qaoa_layer.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/qaoa_layer.png
 
 .. related::
 

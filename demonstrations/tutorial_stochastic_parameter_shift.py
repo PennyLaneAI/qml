@@ -4,7 +4,7 @@ The stochastic parameter-shift rule
 
 .. meta::
     :property="og:description": Differentiate any qubit gate with the stochastic parameter-shift rule.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//stochastic_parameter_shift_thumbnail.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/stochastic_parameter_shift_thumbnail.png
 
 .. related::
 

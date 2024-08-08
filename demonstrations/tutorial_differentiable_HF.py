@@ -5,7 +5,7 @@ Differentiable Hartree-Fock
 
 .. meta::
     :property="og:description": Learn how to use the differentiable Hartree-Fock solver
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//differentiable_HF.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/differentiable_HF.png
 
 .. related::
     tutorial_quantum_chemistry Building molecular Hamiltonians

@@ -6,7 +6,7 @@ QAOA for MaxCut
 
 .. meta::
     :property="og:description": Implementing the quantum approximate optimization algorithm using PennyLane to solve the MaxCut problem.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//qaoa_maxcut_partition.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/qaoa_maxcut_partition.png
 
 .. related::
    tutorial_qaoa_intro Intro to QAOA
