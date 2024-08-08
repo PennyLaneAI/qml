@@ -53,21 +53,21 @@ r"""How to use noise models in PennyLane
 #    with a :class:`~.pennylane.BooleanFn` decorator. Signature for such conditionals must
 #    be ``cond_fn(operation: Operation) -> bool``.
 #
-# For example, here's how we would define a conditional that checks for :math:`R_\phi(\phi)`
-# gate operations with :math:`\phi = -\pi / 4` and wires :math:`\in \{1, 2\}`:
+# For example, here's how we would define a conditional that checks for :math:`R_X(\phi)`
+# gate operations with :math:`|\phi| < 1.0` and wires :math:`\in \{1, 2\}`:
 #
 
-import numpy as np
 import pennylane as qml
+import numpy as np
 
 @qml.BooleanFn
-def rphi_cond(op):
-    return isinstance(op, qml.PhaseShift) and np.isclose(op.parameters[0], -np.pi/4)
+def rx_cond(op):
+    return isinstance(op, qml.RX) and np.abs(op.parameters[0]) < 1.0
 
 # Combine this arbitrary conditional with a wire-based conditional
-rphi_and_wires_cond = rphi_cond & qml.noise.wires_in([1, 2])
-for op in [qml.PhaseShift(0.05, wires=0), qml.PhaseShift(-np.pi/4, wires=2)]:
-    print(f"Result for {op}: {rphi_and_wires_cond(op)}")
+rx_and_wires_cond = rx_cond & qml.noise.wires_in([0, 1])
+for op in [qml.RX(0.05, wires=[0]), qml.RX(2.34, wires=[1])]:
+    print(f"Result for {op}: {rx_and_wires_cond(op)}")
 
 ######################################################################
 # Callables
@@ -92,7 +92,7 @@ for op in [qml.PhaseShift(0.05, wires=0), qml.PhaseShift(-np.pi/4, wires=2)]:
 
 depol_error = qml.noise.partial_wires(qml.DepolarizingChannel, 0.01)
 
-op = qml.X('aux') # Example operation
+op = qml.X('w1') # Example operation
 print(f"Error for {op}: {depol_error(op)}")
 
 ######################################################################
@@ -101,25 +101,26 @@ print(f"Error for {op}: {depol_error(op)}")
 #
 # We can now create a PennyLane :class:`~.pennylane.NoiseModel` by stitching together
 # multiple condition-callable pairs, where noisy noise operations are inserted into the
-# circuit their corresponding given condition is satisfied. We will construct a noise
-# model for performing a noisy `swap test <https://en.wikipedia.org/wiki/Swap_test>`__
-# for the two single-qubit states. The first condition-callable pair we construct will
-# mimic thermal relaxation errors that are encountered during state preparation:
+# circuit when their corresponding given condition is satisfied. We will construct a
+# noise model for a generic three-qubit quantum circuit. The first condition-callable
+# pair we construct will mimic thermal relaxation errors that are encountered during
+# state preparation:
 #
 
 fcond1 = qml.noise.op_eq(qml.StatePrep)
 
 def noise1(op, **kwargs):
-    qml.ThermalRelaxationError(0.1, kwargs["t1"], kwargs["t2"], kwargs["tg"], op.wires)
+    for wire in op.wires:
+        qml.ThermalRelaxationError(0.1, kwargs["t1"], kwargs["t2"], kwargs["tg"], wire)
 
 ######################################################################
 # By default, noise operations will be inserted *after* the gate that the noise function
 # is evaluated over. However, we can circumvent this! For example, we can add a sandwiching
 # constant-valued rotation errors for :class:`~.pennylane.Hadamard` gates on the wires
-# :math:`\in \{1, 2\}`:
+# :math:`\in \{0, 1\}`:
 #
 
-fcond2 = qml.noise.op_eq("Hadamard") & qml.noise.wires_in([1, 2])
+fcond2 = qml.noise.op_eq("Hadamard") & qml.noise.wires_in([0, 1])
 
 def noise2(op, **kwargs):
     qml.RX(np.pi / 16, op.wires)
@@ -127,21 +128,23 @@ def noise2(op, **kwargs):
     qml.RY(np.pi / 8, op.wires)
 
 ######################################################################
-# Next, we will insert a depolarization error for every :class:`~.pennylane.T`, and
-# for :class:`~.pennylane.PhaseShift` gates that act on the wires :math:`\in \{1, 2\}`:
+# Next, we will insert a single-qubit depolarization error for the
+# :class:`~.pennylane.RX` gates that act on the wires :math:`\in \{0, 1\}`.
+# For this we can reuse the previously constructed ``rx_and_wires_cond``
+# and ``depol_error``:
 #
 
-fcond3, noise3 = qml.noise.op_eq(qml.T) | rphi_and_wires_cond, depol_error
+fcond3, noise3 = rx_and_wires_cond, depol_error
 
 ######################################################################
 # And have one last pair for a two-qubit depolarization error for every
-# :class:`~.pennylane.CNOT` gate:
+# :class:`~.pennylane.CNOT` and :class:`~.pennylane.CZ` gates:
 #
 
 from functools import reduce
 from itertools import product
 
-fcond4 = qml.noise.op_eq("CNOT")
+fcond4 = qml.noise.op_in(["CNOT", "CZ"])
 
 pauli_mats = map(qml.matrix, [qml.I(0), qml.X(0), qml.Y(0), qml.Z(0)])
 kraus_mats = [reduce(np.kron, prod, 1.0) for prod in product(pauli_mats, repeat=2)]
@@ -166,66 +169,64 @@ print(noise_model)
 # Now that we have built our noise model, we can learn how to use it.
 # A noise model can be applied to a circuit or device via the
 # :func:`~pennylane.add_noise` transform. For example, consider
-# the following `swap test <https://en.wikipedia.org/wiki/Swap_test>`__
-# circuit that compares two single-qubit states prepared based on parameters:
+# the following circuit that performs the evolution and de-evolution
+# of a given initial state based on some parameters:
 #
 
 from matplotlib import pyplot as plt
 
 qml.drawer.use_style("pennylane")
 dev = qml.device("default.mixed", wires=3)
-# gives a single-qubit statevector based on a parameter "param"
-state = lambda param: np.array([np.cos(-param / 2), 1j * np.sin(-param / 2)])
+init_state = np.random.RandomState(42).rand(2 ** len(dev.wires))
+init_state /= np.linalg.norm(init_state)
 
-def swap_test(theta, phi):
+def circuit(theta, phi):
     # State preparation
-    qml.StatePrep(state(theta), wires=[1])
-    qml.StatePrep(state(phi), wires=[2])
+    qml.StatePrep(init_state, wires=[0, 1, 2])
+    qml.Barrier(wires=[0, 1, 2])
 
-    # Swap test with decomposed Fredkin gate
+    # Evolve state
     qml.Hadamard(0)
+    qml.RX(theta, 1)
+    qml.RX(phi, 2)
     qml.CNOT([1, 2])
-    qml.Hadamard(1)
+    qml.CZ([0, 1])
+    qml.Barrier(wires=[0, 1, 2])
+
+    # De-evolve state
+    qml.CZ([0, 1])
     qml.CNOT([1, 2])
-    qml.PhaseShift(-np.pi/4, 2)
-    qml.CNOT([0, 2])
-    qml.T(2)
-    qml.CNOT([1, 2])
-    qml.PhaseShift(-np.pi/4, 2)
-    qml.CNOT([0, 2])
-    qml.T(1)
-    qml.CNOT([0, 1])
-    qml.T(0)
-    qml.PhaseShift(-np.pi/4, 1)
-    qml.CNOT([0, 1])
+    qml.RX(-phi, 2)
+    qml.RX(-theta, 1)
     qml.Hadamard(0)
+    return qml.state()
 
-    return qml.expval(qml.Z(0))
-
-swap_circuit = qml.QNode(swap_test, dev)
-qml.draw_mpl(swap_circuit)(0.2, 0.3)
+theta, phi = 0.21, 0.43
+ideal_circuit = qml.QNode(circuit, dev)
+qml.draw_mpl(ideal_circuit)(theta, phi)
 plt.show()
 
 ######################################################################
 # To attach the ``noise_model`` to this quantum circuit, we can do the following:
 #
 
-noisy_circuit = qml.add_noise(swap_circuit, noise_model)
-print(qml.draw(noisy_circuit, decimals=None, max_length=320)(0.2, 0.3))
+noisy_circuit = qml.add_noise(ideal_circuit, noise_model)
+qml.draw_mpl(noisy_circuit)(theta, phi)
+plt.show()
 
 ######################################################################
 # We can then use these for running noisy simulations as shown below:
 #
 
-theta, phi = np.pi / 3, np.pi / 3
-ideal_circ_res = np.round(swap_circuit(theta, phi), 8)
-noisy_circ_res = np.round(noisy_circuit(theta, phi), 8)
+init_dm = np.outer(init_state, init_state) # density matrix for init_state
+ideal_circ_fidelity = qml.math.fidelity(ideal_circuit(theta, phi), init_dm)
+noisy_circ_fidelity = qml.math.fidelity(noisy_circuit(theta, phi), init_dm)
 
-print(f"Ideal v/s Noisy: {ideal_circ_res} and {noisy_circ_res}")
+print(f"Ideal v/s Noisy: {ideal_circ_fidelity} and {noisy_circ_fidelity}")
 
 ######################################################################
-# The ideal result for the swap test is :math:`\approx 1.0`. We see that
-# this is not the case for the result obtained from the noisy circuit,
+# The fidelity for the state obtained from the ideal circuit is :math:`\approx 1.0`.
+# We see that this is not the case for the result obtained from the noisy circuit,
 # as expected.
 #
 
