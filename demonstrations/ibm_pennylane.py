@@ -125,6 +125,7 @@ from qiskit_ibm_runtime import QiskitRuntimeService
 
 import pennylane as qml
 
+# Obtaining the Hamiltonian for H2 from PennyLane QChem dataset
 [dataset] = qml.data.load("qchem", molname="H2", bondlength=0.742, basis="STO-3G")
 H = dataset.hamiltonian
 qubits = 4
