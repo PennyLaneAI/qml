@@ -66,8 +66,23 @@ quantum computing paper/result.
 
   where `<demo name>` is a sub-directory with the name of
   your demo.
+  <details>
+    <summary><u>Follow image standards when adding images</u></summary>
+
+    ### File Size
+    * Always aim to keep the image file size in kilobytes (KB’s) 
+    * Always compress the image to the best possible size where quality is acceptable.
+    
+    ### Formats
+    * Use `.png` for everything (decorative images, descriptive images, logos etc)
+    * Use `.gif` for animated images
+
+    ### Dimensions
+    * To maintain quality and performance, every image should be twice (2X) its visible dimension size on the web page, and at a minimum of `150 ppi/dpi` (preferably `300 ppi/dpi`).
+  </details><br>
 
 - Add and select an author photo from the `_static/authors` folder. The image name should be as `<author name>_<author surname>.<format>`. If this is a new author and their image is not a headshot, store the original image as `<author name>_<author surname>_original.<format>` and create a cropped headshot with the aforementioned name.
+  
 - In the same folder create a `<author name>.txt` file where to include the bio following this structure:
 
   ```txt
