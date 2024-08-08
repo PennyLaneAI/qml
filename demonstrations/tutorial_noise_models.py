@@ -54,7 +54,7 @@ r"""How to use noise models in PennyLane
 #    be ``cond_fn(operation: Operation) -> bool``.
 #
 # For example, here's how we would define a conditional that checks for :math:`R_\phi(\phi)`
-# gate operations with :math:`\phi = -np.pi / 4` and wires :math:`\in\, \{1, 2\}`:
+# gate operations with :math:`\phi = -\pi / 4` and wires :math:`\in \{1, 2\}`:
 #
 
 import numpy as np
@@ -143,7 +143,7 @@ from itertools import product
 fcond4 = qml.noise.op_eq("CNOT")
 
 pauli_mats = map(qml.matrix, [qml.I(0), qml.X(0), qml.Y(0), qml.Z(0)])
-kraus_mats = list(reduce(np.kron, prod, 1.0) for prod in product(pauli_mats, repeat=2))
+kraus_mats = [reduce(np.kron, prod, 1.0) for prod in product(pauli_mats, repeat=2)]
 def noise4(op, **kwargs):
     probs = np.array([1 - kwargs["p"]] + [kwargs["p"] / 15] * 15).reshape(-1, 1, 1)
     qml.QubitChannel(np.sqrt(probs) * np.array(kraus_mats), op.wires)
@@ -210,8 +210,7 @@ plt.show()
 #
 
 noisy_circuit = qml.add_noise(swap_circuit, noise_model)
-qml.draw_mpl(noisy_circuit)(0.2, 0.3)
-plt.show()
+print(qml.draw(noisy_circuit, decimals=None, max_length=320)(0.2, 0.3))
 
 ######################################################################
 # We can then use these for running noisy simulations as shown below:
