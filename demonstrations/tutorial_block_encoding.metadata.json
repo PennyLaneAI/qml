@@ -2,17 +2,17 @@
     "title": "Block Encodings",
     "authors": [
       {
-            "id": "jay_soni"
+            "username": "Jay"
         },
       {
-            "id": "diego_guala"
+            "username": "Diego"
         },
       {
-            "id": "soran_jahangiri"
+            "username": "soran"
         }
     ],
     "dateOfPublication": "2023-11-28T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
     "categories": [
         "Quantum Computing",
         "Algorithms"

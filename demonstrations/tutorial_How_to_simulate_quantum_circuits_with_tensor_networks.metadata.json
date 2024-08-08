@@ -2,11 +2,11 @@
     "title": "How to simulate quantum circuits with tensor networks using DefaultTensor",
     "authors": [
         {
-            "id": "pietropaolo_frisoni"
+            "username": "Frisus95"
         }
     ],
     "dateOfPublication": "2024-07-09T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
     "categories": [
         "Getting Started",
         "Quantum Computing",

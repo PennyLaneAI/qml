@@ -2,14 +2,14 @@
     "title": "Error mitigation with Mitiq and PennyLane",
     "authors": [
         {
-            "id": "thomas_bromley"
+            "username": "tombromleyxanadu"
         },
         {
             "id": "andrea_mari"
         }
     ],
     "dateOfPublication": "2021-11-29T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
     "categories": [
         "Algorithms",
         "Quantum Computing"

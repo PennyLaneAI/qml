@@ -2,11 +2,11 @@
     "title": "Introducing (Dynamical) Lie Algebras for quantum practitioners",
     "authors": [
         {
-            "id": "korbinian_kottmann"
+            "username": "Qottmann"
         }
     ],
     "dateOfPublication": "2024-02-27T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
     "categories": [
         "Quantum Computing",
         "Getting Started"

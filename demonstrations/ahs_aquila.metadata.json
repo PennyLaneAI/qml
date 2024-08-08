@@ -2,11 +2,11 @@
     "title": "Pulse programming on Rydberg atom hardware",
     "authors": [
         {
-            "id": "lillian_frederiksen"
+            "username": "lillian_frederiksen"
         }
     ],
     "dateOfPublication": "2023-05-16T00:00:00+00:00",
-    "dateOfLastModification": "2024-07-10T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
     "categories": ["Quantum Hardware", "Devices and Performance", "Quantum Computing"],
     "tags": [],
     "previewImages": [

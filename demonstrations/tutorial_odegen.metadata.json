@@ -2,11 +2,11 @@
     "title": "Evaluating analytic gradients of pulse programs on quantum computers",
     "authors": [
         {
-            "id": "korbinian_kottmann"
+            "username": "Qottmann"
         }
     ],
     "dateOfPublication": "2023-12-12T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
     "categories": [
         "Optimization",
         "Quantum Computing",

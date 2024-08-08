@@ -2,11 +2,11 @@
     "title": "How to use Qiskit 1.0 with PennyLane",
     "authors": [
         {
-            "id": "isaac_de_vlugt"
+            "username": "isaacdevlugt"
         }
     ],
     "dateOfPublication": "2024-07-02T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
     "categories": [
         "Quantum Computing",
         "How-to"

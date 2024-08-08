@@ -2,17 +2,17 @@
     "title": "Linear combination of unitaries and block encodings",
     "authors": [
         {
-            "id": "juan_miguel_arrazola"
+            "username": "ixfoduap"
         },
         {
-            "id": "diego_guala"
+            "username": "Diego"
         },
         {
-            "id": "jay_soni"
+            "username": "Jay"
         }
     ],
     "dateOfPublication": "2023-10-25T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
     "categories": [
         "Algorithms",
         "Quantum Computing"

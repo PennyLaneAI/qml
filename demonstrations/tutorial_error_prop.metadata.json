@@ -2,11 +2,11 @@
     "title": "How to track algorithmic error using PennyLane",
     "authors": [
         {
-            "id": "jay_soni"
+            "username": "Jay"
         }
     ],
     "dateOfPublication": "2024-05-03T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
     "categories": [
         "Algorithms",
         "Quantum Computing",

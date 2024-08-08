@@ -2,11 +2,11 @@
     "title": "Estimating observables with classical shadows in the Pauli basis",
     "authors": [
         {
-            "id": "korbinian_kottmann"
+            "username": "Qottmann"
         }
     ],
     "dateOfPublication": "2022-10-07T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
     "categories": [
         "Algorithms",
         "Quantum Computing"

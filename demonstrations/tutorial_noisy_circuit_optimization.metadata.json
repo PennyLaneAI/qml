@@ -2,11 +2,11 @@
     "title": "Optimizing noisy circuits with Cirq",
     "authors": [
         {
-            "id": "nathan_killoran"
+            "username": "co9olguy"
         }
     ],
     "dateOfPublication": "2020-06-01T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
     "categories": [
         "Devices and Performance"
     ],
