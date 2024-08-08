@@ -67,7 +67,7 @@ quantum computing paper/result.
   where `<demo name>` is a sub-directory with the name of
   your demo.
   <details>
-    <summary><u>Follow image standards when adding images</u></summary>
+    <summary><b>Follow these standards when adding images</b></summary>
 
     ### File Size
     * Always aim to keep the image file size in kilobytes (KB’s) 
