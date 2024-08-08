@@ -32,7 +32,7 @@ on the state prepared by a parameterized circuit :math:`U(\vec{x}, \vec{\theta})
 .. math:: g_{\vec{\theta}}(\vec{x}) = \langle 0 | U^\dagger (\vec{x}, \vec{\theta}) M U(\vec{x}, \vec{\theta}) | 0 \rangle.
 
 By repeatedly running the circuit with a set of parameters :math:`\vec{\theta}` and set of data points :math:`\vec{x}`, we can
-approximately find the expectation value with respect to the observable :math:`M`. Then, the parameters can be
+approximate the expectation value of the observable :math:`M` in the state :math:`U(\vec{x}, \vec{\theta}) | 0 \rangle.` Then, the parameters can be
 optimized to minimize some loss function.
 
 What are we using the variational circuit for?
@@ -42,7 +42,7 @@ In this example, we will use a variational quantum circuit to find the Fourier s
 approximates the function :math:`f(x_1, x_2) = \frac{1}{2} \left( x_1^2 + x_2^2 \right)`. The variational circuit that we are using is made up of :math:`L` layers. Each layer consists of a *data encoding block*
 :math:`S(\vec{x})` and a *training block* :math:`W(\vec{\theta})`. The overall circuit is:
 
-.. math:: U(x, \vec{\theta}) = W^{(L+1)}(\vec{\theta}) S(\vec{x}) W^{(L)} (\vec{\theta}) \ldots W^{(2)}(\vec{\theta}) S(\vec{x}) W^{(1)}(\vec{\theta}).
+.. math:: U(\vec{x}, \vec{\theta}) = W^{(L+1)}(\vec{\theta}) S(\vec{x}) W^{(L)} (\vec{\theta}) \ldots W^{(2)}(\vec{\theta}) S(\vec{x}) W^{(1)}(\vec{\theta}).
 
 The training blocks :math:`W(\vec{\theta})` depend on the parameters :math:`\vec{\theta}` that can be optimized classically.
 
@@ -122,7 +122,7 @@ def target_function(x):
     return f
 
 ######################################################################
-# Now we will specify the range of :math:`x_1` and :math:`x_2` values and store those values in an input data vector. We are fitting the function for :math:`x_1, x_2 \in [-1, 1]`, using 30 evenly-spaced samples for each variable.
+# Now we will specify the range of :math:`x_1` and :math:`x_2` values and store those values in an input data vector. We are fitting the function for :math:`x_1, x_2 \in [-1, 1]` using 30 evenly-spaced samples for each variable.
 
 x1_min=-1
 x1_max=1
@@ -132,15 +132,15 @@ num_samples=30
 
 ######################################################################
 # Now we build the training data with the exact target function :math:`f(x_1, x_2)`. To do so, it is convenient to  
-# create a 2D grid to make sure that for each value of
-# :math:`x_1` we perform a sweep over all the values of :math:`x_2` and viceversa.
+# create a 2D grid to make sure that, for each value of
+# :math:`x_1,` we perform a sweep over all the values of :math:`x_2` and viceversa.
 
 x1_train=pnp.linspace(x1_min,x1_max, num_samples)
 x2_train=pnp.linspace(x2_min,x2_max, num_samples)
 x1_mesh,x2_mesh=pnp.meshgrid(x1_train, x2_train)
 
 ######################################################################
-# We define x_train, y_train
+# We define ``x_train``, ``y_train``
 x_train=pnp.stack((x1_mesh.flatten(), x2_mesh.flatten()), axis=1)
 y_train = target_function([x1_mesh,x2_mesh]).reshape(-1,1)
 
@@ -163,15 +163,17 @@ y_train = target_function([x1_mesh,x2_mesh]).reshape(-1,1)
 
 @jax.jit
 def mse(params,x,targets):
+    # We compute the Mean Square Error between the target function and the quantum circuit to quantify the quality of our estimator
     return (quantum_neural_network(params,x)-jnp.array(targets))**2
 @jax.jit
 def loss_fn(params, x,targets):
+    # We define the loss function to feed our optimizer
     mse_pred = jax.vmap(mse,in_axes=(None, 0,0))(params,x,targets)
     loss = jnp.mean(mse_pred)
     return loss
 
 ####################################################################### 
-#Here, we are choosing a learning rate of 0.05 and 300 steps.
+#Here, we are choosing an Adam Optimizer with a learning rate of 0.05 and 300 steps.
 
 opt = optax.adam(learning_rate=0.05)
 max_steps=300
@@ -208,7 +210,7 @@ params=pnp.random.default_rng().random(size=params_shape)
 best_params=optimization_jit(params, x_train, jnp.array(y_train), print_training=True)
 
 ######################################################################
-# As you can see, the training with jax is extremely fast!
+# If you run this yourself, you'll see that the training step with JAX is extremely fast!
 # Once the optimized :math:`\vec{\theta}` has been obtained, we can use those parameters to build our fitted version of the function.
 
 def evaluate(params, data):
