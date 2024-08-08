@@ -2,7 +2,7 @@ r"""
 Variational Quantum Circuit for Multidimensional Regression
 ==========================================
 
-In this tutorial, we show how to use a variational quantum circuit to fit a simple multivariate function,
+In this tutorial, we show how to use a variational quantum circuit to fit the simple multivariate function
 
 .. math:: f(x_1, x_2) = \frac{1}{2} \left( x_1^2 + x_2^2 \right). 
 
@@ -78,15 +78,10 @@ pnp.random.seed(42)
 dev = qml.device('default.qubit', wires=2)
 
 ######################################################################
-# Now we will define the data-encoding circuit block, :math:`S(\vec{x})`, where :math:`\vec{x} = (x_1, x_2)`. We can encode the data in the operator
-#
-# .. math::
-#    e^{-i H x_1} \otimes e^{-i H x_2},
-#
-# where :math:`H` is the *encoding Hamiltonian*. In this example, we will use :math:`\frac{1}{2} Z`, where :math:`Z` is the Pauli :math:`Z` operator, as our encoding Hamiltonian. This gives us a product of :math:`R_z` rotations:
+# Now we will construct the data-encoding circuit block, :math:`S(\vec{x})` as a product of :math:`R_z` rotations:
 #
 # .. math:: 
-#   S(\vec{x}) = e^{-i \frac{1}{2} Z x_1} \otimes e^{i \frac{1}{2} Z x_2} = R_z(x_1) \otimes R_z(x_2).
+#   S(\vec{x}) = R_z(x_1) \otimes R_z(x_2).
 #
 # Specifically, we define the :math:`S(\vec{x})` operator using the :class:`~.pennylane.AngleEmbedding` function
 
@@ -140,7 +135,7 @@ x2_train=pnp.linspace(x2_min,x2_max, num_samples)
 x1_mesh,x2_mesh=pnp.meshgrid(x1_train, x2_train)
 
 ######################################################################
-# We define ``x_train``, ``y_train``
+# We define ``x_train``, ``y_train`` using the above vectors, reshaping them for our convenience
 x_train=pnp.stack((x1_mesh.flatten(), x2_mesh.flatten()), axis=1)
 y_train = target_function([x1_mesh,x2_mesh]).reshape(-1,1)
 
@@ -256,8 +251,7 @@ plt.tight_layout(pad=3.7)
 ######################################################################
 # Conclusions
 # ------------------------------------------
-# In this demo we have shown how to leverage the Fourier series representation 
-# of a variational quantum circuit to solve a regression problem for a two dimensional function. 
+# In this demo, we've shown how to utilize a variational quantum circuit to solve a regression problem for a two-dimensional function. 
 # The results show a good agreement with the target function and the model 
 # can be trained further, increasing number of iterations in the training to maximize the accuracy. It also 
 # paves the way for addressing a regression problem for a :math:`N`-dimensional function, as everything presented 
