@@ -1,0 +1,4 @@
+.. bio:: Hayk Tepanyan
+   :photo: ../_static/authors/hayk_tepanyan.jpeg
+
+   Hayk Tepanyan is the Co-Founder and CTO of BlueQubit — a quantum software and algorithms company. Hayk is coming from a computer science background and is focusing on quantum computing simulations and applications.

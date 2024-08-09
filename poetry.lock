@@ -358,6 +358,23 @@ files = [
 ]
 
 [[package]]
+name = "bluequbit"
+version = "0.8.1b1"
+description = "Python SDK to BlueQubit app"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "bluequbit-0.8.1b1-py3-none-any.whl", hash = "sha256:0c6bd231f46db2a336fe1de0498f9faeafe2a3d13e8efda5e9568615c127e2a7"},
+    {file = "bluequbit-0.8.1b1.tar.gz", hash = "sha256:832f9c5b3f50c594659e470af5fda3fd33b0ebd5a3c5af40922db94eba314b86"},
+]
+
+[package.dependencies]
+numpy = ">=1.21,<2.0"
+packaging = "*"
+python-dateutil = ">=2.8,<3.0"
+requests = ">=2.28,<3.0"
+
+[[package]]
 name = "cachetools"
 version = "5.3.3"
 description = "Extensible memoizing collections and decorators"
@@ -8097,4 +8114,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.10.0"
-content-hash = "9d79a3c7864580ff575f8eed195b739cca63167e993e57f175bbe0127496a48f"
+content-hash = "15470d25f6369e1c64024acae4fd2a4d5fc212968fc3bb48a5a1c88237124d2d"
