@@ -70,8 +70,8 @@ for op in [qml.RX(0.05, wires=[0]), qml.RX(2.34, wires=[1])]:
     print(f"Result for {op}: {rx_and_wires_cond(op)}")
 
 ######################################################################
-# Callables
-# ~~~~~~~~~
+# Noise functions
+# ~~~~~~~~~~~~~~~
 #
 # Callables that apply noise operations are referred to as *noise functions* and have the
 # signature ``fn(op, **metadata) -> None``. Their definition has no return statement and
@@ -81,18 +81,16 @@ for op in [qml.RX(0.05, wires=[0]), qml.RX(2.34, wires=[1])]:
 # 1. **Single-instruction noise functions:** To add a single-operation noise, one can use
 #    :func:`~pennylane.noise.partial_wires`. It performs a partial initialization of the
 #    noise operation and queues it on the ``wires`` of the gate operation.
-# 2. **User-defined noise functions:** For adding more sophisticated noise, one can define
-#    their own quantum function with the signature specified above. This way, one can also
-#    specify their own custom order for inserting the noise by queing the operation being
-#    evaluated via :func:`~pennylane.apply` within the function definition.
+# 2. **User-defined noise functions:** For adding more sophisticated and custom noise,
+#    one can define their own quantum function with the signature specified above.
 #
-# For example, one can use the following for inserting a depolarization error and test it
-# with an example gate operation:
+# For example, one can use the following for inserting a depolarization error and show
+# the error that gets queued with an example gate operation:
 #
 
 depol_error = qml.noise.partial_wires(qml.DepolarizingChannel, 0.01)
 
-op = qml.X('w1') # Example operation
+op = qml.X('w1') # Example gate operation
 print(f"Error for {op}: {depol_error(op)}")
 
 ######################################################################
@@ -103,13 +101,14 @@ print(f"Error for {op}: {depol_error(op)}")
 # multiple condition-callable pairs, where noisy noise operations are inserted into the
 # circuit when their corresponding given condition is satisfied. For the first pair, we
 # will use the previously constructed conditional and callable to insert a depolarization
-# error for the :class:`~.pennylane.RX` gates that act on the wires :math:`\in \{0, 1\}`.
+# error after :class:`~.pennylane.RX` gates that satisfy :math:`|\phi| < 1.0` and that
+# act on the wires :math:`\in \{0, 1\}`.
 #
 
 fcond1, noise1 = rx_and_wires_cond, depol_error
 
 ######################################################################
-# Next, we construct a pair to mimic the thermal relaxation errors that are
+# Next, we construct a pair to mimic thermal relaxation errors that are
 # encountered during state preparation:
 
 fcond2 = qml.noise.op_eq(qml.StatePrep)
@@ -119,10 +118,11 @@ def noise2(op, **kwargs):
         qml.ThermalRelaxationError(0.1, kwargs["t1"], kwargs["t2"], kwargs["tg"], wire)
 
 ######################################################################
-# By default, noise operations will be inserted *after* the gate that the noise function
-# is evaluated over. However, we can circumvent this! For example, we can add a sandwiching
-# constant-valued rotation errors for :class:`~.pennylane.Hadamard` gates on the wires
-# :math:`\in \{0, 1\}`:
+# By default, noise operations specified by a noise function will be inserted *after* the
+# gate operation that satisfies the conditional. However, we can circumvent this by manually
+# queing the evaluated gate operation via :func:`~pennylane.apply` within the function
+# definition. For example, we can add a sandwiching constant-valued rotation error
+# for :class:`~.pennylane.Hadamard` gates on the wires :math:`\in \{0, 1\}`:
 #
 
 fcond3 = qml.noise.op_eq("Hadamard") & qml.noise.wires_in([0, 1])
@@ -133,28 +133,12 @@ def noise3(op, **kwargs):
     qml.RY(np.pi / 8, op.wires)
 
 ######################################################################
-# And have one last pair for inserting a two-qubit depolarization error for every
-# :class:`~.pennylane.CNOT` and :class:`~.pennylane.CZ` gates:
-#
-
-from functools import reduce
-from itertools import product
-
-fcond4 = qml.noise.op_in(["CNOT", "CZ"])
-
-pauli_mats = map(qml.matrix, [qml.I(0), qml.X(0), qml.Y(0), qml.Z(0)])
-kraus_mats = [reduce(np.kron, prod, 1.0) for prod in product(pauli_mats, repeat=2)]
-def noise4(op, **kwargs):
-    probs = np.array([1 - kwargs["p"]] + [kwargs["p"] / 15] * 15).reshape((-1, 1, 1))
-    qml.QubitChannel(np.sqrt(probs) * np.array(kraus_mats), op.wires)
-
-######################################################################
-# Finally, we can build the noise model with some required ``metadata``:
+# Finally, we can build the noise model with some required ``metadata`` for ``noise2``:
 #
 
 metadata = dict(t1=0.02, t2=0.03, tg=0.001, p=0.01)  # times unit: sec
 noise_model = qml.NoiseModel(
-    {fcond1: noise1, fcond2: noise2, fcond3: noise3, fcond4: noise4}, **metadata
+    {fcond1: noise1, fcond2: noise2, fcond3: noise3}, **metadata
 )
 print(noise_model)
 
@@ -185,10 +169,10 @@ def circuit(theta, phi):
     qml.RX(theta, 1)
     qml.RX(phi, 2)
     qml.CNOT([1, 2])
-    qml.CZ([0, 1])
+    qml.CNOT([0, 1])
 
     # De-evolve state
-    qml.CZ([0, 1])
+    qml.CNOT([0, 1])
     qml.CNOT([1, 2])
     qml.RX(-phi, 2)
     qml.RX(-theta, 1)
@@ -201,7 +185,8 @@ qml.draw_mpl(ideal_circuit)(theta, phi)
 plt.show()
 
 ######################################################################
-# To attach the ``noise_model`` to this quantum circuit, we can do the following:
+# To attach the ``noise_model`` to this quantum circuit, we use the
+# :func:`~.pennylane.add_noise` transform:
 #
 
 noisy_circuit = qml.add_noise(ideal_circuit, noise_model)
@@ -219,9 +204,10 @@ noisy_circ_fidelity = qml.math.fidelity(noisy_circuit(theta, phi), init_dm)
 print(f"Ideal v/s Noisy: {ideal_circ_fidelity} and {noisy_circ_fidelity}")
 
 ######################################################################
-# The fidelity for the state obtained from the ideal circuit is :math:`\approx 1.0`.
-# We see that this is not the case for the result obtained from the noisy circuit,
-# as expected.
+# The fidelity for the state obtained from the ideal circuit is :math:`\approx 1.0`,
+# which is expected since our circuit effectively does nothing to the initial state.
+# We see that this is not the case for the result obtained from the noisy simulation,
+# due to the error operations inserted in the circuit.
 #
 
 
