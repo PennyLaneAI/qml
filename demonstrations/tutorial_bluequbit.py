@@ -1,12 +1,15 @@
 r"""Intro to the BlueQubit (CPU) device 
 =============================================================
 
-Here we will show how you can run Pennylane circuits of up to 33 qubits for free on BlueQubit backend.
-Running large scale simulations usually requires lots of memory and compute power.
-Regular laptops already struggle above 20 qubits and most of the time 30+ qubits are a no go.
-Using the BlueQubit device, now Pennylane users can run circuit simulations on souped up machines and go up to 33 qubits!
+Running large-scale simulations usually requires lots of memory and compute power, regular laptops already struggle above 20 qubits 
+and most of the time 30+ qubits are a no-go.
+Using the BlueQubit device, PennyLane users can now run circuit simulations on souped up machines and go up to 33 qubits!
+Also Bluequbit uses a custom build of `PennyLane-Lightning <https://docs.pennylane.ai/projects/lightning/en/stable/index.html>`__ that 
+enables multi-threading and other configurations to achieve best possible performance.
 
-BlueQubit uses a custom build of Pennilane-Lighning to have multi-threading and other configurations to achieve best possible performance.
+Below we will show 2 examples of how to use Bluequbit with Pennylane.
+The first is a very simple example building a Bell pair, and the second one is a large 26 qubit circuit that demonstrates the central limit theorem using quantum arithmetic.
+
 
 .. note::
 
