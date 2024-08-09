@@ -54,7 +54,7 @@ r"""How to use noise models in PennyLane
 #    be ``cond_fn(operation: Operation) -> bool``.
 #
 # For example, here's how we would define a conditional that checks for :math:`R_X(\phi)`
-# gate operations with :math:`|\phi| < 1.0` and wires :math:`\in \{1, 2\}`:
+# gate operations with :math:`|\phi| < 1.0` and wires :math:`\in \{0, 1\}`:
 #
 
 import pennylane as qml
