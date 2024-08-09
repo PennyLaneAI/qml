@@ -49,13 +49,11 @@ orbitals (:func:`~.pennylane.qchem.import_state` works for unrestricted orbitals
 
 from pyscf import gto, scf, ci
 from pennylane.qchem import import_state
-from pennylane import numpy as np
+import numpy as np
 
 R = 1.2
 # create the H3+ molecule
-mol = gto.M(atom=[["H", (0, 0, 0)],
-                  ["H", (0, 0, R)],
-                  ["H", (0, 0, 2 * R)]], charge=1)
+mol = gto.M(atom=[["H", (0, 0, 0)], ["H", (0, 0, R)], ["H", (0, 0, 2 * R)]], charge=1)
 # perfrom restricted Hartree-Fock and then CISD
 myhf = scf.RHF(mol).run()
 myci = ci.CISD(myhf).run()
@@ -159,7 +157,7 @@ print(f"CCSD-based state vector: \n{np.round(wf_ccsd.real, 4)}")
 # Let's take this opportunity to create the Hartree-Fock initial state, to compare the
 # other states against it later on.
 
-from pennylane import numpy as np
+import numpy as np
 
 hf_primer = ([[3, 0, 0]], np.array([1.0]))
 wf_hf = import_state(hf_primer)
@@ -227,7 +225,7 @@ from pennylane import qchem
 
 # generate the molecular Hamiltonian for H3+
 symbols = ["H", "H", "H"]
-geometry = np.array([[0, 0, 0], [0, 0, R/0.529], [0, 0, 2*R/0.529]])
+geometry = np.array([[0, 0, 0], [0, 0, R / 0.529], [0, 0, 2 * R / 0.529]])
 molecule = qchem.Molecule(symbols, geometry, charge=1)
 
 H2mol, qubits = qchem.molecular_hamiltonian(molecule)
@@ -284,7 +282,9 @@ while abs(delta_E) > 1e-5:
     results_cisd.append(new_energy)
     if len(results_cisd) % 5 == 0:
         print(f"Step = {len(results_cisd)},  Energy = {new_energy:.6f} Ha")
-print(f"Starting with CISD state took {len(results_cisd)} iterations until convergence.")
+print(
+    f"Starting with CISD state took {len(results_cisd)} iterations until convergence."
+)
 
 ##############################################################################
 # Let's visualize the comparison between the two initial states, and see that indeed 
