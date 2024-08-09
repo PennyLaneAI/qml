@@ -179,7 +179,6 @@ init_state /= np.linalg.norm(init_state)
 def circuit(theta, phi):
     # State preparation
     qml.StatePrep(init_state, wires=[0, 1, 2])
-    qml.Barrier(wires=[0, 1, 2])
 
     # Evolve state
     qml.Hadamard(0)
@@ -187,7 +186,6 @@ def circuit(theta, phi):
     qml.RX(phi, 2)
     qml.CNOT([1, 2])
     qml.CZ([0, 1])
-    qml.Barrier(wires=[0, 1, 2])
 
     # De-evolve state
     qml.CZ([0, 1])
