@@ -118,11 +118,11 @@ def noise2(op, **kwargs):
         qml.ThermalRelaxationError(0.1, kwargs["t1"], kwargs["t2"], kwargs["tg"], wire)
 
 ######################################################################
-# By default, noise operations specified by a noise function will be inserted *after* the
-# gate operation that satisfies the conditional. However, we can circumvent this by manually
-# queing the evaluated gate operation via :func:`~pennylane.apply` within the function
-# definition. For example, we can add a sandwiching constant-valued rotation error
-# for :class:`~.pennylane.Hadamard` gates on the wires :math:`\in \{0, 1\}`:
+# By default, noise operations specified by a noise function will be inserted *after*
+# the gate operation that satisfies the conditional. However, we can circumvent this by
+# manually queing the evaluated gate operation via :func:`~pennylane.apply` within the
+# function definition. For example, we can add a sandwiching constant-valued rotation
+# error for :class:`~.pennylane.Hadamard` gates on the wires :math:`\in \{0, 1\}`:
 #
 
 fcond3 = qml.noise.op_eq("Hadamard") & qml.noise.wires_in([0, 1])
@@ -136,7 +136,7 @@ def noise3(op, **kwargs):
 # Finally, we can build the noise model with some required ``metadata`` for ``noise2``:
 #
 
-metadata = dict(t1=0.02, t2=0.03, tg=0.001, p=0.01)  # times unit: sec
+metadata = dict(t1=0.02, t2=0.03, tg=0.001)  # times unit: sec
 noise_model = qml.NoiseModel(
     {fcond1: noise1, fcond2: noise2, fcond3: noise3}, **metadata
 )
@@ -194,7 +194,7 @@ qml.draw_mpl(noisy_circuit)(theta, phi)
 plt.show()
 
 ######################################################################
-# We can then use these for running noisy simulations as shown below:
+# We can then use the ``noisy_circuit`` to run noisy simulations as shown below:
 #
 
 init_dm = np.outer(init_state, init_state) # density matrix for init_state
