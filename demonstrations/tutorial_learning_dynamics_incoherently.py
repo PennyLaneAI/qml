@@ -303,7 +303,7 @@ print("The final trace distance is: \n", trace_distances[-1])
 # larger, 16-qubit transverse-field Ising
 # Hamiltonian, and use classical shadow samples from quantum hardware to estimate the cost function.
 # The corresponding `Learning Dynamics Incoherently PennyLane Dataset <https://pennylane.ai/datasets/other/learning-dynamics-incoherently>`__
-# and can be downloaded via the :mod:`qml.data` module.
+# can be downloaded via the :mod:`qml.data` module.
 
 [ds] = qml.data.load("other", name="learning-dynamics-incoherently")
 
