@@ -8,12 +8,12 @@ in the
 `Learning Dynamics Incoherently PennyLane Dataset <https://pennylane.ai/datasets/other/learning-dynamics-incoherently>`__. 
 
 In simple terms, learning dynamics incoherently consists of two steps. First, we measure the output
-of the unknown process for many different inputs. Then, we adjust a variational quantum circuit
-until it produces the same input-output combinations as the unknown process. For step 1, we measure
+of the unknown process for many different inputs. For example, we will measure
 :doc:`classical shadows <tutorial_classical_shadows>` of the target process output.
-For step 2, we simulate the model circuit to get its final state. To know how similar the simulated
-state is to the target process output, we estimate the overlap of the states using the classical
-shadows from step 1.
+Then, we adjust a variational quantum circuit
+until it produces the same input-output combinations as the unknown process. In this tutorial, we
+simulate the model circuit output and use the classical shadow measurements to estimate the
+overlap between the model output states and the unknown process output states.
 
 This approach differs from learning the quantum process *coherently* [#Huang]_ because it does not
 require the model circuit to be connected to the target quantum process. That is, the model circuit
@@ -22,13 +22,6 @@ circuit using classical information from the classical shadow measurements. This
 it's not always possible to port the quantum output of a system directly to hardware without
 first measuring it. However, depending on the quantum process, an exponential number of classical
 shadow measurements may be required [#Jerbi]_.
-
-In this tutorial, we will use PennyLane to create an unknown target quantum process and the initial
-states to go into it, simulate shallow classical shadow measurements of the target process, and
-create and train a model variational circuit that approximates the target process.
-Finally, we will use the
-`Learning Dynamics Incoherently PennyLane Dataset <https://pennylane.ai/datasets/other/learning-dynamics-incoherently>`__
-to replicate part of the original investigation.
 """
 
 ######################################################################
