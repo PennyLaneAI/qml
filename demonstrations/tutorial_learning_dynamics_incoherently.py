@@ -1,5 +1,5 @@
-r"""Learning quantum dynamics incoherently: variational learning using classical shadows
-====================================================================================
+r"""Learning quantum dynamics incoherently: Variational learning using classical shadows
+========================================================================================
 
 How can we recreate and simulate an unknown quantum process with a quantum circuit? One approach is
 to learn the dynamics of this process incoherently, as done by Jerbi et al. [#Jerbi]_. 
@@ -86,7 +86,7 @@ hamiltonian = qml.sum(
 # behavior for states that are very different from our training set.
 #
 # For quantum systems, this means we want to sample
-# :doc:`Haar random states <tutorial_haar_measure>` as done below.
+# :doc:`Haar-random states <tutorial_haar_measure>`, as done below.
 #
 
 from scipy.stats import unitary_group
@@ -133,7 +133,7 @@ plt.show()
 #
 # Since ``target_circuit`` returns :func:`~pennylane.classical_shadow`, running the circuit with a
 # ``shot`` value gives the desired number of classical shadow measurements.
-# We use this to create a set of shadows for each initial state:
+# We use this to create a set of shadows for each initial state.
 #
 
 n_measurements = 10000
@@ -155,7 +155,7 @@ for random_state in random_states:
 # As done in [#Jerbi]_, we create a model circuit with the same gate structure as the target
 # circuit. If the target quantum process were truly unknown, then we would choose a general
 # variational quantum circuit like in the
-# :doc:`variational classifiers demo </demos/tutorial_variational_classifier>`.
+# :doc:`Variational classifier demo </demos/tutorial_variational_classifier>`.
 #
 # .. note ::
 #
@@ -168,7 +168,7 @@ for random_state in random_states:
 @qml.qnode(dev)
 def model_circuit(params, random_state):
     qml.StatePrep(random_state, wires=range(n_qubits))
-    # Parameterized quantum circuit with the same gate structure as the target
+    # parameterized quantum circuit with the same gate structure as the target
     for i in range(n_qubits):
         qml.RX(params[i], wires=i)
 
@@ -183,8 +183,8 @@ qml.draw_mpl(model_circuit)(initial_params, random_states[0])
 plt.show()
 
 ######################################################################
-# 5. Training a model circuit using classical shadows in a cost function
-# ------------------------------------------------------------------------
+# 5. Training using classical shadows in a cost function
+# ------------------------------------------------------
 #
 # We now have to find the optimal parameters for ``model_circuit`` to mirror the ``target_circuit``.
 # We can estimate the similarity between the circuits according to this cost function (see
@@ -209,14 +209,14 @@ plt.show()
 def cost(params):
     cost = 0.0
     for idx, random_state in enumerate(random_states):
-        # Obtain the density matrices for each qubit
+        # obtain the density matrices for each qubit
         observable_mats = model_circuit(params, random_state)
-        # Convert to a PauliSentence
+        # convert to a PauliSentence
         observable_pauli = [
             qml.pauli_decompose(observable_mat, wire_order=[qubit])
             for qubit, observable_mat in enumerate(observable_mats)
         ]
-        # Estimate the overlap for each qubit
+        # estimate the overlap for each qubit
         cost = cost + qml.math.sum(shadows[idx].expval(observable_pauli))
     cost = 1 - cost / n_qubits / n_random_states
     return cost
@@ -245,7 +245,7 @@ print("Final cost:", costs[-1])
 #
 
 
-# Find the ideal parameters from the original Trotterized Hamiltonian
+# find the ideal parameters from the original Trotterized Hamiltonian
 ideal_parameters = [
     op.decomposition()[0].parameters[0]
     for op in qml.TrotterProduct(hamiltonian, 2, 1, 1).decomposition()
@@ -275,7 +275,7 @@ plt.show()
 #
 # The ideal cost :math:`C^l_N(\theta)` is therefore greater than 0.
 #
-# We can also look at the :func:`trace distance <pennylane.math.trace_distance>` between the unitary
+# We can also look at the :func:`trace_distance <pennylane.math.trace_distance>` between the unitary
 # matrix of the target circuit and the model circuit. As the circuits become more similar with each
 # training iteration, we should see the trace distance decrease and reach a low value.
 #
@@ -302,8 +302,8 @@ print("The final trace distance is: \n", trace_distances[-1])
 
 
 ######################################################################
-# Using the learning dynamics incoherently dataset
-# ----------------------------------------------------------------
+# Using the Learning Dynamics Incoherently dataset
+# ------------------------------------------------
 #
 # In Jerbi et al. [#Jerbi]_, the authors perform this procedure to learn dynamics incoherently on a
 # larger, 16-qubit transverse-field Ising
@@ -341,7 +341,7 @@ shadows = [qml.ClassicalShadow(shadow_meas[:n_measurements], shadow_bases[:n_mea
 # We only need to create the model circuit, cost function, and train.
 # For these we use the same model circuit as
 # `above <#creating-a-model-circuit-that-will-learn-the-target-process>`_, updated to reflect
-# the increased number of qubits:
+# the increased number of qubits.
 #
 
 dev = qml.device("default.qubit")
@@ -434,4 +434,3 @@ print("Target output state\n", target_matrices_shadow[0])
 # About the author
 # ------------------
 #
-# .. include:: ../_static/authors/diego_guala.txt

@@ -1,5 +1,5 @@
 {
-    "title": "Learning Dynamics Incoherently",
+    "title": "Learning dynamics incoherently",
     "authors": [
         {
             "id": "diego_guala"
@@ -8,7 +8,8 @@
     "dateOfPublication": "2024-07-29T00:00:00+00:00",
     "dateOfLastModification": "2024-07-29T00:00:00+00:00",
     "categories": [
-        "Quantum Machine Learning"
+        "Quantum Machine Learning",
+        "How-to"
     ],
     "tags": [],
     "previewImages": [
