@@ -406,9 +406,10 @@ print("Target output state\n", target_matrices_shadow[0])
 #
 # After training, the model outputs are closer to the target outputs, but not quite the same.
 # This is due to the limitations of this learning method. Even for a simple circuit like the
-# short-time evolution of a first order single Trotter step, it requires an exponential number of
+# short-time evolution of a first order single Trotter step, it requires a large number of
 # shadow measurements and training states to faithfully reproduce the underlying quantum process.
-# The results can be improved by using more training states and classical shadow measurements.
+# The results can be improved by increasing the number training states and
+# classical shadow measurements.
 #
 
 
