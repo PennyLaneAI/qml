@@ -8,10 +8,10 @@ r"""How to use noise models in PennyLane
 # arising from environment-based errors, state preparation routines, measurements, and more.
 #
 # Here, we show how to use the features provided in PennyLane's :mod:`~.pennylane.noise`
-# module to construct and manipulate noise models for enabling noisy simulation. In PennyLane,
+# module to construct and manipulate noise models, enabling noisy simulation. In PennyLane,
 # noise models are constructed from two main components:
 #
-# 1. Boolean conditions that dictate whether or not noise is inserted into the circuit.
+# 1. Boolean conditions that dictate whether noise is inserted into the circuit.
 # 2. Callables that apply noise operations when a corresponding condition is satisfied.
 #
 # The following example shows how a noise model transforms a sample circuit by inserting
@@ -38,16 +38,16 @@ r"""How to use noise models in PennyLane
 # ~~~~~~~~~~~~
 #
 # We implement conditions as Boolean functions that accept an operation and evaluate it
-# to return a Boolean output. In PennyLane, such objects are referred to as conditionals
-# and are constructed as instances of :class:`~.pennylane.BooleanFn` and can be combined
-# using standard bitwise operations such as ``&``, ``|``, ``^``, or ``~``. We support
+# to return a Boolean output. In PennyLane, such objects are referred to as **conditionals**.
+# They are constructed as instances of :class:`~.pennylane.BooleanFn` and can be combined
+# using standard bitwise operations such as ``&``, ``|``, ``^``, or ``~``. PennyLane supports
 # the following types of conditionals:
 #
-# 1. **Operation-based conditionals:** They evaluate a gate operation based on whether it
-#    is a specific type of operation or belongs to a specified set of operations. They are
+# 1. **Operation-based conditionals:** They evaluate whether a gate operation is a
+#    specific type of operation or belongs to a specified set of operations. They are
 #    built using the :func:`~.pennylane.noise.op_eq` and :func:`~.pennylane.noise.op_in`.
-# 2. **Wire-based conditionals:** They evaluate a gate operation based whether if
-#    its wires are equal or belong to a specified set of wires. They are built using the
+# 2. **Wire-based conditionals:** They evaluate whether a gate operation's wires
+#     are equal to or are contained in a specified set of wires. They are built using the
 #    :func:`~.pennylane.noise.wires_eq` and :func:`~.pennylane.noise.wires_in`.
 # 3. **Arbitrary conditionals:** Custom conditionals can be defined as a function wrapped
 #    with a :class:`~.pennylane.BooleanFn` decorator. Signature for such conditionals must
@@ -78,13 +78,13 @@ for op in [qml.RX(0.05, wires=[0]), qml.RX(2.34, wires=[1])]:
 # contains the error operations that are *inserted* when a gate operation in the circuit
 # satisfies corresponding conditional. There are a few ways to construct noise functions:
 #
-# 1. **Single-instruction noise functions:** To add a single-operation noise, one can use
+# 1. **Single-instruction noise functions:** To add a single-operation noise, we can use
 #    :func:`~pennylane.noise.partial_wires`. It performs a partial initialization of the
 #    noise operation and queues it on the ``wires`` of the gate operation.
 # 2. **User-defined noise functions:** For adding more sophisticated and custom noise,
-#    one can define their own quantum function with the signature specified above.
+#    we can define our own quantum function with the signature specified above.
 #
-# For example, one can use the following for inserting a depolarization error and show
+# For example, one can use the following to insert a depolarization error and show
 # the error that gets queued with an example gate operation:
 #
 
@@ -108,8 +108,8 @@ print(f"Error for {op}: {depol_error(op)}")
 fcond1, noise1 = rx_and_wires_cond, depol_error
 
 ######################################################################
-# Next, we construct a pair to mimic thermal relaxation errors that are
-# encountered during state preparation:
+# Next, we construct a pair to mimic thermal relaxation errors that are encountered
+# during the state preparation via :class:`~.pennylane.ThermalRelaxationError`:
 
 fcond2 = qml.noise.op_eq(qml.StatePrep)
 
