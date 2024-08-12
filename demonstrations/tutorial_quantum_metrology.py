@@ -181,7 +181,7 @@ def experiment(weights, phi, gamma=0.0):
     return qml.probs(wires=[0, 1, 2])
 
 # Draw the circuit at the given parameter values
-print(qml.draw(experiment, expansion_strategy='device')(
+print(qml.draw(experiment, level='device')(
     np.arange(NUM_ANSATZ_PARAMETERS + NUM_MEASUREMENT_PARAMETERS),
     np.zeros(3),
     gamma=0.2)

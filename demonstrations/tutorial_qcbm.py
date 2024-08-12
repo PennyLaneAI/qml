@@ -474,7 +474,7 @@ def circuit(weights):
 
 jit_circuit = jax.jit(circuit)
 
-qml.draw_mpl(circuit, expansion_strategy="device")(weights)
+qml.draw_mpl(circuit, level="device")(weights)
 plt.show()
 
 ######################################################################

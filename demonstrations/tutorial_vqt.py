@@ -288,7 +288,7 @@ qnode = qml.QNode(quantum_circuit, dev, interface="autograd")
 
 rotation_params = [[[1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1]] for i in range(0, depth)]
 coupling_params = [[1, 1, 1, 1] for i in range(0, depth)]
-print(qml.draw(qnode, expansion_strategy="device", show_matrices=True)(rotation_params, coupling_params, sample=[1, 0, 1, 0]))
+print(qml.draw(qnode, level="device", show_matrices=True)(rotation_params, coupling_params, sample=[1, 0, 1, 0]))
 
 
 ######################################################################

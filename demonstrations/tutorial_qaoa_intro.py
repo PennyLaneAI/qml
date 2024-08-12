@@ -103,7 +103,7 @@ def circuit():
     qml.ApproxTimeEvolution(H, t, n)
     return [qml.expval(qml.PauliZ(i)) for i in range(2)]
 
-print(qml.draw(circuit, expansion_strategy='device')())
+print(qml.draw(circuit, level='device')())
 
 ######################################################################
 # Layering circuits
