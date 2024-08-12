@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2019-10-11T00:00:00+00:00",
-    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
     "categories": [
         "Optimization"
     ],
@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_quantum_natural_gradient.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_quantum_natural_gradient.png"
         }
     ],
     "seoDescription": "The quantum natural gradient method can achieve faster convergence for quantum machine learning problems by taking into account the intrinsic geometry of qubits.",

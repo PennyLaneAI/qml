@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2020-10-13T00:00:00+00:00",
-    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
     "categories": [
         "Quantum Hardware",
         "Quantum Computing"
@@ -15,7 +15,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_QC_neutral_atoms.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_QC_neutral_atoms.png"
         }
     ],
     "seoDescription": "Neutral atom quantum devices allow you to place qubits within interesting three-dimensional configurations.",
