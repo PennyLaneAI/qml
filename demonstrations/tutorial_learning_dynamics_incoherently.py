@@ -302,8 +302,8 @@ print("The final trace distance is: \n", trace_distances[-1])
 # In Jerbi et al. [#Jerbi]_, the authors perform this procedure to learn dynamics incoherently on a
 # larger, 16-qubit transverse-field Ising
 # Hamiltonian, and use classical shadow samples from quantum hardware to estimate the cost function.
-# This data is available in the
-# `Learning Dynamics Incoherently PennyLane Dataset <https://pennylane.ai/datasets/other/learning-dynamics-incoherently>`__ and downloadable through the :mod:`qml.data` module.
+# The corresponding `Learning Dynamics Incoherently PennyLane Dataset <https://pennylane.ai/datasets/other/learning-dynamics-incoherently>`__
+# and can be downloaded via the :mod:`qml.data` module.
 #
 # To use this dataset, we first load it using :func:`~pennylane.data.load`:
 
