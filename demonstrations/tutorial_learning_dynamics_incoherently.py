@@ -7,6 +7,15 @@ Here, we'll reproduce the numerical simulations of [#Jerbi]_ using the authors' 
 in the
 `Learning Dynamics Incoherently PennyLane Dataset <https://pennylane.ai/datasets/other/learning-dynamics-incoherently>`__. 
 
+This approach differs from learning the quantum process *coherently* [#Huang]_ because it does not
+require the model circuit to be connected to the target quantum process. That is, the model circuit
+does not receive quantum information from the target process directly. Instead, we train the model
+circuit using classical information from the classical shadow measurements. This works well for
+low-entangling processes but can require an exponential number of classical shadow measurements,
+depending on the unknown quantum process [#Jerbi]_. This is useful because
+it's not always possible to port the quantum output of a system directly to hardware without
+first measuring it.
+
 In simple terms, learning dynamics incoherently consists of two steps. First, we measure the output
 of the unknown process for many different inputs. For example, we will measure
 :doc:`classical shadows <tutorial_classical_shadows>` of the target process output.
@@ -14,14 +23,6 @@ Then, we adjust a variational quantum circuit
 until it produces the same input-output combinations as the unknown process. In this tutorial, we
 simulate the model circuit output and use the classical shadow measurements to estimate the
 overlap between the model output states and the unknown process output states.
-
-This approach differs from learning the quantum process *coherently* [#Huang]_ because it does not
-require the model circuit to be connected to the target quantum process. That is, the model circuit
-does not receive quantum information from the target process directly. Instead, we train the model
-circuit using classical information from the classical shadow measurements. This is useful because
-it's not always possible to port the quantum output of a system directly to hardware without
-first measuring it. However, depending on the quantum process, an exponential number of classical
-shadow measurements may be required [#Jerbi]_.
 """
 
 ######################################################################
