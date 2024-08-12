@@ -249,7 +249,7 @@ ideal_parameters = ideal_parameters[:n_qubits][::-1] + ideal_parameters[n_qubits
 ideal_cost = cost(ideal_parameters)
 
 plt.plot(costs, label="Training")
-plt.plot([0, steps], [ideal_cost, ideal_cost], "r--", label="Ideal Parameters")
+plt.plot([0, steps], [ideal_cost, ideal_cost], "r--", label="Ideal parameters")
 plt.ylabel("Cost")
 plt.xlabel("Training iterations")
 plt.legend()
