@@ -96,17 +96,31 @@ import warnings
 warnings.filterwarnings("ignore")
 np.random.seed(42)
 
+# Load the digits dataset with features (X_digits) and labels (y_digits)
 X_digits, y_digits = load_digits(return_X_y=True)
+
+# Create a boolean mask to filter out only the samples where the label is 2 or 6
 filter_mask = np.isin(y_digits, [2, 6])
+
+# Apply the filter mask to the features and labels to keep only the selected digits
 X_digits = X_digits[filter_mask]
 y_digits = y_digits[filter_mask]
+
+# Split the filtered dataset into training and testing sets with 10% of data reserved for testing
 X_train, X_test, y_train, y_test = train_test_split(
     X_digits, y_digits, test_size=0.1, random_state=42
 )
+
+# Normalize the pixel values in the training and testing data
+# Convert each image from a 1D array to an 8x8 2D array, normalize pixel values, and scale them
 X_train = np.array([thing.reshape([8, 8]) / 16 * 2 * np.pi for thing in X_train])
 X_test = np.array([thing.reshape([8, 8]) / 16 * 2 * np.pi for thing in X_test])
-y_train = (y_train - 4)/2
-y_test = (y_test - 4)/2
+
+# Adjust the labels to be centered around 0 and scaled to be in the range -1 to 1
+# The original labels (2 and 6) are mapped to -1 and 1 respectively
+y_train = (y_train - 4) / 2
+y_test = (y_test - 4) / 2
+
 
 ######################################################################
 # A visualization of a few data points are shown below.
@@ -159,26 +173,38 @@ plt.show()
 # We write code for the above Ansatz and feature map as follows.
 # 
 
+
 def feature_map(features):
+    # Apply Hadamard gates to all qubits to create an equal superposition state
     for i in range(len(features[0])):
         qml.Hadamard(i)
+    
+    # Apply angle embeddings based on the feature values
     for i in range(len(features)):
+        # For odd-indexed features, use Z-rotation in the angle embedding
         if i % 2:
             qml.AngleEmbedding(features=features[i], wires=range(8), rotation="Z")
+        # For even-indexed features, use X-rotation in the angle embedding
         else:
             qml.AngleEmbedding(features=features[i], wires=range(8), rotation="X")
 
-
+# Define the ansatz (quantum circuit ansatz) for parameterized quantum operations
 def ansatz(params):
+    # Apply RY rotations with the first set of parameters
     for i in range(8):
         qml.RY(params[i], wires=i)
+    
+    # Apply CNOT gates with adjacent qubits (cyclically connected) to create entanglement
     for i in range(8):
         qml.CNOT(wires=[(i - 1) % 8, (i) % 8])
+    
+    # Apply RY rotations with the second set of parameters
     for i in range(8):
         qml.RY(params[i + 8], wires=i)
+    
+    # Apply CNOT gates with qubits in reverse order (cyclically connected) to create additional entanglement
     for i in range(8):
         qml.CNOT(wires=[(8 - 2 - i) % 8, (8 - i - 1) % 8])
-
 ######################################################################
 # Variational Algorithm
 # ---------------------
