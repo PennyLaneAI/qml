@@ -304,8 +304,6 @@ print("The final trace distance is: \n", trace_distances[-1])
 # Hamiltonian, and use classical shadow samples from quantum hardware to estimate the cost function.
 # The corresponding `Learning Dynamics Incoherently PennyLane Dataset <https://pennylane.ai/datasets/other/learning-dynamics-incoherently>`__
 # and can be downloaded via the :mod:`qml.data` module.
-#
-# To use this dataset, we first load it using :func:`~pennylane.data.load`:
 
 [ds] = qml.data.load("other", name="learning-dynamics-incoherently")
 
