@@ -8,7 +8,7 @@ For example, a quantum algorithm could prepare a classically pre-computed MPS
 as initial state in order to then perform operations that are no longer
 classically tractable.
 
-.. figure:: ../_static/demonstration_assets/preparation_mps_mcm/socialthumbnail_constant_depth_mps_prep.png
+.. figure:: ../_static/demonstration_assets/constant_depth_mps_prep/socialthumbnail_constant_depth_mps_prep.png
     :align: center
     :width: 50%
 
@@ -63,7 +63,7 @@ are able to approximate relevant states in quantum many-body systems.
 In particular, MPS can accurately describe ground states of (gapped local)
 one-dimensional Hamiltonians, which can be found efficiently using the density
 matrix renormalization group (DMRG).
-For reviews of MPS see [#todo]_, [#todo]_, and [#todo]_.
+For reviews of MPS see [#todo].
 
 Following [#smith]_, we will look at translation-invariant MPS
 of a quantum :math:`N`-body system where each body, or site, has local (physical)
@@ -753,11 +753,15 @@ for g, correls in zip(gs, all_correls):
 # Conclusion
 # ----------
 #
-######################################################################
+# The circuit works and it has constant depth, yay!
+# It needs additional qubits, nay!
+# This can alleviate connectivity issues (?), yay!
+# Entanglement swapping works, and we have MPS available in yet another way now, yay!
 #
 #
 # References
 # ----------
+#
 # .. [#smith]
 #
 #     Kevin C. Smith, Abid Khan, Bryan K. Clark, S.M. Girvin, Tzu-Chieh Wei
