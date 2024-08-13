@@ -70,7 +70,7 @@ r"""Adversarial Attacks on Quantum Machine Learning
 # Setting up the environment
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# For this tutorial, we will use the Pennylane *TorchLayer* [5] class to perform circuit operations
+# For this tutorial, we will use the Pennylane :class:`~pennylane.qnn.TorchLayer` class to perform circuit operations
 # and optimizations with the PyTorch backend. Thus, we need to import the torch library alongside
 # Pennylane:
 #
