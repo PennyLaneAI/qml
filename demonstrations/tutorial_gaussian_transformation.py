@@ -6,7 +6,7 @@ Gaussian transformation
 
 .. meta::
     :property="og:description": Use quantum machine learning techniques to tune a beamsplitter.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//gauss-circuit.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/gauss-circuit.png
 
 .. related:: 
    plugins_hybrid Plugins and Hybrid computation
