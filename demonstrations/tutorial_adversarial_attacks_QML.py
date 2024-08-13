@@ -4,7 +4,7 @@ r"""Adversarial Attacks on Quantum Machine Learning
 
 ######################################################################
 # This demo is based on the paper ‘A Comparative Analysis of Adversarial Robustness for Quantum and
-# Classical Machine Learning Models’ [1] by M.Wendlinger, K.Tscharke and P.Debus, which dives into the
+# Classical Machine Learning Models’ [#Wendlinger]_ by M.Wendlinger, K.Tscharke and P.Debus, which dives into the
 # world of adversarial attacks on quantum computers to find relations to classical adversarial machine
 # learning. In the following, we briefly cover the necessary theoretical baselines of adversarial
 # attacks on classification networks before giving a hands-on example of how to construct such an
