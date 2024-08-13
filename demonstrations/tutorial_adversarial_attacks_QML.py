@@ -431,8 +431,10 @@ visualize_data(perturbed_x.reshape(-1, 16, 16), y_vis, adversarial_class_output)
 # References
 # ----------
 #
-# [1] *A Comparative Analysis of Adversarial Robustness for Quantum and Classical Machine Learning
-# Models* (https://arxiv.org/abs/2404.16154)
+# .. [#Wendlinger]
+#     Maximilian Wendlinger and Kilian Tscharke and Pascal Debus
+#     "A Comparative Analysis of Adversarial Robustness for Quantum and Classical Machine Learning Models"
+#     `arXiv:2404.16154 <https://arxiv.org/abs/2404.16154>`__, 2024
 #
 # [2] *Explaining and harnessing adversarial examples* (https://arxiv.org/abs/1412.6572)
 #
