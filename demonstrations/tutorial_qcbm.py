@@ -174,7 +174,13 @@ plt.yticks([])
 for i in range(n):
     for j in range(n):
         text = plt.text(
-            i, j, sample[j][i], ha="center", va="center", color="gray", fontsize=12
+            i,
+            j,
+            sample[j][i],
+            ha="center",
+            va="center",
+            color="gray",
+            fontsize=12,
         )
 
 print(f"\nSample bitstring: {''.join(np.array(sample.flatten(), dtype='str'))}")
@@ -242,9 +248,7 @@ weights = np.random.random(size=wshape)
 
 @qml.qnode(dev)
 def circuit(weights):
-    qml.StronglyEntanglingLayers(
-        weights=weights, ranges=[1] * n_layers, wires=range(n_qubits)
-    )
+    qml.StronglyEntanglingLayers(weights=weights, ranges=[1] * n_layers, wires=range(n_qubits))
     return qml.probs()
 
 
@@ -297,9 +301,7 @@ print(loss_2)
 
 @jax.jit
 def update_step(params, opt_state):
-    (loss_val, qcbm_probs), grads = jax.value_and_grad(qcbm.mmd_loss, has_aux=True)(
-        params
-    )
+    (loss_val, qcbm_probs), grads = jax.value_and_grad(qcbm.mmd_loss, has_aux=True)(params)
     updates, opt_state = opt.update(grads, opt_state)
     params = optax.apply_updates(params, updates)
     kl_div = -jnp.sum(qcbm.py * jnp.nan_to_num(jnp.log(qcbm_probs / qcbm.py)))
@@ -344,7 +346,12 @@ qcbm_probs = np.array(qcbm.circ(weights))
 plt.figure(figsize=(12, 5))
 
 plt.bar(
-    np.arange(2**size), probs, width=2.0, label=r"$\pi(x)$", alpha=0.4, color="tab:blue"
+    np.arange(2**size),
+    probs,
+    width=2.0,
+    label=r"$\pi(x)$",
+    alpha=0.4,
+    color="tab:blue",
 )
 plt.bar(
     np.arange(2**size),
@@ -374,9 +381,7 @@ plt.show()
 
 
 def circuit(weights):
-    qml.StronglyEntanglingLayers(
-        weights=weights, ranges=[1] * n_layers, wires=range(n_qubits)
-    )
+    qml.StronglyEntanglingLayers(weights=weights, ranges=[1] * n_layers, wires=range(n_qubits))
     return qml.sample()
 
 
@@ -384,9 +389,7 @@ for N in [2000, 20000]:
     dev = qml.device("default.qubit", wires=n_qubits, shots=N)
     circ = qml.QNode(circuit, device=dev)
     preds = circ(weights)
-    mask = np.any(
-        np.all(preds[:, None] == data, axis=2), axis=1
-    )  # Check for row-wise equality
+    mask = np.any(np.all(preds[:, None] == data, axis=2), axis=1)  # Check for row-wise equality
     chi = np.sum(mask) / N
     print(f"χ for N = {N}: {chi:.4f}")
 
@@ -433,8 +436,7 @@ def mixture_gaussian_pdf(x, mus, sigmas):
     mus, sigmas = np.array(mus), np.array(sigmas)
     vars = sigmas**2
     values = [
-        (1 / np.sqrt(2 * np.pi * v)) * np.exp(-((x - m) ** 2) / (2 * v))
-        for m, v in zip(mus, vars)
+        (1 / np.sqrt(2 * np.pi * v)) * np.exp(-((x - m) ** 2) / (2 * v)) for m, v in zip(mus, vars)
     ]
     values = np.sum([val / sum(val) for val in values], axis=0)
     return values / np.sum(values)
@@ -466,15 +468,13 @@ weights = np.random.random(size=wshape)
 
 @qml.qnode(dev)
 def circuit(weights):
-    qml.StronglyEntanglingLayers(
-        weights=weights, ranges=[1] * n_layers, wires=range(n_qubits)
-    )
+    qml.StronglyEntanglingLayers(weights=weights, ranges=[1] * n_layers, wires=range(n_qubits))
     return qml.probs()
 
 
 jit_circuit = jax.jit(circuit)
 
-qml.draw_mpl(circuit, expansion_strategy="device")(weights)
+qml.draw_mpl(circuit, level="device")(weights)
 plt.show()
 
 ######################################################################
