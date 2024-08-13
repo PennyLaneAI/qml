@@ -26,7 +26,7 @@ r"""Adversarial Attacks on Quantum Machine Learning
 # typical example of an adversarial attack is shown in the picture above, where an image of a panda is
 # manipulated by adding a small noise to each pixel. The original image is correctly classified as
 # “Panda” while the image with tiny manipulations is falsely classified as “Gibbon” (the noise is
-# magnified in the figure so we can actually see it). This example is adapted from a famous paper [2]
+# magnified in the figure so we can actually see it). This example is adapted from a famous paper [#Goodfellow]_
 # showing the vulnerability of classical machine learning models to adversarial attacks.
 #
 # Mathematically, the goal of an (untargeted) attack is to achieve a misclassification of the model
@@ -56,9 +56,9 @@ r"""Adversarial Attacks on Quantum Machine Learning
 # attacks are imperceptible to humans, and hence difficult to detect. For this reason, it is essential
 # that ML models in security-critical applications are robust against these types of attacks.
 #
-# Quantum machine learning has been shown to have theoretical advantages over classical ML methods [3]
+# Quantum machine learning has been shown to have theoretical advantages over classical ML methods [#Liu]_
 # and is becoming increasingly popular. However, first works in this direction suggest that QML
-# suffers from the same vulnerabilities as classical ML [4]. How the vulnerability of QML models
+# suffers from the same vulnerabilities as classical ML [#Lu]_. How the vulnerability of QML models
 # relates to classical models and how robust the models are in comparison is evaluated in [#Wendlinger]_. But
 # enough talk, let’s see how we can actually attack a QML model!
 #
@@ -84,10 +84,10 @@ from matplotlib import pyplot as plt
 # Visualization of the dataset
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# As in the paper [1], we make use of the PlusMinus dataset, which serves as a good baseline for
+# As in the paper [#Wendlinger]_, we make use of the PlusMinus dataset, which serves as a good baseline for
 # evaluating a QML image classification model’s ability to find useful features in the input. It also
 # allows us to define the usefulness of attacks on the QML model while being low-dimensional enough to
-# perform scalable training (more info on the dataset can be found in [1]). It consists of four
+# perform scalable training (more info on the dataset can be found in [#Wendlinger]_). It consists of four
 # classes of :math:`16\times16` pixel grayscale images which show one of the four symbols
 # :math:`\{+,-,\vdash,\dashv\}`. Below we visualize one sample of each class to get an understanding
 # of the dataset.
@@ -138,11 +138,11 @@ visualize_data(x_vis, y_vis)
 # Building the QML circuit for classification
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# We will make use of a data-reuploading scheme to encode the 256 input pixels into the latent space
-# of the quantum classifier. To this end, the *StronglyEntanglingLayers* [6] template provides an
+# We will make use of a :doc:`data-reuploading <tutorial_data_reuploading_classifier>` scheme to encode the 256 input pixels into the latent space
+# of the quantum classifier. To this end, the :class:`~pennylane.StronglyEntanglingLayers` template provides an
 # easy-to-use structure for the circuit design. The output of our classifier is a four-dimensional
 # vector resulting from Pauli-Z oberservables along the first four qubits. These outputs (unnormalized
-# probability scores - i.e. logits) are then used in the *CrossEntropyLoss* function to optimize the
+# probability scores - i.e. logits) are then used in the `CrossEntropyLoss <https://pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html>`_ function to optimize the
 # model parameters. Together with the PyTorch integration mentioned above, the classifier code looks
 # like the following:
 #
@@ -159,6 +159,15 @@ print("Using device:", device)
 
 
 class QML_classifier(torch.nn.Module):
+    """
+    Class for creating a quantum machine learning (classification) model based on the StronglyEntanglingLayers template.
+
+    Args:
+        input_dim: the dimension of the input samples
+        output_dim: the dimension of the output, i.e. the numbers of classes 
+        num_qubits: the number of qubits in the circuit
+        num_layers: the number of layers within the StronglyEntanglingLayers template
+    """
     def __init__(self, input_dim, output_dim, num_qubits, num_layers):
         super().__init__()
         torch.manual_seed(1337)  # fixed seed for reproducibility
@@ -293,9 +302,8 @@ visualize_data(x_vis, y_vis, benign_class_output)
 # ~~~~~~~~~~~~~~~~~~
 #
 # As described before, the mathematical notation for an adversarial attack is as follows:
-# :raw-latex:`\begin{equation}
-# \delta \equiv \; \underset{\delta^{\prime} \in \Delta}{\operatorname{argmax}} \;\mathcal{L}\left(f\left(x+\delta^{\prime} ; \theta^*\right), y\right)
-# \end{equation}` This equation can be summarized in a simple step-by-step recipe. In basic terms, we
+# .. math:: \delta \equiv \; \underset{\delta^{\prime} \in \Delta}{\operatorname{argmax}} \;\mathcal{L}\left(f\left(x+\delta^{\prime} ; \theta^*\right), y\right)
+# This equation can be summarized in a simple step-by-step recipe. In basic terms, we
 # perform a forward and backward pass through the model and loss function (just like we do during
 # training) for the specific samples that we want to find perturbations for. The difference to
 # training steps is that the gradients we calculate are **with respect to the input features** of the
@@ -307,7 +315,8 @@ visualize_data(x_vis, y_vis, benign_class_output)
 #
 
 
-# simple implementation of PGD attack (without randomized starting points - cf. BIM)
+# simple implementation of Projected Gradient Descent (PGD) attack (without randomized starting points - cf. BIM)
+# for an introduction to PGD, see https://adversarial-ml-tutorial.org/adversarial_examples/#projected-gradient-descent
 def PGD(model, feats, labels, epsilon=0.1, alpha=0.01, num_iter=10):
 
     # initialize image perturbations with zero
@@ -423,7 +432,7 @@ visualize_data(perturbed_x.reshape(-1, 16, 16), y_vis, adversarial_class_output)
 # While this method does seem useful, it needs to be noted that this is a very basic approach (just
 # include the pertubed images in the trainset, duh!) and might not work equally well for a different
 # attack or slightly changed epsilon values. There are approaches (e.g. using Lipschitz regularization
-# as shown in [1]) that have the potential to be more effective in increasing the robustness, but this
+# as shown in [#Wendlinger]_) that have the potential to be more effective in increasing the robustness, but this
 # is still a field of ongoing research, and many different approaches are waiting to be discovered!
 #
 
@@ -436,16 +445,21 @@ visualize_data(perturbed_x.reshape(-1, 16, 16), y_vis, adversarial_class_output)
 #     "A Comparative Analysis of Adversarial Robustness for Quantum and Classical Machine Learning Models"
 #     `arXiv:2404.16154 <https://arxiv.org/abs/2404.16154>`__, 2024
 #
-# [2] *Explaining and harnessing adversarial examples* (https://arxiv.org/abs/1412.6572)
+# .. [#Goodfellow]
+#     Ian J. Goodfellow and Jonathon Shlens and Christian Szegedy
+#     "Explaining and harnessing adversarial examples"
+#     `arXiv:1412.6572 <https://arxiv.org/abs/1412.6572>`__, 2014
 #
-# [3] *A rigorous and robust quantum speed-up in supervised machine learning*
-# (https://arxiv.org/abs/2010.02174)
+# .. [#Liu] 
+#     Yunchao Liu and Srinivasan Arunachalam and Kristan Temme
+#     "A rigorous and robust quantum speed-up in supervised machine learning"
+#     `arXiv:2010.02174 <https://arxiv.org/abs/2010.02174>`__, 2020
 #
-# [4] *Quantum Adversarial Machine Learning* (https://arxiv.org/abs/2001.00030)
+# .. [#Lu] 
+#     Sirui Lu and Lu-Ming Duan and Dong-Ling Deng
+#     "Quantum Adversarial Machine Learning"
+#     `arXiv:2001.00030 <https://arxiv.org/abs/2001.00030>`__, 2019
 #
-# [5] https://docs.pennylane.ai/en/stable/code/api/pennylane.qnn.TorchLayer.html
-#
-# [6] https://docs.pennylane.ai/en/stable/code/api/pennylane.StronglyEntanglingLayers.html
 #
 
 ######################################################################
