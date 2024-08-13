@@ -59,7 +59,7 @@ r"""Adversarial Attacks on Quantum Machine Learning
 # Quantum machine learning has been shown to have theoretical advantages over classical ML methods [3]
 # and is becoming increasingly popular. However, first works in this direction suggest that QML
 # suffers from the same vulnerabilities as classical ML [4]. How the vulnerability of QML models
-# relates to classical models and how robust the models are in comparison is evaluated in [1]. But
+# relates to classical models and how robust the models are in comparison is evaluated in [#Wendlinger]_. But
 # enough talk, let’s see how we can actually attack a QML model!
 #
 
