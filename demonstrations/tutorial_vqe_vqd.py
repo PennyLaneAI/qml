@@ -1,8 +1,8 @@
 r"""How to implement VQD with PennyLane
 ===============================================================
 
-Finding eigenvalues of an operator is a key task in quantum computing. Algorithms like the variational quantum eigensolver (VQE) are used to find the smallest
-one, but sometimes we are interested in other eigenvalues. Here we will show you how to implement the variational
+Finding the eigenvalues of a Hamiltonian is a key task in quantum computing. Algorithms such as the variational quantum eigensolver (VQE) are used to find the smallest
+eigenvalue, but sometimes we are interested in other eigenvalues. Here we will show you how to implement the variational
 quantum deflation (VQD) algorithm in PennyLane
 and find the first excited state energy of the `hydrogen molecule <https://pennylane.ai/datasets/qchem/h2-molecule>`__. To benefit the most from this tutorial, we recommend
 a familiarization with the `variational quantum eigensolver (VQE) algorithm <https://pennylane.ai/qml/demos/tutorial_vqe/>`__ first.
@@ -21,20 +21,20 @@ a familiarization with the `variational quantum eigensolver (VQE) algorithm <htt
 #
 # The VQD algorithm [#Vqd]_ is a method used to find the excited states of a quantum system.
 # It is related to the VQE algorithm, which is often used to find the ground state energy of a quantum system.
-# The main idea of the VQE algorithm is to define a quantum state ansatz that depends on adjustable parameters :math:`\theta` and minimizes the energy of the system, computed as:
+# The main idea of the VQE algorithm is to define a quantum state ansatz that depends on adjustable parameters :math:`\theta` and minimize the energy of the system, computed as:
 #
-# .. math:: C_0(\theta) = \left\langle\Psi (\theta)|\hat H |\Psi (\theta) \right\rangle,
+# .. math:: C_0(\theta) = \left\langle\Psi_0 (\theta)|\hat H |\Psi_0 (\theta) \right\rangle,
 #
-# where :math:`\Psi(\theta)` is the ansatz. However, this is not enough if we are interested in states other than the ground state.
+# where :math:`\Psi_0(\theta)` is the ansatz. However, this is not enough if we are interested in states other than the ground state.
 # We must find a function whose minimum is no longer the ground state energy but gives the next excited state.
 # This is possible by just adding a penalty term to the above function, which accounts for the orthogonality of the states:
 #
 # .. math:: C_1(\theta) = \left\langle\Psi(\theta)|\hat H |\Psi (\theta) \right\rangle + \beta | \left\langle \Psi (\theta)| \Psi_0 \right\rangle|^2,
 #
-# where :math:`\beta` is a hyperparameter that controls the penalty term and :math:`| \Psi_0 \rangle` is the ground state.
-# Note that the :math:`\beta` should be larger than the energy gap between the ground and excited states.
-# This function can be minimized to give the energy, but for now we are restricting the new state to be orthogonal to the ground state.
-# Similarly, we could iteratively calculate the :math:`k`-th excited states by adding the corresponding penalty term to the previous :math:`k - 1` excitation states.
+# where :math:`\beta` is a hyperparameter that controls the penalty term and :math:`| \Psi \rangle` is the excited state.
+# Note that :math:`\beta` should be larger than the energy gap between the ground and excited states.
+# This function can now be minimized to give the first excited state energy.
+# Similarly, we could iteratively calculate the :math:`k`-th excited states by adding the corresponding penalty term to the previous :math:`k - 1` excited state.
 #
 # As easy as that! Let's see how we can run this using PennyLane.
 #
@@ -60,7 +60,7 @@ H, n_qubits = h2.hamiltonian, len(h2.hamiltonian.wires)
 def generate_ground_state(wires):
     qml.BasisState(h2.hf_state, wires=wires)
 
-    for op in h2.vqe_gates:  # use the gates data the datasets package provided
+    for op in h2.vqe_gates:  # use the gates data from the dataset
         op = qml.map_wires(op, {op.wires[i]: wires[i] for i in range(len(wires))})
         qml.apply(op)
 
@@ -79,9 +79,9 @@ def circuit():
 print(f"Ground state energy: {circuit()}")
 
 ######################################################################
-# Let's use the ground state to find the first excited state.
+# We now use the ground state to find the first excited state.
 #
-# Finding the excited states
+# Finding the excited state
 # ----------------------------
 #
 # To obtain the excited state we must define our ansatz that generates the state :math:`|\Psi(\theta)\rangle`.
@@ -197,10 +197,10 @@ print(np.sort(np.linalg.eigvals(H.matrix())))
 # Conclusion
 # ----------
 #
-# In this tutorial we delved into the capabilities of Variational Quantum Deflation (VQD) using PennyLane to compute not only the ground
-# state but also the excited states of a hydrogen molecule.
-# VQD is a variational method for calculating low-level excited state energies of quantum systems. Leveraging the
-# orthogonality of the eigenstates, it adds a regularization penalty to the cost function to encourage the search for
+# In this tutorial we delved into the capabilities of Variational Quantum Deflation (VQD) using PennyLane to compute
+# the excited states of a hydrogen molecule.
+# VQD is a variational method that can be used for calculating low-level excited state energies of quantum systems. Leveraging the
+# orthogonality of the eigenstates, it adds a regularization penalty to the cost function to allow the search for
 # the next excited state from the ground state discovered by VQE.
 # This illustrated how advanced quantum algorithms can extend beyond basic applications,
 # offering deeper insights into quantum systems. We invite you to continue exploring these techniques and find more interesting use cases.
