@@ -46,8 +46,8 @@ r"""How to use noise models in PennyLane
 # 1. **Operation-based conditionals:** They evaluate whether a gate operation is a
 #    specific type of operation or belongs to a specified set of operations. They are
 #    built using the :func:`~.pennylane.noise.op_eq` and :func:`~.pennylane.noise.op_in`.
-# 2. **Wire-based conditionals:** They evaluate whether a gate operation's wires
-#     are equal to or are contained in a specified set of wires. They are built using the
+# 2. **Wire-based conditionals:** They evaluate whether a gate operation's wires are
+#    equal to or are contained in a specified set of wires. They are built using the
 #    :func:`~.pennylane.noise.wires_eq` and :func:`~.pennylane.noise.wires_in`.
 # 3. **Arbitrary conditionals:** Custom conditionals can be defined as a function wrapped
 #    with a :class:`~.pennylane.BooleanFn` decorator. Signature for such conditionals must
@@ -197,7 +197,7 @@ plt.show()
 # We can then use the ``noisy_circuit`` to run noisy simulations as shown below:
 #
 
-init_dm = np.outer(init_state, init_state) # density matrix for init_state
+init_dm = np.outer(init_state, init_state) # density matrix for the init_state
 ideal_circ_fidelity = qml.math.fidelity(ideal_circuit(theta, phi), init_dm)
 noisy_circ_fidelity = qml.math.fidelity(noisy_circuit(theta, phi), init_dm)
 
