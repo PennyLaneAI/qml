@@ -86,7 +86,7 @@ from matplotlib import pyplot as plt
 # Visualization of the dataset
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# As in the paper [#Wendlinger]_, we make use of the `PlusMinus` <pennylane.ai/datasets/other/plus-minus>`_ dataset, which serves as a good baseline for
+# As in the paper [#Wendlinger]_, we make use of the `PlusMinus <pennylane.ai/datasets/other/plus-minus>`_ dataset, which serves as a good baseline for
 # evaluating a QML image classification model’s ability to find useful features in the input. It also
 # allows us to define the usefulness of attacks on the QML model while being low-dimensional enough to
 # perform scalable training (more info on the dataset can be found in [#Wendlinger]_). It consists of four
@@ -98,7 +98,7 @@ from matplotlib import pyplot as plt
 # https://pennylane.ai/datasets/ for easy integration into Pennylane circuits and optimization code.
 #
 
-# TODO use dataset hosted on pennylane, once available
+# we can use the dataset hosted on pennylane
 # pm = qml.data.load('other, name='PlusMinus')
 
 pm = qml.data.Dataset()
@@ -209,7 +209,7 @@ class QML_classifier(torch.nn.Module):
 # Training the classifier
 # ~~~~~~~~~~~~~~~~~~~~~~~
 #
-# The ’test’set will be used as validation in each training step to verify the generalization
+# The ’test’ set will be used as validation in each training step to verify the generalization
 # capabilities of our classifier.
 #
 
