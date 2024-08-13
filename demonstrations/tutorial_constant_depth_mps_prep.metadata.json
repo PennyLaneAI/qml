@@ -1,0 +1,53 @@
+{
+    "title": "Constant-depth preparation of matrix product states with dynamic circuits",
+    "authors": [
+        {
+            "id": "david_wierichs"
+        }
+    ],
+    "dateOfPublication": "2024-09-10T00:00:00+00:00",
+    "dateOfLastModification": "2024-09-10T00:00:00+00:00",
+    "categories": [
+        "Quantum Computing",
+        "Algorithms"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_constant_depth_mps_prep.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_constant_depth_mps_prep.png"
+        }
+    ],
+    "seoDescription": "Prepare a matrix product state in constant depth with mid-circuit measurements and feedforward control.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_constant_depth_mps_prep",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_mcm_introduction",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_how_to_create_dynamic_mcm_circuits",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_tn_circuits",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_initial_state_preparation",
+            "weight": 1.0
+        }
+    ]
+}

@@ -8,7 +8,7 @@ For example, a quantum algorithm could prepare a classically pre-computed MPS
 as initial state in order to then perform operations that are no longer
 classically tractable.
 
-.. figure:: ../_static/todo
+.. figure:: ../_static/demonstration_assets/preparation_mps_mcm/socialthumbnail_constant_depth_mps_prep.png
     :align: center
     :width: 50%
 
@@ -449,7 +449,7 @@ print(f"The test measurement of the fusion preparation + sequential unpreparatio
 # :math:`C^k` and :math:`D^k` on the bond and physical axes, respectively.
 # Visually, we find:
 #
-# .. image:: ../_static/demonstration_assets/preparation_mps_mcm/operator_pushing.png
+# .. image:: ../_static/demonstration_assets/constant_depth_mps_prep/operator_pushing.png
 #
 # For simplicity, we denote a push by :math:`B^k\mapsto (C^k, D^k)`.
 #
@@ -461,7 +461,7 @@ print(f"The test measurement of the fusion preparation + sequential unpreparatio
 # the tensor :math:`A` of our example MPS :math:`|\Psi(g)\rangle`.
 # In particular, the relations are
 #
-# .. image:: ../_static/demonstration_assets/preparation_mps_mcm/operator_pushing.png
+# .. image:: ../_static/demonstration_assets/constant_depth_mps_prep/operator_pushing_example.png
 #
 # That is, in the notation above we have
 # :math:`X\mapsto (Y, Y)`,
