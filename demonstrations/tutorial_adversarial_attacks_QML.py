@@ -449,6 +449,3 @@ visualize_data(perturbed_x.reshape(-1, 16, 16), y_vis, adversarial_class_output)
 ######################################################################
 # About the author
 # ----------------
-# # .. include:: ../_static/authors/maxi_wendlinger.txt
-
-# # .. include:: ../_static/authors/kilian_tscharke.txt
