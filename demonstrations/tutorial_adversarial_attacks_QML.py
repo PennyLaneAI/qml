@@ -36,7 +36,9 @@ r"""Adversarial Attacks on Quantum Machine Learning
 # :math:`f: \mathbb{R}^{D} \to \mathbb{R}^K` (mapping :math:`D`-dimensional input to softmax
 # probability scores of :math:`K` classes with model parameters :math:`\theta^*`), the objective of
 # the untargeted attack is: 
+#
 # .. math:: \delta \equiv \; \underset{\delta^{\prime} \in \Delta}{\operatorname{argmax}} \;\mathcal{L}\left(f\left(x+\delta^{\prime} ; \theta^*\right), y\right)
+# 
 # Later, when we show how to actually construct such an attack, we will revisit this
 # equation. For an adversarial attack to be considered useful, it must hold that the modifications to
 # the input elements are imperceptible, i.e. that
@@ -84,7 +86,7 @@ from matplotlib import pyplot as plt
 # Visualization of the dataset
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# As in the paper [#Wendlinger]_, we make use of the PlusMinus dataset, which serves as a good baseline for
+# As in the paper [#Wendlinger]_, we make use of the `PlusMinus` <pennylane.ai/datasets/other/plus-minus>`_ dataset, which serves as a good baseline for
 # evaluating a QML image classification model’s ability to find useful features in the input. It also
 # allows us to define the usefulness of attacks on the QML model while being low-dimensional enough to
 # perform scalable training (more info on the dataset can be found in [#Wendlinger]_). It consists of four
@@ -302,7 +304,9 @@ visualize_data(x_vis, y_vis, benign_class_output)
 # ~~~~~~~~~~~~~~~~~~
 #
 # As described before, the mathematical notation for an adversarial attack is as follows:
+#
 # .. math:: \delta \equiv \; \underset{\delta^{\prime} \in \Delta}{\operatorname{argmax}} \;\mathcal{L}\left(f\left(x+\delta^{\prime} ; \theta^*\right), y\right)
+#
 # This equation can be summarized in a simple step-by-step recipe. In basic terms, we
 # perform a forward and backward pass through the model and loss function (just like we do during
 # training) for the specific samples that we want to find perturbations for. The difference to
