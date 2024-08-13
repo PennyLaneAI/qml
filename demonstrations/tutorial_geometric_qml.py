@@ -5,7 +5,7 @@ Introduction to Geometric Quantum Machine Learning
 
 .. meta::
     :property="og:description": Using the natural symmetries in a quantum learning problem can improve learning
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//equivariant_thumbnail.jpeg
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/equivariant_thumbnail.jpeg
 
 .. related::
    tutorial_equivariant_graph_embedding A permutation equivariant graph embedding
