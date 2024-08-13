@@ -5,7 +5,7 @@ Doubly stochastic gradient descent
 .. meta::
     :property="og:description": Minimize a Hamiltonian via an adaptive shot optimization
         strategy with doubly stochastic gradient descent.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//single_shot.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/single_shot.png
 
 .. related::
 

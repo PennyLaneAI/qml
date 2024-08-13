@@ -56,7 +56,7 @@ extensions = [
 ]
 
 
-html_baseurl = 'https://pennylane.ai/qml/'
+html_baseurl = "https://pennylane.ai/qml/"
 
 sphinx_gallery_conf = {
     # path to your example scripts
@@ -76,13 +76,13 @@ sphinx_gallery_conf = {
     ),
     # thumbnail size
     "thumbnail_size": (400, 400),
-    'reference_url': {
-         # The module you locally document uses None
-        'pennylane': "https://docs.pennylane.ai/en/stable/",
+    "reference_url": {
+        # The module you locally document uses None
+        "pennylane": None,  # "https://docs.pennylane.ai/en/stable",
     },
-    'backreferences_dir'  : 'backreferences',
-    'doc_module'          : ('pennylane'),
-    'junit': '../test-results/sphinx-gallery/junit.xml',
+    "backreferences_dir"  : "backreferences",
+    "doc_module"          : ("pennylane"),
+    "junit": "../test-results/sphinx-gallery/junit.xml",
 }
 
 mathjax_path = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"

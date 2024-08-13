@@ -4,7 +4,7 @@ Introduction to the ZX-calculus
 
 .. meta::
     :property="og:description": Investigation of the ZX-calculus and its applications to quantum computing
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_zx_calculus.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/thumbnail_tutorial_zx_calculus.png
 
 .. related::
 
