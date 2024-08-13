@@ -119,13 +119,14 @@ that dynamic quantum circuits are more powerful than unitary operations alone.
 
 The MPS :math:`|\Psi(g)\rangle` will be our working example throughout this demo. Therefore
 we warm up our coding by defining the tensor :math:`A` and testing some of its properties.
-
 """
+
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 
 import pennylane as qml
+
 
 def A(g):
     """Compute the tensor A in form of d=2 matrices with shape (D, D) = (2, 2) each."""
@@ -134,12 +135,13 @@ def A(g):
     A_1 = np.array([[0, -np.sqrt(-g)], [0, 1]]) * eta
     return (A_0, A_1)
 
+
 g = -0.6
 A_0, A_1 = A(g)
 is_left_canonical = np.allclose(A_0.conj().T @ A_0 + A_1.conj().T @ A_1, np.eye(2))
 print(f"The matrices A^m are in left-canonical form: {is_left_canonical}")
 
-xi = 1 / abs(np.log((1+g) / (1-g)))
+xi = 1 / abs(np.log((1 + g) / (1 - g)))
 print(f"For {g=}, the theoretical correlation length is {xi=:.4f}")
 
 ######################################################################
@@ -205,8 +207,8 @@ print(f"For {g=}, the theoretical correlation length is {xi=:.4f}")
 # For our example MPS :math:`|\Psi(g)\rangle`, let us first find the unitary :math:`U`.
 # For this, consider the fixed part of :math:`U`.
 
-E_00 = np.array([[1, 0], [0, 0]]) # |0><0|
-E_10 = np.array([[0, 0], [1, 0]]) # |1><0|
+E_00 = np.array([[1, 0], [0, 0]])  # |0><0|
+E_10 = np.array([[0, 0], [1, 0]])  # |1><0|
 U_first_term = np.kron(A_0, E_00) + np.kron(A_1, E_10)
 
 print(np.round(U_first_term, 5))
@@ -216,8 +218,8 @@ print(np.linalg.norm(U_first_term, axis=0))
 # We see that this fixed part has two norm-1 columns already, and we are
 # able to complement this by :math:`C_\perp` with the same columns:
 
-E_01 = np.array([[0, 1], [0, 0]]) # |0><1|
-E_11 = np.array([[0, 0], [0, 1]]) # |1><1|
+E_01 = np.array([[0, 1], [0, 0]])  # |0><1|
+E_11 = np.array([[0, 0], [0, 1]])  # |1><1|
 C_perp = np.kron(A_1, E_01) + np.kron(A_0, E_11)
 
 U = U_first_term + C_perp
@@ -253,6 +255,7 @@ def U_template(eta, bond_idx, phys_idx):
     qml.CNOT([bond_idx, phys_idx])
     qml.RY(2 * np.arccos(eta), bond_idx)
 
+
 eta = 1 / np.sqrt(1 - g)
 template_matrix = qml.matrix(U_template, wire_order=["bond", "phys"])(eta, "bond", "phys")
 print(f"The template reproduces U: {np.allclose(template_matrix, U)}")
@@ -262,10 +265,12 @@ print(f"The template reproduces U: {np.allclose(template_matrix, U)}")
 # sequential preparation circuit. We will leave the measurement \& postselect step as a separate
 # function for now.
 
+
 def prepare_bell(wire_0, wire_1):
     """Prepare two qubits in the Bell state (|00>+|11>)/sqrt(2)."""
     qml.Hadamard(wire_0)
     qml.CNOT([wire_0, wire_1])
+
 
 def project_measure(wire_0, wire_1):
     """Measure two qubits in the Bell basis and
@@ -275,6 +280,7 @@ def project_measure(wire_0, wire_1):
     # Measure and postselect |00>
     qml.measure(wire_0, postselect=0)
     qml.measure(wire_1, postselect=0)
+
 
 def sequential_preparation(g, wires):
     """Prepare the example MPS \Psi(g) on N qubits where N is the length
@@ -286,15 +292,18 @@ def sequential_preparation(g, wires):
     for phys_wire in phys_wires:
         U_template(eta, bond_wires[1], phys_wire)
 
+
 dev = qml.device("default.qubit")
+
 
 @qml.qnode(dev)
 def sequential_circuit(N, g):
     """Run the preparation circuit and projectively measure the bond qubits."""
-    wires = list(range(N+2))
+    wires = list(range(N + 2))
     sequential_preparation(g, wires)
     project_measure(0, N + 1)
-    return qml.probs(wires=wires[1:N+1])
+    return qml.probs(wires=wires[1 : N + 1])
+
 
 ######################################################################
 # We will verify the prepared state below, when comparing to the constant-depth
@@ -379,6 +388,7 @@ qml.draw_mpl(sequential_circuit)(N, g)
 # routine. Note, however, that instead of postselecting, we record the measurement
 # outcome and will use it further below.
 
+
 def fuse(wire_0, wire_1):
     """Measure two qubits in the Bell basis and return the outcome
     encoded in two bits."""
@@ -386,14 +396,17 @@ def fuse(wire_0, wire_1):
     qml.Hadamard(wire_0)
     return np.array([qml.measure(i) for i in [wire_0, wire_1]])
 
+
 ######################################################################
 #
 # Fusing two MPS that have been prepared by the sequential routine now is really simple:
+
 
 def two_qubit_mps_by_fusion(g):
     sequential_preparation(g, [0, 1, 2])
     sequential_preparation(g, [3, 4, 5])
     mcms = fuse(2, 3)
+
 
 ######################################################################
 # However, the produced state is not quite the MPS state on two qubits,
@@ -403,6 +416,7 @@ def two_qubit_mps_by_fusion(g):
 # If the two sequentially prepared MPS and the fusion step did prepare the correct
 # MPS already, the test measurement would just be :math:`\langle 00 | Z_0| 11\rangle=1`.
 
+
 @qml.qnode(qml.device("default.qubit", wires=6))
 def prepare_and_unprepare(g):
     two_qubit_mps_by_fusion(g)
@@ -410,6 +424,7 @@ def prepare_and_unprepare(g):
     # The bond qubits 2 and 3 have been measured out in the fusion protocol
     qml.adjoint(sequential_preparation)(g, [0, 1, 4, 5])
     return qml.expval(qml.PauliZ(1))
+
 
 test = prepare_and_unprepare(g)
 print(f"The test measurement of the fusion preparation + sequential unpreparation is {test:.2f}")
@@ -471,6 +486,7 @@ print(f"The test measurement of the fusion preparation + sequential unpreparatio
 # This pushing and correction step is captured by the following function, where we use some additional
 # simplifications based on the used encoding with two bits of the pushed operator.
 
+
 def push_and_correct(op_id, phys_wires):
     """Push an operator from left to right along the bond sites of an MPS and
     conditionally apply correcting operations on the corresponding physical sites.
@@ -489,6 +505,7 @@ def push_and_correct(op_id, phys_wires):
     # Push through Y if input is X or Y
     return np.array([op_id[1], op_id[1]])
 
+
 def correction(idx, q, op_id):
     w = (idx + 1) * q
     op_int = np.array([2, 1]) @ op_id
@@ -502,6 +519,7 @@ def correction(idx, q, op_id):
     for i in range(w, w + q):
         qml.cond(op_int == 3, qml.X)(i)
     return np.array([op_id[1], op_id[1]])
+
 
 ######################################################################
 #
@@ -546,11 +564,14 @@ def correction(idx, q, op_id):
 # site after pushing through the operator.
 #
 
+
 def xor(op_id_0, op_id_1):
     """Express logical XOR as "SUM - 2 * AND" on integers."""
     return op_id_0 + op_id_1 - 2 * op_id_0 * op_id_1
 
+
 def correct_end_bond(bond_idx, op_id):
+    """Perform a correction on the end bond site."""
     op_int = np.array([2, 1]) @ op_id
     qml.cond(op_int == 1, qml.X)(bond_idx)
     qml.cond(op_int == 2, qml.Z)(bond_idx)
@@ -560,11 +581,11 @@ def correct_end_bond(bond_idx, op_id):
 def constant_depth(N, g, q):
     """Prepare the MPS |\Psi(g)> in constant depth."""
     num_blocks = N // q
-    wires_per_block = q + 2 # 2 bond wires added
+    wires_per_block = q + 2  # 2 bond wires added
 
     # Step 1: Prepare small block MPS
     for i in range(num_blocks):
-        wires = list(range(wires_per_block * i, wires_per_block * (i+1)))
+        wires = list(range(wires_per_block * i, wires_per_block * (i + 1)))
         sequential_preparation(g, wires)
 
     # Step 2: Fusion with mid-circuit measurements
@@ -574,33 +595,39 @@ def constant_depth(N, g, q):
         mcms.append(fuse(*bond_wires))
 
     # Step 3: Push operators through to highest-index wire and correct phys. sites
-    pushed_op_id = np.array([0, 0]) # Start with identity
+    pushed_op_id = np.array([0, 0])  # Start with identity
     for i in range(1, num_blocks):
-        phys_wires = list(range(wires_per_block * i + 1, wires_per_block * (i+1) - 1))
-        pushed_op_id = push_and_correct(xor(mcms[i-1], pushed_op_id), phys_wires)
+        phys_wires = list(range(wires_per_block * i + 1, wires_per_block * (i + 1) - 1))
+        pushed_op_id = push_and_correct(xor(mcms[i - 1], pushed_op_id), phys_wires)
 
     # Step 4: Undo the pushed-through operator on the highest-index wire bond site.
     correct_end_bond(num_blocks * wires_per_block - 1, pushed_op_id)
 
+
 def constant_depth_ansatz(N, g, q):
+    """Circuit ansatz for constant-depth preparation routine."""
     num_blocks = N // q
-    wires_per_block = q + 2 # 2 bond wires added
+    wires_per_block = q + 2  # 2 bond wires added
     outer_bond_sites = [0, num_blocks * wires_per_block - 1]
     # Steps 1-4
     constant_depth(N, g, q)
     # Step 5: Perform projective measurement on outer-most bond sites.
     project_measure(*outer_bond_sites)
     phys_wires = sum(
-        (list(range(wires_per_block * i + 1, wires_per_block * (i+1) - 1))
-        for i in range(num_blocks)),
-        start = [],
+        (
+            list(range(wires_per_block * i + 1, wires_per_block * (i + 1) - 1))
+            for i in range(num_blocks)
+        ),
+        start=[],
     )
     return phys_wires
+
 
 @qml.qnode(dev)
 def constant_depth_circuit(N, g, q):
     phys_wires = constant_depth_ansatz(N, g, q)
     return qml.probs(wires=phys_wires)
+
 
 ######################################################################
 #
@@ -615,7 +642,7 @@ N = 12
 q = 3
 g = -0.8
 qml.draw_mpl(constant_depth_circuit)(N, g, q)
-#plt.show()
+# plt.show()
 
 ######################################################################
 # Let's check that the constant-depth circuit produces the same state, or probability
@@ -652,7 +679,7 @@ ax.bar(ints, ghz_probs, width=1, label="long correlation length (GHZ)")
 ax.set_yscale("log")
 ax.set_ylim([1e-3, 1])
 ax.legend()
-#plt.show()
+# plt.show()
 
 ######################################################################
 # In a more nuanced setting, let us produce the MPS in question for a series of values
@@ -669,23 +696,27 @@ ax.legend()
 @qml.qnode(dev, interface="numpy")
 def pre_correlations(N, g, q):
     phys_wires = constant_depth_ansatz(N, g, q)
-    return [qml.expval(qml.Z(1) @ qml.Z(i)) for i in phys_wires] + [qml.expval(qml.Z(i)) for i in phys_wires]
+    return [qml.expval(qml.Z(1) @ qml.Z(i)) for i in phys_wires] + [
+        qml.expval(qml.Z(i)) for i in phys_wires
+    ]
+
 
 def correlations(N, g, q):
     expvals = pre_correlations(N, g, q)
     prods = expvals[:-N]
     expvals = expvals[-N:]
-    correls = [prods[i] - expvals[1] * expvals[i] for i in range(N) if i!=1]
+    correls = [prods[i] - expvals[1] * expvals[i] for i in range(N) if i != 1]
     return correls
+
 
 N = 18
 q = 6
-gs = [-1/5, -2/5, -3/5, -4/5]
+gs = [-1 / 5, -2 / 5, -3 / 5, -4 / 5]
 fig, ax = plt.subplots()
 all_correls = []
 for g in gs:
     correls = correlations(N, g, q)
-    ax.plot(list(range(N-1)), correls, label=f"$g={g}$")
+    ax.plot(list(range(N - 1)), correls, label=f"$g={g}$")
     all_correls.append(correls)
 ax.set_yscale("log")
 ax.set_ylim([5e-8, 1.5])
@@ -700,14 +731,16 @@ plt.show()
 # We can also compare this result to the analytic result for the correlation
 # length :math:`xi` mentioned in the beginning:
 
+
 def exp_fn(x, a, b):
     return a * np.exp(x * b)
 
+
 print(f"Correlation lengths xi\n===================")
 for g, correls in zip(gs, all_correls):
-    popt, pcov = curve_fit(exp_fn, list(range(1, N//2+1)), correls[1:N//2+1])
-    xi_numerical = -1/popt[1]
-    xi_predicted = 1 / abs(np.log((1+g) / (1-g)))
+    popt, pcov = curve_fit(exp_fn, list(range(1, N // 2 + 1)), correls[1 : N // 2 + 1])
+    xi_numerical = -1 / popt[1]
+    xi_predicted = 1 / abs(np.log((1 + g) / (1 - g)))
     print(f"{g=:.1f}")
     print(f"Predicted: {xi_predicted:.5f}")
     print(f"Numerical: {xi_numerical:.5f}")
