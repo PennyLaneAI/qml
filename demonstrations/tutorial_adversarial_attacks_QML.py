@@ -35,9 +35,9 @@ r"""Adversarial Attacks on Quantum Machine Learning
 # input that maximizes the loss of the true class. For a loss function :math:`\mathcal{L}`, a model
 # :math:`f: \mathbb{R}^{D} \to \mathbb{R}^K` (mapping :math:`D`-dimensional input to softmax
 # probability scores of :math:`K` classes with model parameters :math:`\theta^*`), the objective of
-# the untargeted attack is: :raw-latex:`\begin{equation}
-# \delta \equiv \; \underset{\delta^{\prime} \in \Delta}{\operatorname{argmax}} \;\mathcal{L}\left(f\left(x+\delta^{\prime} ; \theta^*\right), y\right)
-# \end{equation}` Later, when we show how to actually construct such an attack, we will revisit this
+# the untargeted attack is: 
+# .. math:: \delta \equiv \; \underset{\delta^{\prime} \in \Delta}{\operatorname{argmax}} \;\mathcal{L}\left(f\left(x+\delta^{\prime} ; \theta^*\right), y\right)
+# Later, when we show how to actually construct such an attack, we will revisit this
 # equation. For an adversarial attack to be considered useful, it must hold that the modifications to
 # the input elements are imperceptible, i.e. that
 # :math:`\Delta=\{\delta \in \mathbb{R}^{D}: \| \delta\|_{\infty} \le \varepsilon\}`, where
