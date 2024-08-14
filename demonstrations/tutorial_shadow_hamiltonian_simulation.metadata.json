@@ -1,0 +1,122 @@
+{
+    "title": "Shadow Hamiltonian simulation",
+    "authors": [
+        {
+            "id": "korbinian_kottmann"
+        }
+    ],
+    "dateOfPublication": "2024-08-06T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
+    "categories": [
+        "Quantum Computing",
+        "Algorithms"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_shadow_hamiltonian_simulation.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_shadow_hamiltonian_simulation.png"
+        }
+    ],
+    "seoDescription": "A user-friendly intro to the contents of shadow Hamiltonian simulation, a technique introduced by by Somma et al (arXiv:2407.21775), with a code implementation.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_shadow_hamiltonian_simulation",
+    "references": [
+        {
+            "id": "Wiersema",
+            "type": "preprint",
+            "title": "Classification of dynamical Lie algebras for translation-invariant 2-local spin systems in one dimension",
+            "authors": "Roeland Wiersema, Efekan Kökcü, Alexander F. Kemper, Bojko N. Bakalov",
+            "year": "2023",
+            "publisher": "",
+            "journal": "",
+            "doi": "10.48550/arXiv.2309.05690",
+            "url": "https://arxiv.org/abs/2309.05690"
+        },
+        {
+            "id": "Goh",
+            "type": "preprint",
+            "title": "Lie-algebraic classical simulations for variational quantum computing",
+            "authors": "Matthew L. Goh, Martin Larocca, Lukasz Cincio, M. Cerezo, Frédéric Sauvage",
+            "year": "2023",
+            "publisher": "",
+            "journal": "",
+            "doi": "10.48550/arXiv.2308.01432",
+            "url": "https://arxiv.org/abs/2308.01432"
+        },
+        {
+            "id": "Somma",
+            "type": "preprint",
+            "title": "Quantum Computation, Complexity, and Many-Body Physics",
+            "authors": "Rolando D. Somma",
+            "year": "2005",
+            "publisher": "",
+            "journal": "",
+            "doi": "10.48550/arXiv.quant-ph/0512209",
+            "url": "https://arxiv.org/abs/quant-ph/0512209"
+        },
+        {
+            "id": "Somma2",
+            "type": "preprint",
+            "title": "Efficient solvability of Hamiltonians and limits on the power of some quantum computational models",
+            "authors": "Rolando Somma, Howard Barnum, Gerardo Ortiz, Emanuel Knill",
+            "year": "2006",
+            "publisher": "",
+            "journal": "",
+            "doi": "10.48550/arXiv.quant-ph/0601030",
+            "url": "https://arxiv.org/abs/quant-ph/0601030"
+        },
+        {
+            "id": "Galitski",
+            "type": "preprint",
+            "title": "Quantum-to-Classical Correspondence and Hubbard-Stratonovich Dynamical Systems, a Lie-Algebraic Approach",
+            "authors": "Victor Galitski",
+            "year": "2010",
+            "publisher": "",
+            "journal": "",
+            "doi": "10.48550/arXiv.1012.2873",
+            "url": "https://arxiv.org/abs/1012.2873"
+        },
+        {
+            "id": "Aguilar",
+            "type": "preprint",
+            "title": "Full classification of Pauli Lie algebras",
+            "authors": "Gerard Aguilar, Simon Cichy, Jens Eisert, Lennart Bittel",
+            "year": "2024",
+            "publisher": "",
+            "journal": "",
+            "doi": "10.48550/arXiv.2408.00081",
+            "url": "https://arxiv.org/abs/2408.00081"
+        }
+        ,
+        {
+            "id": "SommaShadow",
+            "type": "preprint",
+            "title": "Shadow Hamiltonian Simulation",
+            "authors": "olando D. Somma, Robbie King, Robin Kothari, Thomas O'Brien, Ryan Babbush",
+            "year": "2024",
+            "publisher": "",
+            "journal": "",
+            "doi": "10.48550/arXiv.2407.21775",
+            "url": "https://arxiv.org/abs/2407.21775"
+        }
+    ],
+    "basedOnPapers": ["10.48550/arXiv.2407.21775"],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_liealgebra",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_liesim",
+            "weight": 1.0
+        }
+    ]
+}

@@ -8,7 +8,7 @@ Quantum natural gradient
 .. meta::
     :property="og:description": The quantum natural gradient method can achieve faster convergence for quantum machine
         learning problems by taking into account the intrinsic geometry of qubits.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//qng_optimization.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/qng_optimization.png
 
 .. related::
 
@@ -26,7 +26,7 @@ Background
 
 The most successful class of quantum algorithms for use on near-term noisy quantum hardware
 is the so-called variational quantum algorithm. As laid out in the
-:ref:`Concepts section <glossary_variational_circuit>`, in variational quantum algorithms
+`Concepts section <https://pennylane.ai/qml/glossary/#variational-circuits>`__, in variational quantum algorithms
 a low-depth parametrized quantum circuit ansatz is chosen, and a problem-specific
 observable measured. A classical optimization loop is then used to find
 the set of quantum parameters that *minimize* a particular measurement expectation value
