@@ -30,7 +30,7 @@ overlap between the model output states and the unknown process output states.
 # ----------------------------------------------
 #
 # For our unknown quantum process, we will use the
-# `time evolution of a Hamiltonian <https://pennylane.ai/qml/demos/tutorial_qaoa_intro/#circuits-and-hamiltonians>`_:
+# time evolution of a Hamiltonian:
 #
 # .. math:: U(H, t) = e^{-i H t / \hbar} .
 #
@@ -41,7 +41,7 @@ overlap between the model output states and the unknown process output states.
 #
 # where :math:`n` is the number of qubits and :math:`\alpha` are randomly generated weights.
 # 
-# More sppecifically, we will approximate :math:`U(H, t)` via
+# More specifically, we will approximate :math:`U(H, t)` via
 # `Trotterization <https://en.wikipedia.org/wiki/Hamiltonian_simulation#Product_formulas>`_.
 # We first create the Hamiltonian and Trotterize later with :class:`~pennylane.TrotterProduct`.
 #
@@ -359,7 +359,7 @@ plt.show()
 #
 # We can then minimize the cost to train the model to output the same states as the target circuit.
 # For this, we can use the cost function from
-# `before <#training-a-model-circuit-using-classical-shadows-in-a-cost-function>`_, 
+# `before <#training-using-classical-shadows-in-a-cost-function>`_, 
 # as long as we update the number of qubits and the number of random states.
 #
 
