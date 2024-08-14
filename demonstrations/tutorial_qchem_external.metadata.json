@@ -2,11 +2,11 @@
     "title": "Using PennyLane with PySCF and OpenFermion",
     "authors": [
         {
-            "id": "soran_jahangiri"
+            "username": "soran"
         }
     ],
     "dateOfPublication": "2023-01-03T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
     "categories": [
         "Quantum Chemistry", "Devices and Performance"
     ],

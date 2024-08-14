@@ -2,14 +2,14 @@
     "title": "How to optimize a QML model using JAX and Optax",
     "authors": [
         {
-            "id": "josh_izaac"
+            "username": "josh"
         },
         {
-            "id": "maria_schuld"
+            "username": "mariaschuld"
         }
     ],
     "dateOfPublication": "2024-01-18T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning",
         "Optimization",

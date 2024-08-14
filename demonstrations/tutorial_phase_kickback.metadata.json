@@ -2,11 +2,11 @@
     "title": "Building a quantum lock using phase kickback",
     "authors": [
         {
-            "id": "danial_motlagh"
+            "username": "Dan"
         }
     ],
     "dateOfPublication": "2023-08-01T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
     "categories": [
         "Getting Started",
         "Algorithms",

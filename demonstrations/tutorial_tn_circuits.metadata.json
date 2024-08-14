@@ -2,7 +2,7 @@
     "title": "Tensor-network quantum circuits",
     "authors": [
         {
-            "id": "diego_guala"
+            "username": "Diego"
         },
         {
             "id": "esther_cruz-rico"
@@ -11,11 +11,11 @@
             "id": "shaoming_zhang"
         },
         {
-            "id": "juan_miguel_arrazola"
+            "username": "ixfoduap"
         }
     ],
     "dateOfPublication": "2022-03-29T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
