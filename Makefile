@@ -78,5 +78,6 @@ environment:
 			$$PYTHON_VENV_PATH/bin/python -m pip install --upgrade git+https://github.com/PennyLaneAI/pennylane-qiskit.git#egg=pennylane-qiskit;\
 			$$PYTHON_VENV_PATH/bin/python -m pip install --upgrade git+https://github.com/PennyLaneAI/pennylane-qulacs.git#egg=pennylane-qulacs;\
 			$$PYTHON_VENV_PATH/bin/python -m pip install -i https://test.pypi.org/simple/ PennyLane-Lightning --pre --upgrade;\
+			$$PYTHON_VENV_PATH/bin/python -m pip install -i https://test.pypi.org/simple/ PennyLane-Catalyst --pre --upgrade;\
 		fi;\
 	fi
