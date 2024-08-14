@@ -19,6 +19,7 @@ first measuring it.
 In simple terms, learning dynamics incoherently consists of two steps. First, we measure the output
 of the unknown process for many different inputs. For example, we will measure
 :doc:`classical shadows <tutorial_classical_shadows>` of the target process output.
+
 Then, we adjust a variational quantum circuit
 until it produces the same input-output combinations as the unknown process. In this tutorial, we
 simulate the model circuit output and use the classical shadow measurements to estimate the
@@ -400,8 +401,8 @@ print("Target output state\n", target_matrices_shadow[0])
 # This is due to the limitations of this learning method. Even for a simple circuit like the
 # short-time evolution of a first order single Trotter step, it requires a large number of
 # shadow measurements and training states to faithfully reproduce the underlying quantum process.
-# The results can be improved by increasing the number training states and
-# classical shadow measurements.
+# The results can be improved by increasing the number of training states and
+# :doc:`classical shadow measurements <tutorial_classical_shadows>`.
 #
 
 
