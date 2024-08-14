@@ -16,12 +16,17 @@ depending on the unknown quantum process [#Jerbi]_. This is useful because
 it's not always possible to port the quantum output of a system directly to hardware without
 first measuring it.
 
+.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_large_LearningDynamicsIncoherently.png
+    :align: center
+    :width: 80%
+
 In simple terms, learning dynamics incoherently consists of two steps. First, we measure the output
-of the unknown process for many different inputs. For example, we will measure
+of the unknown process for many different inputs. In this tutorial, we do this by measuring
 :doc:`classical shadows <tutorial_classical_shadows>` of the target process output.
 
 Then, we adjust a variational quantum circuit
-until it produces the same input-output combinations as the unknown process. In this tutorial, we
+until it produces the same input-output combinations as the unknown process.
+Here, we will
 simulate the model circuit output and use the classical shadow measurements to estimate the
 overlap between the model output states and the unknown process output states.
 """
@@ -297,8 +302,8 @@ print("The final trace distance is: \n", trace_distances[-1])
 
 
 ######################################################################
-# Using the Learning Dynamics Incoherently dataset
-# ------------------------------------------------
+# Using the Learning Dynamics Incoherently PennyLane Dataset
+# ----------------------------------------------------------
 #
 # In Jerbi et al. [#Jerbi]_, the authors perform this procedure to learn dynamics incoherently on a
 # larger, 16-qubit transverse-field Ising

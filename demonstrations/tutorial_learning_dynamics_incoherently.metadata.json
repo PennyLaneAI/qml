@@ -15,11 +15,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_learning_dynamics_incoherently.png"
+            "uri": "_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_learning_dynamics_incoherently.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_learning_dynamics_incoherently.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_learning_dynamics_incoherently.png"
         }
     ],
     "seoDescription": "Learn how to reproduce an unknown quantum process with classical shadow measurements",
