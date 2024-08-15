@@ -4,7 +4,7 @@ Modelling chemical reactions on a quantum computer
 
 .. meta::
     :property="og:description": Construct potential energy surfaces for chemical reactions
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/reaction.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//reaction.png
 
 .. related::
    tutorial_quantum_chemistry Building molecular Hamiltonians

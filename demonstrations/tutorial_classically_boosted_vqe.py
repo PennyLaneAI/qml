@@ -4,7 +4,7 @@ Classically-boosted variational quantum eigensolver
 
 .. meta::
     :property="og:description": Learn how to implement classically-boosted VQE in PennyLane.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/CB_VQE.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//CB_VQE.png
 
 .. related::
 
