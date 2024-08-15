@@ -43,7 +43,7 @@ print(nested_register["all_registers"][2])
 print(nested_register["bob1a"][0])
 
 # You can also create registers using set operations. Here, we use the pipe operator ``|`` to
-# perform the union operation on the alice register and the charlie register. For more details on
+# perform the union operation on the ``alice`` register and the ``charlie`` register. For more details on
 # what set operations are supported, refer to the documentation of :func:`~pennylane.registers`.
 
 new_register = nested_register["alice"] | nested_register["charlie"]
