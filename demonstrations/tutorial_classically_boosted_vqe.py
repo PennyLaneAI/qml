@@ -153,7 +153,7 @@ def circuit_VQE(theta, wires):
 import optax
 import jax
 
-jax.config.update("jax_enable_x64", True)
+jax.config.update("jax_enable_x64", True) # use double-precision numbers
 
 dev = qml.device("lightning.qubit", wires=qubits)
 
@@ -172,7 +172,7 @@ def cost(theta):
 
 stepsize = 0.4
 max_iterations = 30
-opt = optax.sgd(learning_rate=stepsize)
+opt = optax.sgd(learning_rate=stepsize) # sgd stands for StochasticGradientDescent
 init_params = jnp.zeros(num_theta)
 
 

@@ -67,8 +67,6 @@ from pennylane import numpy as np
 from jax import numpy as jnp
 import time
 
-jax.config.update("jax_enable_x64", True)
-
 symbols = ["Li", "H"]
 geometry = np.array([[0.0, 0.0, 0.0], [0.0, 0.0, 2.969280527]])
 molecule = qchem.Molecule(symbols, geometry)
@@ -193,6 +191,8 @@ def circuit_1(params, excitations):
 # with respect to the Hartree-Fock state.
 
 
+jax.config.update("jax_enable_x64", True) # use double-precision numbers
+
 dev = qml.device("lightning.qubit", wires=qubits)
 cost_fn = qml.QNode(circuit_1, dev, interface="jax")
 
@@ -222,7 +222,7 @@ import optax
 
 init_params = jnp.zeros(len(doubles_select))
 
-opt = optax.sgd(learning_rate=0.5)
+opt = optax.sgd(learning_rate=0.5) # sgd stands for StochasticGradientDescent
 opt_state = opt.init(init_params)
 params_doubles = init_params
 

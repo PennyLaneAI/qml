@@ -273,7 +273,7 @@ def tapered_circuit(params):
 import optax
 import catalyst
 
-opt = optax.sgd(learning_rate=0.8)
+opt = optax.sgd(learning_rate=0.8) # sgd stands for StochasticGradientDescent
 init_params = jnp.zeros(len(doubles) + len(singles))
 
 def update_step(i, params, opt_state):

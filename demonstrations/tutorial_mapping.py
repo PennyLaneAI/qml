@@ -207,7 +207,6 @@ from pennylane import numpy as np
 symbols  = ['H', 'H']
 geometry = np.array([[0.0, 0.0, -0.69434785],
                      [0.0, 0.0,  0.69434785]], requires_grad = False)
-
 mol = qchem.Molecule(symbols, geometry)
 
 ##############################################################################

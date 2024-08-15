@@ -259,7 +259,7 @@ import optax
 import jax
 from jax import numpy as jnp
 
-opt = optax.sgd(learning_rate=0.4)
+opt = optax.sgd(learning_rate=0.4) # sgd stands for StochasticGradientDescent
 theta = jnp.array(jnp.zeros(len(excitations)))
 delta_E, iteration = 10, 0
 results_hf = []

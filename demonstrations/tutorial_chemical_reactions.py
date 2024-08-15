@@ -124,7 +124,6 @@ pes_point = 0
 # We build the Hamiltonian using the :func:`~.pennylane.qchem.molecular_hamiltonian`
 # function, and use standard Pennylane techniques to optimize the circuit.
 
-import catalyst
 import optax
 
 for r in r_range:
@@ -139,7 +138,7 @@ for r in r_range:
 
     # define the device, optimizer and circuit
     dev = qml.device("lightning.qubit", wires=qubits)
-    opt = optax.sgd(learning_rate=0.4)
+    opt = optax.sgd(learning_rate=0.4) # sgd stands for StochasticGradientDescent
 
     @qml.qnode(dev, interface='jax')
     def circuit(parameters):
@@ -308,7 +307,7 @@ for r in r_range:
     H, qubits = qchem.molecular_hamiltonian(molecule, method='openfermion')
 
     dev = qml.device("lightning.qubit", wires=qubits)
-    opt = optax.sgd(learning_rate=1.5)
+    opt = optax.sgd(learning_rate=1.5) # sgd stands for StochasticGradientDescent
 
     @qml.qjit
     @qml.qnode(dev, interface='jax')

@@ -229,7 +229,7 @@ def total_spin(params):
 from jax import random
 import optax
 
-opt = optax.sgd(learning_rate=0.8)
+opt = optax.sgd(learning_rate=0.8) # sgd stands for StochasticGradientDescent
 key = random.PRNGKey(0)
 init_params = random.normal(key, shape=(len(singles) + len(doubles),)) * np.pi
 
@@ -324,7 +324,7 @@ def S2_exp_value(params):
 # Finally, we generate the new set of initial parameters, and proceed with the VQE algorithm to
 # optimize the variational circuit.
 
-opt = optax.sgd(learning_rate=0.8)
+opt = optax.sgd(learning_rate=0.8) # sgd stands for StochasticGradientDescent
 key = random.PRNGKey(0)
 init_params = random.normal(key, shape=(len(singles) + len(doubles),)) * np.pi
 
