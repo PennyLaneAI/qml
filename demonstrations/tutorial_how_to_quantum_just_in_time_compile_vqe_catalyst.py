@@ -12,7 +12,7 @@ atoms sharing two electrons) using `Catalyst <https://github.com/PennyLaneAI/Cat
 quantum just-in-time framework for PennyLane, that allows hybrid quantum-classical workflows to be
 compiled, optimized, and executed with a significant performance boost.
 
-.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_large_how-to-vqe-qjit_2024-04-23.png
+.. figure:: ../_static/demonstration_assets/how_to_vqe_qjit/OGthumbnail_large_how-to-vqe-qjit_2024-04-23.png
     :align: center
     :width: 60%
     :target: javascript:void(0)
