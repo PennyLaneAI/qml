@@ -299,7 +299,7 @@ num_qubits = active_atoms * rep
 #################################
 
 
-dev = qml.device("lightning.qubit", wires=num_qubits)
+dev = qml.device("default.qubit", wires=num_qubits)
 
 
 @qml.qnode(dev, interface="jax")
