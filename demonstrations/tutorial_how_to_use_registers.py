@@ -24,7 +24,13 @@ print(register)
 # You can also pass in a dictionary that has nested dictionaries as its values.
 
 nested_register = qml.registers(
-    {"all_registers": {"alice": 1, "bob": {"bob1": {"bob1a": 1}, "bob2": 1}, "charlie": 1}}
+    {
+        "all_registers": {
+            "alice": 1,
+            "bob": {"bob1": {"bob1a": 1}, "bob2": 1},
+            "charlie": 1,
+        }
+    }
 )
 print(nested_register)
 
@@ -43,26 +49,28 @@ print(nested_register["all_registers"][2])
 print(nested_register["bob1a"][0])
 
 # You can also create registers using set operations. Here, we use the pipe operator ``|`` to
-# perform the union operation on the ``alice`` register and the ``charlie`` register. For more details on
-# what set operations are supported, refer to the documentation of :func:`~pennylane.registers`.
+# perform the union operation on the ``alice`` register and the ``charlie`` register.
 
 new_register = nested_register["alice"] | nested_register["charlie"]
 print(new_register)
+
+# For more details on what set operations are supported, refer to the documentation of
+# :func:`~pennylane.registers`.
 ######################################################################
 # A simple example using wire registers
 # -------------------------------------
 #
-# In this example, we demonstrate how one can implement the SWAP test with registers. 
+# In this example, we demonstrate how one can implement the SWAP test with registers.
 # The `SWAP test <https://en.wikipedia.org/wiki/Swap_test>`_
 # is an algorithm that calculates the squared inner
-# product of two input states. It requires one ancilla qubit and takes two input states :math:`|\psi\rangle`
+# product of two input states. It requires one auxilliary qubit and takes two input states :math:`|\psi\rangle`
 # and :math:`|\phi\rangle`. We can think of these components as three registers. Suppose states
 # :math:`|\psi\rangle` and :math:`|\phi\rangle` are each represented with 3 wires. In PennyLane
 # code, that would be:
 
 import pennylane as qml
 
-swap_register = qml.registers({"ancilla": 1, "psi": 3, "phi": 3})
+swap_register = qml.registers({"auxilliary": 1, "psi": 3, "phi": 3})
 
 
 def swap_test():
@@ -70,14 +78,16 @@ def swap_test():
     for state in ["phi", "psi"]:
         qml.BasisState([1, 1, 0], swap_register[state])
 
-    qml.Hadamard(swap_register["ancilla"])
+    qml.Hadamard(swap_register["auxilliary"])
     for i in range(len(swap_register["psi"])):
         # We can use the union operation to assemble our registers on the fly
         qml.CSWAP(
-            swap_register["ancilla"] | swap_register["psi"][i] | swap_register["phi"][i]
+            swap_register["auxilliary"]
+            | swap_register["psi"][i]
+            | swap_register["phi"][i]
         )
-    qml.Hadamard(swap_register["ancilla"])
-    return qml.expval(qml.Z(wires=swap_register["ancilla"]))
+    qml.Hadamard(swap_register["auxilliary"])
+    return qml.expval(qml.Z(wires=swap_register["auxilliary"]))
 
 
 print(swap_test())
@@ -106,12 +116,14 @@ register = qml.registers({"state": 4, "estimation": 8})
 register = qml.registers({"state": 4, "estimation": 8, "prep": 4})
 
 # Finally, let's define our Hamiltonian. We'll use the Transverse-Field Ising model from
-# PennyLane's `quantum datasets <https://pennylane.ai/datasets/qspin/transverse-field-ising-model>`_, 
+# PennyLane's `quantum datasets <https://pennylane.ai/datasets/qspin/transverse-field-ising-model>`_,
 # but feel free to try this with any other Hamiltonian you want to find the eigenvalues of.
 
 import pennylane as qml
 
-[dataset] = qml.data.load("qspin", sysname="Ising", periodicity="open", lattice="chain", layout="1x4")
+[dataset] = qml.data.load(
+    "qspin", sysname="Ising", periodicity="open", lattice="chain", layout="1x4"
+)
 H = dataset.hamiltonians[0]
 print(H)
 
@@ -142,6 +154,7 @@ def circuit():
     qml.adjoint(qml.QFT)(wires=register["estimation"])
 
     return qml.probs(wires=register["estimation"])
+
 
 # Changing the number of wires in your estimation register is very easy with registers, but can
 # be very error-prone when using wires. The complexity of wire management only gets more difficult
