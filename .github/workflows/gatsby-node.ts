@@ -1,3 +1,10 @@
+/*
+ *                      *** Used by CI ***
+ * This file is used by deploy-pr.yml when building the PR Previews for QML.
+ * This is a modified gatsby-node.ts file that replaces the gatsby-node in pennylane-website build
+ * and remove the dependency on other SWC backend service that the QML PR Previews does not need.
+ */
+
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { createFilePath } = require(`gatsby-source-filesystem`)
 import {
