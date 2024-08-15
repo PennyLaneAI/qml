@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2021-09-13T00:00:00+00:00",
-    "dateOfLastModification": "2024-07-10T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-08T00:00:00+00:00",
     "categories": [
         "Quantum Chemistry"
     ],
@@ -18,7 +18,7 @@
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_adaptive_circuits_new.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_adaptive_circuits_new.png"
         }
     ],
     "seoDescription": "Learn how to build quantum chemistry circuits adaptively.",

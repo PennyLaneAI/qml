@@ -5,7 +5,7 @@ Qubit tapering
 
 .. meta::
     :property="og:description": Learn how to taper off qubits
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//qubit_tapering.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/qubit_tapering.png
 
 .. related::
     tutorial_quantum_chemistry Building molecular Hamiltonians
@@ -14,7 +14,7 @@ Qubit tapering
     tutorial_adaptive_circuits Adaptive circuits for quantum chemistry
     tutorial_differentiable_HF Differentiable Hartree-Fock
 
-*Authors: Utkarsh Azad and Soran Jahangiri. Posted: 16 May 2022. Last updated: 08 Nov 2022*
+*Authors: Utkarsh Azad and Soran Jahangiri. Posted: 16 May 2022. Last updated: 8 August 2024*
 
 The performance of variational quantum algorithms is considerably limited by the number of qubits
 required to represent wave functions. In the context of quantum chemistry, this
@@ -122,10 +122,10 @@ In PennyLane, a :doc:`molecular Hamiltonian <tutorial_quantum_chemistry>` can be
 coordinates.
 """
 import pennylane as qml
-from pennylane import numpy as np
+from jax import numpy as jnp
 
 symbols = ["He", "H"]
-geometry = np.array([[0.00000000, 0.00000000, -0.87818361],
+geometry = jnp.array([[0.00000000, 0.00000000, -0.87818361],
                      [0.00000000, 0.00000000,  0.87818362]])
 
 molecule = qml.qchem.Molecule(symbols, geometry, charge=1)
@@ -169,7 +169,7 @@ print(paulix_sector)
 
 H_tapered = qml.taper(H, generators, paulixops, paulix_sector)
 H_tapered_coeffs, H_tapered_ops = H_tapered.terms()
-H_tapered = qml.Hamiltonian(np.real(H_tapered_coeffs), H_tapered_ops)
+H_tapered = qml.Hamiltonian(jnp.real(jnp.array(H_tapered_coeffs)), H_tapered_ops)
 print(H_tapered)
 
 ##############################################################################
@@ -215,24 +215,24 @@ print(state_tapered)
 # Hartree-Fock energies for each Hamiltonian.
 
 dev = qml.device("default.qubit", wires=H.wires)
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev, interface="jax")
 def circuit():
-    qml.BasisState(np.array([1, 1, 0, 0]), wires=H.wires)
+    qml.BasisState(jnp.array([1, 1, 0, 0]), wires=H.wires)
     return qml.state()
 
 qubit_state = circuit()
 HF_energy = qubit_state.T @ H.sparse_matrix().toarray() @ qubit_state
-print(f"HF energy: {np.real(HF_energy):.8f} Ha")
+print(f"HF energy: {jnp.real(HF_energy):.8f} Ha")
 
-dev = qml.device("default.qubit", wires=H_tapered.wires)
-@qml.qnode(dev, interface="autograd")
+dev = qml.device("lightning.qubit", wires=H_tapered.wires)
+@qml.qnode(dev, interface="jax")
 def circuit():
-    qml.BasisState(np.array([1, 1]), wires=H_tapered.wires)
+    qml.BasisState(jnp.array([1, 1]), wires=H_tapered.wires)
     return qml.state()
 
 qubit_state = circuit()
 HF_energy = qubit_state.T @ H_tapered.sparse_matrix().toarray() @ qubit_state
-print(f"HF energy (tapered): {np.real(HF_energy):.8f} Ha")
+print(f"HF energy (tapered): {jnp.real(HF_energy):.8f} Ha")
 
 ##############################################################################
 # These values are identical to the reference Hartree-Fock energy :math:`-2.8543686493` Ha.
@@ -257,9 +257,9 @@ tapered_singles = [
                         wire_order=H.wires, op_wires=single) for single in singles
 ]
 
-dev = qml.device("default.qubit", wires=H_tapered.wires)
+dev = qml.device("lightning.qubit", wires=H_tapered.wires)
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev, interface="jax")
 def tapered_circuit(params):
     qml.BasisState(state_tapered, wires=H_tapered.wires)
     for idx, tapered_op in enumerate(tapered_doubles + tapered_singles):
@@ -270,13 +270,29 @@ def tapered_circuit(params):
 # We define an optimizer and the initial values of the circuit parameters and optimize the circuit
 # parameters with respect to the ground state energy.
 
-optimizer = qml.GradientDescentOptimizer(stepsize=0.5)
-params = np.zeros(len(doubles) + len(singles), requires_grad=True)
+import optax
+import catalyst
 
-for n in range(1, 41):
-    params, energy = optimizer.step_and_cost(tapered_circuit, params)
-    if not n % 5:
-        print(f"n: {n}, E: {energy:.8f} Ha, Params: {params}")
+opt = optax.sgd(learning_rate=0.8)
+init_params = jnp.zeros(len(doubles) + len(singles))
+
+def update_step(i, params, opt_state):
+    """Perform a single gradient update step"""
+    grads = catalyst.grad(tapered_circuit)(params)
+    updates, opt_state = opt.update(grads, opt_state)
+    params = optax.apply_updates(params, updates)
+    return (params, opt_state)
+
+loss_history = []
+
+opt_state = opt.init(init_params)
+params = init_params
+
+for i in range(1, 41):
+    params, opt_state = update_step(i, params, opt_state)
+    energy = tapered_circuit(params)
+    if not i % 5:
+        print(f"n: {i}, E: {energy:.8f} Ha, Params: {params}")
 
 ##############################################################################
 # The computed energy matches the FCI energy, :math:`-2.862595242378` Ha, while the number of qubits

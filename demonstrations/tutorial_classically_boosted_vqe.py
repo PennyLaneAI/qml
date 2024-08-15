@@ -4,7 +4,7 @@ Classically-boosted variational quantum eigensolver
 
 .. meta::
     :property="og:description": Learn how to implement classically-boosted VQE in PennyLane.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//CB_VQE.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/CB_VQE.png
 
 .. related::
 
@@ -12,7 +12,7 @@ Classically-boosted variational quantum eigensolver
     tutorial_vqe Variational Quantum Eigensolver
 
 *Authors: Joana Fraxanet & Isidor Schoch (Xanadu Residents).
-Posted: 31 October 2022. Last updated: 31 October 2022.*
+Posted: 31 October 2022. Last updated: 8 August 2024.*
 
 One of the most important applications of quantum computers is expected
 to be the computation of ground-state energies of complicated molecules
@@ -104,7 +104,8 @@ Let’s get started!
 
 import pennylane as qml
 from pennylane import qchem
-from pennylane import numpy as np
+import numpy as np
+from jax import numpy as jnp
 
 symbols = ["H", "H"]
 coordinates = np.array([[0.0, 0.0, -0.6614], [0.0, 0.0, 0.6614]])
@@ -139,7 +140,9 @@ num_theta = len(singles) + len(doubles)
 
 
 def circuit_VQE(theta, wires):
-    qml.AllSinglesDoubles(weights=theta, wires=wires, hf_state=hf, singles=singles, doubles=doubles)
+    qml.AllSinglesDoubles(
+        weights=theta, wires=wires, hf_state=hf, singles=singles, doubles=doubles
+    )
 
 
 ######################################################################
@@ -147,11 +150,17 @@ def circuit_VQE(theta, wires):
 # define a circuit for the cost function.
 #
 
+import optax
+import jax
+
+jax.config.update("jax_enable_x64", True)
+
 dev = qml.device("lightning.qubit", wires=qubits)
 
 
-@qml.qnode(dev, interface="autograd")
-def cost_fn(theta):
+@qml.qjit
+@qml.qnode(dev, interface="jax")
+def cost(theta):
     circuit_VQE(theta, range(qubits))
     return qml.expval(H)
 
@@ -163,20 +172,35 @@ def cost_fn(theta):
 
 stepsize = 0.4
 max_iterations = 30
-opt = qml.GradientDescentOptimizer(stepsize=stepsize)
-theta = np.zeros(num_theta, requires_grad=True)
+opt = optax.sgd(learning_rate=stepsize)
+init_params = jnp.zeros(num_theta)
 
 
 ######################################################################
 # Finally, we run the algorithm.
 #
 
-for n in range(max_iterations):
-    theta, prev_energy = opt.step_and_cost(cost_fn, theta)
-    samples = cost_fn(theta)
 
-energy_VQE = cost_fn(theta)
-theta_opt = theta
+@qml.qjit
+def update_step(i, params, opt_state):
+    """Perform a single gradient update step"""
+    grads = qml.grad(cost)(params)
+    updates, opt_state = opt.update(grads, opt_state)
+    params = optax.apply_updates(params, updates)
+    return (params, opt_state)
+
+
+loss_history = []
+
+opt_state = opt.init(init_params)
+params = init_params
+
+for i in range(30):
+    params, opt_state = update_step(i, params, opt_state)
+    energy = cost(params)
+
+energy_VQE = cost(params)
+theta_opt = params
 
 print("VQE energy: %.4f" % (energy_VQE))
 print("Optimal parameters:", theta_opt)
@@ -418,13 +442,15 @@ wires = range(qubits + 1)
 dev = qml.device("lightning.qubit", wires=wires)
 
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev, interface="jax")
 def hadamard_test(Uq, Ucl, component="real"):
     if component == "imag":
         qml.RX(math.pi / 2, wires=wires[1:])
 
     qml.Hadamard(wires=[0])
-    qml.ControlledQubitUnitary(Uq.conjugate().T @ Ucl, control_wires=[0], wires=wires[1:])
+    qml.ControlledQubitUnitary(
+        Uq.conjugate().T @ Ucl, control_wires=[0], wires=wires[1:]
+    )
     qml.Hadamard(wires=[0])
 
     return qml.probs(wires=[0])
@@ -445,7 +471,7 @@ Uq = qml.matrix(circuit_VQE, wire_order=wire_order)(theta_opt, wire_order)
 
 H12 = 0
 relevant_basis_states = np.array(
-    [[1, 1, 0, 0], [0, 1, 1, 0], [1, 0, 0, 1], [0, 0, 1, 1]], requires_grad=True
+    [[1, 1, 0, 0], [0, 1, 1, 0], [1, 0, 0, 1], [0, 0, 1, 1]]
 )
 for j, basis_state in enumerate(relevant_basis_states):
     Ucl = qml.matrix(circuit_product_state, wire_order=wire_order)(basis_state)

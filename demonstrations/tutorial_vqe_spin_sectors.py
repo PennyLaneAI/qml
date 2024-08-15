@@ -4,13 +4,13 @@ VQE in different spin sectors
 
 .. meta::
     :property="og:description": Find the lowest-energy states of a Hamiltonian in different spin sectors
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_spectra_h2.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/thumbnail_spectra_h2.png
 
 .. related::
    tutorial_vqe A brief overview of VQE
    vqe_parallel VQE with parallel QPUs with Rigetti
 
-*Author: Alain Delgado — Posted: 13 October 2020. Last updated: 25 June 2022.*
+*Author: Alain Delgado — Posted: 13 October 2020. Last updated: 8 August 2024.*
 
 The Variational Quantum Eigensolver (VQE) algorithm is an approach for finding the
 lowest-energy state of a molecule using a quantum computer [#peruzzo2014]_.
@@ -49,7 +49,7 @@ with the symbols of the constituent atoms and a one-dimensional array with the c
 nuclear coordinates in `atomic units <https://en.wikipedia.org/wiki/Hartree_atomic_units>`_.
 """
 
-from pennylane import numpy as np
+import numpy as np
 
 symbols = ["H", "H"]
 coordinates = np.array([0.0, 0.0, -0.6614, 0.0, 0.0, 0.6614])
@@ -191,18 +191,17 @@ dev = qml.device("lightning.qubit", wires=qubits)
 # a cost function that can be evaluated with the circuit parameters:
 
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev, interface="jax")
 def cost_fn(params):
     circuit(params, wires=range(qubits))
     return qml.expval(H)
-
 
 ##############################################################################
 # As a reminder, we also built the total spin operator :math:`\hat{S}^2` for which
 # we can now define a function to compute its expectation value:
 
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev, interface="jax")
 def S2_exp_value(params):
     circuit(params, wires=range(qubits))
     return qml.expval(S2)
@@ -227,35 +226,40 @@ def total_spin(params):
 # Now, we proceed to minimize the cost function to find the ground state. We define
 # the classical optimizer and initialize the circuit parameters.
 
-opt = qml.GradientDescentOptimizer(stepsize=0.8)
-np.random.seed(0)  # for reproducibility
-theta = np.random.normal(0, np.pi, len(singles) + len(doubles), requires_grad=True)
-print(theta)
+from jax import random
+import optax
+
+opt = optax.sgd(learning_rate=0.8)
+key = random.PRNGKey(0)
+init_params = random.normal(key, shape=(len(singles) + len(doubles),)) * np.pi
 
 ##############################################################################
 # We carry out the optimization over a maximum of 100 steps, aiming to reach a
 # convergence tolerance of :math:`10^{-6}` for the value of the cost function.
 
+import catalyst
 max_iterations = 100
-conv_tol = 1e-06
 
-for n in range(max_iterations):
+prev_energy = 0.0
+@qml.qjit
+def update_step(i, params, opt_state):
+    """Perform a single gradient update step"""
+    grads = qml.grad(cost_fn)(params)
+    updates, opt_state = opt.update(grads, opt_state)
+    params = optax.apply_updates(params, updates)
+    return (params, opt_state)
 
-    theta, prev_energy = opt.step_and_cost(cost_fn, theta)
+loss_history = []
 
-    energy = cost_fn(theta)
-    spin = total_spin(theta)
+opt_state = opt.init(init_params)
+params = init_params
 
-    conv = np.abs(energy - prev_energy)
-
-    if n % 4 == 0:
-        print(f"Step = {n}, Energy = {energy:.8f} Ha, S = {spin:.4f}")
-
-    if conv <= conv_tol:
-        break
+for i in range(max_iterations):
+    params, opt_state = update_step(i, params, opt_state)
+    energy = cost_fn(params)
 
 print("\n" f"Final value of the ground-state energy = {energy:.8f} Ha")
-print("\n" f"Optimal value of the circuit parameters = {theta}")
+print("\n" f"Optimal value of the circuit parameters = {params}")
 
 ##############################################################################
 # As a result, we have estimated the lowest-energy state of the hydrogen molecule
@@ -304,13 +308,13 @@ def circuit(params, wires):
 # and the total spin operator for the new circuit.
 
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev, interface="jax")
 def cost_fn(params):
     circuit(params, wires=range(qubits))
     return qml.expval(H)
 
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev, interface="jax")
 def S2_exp_value(params):
     circuit(params, wires=range(qubits))
     return qml.expval(S2)
@@ -320,29 +324,31 @@ def S2_exp_value(params):
 # Finally, we generate the new set of initial parameters, and proceed with the VQE algorithm to
 # optimize the variational circuit.
 
-np.random.seed(0)
-theta = np.random.normal(0, np.pi, len(singles) + len(doubles), requires_grad=True)
+opt = optax.sgd(learning_rate=0.8)
+key = random.PRNGKey(0)
+init_params = random.normal(key, shape=(len(singles) + len(doubles),)) * np.pi
 
 max_iterations = 100
-conv_tol = 1e-06
 
-for n in range(max_iterations):
+@qml.qjit
+def update_step(i, params, opt_state):
+    """Perform a single gradient update step"""
+    grads = qml.grad(cost_fn)(params)
+    updates, opt_state = opt.update(grads, opt_state)
+    params = optax.apply_updates(params, updates)
+    return (params, opt_state)
 
-    theta, prev_energy = opt.step_and_cost(cost_fn, theta)
+loss_history = []
 
-    energy = cost_fn(theta)
-    spin = total_spin(theta)
+opt_state = opt.init(init_params)
+params = init_params
 
-    conv = np.abs(energy - prev_energy)
-
-    if n % 4 == 0:
-        print(f"Step = {n}, Energy = {energy:.8f} Ha, S = {spin:.4f}")
-
-    if conv <= conv_tol:
-        break
+for i in range(max_iterations):
+    params, opt_state = update_step(i, params, opt_state)
+    energy = cost_fn(params)
 
 print("\n" f"Final value of the energy = {energy:.8f} Ha")
-print("\n" f"Optimal value of the circuit parameters = {theta}")
+print("\n" f"Optimal value of the circuit parameters = {params}")
 
 ##############################################################################
 # As expected, the VQE algorithms has found the lowest-energy state with total spin

@@ -7,7 +7,7 @@ Givens rotations for quantum chemistry
     :property="og:description": Discover the building blocks of quantum circuits for
         quantum chemistry
 
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//Givens_rotations.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/Givens_rotations.png
 
 .. related::
     tutorial_quantum_chemistry Building molecular Hamiltonians
@@ -185,21 +185,22 @@ This can be implemented in PennyLane as follows:
 """
 
 import pennylane as qml
+from jax import numpy as jnp
 import numpy as np
 
-dev = qml.device('default.qubit', wires=3)
+dev = qml.device('lightning.qubit', wires=3)
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev, interface="jax")
 def circuit(x, y):
     # prepares the reference state |100>
-    qml.BasisState(np.array([1, 0, 0]), wires=[0, 1, 2])
+    qml.BasisState(jnp.array([1, 0, 0]), wires=[0, 1, 2])
     # applies the single excitations
     qml.SingleExcitation(x, wires=[0, 1])
     qml.SingleExcitation(y, wires=[0, 2])
     return qml.state()
 
-x = -2 * np.arcsin(np.sqrt(1/3))
-y = -2 * np.arcsin(np.sqrt(1/2))
+x = -2 * jnp.arcsin(jnp.sqrt(1/3))
+y = -2 * jnp.arcsin(jnp.sqrt(1/2))
 print(circuit(x, y))
 
 ##############################################################################
@@ -258,12 +259,14 @@ print(f"Double excitations = {doubles}")
 ##############################################################################
 # Now we continue to build the circuit:
 
-dev2 = qml.device('default.qubit', wires=6)
+from jax import random
 
-@qml.qnode(dev2, interface="autograd")
+dev2 = qml.device('lightning.qubit', wires=6)
+
+@qml.qnode(dev2, interface="jax")
 def circuit2(x, y):
     # prepares reference state
-    qml.BasisState(np.array([1, 1, 1, 0, 0, 0]), wires=[0, 1, 2, 3, 4, 5])
+    qml.BasisState(jnp.array([1, 1, 1, 0, 0, 0]), wires=[0, 1, 2, 3, 4, 5])
     # apply all single excitations
     for i, s in enumerate(singles):
         qml.SingleExcitation(x[i], wires=s)
@@ -273,8 +276,10 @@ def circuit2(x, y):
     return qml.state()
 
 # random angles of rotation
-x = np.random.normal(0, 1, len(singles))
-y = np.random.normal(0, 1, len(doubles))
+key = random.PRNGKey(0)
+key_x, key_y = random.split(key)
+x = random.normal(key_x, shape=(len(singles),))
+y = random.normal(key_y, shape=(len(singles),))
 
 output = circuit2(x, y)
 
@@ -356,17 +361,17 @@ print(states)
 
 dev = qml.device('default.qubit', wires=6)
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev, interface="jax")
 def circuit3(x, y, z):
-    qml.BasisState(np.array([1, 1, 0, 0, 0, 0]), wires=[i for i in range(6)])
+    qml.BasisState(jnp.array([1, 1, 0, 0, 0, 0]), wires=[i for i in range(6)])
     qml.DoubleExcitation(x, wires=[0, 1, 2, 3])
     qml.DoubleExcitation(y, wires=[0, 1, 4, 5])
     qml.SingleExcitation(z, wires=[1, 3])
     return qml.state()
 
-x = -2 * np.arcsin(np.sqrt(1/4))
-y = -2 * np.arcsin(np.sqrt(1/3))
-z = -2 * np.arcsin(np.sqrt(1/2))
+x = -2 * jnp.arcsin(jnp.sqrt(1/4))
+y = -2 * jnp.arcsin(jnp.sqrt(1/3))
+z = -2 * jnp.arcsin(jnp.sqrt(1/2))
 
 output = circuit3(x, y, z)
 states = [np.binary_repr(i, width=6) for i in range(len(output)) if output[i] != 0]
@@ -380,9 +385,9 @@ print(states)
 # above, this time controlling on the state of the first qubit and verify that we can prepare the
 # desired state. To perform the control, we use the :func:`~.pennylane.ctrl` transform:
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev, interface="jax")
 def circuit4(x, y, z):
-    qml.BasisState(np.array([1, 1, 0, 0, 0, 0]), wires=[i for i in range(6)])
+    qml.BasisState(jnp.array([1, 1, 0, 0, 0, 0]), wires=[i for i in range(6)])
     qml.DoubleExcitation(x, wires=[0, 1, 2, 3])
     qml.DoubleExcitation(y, wires=[0, 1, 4, 5])
     # single excitation controlled on qubit 0
@@ -438,9 +443,9 @@ print(states)
 
 dev = qml.device('default.qubit', wires=4)
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev, interface="jax")
 def state_preparation(params):
-    qml.BasisState(np.array([1, 1, 0, 0]), wires=[0, 1, 2, 3])
+    qml.BasisState(jnp.array([1, 1, 0, 0]), wires=[0, 1, 2, 3])
     qml.SingleExcitation(params[0], wires=[1, 2])
     qml.SingleExcitation(params[1], wires=[1, 3])
     # single excitations controlled on qubit 1
@@ -450,11 +455,11 @@ def state_preparation(params):
     return qml.state()
 
 n = 6
-params = np.array([-2 * np.arcsin(1/np.sqrt(n-i)) for i in range(n-1)])
+params = jnp.array([-2 * jnp.arcsin(1/jnp.sqrt(n-i)) for i in range(n-1)])
 
 output = state_preparation(params)
 # sets very small coefficients to zero
-output[np.abs(output) < 1e-10] = 0
+output = jnp.where(jnp.abs(output) < 1e-10, 0.0, output)
 states = [np.binary_repr(i, width=4) for i in range(len(output)) if output[i] != 0]
 print("Basis states = ", states)
 print("Output state =", output)
