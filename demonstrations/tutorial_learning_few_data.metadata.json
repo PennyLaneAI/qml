@@ -2,7 +2,7 @@
     "title": "Generalization in QML from few training data",
     "authors": [
         {
-            "id": "korbinian_kottmann"
+            "username": "Qottmann"
         },
         {
             "id": "luis_mantilla_calderon"
@@ -12,7 +12,7 @@
         }
     ],
     "dateOfPublication": "2022-08-29T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],

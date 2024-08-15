@@ -2,11 +2,11 @@
     "title": "Is quantum computing useful before fault tolerance?",
     "authors": [
         {
-            "id": "korbinian_kottmann"
+            "username": "Qottmann"
         }
     ],
     "dateOfPublication": "2023-06-16T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
     "categories": [
         "Quantum Hardware",
         "Quantum Computing"

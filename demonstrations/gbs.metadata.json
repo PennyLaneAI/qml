@@ -2,14 +2,14 @@
     "title": "Quantum advantage with Gaussian Boson Sampling",
     "authors": [
         {
-            "id": "josh_izaac"
+            "username": "josh"
         },
         {
-            "id": "nathan_killoran"
+            "username": "co9olguy"
         }
     ],
     "dateOfPublication": "2020-12-04T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
     "categories": [
         "Quantum Hardware",
         "Quantum Computing"
