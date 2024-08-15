@@ -14,11 +14,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/here_comes_the_sun/thumbnail_tutorial_how_to_use_wire_registers.png"
+            "uri": "/_static/demonstration_assets/initial_state_preparation/thumbnail_initial_state_preparation.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_how_to_use_wire_registers.png"
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_initial_state_preparation.png"
         }
     ],
     "seoDescription": "Learn how wire registers can be built and used in PennyLane.",
