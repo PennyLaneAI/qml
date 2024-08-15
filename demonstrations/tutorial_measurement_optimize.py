@@ -153,8 +153,8 @@ def cost_circuit(params):
 # executions under the hood—one per expectation value:
 
 from jax import random as random
-key = random.PRNGKey(0)
-params = random.normal(key, shape=(len(singles) + len(doubles),)) * jnp.pi
+key, scale = random.PRNGKey(0), jnp.pi
+params = random.normal(key, shape=(len(singles) + len(doubles),)) * scale
 with qml.Tracker(dev) as tracker:  # track the number of executions
     print("Cost function value:", cost_circuit(params))
 
