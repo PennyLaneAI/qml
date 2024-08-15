@@ -63,14 +63,14 @@ print(new_register)
 # In this example, we demonstrate how one can implement the SWAP test with registers.
 # The `SWAP test <https://en.wikipedia.org/wiki/Swap_test>`_
 # is an algorithm that calculates the squared inner
-# product of two input states. It requires one auxilliary qubit and takes two input states :math:`|\psi\rangle`
+# product of two input states. It requires one auxiliary qubit and takes two input states :math:`|\psi\rangle`
 # and :math:`|\phi\rangle`. We can think of these components as three registers. Suppose states
 # :math:`|\psi\rangle` and :math:`|\phi\rangle` are each represented with 3 wires. In PennyLane
 # code, that would be:
 
 import pennylane as qml
 
-swap_register = qml.registers({"auxilliary": 1, "psi": 3, "phi": 3})
+swap_register = qml.registers({"auxiliary": 1, "psi": 3, "phi": 3})
 
 
 def swap_test():
@@ -78,16 +78,16 @@ def swap_test():
     for state in ["phi", "psi"]:
         qml.BasisState([1, 1, 0], swap_register[state])
 
-    qml.Hadamard(swap_register["auxilliary"])
+    qml.Hadamard(swap_register["auxiliary"])
     for i in range(len(swap_register["psi"])):
         # We can use the union operation to assemble our registers on the fly
         qml.CSWAP(
-            swap_register["auxilliary"]
+            swap_register["auxiliary"]
             | swap_register["psi"][i]
             | swap_register["phi"][i]
         )
-    qml.Hadamard(swap_register["auxilliary"])
-    return qml.expval(qml.Z(wires=swap_register["auxilliary"]))
+    qml.Hadamard(swap_register["auxiliary"])
+    return qml.expval(qml.Z(wires=swap_register["auxiliary"]))
 
 
 print(swap_test())
