@@ -403,8 +403,8 @@ def circuit2(weights):
     return qml.expval(obs[1])
 
 param_shape = qml.templates.StronglyEntanglingLayers.shape(n_layers=3, n_wires=3)
-key = random.PRNGKey(192933)
-weights = random.normal(key, shape=param_shape) * 0.1
+key, scale = random.PRNGKey(192933), 0.1
+weights = scale * random.normal(key, shape=param_shape)
 
 print("Expectation value of XYI = ", circuit1(weights))
 print("Expectation value of XIZ = ", circuit2(weights))
