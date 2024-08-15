@@ -201,6 +201,41 @@ export const createPages: GatsbyNode['createPages'] = async ({
     return
   }
 
+  // Query blog authors & slugs from search query in PennyLane Cloud
+  const BlogAuthorResult = await graphql<Queries.GetBlogAuthorDataQuery>(`
+    query GetBlogAuthorData {
+      pennylaneCloud {
+        search(input: { contentTypes: BLOG }) {
+          items {
+            ... on pennylaneCloud_GenericContent {
+              authors {
+                ... on pennylaneCloud_AuthorName {
+                  name
+                }
+                ... on pennylaneCloud_Profile {
+                  handle
+                  firstName
+                  headline
+                  lastName
+                  avatarUrl
+                }
+              }
+              slug
+            }
+          }
+        }
+      }
+    }
+  `)
+
+  if (BlogAuthorResult.errors) {
+    reporter.panicOnBuild(
+      `There was an error loading your blog authors`,
+      BlogResult.errors
+    )
+    return
+  }
+
   /**
    * Create a map for content slug and authors
    * to easily fetch authors for demo & blog pages while creating them programmatically.
@@ -208,9 +243,14 @@ export const createPages: GatsbyNode['createPages'] = async ({
   const contentAuthorMap = {}
   const demoSearchItems =
     DemoAuthorResult.data?.pennylaneCloud.search.items || []
+  const blogSearchItems =
+    BlogAuthorResult.data?.pennylaneCloud.search.items || []
 
   demoSearchItems.forEach((content) => {
     contentAuthorMap[content['slug']] = content['authors']
+  })
+  blogSearchItems.forEach((content) => {
+    contentAuthorMap[`/${content['slug']}/`] = content['authors']
   })
 
   // Create Pages Programmatically
