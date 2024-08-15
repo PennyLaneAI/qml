@@ -127,7 +127,7 @@ dev = qml.device("lightning.qubit", wires=16)
 
 @qml.qnode(dev)
 def circuit():
-    # Initialize state register to Hartree-Fock State
+    # Initialize state register to initial state
     qml.BasisState(initial_state, wires=register["state"])
 
     # Apply Hadamard gate to all wires in estimation register
