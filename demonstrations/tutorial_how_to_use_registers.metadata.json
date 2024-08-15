@@ -1,0 +1,31 @@
+{
+    "title": "How to use wire registers",
+    "authors": [
+        {
+            "id": "austin_huang"
+        }
+    ],
+    "dateOfPublication": "2024-07-23T00:00:00+00:00",
+    "dateOfLastModification": "2024-07-23T00:00:00+00:00",
+    "categories": [
+        "How-to"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/here_comes_the_sun/thumbnail_tutorial_how_to_use_wire_registers.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_how_to_use_wire_registers.png"
+        }
+    ],
+    "seoDescription": "Learn how wire registers can be built and used in PennyLane.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/how_to_use_wire_registers",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": []
+}
