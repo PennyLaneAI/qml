@@ -773,7 +773,7 @@ for g, correls in zip(gs, all_correls):
 #     C. Schön, E. Solano, F. Verstraete, J. I. Cirac, M. M. Wolf
 #     "Sequential Generation of Entangled Multiqubit States", Physical Review Letters, **95**, 110503,
 #     `closed access <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.95.110503>`__, 2005.
-#     `arXiv:quant-ph/0501096 <http://www.arxiv.org/abs/quant-ph/0501096 >`__, 2005.
+#     `arXiv:quant-ph/0501096 <http://www.arxiv.org/abs/quant-ph/0501096>`__, 2005.
 #
 # .. [#todo]
 #

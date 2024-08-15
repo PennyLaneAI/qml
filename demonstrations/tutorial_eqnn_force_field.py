@@ -45,7 +45,7 @@ and finally obtain the forces by computing the gradient of the learned PES.
 
 
 Equivariant Quantum Machine learning
------------------------------------
+------------------------------------
 
 In order to incorporate symmetries into machine learning models, we need a few concepts from group theory. A formal course on the
 subject is out of the scope of the present document, which is why we refer to two other demos, `equivariant graph embedding <https://pennylane.ai/qml/demos/tutorial_equivariant_graph_embedding/>`_
