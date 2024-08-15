@@ -3,15 +3,16 @@
     "authors": [
         {
             "id": "oriel_kiss"
-          },
-          {
+        },
+        {
             "id": "isabel_nha_minh_le"
         }
     ],
     "dateOfPublication": "2024-03-12T00:00:00+00:00",
     "dateOfLastModification": "2024-08-05T00:00:00+00:00",
     "categories": [
-        "Quantum Machine Learning", "Quantum Chemistry"
+        "Quantum Machine Learning", 
+        "Quantum Chemistry"
     ],
     "tags": [],
     "previewImages": [
@@ -57,7 +58,7 @@
             "publisher": "APS",
             "journal": "Phys. Rev. A",
             "url": "https://journals.aps.org/pra/abstract/10.1103/PhysRevA.103.032430"
-        } ,
+        },
         {
             "id": "wierichs",
             "type": "article",
@@ -67,7 +68,7 @@
             "publisher": "",
             "journal": "",
             "url": "https://arxiv.org/abs/2312.06752"
-        } ,
+        },
         {
             "id": "meyer",
             "type": "article",
@@ -79,10 +80,11 @@
             "url": "https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.4.010328"
         }
     ],
-    "basedOnPapers": ["https://arxiv.org/abs/2311.11362"],
+    "basedOnPapers": [
+        "https://arxiv.org/abs/2311.11362"
+    ],
     "referencedByPapers": [],
     "relatedContent": [
-
         {
             "type": "demonstration",
             "id": "tutorial_geometric_qml",

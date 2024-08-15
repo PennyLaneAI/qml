@@ -169,7 +169,6 @@ def singlet(wires):
     qml.CNOT(wires=wires)
 
 
-
 ######################################################################
 # Next, we need a rotationally equivariant data embedding. We choose to encode a three-dimensional
 # data point :math:`\vec{x}\in \mathbb{R}^3` via
@@ -199,7 +198,6 @@ def equivariant_encoding(alpha, data, wires):
     hamiltonian = jnp.einsum("i,ijk", data, sigmas)  # Heisenberg Hamiltonian
     U = jax.scipy.linalg.expm(-1.0j * alpha * hamiltonian / 2)
     qml.QubitUnitary(U, wires=wires, id="E")
-
 
 
 ######################################################################
@@ -290,7 +288,7 @@ B = 1  # Number of repetitions inside a trainable layer
 rep = 2  # Number of repeated vertical encoding
 
 active_atoms = 2  # Number of active atoms
-                  # Here we only have two active atoms since we fixed the oxygen (which becomes non-active) at the origin
+# Here we only have two active atoms since we fixed the oxygen (which becomes non-active) at the origin
 num_qubits = active_atoms * rep
 #################################
 
@@ -311,9 +309,7 @@ def vqlm(data, params):
 
     # Initial encoding
     for i in range(num_qubits):
-        equivariant_encoding(
-            alphas[i, 0], jnp.asarray(data)[i % active_atoms, ...], wires=[i]
-        )
+        equivariant_encoding(alphas[i, 0], jnp.asarray(data)[i % active_atoms, ...], wires=[i])
 
     # Reuploading model
     for d in range(D):
@@ -437,6 +433,7 @@ def inference(loss_data, opt_state):
 
     return E_pred, l
 
+
 #################################
 # **Parameter initialization:**
 #
@@ -466,8 +463,8 @@ running_loss = []
 # We train our VQLM using stochastic gradient descent.
 
 
-num_batches = 5000 # number of optimization steps
-batch_size = 256   # number of training data per batch
+num_batches = 5000  # number of optimization steps
+batch_size = 256  # number of training data per batch
 
 
 for ibatch in range(num_batches):
@@ -492,7 +489,7 @@ for ibatch in range(num_batches):
 history_loss = np.array(running_loss)
 
 fontsize = 12
-plt.figure(figsize=(4,4))
+plt.figure(figsize=(4, 4))
 plt.plot(history_loss[:, 0], "r-", label="training error")
 plt.plot(history_loss[:, 1], "b-", label="testing error")
 
@@ -512,7 +509,7 @@ plt.show()
 # could be improved, e.g. by using a deeper model as in the original paper.
 #
 
-plt.figure(figsize=(4,4))
+plt.figure(figsize=(4, 4))
 plt.title("Energy predictions", fontsize=fontsize)
 plt.plot(energy[indices_test], E_pred, "ro", label="Test predictions")
 plt.plot(energy[indices_test], energy[indices_test], "k.-", lw=1, label="Exact")
