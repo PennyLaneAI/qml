@@ -3,7 +3,7 @@ r"""Differentiating quantum error mitigation transforms
 
 .. meta::
     :property="og:description": Differentiable error mitigation
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//diffable_mitigation_thumb.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/diffable_mitigation_thumb.png
 
 .. related::
 

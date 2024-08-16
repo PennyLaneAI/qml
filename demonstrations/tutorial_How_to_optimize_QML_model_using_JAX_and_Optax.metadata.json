@@ -2,27 +2,28 @@
     "title": "How to optimize a QML model using JAX and Optax",
     "authors": [
         {
-            "id": "josh_izaac"
+            "username": "josh"
         },
         {
-            "id": "maria_schuld"
+            "username": "mariaschuld"
         }
     ],
     "dateOfPublication": "2024-01-18T00:00:00+00:00",
-    "dateOfLastModification": "2024-03-08T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning",
-        "Optimization"
+        "Optimization",
+        "How-to"
     ],
     "tags": ["how to"],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_How_to_optimize_QML_model_using_JAX_and_Optax_2024-01-16.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_How_to_optimize_QML_model_using_JAX_and_Optax_2024-01-16.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_How_to_optimize_QML_model_using_JAX_and_Optax_2024-01-16.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_How_to_optimize_QML_model_using_JAX_and_Optax_2024-01-16.png"
         }
     ],
     "seoDescription": "Learn how to train a quantum machine learning model using PennyLane, JAX, and Optax.",

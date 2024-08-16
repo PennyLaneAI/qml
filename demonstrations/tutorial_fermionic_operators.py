@@ -5,7 +5,7 @@ Fermionic operators
 
 .. meta::
     :property="og:description": Learn how to work with fermionic operators
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_fermionic_operators.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/thumbnail_tutorial_fermionic_operators.png
 
 .. related::
     tutorial_quantum_chemistry Building molecular Hamiltonians

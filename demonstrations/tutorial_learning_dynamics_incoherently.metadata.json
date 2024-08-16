@@ -1,0 +1,66 @@
+{
+    "title": "Learning dynamics incoherently",
+    "authors": [
+        {
+            "username": "Diego"
+        }
+    ],
+    "dateOfPublication": "2024-08-15T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-15T00:00:00+00:00",
+    "categories": [
+        "Quantum Machine Learning",
+        "How-to"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_learning_dynamics_incoherently.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_learning_dynamics_incoherently.png"
+        }
+    ],
+    "seoDescription": "Learn how to reproduce an unknown quantum process with classical shadow measurements",
+    "doi": "",
+    "canonicalURL": "/qml/demos/learning_dynamics_incoherently",
+    "references": [
+        {
+            "id": "jerbi2023power",
+            "type": "article",
+            "title": "The power and limitations of learning quantum dynamics incoherently",
+            "authors": "Sofiene Jerbi, Joe Gibbs, Manuel S. Rudolph, Matthias C. Caro, Patrick J. Coles, Hsin-Yuan Huang, and Zoë Holmes",
+            "year": "2023",
+            "url": "https://arxiv.org/abs/2303.12834"
+        },
+        {
+            "id": "Huang2022Quantum",
+            "type": "article",
+            "title": "Quantum advantage in learning from experiments",
+            "journal": "Science",
+            "authors": "Hsin-Yuan Huang, Michael Broughton, Jordan Cotler, Sitan Chen, Jerry Li, Masoud Mohseni, Hartmut Neven, Ryan Babbush, Richard Kueng, John Preskill, and Jarrod R. McClean",
+            "year": "2022",
+            "url": "http://dx.doi.org/10.1126/science.abn7293"
+        }
+    ],
+    "basedOnPapers": ["10.48550/arXiv.2303.12834"],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_haar_measure",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_classical_shadows",
+            "weight": 1.0            
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_variational_classifier",
+            "weight": 1.0            
+        }
+    ]
+}

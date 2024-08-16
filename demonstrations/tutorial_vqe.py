@@ -5,7 +5,7 @@ A brief overview of VQE
 .. meta::
     :property="og:description": Find the ground state of a Hamiltonian using the
         variational quantum eigensolver algorithm.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//pes_h2.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/pes_h2.png
 
 .. related::
 
@@ -53,7 +53,7 @@ jax.config.update("jax_platform_name", "cpu")
 jax.config.update('jax_enable_x64', True)
 
 symbols = ["H", "H"]
-coordinates = np.array([0.0, 0.0, -0.6614, 0.0, 0.0, 0.6614])
+coordinates = np.array([[0.0, 0.0, -0.6614], [0.0, 0.0, 0.6614]])
 
 ##############################################################################
 # The molecular structure can also be imported from an external file using
@@ -64,7 +64,8 @@ coordinates = np.array([0.0, 0.0, -0.6614, 0.0, 0.0, 0.6614])
 
 import pennylane as qml
 
-H, qubits = qml.qchem.molecular_hamiltonian(symbols, coordinates)
+molecule = qml.qchem.Molecule(symbols, coordinates)
+H, qubits = qml.qchem.molecular_hamiltonian(molecule)
 print("Number of qubits = ", qubits)
 print("The Hamiltonian is ", H)
 

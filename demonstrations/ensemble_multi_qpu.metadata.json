@@ -2,11 +2,11 @@
     "title": "Ensemble classification with Rigetti and Qiskit devices",
     "authors": [
         {
-            "id": "thomas_bromley"
+            "username": "trbromley"
         }
     ],
     "dateOfPublication": "2020-02-14T00:00:00+00:00",
-    "dateOfLastModification": "2024-03-04T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-14T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_ensemble_classification_rigetti_qiskit.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_ensemble_classification_rigetti_qiskit.png"
         }
     ],
     "seoDescription": "We demonstrate how two QPUs can be combined in parallel to help solve a machine learning classification problem, using PyTorch and PennyLane.",

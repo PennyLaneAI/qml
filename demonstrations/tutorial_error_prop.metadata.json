@@ -2,14 +2,15 @@
     "title": "How to track algorithmic error using PennyLane",
     "authors": [
         {
-            "id": "jay_soni"
+            "username": "Jay"
         }
     ],
     "dateOfPublication": "2024-05-03T00:00:00+00:00",
-    "dateOfLastModification": "2024-05-03T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
     "categories": [
         "Algorithms",
-        "Quantum Computing"
+        "Quantum Computing",
+        "How-to"
     ],
     "tags": [],
     "previewImages": [
@@ -19,7 +20,7 @@
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_error-prop_2024-05-01.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_error-prop_2024-05-01.png"
         }
     ],
     "seoDescription": "Learn how to propagate error through quantum circuits.",

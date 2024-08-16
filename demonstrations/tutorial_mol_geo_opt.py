@@ -4,7 +4,7 @@ Optimization of molecular geometries
 
 .. meta::
     :property="og:description": Find the equilibrium geometry of a molecule
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//fig_pes.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/fig_pes.png
 
 .. related::
    tutorial_quantum_chemistry Building molecular Hamiltonians
@@ -126,7 +126,8 @@ import pennylane as qml
 
 
 def H(x):
-    return qml.qchem.molecular_hamiltonian(symbols, x, charge=1)[0]
+    molecule = qml.qchem.Molecule(symbols, x, charge=1)
+    return qml.qchem.molecular_hamiltonian(molecule)[0]
 
 
 ##############################################################################

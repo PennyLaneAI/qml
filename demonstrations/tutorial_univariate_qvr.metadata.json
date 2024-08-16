@@ -2,14 +2,14 @@
     "title": "Quantum detection of time series anomalies",
     "authors": [
         {
-            "id": "jack_stephen_baker"
+            "username": "jsbaker"
         },
         {
             "id": "santosh_kumar_radha"
         }
     ],
     "dateOfPublication": "2023-02-07T00:00:00+00:00",
-    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
@@ -21,7 +21,7 @@
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_univariate_qvr.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_univariate_qvr.png"
         }
     ],
     "seoDescription": "Learn how to quantumly detect anomalous behaviour in time series data with the help of Covalent.",
@@ -75,6 +75,13 @@
             "type": "demonstration",
             "id": "tutorial_qaoa_intro",
             "weight": 1.0
+        }
+    ],
+    "hardware": [
+        {
+            "id": "covalent",
+            "link": "https://github.com/AgnostiqHQ/QuantumVariationalRewinding",
+            "logo": "/_static/hardware_logos/covalent.png"
         }
     ]
 }

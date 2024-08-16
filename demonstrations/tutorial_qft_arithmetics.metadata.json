@@ -2,11 +2,11 @@
     "title": "Basic arithmetic with the quantum Fourier transform (QFT)",
     "authors": [
         {
-            "id": "guillermo_alonso"
+            "username": "KetPuntoG"
         }
     ],
     "dateOfPublication": "2022-11-07T00:00:00+00:00",
-    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
     "categories": [
         "Getting Started", "Algorithms", "Quantum Computing"
     ],
@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_basic_arithmetic_QFT.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_basic_arithmetic_QFT.png"
         }
     ],
     "seoDescription": "Learn how to use the quantum Fourier transform (QFT) to do basic arithmetic",
