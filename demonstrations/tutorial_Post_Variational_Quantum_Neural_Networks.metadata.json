@@ -24,7 +24,7 @@
             "uri": "/_static/large_demo_thumbnails/thumbnail_large_here_comes_the_sun.png"
         }
     ],
-    "seoDescription": "Learn about multivariate quantum gates for optimization",
+    "seoDescription": "Learn about post-variational quantum neural networks",
     "doi": "",
     "canonicalURL": "/qml/demos/Post_Variational_Quantum_Neural_Networks",
     "references": [
@@ -32,10 +32,10 @@
             "id": "cerezo2021variational",
             "type": "article",
             "title": "Variational quantum algorithms",
-            "authors": "M. Cerezo and Andrew Arrasmith and Ryan Babbush and Simon C. Benjamin and Suguru Endo and Keisuke Fujii and Jarrod R. McClean and Kosuke Mitarai and Xiao Yuan and Lukasz Cincio and Patrick J. Coles",
+            "authors": "Marco Cerezo and Andrew Arrasmith and Ryan Babbush and Simon C. Benjamin and Suguru Endo and Keisuke Fujii and Jarrod R. McClean and Kosuke Mitarai and Xiao Yuan and Lukasz Cincio and Patrick J. Coles",
             "year": "2021",
-            "publisher": "Springer Science and Business Media LLC",
-            "journal": "Nature Reviews Physics",
+            "publisher": "Nature Portfolio",
+            "journal": "Nat. Rev. Phys.",
             "doi": "10.1038/s42254-021-00348-9",
             "url": "https://doi.org/10.1038/s42254-021-00348-9"
         },
@@ -45,8 +45,10 @@
             "title": "Barren plateaus in quantum neural network training landscapes",
             "authors": "Jarrod R. McClean and Sergio Boixo and Vadim N. Smelyanskiy and Ryan Babbush and Hartmut Neven",
             "year": "2018",
-            "journal": "Nature Communications",
-            "doi": "10.1038/s41467-018-07090-4"
+            "publisher": "Nature Portfolio",
+            "journal": "Nat. Commun.",
+            "doi": "10.1038/s41467-018-07090-4",
+            "url": "https://doi.org/10.1038/s41467-018-07090-4"
         },
         {
             "id": "du2020expressive",
@@ -57,7 +59,7 @@
             "publisher": "American Physical Society",
             "journal": "Phys. Rev. Res.",
             "doi": "10.1103/PhysRevResearch.2.033125",
-            "url": "https://link.aps.org/doi/10.1103/PhysRevResearch.2.033125"
+            "url": "https://doi.org/10.1103/PhysRevResearch.2.033125"
         },
         {
             "id": "schuld2019evaluating",
@@ -65,6 +67,7 @@
             "title": "Evaluating analytic gradients on quantum hardware",
             "authors": "Schuld, Maria and Bergholm, Ville and Gogolin, Christian and Izaac, Josh and Killoran, Nathan",
             "year": "2019",
+            "publisher": "American Physical Society",
             "journal": "Phys. Rev. A",
             "doi": "10.1103/PhysRevA.99.032331",
             "url": "https://doi.org/10.1103/PhysRevA.99.032331"
@@ -76,7 +79,7 @@
             "authors": "Po-Wei Huang and Patrick Rebentrost",
             "year": "2024",
             "doi": "10.48550/arXiv.2307.10560",
-            "url": "https://arxiv.org/pdf/2307.10560"
+            "url": "https://arxiv.org/abs/2307.10560"
         }
     ],
     "basedOnPapers": [],
