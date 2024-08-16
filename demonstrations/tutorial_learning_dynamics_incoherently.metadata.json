@@ -24,7 +24,7 @@
     ],
     "seoDescription": "Learn how to reproduce an unknown quantum process with classical shadow measurements",
     "doi": "",
-    "canonicalURL": "/qml/demos/learning_dynamics_incoherently",
+    "canonicalURL": "/qml/demos/tutorial_learning_dynamics_incoherently",
     "references": [
         {
             "id": "jerbi2023power",
