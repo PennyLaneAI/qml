@@ -15,6 +15,7 @@ r"""Post-Variational Quantum Neural Networks
 # This tutorial introduces post-variational quantum neural networks with example code from PennyLane and Jax.
 # We build variational and post-variational networks through a step-by-step process, and compare their 
 # performance on the digits dataset. 
+#
 # 
 
 ######################################################################
@@ -94,7 +95,7 @@ import matplotlib.pyplot as plt
 import matplotlib.colors
 import warnings
 warnings.filterwarnings("ignore")
-np.random.seed(42)
+np.random.seed(42) 
 
 # Load the digits dataset with features (X_digits) and labels (y_digits)
 X_digits, y_digits = load_digits(return_X_y=True)
