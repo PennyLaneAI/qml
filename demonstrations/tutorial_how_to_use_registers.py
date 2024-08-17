@@ -9,7 +9,7 @@ in PennyLane.
 # How to create a wire register
 # -----------------------------
 #
-# The way to construct a wire register is simple --- just use :func:`~pennylane.registers`. We need to
+# The way to construct a wire register is simple --- just use :func:`~.pennylane.registers`. We need to
 # pass a dictionary where the keys are the register names and the values are the number of
 # wires for each register:
 
