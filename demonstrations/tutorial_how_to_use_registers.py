@@ -19,7 +19,8 @@ import pennylane as qml
 register = qml.registers({"alice": 1, "bob": 2, "charlie": 3})
 print(register)
 
-# The register created is a dictionary where the keys are the names of the registers and the
+######################################################################
+# The output is a dictionary where the keys are the names of the registers and the
 # values are :class:`~Wires` instances.
 #
 # You can also pass in a dictionary that has nested dictionaries as its values.
