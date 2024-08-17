@@ -137,7 +137,6 @@ initial_state = dataset.ground_states[0]
 
 dev = qml.device("lightning.qubit", wires=16)
 
-
 @qml.qnode(dev)
 def circuit():
     # Initialize state register to initial state
