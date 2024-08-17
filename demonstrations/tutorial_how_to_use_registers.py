@@ -57,7 +57,7 @@ new_register = nested_register["alice"] | nested_register["charlie"]
 print(new_register)
 
 # For more details on what set operations are supported, refer to the documentation of
-# :func:`~pennylane.registers`.
+# :func:`~.pennylane.registers`.
 ######################################################################
 # A simple example using wire registers
 # -------------------------------------
