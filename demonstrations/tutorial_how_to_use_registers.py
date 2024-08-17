@@ -53,7 +53,7 @@ print(nested_register["bob1a"])
 print(nested_register["all_registers"][2])
 print(nested_register["bob1a"][0])
 
-# You can also create registers using set operations. Here, we use the pipe operator ``|`` to
+# You can also combine registers using set operations. Here, we use the pipe operator ``|`` to
 # perform the union operation on the ``alice`` register and the ``charlie`` register.
 
 new_register = nested_register["alice"] | nested_register["charlie"]
