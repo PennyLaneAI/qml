@@ -109,8 +109,6 @@ print(swap_test())
 # "estimation" (or measurement) register and the other is the state register where we apply our
 # unitary operators :math:`U`. We can define these registers in PennyLane code:
 
-import pennylane as qml
-
 register = qml.registers({"state": 4, "estimation": 8})
 
 # To build our unitary operator :math:`U`, there are a variety of options. We can opt to use a
