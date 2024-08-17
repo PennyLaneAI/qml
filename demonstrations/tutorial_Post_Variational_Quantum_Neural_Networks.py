@@ -315,16 +315,22 @@ def local_pauli_group(qubits: int, locality: int):
     assert locality <= qubits, f"Locality must not exceed the number of qubits."
     return list(generate_paulis(0, 0, "", qubits, locality))
 
-
+# This is a recursive generator function that constructs Pauli strings.
 def generate_paulis(identities: int, paulis: int, output: str, qubits: int, locality: int):
+    # Base case: if the output string's length matches the number of qubits, yield it.
     if len(output) == qubits:
         yield output
     else:
+        # Recursive case: add an "I" (identity) to the output string.
         yield from generate_paulis(identities + 1, paulis, output + "I", qubits, locality)
+        
+        # If the number of Pauli operators used is less than the locality, add "X", "Y", or "Z"
+        # systematically builds all possible Pauli strings that conform to the specified locality.
         if paulis < locality:
             yield from generate_paulis(identities, paulis + 1, output + "X", qubits, locality)
             yield from generate_paulis(identities, paulis + 1, output + "Y", qubits, locality)
             yield from generate_paulis(identities, paulis + 1, output + "Z", qubits, locality)
+
 
 ######################################################################
 # For each image sample, we measure the output of the quantum circuit using the :math:`k`-local observables
@@ -332,29 +338,50 @@ def generate_paulis(identities: int, paulis: int, output: str, qubits: int, loca
 # 3-local in the `for`-loop below.
 # 
 
+# Initialize lists to store training and testing accuracies for different localities.
 train_accuracies_O = []
 test_accuracies_O = []
+
 for locality in range(1, 4):
     print(str(locality) + "-local: ")
+    
+    # Define a quantum device with 8 qubits using the default simulator.
     dev = qml.device("default.qubit", wires=8)
 
+    # Define a quantum node (qnode) with the quantum circuit that will be executed on the device.
     @qml.qnode(dev)
     def circuit(features):
+        # Generate all possible Pauli strings for the given locality.
         measurements = local_pauli_group(8, locality)
+        
+        # Apply the feature map to encode classical data into quantum states.
         feature_map(features)
-        return [
-            qml.expval(qml.pauli.string_to_pauli_word(measurement)) for measurement in measurements
-        ]
+        
+        # Measure the expectation values of the generated Pauli operators.
+        return [qml.expval(qml.pauli.string_to_pauli_word(measurement)) for measurement in measurements]
 
+    # Vectorize the quantum circuit function to apply it to multiple data points in parallel.
     vcircuit = jax.vmap(circuit)
+    
+    # Transform the training and testing datasets by applying the quantum circuit.
     new_X_train = np.asarray(vcircuit(jnp.array(X_train))).T
     new_X_test = np.asarray(vcircuit(jnp.array(X_test))).T
+    
+    # Train a Multilayer Perceptron (MLP) classifier on the transformed training data.
     clf = MLPClassifier(early_stopping=True).fit(new_X_train, y_train)
+    
+    # Print the log loss for the training data.
     print("Training loss: ", log_loss(y_train, clf.predict_proba(new_X_train)))
+    
+    # Print the log loss for the testing data.
     print("Testing loss: ", log_loss(y_test, clf.predict_proba(new_X_test)))
+    
+    # Calculate and store the training accuracy.
     acc = clf.score(new_X_train, y_train)
     train_accuracies_O.append(acc)
     print("Training accuracy: ", acc)
+    
+    # Calculate and store the testing accuracy.
     acc = clf.score(new_X_test, y_test)
     test_accuracies_O.append(acc)
     print("Testing accuracy: ", acc)
@@ -365,9 +392,11 @@ train_accuracies_O = [round(value, 2) for value in train_accuracies_O]
 test_accuracies_O = [round(value, 2) for value in test_accuracies_O]
 x = np.arange(3)
 width = 0.25
+
+# Create a bar plot to visualize the training and testing accuracies.
 fig, ax = plt.subplots(layout="constrained")
-rects = ax.bar(x, train_accuracies_O, width, label="Training", color="#FF87EB")
-rects = ax.bar(x + width, test_accuracies_O, width, label="Testing", color="#70CEFF")
+rects = ax.bar(x, train_accuracies_O, width, label="Training", color="#FF87EB")  # Training accuracy bars.
+rects = ax.bar(x + width, test_accuracies_O, width, label="Testing", color="#70CEFF")  # Testing accuracy bars.
 ax.bar_label(rects, padding=3)
 ax.set_xlabel("Locality")
 ax.set_ylabel("Accuracy")
@@ -375,6 +404,7 @@ ax.set_title("Accuracy of different localities")
 ax.set_xticks(x + width / 2, locality)
 ax.legend(loc="upper left")
 plt.show()
+
 
 ######################################################################
 # We can see that the highest accuracy is achieved with the 3-local observables, which gives the
@@ -402,33 +432,58 @@ plt.show()
 # 
 
 def deriv_params(thetas: int, order: int):
+    # This function generates parameter shift values for calculating derivatives of a quantum circuit.
+    # 'thetas' is the number of parameters in the circuit.
+    # 'order' determines the order of the derivative to calculate (1st order, 2nd order, etc.).
+
     def generate_shifts(thetas: int, order: int):
+        # Generate all possible combinations of parameters to shift for the given order.
         shift_pos = list(combinations(np.arange(thetas), order))
+        
+        # Initialize a 3D array to hold the shift values.
+        # Shape: (number of combinations, 2^order, thetas)
         params = np.zeros((len(shift_pos), 2 ** order, thetas))
+        
+        # Iterate over each combination of parameter shifts.
         for i in range(len(shift_pos)):
+            # Iterate over each possible binary shift pattern for the given order.
             for j in range(2 ** order):
+                # Convert the index j to a binary string of length 'order'.
                 for k, l in enumerate(f"{j:0{order}b}"):
+                    # For each bit in the binary string:
                     if int(l) > 0:
+                        # If the bit is 1, increment the corresponding parameter.
                         params[i][j][shift_pos[i][k]] += 1
                     else:
+                        # If the bit is 0, decrement the corresponding parameter.
                         params[i][j][shift_pos[i][k]] -= 1
+        
+        # Reshape the parameters array to collapse the first two dimensions.
         params = np.reshape(params, (-1, thetas))
         return params
 
+    # Start with a list containing a zero-shift array for all parameters.
     param_list = [np.zeros((1, thetas))]
+    
+    # Append the generated shift values for each order from 1 to the given order.
     for i in range(1, order + 1):
         param_list.append(generate_shifts(thetas, i))
+    
+    # Concatenate all the shift arrays along the first axis to create the final parameter array.
     params = np.concatenate(param_list, axis=0)
+    
+    # Scale the shift values by π/2.
     params *= np.pi / 2
+    
     return params
 
+
 ######################################################################
-# We construct the Ansatz above and measure the top qubit with Pauli-Z.
+# We construct the circuit and measure the top qubit with Pauli-Z.
 # 
 
 n_wires = 8
 dev = qml.device("default.qubit", wires=n_wires)
-
 
 @jax.jit
 @qml.qnode(dev, interface="jax")
@@ -442,26 +497,44 @@ def circuit(features, params, n_wires=8):
 # feed the outputs into a multilayer perceptron.
 # 
 
+# Initialize lists to store training and testing accuracies for different derivative orders.
 train_accuracies_AE = []
 test_accuracies_AE = []
+
+# Loop through different derivative orders (1st order, 2nd order, 3rd order).
 for order in range(1, 4):
     print("Order number: " + str(order))
+    
+    # Generate the parameter shifts required for the given derivative order.
     to_measure = deriv_params(16, order)
 
+    # Transform the training dataset by applying the quantum circuit with the generated parameter shifts.
     new_X_train = []
     for thing in X_train:
         result = circuit(thing, to_measure.T)
         new_X_train.append(result)
+    
+    # Transform the testing dataset similarly.
     new_X_test = []
     for thing in X_test:
         result = circuit(thing, to_measure.T)
         new_X_test.append(result)
+    
+    # Train a Multilayer Perceptron (MLP) classifier on the transformed training data.
     clf = MLPClassifier(early_stopping=True).fit(new_X_train, y_train)
+    
+    # Print the log loss for the training data.
     print("Training loss: ", log_loss(y_train, clf.predict_proba(new_X_train)))
+    
+    # Print the log loss for the testing data.
     print("Testing loss: ", log_loss(y_test, clf.predict_proba(new_X_test)))
+    
+    # Calculate and store the training accuracy.
     acc = clf.score(new_X_train, y_train)
     train_accuracies_AE.append(acc)
     print("Training accuracy: ", acc)
+    
+    # Calculate and store the testing accuracy.
     acc = clf.score(new_X_test, y_test)
     test_accuracies_AE.append(acc)
     print("Testing accuracy: ", acc)
@@ -509,42 +582,62 @@ plt.show()
 # better results.
 # 
 
+# Initialize matrices to store training and testing accuracies for different combinations of locality and order.
 train_accuracies = np.zeros([4, 4])
 test_accuracies = np.zeros([4, 4])
 
+# Loop through different derivative orders (1st to 3rd) and localities (1-local to 3-local).
 for order in range(1, 4):
     for locality in range(1, 4):
+        # Skip invalid combinations where locality + order exceeds 3 or equals 0.
         if locality + order > 3 or locality + order == 0:
             continue
         print("Locality: " + str(locality) + " Order: " + str(order))
 
+        # Define a quantum device with 8 qubits using the default simulator.
         dev = qml.device("default.qubit", wires=8)
+
+        # Generate the parameter shifts required for the given derivative order and transpose them.
         params = deriv_params(16, order).T
 
+        # Define a quantum node (qnode) with the quantum circuit that will be executed on the device.
         @qml.qnode(dev)
         def circuit(features, params):
+            # Generate the Pauli group for the given locality.
             measurements = local_pauli_group(8, locality)
             feature_map(features)
             ansatz(params)
-            return [
-                qml.expval(qml.pauli.string_to_pauli_word(measurement))
-                for measurement in measurements
-            ]
+            # Measure the expectation values of the generated Pauli operators.
+            return [qml.expval(qml.pauli.string_to_pauli_word(measurement)) for measurement in measurements]
 
+        # Vectorize the quantum circuit function to apply it to multiple data points in parallel.
         vcircuit = jax.vmap(circuit)
+
+        # Transform the training dataset by applying the quantum circuit with the generated parameter shifts.
         new_X_train = np.asarray(
             vcircuit(jnp.array(X_train), jnp.array([params for i in range(len(X_train))]))
         )
+        # Reorder the axes and reshape the transformed data for input into the classifier.
         new_X_train = np.moveaxis(new_X_train, 0, -1).reshape(
             -1, len(local_pauli_group(8, locality)) * len(deriv_params(16, order))
         )
+
+        # Transform the testing dataset similarly.
         new_X_test = np.asarray(
             vcircuit(jnp.array(X_test), jnp.array([params for i in range(len(X_test))]))
         )
+        # Reorder the axes and reshape the transformed data for input into the classifier.
         new_X_test = np.moveaxis(new_X_test, 0, -1).reshape(
             -1, len(local_pauli_group(8, locality)) * len(deriv_params(16, order))
         )
+
+        # Train a Multilayer Perceptron (MLP) classifier on the transformed training data.
         clf = MLPClassifier(early_stopping=True).fit(new_X_train, y_train)
+
+        # Calculate and store the training and testing accuracies.
+        train_accuracies[order][locality] = clf.score(new_X_train, y_train)
+        test_accuracies[order][locality] = clf.score(new_X_test, y_test)
+
         print("Training loss: ", log_loss(y_train, clf.predict_proba(new_X_train)))
         print("Testing loss: ", log_loss(y_test, clf.predict_proba(new_X_test)))
         acc = clf.score(new_X_train, y_train)
