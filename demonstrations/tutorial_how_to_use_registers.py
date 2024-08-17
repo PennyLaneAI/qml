@@ -38,7 +38,8 @@ print(nested_register)
 # elements is based on the order of appearance and nestedness. For more details on ordering, refer
 # to the documentation for :func:`~pennylane.registers`.
 #
-# Accessing elements in your registers is the same as accessing any element in a dictionary.
+# Accessing a particular register is the same as accessing any element in a dictionary.
+#
 
 print(nested_register["alice"])
 print(nested_register["bob1a"])
