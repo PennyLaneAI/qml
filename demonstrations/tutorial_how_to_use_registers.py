@@ -48,17 +48,20 @@ print(nested_register)
 print(nested_register["alice"])
 print(nested_register["bob1a"])
 
+######################################################################
 # You can access a specific wire index via its index in a register.
 
 print(nested_register["all_registers"][2])
 print(nested_register["bob1a"][0])
 
+######################################################################
 # You can also combine registers using set operations. Here, we use the pipe operator ``|`` to
 # perform the union operation on the ``alice`` register and the ``charlie`` register.
 
 new_register = nested_register["alice"] | nested_register["charlie"]
 print(new_register)
 
+######################################################################
 # For more details on what set operations are supported, refer to the documentation of
 # :func:`~.pennylane.registers`.
 ######################################################################
@@ -111,6 +114,7 @@ print(swap_test())
 
 register = qml.registers({"state": 4, "estimation": 8})
 
+######################################################################
 # To build our unitary operator :math:`U`, there are a variety of options. We can opt to use a
 # straight-forward block encoding, or choose to use a subroutine like qubitization.
 # Let's opt for :func:`qubitization <~.pennylane.Qubitization>`_, which means we have to define another "prep" register.
@@ -118,6 +122,7 @@ register = qml.registers({"state": 4, "estimation": 8})
 
 register = qml.registers({"state": 4, "estimation": 8, "prep": 4})
 
+######################################################################
 # Finally, let's define our Hamiltonian. We'll use the Transverse-Field Ising model from
 # PennyLane's `quantum datasets <https://pennylane.ai/datasets/qspin/transverse-field-ising-model>`_,
 # but feel free to try this with any other Hamiltonian you want to find the eigenvalues of.
@@ -129,11 +134,13 @@ register = qml.registers({"state": 4, "estimation": 8, "prep": 4})
 H = dataset.hamiltonians[0]
 print(H)
 
+######################################################################
 # For QPE to work, we need to initialize the "state" register with an initial state that has good
 # overlap with the eigenstate we want the eigenvalue of.
 
 initial_state = dataset.ground_states[0]
 
+######################################################################
 # With this, we can now define our QPE circuit like so:
 
 dev = qml.device("lightning.qubit", wires=16)
@@ -156,6 +163,7 @@ def circuit():
 
     return qml.probs(wires=register["estimation"])
 
+######################################################################
 # Changing the number of wires in your estimation register is very easy with registers, but can
 # be very error-prone when using wires. The complexity of wire management only gets more difficult
 # as you start working with more and more registers. As you start building bigger and more complex
