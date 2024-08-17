@@ -23,6 +23,7 @@ print(register)
 # values are :class:`~Wires` instances.
 #
 # You can also pass in a dictionary that has nested dictionaries as its values.
+# 
 
 nested_register = qml.registers(
     {
