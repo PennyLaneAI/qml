@@ -37,7 +37,8 @@ nested_register = qml.registers(
 )
 print(nested_register)
 
-# Note that :func:`~pennylane.registers` flattens any nested dictionaries, and the order of the
+######################################################################
+# Note that :func:`~.pennylane.registers` flattens any nested dictionaries, and the order of the
 # elements is based on the order of appearance and nestedness. For more details on ordering, refer
 # to the documentation for :func:`~pennylane.registers`.
 #
