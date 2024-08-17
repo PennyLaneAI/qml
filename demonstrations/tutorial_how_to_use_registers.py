@@ -73,7 +73,6 @@ print(new_register)
 # :math:`|\psi\rangle` and :math:`|\phi\rangle` are each represented with 3 wires. In PennyLane
 # code, that would be:
 
-import pennylane as qml
 
 swap_register = qml.registers({"auxiliary": 1, "psi": 3, "phi": 3})
 
