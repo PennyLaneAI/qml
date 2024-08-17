@@ -76,7 +76,9 @@ print(new_register)
 
 swap_register = qml.registers({"auxiliary": 1, "psi": 3, "phi": 3})
 
+dev = qml.device("default.qubit")
 
+@qml.qnode(dev)
 def swap_test():
     # Prepare phi and psi in some arbitrary state
     for state in ["phi", "psi"]:
