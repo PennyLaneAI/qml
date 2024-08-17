@@ -129,7 +129,7 @@ H = dataset.hamiltonians[0]
 print(H)
 
 # For QPE to work, we need to initialize the "state" register with an initial state that has good
-# overlap with the eigenstate we want the eigenvalue of. In PennyLane code:
+# overlap with the eigenstate we want the eigenvalue of.
 
 initial_state = dataset.ground_states[0]
 
