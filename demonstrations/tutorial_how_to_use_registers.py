@@ -122,7 +122,6 @@ register = qml.registers({"state": 4, "estimation": 8, "prep": 4})
 # PennyLane's `quantum datasets <https://pennylane.ai/datasets/qspin/transverse-field-ising-model>`_,
 # but feel free to try this with any other Hamiltonian you want to find the eigenvalues of.
 
-import pennylane as qml
 
 [dataset] = qml.data.load(
     "qspin", sysname="Ising", periodicity="open", lattice="chain", layout="1x4"
