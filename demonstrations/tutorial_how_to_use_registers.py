@@ -165,10 +165,11 @@ def circuit():
 # Conclusion
 # ----------
 #
+# In this demo, we showed how to construct
+# wire registers and use them to implement quantum algorithms.
 # Wire registers provide a neat way of organizing and managing wires. Often, algorithms are
 # described as acting upon registers and sub-registers; using wire registers can greatly
-# streamline the implementation from theory to code. In this demo, we showed how to construct
-# wire registers and use them to implement quantum algorithms.
+# streamline the implementation from theory to code. 
 #
 ######################################################################
 # About the author
