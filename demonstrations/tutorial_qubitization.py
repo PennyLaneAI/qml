@@ -186,10 +186,6 @@ plt.show()
 
 ##############################################################################
 # The two peaks obtained refer to values of :math:`|\theta\rangle` and :math:`|-\theta\rangle`.
-# The reason why we have two eigenvalues after prepare a single eigenvector of :math:`\mathcal{H}` is related to the
-# fact that :math:`\mathcal{H}` and :math:`\text{Q}` do not share eigenvectors as such. However, they
-# have this convenient correlation making still possible to recover :math:`\theta`.
-#
 # Finally, by doing some post-processing, we can obtain the value of :math:`E`:
 
 import numpy as np
