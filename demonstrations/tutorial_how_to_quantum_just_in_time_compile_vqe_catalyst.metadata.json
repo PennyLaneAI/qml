@@ -2,14 +2,14 @@
     "title": "How to quantum just-in-time compile VQE with Catalyst",
     "authors": [
         {
-            "id": "ali_asadi"
+            "username": "maliasadi"
         },
         {
-            "id": "josh_izaac"
+            "username": "josh"
         }
     ],
     "dateOfPublication": "2024-04-26T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning",
         "Optimization",
