@@ -21,13 +21,12 @@ Going directly to the point, the Qubitization operator is defined as:
 
 where :math:`\text{Prep}_{\mathcal{H}}` and :math:`\text{Sel}_{\mathcal{H}}` are the preparation and selection operators
 used on `this demo <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding/>`_.
-:math:`Q` is a block encoding operator with a key property: ** its eigenvalues encode the Hamiltonian eigenvalues. **
+:math:`Q` is a block encoding operator with a key property: its eigenvalues encode the Hamiltonian eigenvalues.
 
 
 In particular, if :math:`E` is an eigenvalue of :math:`\mathcal{H}`, then :math:`e^{i\arccos(E/\lambda)}` is an
 eigenvalue of :math:`Q`, where :math:`\lambda` is a known normalization factor. This property is used in the context
-of Quantum Phase Estimation to approximate eigenvalues of given eigenvectors: we obtain the phase :math:`\arccos(E/\lambda)`
-and we use it to clear the :math:`E` value.
+of Quantum Phase Estimation to approximate the eigenvalues of a given Hamiltonian.
 
 Sounds good but, where this decomposition come from? Why the eigenvalues are encoded in this way? 🤔
 
@@ -63,16 +62,18 @@ in a two-dimensional space  — idea that we have exploited in our `Amplitude Am
 Qubitization as a rotation
 ---------------------------
 
-Any Block Encoding operator, manages to move the state :math:`|0\rangle |\phi\rangle` into the state :math:`|\Psi\rangle`.
+Any Block Encoding operator, manages to transform the state :math:`|0\rangle |\phi\rangle` into the state :math:`|\Psi\rangle`.
 The Qubitization operator does this by just applying a :math:`\theta` rotation in that subspace.
-The advantage of rotations is that they encode the rotation angle in their eigenvalues as :math:`e^{\pm i\theta}`.
+The advantage of rotations is that they encode the rotation angle in their eigenvalues as :math:`e^{\pm i\theta}`
+and we can use algorithms such as QPE to obtain this information.
+
 Since :math:`\theta = \arccos {\frac{E}{\lambda}}`, we can rewrite the eigenvalues
 of :math:`Q` as :math:`e^{\pm i\arccos {\frac{E}{\lambda}}}`.
 
 In order to build this rotation we will follow the same idea of Amplitude Amplification:
 two reflections are equivalent to one rotation.
 
-Let's use :math:`|\Psi\rangle` as an initial state to visualize the rotation.
+Let's use for instance :math:`|\Psi\rangle` as an initial state to visualize the rotation.
 The first reflection we make is with respect to the x-axis:
 
 .. figure:: ../_static/demonstration_assets/qubitization/qubitization2.jpeg
@@ -86,7 +87,7 @@ This is built by making a reflection on the state :math:`|0\rangle` restricted t
 
     R_{|0\rangle} = 2|0\rangle\langle 0| - I.
 
-Now, if we want the initial state :math:`|\Psi\rangle` to rotate a total of :math:`\theta` degrees, we must reflect over the bisector of :math:`|\Psi\rangle`
+The second reflection of interest will be over the bisector of :math:`|\Psi\rangle`
 and the x-axis:
 
 .. figure:: ../_static/demonstration_assets/qubitization/qubitization3.jpeg
@@ -94,7 +95,8 @@ and the x-axis:
     :width: 60%
     :target: javascript:void(0)
 
-But how are we supposed to find this operator? Fortunately, we don't have to look very far: the block encoding :math:`\text{Prep}_{\mathcal{H}}^{\dagger} \text{Sel}_{\mathcal{H}} \text{Prep}_{\mathcal{H}}` ,or just :math:`\text{PSP}_{\mathcal{H}}`, is
+As we can see, this reflection achieves a rotation of :math:`\theta` degrees with respect to the initial state.
+But how are we supposed to find this particular reflection? Fortunately, we don't have to look very far: the block encoding :math:`\text{Prep}_{\mathcal{H}}^{\dagger} \text{Sel}_{\mathcal{H}} \text{Prep}_{\mathcal{H}}` ,or just :math:`\text{PSP}_{\mathcal{H}}`, is
 exactly that reflection 🤯. To learn more about this technique, take a look to `this demo <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding/>`_.
 
 
@@ -104,7 +106,7 @@ After that, we can know the reflection axis, by taking the midpoint between an i
 its output. Using :math:`|0\rangle|\phi\rangle` as input and knowing that :math:`|\Psi\rangle` is the output,
 we note that the reflection is indeed over that bisector.
 
-The union of these two reflections defines our rotation.
+The union of these two reflections defines our :math:`\theta` rotation in the subspace.
 
 
 Qubitization in PennyLane
@@ -112,9 +114,16 @@ Qubitization in PennyLane
 
 Now that we know how to encode the Hamiltonian in this useful way, let's see how we can use Quantum Phase Estimation (QPE)
 to retrieve the encoded eigenvalue. In `this demo <https://pennylane.ai/qml/demos/tutorial_qpe/>`_  you can learn more about
-how QPE works.
+how QPE works. The algorithm is expressed in the following way:
 
-Let's define the Hamiltonian for our example:
+.. figure:: ../_static/demonstration_assets/qubitization/QPE_qubitization.png
+    :align: center
+    :width: 50%
+    :target: javascript:void(0)
+
+Applying QPE with the Qubitization operator (i.e., the :math:`\theta` rotation in subspace), we will get the :math:`\theta` and :math:`-\theta` values.
+
+Let's define the Hamiltonian to see an example:
 
 """
 
@@ -131,7 +140,7 @@ print(qml.matrix(H))
 #
 # In PennyLane, the Qubitization operator can be built by making use of :class:`~.pennylane.Qubitization`. We just have to pass the
 # Hamiltonian and the control qubits characteristic of the Block Encoding, where the number of control wires
-# is :math:`⌈\log_2 k⌉` where :math:`k` is the number of terms in the Hamiltonian.
+# is :math:`⌈\log_2 k⌉` where :math:`k` is the number of terms in the Hamiltonian LCU representation.
 #
 # .. note::
 #
@@ -150,14 +159,8 @@ def circuit():
     for wire in [0, 1]:
         qml.X(wire)
 
-    # Apply QPE with the walk operator
-    for wire in estimation_wires:
-        qml.Hadamard(wires=wire)
-
-    qml.ControlledSequence(qml.Qubitization(H, control_wires),
-                           control=estimation_wires)
-
-    qml.adjoint(qml.QFT)(wires=estimation_wires)
+    # Apply QPE with the Qubitization operator
+    qml.QuantumPhaseEstimation(qml.Qubitization(H, control_wires), estimation_wires = estimation_wires)
 
     return qml.probs(wires=estimation_wires)
 
