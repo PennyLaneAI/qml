@@ -2,11 +2,11 @@
     "title": "VQE with parallel QPUs with Rigetti",
     "authors": [
         {
-            "id": "thomas_bromley"
+            "username": "trbromley"
         }
     ],
     "dateOfPublication": "2020-02-14T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-14T00:00:00+00:00",
     "categories": [
         "Quantum Chemistry"
     ],

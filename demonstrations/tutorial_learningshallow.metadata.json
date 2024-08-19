@@ -2,11 +2,11 @@
     "title": "Learning shallow quantum circuits with local inversions and circuit sewing",
     "authors": [
         {
-            "id": "korbinian_kottmann"
+            "username": "Qottmann"
         }
     ],
     "dateOfPublication": "2024-01-24T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
     "categories": [
         "Optimization",
         "Quantum Computing",

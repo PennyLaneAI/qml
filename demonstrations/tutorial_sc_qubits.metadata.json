@@ -2,11 +2,11 @@
     "title": "Quantum computing with superconducting qubits",
     "authors": [
         {
-            "id": "alvaro_ballon"
+            "username": "alvaro"
         }
     ],
     "dateOfPublication": "2022-03-22T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
     "categories": [
         "Quantum Hardware",
         "Quantum Computing"

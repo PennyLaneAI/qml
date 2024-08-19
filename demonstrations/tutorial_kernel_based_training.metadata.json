@@ -2,11 +2,11 @@
     "title": "Kernel-based training of quantum models with scikit-learn",
     "authors": [
         {
-            "id": "maria_schuld"
+            "username": "mariaschuld"
         }
     ],
     "dateOfPublication": "2021-02-03T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
