@@ -12,14 +12,14 @@ One method that has gained special status is known as **Qubitization**. In this 
 Qubitization operator
 ----------------------
 
-For a Hamiltonian :math:`\mathcal{H}`, the Qubitization operator is defined as:
+For a Hamiltonian :math:`\mathcal{H}` given in `LCU representation <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding/>`_, the Qubitization operator is defined as:
 
 .. math::
 
-    Q =  \text{Prep}_{\mathcal{H}}^{\dagger} \text{Sel}_{\mathcal{H}} \text{Prep}_{\mathcal{H}}\cdot (2|0\rangle\langle 0| - I),
+    Q =  \text{PSP}_{\mathcal{H}}\cdot (2|0\rangle\langle 0| - I),
 
-where :math:`\text{Prep}_{\mathcal{H}}` and :math:`\text{Sel}_{\mathcal{H}}` are the preparation and selection operators. They are explained `this demo <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding/>`_, which you can check out for more details.
-The operator :math:`Q` is a block encoding operator with a key property: its eigenvalues encode the eigenvalues of the Hamiltonian.
+where :math:`\text{PSP}_{\mathcal{H}}` refers to the block encoding :math:`\text{Prep}_{\mathcal{H}}^{\dagger} \text{Sel}_{\mathcal{H}} \text{Prep}_{\mathcal{H}}`, as explained in `this demo <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding/>`_. You can check it out for more details.
+The operator :math:`Q` is also a block encoding operator with a key property: its eigenvalues encode the eigenvalues of the Hamiltonian.
 As we will soon explain in detail, if :math:`E` is an eigenvalue of :math:`\mathcal{H}`, then :math:`e^{i\arccos(E/\lambda)}` is an
 eigenvalue of :math:`Q`, where :math:`\lambda` is a known normalization factor. This property is very useful because it means that we can use the `Quantum Phase Estimation algorithm <https://pennylane.ai/qml/demos/tutorial_qpe/>`_  to estimate the eigenvalues of  :math:`Q`, and then use them to retrieve the eigenvalues of the encoded Hamiltonian.
 
@@ -82,20 +82,14 @@ Given the effect that :math:`\text{Prep}_{\mathcal{H}} \text{Sel}_{\mathcal{H}} 
 
 After applying the reflection, the new state is rotated by :math:`\theta` degrees relative to the initial state. This shows that the Qubitization operator successfully creates a rotation of :math:`\theta` degrees within the subspace.
 
+The term "qubitization" comes from the fact that this process occurs within a two-dimensional subspace, which can be viewed as a qubit. For each eigenstate of the Hamiltonian, the Qubitization operator acts within this two-dimensional space, effectively treating it as a qubit. This is why we say the system has been "qubitized".
+
 Qubitization in PennyLane
 --------------------------
 
-Now that we understand how to encode the Hamiltonian using this method, let's explore how Quantum Phase Estimation (QPE) can be used to extract the encoded eigenvalue. You can learn more about QPE in `this demo <https://pennylane.ai/qml/demos/tutorial_qpe/>`_. The algorithm is described as follows:
+We now describe how to implement qubitization-based `Quantum Phase Estimation (QPE) <https://pennylane.ai/qml/demos/tutorial_qpe/>`_  to sample eigenvalues of a Hamiltonian.
 
-.. figure:: ../_static/demonstration_assets/qubitization/QPE_qubitization.png
-    :align: center
-    :width: 50%
-    :target: javascript:void(0)
-
-By applying QPE with the Qubitization operator (which performs the :math:`\theta` rotation in the subspace), we obtain the values :math:`\theta` and :math:`-\theta`.
-
-Now, let's define the Hamiltonian to see an example:
-
+First, let's define a Hamiltonian to use as an example:
 """
 
 import pennylane as qml
@@ -105,14 +99,18 @@ H = -0.4 * qml.Z(0) + 0.3 * qml.Z(1) + 0.4 * qml.Z(0) @ qml.Z(1)
 print(qml.matrix(H))
 
 ##############################################################################
-# We have chosen a diagonal matrix because it makes identifying eigenvalues and eigenvectors straightforward, but this approach works with any Hamiltonian. For this example, we will use :math:`|\phi\rangle = |11\rangle` and estimate its eigenvalue :math:`E = 0.5` using this technique.
+# We have chosen an operator that is diagonal in the computational basis because it is easy to identify
+# eigenvalues and eigenvectors, but this would work with any Hamiltonian. We are going to take
+# the eigenstate  :math:`|\phi\rangle = |11\rangle` as input and try to estimate its eigenvalue :math:`E = 0.5` using
+# this technique.
 #
-# In PennyLane, the Qubitization operator can be constructed using the :class:`~.pennylane.Qubitization` class. You simply need to provide the Hamiltonian and the control qubits characteristic of the block encoding. The number of control wires is :math:`⌈\log_2 k⌉`, where :math:`k` is the number of terms in the Hamiltonian's LCU representation.
+# In PennyLane, the Qubitization operator can be easily constructed using the built-in :class:`~.pennylane.Qubitization` operation. You simply need to provide the Hamiltonian and the control qubits that defines the block encoding. The number of control wires is :math:`⌈\log_2 k⌉`, where :math:`k` is the number of terms in the Hamiltonian's `LCU representation <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding/>`_.
 #
 # .. note::
 #
 #    The Qubitization rotation in PennyLane is defined clockwise as the adjoint of the operator described above.
 #
+# We will make use of the built-in :class:`~.pennylane.QuantumPhaseEstimation` operator to easily apply the algorithm:
 
 control_wires = [2, 3]
 estimation_wires = [4, 5, 6, 7, 8, 9]
@@ -135,7 +133,7 @@ def circuit():
 
 
 ##############################################################################
-# Let's run the circuit and plot the estimated :math:`\theta` values:
+# Let's run the circuit and plot the estimated eigenvalue:
 
 import matplotlib.pyplot as plt
 
@@ -170,7 +168,7 @@ print("E = ", lambda_ * np.cos(2 * np.pi * np.argmax(results) / 2 ** (len(estima
 # Conclusion
 # ----------------
 #
-# In this demo, we explored the concept of Qubitization and one of its applications. To achieve this, we combined several key concepts, including Block Encoding, Quantum Phase Estimation, and Amplitude Amplification. This algorithm serves as a foundation for more advanced techniques like Quantum Singular Value Transformation. We encourage you to continue studying these methods and apply them in your research.
+# In this demo, we explored the concept of Qubitization and one of its applications. To achieve this, we combined several key concepts, including `Block Encoding <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding/>`_, `Quantum Phase Estimation <https://pennylane.ai/qml/demos/tutorial_qpe/>`_, and `Amplitude Amplification <https://pennylane.ai/qml/demos/tutorial_intro_amplitude_amplification/>`_. This algorithm serves as a foundation for more advanced techniques like `Quantum Singular Value Transformation <https://pennylane.ai/qml/demos/tutorial_intro_qsvt/>`_. We encourage you to continue studying these methods and apply them in your research.
 #
 # About the author
 # ----------------
