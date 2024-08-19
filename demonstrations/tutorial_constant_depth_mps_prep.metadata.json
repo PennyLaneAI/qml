@@ -15,7 +15,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/regular_demo_thumbnails/thumbnail_constant_depth_mps_prep.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_constant_depth_mps_prep.png"
         },
         {
             "type": "large_thumbnail",
