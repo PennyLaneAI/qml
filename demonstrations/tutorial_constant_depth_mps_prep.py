@@ -38,12 +38,13 @@ We will start by briefly (no, really!) introducing the building blocks for
 the algorithm from a mathematical perspective. One of these blocks
 is the sequential MPS preparation circuit to which we will compare later.
 Alongside this introduction we describe and code up each building block for a
-specific MPS and verify the conditions for the algorithm to apply. 
-Finally, we combine the building blocks into the constant-depth algorithm by
-Smith et al. We conclude by computing the correlation length of the prepared MPS.
+specific MPS.
+Then we combine the building blocks into the constant-depth algorithm by
+Smith et al. We conclude by computing the correlation length of the prepared
+example MPS.
 
-Mathematical derivation
------------------------
+Building blocks
+---------------
 
 We briefly introduce MPS and a sequential circuit with linear
 depth to prepare them, as well as two tools from quantum information theory
@@ -89,8 +90,8 @@ mentioned reviews for more details.
 
 **Example**
 
-As an example, consider a chain of :math:`N` qubits (:math:`d=2`) and a :math:`D=2` MPS
-:math:`|\Psi(g)\rangle` on this system, defined by the matrices
+As an example, consider a chain of :math:`N` qubits (:math:`d=2`) and an MPS
+:math:`|\Psi(g)\rangle` on this system with :math:`D=2`, defined by the matrices
 
 .. math::
 
@@ -103,6 +104,7 @@ where :math:`\eta = \frac{1}{\sqrt{1-g}}` and :math:`g\in[-1, 0]` is a freely ch
 This MPS is a simple yet important example because it can be tuned from the long-range correlated
 GHZ state :math:`|\Psi(0)\rangle=\frac{1}{\sqrt{2}}(|0\rangle^{\otimes N} + |1\rangle^{\otimes N})`
 to the state :math:`|\Psi(-1)\rangle=|+\rangle^{\otimes N}` with vanishing correlation length.
+This MPS also is discussed in Sec. III C 1. of [#smith]_.
 In general, the correlation length of :math:`|\Psi(g)\rangle` is given by
 
 .. math::
@@ -236,17 +238,16 @@ print(f"\nU is unitary: {np.allclose(U.conj().T @ U, np.eye(4))}")
 #     + A^1\otimes (|1\rangle\!\langle 0| + |0\rangle\!\langle 1|)\\
 #     &= A^0 \otimes \mathbb{I} + A^1\otimes X
 #
-# This looks a lot like a :class:`~.pennylane.CNOT` gate plays a part in :math:`U`.
+# This looks a lot like a :class:`~.pennylane.CNOT` gate.
 # Removing it from :math:`U` we find
 #
 # .. math::
 #
 #     U \operatorname{CNOT}
-#     &= (A^0 P_0) \otimes \mathbb{I} + (A^0P_1) \otimes X + (A^1 P_0) \otimes X + (A^1P_1) \otimes \mathbb{I}\\
+#     &= (A^0 E_{00}) \otimes \mathbb{I} + (A^0E_{11}) \otimes X + (A^1 E_{00}) \otimes X + (A^1E_{11}) \otimes \mathbb{I}\\
 #     &= \left(\begin{matrix} \eta & -\eta\sqrt{-g} \\ \eta\sqrt{-g} & \eta \end{matrix}\right)\otimes \mathbb{I},
 #
-# where we denoted the computational basis state projectors as
-# :math:`P_i = |i\rangle\!\langle i|`. The remaining operation is an
+# The remaining operation is an
 # :class:`~.pennylane.RY` rotation by the angle :math:`2\arccos(\eta)`, so
 # that we can easily code up the unitary as a small circuit template:
 
@@ -262,7 +263,7 @@ print(f"The template reproduces U: {np.allclose(template_matrix, U)}")
 
 ######################################################################
 # Excellent, now that we have a circuit that realizes the unitary :math:`U`, let's code up the entire
-# sequential preparation circuit. We implement the measurement \& postselect step as a separate
+# sequential preparation circuit. We implement the measurement \& postselection step as a separate
 # function ``project_measure``.
 
 
@@ -310,7 +311,7 @@ def sequential_circuit(N, g):
 # preparation circuit. Let's just draw the circuit for now.
 
 N = 7
-qml.draw_mpl(sequential_circuit)(N, g);
+_ = qml.draw_mpl(sequential_circuit)(N, g)
 
 ######################################################################
 # As we can see, the sequential preparation circuit already uses mid-circuit
@@ -359,7 +360,7 @@ qml.draw_mpl(sequential_circuit)(N, g);
 # where we used that :math:`\sum_{j,\ell} |j\rangle B^k_{j\ell}\langle\ell|=B^k`.
 # We now can measure the two bond qudits and will know that for a given measurement
 # outcome :math:`k`, we obtained the MPS state on :math:`K+L` qubits, up to
-# a small "impurity", namely the matrix :math:`B^k` that depends to the outcome.
+# an "impurity", namely the matrix :math:`B^k` that depends to the outcome.
 #
 # In full generality, the fusion strategy may seem complicated, but it can take
 # a very simply form, as we will now see in our example:
@@ -538,6 +539,10 @@ def push_and_correct(op_id, phys_wires):
 #
 # #. Perform the same projection step as in the sequential preparation algorithm on
 #    the two remaining bond sites.
+#
+# Smith et al. summarize their algorithm in the following chart:
+#
+# .. image:: ../_static/demonstration_assets/constant_depth_mps_prep/algorithm.png
 #
 # It is important to remember that showing the existence of suitable operator pushing
 # relations (and finding them explicitly) is a crucial step in general, which goes
