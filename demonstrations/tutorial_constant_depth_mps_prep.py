@@ -761,7 +761,7 @@ def correlations(N, g, q):
     return [p - single_expvals[0] * s for p, s in zip(prod_expvals, single_expvals[1:])]
 
 
-N = 12
+N = 18
 q = 6
 gs = [-1 / 5, -2 / 5, -3 / 5, -4 / 5]
 fig, ax = plt.subplots()
