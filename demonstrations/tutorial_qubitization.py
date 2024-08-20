@@ -1,7 +1,7 @@
 r"""Intro to Qubitization
 =========================
 
-Encoding a Hamiltonian into a quantum computer is a fundamental task for many applications, but the way to do it is not unique. One method that has gained special status is known as **Qubitization**. In this demo, we will introduce the Qubitization operator, explain how to view it as a rotation operator, and why this is useful. Understanding Qubitization as a rotation simplifies the analysis and implementation of quantum algorithms, particularly when combined with Quantum Phase Estimation. We will demonstrate this through an example application, with code provided using the :class:`~.pennylane.Qubitization` template in PennyLane.
+Encoding a Hamiltonian into a quantum computer is a fundamental task for many applications, but the way to do it is not unique. One method that has gained special status is known as **Qubitization**. In this demo, we will introduce the Qubitization operator and explain how to view it as a rotation operator. Understanding Qubitization as a rotation simplifies the analysis and implementation of quantum algorithms, particularly when combined with Quantum Phase Estimation. We will demonstrate this through an example application, with code provided using the :class:`~.pennylane.Qubitization` template in PennyLane.
 
 .. figure:: ../_static/demonstration_assets/qubitization/OGthumbnail_large_Qubitization.png
     :align: center
@@ -18,11 +18,11 @@ For a Hamiltonian :math:`\mathcal{H}` given in its `LCU representation <https://
     Q =  \text{PSP}_{\mathcal{H}}\cdot (2|0\rangle\langle 0| - I),
 
 where :math:`\text{PSP}_{\mathcal{H}}` refers to the block encoding :math:`\text{Prep}_{\mathcal{H}}^{\dagger} \text{Sel}_{\mathcal{H}} \text{Prep}_{\mathcal{H}}`, as explained in `this demo <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding/>`_.
-The operator :math:`Q` is also a block encoding operator but with a key property: its eigenvalues encode the eigenvalues of the Hamiltonian.
+The operator :math:`Q` is also a block encoding operator with a key property: its eigenvalues encode the eigenvalues of the Hamiltonian.
 As we will soon explain in detail, if :math:`E` is an eigenvalue of :math:`\mathcal{H}`, then :math:`e^{i\arccos(E/\lambda)}` is an
 eigenvalue of :math:`Q`, where :math:`\lambda` is a known normalization factor. This property is very useful because it means that we can use the `Quantum Phase Estimation algorithm <https://pennylane.ai/qml/demos/tutorial_qpe/>`_  to estimate the eigenvalues of  :math:`Q`, and then use them to retrieve the eigenvalues of the encoded Hamiltonian.
 
-This is the essence of why qubitization is attractive for applications: it provides a method to exactly encode eigenvalues of a Hamiltonian into a unitary operator that can be used inside the Quantum Phase Estimation algorithm to sample Hamiltonian eigenvalues. But where does this decomposition come from? Why are the eigenvalues encoded in this way? 🤔 We explain these concepts below.
+This is the essence of why Qubitization is attractive for applications: it provides a method to exactly encode eigenvalues of a Hamiltonian into a unitary operator that can be used inside the Quantum Phase Estimation algorithm to sample Hamiltonian eigenvalues. But where does this decomposition come from? Why are the eigenvalues encoded in this way? 🤔 We explain these concepts below.
 
 Block Encoding
 ----------------
@@ -63,7 +63,7 @@ two reflections are equivalent to one rotation. These reflections correspond to 
 
     To verify that an operator is indeed a reflection, one must square the operator and check if the result is the identity operator.
 
-As an example, let’s take :math:`|\Psi\rangle` as the initial state to visualize the rotation. The first reflection, given by :math:`2|0\rangle\langle 0| - I`, mirrors the state around the axis defined by :math:`|0\rangle |\phi\rangle`. This occurs because the operator flips the sign of any component not aligned with :math:`|0\rangle` in the first register.
+As an example, let’s take :math:`|\Psi\rangle` as the initial state to visualize the rotation. The first reflection, given by :math:`(2|0\rangle\langle 0| - I)`, mirrors the state around the axis defined by :math:`|0\rangle |\phi\rangle`. This occurs because the operator flips the sign of any component not aligned with :math:`|0\rangle` in the first register.
 
 .. figure:: ../_static/demonstration_assets/qubitization/qubitization2.jpeg
     :align: center
@@ -101,7 +101,7 @@ print(qml.matrix(H))
 # the eigenstate  :math:`|\phi\rangle = |11\rangle` as input and try to estimate its eigenvalue :math:`E = 0.5` using
 # this technique.
 #
-# In PennyLane, the Qubitization operator can be easily constructed using the built-in :class:`~.pennylane.Qubitization` operation. You simply need to provide the Hamiltonian and the control qubits that defines the block encoding. The number of control wires is :math:`⌈\log_2 k⌉`, where :math:`k` is the number of terms in the `LCU representation <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding/>`_ of the Hamiltonian.
+# In PennyLane, the Qubitization operator can be easily constructed using the built-in :class:`~.pennylane.Qubitization` operation. You simply need to provide the Hamiltonian and the control qubits that define the block encoding. The number of control wires is :math:`⌈\log_2 k⌉`, where :math:`k` is the number of terms in the `LCU representation <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding/>`_ of the Hamiltonian.
 #
 # .. note::
 #
