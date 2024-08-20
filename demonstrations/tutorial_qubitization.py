@@ -2,7 +2,7 @@ r"""Intro to Qubitization
 =========================
 
 Encoding a Hamiltonian into a quantum computer is a fundamental task for many applications, but the way to do it is not unique.
-One method that has gained special status is known as **Qubitization**. In this demo, we will introduce the qubitization operator and explain how to view it as a rotation operator. We then explain how to combine it with quantum phase estimation in an example application, illustrated with example code in PennyLane using the :class:`~.pennylane.Qubitization` template.
+One method that has gained special status is known as **Qubitization**. In this demo, we will introduce the Qubitization operator and explain how to view it as a rotation operator. We then explain how to combine it with Quantum Phase Estimation in an example application, illustrated with example code in PennyLane using the :class:`~.pennylane.Qubitization` template.
 
 .. figure:: ../_static/demonstration_assets/qubitization/OGthumbnail_large_Qubitization.png
     :align: center
@@ -18,12 +18,12 @@ For a Hamiltonian :math:`\mathcal{H}` given in `LCU representation <https://penn
 
     Q =  \text{PSP}_{\mathcal{H}}\cdot (2|0\rangle\langle 0| - I),
 
-where :math:`\text{PSP}_{\mathcal{H}}` refers to the block encoding :math:`\text{Prep}_{\mathcal{H}}^{\dagger} \text{Sel}_{\mathcal{H}} \text{Prep}_{\mathcal{H}}`, as explained in `this demo <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding/>`_. You can check it out for more details.
-The operator :math:`Q` is also a block encoding operator with a key property: its eigenvalues encode the eigenvalues of the Hamiltonian.
+where :math:`\text{PSP}_{\mathcal{H}}` refers to the block encoding :math:`\text{Prep}_{\mathcal{H}}^{\dagger} \text{Sel}_{\mathcal{H}} \text{Prep}_{\mathcal{H}}`, as explained in `this demo <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding/>`_ which you can check it out for more details.
+The operator :math:`Q` is also a block encoding operator but with a key property: its eigenvalues encode the eigenvalues of the Hamiltonian.
 As we will soon explain in detail, if :math:`E` is an eigenvalue of :math:`\mathcal{H}`, then :math:`e^{i\arccos(E/\lambda)}` is an
 eigenvalue of :math:`Q`, where :math:`\lambda` is a known normalization factor. This property is very useful because it means that we can use the `Quantum Phase Estimation algorithm <https://pennylane.ai/qml/demos/tutorial_qpe/>`_  to estimate the eigenvalues of  :math:`Q`, and then use them to retrieve the eigenvalues of the encoded Hamiltonian.
 
-This is the essence of why qubitization is attractive for applications: it provides a method to exactly encode eigenvalues of a Hamiltonian into a unitary operator that can be used inside the quantum phase estimation algorithm to sample Hamiltonian eigenvalues. But where does this decomposition come from? Why are the eigenvalues are encoded in this way? 🤔 We explain these concepts below.
+This is the essence of why qubitization is attractive for applications: it provides a method to exactly encode eigenvalues of a Hamiltonian into a unitary operator that can be used inside the quantum phase estimation algorithm to sample Hamiltonian eigenvalues. But where does this decomposition come from? Why are the eigenvalues encoded in this way? 🤔 We explain these concepts below.
 
 Block Encoding
 ----------------
@@ -60,7 +60,7 @@ The Qubitization operator does this by applying a rotation in that two-dimension
 The advantage of a rotation operator is that the angle :math:`\theta` appears directly in its eigenvalues as the phases  :math:`e^{\pm i\theta}`. Therefore, if the rotation angle encodes useful information, it can be retrieved by estimating the phase of the rotation operator, for example using QPE.
 
 We now show that the Qubitization operator is a rotation by using the same idea of Amplitude Amplification:
-two reflections are equivalent to one rotation. These reflections correspond to :math:`2|0\rangle\langle 0| - I` and :math:`\text{Prep}_{\mathcal{H}}^{\dagger} \text{Sel}_{\mathcal{H}} \text{Prep}_{\mathcal{H}}`, which together define our Qubitization operator.
+two reflections are equivalent to one rotation. These reflections correspond to :math:`2|0\rangle\langle 0| - I` and :math:`\text{PSP}_{\mathcal{H}}`, which together define our Qubitization operator.
 
 .. note::
 
@@ -73,7 +73,7 @@ As an example, let’s take :math:`|\Psi\rangle` as the initial state to visuali
     :width: 50%
     :target: javascript:void(0)
 
-Given the effect that :math:`\text{Prep}_{\mathcal{H}} \text{Sel}_{\mathcal{H}} \text{Prep}_{\mathcal{H}}` has on the state :math:`|0\rangle|\phi\rangle`, it can be verified that the second reflection occurs along the line that bisects the angle between the state :math:`|\Psi\rangle` and the x-axis. Let's now examine the effect this reflection has on the previous state:
+Given the effect that :math:`\text{PSP}_{\mathcal{H}}` has on the state :math:`|0\rangle|\phi\rangle`, it can be verified that the second reflection occurs along the line that bisects the angle between the state :math:`|\Psi\rangle` and the x-axis. Let's now examine the effect this reflection has on the previous state:
 
 .. figure:: ../_static/demonstration_assets/qubitization/qubitization3.jpeg
     :align: center
@@ -170,5 +170,5 @@ print("E = ", lambda_ * np.cos(2 * np.pi * np.argmax(results) / 2 ** (len(estima
 #
 # In this demo, we explored the concept of Qubitization and one of its applications. To achieve this, we combined several key concepts, including `Block Encoding <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding/>`_, `Quantum Phase Estimation <https://pennylane.ai/qml/demos/tutorial_qpe/>`_, and `Amplitude Amplification <https://pennylane.ai/qml/demos/tutorial_intro_amplitude_amplification/>`_. This algorithm serves as a foundation for more advanced techniques like `Quantum Singular Value Transformation <https://pennylane.ai/qml/demos/tutorial_intro_qsvt/>`_. We encourage you to continue studying these methods and apply them in your research.
 #
-# About the author
-# ----------------
+# About the authors
+# ------------------
