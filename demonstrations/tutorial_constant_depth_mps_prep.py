@@ -642,7 +642,8 @@ def constant_depth_circuit(N, g, q):
 # We built the full constant-depth circuit to prepare the MPS
 # :math:`|\Psi(g)\rangle`.
 # Before we evaluate the states it produces, let's see how the circuit looks.
-# We'll add some boxes for the individual subroutines.
+# We'll add some boxes for the individual subroutines, and recommend opening
+# the figure in a separate tab.
 #
 
 N = 9
