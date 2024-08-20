@@ -119,6 +119,7 @@ we warm up our coding by defining the tensor :math:`A` and testing its propertie
 
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.patches import FancyBboxPatch
 from scipy.optimize import curve_fit
 
 import pennylane as qml
@@ -284,7 +285,8 @@ def sequential_preparation(g, wires):
 def project_measure(wire_0, wire_1):
     """Measure two qubits in the Bell basis and postselect on (|00>+|11>)/sqrt(2)."""
     # Move bond qubits to Bell basis by undoing the preparation
-    qml.adjoint(prepare_bell)(wire_0, wire_1)
+    qml.CNOT([wire_0, wire_1])
+    qml.Hadamard(wire_0)
     # Measure and postselect |00>
     qml.measure(wire_0, postselect=0)
     qml.measure(wire_1, postselect=0)
@@ -491,6 +493,7 @@ print(f"The test measurement of the fusion preparation + sequential unpreparatio
 #
 # This pushing and correction step is captured by the following function.
 
+
 def push_and_correct(op_id, phys_wires):
     """Push an operator from left to right along the bond sites of an MPS and
     conditionally apply correcting operations on the corresponding physical sites.
@@ -508,6 +511,7 @@ def push_and_correct(op_id, phys_wires):
         qml.cond(op_id[1], qml.X)(i)
     # Push through Y if input is X or Y
     return np.array([op_id[1], op_id[1]])
+
 
 ######################################################################
 # Piecing everything together
@@ -532,7 +536,7 @@ def push_and_correct(op_id, phys_wires):
 #
 # #. Perform the same projection step as in the sequential preparation algorithm on
 #    the two remaining bond sites.
-# 
+#
 # It is important to remember that showing the existence of suitable operator pushing
 # relations (and finding them explicitly) is a crucial step in general, which goes
 # beyond the scope of the demo.
@@ -571,10 +575,10 @@ def correct_end_bond(bond_idx, op_id):
     qml.cond(op_id[0], qml.Z)(bond_idx)
     # Apply X if correction op is X or Y
     qml.cond(op_id[1], qml.X)(bond_idx)
-    #op_int = np.array([2, 1]) @ op_id
-    #qml.cond(op_int == 1, qml.X)(bond_idx)
-    #qml.cond(op_int == 2, qml.Z)(bond_idx)
-    #qml.cond(op_int == 3, qml.Y)(bond_idx)
+    # op_int = np.array([2, 1]) @ op_id
+    # qml.cond(op_int == 1, qml.X)(bond_idx)
+    # qml.cond(op_int == 2, qml.Z)(bond_idx)
+    # qml.cond(op_int == 3, qml.Y)(bond_idx)
 
 
 def constant_depth(N, g, q):
@@ -613,11 +617,10 @@ def constant_depth_ansatz(N, g, q):
     # Step 5: Perform projective measurement on outer-most bond sites.
     project_measure(*outer_bond_sites)
     # Collect wire ranges for physical wires, skipping bond wires
-    phys_wires = (
-        range(block_wires * i + 1, block_wires * (i + 1) - 1) for i in range(num_blocks)
-    )
+    phys_wires = (range(block_wires * i + 1, block_wires * (i + 1) - 1) for i in range(num_blocks))
     # Turn ranges to lists and sum them together
     return sum(map(list, phys_wires), start=[])
+
 
 @qml.qnode(dev)
 def constant_depth_circuit(N, g, q):
@@ -633,13 +636,52 @@ def constant_depth_circuit(N, g, q):
 # We'll add some boxes for the individual subroutines.
 #
 
-N = 12
+N = 9
 q = 3
 g = -0.8
-qml.draw_mpl(constant_depth_circuit)(N, g, q)
-# TODO: BOXES
+fig, ax = qml.draw_mpl(constant_depth_circuit)(N, g, q)
+
+# Cosmetics
+options = {
+    "facecolor": "white",
+    "linewidth": 2,
+    "zorder": -1,
+    "boxstyle": "round, pad=0.1",
+}
+text_options = {"fontsize": 15, "ha": "center", "va": "top"}
+box_data = [
+    ((-0.45, -0.35), 1.7, 4.7, "#FF87EB"),  # Bond entangling 1
+    ((-0.45, 4.65), 1.7, 4.7, "#FF87EB"),  # Bond entangling 2
+    ((-0.45, 9.65), 1.7, 4.7, "#FF87EB"),  # Bond entangling 3
+    ((1.65, 0.55), 5.7, 3.8, "#FFE096"),  # Sequential prep 1
+    ((1.65, 5.55), 5.7, 3.8, "#FFE096"),  # Sequential prep 2
+    ((1.65, 10.55), 5.7, 3.8, "#FFE096"),  # Sequential prep 3
+    ((7.65, 3.6), 1.7, 1.65, "#D7A2F6"),  # Fuse 1 and 2
+    ((11.65, 8.65), 1.7, 1.65, "#D7A2F6"),  # Fuse (1,2) and 3
+    ((9.65, 3.6), 9.7, 4.75, "#70CEFF"),  # Push and correct b/w 1 and 2
+    ((13.65, 8.65), 9.7, 4.75, "#70CEFF"),  # Push and correct b/w (1, 2) and 3
+    ((23.6, 13.6), 1.75, 0.8, "#C756B2"),  # Correct pushed bond operator
+    ((25.7, -0.35), 2.7, 14.75, "#B5F2ED"),  # Projective measurement
+]
+
+labels = [
+    ("Step 1a", 0.5, 14.75),
+    ("Step 1b", 4.5, 14.75),
+    ("Step 2", 8.5, 5.5),
+    ("Step 2", 12.5, 10.5),
+    ("Step 3", 20.5, 7.5),
+    ("Step 4", 24.5, 13),
+    ("Step 5", 27, 14.75),
+]
+
+for xy, width, height, color in box_data:
+    ax.add_patch(FancyBboxPatch(xy, width, height, edgecolor=color, **options))
+for label, x, y in labels:
+    t = ax.text(x, y, label, **text_options)
+    t.set_bbox({"facecolor": "white", "alpha": 0.85, "edgecolor": "white"})
 
 ######################################################################
+#
 # Let's check that the constant-depth circuit produces the same probability
 # distribution as the sequential circuit.
 #
@@ -691,20 +733,19 @@ ax.legend()
 @qml.qnode(dev, interface="numpy")
 def pre_correlations(N, g, q):
     phys_wires = constant_depth_ansatz(N, g, q)
-    return (
-        [qml.expval(qml.Z(1) @ qml.Z(i)) for i in phys_wires]
-        + [qml.expval(qml.Z(i)) for i in phys_wires]
-    )
+    single_obs = [qml.expval(qml.Z(i)) for i in phys_wires]
+    # Exclude the product Z(1) @ Z(1) = I
+    prod_obs = [qml.expval(qml.Z(1) @ qml.Z(i)) for i in phys_wires[1:]]
+    return single_obs + prod_obs
 
 
 def correlations(N, g, q):
     # Compute expectation values for correlators
     expvals = pre_correlations(N, g, q)
-    prods = expvals[:-N]
-    expvals = expvals[-N:]
+    single_expvals = expvals[:N]
+    prod_expvals = expvals[N:]
     # Exclude the self-correlation C(1)
-    correls = [prods[i] - expvals[0] * expvals[i] for i in range(N) if i != 0]
-    return correls
+    return [p - single_expvals[0] * s for p, s in zip(prod_expvals, single_expvals[1:])]
 
 
 N = 12
@@ -738,7 +779,7 @@ mid_point = N // 2 + 1
 distances = list(range(1, mid_point))
 print(f"Correlation lengths xi\n======================")
 for g, correls in zip(gs, all_correls):
-    popt, pcov = curve_fit(exp_fn, distances, correls[1 : mid_point])
+    popt, pcov = curve_fit(exp_fn, distances, correls[1:mid_point])
     xi_numerical = -1 / popt[1]
     xi_predicted = 1 / abs(np.log((1 + g) / (1 - g)))
     print(f"{g=:.1f}")
@@ -761,7 +802,7 @@ for g, correls in zip(gs, all_correls):
 # bond sites. Nonetheless, this constant-depth algorithm is an exciting advance in
 # state preparation techniques, alleviating requirements of coherence times and
 # connectivity on hardware.
-# 
+#
 # For more information, consider the original article, the mentioned reviews, as well
 # as our demos on dynamic circuits and tensor network states.
 #
