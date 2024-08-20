@@ -26,7 +26,7 @@
     "doi": "",
     "canonicalURL": "/qml/demos/tutorial_constant_depth_mps_prep",
     "references": [],
-    "basedOnPapers": [],
+    "basedOnPapers": ["10.48550/arXiv.2404.16083"],
     "referencedByPapers": [],
     "relatedContent": [
         {

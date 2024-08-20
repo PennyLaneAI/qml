@@ -59,7 +59,7 @@ are able to approximate relevant states in quantum many-body systems.
 In particular, MPS can efficiently describe ground states of (gapped local)
 one-dimensional Hamiltonians, which in addition can be found efficiently using
 density matrix renormalization group (DMRG) algorithms.
-For reviews of MPS see [#todo].
+For a review of MPS see [#cirac]_.
 
 Following [#smith]_, we will look at translation-invariant MPS
 of a quantum :math:`N`-body system where each body, or site, has local (physical)
@@ -831,9 +831,14 @@ for g, correls in zip(gs, all_correls):
 #     `closed access <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.95.110503>`__, 2005.
 #     `arXiv:quant-ph/0501096 <http://www.arxiv.org/abs/quant-ph/0501096>`__, 2005.
 #
-# .. [#todo]
+# .. [#cirac]
+#     
+#      J. I. Cirac, D. Pérez-García, N. Schuch, F. Verstraete
+#      "Matrix product states and projected entangled pair states: Concepts, symmetries, theorems",
+#      Reviews of Modern Physics **93**, 045003,
+#      `closed access <https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.93.045003>`__, 2021.
+#      `arXiv:2011.12127 <https://arxiv.org/abs/2011.12127>`__, 2020.
 #
-#     Todo
 #
 # About the author
 # ----------------
