@@ -98,10 +98,10 @@ As an example, consider a chain of :math:`N` qubits (:math:`d=2`) and a :math:`D
     \quad
     A^1 = \eta \left(\begin{matrix} 0 & -\sqrt{-g} \\ 0 & 1 \end{matrix}\right)
 
-where :math:`\eta = \sqrt{1-g}^{-1}` and :math:`g\in[-1, 0]` is a freely chosen parameter.
+where :math:`\eta = \frac{1}{\sqrt{1-g}}` and :math:`g\in[-1, 0]` is a freely chosen parameter.
 
 This MPS is a simple yet important example because it can be tuned from the long-range correlated
-GHZ state :math:`|\Psi(0)\rangle=(|0>^{\otimes N} + |1>^{\otimes N})/\sqrt(2)`
+GHZ state :math:`|\Psi(0)\rangle=\frac{1}{\sqrt{2}}(|0\rangle^{\otimes N} + |1\rangle^{\otimes N})`
 to the state :math:`|\Psi(-1)\rangle=|+\rangle^{\otimes N}` with vanishing correlation length.
 In general, the correlation length of :math:`|\Psi(g)\rangle` is given by
 
@@ -110,7 +110,7 @@ In general, the correlation length of :math:`|\Psi(g)\rangle` is given by
     \xi(g) = \left|\ln\left(\frac{1+g}{1-g}\right)\right|^{-1}.
 
 Long-range correlated states require linear-depth unitary circuits in general.
-Therefore, the constant-depth circuit below for :math:`|\Psi(0)\rangle` will demonstrate
+Therefore, the constant-depth circuit for :math:`|\Psi(0)\rangle` will demonstrate
 that dynamic quantum circuits are more powerful than unitary operations alone.
 
 The MPS :math:`|\Psi(g)\rangle` will be our working example throughout this demo. Therefore
@@ -165,27 +165,28 @@ print(f"For {g=}, the theoretical correlation length is {xi=:.4f}")
 # where :math:`C_\perp` can be any operator making :math:`U` unitary.
 # The sequential preparation circuit now consists of the following steps.
 #
-# #. Start in the state :math:`|\psi_0\rangle = |0_d\rangle^{\otimes N}\otimes |00\rangle_D`.
+# #. Start in the state :math:`|\psi_0\rangle = |0\rangle^{\otimes N}\otimes |00\rangle_D`.
 #    The last two sites are non-physical bond sites, encoded by :math:`D`-dimensional qudits.
 #
-# #. Entangle the bond qudits into the state :math:`|I\rangle = 1/\sqrt{D}\sum_j |jj\rangle_D`.
+# #. Entangle the bond qudits into the state :math:`|I\rangle = \frac{1}{\sqrt{D}}\sum_j |jj\rangle_D`.
 #
 # #. Apply the unitary :math:`U` once to each of the :math:`N` physical sites, with the
-#    :math:`D`-dimensional factor always acting on the first bond qudit, denoted by :math:`U^{(i)}`.
+#    :math:`D`-dimensional tensor factor always acting on the first bond qudit, denoted by :math:`U^{(i)}`.
 #    This produces the state
 #
 #    .. math::
 #
 #        |\psi_1\rangle
+#        &= \prod_{i=N}^{1} U^{(i)} |0\rangle^{\otimes N} \frac{1}{\sqrt{D}} \sum_j|jj\rangle _D\\
 #        &= \frac{1}{\sqrt{D}} \sum_j \prod_{i=N-1}^{1} U^{(i)}
-#        \sum_{m_N=0}^{d-1} |0_d\rangle^{\otimes N-1}|m_N\rangle A^{m_N}|jj\rangle _D\\
+#        \sum_{m_N=0}^{d-1} |0\rangle^{\otimes N-1}|m_N\rangle A^{m_N}|jj\rangle _D\\
 #        &= \frac{1}{\sqrt{D}} \sum_j
-#        \sum_{\vec{m}} |\vec{m}\rangle A^{m_1} A^{m_2}\cdots A^{m_N}|j\rangle_D |j\rangle_D\\
+#        \sum_{\vec{m}} |\vec{m}\rangle A^{m_1} A^{m_2}\cdots A^{m_N}|jj\rangle_D\\
 #        &= \frac{1}{\sqrt{D}} \sum_{i,j}
-#        \sum_{\vec{m}} |\vec{m}\rangle \langle i|A^{m_1} A^{m_2}\cdots A^{m_N}|j\rangle_D |i\rangle_D|j\rangle_D
+#        \sum_{\vec{m}} |\vec{m}\rangle \langle i|A^{m_1} A^{m_2}\cdots A^{m_N}|j\rangle |ij\rangle_D
 #
 # #. Measure the two bond qudits in the (generalized) Bell basis and postselect on the outcome
-#    being :math:`|I\rangle`. Then discard the bond qudits, which collapses :math:`\psi_1\rangle`
+#    being :math:`|I\rangle`. Then discard the bond qudits, which collapses :math:`|\psi_1\rangle`
 #    into the state
 #
 #    .. math::
@@ -213,7 +214,7 @@ print(np.linalg.norm(U_first_term, axis=0))
 
 ######################################################################
 # We see that this fixed part has two norm-1 columns already, and we are
-# able to complement this by :math:`C_\perp` with the same columns:
+# able to complement this by :math:`C_\perp` using the same columns, but with shifted rows:
 
 E_01 = np.array([[0, 1], [0, 0]])  # |0><1|
 E_11 = np.array([[0, 0], [0, 1]])  # |1><1|
@@ -222,7 +223,7 @@ C_perp = np.kron(A_1, E_01) + np.kron(A_0, E_11)
 U = U_first_term + C_perp
 
 print(np.round(U, 5))
-print(f"U is unitary: {np.allclose(U.conj().T @ U, np.eye(4))}")
+print(f"\nU is unitary: {np.allclose(U.conj().T @ U, np.eye(4))}")
 
 
 ######################################################################
@@ -241,8 +242,8 @@ print(f"U is unitary: {np.allclose(U.conj().T @ U, np.eye(4))}")
 # .. math::
 #
 #     U \operatorname{CNOT}
-#     &= A^0 P_0 \otimes \mathbb{I} + A^0P_1 \otimes X + A^1 P_0 \otimes X + A^1P_1 \otimes \mathbb{I}\\
-#     &= \left(\begin{matrix} \eta & -\eta\sqrt{-g} \\ \eta\sqrt{-g} & \eta \end{matrix}\right),
+#     &= (A^0 P_0) \otimes \mathbb{I} + (A^0P_1) \otimes X + (A^1 P_0) \otimes X + (A^1P_1) \otimes \mathbb{I}\\
+#     &= \left(\begin{matrix} \eta & -\eta\sqrt{-g} \\ \eta\sqrt{-g} & \eta \end{matrix}\right)\otimes \mathbb{I},
 #
 # where we denoted the computational basis state projectors as
 # :math:`P_i = |i\rangle\!\langle i|`. The remaining operation is an
@@ -260,7 +261,7 @@ template_matrix = qml.matrix(U_template, wire_order=["bond", "phys"])(eta, "bond
 print(f"The template reproduces U: {np.allclose(template_matrix, U)}")
 
 ######################################################################
-# Great, now that we have a circuit that realizes the unitary :math:`U`, let's code up the entire
+# Excellent, now that we have a circuit that realizes the unitary :math:`U`, let's code up the entire
 # sequential preparation circuit. We implement the measurement \& postselect step as a separate
 # function ``project_measure``.
 
@@ -308,8 +309,8 @@ def sequential_circuit(N, g):
 # We will verify the prepared state below, when comparing to the constant-depth
 # preparation circuit. Let's just draw the circuit for now.
 
-N = 10
-qml.draw_mpl(sequential_circuit)(N, g)
+N = 7
+qml.draw_mpl(sequential_circuit)(N, g);
 
 ######################################################################
 # As we can see, the sequential preparation circuit already uses mid-circuit
@@ -386,7 +387,8 @@ qml.draw_mpl(sequential_circuit)(N, g)
 # The measurement procedure can then be coded up in the following short function,
 # which is similar to the ``project_measure`` function from the sequential preparation
 # routine. Note, however, that instead of postselecting, we record the measurement
-# outcome in the form of two bits, to be used further below.
+# outcome in the form of two bits representing the index :math:`k` of the operator
+# :math:`B^k`, which we will use further below.
 
 
 def fuse(wire_0, wire_1):
@@ -617,7 +619,9 @@ def constant_depth_ansatz(N, g, q):
     # Step 5: Perform projective measurement on outer-most bond sites.
     project_measure(*outer_bond_sites)
     # Collect wire ranges for physical wires, skipping bond wires
-    phys_wires = (range(block_wires * i + 1, block_wires * (i + 1) - 1) for i in range(num_blocks))
+    phys_wires = (
+        range(block_wires * i + 1, block_wires * (i + 1) - 1) for i in range(num_blocks)
+    )
     # Turn ranges to lists and sum them together
     return sum(map(list, phys_wires), start=[])
 
@@ -630,7 +634,7 @@ def constant_depth_circuit(N, g, q):
 
 ######################################################################
 #
-# Great, we now built the full constant-depth circuit to prepare the MPS
+# We built the full constant-depth circuit to prepare the MPS
 # :math:`|\Psi(g)\rangle`.
 # Before we evaluate the states it produces, let's see how the circuit looks.
 # We'll add some boxes for the individual subroutines.
@@ -692,8 +696,11 @@ print(f"The two probabilities agree for {g=:.1f}: {np.allclose(p_seq, p_const)}"
 
 
 ######################################################################
-# Great, we have a constant-depth circuit that reproduces the existing sequential
+# Nice, we have a constant-depth circuit that reproduces the existing sequential
 # preparation circuit, which has linear depth!
+# Not that while the dynamic operations of step 3 seem to have a linear depth,
+# they can be applied in parallel because they are only controlled by classical
+# registers.
 #
 # Correlation length
 # ~~~~~~~~~~~~~~~~~~
@@ -716,7 +723,7 @@ ax.bar(ints, uniform_probs, width=1, label="zero correlation length ($|+\\rangle
 ax.bar(ints, ghz_probs, width=1, label="long correlation length (GHZ)")
 ax.set_yscale("log")
 ax.set_ylim([1e-3, 1])
-ax.legend()
+ax.legend();
 
 ######################################################################
 # In a more nuanced setting, let us produce the MPS in question for a series of
@@ -766,7 +773,7 @@ plt.show()
 # Note that due to the periodic boundary conditions, we have :math:`C(N-j)=C(j)`.
 # This is why the correlations increase again after :math:`j=\frac{N}{2}`.
 # To obtain the correlation length, we fit an exponential to the measured correlators
-# up until :math:`j=\frac{N/2}` and invert the decay rate.
+# up until :math:`j=\frac{N}{2}` and invert the decay rate.
 # We can also compare this result to the analytic result for the correlation
 # length :math:`xi` mentioned in the beginning:
 
