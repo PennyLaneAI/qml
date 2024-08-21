@@ -19,7 +19,7 @@ Where each :math:`i_n` is an *index* of dimension :math:`d_n` - it can take valu
 .. tip::
     Some authors refer to the indices of the tensors as their dimensions. In this tutorial, these two concepts will have have different meanings, although related.
 
-For example, a scalar :math:`S` is a rank-0 tensor, a vector :math:`V_i` is a rank-1 tensor and a matrix :math:`G_{ij}` is a rank-2 tensor.
+For example, a scalar :math:`s` is a rank-0 tensor, a vector :math:`v_i` is a rank-1 tensor and a matrix :math:`G_{ij}` is a rank-2 tensor.
     
 A beautiful and powerful tool accompanying tensors (networks) is their graphical language representation. The diagram of a tensor is simply a geometric shape with a leg sticking out of it for every index in the tensor. For example,
 
@@ -31,10 +31,10 @@ We can apply this same idea to represent a scalar, a vector and a matrix:
 
 TODO: add diagrams here.
 .. math::
-    S = 
+    s = 
     
 .. math::
-    V_i =
+    v_i =
     
 .. math::
     G_{ij} =  
@@ -87,11 +87,22 @@ print("rank: ", tensor_rank3.ndim)
 print("dimensions: ", tensor_rank3.shape)
 print("Rank-3 tensor: \n", tensor_rank3)
 ##############################################################################
-# Similarly, we can create a tensor of arbitrary rank following a similar procedure. This recursive approach is instructive to understand a rank-r tensor made up of rank-(r-1) tensors.
+# Similarly, we can create a tensor of arbitrary rank following a similar procedure. This recursive approach is instructive to understand a rank-r tensor as made up of rank-(r-1) tensors.
 
 """
 From matrix multiplication to tensor contractions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Matrix-matrix and matrix-vector multiplications are familiar operations within the context of quantum computing. We can now study these opereations under the lens of the tensor notation introduced above. First, a matrix and a vector can be multiplied as
+
+TODO: add diagram at the end of the equation.
+.. math::
+    (w)_i = G \cdot v = \sum_j G_ij v_j =
+
+We see that summing over the shared index :math:`j` is equivalent to **contracting** the corresponding legs from the matrix and vector diagrams. As expected, the result of this multiplication is another rank-1 tensor with dangling leg :math:`i`. Similarly, we can look at the matrix-matrix multiplication:
+
+TODO: add diagram at the end of the equation.
+.. math::
+    (G^3)_{jk} = G^1 \cdot G^2 = \sum_j G^{1}_{ij} G^{2}_{jk} = 
 
 - Show the matrix multiplication in terms of summation over indices, then using the diagrammatic representation. This results in another rank 2 tensor (matrix)
 - Analagously, we can represent matrix-vector multiplication resulting in a rank 1 tensor (vector). Just as we expected!
