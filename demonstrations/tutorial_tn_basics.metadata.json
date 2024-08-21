@@ -8,7 +8,7 @@
             "id": "ahmed_darwish"
         }
     ],
-    "dateOfPublication": "2022-03-29T00:00:00+00:00",
+    "dateOfPublication": "2024-08-06T00:00:00+00:00",
     "dateOfLastModification": "2024-08-06T00:00:00+00:00",
     "categories": [
         "Tensor Networks"
@@ -22,7 +22,7 @@
     ],
     "seoDescription": "An introductory tutorial to tensor networks.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_tn_circuits",
+    "canonicalURL": "/qml/demos/tutorial_tn_basics",
     "references": [
         {
             "id": "huggins",
@@ -43,13 +43,7 @@
             "url": "https://www.sciencedirect.com/science/article/pii/S0003491614001596"
         }
     ],
-    "basedOnPapers": ["10.1088/2058-9565/aaea94"],
+    "basedOnPapers": [],
     "referencedByPapers": [],
-    "relatedContent": [
-        {
-            "type": "demonstration",
-            "id": "tutorial_variational_classifier",
-            "weight": 1.0
-        }
-    ]
+    "relatedContent": []
 }

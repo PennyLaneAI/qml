@@ -68,24 +68,24 @@ Creating a tensor in code is straightforward, and chances are you have already c
 
 import numpy as np
 
-tensor_rank1 = np.array([1,2,3])
-print('rank: ', tensor_rank1.ndim)
-print('dimensions: ', tensor_rank1.shape)
+tensor_rank1 = np.array([1, 2, 3])
+print("rank: ", tensor_rank1.ndim)
+print("dimensions: ", tensor_rank1.shape)
 
 ##############################################################################
 # Then, we can use this to constructor a rank-2 tensor (a matrix).
 
 tensor_rank2 = np.array([tensor_rank1, tensor_rank1])
-print('rank: ', tensor_rank2.ndim)
-print('dimensions: ', tensor_rank2.shape)
+print("rank: ", tensor_rank2.ndim)
+print("dimensions: ", tensor_rank2.shape)
 
 ##############################################################################
 # As you might have guessed, we can repeat this procedure to create a rank-3 tensor.
 
 tensor_rank3 = np.array([tensor_rank2])
-print('rank: ', tensor_rank3.ndim)
-print('dimensions: ', tensor_rank3.shape)
-print('Rank-3 tensor: \n', tensor_rank3)
+print("rank: ", tensor_rank3.ndim)
+print("dimensions: ", tensor_rank3.shape)
+print("Rank-3 tensor: \n", tensor_rank3)
 ##############################################################################
 # Similarly, we can create a tensor of arbitrary rank following a similar procedure. This recursive approach is instructive to understand a rank-r tensor made up of rank-(r-1) tensors.
 
@@ -116,4 +116,3 @@ From tensor networks to quantum circuits:
 - show examples on https://arxiv.org/pdf/1912.10049 page 8 and 9 showing a quantum circuit for a bell state, defining each component as a tensor and show their contraction.
 - What else?
 """
-
