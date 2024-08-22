@@ -7,7 +7,9 @@ This makes the preparation of MPS on a quantum computer an important subroutine.
 
 .. figure:: ../_static/demonstration_assets/constant_depth_mps_prep/socialthumbnail_constant_depth_mps_prep.png
     :align: center
-    :width: 50%
+    :width: 70%
+    :alt: Illustration of two matrix product states merged together by a tree growing out of and back into them
+    :target: javascript:void(0);
 
 In this demo you will learn to prepare certain MPS with a dynamic
 quantum circuit of constant depth. We will implement the circuit, which makes use
@@ -115,8 +117,8 @@ Long-range correlated states require linear-depth unitary circuits in general.
 Therefore, the constant-depth circuit for :math:`|\Psi(0)\rangle` will demonstrate
 that dynamic quantum circuits are more powerful than unitary operations alone.
 
-The MPS :math:`|\Psi(g)\rangle` will be our working example throughout this demo. Therefore
-we warm up our coding by defining the tensor :math:`A` and testing its properties.
+The MPS :math:`|\Psi(g)\rangle` will be our running example throughout this demo.
+To warm up our coding, let's define the tensor :math:`A` and test that it is in left-canonical form.
 """
 
 import numpy as np
@@ -360,7 +362,7 @@ _ = qml.draw_mpl(sequential_circuit)(N, g)
 # where we used that :math:`\sum_{j,\ell} |j\rangle B^k_{j\ell}\langle\ell|=B^k`.
 # We now can measure the two bond qudits and will know that for a given measurement
 # outcome :math:`k`, we obtained the MPS state on :math:`K+L` qubits, up to
-# an "impurity", namely the matrix :math:`B^k` that depends to the outcome.
+# a defect, namely the matrix :math:`B^k` that depends to the outcome.
 #
 # In full generality, the fusion strategy may seem complicated, but it can take
 # a very simply form, as we will now see in our example:
@@ -433,7 +435,7 @@ test = prepare_and_unprepare(g)
 print(f"The test measurement of the fusion preparation + sequential unpreparation is {test:.2f}")
 
 ######################################################################
-# This means we still need a way to remove the impurity matrices :math:`B^k` from the
+# This means we still need a way to remove the defect matrices :math:`B^k` from the
 # state that ended up in the prepared state when we performed the fusion measurement.
 # *Operator pushing* will allow us to do exactly that!
 #
@@ -446,13 +448,15 @@ print(f"The test measurement of the fusion preparation + sequential unpreparatio
 # tensor :math:`A`. We will not go into detail about these conditions but assume here that
 # we work with compatible MPS and measurements.
 #
-# Operator pushing then allows us to push an impurity operator :math:`B^k` from one bond
+# Operator pushing then allows us to push a defect operator :math:`B^k` from one bond
 # axis through the tensor :math:`A` of the MPS to the other bond axis and to the physical axis.
 # While doing so, the operator in general will change, i.e., we end up with different operators
 # :math:`C^k` and :math:`D^k` on the bond and physical axes, respectively.
 # Visually, we find:
 #
 # .. image:: ../_static/demonstration_assets/constant_depth_mps_prep/operator_pushing.png
+#     :width: 35%
+#     :align: center
 #
 # For simplicity, we denote a push by :math:`B^k\mapsto (C^k, D^k)`.
 #
@@ -465,6 +469,8 @@ print(f"The test measurement of the fusion preparation + sequential unpreparatio
 # measurement basis. In particular, the relations are
 #
 # .. image:: ../_static/demonstration_assets/constant_depth_mps_prep/operator_pushing_example.png
+#     :width: 75%
+#     :align: center
 #
 # That is, in the notation above we have
 # :math:`X\mapsto (Y, Y)`,
@@ -531,7 +537,7 @@ def push_and_correct(op_id, phys_wires):
 # #. Fuse together the blocks of MPS using mid-circuit measurements and store the
 #    measurement outcomes.
 #
-# #. Push the resulting impurity operators to one of the outer bond sites and
+# #. Push the resulting defect operators to one of the outer bond sites and
 #    conditionally apply correction operators to the physical sites.
 #
 # #. Undo the operator that was pushed to the outer bond site by conditionally applying
@@ -543,6 +549,8 @@ def push_and_correct(op_id, phys_wires):
 # Smith et al. summarize their algorithm in the following chart:
 #
 # .. image:: ../_static/demonstration_assets/constant_depth_mps_prep/algorithm.png
+#     :width: 75%
+#     :align: center
 #
 # It is important to remember that showing the existence of suitable operator pushing
 # relations (and finding them explicitly) is a crucial step in general, which goes
