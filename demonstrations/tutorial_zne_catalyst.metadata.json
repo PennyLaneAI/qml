@@ -1,0 +1,51 @@
+{
+    "title": "Digital Zero-Noise Extrapolation with Catalyst",
+    "authors": [
+        {
+            "id": "nate_stemen"
+        }
+    ],
+    "dateOfPublication": "2024-09-09T00:00:00+00:00",
+    "dateOfLastModification": "2024-09-09T00:00:00+00:00",
+    "categories": [
+        "Algorithms",
+        "Quantum Computing",
+        "How-to"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_qrack_catalyst_integration.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_qrack_catalyst_integration.png"
+        }
+    ],
+    "seoDescription": "Digital Zero-Noise Extrapolation with Catalyst",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_zne_catalyst",
+    "references": [
+        {
+            "id": "DZNEpaper",
+            "type": "preprint",
+            "title": "Digital zero noise extrapolation for quantum error mitigation",
+            "authors": "Tudor Giurgica-Tiron, Yousef Hindy, Ryan LaRose, Andrea Mari, and William J. Zeng",
+            "year": "2020",
+            "publisher": "",
+            "journal": "",
+            "doi": "10.48550/arXiv.2005.10921",
+            "url": "https://arxiv.org/abs/2005.10921v2"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_error_mitigation",
+            "weight": 1.0
+        }
+    ]
+}
