@@ -733,11 +733,13 @@ g = -1e-8
 ghz_probs = constant_depth_circuit(N, g, q)
 ints = list(range(2**N))
 fig, ax = plt.subplots()
-ax.bar(ints, uniform_probs, width=1, label="zero correlation length ($|+\\rangle^N$)")
-ax.bar(ints, ghz_probs, width=1, label="long correlation length (GHZ)")
+label_plus = "zero correlation length ($|+\\rangle^N$)"
+label_ghz = "long correlation length (GHZ)"
+ax.bar(ints, ghz_probs, width=1, color="#ff87eb", label=label_ghz, edgecolor="k")
+ax.bar(ints, uniform_probs, width=1, color="#70ceff", label=label_plus, edgecolor="0.5")
 ax.set_yscale("log")
 ax.set_ylim([1e-3, 1])
-ax.legend();
+_ = ax.legend()
 
 ######################################################################
 # In a more nuanced setting, let us produce the MPS in question for a series of
@@ -771,14 +773,18 @@ def correlations(N, g, q):
 
 N = 18
 q = 6
-gs = [-1 / 5, -2 / 5, -3 / 5, -4 / 5]
+gs = [-0.2, -0.4, -0.6, -0.8]
 fig, ax = plt.subplots()
+colors = ["#70ceff", "#ffe096", "#c756b2", "#e1eba8"]
+plot_kwargs = dict(ls="", marker="o", markersize=7, markeredgecolor="k")
 all_correls = []
-for g in gs:
+for g, c in zip(gs, colors):
     correls = correlations(N, g, q)
-    ax.plot(list(range(N - 1)), correls, label=f"$g={g}$")
+    ax.plot(list(range(N - 1)), correls, color=c, label=f"$g={g}$", **plot_kwargs)
     all_correls.append(correls)
 ax.set_yscale("log")
+ax.set_xlabel("$j$")
+ax.set_ylabel("$C(j)$")
 ax.set_ylim([5e-8, 1.5])
 ax.legend()
 plt.show()
