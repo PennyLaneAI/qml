@@ -2,11 +2,11 @@
     "title": "Differentiable Hartree-Fock",
     "authors": [
         {
-            "id": "soran_jahangiri"
+            "username": "soran"
         }
     ],
     "dateOfPublication": "2022-05-09T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
     "categories": [
         "Quantum Chemistry"
     ],

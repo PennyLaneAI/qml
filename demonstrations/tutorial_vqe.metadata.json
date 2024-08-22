@@ -2,11 +2,11 @@
     "title": "A brief overview of VQE",
     "authors": [
         {
-            "id": "alain_delgado"
+            "username": "adgran"
         }
     ],
     "dateOfPublication": "2020-02-08T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
     "categories": [
         "Quantum Chemistry", "Getting Started"
     ],
