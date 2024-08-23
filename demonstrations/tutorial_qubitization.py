@@ -99,7 +99,7 @@ print(qml.matrix(H).real)
 # the eigenstate  :math:`|\phi\rangle = |11\rangle` as input and try to estimate its eigenvalue :math:`E = 0.5` using
 # this technique.
 #
-# In PennyLane, the qubitization operator can be easily constructed using the built-in class:class:`~.pennylane.Qubitization`. You simply need to provide the Hamiltonian and the control qubits that define the block encoding. The number of control wires is :math:`⌈\log_2 k⌉`, where :math:`k` is the number of terms in the `LCU representation <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding/>`_ of the Hamiltonian.
+# In PennyLane, the qubitization operator can be easily constructed using the built-in class :class:`~.pennylane.Qubitization`. You simply need to provide the Hamiltonian and the control qubits that define the block encoding. The number of control wires is :math:`⌈\log_2 k⌉`, where :math:`k` is the number of terms in the `LCU representation <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding/>`_ of the Hamiltonian.
 # We will make use of the built-in :class:`~.pennylane.QuantumPhaseEstimation` operator to easily apply the algorithm:
 
 control_wires = [2, 3]

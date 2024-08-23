@@ -25,61 +25,21 @@
             "uri": "/_static/large_demo_thumbnails/thumbnail_large_Qubitization.png"
         }
     ],
-    "seoDescription": "Learn Amplitude Amplification from scratch and how to use fixed-point quantum search",
+    "seoDescription": "Learn qubitization, how to visualize it, and its applications",
     "doi": "",
     "canonicalURL": "/qml/demos/tutorial_qubitization",
-    "references": [
-        {
-            "id": "ampamp",
-            "type": "article",
-            "title": "Quantum Amplitude Amplification and Estimation",
-            "authors": "Gilles Brassard, Peter Hoyer, Michele Mosca, Alain Tapp",
-            "year": "2000",
-            "journal": "arXiv",
-            "url": "https://arxiv.org/abs/quant-ph/0005055"
-        },
-        {
-            "id": "fixedpoint",
-            "type": "article",
-            "title": "Fixed-point quantum search with an optimal number of queries",
-            "authors": "Theodore J. Yoder, Guang Hao Low, Isaac L. Chuang",
-            "year": "2014",
-            "publisher": "",
-            "journal": "arXiv",
-            "url": "https://arxiv.org/abs/1409.3305"
-        },
-        {
-            "id": "unification",
-            "type": "article",
-            "title": "A Grand Unification of Quantum Algorithms",
-            "authors": "John M. Martyn, Zane M. Rossi, Andrew K. Tan, Isaac L. Chuang",
-            "year": "2021",
-            "publisher": "PRX Quantum",
-            "journal": "arXiv",
-            "url": "https://arxiv.org/abs/2105.02859"
-        },
-        {
-            "id": "oblivious",
-            "type": "article",
-            "title": "Simulating Hamiltonian dynamics with a truncated Taylor series",
-            "authors": "Dominic W. Berry, et al.",
-            "year": "2014",
-            "publisher": "",
-            "journal": "arXiv",
-            "url": "https://arxiv.org/pdf/1412.4687.pdf"
-        }
-    ],
+    "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],
     "relatedContent": [
         {
             "type": "demonstration",
-            "id": "tutorial_grovers_algorithm",
+            "id": "tutorial_intro_amplitude_amplification",
             "weight": 1.0
         },
         {
             "type": "demonstration",
-            "id": "tutorial_qft_arithmetics",
+            "id": "tutorial_qpe",
             "weight": 1.0
         }
     ]
