@@ -90,7 +90,7 @@ print("Rank-3 tensor: \n", tensor_rank3)
 ##############################################################################
 # From matrix multiplication to tensor contractions
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
+#
 # Matrix-matrix and matrix-vector multiplications are familiar operations within the context of quantum computing. We can now study these operations under the lens of the tensor notation introduced above. First, a matrix and a vector can be multiplied as
 #
 # TODO: add diagram at the end of the equation.
@@ -131,27 +131,57 @@ C = np.arange(6).reshape(3, 1, 2)  # kmn
 D = np.einsum("ijk, jlm, kmn -> iln", A, B, C)
 print(D.shape)
 
-# The ``np.einsum`` takes as inputs the tensors to be contracted and a string showing the indices of the each tensor and (optionally) the indices of the output tensor.
-"""
-
-The cost of contracting a network (bubbling):
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- Mention that the resulting tensor network doesn't change but the way we arrive to the final tensor affects how expensive it is to get there.
-- Show how can we can calculate the complexity of a contraction by means of a simple example using 2 matrices (rank 2 tensors): dimension_contracted x (dimensions_open).
-    Intuition behind: we perform one operation (contraction) and repeat many times to "populate" the resulting tensor (dimension_open1 x dimension_open2). Show the equation with indices.
-- Show an example with at least three tensors where they all have different dimensions. Walk through it showing that choosing to contract two indices (the ones with lower dimensions) results in a worst computational complexity than contracting other ones (the ones with higher dimensions).
-- For this reason there exist heuristics for optimizing contraction path complexity. NP problem -> no perfect solution but great heuristics (https://arxiv.org/pdf/2002.01935).
-    (optional) mention the idea behind some of them 
-    Link to quimb examples.
-- CODE: show this using np.einsum, timeit, and very large dimensions expecting to see a difference.
-
-From tensor networks to quantum circuits:
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- Quantum circuits are a restricted subclass of tensor networks
-- show examples on https://arxiv.org/pdf/1912.10049 page 8 and 9 showing a quantum circuit for a bell state, defining each component as a tensor and show their contraction.
-- What else?
-"""
-
+##############################################################################
+# The ``np.einsum`` takes as inputs the tensors to be contracted and a string showing the indices of the each tensor and (optionally) the indices of the output tensor. To end this section, we want to discuss a common example of a tensor network contraction arising in quantum computing, namely the **CNOT** gate. The CNOT gate can be expressed in the computational basis as
+#
+# .. math::
+#   CNOT = \ket{0}bra{0} \otimes I + \ket{1}bra{1} \otimes X.
+#
+# That is, if the control qubit is in the :math:`\ket{1}` state, we apply the :math:`X` gate on the target qubit, otherwise, we leave them untouched. Alternatively, we can rewrite this equation as a contraction. To do so, we define two tensors:
+#
+# .. math::
+#   T^1 = \begin{pmatrix}
+#           \ket{0}\bra{0} \\
+#           \ket{1}\bra{1}
+#         \end{pmatrix}
+#
+# and
+#
+# .. math::
+#   T^2 = \begin{pmatrix}
+#           I \\
+#           X
+#         \end{pmatrix}
+#
+# This means, :math:`(T^1)_{i,j,k}` and :math:`(T^2)_{l,j,m}` are two rank-3 tensors, where the index :math:`j` "*picks*" the elements in the column vector while the first and last indices correspond to the indices of the internal tensors (matrices). For instance, the :math:`0`-th element of :math:`T^1` and :math:`T^2` are :math:`\ket{0}\bra{0}` and :math:`I`, respectively. And similarly for their :math:`1`-st element. This means we can redefine the CNOT expression from above as
+#
+# .. math::
+#   CNOT = \sum_j (T^1)_{i,j,k} \otimes (T^2)_{l,j,m}.
+#
+# It turns out :math:`T^1` and :math:`T^2` are special tensors known as the COPY and XOR tensors, respectively, and therefore have special diagrammatic representations.
+#
+# TODO: add a diagram for each of these
+#
+# Then, their contraction results in the well known CNOT quantum circuit representation.
+#
+# TODO: add the CNOT diagram here.
+##############################################################################
+# The cost of contracting a network:
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# - Mention that the resulting tensor network doesn't change but the way we arrive to the final tensor affects how expensive it is to get there.
+# - Show how can we can calculate the complexity of a contraction by means of a simple example using 2 matrices (rank 2 tensors): dimension_contracted x (dimensions_open).
+# Intuition behind: we perform one operation (contraction) and repeat many times to "populate" the resulting tensor (dimension_open1 x dimension_open2). Show the equation with indices.
+# - Show an example with at least three tensors where they all have different dimensions. Walk through it showing that choosing to contract two indices (the ones with lower dimensions) results in a worst computational complexity than contracting other ones (the ones with higher dimensions).
+# - For this reason there exist heuristics for optimizing contraction path complexity. NP problem -> no perfect solution but great heuristics (https://arxiv.org/pdf/2002.01935).
+#     (optional) mention the idea behind some of them
+#     Link to quimb examples.
+# - CODE: show this using np.einsum, timeit, and very large dimensions expecting to see a difference.
+##############################################################################
+# From tensor networks to quantum circuits:
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# - Quantum circuits are a restricted subclass of tensor networks
+# - show examples on https://arxiv.org/pdf/1912.10049 page 8 and 9 showing a quantum circuit for a bell state, defining each component as a tensor and show their contraction.
+# - What else?
 """
 DRAFT:
 
