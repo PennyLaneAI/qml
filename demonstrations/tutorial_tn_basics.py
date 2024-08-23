@@ -92,43 +92,43 @@ print("Rank-3 tensor: \n", tensor_rank3)
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 # Matrix-matrix and matrix-vector multiplications are familiar operations within the context of quantum computing. We can now study these operations under the lens of the tensor notation introduced above. First, a matrix and a vector can be multiplied as
-# 
+#
 # TODO: add diagram at the end of the equation.
-# 
+#
 # .. math::
 #     (w)_i = G \cdot v = \sum_j G_ij v_j =
-# 
+#
 # We see that summing over the shared index :math:`j` is equivalent to **contracting** the corresponding legs from the matrix and vector diagrams. As expected, the result of this multiplication is another rank-1 tensor with dangling leg :math:`i`. Similarly, we can look at the matrix-matrix multiplication:
-# 
+#
 # TODO: add diagram at the end of the equation.
-# 
+#
 # .. math::
-#     (G^3)_{j,k} = G^1 \cdot G^2 = \sum_j G^{1}_{i,j} G^{2}_{j,k} = 
-# 
+#     (G^3)_{j,k} = G^1 \cdot G^2 = \sum_j G^{1}_{i,j} G^{2}_{j,k} =
+#
 # In this case, the resulting tensor has two dangling indices, :math:`i` and :math:`k`, which defines a matrix, as expected!
-# 
+#
 # We can now generalize this concept to tensors, and consequently, to more than a pair of legs being contracted. For example, let us look at three tensors :math:`A_{i,j,k}`, :math:`B_{j,l,m}` and :math:`C_{k,m,n}`. To contract them, all we need to do is to sum over repeated indices (:math:`j`, :math:`k`, :math:`m`), just as we would do in Einstein convention. Thus, the (i,l,n)-th element of the resulting tensor :math:`D` is
-# 
+#
 # .. math::
-#     (D)_{i,l,n} = \sum_{j,k,m} `A_{i,j,k} B_{j,l,m} C_{k,m,n} . 
-# 
+#     (D)_{i,l,n} = \sum_{j,k,m} `A_{i,j,k} B_{j,l,m} C_{k,m,n} .
+#
 # Note how the resulting rank-3 tensor is made up of the open legs from all the initial tensors (i,l,n). The diagrammatic representation of this equation is obtained by sticking all the legs with the same indices together.
-# 
+#
 # TODO: add figure here.
-# 
+#
 # With the above contraction we have formed a network of tensors, i.e. a **Tensor Network**!
-# 
+#
 # .. tip::
 #   A common question arising when drawing a tensor is "what is the correct order to draw the indices". For instance, in the figure above we have adopted the convention that a tensor :math:`A_{i,j,k}` corresponds to a diagram with the the first leg (i) pointing left, the second leg (j) pointing upwards and the third leg (k) pointing right, and similarly for the other two tensors. However, this need not be the case. We could have defined the first leg to be the one pointing upwards, for example. Based on the use case, and the user, some conventions might seem more natural than others. The only important thing to keep in mind is to be consistent. In other words, once we choose a convetion for the order, we should apply it to all the tensors to avoid contracting the wrong indices ❌.
-# 
+#
 # Remember we pointed out the similarity in the notation for the tensor network contractions? Then it doesn't come as a suprise that we can perform a contraction using the function ``np.einsum``. We start creating the 3 tensors in the network by reshaping a 1D array (coming from ``np.arange``) into rank-3 tensors of the right dimensions.
 
-# Create the individual rank-3 tensors 
-A = np.arange(6).reshape(1,2,3) # ijk
-B = np.arange(6).reshape(2,3,1) # jlm
-C = np.arange(6).reshape(3,1,2) # kmn
+# Create the individual rank-3 tensors
+A = np.arange(6).reshape(1, 2, 3)  # ijk
+B = np.arange(6).reshape(2, 3, 1)  # jlm
+C = np.arange(6).reshape(3, 1, 2)  # kmn
 
-D = np.einsum('ijk, jlm, kmn -> iln', A, B, C) 
+D = np.einsum("ijk, jlm, kmn -> iln", A, B, C)
 print(D.shape)
 
 # The ``np.einsum`` takes as inputs the tensors to be contracted and a string showing the indices of the each tensor and (optionally) the indices of the output tensor.
