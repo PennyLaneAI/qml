@@ -71,31 +71,34 @@ import matplotlib.pyplot as plt
 jax.config.update("jax_enable_x64", True)
 jax.config.update("jax_platform_name", "cpu")
 
+
 def f1(p, t):
     # polyval(p, t) evaluates a polynomial of degree N=len(p)
     # i.e. p[0]*t**(N-1) + p[1]*t**(N-2) + ... + p[N-2]*t + p[N-1]
     return jnp.polyval(p, t)
 
+
 def f2(p, t):
     return p[0] * jnp.sin(p[1] * t)
+
 
 Ht = f1 * qml.PauliX(0) + f2 * qml.PauliY(1)
 
 ##############################################################################
 # This constructs a :class:`~pennylane.pulse.ParametrizedHamiltonian`. Note that the ``callable`` functions ``f1`` and ``f2``
-# are expected to have the fixed signature ``(p, t)``. When calling the :class:`~pennylane.pulse.ParametrizedHamiltonian`, 
+# are expected to have the fixed signature ``(p, t)``. When calling the :class:`~pennylane.pulse.ParametrizedHamiltonian`,
 # a ``tuple`` or ``list`` of the parameters for each of the functions is passed in the same
 # order the Hamiltonian was constructed.
 
-p1 = jnp.ones(5)              # parameters for f1
-p2 = jnp.array([1.0, jnp.pi]) # parameters for f2
-t = 0.5                       # some fixed point in time
-print(Ht((p1, p2), t))        # order of parameters p1, p2 matters
+p1 = jnp.ones(5)  # parameters for f1
+p2 = jnp.array([1.0, jnp.pi])  # parameters for f2
+t = 0.5  # some fixed point in time
+print(Ht((p1, p2), t))  # order of parameters p1, p2 matters
 
 ##############################################################################
 # We can construct general Hamiltonians of the form :math:`\sum_i H_i^d + \sum_i f_i(p_i, t) H_i`
 # using :func:`qml.dot <pennylane.dot>`. Such a time-dependent Hamiltonian consists of time-independent drift terms :math:`H_i^d`
-# and time-dependent control terms :math:`f_i(p_i, t) H_i` with scalar complex-valued functions :math:`f_i(p, t).` 
+# and time-dependent control terms :math:`f_i(p_i, t) H_i` with scalar complex-valued functions :math:`f_i(p, t).`
 # In the following we are going to construct :math:`\sum_i X_i X_{i+1} + \sum_i f_i(p_i, t) Z_i` with :math:`f_i(p_i, t) = \sin(p_i^0 t) + \sin(p_i^1 t) \forall i` as an example:
 
 coeffs = [1.0] * 2
@@ -107,7 +110,7 @@ Ht = qml.dot(coeffs, ops)
 
 # random coefficients
 key = jax.random.PRNGKey(777)
-subkeys = jax.random.split(key, 3) # create list of 3 subkeys
+subkeys = jax.random.split(key, 3)  # create list of 3 subkeys
 params = [jax.random.uniform(subkeys[i], shape=[2], maxval=5) for i in range(3)]
 print(Ht(params, 0.5))
 
@@ -135,7 +138,7 @@ plt.show()
 # gate :math:`U(t_0, t_1)`, which implicitly depends on the parameters ``p``. The objective of the program
 # is then to compute the expectation value of some objective Hamiltonian ``H_obj`` (here :math:`\sum_i Z_i` as a simple example).
 
-dev = qml.device("default.qubit.jax", range(4))
+dev = qml.device("default.qubit", range(4))
 
 ts = jnp.array([0.0, 3.0])
 H_obj = sum([qml.PauliZ(i) for i in range(4)])
@@ -190,7 +193,7 @@ coeffs = [qml.pulse.pwc(timespan) for _ in range(2)]
 # the corresponding piece-wise-constant function sampled at ``100`` different points in time.
 
 key = jax.random.PRNGKey(777)
-subkeys = jax.random.split(key, 2) # creates a list of two sub-keys
+subkeys = jax.random.split(key, 2)  # creates a list of two sub-keys
 theta0 = jax.random.uniform(subkeys[0], shape=[4], maxval=5)
 theta1 = jax.random.uniform(subkeys[1], shape=[10], maxval=5)
 theta = [theta0, theta1]
@@ -241,18 +244,22 @@ n_wires = len(H_obj.wires)
 # The order of magnitude of the resonance frequencies :math:`\omega_q` and coupling strength :math:`g_{pq}` are taken from [#Mitei]_ (in GHz).
 # Let us construct the Hamiltonian in PennyLane:
 
+
 def a(wires):
     return 0.5 * qml.PauliX(wires) + 0.5j * qml.PauliY(wires)
 
+
 def ad(wires):
     return 0.5 * qml.PauliX(wires) - 0.5j * qml.PauliY(wires)
+
 
 omega = 2 * jnp.pi * jnp.array([4.8080, 4.8333])
 g = 2 * jnp.pi * jnp.array([0.01831, 0.02131])
 
 H_D = qml.dot(omega, [ad(i) @ a(i) for i in range(n_wires)])
 H_D += qml.dot(
-    g, [ad(i) @ a((i + 1) % n_wires) + ad((i + 1) % n_wires) @ a(i) for i in range(n_wires)]
+    g,
+    [ad(i) @ a((i + 1) % n_wires) + ad((i + 1) % n_wires) @ a(i) for i in range(n_wires)],
 )
 
 ##############################################################################
@@ -271,9 +278,11 @@ H_D += qml.dot(
 # (as is done in [#Mitei]_). We achieve this by normalizing the respective quantities with a shifted sigmoid :math:`\mathcal{N}(x) = \frac{1 - e^{-x}}{1 + e^{-x}}`,
 # which ensures differentiability.
 
+
 def normalize(x):
     """Differentiable normalization to +/- 1 outputs (shifted sigmoid)"""
-    return (1 - jnp.exp(-x))/(1 + jnp.exp(-x))
+    return (1 - jnp.exp(-x)) / (1 + jnp.exp(-x))
+
 
 # Because ParametrizedHamiltonian expects each callable function to have the signature
 # f(p, t) but we have additional parameters it depends on, we create a wrapper function
@@ -283,7 +292,7 @@ def drive_field(T, omega, sign=1.0):
         # The first len(p)-1 values of the trainable params p characterize the pwc function
         amp = qml.pulse.pwc(T)(p[:-1], t)
         # The amplitude is normalized to maximally reach +/-20MHz (0.02GHz)
-        amp = 0.02*normalize(amp)
+        amp = 0.02 * normalize(amp)
 
         # The last value of the trainable params p provides the drive frequency deviation
         # We normalize as the difference to drive can maximally be +/-1 GHz
@@ -292,6 +301,7 @@ def drive_field(T, omega, sign=1.0):
         return amp * phase
 
     return wrapped
+
 
 duration = 15.0
 
@@ -313,13 +323,15 @@ H_pulse = H_D + H_C
 ##############################################################################
 # Now we define the ``qnode`` that computes the expectation value of the molecular Hamiltonian.
 
-dev = qml.device("default.qubit.jax", wires=range(n_wires))
+dev = qml.device("default.qubit", wires=range(n_wires))
+
 
 @qml.qnode(dev, interface="jax")
 def qnode(theta, t=duration):
     qml.BasisState(list(data.tapered_hf_state), wires=H_obj.wires)
     qml.evolve(H_pulse)(params=(*theta, *theta), t=t)
     return qml.expval(H_obj)
+
 
 value_and_grad = jax.jit(jax.value_and_grad(qnode))
 
@@ -330,13 +342,13 @@ value_and_grad = jax.jit(jax.value_and_grad(qnode))
 # It has been shown that the loss landscapes of pulse programs are trap-free for a variety of conditions and loss functions, including ours [#Russell2016]_.
 # In practice however, we see that the optimization is senstive to the initial values of the parameters and the optimization strategy.
 # In particular, we often find ourselves with very slow progress during optimization, indicating wide flat regions in the loss landscape.
-# This can be salvaged by increasing the learning rate. Sometimes, it proved advantageous to increase the learning rate after an 
+# This can be salvaged by increasing the learning rate. Sometimes, it proved advantageous to increase the learning rate after an
 # initial finer search for a better starting point. Further, we note that with the increase in the number of parameters due to the continuous evolution,
 # the optimization becomes harder.
 #
 # Whether or not that is due to the increased parameter search space or an inherent effect of pulse programs like barren plateaus in variational quantum circuits
 # is to be determined in future work.
-# 
+#
 # We systematically tried a variety of combinations of learning rate schedule, optimizer, and initial values. Here, we provide one possible choice leading to good results.
 #
 # We choose ``t_bins = 100`` segments for the piece-wise-constant parametrization of the pulses.
@@ -344,7 +356,7 @@ value_and_grad = jax.jit(jax.value_and_grad(qnode))
 t_bins = 100  # number of time bins
 
 key = jax.random.PRNGKey(999)
-theta = 0.9*jax.random.uniform(key, shape=jnp.array([n_wires, t_bins+1]))
+theta = 0.9 * jax.random.uniform(key, shape=jnp.array([n_wires, t_bins + 1]))
 
 import optax
 from datetime import datetime
@@ -400,7 +412,7 @@ plt.show()
 
 ##############################################################################
 # We can also visualize the envelopes for each qubit in time.
-# We only plot the real amplitude :math:`\Omega(t)` and indicate the deviation 
+# We only plot the real amplitude :math:`\Omega(t)` and indicate the deviation
 # :math:`\Delta \nu_q = \omega_q - \nu_q` of the drive frequency :math:`\nu_q` from the qubit frequency :math:`\omega_q`
 # in the labels.
 
@@ -411,7 +423,7 @@ fig, axs = plt.subplots(nrows=n_channels, figsize=(5, 2 * n_channels), sharex=Tr
 for n in range(n_channels):
     ax = axs[n]
     label = f"$\\Delta \\nu_{n}$: {normalize(theta[n][-1]):.3}"
-    ax.plot(ts, 0.02*normalize(theta[n][:-1]), ".:", label=label)
+    ax.plot(ts, 0.02 * normalize(theta[n][:-1]), ".:", label=label)
     ax.set_ylabel(f"$amp_{n}$ (GHz)")
     ax.legend()
 ax.set_xlabel("t (ns)")

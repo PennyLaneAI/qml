@@ -116,7 +116,7 @@ noisy_qnode = qml.QNode(circuit, dev_noisy)
 ##############################################################################
 # First, we'll visualize the circuit:
 
-print(qml.draw(ideal_qnode, expansion_strategy="device")(w1, w2))
+print(qml.draw(ideal_qnode, level="device")(w1, w2))
 
 ##############################################################################
 # As expected, executing the circuit on an ideal noise-free device gives a result of ``1``.
@@ -195,10 +195,12 @@ mitigated_qnode(w1, w2)
 # :class:`QuantumTape <pennylane.tape.QuantumTape>`, which provides a low-level approach for circuit
 # construction in PennyLane.
 
-circuit = qml.tape.QuantumTape([
-    template(w1, w2, wires=range(n_wires)),
-    qml.adjoint(template(w1, w2, wires=range(n_wires)))
-])
+circuit = qml.tape.QuantumTape(
+    [
+        template(w1, w2, wires=range(n_wires)),
+        qml.adjoint(template(w1, w2, wires=range(n_wires))),
+    ]
+)
 
 ##############################################################################
 # Don't worry, in most situations you will not need to work with a PennyLane
@@ -354,7 +356,9 @@ from mitiq.zne.scaling import fold_gates_at_random as folding
 
 extrapolate = RichardsonFactory.extrapolate
 
-mitigated_qnode = mitigate_with_zne(noisy_qnode, scale_factors, folding, extrapolate, reps_per_factor=100)
+mitigated_qnode = mitigate_with_zne(
+    noisy_qnode, scale_factors, folding, extrapolate, reps_per_factor=100
+)
 
 mitigated_qnode(w1, w2)
 
@@ -418,8 +422,8 @@ execute_with_zne(circuit, executor, factory=factory, scale_noise=fold_global)
 # hardware. Suppose we want to simulate the ``ibmq_lima`` hardware device available on IBMQ. We
 # can load a noise model that represents this device using:
 
-from qiskit.providers.fake_provider import FakeLima
-from qiskit.providers.aer.noise import NoiseModel
+from qiskit_ibm_runtime.fake_provider import FakeLima
+from qiskit_aer.noise import NoiseModel
 
 backend = FakeLima()
 noise_model = NoiseModel.from_backend(backend)
@@ -435,7 +439,6 @@ dev_noisy = qml.device(
     wires=n_wires,
     noise_model=noise_model,
     optimization_level=0,
-    shots=10000,
 )
 
 ##############################################################################
@@ -500,7 +503,11 @@ for r, phi in zip(distances, params):
     H, _ = qchem.molecular_hamiltonian(molecule)
 
     # Define ansatz circuit
-    ops = [qml.PauliX(0), qml.PauliX(1), qml.DoubleExcitation(phi, wires=range(n_wires))]
+    ops = [
+        qml.PauliX(0),
+        qml.PauliX(1),
+        qml.DoubleExcitation(phi, wires=range(n_wires)),
+    ]
     circuit = qml.tape.QuantumTape(ops)
 
     # Define custom executor that expands Hamiltonian measurement
@@ -509,14 +516,14 @@ for r, phi in zip(distances, params):
     def executor(circuit):
 
         # Add Hamiltonian measurement to circuit
-        circuit_with_meas = qml.tape.QuantumTape(circuit.operations, [qml.expval(H)])
+        circuit_with_meas = qml.tape.QuantumTape(circuit.operations, [qml.expval(H)], shots=10000)
 
         # Expand Hamiltonian measurement into tensor product of
         # of Pauli operators. We get a list of circuits to execute
         # and a postprocessing function to combine the results into
         # a single number.
-        circuits, postproc = qml.transforms.hamiltonian_expand(
-            circuit_with_meas, group=False
+        circuits, postproc = qml.transforms.split_non_commuting(
+            circuit_with_meas, grouping_strategy=None
         )
         circuits_executed = qml.execute(circuits, dev_noisy, gradient_fn=None)
         return postproc(circuits_executed)
