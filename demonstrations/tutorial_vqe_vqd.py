@@ -20,7 +20,7 @@ a familiarization with the `variational quantum eigensolver (VQE) algorithm <htt
 # ------------------------------
 #
 # The VQD algorithm [#Vqd]_ is a method used to find the excited states of a quantum system.
-# It is related to the VQE algorithm, which is often used to find the ground state energy of a quantum system.
+# It is related to the `VQE algorithm <https://pennylane.ai/qml/demos/tutorial_vqe/>`__, which is often used to find the ground state energy of a quantum system.
 # The main idea of the VQE algorithm is to define a quantum state ansatz that depends on adjustable parameters :math:`\theta` and minimize the energy of the system, computed as:
 #
 # .. math:: C_0(\theta) = \left\langle\Psi_0 (\theta)|\hat H |\Psi_0 (\theta) \right\rangle,
@@ -91,7 +91,7 @@ print(f"Ground state energy: {circuit()}")
 
 from functools import partial
 
-# This lines is added to better visualise the circuit
+# This line is added to better visualise the circuit
 @partial(qml.devices.preprocess.decompose, stopping_condition = lambda obj:False, max_expansion=1)
 
 def ansatz(theta, wires):
@@ -106,7 +106,7 @@ print(qml.draw(ansatz, decimals = 2)(theta, range(4)))
 ######################################################################
 # The ``ansatz`` function is the one that generates the state :math:`|\Psi(\theta)\rangle`.
 # The next step is to calculate the overlap between our generated state and the ground state, using a technique
-# known as `SWAP test <https://en.wikipedia.org/wiki/Swap_test>`__.
+# known as `swap test <https://en.wikipedia.org/wiki/Swap_test>`__.
 
 
 @qml.qnode(dev)
@@ -197,11 +197,12 @@ print(np.sort(np.linalg.eigvals(H.matrix())))
 # Conclusion
 # ----------
 #
-# In this tutorial we delved into the capabilities of Variational Quantum Deflation (VQD) using PennyLane to compute
-# the excited states of a hydrogen molecule.
 # VQD is a variational method that can be used for calculating low-level excited state energies of quantum systems. Leveraging the
 # orthogonality of the eigenstates, it adds a regularization penalty to the cost function to allow the search for
 # the next excited state from the ground state discovered by VQE.
+#
+# In this tutorial we delved into the capabilities of variational quantum deflation (VQD) using PennyLane to compute
+# the excited states of a hydrogen molecule.
 # This illustrated how advanced quantum algorithms can extend beyond basic applications,
 # offering deeper insights into quantum systems. We invite you to continue exploring these techniques and find more interesting use cases.
 #
@@ -212,7 +213,7 @@ print(np.sort(np.linalg.eigvals(H.matrix())))
 #
 #     Higgott, Oscar and Wang, Daochen and Brierley, Stephen
 #     "Variational Quantum Computation of Excited States"
-#     `Quantum 3, 156 (2019).: <https://dx.doi.org/10.22331/q-2019-07-01-156>`__.
+#     `Quantum 3, 156 (2019): <https://dx.doi.org/10.22331/q-2019-07-01-156>`__.
 #
 # About the authors
 # -----------------
