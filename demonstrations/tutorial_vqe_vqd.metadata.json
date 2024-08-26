@@ -2,10 +2,10 @@
     "title": "How to implement VQD with PennyLane",
     "authors": [
         {
-            "id": "minh_chau"
+            "username": "mchau"
         },
         {
-            "id": "guillermo_alonso"
+            "username": "KetPuntoG"
         }
     ],
     "dateOfPublication": "2024-08-26T00:00:00+00:00",
