@@ -7,7 +7,7 @@ quantum deflation (VQD) algorithm in PennyLane
 and find the first excited state energy of the `hydrogen molecule <https://pennylane.ai/datasets/qchem/h2-molecule>`__. To benefit the most from this tutorial, we recommend
 a familiarization with the `variational quantum eigensolver (VQE) algorithm <https://pennylane.ai/qml/demos/tutorial_vqe/>`__ first.
 
-.. figure:: ../_static/demonstration_assets/vqe_vqd/how_to_vqd_pennylane_opengraph.png
+.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_how_to_vqd_pennylane.png
     :align: center
     :width: 70%
     :target: javascript:void(0)

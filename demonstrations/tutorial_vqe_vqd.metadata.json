@@ -8,8 +8,8 @@
             "id": "guillermo_alonso"
         }
     ],
-    "dateOfPublication": "2024-08-08T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-08T00:00:00+00:00",
+    "dateOfPublication": "2024-08-26T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-26T00:00:00+00:00",
     "categories": [
         "Quantum Chemistry",
         "How-to"
@@ -18,11 +18,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri":  "/_static/demonstration_assets/vqe_vqd/how_to_vqd_pennylane_thumbnail.png"
+            "uri":  "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_how_to_vqd_pennylane.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/how_to_vqd_pennylane_largethumbnail.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_how_to_vqd_pennylane.png"
         }
     ],
     "seoDescription": "Learn how to use variational quantum deflation (VQD) to find the first excited state energy of the hydrogen molecule.",
