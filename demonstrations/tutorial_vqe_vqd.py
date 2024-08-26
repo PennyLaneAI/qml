@@ -213,7 +213,7 @@ print(np.sort(np.linalg.eigvals(H.matrix())))
 #
 #     Higgott, Oscar and Wang, Daochen and Brierley, Stephen
 #     "Variational Quantum Computation of Excited States"
-#     `Quantum 3, 156 (2019): <https://dx.doi.org/10.22331/q-2019-07-01-156>`__.
+#     `Quantum 3, 156 (2019) <https://dx.doi.org/10.22331/q-2019-07-01-156>`__.
 #
 # About the authors
 # -----------------
