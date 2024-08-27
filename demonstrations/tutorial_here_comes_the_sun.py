@@ -5,7 +5,7 @@ Here comes the SU(N): multivariate quantum gates and gradients
 
 .. meta::
     :property="og:description": Learn about multivariate quantum gates for optimization
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_here_comes_the_sun.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/thumbnail_tutorial_here_comes_the_sun.png
 
 .. related::
 

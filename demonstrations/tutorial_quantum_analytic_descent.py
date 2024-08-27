@@ -7,7 +7,7 @@ Quantum analytic descent
 
 .. meta::
     :property="og:description": Implement the Quantum analytic descent algorithm for VQE.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//flowchart.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/flowchart.png
 
 .. related::
 

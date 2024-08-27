@@ -6,7 +6,7 @@ Tensor-network quantum circuits
 
 .. meta::
     :property="og:description": This demonstration explains how to simulate tensor-network quantum circuits.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tn_circuits.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/thumbnail_tn_circuits.png
 
 .. related::
 

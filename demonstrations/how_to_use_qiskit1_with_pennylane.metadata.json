@@ -2,23 +2,24 @@
     "title": "How to use Qiskit 1.0 with PennyLane",
     "authors": [
         {
-            "id": "isaac_de_vlugt"
+            "username": "isaacdevlugt"
         }
     ],
     "dateOfPublication": "2024-07-02T00:00:00+00:00",
-    "dateOfLastModification": "2024-07-03T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
     "categories": [
-        "Quantum Computing"
+        "Quantum Computing",
+        "How-to"
     ],
     "tags": [],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_HowToUseQiskit1WithPL.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_HowToUseQiskit1WithPL.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_HowToUseQiskit1WithPL.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_HowToUseQiskit1WithPL.png"
         }
     ],
     "seoDescription": "Learn how to get started using Qiskit 1.0 with PennyLane",

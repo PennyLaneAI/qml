@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2024-05-10T00:00:00+00:00",
-    "dateOfLastModification": "2024-06-21T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
     "categories": [
         "Getting Started",
         "Quantum Computing"
@@ -15,11 +15,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_mcm_introduction.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_mcm_introduction.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_mcm_introduction.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_mcm_introduction.png"
         }
     ],
     "seoDescription": "Learn the basics of mid-circuit measurements and how to use them in PennyLane.",

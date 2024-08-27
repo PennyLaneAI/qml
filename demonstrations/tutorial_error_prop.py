@@ -16,7 +16,7 @@ We refer to the first three of these as "Algorithmic Error". Typically, these ty
 hand due to the variety of error metrics and the specific handling of such errors for each subroutine. In 
 this demo, we present the latest tools in PennyLane which **automatically** track algorithmic error. 
 
-.. figure:: ../_static/demonstration_assets/error_prop/OGthumbnail_large_error-prop_2024-05-01.png
+.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_large_error-prop_2024-05-01.png
      :align: center
      :width: 50%
      :target: javascript:void(0)

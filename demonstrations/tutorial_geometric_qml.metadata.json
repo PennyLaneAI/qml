@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2022-10-18T00:00:00+00:00",
-    "dateOfLastModification": "2024-07-31T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_intro_to_geometric_QML.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_intro_to_geometric_QML.png"
         }
     ],
     "seoDescription": "Using the natural symmetries in a quantum learning problem can improve learning",
