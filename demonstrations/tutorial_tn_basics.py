@@ -26,7 +26,7 @@ A beautiful and powerful tool accompanying tensors (networks) is their graphical
 TODO: add diagram here as the second part of the equation.
 
 .. math::
-    T_{i,j,k,l} = \includegraphics{../_static/demonstration_assets/tn_basics/tensor_one.png}
+    T_{i,j,k,l} = \includegraphics[height=0.2\textheight]{../_static/demonstration_assets/tn_basics/tensor_one.png}
 
 We can apply this same idea to represent a scalar, a vector and a matrix:
 
