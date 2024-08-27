@@ -26,7 +26,7 @@ A beautiful and powerful tool accompanying tensors (networks) is their graphical
 TODO: add diagram here as the second part of the equation.
 
 .. math::
-    T_{i,j,k,l} = 
+    T_{i,j,k,l} = \includegraphics{../_static/demonstration_assets/tn_basics/tensor_one.png}
 
 .. figure:: ../_static/demonstration_assets/tn_basics/tensor_one.png
     :align: center
