@@ -3,7 +3,9 @@ r"""Constant-depth preparation of matrix product states with dynamic circuits
 
 Matrix product states (MPS) are used in a plethora of applications on quantum
 many-body systems, both on classical and quantum computers.
-This makes the preparation of MPS on a quantum computer an important subroutine.
+This makes the preparation of MPS on a quantum computer an important subroutine,
+for example when warm-starting a quantum algorithm with a classically optimized
+MPS or preparing initial states with well-studied physical properties.
 
 .. figure:: ../_static/demonstration_assets/constant_depth_mps_prep/socialthumbnail_constant_depth_mps_prep.png
     :align: center
@@ -14,24 +16,24 @@ This makes the preparation of MPS on a quantum computer an important subroutine.
 In this demo you will learn to prepare certain MPS with a dynamic
 quantum circuit of constant depth. We will implement the circuit, which makes use
 of mid-circuit measurements and conditionally applied operations, for a specific
-MPS, and compare it to a (static) sequential circuit with linear depth.
-We will closely follow the eponymous article by Smith et al. [#smith]_.
+MPS. Then we will compare it to a (static) sequential circuit with linear depth.
+Throughout, we closely follow the eponymous article by Smith et al. [#smith]_.
 
 .. note::
 
-    If you would like to first learn about the dynamic circuit tools used in this
-    algorithm, have a look at our :doc:`introduction to mid-circuit measurements
-    </demos/tutorial_mcm_introduction>` and learn :doc:`how to collect statics of
-    mid-circuit measurements </demos/tutorial_how_to_collect_mcm_stats>` and
+    If you are new to dynamic circuit tools (mid-circuit measurements and classically
+    controlled operations) used in this algorithm, we recommend to check out
+    our :doc:`introduction to mid-circuit measurements
+    </demos/tutorial_mcm_introduction>` and learn
     :doc:`how to create dynamic circuits with mid-circuit measurements
     </demos/tutorial_how_to_create_dynamic_mcm_circuits>`.
 
-    If you first want to familiarize yourself with tensor network states and MPS
-    in particular, take a look at our demo on
-    :doc:`tensor-network quantum circuits </demos/tutorial_tn_circuits>`.
-    Finally, our demo on :doc:`initial state preparation for quantum chemistry
-    </demos/tutorial_initial_state_preparation>` shows you how to
-    proceed to a concrete application, once an MPS is prepared.
+    Optionally, you may want to familiarize yourself with tensor network states
+    and MPS in particular. For this, take a look at our demos on
+    :doc:`tensor-network quantum circuits </demos/tutorial_tn_circuits>` and
+    :doc:`initial state preparation for quantum chemistry
+    </demos/tutorial_initial_state_preparation>`, which uses a prepared MPS in
+    an application.
 
 Outline
 -------
@@ -62,7 +64,7 @@ are able to approximate relevant states in quantum many-body systems.
 In particular, MPS can efficiently describe ground states of (gapped local)
 one-dimensional Hamiltonians, which in addition can be found efficiently using
 density matrix renormalization group (DMRG) algorithms.
-For a review of MPS see [#cirac]_.
+For a review of MPS see [#schollwoeck]_.
 
 Following [#smith]_, we will look at translation-invariant MPS
 of a quantum :math:`N`-body system where each body, or site, has local (physical)
@@ -106,16 +108,17 @@ where :math:`\eta = \frac{1}{\sqrt{1-g}}` and :math:`g\in[-1, 0]` is a freely ch
 This MPS is a simple yet important example because it can be tuned from the long-range correlated
 GHZ state :math:`|\Psi(0)\rangle=\frac{1}{\sqrt{2}}(|0\rangle^{\otimes N} + |1\rangle^{\otimes N})`
 to the state :math:`|\Psi(-1)\rangle=|+\rangle^{\otimes N}` with vanishing correlation length.
-This MPS also is discussed in Sec. III C 1. of [#smith]_.
+This example also is discussed in Sec. III C 1. of [#smith]_.
 In general, the correlation length of :math:`|\Psi(g)\rangle` is given by
 
 .. math::
 
     \xi(g) = \left|\ln\left(\frac{1+g}{1-g}\right)\right|^{-1}.
 
-Long-range correlated states require linear-depth unitary circuits in general.
-Therefore, the constant-depth circuit for :math:`|\Psi(0)\rangle` will demonstrate
-that dynamic quantum circuits are more powerful than unitary operations alone.
+Long-range correlated states require linear-depth circuits if we are restricted to unitary 
+operations. Therefore, the constant-depth circuit for :math:`|\Psi(0)\rangle` will demonstrate
+that dynamic quantum circuits, which are not unitary, are more powerful than unitary
+operations alone.
 
 The MPS :math:`|\Psi(g)\rangle` will be our running example throughout this demo.
 To warm up our coding, let's define the tensor :math:`A` and test that it is in left-canonical form.
@@ -151,32 +154,48 @@ print(f"For {g=}, the theoretical correlation length is {xi=:.4f}")
 #
 # An MPS like the one above can be prepared in linear depth using an established technique
 # by Schön et al. [#schoen]_. We introduce this technique here because the new
-# constant-depth construction uses it as a parallelized subroutine, and because we will
+# constant-depth construction uses it as a (parallelized) subroutine, and because we will
 # later compare the two approaches.
 #
 # The MPS :math:`|\Psi\rangle` above is given by the rank-3 tensor :math:`A`.
-# In order to prepare the state in a circuit, we want to construct unitary operations
-# from :math:`A`. For this, we build a new rank-4 tensor :math:`U` with an additional
-# axis of dimension :math:`d`. If this new physical input axis is in the state
-# :math:`|0\rangle`, we demand :math:`U` to reproduce one :math:`A^m` for each physical
-# output state :math:`|m\rangle`. We leave the remaining action undefined and only require
-# it to make :math:`U` unitary overall. In short, this can be written as
+# We can think of this as an operator that acts on a bond site and simultaneously *creates*
+# a physical site. In order to prepare the state in a circuit, which usually is not allowed
+# to create qudits out of nowhere, we want to construct a unitary operation
+# from :math:`A` that already takes a physical site as input.
+# This means that we build a new rank-4 tensor :math:`U` with an additional
+# axis of dimension :math:`d`. Then we demand that :math:`U` acts like :math:`A` if this
+# new physical input axis is in the state :math:`|0\rangle`. That is, after applying :math:`U`
+# to a physical site in :math:`|0\rangle` and a bond site, we obtain the same result as
+# applying :math:`A` to the bond site alone.
+#
+# We leave the action of :math:`U` on other physical input states undefined, and only require
+# it to make :math:`U` unitary overall.
+# In short, our construction can be written as
 #
 # .. math::
 #
 #     U = \sum_m A^m \otimes |m\rangle\!\langle 0| + C_\perp,
 #
 # where :math:`C_\perp` can be any operator making :math:`U` unitary.
+#
+# In the definition of the MPS, the bond site is passed on between copies of :math:`A`,
+# sequentially creating physical sites. Likewise, we will apply our unitary :math:`U` to
+# a sequence of physical sites (each in the initial state :math:`|0\rangle`) while passing
+# on a single bond site. This way, we chain up the unitaries on the bond site like beads
+# on a string.
+#
 # The sequential preparation circuit now consists of the following steps.
 #
 # #. Start in the state :math:`|\psi_0\rangle = |0\rangle^{\otimes N}\otimes |00\rangle_D`.
 #    The last two sites are non-physical bond sites, encoded by :math:`D`-dimensional qudits.
 #
-# #. Entangle the bond qudits into the state :math:`|I\rangle = \frac{1}{\sqrt{D}}\sum_j |jj\rangle_D`.
+# #. Entangle the bond qudits into the state
+#    :math:`|I\rangle = \frac{1}{\sqrt{D}}\sum_j |jj\rangle_D`.
 #
-# #. Apply the unitary :math:`U` once to each of the :math:`N` physical sites, with the
-#    :math:`D`-dimensional tensor factor always acting on the first bond qudit, denoted by :math:`U^{(i)}`.
-#    This produces the state
+# #. Apply the unitary :math:`U` to each of the :math:`N` physical sites, with the
+#    :math:`D`-dimensional tensor factor always acting on the first bond qudit.
+#    Denoting :math:`U` acting on the :math:`i`\ th physical site and the first bond site
+#    by :math:`U^{(i)}`, this produces the state
 #
 #    .. math::
 #
@@ -186,8 +205,12 @@ print(f"For {g=}, the theoretical correlation length is {xi=:.4f}")
 #        \sum_{m_N=0}^{d-1} |0\rangle^{\otimes N-1}|m_N\rangle A^{m_N}|jj\rangle _D\\
 #        &= \frac{1}{\sqrt{D}} \sum_j
 #        \sum_{\vec{m}} |\vec{m}\rangle A^{m_1} A^{m_2}\cdots A^{m_N}|jj\rangle_D\\
-#        &= \frac{1}{\sqrt{D}} \sum_{i,j}
-#        \sum_{\vec{m}} |\vec{m}\rangle \langle i|A^{m_1} A^{m_2}\cdots A^{m_N}|j\rangle |ij\rangle_D
+#        &= \frac{1}{\sqrt{D}} \sum_{j,k}
+#        \sum_{\vec{m}} |\vec{m}\rangle \langle j|A^{m_1} A^{m_2}\cdots A^{m_N}|k\rangle |jk\rangle_D
+#
+#    We can see how each :math:`U^{(i)}` contributes a factor of :math:`A` and a corresponding
+#    state :math:`|m_i\rangle` on the :math:`i`\ th physical site. The same would have
+#    come out when applying the 3-tensor :math:`A` to the first bond site :math:`N` times.
 #
 # #. Measure the two bond qudits in the (generalized) Bell basis and postselect on the outcome
 #    being :math:`|I\rangle`. Then discard the bond qudits, which collapses :math:`|\psi_1\rangle`
@@ -195,7 +218,9 @@ print(f"For {g=}, the theoretical correlation length is {xi=:.4f}")
 #
 #    .. math::
 #
-#        |\psi_2\rangle = \sum_{\vec{m}} \operatorname{tr}[A^{m_1}A^{m_2}\cdots A^{m_N}]|\vec{m}\rangle = |\Psi\rangle
+#        |\psi_2\rangle
+#        = \sum_{\vec{m}} \operatorname{tr}[A^{m_1}A^{m_2}\cdots A^{m_N}]|\vec{m}\rangle
+#        = |\Psi\rangle
 #
 #    Note that this step is *probabilistic* and we only succeed to produce the state if we measure
 #    the state :math:`|I\rangle`.
@@ -316,16 +341,22 @@ N = 7
 _ = qml.draw_mpl(sequential_circuit)(N, g)
 
 ######################################################################
-# As we can see, the sequential preparation circuit already uses mid-circuit
-# measurements. However, there is no feed forward control that modifies the circuit
-# dynamically based on measured values.
+# The sequential preparation circuit already uses mid-circuit measurements as is visible
+# from the measurement steps on the first and last qubit, which are set to postselect the
+# outcome :math:`|0\rangle`. However, there is no feed-forward control that modifies the circuit
+# dynamically based on measured values. This will change in the following sections.
 #
 # Fusion of MPS states with mid-circuit measurements
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# The next ingredient for the constant-depth MPS preparation circuit is to fuse
-# two MPS states together into one MPS. Under the hood, this is
-# an application of entanglement swapping.
+# The next ingredient for the constant-depth MPS preparation circuit is to fuse the product
+# state of two MPS states together into one (entangled) MPS. Recall that a single sequential
+# creation of this final MPS would pass a bond site between the first and second group of physical
+# sites, chaining them like beads on the same string. The fusion step allows us to replace
+# this connection with dynamic circuit components after creating two independent MPS.
+# This is like knotting together two strings on which we chained beads independently before.
+# As a matter of fact, chaining beads on smaller strings and the fact that we can knot them
+# together simultaneously is at the heart of going from linear to constant circuit depth.
 #
 # Consider a state :math:`|\Phi\rangle=|\Phi_1\rangle\otimes|\Phi_2\rangle`, where
 # :math:`|\Phi_{1,2}\rangle` are MPS prepared with the sequential technique from
@@ -528,9 +559,11 @@ def push_and_correct(op_id, phys_wires):
 #
 # Now that we discussed the sequential preparation algorithm, fusion with mid-circuit
 # measurements, and operator pushing, we have all components for the constant-depth
-# preparation algorithm.
+# preparation algorithm. As inputs it requires the tensor :math:`A` (or the unitary
+# :math:`U` to reproduce :math:`A`), the total number of physical sites :math:`N`,
+# and a block size :math:`q`.
 #
-# #. For a block size :math:`q`, prepare :math:`\frac{N}{q}` MPS of size :math:`q`
+# #. Prepare :math:`\frac{N}{q}` MPS of size :math:`q`
 #    in parallel, using the sequential preparation algorithm (without the final
 #    projection step).
 #
@@ -546,7 +579,7 @@ def push_and_correct(op_id, phys_wires):
 # #. Perform the same projection step as in the sequential preparation algorithm on
 #    the two remaining bond sites.
 #
-# Smith et al. summarize their algorithm in the following chart:
+# We summarize the algorithm in the following sketch, which again follows [#smith]_.
 #
 # .. image:: ../_static/demonstration_assets/constant_depth_mps_prep/algorithm.png
 #     :width: 75%
@@ -632,9 +665,7 @@ def constant_depth_ansatz(N, g, q):
     # Step 5: Perform projective measurement on outer-most bond sites.
     project_measure(*outer_bond_sites)
     # Collect wire ranges for physical wires, skipping bond wires
-    phys_wires = (
-        range(block_wires * i + 1, block_wires * (i + 1) - 1) for i in range(num_blocks)
-    )
+    phys_wires = (range(block_wires * i + 1, block_wires * (i + 1) - 1) for i in range(num_blocks))
     # Turn ranges to lists and sum them together
     return sum(map(list, phys_wires), start=[])
 
@@ -771,7 +802,7 @@ def correlations(N, g, q):
     return [p - single_expvals[0] * s for p, s in zip(prod_expvals, single_expvals[1:])]
 
 
-N = 18
+N = 12
 q = 6
 gs = [-0.2, -0.4, -0.6, -0.8]
 fig, ax = plt.subplots()
@@ -851,13 +882,13 @@ for g, correls in zip(gs, all_correls):
 #     `closed access <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.95.110503>`__, 2005.
 #     `arXiv:quant-ph/0501096 <http://www.arxiv.org/abs/quant-ph/0501096>`__, 2005.
 #
-# .. [#cirac]
-#     
-#      J. I. Cirac, D. Pérez-García, N. Schuch, F. Verstraete
-#      "Matrix product states and projected entangled pair states: Concepts, symmetries, theorems",
-#      Reviews of Modern Physics **93**, 045003,
-#      `closed access <https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.93.045003>`__, 2021.
-#      `arXiv:2011.12127 <https://arxiv.org/abs/2011.12127>`__, 2020.
+# .. [#schollwoeck]
+#
+#      U. Schollwoeck
+#      "The density-matrix renormalization group in the age of matrix product states",
+#      Annals of Physics **326**, 96,
+#      `closed access <https://www.sciencedirect.com/science/article/abs/pii/S0003491610001752>`__, 2011.
+#      `arXiv:1008.3477 <https://arxiv.org/abs/1008.3477>`__, 2010.
 #
 #
 # About the author
