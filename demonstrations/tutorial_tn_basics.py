@@ -28,11 +28,6 @@ TODO: add diagram here as the second part of the equation.
 .. math::
     T_{i,j,k,l} = \includegraphics{../_static/demonstration_assets/tn_basics/tensor_one.png}
 
-.. figure:: ../_static/demonstration_assets/tn_basics/tensor_one.png
-    :align: center
-    :width: 60%
-
-
 We can apply this same idea to represent a scalar, a vector and a matrix:
 
 TODO: add diagrams here.
