@@ -68,7 +68,7 @@ Following [#smith]_, we will look at translation-invariant MPS
 of a quantum :math:`N`-body system where each body, or site, has local (physical)
 dimension :math:`d`. We will further restrict to periodic boundary conditions,
 corresponding to translational invariance of the MPS on a closed loop.
-A general MPS with this properties is given by
+A general MPS with these properties is given by
 
 .. math::
 
@@ -76,7 +76,7 @@ A general MPS with this properties is given by
 
 where :math:`\vec{m}` is a multi-index of :math:`N` indices ranging over :math:`d`,
 i.e., :math:`\vec{m}\in\{0, 1 \dots, d-1\}^N`, and :math:`\{A^{m}\}_{m}` are :math:`d`
-square matrices of equal dimension. This dimension :math:`D` is called the bond dimension,
+square matrices of equal dimension :math:`D`. This dimension :math:`D` is called the bond dimension,
 which is a crucial quantity for the expressivity and complexity of the MPS.
 We see that :math:`|\Psi\rangle` is fully specified by the :math:`d\times D\times D=dD^2`
 numbers in the rank-3 tensor :math:`A`.
@@ -795,7 +795,7 @@ plt.show()
 # To obtain the correlation length, we fit an exponential to the measured correlators
 # up until :math:`j=\frac{N}{2}` and invert the decay rate.
 # We can also compare this result to the analytic result for the correlation
-# length :math:`xi` mentioned in the beginning:
+# length :math:`\xi` mentioned in the beginning:
 
 
 def exp_fn(x, a, b):
