@@ -42,7 +42,7 @@ ang_seq = [
 ]
 
 ######################################################################
-# We use this angles to apply the polynomial transformation.
+# We use these angles to apply the polynomial transformation.
 # However, we are not finished yet: these angles have been calculated following the "Wx"
 # convention, while :class:`~.qml.PrepSelPrep` follows a different one. Moreover, the angles obtained in the
 # context of QSP (the ones given by ``pyqsp``) are not the same as the ones we have to use in QSVT. That is why
