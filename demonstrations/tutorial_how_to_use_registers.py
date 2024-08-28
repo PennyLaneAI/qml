@@ -175,8 +175,7 @@ def circuit():
 # algorithms. Wire registers provide a neat way of organizing and managing wires. Often, 
 # algorithms are described as acting upon registers and sub-registers; using wire registers
 # can greatly streamline the implementation from theory to code. 
-
-######################################################################
+#
 # About the author
 # ----------------
 #
