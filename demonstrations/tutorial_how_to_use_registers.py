@@ -181,4 +181,3 @@ def circuit():
 # ----------------
 #
 # .. include:: ../_static/authors/austin_huang.txt
-#
