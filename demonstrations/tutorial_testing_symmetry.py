@@ -4,7 +4,7 @@ Testing for symmetry with quantum computers
 
 .. meta::
     :property="og:description": Test if a system possesses discrete symmetries
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_testing_symmetry.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/thumbnail_tutorial_testing_symmetry.png
 
 
 .. related::

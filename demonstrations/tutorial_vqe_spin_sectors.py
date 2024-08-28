@@ -4,7 +4,7 @@ VQE in different spin sectors
 
 .. meta::
     :property="og:description": Find the lowest-energy states of a Hamiltonian in different spin sectors
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_spectra_h2.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/thumbnail_spectra_h2.png
 
 .. related::
    tutorial_vqe A brief overview of VQE
