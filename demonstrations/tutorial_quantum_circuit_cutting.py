@@ -713,7 +713,7 @@ fig.set_size_inches(12, 6)
 # simulator. Luckily, PennyLane has just what we need:
 #
 
-device = qml.device("default.mixed", wires=tape.wires)
+device = qml.device("default.mixed", wires=tape.wires, shots=n_shots)
 
 ######################################################################
 # We only need a single run for each of the two generated tapes, ``tape0`` and
