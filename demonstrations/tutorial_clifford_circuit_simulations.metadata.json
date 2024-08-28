@@ -2,11 +2,11 @@
     "title": "Efficient Simulation of Clifford Circuits",
     "authors": [
         {
-            "id": "utkarsh_azad"
+            "username": "whatsis"
         }
     ],
     "dateOfPublication": "2024-04-12T00:00:00+00:00",
-    "dateOfLastModification": "2024-04-12T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
     "categories": [
         "Devices and Performance"
     ],
@@ -18,7 +18,7 @@
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_clifford_circuit_simulations.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_clifford_circuit_simulations.png"
         }
     ],
     "seoDescription": "Perform efficient simulations for Clifford circuits.",

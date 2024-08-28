@@ -4,7 +4,7 @@ Optimal control for gate compilation
 
 .. meta::
     :property="og:description": Optimize pulse programs to obtain digital gates.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_optimal_control.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/thumbnail_tutorial_optimal_control.png
 
 .. related::
 
@@ -565,7 +565,6 @@ hist = run_adam(profit, grad, params, learning_rate, num_steps)
 
 colors = {0: "#70CEFF", 1: "#C756B2", 2: "#FDC357"}
 dashes = {"X": [10, 0], "Y": [2, 2, 10, 2], "Z": [6, 2]}
-
 
 def plot_optimal_pulses(hist, pulse_fn, ops, T, target_name):
     _, profit_hist = list(zip(*hist))

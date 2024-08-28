@@ -2,14 +2,14 @@
     "title": "Intro to Amplitude Amplification",
     "authors": [
         {
-            "id": "guillermo_alonso"
+            "username": "KetPuntoG"
         },
         {
-            "id": "juan_miguel_arrazola"
+            "username": "ixfoduap"
         }
     ],
     "dateOfPublication": "2024-05-07T00:00:00+00:00",
-    "dateOfLastModification": "2024-05-07T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
     "categories": [
         "Quantum Computing",
         "Algorithms"
@@ -22,7 +22,7 @@
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_AmplitudeAmplification_2024-04-29.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_AmplitudeAmplification_2024-04-29.png"
         }
     ],
     "seoDescription": "Learn Amplitude Amplification from scratch and how to use fixed-point quantum search",

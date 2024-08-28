@@ -2,11 +2,11 @@
     "title": "Function Fitting using Quantum Signal Processing",
     "authors": [
         {
-            "id": "jay_soni"
+            "username": "Jay"
         }
     ],
     "dateOfPublication": "2022-05-24T00:00:00+00:00",
-    "dateOfLastModification": "2024-03-04T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_function_fitting_quantum_signal_processing.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_function_fitting_quantum_signal_processing.png"
         }
     ],
     "seoDescription": "Learn how to create polynomial approximations to functions using Quantum Signal Processing (QSP).",

@@ -2,11 +2,11 @@
     "title": "Is quantum computing useful before fault tolerance?",
     "authors": [
         {
-            "id": "korbinian_kottmann"
+            "username": "Qottmann"
         }
     ],
     "dateOfPublication": "2023-06-16T00:00:00+00:00",
-    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
     "categories": [
         "Quantum Hardware",
         "Quantum Computing"
@@ -19,7 +19,7 @@
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_mitigation_advantage.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_mitigation_advantage.png"
         }
     ],
     "seoDescription": "Using IBM's 127-qubit quantum computer to simulate deep quantum circuits using Zero Noise Extrapolation",

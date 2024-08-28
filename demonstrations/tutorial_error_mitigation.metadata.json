@@ -2,7 +2,7 @@
     "title": "Error mitigation with Mitiq and PennyLane",
     "authors": [
         {
-            "id": "thomas_bromley"
+            "username": "trbromley"
         },
         {
             "id": "andrea_mari"
@@ -18,7 +18,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_error_mitigation_Mitiq_PL.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_error_mitigation_Mitiq_PL.png"
         }
     ],
     "seoDescription": "Learn how to mitigate quantum circuits using Mitiq and PennyLane.",

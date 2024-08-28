@@ -7,7 +7,7 @@ Basic tutorial: qubit rotation
 .. meta::
     :property="og:description": To see how PennyLane allows the easy construction and optimization
         of quantum functions, let's consider the 'hello world' of QML: qubit rotation.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//bloch.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/bloch.png
 
 .. related::
 
@@ -264,8 +264,8 @@ def circuit2(phi1, phi2):
 # the gradient for ``phi2``. To get the gradient with respect to both parameters,
 # we can use ``argnums=[0,1]``:
 
-phi1 = np.array([0.54])
-phi2 = np.array([0.12])
+phi1 = np.array(0.54)
+phi2 = np.array(0.12)
 
 dcircuit = jax.grad(circuit2, argnums=[0, 1])
 print(dcircuit(phi1, phi2))

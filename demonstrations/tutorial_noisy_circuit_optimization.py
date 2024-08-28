@@ -4,7 +4,7 @@ Optimizing noisy circuits with Cirq
 
 .. meta::
     :property="og:description": Learn how noise can affect the optimization and training of quantum computations.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//noisy_circuit_optimization_thumbnail.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/noisy_circuit_optimization_thumbnail.png
 
 .. related::
 
