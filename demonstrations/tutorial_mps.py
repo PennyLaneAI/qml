@@ -204,10 +204,10 @@ U.shape, Lambda.shape, Vd.shape
 # When the state is normalized, we are done. Else, we can do the procedure one more time again with a virtual dummy dimension on the right-most site.
 
 psi_remainder = np.diag(Lambda) @ Vd                 # mu1 (s2 s3)
-psi_remainder = np.reshape(psi_remainder, (2*2, 2))  # (mu1 s2), s3
+psi_remainder = np.reshape(psi_remainder, (2*2, 1))  # (mu1 s2), s3
 U, Lambda, Vd = np.linalg.svd(psi_remainder, full_matrices=False)
 
-U = np.reshape(U, (2, 2, 2)) # mu1, s2, mu2
+U = np.reshape(U, (2, 2, 1)) # mu1, s2, mu2
 Us.append(U)
 
 U.shape, Lambda.shape, Vd.shape
