@@ -1,8 +1,8 @@
 {
-    "title": "Quantum Neural Network for Multivariate Regression",
+    "title": "Variational Quantum Circuit for Multidimensional Regression",
     "authors": [
         {
-            "id": "jorge_martinez_lejarza"
+            "id": "jorge_martinez_de_lejarza"
         },
         {
             "id": "serene_shum"
@@ -11,7 +11,6 @@
     "dateOfPublication": "2024-05-09T00:00:00+00:00",
     "dateOfLastModification": "2024-05-09T00:00:00+00:00",
     "categories": [
-        "Algorithms",
         "Quantum Computing",
         "Quantum Machine Learning"
     ],
