@@ -2,11 +2,11 @@
     "title": "Doubly stochastic gradient descent",
     "authors": [
         {
-            "id": "josh_izaac"
+            "username": "josh"
         }
     ],
     "dateOfPublication": "2019-10-16T00:00:00+00:00",
-    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
     "categories": [
         "Optimization"
     ],
@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_doubly_stochastic_gradient_descent.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_doubly_stochastic_gradient_descent.png"
         }
     ],
     "seoDescription": "Minimize a Hamiltonian via an adaptive shot optimization strategy with doubly stochastic gradient descent.",

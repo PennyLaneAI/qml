@@ -2,14 +2,14 @@
     "title": "Quantum models as Fourier series",
     "authors": [
         {
-            "id": "maria_schuld"
+            "username": "mariaschuld"
         },
         {
             "id": "johannes_jakob_meyer"
         }
     ],
     "dateOfPublication": "2020-08-24T00:00:00+00:00",
-    "dateOfLastModification": "2024-07-22T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
@@ -17,7 +17,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_quantum_models_as_fourier_series.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_quantum_models_as_fourier_series.png"
         }
     ],
     "seoDescription": "The class of functions a quantum model can learn is characterized by the structure of its corresponding Fourier series.",

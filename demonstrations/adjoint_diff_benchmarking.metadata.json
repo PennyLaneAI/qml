@@ -2,17 +2,17 @@
     "title": "Adjoint Differentiation – Supplementary Material",
     "authors": [
         {
-            "id": "christina_lee"
+            "username": "christina"
         }
     ],
     "dateOfPublication": "2021-11-23T00:00:00+00:00",
-    "dateOfLastModification": "2024-07-04T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
     "categories": [],
     "tags": [],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_adjoint_differentiation.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_adjoint_differentiation.png"
         }
     ],
     "seoDescription": "Benchmarking file for adjoint diff demonstration.",

@@ -8,7 +8,7 @@ Generalized parameter-shift rules
 .. meta::
 
     :property="og:description": Reconstruct quantum functions and compute their derivatives.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_genpar.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/thumbnail_genpar.png
 
 .. related::
 
@@ -127,13 +127,11 @@ def random_observable(N, seed):
 # on the NumPy implementation of JAX.
 # To obtain precise results, we enable 64-bit ``float`` precision via the JAX config.
 
-
-from jax.config import config
-
-config.update("jax_enable_x64", True)
 import jax
 from jax import numpy as np
 import pennylane as qml
+
+jax.config.update("jax_enable_x64", True)
 
 def make_cost(N, seed):
     """Create a cost function on N qubits with N frequencies."""

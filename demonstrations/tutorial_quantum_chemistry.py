@@ -6,7 +6,7 @@ Building molecular Hamiltonians
 .. meta::
     :property="og:description": Learn how to build electronic Hamiltonians of molecules.
 
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//water_structure.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/water_structure.png
 
 .. related::
    tutorial_vqe A brief overview of VQE
@@ -255,7 +255,7 @@ print(H)
 ##############################################################################
 # In this case, since we have truncated the basis of molecular orbitals, the resulting
 # observable is an approximation of the Hamiltonian generated in the
-# section :ref:`hamiltonian`.
+# section `Building the Hamiltonian <https://pennylane.ai/qml/demos/tutorial_quantum_chemistry/#building-the-hamiltonian>`__.
 #
 # OpenFermion-PySCF backend
 # -------------------------
