@@ -116,8 +116,8 @@ register = qml.registers({"state": 4, "estimation": 8})
 
 ######################################################################
 # To build our unitary operator :math:`U`, there are a variety of options. We can opt to use a
-# straight-forward block encoding, or choose to use a subroutine like qubitization.
-# Let's opt for :class:`~.pennylane.Qubitization`, which means we have to define another "prep" register.
+# straight-forward block encoding, or choose to use a subroutine like qubitization. Let's opt for
+# :class:`~.pennylane.Qubitization`, which means we have to define another "prep" register.
 # Our registers now look like this:
 
 register = qml.registers({"state": 4, "estimation": 8, "prep": 4})
@@ -171,11 +171,10 @@ def circuit():
 #
 # Conclusion
 # -----------------------
-# In this demo, we showed how to construct
-# wire registers and use them to implement quantum algorithms.
-# Wire registers provide a neat way of organizing and managing wires. Often, algorithms are
-# described as acting upon registers and sub-registers; using wire registers can greatly
-# streamline the implementation from theory to code. 
+# In this demo, we showed how to construct wire registers and use them to implement quantum
+# algorithms. Wire registers provide a neat way of organizing and managing wires. Often, 
+# algorithms are described as acting upon registers and sub-registers; using wire registers
+# can greatly streamline the implementation from theory to code. 
 
 ######################################################################
 # About the author
