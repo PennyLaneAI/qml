@@ -1,4 +1,4 @@
-g119name: Build Website
+name: Build Website
 on:
   pull_request:
 
