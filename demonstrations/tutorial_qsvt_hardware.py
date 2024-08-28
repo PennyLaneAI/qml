@@ -15,7 +15,7 @@ fundamental components of the QSVT algorithm:
 - **Projection angles**: A list of angles that will determine the coefficients of the polynomial to be applied.
 - **Block Encoding**: The strategy used to encode the Hamiltonian. We will use :class:`~.qml.PrepSelPrep`.
 
-Calculating angles is not a trivial task but there are tools such as ``pyqsp`` that do the job for us.
+Calculating angles is not a trivial task but there are tools such as `pyqsp <https://github.com/ichuang/pyqsp/tree/master/pyqsp>`_ that do the job for us.
 For instance, to find the angles to apply the polynomial :math:`p(x) = -x + \frac{x^3}{2}+ \frac{x^5}{2}`, we can run this code:
 
 .. code-block:: python
@@ -44,7 +44,7 @@ ang_seq = [
 ######################################################################
 # We use these angles to apply the polynomial transformation.
 # However, we are not finished yet: these angles have been calculated following the "Wx"
-# convention, while :class:`~.qml.PrepSelPrep` follows a different one. Moreover, the angles obtained in the
+# convention [#unification]_, while :class:`~.qml.PrepSelPrep` follows a different one. Moreover, the angles obtained in the
 # context of QSP (the ones given by ``pyqsp``) are not the same as the ones we have to use in QSVT. That is why
 # we must transform the angles:
 
@@ -138,6 +138,15 @@ print(np.round(matrix[: 2 ** len(H.wires), : 2 ** len(H.wires)], 4))
 # In this brief how-to we demonstrated applying QSVT on a sample Hamiltonian. Note that the algorithm is sensitive to
 # the block-encoding method, so please make sure that the projection angles are converted to the proper format.
 # This how-to serves as a guide for running your own workflows and experimenting with more advanced Hamiltonians and polynomial functions.
+#
+# References
+# ----------
+#
+# .. [#unification]
+#
+#     John M. Martyn, Zane M. Rossi, Andrew K. Tan, Isaac L. Chuang.
+#     "A Grand Unification of Quantum Algorithms".
+#     `arXiv preprint arXiv:2105.02859 <https://arxiv.org/abs/2105.02859>`__.
 #
 # About the author
 # ----------------
