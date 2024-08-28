@@ -115,7 +115,7 @@ register = qml.registers({"state": 4, "estimation": 8})
 ######################################################################
 # To build our unitary operator :math:`U`, there are a variety of options. We can opt to use a
 # straight-forward block encoding, or choose to use a subroutine like qubitization. Let's opt for
-# Qubitization, which means we have to define another "prep" register.
+# :class:`~.pennylane.Qubitization`, which means we have to define another "prep" register.
 # Our registers now look like this:
 
 register = qml.registers({"state": 4, "estimation": 8, "prep": 4})
