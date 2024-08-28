@@ -403,7 +403,7 @@ plt.show()
 def validate(n):
     results = []
     for device in ["qrack.simulator", "lightning.qubit"]:
-        dev = qml.device(device, n, shots=1)
+        dev = qml.device(device, n, shots=None)
 
         @qjit
         @qml.qnode(dev)
