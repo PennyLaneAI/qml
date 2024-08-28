@@ -14,7 +14,7 @@ Matrix Product State basics
 ---------------------------
 
 Matrix Product States (MPS) are an efficient representation of low entanglement states.
-The amount of entanglement the MPS can represent is user-controlled via a hyper parameter, the so-called `bond dimension` :math:`\chi`.
+The amount of entanglement the MPS can represent is user-controlled via a hyper-parameter, the so-called `bond dimension` :math:`\chi`.
 If we allow :math:`\chi` to be of :math:`\mathcal{O}(2^{\frac{n}{2}})` for a system of :math:`n` qubits, we can write `any` state as an `exact` MPS.
 To avoid exponentially large resources, however, one typically sets a finite bond dimension :math:`\chi` at the cost of introducing an approximation error.
 For some specific classes of states, this is provably sufficient to have a faithful representations (see note box below). 
@@ -192,6 +192,7 @@ psi_remainder = np.reshape(psi_remainder, (2*2, 2))  # (mu1 s2), s3
 U, Lambda, Vd = np.linalg.svd(psi_remainder, full_matrices=False)
 
 U = np.reshape(U, (2, 2, 2)) # mu1, s2, mu2
+Us.append(U)
 
 U.shape, Lambda.shape, Vd.shape
 
@@ -245,7 +246,7 @@ np.allclose(psi, psi_reconstruct)
 #
 # Just like in the example with images before, we can compress the state by only keeping 
 # the :math:`\chi` largest singular values, and respective singular vectors.
-# The hyper parameter :math:`\chi` is called the bond dimension and it allows us 
+# The hyper-parameter :math:`\chi` is called the bond dimension and it allows us 
 # to control the amount of entanglement the state can represent between everything that 
 # is left and right of the bond (more on that later).
 #
@@ -312,10 +313,27 @@ Ms, Ss = dense_to_mps(psi, 5)
 
 [M.shape for M in Ms]
 
-#
+# This was all to conceptually understand the relationship between dense vectors and a compressed matrix product state.
+# We want to use MPS for many sites, where it is often not possible to write down the exponentially large state vector in the first place.
+# In that case we would simply start from an MPS description in terms of :math:`n` :math:`\chi \times \chi` matrices.
+# Luckily, we can obtain all relevant information without ever reconstructing the full state vector.
 # 
 # Canonical forms
 # ~~~~~~~~~~~~~~~
+#
+# In the above construction, we unknowingly already baked in a very useful feature of our MPS because all the :math:`U` matrices from the SVD
+# are left-orthogonal. In particular, they satisfy
+#
+# .. math:: \sum_{\sigma_i} \left(U^{\sigma_i} \right)^\dagger U^{\sigma_i} = \mathbb{I}.
+#
+# Let us briefly confirm that:
+
+
+
+#
+#
+# Expectation values
+# ~~~~~~~~~~~~~~~~~~
 # 
 # Density Matrix Renormalization Group (DMRG) algorithm
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
