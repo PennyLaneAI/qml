@@ -1886,19 +1886,18 @@ files = [
 
 [[package]]
 name = "flax"
-version = "0.7.5"
+version = "0.9.0"
 description = "Flax: A neural network library for JAX designed for flexibility"
 optional = false
-python-versions = ">=3.9"
+python-versions = ">=3.10"
 files = [
-    {file = "flax-0.7.5-py3-none-any.whl", hash = "sha256:bb8cf313e4935089e222fe676e09ea96e9b4d2f9ad355f8acff37c2ca5640d08"},
-    {file = "flax-0.7.5.tar.gz", hash = "sha256:f51043efd60eb194dd4648c778ae3ea291ef3fd03ec975dce69d98de7ca47489"},
+    {file = "flax-0.9.0-py3-none-any.whl", hash = "sha256:12cd8f7162165ddd56877fb1cd9a4fcb47a31569e4c5343eeb59a36369fa2cfe"},
+    {file = "flax-0.9.0.tar.gz", hash = "sha256:8b7f361eed0f5324e81f9dc8d02ea53da5f993d7c2e37e7aa5b37d3f6331dd53"},
 ]
 
 [package.dependencies]
-jax = ">=0.4.19"
+jax = ">=0.4.27"
 msgpack = "*"
-numpy = ">=1.22"
 optax = "*"
 orbax-checkpoint = "*"
 PyYAML = ">=5.4.1"
@@ -1908,7 +1907,9 @@ typing-extensions = ">=4.2"
 
 [package.extras]
 all = ["matplotlib"]
-testing = ["black[jupyter] (==23.7.0)", "clu", "clu (<=0.0.9)", "einops", "gymnasium[accept-rom-license,atari]", "jaxlib", "jraph (>=0.0.6dev0)", "ml-collections", "mypy", "nbstripout", "opencv-python", "pytest", "pytest-cov", "pytest-custom-exit-code", "pytest-xdist (==1.34.0)", "pytype", "sentencepiece", "tensorflow", "tensorflow-datasets", "tensorflow-text (>=2.11.0)", "torch"]
+dev = ["pre-commit (>=3.8.0)"]
+docs = ["Pygments (>=2.6.1)", "dm-haiku", "docutils (==0.16)", "einops", "ipykernel", "ipython-genutils", "jupytext (==1.13.8)", "matplotlib", "ml-collections", "myst-nb", "nbstripout", "recommonmark", "scikit-learn", "sphinx (>=3.3.1)", "sphinx-book-theme", "sphinx-design"]
+testing = ["clu", "clu (<=0.0.9)", "einops", "gymnasium[accept-rom-license,atari]", "jaxlib", "jaxtyping", "jraph (>=0.0.6dev0)", "ml-collections", "mypy", "opencv-python", "pytest", "pytest-cov", "pytest-custom-exit-code", "pytest-xdist", "pytype", "sentencepiece", "tensorflow (>=2.12.0)", "tensorflow-datasets", "tensorflow-text (>=2.11.0)", "torch", "treescope (>=0.1.1)"]
 
 [[package]]
 name = "fonttools"
@@ -8032,4 +8033,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.10.0"
-content-hash = "fa804da164703a5bc3a6a511285cea9864057c1d508dbb59ac72c1866eefc017"
+content-hash = "8c4452933d8ab0425de54f8326817c261002487386df76b5f5705516d6aa21bf"
