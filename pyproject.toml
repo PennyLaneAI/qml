@@ -24,7 +24,7 @@ python = "~3.10.0"
 # Base dependencies needed to build the website without any code execution (*-norun)
 [tool.poetry.group.base.dependencies]
 sphinx = ">=5.0.2"
-sphinx_gallery = "0.12.2"
+sphinx_gallery = "0.17.1"
 Jinja2 = "3.0.3"
 markupsafe = "2.1.1"
 numpy = "~1.24"
@@ -75,7 +75,7 @@ h5py = "3.11.0"
 qiskit = ">=1.0.0"
 qiskit-aer = ">=0.14.0"
 sphinxcontrib-applehelp = "1.0.8"
-sphinx-gallery = "<=0.12.2"
+sphinx-gallery = "0.17.1"
 
 
 # Install a difference version of torch from PyPI as the one from PyTorch repo is not compatible with MacOS
