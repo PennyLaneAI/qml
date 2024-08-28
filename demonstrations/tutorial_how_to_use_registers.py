@@ -24,7 +24,6 @@ print(register)
 # values are :class:`~Wires` instances.
 #
 # You can also pass in a dictionary that has nested dictionaries as its values.
-# 
 
 nested_register = qml.registers(
     {
@@ -43,7 +42,6 @@ print(nested_register)
 # to the documentation for :func:`~pennylane.registers`.
 #
 # Accessing a particular register is the same as accessing any element in a dictionary.
-#
 
 print(nested_register["alice"])
 print(nested_register["bob1a"])
@@ -64,7 +62,7 @@ print(new_register)
 ######################################################################
 # For more details on what set operations are supported, refer to the documentation of
 # :func:`~.pennylane.registers`.
-######################################################################
+#
 # A simple example using wire registers
 # -------------------------------------
 #
