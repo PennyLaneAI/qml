@@ -139,8 +139,8 @@ x1_mesh,x2_mesh=pnp.meshgrid(x1_train, x2_train)
 x_train=pnp.stack((x1_mesh.flatten(), x2_mesh.flatten()), axis=1)
 y_train = target_function([x1_mesh,x2_mesh]).reshape(-1,1)
 # Let's take a look at how they look like
-print("x_train:\n", x_train[:10])
-print("y_train:\n", y_train[:10])
+print("x_train:\n", x_train[:5])
+print("y_train:\n", y_train[:5])
 
 ######################################################################
 # What do we do with the output from the circuit?
