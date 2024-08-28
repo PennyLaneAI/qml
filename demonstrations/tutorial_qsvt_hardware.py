@@ -3,7 +3,6 @@ r"""How to implement QSVT on hardware
 
 Performing polynomial transformations on matrices or operators is a task of great interest,
 which we have previously addressed in our introductory demos on :doc:`QSVT </demos/tutorial_intro_qsvt>` and its :doc:`practical applications </demos/tutorial_apply_qsvt>`.
-However, until now, we have focused more on the algebraic aspect rather than the implementation in hardware.
 In this how-to guide, we will show how we can implement the QSVT subroutine in a hardware-compatible way,
 taking your applications to the next level.
 
@@ -33,7 +32,14 @@ The angles obtained after execution are as follows:
 
 """
 
-ang_seq = [-1.5115007723754004, 0.6300762184670975, 0.8813995564082947, -2.2601930971815003, 3.7716688720568885, 0.059295554419495855]
+ang_seq = [
+    -1.5115007723754004,
+    0.6300762184670975,
+    0.8813995564082947,
+    -2.2601930971815003,
+    3.7716688720568885,
+    0.059295554419495855,
+]
 
 ######################################################################
 # We use this angles to apply the polynomial transformation.
@@ -43,6 +49,7 @@ ang_seq = [-1.5115007723754004, 0.6300762184670975, 0.8813995564082947, -2.26019
 # we must transform the angles:
 
 import numpy as np
+
 
 def convert_angles(angles):
     num_angles = len(angles)
@@ -54,6 +61,7 @@ def convert_angles(angles):
 
     return angles + update_vals
 
+
 angles = convert_angles(ang_seq)
 print(angles)
 
@@ -63,7 +71,7 @@ print(angles)
 # QSVT on Hardware
 # -----------------
 #
-# The :class:`~.qml.QSVT` template expects two inputs. The first one is the block encoding operator, :class:`~.qml.PrepSelPrep`, 
+# The :class:`~.qml.QSVT` template expects two inputs. The first one is the block encoding operator, :class:`~.qml.PrepSelPrep`,
 # and the second one is a set of projection operators, :class:`~.qml.PCPhase`, that encode the angles properly.
 # We will see how to apply them later, but first let's define
 # a Hamiltonian and manually apply the polynomial of interest:
@@ -71,30 +79,33 @@ print(angles)
 import pennylane as qml
 from numpy.linalg import matrix_power as mpow
 
-coeffs = np.array([0.2, -.7, -.6])
-coeffs /= np.linalg.norm(coeffs, ord = 1) # Normalize the coefficients
+coeffs = np.array([0.2, -0.7, -0.6])
+coeffs /= np.linalg.norm(coeffs, ord=1)  # Normalize the coefficients
 
 obs = [qml.X(3), qml.X(3) @ qml.Z(4), qml.Z(3) @ qml.Y(4)]
 
 H = qml.dot(coeffs, obs)
 
-H_mat = qml.matrix(H, wire_order = [3,4])
+H_mat = qml.matrix(H, wire_order=[3, 4])
 
 # We calculate p(H) = -H + 0.5 * H^3 + 0.5 * H^5
-H_poly = -H_mat + 0.5 * mpow(H_mat, 3) + 0.5* mpow(H_mat, 5)
+H_poly = -H_mat + 0.5 * mpow(H_mat, 3) + 0.5 * mpow(H_mat, 5)
 
-print(np.round(H_poly,4))
+print(np.round(H_poly, 4))
 
 ######################################################################
 # Great, we already know what the target result is. Let's now see how apply the polynomial with a quantum circuit.
 # We start by defining the proper input operators for the :class:`~.qml.QSVT` template.
 
 # We need |log2(len(coeffs))| = 2 control wires to encode the Hamiltonian
-control_wires = [1,2]
-block_encode = qml.PrepSelPrep(H, control = control_wires)
+control_wires = [1, 2]
+block_encode = qml.PrepSelPrep(H, control=control_wires)
 
-projectors = [qml.PCPhase(angles[i], dim=2**len(H.wires), wires= control_wires + H.wires)
-              for i in range(len(angles))]
+projectors = [
+    qml.PCPhase(angles[i], dim=2 ** len(H.wires), wires=control_wires + H.wires)
+    for i in range(len(angles))
+]
+
 
 @qml.qnode(qml.device("default.qubit"))
 def circuit():
@@ -106,8 +117,9 @@ def circuit():
 
     return qml.state()
 
-matrix = qml.matrix(circuit, wire_order = [0] + control_wires + H.wires)()
-print(np.round(matrix[: 2**len(H.wires), :2**len(H.wires)],4))
+
+matrix = qml.matrix(circuit, wire_order=[0] + control_wires + H.wires)()
+print(np.round(matrix[: 2 ** len(H.wires), : 2 ** len(H.wires)], 4))
 
 ######################################################################
 # The matrix obtained using QSVT is the same as the one obtained by applying the polynomial
