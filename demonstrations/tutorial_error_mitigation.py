@@ -153,9 +153,7 @@ from pennylane.transforms import mitigate_with_zne
 extrapolate = RichardsonFactory.extrapolate
 scale_factors = [1, 2, 3]
 
-mitigated_qnode = mitigate_with_zne(
-    noisy_qnode, scale_factors, fold_global, extrapolate
-)
+mitigated_qnode = mitigate_with_zne(noisy_qnode, scale_factors, fold_global, extrapolate)
 mitigated_qnode(w1, w2)
 
 ##############################################################################
@@ -263,9 +261,7 @@ def executor(circuits, dev=dev_noisy):
 
     # Loop through circuits and add on measurement
     for c in circuits:
-        circuit_with_meas = qml.tape.QuantumTape(
-            c.operations, [qml.expval(qml.PauliZ(0))]
-        )
+        circuit_with_meas = qml.tape.QuantumTape(c.operations, [qml.expval(qml.PauliZ(0))])
         circuits_with_meas.append(circuit_with_meas)
 
     return qml.execute(circuits_with_meas, dev, gradient_fn=None)
@@ -374,11 +370,7 @@ mitigated_qnode(w1, w2)
 # circuits are all folded with a scale factor of :math:`s=1.1`:
 
 for _ in range(3):
-    print(
-        qml.drawer.tape_text(
-            folding(circuit, scale_factor=1.1), decimals=2, max_length=80
-        )
-    )
+    print(qml.drawer.tape_text(folding(circuit, scale_factor=1.1), decimals=2, max_length=80))
 
 ##############################################################################
 # To accommodate for this randomness, we can perform multiple repetitions of random folding for a
@@ -447,7 +439,6 @@ dev_noisy = qml.device(
     wires=n_wires,
     noise_model=noise_model,
     optimization_level=0,
-    shots=10000,
 )
 
 ##############################################################################
@@ -525,7 +516,7 @@ for r, phi in zip(distances, params):
     def executor(circuit):
 
         # Add Hamiltonian measurement to circuit
-        circuit_with_meas = qml.tape.QuantumTape(circuit.operations, [qml.expval(H)])
+        circuit_with_meas = qml.tape.QuantumTape(circuit.operations, [qml.expval(H)], shots=10000)
 
         # Expand Hamiltonian measurement into tensor product of
         # of Pauli operators. We get a list of circuits to execute
