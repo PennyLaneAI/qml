@@ -21,6 +21,8 @@ import yaml
 from pennylane import PennyLaneDeprecationWarning
 
 sys.path.insert(0, os.path.abspath("."))
+sys.path.insert(0, os.path.dirname(__file__))
+print(sys.path)
 
 
 # -- Project information -----------------------------------------------------
@@ -83,7 +85,9 @@ sphinx_gallery_conf = {
     "backreferences_dir"  : "backreferences",
     "doc_module"          : ("pennylane"),
     "junit": "../test-results/sphinx-gallery/junit.xml",
+    'reset_modules': ("module_resets.reset_jax", "matplotlib", "seaborn"),
 }
+
 
 mathjax_path = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
 
