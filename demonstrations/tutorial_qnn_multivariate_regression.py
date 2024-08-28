@@ -1,6 +1,6 @@
 r"""
 Variational Quantum Circuit for Multidimensional Regression
-==========================================
+===========================================================
 
 In this tutorial, we show how to use a variational quantum circuit to fit the simple multivariate function
 
@@ -24,7 +24,7 @@ The main outline of the process is as follows:
 4. Plot the optimized circuit expectation value against the exact function to compare the two.
 
 What is a quantum model?
-------------------------------------------
+------------------------
 
 A quantum model :math:`g_{\vec{\theta}}(\vec{x})` is the expectation value of some observable :math:`M` estimated
 on the state prepared by a parameterized circuit :math:`U(\vec{x}, \vec{\theta})`:
@@ -36,7 +36,7 @@ approximate the expectation value of the observable :math:`M` in the state :math
 optimized to minimize some loss function.
 
 What are we using the variational circuit for?
-------------------------------------------
+----------------------------------------------
 
 In this example, we will use a variational quantum circuit to find the Fourier series that
 approximates the function :math:`f(x_1, x_2) = \frac{1}{2} \left( x_1^2 + x_2^2 \right)`. The variational circuit that we are using is made up of :math:`L` layers. Each layer consists of a *data encoding block*
@@ -60,7 +60,7 @@ Then, we can directly plot the partial Fourier series. We can also apply a Fouri
 Fourier series check out these two related tutorials [#demoschuld]_, [#demoqibo]_.
 
 How do we actually construct the quantum circuit?
-------------------------------------------
+-------------------------------------------------
 
 First, let's import the necessary libraries and seed the random number generator. We will use MatPlotLib for plotting, and JAX [#demojax]_ for optimization.
 We will also define the device, which has two qubits, using :func:`~.pennylane.device`.
@@ -259,7 +259,7 @@ plt.tight_layout(pad=3.7)
 # trained circuit and compare it with the Fourier series we obtained directly from the target function.
 #
 # References
-# ------------------------------------------
+# ----------
 #
 # .. [#schuld]
 #
@@ -285,5 +285,5 @@ plt.tight_layout(pad=3.7)
 #    `Pennylane: How to optimize a QML model using JAX and Optax  <https://pennylane.ai/qml/demos/tutorial_How_to_optimize_QML_model_using_JAX_and_Optax/>`__, 2024
 #
 # About the authors
-# ----------------
+# -----------------
 

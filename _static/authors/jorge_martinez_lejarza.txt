@@ -1,4 +1,4 @@
-.. bio:: Jorge Martinez de Lejarza
-   :photo: ../_static/authors/jorge_martinez_de_lejarza.jpg
+.. bio:: Jorge Martinez Lejarza
+   :photo: ../_static/authors/jorge_martinez_lejarza.jpg
 
    Jorge is a PhD student at IFIC-Instituto de Fisica Corpuscular, where he works on quantum algorithms for High Energy Physics. He is also a summer resident at Xanadu.
