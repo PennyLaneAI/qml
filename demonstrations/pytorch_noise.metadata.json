@@ -2,11 +2,11 @@
     "title": "PyTorch and noisy devices",
     "authors": [
         {
-            "id": "josh_izaac"
+            "username": "josh"
         }
     ],
     "dateOfPublication": "2019-10-11T00:00:00+00:00",
-    "dateOfLastModification": "2024-03-04T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
     "categories": [
         "Devices and Performance"
     ],
@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_PyTorch_noisy_devices.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_PyTorch_noisy_devices.png"
         }
     ],
     "seoDescription": "Extend PyTorch with real quantum computing power, by using it to optimize a noisy quantum hardware device.",

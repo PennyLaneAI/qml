@@ -2,11 +2,11 @@
     "title": "Using PennyLane with PySCF and OpenFermion",
     "authors": [
         {
-            "id": "soran_jahangiri"
+            "username": "soran"
         }
     ],
     "dateOfPublication": "2023-01-03T00:00:00+00:00",
-    "dateOfLastModification": "2024-06-20T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
     "categories": [
         "Quantum Chemistry", "Devices and Performance"
     ],
@@ -18,7 +18,7 @@
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_external_libs.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_external_libs.png"
         }
     ],
     "seoDescription": "Learn how to integrate external quantum chemistry libraries with PennyLane.",

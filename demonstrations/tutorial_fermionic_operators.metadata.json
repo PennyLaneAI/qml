@@ -2,11 +2,11 @@
     "title": "Fermionic operators",
     "authors": [
         {
-            "id": "soran_jahangiri"
+            "username": "soran"
         }
     ],
     "dateOfPublication": "2023-06-27T00:00:00+00:00",
-    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
     "categories": [
         "Quantum Chemistry"
     ],
@@ -18,7 +18,7 @@
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_fermionic_operators.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_fermionic_operators.png"
         },
         {
             "type": "hero_image",

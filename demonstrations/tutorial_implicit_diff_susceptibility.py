@@ -6,7 +6,7 @@ Implicit differentiation of variational quantum algorithms
 
 .. meta::
    :property="og:description": Implicitly differentiating the the solution of a VQA in PennyLane.
-   :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//descartes.png
+   :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/descartes.png
 
 .. related::
     tutorial_backprop Quantum gradients with backpropagation
@@ -264,7 +264,6 @@ from operator import add
 import jax
 from jax import jit
 import jax.numpy as jnp
-from jax.config import config
 
 import pennylane as qml
 import numpy as np
@@ -276,7 +275,7 @@ import matplotlib.pyplot as plt
 jax.config.update("jax_platform_name", "cpu")
 
 # Use double precision numbers
-config.update("jax_enable_x64", True)
+jax.config.update("jax_enable_x64", True)
 
 ##############################################################################
 # Defining the Hamiltonian and measurement operator

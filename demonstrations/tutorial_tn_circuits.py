@@ -6,7 +6,7 @@ Tensor-network quantum circuits
 
 .. meta::
     :property="og:description": This demonstration explains how to simulate tensor-network quantum circuits.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tn_circuits.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/thumbnail_tn_circuits.png
 
 .. related::
 
@@ -233,7 +233,7 @@ def circuit(template_weights):
 
 shapes = qml.SimplifiedTwoDesign.shape(n_layers=1, n_wires=4)
 weights = [np.random.random(size=shape) for shape in shapes]
-template_weights = [weights] * 3
+template_weights = qml._np.array([weights] * 3, dtype="object")
 fig, ax = qml.draw_mpl(circuit, level="device")(template_weights)
 
 ##############################################################################
