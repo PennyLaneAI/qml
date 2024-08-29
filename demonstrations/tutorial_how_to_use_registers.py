@@ -102,21 +102,21 @@ print(swap_test())
 # --------------------
 #
 # Using registers can greatly streamline the process of modifying a workflow
-# by simplifying wire management. In this example, we use :doc:`Quantum Phase Estimation (QPE) <tutorial_qpe>` to
+# by simplifying wire management. In this example, we use :doc:`Quantum Phase Estimation (QPE) </demos/tutorial_qpe>` to
 # calculate the eigenvalues of a Hamiltonian.
 # Generally, QPE is described with two sets of registers. One register is known as the
-# "estimation" (or measurement) register and the other is the state register where we apply our
+# "estimation", or measurement, register and the other is the state register where we apply our
 # unitary operators :math:`U`. We can define these registers in PennyLane code:
 
-register = qml.registers({"state": 4, "estimation": 8})
+register = qml.registers({"state": 4, "estimation": 6})
 
 ######################################################################
 # To build our unitary operator :math:`U`, there are a variety of options. We can opt to use a
 # straight-forward block encoding, or choose to use a subroutine like qubitization. Let's opt for
-# :class:`~.pennylane.Qubitization`, which means we have to define another "prep" register.
+# :class:`~.pennylane.Qubitization`, which means we have to define another preparation register.
 # Our registers now look like this:
 
-register = qml.registers({"state": 4, "estimation": 8, "prep": 4})
+register = qml.registers({"state": 4, "estimation": 6, "prep": 4})
 
 ######################################################################
 # Finally, let's define our Hamiltonian. We'll use the Transverse-Field Ising model from
@@ -139,7 +139,7 @@ initial_state = dataset.ground_states[0]
 ######################################################################
 # With this, we can now define our QPE circuit like so:
 
-dev = qml.device("lightning.qubit", wires=16)
+dev = qml.device("lightning.qubit", wires=14)
 
 @qml.qnode(dev)
 def circuit():
@@ -158,6 +158,15 @@ def circuit():
     qml.adjoint(qml.QFT)(wires=register["estimation"])
 
     return qml.probs(wires=register["estimation"])
+
+######################################################################
+# We'll run our circuit and do some post-processing to get the energy eigenvalue:
+
+import numpy as np
+
+output = circuit()
+lamb = sum([abs(c) for c in H.terms()[0]])
+print("Eigenvalue: ", lamb * np.cos(2 * np.pi * (np.argmax(output)) / 8))
 
 ######################################################################
 # Changing the number of wires in your estimation register is very easy with registers, but human errors
