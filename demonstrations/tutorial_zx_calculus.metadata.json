@@ -2,11 +2,11 @@
     "title": "Introduction to the ZX-calculus",
     "authors": [
         {
-            "id": "romain_moyard"
+            "username": "rmoyard"
         }
     ],
     "dateOfPublication": "2023-06-06T00:00:00+00:00",
-    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
     "categories": [
         "Quantum Computing"
     ],
@@ -18,7 +18,7 @@
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_zx_calculus.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_zx_calculus.png"
         }
     ],
     "seoDescription": "Introduction to the ZX-calculus and use cases.",

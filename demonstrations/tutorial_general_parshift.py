@@ -8,7 +8,7 @@ Generalized parameter-shift rules
 .. meta::
 
     :property="og:description": Reconstruct quantum functions and compute their derivatives.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_genpar.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/thumbnail_genpar.png
 
 .. related::
 
@@ -127,13 +127,11 @@ def random_observable(N, seed):
 # on the NumPy implementation of JAX.
 # To obtain precise results, we enable 64-bit ``float`` precision via the JAX config.
 
-
-from jax.config import config
-
-config.update("jax_enable_x64", True)
 import jax
 from jax import numpy as np
 import pennylane as qml
+
+jax.config.update("jax_enable_x64", True)
 
 def make_cost(N, seed):
     """Create a cost function on N qubits with N frequencies."""
@@ -601,8 +599,8 @@ odd_reconstructions = list(map(odd_reconstruction_equ, cost_functions, Ns))
 #   E_\text{even}(x) &= \sum_{\mu=0}^R E_\text{even}(x_\mu) \hat{D}_\mu(x)\\
 #   \hat{D}_\mu(x) &=
 #   \begin{cases}
-#      \frac{\sin(Rx)}{2R \tan(x/2)} &\text{if } \mu = 0 \\[12pt]
-#      \frac{\sin(R (x-x_\mu))}{2R \tan\left(\frac{1}{2} (x-x_\mu)\right)} + \frac{\sin(R (x+x_\mu))}{2R \tan\left(\frac{1}{2} (x+x_\mu)\right)} & \text{if } \mu \in [R-1] \\[12pt]
+#      \frac{\sin(Rx)}{2R \tan(x/2)} &\text{if } \mu = 0 \\
+#      \frac{\sin(R (x-x_\mu))}{2R \tan\left(\frac{1}{2} (x-x_\mu)\right)} + \frac{\sin(R (x+x_\mu))}{2R \tan\left(\frac{1}{2} (x+x_\mu)\right)} & \text{if } \mu \in [R-1] \\
 #      \frac{\sin(R (x-\pi))}{2R \tan\left(\frac{1}{2} (x-\pi)\right)} & \text{if } \mu = R.
 #   \end{cases}
 #

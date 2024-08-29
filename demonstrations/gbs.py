@@ -8,7 +8,7 @@ Quantum advantage with Gaussian Boson Sampling
 .. meta::
     :property="og:description": Using light to perform tasks beyond the reach of classical computers.
 
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/gbs/gbs_expt2.png
+    :property="og:image": https://pennylane.ai/qml/_static/demo_thumbnails/opengraph_demo_thumbnails/gbs_expt2.png
 
 .. related::
 

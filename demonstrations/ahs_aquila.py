@@ -3,7 +3,7 @@ r"""Pulse programming on Rydberg atom hardware
 
 .. meta::
     :property="og:description": Perform measurements on neutral atom hardware through PennyLane
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_pulse_on_hardware.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/thumbnail_tutorial_pulse_on_hardware.png
 
 .. related::
    tutorial_pasqal Quantum computation with neutral atoms
@@ -512,7 +512,7 @@ amplitude_params = [max_amplitude, displacement, sigma]
 params = [amplitude_params]
 ts = [0.0, 1.75]
 
-default_qubit = qml.device("default.qubit.jax", wires=3, shots=1000)
+default_qubit = qml.device("default.qubit", wires=3, shots=1000)
 
 
 @qml.qnode(default_qubit, interface="jax")

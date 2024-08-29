@@ -9,7 +9,7 @@ Function fitting with a photonic quantum neural network
 
 .. meta::
     :property="og:description": Fit to noisy data with a variational quantum circuit.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//qnn_output_28_0.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/qnn_output_28_0.png
 
 .. related::
  

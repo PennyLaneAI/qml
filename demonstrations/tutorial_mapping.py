@@ -12,9 +12,9 @@ this demo, you will learn about these mapping schemes and their implementation i
 will also learn how to use these mappings in the context of computing the ground state energy
 of a molecular system.
 
-.. figure:: ../_static/demonstration_assets/mapping/OGthumbnail_large_mapping_2024-05-01.png
+.. figure:: ../_static/demonstration_assets/mapping/long_image.png
     :align: center
-    :width: 50%
+    :width: 80%
     :target: javascript:void(0)
 
 Jordan-Wigner Mapping

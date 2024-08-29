@@ -5,7 +5,7 @@ Qutrits and quantum algorithms
 
 .. meta::
     :property="og:description": Learn how to interpret the Bernstein-Vazirani algorithm with qutrits
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_qutrits_bernstein_vazirani.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/thumbnail_tutorial_qutrits_bernstein_vazirani.png
 
 .. related::
 

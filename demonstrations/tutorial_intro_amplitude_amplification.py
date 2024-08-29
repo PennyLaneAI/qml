@@ -7,7 +7,7 @@ developments in quantum computing. This technique is a special case of a quantum
 how to implement it in PennyLane using the new :class:`~.pennylane.AmplitudeAmplification` template. We also discuss
 a useful extension of the algorithm called fixed-point amplitude amplification.
 
-.. figure:: ../_static/demonstration_assets/intro_amplitude_amplification/OGthumbnail_large_AmplitudeAmplification_2024-04-29.png
+.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_large_AmplitudeAmplification_2024-04-29.png
     :align: center
     :width: 50%
     :target: javascript:void(0)

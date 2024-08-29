@@ -2,11 +2,11 @@
     "title": "Optimizing noisy circuits with Cirq",
     "authors": [
         {
-            "id": "nathan_killoran"
+            "username": "co9olguy"
         }
     ],
     "dateOfPublication": "2020-06-01T00:00:00+00:00",
-    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
     "categories": [
         "Devices and Performance"
     ],
@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_optimizing_noisy_circuits_Cirq.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_optimizing_noisy_circuits_Cirq.png"
         }
     ],
     "seoDescription": "Learn how noise can affect the optimization and training of quantum computations.",

@@ -2,11 +2,11 @@
     "title": "Building a quantum lock using phase kickback",
     "authors": [
         {
-            "id": "danial_motlagh"
+            "username": "Dan"
         }
     ],
     "dateOfPublication": "2023-08-01T00:00:00+00:00",
-    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
     "categories": [
         "Getting Started",
         "Algorithms",
@@ -20,7 +20,7 @@
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_phase_kickback.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_phase_kickback.png"
         }
     ],
     "seoDescription": "Use phase kickback to create an unbreakable quantum lock",

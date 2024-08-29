@@ -3,7 +3,7 @@ r"""Compilation of quantum circuits
 
 .. meta::
     :property="og:description": Learn about circuit transformations and quantum circuit compilation with PennyLane
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_circuit_compilation.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/thumbnail_tutorial_circuit_compilation.png
 
 .. related::
 

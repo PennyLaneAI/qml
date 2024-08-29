@@ -2,11 +2,11 @@
     "title": "Introducing (Dynamical) Lie Algebras for quantum practitioners",
     "authors": [
         {
-            "id": "korbinian_kottmann"
+            "username": "Qottmann"
         }
     ],
     "dateOfPublication": "2024-02-27T00:00:00+00:00",
-    "dateOfLastModification": "2024-04-25T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
     "categories": [
         "Quantum Computing",
         "Getting Started"
@@ -19,7 +19,7 @@
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_liealgebra.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_liealgebra.png"
         }
     ],
     "seoDescription": "A gentle introduction to Lie theory covering the basics of Lie algebras and Lie groups in the context of quantum computing.",

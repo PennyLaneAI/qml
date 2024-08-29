@@ -5,7 +5,7 @@ Variationally optimizing measurement protocols
 .. meta::
     :property="og:description": Using a variational quantum algorithm to
         optimize a quantum sensing protocol.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//illustration1.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/illustration1.png
 
 .. related::
 
@@ -120,9 +120,9 @@ where :math:`J_{kl} = \frac{\partial f_k}{\partial \phi_l}` is the Jacobian of :
 
 We now turn to the actual implementation of the scheme.
 """
+
 import pennylane as qml
 from pennylane import numpy as np
-
 
 
 ##############################################################################
@@ -155,18 +155,22 @@ def encoding(phi, gamma):
 # we make use of the
 # `ArbitraryStatePreparation <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.templates.state_preparations.ArbitraryStatePreparation.html>`_
 # template from PennyLane.
+
+
 def ansatz(weights):
     qml.ArbitraryStatePreparation(weights, wires=[0, 1, 2])
 
+
 NUM_ANSATZ_PARAMETERS = 14
+
 
 def measurement(weights):
     for i in range(3):
-        qml.ArbitraryStatePreparation(
-            weights[2 * i : 2 * (i + 1)], wires=[i]
-        )
+        qml.ArbitraryStatePreparation(weights[2 * i : 2 * (i + 1)], wires=[i])
+
 
 NUM_MEASUREMENT_PARAMETERS = 6
+
 
 ##############################################################################
 # We now have everything at hand to model the quantum part of our experiment
@@ -180,11 +184,14 @@ def experiment(weights, phi, gamma=0.0):
 
     return qml.probs(wires=[0, 1, 2])
 
+
 # Draw the circuit at the given parameter values
-print(qml.draw(experiment, expansion_strategy='device')(
-    np.arange(NUM_ANSATZ_PARAMETERS + NUM_MEASUREMENT_PARAMETERS),
-    np.zeros(3),
-    gamma=0.2)
+print(
+    qml.draw(experiment, level="device", max_length=80)(
+        np.arange(NUM_ANSATZ_PARAMETERS + NUM_MEASUREMENT_PARAMETERS),
+        np.zeros(3),
+        gamma=0.2,
+    )
 )
 
 
@@ -224,12 +231,7 @@ def CFIM(weights, phi, gamma):
 # to it to avoid inverting a singular matrix. As additional parameters, we add
 # the weighting matrix :math:`W` and the Jacobian :math:`J`.
 def cost(weights, phi, gamma, J, W, epsilon=1e-10):
-    return np.trace(
-        W
-        @ np.linalg.inv(
-            J.T @ CFIM(weights, phi, gamma) @ J + np.eye(2) * epsilon
-        )
-    )
+    return np.trace(W @ np.linalg.inv(J.T @ CFIM(weights, phi, gamma) @ J + np.eye(2) * epsilon))
 
 
 ##############################################################################
@@ -245,12 +247,10 @@ phi = sympy.Matrix([x, y, z])
 
 # Construct discrete Fourier transform matrix
 omega = sympy.exp((-1j * 2.0 * cmath.pi) / 3)
-Omega = sympy.Matrix([[1, 1, 1], [1, omega ** 1, omega ** 2]]) / sympy.sqrt(3)
+Omega = sympy.Matrix([[1, 1, 1], [1, omega**1, omega**2]]) / sympy.sqrt(3)
 
 # Compute Jacobian
-jacobian = (
-    sympy.Matrix(list(map(lambda x: abs(x) ** 2, Omega @ phi))).jacobian(phi).T
-)
+jacobian = sympy.Matrix(list(map(lambda x: abs(x) ** 2, Omega @ phi))).jacobian(phi).T
 # Lambdify converts the symbolic expression to a python function
 jacobian = sympy.lambdify((x, y, z), sympy.re(jacobian))
 
@@ -267,6 +267,7 @@ phi = np.array([1.1, 0.7, -0.6])
 J = jacobian(*phi)
 W = np.eye(2)
 
+
 ##############################################################################
 # We are now ready to perform the optimization. We will initialize the weights
 # at random. Then we make use of the `Adagrad <https://pennylane.readthedocs.io/en/stable/introduction/optimizers.html>`_
@@ -279,7 +280,10 @@ def opt_cost(weights, phi=phi, gamma=gamma, J=J, W=W):
 # Seed for reproducible results
 np.random.seed(395)
 weights = np.random.uniform(
-    0, 2 * np.pi, NUM_ANSATZ_PARAMETERS + NUM_MEASUREMENT_PARAMETERS, requires_grad=True
+    0,
+    2 * np.pi,
+    NUM_ANSATZ_PARAMETERS + NUM_MEASUREMENT_PARAMETERS,
+    requires_grad=True,
 )
 
 opt = qml.AdagradOptimizer(stepsize=0.1)
@@ -289,9 +293,7 @@ for i in range(20):
     weights, cost_ = opt.step_and_cost(opt_cost, weights)
 
     if (i + 1) % 5 == 0:
-        print(
-            "Iteration {:>4}: Cost = {:6.4f}".format(i + 1, cost_)
-        )
+        print("Iteration {:>4}: Cost = {:6.4f}".format(i + 1, cost_))
 
 ##############################################################################
 # Comparison with the standard protocol
@@ -305,11 +307,7 @@ for i in range(20):
 Ramsey_weights = np.zeros_like(weights)
 Ramsey_weights[1:6:2] = np.pi / 2
 Ramsey_weights[15:20:2] = np.pi / 2
-print(
-    "Cost for standard Ramsey sensing = {:6.4f}".format(
-        opt_cost(Ramsey_weights)
-    )
-)
+print("Cost for standard Ramsey sensing = {:6.4f}".format(opt_cost(Ramsey_weights)))
 
 ##############################################################################
 # We can now make a plot to compare the noise scaling of the above probes.
@@ -320,12 +318,8 @@ comparison_costs = {
 }
 
 for gamma in gammas:
-    comparison_costs["optimized"].append(
-        cost(weights, phi, gamma, J, W)
-    )
-    comparison_costs["standard"].append(
-        cost(Ramsey_weights, phi, gamma, J, W)
-    )
+    comparison_costs["optimized"].append(cost(weights, phi, gamma, J, W))
+    comparison_costs["standard"].append(cost(Ramsey_weights, phi, gamma, J, W))
 
 import matplotlib.pyplot as plt
 

@@ -5,7 +5,7 @@ Basic arithmetic with the quantum Fourier transform (QFT)
 
 .. meta::
     :property="og:description": Learn how to use the quantum Fourier transform (QFT) to do basic arithmetic
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//qft_arithmetics_thumbnail.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/qft_arithmetics_thumbnail.png
 
 .. related::
     tutorial_qubit_rotation Basis tutorial: qubit rotation 
@@ -24,7 +24,7 @@ quantum Fourier transform (QFT), which we will demonstrate on a basic level.
 
 In this demo we will not focus on understanding how the QFT is built,
 as we can find a great explanation in the
-`Xanadu Quantum Codebook <https://codebook.xanadu.ai/F.1>`__. Instead, we will develop the
+`PennyLane Codebook </codebook/08-quantum-fourier-transform/01-changing-perspectives/>`__. Instead, we will develop the
 intuition for how it works and how we can best take advantage of it.
 
 Motivation

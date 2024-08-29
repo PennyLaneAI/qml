@@ -6,7 +6,7 @@ Optimization using SPSA
 .. meta::
     :property="og:description": Use the simultaneous perturbation stochastic
         approximation algorithm to optimize variational circuits in PennyLane.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//spsa_mntn.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/spsa_mntn.png
 
 .. related::
 
@@ -164,6 +164,7 @@ the pieces of an example optimization to come together:
   We choose five layers and four wires.
 
 """
+
 import pennylane as qml
 from pennylane import numpy as np
 
@@ -209,7 +210,9 @@ def run_optimizer(opt, cost_function, init_param, num_steps, interval, execs_per
     cost_history.append(cost_function(param))
     exec_history = [0]
 
-    print(f"\nRunning the {opt.__class__.__name__} optimizer for {num_steps} iterations.")
+    print(
+        f"\nRunning the {opt.__class__.__name__} optimizer for {num_steps} iterations."
+    )
     for step in range(num_steps):
         # Print out the status of the optimization
         if step % interval == 0:
@@ -309,8 +312,12 @@ plt.show()
 # Let's take a deeper dive to see how much better it actually is by computing
 # the ratio of required circuit executions to reach an absolute accuracy of 0.01.
 #
-grad_execs_to_prec = exec_history_grad[np.where(np.array(cost_history_grad) < -0.99)[0][0]]
-spsa_execs_to_prec = exec_history_spsa[np.where(np.array(cost_history_spsa) < -0.99)[0][0]]
+grad_execs_to_prec = exec_history_grad[
+    np.where(np.array(cost_history_grad) < -0.99)[0][0]
+]
+spsa_execs_to_prec = exec_history_spsa[
+    np.where(np.array(cost_history_spsa) < -0.99)[0][0]
+]
 print(f"Circuit execution ratio: {np.round(grad_execs_to_prec/spsa_execs_to_prec, 3)}.")
 
 ##############################################################################
@@ -373,8 +380,8 @@ def ansatz(param, wires):
 # IBMProvider().backends()  # List all available backends
 # dev = qml.device("qiskit.ibmq", wires=num_qubits, backend="ibmq_lima")
 
-from qiskit.providers.aer import noise
-from qiskit.providers.fake_provider import FakeLima
+from qiskit_ibm_runtime.fake_provider import FakeLima
+from qiskit_aer import noise
 
 # Load a fake backed to create a noise model, and create a device using that model
 noise_model = noise.NoiseModel.from_backend(FakeLima())

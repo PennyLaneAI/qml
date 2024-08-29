@@ -7,7 +7,7 @@
         }
     ],
     "dateOfPublication": "2024-03-12T00:00:00+00:00",
-    "dateOfLastModification": "2024-03-12T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
     "categories": ["Quantum Machine Learning"],
     "tags": ["QNN", "overfitting", "dropout", "regularization"],
     "previewImages": [
@@ -17,7 +17,7 @@
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_QuantumDropout_2024-03-07.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_QuantumDropout_2024-03-07.png"
         }
     ],
     "seoDescription": "Learn to avoid overfitting employing quantum dropout",
