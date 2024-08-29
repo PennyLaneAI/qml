@@ -169,8 +169,8 @@ lamb = sum([abs(c) for c in H.terms()[0]])
 print("Eigenvalue: ", lamb * np.cos(2 * np.pi * (np.argmax(output)) / 8))
 
 ######################################################################
-# Changing the number of wires in your estimation register is very easy with registers, but human errors
-# can happen when using wires. The complexity of wire management only gets more difficult
+# Changing the number of wires in your estimation register is very easy with registers, but human
+# error can happen when using wires. The complexity of wire management only gets more difficult
 # as you start working with more and more registers. As you start building bigger and more complex
 # algorithms, this can quickly become a serious issue!
 #
