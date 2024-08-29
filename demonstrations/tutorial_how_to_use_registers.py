@@ -166,7 +166,7 @@ import numpy as np
 
 output = circuit()
 lamb = sum([abs(c) for c in H.terms()[0]])
-print("Eigenvalue: ", lamb * np.cos(2 * np.pi * (np.argmax(output)) / 8))
+print("Eigenvalue: ", lamb * np.cos(2 * np.pi * (np.argmax(output)) / 2 ** len(register["estimation"])))
 
 ######################################################################
 # Changing the number of wires in your estimation register is very easy with registers, but human
