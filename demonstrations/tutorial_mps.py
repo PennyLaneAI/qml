@@ -232,9 +232,9 @@ for i in range(1, len(Us)):
 
 print(f"Shape of reconstructed psi: {[_.shape for _ in Us]}")
 # remove dummy dimensions
-psi_reconstruct = np.reshape(psi_reconstruct, (2, 2, 2))
+psi_reconstruct = np.reshape(psi_reconstruct, (2, 2, 1))
 # original shape of original psi
-psi = np.reshape(psi, (2, 2, 2))
+psi = np.reshape(psi, (2, 2, 1))
 
 np.allclose(psi, psi_reconstruct)
 
@@ -284,10 +284,15 @@ def dense_to_mps(psi, bond_dim):
         Ms.append(U)
         Ss.append(Ss)
 
-        psi = Vd
+        psi = np.tensordot(np.diag(S), Vd, 1)
         bondL = Vd.shape[0]
 
-    Ms.append(Vd)
+    # dummy step on last site
+    psi = np.reshape(psi, (-1, 1))
+    U, _, _ = np.linalg.svd(psi, full_matrices=False)
+
+    U = np.reshape(U, (-1, 2, 1))
+    Ms.append(U)
     
     return Ms, Ss
 
@@ -313,6 +318,8 @@ Ms, Ss = dense_to_mps(psi, 5)
 
 [M.shape for M in Ms]
 
+##############################################################################
+#
 # This was all to conceptually understand the relationship between dense vectors and a compressed matrix product state.
 # We want to use MPS for many sites, where it is often not possible to write down the exponentially large state vector in the first place.
 # In that case we would simply start from an MPS description in terms of :math:`n` :math:`\chi \times \chi` matrices.
@@ -328,18 +335,91 @@ Ms, Ss = dense_to_mps(psi, 5)
 #
 # Let us briefly confirm that:
 
+for i in range(len(Ms)):
+    id_ = np.tensordot(Ms[i].conj(), Ms[i], axes=([1, 0], [1, 0]))
+    is_id = np.allclose(id_, np.eye(len(id_)))
+    print(f"U[{i}] is left-orthonormal: {is_id}")
+
+##############################################################################
+# This is a very powerful identity as it tells us that contracting a site of the MPS from the left is just the identity.
+#
+# .. figure:: ../_static/demonstration_assets/mps/left_orthogonal.png
+#     :align: center
+#     :width: 30%
+#
+# This means that computing the norm, which is just contracting the MPS with itself, becomes trivial.
+#
+# .. figure:: ../_static/demonstration_assets/mps/norm_trivial.png
+#     :align: center
+#     :width: 70%
+#
+# The fact that we went through the MPS from SVD-ing from left-to-right earlier was a choice.
+# We could have equivalently gone through the MPS from right-to-left and obtained a right-canonical state by keeping the :math:`V^\dagger` of the decompositions.
+#
+# When computing expectation values, it is convenient to have the MPS in a mixed canonical form.
+# Take some single-site observable :math:`O_i` for which we want to compute the expectation value.
+# The best way to do this is to have the MPS such that all sites left of site :math:`i` are left-canonical and all sites right of it are right-canonical.
+# That way, the contraction :math:`\langle \psi | O | \psi \rangle` for local expectation values reduces to contractions on just a single site.
+#
+# .. figure:: ../_static/demonstration_assets/mps/mixed_canonical_observable.png
+#     :align: center
+#     :width: 70%
+#
+# We can obtain such a mixed canonical form by starting from our left-canonical MPS and going through the sites from right to left right-canonizing all sites until the observable.
+# However, if we keep track of the singular values at all times, we can switch any site tensor from left- to right-orthogonal by just multiplying with the singular values.
+# This is the so-called Vidal form introduced in [#Vidal]_ and works like this: Even though we are not going to use them in our representation, it makes sense to introduce the "bare" local :math:`\Gamma`-tensors :math:`\Gamma^{\sigma_i}` in terms of
+#
+# .. math:: \Gamma^{\sigma_i} = \left(\Lambda^{[i-1]}\right)^{-1} U^{\sigma_i} = V^{\sigma_i}^\dagger \left(\Lambda^{[i]}\right)^{-1}
+#
+# and write the MPS in terms of those bare :math:`\Gamma`-tensors with the singular values connecting them. We can then just sub-select and recombine parts to get either right- or left-canonical tensors in the following manner:
+#
+# .. figure:: ../_static/demonstration_assets/mps/vidal.png
+#     :align: center
+#     :width: 70%
+#
+# In particular, to compute the expectation value described just above, we need the :math:`\Theta`-tensor for the right site.
+# We are not going to actually store the :math:`\Gamma`-tensors but continue to use the left-orthogonal :math:`U`-tensors.
+# So all we need to do is construct :math:`\Theta^{\sigma_i} = U^{\sigma_i} \Lambda^{[i]}`. This has two advantages: 1) 
+# we only need to perform one contraction with the singular values from the right and 2) we avoid having to compute any 
+# inverses of the singular values, which numerically can become messy for very small singular values.
+#
+# Finally, the local observable expectation value simply becomes
+#
+# .. math:: \langle \psi | O | \psi \rangle = \text{tr}\left[ \sum_{\sigma_i \tilde{\sigma}_i} \Theta^{\sigma_i} O^{\sigma_i \tilde{\sigma}_i} \Theta^{\tilde{\sigma}_i}^* \right],
+#
+# or, graphically the following.
+#
+# .. figure:: ../_static/demonstration_assets/mps/final_expval.png
+#     :align: center
+#     :width: 70%
+#
+# The canonical form essentially allows us to treat local operations locally and remove all redundancy on other sites. This will come in handy later when we look at simulating quantum circuits with MPS.
+# It also enables the very powerful density matrix renormalization group algorithm (DMRG). Here, one constructs the ground state of a Hamiltonian by iteratively sweeping through the MPS back and forth, solving
+# the eigenvalue problem locally at each site (with all other sites "frozen"). This works extremely well in practice and is hence still one of the workhorses of classical quantum simulation to this day. For a very good review
+# see [#Schollwoeck]_
+#
+# Entanglement
+# ~~~~~~~~~~~~
+#
+# Entanglement is best quantified via bipartitions of states. In particular, separating a full system :math:`|\psi\rangle` and a sub-system :math:`\rho_\text{sub}`, the von Neumann entanglement entropy is given by
+#
+# .. math:: S(\rho_\text{sub}) = -\text{tr}\left[\rho_\text{sub} \log\left(\rho_\text{sub}\right) \right]
+#
+# The singular values of the bonds naturally encode the entanglement of bipartition between all sites left vs all sites right of the bond.
+# In particular, the von Neumann entanglement entropy at bond :math:`i` is given by
+#
+# .. math:: S(\rho_{1:i}) = S(\rho_{i+1:n}) = - \sum_i \Lambda^2_i \log\left( \Lambda_i^2 \right).
+#
+# Given a bond dimension :math:`\chi`, the maximal entanglement entropy we can obtain is for the all-equal distribution of singular values, :math:`\Lambda_i^2 \equiv 1/\chi`.
+# The entanglement entropy is thus bounded by
+#
+# .. math:: S(\rho_{1:i}) \leq \log(\chi) = \text{const.}.
+#
+# This is the area law of entanglement for one dimensional systems in that the surface area of a sub-system of a one-dimensional system is just :math:`1`, or, simply "constant".
 
 
-#
-#
-# Expectation values
-# ~~~~~~~~~~~~~~~~~~
+##############################################################################
 # 
-# Density Matrix Renormalization Group (DMRG) algorithm
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-
 # # Part 2
 # 
 # Quantum Simulation with MPS
@@ -385,7 +465,7 @@ dev = qml.device("default.qubit")
 # Conclusion
 # ----------
 #
-# conclusion
+# No time to talk about MPO, DMRG, Correlation lengths
 #
 
 
@@ -395,59 +475,17 @@ dev = qml.device("default.qubit")
 # References
 # ----------
 #
-# .. [#SommaShadow]
+# .. [#Vidal]
 #
-#     Rolando D. Somma, Robbie King, Robin Kothari, Thomas O'Brien, Ryan Babbush
-#     "Shadow Hamiltonian Simulation"
-#     `arXiv:2407.21775 <https://arxiv.org/abs/2407.21775>`__, 2024.
+#     Guifre Vidal
+#     "Efficient classical simulation of slightly entangled quantum computations"
+#     `arXiv:quant-ph/0301063 <https://arxiv.org/abs/quant-ph/0301063>`__, 2003.
 #
-# .. [#Somma]
+# .. [#Schollwoeck]
 #
-#     Rolando D. Somma
-#     "Quantum Computation, Complexity, and Many-Body Physics"
-#     `arXiv:quant-ph/0512209 <https://arxiv.org/abs/quant-ph/0512209>`__, 2005.
-#
-# .. [#Somma2]
-#
-#     Rolando Somma, Howard Barnum, Gerardo Ortiz, Emanuel Knill
-#     "Efficient solvability of Hamiltonians and limits on the power of some quantum computational models"
-#     `arXiv:quant-ph/0601030 <https://arxiv.org/abs/quant-ph/0601030>`__, 2006.
-#
-# .. [#Galitski]
-#
-#     Victor Galitski
-#     "Quantum-to-Classical Correspondence and Hubbard-Stratonovich Dynamical Systems, a Lie-Algebraic Approach"
-#     `arXiv:1012.2873 <https://arxiv.org/abs/1012.2873>`__, 2010.
-#
-# .. [#Goh]
-#
-#     Matthew L. Goh, Martin Larocca, Lukasz Cincio, M. Cerezo, Frédéric Sauvage
-#     "Lie-algebraic classical simulations for variational quantum computing"
-#     `arXiv:2308.01432 <https://arxiv.org/abs/2308.01432>`__, 2023.
-#
-# .. [#Wiersema]
-#
-#     Roeland Wiersema, Efekan Kökcü, Alexander F. Kemper, Bojko N. Bakalov
-#     "Classification of dynamical Lie algebras for translation-invariant 2-local spin systems in one dimension"
-#     `arXiv:2309.05690 <https://arxiv.org/abs/2309.05690>`__, 2023.
-#
-# .. [#Aguilar]
-#
-#     Gerard Aguilar, Simon Cichy, Jens Eisert, Lennart Bittel
-#     "Full classification of Pauli Lie algebras"
-#     `arXiv:2408.00081 <https://arxiv.org/abs/2408.00081>`__, 2024.
-#
-# .. [#Babbush]
-#
-#     Ryan Babbush, Dominic W. Berry, Robin Kothari, Rolando D. Somma, Nathan Wiebe
-#     "Exponential quantum speedup in simulating coupled classical oscillators"
-#     `arXiv:2303.13012 <https://arxiv.org/abs/2303.13012>`__, 2023.
-#
-# .. [#Barthe]
-#
-#     Alice Barthe, M. Cerezo, Andrew T. Sornborger, Martin Larocca, Diego García-Martín
-#     "Gate-based quantum simulation of Gaussian bosonic circuits on exponentially many modes"
-#     `arXiv:2407.06290 <https://arxiv.org/abs/2407.06290>`__, 2024.
+#     Ulrich Schollwoeck
+#     "The density-matrix renormalization group in the age of matrix product states"
+#     `arXiv:1008.3477 <https://arxiv.org/abs/1008.3477>`__, 2010.
 #
 
 
