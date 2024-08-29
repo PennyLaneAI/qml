@@ -2,11 +2,11 @@
     "title": "(g + P)-sim: Extending g-sim by non-DLA observables and gates",
     "authors": [
         {
-            "id": "korbinian_kottmann"
+            "username": "Qottmann"
         }
     ],
     "dateOfPublication": "2024-06-18T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
     "categories": [
         "Quantum Computing",
         "Quantum Machine Learning"
