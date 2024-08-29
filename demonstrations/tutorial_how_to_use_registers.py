@@ -106,7 +106,7 @@ print(swap_test())
 # Using registers can greatly streamline the process of modifying a workflow
 # by simplifying wire management. In this example, we use :doc:`Quantum Phase Estimation (QPE) <tutorial_qpe>` to
 # calculate the eigenvalues of a Hamiltonian.
-# Generally, QPE is described as having two sets of registers. One register is known as the
+# Generally, QPE is described with two sets of registers. One register is known as the
 # "estimation" (or measurement) register and the other is the state register where we apply our
 # unitary operators :math:`U`. We can define these registers in PennyLane code:
 
