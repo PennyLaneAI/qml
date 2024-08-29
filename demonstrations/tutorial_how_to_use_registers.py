@@ -59,7 +59,7 @@ print(new_register)
 
 ######################################################################
 # For more details on what set operations are supported, refer to the documentation of
-# :func:`~.pennylane.registers`.
+# :func:`Wires <~.pennylane.wires.Wires.difference>`_.
 #
 # A simple example using wire registers
 # -------------------------------------
