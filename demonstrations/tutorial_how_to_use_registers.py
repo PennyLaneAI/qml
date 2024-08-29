@@ -43,14 +43,12 @@ print(nested_register)
 #
 # Accessing a particular register is the same as accessing any element in a dictionary.
 
-print(nested_register["alice"])
-print(nested_register["bob1a"])
+print(nested_register["alice"], nested_register["bob1a"])
 
 ######################################################################
 # You can access a specific wire index via its index in a register.
 
-print(nested_register["all_registers"][2])
-print(nested_register["bob1a"][0])
+print(nested_register["all_registers"][2], nested_register["bob1a"][0])
 
 ######################################################################
 # You can also combine registers using set operations. Here, we use the pipe operator ``|`` to
