@@ -160,8 +160,8 @@ def circuit():
     return qml.probs(wires=register["estimation"])
 
 ######################################################################
-# Changing the number of wires in your estimation register is very easy with registers, but can
-# be very error-prone when using wires. The complexity of wire management only gets more difficult
+# Changing the number of wires in your estimation register is very easy with registers, but human errors
+# can happen when using wires. The complexity of wire management only gets more difficult
 # as you start working with more and more registers. As you start building bigger and more complex
 # algorithms, this can quickly become a serious issue!
 #
