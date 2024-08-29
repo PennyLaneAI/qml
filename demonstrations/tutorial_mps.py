@@ -232,9 +232,9 @@ for i in range(1, len(Us)):
 
 print(f"Shape of reconstructed psi: {[_.shape for _ in Us]}")
 # remove dummy dimensions
-psi_reconstruct = np.reshape(psi_reconstruct, (2, 2, 1))
+psi_reconstruct = np.reshape(psi_reconstruct, (2, 2, 2))
 # original shape of original psi
-psi = np.reshape(psi, (2, 2, 1))
+psi = np.reshape(psi, (2, 2, 2))
 
 np.allclose(psi, psi_reconstruct)
 
