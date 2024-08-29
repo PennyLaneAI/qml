@@ -6,7 +6,7 @@ Tensor-network quantum circuits
 
 .. meta::
     :property="og:description": This demonstration explains how to simulate tensor-network quantum circuits.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tn_circuits.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/thumbnail_tn_circuits.png
 
 .. related::
 
@@ -150,7 +150,7 @@ def circuit(template_weights):
 np.random.seed(1)
 weights = np.random.random(size=[3, 2])
 qml.drawer.use_style("black_white")
-fig, ax = qml.draw_mpl(circuit, expansion_strategy="device")(weights)
+fig, ax = qml.draw_mpl(circuit, level="device")(weights)
 fig.set_size_inches((6, 3))
 
 ##############################################################################
@@ -196,7 +196,7 @@ def circuit(template_weights):
 
 shape = qml.StronglyEntanglingLayers.shape(n_layers=2, n_wires=2)
 template_weights = [np.random.random(size=shape)] * 3
-fig, ax = qml.draw_mpl(circuit, expansion_strategy="device")(template_weights)
+fig, ax = qml.draw_mpl(circuit, level="device")(template_weights)
 
 ##############################################################################
 # In addition to deep blocks, we can easily expand to wider blocks with more
@@ -233,8 +233,8 @@ def circuit(template_weights):
 
 shapes = qml.SimplifiedTwoDesign.shape(n_layers=1, n_wires=4)
 weights = [np.random.random(size=shape) for shape in shapes]
-template_weights = [weights] * 3
-fig, ax = qml.draw_mpl(circuit, expansion_strategy="device")(template_weights)
+template_weights = qml._np.array([weights] * 3, dtype="object")
+fig, ax = qml.draw_mpl(circuit, level="device")(template_weights)
 
 ##############################################################################
 # We can also broadcast a block to the tree tensor network architecture by using the
@@ -263,7 +263,7 @@ def circuit(template_weights):
 
 
 weights = np.random.random(size=[7, 2])
-fig, ax = qml.draw_mpl(circuit, expansion_strategy="device")(weights)
+fig, ax = qml.draw_mpl(circuit, level="device")(weights)
 fig.set_size_inches((4, 4))
 ##############################################################################
 # Classifying the bars and stripes data set
@@ -341,7 +341,7 @@ def circuit(image, template_weights):
 
 
 weights = np.random.random(size=[3, 2])
-fig, ax = qml.draw_mpl(circuit, expansion_strategy="device")(BAS[0], weights)
+fig, ax = qml.draw_mpl(circuit, level="device")(BAS[0], weights)
 fig.set_size_inches((6, 3.5))
 
 ##############################################################################
@@ -381,7 +381,7 @@ for k in range(100):
 # we can now show the full circuits and the resulting output for each image.
 
 for image in BAS:
-    fig, ax = qml.draw_mpl(circuit, expansion_strategy="device")(image, params)
+    fig, ax = qml.draw_mpl(circuit, level="device")(image, params)
     plt.figure(figsize=[1.8, 1.8])
     plt.imshow(np.reshape(image, [2, 2]), cmap="gray")
     plt.title(

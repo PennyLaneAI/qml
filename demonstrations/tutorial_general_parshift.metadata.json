@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2021-08-23T00:00:00+00:00",
-    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
     "categories": [
         "Optimization"
     ],
@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_generalized_parametershift_rules.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_generalized_parametershift_rules.png"
         }
     ],
     "seoDescription": "Reconstruct quantum functions and compute their derivatives.",

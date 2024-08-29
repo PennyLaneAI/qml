@@ -2,17 +2,17 @@
     "title": "Computing gradients in parallel with Amazon Braket",
     "authors": [
         {
-            "id": "thomas_bromley"
+            "username": "trbromley"
         },
         {
-            "id": "maria_schuld"
+            "username": "mariaschuld"
         },
         {
             "id": "matthew_beach"
         }
     ],
     "dateOfPublication": "2020-12-08T00:00:00+00:00",
-    "dateOfLastModification": "2024-03-04T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-14T00:00:00+00:00",
     "categories": [
         "Devices and Performance"
     ],
@@ -20,7 +20,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_computing_gradients_amazon_braket.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_computing_gradients_amazon_braket.png"
         }
     ],
     "seoDescription": "Parallelize gradient calculations with Amazon Braket",

@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2023-10-16T00:00:00+00:00",
-    "dateOfLastModification": "2024-07-04T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
     "categories": [
         "Devices and Performance"
     ],
@@ -18,7 +18,7 @@
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_getting_started_with_hybrid_jobs.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_getting_started_with_hybrid_jobs.png"
         }
     ],
     "seoDescription": "Getting started with the Amazon Braket Hybrid Jobs",

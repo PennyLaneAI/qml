@@ -5,7 +5,7 @@ Neutral-atom quantum computers
 
 .. meta::
     :property="og:description": Learn how neutral atom quantum devices work using code
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_neutral_atoms.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/thumbnail_tutorial_neutral_atoms.png
 
 .. related::
    tutorial_pasqal Quantum computation with neutral atoms
@@ -71,7 +71,7 @@ the work that still needs to be done to scale this technology even further.
 # so they can't be affected by electric fields. How can we even hope to manipulate them individually?
 # It turns out that the technology to do this has been around for decades [#Tweezers1985]_.
 # **Optical tweezers**—highly focused laser beams—can grab small objects and hold them in place, no
-# need to charge them! Let's see how they are able to do this. 
+# need to charge them! Let's see how they are able to do this.
 #
 # Laser beams are nothing but electromagnetic waves, that is, oscillating electric and magnetic
 # fields. It would seem that a neutral atom could not be affected by them—but it can! To understand how, we need
@@ -95,7 +95,7 @@ the work that still needs to be done to scale this technology even further.
 #    ..
 #
 # Electric and magnetic fields are more effective in atoms that are larger in size and whose electrons can reach high energy
-# levels. Atoms with these features are known as **Rydberg atoms** and, as we will see later, their extra sensitivity to 
+# levels. Atoms with these features are known as **Rydberg atoms** and, as we will see later, their extra sensitivity to
 # electric fields is also necessary to implemenent some quantum gates.
 #
 # In the last decade, optical tweezer technology has evolved to the point where we can move atoms around
@@ -240,9 +240,9 @@ the work that still needs to be done to scale this technology even further.
 #    ..
 #
 # .. note::
-#    
+#
 #    What about atoms in the state :math:`\vert \bar{0}\rangle`? Wouldn't they become excited as well?
-#    We can actually choose the energy level :math:`\vert h\rangle` such that the transition 
+#    We can actually choose the energy level :math:`\vert h\rangle` such that the transition
 #    :math:`\vert \bar{0}\rangle \rightarrow \vert h\rangle` wouldn't conserve angular momentum,
 #    so it would be suppressed.
 #
@@ -277,9 +277,9 @@ the work that still needs to be done to scale this technology even further.
 # Here, the **detuning** :math:`\delta(t)` is defined as the difference between the photon's energy and the energy :math:`E_{01}`
 # needed to transition between the ground state :math:`\lvert 0 \rangle` and the excited state
 # :math:`\lvert 1 \rangle:`
-# 
+#
 # .. math::
-#    
+#
 #    \delta(t) = \hbar\nu(t)-E_{01}.
 #
 # We will call :math:`H_d` the **drive Hamiltonian**, since the electronic states of the atoms are being
@@ -294,7 +294,7 @@ the work that still needs to be done to scale this technology even further.
 #
 # The mathematical expression of the Hamiltonian tells us that the time evolution depends on
 # the shape of the pulse, which we can control pretty much arbitrarily as long as it's finite in duration.
-# We must choose a pulse shape that starts and dies off smoothly. It turns out that one of the best choices is 
+# We must choose a pulse shape that starts and dies off smoothly. It turns out that one of the best choices is
 # the *Blackman window* pulse, which minimizes noise [#Pulser2022]_.
 # The amplitude of a Blackman pulse of duration :math:`T` is given by
 #
@@ -361,7 +361,7 @@ phase = np.pi / 2
 detuning = 0
 
 # For now, let's act on only one neutral atom
-single_qubit_dev = qml.device("default.qubit.jax", wires=1)
+single_qubit_dev = qml.device("default.qubit", wires=1)
 
 
 @qml.qnode(single_qubit_dev)
@@ -376,7 +376,7 @@ def state_evolution():
 print("The final state is {}".format(state_evolution().round(2)))
 ##############################################################################
 #
-# We see that the electronic state changes indeed. As a sanity check, let's see what happens when the detuning is 
+# We see that the electronic state changes indeed. As a sanity check, let's see what happens when the detuning is
 # large, such that we expect not to drive the transition.
 
 # Choose some arbitrary parameters
@@ -503,7 +503,7 @@ print(
 #
 # for a system of :math:`N` atoms. Here, :math:`\hat{n}_{i}=(\mathbb{I}+\sigma^{z}_{i})/2,` :math:`C_6` is a coupling constant that
 # describes the interaction strength between the atoms, and :math:`R_{ij}` is the distance between atom :math:`i` and atom :math:`j.`
-# If we add a pulse that addresses the transition between :math:`\vert 0\rangle` and :math:`\vert r\rangle,` the full Hamiltonian for :math:`N` 
+# If we add a pulse that addresses the transition between :math:`\vert 0\rangle` and :math:`\vert r\rangle,` the full Hamiltonian for :math:`N`
 # atoms is given by
 #
 # .. math::
@@ -542,8 +542,7 @@ time = 0.1
 
 
 def energy_gap(distance):
-
-    """Calculates the energy eigenvalues for the full Hamiltonian, as a function 
+    """Calculates the energy eigenvalues for the full Hamiltonian, as a function
     of the distance between the atoms."""
 
     # create the terms
@@ -551,7 +550,7 @@ def energy_gap(distance):
     interaction_term = H_i(distance, coupling)
 
     # combine and evaluate the Hamiltonian with peak and time parameters
-    H  = (interaction_term + drive_term)([peak], time)
+    H = (interaction_term + drive_term)([peak], time)
 
     # Calculate the eigenvalues for the full Hamiltonian
     eigenvalues = jnp.linalg.eigvals(qml.matrix(H))
@@ -604,6 +603,7 @@ plt.show()
 # order. Combined with the effects of the Rydberg blockade, this pulse combination will implement the desired gate. To see this,
 # let's code the pulses needed first.
 
+
 def two_pi_pulse(distance, coupling, wires=[0]):
 
     # Build full Hamiltonian
@@ -628,7 +628,8 @@ def pi_pulse(distance, coupling, wires=[0]):
 # Then, let's see the effect the sequence of pulses has on the :math:`\vert 00 \rangle` state when the atoms are close enough.
 #
 
-dev_two_qubits = qml.device("default.qubit.jax", wires=2)
+dev_two_qubits = qml.device("default.qubit", wires=2)
+
 
 @qml.qnode(dev_two_qubits)
 def neutral_atom_CZ(distance, coupling):
@@ -655,8 +656,8 @@ print(
 ##############################################################################
 #
 # The effect is to multiply the two-qubit state by :math:`-1`, which doesn't happen without the Rydberg blockade! Indeed, when the atoms
-# are far away from each other, each individual atomic state gets multiplied by :math:`-1.` Therefore, there would be 
-# no total phase change since the two-atom state gains a multiplier of :math:`(-1)\times(-1)=1`. It turns out that the Rydberg 
+# are far away from each other, each individual atomic state gets multiplied by :math:`-1.` Therefore, there would be
+# no total phase change since the two-atom state gains a multiplier of :math:`(-1)\times(-1)=1`. It turns out that the Rydberg
 # blockade is only important when the initial state is :math:`\vert 00 \rangle.`
 #
 # .. figure:: ../_static/demonstration_assets/neutral_atoms/control_z00.png
@@ -722,7 +723,7 @@ print(
 #
 #    The method shown here is only one of the ways to implement the :math:`CZ` gate.  Here, we have chosen to encode the qubits
 #    in a ground and a hyperfine state, which allows for simplicity. Depending on the hardware, one may also choose
-#    to encode the qubits in a ground state and a Rydberg state, or two Rydberg states. The Rydberg blockade is also 
+#    to encode the qubits in a ground state and a Rydberg state, or two Rydberg states. The Rydberg blockade is also
 #    the main phenomenon that allows for the implementation of two-qubit gates in these realizations, but the details
 #    are a bit different [#Morgado2011]_.
 #
@@ -736,8 +737,8 @@ print(
 # An important issue to deal with in quantum hardware in general. Quantum states are short-lived in the presence of external
 # influences. We can never achieve a perfect vacuum in the chamber, and the particles and charges around the atoms will destroy
 # our carefully crafted quantum states in a matter of microseconds. While our qubit states are long-lived, the auxiliary Rydberg
-# state is more prone to decohere, which limits the amount of computations we can perform in a succession. Overall 
-# improving our register preparation, gates, and measurement protocols is of the essence to make more progress on 
+# state is more prone to decohere, which limits the amount of computations we can perform in a succession. Overall
+# improving our register preparation, gates, and measurement protocols is of the essence to make more progress on
 # neutral-atom technology.
 #
 # While we are able to trap many atoms with our current laser technology, scaling optical tweezer arrays to thousands of qubits
@@ -747,14 +748,14 @@ print(
 # but such technology is still being developed. Another solution is to use photons through optical fibres to communicate between
 # different processors, allowing for further connectivity and scalability.
 #
-# Another issue with scalability is the preparation times of the registers. While, with hundreds of qubits, we can still prepare 
+# Another issue with scalability is the preparation times of the registers. While, with hundreds of qubits, we can still prepare
 # and arrange the atoms in reasonable times, it becomes increasingly costly the more atoms we have. And we do need
 # to reprepare the neutral atom array when we are done with a computation. It's not as easy as moving the atoms around
-# faster—if we try to move the atoms around too fast, they will escape from the traps! Therefore, engineers are working 
-# on more efficient ways to move the tweezers around, minimizing the number of steps needed to prepare the initial 
+# faster—if we try to move the atoms around too fast, they will escape from the traps! Therefore, engineers are working
+# on more efficient ways to move the tweezers around, minimizing the number of steps needed to prepare the initial
 # state [#NeutralHardware2023]_.
 #
-# Finally, let us remark that there are some nuances with gate implementation—it's not nearly as simple in real-life as it is in theory. 
+# Finally, let us remark that there are some nuances with gate implementation—it's not nearly as simple in real-life as it is in theory.
 # It is not easy to address individual atoms with the driving laser pulses. This is necessary for universal quantum computing, as we saw in
 # the previous section. True local atom drives are still in the works, but even without them, we can still use these non-universal devices
 # for applications in quantum simulation.
@@ -764,9 +765,9 @@ print(
 #
 # Neutral-atom quantum hardware is a promising and quickly developing technology which we should keep an eye on. The ability to
 # easily create custom qubit topologies and the coherence time of the atoms are its main strong points, and its weaknesses are
-# actually no too different from other qubit-based architectures. We can easily program neutral-atom devices using pulses, 
-# for which PennyLane is of great help. If you want to 
-# learn more, check out our tutorials on the :doc:`Aquila device, </demos/ahs_aquila>` :doc:`neutral atom configurations, </demos/tutorial_pasqal>` and 
+# actually no too different from other qubit-based architectures. We can easily program neutral-atom devices using pulses,
+# for which PennyLane is of great help. If you want to
+# learn more, check out our tutorials on the :doc:`Aquila device, </demos/ahs_aquila>` :doc:`neutral atom configurations, </demos/tutorial_pasqal>` and
 # :doc:`pulse programming </demos/tutorial_pulse_programming101>`. And do take a look
 # at the references below to dive into much more detail about the topics introduced here.
 #
@@ -786,11 +787,11 @@ print(
 #     (`arXiv <https://arxiv.org/abs/quant-ph/0002077>`__)
 #
 # .. [#Tweezers1985]
-# 
+#
 #    A. Ashkin, J. M. Dziedzic, J. E. Bjorkholm, and Steven Chu. (1986)
-#    "Observation of a single-beam gradient force optical trap for dielectric particles", 
-#    Opt. Lett. 11, 288-290 
-# 
+#    "Observation of a single-beam gradient force optical trap for dielectric particles",
+#    Opt. Lett. 11, 288-290
+#
 # .. [#AtomComputing]
 #
 #    Atom Computing (May 23, 2023). Quantum Computing Technology,
@@ -819,5 +820,3 @@ print(
 # About the author
 # ----------------
 # .. include:: ../_static/authors/alvaro_ballon.txt
-
-
