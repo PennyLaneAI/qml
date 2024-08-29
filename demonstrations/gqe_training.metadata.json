@@ -12,7 +12,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/variational_quantum_eigensolver/sketch_circuit.png"
+            "uri": "_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_generative_quantum_eigensolver.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_generative_quantum_eigensolver.png"
         }
     ],
     "seoDescription": "Training a small GPT model using Pennylane data",

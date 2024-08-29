@@ -6,6 +6,12 @@ paper <https://arxiv.org/pdf/2401.09253v1>`__, using the molecular dataset gener
 We will show that the model gradually better approximates the correct energies for operator
 sequences and, in turn, can sample energies close to the ground state energy calculated by
 Pennylane.
+
+.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_generative_quantum_eigensolver.png
+    :align: center
+    :width: 70%
+    :target: javascript:void(0)
+
 """
 
 ######################################################################
