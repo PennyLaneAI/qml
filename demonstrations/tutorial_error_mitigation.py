@@ -5,7 +5,7 @@ Error mitigation with Mitiq and PennyLane
 .. meta::
     :property="og:description": Learn how to mitigate quantum circuits using Mitiq and PennyLane.
 
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//laptop.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/laptop.png
 
 .. related::
 
@@ -447,7 +447,6 @@ dev_noisy = qml.device(
     wires=n_wires,
     noise_model=noise_model,
     optimization_level=0,
-    shots=10000,
 )
 
 ##############################################################################
@@ -525,7 +524,7 @@ for r, phi in zip(distances, params):
     def executor(circuit):
 
         # Add Hamiltonian measurement to circuit
-        circuit_with_meas = qml.tape.QuantumTape(circuit.operations, [qml.expval(H)])
+        circuit_with_meas = qml.tape.QuantumTape(circuit.operations, [qml.expval(H)], shots=10000)
 
         # Expand Hamiltonian measurement into tensor product of
         # of Pauli operators. We get a list of circuits to execute

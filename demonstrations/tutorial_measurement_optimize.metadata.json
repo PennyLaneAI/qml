@@ -2,7 +2,7 @@
     "title": "Measurement optimization",
     "authors": [
         {
-            "id": "josh_izaac"
+            "username": "josh"
         }
     ],
     "dateOfPublication": "2021-01-18T00:00:00+00:00",
@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/measurement_optimize/meas_optimize_thumbnail.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_measurement_optimization.png"
         }
     ],
     "seoDescription": "Optimize and reduce the number of measurements required to evaluate a variational algorithm cost function.",

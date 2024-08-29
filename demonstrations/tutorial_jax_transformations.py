@@ -4,7 +4,7 @@ Using JAX with PennyLane
 
 .. meta::
     :property="og:description": Learn how to use JAX with PennyLane.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//jax.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/jax.png
 
 .. related::
 
@@ -43,14 +43,12 @@ for quantum machine learning (QML), and can be used directly with PennyLane.
 # set up a two-qubit device for computations. We'll be using the ``default.qubit`` device
 # for the first part of this tutorial.
 
-# Added to silence some warnings.
-from jax.config import config
-
-config.update("jax_enable_x64", True)
-
 import jax
 import jax.numpy as jnp
 import pennylane as qml
+
+# Added to silence some warnings.
+jax.config.update("jax_enable_x64", True)
 
 dev = qml.device("default.qubit", wires=2)
 

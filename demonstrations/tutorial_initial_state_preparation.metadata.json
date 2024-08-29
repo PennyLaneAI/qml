@@ -2,7 +2,7 @@
     "title": "Initial State Preparation for Quantum Chemistry",
     "authors": [
         {
-            "id": "stepan_fomichev"
+            "username": "chiffa"
         }
     ],
     "dateOfPublication": "2023-10-20T00:00:00+00:00",
@@ -18,7 +18,7 @@
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_initial_state_preparation.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_initial_state_preparation.png"
         }
     ],
     "seoDescription": "Prepare initial states for quantum algorithms from output of traditional quantum chemistry methods.",
