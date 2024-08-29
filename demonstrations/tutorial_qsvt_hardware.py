@@ -1,10 +1,15 @@
 r"""How to implement QSVT on hardware
 =======================================
 
-Performing polynomial transformations on matrices or operators is a task of great interest,
-which we have previously addressed in our introductory demos on :doc:`QSVT </demos/tutorial_intro_qsvt>` and its :doc:`practical applications </demos/tutorial_apply_qsvt>`.
-In this how-to guide, we will show how we can implement the QSVT subroutine in a hardware-compatible way,
-taking your applications to the next level.
+The :doc:`Quantum Singular Value Transform (QSVT) </demos/tutorial_intro_qsvt>`
+is a quantum algorithm that allows us to perform polynomial
+transformations on matrices or operators, and is rapidly becoming
+a go-to algorithm for :doc:`quantum application research </demos/tutorial_apply_qsvt>`
+in the `ISQ era <https://pennylane.ai/blog/2023/06/from-nisq-to-isq/>`__.
+
+In this how-to guide, we will show how we can implement the QSVT
+subroutine in a hardware-compatible way, taking your application research
+to the next level.
 
 Angles calculation
 ------------------
@@ -13,7 +18,7 @@ Our goal is to apply a polynomial transformation to a given Hamiltonian, i.e., :
 fundamental components of the QSVT algorithm:
 
 - **Projection angles**: A list of angles that will determine the coefficients of the polynomial to be applied.
-- **Block Encoding**: The strategy used to encode the Hamiltonian. We will use :class:`~.qml.PrepSelPrep`.
+- **Block Encoding**: The strategy used to encode the Hamiltonian. We will use the :doc:`Linear Combinations of Unitaries <demos/tutorial_lcu_blockencoding>` approach via the PennyLane :class:`~.qml.PrepSelPrep` operation.
 
 Calculating angles is not a trivial task but there are tools such as `pyqsp <https://github.com/ichuang/pyqsp/tree/master/pyqsp>`_ that do the job for us.
 For instance, to find the angles to apply the polynomial :math:`p(x) = -x + \frac{x^3}{2}+ \frac{x^5}{2}`, we can run this code:
@@ -94,7 +99,7 @@ H_poly = -H_mat + 0.5 * mpow(H_mat, 3) + 0.5 * mpow(H_mat, 5)
 print(np.round(H_poly, 4))
 
 ######################################################################
-# Great, we already know what the target result is. Let's now see how apply the polynomial with a quantum circuit.
+# Now that we know what the target result is, let's see how to apply the polynomial with a quantum circuit instead.
 # We start by defining the proper input operators for the :class:`~.qml.QSVT` template.
 
 # We need |log2(len(coeffs))| = 2 control wires to encode the Hamiltonian
@@ -107,7 +112,9 @@ projectors = [
 ]
 
 
-@qml.qnode(qml.device("default.qubit"))
+dev = qml.device("default.qubit")
+
+@qml.qnode(dev)
 def circuit():
 
     qml.Hadamard(0)
@@ -125,10 +132,11 @@ print(np.round(matrix[: 2 ** len(H.wires), : 2 ** len(H.wires)], 4))
 # The matrix obtained using QSVT is the same as the one obtained by applying the polynomial
 # directly to the Hamiltonian! That means the circuit is encoding :math:`p(\mathcal{H})` correctly.
 # The great advantage of this approach is that all the building blocks used in the circuit can be
-# decomposed into basic gates easily.
+# decomposed into basic gates easily, allowing this circuit
+# to be easily executed on hardware devices with PennyLane.
 #
 # Please also note that QSVT encodes the desired polynomial :math:`p(\mathcal{H})` as well as
-# a polynomial :math:`i q(\mathcal{H})`. To isolate :math:`p(\mathcal{H})`, we have used an auxiliary qubit and considered the that
+# a polynomial :math:`i q(\mathcal{H})`. To isolate :math:`p(\mathcal{H})`, we have used an auxiliary qubit and considered that
 # the sum of a complex number and its conjugate gives us twice its real part. We
 # recommend :doc:`this demo </demos/tutorial_apply_qsvt>` to learn more about the structure
 # of the circuit.
