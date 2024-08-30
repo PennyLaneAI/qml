@@ -109,7 +109,7 @@ print("Rank-3 tensor: \n", tensor_rank3)
 # TODO: add diagram at the end of the equation.
 #
 # .. math::
-#     (G^3)_{j,k} = G^1 \cdot G^2 = \sum_j G^{1}_{i,j} G^{2}_{j,k} =
+#     (G^3)_{i,k} = G^1 \cdot G^2 = \sum_j G^{1}_{i,j} G^{2}_{j,k} =
 #
 # In this case, the resulting tensor has two dangling indices, :math:`i` and :math:`k`, which defines a matrix, as expected!
 #
@@ -178,34 +178,102 @@ print(D.shape)
 ##############################################################################
 # The cost of contracting a network:
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
-# - Mention that the resulting tensor network doesn't change but the way we arrive to the final tensor affects how expensive it is to get there.
-# - Show how can we can calculate the complexity of a contraction by means of a simple example using 2 matrices (rank 2 tensors): dimension_contracted x (dimensions_open).
-# Intuition behind: we perform one operation (contraction) and repeat many times to "populate" the resulting tensor (dimension_open1 x dimension_open2). Show the equation with indices.
-# - Show an example with at least three tensors where they all have different dimensions. Walk through it showing that choosing to contract two indices (the ones with lower dimensions) results in a worst computational complexity than contracting other ones (the ones with higher dimensions).
+# 
+# A common task when dealing with tensors is the contraction of large networks resulting in a single tensor (including scalars). To arrive to this final tensor, we can start with a single tensor and contract it with adjacent tensors one-at-a-time. The order in which this is carried out is known as the *contraction path* or *bubbling*.
+# While the final tensor is independent of the order of the contraction, the number of operations performed can vary greatly with the order in which we contract the intermediate tensors. Moreover, in a general setup, finding the optimal order of indices to be contracted is not at all a trivial task - actually it is a NP-complete problem [#Arad]_.
+# 
+# For this reason, it is useful to look at how to calculate the computational cost or the *complexity* of a tensor network contraction. First, we look at a simple matrix-matrix contraction. Given rank-2 tensors :math:`G^1_{i,j}` and :math:`G^2_{j,k}`, we have seen the :math:`(i,k)`-th element of the resulting contraction along the :math:`j`-th index is
+# 
+# .. math::
+#   (G^3)_{i,k} = G^1 \cdot G^2 = \sum_{j=1}^{d_j} G^{1}_{i,j} G^{2}_{j,k}
+# 
+# where the indices :math:`i, j, k` have dimensions :math:`d_i, d_j, d_k`, respectively. Thus, obtaining the :math:`(i,k)`-th element requires :math:`\mathcal{O}(d_j)` operations. To construct the full tensor :math:`G^3`, we must repeat this procedure :math:`d_i \times d_k` times (once for every possible value of :math:`i` and :math:`k`). Therefore, the total complexity of the contration is
+# 
+# .. math::
+#   \mathcal{O}(d_i \times d_j \times d_k)
+# 
+# To illustrate the importance of choosing an efficient contraction path, let us look at a similar contraction between 3 rank-3 tensors as shown in the previous section.
+# 
+# TODO: add diagram here with 3 tensors. Tensor A has dimensions (i,j,k)->(d_i, d_j, d_j), tensor B has dimension (j,l,m)->(d_j, 1, d_m) and tensor C has dimensions (k,m,n)->(d_j, d_m, d_i). Positioned in a traingle-like structure similar to the previous example.
+# 
+# In this case, the tensors are such that :math:`A_{i,j,k} \in \mathcal{C}^{d_i \times d_j \times d_j}`, :math:`B_{j,l,m} \in \mathcal{C}^{d_j \times 1 \times d_m}`, and :math:`C_{k,m,n} \in \mathcal{C}^{d_j \times d_m \times d_i}`. First, we look at the complexity of contracting :math:`(AB)` and then :math:`C`. Following the procedure explained above, the first contraction results in a complexity of
+# 
+# .. math::
+#   \sum_{j} A_{i,j,k} B_{j,l,m} \implies \mathcal{O}(d_i \times d_m \times d_j^2 )
+# 
+# Then, contracting the resulting tensor :mathcal:`(AB)_{i, k, l, m}` with :math:`C_{k,m,n}` requires
+# .. math::
+#   \sum_{k, m} (AB)_{i, k, l, m} C_{k,m,n}  \implies \mathcal{O}(d_j \times d_m \times d_i^2)
+# 
+# operations. Assuming :math:`d_j \leq \d_m \leq d_i`, assymptotially, the whole contraction will have a cost of :math:`\mathcal{O}(d_j \times d_m \times d_i^2)`. Alternatively, we could first contract :math:`B` and :math:`C`, incurring in the cost
+# 
+# .. math::
+#   \sum_{m}  B_{j,l,m} C_{k,m,n} \implies \mathcal{O}(d_i \times d_m \times d_j^2 ) .
+# 
+# Then, contracting the result with :math:`A` results in
+# 
+# .. math::
+#   \sum_{j, k} A_{i,j,k} (BC)_{j,l,k,n}  \implies \mathcal{O}(d_i^2 \times d_j^2) .
+# 
+# This means, the second contraction path results in an asymptotic cost of :math:`\mathcal{O}(d_i^2 \times d_j^2)` - lower than the first contraction path.
+# To see this in practice, let us perform the above contraction using ``np.einsum``.
+
+import timeit
+
+di = 1000
+dm = 100
+dj = 10
+
+A = np.arange(di*dj*dj).reshape(di,dj,dj) # ijk
+B = np.arange(dj*1*dm).reshape(dj,1,dm) # jlm
+C = np.arange(dj*dm*di).reshape(dj,dm,di) # kmn
+
+iterations = 20
+
+contraction = "np.einsum('ijk, jlm -> iklm', A, B)"
+execution_time = timeit.timeit(contraction, globals=globals(), number=iterations)
+
+average_time_ms = execution_time * 1000 / iterations
+print(f"Computation cost for AB contraction: {average_time_ms:.8f} ms")
+
+AB = np.einsum('ijk, jlm -> iklm', A, B)
+contraction = "np.einsum('iklm, kmn -> iln', AB, C)"
+execution_time = timeit.timeit(contraction, globals=globals(), number=iterations)
+
+average_time_ms = execution_time * 1000 / iterations
+print(f"Computation cost for (AB)C contraction: {average_time_ms:.8f} ms")
+
+contraction = "np.einsum('jlm, kmn -> jlkn', B, C)"
+execution_time = timeit.timeit(contraction, globals=globals(), number=iterations)
+
+average_time_ms = execution_time * 1000 / iterations
+print(f"Computation cost for BC contraction: {average_time_ms:.8f} ms")
+
+BC = np.einsum('jlm, kmn -> jlkn', B, C)
+
+contraction = "np.einsum('ijk, jlkn -> iln', A, BC)"
+execution_time = timeit.timeit(contraction, globals=globals(), number=iterations)
+
+average_time_ms = execution_time * 1000 / iterations
+print(f"Computation cost for A(BC) contraction: {average_time_ms:.8f} ms")
+
+##############################################################################
 # - For this reason there exist heuristics for optimizing contraction path complexity. NP problem -> no perfect solution but great heuristics (https://arxiv.org/pdf/2002.01935).
 #     (optional) mention the idea behind some of them
 #     Link to quimb examples.
-# - CODE: show this using np.einsum, timeit, and very large dimensions expecting to see a difference.
+
 ##############################################################################
 # From tensor networks to quantum circuits:
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# 
 # - Quantum circuits are a restricted subclass of tensor networks
 # - show examples on https://arxiv.org/pdf/1912.10049 page 8 and 9 showing a quantum circuit for a bell state, defining each component as a tensor and show their contraction.
 # - What else?
-"""
-DRAFT:
 
-1) 
-- Definition of a tensor as an n-dimensional array. Show notation with n indices, stating that it belongs to C^{d1,...,dn}. Define rank, index, dimension (mention how these terms are sometimes used (wrongly?) interchangeably in literature).
-- Graphical notation. Mention that there exist certain representations in the literature that allow to represent properties of the tensors (e.g. symmetry, orthogonality). In our case, we can adhere to a general circle.
-- Specific examples used in a day-to-day: scalars, vectors, matrices. Mention that for quantum states, we can adopt the convention that the legs in one direction mean that the state belongs to one Hilbert space, and the legs to the other side to the dual space.
-- CODE: include code using numpy creating a >2 dimensional array.
-
-2)
-
-- Show the matrix multiplication in terms of summation over indices, then using the diagrammatic representation. This results in another rank 2 tensor (matrix)
-- Analagously, we can represent matrix-vector multiplication resulting in a rank 1 tensor (vector). Just as we expected!
-- We can generalize this concept to tensors. This is done by summing over repeated indices (just as in einstein convention - external link for it) resulting in another tensor made up of the open legs of all the tensors together.
-    In diagrammatic notation, this is simply sticking together legs with same indices! (show nice diagram with >3 tensors). We have just formed a network of tensors, i.e. a Tensor Network!
-- CODE: Talking about einstein convetion, we can perform this contraction of tensors using `np.einsum`.
-"""
+##############################################################################
+# References
+# ----------
+# .. [#Arad]
+#    I. Arad and Z. Landau.
+#    "Quantum computation and the evaluation of tensor networks",
+#    `<https://arxiv.org/abs/0805.0040>`__, 2010.
