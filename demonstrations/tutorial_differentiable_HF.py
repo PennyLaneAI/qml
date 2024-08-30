@@ -101,7 +101,8 @@ To get started, we need to define the atomic symbols and the nuclear coordinates
 For the hydrogen molecule we have
 """
 import warnings
-warnings.filterwarnings("ignore")
+from numpy import ComplexWarning
+warnings.filterwarnings("ignore", category=ComplexWarning)
 
 from autograd import grad
 import pennylane as qml
