@@ -2,10 +2,11 @@
     "title": "Adversarial Attacks on Quantum Machine Learning",
     "authors": [
         {
-            "id": "maxi_wendlinger"
+            "username": "mxw"
         },
         {
-            "id": "kilian_tscharke"
+            "username": "kil"
+
         }
     ],
     "dateOfPublication": "2024-12-31T00:00:00+00:00",
