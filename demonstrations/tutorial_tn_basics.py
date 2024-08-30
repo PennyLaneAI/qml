@@ -201,7 +201,8 @@ print(D.shape)
 # .. math::
 #   \sum_{j} A_{i,j,k} B_{j,l,m} \implies \mathcal{O}(d_i \times d_m \times d_j^2 )
 # 
-# Then, contracting the resulting tensor :mathcal:`(AB)_{i, k, l, m}` with :math:`C_{k,m,n}` requires
+# Then, contracting the resulting tensor :math:`(AB)_{i, k, l, m}` with :math:`C_{k,m,n}` requires
+# 
 # .. math::
 #   \sum_{k, m} (AB)_{i, k, l, m} C_{k,m,n}  \implies \mathcal{O}(d_j \times d_m \times d_i^2)
 # 
