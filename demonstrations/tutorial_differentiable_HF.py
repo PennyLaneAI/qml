@@ -100,9 +100,6 @@ done in PennyLane.
 To get started, we need to define the atomic symbols and the nuclear coordinates of the molecule.
 For the hydrogen molecule we have
 """
-import warnings
-from numpy import ComplexWarning
-warnings.filterwarnings("ignore", category=ComplexWarning)
 
 from autograd import grad
 import pennylane as qml
