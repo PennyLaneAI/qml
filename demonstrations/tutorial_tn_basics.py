@@ -180,7 +180,11 @@ print(D.shape)
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
 # 
 # A common task when dealing with tensors is the contraction of large networks resulting in a single tensor (including scalars). To arrive to this final tensor, we can start with a single tensor and contract it with adjacent tensors one-at-a-time. The order in which this is carried out is known as the *contraction path* or *bubbling*.
-# While the final tensor is independent of the order of the contraction, the number of operations performed can vary greatly with the order in which we contract the intermediate tensors. Moreover, in a general setup, finding the optimal order of indices to be contracted is not at all a trivial task - actually it is a NP-complete problem [#Arad]_.
+# While the final tensor is independent of the order of the contraction, the number of operations performed can vary greatly with the order in which we contract the intermediate tensors. Moreover, in a general setup, finding the optimal order of indices to be contracted is not at all a trivial task.
+# 
+# .. note::
+# 
+#   Actually finding the optimal contraction path of a tensor network is a NP-complete problem [#Arad]_.
 # 
 # For this reason, it is useful to look at how to calculate the computational cost or the *complexity* of a tensor network contraction. First, we look at a simple matrix-matrix contraction. Given rank-2 tensors :math:`G^1_{i,j}` and :math:`G^2_{j,k}`, we have seen the :math:`(i,k)`-th element of the resulting contraction along the :math:`j`-th index is
 # 
@@ -274,8 +278,8 @@ print(f"Computation cost for A(BC) contraction: {average_time_ms:.8f} ms")
 # From this we see tha the second contraction path yields a much lower complexity compared to the first one, just as we expected!
 # 
 # - For this reason there exist heuristics for optimizing contraction path complexity. NP problem -> no perfect solution but great heuristics (https://arxiv.org/pdf/2002.01935).
-#     (optional) mention the idea behind some of them
-#     Link to quimb examples.
+# - Link to quimb examples.
+# -The minimum required info would be that there are heuristics that work reasonably well, where one can find these heuristics and ideally how to set them in default.tensor. Examples: Faster identification of optimal contraction sequences for tensor networks, 
 
 ##############################################################################
 # From tensor networks to quantum circuits:
@@ -283,7 +287,7 @@ print(f"Computation cost for A(BC) contraction: {average_time_ms:.8f} ms")
 # 
 # - Quantum circuits are a restricted subclass of tensor networks
 # - show examples on https://arxiv.org/pdf/1912.10049 page 8 and 9 showing a quantum circuit for a bell state, defining each component as a tensor and show their contraction.
-# - What else?
+# - Include suggestions from Korbinian: https://github.com/PennyLaneAI/qml/pull/1193#discussion_r1719502008.
 
 ##############################################################################
 # References
