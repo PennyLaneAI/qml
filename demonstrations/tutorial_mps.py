@@ -370,7 +370,7 @@ for i in range(len(Ms)):
 # However, if we keep track of the singular values at all times, we can switch any site tensor from left- to right-orthogonal by just multiplying with the singular values.
 # This is the so-called Vidal form introduced in [#Vidal]_ and works like this: Even though we are not going to use them in our representation, it makes sense to introduce the "bare" local :math:`\Gamma`-tensors :math:`\Gamma^{\sigma_i}` in terms of
 #
-# .. math:: \Gamma^{\sigma_i} = \left(\Lambda^{[i-1]}\right)^{-1} U^{\sigma_i} = V^{\sigma_i}^\dagger \left(\Lambda^{[i]}\right)^{-1}
+# .. math:: \Gamma^{\sigma_i} = \left(\Lambda^{[i-1]}\right)^{-1} U^{\sigma_i} = \left(V^\dagger\right)^{\sigma_i} \left(\Lambda^{[i]}\right)^{-1}
 #
 # and write the MPS in terms of those bare :math:`\Gamma`-tensors with the singular values connecting them. We can then just sub-select and recombine parts to get either right- or left-canonical tensors in the following manner:
 #
@@ -386,7 +386,7 @@ for i in range(len(Ms)):
 #
 # Finally, the local observable expectation value simply becomes
 #
-# .. math:: \langle \psi | O | \psi \rangle = \text{tr}\left[ \sum_{\sigma_i \tilde{\sigma}_i} \Theta^{\sigma_i} O^{\sigma_i \tilde{\sigma}_i} \Theta^{\tilde{\sigma}_i}^* \right],
+# .. math:: \langle \psi | O | \psi \rangle = \text{tr}\left[ \sum_{\sigma_i \tilde{\sigma}_i} \Theta^{\sigma_i} O^{\sigma_i \tilde{\sigma}_i} \Theta^{*\tilde{\sigma}_i} \right],
 #
 # or, graphically the following.
 #
