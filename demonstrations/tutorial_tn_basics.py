@@ -144,14 +144,14 @@ print(D.shape)
 # To end this section, we want to discuss a common example of a tensor network contraction arising in quantum computing, namely the **CNOT** gate. The CNOT gate can be expressed in the computational basis as
 #
 # .. math::
-#   CNOT = \ket{0}\bra{0} \otimes I + \ket{1}\bra{1} \otimes X.
+#   CNOT = |0\rangle \langle 0 | \otimes I + |1\rangle \langle 1 | \otimes X.
 #
-# That is, if the control qubit is in the :math:`\ket{1}` state, we apply the :math:`X` gate on the target qubit, otherwise, we leave them untouched. However, we can also rewrite this equation as a contraction. To do so, we define two tensors:
+# That is, if the control qubit is in the :math:`|1\rangle` state, we apply the :math:`X` gate on the target qubit, otherwise, we leave them untouched. However, we can also rewrite this equation as a contraction. To do so, we define two tensors:
 #
 # .. math::
 #   T^1 = \begin{pmatrix}
-#           \ket{0}\bra{0} \\
-#           \ket{1}\bra{1}
+#           |0\rangle \langle 0\\
+#           |1\rangle \langle 1 |
 #         \end{pmatrix}
 #
 # and
@@ -162,7 +162,7 @@ print(D.shape)
 #           X
 #         \end{pmatrix}
 #
-# This means :math:`(T^1)_{i,j,k}` and :math:`(T^2)_{l,j,m}` are two rank-3 tensors, where the index :math:`j` "*picks*" the elements in the column vector while the first and last indices correspond to the indices of the internal tensors (matrices). For instance, the :math:`j = 0`-th element of :math:`T^1` and :math:`T^2` are :math:`\ket{0}\bra{0}` and :math:`I`, respectively. And similarly for their :math:`j = 1`-st element. This means we can redefine the CNOT expression from above as
+# This means :math:`(T^1)_{i,j,k}` and :math:`(T^2)_{l,j,m}` are two rank-3 tensors, where the index :math:`j` "*picks*" the elements in the column vector while the first and last indices correspond to the indices of the internal tensors (matrices). For instance, the :math:`j = 0`-th element of :math:`T^1` and :math:`T^2` are :math:`|0\rangle \langle 0 |` and :math:`I`, respectively. And similarly for their :math:`j = 1`-st element. This means we can redefine the CNOT expression from above as
 #
 # .. math::
 #   CNOT = \sum_j (T^1)_{i,j,k} \otimes (T^2)_{l,j,m}.
@@ -206,7 +206,7 @@ print(D.shape)
 # .. math::
 #   \sum_{k, m} (AB)_{i, k, l, m} C_{k,m,n}  \implies \mathcal{O}(d_j \times d_m \times d_i^2)
 # 
-# operations. Assuming :math:`d_j \leq \d_m \leq d_i`, assymptotially, the whole contraction will have a cost of :math:`\mathcal{O}(d_j \times d_m \times d_i^2)`. Alternatively, we could first contract :math:`B` and :math:`C`, incurring in the cost
+# operations. Assuming :math:`d_j \leq d_m \leq d_i`, assymptotially, the whole contraction will have a cost of :math:`\mathcal{O}(d_j \times d_m \times d_i^2)`. Alternatively, we could first contract :math:`B` and :math:`C`, incurring in the cost
 # 
 # .. math::
 #   \sum_{m}  B_{j,l,m} C_{k,m,n} \implies \mathcal{O}(d_i \times d_m \times d_j^2 ) .
@@ -217,7 +217,7 @@ print(D.shape)
 #   \sum_{j, k} A_{i,j,k} (BC)_{j,l,k,n}  \implies \mathcal{O}(d_i^2 \times d_j^2) .
 # 
 # This means, the second contraction path results in an asymptotic cost of :math:`\mathcal{O}(d_i^2 \times d_j^2)` - lower than the first contraction path.
-# To see this in practice, let us perform the above contraction using ``np.einsum``.
+# To see this in practice, let us perform the above contraction using ``np.einsum``. First, we crate 3 tensors with the correct dimensions.
 
 import timeit
 
@@ -229,6 +229,9 @@ A = np.arange(di*dj*dj).reshape(di,dj,dj) # ijk
 B = np.arange(dj*1*dm).reshape(dj,1,dm) # jlm
 C = np.arange(dj*dm*di).reshape(dj,dm,di) # kmn
 
+##############################################################################
+# Then, we can perform the individual contractions between pairs of tensors and time it using ``timeit``. We repeat the contraction ``20`` times and average the computation time to account for smaller fluctuations. First, we start contracting :math:`A` and :math:`B`.
+
 iterations = 20
 
 contraction = "np.einsum('ijk, jlm -> iklm', A, B)"
@@ -237,6 +240,9 @@ execution_time = timeit.timeit(contraction, globals=globals(), number=iterations
 average_time_ms = execution_time * 1000 / iterations
 print(f"Computation cost for AB contraction: {average_time_ms:.8f} ms")
 
+##############################################################################
+# Then, we contract the result with :math:`C`.
+
 AB = np.einsum('ijk, jlm -> iklm', A, B)
 contraction = "np.einsum('iklm, kmn -> iln', AB, C)"
 execution_time = timeit.timeit(contraction, globals=globals(), number=iterations)
@@ -244,11 +250,17 @@ execution_time = timeit.timeit(contraction, globals=globals(), number=iterations
 average_time_ms = execution_time * 1000 / iterations
 print(f"Computation cost for (AB)C contraction: {average_time_ms:.8f} ms")
 
+##############################################################################
+# As expected, the last contraction is much more costly than the first one. We now repeat the procedure, contracting :math:`B` and :math:`C` first. 
+
 contraction = "np.einsum('jlm, kmn -> jlkn', B, C)"
 execution_time = timeit.timeit(contraction, globals=globals(), number=iterations)
 
 average_time_ms = execution_time * 1000 / iterations
 print(f"Computation cost for BC contraction: {average_time_ms:.8f} ms")
+
+##############################################################################
+# We see this contraction is in the same order of magnitude as the contraction between :math:`A` and :math:`B`, as expected by the complexity analysis since they both yield :math:`\mathcal{O}(d_i \times d_m \times d_j^2 )`. Then, we perform the contraction between the resulting tensor and :math:`A`.
 
 BC = np.einsum('jlm, kmn -> jlkn', B, C)
 
@@ -259,6 +271,8 @@ average_time_ms = execution_time * 1000 / iterations
 print(f"Computation cost for A(BC) contraction: {average_time_ms:.8f} ms")
 
 ##############################################################################
+# From this we see tha the second contraction path yields a much lower complexity compared to the first one, just as we expected!
+# 
 # - For this reason there exist heuristics for optimizing contraction path complexity. NP problem -> no perfect solution but great heuristics (https://arxiv.org/pdf/2002.01935).
 #     (optional) mention the idea behind some of them
 #     Link to quimb examples.
