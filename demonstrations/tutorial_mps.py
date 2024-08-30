@@ -280,8 +280,8 @@ def dense_to_mps(psi, bond_dim):
     psi = Vd
 
     for _ in range(n-2):
-        psi = np.reshape(psi, (2*bondL, -1))   # reshape psi[2 * bondL, (2x2x2...)]
-        U, S, Vd = split(psi, bond_dim)        # psi[2, (2x2x..)] = U[2, mu] S[mu] Vd[mu, (2x2x2x..)]
+        psi = np.reshape(psi, (2*bondL, -1)) # reshape psi[2 * bondL, (2x2x2...)]
+        U, S, Vd = split(psi, bond_dim) # psi[2, (2x2x..)] = U[2, mu] S[mu] Vd[mu, (2x2x2x..)]
         Ms.append(U)
         Ss.append(Ss)
 
