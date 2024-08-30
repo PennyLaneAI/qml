@@ -228,7 +228,8 @@ print(f"Shapes of Us: {[_.shape for _ in Us]}")
 psi_reconstruct = Us[0]
 
 for i in range(1, len(Us)):
-    psi_reconstruct = np.tensordot(psi_reconstruct, Us[i], axes=1) # contract the rightmost with the left most index
+    # contract the rightmost with the left most index
+    psi_reconstruct = np.tensordot(psi_reconstruct, Us[i], axes=1)
 
 print(f"Shape of reconstructed psi: {[_.shape for _ in Us]}")
 # remove dummy dimensions
