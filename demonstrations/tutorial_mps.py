@@ -184,7 +184,7 @@ Us.append(U)
 # When splitting up :math:`\psi'_{\mu_1, (\sigma_2 \sigma_3)}` we combine the virtual bond with the current site, and have all remaining sites be the other leg of the matrix we create for SVD.
 # In particular, we do
 # 
-# .. math:: \psi'_{\mu_1, (\sigma_2 \sigma_3)} = \psi'_{(\mu_1 \sigma_2), (\sigma_3)} = \sum_{\mu_2} U^{\sigma_2}_{\mu_1 \mu_2} \Lambda_{\mu_2} V^\dagger^{\sigma_3}_{\mu_2}
+# .. math:: \psi'_{\mu_1, (\sigma_2 \sigma_3)} = \psi'_{(\mu_1 \sigma_2), (\sigma_3)} = \sum_{\mu_2} U^{\sigma_2}_{\mu_1 \mu_2} \Lambda_{\mu_2} \left(V^\dagger\right)^{\sigma_3}_{\mu_2}
 #
 
 psi_remainder = np.diag(Lambda) @ Vd                 # mu1 (s2 s3)
