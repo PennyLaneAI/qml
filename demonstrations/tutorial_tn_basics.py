@@ -26,7 +26,11 @@ A beautiful and powerful tool accompanying tensors (networks) is their graphical
 TODO: add diagram here as the second part of the equation.
 
 .. math::
-    T_{i,j,k,l} = \includegraphics[height=0.2\textheight]{../_static/demonstration_assets/tn_basics/tensor_one.png}
+    T_{i,j,k,l} = 
+    
+.. figure:: ../_static/demonstration_assets/tn_basics/tensor_one.png
+    :align: center
+    :width: 60%
 
 We can apply this same idea to represent a scalar, a vector and a matrix:
 
@@ -71,7 +75,7 @@ print("rank: ", tensor_rank1.ndim)
 print("dimensions: ", tensor_rank1.shape)
 
 ##############################################################################
-# Then, we can use this to constructor a rank-2 tensor (a matrix).
+# Then, we can use this to construct a rank-2 tensor (a matrix).
 
 tensor_rank2 = np.array([tensor_rank1, tensor_rank1])
 print("rank: ", tensor_rank2.ndim)
@@ -84,9 +88,11 @@ tensor_rank3 = np.array([tensor_rank2])
 print("rank: ", tensor_rank3.ndim)
 print("dimensions: ", tensor_rank3.shape)
 print("Rank-3 tensor: \n", tensor_rank3)
+
 ##############################################################################
-# Similarly, we can create a tensor of arbitrary rank following a similar procedure. This recursive approach is instructive to understand a rank-r tensor as made up of rank-(r-1) tensors, which translates to the code as adding an additional level in the nested bracket structure ``[tensor_rank_r-1]``.
+# We can create a tensor of arbitrary rank following a similar procedure. This recursive approach is instructive to understand a rank-r tensor as made up of rank-(r-1) tensors, which translates to the code as adding an additional level in the nested bracket structure ``[tensor_rank_r-1]``.
 #
+
 ##############################################################################
 # From matrix multiplication to tensor contractions
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -107,37 +113,40 @@ print("Rank-3 tensor: \n", tensor_rank3)
 #
 # In this case, the resulting tensor has two dangling indices, :math:`i` and :math:`k`, which defines a matrix, as expected!
 #
-# We can now generalize this concept to tensors, and consequently, to more than a pair of legs being contracted. For example, let us look at three tensors :math:`A_{i,j,k}`, :math:`B_{j,l,m}` and :math:`C_{k,m,n}`. To contract them, all we need to do is to sum over repeated indices (:math:`j`, :math:`k`, :math:`m`), just as we would do in Einstein convention. Thus, the (i,l,n)-th element of the resulting tensor :math:`D` is
+# We can now generalize this concept to tensors, and consequently, to more than a pair of legs being contracted. For example, let us look at three tensors :math:`A_{i,j,k}`, :math:`B_{j,l,m}` and :math:`C_{k,m,n}`. To contract them, all we need to do is to sum over repeated indices (:math:`j`, :math:`k`, :math:`m`), just as we would do in `Einstein convention <https://en.wikipedia.org/wiki/Einstein_notation>`_. Thus, the (i,l,n)-th element of the resulting tensor :math:`D` is
 #
 # .. math::
 #     (D)_{i,l,n} = \sum_{j,k,m} A_{i,j,k} B_{j,l,m} C_{k,m,n} .
 #
-# Note how the resulting rank-3 tensor is made up of the open legs from all the initial tensors :math:`(i,l,n)`. The diagrammatic representation of this equation is obtained by sticking all the legs with the same indices together.
+# Note how the resulting rank-3 tensor is made up of the remaining open legs from the initial tensors :math:`(i,l,n)`. The diagrammatic representation of this equation is obtained by sticking all the legs with the same indices together.
 #
 # TODO: add figure here.
 #
-# With the above contraction we have formed a network of tensors, i.e. a **Tensor Network**!
+# With the above contraction we have formed a network of tensors, i.e., a **Tensor Network**!
 #
 # .. tip::
 #   A common question arising when drawing a tensor is "what is the correct order to draw the indices". For instance, in the figure above we have adopted the convention that a tensor :math:`A_{i,j,k}` corresponds to a diagram with the the first leg (:math:`i`) pointing left, the second leg (:math:`j`) pointing upwards and the third leg (:math:`k`) pointing right, and similarly for the other two tensors. However, this need not be the case. We could have defined the first leg to be the one pointing upwards, for example. Based on the use case, and the user, some conventions might seem more natural than others. The only important thing to keep in mind is to be consistent. In other words, once we choose a convetion for the order, we should apply it to all the tensors to avoid contracting the wrong indices ❌.
 #
-# Remember we pointed out the similarity in the notation between the tensor network contractions and Einstein notation? Then it doesn't come as a suprise that we can perform a contraction using the function ``np.einsum``. To do so, we can start creating the 3 tensors to be contracted by reshaping a 1D array (coming from ``np.arange``) into rank-3 tensors of the correct dimensions.
+# Remember we pointed out the similarity in the notation between the tensor network contractions and Einstein notation? Then, it doesn't come as a suprise that we can perform a contraction using the function ``np.einsum``. To do so, we can start creating the 3 tensors to be contracted by reshaping a 1D array (created using``np.arange``) into rank-3 tensors of the correct dimensions.
 
 # Create the individual rank-3 tensors
 A = np.arange(6).reshape(1, 2, 3)  # ijk
 B = np.arange(6).reshape(2, 3, 1)  # jlm
 C = np.arange(6).reshape(3, 1, 2)  # kmn
 
+##############################################################################
+# The ``np.einsum`` function takes as inputs the tensors to be contracted and a string showing the indices of the each tensor and (optionally) the indices of the output tensor.
+
 D = np.einsum("ijk, jlm, kmn -> iln", A, B, C)
 print(D.shape)
 
 ##############################################################################
-# The ``np.einsum`` takes as inputs the tensors to be contracted and a string showing the indices of the each tensor and (optionally) the indices of the output tensor. To end this section, we want to discuss a common example of a tensor network contraction arising in quantum computing, namely the **CNOT** gate. The CNOT gate can be expressed in the computational basis as
+# To end this section, we want to discuss a common example of a tensor network contraction arising in quantum computing, namely the **CNOT** gate. The CNOT gate can be expressed in the computational basis as
 #
 # .. math::
 #   CNOT = \ket{0}\bra{0} \otimes I + \ket{1}\bra{1} \otimes X.
 #
-# That is, if the control qubit is in the :math:`\ket{1}` state, we apply the :math:`X` gate on the target qubit, otherwise, we leave them untouched. Alternatively, we can rewrite this equation as a contraction. To do so, we define two tensors:
+# That is, if the control qubit is in the :math:`\ket{1}` state, we apply the :math:`X` gate on the target qubit, otherwise, we leave them untouched. However, we can also rewrite this equation as a contraction. To do so, we define two tensors:
 #
 # .. math::
 #   T^1 = \begin{pmatrix}
@@ -153,7 +162,7 @@ print(D.shape)
 #           X
 #         \end{pmatrix}
 #
-# This means, :math:`(T^1)_{i,j,k}` and :math:`(T^2)_{l,j,m}` are two rank-3 tensors, where the index :math:`j` "*picks*" the elements in the column vector while the first and last indices correspond to the indices of the internal tensors (matrices). For instance, the :math:`0`-th element of :math:`T^1` and :math:`T^2` are :math:`\ket{0}\bra{0}` and :math:`I`, respectively. And similarly for their :math:`1`-st element. This means we can redefine the CNOT expression from above as
+# This means :math:`(T^1)_{i,j,k}` and :math:`(T^2)_{l,j,m}` are two rank-3 tensors, where the index :math:`j` "*picks*" the elements in the column vector while the first and last indices correspond to the indices of the internal tensors (matrices). For instance, the :math:`j = 0`-th element of :math:`T^1` and :math:`T^2` are :math:`\ket{0}\bra{0}` and :math:`I`, respectively. And similarly for their :math:`j = 1`-st element. This means we can redefine the CNOT expression from above as
 #
 # .. math::
 #   CNOT = \sum_j (T^1)_{i,j,k} \otimes (T^2)_{l,j,m}.
@@ -165,9 +174,10 @@ print(D.shape)
 # Then, their contraction results in the well known CNOT quantum circuit representation.
 #
 # TODO: add the CNOT diagram here.
+
 ##############################################################################
 # The cost of contracting a network:
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
 # - Mention that the resulting tensor network doesn't change but the way we arrive to the final tensor affects how expensive it is to get there.
 # - Show how can we can calculate the complexity of a contraction by means of a simple example using 2 matrices (rank 2 tensors): dimension_contracted x (dimensions_open).
 # Intuition behind: we perform one operation (contraction) and repeat many times to "populate" the resulting tensor (dimension_open1 x dimension_open2). Show the equation with indices.
