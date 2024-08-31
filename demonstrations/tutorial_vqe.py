@@ -42,34 +42,30 @@ Let's get started!
 
 Building the electronic Hamiltonian
 -----------------------------------
-The first step is to specify the molecule we want to simulate. This
-is done by providing a list with the symbols of the constituent atoms
-and a one-dimensional array with the corresponding nuclear coordinates
-in `atomic units <https://en.wikipedia.org/wiki/Hartree_atomic_units>`_.
+The first step is to specify the molecule we want to simulate. We will use
+the electronic Hamiltonian of the hydrogen molecule. A wide variety of molecular
+data, including Hamiltonians, is available on the
+`PennyLane Datasets service <https://pennylane.ai/datasets>`__. This data can
+be downloaded using the :func:`~.pennylane.data.load` function:
 """
+
 from jax import numpy as np
 import jax
 jax.config.update("jax_platform_name", "cpu")
 jax.config.update('jax_enable_x64', True)
 
-symbols = ["H", "H"]
-coordinates = np.array([[0.0, 0.0, -0.6614], [0.0, 0.0, 0.6614]])
-
-##############################################################################
-# The molecular structure can also be imported from an external file using
-# the :func:`~.pennylane.qchem.read_structure` function.
-#
-# Now, we can build the electronic Hamiltonian of the hydrogen molecule
-# using the :func:`~.pennylane.qchem.molecular_hamiltonian` function.
-
 import pennylane as qml
 
-molecule = qml.qchem.Molecule(symbols, coordinates)
-H, qubits = qml.qchem.molecular_hamiltonian(molecule)
+dataset = qml.data.load('qchem', molname="H2")[0]
+H, qubits = dataset.hamiltonian, len(dataset.hamiltonian.wires)
 print("Number of qubits = ", qubits)
 print("The Hamiltonian is ", H)
 
 ##############################################################################
+# For more details on quantum datasets, check out the
+# `Quantum Datasets <https://docs.pennylane.ai/en/stable/introduction/data.html>`__
+# documentation.
+#
 # The outputs of the function are the Hamiltonian, represented as
 # a linear combination of Pauli operators, and the number of qubits
 # required for the quantum simulations. For this example, we use a
@@ -85,18 +81,14 @@ print("The Hamiltonian is ", H)
 #
 # .. note::
 #
-#     A wide variety of molecular data, including Hamiltonians, is
-#     available on the `PennyLane Datasets service <https://pennylane.ai/datasets>`__.
-#     This data can be downloaded using the :func:`~.pennylane.data.load` function:
+#     You can also manually construct the Hamiltonian using the following code:
 #
 #     .. code-block:: python
-#     
-#         dataset = qml.data.load('qchem', molname="H2")[0]
-#         H, qubits = dataset.hamiltonian, len(dataset.hamiltonian.wires)
 #
-#     For more details, check out the
-#     `Quantum Datasets <https://docs.pennylane.ai/en/stable/introduction/data.html>`__
-#     documentation.
+#         symbols = ["H", "H"]
+#         coordinates = np.array([[0.0, 0.0, -0.6614], [0.0, 0.0, 0.6614]])
+#         molecule = qml.qchem.Molecule(symbols, coordinates)
+#         H, qubits = qml.qchem.molecular_hamiltonian(molecule)
 #
 # Implementing the VQE algorithm
 # ------------------------------
