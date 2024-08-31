@@ -103,11 +103,17 @@ Let's see how we would code the number :math:`6`.
 """
 
 import pennylane as qml
+from pennylane.devices.preprocess import decompose
 import matplotlib.pyplot as plt
+from functools import partial
 
 dev = qml.device("default.qubit", wires=3)
 
-@qml.compile
+def stopping_condition(op):
+    """Stop decomposing operations if they have a matrix"""
+    return op.has_matrix
+
+@partial(decompose, stopping_condition=stopping_condition, skip_initial_state_prep=False)
 @qml.qnode(dev)
 def basis_embedding_circuit(m):
     qml.BasisEmbedding(m, wires=range(3))

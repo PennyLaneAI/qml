@@ -224,7 +224,6 @@ def plot_bloch_sphere(bloch_vectors):
     ax.grid(False)
     ax.set_axis_off()
     ax.view_init(30, 45)
-    ax.dist = 7
 
     # Draw the axes (source: https://github.com/matplotlib/matplotlib/issues/13575)
     x, y, z = np.array([[-1.5,0,0], [0,-1.5,0], [0,0,-1.5]])
@@ -241,6 +240,7 @@ def plot_bloch_sphere(bloch_vectors):
     ax.scatter(
         bloch_vectors[:,0], bloch_vectors[:,1], bloch_vectors[:, 2], c='#e29d9e', alpha=0.3
     )
+    plt.show()
 
 plot_bloch_sphere(not_haar_bloch_vectors)
 
