@@ -65,10 +65,6 @@ from pennylane import qchem
 from pennylane import numpy as np
 import time
 
-# TODO: Remove these lines before merging the PR
-import warnings
-warnings.simplefilter("error", np.ComplexWarning)
-
 symbols = ["Li", "H"]
 geometry = np.array([[0.0, 0.0, 0.0], [0.0, 0.0, 2.969280527]])
 molecule = qchem.Molecule(symbols, geometry)
