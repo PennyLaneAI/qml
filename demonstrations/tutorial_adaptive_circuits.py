@@ -87,7 +87,6 @@ H, qubits = qchem.molecular_hamiltonian(
     active_electrons=2,
     active_orbitals=5
 )
-H = qml.Hamiltonian(*H.terms())
 
 active_electrons = 2
 
