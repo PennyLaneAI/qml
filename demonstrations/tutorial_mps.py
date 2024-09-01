@@ -459,7 +459,7 @@ for i in range(len(Ms)):
 # Alternatively we can construct a so-called matrix product operator (MPO) that acts on all sites in between with an identity. This is done in the following way.
 #
 # First, we split the matrix of the gate into tensors that act locally. This is done again using SVD. In general the MPO bond dimension for a two qubit gate is maximally 4,
-# but in some cases like CNOT it is :math:`2`, so we can do a lossless compression by only keeping the two non-zero singular values and tossing the zeros. After we have done that, we can multiply 
+# but in some cases like :math:`\text{CNOT}` it is :math:`2`, so we can do a lossless compression by only keeping the two non-zero singular values and tossing the zeros. After we have done that, we can multiply 
 # the singular values onto either site as we do not have a use for them in the MPO other than doing the compression.
 #
 # .. figure:: ../_static/demonstration_assets/mps/cnot_split.png
@@ -477,41 +477,75 @@ for i in range(len(Ms)):
 # that is exponentially large in the number of intermediate sites. While in general it is NP-hard to find the optimal contraction path,
 # for MPS the optimal path is known. The way to do it is alternating between the physical index and the corresponding two virtual indices, going either from left-to-right, or, equivalently, from right-to-left (see figure 21 in [#Schollwoeck]_).
 #
-# 
-# Circuits that are well-suited to MPS methods and circuits that are not
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# 
-# Use of default.tensor as a tool for demonstration
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# While we focussed on the specific case of a :math:`\text{CNOT}` gate, this concept is readily generalized to arbitrary two or multi-qubit gates.
+# With that, we are now ready to run some quantum circuit simulations. We don't have to code up all contractions by hand, instead, we can use
+# the :class:`~DefaultTensor` device that takes care of all of this under the hood. All we need to do is set the bond dimension and tell the device whether
+# it should use the swap-unswap or MPO method for doing non-local gates. This is done via the keyword argument ``contract``, where we can choose between ``"swap+split"`` (what I called swap-unswap),
+# ``"nonlocal"`` (what I called the MPO method), and ``"auto-mps"``, which uses swap-unswap for 2-qubit gates and the MPO method for 3 and more qubits.
 #
-# Show how to do finite size scaling.
-# 
-# In PennyLane, we have the :class:`~DefaultTensor` device, which we can use to simulate quantum circuits using either
-# MPS or full contraction mode. We want to briefly go over what the device is 
-
+# Aside from that, we can basically use the device like any other state vector simulator device.
+# Let us run a VQE example from the PennyLane datasets of the :math:`H_6` molecule.
 
 import pennylane as qml
-import numpy as np
-from pennylane import X, Y, Z, I
 
-dev = qml.device("default.qubit")
+dataset = qml.data.load("qchem", molname="H6", bondlength=1.3, basis="STO-3G")[0]
+
+H = dataset.hamiltonian
+n_wires = len(H.wires)
+
+def circuit():
+    qml.BasisState(dataset.hf_state, wires=H.wires)
+    for op in dataset.vqe_gates:
+        qml.apply(op)
+    return qml.expval(H)
+
+mps = qml.device("default.tensor", wires=n_wires, method="mps", max_bond_dim=30, contract="auto-mps")
+res = qml.QNode(circuit, mps)()
+
+res, dataset.vqe_energy
+
+##############################################################################
+# We've set the bond dimension to ``30`` kind of arbitrarily, and saw that we are pretty close to the exact result
+# (note that exact here refers to the simulation method, not the ground state energy of the VQE result itself).
+# But when dealing with systems of sizes where we don't have the means to compare to an exact result, how do know
+# that our simulation results make sense, and are not scrambled by the errors introduced by a small bond dimension?
+#
+# The answer is **finite size scaling**, or bond dimension scaling, or just extrapolation. This is a standard method 
+# in tensor network simulations and originates from condensed matter physics and quantum phase transitions. 
+# The idea is to run the same simulation with an increasing bond dimension and check whether it saturates or converges to a value.
+# In spirit, this is similar to :doc:`zero noise extrapolation </demos/tutorial_diffable-mitigation>`.
+#
+# We always know that 
+# We choose a range of bond dimensions and plot the results for the simulation against them, keeping in mind that
+# the maximum bond dimension of a system of :math:`n` qubits is :math:`2^{\frac{n}{2}}`.
+
+bond_dims = 2**np.arange(2, (n_wires//2)+1) # maximum required bond dinemsion is 2**(n_wires//2) = 64
+ress = []
+
+for bond_dim in bond_dims:
+    mps = qml.device("default.tensor", wires=n_wires, method="mps", max_bond_dim=bond_dim, contract="auto-mps")
+    res = qml.QNode(circuit, mps)()
+    ress.append(res)
+
+
+plt.plot(bond_dims, ress, "x:", label="mps sim")
+plt.hlines(dataset.vqe_energy, bond_dims[0], bond_dims[-1], label="exact result")
+plt.xscale("log")
+plt.xlabel("bond dim $\\chi$")
+plt.xticks(bond_dims, bond_dims)
+plt.legend()
+plt.show()
 
 
 ##############################################################################
-# 
+# We see that already for :math:`\chi = 32` we have pretty accurate results.
+# We might even get away with :math:`\chi = 16` for some qualitative simulations at the cose of some approximation error.
 #
-
-##############################################################################
-# 
-#
-
-##############################################################################
-# 
-#
-
-##############################################################################
-# 
-#
+# Setting the bond dimension is an important part of performing MPS simulations. Finite size scaling is a
+# quantitative tool to orient ourselves and choose a suitable bond dimension for our simulations.
+# We can extrapolate the exact result for every simulation run,
+# but this is of course more expensive as it requires multiple executions at different bond dimensions, and is not guaranteed to converge.
+# Sometimes we are also just happy to get a cheap qualitative result for large systems that may or may not be 100% accurate.
 
 
 ##############################################################################
@@ -519,8 +553,12 @@ dev = qml.device("default.qubit")
 # Conclusion
 # ----------
 #
-# No time to talk about MPO, DMRG, Correlation lengths
+# We introduced the basics of matrix product states (MPS) and saw how the existence of a canonical form simplifies a lot of the contractions.
+# This fact can also be used for simulation of quantum circuits with local and non-local gates.
+# We showed how to run quantum circuits using the :class:`~DefaultTensor` device and how to systematically find an appropriate bond dimension.
 #
+# While MPS are mathematically known to we-describe a particular class of states (those that fulfill the area law of entanglement in 1D), we can
+# also simulate more complex systems by throwing some extra resources into the bond dimension. In particular 
 
 
 
