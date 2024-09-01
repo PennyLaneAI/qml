@@ -17,12 +17,12 @@ Matrix Product States (MPS) are an efficient representation of low entanglement 
 The amount of entanglement the MPS can represent is user-controlled via a hyper-parameter, the so-called `bond dimension` :math:`\chi`.
 If we allow :math:`\chi` to be of :math:`\mathcal{O}(2^{\frac{n}{2}})` for a system of :math:`n` qubits, we can write `any` state as an `exact` MPS.
 To avoid exponentially large resources, however, one typically sets a finite bond dimension :math:`\chi` at the cost of introducing an approximation error.
-For some specific classes of states, this is provably sufficient to have a faithful representations (see note box below). 
+For some specific classes of states, this is provably sufficient to have a faithful representations (see section on entanglement). 
 But because MPS come with a lot of powerful computational features that we are going to discuss later (in particular canonical forms),
 they are still used in much more complex systems where these requirements do not hold anymore, and still yield good results.
 For example, state of the art quantum chemistry simulations were performed using MPS (citation needed).
 
-It is known that there are more suitable tensor network states for more complex situations (see note box below).
+It is known that there are more suitable tensor network states for more complex situations (see section on entanglement later).
 However, they all suffer from a significantly larger algorithmic cost as a lot of the things that make MPS so attractive are not true anymore.
 To put it plainly, it is often simply much easier to use MPS and throw a large amount of resources into the bond dimension than to develop
 more advanced tensor network methods.
@@ -30,21 +30,6 @@ more advanced tensor network methods.
 
 While more advanced tensor network methods are developed, optimized and democratized, MPS continue to be the workhorse of
 many quantum simulation techniques.
-
-
-.. note::
-
-    Ground states of local and gapped Hamiltonians are known to satisfy the so-called area law of entanglement.
-    This law states that the entanglement entropy of a sub-system grows with its area and not its volume.
-    For one dimensional systems, the surface area of a non-disjoint sub-system is just a constant, and the entanglement
-    between any such sub-system in an MPS with a finite bond dimension :math:`\chi` is naturally bounded by :math:`\log(\chi)=\text{const.}`,
-    so MPS satisfy the area law of entanglement for one-dimensional systems.
-
-    PEPS are the natural generalization to regular 2D or 3D grids as well as more general graph connectivities, and are known to fulfill the
-    respective area laws of entanglement, making them the correct ansätze for local and gapped Hamiltonians in those cases. For example, for a 2D
-    PEPS with a square subsystem of size :math:`L` and bond dimension :math:`\chi`, the entanglement entropy between the that square and the rest of the system is bounded by
-    :math:`\log(\chi^L) = L \log(\chi)`, which is proportional to the circumference.
-
 
 
 Compression using Singular Value Decomposition
@@ -55,9 +40,9 @@ Any matrix :math:`M = \mathbb{C}^{M\times N}` can be singular-value-decomposed a
 
 .. math:: M = U \Lambda V^\dagger,
 
-where :math:`\Lambda` is the diagonal matrix of the :math:`r=\min(m, n)` real and non-negative singular values, 
-:math:`U \in \mathbb{C}^{m\times r}` is left-unitary :math:`U^\dagger U = \mathbb{I}_r`, and
-:math:`V^\dagger \in \mathbb{C}^{r\times n}` is right-unitary :math:`V V^\dagger = \mathbb{I}_r`.
+where :math:`\Lambda` is the diagonal matrix of the :math:`r=\min(M, N)` real and non-negative singular values, 
+:math:`U \in \mathbb{C}^{M\times r}` is left-unitary :math:`U^\dagger U = \mathbb{I}_r`, and
+:math:`V^\dagger \in \mathbb{C}^{r\times N}` is right-unitary :math:`V^\daggers (V^\daggers)^\daggers = \mathbb{I}_r`.
 We say the columns and rows of :math:`U` and :math:`V^\dagger` are the left- and right-orthogonal
 singular vectors, respectively. In the case of square and normal matrices, the singular values and singular vectors
 are just the eigenvalues and eigenvectors.
@@ -98,7 +83,7 @@ plt.show()
 size_original = np.prod(img.shape)
 size_compressed = np.prod(U_compressed.shape) + np.prod(Lambda_compressed.shape) + np.prod(Vd_compressed.shape)
 
-print(f"original image: {size_original}, compressed image: {size_compressed}, factor {size_original/size_compressed:.3f} saving")
+print(f"original image size: {size_original}, compressed image size: {size_compressed}, factor {size_original/size_compressed:.3f} saving")
 ##############################################################################
 # 
 #
@@ -109,11 +94,14 @@ print(f"original image: {size_original}, compressed image: {size_compressed}, fa
 
 _, Lambda, _ = np.linalg.svd(img) # recompute full spectrum
 plt.plot(Lambda)
+plt.xlabel("index $i$")
+plt.ylabel("$\\Lambda_i$")
+plt.show()
 
 ##############################################################################
 # 
 # We are later going to do the same trick with state vectors.
-# Note that the compressed information is encoded in :math:`U`, :math:`S` and :math:`Vd`.
+# Note that the compressed information is encoded in :math:`U`, :math:`S` and :math:`V^\dagger`.
 # If we want to retrieve the actual image :math:`M` (or state vector), we still need to reconstruct the full :math:`334 \times 542` pixels.
 # Luckily, as we will later see in the case of MPS, we can retrieve all relevant information efficiently from the compressed components without ever 
 # having to reconstruct the full state vector.
@@ -124,10 +112,10 @@ plt.plot(Lambda)
 # Formally, any quantum state :math:`|\psi\rangle \in \mathbb{C}^{2^n}` on :math:`n` qubits can be written as a Matrix Product State (MPS).
 # The goal will be to write an arbitrary state :math:`|\psi\rangle = \sum_{\sigma_1, .., \sigma_n} \psi_{\sigma_1, .., \sigma_n} |\sigma_1 .. \sigma_n\rangle` in the form
 #
-# ..math:: |\psi\rangle = \sum_{\sigma_1, .., \sigma_n} U^{\sigma_1} .. U^{\sigma_n} |\sigma_1 .. \sigma_n\rangle,
+# .. math:: |\psi \rangle = \sum_{\sigma_1, .., \sigma_n} U^{\sigma_1} .. U^{\sigma_n} |\sigma_1 .. \sigma_n\rangle,
 #
 # where we decomposed the rank :math:`n` tensor :math:`\psi_{\sigma_1, .., \sigma_n}` into a product of matrices :math:`U^{\sigma_j}`
-# for each value of :math:`\sigma_j=0, 1` for qubits. This is why it is called a **matrix product** state, even though most of these object are, technically, rank-3 tensors.
+# for each value of :math:`\sigma_j` (equal to `0, 1` for qubits). This is why it is called a **matrix product** state, even though most of these object are, technically, rank-3 tensors.
 #
 # Graphically, this corresponds to splitting up the big rank-n tensor into :math:`n` smaller tensors, 
 # similar to what we did above in the example of compressing an image.
@@ -135,6 +123,10 @@ plt.plot(Lambda)
 # .. figure:: ../_static/demonstration_assets/mps/psi_to_mps_0.png
 #     :align: center
 #     :width: 70%
+#
+# The horizontal connections between the :math:`U`-tensors are the matrix multiplications in the equation above.
+# They are referred to as the `virtual` indices that we contract over. The dangling vertical lines are the
+# `physical` indices :math:`\sigma_i` of the original state.
 #
 # To make things simpler, let us look at concrete state vector with :math:`n=3` sites, so :math:`\psi_{\sigma_1 \sigma_2 \sigma_3}`.
 
@@ -159,7 +151,7 @@ U, Lambda, Vd = np.linalg.svd(psi, full_matrices=False)
 
 ##############################################################################
 #
-# For convenience, we separate so-called physical indices :math:`\sigma_j` as superscripts, and so-called virtual indices :math:`\mu_1` as subscripts.
+# For convenience, we separate physical indices :math:`\sigma_j` as superscripts, and virtual indices :math:`\mu_1` as subscripts.
 # We also multiply the singular values onto :math:`V^\dagger` and call this the remainder state :math:`\psi'_{\mu_1, (\sigma_2 \sigma_3)}`,
 # so overall we have
 # 
@@ -172,7 +164,7 @@ U, Lambda, Vd = np.linalg.svd(psi, full_matrices=False)
 #     :width: 70%
 #
 # We keep the :math:`U` tensors. We want to maintain the convention that they are of shape ``(virtual_left, physical, virtual_right)``.
-# Because there is not virtual index on the left for the first site, we introduce a dummy index.
+# Because there is no virtual index on the left for the first site, we introduce a dummy index of size ``1``.
 
 Us = []
 U = np.reshape(U, (1, 2, 2)) # mu1, s2, mu2
@@ -231,7 +223,7 @@ for i in range(1, len(Us)):
     # contract the rightmost with the left most index
     psi_reconstruct = np.tensordot(psi_reconstruct, Us[i], axes=1)
 
-print(f"Shape of reconstructed psi: {[_.shape for _ in Us]}")
+print(f"Shape of reconstructed psi: {psi_reconstruct.shape}")
 # remove dummy dimensions
 psi_reconstruct = np.reshape(psi_reconstruct, (2, 2, 2))
 # original shape of original psi
@@ -354,19 +346,20 @@ for i in range(len(Ms)):
 #     :align: center
 #     :width: 70%
 #
-# The fact that we went through the MPS from SVD-ing from left-to-right earlier was a choice.
-# We could have equivalently gone through the MPS from right-to-left and obtained a right-canonical state by keeping the :math:`V^\dagger` of the decompositions.
+# The fact that we went through the MPS SVD-ing from left-to-right earlier was a choice.
+# We could have equivalently gone through the MPS from right-to-left and obtained a right-canonical state by keeping the right-orthogonal :math:`V^\dagger` of the decompositions.
 #
 # When computing expectation values, it is convenient to have the MPS in a mixed canonical form.
 # Take some single-site observable :math:`O_i` for which we want to compute the expectation value.
 # The best way to do this is to have the MPS such that all sites left of site :math:`i` are left-canonical and all sites right of it are right-canonical.
-# That way, the contraction :math:`\langle \psi | O | \psi \rangle` for local expectation values reduces to contractions on just a single site.
+# That way, the contraction :math:`\langle \psi | O | \psi \rangle` for local expectation values reduces to contractions on just a single site,
+# because all other contractions are just the identity.
 #
 # .. figure:: ../_static/demonstration_assets/mps/mixed_canonical_observable.png
 #     :align: center
 #     :width: 70%
 #
-# We can obtain such a mixed canonical form by starting from our left-canonical MPS and going through the sites from right to left right-canonizing all sites until the observable.
+# We can obtain such a mixed canonical form by starting from our left-canonical MPS and going through the sites from right to left, thereby right-canonizing all sites until the observable.
 # However, if we keep track of the singular values at all times, we can switch any site tensor from left- to right-orthogonal by just multiplying with the singular values.
 # This is the so-called Vidal form introduced in [#Vidal]_ and works like this: Even though we are not going to use them in our representation, it makes sense to introduce the "bare" local :math:`\Gamma`-tensors :math:`\Gamma^{\sigma_i}` in terms of
 #
@@ -378,9 +371,9 @@ for i in range(len(Ms)):
 #     :align: center
 #     :width: 70%
 #
-# In particular, to compute the expectation value described just above, we need the :math:`\Theta`-tensor for the right site.
+# In particular, to compute the expectation value described just above, we need the central tensor that we named :math:`\Theta`.
 # We are not going to actually store the :math:`\Gamma`-tensors but continue to use the left-orthogonal :math:`U`-tensors.
-# So all we need to do is construct :math:`\Theta^{\sigma_i} = U^{\sigma_i} \Lambda^{[i]}`. This has two advantages: 1) 
+# So all we need to do is construct :math:`\Theta^{\sigma_i}_{\mu_{i-1} \mu_i} = \sum_{\tilde{\mu}_i} U^{\sigma_i}_{\mu_{i-1} \tilde{\mu}_i} \Lambda^{[i]}_{\tilde{\mu}_i \mu_i}`. This has two advantages: 1) 
 # we only need to perform one contraction with the singular values from the right and 2) we avoid having to compute any 
 # inverses of the singular values, which numerically can become messy for very small singular values.
 #
@@ -392,21 +385,21 @@ for i in range(len(Ms)):
 #
 # .. figure:: ../_static/demonstration_assets/mps/final_expval.png
 #     :align: center
-#     :width: 70%
+#     :width: 50%
 #
 # The canonical form essentially allows us to treat local operations locally and remove all redundancy on other sites. This will come in handy later when we look at simulating quantum circuits with MPS.
 # It also enables the very powerful density matrix renormalization group algorithm (DMRG). Here, one constructs the ground state of a Hamiltonian by iteratively sweeping through the MPS back and forth, solving
 # the eigenvalue problem locally at each site (with all other sites "frozen"). This works extremely well in practice and is hence still one of the workhorses of classical quantum simulation to this day. For a very good review
-# see [#Schollwoeck]_
+# on DMRG with MPS, see [#Schollwoeck]_.
 #
-# Entanglement
-# ~~~~~~~~~~~~
+# Entanglement and area laws
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # Entanglement is best quantified via bipartitions of states. In particular, separating a full system :math:`|\psi\rangle` and a sub-system :math:`\rho_\text{sub}`, the von Neumann entanglement entropy is given by
 #
-# .. math:: S(\rho_\text{sub}) = -\text{tr}\left[\rho_\text{sub} \log\left(\rho_\text{sub}\right) \right]
+# .. math:: S(\rho_\text{sub}) = -\text{tr}\left[\rho_\text{sub} \log\left(\rho_\text{sub}\right) \right].
 #
-# The singular values of the bonds naturally encode the entanglement of bipartition between all sites left vs all sites right of the bond.
+# In an MPS, the singular values of the bonds naturally encode the entanglement of bipartitions between all sites left vs all sites right of the bond.
 # In particular, the von Neumann entanglement entropy at bond :math:`i` is given by
 #
 # .. math:: S(\rho_{1:i}) = S(\rho_{i+1:n}) = - \sum_i \Lambda^2_i \log\left( \Lambda_i^2 \right).
@@ -416,7 +409,25 @@ for i in range(len(Ms)):
 #
 # .. math:: S(\rho_{1:i}) \leq \log(\chi) = \text{const.}.
 #
-# This is the area law of entanglement for one dimensional systems in that the surface area of a sub-system of a one-dimensional system is just :math:`1`, or, simply "constant".
+# This is the area law of entanglement for one dimensional systems in that the surface area of a sub-system of a one-dimensional system is just two points, so constant in the system size.
+#
+# .. note::
+# 
+#     Ground states of local and gapped Hamiltonians are known to satisfy the area law of entanglement.
+#     This law states that the entanglement entropy of a sub-system grows with its surface area area :math:`\partial V` instead of its volume :math:`V`.
+#     For one dimensional systems, the volume is just a line and its surface area just a constant. The entanglement
+#     between any such sub-system in an MPS with a finite bond dimension :math:`\chi` is naturally bounded by :math:`\log(\chi)=\text{const.}`,
+#     so MPS satisfy the area law of entanglement for one-dimensional systems.
+# 
+#     PEPS are the natural generalization to regular 2D or 3D grids as well as more general graph connectivities, and are known to fulfill the
+#     respective area laws of entanglement, making them the correct ansätze for local and gapped Hamiltonians in those cases. For example, for a 2D
+#     PEPS with square subsystem of volume :math:`L \times L` and bond dimension :math:`\chi`, the entanglement entropy between the that square and the rest of the system is bounded by
+#     :math:`\log(\chi^L) = L \log(\chi)`, which is proportional to the circumference :math:`\propto L`, and not its area.
+#
+#     .. figure:: ../_static/demonstration_assets/mps/area_law.png
+#         :align: center
+#         :width: 50%
+
 
 
 ##############################################################################
