@@ -432,20 +432,62 @@ for i in range(len(Ms)):
 
 ##############################################################################
 # 
-# # Part 2
 # 
 # Quantum Simulation with MPS
 # ---------------------------
-# 
-# How a gate is applied to an MPS
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+# We can use MPS to classically simulate quantum algorithms. This is a very useful tool for as long as
+# real quantum devices are noisy and costly to use.
+# An MPS simulator works very similarly to a state vector simular like :class:`~DefaultQubit`, the only difference is that the underlying state
+# is encoded in an MPS.
+#
+# Due to its canonical form, applying local gates onto an MPS is very straight forward and little work.
+# Let us walk through the example of applying a :math:`\text{CNOT}` gate on neighboring sites on the underlying MPS state of the simulator.
+#
+# Graphically, this is happening in three steps as illustrated here.
+#
+# .. figure:: ../_static/demonstration_assets/mps/apply_gate.png
+#     :align: center
+#     :width: 80%
+#
+# In the first step, we simply contract the appropriate physical indices of the MPS with those of the :math:`\text{CNOT}` matrix (which we reshape to :math:`2\times 2\times 2\times 2`).
+# Note that we also take the bond singular values into account. The result is a big blob with two virtual indices and two physical indices. 
+# We then just split this blob in the same way we split up the dense state vector and keep track of its singular values to restore the canonical form.
+#
+# The situation gets a bit more complicated when we apply a :math:`\text{CNOT}` (or any multi-site gate) on non-neighboring sites. We have two possibilities to handle this.
+# We can do what a quantum computer would do, which is swap out sites until the appropriate indices are neighboring, perform the operation and then un-swap the sites.
+# Alternatively we can construct a so-called matrix product operator (MPO) that acts on all sites in between with an identity. This is done in the following way.
+#
+# First, we split the matrix of the gate into tensors that act locally. This is done again using SVD. In general the MPO bond dimension for a two qubit gate is maximally 4,
+# but in some cases like CNOT it is :math:`2`, so we can do a lossless compression by only keeping the two non-zero singular values and tossing the zeros. After we have done that, we can multiply 
+# the singular values onto either site as we do not have a use for them in the MPO other than doing the compression.
+#
+# .. figure:: ../_static/demonstration_assets/mps/cnot_split.png
+#     :align: center
+#     :width: 50%
+#
+# Now if we want to apply the CNOT gate on non-neighboring sites, we fill the intermediate sites with identities :math:`\mathbb{I} = \delta_{\sigma_i \sigma'_i} \delta_{\mu_{i-1} \mu_i}`, and contract that larger
+# MPO with the MPS.
+#
+# .. figure:: ../_static/demonstration_assets/mps/non_local_cnot.png
+#     :align: center
+#     :width: 80%
+#
+# Here we just need to be careful to contract in the right order, otherwise we might end up with unnecessarily large tensors in intermediate steps. For example, if we first contract all physical indices we get a big blob
+# that is exponentially large in the number of intermediate sites. While in general it is NP-hard to find the optimal contraction path,
+# for MPS the optimal path is known. The way to do it is alternating between the physical index and the corresponding two virtual indices, going either from left-to-right, or, equivalently, from right-to-left (see figure 21 in [#Schollwoeck]_).
+#
 # 
 # Circuits that are well-suited to MPS methods and circuits that are not
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # Use of default.tensor as a tool for demonstration
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+# Show how to do finite size scaling.
 # 
+# In PennyLane, we have the :class:`~DefaultTensor` device, which we can use to simulate quantum circuits using either
+# MPS or full contraction mode. We want to briefly go over what the device is 
 
 
 import pennylane as qml
