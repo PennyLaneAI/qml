@@ -9,7 +9,8 @@
       "description": "The ID of the hardware vendor",
       "enum": [
         "aws",
-        "covalent"
+        "covalent",
+        "bluequbit"
       ]
     },
     "link": {
