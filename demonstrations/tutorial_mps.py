@@ -105,8 +105,8 @@ print(f"original image size: {size_original}, compressed image size: {size_compr
 ##############################################################################
 # 
 #
-# The original image is :math:`334 \times 542` pixels, that we compress in the :math:`334 \times 50`
-# :math:`U`, :math:`50` :math:`\Lambda` and :math:`50 \times 542` :math:`V^\dagger`.
+# The original image is :math:`334 \times 542` pixels, that we compress in the :math:`334 \times 50` pixels in
+# :math:`U`, :math:`50` pixels in :math:`\Lambda` and :math:`50 \times 542` pixels in :math:`V^\dagger`.
 # This is possible because the information density in the image is low, as seen by the distribution of singular values
 
 
@@ -133,7 +133,7 @@ plt.show()
 # .. math:: |\psi \rangle = \sum_{\sigma_1, .., \sigma_n} U^{\sigma_1} .. U^{\sigma_n} |\sigma_1 .. \sigma_n\rangle,
 #
 # where we decomposed the rank :math:`n` tensor :math:`\psi_{\sigma_1, .., \sigma_n}` into a product of matrices :math:`U^{\sigma_j}`
-# for each value of :math:`\sigma_j` (equal to :math:`0` or :math`1` for qubits). This is why it is called a **matrix product** state, even though most of these object are, technically, rank-3 tensors.
+# for each value of :math:`\sigma_j` (equal to :math:`0` or :math:`1` for qubits). This is why it is called a **matrix product** state, even though most of these object are, technically, rank-3 tensors.
 #
 # Graphically, this corresponds to splitting up the big rank-n tensor into :math:`n` smaller tensors, 
 # similar to what we did above in the example of compressing an image.
