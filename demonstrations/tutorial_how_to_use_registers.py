@@ -105,7 +105,7 @@ print(swap_test())
 # by simplifying wire management. In this example, we use :doc:`Quantum Phase Estimation (QPE) </demos/tutorial_qpe>` to
 # calculate the eigenvalues of a Hamiltonian.
 # Generally, QPE is described with two sets of registers. One register is known as the
-# "estimation", or measurement, register and the other is the state register where we apply our
+# "estimation" or "measurement" register, and the other is the state register where we apply our
 # unitary operators :math:`U`. We can define these registers in PennyLane code:
 
 register = qml.registers({"state": 4, "estimation": 6})
