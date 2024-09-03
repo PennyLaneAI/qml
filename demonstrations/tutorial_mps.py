@@ -505,11 +505,11 @@ for i in range(len(Ms)):
 #
 #
 # Running simulations and setting the bond dimension
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # While we focussed on the specific case of a :math:`\text{CNOT}` gate, this concept is readily generalized to arbitrary two or multi-qubit gates.
 # With that, we are now ready to run some quantum circuit simulations. We don't have to code up all contractions by hand, instead, we can use
-# the :class:`~DefaultTensor` device that takes care of all of this under the hood. All we need to do is set the bond dimension and tell the device whether
+# the :class:`~pennylane.devices.default_tensor.DefaultTensor` device that takes care of all of this under the hood. All we need to do is set the bond dimension and tell the device whether
 # it should use the swap-unswap or MPO method for doing non-local gates. This is done via the keyword argument ``contract``, where we can choose between ``"swap+split"`` (what I called swap-unswap),
 # ``"nonlocal"`` (what I called the MPO method), and ``"auto-mps"``, which uses swap-unswap for 2-qubit gates and the MPO method for 3 and more qubits.
 #
@@ -584,7 +584,7 @@ plt.show()
 #
 # We introduced the basics of matrix product states (MPS) and saw how the existence of a canonical form simplifies a lot of the contractions.
 # This fact can also be used for simulation of quantum circuits with local and non-local gates.
-# We showed how to run quantum circuits using the :class:`~DefaultTensor` device and how to systematically find an appropriate bond dimension.
+# We showed how to run quantum circuits using the :class:`~pennylane.devices.default_tensor.DefaultTensor` device and how to systematically find an appropriate bond dimension.
 #
 # While MPS are mathematically known to we-describe a particular class of states (those that fulfill the area law of entanglement in 1D), we can
 # also simulate more complex systems by throwing some extra resources into the bond dimension. In particular 
