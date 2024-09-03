@@ -38,7 +38,7 @@ print(nested_register)
 
 ######################################################################
 # Note that :func:`~.pennylane.registers` flattens any nested dictionaries, and the order of the
-# elements is based on the order of appearance and nestedness. For more details on ordering, refer
+# elements is based on the order of appearance and the level of nestedness. For more details on ordering, refer
 # to the documentation for :func:`~pennylane.registers`.
 #
 # Accessing a particular register is the same as accessing any element in a dictionary.
@@ -59,7 +59,7 @@ print(new_register)
 
 ######################################################################
 # For more details on what set operations are supported, refer to the documentation of
-# :ref:`Wires <pennylane.wires.Wires.difference>`.
+# :class:`~Wires`.
 #
 # A simple example using wire registers
 # -------------------------------------
