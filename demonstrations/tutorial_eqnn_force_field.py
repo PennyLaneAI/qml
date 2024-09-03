@@ -127,7 +127,7 @@ Let’s implement the model depicted above!
 ######################################################################
 # Implementation of the VQLM
 # --------------------------
-# We start by importing the librairies that we will need.
+# We start by importing the libraries that we will need.
 
 import pennylane as qml
 import numpy as np
@@ -135,6 +135,8 @@ import numpy as np
 import jax
 
 jax.config.update("jax_platform_name", "cpu")
+jax.config.update("jax_enable_x64", True)
+
 from jax import numpy as jnp
 
 import scipy
@@ -261,7 +263,7 @@ def trainable_layer(weight, wires):
     qml.QubitUnitary(U, wires=wires, id="U")
 
 
-# Invariant observbale
+# Invariant observable
 Heisenberg = [
     qml.PauliX(0) @ qml.PauliX(1),
     qml.PauliY(0) @ qml.PauliY(1),

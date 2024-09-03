@@ -278,7 +278,7 @@ sin_sampler = sin_prob_dist(a=0, b=np.pi)
 @qml.qnode(dev)
 def haar_random_unitary():
     phi, omega = 2 * np.pi * np.random.uniform(size=2) # Sample phi and omega as normal
-    theta = sin_sampler.rvs(size=1) # Sample theta from our new distribution
+    theta = sin_sampler.rvs(size=1)[0]  # Sample theta from our new distribution
     qml.Rot(phi, theta, omega, wires=0)
     return qml.state()
 
