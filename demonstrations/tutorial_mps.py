@@ -75,13 +75,16 @@ img = plt.imread("../_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_s
 # only look at one color channel for demonstration purposes
 img = img[:, :, 0]
 
+# Perform SVD
 U, Lambda, Vd = np.linalg.svd(img)
 
+# Keep only the 50 largest singular values and vectors
 chi = 50
 U_compressed = U[:, :chi]
 Lambda_compressed = Lambda[:chi]
 Vd_compressed = Vd[:chi]
 
+# Reconstruct the compressed image
 compressed_img = U_compressed @ np.diag(Lambda_compressed) @ Vd_compressed
 
 fig, axs = plt.subplots(ncols=2)
