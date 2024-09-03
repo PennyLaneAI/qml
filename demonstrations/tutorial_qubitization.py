@@ -3,7 +3,7 @@ r"""Intro to Qubitization
 
 Encoding a Hamiltonian into a quantum computer is a fundamental task for many applications, but the way to do it is not unique. One method that has gained special status is known as **qubitization**. In this demo, we will introduce the qubitization operator and explain how to view it as a rotation operator. This perspective is useful when combining qubitization with quantum phase estimation (QPE). We will demonstrate this by implementing qubitization-based quantum phase estimation, with code provided using the :class:`~.pennylane.Qubitization` template in PennyLane.
 
-.. figure:: ../_static/demonstration_assets/qubitization/OGthumbnail_large_Qubitization.png
+.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_large_qubitization.png
     :align: center
     :width: 50%
     :target: javascript:void(0)

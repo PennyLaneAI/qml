@@ -18,11 +18,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/qubitization/thumbnail_Qubitization.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_qubitization.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_Qubitization.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_qubitization.png"
         }
     ],
     "seoDescription": "Learn qubitization, how to visualize it, and its applications",
