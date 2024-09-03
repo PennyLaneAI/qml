@@ -73,7 +73,7 @@ The complexity of the classical simulation varies with the parameter :math:`\the
 :math:`\theta_h=0` and :math:`\theta_h=\pi/2`, the system becomes trivially solvable. We interpolate between 
 those extrema and show the final value of a single weight observable :math:`\langle Z_4\rangle` as is done in [#ibm]_.
 
-To reproduce the key ingredients of [#ibm]_, we are going to simulate a scaled down version of the real system using PennyLane.  Instead of 127 qubits, we will use only 9, placed on a :math:`3 \times 3` grid with
+To reproduce the key ingredients of [#ibm]_, we are going to simulate a scaled down version of the real system using PennyLane. Instead of 127 qubits, we will use only 9, placed on a :math:`3 \times 3` grid with
 nearest neighbor interactions.
 We start by setting up the circuits for the time evolution and a noise model consisting of
 :class:`~pennylane.DepolarizingChannel` applied to each gate the circuit executes. Physically, this corresponds to applying either of the 
@@ -93,8 +93,9 @@ n_wires = 9
 noise_gate = qml.DepolarizingChannel
 p = 0.005
 
-# Load device
-dev = qml.device("default.mixed", wires=n_wires)
+# Load devices
+dev_ideal = qml.device("default.mixed", wires=n_wires)
+dev_noisy = qml.transforms.insert(dev_ideal, noise_gate, p, position="all")
 
 # 3x3 grid with nearest neighbors
 connections = [(0, 1), (1, 2),
@@ -112,12 +113,14 @@ def time_evolution(theta_h, n_layers = 10, obs = qml.PauliZ(4)):
             qml.RX(theta_h, wires=i)
     return qml.expval(obs)
 
-qnode_ideal = qml.QNode(time_evolution, dev, interface="jax")
-qnode_noisy = qml.transforms.insert(qnode_ideal, noise_gate, p, position="all")
+qnode_ideal = qml.QNode(time_evolution, dev_ideal, interface="jax")
+qnode_noisy = qml.QNode(time_evolution, dev_noisy, interface="jax")
 
 ##############################################################################
-# We can now simulate the final expectation value with and without noise.
-# We use ``jax.vmap`` to vectorize and speed up the execution for different values of :math:`\theta_h`.
+# We can now simulate the final expectation value with and without noise. Note that the ``IsingZZ`` gate is not natively
+# supported by the ``default.mixed`` device, and will be decomposed into a supported gate set. The noise channels will be
+# inserted after all gates in the final decomposed circuit. We use ``jax.vmap`` to vectorize and speed up the execution
+# for different values of :math:`\theta_h`.
 
 thetas = jnp.linspace(0, jnp.pi/2, 50)
 
@@ -166,8 +169,11 @@ plt.show()
 # our model by an appropriate gain factor. Here, :math:`G=(1, 1.2, 1.6)` in accordance with [#ibm]_. In order to do this in PennyLane, we simply
 # set up two new noisy devices with the appropriately attenuated noise parameters.
 
-qnode_noisy1 = qml.transforms.insert(qnode_ideal, noise_gate, p*1.2, position="all")
-qnode_noisy2 = qml.transforms.insert(qnode_ideal, noise_gate, p*1.6, position="all")
+dev_noisy1 = qml.transforms.insert(dev_ideal, noise_gate, p*1.2, position="all")
+dev_noisy2 = qml.transforms.insert(dev_ideal, noise_gate, p*1.6, position="all")
+
+qnode_noisy1 = qml.QNode(time_evolution, dev_noisy1, interface="jax")
+qnode_noisy2 = qml.QNode(time_evolution, dev_noisy2, interface="jax")
 
 res_noisy1 = jax.vmap(qnode_noisy1)(thetas)
 res_noisy2 = jax.vmap(qnode_noisy2)(thetas)
@@ -270,4 +276,3 @@ plt.show()
 # About the author
 # ----------------
 # .. include:: ../_static/authors/korbinian_kottmann.txt
-
