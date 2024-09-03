@@ -109,14 +109,14 @@ warnings.filterwarnings(
     message=r"Creating an ndarray from ragged"
 )
 warnings.filterwarnings(
-    "ignore",
+    "error",
     category=UserWarning,
     message=r"Contains tensors of types {'autograd', 'jax'}"
 )
+warnings.filterwarnings("error", message="Casting complex values to real discards the")
 
 # Raise PennyLane deprecation warnings as errors
 warnings.filterwarnings("error", category=PennyLaneDeprecationWarning)
-# warnings.filterwarnings("error", message="Casting complex values to real discards the")
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
