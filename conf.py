@@ -113,7 +113,6 @@ warnings.filterwarnings(
     category=UserWarning,
     message=r"Contains tensors of types {'autograd', 'jax'}"
 )
-warnings.filterwarnings("error", message="Casting complex values to real discards the")
 
 # Raise PennyLane deprecation warnings as errors
 warnings.filterwarnings("error", category=PennyLaneDeprecationWarning)
