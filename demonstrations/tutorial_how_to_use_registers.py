@@ -21,7 +21,7 @@ print(register)
 
 ######################################################################
 # The output is a dictionary where the keys are the names of the registers and the
-# values are :class:`~.Wires` instances.
+# values are :class:`~.pennylane.wires.Wires` instances.
 #
 # You can also pass in a dictionary that has nested dictionaries as its values.
 
@@ -59,7 +59,7 @@ print(new_register)
 
 ######################################################################
 # For more details on what set operations are supported, refer to the documentation of
-# :class:`~.Wires`.
+# :class:`~.pennylane.wires.Wires`.
 #
 # A simple example using wire registers
 # -------------------------------------
