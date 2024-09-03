@@ -7,9 +7,9 @@ Two parts: MPS basics and then application to quantum circuit simulation
     :align: center
     :width: 70%
 
-
-Matrix Product State basics
----------------------------
+    
+Introduction
+------------
 
 Matrix Product States (MPS) are an efficient representation of low entanglement states.
 The amount of entanglement the MPS can represent is user-controlled via a hyper-parameter, the so-called `bond dimension` :math:`\chi`.
@@ -29,16 +29,23 @@ and higher costs as a lot of the things that make MPS so attractive,
 like the availability of a canonical form, are not true anymore.
 To put it plainly, it is often simply much easier to use readily available 
 MPS code and throw a large amount of resources into the bond dimension than to develop
-more advanced tensor network methods. An exception to that are simple 
-update methods [#Jiang]_, that use pseudo canonical-forms that allow a similarly simply
-algorithmic complexity at the cast of not being optimal in its resources, 
-as is the case for the method used in [#Patra]_.
+more advanced tensor network methods.
+
+An exception to that are so-called `simple update`
+methods [#Jiang]_, that use pseudo canonical-forms that allow a similarly simple
+algorithmic complexity at the cast of not being optimal in its resources.
+Reference [#Patra]_ is a good example for that.
 
 More advanced tensor network methods are developed and optimized, though the biggest hindrance
 on the widespread use of already known advanced tensor network methods is the lack of reliable open source implementations.
 While the current state of affairs in academia is giving little incentive to change that,
-MPS continue to be the workhorse of many quantum simulation techniques.
+MPS continue to be the workhorse for a wide variety of quantum simulation techniques.
 
+We are going to introduce the essentials of MPS in the first part of this demo. 
+Afterwards, in the second part, we look at the specific application of simulating quantum circuits.
+
+Matrix Product State essentials
+-------------------------------
 
 Compression using Singular Value Decomposition
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
