@@ -137,7 +137,7 @@ print(H)
 initial_state = dataset.ground_states[0]
 
 ######################################################################
-# With this, we can now define our QPE circuit like so:
+# With this, we can now define our QPE circuit:
 
 dev = qml.device("lightning.qubit", wires=14)
 
