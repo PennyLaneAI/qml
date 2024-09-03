@@ -1,7 +1,7 @@
 r"""Intro to Qubitization
 =========================
 
-Encoding a Hamiltonian into a quantum computer is a fundamental task for many applications, but the way to do it is not unique. One method that has gained special status is known as **qubitization**. In this demo, we will introduce the qubitization operator and explain how to view it as a rotation operator. This perspective is useful when combining qubitization with quantum phase estimation (QPE). We will demonstrate this by implementing qubitization-based quantum phase estimation, with code provided using the :class:`~.pennylane.Qubitization` template in PennyLane.
+Encoding a Hamiltonian into a quantum computer is a fundamental task for many applications, but the way to do it is not unique. One method that has gained special status is known as **qubitization**. In this demo, we will introduce the qubitization operator and explain how to view it as a rotation operator. This perspective is useful when combining qubitization with `quantum phase estimation <https://pennylane.ai/qml/demos/tutorial_qpe/>`_ (QPE). We will demonstrate this by implementing qubitization-based quantum phase estimation, with code provided using the :class:`~.pennylane.Qubitization` template in PennyLane.
 
 .. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_large_qubitization.png
     :align: center
@@ -11,6 +11,7 @@ Encoding a Hamiltonian into a quantum computer is a fundamental task for many ap
 Qubitization operator
 ----------------------
 
+Qubitization is a block-encoding technique that, as we will see, is particularly useful for tasks such as estimating eigenvalues, among other applications.
 For a Hamiltonian :math:`\mathcal{H}`, given in its `representation via a linear combination of unitaries (LCU) <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding/>`_, the qubitization operator is defined as:
 
 .. math::
@@ -19,7 +20,7 @@ For a Hamiltonian :math:`\mathcal{H}`, given in its `representation via a linear
 
 where :math:`\text{PSP}_{\mathcal{H}}` refers to the block encoding :math:`\text{Prep}_{\mathcal{H}}^{\dagger} \text{Sel}_{\mathcal{H}} \text{Prep}_{\mathcal{H}}`, as explained in the `LCU PennyLane Demo <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding/>`_.
 
-The operator :math:`Q` is also a block encoding operator with a key property: its eigenvalues encode the eigenvalues of the Hamiltonian.
+The operator :math:`Q` is also a block-encoding operator with a key property: its eigenvalues encode the eigenvalues of the Hamiltonian.
 As we will soon explain in detail, if :math:`E` is an eigenvalue of :math:`\mathcal{H}`, then :math:`e^{i\arccos(E/\lambda)}` is an
 eigenvalue of :math:`Q`, where :math:`\lambda` is a known normalization factor. This property is very useful because it means that we can use the `quantum phase estimation algorithm <https://pennylane.ai/qml/demos/tutorial_qpe/>`_  to estimate the eigenvalues of  :math:`Q`, and then use them to retrieve the eigenvalues of the encoded Hamiltonian.
 

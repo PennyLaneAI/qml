@@ -1,5 +1,5 @@
 {
-    "title": "Qubitization",
+    "title": "Intro to Qubitization",
     "authors": [
         {
             "username": "KetPuntoG"
@@ -40,6 +40,11 @@
         {
             "type": "demonstration",
             "id": "tutorial_qpe",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_lcu_blockencoding",
             "weight": 1.0
         }
     ]
