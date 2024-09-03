@@ -177,7 +177,7 @@ print("Eigenvalue: ", lamb * np.cos(2 * np.pi * (np.argmax(output)) / 2 ** len(r
 # Conclusion
 # ----------
 # In this demo, we showed how to construct wire registers and use them to implement quantum
-# algorithms. Wire registers provide a neat way of organizing and managing wires. Often, 
+# algorithms. Wire registers provide an elegant way of organizing and managing wires. Often, 
 # algorithms are described as acting upon registers and sub-registers; using wire registers
 # can greatly streamline the implementation from theory to code. 
 #
