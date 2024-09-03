@@ -5,19 +5,19 @@ Encoding a Hamiltonian into a quantum computer is a fundamental task for many ap
 
 .. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_large_qubitization.png
     :align: center
-    :width: 50%
+    :width: 70%
     :target: javascript:void(0)
 
 Qubitization operator
 ----------------------
 
-For a Hamiltonian :math:`\mathcal{H}`, given in its `LCU representation <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding/>`_, the qubitization operator is defined as:
+For a Hamiltonian :math:`\mathcal{H}`, given in its `representation via a linear combination of unitaries (LCU) <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding/>`_, the qubitization operator is defined as:
 
 .. math::
 
     Q =  \text{PSP}_{\mathcal{H}}\cdot (2|0\rangle\langle 0| - I),
 
-where :math:`\text{PSP}_{\mathcal{H}}` refers to the block encoding :math:`\text{Prep}_{\mathcal{H}}^{\dagger} \text{Sel}_{\mathcal{H}} \text{Prep}_{\mathcal{H}}`, as explained in `this demo <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding/>`_.
+where :math:`\text{PSP}_{\mathcal{H}}` refers to the block encoding :math:`\text{Prep}_{\mathcal{H}}^{\dagger} \text{Sel}_{\mathcal{H}} \text{Prep}_{\mathcal{H}}`, as explained in the `LCU PennyLane Demo <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding/>`_.
 
 The operator :math:`Q` is also a block encoding operator with a key property: its eigenvalues encode the eigenvalues of the Hamiltonian.
 As we will soon explain in detail, if :math:`E` is an eigenvalue of :math:`\mathcal{H}`, then :math:`e^{i\arccos(E/\lambda)}` is an
@@ -25,8 +25,8 @@ eigenvalue of :math:`Q`, where :math:`\lambda` is a known normalization factor. 
 
 This is the essence of why qubitization is attractive for applications: it provides a method to exactly encode eigenvalues of a Hamiltonian into a unitary operator that can be used inside the quantum phase estimation algorithm to sample Hamiltonian eigenvalues. But where does this decomposition come from? Why are the eigenvalues encoded in this way? 🤔 We explain these concepts below.
 
-Block Encodings
-----------------
+Block encodings
+---------------
 
 First, we introduce some useful concepts about block encodings.
 Given a Hamiltonian :math:`\mathcal{H}`, we define as a block encoding any operator that embeds :math:`\mathcal{H}`
@@ -43,7 +43,7 @@ generates a state:
 
 where :math:`|\phi^{\perp}\rangle` is a state orthogonal to :math:`|0\rangle |\phi\rangle`,
 and :math:`E` is the eigenvalue. The advantage of expressing :math:`|\Psi\rangle` as the sum of two orthogonal states is that it can be represented
-in a two-dimensional space  — an idea that we have explored in our `Amplitude Amplification <https://pennylane.ai/qml/demos/tutorial_intro_amplitude_amplification/>`_ demo. The state :math:`|\Psi\rangle` forms an angle :math:`\theta =\arccos {\frac{E}{\lambda}}` with respect to the axis defined by the initial state :math:`|0\rangle |\phi\rangle`, as shown in the image below.
+in a two-dimensional space  — an idea that we have explored in our `amplitude amplification <https://pennylane.ai/qml/demos/tutorial_intro_amplitude_amplification/>`_ demo. The state :math:`|\Psi\rangle` forms an angle :math:`\theta =\arccos {\frac{E}{\lambda}}` with respect to the axis defined by the initial state :math:`|0\rangle |\phi\rangle`, as shown in the image below.
 
 .. figure:: ../_static/demonstration_assets/qubitization/qubitization0.jpeg
     :align: center
@@ -53,11 +53,11 @@ in a two-dimensional space  — an idea that we have explored in our `Amplitude 
 Qubitization as a rotation
 ---------------------------
 
-Any block encoding operator manages to transform the state :math:`|0\rangle |\phi\rangle` into the state :math:`|\Psi\rangle`.
+Any block-encoding operator manages to transform the state :math:`|0\rangle |\phi\rangle` into the state :math:`|\Psi\rangle`.
 The qubitization operator does this by applying a rotation in that two-dimensional subspace by an angle of :math:`\theta=\arccos {\frac{E}{\lambda}}`.
 The advantage of a rotation operator is that the angle :math:`\theta` appears directly in the eigenvalues, which are simply :math:`e^{\pm i\theta}`. Therefore, if the rotation angle encodes useful information, it can be retrieved by estimating the phase of the rotation operator, for example using QPE.
 
-We now show that the qubitization operator is a rotation by using the same idea of Amplitude Amplification:
+We now show that the qubitization operator is a rotation by using the same idea of amplitude amplification:
 two reflections are equivalent to one rotation. These reflections correspond to :math:`(2|0\rangle\langle 0| - I)` and :math:`\text{PSP}_{\mathcal{H}}`, which together define our qubitization operator.
 Recall that an operator :math:`U` is a reflection if :math:`U^2=I`.
 
@@ -77,7 +77,7 @@ The block encoding operator :math:`\text{PSP}_{\mathcal{H}}` performs a second r
 
 After applying the reflection, the new state :math:`|\Psi_2\rangle` is rotated by :math:`\theta` degrees relative to the initial state :math:`|\Psi\rangle`. This shows that the qubitization operator successfully creates a rotation of :math:`\theta` degrees within the subspace.
 
-The term "qubitization" comes from the fact that this process occurs within a two-dimensional subspace, which can be viewed as a qubit. For each eigenstate of the Hamiltonian, the qubitization operator acts within this two-dimensional space, effectively treating it as a qubit. This is why we say the system has been "qubitized".
+The term "qubitization" comes from the fact that this process occurs within a two-dimensional subspace, which can be viewed as a qubit. For each eigenstate of the Hamiltonian, the qubitization operator acts within this two-dimensional space, effectively treating it as a qubit. This is why we say the system has been *qubitized*.
 
 Qubitization in PennyLane
 --------------------------
