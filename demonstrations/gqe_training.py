@@ -14,7 +14,7 @@ can sample energies close to the ground state energy calculated by Pennylane.
 The GQE algorithm is an alternative approach in estimating the ground state of a particular molecule.
 Usually, this ground state estimation is done via the variational quantum eigensolver (VQE) approach, 
 where the quantum state is represented as a quantum circuit with tunable parameters. The goal is then 
-to find the optimal parameters that minimizes the corresponding energy :math: `E`. For more details on
+to find the optimal parameters that minimizes the corresponding energy :math:`E`. For more details on
 VQEs, check out the `PennyLane Demo <https://pennylane.ai/qml/demos/tutorial_vqe/>`__ and 
 `Documentation <https://docs.pennylane.ai/projects/catalyst/en/stable/demos/adaptive_circuits_demo.html>`__.
 
@@ -44,20 +44,46 @@ will be amenable for larger problems.
 # Outline
 # -------
 # 
-# 1. | **Dataset construction via Pennylane**
-#    | 1a. Loading molecular information
-#    | 1b. Defining energy function
-#    | 1c. Token sequence generation with corresponding energies
+# 1. | **GPT-QE Background**
+# 2. | **Dataset construction via Pennylane**
+#    | 2a. Loading molecular information
+#    | 2b. Defining energy function
+#    | 2c. Token sequence generation with corresponding energies
 # 
-# 2. | **GPT (pre-)training**
-#    | 2a. GPT implementation details
-#    | 2b. GPT (pre-)training loop implementation
+# 3. | **GPT (pre-)training**
+#    | 3a. GPT implementation details
+#    | 3b. GPT (pre-)training loop implementation
 # 
-# 3. | **Results**
-#    | 3a. Loss curve
-#    | 3b. GPT evaluation progress
-#    | 3c. GPT sequence generation comparison
+# 4. | **Results**
+#    | 4a. Loss curve
+#    | 4b. GPT evaluation progress
+#    | 4c. GPT sequence generation comparison
 # 
+
+######################################################################
+# GPT-QE Background
+# -----------------
+# 
+# In particular, the chosen model design in the paper was the generative pre-trained
+# transformer (GPT) architecture. As a language model, GPTs are successful in generating
+# sequences of words that closely resemble human natural language. This performance is
+# harnessed by constructing quantum states :math:`\rho` as a sequence of unitary operators 
+# which are in turn, represented by quantum circuits. That is, we let :math:`\rho = U\rho_0 U^{\dagger}`
+# for some fixed initial state :math:`\rho_0` and the sequence is :math:`U = U_{j_N}U_{j_{N-1}}\cdots U_{j_1}`.
+# The GPT model generates the sequence of integers :math:`j_1, j_2, ..., j_N` indexing a vocabulary
+# of operators :math:`U_j`'s. The goal of training is then to minimize the corresponding energy
+# :math:`E = \mbox{Tr}(\hat{H}\rho)` where :math:`\hat{H}` is the hamiltonian of the molecule in 
+# question.
+# 
+# Each integer :math:`j_i` is sampled from the distribution :math:`\exp(-\beta w_{j_i})` where
+# :math:`\beta` is an inverse temperature representing a trade-off parameter between exploration and 
+# exploitation and :math:`w_{j_i}` is the logit returned by GPT for the index :math:`j_i`. We then
+# observe that the probability of sampling a state through the method described above is 
+# proportional to :math:`\exp(-\beta w_{\mbox{sum}})` where :math:`w_{\mbox{sum}} = \sum_{i=1}^N w_{j_i}` 
+# and the probability for the corresponding energy is :math:`\exp(-\beta E)`. We thus have a constraint 
+# for the total logit to be equal to the energy of the corresponding state :math:`w_{\mbox{sum}} = E` which
+# can be imposed by minimizing the loss function :math:`C = (w_{\mbox{sum}} - E)^2`.
+#   
 
 ######################################################################
 # Generating molecules from Google Colab by Utkarsh
