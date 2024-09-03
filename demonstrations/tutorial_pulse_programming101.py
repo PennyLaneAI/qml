@@ -62,7 +62,7 @@ The Hamiltonian depends on the set of parameters :math:`p = \{p_i\}`. One way to
 """
 
 import pennylane as qml
-import pennylane.numpy as np
+import numpy as np
 import jax.numpy as jnp
 import jax
 import matplotlib.pyplot as plt
@@ -325,10 +325,9 @@ H_pulse = H_D + H_C
 
 dev = qml.device("default.qubit", wires=range(n_wires))
 
-
 @qml.qnode(dev, interface="jax")
 def qnode(theta, t=duration):
-    qml.BasisState(list(data.tapered_hf_state), wires=H_obj.wires)
+    qml.BasisState(jnp.array(data.tapered_hf_state), wires=H_obj.wires)
     qml.evolve(H_pulse)(params=(*theta, *theta), t=t)
     return qml.expval(H_obj)
 
