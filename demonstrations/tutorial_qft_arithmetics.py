@@ -103,9 +103,7 @@ Let's see how we would code the number :math:`6`.
 """
 
 import pennylane as qml
-from pennylane.devices.preprocess import decompose
 import matplotlib.pyplot as plt
-from functools import partial
 
 dev = qml.device("default.qubit", wires=3)
 
