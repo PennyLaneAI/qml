@@ -79,9 +79,8 @@ dev = qml.device("default.qubit")
 
 @qml.qnode(dev)
 def swap_test():
-    # Prepare phi and psi in some arbitrary state
-    for state in ["phi", "psi"]:
-        qml.BasisState([1, 1, 0], swap_register[state])
+    # Make "psi" and "phi" state orthogonal to each other
+    qml.RX(np.pi/2, swap_register["phi"][0])
 
     qml.Hadamard(swap_register["auxiliary"])
     for i in range(len(swap_register["psi"])):
