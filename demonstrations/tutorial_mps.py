@@ -8,8 +8,6 @@ Two parts: MPS basics and then application to quantum circuit simulation
     :width: 70%
 
 
-# Part 1
-
 Matrix Product State basics
 ---------------------------
 
@@ -17,19 +15,29 @@ Matrix Product States (MPS) are an efficient representation of low entanglement 
 The amount of entanglement the MPS can represent is user-controlled via a hyper-parameter, the so-called `bond dimension` :math:`\chi`.
 If we allow :math:`\chi` to be of :math:`\mathcal{O}(2^{\frac{n}{2}})` for a system of :math:`n` qubits, we can write `any` state as an `exact` MPS.
 To avoid exponentially large resources, however, one typically sets a finite bond dimension :math:`\chi` at the cost of introducing an approximation error.
+
 For some specific classes of states, this is provably sufficient to have a faithful representations (see section on entanglement). 
 But because MPS come with a lot of powerful computational features that we are going to discuss later (in particular canonical forms),
 they are still used in much more complex systems where these requirements do not hold anymore, and still yield good results.
-For example, state of the art quantum chemistry simulations were performed using MPS (citation needed).
+For example, state of the art quantum chemistry simulations were performed using MPS [#Baiardi]_ 
+and similar methods have been used to simulate experiments on the largest available chips at the time [#Patra]_.
 
-It is known that there are more suitable tensor network states for more complex situations (see section on entanglement later).
-However, they all suffer from a significantly larger algorithmic cost as a lot of the things that make MPS so attractive are not true anymore.
-To put it plainly, it is often simply much easier to use MPS and throw a large amount of resources into the bond dimension than to develop
-more advanced tensor network methods.
+It is known that there are more suitable tensor network states for 
+more complex situations (see section on entanglement later).
+However, they all suffer from significantly more complicated algorithms 
+and higher costs as a lot of the things that make MPS so attractive, 
+like the availability of a canonical form, are not true anymore.
+To put it plainly, it is often simply much easier to usereadily available 
+MPS code and throw a large amount of resources into the bond dimension than to develop
+more advanced tensor network methods. An exception to that are simple 
+update methods [#Jiang]_, that use pseudo canonical-forms that allow a similarly simply
+algorithmic complexity at the cast of not being optimal in its resources, 
+as is the case for the method used in [#Patra]_.
 
-
-While more advanced tensor network methods are developed, optimized and democratized, MPS continue to be the workhorse of
-many quantum simulation techniques.
+More advanced tensor network methods are developed and optimized, though the biggest hindrance
+on the widespread use of already known advanced tensor network methods is the lack of reliable open source implementations.
+While the current state of affairs in academia is giving little incentive to change that,
+MPS continue to be the workhorse of many quantum simulation techniques.
 
 
 Compression using Singular Value Decomposition
@@ -42,7 +50,7 @@ Any matrix :math:`M = \mathbb{C}^{M\times N}` can be singular-value-decomposed a
 
 where :math:`\Lambda` is the diagonal matrix of the :math:`r=\min(M, N)` real and non-negative singular values, 
 :math:`U \in \mathbb{C}^{M\times r}` is left-unitary :math:`U^\dagger U = \mathbb{I}_r`, and
-:math:`V^\dagger \in \mathbb{C}^{r\times N}` is right-unitary :math:`V^\daggers (V^\daggers)^\daggers = \mathbb{I}_r`.
+:math:`V^\dagger \in \mathbb{C}^{r\times N}` is right-unitary :math:`V^\dagger (V^\daggers)^\dagger = \mathbb{I}_r`.
 We say the columns and rows of :math:`U` and :math:`V^\dagger` are the left- and right-orthogonal
 singular vectors, respectively. In the case of square and normal matrices, the singular values and singular vectors
 are just the eigenvalues and eigenvectors.
@@ -115,7 +123,7 @@ plt.show()
 # .. math:: |\psi \rangle = \sum_{\sigma_1, .., \sigma_n} U^{\sigma_1} .. U^{\sigma_n} |\sigma_1 .. \sigma_n\rangle,
 #
 # where we decomposed the rank :math:`n` tensor :math:`\psi_{\sigma_1, .., \sigma_n}` into a product of matrices :math:`U^{\sigma_j}`
-# for each value of :math:`\sigma_j` (equal to `0, 1` for qubits). This is why it is called a **matrix product** state, even though most of these object are, technically, rank-3 tensors.
+# for each value of :math:`\sigma_j` (equal to :math:`0` or :math`1` for qubits). This is why it is called a **matrix product** state, even though most of these object are, technically, rank-3 tensors.
 #
 # Graphically, this corresponds to splitting up the big rank-n tensor into :math:`n` smaller tensors, 
 # similar to what we did above in the example of compressing an image.
@@ -194,7 +202,13 @@ U.shape, Lambda.shape, Vd.shape
 #
 # .. math:: \psi_{\sigma_1 \sigma_2 \sigma_3} = \sum_{\mu_1 \mu_2} U^{\sigma_1}_{\mu_1} U^{\sigma_2}_{\mu_1 \mu_2} \psi''^{\sigma_3}_{\mu_2}.
 #
-# When the state is normalized, we are done. Else, we can do the procedure one more time again with a virtual dummy dimension on the right-most site.
+# Graphically, this corresponds to 
+#
+# .. figure:: ../_static/demonstration_assets/mps/psi_to_mps_2.png
+#     :align: center
+#     :width: 70%
+#
+# When the state is normalized, we are done. Else, we can do the procedure one more time, again with a virtual dummy dimension on the right-most site.
 
 psi_remainder = np.diag(Lambda) @ Vd                 # mu1 (s2 s3)
 psi_remainder = np.reshape(psi_remainder, (2*2, 1))  # (mu1 s2), s3
@@ -209,11 +223,17 @@ U.shape, Lambda.shape, Vd.shape
 # Because our state vector was already normalized, the singular value in this last SVD is just ``1.``. Else it would yield the norm of ``psi``
 # (a good exercise to confirm by skipping the normalization step in the definition of ``psi`` above).
 #
+# Graphically, this corresponds to 
+#
+# .. figure:: ../_static/demonstration_assets/mps/psi_to_mps_3.png
+#     :align: center
+#     :width: 70%
+#
 # The collected tensors :math:`U^{\sigma_i}_{\mu_{i-1}, \mu_i}` now make up the matrix product state and describe the original state :math:`|\psi\rangle`
 # by appropriately contracting the virtual indices :math:`\mu_i`. We can briefly confirm this by reverse engineering the original state. Due to the convention of
-# the indices as ``(virtual_left, physical, virtual_right)``, the contraction is simple and we can use the standard 
-# `np.tensordot <https://numpy.org/doc/stable/reference/generated/numpy.tensordot.html>`_ with ``axes=1`` indicating matrix-product-like contraction of the left-most and right-most index.
-# This is one way of thinking of the obtained state as a **matrix product** state.
+# the indices as ``(virtual_left, physical, virtual_right)``, the contraction is simple and we can use 
+# `np.tensordot <https://numpy.org/doc/stable/reference/generated/numpy.tensordot.html>`_ with ``axes=1``, indicating matrix-product-like contraction of the left-most and right-most index.
+# This is another way of thinking of the obtained state as a **matrix product** state.
 
 print(f"Shapes of Us: {[_.shape for _ in Us]}")
 
@@ -578,6 +598,24 @@ plt.show()
 #     Ulrich Schollwoeck
 #     "The density-matrix renormalization group in the age of matrix product states"
 #     `arXiv:1008.3477 <https://arxiv.org/abs/1008.3477>`__, 2010.
+#
+# .. [#Baiardi]
+#
+#     Alberto Baiardi, Markus Reiher
+#     "The Density Matrix Renormalization Group in Chemistry and Molecular Physics: Recent Developments and New Challenges"
+#     `arXiv:1910.00137 <https://arxiv.org/abs/1910.00137>`__, 2019.
+#
+# .. [#Patra]
+#
+#     Siddhartha Patra, Saeed S. Jahromi, Sukhbinder Singh, Roman Orus
+#     "Efficient tensor network simulation of IBM's largest quantum processors"
+#     `arXiv:2309.15642 <https://arxiv.org/abs/2309.15642>`__, 2023.
+#
+# .. [#Jiang]
+#
+#     H. C. Jiang, Z. Y. Weng, T. Xiang
+#     "Accurate determination of tensor network state of quantum lattice models in two dimensions"
+#     `arXiv:0806.3719 <https://arxiv.org/abs/0806.3719>`__, 2008.
 #
 
 
