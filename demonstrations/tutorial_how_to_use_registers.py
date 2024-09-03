@@ -29,7 +29,7 @@ nested_register = qml.registers(
     {
         "all_registers": {
             "alice": 1,
-            "bob": {"bob1": {"bob1a": 1}, "bob2": 1},
+            "bob": {"bob1": {"bob1a": 1, "bob1b": 2}, "bob2": 1},
             "charlie": 1,
         }
     }
@@ -59,7 +59,7 @@ print(new_register)
 
 ######################################################################
 # For more details on what set operations are supported, refer to the documentation of
-# :func:`Wires <~.pennylane.wires.Wires.difference>`_.
+# :ref:`Wires <pennylane.wires.Wires.difference>`.
 #
 # A simple example using wire registers
 # -------------------------------------
