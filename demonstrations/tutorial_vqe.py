@@ -147,7 +147,7 @@ print(hf)
 # We do this using the :func:`~.expval` function. The decorator syntax allows us to
 # run the cost function as an executable QNode with the gate parameter :math:`\theta`:
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="jax")
 def circuit(param, wires):
     qml.BasisState(hf, wires=wires)
     qml.DoubleExcitation(param, wires=[0, 1, 2, 3])
