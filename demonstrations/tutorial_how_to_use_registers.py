@@ -121,7 +121,7 @@ register = qml.registers({"state": 4, "estimation": 6, "prep": 4})
 ######################################################################
 # Finally, let's define our Hamiltonian. We'll use the Transverse-Field Ising model from
 # PennyLane's `quantum datasets <https://pennylane.ai/datasets/qspin/transverse-field-ising-model>`_,
-# but feel free to try this with any other Hamiltonian you want to find the eigenvalues of.
+# but feel free to try this with any other Hamiltonian.
 
 
 [dataset] = qml.data.load(
