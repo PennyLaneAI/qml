@@ -575,6 +575,9 @@ plt.show()
 # We can extrapolate the exact result for every simulation run,
 # but this is of course more expensive as it requires multiple executions at different bond dimensions, and is not guaranteed to converge.
 # Sometimes we are also just happy to get a cheap qualitative result for large systems that may or may not be 100% accurate.
+#
+# .. note:: 
+#     Note on how default.tensor is under development and has some rough edges still
 
 
 ##############################################################################
