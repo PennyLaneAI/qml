@@ -51,7 +51,7 @@ Any matrix :math:`M = \mathbb{C}^{M\times N}` can be singular-value-decomposed a
 where :math:`\Lambda` is the diagonal matrix of the :math:`r=\min(M, N)` real and non-negative singular values, 
 :math:`U \in \mathbb{C}^{M\times r}` is left-unitary :math:`U^\dagger U = \mathbb{I}_r`, and
 :math:`V^\dagger \in \mathbb{C}^{r\times N}` is right-unitary :math:`V^\dagger (V^\daggers)^\dagger = \mathbb{I}_r`.
-We say the columns and rows of :math:`U` and :math:`V^\dagger` are the left- and right-orthogonal
+We say the columns and rows of :math:`U` and :math:`V^\dagger` are the left- and right-orthonormal
 singular vectors, respectively. In the case of square and normal matrices, the singular values and singular vectors
 are just the eigenvalues and eigenvectors.
 
@@ -255,7 +255,7 @@ np.allclose(psi, psi_reconstruct)
 ##############################################################################
 # 
 # Up to this point, the description of the original state in terms of the MPS, made up by the three matrices :math:`U^{\sigma_i}_{\mu_{i-1}, \mu_i}`, is exact.
-# With this construction, the sizes of the virtual bonds grow exponentially from :math:`2` to :math:`2^{n/2}` until the middle of the chain.
+# With this construction, the sizes of the virtual bonds grow exponentially from :math:`2` to :math:`2^{n/2}` until the middle of the chain (to be confirmed here below).
 #
 # Just like in the example with images before, we can compress the state by only keeping 
 # the :math:`\chi` largest singular values, and respective singular vectors.
@@ -264,7 +264,7 @@ np.allclose(psi, psi_reconstruct)
 # is left and right of the bond (more on that later).
 #
 # A full subroutine from :math:`|\psi\rangle` to its compressed MPS description is given by the following function ``dense_to_mps``.
-# It is convenient to also keep the singular values for each bond, we will shortly see why.
+# It is convenient to also keep the singular values for each bond to easily change the orthonormality of the tensors, but more on that in the next section.
 
 def split(M, bond_dim):
     """Split a matrix M via SVD and keep only the ``bond_dim`` largest entries"""
@@ -342,7 +342,7 @@ Ms, Ss = dense_to_mps(psi, 5)
 # ~~~~~~~~~~~~~~~
 #
 # In the above construction, we unknowingly already baked in a very useful feature of our MPS because all the :math:`U` matrices from the SVD
-# are left-orthogonal. In particular, they satisfy
+# are left-orthonormal (highlighted by the pink color of left-orthonormal tensors). In particular, they satisfy
 #
 # .. math:: \sum_{\sigma_i} \left(U^{\sigma_i} \right)^\dagger U^{\sigma_i} = \mathbb{I}.
 #
@@ -356,7 +356,7 @@ for i in range(len(Ms)):
 ##############################################################################
 # This is a very powerful identity as it tells us that contracting a site of the MPS from the left is just the identity.
 #
-# .. figure:: ../_static/demonstration_assets/mps/left_orthogonal.png
+# .. figure:: ../_static/demonstration_assets/mps/left_orthonormal.png
 #     :align: center
 #     :width: 30%
 #
@@ -367,7 +367,7 @@ for i in range(len(Ms)):
 #     :width: 70%
 #
 # The fact that we went through the MPS SVD-ing from left-to-right earlier was a choice.
-# We could have equivalently gone through the MPS from right-to-left and obtained a right-canonical state by keeping the right-orthogonal :math:`V^\dagger` of the decompositions.
+# We could have equivalently gone through the MPS from right-to-left and obtained a right-canonical state by keeping the right-orthonormal :math:`V^\dagger` of the decompositions.
 #
 # When computing expectation values, it is convenient to have the MPS in a mixed canonical form.
 # Take some single-site observable :math:`O_i` for which we want to compute the expectation value.
@@ -380,8 +380,8 @@ for i in range(len(Ms)):
 #     :width: 70%
 #
 # We can obtain such a mixed canonical form by starting from our left-canonical MPS and going through the sites from right to left, thereby right-canonizing all sites until the observable.
-# However, if we keep track of the singular values at all times, we can switch any site tensor from left- to right-orthogonal by just multiplying with the singular values.
-# This is the so-called Vidal form introduced in [#Vidal]_ and works like this: Even though we are not going to use them in our representation, it makes sense to introduce the "bare" local :math:`\Gamma`-tensors :math:`\Gamma^{\sigma_i}` in terms of
+# However, if we keep track of the singular values at all times, we can switch any site tensor from left- to right-orthonormal by just multiplying with the singular values.
+# This is the so-called Vidal form introduced in [#Vidal]_ and works like this: Even though we are not going to use them in our representation, it makes sense to introduce the "bare" local :math:`\Gamma`-tensors :math:`\{\Gamma^{\sigma_i}\}` in terms of
 #
 # .. math:: \Gamma^{\sigma_i} = \left(\Lambda^{[i-1]}\right)^{-1} U^{\sigma_i} = \left(V^\dagger\right)^{\sigma_i} \left(\Lambda^{[i]}\right)^{-1}
 #
@@ -392,7 +392,7 @@ for i in range(len(Ms)):
 #     :width: 70%
 #
 # In particular, to compute the expectation value described just above, we need the central tensor that we named :math:`\Theta`.
-# We are not going to actually store the :math:`\Gamma`-tensors but continue to use the left-orthogonal :math:`U`-tensors.
+# We are not going to actually store the :math:`\Gamma`-tensors but continue to use the left-orthonormal :math:`U`-tensors.
 # So all we need to do is construct :math:`\Theta^{\sigma_i}_{\mu_{i-1} \mu_i} = \sum_{\tilde{\mu}_i} U^{\sigma_i}_{\mu_{i-1} \tilde{\mu}_i} \Lambda^{[i]}_{\tilde{\mu}_i \mu_i}`. This has two advantages: 1) 
 # we only need to perform one contraction with the singular values from the right and 2) we avoid having to compute any 
 # inverses of the singular values, which numerically can become messy for very small singular values.
@@ -461,6 +461,9 @@ for i in range(len(Ms)):
 # An MPS simulator works very similarly to a state vector simular like :class:`~DefaultQubit`, the only difference is that the underlying state
 # is encoded in an MPS.
 #
+# Applying local gates
+# ~~~~~~~~~~~~~~~~~~~~
+#
 # Due to its canonical form, applying local gates onto an MPS is very straight forward and little work.
 # Let us walk through the example of applying a :math:`\text{CNOT}` gate on neighboring sites on the underlying MPS state of the simulator.
 #
@@ -473,6 +476,9 @@ for i in range(len(Ms)):
 # In the first step, we simply contract the appropriate physical indices of the MPS with those of the :math:`\text{CNOT}` matrix (which we reshape to :math:`2\times 2\times 2\times 2`).
 # Note that we also take the bond singular values into account. The result is a big blob with two virtual indices and two physical indices. 
 # We then just split this blob in the same way we split up the dense state vector and keep track of its singular values to restore the canonical form.
+#
+# Applying non-local gates
+# ~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # The situation gets a bit more complicated when we apply a :math:`\text{CNOT}` (or any multi-site gate) on non-neighboring sites. We have two possibilities to handle this.
 # We can do what a quantum computer would do, which is swap out sites until the appropriate indices are neighboring, perform the operation and then un-swap the sites.
@@ -496,6 +502,10 @@ for i in range(len(Ms)):
 # Here we just need to be careful to contract in the right order, otherwise we might end up with unnecessarily large tensors in intermediate steps. For example, if we first contract all physical indices we get a big blob
 # that is exponentially large in the number of intermediate sites. While in general it is NP-hard to find the optimal contraction path,
 # for MPS the optimal path is known. The way to do it is alternating between the physical index and the corresponding two virtual indices, going either from left-to-right, or, equivalently, from right-to-left (see figure 21 in [#Schollwoeck]_).
+#
+#
+# Running simulations and setting the bond dimension
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # While we focussed on the specific case of a :math:`\text{CNOT}` gate, this concept is readily generalized to arbitrary two or multi-qubit gates.
 # With that, we are now ready to run some quantum circuit simulations. We don't have to code up all contractions by hand, instead, we can use
@@ -532,10 +542,9 @@ res, dataset.vqe_energy
 #
 # The answer is **finite size scaling**, or bond dimension scaling, or just extrapolation. This is a standard method 
 # in tensor network simulations and originates from condensed matter physics and quantum phase transitions. 
-# The idea is to run the same simulation with an increasing bond dimension and check whether it saturates or converges to a value.
+# The idea is to run the same simulation with an increasing bond dimension and check that it saturates and converges to an extrapolated value.
 # In spirit, this is similar to :doc:`zero noise extrapolation </demos/tutorial_diffable-mitigation>`.
 #
-# We always know that 
 # We choose a range of bond dimensions and plot the results for the simulation against them, keeping in mind that
 # the maximum bond dimension of a system of :math:`n` qubits is :math:`2^{\frac{n}{2}}`.
 
