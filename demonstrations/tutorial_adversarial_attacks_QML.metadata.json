@@ -16,11 +16,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_guide_to_pennylane_knowing_qiskit.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_adversarial_attacks_qml.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_guide_to_pennylane_knowing_qiskit.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_adversarial_attacks_qml.png"
         }
     ],
     "seoDescription": "Learn how to attack and defend QML models.",
