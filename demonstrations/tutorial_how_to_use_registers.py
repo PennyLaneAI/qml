@@ -163,8 +163,6 @@ def circuit():
 ######################################################################
 # We'll run our circuit and do some post-processing to get the energy eigenvalue:
 
-import numpy as np
-
 output = circuit()
 lamb = sum([abs(c) for c in H.terms()[0]])
 print("Eigenvalue: ", lamb * np.cos(2 * np.pi * (np.argmax(output)) / 2 ** len(register["estimation"])))
