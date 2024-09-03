@@ -109,11 +109,7 @@ from functools import partial
 
 dev = qml.device("default.qubit", wires=3)
 
-def stopping_condition(op):
-    """Stop decomposing operations if they have a matrix"""
-    return op.has_matrix
-
-@partial(decompose, stopping_condition=stopping_condition, skip_initial_state_prep=False)
+@qml.compile
 @qml.qnode(dev)
 def basis_embedding_circuit(m):
     qml.BasisEmbedding(m, wires=range(3))
