@@ -133,7 +133,10 @@ plt.show()
 # .. math:: |\psi \rangle = \sum_{\sigma_1, .., \sigma_n} U^{\sigma_1} .. U^{\sigma_n} |\sigma_1 .. \sigma_n\rangle,
 #
 # where we decomposed the rank :math:`n` tensor :math:`\psi_{\sigma_1, .., \sigma_n}` into a product of matrices :math:`U^{\sigma_j}`
-# for each value of :math:`\sigma_j` (equal to :math:`0` or :math:`1` for qubits). This is why it is called a **matrix product** state, even though most of these object are, technically, rank-3 tensors.
+# for each value of :math:`\sigma_j` (equal to :math:`0` or :math:`1` for qubits). This is why it is called a **matrix product** state.
+# While it historically makes sense to treat these indeed as matrices, given a concrete value of :math:`\sigma_j`, I find it more convenient
+# to forget about the notion of matrices and just treat them as the collection of rank-3 tensors :math:`\{ U^{\sigma_i}_{\mu_{i-1} \mu_i} \}`
+# that have two so-called virtual indices :math:`\mu_{i-1}, \mu_i` and one so-called physical index :math:`\sigma_j`.
 #
 # Graphically, this corresponds to splitting up the big rank-n tensor into :math:`n` smaller tensors, 
 # similar to what we did above in the example of compressing an image.
@@ -143,10 +146,10 @@ plt.show()
 #     :width: 70%
 #
 # The horizontal connections between the :math:`U`-tensors are the matrix multiplications in the equation above.
-# They are referred to as the `virtual` indices that we contract over. The dangling vertical lines are the
+# They are contractions over the virtual indices. The dangling vertical lines are the
 # `physical` indices :math:`\sigma_i` of the original state.
 #
-# To make things simpler, let us look at concrete state vector with :math:`n=3` sites, so :math:`\psi_{\sigma_1 \sigma_2 \sigma_3}`.
+# Let us look at concrete state vector with :math:`n=3` sites, so :math:`\psi_{\sigma_1 \sigma_2 \sigma_3}`, and decompose it as an MPS.
 
 n = 3 # three sites = three legs
 psi = np.random.rand(2**3)
@@ -156,10 +159,10 @@ psi = np.reshape(psi, (2, 2, 2)) # rewrite psi as rank-n tensor
 ##############################################################################
 #
 #
-# We rewrite the tensor as a matrix with indices of the first site :math:`\sigma_1` and the combined indices of all remaining sites, :math:`(\sigma_2 \sigma_3)`
+# We rewrite the tensor as a matrix with indices of the first site :math:`\sigma_1` and the combined indices of all remaining sites, :math:`(\sigma_2 \sigma_3)`.
 # Now that we have a matrix, we can perform SVD to split off the first site. Mathematically, this is
 #
-# .. math:: \psi_{\sigma_1 \sigma_2 \sigma_3} = \psi_{\sigma_1, (\sigma_2 \sigma_3)} = \sum_{\mu_1} U_{\sigma_1 \mu_1} \Lambda_{\mu_1} V^\dagger_{\mu_1 (\sigma_2 \sigma_3)}.
+# .. math:: \psi_{\sigma_1 \sigma_2 \sigma_3} \stackrel{\text{reshape}}{=} \psi_{\sigma_1, (\sigma_2 \sigma_3)} \stackrel{\text{SVD}}{=} \sum_{\mu_1} U_{\sigma_1 \mu_1} \Lambda_{\mu_1} V^\dagger_{\mu_1 (\sigma_2 \sigma_3)}.
 #
 
 # reshape vector to matrix
