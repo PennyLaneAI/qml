@@ -178,14 +178,17 @@ U, Lambda, Vd = np.linalg.svd(psi, full_matrices=False)
 # 
 # .. math:: \psi_{\sigma_1 \sigma_2 \sigma_3} = \sum_{\mu_1} U^{\sigma_1}_{\mu_1} \psi'_{\mu_1, (\sigma_2 \sigma_3)}.
 #
-# Graphically, this corresponds to
+# Graphically, this corresponds to the following.
 #
 # .. figure:: ../_static/demonstration_assets/mps/psi_to_mps_1.png
 #     :align: center
 #     :width: 70%
 #
+# Note that because :math:`\Lambda` is diagonal, it has the same virtual index on either side.
+#
 # We keep the :math:`U` tensors. We want to maintain the convention that they are of shape ``(virtual_left, physical, virtual_right)``.
 # Because there is no virtual index on the left for the first site, we introduce a dummy index of size ``1``.
+# This is just to make the bookkeeping of the final MPS a bit simpler, as all tensors have the same shape structure.
 
 Us = []
 U = np.reshape(U, (1, 2, 2)) # mu1, s2, mu2
@@ -197,7 +200,7 @@ Us.append(U)
 # When splitting up :math:`\psi'_{\mu_1, (\sigma_2 \sigma_3)}` we combine the virtual bond with the current site, and have all remaining sites be the other leg of the matrix we create for SVD.
 # In particular, we do
 # 
-# .. math:: \psi'_{\mu_1, (\sigma_2 \sigma_3)} = \psi'_{(\mu_1 \sigma_2), (\sigma_3)} = \sum_{\mu_2} U^{\sigma_2}_{\mu_1 \mu_2} \Lambda_{\mu_2} \left(V^\dagger\right)^{\sigma_3}_{\mu_2}
+# .. math:: \psi'_{\mu_1, (\sigma_2 \sigma_3)} \stackrel{\text{reshape}}{=} \psi'_{(\mu_1 \sigma_2), (\sigma_3)} \stackrel{\text{SVD}}{=} \sum_{\mu_2} U^{\sigma_2}_{\mu_1 \mu_2} \Lambda_{\mu_2} \left(V^\dagger\right)^{\sigma_3}_{\mu_2}
 #
 
 psi_remainder = np.diag(Lambda) @ Vd                 # mu1 (s2 s3)
@@ -236,14 +239,16 @@ U.shape, Lambda.shape, Vd.shape
 # Because our state vector was already normalized, the singular value in this last SVD is just ``1.``. Else it would yield the norm of ``psi``
 # (a good exercise to confirm by skipping the normalization step in the definition of ``psi`` above).
 #
-# Graphically, this corresponds to 
+# The collected tensors :math:`U^{\sigma_i}_{\mu_{i-1}, \mu_i}` now make up the matrix product state and describe the original state :math:`|\psi\rangle`
+# by appropriately contracting the virtual indices :math:`\mu_i`. We can briefly confirm this by reverse engineering the original state. 
+# 
 #
 # .. figure:: ../_static/demonstration_assets/mps/psi_to_mps_3.png
 #     :align: center
 #     :width: 70%
 #
-# The collected tensors :math:`U^{\sigma_i}_{\mu_{i-1}, \mu_i}` now make up the matrix product state and describe the original state :math:`|\psi\rangle`
-# by appropriately contracting the virtual indices :math:`\mu_i`. We can briefly confirm this by reverse engineering the original state. Due to the convention of
+# 
+# Due to the convention of
 # the indices as ``(virtual_left, physical, virtual_right)``, the contraction is simple and we can use 
 # `np.tensordot <https://numpy.org/doc/stable/reference/generated/numpy.tensordot.html>`_ with ``axes=1``, indicating matrix-product-like contraction of the left-most and right-most index.
 # This is another way of thinking of the obtained state as a **matrix product** state.
@@ -277,7 +282,7 @@ np.allclose(psi, psi_reconstruct)
 # is left and right of the bond (more on that later).
 #
 # A full subroutine from :math:`|\psi\rangle` to its compressed MPS description is given by the following function ``dense_to_mps``.
-# It is convenient to also keep the singular values for each bond to easily change the orthonormality of the tensors, but more on that in the next section.
+# It is convenient to also keep the singular values for each bond to easily change the orthonormality of the tensors, but more on that in the next section on canonical forms.
 
 def split(M, bond_dim):
     """Split a matrix M via SVD and keep only the ``bond_dim`` largest entries"""
@@ -348,7 +353,7 @@ Ms, Ss = dense_to_mps(psi, 5)
 #
 # This was all to conceptually understand the relationship between dense vectors and a compressed matrix product state.
 # We want to use MPS for many sites, where it is often not possible to write down the exponentially large state vector in the first place.
-# In that case we would simply start from an MPS description in terms of :math:`n` :math:`\chi \times \chi` matrices.
+# In that case we would simply start from an MPS description in terms of :math:`n` :math:`\chi \times 2 \times \chi` tensors.
 # Luckily, we can obtain all relevant information without ever reconstructing the full state vector.
 # 
 # Canonical forms
@@ -357,17 +362,22 @@ Ms, Ss = dense_to_mps(psi, 5)
 # In the above construction, we unknowingly already baked in a very useful feature of our MPS because all the :math:`U` matrices from the SVD
 # are left-orthonormal (highlighted by the pink color of left-orthonormal tensors). In particular, they satisfy
 #
-# .. math:: \sum_{\sigma_i} \left(U^{\sigma_i} \right)^\dagger U^{\sigma_i} = \mathbb{I}.
+# .. math:: \sum_{\sigma_i} \left(U^{\sigma_i} \right)^\dagger U^{\sigma_i} = \mathbb{I}
 #
 # Let us briefly confirm that:
 
 for i in range(len(Ms)):
-    id_ = np.tensordot(Ms[i].conj(), Ms[i], axes=([1, 0], [1, 0]))
+    id_ = np.tensordot(Ms[i].conj(), Ms[i], axes=([0, 1], [0, 1]))
     is_id = np.allclose(id_, np.eye(len(id_)))
     print(f"U[{i}] is left-orthonormal: {is_id}")
 
 ##############################################################################
 # This is a very powerful identity as it tells us that contracting a site of the MPS from the left is just the identity.
+# Making the matric multiplication explicit, we have
+# 
+# .. math:: \sum_{\sigma_i \mu_{i-1}} U^{*\sigma_i}_\{\mu_{i-1} \mu'_i} U^{\sigma_i}_\{\mu_{i-1} \mu_i} = \mathbb{I}_\{\mu'_i \mu_i}.
+#
+# Or, graphically:
 #
 # .. figure:: ../_static/demonstration_assets/mps/left_orthonormal.png
 #     :align: center
