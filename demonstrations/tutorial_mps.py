@@ -389,7 +389,7 @@ for i in range(len(Ms)):
 #     :align: center
 #     :width: 70%
 #
-# The fact that we went through the MPS SVD-ing from left-to-right earlier was a choice.
+# The fact that we went through the MPS from left-to-right was a choice.
 # We could have equivalently gone through the MPS from right-to-left and obtained a right-canonical state by keeping the right-orthonormal :math:`V^\dagger` of the decompositions.
 #
 # When computing expectation values, it is convenient to have the MPS in a mixed canonical form.
@@ -445,12 +445,12 @@ for i in range(len(Ms)):
 # In an MPS, the singular values of the bonds naturally encode the entanglement of bipartitions between all sites left vs all sites right of the bond.
 # In particular, the von Neumann entanglement entropy at bond :math:`i` is given by
 #
-# .. math:: S(\rho_{1:i}) = S(\rho_{i+1:n}) = - \sum_i \Lambda^2_i \log\left( \Lambda_i^2 \right).
+# .. math:: S(\rho_{1:i}) = S(\rho_{i+1:n}) = - \sum_{\mu_i=1}^{\chi} \Lambda^2_{\mu_i} \log\left( \Lambda_{\mu_i}^2 \right).
 #
 # Given a bond dimension :math:`\chi`, the maximal entanglement entropy we can obtain is for the all-equal distribution of singular values, :math:`\Lambda_i^2 \equiv 1/\chi`.
 # The entanglement entropy is thus bounded by
 #
-# .. math:: S(\rho_{1:i}) \leq \log(\chi) = \text{const.}.
+# .. math:: S(\rho_{1:i}) \leq \log(\chi) = \text{const}.
 #
 # This is the area law of entanglement for one dimensional systems in that the surface area of a sub-system of a one-dimensional system is just two points, so constant in the system size.
 #
