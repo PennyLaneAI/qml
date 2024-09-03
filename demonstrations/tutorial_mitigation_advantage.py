@@ -93,9 +93,8 @@ n_wires = 9
 noise_gate = qml.DepolarizingChannel
 p = 0.005
 
-# Load devices
-dev_ideal = qml.device("default.mixed", wires=n_wires)
-dev_noisy = qml.transforms.insert(dev_ideal, noise_gate, p, position="all")
+# Load device
+dev = qml.device("default.mixed", wires=n_wires)
 
 # 3x3 grid with nearest neighbors
 connections = [(0, 1), (1, 2),
@@ -113,8 +112,8 @@ def time_evolution(theta_h, n_layers = 10, obs = qml.PauliZ(4)):
             qml.RX(theta_h, wires=i)
     return qml.expval(obs)
 
-qnode_ideal = qml.QNode(time_evolution, dev_ideal, interface="jax")
-qnode_noisy = qml.QNode(time_evolution, dev_noisy, interface="jax")
+qnode_ideal = qml.QNode(time_evolution, dev, interface="jax")
+qnode_noisy = qml.transforms.insert(qnode_ideal, noise_gate, p, position="all")
 
 ##############################################################################
 # We can now simulate the final expectation value with and without noise.
@@ -167,11 +166,8 @@ plt.show()
 # our model by an appropriate gain factor. Here, :math:`G=(1, 1.2, 1.6)` in accordance with [#ibm]_. In order to do this in PennyLane, we simply
 # set up two new noisy devices with the appropriately attenuated noise parameters.
 
-dev_noisy1 = qml.transforms.insert(dev_ideal, noise_gate, p*1.2, position="all")
-dev_noisy2 = qml.transforms.insert(dev_ideal, noise_gate, p*1.6, position="all")
-
-qnode_noisy1 = qml.QNode(time_evolution, dev_noisy1, interface="jax")
-qnode_noisy2 = qml.QNode(time_evolution, dev_noisy2, interface="jax")
+qnode_noisy1 = qml.transforms.insert(qnode_ideal, noise_gate, p*1.2, position="all")
+qnode_noisy2 = qml.transforms.insert(qnode_ideal, noise_gate, p*1.6, position="all")
 
 res_noisy1 = jax.vmap(qnode_noisy1)(thetas)
 res_noisy2 = jax.vmap(qnode_noisy2)(thetas)
