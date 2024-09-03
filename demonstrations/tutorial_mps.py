@@ -27,7 +27,7 @@ more complex situations (see section on entanglement later).
 However, they all suffer from significantly more complicated algorithms 
 and higher costs as a lot of the things that make MPS so attractive, 
 like the availability of a canonical form, are not true anymore.
-To put it plainly, it is often simply much easier to usereadily available 
+To put it plainly, it is often simply much easier to use readily available 
 MPS code and throw a large amount of resources into the bond dimension than to develop
 more advanced tensor network methods. An exception to that are simple 
 update methods [#Jiang]_, that use pseudo canonical-forms that allow a similarly simply
