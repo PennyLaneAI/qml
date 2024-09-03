@@ -20,7 +20,7 @@ For some specific classes of states, this is provably sufficient to have a faith
 But because MPS come with a lot of powerful computational features that we are going to discuss later (in particular canonical forms),
 they are still used in much more complex systems where these requirements do not hold anymore, and still yield good results.
 For example, state of the art quantum chemistry simulations were performed using MPS [#Baiardi]_ 
-and similar methods have been used to simulate experiments on the largest available chips at the time [#Patra]_.
+and similar methods have been used to simulate experiments on the largest available quantum computers at the time [#Patra]_.
 
 It is known that there are more suitable tensor network states for 
 more complex situations (see section on entanglement later).
@@ -50,7 +50,7 @@ Any matrix :math:`M = \mathbb{C}^{M\times N}` can be singular-value-decomposed a
 
 where :math:`\Lambda` is the diagonal matrix of the :math:`r=\min(M, N)` real and non-negative singular values, 
 :math:`U \in \mathbb{C}^{M\times r}` is left-unitary :math:`U^\dagger U = \mathbb{I}_r`, and
-:math:`V^\dagger \in \mathbb{C}^{r\times N}` is right-unitary :math:`V^\dagger (V^\daggers)^\dagger = \mathbb{I}_r`.
+:math:`V^\dagger \in \mathbb{C}^{r\times N}` is right-unitary :math:`V^\dagger (V^\dagger)^\dagger = \mathbb{I}_r`.
 We say the columns and rows of :math:`U` and :math:`V^\dagger` are the left- and right-orthonormal
 singular vectors, respectively. In the case of square and normal matrices, the singular values and singular vectors
 are just the eigenvalues and eigenvectors.
