@@ -12,7 +12,7 @@ Qubitization operator
 ----------------------
 
 Qubitization is a block-encoding technique that, as we will see, is particularly useful for tasks such as estimating eigenvalues, among other applications.
-For a Hamiltonian :math:`\mathcal{H}`, given in its `representation via a linear combination of unitaries (LCU) <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding/>`_, the qubitization operator is defined as:
+For a Hamiltonian :math:`\mathcal{H}`, given in its representation via a linear combination of unitaries (LCU), the qubitization operator is defined as:
 
 .. math::
 
