@@ -108,11 +108,6 @@ warnings.filterwarnings(
     category=np.VisibleDeprecationWarning,
     message=r"Creating an ndarray from ragged"
 )
-warnings.filterwarnings(
-    "error",
-    category=UserWarning,
-    message=r"Contains tensors of types {'autograd', 'jax'}"
-)
 
 # Raise PennyLane deprecation warnings as errors
 warnings.filterwarnings("error", category=PennyLaneDeprecationWarning)

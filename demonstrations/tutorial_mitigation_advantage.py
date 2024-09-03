@@ -118,7 +118,7 @@ qnode_noisy = qml.QNode(time_evolution, dev_noisy, interface="jax")
 
 ##############################################################################
 # We can now simulate the final expectation value with and without noise. Note that the ``IsingZZ`` gate is not natively
-# supported by the ``default.mixed`` device, and will be decomposed into a supported gate set. The noise channels will be
+# supported by the ``default.mixed`` device and will be decomposed into a supported gate set. The noise channels will be
 # inserted after all gates in the final decomposed circuit. We use ``jax.vmap`` to vectorize and speed up the execution
 # for different values of :math:`\theta_h`.
 
