@@ -22,7 +22,6 @@ from pennylane import PennyLaneDeprecationWarning
 
 sys.path.insert(0, os.path.abspath("."))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
-print(sys.path)
 
 
 # -- Project information -----------------------------------------------------
