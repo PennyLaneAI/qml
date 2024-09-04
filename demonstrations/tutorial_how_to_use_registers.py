@@ -1,7 +1,7 @@
 r"""How to use wire registers
 ====================================
 A register of wires represents a collection of wires that serve a purpose (e.g., an "estimation" register in :doc:`quantum phase estimation </demos/tutorial_qpe>`) and abstract away the finer details of running quantum
-algorithms. In this tutorial, we will explore how wire registers are constructed and used
+algorithms. In this tutorial, we will explore how you can construct and use wire registers
 in PennyLane.
 """
 
