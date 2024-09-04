@@ -64,25 +64,24 @@ import matplotlib.pyplot as plt
 
 bitstrings = ["01", "11", "11", "00", "01", "11", "11", "00"]
 
-control_wires = [0,1,2]
-target_wires = [3,4]
+control_wires = [0, 1, 2]
+target_wires = [3, 4]
 
 Ui = [qml.BasisState(int(bitstring, 2), target_wires) for bitstring in bitstrings]
 
-dev = qml.device("default.qubit", shots = 1)
+dev = qml.device("default.qubit", shots=1)
+
 
 # This line is included for drawing purposes only.
-@partial(qml.devices.preprocess.decompose,
-         stopping_condition = lambda obj: False,
-         max_expansion=1)
-
+@partial(qml.devices.preprocess.decompose, stopping_condition=lambda obj: False, max_expansion=1)
 @qml.qnode(dev)
 def circuit(index):
     qml.BasisState(index, wires=control_wires)
     qml.Select(Ui, control=control_wires)
     return qml.sample(wires=target_wires)
 
-qml.draw_mpl(circuit, style = "pennylane")(3)
+
+qml.draw_mpl(circuit, style="pennylane")(3)
 plt.show()
 
 ##############################################################################
@@ -102,15 +101,17 @@ for i in range(8):
 
 bitstrings = ["01", "11", "11", "00", "01", "11", "11", "00"]
 
-control_wires = [0,1,2]
-target_wires = [3,4]
+control_wires = [0, 1, 2]
+target_wires = [3, 4]
 
-@partial(qml.compile, basis_set = "CNOT") # Line added for resource estimation purposes only.
+
+@partial(qml.compile, basis_set="CNOT")  # Line added for resource estimation purposes only.
 @qml.qnode(dev)
 def circuit(index):
     qml.BasisState(index, wires=control_wires)
-    qml.QROM(bitstrings, control_wires, target_wires, work_wires = None)
+    qml.QROM(bitstrings, control_wires, target_wires, work_wires=None)
     return qml.sample(wires=target_wires)
+
 
 for i in range(8):
     print(f"The bitstring stored in index {i} is: {circuit(i)}")
@@ -137,15 +138,17 @@ print("Two-qubit gates: ", qml.specs(circuit)(0)["resources"].gate_sizes[2])
 
 bitstrings = ["01", "11", "11", "00", "01", "11", "11", "00"]
 
-control_wires = [0,1,2]
-target_wires = [3,4]
-work_wires = [5,6]
+control_wires = [0, 1, 2]
+target_wires = [3, 4]
+work_wires = [5, 6]
 
+@partial(qml.compile, basis_set="CNOT")  # Line added for resource estimation purposes only.
 @qml.qnode(dev)
 def circuit(index):
     qml.BasisState(index, wires=control_wires)
-    qml.QROM(bitstrings, control_wires, target_wires, work_wires, clean = False)
+    qml.QROM(bitstrings, control_wires, target_wires, work_wires, clean=False)
     return qml.sample(wires=control_wires + target_wires + work_wires)
+
 
 print("One-qubit gates: ", qml.specs(circuit)(0)["resources"].gate_sizes[1])
 print("Two-qubit gates: ", qml.specs(circuit)(0)["resources"].gate_sizes[2])
@@ -205,7 +208,7 @@ print(f"work wires: {output[5:7]}")
 #
 #
 # Reusable qubits
-# ~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~
 #
 # The above approach has a drawback. The work wires have been altered, i.e., after applying the operator they have not
 # been returned to state :math:`|00\rangle`. This can cause unwanted behaviors, but in PennyLane can be easily solved
@@ -224,6 +227,7 @@ def circuit(index):
     qml.BasisState(index, wires=control_wires)
     qml.QROM(bitstrings, control_wires, target_wires, work_wires, clean=True)
     return qml.sample(wires=target_wires + work_wires)
+
 
 for i in range(8):
     print(f"The bitstring stored in index {i} is: {circuit(i)[:2]}")
@@ -276,7 +280,7 @@ for i in range(8):
 # By implementing various versions of the QROM operator, such as Select and SelectSwap, we optimize quantum circuits
 # for enhanced performance and scalability. These methods improve the efficiency of
 # state preparation [#StatePrep]_ techniques. After all, state preparation is a special case of data encoding, where the data are the coefficients that define the state.
-# As the availability of qubits increases, QROM methods will become more attractive as a practical due to their superior asymptotic efficiency. 
+# As the availability of qubits increases, QROM methods will become more attractive as a practical due to their superior asymptotic efficiency.
 # This makes them an indispensable tool for developing new algorithms.
 #
 # References
