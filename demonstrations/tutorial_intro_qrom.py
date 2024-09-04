@@ -163,7 +163,7 @@ print("Two-qubit gates: ", qml.specs(circuit)(0)["resources"].gate_sizes[2])
 #    :width: 70%
 #    :target: javascript:void(0)
 #
-# Following this structure, for instance the :math:`U_5` operator (or :math:`101` in binary) is in column :math:`2` and row :math:`1` (counting from :math:`0`):
+# Following this structure, for instance, the :math:`U_5` operator (or :math:`101` in binary) is in column :math:`2` and row :math:`1` (counting from :math:`0`):
 #
 # .. figure:: ../_static/demonstration_assets/qrom/indixes_qrom.jpeg
 #    :align: center
@@ -177,15 +177,15 @@ print("Two-qubit gates: ", qml.specs(circuit)(0)["resources"].gate_sizes[2])
 #
 #
 # Let's look at an example by assuming we want to load in the target wires the bitstring with
-# the index :math:`5`, i.e. :math:`b_5 = 11`.
-# For it, we put as input in the control wires the state :math:`|101\rangle` (5 in binary). Then, the initial state is :math:`|101\rangle|00\rangle|00\rangle`,
-# where the first two qubits store the index :math:`|c\rangle = |10\rangle` and the third qubit store to the index :math:`|r\rangle = |1\rangle`.
+# the index :math:`5`.
 #
-# The first operator we have to apply is the Select block, which loads the column :math:`c`, generating the state  :math:`|101\rangle U_4|00\rangle U_5|00\rangle = |101\rangle |01\rangle |11\rangle`,
-# where :math:`01` and :math:`11` are the bitstrings :math:`b_4` and :math:`b_5`, respectively.
-# After that we have to apply the Swap block. Since the third
-# control qubit is a :math:`|r\rangle = |1\rangle`, we swap the row :math:`1` with the target wires, getting the state :math:`|101\rangle U_5 |00\rangle U_4|00\rangle = |101\rangle|11\rangle|01\rangle`
-# loading the bitstring :math:`b_5 = 11` in the target register.
+# .. figure:: ../_static/demonstration_assets/qrom/example_selectswap.jpeg
+#    :align: center
+#    :width: 70%
+#    :target: javascript:void(0)
+#
+# As we can see, :math:`|b_5\rangle` is loaded in the target wires.
+# Let's run the circuit with our initial data list: :math:`[01, 11, 11, 00, 01, 11, 11, 00]`.
 
 index = 5
 output = circuit(index)
@@ -195,7 +195,7 @@ print(f"work wires: {output[5:7]}")
 
 
 ##############################################################################
-#
+# As expected, :math:`|b_5\rangle = |11\rangle` is loaded in the target wires.
 # Note that with more auxiliary qubits we could make larger groupings of bitstrings reducing the depth of the
 # Select operator. Below we show an example with two columns and four rows:
 #
@@ -205,13 +205,39 @@ print(f"work wires: {output[5:7]}")
 #    :target: javascript:void(0)
 #
 # The QROM template will put as many rows as possible using the ``work_wires`` we pass.
-#
+# Let's check how it looks in PennyLane:
+
+import pennylane as qml
+from functools import partial
+
+bitstrings = ["01", "11", "11", "00", "01", "11", "11", "00"]
+
+control_wires = [0, 1, 2]
+target_wires = [3, 4]
+work_wires = [5, 6, 7, 8, 9, 10, 11, 12]
+
+# Added for drawing purposes only
+@partial(qml.devices.preprocess.decompose, stopping_condition = lambda obj: False, max_expansion=2)
+
+@qml.qnode(qml.device("default.qubit", shots = 1))
+def circuit(index):
+    qml.BasisState(index, wires=control_wires)
+    qml.QROM(bitstrings, control_wires, target_wires, work_wires, clean=False)
+    return qml.sample(wires = target_wires), qml.sample(wires = target_wires)
+
+qml.draw_mpl(circuit, style = "pennylane")(0)
+plt.show()
+
+
+
+##############################################################################
+# The scheme coincides with the one described above.
 #
 # Reusable qubits
 # ~~~~~~~~~~~~~~~~
 #
 # The above approach has a drawback. The work wires have been altered, i.e., after applying the operator they have not
-# been returned to state :math:`|00\rangle`. This can cause unwanted behaviors, but in PennyLane can be easily solved
+# been returned to state :math:`|00\rangle`. This could cause unwanted behaviors, but in PennyLane can be easily solved
 # by setting the parameter ``clean = True``.
 
 
@@ -235,7 +261,8 @@ for i in range(8):
 
 
 ##############################################################################
-# Great! We confirm that all the work wires have been reset. To achieve this, we have followed the technique shown in [#cleanQROM]_ where the proposed circuit is as follows:
+# We confirm that all the work wires have been reset to the zero state.
+# To achieve this, we follow the technique shown in [#cleanQROM]_ where the proposed circuit is as follows:
 #
 # .. figure:: ../_static/demonstration_assets/qrom/clean_version_2.jpeg
 #    :align: center
@@ -245,34 +272,40 @@ for i in range(8):
 # where :math:`R` is the number of rows. To see how this circuit works, let's suppose we want to load the bitstring :math:`b_{cr}` in the target wires, where :math:`b_{cr}`
 # is the bitstring whose operator :math:`U` is placed in the c-th column and r-th row in the two dimensional representation shown in the Select block.
 #
-# We can summarize the idea in a few simple steps:
+# We can summarize the idea in a few simple steps.
 #
-# 1. **A uniform superposition is created in the r-th register of the work wires**. To do this, we put the Hadamards in the target wires and move it to the :math:`r` -row with the Swap block.
+# 0. **Initialize the state.** We create the state:
+#
+# .. math::
+#       |c\rangle |r\rangle |0\rangle |0\rangle \dots |0\rangle.
+#
+# 1. **A uniform superposition is created in the r-th register of the work wires**. To do this, we put the Hadamards in the target wires and move it to the :math:`r`-row with the Swap block.
 #
 # .. math::
 #       |c\rangle |r\rangle |0\rangle |0\rangle \dots |+\rangle_r \dots |0\rangle.
 #
-# 2. **Select block is applied.** Note that in the :math:`r`-th position, the Select has no effect since the state :math:`|+\rangle` is not modified by :math:`X` gates.
+# 2. **Select block is applied.** This loads the whole column :math:`c` in the registers. Note that in the :math:`r`-th position, the Select has no effect since the state :math:`|+\rangle` is not modified by :math:`X` gates.
 #
 # .. math::
 #       |c\rangle |r\rangle |b_{c0}\rangle |b_{c1}\rangle \dots |+\rangle_r \dots |b_{c(R-1)}\rangle.
 #
 #
-# 3. **The Hadamard gate is applied to the r-th register of the work wires.** The two Swap blocks and the Hadamard gate applied to the target wires achieve this.
+# 3. **The Hadamard gate is applied to the r-th register of the work wires.** This returns the state to zero. The two Swap blocks and the Hadamard gate applied to the target wires achieve this.
 #
 # .. math::
 #       |c\rangle |r\rangle |b_{c0}\rangle |b_{c1}\rangle \dots |0\rangle_r \dots |b_{c(R-1)}\rangle.
 #
-# 4. **Select block is applied.** Note that loading the bitstring twice in the same register leaves the state as :math:`|0\rangle`. (:math:`X^2 = \mathbb{I}`)
+# 4. **Select block is applied.** Thanks to this, we clean the used registers. That is because loading the bitstring twice in the same register leaves the state as :math:`|0\rangle`. (:math:`X^2 = \mathbb{I}`)
 #
 # .. math::
 #       |c\rangle |r\rangle |0\rangle |0\rangle \dots |b_{cr}\rangle_r \dots |0\rangle.
 #
-# 5. **Swap block is applied.** With this, we move :math:`b_{cr}` that is encoded in the :math:`r`-row to the target wires.
+# 5. **Swap block is applied.** With this, we move :math:`|b_{cr}\rangle` that is encoded in the :math:`r`-row to the target wires.
 #
 # .. math::
 #       |c\rangle |r\rangle |b_{cr}\rangle |0\rangle \dots |0\rangle_r \dots |0\rangle.
 #
+# The desired bitstring has been encoded in the target wires and the rest of the qubits have been left in the zero state. Nice!
 #
 # Conclusion
 # ----------
