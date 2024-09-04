@@ -54,10 +54,10 @@ will be amenable for larger problems.
 #    | 3a. GPT model implementation details
 #    | 3b. GPT offline training loop implementation
 # 
-# 4. | **Results**
+# 4. | **GPT-QE results**
 #    | 4a. Loss curve
-#    | 4b. GPT evaluation progress
-#    | 4c. GPT sequence generation comparison
+#    | 4b. Evaluation progress
+#    | 4c. Sequence generation comparison
 
 ######################################################################
 # 1. GPT-QE Background
@@ -337,7 +337,7 @@ opt = gpt.configure_optimizers(device_type="cuda", learning_rate=5e-5)
 # supervised learning problem. We sketch the steps for each training iteration/epoch below:
 # 
 # 1. Shuffle the training set and split it into ``n_batches`` minibatches
-# 2. For each minibatch, calculate the loss, the gradients, and take an optimizer step 
+# 2. For each minibatch, calculate the average loss, the gradients, and take an optimizer step 
 # 3. For each nth iteration (500 here), evaluate the GPT model: 
 #    3a. Generate a batch of sequences and the predicted energies (total logits). Note that these are 
 # not necessarily same sequences in training set.
@@ -444,13 +444,17 @@ true_Es_t = np.concatenate(true_Es_t, axis=1)
 #     Wall time: 2h 12min 32s
 
 ######################################################################
-# GPT (pre-)training results
-# --------------------------
-# 
+# 4. GPT-QE results
+# -----------------
+# Having finished the offline training, let's take a look at some of our results.
 
 ######################################################################
-# Loss curve
-# ~~~~~~~~~~
+# 4a. Loss curve
+# ~~~~~~~~~~~~~~
+# One of the first things we can look at is the training loss curve. We see here that the average loss
+# continues to decrease until around the 4000th iteration. There, the model was erroraneous but is quick
+# to recover as training continues. This may signal that the GPT model started focusing on learning something
+# erroraneous too quickly. So, more regularization noise (like ``dropout``) may be needed to help avoid this. 
 # 
 
 import holoviews as hv
@@ -481,22 +485,29 @@ df_preds_stats = pd.concat([df_pred.mean(axis=0), df_pred.min(axis=0), df_pred.m
 df_preds_stats.columns = ["Ave Pred E", "Min Pred E", "Max Pred E"]
 
 ######################################################################
-# GPT model learning progress
+# 4b. Evaluation progress
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # In this plot, we track the performance of the GPT model throughout its training. As mentioned
 # before, every after 500th iteration, we let the model generate a batch of sequences. Alongside, we
 # also return the total logits (predicted energies) used in the sequence generation. In the figure,
 # the average predicted energies corresponds to the red markers and the distribution of predicted
-# energies is represented by the red area.
-# 
-# Once we have the generated sequences, we can also let Pennylane calculate the true sequence
+# energies is represented by the red area. Once we have the generated sequences, we can also let PennyLane calculate the true sequence
 # energies. Similarly in the figure then, the blue markers are the average true energies and the blue
 # area represents the true energy distribution.
 # 
 # We now see that the energies predicted by the model gets more accurate at approximating the true
 # energies during training. This in turn, samples lower energies as we see that the true energies
 # sampled gets closer to the ground state energy (the dashed line).
+# 
+# Note that at around the 4000th iteration, the predicted energies are very far from the true energies.
+# This makes sense considering our observation for the loss curve. Also note that at around the 7000th
+# iteration, the averages of the predicted and true energies are the closest and even their respective
+# spreads seem to have good overlap. For later iterations however, the predicted energies were not as good.
+# This may indicate that the GPT model has started overfitting on the training dataset in the later iterations. 
+# That is, the model became great at predicting the correct energies for the training set (as observed in the 
+# loss curve) but not great at generalizing on those outside the training set (like the sequences that the model
+# generated on its own).
 # 
 
 fig = (
