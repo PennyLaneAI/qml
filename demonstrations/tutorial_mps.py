@@ -152,10 +152,11 @@ plt.show()
 #     :width: 70%
 # 
 # .. note:: 
-#     We are going to use the convention of combining indices in the same way ``numpy`` arrays are reshaped.
-#     In particular, for two indices :math:`\sigma_1 = \{0, 1\}` and :math:`\sigma_2 = \{0, 1\}` have the combined index
-#     :math:`(\sigma_1 \sigma_2) = \{00, 01, 10, 11\}`. The actual order is a choice, an alternative would be :math:`(\sigma_1 \sigma_2) = \{00, 10, 11, 01\}`.
-#     We just choose to do it in the same way as ``numpy`` arrays are reshaped for convenience.
+#     We are going to use combination of tensor indices and treat them as one big index.
+#     In particular, two indices :math:`\sigma_1 = \{0, 1\}` and :math:`\sigma_2 = \{0, 1\}` have the combined index
+#     :math:`(\sigma_1 \sigma_2) = \{00, 01, 10, 11\}`. The actual order is a choice and does not matter for the analytic descriptions.
+#     But in practice, we just choose to do it in the same way as ``numpy`` arrays are reshaped for convenience. 
+#     That way we don't have to worry about it and also save on transpositions.
 #
 # The horizontal connections between the :math:`U`-tensors are the matrix multiplications in the equation above.
 # They are contractions over the virtual indices. The dangling vertical lines are the
