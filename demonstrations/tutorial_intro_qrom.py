@@ -164,7 +164,7 @@ print("Two-qubit gates: ", qml.specs(circuit)(0)["resources"].gate_sizes[2])
 #    :width: 70%
 #    :target: javascript:void(0)
 #
-# Following this structure, for instance, the :math:`U_5` operator (or :math:`101` in binary) is in column :math:`2` and row :math:`1` (counting from :math:`0`):
+# Following this structure, for instance, the :math:`U_5` operator (or :math:`101` in binary) is in column :math:`2` and row :math:`1` (zero-based indexing):
 #
 # .. figure:: ../_static/demonstration_assets/qrom/indixes_qrom.jpeg
 #    :align: center
@@ -178,7 +178,7 @@ print("Two-qubit gates: ", qml.specs(circuit)(0)["resources"].gate_sizes[2])
 #
 #
 # Let's look at an example by assuming we want to load in the target wires the bitstring with
-# the index :math:`5` i.e., :math:`U_5|0\rangle = |b_5\rangle`.
+# the index :math:`5`, i.e., :math:`U_5|0\rangle = |b_5\rangle`.
 #
 # .. figure:: ../_static/demonstration_assets/qrom/example_selectswap.jpeg
 #    :align: center
@@ -287,7 +287,7 @@ for i in range(8):
 #       |c\rangle |r\rangle |b_{c0}\rangle |b_{c1}\rangle \dots |+\rangle_r \dots |b_{c(R-1)}\rangle.
 #
 #
-# 3. **The Hadamard gate is applied to the r-th register of the work wires.** This returns that register to zero. The two Swap blocks and the Hadamard gate applied to the target wires achieve this.
+# 3. **The Hadamard gate is applied to the r-th register of the work wires.** This returns that register to the zero state. The two Swap blocks and the Hadamard gate applied to the target wires achieve this.
 #
 # .. math::
 #       |c\rangle |r\rangle |b_{c0}\rangle |b_{c1}\rangle \dots |0\rangle_r \dots |b_{c(R-1)}\rangle.
