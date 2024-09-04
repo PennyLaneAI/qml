@@ -74,6 +74,7 @@ dev = qml.device("default.qubit", shots=1)
 
 # This line is included for drawing purposes only.
 @partial(qml.devices.preprocess.decompose, stopping_condition=lambda obj: False, max_expansion=1)
+
 @qml.qnode(dev)
 def circuit(index):
     qml.BasisState(index, wires=control_wires)
@@ -85,8 +86,6 @@ qml.draw_mpl(circuit, style="pennylane")(3)
 plt.show()
 
 ##############################################################################
-# In this example we are applying Select to index :math:`3`, so we encode the state :math:`|3\rangle = |011\rangle`
-# with two :math:`X` gates.
 # Now we can check that all the outputs are as expected:
 
 for i in range(8):
@@ -142,6 +141,7 @@ control_wires = [0, 1, 2]
 target_wires = [3, 4]
 work_wires = [5, 6]
 
+
 @partial(qml.compile, basis_set="CNOT")  # Line added for resource estimation purposes only.
 @qml.qnode(dev)
 def circuit(index):
@@ -155,7 +155,8 @@ print("Two-qubit gates: ", qml.specs(circuit)(0)["resources"].gate_sizes[2])
 
 ##############################################################################
 # The number of 1 and 2 qubit gates is significantly reduced!
-# Internally, the main idea of this approach is to organize the :math:`U_i` operators in two dimensions,
+#
+# Internally, the main idea of this approach is to organize the :math:`U_i` operators into two dimensions,
 # whose positions will be determined by a column index :math:`c` and a row index :math:`r`.
 #
 # .. figure:: ../_static/demonstration_assets/qrom/select_swap.jpeg
@@ -177,15 +178,14 @@ print("Two-qubit gates: ", qml.specs(circuit)(0)["resources"].gate_sizes[2])
 #
 #
 # Let's look at an example by assuming we want to load in the target wires the bitstring with
-# the index :math:`5`.
+# the index :math:`5` i.e., :math:`U_5|0\rangle = |b_5\rangle`.
 #
 # .. figure:: ../_static/demonstration_assets/qrom/example_selectswap.jpeg
 #    :align: center
-#    :width: 70%
+#    :width: 85%
 #    :target: javascript:void(0)
 #
-# As we can see, :math:`|b_5\rangle` is loaded in the target wires.
-# Let's run the circuit with our initial data list: :math:`[01, 11, 11, 00, 01, 11, 11, 00]`.
+# Now we run the circuit with our initial data list: :math:`[01, 11, 11, 00, 01, 11, 11, 00]`.
 
 index = 5
 output = circuit(index)
@@ -207,31 +207,28 @@ print(f"work wires: {output[5:7]}")
 # The QROM template will put as many rows as possible using the ``work_wires`` we pass.
 # Let's check how it looks in PennyLane:
 
-import pennylane as qml
-from functools import partial
-
 bitstrings = ["01", "11", "11", "00", "01", "11", "11", "00"]
 
 control_wires = [0, 1, 2]
 target_wires = [3, 4]
 work_wires = [5, 6, 7, 8, 9, 10, 11, 12]
 
-# Added for drawing purposes only
-@partial(qml.devices.preprocess.decompose, stopping_condition = lambda obj: False, max_expansion=2)
 
-@qml.qnode(qml.device("default.qubit", shots = 1))
+# Line added for drawing purposes only
+@partial(qml.devices.preprocess.decompose, stopping_condition=lambda obj: False, max_expansion=2)
+@qml.qnode(qml.device("default.qubit", shots=1))
 def circuit(index):
     qml.BasisState(index, wires=control_wires)
     qml.QROM(bitstrings, control_wires, target_wires, work_wires, clean=False)
-    return qml.sample(wires = target_wires), qml.sample(wires = target_wires)
+    return qml.sample(wires=target_wires), qml.sample(wires=target_wires)
 
-qml.draw_mpl(circuit, style = "pennylane")(0)
+
+qml.draw_mpl(circuit, style="pennylane")(0)
 plt.show()
 
 
-
 ##############################################################################
-# The scheme coincides with the one described above.
+# The circuit matches the one described above.
 #
 # Reusable qubits
 # ~~~~~~~~~~~~~~~~
@@ -261,7 +258,8 @@ for i in range(8):
 
 
 ##############################################################################
-# We confirm that all the work wires have been reset to the zero state.
+# All the work wires have been reset to the zero state.
+#
 # To achieve this, we follow the technique shown in [#cleanQROM]_ where the proposed circuit is as follows:
 #
 # .. figure:: ../_static/demonstration_assets/qrom/clean_version_2.jpeg
@@ -271,7 +269,6 @@ for i in range(8):
 #
 # where :math:`R` is the number of rows. To see how this circuit works, let's suppose we want to load the bitstring :math:`b_{cr}` in the target wires, where :math:`b_{cr}`
 # is the bitstring whose operator :math:`U` is placed in the c-th column and r-th row in the two dimensional representation shown in the Select block.
-#
 # We can summarize the idea in a few simple steps.
 #
 # 0. **Initialize the state.** We create the state:
@@ -290,12 +287,12 @@ for i in range(8):
 #       |c\rangle |r\rangle |b_{c0}\rangle |b_{c1}\rangle \dots |+\rangle_r \dots |b_{c(R-1)}\rangle.
 #
 #
-# 3. **The Hadamard gate is applied to the r-th register of the work wires.** This returns the state to zero. The two Swap blocks and the Hadamard gate applied to the target wires achieve this.
+# 3. **The Hadamard gate is applied to the r-th register of the work wires.** This returns that register to zero. The two Swap blocks and the Hadamard gate applied to the target wires achieve this.
 #
 # .. math::
 #       |c\rangle |r\rangle |b_{c0}\rangle |b_{c1}\rangle \dots |0\rangle_r \dots |b_{c(R-1)}\rangle.
 #
-# 4. **Select block is applied.** Thanks to this, we clean the used registers. That is because loading the bitstring twice in the same register leaves the state as :math:`|0\rangle`. (:math:`X^2 = \mathbb{I}`)
+# 4. **Select block is applied.** Thanks to this, we clean the used registers. That is because loading the bitstring twice in the same register leaves the state as :math:`|0\rangle` since :math:`X^2 = \mathbb{I}`. On the other hand, the bitstring :math:`|b_{cr}\rangle` is loaded in the :math:`r` register.
 #
 # .. math::
 #       |c\rangle |r\rangle |0\rangle |0\rangle \dots |b_{cr}\rangle_r \dots |0\rangle.
@@ -305,7 +302,7 @@ for i in range(8):
 # .. math::
 #       |c\rangle |r\rangle |b_{cr}\rangle |0\rangle \dots |0\rangle_r \dots |0\rangle.
 #
-# The desired bitstring has been encoded in the target wires and the rest of the qubits have been left in the zero state. Nice!
+# The desired bitstring has been encoded in the target wires and the rest of the qubits have been left in the zero state.
 #
 # Conclusion
 # ----------
