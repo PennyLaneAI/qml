@@ -1,6 +1,6 @@
 r"""How to use wire registers
 ====================================
-Wire registers help us group qubits and abstract away the finer details of running quantum
+A register of wires represents a collection of wires that serve a purpose (e.g., an "estimation" register in :doc:`quantum phase estimation </demos/tutorial_qpe>`) and abstract away the finer details of running quantum
 algorithms. In this tutorial, we will explore how wire registers are constructed and used
 in PennyLane.
 """
@@ -41,12 +41,12 @@ print(nested_register)
 # elements is based on the order of appearance and the level of nestedness. For more details on ordering, refer
 # to the documentation for :func:`~pennylane.registers`.
 #
-# Accessing a particular register is the same as accessing any element in a dictionary.
+# Accessing a particular register is the same as accessing any element in a dictionary…
 
 print(nested_register["alice"], nested_register["bob1a"])
 
 ######################################################################
-# You can access a specific wire index via its index in a register.
+# …and you can access a specific wire index via its index in a register.
 
 print(nested_register["all_registers"][2], nested_register["bob1a"][0])
 
@@ -61,11 +61,11 @@ print(new_register)
 # For more details on what set operations are supported, refer to the documentation of
 # :class:`~.pennylane.wires.Wires`.
 #
-# A simple example using wire registers
-# -------------------------------------
+# A simple example
+# ----------------
 #
-# In this example, we demonstrate how one can implement the SWAP test with registers.
-# The `SWAP test <https://en.wikipedia.org/wiki/Swap_test>`_
+# In this example, we demonstrate how one can implement the swap test with registers.
+# The `swap test <https://en.wikipedia.org/wiki/Swap_test>`_
 # is an algorithm that calculates the squared inner
 # product of two input states. It requires one auxiliary qubit and takes two input states :math:`|\psi\rangle`
 # and :math:`|\phi\rangle`. We can think of these components as three registers. Suppose states
@@ -99,11 +99,11 @@ def swap_test():
 print(swap_test())
 
 ######################################################################
-# Advanced example
-# --------------------
+# An advanced example
+# -------------------
 #
 # Using registers can greatly streamline the process of modifying a workflow
-# by simplifying wire management. In this example, we use :doc:`Quantum Phase Estimation (QPE) </demos/tutorial_qpe>` to
+# by simplifying wire management. In this example, we use :doc:`quantum phase estimation (QPE) </demos/tutorial_qpe>` to
 # calculate the eigenvalues of a Hamiltonian.
 # Generally, QPE is described with two sets of registers. One register is known as the
 # "estimation" or "measurement" register, and the other is the state register where we apply our
@@ -120,8 +120,8 @@ register = qml.registers({"state": 4, "estimation": 6})
 register = qml.registers({"state": 4, "estimation": 6, "prep": 4})
 
 ######################################################################
-# Finally, let's define our Hamiltonian. We'll use the Transverse-Field Ising model from
-# PennyLane's `quantum datasets <https://pennylane.ai/datasets/qspin/transverse-field-ising-model>`_,
+# Finally, let's define our Hamiltonian. We'll use the `transverse-field Ising model <https://pennylane.ai/datasets/qspin/transverse-field-ising-model>`_ from
+# `PennyLane Datasets <https://pennylane.ai/datasets/>`_,
 # but feel free to try this with any other Hamiltonian.
 
 
