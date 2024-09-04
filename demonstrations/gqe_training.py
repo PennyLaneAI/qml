@@ -58,6 +58,8 @@ will be amenable for larger problems.
 #    | 4a. Loss curve
 #    | 4b. Evaluation progress
 #    | 4c. Sequence generation comparison
+# 
+# 5. | **Conclusion**
 
 ######################################################################
 # 1. GPT-QE Background
@@ -110,7 +112,7 @@ will be amenable for larger problems.
 
 ######################################################################
 # 2a. Loading molecular information
-# ---------------------------------
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # For simplicity, let us consider the hydrogen gas molecule and load the correspoding data from PennyLane.
 # Recall that we would need a vocabulary of operators :math:`U_j`'s, an initial state :math:`\rho_0`, and 
@@ -166,7 +168,7 @@ op_pool_size = len(op_pool)
 
 ######################################################################
 # 2b. Defining the energy function
-# --------------------------------
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # In PennyLane, we define the energy function :math:`E = \mbox{Tr}(\hat{H}U_{j_N}\cdots U_{j_1}\rho_0 U_{j_1}^{\dagger}\cdots U_{j_N}^{\dagger})`
 # corresponding to Eq. 1 of the paper. Here, ``energy_circuit`` takes in the operator sequence :math:`U_{j_1}, U_{j_2}, ..., U_{j_N}`.
@@ -205,7 +207,7 @@ def get_subsequence_energies(op_seq):
 
 ######################################################################
 # 2c. Token sequence generation with corresponding energies
-# ---------------------------------------------------------
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # With these ingredients, we can now construct a dataset containing sequences of tokens and their energies. 
 # Since we cannot feed the operators directly to the GPT model, we would need to tokenize
@@ -250,7 +252,7 @@ train_sub_seq_en = get_subsequence_energies(train_op_seq)
 
 ######################################################################
 # 3a. GPT model implementation details
-# ------------------------------------
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # The architecture of the GPT model we instantiate here is similar to that described in the paper.
 # That is, we used 12 attention layers, 12 attention heads, and 768 embedding dimensions as specified
@@ -316,22 +318,8 @@ opt = gpt.configure_optimizers(device_type="cuda", learning_rate=5e-5)
 #     num non-decayed parameter tensors: 25, with 19,200 parameters
 
 ######################################################################
-# .. rst-class:: sphx-glr-script-out
-# 
-#  .. code-block:: none
-# 
-#       from .autonotebook import tqdm as notebook_tqdm
-
-######################################################################
-# .. rst-class:: sphx-glr-script-out
-# 
-#  .. code-block:: none
-# 
-#     using fused AdamW: True
-
-######################################################################
 # 3b. GPT offline training loop implementation
-# --------------------------------------------
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # We now implement a training loop for our GPT model. This can be framed as a straightforward
 # supervised learning problem. We sketch the steps for each training iteration/epoch below:
@@ -339,11 +327,12 @@ opt = gpt.configure_optimizers(device_type="cuda", learning_rate=5e-5)
 # 1. Shuffle the training set and split it into ``n_batches`` minibatches
 # 2. For each minibatch, calculate the average loss, the gradients, and take an optimizer step 
 # 3. For each nth iteration (500 here), evaluate the GPT model: 
-#    3a. Generate a batch of sequences and the predicted energies (total logits). Note that these are 
-# not necessarily same sequences in training set.
+# 
+#    3a. Generate a batch of sequences and the predicted energies (total logits). Note that these are not necessarily same sequences in training set.
+# 
 #    3b. Calculate the true energies using PennyLane
-#    3c. Calculate the mean absolute error as a metric to track the learning progress and save the GPT model
-# everytime the metric gets better
+# 
+#    3c. Calculate the mean absolute error as a metric to track the learning progress and save the GPT model everytime the metric gets better
 # 
 
 # %%time 
@@ -544,7 +533,8 @@ fig
 # is relatively far so the random sequences give a wider spread of energies.
 # 
 # The energies of the generated sequences from the GPT models however have a narrower spread and so,
-# the average and the minimum energies are very close to ``grd_E``. It is then very interesting that
+# the average and the minimum energies are very close to ``grd_E``, closer than those in the random 
+# training set. It is then very interesting that
 # the models can generate sequences that are better than those in the training set, even though every
 # sequence the models have seen just came from that set. The models were good at generalizing. 
 # 
@@ -599,23 +589,23 @@ df_compare_Es
 #     2    Best Model -1.135560 -1.137263 -1.125118
 
 ######################################################################
-# Next steps
-# ----------
+# 5. Conclusion
+# -------------
 # 
-
-######################################################################
-# -  learning rate schedule
-# -  early stopping mechanism
-# -  regularization
-# -  optimize code, use all of gpu (evaluate energies on gpu?)
-# -  try other generative algorithms?
+# In this demo, we see that GPT-QE is a viable alternative in estimating the ground state
+# of a hydrogen gas molecule. The underlying GPT model can generate a state whose energy is equal to the 
+# ground state energy up to the sixth decimal place. The offline training algorithm (without the sequence 
+# evaluations) is completely detached from the quantum simulations. Thus, the machinery of classical ML 
+# can be harnessed and circumventing the issues of VQE.
 # 
-
-######################################################################
-# Online learning -> training in the paper
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# 
-# For each training iteration/epoch: 1. Sample sequences from current GPT model - decrease temp of
-# sampling 2. For each minibatch, calculate the loss, the gradients, and take an optimizer step 3. For
-# each nth iteration, evaluate the GPT model
+# The reader can also experiment with other molecules from PennyLane and tweak several hyperparameters
+# of the GPT model (like ``dropout``, and ``n_layer``) and include standard ML callbacks to its training
+# (like an early stopping mechanism, and a learning rate schedule). The code itself as well is open to
+# optimization like using `PennyLane Lightning GPU <https://docs.pennylane.ai/projects/lightning/en/latest/lightning_gpu/device.html>`__ 
+# to evaluate the energies faster. An online training loop can also be implemented similar to our offline
+# version. The reader would just need to sample sequences from the current GPT model instead of a fixed
+# dataset for each training iteration. To facilitate exploration and exploitation, one would also define
+# a schedule for the inverse temperature. Initially letting the GPT model sample more randomly through
+# a high temperature then gradually decreasing so that the GPT model focuses more on the higher probability
+# states (low energies). 
 # 
