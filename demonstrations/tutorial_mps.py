@@ -1,7 +1,11 @@
-r"""What is a Matrix Product State (MPS)?
-=========================================
+r"""Simulating quantum circuits with Matrix Product States (MPS)
+================================================================
 
-Two parts: MPS basics and then application to quantum circuit simulation
+Matrix Product States are the workhorse for a broad range of modern classical quantum simulation techniques,
+still to this day. Their unique features like offering a canonical form make them incredibly neat to handle 
+in terms of simplicity and algorithmic complexity.
+In this demo, we are going to cover all the essentials you need to know in order to use them for quantum simulation.
+
 
 .. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_shadow_hamiltonian_simulation.png
     :align: center
@@ -11,7 +15,9 @@ Two parts: MPS basics and then application to quantum circuit simulation
 Introduction
 ------------
 
-Matrix Product States (MPS) are an efficient representation of low entanglement states.
+Matrix Product States (MPS) are an efficient representation of constant-entangled states in one spatial dimension. 
+But in practice, due to their unique features, they are employed in a variety of tasks beyond just gapped 1D systems.
+
 The amount of entanglement the MPS can represent is user-controlled via a hyper-parameter, the so-called `bond dimension` :math:`\chi`.
 If we allow :math:`\chi` to be of :math:`\mathcal{O}(2^{\frac{n}{2}})` for a system of :math:`n` qubits, we can write `any` state as an `exact` MPS.
 To avoid exponentially large resources, however, one typically sets a finite bond dimension :math:`\chi` at the cost of introducing an approximation error.
@@ -172,11 +178,10 @@ U, Lambda, Vd = np.linalg.svd(psi, full_matrices=False)
 
 ##############################################################################
 #
-# For convenience, we separate physical indices :math:`\sigma_j` as superscripts, and virtual indices :math:`\mu_1` as subscripts.
-# We also multiply the singular values onto :math:`V^\dagger` and call this the remainder state :math:`\psi'_{\mu_1, (\sigma_2 \sigma_3)}`,
+# We multiply the singular values onto :math:`V^\dagger` and call this the remainder state :math:`\psi'_{\mu_1, (\sigma_2 \sigma_3)}`,
 # so overall we have
 # 
-# .. math:: \psi_{\sigma_1 \sigma_2 \sigma_3} = \sum_{\mu_1} U^{\sigma_1}_{\mu_1} \psi'_{\mu_1, (\sigma_2 \sigma_3)}.
+# .. math:: \psi_{\sigma_1 \sigma_2 \sigma_3} = \sum_{\mu_1} U_{\sigma_1 \mu_1} \psi'_{\mu_1, (\sigma_2 \sigma_3)}.
 #
 # Graphically, this corresponds to the following.
 #
@@ -200,7 +205,7 @@ Us.append(U)
 # When splitting up :math:`\psi'_{\mu_1, (\sigma_2 \sigma_3)}` we combine the virtual bond with the current site, and have all remaining sites be the other leg of the matrix we create for SVD.
 # In particular, we do
 # 
-# .. math:: \psi'_{\mu_1, (\sigma_2 \sigma_3)} \stackrel{\text{reshape}}{=} \psi'_{(\mu_1 \sigma_2), (\sigma_3)} \stackrel{\text{SVD}}{=} \sum_{\mu_2} U^{\sigma_2}_{\mu_1 \mu_2} \Lambda_{\mu_2} \left(V^\dagger\right)^{\sigma_3}_{\mu_2}
+# .. math:: \psi'_{\mu_1, (\sigma_2 \sigma_3)} \stackrel{\text{reshape}}{=} \psi'_{(\mu_1 \sigma_2), (\sigma_3)} \stackrel{\text{SVD}}{=} \sum_{\mu_2} U_{\mu_1 \sigma_2 \mu_2} \Lambda_{\mu_2} V_{\mu_2 \sigma_3}
 #
 
 psi_remainder = np.diag(Lambda) @ Vd                 # mu1 (s2 s3)
@@ -216,7 +221,7 @@ U.shape, Lambda.shape, Vd.shape
 # We again multiply the singular values onto the new :math:`V^\dagger` and take that as the remainder state :math:`\psi''`.
 # The state overall now reads
 #
-# .. math:: \psi_{\sigma_1 \sigma_2 \sigma_3} = \sum_{\mu_1 \mu_2} U^{\sigma_1}_{\mu_1} U^{\sigma_2}_{\mu_1 \mu_2} \psi''^{\sigma_3}_{\mu_2}.
+# .. math:: \psi_{\sigma_1 \sigma_2 \sigma_3} = \sum_{\mu_1 \mu_2} U_{\sigma_1\mu_1} U_{\mu_1 \sigma_2 \mu_2} \psi''_{\mu_2 \sigma_3}.
 #
 # Graphically, this corresponds to 
 #
@@ -239,7 +244,7 @@ U.shape, Lambda.shape, Vd.shape
 # Because our state vector was already normalized, the singular value in this last SVD is just ``1.``. Else it would yield the norm of ``psi``
 # (a good exercise to confirm by skipping the normalization step in the definition of ``psi`` above).
 #
-# The collected tensors :math:`U^{\sigma_i}_{\mu_{i-1}, \mu_i}` now make up the matrix product state and describe the original state :math:`|\psi\rangle`
+# The collected tensors :math:`U_{\mu_{i-1} \sigma_i \mu_i}` now make up the Matrix Product State and describe the original state :math:`|\psi\rangle`
 # by appropriately contracting the virtual indices :math:`\mu_i`. We can briefly confirm this by reverse engineering the original state. 
 # 
 #
@@ -272,7 +277,7 @@ np.allclose(psi, psi_reconstruct)
 
 ##############################################################################
 # 
-# Up to this point, the description of the original state in terms of the MPS, made up by the three matrices :math:`U^{\sigma_i}_{\mu_{i-1}, \mu_i}`, is exact.
+# Up to this point, the description of the original state in terms of the MPS, made up by the three matrices :math:`U_{\mu_{i-1} \sigma_i \mu_i}`, is exact.
 # With this construction, the sizes of the virtual bonds grow exponentially from :math:`2` to :math:`2^{n/2}` until the middle of the chain (to be confirmed here below).
 #
 # Just like in the example with images before, we can compress the state by only keeping 
@@ -351,7 +356,7 @@ Ms, Ss = dense_to_mps(psi, 5)
 
 ##############################################################################
 #
-# This was all to conceptually understand the relationship between dense vectors and a compressed matrix product state.
+# This was all to conceptually understand the relationship between dense vectors and a compressed Matrix Product State.
 # We want to use MPS for many sites, where it is often not possible to write down the exponentially large state vector in the first place.
 # In that case we would simply start from an MPS description in terms of :math:`n` :math:`\chi \times 2 \times \chi` tensors.
 # Luckily, we can obtain all relevant information without ever reconstructing the full state vector.
@@ -362,7 +367,10 @@ Ms, Ss = dense_to_mps(psi, 5)
 # In the above construction, we unknowingly already baked in a very useful feature of our MPS because all the :math:`U` matrices from the SVD
 # are left-orthonormal (highlighted by the pink color of left-orthonormal tensors). In particular, they satisfy
 #
-# .. math:: \sum_{\sigma_i} \left(U^{\sigma_i} \right)^\dagger U^{\sigma_i} = \mathbb{I}
+# .. math:: \sum_{\sigma_i} \left(U^{\sigma_i} \right)^\dagger U^{\sigma_i} = \mathbb{I}.
+#
+# Here, we have written just the physical index :math:`\sigma_i` as a superscript, indicating that 
+# for each of the values we obtain a matrix :math:`U^{\sigma_i}` and we just have the standard matrix multiplication.
 #
 # Let us briefly confirm that:
 
@@ -375,7 +383,9 @@ for i in range(len(Ms)):
 # This is a very powerful identity as it tells us that contracting a site of the MPS from the left is just the identity.
 # Making the matric multiplication explicit, we have
 # 
-# .. math:: \sum_{\sigma_i \mu_{i-1}} U^{*\sigma_i}_\{\mu_{i-1} \mu'_i} U^{\sigma_i}_\{\mu_{i-1} \mu_i} = \mathbb{I}_\{\mu'_i \mu_i}.
+# .. math:: \sum_{\sigma_i \mu_{i-1}} U^{*}_{\mu_{i-1} \sigma_i \mu'_i} U_{\mu_{i-1} \sigma_i \mu_i} = \mathbb{I}_{\mu'_i \mu_i}.
+#
+# Note that we only use the complex conjugation :math:`U^{*}` instead of Hermitian conjugate :math:`U^\dagger` because we can just choose the indices to contract over, accordingly.
 #
 # Or, graphically:
 #
@@ -416,7 +426,7 @@ for i in range(len(Ms)):
 #
 # In particular, to compute the expectation value described just above, we need the central tensor that we named :math:`\Theta`.
 # We are not going to actually store the :math:`\Gamma`-tensors but continue to use the left-orthonormal :math:`U`-tensors.
-# So all we need to do is construct :math:`\Theta^{\sigma_i}_{\mu_{i-1} \mu_i} = \sum_{\tilde{\mu}_i} U^{\sigma_i}_{\mu_{i-1} \tilde{\mu}_i} \Lambda^{[i]}_{\tilde{\mu}_i \mu_i}`. This has two advantages: 1) 
+# So all we need to do is construct :math:`\Theta_{\mu_{i-1} \sigma_i \mu_i} = \sum_{\tilde{\mu}_i} U_{\mu_{i-1} \sigma_i \tilde{\mu}_i} \Lambda^{[i]}_{\tilde{\mu}_i \mu_i}`. This has two advantages: 1) 
 # we only need to perform one contraction with the singular values from the right and 2) we avoid having to compute any 
 # inverses of the singular values, which numerically can become messy for very small singular values.
 #
@@ -608,7 +618,7 @@ plt.show()
 # Conclusion
 # ----------
 #
-# We introduced the basics of matrix product states (MPS) and saw how the existence of a canonical form simplifies a lot of the contractions.
+# We introduced the basics of Matrix Product States (MPS) and saw how the existence of a canonical form simplifies a lot of the contractions.
 # This fact can also be used for simulation of quantum circuits with local and non-local gates.
 # We showed how to run quantum circuits using the :class:`~pennylane.devices.default_tensor.DefaultTensor` device and how to systematically find an appropriate bond dimension.
 #
@@ -631,7 +641,7 @@ plt.show()
 # .. [#Schollwoeck]
 #
 #     Ulrich Schollwoeck
-#     "The density-matrix renormalization group in the age of matrix product states"
+#     "The density-matrix renormalization group in the age of Matrix Product States"
 #     `arXiv:1008.3477 <https://arxiv.org/abs/1008.3477>`__, 2010.
 #
 # .. [#Baiardi]
