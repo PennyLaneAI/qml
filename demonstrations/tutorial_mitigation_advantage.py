@@ -73,7 +73,7 @@ The complexity of the classical simulation varies with the parameter :math:`\the
 :math:`\theta_h=0` and :math:`\theta_h=\pi/2`, the system becomes trivially solvable. We interpolate between 
 those extrema and show the final value of a single weight observable :math:`\langle Z_4\rangle` as is done in [#ibm]_.
 
-To reproduce the key ingredients of [#ibm]_, we are going to simulate a scaled down version of the real system using PennyLane.  Instead of 127 qubits, we will use only 9, placed on a :math:`3 \times 3` grid with
+To reproduce the key ingredients of [#ibm]_, we are going to simulate a scaled down version of the real system using PennyLane. Instead of 127 qubits, we will use only 9, placed on a :math:`3 \times 3` grid with
 nearest neighbor interactions.
 We start by setting up the circuits for the time evolution and a noise model consisting of
 :class:`~pennylane.DepolarizingChannel` applied to each gate the circuit executes. Physically, this corresponds to applying either of the 
@@ -117,8 +117,10 @@ qnode_ideal = qml.QNode(time_evolution, dev_ideal, interface="jax")
 qnode_noisy = qml.QNode(time_evolution, dev_noisy, interface="jax")
 
 ##############################################################################
-# We can now simulate the final expectation value with and without noise.
-# We use ``jax.vmap`` to vectorize and speed up the execution for different values of :math:`\theta_h`.
+# We can now simulate the final expectation value with and without noise. Note that the ``IsingZZ`` gate is not natively
+# supported by the ``default.mixed`` device and will be decomposed into a supported gate set. The noise channels will be
+# inserted after all gates in the final decomposed circuit. We use ``jax.vmap`` to vectorize and speed up the execution
+# for different values of :math:`\theta_h`.
 
 thetas = jnp.linspace(0, jnp.pi/2, 50)
 
@@ -274,4 +276,3 @@ plt.show()
 # About the author
 # ----------------
 # .. include:: ../_static/authors/korbinian_kottmann.txt
-
