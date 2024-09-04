@@ -1,7 +1,7 @@
 r"""Generative quantum eigensolver (GQE) training using data generated with PennyLane
 ===================================================
 
-In this demo, we will be (pre-)training a generative quantum eigensolver (GQE) and applying the technique described in `this
+In this demo, we will be training a generative quantum eigensolver (GQE) and applying the technique described in `this
 paper <https://arxiv.org/abs/2401.09253v1>`__, using the molecular data available in `PennyLane Datasets <https://pennylane.ai/datasets/>`__.
 We will show that the model gradually better approximates the correct energies and, in turn, 
 can sample energies close to the ground state energy calculated by PennyLane. 
@@ -47,12 +47,12 @@ will be amenable for larger problems.
 # 1. | **GPT-QE Background**
 # 2. | **Dataset construction via PennyLane**
 #    | 2a. Loading molecular information
-#    | 2b. Defining energy function
+#    | 2b. Defining the energy function
 #    | 2c. Token sequence generation with corresponding energies
 # 
-# 3. | **GPT (pre-)training**
-#    | 3a. GPT implementation details
-#    | 3b. GPT (pre-)training loop implementation
+# 3. | **GPT-QE training**
+#    | 3a. GPT model implementation details
+#    | 3b. GPT offline training loop implementation
 # 
 # 4. | **Results**
 #    | 4a. Loss curve
@@ -61,8 +61,8 @@ will be amenable for larger problems.
 # 
 
 ######################################################################
-# GPT-QE Background
-# -----------------
+# 1. GPT-QE Background
+# --------------------
 # 
 # In particular, the chosen model design in the paper was the generative pre-trained
 # transformer (GPT) architecture. So, a GQE using a transformer is called GPT-QE. As a language model, GPTs are successful in generating
@@ -70,25 +70,28 @@ will be amenable for larger problems.
 # harnessed for quantum chemistry by constructing quantum states :math:`\rho` as a sequence of unitary operators 
 # which are in turn, represented by quantum circuits. That is, we let :math:`\rho = U\rho_0 U^{\dagger}`
 # for some fixed initial state :math:`\rho_0` and the aforementioned sequence is :math:`U = U_{j_N}U_{j_{N-1}}\cdots U_{j_1}`.
-# The GPT model generates the sequence of integers :math:`j_1, j_2, ..., j_N` indexing a vocabulary
-# of operators :math:`U_j`'s. The goal of training is then to minimize the corresponding energy
+# The GPT model generates the sequence of integers :math:`j_1, j_2, ..., j_N` indexing a pool 
+# of operators :math:`U_j`'s. We interpret these integers as tokens and the pool as the vocabulary in the parlance for language models. 
+# The goal of training is then to minimize the corresponding energy
 # :math:`E = \mbox{Tr}(\hat{H}\rho)` where :math:`\hat{H}` is the hamiltonian of the molecule in 
 # question.
 # 
-# Each integer :math:`j_i` is sampled from the distribution :math:`\exp(-\beta w_{j_i})` where
-# :math:`\beta` is an inverse temperature representing a trade-off parameter between exploration and 
-# exploitation and :math:`w_{j_i}` is the logit returned by the GPT model for the index :math:`j_i`. We then
+# Each token :math:`j_i` is sampled from the distribution :math:`\exp(-\beta w_{j_i})` where
+# :math:`w_{j_i}` is the unnormalized log probability (or logit) returned by the GPT model for the token :math:`j_i`
+# and :math:`\beta` is an inverse temperature representing a trade-off parameter between exploration and exploitation. We then
 # observe that the probability of sampling a state through the method described above is 
 # proportional to :math:`\exp(-\beta w_{\mbox{sum}})` where :math:`w_{\mbox{sum}} = \sum_{i=1}^N w_{j_i}` 
 # and the probability for the corresponding energy is :math:`\exp(-\beta E)`. We thus have a constraint 
 # for the total logit to be equal to the energy of the corresponding state: :math:`w_{\mbox{sum}} = E` which
 # can be imposed by training GPT-QE to minimize the loss function :math:`C = (w_{\mbox{sum}} - E)^2`.
-# With this constraint satisfied, GPT-QE would then sample states with smaller energies with increasing
+# With this constraint satisfied, GPT-QE would then be sampling states of smaller energies with increasing
 # likelihood.
 #  
-# More concretely, we summarize the (pre-)training loop in the following diagram. This is called
+# More concretely, we summarize the "pre-"training loop in the following diagram. This is called
 # pre-training because the learning is done using a fixed dataset first before the "real" training 
-# is done based on the data it generated on its own. 
+# is done based on the data it generated on its own. In this demo, we will call the pre-training as offline
+# training since the GPT model does not receive feedback from the sequences it samples, and online
+# training if otherwise.
 # 
 ##############################################################################
 #.. figure:: ../_static/demonstration_assets/gqe_training/gqe_training_diagram.png
@@ -96,11 +99,24 @@ will be amenable for larger problems.
 #    :width: 90%
 
 ######################################################################
-# Dataset construction via PennyLane
-# -------------------------------------------------
+# 2. Dataset construction via PennyLane
+# -------------------------------------
 # 
-# For simplicity, let us consider the hydrogen gas molecule and load the correspoding data
-# (especially, a pool of unitary operators) from PennyLane.
+# Firstly, let us construct the static dataset we will use for offline training. We choose
+# to generate our own dataset in order to illustrate the sequences and energies more concretely.
+# Our dataset will be made from random sequences of tokens, which we recall corresponds to indices
+# of a vocabulary of unitary operators. We then define an energy function in PennyLane to calculate 
+# the energy of a state corresponding to a token sequence. Applying the aforementioned function,
+# we would then have a dataset of token sequences and energies for the GPT model offline training.
+#
+######################################################################
+# 2a. Loading molecular information
+# ---------------------------------
+# 
+# For simplicity, let us consider the hydrogen gas molecule and load the correspoding data from PennyLane.
+# Recall that we would need a vocabulary of operators :math:`U_j`'s, an initial state :math:`\rho_0`, and 
+# the hamiltonian :math:`\hat{H}` for hydrogen gas. We also get the ground state energy for later comparison
+# with the results.
 # 
 
 import numpy as np
@@ -150,19 +166,16 @@ op_pool_size = len(op_pool)
 #     Molecule: H2, n_ops: 32, num_qubits: 4
 
 ######################################################################
-# Define the energy function
-# --------------------------
+# 2b. Defining the energy function
+# --------------------------------
 # 
-# To generate a dataset, we would be creating an operator sequence of fixed length and calculating the
-# energy corresponding to that sequence by using Eq. 1 of the paper. This function ``energy_circuit``
-# was implemented by Utkarsh using Pennylane.
-# 
+# In PennyLane, we define the energy function :math:`E = \mbox{Tr}(\hat{H}U_{j_N}\cdots U_{j_1}\rho_0 U_{j_1}^{\dagger}\cdots U_{j_N}^{\dagger})`
+# corresponding to Eq. 1 of the paper. Here, ``energy_circuit`` takes in the operator sequence :math:`U_{j_1}, U_{j_2}, ..., U_{j_N}`.
+#
 # As a slight extension from the paper, we also calculate the energies for each subsequence of
-# operators to help with the training of the model. That is, for a sequence of operators:
-# ``[U_1, U_2, U_3]``, we also compute the energies for ``[U_1]`` and ``[U_1, U_2]`` instead of just
-# the full sequence ``[U_1, U_2, U_3]`` described in the paper.
-# 
-# This is simply done in Pennylane using ``Snapshot``
+# operators to help with the training of the model. That is, for a sequence of three operators:
+# :math:`U_{j_1}, U_{j_2}, U_{j_3}`, we also compute the energies for :math:`U_{j_1}` and :math:`U_{j_1}, U_{j_2}` instead of just
+# the full sequence of three operators as described in the paper. This is simply done in PennyLane using ``Snapshot``.
 # 
 
 # This computes the energy for a chosen molecule with the selected operator pool
@@ -192,11 +205,11 @@ def get_subsequence_energies(op_seq):
 # Note: Energy offsets are included for other molecules in the paper
 
 ######################################################################
-# Generate dataset for GPT (pre-)training
-# ---------------------------------------
+# 2c. Token sequence generation with corresponding energies
+# ---------------------------------------------------------
 # 
-# With these ingredients, we can now construct a dataset containing sequences of operators and their
-# energies. Since we cannot feed the operators directly to the GPT model, we would need to tokenize
+# With these ingredients, we can now construct a dataset containing sequences of tokens and their energies. 
+# Since we cannot feed the operators directly to the GPT model, we would need to tokenize
 # them. The indices of ``op_pool`` seems to be a good candidate but we instead choose the tokens to be
 # the ``op_pool`` indices shifted by 1. This is so that we can define a special token ``0`` that tells
 # the GPT model the start of a sequence.
