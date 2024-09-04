@@ -53,7 +53,7 @@ Then the unitaries :math:`U_i` can be simply products of :math:`X` gates satisfy
 
     U_i|0\rangle =|b_i\rangle.
 
-We use :class:`~.pennylane.BasisEmbedding` as a useful template for implementing the gates :math:`U_i`. Let's see how it could be written in code:
+We use :class:`~.pennylane.BasisState` as a useful template for implementing the gates :math:`U_i`. Let's see how it could be written in code:
 
 """
 
@@ -67,7 +67,7 @@ bitstrings = ["01", "11", "11", "00", "01", "11", "11", "00"]
 control_wires = [0,1,2]
 target_wires = [3,4]
 
-Ui = [qml.BasisEmbedding(int(bitstring, 2), target_wires) for bitstring in bitstrings]
+Ui = [qml.BasisState(int(bitstring, 2), target_wires) for bitstring in bitstrings]
 
 dev = qml.device("default.qubit", shots = 1)
 
@@ -78,7 +78,7 @@ dev = qml.device("default.qubit", shots = 1)
 
 @qml.qnode(dev)
 def circuit(index):
-    qml.BasisEmbedding(index, wires=control_wires)
+    qml.BasisState(index, wires=control_wires)
     qml.Select(Ui, control=control_wires)
     return qml.sample(wires=target_wires)
 
@@ -105,24 +105,34 @@ bitstrings = ["01", "11", "11", "00", "01", "11", "11", "00"]
 control_wires = [0,1,2]
 target_wires = [3,4]
 
+@partial(qml.compile, basis_set = "CNOT") # Line added for resource estimation purposes only.
 @qml.qnode(dev)
 def circuit(index):
-    qml.BasisEmbedding(index, wires=control_wires)
+    qml.BasisState(index, wires=control_wires)
     qml.QROM(bitstrings, control_wires, target_wires, work_wires = None)
     return qml.sample(wires=target_wires)
 
+for i in range(8):
+    print(f"The bitstring stored in index {i} is: {circuit(i)}")
+
 ##############################################################################
-# Although this approach works correctly, the number of multicontrol gates is high.
-# The decomposition of these gates is expensive and there are numerous works that attempt to simplify this.
-# We highlight reference [#unary]_ which introduces an efficient technique using measurements in the middle
+# Although this approach works correctly, the number of multicontrol gates is high — gates with a costly decomposition.
+# Here we show the number of 1 and 2 qubit gates we use when decomposing the circuit:
+
+print("One-qubit gates: ", qml.specs(circuit)(0)["resources"].gate_sizes[1])
+print("Two-qubit gates: ", qml.specs(circuit)(0)["resources"].gate_sizes[2])
+
+##############################################################################
+# There are numerous works that attempt to simplify this of which
+# we highlight reference [#unary]_ which introduces an efficient technique using measurements in the middle
 # of the circuit. Another clever approach was introduced in [#selectSwap]_ , with a smart structure known as SelectSwap,
 # which we describe below.
 #
 # SelectSwap
 # ~~~~~~~~~~
-# The goal of the SelectSwap construction is to trade depth for width. That is, using multiple auxiliary qubits,
-# we reduce the circuit depth required to build the QROM. To apply it, we just have to add ``work_wires`` to
-# the template and PennyLane will do all the work for you automatically:
+# The goal of the SelectSwap construction is to trade depth of the circuit for width. That is, using multiple auxiliary qubits,
+# we reduce the circuit depth required to build the QROM. Before we get into how it works, let's show you how easy it is to use:
+# we simply add ``work_wires`` to the code we had previously.
 #
 
 bitstrings = ["01", "11", "11", "00", "01", "11", "11", "00"]
@@ -133,12 +143,15 @@ work_wires = [5,6]
 
 @qml.qnode(dev)
 def circuit(index):
-    qml.BasisEmbedding(index, wires=control_wires)
+    qml.BasisState(index, wires=control_wires)
     qml.QROM(bitstrings, control_wires, target_wires, work_wires, clean = False)
     return qml.sample(wires=control_wires + target_wires + work_wires)
 
+print("One-qubit gates: ", qml.specs(circuit)(0)["resources"].gate_sizes[1])
+print("Two-qubit gates: ", qml.specs(circuit)(0)["resources"].gate_sizes[2])
 
 ##############################################################################
+# The number of 1 and 2 qubit gates is significantly reduced!
 # Internally, the main idea of this approach is to organize the :math:`U_i` operators in two dimensions,
 # whose positions will be determined by a column index :math:`c` and a row index :math:`r`.
 #
@@ -147,10 +160,17 @@ def circuit(index):
 #    :width: 70%
 #    :target: javascript:void(0)
 #
-# The circuit is divided into two fundamental parts:
+# Following this structure, for instance the :math:`U_5` operator (or :math:`101` in binary) is in column :math:`2` and row :math:`1` (counting from :math:`0`):
 #
-# - **Select block**:  works the same as before, but now it loads more than one bitstring per column. The control wires associated to this operator encode the column :math:`c` to be applied.
-# - **Swap block**:  swaps the :math:`r`-row to the target wires where the :math:`r` value is encoded in the control wires associated with this operator.
+# .. figure:: ../_static/demonstration_assets/qrom/indixes_qrom.jpeg
+#    :align: center
+#    :width: 70%
+#    :target: javascript:void(0)
+#
+# Therefore, we can divide the circuit in two fundamental parts:
+#
+# - **Select block**: Loads the :math:`r`-column in the target and work wires.
+# - **Swap block**: Swaps the :math:`r`-row to the target wires.
 #
 #
 # Let's look at an example by assuming we want to load in the target wires the bitstring with
@@ -201,7 +221,7 @@ work_wires = [5, 6]
 
 @qml.qnode(dev)
 def circuit(index):
-    qml.BasisEmbedding(index, wires=control_wires)
+    qml.BasisState(index, wires=control_wires)
     qml.QROM(bitstrings, control_wires, target_wires, work_wires, clean=True)
     return qml.sample(wires=target_wires + work_wires)
 
