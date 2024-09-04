@@ -4,7 +4,7 @@ r"""Generative quantum eigensolver (GQE) training using data generated with Penn
 In this demo, we will be (pre-)training a generative quantum eigensolver (GQE) and applying the technique described in `this
 paper <https://arxiv.org/abs/2401.09253v1>`__, using the molecular data available in `PennyLane Datasets <https://pennylane.ai/datasets/>`__.
 We will show that the model gradually better approximates the correct energies and, in turn, 
-can sample energies close to the ground state energy calculated by Pennylane. 
+can sample energies close to the ground state energy calculated by PennyLane. 
 
 .. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_generative_quantum_eigensolver.png
     :align: center
@@ -15,7 +15,7 @@ The GQE algorithm is an alternative approach in estimating the ground state of a
 Usually, this ground state estimation is done via the variational quantum eigensolver (VQE) approach, 
 where the quantum state is represented as a quantum circuit with tunable parameters. The goal is then 
 to find the optimal parameters that minimizes the corresponding energy :math:`E`. For more details on
-VQEs, check out the `PennyLane Demo <https://pennylane.ai/qml/demos/tutorial_vqe/>`__ and 
+VQEs, check out this `PennyLane Demo <https://pennylane.ai/qml/demos/tutorial_vqe/>`__ and 
 `Documentation <https://docs.pennylane.ai/projects/catalyst/en/stable/demos/adaptive_circuits_demo.html>`__.
 
 .. figure:: ../_static/demonstration_assets/gqe_training/paper_vqe_diagram.png
@@ -45,7 +45,7 @@ will be amenable for larger problems.
 # -------
 # 
 # 1. | **GPT-QE Background**
-# 2. | **Dataset construction via Pennylane**
+# 2. | **Dataset construction via PennyLane**
 #    | 2a. Loading molecular information
 #    | 2b. Defining energy function
 #    | 2c. Token sequence generation with corresponding energies
@@ -65,11 +65,11 @@ will be amenable for larger problems.
 # -----------------
 # 
 # In particular, the chosen model design in the paper was the generative pre-trained
-# transformer (GPT) architecture. As a language model, GPTs are successful in generating
+# transformer (GPT) architecture. So, a GQE using a transformer is called GPT-QE. As a language model, GPTs are successful in generating
 # sequences of words that closely resemble human natural language. This performance is
-# harnessed by constructing quantum states :math:`\rho` as a sequence of unitary operators 
+# harnessed for quantum chemistry by constructing quantum states :math:`\rho` as a sequence of unitary operators 
 # which are in turn, represented by quantum circuits. That is, we let :math:`\rho = U\rho_0 U^{\dagger}`
-# for some fixed initial state :math:`\rho_0` and the sequence is :math:`U = U_{j_N}U_{j_{N-1}}\cdots U_{j_1}`.
+# for some fixed initial state :math:`\rho_0` and the aforementioned sequence is :math:`U = U_{j_N}U_{j_{N-1}}\cdots U_{j_1}`.
 # The GPT model generates the sequence of integers :math:`j_1, j_2, ..., j_N` indexing a vocabulary
 # of operators :math:`U_j`'s. The goal of training is then to minimize the corresponding energy
 # :math:`E = \mbox{Tr}(\hat{H}\rho)` where :math:`\hat{H}` is the hamiltonian of the molecule in 
@@ -77,20 +77,30 @@ will be amenable for larger problems.
 # 
 # Each integer :math:`j_i` is sampled from the distribution :math:`\exp(-\beta w_{j_i})` where
 # :math:`\beta` is an inverse temperature representing a trade-off parameter between exploration and 
-# exploitation and :math:`w_{j_i}` is the logit returned by GPT for the index :math:`j_i`. We then
+# exploitation and :math:`w_{j_i}` is the logit returned by the GPT model for the index :math:`j_i`. We then
 # observe that the probability of sampling a state through the method described above is 
 # proportional to :math:`\exp(-\beta w_{\mbox{sum}})` where :math:`w_{\mbox{sum}} = \sum_{i=1}^N w_{j_i}` 
 # and the probability for the corresponding energy is :math:`\exp(-\beta E)`. We thus have a constraint 
-# for the total logit to be equal to the energy of the corresponding state :math:`w_{\mbox{sum}} = E` which
-# can be imposed by minimizing the loss function :math:`C = (w_{\mbox{sum}} - E)^2`.
-#   
+# for the total logit to be equal to the energy of the corresponding state: :math:`w_{\mbox{sum}} = E` which
+# can be imposed by training GPT-QE to minimize the loss function :math:`C = (w_{\mbox{sum}} - E)^2`.
+# With this constraint satisfied, GPT-QE would then sample states with smaller energies with increasing
+# likelihood.
+#  
+# More concretely, we summarize the (pre-)training loop in the following diagram. This is called
+# pre-training because the learning is done using a fixed dataset first before the "real" training 
+# is done based on the data it generated on its own. 
+# 
+##############################################################################
+#.. figure:: ../_static/demonstration_assets/gqe_training/gqe_training_diagram.png
+#    :align: center
+#    :width: 90%
 
 ######################################################################
-# Generating molecules from Google Colab by Utkarsh
+# Dataset construction via PennyLane
 # -------------------------------------------------
 # 
 # For simplicity, let us consider the hydrogen gas molecule and load the correspoding data
-# (especially, a pool of unitary operators) from Pennylane.
+# (especially, a pool of unitary operators) from PennyLane.
 # 
 
 import numpy as np
