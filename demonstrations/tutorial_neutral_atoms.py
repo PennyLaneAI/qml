@@ -314,6 +314,7 @@ import jax
 from jax import numpy as jnp  # Needed for pulse programming
 
 jax.config.update("jax_platform_name", "cpu")  # Tell jax to use CPU by default
+jax.config.update("jax_enable_x64", True)
 
 ##############################################################################
 #
