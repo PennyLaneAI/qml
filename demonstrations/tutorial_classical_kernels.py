@@ -165,7 +165,7 @@ plt.plot(X, Y_gaussian)
 plt.suptitle("The Gaussian kernel with $\sigma=1/\sqrt{2}$")
 plt.xlabel("$\delta$")
 plt.ylabel("$k(\delta)$")
-plt.show();
+plt.show()
 
 ###############################################################################
 # In this demo, we will consider only this one example. However, the arguments we
@@ -218,7 +218,7 @@ y_func = [Gauss_p(x) for x in x_func]
 plt.plot(x_func, y_func)
 plt.xlabel("$\delta$")
 plt.suptitle("Periodic extension to the Gaussian kernel")
-plt.show();
+plt.show()
 
 ##################################################################################
 # In practice, we would construct several periodic extensions of the aperiodic
@@ -270,7 +270,7 @@ for n in range(2,7):
 plt.legend()
 plt.xlabel("frequency $n$")
 plt.ylabel("Fourier coefficient $c_n$")
-plt.show();
+plt.show()
 
 ##################################################################################
 # What do we see?
@@ -292,7 +292,7 @@ plt.plot(range(32), fourier_p(32), 'x')
 plt.xlabel("frequency $n$")
 plt.ylabel("Fourier coefficient $c_n$")
 plt.suptitle("Fourier spectrum of the Gaussian kernel")
-plt.show();
+plt.show()
 
 ##################################################################################
 # We just need a QK with the same Fourier spectrum!
@@ -459,7 +459,7 @@ Y_test = QK_on_dataset(X, thetas, test_amplitudes)
 plt.plot(X, Y_test)
 plt.xlabel("$\delta$")
 plt.suptitle("QK with test amplitudes")
-plt.show();
+plt.show()
 
 ###############################################################################
 # One can see that the stationary kernel with this particular initial state has
@@ -632,7 +632,7 @@ for step in range(max_steps):
 plt.plot(range(d), probabilities, 'x')
 plt.xlabel("array entry $j$")
 plt.ylabel("probabilities $p_j$")
-plt.show();
+plt.show()
 
 ###############################################################################
 # Would you be able to tell whether this is correct?
@@ -672,7 +672,7 @@ plt.plot(range(d), probabilities, '+', label = "probability $p_j = |a_j|^2$")
 plt.plot(range(d), amplitudes, 'x', label = "amplitude $a_j$")
 plt.xlabel("array entry $j$")
 plt.legend()
-plt.show();
+plt.show()
 
 ###############################################################################
 # Visualizing the solution
@@ -688,7 +688,7 @@ plt.xlabel("frequency $n$")
 plt.ylabel("Fourier coefficient")
 plt.suptitle("Fourier spectrum of the Gaussian kernel")
 plt.legend()
-plt.show();
+plt.show()
 
 ###############################################################################
 # It seems like it does!
@@ -717,7 +717,7 @@ plt.xlabel("frequency $n$")
 plt.ylabel("Fourier coefficient")
 plt.suptitle("Fourier spectrum of the Gaussian kernel")
 plt.legend()
-plt.show();
+plt.show()
 
 ###############################################################################
 # It seems it went well!
@@ -731,7 +731,7 @@ plt.plot(X, Y_truth, '--', label = "Gaussian kernel")
 plt.xlabel("$\delta$")
 plt.ylabel("$k(\delta)$")
 plt.legend()
-plt.show();
+plt.show()
 
 ###############################################################################
 # Yeah!
