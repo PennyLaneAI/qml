@@ -235,11 +235,11 @@ jit_circuit(0.123).block_until_ready()
 second_time = time.time() - start
 
 
-print(f"No jit time: {no_jit_time:0.4f} seconds")
+print(f"No jit time: {no_jit_time:0.8f} seconds")
 # Compilation overhead will make the first call slower than without jit...
-print(f"First run time: {first_time:0.4f} seconds")
+print(f"First run time: {first_time:0.8f} seconds")
 # ... but the second run time is >100x faster than the first!
-print(f"Second run time: {second_time:0.4f} seconds")
+print(f"Second run time: {second_time:0.8f} seconds")
 
 
 # You can see that for the cost of some compilation overhead, we can
