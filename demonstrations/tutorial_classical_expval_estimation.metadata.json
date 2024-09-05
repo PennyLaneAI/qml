@@ -26,14 +26,50 @@
     "canonicalURL": "/qml/demos/tutorial_classical_expval_estimation",
     "references": [
         {
-            "id": "mbmqc_2009",
+            "id": "gottesman",
             "type": "article",
-            "title": "Measurement-based quantum computation.",
-            "authors": "H. J. Briegel, D. E. Browne, W. Dür, R. Raussendorf, and M. V. den Nest",
-            "year": "2009",
+            "title": "The Heisenberg Representation of Quantum Computers.",
+            "authors": "D. Gottesman",
+            "year": "1998",
             "journal": "",
-            "url": "https://arxiv.org/abs/0910.1116"
+            "url": "https://arxiv.org/abs/quant-ph/9807006"
         },
+        {
+            "id": "angrisani",
+            "type": "article",
+            "title": "Classically estimating observables of noiseless quantum circuits.",
+            "authors": "Armando Angrisani, Alexander Schmidhuber, Manuel S. Rudolph, M. Cerezo, Zoë Holmes, Hsin-Yuan Huang",
+            "year": "2024",
+            "journal": "",
+            "url": "https://arxiv.org/abs/2409.01706"
+        },
+        {
+            "id": "aharonov",
+            "type": "article",
+            "title": "A polynomial-time classical algorithm for noisy random circuit sampling.",
+            "authors": "Dorit Aharonov, Xun Gao, Zeph Landau, Yunchao Liu, Umesh Vazirani",
+            "year": "2022",
+            "journal": "",
+            "url": "https://arxiv.org/abs/2211.03999"
+        },
+        {
+            "id": "lowesa",
+            "type": "article",
+            "title": "Classical surrogate simulation of quantum systems with LOWESA.",
+            "authors": "Manuel S. Rudolph, Enrico Fontana, Zoë Holmes, Lukasz Cincio",
+            "year": "2023",
+            "journal": "",
+            "url": "https://arxiv.org/abs/2308.09109"
+        },
+        {
+            "id": "begusic",
+            "type": "article",
+            "title": "Fast and converged classical simulations of evidence for the utility of quantum computing before fault tolerance.",
+            "authors": "Tomislav Begušić, Johnnie Gray, Garnet Kin-Lic Chan",
+            "year": "2023",
+            "journal": "",
+            "url": "https://arxiv.org/abs/2308.05077"
+        }
     ],
     "basedOnPapers": ["10.48550/arXiv.2409.01706"],
     "referencedByPapers": [],

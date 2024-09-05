@@ -114,7 +114,7 @@ params = np.random.random((num_layers, num_qubits, 3))
 tape = ansatz(params, num_qubits)
 print(qml.drawer.tape_text(tape))
 
-###############################################################################
+##############################################################################
 # Now that we have our example set up, let's look at the core technique behind
 # the simulation algorithm.
 #
@@ -168,7 +168,7 @@ for op0, op1 in product([qml.Identity, qml.X, qml.Y, qml.Z], repeat=2):
     new_op = qml.pauli_decompose(new_op.matrix())
     print(f"CNOT transformed {original_op} to {new_op}")
 
-###############################################################################
+##############################################################################
 # This fully specifies the action of :math:`\operatorname{CNOT}` on any Pauli word,
 # because any tensor factors that the gate does not act on are simply left unchanged.
 # We will use these results as a lookup table for the simulation below,
@@ -194,7 +194,7 @@ cnot_table = {
 }
 
 
-###############################################################################
+##############################################################################
 # Now, on to some non-Clifford gates, namely Pauli rotation gates. They
 # have the important property of mapping a Pauli word to two Pauli words whenever
 # the rotation generator and the transformed Pauli word do not commute.
@@ -296,7 +296,7 @@ def apply_single_qubit_rot(pauli, wire, param, H):
     return new_H
 
 
-###############################################################################
+##############################################################################
 # With those two essential functions implemented, we're almost ready to put the algorithm together.
 # Before doing so, we need a function that computes the expectation value of the evolved observable
 # with respect to the initial state :math:`|0\rangle`. This is simple, though, because we know for
@@ -312,7 +312,7 @@ def initial_state_expval(H):
     return expval
 
 
-###############################################################################
+##############################################################################
 # Now let's combine everything into a function that can handle the tape of our quantum
 # circuit from the beginning. It simply extracts the measurement observable and then
 # goes through the circuit backwards, propagating the Pauli words of the observable
@@ -340,7 +340,7 @@ def execute_tape(tape, k=None):
     return initial_state_expval(H)
 
 
-###############################################################################
+##############################################################################
 # Great! So let's run it on our circuit, but now on 25 qubits and with 5 layers,
 # and compare to the exact value from PennyLane's fast statevector simulator
 # Lightning Qubit. We also set the truncation threshold to :math:`k=8`. # TODO LIGHTNING LINK
@@ -374,7 +374,7 @@ print(f"Truncated Pauli propagation estimated the expectation value to be {expva
 print(f"The numerically exact expectation value is                        {exact_expval:.6f}")
 
 
-###############################################################################
+##############################################################################
 # Wonderful, we have a working approximate simulation of the circuit that is scalable (for
 # fixed :math:`k`) that estimates the expectation value of :math:`H`!
 #
@@ -395,7 +395,7 @@ print(
 )
 
 
-###############################################################################
+##############################################################################
 # We obtain approximations of the observable expectation values, with an error around :math:`5\times 10^{-3}`.
 #
 # Fine print
@@ -445,7 +445,38 @@ print(
 # for which this estimation task is hard, but sampling from the quantum state prepared by
 # the circuit is hard.
 #
-# TODO: references
+# References
+# ----------
 #
+# .. [#gottesman]
+#
+#     Daniel Gottesman
+#     "The Heisenberg Representation of Quantum Computers"
+#     `arXiv:quant-ph/9807006 <https://arxiv.org/abs/quant-ph/9807006>`__, 1998.
+#
+# .. [#angrisani]
+#
+#     Armando Angrisani, Alexander Schmidhuber, Manuel S. Rudolph, M. Cerezo, Zoë Holmes, Hsin-Yuan Huang
+#     "Classically estimating observables of noiseless quantum circuits"
+#     `arXiv:2409.01706 <https://arxiv.org/abs/2409.01706>`__, 2024.
+#
+# .. [#aharonov]
+#
+#     Dorit Aharonov, Xun Gao, Zeph Landau, Yunchao Liu, Umesh Vazirani
+#     "A polynomial-time classical algorithm for noisy random circuit sampling"
+#     `arXiv:2211.03999 <https://arxiv.org/abs/2211.03999>`__, 2022.
+#
+# .. [#lowesa]
+#
+#     Manuel S. Rudolph, Enrico Fontana, Zoë Holmes, Lukasz Cincio
+#     "Classical surrogate simulation of quantum systems with LOWESA"
+#     `arXiv:2308.09109 <https://arxiv.org/abs/2308.09109>`__, 2023.
+#
+# .. [#begusic]
+#
+#     Tomislav Begušić, Johnnie Gray, Garnet Kin-Lic Chan
+#     "Fast and converged classical simulations of evidence for the utility of quantum computing before fault tolerance"
+#     `arXiv:2308.05077 <https://arxiv.org/abs/2308.05077>`__, 2023.
+# 
 # About the author
 # ----------------
