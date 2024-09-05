@@ -1,0 +1,4 @@
+.. bio:: Nate Stemen
+   :photo: ../_static/authors/nate_stemen.png
+
+   Nate Stemen is a technical staff member at Unitary Fund, leading the development of Mitiq, a quantum error mitigation library. He earned a master’s degree from the University of Waterloo, where he focused on quantum circuit compilation. He is passionate about advancing effective education in quantum computing.
