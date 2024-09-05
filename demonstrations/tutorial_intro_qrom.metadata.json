@@ -15,11 +15,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/qrom/qrom_thumbnail.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_qrom.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/qrom_largethumbnail.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnial_large_qrom.png"
         }
     ],
     "seoDescription": "Master the basics of the quantum singular value transformation",
