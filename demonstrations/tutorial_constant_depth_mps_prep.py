@@ -1,3 +1,18 @@
+# TODOs
+# 
+# - Adapt wording in algorithm picture to demo wording
+#
+# - Create sketch of algorithm preview that is reduced c.f. full algorithm picture
+#
+# - Create sketch for sequential preparation
+#
+# - Create sketch for fusion step
+#
+# - Adapt algorithm and algorithm preview pictures to the fusion step picture
+#
+# - Comment on bond measurements being the same for sequential and const-depth algorithm,
+#   and how that works (brief!)
+#
 r"""Constant-depth preparation of matrix product states with dynamic circuits
 =============================================================================
 
@@ -44,8 +59,11 @@ is the sequential MPS preparation circuit to which we will compare later.
 Alongside this introduction we describe and code up each building block for a
 specific MPS. Then we combine the building blocks into the constant-depth
 algorithm by Smith et al. and run it for the example MPS.
+As a preview, this is what the algorithm will look like schematically:
 
-TODO: INCLUDE ALGORITHM OVERVIEW IMAGE HERE ALREADY
+.. image:: ../_static/demonstration_assets/constant_depth_mps_prep/algorithm_preview.png
+    :width: 75%
+    :align: center
 
 Building blocks
 ---------------
@@ -128,7 +146,7 @@ infinite. For the product state, on the other hand, we get
     C_{+}(j) = \langle Z(0) Z(j) \rangle_{+} - \lange Z(0)\rangle_{+}\lange Z(j)\rangle_{+} = 0,
 
 so that correlations decay "instantaneously". The correlation length vanishes.
-Long-range correlated states require linear-depth circuits if we are restricted to unitary 
+Long-range correlated states require linear-depth circuits if we are restricted to unitary
 operations. Therefore, the constant-depth circuit for :math:`|\Psi(0)\rangle` will demonstrate
 that dynamic quantum circuits, which are not purely unitary, are more powerful than unitary
 operations alone!
@@ -163,8 +181,6 @@ print(f"For {g=}, the theoretical correlation length is {xi=:.4f}")
 ######################################################################
 # Sequential preparation circuit
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#
-# TODO IMAGE
 #
 # An MPS like the one above can be prepared in linear depth using an established technique
 # by Schön et al. [#schoen]_. We introduce this technique here because the new
@@ -242,6 +258,14 @@ print(f"For {g=}, the theoretical correlation length is {xi=:.4f}")
 # We see that we prepared :math:`|\Psi\rangle` with an entangling operation on the bond qudits, one unitary per
 # physical qubit, and a final basis change to measure the Bell basis. Overall, this amounts to a linear
 # operation count and circuit depth.
+#
+# These steps are visualized in the following sketch, with the bond qudits starting on the right.
+# Note that the sketch deviates from standard circuit diagrams in that it passes one bond qudits from
+# the right to the left, instead of keeping the position of the qudits fixed.
+#
+# .. image:: ../_static/demonstration_assets/constant_depth_mps_prep/sequential_prep.png
+#     :width: 75%
+#     :align: center
 #
 # **Example**
 #
@@ -347,8 +371,6 @@ _ = qml.draw_mpl(sequential_circuit)(N, g)
 # Fusion of MPS states with mid-circuit measurements
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# TODO IMAGE
-#
 # The next ingredient for the constant-depth MPS preparation circuit is to fuse the product
 # state of two MPS states together into one (entangled) MPS. Recall that a single sequential
 # creation of this final MPS would pass a bond site between the first and second group of physical
@@ -357,6 +379,13 @@ _ = qml.draw_mpl(sequential_circuit)(N, g)
 # This is like knotting together two strings on which we chained beads independently before.
 # As a matter of fact, chaining beads on smaller strings and the fact that we can knot them
 # together simultaneously is at the heart of going from linear to constant circuit depth.
+#
+# Before we dive into the mathematical details, we visualize the idea behind the fusion step
+# schematically:
+#
+# .. image:: ../_static/demonstration_assets/constant_depth_mps_prep/fusion.png
+#     :width: 75%
+#     :align: center
 #
 # Consider a state :math:`|\Phi\rangle=|\Phi_1\rangle\otimes|\Phi_2\rangle`, where
 #
@@ -592,8 +621,6 @@ def push_and_correct(op_id, phys_wires):
 #    the two remaining bond sites.
 #
 # We summarize the algorithm in the following sketch, which again follows [#smith]_.
-#
-# TODO: ADAPT WORDING IN IMAGE FROM PAPER TO DEMO
 #
 # .. image:: ../_static/demonstration_assets/constant_depth_mps_prep/algorithm.png
 #     :width: 75%
