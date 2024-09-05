@@ -2,7 +2,7 @@ r"""Generative quantum eigensolver (GQE) training using data generated with Penn
 ===================================================
 
 In this demo, we will be training a generative quantum eigensolver (GQE) and applying the technique described in `this
-paper <https://arxiv.org/abs/2401.09253v1>`__, using the molecular data available in `PennyLane Datasets <https://pennylane.ai/datasets/>`__.
+paper <https://arxiv.org/abs/2401.09253>`__, using the molecular data available in `PennyLane Datasets <https://pennylane.ai/datasets/>`__.
 We will show that the model gradually better approximates the correct energies and, in turn, 
 can sample energies close to the ground state energy calculated by PennyLane. 
 
@@ -21,7 +21,7 @@ VQEs, check out this `PennyLane Demo <https://pennylane.ai/qml/demos/tutorial_vq
 .. figure:: ../_static/demonstration_assets/gqe_training/paper_vqe_diagram.png
     :align: center
     :width: 90%
-    :target: javascript:void(0)
+    :alt: Figure 1 from [1]
 
 There are some issues with VQE scalability, however. This shortcoming makes it less competitive against
 the performance of classical ML algorithms for large problems. To bypass this, the GQE algorithm was 
@@ -32,7 +32,7 @@ the ground state.
 .. figure:: ../_static/demonstration_assets/gqe_training/paper_gqe_diagram.png
     :align: center
     :width: 90%
-    :target: javascript:void(0)
+    :alt: Figure 1 from [1]
 
 The main difference between the two approaches is where the tunable parameters are embedded.
 That is, it is the classical GQE model that is being optimized as opposed to the variable
@@ -171,7 +171,7 @@ op_pool_size = len(op_pool)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # In PennyLane, we define the energy function :math:`E = \mbox{Tr}(\hat{H}U_{j_N}\cdots U_{j_1}\rho_0 U_{j_1}^{\dagger}\cdots U_{j_N}^{\dagger})`
-# corresponding to Eq. 1 of the paper. Here, ``energy_circuit`` takes in the operator sequence :math:`U_{j_1}, U_{j_2}, ..., U_{j_N}`.
+# corresponding to Eq. 1 of [1]. Here, ``energy_circuit`` takes in the operator sequence :math:`U_{j_1}, U_{j_2}, ..., U_{j_N}`.
 #
 # As a slight extension from the paper, we also calculate the energies for each subsequence of
 # operators to help with the training of the model. That is, for a sequence of three operators:
@@ -440,7 +440,7 @@ true_Es_t = np.concatenate(true_Es_t, axis=1)
 ######################################################################
 # 4a. Loss curve
 # ~~~~~~~~~~~~~~
-# One of the first things we can look at is the training loss curve. We see here that the average loss
+# One of the first things we can look at is the training loss curve. We see in Figure 1 that the average loss
 # continues to decrease until around the 4000th iteration. There, the model was erroraneous but is quick
 # to recover as training continues. This may signal that the GPT model started focusing on learning something
 # erroraneous too quickly. So, more regularization noise (like ``dropout``) may be needed to help avoid this. 
@@ -460,6 +460,34 @@ np.log(losses).hvplot(title="Training loss progress", ylabel="log(loss)", xlabel
 #.. figure:: ../_static/demonstration_assets/gqe_training/gqe_training_loss.png
 #    :align: center
 #    :width: 90%
+#    :alt: Figure 1: The average subsequence loss for each training iteration
+
+######################################################################
+# 4b. Evaluation progress
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# 
+# We now track the performance of the GPT model throughout its training in Figure 2. As mentioned
+# before, every after 500th iteration, we let the model generate a batch of sequences. Alongside, we
+# also return the total logits (predicted energies) used in the sequence generation. In Figure 2,
+# the average predicted energies corresponds to the red markers and the distribution of predicted
+# energies is represented by the red area. Once we have the generated sequences, we can also let PennyLane calculate the true sequence
+# energies. Similarly then, the blue markers are the average true energies and the blue
+# area represents the true energy distribution.
+# 
+# We now see that the energies predicted by the model get more accurate at approximating the true
+# energies during training. This in turn, samples lower energies as we see that the true energies
+# sampled gets closer to the ground state energy (the dashed line).
+# 
+# Note that at around the 4000th iteration, the predicted energies are very far from the true energies.
+# This makes sense considering our observation in Figure 1. Also note that at around the 7000th
+# iteration, the averages of the predicted and true energies are the closest and even their respective
+# spreads seem to have good overlap. For later iterations however, the predicted energies were not as good.
+# This may indicate that the GPT model has started overfitting on the training dataset in the later iterations. 
+# That is, the model became great at predicting the correct energies for the training set (as observed in the 
+# loss curve) but not great at generalizing on those outside the training set (like the sequences that the model
+# generated on its own). One solution to avoid overfitting could then be online training. This is so that 
+# the GPT model is not restricted on a fixed dataset to overfit on.
+# 
 
 df_true = pd.read_csv("./seq_len=4/trial7/true_Es_t.csv").iloc[:, 1:]
 df_pred = pd.read_csv("./seq_len=4/trial7/pred_Es_t.csv").iloc[:, 1:]
@@ -472,33 +500,6 @@ df_trues_stats.columns = ["Ave True E", "Min True E", "Max True E"]
 
 df_preds_stats = pd.concat([df_pred.mean(axis=0), df_pred.min(axis=0), df_pred.max(axis=0)], axis=1)
 df_preds_stats.columns = ["Ave Pred E", "Min Pred E", "Max Pred E"]
-
-######################################################################
-# 4b. Evaluation progress
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# 
-# In this plot, we track the performance of the GPT model throughout its training. As mentioned
-# before, every after 500th iteration, we let the model generate a batch of sequences. Alongside, we
-# also return the total logits (predicted energies) used in the sequence generation. In the figure,
-# the average predicted energies corresponds to the red markers and the distribution of predicted
-# energies is represented by the red area. Once we have the generated sequences, we can also let PennyLane calculate the true sequence
-# energies. Similarly in the figure then, the blue markers are the average true energies and the blue
-# area represents the true energy distribution.
-# 
-# We now see that the energies predicted by the model gets more accurate at approximating the true
-# energies during training. This in turn, samples lower energies as we see that the true energies
-# sampled gets closer to the ground state energy (the dashed line).
-# 
-# Note that at around the 4000th iteration, the predicted energies are very far from the true energies.
-# This makes sense considering our observation for the loss curve. Also note that at around the 7000th
-# iteration, the averages of the predicted and true energies are the closest and even their respective
-# spreads seem to have good overlap. For later iterations however, the predicted energies were not as good.
-# This may indicate that the GPT model has started overfitting on the training dataset in the later iterations. 
-# That is, the model became great at predicting the correct energies for the training set (as observed in the 
-# loss curve) but not great at generalizing on those outside the training set (like the sequences that the model
-# generated on its own). One solution to avoid overfitting could then be online training. This is so that 
-# the GPT model is not restricted on a fixed dataset to overfit on.
-# 
 
 fig = (
     df_trues_stats.hvplot.scatter(y="Ave True E", label="Mean True Energies") * 
@@ -517,6 +518,7 @@ fig
 #.. figure:: ../_static/demonstration_assets/gqe_training/gqe_performance.png
 #    :align: center
 #    :width: 90%
+#    :alt: Figure 2: True and predicted energies for sequences generated by the GPT model for each 500th training iteration
 
 ######################################################################
 # 4c. Sequence generation comparison
@@ -540,7 +542,7 @@ fig
 # 
 # Between the two GPT models, we see that the latest model is just a bit worse than the best model 
 # with the minimum energy of the latest model being correct only up to the third decimal place. It makes
-# sense that the best model is not the latest one as we saw in the previous plot. The minimum energy of
+# sense that the best model is not the latest one as we saw in Figure 2. The minimum energy of
 # the best model however is correct until the 6th decimal place.
 # 
 
@@ -608,4 +610,12 @@ df_compare_Es
 # a schedule for the inverse temperature. Initially letting the GPT model sample more randomly through
 # a high temperature then gradually decreasing so that the GPT model focuses more on the higher probability
 # states (low energies). 
+# 
+
+######################################################################
+# Reference
+# ---------
+# 
+# [1] Kouhei Nakaji *et al.*, "The generative quantum eigensolver (GQE) and its application for ground state search".
+#     `arXiv:2401.09253 <https://arxiv.org/abs/2401.09253>`__
 # 
