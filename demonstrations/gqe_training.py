@@ -21,7 +21,7 @@ VQEs, check out this `PennyLane Demo <https://pennylane.ai/qml/demos/tutorial_vq
 .. figure:: ../_static/demonstration_assets/gqe_training/paper_vqe_diagram.png
     :align: center
     :width: 90%
-    :alt: Figure 1 from [#nakaji2024]
+    :alt: Figure 1 from [#nakaji2024]_
 
 There are some issues with VQE scalability, however. This shortcoming makes it less competitive against
 the performance of classical ML algorithms for large problems. To bypass this, the GQE algorithm was 
@@ -32,7 +32,7 @@ the ground state.
 .. figure:: ../_static/demonstration_assets/gqe_training/paper_gqe_diagram.png
     :align: center
     :width: 90%
-    :alt: Figure 1 from [#nakaji2024]
+    :alt: Figure 1 from [#nakaji2024]_
 
 The main difference between the two approaches is where the tunable parameters are embedded.
 That is, it is the classical GQE model that is being optimized as opposed to the variable
@@ -158,7 +158,7 @@ op_pool_size = len(op_pool)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # In PennyLane, we define the energy function :math:`E = \mbox{Tr}(\hat{H}U_{j_N}\cdots U_{j_1}\rho_0 U_{j_1}^{\dagger}\cdots U_{j_N}^{\dagger})`
-# corresponding to Eq. 1 of [#nakaji2024]. Here, ``energy_circuit`` takes in the operator sequence :math:`U_{j_1}, U_{j_2}, ..., U_{j_N}`
+# corresponding to Eq. 1 of [#nakaji2024]_. Here, ``energy_circuit`` takes in the operator sequence :math:`U_{j_1}, U_{j_2}, ..., U_{j_N}`
 # and returns the energy of the corresponding quantum state.
 #
 # As a slight extension of the paper, we can also calculate the energies for each subsequence of
@@ -172,17 +172,17 @@ dev = qml.device("default.qubit", wires=num_qubits)
 
 @qml.qnode(dev)
 def energy_circuit(gqe_ops):
-    # Computes Eq. 1 based on the selected time evolution operators
+    # Computes Eq. 1 of [1] based on the selected unitary operators
     qml.BasisState(init_state, wires=range(num_qubits)) # Initial state <-- Hartree Fock state
     for op in gqe_ops:
         qml.Snapshot(measurement=qml.expval(hamiltonian))
-        qml.apply(op) # Applies each of the time evolution operator
-    return qml.expval(hamiltonian) # Computes the energy via (1)
+        qml.apply(op) # Applies each of the unitary operators
+    return qml.expval(hamiltonian) # Computes the energy expectation value as in Eq. 1 of [1]
 
 energy_circuit = qml.snapshots(energy_circuit)
 
 def get_subsequence_energies(op_seq):
-    "Collates the energies of each subsequence for a batch of sequences"
+    # Collates the energies of each subsequence for a batch of sequences
     energies = []
     for ops in op_seq:
         es = energy_circuit(ops)
@@ -191,17 +191,15 @@ def get_subsequence_energies(op_seq):
         )
     return np.array(energies)
 
-# Note: Energy offsets are included for other molecules in the paper
-
 ######################################################################
 # 2c. Token sequence generation with corresponding energies
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # With these ingredients, we can now construct a dataset containing sequences of tokens and their energies. 
 # Since we cannot feed the operators directly to the GPT model, we would need to tokenize
-# them. The indices of ``op_pool`` seems to be a good candidate but we instead choose the tokens to be
+# them. The indices of ``op_pool`` seems to be a good candidate, but we instead choose the tokens to be
 # the ``op_pool`` indices shifted by 1. This is so that we can define a special token ``0`` that tells
-# the GPT model the start of a sequence.
+# the GPT model where the sequence starts.
 # 
 # We generate a ``train_size`` number of random operator sequences of length ``seq_len`` for our
 # purposes and calculate their energies (and their subsequences).
@@ -215,13 +213,14 @@ train_op_pool_inds = np.random.randint(op_pool_size, size=(train_size, seq_len))
 # Corresponding sequence of operators
 train_op_seq = op_pool[train_op_pool_inds]
 
-# Corresponding tokens with special starting token
+# Corresponding tokens with special starting tokens
 train_token_seq = np.concatenate([
     np.zeros(shape=(train_size, 1), dtype=int), # starting token is 0
     train_op_pool_inds + 1 # shift operator inds by one
 ], axis=1)
 
 # %%time 
+# Calculate the energies for each subsequence in the training set
 train_sub_seq_en = get_subsequence_energies(train_op_seq)
 
 ######################################################################
@@ -231,6 +230,12 @@ train_sub_seq_en = get_subsequence_energies(train_op_seq)
 # 
 #     CPU times: user 47 s, sys: 37.5 ms, total: 47 s
 #     Wall time: 47 s
+
+##############################################################################
+# We also measure the time to calculate the subsequence energies. Currently, 47s is acceptable 
+# but this can be a bottleneck when generating sequences of longer lengths and more complicated 
+# molecules. Code optimization here can be done in the future.
+#  
 
 ######################################################################
 # 3. GPT-QE offline training
@@ -242,8 +247,8 @@ train_sub_seq_en = get_subsequence_energies(train_op_seq)
 # 3a. GPT model implementation details
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
-# The architecture of the GPT model we instantiate here is similar to that described in the paper.
-# That is, we used 12 attention layers, 12 attention heads, and 768 embedding dimensions as specified
+# The architecture of the GPT model we instantiate here is similar to that described in [#nakaji2024]_.
+# That is, we used 12 attention layers, 12 attention heads, and 768 embedding dimensions, as specified
 # in the default values of ``GPTConfig``. For our demo, the model then has a default of around 85
 # million parameters and is ``324.25 MB`` in size. Its implementation is in `our
 # repo <https://github.com/XanaduAI/gpt-qe/tree/dev>`__ and was originally from this `nanoGPT
