@@ -21,7 +21,7 @@ VQEs, check out this `PennyLane Demo <https://pennylane.ai/qml/demos/tutorial_vq
 .. figure:: ../_static/demonstration_assets/gqe_training/paper_vqe_diagram.png
     :align: center
     :width: 90%
-    :alt: Figure 1 from [1]
+    :alt: Figure 1 from [#nakaji2024]
 
 There are some issues with VQE scalability, however. This shortcoming makes it less competitive against
 the performance of classical ML algorithms for large problems. To bypass this, the GQE algorithm was 
@@ -32,34 +32,20 @@ the ground state.
 .. figure:: ../_static/demonstration_assets/gqe_training/paper_gqe_diagram.png
     :align: center
     :width: 90%
-    :alt: Figure 1 from [1]
+    :alt: Figure 1 from [#nakaji2024]
 
 The main difference between the two approaches is where the tunable parameters are embedded.
 That is, it is the classical GQE model that is being optimized as opposed to the variable
 quantum circuit of VQE. Potentially then, the loss landscape for GQE will be different and
 will be amenable for larger problems.
-"""
 
-######################################################################
-# Outline
-# -------
-# 
-# 1. | **GPT-QE Background**
-# 2. | **Dataset construction via PennyLane**
-#    | 2a. Loading molecular information
-#    | 2b. Defining the energy function
-#    | 2c. Token sequence generation with corresponding energies
-# 
-# 3. | **GPT-QE offline training**
-#    | 3a. GPT model implementation details
-#    | 3b. GPT offline training loop implementation
-# 
-# 4. | **GPT-QE results**
-#    | 4a. Loss curve
-#    | 4b. Evaluation progress
-#    | 4c. Sequence generation comparison
-# 
-# 5. | **Conclusion**
+This demo is organized as follows. In Section 1, we describe GPT-QE, (a particular
+design of the GQE algorithm which uses a GPT model) what it generates, and how we train it. 
+In Section 2, we generate the training dataset we will use by using PennyLane. In Section 3,
+we give details on our GPT model architecture and training implementation. In Section 4, we 
+evaluate the model throughout its training and discuss its performance in estimating the ground
+state. And lastly in Section 5, we conclude.
+"""
 
 ######################################################################
 # 1. GPT-QE Background
@@ -114,7 +100,8 @@ will be amenable for larger problems.
 # 2a. Loading molecular information
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
-# For simplicity, let us consider the hydrogen gas molecule and load the correspoding data from PennyLane.
+# For simplicity, let us consider the  `hydrogen gas molecule <https://pennylane.ai/datasets/qchem/h2-molecule>`__ 
+# and load the correspoding dataset from PennyLane.
 # Recall that we would need a vocabulary of operators :math:`U_j`'s, an initial state :math:`\rho_0`, and 
 # the hamiltonian :math:`\hat{H}` for hydrogen gas. We also get the ground state energy for later comparison
 # with the results.
@@ -124,13 +111,13 @@ import numpy as np
 import pennylane as qml
 
 def generate_molecule_data(molecules=["H2", "LiH", "BeH2", "H2O", "N2"]):
-    # Get same molecules as the paper with addition of Water
+    # Get the same molecules as in the paper, with the addition of water
     datasets = qml.data.load("qchem", molname=molecules)
 
-    # Get the time set \mathcal{T}
+    # Get the time set T
     operator_times = np.sort(np.array([-2**k for k in range(1, 5)] + [2**k for k in range(1, 5)]) / 160)
 
-    # Build operator set \mathcal{P} for each molecule
+    # Build operator set P for each molecule
     molecule_data = dict()
     for dataset in datasets:
         molecule = dataset.molecule
@@ -171,12 +158,13 @@ op_pool_size = len(op_pool)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # In PennyLane, we define the energy function :math:`E = \mbox{Tr}(\hat{H}U_{j_N}\cdots U_{j_1}\rho_0 U_{j_1}^{\dagger}\cdots U_{j_N}^{\dagger})`
-# corresponding to Eq. 1 of [1]. Here, ``energy_circuit`` takes in the operator sequence :math:`U_{j_1}, U_{j_2}, ..., U_{j_N}`.
+# corresponding to Eq. 1 of [#nakaji2024]. Here, ``energy_circuit`` takes in the operator sequence :math:`U_{j_1}, U_{j_2}, ..., U_{j_N}`
+# and returns the energy of the corresponding quantum state.
 #
-# As a slight extension from the paper, we also calculate the energies for each subsequence of
-# operators to help with the training of the model. That is, for a sequence of three operators:
-# :math:`U_{j_1}, U_{j_2}, U_{j_3}`, we also compute the energies for :math:`U_{j_1}` and :math:`U_{j_1}, U_{j_2}` instead of just
-# the full sequence of three operators as described in the paper. This is simply done in PennyLane using ``Snapshot``.
+# As a slight extension of the paper, we can also calculate the energies for each subsequence of
+# operators to help with the training of the model. That is, for a sequence of three operators
+# :math:`U_{j_1}, U_{j_2}, U_{j_3}` we compute the energies for :math:`U_{j_1}` and :math:`U_{j_1}, U_{j_2}` instead of just
+# the full sequence of three operators, which was described in the paper. This can be done simply in PennyLane, using :class:`~.pennylane.Snapshot`.
 # 
 
 # This computes the energy for a chosen molecule with the selected operator pool
@@ -184,7 +172,7 @@ dev = qml.device("default.qubit", wires=num_qubits)
 
 @qml.qnode(dev)
 def energy_circuit(gqe_ops):
-    """Computes Eq. 1 based on selected time evolution operators"""
+    # Computes Eq. 1 based on the selected time evolution operators
     qml.BasisState(init_state, wires=range(num_qubits)) # Initial state <-- Hartree Fock state
     for op in gqe_ops:
         qml.Snapshot(measurement=qml.expval(hamiltonian))
@@ -624,6 +612,8 @@ df_compare_Es
 # Reference
 # ---------
 # 
-# [1] Kouhei Nakaji *et al.*, "The generative quantum eigensolver (GQE) and its application for ground state search".
+# .. [#nakaji2024]
+#
+#     Kouhei Nakaji *et al.*, "The generative quantum eigensolver (GQE) and its application for ground state search". `Nature Communications 5, 4213 (2014).
 #     `arXiv:2401.09253 <https://arxiv.org/abs/2401.09253>`__
 # 
