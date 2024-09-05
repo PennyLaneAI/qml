@@ -103,7 +103,7 @@ plt.show()
 
 ##############################################################################
 # .. figure:: /_static/demonstration_assets/ml_classical_shadows/spin_lattice.png
-#    :width: 80%
+#    :width: 55%
 #    :align: center
 #    :alt: Spin model on square lattice
 
@@ -236,7 +236,7 @@ plt.show()
 
 ##############################################################################
 # .. figure:: /_static/demonstration_assets/ml_classical_shadows/exact_correlation_matrix.png
-#    :width: 80%
+#    :width: 55%
 #    :align: center
 #    :alt: Exact correlation matrix
 
@@ -306,7 +306,6 @@ def gen_class_shadow(circ_template, circuit_params, num_shadows, num_qubits):
         outcomes[ns, :] = circ_template(circuit_params, observables=meas_obs)
 
     return outcomes, unitary_ensmb
-
 
 outcomes, basis = gen_class_shadow(circuit_oshot, psi0, 100, num_qubits)
 print("First five measurement outcomes =\n", outcomes[:5])
@@ -481,7 +480,7 @@ plt.show()
 ######################################################################
 # .. figure::  /_static/demonstration_assets/ml_classical_shadows/error_correlation_matrix.png
 #    :align: center
-#    :width: 100 %
+#    :width: 55 %
 #    :alt: Error in estimating correlation matrix
 #
 
@@ -732,22 +731,22 @@ for idx, data in enumerate(kernel_data):
 #  .. code-block:: none
 #
 #   Correlation                    Gaussian kernel              Neural Tangent kernel
-#    	 C_00 	|                           [-0.  0.]                          [-0.  0.]
-#    	 C_01 	|                   [0.08691 0.0676 ]                  [0.11507 0.07552]
-#    	 C_02 	|                   [0.10751 0.0736 ]                  [0.11646 0.08599]
-#    	 C_03 	|                   [0.0937  0.04272]                  [0.09628 0.06695]
-#    	 C_10 	|                   [0.08691 0.0676 ]                  [0.11507 0.07552]
-#    	 C_11 	|                           [-0.  0.]                          [-0.  0.]
-#    	 C_12 	|                   [0.1159  0.05131]                  [0.12794 0.0696 ]
-#    	 C_13 	|                   [0.11679 0.0802 ]                  [0.11901 0.10352]
-#    	 C_20 	|                   [0.10751 0.0736 ]                  [0.11646 0.08599]
-#    	 C_21 	|                   [0.1159  0.05131]                  [0.12794 0.0696 ]
-#    	 C_22 	|                           [-0.  0.]                          [-0.  0.]
-#    	 C_23 	|                   [0.09494 0.07095]                  [0.11708 0.07366]
-#    	 C_30 	|                   [0.0937  0.04272]                  [0.09628 0.06695]
-#    	 C_31 	|                   [0.11679 0.0802 ]                  [0.11901 0.10352]
-#    	 C_32 	|                   [0.09494 0.07095]                  [0.11708 0.07366]
-#    	 C_33 	|                           [-0.  0.]                          [-0.  0.]
+#       C_00  	 |                       [-0.  0.]                          [-0.  0.]
+#       C_01  	 |               [0.08691 0.0676 ]                  [0.11507 0.07552]
+#       C_02  	 |               [0.10751 0.0736 ]                  [0.11646 0.08599]
+#       C_03  	 |               [0.0937  0.04272]                  [0.09628 0.06695]
+#       C_10  	 |               [0.08691 0.0676 ]                  [0.11507 0.07552]
+#       C_11  	 |                       [-0.  0.]                          [-0.  0.]
+#       C_12  	 |               [0.1159  0.05131]                  [0.12794 0.0696 ]
+#       C_13  	 |               [0.11679 0.0802 ]                  [0.11901 0.10352]
+#       C_20  	 |               [0.10751 0.0736 ]                  [0.11646 0.08599]
+#       C_21  	 |               [0.1159  0.05131]                  [0.12794 0.0696 ]
+#       C_22  	 |                       [-0.  0.]                          [-0.  0.]
+#       C_23  	 |               [0.09494 0.07095]                  [0.11708 0.07366]
+#       C_30  	 |               [0.0937  0.04272]                  [0.09628 0.06695]
+#       C_31  	 |               [0.11679 0.0802 ]                  [0.11901 0.10352]
+#       C_32  	 |               [0.09494 0.07095]                  [0.11708 0.07366]
+#       C_33  	 |                       [-0.  0.]                          [-0.  0.]
 
 
 ######################################################################
@@ -800,7 +799,7 @@ plt.show()
 ######################################################################
 # .. figure::  /_static/demonstration_assets/ml_classical_shadows/model_comparison.png
 #    :align: center
-#    :width: 100 %
+#    :width: 80 %
 #    :alt: Model comparison based on different kernels
 #
 
@@ -820,10 +819,10 @@ plt.show()
 
 ######################################################################
 # .. image::  /_static/demonstration_assets/ml_classical_shadows/rmse_training.png
-#     :width: 47 %
+#    :width: 46 %
 #
 # .. image::  /_static/demonstration_assets/ml_classical_shadows/rmse_shadow.png
-#     :width: 47 %
+#    :width: 46 %
 #
 
 ######################################################################
@@ -859,4 +858,4 @@ plt.show()
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/utkarsh_azad.txt
+
