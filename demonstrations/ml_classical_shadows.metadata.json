@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_machine_learning_quantum_manybody_problems.png"
+            "uri": "_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_machine_learning_quantum_manybody_problems.png"
         }
     ],
     "seoDescription": "Machine learning for many-body problems",
