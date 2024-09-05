@@ -44,7 +44,7 @@ We will break the implementation into three steps:
 #
 
 import pennylane as qml
-from pennylane import numpy as np
+import numpy as np
 
 dataset = qml.data.load('qchem', molname="H3+")[0]
 H, qubits = dataset.hamiltonian, len(dataset.hamiltonian.wires)

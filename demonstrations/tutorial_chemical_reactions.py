@@ -10,7 +10,7 @@ Modelling chemical reactions on a quantum computer
    tutorial_quantum_chemistry Building molecular Hamiltonians
    tutorial_vqe A brief overview of VQE
 
-*Authors: Varun Rishi and Juan Miguel Arrazola — Posted: 23 July 2021. Last updated: 21 February 2023.*
+*Authors: Varun Rishi and Juan Miguel Arrazola — Posted: 23 July 2021. Last updated: 8 August 2024.*
 
 The term "chemical reaction" is another name for the transformation of molecules – the breaking and 
 forming of bonds. They are characterized by an energy barrier that determines
@@ -106,7 +106,7 @@ hf = qml.qchem.hf_state(electrons=2, orbitals=4)
 # the equilibrium bond length, and the point where the bond is broken, which occurs when the atoms
 # are far away from each other.
 
-from pennylane import numpy as np
+from jax import numpy as jnp
 
 # atomic symbols defining the molecule
 symbols = ['H', 'H']
@@ -115,7 +115,7 @@ symbols = ['H', 'H']
 energies = []
 
 # set up a loop to change bond length
-r_range = np.arange(0.5, 5.0, 0.25)
+r_range = jnp.arange(0.5, 5.0, 0.25)
 
 # keeps track of points in the potential energy surface
 pes_point = 0
@@ -124,9 +124,11 @@ pes_point = 0
 # We build the Hamiltonian using the :func:`~.pennylane.qchem.molecular_hamiltonian`
 # function, and use standard Pennylane techniques to optimize the circuit.
 
+import optax
+
 for r in r_range:
     # Change only the z coordinate of one atom
-    coordinates = np.array([[0.0, 0.0, 0.0], [0.0, 0.0, r]])
+    coordinates = jnp.array([[0.0, 0.0, 0.0], [0.0, 0.0, r]])
 
     # Construct the Molecule object
     molecule = qchem.Molecule(symbols, coordinates)
@@ -135,10 +137,10 @@ for r in r_range:
     H, qubits = qchem.molecular_hamiltonian(molecule, method='openfermion')
 
     # define the device, optimizer and circuit
-    dev = qml.device("default.qubit", wires=qubits)
-    opt = qml.GradientDescentOptimizer(stepsize=0.4)
+    dev = qml.device("lightning.qubit", wires=qubits)
+    opt = optax.sgd(learning_rate=0.4) # sgd stands for StochasticGradientDescent
 
-    @qml.qnode(dev, interface='autograd')
+    @qml.qnode(dev, interface='jax')
     def circuit(parameters):
         # Prepare the HF state: |1100>
         qml.BasisState(hf, wires=range(qubits))
@@ -149,19 +151,33 @@ for r in r_range:
         return qml.expval(H)  # we are interested in minimizing this expectation value
 
     # initialize the gate parameters
-    params = np.zeros(3, requires_grad=True)
+    init_params = jnp.zeros(3)
 
     # initialize with converged parameters from previous point
     if pes_point > 0:
-        params = params_old
+        init_params = params_old
 
     prev_energy = 0.0
-    for n in range(50):
-        # perform optimization step
-        params, energy = opt.step_and_cost(circuit, params)
+    @qml.qjit
+    def update_step(i, params, opt_state):
+        """Perform a single gradient update step"""
+        grads = qml.grad(circuit)(params)
+        updates, opt_state = opt.update(grads, opt_state)
+        params = optax.apply_updates(params, updates)
+        return (params, opt_state)
 
-        if np.abs(energy - prev_energy) < 1e-6:
+    loss_history = []
+
+    opt_state = opt.init(init_params)
+    params = init_params
+
+    for i in range(50):
+        params, opt_state = update_step(i, params, opt_state)
+        energy = circuit(params)
+
+        if jnp.abs(energy - prev_energy) < 1e-6:
             break
+
         prev_energy = energy
 
     # store the converged parameters
@@ -280,35 +296,52 @@ hf = qml.qchem.hf_state(electrons, orbitals)
 
 
 # loop to change reaction coordinate
-r_range = np.arange(1.0, 3.0, 0.1)
+r_range = jnp.arange(1.0, 3.0, 0.1)
 for r in r_range:
 
-    coordinates = np.array([[0.0, 0.0, 0.0], [0.0, 0.0, r], [0.0, 0.0, 4.0]])
+    coordinates = jnp.array([[0.0, 0.0, 0.0], [0.0, 0.0, r], [0.0, 0.0, 4.0]])
 
     # We now specify the multiplicity
     molecule = qchem.Molecule(symbols, coordinates, mult=multiplicity)
 
     H, qubits = qchem.molecular_hamiltonian(molecule, method='openfermion')
 
-    dev = qml.device("default.qubit", wires=qubits)
-    opt = qml.GradientDescentOptimizer(stepsize=1.5)
+    dev = qml.device("lightning.qubit", wires=qubits)
+    opt = optax.sgd(learning_rate=1.5) # sgd stands for StochasticGradientDescent
 
-    @qml.qnode(dev, interface='autograd')
+    @qml.qjit
+    @qml.qnode(dev, interface='jax')
     def circuit(parameters):
         AllSinglesDoubles(parameters, range(qubits), hf, singles, doubles)
         return qml.expval(H)  # we are interested in minimizing this expectation value
 
-    params = np.zeros(len(singles) + len(doubles), requires_grad=True)
+    init_params = jnp.zeros(len(singles) + len(doubles))
 
+    # initialize with converged parameters from previous point
     if pes_point > 0:
-        params = params_old
+        init_params = params_old
 
     prev_energy = 0.0
+    @qml.qjit
+    def update_step(i, params, opt_state):
+        """Perform a single gradient update step"""
+        grads = qml.grad(circuit)(params)
+        updates, opt_state = opt.update(grads, opt_state)
+        params = optax.apply_updates(params, updates)
+        return (params, opt_state)
 
-    for n in range(60):
-        params, energy = opt.step_and_cost(circuit, params)
-        if np.abs(energy - prev_energy) < 1e-6:
+    loss_history = []
+
+    opt_state = opt.init(init_params)
+    params = init_params
+
+    for i in range(60):
+        params, opt_state = update_step(i, params, opt_state)
+        energy = circuit(params)
+
+        if jnp.abs(energy - prev_energy) < 1e-6:
             break
+
         prev_energy = energy
 
     # store the converged parameters
@@ -393,7 +426,7 @@ k_B = 1.38e-23
 # Temperature
 T = 300
 
-ratio = np.exp(activation_energy / (2 * k_B * T))
+ratio = jnp.exp(activation_energy / (2 * k_B * T))
 
 print(f"Ratio of reaction rates is {ratio:.0f}")
 

@@ -14,7 +14,7 @@ Using PennyLane with PySCF and OpenFermion
     tutorial_givens_rotations Givens rotations for quantum chemistry
     tutorial_adaptive_circuits Adaptive circuits for quantum chemistry
 
-*Author: Soran Jahangiri — Posted: 3 January 2023.*
+*Author: Soran Jahangiri — Posted: 3 January 2023. Updated: 8 August 2024.*
 
 The quantum chemistry module in PennyLane, :mod:`qchem  <pennylane.qchem>`, provides built-in
 methods to compute molecular integrals, solve Hartree-Fock equations, and construct
@@ -48,12 +48,12 @@ backend as:
 """
 
 import pennylane as qml
-from pennylane import numpy as np
+import numpy as np
 
 symbols = ["H", "O", "H"]
 geometry = np.array([[-0.0399, -0.0038, 0.0000],
                      [ 1.5780,  0.8540, 0.0000],
-                     [ 2.7909, -0.5159, 0.0000]], requires_grad = False)
+                     [ 2.7909, -0.5159, 0.0000]])
 molecule = qml.qchem.Molecule(symbols, geometry)
 
 H, qubits = qml.qchem.molecular_hamiltonian(molecule, method="pyscf")
