@@ -738,11 +738,12 @@ print(f"Channel 1: {channel_shots[1]} times.")
 # Time to run the simulator!
 #
 
-device.shots = channel_shots[0].item()
+tape0 = QuantumTape(ops=ops_0, measurements=tape.measurements, shots=channel_shots[0].item())
+tape1 = QuantumTape(ops=ops_1, measurements=tape.measurements, shots=channel_shots[1].item())
+
 (shots0,) = qml.execute([tape0], device=device, cache=False, gradient_fn=None)
 samples[choices == 0] = shots0
 
-device.shots = channel_shots[1].item()
 (shots1,) = qml.execute([tape1], device=device, cache=False, gradient_fn=None)
 samples[choices == 1] = shots1
 
