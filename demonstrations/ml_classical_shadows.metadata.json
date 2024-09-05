@@ -19,7 +19,7 @@
     ],
     "seoDescription": "Machine learning for many-body problems",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_ml_classical_shadows",
+    "canonicalURL": "/qml/demos/ml_classical_shadows",
     "references": [
         {
             "id": "preskill",
