@@ -5,7 +5,7 @@ Noisy circuits
 
 .. meta::
     :property="og:description": Learn how to simulate noisy quantum circuits
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//N-Nisq.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/N-Nisq.png
 
 .. related::
 
@@ -268,7 +268,7 @@ def cost(x, target):
 
 steps = 35
 
-gd = jaxopt.GradientDescent(cost, maxiter=steps)
+gd = jaxopt.GradientDescent(cost, maxiter=steps, tol=1e-5)
 
 x = np.array(0.01)
 res = gd.run(x, ev)

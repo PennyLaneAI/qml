@@ -2,11 +2,11 @@
     "title": "Quantum Teleportation",
     "authors": [
         {
-            "id": "matthew_silverman"
+            "username": "timmysilv"
         }
     ],
     "dateOfPublication": "2023-10-20T00:00:00+00:00",
-    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-12T00:00:00+00:00",
     "categories": [
         "Getting Started",
         "Quantum Computing"
@@ -19,7 +19,7 @@
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_teleportation.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_teleportation.png"
         }
     ],
     "seoDescription": "Transmit arbitrary quantum states using quantum teleportation",

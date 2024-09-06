@@ -2,14 +2,14 @@
     "title": "QSVT in Practice",
     "authors": [
         {
-            "id": "jay_soni"
+            "username": "Jay"
         },
       {
             "id": "jarrett_smalley"
         }
     ],
     "dateOfPublication": "2023-08-22T00:00:00+00:00",
-    "dateOfLastModification": "2024-03-04T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
     "categories": [
         "Quantum Computing",
         "Algorithms",
@@ -23,7 +23,7 @@
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_QSVT_for_Matrix_Inversion.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_QSVT_for_Matrix_Inversion.png"
         }
     ],
     "seoDescription": "Applying QSVT for matrix inversion",

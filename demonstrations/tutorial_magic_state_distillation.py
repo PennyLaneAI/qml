@@ -16,7 +16,7 @@ developed to enable practical universal gate sets on fault-tolerant hardware arc
 tutorial, we will see how we can use Catalyst’s tight integration of quantum and classical code,
 both within the language and during execution, to develop a magic state distillation routine.
 
-.. figure:: ../_static/demonstration_assets/magic_state_distillation/OGthumbnail_large_magic-state-distillation_2024-04-23.png
+.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_large_magic-state-distillation_2024-04-23.png
     :align: center
     :width: 60%
     :target: javascript:void(0)
@@ -249,13 +249,13 @@ import os
 dev_5_qubits = qml.device("default.qubit", wires=5)
 
 @jax.jit
-@qml.qnode(dev_5_qubits)
+@qml.qnode(dev_5_qubits, interface="jax")
 def T0_state():
     generate_T0(0)
     return qml.state()
 
 @jax.jit
-@qml.qnode(dev_5_qubits)
+@qml.qnode(dev_5_qubits, interface="jax")
 def faulty_T0_state(random_key, r):
     faulty_generate_T0(0, random_key, r)
     return qml.state()

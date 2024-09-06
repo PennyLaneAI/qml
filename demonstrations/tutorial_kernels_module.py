@@ -3,7 +3,7 @@ r"""Training and evaluating quantum kernels
 
 .. meta::
     :property="og:description": Kernels and alignment training with Pennylane.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//QEK_thumbnail.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/QEK_thumbnail.png
 
 .. related::
 

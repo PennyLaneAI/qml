@@ -4,7 +4,7 @@ Feedback-Based Quantum Optimization (FALQON)
 
 .. meta::
     :property="og:description": Solve combinatorial optimization problems without a classical optimizer
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//falqon_thumbnail.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/falqon_thumbnail.png
 
 .. related::
 

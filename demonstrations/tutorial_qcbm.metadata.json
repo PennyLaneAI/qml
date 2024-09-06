@@ -7,7 +7,7 @@
         }
     ],
     "dateOfPublication": "2024-05-22T00:00:00+00:00",
-    "dateOfLastModification": "2024-05-22T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-12T00:00:00+00:00",
     "categories": ["Quantum Machine Learning"],
     "tags": [],
     "previewImages": [
@@ -17,7 +17,7 @@
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_QuantumCircuitBornMachines_2024-05-13.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_QuantumCircuitBornMachines_2024-05-13.png"
         }
     ],
     "seoDescription": "Learn how to use the Quantum Circuit Born Machines (QCBMs).",

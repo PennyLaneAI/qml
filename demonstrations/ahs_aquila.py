@@ -3,7 +3,7 @@ r"""Pulse programming on Rydberg atom hardware
 
 .. meta::
     :property="og:description": Perform measurements on neutral atom hardware through PennyLane
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_pulse_on_hardware.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/thumbnail_tutorial_pulse_on_hardware.png
 
 .. related::
    tutorial_pasqal Quantum computation with neutral atoms
@@ -254,7 +254,7 @@ aquila.hardware_capabilities["lattice"].dict()
 #      {'area': {'width': Decimal('0.000075'), 'height': Decimal('0.000076')},
 #       'geometry': {'spacingRadialMin': Decimal('0.000004'),
 #        'spacingVerticalMin': Decimal('0.000004'),
-#        'positionResolution': Decimal('1E-7'),
+#        'positionResolution': Decimal('1E-8'),
 #        'numberSitesMax': 256}}
 #
 # We can see that the atom field has a width of :math:`75 \, \mu m` and a height of :math:`76 \, \mu m`.
@@ -289,6 +289,7 @@ print(f"coordinates: {coordinates}")
 plt.scatter([x for x, y in coordinates], [y for x, y in coordinates])
 plt.xlabel("μm")
 plt.ylabel("μm")
+plt.show()
 
 ##############################################################################
 # .. figure:: ../_static/demonstration_assets/ahs_aquila/rydberg_blockade_coordinates.png
@@ -347,16 +348,17 @@ aquila.hardware_capabilities["rydberg"].dict()
 #       'rydbergGlobal': {'rabiFrequencyRange': (Decimal('0.0'),
 #         Decimal('15800000.0')),
 #        'rabiFrequencyResolution': Decimal('400.0'),
-#        'rabiFrequencySlewRateMax': Decimal('250000000000000.0'),
+#        'rabiFrequencySlewRateMax': Decimal('400000000000000.0'),
 #        'detuningRange': (Decimal('-125000000.0'), Decimal('125000000.0')),
 #        'detuningResolution': Decimal('0.2'),
-#        'detuningSlewRateMax': Decimal('2500000000000000.0'),
+#        'detuningSlewRateMax': Decimal('6000000000000000.0'),
 #        'phaseRange': (Decimal('-99.0'), Decimal('99.0')),
 #        'phaseResolution': Decimal('5E-7'),
 #        'timeResolution': Decimal('1E-9'),
 #        'timeDeltaMin': Decimal('5E-8'),
 #        'timeMin': Decimal('0.0'),
-#        'timeMax': Decimal('0.000004')}}
+#        'timeMax': Decimal('0.000004')},
+#       'rydbergLocal': None}
 #
 # It is important to note that these quantities are in radians per second rather than Hz where relevant, and
 # are all in SI units. This means that for amplitude and detuning, we will need to convert from angular
@@ -436,7 +438,7 @@ import jax.numpy as jnp
 
 
 def gaussian_fn(p, t):
-    return p[0] * jnp.exp(-((t-p[1])**2) / (2*p[2]**2))
+    return p[0] * jnp.exp(-((t - p[1]) ** 2) / (2 * p[2] ** 2))
 
 
 # Visualize pulse, time in μs
@@ -453,6 +455,7 @@ plt.xlabel("Time [$\mu s$]")
 plt.ylabel("Amplitude [MHz]")
 
 plt.plot(time, y)
+plt.show()
 
 ##############################################################################
 #
@@ -467,10 +470,7 @@ plt.plot(time, y)
 # We can then define our drive using via :func:`~pennylane.pulse.rydberg_drive`:
 #
 
-global_drive = qml.pulse.rydberg_drive(amplitude=gaussian_fn,
-                                       phase=0,
-                                       detuning=0,
-                                       wires=[0, 1, 2])
+global_drive = qml.pulse.rydberg_drive(amplitude=gaussian_fn, phase=0, detuning=0, wires=[0, 1, 2])
 
 ######################################################################
 # With only amplitude as non-zero, the overall driven Hamiltonian in this case simplifies to:
@@ -512,7 +512,7 @@ amplitude_params = [max_amplitude, displacement, sigma]
 params = [amplitude_params]
 ts = [0.0, 1.75]
 
-default_qubit = qml.device("default.qubit.jax", wires=3, shots=1000)
+default_qubit = qml.device("default.qubit", wires=3, shots=1000)
 
 
 @qml.qnode(default_qubit, interface="jax")
@@ -606,7 +606,7 @@ amplitude = [gaussian_fn(amplitude_params, t) for t in times]
 start_val = amplitude[0]
 stop_val = amplitude[-1]
 max_val = np.max(amplitude)
-max_rate = np.max([(amplitude[i + 1] - amplitude[i]) / timestep for i in range(len(times)-1)])
+max_rate = np.max([(amplitude[i + 1] - amplitude[i]) / timestep for i in range(len(times) - 1)])
 
 print(f"start value: {start_val:.3} MHz")
 print(f"stop value: {stop_val:.3} MHz")
@@ -636,10 +636,7 @@ print(f"maximum rate of change: {max_rate:.3} MHz/s")
 #
 
 amp_fn = qml.pulse.rect(gaussian_fn, windows=[0.01, 1.749])
-global_drive = qml.pulse.rydberg_drive(amplitude=amp_fn,
-                                       phase=0,
-                                       detuning=0,
-                                       wires=[0, 1, 2])
+global_drive = qml.pulse.rydberg_drive(amplitude=amp_fn, phase=0, detuning=0, wires=[0, 1, 2])
 
 ######################################################################
 # At this point we could skip directly to defining a ``qnode`` using the ``aquila`` device and running our
@@ -679,6 +676,7 @@ plt.scatter(op_x_coordinates, op_y_coordinates, marker="x", label="Input registe
 plt.xlabel("μm")
 plt.ylabel("μm")
 plt.legend()
+plt.show()
 
 ##############################################################################
 #
@@ -705,8 +703,7 @@ amp_setpoints = ahs_program.hamiltonian.amplitude.time_series
 # values for plotting the function defined in PennyLane for amplitude
 input_times = np.linspace(*ts, 1000)
 input_amplitudes = [
-    qml.pulse.rect(gaussian_fn, windows=[0.01, 1.749])(amplitude_params, _t)
-    for _t in input_times
+    qml.pulse.rect(gaussian_fn, windows=[0.01, 1.749])(amplitude_params, _t) for _t in input_times
 ]
 
 # plot PL input and hardware setpoints for comparison

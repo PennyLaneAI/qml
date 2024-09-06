@@ -7,7 +7,7 @@ Unitary designs
 .. meta::
     :property="og:description": Learn about designs and their uses in quantum computing.
 
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//fano.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/fano.png
 
 .. related::
 

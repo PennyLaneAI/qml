@@ -66,8 +66,23 @@ quantum computing paper/result.
 
   where `<demo name>` is a sub-directory with the name of
   your demo.
+  <details>
+    <summary><b>Follow these standards when adding images</b></summary>
+
+    ### File Size
+    * Always aim to keep the image file size in kilobytes (KB’s) 
+    * Always compress the image to the best possible size where quality is acceptable.
+    
+    ### Formats
+    * Use `.png` for everything (decorative images, descriptive images, logos etc)
+    * Use `.gif` for animated images
+
+    ### Dimensions
+    * To maintain quality and performance, every image should be twice (2X) its visible dimension size on the web page, and at a minimum of `150 ppi/dpi` (preferably `300 ppi/dpi`).
+  </details><br>
 
 - Add and select an author photo from the `_static/authors` folder. The image name should be as `<author name>_<author surname>.<format>`. If this is a new author and their image is not a headshot, store the original image as `<author name>_<author surname>_original.<format>` and create a cropped headshot with the aforementioned name.
+  
 - In the same folder create a `<author name>.txt` file where to include the bio following this structure:
 
   ```txt
@@ -104,7 +119,7 @@ quantum computing paper/result.
   - Make sure the file name is `<name of your tutorial>.metadata.json`.
   - The "id" of the author will be the same as the one you chose when creating the bio. 
   - The date of publication and modification. Leave them empty in case you don't know them.
-  - Choose the categories your demo fits into: `"Getting Started"`, `"Optimization"`, `"Quantum Machine Learning"`, `"Quantum Chemistry"`, `"Devices and Performance"`, `"Quantum Computing"`, `"Quantum Hardware"` or `"Algorithms"`. Feel free to add more than one.
+  - Choose the categories your demo fits into: `"Getting Started"`, `"Optimization"`, `"Quantum Machine Learning"`, `"Quantum Chemistry"`, `"Devices and Performance"`, `"Quantum Computing"`, `"Quantum Hardware"`, `"Algorithms"` or `"How-to"`. Feel free to add more than one.
   - In `previewImages` you should simply modify the final part of the file's name to fit the name of your demo. These two images will be sent to you once the review process begins. Once sent, you must upload them to the address indicated in the metadata.
   - `relatedContent` refers to the demos related to yours. You will have to put the corresponding id and set the `weight` to `1.0`. 
   - If there is any doubt with any field, do not hesitate to post a comment to the reviewer of your demo. 

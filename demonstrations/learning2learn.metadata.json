@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2021-03-02T00:00:00+00:00",
-    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "dateOfLastModification": "2024-09-04T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
@@ -14,14 +14,16 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_learning_to_learn_quantum_neural.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_learning_to_learn_quantum_neural.png"
         }
     ],
     "seoDescription": "Use a classical recurrent neural network to initilize the parameters of a variational quatum algorithm.",
     "doi": "",
     "canonicalURL": "/qml/demos/learning2learn",
     "references": [],
-    "basedOnPapers": ["10.48550/arXiv.1907.05415"],
+    "basedOnPapers": [
+        "10.48550/arXiv.1907.05415"
+    ],
     "referencedByPapers": [],
     "relatedContent": [
         {

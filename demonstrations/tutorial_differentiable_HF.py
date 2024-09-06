@@ -5,7 +5,7 @@ Differentiable Hartree-Fock
 
 .. meta::
     :property="og:description": Learn how to use the differentiable Hartree-Fock solver
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//differentiable_HF.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/differentiable_HF.png
 
 .. related::
     tutorial_quantum_chemistry Building molecular Hamiltonians
@@ -100,6 +100,7 @@ done in PennyLane.
 To get started, we need to define the atomic symbols and the nuclear coordinates of the molecule.
 For the hydrogen molecule we have
 """
+
 from autograd import grad
 import pennylane as qml
 from pennylane import numpy as np
@@ -251,9 +252,7 @@ plt.show()
 # over molecular orbitals that can be used to construct the molecular Hamiltonian with the
 # :func:`~.pennylane.qchem.molecular_hamiltonian` function.
 
-hamiltonian, qubits = qml.qchem.molecular_hamiltonian(mol.symbols,
-                                                      mol.coordinates,
-                                                      args=[mol.coordinates])
+hamiltonian, qubits = qml.qchem.molecular_hamiltonian(mol, args=[mol.coordinates])
 print(hamiltonian)
 
 ##############################################################################
@@ -271,8 +270,7 @@ def energy(mol):
     def circuit(*args):
         qml.BasisState(np.array([1, 1, 0, 0]), wires=range(4))
         qml.DoubleExcitation(*args[0][0], wires=[0, 1, 2, 3])
-        H = qml.qchem.molecular_hamiltonian(mol.symbols, mol.coordinates, alpha=mol.alpha,
-                                            coeff=mol.coeff, args=args[1:])[0]
+        H = qml.qchem.molecular_hamiltonian(mol, args=args[1:])[0]
         return qml.expval(H)
     return circuit
 

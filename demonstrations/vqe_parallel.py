@@ -7,7 +7,7 @@ VQE with parallel QPUs with Rigetti
 .. meta::
     :property="og:description": Using parallel QPUs to
         speed up the calculation of the potential energy surface of molecular Hamiltonian.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//vqe_diagram.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/vqe_diagram.png
 
 .. related::
 

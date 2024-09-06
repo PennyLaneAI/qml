@@ -5,7 +5,7 @@ Quantum computation with neutral atoms
 .. meta::
     :property="og:description": Neutral atom quantum devices allow you to place
         qubits within interesting three-dimensional configurations.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//pasqal_thumbnail.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/pasqal_thumbnail.png
 
 .. related::
    ahs_aquila Pulse programming on neutral atom hardware
@@ -83,7 +83,7 @@ ax.set_ylim(-20, 20)
 ax.set_zlim(-40, 10)
 plt.axis('off')
 ax.scatter(xs, ys, zs, c='g',alpha=0.3)
-plt.show();
+plt.show()
 
 ##############################################################################
 # This dataset contains 126 points. Each point represents a distinct
@@ -112,7 +112,7 @@ subset_xs = qubit_coords[:, 0]
 subset_ys = qubit_coords[:, 1]
 subset_zs = qubit_coords[:, 2]
 ax.scatter(subset_xs, subset_ys, subset_zs, c='r', alpha=1.0)
-plt.show();
+plt.show()
 
 ##############################################################################
 # Converting to Cirq qubits
@@ -237,7 +237,7 @@ for corner in range(4):
             zs=[third_z[corner], third_z[(corner + 1) % 4]],
             c='grey', linestyle='--');
 
-plt.show();
+plt.show()
 
 ##############################################################################
 # In this figure, the red dots represent the specific qubits we will use in
