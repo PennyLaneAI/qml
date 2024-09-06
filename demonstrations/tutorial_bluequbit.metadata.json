@@ -25,7 +25,17 @@
     "seoDescription": "Run large-scale quantum simulations with PennyLane and BlueQubit.",
     "doi": "",
     "canonicalURL": "/qml/demos/tutorial_bluequbit",
-    "references": [],
+    "references": [
+        {
+            "id": "Draper2000",
+            "type": "article",
+            "title": "Addition on a Quantum Computer",
+            "authors": "Thomas G. Draper",
+            "year": "2000",
+            "journal": "",
+            "url": "https://arxiv.org/abs/quant-ph/0008033"
+        }        
+    ],
     "basedOnPapers": [],
     "referencedByPapers": [],
     "relatedContent": [

@@ -167,6 +167,13 @@ plt.tick_params(axis='y', labelsize=30)
 # PennyLane users can now simulate large circuits of up to 33 qubits for free using `BlueQubit <https://app.bluequbit.io/sdk-docs/index.html>`_ — we are looking forward to seeing the  
 # creative and innovative ways researchers and quantum enthusiasts will be using this capability!
 
+# References
+# ----------
+#
+# .. [#Draper2000]
+#
+#     Thomas G. Draper, "Addition on a Quantum Computer". `arXiv:quant-ph/0008033 <https://arxiv.org/abs/quant-ph/0008033>`__.
+
 ##############################################################################
 # About the author
 # ----------------
