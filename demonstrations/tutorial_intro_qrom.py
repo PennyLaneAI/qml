@@ -1,9 +1,9 @@
 r"""Intro to QROM
 =============================================================
 
-Managing data is a crucial task on any computer, and quantum computers are no exception. Efficient data management is vital in quantum machine learning, search algorithms, and state preparation.
+Managing data is a crucial task, and quantum computers are no exception: efficient data management is vital in quantum machine learning, search algorithms, and state preparation.
 In this demonstration, we will discuss the concept of a Quantum Read-Only Memory (QROM), a data structure designed to load classical data on a quantum computer.
-You will also see how easy it is to use this operator in PennyLane using the :class:`~.pennylane.QROM` template.
+We also explain how to use this operator in PennyLane using the :class:`~.pennylane.QROM` template.
 
 
 .. figure:: ../_static/demonstration_assets/qrom/qrom_opengraph.png
@@ -20,7 +20,7 @@ The QROM is an operator that allows us to load classical data into a quantum com
 
     \text{QROM}|i\rangle|0^{\otimes m}\rangle = |i\rangle|b_i\rangle,
 
-where :math:`|b_i\rangle` is the bitstring associated with the :math:`i`-th computational basis and :math:`m` is the length of the bitstrings. We have assumed all the bitstrings are of equal length.
+where :math:`|b_i\rangle` is the bitstring associated with the :math:`i`-th computational basis state, and :math:`m` is the length of the bitstrings. We have assumed all the bitstrings are of equal length.
 
 For example, suppose our data consists of eight bitstrings, each with two bits: :math:`[01, 11, 11, 00, 01, 11, 11, 00]`. Then, the index register will consist of three
 qubits (:math:`3 = \log_2 8`) and the target register of two qubits (:math:`m = 2`). For instance, for the
@@ -123,9 +123,9 @@ print("One-qubit gates: ", qml.specs(circuit)(0)["resources"].gate_sizes[1])
 print("Two-qubit gates: ", qml.specs(circuit)(0)["resources"].gate_sizes[2])
 
 ##############################################################################
-# There are numerous works that attempt to simplify this of which
-# we highlight reference [#unary]_ which introduces an efficient technique using measurements in the middle
-# of the circuit. Another clever approach was introduced in [#selectSwap]_ , with a smart structure known as SelectSwap,
+# There are numerous works that attempt to simplify the construction of a QROM . 
+# We highlight reference [#unary]_ , which introduces an efficient technique using measurements in the middle
+# of the circuit. Another clever approach was introduced in [#selectSwap]_ , with a structure known as SelectSwap,
 # which we describe below.
 #
 # SelectSwap
@@ -142,10 +142,11 @@ target_wires = [3, 4]
 work_wires = [5, 6]
 
 
-@partial(qml.compile, basis_set="CNOT")  # Line added for resource estimation purposes only.
+@partial(qml.compile, basis_set="CNOT") 
 @qml.qnode(dev)
 def circuit(index):
     qml.BasisState(index, wires=control_wires)
+    #  added work wires below
     qml.QROM(bitstrings, control_wires, target_wires, work_wires, clean=False)
     return qml.sample(wires=control_wires + target_wires + work_wires)
 
@@ -234,7 +235,7 @@ plt.show()
 # ~~~~~~~~~~~~~~~~
 #
 # The above approach has a drawback. The work wires have been altered, i.e., after applying the operator they have not
-# been returned to state :math:`|00\rangle`. This could cause unwanted behaviors, but in PennyLane can be easily solved
+# been returned to state :math:`|00\rangle`. This could cause unwanted behaviors, but in PennyLane it can be easily solved
 # by setting the parameter ``clean = True``.
 
 
@@ -310,7 +311,7 @@ for i in range(8):
 # By implementing various versions of the QROM operator, such as Select and SelectSwap, we optimize quantum circuits
 # for enhanced performance and scalability. These methods improve the efficiency of
 # state preparation [#StatePrep]_ techniques. After all, state preparation is a special case of data encoding, where the data are the coefficients that define the state.
-# As the availability of qubits increases, QROM methods will become more attractive as a practical due to their superior asymptotic efficiency.
+# QROM methods are particularly attractive for large-scale quantum computing due to their superior asymptotic efficiency.
 # This makes them an indispensable tool for developing new algorithms.
 #
 # References
