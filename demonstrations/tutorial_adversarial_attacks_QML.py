@@ -1,4 +1,4 @@
-r"""Adversarial Attacks on Quantum Machine Learning
+r"""Adversarial attacks and robustness for quantum machine learning
 ===============================================
 """
 
@@ -58,7 +58,7 @@ r"""Adversarial Attacks on Quantum Machine Learning
 # attacks are imperceptible to humans, and hence difficult to detect. For this reason, it is essential
 # that ML models in security-critical applications are robust against these types of attacks.
 #
-# Quantum machine learning has been shown to have theoretical advantages over classical ML methods [#Liu]_
+# :doc:`Quantum machine learning (QML) </whatisqml>` has been shown to have theoretical advantages over classical ML methods [#Liu]_
 # and is becoming increasingly popular. However, first works in this direction suggest that QML
 # suffers from the same vulnerabilities as classical ML [#Lu]_. How the vulnerability of QML models
 # relates to classical models and how robust the models are in comparison is evaluated in [#Wendlinger]_. But
@@ -72,9 +72,9 @@ r"""Adversarial Attacks on Quantum Machine Learning
 # Setting up the environment
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# For this tutorial, we will use the Pennylane :class:`~pennylane.qnn.TorchLayer` class to perform circuit operations
+# For this tutorial, we will use the PennyLane :class:`~pennylane.qnn.TorchLayer` class to perform circuit operations
 # and optimizations with the PyTorch backend. Thus, we need to import the torch library alongside
-# Pennylane:
+# PennyLane:
 #
 
 import pennylane as qml
@@ -86,7 +86,7 @@ from matplotlib import pyplot as plt
 # Visualization of the dataset
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# As in the paper [#Wendlinger]_, we make use of the `PlusMinus <pennylane.ai/datasets/other/plus-minus>`_ dataset, which serves as a good baseline for
+# As in the paper [#Wendlinger]_, we make use of the `PlusMinus <pennylane.ai/datasets/other/plus-minus>`_ dataset (available via `PennyLane Datasets <https://pennylane.ai/datasets/>`_), which serves as a good baseline for
 # evaluating a QML image classification model’s ability to find useful features in the input. It also
 # allows us to define the usefulness of attacks on the QML model while being low-dimensional enough to
 # perform scalable training (more info on the dataset can be found in [#Wendlinger]_). It consists of four
@@ -94,11 +94,10 @@ from matplotlib import pyplot as plt
 # :math:`\{+,-,\vdash,\dashv\}`. Below we visualize one sample of each class to get an understanding
 # of the dataset.
 #
-# The data can be loaded directly form the Pennylane Quantum datasets hub:
-# https://pennylane.ai/datasets/ for easy integration into Pennylane circuits and optimization code.
+# The data can be loaded directly from `PennyLane Datasets <https://pennylane.ai/datasets/>`_ for easy integration into PennyLane circuits and optimization code.
 #
 
-# we can use the dataset hosted on pennylane
+# we can use the dataset hosted on PennyLane
 # pm = qml.data.load('other, name='PlusMinus')
 
 pm = qml.data.Dataset()
@@ -143,8 +142,8 @@ visualize_data(x_vis, y_vis)
 # We will make use of a :doc:`data-reuploading <tutorial_data_reuploading_classifier>` scheme to encode the 256 input pixels into the latent space
 # of the quantum classifier. To this end, the :class:`~pennylane.StronglyEntanglingLayers` template provides an
 # easy-to-use structure for the circuit design. The output of our classifier is a four-dimensional
-# vector resulting from Pauli-Z oberservables along the first four qubits. These outputs (unnormalized
-# probability scores - i.e. logits) are then used in the `CrossEntropyLoss <https://pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html>`_ function to optimize the
+# vector resulting from Pauli Z oberservables along the first four qubits. These outputs (unnormalized
+# probability scores — i.e. logits) are then used in the `CrossEntropyLoss <https://pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html>`_ function to optimize the
 # model parameters. Together with the PyTorch integration mentioned above, the classifier code looks
 # like the following:
 #
@@ -305,7 +304,7 @@ visualize_data(x_vis, y_vis, benign_class_output)
 #
 # As described before, the mathematical notation for an adversarial attack is as follows:
 #
-# .. math:: \delta \equiv \; \underset{\delta^{\prime} \in \Delta}{\operatorname{argmax}} \;\mathcal{L}\left(f\left(x+\delta^{\prime} ; \theta^*\right), y\right)
+# .. math:: \delta \equiv \; \underset{\delta^{\prime} \in \Delta}{\operatorname{argmax}} \;\mathcal{L}\left(f\left(x+\delta^{\prime} ; \theta^*\right), y\right).
 #
 # This equation can be summarized in a simple step-by-step recipe. In basic terms, we
 # perform a forward and backward pass through the model and loss function (just like we do during
@@ -319,7 +318,7 @@ visualize_data(x_vis, y_vis, benign_class_output)
 #
 
 
-# simple implementation of Projected Gradient Descent (PGD) attack (without randomized starting points - cf. BIM)
+# simple implementation of projected gradient descent (PGD) attack (without randomized starting points — cf. BIM)
 # for an introduction to PGD, see https://adversarial-ml-tutorial.org/adversarial_examples/#projected-gradient-descent
 def PGD(model, feats, labels, epsilon=0.1, alpha=0.01, num_iter=10):
 
@@ -354,7 +353,7 @@ adversarial_class_output = [torch.argmax(p) for p in adversarial_preds]
 visualize_data(perturbed_x.reshape(-1, 16, 16), y_vis, adversarial_class_output)
 
 ######################################################################
-# We can see the devastating effect of a simple PGD attack using a perturbation strength
+# We can see the devastating effect of a simple PGD (projected gradient descent) attack using a perturbation strength
 # :math:`\varepsilon=0.1`, where the model misclassifies each of the four samples we used for
 # visualization of the dataset. For humans, the images are still very easily classifiable, the
 # perturbations look mostly like random noise added to the images. All in all, the accuracy of the
@@ -408,8 +407,8 @@ for ep in range(0, epochs_retraining):
 print_acc(epochs_retraining, max_ep=2)
 
 ######################################################################
-# Evaluation of retrained model
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Evaluation of the retrained model
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 
 adversarial_preds = [qml_model(f) for f in perturbed_x]
@@ -428,7 +427,7 @@ visualize_data(perturbed_x.reshape(-1, 16, 16), y_vis, adversarial_class_output)
 # ----------
 #
 # In this demo we saw how to perform adversarial attacks on quantum variational classification models.
-# The resulting perturbed images (which - for humans - still closely resemble the original ones)
+# The resulting perturbed images (which — for humans — still closely resemble the original ones)
 # result in large misclassification rates of the QML models, showing the vulnerability of such models
 # to adversarial attacks. Consequently, we showcased one possibility to increase the adversarial
 # robustness using adversarial retraining, which led the model under attack to perform better.
