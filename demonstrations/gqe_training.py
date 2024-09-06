@@ -247,15 +247,93 @@ train_sub_seq_en = get_subsequence_energies(train_op_seq)
 # 3a. GPT model implementation details
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
-# The architecture of the GPT model we instantiate here is similar to that described in [#nakaji2024]_.
-# That is, we used 12 attention layers, 12 attention heads, and 768 embedding dimensions, as specified
-# in the default values of ``GPTConfig``. For our demo, the model then has a default of around 85
-# million parameters and is ``324.25 MB`` in size. Its implementation is in `our
-# repo <https://github.com/XanaduAI/gpt-qe/tree/dev>`__ and was originally from this `nanoGPT
-# repo <https://github.com/karpathy/nanoGPT/blob/master/model.py>`__.
+# The GPT model we will use in this demo is mostly implemented in the `nanoGPT repo
+# <https://github.com/karpathy/nanoGPT>`__ as the 
+# `class <https://github.com/karpathy/nanoGPT/blob/9755682b981a45507f6eb9b11eadef8cb83cebd5/model.py#L118>`__ 
+# ``GPT`` with the model hyperparameters stored in the 
+# `dataclass <https://github.com/karpathy/nanoGPT/blob/9755682b981a45507f6eb9b11eadef8cb83cebd5/model.py#L109>`__ 
+# ``GPTConfig``. Namely, we will use 12 attention layers, 12 attention heads, and 768 embedding dimensions
+# which are equal to those described in [#nakaji2024]_. Our GPT model would then have around 85 million parameters
+# and is ``324.25 MB`` in size.
+
+!curl -O https://raw.githubusercontent.com/karpathy/nanoGPT/master/model.py
+from model import GPT, GPTConfig
+
+# We needed to make some mandatory changes to the nanoGPT implementation however to accommodate the details of
+# the problem. We thus override some methods from ``GPT`` as seen below
 # 
-# We needed to make some mandatory changes to the nanoGPT implementation to accommodate the details of
-# the problem:
+
+import torch
+from torch.nn import functional as F
+
+class GPTQE(GPT):
+    def forward(self, idx):
+        device = idx.device
+        b, t = idx.size()
+        assert t <= self.config.block_size, f"Cannot forward sequence of length {t}, block size is only {self.config.block_size}"
+        pos = torch.arange(0, t, dtype=torch.long, device=device) # shape (t)
+
+        # forward the GPT model itself
+        tok_emb = self.transformer.wte(idx) # token embeddings of shape (b, t, n_embd)
+        pos_emb = self.transformer.wpe(pos) # position embeddings of shape (t, n_embd)
+        x = self.transformer.drop(tok_emb + pos_emb)
+        for block in self.transformer.h:
+            x = block(x)
+        x = self.transformer.ln_f(x)
+        logits = self.lm_head(x)
+        return logits
+    
+    def calculate_loss_sub(self, tokens, energies):
+        current_tokens, next_tokens = tokens[:, :-1], tokens[:, 1:]
+
+        logits = self(current_tokens)
+        next_token_mask = torch.nn.functional.one_hot(
+            next_tokens, num_classes=self.config.vocab_size
+        )
+        next_token_logits = (logits * next_token_mask).sum(axis=2)
+        cumsum_logits = torch.cumsum(next_token_logits, dim=1)
+        return torch.mean(torch.square(cumsum_logits - energies))
+
+    def calculate_loss(self, tokens, energies):
+        current_tokens, next_tokens = tokens[:, :-1], tokens[:, 1:]
+
+        logits = self(current_tokens)
+        next_token_mask = torch.nn.functional.one_hot(
+            next_tokens, num_classes=self.config.vocab_size
+        )
+        next_token_logits = (logits * next_token_mask).sum(axis=2)
+
+        # gpt_preds = torch.exp(-next_token_logits.sum(axis=1))
+        # sim_res = torch.exp(-energies)
+        # logit_match = torch.mean(torch.square(gpt_preds - sim_res))
+        logit_match = torch.mean(torch.square(
+            next_token_logits.sum(axis=1) - energies
+        ))
+        return logit_match
+    
+    @torch.no_grad()
+    def generate(self, n_sequences, max_new_tokens, temperature=1.0, device="cpu"):
+        idx = torch.zeros(size=(n_sequences, 1), dtype=int, device=device)
+        total_logits = torch.zeros(size=(n_sequences, 1), device=device)
+        for _ in range(max_new_tokens):
+            # if the sequence context is growing too long we must crop it at block_size
+            idx_cond = idx if idx.size(1) <= self.config.block_size else idx[:, -self.config.block_size:]
+            # forward the model to get the logits for the index in the sequence
+            logits = self(idx_cond)
+            # pluck the logits at the final step 
+            logits = logits[:, -1, :] 
+            # set the logit of the first token so that its probability will be zero
+            logits[:, 0] = float("inf")
+            # apply softmax to convert logits to (normalized) probabilities and scale by desired temperature
+            probs = F.softmax(-logits / temperature, dim=-1)
+            # sample from the distribution
+            idx_next = torch.multinomial(probs, num_samples=1)
+            # # Accumulate logits
+            total_logits += torch.gather(logits, index=idx_next, dim=1)
+            # append sampled index to the running sequence and continue
+            idx = torch.cat((idx, idx_next), dim=1)
+        return idx, total_logits
+
 # 
 # -  For the offline training:
 # 
