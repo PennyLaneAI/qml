@@ -22,7 +22,7 @@ The amount of entanglement the MPS can represent is user-controlled via a hyper-
 If we allow :math:`\chi` to be of :math:`\mathcal{O}(2^{\frac{n}{2}})` for a system of :math:`n` qubits, we can write `any` state as an `exact` MPS.
 To avoid exponentially large resources, however, one typically sets a finite bond dimension :math:`\chi` at the cost of introducing an approximation error.
 
-For some specific classes of states, this is provably sufficient to have a faithful representations (see section on entanglement). 
+For some specific classes of states, this is provably sufficient to have faithful representations (see the section on entanglement). 
 But because MPS come with a lot of powerful computational features that we are going to discuss later (in particular canonical forms),
 they are still used in much more complex systems where these requirements do not hold anymore, and still yield good results.
 For example, state of the art quantum chemistry simulations were performed using MPS [#Baiardi]_ 
@@ -38,12 +38,11 @@ MPS code and throw a large amount of resources into the bond dimension than to d
 more advanced tensor network methods.
 
 An exception to that are so-called `simple update`
-methods [#Jiang]_, that use pseudo canonical-forms that allow a similarly simple
-algorithmic complexity at the cast of not being optimal in its resources.
-Reference [#Patra]_ is a good example for that.
+methods [#Jiang]_, which use pseudo canonical forms that allow a similarly simple
+algorithmic complexity at the cost of not being optimal in its resources.
+Reference [#Patra]_ is a good example of that.
 
-More advanced tensor network methods are developed and optimized, though the biggest hindrance
-on the widespread use of already known advanced tensor network methods is the lack of reliable open source implementations.
+More advanced tensor network methods are developed and optimized, though the biggest hindrance to the widespread use of already known advanced tensor network methods is the lack of reliable open-source implementations.
 While the current state of affairs in academia is giving little incentive to change that,
 MPS continue to be the workhorse for a wide variety of quantum simulation techniques.
 
@@ -111,7 +110,7 @@ print(f"original image size: {size_original}, compressed image size: {size_compr
 ##############################################################################
 # 
 #
-# The original image is :math:`334 \times 542` pixels, that we compress in the :math:`334 \times 50` pixels in
+# The original image is :math:`334 \times 542` pixels, that we compress as :math:`334 \times 50` pixels in
 # :math:`U`, :math:`50` pixels in :math:`\Lambda` and :math:`50 \times 542` pixels in :math:`V^\dagger`.
 # This is possible because the information density in the image is low, as seen by the distribution of singular values
 
@@ -152,7 +151,7 @@ plt.show()
 #     :width: 70%
 # 
 # .. note:: 
-#     We are going to use combination of tensor indices and treat them as one big index.
+#     We are going to use combinations of tensor indices and treat them as one big index.
 #     In particular, two indices :math:`\sigma_1 = \{0, 1\}` and :math:`\sigma_2 = \{0, 1\}` have the combined index
 #     :math:`(\sigma_1 \sigma_2) = \{00, 01, 10, 11\}`. The actual order is a choice and does not matter for the analytic descriptions.
 #     But in practice, we just choose to do it in the same way as ``numpy`` arrays are reshaped for convenience. 
@@ -162,7 +161,7 @@ plt.show()
 # They are contractions over the virtual indices. The dangling vertical lines are the
 # `physical` indices :math:`\sigma_i` of the original state.
 #
-# Let us look at concrete state vector with :math:`n=3` sites, so :math:`\psi_{\sigma_1 \sigma_2 \sigma_3}`, and decompose it as an MPS.
+# Let us look at a concrete state vector with :math:`n=3` sites, so :math:`\psi_{\sigma_1 \sigma_2 \sigma_3}`, and decompose it as an MPS.
 
 n = 3 # three sites = three legs
 psi = np.random.rand(2**3)
@@ -236,7 +235,7 @@ U.shape, Lambda.shape, Vd.shape
 #     :align: center
 #     :width: 70%
 #
-# When the state is normalized, we are done. Else, we can do the procedure one more time, again with a virtual dummy dimension on the right-most site.
+# When the state is normalized, we are done. Otherwise, we can do the procedure one more time, again with a virtual dummy dimension on the right-most site.
 
 psi_remainder = np.diag(Lambda) @ Vd                 # mu1 (s2 s3)
 psi_remainder = np.reshape(psi_remainder, (2*2, 1))  # (mu1 s2), s3
@@ -248,7 +247,7 @@ Us.append(U)
 U.shape, Lambda.shape, Vd.shape
 
 ##############################################################################
-# Because our state vector was already normalized, the singular value in this last SVD is just ``1.``. Else it would yield the norm of ``psi``
+# Because our state vector was already normalized, the singular value in this last SVD is just ``1``. Else it would yield the norm of ``psi``
 # (a good exercise to confirm by skipping the normalization step in the definition of ``psi`` above).
 #
 # The collected tensors :math:`U_{\mu_{i-1} \sigma_i \mu_i}` now make up the Matrix Product State and describe the original state :math:`|\psi\rangle`
@@ -365,7 +364,7 @@ Ms, Ss = dense_to_mps(psi, 5)
 #
 # This was all to conceptually understand the relationship between dense vectors and a compressed Matrix Product State.
 # We want to use MPS for many sites, where it is often not possible to write down the exponentially large state vector in the first place.
-# In that case we would simply start from an MPS description in terms of :math:`n` :math:`\chi \times 2 \times \chi` tensors.
+# In that case, we would simply start from an MPS description in terms of :math:`n` :math:`\chi \times 2 \times \chi` tensors.
 # Luckily, we can obtain all relevant information without ever reconstructing the full state vector.
 # 
 # Canonical forms
@@ -498,13 +497,13 @@ for i in range(len(Ms)):
 #
 # We can use MPS to classically simulate quantum algorithms. This is a very useful tool for as long as
 # real quantum devices are noisy and costly to use.
-# An MPS simulator works very similarly to a state vector simular like :class:`~DefaultQubit`, the only difference is that the underlying state
+# An MPS simulator works very similarly to a state vector simulator like :class:`~DefaultQubit`, the only difference is that the underlying state
 # is encoded in an MPS.
 #
 # Applying local gates
 # ~~~~~~~~~~~~~~~~~~~~
 #
-# Due to its canonical form, applying local gates onto an MPS is very straight forward and little work.
+# Due to its canonical form, applying local gates onto an MPS is very straightforward and little work.
 # Let us walk through the example of applying a :math:`\text{CNOT}` gate on neighboring sites on the underlying MPS state of the simulator.
 #
 # Graphically, this is happening in three steps as illustrated here.
@@ -521,10 +520,10 @@ for i in range(len(Ms)):
 # ~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # The situation gets a bit more complicated when we apply a :math:`\text{CNOT}` (or any multi-site gate) on non-neighboring sites. We have two possibilities to handle this.
-# We can do what a quantum computer would do, which is swap out sites until the appropriate indices are neighboring, perform the operation and then un-swap the sites.
-# Alternatively we can construct a so-called matrix product operator (MPO) that acts on all sites in between with an identity. This is done in the following way.
+# We can do what a quantum computer would do, which is swap out sites until the appropriate indices are neighboring, perform the operation, and then un-swap the sites.
+# Alternatively, we can construct a so-called matrix product operator (MPO) that acts on all sites in between with an identity. This is done in the following way.
 #
-# First, we split the matrix of the gate into tensors that act locally. This is done again using SVD. In general the MPO bond dimension for a two qubit gate is maximally 4,
+# First, we split the matrix of the gate into tensors that act locally. This is done again using SVD. In general, the MPO bond dimension for a two-qubit gate is maximally 4,
 # but in some cases like :math:`\text{CNOT}` it is :math:`2`, so we can do a lossless compression by only keeping the two non-zero singular values and tossing the zeros. After we have done that, we can multiply 
 # the singular values onto either site as we do not have a use for them in the MPO other than doing the compression.
 #
@@ -541,16 +540,16 @@ for i in range(len(Ms)):
 #
 # Here we just need to be careful to contract in the right order, otherwise we might end up with unnecessarily large tensors in intermediate steps. For example, if we first contract all physical indices we get a big blob
 # that is exponentially large in the number of intermediate sites. While in general it is NP-hard to find the optimal contraction path,
-# for MPS the optimal path is known. The way to do it is alternating between the physical index and the corresponding two virtual indices, going either from left-to-right, or, equivalently, from right-to-left (see figure 21 in [#Schollwoeck]_).
+# for MPS the optimal path is known. The way to do it is by alternating between the physical index and the corresponding two virtual indices, going either from left-to-right or, equivalently, from right-to-left (see Figure 21 in [#Schollwoeck]_).
 #
 #
 # Running simulations and setting the bond dimension
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # While we focussed on the specific case of a :math:`\text{CNOT}` gate, this concept is readily generalized to arbitrary two or multi-qubit gates.
-# With that, we are now ready to run some quantum circuit simulations. We don't have to code up all contractions by hand, instead, we can use
+# With that, we are now ready to run some quantum circuit simulations. We don't have to code up all contractions by hand. Instead, we can use
 # the :class:`~pennylane.devices.default_tensor.DefaultTensor` device that takes care of all of this under the hood. All we need to do is set the bond dimension and tell the device whether
-# it should use the swap-unswap or MPO method for doing non-local gates. This is done via the keyword argument ``contract``, where we can choose between ``"swap+split"`` (what I called swap-unswap),
+# it should use the swap-unswap or MPO method for applying non-local gates. This is done via the keyword argument ``contract``, where we can choose between ``"swap+split"`` (what I called swap-unswap),
 # ``"nonlocal"`` (what I called the MPO method), and ``"auto-mps"``, which uses swap-unswap for 2-qubit gates and the MPO method for 3 and more qubits.
 #
 # Aside from that, we can basically use the device like any other state vector simulator device.
@@ -588,7 +587,7 @@ res, dataset.vqe_energy
 # We choose a range of bond dimensions and plot the results for the simulation against them, keeping in mind that
 # the maximum bond dimension of a system of :math:`n` qubits is :math:`2^{\frac{n}{2}}`.
 
-bond_dims = 2**np.arange(2, (n_wires//2)+1) # maximum required bond dinemsion is 2**(n_wires//2) = 64
+bond_dims = 2**np.arange(2, (n_wires//2)+1) # maximum required bond dimension is 2**(n_wires//2) = 64
 ress = []
 
 for bond_dim in bond_dims:
@@ -608,7 +607,7 @@ plt.show()
 
 ##############################################################################
 # We see that already for :math:`\chi = 32` we have pretty accurate results.
-# We might even get away with :math:`\chi = 16` for some qualitative simulations at the cose of some approximation error.
+# We might even get away with :math:`\chi = 16` for some qualitative simulations at the cost of some approximation error.
 #
 # Setting the bond dimension is an important part of performing MPS simulations. Finite size scaling is a
 # quantitative tool to orient ourselves and choose a suitable bond dimension for our simulations.
@@ -628,11 +627,11 @@ plt.show()
 # ----------
 #
 # We introduced the basics of Matrix Product States (MPS) and saw how the existence of a canonical form simplifies a lot of the contractions.
-# This fact can also be used for simulation of quantum circuits with local and non-local gates.
+# This fact can also be used for simulations of quantum circuits with local and non-local gates.
 # We showed how to run quantum circuits using the :class:`~pennylane.devices.default_tensor.DefaultTensor` device and how to systematically find an appropriate bond dimension.
 #
-# While MPS are mathematically known to we-describe a particular class of states (those that fulfill the area law of entanglement in 1D), we can
-# also simulate more complex systems by throwing some extra resources into the bond dimension. In particular 
+# While MPS are mathematically known to well-describe a particular class of states (those that fulfill the area law of entanglement in 1D), we can
+# also simulate more complex systems by throwing some extra resources into the bond dimension. 
 
 
 
