@@ -554,7 +554,8 @@ for i in range(len(Ms)):
 # ``"nonlocal"`` (what I called the MPO method), and ``"auto-mps"``, which uses swap-unswap for 2-qubit gates and the MPO method for 3 and more qubits.
 #
 # Aside from that, we can basically use the device like any other state vector simulator device.
-# Let us run a VQE example from the PennyLane datasets of the :math:`H_6` molecule. This is mostly PennyLane boilerplate code, except that we now use ``default.tensor``
+# Let us run a VQE example from the PennyLane datasets of the :math:`H_6` molecule. This is mostly PennyLane boilerplate code while using ``default.tensor``,
+# see our :doc:`demo on how to use default.tensor </demos/tutorial_How_to_simulate_quantum_circuits_with_tensor_networks/>` for more details.
 
 import pennylane as qml
 
@@ -587,7 +588,7 @@ res, dataset.vqe_energy
 # The answer is **finite size scaling**, or bond dimension scaling, or just extrapolation. This is a standard method 
 # in tensor network simulations and originates from condensed matter physics and quantum phase transitions. 
 # The idea is to run the same simulation with an increasing bond dimension and check that it saturates and converges to an extrapolated value.
-# In spirit, this is similar to :doc:`zero noise extrapolation </demos/tutorial_diffable-mitigation>`.
+# In spirit, this is similar to :doc:`zero noise extrapolation <tutorial_diffable-mitigation>`.
 #
 # We choose a range of bond dimensions and plot the results for the simulation against them, keeping in mind that
 # the maximum bond dimension of a system of :math:`n` qubits is :math:`2^{\frac{n}{2}}`.
