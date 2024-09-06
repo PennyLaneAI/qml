@@ -413,6 +413,7 @@ for i in range(len(Ms)):
 # The best way to do this is to have the MPS such that all sites left of site :math:`i` are left-canonical and all sites right of it are right-canonical.
 # That way, the contraction :math:`\langle \psi | O | \psi \rangle` for local expectation values reduces to contractions on just a single site,
 # because all other contractions are just the identity.
+# We call that single tensor :math:`\Theta`, it is all we need to compute the expectation value and we shall see how we can easily obtain it while not having to care about all other sites.
 #
 # .. figure:: ../_static/demonstration_assets/mps/mixed_canonical_observable.png
 #     :align: center
