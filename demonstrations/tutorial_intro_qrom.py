@@ -119,13 +119,16 @@ for i in range(8):
 # Although this approach works correctly, the number of multicontrol gates is high — gates with a costly decomposition.
 # Here we show the number of 1 and 2 qubit gates we use when decomposing the circuit:
 
+print("Number of qubits: ", len(control_wires + target_wires))
 print("One-qubit gates: ", qml.specs(circuit)(0)["resources"].gate_sizes[1])
 print("Two-qubit gates: ", qml.specs(circuit)(0)["resources"].gate_sizes[2])
 
 ##############################################################################
-# There are numerous works that attempt to simplify the construction of a QROM . 
-# We highlight reference [#unary]_ , which introduces an efficient technique using measurements in the middle
-# of the circuit. Another clever approach was introduced in [#selectSwap]_ , with a structure known as SelectSwap,
+# You can learn more about these resource estimation methods in
+# the `Pennylane documentation <https://docs.pennylane.ai/en/stable/code/qml_resource.html>.
+# There are numerous works that attempt to simplify this of which
+# we highlight reference [#unary]_ which introduces an efficient technique using measurements in the middle
+# of the circuit. Another clever approach was introduced in [#selectSwap]_ , with a smart structure known as SelectSwap,
 # which we describe below.
 #
 # SelectSwap
@@ -150,7 +153,7 @@ def circuit(index):
     qml.QROM(bitstrings, control_wires, target_wires, work_wires, clean=False)
     return qml.sample(wires=control_wires + target_wires + work_wires)
 
-
+print("Number of qubits: ", len(control_wires + target_wires + work_wires))
 print("One-qubit gates: ", qml.specs(circuit)(0)["resources"].gate_sizes[1])
 print("Two-qubit gates: ", qml.specs(circuit)(0)["resources"].gate_sizes[2])
 
@@ -268,7 +271,7 @@ for i in range(8):
 #    :width: 90%
 #    :target: javascript:void(0)
 #
-# where :math:`R` is the number of rows. To see how this circuit works, let's suppose we want to load the bitstring :math:`b_{cr}` in the target wires, where :math:`b_{cr}`
+# where :math:`R` is the number of rows shown in the image. To see how this circuit works, let's suppose we want to load the bitstring :math:`b_{cr}` in the target wires, where :math:`b_{cr}`
 # is the bitstring whose operator :math:`U` is placed in the c-th column and r-th row in the two dimensional representation shown in the Select block.
 # We can summarize the idea in a few simple steps.
 #
