@@ -1,14 +1,14 @@
-r"""Intro to the BlueQubit (CPU) device 
+r"""Using the BlueQubit (CPU) device with PennyLane
 =============================================================
 
 Running large-scale simulations usually requires lots of memory and compute power, regular laptops already struggle above 20 qubits 
 and most of the time 30+ qubits are a no-go.
-Using the BlueQubit device, PennyLane users can now run circuit simulations on souped up machines and go up to 33 qubits!
-Also Bluequbit uses a custom build of `PennyLane-Lightning <https://docs.pennylane.ai/projects/lightning/en/stable/index.html>`__ that 
-enables multi-threading and other configurations to achieve best possible performance.
+Using the `BlueQubit device <https://app.bluequbit.io/sdk-docs/index.html>`_, PennyLane users can now run circuit simulations on souped up machines and go up to 33 qubits!
+Also, Bluequbit uses a custom build of `PennyLane-Lightning <https://docs.pennylane.ai/projects/lightning/en/stable/index.html>`__ that 
+enables multi-threading and other configurations to achieve the best possible performance.
 
-Below we will show 2 examples of how to use Bluequbit with Pennylane.
-The first is a very simple example building a Bell pair, and the second one is a large 26 qubit circuit that demonstrates the central limit theorem using quantum arithmetic.
+Below we will show 2 examples of how to use BlueQubit with PennyLane.
+The first is a very simple example building a Bell pair, and the second one is a large 26-qubit circuit that demonstrates the central limit theorem using quantum arithmetic.
 
 
 .. note::
@@ -32,7 +32,7 @@ Build your PennyLane circuit
 ----------------------------
 
 Here we will build a simple :doc:`Bell pair </glossary/what-are-bell-states>` and simulate it on the BlueQubit backend.
-Later in this tutorial we will show a larger example — a 26-qubit circuit that demonstrates the Central Limit Theorem using a `Draper QFT adder <https://pennylane.ai/qml/demos/tutorial_qft_arithmetics>`__.
+Later in this tutorial we will show a larger example — a 26-qubit circuit that demonstrates the central limit theorem using a `Draper QFT adder <https://pennylane.ai/qml/demos/tutorial_qft_arithmetics>`__.
 
 Here is the example circuit we will be simulating:
 """
@@ -81,8 +81,8 @@ print(result)
 # Larger workloads: 26 qubits
 # ---------------------------
 # Here we will see a much larger example — a 26-qubit circuit.
-# Inspired by `Guillermo Allonso's <https://www.pennylane.ai/profile/ketpuntog>`__ PennyLane Demo `Basic arithmetic with the QFT <https://pennylane.ai/qml/demos/tutorial_qft_arithmetics>`__,
-# which implements a quantum adder in Pennylane, we build our own adder and use it to add together quantum registers.
+# Inspired by `Guillermo Allonso's <https://www.pennylane.ai/profile/ketpuntog>`__ PennyLane Demo `Basic arithmetic with the quantum Fourier transform (QFT) <https://pennylane.ai/qml/demos/tutorial_qft_arithmetics>`__,
+# which implements a quantum adder in PennyLane, we build our own adder and use it to add together quantum registers.
 # 
 # In the quantum world we can use the idea of superposition to add multiple numbers at the same time.
 # Furthermore, since each number in the superposition can have its own weight, we can use this adder to sum together distributions!
@@ -164,7 +164,7 @@ plt.tick_params(axis='y', labelsize=30)
 # We demonstrated this both on a small example, as well as a large 26-qubit simulation where we added together uniform 
 # distributions to approximate a normal distribution.
 #
-# PennyLane users can now simulate large circuits of up to 33 qubits for free using BlueQubit — we are looking forward to seeing the  
+# PennyLane users can now simulate large circuits of up to 33 qubits for free using `BlueQubit <https://app.bluequbit.io/sdk-docs/index.html>`_ — we are looking forward to seeing the  
 # creative and innovative ways researchers and quantum enthusiasts will be using this capability!
 
 ##############################################################################
