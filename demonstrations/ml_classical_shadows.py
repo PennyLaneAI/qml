@@ -103,7 +103,7 @@ plt.show()
 
 ##############################################################################
 # .. figure:: /_static/demonstration_assets/ml_classical_shadows/spin_lattice.png
-#    :width: 55%
+#    :width: 40%
 #    :align: center
 #    :alt: Spin model on square lattice
 
@@ -799,7 +799,7 @@ plt.show()
 ######################################################################
 # .. figure::  /_static/demonstration_assets/ml_classical_shadows/model_comparison.png
 #    :align: center
-#    :width: 80 %
+#    :width: 95 %
 #    :alt: Model comparison based on different kernels
 #
 
@@ -818,11 +818,12 @@ plt.show()
 #
 
 ######################################################################
-# .. image::  /_static/demonstration_assets/ml_classical_shadows/rmse_training.png
-#    :width: 46 %
-#
 # .. image::  /_static/demonstration_assets/ml_classical_shadows/rmse_shadow.png
-#    :width: 46 %
+#    :width: 45 %
+#    :align: right
+#
+# .. image::  /_static/demonstration_assets/ml_classical_shadows/rmse_training.png
+#    :width: 45 %
 #
 
 ######################################################################
