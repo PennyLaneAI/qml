@@ -254,13 +254,14 @@ train_sub_seq_en = get_subsequence_energies(train_op_seq)
 # `dataclass <https://github.com/karpathy/nanoGPT/blob/9755682b981a45507f6eb9b11eadef8cb83cebd5/model.py#L109>`__ 
 # ``GPTConfig``. Namely, we will use 12 attention layers, 12 attention heads, and 768 embedding dimensions
 # which are equal to those described in [#nakaji2024]_. Our GPT model would then have around 85 million parameters
-# and is ``324.25 MB`` in size.
+# and is ``324.25 MB`` in size. We can import from the repo directly with:
 
 !curl -O https://raw.githubusercontent.com/karpathy/nanoGPT/master/model.py
 from model import GPT, GPTConfig
 
-# We needed to make some mandatory changes to the nanoGPT implementation however to accommodate the details of
-# the problem. We thus override some methods from ``GPT`` as seen below
+# Since the loss function for our problem is different from usual language model training, we 
+# override some methods from ``GPT`` below. We redefine the loss function and made some refactors  
+# for convenience. 
 # 
 
 import torch
@@ -270,7 +271,6 @@ class GPTQE(GPT):
     def forward(self, idx):
         device = idx.device
         b, t = idx.size()
-        assert t <= self.config.block_size, f"Cannot forward sequence of length {t}, block size is only {self.config.block_size}"
         pos = torch.arange(0, t, dtype=torch.long, device=device) # shape (t)
 
         # forward the GPT model itself
@@ -283,33 +283,20 @@ class GPTQE(GPT):
         logits = self.lm_head(x)
         return logits
     
-    def calculate_loss_sub(self, tokens, energies):
-        current_tokens, next_tokens = tokens[:, :-1], tokens[:, 1:]
-
-        logits = self(current_tokens)
-        next_token_mask = torch.nn.functional.one_hot(
-            next_tokens, num_classes=self.config.vocab_size
-        )
-        next_token_logits = (logits * next_token_mask).sum(axis=2)
-        cumsum_logits = torch.cumsum(next_token_logits, dim=1)
-        return torch.mean(torch.square(cumsum_logits - energies))
-
     def calculate_loss(self, tokens, energies):
         current_tokens, next_tokens = tokens[:, :-1], tokens[:, 1:]
-
+        # calculate the logits for the next possible tokens in the sequence
         logits = self(current_tokens)
+        # get the logit for the actual next token in the sequence
         next_token_mask = torch.nn.functional.one_hot(
             next_tokens, num_classes=self.config.vocab_size
         )
         next_token_logits = (logits * next_token_mask).sum(axis=2)
-
-        # gpt_preds = torch.exp(-next_token_logits.sum(axis=1))
-        # sim_res = torch.exp(-energies)
-        # logit_match = torch.mean(torch.square(gpt_preds - sim_res))
-        logit_match = torch.mean(torch.square(
-            next_token_logits.sum(axis=1) - energies
-        ))
-        return logit_match
+        # calculate the cumulative logits for each subsequence
+        cumsum_logits = torch.cumsum(next_token_logits, dim=1)
+        # match cumulative logits to subsequence energies
+        loss = torch.mean(torch.square(cumsum_logits - energies))
+        return loss
     
     @torch.no_grad()
     def generate(self, n_sequences, max_new_tokens, temperature=1.0, device="cpu"):
@@ -334,6 +321,12 @@ class GPTQE(GPT):
             idx = torch.cat((idx, idx_next), dim=1)
         return idx, total_logits
 
+# Strictly speaking however, the loss function ``calculate_loss`` we defined is different from that
+# described in [#nakaji2024]_ which is :math:`(\exp(-w_{\mbox{sum}}) - \exp(-E))^2`. As described
+# in Section 1, we directly compute the mean squared error between :math:`\mbox{sum}` and :math:`E`.
+# In addition to computing the error between the total logit and energy for the entire sequence, we
+# also use the error between the cumulative sum of logits and the corresponding energy for each subsequence. 
+# 
 # 
 # -  For the offline training:
 # 
