@@ -640,18 +640,6 @@ plt.show()
 # References
 # ----------
 #
-# .. [#Vidal]
-#
-#     Guifre Vidal
-#     "Efficient classical simulation of slightly entangled quantum computations"
-#     `arXiv:quant-ph/0301063 <https://arxiv.org/abs/quant-ph/0301063>`__, 2003.
-#
-# .. [#Schollwoeck]
-#
-#     Ulrich Schollwoeck
-#     "The density-matrix renormalization group in the age of Matrix Product States"
-#     `arXiv:1008.3477 <https://arxiv.org/abs/1008.3477>`__, 2010.
-#
 # .. [#Baiardi]
 #
 #     Alberto Baiardi, Markus Reiher
@@ -669,6 +657,18 @@ plt.show()
 #     H. C. Jiang, Z. Y. Weng, T. Xiang
 #     "Accurate determination of tensor network state of quantum lattice models in two dimensions"
 #     `arXiv:0806.3719 <https://arxiv.org/abs/0806.3719>`__, 2008.
+#
+# .. [#Vidal]
+#
+#     Guifre Vidal
+#     "Efficient classical simulation of slightly entangled quantum computations"
+#     `arXiv:quant-ph/0301063 <https://arxiv.org/abs/quant-ph/0301063>`__, 2003.
+#
+# .. [#Schollwoeck]
+#
+#     Ulrich Schollwoeck
+#     "The density-matrix renormalization group in the age of Matrix Product States"
+#     `arXiv:1008.3477 <https://arxiv.org/abs/1008.3477>`__, 2010.
 #
 
 
