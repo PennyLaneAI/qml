@@ -26,7 +26,7 @@ calculate its ground-state properties, and compute its classical shadow. Finally
 how to use :doc:`kernel-based learning models <tutorial_kernels_module>` to predict ground-state
 properties from the learned classical shadows. So let's get started!
 
-.. warning::
+.. note::
     This demo is compatible with the latest version of PennyLane and ``neural-tangents==0.6.5``.
     The latter is required for building the kernel for the infinite network used in training.
 
@@ -819,11 +819,11 @@ plt.show()
 
 ######################################################################
 # .. image::  /_static/demonstration_assets/ml_classical_shadows/rmse_shadow.png
-#    :width: 45 %
+#    :width: 47 %
 #    :align: right
 #
 # .. image::  /_static/demonstration_assets/ml_classical_shadows/rmse_training.png
-#    :width: 45 %
+#    :width: 47 %
 #
 
 ######################################################################
