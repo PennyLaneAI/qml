@@ -1,5 +1,5 @@
 {
-    "title": "Intro to Qubitization",
+    "title": "Intro to qubitization",
     "authors": [
         {
             "username": "KetPuntoG"
@@ -25,7 +25,7 @@
             "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_qubitization.png"
         }
     ],
-    "seoDescription": "Learn qubitization, how to visualize it, and its applications",
+    "seoDescription": "Learn how to use, visualize and apply qubitization, a block-encoding technique in quantum computing.",
     "doi": "",
     "canonicalURL": "/qml/demos/tutorial_qubitization",
     "references": [],
