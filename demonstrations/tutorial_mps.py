@@ -554,24 +554,28 @@ for i in range(len(Ms)):
 # ``"nonlocal"`` (what I called the MPO method), and ``"auto-mps"``, which uses swap-unswap for 2-qubit gates and the MPO method for 3 and more qubits.
 #
 # Aside from that, we can basically use the device like any other state vector simulator device.
-# Let us run a VQE example from the PennyLane datasets of the :math:`H_6` molecule.
+# Let us run a VQE example from the PennyLane datasets of the :math:`H_6` molecule. This is mostly PennyLane boilerplate code, except that we now use ``default.tensor``
 
 import pennylane as qml
 
 dataset = qml.data.load("qchem", molname="H6", bondlength=1.3, basis="STO-3G")[0]
 
-H = dataset.hamiltonian
-n_wires = len(H.wires)
+H = dataset.hamiltonian # molecular Hamiltonian in qubit basis
+n_wires = len(H.wires)  # number of qubits
 
 def circuit():
-    qml.BasisState(dataset.hf_state, wires=H.wires)
-    for op in dataset.vqe_gates:
-        qml.apply(op)
-    return qml.expval(H)
+    qml.BasisState(dataset.hf_state, wires=H.wires) # Hartree-Fock initial state
+    for op in dataset.vqe_gates:                    # Applying all pre-optimized VQE gates
+        qml.apply(op)               
+    return qml.expval(H)                            # expectation value of molecular Hamiltonian
 
+# set up device with hyper-parameters and kwargs
 mps = qml.device("default.tensor", wires=n_wires, method="mps", max_bond_dim=30, contract="auto-mps")
+
+# Create the qnode to execute the circuit on the device, and call it (w/o arguments)
 res = qml.QNode(circuit, mps)()
 
+# Compare mps simulation result with pre-optimized state-vector result
 res, dataset.vqe_energy
 
 ##############################################################################
