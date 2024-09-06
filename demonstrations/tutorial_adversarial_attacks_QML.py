@@ -340,7 +340,7 @@ def PGD(model, feats, labels, epsilon=0.1, alpha=0.01, num_iter=10):
 
 
 ######################################################################
-# Evaluation - model under attack
+# Evaluation — model under attack
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 
