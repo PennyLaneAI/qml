@@ -585,7 +585,7 @@ res, dataset.vqe_energy
 # But when dealing with systems of sizes where we don't have the means to compare to an exact result, how do know
 # that our simulation results make sense, and are not scrambled by the errors introduced by a small bond dimension?
 #
-# The answer is **finite size scaling**, or bond dimension scaling, or just extrapolation. This is a standard method 
+# The answer is **finite size scaling** (sometimes also called bond dimension scaling or just extrapolation). This is a standard method 
 # in tensor network simulations and originates from condensed matter physics and quantum phase transitions. 
 # The idea is to run the same simulation with an increasing bond dimension and check that it saturates and converges to an extrapolated value.
 # In spirit, this is similar to :doc:`zero noise extrapolation </demos/tutorial_diffable-mitigation>`.
