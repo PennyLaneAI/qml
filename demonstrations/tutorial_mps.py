@@ -140,8 +140,10 @@ plt.show()
 # where we decomposed the rank :math:`n` tensor :math:`\psi_{\sigma_1, .., \sigma_n}` into a product of matrices :math:`U^{\sigma_j}`
 # for each value of :math:`\sigma_j` (equal to :math:`0` or :math:`1` for qubits). This is why it is called a **matrix product** state.
 # While it historically makes sense to treat these indeed as matrices, given a concrete value of :math:`\sigma_j`, I find it more convenient
-# to forget about the notion of matrices and just treat them as the collection of rank-3 tensors :math:`\{ U^{\sigma_i}_{\mu_{i-1} \mu_i} \}`
+# to forget about the notion of matrices and just treat them as the collection of rank-3 tensors :math:`\{ U_{\mu_{i-1} \sigma_i \mu_i} \}`
 # that have two so-called virtual indices :math:`\mu_{i-1}, \mu_i` and one so-called physical index :math:`\sigma_j`.
+# Whenever we write :math:`U^{\sigma_j}` with a superscript, we mean a matrix given a concrete value of :math:`\sigma_j`. 
+# In particular, we define :math:`\left(U^{\sigma_j}\right)_{\mu_{i-1} \mu_i} = U_{\mu_{i-1} \sigma_i \mu_i}` for notational convenience and making it easier to follow along with the code.
 #
 # Graphically, this corresponds to splitting up the big rank-n tensor into :math:`n` smaller tensors, 
 # similar to what we did above in the example of compressing an image.
@@ -207,7 +209,7 @@ Us.append(U)
 
 ##############################################################################
 #
-# This procedure is repeated through all sites. The first step was special in that :math:`U^{\sigma_1}_{\mu_1}` is a vector for each value of :math:`\sigma_1`.
+# This procedure is repeated through all sites. The first step was special in that :math:`U_{\sigma_1 \mu_1}` is a vector for each value of :math:`\sigma_1`.
 # When splitting up :math:`\psi'_{\mu_1, (\sigma_2 \sigma_3)}` we combine the virtual bond with the current site, and have all remaining sites be the other leg of the matrix we create for SVD.
 # In particular, we do
 # 
@@ -373,10 +375,15 @@ Ms, Ss = dense_to_mps(psi, 5)
 # In the above construction, we unknowingly already baked in a very useful feature of our MPS because all the :math:`U` matrices from the SVD
 # are left-orthonormal (highlighted by the pink color of left-orthonormal tensors). In particular, they satisfy
 #
-# .. math:: \sum_{\sigma_i} \left(U^{\sigma_i} \right)^\dagger U^{\sigma_i} = \mathbb{I}.
+# .. math:: \sum_{\sigma_i} \left(U^{\sigma_i} \right)^\dagger U^{\sigma_i} = \mathbb{I},
 #
-# Here, we have written just the physical index :math:`\sigma_i` as a superscript, indicating that 
-# for each of the values we obtain a matrix :math:`U^{\sigma_i}` and we just have the standard matrix multiplication.
+# which is a compact matrix notation treating :math:`U^{\sigma_i}` as a matrix for a concrete value of :math:`\sigma_i`.
+# Making the coefficient in the matrix multiplication explicit we have
+# 
+# .. math:: \sum_{\sigma_i \mu_{i-1}} U^{*}_{\mu_{i-1} \sigma_i \mu'_i} U_{\mu_{i-1} \sigma_i \mu_i} = \mathbb{I}_{\mu'_i \mu_i}.
+#
+# Note that we only use the complex conjugation :math:`U^{*}` instead of Hermitian conjugate :math:`U^\dagger`
+# because we can just choose the indices to contract over, accordingly.
 #
 # Let us briefly confirm that:
 
@@ -387,13 +394,6 @@ for i in range(len(Ms)):
 
 ##############################################################################
 # This is a very powerful identity as it tells us that contracting a site of the MPS from the left is just the identity.
-# Making the matric multiplication explicit, we have
-# 
-# .. math:: \sum_{\sigma_i \mu_{i-1}} U^{*}_{\mu_{i-1} \sigma_i \mu'_i} U_{\mu_{i-1} \sigma_i \mu_i} = \mathbb{I}_{\mu'_i \mu_i}.
-#
-# Note that we only use the complex conjugation :math:`U^{*}` instead of Hermitian conjugate :math:`U^\dagger` because we can just choose the indices to contract over, accordingly.
-#
-# Or, graphically:
 #
 # .. figure:: ../_static/demonstration_assets/mps/left_orthonormal.png
 #     :align: center
