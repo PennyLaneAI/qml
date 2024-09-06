@@ -474,14 +474,14 @@ for i in range(len(Ms)):
 # .. note::
 # 
 #     Ground states of local and gapped Hamiltonians are known to satisfy the area law of entanglement.
-#     This law states that the entanglement entropy of a sub-system grows with its surface area area :math:`\partial V` instead of its volume :math:`V`.
+#     This law states that the entanglement entropy of a sub-system grows with its surface area :math:`\partial V` instead of its volume :math:`V`.
 #     For one dimensional systems, the volume is just a line and its surface area just a constant. The entanglement
 #     between any such sub-system in an MPS with a finite bond dimension :math:`\chi` is naturally bounded by :math:`\log(\chi)=\text{const.}`,
 #     so MPS satisfy the area law of entanglement for one-dimensional systems.
 # 
-#     PEPS are the natural generalization to regular 2D or 3D grids as well as more general graph connectivities, and are known to fulfill the
+#     PEPS are the natural generalization to regular 2D or 3D grids as well as more general graph connectivities and are known to fulfill the
 #     respective area laws of entanglement, making them the correct ansätze for local and gapped Hamiltonians in those cases. For example, for a 2D
-#     PEPS with square subsystem of volume :math:`L \times L` and bond dimension :math:`\chi`, the entanglement entropy between the that square and the rest of the system is bounded by
+#     PEPS with a square subsystem of volume :math:`L \times L` and bond dimension :math:`\chi`, the entanglement entropy between the square and the rest of the system is bounded by
 #     :math:`\log(\chi^L) = L \log(\chi)`, which is proportional to the circumference :math:`\propto L`, and not its area.
 #
 #     .. figure:: ../_static/demonstration_assets/mps/area_law.png
