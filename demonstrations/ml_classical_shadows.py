@@ -31,7 +31,7 @@ properties from the learned classical shadows. So let's get started!
     The latter is required for building the kernel for the infinite network used in training.
 
 
-Building the 2D Heisenberg Model
+Building the 2D Heisenberg model
 ---------------------------------
 
 We define a two-dimensional antiferromagnetic `Heisenberg model
@@ -242,7 +242,7 @@ plt.show()
 
 
 ######################################################################
-# Constructing Classical Shadows
+# Constructing classical shadows
 # ------------------------------
 #
 
@@ -486,7 +486,7 @@ plt.show()
 
 
 ######################################################################
-# Training Classical Machine Learning Models
+# Training classical machine learning models
 # ------------------------------------------
 #
 
