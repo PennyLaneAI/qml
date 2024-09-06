@@ -23,7 +23,7 @@
             "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_adversarial_attacks_qml.png"
         }
     ],
-    "seoDescription": "Learn how to attack and defend QML models.",
+    "seoDescription": "Learn how to construct adversarial attacks on classification networks and how to make quantum machine learning (QML) models more robust.",
     "doi": "",
     "canonicalURL": "/qml/demos/tutorial_adversarial_attacks_QML",
     "references": [
