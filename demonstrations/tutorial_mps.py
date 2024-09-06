@@ -588,7 +588,7 @@ res, dataset.vqe_energy
 # The answer is **finite size scaling**, or bond dimension scaling, or just extrapolation. This is a standard method 
 # in tensor network simulations and originates from condensed matter physics and quantum phase transitions. 
 # The idea is to run the same simulation with an increasing bond dimension and check that it saturates and converges to an extrapolated value.
-# In spirit, this is similar to :doc:`zero noise extrapolation <tutorial_diffable-mitigation>`.
+# In spirit, this is similar to :doc:`zero noise extrapolation </demos/tutorial_diffable-mitigation>`.
 #
 # We choose a range of bond dimensions and plot the results for the simulation against them, keeping in mind that
 # the maximum bond dimension of a system of :math:`n` qubits is :math:`2^{\frac{n}{2}}`.
