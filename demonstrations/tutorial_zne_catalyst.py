@@ -1,16 +1,15 @@
 r"""
 Digital Zero-Noise Extrapolation with Catalyst
-========================================
+==============================================
 
 In this tutorial, you will learn how to use Zero-Noise Extrapolation (ZNE) in combination with
-Catalyst, a quantum programming framework.
-We'll demonstrate how to generate noise-scaled circuits, execute them on a noisy quantum simulator,
-and use extrapolation techniques to estimate the zero-noise result, all while leveraging quantum
-just-in-time (QJIT) compilation via
-`Catalyst <https://docs.pennylane.ai/projects/catalyst/en/stable/index.html>`__.
+Catalyst. We'll demonstrate how to generate noise-scaled circuits, execute them on a noisy quantum
+simulator, and use extrapolation techniques to estimate the zero-noise result, all while
+leveraging just-in-time (JIT) compilation through
+`Catalyst <https://docs.pennylane.ai/projects/catalyst/en/stable/index.html>`_.
 
 What is ZNE
----------------
+-----------
 
 Zero-Noise Extrapolation (ZNE) is a technique used to mitigate the effect of noise on quantum
 computations. First introduced in [#temme2017zne]_, it helps improve the accuracy of quantum
@@ -24,18 +23,19 @@ Stage 1: Generating Noise-Scaled Circuits
 For ZNE to work, we need to generate circuits with **increased** noise. Currently, ZNE in Catalyst
 supports two methods for generating noise-scaled circuits:
 
-1. **Global folding**: If a circuit implements a global unitary :math:`\mathcal{U}`, global folding
-  applies :math:`\mathcal{U}(\mathcal{U}^\dagger\mathcal{U})^n` for some integer :math:`n`,
-  effectively scaling the noise in the entire circuit.
+1. **Global folding**: If a circuit implements a global unitary :math:`U`, global folding applies
+   :math:`U(U^\dagger U)^n` for some integer :math:`n`,
+   effectively scaling the noise in the entire circuit.
 2. **Local folding**: Individual gates are repeated (or folded) in contrast with the entire
-  circuit.
+   circuit.
 
 Stage 2: Running the circuits
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Once noise-scaled circuits are created, they need to be run! These can be executed on either real
-quantum hardware or a noisy quantum simulator. In this tutorial, we'll use the Qrack quantum
-simulator, which implements a noise model compatible with Catalyst.
+quantum hardware or a noisy quantum simulator. In this tutorial, we'll use the
+`Qrack quantum simulator <https://qrack.readthedocs.io/>`_, which implements a noise model
+compatible with Catalyst.
 
 Stage 3: Combining the results
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -52,6 +52,15 @@ Using ZNE in Catalyst
 ---------------------
 
 Let's see what this workflow looks like using Catalyst.
+To get things started we'll need two ingredients:
+
+1. an example quantum circuit to run
+2. a way to execute circuits
+
+The circuits we use here will be ..., and the method of execution will be a noisy simulation
+available through Qrack. The underlying noise model of this simulation is that of depolarizing
+noise.
+
 """
 
 import os
@@ -63,8 +72,6 @@ from pennylane import numpy as np
 from catalyst import qjit, mitigate_with_zne
 
 
-#############################################################################
-# We use Qrack because it implements a noise-model and it's compatible with Catalyst
 qubits = 2
 NOISE_LEVEL = 0.1
 os.environ["QRACK_GATE_DEPOLARIZATION"] = str(NOISE_LEVEL)
@@ -78,19 +85,58 @@ def circuit():
     return qml.expval(qml.PauliZ(wires=0))
 
 
-folding_factors = jax.numpy.array([1, 3, 5])
+##############################################################################
+# With a circuit and simulator defined, we can begin to define some of the necessary parameters
+# for ZNE. In particular we will need to specify
+#
+# 1. The noise scaling factors (i.e. how much to increase the depth of the circuit)
+# 2. The _method_ for scaling this noise up (in Catalyst there are two options: `global` and
+#    `local`)
+# 3. The extrapolation technique to use to estimate the ideal value (available in Catalyst are
+#    polynomial, and exponential extrapolation).
+#
+# We'll define the scale factors as a `jax.numpy.array` where the scale factors must be odd
+# integers.
+
+scale_factors = jax.numpy.array([1, 3, 5])
+
+##############################################################################
+# Next we'll choose a method for scaling the noise. This needs to be defined as a python string.
+
+folding_method = "local"
+
+##############################################################################
+# Finally, we'll choose the extrapolation technique. Both exponential and polynoamial extrapolation
+# is available in the `pennylane.transforms` module. Both of these functions can be passed directly
+# into `mitigate_with_zne`!
+
+from pennylane.transforms import exponential_extrapolate, poly_extrapolate
+
+extrapolation_method = exponential_extrapolate
+
+##############################################################################
+# We're now ready to run our example using ZNE with Catalyst! Putting these all together we're able
+# to define a very simple `QNode`!
 
 
 @qjit
 def mitigated_circuit():
-    return mitigate_with_zne(circuit, scale_factors=folding_factors)()
+    return mitigate_with_zne(
+        circuit,
+        scale_factors=scale_factors,
+        extrapolate=extrapolation_method,
+        folding=folding_method,
+    )()
 
 
 print(circuit())
 print(mitigated_circuit())
 
 ##############################################################################
-#
+# But there's still a big unanswered question! _If I can do this all in PennyLane, what is Catalyst
+# offering here?_ That's a **great** question! In order to explore the difference we'll need to
+# explore what happens when `catalyst.qjit` is, and is not, used!
+# ...
 
 
 ##############################################################################
