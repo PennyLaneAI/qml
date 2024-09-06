@@ -239,8 +239,7 @@ def qaoa_from_graph(graph, n_layers=1):
     def hamiltonian(params, **kwargs):
         """Evaluate the cost Hamiltonian, given the angles and the graph."""
 
-        # We set the default.qubit.tf device for seamless integration with TensorFlow
-        dev = qml.device("default.qubit.tf", wires=len(graph.nodes))
+        dev = qml.device("default.qubit", wires=len(graph.nodes))
 
         # This qnode evaluates the expectation value of the cost hamiltonian operator
         cost = qml.QNode(circuit, dev, diff_method="backprop", interface="tf")

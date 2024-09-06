@@ -127,18 +127,22 @@ Let’s implement the model depicted above!
 ######################################################################
 # Implementation of the VQLM
 # --------------------------
-# We start by importing the librairies that we will need.
+# We start by importing the libraries that we will need.
 
 import pennylane as qml
 import numpy as np
 
 import jax
-jax.config.update('jax_platform_name', 'cpu')
+
+jax.config.update("jax_platform_name", "cpu")
+jax.config.update("jax_enable_x64", True)
+
 from jax import numpy as jnp
 
 import scipy
 import matplotlib.pyplot as plt
 import sklearn
+
 ######################################################################
 # Let us construct Pauli matrices, which are used to build the Hamiltonian.
 X = np.array([[0, 1], [1, 0]])
@@ -148,7 +152,11 @@ Z = np.array([[1, 0], [0, -1]])
 sigmas = jnp.array(np.array([X, Y, Z]))  # Vector of Pauli matrices
 sigmas_sigmas = jnp.array(
     np.array(
-        [np.kron(X, X), np.kron(Y, Y), np.kron(Z, Z)]  # Vector of tensor products of Pauli matrices
+        [
+            np.kron(X, X),
+            np.kron(Y, Y),
+            np.kron(Z, Z),
+        ]  # Vector of tensor products of Pauli matrices
     )
 )
 
@@ -167,7 +175,6 @@ def singlet(wires):
     qml.PauliZ(wires=wires[0])
     qml.PauliX(wires=wires[1])
     qml.CNOT(wires=wires)
-
 
 
 ######################################################################
@@ -199,7 +206,6 @@ def equivariant_encoding(alpha, data, wires):
     hamiltonian = jnp.einsum("i,ijk", data, sigmas)  # Heisenberg Hamiltonian
     U = jax.scipy.linalg.expm(-1.0j * alpha * hamiltonian / 2)
     qml.QubitUnitary(U, wires=wires, id="E")
-
 
 
 ######################################################################
@@ -257,7 +263,7 @@ def trainable_layer(weight, wires):
     qml.QubitUnitary(U, wires=wires, id="U")
 
 
-# Invariant observbale
+# Invariant observable
 Heisenberg = [
     qml.PauliX(0) @ qml.PauliX(1),
     qml.PauliY(0) @ qml.PauliY(1),
@@ -290,12 +296,12 @@ B = 1  # Number of repetitions inside a trainable layer
 rep = 2  # Number of repeated vertical encoding
 
 active_atoms = 2  # Number of active atoms
-                  # Here we only have two active atoms since we fixed the oxygen (which becomes non-active) at the origin
+# Here we only have two active atoms since we fixed the oxygen (which becomes non-active) at the origin
 num_qubits = active_atoms * rep
 #################################
 
 
-dev = qml.device("default.qubit.jax", wires=num_qubits)
+dev = qml.device("default.qubit", wires=num_qubits)
 
 
 @qml.qnode(dev, interface="jax")
@@ -311,9 +317,7 @@ def vqlm(data, params):
 
     # Initial encoding
     for i in range(num_qubits):
-        equivariant_encoding(
-            alphas[i, 0], jnp.asarray(data)[i % active_atoms, ...], wires=[i]
-        )
+        equivariant_encoding(alphas[i, 0], jnp.asarray(data)[i % active_atoms, ...], wires=[i])
 
     # Reuploading model
     for d in range(D):
@@ -437,6 +441,7 @@ def inference(loss_data, opt_state):
 
     return E_pred, l
 
+
 #################################
 # **Parameter initialization:**
 #
@@ -466,8 +471,8 @@ running_loss = []
 # We train our VQLM using stochastic gradient descent.
 
 
-num_batches = 5000 # number of optimization steps
-batch_size = 256   # number of training data per batch
+num_batches = 5000  # number of optimization steps
+batch_size = 256  # number of training data per batch
 
 
 for ibatch in range(num_batches):
@@ -492,7 +497,7 @@ for ibatch in range(num_batches):
 history_loss = np.array(running_loss)
 
 fontsize = 12
-plt.figure(figsize=(4,4))
+plt.figure(figsize=(4, 4))
 plt.plot(history_loss[:, 0], "r-", label="training error")
 plt.plot(history_loss[:, 1], "b-", label="testing error")
 
@@ -512,7 +517,7 @@ plt.show()
 # could be improved, e.g. by using a deeper model as in the original paper.
 #
 
-plt.figure(figsize=(4,4))
+plt.figure(figsize=(4, 4))
 plt.title("Energy predictions", fontsize=fontsize)
 plt.plot(energy[indices_test], E_pred, "ro", label="Test predictions")
 plt.plot(energy[indices_test], energy[indices_test], "k.-", lw=1, label="Exact")

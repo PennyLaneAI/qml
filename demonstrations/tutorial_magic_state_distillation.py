@@ -249,13 +249,13 @@ import os
 dev_5_qubits = qml.device("default.qubit", wires=5)
 
 @jax.jit
-@qml.qnode(dev_5_qubits)
+@qml.qnode(dev_5_qubits, interface="jax")
 def T0_state():
     generate_T0(0)
     return qml.state()
 
 @jax.jit
-@qml.qnode(dev_5_qubits)
+@qml.qnode(dev_5_qubits, interface="jax")
 def faulty_T0_state(random_key, r):
     faulty_generate_T0(0, random_key, r)
     return qml.state()
