@@ -469,7 +469,7 @@ for i in range(len(Ms)):
 #
 # .. math:: S(\rho_{1:i}) \leq \log(\chi) = \text{const}.
 #
-# This is the area law of entanglement for one dimensional systems in that the surface area of a sub-system of a one-dimensional system is just two points, so constant in the system size.
+# This is the area law of entanglement for one dimensional systems. A "volume" in one spatial dimension is a line, and its surface area :math:`\partial V` two points, so constant in the system size.
 #
 # .. note::
 # 
