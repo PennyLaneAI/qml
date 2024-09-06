@@ -3,8 +3,8 @@ r"""Adversarial attacks and robustness for quantum machine learning
 """
 
 ######################################################################
-# This demo is based on the paper ‘A Comparative Analysis of Adversarial Robustness for Quantum and
-# Classical Machine Learning Models’ [#Wendlinger]_ by M.Wendlinger, K.Tscharke and P.Debus, which dives into the
+# This demo is based on the paper *A Comparative Analysis of Adversarial Robustness for Quantum and
+# Classical Machine Learning Models* [#Wendlinger]_ by M.Wendlinger, K.Tscharke and P.Debus, which dives into the
 # world of adversarial attacks on quantum computers to find relations to classical adversarial machine
 # learning. In the following, we briefly cover the necessary theoretical baselines of adversarial
 # attacks on classification networks before giving a hands-on example of how to construct such an
@@ -25,7 +25,7 @@ r"""Adversarial attacks and robustness for quantum machine learning
 # manipulations of the pixels can fool a classifier without any changes being visible to humans. A
 # typical example of an adversarial attack is shown in the picture above, where an image of a panda is
 # manipulated by adding a small noise to each pixel. The original image is correctly classified as
-# “Panda” while the image with tiny manipulations is falsely classified as “Gibbon” (the noise is
+# “Panda”, while the image with tiny manipulations is falsely classified as “Gibbon” (the noise is
 # magnified in the figure so we can actually see it). This example is adapted from a famous paper [#Goodfellow]_
 # showing the vulnerability of classical machine learning models to adversarial attacks.
 #
@@ -50,8 +50,8 @@ r"""Adversarial attacks and robustness for quantum machine learning
 # Why are adversarial attacks dangerous?
 # --------------------------------------
 #
-# Machine learning is becoming essential in many security-critical applications, for example in
-# cybersecurity, the medical sector, or autonomous vehicles. In cybersecurity, ML models are used,
+# Machine learning (ML) is becoming essential in many security-critical applications, for example in
+# `cybersecurity <https://arxiv.org/abs/1901.03407>`_, the `medical sector <https://arxiv.org/abs/1606.05718>`_, or `autonomous vehicles <https://arxiv.org/abs/1604.07316>`_. In cybersecurity, ML models are used,
 # amongst others, for malware detection or the prevention of attacks on networks. Given their critical
 # roles, any successful attack of these ML models can lead to severe consequences, ranging from
 # financial losses and privacy violations to threats to human life. As we have seen above, adversarial
