@@ -33,7 +33,7 @@ r"""Adversarial attacks and robustness for quantum machine learning
 # such that a sample :math:`x` leads to a predicted label :math:`y' \neq y` that is not the true label
 # :math:`y`. This is achieved by finding the perturbation :math:`\delta\in\Delta` to the original
 # input that maximizes the loss of the true class. For a loss function :math:`\mathcal{L}`, a model
-# :math:`f: \mathbb{R}^{D} \to \mathbb{R}^K` (mapping :math:`D`-dimensional input to softmax
+# :math:`f: \mathbb{R}^{D} \to \mathbb{R}^K` (mapping :math:`D`-dimensional input to `softmax <https://en.wikipedia.org/wiki/Softmax_function>`_
 # probability scores of :math:`K` classes with model parameters :math:`\theta^*`), the objective of
 # the untargeted attack is: 
 #
