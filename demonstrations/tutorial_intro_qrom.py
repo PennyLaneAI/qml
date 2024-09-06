@@ -171,10 +171,10 @@ print("Two-qubit gates: ", qml.specs(circuit)(0)["resources"].gate_sizes[2])
 #    :width: 70%
 #    :target: javascript:void(0)
 #
-# Therefore, we can divide the circuit in two fundamental parts:
+# In order to load the desired bitstring in the target wires, we use two building blocks in the construction:
 #
-# - **Select block**: Loads the :math:`r`-column in the target and work wires.
-# - **Swap block**: Swaps the :math:`r`-row to the target wires.
+# - **Select block**: Loads the c-th column in the target and work wires.
+# - **Swap block**: Swaps the r-th row to the target wires.
 #
 #
 # Let's look at an example by assuming we want to load in the target wires the bitstring with
@@ -276,28 +276,28 @@ for i in range(8):
 # .. math::
 #       |c\rangle |r\rangle |0\rangle |0\rangle \dots |0\rangle.
 #
-# 1. **A uniform superposition is created in the r-th register of the work wires**. To do this, we put the Hadamards in the target wires and move it to the :math:`r`-row with the Swap block.
+# 1. **A uniform superposition is created in the r-th register of the work wires**. To do this, we put the Hadamards in the target wires and move it to the r-th row with the Swap block:
 #
 # .. math::
 #       |c\rangle |r\rangle |0\rangle |0\rangle \dots |+\rangle_r \dots |0\rangle.
 #
-# 2. **Select block is applied.** This loads the whole column :math:`c` in the registers. Note that in the :math:`r`-th position, the Select has no effect since the state :math:`|+\rangle` is not modified by :math:`X` gates.
+# 2. **Select block is applied.** This loads the whole c-th column in the registers. Note that in the :math:`r`-th position, the Select has no effect since the state :math:`|+\rangle` is not modified by :math:`X` gates:
 #
 # .. math::
 #       |c\rangle |r\rangle |b_{c0}\rangle |b_{c1}\rangle \dots |+\rangle_r \dots |b_{c(R-1)}\rangle.
 #
 #
-# 3. **The Hadamard gate is applied to the r-th register of the work wires.** This returns that register to the zero state. The two Swap blocks and the Hadamard gate applied to the target wires achieve this.
+# 3. **The Hadamard gate is applied to the r-th register of the work wires.** This returns that register to the zero state. The two Swap blocks and the Hadamard gate applied to the target wires achieve this:
 #
 # .. math::
 #       |c\rangle |r\rangle |b_{c0}\rangle |b_{c1}\rangle \dots |0\rangle_r \dots |b_{c(R-1)}\rangle.
 #
-# 4. **Select block is applied.** Thanks to this, we clean the used registers. That is because loading the bitstring twice in the same register leaves the state as :math:`|0\rangle` since :math:`X^2 = \mathbb{I}`. On the other hand, the bitstring :math:`|b_{cr}\rangle` is loaded in the :math:`r` register.
+# 4. **Select block is applied.** Thanks to this, we clean the used registers. That is because loading the bitstring twice in the same register leaves the state as :math:`|0\rangle` since :math:`X^2 = \mathbb{I}`. On the other hand, the bitstring :math:`|b_{cr}\rangle` is loaded in the :math:`r` register:
 #
 # .. math::
 #       |c\rangle |r\rangle |0\rangle |0\rangle \dots |b_{cr}\rangle_r \dots |0\rangle.
 #
-# 5. **Swap block is applied.** With this, we move :math:`|b_{cr}\rangle` that is encoded in the :math:`r`-row to the target wires.
+# 5. **Swap block is applied.** With this, we move :math:`|b_{cr}\rangle` that is encoded in the r-th row to the target wires:
 #
 # .. math::
 #       |c\rangle |r\rangle |b_{cr}\rangle |0\rangle \dots |0\rangle_r \dots |0\rangle.
