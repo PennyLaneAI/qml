@@ -14,14 +14,14 @@ What is ZNE
 Zero-Noise Extrapolation (ZNE) is a technique used to mitigate the effect of noise on quantum
 computations. First introduced in [#temme2017zne]_, it helps improve the accuracy of quantum
 results by running circuits at varying noise levels and extrapolating back to a hypothetical
-zero-noise case. While this tutorial won't delve into the theory behind ZNE in detail, lets first
+zero-noise case. While this tutorial won't delve into the theory behind ZNE in detail, let's first
 review what happens when using the protocol in practice.
 
 Stage 1: Generating Noise-Scaled Circuits
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-For ZNE to work, we need to generate circuits with **increased** noise. Currently, ZNE in Catalyst
-supports two methods for generating noise-scaled circuits:
+In its digital version [#DZNEpaper]_, ZNE works by generating circuits with **increased** noise. 
+Currently, ZNE in Catalyst supports two methods for generating noise-scaled circuits:
 
 1. **Global folding**: If a circuit implements a global unitary :math:`U`, global folding applies
    :math:`U(U^\dagger U)^n` for some integer :math:`n`,
@@ -34,8 +34,9 @@ Stage 2: Running the circuits
 
 Once noise-scaled circuits are created, they need to be run! These can be executed on either real
 quantum hardware or a noisy quantum simulator. In this tutorial, we'll use the
-`Qrack quantum simulator <https://qrack.readthedocs.io/>`_, which implements a noise model
-compatible with Catalyst.
+`Qrack quantum simulator <https://qrack.readthedocs.io/>`_, which is both compatible with Catalyst,
+and implements a noise model. For more about the integration of Qrack and Catalyst, see
+the demo `QJIT compilation with Qrack and Catalyst <https://pennylane.ai/qml/demos/qrack/>`_.
 
 Stage 3: Combining the results
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -46,6 +47,16 @@ perfoming this extrapolation:
 
 1. **Polynomial extrapolation**, and
 2. **Exponential extrapolation**.
+
+Using ZNE with Pennylane
+------------------------
+The demo `Error mitigation with Mitiq and PennyLane <https://pennylane.ai/qml/demos/tutorial_error_mitigation/>`_
+shows how ZNE, along with other error mitigation techniques, can be carried out in Pennylane by using Mitiq, 
+a Python library developed by Unitary Fund.
+
+ZNE in particular is also offered out of the box in Pennylane as a *differentiable* error mitigation technique,
+for usage in combination with variational workflows. More on this in the tutorial 
+`Differentiating quantum error mitigation transforms <https://pennylane.ai/qml/demos/tutorial_diffable-mitigation/>`_.
 
 
 Using ZNE in Catalyst
@@ -103,7 +114,7 @@ scale_factors = jax.numpy.array([1, 3, 5])
 ##############################################################################
 # Next, we'll choose a method to scale the noise. This needs to be defined as a Python string.
 
-folding_method = "local"
+folding_method = "global"
 
 ##############################################################################
 # Finally, we'll choose the extrapolation technique. Both exponential and polynoamial extrapolation
@@ -137,6 +148,31 @@ print(mitigated_circuit())
 # offering here?_ That's a **great** question! In order to explore the difference we'll need to
 # explore what happens when `catalyst.qjit` is, and is not, used!
 # ...
+
+
+##############################################################################
+# Here is a recap of the landscape of QEM techniques available in Pennylane.
+#
+#     .. list-table::
+#        :widths: 30 35 20 15
+#        :header-rows: 1
+#
+#        * - **Framework**
+#          - **Techniques**
+#          - **Differentiable**
+#          - **JIT**
+#        * - Pennylane + Mitiq
+#          - ZNE, PEC, CDR, DDD, REM
+#          - 
+#          - 
+#        * - Pennylane transforms
+#          - ZNE
+#          - ✅
+#          - 
+#        * - Catalyst
+#          - ZNE
+#          - ✅
+#          - ✅
 
 
 ##############################################################################
