@@ -87,7 +87,7 @@ def circuit():
 
 ##############################################################################
 # With a circuit and simulator defined, we can begin to define some of the necessary parameters
-# for ZNE. In particular we will need to specify
+# In particular we will need to specify:
 #
 # 1. The noise scaling factors (i.e. how much to increase the depth of the circuit)
 # 2. The _method_ for scaling this noise up (in Catalyst there are two options: `global` and
@@ -101,7 +101,7 @@ def circuit():
 scale_factors = jax.numpy.array([1, 3, 5])
 
 ##############################################################################
-# Next we'll choose a method for scaling the noise. This needs to be defined as a python string.
+# Next, we'll choose a method to scale the noise. This needs to be defined as a Python string.
 
 folding_method = "local"
 
