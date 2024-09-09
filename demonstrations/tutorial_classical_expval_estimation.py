@@ -55,8 +55,10 @@ Lastly, the observable :math:`H` can be decomposed into a sum of Pauli words as
     H = \sum_{\ell=1}^L h_\ell P_\ell, \quad P_\ell \in \{I, X, Y, Z\}^{\otimes N}.
 
 Here, :math:`N` is the total number of qubits.
-Each of the Pauli words should not have support (i.e., a non-identity component)
-on more qubits than a certain threshold.
+The number of qubits on which a Pauli word is supported (i.e., has a non-identity
+component) is called its *weight*.
+For the algorithm to work, the weights of the Hamiltonian Pauli words may not
+exceed a set threshold.
 For our example we pick the Heisenberg model Hamiltonian
 
 .. math::
@@ -233,7 +235,7 @@ cnot_table = {
 # Both existing algorithms and the new work [#angrisani]_ therefore use
 # truncation methods to keep the number of Pauli words that need to be tracked
 # below a reasonable threshold.
-# The algorithm we discuss here does this based on the support of the tracked Pauli
+# The algorithm we discuss here does this based on the weight of the tracked Pauli
 # words. For a chosen threshold :math:`k`, it simply discards all Pauli words with
 # non-trivial tensor factors on more than :math:`k` qubits.
 #
@@ -252,7 +254,7 @@ cnot_table = {
 # observable easily. Let's start with two functions that implement a
 # single-qubit rotation and a :math:`\operatorname{CNOT}` gate in the Heisenberg
 # picture, respectively. Note that single-qubit rotation gates do not
-# require us to implement truncation, because it never increases the support of
+# require us to implement truncation, because it never increases the weight of
 # a Pauli word.
 #
 
@@ -401,16 +403,28 @@ print(f"The numerically exact expectation value is                        {exact
 # Second, there is a requirement for the structure and gates of the parametrized circuit:
 # We need to be able to divide the circuit into layers such that each layer, together with
 # the distribution of parameters we consider for the parametrized family, does not change under
-# random single-qubit rotations. This may sound complicated, but for our purposes it is sufficient
-# to note that the hardware-efficient layers from above do satisfy this requirement.
+# random single-qubit rotations. This may sound complicated, but is easy to understand for a
+# small example: Consider an arbitrary rotation :class:`~.pennylane.Rot` on a single qubit,
+# together with a distribution for its three angles that leads Haar random rotations
+# (see our :doc:`tutorial on the Haar measure </demos/tutorial_haar_measure>` for details).
+# This parametrized rotation then is unchanged if we apply another Haar random rotation!
+# That is, even though an individual rotation does get modified, the *distribution* of rotations
+# remains the same (an important property of the Haar measure!). For our purposes it is sufficient
+# to note that the hardware-efficient layers from above do indeed satisfy this requirement.
 # Please take a look at the original paper for further details [#agrisani]_.
 #
 # Third, the parametrized circuit may not "branch too much".
-# That is, if a Pauli word has support on :math:`r` qubits, no layer of the circuit
+# That is, if a Pauli word has weight :math:`r`, no layer of the circuit
 # may produce more than :math:`n^r` different Pauli words under the Heisenberg evolution.
-# Again, we refer to the paper for details, but note that the hardware-efficient circuit
-# with the used entangler ring can create at most :math:`4^r` different Pauli words in one
-# layer.
+# For our hardware-efficient circuit, we can bound this amount of branching directly:
+# Each :math:`\operatorname{CNOT}` in the entangling layer can at most double the weight of the Pauli word, e.g.,
+# if each :math:`\operatorname{CNOT}` gate hits a :math:`Z` on its target qubit.
+# Afterwards, each single-qubit rotation can create all three Pauli operators on each
+# qubit in the support of the enlarged Pauli word, leading to a factor of three.
+# Taken together, a Pauli word with weight :math:`r` is transformed into at most
+# :math:`3^{2r}=9^r` Pauli words with weights at most :math:`2r`. The requirement
+# of not "branching too much" therefore is satisfied.
+# Again, we refer to the paper for further details.
 #
 # Conclusion
 # ----------
@@ -460,6 +474,6 @@ print(f"The numerically exact expectation value is                        {exact
 #     Tomislav Begušić, Johnnie Gray, Garnet Kin-Lic Chan
 #     "Fast and converged classical simulations of evidence for the utility of quantum computing before fault tolerance"
 #     `arXiv:2308.05077 <https://arxiv.org/abs/2308.05077>`__, 2023.
-# 
+#
 # About the author
 # ----------------
