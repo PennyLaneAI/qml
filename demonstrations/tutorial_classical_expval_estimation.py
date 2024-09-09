@@ -377,26 +377,9 @@ print(f"The numerically exact expectation value is                        {exact
 ##############################################################################
 # Wonderful, we have a working approximate simulation of the circuit that is scalable (for
 # fixed :math:`k`) that estimates the expectation value of :math:`H`!
-#
-# It is hard to judge it from a single estimate, though. So let's sample a few parameter
-# settings and collect the error in the estimates:
-
-num_samples = 10
-diffs = []
-
-for sample in tqdm(range(num_samples)):
-    params = np.random.random((num_layers, num_qubits, 3))
-    expval = run_estimate(params)
-    exact_expval = run_lightning(params)
-    diffs.append(abs(expval - exact_expval))
-
-print(
-    f"The differences are {np.mean(diffs):.6f} on average, with a standard deviation of {np.std(diffs):.6f}"
-)
-
-
-##############################################################################
-# We obtain approximations of the observable expectation values, with an error around :math:`5\times 10^{-3}`.
+# Note that a single estimate neither is a proof that the algorithm works in general,
+# nor is it the subject of the main results by Angrisani et al.
+# However, doing a full-fledged benchmark goes beyond this demo.
 #
 # Fine print
 # ----------
