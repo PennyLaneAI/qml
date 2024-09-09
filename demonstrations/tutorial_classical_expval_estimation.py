@@ -393,8 +393,8 @@ def run_lightning(params, H):
 
 exact_expval = run_lightning(params, H)
 
-print(f"Truncated Pauli propagation estimated the expectation value to be {expval:.6f}")
-print(f"The numerically exact expectation value is                        {exact_expval:.6f}")
+print(f"Expectation value estimated by truncated Pauli propagation: {expval:.6f}")
+print(f"Numerically exact expectation value:                        {exact_expval:.6f}")
 
 
 ##############################################################################
@@ -485,8 +485,8 @@ specific_params = np.ones((num_layers, num_qubits, 3)) * np.pi / 4
 expval = run_estimate(specific_params, H)
 exact_expval = run_lightning(specific_params, H)
 
-print(f"Truncated Pauli propagation estimated the expectation value to be {expval:.6f}")
-print(f"The numerically exact expectation value is                        {exact_expval:.6f}")
+print(f"Expectation value estimated by truncated Pauli propagation: {expval:.6f}")
+print(f"Numerically exact expectation value:                        {exact_expval:.6f}")
 
 ##############################################################################
 # As we can see, the estimation error became quite large, although we reduced the
