@@ -478,8 +478,12 @@ print(f"The numerically exact expectation value is                        {exact
 # Similar to the result discussed here, there already exist other classes of quantum circuits
 # for which this estimation task is easy, but sampling from the quantum state prepared by
 # the circuit is hard.
-# This includes so-called Instantaneous quantum polynomial-time (IQP) circuits
+# One prominent example are so-called instantaneous quantum polynomial-time (IQP) circuits
 # [#bremner]_, [#bremner2]_, which arise in the context of :doc:`Boson sampling </demos/gbs>`.
+#
+# Finally, it is important to note that while truncated Pauli propagation scales
+# polynomially with the qubit count, the exponent of this scaling contains :math:`k`,
+# which still can lead to impractical computational cost, e.g., for deep circuits.
 #
 # References
 # ----------
