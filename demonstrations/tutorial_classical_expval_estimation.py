@@ -433,7 +433,7 @@ print(f"The numerically exact expectation value is                        {exact
 # the distribution of parameters we consider for the parametrized family, does not change under
 # random single-qubit rotations. The circuit and its parameter distribution are said to be
 # *locally scrambling* in this case.
-# 
+#
 # This may sound complicated, but is easy to understand for a
 # small example: Consider an arbitrary rotation :class:`~.pennylane.Rot` on a single qubit,
 # together with a distribution for its three angles that leads to Haar random rotations
@@ -453,7 +453,7 @@ print(f"The numerically exact expectation value is                        {exact
 # Third, the parametrized circuit may not "branch too much." That is, if a Pauli word has
 # weight :math:`r`, none of the locally scrambling layers of the circuit
 # may produce more than :math:`n^r` different Pauli words under the Heisenberg evolution.
-# 
+#
 # For our hardware-efficient circuit, we can bound this amount of branching directly:
 # Each :math:`\operatorname{CNOT}` in the entangling layer can at most double the weight of the Pauli word, e.g.,
 # if each :math:`\operatorname{CNOT}` gate hits a :math:`Z` on its target qubit.
