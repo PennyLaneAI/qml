@@ -437,13 +437,12 @@ print(f"The numerically exact expectation value is                        {exact
 # Counter-example
 # ---------------
 #
-# After spending these thoughts on the fine print of the simulation algorithm,
-# let's see how it fails in practice if we are not careful with the assumptions.
-# In particular, if we ignore the first point in the previous section, we could
-# expect the algorithm to simulate our circuit for any specific choice of parameters.
-# So let's be ignorant, and try just that! We set all parameters to :math:`\frac{\pi}{4}` and
-# even *reduce* the number of qubits and layers, which makes the task easier for other classical
-# simulation tools (such as Lightning qubit).
+# As emphasized in the fine print above, we should not expect the classical algorithm
+# to produce precise expectation value estimates for all parameter settings.
+# So let's evaluate our circuit for a specific parameter setting with all parameters set to
+# :math:`\frac{\pi}{4}`. In addition, we even *reduce* the number of qubits and layers,
+# which makes the task easier for other classical simulation tools (such as Lightning qubit),
+# but does not help the truncated Pauli propagation.
 
 num_qubits = 15
 num_layers = 3
@@ -459,10 +458,10 @@ print(f"Truncated Pauli propagation estimated the expectation value to be {expva
 print(f"The numerically exact expectation value is                        {exact_expval:.6f}")
 
 ##############################################################################
-# As we can see, the estimation error became larger, although we made the task easier
-# on typical classical simulators. This is a manifestation of the statement that the
-# algorithm only will estimate expectation values successfully *on average* over the
-# parameter domain.
+# As we can see, the estimation error became quite large, although we reduced the
+# qubit and layer count while keeping :math:`k` fixed.
+# This is a manifestation of the statement that the algorithm only will estimate expectation
+# values successfully *on average* over the parameter domain.
 #
 # Conclusion
 # ----------
