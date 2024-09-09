@@ -25,6 +25,11 @@ This result is important, as it casts doubt on the usefulness of generic paramet
 circuits in quantum computations. Read on if you are wondering whether this
 preprint just dequantized your work!
 
+.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_classical_expval_estimation.png
+    :align: center
+    :width: 60%
+    :target: javascript:void(0)
+
 Our target: Estimating expectation values from quantum circuits
 ---------------------------------------------------------------
 
