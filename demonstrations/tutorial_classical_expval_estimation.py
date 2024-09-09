@@ -449,7 +449,7 @@ print(f"The numerically exact expectation value is                        {exact
 # to produce precise expectation value estimates for all parameter settings.
 # So let's evaluate our circuit for a specific parameter setting with all parameters set to
 # :math:`\frac{\pi}{4}`. In addition, we will even *reduce* the number of qubits and layers,
-# which makes the task easier for other classical simulation tools (such as 
+# which makes the task easier for other classical simulation tools (such as
 # `Lightning qubit <https://docs.pennylane.ai/projects/lightning/en/stable/lightning_qubit/device.html>`__
 # ), but does not help the truncated Pauli propagation.
 
