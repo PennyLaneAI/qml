@@ -11,35 +11,39 @@ gates alone can be simulated classically, provided that the initial state
 of the circuit is "nice enough" (also see the :doc:`PennyLane Demo on Clifford simulation
 </demos/tutorial_clifford_circuit_simulations>`).
 
-In this short demo we will look at a new result of this type by Angrisani
-et al. [#angrisani]_.
-Roughly, it provides an efficient classical algorithm to estimate expectation
-values of local observables for a large class of parametrized quantum circuits.
-Some conditions apply here, but we will get to those later.
+In this demo we will showcase a new result on classical simulation of quantum
+circuits at a glance! For this, we will learn about *Pauli propagation*, how to
+truncate it, and how it results in an efficient classical algorithm for
+estimating expectation values of parametrized quantum circuits (on average
+across parameter settings).
+We will implement a basic variant in PennyLane, and discuss limitations and the
+important details that lie at the heart of the new preprint called
+*Classically estimating observables of noiseless quantum circuits*
+by Angrisani et al. [#angrisani]_.
 
-First, we will focus on the main technique of this algorithm, called Pauli propagation,
-which is not unique to this algorithm, but is also used by related simulation
-algorithms [#aharonov]_, [#lowesa]_, [#begusic]_.
-We will introduce Pauli propagation mathematically and implement a basic variant
-of the algorithm in code.
-Afterwards, we will outline some of the important details behind the
-overly simplified statement "Parametrized quantum circuits can be simulated
-classically", which are the important core of the new result [#angrisani]_.
+This result is important, as it casts doubt on the usefulness of generic parametrized quantum
+circuits in quantum computations. Read on if you are wondering whether this
+preprint just dequantized your work!
 
-Which computation are we going to simulate?
--------------------------------------------
+Our target: Estimating expectation values from quantum circuits
+---------------------------------------------------------------
 
 Let's start by looking at the type of quantum computations that we want to
 simulate classically.
 Given an initial state :math:`|\psi_0\rangle`, a parametrized quantum
-circuit :math:`U(\theta)`, and an observable :math:`H`, a common task is
-to compute the expectation value
+circuit :math:`U(\theta)`, and an observable :math:`H`, a common task in
+many variational quantum algorithms is to compute the expectation value
 
 .. math::
 
     E(\theta) = \langle \psi_0 | U^\dagger(\theta) H U(\theta) |\psi_0\rangle
 
 for various parameter settings :math:`\theta`.
+Being able to estimate such an expectation value efficiently is required
+to train the parametrized quantum circuit in applications such as 
+:doc:`QAOA </demos/tutorial_qaoa_intro>`,
+the :doc:`variational quantum eigensolver </demos/tutorial_vqe>` and a wide
+range of :doc:`quantum machine learning </whatisqml>` tasks.
 
 For simplicity, we will assume the initial state to be
 :math:`|\psi_0\rangle=|0\rangle` throughout, and discuss other initial states
@@ -67,11 +71,11 @@ For our example we pick the Heisenberg model Hamiltonian
 
     H_{XYZ} = \sum_{j=1}^{N-1} h_j^{(X)} X_j X_{j+1} + h_j^{(Y)} Y_j Y_{j+1} + h_j^{(Z)} Z_j Z_{j+1}
 
-with random coefficients :math:`h_j^{(X|Y|Z)}`.
-Again, we will discuss the type of Hamiltonians that the algorithm can tackle
-further below.
+with random coefficients :math:`h_j^{(X|Y|Z)}`. In :math:`H_{XYZ}`, each Pauli word
+has weight two.
 
-For now, let's define the Hamiltonian and the circuit ansatz. We pick a
+We will discuss the type of Hamiltonians that the algorithm can tackle
+further below, but for now, let's define the Hamiltonian and the circuit ansatz. We pick a
 :math:`\operatorname{CNOT}` layer on a ring as entangler for the ansatz.
 We transform the ``ansatz`` function with :func:`~.pennylane.transforms.make_tape`, making
 the function into one that returns a tape containing the gates (and expectation value).
@@ -132,8 +136,11 @@ print(qml.drawer.tape_text(tape))
 #
 # Here we will use a technique based on the Heisenberg picture, which
 # describes the evolution of the measurement observable :math:`H` instead.
-# That is, each gate :math:`V`, be it parametrized or not, acts on the observable
-# via
+# This technique is called *Pauli propagation* and has also been used by
+# related simulation algorithms [#aharonov]_, [#lowesa]_, [#begusic]_.
+#
+# In the Heisenberg picture, each gate :math:`V`, be it parametrized or not,
+# acts on the observable via
 #
 # .. math::
 #
@@ -352,7 +359,7 @@ def execute_tape(tape, k=None):
 ##############################################################################
 # Great! So let's run it on our circuit, but now on 25 qubits and with 5 layers,
 # and compare the result to the exact value from PennyLane's `fast statevector simulator,
-# Lightning Qubit <https://pennylane.ai/performance/>`__.
+# Lightning Qubit <https://docs.pennylane.ai/projects/lightning/en/stable/lightning_qubit/device.html>`__.
 # We also set the truncation threshold to :math:`k=8`.
 
 num_qubits = 25
@@ -389,7 +396,7 @@ print(f"The numerically exact expectation value is                        {exact
 # fixed :math:`k`) that estimates the expectation value of :math:`H`!
 # Note that a single estimate neither is a proof that the algorithm works in general,
 # nor is it the subject of the main results by Angrisani et al.
-# However, doing a full-fledged benchmark goes beyond this demo.
+# However, a full-fledged benchmark goes beyond this demo.
 #
 # Fine print
 # ----------
@@ -442,8 +449,9 @@ print(f"The numerically exact expectation value is                        {exact
 # to produce precise expectation value estimates for all parameter settings.
 # So let's evaluate our circuit for a specific parameter setting with all parameters set to
 # :math:`\frac{\pi}{4}`. In addition, we will even *reduce* the number of qubits and layers,
-# which makes the task easier for other classical simulation tools (such as Lightning qubit),
-# but does not help the truncated Pauli propagation.
+# which makes the task easier for other classical simulation tools (such as 
+# `Lightning qubit <https://docs.pennylane.ai/projects/lightning/en/stable/lightning_qubit/device.html>`__
+# ), but does not help the truncated Pauli propagation.
 
 num_qubits = 15
 num_layers = 3
