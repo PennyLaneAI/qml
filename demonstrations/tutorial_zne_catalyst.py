@@ -108,7 +108,7 @@ noisy_device = qml.device("qrack.simulator", n_wires, isNoisy=True)
 
 noisy_qnode = qml.QNode(circuit, device=noisy_device)
 noisy_value = noisy_qnode(w1, w2)
-print(f"Error without  mitigation: {abs((ideal_value - noisy_value) / ideal_value):.3f}")
+print(f"Error without  mitigation: {abs(ideal_value - noisy_value):.3f}")
 
 
 ##############################################################################
@@ -136,9 +136,9 @@ folding_method = "global"
 # is available in the `pennylane.transforms` module. Both of these functions can be passed directly
 # into `mitigate_with_zne`!
 
-from pennylane.transforms import exponential_extrapolate, poly_extrapolate
+from pennylane.transforms import exponential_extrapolate, richardson_extrapolate
 
-extrapolation_method = exponential_extrapolate
+extrapolation_method = richardson_extrapolate
 
 ##############################################################################
 # We're now ready to run our example using ZNE with Catalyst! Putting these all together we're able
@@ -146,7 +146,7 @@ extrapolation_method = exponential_extrapolate
 
 
 @qjit
-def mitigated_circuit(w1, w2):
+def mitigated_circuit_qjit(w1, w2):
     return mitigate_with_zne(
         noisy_qnode,
         scale_factors=scale_factors,
@@ -154,14 +154,27 @@ def mitigated_circuit(w1, w2):
         folding=folding_method,
     )(w1, w2)
 
-zne_value = mitigated_circuit(w1, w2)
-print(f"Error with mitigation: {abs((ideal_value - zne_value) / ideal_value):.3f}")
+zne_value = mitigated_circuit_qjit(w1, w2)
+print(f"Error with mitigation: {abs(ideal_value - zne_value):.3f}")
 
 ##############################################################################
 # But there's still a big unanswered question! _If I can do this all in PennyLane, what is Catalyst
 # offering here?_ That's a **great** question! In order to explore the difference we'll need to
 # explore what happens when `catalyst.qjit` is, and is not, used!
 # ...
+
+# ZNE in non-catalyst pennylane
+def mitigated_circuit(w1, w2):
+    return qml.transforms.mitigate_with_zne(
+        noisy_qnode,
+        scale_factors=scale_factors,
+        extrapolate=extrapolation_method,
+        folding=qml.transforms.fold_global,
+    )(w1, w2)
+
+zne_value = mitigated_circuit(w1, w2)
+print(f"Error with mitigation: {abs(ideal_value - zne_value):.3f}")
+
 
 
 ##############################################################################
