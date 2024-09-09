@@ -9,10 +9,10 @@
 
         }
     ],
-    "dateOfPublication": "2024-12-31T00:00:00+00:00",
-    "dateOfLastModification": "2024-12-31T00:00:00+00:00",
+    "dateOfPublication": "2024-09-16T00:00:00+00:00",
+    "dateOfLastModification": "2024-09-16T00:00:00+00:00",
     "categories": ["Quantum Machine Learning", "Quantum Computing"],
-    "tags": ["Quantum Machine Learning", "QML", "Adversarial attacks", "Quantum security"],
+    "tags": ["Quantum machine learning", "QML", "Adversarial attacks", "Quantum security"],
     "previewImages": [
         {
             "type": "thumbnail",
