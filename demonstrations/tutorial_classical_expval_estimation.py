@@ -169,7 +169,6 @@ for op0, op1 in product([qml.Identity, qml.X, qml.Y, qml.Z], repeat=2):
     new_op = cnot @ original_op @ cnot
     new_op = qml.pauli_decompose(new_op.matrix())
     print(f"CNOT transformed {original_op} to {new_op}")
-    print(cnot.pauli_rep @ original_op.pauli_rep)
 
 ##############################################################################
 # This fully specifies the action of :math:`\operatorname{CNOT}` on any Pauli word,
@@ -427,6 +426,32 @@ print(f"The numerically exact expectation value is                        {exact
 # :math:`3^{2r}=9^r` Pauli words with weights at most :math:`2r`. The requirement
 # of not "branching too much" therefore is satisfied, because :math:`9^r<n^r` from the complexity
 # theoretic perspective.
+#
+# Counter-example
+# ---------------
+#
+# After spending these thoughts on the fine print of the simulation algorithm,
+# let's see how it fails in practice if we are not careful with the assumptions.
+# In particular, if we ignore the first point in the previous section, we could
+# expect the algorithm to simulate our circuit for any specific choice of parameters.
+# So let's be ignorant, and try just that! We set all parameters to :math:`\frac{\pi}{4}` and
+# even *reduce* the number of qubits and layers, which makes the task easier for other classical
+# simulation tools (such as Lightning qubit).
+
+num_qubits = 15
+num_layers = 3
+H_coeffs = np.random.random((num_qubits - 1) * 3)
+H_ops = [op(j) @ op(j + 1) for j in range(num_qubits - 1) for op in [qml.X, qml.Y, qml.Z]]
+H = qml.dot(H_coeffs, H_ops)
+specific_params = np.ones((num_layers, num_qubits, 3)) * np.pi / 4
+
+expval = run_estimate(specific_params, H)
+exact_expval = run_lightning(specific_params, H)
+
+print(f"Truncated Pauli propagation estimated the expectation value to be {expval:.6f}")
+print(f"The numerically exact expectation value is                        {exact_expval:.6f}")
+
+##############################################################################
 #
 # Conclusion
 # ----------
