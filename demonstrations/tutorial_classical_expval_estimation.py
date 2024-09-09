@@ -2,20 +2,20 @@ r"""
 Classically estimating expectation values from parametrized quantum circuits
 ============================================================================
 
-In the race between quantum and classical computing, an important question
+In the race between classical and :doc:`quantum computing </quantum-computing>`, an important question
 is whether there exist efficient classical algorithms to simulate quantum
 circuits.
-Probably the most widely-known result of this type is the Gottesman-Knill
+Probably the most widely-known result of this type is the Gottesman–Knill
 theorem [#gottesman]_. It states that quantum circuits consisting of Clifford
 gates alone can be simulated classically, provided that the initial state
-of the circuit is "nice enough" (also see :doc:`our demo on Clifford simulation
+of the circuit is "nice enough" (also see the :doc:`PennyLane Demo on Clifford simulation
 </demos/tutorial_clifford_circuit_simulations>`).
 
 In this short demo we will look at a new result of this type by Angrisani
 et al. [#angrisani]_.
 Roughly, it provides an efficient classical algorithm to estimate expectation
 values of local observables for a large class of parametrized quantum circuits.
-Again, some conditions apply to which we will get later.
+Some conditions apply here, but we will get to those later.
 
 First, we will focus on the main technique of this algorithm, called Pauli propagation,
 which is not unique to this algorithm, but is also used by related simulation
@@ -45,10 +45,11 @@ For simplicity, we will assume the initial state to be
 :math:`|\psi_0\rangle=|0\rangle` throughout, and discuss other initial states
 later on.
 Similarly, we will work with a particular example for the circuit
-:math:`U(\theta)` and discuss the class of parametrized circuits the algorithm
+:math:`U(\theta)` and discuss the class of :doc:`parametrized circuits </glossary/variational_circuit/>` the algorithm
 can tackle further below.
-For our demo, we choose the widely-used hardware-efficient ansatz, which alternates
-arbitrary single qubit rotations with layers of entangling gates.
+
+For our demo, we choose the widely used hardware-efficient ansatz, which alternates
+arbitrary single-qubit rotations with layers of entangling gates.
 Lastly, the observable :math:`H` can be decomposed into a sum of Pauli words as
 
 .. math::
@@ -58,7 +59,7 @@ Lastly, the observable :math:`H` can be decomposed into a sum of Pauli words as
 Here, :math:`N` is the total number of qubits.
 The number of qubits on which a Pauli word is supported (i.e., has a non-identity
 component) is called its *weight*.
-For the algorithm to work, the weights of the Hamiltonian Pauli words may not
+For the algorithm to work, the weights of the Hamiltonian's Pauli words may not
 exceed a set threshold.
 For our example we pick the Heisenberg model Hamiltonian
 
@@ -125,8 +126,8 @@ print(qml.drawer.tape_text(tape))
 #
 # A standard classical simulation technique for quantum circuits is based on
 # state vector simulation, which updates the state vector of the quantum system
-# with each gate applied to it. From a physics perspective, this is the Schrödinger
-# picture evolution of the quantum state. To conclude the simulation, this approach
+# with each gate applied to it. From a physics perspective, this is the evolution of
+# a quantum state in the Schrödinger picture. To conclude the simulation, this approach
 # then contracts the evolved state with the observable :math:`H`.
 #
 # Here we will use a technique based on the Heisenberg picture, which
@@ -221,13 +222,13 @@ cnot_table = {
 # Pauli rotations act on a Pauli word, we will be able to tackle our example
 # circuit.
 #
-# Before we move on to implementing it, there is a *crucial* point missing, still!
+# But before we move on to implementing it, there is still a *crucial* point missing!
 #
-# Truncating Pauli propagation
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Truncating the Pauli propagation
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # Pauli propagation is a neat way to approach the task of estimating expectation
-# values like :math:`E(\theta)` that we are after. However, if we were to run
+# values that we are after, like :math:`E(\theta)`. However, if we were to run
 # a classical simulation using this approach as is, we would quickly run into
 # a scaling problem. There are :math:`4^N` Pauli words on :math:`N` qubits, an
 # unfeasibly large number if we hit all of them during our simulation.
@@ -244,7 +245,7 @@ cnot_table = {
 # for a wide class of parametrized circuits at most parameter settings.
 #
 # Note that the truncation step requires the Pauli words of the initial :math:`H`
-# to be at most :math:`k`-local, as they get truncated away otherwise. Alternatively
+# to be at most :math:`k`-local, as they get truncated away otherwise. Alternatively,
 # non-local terms need to make a negligible contribution to the expectation value
 # in order for the truncation to be a good approximation.
 #
@@ -350,7 +351,7 @@ def execute_tape(tape, k=None):
 
 ##############################################################################
 # Great! So let's run it on our circuit, but now on 25 qubits and with 5 layers,
-# and compare to the exact value from PennyLane's `fast statevector simulator,
+# and compare the result to the exact value from PennyLane's `fast statevector simulator,
 # Lightning Qubit <https://pennylane.ai/performance/>`__.
 # We also set the truncation threshold to :math:`k=8`.
 
@@ -413,7 +414,7 @@ print(f"The numerically exact expectation value is                        {exact
 # random single-qubit rotations. This may sound complicated, but is easy to understand for a
 # small example: Consider an arbitrary rotation :class:`~.pennylane.Rot` on a single qubit,
 # together with a distribution for its three angles that leads to Haar random rotations
-# (see our :doc:`tutorial on the Haar measure </demos/tutorial_haar_measure>` for details).
+# (see the :doc:`PennyLane Demo on the Haar measure </demos/tutorial_haar_measure>` for details).
 # This parametrized rotation then is unchanged if we apply another Haar random rotation!
 # That is, even though an individual rotation does get modified, the *distribution* of rotations
 # remains the same (an important property of the Haar measure!). For our purposes it is sufficient
@@ -421,7 +422,7 @@ print(f"The numerically exact expectation value is                        {exact
 # Please take a look at the original paper for further details [#angrisani]_, in particular
 # Sections II and VIII and Appendix A.
 #
-# Third, the parametrized circuit may not "branch too much".
+# Third, the parametrized circuit may not "branch too much."
 # That is, if a Pauli word has weight :math:`r`, no layer of the circuit
 # may produce more than :math:`n^r` different Pauli words under the Heisenberg evolution.
 # For our hardware-efficient circuit, we can bound this amount of branching directly:
@@ -434,13 +435,13 @@ print(f"The numerically exact expectation value is                        {exact
 # of not "branching too much" therefore is satisfied, because :math:`9^r<n^r` from the complexity
 # theoretic perspective.
 #
-# Counter-example
-# ---------------
+# Counterexample
+# --------------
 #
 # As emphasized in the fine print above, we should not expect the classical algorithm
 # to produce precise expectation value estimates for all parameter settings.
 # So let's evaluate our circuit for a specific parameter setting with all parameters set to
-# :math:`\frac{\pi}{4}`. In addition, we even *reduce* the number of qubits and layers,
+# :math:`\frac{\pi}{4}`. In addition, we will even *reduce* the number of qubits and layers,
 # which makes the task easier for other classical simulation tools (such as Lightning qubit),
 # but does not help the truncated Pauli propagation.
 
