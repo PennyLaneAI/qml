@@ -452,6 +452,10 @@ print(f"Truncated Pauli propagation estimated the expectation value to be {expva
 print(f"The numerically exact expectation value is                        {exact_expval:.6f}")
 
 ##############################################################################
+# As we can see, the estimation error became larger, although we made the task easier
+# on typical classical simulators. This is a manifestation of the statement that the
+# algorithm only will estimate expectation values successfully *on average* over the
+# parameter domain.
 #
 # Conclusion
 # ----------
