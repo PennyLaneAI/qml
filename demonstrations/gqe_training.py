@@ -256,7 +256,7 @@ train_sub_seq_en = get_subsequence_energies(train_op_seq)
 # which are equal to those described in [#nakaji2024]_. Our GPT model would then have around 85 million parameters
 # and is ``324.25 MB`` in size. We can import from the repo directly with:
 
-!curl -O https://raw.githubusercontent.com/karpathy/nanoGPT/master/model.py
+# !curl -O https://raw.githubusercontent.com/karpathy/nanoGPT/master/model.py
 from model import GPT, GPTConfig
 
 # Since the loss function for our problem is different from usual language model training, we 
