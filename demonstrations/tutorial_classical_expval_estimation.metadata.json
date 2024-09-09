@@ -2,7 +2,7 @@
     "title": "Classically estimating expectation values from parametrized quantum circuits",
     "authors": [
         {
-            "username": "dwierichs"
+            "id": "david_wierichs"
         }
     ],
     "dateOfPublication": "2024-09-10T00:00:00+00:00",
@@ -14,14 +14,14 @@
     "previewImages": [  
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/clifford_simulation/thumbnail_clifford_circuit_simulations.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_classical_expval_estimation.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_clifford_circuit_simulations.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_classical_expval_estimation.png"
         }
     ],
-    "seoDescription": "Estimate expectation values from parametrized quantum circuits efficiently with truncated Pauli propagation.",
+    "seoDescription": "Estimate expectation values from parametrized quantum circuits efficiently on average with truncated Pauli propagation.",
     "doi": "",
     "canonicalURL": "/qml/demos/tutorial_classical_expval_estimation",
     "references": [

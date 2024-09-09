@@ -153,9 +153,9 @@ print(qml.drawer.tape_text(tape))
 # .. math::
 #
 #     \operatorname{CNOT} (Z\otimes Z) \operatorname{CNOT}
-#     =(P_0 \otimes \mathbb{I}+P_1\otimes X) (Z\otimes Z) (P_0 \otimes \mathbb{I}+P_1\otimes X)
-#     =(Z \otimes \mathbb{I}) (P_0 \otimes Z - P_1 \otimes Z)
-#     =\mathbb{I}\otimes Z.
+#     &=(P_0 \otimes \mathbb{I}+P_1\otimes X) (Z\otimes Z) (P_0 \otimes \mathbb{I}+P_1\otimes X)\\
+#     &=(Z \otimes \mathbb{I}) (P_0 \otimes Z - P_1 \otimes Z)\\
+#     &=\mathbb{I}\otimes Z.
 #
 # Here we abbreviated the projectors :math:`P_i=|i\rangle\langle i|` and used simple
 # operator arithmetic. We can similarly look at the action of :math:`\operatorname{CNOT}`
@@ -169,6 +169,7 @@ for op0, op1 in product([qml.Identity, qml.X, qml.Y, qml.Z], repeat=2):
     new_op = cnot @ original_op @ cnot
     new_op = qml.pauli_decompose(new_op.matrix())
     print(f"CNOT transformed {original_op} to {new_op}")
+    print(cnot.pauli_rep @ original_op.pauli_rep)
 
 ##############################################################################
 # This fully specifies the action of :math:`\operatorname{CNOT}` on any Pauli word,
@@ -321,12 +322,10 @@ def initial_state_expval(H):
 # according to the Heisenberg picture. Finally, it evaluates the expectation value
 # with respect to :math:`|0\rangle`. The truncation threshold :math:`k` for ``apply_cnot``
 # is a hyperparameter of the execution function.
-from tqdm import tqdm
-
 
 def execute_tape(tape, k=None):
     H = tape.measurements[0].obs.pauli_rep
-    for op in tqdm(reversed(tape.operations), total=len(tape)):
+    for op in reversed(tape.operations), total=len(tape):
         if isinstance(op, qml.CNOT):
             # Apply CNOT
             H = apply_cnot(op.wires, H, k=k)
@@ -344,8 +343,9 @@ def execute_tape(tape, k=None):
 
 ##############################################################################
 # Great! So let's run it on our circuit, but now on 25 qubits and with 5 layers,
-# and compare to the exact value from PennyLane's fast statevector simulator
-# Lightning Qubit. We also set the truncation threshold to :math:`k=8`. # TODO LIGHTNING LINK
+# and compare to the exact value from PennyLane's `fast statevector simulator,
+# Lightning Qubit <https://pennylane.ai/performance/>`__.
+# We also set the truncation threshold to :math:`k=8`.
 
 num_qubits = 25
 num_layers = 5
@@ -396,7 +396,7 @@ print(f"The numerically exact expectation value is                        {exact
 # *on average across the sampled parameter settings* can be suppressed exponentially by
 # increasing :math:`k`.
 # This can be rephrased as follows: the probability of obtaining an error larger than some
-# tolerance can be suppressed exponentially by increasing :math:`k`.
+# tolerance can be suppressed exponentially by increasing :math:`k`\ .
 # Note that this does not prevent the simulation
 # algorithm to be *very* wrong at some rare parameter settings!
 #
@@ -411,7 +411,7 @@ print(f"The numerically exact expectation value is                        {exact
 # That is, even though an individual rotation does get modified, the *distribution* of rotations
 # remains the same (an important property of the Haar measure!). For our purposes it is sufficient
 # to note that the hardware-efficient layers from above do indeed satisfy this requirement.
-# Please take a look at the original paper for further details [#agrisani]_.
+# Please take a look at the original paper for further details [#angrisani]_.
 #
 # Third, the parametrized circuit may not "branch too much".
 # That is, if a Pauli word has weight :math:`r`, no layer of the circuit
