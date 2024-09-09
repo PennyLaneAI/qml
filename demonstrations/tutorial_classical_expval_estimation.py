@@ -8,7 +8,8 @@ circuits.
 Probably the most widely-known result of this type is the Gottesman-Knill
 theorem [#gottesman]_. It states that quantum circuits consisting of Clifford
 gates alone can be simulated classically, provided that the initial state
-of the circuit is "nice enough".
+of the circuit is "nice enough" (also see :doc:`our demo on Clifford simulation
+</demos/tutorial_clifford_circuit_simulations>`).
 
 In this short demo we will look at a new result of this type by Angrisani
 et al. [#angrisani]_.
@@ -18,7 +19,7 @@ Again, some conditions apply to which we will get later.
 
 First, we will focus on the main technique of this algorithm, called Pauli propagation,
 which is not unique to this algorithm, but is also used by related simulation
-algorithm [#aharonov]_, [#lowesa]_, [#begusic]_.
+algorithms [#aharonov]_, [#lowesa]_, [#begusic]_.
 We will introduce Pauli propagation mathematically and implement a basic variant
 of the algorithm in code.
 Afterwards, we will outline some of the important details behind the
@@ -82,11 +83,10 @@ import numpy as np
 from itertools import combinations, product
 
 
-def _ansatz(params, num_qubits):
+def _ansatz(params, num_qubits, H):
     """Parametrized quantum circuit ansatz that alternates arbitrary single-qubit
     rotations with strongly entangling CNOT layers. The depth of the ansatz and the
     number of qubits are given by the first dimension of the input parameters."""
-    _num_qubits = params.shape[1]
 
     for i, params_layer in enumerate(params):
         # Execute arbitrary parametrized single-qubit rotations
@@ -113,7 +113,7 @@ H = qml.dot(H_coeffs, H_ops)
 
 # Smaller parameter set to get smaller circuit to draw
 params = np.random.random((num_layers, num_qubits, 3))
-tape = ansatz(params, num_qubits)
+tape = ansatz(params, num_qubits, H)
 print(qml.drawer.tape_text(tape))
 
 ##############################################################################
@@ -323,9 +323,10 @@ def initial_state_expval(H):
 # with respect to :math:`|0\rangle`. The truncation threshold :math:`k` for ``apply_cnot``
 # is a hyperparameter of the execution function.
 
+
 def execute_tape(tape, k=None):
     H = tape.measurements[0].obs.pauli_rep
-    for op in reversed(tape.operations), total=len(tape):
+    for op in reversed(tape.operations):
         if isinstance(op, qml.CNOT):
             # Apply CNOT
             H = apply_cnot(op.wires, H, k=k)
@@ -356,21 +357,21 @@ H = qml.dot(H_coeffs, H_ops)
 params = np.random.random((num_layers, num_qubits, 3))
 
 
-def run_estimate(params):
-    tape = ansatz(params, num_qubits)
+def run_estimate(params, H):
+    tape = ansatz(params, num_qubits, H)
     expval = execute_tape(tape, k=k)
     return expval
 
 
-expval = run_estimate(params)
+expval = run_estimate(params, H)
 
 
 @qml.qnode(qml.device("lightning.qubit", wires=num_qubits))
-def run_lightning(params):
-    return _ansatz(params, num_qubits)
+def run_lightning(params, H):
+    return _ansatz(params, num_qubits, H)
 
 
-exact_expval = run_lightning(params)
+exact_expval = run_lightning(params, H)
 
 print(f"Truncated Pauli propagation estimated the expectation value to be {expval:.6f}")
 print(f"The numerically exact expectation value is                        {exact_expval:.6f}")
@@ -394,7 +395,7 @@ print(f"The numerically exact expectation value is                        {exact
 # defined by a circuit ansatz, together with a probability distribution to pick the parameters.
 # The guarantee then is that the approximation error of truncated Pauli propagation
 # *on average across the sampled parameter settings* can be suppressed exponentially by
-# increasing :math:`k`.
+# increasing the truncation threshold :math:`k`.
 # This can be rephrased as follows: the probability of obtaining an error larger than some
 # tolerance can be suppressed exponentially by increasing :math:`k`\ .
 # Note that this does not prevent the simulation
@@ -405,13 +406,14 @@ print(f"The numerically exact expectation value is                        {exact
 # the distribution of parameters we consider for the parametrized family, does not change under
 # random single-qubit rotations. This may sound complicated, but is easy to understand for a
 # small example: Consider an arbitrary rotation :class:`~.pennylane.Rot` on a single qubit,
-# together with a distribution for its three angles that leads Haar random rotations
+# together with a distribution for its three angles that leads to Haar random rotations
 # (see our :doc:`tutorial on the Haar measure </demos/tutorial_haar_measure>` for details).
 # This parametrized rotation then is unchanged if we apply another Haar random rotation!
 # That is, even though an individual rotation does get modified, the *distribution* of rotations
 # remains the same (an important property of the Haar measure!). For our purposes it is sufficient
 # to note that the hardware-efficient layers from above do indeed satisfy this requirement.
-# Please take a look at the original paper for further details [#angrisani]_.
+# Please take a look at the original paper for further details [#angrisani]_, in particular
+# Sections II and VIII and Appendix A.
 #
 # Third, the parametrized circuit may not "branch too much".
 # That is, if a Pauli word has weight :math:`r`, no layer of the circuit
@@ -423,8 +425,8 @@ print(f"The numerically exact expectation value is                        {exact
 # qubit in the support of the enlarged Pauli word, leading to a factor of three.
 # Taken together, a Pauli word with weight :math:`r` is transformed into at most
 # :math:`3^{2r}=9^r` Pauli words with weights at most :math:`2r`. The requirement
-# of not "branching too much" therefore is satisfied.
-# Again, we refer to the paper for further details.
+# of not "branching too much" therefore is satisfied, because :math:`9^r<n^r` from the complexity
+# theoretic perspective.
 #
 # Conclusion
 # ----------
@@ -438,9 +440,11 @@ print(f"The numerically exact expectation value is                        {exact
 # Besides the caveat that the approximation is only guaranteed across the full distribution
 # of parameters, it is important to note that expectation value estimation is not the only
 # interesting task on a quantum computer.
-# Similar to the result discussed here, there already existed other classes of quantum circuits
-# for which this estimation task is hard, but sampling from the quantum state prepared by
+# Similar to the result discussed here, there already exist other classes of quantum circuits
+# for which this estimation task is easy, but sampling from the quantum state prepared by
 # the circuit is hard.
+# This includes so-called Instantaneous quantum polynomial-time (IQP) circuits
+# [#bremner]_, [#bremner2]_, which arise in the context of :doc:`Boson sampling </demos/gbs>`.
 #
 # References
 # ----------
@@ -474,6 +478,18 @@ print(f"The numerically exact expectation value is                        {exact
 #     Tomislav Begušić, Johnnie Gray, Garnet Kin-Lic Chan
 #     "Fast and converged classical simulations of evidence for the utility of quantum computing before fault tolerance"
 #     `arXiv:2308.05077 <https://arxiv.org/abs/2308.05077>`__, 2023.
+#
+# .. [#bremner]
+#
+#     M. Bremner, R. Jozsa, D. Shepherd.
+#     "Classical simulation of commuting quantum computations implies collapse of the polynomial hierarchy."
+#     `arXiv:1005.1407 <https://arxiv.org/abs/1005.1407>`__, 2010.
+#
+# .. [#bremner2]
+#
+#     Michael J. Bremner, Ashley Montanaro, Dan J. Shepherd
+#     "Achieving quantum supremacy with sparse and noisy commuting quantum computations."
+#     `arXiv:1610.01808 <https://arxiv.org/abs/1610.01808>`__, 2016.
 #
 # About the author
 # ----------------
