@@ -116,7 +116,7 @@ noisy_qnode = qml.QNode(circuit, dev_noisy)
 ##############################################################################
 # First, we'll visualize the circuit:
 
-print(qml.draw(ideal_qnode, expansion_strategy="device")(w1, w2))
+print(qml.draw(ideal_qnode, level="device")(w1, w2))
 
 ##############################################################################
 # As expected, executing the circuit on an ideal noise-free device gives a result of ``1``.
@@ -447,7 +447,6 @@ dev_noisy = qml.device(
     wires=n_wires,
     noise_model=noise_model,
     optimization_level=0,
-    shots=10000,
 )
 
 ##############################################################################
@@ -525,7 +524,7 @@ for r, phi in zip(distances, params):
     def executor(circuit):
 
         # Add Hamiltonian measurement to circuit
-        circuit_with_meas = qml.tape.QuantumTape(circuit.operations, [qml.expval(H)])
+        circuit_with_meas = qml.tape.QuantumTape(circuit.operations, [qml.expval(H)], shots=10000)
 
         # Expand Hamiltonian measurement into tensor product of
         # of Pauli operators. We get a list of circuits to execute

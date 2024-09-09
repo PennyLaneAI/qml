@@ -51,7 +51,7 @@ supported in PennyLane:
 | Each of these gates can be uniquely described by how they transform the Pauli words. For
   example, ``Hadamard`` conjugates :math:`X` to :math:`Z` and :math:`Z` to :math:`X`.
   Similarly, ``ISWAP`` acting on a subspace of qubits `i` and `j` conjugates :math:`X_{i}`
-  to :math:`-Z_{i}Y_{j}` and :math:`Z_{i}` to :math:`Z_{j}`. These transformations can
+  to :math:`Z_{i}Y_{j}` and :math:`Z_{i}` to :math:`Z_{j}`. These transformations can
   be presented in tabulated forms called *Clifford tableaus*, as shown below:
 
 .. figure:: ../_static/demonstration_assets/clifford_simulation/clifford_tableaus.jpeg
