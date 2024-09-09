@@ -311,6 +311,9 @@ def apply_single_qubit_rot(pauli, wire, param, H):
 
 
 ##############################################################################
+# Completing the simulation with the initial state
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
 # With those two essential functions implemented, we're almost ready to put the algorithm together.
 # Before doing so, we need a function that computes the expectation value of the evolved observable
 # with respect to the initial state :math:`|0\rangle`. This is simple, though, because we know for
@@ -328,6 +331,9 @@ def initial_state_expval(H):
 
 
 ##############################################################################
+# Putting the pieces together
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
 # Now let's combine everything into a function that can handle the tape of our quantum
 # circuit from the beginning. It simply extracts the measurement observable and then
 # goes through the circuit backwards, propagating the Pauli words of the observable
@@ -398,40 +404,56 @@ print(f"The numerically exact expectation value is                        {exact
 # nor is it the subject of the main results by Angrisani et al.
 # However, a full-fledged benchmark goes beyond this demo.
 #
-# Fine print
-# ----------
+# Fine print: Which circuits can be simulated?
+# --------------------------------------------
 #
 # As anticipated multiple times throughout the demo, we now want to consider some details on
 # the circuits for which the truncated Pauli propagation is guaranteed to work.
 #
+# It's a statistical thing
+# ~~~~~~~~~~~~~~~~~~~~~~~~
+#
 # First, it is very important to note that the guarantee of good approximations does not
-# apply to any single instance of a quantum circuit, but to the full parametrized family
+# apply to any single instance of a quantum circuit, but to the full parametrized *family*
 # defined by a circuit ansatz, together with a probability distribution to pick the parameters.
 # The guarantee then is that the approximation error of truncated Pauli propagation
 # *on average across the sampled parameter settings* can be suppressed exponentially by
 # increasing the truncation threshold :math:`k`.
+#
 # This can be rephrased as follows: the probability of obtaining an error larger than some
 # tolerance can be suppressed exponentially by increasing :math:`k`\ .
 # Note that this does not prevent the simulation
 # algorithm to be *very* wrong at some rare parameter settings!
 #
+# The circuit needs to be locally scrambling
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
 # Second, there is a requirement for the structure and gates of the parametrized circuit:
 # We need to be able to divide the circuit into layers such that each layer, together with
 # the distribution of parameters we consider for the parametrized family, does not change under
-# random single-qubit rotations. This may sound complicated, but is easy to understand for a
+# random single-qubit rotations. The circuit and its parameter distribution are said to be
+# *locally scrambling* in this case.
+# 
+# This may sound complicated, but is easy to understand for a
 # small example: Consider an arbitrary rotation :class:`~.pennylane.Rot` on a single qubit,
 # together with a distribution for its three angles that leads to Haar random rotations
 # (see the :doc:`PennyLane Demo on the Haar measure </demos/tutorial_haar_measure>` for details).
 # This parametrized rotation then is unchanged if we apply another Haar random rotation!
 # That is, even though an individual rotation does get modified, the *distribution* of rotations
-# remains the same (an important property of the Haar measure!). For our purposes it is sufficient
+# remains the same (an important property of the Haar measure!).
+#
+# For our purposes it is sufficient
 # to note that the hardware-efficient layers from above do indeed satisfy this requirement.
 # Please take a look at the original paper for further details [#angrisani]_, in particular
 # Sections II and VIII and Appendix A.
 #
-# Third, the parametrized circuit may not "branch too much."
-# That is, if a Pauli word has weight :math:`r`, no layer of the circuit
+# Scrambling layers need to be shallow
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+# Third, the parametrized circuit may not "branch too much." That is, if a Pauli word has
+# weight :math:`r`, none of the locally scrambling layers of the circuit
 # may produce more than :math:`n^r` different Pauli words under the Heisenberg evolution.
+# 
 # For our hardware-efficient circuit, we can bound this amount of branching directly:
 # Each :math:`\operatorname{CNOT}` in the entangling layer can at most double the weight of the Pauli word, e.g.,
 # if each :math:`\operatorname{CNOT}` gate hits a :math:`Z` on its target qubit.
@@ -439,8 +461,8 @@ print(f"The numerically exact expectation value is                        {exact
 # qubit in the support of the enlarged Pauli word, leading to a factor of three.
 # Taken together, a Pauli word with weight :math:`r` is transformed into at most
 # :math:`3^{2r}=9^r` Pauli words with weights at most :math:`2r`. The requirement
-# of not "branching too much" therefore is satisfied, because :math:`9^r<n^r` from the complexity
-# theoretic perspective.
+# of not "branching too much" therefore is satisfied, because :math:`9^r<n^r`
+# from the complexity theoretic perspective.
 #
 # Counterexample
 # --------------
