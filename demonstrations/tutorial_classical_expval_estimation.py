@@ -262,6 +262,8 @@ from pennylane.pauli import PauliWord, PauliSentence
 
 
 def apply_cnot(wires, H, k=None):
+    """Apply a CNOT gate on given wires to operator H in the Heisenberg picture.
+    Truncate all Pauli words in the transformed operator that have weight larger than k."""
     new_H = PauliSentence()
     for pauli_word, coeff in H.items():
         # Extract the Pauli tensor factors on the wires of the CNOT
@@ -282,14 +284,16 @@ def apply_cnot(wires, H, k=None):
 
 
 def apply_single_qubit_rot(pauli, wire, param, H):
+    """Apply a single-qubit rotation about the given ``pauli`` on the given ``wire``
+    by a rotation angle ``param`` to an operator ``H``."""
     new_H = PauliSentence()
     rot_pauli_word = PauliWord({wire: pauli})
     for pauli_word, coeff in H.items():
         if pauli_word.commutes_with(rot_pauli_word):
-            # Rotation generator commutes with Pauli word from H
+            # Rotation generator commutes with Pauli word from H, the word is unchanged
             new_H[pauli_word] += coeff
         else:
-            # Rotation generator does not commute with Pauli word from H
+            # Rotation generator does not commute with Pauli word from H;
             # Multiply old coefficient by cosine, and add new term with modified Pauli word
             new_H[pauli_word] += qml.math.cos(param) * coeff
             new_pauli_word, factor = list((rot_pauli_word @ pauli_word).items())[0]
@@ -307,6 +311,7 @@ def apply_single_qubit_rot(pauli, wire, param, H):
 
 
 def initial_state_expval(H):
+    """Compute the expectation value of an operator ``H`` in the state |0>."""
     expval = 0.0
     for pauli_word, coeff in H.items():
         if all(pauli in {"I", "Z"} for pauli in pauli_word.values()):
@@ -324,6 +329,8 @@ def initial_state_expval(H):
 
 
 def execute_tape(tape, k=None):
+    """Classically simulate a tape and estimate the expectation value
+    of its output observable using truncated Pauli propagation."""
     H = tape.measurements[0].obs.pauli_rep
     for op in reversed(tape.operations):
         if isinstance(op, qml.CNOT):
