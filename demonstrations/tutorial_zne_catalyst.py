@@ -62,15 +62,12 @@ for usage in combination with variational workflows. More on this in the tutoria
 Using ZNE in Catalyst
 ---------------------
 
-Let's see what this workflow looks like using Catalyst.
-To get things started we'll need two ingredients:
+ZNE is also available for just-in-time (JIT) compilation of PennyLane programs, 
+starting from Catalyst v0.8.1.
+Let's see how an error mitigation routine can be integrated in a Catalyst workflow.
 
-1. an example quantum circuit to run
-2. a way to execute circuits
-
-The circuits we use here will be ..., and the method of execution will be a noisy simulation
-available through Qrack. The underlying noise model of this simulation is that of depolarizing
-noise.
+We start with defining a 4-qubit circuit, ... 
+and we measure the expectation value :math:`\langle Z\rangle` on the state of the first qubit.  
 
 """
 
@@ -82,18 +79,36 @@ import pennylane as qml
 from pennylane import numpy as np
 from catalyst import qjit, mitigate_with_zne
 
+n_wires = 4
 
-qubits = 2
-NOISE_LEVEL = 0.1
+np.random.seed(42)
+
+n_layers = 1
+template = qml.SimplifiedTwoDesign
+weights_shape = template.shape(n_layers, n_wires)
+w1, w2 = [2 * np.pi * np.random.random(s) for s in weights_shape]
+
+
+def circuit(w1, w2):
+    template(w1, w2, wires=range(n_wires))
+    qml.adjoint(template)(w1, w2, wires=range(n_wires))
+    return qml.expval(qml.PauliZ(0))
+
+##############################################################################
+# We execute the circuit on the Qrack simulator, first without noise, and then in a nosy scenario.
+
+noiseless_device = qml.device("qrack.simulator", n_wires, isNoisy=False)
+
+ideal_value = qml.QNode(circuit, device=noiseless_device)(w1, w2)
+print(f"Ideal value: {ideal_value}")
+
+NOISE_LEVEL = 0.2
 os.environ["QRACK_GATE_DEPOLARIZATION"] = str(NOISE_LEVEL)
-dev = qml.device("qrack.simulator", qubits, isNoisy=True)
+noisy_device = qml.device("qrack.simulator", n_wires, isNoisy=True)
 
-
-@qml.qnode(dev)
-def circuit():
-    qml.Hadamard(wires=0)
-    qml.CNOT(wires=[0, 1])
-    return qml.expval(qml.PauliZ(wires=0))
+noisy_qnode = qml.QNode(circuit, device=noisy_device)
+noisy_value = noisy_qnode(w1, w2)
+print(f"Error without  mitigation: {abs((ideal_value - noisy_value) / ideal_value):.3f}")
 
 
 ##############################################################################
@@ -106,10 +121,10 @@ def circuit():
 # 3. The extrapolation technique to use to estimate the ideal value (available in Catalyst are
 #    polynomial, and exponential extrapolation).
 #
-# We'll define the scale factors as a `jax.numpy.array` where the scale factors must be odd
-# integers.
+# We'll define the scale factors as a `jax.numpy.array` where the scale factors represents
+# the number of time the circuit is folded.
 
-scale_factors = jax.numpy.array([1, 3, 5])
+scale_factors = jax.numpy.array([1, 2, 3])
 
 ##############################################################################
 # Next, we'll choose a method to scale the noise. This needs to be defined as a Python string.
@@ -131,17 +146,16 @@ extrapolation_method = exponential_extrapolate
 
 
 @qjit
-def mitigated_circuit():
+def mitigated_circuit(w1, w2):
     return mitigate_with_zne(
-        circuit,
+        noisy_qnode,
         scale_factors=scale_factors,
         extrapolate=extrapolation_method,
         folding=folding_method,
-    )()
+    )(w1, w2)
 
-
-print(circuit())
-print(mitigated_circuit())
+zne_value = mitigated_circuit(w1, w2)
+print(f"Error with mitigation: {abs((ideal_value - zne_value) / ideal_value):.3f}")
 
 ##############################################################################
 # But there's still a big unanswered question! _If I can do this all in PennyLane, what is Catalyst
