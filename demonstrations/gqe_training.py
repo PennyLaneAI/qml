@@ -524,7 +524,7 @@ hvplot.extension('matplotlib')
 losses = pd.read_csv("./seq_len=4/trial7/losses.csv")["0"]
 loss_fig = losses.hvplot(
     title="Training loss progress", ylabel="loss", xlabel="Training epochs", logy=True
-).opts(fig_size=600, fontscale=1.8, aspect=1.2)
+).opts(fig_size=600, fontscale=2, aspect=1.2)
 loss_fig
 
 ##############################################################################
