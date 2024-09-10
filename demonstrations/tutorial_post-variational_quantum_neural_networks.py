@@ -46,7 +46,7 @@ r"""Post-Variational Quantum Neural Networks
 ######################################################################
 # |image1|
 # 
-# .. |image1| image:: ../_static/demonstration_assets/PVQNN/PVdrawing.jpeg
+# .. |image1| image:: ../_static/demonstration_assets/post-variational_quantum_neural_networks/PVdrawing.jpeg
 #    :width: 90.0%
 # 
 
@@ -58,7 +58,7 @@ r"""Post-Variational Quantum Neural Networks
 ######################################################################
 # |image2|
 # 
-# .. |image2| image:: ../_static/demonstration_assets/PVQNN/table.png
+# .. |image2| image:: ../_static/demonstration_assets/post-variational_quantum_neural_networks/table.png
 #    :width: 90.0%
 # 
 
@@ -153,7 +153,7 @@ plt.show()
 ######################################################################
 # |image3|
 # 
-# .. |image3| image:: ../_static/demonstration_assets/PVQNN/featuremap.png
+# .. |image3| image:: ../_static/demonstration_assets/post-variational_quantum_neural_networks/featuremap.png
 #    :width: 90.0%
 # 
 
@@ -166,7 +166,7 @@ plt.show()
 ######################################################################
 # |image4|
 # 
-# .. |image4| image:: ../_static/demonstration_assets/PVQNN/ansatz.png
+# .. |image4| image:: ../_static/demonstration_assets/post-variational_quantum_neural_networks/ansatz.png
 #    :width: 90.0%
 # 
 
