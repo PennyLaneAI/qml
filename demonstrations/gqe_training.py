@@ -232,11 +232,11 @@ train_token_seq = np.concatenate([
 ], axis=1)
 
 ######################################################################
-# Now that we have the operator sequences, we also measure the time to 
-# calculate the subsequence energies.
+# Now that we have the operator sequences, we calculate the energies for 
+# each subsequence in the training set while also measuring the execution time. 
+# 
 
 # %%time 
-# Calculate the energies for each subsequence in the training set
 train_sub_seq_en = get_subsequence_energies(train_op_seq)
 
 ######################################################################
@@ -338,7 +338,7 @@ class GPTQE(GPT):
 ######################################################################
 # Strictly speaking however, the loss function ``calculate_loss`` we defined is different from that
 # described in [#nakaji2024]_ which is :math:`(\exp(-w_{\mbox{sum}}) - \exp(-E))^2`. As described
-# beforehand, we instead directly compute the mean squared error between :math:`\mbox{sum}` and :math:`E`.
+# beforehand, we instead directly compute the mean squared error between :math:`w_{\mbox{sum}}` and :math:`E`.
 # Since the exponential function is 1-to-1, both loss functions would then impose the same minimum. 
 # Using the error between exponentials may even  
 # introduce numerical instabilities in the training since the loss would be taking differences of potentially large numbers.
@@ -491,10 +491,10 @@ true_Es_t = np.concatenate(true_Es_t, axis=1)
 #     Wall time: 2h 12min 32s
 
 ######################################################################
-# With a preliminary look at the training logs, we see that the offline training took 2h and 12min for 10000 
+# With a preliminary look at the training logs above, we see that the offline training took 2h and 12min for 10000 
 # training iterations. We also note that the mean absolute error between the predicted and true energies for the 
 # generated sequences quickly became smaller during the earlier parts of the training but become more fluctuating
-# later on. As mentioned earlier, a model is saved each time we get better performance. The best model is then 
+# later on. As mentioned earlier, a model version is saved each time we get better performance. The best model version is then 
 # saved at the 7000th iteration where the mean absolute error is at its lowest. Another quantity we observe is the
 # average true energies of the generated sequences. It is then promising to see that throughout training, this is
 # close to the ground state energy ``grd_E=-1.1372633205048763``.
@@ -535,7 +535,7 @@ loss_fig
 #    Figure 4: The subsequence loss for each training iteration
 
 ##############################################################################
-# We see in Figure 4 that the log loss
+# We see in Figure 4 that the loss
 # continues to decrease until around the 4000th iteration. There, the model was erroraneous but is quick
 # to recover as training continues. This may signal that the GPT model started focusing on learning something
 # erroraneous too quickly. So, more regularization noise (like ``dropout``) may be needed to help avoid this. 
@@ -587,17 +587,18 @@ fig
 
 ##############################################################################
 # We now see that the energies predicted by the model get more accurate at approximating the true
-# energies during training. This in turn, samples lower energies as we see that the true energies
+# energies during training. The increase in accuracy then allows the model to correctly sample states 
+# with lower energies. This is supported in Figure 5 where the true energies 
 # sampled gets closer to the ground state energy (the dashed line).
 # 
 # Note that at around the 4000th iteration, the predicted energies are very far from the true energies.
 # This makes sense considering our observation in Figure 4. Also note that at the 7000th
 # iteration, the averages of the predicted and true energies are the closest and even their respective
-# spreads seem to have good overlap. This is when the best performing model was saved. For later iterations however, 
-# the predicted energies no longer improved.
+# spreads seem to have good overlap. This is when the best performing model version was saved, as seen in the training logs. 
+# For later iterations however, the predicted energies no longer improved.
 # This may indicate that the GPT model has started overfitting on the training dataset in the later iterations. 
-# That is, the model became great at predicting the correct energies for the training set (as observed in the 
-# loss curve) but not great at generalizing on those outside the training set (like the sequences that the model
+# That is, the model became great at predicting the correct energies for the training set (as observed by the decreasing
+# loss in Figure 4) but not great at generalizing on those outside the training set (like the sequences that the model
 # generated on its own). One solution to avoid overfitting could then be online training. This is so that 
 # the GPT model is not restricted on a fixed dataset to overfit on.
 # 
@@ -607,7 +608,7 @@ fig
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # Here, we compare some statistics of the true energies corresponding to sequences generated
-# by a "random" model, the latest model after all the training iterations, and the best model
+# by a "random" model, the latest version of the model after all the training iterations, and the best model version
 # saved based on the mean absolute error between the true and predicted energies during training 
 # (for our case, this is the model saved at the 7000th iteration).
 # Note that we consider the training set to be generated by a random model since the token
@@ -666,40 +667,41 @@ df_compare_Es
 # to the ground state energy ``grd_E=-1.1372633205048763`` with an error of around ``2.81e-04``. But we notice that the maximum energy
 # is relatively far so the random sequences give a wider spread of energies.
 # 
-# The energies of the generated sequences from the GPT models however have a narrower spread and so,
+# The energies of the generated sequences from the latest and the best GPT model versions however have a narrower spread and so,
 # the average and the minimum energies are very close to ``grd_E``, closer than those in the random 
-# training set. Namely, around a ``2.25e-04`` error for the minimum energy generated by the latest model
-# and a ``7.71e-07`` error for the best model. It is then very interesting that
-# the models can generate sequences that are better than those in the training set, even though every
-# sequence the models have seen just came from that set. The models were able to generalize. 
+# training set. Namely, around a ``2.25e-04`` error for the minimum energy generated by the latest model version
+# and a ``7.71e-07`` error for the best model version. It is then very interesting that
+# a well-trained GPT model can generate sequences that are better than those in the training set, even though every
+# sequence the model has seen just came from that set. That is, the model was able to generalize. 
 # 
-# Between the two GPT models, we see that the latest model is worse than the best model. The minimum energy
-# error for the latest model has the same order of magnitude as the corresponding one for the random training set.
-# Contrast this with the minimum energy error for the best model which is 3 orders of magnitude smaller.
-# This behavior is supported by our observation in Figure 5 where the performance of the models saved after 
+# Between the two GPT model versions, we see that the latest version is worse than the best version. The minimum energy
+# error for the latest version has the same order of magnitude as the corresponding one for the random training set.
+# Contrast this with the minimum energy error for the best version which is 3 orders of magnitude smaller.
+# This behavior is supported by our observation in Figure 5 where the performance of the model after
 # the 7000th iteration worsened. That is, the predicted energies started to deviate further from the true energies
 # which in turn caused the states being sampled from these predicted energies to be different from the intended 
 # lower energy states.
 # 
 
 ######################################################################
-# 5. Conclusion
+# Conclusion
 # -------------
 # 
 # In this demo, we see that GPT-QE is a viable alternative in estimating the ground state
-# of a hydrogen gas molecule. The best underlying GPT model can generate a state whose energy is 
-# only around ``7.71e-07`` away from ground state energy. The offline training algorithm (without the sequence 
-# evaluations) is completely detached from the quantum simulations. Thus, the machinery of classical ML 
-# can be harnessed and circumventing the issues of VQE.
+# of a hydrogen gas molecule. The best underlying GPT model version can generate a state whose energy is 
+# only around ``7.71e-07`` away from ground state energy. Additionally, since the GPT model being optimized 
+# is completely detached from the quantum simulations, gradients across a potentially large quantum circuit
+# don't need to be computed, for example. Thus, the machinery of classical ML can be harnessed without 
+# worrying too much about the quantum algorithm side of the problem.
 # 
 # The reader can also experiment with other molecules from PennyLane and tweak several hyperparameters
 # of the GPT model (like ``dropout``, and ``n_layer``) and include standard ML callbacks to its training
-# (like an early stopping mechanism, and a learning rate schedule). The code itself as well is open to
-# optimization like using `PennyLane Lightning GPU <https://docs.pennylane.ai/projects/lightning/en/latest/lightning_gpu/device.html>`__ 
+# (like an early stopping mechanism, and a learning rate schedule). The code itself is also open to
+# optimization. For instance, using `PennyLane Lightning GPU <https://docs.pennylane.ai/projects/lightning/en/latest/lightning_gpu/device.html>`__ 
 # to evaluate the energies faster. An online training loop can also be implemented similar to our offline
 # version. The reader would just need to sample sequences from the current GPT model instead of a fixed
 # dataset for each training iteration. To facilitate exploration and exploitation, one would also define
-# a schedule for the inverse temperature. Initially letting the GPT model sample more randomly through
+# a schedule for the inverse temperature. That is, initially letting the GPT model sample more randomly through
 # a high temperature then gradually decreasing so that the GPT model focuses more on the higher probability
 # states (low energies). 
 # 
