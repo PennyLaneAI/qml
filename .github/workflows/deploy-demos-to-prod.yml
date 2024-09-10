@@ -19,6 +19,7 @@ jobs:
         run: |
           aws s3 cp --recursive s3://$AWS_S3_BUCKET_ID/master ./local-master
           aws s3 cp s3://$AWS_S3_HTML_BUCKET_ID/qml/searchindex.js searchindex.js
+          aws s3 cp s3://$AWS_S3_HTML_BUCKET_ID/qml/objects.inv objects.inv
 
       - name: Push production bucket
         env:
@@ -29,6 +30,7 @@ jobs:
         run: |
           aws s3 sync ./local-master s3://$AWS_S3_BUCKET_ID/master --delete
           aws s3 cp searchindex.js s3://$AWS_S3_HTML_BUCKET_ID/qml/searchindex.js
+          aws s3 cp objects.inv s3://$AWS_S3_HTML_BUCKET_ID/qml/objects.inv
 
       - name: Trigger production website build
         uses: peter-evans/repository-dispatch@v2
