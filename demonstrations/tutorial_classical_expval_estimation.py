@@ -45,14 +45,13 @@ many variational quantum algorithms is to compute the expectation value
 
 for various parameter settings :math:`\theta`.
 Being able to estimate such an expectation value efficiently is required
-to train the parametrized quantum circuit in applications such as 
+to train the parametrized quantum circuit in applications such as
 :doc:`QAOA </demos/tutorial_qaoa_intro>`,
 the :doc:`variational quantum eigensolver </demos/tutorial_vqe>` and a wide
 range of `quantum machine learning <https://pennylane.ai/qml/whatisqml/>`__ tasks.
 
 For simplicity, we will assume the initial state to be
-:math:`|\psi_0\rangle=|0\rangle` throughout, and discuss other initial states
-later on.
+:math:`|\psi_0\rangle=|0\rangle` throughout.
 Similarly, we will work with a particular example for the circuit
 :math:`U(\theta)` and discuss the class of :doc:`parametrized circuits </glossary/variational_circuit/>` the algorithm
 can tackle further below.
@@ -69,7 +68,7 @@ Here, :math:`N` is the total number of qubits.
 The number of qubits on which a Pauli word is supported (i.e., has a non-identity
 component) is called its *weight*.
 For the algorithm to work, the weights of the Hamiltonian's Pauli words may not
-exceed a set threshold.
+exceed a set threshold, see the truncation step below.
 For our example we pick the Heisenberg model Hamiltonian
 
 .. math::
@@ -80,8 +79,8 @@ with random coefficients :math:`h_j^{(X|Y|Z)}`. In :math:`H_{XYZ}`, each Pauli w
 has weight two.
 
 We will discuss the type of Hamiltonians that the algorithm can tackle
-further below, but for now, let's define the Hamiltonian and the circuit ansatz. We pick a
-:math:`\operatorname{CNOT}` layer on a ring as entangler for the ansatz.
+further below, but for now, let's define the Hamiltonian and the circuit ansatz in code.
+We pick a :math:`\operatorname{CNOT}` layer on a ring as entangler for the ansatz.
 We transform the ``ansatz`` function with :func:`~.pennylane.transforms.make_tape`, making
 the function into one that returns a tape containing the gates (and expectation value).
 This also allows us to draw the ansatz easily with :func:`~.pennylane.drawer.tape_text`.
@@ -240,7 +239,7 @@ cnot_table = {
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # Pauli propagation is a neat way to approach the task of estimating expectation
-# values that we are after, like :math:`E(\theta)`. However, if we were to run
+# values that we are after, like :math:`E(\theta)`\ . However, if we were to run
 # a classical simulation using this approach as is, we would quickly run into
 # a scaling problem. There are :math:`4^N` Pauli words on :math:`N` qubits, an
 # unfeasibly large number if we hit all of them during our simulation.
@@ -256,7 +255,7 @@ cnot_table = {
 # error in this truncation. However, Angrisani et al. show that this is not the case
 # for a wide class of parametrized circuits at most parameter settings.
 #
-# Note that the truncation step requires the Pauli words of the initial :math:`H`
+# As anticipated above, the truncation step requires the Pauli words of the initial :math:`H`
 # to be at most :math:`k`-local, as they get truncated away otherwise. Alternatively,
 # non-local terms need to make a negligible contribution to the expectation value
 # in order for the truncation to be a good approximation.
@@ -267,7 +266,7 @@ cnot_table = {
 # observable easily. Let's start with two functions that implement a
 # single-qubit rotation and a :math:`\operatorname{CNOT}` gate in the Heisenberg
 # picture, respectively. Note that single-qubit rotation gates do not
-# require us to implement truncation, because it never increases the weight of
+# require us to implement truncation, because they never increase the weight of
 # a Pauli word.
 #
 
@@ -323,7 +322,7 @@ def apply_single_qubit_rot(pauli, wire, param, H):
 # Before doing so, we need a function that computes the expectation value of the evolved observable
 # with respect to the initial state :math:`|0\rangle`. This is simple, though, because we know for
 # each Pauli word :math:`P_\ell` in the Hamiltonian that it will contribute its coefficient :math:`h_\ell`
-# to the expectation value if all tensor factors are :math:`I` or :math:`Z`.
+# to the expectation value if (and only if) all tensor factors are :math:`I` or :math:`Z`.
 
 
 def initial_state_expval(H):
@@ -371,7 +370,7 @@ def execute_tape(tape, k=None):
 # Great! So let's run it on our circuit, but now on 25 qubits and with 5 layers,
 # and compare the result to the exact value from PennyLane's `fast statevector simulator,
 # Lightning Qubit <https://docs.pennylane.ai/projects/lightning/en/stable/lightning_qubit/device.html>`__.
-# We also set the truncation threshold to :math:`k=8`.
+# We also set the truncation threshold to :math:`k=8`\ .
 
 num_qubits = 25
 num_layers = 5
@@ -458,6 +457,7 @@ print(f"Numerically exact expectation value:                        {exact_expva
 # Third, the parametrized circuit may not "branch too much." That is, if a Pauli word has
 # weight :math:`r`, none of the locally scrambling layers of the circuit
 # may produce more than :math:`n^r` different Pauli words under the Heisenberg evolution.
+# Intuitively, this requirement limits the layers of the circuit to be sufficiently shallow.
 #
 # For our hardware-efficient circuit, we can bound this amount of branching directly:
 # Each :math:`\operatorname{CNOT}` in the entangling layer can at most double the weight of the Pauli word, e.g.,
