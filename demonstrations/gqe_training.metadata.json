@@ -1,5 +1,5 @@
 {
-    "title": "Generative quantum eigensolver training using Pennylane data",
+    "title": "Generative quantum eigensolver training using PennyLane data",
     "authors": [
         {
             "username": "Joseph"
@@ -19,7 +19,7 @@
             "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_generative_quantum_eigensolver.png"
         }
     ],
-    "seoDescription": "Training a small GPT model using Pennylane data",
+    "seoDescription": "Learn how you can train a small GPT model using PennyLane data.",
     "doi": "",
     "canonicalURL": "/qml/demos/gqe_training",
     "references": [
