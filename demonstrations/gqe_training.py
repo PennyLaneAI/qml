@@ -15,17 +15,6 @@ can sample energies close to the ground state energy calculated by PennyLane.
     :width: 70%
     :target: javascript:void(0)
 
-The main difference between the two approaches is where the tunable parameters are embedded.
-That is, it is the classical GQE model that is being optimized as opposed to the variable
-quantum circuit of VQE. Potentially then, the barren plateau landscape of VQE and the quantum gradient
-evaluation of large circuits will be sidestepped by GQE. Thus, becoming more amenable for larger problems.
-
-This demo is organized as follows. In Section 1, we describe GPT-QE, (a particular
-design of the GQE algorithm which uses a GPT model) what it generates, and how we train it. 
-In Section 2, we generate the training dataset we will use by using PennyLane. In Section 3,
-we give details on our GPT model architecture and training implementation. In Section 4, we 
-evaluate the model throughout its training and discuss its performance in estimating the ground
-state. And lastly in Section 5, we conclude.
 """
 
 ######################################################################
@@ -349,16 +338,18 @@ class GPTQE(GPT):
 ######################################################################
 # Strictly speaking however, the loss function ``calculate_loss`` we defined is different from that
 # described in [#nakaji2024]_ which is :math:`(\exp(-w_{\mbox{sum}}) - \exp(-E))^2`. As described
-# in Section 1, we directly compute the mean squared error between :math:`\mbox{sum}` and :math:`E`.
-# Using the error between exponentials should be unnecessary since the exponential function is 1-to-1 and this may even 
+# beforehand, we instead directly compute the mean squared error between :math:`\mbox{sum}` and :math:`E`.
+# Since the exponential function is 1-to-1, both loss functions would then impose the same minimum. 
+# Using the error between exponentials may even  
 # introduce numerical instabilities in the training since the loss would be taking differences of potentially large numbers.
 # In addition to this change from [#nakaji2024]_, we also use the error between the cumulative sum of logits and the corresponding energy
 # for each subsequence instead of just the error between total logits and the energy of an entire sequence. 
 # This addition will give more training data to the model and should help with logit matching the intermediate tokens.
 #
-# Since it was not explicitly shown in [#nakaji2024]_, another possible deviation we made is the logit calculation during offline training. 
-# It seems that the logits were accumulated by looping through the sequential generation of tokens. This is inefficient and unnecessary   
-# for offline training since we can directly pass the fixed training sequences to the model and retrieve the relevant logits from it.
+# Since it was not explicitly shown in [#nakaji2024]_, another possible deviation we made is with the logit calculation during offline training. 
+# It seems that the logits were accumulated by looping through the sequential generation of tokens. 
+# In order to fill in the blanks, we implement the logit calculation in a manner that we think is efficient.
+# Namely, we directly pass the fixed training sequences to the model and retrieve the relevant logits from it.
 # This can be done because we are using a causal mask for the attention blocks so that the logits of the earlier tokens in the sequence are 
 # not affected by tokens in the later part of the sequence. Thus, having the same effect of the sequential token generation.
 # 
