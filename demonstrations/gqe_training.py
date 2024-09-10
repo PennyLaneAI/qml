@@ -15,31 +15,6 @@ can sample energies close to the ground state energy calculated by PennyLane.
     :width: 70%
     :target: javascript:void(0)
 
-The GQE algorithm is an alternative approach in estimating the ground state of a particular molecule.
-Usually, this ground state estimation is done via the variational quantum eigensolver (VQE) approach, 
-where the quantum state is represented as a quantum circuit with tunable parameters. The goal is then 
-to find the optimal parameters that minimizes the corresponding energy :math:`E`. For more details on
-VQEs, check out this `PennyLane Demo <https://pennylane.ai/qml/demos/tutorial_vqe/>`__ and 
-`Documentation <https://docs.pennylane.ai/projects/catalyst/en/stable/demos/adaptive_circuits_demo.html>`__.
-
-.. figure:: ../_static/demonstration_assets/gqe_training/paper_vqe_diagram.png
-    :align: center
-    :width: 90%
-    
-    Figure 1 from [#nakaji2024]_
-
-There are some issues with VQE scalability [#nakaji2024]_, however. This shortcoming makes it less competitive against
-the performance of classical ML algorithms for large problems. To bypass this, the GQE algorithm was 
-proposed. A GQE is then a generative model where quantum states represented by quantum circuits are 
-sampled. The generative model is then trained so that the states being sampled more closely approximates
-the ground state. 
-
-.. figure:: ../_static/demonstration_assets/gqe_training/paper_gqe_diagram.png
-    :align: center
-    :width: 90%
-    
-    Figure 1 from [#nakaji2024]_
-
 The main difference between the two approaches is where the tunable parameters are embedded.
 That is, it is the classical GQE model that is being optimized as opposed to the variable
 quantum circuit of VQE. Potentially then, the barren plateau landscape of VQE and the quantum gradient
@@ -54,11 +29,57 @@ state. And lastly in Section 5, we conclude.
 """
 
 ######################################################################
-# 1. GPT-QE Background
+# The GQE algorithm is an alternative approach in estimating the ground state of a particular molecule.
+# Usually, this ground state estimation is done via the variational quantum eigensolver (VQE) approach, 
+# where the quantum state is represented as a quantum circuit with tunable parameters. The goal is then 
+# to find the optimal parameters that minimizes the corresponding energy :math:`E`. For more details on
+# VQEs, check out this `PennyLane Demo <https://pennylane.ai/qml/demos/tutorial_vqe/>`__ and 
+# `Documentation <https://docs.pennylane.ai/projects/catalyst/en/stable/demos/adaptive_circuits_demo.html>`__.
+#
+
+##############################################################################
+#.. figure:: ../_static/demonstration_assets/gqe_training/paper_vqe_diagram.png
+#    :align: center
+#    :width: 90%
+# 
+#    Figure 1: VQE diagram from [#nakaji2024]_
+
+######################################################################
+# However, there are some issues with VQE regarding their "trainability for large problem instances" [#nakaji2024]_. 
+# This shortcoming makes it less competitive against
+# the performance of classical ML algorithms for large problems. To bypass this, the GQE algorithm was 
+# proposed. A GQE is then a generative model where quantum states represented by quantum circuits are 
+# sampled. The generative model is then trained so that the states being sampled more closely approximates
+# the ground state. 
+#
+
+##############################################################################
+#.. figure:: ../_static/demonstration_assets/gqe_training/paper_gqe_diagram.png
+#    :align: center
+#    :width: 90%
+# 
+#    Figure 2: GQE diagram from [#nakaji2024]_
+
+######################################################################
+# The main difference between the two approaches is where the tunable parameters are embedded.
+# That is, it is the classical GQE model that is being optimized as opposed to the variable
+# quantum circuit of VQE. Potentially then, the barren plateau landscape of VQE and the quantum gradient
+# evaluation of large circuits will be sidestepped by GQE. Thus, becoming more amenable for larger problems.
+# 
+# This demo is organized as follows. Firstly, we describe GPT-QE, (a particular
+# design of the GQE algorithm which uses a GPT model) what it generates, and how we train it. 
+# Then in the section afterwards, we generate the training dataset we will use by using PennyLane. 
+# We then give details on our GPT model architecture and training implementation. After that, we 
+# evaluate the model throughout its training and discuss its performance in estimating the ground
+# state. And lastly, we conclude.
+# 
+
+######################################################################
+# GPT-QE Background
 # --------------------
 # 
 # In particular, the chosen model design in the paper was the generative pre-trained
-# transformer (GPT) architecture [#radford2019], [#vaswani2017]. So, a GQE using a transformer is called GPT-QE. 
+# transformer (GPT) [#radford2019]_, [#vaswani2017]_ architecture. So, a GQE using a transformer is called GPT-QE. 
 # As a language model, GPTs are successful in generating
 # sequences of words that closely resemble human natural language. This performance is
 # harnessed for quantum chemistry by constructing quantum states :math:`\rho` as a sequence of unitary operators 
@@ -82,7 +103,7 @@ state. And lastly in Section 5, we conclude.
 # With this constraint satisfied, GPT-QE would then be sampling states of smaller energies with increasing
 # likelihood.
 #  
-# More concretely, we summarize the "pre-"training loop in the following diagram. This is called
+# More concretely, we summarize the "pre-"training loop in the Figure 3. This is called
 # pre-training because the learning is done using a fixed dataset first before the "real" training 
 # is done based on the data it generated on its own. In this demo, we will call the pre-training as offline
 # training since the GPT model does not receive feedback from the sequences it samples, and online
@@ -93,10 +114,10 @@ state. And lastly in Section 5, we conclude.
 #    :align: center
 #    :width: 90%
 # 
-#    Overview for offline training of GPT-QE
+#    Figure 3: Overview for offline training of GPT-QE
 
 ######################################################################
-# 2. Dataset construction via PennyLane
+# Dataset construction via PennyLane
 # -------------------------------------
 # 
 # Firstly, let us construct the static dataset we will use for offline training. We choose
@@ -107,7 +128,7 @@ state. And lastly in Section 5, we conclude.
 # we would then have a dataset of token sequences and energies for the GPT model offline training.
 
 ######################################################################
-# 2a. Loading molecular information
+# Loading molecular information
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # For simplicity, let us consider the `hydrogen gas molecule <https://pennylane.ai/datasets/qchem/h2-molecule>`__ 
@@ -156,17 +177,17 @@ grd_E = h2_molecule["expected_ground_state_E"]
 op_pool_size = len(op_pool)
 
 ######################################################################
-# 2b. Defining the energy function
+# Defining the energy function
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # In PennyLane, we define the energy function :math:`E = \mbox{Tr}(\hat{H}U_{j_N}\cdots U_{j_1}\rho_0 U_{j_1}^{\dagger}\cdots U_{j_N}^{\dagger})`
 # corresponding to Eq. 1 of [#nakaji2024]_. Here, ``energy_circuit`` takes in the operator sequence :math:`U_{j_1}, U_{j_2}, ..., U_{j_N}`
 # and returns the energy of the corresponding quantum state.
 #
-# As a slight extension of the paper, we can also calculate the energies for each subsequence of
+# As a slight extension of [#nakaji2024]_, we can also calculate the energies for each subsequence of
 # operators to help with the training of the model. That is, for a sequence of three operators
 # :math:`U_{j_1}, U_{j_2}, U_{j_3}` we compute the energies for :math:`U_{j_1}` and :math:`U_{j_1}, U_{j_2}` instead of just
-# the full sequence of three operators, which was described in the paper. This can be done simply in PennyLane, using 
+# the full sequence of three operators, which was described in [#nakaji2024]_. This can be done simply in PennyLane, using 
 # :class:`~.pennylane.Snapshot` as shown below.
 # 
 
@@ -194,7 +215,7 @@ def get_subsequence_energies(op_seq):
     return np.array(energies)
 
 ######################################################################
-# 2c. Token sequence generation with corresponding energies
+# Token sequence generation with corresponding energies
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # With these ingredients, we can now construct a dataset containing sequences of tokens and their energies. 
@@ -244,24 +265,24 @@ train_sub_seq_en = get_subsequence_energies(train_op_seq)
 #  
 
 ######################################################################
-# 3. GPT-QE offline training
+# GPT-QE offline training
 # --------------------------
 # Having setup our training dataset, we can start implementing our offline training loop as
-# illustrated by our diagram. We outline our implementation below.
+# illustrated in Figure 3. We outline our implementation below.
 
 ######################################################################
-# 3a. GPT model implementation details
+# GPT model implementation details
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # The GPT model we will use in this demo is mostly implemented in the `nanoGPT repo
-# <https://github.com/karpathy/nanoGPT>`__ as the 
+# <https://github.com/karpathy/nanoGPT>`__ (a reimplementation of the `OpenAI GPT-2 <https://github.com/openai/gpt-2>`__) as the 
 # `class <https://github.com/karpathy/nanoGPT/blob/9755682b981a45507f6eb9b11eadef8cb83cebd5/model.py#L118>`__ 
 # ``GPT`` with the model hyperparameters stored in the 
 # `dataclass <https://github.com/karpathy/nanoGPT/blob/9755682b981a45507f6eb9b11eadef8cb83cebd5/model.py#L109>`__ 
 # ``GPTConfig``. Namely, we will use 12 attention layers, 12 attention heads, and 768 embedding dimensions, 
 # which are equal to those described in [#nakaji2024]_. 
 # We can import from the nanoGPT repo directly by running the curl command below in the terminal
-# or the jupyter notebook. Since nanoGPT is trained as a language model, its loss function and sampling method is 
+# or the jupyter notebook. Since nanoGPT is trained as a language model, its loss function and sampling method are 
 # defined differently. We then define the subclass ``GPTQE`` below to override some nanoGPT methods in order to make it more
 # suitable for our case. 
 # 
@@ -366,7 +387,7 @@ opt = gpt.configure_optimizers(
 #     num non-decayed parameter tensors: 25, with 19,200 parameters
 
 ######################################################################
-# 3b. GPT offline training loop implementation
+# GPT offline training loop implementation
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # We now implement a training loop for our GPT model. This can be framed as a straightforward
@@ -384,7 +405,6 @@ opt = gpt.configure_optimizers(
 # 
 
 # %%time 
-
 n_batches = 8
 train_inds = np.arange(train_size)
 
@@ -490,12 +510,12 @@ true_Es_t = np.concatenate(true_Es_t, axis=1)
 # 
 
 ######################################################################
-# 4. GPT-QE results
+# GPT-QE results
 # -----------------
 # Having finished the offline training, let's take a look at some of our results.
 
 ######################################################################
-# 4a. Loss curve
+# Loss curve
 # ~~~~~~~~~~~~~~
 # One of the first things we can look at is the training loss curve. Recall that for our case, the 
 # loss is the mean squared error between the cumulative sum of logits (predicted subsequence energies) and their
@@ -518,21 +538,21 @@ np.log(losses).hvplot(title="Training loss progress", ylabel="log(loss)", xlabel
 #    :align: center
 #    :width: 90%
 # 
-#    Figure 1: The average subsequence loss for each training iteration
+#    Figure 4: The average subsequence loss for each training iteration
 
 ##############################################################################
-# We see in Figure 1 that the average loss
+# We see in Figure 4 that the average loss
 # continues to decrease until around the 4000th iteration. There, the model was erroraneous but is quick
 # to recover as training continues. This may signal that the GPT model started focusing on learning something
 # erroraneous too quickly. So, more regularization noise (like ``dropout``) may be needed to help avoid this. 
 
 ######################################################################
-# 4b. Evaluation progress
+# Evaluation progress
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
-# We now track the performance of the GPT model throughout its training in Figure 2. As mentioned
+# We now track the performance of the GPT model throughout its training in Figure 5 below. As mentioned
 # before, after every 500th iteration, we let the model generate a batch of sequences. Alongside, we
-# also return the total logits (predicted energies) used in the sequence generation. In Figure 2,
+# also return the total logits (predicted energies) used in the sequence generation. In Figure 5,
 # the average predicted energies corresponds to the red markers and the distribution of predicted
 # energies is represented by the red area. Once we have the generated sequences, we can also let PennyLane calculate the true sequence
 # energies. Similarly then, the blue markers are the average true energies and the blue
@@ -569,7 +589,7 @@ fig
 #    :align: center
 #    :width: 90%
 # 
-#    Figure 2: True and predicted energies for sequences generated by the GPT model for each 500th training iteration
+#    Figure 5: True and predicted energies for sequences generated by the GPT model for each 500th training iteration
 
 ##############################################################################
 # We now see that the energies predicted by the model get more accurate at approximating the true
@@ -577,9 +597,10 @@ fig
 # sampled gets closer to the ground state energy (the dashed line).
 # 
 # Note that at around the 4000th iteration, the predicted energies are very far from the true energies.
-# This makes sense considering our observation in Figure 1. Also note that at the 7000th
+# This makes sense considering our observation in Figure 4. Also note that at the 7000th
 # iteration, the averages of the predicted and true energies are the closest and even their respective
-# spreads seem to have good overlap. For later iterations however, the predicted energies no longer improved.
+# spreads seem to have good overlap. This is when the best performing model was saved. For later iterations however, 
+# the predicted energies no longer improved.
 # This may indicate that the GPT model has started overfitting on the training dataset in the later iterations. 
 # That is, the model became great at predicting the correct energies for the training set (as observed in the 
 # loss curve) but not great at generalizing on those outside the training set (like the sequences that the model
@@ -588,7 +609,7 @@ fig
 # 
 
 ######################################################################
-# 4c. Sequence generation comparison
+# Sequence generation comparison
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # Here, we compare some statistics of the true energies corresponding to sequences generated
@@ -661,7 +682,7 @@ df_compare_Es
 # Between the two GPT models, we see that the latest model is worse than the best model. The minimum energy
 # error for the latest model has the same order of magnitude as the corresponding one for the random training set.
 # Contrast this with the minimum energy error for the best model which is 3 orders of magnitude smaller.
-# This behavior is supported by our observation in Figure 2 where the performance of the models saved after 
+# This behavior is supported by our observation in Figure 5 where the performance of the models saved after 
 # the 7000th iteration worsened. That is, the predicted energies started to deviate further from the true energies
 # which in turn caused the states being sampled from these predicted energies to be different from the intended 
 # lower energy states.
