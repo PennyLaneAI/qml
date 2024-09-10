@@ -2,7 +2,7 @@ r"""
 Classically estimating expectation values from parametrized quantum circuits
 ============================================================================
 
-In the race between classical and :doc:`quantum computing </quantum-computing>`, an important question
+In the race between classical and `quantum computing <https://pennylane.ai/qml/quantum-computing/>`__, an important question
 is whether there exist efficient classical algorithms to simulate quantum
 circuits.
 Probably the most widely-known result of this type is the Gottesman–Knill
@@ -48,7 +48,7 @@ Being able to estimate such an expectation value efficiently is required
 to train the parametrized quantum circuit in applications such as 
 :doc:`QAOA </demos/tutorial_qaoa_intro>`,
 the :doc:`variational quantum eigensolver </demos/tutorial_vqe>` and a wide
-range of :doc:`quantum machine learning </whatisqml>` tasks.
+range of `quantum machine learning <https://pennylane.ai/qml/whatisqml/>`__ tasks.
 
 For simplicity, we will assume the initial state to be
 :math:`|\psi_0\rangle=|0\rangle` throughout, and discuss other initial states
@@ -477,8 +477,8 @@ print(f"Numerically exact expectation value:                        {exact_expva
 # So let's evaluate our circuit for a specific parameter setting with all parameters set to
 # :math:`\frac{\pi}{4}`. In addition, we will even *reduce* the number of qubits and layers,
 # which makes the task easier for other classical simulation tools (such as
-# `Lightning qubit <https://docs.pennylane.ai/projects/lightning/en/stable/lightning_qubit/device.html>`__
-# ), but does not help the truncated Pauli propagation.
+# `Lightning Qubit <https://docs.pennylane.ai/projects/lightning/en/stable/lightning_qubit/device.html>`__),
+# but does not help the truncated Pauli propagation.
 
 num_qubits = 15
 num_layers = 3
