@@ -1,18 +1,3 @@
-# TODOs
-# 
-# - Adapt wording in algorithm picture to demo wording
-#
-# - Create sketch of algorithm preview that is reduced c.f. full algorithm picture
-#
-# - Create sketch for sequential preparation
-#
-# - Create sketch for fusion step
-#
-# - Adapt algorithm and algorithm preview pictures to the fusion step picture
-#
-# - Comment on bond measurements being the same for sequential and const-depth algorithm,
-#   and how that works (brief!)
-#
 r"""Constant-depth preparation of matrix product states with dynamic circuits
 =============================================================================
 
@@ -259,11 +244,11 @@ print(f"For {g=}, the theoretical correlation length is {xi=:.4f}")
 # physical qubit, and a final basis change to measure the Bell basis. Overall, this amounts to a linear
 # operation count and circuit depth.
 #
-# These steps are visualized in the following sketch, with the bond qudits starting on the right.
-# Note that the sketch deviates from standard circuit diagrams in that it passes one bond qudits from
-# the right to the left, instead of keeping the position of the qudits fixed.
+# These steps are visualized in the following sketch, with the bond qudits starting at the top.
+# Note that the sketch deviates from standard circuit diagrams in that it passes one bond qudit from
+# the top to the bottom, instead of keeping the position of the qudits fixed.
 #
-# .. image:: ../_static/demonstration_assets/constant_depth_mps_prep/sequential_prep.png
+# .. image:: ../_static/demonstration_assets/constant_depth_mps_prep/sequential.png
 #     :width: 75%
 #     :align: center
 #
@@ -629,6 +614,10 @@ def push_and_correct(op_id, phys_wires):
 # It is important to remember that showing the existence of suitable operator pushing
 # relations (and finding them explicitly) is a crucial step in general, which goes
 # beyond the scope of the demo.
+# 
+# The projective measurement step at the end is the same as for the sequential
+# preparation algorithm, and therefore is *probabilistic*, with the same
+# success probability.
 #
 # Block size :math:`q`
 # ~~~~~~~~~~~~~~~~~~~~

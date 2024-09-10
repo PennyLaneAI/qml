@@ -2,11 +2,11 @@
     "title": "Constant-depth preparation of matrix product states with dynamic circuits",
     "authors": [
         {
-            "id": "david_wierichs"
+            "username": "dwierichs"
         }
     ],
-    "dateOfPublication": "2024-09-10T00:00:00+00:00",
-    "dateOfLastModification": "2024-09-10T00:00:00+00:00",
+    "dateOfPublication": "2024-09-25T00:00:00+00:00",
+    "dateOfLastModification": "2024-09-25T00:00:00+00:00",
     "categories": [
         "Quantum Computing",
         "Algorithms"
