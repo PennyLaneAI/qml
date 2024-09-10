@@ -711,14 +711,15 @@ df_compare_Es
 # .. [#nakaji2024]
 #
 #     Kouhei Nakaji *et al.*, "The generative quantum eigensolver (GQE) and its application for ground state search". 
-#     `arXiv:2401.09253 <https://arxiv.org/abs/2401.09253>`__
+#     `arXiv:2401.09253 (2024) <https://arxiv.org/abs/2401.09253>`__
 # 
 # .. [#radford2019]
 # 
 #     Alec Radford *et al.*, "Language Models are Unsupervised Multitask Learners".
-#     `OpenAI blog 2019 <https://api.semanticscholar.org/CorpusID:160025533>`__
+#     OpenAI blog, 1(8):9 (2019)
 # 
 # .. [#vaswani2017]
+# 
 #     Ashish Vaswani *et al.*, "Attention is All you Need". 
-#     `Neural Information Processing Systems 2017 <https://api.semanticscholar.org/CorpusID:13756489>`__
+#     Advances in Neural Information Processing Systems, 30 (2017)
 # 

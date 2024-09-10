@@ -24,13 +24,31 @@
     "canonicalURL": "/qml/demos/gqe_training",
     "references": [
         {
-            "id": "gqe_paper",
+            "id": "nakaji2024",
             "type": "article",
             "title": "The generative quantum eigensolver (GQE) and its application for ground state search",
             "authors": "K. Nakaji, L. B. Kristensen, J. A. Campos-Gonzalez-Angulo, M. G. Vakili, H. Huang, M. Bagherimehrab, C. Gorgulla, F. Wong, A. McCaskey, J. S. Kim, T. Nguyen, P. Rao, A. Aspuru-Guzik",
             "year": "2024",
             "journal": "",
             "url": "https://arxiv.org/abs/2401.09253"
+        },
+        {
+            "id": "radford2019",
+            "type": "article",
+            "title": "Language Models are Unsupervised Multitask Learners",
+            "authors": "A. Radford, J. Wu, R. Child, D. Luan, D. Amodei, I. Sutskever",
+            "year": "2019",
+            "journal": "OpenAI blog",
+            "url": "https://openai.com/index/better-language-models/"
+        },
+        {
+            "id": "vaswani2017",
+            "type": "article",
+            "title": "Attention is All you Need",
+            "authors": "A. Vaswani, N. Shazeer, N. Parmar, J. Uszkoreit, L. Jones, A. N. Gomez, L. Kaiser, I. Polosukhin",
+            "year": "2017",
+            "journal": "Advances in Neural Information Processing Systems",
+            "url": "https://papers.nips.cc/paper_files/paper/2017/hash/3f5ee243547dee91fbd053c1c4a845aa-Abstract.html"
         }
     ],
     "basedOnPapers": [
