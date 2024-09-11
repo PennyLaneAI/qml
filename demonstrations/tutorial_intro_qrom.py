@@ -6,9 +6,9 @@ In this demonstration, we will discuss the concept of a Quantum Read-Only Memory
 We also explain how to use this operator in PennyLane using the :class:`~.pennylane.QROM` template.
 
 
-.. figure:: ../_static/demonstration_assets/qrom/qrom_opengraph.png
+.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_qrom.png
     :align: center
-    :width: 50%
+    :width: 70%
     :target: javascript:void(0)
 
 QROM
@@ -344,5 +344,5 @@ for i in range(8):
 #       "Creating superpositions that correspond to efficiently integrable probability distributions",
 #       `arXiv:quant-ph/0208112 <https://arxiv.org/abs/quant-ph/0208112>`__, 2002
 #
-# About the author
-# ----------------
+# About the authors
+# -----------------

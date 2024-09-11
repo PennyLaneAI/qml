@@ -22,10 +22,10 @@
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnial_large_qrom.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_qrom.png"
         }
     ],
-    "seoDescription": "Learn how to enter data into a quantum computer with a QROM",
+    "seoDescription": "Learn how to enter data into a quantum computer with a quantum read-only memory (QROM) approach.",
     "doi": "",
     "canonicalURL": "/qml/demos/tutorial_intro_qrom",
     "references": [
