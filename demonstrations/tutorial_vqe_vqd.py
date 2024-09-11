@@ -47,7 +47,7 @@ a familiarization with the `variational quantum eigensolver (VQE) algorithm <htt
 #
 
 import pennylane as qml
-from pennylane import numpy as np
+import numpy as np
 
 # Load the dataset
 h2 = qml.data.load("qchem", molname="H2", bondlength=0.742, basis="STO-3G")[0]
@@ -58,7 +58,7 @@ H, n_qubits = h2.hamiltonian, len(h2.hamiltonian.wires)
 
 # Obtain the ground state from the operations given by the dataset
 def generate_ground_state(wires):
-    qml.BasisState(h2.hf_state, wires=wires)
+    qml.BasisState(np.array(h2.hf_state), wires=wires)
 
     for op in h2.vqe_gates:  # use the gates data from the dataset
         op = qml.map_wires(op, {op.wires[i]: wires[i] for i in range(len(wires))})

@@ -317,7 +317,7 @@ def vqlm(data, params):
 
     # Initial encoding
     for i in range(num_qubits):
-        equivariant_encoding(alphas[i, 0], jnp.asarray(data)[i % active_atoms, ...], wires=[i])
+        equivariant_encoding(alphas[i, 0], jnp.asarray(data, dtype=complex)[i % active_atoms, ...], wires=[i])
 
     # Reuploading model
     for d in range(D):
@@ -339,7 +339,7 @@ def vqlm(data, params):
         # Encoding
         for i in range(num_qubits):
             equivariant_encoding(
-                alphas[i, d + 1], jnp.asarray(data)[i % active_atoms, ...], wires=[i]
+                alphas[i, d + 1], jnp.asarray(data, dtype=complex)[i % active_atoms, ...], wires=[i]
             )
 
     return qml.expval(Observable)
