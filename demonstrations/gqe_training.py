@@ -251,8 +251,8 @@ train_sub_seq_en = get_subsequence_energies(train_op_seq)
 # `dataclass <https://github.com/karpathy/nanoGPT/blob/9755682b981a45507f6eb9b11eadef8cb83cebd5/model.py#L109>`__ 
 # ``GPTConfig``. Namely, we will use 12 attention layers, 12 attention heads, and 768 embedding dimensions, 
 # which are equal to those described in [#nakaji2024]_. 
-# We can import from the nanoGPT repo directly by running the curl command below in the terminal
-# or the Jupyter Notebook. Since nanoGPT is trained as a language model, its loss function and sampling method are 
+# We can import from the nanoGPT repo directly by running the ``curl`` command (commented out below) in the Jupyter Notebook.
+# Since nanoGPT is trained as a language model, its loss function and sampling method are 
 # defined differently. We then define the subclass ``GPTQE`` below to override some nanoGPT methods in order to make it more
 # suitable for our case. 
 # 
