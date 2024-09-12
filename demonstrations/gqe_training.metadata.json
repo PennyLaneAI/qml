@@ -7,7 +7,7 @@
     ],
     "dateOfPublication": "2024-05-27T00:00:00+00:00",
     "dateOfLastModification": "2024-05-27T00:00:00+00:00",
-    "categories": ["Quantum Machine Learning"],
+    "categories": ["Quantum Machine Learning", "Quantum Chemistry", "Algorithms"],
     "tags": [],
     "previewImages": [
         {
@@ -19,7 +19,7 @@
             "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_generative_quantum_eigensolver.png"
         }
     ],
-    "seoDescription": "Learn how you can train a small GPT model using PennyLane data.",
+    "seoDescription": "Learn how you can train a small GPT model using the generative quantum eigensolver (GQE) technique and PennyLane data.",
     "doi": "",
     "canonicalURL": "/qml/demos/gqe_training",
     "references": [
@@ -55,6 +55,17 @@
         "10.48550/arXiv.2401.09253"
     ],
     "referencedByPapers": [],
-    "relatedContent": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_vqe",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_vqe_qng",
+            "weight": 1.0
+        }
+    ],
     "hardware": []
 }
