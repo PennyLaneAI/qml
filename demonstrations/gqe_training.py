@@ -57,7 +57,7 @@ state. And lastly, we discuss the results, potential ways optimizing the code, a
 ######################################################################
 # The main difference between the two approaches is where the tunable parameters are embedded.
 # That is, it is the classical GQE model that is being optimized as opposed to the variable
-# quantum circuit of VQE. Potentially then, the  :doc:`barren plateau </demos/tutorial_barren_plateaus/>` landscape of VQE and the quantum gradient
+# quantum circuit of VQE. Potentially then, the :doc:`barren plateau </demos/tutorial_barren_plateaus/>` landscape of VQE and the quantum gradient
 # evaluation of large circuits will be sidestepped by GQE, thus becoming more amenable for larger problems.
 # 
 
@@ -76,7 +76,7 @@ state. And lastly, we discuss the results, potential ways optimizing the code, a
 # of operators :math:`U_j` loaded from `PennyLane Datasets <https://pennylane.ai/datasets/>`__. We interpret these integers as 
 # tokens and the pool as the vocabulary in the parlance for language models. 
 # The goal of training is then to minimize the corresponding energy
-# :math:`E = \mbox{Tr}(\hat{H}\rho)` where :math:`\hat{H}` is the Hamiltonian of the molecule in 
+# :math:`E = \mbox{Tr}(\hat{H}\rho)`, where :math:`\hat{H}` is the Hamiltonian of the molecule in 
 # question.
 # 
 # Each token :math:`j_i` is sampled from the distribution :math:`\exp(-\beta w_{j_i})`, where
@@ -471,7 +471,7 @@ true_Es_t = np.concatenate(true_Es_t, axis=1)
 
 ######################################################################
 # With a preliminary look at the training logs above, we see that the offline training took 2 h and 12 min for 10,000 
-# training iterations. The code execution time was measured using ``%%time`` before the code block. 
+# training iterations. The code execution time was measured by including ``%%time`` before the code block. 
 # We also note that the mean absolute error between the predicted and true energies for the 
 # generated sequences quickly became smaller during the earlier parts of the training but become more fluctuating
 # later on. As mentioned earlier, a model version is saved each time we get better performance. The best model version is then 
