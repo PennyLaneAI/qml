@@ -31,6 +31,24 @@ state. And lastly, we discuss the results, potential ways optimizing the code, a
 
 """
 
+######################################################################
+# GQE vs. VQE
+# -----------
+# Despite the relative success of VQE, there are some issues regarding its "trainability for large problem  
+# instances" [#nakaji2024]_. This shortcoming makes it less competitive against the performance of
+# classical machine learning (ML) algorithms for large problems. To bypass this, the GQE algorithm was 
+# proposed. A GQE is then a generative model where quantum states represented by quantum circuits are 
+# sampled. The generative model is then trained so that the states being sampled more closely approximate
+# the ground state. 
+# 
+# The main difference between the two approaches is where the tunable parameters are embedded.
+# That is, it is the classical GQE model that is being optimized as opposed to the variable
+# quantum circuit of VQE. Potentially then, the :doc:`barren plateau </demos/tutorial_barren_plateaus/>` landscape of 
+# VQE and the quantum gradient evaluation of large circuits will be sidestepped by GQE, thus becoming more amenable 
+# for larger problems.
+# 
+ 
+
 ##############################################################################
 #.. figure:: ../_static/demonstration_assets/gqe_training/paper_vqe_diagram.png
 #    :align: center
@@ -38,28 +56,12 @@ state. And lastly, we discuss the results, potential ways optimizing the code, a
 # 
 #    Figure 1: VQE diagram from [#nakaji2024]_
 
-######################################################################
-# However, there are some issues with VQE regarding its "trainability for large problem instances" [#nakaji2024]_. 
-# This shortcoming makes it less competitive against
-# the performance of classical machine learning (ML) algorithms for large problems. To bypass this, the GQE algorithm was 
-# proposed. A GQE is then a generative model where quantum states represented by quantum circuits are 
-# sampled. The generative model is then trained so that the states being sampled more closely approximate
-# the ground state. 
-#
-
 ##############################################################################
 #.. figure:: ../_static/demonstration_assets/gqe_training/paper_gqe_diagram.png
 #    :align: center
 #    :width: 90%
 # 
-#    Figure 2: GQE diagram from [#nakaji2024]_
-
-######################################################################
-# The main difference between the two approaches is where the tunable parameters are embedded.
-# That is, it is the classical GQE model that is being optimized as opposed to the variable
-# quantum circuit of VQE. Potentially then, the :doc:`barren plateau </demos/tutorial_barren_plateaus/>` landscape of VQE and the quantum gradient
-# evaluation of large circuits will be sidestepped by GQE, thus becoming more amenable for larger problems.
-# 
+#    Figure 2: GQE diagram from [#nakaji2024]_ 
 
 ######################################################################
 # GPT-QE background
