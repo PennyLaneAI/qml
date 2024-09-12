@@ -50,8 +50,8 @@ r"""How to use noise models in PennyLane
 #    equal to or are contained in a specified set of wires. They are built using
 #    :func:`~.pennylane.noise.wires_eq` and :func:`~.pennylane.noise.wires_in`.
 # 3. **Arbitrary conditionals:** Custom conditionals can be defined as a function wrapped
-#    with a :class:`~.pennylane.BooleanFn` decorator. Signature for such conditionals must
-#    be ``cond_fn(operation: Operation) -> bool``.
+#    with a :class:`~.pennylane.BooleanFn` decorator. The signature for such conditionals
+#    must be ``cond_fn(operation: Operation) -> bool``.
 #
 # For example, here's how we would define a conditional that checks for :math:`R_X(\phi)`
 # gate operations with :math:`|\phi| < 1.0` and wires :math:`\in \{0, 1\}`:
@@ -94,7 +94,7 @@ op = qml.X('w1') # Example gate operation
 print(f"Error for {op}: {depol_error(op)}")
 
 ######################################################################
-# Noise Models
+# Noise models
 # ~~~~~~~~~~~~
 #
 # We can now create a PennyLane :class:`~.pennylane.NoiseModel` by stitching together
@@ -221,7 +221,8 @@ print(f"Ideal v/s Noisy: {ideal_res} and {noisy_res}")
 # can be constructed with utmost flexibility as we showed here.
 #
 # Should you have any questions about using noise models in PennyLane, you can consult the
-# `noise module documentation <https://docs.pennylane.ai/en/stable/code/qml_noise.html>`__
+# `noise module documentation <https://docs.pennylane.ai/en/stable/code/qml_noise.html>`__,
+# `codebook module <https://pennylane.ai/codebook/#06-noisy-quantum-theory>`__ on noise,
 # or create a post on the `PennyLane Discussion Forum <https://discuss.pennylane.ai>`__.
 # You can also follow us on `X (formerly Twitter) <https://twitter.com/PennyLaneAI>`__
 # or `LinkedIn <https://www.linkedin.com/company/pennylaneai/>`__ to stay up-to-date with
