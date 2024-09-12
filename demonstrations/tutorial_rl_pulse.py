@@ -528,7 +528,7 @@ def score_function_and_action(params, state, subkey):
 @jax.jit
 def sum_pytrees(pytrees):
     """Sum a list of pytrees."""
-    return jax.tree_map(lambda *x: sum(x), *pytrees)
+    return jax.tree_util.tree_map(lambda *x: sum(x), *pytrees)
 
 
 @jax.jit
@@ -586,13 +586,13 @@ def reinforce_gradient_with_baseline(episodes):
     # b
     baseline = compute_baseline(episodes)
     # G - b
-    ret_minus_baseline = jax.tree_map(lambda b: adapt_shape(returns, b) - b, baseline)
+    ret_minus_baseline = jax.tree_util.tree_map(lambda b: adapt_shape(returns, b) - b, baseline)
     # sum((G - b) * sf)
     sf_sum = sum_pytrees(
-        [jax.tree_map(lambda r, s: r * s, ret_minus_baseline, sf) for sf in score_functions]
+        [jax.tree_util.tree_map(lambda r, s: r * s, ret_minus_baseline, sf) for sf in score_functions]
     )
     # E[sum((G - b) * sf)]
-    return jax.tree_map(lambda x: x.sum(0) / ret_episodes, sf_sum)
+    return jax.tree_util.tree_map(lambda x: x.sum(0) / ret_episodes, sf_sum)
 
 
 @jax.jit
@@ -603,19 +603,19 @@ def compute_baseline(episodes):
     n_segments = len(score_functions)
     total_actions = n_episodes * n_segments
     # Square of the score function: sf**2
-    sq_sfs = jax.tree_map(lambda sf: sf**2, score_functions)
+    sq_sfs = jax.tree_util.tree_map(lambda sf: sf**2, score_functions)
     # Expected value: E[sf**2]
-    exp_sq_sfs = jax.tree_map(
+    exp_sq_sfs = jax.tree_util.tree_map(
         lambda sqsf: sqsf.sum(0, keepdims=True) / total_actions, sum_pytrees(sq_sfs)
     )
     # Return times score function squared: G*sf**2
     r_sq_sf = sum_pytrees(
-        [jax.tree_map(lambda sqsf: adapt_shape(returns, sqsf) * sqsf, sq_sf) for sq_sf in sq_sfs]
+        [jax.tree_util.tree_map(lambda sqsf: adapt_shape(returns, sqsf) * sqsf, sq_sf) for sq_sf in sq_sfs]
     )
     # Expected product: E[G_t*sf**2]
-    exp_r_sq_sf = jax.tree_map(lambda rsqsf: rsqsf.sum(0, keepdims=True) / total_actions, r_sq_sf)
+    exp_r_sq_sf = jax.tree_util.tree_map(lambda rsqsf: rsqsf.sum(0, keepdims=True) / total_actions, r_sq_sf)
     # Ratio of espectation values: E[G_t*sf**2] / E[sf**2]  (avoid dividing by zero)
-    return jax.tree_map(lambda ersq, esq: ersq / jnp.where(esq, esq, 1.0), exp_r_sq_sf, exp_sq_sfs)
+    return jax.tree_util.tree_map(lambda ersq, esq: ersq / jnp.where(esq, esq, 1.0), exp_r_sq_sf, exp_sq_sfs)
 
 
 ######################################################################
@@ -644,7 +644,7 @@ def get_optimizer(params, learning_rate):
 def update_params(params, gradients, optimizer, opt_state):
     """Update model parameters with gradient ascent."""
     updates, opt_state = optimizer.update(gradients, opt_state, params)
-    new_params = jax.tree_map(lambda p, u: p - u, params, updates)  # Negative update
+    new_params = jax.tree_util.tree_map(lambda p, u: p - u, params, updates)  # Negative update
     return new_params, opt_state
 
 

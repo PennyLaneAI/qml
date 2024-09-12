@@ -242,6 +242,7 @@ directly implement the product of the two sigmoids in the function ``sigmoid_rec
     R_k(t, (\Omega, t_0, t_1), k)=
     \Omega [1+\exp(-k (t-t_0))+\exp(-k (t_1-t))+\exp(-k(t_1-t_0))]^{-1}.
 """
+
 import jax
 from jax import numpy as jnp
 
@@ -696,7 +697,7 @@ max_params = params_hist[jnp.argmax(jnp.array(profit_hist))]
 # flip the third qubit, returning a probability of one in the last entry
 # and zeros elsewhere.
 
-dev = qml.device("default.qubit.jax", wires=3)
+dev = qml.device("default.qubit", wires=3)
 
 
 @qml.qnode(dev, interface="jax")

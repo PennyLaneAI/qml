@@ -1,0 +1,88 @@
+{
+    "title": "Classically estimating expectation values from parametrized quantum circuits",
+    "authors": [
+        {
+            "username": "dwierichs"
+        }
+    ],
+    "dateOfPublication": "2024-09-10T00:00:00+00:00",
+    "dateOfLastModification": "2024-09-10T00:00:00+00:00",
+    "categories": [
+        "Quantum Computing"
+    ],
+    "tags": [],
+    "previewImages": [  
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_classical_expval_estimation.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_classical_expval_estimation.png"
+        }
+    ],
+    "seoDescription": "Estimate expectation values from parametrized quantum circuits efficiently on average with truncated Pauli propagation.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_classical_expval_estimation",
+    "references": [
+        {
+            "id": "gottesman",
+            "type": "article",
+            "title": "The Heisenberg Representation of Quantum Computers.",
+            "authors": "D. Gottesman",
+            "year": "1998",
+            "journal": "",
+            "url": "https://arxiv.org/abs/quant-ph/9807006"
+        },
+        {
+            "id": "angrisani",
+            "type": "article",
+            "title": "Classically estimating observables of noiseless quantum circuits.",
+            "authors": "Armando Angrisani, Alexander Schmidhuber, Manuel S. Rudolph, M. Cerezo, Zoë Holmes, Hsin-Yuan Huang",
+            "year": "2024",
+            "journal": "",
+            "url": "https://arxiv.org/abs/2409.01706"
+        },
+        {
+            "id": "aharonov",
+            "type": "article",
+            "title": "A polynomial-time classical algorithm for noisy random circuit sampling.",
+            "authors": "Dorit Aharonov, Xun Gao, Zeph Landau, Yunchao Liu, Umesh Vazirani",
+            "year": "2022",
+            "journal": "",
+            "url": "https://arxiv.org/abs/2211.03999"
+        },
+        {
+            "id": "lowesa",
+            "type": "article",
+            "title": "Classical surrogate simulation of quantum systems with LOWESA.",
+            "authors": "Manuel S. Rudolph, Enrico Fontana, Zoë Holmes, Lukasz Cincio",
+            "year": "2023",
+            "journal": "",
+            "url": "https://arxiv.org/abs/2308.09109"
+        },
+        {
+            "id": "begusic",
+            "type": "article",
+            "title": "Fast and converged classical simulations of evidence for the utility of quantum computing before fault tolerance.",
+            "authors": "Tomislav Begušić, Johnnie Gray, Garnet Kin-Lic Chan",
+            "year": "2023",
+            "journal": "",
+            "url": "https://arxiv.org/abs/2308.05077"
+        }
+    ],
+    "basedOnPapers": ["10.48550/arXiv.2409.01706"],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_clifford_circuit_simulations",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_liesim",
+            "weight": 1.0
+        }
+    ]
+}

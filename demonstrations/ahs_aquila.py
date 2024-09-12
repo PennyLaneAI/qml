@@ -512,7 +512,7 @@ amplitude_params = [max_amplitude, displacement, sigma]
 params = [amplitude_params]
 ts = [0.0, 1.75]
 
-default_qubit = qml.device("default.qubit.jax", wires=3, shots=1000)
+default_qubit = qml.device("default.qubit", wires=3, shots=1000)
 
 
 @qml.qnode(default_qubit, interface="jax")
