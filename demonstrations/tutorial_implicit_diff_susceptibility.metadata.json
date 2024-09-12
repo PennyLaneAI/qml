@@ -9,7 +9,7 @@
         }
     ],
     "dateOfPublication": "2022-11-28T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-08-30T00:00:00+00:00",
     "categories": [
         "Optimization"
     ],
@@ -80,7 +80,9 @@
             "url": "http://emis.icm.edu.pl/journals/JIPAM/v4n1/061_02_www.pdf"
         }
     ],
-    "basedOnPapers": ["10.48550/arXiv.2211.13765"],
+    "basedOnPapers": [
+        "10.48550/arXiv.2211.13765"
+    ],
     "referencedByPapers": [],
     "relatedContent": [
         {

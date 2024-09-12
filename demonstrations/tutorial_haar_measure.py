@@ -224,7 +224,6 @@ def plot_bloch_sphere(bloch_vectors):
     ax.grid(False)
     ax.set_axis_off()
     ax.view_init(30, 45)
-    ax.dist = 7
 
     # Draw the axes (source: https://github.com/matplotlib/matplotlib/issues/13575)
     x, y, z = np.array([[-1.5,0,0], [0,-1.5,0], [0,0,-1.5]])
@@ -241,6 +240,7 @@ def plot_bloch_sphere(bloch_vectors):
     ax.scatter(
         bloch_vectors[:,0], bloch_vectors[:,1], bloch_vectors[:, 2], c='#e29d9e', alpha=0.3
     )
+    plt.show()
 
 plot_bloch_sphere(not_haar_bloch_vectors)
 
@@ -278,7 +278,7 @@ sin_sampler = sin_prob_dist(a=0, b=np.pi)
 @qml.qnode(dev)
 def haar_random_unitary():
     phi, omega = 2 * np.pi * np.random.uniform(size=2) # Sample phi and omega as normal
-    theta = sin_sampler.rvs(size=1) # Sample theta from our new distribution
+    theta = sin_sampler.rvs(size=1)[0]  # Sample theta from our new distribution
     qml.Rot(phi, theta, omega, wires=0)
     return qml.state()
 
