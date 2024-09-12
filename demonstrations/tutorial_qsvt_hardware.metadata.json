@@ -1,0 +1,45 @@
+{
+    "title": "How to implement QSVT on hardware",
+    "authors": [
+        {
+            "id": "guillermo_alonso"
+        }
+    ],
+    "dateOfPublication": "2023-05-23T00:00:00+00:00",
+    "dateOfLastModification": "2024-03-04T00:00:00+00:00",
+    "categories": [
+        "Algorithms",
+        "Quantum Computing"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/intro_qsvt/thumbnail_intro_qsvt.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_intro_qsvt.png"
+        }
+    ],
+    "seoDescription": "Learn how to implement QSVT on hardware.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_qsvt_hardware",
+    "references": [
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_intro_qsvt",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_apply_qsvt",
+            "weight": 1.0
+        }
+
+    ]
+}
