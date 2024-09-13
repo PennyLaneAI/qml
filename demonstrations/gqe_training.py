@@ -50,18 +50,11 @@ state. And lastly, we discuss the results, potential ways optimizing the code, a
  
 
 ##############################################################################
-#.. figure:: ../_static/demonstration_assets/gqe_training/paper_vqe_diagram.png
+#.. figure:: ../_static/demonstration_assets/gqe_training/paper_gqe_vqe.png
 #    :align: center
 #    :width: 90%
 # 
-#    Figure 1: VQE diagram from [#nakaji2024]_
-
-##############################################################################
-#.. figure:: ../_static/demonstration_assets/gqe_training/paper_gqe_diagram.png
-#    :align: center
-#    :width: 90%
-# 
-#    Figure 2: GQE diagram from [#nakaji2024]_ 
+#    Figure 1: Diagrams of GQE and VQE from [#nakaji2024]_
 
 ######################################################################
 # GPT-QE background
@@ -74,9 +67,10 @@ state. And lastly, we discuss the results, potential ways optimizing the code, a
 # harnessed for quantum chemistry by constructing quantum states :math:`\rho` as a sequence of unitary operators 
 # which are, in turn, represented by quantum circuits. That is, we let :math:`\rho = U\rho_0 U^{\dagger}`
 # for some fixed initial state :math:`\rho_0` and the aforementioned sequence is :math:`U = U_{j_N}U_{j_{N-1}}\cdots U_{j_1}`.
-# The GPT model generates the sequence of integers :math:`j_1, j_2, ..., j_N` indexing a pool 
-# of operators :math:`U_j` loaded from `PennyLane Datasets <https://pennylane.ai/datasets/>`__. We interpret these integers as 
-# tokens and the pool as the vocabulary in the parlance for language models. 
+# The GPT model samples a sequence of integers :math:`j_1, j_2, ..., j_N` indexing a pool 
+# of operators :math:`U_j` generated using molecular data from `PennyLane Molecules <https://pennylane.ai/datasets/qchem>`__ 
+# (a collection of many molecular datasets in `PennyLane Datasets <https://pennylane.ai/datasets/>`__). We interpret these 
+# integers as tokens and the pool as the vocabulary in the parlance for language models. 
 # The goal of training is then to minimize the corresponding energy
 # :math:`E = \mbox{Tr}(\hat{H}\rho)`, where :math:`\hat{H}` is the Hamiltonian of the molecule in 
 # question.
@@ -92,7 +86,7 @@ state. And lastly, we discuss the results, potential ways optimizing the code, a
 # With this constraint satisfied, GPT-QE would then be sampling states of smaller energies with increasing
 # likelihood.
 #  
-# More concretely, we summarize the "pre-"training loop in Figure 3. This is called
+# More concretely, we summarize the "pre-"training loop in Figure 2. This is called
 # pre-training because the learning is done using a fixed dataset first before the "real" training 
 # is done based on the data it generated on its own. In this demo, we will call the pre-training as offline
 # training since the GPT model does not receive feedback from the sequences it samples, and online
@@ -103,7 +97,7 @@ state. And lastly, we discuss the results, potential ways optimizing the code, a
 #    :align: center
 #    :width: 90%
 # 
-#    Figure 3: Overview for offline training of GPT-QE
+#    Figure 2: Overview for offline training of GPT-QE
 
 ######################################################################
 # Dataset construction via PennyLane
@@ -121,10 +115,15 @@ state. And lastly, we discuss the results, potential ways optimizing the code, a
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # For simplicity, let us consider the `hydrogen gas molecule <https://pennylane.ai/datasets/qchem/h2-molecule>`__ 
-# and load the correspoding dataset from PennyLane.
+# and load the corresponding dataset from PennyLane.
 # Recall that we would need a vocabulary of operators :math:`U_j`, an initial state :math:`\rho_0`, and 
 # the Hamiltonian :math:`\hat{H}` for hydrogen gas. We also get the ground state energy for later comparison
-# with the results.
+# with the results. 
+# 
+# Specifically, the unitary operators :math:`U_j` are time evolution operators as prescribed
+# in [#nakaji2024]_. The non-identity operators are generated in PennyLane using :class:`~.pennylane.SingleExcitation`
+# and :class:`~.pennylane.DoubleExcitation` which then depend on the number of electrons and orbitals 
+# of the molecule.
 # 
 
 import numpy as np
@@ -238,7 +237,7 @@ train_sub_seq_en = get_subsequence_energies(train_op_seq)
 # GPT-QE offline training
 # --------------------------
 # Having setup our training dataset, we can start implementing our offline training loop as
-# illustrated in Figure 3. We outline our implementation below.
+# illustrated in Figure 2. We outline our implementation below.
 
 ######################################################################
 # GPT model implementation details
@@ -514,10 +513,10 @@ loss_fig
 #    :align: center
 #    :width: 100%
 # 
-#    Figure 4: The subsequence loss for each training iteration
+#    Figure 3: The subsequence loss for each training iteration
 
 ##############################################################################
-# We see in Figure 4 that the loss
+# We see in Figure 3 that the loss
 # continues to decrease until around the 4,000th iteration. There, the model was erroraneous but is quick
 # to recover as training continues. This may signal that the GPT model started focusing on learning something
 # erroraneous too quickly. So, more regularization noise (like ``dropout``) may be needed to help avoid this. 
@@ -526,9 +525,9 @@ loss_fig
 # Evaluation progress
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
-# We now track the performance of the GPT model throughout its training in Figure 5 below. As mentioned
+# We now track the performance of the GPT model throughout its training in Figure 4 below. As mentioned
 # before, after every 500th iteration, we let the model generate a batch of sequences. Alongside, we
-# also return the total logits (predicted energies) used in the sequence generation. In Figure 5,
+# also return the total logits (predicted energies) used in the sequence generation. In Figure 4,
 # the average predicted energies correspond to the red markers and the distribution of predicted
 # energies is represented by the red area. Once we have the generated sequences, we can also let PennyLane calculate the true sequence
 # energies. Similarly then, the blue markers are the average true energies and the blue
@@ -565,22 +564,22 @@ fig
 #    :align: center
 #    :width: 100%
 # 
-#    Figure 5: True and predicted energies for sequences generated by the GPT model for each 500th training iteration
+#    Figure 4: True and predicted energies for sequences generated by the GPT model for each 500th training iteration
 
 ##############################################################################
 # We now see that the energies predicted by the model get more accurate at approximating the true
 # energies during training. The increase in accuracy then allows the model to correctly sample states 
-# with lower energies. This is supported in Figure 5 where the true energies 
+# with lower energies. This is supported in Figure 4 where the true energies 
 # sampled gets closer to the ground state energy (the dashed line).
 # 
 # Note that at around the 4,000th iteration, the predicted energies are very far from the true energies.
-# This makes sense considering our observation in Figure 4. Also note that at the 7,000th
+# This makes sense considering our observation in Figure 3. Also note that at the 7,000th
 # iteration, the averages of the predicted and true energies are the closest and even their respective
 # spreads seem to have good overlap. This is when the best performing model version was saved, as seen in the training logs. 
 # For later iterations however, the predicted energies no longer improved.
 # This may indicate that the GPT model has started overfitting on the training dataset in the later iterations. 
 # That is, the model became great at predicting the correct energies for the training set (as observed by the decreasing
-# loss in Figure 4) but not great at generalizing on those outside the training set (like the sequences that the model
+# loss in Figure 3) but not great at generalizing on those outside the training set (like the sequences that the model
 # generated on its own). One solution to avoid overfitting could then be online training. This is so that 
 # the GPT model is not restricted on a fixed dataset on which to overfit.
 # 
@@ -659,7 +658,7 @@ df_compare_Es
 # Between the two GPT model versions, we see that the latest version is worse than the best version. The minimum energy
 # error for the latest version has the same order of magnitude as the corresponding one for the random training set.
 # Contrast this with the minimum energy error for the best version, which is 3 orders of magnitude smaller.
-# This behavior is supported by our observation in Figure 5 where the performance of the model after
+# This behavior is supported by our observation in Figure 4 where the performance of the model after
 # the 7,000th iteration worsened. That is, the predicted energies started to deviate further from the true energies
 # which in turn caused the states being sampled from these predicted energies to be different from the intended 
 # lower energy states.
