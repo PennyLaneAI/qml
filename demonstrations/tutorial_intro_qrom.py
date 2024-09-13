@@ -3,6 +3,7 @@ r"""Intro to quantum read-only memory (QROM)
 
 Managing data is a crucial task, and quantum computers are no exception: efficient data management is vital in `quantum machine learning <https://pennylane.ai/qml/quantum-machine-learning/>`__, search algorithms, and :doc:`state preparation </demos/tutorial_initial_state_preparation/>`.
 In this demonstration, we will discuss the concept of a quantum read-only memory (QROM), a data structure designed to load classical data into a quantum computer.
+This is a valuable tool in quantum machine learning or for preparing quantum states among others.
 We also explain how to use this operator in PennyLane using the :class:`~.pennylane.QROM` template.
 
 
