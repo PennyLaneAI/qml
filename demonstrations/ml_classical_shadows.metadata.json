@@ -15,6 +15,10 @@
         {
             "type": "thumbnail",
             "uri": "_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_machine_learning_quantum_manybody_problems.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_large_machine_learning_quantum_manybody_problems.png"
         }
     ],
     "seoDescription": "Learn how to apply machine learning to quantum many-body problems by using classical shadow formalism and ML to predict the ground-state properties of the 2D antiferromagnetic Heisenberg model.",
