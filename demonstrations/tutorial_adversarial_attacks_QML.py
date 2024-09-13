@@ -98,10 +98,7 @@ from matplotlib import pyplot as plt
 #
 
 # we can use the dataset hosted on PennyLane
-# pm = qml.data.load('other, name='PlusMinus')
-
-pm = qml.data.Dataset()
-pm.read("./adversarial_attacks/data/PlusMinus.h5")
+[pm] = qml.data.load('other', name='plus-minus')
 
 X_train = pm.img_train  # shape (1000,16,16)
 X_test = pm.img_test  # shape (200,16,16)
