@@ -1,5 +1,5 @@
 r"""
-Variational Quantum Circuit for Multidimensional Regression
+Multidimensional regression with a variational quantum circuit
 ===========================================================
 
 In this tutorial, we show how to use a variational quantum circuit to fit the simple multivariate function
@@ -35,11 +35,11 @@ By repeatedly running the circuit with a set of parameters :math:`\vec{\theta}` 
 approximate the expectation value of the observable :math:`M` in the state :math:`U(\vec{x}, \vec{\theta}) | 0 \rangle.` Then, the parameters can be
 optimized to minimize some loss function.
 
-What are we using the variational circuit for?
-----------------------------------------------
+Building the variational circuit
+--------------------------------
 
 In this example, we will use a variational quantum circuit to find the Fourier series that
-approximates the function :math:`f(x_1, x_2) = \frac{1}{2} \left( x_1^2 + x_2^2 \right)`. The variational circuit that we are using is made up of :math:`L` layers. Each layer consists of a *data encoding block*
+approximates the function :math:`f(x_1, x_2) = \frac{1}{2} \left( x_1^2 + x_2^2 \right)`. The variational circuit that we are using is made up of :math:`L` layers. Each layer consists of a *data-encoding block*
 :math:`S(\vec{x})` and a *training block* :math:`W(\vec{\theta})`. The overall circuit is:
 
 .. math:: U(\vec{x}, \vec{\theta}) = W^{(L+1)}(\vec{\theta}) S(\vec{x}) W^{(L)} (\vec{\theta}) \ldots W^{(2)}(\vec{\theta}) S(\vec{x}) W^{(1)}(\vec{\theta}).
@@ -56,13 +56,13 @@ that approximates :math:`f(\vec{x})`, i.e.,
 .. math:: g_{\vec{\theta}}(\vec{x})= \sum_{\vec{\omega} \in \Omega} c_\vec{\omega} e^{i \vec{\omega} \vec{x}} \approx f(\vec{x}).
 
 Then, we can directly plot the partial Fourier series. We can also apply a Fourier transform to
-:math:`g_{\vec{\theta}}`, so we can obtain the Fourier coefficients :math:`c_\vec{\omega}`. To know more about how to obtain the 
-Fourier series check out these two related tutorials [#demoschuld]_, [#demoqibo]_.
+:math:`g_{\vec{\theta}}`, so we can obtain the Fourier coefficients, :math:`c_\vec{\omega}`. To know more about how to obtain the 
+Fourier series, check out these two related tutorials [#demoschuld]_, [#demoqibo]_.
 
-How do we actually construct the quantum circuit?
--------------------------------------------------
+Constructing the quantum circuit
+--------------------------------
 
-First, let's import the necessary libraries and seed the random number generator. We will use MatPlotLib for plotting, and JAX [#demojax]_ for optimization.
+First, let's import the necessary libraries and seed the random number generator. We will use Matplotlib for plotting and JAX [#demojax]_ for optimization.
 We will also define the device, which has two qubits, using :func:`~.pennylane.device`.
 """
 
@@ -78,12 +78,12 @@ pnp.random.seed(42)
 dev = qml.device('default.qubit', wires=2)
 
 ######################################################################
-# Now we will construct the data-encoding circuit block, :math:`S(\vec{x})` as a product of :math:`R_z` rotations:
+# Now we will construct the data-encoding circuit block, :math:`S(\vec{x})`, as a product of :math:`R_z` rotations:
 #
 # .. math:: 
 #   S(\vec{x}) = R_z(x_1) \otimes R_z(x_2).
 #
-# Specifically, we define the :math:`S(\vec{x})` operator using the :class:`~.pennylane.AngleEmbedding` function
+# Specifically, we define the :math:`S(\vec{x})` operator using the :class:`~.pennylane.AngleEmbedding` function.
 
 def S(x):
     qml.AngleEmbedding( x, wires=[0,1],rotation='Z')
@@ -117,7 +117,7 @@ def target_function(x):
     return f
 
 ######################################################################
-# Now we will specify the range of :math:`x_1` and :math:`x_2` values and store those values in an input data vector. We are fitting the function for :math:`x_1, x_2 \in [-1, 1]` using 30 evenly-spaced samples for each variable.
+# Now we will specify the range of :math:`x_1` and :math:`x_2` values and store those values in an input data vector. We are fitting the function for :math:`x_1, x_2 \in [-1, 1]` using 30 evenly spaced samples for each variable.
 
 x1_min=-1
 x1_max=1
@@ -127,7 +127,7 @@ num_samples=30
 
 ######################################################################
 # Now we build the training data with the exact target function :math:`f(x_1, x_2)`. To do so, it is convenient to  
-# create a 2D grid to make sure that, for each value of
+# create a two-dimensional grid to make sure that, for each value of
 # :math:`x_1,` we perform a sweep over all the values of :math:`x_2` and viceversa.
 
 x1_train=pnp.linspace(x1_min,x1_max, num_samples)
@@ -135,7 +135,7 @@ x2_train=pnp.linspace(x2_min,x2_max, num_samples)
 x1_mesh,x2_mesh=pnp.meshgrid(x1_train, x2_train)
 
 ######################################################################
-# We define ``x_train``, ``y_train`` using the above vectors, reshaping them for our convenience
+# We define ``x_train`` and ``y_train`` using the above vectors, reshaping them for our convenience
 x_train=pnp.stack((x1_mesh.flatten(), x2_mesh.flatten()), axis=1)
 y_train = target_function([x1_mesh,x2_mesh]).reshape(-1,1)
 # Let's take a look at how they look like
@@ -143,8 +143,8 @@ print("x_train:\n", x_train[:5])
 print("y_train:\n", y_train[:5])
 
 ######################################################################
-# What do we do with the output from the circuit?
-# ------------------------------------------
+# Optimizing the circuit
+# ----------------------
 #
 # We want to optimize the circuit above so that the expectation value of :math:`Z \otimes Z` 
 # approximates the exact target function. This is done by minimizing the mean squared error between
@@ -161,7 +161,7 @@ print("y_train:\n", y_train[:5])
 
 @jax.jit
 def mse(params,x,targets):
-    # We compute the Mean Square Error between the target function and the quantum circuit to quantify the quality of our estimator
+    # We compute the mean square error between the target function and the quantum circuit to quantify the quality of our estimator
     return (quantum_neural_network(params,x)-jnp.array(targets))**2
 @jax.jit
 def loss_fn(params, x,targets):
@@ -171,7 +171,7 @@ def loss_fn(params, x,targets):
     return loss
 
 ####################################################################### 
-#Here, we are choosing an Adam Optimizer with a learning rate of 0.05 and 300 steps.
+#Here, we are choosing an Adam optimizer with a learning rate of 0.05 and 300 steps.
 
 opt = optax.adam(learning_rate=0.05)
 max_steps=300
@@ -249,15 +249,15 @@ ax2.set_title(f' Predicted \nAccuracy: {round(r2*100,3)}%')
 plt.tight_layout(pad=3.7)
 
 ######################################################################
-# Cool! We have managed to successfully fit a multidimensional function using a Parametrized Quantum Circuit!
+# Cool! We have managed to successfully fit a multidimensional function using a parametrized quantum circuit!
 
 ######################################################################
 # Conclusions
 # ------------------------------------------
 # In this demo, we've shown how to utilize a variational quantum circuit to solve a regression problem for a two-dimensional function. 
 # The results show a good agreement with the target function and the model 
-# can be trained further, increasing number of iterations in the training to maximize the accuracy. It also 
-# paves the way for addressing a regression problem for a :math:`N`-dimensional function, as everything presented 
+# can be trained further, increasing the number of iterations in the training to maximize the accuracy. It also 
+# paves the way for addressing a regression problem for an :math:`N`-dimensional function, as everything presented 
 # here can be easily generalized. A final check that could be done is to obtain the Fourier coefficients of the
 # trained circuit and compare it with the Fourier series we obtained directly from the target function.
 #

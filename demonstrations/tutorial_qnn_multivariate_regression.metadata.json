@@ -1,18 +1,19 @@
 {
-    "title": "Variational Quantum Circuit for Multidimensional Regression",
+    "title": "Multidimensional regression with a variational quantum circuit",
     "authors": [
         {
-            "id": "jorge_martinez_de_lejarza"
+            "username": "gmlejarza"
         },
         {
-            "id": "serene_shum"
+            "username": "quantumpenguin"
         }
     ],
     "dateOfPublication": "2024-05-09T00:00:00+00:00",
     "dateOfLastModification": "2024-05-09T00:00:00+00:00",
     "categories": [
         "Quantum Computing",
-        "Quantum Machine Learning"
+        "Quantum Machine Learning",
+        "Getting Started"
     ],
     "tags": [],
     "previewImages": [
@@ -25,7 +26,7 @@
             "uri": "/_static/demonstration_assets/qnn_multivariate_regression/qnn_diagram.jpg"
         }
     ],
-    "seoDescription": "Use a quantum neural network to fit a multivariate function",
+    "seoDescription": "Learn to use a quantum neural network to fit a multivariate function.",
     "doi": "",
     "canonicalURL": "/qml/demos/tutorial_qnn_multivariate_regression.py",
     "references": [
