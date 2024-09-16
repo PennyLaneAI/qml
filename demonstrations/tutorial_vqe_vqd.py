@@ -49,6 +49,14 @@ a familiarization with the `variational quantum eigensolver (VQE) algorithm <htt
 import pennylane as qml
 import numpy as np
 
+# .. note::
+#
+#     To improve veiwability of the demo, we will suppress any ``ComplexWarning``'s, which get raised during optmization
+#     The warnings do not impact the correctness of the results, but make it harder to view outputs.
+
+import warnings
+warnings.filterwarnings(action="ignore", category=np.ComplexWarning)
+
 # Load the dataset
 h2 = qml.data.load("qchem", molname="H2", bondlength=0.742, basis="STO-3G")[0]
 

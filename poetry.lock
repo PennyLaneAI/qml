@@ -4069,12 +4069,12 @@ scipy = ">=1.6.0"
 
 [[package]]
 name = "pennylane"
-version = "0.38.1"
+version = "0.38.0"
 description = "PennyLane is a cross-platform Python library for quantum computing, quantum machine learning, and quantum chemistry. Train a quantum computer the same way as a neural network."
 optional = false
 python-versions = "*"
 files = [
-    {file = "PennyLane-0.38.1-py3-none-any.whl", hash = "sha256:e7d20a2f629363c1b0152a33de74d112c0a459ec08126090e5750827da7dbf10"},
+    {file = "PennyLane-0.38.0-py3-none-any.whl", hash = "sha256:6a6f4e96feaffa0aafbf460be901140d6c14481cf26dc92fd050d74aaa793b47"},
 ]
 
 [package.dependencies]
@@ -7977,4 +7977,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.10.0"
-content-hash = "114d484fb141fa7eee7a4357ac7f6e38082c3c300214a2bfe0b48237e2b1ff78"
+content-hash = "d59fa8bf5b196b5b93ed6f2f19032ec552a4f9ecab1a0babfa976aba67278dbf"
