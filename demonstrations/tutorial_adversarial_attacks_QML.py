@@ -37,7 +37,7 @@ r"""Adversarial attacks and robustness for quantum machine learning
 # probability scores of :math:`K` classes with model parameters :math:`\theta^*`), the objective of
 # the untargeted attack is: 
 #
-# .. math:: \delta \equiv \; \underset{\delta^{\prime} \in \Delta}{\operatorname{argmax}} \;\mathcal{L}\left(f\left(x+\delta^{\prime} ; \theta^*\right), y\right)
+# .. math:: \delta \equiv \; \underset{\delta^{\prime} \in \Delta}{\operatorname{argmax}} \;\mathcal{L}\left(f\left(x+\delta^{\prime} ; \theta^*\right), y\right).
 # 
 # Later, when we show how to actually construct such an attack, we will revisit this
 # equation. For an adversarial attack to be considered useful, it must hold that the modifications to
