@@ -51,7 +51,7 @@ import numpy as np
 
 # .. note::
 #
-#     To improve veiwability of the demo, we will suppress any ``ComplexWarning``'s, which get raised during optmization
+#     To improve veiwability of this tutorial, we will suppress any ``ComplexWarning``'s which may raised during optmization.
 #     The warnings do not impact the correctness of the results, but make it harder to view outputs.
 
 import warnings
