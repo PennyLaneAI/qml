@@ -86,7 +86,7 @@ from matplotlib import pyplot as plt
 # Visualization of the dataset
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# As in the paper [#Wendlinger]_, we make use of the `PlusMinus <pennylane.ai/datasets/other/plus-minus>`_ dataset (available via `PennyLane Datasets <https://pennylane.ai/datasets/>`_), which serves as a good baseline for
+# As in the paper [#Wendlinger]_, we make use of the `PlusMinus <https://pennylane.ai/datasets/single-dataset/plus-minus>`_ dataset (available via `PennyLane Datasets <https://pennylane.ai/datasets/>`_), which serves as a good baseline for
 # evaluating a QML image classification model’s ability to find useful features in the input. It also
 # allows us to define the usefulness of attacks on the QML model while being low-dimensional enough to
 # perform scalable training (more info on the dataset can be found in [#Wendlinger]_). It consists of four
