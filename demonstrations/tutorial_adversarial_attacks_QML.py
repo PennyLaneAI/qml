@@ -4,7 +4,7 @@ r"""Adversarial attacks and robustness for quantum machine learning
 
 ######################################################################
 # This demo is based on the paper *A Comparative Analysis of Adversarial Robustness for Quantum and
-# Classical Machine Learning Models* [#Wendlinger]_ by M.Wendlinger, K.Tscharke and P.Debus, which dives into the
+# Classical Machine Learning Models* [#Wendlinger]_ by M. Wendlinger, K. Tscharke and P. Debus, which dives into the
 # world of adversarial attacks on quantum computers to find relations to classical adversarial machine
 # learning. In the following, we briefly cover the necessary theoretical baselines of adversarial
 # attacks on classification networks before giving a hands-on example of how to construct such an
@@ -25,7 +25,7 @@ r"""Adversarial attacks and robustness for quantum machine learning
 # manipulations of the pixels can fool a classifier without any changes being visible to humans. A
 # typical example of an adversarial attack is shown in the picture above, where an image of a panda is
 # manipulated by adding a small noise to each pixel. The original image is correctly classified as
-# “Panda”, while the image with tiny manipulations is falsely classified as “Gibbon” (the noise is
+# "Panda," while the image with tiny manipulations is falsely classified as "Gibbon" (the noise is
 # magnified in the figure so we can actually see it). This example is adapted from a famous paper [#Goodfellow]_
 # showing the vulnerability of classical machine learning models to adversarial attacks.
 #
@@ -58,7 +58,7 @@ r"""Adversarial attacks and robustness for quantum machine learning
 # attacks are imperceptible to humans, and hence difficult to detect. For this reason, it is essential
 # that ML models in security-critical applications are robust against these types of attacks.
 #
-# :doc:`Quantum machine learning (QML) </whatisqml>` has been shown to have theoretical advantages over classical ML methods [#Liu]_
+# `Quantum machine learning (QML) <[/whatisqml](https://pennylane.ai/qml/whatisqml/)>`__ has been shown to have theoretical advantages over classical ML methods [#Liu]_
 # and is becoming increasingly popular. However, first works in this direction suggest that QML
 # suffers from the same vulnerabilities as classical ML [#Lu]_. How the vulnerability of QML models
 # relates to classical models and how robust the models are in comparison is evaluated in [#Wendlinger]_. But
