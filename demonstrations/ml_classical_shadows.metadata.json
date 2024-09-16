@@ -1,0 +1,66 @@
+{
+    "title": "Machine learning for quantum many-body problems",
+    "authors": [
+        {
+            "username": "whatsis"
+        }
+    ],
+    "dateOfPublication": "2022-05-02T00:00:00+00:00",
+    "dateOfLastModification": "2024-09-05T00:00:00+00:00",
+    "categories": [
+        "Quantum Machine Learning"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_machine_learning_quantum_manybody_problems.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_machine_learning_quantum_manybody_problems.png"
+        }
+    ],
+    "seoDescription": "Learn how to apply machine learning to quantum many-body problems by using classical shadow formalism and ML to predict the ground-state properties of the 2D antiferromagnetic Heisenberg model.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/ml_classical_shadows",
+    "references": [
+        {
+            "id": "preskill",
+            "type": "article",
+            "title": "Provably efficient machine learning for quantum many-body problems",
+            "authors": "H. Y. Huang, R. Kueng, G. Torlai, V. V. Albert, J. Preskill",
+            "year": "2021",
+            "journal": "",
+            "url": "https://arxiv.org/abs/2106.12627"
+        },
+        {
+            "id": "neurtangkernel",
+            "type": "article",
+            "title": "Neural tangent kernel: Convergence and generalization in neural networks",
+            "authors": "A. Jacot, F. Gabriel, and C. Hongler",
+            "year": "2018",
+            "journal": "",
+            "url": "https://proceedings.neurips.cc/paper/2018/file/5a4be1fa34e62bb8a6ec6b91d2462f5a-Paper.pdf"
+        }
+    ],
+    "basedOnPapers": ["10.48550/arXiv.2106.12627"],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_classical_shadows",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_kernel_based_training",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_kernels_module",
+            "weight": 1.0
+        }
+    ]
+}

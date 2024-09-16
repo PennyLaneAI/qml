@@ -9,7 +9,7 @@ r"""Estimating observables with classical shadows in the Pauli basis
 .. related::
 
     tutorial_classical_shadows Introduction to classic shadows
-    tutorial_ml_classical_shadows Classic shadows in machine learning
+    ml_classical_shadows Classic shadows in machine learning
 
 *Author: Korbinian Kottmann — Posted: 07 October 2022. Last updated: 11 October 2022.*
 
@@ -22,7 +22,7 @@ Classical shadow theory
 -----------------------
 
 A `classical shadow` is a classical description of a quantum state that is capable of reproducing expectation values of local Pauli observables, see [#Huang2020]_.
-We briefly go through their theory here, and note the two additional demos in :doc:`tutorial_classical_shadows` and :doc:`tutorial_ml_classical_shadows`.
+We briefly go through their theory here, and note the two additional demos in :doc:`tutorial_classical_shadows` and :doc:`ml_classical_shadows`.
 
 We are here focussing on the case where measurements are performed in the Pauli basis.
 The idea of classical shadows is to measure each qubit in a random Pauli basis.
