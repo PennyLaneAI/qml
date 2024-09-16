@@ -47,7 +47,7 @@ a familiarization with the `variational quantum eigensolver (VQE) algorithm <htt
 #
 # .. note::
 #
-#     To improve veiwability of this tutorial, we will suppress any ``ComplexWarning``'s which may raised during optmization.
+#     To improve viewability of this tutorial, we will suppress any ``ComplexWarning``'s which may be raised during optimization.
 #     The warnings do not impact the correctness of the results, but make it harder to view outputs.
 #
 
