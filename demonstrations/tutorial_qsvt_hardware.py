@@ -11,6 +11,12 @@ In this how-to guide, we will show how we can implement the QSVT
 subroutine in a hardware-compatible way, taking your application research
 to the next level.
 
+.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_qsvt_hardware.png
+    :align: center
+    :width: 70%
+    :target: javascript:void(0)
+
+
 Calculating angles
 ------------------
 
