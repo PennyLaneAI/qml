@@ -23,7 +23,7 @@
             "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_shadow_hamiltonian_simulation.png"
         }
     ],
-    "seoDescription": "What is a Matrix Product State (MPS)? All you need to know from a quantum computation and quantum simulation perspective.",
+    "seoDescription": "What is a matrix product state (MPS)? Here is all you need to know about MPS from a quantum computation and quantum simulation perspective.",
     "doi": "",
     "canonicalURL": "/qml/demos/tutorial_mps",
     "references": [
