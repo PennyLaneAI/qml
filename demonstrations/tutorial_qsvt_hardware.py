@@ -13,7 +13,7 @@ to the next level.
 
 .. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_qsvt_hardware.png
     :align: center
-    :width: 70%
+    :width: 50%
     :target: javascript:void(0)
 
 
