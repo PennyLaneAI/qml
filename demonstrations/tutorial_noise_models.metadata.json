@@ -15,7 +15,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_noise_models.jpg"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_tutorial_noise_models.png"
         }
     ],
     "seoDescription": "Learn how noise models can be built and inserted to a quantum circuit in PennyLane.",
