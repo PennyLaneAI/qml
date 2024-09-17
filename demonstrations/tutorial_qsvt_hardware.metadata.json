@@ -15,11 +15,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/intro_qsvt/thumbnail_intro_qsvt.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_qsvt_hardware.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_intro_qsvt.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_qsvt_hardware.png"
         }
     ],
     "seoDescription": "Learn how to implement QSVT on hardware.",
