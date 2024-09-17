@@ -1,9 +1,9 @@
 r"""How to implement QSVT on hardware
 =======================================
 
-The :doc:`Quantum Singular Value Transform (QSVT) </demos/tutorial_intro_qsvt>`
+The :doc:`quantum singular value transform (QSVT) </demos/tutorial_intro_qsvt>`
 is a quantum algorithm that allows us to perform polynomial
-transformations on matrices or operators, and is rapidly becoming
+transformations on matrices or operators, and it is rapidly becoming
 a go-to algorithm for :doc:`quantum application research </demos/tutorial_apply_qsvt>`
 in the `ISQ era <https://pennylane.ai/blog/2023/06/from-nisq-to-isq/>`__.
 
@@ -11,16 +11,16 @@ In this how-to guide, we will show how we can implement the QSVT
 subroutine in a hardware-compatible way, taking your application research
 to the next level.
 
-Angles calculation
+Calculating angles
 ------------------
 
 Our goal is to apply a polynomial transformation to a given Hamiltonian, i.e., :math:`p(\mathcal{H})`. To achieve this, we must consider the two
 fundamental components of the QSVT algorithm:
 
 - **Projection angles**: A list of angles that will determine the coefficients of the polynomial to be applied.
-- **Block Encoding**: The strategy used to encode the Hamiltonian. We will use the :doc:`Linear Combinations of Unitaries <demos/tutorial_lcu_blockencoding>` approach via the PennyLane :class:`~.qml.PrepSelPrep` operation.
+- **Block encoding**: The strategy used to encode the Hamiltonian. We will use the :doc:`linear combinations of unitaries <demos/tutorial_lcu_blockencoding>` approach via the PennyLane :class:`~.qml.PrepSelPrep` operation.
 
-Calculating angles is not a trivial task but there are tools such as `pyqsp <https://github.com/ichuang/pyqsp/tree/master/pyqsp>`_ that do the job for us.
+Calculating angles is not a trivial task, but there are tools such as `pyqsp <https://github.com/ichuang/pyqsp/tree/master/pyqsp>`_ that do the job for us.
 For instance, to find the angles to apply the polynomial :math:`p(x) = -x + \frac{x^3}{2}+ \frac{x^5}{2}`, we can run this code:
 
 .. code-block:: python
@@ -73,7 +73,7 @@ print(angles)
 ######################################################################
 # Using these angles, we can now start working with the template.
 #
-# QSVT on Hardware
+# QSVT on hardware
 # -----------------
 #
 # The :class:`~.qml.QSVT` template expects two inputs. The first one is the block encoding operator, :class:`~.qml.PrepSelPrep`,
