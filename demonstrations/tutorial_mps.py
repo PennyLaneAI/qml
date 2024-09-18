@@ -120,6 +120,7 @@ print(f"original image size: {size_original}, compressed image size: {size_compr
 # The original image is :math:`334 \times 542` pixels, that we compress as :math:`334 \times 50` pixels in
 # :math:`U`, :math:`50` pixels in :math:`\Lambda` and :math:`50 \times 542` pixels in :math:`V^\dagger`.
 # This is possible because the information density in the image is low, as seen by the distribution of singular values.
+# Let us visualize this by re-computing the singular values and plotting their distribution (note that they are automatically ordered in descending order).
 
 
 _, Lambda, _ = np.linalg.svd(img) # recompute the full spectrum
