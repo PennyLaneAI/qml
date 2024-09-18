@@ -527,7 +527,7 @@ for i in range(len(Ms)):
 #
 # .. figure:: ../_static/demonstration_assets/mps/apply_gate.png
 #     :align: center
-#     :width: 80%
+#     :width: 65%
 #
 # In the first step, we simply contract the appropriate physical indices of the MPS with those of the :math:`\text{CNOT}` matrix (which we reshape to :math:`2\times 2\times 2\times 2`).
 # Note that we also take the bond singular values into account. The result is a big blob with two virtual indices and two physical indices. 
