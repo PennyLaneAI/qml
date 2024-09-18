@@ -69,19 +69,28 @@ key = jax.random.PRNGKey(42)
 # create a device to execute the circuit on
 dev = qml.device("default.qubit", wires=3)
 
+
+def CNOT_ring(wires):
+    """Apply CNOTs in a ring pattern"""
+    n_wires = len(wires)
+
+    for w in wires:
+        qml.CNOT([w % n_wires, (w + 1) % n_wires])
+
+
 @qml.qnode(dev, diff_method="parameter-shift")
 def circuit(params):
     qml.RX(params[0], wires=0)
     qml.RY(params[1], wires=1)
     qml.RZ(params[2], wires=2)
 
-    qml.broadcast(qml.CNOT, wires=[0, 1, 2], pattern="ring")
+    CNOT_ring(wires=[0, 1, 2])
 
     qml.RX(params[3], wires=0)
     qml.RY(params[4], wires=1)
     qml.RZ(params[5], wires=2)
 
-    qml.broadcast(qml.CNOT, wires=[0, 1, 2], pattern="ring")
+    CNOT_ring(wires=[0, 1, 2])
     return qml.expval(qml.PauliY(0) @ qml.PauliZ(2))
 
 
