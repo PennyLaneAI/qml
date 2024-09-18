@@ -16,14 +16,14 @@ and, in particular, how to use them to simulate quantum circuits.
 Introduction
 ------------
 
-Matrix Product States (MPS) are an efficient representation of quantum states in one spatial dimension.
+Matrix product states (MPS) are an efficient representation of quantum states in one spatial dimension.
 However, due to their unique features like offering a canonical form, they are employed in a variety of tasks beyond just 1D systems.
 
 The amount of entanglement the MPS can represent is user-controlled via a hyper-parameter, the so-called `bond dimension` :math:`\chi`.
 If we allow :math:`\chi` to be of :math:`\mathcal{O}(2^{\frac{n}{2}})` for a system of :math:`n` qubits, we can write `any` state as an `exact` MPS.
 To avoid exponentially large resources, however, one typically sets a finite bond dimension :math:`\chi` at the cost of introducing an approximation error.
 
-For some specific classes of states, this is provably sufficient to have faithful representations (see the section on entanglement). 
+For some specific classes of states, this is provably sufficient to have faithful representations (see the section on entanglement :ref:`Area Law`). 
 But because MPS come with a lot of powerful computational features that we are going to discuss later (in particular canonical forms),
 they are still used in much more complex systems where these requirements do not hold anymore, and still yield good results.
 For example, state-of-the-art `quantum chemistry <https://pennylane.ai/qml/quantum-chemistry/>`__ simulations were performed using MPS [#Baiardi]_ 
@@ -452,6 +452,8 @@ for i in range(len(Ms)):
 # It also enables the very powerful density matrix renormalization group (DMRG) algorithm. Here, one constructs the ground state of a Hamiltonian by iteratively sweeping through the MPS back and forth, solving
 # the eigenvalue problem locally at each site (with all other sites "frozen"). This works extremely well in practice and is hence still one of the workhorses of classical quantum simulation to this day. For a very good review
 # on DMRG with MPS, see [#Schollwoeck]_.
+#
+# .. _Area Law:
 #
 # Entanglement and area laws
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~
