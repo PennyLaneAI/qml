@@ -64,26 +64,32 @@ Using ZNE in Catalyst
 
 ZNE is also available for just-in-time (JIT) compilation of PennyLane programs, 
 starting from Catalyst v0.8.1.
-Let's see how an error mitigation routine can be integrated in a Catalyst workflow.
+In this tutorial we see how an error mitigation routine can be integrated in a Catalyst workflow.
 
-We start with defining a 4-qubit circuit, ... 
-and we measure the expectation value :math:`\langle Z\rangle` on the state of the first qubit.  
+At the end of the tutorial, we will compare time for the execution of ZNE routines in 
+Pennylane vs. Catalyst.
 
+Mirror circuit
+--------------
+
+First we build a mirror-circuit starting off a unitary 2-design. 
+This is a typical construction for a randomized benchmarking circuit, which is used in many tasks
+in quantum computing. Given such circuit, we measure the expectation value :math:`\langle Z\rangle` 
+on the state of the first qubit.
 """
 
 import os
-
-import jax
+import timeit
 
 import pennylane as qml
 from pennylane import numpy as np
 from catalyst import qjit, mitigate_with_zne
 
-n_wires = 4
+n_wires = 5
 
 np.random.seed(42)
 
-n_layers = 1
+n_layers = 10
 template = qml.SimplifiedTwoDesign
 weights_shape = template.shape(n_layers, n_wires)
 w1, w2 = [2 * np.pi * np.random.random(s) for s in weights_shape]
@@ -95,21 +101,25 @@ def circuit(w1, w2):
     return qml.expval(qml.PauliZ(0))
 
 ##############################################################################
-# We execute the circuit on the Qrack simulator, first without noise, and then in a nosy scenario.
+# We execute the circuit on the Qrack simulator, first without noise, 
+# and then in a noisy scenario.
 
 noiseless_device = qml.device("qrack.simulator", n_wires, isNoisy=False)
 
 ideal_value = qml.QNode(circuit, device=noiseless_device)(w1, w2)
 print(f"Ideal value: {ideal_value}")
 
-NOISE_LEVEL = 0.2
+##############################################################################
+# As expected, in the noiseless scenario, the first qubit is in the :math:|0\rangle`
+# state, so the expecation value of the Pauli-Z measurement is equal to 1.
+
+NOISE_LEVEL = 0.01
 os.environ["QRACK_GATE_DEPOLARIZATION"] = str(NOISE_LEVEL)
 noisy_device = qml.device("qrack.simulator", n_wires, isNoisy=True)
 
 noisy_qnode = qml.QNode(circuit, device=noisy_device)
 noisy_value = noisy_qnode(w1, w2)
-print(f"Error without  mitigation: {abs(ideal_value - noisy_value):.3f}")
-
+print(f"Error without mitigation: {abs(ideal_value - noisy_value):.8f}")
 
 ##############################################################################
 # With a circuit and simulator defined, we can begin to define some of the necessary parameters
@@ -124,7 +134,7 @@ print(f"Error without  mitigation: {abs(ideal_value - noisy_value):.3f}")
 # We'll define the scale factors as a `jax.numpy.array` where the scale factors represents
 # the number of time the circuit is folded.
 
-scale_factors = jax.numpy.array([1, 2, 3])
+scale_factors = [1, 3, 5]
 
 ##############################################################################
 # Next, we'll choose a method to scale the noise. This needs to be defined as a Python string.
@@ -136,7 +146,7 @@ folding_method = "global"
 # is available in the `pennylane.transforms` module. Both of these functions can be passed directly
 # into `mitigate_with_zne`!
 
-from pennylane.transforms import exponential_extrapolate, richardson_extrapolate
+from pennylane.transforms import richardson_extrapolate
 
 extrapolation_method = richardson_extrapolate
 
@@ -154,16 +164,17 @@ def mitigated_circuit_qjit(w1, w2):
         folding=folding_method,
     )(w1, w2)
 
+
 zne_value = mitigated_circuit_qjit(w1, w2)
-print(f"Error with mitigation: {abs(ideal_value - zne_value):.3f}")
+
+print(f"Error with ZNE in Catalyst: {abs(ideal_value - zne_value):.3f}")
+
 
 ##############################################################################
-# But there's still a big unanswered question! _If I can do this all in PennyLane, what is Catalyst
-# offering here?_ That's a **great** question! In order to explore the difference we'll need to
-# explore what happens when `catalyst.qjit` is, and is not, used!
-# ...
+# ZNE in Pennylane
+# --------------------------------------------------------
+# Notice
 
-# ZNE in non-catalyst pennylane
 def mitigated_circuit(w1, w2):
     return qml.transforms.mitigate_with_zne(
         noisy_qnode,
@@ -173,7 +184,28 @@ def mitigated_circuit(w1, w2):
     )(w1, w2)
 
 zne_value = mitigated_circuit(w1, w2)
-print(f"Error with mitigation: {abs(ideal_value - zne_value):.3f}")
+
+print(f"Error with ZNE in Pennylane: {abs(ideal_value - zne_value):.3f}")
+
+##############################################################################
+# We use the timeit module in Python to measure execution time of a mitigated circuit
+# ...
+
+repeat = 5  # number of timing runs
+number = 5  # number of loops executed in each timing run 
+
+times = timeit.repeat(
+    "mitigated_circuit(w1, w2)", 
+    globals=globals(), number=number, repeat=repeat)
+
+print(f"Pennylane running time (best of {repeat}): {min(times):.3f}")
+
+times = timeit.repeat(
+    "mitigated_circuit_qjit(w1, w2)", 
+    globals=globals(), number=number, repeat=repeat)
+
+print(f"Catalyst running time (best of {repeat}): {min(times):.3f}")
+
 
 
 
