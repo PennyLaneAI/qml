@@ -16,7 +16,7 @@ Introduction
 ------------
 
 Matrix Product States (MPS) are an efficient representation of constant-entangled states in one spatial dimension. 
-But in practice, due to their unique features, they are employed in a variety of tasks beyond just gapped 1D systems.
+However, due to their unique features, they are employed in a variety of tasks beyond just gapped 1D systems.
 
 The amount of entanglement the MPS can represent is user-controlled via a hyper-parameter, the so-called `bond dimension` :math:`\chi`.
 If we allow :math:`\chi` to be of :math:`\mathcal{O}(2^{\frac{n}{2}})` for a system of :math:`n` qubits, we can write `any` state as an `exact` MPS.
