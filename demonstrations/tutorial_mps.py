@@ -77,7 +77,13 @@ The power of this approach is best seen by a small example. Let us load the imag
 import numpy as np
 import matplotlib.pyplot as plt
 
-img = plt.imread("../_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_shadow_hamiltonian_simulation.png")
+# import image
+img = plt.imread("../_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_mps_simulation.png")
+# alternative: import image directly from url
+# import urllib2
+# img_url = urllib2.urlopen("https://pennylane.ai/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_mps_simulation.png")
+# img = plt.imread(img_url)
+
 # only look at one color channel for demonstration purposes
 img = img[:, :, 0]
 
