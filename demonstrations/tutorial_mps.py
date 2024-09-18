@@ -1,13 +1,14 @@
-r"""Simulating quantum circuits with matrix product states (MPS)
-================================================================
+r"""Introducing matrix product states for quantum practitioners
+===============================================================
 
 Matrix product states remain the workhorse for a broad range of modern classical quantum simulation techniques,
 still to this day. Their unique features (like offering a canonical form) make them an incredibly neat tool
 in terms of simplicity and algorithmic complexity.
-In this demo, we are going to cover all the essentials you need to know in order to use matrix product states for quantum simulation.
+In this demo, we are going to cover all the essentials you need to know in order to handle matrix product states,
+and, in particular, how to use them to simulate quantum circuits.
 
 
-.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_shadow_hamiltonian_simulation.png
+.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_mps_simulation.png
     :align: center
     :width: 70%
 
@@ -15,8 +16,8 @@ In this demo, we are going to cover all the essentials you need to know in order
 Introduction
 ------------
 
-Matrix Product States (MPS) are an efficient representation of constant-entangled states in one spatial dimension. 
-However, due to their unique features, they are employed in a variety of tasks beyond just gapped 1D systems.
+Matrix Product States (MPS) are an efficient representation of quantum states in one spatial dimension.
+However, due to their unique features like offering a canonical form, they are employed in a variety of tasks beyond just 1D systems.
 
 The amount of entanglement the MPS can represent is user-controlled via a hyper-parameter, the so-called `bond dimension` :math:`\chi`.
 If we allow :math:`\chi` to be of :math:`\mathcal{O}(2^{\frac{n}{2}})` for a system of :math:`n` qubits, we can write `any` state as an `exact` MPS.
@@ -53,7 +54,7 @@ Matrix product state essentials
 -------------------------------
 
 Compression using singular value decomposition (SVD)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To understand MPS and the bond dimension, we first need to understand how one can generally use singular value decomposition (SVD) to do compression.
 Any matrix :math:`M = \mathbb{C}^{M\times N}` can be singular-value-decomposed as
@@ -495,6 +496,10 @@ for i in range(len(Ms)):
 # 
 # Quantum simulation with MPS
 # ---------------------------
+#
+# .. figure:: ../_static/demonstration_assets/how_to_simulate_quantum_circuits_with_tensor_networks/TN_MPS.gif
+#     :align: center
+#     :width: 90%
 #
 # We can use MPS to classically simulate quantum algorithms. This is a very useful tool for as long as
 # real quantum devices are noisy and costly to use.
