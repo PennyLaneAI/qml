@@ -100,6 +100,10 @@ for i in range(8):
 # The :class:`~.pennylane.QROM` template can be used to implement the previous circuit using directly the bitstring
 # without having to calculate the :math:`U_i` gates:
 
+import warnings
+# This line will suppress ComplexWarnings for output visibility
+warnings.filterwarnings(action="ignore", category=np.ComplexWarning)
+
 bitstrings = ["01", "11", "11", "00", "01", "11", "11", "00"]
 
 control_wires = [0, 1, 2]
