@@ -575,7 +575,7 @@ for i in range(len(Ms)):
 
 import pennylane as qml
 
-dataset = qml.data.load("qchem", molname="H6", bondlength=1.3, basis="STO-3G")[0]
+[dataset] = qml.data.load("qchem", molname="H6", bondlength=1.3, basis="STO-3G")
 
 H = dataset.hamiltonian # molecular Hamiltonian in qubit basis
 n_wires = len(H.wires)  # number of qubits
