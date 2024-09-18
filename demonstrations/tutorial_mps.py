@@ -5,7 +5,7 @@ Matrix product states remain the workhorse for a broad range of modern classical
 still to this day. Their unique features (like offering a canonical form) make them an incredibly neat tool
 in terms of simplicity and algorithmic complexity.
 In this demo, we are going to cover all the essentials you need to know in order to handle matrix product states,
-and, in particular, how to use them to simulate quantum circuits.
+and show how to use them to simulate quantum circuits.
 
 
 .. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_mps_simulation.png
