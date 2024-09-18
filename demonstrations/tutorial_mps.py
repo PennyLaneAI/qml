@@ -7,11 +7,9 @@ in terms of simplicity and algorithmic complexity.
 In this demo, we are going to cover all the essentials you need to know in order to handle matrix product states,
 and show how to use them to simulate quantum circuits.
 
-
 .. figure:: ../_static/demonstration_assets/how_to_simulate_quantum_circuits_with_tensor_networks/TN_MPS.gif
     :align: center
     :width: 90%
-
     
 Introduction
 ------------
@@ -22,6 +20,10 @@ However, due to their unique features like offering a canonical form, they are e
 The amount of entanglement the MPS can represent is user-controlled via a hyper-parameter, the so-called `bond dimension` :math:`\chi`.
 If we allow :math:`\chi` to be of :math:`\mathcal{O}(2^{\frac{n}{2}})` for a system of :math:`n` qubits, we can write `any` state as an `exact` MPS.
 To avoid exponentially large resources, however, one typically sets a finite bond dimension :math:`\chi` at the cost of introducing an approximation error.
+
+.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_mps_simulation.png
+    :align: center
+    :width: 40%
 
 For some specific classes of states, this is provably sufficient to have faithful representations (see :ref:`Area Law`). 
 But because MPS come with a lot of powerful computational features that we are going to discuss later (in particular :ref:`canonical forms <Canonical Forms>`),
@@ -383,7 +385,7 @@ Ms, Ss = dense_to_mps(psi, 5)
 # ~~~~~~~~~~~~~~~
 #
 # In the above construction, we unknowingly already baked in a very useful feature of our MPS because all the :math:`U` matrices from the SVD
-# are left-orthonormal (highlighted by the pink color of left-orthonormal tensors). In particular, they satisfy
+# are left-orthonormal (highlighted by the pink color in the illustrations of the left-orthonormal :math:`U` tensors). In particular, they satisfy
 #
 # .. math:: \sum_{\sigma_i} \left(U^{\sigma_i} \right)^\dagger U^{\sigma_i} = \mathbb{I},
 #
@@ -481,7 +483,7 @@ for i in range(len(Ms)):
 #
 # .. math:: S(\rho_{1:i}) \leq \log(\chi) = \text{const}.
 #
-# This is the area law of entanglement for one dimensional systems. A "volume" in one spatial dimension is a line, and its surface area, :math:`\partial V`, two points, so constant in the system size (see note below).
+# This is the area law of entanglement for one-dimensional systems. A "volume" in one spatial dimension is a line, and its surface area, :math:`\partial V`, two points, so constant in the system size (see note below).
 #
 # .. note::
 # 
