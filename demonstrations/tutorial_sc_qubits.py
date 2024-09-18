@@ -619,7 +619,7 @@ Two_qubit_H = qml.Hamiltonian(coeffs, ops)
 # Implement Hamiltonian evolution for time t and some initial computational basis state
 @qml.qnode(dev3, interface="autograd")
 def Sc_ISWAP(basis_state, time):
-    qml.templates.BasisStatePreparation(basis_state, wires=range(2))
+    qml.BasisState(basis_state, wires=range(2))
     ApproxTimeEvolution(Two_qubit_H, time, 1)
     return qml.state()
 
@@ -627,7 +627,7 @@ def Sc_ISWAP(basis_state, time):
 # Implement ISWAP exactly
 @qml.qnode(dev3, interface="autograd")
 def iswap(basis_state):
-    qml.templates.BasisStatePreparation(basis_state, wires=range(2))
+    qml.BasisState(basis_state, wires=range(2))
     qml.ISWAP(wires=[0, 1])
     return qml.state()
 
@@ -735,7 +735,7 @@ matrix = qml.matrix(cnot_with_iswap, wire_order=[0, 1])()
 @qml.qnode(dev3, interface="autograd")
 def H_evolve(state, phi, time):
     # Prepare initial state
-    qml.templates.BasisStatePreparation(state, wires=range(2))
+    qml.BasisState(state, wires=range(2))
     # Define Hamiltonian
     coeffs = [np.cos(phi), np.sin(phi)]
     ops = [qml.PauliZ(0) @ qml.PauliX(1), qml.PauliZ(0) @ qml.PauliY(1)]

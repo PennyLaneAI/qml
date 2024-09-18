@@ -815,7 +815,7 @@ dev2 = qml.device("default.qubit",wires=2)
 def ion_cnot(basis_state):
     
     #Prepare the two-qubit basis states from the input
-    qml.templates.BasisStatePreparation(basis_state, wires=range(2))
+    qml.BasisState(basis_state, wires=range(2))
     
     #Implements the circuit shown above
     qml.RY(np.pi/2, wires=0)
@@ -830,7 +830,7 @@ def ion_cnot(basis_state):
 @qml.qnode(dev2, interface="autograd")
 def cnot_gate(basis_state):
     
-    qml.templates.BasisStatePreparation(basis_state, wires=range(2))
+    qml.BasisState(basis_state, wires=range(2))
 
     qml.CNOT(wires=[0,1])
     

@@ -224,7 +224,7 @@ device = qml.device("default.qubit", wires=1)
 @partial(jax.vmap, in_axes=(0, None, 0, None))
 @qml.qnode(device=device, interface="jax")
 def evolve_states(state, H, params, t):
-    qml.QubitStateVector(state, wires=wires)
+    qml.StatePrep(state, wires=wires)
     qml.evolve(H)(params, t, atol=1e-5)
     return qml.state()
 
@@ -929,7 +929,7 @@ H_sq_end = H_sq_0_end + H_sq_1_end
 @qml.qnode(device=device, interface="jax")
 def evolve_states(state, params, t):
     params_sq, params_cr = params
-    qml.QubitStateVector(state, wires=wires)
+    qml.StatePrep(state, wires=wires)
     # Single qubit pulses
     qml.evolve(H_int + H_sq_ini)(params_sq, t, atol=1e-5)
 

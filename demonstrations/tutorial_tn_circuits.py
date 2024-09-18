@@ -317,11 +317,11 @@ def block(weights, wires):
 
 ##############################################################################
 # As for the tensor-network architecture, we use the tree tensor-network quantum circuit.
-# We use :class:`~pennylane.BasisStatePreparation` to encode the input images.
-# The following code implements the :class:`~pennylane.BasisStatePreparation` encoding,
+# We use :class:`~pennylane.BasisState` to encode the input images.
+# The following code implements the :class:`~pennylane.BasisState` encoding,
 # followed by a :class:`~pennylane.TTN` circuit using the above ``block``. Finally, we compute the expectation
 # value of a :class:`~pennylane.PauliZ` measurement as the output.
-# The circuit diagram below shows the full circuit. The :class:`~pennylane.BasisStatePreparation`
+# The circuit diagram below shows the full circuit. The :class:`~pennylane.BasisState`
 # encoding appears in the initial :class:`~pennylane.PauliX` gates.
 
 dev = qml.device("default.qubit", wires=4)
@@ -329,7 +329,7 @@ dev = qml.device("default.qubit", wires=4)
 
 @qml.qnode(dev)
 def circuit(image, template_weights):
-    qml.BasisStatePreparation(image, wires=range(4))
+    qml.BasisState(image, wires=range(4))
     qml.TTN(
         wires=range(4),
         n_block_wires=2,

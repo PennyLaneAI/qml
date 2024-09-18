@@ -265,7 +265,7 @@ dev = qml.device("lightning.qubit", wires=nr_qubits)
 def quantum_circuit(rotation_params, coupling_params, sample=None, return_state=False):
 
     # Prepares the initial basis state corresponding to the sample
-    qml.BasisStatePreparation(sample, wires=range(nr_qubits))
+    qml.BasisState(sample, wires=range(nr_qubits))
 
     # Prepares the variational ansatz for the circuit
     for i in range(0, depth):
