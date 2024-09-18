@@ -28,7 +28,7 @@ they are still used in much more complex systems where these requirements do not
 For example, state-of-the-art `quantum chemistry <https://pennylane.ai/qml/quantum-chemistry/>`__ simulations were performed using MPS [#Baiardi]_ 
 and similar methods have been used to simulate experiments on the largest available quantum computers at the time [#Patra]_.
 
-It is known that there are more suitable tensor network states for 
+It is known that there are more suitable tensor network states like projected entangled pair states (PEPS) for 
 more complex situations (see section on entanglement later).
 However, they all suffer from the need for significantly more complicated algorithms 
 and higher costs, as a lot of the things that make MPS so attractive, 
