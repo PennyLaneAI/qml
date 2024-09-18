@@ -290,7 +290,7 @@ np.allclose(psi, psi_reconstruct)
 #
 # Just like in the example with images before, we can compress the state by only keeping 
 # the :math:`\chi` largest singular values with their respective singular vectors.
-# The hyper-parameter :math:`\chi` is called the bond dimension and it allows us 
+# This hyper-parameter :math:`\chi` is the bond dimension we mentioned earlier. It allows us 
 # to control the amount of entanglement the state can represent between everything that 
 # is left and right of the bond (more on that later).
 #
