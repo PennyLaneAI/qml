@@ -493,7 +493,7 @@ for i in range(len(Ms)):
 #     between any such sub-system in an MPS with a finite bond dimension :math:`\chi` is naturally bounded by :math:`\log(\chi)=\text{const.}`,
 #     so MPS satisfy the area law of entanglement for one-dimensional systems.
 # 
-#     PEPS are the natural generalization to regular 2D or 3D grids as well as more general graph connectivities and are known to fulfill the
+#     Projected entangled pair states (PEPS) are the natural generalization of MPS to regular 2D or 3D grids as well as more general graph connectivities and are known to fulfill the
 #     respective area laws of entanglement, making them the correct ansätze for local and gapped Hamiltonians in those cases. For example, for a 2D
 #     PEPS with a square subsystem of volume :math:`L \times L` and bond dimension :math:`\chi`, the entanglement entropy between the square and the rest of the system is bounded by
 #     :math:`\log(\chi^L) = L \log(\chi)`, which is proportional to the circumference :math:`\propto L`, and not its area.
@@ -648,7 +648,7 @@ plt.show()
 #
 # In this demo we introduced the basics of matrix product states (MPS) and saw how the existence of a canonical form simplifies a lot of the contractions.
 # This fact can also be used for simulations of quantum circuits with local and non-local gates.
-# We showed how to run quantum circuits using the :class:`~pennylane.devices.default_tensor.DefaultTensor` device and how to systematically find an appropriate bond dimension.
+# We showed how to run quantum circuits using PennyLane's :class:`~pennylane.devices.default_tensor.DefaultTensor` device and how to systematically find an appropriate bond dimension.
 #
 # While MPS are mathematically known to be well-suited to describe a particular class of states (those that fulfill the area law of entanglement in 1D), we can
 # also simulate more complex systems by throwing some extra resources into the bond dimension. 
