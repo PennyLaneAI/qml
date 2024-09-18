@@ -1,0 +1,36 @@
+{
+    "title": "How to Quantum Just-In-Time Compile Grover's Algorithm with Catalyst",
+    "authors": [
+        {
+            "id": "joey_carter"
+        }
+    ],
+    "dateOfPublication": "",
+    "dateOfLastModification": "",
+    "categories": [
+        "Algorithms",
+        "Devices and Performance",
+        "How-to",
+        "Quantum Computing"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_qjit_compile_grovers_algorithm_with_catalyst.png"
+        }
+    ],
+    "seoDescription": "How to QJIT compile Grover's Algorithm with Catalyst",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_qjit_compile_grovers_algorithm_with_catalyst",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_grovers_algorithm",
+            "weight": 1.0
+        }
+    ]
+}

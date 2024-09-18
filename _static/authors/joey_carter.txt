@@ -1,0 +1,4 @@
+.. bio:: Joey Carter
+   :photo: ../_static/authors/joey_carter.png
+
+   Joey is as a quantum software developer at Xanadu. Prior to joining Xanadu, Joey completed his PhD in experimental high-energy physics at the University of Toronto.
