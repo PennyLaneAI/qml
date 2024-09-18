@@ -132,7 +132,7 @@ plt.show()
 ##############################################################################
 # 
 # We are later going to do the same trick with state vectors.
-# Note that the compressed information is encoded in :math:`U`, :math:`S` and :math:`V^\dagger`.
+# Note that the compressed information is encoded in :math:`U,` :math:`S` and :math:`V^\dagger`.
 # If we want to retrieve the actual image :math:`M` (or state vector), we still need to reconstruct the full :math:`334 \times 542` pixels.
 # Luckily, as we will later see in the case of MPS, we can retrieve all relevant information efficiently from the compressed components without ever 
 # having to reconstruct the full state vector.
