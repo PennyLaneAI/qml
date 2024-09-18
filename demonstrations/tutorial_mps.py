@@ -8,9 +8,9 @@ In this demo, we are going to cover all the essentials you need to know in order
 and show how to use them to simulate quantum circuits.
 
 
-.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_mps_simulation.png
+.. figure:: ../_static/demonstration_assets/how_to_simulate_quantum_circuits_with_tensor_networks/TN_MPS.gif
     :align: center
-    :width: 70%
+    :width: 90%
 
     
 Introduction
@@ -507,10 +507,6 @@ for i in range(len(Ms)):
 # 
 # Quantum simulation with MPS
 # ---------------------------
-#
-# .. figure:: ../_static/demonstration_assets/how_to_simulate_quantum_circuits_with_tensor_networks/TN_MPS.gif
-#     :align: center
-#     :width: 90%
 #
 # We can use MPS to classically simulate quantum algorithms. This is a very useful tool for as long as
 # real quantum devices are noisy and costly to use.
