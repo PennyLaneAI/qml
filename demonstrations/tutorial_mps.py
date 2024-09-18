@@ -298,7 +298,7 @@ np.allclose(psi, psi_reconstruct)
 # It is convenient to also keep the singular values for each bond to easily change the orthonormality of the tensors, but more on that in the next section on canonical forms.
 
 def split(M, bond_dim):
-    """Split a matrix M via SVD and keep only the ``bond_dim`` largest entries"""
+    """Split a matrix M via SVD and keep only the ``bond_dim`` largest entries."""
     U, S, Vd = np.linalg.svd(M, full_matrices=False)
     bonds = len(S)
     Vd = Vd.reshape(bonds, 2, -1)
@@ -310,7 +310,7 @@ def split(M, bond_dim):
     return U, S, Vd
 
 def dense_to_mps(psi, bond_dim):
-    """Turn a state vector ``psi`` into an MPS with bond dimension ``bond_dim``"""
+    """Turn a state vector ``psi`` into an MPS with bond dimension ``bond_dim``."""
     Ms = []
     Ss = []
 
