@@ -286,7 +286,7 @@ for i in range(8):
 # .. math::
 #       |c\rangle |r\rangle |0\rangle |0\rangle \dots |0\rangle.
 #
-# 1. **A uniform superposition is created in the :math:`r`-th register of the work wires**. To do this, we put the Hadamards in the target wires and move it to the :math:`r`-th row with the *Swap* block:
+# 1. **A uniform superposition is created in the r-th register of the work wires**. To do this, we put the Hadamards in the target wires and move it to the :math:`r`-th row with the *Swap* block:
 #
 # .. math::
 #       |c\rangle |r\rangle |0\rangle |0\rangle \dots |+\rangle_r \dots |0\rangle.
@@ -297,7 +297,7 @@ for i in range(8):
 #       |c\rangle |r\rangle |b_{c0}\rangle |b_{c1}\rangle \dots |+\rangle_r \dots |b_{c(R-1)}\rangle.
 #
 #
-# 3. **The Hadamard gate is applied to the :math:`r`-th register of the work wires.** This returns that register to the zero state. The two *Swap* blocks and the Hadamard gate applied to the target wires achieve this:
+# 3. **The Hadamard gate is applied to the r-th register of the work wires.** This returns that register to the zero state. The two *Swap* blocks and the Hadamard gate applied to the target wires achieve this:
 #
 # .. math::
 #       |c\rangle |r\rangle |b_{c0}\rangle |b_{c1}\rangle \dots |0\rangle_r \dots |b_{c(R-1)}\rangle.
