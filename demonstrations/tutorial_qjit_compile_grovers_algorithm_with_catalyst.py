@@ -34,10 +34,10 @@ How to Quantum Just-In-Time Compile Grover's Algorithm with Catalyst
 # solutions, with :math:`1 \leq M \leq N`.
 #
 # In this tutorial, we will implement the generalized Grover's algorithm using `Catalyst
-# <https://github.com/PennyLaneAI/Catalyst>`__, a quantum just-in-time (QJIT) compiler framework for
-# PennyLane, which makes it possible to compile, optimize, and execute hybrid quantum–classical
-# workflows. We will also measure the performance improvement we get from using Catalyst with
-# respect to the native Python implementation.
+# <https://docs.pennylane.ai/projects/catalyst/en/stable/index.html>`__, a quantum just-in-time
+# (QJIT) compiler framework for PennyLane, which makes it possible to compile, optimize, and execute
+# hybrid quantum–classical workflows. We will also measure the performance improvement we get from
+# using Catalyst with respect to the native Python implementation.
 
 
 ######################################################################
