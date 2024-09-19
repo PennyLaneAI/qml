@@ -123,7 +123,7 @@
         }
       },
       "discussionForumUrl": {
-        "description": "Link to dedicated discussion form thread for the demo on https://discuss.pennylane.ai/",
+        "description": "Link to dedicated discussion forum thread on https://discuss.pennylane.ai/ for this demo",
         "type": "string",
         "format": "uri",
         "pattern": "(^https?:\/\/(www.)?discuss.pennylane.ai(?:\/.*)?$)"
