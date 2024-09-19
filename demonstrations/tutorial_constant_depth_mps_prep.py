@@ -125,14 +125,14 @@ For the GHZ state, a correlator between sites :math:`0` and :math:`j` is
 
 .. math::
 
-    C_{\text{GHZ}}(j) = \langle Z(0) Z(j) \rangle_{\text{GHZ}} - \lange Z(0)\rangle_{\text{GHZ}}\lange Z(j)\rangle_{\text{GHZ}} = 1.
+    C_{\text{GHZ}}(j) = \langle Z(0) Z(j) \rangle_{\text{GHZ}} - \langle Z(0)\rangle_{\text{GHZ}}\langle Z(j)\rangle_{\text{GHZ}} = 1.
 
 That is, the correlation does not decay with the distance :math:`j`, but the correlation length is
 infinite. For the product state, on the other hand, we get
 
 .. math::
 
-    C_{+}(j) = \langle Z(0) Z(j) \rangle_{+} - \lange Z(0)\rangle_{+}\lange Z(j)\rangle_{+} = 0,
+    C_{+}(j) = \langle Z(0) Z(j) \rangle_{+} - \langle Z(0)\rangle_{+}\langle Z(j)\rangle_{+} = 0,
 
 so that correlations decay "instantaneously". The correlation length vanishes.
 Long-range correlated states require linear-depth circuits if we are restricted to unitary
@@ -516,7 +516,7 @@ print(f"The test measurement of the fusion preparation + sequential unpreparatio
 # Visually, we find:
 #
 # .. image:: ../_static/demonstration_assets/constant_depth_mps_prep/operator_pushing.png
-#     :width: 35%
+#     :width: 80%
 #     :align: center
 #
 # For simplicity, we denote a push by :math:`B^k\mapsto (C^k, D^k)`.
@@ -530,7 +530,7 @@ print(f"The test measurement of the fusion preparation + sequential unpreparatio
 # measurement basis. In particular, the relations are
 #
 # .. image:: ../_static/demonstration_assets/constant_depth_mps_prep/operator_pushing_example.png
-#     :width: 75%
+#     :width: 90%
 #     :align: center
 #
 # That is, in the notation above we have
@@ -612,7 +612,7 @@ def push_and_correct(op_id, phys_wires):
 # We summarize the algorithm in the following sketch, which again follows [#smith]_.
 #
 # .. image:: ../_static/demonstration_assets/constant_depth_mps_prep/algorithm.png
-#     :width: 75%
+#     :width: 90%
 #     :align: center
 #
 # It is important to remember that showing the existence of suitable operator pushing
@@ -695,7 +695,9 @@ def constant_depth_ansatz(N, g, q):
     # Step 5: Perform projective measurement on outer-most bond sites.
     project_measure(*outer_bond_sites)
     # Collect wire ranges for physical wires, skipping bond wires
-    phys_wires = (range(block_wires * i + 1, block_wires * (i + 1) - 1) for i in range(num_blocks))
+    phys_wires = (
+        range(block_wires * i + 1, block_wires * (i + 1) - 1) for i in range(num_blocks)
+    )
     # Turn ranges to lists and sum them together
     return sum(map(list, phys_wires), start=[])
 
@@ -774,7 +776,7 @@ plt.show()
 ######################################################################
 # Nice, we arrived at a *constant-depth* circuit that reproduces the existing sequential
 # preparation circuit, which has linear depth!
-# Note that while the dynamic operations of step 3 appear visually to have a linear depth,
+# Note that while the dynamic operations of steps 2 and 3 appear visually to have a linear depth,
 # they can be applied in parallel because they are only controlled by classical
 # registers.
 #
@@ -790,6 +792,10 @@ plt.show()
 # This constant-depth algorithm is an exciting advance in
 # state preparation techniques, alleviating requirements of coherence times and
 # connectivity on hardware.
+#
+# We want to note that there are other MPS preparation algorithms with depths that only
+# scale logarithmically in the qubit count [#malz1]_. They, too, can be improved further by
+# using mid-circuit measurements and dynamic circuit operations [#malz2]_
 #
 # For more information, consider the original article, the mentioned reviews, as well
 # as our demos on dynamic circuits and tensor network states.
@@ -820,6 +826,17 @@ plt.show()
 #      `closed access <https://www.sciencedirect.com/science/article/abs/pii/S0003491610001752>`__, 2011.
 #      `arXiv:1008.3477 <https://arxiv.org/abs/1008.3477>`__, 2010.
 #
+# .. [#malz1]
+#
+#     Z. Wei, D. Malz, J. I. Cirac
+#     "Efficient adiabatic preparation of tensor network states", Physical Review Research, **5**, L022037,
+#     `open access <https://link.aps.org/doi/10.1103/PhysRevResearch.5.L022037>`__, 2023.
+#
+# .. [#malz2]
+#
+#     Z. Wei, D. Malz, J. I. Cirac
+#     "Preparation of Matrix Product States with Log-Depth Quantum Circuits", Physical Review Letters, **132**, 040404,
+#     `open access <https://link.aps.org/doi/10.1103/PhysRevLett.132.040404>`__, 2024.
 #
 # About the author
 # ----------------
