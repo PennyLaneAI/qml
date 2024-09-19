@@ -44,11 +44,15 @@ is the sequential MPS preparation circuit to which we will compare later.
 Alongside this introduction we describe and code up each building block for a
 specific MPS. Then we combine the building blocks into the constant-depth
 algorithm by Smith et al. and run it for the example MPS.
-As a preview, this is what the algorithm will look like schematically:
+As a rough preview, this is what the algorithm will look like schematically:
 
 .. image:: ../_static/demonstration_assets/constant_depth_mps_prep/algorithm_preview.png
     :width: 75%
     :align: center
+
+The algorithm consists of a parallelized preparation step of states
+on fewer qubits, a fusion step connecting them to a defective state on all qubits,
+and finally correcting the defects to obtain the target state.
 
 Building blocks
 ---------------
