@@ -297,7 +297,8 @@ plt.show()
 # -----------
 #
 # This tutorial has demonstrated how to just-in-time compile a quantum circuit implementing the
-# generalized Grover's algorithm using `Catalyst <https://github.com/PennyLaneAI/Catalyst>`__.
+# generalized Grover's algorithm using `Catalyst
+# <https://docs.pennylane.ai/projects/catalyst/en/stable/index.html>`__.
 #
 # For a circuit with :math:`n = 12` qubits, analogous to a search in a randomly ordered "database"
 # containing :math:`N = 2^{12} = 4096` entries, Catalyst offers a runtime performance several orders
