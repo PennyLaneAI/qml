@@ -116,8 +116,9 @@ We call this a block. The block defines a variational quantum circuit that takes
 of tensors in the network.
 """
 
+import numpy as np
 import pennylane as qml
-from pennylane import numpy as np
+from pennylane import numpy as pnp
 
 
 def block(weights, wires):
@@ -233,7 +234,7 @@ def circuit(template_weights):
 
 shapes = qml.SimplifiedTwoDesign.shape(n_layers=1, n_wires=4)
 weights = [np.random.random(size=shape) for shape in shapes]
-template_weights = qml._np.array([weights] * 3, dtype="object")
+template_weights = np.array([weights] * 3, dtype="object")
 fig, ax = qml.draw_mpl(circuit, level="device")(template_weights)
 
 ##############################################################################
@@ -368,7 +369,7 @@ def costfunc(params):
 # train the circuit over 100 iterations. This optimizer will attempt to minimize
 # the cost function.
 
-params = np.random.random(size=[3, 2], requires_grad=True)
+params = pnp.random.random(size=[3, 2], requires_grad=True)
 optimizer = qml.GradientDescentOptimizer(stepsize=0.1)
 
 for k in range(100):
