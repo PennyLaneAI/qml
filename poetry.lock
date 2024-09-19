@@ -4097,27 +4097,27 @@ kernels = ["cvxopt", "cvxpy"]
 
 [[package]]
 name = "pennylane-catalyst"
-version = "0.8.0"
+version = "0.8.1"
 description = "A JIT compiler for hybrid quantum programs in PennyLane"
 optional = false
 python-versions = ">=3.9"
 files = [
-    {file = "PennyLane_Catalyst-0.8.0-cp310-cp310-macosx_12_0_x86_64.whl", hash = "sha256:d15e99ab26245411994f9a21de79b8e51180312fc73c78f28743aeb29a952df3"},
-    {file = "PennyLane_Catalyst-0.8.0-cp310-cp310-macosx_13_0_arm64.whl", hash = "sha256:71896de952293f73c7f96a5cbf01e69b9ebf413b89235495a9de02e78b3a2864"},
-    {file = "PennyLane_Catalyst-0.8.0-cp310-cp310-manylinux_2_28_aarch64.whl", hash = "sha256:c0b063eaa4145bc7c59ba6ce2e31b726b52b342ea1a62c60c1a97ff5e0dd0e36"},
-    {file = "PennyLane_Catalyst-0.8.0-cp310-cp310-manylinux_2_28_x86_64.whl", hash = "sha256:ffa6fb79b1319fe932f5dae6ee44b1fafe734e658e7ed6b50f5f75b7fd93b64f"},
-    {file = "PennyLane_Catalyst-0.8.0-cp311-cp311-macosx_12_0_x86_64.whl", hash = "sha256:bac5405e7ce8e905fabbc1f330f496fb564de40ab6ae75d2be5e9e4114ec3aa4"},
-    {file = "PennyLane_Catalyst-0.8.0-cp311-cp311-macosx_13_0_arm64.whl", hash = "sha256:a217dbc75f3183531d78193db0e5b322deae52cb4542609c68a715159111a226"},
-    {file = "PennyLane_Catalyst-0.8.0-cp311-cp311-manylinux_2_28_aarch64.whl", hash = "sha256:e89b04d80d95b433910c6fcd08907e804ec622785ffd68d7dda562d2308307a8"},
-    {file = "PennyLane_Catalyst-0.8.0-cp311-cp311-manylinux_2_28_x86_64.whl", hash = "sha256:73411f46fa159f7f9030e9df034bbfec16ec9867185e92c0a02afa8425b862a5"},
-    {file = "PennyLane_Catalyst-0.8.0-cp312-cp312-macosx_12_0_x86_64.whl", hash = "sha256:02bbc0f61de3b6b3646c5d6866d73ef1a9f604373ec57ad4edbeb9da56ed1c25"},
-    {file = "PennyLane_Catalyst-0.8.0-cp312-cp312-macosx_13_0_arm64.whl", hash = "sha256:993bc5c91e3347cc469c03d65d78cc8a974bf2cdeec5a093f6051bb90d1df1de"},
-    {file = "PennyLane_Catalyst-0.8.0-cp312-cp312-manylinux_2_28_aarch64.whl", hash = "sha256:fd876deaea63c0e00dbcba99431fdab59377dd48037979c75b4ce5bb3aaf2ddc"},
-    {file = "PennyLane_Catalyst-0.8.0-cp312-cp312-manylinux_2_28_x86_64.whl", hash = "sha256:fcce11aada6093c50b136ffa424cc13c0ed92221601d36ff7ec1fcac31a9071f"},
-    {file = "PennyLane_Catalyst-0.8.0-cp39-cp39-macosx_12_0_x86_64.whl", hash = "sha256:435911060badcf080d0cdbcba9fc5e7cd58cee57ffc940406acb5d59e4fb8687"},
-    {file = "PennyLane_Catalyst-0.8.0-cp39-cp39-macosx_13_0_arm64.whl", hash = "sha256:97cad82ca9b4b8382803a79ab0223ad19de2a86e098920e092338caa19143dbd"},
-    {file = "PennyLane_Catalyst-0.8.0-cp39-cp39-manylinux_2_28_aarch64.whl", hash = "sha256:9d8dbbff8e8c91cdac48cacbb9c3d57fa6832011662ee3fc49dca3905ba511fc"},
-    {file = "PennyLane_Catalyst-0.8.0-cp39-cp39-manylinux_2_28_x86_64.whl", hash = "sha256:cdc16866b1e1474753081ec594c024df72a0d782ba79944dc8698f44213ed66b"},
+    {file = "PennyLane_Catalyst-0.8.1-cp310-cp310-macosx_12_0_x86_64.whl", hash = "sha256:b7c4c2dc7214d038cafc104078efbbb5e9cc9a60a0ede8c20046e24b78b987de"},
+    {file = "PennyLane_Catalyst-0.8.1-cp310-cp310-macosx_13_0_arm64.whl", hash = "sha256:9ebb57f0561bc26ddc1dd71e7497e8c3214010a42dea24fa07ae446172f16d12"},
+    {file = "PennyLane_Catalyst-0.8.1-cp310-cp310-manylinux_2_28_aarch64.whl", hash = "sha256:a546bfcbfdb70ca901545644741778100cdc4373e35454f28a7764191647e989"},
+    {file = "PennyLane_Catalyst-0.8.1-cp310-cp310-manylinux_2_28_x86_64.whl", hash = "sha256:5228d186f8aed0aba2c19619ed5ed0a16c999b7ab03cdf349bf873786274f57e"},
+    {file = "PennyLane_Catalyst-0.8.1-cp311-cp311-macosx_12_0_x86_64.whl", hash = "sha256:a1ba10b5e06cd71ccc73966adc724f51e2bdb2592aed0ab324e85ab705492171"},
+    {file = "PennyLane_Catalyst-0.8.1-cp311-cp311-macosx_13_0_arm64.whl", hash = "sha256:bb12202d952c99c93bae676ae34e0972a042723b24083e61cd4449e307420e4e"},
+    {file = "PennyLane_Catalyst-0.8.1-cp311-cp311-manylinux_2_28_aarch64.whl", hash = "sha256:1a4105a3e4776034cffb9a301d7196fc43d6b732406397f0fb56a82ad7049601"},
+    {file = "PennyLane_Catalyst-0.8.1-cp311-cp311-manylinux_2_28_x86_64.whl", hash = "sha256:9907a1c0bb49aff8e166427383da22d005ab46069e556af2aee011b741f5721d"},
+    {file = "PennyLane_Catalyst-0.8.1-cp312-cp312-macosx_12_0_x86_64.whl", hash = "sha256:0a8f66a58e0af5d9db130bb2976165da3743245767657c7bc240fcc598c390bd"},
+    {file = "PennyLane_Catalyst-0.8.1-cp312-cp312-macosx_13_0_arm64.whl", hash = "sha256:ce52ab39a2f40fc398c447181047ebb74d8c3c3f057534670278c8e9867f8c19"},
+    {file = "PennyLane_Catalyst-0.8.1-cp312-cp312-manylinux_2_28_aarch64.whl", hash = "sha256:f60773ac0320d0645e895bc6554d0d49a8db0e6e64e9f2d4c01659778ef859d4"},
+    {file = "PennyLane_Catalyst-0.8.1-cp312-cp312-manylinux_2_28_x86_64.whl", hash = "sha256:4e8344d6a2ffb30d7c3fafbe839dcd1fa6a822de44a5928dda1a871a81a19976"},
+    {file = "PennyLane_Catalyst-0.8.1-cp39-cp39-macosx_12_0_x86_64.whl", hash = "sha256:f34a5fee406c3f4aea30ad970bb24463ed78a780b1bad043a848f65b8e30b540"},
+    {file = "PennyLane_Catalyst-0.8.1-cp39-cp39-macosx_13_0_arm64.whl", hash = "sha256:91eb15e9976c300a730e870d8d509e03a75421cc57c0a2bef2783e865ce42cef"},
+    {file = "PennyLane_Catalyst-0.8.1-cp39-cp39-manylinux_2_28_aarch64.whl", hash = "sha256:96895a6a495060cb0cfb83f11155b6ef7b000ae0a8ac98bb3260896f80507565"},
+    {file = "PennyLane_Catalyst-0.8.1-cp39-cp39-manylinux_2_28_x86_64.whl", hash = "sha256:f1c479d9cd1a5308099fffa83444437fe5a46dcf708e82abffc951ce7d1324ad"},
 ]
 
 [package.dependencies]
@@ -7977,4 +7977,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.10.0"
-content-hash = "f367ee3cd3a38992ff965ad2179ce50a7f124556a31f3be13eed36bdde8f510a"
+content-hash = "d59fa8bf5b196b5b93ed6f2f19032ec552a4f9ecab1a0babfa976aba67278dbf"
