@@ -17,7 +17,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_qjit_compile_grovers_algorithm_with_catalyst.png"
+            "uri": "/_static/demonstration_assets/grovers_algorithm/thumbnail_tutorial_grovers_algorithm.png"
         }
     ],
     "seoDescription": "How to QJIT compile Grover's Algorithm with Catalyst",
