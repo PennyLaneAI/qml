@@ -90,6 +90,11 @@
             "type": "demonstration",
             "id": "tutorial_How_to_simulate_quantum_circuits_with_tensor_networks",
             "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_diffable-mitigation",
+            "weight": 1.0
         }
     ]
 }
