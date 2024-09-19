@@ -1,6 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "demo.metadata.schema.0.1.1.json",
+    "$id": "demo.metadata.schema.0.1.2.json",
     "title": "Demo Metadata",
     "description": "A QML demo's metadata",
     "type": "object",
@@ -121,6 +121,12 @@
         "items": {
           "$ref": "file:./objects/hardware.schema.0.1.0.json"
         }
+      },
+      "discussionForumUrl": {
+        "description": "Link to dedicated discussion form thread for the demo on https://discuss.pennylane.ai/",
+        "type": "string",
+        "format": "uri",
+        "pattern": "(^https?:\/\/(www.)?discuss.pennylane.ai(?:\/.*)?$)"
       }
     },
     "required": [
