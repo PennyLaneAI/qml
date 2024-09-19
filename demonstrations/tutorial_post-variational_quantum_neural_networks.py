@@ -411,7 +411,7 @@ plt.show()
 # classical model the most information about the outputs of the circuit. However, this is much
 # more computationally resource heavy than its lower-locality counterparts. Note, however, that the
 # complexity of the observable construction method for local observables can be vastly decreased by 
-# introducing the usage of classical shadows. [#schuld2019evaluating]_
+# introducing the usage of classical shadows. [#huang2020predicting]_
 # 
 
 ######################################################################
