@@ -23,7 +23,7 @@ To avoid exponentially large resources, however, one typically sets a finite bon
 
 .. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_mps_simulation.png
     :align: center
-    :width: 40%
+    :width: 70%
 
 For some specific classes of states, this is provably sufficient to have faithful representations (see :ref:`Area Law`). 
 But because MPS come with a lot of powerful computational features that we are going to discuss later (in particular :ref:`canonical forms <Canonical Forms>`),
@@ -32,7 +32,7 @@ For example, state-of-the-art `quantum chemistry <https://pennylane.ai/qml/quant
 and similar methods have been used to simulate experiments on the largest available quantum computers at the time [#Patra]_.
 
 It is known that there are more suitable tensor network states like projected entangled pair states (PEPS) for 
-more complex situations (see :ref:`Area Law`).
+more complex situations (see the :ref:`Area Law` section).
 However, they all suffer from the need for significantly more complicated algorithms 
 and higher costs, as a lot of the things that make MPS so attractive, 
 like the availability of a canonical form, are not true anymore.
