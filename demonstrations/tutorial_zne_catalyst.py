@@ -2,15 +2,15 @@ r"""
 Digital Zero-Noise Extrapolation with Catalyst
 ==============================================
 
-In this tutorial, you will learn how to use Zero-Noise Extrapolation (ZNE) in combination with
-Catalyst. We'll demonstrate how to generate noise-scaled circuits, execute them on a noisy quantum
+In this tutorial, you will learn how to use error mitigation, and in particular 
+the Zero-Noise Extrapolation (ZNE) technique, in combination with Catalyst. 
+We'll demonstrate how to generate noise-scaled circuits, execute them on a noisy quantum
 simulator, and use extrapolation techniques to estimate the zero-noise result, all while
 leveraging just-in-time (JIT) compilation through
 `Catalyst <https://docs.pennylane.ai/projects/catalyst/en/stable/index.html>`_.
 
 What is ZNE
 -----------
-
 Zero-Noise Extrapolation (ZNE) is a technique used to mitigate the effect of noise on quantum
 computations. First introduced in [#temme2017zne]_, it helps improve the accuracy of quantum
 results by running circuits at varying noise levels and extrapolating back to a hypothetical
@@ -41,9 +41,9 @@ the demo `QJIT compilation with Qrack and Catalyst <https://pennylane.ai/qml/dem
 Stage 3: Combining the results
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-After executing the noise-scaled circuits, we perform an extrapolation to estimate the zero-noise
-limit---the result we would expect in a noise-free scenario. Catalyst provides two methods for
-perfoming this extrapolation:
+After executing the noise-scaled circuits, an extrapolation on the results is performed  
+to estimate the zero-noise limit---the result we would expect in a noise-free scenario. 
+Catalyst provides two methods for perfoming this extrapolation:
 
 1. **Polynomial extrapolation**, and
 2. **Exponential extrapolation**.
@@ -61,21 +61,22 @@ for usage in combination with variational workflows. More on this in the tutoria
 
 Using ZNE in Catalyst
 ---------------------
-
-ZNE is also available for just-in-time (JIT) compilation of PennyLane programs, 
-starting from Catalyst v0.8.1.
+On top of the error mitigation routines offered in Pennylane, ZNE is also available for just-in-time 
+(JIT) compilation, starting from Catalyst v0.8.1.
 In this tutorial we see how an error mitigation routine can be integrated in a Catalyst workflow.
 
 At the end of the tutorial, we will compare time for the execution of ZNE routines in 
-Pennylane vs. Catalyst.
+pure Pennylane vs. Pennylane Catalyst with JIT. 
 
 Mirror circuit
 --------------
 
-First we build a mirror-circuit starting off a unitary 2-design. 
+The first step for demoing an error mitigation routine is to define a circuit. 
+Here we build a simple mirror-circuit starting off a unitary 2-design. 
 This is a typical construction for a randomized benchmarking circuit, which is used in many tasks
 in quantum computing. Given such circuit, we measure the expectation value :math:`\langle Z\rangle` 
-on the state of the first qubit.
+on the state of the first qubit, and by construction of the circuit, we expect this value to be
+equal to 1.
 """
 
 import os
@@ -101,8 +102,7 @@ def circuit(w1, w2):
     return qml.expval(qml.PauliZ(0))
 
 ##############################################################################
-# We execute the circuit on the Qrack simulator, first without noise, 
-# and then in a noisy scenario.
+# As a sanity check, we first execute the circuit on the Qrack simulator without any noise.
 
 noiseless_device = qml.device("qrack.simulator", n_wires, isNoisy=False)
 
@@ -110,8 +110,13 @@ ideal_value = qml.QNode(circuit, device=noiseless_device)(w1, w2)
 print(f"Ideal value: {ideal_value}")
 
 ##############################################################################
-# As expected, in the noiseless scenario, the first qubit is in the :math:|0\rangle`
-# state, so the expecation value of the Pauli-Z measurement is equal to 1.
+# As expected, in the noiseless scenario, the expecation value of the Pauli-Z measurement 
+# is equal to 1, since the first qubit is back in the :math:`|0\rangle` state.
+#
+# Let's now run the circuit through a noisy scenario. The Qrack simulator models noise by
+# applying single-qubit depolarizing noise channels to all qubits in all gates of the circuit.
+# The probability of error is specified by the value of the 
+# `QRACK_GATE_DEPOLARIZATION` environment variable. 
 
 NOISE_LEVEL = 0.01
 os.environ["QRACK_GATE_DEPOLARIZATION"] = str(NOISE_LEVEL)
@@ -119,41 +124,44 @@ noisy_device = qml.device("qrack.simulator", n_wires, isNoisy=True)
 
 noisy_qnode = qml.QNode(circuit, device=noisy_device)
 noisy_value = noisy_qnode(w1, w2)
-print(f"Error without mitigation: {abs(ideal_value - noisy_value):.8f}")
+print(f"Error without mitigation: {abs(ideal_value - noisy_value):.3f}")
 
 ##############################################################################
-# With a circuit and simulator defined, we can begin to define some of the necessary parameters
-# In particular we will need to specify:
+# Again expected, we obtain a noisy value that diverges from the ideal value we obtained above.
+# Fortunately, we have error mitigation to the rescue! We can apply ZNE, however we are still 
+# missing some necessary parameters. In particular we still need to specify:
 #
-# 1. The noise scaling factors (i.e. how much to increase the depth of the circuit)
-# 2. The _method_ for scaling this noise up (in Catalyst there are two options: `global` and
+# 1. The method for scaling this noise up (in Catalyst there are two options: `global` and
 #    `local`)
-# 3. The extrapolation technique to use to estimate the ideal value (available in Catalyst are
-#    polynomial, and exponential extrapolation).
+# 2. The noise scaling factors (i.e. how much to increase the depth of the circuit)
+# 3. The extrapolation technique used to estimate the ideal value (available in Catalyst are
+#    polynomial and exponential extrapolation).
 #
-# We'll define the scale factors as a `jax.numpy.array` where the scale factors represents
-# the number of time the circuit is folded.
-
-scale_factors = [1, 3, 5]
-
-##############################################################################
-# Next, we'll choose a method to scale the noise. This needs to be defined as a Python string.
+# First, we choose a method to scale the noise. This needs to be specified as a Python string.
 
 folding_method = "global"
 
 ##############################################################################
-# Finally, we'll choose the extrapolation technique. Both exponential and polynoamial extrapolation
-# is available in the `pennylane.transforms` module. Both of these functions can be passed directly
-# into `mitigate_with_zne`!
+# Next, we pick a list of scale factors. At the time of writing this tutorial, 
+# Catalyst supports only odd integer scale factors. In the global folding setting, 
+# a scale factor  :math:`s` correspond to the circuit being folded
+# :math:`\frac{s - 1}{2}` times.
+scale_factors = [1, 3, 5]
 
-from pennylane.transforms import richardson_extrapolate
+##############################################################################
+# Finally, we'll choose the extrapolation technique. Both exponential and polynomial extrapolation
+# is available in the `pennylane.transforms` module, and both of these functions can be passed directly
+# into Catalyst's `mitigate_with_zne`. In this tutorial we use polynomial extrapolation, 
+# which we hypothesize it best models the behavior of the noise scenario we are considering.
 
-extrapolation_method = richardson_extrapolate
+from pennylane.transforms import poly_extrapolate
+from functools import partial
+
+extrapolation_method = partial(poly_extrapolate, order = 3)
 
 ##############################################################################
 # We're now ready to run our example using ZNE with Catalyst! Putting these all together we're able
-# to define a very simple `QNode`!
-
+# to define a very simple `QNode`, which represents the mitigated version of the original circuit.
 
 @qjit
 def mitigated_circuit_qjit(w1, w2):
@@ -169,11 +177,18 @@ zne_value = mitigated_circuit_qjit(w1, w2)
 
 print(f"Error with ZNE in Catalyst: {abs(ideal_value - zne_value):.3f}")
 
-
 ##############################################################################
-# ZNE in Pennylane
-# --------------------------------------------------------
-# Notice
+# It's crucial to note that we can use the `@qjit` decorator here, as all the functions used 
+# to define the node are compatible with Catalyst, and we can therefore 
+# exploit the potential of just-in-time compilation.
+#
+# ZNE in Pennylane without @qjit
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# For comparison, let's define a very similar `QNode`, but this time we don't decorate the node
+# as just-in-time compilable.
+# When it comes to the parameters, the only difference here (due to an implementation technicality)
+# is the type of the `folding` argument. Despite the type being different, however,
+# the value of the folding method is the same, i.e., global folding.   
 
 def mitigated_circuit(w1, w2):
     return qml.transforms.mitigate_with_zne(
@@ -187,9 +202,9 @@ zne_value = mitigated_circuit(w1, w2)
 
 print(f"Error with ZNE in Pennylane: {abs(ideal_value - zne_value):.3f}")
 
-##############################################################################
-# We use the timeit module in Python to measure execution time of a mitigated circuit
-# ...
+############################################################################## 
+# To showcase the impact of JIT compilation, let's use Python's timeit module
+# to measure execution time of `mitigated_circuit_qjit` vs. `mitigated_circuit`.
 
 repeat = 5  # number of timing runs
 number = 5  # number of loops executed in each timing run 
@@ -198,40 +213,50 @@ times = timeit.repeat(
     "mitigated_circuit(w1, w2)", 
     globals=globals(), number=number, repeat=repeat)
 
-print(f"Pennylane running time (best of {repeat}): {min(times):.3f}")
+print(f"mitigated_circuit running time (best of {repeat}): {min(times):.3f}s")
 
 times = timeit.repeat(
     "mitigated_circuit_qjit(w1, w2)", 
     globals=globals(), number=number, repeat=repeat)
 
-print(f"Catalyst running time (best of {repeat}): {min(times):.3f}")
-
-
-
+print(f"mitigated_circuit_qjit running time (best of {repeat}): {min(times):.3f}s")
 
 ##############################################################################
-# Here is a recap of the landscape of QEM techniques available in Pennylane.
+# Already with the simple circuit we started with, and with the simple parameters in our example,
+# we can appreciate the performance differences. That was at the cost of very minimal syntax change. 
+#
+# There are still reasons to use ZNE in Pennylane without @qjit, for instance, 
+# whenever the device of choice is not supported by Catalyst. To help the users orient themselves, 
+# we conlcude with a landscape of the QEM techniques available on Pennylane. 
 #
 #     .. list-table::
-#        :widths: 30 35 20 15
+#        :widths: 30 20 20 20 20 30
 #        :header-rows: 1
 #
 #        * - **Framework**
-#          - **Techniques**
+#          - **ZNE folding**
+#          - **ZNE extrapolation**
 #          - **Differentiable**
 #          - **JIT**
+#          - **other QEM techniques**
 #        * - Pennylane + Mitiq
-#          - ZNE, PEC, CDR, DDD, REM
+#          - global, local, random
+#          - polynomial, exponential
 #          - 
 #          - 
+#          - PEC, CDR, DDD, REM
 #        * - Pennylane transforms
-#          - ZNE
+#          - global, local
+#          - polynomial, exponential
 #          - ✅
 #          - 
-#        * - Catalyst
-#          - ZNE
+#          - 
+#        * - Catalyst (experimental)
+#          - global, local
+#          - polynomial, exponential
 #          - ✅
 #          - ✅
+#          - 
 
 
 ##############################################################################
