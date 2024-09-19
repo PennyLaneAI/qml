@@ -6,8 +6,8 @@ How to Quantum Just-In-Time Compile Grover's Algorithm with Catalyst
 
 .. meta::
     :property="og:description": This demonstration illustrates how to use
-        Catalyst to quantum just-in-time (QJIT) compile a PennyLane circuit
-        implementing Grover's algorithm.
+        Catalyst to just-in-time (QJIT) compile a PennyLane circuit implementing
+        Grover's algorithm.
 
 .. related::
 
@@ -148,7 +148,8 @@ for i in most_probable_states:
 # so let's first define a new circuit using `Lightning
 # <https://docs.pennylane.ai/projects/lightning/en/stable/index.html>`__, which is a PennyLane
 # plugin that provides more performant state simulators written in C++, and which is supported by
-# Catalyst:
+# Catalyst. The full list of devices supported by Catalyst is available `here
+# <https://docs.pennylane.ai/projects/catalyst/en/stable/dev/devices.html>`__.
 
 
 @qml.qnode(qml.device("lightning.qubit", wires=NUM_QUBITS))
