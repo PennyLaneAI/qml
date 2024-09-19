@@ -163,7 +163,7 @@ n_shots = 100  # the number of times we can use each unitary
 
 import pennylane as qml
 from pennylane.templates.layers import RandomLayers
-from pennylane import numpy as np
+import numpy as np
 
 np.random.seed(234087)
 
@@ -485,7 +485,7 @@ def enhanced_circuit(ts=False):
     RandomLayers(weights, wires=range(0, qubits), rotations=ops, seed=seed)
     RandomLayers(weights, wires=range(qubits, 2 * qubits), rotations=ops, seed=seed)
     noise_layer(np.pi / 4)  # added noise layer
-    CNOT_sequence(control_wires=range(qubits), target_wires=range(qubits, 2 * qubits))
+    CNOT_sequence(control_wires=range(qubits, 2 * qubits), target_wires=range(qubits))
 
     for q in range(qubits):
         qml.Hadamard(wires=qubits + q)

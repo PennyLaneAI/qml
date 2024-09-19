@@ -110,7 +110,6 @@ This demonstration discusses theory and experiments relating to a recently propo
 import pennylane as qml
 from matplotlib import pyplot as plt
 import numpy as np
-from numpy import array
 import scipy
 from scipy.optimize import minimize
 import networkx as nx

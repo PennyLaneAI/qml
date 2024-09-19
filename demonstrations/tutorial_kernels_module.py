@@ -129,10 +129,10 @@ embedded quantum states
 # training variational embedding kernels and the available functionalities
 # to do both in PennyLane. We of course need to start with some imports:
 
-from pennylane import numpy as np
+from pennylane import numpy as pnp
 import matplotlib as mpl
 
-np.random.seed(1359)
+pnp.random.seed(1359)
 
 ##############################################################################
 # And we proceed right away to create a dataset to work with, the
@@ -144,12 +144,12 @@ np.random.seed(1359)
 
 def _make_circular_data(num_sectors):
     """Generate datapoints arranged in an even circle."""
-    center_indices = np.array(range(0, num_sectors))
-    sector_angle = 2 * np.pi / num_sectors
+    center_indices = pnp.array(range(0, num_sectors))
+    sector_angle = 2 * pnp.pi / num_sectors
     angles = (center_indices + 0.5) * sector_angle
-    x = 0.7 * np.cos(angles)
-    y = 0.7 * np.sin(angles)
-    labels = 2 * np.remainder(np.floor_divide(angles, sector_angle), 2) - 1
+    x = 0.7 * pnp.cos(angles)
+    y = 0.7 * pnp.sin(angles)
+    labels = 2 * pnp.remainder(pnp.floor_divide(angles, sector_angle), 2) - 1
 
     return x, y, labels
 
@@ -159,13 +159,13 @@ def make_double_cake_data(num_sectors):
     x2, y2, labels2 = _make_circular_data(num_sectors)
 
     # x and y coordinates of the datapoints
-    x = np.hstack([x1, 0.5 * x2])
-    y = np.hstack([y1, 0.5 * y2])
+    x = pnp.hstack([x1, 0.5 * x2])
+    y = pnp.hstack([y1, 0.5 * y2])
 
     # Canonical form of dataset
-    X = np.vstack([x, y]).T
+    X = pnp.vstack([x, y]).T
 
-    labels = np.hstack([labels1, -1 * labels2])
+    labels = pnp.hstack([labels1, -1 * labels2])
 
     # Canonical form of labels
     Y = labels.astype(int)
@@ -276,7 +276,7 @@ adjoint_ansatz = qml.adjoint(ansatz)
 
 def random_params(num_wires, num_layers):
     """Generate random variational parameters in the shape for the ansatz."""
-    return np.random.uniform(0, 2 * np.pi, (num_layers, 2, num_wires), requires_grad=True)
+    return pnp.random.uniform(0, 2 * pnp.pi, (num_layers, 2, num_wires), requires_grad=True)
 
 
 ##############################################################################
@@ -349,7 +349,7 @@ print(f"The kernel value between the first and second datapoint is {kernel_value
 init_kernel = lambda x1, x2: kernel(x1, x2, init_params)
 K_init = qml.kernels.square_kernel_matrix(X, init_kernel, assume_normalized_kernel=True)
 
-with np.printoptions(precision=3, suppress=True):
+with pnp.printoptions(precision=3, suppress=True):
     print(K_init)
 
 ##############################################################################
@@ -385,7 +385,7 @@ svm = SVC(kernel=lambda X1, X2: qml.kernels.kernel_matrix(X1, X2, init_kernel)).
 
 
 def accuracy(classifier, X, Y_target):
-    return 1 - np.count_nonzero(classifier.predict(X) - Y_target) / len(Y_target)
+    return 1 - pnp.count_nonzero(classifier.predict(X) - Y_target) / len(Y_target)
 
 
 accuracy_init = accuracy(svm, X, Y)
@@ -399,11 +399,11 @@ print(f"The accuracy of the kernel with random parameters is {accuracy_init:.3f}
 
 
 def plot_decision_boundaries(classifier, ax, N_gridpoints=14):
-    _xx, _yy = np.meshgrid(np.linspace(-1, 1, N_gridpoints), np.linspace(-1, 1, N_gridpoints))
+    _xx, _yy = pnp.meshgrid(pnp.linspace(-1, 1, N_gridpoints), pnp.linspace(-1, 1, N_gridpoints))
 
-    _zz = np.zeros_like(_xx)
-    for idx in np.ndindex(*_xx.shape):
-        _zz[idx] = classifier.predict(np.array([_xx[idx], _yy[idx]])[np.newaxis, :])
+    _zz = pnp.zeros_like(_xx)
+    for idx in pnp.ndindex(*_xx.shape):
+        _zz[idx] = classifier.predict(pnp.array([_xx[idx], _yy[idx]])[pnp.newaxis, :])
 
     plot_data = {"_xx": _xx, "_yy": _yy, "_zz": _zz}
     ax.contourf(
@@ -534,15 +534,15 @@ def target_alignment(
     )
 
     if rescale_class_labels:
-        nplus = np.count_nonzero(np.array(Y) == 1)
+        nplus = pnp.count_nonzero(pnp.array(Y) == 1)
         nminus = len(Y) - nplus
-        _Y = np.array([y / nplus if y == 1 else y / nminus for y in Y])
+        _Y = pnp.array([y / nplus if y == 1 else y / nminus for y in Y])
     else:
-        _Y = np.array(Y)
+        _Y = pnp.array(Y)
 
-    T = np.outer(_Y, _Y)
-    inner_product = np.sum(K * T)
-    norm = np.sqrt(np.sum(K * K) * np.sum(T * T))
+    T = pnp.outer(_Y, _Y)
+    inner_product = pnp.sum(K * T)
+    norm = pnp.sqrt(pnp.sum(K * K) * pnp.sum(T * T))
     inner_product = inner_product / norm
 
     return inner_product
@@ -553,7 +553,7 @@ opt = qml.GradientDescentOptimizer(0.2)
 
 for i in range(500):
     # Choose subset of datapoints to compute the KTA on.
-    subset = np.random.choice(list(range(len(X))), 4)
+    subset = pnp.random.choice(list(range(len(X))), 4)
     # Define the cost function for optimization
     cost = lambda _params: -target_alignment(
         X[subset],

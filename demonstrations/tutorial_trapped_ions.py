@@ -401,7 +401,7 @@ and read future papers to keep up-to-date with the most recent developments.
 # duration :math:`t` of the pulse, with :math:`\Omega` set to 100 kHz.
 
 import pennylane as qml
-from pennylane import numpy as np
+import numpy as np
 from scipy.linalg import expm
 
 Omega = 100
@@ -422,7 +422,7 @@ def evolution(phi, t):
 dev = qml.device("default.qubit", wires=1)
 
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev)
 def ion_hadamard(state):
 
     if state == 1:
@@ -440,7 +440,7 @@ def ion_hadamard(state):
     return qml.state()
 
 #For comparison, we use the Hadamard built into PennyLane
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev)
 def hadamard(state):
 
     if state == 1:
@@ -459,7 +459,7 @@ print(np.isclose(1j * ion_hadamard(1), hadamard(1)))
 # A similar exercise can be done for the :math:`T` gate:
 
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev)
 def ion_Tgate(state):
 
     if state == 1:
@@ -472,7 +472,7 @@ def ion_Tgate(state):
     return qml.state()
 
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev)
 def tgate(state):
 
     if state == 1:
@@ -504,7 +504,7 @@ print(np.isclose(np.exp(1j * np.pi / 8) * ion_Tgate(1), tgate(1)))
 import matplotlib.pyplot as plt
 
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev)
 def evolution_prob(t):
 
     qml.QubitUnitary(evolution(0, t / Omega), wires=0)
@@ -513,7 +513,7 @@ def evolution_prob(t):
 
 
 t = np.linspace(0, 4 * np.pi, 101)
-s = [evolution_prob(i)[1].numpy() for i in t]
+s = [evolution_prob(i)[1] for i in t]
 
 fig1, ax1 = plt.subplots(figsize=(9, 6))
 
@@ -811,7 +811,7 @@ def Molmer_Sorensen(t):
 
 dev2 = qml.device("default.qubit",wires=2)
 
-@qml.qnode(dev2, interface="autograd")
+@qml.qnode(dev2)
 def ion_cnot(basis_state):
     
     #Prepare the two-qubit basis states from the input
@@ -827,7 +827,7 @@ def ion_cnot(basis_state):
     return qml.state()
 
 #Compare with built-in CNOT
-@qml.qnode(dev2, interface="autograd")
+@qml.qnode(dev2)
 def cnot_gate(basis_state):
     
     qml.BasisState(basis_state, wires=range(2))
