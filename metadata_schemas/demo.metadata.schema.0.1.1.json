@@ -121,6 +121,11 @@
         "items": {
           "$ref": "file:./objects/hardware.schema.0.1.0.json"
         }
+      },
+      "discussionForumURL": {
+        "description": "Link to dedicated discussion form thread for the demo on https://discuss.pennylane.ai/",
+        "type": "string",
+        "pattern": "(^https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6})?\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)"
       }
     },
     "required": [
