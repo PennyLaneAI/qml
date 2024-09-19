@@ -105,6 +105,9 @@ jobs:
       - name: Sync searchindex to HTML Bucket
         run: aws s3 cp searchindex.js s3://$AWS_S3_HTML_BUCKET_ID/qml/searchindex.js
 
+      - name: Sync objects.inv to HTML Bucket
+        run: aws s3 cp ${{ steps.qml_json.outputs.download-path }}/objects.inv s3://$AWS_S3_HTML_BUCKET_ID/qml/objects.inv
+
   trigger-website-build:
     runs-on: ubuntu-latest
 
