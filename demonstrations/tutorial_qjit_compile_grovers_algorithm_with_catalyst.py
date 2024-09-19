@@ -13,6 +13,8 @@ How to Quantum Just-In-Time Compile Grover's Algorithm with Catalyst
 
     tutorial_grovers_algorithm Grover's Algorithm
     tutorial_how_to_quantum_just_in_time_compile_vqe_catalyst How to quantum just-in-time compile VQE with Catalyst
+
+*Author: Joey Carter — Posted: 19 September 2024.*
 """
 
 ######################################################################
