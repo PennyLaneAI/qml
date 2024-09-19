@@ -248,9 +248,11 @@ print(f"For {g=}, the theoretical correlation length is {xi=:.4f}")
 # physical qubit, and a final basis change to measure the Bell basis. Overall, this amounts to a linear
 # operation count and circuit depth.
 #
-# These steps are visualized in the following sketch, with the bond qudits starting at the top.
-# Note that the sketch deviates from standard circuit diagrams in that it passes one bond qudit from
-# the top to the bottom, instead of keeping the position of the qudits fixed.
+# Alongside the correspondence between :math:`U` acting on :math:`|0\rangle` and :math:`A`,
+# these steps are visualized in the following sketch.
+# Note that the sketch deviates from standard circuit diagrams:
+# The bond qudits start at the top and throughout the circuit one of them is passed from
+# the top to the bottom, instead of keeping the position of all qudits fixed.
 #
 # .. image:: ../_static/demonstration_assets/constant_depth_mps_prep/sequential.png
 #     :width: 75%
