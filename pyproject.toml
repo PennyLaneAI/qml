@@ -43,6 +43,7 @@ pennylane-cirq = "0.36.0"
 pennylane-qiskit = "0.38.0"
 pennylane-qulacs = "0.36.0"
 pennylane-catalyst = "0.8.1"
+pennylane-qrack = "0.9.1"
 ##########################################################
 
 
