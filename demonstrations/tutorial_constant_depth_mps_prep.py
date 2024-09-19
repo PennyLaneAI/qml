@@ -44,15 +44,19 @@ is the sequential MPS preparation circuit to which we will compare later.
 Alongside this introduction we describe and code up each building block for a
 specific MPS. Then we combine the building blocks into the constant-depth
 algorithm by Smith et al. and run it for the example MPS.
-As a rough preview, this is what the algorithm will look like schematically:
+As a preview, this is a schematic overview of the algorithm:
 
-.. image:: ../_static/demonstration_assets/constant_depth_mps_prep/algorithm_preview.png
+.. image:: ../_static/demonstration_assets/constant_depth_mps_prep/algorithm.png
     :width: 75%
     :align: center
 
-The algorithm consists of a parallelized preparation step of states
-on fewer qubits, a fusion step connecting them to a defective state on all qubits,
-and finally correcting the defects to obtain the target state.
+We will get to all these steps in detail below, but in short, the algorithm
+runs through five steps. It 1) creates independent MPS on small groups of qubits
+and then 2) fuses them together with mid-circuit measurements. This leaves
+the overall state with some defects, which are 3) corrected and moved to the
+boundary of the state with dynamic operations and classical processing. 
+Then, all that is left to do is to 4) correct the defect at the boundary and
+finally 5) to measure two remaining bond qudits projectively.
 
 Building blocks
 ---------------
@@ -203,6 +207,16 @@ print(f"For {g=}, the theoretical correlation length is {xi=:.4f}")
 # on a single bond site. This way, we chain up the unitaries on the bond site like beads
 # on a string.
 #
+# .. image:: ../_static/demonstration_assets/constant_depth_mps_prep/sequential.png
+#     :width: 75%
+#     :align: center
+#
+# Alongside the correspondence between :math:`U` acting on :math:`|0\rangle` and :math:`A`,
+# these steps are visualized in the sketch above.
+# Note that the sketch deviates from standard circuit diagrams:
+# The bond qudits start at the top and throughout the circuit one of them is passed from
+# the top to the bottom, instead of keeping the position of all qudits fixed.
+#
 # The sequential preparation circuit now consists of the following steps.
 #
 # #. Start in the state :math:`|\psi_0\rangle = |0\rangle^{\otimes N}\otimes |00\rangle_D`.
@@ -247,16 +261,6 @@ print(f"For {g=}, the theoretical correlation length is {xi=:.4f}")
 # We see that we prepared :math:`|\Psi\rangle` with an entangling operation on the bond qudits, one unitary per
 # physical qubit, and a final basis change to measure the Bell basis. Overall, this amounts to a linear
 # operation count and circuit depth.
-#
-# Alongside the correspondence between :math:`U` acting on :math:`|0\rangle` and :math:`A`,
-# these steps are visualized in the following sketch.
-# Note that the sketch deviates from standard circuit diagrams:
-# The bond qudits start at the top and throughout the circuit one of them is passed from
-# the top to the bottom, instead of keeping the position of all qudits fixed.
-#
-# .. image:: ../_static/demonstration_assets/constant_depth_mps_prep/sequential.png
-#     :width: 75%
-#     :align: center
 #
 # **Example**
 #
@@ -495,7 +499,7 @@ def prepare_and_unprepare(g):
 
 
 test = prepare_and_unprepare(g)
-print(f"The test measurement of the fusion preparation + sequential unpreparation is {test:.2f}")
+print(f"The test measurement of fusion preparation + sequential unpreparation is {test:.2f}")
 
 ######################################################################
 # This means we still need a way to remove the defect matrices :math:`B^k` from the
@@ -620,13 +624,12 @@ def push_and_correct(op_id, phys_wires):
 # It is important to remember that showing the existence of suitable operator pushing
 # relations (and finding them explicitly) is a crucial step in general, which goes
 # beyond the scope of the demo.
-# 
+#
 # The projective measurement step at the end is the same as for the sequential
 # preparation algorithm, and therefore is *probabilistic*, with the same
 # success probability.
 #
-# Block size :math:`q`
-# ~~~~~~~~~~~~~~~~~~~~
+# **The block size** :math:`q`
 #
 # The size of the blocks that have to be prepared in the first step depends on multiple
 # considerations. First, the block must be such that operator pushing relations are
