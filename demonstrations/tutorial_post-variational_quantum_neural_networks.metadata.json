@@ -11,7 +11,9 @@
     "dateOfPublication": "2024-07-09T00:00:00+00:00",
     "dateOfLastModification": "2024-07-09T00:00:00+00:00",
     "categories": [
-        "Quantum Machine Learning"
+        "Quantum Machine Learning",
+        "Algorithms",
+        "Quantum Computing"
     ],
     "tags": [],
     "previewImages": [
@@ -82,7 +84,18 @@
             "url": "https://arxiv.org/abs/2307.10560"
         }
     ],
-    "basedOnPapers": [],
+    "basedOnPapers": ["https://arxiv.org/abs/2307.10560"],
     "referencedByPapers": [],
-    "relatedContent": []
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_variational_classifier",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "learning2learn",
+            "weight": 1.0
+        }
+    ]
 }
