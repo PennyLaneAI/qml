@@ -7,7 +7,7 @@ This makes the preparation of MPS on a quantum computer an important subroutine,
 for example when warm-starting a quantum algorithm with a classically optimized
 MPS or preparing initial states with well-studied physical properties.
 
-.. figure:: ../_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_constant_depth_mps_prep.png
+.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_constant_depth_mps_prep.png
     :align: center
     :width: 70%
     :alt: Illustration of two matrix product states merged together by a tree growing out of and back into them
