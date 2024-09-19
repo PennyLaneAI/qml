@@ -45,9 +45,17 @@ a familiarization with the `variational quantum eigensolver (VQE) algorithm <htt
 # To implement the VQD algorithm, we first need to know the ground state of our system, and it is a breeze to use the data from `PennyLane Datasets <https://pennylane.ai/datasets/>`__  to obtain the Hamiltonian and the ground state
 # of the hydrogen molecule:
 #
+# .. note::
+#
+#     To improve viewability of this tutorial, we will suppress any ``ComplexWarning``'s which may be raised during optimization.
+#     The warnings do not impact the correctness of the results, but make it harder to view outputs.
+#
 
 import pennylane as qml
-from pennylane import numpy as np
+import numpy as np
+
+import warnings
+warnings.filterwarnings(action="ignore", category=np.ComplexWarning)
 
 # Load the dataset
 h2 = qml.data.load("qchem", molname="H2", bondlength=0.742, basis="STO-3G")[0]
@@ -58,7 +66,7 @@ H, n_qubits = h2.hamiltonian, len(h2.hamiltonian.wires)
 
 # Obtain the ground state from the operations given by the dataset
 def generate_ground_state(wires):
-    qml.BasisState(h2.hf_state, wires=wires)
+    qml.BasisState(np.array(h2.hf_state), wires=wires)
 
     for op in h2.vqe_gates:  # use the gates data from the dataset
         op = qml.map_wires(op, {op.wires[i]: wires[i] for i in range(len(wires))})
