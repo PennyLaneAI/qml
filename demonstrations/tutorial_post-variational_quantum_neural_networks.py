@@ -4,7 +4,7 @@ r"""Post-Variational Quantum Neural Networks
 
 ######################################################################
 # You're sitting in front of your quantum computer, excitement buzzing through your veins as your 
-# carefully crafted Ansatz for a variational algorithm is finally ready. But oh buttersticks -— 
+# carefully crafted Ansatz for a variational algorithm is finally ready. But oh buttersticks — 
 # after a few hundred iterations, your heart sinks as you realize you have encountered the dreaded barren plateau problem, where 
 # gradients vanish and optimisation grinds to a halt. What now? Panic sets in, but then you remember the new technique 
 # you read about. You reach into your toolbox and pull out the "post-variational strategy". This approach shifts 
@@ -409,7 +409,9 @@ plt.show()
 ######################################################################
 # We can see that the highest accuracy is achieved with the 3-local observables, which gives the
 # classical model the most information about the outputs of the circuit. However, this is much
-# more computationally resource heavy than its lower-locality counterparts.
+# more computationally resource heavy than its lower-locality counterparts. Note, however, that the
+# complexity of the observable construction method for local observables can be vastly decreased by 
+# introducing the usage of classical shadows. [#schuld2019evaluating]_
 # 
 
 ######################################################################
@@ -787,6 +789,13 @@ plt.show()
 #     Y. Du, M.-H. Hsieh, T. Liu, and D. Tao,  
 #     Expressive power of parametrized quantum circuits,  
 #     `Phys. Rev. Res. 2, 033125 (2020) <https://doi.org/10.1103/PhysRevResearch.2.033125>`__.
+#
+#
+# .. [#huang2020predicting]
+#
+#     H.-Y. Huang, R. Kueng, and J. Preskill,  
+#     Predicting many properties of a quantum system from very few measurements,  
+#     `Nat. Phys. 16, 1050–1057 (2020) <https://doi.org/10.1038/s41567-020-0932-7>`__.
 #
 #
 

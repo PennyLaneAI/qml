@@ -82,6 +82,15 @@
             "year": "2024",
             "doi": "10.48550/arXiv.2307.10560",
             "url": "https://arxiv.org/abs/2307.10560"
+        },
+        {
+            "id": "huang2020predicting",
+            "type": "article",
+            "title": "Predicting many properties of a quantum system from very few measurements",
+            "authors": "Hsin-Yuan Huang and Richard Kueng and John Preskill",
+            "year": "2024",
+            "doi": "10.1038/s41567-020-0932-7",
+            "url": "https://doi.org/10.1038/s41567-020-0932-7"
         }
     ],
     "basedOnPapers": ["https://arxiv.org/abs/2307.10560"],
@@ -94,7 +103,32 @@
         },
         {
             "type": "demonstration",
-            "id": "learning2learn",
+            "id": "tutorial_local_cost_functions",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_How_to_optimize_QML_model_using_JAX_and_Optax",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_jax_transformations",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_classical_shadows",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_diffable_shadows",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "ensemble_multi_qpu",
             "weight": 1.0
         }
     ]
