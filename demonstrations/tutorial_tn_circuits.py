@@ -233,7 +233,9 @@ def circuit(template_weights):
 
 shapes = qml.SimplifiedTwoDesign.shape(n_layers=1, n_wires=4)
 weights = [np.random.random(size=shape) for shape in shapes]
-template_weights = qml._np.array([weights] * 3, dtype="object")
+
+import numpy as onp
+template_weights = onp.array([weights] * 3, dtype="object")
 fig, ax = qml.draw_mpl(circuit, level="device")(template_weights)
 
 ##############################################################################
