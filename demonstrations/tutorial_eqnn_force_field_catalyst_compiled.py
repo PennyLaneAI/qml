@@ -16,9 +16,7 @@ import numpy as np
 import jax
 from jax import numpy as jnp
 
-import scipy
 import matplotlib.pyplot as plt
-import sklearn
 
 import catalyst
 from catalyst import qjit
@@ -87,11 +85,11 @@ dev = qml.device("lightning.qubit", wires=num_qubits)
 
 
 ######################################################################
-# The core function that is called repeatedly many times can benifit from being just-in-time compiled with qjit.
+# The core function that is called repeatedly can benefit from being just-in-time compiled with qjit.
 # All we need to do is decorate the function with the `@qjit` decorator.
 #
 # Catalyst has its own `for_loop` function to work with qjit.
-# `catalyst.for_loop` should be used when the loop bounds or step depends on the qjit-ted function's input arguments.
+# `catalyst.for_loop` should be used when the loop bounds or step depend on the qjit-ted function's input arguments.
 # If there is no such dependence, `catalyst.for_loop` can still be used.
 # Here we showcase both usages.
 
