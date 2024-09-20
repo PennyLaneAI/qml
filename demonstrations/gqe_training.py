@@ -167,7 +167,7 @@ op_pool_size = len(op_pool)
 # corresponding to Eq. 1 of [#nakaji2024]_. Here, ``energy_circuit`` takes in the operator sequence :math:`U_{j_1}, U_{j_2}, ..., U_{j_N}`
 # and returns the energy of the corresponding quantum state.
 #
-# As a slight extension of [#nakaji2024]_, we can also calculate the energies for each subsequence of
+# As a slight extension, we can also calculate the energies for each subsequence of
 # operators to help with the training of the model. That is, for a sequence of three operators
 # :math:`U_{j_1}, U_{j_2}, U_{j_3}` we compute the energies for :math:`U_{j_1}` and :math:`U_{j_1}, U_{j_2}` instead of just
 # the full sequence of three operators, which was described in [#nakaji2024]_. This can be done simply in PennyLane, using 
@@ -665,7 +665,7 @@ df_compare_Es
 # 
 # In this demo, we see that GPT-QE is a viable alternative in estimating the ground-state energy 
 # of a hydrogen molecule. The best underlying GPT model version can generate a state whose energy is 
-# only around ``7.71e-07 Ha`` away from ground state energy. Additionally, since the GPT model being optimized 
+# only around ``7.71e-07 Ha`` away from ground state energy, which is well below the chemical accuracy. Additionally, since the GPT model being optimized 
 # is completely detached from the quantum simulations, gradients across a potentially large quantum circuit
 # don't need to be computed, for example. Thus, the machinery of classical ML can be harnessed without 
 # worrying too much about the quantum algorithm side of the problem.
