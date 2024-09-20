@@ -203,8 +203,6 @@ data_train, data_test = (
 )
 
 ### training ###
-opt_init, opt_update, get_params = optimizers.adam(1e-2)
-
 np.random.seed(42)
 weights = np.zeros((num_qubits, D, B))
 weights[0] = np.random.uniform(0, np.pi, 1)
@@ -220,7 +218,7 @@ epsilon = None  # We disable SB for this specific example
 epsilon = jax.lax.stop_gradient(epsilon)  # comment if we wish to train the SB weights as well.
 
 
-
+opt_init, opt_update, get_params = optimizers.adam(1e-2)
 net_params = {"params": {"weights": weights, "alphas": alphas, "epsilon": epsilon}}
 opt_state = opt_init(net_params)
 running_loss = []
