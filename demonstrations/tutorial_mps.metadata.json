@@ -1,0 +1,100 @@
+{
+    "title": "Introducing matrix product states for quantum practitioners",
+    "authors": [
+        {
+            "username": "Qottmann"
+        }
+    ],
+    "dateOfPublication": "2024-09-29T00:00:00+00:00",
+    "dateOfLastModification": "2024-09-29T00:00:00+00:00",
+    "categories": [
+        "Quantum Computing",
+        "Algorithms",
+        "Getting Started"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_mps_simulation.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_mps_simulation.png"
+        }
+    ],
+    "seoDescription": "What is a matrix product state (MPS)? Here is all you need to know about MPS from a quantum computation and quantum simulation perspective.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_mps",
+    "references": [
+        {
+            "id": "Baiardi",
+            "type": "preprint",
+            "title": "The Density Matrix Renormalization Group in Chemistry and Molecular Physics: Recent Developments and New Challenges",
+            "authors": "Alberto Baiardi, Markus Reiher",
+            "year": "2019",
+            "publisher": "",
+            "journal": "",
+            "doi": "10.48550/arXiv.1910.00137",
+            "url": "https://arxiv.org/abs/1910.00137"
+        },
+        {
+            "id": "Patra",
+            "type": "preprint",
+            "title": "Efficient tensor network simulation of IBM's largest quantum processors",
+            "authors": "Siddhartha Patra, Saeed S. Jahromi, Sukhbinder Singh, Roman Orus",
+            "year": "2023",
+            "publisher": "",
+            "journal": "",
+            "doi": "10.48550/arXiv.2309.15642",
+            "url": "https://arxiv.org/abs/2309.15642"
+        },
+        {
+            "id": "Jiang",
+            "type": "preprint",
+            "title": "Accurate determination of tensor network state of quantum lattice models in two dimensions",
+            "authors": "H. C. Jiang, Z. Y. Weng, T. Xiang",
+            "year": "2008",
+            "publisher": "",
+            "journal": "",
+            "doi": "10.48550/arXiv.0806.3719",
+            "url": "https://arxiv.org/abs/0806.3719"
+        },
+        {
+            "id": "Vidal",
+            "type": "preprint",
+            "title": "Efficient classical simulation of slightly entangled quantum computations",
+            "authors": "Guifre Vidal",
+            "year": "2003",
+            "publisher": "",
+            "journal": "",
+            "doi": "10.48550/arXiv.quant-ph/0301063",
+            "url": "https://arxiv.org/abs/quant-ph/0301063"
+        },
+        {
+            "id": "Schollwoeck",
+            "type": "preprint",
+            "title": "The density-matrix renormalization group in the age of Matrix Product States",
+            "authors": "Ulrich Schollwoeck",
+            "year": "2010",
+            "publisher": "",
+            "journal": "",
+            "doi": "10.48550/arXiv.1008.3477",
+            "url": "https://arxiv.org/abs/1008.3477"
+        }
+    ],
+    "basedOnPapers": ["10.48550/arXiv.1008.3477"],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_How_to_simulate_quantum_circuits_with_tensor_networks",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_diffable-mitigation",
+            "weight": 1.0
+        }
+    ]
+}

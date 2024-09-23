@@ -1,0 +1,74 @@
+{
+    "title": "Generative quantum eigensolver training using PennyLane data",
+    "authors": [
+        {
+            "username": "Joseph"
+        }, 
+        {
+            "username": "zy_n"
+        }
+    ],
+    "dateOfPublication": "2024-09-20T00:00:00+00:00",
+    "dateOfLastModification": "2024-09-20T00:00:00+00:00",
+    "categories": ["Quantum Machine Learning", "Quantum Chemistry", "Algorithms"],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_generative_quantum_eigensolver.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_generative_quantum_eigensolver.png"
+        }
+    ],
+    "seoDescription": "Learn how you can train a small GPT model using the generative quantum eigensolver (GQE) technique and PennyLane data.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/gqe_training",
+    "references": [
+        {
+            "id": "nakaji2024",
+            "type": "article",
+            "title": "The generative quantum eigensolver (GQE) and its application for ground state search",
+            "authors": "K. Nakaji, L. B. Kristensen, J. A. Campos-Gonzalez-Angulo, M. G. Vakili, H. Huang, M. Bagherimehrab, C. Gorgulla, F. Wong, A. McCaskey, J. S. Kim, T. Nguyen, P. Rao, A. Aspuru-Guzik",
+            "year": "2024",
+            "journal": "",
+            "url": "https://arxiv.org/abs/2401.09253"
+        },
+        {
+            "id": "radford2019",
+            "type": "article",
+            "title": "Language Models are Unsupervised Multitask Learners",
+            "authors": "A. Radford, J. Wu, R. Child, D. Luan, D. Amodei, I. Sutskever",
+            "year": "2019",
+            "journal": "OpenAI blog",
+            "url": "https://openai.com/index/better-language-models/"
+        },
+        {
+            "id": "vaswani2017",
+            "type": "article",
+            "title": "Attention is All you Need",
+            "authors": "A. Vaswani, N. Shazeer, N. Parmar, J. Uszkoreit, L. Jones, A. N. Gomez, L. Kaiser, I. Polosukhin",
+            "year": "2017",
+            "journal": "Advances in Neural Information Processing Systems",
+            "url": "https://papers.nips.cc/paper_files/paper/2017/hash/3f5ee243547dee91fbd053c1c4a845aa-Abstract.html"
+        }
+    ],
+    "basedOnPapers": [
+        "10.48550/arXiv.2401.09253"
+    ],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_vqe",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_vqe_qng",
+            "weight": 1.0
+        }
+    ],
+    "hardware": []
+}
