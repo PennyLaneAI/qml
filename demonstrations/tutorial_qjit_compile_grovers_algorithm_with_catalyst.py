@@ -1,7 +1,7 @@
 r""".. role:: html(raw)
    :format: html
 
-How to Quantum Just-In-Time Compile Grover's Algorithm with Catalyst
+How to quantum just-in-time compile Grover's algorithm with Catalyst
 ====================================================================
 
 .. meta::
@@ -18,9 +18,9 @@ How to Quantum Just-In-Time Compile Grover's Algorithm with Catalyst
 """
 
 ######################################################################
-# `Grover's algorithm <https://pennylane.ai/qml/demos/tutorial_grovers_algorithm/>`__ is an `oracle
+# :doc:`Grover's algorithm <tutorial_grovers_algorithm>` is an `oracle
 # </codebook/04-basic-quantum-algorithms/02-the-magic-8-ball/>`__-based quantum algorithm, first
-# proposed by Lov Grover in 1996 [#Grover1996]_, to solve "unstructured search" problems using a
+# proposed by Lov Grover in 1996 [#Grover1996]_, to solve unstructured search problems using a
 # quantum computer. For example, we could use Grover's algorithm to search for a phone number in a
 # randomly ordered database containing :math:`N` entries and say with high probability that the
 # database contains the number being searched by performing :math:`O(\sqrt{N})` queries on the
@@ -34,17 +34,17 @@ How to Quantum Just-In-Time Compile Grover's Algorithm with Catalyst
 # solutions, with :math:`1 \leq M \leq N`.
 #
 # In this tutorial, we will implement the generalized Grover's algorithm using `Catalyst
-# <https://docs.pennylane.ai/projects/catalyst/en/stable/index.html>`__, a quantum just-in-time
+# <https://docs.pennylane.ai/projects/catalyst>`__, a quantum just-in-time
 # (QJIT) compiler framework for PennyLane, which makes it possible to compile, optimize, and execute
 # hybrid quantum–classical workflows. We will also measure the performance improvement we get from
 # using Catalyst with respect to the native Python implementation.
 
 
 ######################################################################
-# Generalized Grover's Algorithm with PennyLane
+# Generalized Grover's algorithm with PennyLane
 # ---------------------------------------------
 #
-# In the `Grover's Algorithm <https://pennylane.ai/qml/demos/tutorial_grovers_algorithm/>`__
+# In the :doc:`Grover's Algorithm <tutorial_grovers_algorithm>`
 # tutorial, we saw how to implement the generalized Grover's algorithm in PennyLane. The procedure
 # is as follows:
 #
@@ -141,15 +141,15 @@ for i in most_probable_states:
 
 
 ######################################################################
-# Quantum Just-In-Time Compiling the Circuit
+# Quantum just-in-time compiling the circuit
 # ------------------------------------------
 #
 # At the time of writing, Catalyst does not support the ``"default.qubit"`` state-simulator device,
 # so let's first define a new circuit using `Lightning
-# <https://docs.pennylane.ai/projects/lightning/en/stable/index.html>`__, which is a PennyLane
+# <https://docs.pennylane.ai/projects/lightning>`__, which is a PennyLane
 # plugin that provides more performant state simulators written in C++, and which is supported by
-# Catalyst. The full list of devices supported by Catalyst is available `here
-# <https://docs.pennylane.ai/projects/catalyst/en/stable/dev/devices.html>`__.
+# Catalyst. See the :doc:`Catalyst documentation <catalyst:dev/devices>`
+# for the full list of devices supported by Catalyst.
 
 
 @qml.qnode(qml.device("lightning.qubit", wires=NUM_QUBITS))
@@ -175,14 +175,13 @@ circuit_qjit = qml.qjit(circuit_lightning)
 # subsequent call to the QJIT object, assuming it has not been altered, will read directly from this
 # cache and execute the compiled circuit. See the `Compilation Modes
 # <https://docs.pennylane.ai/projects/catalyst/en/stable/dev/quick_start.html#compilation-modes>`__
-# documentation in the Catalyst `Quick Start
-# <https://docs.pennylane.ai/projects/catalyst/en/stable/dev/quick_start.html>`__ guide for more
+# documentation in the Catalyst :doc:`Quick Start <catalyst:dev/quick_start>` guide for more
 # information on the difference between JIT and AOT compilation.
 
 
 ######################################################################
-# Profiling the Circuits
-# ----------------------
+# Benchmarking
+# ------------
 #
 # Let's start profiling the circuits we have defined. We have five function executions in total to
 # profile:
@@ -298,7 +297,7 @@ plt.show()
 #
 # This tutorial has demonstrated how to just-in-time compile a quantum circuit implementing the
 # generalized Grover's algorithm using `Catalyst
-# <https://docs.pennylane.ai/projects/catalyst/en/stable/index.html>`__.
+# <https://docs.pennylane.ai/projects/catalyst>`__.
 #
 # For a circuit with :math:`n = 12` qubits, analogous to a search in a randomly ordered "database"
 # containing :math:`N = 2^{12} = 4096` entries, Catalyst offers a runtime performance several orders
@@ -324,7 +323,8 @@ plt.show()
 
 
 ######################################################################
-# -----
+# Footnotes
+# ---------
 #
 # .. [*]
 #
