@@ -105,7 +105,7 @@ def circuit(w1, w2):
 ##############################################################################
 # As a sanity check, we first execute the circuit on the Qrack simulator without any noise.
 
-noiseless_device = qml.device("qrack.simulator", n_wires, isNoisy=False)
+noiseless_device = qml.device("qrack.simulator", n_wires, isNoisy=False, isOpenCL=False)
 
 ideal_value = qml.QNode(circuit, device=noiseless_device)(w1, w2)
 print(f"Ideal value: {ideal_value}")
@@ -121,7 +121,7 @@ print(f"Ideal value: {ideal_value}")
 
 NOISE_LEVEL = 0.01
 os.environ["QRACK_GATE_DEPOLARIZATION"] = str(NOISE_LEVEL)
-noisy_device = qml.device("qrack.simulator", n_wires, isNoisy=True)
+noisy_device = qml.device("qrack.simulator", n_wires, isNoisy=True, isOpenCL=False)
 
 noisy_qnode = qml.QNode(circuit, device=noisy_device)
 noisy_value = noisy_qnode(w1, w2)
