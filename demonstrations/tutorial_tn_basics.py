@@ -285,9 +285,11 @@ print(f"Computation cost for A(BC) contraction: {average_time_ms:.8f} ms")
 # 
 # First, we set up the framework of the problem. While multiway contractions - contractions between more than 2 tensors at a time - are possible, we will consider only pairwise contractions since the former can always be decomposed in terms of the latter. In addition, contracting a tensor network need not result in a single tensor. However, here we consider only the single tensor case as it underlies the more general scenario [#Gray2021]_. 
 # 
-# The underlying idea behind finding a contraction path, is based on the construction of the computational graph, i.e. a rooted binary tree specifying the sequence of pairwise contractions, where a leaf node corresponds to a tensor from the original network and the pairwise contractions give rise to the intermediate tensors corresponding to the rest of the nodes. Transforming a tensor network with an arbitrary structure into this binary tree can be achieved by a *tree embedding* of the tensor network graph [#Bienstock1990]_. Thus, optimization of the contraction path is equivalent to a search over tree embeddings of the network.
+# The underlying idea behind finding a contraction path is based on the construction of the computational graph, i.e. a rooted binary tree - also known as the **contraction tree** - that specifies the sequence of pairwise contractions to be executed. In this tree structure, a leaf node corresponds to a tensor from the original network and the pairwise contractions give rise to the intermediate tensors corresponding to the rest of the nodes in the tree. 
 # 
 # TODO: here include a drawing similar to one in Fig2.a of https://journals.aps.org/prx/pdf/10.1103/PhysRevX.14.011009
+# 
+# Transforming a tensor network with an arbitrary structure into this binary tree can be achieved by a *tree embedding* of the tensor network graph [#Bienstock1990]_. Thus, optimization of the contraction path is equivalent to a search over tree embeddings of the network.
 # 
 # .. note::
 # 
@@ -299,15 +301,19 @@ print(f"Computation cost for A(BC) contraction: {average_time_ms:.8f} ms")
 # - Breadth-first search
 # - Dynamic programming
 # 
-# While the exhaustive approach scales like :math:`\mathcal{O}(N!)`, with :math:`N` the number of tensors in the network, it can handle a handful of tensors within seconds, providing a good benchmark. In addition, compared to the following algorithms, it guarantees to find the global minimum optimizing the desired metric - space and/or time.
+# While the exhaustive approach scales like :math:`\mathcal{O}(N!)`, with :math:`N` the number of tensors in the network, it can handle a handful of tensors within seconds, providing a good benchmark. In addition, compared to the following algorithms, the exhaustive search guarantees to find the global minimum optimizing the desired metric - space and/or time.
 # 
 # .. note::
 # 
 #   A recursive implementation of the depth-first search is used by default in the well known package `opt_einsum` `(see docs)<https://optimized-einsum.readthedocs.io/en/stable/optimal_path.html>`_.
 # 
-# Further approaches introduced in [#Gray2021]_ are based on alternative common graph theoretic tasks, rather than searching over the contraction tree space, such as the balanced partitioning and community detection problems. And even though, these are only heuristics that do not guarantee an optimal contraction path, they can often achieve an arbitrarliy close to optimal performance. An additional level of optimization, known as *hyper-optimization* is introduced by the use of different algorithms, as some algorithms are better suited for certain graph structures. For an in-depth exploration of these heuristics, please refer to [#Gray2021]_.
+# Further approaches introduced in [#Gray2021]_ are based on alternative common graph theoretic tasks, rather than searching over the contraction tree space, such as the `balanced bipartitioning <https://en.wikipedia.org/wiki/Balanced_number_partitioning>`_ and `community detection <https://en.wikipedia.org/wiki/Community_structure>`_ algorithms. And even though, these are only heuristics that do not guarantee an optimal contraction path, they can often achieve an arbitrarliy close to optimal performance. 
 # 
-#  TODO: mention where in Quimb we can find these heuristics.
+# An extra level of optimization, known as *hyper-optimization* is introduced by the use of different algorithms to find the optimal contraction based on the specific tensor network, as some algorithms are better suited for certain network structures. For an in-depth exploration of these heuristics, please refer to [#Gray2021]_.
+# 
+# .. note::
+# 
+#   The size of (intermediate) tensors can grow exponential with the number of indices and dimensions, specially for large-scale tensor networks. Thus, we might run into memory problems when performing the contractions. A useful additional technique to split these tensors into more manageable pieces is known as *slicing*. The idea is to change space for computation time, by temporarily fixing the values of some indices in the tensors, performing independently the contraction for each fixed value and summing the results [#Gray2021]_.
 
 ##############################################################################
 # From tensor networks to quantum circuits:
