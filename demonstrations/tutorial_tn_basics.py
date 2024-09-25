@@ -322,7 +322,7 @@ import pennylane as qml
 dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 
 ##############################################################################
-# The different types of values accepted for ``contraction_optimizer`` are determined by the ``optimize`` parameter in ``Quimb`` (see `docs <https://quimb.readthedocs.io/en/latest/tensor-circuit.html#finding-a-contraction-path-the-optimize-kwarg>`_). See `this tutorial <https://pennylane.ai/qml/demos/tutorial_How_to_simulate_quantum_circuits_with_tensor_networks/>`_ to learn more about this device.
+# The different types of values accepted for ``contraction_optimizer`` are determined by the ``optimize`` parameter in ``Quimb`` (see `docs <https://quimb.readthedocs.io/en/latest/tensor-circuit.html#finding-a-contraction-path-the-optimize-kwarg>`_). See `this tutorial <https://pennylane.ai/qml/demos/tutorial_How_to_simulate_quantum_circuits_with_tensor_networks/>`_ to learn more about the ``DefaultTensor`` device.
 
 ##############################################################################
 # From tensor networks to quantum circuits:
