@@ -314,6 +314,15 @@ print(f"Computation cost for A(BC) contraction: {average_time_ms:.8f} ms")
 # .. note::
 # 
 #   The size of (intermediate) tensors can grow exponential with the number of indices and dimensions, specially for large-scale tensor networks. Thus, we might run into memory problems when performing the contractions. A useful additional technique to split these tensors into more manageable pieces is known as *slicing*. The idea is to change space for computation time, by temporarily fixing the values of some indices in the tensors, performing independently the contraction for each fixed value and summing the results [#Gray2021]_.
+# 
+# As we will explore in the next section, we can use tensor networks to simulate quantum circuits. In particular, the calculation of an expectation value corresponds to the contraction of the tensor network into a single tensor (scalar) as discussed in this section. In ``Pennylane``, this simulation can be performed using the ``DefaultTensor`` device and the method used to find the contraction path can be chosen via the ``contraction_optimizer`` keyword argument.
+
+import pennylane as qml
+
+dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
+
+##############################################################################
+# The different types of values accepted for ``contraction_optimizer`` are determined by the ``optimize`` parameter in ``Quimb`` (see `docs <https://quimb.readthedocs.io/en/latest/tensor-circuit.html#finding-a-contraction-path-the-optimize-kwarg>`_). See `this tutorial <https://pennylane.ai/qml/demos/tutorial_How_to_simulate_quantum_circuits_with_tensor_networks/>`_ to learn more about this device.
 
 ##############################################################################
 # From tensor networks to quantum circuits:
