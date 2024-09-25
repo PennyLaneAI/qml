@@ -116,11 +116,11 @@ def grover_circuit(num_qubits):
 
 NUM_QUBITS = 12
 
+dev = qml.device("default.qubit", wires=NUM_QUBITS)
 
-@qml.qnode(qml.device("default.qubit", wires=NUM_QUBITS))
+@qml.qnode(dev)
 def circuit_default_qubit():
     return grover_circuit(NUM_QUBITS)
-
 
 results = circuit_default_qubit()
 
@@ -151,11 +151,11 @@ for i in most_probable_states:
 # Catalyst. See the :doc:`Catalyst documentation <catalyst:dev/devices>`
 # for the full list of devices supported by Catalyst.
 
+dev = qml.device("lightning.qubit", wires=NUM_QUBITS)
 
-@qml.qnode(qml.device("lightning.qubit", wires=NUM_QUBITS))
+@qml.qnode(dev)
 def circuit_lightning():
     return grover_circuit(NUM_QUBITS)
-
 
 ######################################################################
 # Then, to QJIT compile our circuit with Catalyst, we simply wrap it with :func:`~pennylane.qjit`:
