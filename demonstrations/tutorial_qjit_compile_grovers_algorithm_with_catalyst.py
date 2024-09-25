@@ -182,24 +182,23 @@ circuit_qjit = qml.qjit(circuit_lightning)
 # .. note::
 #
 #     The Catalyst :class:`~.qjit` decorator supports capturing control flow when specified using
-#     the :func:`~pennylane.for_loop`, :func:`~pennylane.while_loop`, and :func:`~pennylane.cond` functions, or additionally,
-#     can automatically capture native Python control flow via experimental :doc:`AutoGraph
-#     <catalyst:dev/autograph>` support.
+#     the :func:`~pennylane.for_loop`, :func:`~pennylane.while_loop`, and :func:`~pennylane.cond`
+#     functions, or additionally, can automatically capture native Python control flow via
+#     experimental :doc:`AutoGraph <catalyst:dev/autograph>` support.
 #
 #     In this tutorial, however, you'll notice that our ``grover_circuit`` function is able to use
 #     native Python control flow without the need to convert the Python ``for`` loops to the
 #     qjit-compatible :func:`~.for_loop`, for instance, and without using AutoGraph. The reason we
 #     are able to do so here is because the circuit we have compiled, ``circuit_lightning``, is:
 #
-#     * unparameterized, meaning it takes in no input argument, thus the control flow of the circuit
-#     does not depend on any dynamic variables (whose values are known only at run time); and
+#     * unparameterized, meaning it takes in no input arguments, thus the control flow of the circuit
+#       does not depend on any dynamic variables (whose values are known only at run time); and
 #
-#     * the ranges of the ``for`` loops depend only on static variables (i.e.,
-#     constants known at compile time), in this case native-Python numerics and lists, and NumPy
-#     arrays.
+#     * the ranges of the ``for`` loops depend only on static variables (i.e., constants known at
+#       compile time), in this case native-Python numerics and lists, and NumPy arrays.
 #
-#     Hence, the complete control flow of the circuit is known at compile time, which allows
-#     us to use native Python control-flow statements.
+#     Hence, the complete control flow of the circuit is known at compile time, which allows us to
+#     use native Python control-flow statements.
 #
 #     See the :doc:`Sharp bits and debugging tips <catalyst:dev/sharp_bits>` section of the Catalyst
 #     documentation for more details on this subject.
