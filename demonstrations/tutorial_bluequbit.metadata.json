@@ -1,0 +1,60 @@
+{
+    "title": "Using the BlueQubit (CPU) device with PennyLane",
+    "authors": [
+        {
+            "username": "hayk_tepanyan"
+        }
+    ],
+    "dateOfPublication": "2024-09-24T00:00:00+00:00",
+    "dateOfLastModification": "2024-09-24T00:00:00+00:00",
+    "categories": [
+        "Devices and Performance",
+        "Quantum Computing"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_bluequbit-pennylane_device.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_bluequbit-pennylane_device.png"
+        }
+    ],
+    "seoDescription": "Run large-scale quantum simulations with PennyLane and BlueQubit.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_bluequbit",
+    "references": [
+        {
+            "id": "Draper2000",
+            "type": "article",
+            "title": "Addition on a Quantum Computer",
+            "authors": "Thomas G. Draper",
+            "year": "2000",
+            "journal": "",
+            "url": "https://arxiv.org/abs/quant-ph/0008033"
+        }        
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_qft_arithmetics",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_qft",
+            "weight": 1.0
+        }
+    ],
+    "hardware": [
+        {
+            "id": "bluequbit",
+            "link": "https://app.bluequbit.io/",
+            "logo": "/_static/hardware_logos/bluequbit.png"
+        }
+    ]
+}
