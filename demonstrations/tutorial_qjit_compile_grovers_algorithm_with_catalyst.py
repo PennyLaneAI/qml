@@ -336,8 +336,7 @@ for i in range(len(run_names)):
 
 
 ######################################################################
-# Let's plot these runtimes as a bar chart to compare them visually. Note that we're using a
-# logarithmic scale for the *y*-axis!
+# Let's plot these runtimes as a bar chart to compare them visually.
 
 fig = plt.figure(figsize=[8.0, 4.8])
 plt.title("Grover's Algorithm Runtime Benchmarks")
@@ -348,7 +347,6 @@ plt.errorbar(
 plt.bar_label(bars, fmt="{:#.2g} s", padding=5)
 plt.xlabel("Function Executed")
 plt.ylabel("Runtime [s]")
-plt.yscale("log")
 plt.margins(y=0.15)
 plt.text(
     0.98,
