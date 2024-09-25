@@ -43,11 +43,11 @@ bias but generalizes better.
 
 Let us now dive deeper into generalization properties of quantum machine learning (QML) models. We start by describing
 the typical data processing pipeline of a QML model. A classical data input :math:`x` is first encoded in a quantum
-state via a mapping :math:`x \mapsto \rho(x)`. This encoded state is then processed through a quantum
-channel :math:`\rho(x) \mapsto \mathcal{E}_\alpha(\rho(x))` with learnable parameters :math:`\alpha`. Finally, a measurement is performed on the resulting state
+state via a mapping :math:`x \mapsto \rho(x).` This encoded state is then processed through a quantum
+channel :math:`\rho(x) \mapsto \mathcal{E}_\alpha(\rho(x))` with learnable parameters :math:`\alpha.` Finally, a measurement is performed on the resulting state
 to get the final prediction. Now, the goal is to minimize the expected loss over the data-generating distribution
-:math:`P`, indicating how well our model performs on new data. Mathematically, for a loss function :math:`\ell`, the
-expected loss, denoted by :math:`R`, is given by
+:math:`P`, indicating how well our model performs on new data. Mathematically, for a loss function :math:`\ell,` the
+expected loss, denoted by :math:`R,` is given by
 
 .. math:: R(\alpha) = \mathbb{E}_{(x,y)\sim P}[\ell(\alpha;\,x,\,y)]
 
@@ -59,8 +59,8 @@ average loss over the training set
 
 .. math:: R_S(\alpha) = \frac{1}{N}\sum_{i=1}^N \ell(\alpha;\,x_i,\,y_i),
 
-which is referred to as the training loss and is an unbiased estimate of :math:`R(\alpha)`. This is only a proxy
-to the true quantity of interest :math:`R(\alpha)`, and their difference is called the generalization error
+which is referred to as the training loss and is an unbiased estimate of :math:`R(\alpha).` This is only a proxy
+to the true quantity of interest :math:`R(\alpha),` and their difference is called the generalization error
 
 .. math:: \mathrm{gen}(\alpha) =  R(\alpha) - \hat{R}_S(\alpha),
 
@@ -68,7 +68,7 @@ which is the quantity that we explore in this tutorial. Keeping in mind the bias
 that more complex models, i.e. models with a larger number of parameters, achieve a lower error on the training data
 but a higher generalization error. Having more training data, on the other hand, leads to a better approximation of the
 true expected loss and hence a lower generalization error. This intuition is made precise in Ref. [#CaroGeneralization]_, 
-where it is shown that :math:`\mathrm{gen}(\alpha)` roughly scales as :math:`\mathcal{O}(\sqrt{T / N})`, where :math:`T`
+where it is shown that :math:`\mathrm{gen}(\alpha)` roughly scales as :math:`\mathcal{O}(\sqrt{T / N}),` where :math:`T`
 is the number of parametrized gates and :math:`N` is the number of training samples.
 """
 
@@ -91,15 +91,15 @@ is the number of parametrized gates and :math:`N` is the number of training samp
 #
 # .. math:: \mathrm{gen}(\alpha) \sim \mathcal{O}\left(\sqrt{\frac{T\log MT}{N}}\right).
 #
-# With this, we see that for QCNNs to have a generalization error :math:`\mathrm{gen}(\alpha)\leq\epsilon`, we need a
-# training set of size :math:`N \sim T \log MT / \epsilon^2`. For the special case of QCNNs, we can explicitly connect
+# With this, we see that for QCNNs to have a generalization error :math:`\mathrm{gen}(\alpha)\leq\epsilon,` we need a
+# training set of size :math:`N \sim T \log MT / \epsilon^2.` For the special case of QCNNs, we can explicitly connect
 # the number of samples needed for good generalization to the system size :math:`n` since these models
 # use :math:`\mathcal{O}(\log(n))` independently parametrized gates, each of which is used at most :math:`n` times [#CongQuantumCNN]_.
 # Putting the pieces together, we find that a training set of size
 #
 # .. math::  N \sim \mathcal{O}(\mathrm{poly}(\log n))
 #
-# is sufficient for the generalization error to be bounded by :math:`\mathrm{gen}(\alpha) \leq \epsilon`.
+# is sufficient for the generalization error to be bounded by :math:`\mathrm{gen}(\alpha) \leq \epsilon.`
 # In the next part of this tutorial, we will illustrate this result by implementing a QCNN to classify different
 # digits in the classical ``digits`` dataset. Before that, we set up our QCNN.
 
@@ -377,7 +377,7 @@ value_and_grad = jax.jit(jax.value_and_grad(compute_cost, argnums=[0, 1]))
 
 
 ##############################################################################
-# We are going to perform the classification for training sets with different values of :math:`N`. Therefore, we
+# We are going to perform the classification for training sets with different values of :math:`N.` Therefore, we
 # define the classification procedure once and then perform it for different datasets.
 # Finally, we update the weights using the :class:`pennylane.AdamOptimizer` and use these updated weights to
 # calculate the cost and accuracy on the testing and training set:

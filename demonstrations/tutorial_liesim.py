@@ -49,7 +49,7 @@ can be computed via the Lie closure :math:`\langle \cdot \rangle_\text{Lie}` (se
 That is, by computing all possible nested commutators until no new operators emerge. This leads to a set of operators that is closed under commutation,
 hence the name.
 In particular, the result of the commutator between any two elements in :math:`\mathfrak{g}`
-can be decomposed as a linear combination of other elements in :math:`\mathfrak{g}`,
+can be decomposed as a linear combination of other elements in :math:`\mathfrak{g},`
 
 .. math:: [h_\alpha, h_\beta] = \sum_\gamma f^\gamma_{\alpha \beta} h_\gamma.
 
@@ -63,7 +63,7 @@ use the trace inner product between operators :math:`\langle h_\alpha, h_\beta \
 
 .. note:: 
 
-    Technically, the (dynamical) Lie algebra is formed by skew-Hermitian operators :math:`\{i h_i\}`.
+    Technically, the (dynamical) Lie algebra is formed by skew-Hermitian operators :math:`\{i h_i\}.`
     We avoid this distinction here since for all practical purposes one can also look at Hermitian
     operators and explicitly add imaginary units in the exponents where appropriate.
     For more details, see the note in the "Lie algebras" section of our `Intro to (dynamical) Lie algebras for quantum practitioners <https://pennylane.ai/qml/demos/tutorial_liealgebra/#lie-algebras>`__.
@@ -82,7 +82,7 @@ Graphically, we can represent this as a tensor with one leg.
     :align: center
     :width: 33%
 
-When we transform the state :math:`\rho^0` with a unitary evolution :math:`U`, we can use the cyclic property of the trace to shift the
+When we transform the state :math:`\rho^0` with a unitary evolution :math:`U,` we can use the cyclic property of the trace to shift the
 evolution onto the DLA element,
 
 .. math:: (\vec{e}^1)_\alpha = \text{tr}\left[ h_\alpha U \rho^0 U^\dagger \right] = \text{tr}\left[ U^\dagger h_\alpha U \rho^0 \right].
@@ -91,7 +91,7 @@ In the context of :math:`\mathfrak{g}`-sim, we assume the unitary operator to be
 
 .. math:: U = e^{-i \theta h_\mu}
 
-with some real parameter :math:`\theta \in \mathbb{R}`.
+with some real parameter :math:`\theta \in \mathbb{R}.`
 
 As a consequence of the `Baker–Campbell–Hausdorff formula <https://en.wikipedia.org/wiki/Baker%E2%80%93Campbell%E2%80%93Hausdorff_formula>`__,
 we know that any :math:`h_\alpha \in \mathfrak{g}` transformed under such a :math:`U` is again in :math:`\mathfrak{g}`
@@ -100,8 +100,8 @@ In fact, it is a well-known result that the resulting operator is given by the e
 
 .. math:: e^{i \theta h_\mu} h_\alpha e^{-i \theta h_\mu} = \sum_\beta e^{-i \theta f^\mu_{\alpha \beta}} h_\beta.
 
-This is the identity connecting the adjoint representations of a Lie group, :math:`\text{Ad}_{e^{-ih_\mu}}(x) = e^{ih_\mu} x e^{-ih_\mu}`,
-and the adjoint representation of the associated Lie algebra, :math:`\left(\text{ad}_{h_\mu}\right)_{\alpha \beta} = f^\mu_{\alpha \beta}`.
+This is the identity connecting the adjoint representations of a Lie group, :math:`\text{Ad}_{e^{-ih_\mu}}(x) = e^{ih_\mu} x e^{-ih_\mu},`
+and the adjoint representation of the associated Lie algebra, :math:`\left(\text{ad}_{h_\mu}\right)_{\alpha \beta} = f^\mu_{\alpha \beta}.`
 It can be summarized as
 
 .. math:: \text{Ad}_{e^{-ih_\mu}} = e^{-i \text{ad}_{h_\mu}}.
@@ -131,7 +131,7 @@ So overall, the evolution can be summarized graphically as the following.
     :width: 33%
 
 We are typically interested in expectation values of observables composed of DLA elements,
-:math:`\langle \hat{O} \rangle = \sum_\alpha w_\alpha h_\alpha`.
+:math:`\langle \hat{O} \rangle = \sum_\alpha w_\alpha h_\alpha.`
 Overall, the computation in :math:`\mathfrak{g}`-sim is a vector-matrix-vector product,
 
 .. math:: \langle \hat{O} \rangle = \text{tr}\left[\hat{O} \mathcal{U} \rho^0 \mathcal{U}^\dagger \right] = \sum_{\alpha \beta} w_\alpha \tilde{U}_{\alpha \beta} e_\beta = \vec{w} \cdot \tilde{U} \cdot \vec{e}.
@@ -143,10 +143,10 @@ Or, graphically:
     :width: 33%
 
 The dimension of :math:`\left(\text{ad}_{h_j}\right)_{\alpha \beta} = f^j_{\alpha \beta}` is
-:math:`\text{dim}(\mathfrak{g}) \times \text{dim}(\mathfrak{g})`. So while we evolve a :math:`2^n`-dimensional
+:math:`\text{dim}(\mathfrak{g}) \times \text{dim}(\mathfrak{g}).` So while we evolve a :math:`2^n`-dimensional
 complex vector in state vector simulators, we evolve a :math:`\text{dim}(\mathfrak{g})`-dimensional expectation
-vector in :math:`\mathfrak{g}`-sim, which is more efficient whenever :math:`\text{dim}(\mathfrak{g}) < 2^n`. In general, it is efficient
-whenever :math:`\text{dim}(\mathfrak{g}) = O\left(\text{poly}(n)\right)`.
+vector in :math:`\mathfrak{g}`-sim, which is more efficient whenever :math:`\text{dim}(\mathfrak{g}) < 2^n.` In general, it is efficient
+whenever :math:`\text{dim}(\mathfrak{g}) = O\left(\text{poly}(n)\right).`
 
 :math:`\mathfrak{g}`-sim in PennyLane
 -------------------------------------
@@ -196,7 +196,7 @@ dim_g = len(dla)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # With that, we can compute the initial expectation value vector for the :math:`\rho_0 = |0 \rangle \langle 0 |` initial state for every DLA element.
-# We are doing a trick of representing the initial state as a Pauli operator, :math:`|0 \rangle \langle 0 |^{\otimes n} = \prod_{i=1}^n (I_i + Z_i)/2`.
+# We are doing a trick of representing the initial state as a Pauli operator, :math:`|0 \rangle \langle 0 |^{\otimes n} = \prod_{i=1}^n (I_i + Z_i)/2.`
 # We take advantage of the locality of the DLA elements
 # and use the analytic, normalized trace method :meth:`~.pennylane.pauli.PauliSentence.trace`, all to avoid having to go to the full Hilbert space.
 
@@ -225,7 +225,7 @@ e_in
 # .. math:: \hat{O} = H_\text{TFIM} = \sum_j J X_j X_{j+1} + h Z_j.
 #
 # So just the generators with some coefficients. Here we choose :math:`J=h=0.5` for simplicity.
-# We generate the :math:`\vec{w}` vector by setting the appropriate coefficients to ``0.5``.
+# We generate the :math:`\vec{w}` vector by setting the appropriate coefficients to ``0.5`.`
 
 w = np.zeros(dim_g, dtype=float)
 w[:len(generators)] = 0.5

@@ -22,18 +22,18 @@ Most variational quantum algorithms (VQAs) are concerned with optimizing a `quan
 
 .. math:: f(\theta) = \langle 0 | U^\dagger(\theta) H U(\theta) | 0 \rangle,
 
-for some Ansatz unitary :math:`U` with variational parameters :math:`\theta` and observable :math:`H`. 
+for some Ansatz unitary :math:`U` with variational parameters :math:`\theta` and observable :math:`H.` 
 These algorithms arose due to the constraints of noisy near-term quantum hardware.
-This means that naturally in that scenario we do not have direct access to :math:`f`, but rather a noisy version :math:`f^{⚡}` where the variational state
-:math:`|\psi(\theta)\rangle = U^\dagger(\theta)|0\rangle` is distorted via a noise channel :math:`\Phi(|\psi(\theta)\rangle \langle \psi(\theta)|)`. Since noisy channels generally
+This means that naturally in that scenario we do not have direct access to :math:`f,` but rather a noisy version :math:`f^{⚡}` where the variational state
+:math:`|\psi(\theta)\rangle = U^\dagger(\theta)|0\rangle` is distorted via a noise channel :math:`\Phi(|\psi(\theta)\rangle \langle \psi(\theta)|).` Since noisy channels generally
 yield mixed states (see e.g. :doc:`tutorial_noisy_circuits`), we can formally write 
 
 .. math:: f^{⚡}(\theta) := \text{tr}\left[H \Phi(|\psi(\theta)\rangle \langle \psi(\theta)|) \right].
 
 To be able to get the most out of these devices, it is advisable to use quantum error mitigation — a method of
-altering and/or post-processing the quantum function :math:`f^{⚡}(\theta)` to improve the result and be closer to the ideal scenario of an error free execution, :math:`f(\theta)`.
+altering and/or post-processing the quantum function :math:`f^{⚡}(\theta)` to improve the result and be closer to the ideal scenario of an error free execution, :math:`f(\theta).`
 
-Formally, we can treat error mitigation as yet another transform that maps the noisy quantum function :math:`f^{⚡}` to a new, mitigated, quantum function :math:`\tilde{f}`,
+Formally, we can treat error mitigation as yet another transform that maps the noisy quantum function :math:`f^{⚡}` to a new, mitigated, quantum function :math:`\tilde{f},`
 
 .. math:: \text{mitigate}: f^{⚡} \mapsto \tilde{f}.
 
@@ -73,7 +73,7 @@ H = qml.Hamiltonian(coeffs, observables)
 
 
 ##############################################################################
-# The quantum function, the expectation value of :math:`H`, can then be executed on the noisy or ideal device
+# The quantum function, the expectation value of :math:`H,` can then be executed on the noisy or ideal device
 # by creating respective QNodes for both. As our ansatz, we'll use a :class:`~.pennylane.SimplifiedTwoDesign` with all-constant parameters set to ``1``:
 
 n_layers = 2
@@ -89,7 +89,7 @@ qnode_noisy = qml.QNode(qfunc, dev_noisy)
 qnode_ideal = qml.QNode(qfunc, dev_ideal)
 
 ##############################################################################
-# We can then simply transform the noisy QNode :math:`f^{⚡}` with :func:`~.pennylane.transforms.mitigate_with_zne` to generate :math:`\tilde{f}`.
+# We can then simply transform the noisy QNode :math:`f^{⚡}` with :func:`~.pennylane.transforms.mitigate_with_zne` to generate :math:`\tilde{f}.`
 # If everything goes as planned, executing the mitigated QNode is then closer to the ideal result:
 
 scale_factors = [1, 2, 3]
@@ -119,18 +119,18 @@ print(grad[1])
 # Under the hood of Zero Noise Extrapolation
 # ------------------------------------------
 # What is happening here under the hood? The basic idea of ZNE is to artificially increase the noise in a circuit,
-# controlled by a parameter :math:`\lambda` that is called the ``scale_factor``, to then be able to extrapolate back to zero noise.
+# controlled by a parameter :math:`\lambda` that is called the ``scale_factor`,` to then be able to extrapolate back to zero noise.
 #
-# Consider two circuits: :math:`U` and :math:`U U^\dagger U`. They are logically equivalent, but we can expect the latter to have more noise due its larger gate count.
-# This is the underlying concept of unitary folding, which is used to artificially increase the noise of a quantum function. Given a unitary circuit :math:`U = L_d .. L_1`,
+# Consider two circuits: :math:`U` and :math:`U U^\dagger U.` They are logically equivalent, but we can expect the latter to have more noise due its larger gate count.
+# This is the underlying concept of unitary folding, which is used to artificially increase the noise of a quantum function. Given a unitary circuit :math:`U = L_d .. L_1,`
 # where :math:`L_i` can be either a gate or layer, we use :func:`~.pennylane.transforms.fold_global` to construct
 #
 # .. math:: \texttt{fold_global}(U) = U (U^\dagger U)^n (L^\dagger_d L^\dagger_{d-1} .. L^\dagger_s) (L_s .. L_d),
 #
-# where :math:`n = \lfloor (\lambda - 1)/2 \rfloor` and :math:`s = \lfloor \left((\lambda -1) \mod 2 \right) (d/2) \rfloor` are determined via the ``scale_factor`` :math:`\lambda`.
+# where :math:`n = \lfloor (\lambda - 1)/2 \rfloor` and :math:`s = \lfloor \left((\lambda -1) \mod 2 \right) (d/2) \rfloor` are determined via the ``scale_factor`` :math:`\lambda.`
 #
 # The version of ZNE that we are showcasing is simply executing the noisy quantum function :math:`f^{⚡}` for different scale factors,
-# and then extrapolate to :math:`\lambda \rightarrow 0` (zero noise). This is done with a polynomial fit in :math:`f^{⚡}` as a function of :math:`\lambda`.
+# and then extrapolate to :math:`\lambda \rightarrow 0` (zero noise). This is done with a polynomial fit in :math:`f^{⚡}` as a function of :math:`\lambda.`
 # Note that ``scale_factor = 1`` corresponds to the original circuit, i.e. the noisy execution.
 #
 
@@ -244,9 +244,9 @@ plt.show()
 #     Time-sensitive dynamical decoupling scheme.
 #
 # In this mitigation technique, the single qubit state is put into an equal superposition: 
-# :math:`|+\rangle = (|0\rangle + |1\rangle)/\sqrt{2}`. During the first idle time :math:`t_1`, the state is altered due to noise.
+# :math:`|+\rangle = (|0\rangle + |1\rangle)/\sqrt{2}.` During the first idle time :math:`t_1,` the state is altered due to noise.
 # Applying :math:`X` reverses the roles of each computational basis state. The idea is that the noise in the second idle time
-# :math:`T-t_1` is cancelling out the effect of the first time window. We see that the output fidelity is a smooth function of :math:`t_1`.
+# :math:`T-t_1` is cancelling out the effect of the first time window. We see that the output fidelity is a smooth function of :math:`t_1.`
 # This was executed on ``ibm_perth``, and we note that simple noise models,
 # like the simulated IBM device, do not suffice to reproduce the behavior of the real device.
 #

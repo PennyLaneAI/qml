@@ -45,14 +45,14 @@ Quantum GANs
 # to the training dataset.
 #
 # Specifically, the training dataset represents samples drawn from some
-# unknown data distribution :math:`P_{data}`, and the generator has the
-# job of trying to capture this distribution. The generator, :math:`G`,
-# starts from some initial latent distribution, :math:`P_z`, and maps it
-# to :math:`P_g = G(P_z)`. The best solution would be for
-# :math:`P_g = P_{data}`. However, this point is rarely achieved in
+# unknown data distribution :math:`P_{data},` and the generator has the
+# job of trying to capture this distribution. The generator, :math:`G,`
+# starts from some initial latent distribution, :math:`P_z,` and maps it
+# to :math:`P_g = G(P_z).` The best solution would be for
+# :math:`P_g = P_{data}.` However, this point is rarely achieved in
 # practice apart from in the most simple tasks.
 #
-# Both the discriminator, :math:`D`, and generator, :math:`G`, play in a
+# Both the discriminator, :math:`D`, and generator, :math:`G,` play in a
 # 2-player minimax game. The discriminator tries to maximise the
 # probability of discerning real from fake data, while the generator tries
 # to minimise the same probability. The value function for the game is
@@ -83,7 +83,7 @@ Quantum GANs
 # where :math:`y` is a binary label for real (:math:`y=1`) or fake
 # (:math:`y=0`) data. In practice, generator training is shown to be more
 # stable [#goodfellow2014]_ when made to maximise :math:`\log(D(G(z)))` instead of
-# minimising :math:`\log(1-D(G(z)))`. Hence, the generator loss function to
+# minimising :math:`\log(1-D(G(z))).` Hence, the generator loss function to
 # be minimised becomes,
 #
 # .. math::  L_G = -[(1-y) \cdot \log(D(G(z)))]
@@ -99,7 +99,7 @@ Quantum GANs
 ######################################################################
 # In this tutorial, we re-create one of the quantum GAN methods presented
 # by Huang et al. [#huang2020]_: the patch method. This method uses several quantum
-# generators, with each sub-generator, :math:`G^{(i)}`, responsible for
+# generators, with each sub-generator, :math:`G^{(i)},` responsible for
 # constructing a small patch of the final image. The final image is
 # contructed by concatenting all of the patches together as shown below.
 #
@@ -273,7 +273,7 @@ class Discriminator(nn.Module):
 
 
 ######################################################################
-# Each sub-generator, :math:`G^{(i)}`, shares the same circuit
+# Each sub-generator, :math:`G^{(i)},` shares the same circuit
 # architecture as shown below. The overall quantum generator consists of
 # :math:`N_G` sub-generators, each consisting of :math:`N` qubits. The
 # process from latent vector input to image output can be split into four
@@ -290,8 +290,8 @@ class Discriminator(nn.Module):
 # **1) State Embedding**
 # 
 #
-# A latent vector, :math:`\boldsymbol{z}\in\mathbb{R}^N`, is sampled from
-# a uniform distribution in the interval :math:`[0,\pi/2)`. All
+# A latent vector, :math:`\boldsymbol{z}\in\mathbb{R}^N,` is sampled from
+# a uniform distribution in the interval :math:`[0,\pi/2).` All
 # sub-generators receive the same latent vector which is then embedded
 # using RY gates.
 #
@@ -317,21 +317,21 @@ class Discriminator(nn.Module):
 #
 # where :math:`U_{G}(\theta)` represents the overall unitary of the
 # parameterised layers. Let us inspect the state when we take a partial
-# measurment, :math:`\Pi`, and trace out the ancillary subsystem,
-# :math:`\mathcal{A}`,
+# measurment, :math:`\Pi,` and trace out the ancillary subsystem,
+# :math:`\mathcal{A},`
 #
 # .. math:: \rho(\boldsymbol{z}) = \frac{\text{Tr}_{\mathcal{A}}(\Pi \otimes \mathbb{I} |\Psi(z)\rangle \langle \Psi(\boldsymbol{z})|) }{\text{Tr}(\Pi \otimes \mathbb{I} |\Psi(\boldsymbol{z})\rangle \langle \Psi(\boldsymbol{z})|))} = \frac{\text{Tr}_{\mathcal{A}}(\Pi \otimes \mathbb{I} |\Psi(\boldsymbol{z})\rangle \langle \Psi(\boldsymbol{z})|) }{\langle \Psi(\boldsymbol{z})| \Pi \otimes \mathbb{I} |\Psi(\boldsymbol{z})\rangle}
 #
-# The post-measurement state, :math:`\rho(\boldsymbol{z})`, is dependent
+# The post-measurement state, :math:`\rho(\boldsymbol{z}),` is dependent
 # on :math:`\boldsymbol{z}` in both the numerator and denominator. This
 # means the state has been non-linearly transformed! For this tutorial,
-# :math:`\Pi = (|0\rangle \langle0|)^{\otimes N_A}`, where :math:`N_A` 
+# :math:`\Pi = (|0\rangle \langle0|)^{\otimes N_A},` where :math:`N_A` 
 # is the number of ancillary qubits in the system.
 #
 # With the remaining data qubits, we measure the probability of
 # :math:`\rho(\boldsymbol{z})` in each computational basis state,
-# :math:`P(j)`, to obtain the sub-generator output,
-# :math:`\boldsymbol{g}^{(i)}`,
+# :math:`P(j),` to obtain the sub-generator output,
+# :math:`\boldsymbol{g}^{(i)},`
 #
 # .. math::  \boldsymbol{g}^{(i)} = [P(0), P(1), ... ,P(2^{N-N_A} - 1)]
 #
@@ -344,12 +344,12 @@ class Discriminator(nn.Module):
 # intensity values for our patch. For example, imagine a hypothetical
 # situation where a patch of full intensity pixels was the target. The
 # best patch a sub-generator could produce would be a patch of pixels all
-# at a magnitude of :math:`\frac{1}{2^{N-N_A}}`. To alleviate this
+# at a magnitude of :math:`\frac{1}{2^{N-N_A}}.` To alleviate this
 # constraint, we apply a post-processing technique to each patch,
 #
 # .. math::  \boldsymbol{\tilde{x}^{(i)}} = \frac{\boldsymbol{g}^{(i)}}{\max_{k}\boldsymbol{g}_k^{(i)}}
 #
-# Therefore, the final image, :math:`\boldsymbol{\tilde{x}}`, is given by
+# Therefore, the final image, :math:`\boldsymbol{\tilde{x}},` is given by
 #
 # .. math:: \boldsymbol{\tilde{x}} = [\boldsymbol{\tilde{x}^{(1)}}, ... ,\boldsymbol{\tilde{x}^{(N_G)}}]
 #

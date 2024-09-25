@@ -39,7 +39,7 @@ We're putting the N in NISQ.
 # * **Coherent noise** is described by unitary operations that maintain the purity of the
 #   output quantum state. A common source are systematic errors originating from
 #   imperfectly-calibrated devices that do not exactly apply the desired gates, e.g., applying
-#   a rotation by an angle :math:`\phi+\epsilon` instead of :math:`\phi`.
+#   a rotation by an angle :math:`\phi+\epsilon` instead of :math:`\phi.`
 #
 # * **Incoherent noise** is more problematic: it originates from a quantum computer
 #   becoming entangled with the environment, resulting in mixed states — probability
@@ -56,7 +56,7 @@ We're putting the N in NISQ.
 # The purpose of PennyLane's ``default.mixed`` device is to provide native
 # support for mixed states and for simulating noisy computations. Let's use ``default.mixed`` to
 # simulate a simple circuit for preparing the
-# Bell state :math:`|\psi\rangle=\frac{1}{\sqrt{2}}(|00\rangle+|11\rangle)`. We ask the QNode to
+# Bell state :math:`|\psi\rangle=\frac{1}{\sqrt{2}}(|00\rangle+|11\rangle).` We ask the QNode to
 # return the expectation value of :math:`Z_0\otimes Z_1`:
 #
 import pennylane as qml
@@ -80,8 +80,8 @@ print(f"QNode output = {circuit():.4f}")
 
 ######################################################################
 # With a small modification of the circuit we can also ask for the density matrix. In this case, the density matrix is
-# equal to :math:`|\psi\rangle\langle\psi|`,
-# where :math:`|\psi\rangle=\frac{1}{\sqrt{2}}(|00\rangle + |11\rangle)`.
+# equal to :math:`|\psi\rangle\langle\psi|,`
+# where :math:`|\psi\rangle=\frac{1}{\sqrt{2}}(|00\rangle + |11\rangle).`
 
 @qml.qnode(dev)
 def density_matrix_circuit():
@@ -100,7 +100,7 @@ print(f"Output density matrix is = \n{np.real(matrix)}")
 # quantum channels is to employ `Kraus operators
 # <https://en.wikipedia.org/wiki/Quantum_operation#Kraus_operators>`__
 # :math:`\{K_i\}` satisfying the condition
-# :math:`\sum_i K_{i}^{\dagger} K_i = I`. For an initial state :math:`\rho`, the output
+# :math:`\sum_i K_{i}^{\dagger} K_i = I.` For an initial state :math:`\rho,` the output
 # state after the action of a channel :math:`\Phi` is:
 #
 # .. math::
@@ -110,8 +110,8 @@ print(f"Output density matrix is = \n{np.real(matrix)}")
 # Just like pure states are special cases of mixed states, unitary
 # transformations are special cases of quantum channels. Unitary transformations are represented
 # by a single Kraus operator,
-# the unitary :math:`U`, and they transform a state as
-# :math:`U\rho U^\dagger`.
+# the unitary :math:`U,` and they transform a state as
+# :math:`U\rho U^\dagger.`
 #
 # More generally, the action of a quantum channel can be interpreted as applying a
 # transformation corresponding to the Kraus operator :math:`K_i` with some associated
@@ -123,7 +123,7 @@ print(f"Output density matrix is = \n{np.real(matrix)}")
 # transformations on a quantum state. For
 # example, consider the bit flip channel. It describes a transformation that flips the state of
 # a qubit (applies an X gate) with probability :math:`p` and leaves it unchanged with probability
-# :math:`1-p`. Its Kraus operators are
+# :math:`1-p.` Its Kraus operators are
 #
 # .. math::
 #

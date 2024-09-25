@@ -115,7 +115,7 @@ def circuit(phi, theta):
 #
 # We can now create our optimization cost function. To introduce some additional
 # complexity into the system, rather than simply training the variational circuit
-# to 'flip a qubit' from state :math:`\left|0\right\rangle` to state :math:`\left|1\right\rangle`, let's also
+# to 'flip a qubit' from state :math:`\left|0\right\rangle` to state :math:`\left|1\right\rangle,` let's also
 # modify the target state every 100 steps. For example, for the first 100 steps,
 # the target state will be :math:`\left|1\right\rangle`; this will then change to :math:`\left|0\right\rangle`
 # for steps 100 and 200, before changing back to state :math:`\left|1\right\rangle` for steps 200

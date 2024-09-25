@@ -20,19 +20,19 @@ different way to think of the material. But beginners are also welcome!
 Single-qubit gates
 --------------------------
 
-Consider a single-qubit Hermitian operator :math:`G`. It acts on a two-dimensional
-space, and therefore has two eigenvalues: :math:`\kappa \pm \gamma`,
+Consider a single-qubit Hermitian operator :math:`G.` It acts on a two-dimensional
+space, and therefore has two eigenvalues: :math:`\kappa \pm \gamma,`
 where :math:`\kappa` is the average and :math:`2\gamma` the difference between them. If
-we exponentiate :math:`G`, with a parameter :math:`\theta`, we obtain a unitary gate:
+we exponentiate :math:`G`, with a parameter :math:`\theta,` we obtain a unitary gate:
 
 .. math::
 
     U(\theta) = e^{i\theta G}.
 
-Up to an overall phase of :math:`e^{i\theta\kappa}`, which we can ignore because it is
+Up to an overall phase of :math:`e^{i\theta\kappa},` which we can ignore because it is
 not measurable, the unitary :math:`U` has eigenvalues :math:`e^
 {\pm i \theta\gamma}`. In the eigenbasis (i.e., the basis of eigenvectors
-of :math:`G`, or equivalently :math:`U`), it is diagonal. We will draw this
+of :math:`G,` or equivalently :math:`U`), it is diagonal. We will draw this
 diagonal matrix as a magenta box:
 
 .. raw:: html
@@ -45,7 +45,7 @@ diagonal matrix as a magenta box:
     </figure>
   
 We will work on the eigenbasis of :math:`U` from now on. This means that a column
-vector :math:`[1, 0]^T` is the eigenvector associated with :math:`-\gamma`, and
+vector :math:`[1, 0]^T` is the eigenvector associated with :math:`-\gamma,` and
 :math:`[0, 1]^T` is associated with :math:`+\gamma`:
 
 .. tip:: 
@@ -63,15 +63,15 @@ vector :math:`[1, 0]^T` is the eigenvector associated with :math:`-\gamma`, and
 We've written the matrix as a box to suggest a different way to think of it:
 a *gate* in a quantum circuit. Instead of column vectors, we can use
 bra-ket notation, with basis states :math:`\vert0\rangle = [1, 0]^T` and
-:math:`\vert 1\rangle = [0, 1]^T`. We will also add some horizontal lines through the
+:math:`\vert 1\rangle = [0, 1]^T.` We will also add some horizontal lines through the
 gate to suggest that the states are "piped" through and pick up the
 corresponding phase. 
   
 .. tip::
 
     Click to toggle between basis states :math:`\vert 0\rangle`
-    and :math:`\vert 1\rangle`. While the mouse is in the magenta
-    box, its vertical position controls :math:`\gamma`, with the top of 
+    and :math:`\vert 1\rangle.` While the mouse is in the magenta
+    box, its vertical position controls :math:`\gamma,` with the top of 
     the box corresponding to high frequencies, and the bottom of the box
     to low frequencies.
   
@@ -86,19 +86,19 @@ corresponding phase.
 Frequency components
 -----------------------------
 
-You may wonder why we have introduced the parameter :math:`\theta`.
+You may wonder why we have introduced the parameter :math:`\theta.`
 The idea is that, if we have :math:`U(\theta)` in our circuit, we can
 treat :math:`\theta` as a parameter we can tune to improve the results of
 the circuit for, say, approximating a state of interest.
-Viewed as functions of this tunable parameter :math:`\theta`, the purples
-phases are *exponentials* of frequency :math:`\omega = \pm \gamma`.
+Viewed as functions of this tunable parameter :math:`\theta,` the purples
+phases are *exponentials* of frequency :math:`\omega = \pm \gamma.`
 Below, we plot the real and imaginary parts of these frequencies. 
 
 .. tip::
 
     Click to toggle between basis states :math:`\vert 0\rangle`
-    and :math:`\vert 1\rangle`. While the mouse is in the magenta
-    box, its vertical position controls :math:`\gamma`.
+    and :math:`\vert 1\rangle.` While the mouse is in the magenta
+    box, its vertical position controls :math:`\gamma.`
 
 .. raw:: html
 
@@ -110,21 +110,21 @@ Below, we plot the real and imaginary parts of these frequencies.
 
 Usually, we start a wire in the :math:`\vert 0\rangle` basis state. We
 can "split" this into a combination of :math:`\vert 0\rangle`
-and :math:`\vert1\rangle` by applying a gate :math:`W`. We picture :math:`W`
+and :math:`\vert1\rangle` by applying a gate :math:`W.` We picture :math:`W`
 as a blue gate below. The state
 :math:`\vert\psi(\theta)\rangle =U(\theta)W\vert 0\rangle` will then be a superposition of
 :math:`e^{-i\theta\gamma}\vert0\rangle` and
-:math:`e^{+i\theta\gamma}\vert1\rangle`. Again, viewed as a function of
-:math:`\theta`, it has both frequency components, storing them in the
+:math:`e^{+i\theta\gamma}\vert1\rangle.` Again, viewed as a function of
+:math:`\theta,` it has both frequency components, storing them in the
 coefficient of the corresponding eigenstate.
 
 .. tip::
 
     Vertical mouse position in the blue box controls the relative weight
-    of :math:`\vert0\rangle` and :math:`\vert 1\rangle`. Hovering  towards the
-    top places the most weight on :math:`\vert0\rangle`, and towards the bottom
-    on :math:`\vert1\rangle`.
-    Clicking the magenta box toggles between them, with vertical mouse position controlling :math:`\gamma`.
+    of :math:`\vert0\rangle` and :math:`\vert 1\rangle.` Hovering  towards the
+    top places the most weight on :math:`\vert0\rangle,` and towards the bottom
+    on :math:`\vert1\rangle.`
+    Clicking the magenta box toggles between them, with vertical mouse position controlling :math:`\gamma.`
 
 .. raw:: html
 
@@ -134,11 +134,11 @@ coefficient of the corresponding eigenstate.
       </center>
     </figure>
 
-Once we've prepared a state :math:`\vert\psi(\theta)\rangle`, we can
-measure it with some Hermitian operator :math:`M`. In the context of variational circuits, the result of
-a measurement can be used to optimize the parameter :math:`\theta`.
+Once we've prepared a state :math:`\vert\psi(\theta)\rangle,` we can
+measure it with some Hermitian operator :math:`M.` In the context of variational circuits, the result of
+a measurement can be used to optimize the parameter :math:`\theta.`
 To this end, let's define the expectation value as a function of
-:math:`\theta`,
+:math:`\theta,`
 
 .. math::
 
@@ -146,25 +146,25 @@ To this end, let's define the expectation value as a function of
 
 We represent the measurement :math:`M` as a yellow box, sandwiched between a
 circuit on the left preparing the ket :math:`\vert\psi(\theta)\rangle` and
-an adjoint circuit preparing the bra :math:`\langle \psi(\theta)\vert`.
+an adjoint circuit preparing the bra :math:`\langle \psi(\theta)\vert.`
 
 .. note::
 
-    Note that taking the adjoint swaps :math:`\pm\gamma`, and the order of elements
+    Note that taking the adjoint swaps :math:`\pm\gamma,` and the order of elements
     in the circuit is inverted compared to the expression for
-    :math:`f(\theta)`.
+    :math:`f(\theta).`
 
 We can expand the bra and ket in terms of frequency components
-:math:`e^{\pm i\theta\gamma}`, so :math:`f(\theta)` will be a sum of products of
+:math:`e^{\pm i\theta\gamma},` so :math:`f(\theta)` will be a sum of products of
 these terms. We show this below.
 
 .. tip::
 
     Click on magenta boxes to toggle between frequency
-    components contributing to :math:`f(\theta)`. Vertical position in the
+    components contributing to :math:`f(\theta).` Vertical position in the
     yellow box controls the constant terms
     :math:`\langle 0 \vert M \vert0\rangle` and
-    :math:`\langle 1 \vert M \vert 1\rangle`.
+    :math:`\langle 1 \vert M \vert 1\rangle.`
  
 
 .. raw:: html
@@ -181,14 +181,14 @@ To recap what we've learned so far: the ket :math:`\vert\psi
 {+i\theta\gamma}\vert1\rangle`. If we measure this state, the expectation
 value :math:`f(\theta) = \langle\psi(\theta)\vert M\vert\psi
 (\theta)\rangle` is a linear combination of products of the frequency
-terms :math:`e^{\pm i\theta\gamma}`. More formally, we can write
+terms :math:`e^{\pm i\theta\gamma}.` More formally, we can write
 
 .. math::
 
     f(\theta) = c_{(-2)} e^{-i2\gamma\theta} + c_{(0)} + c_{(+2)}
     e^{+i2\gamma\theta}
 
-for some coefficients :math:`c_{(-2)}, c_{(0)}, c_{(+2)}`. General expressions of
+for some coefficients :math:`c_{(-2)}, c_{(0)}, c_{(+2)}.` General expressions of
 this form—sums of exponential terms with evenly spaced frequencies—are
 called *Fourier series*. This turns out to be a useful way to look at
 parameterized circuits!
@@ -198,7 +198,7 @@ Larger circuits
 
 We can embed this structure, with a single occurrence of :math:`U
 (\theta)`, into a larger circuit. Instead of a linear combination
-of :math:`\vert0\rangle` and :math:`\vert 1\rangle`, it will be a linear
+of :math:`\vert0\rangle` and :math:`\vert 1\rangle,` it will be a linear
 combination of the form
 
 .. math::
@@ -211,14 +211,14 @@ the rest of the circuit, up to a reordering of wires. (This follows by
 factorizing with respect to the tensor product.)
 
 
-After applying :math:`U(\theta)`, the overall state will become
+After applying :math:`U(\theta),` the overall state will become
 
 .. math::
 
     e^{-i\theta\gamma}\alpha_0 \vert 0\rangle \otimes\vert \psi_0\rangle + e^{+i\theta\gamma}\alpha_1 \vert 1\rangle \otimes\vert \psi_1\rangle.
 
 Whatever subsequent gates we apply, as long as there is only one occurrence
-of :math:`U(\theta)`, this expansion in frequencies :math:`e^
+of :math:`U(\theta),` this expansion in frequencies :math:`e^
 {\pm i\theta\gamma}` is the same. We illustrate how a single copy of :math:`U
 (\theta)` acts on the larger circuit below.
 
@@ -232,7 +232,7 @@ of :math:`U(\theta)`, this expansion in frequencies :math:`e^
 
 If there are multiple copies of :math:`U(\theta)` in the circuit, we simply
 get more frequencies. Each box will multiply existing coefficients
-by :math:`e^{-i\gamma\theta}` or :math:`e^{+i\gamma\theta}`, depending on the
+by :math:`e^{-i\gamma\theta}` or :math:`e^{+i\gamma\theta},` depending on the
 state it encounters. This will iteratively build up a state of the following
 form:
 
@@ -275,7 +275,7 @@ Here, there are two ways to obtain a frequency of zero.
 As usual, we can form the expectation value of a measurement
 :math:`f(\theta) = \langle \psi(\theta)\vert M \vert \psi
 (\theta)\rangle`. This will be a linear combination of overlaps of the
-states above. For instance, when :math:`n =2`, it will be built from
+states above. For instance, when :math:`n =2,` it will be built from
 overlaps of the states (including the associated phases)
 
 .. math::
@@ -284,7 +284,7 @@ overlaps of the states (including the associated phases)
     \psi_{10}\rangle, \quad e^{+i2\theta\gamma}\vert \psi_{11}\rangle.
 
 Thus, the expectation is a Fourier series, with terms arising from
-all the different ways of combining these frequencies. For general :math:`n`, this is
+all the different ways of combining these frequencies. For general :math:`n,` this is
 
 .. math::
 
@@ -292,7 +292,7 @@ all the different ways of combining these frequencies. For general :math:`n`, th
      \cdots + c_{(0)} + \cdots +
      c_{(2n)}e^{2in\gamma\theta}.
 
-Below, we illustrate for :math:`n = 2`, where the Fourier series consists
+Below, we illustrate for :math:`n = 2,` where the Fourier series consists
 of five terms:
 
 .. math::
@@ -322,7 +322,7 @@ So far, we've focused on the :math:`\theta`-dependent "pure frequency" terms :ma
 However, the *coefficients* :math:`c_w` also have an important role
 to play.
 It turns out that, for a given set of frequencies in the Fourier
-series, the coefficients *uniquely* characterize :math:`f(\theta)`.
+series, the coefficients *uniquely* characterize :math:`f(\theta).`
 We'll redo the :math:`n = 2` example but highlight the coefficients instead;
 these depend on the structure of the circuit and the choice of
 measurement.
@@ -344,7 +344,7 @@ measurement.
 The set of Fourier sums of fixed degree form a vector space, and the pure
 frequencies :math:`e^{i\omega \theta\gamma}` are a *basis*. We can assemble
 these coefficients into a column vector,
-:math:`\vec{c}_f`, which contains the same information as the
+:math:`\vec{c}_f,` which contains the same information as the
 function :math:`f(\theta)`:
 
 .. math::
@@ -405,8 +405,8 @@ matrix :math:`D`:
     </figure>
 
 Another particularly simple operation on :math:`f(\theta)` is to
-shift the parameter :math:`\theta` by some constant amount :math:`s`, giving a new
-function :math:`f_s(\theta) = f(\theta + s)`, also called a
+shift the parameter :math:`\theta` by some constant amount :math:`s,` giving a new
+function :math:`f_s(\theta) = f(\theta + s),` also called a
 *parameter shift*. From index laws, this adds an exponential
 factor to each coefficient:
 
@@ -455,7 +455,7 @@ The two-term parameter-shift rule
 -----------------------------------------
 
 Our original motivation for introducing :math:`\theta` was to *optimize* the
-measurement result :math:`f(\theta)`. If we can differentiate :math:`f
+measurement result :math:`f(\theta).` If we can differentiate :math:`f
 (\theta)`, we can use tools from classical machine learning such as *gradient
 descent*. The problem is that circuits are black boxes; all we can do is set
 some parameters, pull a lever, and out pops a measurement outcome. It's a bit
@@ -475,9 +475,9 @@ like a toaster. How do you differentiate a toaster?
 
 Luckily, the magic of Fourier series and coefficient vectors come to the
 rescue. The basic idea is to write the differentiation matrix :math:`D` as a
-linear combination of shift matrices :math:`T_s`. Although we can't
+linear combination of shift matrices :math:`T_s.` Although we can't
 differentiate directly, we _can_ change parameters! Let's illustrate with the
-simple example of :math:`n = 1`. In this case, the matrices are
+simple example of :math:`n = 1.` In this case, the matrices are
 
 .. math::
 
@@ -487,7 +487,7 @@ simple example of :math:`n = 1`. In this case, the matrices are
     {+2i\gamma s} \end{bmatrix}.
 
 
-It's easy to check that for any :math:`s`,
+It's easy to check that for any :math:`s,`
 
 .. math::
     
@@ -517,23 +517,23 @@ This is called *two-term parameter-shift rule*.
 
 The two-term rule has a simple geometric interpretation. Changing
 :math:`\theta` takes us around a circle of fixed radius
-:math:`r = \vert c_{\pm2}\vert` at speed :math:`\gamma/2\pi`.
+:math:`r = \vert c_{\pm2}\vert` at speed :math:`\gamma/2\pi.`
 
 .. note::
 
     Note that parameter shifts add phases and don't change :math:`\vert c_
     {(\pm 2)}\vert`. The radius is given by either, since the reality of
-    measurement outcomes implies :math:`c_{(+2)} = \overline{c_{(-2)}}`.
+    measurement outcomes implies :math:`c_{(+2)} = \overline{c_{(-2)}}.`
 
 The derivative :math:`f'(\theta)` is a tangent vector of
-length :math:`r\gamma`. We can choose Cartesian coordinates where this
+length :math:`r\gamma.` We can choose Cartesian coordinates where this
 tangent vector is vertical, with components
 
 .. math::
 
     f'(\theta) = (0, r\gamma).
 
-The parameter shifts :math:`f(\theta \pm s)`, on the other hand, have
+The parameter shifts :math:`f(\theta \pm s),` on the other hand, have
 components
 
 .. math::
@@ -553,7 +553,7 @@ lines. Their vector sum :math:`\Delta f` is a dark magenta line.
 
 .. tip::
 
-    Horizontal mouse position controls :math:`s`. 
+    Horizontal mouse position controls :math:`s.` 
 
 .. raw:: html
 
@@ -566,7 +566,7 @@ lines. Their vector sum :math:`\Delta f` is a dark magenta line.
 The general parameter-shift rule
 -----------------------------------------
 
-For :math:`n > 1`, parameter shift rules don't have a simple geometric
+For :math:`n > 1,` parameter shift rules don't have a simple geometric
 interpretation. The problem is that each pair of coefficients
 :math:`c_{\pm \omega}` is associated with a circle governing two components of
 the coefficient vector. To find the derivative, we need to understand each
@@ -579,13 +579,13 @@ around. This sounds complicated!
 It also looks complicated, as we illustrate for :math:`n = 3` below. We
 set :math:`\gamma = 1` so that, on the circle in the :math:`c_{\pm
 \omega}` plane, we execute :math:`\omega` revolutions for a single cycle
-of :math:`s`.
+of :math:`s.`
 
 .. tip::
 
-    Horizontal mouse position controls :math:`s`. For instance, if we place it in
-    the middle of interval, :math:`s = \pi`. This translates into an angle
-    :math:`\pm \pi\gamma` on the circle labelled :math:`c_{(\pm \gamma)}`.
+    Horizontal mouse position controls :math:`s.` For instance, if we place it in
+    the middle of interval, :math:`s = \pi.` This translates into an angle
+    :math:`\pm \pi\gamma` on the circle labelled :math:`c_{(\pm \gamma)}.`
 
 .. raw:: html
 
@@ -607,16 +607,16 @@ Thus, :math:`2n` linearly independent parameter shifts :math:`f
 
     f'(\theta) = \sum_{k=1}^{2n} \beta_k f(\theta + s_k) \tag{1}
 
-for some coefficients :math:`\beta_k`. The problem is how to find the shifts
+for some coefficients :math:`\beta_k.` The problem is how to find the shifts
 and coefficients! We can invoke linear algebra to find coefficients, but only
 once we choose shifts, and it's not obvious how to get them to be
-independent. We can see the problem for :math:`n = 3`, where we choose six
+independent. We can see the problem for :math:`n = 3,` where we choose six
 random shifts. Are they independent or not? It seems hard to tell. Is there a
 better approach?
 
 .. tip::
 
-    Horizontal mouse position controls :math:`s`,
+    Horizontal mouse position controls :math:`s,`
     which is now "quantized" with random shifts. 
 
 .. raw:: html
@@ -630,8 +630,8 @@ better approach?
 Thankfully, there is! We can solve two problems at once by introducing
 an *inner product*, i.e., a way to find the scalar overlap of two vectors.
 This will let us identify orthogonal and hence independent
-shifts :math:`s_k`. Since they are orthogonal, we can also easily determine
-the coefficients :math:`\beta_k`. The idea is straightforward: since the
+shifts :math:`s_k.` Since they are orthogonal, we can also easily determine
+the coefficients :math:`\beta_k.` The idea is straightforward: since the
 matrices of interest are diagonal,
 
 .. math::
@@ -648,8 +648,8 @@ matrices:
 
     \langle A, B\rangle = \mbox{Tr}[A^\dagger B].
 
-Consider two shifts :math:`s, t \in [0, 2\pi/\gamma)`, and
-define :math:`\omega = e^{2\pi i\gamma(t-s)}`. The inner product of diagonal
+Consider two shifts :math:`s, t \in [0, 2\pi/\gamma),` and
+define :math:`\omega = e^{2\pi i\gamma(t-s)}.` The inner product of diagonal
 shift matrices :math:`T_s, T_t` is
 
 .. math::
@@ -658,7 +658,7 @@ shift matrices :math:`T_s, T_t` is
     {2n} \omega^j= \frac{\omega^{-n}(1 - \omega^{2n+1})}{1 - \omega} \tag{2}
 
 using the `geometric series <https://en.wikipedia.org/wiki/Geometric_series>`__. Before moving on, let's visualize what these inner
-products look like for :math:`n = 3`. The expression (2) is
+products look like for :math:`n = 3.` The expression (2) is
 a sum of phases, which we can add top-to-tail on the complex plane. We've
 added a big :math:`\mathbb{C}` to distinguish this from other planes we've
 been looking at.
@@ -667,7 +667,7 @@ been looking at.
 .. tip::
 
     We display the inner product :math:`\langle T_s, T_t\rangle` below.
-    Horizontal mouse position controls :math:`s`. The choice of :math:`t`
+    Horizontal mouse position controls :math:`s.` The choice of :math:`t`
     is "quantized" to the random shifts from above; click to the left to set
     it. The phases summed are light magenta, and the total is dark magenta.
 
@@ -694,7 +694,7 @@ natural choice is
 
     s_k = \frac{k}{\gamma(2n+1)},
 
-for :math:`k = 1, \ldots, 2n`. In this case, we have the orthogonality
+for :math:`k = 1, \ldots, 2n.` In this case, we have the orthogonality
 relation
 
 .. math::
@@ -709,7 +709,7 @@ the equally spaced points vanishes.
 
 .. tip::
 
-    Horizontal mouse position controls :math:`s`. 
+    Horizontal mouse position controls :math:`s.` 
 
 .. raw:: html
 
@@ -722,7 +722,7 @@ the equally spaced points vanishes.
 Orthogonality makes finding the coefficients :math:`\beta_k` easy: we simply
 take the inner product between :math:`T_{s_k}` and the left-hand side
 of (1), expressed in terms of the differentiation
-matrix :math:`D`. This gives
+matrix :math:`D.` This gives
 
 .. math::
 
@@ -730,9 +730,9 @@ matrix :math:`D`. This gives
     \beta_k & = \frac{2i\gamma}{2n+1}\sum_{j=-n}^n j \omega_k^j
     \end{align*}
 
-for :math:`\omega_k = e^{-2\pi i k/(2n+1)}`. This looks tricky, but we can
+for :math:`\omega_k = e^{-2\pi i k/(2n+1)}.` This looks tricky, but we can
 start with a geometric series, *differentiate* with respect
-to :math:`\omega`, and multiply by :math:`\omega_k`, so we get what we want:
+to :math:`\omega`, and multiply by :math:`\omega_k,` so we get what we want:
 
 .. math::
 
@@ -741,7 +741,7 @@ to :math:`\omega`, and multiply by :math:`\omega_k`, so we get what we want:
 
 We already computed the geometric series in
 (2). Plugging that back in, differentiating, and using the
-fact that :math:`\omega_k^{2n+1} = 1`, we finally get
+fact that :math:`\omega_k^{2n+1} = 1,` we finally get
 
 .. math::
 

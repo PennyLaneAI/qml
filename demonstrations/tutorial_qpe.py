@@ -17,14 +17,14 @@ Quantum phase estimation
 ------------------------
 
 Let's define the problem more carefully. We are given a unitary
-operator :math:`U` and one of its eigenstates :math:`|\psi \rangle`. The operator is unitary,
+operator :math:`U` and one of its eigenstates :math:`|\psi \rangle.` The operator is unitary,
 so we can write:
 
 .. math::
     U |\psi \rangle = e^{i \phi} |\psi \rangle,
 
 where :math:`\phi` is the *phase* of the eigenvalue (remember, unitaries have eigenvalues with an 
-absolute value of 1). The goal is to estimate :math:`\phi`,
+absolute value of 1). The goal is to estimate :math:`\phi,`
 hence the name *phase estimation*. Our challenge is to design a quantum algorithm to solve this problem.
 How would that work?
 
@@ -40,9 +40,9 @@ A first step is to find a quantum circuit that performs the transformation
 We could then obtain :math:`\phi` directly by measuring the second register.  We call this the **estimation register**.
 
 But let's be more careful. Because the
-complex exponential has period :math:`2\pi`, technically the phase is not unique. Instead, we
+complex exponential has period :math:`2\pi,` technically the phase is not unique. Instead, we
 define :math:`\phi = 2\pi \theta` so that :math:`\theta` is a number between 0 and 1; this forces :math:`\phi`
-to be between 0 and :math:`2\pi`. We'll refer to :math:`\theta` as the phase from now on.
+to be between 0 and :math:`2\pi.` We'll refer to :math:`\theta` as the phase from now on.
 
 How can we represent :math:`\theta` on a quantum computer? The answer is the first clever part of the algorithm: we represent
 :math:`\theta` in binary. 🧠
@@ -68,7 +68,7 @@ to make sure we're on the same page.
     and 0.3125 is 0.0101.
 
 Ok, now back to quantum. A binary representation is useful because we can encode it using
-qubits, e.g., :math:`|110010\rangle` for :math:`\theta=0.110010`. The phase is retrieved by measuring the qubits.
+qubits, e.g., :math:`|110010\rangle` for :math:`\theta=0.110010.` The phase is retrieved by measuring the qubits.
 The **precision** of the estimate is determined by the number of qubits. We've used examples of fractions that can be
 conveniently expressed exactly with just a few binary points, but this won't
 always be possible. For example, the binary expansion of :math:`0.8` is :math:`0.11001100...` which does not terminate.
@@ -86,8 +86,8 @@ The second clever part of the algorithm is to follow advice given to many physic
 Note that this results in a uniform superposition, where each basis state has an additional phase.
 If we can prepare that state, then applying the *inverse* QFT would give
 :math:`|\theta\rangle` in the estimation register.
-This looks more promising, especially if we notice the appearance of the eigenvalues :math:`e^{2 \pi i\theta}`,
-although with an extra factor of :math:`k`. We can obtain this factor by applying the unitary :math:`k` times to the state :math:`|\psi\rangle`:
+This looks more promising, especially if we notice the appearance of the eigenvalues :math:`e^{2 \pi i\theta},`
+although with an extra factor of :math:`k.` We can obtain this factor by applying the unitary :math:`k` times to the state :math:`|\psi\rangle`:
 
 .. math::
    U^k|\psi\rangle =  e^{2\pi i \theta k} |\psi\rangle.
@@ -118,7 +118,7 @@ the operator we need is
    |\psi\rangle |00\rangle + |\psi\rangle |01\rangle + |\psi\rangle |10\rangle+  |\psi\rangle |11\rangle\rightarrow
    |\psi\rangle |00\rangle + U |\psi\rangle |01\rangle + U^2 |\psi\rangle |10\rangle+ U^3 |\psi\rangle |11\rangle.
 
-Notice something? The power of :math:`U` is the same as the binary representation of the corresponding basis state. For example,  :math:`U^3` is applied when the estimation register is in state :math:`|11\rangle`, and 11 is just the number 3 in binary. 
+Notice something? The power of :math:`U` is the same as the binary representation of the corresponding basis state. For example,  :math:`U^3` is applied when the estimation register is in state :math:`|11\rangle,` and 11 is just the number 3 in binary. 
 Therefore, the desired operation can be implemented by applying :math:`U` controlled on the first qubit, and
 :math:`U^2` controlled on the second qubit.
 
@@ -147,7 +147,7 @@ Bringing it all together, here is the quantum phase estimation algorithm in all 
 The QPE algorithm
 -----------------
 
-1. Start with the state :math:`|\psi \rangle |0\rangle`. Apply a Hadamard gate to all estimation qubits to implement the
+1. Start with the state :math:`|\psi \rangle |0\rangle.` Apply a Hadamard gate to all estimation qubits to implement the
    transformation
 
    .. math::
@@ -167,7 +167,7 @@ The QPE algorithm
 
       |\psi\rangle \frac{1}{\sqrt{2^n}}\sum_{k=0} e^{2 \pi i \theta k}|k\rangle \rightarrow |\psi\rangle|\theta\rangle.
 
-4. Measure the estimation qubits to recover :math:`\theta`.
+4. Measure the estimation qubits to recover :math:`\theta.`
 
 .. figure:: ../_static/demonstration_assets/qpe/qpe.png
     :align: center
@@ -182,7 +182,7 @@ state expanded in the eigenbasis of :math:`U` as
 .. math::
    |\Psi\rangle = \sum_i c_i |\psi_i\rangle,
 
-QPE outputs the eigenphase :math:`\theta_i` with probability :math:`|c_i|^2`.
+QPE outputs the eigenphase :math:`\theta_i` with probability :math:`|c_i|^2.`
 
 Most of the heavy lifting is done by the controlled sequence step. Control-U operations are the heart of the algorithm,
 coupled with a clever use of quantum Fourier transforms. This feature is crucial for quantum chemistry applications,
@@ -194,7 +194,7 @@ estimation qubits. Thus, there is typically a distribution of possible
 outcomes, which induce an error in the estimation. We'll see an example in the code below.
 The error *decreases* exponentially with the number of estimation qubits, but the number of controlled-U operations
 *increases* exponentially. The math is such that these effects basically cancel out and the cost of estimating a phase
-with error :math:`\varepsilon` is proportional to :math:`1/\varepsilon`.
+with error :math:`\varepsilon` is proportional to :math:`1/\varepsilon.`
 
 All the previous ideas help to also understand the Phase KickBack algorithm in the case of one qubit.
 If you want to learn more about this subroutine, take a look at this :doc:`demo <tutorial_phase_kickback>`.
@@ -203,7 +203,7 @@ Time to code!
 -------------
 We already know the three building blocks of QPE; it is time to put them to practice.
 We use a single-qubit :class:`~pennylane.PhaseShift` operator :math:`U = R_{\phi}(2 \pi / 5)`
-and its eigenstate :math:`|1\rangle`` with corresponding phase :math:`\theta=0.2`.
+and its eigenstate :math:`|1\rangle`` with corresponding phase :math:`\theta=0.2.`
 
 """
 
@@ -259,8 +259,8 @@ plt.show()
 ##############################################################################
 # Since the eigenphase cannot be represented exactly using 4 bits, there is a
 # distribution of possible outcomes. The peak occurs
-# at :math:`\phi = 0.0011`, which is :math:`0.1875` in decimal. This is the closest value we can get with
-# a 4-bit representation to the exact value :math:`0.2`.  🎊
+# at :math:`\phi = 0.0011,` which is :math:`0.1875` in decimal. This is the closest value we can get with
+# a 4-bit representation to the exact value :math:`0.2.`  🎊
 #
 # Conclusion
 # ----------
@@ -272,7 +272,7 @@ plt.show()
 # Finally, there is extensive work on how to implement the unitaries themselves. In quantum chemistry,
 # the main strategy is to encode a molecular Hamiltonian
 # into a unitary such that the phases are invertible functions of the Hamiltonian eigenvalues. This can be done for instance
-# through the mapping :math:`U=e^{-iHt}`, which can be implemented using Hamiltonian simulation techniques. More advanced techniques employ a qubitization-based encoding. QPE can then
+# through the mapping :math:`U=e^{-iHt},` which can be implemented using Hamiltonian simulation techniques. More advanced techniques employ a qubitization-based encoding. QPE can then
 # be used to estimate eigenvalues like ground-state energies by sampling them with respect to a distribution
 # induced by the input state.
 #

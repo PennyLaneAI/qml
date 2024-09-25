@@ -148,7 +148,7 @@ print(state)
 #
 # .. math:: | k \rangle =  |\Psi \rangle = U_n U_{n-1} \dots U_0 |0\rangle.
 #
-# We could have attached :math:`M`, a Hermitian observable (:math:`M^{\dagger}=M`), to either the
+# We could have attached :math:`M,` a Hermitian observable (:math:`M^{\dagger}=M`), to either the
 # bra or the ket, but attaching it to the bra side will be useful later.
 #
 # Using the ``state`` calculated above, we can create these :math:`|b\rangle` and :math:`|k\rangle`
@@ -171,7 +171,7 @@ print("QNode : ", circuit(x))
 #
 # But the dividing line between what makes the "bra" and "ket" vector is actually
 # fairly arbitrary.  We can divide the two vectors at any point from one :math:`\langle 0 |`
-# to the other :math:`|0\rangle`. For example, we could have used
+# to the other :math:`|0\rangle.` For example, we could have used
 #
 # .. math:: \langle b_n | = \langle 0 | U_1^{\dagger} \dots  U_n^{\dagger} M U_n,
 #
@@ -199,7 +199,7 @@ print(M_expval_n)
 # Same answer!
 #
 # We can calculate this in a more efficient way if we already have the
-# initial ``state`` :math:`| \Psi \rangle`. To shift the splitting point, we don't
+# initial ``state`` :math:`| \Psi \rangle.` To shift the splitting point, we don't
 # have to recalculate everything from scratch. We just remove the operation from
 # the ket and add it to the bra:
 #
@@ -210,7 +210,7 @@ print(M_expval_n)
 # For the ket vector, you can think of :math:`U_n^{\dagger}` as "eating" its
 # corresponding unitary from the vector, erasing it from the list of operations.
 #
-# Of course, we actually work with the conjugate transpose of :math:`\langle b_n |`,
+# Of course, we actually work with the conjugate transpose of :math:`\langle b_n |,`
 #
 # .. math:: |b_n\rangle = U_n^{\dagger} | b \rangle.
 #
@@ -247,7 +247,7 @@ print(M_expval_n_v2)
 # .. math:: | k_i \rangle  = U_i^{\dagger} |k_{i+1}\rangle.
 #
 # For each iteration, we move an operation from the ket side to the bra side.
-# We start near the center at :math:`U_n` and reverse through the operations list until we reach :math:`U_0`.
+# We start near the center at :math:`U_n` and reverse through the operations list until we reach :math:`U_0.`
 
 bra_loop = apply_operation(M, state)
 ket_loop = state
@@ -267,7 +267,7 @@ for op in reversed(ops):
 # The derivative of a gate.
 #
 # For simplicity's sake, assume each unitary operation :math:`U_i` is a function of a single
-# parameter :math:`\theta_i`.  For non-parametrized gates like CNOT, we say its derivative is zero.
+# parameter :math:`\theta_i.`  For non-parametrized gates like CNOT, we say its derivative is zero.
 # We can also generalize the algorithm to multi-parameter gates, but we leave those out for now.
 #
 # Remember that each parameter occurs twice in :math:`\langle M \rangle`: once in the bra and once in
@@ -320,7 +320,7 @@ for op in reversed(ops):
 #
 # .. math:: | k_{i} \rangle = U^{\dagger}_{i} |k_{i+1}\rangle.
 #
-# We can iterate through the operations starting at :math:`n` and ending at :math:`1`.
+# We can iterate through the operations starting at :math:`n` and ending at :math:`1.`
 #
 # We do have to calculate initial state first, the "forward" pass:
 #
@@ -338,7 +338,7 @@ for op in reversed(ops):
 #
 # .. math:: U = e^{i c \hat{G} \theta}
 #
-# for a Pauli matrix :math:`\hat{G}`, a constant :math:`c`, and the parameter :math:`\theta`.
+# for a Pauli matrix :math:`\hat{G}`, a constant :math:`c,` and the parameter :math:`\theta.`
 # Thus we can easily calculate their derivatives:
 #
 # .. math:: \frac{\text{d} U}{\text{d} \theta} = i c \hat{G} e^{i c \hat{G} \theta} = i c \hat{G} U .
@@ -354,7 +354,7 @@ print(grad_op0)
 # We loop over the reversed operations, just as before.  But if the operation has a parameter,
 # we calculate its derivative and append it to a list before moving on. Since the ``operation_derivative``
 # function spits back out a matrix instead of an operation,
-# we have to use :class:`~pennylane.QubitUnitary` instead to create :math:`|\tilde{k}_i\rangle`.
+# we have to use :class:`~pennylane.QubitUnitary` instead to create :math:`|\tilde{k}_i\rangle.`
 
 bra = apply_operation(M, state)
 ket = state

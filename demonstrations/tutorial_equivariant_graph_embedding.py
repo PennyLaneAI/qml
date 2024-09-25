@@ -165,19 +165,19 @@ plt.show()
 # 
 # However, invariance is often too strong a constraint. Think for example of an encoding that 
 # associates each node in the graph with a qubit. We might want permutations of the adjacency 
-# matrix to lead to the same state *up to an equivalent permutation of the qubits* :math:`P_{\pi}`,
+# matrix to lead to the same state *up to an equivalent permutation of the qubits* :math:`P_{\pi},`
 # where
 #
 # .. math:: 
 #    
 #     P_{\pi} |q_1,...,q_n \rangle = |q_{\textit{perm}_{\pi}(1)}, ... q_{\textit{perm}_{\pi}(n)} \rangle .
 # 
-# The function :math:`\text{perm}_{\pi}` maps each index to the permuted index according to :math:`\pi`. 
+# The function :math:`\text{perm}_{\pi}` maps each index to the permuted index according to :math:`\pi.` 
 #    
 #
 # .. note:: 
 #
-#     The operator :math:`P_{\pi}` is implemented by PennyLane's :class:`~pennylane.Permute`.
+#     The operator :math:`P_{\pi}` is implemented by PennyLane's :class:`~pennylane.Permute.`
 # 
 # This results in an *equivariant* embedding with respect to permutations of the adjacency matrix:
 # 
@@ -203,7 +203,7 @@ plt.show()
 #    :alt: Equivariant embedding
 #    
 # The image can be found in `Skolik et al. (2022) <https://arxiv.org/pdf/2205.06109.pdf>`_ and shows one layer of the circuit.  
-# The :math:`\epsilon` are our edge weights while :math:`\alpha` describe the node weights, and the :math:`\beta`, :math:`\gamma` are variational parameters.
+# The :math:`\epsilon` are our edge weights while :math:`\alpha` describe the node weights, and the :math:`\beta,` :math:`\gamma` are variational parameters.
 #
 # In PennyLane this looks as follows:
 #

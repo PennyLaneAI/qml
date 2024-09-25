@@ -31,7 +31,7 @@ A general circuit for block encoding an arbitrary matrix :math:`A \in \mathbb{C}
 Where the :math:`H^{\otimes n}` operation is a Hadamard transformation on :math:`n` qubits. The
 :math:`U_A` operation is an oracle which encodes the matrix element :math:`A_{i,j}` into the the 
 amplitude of the ancilla qubit. The :math:`U_B` oracle ensures that we iterate over every 
-combination of :math:`(i,j)`.
+combination of :math:`(i,j).`
 
 Finding an optimal quantum gate decomposition that implements :math:`U_A` and :math:`U_B` is not 
 always possible. We now explore two different approaches for constructing these oracles that can be 
@@ -40,7 +40,7 @@ very efficient for matrices with specific structure or sparsity.
 Block encoding structured matrices 
 -----------------------------------
 In order to better understand the oracle access framework, let us first define :math:`U_A` and :math:`U_B`
-for the exact block-encoding of :math:`A`. The :math:`U_A` oracle is responsible for encoding the 
+for the exact block-encoding of :math:`A.` The :math:`U_A` oracle is responsible for encoding the 
 matrix entries of :math:`A` into the amplitude of an auxilary qubit :math:`|0\rangle_{\text{anc}}`:
 
 .. math::
@@ -59,7 +59,7 @@ and for this algorithm, it simplifies to be the :class:`~.pennylane.SWAP` gate:
 .. math:: U_B |i\rangle|j\rangle \ = \ |j\rangle |i\rangle
 
 The naive approach is to construct :math:`U_A` using a sequence of multi-controlled :math:`Ry(\alpha)` 
-rotation gates with rotation angles computed as :math:`\alpha = \text{arccos}(A_{i,j})`. It turns out
+rotation gates with rotation angles computed as :math:`\alpha = \text{arccos}(A_{i,j}).` It turns out
 that this requires :math:`O(N^{4})` gates and is very inefficient. A more efficient approach is the 
 Fast Approximate BLock Encodings (FABLE) technique [#fable]_, which
 uses the oracle access framework and some clever approximations 🧠. The level of approximation in FABLE 
@@ -68,7 +68,7 @@ efficient circuit *without* reducing accuracy.
 
 The FABLE circuit is constructed from a set of single :math:`Ry` rotation and C-NOT gates. We can remove
 the need for multi-controlled rotations using a special transformation of the angles (see [#fable]_ for details).
-The rotation angles, :math:`(\theta_1, ..., \theta_n)`, are obtained from a transformation of the elements 
+The rotation angles, :math:`(\theta_1, ..., \theta_n),` are obtained from a transformation of the elements 
 of the block-encoded matrix.
 
 .. math:: \begin{pmatrix} \theta_1 \\ \cdots \\ \theta_n \end{pmatrix} =
@@ -233,17 +233,17 @@ print(f"Block-encoded matrix:\n{M}", "\n")
 #
 # Block encoding sparse matrices
 # ------------------------------
-# The quantum circuit for the oracle :math:`U_A`, presented above, accesses every entry of
+# The quantum circuit for the oracle :math:`U_A,` presented above, accesses every entry of
 # :math:`A` and thus requires :math:`~ O(N^2)` gates to implement the oracle [#fable]_. In the
 # special cases where :math:`A` is structured and sparse, we can generate a more efficient quantum
 # circuit representation for :math:`U_A` and :math:`U_B` [#sparse]_ by only keeping track of the 
 # non-zero entries of the matrix. 
 #
 # Let :math:`b(i,j)` be a function such that it takes a column index :math:`j` and returns the
-# row index for the :math:`i^{th}` non-zero entry in that column of :math:`A`. Note, in this 
+# row index for the :math:`i^{th}` non-zero entry in that column of :math:`A.` Note, in this 
 # formulation, the :math:`|i\rangle` qubit register now refers to the number of non-zero entries 
-# in :math:`A`. For sparse matrices, this can be much smaller than :math:`N`, thus saving us many
-# qubits. We use this to define :math:`U_A` and :math:`U_B`.
+# in :math:`A.` For sparse matrices, this can be much smaller than :math:`N,` thus saving us many
+# qubits. We use this to define :math:`U_A` and :math:`U_B.`
 #
 # Like in the structured approach, the :math:`U_A` oracle is responsible for encoding the matrix 
 # entries of :math:`A` into the amplitude of the ancilla qubit. However, we now use :math:`b(i,j)`
@@ -268,7 +268,7 @@ print(f"Block-encoded matrix:\n{M}", "\n")
 #       \gamma & 0 & \dots & \beta & \alpha \\
 #       \end{bmatrix},
 #
-# where :math:`\alpha`, :math:`\beta` and :math:`\gamma` are real numbers. The following code block
+# where :math:`\alpha,` :math:`\beta` and :math:`\gamma` are real numbers. The following code block
 # prepares the matrix representation of :math:`A` for an :math:`8 \times 8` sparse matrix.
 
 alpha, beta, gamma  = 0.1, 0.6, 0.3

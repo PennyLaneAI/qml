@@ -40,18 +40,18 @@ Theory
 ------
 
 To solve a combinatorial optimization problem with a quantum computer, a typical strategy is to encode
-the solution to the problem as the ground state of a *cost Hamiltonian* :math:`H_c`. Then, we use some procedure to drive
-an initial state into the ground state of :math:`H_c`.
+the solution to the problem as the ground state of a *cost Hamiltonian* :math:`H_c.` Then, we use some procedure to drive
+an initial state into the ground state of :math:`H_c.`
 FALQON falls under this broad scheme.
 
-Consider a quantum system governed by a Hamiltonian of the form :math:`H = H_c + \beta(t) H_d`. These kinds of
+Consider a quantum system governed by a Hamiltonian of the form :math:`H = H_c + \beta(t) H_d.` These kinds of
 Hamiltonians appear often in the theory of `quantum control <https://quantiki.org/wiki/quantum-control-theory>`__, a
 field of inquiry which studies how a quantum system can be driven from one state to another.
 The choice of :math:`\beta(t)` corresponds to a "driving strategy", which partially determines how the system evolves
 with time.
 
 Suppose our objective is to drive some quantum system
-to the ground state of :math:`H_c`. It is a reasonable goal to
+to the ground state of :math:`H_c.` It is a reasonable goal to
 construct a quantum control process such that the energy expectation :math:`\langle H_c \rangle_t` decreases with time:
 
 .. math:: \frac{d}{dt} \langle H_c\rangle_t = \frac{d}{dt} \langle \psi(t)|H_c|\psi(t)\rangle = i \beta(t)\langle [H_d, H_c] \rangle_t \leq 0,
@@ -63,12 +63,12 @@ If we pick :math:`\beta(t) = -\langle i[H_d, H_c] \rangle_t,` so that
 .. math:: \frac{d}{dt} \langle H_c\rangle_t = -|\langle i[H_d, H_c] \rangle_t|^2 \leq 0,
 
 then :math:`\langle H_c \rangle` is guaranteed to strictly decrease, as desired!
-Thus, if we evolve some initial state :math:`|\psi_0\rangle` under the time evolution operator :math:`U` corresponding to :math:`H`,
+Thus, if we evolve some initial state :math:`|\psi_0\rangle` under the time evolution operator :math:`U` corresponding to :math:`H,`
 
 .. math:: U(T) = \mathcal{T} \exp \Big[ -i \displaystyle\int_{0}^{T} H(t) \ dt \Big] \approx \mathcal{T} \exp \Big[ -i \displaystyle\sum_{k = 0}^{T/\Delta t} H( k \Delta t) \Delta t \Big],
 
 where :math:`\mathcal{T}` is the `time-ordering operator <https://en.wikipedia.org/wiki/Path-ordering#Time_ordering>`__ and :math:`\Delta t` is some small time step,
-then the energy expectation will strictly decrease, for a large enough value of :math:`T`. This is exactly the procedure used by FALQON to minimize :math:`\langle H_c \rangle`.
+then the energy expectation will strictly decrease, for a large enough value of :math:`T`. This is exactly the procedure used by FALQON to minimize :math:`\langle H_c \rangle.`
 In general, implementing a time evolution unitary in a quantum circuit is
 difficult, so we use a
 `Trotter-Suzuki decomposition <https://en.wikipedia.org/wiki/Time-evolving_block_decimation#The_Suzuki%E2%80%93Trotter_expansion>`__
@@ -77,26 +77,26 @@ to perform approximate time evolution. We then have
 .. math:: U(T) \approx \mathcal{T} \exp \Big[ -i \displaystyle\sum_{k = 0}^{T/\Delta t} H( k \Delta t) \Delta t \Big] \approx
             e^{-i\beta_n H_d \Delta t} e^{-iH_c \Delta t} \cdots e^{-i\beta_1 H_d \Delta t} e^{-iH_c \Delta t} = U_d(\beta_n) U_c \cdots U_d(\beta_1) U_c,
 
-where :math:`n = T/\Delta t` and :math:`\beta_k = \beta(k\Delta t)`.
+where :math:`n = T/\Delta t` and :math:`\beta_k = \beta(k\Delta t).`
 For each layer of the time evolution, the value :math:`\beta_k` is required. However,
 :math:`\beta_k` is dependent on the state of the system at some time. Recall that
 
 .. math:: \beta(t) = - \langle \psi(t) | i [H_d, H_c] | \psi(t) \rangle.
 
-We let :math:`A(t) := i\langle [H_d, H_c] \rangle_t`. Our strategy is to obtain the values
+We let :math:`A(t) := i\langle [H_d, H_c] \rangle_t.` Our strategy is to obtain the values
 :math:`\beta_k` recursively, by finding the value of :math:`A(t)` for the **previous time step**. We then set
 
 .. math:: \beta_{k+1} = -A_k = -A(k\Delta t).
 
-This leads to the FALQON algorithm as a recursive process. On step :math:`k`, we perform the following three substeps:
+This leads to the FALQON algorithm as a recursive process. On step :math:`k,` we perform the following three substeps:
 
-1. Prepare the state :math:`|\psi_k\rangle = U_d(\beta_k) U_c \cdots U_d(\beta_1) U_c|\psi_0\rangle`.
-2. Measure the expectation value :math:`A_k = \langle i[H_c, H_d]\rangle_{k \Delta t}`.
-3. Set :math:`\beta_{k+1} = -A_k`.
+1. Prepare the state :math:`|\psi_k\rangle = U_d(\beta_k) U_c \cdots U_d(\beta_1) U_c|\psi_0\rangle.`
+2. Measure the expectation value :math:`A_k = \langle i[H_c, H_d]\rangle_{k \Delta t}.`
+3. Set :math:`\beta_{k+1} = -A_k.`
 
-We repeat for all :math:`k` from :math:`1` to :math:`n`, where :math:`n` is a hyperparameter.
-At the final step we evaluate :math:`\langle H_c \rangle`,
-which gives us an approximation for the ground state of :math:`H_c`.
+We repeat for all :math:`k` from :math:`1` to :math:`n,` where :math:`n` is a hyperparameter.
+At the final step we evaluate :math:`\langle H_c \rangle,`
+which gives us an approximation for the ground state of :math:`H_c.`
 
 .. figure:: ../_static/demonstration_assets/falqon/falqon.png
      :align: center
@@ -118,7 +118,7 @@ import networkx as nx
 ######################################################################
 # In this demonstration, we will be using FALQON to solve the
 # `maximum clique (MaxClique) problem <https://en.wikipedia.org/wiki/Clique_problem>`__: finding the
-# largest complete subgraph of some graph :math:`G`. For example, the following graph's maximum
+# largest complete subgraph of some graph :math:`G.` For example, the following graph's maximum
 # clique is coloured in red:
 #
 # .. figure:: ../_static/demonstration_assets/falqon/max_clique.png
@@ -133,7 +133,7 @@ graph = nx.Graph(edges)
 nx.draw(graph, with_labels=True, node_color="#e377c2")
 
 ######################################################################
-# We must first encode this combinatorial problem into a cost Hamiltonian :math:`H_c`. This ends up being
+# We must first encode this combinatorial problem into a cost Hamiltonian :math:`H_c.` This ends up being
 #
 # .. math:: H_c = 3 \sum_{(i, j) \in E(\bar{G})} (Z_i Z_j - Z_i - Z_j) + \displaystyle\sum_{i \in V(G)} Z_i,
 #
@@ -141,10 +141,10 @@ nx.draw(graph, with_labels=True, node_color="#e377c2")
 # represent whether the vertex has been marked as part of the clique, as is the case for `most standard QAOA encoding
 # schemes <https://arxiv.org/abs/1709.03489>`__.
 # Note that :math:`\bar{G}` is the complement of :math:`G`: the graph formed by connecting all nodes that **do not** share
-# an edge in :math:`G`.
+# an edge in :math:`G.`
 #
-# In addition to defining :math:`H_c`, we also require a driver Hamiltonian :math:`H_d` which does not commute
-# with :math:`H_c`. The driver Hamiltonian's role is similar to that of the mixer Hamiltonian in QAOA.
+# In addition to defining :math:`H_c,` we also require a driver Hamiltonian :math:`H_d` which does not commute
+# with :math:`H_c.` The driver Hamiltonian's role is similar to that of the mixer Hamiltonian in QAOA.
 # To keep things simple, we choose a sum over Pauli :math:`X` operations on each qubit:
 #
 # .. math:: H_d = \displaystyle\sum_{i \in V(G)} X_i.
@@ -160,13 +160,13 @@ print("Driver Hamiltonian")
 print(driver_h)
 
 ######################################################################
-# One of the main ingredients in the FALQON algorithm is the operator :math:`i [H_d, H_c]`. In
+# One of the main ingredients in the FALQON algorithm is the operator :math:`i [H_d, H_c].` In
 # the case of MaxClique, we can write down the commutator :math:`[H_d, H_c]` explicitly:
 #
 # .. math:: [H_d, H_c] = 3 \displaystyle\sum_{k \in V(G)} \displaystyle\sum_{(i, j) \in E(\bar{G})} \big( [X_k, Z_i Z_j] - [X_k, Z_i]
 #           - [X_k, Z_j] \big) + 3 \displaystyle\sum_{i \in V(G)} \displaystyle\sum_{j \in V(G)} [X_i, Z_j].
 #
-# There are two distinct commutators that we must calculate, :math:`[X_k, Z_j]` and :math:`[X_k, Z_i Z_j]`.
+# There are two distinct commutators that we must calculate, :math:`[X_k, Z_j]` and :math:`[X_k, Z_i Z_j].`
 # This is straightforward as we know exactly what the
 # `commutators of the Pauli matrices <https://en.wikipedia.org/wiki/Pauli_matrices#Commutation_relations>`__ are.
 # We have:
@@ -207,9 +207,9 @@ print("MaxClique Commutator")
 print(build_hamiltonian(graph))
 
 ######################################################################
-# We can now build the FALQON algorithm. Our goal is to evolve some initial state under the Hamiltonian :math:`H`,
-# with our chosen :math:`\beta(t)`. We first define one layer of the Trotterized time evolution, which is of
-# the form :math:`U_d(\beta_k) U_c`. Note that we can use the :class:`~.pennylane.templates.ApproxTimeEvolution` template:
+# We can now build the FALQON algorithm. Our goal is to evolve some initial state under the Hamiltonian :math:`H,`
+# with our chosen :math:`\beta(t).` We first define one layer of the Trotterized time evolution, which is of
+# the form :math:`U_d(\beta_k) U_c.` Note that we can use the :class:`~.pennylane.templates.ApproxTimeEvolution` template:
 
 def falqon_layer(beta_k, cost_h, driver_h, delta_t):
     qml.ApproxTimeEvolution(cost_h, delta_t, 1)
@@ -217,7 +217,7 @@ def falqon_layer(beta_k, cost_h, driver_h, delta_t):
 
 ######################################################################
 # We then define a method which returns a FALQON ansatz corresponding to a particular cost Hamiltonian, driver
-# Hamiltonian, and :math:`\Delta t`. This involves multiple repetitions of the "FALQON layer" defined above. The
+# Hamiltonian, and :math:`\Delta t.` This involves multiple repetitions of the "FALQON layer" defined above. The
 # initial state of our circuit is an even superposition:
 
 def build_maxclique_ansatz(cost_h, driver_h, delta_t):
@@ -244,7 +244,7 @@ def expval_circuit(beta, measurement_h):
 
 ######################################################################
 # Finally, we implement the recursive process, where FALQON is able to determine the values
-# of :math:`\beta_k`, feeding back into itself as the number of layers increases. This is
+# of :math:`\beta_k,` feeding back into itself as the number of layers increases. This is
 # straightforward using the methods defined above:
 
 def max_clique_falqon(graph, n, beta_1, delta_t, dev):
@@ -269,8 +269,8 @@ def max_clique_falqon(graph, n, beta_1, delta_t, dev):
 #
 # We can now run FALQON for our MaxClique problem! It is important that we choose :math:`\Delta t` small enough
 # such that the approximate time evolution is close enough to the real time evolution, otherwise we the expectation
-# value of :math:`H_c` may not strictly decrease. For this demonstration, we set :math:`\Delta t = 0.03`,
-# :math:`n = 40`, and :math:`\beta_1 = 0`. These are comparable to the hyperparameters chosen in the original paper.
+# value of :math:`H_c` may not strictly decrease. For this demonstration, we set :math:`\Delta t = 0.03,`
+# :math:`n = 40,` and :math:`\beta_1 = 0.` These are comparable to the hyperparameters chosen in the original paper.
 
 n = 40
 beta_1 = 0.0
@@ -313,8 +313,8 @@ plt.ylabel("Measurement Probability")
 plt.show()
 
 ######################################################################
-# The bit string occurring with the highest probability is the state :math:`|28\rangle = |11100\rangle`.
-# This corresponds to nodes :math:`0`, :math:`1`, and :math:`2`, which is precisely the maximum clique.
+# The bit string occurring with the highest probability is the state :math:`|28\rangle = |11100\rangle.`
+# This corresponds to nodes :math:`0`, :math:`1`, and :math:`2,` which is precisely the maximum clique.
 # FALQON has solved the MaxClique problem 🤩.
 #
 
@@ -329,7 +329,7 @@ nx.draw(graph, with_labels=True, node_color=cmap)
 # After seeing how FALQON works, it is worth considering how well FALQON performs according to a set of benchmarking
 # criteria on a batch of graphs. We generate graphs randomly using the
 # `Erdos-Renyi model <https://en.wikipedia.org/wiki/Erd%C5%91s%E2%80%93R%C3%A9nyi_model>`__, where we start with
-# the complete graph on :math:`n` vertices and then keep each edge with probability :math:`p`. We then find the maximum
+# the complete graph on :math:`n` vertices and then keep each edge with probability :math:`p.` We then find the maximum
 # cliques on these graphs using the
 # `Bron-Kerbosch algorithm <https://en.wikipedia.org/wiki/Bron%E2%80%93Kerbosch_algorithm>`__. To benchmark FALQON,
 # the relative error in the estimated minimum energy
@@ -338,10 +338,10 @@ nx.draw(graph, with_labels=True, node_color=cmap)
 #
 # makes a good figure of merit.
 #
-# Final results for :math:`r_A`, along with :math:`\beta`, are plotted below,
+# Final results for :math:`r_A`, along with :math:`\beta,` are plotted below,
 # with the number of FALQON layers on the horizontal axis. We have averaged over :math:`50` random graphs per node
-# size, for sizes :math:`n = 6, 7, 8, 9`, with probability :math:`p = 0.1` of keeping an edge. Running FALQON for
-# :math:`40` steps, with :math:`\Delta t = 0.01`, produces:
+# size, for sizes :math:`n = 6, 7, 8, 9,` with probability :math:`p = 0.1` of keeping an edge. Running FALQON for
+# :math:`40` steps, with :math:`\Delta t = 0.01,` produces:
 #
 # .. figure:: ../_static/demonstration_assets/falqon/bench.png
 #     :align: center
@@ -349,7 +349,7 @@ nx.draw(graph, with_labels=True, node_color=cmap)
 #
 # The relative error decreases with the number of layers (as we expect from the construction) and graph size (suggesting the errors grows
 # more slowly than the minimum energy).
-# The exception is :math:`n = 9`, where the step size has become too large
+# The exception is :math:`n = 9,` where the step size has become too large
 # and the Trotter-Suzuki decomposition breaks down.
 # The rate of decrease also slows down. Even though the algorithm will converge to the ground state, it won't always get
 # there in a few time steps!
@@ -374,18 +374,18 @@ nx.draw(graph, with_labels=True, node_color=cmap)
 # The FALQON paper raises the idea of combining FALQON and QAOA to yield a new optimization algorithm that
 # leverages the benefits of both. In this final section of the tutorial, we will implement this procedure in PennyLane.
 #
-# Suppose we want to run a QAOA circuit of depth :math:`p`. Our ansatz will be of the form
+# Suppose we want to run a QAOA circuit of depth :math:`p.` Our ansatz will be of the form
 #
 # .. math:: U_{\text{QAOA}} = e^{-i \alpha_p H_m} e^{-i \gamma_p H_c} \cdots e^{-i \alpha_1 H_m} e^{-i \gamma_1 H_c},
 #
-# for sets of parameters :math:`\{\alpha_k\}` and :math:`\{\gamma_k\}`, which are optimized.
-# If we run FALQON for :math:`p` steps, setting :math:`H_d = H_m`, and use the same cost Hamiltonian, we will end up with
+# for sets of parameters :math:`\{\alpha_k\}` and :math:`\{\gamma_k\},` which are optimized.
+# If we run FALQON for :math:`p` steps, setting :math:`H_d = H_m,` and use the same cost Hamiltonian, we will end up with
 # the following ansatz:
 #
 # .. math:: U_{\text{FALQON}} = e^{-i \Delta t \beta_p H_m} e^{-i \Delta t H_c} \cdots e^{-i \Delta t \beta_1 H_m} e^{-i \Delta t H_c}.
 #
 # Thus, our strategy is to initialize our QAOA parameters using the :math:`\beta_k` values that FALQON yields.
-# More specifically, we set :math:`\alpha_k = \Delta t \beta_k` and :math:`\gamma_k = \Delta t`. We then optimize
+# More specifically, we set :math:`\alpha_k = \Delta t \beta_k` and :math:`\gamma_k = \Delta t.` We then optimize
 # over these parameters. The goal is that these parameters provide QAOA a good place in the parameter space to
 # begin its optimization.
 #
@@ -463,7 +463,7 @@ plt.show()
 
 ######################################################################
 # The state :math:`|112\rangle = |1110000\rangle` occurs with highest probability.
-# This corresponds to nodes :math:`0`, :math:`1`, and :math:`2` of the graph, which is
+# This corresponds to nodes :math:`0`, :math:`1,` and :math:`2` of the graph, which is
 # the maximum clique! We have successfully combined FALQON and QAOA to solve a combinatorial
 # optimization problem 🎉.
 #

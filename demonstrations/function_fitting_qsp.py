@@ -56,9 +56,9 @@ this operator, we can construct another operator which we call
 .. math::  \hat{U}_{sp} = \hat{R}_{z}(\phi_{0}) \prod_{k=1}^{d} \hat{W}(a) \hat{R}_{z}(\phi_{k}).
 
 The SPO is parameterized by a vector
-:math:`\vec{\phi} \in \mathbb{R}^{d+1}`, where :math:`d` is a free
+:math:`\vec{\phi} \in \mathbb{R}^{d+1},` where :math:`d` is a free
 parameter which represents the number of repeated applications of
-:math:`\hat{W}(a)`.
+:math:`\hat{W}(a).`
 
 The SPO :math:`\hat{U}_{sp}` alternates between applying the SRO :math:`\hat{W}(a)`
 and parameterized rotations around the z-axis. Let’s see what happens when we try to compute the
@@ -85,19 +85,19 @@ case where :math:`d = 2` and :math:`\vec{\phi} = (0, 0, 0)` :
 
 .. math::  \langle 0|\hat{U}_{sp}|0\rangle = 2a^{2} - 1
 
-Notice that this quantity is a polynomial in :math:`a`. Equivalently,
-suppose we wanted to create a map :math:`S: a \to 2a^2 - 1`.
+Notice that this quantity is a polynomial in :math:`a.` Equivalently,
+suppose we wanted to create a map :math:`S: a \to 2a^2 - 1.`
 This expectation value would give us the means to perform such a mapping.
 This may seem oddly specific at first, but it turns out that
 this process can be generalized for generating a mapping
-:math:`S: a \to \text{poly}(a)`. The following theorem shows us how:
+:math:`S: a \to \text{poly}(a).` The following theorem shows us how:
 
 Theorem: Quantum Signal Processing
 $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
-Given a vector :math:`\vec{\phi} \in \mathbb{R}^{d+1}`, there exist
+Given a vector :math:`\vec{\phi} \in \mathbb{R}^{d+1},` there exist
 complex polynomials :math:`P(a)` and :math:`Q(a)` such that the SPO,
-:math:`\hat{U}_{sp}`, can be expressed in matrix form as:
+:math:`\hat{U}_{sp},` can be expressed in matrix form as:
 
 .. math::  \hat{U}_{sp} = \hat{R}_{z}(\phi_{0}) \prod_{k=1}^{d} \hat{W}(a) \hat{R}_{z}(\phi_{k}),
 
@@ -105,18 +105,18 @@ complex polynomials :math:`P(a)` and :math:`Q(a)` such that the SPO,
 
    \hat{U}_{sp} = \begin{bmatrix} P(a) & iQ(a)\sqrt{1 - a^{2}} \\ iQ^{*}(a)\sqrt{1 - a^{2}} & P^{*}(a) \end{bmatrix},
 
-where :math:`a \in [-1, 1]` and the polynomials :math:`P(a)`,
+where :math:`a \in [-1, 1]` and the polynomials :math:`P(a),`
 :math:`Q(a)` satisfy the following constraints:
 
--  :math:`deg(P) \leq d \ ` and :math:`deg(Q) \leq d - 1`,
+-  :math:`deg(P) \leq d \ ` and :math:`deg(Q) \leq d - 1,`
 -  :math:`P` has parity :math:`d` mod 2 and :math:`Q` has parity,
    :math:`d - 1` mod 2
--  :math:`|P|^{2} + (1 - a^{2})|Q|^{2} = 1`.
+-  :math:`|P|^{2} + (1 - a^{2})|Q|^{2} = 1.`
 
 
-The third condition is actually quite restrictive because if we substitute :math:`a = \pm 1`,
-we get the result :math:`|P^{2}(\pm 1)| = 1`. Thus it restricts the polynomial to be
-pinned to :math:`\pm 1` at the end points of the domain, :math:`a = \pm 1`. This condition
+The third condition is actually quite restrictive because if we substitute :math:`a = \pm 1,`
+we get the result :math:`|P^{2}(\pm 1)| = 1.` Thus it restricts the polynomial to be
+pinned to :math:`\pm 1` at the end points of the domain, :math:`a = \pm 1.` This condition
 can be relaxed to :math:`|P^{2}(a)| \leq 1` by expressing the signal processing operator
 in the Hadamard basis, i.e., :math:`\langle + |\hat{U}_{sp}(\vec{\phi};a)|+\rangle`). This is equivalent to
 redefining :math:`P(a)` such that:
@@ -132,11 +132,11 @@ redefining :math:`P(a)` such that:
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # Now we put this theorem to the test! In this section we construct
-# the SRO :math:`\hat{W}(a)`, and then use PennyLane to define the SPO.
+# the SRO :math:`\hat{W}(a),` and then use PennyLane to define the SPO.
 # To test the theorem we will randomly generate parameters
 # :math:`\vec{\phi}` and plot the expectation value
 # :math:`\langle + |\hat{U}_{sp}(\vec{\phi};a)|+\rangle` for
-# :math:`a \in [-1, 1]`.
+# :math:`a \in [-1, 1].`
 #
 
 ######################################################################
@@ -203,12 +203,12 @@ def QSP_circ(phi, W):
 ######################################################################
 # Finally, we randomly generate the vector :math:`\vec{\phi}` and plot the
 # expectation value :math:`\langle +|\hat{U}_{sp}|+\rangle` as a function of
-# :math:`a`. In this case we choose :math:`d = 5`.
+# :math:`a`. In this case we choose :math:`d = 5.`
 # We expect to observe the following:
 #
 # -  Since :math:`d` is odd, we expect all of the
 #    polynomials we plot to have odd symmetry
-# -  Since :math:`d = 5`, we expect none of the polynomials will have
+# -  Since :math:`d = 5,` we expect none of the polynomials will have
 #    terms ~ :math:`O(a^6)` or higher
 # -  All of the polynomials are bounded by :math:`\pm1`
 #
@@ -257,7 +257,7 @@ plt.show()
 # holds true in both directions: If we have two polynomials :math:`P(a)`
 # and :math:`Q(a)` that satisfy the conditions of the theorem, then there
 # exists a :math:`\vec{\phi}` for which we can construct a signal
-# processing operator which maps :math:`a \to P(a)`.
+# processing operator which maps :math:`a \to P(a).`
 #
 # In this section we try to answer the question:
 #
@@ -270,9 +270,9 @@ plt.show()
 # <https://pennylane.ai/blog/2021/10/how-to-start-learning-quantum-machine-learning/>`__.
 # We begin by building a machine learning model using Pytorch. The ``__init__()``
 # method handles the
-# random initialization of our parameter vector :math:`\vec{\phi}`. The
+# random initialization of our parameter vector :math:`\vec{\phi}.` The
 # ``forward()`` method takes an array of signal rotation matrices
-# :math:`\hat{W}(a)` for varying :math:`a`, and produces the
+# :math:`\hat{W}(a)` for varying :math:`a,` and produces the
 # predicted :math:`y` values.
 #
 # Next we leverage the PennyLane function `qml.matrix()
@@ -280,7 +280,7 @@ plt.show()
 # which accepts our quantum function (it can also accept quantum tapes and
 # QNodes) and returns its unitary matrix representation. We are interested
 # in the real value of the top left entry, this corresponds to
-# :math:`P(a)`.
+# :math:`P(a).`
 #
 
 torch_pi = torch.Tensor([math.pi])
@@ -530,11 +530,11 @@ qsp_model_runner.plot_result()
 #
 # In this demo, we explored the Quantum Signal Processing theorem, which
 # is a method to perform polynomial transformations on the entries of the
-# SRO :math:`\hat{W}(a)`. This polynomial transformation
+# SRO :math:`\hat{W}(a).` This polynomial transformation
 # arises from the repeated application of :math:`\hat{W}(a)` and the
-# parameterized Z-axis rotations :math:`e^{i \phi \hat{Z}}`. Note, the
+# parameterized Z-axis rotations :math:`e^{i \phi \hat{Z}}.` Note, the
 # SRO is itself a transformation, in this case a rotation around the
-# X-axis by :math:`\theta = -2 \cos^{-1}(a)`, which rotates our basis.
+# X-axis by :math:`\theta = -2 \cos^{-1}(a),` which rotates our basis.
 # Thus the underlying principal of quantum signal processing is that we
 # can generate polynomial transformations through parameterized rotations
 # along a principal axis followed by change of basis transformations

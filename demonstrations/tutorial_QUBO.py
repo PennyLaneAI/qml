@@ -186,7 +186,7 @@ print(f"The minimum cost is  {min_cost}")
 
 ######################################################################
 # But just with this function, we cannot solve the problem. We also need the weight restriction. Based
-# on our variables, the weight list (items_weight = {“⚽️”: :math:`3`, “💻”: :math:`11`, “📸”: :math:`14`, “📚”: :math:`19`, “🎸”: :math:`5`}), and
+# on our variables, the weight list (items_weight = {“⚽️”: :math:`3`, “💻”: :math:`11`, “📸”: :math:`14`, “📚”: :math:`19,` “🎸”: :math:`5`}), and
 # the knapsack maximum weight (maximum_weight :math:`W = 26`), we can construct our constraint
 #
 # .. math:: 3x_0 + 11x_1 + 14x_2 + 19x_3 + 5x_4 \le 26
@@ -207,19 +207,19 @@ print(f"The minimum cost is  {min_cost}")
 #
 # .. math:: 3x_0 + 11x_1 + 14x_2 + 19x_3 + 5x_4 + S = 26\tag{4}
 #
-# where :math:`0 \le S \le 26`. But let’s take this slowly because we can get lost here, so let’s see
+# where :math:`0 \le S \le 26.` But let’s take this slowly because we can get lost here, so let’s see
 # this with some examples:
 #
-# -  Imagine this case. No item is selected {:math:`x_0`: :math:`0`, :math:`x_1`: :math:`0`, :math:`x_2`: :math:`0`,
-#    :math:`x_3`: :math:`0`, :math:`x_4`: :math:`0`}, so the overall weight is zero (a valid solution) and the equality
+# -  Imagine this case. No item is selected {:math:`x_0`: :math:`0`, :math:`x_1`: :math:`0`, :math:`x_2`: :math:`0,`
+#    :math:`x_3`: :math:`0,` :math:`x_4`: :math:`0`}, so the overall weight is zero (a valid solution) and the equality
 #    constraint Eq.(4) must be fulfilled. So we select our slack variable to be 26.
 #
-# -  Now, what if we bring ⚽️ and 📚 {:math:`x_0`: :math:`1`, :math:`x_1`: :math:`0`, :math:`x_2`: :math:`0`, :math:`x_3`: :math:`1`,
+# -  Now, what if we bring ⚽️ and 📚 {:math:`x_0`: :math:`1`, :math:`x_1`: :math:`0`, :math:`x_2`: :math:`0`, :math:`x_3`: :math:`1,`
 #    :math:`x_4`:0}. In this case, the overall weight is :math:`3 + 19 = 22` (a valid solution) and the equality
-#    constraint is fulfilled if :math:`22 + S = 26 \rightarrow S = 4`.
+#    constraint is fulfilled if :math:`22 + S = 26 \rightarrow S = 4.`
 #
-# -  Finally, what if we try to bring all the items {:math:`x_0`: :math:`1`, :math:`x_1`: :math:`1`, :math:`x_2`: :math:`1`,
-#    :math:`x_3`: :math:`1`, :math:`x_4`: :math:`1`}, the total weight, in this case, is :math:`3+11+14+19+5=52` (not a valid
+# -  Finally, what if we try to bring all the items {:math:`x_0`: :math:`1`, :math:`x_1`: :math:`1`, :math:`x_2`: :math:`1,`
+#    :math:`x_3`: :math:`1,` :math:`x_4`: :math:`1`}, the total weight, in this case, is :math:`3+11+14+19+5=52` (not a valid
 #    solution), to fulfill the constraint, we need :math:`52 + S = 26 \rightarrow S=-26` but the slack
 #    variable is in the range :math:`(0,26)` in our definition, so, in this case, there is valid solution for :math:`S.`
 #
@@ -228,19 +228,19 @@ print(f"The minimum cost is  {min_cost}")
 #
 # .. math:: S = \sum_{k=0}^{N-1} 2^k s_k,
 #
-# where :math:`N = \lfloor\log_2(\max S)\rfloor + 1`. In our case
-# :math:`N = \lfloor\log_2(26)\rfloor + 1 = 5`. We need 5 binary variables to represent the range
+# where :math:`N = \lfloor\log_2(\max S)\rfloor + 1.` In our case
+# :math:`N = \lfloor\log_2(26)\rfloor + 1 = 5.` We need 5 binary variables to represent the range
 # of our :math:`S` variable.
 #
 # .. math:: S = 2^0 s_0 + 2^1 s_1 + 2^2 s_2 + 2^3 s_3 + 2^4 s_4
 #
-# To compact our equation later, let’s rename our slack variables by :math:`s_0=x_5`, :math:`s_1=x_6`,
-# :math:`s_3=x_7`, :math:`s_4=x_8`, and :math:`s_5=x_9`. Then we have
+# To compact our equation later, let’s rename our slack variables by :math:`s_0=x_5`, :math:`s_1=x_6,`
+# :math:`s_3=x_7`, :math:`s_4=x_8,` and :math:`s_5=x_9.` Then we have
 #
 # .. math::  S = 1 x_5 + 2 x_6 + 4 x_7 + 8 x_8 + 16 x_9.
 #
 # For example, if we need to represent the second case above (⚽️, 📚),
-# :math:`S = 4 \rightarrow\{x_5:0, x_6:0,x_7:1,x_8:0, x_9:0\}`.
+# :math:`S = 4 \rightarrow\{x_5:0, x_6:0,x_7:1,x_8:0, x_9:0\}.`
 #
 # We are almost done in our quest to represent our problem in such a way that our quantum computer can
 # manage it. The last step is to add the penalty term, a usual choice for it is to use a
@@ -274,7 +274,7 @@ print(f"The minimum cost is  {min_cost}")
 # .. math::                                   = 2\sum_i \sum_{j>i} w_i w_j x_i x_j - \sum_i w_i(2C - w_i) x_i + C^2 \tag{8}
 #
 # where :math:`w_i` represent the weights for the items and :math:`2^k` for the slack variables. We
-# can combine equations :math:`(7)` and :math:`(8)` to get the terms of the matrix :math:`Q`. So we end up with
+# can combine equations :math:`(7)` and :math:`(8)` to get the terms of the matrix :math:`Q.` So we end up with
 #
 # .. math:: Q_{ij} = 2\lambda w_i w_j,\tag{9}
 #
@@ -316,7 +316,7 @@ print(f"Cost:{cost}")
 #
 # We use QAOA `[1] <https://arxiv.org/pdf/1411.4028.pdf>`__ to find the solution to our Knapsack
 # Problem (`read this demo <https://pennylane.ai/qml/demos/tutorial_qaoa_intro>`__ for a more detailed explanation
-# of the QAOA algorithm). In this case, the cost Hamiltonian, :math:`H_c(Z)`, obtained from the QUBO
+# of the QAOA algorithm). In this case, the cost Hamiltonian, :math:`H_c(Z),` obtained from the QUBO
 # formulation is translated into a parametric unitary gate given by
 #
 # .. math::
@@ -395,8 +395,8 @@ def samples_dict(samples, n_items):
 # start in the ground state :math:`|+\rangle ^{\otimes n}` of the mixer Hamiltonian :math:`X` and move
 # to the ground state of the cost Hamiltonian :math:`H_c` slowly enough to always be close to the
 # ground state of the Hamiltonian. How slow? In our case the rate is determined by the number of layers
-# :math:`p`. We can adopt this principle and initialize the :math:`\beta_i` and :math:`\gamma_i` in
-# this way, moving :math:`\beta_i` from :math:`1` to :math:`0` and :math:`\gamma_i` from :math:`0` to :math:`1`. With this approach,
+# :math:`p.` We can adopt this principle and initialize the :math:`\beta_i` and :math:`\gamma_i` in
+# this way, moving :math:`\beta_i` from :math:`1` to :math:`0` and :math:`\gamma_i` from :math:`0` to :math:`1.` With this approach,
 # we can skip the optimization part in QAOA.
 #
 
@@ -422,12 +422,12 @@ fig.show()
 #
 # I know this is a lot of information so far, but we are almost done! The last step to represent the
 # QUBO problem on QPUs is to change the :math:`x_i\in \{0, 1\}` variables to spin variables
-# :math:`z_i \in \{1, -1\}` via the transformation :math:`x_i = (1 - z_i) / 2`. We also want to set
+# :math:`z_i \in \{1, -1\}` via the transformation :math:`x_i = (1 - z_i) / 2.` We also want to set
 # the penalty term, so a value of :math:`\lambda = 2` will be enough for our problem. In
 # practice, we choose a value for :math:`\lambda` and, if after the optimization the solution does not
 # fulfill the constraints, we try again using a larger value. On the other hand, if the solution is suspected
 # to be a valid but suboptimal, then we will reduce :math:`\lambda` a little. Eq.(3) can be
-# represented by an Ising Hamiltonian with quadratic and linear terms plus a constant :math:`O`, namely
+# represented by an Ising Hamiltonian with quadratic and linear terms plus a constant :math:`O,` namely
 #
 # .. math::
 #
@@ -517,7 +517,7 @@ print(
 # :math:`2^5 = 32` options. Randomly guessing the solution will give us on average :math:`5000/32 \approx 156`
 # optimal solutions. Why don’t we get good results using QAOA? Maybe we can blame the algorithm
 # or we look deeper— it turns out our encoding method is really bad. Randomly guessing using the whole set of
-# variables (:math:`5` items + :math:`5` slack) :math:`2^{10} = 1024` options, :math:`5000/1024 \approx 5`. So in fact we have a
+# variables (:math:`5` items + :math:`5` slack) :math:`2^{10} = 1024` options, :math:`5000/1024 \approx 5.` So in fact we have a
 # tiny improvement.
 #
 

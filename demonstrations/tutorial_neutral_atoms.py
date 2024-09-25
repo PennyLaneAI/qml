@@ -192,7 +192,7 @@ the work that still needs to be done to scale this technology even further.
 # let's figure out how all the electrons end up in the same energy state. It turns out that Rubidium-85 is
 # the ideal atom not only because it has one valence electron, but also because it has a **closed optical loop.**
 #
-# Rubidium-85 has two ground states :math:`\vert 0\rangle` and :math:`\vert \bar{0}\rangle`, which are excited
+# Rubidium-85 has two ground states :math:`\vert 0\rangle` and :math:`\vert \bar{0}\rangle,` which are excited
 # using the laser to two excited states :math:`\vert 1\rangle` and :math:`\vert \bar{1}\rangle` respectively. However,
 # both of these excited states will decay to :math:`\vert 0\rangle` with high probability. This means that no
 # matter what ground state the electrons occupied initially, they will most likely be driven to the same ground state
@@ -225,8 +225,8 @@ the work that still needs to be done to scale this technology even further.
 # that laser cooling is not deterministic, which means that some atoms may not be in the ground state. We would like
 # to exclude those from our initial state. Happily, there is a simple solution that addresses these two problems.
 #
-# To verify that a neutral atom is in the fiducial state :math:`\lvert 0 \rangle`, we shine a photon on it that stimulates
-# the transition between this state to some short-lived excited state :math:`\lvert h \rangle`. Electrons excited in this way will
+# To verify that a neutral atom is in the fiducial state :math:`\lvert 0 \rangle,` we shine a photon on it that stimulates
+# the transition between this state to some short-lived excited state :math:`\lvert h \rangle.` Electrons excited in this way will
 # promptly decay to the state :math:`\lvert 0 \rangle` again, emitting light. The electrons that are in some state different than
 # :math:`\lvert 0 \rangle` never get excited, since the photon does not have the right energy. And, of course, nothing will happen
 # in traps where there is no atom. The net result is that atoms in the ground state will shine, while others won't. This
@@ -425,7 +425,7 @@ print(
 #
 #    \frac{1}{2\pi}\int_{0}^{T}\Omega(t)dt = \left(\frac{1-\alpha}{2}\right)A\times T = 0.42*0.2*A.
 #
-# For example, for :math:`\phi = 0`, the evolved state is of the form :math:`\vert\psi(t)\rangle = e^{-i\theta \sigma^x },`
+# For example, for :math:`\phi = 0,` the evolved state is of the form :math:`\vert\psi(t)\rangle = e^{-i\theta \sigma^x },`
 # with :math:`\theta = \int_{0}^{T}\Omega(t).` This is none other than the rotation gate :math:`RX(\theta).` Therefore, if
 # we want to implement a rotation by an angle :math:`\theta,` it suffices to use a Blackman pulse with peak amplitude
 #
@@ -511,10 +511,10 @@ print(
 #
 #    H = \sum_{k=1}^{N}(\cos(\phi)\sigma_{k}^x-\sin(\phi)\sigma_{k}^y) - \frac{1}{2}\delta(t)\sum_{k=1}^{N}(\mathbb{I}_k -\sigma_{k}^z)+ \sum_{i<j}^{N}\frac{C_6}{R_{ij}^6}\hat{n}_{i}\hat{n}_j.
 #
-# Note that the first two terms are the same as :math:`H_d`, but bear in mind that the two-level system we're working with in
+# Note that the first two terms are the same as :math:`H_d,` but bear in mind that the two-level system we're working with in
 # this case is the one spanned by the states :math:`\vert 0\rangle` and :math:`\vert r\rangle,` as opposed to :math:`\vert 0\rangle`
 # and :math:`\vert 1\rangle.` Let us **focus only on two atoms** and create the interaction Hamiltonian in terms of the distance
-# between the two atoms and the coupling strength :math:`C_6`.
+# between the two atoms and the coupling strength :math:`C_6.`
 # This Hamiltonian is also built into Pennylane, in the :func:`pennylane.pulse.rydberg_interaction` function.
 
 
@@ -656,9 +656,9 @@ print(
 )
 ##############################################################################
 #
-# The effect is to multiply the two-qubit state by :math:`-1`, which doesn't happen without the Rydberg blockade! Indeed, when the atoms
+# The effect is to multiply the two-qubit state by :math:`-1,` which doesn't happen without the Rydberg blockade! Indeed, when the atoms
 # are far away from each other, each individual atomic state gets multiplied by :math:`-1.` Therefore, there would be
-# no total phase change since the two-atom state gains a multiplier of :math:`(-1)\times(-1)=1`. It turns out that the Rydberg
+# no total phase change since the two-atom state gains a multiplier of :math:`(-1)\times(-1)=1.` It turns out that the Rydberg
 # blockade is only important when the initial state is :math:`\vert 00 \rangle.`
 #
 # .. figure:: ../_static/demonstration_assets/neutral_atoms/control_z00.png

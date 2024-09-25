@@ -187,8 +187,8 @@ def multiclass_svm_loss(q_circuits, all_params, feature_vecs, true_labels):
 # ~~~~~~~~~~~~~~~~~~~~~~~
 #
 # Next, we use the learned models to classify our samples. For a given sample,
-# compute the score given to it by classifier :math:`i`, which quantifies how likely it is that
-# this sample belongs to class :math:`i`. For each sample, return the class with the highest score.
+# compute the score given to it by classifier :math:`i,` which quantifies how likely it is that
+# this sample belongs to class :math:`i.` For each sample, return the class with the highest score.
 
 
 def classify(q_circuits, all_params, feature_vecs, labels):

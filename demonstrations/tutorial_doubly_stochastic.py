@@ -50,7 +50,7 @@ In general, stochastic gradient descent is preferred over standard gradient
 descent for several reasons:
 
 1. Samples of the gradient estimator :math:`g^{(t)}(\theta)` can typically
-   be computed much more efficiently than :math:`\mathcal{L}(\theta)`,
+   be computed much more efficiently than :math:`\mathcal{L}(\theta),`
 
 2. Stochasticity can help to avoid local minima and saddle points,
 
@@ -62,7 +62,7 @@ values. For example, consider the expectation values
 
 .. math:: \langle A_i \rangle = \langle 0 | U(\theta)^\dagger A_i U(\theta) | 0\rangle
 
-for a set of observables :math:`\{A_i\}`, and loss function
+for a set of observables :math:`\{A_i\},` and loss function
 
 .. math:: \mathcal{L}(\theta, \langle A_1 \rangle, \dots, \langle A_M \rangle).
 
@@ -117,7 +117,7 @@ of shots is 1!
 # the variational quantum eigensolver (VQE) algorithm.
 #
 # Let's use the ``lightning.qubit`` simulator for both the analytic gradient,
-# as well as the estimated gradient using number of shots :math:`N\in\{1, 100\}`.
+# as well as the estimated gradient using number of shots :math:`N\in\{1, 100\}.`
 
 import pennylane as qml
 import numpy as np

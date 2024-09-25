@@ -23,7 +23,7 @@ The state of a quantum system in the `second quantized <https://en.wikipedia.org
 formalism is typically represented in the occupation-number basis. For fermions, the occupation
 number is either :math:`0` or :math:`1` as a result of the Pauli exclusion principle. The
 occupation-number basis states can be represented by a vector that is constructed by
-applying the fermionic creation operators, :math:`a^\dagger`, to a vacuum state:
+applying the fermionic creation operators, :math:`a^\dagger,` to a vacuum state:
 
 .. math::
 
@@ -79,7 +79,7 @@ This representation is called the **Jordan-Wigner** mapping. Let's now look at a
 using PennyLane. We map a simple fermionic operator to a qubit operator
 using the Jordan-Wigner mapping. First, we define our
 `fermionic operator <https://pennylane.ai/qml/demos/tutorial_fermionic_operators>`__,
-:math:`a_{5}^{\dagger}`, which creates an electron in the fifth orbital. One
+:math:`a_{5}^{\dagger},` which creates an electron in the fifth orbital. One
 way to do this in PennyLane is to use :func:`~.pennylane.fermi.from_string`. We
 then map the operator using :func:`~.pennylane.fermi.jordan_wigner`.
 """
@@ -125,7 +125,7 @@ print("State in parity basis:\n", state_parity)
 # and whether we need to act with a creation or annihilation operator. Similarly, the creation or
 # annihilation of a particle in qubit :math:`j` changes the parity of all qubits following it.
 # As a result, the operator that is equivalent to creation and annihilation operators in
-# the parity basis is a two-qubit operator acting on qubits :math:`j` and :math:`j − 1`, and
+# the parity basis is a two-qubit operator acting on qubits :math:`j` and :math:`j − 1,` and
 # an update operator which updates the parity of all qubits with index larger than j:
 #
 # .. math::
@@ -162,7 +162,7 @@ taper_op = qml.taper(pauli_pr, generators, paulixops, paulix_sector)
 qml.simplify(taper_op)
 
 ###############################################################################
-# Note that the tapered operator doesn't include qubit :math:`8` and :math:`9`.
+# Note that the tapered operator doesn't include qubit :math:`8` and :math:`9.`
 #
 # Bravyi-Kitaev Mapping
 # ---------------------

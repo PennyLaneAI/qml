@@ -18,7 +18,7 @@ Amplitude Amplification
 
 Our goal is to prepare an unknown state :math:`|\phi\rangle` knowing certain property of the state.
 A first approach is to design a quantum circuit described by a unitary :math:`U` that generates an initial state :math:`|\Psi\rangle= U|0\rangle`
-that has a non-zero overlap with the target state :math:`|\phi\rangle`.
+that has a non-zero overlap with the target state :math:`|\phi\rangle.`
 Any state can be represented in the computational basis as:
 
 .. math::
@@ -30,7 +30,7 @@ But we can find better representations 😈. One choice is to make :math:`|\phi\
     |\Psi\rangle = \alpha |\phi\rangle + \beta |\phi^{\perp}\rangle,
 
 where  :math:`|\phi^{\perp}\rangle` is some state orthogonal
-to :math:`|\phi\rangle`, and :math:`\alpha, \beta \in \mathbb{R}`. This allows us to represent 
+to :math:`|\phi\rangle,` and :math:`\alpha, \beta \in \mathbb{R}.` This allows us to represent 
 the initial state in a two-dimensional space --- a crucial advantage that we will exploit repeatedly. Notice that this representation is even simpler than a Bloch
 sphere since the amplitudes are real numbers, so we can visualize all operations inside a circle, as shown in the image below:
 
@@ -40,21 +40,21 @@ sphere since the amplitudes are real numbers, so we can visualize all operations
     :target: javascript:void(0)
 
 
-The two axes correspond to the states :math:`|\phi\rangle` and :math:`|\phi^{\perp}\rangle`. In the figure we also show the initial state :math:`|\Psi\rangle`, which
+The two axes correspond to the states :math:`|\phi\rangle` and :math:`|\phi^{\perp}\rangle.` In the figure we also show the initial state :math:`|\Psi\rangle,` which
 forms an angle of :math:`\theta=\arcsin(\alpha)`  with the x-axis.
 
 Our aim is to **amplify** the amplitude :math:`\alpha` to get closer
-to :math:`|\phi\rangle`, hence the name Amplitude Amplification [#ampamp]_ 😏. We will use this geometric picture to identify a sequence of operators that moves
+to :math:`|\phi\rangle,` hence the name Amplitude Amplification [#ampamp]_ 😏. We will use this geometric picture to identify a sequence of operators that moves
 the initial vector :math:`|\Psi\rangle` as close to :math:`|\phi\rangle` as possible.
 
 The algorithm
 ~~~~~~~~~~~~~~~
 
-To obtain the state :math:`|\phi\rangle`, we could just rotate the initial state counterclockwise
-by an angle :math:`\pi/2 -\theta`.  However, we don't explicitly know :math:`|\phi\rangle`,
+To obtain the state :math:`|\phi\rangle,` we could just rotate the initial state counterclockwise
+by an angle :math:`\pi/2 -\theta.`  However, we don't explicitly know :math:`|\phi\rangle,`
 so it's unclear how this could be done.  This is where a great idea is born: **what if instead of rotations we think of reflections?**
 
-The main insight of the Amp Amp algorithm is that there is a sequence of **two reflections** that allow us to effectively perform a rotation towards the target state. The first is the reflection with respect to :math:`|\phi^{\perp}\rangle` and the second one is the reflection with respect to :math:`|\Psi\rangle`.
+The main insight of the Amp Amp algorithm is that there is a sequence of **two reflections** that allow us to effectively perform a rotation towards the target state. The first is the reflection with respect to :math:`|\phi^{\perp}\rangle` and the second one is the reflection with respect to :math:`|\Psi\rangle.`
 
 Let's go step by step. First we apply the reflection around :math:`|\phi^{\perp}\rangle`:
 
@@ -64,7 +64,7 @@ Let's go step by step. First we apply the reflection around :math:`|\phi^{\perp}
     :target: javascript:void(0)
 
 
-This reflection  may seem challenging to implement since we do not explicitly know :math:`|\phi^{\perp}\rangle`. However, the operator performing the reflection is well-defined:
+This reflection  may seem challenging to implement since we do not explicitly know :math:`|\phi^{\perp}\rangle.` However, the operator performing the reflection is well-defined:
 
 .. math::
      \begin{cases}
@@ -80,31 +80,31 @@ if the given state meets the known property, we change its sign. This will becom
 
 After applying the first reflection we are moving away from :math:`|\phi\rangle` --- why do that?
 Well, sometimes it's necessary to take a step backward to take two steps
-forward, and that is exactly what we will do. For this purpose, we use a second reflection with respect to :math:`|\Psi\rangle`. This is easier to build since
-we know the operator :math:`U` that generates :math:`|\Psi\rangle`.
+forward, and that is exactly what we will do. For this purpose, we use a second reflection with respect to :math:`|\Psi\rangle.` This is easier to build since
+we know the operator :math:`U` that generates :math:`|\Psi\rangle.`
 
 .. figure:: ../_static/demonstration_assets/intro_amplitude_amplification/ampamp3.jpeg
     :align: center
     :width: 60%
     :target: javascript:void(0)
 
-    Reflection with respect to :math:`|\Psi\rangle`.
+    Reflection with respect to :math:`|\Psi\rangle.`
 
 
 Together, these two reflections are equivalent to rotating the state by :math:`2\theta` degrees from its original position,
 where :math:`\theta` is the angle that defines the initial state. To amplify the amplitude and
-approach the target state, we perform this sequence of rotations multiple times, i.e. :math:`\dots R_{\Psi}R_{\phi^{\perp}}R_{\Psi}R_{\phi^{\perp}}`. More precisely, we repeat them :math:`k` times, with :math:`k` given by:
+approach the target state, we perform this sequence of rotations multiple times, i.e. :math:`\dots R_{\Psi}R_{\phi^{\perp}}R_{\Psi}R_{\phi^{\perp}}.` More precisely, we repeat them :math:`k` times, with :math:`k` given by:
 
 .. math::
     k = \frac{\pi}{4 \theta}-\frac{1}{2}.
 
-This expression is derived by recognizing that the angle of the resulting state after :math:`k` iterations is :math:`(2k + 1)\theta`,
+This expression is derived by recognizing that the angle of the resulting state after :math:`k` iterations is :math:`(2k + 1)\theta,`
 and we aim for this value to be equal to :math:`\frac{\pi}{2}` radians (i.e. :math:`90º`).
 
 As we will see below, Amp Amp can be applied to unstructured dataset searching problems. Let's suppose that in a set
-of N elements we are looking for a single one, and we begin with an equal superposition state such that :math:`\alpha=\frac{1}{\sqrt{N}}`.
-The number of iterations required in this case is :math:`k \sim \frac{\pi \sqrt{N}}{4}`, making the complexity
-of the algorithm :math:`\mathcal{O}(\sqrt{N})`. This provides a quadratic speedup compared to the
+of N elements we are looking for a single one, and we begin with an equal superposition state such that :math:`\alpha=\frac{1}{\sqrt{N}}.`
+The number of iterations required in this case is :math:`k \sim \frac{\pi \sqrt{N}}{4},` making the complexity
+of the algorithm :math:`\mathcal{O}(\sqrt{N}).` This provides a quadratic speedup compared to the
 classical :math:`\mathcal{O}(N)` brute-force approach.
 
 Amplitude Amplification in PennyLane
@@ -112,7 +112,7 @@ Amplitude Amplification in PennyLane
 
 Let's take a look at a practical example using PennyLane: solving the `zero-sum problem <https://en.wikipedia.org/wiki/Zero-sum_problem>`_.
 In this task, we are given a list of :math:`n` integers and our goal is to find all subsets of numbers
-whose sum is equal :math:`0`. In this example, we use the following set of integers:
+whose sum is equal :math:`0.` In this example, we use the following set of integers:
 """
 
 
@@ -136,7 +136,7 @@ n = len(values)
 #   |\Psi\rangle = \frac{1}{\sqrt{2^n}}\sum_{i=0}^{2^n-1}|i\rangle.
 #
 # This is a uniform superposition of all possible subsets so solutions are guaranteed to have non-zero amplitudes
-# in :math:`|\Psi\rangle`. Let's generate the state and visualize it.
+# in :math:`|\Psi\rangle.` Let's generate the state and visualize it.
 
 import pennylane as qml
 import matplotlib.pyplot as plt
@@ -191,8 +191,8 @@ def Sum(wires_subset, wires_sum):
     qml.adjoint(qml.QFT)(wires=wires_sum)
 
 ##############################################################################
-# To create the oracle  that performs the reflection around :math:`|\phi^{\perp}\rangle`,  we apply the :math:`\text{Sum}` operator to the
-# state and then flip the sign of those states whose sum is :math:`0`.
+# To create the oracle  that performs the reflection around :math:`|\phi^{\perp}\rangle,`  we apply the :math:`\text{Sum}` operator to the
+# state and then flip the sign of those states whose sum is :math:`0.`
 # This allows us to mark the searched elements. Then we apply the inverse of the sum to clean the auxiliary qubits.
 #
 
@@ -252,12 +252,12 @@ plt.show()
 
 ##############################################################################
 # We have now amplified the amplitude of all the states that represent a solution to our problem.
-# The four peaks are obtained in :math:`0`, :math:`27`, :math:`35` and :math:`61`, whose binary
-# representation corresponds with :math:`|000000\rangle`, :math:`|011011\rangle`, :math:`|100011\rangle` and :math:`|111101\rangle` respectively.
-# These states satisfy the property that the sum of the subset is :math:`0`.
+# The four peaks are obtained in :math:`0`, :math:`27`, :math:`35` and :math:`61,` whose binary
+# representation corresponds with :math:`|000000\rangle`, :math:`|011011\rangle,` :math:`|100011\rangle` and :math:`|111101\rangle` respectively.
+# These states satisfy the property that the sum of the subset is :math:`0.`
 #
 # Let's use the :class:`~.pennylane.AmplitudeAmplification` to code the problem in a more compact way.
-# This template expects as input, the unitary :math:`U` that prepares :math:`|\Psi\rangle`, the reflection with respect
+# This template expects as input, the unitary :math:`U` that prepares :math:`|\Psi\rangle,` the reflection with respect
 # to :math:`|\phi^{\perp}\rangle` (i.e. the oracle), and the number of iterations.
 # We increase the number of iterations in order to study the evolution of the initial state:
 

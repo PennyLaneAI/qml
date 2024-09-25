@@ -46,7 +46,7 @@ associated with the model:
 Here, we consider the family of Hamiltonians where all the couplings :math:`J_{ij}`
 are sampled uniformly from [0, 2]. We build a coupling matrix :math:`J` by providing
 the number of rows :math:`N_r` and columns :math:`N_c` present in the square lattice.
-The dimensions of this matrix are :math:`N_s \times N_s`, where :math:`N_s = N_r \times N_c`
+The dimensions of this matrix are :math:`N_s \times N_s,` where :math:`N_s = N_r \times N_c`
 is the total number of spin particles present in the model.
 
 
@@ -141,7 +141,7 @@ print(f"Hamiltonian =\n{Hamiltonian(J_mat)}")
 
 ######################################################################
 # For the Heisenberg model, a property of interest is usually the two-body
-# correlation function :math:`C_{ij}`, which for a pair of spins :math:`i`
+# correlation function :math:`C_{ij},` which for a pair of spins :math:`i`
 # and :math:`j` is defined as the following operator:
 #
 # .. math::  \hat{C}_{ij} = \frac{1}{3} (X_i X_j + Y_iY_j + Z_iZ_j).
@@ -166,7 +166,7 @@ def corr_function(i, j):
 
 ######################################################################
 # Hence, to build :math:`C` for the model, we need to calculate its
-# ground state :math:`|\psi_{0}\rangle`. We do this by diagonalizing
+# ground state :math:`|\psi_{0}\rangle.` We do this by diagonalizing
 # the Hamiltonian for the model. Then, we obtain the eigenvector corresponding
 # to the smallest eigenvalue.
 #
@@ -195,8 +195,8 @@ circuit_exact = qml.QNode(circuit, dev_exact)
 
 ######################################################################
 # Finally, we execute this circuit to obtain the exact correlation matrix
-# :math:`C`. We compute the correlation operators :math:`\hat{C}_{ij}` and
-# their expectation values with respect to the ground state :math:`|\psi_0\rangle`.
+# :math:`C.` We compute the correlation operators :math:`\hat{C}_{ij}` and
+# their expectation values with respect to the ground state :math:`|\psi_0\rangle.`
 #
 
 coups = list(it.product(range(num_qubits), repeat=2))
@@ -250,10 +250,10 @@ plt.show()
 ######################################################################
 # Now that we have built the Heisenberg model, the next step is to construct
 # a :doc:`classical shadow <tutorial_classical_shadows>` representation for its ground state. To construct an
-# approximate classical representation of an :math:`n`-qubit quantum state :math:`\rho`,
+# approximate classical representation of an :math:`n`-qubit quantum state :math:`\rho,`
 # we perform randomized single-qubit measurements on :math:`T`-copies of
-# :math:`\rho`. Each measurement is chosen randomly among the Pauli bases
-# :math:`X`, :math:`Y`, or :math:`Z` to yield random :math:`n` pure product
+# :math:`\rho.` Each measurement is chosen randomly among the Pauli bases
+# :math:`X`, :math:`Y,` or :math:`Z` to yield random :math:`n` pure product
 # states :math:`|s_i\rangle` for each copy:
 #
 # .. math:: |s_{i}^{(t)}\rangle \in \{|0\rangle, |1\rangle, |+\rangle, |-\rangle, |i+\rangle, |i-\rangle\}.
@@ -261,8 +261,8 @@ plt.show()
 # .. math::  S_T(\rho) = \big\{|s_{i}^{(t)}\rangle: i\in\{1,\ldots, n\},\ t\in\{1,\ldots, T\} \big\}.
 #
 # Each of the :math:`|s_i^{(t)}\rangle` provides us with a snapshot of the
-# state :math:`\rho`, and the :math:`nT` measurements yield the complete
-# set :math:`S_{T}`, which requires just :math:`3nT` bits to be stored
+# state :math:`\rho,` and the :math:`nT` measurements yield the complete
+# set :math:`S_{T},` which requires just :math:`3nT` bits to be stored
 # in classical memory. This is discussed in further detail in our previous
 # demo about :doc:`classical shadows <tutorial_classical_shadows>`.
 #
@@ -371,13 +371,13 @@ def shadow_state_reconst(shadow):
 
 
 ######################################################################
-# To see how well the reconstruction works for different values of :math:`T`,
+# To see how well the reconstruction works for different values of :math:`T,`
 # we look at the `fidelity <https://en.wikipedia.org/wiki/Fidelity_of_quantum_states>`_
 # of the actual quantum state with respect to the reconstructed quantum state from
 # the classical shadow with :math:`T` copies. On average, as the number of copies
 # :math:`T` is increased, the reconstruction becomes more effective with average
 # higher fidelity values (orange) and lower variance (blue). Eventually, in the
-# limit :math:`T\rightarrow\infty`, the reconstruction will be exact.
+# limit :math:`T\rightarrow\infty,` the reconstruction will be exact.
 #
 # .. figure:: /_static/demonstration_assets/ml_classical_shadows/fidel_snapshot.png
 #    :align: center
@@ -391,9 +391,9 @@ def shadow_state_reconst(shadow):
 ######################################################################
 # The reconstructed quantum state :math:`\sigma_T` can also be used to
 # evaluate expectation values :math:`\text{Tr}(O\sigma_T)` for some localized
-# observable :math:`O = \bigotimes_{i}^{n} P_i`, where :math:`P_i \in \{I, X, Y, Z\}`.
+# observable :math:`O = \bigotimes_{i}^{n} P_i,` where :math:`P_i \in \{I, X, Y, Z\}.`
 # However, as shown above, :math:`\sigma_T` would be only an approximation of
-# :math:`\rho` for finite values of :math:`T`. Therefore, to estimate
+# :math:`\rho` for finite values of :math:`T.` Therefore, to estimate
 # :math:`\langle O \rangle` robustly, we use the median of means
 # estimation. For this purpose, we split up the :math:`T` shadows into
 # :math:`K` equally-sized groups and evaluate the median of the mean
@@ -498,8 +498,8 @@ plt.show()
 # parameter, estimating a property from such learned classical representations,
 # or a combination of both. In our case, we consider the problem of using
 # :doc:`kernel-based models <tutorial_kernel_based_training>` to learn the ground-state representation of the
-# Heisenberg model Hamiltonian :math:`H(x_l)` from the coupling vector :math:`x_l`,
-# where :math:`x_l = [J_{i,j} \text{ for } i < j]`. The goal is to predict the
+# Heisenberg model Hamiltonian :math:`H(x_l)` from the coupling vector :math:`x_l,`
+# where :math:`x_l = [J_{i,j} \text{ for } i < j].` The goal is to predict the
 # correlation functions :math:`C_{ij}`:
 #
 # .. math::  \big\{x_l \rightarrow \sigma_T(\rho(x_l)) \rightarrow \text{Tr}(\hat{C}_{ij} \sigma_T(\rho(x_l))) \big\}_{l=1}^{N}.
@@ -522,7 +522,7 @@ plt.show()
 # .. math::  \text{Tr}(\hat{O} \hat{\sigma}_{N} (x)) = \sum_{l=1}^{N} \kappa(x, x_l)\text{Tr}(O\sigma_T (x_l)).
 #
 # We train the classical kernel-based models using :math:`N = 70`
-# randomly chosen values of the coupling matrices :math:`J`.
+# randomly chosen values of the coupling matrices :math:`J.`
 #
 
 # imports for ML methods and techniques
@@ -536,10 +536,10 @@ from sklearn.kernel_ridge import KernelRidge
 # the lattice (``Nr`` and ``Nc``), and the number of randomized
 # Pauli measurements (:math:`T`) for the construction of classical shadows.
 # The ``X_data`` is the set of coupling vectors that are defined as a
-# stripped version of the coupling matrix :math:`J`, where only non-duplicate
+# stripped version of the coupling matrix :math:`J,` where only non-duplicate
 # and non-zero :math:`J_{ij}` are considered. The ``y_exact`` and
 # ``y_clean`` are the set of correlation vectors, i.e., the flattened
-# correlation matrix :math:`C`, computed with respect to the ground-state
+# correlation matrix :math:`C,` computed with respect to the ground-state
 # obtained from exact diagonalization and classical shadow representation
 # (with :math:`T=500`), respectively.
 #
@@ -606,7 +606,7 @@ X_data.shape, y_data.shape, y_exact.shape
 # For the Gaussian kernel, the hyperparameter
 # :math:`\gamma = N^{2}/\sum_{i=1}^{N} \sum_{j=1}^{N} ||x_i-x_j||^{2}_{2} > 0`
 # is chosen to be the inverse of the average Euclidean distance
-# :math:`x_i` and :math:`x_j`. The kernel is implemented using the
+# :math:`x_i` and :math:`x_j.` The kernel is implemented using the
 # radial-basis function (rbf) kernel in the ``sklearn`` library.
 #
 
@@ -641,7 +641,7 @@ for i in range(len(kernel_NN)):
 ######################################################################
 # For the above two defined kernel methods, we obtain the best learning
 # model by performing hyperparameter tuning using cross-validation for
-# the prediction task of each :math:`C_{ij}`. For this purpose, we
+# the prediction task of each :math:`C_{ij}.` For this purpose, we
 # implement the function ``fit_predict_data``, which takes input as the
 # correlation function index ``cij``, kernel matrix ``kernel``, and internal
 # kernel mapping ``opt`` required by the kernel-based regression models
@@ -757,7 +757,7 @@ for idx, data in enumerate(kernel_data):
 # differed substantially across the different :math:`C_{ij}` for both
 # kernels. We present the predicted correlation matrix :math:`C^{\prime}`
 # for randomly selected Heisenberg models from the test set below for
-# comparison against the actual correlation matrix :math:`C`, which is
+# comparison against the actual correlation matrix :math:`C,` which is
 # obtained from the ground state found using exact diagonalization.
 #
 
@@ -806,13 +806,13 @@ plt.show()
 
 ######################################################################
 # Finally, we also attempt to showcase the effect of the size of training data
-# :math:`N` and the number of Pauli measurements :math:`T`. For this, we look
+# :math:`N` and the number of Pauli measurements :math:`T.` For this, we look
 # at the average root-mean-square error (RMSE) in prediction for each kernel
-# over all two-point correlation functions :math:`C_{ij}`. Here, the first
+# over all two-point correlation functions :math:`C_{ij}.` Here, the first
 # plot looks at the different training sizes :math:`N` with a fixed number of
-# randomized Pauli measurements :math:`T=100`. In contrast, the second plot
+# randomized Pauli measurements :math:`T=100.` In contrast, the second plot
 # looks at the different shadow sizes :math:`T` with a fixed training data size
-# :math:`N=70`. The performance improvement seems to be saturating after a
+# :math:`N=70.` The performance improvement seems to be saturating after a
 # sufficient increase in :math:`N` and :math:`T` values for all two kernels
 # in both the cases.
 #

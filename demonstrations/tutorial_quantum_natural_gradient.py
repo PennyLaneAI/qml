@@ -54,7 +54,7 @@ In standard gradient descent, each optimization step is given by
 .. math:: \theta_{t+1} = \theta_t -\eta \nabla \mathcal{L}(\theta),
 
 where :math:`\mathcal{L}(\theta)` is the cost as a function of
-the parameters :math:`\theta`, and :math:`\eta` is the learning rate
+the parameters :math:`\theta,` and :math:`\eta` is the learning rate
 or step size. In essence, each optimization step calculates the
 steepest descent direction around the local value of :math:`\theta_t`
 in the parameter space, and updates :math:`\theta_t\rightarrow \theta_{t+1}`
@@ -65,8 +65,8 @@ is strongly connected to a *Euclidean geometry* on the parameter space.
 The parametrization is not unique, and different parametrizations can distort
 distances within the optimization landscape.
 
-For example, consider the following cost function :math:`\mathcal{L}`, parametrized
-using two different coordinate systems, :math:`(\theta_0, \theta_1)`, and
+For example, consider the following cost function :math:`\mathcal{L},` parametrized
+using two different coordinate systems, :math:`(\theta_0, \theta_1),` and
 :math:`(\phi_0, \phi_1)`:
 
 |
@@ -121,7 +121,7 @@ In a similar vein, it has been shown that the standard Euclidean geometry
 is sub-optimal for optimization of quantum variational algorithms
 `(Harrow and Napp, 2019) <https://arxiv.org/abs/1901.05374>`__.
 The space of quantum states instead possesses a unique invariant metric
-tensor known as the Fubini-Study metric tensor :math:`g_{ij}`, which can be used to
+tensor known as the Fubini-Study metric tensor :math:`g_{ij},` which can be used to
 construct a quantum analog to natural gradient descent:
 
 .. math:: \theta_{t+1} = \theta_t - \eta g^{+}(\theta_t)\nabla \mathcal{L}(\theta),
@@ -133,7 +133,7 @@ where :math:`g^{+}` refers to the pseudo-inverse.
     It can be shown that the Fubini-Study metric tensor reduces
     to the Fisher information matrix in the classical limit.
 
-    Furthermore, in the limit where :math:`\eta\rightarrow 0`,
+    Furthermore, in the limit where :math:`\eta\rightarrow 0,`
     the dynamics of the system are equivalent to imaginary-time
     evolution within the variational subspace, as proposed in
     `McArdle et al. (2018) <https://arxiv.org/abs/1804.03023>`__.
@@ -159,10 +159,10 @@ where :math:`g^{+}` refers to the pseudo-inverse.
 # * :math:`|\psi_0\rangle` is the initial state,
 # * :math:`W_\ell` are layers of non-parametrized quantum gates,
 # * :math:`V_\ell(\theta_\ell)` are layers of parametrized quantum gates
-#   with :math:`n_\ell` parameters :math:`\theta_\ell = \{\theta^{(\ell)}_0, \dots, \theta^{(\ell)}_n\}`.
+#   with :math:`n_\ell` parameters :math:`\theta_\ell = \{\theta^{(\ell)}_0, \dots, \theta^{(\ell)}_n\}.`
 #
 # Further, assume all parametrized gates can be written in the form
-# :math:`X(\theta^{(\ell)}_{i}) = e^{i\theta^{(\ell)}_{i} K^{(\ell)}_i}`,
+# :math:`X(\theta^{(\ell)}_{i}) = e^{i\theta^{(\ell)}_{i} K^{(\ell)}_i},`
 # where :math:`K^{(\ell)}_i` is the *generator* of the parametrized operation.
 #
 # For each parametric layer :math:`\ell` in the variational quantum circuit
@@ -235,14 +235,14 @@ params = pnp.array([0.432, -0.123, 0.543, 0.233])
 # (Note that in this example, the first non-parametrized layer :math:`W_0`
 # is simply the identity.) Since there are two layers, each with two parameters,
 # the block-diagonal approximation consists of two
-# :math:`2\times 2` matrices, :math:`g^{(0)}` and :math:`g^{(1)}`.
+# :math:`2\times 2` matrices, :math:`g^{(0)}` and :math:`g^{(1)}.`
 #
 # .. figure:: ../_static/demonstration_assets/quantum_natural_gradient/qng2.png
 #     :align: center
 #     :width: 30%
 #     :target: javascript:void(0)
 #
-# To compute the first block-diagonal :math:`g^{(0)}`, we create subcircuits consisting
+# To compute the first block-diagonal :math:`g^{(0)},` we create subcircuits consisting
 # of all gates prior to the layer, and observables corresponding to
 # the *generators* of the gates in the layer:
 #
@@ -263,7 +263,7 @@ def layer0_subcircuit(params):
 
 
 ##############################################################################
-# We then post-process the measurement results in order to determine :math:`g^{(0)}`,
+# We then post-process the measurement results in order to determine :math:`g^{(0)},`
 # as follows.
 #
 # .. figure:: ../_static/demonstration_assets/quantum_natural_gradient/qng4.png
@@ -314,7 +314,7 @@ g0[1, 0] = (exK0K1 - exK0 * exK1) / 4
 # Note that, by definition, the block-diagonal matrices must be real and
 # symmetric.
 #
-# We can repeat the above process to compute :math:`g^{(1)}`. The subcircuit
+# We can repeat the above process to compute :math:`g^{(1)}.` The subcircuit
 # required is given by
 #
 # .. figure:: ../_static/demonstration_assets/quantum_natural_gradient/qng8.png
@@ -343,7 +343,7 @@ def layer1_subcircuit(params):
 
 
 ##############################################################################
-# Using this subcircuit, we can now generate the submatrix :math:`g^{(1)}`.
+# Using this subcircuit, we can now generate the submatrix :math:`g^{(1)}.`
 #
 # .. figure:: ../_static/demonstration_assets/quantum_natural_gradient/qng5.png
 #     :align: center
