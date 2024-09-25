@@ -47,23 +47,12 @@ TODO: add diagrams here.
 
 Does the last diagram seem familiar? It is because this is the representation of a single-qubit gate! We will see later in this tutorial the relation between quantum circuits and tensor networks. 
 
-Some authors choose to give the shape of the tensor an additional meaning. For example, you might encounter square tensors representing symmetric matrices, to represent its invariance under transposition.
-
-TODO: add diagram here showing: 1. Square matrix 2. Bending of wires as transpose 3. Final matrix
-
-In addition, an isometry :math:`V \in \mathbb{C}^{n \times p}` - i.e., a rectangular matrix such that :math:`V V^\dagger = I_p` but :math:`V^\dagger V \neq I_n` - with :math:`n > p`  can be depicted using a triangle to emphasize the isometry property:
-
-TODO: add diagram here showing the isometry definition (identity from the smaller space to the bigger space). See https://www.math3ma.com/blog/matrices-as-tensor-network-diagrams
-
 For quantum states, it is often useful to adopt the convention that writing the legs towards one direction (e.g. the right) corresponds to a ket, i.e., a vector living in the Hilbert space, while drawing the legs to the opposite direction (e.g. left) means they are a bra vector, i.e., living in the dual space.
 
 TODO: 1) drawing of a vector with legs towards right diretion (ket) 2) legs towards left (bra)
 
-TODO: add reference here for category theory. P. Selinger. A survey of graphical languages for monoidal categories. Lecture Notes
-in Physics, page 289–355, 2010.
-
 .. tip::
-    The diagrammatic representation of tensors is rooted in category theory, which equips the diagrams with all the relevant information so they can used in proofs and formal reasoning!
+    The diagrammatic representation of tensors is rooted in category theory, which equips the diagrams with all the relevant information so they can used in proofs and formal reasoning! [#Selinger2010]_
 
 Creating a tensor in code is straightforward, and chances are you have already created one yourself. Using ``Numpy``, all we have to do is to create a ``np.array`` of the desired rank. For instance, we can start crearting a rank-1 tensor (a vector).
 """
@@ -335,6 +324,12 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 ##############################################################################
 # References
 # ----------
+# 
+# .. [#Selinger2010]
+#    P. Selinger.
+#    "A Survey of Graphical Languages for Monoidal Categories",
+#    `<http://dx.doi.org/10.1007/978-3-642-12821-9_4>`__, in *New Structures for Physics*, Springer Berlin Heidelberg, pp. 289–355, 2010.
+# 
 # .. [#Arad]
 #    I. Arad and Z. Landau.
 #    "Quantum computation and the evaluation of tensor networks",
