@@ -221,7 +221,7 @@ print(D.shape)
 #   \sum_{j, k} A_{i,j,k} (BC)_{j,l,k,n}  \implies \mathcal{O}(d_i^2 \times d_j^2) .
 # 
 # This means, the second contraction path results in an asymptotic cost of :math:`\mathcal{O}(d_i^2 \times d_j^2)` - lower than the first contraction path.
-# To see this in practice, let us perform the above contraction using ``np.einsum``. First, we crate 3 tensors with the correct dimensions.
+# To see this in practice, let us perform the above contraction using ``np.einsum``. First, we create 3 tensors with the correct dimensions.
 
 import timeit
 
@@ -275,11 +275,39 @@ average_time_ms = execution_time * 1000 / iterations
 print(f"Computation cost for A(BC) contraction: {average_time_ms:.8f} ms")
 
 ##############################################################################
-# From this we see tha the second contraction path yields a much lower complexity compared to the first one, just as we expected!
+# From this we see that the second contraction path yields a much lower complexity compared to the first one, just as we expected!
+
+##############################################################################
+# Contraction paths:
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 # 
-# - For this reason there exist heuristics for optimizing contraction path complexity. NP problem -> no perfect solution but great heuristics (https://arxiv.org/pdf/2002.01935).
-# - Link to quimb examples.
-# -The minimum required info would be that there are heuristics that work reasonably well, where one can find these heuristics and ideally how to set them in default.tensor. Examples: Faster identification of optimal contraction sequences for tensor networks, 
+# In the previous section, through a toy example, we explored how the choice of the contraction path affects the computational cost of the tensor network contraction. As shown in [#Lam1997]_ , finding an optimal contraction path is equivalent to solving the "multiplication problem" and thus, it is NP-hard. In this section, we provide a general description of wide-spread techniques used to tackle this ubiquitous task.
+# 
+# First, we set up the framework of the problem. While multiway contractions - contractions between more than 2 tensors at a time - are possible, we will consider only pairwise contractions since the former can always be decomposed in terms of the latter. In addition, contracting a tensor network need not result in a single tensor. However, here we consider only the single tensor case as it underlies the more general scenario [#Gray2021]_. 
+# 
+# The underlying idea behind finding a contraction path, is based on the construction of the computational graph, i.e. a rooted binary tree specifying the sequence of pairwise contractions, where a leaf node corresponds to a tensor from the original network and the pairwise contractions give rise to the intermediate tensors corresponding to the rest of the nodes. Transforming a tensor network with an arbitrary structure into this binary tree can be achieved by a *tree embedding* of the tensor network graph [#Bienstock1990]_. Thus, optimization of the contraction path is equivalent to a search over tree embeddings of the network.
+# 
+# TODO: here include a drawing similar to one in Fig2.a of https://journals.aps.org/prx/pdf/10.1103/PhysRevX.14.011009
+# 
+# .. note::
+# 
+#   Besides finding a contraction path that minimizes the computational cost, we can also attempt to find a path that optimizes the memory cost. That is, a contraction path in which all intermediate tensors are below a certain size.
+# 
+# Now, how do we traverse the space of trees to optimize over? The most straightforward idea is to perform an exhaustic search through all of them. As explained in [#Pfeifer2014]_, this can be done (with some additional improvements) using the following well known algorithms:
+# 
+# - Depth-first search
+# - Breadth-first search
+# - Dynamic programming
+# 
+# While the exhaustive approach scales like :math:`\mathcal{O}(N!)`, with :math:`N` the number of tensors in the network, it can handle a handful of tensors within seconds, providing a good benchmark. In addition, compared to the following algorithms, it guarantees to find the global minimum optimizing the desired metric - space and/or time.
+# 
+# .. note::
+# 
+#   A recursive implementation of the depth-first search is used by default in the well known package `opt_einsum` `(see docs)<https://optimized-einsum.readthedocs.io/en/stable/optimal_path.html>`_.
+# 
+# Further approaches introduced in [#Gray2021]_ are based on alternative common graph theoretic tasks, rather than searching over the contraction tree space, such as the balanced partitioning and community detection problems. And even though, these are only heuristics that do not guarantee an optimal contraction path, they can often achieve an arbitrarliy close to optimal performance. An additional level of optimization, known as *hyper-optimization* is introduced by the use of different algorithms, as some algorithms are better suited for certain graph structures. For an in-depth exploration of these heuristics, please refer to [#Gray2021]_.
+# 
+#  TODO: mention where in Quimb we can find these heuristics.
 
 ##############################################################################
 # From tensor networks to quantum circuits:
@@ -296,3 +324,23 @@ print(f"Computation cost for A(BC) contraction: {average_time_ms:.8f} ms")
 #    I. Arad and Z. Landau.
 #    "Quantum computation and the evaluation of tensor networks",
 #    `<https://arxiv.org/abs/0805.0040>`__, 2010.
+# 
+# .. [#Lam1997]
+#    C.-C. Lam, P. Sadayappan, and R. Wenger.
+#    "On Optimizing a Class of Multi-Dimensional Loops with Reduction for Parallel Execution",
+#    `<https://doi.org/10.1142/S0129626497000176>`__, Parallel Processing Letters, Vol. 7, No. 2, pp. 157-168, 1997.
+# 
+# .. [#Gray2021]
+#    J. Gray, S. Kourtis, and S. Choi.
+#    "Hyper-optimized tensor network contraction",
+#    `<https://quantum-journal.org/papers/q-2021-03-15-410/>`__, Quantum, Vol. 5, pp. 410, 2021.
+# 
+# .. [#Bienstock1990]
+#    D. Bienstock.
+#    "On embedding graphs in trees",
+#    `<https://doi.org/10.1016/009
+# 
+# .. [#Pfeifer2014]
+#    R. N. C. Pfeifer, J. Haegeman, and F. Verstraete.
+#    "Faster identification of optimal contraction sequences for tensor networks",
+#    `<http://dx.doi.org/10.1103/PhysRevE.90.033315>`__, Physical Review
