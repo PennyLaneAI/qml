@@ -34,19 +34,18 @@ How to quantum just-in-time compile Grover's algorithm with Catalyst
 # solutions, with :math:`1 \leq M \leq N`.
 #
 # In this tutorial, we will implement the generalized Grover's algorithm using `Catalyst
-# <https://docs.pennylane.ai/projects/catalyst>`__, a quantum just-in-time
-# (QJIT) compiler framework for PennyLane, which makes it possible to compile, optimize, and execute
-# hybrid quantum–classical workflows. We will also measure the performance improvement we get from
-# using Catalyst with respect to the native Python implementation.
+# <https://docs.pennylane.ai/projects/catalyst>`__, a quantum just-in-time (QJIT) compiler framework
+# for PennyLane, which makes it possible to compile, optimize, and execute hybrid quantum–classical
+# workflows. We will also measure the performance improvement we get from using Catalyst with
+# respect to the native Python implementation.
 
 
 ######################################################################
 # Generalized Grover's algorithm with PennyLane
 # ---------------------------------------------
 #
-# In the :doc:`Grover's Algorithm <tutorial_grovers_algorithm>`
-# tutorial, we saw how to implement the generalized Grover's algorithm in PennyLane. The procedure
-# is as follows:
+# In the :doc:`Grover's Algorithm <tutorial_grovers_algorithm>` tutorial, we saw how to implement
+# the generalized Grover's algorithm in PennyLane. The procedure is as follows:
 #
 # 1. Initialize the system to an equal superposition over all states.
 # 2. Perform :math:`r(N, M)` *Grover iterations:*
@@ -118,9 +117,11 @@ NUM_QUBITS = 12
 
 dev = qml.device("default.qubit", wires=NUM_QUBITS)
 
+
 @qml.qnode(dev)
 def circuit_default_qubit():
     return grover_circuit(NUM_QUBITS)
+
 
 results = circuit_default_qubit()
 
@@ -130,10 +131,22 @@ results = circuit_default_qubit()
 # :math:`\vert 0\rangle ^{\otimes n}` and :math:`\vert 1\rangle ^{\otimes n}` as the most likely
 # states to be measured:
 
-most_probable_states = np.argsort(results)[-2:][::-1]
 
-for i in most_probable_states:
-    print(f"Prob of state '{i:0{NUM_QUBITS}b}': {results[i]:.4g}")
+def most_probable_states_descending(probs, N):
+    """Returns the indices of the N most probable states in descending order."""
+    if N > len(probs):
+        raise ValueError("N cannot be greater than the length of the probs array.")
+
+    return np.argsort(probs)[-N:][::-1]
+
+
+def print_most_probable_states_descending(probs, N):
+    """Prints the most probable states, and their probabilities, in descending order."""
+    for i in most_probable_states_descending(probs, N):
+        print(f"Prob of state '{i:0{NUM_QUBITS}b}': {probs[i]:.4g}")
+
+
+print_most_probable_states_descending(results, N=2)
 
 
 ######################################################################
@@ -146,16 +159,18 @@ for i in most_probable_states:
 #
 # At the time of writing, Catalyst does not support the ``"default.qubit"`` state-simulator device,
 # so let's first define a new circuit using `Lightning
-# <https://docs.pennylane.ai/projects/lightning>`__, which is a PennyLane
-# plugin that provides more performant state simulators written in C++, and which is supported by
-# Catalyst. See the :doc:`Catalyst documentation <catalyst:dev/devices>`
-# for the full list of devices supported by Catalyst.
+# <https://docs.pennylane.ai/projects/lightning>`__, which is a PennyLane plugin that provides more
+# performant state simulators written in C++, and which is supported by Catalyst. See the
+# :doc:`Catalyst documentation <catalyst:dev/devices>` for the full list of devices supported by
+# Catalyst.
 
 dev = qml.device("lightning.qubit", wires=NUM_QUBITS)
+
 
 @qml.qnode(dev)
 def circuit_lightning():
     return grover_circuit(NUM_QUBITS)
+
 
 ######################################################################
 # Then, to QJIT compile our circuit with Catalyst, we simply wrap it with :func:`~pennylane.qjit`:
@@ -164,19 +179,63 @@ circuit_qjit = qml.qjit(circuit_lightning)
 
 
 ######################################################################
+# .. note::
+#
+#     The Catalyst :class:`~.qjit` decorator supports capturing control flow when specified using
+#     the :func:`~.for_loop`, :func:`~.while_loop`, and :func:`~.cond` functions, or additionally,
+#     can automatically capture native Python control flow via experimental :doc:`AutoGraph
+#     <catalyst:dev/autograph>` support.
+#
+#     In this tutorial, however, you'll notice that our ``grover_circuit`` function is able to use
+#     native Python control flow without the need to convert the Python ``for`` loops to the
+#     qjit-compatible :func:`~.for_loop`, for instance, and without using AutoGraph. The reason we
+#     are able to do so here is because the circuit we have compiled, ``circuit_lightning``, is (a)
+#     unparameterized, meaning it takes in no input argument, thus the control flow of the circuit
+#     does not depend on any dynamic variables (whose values are known only at run time); and
+#     similarly because (b) the ranges of the ``for`` loops depend only on static variables (i.e.
+#     constants known at compile time), in this case native-Python numerics and lists, and NumPy
+#     arrays. Hence, the complete control flow of the circuit is known at compile time, which allows
+#     us to use native Python control-flow statements.
+#
+#     See the :doc:`Sharp bits and debugging tips <catalyst:dev/sharp_bits>` section of the Catalyst
+#     documentation for more details on this subject.
+
+
+######################################################################
 # We now have our QJIT object ``circuit_qjit``. A small detail to note in this case is that because
 # the function ``circuit_lightning`` takes no input arguments, Catalyst will in fact *ahead-of-time*
 # (AOT) compile the circuit at instantiation, meaning that when we call this QJIT object for the
 # first time, the compilation will have already taken place, and Catalyst will execute the compiled
 # code. With JIT compilation, by contrast, the compilation is triggered at the first call site
-# rather than at instantiation. The compilation step will incur some runtime overhead, which we will
-# measure below. Furthermore, when we call the compiled QJIT object for the first time, there is an
-# additional, small overhead incurred to cache the compiled code for faster access later on. Every
-# subsequent call to the QJIT object, assuming it has not been altered, will read directly from this
-# cache and execute the compiled circuit. See the `Compilation Modes
+# rather than at instantiation.
+#
+# The compilation step will incur some runtime overhead, which we will measure below. Furthermore,
+# when we call the compiled QJIT object for the first time, there is an additional, small overhead
+# incurred to cache the compiled code for faster access later on. Every subsequent call to the QJIT
+# object, assuming it has not been altered, will read directly from this cache and execute the
+# compiled circuit. See the `Compilation Modes
 # <https://docs.pennylane.ai/projects/catalyst/en/stable/dev/quick_start.html#compilation-modes>`__
 # documentation in the Catalyst :doc:`Quick Start <catalyst:dev/quick_start>` guide for more
 # information on the difference between JIT and AOT compilation.
+#
+# Let's call the compiled circuit now and confirm that we get the same results:
+
+results_qjit = circuit_qjit()
+print_most_probable_states_descending(results_qjit, N=2)
+
+
+######################################################################
+# Indeed, we get the same results as before: the compiled circuit has correctly identified the
+# solution states :math:`\vert 0\rangle ^{\otimes n}` and :math:`\vert 1\rangle ^{\otimes n}` as the
+# most likely states to be measured. We can also compare the results more rigorously by comparing
+# element-wise the computed probability of every state (within the given floating-point tolerance):
+
+results_are_equal = np.allclose(results, results_qjit, atol=1e-12)
+print(f"Native-Python and compiled circuits yield same results? {results_are_equal}")
+
+
+######################################################################
+# Success!
 
 
 ######################################################################
@@ -204,19 +263,37 @@ import timeit
 NUM_REPS = 5
 
 runtimes_native_default = timeit.repeat(
-    "circuit_default_qubit()", globals=locals(), number=1, repeat=1
+    "circuit_default_qubit()",
+    globals={"circuit_default_qubit": circuit_default_qubit},
+    number=1,
+    repeat=1,
 )
 runtimes_native_lightning = timeit.repeat(
-    "circuit_lightning()", globals=locals(), number=1, repeat=NUM_REPS
+    "circuit_lightning()",
+    globals={"circuit_lightning": circuit_lightning},
+    number=1,
+    repeat=NUM_REPS,
 )
 runtimes_compilation = timeit.repeat(
-    "qml.qjit(circuit_lightning)", globals=locals(), number=1, repeat=1
+    "qml.qjit(circuit_lightning)",
+    setup="import pennylane as qml",
+    globals={"circuit_lightning": circuit_lightning},
+    number=1,
+    repeat=1,
 )
 runtimes_first_qjit = timeit.repeat(
-    "circuit_qjit()", globals=locals(), number=1, repeat=1
+    "_circuit_qjit()",
+    setup="import pennylane as qml; _circuit_qjit = qml.qjit(circuit_lightning)",
+    globals={"circuit_lightning": circuit_lightning},
+    number=1,
+    repeat=1,
 )
 runtimes_subsequent_qjit = timeit.repeat(
-    "circuit_qjit()", globals=locals(), number=1, repeat=NUM_REPS
+    "_circuit_qjit()",
+    setup="import pennylane as qml; _circuit_qjit = qml.qjit(circuit_lightning); _circuit_qjit()",
+    globals={"circuit_lightning": circuit_lightning},
+    number=1,
+    repeat=NUM_REPS,
 )
 
 run_names = [
@@ -296,8 +373,7 @@ plt.show()
 # -----------
 #
 # This tutorial has demonstrated how to just-in-time compile a quantum circuit implementing the
-# generalized Grover's algorithm using `Catalyst
-# <https://docs.pennylane.ai/projects/catalyst>`__.
+# generalized Grover's algorithm using `Catalyst <https://docs.pennylane.ai/projects/catalyst>`__.
 #
 # For a circuit with :math:`n = 12` qubits, analogous to a search in a randomly ordered "database"
 # containing :math:`N = 2^{12} = 4096` entries, Catalyst offers a runtime performance several orders
@@ -332,6 +408,7 @@ plt.show()
 #     algorithm. We have only done so here to illustrate the performance improvement that QJIT
 #     compiling with Catalyst offers if it is ever necessary to execute your own quantum circuit
 #     multiple times.
+
 
 ######################################################################
 # About the author
