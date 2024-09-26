@@ -294,7 +294,7 @@ print(f"Computation cost for A(BC) contraction: {average_time_ms:.8f} ms")
 # 
 # .. note::
 # 
-#   A recursive implementation of the depth-first search is used by default in the well known package `opt_einsum` `(see docs)<https://optimized-einsum.readthedocs.io/en/stable/optimal_path.html>`_.
+#   A recursive implementation of the depth-first search is used by default in the well known package ``opt_einsum`` `(see docs) <https://optimized-einsum.readthedocs.io/en/stable/optimal_path.html>`_.
 # 
 # Further approaches introduced in [#Gray2021]_ are based on alternative common graph theoretic tasks, rather than searching over the contraction tree space, such as the `balanced bipartitioning <https://en.wikipedia.org/wiki/Balanced_number_partitioning>`_ and `community detection <https://en.wikipedia.org/wiki/Community_structure>`_ algorithms. And even though, these are only heuristics that do not guarantee an optimal contraction path, they can often achieve an arbitrarliy close to optimal performance. 
 # 
