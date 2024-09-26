@@ -31,8 +31,8 @@ r"""Adversarial attacks and robustness for quantum machine learning
 #
 # Mathematically, the goal of an (untargeted) attack is to achieve a misclassification of the model
 # such that a sample :math:`x` leads to a predicted label :math:`y' \neq y` that is not the true label
-# :math:`y`. This is achieved by finding the perturbation :math:`\delta\in\Delta` to the original
-# input that maximizes the loss of the true class. For a loss function :math:`\mathcal{L}`, a model
+# :math:`y.` This is achieved by finding the perturbation :math:`\delta\in\Delta` to the original
+# input that maximizes the loss of the true class. For a loss function :math:`\mathcal{L},` a model
 # :math:`f: \mathbb{R}^{D} \to \mathbb{R}^K` (mapping :math:`D`-dimensional input to `softmax <https://en.wikipedia.org/wiki/Softmax_function>`_
 # probability scores of :math:`K` classes with model parameters :math:`\theta^*`), the objective of
 # the untargeted attack is: 
@@ -42,8 +42,8 @@ r"""Adversarial attacks and robustness for quantum machine learning
 # Later, when we show how to actually construct such an attack, we will revisit this
 # equation. For an adversarial attack to be considered useful, it must hold that the modifications to
 # the input elements are imperceptible, i.e. that
-# :math:`\Delta=\{\delta \in \mathbb{R}^{D}: \| \delta\|_{\infty} \le \varepsilon\}`, where
-# :math:`\varepsilon` is some small bound, typically below :math:`0.1`.
+# :math:`\Delta=\{\delta \in \mathbb{R}^{D}: \| \delta\|_{\infty} \le \varepsilon\},` where
+# :math:`\varepsilon` is some small bound, typically below :math:`0.1.`
 #
 
 ######################################################################
@@ -91,7 +91,7 @@ from matplotlib import pyplot as plt
 # allows us to define the usefulness of attacks on the QML model while being low-dimensional enough to
 # perform scalable training (more info on the dataset can be found in [#Wendlinger]_). It consists of four
 # classes of :math:`16\times16` pixel grayscale images which show one of the four symbols
-# :math:`\{+,-,\vdash,\dashv\}`. Below we visualize one sample of each class to get an understanding
+# :math:`\{+,-,\vdash,\dashv\}.` Below we visualize one sample of each class to get an understanding
 # of the dataset.
 #
 # The data can be loaded directly from `PennyLane Datasets <https://pennylane.ai/datasets/>`_ for easy integration into PennyLane circuits and optimization code.
@@ -351,10 +351,10 @@ visualize_data(perturbed_x.reshape(-1, 16, 16), y_vis, adversarial_class_output)
 
 ######################################################################
 # We can see the devastating effect of a simple PGD (projected gradient descent) attack using a perturbation strength
-# :math:`\varepsilon=0.1`, where the model misclassifies each of the four samples we used for
+# :math:`\varepsilon=0.1,` where the model misclassifies each of the four samples we used for
 # visualization of the dataset. For humans, the images are still very easily classifiable, the
 # perturbations look mostly like random noise added to the images. All in all, the accuracy of the
-# model for the perturbed trainset decreases to around :math:`0.1`, so almost all samples of the
+# model for the perturbed trainset decreases to around :math:`0.1,` so almost all samples of the
 # dataset are misclassified!
 #
 # Using the code above, you can try the attack on your own and check which samples are more robust

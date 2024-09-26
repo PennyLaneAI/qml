@@ -290,10 +290,10 @@ def circuit(weights, data):
 # problem.
 # For the purposes of this demo, we will consider a very simple classifier:
 #
-# * if the first input qubit is in the state :math:`\mid 0 \rangle`, the model
+# * if the first input qubit is in the state :math:`\mid 0 \rangle,` the model
 #   should make the prediction "0", and
 #
-# * if the first input qubit is in the state :math:`\mid 1 \rangle`, the model
+# * if the first input qubit is in the state :math:`\mid 1 \rangle,` the model
 #   should predict "1" (independent of the states of all other qubits).
 #
 # In other words, the idealized trained model should learn an

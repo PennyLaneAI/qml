@@ -40,7 +40,7 @@ overlap between the model output states and the unknown process output states.
 #
 # .. math:: U(H, t) = e^{-i H t / \hbar} .
 #
-# For the Hamiltonian, :math:`H`, we choose a transverse-field Ising Hamiltonian (as in
+# For the Hamiltonian, :math:`H,` we choose a transverse-field Ising Hamiltonian (as in
 # [#Jerbi]_):
 #
 # .. math:: H = \sum_{i=0}^{n-1} Z_iZ_{i+1} + \sum_{i=0}^{n}\alpha_iX_i,
@@ -194,14 +194,14 @@ plt.show()
 #
 # where :math:`n` is the number of qubits, :math:`N` is the number of initial states, :math:`\psi^{(j)}`
 # are random states, :math:`U` is our target unitary operation, and :math:`O_i` is the local density
-# matrix for qubit :math:`i` after applying the ``model_circuit``. That is, the local states
+# matrix for qubit :math:`i` after applying the ``model_circuit`.` That is, the local states
 # :math:`\rho_{i}^{(j)}` are used as the observables:
 #
 # .. math:: O_{i}^{(j)}(\theta) := \rho_{i}^{(j)}.
 #
 # We can calculate this cost for our system by using the
 # `shadow measurements <#time-evolution-and-classical-shadow-measurements>`_ to estimate
-# the expectation value of :math:`O_i`. Roughly, this cost function measures the fidelity between
+# the expectation value of :math:`O_i.` Roughly, this cost function measures the fidelity between
 # the model circuit and the target circuit, by proxy of the single-qubit reduced states
 # :math:`\rho_{i}^{(j)}` of the model over a variety of input-output pairs.
 

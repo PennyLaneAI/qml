@@ -54,7 +54,7 @@ for approx_op, theta in zip(ops, thetas):
 #
 # Tracking Errors in Hamiltonian Simulation
 # -----------------------------------------
-# Time evolving a quantum state under a Hamiltonian requires generating the unitary :math:`\hat{U} = \exp(iHt)`.
+# Time evolving a quantum state under a Hamiltonian requires generating the unitary :math:`\hat{U} = \exp(iHt).`
 # In general it is difficult to prepare this operator exactly, so it is instead prepared approximately.
 # The most common method to accomplish this is the Suzuki-Trotter product formula [#TrotterError]_. This
 # subroutine introduces **algorithm-specific error** as it produces an approximation to the matrix exponential
@@ -108,7 +108,7 @@ print("commutator bound: ", commutator_error_bound)
 # :class:`~.pennylane.RY`, :class:`~.pennylane.RZ`). How could we decompose the :class:`~.pennylane.RX` gate?
 #
 # Notice that :math:`\hat{R_{x}}(\frac{\pi}{4})  = \hat{H} \cdot \hat{T} \cdot \hat{H}`
-# up to a global phase :math:`e^{i \frac{\pi}{8}}`.
+# up to a global phase :math:`e^{i \frac{\pi}{8}}.`
 
 from pennylane import numpy as np
 
@@ -120,7 +120,7 @@ np.allclose(qml.matrix(op1), qml.matrix(op2))
 
 ###############################################################################
 # We can approximate the :class:`~.pennylane.RX` gate by *rounding* the rotation angle to the lowest multiple
-# of :math:`\frac{\pi}{4}`, then using multiple iterations of the sequence above.
+# of :math:`\frac{\pi}{4},` then using multiple iterations of the sequence above.
 # The **approximation error** we incur from this decomposition is given by the expression:
 #
 # .. math::
@@ -128,7 +128,7 @@ np.allclose(qml.matrix(op1), qml.matrix(op2))
 #     \epsilon = \sqrt{2 - 2 \cdot sin(\theta)},
 #
 # where :math:`\theta = \frac{\pi \ - \ \Delta_{\phi}}{2}` and :math:`\Delta_{\phi}` is the
-# absolute difference between the true rotation angle and the next lowest multiple of :math:`\frac{\pi}{4}`.
+# absolute difference between the true rotation angle and the next lowest multiple of :math:`\frac{\pi}{4}.`
 #
 # We can take this approximate decomposition and turn it into a PennyLane operation simply by inheriting
 # from the :class:`~.pennylane.resource.ErrorOperation` class, and defining the error method:

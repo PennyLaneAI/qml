@@ -202,8 +202,8 @@ def cost(var, data_input, labels):
 # We need to choose the inputs ``X`` and the corresponding labels ``Y``. They are
 # defined using the dual-rail encoding, meaning that :math:`|0\rangle = [1, 0]`
 # (as a vector in the Fock basis of a single mode), and
-# :math:`|1\rangle = [0, 1]`. So a CNOT transformation of :math:`|1\rangle|0\rangle = |10\rangle = [0, 1, 1, 0]`
-# would give :math:`|11\rangle = [0, 1, 0, 1]`.
+# :math:`|1\rangle = [0, 1].` So a CNOT transformation of :math:`|1\rangle|0\rangle = |10\rangle = [0, 1, 1, 0]`
+# would give :math:`|11\rangle = [0, 1, 0, 1].`
 #
 # Furthermore, we want to make sure that the gradient isn't calculated with regards
 # to the inputs or the labels. We can do this by marking them with `requires_grad=False`.
@@ -272,14 +272,14 @@ Y = np.array([[1, 0, 1, 0],
 ######################################################################
 # Now, we must set the number of layers to use and then calculate the
 # corresponding number of initial parameter values, initializing them with
-# a random value between :math:`-2\pi` and :math:`2\pi`. For the CNOT gate two layers is
+# a random value between :math:`-2\pi` and :math:`2\pi.` For the CNOT gate two layers is
 # enough, although for more complex optimization tasks, many more layers
 # might be needed. Generally, the more layers there are, the richer the
 # representational capabilities of the neural network, and the better it
 # will be at finding a good fit.
 #
 # The number of variables corresponds to the number of transmittivity
-# angles :math:`\theta` and phase angles :math:`\phi`, while the Kerr
+# angles :math:`\theta` and phase angles :math:`\phi,` while the Kerr
 # non-linearity is set to a fixed strength.
 #
 
