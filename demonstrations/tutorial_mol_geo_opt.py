@@ -22,14 +22,14 @@ also be inaccurate.
 
 Since the nuclei are much heavier than the electrons, we can treat them as point particles
 clamped to their positions. Under this assumption, the total energy of the molecule :math:`E(x)`
-depends on the nuclear coordinates :math:`x`, which define the potential energy surface.
+depends on the nuclear coordinates :math:`x,` which define the potential energy surface.
 Solving the stationary problem :math:`\nabla_x E(x) = 0` corresponds to molecular geometry
 optimization and the optimized nuclear coordinates determine the equilibrium geometry of the
 molecule. The figure below illustrates these concepts for the
 `trihydrogen cation <https://en.wikipedia.org/wiki/Trihydrogen_cation>`_. Its equilibrium
 geometry in the electronic ground state corresponds to the minimum energy of the potential
 energy surface. At this minimum, the three hydrogen atoms are located at the vertices of an
-equilateral triangle whose side length is the optimized bond length :math:`d`.
+equilateral triangle whose side length is the optimized bond length :math:`d.`
 
 |
 
@@ -42,7 +42,7 @@ equilateral triangle whose side length is the optimized bond length :math:`d`.
 In this tutorial, you will learn how to recast the problem of finding the equilibrium
 geometry of a molecule in terms of a general variational quantum algorithm. The
 central idea is to consider explicitly that the target electronic Hamiltonian :math:`H(x)`
-is a **parametrized** observable that depends on the nuclear coordinates :math:`x`. This
+is a **parametrized** observable that depends on the nuclear coordinates :math:`x.` This
 implies that the objective function, defined by the expectation value of the Hamiltonian
 computed in the trial state prepared by a quantum computer, depends on both the quantum
 circuit and the Hamiltonian parameters.
@@ -67,14 +67,14 @@ quantum optimization of molecular geometries. The algorithm consists of the foll
 #. Build the parametrized electronic Hamiltonian :math:`H(x)` of the molecule.
 
 #. Design the variational quantum circuit to prepare the electronic trial state of the
-   molecule, :math:`\vert \Psi(\theta) \rangle`.
+   molecule, :math:`\vert \Psi(\theta) \rangle.`
 
 #. Define the cost function :math:`g(\theta, x) = \langle \Psi(\theta) \vert H(x) \vert
    \Psi(\theta) \rangle`.
 
-#. Initialize the variational parameters :math:`\theta` and :math:`x`. Perform a joint
+#. Initialize the variational parameters :math:`\theta` and :math:`x.` Perform a joint
    optimization of the circuit and Hamiltonian parameters to minimize the cost function 
-   :math:`g(\theta, x)`. The gradient with respect to the circuit parameters can be obtained
+   :math:`g(\theta, x).` The gradient with respect to the circuit parameters can be obtained
    using a variety of established methods, which are natively supported in PennyLane. The
    gradients with respect to the nuclear coordinates can be computed using the formula
 
@@ -92,7 +92,7 @@ Building the parametrized electronic Hamiltonian
 ------------------------------------------------
 
 In this example, we want to optimize the geometry of the trihydrogen cation
-:math:`\mathrm{H}_3^+`, described in a minimal basis set, where two electrons are shared
+:math:`\mathrm{H}_3^+,` described in a minimal basis set, where two electrons are shared
 between three hydrogen atoms (see figure above). The molecule is specified by providing a list
 with the symbols of the atomic species and a one-dimensional array with the initial
 set of nuclear coordinates in `atomic units
@@ -106,7 +106,7 @@ symbols = ["H", "H", "H"]
 x = np.array([0.028, 0.054, 0.0, 0.986, 1.610, 0.0, 1.855, 0.002, 0.0], requires_grad=True)
 
 ##############################################################################
-# Next, we need to build the parametrized electronic Hamiltonian :math:`H(x)`.
+# Next, we need to build the parametrized electronic Hamiltonian :math:`H(x).`
 # We use the Jordan-Wigner transformation [#seeley2012]_ to represent the fermionic
 # Hamiltonian as a linear combination of Pauli operators,
 #
@@ -114,8 +114,8 @@ x = np.array([0.028, 0.054, 0.0, 0.986, 1.610, 0.0, 1.855, 0.002, 0.0], requires
 #
 #     H(x) = \sum_j h_j(x) \prod_i^{N} \sigma_i^{(j)}.
 #
-# The expansion coefficients :math:`h_j(x)` carry the dependence on the coordinates :math:`x`,
-# the operators :math:`\sigma_i` represent the Pauli group :math:`\{I, X, Y, Z\}`, and
+# The expansion coefficients :math:`h_j(x)` carry the dependence on the coordinates :math:`x,`
+# the operators :math:`\sigma_i` represent the Pauli group :math:`\{I, X, Y, Z\},` and
 # :math:`N` is the number of qubits required to represent the electronic wave function.
 #
 # We define the function ``H(x)`` to build the parametrized Hamiltonian
@@ -156,7 +156,7 @@ def H(x):
 #    double-excitations.
 #    For example, the indices of the singly-excited state :math:`\vert 011000 \rangle`
 #    are given by the list ``[0, 2]``. Similarly, the indices of the doubly-excited
-#    state :math:`\vert 000011 \rangle` are ``[0, 1, 4, 5]``.
+#    state :math:`\vert 000011 \rangle` are ``[0, 1, 4, 5]`.`
 #
 # #. Construct the circuit using all double-excitation gates. Compute the gradient
 #    of the cost function :math:`g(\theta, x)` with respect to each double-excitation
@@ -222,9 +222,9 @@ def circuit(params, obs, wires):
 # -------------------------------------------
 #
 # The third step of the algorithm is to define the cost function
-# :math:`g(\theta, x) = \langle \Psi(\theta) \vert H(x) \vert\Psi(\theta) \rangle`. It
+# :math:`g(\theta, x) = \langle \Psi(\theta) \vert H(x) \vert\Psi(\theta) \rangle.` It
 # evaluates the expectation value of the parametrized Hamiltonian :math:`H(x)` in the
-# trial state :math:`\vert\Psi(\theta)\rangle`.
+# trial state :math:`\vert\Psi(\theta)\rangle.`
 
 ##############################################################################
 # Next, we define the ``cost`` function :math:`g(\theta, x)` which depends on
@@ -241,7 +241,7 @@ def cost(params, x):
 #
 # We minimize the cost function :math:`g(\theta, x)` using a gradient-based
 # method, and compute the gradients with respect to both the
-# circuit parameters :math:`\theta` and the nuclear coordinates :math:`x`.
+# circuit parameters :math:`\theta` and the nuclear coordinates :math:`x.`
 # The circuit gradients are computed analytically using the automatic differentiation
 # techniques available in PennyLane. The nuclear gradients are evaluated
 # by taking the expectation value of the gradient of the electronic Hamiltonian,
@@ -252,7 +252,7 @@ def cost(params, x):
 #
 # We use the :func:`finite_diff` function to compute the gradient of
 # the Hamiltonian using a central-difference approximation. Then, we evaluate the expectation
-# value of the gradient components :math:`\frac{\partial H(x)}{\partial x_i}`. This is implemented by
+# value of the gradient components :math:`\frac{\partial H(x)}{\partial x_i}.` This is implemented by
 # the function ``grad_x``:
 
 
@@ -291,7 +291,7 @@ opt_theta = qml.GradientDescentOptimizer(stepsize=0.4)
 opt_x = qml.GradientDescentOptimizer(stepsize=0.8)
 
 ##############################################################################
-# Next, we initialize the circuit parameters :math:`\theta`. The angles
+# Next, we initialize the circuit parameters :math:`\theta.` The angles
 # :math:`\theta_1` and :math:`\theta_2` are set to zero so that the
 # initial state :math:`\vert\Psi(\theta_1, \theta_2)\rangle`
 # is the Hartree-Fock state.
@@ -299,11 +299,11 @@ opt_x = qml.GradientDescentOptimizer(stepsize=0.8)
 theta = np.array([0.0, 0.0], requires_grad=True)
 
 ##############################################################################
-# The initial set of nuclear coordinates :math:`x`, defined at
+# The initial set of nuclear coordinates :math:`x,` defined at
 # the beginning of the tutorial, was computed classically within the Hartree-Fock
 # approximation using the GAMESS program [#ref_gamess]_. This is a natural choice
 # for the starting geometry that we are aiming to improve due to the electronic
-# correlation effects included in the trial state :math:`\vert\Psi(\theta)\rangle`.
+# correlation effects included in the trial state :math:`\vert\Psi(\theta)\rangle.`
 #
 # We carry out the optimization over a maximum of 100 steps.
 # The circuit parameters and the nuclear coordinates are optimized until the
