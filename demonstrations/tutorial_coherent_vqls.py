@@ -71,7 +71,7 @@ Coherent Variational Quantum Linear Solver (CVQLS)
 
 We approximate the solution :math:`|x\rangle` with a variational quantum
 circuit, i.e., a unitary circuit :math:`V` depending on a finite number of classical real parameters
-:math:`w = (w_0, w_1, \dots)`:
+:math:`w = (w_0, w_1, \dots):`
 
 .. math::
 
@@ -231,7 +231,7 @@ rng_seed = 0                # Seed for random number generator
 #
 # The coefficients of the linear combination are three positive numbers :math:`(1, 0.2, 0.2).`
 # So we can embed them in the state of  :math:`m=2` ancillary qubits by adding a final zero element and
-# normalizing their sum to :math:`1`:
+# normalizing their sum to :math:`1:`
 
 c = np.array([1, 0.2, 0.2, 0])
 c = c / np.sum(c)
@@ -457,7 +457,7 @@ A_num = c[0] * A_0 + c[1] * A_1 + c[2] * A_2
 b = np.ones(8) / np.sqrt(8)
 
 ##############################################################################
-# We can print the explicit values of :math:`A` and :math:`b`:
+# We can print the explicit values of :math:`A` and :math:`b:`
 
 print("A = \n", A_num)
 print("b = \n", b)

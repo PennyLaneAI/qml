@@ -145,7 +145,7 @@ print(hf)
 # on the four qubits. The next step is to compute the expectation value
 # of the molecular Hamiltonian in the trial state prepared by the circuit.
 # We do this using the :func:`~.expval` function. The decorator syntax allows us to
-# run the cost function as an executable QNode with the gate parameter :math:`\theta`:
+# run the cost function as an executable QNode with the gate parameter :math:`\theta:`
 
 @qml.qnode(dev, interface="jax")
 def circuit(param, wires):

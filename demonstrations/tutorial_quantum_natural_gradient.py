@@ -67,7 +67,7 @@ distances within the optimization landscape.
 
 For example, consider the following cost function :math:`\mathcal{L},` parametrized
 using two different coordinate systems, :math:`(\theta_0, \theta_1),` and
-:math:`(\phi_0, \phi_1)`:
+:math:`(\phi_0, \phi_1):`
 
 |
 
@@ -86,7 +86,7 @@ rate with respect to each parameter.
 Instead, if we perform a change of coordinate system (re-parametrization)
 of the cost function, we might find a parameter space where variations in :math:`\mathcal{L}`
 are similar across different parameters. This is the case with the new parametrization
-:math:`(\phi_0, \phi_1)`; the cost function is unchanged,
+:math:`(\phi_0, \phi_1);` the cost function is unchanged,
 but we now have a nicer geometry in which to perform gradient descent, and a more
 informative stepsize. This leads to faster convergence, and can help avoid optimization
 becoming stuck in local minima. For a more in-depth explanation,
@@ -287,7 +287,7 @@ g0[1, 1] = varK1 / 4
 
 ##############################################################################
 # The following two subcircuits are then used to calculate the
-# off-diagonal covariance terms of :math:`g^{(0)}`:
+# off-diagonal covariance terms of :math:`g^{(0)}:`
 
 
 @qml.qnode(dev, interface="autograd")

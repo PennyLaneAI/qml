@@ -371,7 +371,7 @@ mitigated_qnode(w1, w2)
 # keep things interesting, we've swapped out our folding function to instead perform folding on
 # randomly-selected gates. Whenever the folding function is stochastic, there will not be a unique
 # folded circuit corresponding to a given scale factor. For example, the following three distinct
-# circuits are all folded with a scale factor of :math:`s=1.1`:
+# circuits are all folded with a scale factor of :math:`s=1.1:`
 
 for _ in range(3):
     print(

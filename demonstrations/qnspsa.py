@@ -67,7 +67,7 @@ for noisy intermediate-scale quantum (NISQ) devices.
 # in the parameter space is sampled, where :math:`\mathcal{U}(\{-1, 1\}^d)` is a
 # :math:`d`-dimensional discrete uniform distribution.  The gradient
 # component along this sampled direction is then measured with a finite difference
-# approach, with a perturbation step size :math:`\epsilon`:
+# approach, with a perturbation step size :math:`\epsilon:`
 #
 # .. math::
 #
@@ -146,7 +146,7 @@ for noisy intermediate-scale quantum (NISQ) devices.
 #
 # Averaging on the Fubini-Study metric tensor
 #   A running average is taken on the metric tensor estimated from equation (7)
-#   at each step :math:`t`:
+#   at each step :math:`t:`
 #
 #   .. math:: \bar{\boldsymbol{g}}^{(t)}(\mathbf{x}) = \frac{1}{t + 1} \Big(\sum_{i=1}^{t}\widehat{\boldsymbol{g}}(\mathbf{x}, \mathbf{h}_1^{(i)}, \mathbf{h}_2^{(i)})_{SPSA} + \boldsymbol{g}^{(0)}\Big)\label{eq:tensorRunningAvg}\tag{10} ,
 #
@@ -342,7 +342,7 @@ print("Estimated SPSA gradient:\n", grad)
 # :math:`\widehat{\boldsymbol{g}}(\mathbf{x}, \mathbf{h}_1, \mathbf{h}_2)_{SPSA}`
 # from equation (7), we will first need to measure the state overlap
 # :math:`F(\mathbf{x}_1, \mathbf{x}_2) = \bigr\rvert\langle \phi(\mathbf{x}_1) | \phi(\mathbf{x}_2) \rangle \bigr\rvert ^ 2.`
-# We denote the unitary transformation forming the ansatz with :math:`U`;
+# We denote the unitary transformation forming the ansatz with :math:`U;`
 # that is,
 # :math:`\rvert\phi(\mathbf{x})\rangle = U(\mathbf{x}) \rvert0\rangle.`
 # Applying the adjoint operation :math:`U^{\dagger}(\mathbf{x}_2)` on to
@@ -487,7 +487,7 @@ print("Updated metric tensor after the step:\n", metric_tensor)
 #
 # Equation (12) requires computing the inverse of the metric tensor. A
 # numerically more stable approach is to solve the equivalent linear
-# equation for :math:`\mathbf{x}^{(t + 1)}`:
+# equation for :math:`\mathbf{x}^{(t + 1)}:`
 #
 # .. math:: \bar{\boldsymbol{g}}^{(t)}_{reg}(\mathbf{x}^{(t)})\big( \mathbf{x}^{(t)} - \mathbf{x}^{(t + 1)}\big) =  \eta  \widehat{\nabla f}(\mathbf{x}^{(t)}, \mathbf{h}^{(t)})_{SPSA} \label{eq:lin_solver}\tag{13}.
 #

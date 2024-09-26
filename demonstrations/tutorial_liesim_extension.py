@@ -27,7 +27,7 @@ that are outside the DLA. For :math:`n` qubits we get a DLA dimension of
 Suppose we want to expand the DLA by a single operator :math:`p` in order to use it as a gate, 
 and let us assume that :math:`p` is the product of two DLA operators that, itself, is not part of the DLA.
 Adding product operators to the TFIM DLA and computing their new Lie closure can lead to an exponential increase with a new dimension up to :math:`2(2^{2n-2}-1).`
-In that worst case, we get the so-called `associative algebra` of :math:`\mathfrak{g}`; that is, the algebra from the closure over multiplication, 
+In that worst case, we get the so-called `associative algebra` of :math:`\mathfrak{g};` that is, the algebra from the closure over multiplication, 
 i.e. which looks at all possible products of operators. This is also a Lie algebra.
 
 Here, we show how to extend the DLA by such a :math:`p` gate without going to the exponentially large associative algebra, but instead make use of the fact that :math:`p` is

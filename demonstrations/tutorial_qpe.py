@@ -87,7 +87,7 @@ Note that this results in a uniform superposition, where each basis state has an
 If we can prepare that state, then applying the *inverse* QFT would give
 :math:`|\theta\rangle` in the estimation register.
 This looks more promising, especially if we notice the appearance of the eigenvalues :math:`e^{2 \pi i\theta},`
-although with an extra factor of :math:`k.` We can obtain this factor by applying the unitary :math:`k` times to the state :math:`|\psi\rangle`:
+although with an extra factor of :math:`k.` We can obtain this factor by applying the unitary :math:`k` times to the state :math:`|\psi\rangle:`
 
 .. math::
    U^k|\psi\rangle =  e^{2\pi i \theta k} |\psi\rangle.

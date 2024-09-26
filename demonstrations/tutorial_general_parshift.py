@@ -480,7 +480,7 @@ def full_reconstruction_gen(fun, shifts):
 
 ###############################################################################
 # To see this version of the reconstruction in action, we will sample the
-# shifts :math:`x_\mu` at random in :math:`[-\pi,\pi)`:
+# shifts :math:`x_\mu` at random in :math:`[-\pi,\pi):`
 
 
 shifts = [rnd.random(2 * N + 1) * 2 * np.pi - np.pi for N in Ns]
@@ -705,7 +705,7 @@ plt.show()
 #
 # Nothing, actually, for the full reconstruction! Quite the opposite, we spent :math:`2R`
 # evaluations of :math:`E` on each part, that is :math:`4R` evaluations overall to obtain a
-# description of the full function :math:`E`! This is way more than the :math:`2R+1`
+# description of the full function :math:`E!` This is way more than the :math:`2R+1`
 # evaluations needed for the full reconstructions from the beginning.
 #
 # However, remember that we set out to compute derivatives of :math:`E` at :math:`0,` so that
@@ -754,7 +754,7 @@ for order, name in zip([1, 2, 4], ["First", "Second", "4th"]):
 #   E'(0) = \sum_{\mu=1}^{2R} E\left(\frac{2\mu-1}{2R}\pi\right) \frac{(-1)^{\mu-1}}{4R\sin^2\left(\frac{2\mu-1}{4R}\pi\right)},
 #
 # This is straight-forward to implement by defining the coefficients and evaluating
-# :math:`E` at the shifted positions :math:`x_\mu`:
+# :math:`E` at the shifted positions :math:`x_\mu:`
 
 
 def parameter_shift_first(fun, R):
@@ -781,7 +781,7 @@ ps_der1 = list(map(parameter_shift_first, cost_functions, Ns))
 #   E''(0) = -E(0)\frac{2R^2+1}{6} - \sum_{\mu=1}^{2R-1} E\left(\frac{\mu\pi}{R}\right)\frac{(-1)^\mu}{2\sin^2 \left(\frac{\mu\pi}{2R}\right)}.
 #
 # Let's code this up, again we only get slight complications from the special evaluation
-# at :math:`0`:
+# at :math:`0:`
 
 
 def parameter_shift_second(fun, R):

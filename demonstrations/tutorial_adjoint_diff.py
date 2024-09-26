@@ -270,7 +270,7 @@ for op in reversed(ops):
 # parameter :math:`\theta_i.`  For non-parametrized gates like CNOT, we say its derivative is zero.
 # We can also generalize the algorithm to multi-parameter gates, but we leave those out for now.
 #
-# Remember that each parameter occurs twice in :math:`\langle M \rangle`: once in the bra and once in
+# Remember that each parameter occurs twice in :math:`\langle M \rangle:` once in the bra and once in
 # the ket. Therefore, we use the product rule to take the derivative with respect to both locations:
 #
 # .. math::

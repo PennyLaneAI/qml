@@ -67,7 +67,7 @@ Variational quantum linear solver
 
 The approach used in a VQLS is to approximate the solution :math:`|x\rangle` with a variational quantum
 circuit, i.e., a unitary circuit :math:`V` depending on a finite number of classical real parameters
-:math:`w = (w_0, w_1, \dots)`:
+:math:`w = (w_0, w_1, \dots):`
 
 .. math::
 
@@ -435,7 +435,7 @@ A_num = c[0] * A_0 + c[1] * A_1 + c[2] * A_2
 b = np.ones(8) / np.sqrt(8)
 
 ##############################################################################
-# We can print the explicit values of :math:`A` and :math:`b`:
+# We can print the explicit values of :math:`A` and :math:`b:`
 
 print("A = \n", A_num)
 print("b = \n", b)

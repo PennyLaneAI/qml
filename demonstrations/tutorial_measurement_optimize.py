@@ -63,7 +63,7 @@ molecular Hamiltonian is computed:
 .. math:: H = \sum_i c_i h_i,
 
 where :math:`h_i` are the terms of the Hamiltonian written as a tensor product of Pauli operators or the identity
-acting on wire :math:`n,` :math:`P_n \in \{I, \sigma_x, \sigma_y, \sigma_z\}`:
+acting on wire :math:`n,` :math:`P_n \in \{I, \sigma_x, \sigma_y, \sigma_z\}:`
 
 .. math:: h_i = \bigotimes_{n=0}^{N-1} P_n.
 
@@ -74,7 +74,7 @@ after running the variational quantum circuit:
 .. math:: \text{cost}(\theta) = \langle 0 | U(\theta)^\dagger H U(\theta) | 0 \rangle.
 
 By using a classical optimizer to *minimize* this quantity, we can estimate
-the ground state energy of the Hamiltonian :math:`H`:
+the ground state energy of the Hamiltonian :math:`H:`
 
 .. math:: H U(\theta_{min}) |0\rangle = E_{min} U(\theta_{min}) |0\rangle.
 
@@ -176,7 +176,7 @@ print("\n", H)
 # We can see that as the size of our molecule increases, we run into a problem: larger molecules
 # result in Hamiltonians that not only require a larger number of qubits :math:`N` in their
 # representation, but the number of terms in the Hamiltonian scales like
-# :math:`\mathcal{O}(N^4)`! 😱😱😱
+# :math:`\mathcal{O}(N^4)!` 😱😱😱
 #
 # We can mitigate this somewhat by choosing smaller `basis sets
 # <https://en.wikipedia.org/wiki/Basis_set_(chemistry)>`__ to represent the electronic structure
@@ -224,7 +224,7 @@ print("\n", H)
 #
 # To explore why commutativity and simultaneous measurement are related, let's assume that there
 # is a complete, orthonormal eigenbasis :math:`|\phi_n\rangle` that *simultaneously
-# diagonalizes* both :math:`\hat{A}` and :math:`\hat{B}`:
+# diagonalizes* both :math:`\hat{A}` and :math:`\hat{B}:`
 #
 # .. math::
 #
@@ -750,7 +750,7 @@ print(cost_fn(weights))
 # ----------
 #
 # Wait, hang on. We dove so deeply into measurement grouping and optimization, we forgot to check
-# how this affects the number of measurements required to perform the VQE on :math:`\text{H}_2 \text{O}`!
+# how this affects the number of measurements required to perform the VQE on :math:`\text{H}_2 \text{O}!`
 # Let's use our new-found knowledge to see what happens.
 
 dataset = qml.data.load('qchem', molname="H2O")[0]

@@ -209,7 +209,7 @@ def sigmoid(x):
 # :math:`\theta_i` to some subset of the real numbers. With the probability
 # function defined, we can write a method that gives us the diagonal
 # elements of each one-qubit density matrix, for some parameters
-# :math:`\theta`:
+# :math:`\theta:`
 #
 
 

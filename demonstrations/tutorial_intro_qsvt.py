@@ -139,7 +139,7 @@ plt.show()
 # Transforming matrices encoded in matrices
 # ------------------------------------------
 #
-# Time to ask another key question: what if instead of encoding a scalar, we encode an entire matrix :math:`A`? 🧠
+# Time to ask another key question: what if instead of encoding a scalar, we encode an entire matrix :math:`A?` 🧠
 # This is trickier since we need to ensure that the larger operator remains unitary. A way to achieve this
 # is to use a similar construction as in the scalar case:
 #
@@ -147,7 +147,7 @@ plt.show()
 #     \sqrt{I-A^\dagger A} & -A^\dagger
 #     \end{pmatrix}.
 #
-# This operator is a valid unitary regardless of the form of :math:`A`; it doesn't even have to be a square matrix. We just
+# This operator is a valid unitary regardless of the form of :math:`A;` it doesn't even have to be a square matrix. We just
 # need to ensure that :math:`A` is properly normalized such that its largest singular value is bounded by 1.
 #
 # Any such method of encoding a matrix inside a larger unitary is known as a **block encoding**. In our construction,

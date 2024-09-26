@@ -555,7 +555,7 @@ plt.show()
 # models can achieve high-fidelity predictions using a few training data points. 
 # We implemented a model known as the quantum convolutional neural network (QCNN) using PennyLane 
 # for a binary classification task. Using six qubits, we have trained the QCNN to distinguish 
-# between handwritten digits of :math:`0`'s and :math:`1`'s. With :math:`80` samples, we have 
+# between handwritten digits of :math:`0`'s and :math:`1's`. With :math:`80` samples, we have 
 # achieved a model with accuracy greater than :math:`97\%` in :math:`100` training epochs. 
 # Furthermore, we have compared the test and train accuracy of this model for a different number of 
 # training samples and found the scaling of the generalization error agrees with the theoretical 

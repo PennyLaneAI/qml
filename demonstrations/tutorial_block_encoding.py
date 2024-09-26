@@ -22,7 +22,7 @@ very efficient for sparse and structured matrices: block encoding with matrix ac
 
 A general circuit for block encoding an arbitrary matrix :math:`A \in \mathbb{C}^{N \times N}` with
 :math:`N = 2^{n}` can be constructed as shown in the figure below, if we have access to the oracles 
-:math:`U_A` and :math:`U_B`:
+:math:`U_A` and :math:`U_B:`
 
 .. figure:: ../_static/demonstration_assets/block_encoding/general_circuit.png
     :width: 50%
@@ -41,7 +41,7 @@ Block encoding structured matrices
 -----------------------------------
 In order to better understand the oracle access framework, let us first define :math:`U_A` and :math:`U_B`
 for the exact block-encoding of :math:`A.` The :math:`U_A` oracle is responsible for encoding the 
-matrix entries of :math:`A` into the amplitude of an auxilary qubit :math:`|0\rangle_{\text{anc}}`:
+matrix entries of :math:`A` into the amplitude of an auxilary qubit :math:`|0\rangle_{\text{anc}}:`
 
 .. math::
 

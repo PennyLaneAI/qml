@@ -30,7 +30,7 @@ applying the fermionic creation operators, :math:`a^\dagger,` to a vacuum state:
     a^\dagger | 0 \rangle = | 1 \rangle.
 
 Similarly, electrons can be removed from a state by applying the fermionic annihilation
-operators :math:`a`:
+operators :math:`a:`
 
 .. math::
 

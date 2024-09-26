@@ -332,7 +332,7 @@ def S(x, thetas, wires):
 ###############################################################################
 # By setting the ``thetas`` properly, we achieve the integer-valued spectrum,
 # as required by the Fourier series expansion of a function of period
-# :math:`2\pi`:
+# :math:`2\pi:`
 # :math:`\{0, 1, \ldots, 2^n-2, 2^n-1\},` for :math:`n` qubits.
 # Some math shows that setting :math:`\vartheta_i=2^{n-i},` for
 # :math:`\{1,\ldots,n\}` produces the desired outcome.
@@ -390,7 +390,7 @@ def ansatz(x1, x2, thetas, amplitudes, wires):
 #
 # Further, this QK is also shift-invariant :math:`k_a(x_1,x_2) = k_a(x_1+\zeta,
 # x_2+\zeta)` for any :math:`\zeta\in\mathbb{R}.`
-# So we can also write it in terms of the lag :math:`\delta=x_1-x_2`:
+# So we can also write it in terms of the lag :math:`\delta=x_1-x_2:`
 #
 # .. math::
 #
@@ -424,7 +424,7 @@ def QK_circuit(x1, x2, thetas, amplitudes):
 ###############################################################################
 # Recall that the output of a QK is defined as the probability of obtaining
 # the outcome :math:`\lvert0\rangle` when measuring in the computational basis.
-# That corresponds to the :math:`0^\text{th}` entry of ``qml.probs``:
+# That corresponds to the :math:`0^\text{th}` entry of ``qml.probs`:`
 
 def QK_2(x1, x2, thetas, amplitudes):
     return QK_circuit(x1, x2, thetas, amplitudes)[0]
@@ -512,11 +512,11 @@ plt.show()
 # In this sense, the formula is general and it applies to any shift-invariant
 # kernel we might want to approximate, not only the Gaussian kernel.
 #
-# Our goal is to find the set of :math:`p_j`'s that produces the Fourier
+# Our goal is to find the set of :math:`p_j's` that produces the Fourier
 # coefficients of a given kernel function (in our case, the Gaussian kernel),
 # namely its spectrum :math:`(s_0, s_1, s_2, \ldots, s_{2^n-1}).`
 # We consider now a slightly different map :math:`F_s,` for a given spectrum
-# :math:`(s_0, s_1, \ldots, s_{2^n-1})`:
+# :math:`(s_0, s_1, \ldots, s_{2^n-1}):`
 #
 # .. math::
 #

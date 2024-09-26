@@ -65,12 +65,12 @@ Quantum GANs
 #        & ~~ + \mathbb{E}_{\boldsymbol{z}\sim p_{\boldsymbol{z}}}[\log(1 - D(G(\boldsymbol{z}))]
 #    \end{align}
 #
-# -  :math:`\boldsymbol{x}`: real data sample
-# -  :math:`\boldsymbol{z}`: latent vector
-# -  :math:`D(\boldsymbol{x})`: probability of the discriminator
+# -  :math:`\boldsymbol{x}:` real data sample
+# -  :math:`\boldsymbol{z}:` latent vector
+# -  :math:`D(\boldsymbol{x}):` probability of the discriminator
 #    classifying real data as real
-# -  :math:`G(\boldsymbol{z})`: fake data
-# -  :math:`D(G(\boldsymbol{z}))`: probability of discriminator
+# -  :math:`G(\boldsymbol{z}):` fake data
+# -  :math:`D(G(\boldsymbol{z})):` probability of discriminator
 #    classifying fake data as real
 #
 # In practice, the two networks are trained iteratively, each with

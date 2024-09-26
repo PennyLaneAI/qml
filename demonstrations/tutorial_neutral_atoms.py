@@ -241,7 +241,7 @@ the work that still needs to be done to scale this technology even further.
 #
 # .. note::
 #
-#    What about atoms in the state :math:`\vert \bar{0}\rangle`? Wouldn't they become excited as well?
+#    What about atoms in the state :math:`\vert \bar{0}\rangle?` Wouldn't they become excited as well?
 #    We can actually choose the energy level :math:`\vert h\rangle` such that the transition
 #    :math:`\vert \bar{0}\rangle \rightarrow \vert h\rangle` wouldn't conserve angular momentum,
 #    so it would be suppressed.
@@ -480,7 +480,7 @@ print(
 ##############################################################################
 #
 # We have implemented two orthogonal rotations in our neutral-atom device. This means that we have a universal set of single-qubit gates:
-# all one-qubit gates can be implemented using some combination of :math:`RX` and :math:`RY`! The easy part is over—now we need to
+# all one-qubit gates can be implemented using some combination of :math:`RX` and :math:`RY!` The easy part is over—now we need to
 # figure out how to apply two-qubit gates.
 #
 # The Rydberg blockade

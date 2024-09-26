@@ -291,7 +291,7 @@ plt.show()
 #    \hat{U}_{real}(\vec{\phi}) = \frac{1}{2} \ ( \hat{U}_{qsvt}(\vec{\phi}) + \hat{U}^{*}_{qsvt}(\vec{\phi}) ).
 #
 # Here we use a two-term LCU to define the quantum function for this operator. We obtain the complex
-# conjugate of :math:`\hat{U}_{qsvt}` by taking the adjoint of the operator block-encoding :math:`A^{T}`:
+# conjugate of :math:`\hat{U}_{qsvt}` by taking the adjoint of the operator block-encoding :math:`A^{T}:`
 
 
 def real_u(A, phi):

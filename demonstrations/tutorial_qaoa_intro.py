@@ -425,7 +425,7 @@ plt.show()
 # It is easy to introduce constraints of this form in PennyLane.
 # We can use the :func:`~.pennylane.qaoa.edge_driver` cost
 # Hamiltonian to "reward" cases in which the first and last vertices of the graph
-# are :math:`0`:
+# are :math:`0:`
 
 reward_h = qaoa.edge_driver(nx.Graph([(0, 2)]), ["11"])
 
@@ -490,7 +490,7 @@ plt.show()
 ######################################################################
 #
 # Just as we expected, the :math:`|10\rangle` state is now favoured
-# over :math:`|6\rangle`!
+# over :math:`|6\rangle!`
 #
 
 ######################################################################

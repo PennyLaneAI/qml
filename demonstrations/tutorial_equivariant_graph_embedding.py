@@ -149,7 +149,7 @@ plt.show()
 # When we design a machine learning model that takes graph data, the first step is to encode 
 # the adjacency matrix into a quantum state using an embedding or 
 # `quantum feature map <https://pennylane.ai/qml/glossary/quantum_feature_map.html>`_
-# :math:`\phi`:
+# :math:`\phi:`
 # 
 # .. math:: 
 # 

@@ -56,7 +56,7 @@ so it's unclear how this could be done.  This is where a great idea is born: **w
 
 The main insight of the Amp Amp algorithm is that there is a sequence of **two reflections** that allow us to effectively perform a rotation towards the target state. The first is the reflection with respect to :math:`|\phi^{\perp}\rangle` and the second one is the reflection with respect to :math:`|\Psi\rangle.`
 
-Let's go step by step. First we apply the reflection around :math:`|\phi^{\perp}\rangle`:
+Let's go step by step. First we apply the reflection around :math:`|\phi^{\perp}\rangle:`
 
 .. figure:: ../_static/demonstration_assets/intro_amplitude_amplification/ampamp2.jpeg
     :align: center

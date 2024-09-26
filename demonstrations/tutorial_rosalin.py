@@ -332,7 +332,7 @@ plt.show()
 #    :math:`v_i` of the estimated gradients.
 #
 # 3. Gradient descent is performed for each parameter :math:`\theta_i,` using
-#    the pre-defined learning rate :math:`\alpha` and the gradient information :math:`g_i`:
+#    the pre-defined learning rate :math:`\alpha` and the gradient information :math:`g_i:`
 #
 #    .. math:: \theta_i = \theta_i - \alpha g_i.
 #

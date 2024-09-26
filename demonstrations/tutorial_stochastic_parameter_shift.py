@@ -222,7 +222,7 @@ plt.show()
 # for some generator :math:`G.`
 # Additionally, every multi-qubit operator can be expressed as a
 # sum of tensor products of Pauli operators, so let's assume,
-# without loss of generality, the following form for :math:`\hat{G}`:
+# without loss of generality, the following form for :math:`\hat{G}:`
 #
 # .. math::
 #
@@ -239,7 +239,7 @@ plt.show()
 ##############################################################################
 # The stochastic parameter-shift rule gives the following recipe for
 # computing the gradient of the expectation value
-# :math:`\langle \hat{A} (\theta) \rangle`:
+# :math:`\langle \hat{A} (\theta) \rangle:`
 #
 # i) Sample a value for the variable :math:`s` uniformly form
 #    :math:`[0,1].`
@@ -345,7 +345,7 @@ plt.show()
 # gate lead to a functional form :math:`\cos(2\theta_1).`
 # Also by inspection, the results from the stochastic parameter-shift rule
 # have the functional form :math:`-2\sin(2\theta_1),` which is the derivative
-# of :math:`\cos(2\theta_1)`!
+# of :math:`\cos(2\theta_1)!`
 
 ##############################################################################
 # Finally, it is interesting to notice when the stochastic parameter-shift rule

@@ -167,7 +167,7 @@ print(
 #
 # We can write our equation above using the general form of the `QUBO
 # representation <https://en.wikipedia.org/wiki/Quadratic_unconstrained_binary_optimization>`__, i.e.,
-# using an upper triangular matrix :math:`Q \in \mathbb{R}^{n \  \mathrm{x} \ n}`:
+# using an upper triangular matrix :math:`Q \in \mathbb{R}^{n \  \mathrm{x} \ n}:`
 #
 # .. math:: \min_x \mathrm{x}^TQ \mathrm{x} = \min_x \left(\sum_i \sum_{j\ge i} Q_{ij} x_i x_j\right) = \min_x \left(\sum_i Q_{ii} x_i + \sum_i\sum_{j>i} Q_{ij}x_i x_j\right) \tag{3}
 #
@@ -210,16 +210,16 @@ print(f"The minimum cost is  {min_cost}")
 # where :math:`0 \le S \le 26.` But let’s take this slowly because we can get lost here, so let’s see
 # this with some examples:
 #
-# -  Imagine this case. No item is selected {:math:`x_0`: :math:`0`, :math:`x_1`: :math:`0`, :math:`x_2`: :math:`0,`
-#    :math:`x_3`: :math:`0,` :math:`x_4`: :math:`0`}, so the overall weight is zero (a valid solution) and the equality
+# -  Imagine this case. No item is selected {:math:`x_0`: :math:`0`, :math:`x_1`: :math:`0`, :math:`x_2:` :math:`0,`
+#    :math:`x_3`: :math:`0,` :math:`x_4:` :math:`0`}, so the overall weight is zero (a valid solution) and the equality
 #    constraint Eq.(4) must be fulfilled. So we select our slack variable to be 26.
 #
-# -  Now, what if we bring ⚽️ and 📚 {:math:`x_0`: :math:`1`, :math:`x_1`: :math:`0`, :math:`x_2`: :math:`0`, :math:`x_3`: :math:`1,`
-#    :math:`x_4`:0}. In this case, the overall weight is :math:`3 + 19 = 22` (a valid solution) and the equality
+# -  Now, what if we bring ⚽️ and 📚 {:math:`x_0`: :math:`1`, :math:`x_1`: :math:`0`, :math:`x_2`: :math:`0`, :math:`x_3:` :math:`1,`
+#    :math:`x_4:`0}. In this case, the overall weight is :math:`3 + 19 = 22` (a valid solution) and the equality
 #    constraint is fulfilled if :math:`22 + S = 26 \rightarrow S = 4.`
 #
-# -  Finally, what if we try to bring all the items {:math:`x_0`: :math:`1`, :math:`x_1`: :math:`1`, :math:`x_2`: :math:`1,`
-#    :math:`x_3`: :math:`1,` :math:`x_4`: :math:`1`}, the total weight, in this case, is :math:`3+11+14+19+5=52` (not a valid
+# -  Finally, what if we try to bring all the items {:math:`x_0`: :math:`1`, :math:`x_1`: :math:`1`, :math:`x_2:` :math:`1,`
+#    :math:`x_3`: :math:`1,` :math:`x_4:` :math:`1`}, the total weight, in this case, is :math:`3+11+14+19+5=52` (not a valid
 #    solution), to fulfill the constraint, we need :math:`52 + S = 26 \rightarrow S=-26` but the slack
 #    variable is in the range :math:`(0,26)` in our definition, so, in this case, there is valid solution for :math:`S.`
 #

@@ -582,7 +582,7 @@ plt.show()
 # down, the entire ion chain acts as a **quantum harmonic oscillator**,
 # meaning that it can vibrate with energies that are multiples of Planck's
 # constant :math:`\hbar` times a fundamental frequency
-# :math:`\omega`:
+# :math:`\omega:`
 #
 # .. math:: E=n\hbar\omega.
 #
@@ -732,7 +732,7 @@ plt.show()
 # need to be perfectly cooled to the motional ground state for it to work.
 # It relies on simultaneously shining two lasers at different frequencies
 # :math:`\omega_{\pm}` on the two target ions, which are slightly detuned
-# from the atomic energy gap :math:`\Delta`:
+# from the atomic energy gap :math:`\Delta:`
 #
 # .. math:: \omega_{\pm}=\Delta \pm \delta
 #

@@ -45,7 +45,7 @@ This is a powerful tool that will ultimately allow us
 to approximate any function on the interval :math:`[-1, 1]` that
 satisfies certain constraints. Before we can dive into function fitting,
 let’s develop some intuition. Consider the following single-qubit operator
-parameterized by :math:`a \in [-1, 1]`:
+parameterized by :math:`a \in [-1, 1]:`
 
 .. math:: \hat{W}(a) = \begin{bmatrix} a & i\sqrt{1 - a^{2}} \\ i\sqrt{1 - a^{2}} & a \end{bmatrix}.
 

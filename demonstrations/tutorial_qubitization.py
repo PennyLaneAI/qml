@@ -73,7 +73,7 @@ As an example, let’s take :math:`|\Psi\rangle` as the initial state to visuali
     :width: 50%
     :target: javascript:void(0)
 
-The block encoding operator :math:`\text{PSP}_{\mathcal{H}}` performs a second reflection along the line that bisects the angle between :math:`|\Psi\rangle` and :math:`|0\rangle |\phi\rangle.` Let's now examine the effect this reflection has on the previous state :math:`|\Psi_1\rangle`:
+The block encoding operator :math:`\text{PSP}_{\mathcal{H}}` performs a second reflection along the line that bisects the angle between :math:`|\Psi\rangle` and :math:`|0\rangle |\phi\rangle.` Let's now examine the effect this reflection has on the previous state :math:`|\Psi_1\rangle:`
 
 .. figure:: ../_static/demonstration_assets/qubitization/qubitization3.jpeg
     :align: center
@@ -148,7 +148,7 @@ plt.show()
 
 ##############################################################################
 # The two peaks obtained correspond to the values :math:`|\theta\rangle` and :math:`|-\theta\rangle.`
-# Finally, with some post-processing, we can determine the value of :math:`E`:
+# Finally, with some post-processing, we can determine the value of :math:`E:`
 
 import numpy as np
 

@@ -317,7 +317,7 @@ from thewalrus import hafnian as haf
 
 ######################################################################
 # Now, for the right-hand side numerator, we first calculate the submatrix
-# :math:`A = [(UU^T\mathrm{tanh}(r))]_{st}`:
+# :math:`A = [(UU^T\mathrm{tanh}(r))]_{st}:`
 
 A = np.dot(U, U.T) * np.tanh(1)
 
@@ -400,7 +400,7 @@ print(probs[0, 1, 0, 1])
 ######################################################################
 # **Measuring** :math:`|1,1,1,1\rangle` **at the output**
 #
-# This corresponds to the hafnian of the full matrix :math:`A=UU^T\mathrm{tanh}(r)`:
+# This corresponds to the hafnian of the full matrix :math:`A=UU^T\mathrm{tanh}(r):`
 
 A = np.dot(U, U.T) * np.tanh(1)
 print(np.abs(haf(A)) ** 2 / np.cosh(1) ** 4)
@@ -419,7 +419,7 @@ print(probs[1, 1, 1, 1])
 # **Measuring** :math:`|2,0,0,0\rangle` **at the output**
 #
 # Since we have two photons in mode ``q[0]``, we take two copies of the
-# first row and first column, making sure to divide by :math:`2!`:
+# first row and first column, making sure to divide by :math:`2!:`
 
 A = (np.dot(U, U.T) * np.tanh(1))[:, [0, 0]][[0, 0]]
 print(np.abs(haf(A)) ** 2 / (2 * np.cosh(1) ** 4))

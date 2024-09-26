@@ -218,11 +218,11 @@ line2 = ax.plot(
 #
 #     In spirit, a trigonometric expansion and a Taylor expansion are not that different: both are linear combinations of some basis functions, where the coefficients of the sum take very specific values usually related to the derivatives of the function we want to approximate.
 #     The difference between Taylor's and a trigonometric expansion is mainly what basis of functions we take.
-#     In Calculus I we learned that a Taylor series in one variable :math:`x` uses the integer powers of the variable namely :math:`\{1, x, x^2, x^3, \ldots\},` in short :math:`\{x^n\}_{n\in\mathbb{N}}`:
+#     In Calculus I we learned that a Taylor series in one variable :math:`x` uses the integer powers of the variable namely :math:`\{1, x, x^2, x^3, \ldots\},` in short :math:`\{x^n\}_{n\in\mathbb{N}}:`
 #
 #     .. math:: f_\text{Taylor}(x) = \sum c_n(x-x_0)^n.
 #
-#     A trigonometric expansion instead uses a different basis, also for one variable: :math:`\{1, \sin(x), \cos(x), \sin(2x), \cos(2x), \ldots\},` which we could call the set of trigonometric monomials with integer frequency, or in short :math:`\{\sin(nx),\cos(nx)\}_{n\in\mathbb{N}}`:
+#     A trigonometric expansion instead uses a different basis, also for one variable: :math:`\{1, \sin(x), \cos(x), \sin(2x), \cos(2x), \ldots\},` which we could call the set of trigonometric monomials with integer frequency, or in short :math:`\{\sin(nx),\cos(nx)\}_{n\in\mathbb{N}}:`
 #
 #     .. math:: f_\text{Trig}(x) = \sum a_n \cos(n(x-x_0))+ b_n \sin(n(x-x_0)).
 #
@@ -299,7 +299,7 @@ line2 = ax.plot(
 # In PennyLane, computing the gradient of a cost function with respect to an array of parameters can be easily done
 # with the `parameter-shift rule <https://pennylane.ai/qml/glossary/parameter_shift.html>`_.
 # By iterating the rule, we can obtain the second derivatives – the Hessian (see for example [#higher_order_diff]_).
-# Let us implement a function that does just that and prepares the coefficients :math:`E^{(A/B/C/D)}`:
+# Let us implement a function that does just that and prepares the coefficients :math:`E^{(A/B/C/D)}:`
 
 
 def get_model_data(fun, params):
@@ -420,7 +420,7 @@ print(f"E_model and E_original are the same: {E_model==E_original}")
 #
 #     How many parameters does our model have?
 #     In the following table we count them for an :math:`m`-dimensional input
-#     variable :math:`\boldsymbol{\theta}=(\theta_1,\ldots,\theta_m)`:
+#     variable :math:`\boldsymbol{\theta}=(\theta_1,\ldots,\theta_m):`
 #
 #     .. list-table::
 #        :widths: 20 35 45

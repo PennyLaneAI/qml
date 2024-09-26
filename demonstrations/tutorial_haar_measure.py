@@ -67,7 +67,7 @@ But, we know that the volume of a sphere of radius :math:`r` is
 Taking the integral naively like this doesn't take into account the structure of
 the sphere with respect to the parameters. For example, consider
 two small, infinitesimal elements of area with the same difference in
-:math:`\theta` and :math:`\phi,` but at different values of :math:`\theta`:
+:math:`\theta` and :math:`\phi,` but at different values of :math:`\theta:`
 
 .. figure:: /_static/demonstration_assets/haar_measure/spherical_int_dtheta.png
     :align: center
@@ -596,7 +596,7 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 #
 #    \int_{V \in U(N)} f(\color{red}{W}V) d\mu_N(V) =  \int_{V \in U(N)} f(V\color{red}{W}) d\mu_N(V) =  \int_{V \in U(N)} f(V) d\mu_N(V).
 #
-# This holds true for *any* other :math:`N\times N` unitary :math:`W`! A
+# This holds true for *any* other :math:`N\times N` unitary :math:`W!` A
 # consequence of such invariance is that if :math:`V` is Haar-random, then so is
 # :math:`V^T,` :math:`V^\dagger,` and any product of another unitary matrix and
 # :math:`V` (where the product may be taken on either side).

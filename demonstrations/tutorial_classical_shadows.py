@@ -104,7 +104,7 @@ observables.
 # :math:`\text{Tr}{O_1\rho},\ldots,\text{Tr}{O_M \rho}` up to an additive error :math:`\epsilon` if :math:`N\geq \mathcal{O}\left(\log{M} \max_i ||O_i||^2_{\text{shadow}}/\epsilon^2\right).`
 # The shadow norm :math:`||O_i||^2_{\text{shadow}}` depends on the unitary ensemble that is chosen.
 #
-# Two different ensembles can be considered for selecting the random unitaries :math:`U`:
+# Two different ensembles can be considered for selecting the random unitaries :math:`U:`
 #
 # 1. Random :math:`n`-qubit Clifford circuits.
 # 2. Tensor products of random single-qubit Clifford circuits.

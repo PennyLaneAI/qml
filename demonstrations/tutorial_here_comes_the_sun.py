@@ -125,7 +125,7 @@ A Lie algebra element :math:`\Omega` can be written as
 
 and those coefficients :math:`\theta` are precisely the canonical coordinates.
 You may ask why we included the prefactor :math:`i` in the definition of :math:`G_m` and why we excluded
-the identity (times :math:`i`). This was done to match the properties of :math:`\mathfrak{su}(N)`;
+the identity (times :math:`i`). This was done to match the properties of :math:`\mathfrak{su}(N);`
 the prefactor makes the basis elements skew-Hermitian and the identity would not have a
 vanishing trace. Indeed, one can check that the dimension of :math:`\mathfrak{su}(N)` is
 :math:`4^n-1` and that there are :math:`4^n` Pauli words, so that one Pauli word — the identity — had to go
@@ -246,7 +246,7 @@ theta = jnp.array([0.4, 0.2, -0.5])
 # which is much larger than usual for numerical differentiation on classical computers,
 # is adapted to the scenario of shot-based gradients (see App. F2 of [#wiersema]_).
 # We compute the derivative with respect to the second entry of theta, so we will use
-# the unit vector :math:`e_2`:
+# the unit vector :math:`e_2:`
 
 unit_vector = np.array([0.0, 1.0, 0.0])
 

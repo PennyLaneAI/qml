@@ -290,7 +290,7 @@ papers on the topic and keep up-to-date with the newest developments.
 # contain electromagnetic waves. Our focus will be on the so-called *Fabry-Perot* cavities.
 # They consist of two mirrors facing each other and whose rears are coated with an anti-reflecting
 # material. Something surprising happens when we shine a beam of light on a  Fabry-Perot cavity of
-# length :math:`L`: electromagnetic waves will only be transmitted when they have a wavelength :math:`\lambda`
+# length :math:`L:` electromagnetic waves will only be transmitted when they have a wavelength :math:`\lambda`
 # such that
 #
 # .. math:: L = n\lambda/2,

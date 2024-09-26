@@ -46,7 +46,7 @@ diagonal matrix as a magenta box:
   
 We will work on the eigenbasis of :math:`U` from now on. This means that a column
 vector :math:`[1, 0]^T` is the eigenvector associated with :math:`-\gamma,` and
-:math:`[0, 1]^T` is associated with :math:`+\gamma`:
+:math:`[0, 1]^T` is associated with :math:`+\gamma:`
 
 .. tip:: 
 
@@ -345,7 +345,7 @@ The set of Fourier sums of fixed degree form a vector space, and the pure
 frequencies :math:`e^{i\omega \theta\gamma}` are a *basis*. We can assemble
 these coefficients into a column vector,
 :math:`\vec{c}_f,` which contains the same information as the
-function :math:`f(\theta)`:
+function :math:`f(\theta):`
 
 .. math::
 
@@ -370,7 +370,7 @@ exponent of each pure frequency:
     (+i2n\gamma)c_{+2n} e^{+i2n\theta\gamma}.
 
 In terms of the coefficient vectors, however, it is just a diagonal
-matrix :math:`D`:
+matrix :math:`D:`
 
 .. math::
     \vec{c}_{f'} =

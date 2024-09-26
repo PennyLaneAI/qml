@@ -110,11 +110,11 @@ Furthermore, the mean photon number of the second wire is
 
 Therefore, we can see that:
 
-1. :math:`0\leq \left\langle \hat{n}_1\right\rangle\leq 1`: the output of the quantum circuit is
+1. :math:`0\leq \left\langle \hat{n}_1\right\rangle\leq 1:` the output of the quantum circuit is
    bound between 0 and 1;
 
-2. :math:`\frac{\partial}{\partial \phi} \left\langle \hat{n}_1\right\rangle=0`: the output of the
-   quantum circuit is independent of the beamsplitter phase :math:`\phi`;
+2. :math:`\frac{\partial}{\partial \phi} \left\langle \hat{n}_1\right\rangle=0:` the output of the
+   quantum circuit is independent of the beamsplitter phase :math:`\phi;`
 
 3. The output of the quantum circuit above is maximised when :math:`\theta=(2m+1)\pi/2`
    for :math:`m\in\mathbb{Z}_0.`
@@ -193,7 +193,7 @@ def cost(params):
 
 ##############################################################################
 # To begin our optimization, let's choose the following small initial values of
-# :math:`\theta` and :math:`\phi`:
+# :math:`\theta` and :math:`\phi:`
 
 init_params = np.array([0.01, 0.01], requires_grad=True)
 print(cost(init_params))
@@ -212,7 +212,7 @@ print(cost(init_params))
 # this results in :math:`B(\theta,\phi)\approx I,` and the output of the quantum
 # circuit will be very close to :math:`\left|1, 0\right\rangle` — i.e., the circuit leaves the photon in the first mode.
 #
-# Why don't we choose :math:`\theta=0` and :math:`\phi=0`?
+# Why don't we choose :math:`\theta=0` and :math:`\phi=0?`
 #
 # At this point in the parameter space, :math:`\left\langle \hat{n}_1\right\rangle = 0,` and
 # :math:`\frac{d}{d\theta}\left\langle{\hat{n}_1}\right\rangle|_{\theta=0}=2\sin\theta\cos\theta|_{\theta=0}=0.`
@@ -358,7 +358,7 @@ def squared_difference(x, y):
 #
 # We can translate this computational graph to the following function, which combines the three
 # nodes into a single hybrid computation. Below, we choose default values
-# :math:`\phi_1=0.5,` :math:`\phi_2=0.1`:
+# :math:`\phi_1=0.5,` :math:`\phi_2=0.1:`
 
 
 def cost(params, phi1=0.5, phi2=0.1):

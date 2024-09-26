@@ -15,7 +15,7 @@ At the same time, they are known to be difficult to train [#Anschuetz]_.
 The authors of [#Huang]_ tackle the question of whether or not shallow circuits are efficiently learnable.
 
 
-Given some unknown unitary circuit :math:`U,` learning the circuit constitutes finding a unitary :math:`V` that faithfully resembles :math:`U`'s action.
+Given some unknown unitary circuit :math:`U,` learning the circuit constitutes finding a unitary :math:`V` that faithfully resembles :math:`U's` action.
 This can be either fully performing the same operation (:math:`U V^\dagger = 1`) or resembling the action on a fixed input state
 (:math:`U |\phi\rangle = V |\phi\rangle,` where often :math:`|\phi\rangle = |0 \rangle^{\otimes n}`).
 The authors go through both scenarios with different levels of restrictions on the allowed gate set and locality of the target circuit :math:`U.`
@@ -103,7 +103,7 @@ def V_3():
 # Circuit Sewing
 # --------------
 #
-# So how does knowing local inversions :math:`\{V_0, V_1, V_2, V_3\}` help us with solving the original goal of finding a global inversion :math:`U V = \mathbb{1}`?
+# So how does knowing local inversions :math:`\{V_0, V_1, V_2, V_3\}` help us with solving the original goal of finding a global inversion :math:`U V = \mathbb{1}?`
 # The authors introduce a clever trick that they coin `circuit sewing`. It works by swapping out the decoupled qubit with an ancilla register and restoring ("repairing") the unitary on the remaining wires. 
 # Let us walk through this process step by step.
 #

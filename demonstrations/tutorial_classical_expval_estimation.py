@@ -403,7 +403,7 @@ print(f"Numerically exact expectation value:                        {exact_expva
 
 ##############################################################################
 # Wonderful, we have a working approximate simulation of the circuit that is scalable (for
-# fixed :math:`k`) that estimates the expectation value of :math:`H`!
+# fixed :math:`k`) that estimates the expectation value of :math:`H!`
 # Note that a single estimate neither is a proof that the algorithm works in general,
 # nor is it the subject of the main results by Angrisani et al.
 # However, a full-fledged benchmark goes beyond this demo.

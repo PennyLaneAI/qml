@@ -44,8 +44,8 @@ on the Hilbert space :math:`\mathcal{H}` of our system in the form of
 unitary operators :math:`U(g)` for :math:`g \in G.` More formally,
 given any two elements :math:`g_1, g_2\in G`, there is a *product* :math:`g_1 \circ g_2 \in G,` and such that:
 
-* **multiplication is associative**, :math:`g_1 \circ (g_2 \circ g_3) = (g_1 \circ g_2) \circ g_3` for all :math:`g_1, g_2, g_3 \in G`;
-* **there is a boring transformation** :math:`e` that does nothing, :math:`g \circ e = e \circ g = e` for all :math:`g \in G`;
+* **multiplication is associative**, :math:`g_1 \circ (g_2 \circ g_3) = (g_1 \circ g_2) \circ g_3` for all :math:`g_1, g_2, g_3 \in G;`
+* **there is a boring transformation** :math:`e` that does nothing, :math:`g \circ e = e \circ g = e` for all :math:`g \in G;`
 * **transformations can be undone**, with some :math:`g^{-1} \in G` such that :math:`g \circ g^{-1} = g^{-1} \circ g = e` for all :math:`g \in G.`
 
 It is sensible to ask that the unitary operators preserve the structure of the group:
@@ -415,7 +415,7 @@ print("The asymmetry for Hasym is", asymm(Hasym, 1e-4), ".")
 # Our symmetric Hamiltonian :math:`\hat{H}_\text{symm}` has a near-zero asymmetry as
 # expected. The near-symmetric
 # Hamiltonian :math:`\hat{H}_\text{nsym}` has an asymmetry much larger than
-# :math:`O(t)`; evidently, :math:`\xi` is a more intelligible
+# :math:`O(t);` evidently, :math:`\xi` is a more intelligible
 # measure of symmetry than :math:`P_+.` Finally, the Hamiltonian
 # :math:`\hat{H}_\text{asym}` has a huge error; it is not even approximately
 # symmetric.

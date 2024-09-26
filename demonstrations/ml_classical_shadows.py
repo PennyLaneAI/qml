@@ -159,7 +159,7 @@ def corr_function(i, j):
 #
 # The expectation value of each such operator :math:`\hat{C}_{ij}` with respect to
 # the ground state :math:`|\psi_{0}\rangle` of the model can be used to build
-# the correlation matrix :math:`C`:
+# the correlation matrix :math:`C:`
 #
 # .. math:: {C}_{ij} = \langle \hat{C}_{ij} \rangle = \frac{1}{3} \langle \psi_{0} | X_i X_j + Y_iY_j + Z_iZ_j | \psi_{0} \rangle .
 #
@@ -333,7 +333,7 @@ print("First five measurement bases =\n", basis[:5])
 
 ######################################################################
 # Furthermore, :math:`S_{T}` can be used to construct an approximation
-# of the underlying :math:`n`-qubit state :math:`\rho` by averaging over :math:`\sigma_t`:
+# of the underlying :math:`n`-qubit state :math:`\rho` by averaging over :math:`\sigma_t:`
 #
 # .. math::  \sigma_T(\rho) = \frac{1}{T} \sum_{1}^{T} \big(3|s_{1}^{(t)}\rangle\langle s_1^{(t)}| - \mathbb{I}\big)\otimes \ldots \otimes \big(3|s_{n}^{(t)}\rangle\langle s_n^{(t)}| - \mathbb{I}\big).
 #
@@ -500,7 +500,7 @@ plt.show()
 # :doc:`kernel-based models <tutorial_kernel_based_training>` to learn the ground-state representation of the
 # Heisenberg model Hamiltonian :math:`H(x_l)` from the coupling vector :math:`x_l,`
 # where :math:`x_l = [J_{i,j} \text{ for } i < j].` The goal is to predict the
-# correlation functions :math:`C_{ij}`:
+# correlation functions :math:`C_{ij}:`
 #
 # .. math::  \big\{x_l \rightarrow \sigma_T(\rho(x_l)) \rightarrow \text{Tr}(\hat{C}_{ij} \sigma_T(\rho(x_l))) \big\}_{l=1}^{N}.
 #

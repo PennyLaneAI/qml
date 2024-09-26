@@ -57,7 +57,7 @@ We're putting the N in NISQ.
 # support for mixed states and for simulating noisy computations. Let's use ``default.mixed`` to
 # simulate a simple circuit for preparing the
 # Bell state :math:`|\psi\rangle=\frac{1}{\sqrt{2}}(|00\rangle+|11\rangle).` We ask the QNode to
-# return the expectation value of :math:`Z_0\otimes Z_1`:
+# return the expectation value of :math:`Z_0\otimes Z_1:`
 #
 import pennylane as qml
 from jax import numpy as np

@@ -138,7 +138,7 @@ dev_stochastic = qml.device("lightning.qubit", wires=num_wires, shots=1000)
 
 ##############################################################################
 # We can use ``qml.Hermitian`` to directly specify that we want to measure
-# the expectation value of the matrix :math:`H`:
+# the expectation value of the matrix :math:`H:`
 
 H = np.array([[8, 4, 0, -6], [4, 0, 4, 0], [0, 4, 8, 0], [-6, 0, 0, 0]])
 

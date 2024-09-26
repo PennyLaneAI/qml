@@ -319,7 +319,7 @@ def cost(x):
 
 
 ################################################################################
-# To begin our optimization, let's choose small initial values of :math:`\phi_1` and :math:`\phi_2`:
+# To begin our optimization, let's choose small initial values of :math:`\phi_1` and :math:`\phi_2:`
 
 init_params = np.array([0.011, 0.012])
 print(cost(init_params))

@@ -140,7 +140,7 @@ nx.draw(graph, with_labels=True, node_color="#e377c2")
 # where each qubit is a node in the graph, and the states :math:`|0\rangle` and :math:`|1\rangle`
 # represent whether the vertex has been marked as part of the clique, as is the case for `most standard QAOA encoding
 # schemes <https://arxiv.org/abs/1709.03489>`__.
-# Note that :math:`\bar{G}` is the complement of :math:`G`: the graph formed by connecting all nodes that **do not** share
+# Note that :math:`\bar{G}` is the complement of :math:`G:` the graph formed by connecting all nodes that **do not** share
 # an edge in :math:`G.`
 #
 # In addition to defining :math:`H_c,` we also require a driver Hamiltonian :math:`H_d` which does not commute
@@ -294,7 +294,7 @@ plt.show()
 #
 # To get a better understanding of the performance of the FALQON algorithm,
 # we can create a graph showing the probability of measuring each possible bit string.
-# We define the following circuit, feeding in the optimal values of :math:`\beta_k`:
+# We define the following circuit, feeding in the optimal values of :math:`\beta_k:`
 
 @qml.qnode(dev, interface="autograd")
 def prob_circuit():
@@ -398,7 +398,7 @@ nx.draw(new_graph, with_labels=True, node_color="#e377c2")
 
 ######################################################################
 # We can now use the PennyLane QAOA module to create a QAOA circuit corresponding to the MaxClique problem. For this
-# demonstration, we set the depth to :math:`5`:
+# demonstration, we set the depth to :math:`5:`
 
 depth = 5
 dev = qml.device("default.qubit", wires=new_graph.nodes)
@@ -425,7 +425,7 @@ def qaoa_expval(params):
 
 ######################################################################
 # Now all we have to do is run FALQON for :math:`5` steps to get our initial QAOA parameters.
-# We set :math:`\Delta t = 0.02`:
+# We set :math:`\Delta t = 0.02:`
 
 delta_t = 0.02
 
@@ -434,7 +434,7 @@ res, res_energy = max_clique_falqon(new_graph, depth-1, 0.0, delta_t, dev)
 params = np.array([[delta_t for k in res], [delta_t * k for k in res]], requires_grad=True)
 
 ######################################################################
-# Finally, we run our QAOA optimization procedure. We set the number of QAOA executions to :math:`40`:
+# Finally, we run our QAOA optimization procedure. We set the number of QAOA executions to :math:`40:`
 #
 
 steps = 40
