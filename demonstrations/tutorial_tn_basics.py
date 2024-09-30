@@ -22,9 +22,6 @@ Where each :math:`i_n` is an *index* of dimension :math:`d_n` - it can take valu
 For example, a scalar :math:`s` is a rank-0 tensor, a vector :math:`v_i` is a rank-1 tensor and a matrix :math:`G_{i,j}` is a rank-2 tensor.
     
 A beautiful and powerful tool accompanying tensors (networks) is their graphical language representation. The diagram of a tensor is simply a geometric shape with a leg sticking out of it for every index in the tensor. For example,
-
-.. math::
-    T_{i,j,k,l} = 
     
 .. figure:: ../_static/demonstration_assets/tn_basics/01-tensor.png
     :align: center
@@ -52,21 +49,21 @@ Creating a tensor in code is straightforward, and chances are you have already c
 
 import numpy as np
 
-tensor_rank1 = np.array([1, 2, 3])
+tensor_rank1 = np.array([1, 2, 3, 4])
 print("rank: ", tensor_rank1.ndim)
 print("dimensions: ", tensor_rank1.shape)
 
 ##############################################################################
 # Then, we can use this to construct a rank-2 tensor (a matrix).
 
-tensor_rank2 = np.array([tensor_rank1, tensor_rank1])
+tensor_rank2 = np.array([tensor_rank1, tensor_rank1, tensor_rank1])
 print("rank: ", tensor_rank2.ndim)
 print("dimensions: ", tensor_rank2.shape)
 
 ##############################################################################
 # As you might have guessed, we can repeat this procedure to create a rank-3 tensor.
 
-tensor_rank3 = np.array([tensor_rank2])
+tensor_rank3 = np.array([tensor_rank2, tensor_rank2])
 print("rank: ", tensor_rank3.ndim)
 print("dimensions: ", tensor_rank3.shape)
 print("Rank-3 tensor: \n", tensor_rank3)
@@ -285,9 +282,11 @@ print(f"Computation cost for A(BC) contraction: {average_time_ms:.8f} ms")
 # 
 # First, we set up the framework of the problem. While multiway contractions - contractions between more than 2 tensors at a time - are possible, we will consider only pairwise contractions since the former can always be decomposed in terms of the latter. In addition, contracting a tensor network need not result in a single tensor. However, here we consider only the single tensor case as it underlies the more general scenario [#Gray2021]_. 
 # 
-# The underlying idea behind finding a contraction path is based on the construction of the computational graph, i.e., a rooted binary tree - also known as the **contraction tree** - that specifies the sequence of pairwise contractions to be executed. In this tree structure, a leaf node corresponds to a tensor from the original network and the pairwise contractions give rise to the intermediate tensors corresponding to the rest of the nodes in the tree. 
+# The underlying idea behind finding a contraction path is based on the construction of the computational graph, i.e., a rooted binary tree - also known as the **contraction tree** - that specifies the sequence of pairwise contractions to be executed. In this tree structure, a leaf node corresponds to a tensor from the original network (blue tensors) and the pairwise contractions (red lines) give rise to the intermediate tensors (red tensors) corresponding to the rest of the nodes in the contraction tree. 
 # 
-# TODO: here include a drawing similar to one in Fig2.a of https://journals.aps.org/prx/pdf/10.1103/PhysRevX.14.011009
+# .. figure:: ../_static/demonstration_assets/tn_basics/10-contraction-tree.png
+#     :align: center
+#     :width: 50%
 # 
 # Transforming a tensor network with an arbitrary structure into this binary tree can be achieved by a *tree embedding* of the tensor network graph [#Bienstock1990]_. Thus, optimization of the contraction path is equivalent to a search over tree embeddings of the network.
 # 
