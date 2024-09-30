@@ -134,7 +134,7 @@ CHSH_expval = np.sum(expvals[:3]) - expvals[3]
 print(CHSH_expval)
 
 ##############################################################################
-# The output here is :math:`2\sqrt{2}`, which is the maximal value of the
+# The output here is :math:`2\sqrt{2},` which is the maximal value of the
 # CHSH inequality. States which have a value
 # :math:`\langle CHSH \rangle \geq 2` can safely be considered
 # "quantum".
@@ -278,7 +278,7 @@ print("Expectation value:", circuit(gate_pars))
 #
 #     \rho' = \tfrac{1}{3}\left[X\rho X + Y\rho Y + Z\rho Z\right]
 #
-# (at the value :math:`p=\frac{3}{4}`, it passes through the
+# (at the value :math:`p=\frac{3}{4},` it passes through the
 # maximally mixed state).
 # We can see this in our circuit by looking at how the final
 # :class:`~pennylane.ops.PauliZ` expectation value changes as
@@ -350,7 +350,7 @@ print("({: .7f}, {: .7f})".format(*noisy_circuit_params))
 #    as pure states.
 #
 # ii) However, both circuits still converge to
-#     the *same parameter values* :math:`(0,\pi)`, despite having
+#     the *same parameter values* :math:`(0,\pi),` despite having
 #     different final states.
 #
 # It could have been the case that noisy devices irreparably
@@ -371,7 +371,7 @@ print("({: .7f}, {: .7f})".format(*noisy_circuit_params))
 #
 # i) an initial quantum state :math:`\rho` (usually the zero state);
 # ii) a parameterized unitary transformation :math:`U(\theta)`); and
-# iii) measurement of a final observable :math:`\hat{B}`.
+# iii) measurement of a final observable :math:`\hat{B}.`
 #
 # The equation for the expectation value is given by the
 # `Born rule <https://en.wikipedia.org/wiki/Born_rule>`_:
@@ -394,9 +394,9 @@ print("({: .7f}, {: .7f})".format(*noisy_circuit_params))
 #            \right].
 #
 # In our example, the parametrized unitary :math:`U(\theta)` is split into two gates,
-# :math:`U = U_2 U_1`,
-# where :math:`U_1=R_X` and :math:`U_1=R_Y`, and each takes an independent
-# parameter :math:`\theta_i`.
+# :math:`U = U_2 U_1,`
+# where :math:`U_1=R_X` and :math:`U_1=R_Y,` and each takes an independent
+# parameter :math:`\theta_i.`
 #
 # What happens when we apply a
 # noisy channel :math:`\Lambda` after the gates? In this case,
@@ -412,13 +412,13 @@ print("({: .7f}, {: .7f})".format(*noisy_circuit_params))
 #
 # Thus, we can treat it as the expectation value of the same
 # observable, but with respect to a different state
-# :math:`\rho' = \Lambda\left[U(\theta)\rho U^\dagger(\theta)\right]`.
+# :math:`\rho' = \Lambda\left[U(\theta)\rho U^\dagger(\theta)\right].`
 #
 # Alternatively, using the Heisenberg picture, we can transfer the channel
 # :math:`\Lambda` acting on the state :math:`U(\theta)\rho U^\dagger(\theta)`
 # into the *adjoint channel* :math:`\Lambda^\dagger` acting on the
-# observable :math:`\hat{B}`, transforming it to a new observable
-# :math:`\hat{B} = \Lambda^\dagger[\hat{B}]=\hat{B}'`.
+# observable :math:`\hat{B},` transforming it to a new observable
+# :math:`\hat{B} = \Lambda^\dagger[\hat{B}]=\hat{B}'.`
 #
 # With the channel present, the expectation value can be interpreted
 # as if we had the same variational state, but measured a different
@@ -448,7 +448,7 @@ print("({: .7f}, {: .7f})".format(*noisy_circuit_params))
 # .. note:: In the above derivation, we implicitly assumed that the channel
 #           does not depend on the variational circuit's parameters. If the
 #           channel depended on the particular state, or if it depended
-#           on the parameters :math:`\theta`, we would need to be more careful.
+#           on the parameters :math:`\theta,` we would need to be more careful.
 #
 #
 # Let's confirm the above derivation with an example.

@@ -30,7 +30,7 @@ The parameter-shift rule
 ------------------------
 
 The parameter-shift rule states that, given a variational quantum circuit :math:`U(\boldsymbol
-\theta)` composed of parametrized Pauli rotations, and some measured observable :math:`\hat{B}`, the
+\theta)` composed of parametrized Pauli rotations, and some measured observable :math:`\hat{B},` the
 derivative of the expectation value
 
 .. math::
@@ -400,7 +400,7 @@ plt.show()
 # We can see that the computational time for the parameter-shift rule increases with
 # increasing number of parameters, as expected, whereas the computational time
 # for backpropagation appears much more constant, with perhaps a minute linear increase
-# with :math:`p`. Note that the plots are not perfectly linear, with some 'bumpiness' or
+# with :math:`p.` Note that the plots are not perfectly linear, with some 'bumpiness' or
 # noisiness. This is likely due to low-level operating system jitter, and
 # other environmental fluctuations—increasing the number of repeats can help smooth
 # out the plot.
@@ -439,7 +439,7 @@ plt.show()
 #     <br>
 #
 # We can now see clearly that there is constant overhead for backpropagation with
-# ``default.qubit``, but the parameter-shift rule scales as :math:`\sim 2p`.
+# ``default.qubit``, but the parameter-shift rule scales as :math:`\sim 2p.`
 #
 #
 # About the author
