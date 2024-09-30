@@ -49,21 +49,21 @@ Creating a tensor in code is straightforward, and chances are you have already c
 
 import numpy as np
 
-tensor_rank1 = np.array([1, 2, 3])
+tensor_rank1 = np.array([1, 2, 3, 4])
 print("rank: ", tensor_rank1.ndim)
 print("dimensions: ", tensor_rank1.shape)
 
 ##############################################################################
 # Then, we can use this to construct a rank-2 tensor (a matrix).
 
-tensor_rank2 = np.array([tensor_rank1, tensor_rank1])
+tensor_rank2 = np.array([tensor_rank1, tensor_rank1, tensor_rank1])
 print("rank: ", tensor_rank2.ndim)
 print("dimensions: ", tensor_rank2.shape)
 
 ##############################################################################
 # As you might have guessed, we can repeat this procedure to create a rank-3 tensor.
 
-tensor_rank3 = np.array([tensor_rank2])
+tensor_rank3 = np.array([tensor_rank2, tensor_rank2])
 print("rank: ", tensor_rank3.ndim)
 print("dimensions: ", tensor_rank3.shape)
 print("Rank-3 tensor: \n", tensor_rank3)
