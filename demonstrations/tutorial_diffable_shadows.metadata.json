@@ -60,7 +60,7 @@
         },
         {
             "type": "demonstration",
-            "id": "tutorial_ml_classical_shadows",
+            "id": "ml_classical_shadows",
             "weight": 1.0
         }
     ]

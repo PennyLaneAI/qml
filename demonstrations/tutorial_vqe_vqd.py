@@ -45,9 +45,17 @@ a familiarization with the `variational quantum eigensolver (VQE) algorithm <htt
 # To implement the VQD algorithm, we first need to know the ground state of our system, and it is a breeze to use the data from `PennyLane Datasets <https://pennylane.ai/datasets/>`__  to obtain the Hamiltonian and the ground state
 # of the hydrogen molecule:
 #
+# .. note::
+#
+#     To improve viewability of this tutorial, we will suppress any ``ComplexWarning``'s which may be raised during optimization.
+#     The warnings do not impact the correctness of the results, but make it harder to view outputs.
+#
 
 import pennylane as qml
-from pennylane import numpy as np
+import numpy as np
+
+import warnings
+warnings.filterwarnings(action="ignore", category=np.ComplexWarning)
 
 # Load the dataset
 h2 = qml.data.load("qchem", molname="H2", bondlength=0.742, basis="STO-3G")[0]
@@ -58,7 +66,7 @@ H, n_qubits = h2.hamiltonian, len(h2.hamiltonian.wires)
 
 # Obtain the ground state from the operations given by the dataset
 def generate_ground_state(wires):
-    qml.BasisState(h2.hf_state, wires=wires)
+    qml.BasisState(np.array(h2.hf_state), wires=wires)
 
     for op in h2.vqe_gates:  # use the gates data from the dataset
         op = qml.map_wires(op, {op.wires[i]: wires[i] for i in range(len(wires))})
@@ -84,7 +92,7 @@ print(f"Ground state energy: {circuit()}")
 # Finding the excited state
 # ----------------------------
 #
-# To obtain the excited state we must define our ansatz that generates the state :math:`|\Psi(\theta)\rangle`.
+# To obtain the excited state we must define our ansatz that generates the state :math:`|\Psi(\theta)\rangle.`
 #
 # We use an ansatz constructed with :doc:`Givens rotations <tutorial_givens_rotations>`, and we define the circuit for finding the excited state.
 #
@@ -104,7 +112,7 @@ theta = np.random.rand(3) # 3 parameters for the ansatz
 print(qml.draw(ansatz, decimals = 2)(theta, range(4)))
 
 ######################################################################
-# The ``ansatz`` function is the one that generates the state :math:`|\Psi(\theta)\rangle`.
+# The ``ansatz`` function is the one that generates the state :math:`|\Psi(\theta)\rangle.`
 # The next step is to calculate the overlap between our generated state and the ground state, using a technique
 # known as `swap test <https://en.wikipedia.org/wiki/Swap_test>`__.
 
@@ -189,9 +197,9 @@ print(f"\nEstimated energy: {energy[-1].real:.8f}")
 print(np.sort(np.linalg.eigvals(H.matrix())))
 
 ######################################################################
-# We have indeed found an eigenvalue of the Hamiltonian. It may seem that we have skipped the value :math:`-0.5389`,
+# We have indeed found an eigenvalue of the Hamiltonian. It may seem that we have skipped the value :math:`-0.5389,`
 # however the eigenvector corresponding to this eigenvalue belongs to a different particle number sector.
-# The correct energy value for the first excited state of hydrogen is :math:`-0.53320939`, consistent with what we obtained with VQD!
+# The correct energy value for the first excited state of hydrogen is :math:`-0.53320939,` consistent with what we obtained with VQD!
 # We have successfully found the first excited state!
 #
 # Conclusion

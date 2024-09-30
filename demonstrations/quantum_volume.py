@@ -213,25 +213,25 @@ print(f"Heavy output probability = {heavy_output_prob}")
 # we should *expect* to see on average. The intuition for how this can be
 # calculated is as follows [#aaronson]_, [#cmu]_.  Suppose that our random
 # square circuits scramble things up enough so that the effective operation
-# looks like a Haar-random unitary :math:`U`. Since in the circuits we are
+# looks like a Haar-random unitary :math:`U.` Since in the circuits we are
 # applying :math:`U` to the all-zero ket, the measurement outcome probabilities
-# will be the moduli squared of the entries in the first column of :math:`U`.
+# will be the moduli squared of the entries in the first column of :math:`U.`
 #
 # Now if :math:`U` is Haar-random, we can say something about the form of these
 # entries. In particular, they are complex numbers for which both the real and
 # imaginary parts are normally distributed with mean 0 and variance
-# :math:`1/2^m`, where :math:`m` is the number of qubits. Taking the modulus
+# :math:`1/2^m,` where :math:`m` is the number of qubits. Taking the modulus
 # squared of such numbers and making a histogram yields a distribution
 # of probabilities with the form :math:`\hbox{Pr}(p) \sim 2^m e^{-2^m p}.` This
 # is also known as the *Porter-Thomas distribution*.
 #
 # By looking at the form of the underlying probability distribution, the
-# exponential distribution :math:`\hbox{Pr}(x) = e^{-x}`, we can calculate some
+# exponential distribution :math:`\hbox{Pr}(x) = e^{-x},` we can calculate some
 # properties of the heavy output probabilities. First, we can integrate the exponential
-# distribution to find that the median sits at :math:`\ln 2`.  We can further
+# distribution to find that the median sits at :math:`\ln 2.`  We can further
 # compute the expectation value of obtaining something greater than the median
 # by integrating :math:`x e^{-x}` from :math:`\ln 2` to :math:`\infty` to obtain
-# :math:`(1 + \ln 2)/2`. This is the expected heavy output probability!
+# :math:`(1 + \ln 2)/2.` This is the expected heavy output probability!
 # Numerically it is around 0.85, as we will observe later in our results.
 #
 #
@@ -256,7 +256,7 @@ print(f"Heavy output probability = {heavy_output_prob}")
 #
 # To see this more concretely, suppose we have a 20-qubit device and find that
 # we get heavy outputs reliably for up to depth-4 circuits on any set of 4
-# qubits, then the quantum volume is :math:`\log_2 V_Q = 4`. Quantum volume is
+# qubits, then the quantum volume is :math:`\log_2 V_Q = 4.` Quantum volume is
 # incremental, as shown below — we gradually work our way up to larger
 # circuits, until we find something we can't do.  Very loosely, quantum volume
 # is like an effective number of qubits. Even if we have those 20 qubits, only
@@ -269,7 +269,7 @@ print(f"Heavy output probability = {heavy_output_prob}")
 #
 #     ..
 #
-#     This quantum computer has :math:`\log_2 V_Q = 4`, as the 4-qubit square
+#     This quantum computer has :math:`\log_2 V_Q = 4,` as the 4-qubit square
 #     circuits are the largest ones it can run successfully.
 #
 #
@@ -286,7 +286,7 @@ print(f"Heavy output probability = {heavy_output_prob}")
 #    In many sources, the quantum volume of processors is reported as
 #    :math:`V_Q` explicitly, rather than :math:`\log_2 V_Q` as is the
 #    convention in this demo. As such, IonQ's processor has the potential for a
-#    quantum volume of :math:`2^{22} > 4000000`. Here we use the :math:`\log`
+#    quantum volume of :math:`2^{22} > 4000000.` Here we use the :math:`\log`
 #    because it is more straightforward to understand that they have 22
 #    high-quality, well-connected qubits than to extract this at first glance from the
 #    explicit value of the volume.
@@ -452,7 +452,7 @@ print(qml.drawer.tape_text(expanded_tape, wire_order=dev_ideal.wires, show_all_w
 # circuits with numbers of qubits well into the double digits (though they may
 # need a supercomputer to do so). Furthermore, the designers of the protocol
 # don't expect this to be an issue until gate error rates decrease below
-# :math:`\approx 10^{-4}`, after which we may need to make adjustments to remove
+# :math:`\approx 10^{-4},` after which we may need to make adjustments to remove
 # the classical simulation, or even consider new volume metrics [#cross]_.
 #
 # The heavy outputs can be retrieved from a classically-obtained probability
@@ -533,7 +533,7 @@ print(f"Heavy outputs are {heavy_outputs}")
 #
 # Now it's time to run the protocol. First, let's set up our hardware
 # device. We'll use a simulated version of the 5-qubit IBM Lima as an example
-# — the reported quantum volume according to IBM is :math:`V_Q=8`, so we
+# — the reported quantum volume according to IBM is :math:`V_Q=8,` so we
 # endeavour to reproduce that here. This means that we should be able to run our
 # square circuits reliably on up to :math:`\log_2 V_Q =3` qubits.
 #
@@ -607,7 +607,7 @@ dev_noisy.set_transpile_args(
 ##############################################################################
 #
 # Let's run the protocol. We'll start with the smallest circuits on 2
-# qubits, and make our way up to 5. At each :math:`m`, we'll look at 200 randomly
+# qubits, and make our way up to 5. At each :math:`m,` we'll look at 200 randomly
 # generated circuits.
 #
 
@@ -693,8 +693,8 @@ for idx, prob in enumerate(probs_mean_noisy):
 ##############################################################################
 #
 # We see that the ideal probabilities are well over 2/3. In fact, they're quite
-# close to the expected value of :math:`(1 + \ln 2)/2`, which we recall from
-# above is :math:`\approx 0.85`.  For this experiment, we see that the device
+# close to the expected value of :math:`(1 + \ln 2)/2,` which we recall from
+# above is :math:`\approx 0.85.`  For this experiment, we see that the device
 # probabilities are also above the threshold (except one).  But it isn't enough
 # that just the mean of the heavy output probabilities is greater than 2/3. Since we're
 # dealing with randomness, we also want to ensure these results were not just a
@@ -787,9 +787,9 @@ for idx, prob in enumerate(two_sigma_below):
 
 ##############################################################################
 #
-# We see that we are :math:`2\sigma` above the threshold only for :math:`m=2`,
-# and :math:`m=3`. Thus, we find that the quantum volume of our simulated Lima is
-# :math:`\log_2 V_Q = 3`, or :math:`V_Q = 8`, as expected.
+# We see that we are :math:`2\sigma` above the threshold only for :math:`m=2,`
+# and :math:`m=3.` Thus, we find that the quantum volume of our simulated Lima is
+# :math:`\log_2 V_Q = 3`, or :math:`V_Q = 8,` as expected.
 #
 # This framework and code will allow you to calculate the quantum volume of many
 # different processors. Try it yourself! What happens if we don't specify a
