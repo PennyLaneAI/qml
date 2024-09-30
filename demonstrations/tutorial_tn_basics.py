@@ -23,33 +23,26 @@ For example, a scalar :math:`s` is a rank-0 tensor, a vector :math:`v_i` is a ra
     
 A beautiful and powerful tool accompanying tensors (networks) is their graphical language representation. The diagram of a tensor is simply a geometric shape with a leg sticking out of it for every index in the tensor. For example,
 
-TODO: add diagram here as the second part of the equation.
-
 .. math::
     T_{i,j,k,l} = 
     
-.. figure:: ../_static/demonstration_assets/tn_basics/tensor_one.png
+.. figure:: ../_static/demonstration_assets/tn_basics/01-tensor.png
     :align: center
-    :width: 60%
+    :width: 50%
 
 We can apply this same idea to represent a scalar, a vector and a matrix:
 
-TODO: add diagrams here.
-
-.. math::
-    s = 
-    
-.. math::
-    v_i =
-    
-.. math::
-    G_{i,j} =  
+.. figure:: ../_static/demonstration_assets/tn_basics/02-tensors.png
+    :align: center
+    :width: 50%
 
 Does the last diagram seem familiar? It is because this is the representation of a single-qubit gate! We will see later in this tutorial the relation between quantum circuits and tensor networks. 
 
-For quantum states, it is often useful to adopt the convention that writing the legs towards one direction (e.g. the right) corresponds to a ket, i.e., a vector living in the Hilbert space, while drawing the legs to the opposite direction (e.g. left) means they are a bra vector, i.e., living in the dual space.
+When working within the quantum computing notation, we adopt the convention that writing the leg of a quantum state (i.e., a vector) towards the right direction corresponds to a ket, i.e., a vector living in the Hilbert space, while drawing the legs to the left means they are a bra vector, i.e., living in the dual space.
 
-TODO: 1) drawing of a vector with legs towards right diretion (ket) 2) legs towards left (bra)
+.. figure:: ../_static/demonstration_assets/tn_basics/03-braket.png
+    :align: center
+    :width: 50%
 
 .. tip::
     The diagrammatic representation of tensors is rooted in category theory, which equips the diagrams with all the relevant information so they can used in proofs and formal reasoning! [#Selinger2010]_
@@ -88,17 +81,27 @@ print("Rank-3 tensor: \n", tensor_rank3)
 #
 # Matrix-matrix and matrix-vector multiplications are familiar operations within the context of quantum computing. We can now study these operations under the lens of the tensor notation introduced above. First, a matrix and a vector can be multiplied as
 #
-# TODO: add diagram at the end of the equation.
 #
 # .. math::
-#     (w)_i = G \cdot v = \sum_j G_ij v_j =
+#     (w)_j = G \cdot v = \sum_i G_ij v_i
 #
-# We see that summing over the shared index :math:`j` is equivalent to **contracting** the corresponding legs from the matrix and vector diagrams. As expected, the result of this multiplication is another rank-1 tensor with dangling leg :math:`i`. Similarly, we can look at the matrix-matrix multiplication:
+# .. figure:: ../_static/demonstration_assets/tn_basics/04-matrix-vector.png
+#     :align: center
+#     :width: 50%
+# 
+# .. note::
+# 
+#   Recall we are adopting the convention of writing a ket vector with its leg pointing right, as done in quantum circuits. In turn, this means the "input" index of a matrix - its column index - points towards the left, while the "output" index - its row index - points towards the right.
+# 
+# We see that summing over the shared index :math:`i` is equivalent to **contracting** the corresponding legs from the matrix and vector diagrams. As expected, the result of this multiplication is another rank-1 tensor with dangling leg :math:`j`. Similarly, we can look at the matrix-matrix multiplication:
 #
-# TODO: add diagram at the end of the equation.
 #
 # .. math::
-#     (G^3)_{i,k} = G^1 \cdot G^2 = \sum_j G^{1}_{i,j} G^{2}_{j,k} =
+#     (G^3)_{i,k} = G^2 \cdot G^1 = \sum_j G^{2}_{j,k} G^{1}_{i,j}
+# 
+# .. figure:: ../_static/demonstration_assets/tn_basics/05-matrix-matrix.png
+#     :align: center
+#     :width: 50%
 #
 # In this case, the resulting tensor has two dangling indices, :math:`i` and :math:`k`, which defines a matrix, as expected!
 #
@@ -109,7 +112,9 @@ print("Rank-3 tensor: \n", tensor_rank3)
 #
 # Note how the resulting rank-3 tensor is made up of the remaining open legs from the initial tensors :math:`(i,l,n)`. The diagrammatic representation of this equation is obtained by sticking all the legs with the same indices together.
 #
-# TODO: add figure here.
+# .. figure:: ../_static/demonstration_assets/tn_basics/06-tensor-tensor.png
+#     :align: center
+#     :width: 50%
 #
 # With the above contraction we have formed a network of tensors, i.e., a **Tensor Network**!
 #
@@ -158,11 +163,15 @@ print(D.shape)
 #
 # It turns out :math:`T^1` and :math:`T^2` are special tensors known as the COPY and XOR tensors, respectively, and therefore have special diagrammatic representations.
 #
-# TODO: add a diagram for each of these
+# .. figure:: ../_static/demonstration_assets/tn_basics/07-t1-t2.png
+#     :align: center
+#     :width: 50%
 #
 # Then, their contraction results in the well known CNOT quantum circuit representation.
 #
-# TODO: add the CNOT diagram here.
+# .. figure:: ../_static/demonstration_assets/tn_basics/08-cnot.png
+#     :align: center
+#     :width: 50%
 
 ##############################################################################
 # The cost of contracting a network:
@@ -178,7 +187,7 @@ print(D.shape)
 # For this reason, it is useful to look at how to calculate the computational cost or the *complexity* of a tensor network contraction. First, we look at a simple matrix-matrix contraction. Given rank-2 tensors :math:`G^1_{i,j}` and :math:`G^2_{j,k}`, we have seen the :math:`(i,k)`-th element of the resulting contraction along the :math:`j`-th index is
 # 
 # .. math::
-#   (G^3)_{i,k} = G^1 \cdot G^2 = \sum_{j=1}^{d_j} G^{1}_{i,j} G^{2}_{j,k}
+#   (G^3)_{i,k} = G^2 \cdot G^1 = \sum_{j=1}^{d_j} G^{2}_{j,k} G^{1}_{i,j}
 # 
 # where the indices :math:`i, j, k` have dimensions :math:`d_i, d_j, d_k`, respectively. Thus, obtaining the :math:`(i,k)`-th element requires :math:`\mathcal{O}(d_j)` operations. To construct the full tensor :math:`G^3`, we must repeat this procedure :math:`d_i \times d_k` times (once for every possible value of :math:`i` and :math:`k`). Therefore, the total complexity of the contration is
 # 
@@ -187,7 +196,9 @@ print(D.shape)
 # 
 # To illustrate the importance of choosing an efficient contraction path, let us look at a similar contraction between 3 rank-3 tensors as shown in the previous section.
 # 
-# TODO: add diagram here with 3 tensors. Tensor A has dimensions (i,j,k)->(d_i, d_j, d_j), tensor B has dimension (j,l,m)->(d_j, 1, d_m) and tensor C has dimensions (k,m,n)->(d_j, d_m, d_i). Positioned in a traingle-like structure similar to the previous example.
+# .. figure:: ../_static/demonstration_assets/tn_basics/09-contraction.png
+#     :align: center
+#     :width: 50%
 # 
 # In this case, the tensors are such that :math:`A_{i,j,k} \in \mathcal{C}^{d_i \times d_j \times d_j}`, :math:`B_{j,l,m} \in \mathcal{C}^{d_j \times 1 \times d_m}`, and :math:`C_{k,m,n} \in \mathcal{C}^{d_j \times d_m \times d_i}`. First, we look at the complexity of contracting :math:`(AB)` and then :math:`C`. Following the procedure explained above, the first contraction results in a complexity of
 # 
@@ -274,7 +285,7 @@ print(f"Computation cost for A(BC) contraction: {average_time_ms:.8f} ms")
 # 
 # First, we set up the framework of the problem. While multiway contractions - contractions between more than 2 tensors at a time - are possible, we will consider only pairwise contractions since the former can always be decomposed in terms of the latter. In addition, contracting a tensor network need not result in a single tensor. However, here we consider only the single tensor case as it underlies the more general scenario [#Gray2021]_. 
 # 
-# The underlying idea behind finding a contraction path is based on the construction of the computational graph, i.e. a rooted binary tree - also known as the **contraction tree** - that specifies the sequence of pairwise contractions to be executed. In this tree structure, a leaf node corresponds to a tensor from the original network and the pairwise contractions give rise to the intermediate tensors corresponding to the rest of the nodes in the tree. 
+# The underlying idea behind finding a contraction path is based on the construction of the computational graph, i.e., a rooted binary tree - also known as the **contraction tree** - that specifies the sequence of pairwise contractions to be executed. In this tree structure, a leaf node corresponds to a tensor from the original network and the pairwise contractions give rise to the intermediate tensors corresponding to the rest of the nodes in the tree. 
 # 
 # TODO: here include a drawing similar to one in Fig2.a of https://journals.aps.org/prx/pdf/10.1103/PhysRevX.14.011009
 # 
