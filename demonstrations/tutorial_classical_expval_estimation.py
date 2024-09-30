@@ -35,15 +35,15 @@ Our target: Estimating expectation values from quantum circuits
 
 Let's start by looking at the type of quantum computations that we want to
 simulate classically.
-Given an initial state :math:`|\psi_0\rangle`, a parametrized quantum
-circuit :math:`U(\theta)`, and an observable :math:`H`, a common task in
+Given an initial state :math:`|\psi_0\rangle,` a parametrized quantum
+circuit :math:`U(\theta)`, and an observable :math:`H,` a common task in
 many variational quantum algorithms is to compute the expectation value
 
 .. math::
 
     E(\theta) = \langle \psi_0 | U^\dagger(\theta) H U(\theta) |\psi_0\rangle
 
-for various parameter settings :math:`\theta`.
+for various parameter settings :math:`\theta.`
 Being able to estimate such an expectation value efficiently is required
 to train the parametrized quantum circuit in applications such as
 :doc:`QAOA </demos/tutorial_qaoa_intro>`,
@@ -75,7 +75,7 @@ For our example we pick the Heisenberg model Hamiltonian
 
     H_{XYZ} = \sum_{j=1}^{N-1} h_j^{(X)} X_j X_{j+1} + h_j^{(Y)} Y_j Y_{j+1} + h_j^{(Z)} Z_j Z_{j+1}
 
-with random coefficients :math:`h_j^{(X|Y|Z)}`. In :math:`H_{XYZ}`, each Pauli word
+with random coefficients :math:`h_j^{(X|Y|Z)}.` In :math:`H_{XYZ},` each Pauli word
 has weight two.
 
 We will discuss the type of Hamiltonians that the algorithm can tackle
@@ -136,14 +136,14 @@ print(qml.drawer.tape_text(tape))
 # state vector simulation, which updates the state vector of the quantum system
 # with each gate applied to it. From a physics perspective, this is the evolution of
 # a quantum state in the Schrödinger picture. To conclude the simulation, this approach
-# then contracts the evolved state with the observable :math:`H`.
+# then contracts the evolved state with the observable :math:`H.`
 #
 # Here we will use a technique based on the Heisenberg picture, which
 # describes the evolution of the measurement observable :math:`H` instead.
 # This technique is called *Pauli propagation* and has also been used by
 # related simulation algorithms [#aharonov]_, [#lowesa]_, [#begusic]_.
 #
-# In the Heisenberg picture, each gate :math:`V`, be it parametrized or not,
+# In the Heisenberg picture, each gate :math:`V,` be it parametrized or not,
 # acts on the observable via
 #
 # .. math::
@@ -156,7 +156,7 @@ print(qml.drawer.tape_text(tape))
 # Pauli propagation tracks the Pauli words :math:`P_\ell` in the Hamiltonian throughout
 # this Heisenberg picture evolution, requiring us to only determine how a gate
 # :math:`V` acts on any Pauli word. For Clifford gates, including the Hadamard
-# gate, :math:`\operatorname{CNOT}`, :math:`\operatorname{CZ}` and Pauli gates themselves, any Pauli word is mapped
+# gate, :math:`\operatorname{CNOT},` :math:`\operatorname{CZ}` and Pauli gates themselves, any Pauli word is mapped
 # to another Pauli word. As a matter of fact, this is a standard way to *define*
 # Clifford gates. As an example, consider a :math:`\operatorname{CNOT}` gate acting on the Pauli
 # word :math:`Z\otimes Z` in the Heisenberg picture. We can evaluate (note that
@@ -248,7 +248,7 @@ cnot_table = {
 # truncation methods to keep the number of Pauli words that need to be tracked
 # below a reasonable threshold.
 # The algorithm we discuss here does this based on the weight of the tracked Pauli
-# words. For a chosen threshold :math:`k`, it simply discards all Pauli words with
+# words. For a chosen threshold :math:`k,` it simply discards all Pauli words with
 # non-trivial tensor factors on more than :math:`k` qubits.
 #
 # This is clearly an approximation, and in principle we could introduce a large
@@ -320,9 +320,9 @@ def apply_single_qubit_rot(pauli, wire, param, H):
 #
 # With those two essential functions implemented, we're almost ready to put the algorithm together.
 # Before doing so, we need a function that computes the expectation value of the evolved observable
-# with respect to the initial state :math:`|0\rangle`. This is simple, though, because we know for
+# with respect to the initial state :math:`|0\rangle.` This is simple, though, because we know for
 # each Pauli word :math:`P_\ell` in the Hamiltonian that it will contribute its coefficient :math:`h_\ell`
-# to the expectation value if (and only if) all tensor factors are :math:`I` or :math:`Z`.
+# to the expectation value if (and only if) all tensor factors are :math:`I` or :math:`Z.`
 
 
 def initial_state_expval(H):
@@ -342,7 +342,7 @@ def initial_state_expval(H):
 # circuit from the beginning. It simply extracts the measurement observable and then
 # goes through the circuit backwards, propagating the Pauli words of the observable
 # according to the Heisenberg picture. Finally, it evaluates the expectation value
-# with respect to :math:`|0\rangle`. The truncation threshold :math:`k` for ``apply_cnot``
+# with respect to :math:`|0\rangle.` The truncation threshold :math:`k` for ``apply_cnot``
 # is a hyperparameter of the execution function.
 
 
@@ -403,7 +403,7 @@ print(f"Numerically exact expectation value:                        {exact_expva
 
 ##############################################################################
 # Wonderful, we have a working approximate simulation of the circuit that is scalable (for
-# fixed :math:`k`) that estimates the expectation value of :math:`H`!
+# fixed :math:`k`) that estimates the expectation value of :math:`H!`
 # Note that a single estimate neither is a proof that the algorithm works in general,
 # nor is it the subject of the main results by Angrisani et al.
 # However, a full-fledged benchmark goes beyond this demo.
@@ -422,7 +422,7 @@ print(f"Numerically exact expectation value:                        {exact_expva
 # defined by a circuit ansatz, together with a probability distribution to pick the parameters.
 # The guarantee then is that the approximation error of truncated Pauli propagation
 # *on average across the sampled parameter settings* can be suppressed exponentially by
-# increasing the truncation threshold :math:`k`.
+# increasing the truncation threshold :math:`k.`
 #
 # This can be rephrased as follows: the probability of obtaining an error larger than some
 # tolerance can be suppressed exponentially by increasing :math:`k`\ .
@@ -455,7 +455,7 @@ print(f"Numerically exact expectation value:                        {exact_expva
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # Third, the parametrized circuit may not "branch too much." That is, if a Pauli word has
-# weight :math:`r`, none of the locally scrambling layers of the circuit
+# weight :math:`r,` none of the locally scrambling layers of the circuit
 # may produce more than :math:`n^r` different Pauli words under the Heisenberg evolution.
 # Intuitively, this requirement limits the layers of the circuit to be sufficiently shallow.
 #
@@ -465,7 +465,7 @@ print(f"Numerically exact expectation value:                        {exact_expva
 # Afterwards, each single-qubit rotation can create all three Pauli operators on each
 # qubit in the support of the enlarged Pauli word, leading to a factor of three.
 # Taken together, a Pauli word with weight :math:`r` is transformed into at most
-# :math:`3^{2r}=9^r` Pauli words with weights at most :math:`2r`. The requirement
+# :math:`3^{2r}=9^r` Pauli words with weights at most :math:`2r.` The requirement
 # of not "branching too much" therefore is satisfied, because :math:`9^r<n^r`
 # from the complexity theoretic perspective.
 #
@@ -475,7 +475,7 @@ print(f"Numerically exact expectation value:                        {exact_expva
 # As emphasized in the fine print above, we should not expect the classical algorithm
 # to produce precise expectation value estimates for all parameter settings.
 # So let's evaluate our circuit for a specific parameter setting with all parameters set to
-# :math:`\frac{\pi}{4}`. In addition, we will even *reduce* the number of qubits and layers,
+# :math:`\frac{\pi}{4}.` In addition, we will even *reduce* the number of qubits and layers,
 # which makes the task easier for other classical simulation tools (such as
 # `Lightning Qubit <https://docs.pennylane.ai/projects/lightning/en/stable/lightning_qubit/device.html>`__),
 # but does not help the truncated Pauli propagation.
@@ -518,7 +518,7 @@ print(f"Numerically exact expectation value:                        {exact_expva
 # [#bremner]_, [#bremner2]_, which arise in the context of :doc:`Boson sampling </demos/gbs>`.
 #
 # Finally, it is important to note that while truncated Pauli propagation scales
-# polynomially with the qubit count, the exponent of this scaling contains :math:`k`,
+# polynomially with the qubit count, the exponent of this scaling contains :math:`k,`
 # which still can lead to impractical computational cost, e.g., for deep circuits.
 #
 # References

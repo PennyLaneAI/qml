@@ -57,21 +57,21 @@ Breaking this down, step-by-step:
    shorthand 'wires' to refer to quantum subsystems, whether they are qumodes, qubits, or
    any other kind of quantum register.
 
-2. **Prepare the state** :math:`\left|1,0\right\rangle`. That is, the first wire (wire 0) is prepared
+2. **Prepare the state** :math:`\left|1,0\right\rangle.` That is, the first wire (wire 0) is prepared
    in a single-photon state, while the second
    wire (wire 1) is prepared in the vacuum state. The former state is non-Gaussian,
    necessitating the use of the ``'strawberryfields.fock'`` backend device.
 
-3. **Both wires are then incident on a beamsplitter**, with free parameters :math:`\theta` and :math:`\phi`.
-   Here, we have the convention that the beamsplitter transmission amplitude is :math:`t=\cos\theta`,
+3. **Both wires are then incident on a beamsplitter**, with free parameters :math:`\theta` and :math:`\phi.`
+   Here, we have the convention that the beamsplitter transmission amplitude is :math:`t=\cos\theta,`
    and the reflection amplitude is
-   :math:`r=e^{i\phi}\sin\theta`. See :doc:`introduction/operations` for a full list of operation conventions.
+   :math:`r=e^{i\phi}\sin\theta.` See :doc:`introduction/operations` for a full list of operation conventions.
 
 4. **Finally, we measure the mean photon number** :math:`\left\langle \hat{n}\right\rangle` of the second wire, where
 
    .. math:: \hat{n} = \hat{a}^{\dagger}\hat{a}
 
-   is the number operator, acting on the Fock basis number states, such that :math:`\hat{n}\left|n\right\rangle = n\left|n\right\rangle`.
+   is the number operator, acting on the Fock basis number states, such that :math:`\hat{n}\left|n\right\rangle = n\left|n\right\rangle.`
 
 The aim of this tutorial is to optimize the beamsplitter parameters :math:`(\theta, \phi)` such
 that the expected photon number of the second wire is **maximized**. Since the beamsplitter
@@ -85,10 +85,10 @@ Exact calculation
 ~~~~~~~~~~~~~~~~~
 
 To compare with later numerical results, we can first consider what happens analytically.
-The initial state of the circuit is :math:`\left|\psi_0\right\rangle=\left|1,0\right\rangle`, and the output state
-of the system is of the form :math:`\left|\psi\right\rangle = a\left|1, 0\right\rangle + b\left|0,1\right\rangle`, where
-:math:`|a|^2+|b|^2=1`. We may thus write the output state as a vector in this
-computational basis, :math:`\left|\psi\right\rangle = \begin{bmatrix}a & b\end{bmatrix}^T`.
+The initial state of the circuit is :math:`\left|\psi_0\right\rangle=\left|1,0\right\rangle,` and the output state
+of the system is of the form :math:`\left|\psi\right\rangle = a\left|1, 0\right\rangle + b\left|0,1\right\rangle,` where
+:math:`|a|^2+|b|^2=1.` We may thus write the output state as a vector in this
+computational basis, :math:`\left|\psi\right\rangle = \begin{bmatrix}a & b\end{bmatrix}^T.`
 
 The beamsplitter acts on this two-dimensional subspace as follows:
 
@@ -110,14 +110,14 @@ Furthermore, the mean photon number of the second wire is
 
 Therefore, we can see that:
 
-1. :math:`0\leq \left\langle \hat{n}_1\right\rangle\leq 1`: the output of the quantum circuit is
+1. :math:`0\leq \left\langle \hat{n}_1\right\rangle\leq 1:` the output of the quantum circuit is
    bound between 0 and 1;
 
-2. :math:`\frac{\partial}{\partial \phi} \left\langle \hat{n}_1\right\rangle=0`: the output of the
-   quantum circuit is independent of the beamsplitter phase :math:`\phi`;
+2. :math:`\frac{\partial}{\partial \phi} \left\langle \hat{n}_1\right\rangle=0:` the output of the
+   quantum circuit is independent of the beamsplitter phase :math:`\phi;`
 
 3. The output of the quantum circuit above is maximised when :math:`\theta=(2m+1)\pi/2`
-   for :math:`m\in\mathbb{Z}_0`.
+   for :math:`m\in\mathbb{Z}_0.`
 
 Loading the plugin device
 -------------------------
@@ -193,7 +193,7 @@ def cost(params):
 
 ##############################################################################
 # To begin our optimization, let's choose the following small initial values of
-# :math:`\theta` and :math:`\phi`:
+# :math:`\theta` and :math:`\phi:`
 
 init_params = np.array([0.01, 0.01], requires_grad=True)
 print(cost(init_params))
@@ -209,13 +209,13 @@ print(cost(init_params))
 
 ##############################################################################
 # Here, we choose the values of :math:`\theta` and :math:`\phi` to be very close to zero;
-# this results in :math:`B(\theta,\phi)\approx I`, and the output of the quantum
+# this results in :math:`B(\theta,\phi)\approx I,` and the output of the quantum
 # circuit will be very close to :math:`\left|1, 0\right\rangle` — i.e., the circuit leaves the photon in the first mode.
 #
-# Why don't we choose :math:`\theta=0` and :math:`\phi=0`?
+# Why don't we choose :math:`\theta=0` and :math:`\phi=0?`
 #
-# At this point in the parameter space, :math:`\left\langle \hat{n}_1\right\rangle = 0`, and
-# :math:`\frac{d}{d\theta}\left\langle{\hat{n}_1}\right\rangle|_{\theta=0}=2\sin\theta\cos\theta|_{\theta=0}=0`.
+# At this point in the parameter space, :math:`\left\langle \hat{n}_1\right\rangle = 0,` and
+# :math:`\frac{d}{d\theta}\left\langle{\hat{n}_1}\right\rangle|_{\theta=0}=2\sin\theta\cos\theta|_{\theta=0}=0.`
 # Since the gradient is zero at those initial parameter values, the optimization
 # algorithm would never descend from the maximum.
 #
@@ -286,9 +286,9 @@ print("Optimized rotation angles: {}".format(params))
 
 ##############################################################################
 # Comparing this to the :ref:`exact calculation <photon_redirection_calc>` above,
-# this is close to the optimum value of :math:`\theta=\pi/2`, while the value of
+# this is close to the optimum value of :math:`\theta=\pi/2,` while the value of
 # :math:`\phi` has not changed — consistent with the fact that :math:`\left\langle \hat{n}_1\right\rangle`
-# is independent of :math:`\phi`.
+# is independent of :math:`\phi.`
 #
 # .. _hybrid_computation_example:
 #
@@ -342,23 +342,23 @@ def squared_difference(x, y):
 #     :width: 70%
 #     :target: javascript:void(0);
 #
-# 1. The qubit-rotation circuit will contain fixed rotation angles :math:`\phi_1` and :math:`\phi_2`.
+# 1. The qubit-rotation circuit will contain fixed rotation angles :math:`\phi_1` and :math:`\phi_2.`
 #
 # 2. The photon-redirection circuit will contain two free parameters, the beamsplitter angles
-#    :math:`\theta` and :math:`\phi`, which are to be optimized.
+#    :math:`\theta` and :math:`\phi,` which are to be optimized.
 #
 # 3. The outputs of both QNodes will then be fed into the classical node, returning the
 #    squared difference of the two quantum functions.
 #
 # 4. Finally, the optimizer will calculate the gradient of the entire computation with
-#    respect to the free parameters :math:`\theta` and :math:`\phi`, and update their values.
+#    respect to the free parameters :math:`\theta` and :math:`\phi,` and update their values.
 #
 # In essence, we are optimizing the photon-redirection circuit to return the **same expectation value**
 # as the qubit-rotation circuit, even though they are two completely independent quantum systems.
 #
 # We can translate this computational graph to the following function, which combines the three
 # nodes into a single hybrid computation. Below, we choose default values
-# :math:`\phi_1=0.5`, :math:`\phi_2=0.1`:
+# :math:`\phi_1=0.5,` :math:`\phi_2=0.1:`
 
 
 def cost(params, phi1=0.5, phi2=0.1):
@@ -373,7 +373,7 @@ def cost(params, phi1=0.5, phi2=0.1):
 ##############################################################################
 # Now, we use the built-in :class:`~.pennylane.GradientDescentOptimizer` to perform the optimization
 # for 100 steps. As before, we choose initial beamsplitter parameters of
-# :math:`\theta=0.01`, :math:`\phi=0.01`.
+# :math:`\theta=0.01,` :math:`\phi=0.01.`
 
 # initialise the optimizer
 opt = qml.GradientDescentOptimizer(stepsize=0.4)

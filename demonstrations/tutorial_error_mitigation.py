@@ -77,7 +77,7 @@ dev_noisy = qml.transforms.insert(dev_ideal, noise_gate, noise_strength)
 #
 # The next step is to define our circuit. Inspired by the mirror circuits concept introduced by
 # Proctor *et al.* [#proctor2020measuring]_ let's fix a circuit that applies a unitary :math:`U`
-# followed by its inverse :math:`U^{\dagger}`, with :math:`U` given by the
+# followed by its inverse :math:`U^{\dagger},` with :math:`U` given by the
 # :class:`SimplifiedTwoDesign <pennylane.SimplifiedTwoDesign>`
 # template. We also fix a measurement of the :class:`PauliZ <pennylane.PauliZ>` observable on our
 # first qubit. Importantly, such a circuit performs an identity transformation
@@ -172,22 +172,22 @@ mitigated_qnode(w1, w2)
 # introduced by Temme et al. [#temme2017error]_ and Li et al. [#li2017efficient]_.
 #
 # The ZNE method works by assuming that the amount of noise present when a circuit is run on a
-# noisy device is enumerated by a parameter :math:`\gamma`. Suppose we have an input circuit
+# noisy device is enumerated by a parameter :math:`\gamma.` Suppose we have an input circuit
 # that experiences an amount of noise :math:`\gamma = \gamma_{0}` when executed.
 # Ideally, we would like to evaluate the result of the circuit in the :math:`\gamma = 0`
 # noise-free setting.
 #
 # To do this, we create a family of equivalent circuits whose ideal noise-free value is the
 # same as our input circuit. However, when run on a noisy device, each circuit experiences
-# an amount of noise :math:`\gamma = s \gamma_{0}` for some scale factor :math:`s \ge 1`. By
+# an amount of noise :math:`\gamma = s \gamma_{0}` for some scale factor :math:`s \ge 1.` By
 # evaluating the noisy outputs of each circuit, we can extrapolate to :math:`s=0` to estimate
 # the result of running a noise-free circuit.
 #
 # A key element of ZNE is the ability to run equivalent circuits for a range of scale factors
-# :math:`s`. When the noise present in a circuit scales with the number of gates, :math:`s`
+# :math:`s.` When the noise present in a circuit scales with the number of gates, :math:`s`
 # can be varied using unitary folding [#giurgica2020digital]_.
 # Unitary folding works by noticing that any unitary :math:`V` is equivalent to
-# :math:`V V^{\dagger} V`. This type of transform can be applied to individual gates in the
+# :math:`V V^{\dagger} V.` This type of transform can be applied to individual gates in the
 # circuit or to the whole circuit.
 # Let's see how
 # folding works in code using Mitiq's
@@ -220,9 +220,9 @@ for s, c in zip(scale_factors, folded_circuits):
 ##############################################################################
 # Although these circuits are a bit deep, if you look carefully, you might be able to convince
 # yourself that they are all equivalent! In fact, since we have fixed our original circuit to be
-# of the form :math:`U U^{\dagger}`, we get:
+# of the form :math:`U U^{\dagger},` we get:
 #
-# - When the scale factor is :math:`s=1`, the resulting circuit is
+# - When the scale factor is :math:`s=1,` the resulting circuit is
 #
 #   .. math::
 #
@@ -230,17 +230,17 @@ for s, c in zip(scale_factors, folded_circuits):
 #
 #   Hence, the :math:`s=1` setting gives us the original unfolded circuit.
 #
-# - When :math:`s=3`, the resulting circuit is
+# - When :math:`s=3,` the resulting circuit is
 #
 #   .. math::
 #
 #       V V^{\dagger} V = U^{\dagger} U U U^{\dagger} U^{\dagger} U = \mathbb{I}.
 #
-#   In other words, we fold the whole circuit once when :math:`s=3`. Generally, whenever :math:`s`
+#   In other words, we fold the whole circuit once when :math:`s=3.` Generally, whenever :math:`s`
 #   is an odd integer, we fold :math:`(s - 1) / 2` times.
 #
 # - The :math:`s=2` setting is a bit more subtle. Now we apply folding only to the second half of
-#   the circuit, which is in our case given by :math:`U^{\dagger}`. The resulting partially-folded
+#   the circuit, which is in our case given by :math:`U^{\dagger}.` The resulting partially-folded
 #   circuit is
 #
 #   .. math::
@@ -283,7 +283,7 @@ executor(folded_circuits, dev=dev_ideal)
 
 ##############################################################################
 # By construction, these circuits are equivalent to the original and have the same output value of
-# :math:`1`. On the other hand, each circuit has a different depth. If we expect each gate in a
+# :math:`1.` On the other hand, each circuit has a different depth. If we expect each gate in a
 # circuit to contribute an amount of noise when running on NISQ hardware, we should see the
 # result of the executed circuit degrade with increased depth. This can be confirmed using the
 # ``dev_noisy`` device
@@ -295,7 +295,7 @@ executor(folded_circuits, dev=dev_noisy)
 # mitigation: we have a family of equivalent circuits that experience a varying amount of noise
 # when executed on hardware, and we are able to control the amount of noise by varying the folding
 # scale factor :math:`s` which determines the circuit depth. The final step is to extrapolate our
-# results back to :math:`s=0`, providing us with an estimate of the noise-free result of the
+# results back to :math:`s=0,` providing us with an estimate of the noise-free result of the
 # circuit.
 #
 # Performing extrapolation is a well-studied numeric method in mathematics, and Mitiq provides
@@ -371,7 +371,7 @@ mitigated_qnode(w1, w2)
 # keep things interesting, we've swapped out our folding function to instead perform folding on
 # randomly-selected gates. Whenever the folding function is stochastic, there will not be a unique
 # folded circuit corresponding to a given scale factor. For example, the following three distinct
-# circuits are all folded with a scale factor of :math:`s=1.1`:
+# circuits are all folded with a scale factor of :math:`s=1.1:`
 
 for _ in range(3):
     print(
@@ -419,7 +419,7 @@ execute_with_zne(circuit, executor, factory=factory, scale_noise=fold_global)
 # quantum circuit that returns its expectation value. We can then vary the parameters of the
 # circuit to minimize the energy.
 #
-# To find the potential energy surface of :math:`H_{2}`, we must choose a range of interatomic
+# To find the potential energy surface of :math:`H_{2},` we must choose a range of interatomic
 # distances and calculate the qubit Hamiltonian corresponding to each distance. We then optimize the
 # variational circuit with a new set of parameters for each Hamiltonian and plot the resulting
 # energies for each distance. In this demo, we compare the potential energy surface reconstructed

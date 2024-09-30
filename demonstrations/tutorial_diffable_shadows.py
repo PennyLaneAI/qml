@@ -35,8 +35,8 @@ We record :math:`T` of such measurements, and for the :math:`t`-th measurement, 
 
 .. math:: \rho^{(t)} = \bigotimes_{i=1}^{n} 3 U^\dagger_i |b^{(t)}_i \rangle \langle b^{(t)}_i | U_i - \mathbb{I},
 
-where :math:`U_i` is the diagonalizing rotation for the respective Pauli basis (e.g. :math:`U_i=H` for measurement in :math:`X`) for qubit `i`.
-:math:`|b^{(t)}_i\rangle = (1 - b^{(t)}_i, b^{(t)}_i)` is the corresponding computational basis state given by the output bit :math:`b^{(t)}_i \in \{0, 1\}`.
+where :math:`U_i` is the diagonalizing rotation for the respective Pauli basis (e.g. :math:`U_i=H` for measurement in :math:`X`) for qubit `i.`
+:math:`|b^{(t)}_i\rangle = (1 - b^{(t)}_i, b^{(t)}_i)` is the corresponding computational basis state given by the output bit :math:`b^{(t)}_i \in \{0, 1\}.`
 
 From these local snapshots, one can compute expectation values of q-local Pauli strings, where locality refers to the number of non-Identity operators.
 The expectation value of any Pauli string :math:`\bigotimes_iO_i` with :math:`O_i \in \{X, Y, Z, \mathbb{I}\}` can be estimated
@@ -45,7 +45,7 @@ by computing
 .. math:: \Big\langle \bigotimes_iO_i \Big\rangle = \frac{1}{T} \sum_{t=1}^T \text{tr}\left[ \rho^{(t)} \left(\bigotimes_i O_i\right) \right].
 
 Error bounds given by the number of measurements :math:`T = \mathcal{O}\left( \log(M) 4^q/\varepsilon^2 \right)` guarantee that sufficiently many correct measurements
-were performed to estimate :math:`M` different observables up to additive error :math:`\varepsilon`. This :math:`\log(M)` factor may lead one to think that with classical shadows one can
+were performed to estimate :math:`M` different observables up to additive error :math:`\varepsilon.` This :math:`\log(M)` factor may lead one to think that with classical shadows one can
 `magically` estimate multiple observables at a lower cost than with direct measurement. We resolve this misconception in the following section.
 
 
@@ -55,7 +55,7 @@ Using algebraic properties of Pauli operators, we show how to exactly compute th
 without explicitly reconstructing any snapshots. This gives us insights to what is happening under the hood and how the ``T`` measuerements are used to estimate the observable.
 
 Let us start by looking at individual snapshot expectation values
-:math:`\langle \bigotimes_iO_i \rangle ^{(t)} = \text{tr}\left[\rho^{(t)} \left(\bigotimes_iO_i \right)\right]`.
+:math:`\langle \bigotimes_iO_i \rangle ^{(t)} = \text{tr}\left[\rho^{(t)} \left(\bigotimes_iO_i \right)\right].`
 First, we convince ourselves of the identity
 
 .. math:: U_i^\dagger |b^{(t)}_i\rangle \langle b^{(t)}_i| U_i = \frac{1}{2}\left((1-2b^{(t)}_i) P_i + \mathbb{I}\right),
@@ -67,7 +67,7 @@ The snapshot expectation value then reduces to
 
 For that trace we find three different cases.
 The cases where :math:`O_i=\mathbb{I}` yield a trivial factor :math:`1` to the product.
-The full product is always zero if any of the non-trivial :math:`O_i` do not match :math:`P_i`. So in total, `only` in the case that all :math:`q` Pauli operators match, we find
+The full product is always zero if any of the non-trivial :math:`O_i` do not match :math:`P_i.` So in total, `only` in the case that all :math:`q` Pauli operators match, we find
 
 .. math:: \Big\langle\bigotimes_iO_i\Big\rangle^{(t)} = 3^q \prod_{\text{i non-trivial}}(1-2b^{(t)}_i).
 
@@ -383,7 +383,7 @@ print(f"number of ops in H: {len(obs)}, number of qwc groups: {n_groups}")
 print(f"Each group has sizes {[len(_) for _ in groups]}")
 
 ##############################################################################
-# We use a pre-prepared Ansatz that approximates the :math:`\text{H}_2\text{O}` ground state for the given geometry. You can construct this Ansatz by running VQE, see :doc:`tutorial_vqe`.
+# We use a pre-prepared Ansatz that approximates the :math:`\text{H}_2\text{O}` ground state for the given geometry. You can construct this Ansatz by running VQE, see :doc:`tutorial_vqe.`
 # We ran this once on an ideal simulator to get the exact result of the energy for the given Ansatz.
 
 singles, doubles = qml.qchem.excitations(electrons=4, orbitals=n_wires)
