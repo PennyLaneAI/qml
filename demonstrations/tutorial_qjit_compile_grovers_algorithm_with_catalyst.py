@@ -210,18 +210,13 @@ circuit_qjit = qml.qjit(circuit_lightning)
 # (AOT) compile the circuit at instantiation, meaning that when we call this QJIT object for the
 # first time, the compilation will have already taken place, and Catalyst will execute the compiled
 # code. With JIT compilation, by contrast, the compilation is triggered at the first call site
-# rather than at instantiation.
-#
-# The compilation step will incur some runtime overhead, which we will measure below. Furthermore,
-# when we call the compiled QJIT object for the first time, there is an additional, small overhead
-# incurred to cache the compiled code for faster access later on. Every subsequent call to the QJIT
-# object, assuming it has not been altered, will read directly from this cache and execute the
-# compiled circuit. See the `Compilation Modes
+# rather than at instantiation. See the `Compilation Modes
 # <https://docs.pennylane.ai/projects/catalyst/en/stable/dev/quick_start.html#compilation-modes>`__
 # documentation in the Catalyst :doc:`Quick Start <catalyst:dev/quick_start>` guide for more
 # information on the difference between JIT and AOT compilation.
 #
-# Let's call the compiled circuit now and confirm that we get the same results:
+# The compilation step will incur some runtime overhead, which we will measure below. Let's first
+# call the compiled circuit and confirm that we get the same results:
 
 results_qjit = circuit_qjit()
 print_most_probable_states_descending(results_qjit, N=2)
@@ -245,21 +240,18 @@ print(f"Native-Python and compiled circuits yield same results? {results_are_equ
 # Benchmarking
 # ------------
 #
-# Let's start profiling the circuits we have defined. We have five function executions in total to
+# Let's start profiling the circuits we have defined. We have four function executions in total to
 # profile:
 #
 # 1. Executing the circuit using ``"default.qubit"``.
 # 2. Executing the circuit using ``"lightning.qubit"``.
 # 3. Compiling the circuit with Catalyst, to measure the AOT compilation overhead.
-# 4. The first call to the QJIT-compiled circuit, to measure the circuit execution time *with* the
-#    caching overhead.
-# 5. Subsequent calls to the QJIT-compiled circuit, to measure the circuit execution time *without*
-#    the caching overhead.
+# 4. Calls to the QJIT-compiled circuit, to measure the circuit execution time.
 #
 # We'll use the `timeit <https://docs.python.org/3/library/timeit.html>`__ module part of the Python
 # Standard Library to measure the runtimes. To improve the statistical precision of these
-# measurements, we'll repeat the operations for items (2) and (5) five times; item (1) is slow, and
-# items (3) and (4) are only run once by construction, so we will not repeat these operations.
+# measurements, we'll repeat the operations for items (2) and (4) five times; item (1) is slow, and
+# item (3) is only run once by construction, so we will not repeat these operations.
 
 import timeit
 
@@ -284,16 +276,9 @@ runtimes_compilation = timeit.repeat(
     number=1,
     repeat=1,
 )
-runtimes_first_qjit = timeit.repeat(
+runtimes_qjit_call = timeit.repeat(
     "_circuit_qjit()",
-    setup="import pennylane as qml; _circuit_qjit = qml.qjit(circuit_lightning)",
-    globals={"circuit_lightning": circuit_lightning},
-    number=1,
-    repeat=1,
-)
-runtimes_subsequent_qjit = timeit.repeat(
-    "_circuit_qjit()",
-    setup="import pennylane as qml; _circuit_qjit = qml.qjit(circuit_lightning); _circuit_qjit()",
+    setup="import pennylane as qml; _circuit_qjit = qml.qjit(circuit_lightning);",
     globals={"circuit_lightning": circuit_lightning},
     number=1,
     repeat=NUM_REPS,
@@ -303,16 +288,14 @@ run_names = [
     "Native (default.qubit)",
     "Native (lightning.qubit)",
     "QJIT compilation",
-    "QJIT (first call)",
-    "QJIT (subsequent calls)",
+    "QJIT call",
 ]
 run_names_display = [name.replace(" ", "\n", 1) for name in run_names]
 runtimes = [
     np.mean(runtimes_native_default),
     np.mean(runtimes_native_lightning),
     np.mean(runtimes_compilation),
-    np.mean(runtimes_first_qjit),
-    np.mean(runtimes_subsequent_qjit),
+    np.mean(runtimes_qjit_call),
 ]
 
 
@@ -327,8 +310,7 @@ runtimes_err = [
     std_err(runtimes_native_default),
     std_err(runtimes_native_lightning),
     std_err(runtimes_compilation),
-    std_err(runtimes_first_qjit),
-    std_err(runtimes_subsequent_qjit),
+    std_err(runtimes_qjit_call),
 ]
 
 for i in range(len(run_names)):
@@ -366,7 +348,8 @@ plt.show()
 # achieved execution runtimes several orders of magnitude less than the native-Python PennyLane
 # circuit using ``"default.qubit"``. While the compilation step itself does incur some runtime, the
 # overall runtime of the QJIT workflow still outperforms even the circuit defined using the
-# Lightning state simulator, especially in subsequent calls to the QJIT-compiled circuit. [*]_
+# Lightning state simulator. Moreover, since the compilation step only needs to be performed once,
+# the runtime savings are compounded with subsequent calls to the QJIT-compiled circuit. [*]_
 
 
 ######################################################################
@@ -406,9 +389,10 @@ plt.show()
 # .. [*]
 #
 #     Note that we normally wouldn't execute the same circuit multiple times to perform Grover's
-#     algorithm. We have only done so here to illustrate the performance improvement that QJIT
-#     compiling with Catalyst offers if it is ever necessary to execute your own quantum circuit
-#     multiple times.
+#     algorithm. This example is only to illustrate the performance improvement that QJIT compiling
+#     with Catalyst offers if it is ever necessary to execute your own quantum circuit multiple
+#     times. The performance improvements that can be achieved with Catalyst will depend on the
+#     specific size and topology of your PennyLane circuit.
 
 
 ######################################################################
