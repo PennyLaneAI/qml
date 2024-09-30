@@ -5,7 +5,8 @@ r"""How to use noise models in PennyLane
 ######################################################################
 # Noise models are essential for understanding and describing the effects of physical errors
 # in a quantum computation. They allow for simulating the imperfections in state evolution
-# arising from environment-based errors, state preparation routines, measurements, and more.
+# arising from environment-based `errors <https://pennylane.ai/codebook/07-error-correction/>`__,
+# state preparation routines, measurements, and more.
 #
 # Here, we show how to use the features provided in PennyLane's :mod:`~.pennylane.noise`
 # module to construct and manipulate noise models, enabling noisy simulation. In PennyLane,
@@ -30,7 +31,7 @@ r"""How to use noise models in PennyLane
 ######################################################################
 # In the upcoming sections, we will first cover the underlying components of
 # noise models and learn how to use them to construct desired noise models.
-# Finally, we will use the noise model to perform noisy simulations.
+# Finally, we will use our noise model to perform noisy simulations.
 #
 
 ######################################################################
@@ -94,8 +95,8 @@ op = qml.X('w1') # Example gate operation
 print(f"Error for {op}: {depol_error(op)}")
 
 ######################################################################
-# Noise models
-# ~~~~~~~~~~~~
+# Creating a noise model
+# ~~~~~~~~~~~~~~~~~~~~~~
 #
 # We can now create a PennyLane :class:`~.pennylane.NoiseModel` by stitching together
 # multiple condition-callable pairs, where noise operations are inserted into the
@@ -222,8 +223,9 @@ print(f"Ideal v/s Noisy: {ideal_res} and {noisy_res}")
 #
 # Should you have any questions about using noise models in PennyLane, you can consult the
 # `noise module documentation <https://docs.pennylane.ai/en/stable/code/qml_noise.html>`__,
-# `codebook module <https://pennylane.ai/codebook/#06-noisy-quantum-theory>`__ on noise,
-# or create a post on the `PennyLane Discussion Forum <https://discuss.pennylane.ai>`__.
+# the PennyLane Codebook module on
+# `Noisy Quantum Theory <https://pennylane.ai/codebook/#06-noisy-quantum-theory>`__
+# on noise, or create a post on the `PennyLane Discussion Forum <https://discuss.pennylane.ai>`__.
 # You can also follow us on `X (formerly Twitter) <https://twitter.com/PennyLaneAI>`__
 # or `LinkedIn <https://www.linkedin.com/company/pennylaneai/>`__ to stay up-to-date with
 # the latest and greatest from PennyLane!
