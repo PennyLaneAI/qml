@@ -12,8 +12,8 @@ r"""How to use noise models in PennyLane
 # module to construct and manipulate noise models, enabling noisy simulation. In PennyLane,
 # noise models are constructed from two main components:
 #
-# 1. Boolean conditions that dictate whether noise is inserted into the circuit.
-# 2. Callables that apply noise operations when a corresponding condition is satisfied.
+# 1. Boolean conditions referred to as conditionals that dictate whether noise is inserted into the circuit.
+# 2. Callables called noise functions that apply noise operations when a corresponding condition is satisfied.
 #
 # The following example shows how a noise model transforms a sample circuit by inserting
 # amplitude and phase damping errors for :class:`~.pennylane.RX`
