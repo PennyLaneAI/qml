@@ -23,47 +23,29 @@ For example, a scalar :math:`s` is a rank-0 tensor, a vector :math:`v_i` is a ra
     
 A beautiful and powerful tool accompanying tensors (networks) is their graphical language representation. The diagram of a tensor is simply a geometric shape with a leg sticking out of it for every index in the tensor. For example,
 
-TODO: add diagram here as the second part of the equation.
-
 .. math::
     T_{i,j,k,l} = 
     
-.. figure:: ../_static/demonstration_assets/tn_basics/tensor_one.png
+.. figure:: ../_static/demonstration_assets/tn_basics/01-tensor.png
     :align: center
-    :width: 60%
+    :width: 50%
 
 We can apply this same idea to represent a scalar, a vector and a matrix:
 
-TODO: add diagrams here.
-
-.. math::
-    s = 
-    
-.. math::
-    v_i =
-    
-.. math::
-    G_{i,j} =  
+.. figure:: ../_static/demonstration_assets/tn_basics/02-tensors.png
+    :align: center
+    :width: 50%
 
 Does the last diagram seem familiar? It is because this is the representation of a single-qubit gate! We will see later in this tutorial the relation between quantum circuits and tensor networks. 
 
-Some authors choose to give the shape of the tensor an additional meaning. For example, you might encounter square tensors representing symmetric matrices, to represent its invariance under transposition.
+When working within the quantum computing notation, we adopt the convention that writing the leg of a quantum state (i.e., a vector) towards the right direction corresponds to a ket, i.e., a vector living in the Hilbert space, while drawing the legs to the left means they are a bra vector, i.e., living in the dual space.
 
-TODO: add diagram here showing: 1. Square matrix 2. Bending of wires as transpose 3. Final matrix
-
-In addition, an isometry :math:`V \in \mathbb{C}^{n \times p}` - i.e., a rectangular matrix such that :math:`V V^\dagger = I_p` but :math:`V^\dagger V \neq I_n` - with :math:`n > p`  can be depicted using a triangle to emphasize the isometry property:
-
-TODO: add diagram here showing the isometry definition (identity from the smaller space to the bigger space). See https://www.math3ma.com/blog/matrices-as-tensor-network-diagrams
-
-For quantum states, it is often useful to adopt the convention that writing the legs towards one direction (e.g. the right) corresponds to a ket, i.e., a vector living in the Hilbert space, while drawing the legs to the opposite direction (e.g. left) means they are a bra vector, i.e., living in the dual space.
-
-TODO: 1) drawing of a vector with legs towards right diretion (ket) 2) legs towards left (bra)
-
-TODO: add reference here for category theory. P. Selinger. A survey of graphical languages for monoidal categories. Lecture Notes
-in Physics, page 289–355, 2010.
+.. figure:: ../_static/demonstration_assets/tn_basics/03-braket.png
+    :align: center
+    :width: 50%
 
 .. tip::
-    The diagrammatic representation of tensors is rooted in category theory, which equips the diagrams with all the relevant information so they can used in proofs and formal reasoning!
+    The diagrammatic representation of tensors is rooted in category theory, which equips the diagrams with all the relevant information so they can used in proofs and formal reasoning! [#Selinger2010]_
 
 Creating a tensor in code is straightforward, and chances are you have already created one yourself. Using ``Numpy``, all we have to do is to create a ``np.array`` of the desired rank. For instance, we can start crearting a rank-1 tensor (a vector).
 """
@@ -99,17 +81,27 @@ print("Rank-3 tensor: \n", tensor_rank3)
 #
 # Matrix-matrix and matrix-vector multiplications are familiar operations within the context of quantum computing. We can now study these operations under the lens of the tensor notation introduced above. First, a matrix and a vector can be multiplied as
 #
-# TODO: add diagram at the end of the equation.
 #
 # .. math::
-#     (w)_i = G \cdot v = \sum_j G_ij v_j =
+#     (w)_j = G \cdot v = \sum_i G_ij v_i
 #
-# We see that summing over the shared index :math:`j` is equivalent to **contracting** the corresponding legs from the matrix and vector diagrams. As expected, the result of this multiplication is another rank-1 tensor with dangling leg :math:`i`. Similarly, we can look at the matrix-matrix multiplication:
+# .. figure:: ../_static/demonstration_assets/tn_basics/04-matrix-vector.png
+#     :align: center
+#     :width: 50%
+# 
+# .. note::
+# 
+#   Recall we are adopting the convention of writing a ket vector with its leg pointing right, as done in quantum circuits. In turn, this means the "input" index of a matrix - its column index - points towards the left, while the "output" index - its row index - points towards the right.
+# 
+# We see that summing over the shared index :math:`i` is equivalent to **contracting** the corresponding legs from the matrix and vector diagrams. As expected, the result of this multiplication is another rank-1 tensor with dangling leg :math:`j`. Similarly, we can look at the matrix-matrix multiplication:
 #
-# TODO: add diagram at the end of the equation.
 #
 # .. math::
-#     (G^3)_{i,k} = G^1 \cdot G^2 = \sum_j G^{1}_{i,j} G^{2}_{j,k} =
+#     (G^3)_{i,k} = G^2 \cdot G^1 = \sum_j G^{2}_{j,k} G^{1}_{i,j}
+# 
+# .. figure:: ../_static/demonstration_assets/tn_basics/05-matrix-matrix.png
+#     :align: center
+#     :width: 50%
 #
 # In this case, the resulting tensor has two dangling indices, :math:`i` and :math:`k`, which defines a matrix, as expected!
 #
@@ -120,7 +112,9 @@ print("Rank-3 tensor: \n", tensor_rank3)
 #
 # Note how the resulting rank-3 tensor is made up of the remaining open legs from the initial tensors :math:`(i,l,n)`. The diagrammatic representation of this equation is obtained by sticking all the legs with the same indices together.
 #
-# TODO: add figure here.
+# .. figure:: ../_static/demonstration_assets/tn_basics/06-tensor-tensor.png
+#     :align: center
+#     :width: 50%
 #
 # With the above contraction we have formed a network of tensors, i.e., a **Tensor Network**!
 #
@@ -169,11 +163,15 @@ print(D.shape)
 #
 # It turns out :math:`T^1` and :math:`T^2` are special tensors known as the COPY and XOR tensors, respectively, and therefore have special diagrammatic representations.
 #
-# TODO: add a diagram for each of these
+# .. figure:: ../_static/demonstration_assets/tn_basics/07-t1-t2.png
+#     :align: center
+#     :width: 50%
 #
 # Then, their contraction results in the well known CNOT quantum circuit representation.
 #
-# TODO: add the CNOT diagram here.
+# .. figure:: ../_static/demonstration_assets/tn_basics/08-cnot.png
+#     :align: center
+#     :width: 50%
 
 ##############################################################################
 # The cost of contracting a network:
@@ -189,7 +187,7 @@ print(D.shape)
 # For this reason, it is useful to look at how to calculate the computational cost or the *complexity* of a tensor network contraction. First, we look at a simple matrix-matrix contraction. Given rank-2 tensors :math:`G^1_{i,j}` and :math:`G^2_{j,k}`, we have seen the :math:`(i,k)`-th element of the resulting contraction along the :math:`j`-th index is
 # 
 # .. math::
-#   (G^3)_{i,k} = G^1 \cdot G^2 = \sum_{j=1}^{d_j} G^{1}_{i,j} G^{2}_{j,k}
+#   (G^3)_{i,k} = G^2 \cdot G^1 = \sum_{j=1}^{d_j} G^{2}_{j,k} G^{1}_{i,j}
 # 
 # where the indices :math:`i, j, k` have dimensions :math:`d_i, d_j, d_k`, respectively. Thus, obtaining the :math:`(i,k)`-th element requires :math:`\mathcal{O}(d_j)` operations. To construct the full tensor :math:`G^3`, we must repeat this procedure :math:`d_i \times d_k` times (once for every possible value of :math:`i` and :math:`k`). Therefore, the total complexity of the contration is
 # 
@@ -198,7 +196,9 @@ print(D.shape)
 # 
 # To illustrate the importance of choosing an efficient contraction path, let us look at a similar contraction between 3 rank-3 tensors as shown in the previous section.
 # 
-# TODO: add diagram here with 3 tensors. Tensor A has dimensions (i,j,k)->(d_i, d_j, d_j), tensor B has dimension (j,l,m)->(d_j, 1, d_m) and tensor C has dimensions (k,m,n)->(d_j, d_m, d_i). Positioned in a traingle-like structure similar to the previous example.
+# .. figure:: ../_static/demonstration_assets/tn_basics/09-contraction.png
+#     :align: center
+#     :width: 50%
 # 
 # In this case, the tensors are such that :math:`A_{i,j,k} \in \mathcal{C}^{d_i \times d_j \times d_j}`, :math:`B_{j,l,m} \in \mathcal{C}^{d_j \times 1 \times d_m}`, and :math:`C_{k,m,n} \in \mathcal{C}^{d_j \times d_m \times d_i}`. First, we look at the complexity of contracting :math:`(AB)` and then :math:`C`. Following the procedure explained above, the first contraction results in a complexity of
 # 
@@ -221,7 +221,7 @@ print(D.shape)
 #   \sum_{j, k} A_{i,j,k} (BC)_{j,l,k,n}  \implies \mathcal{O}(d_i^2 \times d_j^2) .
 # 
 # This means, the second contraction path results in an asymptotic cost of :math:`\mathcal{O}(d_i^2 \times d_j^2)` - lower than the first contraction path.
-# To see this in practice, let us perform the above contraction using ``np.einsum``. First, we crate 3 tensors with the correct dimensions.
+# To see this in practice, let us perform the above contraction using ``np.einsum``. First, we create 3 tensors with the correct dimensions.
 
 import timeit
 
@@ -275,11 +275,54 @@ average_time_ms = execution_time * 1000 / iterations
 print(f"Computation cost for A(BC) contraction: {average_time_ms:.8f} ms")
 
 ##############################################################################
-# From this we see tha the second contraction path yields a much lower complexity compared to the first one, just as we expected!
+# From this we see that the second contraction path yields a much lower complexity compared to the first one, just as we expected!
+
+##############################################################################
+# Contraction paths:
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 # 
-# - For this reason there exist heuristics for optimizing contraction path complexity. NP problem -> no perfect solution but great heuristics (https://arxiv.org/pdf/2002.01935).
-# - Link to quimb examples.
-# -The minimum required info would be that there are heuristics that work reasonably well, where one can find these heuristics and ideally how to set them in default.tensor. Examples: Faster identification of optimal contraction sequences for tensor networks, 
+# In the previous section, through a toy example, we explored how the choice of the contraction path affects the computational cost of the tensor network contraction. As shown in [#Lam1997]_ , finding an optimal contraction path is equivalent to solving the "multiplication problem" and thus, it is NP-hard. In this section, we provide a general description of wide-spread techniques used to tackle this ubiquitous task.
+# 
+# First, we set up the framework of the problem. While multiway contractions - contractions between more than 2 tensors at a time - are possible, we will consider only pairwise contractions since the former can always be decomposed in terms of the latter. In addition, contracting a tensor network need not result in a single tensor. However, here we consider only the single tensor case as it underlies the more general scenario [#Gray2021]_. 
+# 
+# The underlying idea behind finding a contraction path is based on the construction of the computational graph, i.e., a rooted binary tree - also known as the **contraction tree** - that specifies the sequence of pairwise contractions to be executed. In this tree structure, a leaf node corresponds to a tensor from the original network and the pairwise contractions give rise to the intermediate tensors corresponding to the rest of the nodes in the tree. 
+# 
+# TODO: here include a drawing similar to one in Fig2.a of https://journals.aps.org/prx/pdf/10.1103/PhysRevX.14.011009
+# 
+# Transforming a tensor network with an arbitrary structure into this binary tree can be achieved by a *tree embedding* of the tensor network graph [#Bienstock1990]_. Thus, optimization of the contraction path is equivalent to a search over tree embeddings of the network.
+# 
+# .. note::
+# 
+#   Besides finding a contraction path that minimizes the computational cost, we can also attempt to find a path that optimizes the memory cost. That is, a contraction path in which all intermediate tensors are below a certain size.
+# 
+# Now, how do we traverse the space of trees to optimize over? The most straightforward idea is to perform an exhaustic search through all of them. As explained in [#Pfeifer2014]_, this can be done (with some additional improvements) using the following well known algorithms:
+# 
+# - Depth-first search
+# - Breadth-first search
+# - Dynamic programming
+# 
+# While the exhaustive approach scales like :math:`\mathcal{O}(N!)`, with :math:`N` the number of tensors in the network, it can handle a handful of tensors within seconds, providing a good benchmark. In addition, compared to the following algorithms, the exhaustive search guarantees to find the global minimum optimizing the desired metric - space and/or time.
+# 
+# .. note::
+# 
+#   A recursive implementation of the depth-first search is used by default in the well known package ``opt_einsum`` `(see docs) <https://optimized-einsum.readthedocs.io/en/stable/optimal_path.html>`_.
+# 
+# Further approaches introduced in [#Gray2021]_ are based on alternative common graph theoretic tasks, rather than searching over the contraction tree space, such as the `balanced bipartitioning <https://en.wikipedia.org/wiki/Balanced_number_partitioning>`_ and `community detection <https://en.wikipedia.org/wiki/Community_structure>`_ algorithms. And even though, these are only heuristics that do not guarantee an optimal contraction path, they can often achieve an arbitrarliy close to optimal performance. 
+# 
+# An extra level of optimization, known as *hyper-optimization* is introduced by the use of different algorithms to find the optimal contraction based on the specific tensor network, as some algorithms are better suited for certain network structures. For an in-depth exploration of these heuristics, please refer to [#Gray2021]_.
+# 
+# .. note::
+# 
+#   The size of (intermediate) tensors can grow exponential with the number of indices and dimensions, specially for large-scale tensor networks. Thus, we might run into memory problems when performing the contractions. A useful additional technique to split these tensors into more manageable pieces is known as *slicing*. The idea is to change space for computation time, by temporarily fixing the values of some indices in the tensors, performing independently the contraction for each fixed value and summing the results [#Gray2021]_.
+# 
+# As we will explore in the next section, we can use tensor networks to simulate quantum circuits. In particular, the calculation of an expectation value corresponds to the contraction of the tensor network into a single tensor (scalar) as discussed in this section. In ``Pennylane``, this simulation can be performed using the ``DefaultTensor`` device and the method used to find the contraction path can be chosen via the ``contraction_optimizer`` keyword argument.
+
+import pennylane as qml
+
+dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
+
+##############################################################################
+# The different types of values accepted for ``contraction_optimizer`` are determined by the ``optimize`` parameter in ``Quimb`` (see `docs <https://quimb.readthedocs.io/en/latest/tensor-circuit.html#finding-a-contraction-path-the-optimize-kwarg>`_). See `this tutorial <https://pennylane.ai/qml/demos/tutorial_How_to_simulate_quantum_circuits_with_tensor_networks/>`_ to learn more about the ``DefaultTensor`` device.
 
 ##############################################################################
 # From tensor networks to quantum circuits:
@@ -292,7 +335,33 @@ print(f"Computation cost for A(BC) contraction: {average_time_ms:.8f} ms")
 ##############################################################################
 # References
 # ----------
+# 
+# .. [#Selinger2010]
+#    P. Selinger.
+#    "A Survey of Graphical Languages for Monoidal Categories",
+#    `<http://dx.doi.org/10.1007/978-3-642-12821-9_4>`__, in *New Structures for Physics*, Springer Berlin Heidelberg, pp. 289–355, 2010.
+# 
 # .. [#Arad]
 #    I. Arad and Z. Landau.
 #    "Quantum computation and the evaluation of tensor networks",
 #    `<https://arxiv.org/abs/0805.0040>`__, 2010.
+# 
+# .. [#Lam1997]
+#    C.-C. Lam, P. Sadayappan, and R. Wenger.
+#    "On Optimizing a Class of Multi-Dimensional Loops with Reduction for Parallel Execution",
+#    `<https://doi.org/10.1142/S0129626497000176>`__, Parallel Processing Letters, Vol. 7, No. 2, pp. 157-168, 1997.
+# 
+# .. [#Gray2021]
+#    J. Gray, S. Kourtis, and S. Choi.
+#    "Hyper-optimized tensor network contraction",
+#    `<https://quantum-journal.org/papers/q-2021-03-15-410/>`__, Quantum, Vol. 5, pp. 410, 2021.
+# 
+# .. [#Bienstock1990]
+#    D. Bienstock.
+#    "On embedding graphs in trees",
+#    `<https://doi.org/10.1016/009
+# 
+# .. [#Pfeifer2014]
+#    R. N. C. Pfeifer, J. Haegeman, and F. Verstraete.
+#    "Faster identification of optimal contraction sequences for tensor networks",
+#    `<http://dx.doi.org/10.1103/PhysRevE.90.033315>`__, Physical Review
