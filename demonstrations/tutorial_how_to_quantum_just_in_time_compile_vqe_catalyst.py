@@ -19,7 +19,7 @@ compiled, optimized, and executed with a significant performance boost.
 
 We will break the implementation into three steps:
 
-1. Finding the molecular Hamiltonian for :math:`H_3^{+}`.
+1. Finding the molecular Hamiltonian for :math:`H_3^{+}.`
 2. Preparing trial ground step (ansatz).
 3. Optimizing the circuit to minimize the expectation value of the Hamiltonian.
 """

@@ -56,12 +56,12 @@ Contextuality and inductive bias in QML
 
 ######################################################################
 # Suppose we want to prepare the maximally mixed state of a single qubit, 
-# with :math:`\rho = \frac{1}{2}\mathbb{I}`. Although this corresponds to a
+# with :math:`\rho = \frac{1}{2}\mathbb{I}.` Although this corresponds to a
 # single density matrix, there are many ways we could prepare the state.
 # For example, we could mix the states :math:`\vert 0 \rangle` or
 # :math:`\vert 1 \rangle` with equal probability. Alternatively, we could
 # use the :math:`X` basis, and mix the states :math:`\vert + \rangle` or
-# :math:`\vert - \rangle`. Even though this may not strike us as particularly
+# :math:`\vert - \rangle.` Even though this may not strike us as particularly
 # strange, a remarkable coincidence is in fact going on here: an
 # experimentalist can perform two physically distinct procedures (namely,
 # preparing :math:`\rho` in the :math:`Z` or :math:`X` basis), however it
@@ -75,11 +75,11 @@ Contextuality and inductive bias in QML
 # (we’ll write them as :math:`\lambda`), that comprise our quantum states.
 # In contextuality these are called *ontic states*, although they also go
 # by the name of *hidden variables*. When we prepare a state
-# :math:`\vert 0 \rangle`, :math:`\vert 1 \rangle`,
-# :math:`\vert + \rangle`, :math:`\vert - \rangle`, what is really going
-# on is that we prepare a mixture :math:`P_{\vert 0 \rangle}(\lambda)`,
-# :math:`P_{\vert 1 \rangle}(\lambda)`,
-# :math:`P_{\vert + \rangle}(\lambda)`,
+# :math:`\vert 0 \rangle`, :math:`\vert 1 \rangle,`
+# :math:`\vert + \rangle`, :math:`\vert - \rangle,` what is really going
+# on is that we prepare a mixture :math:`P_{\vert 0 \rangle}(\lambda),`
+# :math:`P_{\vert 1 \rangle}(\lambda),`
+# :math:`P_{\vert + \rangle}(\lambda),`
 # :math:`P_{\vert - \rangle}(\lambda)` over the true ontic states. One may
 # imagine that the corresponding mixtures over the :math:`\lambda` s are
 # the same for the :math:`Z` and :math:`X` basis preparation:
@@ -88,7 +88,7 @@ Contextuality and inductive bias in QML
 #
 # This is a rather natural explanation of our coincidence: the two
 # procedures are indistinguishable because they actually correspond to the
-# same mixture over the fundamental states :math:`\lambda`. This sort of
+# same mixture over the fundamental states :math:`\lambda.` This sort of
 # explanation is called *non-contextual*, since the two mixtures do not
 # depend on the basis (that is, the context) in which the state is
 # prepared. It turns out that if one tries to apply this logic to all the
@@ -153,7 +153,7 @@ Contextuality and inductive bias in QML
 #
 # .. math:: \mathbb{E}(y_k) = \frac{n^k_{\text{win}}-n^k_{\text{lose}}}{2},
 #
-# where :math:`n^k_{\text{win}}`, :math:`n^k_{\text{lose}}` is the number
+# where :math:`n^k_{\text{win}},` :math:`n^k_{\text{lose}}` is the number
 # of players that player :math:`k` beats or loses to in that round. This
 # ensures that a player is certain to get a positive (or negative) payoff
 # if they beat (or lose) to everyone.
@@ -374,10 +374,10 @@ expvals[:10].sum(axis=1)  # check first 10 entries
 # good generalisation performance.
 #
 # .. note::
-#   Since the above holds for all :math:`X_i`, it implies an
+#   Since the above holds for all :math:`X_i,` it implies an
 #   indistinguishability of the model: if we look at one of the labels at
 #   random, we are equally likely to see a positive or negative payoff
-#   regardless of :math:`X_i`, and so the :math:`X_i` are indistinguishable
+#   regardless of :math:`X_i,` and so the :math:`X_i` are indistinguishable
 #   with respect to this observation. This implies a corresponding constraint
 #   on non-contextual learning models, which limits their expressivity and
 #   may therefore hinder their performance: see the paper for more details
@@ -405,7 +405,7 @@ expvals[:10].sum(axis=1)  # check first 10 entries
 #
 # Let’s see how we can create a model class that satisfies this. For
 # precise details on the structure of the model, check out Figure 6 in the
-# paper. We’ll first look at the parameterised unitary :math:`V_{\alpha}`,
+# paper. We’ll first look at the parameterised unitary :math:`V_{\alpha},`
 # that we call the *input preparation unitary*. This prepares a state
 # :math:`V_\alpha\vert 0 \rangle` such that
 #
@@ -428,7 +428,7 @@ def input_prep(alpha):
 # The second unitary is a *bias invariant layer*: it preserves the value
 # of :math:`\langle Z_0+Z_1+Z_2 \rangle` for all input states into the
 # layer. To achieve this, the generators of the unitaries in this layer
-# must commute with the operator :math:`Z_0+Z_1+Z_2`. For example the
+# must commute with the operator :math:`Z_0+Z_1+Z_2.` For example the
 # operator :math:`X\otimes X + Y\otimes Y + Z\otimes Z` (on any pair of
 # qubits) commutes with :math:`Z_0+Z_1+Z_2` and so a valid parameterised
 # gate could be
@@ -440,7 +440,7 @@ def input_prep(alpha):
 # `demo <https://pennylane.ai/qml/demos/tutorial_geometric_qml.html>`__ for an awesome introduction to the subject).
 # Below we construct the
 # bias invariant layer: note that all the generators commute with
-# :math:`Z_0+Z_1+Z_2`. The variables ``blocks`` and ``layers`` are model
+# :math:`Z_0+Z_1+Z_2.` The variables ``blocks`` and ``layers`` are model
 # hyperparameters that we will fix as ``blocks=1`` and ``layers=2``.
 #
 

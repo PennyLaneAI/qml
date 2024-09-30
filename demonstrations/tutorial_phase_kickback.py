@@ -42,7 +42,7 @@ world and learn how to create an unbreakable lock? Let’s go!
 # --------------------
 #
 # First, let’s import the necessary libraries and create a device to run our quantum
-# circuits. Here we will work with 5 qubits, we will use qubit [0] as the control ancilla qubit, and qubits [1,2,3,4] will be our target qubits where we will encode :math:`|\psi\rangle`.
+# circuits. Here we will work with 5 qubits, we will use qubit [0] as the control ancilla qubit, and qubits [1,2,3,4] will be our target qubits where we will encode :math:`|\psi\rangle.`
 #
 
 import pennylane as qml
@@ -56,14 +56,14 @@ dev = qml.device("default.qubit", wires=num_wires, shots=1)
 # -------------------------
 #
 # Now let’s create the most formidable lock in the universe: the “quantum lock”! Here our lock is
-# represented by a unitary :math:`U`, which has all but one eigenvalue equal to 1. Our one “key” eigenstate
+# represented by a unitary :math:`U,` which has all but one eigenvalue equal to 1. Our one “key” eigenstate
 # has eigenvalue -1:
 #
 # .. math:: U|\text{key}\rangle = -|\text{key}\rangle
 #
 # But how can we differentiate the "key" eigenstate from the other eigenstate when the information is contained in the phase?
 # That's where phase kickback comes in! When the correct eigenstate is input, the -1 phase imparted by :math:`U` is kicked back to
-# the ancilla, effectively changing its state from :math:`|+\rangle` to :math:`|-\rangle`.
+# the ancilla, effectively changing its state from :math:`|+\rangle` to :math:`|-\rangle.`
 # Then the outcome of the measurement on the control qubit tells us whether the correct eigenstate was inputted or not.
 # In this case, :math:`|1\rangle = H|-\rangle` represents unlocking the lock, and :math:`|0\rangle = H|+\rangle` represents failure. To make
 # things simple, here we’ll work with a lock-in computational basis. In this setting, the key

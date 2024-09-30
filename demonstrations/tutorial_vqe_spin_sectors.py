@@ -18,10 +18,10 @@ lowest-energy state of a molecule using a quantum computer [#peruzzo2014]_.
 In the absence of `spin-orbit coupling <https://en.wikipedia.org/wiki/Spin-orbit_interaction>`_,
 the eigenstates of the molecular Hamiltonian can be calculated for specific values of the
 spin quantum numbers. This allows us to compute quantities such as the energy of the electronic
-states in different sectors of the total-spin projection :math:`S_z`. This is illustrated in the
+states in different sectors of the total-spin projection :math:`S_z.` This is illustrated in the
 figure below for the energy spectrum of the hydrogen molecule. In this case, the ground state has
-total spin :math:`S=0` while the lowest-lying excited states, with total spin :math:`S=1`, form
-a triplet related to the spin components :math:`S_z=-1, 0, 1`.
+total spin :math:`S=0` while the lowest-lying excited states, with total spin :math:`S=1,` form
+a triplet related to the spin components :math:`S_z=-1, 0, 1.`
 
 |
 
@@ -33,10 +33,10 @@ a triplet related to the spin components :math:`S_z=-1, 0, 1`.
 
 In this tutorial we demonstrate how to run VQE simulations to find the lowest-energy states
 of the hydrogen molecule in different spin sectors. First, we show how to
-build the electronic Hamiltonian and the total spin operator :math:`\hat{S}^2`. Next, we use
+build the electronic Hamiltonian and the total spin operator :math:`\hat{S}^2.` Next, we use
 excitation operations, implemented in PennyLane as Givens rotations [#qchemcircuits]_, to prepare
 the trial states of the molecule. In order to probe the molecular states with different total spin,
-:math:`S=0` and :math:`S=1`, we apply excitation operations which preserve and modify, respectively,
+:math:`S=0` and :math:`S=1,` we apply excitation operations which preserve and modify, respectively,
 the total-spin projection of the initial state encoded in the qubit register. Finally, we run
 the VQE algorithm to compute the energy of the states.
 
@@ -80,7 +80,7 @@ print("The Hamiltonian is ", H)
 # additional keyword arguments to simulate more complicated molecules. For more details
 # take a look at the tutorial :doc:`tutorial_quantum_chemistry`.
 #
-# We also want to build the total spin operator :math:`\hat{S}^2`,
+# We also want to build the total spin operator :math:`\hat{S}^2,`
 #
 # .. math::
 #
@@ -264,7 +264,7 @@ print("\n" f"Optimal value of the circuit parameters = {theta}")
 # Finding the lowest-lying excited state with :math:`S=1`
 # -------------------------------------------------------
 # In the last part of the tutorial, we will use VQE to find the lowest-lying
-# excited state of the hydrogen molecule with total spin :math:`S=1`.
+# excited state of the hydrogen molecule with total spin :math:`S=1.`
 # In this case, we use the :func:`~.pennylane.qchem.excitations` function to generate
 # excitations whose total-spin projection differs by the quantity ``delta_sz=1``
 # with respect to the Hartree-Fock state.
@@ -278,7 +278,7 @@ print(doubles)
 # double excitations, but only a spin-flip single excitation from qubit 1 to 2.
 # In this case, the circuit will contain only one :class:`~.pennylane.SingleExcitation`
 # operation. Additionally, as we want to probe the excited state of the hydrogen molecule,
-# we initialize the qubit register to the state :math:`\vert 0011 \rangle`.
+# we initialize the qubit register to the state :math:`\vert 0011 \rangle.`
 
 
 def circuit(params, wires):
@@ -294,11 +294,11 @@ def circuit(params, wires):
 #     + c_{0123}(\theta) \vert 0011 \rangle,
 #
 # where the first term :math:`\vert 0101 \rangle` encodes a spin-flip excitation with
-# :math:`S_z=-1` and the second term is a double excitation with :math:`S_z=0`.
+# :math:`S_z=-1` and the second term is a double excitation with :math:`S_z=0.`
 # Since an eigenstate of the electronic Hamiltonian cannot contain a superposition of
 # states with different total-spin projections, the double excitation coefficient
 # should vanish as the VQE algorithm minimizes the cost function. The optimized state will
-# correspond to the lowest-energy state with spin quantum numbers :math:`S=1, S_z=-1`.
+# correspond to the lowest-energy state with spin quantum numbers :math:`S=1, S_z=-1.`
 #
 # Now, we define the new functions to compute the expectation values of the Hamiltonian
 # and the total spin operator for the new circuit.

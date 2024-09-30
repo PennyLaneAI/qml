@@ -35,8 +35,8 @@ My personal perspective on QSVT is that it is really a result in linear algebra 
 transform matrices that are inside larger unitary matrices.
 
 Let's start with the simplest example:
-we encode a scalar :math:`a` inside a 2x2 matrix :math:`U(a)`. By encoding we mean that the
-matrix depends explicitly on :math:`a`. This encoding can be achieved in
+we encode a scalar :math:`a` inside a 2x2 matrix :math:`U(a).` By encoding we mean that the
+matrix depends explicitly on :math:`a.` This encoding can be achieved in
 multiple ways, for example:
 
 .. math:: U(a) = \begin{pmatrix} a & \sqrt{1-a^2}\\
@@ -58,8 +58,8 @@ which has the advantage of being diagonal. This unitary is known as the **signal
 It depends on a choice of angle :math:`\phi` that will play an important role.
 
 The answer to our question is encapsulated in a method known as **quantum signal processing** (QSP).
-If we alternate products of :math:`U(a)` and :math:`S(\phi)`, keeping :math:`a` fixed and varying :math:`\phi`,
-the top-left corner of the resulting matrix is a polynomial transformation of :math:`a`. Mathematically,
+If we alternate products of :math:`U(a)` and :math:`S(\phi)`, keeping :math:`a` fixed and varying :math:`\phi,`
+the top-left corner of the resulting matrix is a polynomial transformation of :math:`a.` Mathematically,
 
 .. math:: S(\phi_0)\prod_{k=1}^d U(a) S(\phi_k) = \begin{pmatrix}
     P(a) & *\\
@@ -68,7 +68,7 @@ the top-left corner of the resulting matrix is a polynomial transformation of :m
 
 The asterisk :math:`*` is used to indicate that we are not interested in these entries.
 
-The intuition behind this result is that every time we multiply by :math:`U(a)`, its entries are
+The intuition behind this result is that every time we multiply by :math:`U(a),` its entries are
 transformed to a polynomial of higher degree, and by interleaving signal-processing operators,
 it's possible to tune the coefficients of the polynomial. For example
 
@@ -83,7 +83,7 @@ parity determined by the number of angles [#unification]_.
 
 The results of the
 theorem can then be extended to show that using additional rotations, it is possible to
-find :math:`d+1` angles that implement any real polynomial of parity :math:`d \mod 2` and maximum degree :math:`d`.
+find :math:`d+1` angles that implement any real polynomial of parity :math:`d \mod 2` and maximum degree :math:`d.`
 Multiple QSP sequences can then be used to implement real polynomials of indefinite parity.
 Finding the desired angles can be done efficiently in practice, but identifying the best
 methods is an active area of research. You can learn more in our `QSP demo <https://pennylane.ai/qml/demos/function_fitting_qsp.html>`_
@@ -91,7 +91,7 @@ and in Ref. [#unification]_.
 
 For now, let's look at a simple example of how quantum signal processing can be implemented using
 PennyLane. We aim to perform a transformation by the Legendre polynomial
-:math:`(5 x^3 - 3x)/2`, for which we use pre-computed optimal angles.
+:math:`(5 x^3 - 3x)/2,` for which we use pre-computed optimal angles.
 As you will soon learn, QSP can be viewed as a special case of QSVT. We thus use the :func:`~.pennylane.qsvt`
 operation to construct the output matrix and compare the resulting transformation to
 the target polynomial.
@@ -139,7 +139,7 @@ plt.show()
 # Transforming matrices encoded in matrices
 # ------------------------------------------
 #
-# Time to ask another key question: what if instead of encoding a scalar, we encode an entire matrix :math:`A`? 🧠
+# Time to ask another key question: what if instead of encoding a scalar, we encode an entire matrix :math:`A?` 🧠
 # This is trickier since we need to ensure that the larger operator remains unitary. A way to achieve this
 # is to use a similar construction as in the scalar case:
 #
@@ -147,7 +147,7 @@ plt.show()
 #     \sqrt{I-A^\dagger A} & -A^\dagger
 #     \end{pmatrix}.
 #
-# This operator is a valid unitary regardless of the form of :math:`A`; it doesn't even have to be a square matrix. We just
+# This operator is a valid unitary regardless of the form of :math:`A;` it doesn't even have to be a square matrix. We just
 # need to ensure that :math:`A` is properly normalized such that its largest singular value is bounded by 1.
 #
 # Any such method of encoding a matrix inside a larger unitary is known as a **block encoding**. In our construction,
@@ -199,7 +199,7 @@ print(np.round(qml.matrix(U2), 2))
 #    0 & 0 & 0 & e^{-i\phi} \\
 #    \end{pmatrix}.
 #
-# These are known as **projector-controlled phase gates**, for which we use the symbol :math:`\Pi(\phi)`.
+# These are known as **projector-controlled phase gates**, for which we use the symbol :math:`\Pi(\phi).`
 #
 # When :math:`A` is not square,
 # we have to be careful and define two operators: one acting on the row subspace and another on the
@@ -242,7 +242,7 @@ print(np.round(qml.matrix(pcp), 2))
 #
 # As with QSP, it is possible to use the QSVT sequence to apply any real polynomial transformation up to degree
 # :math:`d` when using :math:`d+1` angles. In fact, as long as we're careful with conventions,
-# we can use the same angles regardless of the dimensions of :math:`A`.
+# we can use the same angles regardless of the dimensions of :math:`A.`
 #
 # The QSVT construction is a beautiful result. By using a number of operations that grows linearly with the
 # degree of the target polynomial, we can transform the singular values of arbitrary block-encoded matrices

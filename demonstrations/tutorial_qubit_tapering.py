@@ -52,7 +52,7 @@ For instance, consider the following Hamiltonian
 where all terms in the Hamiltonian act on the second qubit with the :math:`X` operator. It is
 straightforward to show that each term in the Hamiltonian commutes with :math:`I_0 X_1` and the
 ground-state eigenvector of :math:`H'` is also an eigenvector of :math:`I_0 X_1` with eigenvalues
-:math:`\pm 1`. We can also rewrite the Hamiltonian as
+:math:`\pm 1.` We can also rewrite the Hamiltonian as
 
 .. math:: H' = (Z_0 I_1 - I_0 I_1 + Y_0 I_1) I_0 X_1,
 
@@ -60,7 +60,7 @@ which gives us
 
 .. math:: H'|\psi \rangle = \pm1 (Z_0 I_1 - I_0 I_1 + Y_0 I_1)|\psi \rangle,
 
-where :math:`|\psi \rangle` is an eigenvector of :math:`H'`. This means that the Hamiltonian
+where :math:`|\psi \rangle` is an eigenvector of :math:`H'.` This means that the Hamiltonian
 :math:`H` can be simplified as
 
 .. math:: H_{tapered} = \pm1 (Z_0 - I_0 + Y_0).
@@ -90,10 +90,10 @@ operators applied to the :math:`j`-th qubit:
 
 and the eigenvectors of the transformed Hamiltonian :math:`H'` are also eigenvectors of each of the
 :math:`X^{j}` operators. Then we can factor out all of the :math:`X^{j}` operators from the
-transformed Hamiltonian and replace them with their eigenvalues :math:`\pm 1`. This gives us a
+transformed Hamiltonian and replace them with their eigenvalues :math:`\pm 1.` This gives us a
 set of tapered Hamiltonians depending on which eigenvalue :math:`\pm 1` we chose for each of the
 :math:`X^{j}` operators. For  instance, in the case of two tapered qubits, we have four eigenvalue
-sectors: :math:`[+1, +1]`, :math:`[-1, +1]`, :math:`[+1, -1]`, :math:`[-1, -1]`. In these tapered
+sectors: :math:`[+1, +1]`, :math:`[-1, +1]`, :math:`[+1, -1],` :math:`[-1, -1].` In these tapered
 Hamiltonians, the set of :math:`\left \{ j \right \}, j \in \left \{ l, ..., k \right \}` qubits
 are eliminated. For tapered molecular Hamiltonians, it is possible to determine the optimal sector
 of the eigenvalues that corresponds to the ground state. This is explained in more detail in the
@@ -113,7 +113,7 @@ those elements of the group that can be combined, along with their inverses, to 
 member of the group.
 
 Let's use the qubit tapering method and obtain the ground state energy of the `Helium hydride
-cation <https://en.wikipedia.org/wiki/Helium_hydride_ion>`__ :math:`\textrm{HeH}^+`.
+cation <https://en.wikipedia.org/wiki/Helium_hydride_ion>`__ :math:`\textrm{HeH}^+.`
 
 Tapering the molecular Hamiltonian
 ----------------------------------
@@ -149,7 +149,7 @@ for idx, generator in enumerate(generators):
 ##############################################################################
 # Once the operator :math:`U` is applied, each of the Hamiltonian terms will act on the qubits
 # :math:`q_2, q_3` either with the identity or with a Pauli-X operator. For each of these qubits,
-# we can simply replace the Pauli-X operator with one of its eigenvalues :math:`+1` or :math:`-1`.
+# we can simply replace the Pauli-X operator with one of its eigenvalues :math:`+1` or :math:`-1.`
 # This results in a total number of :math:`2^k` Hamiltonians, where :math:`k` is the number of
 # tapered-off qubits and each Hamiltonian corresponds to one eigenvalue sector. The optimal sector
 # corresponding to the ground-state energy of the molecule can be obtained by using the
@@ -161,9 +161,9 @@ paulix_sector = qml.qchem.optimal_sector(H, generators, n_electrons)
 print(paulix_sector)
 
 ##############################################################################
-# The optimal eigenvalues are :math:`-1, -1` for qubits :math:`q_2, q_3`, respectively. We can now
+# The optimal eigenvalues are :math:`-1, -1` for qubits :math:`q_2, q_3,` respectively. We can now
 # build the tapered Hamiltonian with the :func:`~.pennylane.taper` function which
-# constructs the operator :math:`U`, applies it to the Hamiltonian and finally tapers off the
+# constructs the operator :math:`U,` applies it to the Hamiltonian and finally tapers off the
 # qubits :math:`q_2, q_3` by replacing the Pauli-X operators acting on those qubits with the optimal
 # eigenvalues.
 
@@ -190,7 +190,7 @@ print("\nEigenvalues of H_tapered:\n", qml.eigvals(H_tapered_sparse, k=4))
 # Note that a second-quantized Hamiltonian is independent of the number of electrons and its
 # eigenspectrum contains the energies of the neutral and charged molecules. Therefore, the
 # smallest eigenvalue returned by :func:`~.pennylane.eigvals` for a molecular Hamiltonian
-# might correspond to the neutral or charged molecule. While in the case of :math:`\textrm{HeH}^+`,
+# might correspond to the neutral or charged molecule. While in the case of :math:`\textrm{HeH}^+,`
 # qubit tapering allows specifying the optimal sector of the eigenvectors corresponding only to the
 # correct number of electrons, it is generally guaranteed that the optimal sector covers all
 # eigenvectors with the correct number of electrons, but may contain additional eigenvectors of
@@ -211,7 +211,7 @@ print(state_tapered)
 
 ##############################################################################
 # Recall that the original Hartree-Fock state for the :math:`\textrm{HeH}^+` cation is
-# :math:`[1 1 0 0]`. We can now generate the qubit representation of these states and compute the
+# :math:`[1 1 0 0].` We can now generate the qubit representation of these states and compute the
 # Hartree-Fock energies for each Hamiltonian.
 
 dev = qml.device("default.qubit", wires=H.wires)

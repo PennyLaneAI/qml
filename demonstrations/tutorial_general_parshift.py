@@ -70,13 +70,13 @@ Cost functions arising from quantum gates
 -----------------------------------------
 We start our investigation by considering a cost function that arises from measuring the expectation
 value of an observable in a quantum state, created with a parametrized quantum operation
-that depends on a single variational parameter :math:`x`.
+that depends on a single variational parameter :math:`x.`
 That is, the state may be prepared by any circuit, but we will only allow a single parameter
 in a single operation to enter the circuit.
 For this we will use a handy gate structure that allows us to tune the complexity of the
 operation — and thus of the cost function.
 More concretely, we initialize a qubit register in a random state :math:`|\psi\rangle`
-and apply a layer of Pauli-:math:`Z` rotations ``RZ`` to all qubits, where all rotations are parametrized by the *same* angle :math:`x`.
+and apply a layer of Pauli-:math:`Z` rotations ``RZ`` to all qubits, where all rotations are parametrized by the *same* angle :math:`x.`
 We then measure the expectation value of a random Hermitian observable :math:`B` in the created
 state, so that our cost function overall has the form
 
@@ -119,7 +119,7 @@ def random_observable(N, seed):
 ###############################################################################
 # Now let's set up a "cost function generator", namely a function that will create the
 # ``cost`` function we discussed above, using :math:`|\psi\rangle` as initial state and
-# measuring the expectation value of :math:`B`. This generator has the advantage that
+# measuring the expectation value of :math:`B.` This generator has the advantage that
 # we can quickly create the cost function for various numbers of qubits — and therefore
 # cost functions with different complexity.
 #
@@ -169,7 +169,7 @@ pink = "xkcd:bright pink"
 ###############################################################################
 # Now that we took care of these preparations, let's dive right into it:
 # It can be shown [#GenPar]_ that :math:`E(x)` takes the form of a
-# Fourier series in the variable :math:`x`. That is to say that
+# Fourier series in the variable :math:`x.` That is to say that
 #
 # .. math ::
 #
@@ -181,7 +181,7 @@ pink = "xkcd:bright pink"
 # :doc:`Fourier module tutorial </demos/tutorial_expressivity_fourier_series>`.
 #
 # Due to :math:`B` being Hermitian, :math:`E(x)` is a real-valued function, so 
-# only positive frequencies and real coefficients appear in the Fourier series for :math:`E(x)`.
+# only positive frequencies and real coefficients appear in the Fourier series for :math:`E(x).`
 # This is true for any number of qubits (and therefore ``RZ`` gates) we use.
 #
 # Using our function ``make_cost`` from above, we create the cost function for several
@@ -253,7 +253,7 @@ for N, cost_function in zip(Ns, cost_functions):
 # The number of positive frequencies that appear in :math:`E(x)` is the same as the
 # number of ``RZ`` gates we used in the circuit! Recall that we only need to consider
 # the positive frequencies because :math:`E(x)` is real-valued, and that we accounted for
-# the zero-frequency contribution in the coefficient :math:`a_0`.
+# the zero-frequency contribution in the coefficient :math:`a_0.`
 # If you are interested why the number of gates coincides with the number of frequencies,
 # check out the :doc:`Fourier module tutorial </demos/tutorial_expressivity_fourier_series>`.
 #
@@ -289,11 +289,11 @@ plt.show()
 # Determining the full dependence on :math:`x`
 # --------------------------------------------
 #
-# Next we will show how to determine the *full* dependence of the cost function on :math:`x`,
-# i.e., we will *reconstruct* :math:`E(x)`.
+# Next we will show how to determine the *full* dependence of the cost function on :math:`x,`
+# i.e., we will *reconstruct* :math:`E(x).`
 # The key idea is not new: Since :math:`E(x)` is periodic with known, integer frequencies, we can
 # reconstruct it *exactly* by using trigonometric interpolation.
-# For this, we evaluate :math:`E` at shifted positions :math:`x_\mu`.
+# For this, we evaluate :math:`E` at shifted positions :math:`x_\mu.`
 # We will show the reconstruction both for *equidistant* and random shifts, corresponding to a
 # `uniform <https://en.wikipedia.org/wiki/Discrete_Fourier_transform>`_ and a
 # `non-uniform <https://en.wikipedia.org/wiki/Non-uniform_discrete_Fourier_transform>`_
@@ -312,11 +312,11 @@ plt.show()
 # where we reformulated :math:`E` in the second expression using the
 # `sinc function <https://en.wikipedia.org/wiki/Sinc_function>`__ to enhance the numerical 
 # stability. Note that we have to take care of a rescaling factor of :math:`\pi` between 
-# this definition of :math:`\operatorname{sinc}` and the NumPy implementation ``np.sinc``.
+# this definition of :math:`\operatorname{sinc}` and the NumPy implementation ``np.sinc`.`
 #
 # .. note ::
 #
-#     When implementing :math:`E`, we will replace
+#     When implementing :math:`E,` we will replace
 #
 #     .. math ::
 #
@@ -328,8 +328,8 @@ plt.show()
 #
 #         \frac{\operatorname{sinc}\left(\frac{2R+1}{2}(x-x_\mu)\right)} {\operatorname{sinc} \left(\frac{1}{2} (x-x_\mu)\right)}
 #
-#     where the sinc function is defined as :math:`\operatorname{sinc}(x)=\sin(x)/x`. 
-#     This enhances the numerical stability since :math:`\operatorname{sinc}(0)=1`, so that the
+#     where the sinc function is defined as :math:`\operatorname{sinc}(x)=\sin(x)/x.` 
+#     This enhances the numerical stability since :math:`\operatorname{sinc}(0)=1,` so that the
 #     denominator does no longer vanish at the shifted points. 
 #     Note that we have to take care of a rescaling factor of :math:`\pi`
 #     between this definition of :math:`\operatorname{sinc}` and the NumPy implementation
@@ -360,7 +360,7 @@ reconstructions_equ = list(map(full_reconstruction_equ, cost_functions, Ns))
 
 ###############################################################################
 # So how is this reconstruction doing? We will plot it along with the original function
-# :math:`E`, mark the shifted evaluation points :math:`x_\mu` (with crosses), and also show
+# :math:`E,` mark the shifted evaluation points :math:`x_\mu` (with crosses), and also show
 # its deviation from :math:`E(x)` (lower plots).
 # For this, a function for the whole procedure of comparing the functions comes in handy, and
 # we will reuse it further below. For convenience, showing the deviation will be an optional
@@ -417,14 +417,14 @@ plt.show()
 # ^^^^^^^^^^^^^^^^^^^^^^
 #
 # Now let's test the reconstruction with less regular sampling points on which to evaluate
-# :math:`E`. This means we can no longer use the closed-form expression from above, but switch
+# :math:`E.` This means we can no longer use the closed-form expression from above, but switch
 # to solving the set of equations
 #
 # .. math ::
 #
 #   E(x_\mu) = a_0 + \sum_{\ell=1}^R a_{\ell}\cos(\ell x_\mu)+b_{\ell}\sin(\ell x_\mu)
 #
-# with the—now irregular—sampling points :math:`x_\mu`.
+# with the—now irregular—sampling points :math:`x_\mu.`
 # For this, we set up the matrix
 #
 # .. math ::
@@ -436,7 +436,7 @@ plt.show()
 #   \end{cases}
 #
 # collect the Fourier coefficients of :math:`E` into the vector
-# :math:`\boldsymbol{W}=(a_0, \boldsymbol{a}, \boldsymbol{b})`, and the evaluations of :math:`E`
+# :math:`\boldsymbol{W}=(a_0, \boldsymbol{a}, \boldsymbol{b}),` and the evaluations of :math:`E`
 # into another vector called :math:`\boldsymbol{E}` so that
 #
 # .. math ::
@@ -444,7 +444,7 @@ plt.show()
 #   \boldsymbol{E} = C \boldsymbol{W} \Rightarrow \boldsymbol{W} = C^{-1}\boldsymbol{E}.
 #
 # Let's implement this right away! We will take the function and the shifts :math:`x_\mu` as
-# inputs, inferring :math:`R` from the number of the provided shifts, which is :math:`2R+1`.
+# inputs, inferring :math:`R` from the number of the provided shifts, which is :math:`2R+1.`
 
 
 def full_reconstruction_gen(fun, shifts):
@@ -480,7 +480,7 @@ def full_reconstruction_gen(fun, shifts):
 
 ###############################################################################
 # To see this version of the reconstruction in action, we will sample the
-# shifts :math:`x_\mu` at random in :math:`[-\pi,\pi)`:
+# shifts :math:`x_\mu` at random in :math:`[-\pi,\pi):`
 
 
 shifts = [rnd.random(2 * N + 1) * 2 * np.pi - np.pi for N in Ns]
@@ -511,7 +511,7 @@ plt.show()
 # -----------------------------------
 #
 # Next, we look at a modified reconstruction strategy that only obtains the odd or even part of
-# :math:`E(x)`. This can be done by slightly modifying the shifted positions at which we
+# :math:`E(x).` This can be done by slightly modifying the shifted positions at which we
 # evaluate :math:`E` and the kernel functions.
 #
 # From a perspective of implementing the derivatives there are two approaches, differing in 
@@ -705,10 +705,10 @@ plt.show()
 #
 # Nothing, actually, for the full reconstruction! Quite the opposite, we spent :math:`2R`
 # evaluations of :math:`E` on each part, that is :math:`4R` evaluations overall to obtain a
-# description of the full function :math:`E`! This is way more than the :math:`2R+1`
+# description of the full function :math:`E!` This is way more than the :math:`2R+1`
 # evaluations needed for the full reconstructions from the beginning.
 #
-# However, remember that we set out to compute derivatives of :math:`E` at :math:`0`, so that
+# However, remember that we set out to compute derivatives of :math:`E` at :math:`0,` so that
 # for derivatives of odd/even order only the odd/even reconstruction is required.
 # Using an autodifferentiation framework, e.g. JAX, we can easily compute such higher-order
 # derivatives:
@@ -739,8 +739,8 @@ for order, name in zip([1, 2, 4], ["First", "Second", "4th"]):
 #     While we used the :math:`2R+1` evaluations :math:`x_\mu=\frac{2\mu\pi}{2R+1}` for the full
 #     reconstruction, derivatives only require :math:`2R` calls to the respective circuit.
 #     Also note that the derivatives can be computed at any position :math:`x_0` other than
-#     :math:`0` by simply reconstructing the function :math:`E(x+x_0)`, which again will be
-#     a Fourier series like :math:`E(x)`.
+#     :math:`0` by simply reconstructing the function :math:`E(x+x_0),` which again will be
+#     a Fourier series like :math:`E(x).`
 #
 # Generalized parameter-shift rules
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -754,7 +754,7 @@ for order, name in zip([1, 2, 4], ["First", "Second", "4th"]):
 #   E'(0) = \sum_{\mu=1}^{2R} E\left(\frac{2\mu-1}{2R}\pi\right) \frac{(-1)^{\mu-1}}{4R\sin^2\left(\frac{2\mu-1}{4R}\pi\right)},
 #
 # This is straight-forward to implement by defining the coefficients and evaluating
-# :math:`E` at the shifted positions :math:`x_\mu`:
+# :math:`E` at the shifted positions :math:`x_\mu:`
 
 
 def parameter_shift_first(fun, R):
@@ -781,7 +781,7 @@ ps_der1 = list(map(parameter_shift_first, cost_functions, Ns))
 #   E''(0) = -E(0)\frac{2R^2+1}{6} - \sum_{\mu=1}^{2R-1} E\left(\frac{\mu\pi}{R}\right)\frac{(-1)^\mu}{2\sin^2 \left(\frac{\mu\pi}{2R}\right)}.
 #
 # Let's code this up, again we only get slight complications from the special evaluation
-# at :math:`0`:
+# at :math:`0:`
 
 
 def parameter_shift_second(fun, R):
@@ -803,7 +803,7 @@ ps_der2 = list(map(parameter_shift_second, cost_functions, Ns))
 
 ###############################################################################
 # We will compare these two shift rules to the finite-difference derivative commonly used for
-# numerical differentiation. We choose a finite difference of :math:`d_x=5\times 10^{-5}`.
+# numerical differentiation. We choose a finite difference of :math:`d_x=5\times 10^{-5}.`
 
 dx = 5e-5
 

@@ -335,7 +335,7 @@ print(keep_rot[0])
 # To test the effectiveness of the dropout technique, we will use a prototypical dataset
 # with which it is very easy to overfit: the sinusoidal function. We produce some
 # points according to the :math:`\sin` function and then we add some white Gaussian noise
-# (noise that follows a normal distribution) :math:`\epsilon`. The noise is essential to obtain overfitting;
+# (noise that follows a normal distribution) :math:`\epsilon.` The noise is essential to obtain overfitting;
 # when our model is extremely expressive, it is capable of exactly fit each point and some parameters
 # become hyper-specialized in recognizing the noisy features. This makes predictions on new unseen
 # data difficult, since the overfitting model did not learn the true underlying data distribution.
@@ -395,7 +395,7 @@ plt.legend()
 plt.show()
 
 ######################################################################
-# Since our circuit is only able to provide outputs in the range :math:`[-1,1]`, we rescale all the
+# Since our circuit is only able to provide outputs in the range :math:`[-1,1],` we rescale all the
 # noisy data within this range. To do this we leverage the `MinMaxScaler` from `sklearn`.
 # It is common practice to fit the scaler only from training data and then apply it also to the
 # test. The reason behind this is that in general one only has knowledge about the training dataset.

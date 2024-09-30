@@ -56,10 +56,10 @@ statistics of mid-circuit measurements </demos/tutorial_how_to_collect_mcm_stats
 #
 # .. math:: M[\rho]=\sum_{i=1}^n p_i \rho_i
 #
-# of post-measurement quantum states :math:`\rho_i` that are specified by :math:`M`.
+# of post-measurement quantum states :math:`\rho_i` that are specified by :math:`M.`
 # Here, :math:`n` is the number of possible measurement outcomes and :math:`p_i`
-# is the probability to measure the outcome :math:`i` associated to :math:`\rho_i`,
-# given the input state :math:`\rho`. For a qubit in the
+# is the probability to measure the outcome :math:`i` associated to :math:`\rho_i,`
+# given the input state :math:`\rho.` For a qubit in the
 # :math:`|+\rangle=(|0\rangle + |1\rangle)/\sqrt{2}` state measured in the :math:`Z` basis, we find
 #
 # .. math::
@@ -74,7 +74,7 @@ statistics of mid-circuit measurements </demos/tutorial_how_to_collect_mcm_stats
 # If we do record the measurement outcome and only keep those samples
 # that match a specific postselection rule,
 # we no longer have a probabilistic mixture, but find the state :math:`\rho_i` for
-# the filtered outcome :math:`i`.
+# the filtered outcome :math:`i.`
 #
 # For the rest of this tutorial, we will restrict ourselves to standard measurements
 # commonly found in mid-circuit measurements, using so-called projective measurements.
@@ -85,7 +85,7 @@ statistics of mid-circuit measurements </demos/tutorial_how_to_collect_mcm_stats
 # .. math:: \rho_i = \frac{\Pi_i \rho \Pi_i}{\operatorname{tr}[\Pi_i \rho]}
 #
 # and the probabilities are dictated by the Born rule,
-# :math:`p_i=\operatorname{tr}[\Pi_i \rho]`.
+# :math:`p_i=\operatorname{tr}[\Pi_i \rho].`
 # This means that if we do not record the measurement outcome, the system simply
 # ends up in the state
 #
@@ -97,8 +97,8 @@ statistics of mid-circuit measurements </demos/tutorial_how_to_collect_mcm_stats
 # Measuring a single qubit
 # ~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# Consider a single qubit in the state :math:`|+\rangle`, i.e., in the equal
-# superposition of :math:`|0\rangle` and :math:`|1\rangle`.
+# Consider a single qubit in the state :math:`|+\rangle,` i.e., in the equal
+# superposition of :math:`|0\rangle` and :math:`|1\rangle.`
 # To get started, let's first implement this state in PennyLane and compute some
 # expectation values that will be insightful later on. We follow these steps:
 #
@@ -136,12 +136,12 @@ print(f"Expectation values before any measurement: {b[0]:.1f}, {b[1]:.1f}")
 
 ######################################################################
 # The result is not surprising: :math:`|+\rangle` is the eigenstate of :math:`X` for
-# the eigenvalue :math:`+1`, and it has the well-known expectation value
-# :math:`\langle +|Z|+\rangle=0`.
+# the eigenvalue :math:`+1,` and it has the well-known expectation value
+# :math:`\langle +|Z|+\rangle=0.`
 #
-# Now we bring in a mid-circuit measurement in the computational, or Pauli-:math:`Z`,
-# basis. It comes with the projections :math:`\Pi_i=|i\rangle\langle i|`,
-# :math:`i\in\{0, 1\}`, onto the computational basis states.
+# Now we bring in a mid-circuit measurement in the computational, or Pauli-:math:`Z,`
+# basis. It comes with the projections :math:`\Pi_i=|i\rangle\langle i|,`
+# :math:`i\in\{0, 1\},` onto the computational basis states.
 # If we execute the measurement process but do not record the outcome, we find the state
 #
 # .. math::
@@ -178,7 +178,7 @@ print(f"Expectation value after the measurement:  {a[0]:.1f}, {a[1]:.1f}")
 # the Pauli-:math:`X` operator into a mixed state with expectation value zero for all
 # Pauli operators, explaining the values we just observed.
 #
-# Now if we filter for one measurement outcome, say :math:`0`, we find the state
+# Now if we filter for one measurement outcome, say :math:`0,` we find the state
 #
 # .. math::
 #
@@ -203,9 +203,9 @@ print(f"Expectation value after the postselected measurement:  {a[0]:.1f}, {a[1]
 ######################################################################
 # As expected, we find the that the measured, postselected qubit is in the
 # :math:`|0\rangle` eigenstate of the Pauli-:math:`Z` operator with eigenvalue
-# :math:`+1`, yielding :math:`\langle X\rangle=0` and :math:`\langle Z\rangle=1`. For
+# :math:`+1,` yielding :math:`\langle X\rangle=0` and :math:`\langle Z\rangle=1.` For
 # ``postselect=1``, we would have obtained the :math:`|1\rangle` eigenstate of :math:`Z`
-# with eigenvalue :math:`-1`, instead.
+# with eigenvalue :math:`-1,` instead.
 #
 # Measuring a Bell pair
 # ~~~~~~~~~~~~~~~~~~~~~
@@ -241,7 +241,7 @@ def bell_pair_preparation(**kwargs):
 #     M[\rho] = \frac{1}{2}\left(|00\rangle\langle 00| + |11\rangle\langle 11|\right),
 #
 # which again could be described by a classical mixture as well. If we instead postselect
-# on measuring, say, a :math:`1`, we find :math:`M[\rho] = |11\rangle\langle 11|`.
+# on measuring, say, a :math:`1,` we find :math:`M[\rho] = |11\rangle\langle 11|.`
 #
 # There are two striking differences between whether we record the measurement outcome
 # or not: the state of the qubits changes from a mixed to a pure state, as witnessed
@@ -274,14 +274,14 @@ print(f"Entanglement entropy |     {without_ps[1]:.2f}   |  {with_ps[1]:.1f}")
 # ~~~~~~~~~~~
 #
 # Another commonly used feature with mid-circuit measurements is to reset the measured
-# qubit, i.e., if we measured a :math:`1`, we flip it back into to the :math:`|0\rangle`
+# qubit, i.e., if we measured a :math:`1,` we flip it back into to the :math:`|0\rangle`
 # state with a Pauli :math:`X` operation. If there is just one qubit, this is the same
-# as if we never measured it but reset it directly to the initial state :math:`|0\rangle`,
+# as if we never measured it but reset it directly to the initial state :math:`|0\rangle,`
 # as long as we do not use the measurement outcome for anything.
 # For the Bell pair example from above, resetting the measured qubit means that
-# we flip the first bit if it is a :math:`1`. Alternatively, we can trace out the
-# first qubit and re-initialize it in the state :math:`|0\rangle`. Denoting the reset
-# step explicitly as :math:`R`, this leads to the post-measurement state
+# we flip the first bit if it is a :math:`1.` Alternatively, we can trace out the
+# first qubit and re-initialize it in the state :math:`|0\rangle.` Denoting the reset
+# step explicitly as :math:`R,` this leads to the post-measurement state
 #
 # .. math::
 #
@@ -311,7 +311,7 @@ print(f"With reset    |  {reset[0]:.1f} |  {reset[1]:.1f} |   {reset[2]:.1f}")
 
 ######################################################################
 # Resetting the qubit changed the expectation values of the local observable :math:`Z_0`
-# and the global observable :math:`Z_0Z_1`.
+# and the global observable :math:`Z_0Z_1.`
 #
 # Dynamically controlling a quantum circuit
 # -----------------------------------------
@@ -344,14 +344,14 @@ print(f"With reset    |  {reset[0]:.1f} |  {reset[1]:.1f} |   {reset[2]:.1f}")
 # The gadget then consists of the following steps:
 #
 # - Prepare an auxiliary qubit in a magic state
-#   :math:`(|0\rangle + e^{i\pi/4} |1\rangle)/\sqrt{2}`, for example using :doc:`magic
+#   :math:`(|0\rangle + e^{i\pi/4} |1\rangle)/\sqrt{2},` for example using :doc:`magic
 #   state distillation </demos/tutorial_magic_state_distillation>`;
 #
 # - Entangle the auxiliary and target qubit with a ``CNOT``;
 #
 # - Measure the auxiliary qubit with ``measure`` and record the outcome;
 #
-# - If the measurement outcome was :math:`1`, apply an ``S`` gate to the target qubit.
+# - If the measurement outcome was :math:`1,` apply an ``S`` gate to the target qubit.
 #   The conditional is realized with :func:`~.pennylane.cond`.
 #
 
@@ -377,7 +377,7 @@ def t_gadget(wire, aux_wire):
 #
 # - apply ``T†``, using :func:`~.pennylane.adjoint`;
 #
-# - return the expectation value :math:`\langle X_0\rangle`.
+# - return the expectation value :math:`\langle X_0\rangle.`
 #
 
 @qml.qnode(dev)
@@ -397,13 +397,13 @@ print(f"<X₀> with initial state |->: {test_t_gadget('-'):4.1f}")
 ######################################################################
 # The T-gadget indeed performs a ``T`` gate, which is being reversed by
 # ``T†``. As a result, the expectation values match those of the initial
-# states :math:`|\pm\rangle`.
+# states :math:`|\pm\rangle.`
 #
 # How can we understand the above circuit intuitively? We did not postselect
 # the measurement outcome, but we did record (and use) it to modify the
 # circuit structure. For a single measurement, or shot, this would have
-# led to exactly *one* of the events "measure :math:`0`, do not apply ``S``"
-# or "measure :math:`1`, apply ``S``", with equal probability for either one.
+# led to exactly *one* of the events "measure :math:`0,` do not apply ``S``"
+# or "measure :math:`1,` apply ``S``", with equal probability for either one.
 # The state on wire ``0`` is :math:`T|\pm\rangle` in either case!
 #
 # For scenarios in which the different events lead to *distinct* states,

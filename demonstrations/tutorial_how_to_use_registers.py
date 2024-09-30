@@ -68,7 +68,7 @@ print(new_register)
 # The `swap test <https://en.wikipedia.org/wiki/Swap_test>`_
 # is an algorithm that calculates the squared inner
 # product of two input states. It requires one auxiliary qubit and takes two input states :math:`|\psi\rangle`
-# and :math:`|\phi\rangle`. We can think of these components as three registers. Suppose states
+# and :math:`|\phi\rangle.` We can think of these components as three registers. Suppose states
 # :math:`|\psi\rangle` and :math:`|\phi\rangle` are each represented with 3 wires. In PennyLane
 # code, that would be:
 
@@ -107,12 +107,12 @@ print(swap_test())
 # calculate the eigenvalues of a Hamiltonian.
 # Generally, QPE is described with two sets of registers. One register is known as the
 # "estimation" or "measurement" register, and the other is the state register where we apply our
-# unitary operators :math:`U`. We can define these registers in PennyLane code:
+# unitary operators :math:`U.` We can define these registers in PennyLane code:
 
 register = qml.registers({"state": 4, "estimation": 6})
 
 ######################################################################
-# To build our unitary operator :math:`U`, there are a variety of options. We can opt to use a
+# To build our unitary operator :math:`U,` there are a variety of options. We can opt to use a
 # straight-forward block encoding, or choose to use a subroutine like qubitization. Let's opt for
 # :class:`~.pennylane.Qubitization`, which means we have to define another preparation register.
 # Our registers now look like this:

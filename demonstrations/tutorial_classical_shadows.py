@@ -61,7 +61,7 @@ observables.
 #
 #     \rho \to U \rho U^\dagger.
 #
-# Next, we measure in the computational basis and obtain a bit string of outcomes :math:`|b\rangle = |0011\ldots10\rangle`.
+# Next, we measure in the computational basis and obtain a bit string of outcomes :math:`|b\rangle = |0011\ldots10\rangle.`
 # If the unitaries :math:`U` are chosen at random from a particular ensemble, then we can store the reverse operation
 # :math:`U^\dagger |b\rangle\langle b| U` efficiently in classical memory.
 # We call this a *snapshot* of the state.
@@ -91,7 +91,7 @@ observables.
 # However, this is of no concern to us, since all we care about is efficiently applying this inverse channel to the
 # observed snapshots as a post-processing step.
 #
-# Since the shadow approximates :math:`\rho`, we can now estimate **any** observable with the empirical mean:
+# Since the shadow approximates :math:`\rho,` we can now estimate **any** observable with the empirical mean:
 #
 # .. math::
 #
@@ -100,11 +100,11 @@ observables.
 # Note that the classical shadow is independent of the observables we want to estimate, as :math:`S(\rho,N)` contains
 # only information about the state!
 #
-# Furthermore, the authors of [#Huang2020]_ prove that with a shadow of size :math:`N`, we can predict :math:`M` arbitary linear functions
-# :math:`\text{Tr}{O_1\rho},\ldots,\text{Tr}{O_M \rho}` up to an additive error :math:`\epsilon` if :math:`N\geq \mathcal{O}\left(\log{M} \max_i ||O_i||^2_{\text{shadow}}/\epsilon^2\right)`.
+# Furthermore, the authors of [#Huang2020]_ prove that with a shadow of size :math:`N,` we can predict :math:`M` arbitary linear functions
+# :math:`\text{Tr}{O_1\rho},\ldots,\text{Tr}{O_M \rho}` up to an additive error :math:`\epsilon` if :math:`N\geq \mathcal{O}\left(\log{M} \max_i ||O_i||^2_{\text{shadow}}/\epsilon^2\right).`
 # The shadow norm :math:`||O_i||^2_{\text{shadow}}` depends on the unitary ensemble that is chosen.
 #
-# Two different ensembles can be considered for selecting the random unitaries :math:`U`:
+# Two different ensembles can be considered for selecting the random unitaries :math:`U:`
 #
 # 1. Random :math:`n`-qubit Clifford circuits.
 # 2. Tensor products of random single-qubit Clifford circuits.
@@ -124,7 +124,7 @@ observables.
 #      ||O_i||^2_{\text{shadow}} \leq 4^k ||O_i||_\infty^2.
 #
 # Say that we want to estimate the single expectation value of a Pauli observable
-# :math:`\langle X_1 \otimes X_2 \otimes \ldots \otimes X_n \rangle`. Estimating this from repeated measurements
+# :math:`\langle X_1 \otimes X_2 \otimes \ldots \otimes X_n \rangle.` Estimating this from repeated measurements
 # would require :math:`1/\epsilon^2` samples, whereas we would need an exponentially large shadow due to the :math:`4^n` appearing in the bound.
 # Therefore, classical shadows based on Pauli measurements only offer an advantage when we have to measure a large number
 # of observables with modest locality.
@@ -140,13 +140,13 @@ np.random.seed(666)
 
 
 ##############################################################################
-# A classical shadow is a collection of :math:`N` individual snapshots :math:`\hat{\rho}_i`.
+# A classical shadow is a collection of :math:`N` individual snapshots :math:`\hat{\rho}_i.`
 # Each snapshot is obtained with the following procedure:
 #
 # 1. The quantum state :math:`\rho` is prepared with a circuit.
-# 2. A unitary :math:`U` is randomly selected from the ensemble and applied to :math:`\rho`.
+# 2. A unitary :math:`U` is randomly selected from the ensemble and applied to :math:`\rho.`
 # 3. A computational basis measurement is performed.
-# 4. The snapshot is recorded as the observed eigenvalue :math:`1,-1` for :math:`|0\rangle,|1\rangle`, respectively, and the index of the randomly selected unitary :math:`U`.
+# 4. The snapshot is recorded as the observed eigenvalue :math:`1,-1` for :math:`|0\rangle,|1\rangle,` respectively, and the index of the randomly selected unitary :math:`U.`
 #
 # To obtain a classical shadow using PennyLane, we design the ``calculate_classical_shadow``
 # function below.
@@ -412,7 +412,7 @@ operator_2_norm(bell_state - shadow_state)
 
 ##############################################################################
 # Finally, we see how the approximation improves as we increase the
-# number of snapshots. We run the estimator 10 times for each :math:`N`.
+# number of snapshots. We run the estimator 10 times for each :math:`N.`
 
 number_of_runs = 10
 snapshots_range = [100, 1000, 6000]
@@ -452,7 +452,7 @@ plt.show()
 # an exponential amount of resources. Instead, we want to use the shadows to efficiently
 # calculate linear functions of a quantum state. To do this, we write a function
 # ``estimate_shadow_observable`` that takes in the previously constructed shadow
-# :math:`S(\rho, N)=[\hat{\rho}_1,\hat{\rho}_2,\ldots,\hat{\rho}_N]`, and
+# :math:`S(\rho, N)=[\hat{\rho}_1,\hat{\rho}_2,\ldots,\hat{\rho}_N],` and
 # estimates any observable via a median of means estimation. This makes the estimator
 # more robust to outliers and is required to formally prove the aforementioned theoretical
 # bound. The procedure is simple: split up the shadow into :math:`K` equally sized chunks
@@ -470,10 +470,10 @@ plt.show()
 #
 #       \langle O\rangle = \text{median}\{\langle O_{(1)} \rangle,\ldots, \langle O_{(K)} \rangle \}.
 #
-# Note that the shadow bound has a failure probability :math:`\delta`. By choosing the number of splits :math:`K` to be
+# Note that the shadow bound has a failure probability :math:`\delta.` By choosing the number of splits :math:`K` to be
 # suitably large, we can exponentially suppress this failure probability.
-# Assume now that :math:`O=\bigotimes_j^n P_j`, where :math:`P_j \in \{I, X, Y, Z\}`.
-# To efficiently calculate the estimator for :math:`O`, we look at a single snapshot outcome and plug in the inverse measurement channel:
+# Assume now that :math:`O=\bigotimes_j^n P_j,` where :math:`P_j \in \{I, X, Y, Z\}.`
+# To efficiently calculate the estimator for :math:`O,` we look at a single snapshot outcome and plug in the inverse measurement channel:
 #
 # .. math::
 #
@@ -482,7 +482,7 @@ plt.show()
 #
 # Due to the orthogonality of the Pauli operators, this evaluates to :math:`\pm 3` if :math:`P_j` is the
 # corresponding measurement basis :math:`U_j` and 0 otherwise. Hence if a single :math:`U_j` in the snapshot
-# does not match the one in :math:`O`, the whole product evaluates to zero. As a result, calculating the mean estimator
+# does not match the one in :math:`O,` the whole product evaluates to zero. As a result, calculating the mean estimator
 # can be reduced to counting the number of exact matches in the shadow with the observable, and multiplying with the appropriate
 # sign. Below, we develop the function ``estimate_shadow_obervable`` to estimate any observable given a classical shadow.
 
@@ -622,7 +622,7 @@ list_of_observables = (
 #
 #    |\langle{O_i}\rangle_{shadow} - \langle{O_i}\rangle_{exact}| \leq \epsilon
 #
-# for all :math:`1\leq i \leq M`.
+# for all :math:`1\leq i \leq M.`
 
 shadow_size_bound, k = shadow_bound(
     error=2e-1, observables=[qml.matrix(o) for o in list_of_observables]
@@ -665,7 +665,7 @@ expval_exact = [
 
 ##############################################################################
 # Finally, we plot the errors :math:`|\langle{O_i}\rangle_{shadow} - \langle{O_i}\rangle_{exact}|`
-# for all individual terms in :math:`O`. We expect that these errors are always smaller than :math:`\epsilon`.
+# for all individual terms in :math:`O`. We expect that these errors are always smaller than :math:`\epsilon.`
 
 for j, error in enumerate(epsilon_grid):
     plt.scatter(

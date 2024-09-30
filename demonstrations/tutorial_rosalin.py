@@ -86,7 +86,7 @@ can be expressed as the weighted sum of each individual term:
 In the :doc:`doubly stochastic gradient descent demonstration </demos/tutorial_doubly_stochastic>`,
 we estimated this expectation value by **uniformly sampling** a subset of the terms
 at each optimization step, and evaluating each term by using the same finite number of shots
-:math:`N`.
+:math:`N.`
 
 However, what happens if we use a weighted approach to determine how to distribute
 our samples across the terms of the Hamiltonian? In **weighted random sampling** (WRS),
@@ -102,7 +102,7 @@ with event probabilities
 
 That is, the number of shots assigned to the measurement of the expectation value of the
 :math:`i\text{th}` term of the Hamiltonian is drawn from a probability distribution
-*proportional to the magnitude of its coefficient* :math:`c_i`.
+*proportional to the magnitude of its coefficient* :math:`c_i.`
 
 To see this strategy in action, consider the Hamiltonian
 
@@ -151,7 +151,7 @@ print(prob_shots)
 
 ##############################################################################
 # We can now use SciPy to create our multinomial distributed random variable
-# :math:`S`, using the number of trials (total shot number) and probability values:
+# :math:`S,` using the number of trials (total shot number) and probability values:
 
 from scipy.stats import multinomial
 
@@ -180,7 +180,7 @@ print(sum(samples))
 #    :class:`~.pennylane.templates.layers.StronglyEntanglingLayers`.
 #
 # 3. And, last but not least, estimate the expectation value
-#    :math:`\langle H\rangle = \sum_i c_i\langle h_i\rangle`.
+#    :math:`\langle H\rangle = \sum_i c_i\langle h_i\rangle.`
 #
 
 from pennylane.templates.layers import StronglyEntanglingLayers
@@ -325,14 +325,14 @@ plt.show()
 # :doc:`parameter-shift rule </glossary/quantum_gradient>`. It works roughly as follows:
 #
 # 1. The initial step of the optimizer is performed with some specified minimum
-#    number of shots, :math:`s_{min}`, for all partial derivatives.
+#    number of shots, :math:`s_{min},` for all partial derivatives.
 #
 # 2. The parameter-shift rule is then used to estimate the gradient :math:`g_i`
-#    for each parameter :math:`\theta_i`, parameters, as well as the *variances*
+#    for each parameter :math:`\theta_i,` parameters, as well as the *variances*
 #    :math:`v_i` of the estimated gradients.
 #
-# 3. Gradient descent is performed for each parameter :math:`\theta_i`, using
-#    the pre-defined learning rate :math:`\alpha` and the gradient information :math:`g_i`:
+# 3. Gradient descent is performed for each parameter :math:`\theta_i,` using
+#    the pre-defined learning rate :math:`\alpha` and the gradient information :math:`g_i:`
 #
 #    .. math:: \theta_i = \theta_i - \alpha g_i.
 #
@@ -364,14 +364,14 @@ plt.show()
 #
 # In addition to the above, to counteract the presence of noise in the system, a
 # running average of :math:`g_i` and :math:`s_i` (:math:`\chi_i` and :math:`\xi_i` respectively)
-# are used when computing :math:`\gamma_i` and :math:`s_i`.
+# are used when computing :math:`\gamma_i` and :math:`s_i.`
 #
 # .. note::
 #
 #     In classical machine learning, the Lipschitz constant of the cost function is generally
 #     unknown. However, for a variational quantum algorithm with cost of the form
-#     :math:`f(x) = \langle \psi(x) | \hat{H} |\psi(x)\rangle`,
-#     an upper bound on the Lipschitz constant is given by :math:`L < \sum_i|c_i|`,
+#     :math:`f(x) = \langle \psi(x) | \hat{H} |\psi(x)\rangle,`
+#     an upper bound on the Lipschitz constant is given by :math:`L < \sum_i|c_i|,`
 #     where :math:`c_i` are the coefficients of :math:`\hat{H}` when decomposed
 #     into a linear combination of Pauli-operator tensor products.
 #
@@ -387,13 +387,13 @@ plt.show()
 #   of each term in the Hamiltonian. Note that this must be larger than 2 for the variance
 #   of the gradients to be computed.
 #
-# * ``mu``: The running average constant :math:`\mu\in[0, 1]`. Used to control how quickly the
+# * ``mu``: The running average constant :math:`\mu\in[0, 1].` Used to control how quickly the
 #   number of shots recommended for each gradient component changes.
 #
 # * ``b``: Regularization bias. The bias should be kept small, but non-zero.
 #
 # * ``lr``: The learning rate. Recall from above that the learning rate *must* be such
-#   that :math:`\alpha < 2/L = 2/\sum_i|c_i|`.
+#   that :math:`\alpha < 2/L = 2/\sum_i|c_i|.`
 #
 # Since the Rosalin optimizer has a state that must be preserved between optimization steps,
 # let's use a class to create our optimizer.

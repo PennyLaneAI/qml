@@ -41,7 +41,7 @@ What is this circuit doing?
 
 2. **We displace the qumode**. The displacement gate linearly shifts the state of the
    qumode in phase space. The vacuum state is centered at the origin in phase space,
-   while the displaced state will be centered at the point :math:`\alpha`.
+   while the displaced state will be centered at the point :math:`\alpha.`
 
 3. **We rotate the qumode**. This is another linear transformation in phase space,
    albeit a rotation (by angle :math:`\phi`) instead of a displacement.
@@ -94,7 +94,7 @@ def mean_photon_gaussian(mag_alpha, phase_alpha, phi):
 ###############################################################################
 # Notice that we have broken up the complex number :math:`\alpha` into two real
 # numbers ``mag_alpha`` and ``phase_alpha``, which form a polar representation of
-# :math:`\alpha`. This is so that the notion of a gradient is clear and well-defined.
+# :math:`\alpha.` This is so that the notion of a gradient is clear and well-defined.
 
 
 ###############################################################################

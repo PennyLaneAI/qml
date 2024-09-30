@@ -36,7 +36,7 @@ an operator :math:`A` in terms of coefficients :math:`\alpha_{k}` and unitaries 
 .. math:: A =  \sum_{k=0}^{N-1} \alpha_k U_k.
 
 A general way to build LCUs is to employ properties of the **Pauli basis**.
-This is the set of all products of Pauli matrices :math:`\{I, X, Y, Z\}`. For the space of operators
+This is the set of all products of Pauli matrices :math:`\{I, X, Y, Z\}.` For the space of operators
 acting on :math:`n` qubits, this set forms a complete basis. Thus, any operator can be expressed in the Pauli basis,
 which immediately gives an LCU decomposition. PennyLane allows you to decompose any matrix into the Pauli basis using the
 :func:`~.pennylane.pauli_decompose` function. The coefficients :math:`\alpha_k` and the unitaries
@@ -86,7 +86,7 @@ print(f"Unitaries:\n {LCU_ops}")
 #
 # .. math:: \text{PREP}|0\rangle = \sum_k \sqrt{\frac{|\alpha_k|}{\lambda}}|k\rangle,
 #
-# where :math:`\lambda` is a normalization constant defined as :math:`\lambda = \sum_k |\alpha_k|`,
+# where :math:`\lambda` is a normalization constant defined as :math:`\lambda = \sum_k |\alpha_k|,`
 # and the select (SEL) operator:
 #
 # .. math:: \text{SEL}|k\rangle |\psi\rangle = |k\rangle U_k |\psi\rangle.
@@ -107,7 +107,7 @@ print(f"Unitaries:\n {LCU_ops}")
 #
 # If you're up for it, it's illuminating to go through the math and show how :math:`A` comes out on the right
 # side of the equation.
-# (Tip: calculate the action of :math:`\text{PREP}^\dagger` on :math:`\langle 0|`, not on the output
+# (Tip: calculate the action of :math:`\text{PREP}^\dagger` on :math:`\langle 0|,` not on the output
 # state after :math:`\text{SEL} \cdot \text{PREP}`).
 #
 # Otherwise, the intuitive way to understand this equation is that we apply PREP, SEL, and then invert PREP. If
@@ -127,13 +127,13 @@ print(f"Unitaries:\n {LCU_ops}")
 #
 # .. math:: U = \text{PREP}^\dagger \cdot \text{SEL} \cdot \text{PREP}
 #
-# is a **block encoding** of :math:`A`, up to normalization. The reason for this name is that if we write :math:`U`
+# is a **block encoding** of :math:`A,` up to normalization. The reason for this name is that if we write :math:`U`
 # as a matrix, the operator :math:`A` is encoded inside a block of :math:`U` as
 #
 # .. math:: U = \begin{bmatrix} A & \cdot \\ \cdot & \cdot \end{bmatrix}.
 #
 # This block is defined by the subspace of all states where the auxiliary qubits are in state
-# :math:`|0\rangle`.
+# :math:`|0\rangle.`
 #
 #
 # PennyLane supports the direct implementation of `prepare <https://docs.pennylane.ai/en/stable/code/api/pennylane.StatePrep.html>`_
@@ -184,7 +184,7 @@ plt.show()
 ##############################################################################
 # Based on the controlled operations, the circuit above will flip the measured qubit
 # if the input is :math:`|1\rangle` and leave it unchanged if the
-# input is :math:`|0\rangle`. The output expectation values correspond to these states:
+# input is :math:`|0\rangle.` The output expectation values correspond to these states:
 
 print('Expectation value for input |0>:', sel_circuit([0]))
 print('Expectation value for input |1>:', sel_circuit([1]))
@@ -219,8 +219,8 @@ print(np.real(np.round(output_matrix,2)))
 # Application: Projectors
 # -----------------------
 # Suppose we wanted to project our quantum state :math:`|\psi\rangle` onto the state
-# :math:`|\phi\rangle`. We could accomplish this by applying the projector
-# :math:`| \phi \rangle\langle \phi |` to :math:`|\psi\rangle`. However, we cannot directly apply
+# :math:`|\phi\rangle.` We could accomplish this by applying the projector
+# :math:`| \phi \rangle\langle \phi |` to :math:`|\psi\rangle.` However, we cannot directly apply
 # projectors as gates in our quantum circuits because they are **not** unitary operations.
 # We can instead use a simple LCU decomposition which holds for any projector:
 #

@@ -256,7 +256,7 @@ plt.show()
 # the energy of the Hamiltonian on the system as a whole, we can minimize the contribution of each group operator.
 # Due to the negative coefficients in the Hamiltonian, we need to maximize the
 # expectation value of each operator.
-# The maximum possible expectation value for each operator is :math:`+1`. We can turn this
+# The maximum possible expectation value for each operator is :math:`+1.` We can turn this
 # into a constraint on our ground state:
 #
 # .. math::
@@ -275,11 +275,11 @@ plt.show()
 #
 #    To check your understanding, confirm that this ground state obeys the constraints using pen and paper.
 #
-# :math:`|G \rangle` contains a product of unitaries :math:`U_p`. If we can figure out how to apply a single
+# :math:`|G \rangle` contains a product of unitaries :math:`U_p.` If we can figure out how to apply a single
 # :math:`U_p` using a quantum computer's operations, we can apply that decomposition
 # for every :math:`p` in the product.
 #
-# To better understand how to decompose :math:`U_p`, let’s write
+# To better understand how to decompose :math:`U_p,` let’s write
 # it concretely for a single group of four qubits:
 #
 # .. math::
@@ -374,7 +374,7 @@ print("Total energy: ", E0)
 #    | \phi \rangle = X_i | G \rangle.
 #
 # Two Z group operators :math:`S_s` contain individual Z operators at that
-# same site :math:`i`. The noise term :math:`X_i` will anti-commute with both
+# same site :math:`i.` The noise term :math:`X_i` will anti-commute with both
 # of these group operators:
 #
 # .. math::
@@ -394,7 +394,7 @@ print("Total energy: ", E0)
 #
 #    \langle \phi | S_s | \phi \rangle = -1.
 #
-# :math:`S_s` now has an expectation value of :math:`-1`.
+# :math:`S_s` now has an expectation value of :math:`-1.`
 #
 # Applying a single X operator noise term changes the expectation value of *two* Z group operators.
 #
@@ -444,8 +444,8 @@ print("ZGroup: ", [np.round(val) for val in z_expvals])
 # Instead of interpreting the state via the expectation values of the operators,
 # we can view the state as occupation numbers of the corresponding
 # quasiparticles. A group with an expectation value of :math:`+1` is in the
-# ground state and thus has an occupation number of :math:`0`. If the
-# expectation value is :math:`-1`, then a quasiparticle exists in that location.
+# ground state and thus has an occupation number of :math:`0.` If the
+# expectation value is :math:`-1,` then a quasiparticle exists in that location.
 #
 
 occupation_numbers = lambda expvals: [0.5 * (1 - np.round(val)) for val in expvals]
@@ -626,7 +626,7 @@ plt.show()
 # same class, and
 # members of different homotopy classes cannot be deformed into each other. All the
 # homotopy classes for a given space :math:`S` form its
-# `first homotopy group <https://en.wikipedia.org/wiki/Homotopy_group>`__, denoted by :math:`\pi_1(S)`.
+# `first homotopy group <https://en.wikipedia.org/wiki/Homotopy_group>`__, denoted by :math:`\pi_1(S).`
 # The first homotopy group of a space is also called its *fundamental group*.
 #
 # How do these mathematical concepts apply to the toric code model?
@@ -710,7 +710,7 @@ print("Are the probabilities equal? ", np.allclose(null_probs, contractible_prob
 # The toric code's dependence on the homotopy of the path explains
 # this result. All paths we can smoothly deform into each other will give
 # the same result. The contractible loop can be smoothly deformed to nothing,
-# so the state with the contractible loop is the same as the state with no loop, our initial :math:`|G\rangle`.
+# so the state with the contractible loop is the same as the state with no loop, our initial :math:`|G\rangle.`
 #
 
 
@@ -817,8 +817,8 @@ for name, probs1 in zip(probs_type_labels, all_probs):
 #
 # In this section, we've seen that the space of ground states is directly
 # related to the first homotopy group of the lattice. The first homotopy group
-# of a torus is :math:`\pi_1(T) = \mathbb{Z}^2`, and the space of ground states is
-# that group modulo two, :math:`\mathbb{Z}_2^2`.
+# of a torus is :math:`\pi_1(T) = \mathbb{Z}^2,` and the space of ground states is
+# that group modulo two, :math:`\mathbb{Z}_2^2.`
 #
 # What if we defined the model on a differently shaped lattice? Then the space of the
 # ground state would change to reflect the first homotopy group of that space.
@@ -854,7 +854,7 @@ for name, probs1 in zip(probs_type_labels, all_probs):
 # While the toric code is just an extremely useful mathematical
 # model, anyons exist in physical materials. For example,
 # fractional quantum Hall systems have anyonic particles with spin
-# :math:`1/q` for different integers :math:`q`.
+# :math:`1/q` for different integers :math:`q.`
 #
 # The **statistics** are described by the phase accumulated by moving one particle
 # around another. For example, if the particle picks up phases like a fermion, then it
@@ -896,8 +896,8 @@ plt.show()
 #
 # The `Hadamard test <https://en.wikipedia.org/wiki/Hadamard_test_(quantum_computation)>`__
 # extracts the real component of a unitary operation
-# :math:`\text{Re}\left(\langle \psi | U | \psi \rangle \right)`. If the unitary operation just applies a phase
-# :math:`U |\psi\rangle = e^{i \phi} |\psi \rangle`, the measured quantity reduces to :math:`\cos (\phi)`.
+# :math:`\text{Re}\left(\langle \psi | U | \psi \rangle \right).` If the unitary operation just applies a phase
+# :math:`U |\psi\rangle = e^{i \phi} |\psi \rangle,` the measured quantity reduces to :math:`\cos (\phi).`
 #
 # The steps in the Hadamard test are:
 #

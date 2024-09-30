@@ -22,7 +22,7 @@ consider the simple case of **qubit rotation** the PennyLane version of the 'Hel
 example.
 
 The task at hand is to optimize two rotation gates in order to flip a single
-qubit from state :math:`\left|0\right\rangle` to state :math:`\left|1\right\rangle`.
+qubit from state :math:`\left|0\right\rangle` to state :math:`\left|1\right\rangle.`
 
 
 The quantum circuit
@@ -36,7 +36,7 @@ In the qubit rotation example, we wish to implement the following quantum circui
     :target: javascript:void(0);
 
 Breaking this down step-by-step, we first start with a qubit in the ground state
-:math:`|0\rangle = \begin{bmatrix}1 & 0 \end{bmatrix}^T`,
+:math:`|0\rangle = \begin{bmatrix}1 & 0 \end{bmatrix}^T,`
 and rotate it around the x-axis by applying the gate
 
 .. math::
@@ -73,7 +73,7 @@ Using the above to calculate the exact expectation value, we find that
     = \langle 0 \mid R_x(\phi_1)^\dagger R_y(\phi_2)^\dagger \sigma_z  R_y(\phi_2) R_x(\phi_1) \mid 0 \rangle
     = \cos(\phi_1)\cos(\phi_2).
 
-Depending on the circuit parameters :math:`\phi_1` and :math:`\phi_2`, the
+Depending on the circuit parameters :math:`\phi_1` and :math:`\phi_2,` the
 output expectation lies between :math:`1` (if :math:`\left|\psi\right\rangle = \left|0\right\rangle`)
 and :math:`-1` (if :math:`\left|\psi\right\rangle = \left|1\right\rangle`).
 """
@@ -294,9 +294,9 @@ print(dcircuit(phi1, phi2))
 #
 # Next, let's make use of PennyLane's built-in optimizers to optimize the two circuit
 # parameters :math:`\phi_1` and :math:`\phi_2` such that the qubit, originally in state
-# :math:`\left|0\right\rangle`, is rotated to be in state :math:`\left|1\right\rangle`. This is equivalent to measuring a
-# Pauli-Z expectation value of :math:`-1`, since the state :math:`\left|1\right\rangle` is an eigenvector
-# of the Pauli-Z matrix with eigenvalue :math:`\lambda=-1`.
+# :math:`\left|0\right\rangle,` is rotated to be in state :math:`\left|1\right\rangle.` This is equivalent to measuring a
+# Pauli-Z expectation value of :math:`-1,` since the state :math:`\left|1\right\rangle` is an eigenvector
+# of the Pauli-Z matrix with eigenvalue :math:`\lambda=-1.`
 #
 # In other words, the optimization procedure will find the weights
 # :math:`\phi_1` and :math:`\phi_2` that result in the following rotation on the Bloch sphere:
@@ -309,8 +309,8 @@ print(dcircuit(phi1, phi2))
 # To do so, we need to define a **cost** function. By *minimizing* the cost function, the
 # optimizer will determine the values of the circuit parameters that produce the desired outcome.
 #
-# In this case, our desired outcome is a Pauli-Z expectation value of :math:`-1`. Since we
-# know that the Pauli-Z expectation is bound between :math:`[-1, 1]`, we can define our
+# In this case, our desired outcome is a Pauli-Z expectation value of :math:`-1.` Since we
+# know that the Pauli-Z expectation is bound between :math:`[-1, 1],` we can define our
 # cost directly as the output of the QNode:
 
 
@@ -319,13 +319,13 @@ def cost(x):
 
 
 ################################################################################
-# To begin our optimization, let's choose small initial values of :math:`\phi_1` and :math:`\phi_2`:
+# To begin our optimization, let's choose small initial values of :math:`\phi_1` and :math:`\phi_2:`
 
 init_params = np.array([0.011, 0.012])
 print(cost(init_params))
 
 ################################################################################
-# We can see that, for these initial parameter values, the cost function is close to :math:`1`.
+# We can see that, for these initial parameter values, the cost function is close to :math:`1.`
 #
 # Finally, we use an optimizer to update the circuit parameters for 100 steps. We can use the
 # gradient descent optimizer:
@@ -353,10 +353,10 @@ print("Optimized rotation angles: {}".format(params))
 ################################################################################
 # We can see that the optimization converges after approximately 40 steps.
 #
-# Substituting this into the theoretical result :math:`\langle \psi \mid \sigma_z \mid \psi \rangle = \cos\phi_1\cos\phi_2`,
+# Substituting this into the theoretical result :math:`\langle \psi \mid \sigma_z \mid \psi \rangle = \cos\phi_1\cos\phi_2,`
 # we can verify that this is indeed one possible value of the circuit parameters that
-# produces :math:`\langle \psi \mid \sigma_z \mid \psi \rangle=-1`, resulting in the qubit being rotated
-# to the state :math:`\left|1\right\rangle`.
+# produces :math:`\langle \psi \mid \sigma_z \mid \psi \rangle=-1,` resulting in the qubit being rotated
+# to the state :math:`\left|1\right\rangle.`
 #
 # .. note::
 #

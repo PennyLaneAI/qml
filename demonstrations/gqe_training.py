@@ -7,7 +7,7 @@ that employs a classical generative model of quantum circuits for the purpose of
 energy estimation of any molecular Hamiltonian [#nakaji2024]_.  
 It has been proposed as a scalable alternative to the `variational quantum eigensolver (VQE) <https://pennylane.ai/qml/demos/tutorial_vqe/>`__ approach,
 where the quantum state is represented as a quantum circuit with tunable parameters which are then optimized during training in order to arrive at a 
-state minimizing the corresponding energy :math:`E`. Instead, in GQE, the structure of the quantum circuit is given by a trained generative model.
+state minimizing the corresponding energy :math:`E.` Instead, in GQE, the structure of the quantum circuit is given by a trained generative model.
 
 We will primarily focus on offline training on a fixed training dataset -- thanks to the molecular data
 available in `PennyLane Datasets <https://pennylane.ai/datasets/>`__. 
@@ -63,22 +63,22 @@ state. And lastly, we discuss the results, potential ways optimizing the code, a
 # sequences of words that closely resemble human natural language. This performance is
 # harnessed for quantum chemistry by constructing quantum states :math:`\rho` as a sequence of unitary operators 
 # which are, in turn, represented by quantum circuits. That is, we let :math:`\rho = U\rho_0 U^{\dagger}`
-# for some fixed initial state :math:`\rho_0` and the aforementioned sequence is :math:`U = U_{j_N}U_{j_{N-1}}\cdots U_{j_1}`.
+# for some fixed initial state :math:`\rho_0` and the aforementioned sequence is :math:`U = U_{j_N}U_{j_{N-1}}\cdots U_{j_1}.`
 # The GPT model samples a sequence of integers :math:`j_1, j_2, ..., j_N` indexing a pool 
 # of operators :math:`U_j` generated using molecular data from `PennyLane Molecules <https://pennylane.ai/datasets/qchem>`__. We interpret these 
 # integers as tokens and the pool as the vocabulary in the parlance for language models. 
 # The goal of training is then to minimize the corresponding energy
-# :math:`E = \mbox{Tr}(\hat{H}\rho)`, where :math:`\hat{H}` is the Hamiltonian of the molecule in 
+# :math:`E = \mbox{Tr}(\hat{H}\rho),` where :math:`\hat{H}` is the Hamiltonian of the molecule in 
 # question.
 # 
-# Each token :math:`j_i` is sampled from the distribution :math:`\exp(-\beta w_{j_i})`, where
+# Each token :math:`j_i` is sampled from the distribution :math:`\exp(-\beta w_{j_i}),` where
 # :math:`w_{j_i}` is the unnormalized log probability (or logit) returned by the GPT model for the token :math:`j_i`
 # and :math:`\beta` is an inverse temperature representing a trade-off parameter between exploration and exploitation. We then
 # observe that the probability of sampling a state through the method described above is 
-# proportional to :math:`\exp(-\beta w_{\mbox{sum}})`, where :math:`w_{\mbox{sum}} = \sum_{i=1}^N w_{j_i}` 
-# and the probability for the corresponding energy is :math:`\exp(-\beta E)`. We thus have a constraint 
-# for the total logit to be equal to the energy of the corresponding state: :math:`w_{\mbox{sum}} = E`, which
-# can be imposed by training GPT-QE to minimize the loss function :math:`C = (w_{\mbox{sum}} - E)^2`.
+# proportional to :math:`\exp(-\beta w_{\mbox{sum}}),` where :math:`w_{\mbox{sum}} = \sum_{i=1}^N w_{j_i}` 
+# and the probability for the corresponding energy is :math:`\exp(-\beta E).` We thus have a constraint 
+# for the total logit to be equal to the energy of the corresponding state: :math:`w_{\mbox{sum}} = E,` which
+# can be imposed by training GPT-QE to minimize the loss function :math:`C = (w_{\mbox{sum}} - E)^2.`
 # With this constraint satisfied, GPT-QE would then be sampling states of smaller energies with increasing
 # likelihood.
 #  
@@ -112,7 +112,7 @@ state. And lastly, we discuss the results, potential ways optimizing the code, a
 # 
 # For simplicity, let us consider the `hydrogen molecule <https://pennylane.ai/datasets/qchem/h2-molecule>`__ 
 # and load the corresponding dataset from PennyLane.
-# Recall that we would need a vocabulary of operators :math:`U_j`, an initial state :math:`\rho_0`, and 
+# Recall that we would need a vocabulary of operators :math:`U_j`, an initial state :math:`\rho_0,` and 
 # the Hamiltonian :math:`\hat{H}` for a hydrogen molecule. We also get the ground state energy for later comparison
 # with the results. 
 # 
@@ -312,8 +312,8 @@ class GPTQE(GPT):
 
 ######################################################################
 # However, it is important to note that the loss function ``calculate_loss``, that we defined is different from the one
-# described in [#nakaji2024]_ which is :math:`(\exp(-w_{\mbox{sum}}) - \exp(-E))^2`. As described
-# beforehand, we instead directly compute the mean squared error between :math:`w_{\mbox{sum}}` and :math:`E`.
+# described in [#nakaji2024]_ which is :math:`(\exp(-w_{\mbox{sum}}) - \exp(-E))^2.` As described
+# beforehand, we instead directly compute the mean squared error between :math:`w_{\mbox{sum}}` and :math:`E.`
 # Since the exponential function is one-to-one, both loss functions would then impose the same minimum. 
 # Using the error between exponentials may even  
 # introduce numerical instabilities in the training since the loss would be taking differences of potentially large numbers.

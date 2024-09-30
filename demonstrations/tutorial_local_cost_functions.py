@@ -88,7 +88,7 @@ dev = qml.device("lightning.qubit", wires=wires, shots=10000)
 #
 # We will also define our cost functions here. Since we are trying to
 # learn the identity gate, a natural cost function is 1 minus the probability of measuring the
-# zero state, denoted here as :math:`1 - p_{|0\rangle}`.
+# zero state, denoted here as :math:`1 - p_{|0\rangle}.`
 #
 # .. math:: C = \langle  \psi(\theta) | \left(I - |0\rangle \langle 0|\right)  | \psi(\theta)  \rangle   =1-p_{|0\rangle}
 #

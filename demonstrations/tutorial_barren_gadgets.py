@@ -89,13 +89,13 @@ Pauli words acting on :math:`k` qubits each:
 
 .. math:: H^\text{target} = \sum_i c_i h_i,
 
-where :math:`h_i = \sigma_{i,1} \otimes \sigma_{i,2} \otimes \ldots \otimes \sigma_{i,k}`,
-:math:`\sigma_{i,j} \in \{ X, Y, Z \}`, and :math:`c_i \in \mathbb{R}`.  
+where :math:`h_i = \sigma_{i,1} \otimes \sigma_{i,2} \otimes \ldots \otimes \sigma_{i,k},`
+:math:`\sigma_{i,j} \in \{ X, Y, Z \},` and :math:`c_i \in \mathbb{R}.`  
 Now we construct the gadget Hamiltonian.
-For each term :math:`h_i`, we will need :math:`k` additional qubits, which we
+For each term :math:`h_i,` we will need :math:`k` additional qubits, which we
 call auxiliary qubits, and to add two terms to the Hamiltonian:
 an "unperturbed" part :math:`H^\text{aux}_i` and a perturbation :math:`V_i` 
-of strength :math:`\lambda`. 
+of strength :math:`\lambda.` 
 The unperturbed part penalizes each of the newly added qubits for not being in 
 the :math:`|0\rangle` state
 
@@ -121,7 +121,7 @@ acting on a total of :math:`8` qubits and having :math:`3` terms, each of them b
     :align: center
     :width: 90%
 
-For each of the terms :math:`h_1`, :math:`h_2`, and :math:`h_3` we add :math:`4` auxiliary qubits.
+For each of the terms :math:`h_1`, :math:`h_2,` and :math:`h_3` we add :math:`4` auxiliary qubits.
 In the end, our gadget Hamiltonian acts on :math:`8+3\cdot 4 = 20` qubits.
 
 The penalization (red) acts only on the auxiliary registers, penalizing each 
@@ -131,7 +131,7 @@ As shown in Ref. [#cichy2022]_, this construction results in a spectrum that, fo
 to that of the original Hamiltonian. 
 This means that by minimizing the gadget Hamiltonian and reaching its global
 minimum, the resulting state will be close to the global minimum of 
-:math:`H^\text{target}`.
+:math:`H^\text{target}.`
 
 Since it is a local cost function, it is better behaved with respect to 
 barren plateaus than the global cost function, making it more trainable.
@@ -213,7 +213,7 @@ H_gadget
 # recognize the 8 Paulis from the target Hamiltonian on the qubits ``0`` to 
 # ``3`` and the cyclic pairwise :math:`X` structure on the auxiliaries.
 # Indeed, they are :math:`(X_4X_5, X_5X_6, X_6X_7, X_7X_4)` and
-# :math:`(X_8X_9, X_9X_{10}, X_{10}X_{11}, X_{11}X_8)`.
+# :math:`(X_8X_9, X_9X_{10}, X_{10}X_{11}, X_{11}X_8).`
 
 ##############################################################################
 # Training with the gadget Hamiltonian

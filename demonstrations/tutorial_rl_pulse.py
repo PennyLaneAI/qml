@@ -235,10 +235,10 @@ state_size = 2 ** len(wires)
 # Now that we have a model of the quantum computer and we have defined the environment's states, we
 # can proceed to define the actions. As we mentioned before, the actions will adjust the knobs we
 # can turn to generate the microwave pulse. We have four parameters to play with in our pulse
-# program: amplitude :math:`\Omega(t)`, phase :math:`\phi(t)`, frequency :math:`\omega_p`, and
+# program: amplitude :math:`\Omega(t)`, phase :math:`\phi(t)`, frequency :math:`\omega_p,` and
 # duration. Out of those, we fix the duration beforehand (point 1 in the protocol), and we will
 # always work with resonant pulses with the qubit, thus fixing the frequency
-# :math:`\omega_p=\omega_q`.
+# :math:`\omega_p=\omega_q.`
 #
 # Hence, we will let the agent change the amplitude and the phase for every segment in our pulse
 # program. To keep the pipeline as simple as possible, we will discretize their values within an
@@ -342,12 +342,12 @@ def apply_gate(matrix, states):
 #
 # The agent is a rather simple entity: it observes a state from the environment and selects an action
 # among the ones we have defined above. The action selection is performed according to a policy, which
-# is typically denoted by :math:`\pi`. In this case, we will use a stochastic policy
+# is typically denoted by :math:`\pi.` In this case, we will use a stochastic policy
 # :math:`\pi_{\mathbf{\theta}}(a_i|s_t)` that provides the probability of choosing the action
-# :math:`a_i` given an observed state :math:`s_t` at a given time :math:`t`, according to some
-# parameters :math:`\mathbf{\theta}`. Learning the optimal policy :math:`\pi^*` will consist on
+# :math:`a_i` given an observed state :math:`s_t` at a given time :math:`t,` according to some
+# parameters :math:`\mathbf{\theta}.` Learning the optimal policy :math:`\pi^*` will consist on
 # learning the parameters :math:`\mathbf{\theta}^*` that best approximate it
-# :math:`\pi_{\mathbf{\theta}^*}\approx\pi^*`.
+# :math:`\pi_{\mathbf{\theta}^*}\approx\pi^*.`
 #
 # We parametrize the policy with a small feed-forward neural network that takes the state :math:`s_t`
 # as input, and provides the probability to select every action :math:`a_i` at the end. Therefore, the
@@ -413,8 +413,8 @@ policy_params = policy_model.init(subkey, mock_state)
 # .. math:: \nabla_{\mathbf{\theta}} \mathbb{E}\left[G\right] = \mathbb{E}\left[\sum_{t=0}^{T-1}G_t\nabla_{\mathbf{\theta}}\log\pi_{\mathbf{\theta}}(a_t|s_t)\right],
 #
 # where the expectation values are over episodes sampled following the policy
-# :math:`\pi_{\mathbf{\theta}}`. The sum goes over the episode time steps :math:`t`, where the agent
-# observes the state :math:`s_t` and chooses to perform the action :math:`a_t`. The term
+# :math:`\pi_{\mathbf{\theta}}.` The sum goes over the episode time steps :math:`t,` where the agent
+# observes the state :math:`s_t` and chooses to perform the action :math:`a_t.` The term
 # :math:`\nabla_{\mathbf{\theta}}\log\pi_{\mathbf{\theta}}(a_t|s_t)` is known as the *score function*
 # and it is the gradient of the logarithm of the probability with which the action is taken. Finally,
 # :math:`G_t` is the return associated to the episode from time :math:`t` onwards, which is always the
@@ -423,9 +423,9 @@ policy_params = policy_model.init(subkey, mock_state)
 # reinforcement learning.
 #
 # .. note::
-#     At time :math:`t`, an action :math:`a_t` on state :math:`s_t`` leads to the next state
-#     :math:`s_{t+1}` and yields a reward :math:`r_{t+1}`. The final action is taken at time
-#     :math:`T-1` which yields the final state :math:`s_T` and reward :math:`r_T`. The return is
+#     At time :math:`t,` an action :math:`a_t` on state :math:`s_t`` leads to the next state
+#     :math:`s_{t+1}` and yields a reward :math:`r_{t+1}.` The final action is taken at time
+#     :math:`T-1` which yields the final state :math:`s_T` and reward :math:`r_T.` The return is
 #     the weighted sum of rewards obtained along an episode:
 #
 #     .. math:: G=\sum_{t=0}^{T-1} \gamma^t r_{t+1}\,
@@ -437,20 +437,20 @@ policy_params = policy_model.init(subkey, mock_state)
 #
 #     .. math:: G_t=\sum_{k=0}^{T-1-t} \gamma^k r_{k+t+1},
 #
-#     where :math:`k` denotes the number of steps after :math:`t`. Note that
+#     where :math:`k` denotes the number of steps after :math:`t.` Note that
 #     :math:`G\equiv G_{t=0}` by definition. The return can also be computed recursively following
-#     the relationship :math:`G_t = r_{t+1} + \gamma G_{t+1}`, a property exploited by some
+#     the relationship :math:`G_t = r_{t+1} + \gamma G_{t+1},` a property exploited by some
 #     reinforcement learning algorithms.
 #
-#     In our case, we're in the limit of :math:`\gamma=1`, provided that we only consider the final
+#     In our case, we're in the limit of :math:`\gamma=1,` provided that we only consider the final
 #     reward :math:`r_T` (:math:`r_{t\neq T}=0`) and we fix the total number of interactions
 #     :math:`T` beforehand, given by the number of pulse segments. This greatly simplifies the
-#     expressions and the return is :math:`G=G_t=r_T \,\forall t`.
+#     expressions and the return is :math:`G=G_t=r_T \,\forall t.`
 #
 # To learn the optimal policy, we can estimate the gradient
 # :math:`\nabla_{\mathbf{\theta}} \mathbb{E}\left[G\right]` by sampling a bunch of episodes following
-# the current policy :math:`\pi_{\mathbf{\theta}}`. Then, we can perform a gradient ascent update to
-# the policy parameters :math:`\mathbf{\theta}`, sample some episodes with the new parameters, and
+# the current policy :math:`\pi_{\mathbf{\theta}}.` Then, we can perform a gradient ascent update to
+# the policy parameters :math:`\mathbf{\theta},` sample some episodes with the new parameters, and
 # repeat until we converge to the optimal policy.
 #
 # Let's implement these ideas one by one, starting by the episode sampling. The episodes start with
@@ -518,7 +518,7 @@ def score_function_and_action(params, state, subkey):
 ######################################################################
 # Now that we have a way to sample the episodes, we need to process the collected experience to
 # compute the gradient of the expected return
-# :math:`\nabla_{\mathbf{\theta}} \mathbb{E}\left[G\right]`. First, however, we will define two
+# :math:`\nabla_{\mathbf{\theta}} \mathbb{E}\left[G\right].` First, however, we will define two
 # utility functions: one to add a list of pytrees together (helps with the temporal sum), and one to
 # add extra dimensions to arrays to enable broadcasting. These solve a couple of technicalities that
 # will make the following code much more readable.

@@ -92,7 +92,7 @@ print(f"Ground state energy: {circuit()}")
 # Finding the excited state
 # ----------------------------
 #
-# To obtain the excited state we must define our ansatz that generates the state :math:`|\Psi(\theta)\rangle`.
+# To obtain the excited state we must define our ansatz that generates the state :math:`|\Psi(\theta)\rangle.`
 #
 # We use an ansatz constructed with :doc:`Givens rotations <tutorial_givens_rotations>`, and we define the circuit for finding the excited state.
 #
@@ -112,7 +112,7 @@ theta = np.random.rand(3) # 3 parameters for the ansatz
 print(qml.draw(ansatz, decimals = 2)(theta, range(4)))
 
 ######################################################################
-# The ``ansatz`` function is the one that generates the state :math:`|\Psi(\theta)\rangle`.
+# The ``ansatz`` function is the one that generates the state :math:`|\Psi(\theta)\rangle.`
 # The next step is to calculate the overlap between our generated state and the ground state, using a technique
 # known as `swap test <https://en.wikipedia.org/wiki/Swap_test>`__.
 
@@ -197,9 +197,9 @@ print(f"\nEstimated energy: {energy[-1].real:.8f}")
 print(np.sort(np.linalg.eigvals(H.matrix())))
 
 ######################################################################
-# We have indeed found an eigenvalue of the Hamiltonian. It may seem that we have skipped the value :math:`-0.5389`,
+# We have indeed found an eigenvalue of the Hamiltonian. It may seem that we have skipped the value :math:`-0.5389,`
 # however the eigenvector corresponding to this eigenvalue belongs to a different particle number sector.
-# The correct energy value for the first excited state of hydrogen is :math:`-0.53320939`, consistent with what we obtained with VQD!
+# The correct energy value for the first excited state of hydrogen is :math:`-0.53320939,` consistent with what we obtained with VQD!
 # We have successfully found the first excited state!
 #
 # Conclusion

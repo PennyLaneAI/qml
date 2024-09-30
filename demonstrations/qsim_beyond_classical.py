@@ -136,7 +136,7 @@ dev = qml.device('cirq.qsim', wires=wires, qubits=qubits, shots=shots)
 # For the single-qubit gates we need the :math:`\sqrt{X}` and
 # :math:`\sqrt{Y}` gates, which can be written as :math:`RX(\pi/2)` and
 # :math:`RY(\pi/2)` respectively, as well as the :math:`\sqrt{W}` gate,
-# where :math:`W = \frac{X + Y}{2}`. The latter is easiest defined by its
+# where :math:`W = \frac{X + Y}{2}.` The latter is easiest defined by its
 # unitary matrix
 #
 # .. math::
@@ -298,8 +298,8 @@ def generate_single_qubit_gate_list():
 # results, as well as raw samples. To facilitate this, we add a keyword
 # argument to our circuit allowing us to switch between the two returns. We
 # take samples from the computational basis state using all wires, which will return bitstrings of
-# values :math:`0` and :math:`1`, corresponding to the states
-# :math:`\left|0\right>` and :math:`\left|1\right>`.
+# values :math:`0` and :math:`1,` corresponding to the states
+# :math:`\left|0\right>` and :math:`\left|1\right>.`
 #
 
 @qml.qnode(dev)
@@ -353,7 +353,7 @@ def circuit(seed=42, return_probs=False):
 #
 # where :math:`N = 2^n` is the number of possible bitstrings [#Boixo2018]_.
 # This distribution is approximated well by the Porter-Thomas distribution,
-# given by :math:`Pr(p) = Ne^{-Np}`, a characteristic property of chaotic quantum
+# given by :math:`Pr(p) = Ne^{-Np},` a characteristic property of chaotic quantum
 # systems. From this we can then calculate the expectation value
 # :math:`\left<P(x_i)\right>` as follows:
 #

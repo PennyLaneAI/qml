@@ -87,9 +87,9 @@ For the purposes of this demo, a *kernel* is a real-valued function of two
 variables :math:`k(x_1,x_2)` from a given data domain :math:`x_1,
 x_2\in\mathcal{X}`.
 In this demo, we'll deal with real vector spaces as the data
-domain :math:`\mathcal{X}\subseteq\mathbb{R}^d`, of some dimension :math:`d`.
+domain :math:`\mathcal{X}\subseteq\mathbb{R}^d,` of some dimension :math:`d.`
 A kernel has to be symmetric with respect to exchanging both variables
-:math:`k(x_1,x_2) = k(x_2,x_1)`.
+:math:`k(x_1,x_2) = k(x_2,x_1).`
 We also enforce kernels to be positive semi-definite, but let's avoid getting
 lost in mathematical lingo. You can trust that all kernels featured in this
 demo are positive semi-definite.
@@ -100,18 +100,18 @@ Shift-invariant kernels
 Some kernels fulfill another important restriction, called *shift-invariance*.
 Shift-invariant kernels are those whose value doesn't change if we add a shift
 to both inputs.
-Explicitly, for any suitable shift vector :math:`\zeta\in\mathcal{X}`,
+Explicitly, for any suitable shift vector :math:`\zeta\in\mathcal{X},`
 shift-invariant kernels are those for which
 :math:`k(x_1+\zeta,x_2+\zeta)=k(x_1,x_2)` holds.
 Having this property means the function can be written in
 terms of only one variable, which we call the *lag vector*
-:math:`\delta:=x_1-x_2\in\mathcal{X}`. Abusing notation a bit:
+:math:`\delta:=x_1-x_2\in\mathcal{X}.` Abusing notation a bit:
 
 .. math:: k(x_1,x_2)=k(x_1-x_2,0) = k(\delta).
 
 For shift-invariant kernels, the exchange symmetry property
 :math:`k(x_1,x_2)=k(x_2,x_1)` translates into reflection symmetry
-:math:`k(\delta)=k(-\delta)`.
+:math:`k(\delta)=k(-\delta).`
 Accordingly, we say :math:`k` is an *even function*.
 
 Warm up: Implementing the Gaussian kernel
@@ -130,7 +130,7 @@ np.random.seed(53173)
 
 ###############################################################################
 # We'll look at the Gaussian kernel:
-# :math:`k_\sigma(x_1,x_2):=e^{-\lVert x_1-x_2\rVert^2/2\sigma^2}`.
+# :math:`k_\sigma(x_1,x_2):=e^{-\lVert x_1-x_2\rVert^2/2\sigma^2}.`
 # This function is clearly shift-invariant:
 #
 # .. math::
@@ -173,7 +173,7 @@ plt.show()
 # mild restrictions:
 #
 # #. Shift-invariance
-# #. Normalization :math:`k(0)=1`.
+# #. Normalization :math:`k(0)=1.`
 # #. Smoothness (in the sense of a quickly decaying Fourier spectrum).
 #
 # Note that is a very large class of kernels!
@@ -194,7 +194,7 @@ plt.show()
 # .. math:: f(x) = a_0 + \sum_{n=1}^\infty a_n\cos(n\omega_0x) + b_n\sin(n\omega_0x).
 #
 # For that, we only need to find the suitable base frequency :math:`\omega_0`
-# and coefficients :math:`a_0, a_1, \ldots, b_0, b_1,\ldots`.
+# and coefficients :math:`a_0, a_1, \ldots, b_0, b_1,\ldots.`
 #
 # But the Gaussian kernel is an aperiodic function, whereas the Fourier series
 # only makes sense for periodic functions!
@@ -235,11 +235,11 @@ from pennylane.fourier import coefficients
 # The function ``coefficients`` computes for us the coefficients of the Fourier
 # series up to a fixed term.
 # One tiny detail here: ``coefficients`` returns one complex number :math:`c_n`
-# for each frequency :math:`n`.
+# for each frequency :math:`n.`
 # The real part corresponds to the :math:`a_n` coefficient, and the imaginary
-# part to the :math:`b_n` coefficient: :math:`c_n=a_n+ib_n`.
+# part to the :math:`b_n` coefficient: :math:`c_n=a_n+ib_n.`
 # Because the Gaussian kernel is an even function, we know that the imaginary part
-# of every coefficient will be zero, so :math:`c_n=a_n`.
+# of every coefficient will be zero, so :math:`c_n=a_n.`
 
 def fourier_p(d):
     """
@@ -274,14 +274,14 @@ plt.show()
 
 ##################################################################################
 # What do we see?
-# For very small coefficient counts, like :math:`2` and :math:`3`, we see that
-# the last allowed coefficient is still far from :math:`0`.
+# For very small coefficient counts, like :math:`2` and :math:`3,` we see that
+# the last allowed coefficient is still far from :math:`0.`
 # That's a very clear indicator that we need to consider more frequencies.
 # At the same time, it seems like starting at :math:`5` or :math:`6` all the
 # non-zero contributions have already been well captured.
 # This is important for us, since it tells us the minimum number of qubits we should use.
 # One can see that every new qubit doubles the number of frequencies we can
-# use, so for :math:`n` qubits, we will have :math:`2^n`.
+# use, so for :math:`n` qubits, we will have :math:`2^n.`
 # At minimum of :math:`6` frequencies means at least :math:`3` qubits, corresponding
 # to :math:`2^3=8` frequencies.
 # As we'll see later, we'll work with :math:`5` qubits, so :math:`32`
@@ -318,12 +318,12 @@ plt.show()
 # `Quantum Embedding Kernels <pennylane.ai/qml/demos/tutorial_kernels_module.html>`_).
 # The quantum embedding circuit will consist of two parts.
 # The first one, trainable, will be a parametrized general state preparation
-# scheme :math:`W_a`, with parameters :math:`a`. 
-# In the second one, we input the data, denoted by :math:`S(x)`.
+# scheme :math:`W_a,` with parameters :math:`a.` 
+# In the second one, we input the data, denoted by :math:`S(x).`
 #
-# Start with the non-trainable gate we'll use to encode the data :math:`S(x)`.
+# Start with the non-trainable gate we'll use to encode the data :math:`S(x).`
 # It consists of applying one Pauli-:math:`Z` rotation to each qubit with
-# rotation parameter :math:`x` times some constant :math:`\vartheta_i`, for
+# rotation parameter :math:`x` times some constant :math:`\vartheta_i,` for
 # the :math:`i^\text{th}` qubit.
 
 def S(x, thetas, wires):
@@ -332,9 +332,9 @@ def S(x, thetas, wires):
 ###############################################################################
 # By setting the ``thetas`` properly, we achieve the integer-valued spectrum,
 # as required by the Fourier series expansion of a function of period
-# :math:`2\pi`:
-# :math:`\{0, 1, \ldots, 2^n-2, 2^n-1\}`, for :math:`n` qubits.
-# Some math shows that setting :math:`\vartheta_i=2^{n-i}`, for
+# :math:`2\pi:`
+# :math:`\{0, 1, \ldots, 2^n-2, 2^n-1\},` for :math:`n` qubits.
+# Some math shows that setting :math:`\vartheta_i=2^{n-i},` for
 # :math:`\{1,\ldots,n\}` produces the desired outcome.
 
 def make_thetas(n_wires):
@@ -349,9 +349,9 @@ def make_thetas(n_wires):
 # Amplitude encoding is a common way of embedding classical data into a quantum
 # system in QML.
 # The unitary associated to this template transforms the :math:`\lvert0\rangle`
-# state into a state with amplitudes :math:`a=(a_0,a_1,\ldots,a_{2^n-1})`,
-# namely :math:`\lvert a\rangle=\sum_j a_j\lvert j\rangle`, provided
-# :math:`\lVert a\rVert^2=1`.
+# state into a state with amplitudes :math:`a=(a_0,a_1,\ldots,a_{2^n-1}),`
+# namely :math:`\lvert a\rangle=\sum_j a_j\lvert j\rangle,` provided
+# :math:`\lVert a\rVert^2=1.`
 
 def W(features, wires):
     qml.templates.state_preparations.MottonenStatePreparation(features, wires)
@@ -362,7 +362,7 @@ def W(features, wires):
 #
 # .. math:: \lvert x_a\rangle = S(x)W_a\lvert0\rangle,
 #
-# for a given :math:`a`, which we will specify later.
+# for a given :math:`a,` which we will specify later.
 #
 # Accordingly, we can build the QK corresponding to this feature map as
 #
@@ -372,7 +372,7 @@ def W(features, wires):
 #   S(x_2)W_a\lvert0\rangle\rvert^2 \\
 #   &= \lvert\langle0\rvert W_a^\dagger S(x_2-x_1) W_a\lvert0\rangle\rvert^2.
 #
-# In the code below, the variable ``amplitudes`` corresponds to our set  :math:`a`.
+# In the code below, the variable ``amplitudes`` corresponds to our set  :math:`a.`
 
 def ansatz(x1, x2, thetas, amplitudes, wires):
     W(amplitudes, wires)
@@ -389,8 +389,8 @@ def ansatz(x1, x2, thetas, amplitudes, wires):
 #   &= k_a(x_2,x_1).
 #
 # Further, this QK is also shift-invariant :math:`k_a(x_1,x_2) = k_a(x_1+\zeta,
-# x_2+\zeta)` for any :math:`\zeta\in\mathbb{R}`.
-# So we can also write it in terms of the lag :math:`\delta=x_1-x_2`:
+# x_2+\zeta)` for any :math:`\zeta\in\mathbb{R}.`
+# So we can also write it in terms of the lag :math:`\delta=x_1-x_2:`
 #
 # .. math::
 #
@@ -404,7 +404,7 @@ def ansatz(x1, x2, thetas, amplitudes, wires):
 # -------------------------------------------------
 #
 # Also, at this point, we need to set the number of qubits of our computer.
-# For this example, we'll use the variable ``n_wires``, and set it to :math:`5`.
+# For this example, we'll use the variable ``n_wires``, and set it to :math:`5.`
 
 n_wires = 5
 
@@ -424,7 +424,7 @@ def QK_circuit(x1, x2, thetas, amplitudes):
 ###############################################################################
 # Recall that the output of a QK is defined as the probability of obtaining
 # the outcome :math:`\lvert0\rangle` when measuring in the computational basis.
-# That corresponds to the :math:`0^\text{th}` entry of ``qml.probs``:
+# That corresponds to the :math:`0^\text{th}` entry of ``qml.probs`:`
 
 def QK_2(x1, x2, thetas, amplitudes):
     return QK_circuit(x1, x2, thetas, amplitudes)[0]
@@ -487,9 +487,9 @@ plt.show()
 # using the ansatz for our QK constructed above.
 #
 # In order to simplify the formulas, we introduce new variables, which we call
-# ``probabilities`` :math:`(p_0, p_1, p_2, \ldots, p_{2^n-1})`, and we define as
-# :math:`p_j=\lvert a_j\rvert^2`.
-# Following the normalization property above, we have :math:`\sum_j p_j=1`.
+# ``probabilities`` :math:`(p_0, p_1, p_2, \ldots, p_{2^n-1}),` and we define as
+# :math:`p_j=\lvert a_j\rvert^2.`
+# Following the normalization property above, we have :math:`\sum_j p_j=1.`
 # Don't get too fond of them, we only need them for this step!
 # Remember we introduced the vector :math:`a` for the
 # ``MottonenStatePreparation`` as the *amplitudes* of a quantum state?
@@ -507,16 +507,16 @@ plt.show()
 #   \end{pmatrix}
 #
 # This looks a bit scary, it follows from expanding the matrix product
-# :math:`W_a^\dagger S(\delta)W_a`, and then collecting terms according to
+# :math:`W_a^\dagger S(\delta)W_a,` and then collecting terms according to
 # Fourier basis monomials.
 # In this sense, the formula is general and it applies to any shift-invariant
 # kernel we might want to approximate, not only the Gaussian kernel.
 #
-# Our goal is to find the set of :math:`p_j`'s that produces the Fourier
+# Our goal is to find the set of :math:`p_j's` that produces the Fourier
 # coefficients of a given kernel function (in our case, the Gaussian kernel),
-# namely its spectrum :math:`(s_0, s_1, s_2, \ldots, s_{2^n-1})`.
-# We consider now a slightly different map :math:`F_s`, for a given spectrum
-# :math:`(s_0, s_1, \ldots, s_{2^n-1})`:
+# namely its spectrum :math:`(s_0, s_1, s_2, \ldots, s_{2^n-1}).`
+# We consider now a slightly different map :math:`F_s,` for a given spectrum
+# :math:`(s_0, s_1, \ldots, s_{2^n-1}):`
 #
 # .. math::
 #
@@ -568,7 +568,7 @@ def F(probabilities, spectrum):
 # Finding the solution
 # -------------------------
 #
-# In order to use Newton's method we need the Jacobian of :math:`F_s`.
+# In order to use Newton's method we need the Jacobian of :math:`F_s.`
 
 def J_F(probabilities):
     d = len(probabilities)
@@ -646,7 +646,7 @@ plt.show()
 # Even if they are very small values, if any entry of ``probabilities`` is
 # negative, the square root will give ``nan``.
 # In order to avoid that, we use a simple thresholding where we replace very
-# small entries by :math:`0`.
+# small entries by :math:`0.`
 
 def probabilities_threshold_normalize(probabilities, thresh = 1.e-10):
     d = len(probabilities)

@@ -19,12 +19,12 @@ Grover's Algorithm
 algorithm, proposed by Lov Grover [#Grover1996]_. In the original description, the author approaches the
 following problem: suppose that we are searching for a specific phone number in a randomly-ordered
 catalogue containing :math:`N` entries. To find such a number with a probability of
-:math:`\frac{1}{2}`, a classical algorithm will need to check the list on average
+:math:`\frac{1}{2},` a classical algorithm will need to check the list on average
 :math:`\frac{N}{2}` times.
 
 
 In other words, the problem is defined by searching for an item on a list with :math:`N` items given
-an Oracle access function :math:`f(x)`. This function has the defining property that
+an Oracle access function :math:`f(x).` This function has the defining property that
 :math:`f(x) = 1` if :math:`x` is the item we are looking for, and :math:`f(x) = 0`
 otherwise. The solution to this black-box search problem is proposed as a quantum algorithm that
 performs :math:`O(\sqrt{N})` oracular queries to the list with a high probability of finding the
@@ -56,7 +56,7 @@ import numpy as np
 #
 # To perform the search, we are going to create an n-dimensional system, which has :math:`N = 2^n`
 # computational basis states, represented via :math:`N` binary numbers. More specifically, 
-# bit strings with length :math:`n`, labelled as :math:`x_0,x_2,\cdots, x_{N-1}`.
+# bit strings with length :math:`n,` labelled as :math:`x_0,x_2,\cdots, x_{N-1}.`
 # We initialize the system in the uniform superposition over all states, i.e.,
 # the amplitudes associated with each of the :math:`N` basis states are equal:
 #
@@ -113,7 +113,7 @@ plt.show()
 # The Oracle and Grover's diffusion operator
 # ------------------------------------------
 #
-# Let's assume for now that only one index satisfies :math:`f(x) = 1`. We are going to call this index :math:`\omega`.
+# Let's assume for now that only one index satisfies :math:`f(x) = 1`. We are going to call this index :math:`\omega.`
 # To access :math:`f(x)` with an Oracle, we can formulate a unitary operator such that
 #
 # .. math::
@@ -123,7 +123,7 @@ plt.show()
 #
 # where and :math:`U_\omega` acts by flipping the phase of the solution state while keeping the remaining states untouched. In other
 # words, the unitary :math:`U_\omega` can be seen as a reflection around the set of orthogonal states
-# to :math:`\vert \omega \rangle`, written as
+# to :math:`\vert \omega \rangle,` written as
 #
 # .. math:: U_\omega = \mathbb{I} - 2\vert \omega \rangle \langle \omega \vert.
 #
@@ -236,10 +236,10 @@ plt.show()
 # .. math::
 #    U_D = 2| s \rangle\langle s| - \mathbb{I}.
 #
-# The unitary :math:`U_D` also acts as a rotation, but this time through the uniform superposition :math:`\vert s \rangle`.
+# The unitary :math:`U_D` also acts as a rotation, but this time through the uniform superposition :math:`\vert s \rangle.`
 # Finally, the combination of :math:`U_{\omega}` with :math:`U_D` rotates the state
 # :math:`\vert s \rangle` by an angle of
-# :math:`\theta =2 \arcsin{\tfrac {1}{\sqrt {N}}}`. For more geometric insights
+# :math:`\theta =2 \arcsin{\tfrac {1}{\sqrt {N}}}.` For more geometric insights
 # about the oracle and the diffusion operator, please refer to this `PennyLane Codebook
 # section </codebook/04-basic-quantum-algorithms/02-the-magic-8-ball/>`__.
 #
@@ -294,8 +294,8 @@ for k, result in results.items():
 # Searching for more items in a bigger list
 # -----------------------------------------
 #
-# Now, let us consider the generalized problem with large :math:`N`, accepting :math:`M` solutions, with
-# :math:`1 \leq M \leq N`. In this case, the optimal number of Grover iterations to find the solution
+# Now, let us consider the generalized problem with large :math:`N,` accepting :math:`M` solutions, with
+# :math:`1 \leq M \leq N.` In this case, the optimal number of Grover iterations to find the solution
 # is given by :math:`r \approx \left \lceil \frac{\pi}{4} \sqrt{\frac{N}{M}} \right \rceil`\ [#NandC2000]_.
 #
 # For more qubits, we can use the same function for the Oracle to mark the desired states, and the
@@ -309,7 +309,7 @@ for k, result in results.items():
 #
 # Finally, we have all the tools to build the circuit for Grover's algorithm, as we can see in the
 # code below. For simplicity, we are going to search for the states
-# :math:`\vert 0\rangle ^{\otimes n}` and :math:`\vert 1\rangle ^{\otimes n}`, where
+# :math:`\vert 0\rangle ^{\otimes n}` and :math:`\vert 1\rangle ^{\otimes n},` where
 # :math:`n = \log_2 N` is the number of qubits.
 
 NUM_QUBITS = 5
