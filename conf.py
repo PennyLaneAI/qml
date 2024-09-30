@@ -110,6 +110,9 @@ warnings.filterwarnings(
 
 # Raise PennyLane deprecation warnings as errors
 warnings.filterwarnings("error", category=PennyLaneDeprecationWarning)
+warnings.filterwarnings(
+    "ignore", message="Device will no longer be accessible", category=PennyLaneDeprecationWarning
+)
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]

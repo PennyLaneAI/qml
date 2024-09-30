@@ -59,11 +59,11 @@ We first need to import the following modules.
 """
 
 import pennylane as qml
-from pennylane import numpy as pnp
+from pennylane import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.ticker import LinearLocator, FormatStrFormatter
 
-pnp.random.seed(42)
+np.random.seed(42)
 
 ######################################################################
 # Visualizing the problem
@@ -128,7 +128,7 @@ global_circuit = qml.QNode(global_cost_simple, dev, interface="autograd")
 local_circuit = qml.QNode(local_cost_simple, dev, interface="autograd")
 
 def cost_local(rotations):
-    return 1 - pnp.sum([i for (i, _) in local_circuit(rotations)]) / wires
+    return 1 - np.sum([i for (i, _) in local_circuit(rotations)]) / wires
 
 def cost_global(rotations):
     return 1 - global_circuit(rotations)[0]
@@ -140,8 +140,8 @@ def cost_global(rotations):
 # parameters for each rotation.
 #
 
-RX = pnp.random.uniform(low=-pnp.pi, high=pnp.pi)
-RY = pnp.random.uniform(low=-pnp.pi, high=pnp.pi)
+RX = np.random.uniform(low=-np.pi, high=np.pi)
+RY = np.random.uniform(low=-np.pi, high=np.pi)
 rotations = [[RX for i in range(wires)], [RY for i in range(wires)]]
 
 
@@ -179,9 +179,9 @@ def generate_surface(cost_function):
     Z = []
     Z_assembler = []
 
-    X = pnp.arange(-pnp.pi, pnp.pi, 0.25)
-    Y = pnp.arange(-pnp.pi, pnp.pi, 0.25)
-    X, Y = pnp.meshgrid(X, Y)
+    X = np.arange(-np.pi, np.pi, 0.25)
+    Y = np.arange(-np.pi, np.pi, 0.25)
+    X, Y = np.meshgrid(X, Y)
 
     for x in X[0, :]:
         for y in Y[:, 0]:
@@ -190,13 +190,13 @@ def generate_surface(cost_function):
         Z.append(Z_assembler)
         Z_assembler = []
 
-    Z = pnp.asarray(Z)
+    Z = np.asarray(Z)
     return Z
 
 def plot_surface(surface):
-    X = pnp.arange(-pnp.pi, pnp.pi, 0.25)
-    Y = pnp.arange(-pnp.pi, pnp.pi, 0.25)
-    X, Y = pnp.meshgrid(X, Y)
+    X = np.arange(-np.pi, np.pi, 0.25)
+    Y = np.arange(-np.pi, np.pi, 0.25)
+    X, Y = np.meshgrid(X, Y)
     fig = plt.figure()
     ax = fig.add_subplot(111, projection="3d")
     surf = ax.plot_surface(X, Y, surface, cmap="viridis", linewidth=0, antialiased=False)
@@ -286,7 +286,7 @@ plot_surface(local_surface)
 # landscape is :math:`(\pi,0)` as it is in the middle of the plateau, so let's use that.
 
 
-rotations = pnp.array([[3.] * len(range(wires)), [0.] * len(range(wires))], requires_grad=True)
+rotations = np.array([[3.] * len(range(wires)), [0.] * len(range(wires))], requires_grad=True)
 opt = qml.GradientDescentOptimizer(stepsize=0.2)
 steps = 100
 params_global = rotations
@@ -308,7 +308,7 @@ plt.show()
 # function and see how it performs.
 #
 
-rotations = pnp.array([[3. for i in range(wires)], [0. for i in range(wires)]], requires_grad=True)
+rotations = np.array([[3. for i in range(wires)], [0. for i in range(wires)]], requires_grad=True)
 opt = qml.GradientDescentOptimizer(stepsize=0.2)
 steps = 100
 params_local = rotations
@@ -449,7 +449,7 @@ for runs in range(samples):
     print("--- New run! ---")
     has_been_trained = False
 
-    params_global = pnp.random.uniform(-pnp.pi, pnp.pi, (2, wires), requires_grad=True)
+    params_global = np.random.uniform(-np.pi, np.pi, (2, wires), requires_grad=True)
 
     for i in range(steps):
         # update the circuit parameters
@@ -483,7 +483,7 @@ for runs in range(samples):
     print("--- New run! ---")
     has_been_trained = False
 
-    params_tunable = pnp.random.uniform(-pnp.pi, pnp.pi, (2, wires), requires_grad=True)
+    params_tunable = np.random.uniform(-np.pi, np.pi, (2, wires), requires_grad=True)
     for i in range(steps):
         # update the circuit parameters
         params_tunable = opt.step(cost_tunable, params_tunable)
