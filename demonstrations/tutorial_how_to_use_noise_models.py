@@ -9,13 +9,13 @@ r"""How to use noise models in PennyLane
 # state preparation routines, measurements, and more.
 #
 # Here, we show how to use the features provided in PennyLane's :mod:`~.pennylane.noise`
-# module to construct and manipulate noise models, enabling noisy simulation. In PennyLane,
+# module to construct and manipulate noise models, enabling noisy simulation (see the `noise module documentation <https://docs.pennylane.ai/en/stable/code/qml_noise.html>`__ for more details). In PennyLane,
 # noise models are constructed from two main components:
 #
-# 1. Boolean conditions referred to as conditionals that dictate whether noise is inserted into the circuit.
-# 2. Callables called noise functions that apply noise operations when a corresponding condition is satisfied.
+# 1. Boolean conditions (referred to as *conditionals*) that dictate whether noise is inserted into the circuit.
+# 2. Callables (called noise *functions*) that apply noise operations when a corresponding condition is satisfied.
 #
-# The following example shows how a noise model transforms a sample circuit by inserting
+# The following figure is an example that shows how a noise model transforms a sample circuit by inserting
 # amplitude and phase damping errors for :class:`~.pennylane.RX`
 # and :class:`~.pennylane.RY` gates, respectively.
 #
@@ -46,10 +46,10 @@ r"""How to use noise models in PennyLane
 #
 # 1. **Operation-based conditionals:** They evaluate whether a gate operation is a
 #    specific type of operation or belongs to a specified set of operations. They are
-#    built using :func:`~.pennylane.noise.op_eq` and :func:`~.pennylane.noise.op_in`.
+#    built using :func:`~.pennylane.noise.op_eq` and :func:`~.pennylane.noise.op_in`, respectively.
 # 2. **Wire-based conditionals:** They evaluate whether a gate operation's wires are
 #    equal to or are contained in a specified set of wires. They are built using
-#    :func:`~.pennylane.noise.wires_eq` and :func:`~.pennylane.noise.wires_in`.
+#    :func:`~.pennylane.noise.wires_eq` and :func:`~.pennylane.noise.wires_in`, respectively.
 # 3. **Arbitrary conditionals:** Custom conditionals can be defined as a function wrapped
 #    with a :class:`~.pennylane.BooleanFn` decorator. The signature for such conditionals
 #    must be ``cond_fn(operation: Operation) -> bool``.
