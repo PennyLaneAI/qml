@@ -21,14 +21,14 @@ How to quantum just-in-time compile Grover's algorithm with Catalyst
 # :doc:`Grover's algorithm <tutorial_grovers_algorithm>` is an `oracle
 # </codebook/04-basic-quantum-algorithms/02-the-magic-8-ball/>`__-based quantum algorithm, first
 # proposed by Lov Grover in 1996 [#Grover1996]_, to solve unstructured search problems using a
-# quantum computer. For example, we could use Grover's algorithm to search for a phone number in a
+# `quantum computer <https://pennylane.ai/qml/quantum-computing/>`__. For example, we could use Grover's algorithm to search for a phone number in a
 # randomly ordered database containing :math:`N` entries and say with high probability that the
 # database contains the number being searched by performing :math:`O(\sqrt{N})` queries on the
 # database, whereas a classical search algorithm would require :math:`O(N)` queries to perform the
 # same task.
 #
 # More formally, the problem is defined as a search for a string of bits in a list containing
-# :math:`N` items given an *Oracle access function* :math:`f(x)`. This function is defined such that
+# :math:`N` items given an *oracle access function* :math:`f(x)`. This function is defined such that
 # :math:`f(x) = 1` if :math:`x` is the bitstring we are looking for (the *solution*), and
 # :math:`f(x) = 0` otherwise. The generalized form of Grover's algorithm accepts :math:`M`
 # solutions, with :math:`1 \leq M \leq N`.
@@ -50,7 +50,7 @@ How to quantum just-in-time compile Grover's algorithm with Catalyst
 # 1. Initialize the system to an equal superposition over all states.
 # 2. Perform :math:`r(N, M)` *Grover iterations:*
 #
-#    1. Apply the unitary *Oracle operator* :math:`U_\omega`, implemented using
+#    1. Apply the unitary *oracle operator* :math:`U_\omega`, implemented using
 #       :class:`~.pennylane.FlipSign`, for each solution index :math:`\omega`.
 #    2. Apply the *Grover diffusion operator* :math:`U_D`, implemented using
 #       :class:`~.pennylane.GroverOperator`.
@@ -157,10 +157,10 @@ print_most_probable_states_descending(results, N=2)
 # Quantum just-in-time compiling the circuit
 # ------------------------------------------
 #
-# At the time of writing, Catalyst does not support the ``"default.qubit"`` state-simulator device,
+# At the time of writing, Catalyst is developed natively for `PennyLane's high-performance simulators <https://pennylane.ai/performance/>`__ and does not support the ``"default.qubit"`` state-simulator device,
 # so let's first define a new circuit using `Lightning
 # <https://docs.pennylane.ai/projects/lightning>`__, which is a PennyLane plugin that provides more
-# performant state simulators written in C++, and which is supported by Catalyst. See the
+# performant state simulators written in C++. See the
 # :doc:`Catalyst documentation <catalyst:dev/devices>` for the full list of devices supported by
 # Catalyst.
 
@@ -195,7 +195,7 @@ circuit_qjit = qml.qjit(circuit_lightning)
 #       does not depend on any dynamic variables (whose values are known only at run time); and
 #
 #     * the ranges of the ``for`` loops depend only on static variables (i.e., constants known at
-#       compile time), in this case native-Python numerics and lists, and NumPy arrays.
+#       compile time), in this case Python-native numerics and lists, and NumPy arrays.
 #
 #     Hence, the complete control flow of the circuit is known at compile time, which allows us to
 #     use native Python control-flow statements.
