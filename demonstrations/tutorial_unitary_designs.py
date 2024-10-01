@@ -74,7 +74,7 @@ Spherical designs
 Before diving into unitary designs, let's look at the sphere for some
 intuition.  Suppose we have a polynomial in :math:`d` variables, and we would
 like to compute its average over the surface of a real, :math:`d`-dimensional
-unit sphere, :math:`S(R^d)`. We can do so by integrating that function over the
+unit sphere, :math:`S(R^d).` We can do so by integrating that function over the
 sphere (using the proper measure), but that would be a lot of parameters to
 keep track of. 
 
@@ -84,7 +84,7 @@ computing their average value. That will always work, and it will get us close,
 but it will not be exact.
 
 In fact, both of those approaches may be overkill in some special cases—if the
-terms in the polynomial have the same degree of at most :math:`t`, you can
+terms in the polynomial have the same degree of at most :math:`t,` you can
 compute the average **exactly** over the sphere using only a small set of points
 rather than integrating over the entire sphere.  That set of points is called a
 spherical :math:`t`-design. More formally [#Handbook]_, [#Delsarte]_:
@@ -93,16 +93,16 @@ spherical :math:`t`-design. More formally [#Handbook]_, [#Delsarte]_:
     :class: defn
 
     Let :math:`p_t: \mathcal{S}(R^d)\rightarrow R` be a polynomial in :math:`d`
-    variables, with all terms homogeneous in degree at most :math:`t`. A
+    variables, with all terms homogeneous in degree at most :math:`t.` A
     set :math:`X = \{x: x \in \mathcal{S}(R^d)\}` is a spherical :math:`t`-design if
 
     .. math::
 
         \frac{1}{|X|} \sum_{x \in X} p_t(x) = \int_{\mathcal{S}(R^d)} p_t (u) d\mu(u)
 
-    holds for all possible :math:`p_t`, where :math:`d\mu` is the uniform,
+    holds for all possible :math:`p_t,` where :math:`d\mu` is the uniform,
     normalized spherical measure. A spherical :math:`t`-design is also a
-    :math:`k`-design for all :math:`k < t`.
+    :math:`k`-design for all :math:`k < t.`
 
 
 
@@ -146,7 +146,7 @@ following polynomial in 3 variables:
    f(x, y, z) = x^4 - 4 x^3 y + y^2 z^2
 
 We can compute the average value of :math:`f` by integrating over a unit sphere:
-the result is :math:`4/15 \approx 0.26667`. However, this integral is
+the result is :math:`4/15 \approx 0.26667.` However, this integral is
 non-trivial to evaluate by hand; the most straightforward way is to convert to
 polar coordinates, and even then, it involves integrating functions with 4th and
 5th powers of trigonometric functions.
@@ -217,7 +217,7 @@ print(cube_average)
 # 
 # We've learned now that spherical designs are sets of evenly-spaced points, and
 # saw how they can be used as a shortcut to evaluate the average of a
-# polynomial up to a given degree :math:`t`. However, there was nothing quantum
+# polynomial up to a given degree :math:`t.` However, there was nothing quantum
 # about this; there weren't even any complex numbers involved. A *unitary
 # design* extends this concept from evenly-distributed points to
 # evenly-distributed unitaries.  More formally, instead of averaging polynomials
@@ -228,7 +228,7 @@ print(cube_average)
 #     :class: defn
 # 
 #     Let :math:`P_{t,t}(U)` be a polynomial with homogeneous degree at most :math:`t` in
-#     :math:`d` variables in the entries of a unitary matrix :math:`U`, and degree
+#     :math:`d` variables in the entries of a unitary matrix :math:`U,` and degree
 #     :math:`t` in the complex conjugates of those entries. A unitary
 #     :math:`t`-design is a set of :math:`K` unitaries :math:`\{U_k\}` such that
 # 
@@ -237,7 +237,7 @@ print(cube_average)
 #         \frac{1}{K} \sum_{k=1}^{K} P_{t,t}(U_k) = \int_{\mathcal{U}(d)}
 #         P_{t,t} (U) d\mu(U)
 # 
-#     holds for all possible :math:`P_{t,t}`, and where :math:`d\mu` is the
+#     holds for all possible :math:`P_{t,t},` and where :math:`d\mu` is the
 #     uniform *Haar measure*.
 # 
 # We stress again that this expression is **exact**. The unitaries in a unitary
@@ -288,14 +288,14 @@ print(cube_average)
 # ^^^^^^^^^^^^^^^^
 # A key application of unitary 2-designs is benchmarking quantum
 # operations. Suppose we have a noisy quantum channel :math:`\Lambda` that should
-# perform something close to the unitary operation :math:`V`.  What can we say
+# perform something close to the unitary operation :math:`V.`  What can we say
 # about the performance of this channel?
 #
-# One metric of interest is the *fidelity*. Consider the state :math:`|0\rangle`.
-# In an ideal case, we apply :math:`V` and obtain :math:`V|0\rangle`.  But applying the
+# One metric of interest is the *fidelity*. Consider the state :math:`|0\rangle.`
+# In an ideal case, we apply :math:`V` and obtain :math:`V|0\rangle.`  But applying the
 # channel :math:`\Lambda` gives us something a little different. Since it's noisy,
 # we must consider the state as a density matrix. The action of :math:`\Lambda` on
-# our starting state is :math:`\Lambda(|0\rangle \langle 0|)`.  If :math:`\Lambda`
+# our starting state is :math:`\Lambda(|0\rangle \langle 0|).`  If :math:`\Lambda`
 # was perfect, then :math:`\Lambda(|0\rangle \langle 0|) = V|0\rangle \langle
 # 0|V^\dagger`, and the fidelity is
 #
@@ -304,26 +304,26 @@ print(cube_average)
 #     F(\Lambda, V) = \langle 0 | V^\dagger \cdot \Lambda(|0\rangle \langle 0|) \cdot V|0\rangle = 1.
 #
 # In reality, :math:`\Lambda` is not going to implement :math:`V` perfectly, and
-# :math:`F < 1`. More importantly though, all we've computed so far is the fidelity when
-# the initial state is :math:`|0\rangle`. What if the initial state is something
+# :math:`F < 1.` More importantly though, all we've computed so far is the fidelity when
+# the initial state is :math:`|0\rangle.` What if the initial state is something
 # different? What is the fidelity *on average*?
 # 
 # To compute an average fidelity, we must do so with respect to the full set
 # of Haar-random states. We usually generate random states by applying a
-# Haar-random unitary :math:`U` to :math:`|0\rangle`. Thus to compute the average
+# Haar-random unitary :math:`U` to :math:`|0\rangle.` Thus to compute the average
 # over all such :math:`U` we must evaluate
 # 
 # .. math::
 # 
 #     \bar{F}(\Lambda, V) = \int_{\mathcal{U}} d\mu(U) \langle 0 | U^\dagger V^\dagger \Lambda(U |0\rangle \langle 0| U^\dagger) V U |0\rangle.
 # 
-# This is known as *twirling* the channel :math:`\Lambda`. Computing the average
+# This is known as *twirling* the channel :math:`\Lambda.` Computing the average
 # fidelity in this way would be a nightmare—we'd have to compute the fidelity
 # with respect to an infinite number of states!
 # 
 # However, consider the expression in the integral above. We have an inner product
-# involving two instances of :math:`U`, and two instances of
-# :math:`U^\dagger`. This means that the expression is a polynomial of degree 2 in
+# involving two instances of :math:`U,` and two instances of
+# :math:`U^\dagger.` This means that the expression is a polynomial of degree 2 in
 # both the elements of :math:`U` and its complex conjugates—this matches exactly
 # the definition of a unitary 2-design. This means that if we can find a set of
 # :math:`K` unitaries that form a 2-design, we can compute the average fidelity
@@ -349,9 +349,9 @@ print(cube_average)
 # By the definition of designs, this means the Clifford group is also a 1-
 # and 2-design.
 #
-# The :math:`n`-qubit Pauli group, :math:`\mathcal{P}(n)`, is the set of all tensor
-# products of Pauli operations :math:`X`, :math:`Y`, :math:`Z`, and :math:`I`. The
-# :math:`n`-qubit Clifford group, :math:`\mathcal{C}(n)`, is the *normalizer* of the
+# The :math:`n`-qubit Pauli group, :math:`\mathcal{P}(n),` is the set of all tensor
+# products of Pauli operations :math:`X`, :math:`Y`, :math:`Z,` and :math:`I.` The
+# :math:`n`-qubit Clifford group, :math:`\mathcal{C}(n),` is the *normalizer* of the
 # Pauli group. In simpler terms, the Clifford group is the set of operations that
 # send Paulis to Paulis (up to a phase) under conjugation i.e.,
 #
@@ -368,7 +368,7 @@ print(cube_average)
 #
 #    H X H^\dagger = Z, \quad H Y H^\dagger = -Y, \quad H Z H^\dagger = X.
 #
-# This clearly maps Paulis to Paulis (up to a phase). The other is the phase gate :math:`S`:
+# This clearly maps Paulis to Paulis (up to a phase). The other is the phase gate :math:`S:`
 #
 # .. math::
 #
@@ -376,18 +376,18 @@ print(cube_average)
 #
 # If both :math:`H` and :math:`S` map Paulis to Paulis, then products of them do
 # as well. In group theory terms, the single-qubit Clifford group is
-# generated by :math:`H` and :math:`S`.  For example, consider the action of
-# :math:`HS`:
+# generated by :math:`H` and :math:`S.`  For example, consider the action of
+# :math:`HS:`
 #
 # .. math::
 #
 #    (HS) X (HS)^\dagger = -Y, \quad (HS) Y (HS)^\dagger = -Z, \quad (HS) Z (HS)^\dagger = X.
 #
-# Since :math:`Y = iXZ`, it is enough to specify Clifford operations by how they
-# act on :math:`X` and :math:`Z`.  For a particular Clifford, there are 6 possible
-# ways it can transform :math:`X`, namely :math:`\pm X, \pm Y`, or :math:`\pm Z`.  Once
+# Since :math:`Y = iXZ,` it is enough to specify Clifford operations by how they
+# act on :math:`X` and :math:`Z.`  For a particular Clifford, there are 6 possible
+# ways it can transform :math:`X`, namely :math:`\pm X, \pm Y,` or :math:`\pm Z.`  Once
 # that is determined, there are four remaining options for the transformation of
-# :math:`Z`, leading to 24 elements total.
+# :math:`Z,` leading to 24 elements total.
 #
 # It takes some work, but you can take combinations of :math:`H` and :math:`S`
 # and evaluate their action on :math:`X` and :math:`Z` (or look at their matrix
@@ -406,16 +406,16 @@ single_qubit_cliffords = [
 
 ######################################################################
 # To see for yourself how this set of unitaries is evenly distributed, try
-# applying each of the Cliffords to the initial state :math:`|0\rangle`, and
+# applying each of the Cliffords to the initial state :math:`|0\rangle,` and
 # plot the resulting states on the Bloch sphere. You'll find they are
-# symmetric and evenly spaced; in fact, they are all eigenstates of :math:`X`,
-# :math:`Y`, and :math:`Z`. Furthermore, under the full group action, the result
+# symmetric and evenly spaced; in fact, they are all eigenstates of :math:`X,`
+# :math:`Y,` and :math:`Z.` Furthermore, under the full group action, the result
 # is balanced in the sense that each eigenstate is obtained the same number of
 # times.
 #
 # The multi-qubit Clifford group can also be
 # specified by only a small set of generators (in fact, only one more
-# than is needed for the single-qubit case). Together, :math:`H`, :math:`S`, and
+# than is needed for the single-qubit case). Together, :math:`H`, :math:`S,` and
 # CNOT (on every possible qubit or pair of qubits) generate the :math:`n`-qubit
 # group. Be careful though—the size of the group increases exponentially. The
 # 2-qubit group alone has 11520 elements! The size can be worked out in a manner

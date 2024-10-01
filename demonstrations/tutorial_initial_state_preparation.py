@@ -339,7 +339,7 @@ print(np.dot(wf_ccsd, wf_hf).real)
 print(np.dot(wf_cisd, wf_ccsd).real)
 
 ##############################################################################
-# In this particular case of :math:`\text{H}_3^+`, even CISD gives the exact wavefunction, hence both overlaps 
+# In this particular case of :math:`\text{H}_3^+,` even CISD gives the exact wavefunction, hence both overlaps 
 # with the HF state are identical. In more correlated molecules, overlaps will show that the more
 # multireference methods DMRG and SHCI are farther away from the Hartree-Fock state,
 # allowing them to perform better (you can check this by printing the overlaps with 

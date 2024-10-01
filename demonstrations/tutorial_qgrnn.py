@@ -67,7 +67,7 @@ The Quantum Graph Recurrent Neural Network
 #     \theta_{ij}^{(1)} Z_{i} Z_{j} \ + \ \displaystyle\sum_{i} \theta_{i}^{(2)} Z_{i} \ + \
 #     \displaystyle\sum_{i} X_{i},
 #
-# where :math:`\boldsymbol\theta \ = \ \{\theta^{(1)}, \ \theta^{(2)}\}`.
+# where :math:`\boldsymbol\theta \ = \ \{\theta^{(1)}, \ \theta^{(2)}\}.`
 # In this Hamiltonian, the set :math:`E` that determines which pairs of qubits
 # have :math:`ZZ` interactions can be represented by the set of edges for some graph. With
 # the qubits as nodes, this graph is called the *interaction graph*.
@@ -117,7 +117,7 @@ The Quantum Graph Recurrent Neural Network
 #     U_{H}(\boldsymbol\mu, \ \boldsymbol\gamma) \ = \ \displaystyle\prod_{i \ = \ 1}^{P} \Bigg[
 #     \displaystyle\prod_{j \ = \ 1}^{Q} e^{-i \gamma_j H^{j}(\boldsymbol\mu)} \Bigg],
 #
-# for some parametrized quadratic Hamiltonian, :math:`H(\boldsymbol\mu)`.
+# for some parametrized quadratic Hamiltonian, :math:`H(\boldsymbol\mu).`
 
 ######################################################################
 # Using the QGRNN
@@ -132,18 +132,18 @@ The Quantum Graph Recurrent Neural Network
 # Continuing with the Ising model example, let's imagine we have some system
 # governed by :math:`\hat{H}_{\text{Ising}}(\boldsymbol\alpha)` for an unknown set of
 # target parameters,
-# :math:`\boldsymbol\alpha` and an unknown interaction graph :math:`G`. Let's also
+# :math:`\boldsymbol\alpha` and an unknown interaction graph :math:`G.` Let's also
 # suppose we have access to copies of some
-# low-energy, non-ground state of the target Hamiltonian, :math:`|\psi_0\rangle`. In addition,
+# low-energy, non-ground state of the target Hamiltonian, :math:`|\psi_0\rangle.` In addition,
 # we have access to a collection of time-evolved states,
-# :math:`\{ |\psi(t_1)\rangle, \ |\psi(t_2)\rangle, \ ..., \ |\psi(t_N)\rangle \}`, defined by:
+# :math:`\{ |\psi(t_1)\rangle, \ |\psi(t_2)\rangle, \ ..., \ |\psi(t_N)\rangle \},` defined by:
 #
 # .. math:: |\psi(t_k)\rangle \ = \ e^{-i t_k \hat{H}_{\text{Ising}}(\boldsymbol\alpha)} |\psi_0\rangle.
 #
 # We call the low-energy states and the collection of time-evolved states *quantum data*.
 # From here, we randomly pick a number of time-evolved states
 # from our collection. For any state that we choose, which is
-# evolved to some time :math:`t_k`, we compare it
+# evolved to some time :math:`t_k,` we compare it
 # to
 #
 # .. math::
@@ -153,7 +153,7 @@ The Quantum Graph Recurrent Neural Network
 #
 # This is done by feeding one of the copies of :math:`|\psi_0\rangle` into a quantum circuit
 # with the QGRNN ansatz, with some guessed set of parameters :math:`\boldsymbol\mu`
-# and a guessed interaction graph, :math:`G'`.
+# and a guessed interaction graph, :math:`G'.`
 # We then use a classical optimizer to maximize the average
 # "similarity" between the time-evolved states and the states prepared
 # with the QGRNN.
@@ -232,7 +232,7 @@ nx.draw(ising_graph)
 
 ######################################################################
 # We can then initialize the “unknown” target parameters that describe the
-# target Hamiltonian, :math:`\boldsymbol\alpha \ = \ \{\alpha^{(1)}, \ \alpha^{(2)}\}`.
+# target Hamiltonian, :math:`\boldsymbol\alpha \ = \ \{\alpha^{(1)}, \ \alpha^{(2)}\}.`
 # Recall from the introduction that we have defined our parametrized
 # Ising Hamiltonian to be of the form:
 #
@@ -247,7 +247,7 @@ nx.draw(ising_graph)
 # :math:`i`-th qubit.
 #
 # For this tutorial, we choose the target parameters by sampling from
-# a uniform probability distribution ranging from :math:`-2` to :math:`2`, with
+# a uniform probability distribution ranging from :math:`-2` to :math:`2,` with
 # two-decimal precision.
 #
 
@@ -346,7 +346,7 @@ low_energy_state = [
 # but it can get fairly close. Another way to arrive at the same result is
 # to perform VQE with a reasonable ansatz, but to terminate the algorithm
 # before it converges to the ground state. If we used the exact ground state
-# :math:`|\psi_0\rangle`, the time-dependence would be trivial and the
+# :math:`|\psi_0\rangle,` the time-dependence would be trivial and the
 # data would not provide enough information about the Hamiltonian parameters.
 #
 # We can verify that this is a low-energy
@@ -398,8 +398,8 @@ def state_evolve(hamiltonian, qubits, time):
 # learn the target Hamiltonian.
 # Each of the exponentiated
 # Hamiltonians in the QGRNN ansatz,
-# :math:`\hat{H}^{j}_{\text{Ising}}(\boldsymbol\mu)`, are the
-# :math:`ZZ`, :math:`Z`, and :math:`X` terms from the Ising
+# :math:`\hat{H}^{j}_{\text{Ising}}(\boldsymbol\mu),` are the
+# :math:`ZZ`, :math:`Z,` and :math:`X` terms from the Ising
 # Hamiltonian. This gives:
 #
 
@@ -423,11 +423,11 @@ def qgrnn_layer(weights, bias, qubits, graph, trotter_step):
 # As was mentioned in the first section, the QGRNN has two
 # registers. In one register, some piece of quantum data
 # :math:`|\psi(t)\rangle` is prepared and in the other we have
-# :math:`U_{H}(\boldsymbol\mu, \ \Delta) |\psi_0\rangle`. We need a
+# :math:`U_{H}(\boldsymbol\mu, \ \Delta) |\psi_0\rangle.` We need a
 # way to measure the similarity between these states.
 # This can be done by using the fidelity, which is
 # simply the modulus squared of the inner product between the states,
-# :math:`| \langle \psi(t) | U_{H}(\Delta, \ \boldsymbol\mu) |\psi_0\rangle |^2`.
+# :math:`| \langle \psi(t) | U_{H}(\Delta, \ \boldsymbol\mu) |\psi_0\rangle |^2.`
 # To calculate this value, we use a `SWAP
 # test <https://en.wikipedia.org/wiki/Swap_test>`__ between the registers:
 #
@@ -443,10 +443,10 @@ def swap_test(control, register1, register2):
 
 ######################################################################
 # After performing this procedure, the value returned from a measurement of the circuit is
-# :math:`\langle Z \rangle`, with respect to the ``control`` qubit.
+# :math:`\langle Z \rangle,` with respect to the ``control`` qubit.
 # The probability of measuring the :math:`|0\rangle` state
 # in this control qubit is related to both the fidelity
-# between registers and :math:`\langle Z \rangle`. Thus, with a bit of algebra,
+# between registers and :math:`\langle Z \rangle.` Thus, with a bit of algebra,
 # we find that :math:`\langle Z \rangle` is equal to the fidelity.
 #
 # Before creating the full QGRNN and the cost function, we
@@ -458,7 +458,7 @@ def swap_test(control, register1, register2):
 # we don’t know the interaction graph, and it has to be learned. In this case, the graph
 # is learned *automatically* as the target parameters are optimized. The
 # :math:`\boldsymbol\mu` parameters that correspond to edges that don't exist in
-# the target graph will simply approach :math:`0`.
+# the target graph will simply approach :math:`0.`
 #
 
 # Defines some fixed values
@@ -510,7 +510,7 @@ def qgrnn(weights, bias, time=None):
 # approaches :math:`1` as the states become more similar and approaches
 # :math:`0` as the states become orthogonal. Thus, we choose
 # to minimize the quantity
-# :math:`-| \langle \psi(t) | U_{H}(\boldsymbol\mu, \ \Delta) |\psi_0\rangle |^2`.
+# :math:`-| \langle \psi(t) | U_{H}(\boldsymbol\mu, \ \Delta) |\psi_0\rangle |^2.`
 # Since we are interested in calculating this value for many different
 # pieces of quantum data, the final cost function is the average
 # negative fidelity* between registers:
@@ -620,9 +620,9 @@ plt.show()
 # We can also look
 # at the exact values of the target and learned parameters.
 # Recall how the target
-# interaction graph has :math:`4` edges while the complete graph has :math:`6`.
+# interaction graph has :math:`4` edges while the complete graph has :math:`6.`
 # Thus, as the QGRNN converges to the optimal solution, the weights corresponding to
-# edges :math:`(1, 3)` and :math:`(2, 0)` in the complete graph should go to :math:`0`, as
+# edges :math:`(1, 3)` and :math:`(2, 0)` in the complete graph should go to :math:`0,` as
 # this indicates that they have no effect, and effectively do not exist in the learned
 # Hamiltonian.
 
@@ -656,7 +656,7 @@ print(f"\nNon-Existing Edge Parameters: {[val.unwrap() for val in weights_noedge
 
 ######################################################################
 # The weights of edges :math:`(1, 3)` and :math:`(2, 0)`
-# are very close to :math:`0`, indicating we have learned the cycle graph
+# are very close to :math:`0,` indicating we have learned the cycle graph
 # from the complete graph. In addition, the remaining learned weights
 # are fairly close to those of the target Hamiltonian.
 # Thus, the QGRNN is functioning properly, and has learned the target

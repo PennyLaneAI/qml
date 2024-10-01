@@ -25,17 +25,17 @@ samples through projective measurements on qubits, offering a faster alternative
 sampling approach [#Ack]_.
 
 For a dataset :math:`\mathcal{D} = \{x\}` with independent and identically distributed samples from
-an unknown target distribution :math:`\pi(x)`, QCBM is used to generate samples closely resembling
+an unknown target distribution :math:`\pi(x),` QCBM is used to generate samples closely resembling
 the target distribution. QCBM transforms the input product state :math:`|\textbf{0} \rangle` to a
-parameterized quantum state :math:`|\psi_\boldsymbol{\theta}\rangle`. Measuring this output state in the
-computational basis yields a sample of bits :math:`x \sim p_\theta(x)`.
+parameterized quantum state :math:`|\psi_\boldsymbol{\theta}\rangle.` Measuring this output state in the
+computational basis yields a sample of bits :math:`x \sim p_\theta(x).`
 
 .. math::
 
    p_\boldsymbol{\theta}(x) = |\langle x | \psi_\boldsymbol{\theta} \rangle|^2.
 
 The objective is to align the model probability distribution :math:`p_\boldsymbol{\theta}` with the target
-distribution :math:`\pi`.
+distribution :math:`\pi.`
 
 In this tutorial, following [#Liu]_, we will implement a gradient-based algorithm for QCBM using
 PennyLane. We describe the model and learning algorithm followed by its application to the
@@ -295,7 +295,7 @@ print(loss_2)
 # - calculates the KL divergence.
 #
 # The KL divergence [#Kull]_ is a measure of how far the predicted distribution :math:`p_\boldsymbol{\theta}(x)`
-# is from the target distribution :math:`\pi(x)`.
+# is from the target distribution :math:`\pi(x).`
 #
 
 

@@ -1,0 +1,80 @@
+{
+    "title": "Adversarial attacks and robustness for quantum machine learning",
+    "authors": [
+        {
+            "username": "mxw"
+        },
+        {
+            "username": "kil"
+
+        }
+    ],
+    "dateOfPublication": "2024-09-16T00:00:00+00:00",
+    "dateOfLastModification": "2024-09-16T00:00:00+00:00",
+    "categories": ["Quantum Machine Learning", "Quantum Computing"],
+    "tags": ["Quantum machine learning", "QML", "Adversarial attacks", "Quantum security"],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_adversarial_attacks_qml.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_adversarial_attacks_qml.png"
+        }
+    ],
+    "seoDescription": "Learn how to construct adversarial attacks on classification networks and how to make quantum machine learning (QML) models more robust.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_adversarial_attacks_QML",
+    "references": [
+        {
+            "id": "Wendlinger2024",
+            "type": "preprint",
+            "title": "A Comparative Analysis of Adversarial Robustness for Quantum and Classical Machine Learning Models",
+            "authors": "Maximilian Wendlinger, Kilian Tscharke, Pascal Debus",
+            "year": "2024",
+            "doi": "10.48550/arXiv.2404.16154",
+            "url": "https://arxiv.org/abs/2404.16154"
+        },
+        {
+            "id": "Goodfellow2014",
+            "type": "preprint",
+            "title": "Explaining and harnessing adversarial examples",
+            "authors": "Ian J. Goodfellow, Jonathon Shlens, Christian Szegedy",
+            "year": "2014",
+            "doi": "10.48550/arXiv.1412.6572",
+            "url": "https://arxiv.org/abs/1412.6572"
+
+        },
+        {
+            "id": "Liu2020",
+            "type": "preprint",
+            "title": "A rigorous and robust quantum speed-up in supervised machine learning",
+            "authors": "Yunchao Liu, Srinivasan Arunachalam, Kristan Temme",
+            "year": "2020",
+            "doi": "10.48550/arXiv.2010.02174",
+            "url": "https://arxiv.org/abs/2010.02174"
+
+        },
+        {
+            "id": "Lu2019",
+            "type": "preprint",
+            "title": "Quantum Adversarial Machine Learning",
+            "authors": "Sirui Lu, Lu-Ming Duan, Dong-Ling Deng",
+            "year": "2019",
+            "doi": "10.48550/arXiv.2001.00030",
+            "url": "https://arxiv.org/abs/2001.00030"
+
+        }
+    ],
+    "basedOnPapers": ["10.48550/arXiv.2404.16154"],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_variational_classifier",
+            "weight": 1.0
+        }
+    ],
+    "hardware": []
+}

@@ -7,7 +7,7 @@ make connections and formulate new theories. In the context of machine learning,
 proven to be successful in the presence of symmetries. This framework, known as geometric deep
 learning, often enjoys better generalization and trainability. In this demo, we will learn how to
 use geometric quantum machine learning to drive molecular dynamics as introduced in recent research [#Le23]_. We
-will take as an example a triatomic molecule of :math:`H_2O`.
+will take as an example a triatomic molecule of :math:`H_2O.`
 
 
 Introduction
@@ -36,7 +36,7 @@ advantage of relaxing the need for data preprocessing, as the raw Cartesian coor
 model.
 
 An overview of the workflow is shown in the figure below. First, the relevant symmetries are identified
-and used to build the quantum machine model. We then train it on the PES of some molecule, e.g. :math:`H_2O`,
+and used to build the quantum machine model. We then train it on the PES of some molecule, e.g. :math:`H_2O,`
 and finally obtain the forces by computing the gradient of the learned PES.
 
 .. figure:: ../_static/demonstration_assets/eqnn_force_field/overview.png
@@ -51,9 +51,9 @@ In order to incorporate symmetries into machine learning models, we need a few c
 subject is out of the scope of the present document, which is why we refer to two other demos, `equivariant graph embedding <https://pennylane.ai/qml/demos/tutorial_equivariant_graph_embedding/>`_
 and `geometric quantum machine learning <https://pennylane.ai/qml/demos/tutorial_geometric_qml/#introduction>`_, as well as Ref. [#Meyer23]_ for a more thorough introduction.
 
-In the following, we will denote elements of a symmetry group :math:`G` with :math:`g \in G`. :math:`G` could be for instance the rotation group :math:`SO(3)`,
-or the permutation group :math:`S_n`. Groups are often easier understood in terms of their representation :math:`V_g : \mathcal{V} \rightarrow \mathcal{V}` which maps group elements
-to invertible linear operations, i.e. to :math:`GL(n)`, on some vector space :math:`\mathcal{V}`. We call a function :math:`f: \mathcal{V} \rightarrow \mathcal{W}` *invariant* with respect to the action of
+In the following, we will denote elements of a symmetry group :math:`G` with :math:`g \in G.` :math:`G` could be for instance the rotation group :math:`SO(3),`
+or the permutation group :math:`S_n.` Groups are often easier understood in terms of their representation :math:`V_g : \mathcal{V} \rightarrow \mathcal{V}` which maps group elements
+to invertible linear operations, i.e. to :math:`GL(n),` on some vector space :math:`\mathcal{V}.` We call a function :math:`f: \mathcal{V} \rightarrow \mathcal{W}` *invariant* with respect to the action of
 the group, if
 
 .. math::  f(V_g(v)) = f(v),  \text{  for all } g \in G.
@@ -63,7 +63,7 @@ In mathematical terms, we require that
 
 .. math::  f(V_g(v)) = \mathcal{R}_g(f(v)),  \text{  for all } g \in G,
 
-with :math:`\mathcal{R}` being a representation of :math:`G` on the vector space :math:`\mathcal{W}`. These concepts are important in
+with :math:`\mathcal{R}` being a representation of :math:`G` on the vector space :math:`\mathcal{W}.` These concepts are important in
 machine learning, as they tell us how the internal structure of the data, described by the group, is conserved when passing through the model.
 In the remaining, we will refer to :math:`\mathcal{V}` and :math:`V_g` as the data space and the representation on it, respectively,
 and :math:`\mathcal{W}` and :math:`\mathcal{R}_g` as the qubit space and the symmetry action on it, respectively.
@@ -72,14 +72,14 @@ Now that we have the basics, we will focus on the task at hand: building an equi
 
 We use a `quantum reuploading model <https://pennylane.ai/qml/demos/tutorial_expressivity_fourier_series/>`__, which consists of a
 variational ansatz :math:`M_\Theta(\mathcal{X})` applied to some initial state
-:math:`|\psi_0\rangle`. Here, :math:`\mathcal{X}` denotes the description of a molecular configuration, i.e.,
+:math:`|\psi_0\rangle.` Here, :math:`\mathcal{X}` denotes the description of a molecular configuration, i.e.,
 the set of Cartesian coordinates of the atoms. The quantum circuit is given by
 
 .. math:: M_\Theta(\mathcal{X}) = \left[ \prod_{d=D}^1 \Phi(\mathcal{X}) \mathcal{U}_d(\vec{\theta}_d) \right] \Phi(\mathcal{X}),
 
-and depends on both data :math:`\mathcal{X}` and trainable parameters :math:`\Theta = \{\vec{\theta}_d\}_{d=1}^D`.
+and depends on both data :math:`\mathcal{X}` and trainable parameters :math:`\Theta = \{\vec{\theta}_d\}_{d=1}^D.`
 It is built by interleaving parametrized trainable layers :math:`U_d(\vec{\theta}_d)` with data
-encoding layers :math:`\Phi(\mathcal{X})`. The corresponding quantum function
+encoding layers :math:`\Phi(\mathcal{X}).` The corresponding quantum function
 :math:`f_{\Theta}(\mathcal{X})` is then given by the expectation value of a chosen observable
 :math:`O`
 
@@ -110,14 +110,14 @@ parametrized operations does not matter:
 .. math:: \left[\mathcal{U}_d(\vec{\theta}_d), \mathcal{R}_g\right]=0.
 
 Furthermore, we need to find an invariant observable :math:`O = \mathcal{R}_g O \mathcal{R}_g^\dagger` and an initial state
-:math:`|\psi_0\rangle = \mathcal{R}_g |\psi_0\rangle`, i.e., which can absorb the symmetry action. Putting all this together
+:math:`|\psi_0\rangle = \mathcal{R}_g |\psi_0\rangle,` i.e., which can absorb the symmetry action. Putting all this together
 results in a symmetry-invariant VQLM as required.
 
 In this demo, we will consider the example of a triatomic molecule of two atom types, such as a
 water molecule. In this case, the system is invariant under translations, rotations, and the
 exchange of the two hydrogen atoms. Translational symmetry is included by taking the
 central atom as the origin. Therefore, we only need to encode the coordinates of the two identical *active* atoms, which
-we will call :math:`\vec{x}_1` and :math:`\vec{x}_2`.
+we will call :math:`\vec{x}_1` and :math:`\vec{x}_2.`
 
 Let’s implement the model depicted above!
 
@@ -155,7 +155,7 @@ sigmas_sigmas = jnp.array(
 
 ######################################################################
 # We start by considering **rotational invariance** and building an initial state invariant under
-# rotation, such as the singlet state :math:`|S\rangle = \frac{|01⟩−|10⟩}{\sqrt{2}}`. A general
+# rotation, such as the singlet state :math:`|S\rangle = \frac{|01⟩−|10⟩}{\sqrt{2}}.` A general
 # :math:`2n`-invariant state can be obtained by taking :math:`n`-fold tensor product.
 #
 
@@ -175,13 +175,13 @@ def singlet(wires):
 #
 # .. math:: \Phi(\vec{x}) = \exp\left( -i\alpha_\text{enc} [xX + yY + zZ] \right),
 #
-# where we introduce a trainable encoding angle :math:`\alpha_\text{enc}\in\mathbb{R}`. This encoding
+# where we introduce a trainable encoding angle :math:`\alpha_\text{enc}\in\mathbb{R}.` This encoding
 # scheme is indeed equivariant since embedding a rotated data point is the same as embedding the
 # original data point and then letting the rotation act on the qubits:
-# :math:`\Phi(r(\psi,\theta,\phi)\vec{x}) = U(\psi,\theta,\phi) \Phi(\vec{x}) U(\psi,\theta,\phi)^\dagger`.
+# :math:`\Phi(r(\psi,\theta,\phi)\vec{x}) = U(\psi,\theta,\phi) \Phi(\vec{x}) U(\psi,\theta,\phi)^\dagger.`
 # For this, we have noticed that any rotation on the data level can be parametrized by three angles
-# :math:`V_g = r(\psi,\theta,\phi)`, which can also be used to parametrize the corresponding
-# single-qubit rotation :math:`\mathcal{R}_g = U(\psi,\theta,\phi)`, implemented by the usual
+# :math:`V_g = r(\psi,\theta,\phi),` which can also be used to parametrize the corresponding
+# single-qubit rotation :math:`\mathcal{R}_g = U(\psi,\theta,\phi),` implemented by the usual
 # `qml.rot <https://docs.pennylane.ai/en/stable/code/api/pennylane.Rot.html>`__
 # operation. We choose to encode each atom
 # twice in parallel, resulting in higher expressivity. We can do so by simply using this encoding scheme twice for each
@@ -203,7 +203,7 @@ def equivariant_encoding(alpha, data, wires):
 ######################################################################
 # Finally, we require an equivariant trainable map and an invariant observable. We take the Heisenberg
 # Hamiltonian, which is rotationally invariant, as an inspiration. We define a single summand of it,
-# :math:`H^{(i,j)}(J) = -J\left( X^{(i)}X^{(j)} + Y^{(i)}Y^{(j)} + Z^{(i)}Z^{(j)} \right)`, as a
+# :math:`H^{(i,j)}(J) = -J\left( X^{(i)}X^{(j)} + Y^{(i)}Y^{(j)} + Z^{(i)}Z^{(j)} \right),` as a
 # rotationally invariant two-qubit operator and choose
 #
 # .. math:: O = X^{(0)}X^{(1)} + Y^{(0)}Y^{(1)} + Z^{(0)}Z^{(1)}
@@ -224,19 +224,19 @@ def equivariant_encoding(alpha, data, wires):
 # additionally take into account the **invariance under permutations of the same atom types**.
 #
 # Interchanging two atoms is represented on the data level by simply interchanging the corresponding
-# coordinates, :math:`V_g = \sigma(\vec{x}_1, \vec{x}_2) = (\vec{x}_2, \vec{x}_1)`. On the Hilbert
+# coordinates, :math:`V_g = \sigma(\vec{x}_1, \vec{x}_2) = (\vec{x}_2, \vec{x}_1).` On the Hilbert
 # space this is represented by swapping the corresponding qubits,
-# :math:`\mathcal{R}_g = U(i,j) = SWAP(i,j)`.
+# :math:`\mathcal{R}_g = U(i,j) = SWAP(i,j).`
 #
 # The singlet state is not only rotationally invariant but also permutationally invariant under swapping
 # certain qubit pairs, so we can keep it. The previous embedding scheme for one data point can
 # be extended for embedding two atoms and we see that this is indeed not only rotationally
 # equivariant but also equivariant with respect to permutations, since encoding two swapped atoms is
 # just the same as encoding the atoms in the original order and then swapping the qubits:
-# :math:`\Phi\left( \sigma(\vec{x}_1, \vec{x}_2) \right) = SWAP(i,j) \Phi(\vec{x}_1, \vec{x}_2) SWAP(i,j)`.
+# :math:`\Phi\left( \sigma(\vec{x}_1, \vec{x}_2) \right) = SWAP(i,j) \Phi(\vec{x}_1, \vec{x}_2) SWAP(i,j).`
 # Again, we choose to encode each atom twice as depicted above.
 #
-# For the invariant observable :math:`O`, we note that our Heisenberg interaction is invariant under the swapping
+# For the invariant observable :math:`O,` we note that our Heisenberg interaction is invariant under the swapping
 # of the two involved qubits, therefore we can make use of the same observable as before.
 #
 # For the equivariant parametrized layer we need to be careful when it comes to the selection of qubit
@@ -309,7 +309,9 @@ def vqlm(data, params):
 
     # Initial encoding
     for i in range(num_qubits):
-        equivariant_encoding(alphas[i, 0], jnp.asarray(data)[i % active_atoms, ...], wires=[i])
+        equivariant_encoding(
+            alphas[i, 0], jnp.asarray(data, dtype=complex)[i % active_atoms, ...], wires=[i]
+        )
 
     # Reuploading model
     for d in range(D):
@@ -331,7 +333,9 @@ def vqlm(data, params):
         # Encoding
         for i in range(num_qubits):
             equivariant_encoding(
-                alphas[i, d + 1], jnp.asarray(data)[i % active_atoms, ...], wires=[i]
+                alphas[i, d + 1],
+                jnp.asarray(data, dtype=complex)[i % active_atoms, ...],
+                wires=[i],
             )
 
     return qml.expval(Observable)
@@ -562,7 +566,7 @@ for _, a in enumerate(["x", "y", "z"]):
 plt.tight_layout()
 plt.show()
 ######################################################################
-# In this series of plots, we can see the predicted forces on the two Hydrogen atoms in the three :math:`x`, :math:`y` and :math:`z` directions. Again, the model
+# In this series of plots, we can see the predicted forces on the two Hydrogen atoms in the three :math:`x,` :math:`y` and :math:`z` directions. Again, the model
 # does a fairly good job. The few points which are not on the diagonal can be improved using some tricks, such as incorporating the forces in the loss function.
 
 ######################################################################

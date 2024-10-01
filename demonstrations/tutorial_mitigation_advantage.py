@@ -54,14 +54,14 @@ setting. The authors of [#ibm]_ are concerned with simulating the time dynamics 
 
 with nearest neighbor interactions (indicated by :math:`\langle qp \rangle`) matching the topology of their 127-qubit 
 `ibm_kyiv <https://quantum-computing.ibm.com/services/resources?system=ibm_kyiv>`_ device.
-The system is described by the positive coupling strength :math:`J` and transverse field `h`.
+The system is described by the positive coupling strength :math:`J` and transverse field `h.`
 The time evolution is approximated by trotterization of the time evolution operator
 
 .. math:: U(T) \approx \left(\prod_{\langle qp \rangle} e^{i \delta t J Z_q Z_p} \prod_{q} e^{-i \delta t h X_q} \right)^{\frac{T}{\delta t}}
 
-for an evolution time :math:`T` and a Trotter step size :math:`\delta t`. That means the circuit of concern here is a 
+for an evolution time :math:`T` and a Trotter step size :math:`\delta t.` That means the circuit of concern here is a 
 series of consecutive :math:`\text{RZZ}(\theta_J)` and :math:`\text{RX}(\theta_h)` rotations. The corresponding 
-angles are related to the physical parameters via :math:`\theta_J = -2J \delta t` and :math:`\theta_h = 2h \delta t````. 
+angles are related to the physical parameters via :math:`\theta_J = -2J \delta t` and :math:`\theta_h = 2h \delta t```.` 
 From here on, we are going to focus just on the values of :math:`\theta_h` and keep :math:`\theta_J=-\pi/2` fixed 
 (in the paper, this is due to the simplification this introduces in the decomposition of the :math:`\text{RZZ}` gate in 
 terms of the required CNOT gates).
@@ -69,8 +69,8 @@ terms of the required CNOT gates).
 Noisy simulation of the circuits
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The complexity of the classical simulation varies with the parameter :math:`\theta_h`. For the extrema 
-:math:`\theta_h=0` and :math:`\theta_h=\pi/2`, the system becomes trivially solvable. We interpolate between 
+The complexity of the classical simulation varies with the parameter :math:`\theta_h.` For the extrema 
+:math:`\theta_h=0` and :math:`\theta_h=\pi/2,` the system becomes trivially solvable. We interpolate between 
 those extrema and show the final value of a single weight observable :math:`\langle Z_4\rangle` as is done in [#ibm]_.
 
 To reproduce the key ingredients of [#ibm]_, we are going to simulate a scaled down version of the real system using PennyLane. Instead of 127 qubits, we will use only 9, placed on a :math:`3 \times 3` grid with
@@ -120,7 +120,7 @@ qnode_noisy = qml.QNode(time_evolution, dev_noisy, interface="jax")
 # We can now simulate the final expectation value with and without noise. Note that the ``IsingZZ`` gate is not natively
 # supported by the ``default.mixed`` device and will be decomposed into a supported gate set. The noise channels will be
 # inserted after all gates in the final decomposed circuit. We use ``jax.vmap`` to vectorize and speed up the execution
-# for different values of :math:`\theta_h`.
+# for different values of :math:`\theta_h.`
 
 thetas = jnp.linspace(0, jnp.pi/2, 50)
 
@@ -148,8 +148,8 @@ plt.show()
 # of noisy quantum executions. The authors in [#ibm]_ employ zero noise extrapolation (ZNE), which serves as
 # a biased estimator of expectation values. The idea of ZNE is fairly straightforward: Imagine we want to
 # obtain the exact quantum function :math:`f` that estimates an expectation value under noiseless evolution.
-# However, we only have access to a noisy version :math:`f^{⚡}`. Now suppose we can controllably increase 
-# the noise present in terms of some noise gain parameter :math:`G`. Here, :math:`G=1` corresponds to
+# However, we only have access to a noisy version :math:`f^{⚡}.` Now suppose we can controllably increase 
+# the noise present in terms of some noise gain parameter :math:`G.` Here, :math:`G=1` corresponds to
 # the default noise present in the device. In ZNE, we evaluate :math:`f^{⚡}` at increasing values of :math:`G,`
 # from which we can extrapolate back to zero noise :math:`G=0` via a suitable curve fit. 
 # 
@@ -222,7 +222,7 @@ plt.show()
 # scenarios of different classical complexity.
 #
 # For :math:`\theta_h=-\pi/2` (case 1) the dynamics become trivial with just a global phase factor introduced, such that 
-# starting from the initial state :math:`|0\rangle^{\otimes 127}`, the expectation values :math:`\langle Z_q \rangle` are trivially 
+# starting from the initial state :math:`|0\rangle^{\otimes 127},` the expectation values :math:`\langle Z_q \rangle` are trivially 
 # one at all times. This serves as an anchor point of orientation. Varying :math:`\theta_h` (case 2) then increases the 
 # classical simulation complexity. For the circuits chosen, it is still possible to simulate the dynamical 
 # expectation values of local observables by taking into account their light-cone in the evolution with reduced depth 
@@ -239,7 +239,7 @@ plt.show()
 # restrictions of projected entangled pair states (PEPS) with some simplifications reducing the high computational 
 # and algorithmic complexity, at the cost of more approximation errors.
 # 
-# In both cases, the so-called bond-dimension :math:`\chi`, a hyperparameter chosen by the user, directly determines 
+# In both cases, the so-called bond-dimension :math:`\chi,` a hyperparameter chosen by the user, directly determines 
 # the bipartite entanglement entropy these states can capture. It is known that due to the area law of entanglement, 
 # many ground states of relevant physical system can be faithfully approximated with suitably chosen tensor network states 
 # with finite bond dimension. However, that is generally not the case for time dynamics as the entanglement entropy 

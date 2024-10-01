@@ -63,17 +63,17 @@ modeled by the Hamiltonian
 
 .. math:: H(t) = - \frac{\omega_q}{2} Z_q + \Omega_q(t) \sin(\nu_q t + \phi_q) Y_q
 
-where operators :math:`\{X_q, Y_q, Z_q\}` refer to the single-qubit Pauli operators acting on qubit :math:`q`, :math:`\omega_q` is the qubit frequency, :math:`\Omega_q(t)` is the drive amplitude,  :math:`\nu_q` denotes the drive frequency, and :math:`\phi_q` is the phase of the pulse.
+where operators :math:`\{X_q, Y_q, Z_q\}` refer to the single-qubit Pauli operators acting on qubit :math:`q,` :math:`\omega_q` is the qubit frequency, :math:`\Omega_q(t)` is the drive amplitude,  :math:`\nu_q` denotes the drive frequency, and :math:`\phi_q` is the phase of the pulse.
 All of these parameters are given or set for each qubit :math:`q =0, 1, .., 7` on the device.
 Since we are going to focus on driving one single qubit, we are going to drop the subscript :math:`q` from here on.
 We refer to section IV D in reference [#Krantz]_ for a good derivation and review from first principles.
 
 We now want to understand the action of driving a qubit with this Hamiltonian.
 The first term leads to a constant precession around the Z-axis on the Bloch sphere, whereas the second term introduces
-the so-called Rabi oscillation between :math:`|0\rangle` and :math:`|1\rangle`.
+the so-called Rabi oscillation between :math:`|0\rangle` and :math:`|1\rangle.`
 This can be seen by the following simple simulation:
 We evolve the state in the Bloch sphere from :math:`|0\rangle` with a constant pulse of :math:`\Omega(t) = 2 \pi \text{ GHz}`
-for :math:`1 \text{ ns}`. We choose :math:`\omega = 5 \times 2\pi \text{ GHz}` as the drive and qubit frequency (i.e. we are at resonance :math:`\omega - \nu = 0`).
+for :math:`1 \text{ ns}.` We choose :math:`\omega = 5 \times 2\pi \text{ GHz}` as the drive and qubit frequency (i.e. we are at resonance :math:`\omega - \nu = 0`).
 """
 
 import pennylane as qml
@@ -137,10 +137,10 @@ ax.legend()
 #
 #     Driving a transmon qubits leads to a spiral movement on the Bloch sphere in the lab frame. It results from a constant Z-axis precession together with the Rabi oscillation from the drive on resonance.
 #
-# We can see that for a fixed time, we land on different longitudes on the Bloch sphere for different phases :math:`\phi`.
+# We can see that for a fixed time, we land on different longitudes on the Bloch sphere for different phases :math:`\phi.`
 # This means that we can control the rotation axis of the logical gate by setting the phase :math:`\phi`
 # of the drive. Another way of seeing this is by fixing the pulse duration and looking at the
-# final state for different amplitudes and two phases shifted by :math:`\pi/2`.
+# final state for different amplitudes and two phases shifted by :math:`\pi/2.`
 
 
 # We change the ``callable`` of the time-dependent Hamiltonian and
@@ -193,7 +193,7 @@ ax.legend()
 # So far, we have looked at transmon physics in the so-called lab frame. Another common way of understanding transmon physics
 # is via the Hamiltonian expressed in the `qubit frame,` which rotates at the qubit frequency.
 # We can change frames via the unitary transformation
-# :math:`R = e^{-i \frac{\omega}{2}Z}` that leads to the transformed Hamiltonian :math:`\tilde{H}(t) = i R R^\dagger + R H R^\dagger`.
+# :math:`R = e^{-i \frac{\omega}{2}Z}` that leads to the transformed Hamiltonian :math:`\tilde{H}(t) = i R R^\dagger + R H R^\dagger.`
 # In the rotating wave approximation (RWA) and on resonance (:math:`\omega = \nu`), this yields
 #
 # .. math:: \tilde{H}(t) = - \frac{1}{2} \Omega(t) (\cos(\phi) X + \sin(\phi) Y).
@@ -283,7 +283,7 @@ def fint_sine(x, y, initial_guess=[1.0, 0.1, 1]):
 
 ##############################################################################
 # We can now execute the same constant pulse for different evolution times and see Rabi oscillation
-# in the evolution of :math:`\langle Z \rangle`.
+# in the evolution of :math:`\langle Z \rangle.`
 
 t0, t1, num_ts = 10.0, 25.0, 20
 phi0 = 0.0
@@ -404,7 +404,7 @@ plt.show()
 
 ##############################################################################
 # In particular, we see a match in both Rabi frequencies. The error in terms of the magnitude of the Rabi oscillation
-# may be due to different sources. For one, the qubit has a readout fidelity of :math:`93\%`, according to the vendor.
+# may be due to different sources. For one, the qubit has a readout fidelity of :math:`93\%,` according to the vendor.
 # Another possible source is classical and quantum crosstalk that is not considered in our classical model. Though, we suspect the main source
 # for error beyond readout fidelity to come from excitations to higher levels, caused by strong amplitudes and rapid
 # changes in the signal.
@@ -415,7 +415,7 @@ plt.show()
 # -------------
 #
 # We now want to experiment with performing X- and Y-rotations by setting the phase.
-# For that, we compute expectation values of :math:`\langle X \rangle`, :math:`\langle Y \rangle`, and :math:`\langle Z \rangle`
+# For that, we compute expectation values of :math:`\langle X \rangle`, :math:`\langle Y \rangle,` and :math:`\langle Z \rangle`
 # while changing the phase :math:`\phi` at a fixed duration of :math:`15 \text{ ns}` and output amplitude of :math:`0.3` (arbitrary unit :math:`\in [0, 1]`).
 
 
