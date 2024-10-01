@@ -18,14 +18,14 @@ How to quantum just-in-time compile Grover's algorithm with Catalyst
 """
 
 ######################################################################
-# :doc:`Grover's algorithm <tutorial_grovers_algorithm>` is an `oracle
+# `Grover's algorithm </codebook/#05-grovers-algorithm>`__ is an `oracle
 # </codebook/04-basic-quantum-algorithms/02-the-magic-8-ball/>`__-based quantum algorithm, first
 # proposed by Lov Grover in 1996 [#Grover1996]_, to solve unstructured search problems using a
-# `quantum computer <https://pennylane.ai/qml/quantum-computing/>`__. For example, we could use Grover's algorithm to search for a phone number in a
-# randomly ordered database containing :math:`N` entries and say with high probability that the
-# database contains the number being searched by performing :math:`O(\sqrt{N})` queries on the
-# database, whereas a classical search algorithm would require :math:`O(N)` queries to perform the
-# same task.
+# `quantum computer <https://pennylane.ai/qml/quantum-computing/>`__. For example, we could use
+# Grover's algorithm to search for a phone number in a randomly ordered database containing
+# :math:`N` entries and say with high probability that the database contains the number being
+# searched by performing :math:`O(\sqrt{N})` queries on the database, whereas a classical search
+# algorithm would require :math:`O(N)` queries to perform the same task.
 #
 # More formally, the problem is defined as a search for a string of bits in a list containing
 # :math:`N` items given an *oracle access function* :math:`f(x)`. This function is defined such that
@@ -47,18 +47,20 @@ How to quantum just-in-time compile Grover's algorithm with Catalyst
 # In the :doc:`Grover's Algorithm <tutorial_grovers_algorithm>` tutorial, we saw how to implement
 # the generalized Grover's algorithm in PennyLane. The procedure is as follows:
 #
-# 1. Initialize the system to an equal superposition over all states.
-# 2. Perform :math:`r(N, M)` *Grover iterations:*
+# #. Initialize the system to an equal superposition over all states.
 #
-#    1. Apply the unitary *oracle operator* :math:`U_\omega`, implemented using
+# #. Perform :math:`r(N, M)` *Grover iterations:*
+#
+#    #. Apply the unitary *oracle operator* :math:`U_\omega`, implemented using
 #       :class:`~.pennylane.FlipSign`, for each solution index :math:`\omega`.
-#    2. Apply the *Grover diffusion operator* :math:`U_D`, implemented using
+#
+#    #. Apply the *Grover diffusion operator* :math:`U_D`, implemented using
 #       :class:`~.pennylane.GroverOperator`.
 #
-# 3. Measure the resulting quantum state in the computational basis.
+# #. Measure the resulting quantum state in the computational basis.
 #
-# We also saw that the optimal number of Grover iterations to find the solution is given by
-# [#NandC2000]_
+# We also saw (in Ref. [#NandC2000]_) that the optimal number of Grover iterations to find the
+# solution is given by
 #
 # .. math:: r(N, M) \approx \left \lceil \frac{\pi}{4} \sqrt{\frac{N}{M}} \right \rceil .
 #
@@ -141,7 +143,7 @@ def most_probable_states_descending(probs, N):
 
 
 def print_most_probable_states_descending(probs, N):
-    """Prints the most probable states, and their probabilities, in descending order."""
+    """Prints the most probable states and their probabilities in descending order."""
     for i in most_probable_states_descending(probs, N):
         print(f"Prob of state '{i:0{NUM_QUBITS}b}': {probs[i]:.4g}")
 
@@ -157,12 +159,12 @@ print_most_probable_states_descending(results, N=2)
 # Quantum just-in-time compiling the circuit
 # ------------------------------------------
 #
-# At the time of writing, Catalyst is developed natively for `PennyLane's high-performance simulators <https://pennylane.ai/performance/>`__ and does not support the ``"default.qubit"`` state-simulator device,
-# so let's first define a new circuit using `Lightning
+# At the time of writing, Catalyst is developed natively for `PennyLane's high-performance
+# simulators <https://pennylane.ai/performance/>`__ and does not support the ``"default.qubit"``
+# state-simulator device. Let's first define a new circuit using `Lightning
 # <https://docs.pennylane.ai/projects/lightning>`__, which is a PennyLane plugin that provides more
-# performant state simulators written in C++. See the
-# :doc:`Catalyst documentation <catalyst:dev/devices>` for the full list of devices supported by
-# Catalyst.
+# performant state simulators written in C++. See the :doc:`Catalyst documentation
+# <catalyst:dev/devices>` for the full list of devices supported by Catalyst.
 
 dev = qml.device("lightning.qubit", wires=NUM_QUBITS)
 
@@ -243,10 +245,10 @@ print(f"Native-Python and compiled circuits yield same results? {results_are_equ
 # Let's start profiling the circuits we have defined. We have four function executions in total to
 # profile:
 #
-# 1. Executing the circuit using ``"default.qubit"``.
-# 2. Executing the circuit using ``"lightning.qubit"``.
-# 3. Compiling the circuit with Catalyst, to measure the AOT compilation overhead.
-# 4. Calls to the QJIT-compiled circuit, to measure the circuit execution time.
+# #. Executing the circuit using ``"default.qubit"``.
+# #. Executing the circuit using ``"lightning.qubit"``.
+# #. Compiling the circuit with Catalyst, to measure the AOT compilation overhead.
+# #. Calls to the QJIT-compiled circuit, to measure the circuit execution time.
 #
 # We'll use the `timeit <https://docs.python.org/3/library/timeit.html>`__ module part of the Python
 # Standard Library to measure the runtimes. To improve the statistical precision of these
@@ -362,6 +364,9 @@ plt.show()
 # For a circuit with :math:`n = 12` qubits, analogous to a search in a randomly ordered "database"
 # containing :math:`N = 2^{12} = 4096` entries, Catalyst offers a runtime performance several orders
 # of magnitude better than the same circuit implemented in native Python.
+#
+# To learn more about Catalyst and how to use it to compile and optimize your quantum programs and
+# workflows, check out the Catalyst :doc:`Quick Start <catalyst:dev/quick_start>` guide.
 
 
 ######################################################################

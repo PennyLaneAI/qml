@@ -27,7 +27,27 @@
     "seoDescription": "See how to use Catalyst to just-in-time (QJIT) compile a PennyLane circuit implementing Grover's algorithm.",
     "doi": "",
     "canonicalURL": "/qml/demos/tutorial_qjit_compile_grovers_algorithm_with_catalyst",
-    "references": [],
+    "references": [
+        {
+            "id": "Grover1996",
+            "type": "article",
+            "title": "A fast quantum mechanical algorithm for database search",
+            "authors": "Grover, L. K.",
+            "year": "1996",
+            "journal": "Proceedings of the twenty-eighth annual ACM symposium on Theory of Computing",
+            "doi": "10.1145/237814.237866"
+        },
+        {
+            "id": "NandC2000",
+            "type": "book",
+            "title": "Quantum Computation and Quantum Information",
+            "authors": "M. A. Nielsen, and I. L. Chuang",
+            "year": "2000",
+            "publisher": "Cambridge University Press",
+            "journal": "",
+            "url": ""
+        }
+    ],
     "basedOnPapers": [],
     "referencedByPapers": [],
     "relatedContent": [
