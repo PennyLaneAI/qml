@@ -193,7 +193,7 @@ dev = qml.device('lightning.qubit', wires=3)
 @qml.qnode(dev, interface="jax")
 def circuit(x, y):
     # prepares the reference state |100>
-    qml.BasisState(jnp.array([1, 0, 0]), wires=[0, 1, 2])
+    qml.BasisState.compute_decomposition(jnp.array([1, 0, 0]), wires=[0, 1, 2])
     # applies the single excitations
     qml.SingleExcitation(x, wires=[0, 1])
     qml.SingleExcitation(y, wires=[0, 2])
@@ -266,7 +266,7 @@ dev2 = qml.device('lightning.qubit', wires=6)
 @qml.qnode(dev2, interface="jax")
 def circuit2(x, y):
     # prepares reference state
-    qml.BasisState(jnp.array([1, 1, 1, 0, 0, 0]), wires=[0, 1, 2, 3, 4, 5])
+    qml.BasisState.compute_decomposition(jnp.array([1, 1, 1, 0, 0, 0]), wires=[0, 1, 2, 3, 4, 5])
     # apply all single excitations
     for i, s in enumerate(singles):
         qml.SingleExcitation(x[i], wires=s)
@@ -363,7 +363,7 @@ dev = qml.device('default.qubit', wires=6)
 
 @qml.qnode(dev, interface="jax")
 def circuit3(x, y, z):
-    qml.BasisState(jnp.array([1, 1, 0, 0, 0, 0]), wires=[i for i in range(6)])
+    qml.BasisState.compute_decomposition(jnp.array([1, 1, 0, 0, 0, 0]), wires=[i for i in range(6)])
     qml.DoubleExcitation(x, wires=[0, 1, 2, 3])
     qml.DoubleExcitation(y, wires=[0, 1, 4, 5])
     qml.SingleExcitation(z, wires=[1, 3])
@@ -387,7 +387,7 @@ print(states)
 
 @qml.qnode(dev, interface="jax")
 def circuit4(x, y, z):
-    qml.BasisState(jnp.array([1, 1, 0, 0, 0, 0]), wires=[i for i in range(6)])
+    qml.BasisState.compute_decomposition(jnp.array([1, 1, 0, 0, 0, 0]), wires=[i for i in range(6)])
     qml.DoubleExcitation(x, wires=[0, 1, 2, 3])
     qml.DoubleExcitation(y, wires=[0, 1, 4, 5])
     # single excitation controlled on qubit 0
@@ -445,7 +445,7 @@ dev = qml.device('default.qubit', wires=4)
 
 @qml.qnode(dev, interface="jax")
 def state_preparation(params):
-    qml.BasisState(jnp.array([1, 1, 0, 0]), wires=[0, 1, 2, 3])
+    qml.BasisState.compute_decomposition(jnp.array([1, 1, 0, 0]), wires=[0, 1, 2, 3])
     qml.SingleExcitation(params[0], wires=[1, 2])
     qml.SingleExcitation(params[1], wires=[1, 3])
     # single excitations controlled on qubit 1

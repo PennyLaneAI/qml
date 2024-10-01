@@ -217,7 +217,7 @@ print(state_tapered)
 dev = qml.device("default.qubit", wires=H.wires)
 @qml.qnode(dev, interface="jax")
 def circuit():
-    qml.BasisState(jnp.array([1, 1, 0, 0]), wires=H.wires)
+    qml.BasisState.compute_decomposition(jnp.array([1, 1, 0, 0]), wires=H.wires)
     return qml.state()
 
 qubit_state = circuit()
@@ -227,7 +227,7 @@ print(f"HF energy: {jnp.real(HF_energy):.8f} Ha")
 dev = qml.device("lightning.qubit", wires=H_tapered.wires)
 @qml.qnode(dev, interface="jax")
 def circuit():
-    qml.BasisState(jnp.array([1, 1]), wires=H_tapered.wires)
+    qml.BasisState.compute_decomposition(jnp.array([1, 1]), wires=H_tapered.wires)
     return qml.state()
 
 qubit_state = circuit()
@@ -261,7 +261,7 @@ dev = qml.device("lightning.qubit", wires=H_tapered.wires)
 
 @qml.qnode(dev, interface="jax")
 def tapered_circuit(params):
-    qml.BasisState(state_tapered, wires=H_tapered.wires)
+    qml.BasisState.compute_decomposition(state_tapered, wires=H_tapered.wires)
     for idx, tapered_op in enumerate(tapered_doubles + tapered_singles):
         tapered_op(params[idx])
     return qml.expval(H_tapered)

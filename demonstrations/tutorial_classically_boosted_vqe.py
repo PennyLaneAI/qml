@@ -435,7 +435,7 @@ S22 = 1
 # :math:`U_i \vert 0^n \rangle = \vert \phi_i \rangle.` In this case, this
 # is just a mapping of a classical basis state into the circuit consisting
 # of :math:`X` gates and can be easily implemented using PennyLane’s
-# function ``qml.BasisState(i, n))``.
+# function ``qml.BasisState.compute_decomposition(i, n))``.
 #
 
 wires = range(qubits + 1)
@@ -463,7 +463,7 @@ def hadamard_test(Uq, Ucl, component="real"):
 
 
 def circuit_product_state(state):
-    qml.BasisState(state, range(qubits))
+    qml.BasisState.compute_decomposition(state, range(qubits))
 
 
 wire_order = list(range(qubits))

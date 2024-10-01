@@ -175,7 +175,7 @@ for i in range(len(operator_pool)):
 # We create a circuit that applies a selected group of gates to the reference Hartree-Fock state.
 
 def circuit_1(params, excitations):
-    qml.BasisState(hf_state, wires=range(qubits))
+    qml.BasisState.compute_decomposition(hf_state, wires=range(qubits))
 
     for i, excitation in enumerate(excitations):
         if len(excitation) == 4:
@@ -239,7 +239,7 @@ for n in range(20):
 
 
 def circuit_2(params, excitations, gates_select, params_select):
-    qml.BasisState(hf_state, wires=range(qubits))
+    qml.BasisState.compute_decomposition(hf_state, wires=range(qubits))
 
     for i, gate in enumerate(gates_select):
         if len(gate) == 4:
@@ -345,7 +345,7 @@ params = jnp.zeros(len(excitations))
 
 @qml.qnode(dev, diff_method="parameter-shift", interface="jax")
 def circuit(params):
-    qml.BasisState(hf_state, wires=range(qubits))
+    qml.BasisState.compute_decomposition(hf_state, wires=range(qubits))
 
     for i, excitation in enumerate(excitations):
         if len(excitation) == 4:
