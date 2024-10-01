@@ -101,16 +101,18 @@ To get started, we need to define the atomic symbols and the nuclear coordinates
 For the hydrogen molecule we have
 """
 
-from autograd import grad
 import pennylane as qml
-from pennylane import numpy as np
+import numpy as np
+import jax
+import jax.numpy as jnp
 import matplotlib.pyplot as plt
 np.set_printoptions(precision=5)
+jax.config.update("jax_enable_x64", True)
 
 symbols = ["H", "H"]
 # optimized geometry at the Hartree-Fock level
-geometry = np.array([[-0.672943567415407, 0.0, 0.0],
-                     [ 0.672943567415407, 0.0, 0.0]], requires_grad=True)
+geometry = jnp.array([[-0.672943567415407, 0.0, 0.0],
+                     [ 0.672943567415407, 0.0, 0.0]])
 
 ##############################################################################
 # The use of ``requires_grad=True`` specifies that the nuclear coordinates are differentiable
@@ -124,12 +126,12 @@ mol = qml.qchem.Molecule(symbols, geometry)
 # The Hartree-Fock energy can now be computed with the
 # :func:`~.pennylane.qchem.hf_energy` function which is a function transform
 
-qml.qchem.hf_energy(mol)(geometry)
+qml.qchem.hf_energy(mol)()
 
 ##############################################################################
 # We now compute the gradient of the energy with respect to the nuclear coordinates
 
-grad(qml.qchem.hf_energy(mol))(geometry)
+jax.grad(qml.qchem.hf_energy(mol), argnums=0)(geometry, mol.coeff, mol.alpha)
 
 ##############################################################################
 # The obtained gradients are equal or very close to zero because the geometry we used here has been
@@ -181,13 +183,13 @@ S1.l
 # are those of the hydrogen atoms by default and are therefore treated as differentiable parameters
 # by PennyLane.
 
-qml.qchem.overlap_integral(S1, S2)([geometry[0], geometry[1]])
+qml.qchem.overlap_integral(S1, S2)()
 
 ##############################################################################
 # You can verify that the overlap integral between two identical atomic orbitals is equal to one.
 # We can now compute the gradient of the overlap integral with respect to the orbital centres
 
-grad(qml.qchem.overlap_integral(S1, S2))([geometry[0], geometry[1]])
+jax.grad(qml.qchem.overlap_integral(S1, S2))(geometry, mol.coeff, mol.alpha)
 
 ##############################################################################
 # Can you explain why some of the computed gradients are zero?
@@ -228,13 +230,13 @@ plt.show()
 # plane.
 
 n = 30 # number of grid points along each axis
-
+qml.qchem.hf_energy(mol)()
 mol.mo_coefficients = mol.mo_coefficients.T
 mo = mol.molecular_orbital(0)
 x, y = np.meshgrid(np.linspace(-2, 2, n),
                    np.linspace(-2, 2, n))
 val = np.vectorize(mo)(x, y, 0)
-val = np.array([val[i][j]._value for i in range(n) for j in range(n)]).reshape(n, n)
+val = np.array([val[i][j] for i in range(n) for j in range(n)]).reshape(n, n)
 
 fig, ax = plt.subplots()
 co = ax.contour(x, y, val, 10, cmap='summer_r', zorder=0)
@@ -252,7 +254,7 @@ plt.show()
 # over molecular orbitals that can be used to construct the molecular Hamiltonian with the
 # :func:`~.pennylane.qchem.molecular_hamiltonian` function.
 
-hamiltonian, qubits = qml.qchem.molecular_hamiltonian(mol, args=[mol.coordinates])
+hamiltonian, qubits = qml.qchem.molecular_hamiltonian(mol)
 print(hamiltonian)
 
 ##############################################################################
@@ -266,10 +268,10 @@ print(hamiltonian)
 
 dev = qml.device("default.qubit", wires=4)
 def energy(mol):
-    @qml.qnode(dev, interface="autograd")
+    @qml.qnode(dev, interface="jax")
     def circuit(*args):
-        qml.BasisState(np.array([1, 1, 0, 0]), wires=range(4))
-        qml.DoubleExcitation(*args[0][0], wires=[0, 1, 2, 3])
+        qml.BasisState(jnp.array([1, 1, 0, 0]), wires=range(4))
+        qml.DoubleExcitation(*args[0], wires=[0, 1, 2, 3])
         H = qml.qchem.molecular_hamiltonian(mol, args=args[1:])[0]
         return qml.expval(H)
     return circuit
@@ -282,20 +284,21 @@ def energy(mol):
 # coordinate gradients are simply the forces on the atomic nuclei.
 
 # initial value of the circuit parameter
-circuit_param = [np.array([0.0], requires_grad=True)]
+circuit_param = jnp.array([0.0])
+
+geometry = jnp.array([[0.0, 0.0, -0.672943567415407],
+                     [0.0, 0.0, 0.672943567415407]])
 
 for n in range(36):
-
-    args = [circuit_param, geometry]
     mol = qml.qchem.Molecule(symbols, geometry)
-
+    args = [circuit_param, geometry, mol.coeff, mol.alpha]
     # gradient for circuit parameters
-    g_param = grad(energy(mol), argnum = 0)(*args)
+    g_param = jax.grad(energy(mol), argnums = 0)(*args)
     circuit_param = circuit_param - 0.25 * g_param[0]
 
     # gradient for nuclear coordinates
-    forces = -grad(energy(mol), argnum = 1)(*args)
-    geometry = geometry + 0.5 * forces
+    forces = jax.grad(energy(mol), argnums = 1)(*args)
+    geometry = geometry - 0.5 * forces
 
     if n % 5 == 0:
         print(f'n: {n}, E: {energy(mol)(*args):.8f}, Force-max: {abs(forces).max():.8f}')
@@ -314,43 +317,39 @@ for n in range(36):
 # simultaneously.
 
 # initial values of the nuclear coordinates
-geometry = np.array([[0.0, 0.0, -0.672943567415407],
-                     [0.0, 0.0, 0.672943567415407]], requires_grad=True)
-
-# initial values of the basis set exponents
-alpha = np.array([[3.42525091, 0.62391373, 0.1688554],
-                  [3.42525091, 0.62391373, 0.1688554]], requires_grad=True)
+geometry = jnp.array([[0.0, 0.0, -0.672943567415407],
+                     [0.0, 0.0, 0.672943567415407]])
 
 # initial values of the basis set contraction coefficients
-coeff = np.array([[0.1543289673, 0.5353281423, 0.4446345422],
-                  [0.1543289673, 0.5353281423, 0.4446345422]], requires_grad=True)
+coeff = jnp.array([[0.1543289673, 0.5353281423, 0.4446345422],
+                  [0.1543289673, 0.5353281423, 0.4446345422]])
+
+# initial values of the basis set exponents
+alpha = jnp.array([[3.42525091, 0.62391373, 0.1688554],
+                  [3.42525091, 0.62391373, 0.1688554]])
 
 # initial value of the circuit parameter
-circuit_param = [np.array([0.0], requires_grad=True)]
+circuit_param = jnp.array([0.0])
+
+mol = qml.qchem.Molecule(symbols, geometry, coeff=coeff, alpha=alpha)
+args = [circuit_param, geometry, coeff, alpha]
 
 for n in range(36):
-
-    args = [circuit_param, geometry, alpha, coeff]
+    args = [circuit_param, geometry, coeff, alpha]
     mol = qml.qchem.Molecule(symbols, geometry, alpha=alpha, coeff=coeff)
 
     # gradient for circuit parameters
-    g_param = grad(energy(mol), argnum=0)(*args)
+    g_param = jax.grad(energy(mol), argnums=[0, 1, 2, 3])(*args)[0]
     circuit_param = circuit_param - 0.25 * g_param[0]
 
     # gradient for nuclear coordinates
-    forces = -grad(energy(mol), argnum=1)(*args)
-    geometry = geometry + 0.5 * forces
-
-    # gradient for basis set exponents
-    g_alpha = grad(energy(mol), argnum=2)(*args)
-    alpha = alpha - 0.25 * g_alpha
-
-    # gradient for basis set contraction coefficients
-    g_coeff = grad(energy(mol), argnum=3)(*args)
-    coeff = coeff - 0.25 * g_coeff
+    value, gradients = jax.value_and_grad(energy(mol), argnums=[1, 2, 3])(*args)
+    geometry = geometry - 0.5 * gradients[0]
+    alpha = alpha - 0.25 * gradients[2]
+    coeff = coeff - 0.25 * gradients[1]
 
     if n % 5 == 0:
-        print(f'n: {n}, E: {energy(mol)(*args):.8f}, Force-max: {abs(forces).max():.8f}')
+        print(f'n: {n}, E: {value:.8f}, Force-max: {abs(gradients[0]).max():.8f}')
 
 ##############################################################################
 # You can also print the gradients of the circuit and basis set parameters and confirm that they are
