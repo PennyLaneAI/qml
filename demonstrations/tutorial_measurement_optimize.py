@@ -63,7 +63,7 @@ molecular Hamiltonian is computed:
 .. math:: H = \sum_i c_i h_i,
 
 where :math:`h_i` are the terms of the Hamiltonian written as a tensor product of Pauli operators or the identity
-acting on wire :math:`n`, :math:`P_n \in \{I, \sigma_x, \sigma_y, \sigma_z\}`:
+acting on wire :math:`n,` :math:`P_n \in \{I, \sigma_x, \sigma_y, \sigma_z\}:`
 
 .. math:: h_i = \bigotimes_{n=0}^{N-1} P_n.
 
@@ -74,7 +74,7 @@ after running the variational quantum circuit:
 .. math:: \text{cost}(\theta) = \langle 0 | U(\theta)^\dagger H U(\theta) | 0 \rangle.
 
 By using a classical optimizer to *minimize* this quantity, we can estimate
-the ground state energy of the Hamiltonian :math:`H`:
+the ground state energy of the Hamiltonian :math:`H:`
 
 .. math:: H U(\theta_{min}) |0\rangle = E_{min} U(\theta_{min}) |0\rangle.
 
@@ -100,7 +100,7 @@ The measurement problem
 -----------------------
 
 For small molecules, the VQE algorithm scales and performs exceedingly well. For example, for the
-Hydrogen molecule :math:`\text{H}_2`, the final Hamiltonian in its qubit representation
+Hydrogen molecule :math:`\text{H}_2,` the final Hamiltonian in its qubit representation
 has 15 terms that need to be measured. Let's obtain the Hamiltonian from
 `PennyLane's dataset library <https://pennylane.ai/datasets/qchem/h2-molecule>`__
 to verify the number of terms. In this tutorial, we use the :func:`~.pennylane.data.load`
@@ -176,7 +176,7 @@ print("\n", H)
 # We can see that as the size of our molecule increases, we run into a problem: larger molecules
 # result in Hamiltonians that not only require a larger number of qubits :math:`N` in their
 # representation, but the number of terms in the Hamiltonian scales like
-# :math:`\mathcal{O}(N^4)`! 😱😱😱
+# :math:`\mathcal{O}(N^4)!` 😱😱😱
 #
 # We can mitigate this somewhat by choosing smaller `basis sets
 # <https://en.wikipedia.org/wiki/Basis_set_(chemistry)>`__ to represent the electronic structure
@@ -199,7 +199,7 @@ print("\n", H)
 # One of the assumptions we made above was that every term in the Hamiltonian must be measured independently.
 # However, this might not be the case. From the `Heisenberg uncertainty relationship
 # <https://en.wikipedia.org/wiki/Uncertainty_principle>`__ for two
-# observables :math:`\hat{A}` and :math:`\hat{B}`, we know that
+# observables :math:`\hat{A}` and :math:`\hat{B},` we know that
 #
 # .. math:: \sigma_A^2 \sigma_B^2 \geq \frac{1}{2}\left|\left\langle [\hat{A}, \hat{B}] \right\rangle\right|,
 #
@@ -224,7 +224,7 @@ print("\n", H)
 #
 # To explore why commutativity and simultaneous measurement are related, let's assume that there
 # is a complete, orthonormal eigenbasis :math:`|\phi_n\rangle` that *simultaneously
-# diagonalizes* both :math:`\hat{A}` and :math:`\hat{B}`:
+# diagonalizes* both :math:`\hat{A}` and :math:`\hat{B}:`
 #
 # .. math::
 #
@@ -232,7 +232,7 @@ print("\n", H)
 #     ② ~~ \hat{B} |\phi_n\rangle &= \lambda_{B,n} |\phi_n\rangle.
 #
 # where :math:`\lambda_{A,n}` and :math:`\lambda_{B,n}` are the corresponding eigenvalues.
-# If we pre-multiply the first equation by :math:`\hat{B}`, and the second by :math:`\hat{A}`
+# If we pre-multiply the first equation by :math:`\hat{B},` and the second by :math:`\hat{A}`
 # (both denoted in blue):
 #
 # .. math::
@@ -243,7 +243,7 @@ print("\n", H)
 #       |\phi_n\rangle = \lambda_{A,n} \color{blue}{\lambda_{B,n}} |\phi_n\rangle.
 #
 # We can see that assuming a simultaneous eigenbasis requires that
-# :math:`\hat{A}\hat{B}|\phi_n\rangle = \hat{B}\hat{A}|\phi_n\rangle`. Or, rearranging,
+# :math:`\hat{A}\hat{B}|\phi_n\rangle = \hat{B}\hat{A}|\phi_n\rangle.` Or, rearranging,
 #
 # .. math:: (\hat{A}\hat{B} - \hat{B}\hat{A}) |\phi_n\rangle = [\hat{A}, \hat{B}]|\phi_n\rangle = 0.
 #
@@ -253,7 +253,7 @@ print("\n", H)
 # So far, this seems awfully theoretical. What does this mean in practice?
 #
 # In the realm of variational circuits, we typically want to compute expectation values of an
-# observable on a given state :math:`|\psi\rangle`. If we have two commuting observables, we now know that
+# observable on a given state :math:`|\psi\rangle.` If we have two commuting observables, we now know that
 # they share a simultaneous eigenbasis:
 #
 # .. math::
@@ -308,7 +308,7 @@ print("\n", H)
 #     [\sigma_i, I] = 0, ~~~ [\sigma_i, \sigma_i] = 0, ~~~ [\sigma_i, \sigma_j] = c \sigma_k \delta_{ij}.
 #
 # Now consider two tensor products of Pauli terms, for example :math:`X\otimes Y \otimes I` and
-# :math:`X\otimes I \otimes Z`. We say that these two terms are qubit-wise commuting, since, if
+# :math:`X\otimes I \otimes Z.` We say that these two terms are qubit-wise commuting, since, if
 # we compare each subsystem in the tensor product, we see that every one commutes:
 #
 # .. math::
@@ -431,12 +431,12 @@ print(rotated_probs)
 
 ##############################################################################
 # We're not quite there yet; we have only calculated the probabilities of the variational circuit
-# rotated into the shared eigenbasis—the :math:`|\langle \phi_n |\psi\rangle|^2`. To recover the
+# rotated into the shared eigenbasis—the :math:`|\langle \phi_n |\psi\rangle|^2.` To recover the
 # *expectation values* of the two QWC observables from the probabilities, recall that we need one
-# final piece of information: their eigenvalues :math:`\lambda_{A, n}` and :math:`\lambda_{B, n}`.
+# final piece of information: their eigenvalues :math:`\lambda_{A, n}` and :math:`\lambda_{B, n}.`
 #
-# We know that the single-qubit Pauli operators each have eigenvalues :math:`(1, -1)`, while the identity
-# operator has eigenvalues :math:`(1, 1)`. We can make use of ``np.kron`` to quickly
+# We know that the single-qubit Pauli operators each have eigenvalues :math:`(1, -1),` while the identity
+# operator has eigenvalues :math:`(1, 1).` We can make use of ``np.kron`` to quickly
 # generate the eigenvalues of the full Pauli terms, making sure that the order
 # of the eigenvalues in the Kronecker product corresponds to the tensor product.
 
@@ -750,7 +750,7 @@ print(cost_fn(weights))
 # ----------
 #
 # Wait, hang on. We dove so deeply into measurement grouping and optimization, we forgot to check
-# how this affects the number of measurements required to perform the VQE on :math:`\text{H}_2 \text{O}`!
+# how this affects the number of measurements required to perform the VQE on :math:`\text{H}_2 \text{O}!`
 # Let's use our new-found knowledge to see what happens.
 
 dataset = qml.data.load('qchem', molname="H2O")[0]

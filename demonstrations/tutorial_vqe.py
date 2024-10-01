@@ -32,7 +32,7 @@ and calculate its gradient at each optimization step.
 
 In this tutorial you will learn how to implement the VQE algorithm in a few lines of code.
 As an illustrative example, we use it to find the ground state of the hydrogen
-molecule, :math:`\mathrm{H}_2`. First, we build the molecular Hamiltonian using a minimal
+molecule, :math:`\mathrm{H}_2.` First, we build the molecular Hamiltonian using a minimal
 basis set approximation. Next, we design the quantum circuit preparing the trial
 state of the molecule, and the cost function to evaluate the expectation value
 of the Hamiltonian. Finally, we select a classical optimizer, initialize the
@@ -127,7 +127,7 @@ dev = qml.device("lightning.qubit", wires=qubits)
 # In this figure, the gate :math:`G^{(2)}` corresponds to the
 # :class:`~.pennylane.DoubleExcitation` operation, implemented in PennyLane
 # as a `Givens rotation <https://en.wikipedia.org/wiki/Givens_rotation>`_, which couples
-# the four-qubit states :math:`\vert 1100 \rangle` and :math:`\vert 0011 \rangle`.
+# the four-qubit states :math:`\vert 1100 \rangle` and :math:`\vert 0011 \rangle.`
 # For more details on how to use the excitation operations to build
 # quantum circuits for quantum chemistry applications see the
 # tutorial :doc:`tutorial_givens_rotations`.
@@ -145,7 +145,7 @@ print(hf)
 # on the four qubits. The next step is to compute the expectation value
 # of the molecular Hamiltonian in the trial state prepared by the circuit.
 # We do this using the :func:`~.expval` function. The decorator syntax allows us to
-# run the cost function as an executable QNode with the gate parameter :math:`\theta`:
+# run the cost function as an executable QNode with the gate parameter :math:`\theta:`
 
 @qml.qnode(dev, interface="jax")
 def circuit(param, wires):

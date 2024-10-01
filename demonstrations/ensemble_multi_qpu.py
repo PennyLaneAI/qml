@@ -90,7 +90,7 @@ x = pca.transform(x)
 
 ##############################################################################
 # We will be encoding these two features into quantum circuits using :class:`~.pennylane.RX`
-# rotations, and hence renormalize our features to be between :math:`[-\pi, \pi]`.
+# rotations, and hence renormalize our features to be between :math:`[-\pi, \pi].`
 
 
 x_min = np.min(x, axis=0)

@@ -52,7 +52,7 @@ for noisy intermediate-scale quantum (NISQ) devices.
 #    \mathbf{x}^{(t + 1)} = \mathbf{x}^{(t)} - \eta \nabla f(\mathbf{x}^{(t)}) \label{eq:vanilla}\tag{1},
 #
 # where :math:`f(\mathbf{x})` is the loss function with input parameter
-# :math:`\mathbf{x}`, while :math:`\eta` is the learning rate. The superscript
+# :math:`\mathbf{x},` while :math:`\eta` is the learning rate. The superscript
 # :math:`t` stands for the :math:`t`-th iteration step in the optimization.
 # Here the gradient :math:`\nabla f` is estimated dimension by dimension,
 # requiring :math:`O(d)` quantum measurements (:math:`d` being the
@@ -67,7 +67,7 @@ for noisy intermediate-scale quantum (NISQ) devices.
 # in the parameter space is sampled, where :math:`\mathcal{U}(\{-1, 1\}^d)` is a
 # :math:`d`-dimensional discrete uniform distribution.  The gradient
 # component along this sampled direction is then measured with a finite difference
-# approach, with a perturbation step size :math:`\epsilon`:
+# approach, with a perturbation step size :math:`\epsilon:`
 #
 # .. math::
 #
@@ -99,9 +99,9 @@ for noisy intermediate-scale quantum (NISQ) devices.
 # .. math:: \boldsymbol{g}_{ij}(\mathbf{x}) = -\frac{1}{2} \frac{\partial}{\partial \mathbf{x}_i} \frac{\partial}{\partial \mathbf{x}_j} F(\mathbf{x}', \mathbf{x})\biggr\rvert_{\mathbf{x}'=\mathbf{x}},\label{eq:fsTensor}\tag{5}
 #
 # where
-# :math:`F(\mathbf{x}', \mathbf{x}) = \bigr\rvert\langle \phi(\mathbf{x}') | \phi(\mathbf{x}) \rangle \bigr\rvert ^ 2`,
+# :math:`F(\mathbf{x}', \mathbf{x}) = \bigr\rvert\langle \phi(\mathbf{x}') | \phi(\mathbf{x}) \rangle \bigr\rvert ^ 2,`
 # and :math:`\phi(\mathbf{x})` is the parameterized ansatz with input
-# :math:`\mathbf{x}`. With the metric tensor, the update rule is rewritten
+# :math:`\mathbf{x}.` With the metric tensor, the update rule is rewritten
 # as:
 #
 # .. math:: \mathbf{x}^{(t + 1)} = \mathbf{x}^{(t)} - \eta \boldsymbol{g}^{-1}(\mathbf{x}^{(t)}) \nabla f(\mathbf{x}^{(t)}) \label{eq:qn}\tag{6}.
@@ -109,7 +109,7 @@ for noisy intermediate-scale quantum (NISQ) devices.
 # While the introduction of the metric tensor helps to find better minima
 # and allows for faster convergence  [#Stokes2020]_ [#Yamamoto2019]_,
 # the algorithm is not as scalable due to the number of measurements
-# required to estimate :math:`\boldsymbol{g}`.
+# required to estimate :math:`\boldsymbol{g}.`
 #
 # QN-SPSA manages to combine the merits of QNG and SPSA by estimating
 # both the gradient and the metric tensor stochastically. The gradient is
@@ -130,9 +130,9 @@ for noisy intermediate-scale quantum (NISQ) devices.
 #
 # .. math:: \mathbf{x}^{(t + 1)} = \mathbf{x}^{(t)} - \eta \widehat{\boldsymbol{g}}^{-1}(\mathbf{x}^{(t)}, \mathbf{h}_1^{(t)}, \mathbf{h}_2^{(t)})_{SPSA} \widehat{\nabla f}(\mathbf{x}^{(t)}, \mathbf{h}^{(t)})_{SPSA} \label{eq:qnspsa}\tag{9}.
 #
-# In each optimization step :math:`t`, one will need to randomly sample 3
+# In each optimization step :math:`t,` one will need to randomly sample 3
 # perturbation directions
-# :math:`\mathbf{h}^{(t)}, \mathbf{h}_1^{(t)}, \mathbf{h}_2^{(t)}`. Equation (9)
+# :math:`\mathbf{h}^{(t)}, \mathbf{h}_1^{(t)}, \mathbf{h}_2^{(t)}.` Equation (9)
 # is then applied to compute the parameters for the :math:`(t + 1)`-th
 # step accordingly. This :math:`O(1)` update rule fits into NISQ devices
 # well.
@@ -146,7 +146,7 @@ for noisy intermediate-scale quantum (NISQ) devices.
 #
 # Averaging on the Fubini-Study metric tensor
 #   A running average is taken on the metric tensor estimated from equation (7)
-#   at each step :math:`t`:
+#   at each step :math:`t:`
 #
 #   .. math:: \bar{\boldsymbol{g}}^{(t)}(\mathbf{x}) = \frac{1}{t + 1} \Big(\sum_{i=1}^{t}\widehat{\boldsymbol{g}}(\mathbf{x}, \mathbf{h}_1^{(i)}, \mathbf{h}_2^{(i)})_{SPSA} + \boldsymbol{g}^{(0)}\Big)\label{eq:tensorRunningAvg}\tag{10} ,
 #
@@ -162,7 +162,7 @@ for noisy intermediate-scale quantum (NISQ) devices.
 #   where :math:`\beta` is the regularization coefficient. We can consider :math:`\beta`
 #   as a hyperparameter and choose a suitable value by trial and error. If
 #   :math:`\beta` is too small, it cannot protect the positive semidefiniteness
-#   of :math:`\bar{\boldsymbol{g}}_{reg}`. If :math:`\beta` is too large, it will wipe out
+#   of :math:`\bar{\boldsymbol{g}}_{reg}.` If :math:`\beta` is too large, it will wipe out
 #   the information from the Fubini-Study metric tensor, reducing QN-SPSA to the first
 #   order SPSA.
 #
@@ -284,7 +284,7 @@ metric_tensor = np.identity(params_number)
 # function that we call ``get_perturbation_direction``. The function takes
 # the input parameter to the circuit ansatz, and returns a direction tensor
 # of the same shape. The direction tensor is sampled from a discrete uniform
-# distribution :math:`\mathcal{U}(\{-1, 1\}^d)` using ``random.choices``.
+# distribution :math:`\mathcal{U}(\{-1, 1\}^d)` using ``random.choices`.`
 #
 
 
@@ -341,10 +341,10 @@ print("Estimated SPSA gradient:\n", grad)
 # To estimate the raw stochastic metric tensor
 # :math:`\widehat{\boldsymbol{g}}(\mathbf{x}, \mathbf{h}_1, \mathbf{h}_2)_{SPSA}`
 # from equation (7), we will first need to measure the state overlap
-# :math:`F(\mathbf{x}_1, \mathbf{x}_2) = \bigr\rvert\langle \phi(\mathbf{x}_1) | \phi(\mathbf{x}_2) \rangle \bigr\rvert ^ 2`.
-# We denote the unitary transformation forming the ansatz with :math:`U`;
+# :math:`F(\mathbf{x}_1, \mathbf{x}_2) = \bigr\rvert\langle \phi(\mathbf{x}_1) | \phi(\mathbf{x}_2) \rangle \bigr\rvert ^ 2.`
+# We denote the unitary transformation forming the ansatz with :math:`U;`
 # that is,
-# :math:`\rvert\phi(\mathbf{x})\rangle = U(\mathbf{x}) \rvert0\rangle`.
+# :math:`\rvert\phi(\mathbf{x})\rangle = U(\mathbf{x}) \rvert0\rangle.`
 # Applying the adjoint operation :math:`U^{\dagger}(\mathbf{x}_2)` on to
 # the ansatz state :math:`\rvert\phi(\mathbf{x}_1)\rangle` followed with a
 # measurement in the computational basis then does the trick. The state
@@ -405,7 +405,7 @@ print("Random state overlap: ", get_state_overlap(tape))
 #
 # Now that we have confirmed our implementation of the state overlap, we can
 # proceed to compute the raw stochastic metric tensor
-# :math:`\widehat{\boldsymbol{g}}(\mathbf{x}, \mathbf{h}_1, \mathbf{h}_2)_{SPSA}`.
+# :math:`\widehat{\boldsymbol{g}}(\mathbf{x}, \mathbf{h}_1, \mathbf{h}_2)_{SPSA}.`
 # With the function ``get_raw_tensor_metric``, we sample two perturbations with
 # ``get_perturbation_direction`` independently and estimate the raw metric
 # tensor with equations (8) and (7).
@@ -487,7 +487,7 @@ print("Updated metric tensor after the step:\n", metric_tensor)
 #
 # Equation (12) requires computing the inverse of the metric tensor. A
 # numerically more stable approach is to solve the equivalent linear
-# equation for :math:`\mathbf{x}^{(t + 1)}`:
+# equation for :math:`\mathbf{x}^{(t + 1)}:`
 #
 # .. math:: \bar{\boldsymbol{g}}^{(t)}_{reg}(\mathbf{x}^{(t)})\big( \mathbf{x}^{(t)} - \mathbf{x}^{(t + 1)}\big) =  \eta  \widehat{\nabla f}(\mathbf{x}^{(t)}, \mathbf{h}^{(t)})_{SPSA} \label{eq:lin_solver}\tag{13}.
 #
