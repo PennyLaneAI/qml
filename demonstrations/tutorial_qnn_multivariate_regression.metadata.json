@@ -8,8 +8,8 @@
             "username": "quantumpenguin"
         }
     ],
-    "dateOfPublication": "2024-05-09T00:00:00+00:00",
-    "dateOfLastModification": "2024-05-09T00:00:00+00:00",
+    "dateOfPublication": "2024-10-01T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-01T00:00:00+00:00",
     "categories": [
         "Quantum Computing",
         "Quantum Machine Learning",
@@ -19,16 +19,16 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/qnn_multivariate_regression/qnn_diagram.jpg"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_qnn_multivariate_regression.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/demonstration_assets/qnn_multivariate_regression/qnn_diagram.jpg"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_qnn_multivariate_regression.png"
         }
     ],
     "seoDescription": "Learn to use a quantum neural network to fit a multivariate function.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_qnn_multivariate_regression.py",
+    "canonicalURL": "/qml/demos/tutorial_qnn_multivariate_regression",
     "references": [
         {
             "id": "schuld",
