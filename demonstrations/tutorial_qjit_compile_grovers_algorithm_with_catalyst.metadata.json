@@ -32,7 +32,7 @@
             "id": "Grover1996",
             "type": "article",
             "title": "A fast quantum mechanical algorithm for database search",
-            "authors": "Grover, L. K.",
+            "authors": "L. K. Grover",
             "year": "1996",
             "journal": "Proceedings of the twenty-eighth annual ACM symposium on Theory of Computing",
             "doi": "10.1145/237814.237866"
