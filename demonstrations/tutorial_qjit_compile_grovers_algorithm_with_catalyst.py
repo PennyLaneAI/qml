@@ -1,7 +1,7 @@
 r""".. role:: html(raw)
    :format: html
 
-How to quantum just-in-time compile Grover's algorithm with Catalyst
+How to quantum just-in-time (QJIT) compile Grover's algorithm with Catalyst
 ====================================================================
 
 .. meta::
