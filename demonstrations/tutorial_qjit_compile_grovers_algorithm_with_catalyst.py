@@ -49,12 +49,10 @@ How to quantum just-in-time (QJIT) compile Grover's algorithm with Catalyst
 # the generalized Grover's algorithm in PennyLane. The procedure is as follows:
 #
 # #. Initialize the system to an equal superposition over all states.
-#
 # #. Perform :math:`r(N, M)` *Grover iterations:*
 #
 #    #. Apply the unitary *oracle operator* :math:`U_\omega`, implemented using
 #       :class:`~.pennylane.FlipSign`, for each solution index :math:`\omega`.
-#
 #    #. Apply the *Grover diffusion operator* :math:`U_D`, implemented using
 #       :class:`~.pennylane.GroverOperator`.
 #
