@@ -37,7 +37,8 @@ How to quantum just-in-time (QJIT) compile Grover's algorithm with Catalyst
 # <https://docs.pennylane.ai/projects/catalyst>`__, a quantum just-in-time (QJIT) compiler framework
 # for PennyLane, which makes it possible to compile, optimize, and execute hybrid quantum–classical
 # workflows. We will also measure the performance improvement we get from using Catalyst with
-# respect to the native Python implementation.
+# respect to the native Python implementation and show that the runtime performance of circuits
+# compiled with Catalyst can be several orders of magnitude faster.
 
 
 ######################################################################
