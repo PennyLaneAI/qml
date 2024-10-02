@@ -19,11 +19,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "_static/demonstration_assets/here_comes_the_sun/thumbnail_tutorial_here_comes_the_sun.png"
+            "uri": "_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_post-variational_quantum_neural_networks.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "_static/large_demo_thumbnails/thumbnail_large_here_comes_the_sun.png"
+            "uri": "_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_post-variational_quantum_neural_networks.png"
         }
     ],
     "seoDescription": "Learn about post-variational quantum neural networks",
