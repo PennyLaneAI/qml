@@ -1,5 +1,5 @@
 {
-    "title": "How to quantum just-in-time compile Grover's algorithm with Catalyst",
+    "title": "How to quantum just-in-time (QJIT) compile Grover's algorithm with Catalyst",
     "authors": [
         {
             "username": "joeycarter"
