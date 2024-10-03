@@ -1,18 +1,18 @@
 r"""
-Digital Zero-Noise Extrapolation with Catalyst
+Digital zero-noise Extrapolation with Catalyst
 ==============================================
 
 In this tutorial, you will learn how to use error mitigation, and in particular 
-the Zero-Noise Extrapolation (ZNE) technique, in combination with `Catalyst <https://docs.pennylane.ai/projects/catalyst>`_, a framework for quantum
+the Zero-noise extrapolation (ZNE) technique, in combination with 
+`Catalyst <https://docs.pennylane.ai/projects/catalyst>`_, a framework for quantum 
 just-in-time (JIT) compilation with PennyLane. 
 We'll demonstrate how to generate noise-scaled circuits, execute them on a noisy quantum
 simulator, and use extrapolation techniques to estimate the zero-noise result, all while
-leveraging JIT compilation through
-Catalyst.
+leveraging JIT compilation through Catalyst.
 
 What is ZNE
 -----------
-Zero-Noise Extrapolation (ZNE) is a technique used to mitigate the effect of noise on quantum
+Zero-noise extrapolation (ZNE) is a technique used to mitigate the effect of noise on quantum
 computations. First introduced in [#temme2017zne]_, it helps improve the accuracy of quantum
 results by running circuits at varying noise levels and extrapolating back to a hypothetical
 zero-noise case. While this tutorial won't delve into the theory behind ZNE in detail, let's first
@@ -44,10 +44,7 @@ Stage 3: Combining the results
 
 After executing the noise-scaled circuits, an extrapolation on the results is performed  
 to estimate the zero-noise limit---the result we would expect in a noise-free scenario. 
-Catalyst provides two methods for perfoming this extrapolation:
-
-1. **Polynomial extrapolation**, and
-2. **Exponential extrapolation**.
+Catalyst provides **polynomial** and **exponential** extrapolation methods.
 
 Using ZNE with Pennylane
 ------------------------
@@ -278,6 +275,8 @@ print(f"mitigated_circuit_qjit running time (best of {repeat}): {min(times):.3f}
 #
 
 ##############################################################################
-# About the author
-# ----------------
+# About the authors
+# -----------------
+# .. include:: ../_static/authors/alessandro_cosentino.txt
+#
 # .. include:: ../_static/authors/nate_stemen.txt

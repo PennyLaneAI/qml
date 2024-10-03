@@ -4276,25 +4276,25 @@ sympy = "<1.13"
 
 [[package]]
 name = "pennylane-qrack"
-version = "0.9.4"
+version = "0.9.7"
 description = "PennyLane plugin for Qrack."
 optional = false
 python-versions = "*"
 files = [
-    {file = "pennylane_qrack-0.9.4-py3-none-macosx_12_0_x86_64.whl", hash = "sha256:f4dbe35ab6f6abacc0d03f05afeaf595150509811df8a35fff9a345ca44c0554"},
-    {file = "pennylane_qrack-0.9.4-py3-none-macosx_13_0_x86_64.whl", hash = "sha256:54c2b9f1f1ab398fdc37e41b64c76dde758a7506cd0220e955f7ec38274a1f20"},
-    {file = "pennylane_qrack-0.9.4-py3-none-macosx_14_0_arm64.whl", hash = "sha256:1ccdfa3e3f075bdbe66296861b1fcb79bba28a82a29273e32c7b083c5bd24dc6"},
-    {file = "pennylane_qrack-0.9.4-py3-none-manylinux_2_31_x86_64.whl", hash = "sha256:213431404fa319aea21e45c8253c9a3ec166168185afcafbfe9bdbdc14598932"},
-    {file = "pennylane_qrack-0.9.4-py3-none-manylinux_2_35_x86_64.whl", hash = "sha256:dee67fe2d8deb8866a930819f8052109132b73435955cf310c0ef8e1d1cb6c1c"},
-    {file = "pennylane_qrack-0.9.4-py3-none-manylinux_2_39_x86_64.whl", hash = "sha256:2b21ad77d9566643cecf7f11f6e49db85bd00db4f198e17536f9aa4d28a478a7"},
-    {file = "pennylane_qrack-0.9.4-py3-none-win_amd64.whl", hash = "sha256:c279ee3956f5f3c085392fa0b8bfcb7cc2b0d6859b8247bfe53f88ebe0ab826f"},
-    {file = "pennylane_qrack-0.9.4.tar.gz", hash = "sha256:03335072fcc4b2a8140317fe747b8b89cdf767a978460d148cfaa26b5979946a"},
+    {file = "pennylane_qrack-0.9.7-py3-none-macosx_12_0_x86_64.whl", hash = "sha256:2677c944b939370a642d15973ddd0d3dc8e10e951a949af60a1a66325a8c2b45"},
+    {file = "pennylane_qrack-0.9.7-py3-none-macosx_13_0_x86_64.whl", hash = "sha256:0e0783c8e392f2cbc5d2b6c868cecb19f79e0bc20b57846dbb3e1c5930344609"},
+    {file = "pennylane_qrack-0.9.7-py3-none-macosx_14_0_arm64.whl", hash = "sha256:6efc8de2666ec512069e6a8ea9e3d694d21a56741747822b67b0265edfad154e"},
+    {file = "pennylane_qrack-0.9.7-py3-none-manylinux_2_31_x86_64.whl", hash = "sha256:4224b57e312051afa0dc81bec1085e39d70bad1ebc9b87e6dce39da30eaf4202"},
+    {file = "pennylane_qrack-0.9.7-py3-none-manylinux_2_35_x86_64.whl", hash = "sha256:aa3b00e5d1a5430593719ff55e5b3ab9998e7105f550851a0511d887e74c3905"},
+    {file = "pennylane_qrack-0.9.7-py3-none-manylinux_2_39_x86_64.whl", hash = "sha256:5afc34a8b497eedf10b4a41003548ec6b51d197651906c164b97415ccf9546bf"},
+    {file = "pennylane_qrack-0.9.7-py3-none-win_amd64.whl", hash = "sha256:15dfd9a72474bac7aa3550856928947c559ced8869a43eab38ff243a733933ec"},
+    {file = "pennylane_qrack-0.9.7.tar.gz", hash = "sha256:ef928cc9ec54499d0a8dea0c918b8ba18be651aa9e687f8c6d093fe30a11c4a3"},
 ]
 
 [package.dependencies]
 numpy = ">=1.16"
 pennylane = ">=0.32"
-pyqrack = ">=1.28.0"
+pyqrack = ">=1.30.0"
 
 [[package]]
 name = "pennylane-qulacs"
@@ -8087,4 +8087,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.10.0"
-content-hash = "7371c73563967d6548b8732f9b70c7bab9c256a1bfaef93223543f59c6ff73aa"
+content-hash = "bf95b620bf493a9d65469a0493cf74139dbb782c12be09ae57aad0f3c23747d5"

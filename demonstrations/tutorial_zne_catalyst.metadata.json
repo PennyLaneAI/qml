@@ -2,6 +2,10 @@
     "title": "Digital Zero-Noise Extrapolation with Catalyst",
     "authors": [
         {
+            "id": "alessandro_cosentino",
+            "affiliation": "Unitary Fund"
+        },
+        {
             "id": "nate_stemen",
             "affiliation": "Unitary Fund"
         }
