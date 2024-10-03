@@ -129,9 +129,9 @@ and read future papers to keep up-to-date with the most recent developments.
 #
 # .. math:: \Phi = \frac{1}{2}\left(u_x x^2 + u_y y^2 + u_z z^2\right) + \frac{1}{2}\left(v_x x^2 + v_y y^2 + v_z z^2\right)\cos(\omega t+\phi).
 #
-# The parameters :math:`u_i`, :math:`v_i`, and :math:`\phi` need to be
+# The parameters :math:`u_i`, :math:`v_i,` and :math:`\phi` need to be
 # adjusted to the charge and mass of the ion and to the potential's
-# angular frequency :math:`\omega`. We have to tune these
+# angular frequency :math:`\omega.` We have to tune these
 # parameters very carefully, since the ion could escape if we do not apply
 # the right forces at the right time. It takes a lot of care, but this
 # technique is so old that it is almost perfect by now. Here is what the
@@ -226,23 +226,23 @@ and read future papers to keep up-to-date with the most recent developments.
 #
 # Having chosen the ions that will act as our qubits, we need to prepare
 # them in a stable fiducial state, known as the **ground state** and
-# denoted by :math:`\left\lvert g \right\rangle`. The preparation is done
+# denoted by :math:`\left\lvert g \right\rangle.` The preparation is done
 # by a procedure called **optical pumping**. To understand how it works, let us
 # take Calcium-40 as an example. In this case, the electron has two stable
 # states with the same energy, but different direction of rotation.
 # We denote these by :math:`\left\lvert g_1 \right\rangle` and
-# :math:`\left\lvert g_2\right\rangle`. We do not know which stable state
+# :math:`\left\lvert g_2\right\rangle.` We do not know which stable state
 # the electron is in, and we would like to ensure that the electron is in
 # the :math:`\left\lvert g_1\right\rangle` state. This will be our chosen
 # fiducial state, so
-# :math:`\left\lvert g\right\rangle = \left\lvert g_1\right\rangle`.
+# :math:`\left\lvert g\right\rangle = \left\lvert g_1\right\rangle.`
 # However, quantum mechanics forbids a direct transition between these two
 # stable states. To get from one state to the other, the electron
 # would have to change its rotation without giving out any energy, which
 # is impossible! But we can take a detour: we use circularly polarized
 # laser light of a particular wavelength (397nm for Calcium-40) to excite
 # :math:`\left\lvert g_2\right\rangle` into a short-lived excited state
-# :math:`\left\lvert \textrm{aux}\right\rangle`. This light does not
+# :math:`\left\lvert \textrm{aux}\right\rangle.` This light does not
 # stimulate any other transitions in the ion so that an electron in the
 # ground state :math:`\left\lvert g_1\right\rangle` will remain there.
 # Quantum mechanics tells us that, in a matter of nanoseconds, the excited electron
@@ -261,7 +261,7 @@ and read future papers to keep up-to-date with the most recent developments.
 #    Optical pumping to prepare the ground state
 #
 # What about the other basis qubit state? It will be a long-lived excited
-# state, denoted by :math:`\left\lvert e \right\rangle`. For the
+# state, denoted by :math:`\left\lvert e \right\rangle.` For the
 # Calcium-40 ion, this state is a *metastable state:* a state that
 # has a sufficiently long lifetime since quantum mechanics restricts, but
 # does not entirely forbid, transitions to a lower energy level. For
@@ -316,14 +316,14 @@ and read future papers to keep up-to-date with the most recent developments.
 # use of the auxiliary state. This time, we shine a laser light wavelength
 # of 397 nm that drives the transition from
 # :math:`\left\lvert g \right\rangle` to the auxiliary state
-# :math:`\left\lvert \textrm{aux} \right\rangle`. The transition is
-# short-lived; it will quickly go back to :math:`\left\lvert g \right\rangle`,
+# :math:`\left\lvert \textrm{aux} \right\rangle.` The transition is
+# short-lived; it will quickly go back to :math:`\left\lvert g \right\rangle,`
 # emitting a photon of the same wavelength. The state
 # :math:`\left\lvert e \right\rangle` is not affected. Therefore,
 # we will measure :math:`\left\lvert g \right\rangle` if
 # we see the ion glowing: it continuously emits light at a wavelength of
 # 397 nm. Conversely, if the ion is dark, we will have measured the result
-# corresponding to state :math:`\left\lvert e\right\rangle`. To see the
+# corresponding to state :math:`\left\lvert e\right\rangle.` To see the
 # photons emitted by the ions, we need to collect the photons using a lens
 # and a photomultiplier, a device that transforms weak light signals into
 # electric currents.
@@ -370,7 +370,7 @@ and read future papers to keep up-to-date with the most recent developments.
 # .. math:: \hat{H}=\frac{\hbar\Omega}{2}\left(S_+ e^{i\varphi}+S_{-}e^{-i\varphi}\right).
 #
 # Here, :math:`\Omega` is the **Rabi frequency**. It is defined by
-# :math:`\Omega=\mu_m B/2\hbar`, where :math:`B` is the applied magnetic
+# :math:`\Omega=\mu_m B/2\hbar,` where :math:`B` is the applied magnetic
 # field due to the laser, and :math:`\mu_m` is the magnetic moment of the
 # ion. The phase :math:`\varphi` measures the initial displacement of the
 # light wave at the atom's position. The matrices :math:`S_+` and
@@ -490,8 +490,8 @@ print(np.isclose(np.exp(1j * np.pi / 8) * ion_Tgate(1), tgate(1)))
 # This PennyLane code shows that we can obtain a Hadamard gate and a
 # :math:`T` gate using consecutive pulses with different times and phases. Namely,
 # to get a Hadamard gate, we need five pulses, all of them with duration
-# :math:`t=\frac{\pi}{2\Omega}`, where the second and the fourth pulse
-# have a phase of :math:`\pi/2`. The Hadamard and :math:`T` gates together can be used to
+# :math:`t=\frac{\pi}{2\Omega},` where the second and the fourth pulse
+# have a phase of :math:`\pi/2.` The Hadamard and :math:`T` gates together can be used to
 # implement any operation on a single qubit, to an arbitrary degree of approximation. We
 # see that timing and dephasing our laser pulses provides a versatile way
 # to manipulate single qubits.
@@ -499,7 +499,7 @@ print(np.isclose(np.exp(1j * np.pi / 8) * ion_Tgate(1), tgate(1)))
 # To get a better idea about how the duration
 # of the pulses affects the state that we generate, let us plot the probability
 # of obtaining the state :math:`\left\lvert e \right\rangle` against the
-# duration of the pulse for a fixed phase of :math:`\varphi = 0`.
+# duration of the pulse for a fixed phase of :math:`\varphi = 0.`
 
 import matplotlib.pyplot as plt
 
@@ -531,7 +531,7 @@ plt.show()
 ##############################################################################
 # We see that the probability of obtaining the excited state changes with
 # the duration of the pulse, reaching a maximum at a time
-# :math:`t=\pi/\Omega`, and then vanishing at :math:`t=2\pi/\Omega`. This
+# :math:`t=\pi/\Omega,` and then vanishing at :math:`t=2\pi/\Omega.` This
 # pattern keeps repeating itself and is known as a **Rabi oscillation**.
 #
 # In fact, we can solve the Schrödinger equation
@@ -545,20 +545,20 @@ plt.show()
 # adjusting the duration of the interaction and the phase. This means
 # that we can produce any single-qubit gate! To be more precise, let us
 # see what would happen if the initial state was
-# :math:`\left\lvert e \right\rangle`. As before, we can show that the
+# :math:`\left\lvert e \right\rangle.` As before, we can show that the
 # evolution is given by
 #
 # .. math:: \left\lvert \psi_1(t) \right\rangle = -i\sin\left(\frac{\Omega t}{2}\right)e^{-i\varphi}\left\lvert g \right\rangle +\cos\left(\frac{\Omega t}{2}\right)\left\lvert e \right\rangle .
 #
 # Therefore, the unitary induced by a laser pulse of amplitude
-# :math:`B`, duration :math:`t`, and phase :math:`\varphi` on an ion
+# :math:`B`, duration :math:`t,` and phase :math:`\varphi` on an ion
 # with magnetic moment :math:`\mu_m` is
 #
 # .. math::  U(\Omega,\varphi,t)=\left( \begin{array}{cc} \cos\left(\frac{\Omega t}{2}\right) & -i\sin\left(\frac{\Omega t}{2}\right)e^{-i\varphi} \\ -i\sin\left(\frac{\Omega t}{2}\right)e^{i\varphi} & \cos\left(\frac{\Omega t}{2}\right)\end{array}\right),
 #
 # which has the form of a general rotation. Since we can generate
 # arbitrary X and Y rotations using :math:`\varphi=0` and
-# :math:`\varphi=\pi/2`, Rabi oscillations allow us to build a
+# :math:`\varphi=\pi/2,` Rabi oscillations allow us to build a
 # universal set of single-qubit gates.
 #
 # Achieving the required superpositions of quantum states requires precise
@@ -582,15 +582,15 @@ plt.show()
 # down, the entire ion chain acts as a **quantum harmonic oscillator**,
 # meaning that it can vibrate with energies that are multiples of Planck's
 # constant :math:`\hbar` times a fundamental frequency
-# :math:`\omega`:
+# :math:`\omega:`
 #
 # .. math:: E=n\hbar\omega.
 #
-# When the chain is oscillating with energy :math:`E=n\hbar\omega`, we
+# When the chain is oscillating with energy :math:`E=n\hbar\omega,` we
 # denote the harmonic oscillator state, also known as **phonon state** or
-# **motional state**, by :math:`\left\lvert n\right\rangle`. The harmonic
+# **motional state**, by :math:`\left\lvert n\right\rangle.` The harmonic
 # oscillator can absorb and emit energy in multiples of
-# :math:`\hbar\omega`, in packets of energy known as **phonons**.
+# :math:`\hbar\omega,` in packets of energy known as **phonons**.
 # When we shine laser light on a particular atom of
 # the ion chain, the entire chain could absorb the energy of the photons
 # and start oscillating. However, we have seen that this does not happen
@@ -605,23 +605,23 @@ plt.show()
 # Let us introduce some notation that will help us understand exactly how
 # the two-qubit gates are implemented. When an ion is in the ground state
 # :math:`\left\lvert g \right\rangle` and the chain is in the state
-# :math:`\left\lvert n \right\rangle`, we will write the state as
-# :math:`\left\lvert g \right\rangle \left\lvert n \right\rangle`, and
+# :math:`\left\lvert n \right\rangle,` we will write the state as
+# :math:`\left\lvert g \right\rangle \left\lvert n \right\rangle,` and
 # similarly when the ion is in the excited state
-# :math:`\left\lvert e \right\rangle`. If we are studying two ions at the
+# :math:`\left\lvert e \right\rangle.` If we are studying two ions at the
 # same time, then we will write the states in the form
-# :math:`\left\lvert g \right\rangle\left\lvert g \right\rangle\left\lvert n \right\rangle`,
+# :math:`\left\lvert g \right\rangle\left\lvert g \right\rangle\left\lvert n \right\rangle,`
 # where the last :math:`\left\lvert n \right\rangle` always represents the
 # state of the oscillating ion chain. Suppose that the ion's energy gap
-# value is :math:`\Delta`, and we shine light of frequency
+# value is :math:`\Delta,` and we shine light of frequency
 # :math:`\omega_b=\omega+\Delta` on a particular ion. If it is in the
-# ground state, it will absorb an energy :math:`\Delta`, and the ion chain
+# ground state, it will absorb an energy :math:`\Delta,` and the ion chain
 # will absorb the rest. Therefore, this light frequency induces the
 # following **blue sideband** transition:
 #
 # .. math:: \left\lvert g \right\rangle \left\lvert n \right\rangle \rightarrow \left\lvert e \right\rangle \left\lvert n+1\right\rangle.
 #
-# By using the frequency :math:`\omega_r=\Delta-\omega`, we can instead
+# By using the frequency :math:`\omega_r=\Delta-\omega,` we can instead
 # excite the ion and de-excite the ion chain, also known as a
 # **red sideband** transition:
 #
@@ -629,7 +629,7 @@ plt.show()
 #
 # Crucially, this frequency will do nothing if the ion chain is in the
 # state of zero energy.
-# If the light frequency is exactly :math:`\Delta`,
+# If the light frequency is exactly :math:`\Delta,`
 # the ion chain does not absorb any phonons, but the ion does become
 # excited. We will call this a **carrier** transition.
 #
@@ -645,11 +645,11 @@ plt.show()
 # wonder whether we can also create superpositions of motional states. For
 # both the red and blue sideband frequencies, the Hamiltonian turns out to
 # be similar to the one we saw above, but with a different Rabi frequency
-# :math:`\tilde{\Omega}`. Following the same prescription as with single
+# :math:`\tilde{\Omega}.` Following the same prescription as with single
 # ions, we can tune the duration and phase of the pulses to form
 # superpositions of phonon states. For example, for a blue sideband pulse
 # of duration :math:`t=\pi/2\tilde{\Omega}` and phase
-# :math:`\varphi=\pi/2`, a system of two ions in both the motional and
+# :math:`\varphi=\pi/2,` a system of two ions in both the motional and
 # electronic ground state evolves as
 #
 # .. math:: \left\lvert g\right\rangle \left\lvert g\right\rangle \left\lvert n\right\rangle \rightarrow \frac{1}{\sqrt{2}}\left(\left\lvert g\right\rangle \left\lvert g\right\rangle \left\lvert n\right\rangle + \left\lvert e\right\rangle \left\lvert g\right\rangle \left\lvert n+1\right\rangle\right)
@@ -732,12 +732,12 @@ plt.show()
 # need to be perfectly cooled to the motional ground state for it to work.
 # It relies on simultaneously shining two lasers at different frequencies
 # :math:`\omega_{\pm}` on the two target ions, which are slightly detuned
-# from the atomic energy gap :math:`\Delta`:
+# from the atomic energy gap :math:`\Delta:`
 #
 # .. math:: \omega_{\pm}=\Delta \pm \delta
 #
 # The net effect of this interaction with laser light is to excite
-# :math:`\left\lvert g \right\rangle \left\lvert g \right\rangle \left\lvert n \right\rangle \rightarrow \left\lvert e \right\rangle \left\lvert e \right\rangle\left\lvert n \right\rangle`,
+# :math:`\left\lvert g \right\rangle \left\lvert g \right\rangle \left\lvert n \right\rangle \rightarrow \left\lvert e \right\rangle \left\lvert e \right\rangle\left\lvert n \right\rangle,`
 # and it can do so through any of the four paths shown below:
 #
 # .. figure:: ../_static/demonstration_assets/trapped_ions/molmer_sorensen.png
@@ -754,13 +754,13 @@ plt.show()
 # phase of the lasers can lead to a superposition of
 # :math:`\left\lvert g \right\rangle \left\lvert g \right\rangle \left\lvert n \right\rangle`
 # and
-# :math:`\left\lvert e \right\rangle \left\lvert e \right\rangle\left\lvert n \right\rangle`.
+# :math:`\left\lvert e \right\rangle \left\lvert e \right\rangle\left\lvert n \right\rangle.`
 # For example, we can obtain the state
 # :math:`\frac{1}{\sqrt{2}}\left(\left\lvert g \right\rangle \left\lvert g \right\rangle\left\lvert n \right\rangle +\left\lvert e \right\rangle \left\lvert e \right\rangle\left\lvert n \right\rangle\right)`
 # which, in the two-ion subsystem, corresponds to the maximally entangled state
-# :math:`\frac{1}{\sqrt{2}}\left(\left\lvert g \right\rangle \left\lvert g \right\rangle +\left\lvert e \right\rangle \left\lvert e \right\rangle\right)`.
+# :math:`\frac{1}{\sqrt{2}}\left(\left\lvert g \right\rangle \left\lvert g \right\rangle +\left\lvert e \right\rangle \left\lvert e \right\rangle\right).`
 # Using Schrödinger's equation allows us to derive how the qubits evolve
-# when we apply the Mølmer-Sørensen protocol for a time :math:`t`. The
+# when we apply the Mølmer-Sørensen protocol for a time :math:`t.` The
 # Hamiltonian is more involved, so we will not do this. We simply state
 # the result (for zero phase) and implement it via a Python function
 #
@@ -793,7 +793,7 @@ def Molmer_Sorensen(t):
 # determine how to obtain it from the Mølmer-Sørensen gate.
 # It is possible to do so by using a combination of
 # single-qubit rotations and the Mølmer-Sørensen gate applied for a period of
-# :math:`t=\pi/2\Omega_{MS}`. Explicitly, we do this using the
+# :math:`t=\pi/2\Omega_{MS}.` Explicitly, we do this using the
 # following circuit [#Brown2019]_:
 #
 # .. figure:: ../_static/demonstration_assets/trapped_ions/CNOTgate.png
@@ -806,7 +806,7 @@ def Molmer_Sorensen(t):
 #
 # where :math:`RX` and :math:`RY` are the usual rotations around the X and Y
 # axes, and :math:`MS(t)` denotes the Mølmer-Sørensen gate applied for a
-# time :math:`t/\Omega_{MS}`. Let us verify that this is indeed the case
+# time :math:`t/\Omega_{MS}.` Let us verify that this is indeed the case
 # by building the circuit in PennyLane:
 
 dev2 = qml.device("default.qubit",wires=2)

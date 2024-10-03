@@ -87,7 +87,7 @@ After working through this demo, you will:
 # where :math:`| \phi(x)\rangle` is prepared
 # by a fixed `embedding
 # circuit <https://pennylane.ai/qml/glossary/quantum_embedding.html>`__ that
-# encodes data inputs :math:`x`,
+# encodes data inputs :math:`x,`
 # and :math:`\mathcal{M}` is an arbitrary observable. This model includes variational
 # quantum machine learning models, since the observable can
 # effectively be implemented by a simple measurement that is preceded by a
@@ -104,7 +104,7 @@ After working through this demo, you will:
 # For example, applying a circuit :math:`G(\theta)` and then
 # measuring the Pauli-Z observable :math:`\sigma^0_z` of the first qubit
 # implements the trainable measurement
-# :math:`\mathcal{M}(\theta) = G^{\dagger}(\theta) \sigma^0_z G(\theta)`.
+# :math:`\mathcal{M}(\theta) = G^{\dagger}(\theta) \sigma^0_z G(\theta).`
 #
 # The main practical consequence of approaching quantum machine learning with a
 # kernel approach is that instead of training :math:`f` variationally,
@@ -133,8 +133,8 @@ After working through this demo, you will:
 #
 #    .. math::  \min_f  \lambda\;  \mathrm{tr}\{\mathcal{M}^2\} + \frac{1}{M}\sum_{m=1}^M L(f(x^m), y^m),
 #
-#    which is a regularized empirical risk with training data samples :math:`(x^m, y^m)_{m=1\dots M}`,
-#    regularization strength :math:`\lambda \in \mathbb{R}`, and loss function :math:`L`.
+#    which is a regularized empirical risk with training data samples :math:`(x^m, y^m)_{m=1\dots M},`
+#    regularization strength :math:`\lambda \in \mathbb{R},` and loss function :math:`L.`
 #
 #    Theory predicts that kernel-based training will always find better or equally good
 #    minima of this risk. However, to show this here we would have
@@ -216,14 +216,14 @@ n_qubits
 
 
 ######################################################################
-# To implement the kernel we could prepare the two states :math:`| \phi(x) \rangle`, :math:`| \phi(x') \rangle`
-# on different sets of qubits with angle-embedding routines :math:`S(x), S(x')`,
+# To implement the kernel we could prepare the two states :math:`| \phi(x) \rangle,` :math:`| \phi(x') \rangle`
+# on different sets of qubits with angle-embedding routines :math:`S(x), S(x'),`
 # and measure their overlap with a small routine called a `SWAP test <https://en.wikipedia.org/wiki/Swap_test>`__.
 #
 # However, we need only half the number of qubits if we prepare
 # :math:`| \phi(x)\rangle` and then apply the inverse embedding
 # with :math:`x'` on the same qubits. We then measure the projector onto
-# the initial state :math:`|0..0\rangle \langle 0..0|`.
+# the initial state :math:`|0..0\rangle \langle 0..0|.`
 #
 # .. figure:: ../_static/demonstration_assets/kernel_based_training/kernel_circuit.png
 #       :align: center
@@ -340,7 +340,7 @@ def circuit_evals_kernel(n_data, split):
 
 
 ######################################################################
-# With :math:`M = 75` and :math:`M_{\rm pred} = 25`, the number of kernel evaluations
+# With :math:`M = 75` and :math:`M_{\rm pred} = 25,` the number of kernel evaluations
 # can therefore be estimated as:
 #
 

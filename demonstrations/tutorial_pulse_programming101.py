@@ -39,8 +39,8 @@ During a pulse sequence, the state evolves according to the time-dependent Schr√
 
 .. math:: \frac{d}{dt}|\psi\rangle = -i H(t) |\psi\rangle
 
-from an initial state :math:`|\psi(t_0)\rangle` to a final state :math:`|\psi(t_1)\rangle`. This process corresponds to a unitary evolution :math:`U(t_0, t_1)`
-of the input state from time :math:`t_0` to :math:`t_1`, i.e. :math:`|\psi(t_1)\rangle = U(t_0, t_1) |\psi(t_0)\rangle`.
+from an initial state :math:`|\psi(t_0)\rangle` to a final state :math:`|\psi(t_1)\rangle.` This process corresponds to a unitary evolution :math:`U(t_0, t_1)`
+of the input state from time :math:`t_0` to :math:`t_1,` i.e. :math:`|\psi(t_1)\rangle = U(t_0, t_1) |\psi(t_0)\rangle.`
 
 In most digital quantum computers (with the exception of `measurement-based <https://pennylane.ai/qml/demos/tutorial_mbqc.html>`_ architectures), the amplitude and frequencies of predefined pulse sequences are
 fine tuned to realize the native gates of the quantum computer. More specifically, the Hamiltonian interaction :math:`H(t)`
@@ -57,8 +57,8 @@ to more noise in the computation. The idea of differentiable pulse programming i
 level instead, with the aim of achieving the shortest interaction sequence a hardware system allows.
 
 In PennyLane, we can simulate arbitrary qubit system interactions to explore the possibilities of such pulse programs.
-First, we need to define the time-dependent Hamiltonian :math:`H(p, t)= \sum_i f_i(p_i, t) H_i` with constant operators :math:`H_i` and control fields :math:`f_i(p_i, t)`.
-The Hamiltonian depends on the set of parameters :math:`p = \{p_i\}`. One way to do this in PennyLane is in the following way:
+First, we need to define the time-dependent Hamiltonian :math:`H(p, t)= \sum_i f_i(p_i, t) H_i` with constant operators :math:`H_i` and control fields :math:`f_i(p_i, t).`
+The Hamiltonian depends on the set of parameters :math:`p = \{p_i\}.` One way to do this in PennyLane is in the following way:
 """
 
 import pennylane as qml
@@ -115,8 +115,8 @@ params = [jax.random.uniform(subkeys[i], shape=[2], maxval=5) for i in range(3)]
 print(Ht(params, 0.5))
 
 ##############################################################################
-# We can visualize the Hamiltonian interaction by plotting the time-dependent envelopes. We refer to the drift term as all constant terms in time, i.e. :math:`\sum_i X_i X_{i+1}`,
-# and plot the envelopes :math:`f_i(p_i, t)` of the time-dependent terms :math:`f_i(p_i, t) Z_i`.
+# We can visualize the Hamiltonian interaction by plotting the time-dependent envelopes. We refer to the drift term as all constant terms in time, i.e. :math:`\sum_i X_i X_{i+1},`
+# and plot the envelopes :math:`f_i(p_i, t)` of the time-dependent terms :math:`f_i(p_i, t) Z_i.`
 
 ts = jnp.linspace(0.0, 5.0, 100)
 fs = Ht.coeffs_parametrized
@@ -135,7 +135,7 @@ plt.show()
 ##############################################################################
 #
 # A pulse program is then executed by using the :func:`~.pennylane.evolve` transform to create the evolution
-# gate :math:`U(t_0, t_1)`, which implicitly depends on the parameters ``p``. The objective of the program
+# gate :math:`U(t_0, t_1),` which implicitly depends on the parameters ``p`.` The objective of the program
 # is then to compute the expectation value of some objective Hamiltonian ``H_obj`` (here :math:`\sum_i Z_i` as a simple example).
 
 dev = qml.device("default.qubit", range(4))
@@ -275,7 +275,7 @@ H_D += qml.dot(
 #
 # For this drive, there are certain restrictions by the hardware that we want to already account for to make our simulation as realistic as possible.
 # We therefore restrict the amplitude to :math:`\pm 20 \text{MHz}` and the frequency deviation :math:`\Delta \nu_q = \omega_q - \nu_q` to :math:`\pm 1 \text{GHz}`
-# (as is done in [#Mitei]_). We achieve this by normalizing the respective quantities with a shifted sigmoid :math:`\mathcal{N}(x) = \frac{1 - e^{-x}}{1 + e^{-x}}`,
+# (as is done in [#Mitei]_). We achieve this by normalizing the respective quantities with a shifted sigmoid :math:`\mathcal{N}(x) = \frac{1 - e^{-x}}{1 + e^{-x}},`
 # which ensures differentiability.
 
 

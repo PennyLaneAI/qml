@@ -38,8 +38,8 @@ Quantum Analytic Descent paper [#QAD]_
 propose an algorithm that constructs a classical model which approximates the
 landscape, so that the gradients can be calculated on a classical computer, which is much cheaper.
 In order to build the classical model, we need to use the quantum device to
-evaluate the cost function on (a) a reference point :math:`\boldsymbol{\theta}_0`,
-and (b) a number of points shifted away from :math:`\boldsymbol{\theta}_0`.
+evaluate the cost function on (a) a reference point :math:`\boldsymbol{\theta}_0,`
+and (b) a number of points shifted away from :math:`\boldsymbol{\theta}_0.`
 With the cost values at these points, we can build the classical model that
 approximates the landscape.
 
@@ -62,10 +62,10 @@ So: sit down, relax, and enjoy your optimization!
 VQEs give rise to trigonometric cost functions
 ----------------------------------------------
 
-When we talk about VQEs we have a quantum circuit with :math:`n` qubits in mind, which are typically initialized in the base state :math:`|0\rangle`.
-The body of the circuit is a *variational form* :math:`V(\boldsymbol{\theta})` – a fixed architecture of quantum gates parametrized by an array of real-valued parameters :math:`\boldsymbol{\theta}\in\mathbb{R}^m`.
+When we talk about VQEs we have a quantum circuit with :math:`n` qubits in mind, which are typically initialized in the base state :math:`|0\rangle.`
+The body of the circuit is a *variational form* :math:`V(\boldsymbol{\theta})` – a fixed architecture of quantum gates parametrized by an array of real-valued parameters :math:`\boldsymbol{\theta}\in\mathbb{R}^m.`
 After the variational form, the circuit ends with the measurement of a chosen observable
-:math:`\mathcal{M}`, based on the problem
+:math:`\mathcal{M},` based on the problem
 we are trying to solve.
 
 The idea in VQE is to fix a variational form such that the expected value of the measurement relates to the energy of an interesting Hamiltonian:
@@ -78,12 +78,12 @@ this corresponds to running an optimization program to find the :math:`\boldsymb
 
 If the gates in the variational form are restricted to be Pauli rotations, then the cost function is a sum of *multilinear trigonometric terms* in each of the parameters.
 That's a scary sequence of words!
-What it means is that if we look at :math:`E(\boldsymbol{\theta})` but we focus only on one of the parameters, say :math:`\theta_i`, then we can write the functional dependence as a linear combination of three functions: :math:`1`, :math:`\sin(\theta_i)`, and :math:`\cos(\theta_i)`.
-That is, for each parameter :math:`\theta_i` there exist :math:`a_i`, :math:`b_i`, and :math:`c_i` such that the cost can be written as
+What it means is that if we look at :math:`E(\boldsymbol{\theta})` but we focus only on one of the parameters, say :math:`\theta_i`, then we can write the functional dependence as a linear combination of three functions: :math:`1`, :math:`\sin(\theta_i),` and :math:`\cos(\theta_i).`
+That is, for each parameter :math:`\theta_i` there exist :math:`a_i`, :math:`b_i,` and :math:`c_i` such that the cost can be written as
 
 .. math:: E(\boldsymbol{\theta}) = a_i + b_i\sin(\theta_i) + c_i\cos(\theta_i).
 
-All parameters but :math:`\theta_i` are absorbed in the coefficients :math:`a_i`, :math:`b_i` and :math:`c_i`.
+All parameters but :math:`\theta_i` are absorbed in the coefficients :math:`a_i,` :math:`b_i` and :math:`c_i.`
 Another technique using this structure of :math:`E(\boldsymbol{\theta})` are the
 Rotosolve/Rotoselect algorithms [#Rotosolve]_ for which there also is `a PennyLane demo <https://pennylane.ai/qml/demos/tutorial_rotoselect.html>`__.
 
@@ -186,11 +186,11 @@ line2 = ax.plot(
 # Given a reference point, we use the classical model to find a point that's closer to the true minimum, and then use that point as reference for a new model!
 # This is what is called Quantum Analytic Descent (QAD), and if you are fine not knowing yet what all the symbols mean, here's its pseudo-algorithm:
 #
-# #. Set an initial reference point :math:`\boldsymbol{\theta}_0`.
+# #. Set an initial reference point :math:`\boldsymbol{\theta}_0.`
 # #. Build the model :math:`\hat{E}(\boldsymbol{\theta})\approx E(\boldsymbol{\theta}_0+\boldsymbol{\theta})` at this point.
 # #. Find the minimum :math:`\boldsymbol{\theta}_\text{min}` of the model.
-# #. Set :math:`\boldsymbol{\theta}_0+\boldsymbol{\theta}_\text{min}` as the new reference point :math:`\boldsymbol{\theta}_0`, go back to Step 2.
-# #. After convergence or a fixed number of models built, output the last minimum :math:`\boldsymbol{\theta}_\text{opt}=\boldsymbol{\theta}_0+\boldsymbol{\theta}_\text{min}`.
+# #. Set :math:`\boldsymbol{\theta}_0+\boldsymbol{\theta}_\text{min}` as the new reference point :math:`\boldsymbol{\theta}_0,` go back to Step 2.
+# #. After convergence or a fixed number of models built, output the last minimum :math:`\boldsymbol{\theta}_\text{opt}=\boldsymbol{\theta}_0+\boldsymbol{\theta}_\text{min}.`
 #
 # Computing a classical model
 # ---------------------------
@@ -218,11 +218,11 @@ line2 = ax.plot(
 #
 #     In spirit, a trigonometric expansion and a Taylor expansion are not that different: both are linear combinations of some basis functions, where the coefficients of the sum take very specific values usually related to the derivatives of the function we want to approximate.
 #     The difference between Taylor's and a trigonometric expansion is mainly what basis of functions we take.
-#     In Calculus I we learned that a Taylor series in one variable :math:`x` uses the integer powers of the variable namely :math:`\{1, x, x^2, x^3, \ldots\}`, in short :math:`\{x^n\}_{n\in\mathbb{N}}`:
+#     In Calculus I we learned that a Taylor series in one variable :math:`x` uses the integer powers of the variable namely :math:`\{1, x, x^2, x^3, \ldots\},` in short :math:`\{x^n\}_{n\in\mathbb{N}}:`
 #
 #     .. math:: f_\text{Taylor}(x) = \sum c_n(x-x_0)^n.
 #
-#     A trigonometric expansion instead uses a different basis, also for one variable: :math:`\{1, \sin(x), \cos(x), \sin(2x), \cos(2x), \ldots\}`, which we could call the set of trigonometric monomials with integer frequency, or in short :math:`\{\sin(nx),\cos(nx)\}_{n\in\mathbb{N}}`:
+#     A trigonometric expansion instead uses a different basis, also for one variable: :math:`\{1, \sin(x), \cos(x), \sin(2x), \cos(2x), \ldots\},` which we could call the set of trigonometric monomials with integer frequency, or in short :math:`\{\sin(nx),\cos(nx)\}_{n\in\mathbb{N}}:`
 #
 #     .. math:: f_\text{Trig}(x) = \sum a_n \cos(n(x-x_0))+ b_n \sin(n(x-x_0)).
 #
@@ -274,19 +274,19 @@ line2 = ax.plot(
 #
 # With that, we know what type of terms we should expect to encounter in our local classical model:
 # the model we want to construct is a linear combination of the functions
-# :math:`A(\boldsymbol{\theta})`, :math:`B_k(\boldsymbol{\theta})` and :math:`C_k(\boldsymbol{\theta})`
-# for each parameter, and :math:`D_{kl}(\boldsymbol{\theta})` for every pair of different parameters :math:`(\theta_k,\theta_l)`.
+# :math:`A(\boldsymbol{\theta}),` :math:`B_k(\boldsymbol{\theta})` and :math:`C_k(\boldsymbol{\theta})`
+# for each parameter, and :math:`D_{kl}(\boldsymbol{\theta})` for every pair of different parameters :math:`(\theta_k,\theta_l).`
 #
 # Computing the expansion coefficients
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
 # We can now use the derivatives of the function we are approximating to obtain the coefficients of the linear combination.
-# As the terms we include in the expansion have leading orders :math:`0`, :math:`1` and :math:`2`, these derivatives are
-# :math:`E(\boldsymbol{\theta})`, :math:`\partial E(\boldsymbol{\theta})/\partial \theta_k`,
-# :math:`\partial^2 E(\boldsymbol{\theta})/\partial\theta_k^2`, and :math:`\partial^2 E(\boldsymbol{\theta})/\partial \theta_k\partial\theta_l`.
-# However, the trigonometric polynomials may contain multiple orders in :math:`\boldsymbol{\theta}`. For example, both
+# As the terms we include in the expansion have leading orders :math:`0`, :math:`1` and :math:`2,` these derivatives are
+# :math:`E(\boldsymbol{\theta})`, :math:`\partial E(\boldsymbol{\theta})/\partial \theta_k,`
+# :math:`\partial^2 E(\boldsymbol{\theta})/\partial\theta_k^2,` and :math:`\partial^2 E(\boldsymbol{\theta})/\partial \theta_k\partial\theta_l.`
+# However, the trigonometric polynomials may contain multiple orders in :math:`\boldsymbol{\theta}.` For example, both
 # :math:`A(\boldsymbol{\theta})` and :math:`C_k(\boldsymbol{\theta})` contribute to the second order, so we have to account
-# for this in the coefficient of :math:`\partial^2 E(\boldsymbol{\theta})/\partial \theta_k^2`.
+# for this in the coefficient of :math:`\partial^2 E(\boldsymbol{\theta})/\partial \theta_k^2.`
 # We can name the different coefficients (including the function value itself) accordingly to how we named the terms in the series:
 #
 # .. math::
@@ -299,7 +299,7 @@ line2 = ax.plot(
 # In PennyLane, computing the gradient of a cost function with respect to an array of parameters can be easily done
 # with the `parameter-shift rule <https://pennylane.ai/qml/glossary/parameter_shift.html>`_.
 # By iterating the rule, we can obtain the second derivatives – the Hessian (see for example [#higher_order_diff]_).
-# Let us implement a function that does just that and prepares the coefficients :math:`E^{(A/B/C/D)}`:
+# Let us implement a function that does just that and prepares the coefficients :math:`E^{(A/B/C/D)}:`
 
 
 def get_model_data(fun, params):
@@ -348,7 +348,7 @@ print(
 # .. math:: \hat{E}(\boldsymbol{\theta}) := A(\boldsymbol{\theta}) E^{(A)} + \sum_{k=1}^m\left[B_k(\boldsymbol{\theta})E_k^{(B)} + C_k(\boldsymbol{\theta}) E_k^{(C)}\right] + \sum_{k<l}^m\left[D_{kl}(\boldsymbol{\theta}) E_{kl}^{(D)}\right].
 #
 # Let us now take a few moments to breath deeply and admire the entirety of it.
-# On the one hand, we have the :math:`A`, :math:`B_k`, :math:`C_k`, and
+# On the one hand, we have the :math:`A`, :math:`B_k`, :math:`C_k,` and
 # :math:`D_{kl}` functions, which we said are the basis functions of the
 # expansion.
 # On the other hand we have the real-valued coefficients :math:`E^{(A/B/C/D)}` for the previous functions which are nothing but the derivatives in the corresponding input components.
@@ -395,7 +395,7 @@ print(f"E_model and E_original are the same: {E_model==E_original}")
 # position :math:`\boldsymbol{\theta}_0` at which we constructed it (again note how the
 # input parameters of the model are *relative* to the reference point
 # such that :math:`\hat{E}(0)=E(\boldsymbol{\theta}_0)` is satisfied).
-# When we move away from :math:`\boldsymbol{\theta}_0`, the model starts to deviate,
+# When we move away from :math:`\boldsymbol{\theta}_0,` the model starts to deviate,
 # as it is an *approximation* after all:
 
 # Obtain a random shift away from parameters
@@ -420,7 +420,7 @@ print(f"E_model and E_original are the same: {E_model==E_original}")
 #
 #     How many parameters does our model have?
 #     In the following table we count them for an :math:`m`-dimensional input
-#     variable :math:`\boldsymbol{\theta}=(\theta_1,\ldots,\theta_m)`:
+#     variable :math:`\boldsymbol{\theta}=(\theta_1,\ldots,\theta_m):`
 #
 #     .. list-table::
 #        :widths: 20 35 45
@@ -505,7 +505,7 @@ plot_cost_and_model(circuit, mapped_model, parameters)
 # In the first two plots, we see the true landscape, and the approximate model.
 # The vertical rods indicate the points at which the original cost function
 # was evaluated in order to obtain the model coefficients (we skip the additional
-# evaluations for :math:`E^{(C)}`, though, for clarity of the plot).
+# evaluations for :math:`E^{(C)},` though, for clarity of the plot).
 # The rod with the bead on top indicates the reference point around which the model
 # is built and at which it coincides with the original cost function up to second
 # order. This is underlined in the third plot, where we see the difference between
@@ -521,15 +521,15 @@ plot_cost_and_model(circuit, mapped_model, parameters)
 # if we can model the cost around the reference point well enough, we will be able to find a rough
 # estimate of where the minimum of the landscape is.
 # Granted, our model represents the true landscape less accurately the further we go away from the
-# reference point :math:`\boldsymbol{\theta}_0`, but nonetheless the minimum *of the model*
+# reference point :math:`\boldsymbol{\theta}_0,` but nonetheless the minimum *of the model*
 # will bring us much closer to the minimum *of the true cost* than a random choice.
 # Recall the complete strategy from above:
 #
-# #. Set an initial reference point :math:`\boldsymbol{\theta}_0`.
+# #. Set an initial reference point :math:`\boldsymbol{\theta}_0.`
 # #. Build the model :math:`\hat{E}(\boldsymbol{\theta})\approx E(\boldsymbol{\theta}_0+\boldsymbol{\theta})` at this point.
 # #. Find the minimum :math:`\boldsymbol{\theta}_\text{min}` of the model.
-# #. Set :math:`\boldsymbol{\theta}_0+\boldsymbol{\theta}_\text{min}` as the new reference point :math:`\boldsymbol{\theta}_0`, go back to Step 2.
-# #. After convergence or a fixed number of models built, output the last minimum :math:`\boldsymbol{\theta}_\text{opt}=\boldsymbol{\theta}_0+\boldsymbol{\theta}_\text{min}`.
+# #. Set :math:`\boldsymbol{\theta}_0+\boldsymbol{\theta}_\text{min}` as the new reference point :math:`\boldsymbol{\theta}_0,` go back to Step 2.
+# #. After convergence or a fixed number of models built, output the last minimum :math:`\boldsymbol{\theta}_\text{opt}=\boldsymbol{\theta}_0+\boldsymbol{\theta}_\text{min}.`
 #
 # This provides an iterative strategy which will take us to a good enough solution
 # in fewer iterations than, for example, regular stochastic gradient descent (SGD).
@@ -553,8 +553,8 @@ plot_cost_and_model(circuit, mapped_model, parameters)
 #   0 & 0 & -1 & 0 \\
 #   0 & 0 & 0 & 1 \end{pmatrix},
 #
-# which has the eigenvalues :math:`1` and :math:`-1`.
-# This means our function is bounded and takes values in the range :math:`[-1,1]`, so that the global minimum should be around :math:`-1` if our circuit is expressive enough.
+# which has the eigenvalues :math:`1` and :math:`-1.`
+# This means our function is bounded and takes values in the range :math:`[-1,1],` so that the global minimum should be around :math:`-1` if our circuit is expressive enough.
 # Let's try it and apply the full optimization strategy:
 
 import copy
@@ -637,7 +637,7 @@ plot_cost_and_model(circuit, mapped_model, past_parameters[2])
 # ^^^^^^^^^^^^^^^^^^^^^^
 #
 # If we pay close attention to the values printed during the optimization, we can identify a curious phenomenon.
-# At the last epochs within some iterations, the *model cost* goes beyond :math:`-1`.
+# At the last epochs within some iterations, the *model cost* goes beyond :math:`-1.`
 # Could we visualize this behavior more clearly, please?
 
 fig, ax = plt.subplots(1, 1, figsize=(6, 4))

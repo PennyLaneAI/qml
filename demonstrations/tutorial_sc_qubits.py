@@ -139,12 +139,12 @@ papers on the topic and keep up-to-date with the newest developments.
 # Our first task is to isolate the features that an ideal qubit should have. First and foremost,
 # we must not forget that a qubit is a physical system with **two distinguishable configurations**
 # that correspond to the computational basis states. In the case of an atom, these are usually the
-# ground and excited states, :math:`\left\lvert g \right\rangle` and :math:`\left\lvert e \right\rangle`, of a
+# ground and excited states, :math:`\left\lvert g \right\rangle` and :math:`\left\lvert e \right\rangle,` of a
 # valence electron. In atoms, we can distinguish these states reliably because the ground and excited
 # states have two distinct values of energy that can be resolved by our measuring devices. If we
 # measure the energy of the valence electron that is in either  :math:`\left\lvert g \right\rangle`
-# or :math:`\left\lvert e \right\rangle`, we will measure two — and only two — possible values
-# :math:`E_0` and :math:`E_1`, associated to :math:`\left\lvert g \right\rangle`
+# or :math:`\left\lvert e \right\rangle,` we will measure two — and only two — possible values
+# :math:`E_0` and :math:`E_1,` associated to :math:`\left\lvert g \right\rangle`
 # and :math:`\left\lvert e \right\rangle` respectively.
 #
 # Most importantly, the physical system under consideration must **exhibit quantum properties**.
@@ -156,14 +156,14 @@ papers on the topic and keep up-to-date with the newest developments.
 # it to temperatures of about 10 mK, it becomes a quantum system with discrete energy levels.
 #
 # Finally, we must account for the fact that electrons in atoms have more states available than just
-# :math:`\left\lvert g \right\rangle` and :math:`\left\lvert e \right\rangle`. In fact, the
+# :math:`\left\lvert g \right\rangle` and :math:`\left\lvert e \right\rangle.` In fact, the
 # energy levels in an atom are infinitely many. How do we guarantee that an electron does not
 # escape to another state that is neither of our hand-picked states? The transition between the ground
 # and the excited state only happens when the electron absorbs a photon (a particle of light) with energy
-# :math:`\Delta E = E_1 - E_0`. To get to another state with energy :math:`E_2`,
-# the electron would need to absorb a photon with energy :math:`E_2 - E_1` or :math:`E_2-E_0`. In an atom,
+# :math:`\Delta E = E_1 - E_0.` To get to another state with energy :math:`E_2,`
+# the electron would need to absorb a photon with energy :math:`E_2 - E_1` or :math:`E_2-E_0.` In an atom,
 # these energy differences are always different: there is a **non-uniform spacing between the energy levels**.
-# Therefore, if we limit ourselves to interacting with the atom using photons with energy :math:`\Delta E`,
+# Therefore, if we limit ourselves to interacting with the atom using photons with energy :math:`\Delta E,`
 # we will not go beyond the states that define our qubit.
 #
 # .. figure:: ../_static/demonstration_assets/sc_qubits/photon_absorb.png
@@ -178,11 +178,11 @@ papers on the topic and keep up-to-date with the newest developments.
 # it will lose its quantum properties. Of all the elements that an ordinary circuit may have,
 # only two do not produce heat when they're superconducting: *capacitors* and *inductors*.
 # Capacitors are two parallel metallic plates that store electric charge.
-# They are characterized by their *capacitance* :math:`C`, which measures how much charge
+# They are characterized by their *capacitance* :math:`C,` which measures how much charge
 # they can store when connected to a given power source.  Inductors are wires shaped
 # as a coil and store magnetic fields when a current passes through.
 # These magnetic fields, in turn, slow down changing currents that pass through the inductor.
-# They are described by an *inductance* :math:`L`, which measures the strength of the magnetic field
+# They are described by an *inductance* :math:`L,` which measures the strength of the magnetic field
 # stored in the inductor at a fixed current. The simplest superconducting circuit is, therefore,
 # a capacitor connected to an inductor, also known as an LC circuit, as shown below:
 #
@@ -247,10 +247,10 @@ papers on the topic and keep up-to-date with the newest developments.
 #
 # The problem with this dependence is that a small change in the gate charge :math:`Q_g` can change the
 # difference in energy levels significantly. A solution to this issue is to work around the
-# value :math:`Q_g/2e = 1/2`, where the levels are not too sensitive to changes in the gate charge.
+# value :math:`Q_g/2e = 1/2,` where the levels are not too sensitive to changes in the gate charge.
 # But there is a more straightforward solution: the difference in energy levels also depends
 # on the in-circuit capacitance :math:`C` and the physical characteristics of the junction. If we can make
-# the capacitance larger, the energy level differences become less sensitive to :math:`Q_g`. So all we need
+# the capacitance larger, the energy level differences become less sensitive to :math:`Q_g.` So all we need
 # to do is choose an appropriate capacitor.
 #
 # .. figure:: ../_static/demonstration_assets/sc_qubits/levels_capacitance.png
@@ -269,9 +269,9 @@ papers on the topic and keep up-to-date with the newest developments.
 # in this regime are called **transmons**. They have proven to be highly effective as qubits,
 # and they are used in many applications nowadays. We can thus work with the first two
 # energy levels of the transmon, which we will also denote :math:`\left\lvert g \right\rangle` and
-# :math:`\left\lvert e \right\rangle`, the ground and excited states respectively. The energy difference
-# between these states is known as the *energy gap* :math:`E_a`. We can stimulate transitions using
-# photons of frequency :math:`\omega_a`, where
+# :math:`\left\lvert e \right\rangle,` the ground and excited states respectively. The energy difference
+# between these states is known as the *energy gap* :math:`E_a.` We can stimulate transitions using
+# photons of frequency :math:`\omega_a,` where
 #
 # .. math:: E_a = \hbar\omega_a.
 #
@@ -290,7 +290,7 @@ papers on the topic and keep up-to-date with the newest developments.
 # contain electromagnetic waves. Our focus will be on the so-called *Fabry-Perot* cavities.
 # They consist of two mirrors facing each other and whose rears are coated with an anti-reflecting
 # material. Something surprising happens when we shine a beam of light on a  Fabry-Perot cavity of
-# length :math:`L`: electromagnetic waves will only be transmitted when they have a wavelength :math:`\lambda`
+# length :math:`L:` electromagnetic waves will only be transmitted when they have a wavelength :math:`\lambda`
 # such that
 #
 # .. math:: L = n\lambda/2,
@@ -311,14 +311,14 @@ papers on the topic and keep up-to-date with the newest developments.
 #
 # Following Di Vincenzo's fifth criterion, let's see how we can measure the state of the qubit placed inside the cavity.
 # To obtain information, we need to shine light at a frequency :math:`\omega_r` that the cavity lets through
-# (recall that the frequency and the wavelength are related via :math:`\omega = 2\pi c/\lambda`, where :math:`c` is the speed of light).
-# We may also choose the frequency value :math:`\omega_r` to be far from the transmon's frequency gap :math:`\omega_a`, so the qubit
+# (recall that the frequency and the wavelength are related via :math:`\omega = 2\pi c/\lambda,` where :math:`c` is the speed of light).
+# We may also choose the frequency value :math:`\omega_r` to be far from the transmon's frequency gap :math:`\omega_a,` so the qubit
 # does not absorb the photons. Namely, the *detuning* :math:`\Delta` needs to be large:
 #
 # .. math:: \Delta \equiv \left\lvert \omega_r - \omega_a \right\rvert \gg 1.
 #
 # What happens to the photons of this frequency that meet paths with the qubit? They are scattered by the circuit,
-# as opposed to photons of frequency :math:`\omega_a`, which get absorbed. Scattering counts as an interaction,
+# as opposed to photons of frequency :math:`\omega_a,` which get absorbed. Scattering counts as an interaction,
 # albeit a weak one, so the scattered photons contain some information about the qubit's state.
 # Indeed, the collision causes an exchange in momentum and energy. For light, this means that its
 # amplitude and phase will change slightly. If we carefully measure the properties of the scattered light,
@@ -347,10 +347,10 @@ papers on the topic and keep up-to-date with the newest developments.
 #
 # We are given a Hamiltonian :math:`\hat{H}` that describes the transmon and the photons inside the cavity.
 # The transmon is initially in its ground state :math:`\left\lvert g \right\rangle,` and the cavity starts
-# without any photons in it, i.e., in the *vacuum state* denoted by :math:`\left\lvert 0 \right\rangle`.
+# without any photons in it, i.e., in the *vacuum state* denoted by :math:`\left\lvert 0 \right\rangle.`
 # According to Schrodinger's equation,  the state of the cavity (transmon and photons system) evolves
 # into :math:`\left\lvert \psi(t)\right\rangle= \exp(-i\hat{H}t/\hbar)\left\lvert g \right\rangle\left\lvert 0 \right\rangle`
-# after a time :math:`t`. What is the Hamiltonian that describes light of amplitude :math:`\epsilon`
+# after a time :math:`t.` What is the Hamiltonian that describes light of amplitude :math:`\epsilon`
 # and frequency :math:`\omega_r` incident on the cavity, when the detuning :math:`\Delta` is large?
 # Deriving the Hamiltonian is not an easy job, so we should trust physicists on this one!  The Hamiltonian turns out
 # to be
@@ -359,15 +359,15 @@ papers on the topic and keep up-to-date with the newest developments.
 #
 # where :math:`\hat{N}` counts the number of photons in the cavity, :math:`\hat{P}` is the photon momentum operator, and
 # :math:`\epsilon` is the amplitude of the electromagnetic wave incident on the cavity. The shift :math:`\chi` is
-# a quantity that depends on the circuit and gate capacitances and the detuning :math:`\Delta`.
+# a quantity that depends on the circuit and gate capacitances and the detuning :math:`\Delta.`
 #
 # The effect of this evolution can be calculated explicitly. Shining microwaves on the cavity gives
 # us a *coherent state* of light contained in it, which is the state of light that lasers give out.
 # Coherent states are completely determined by two quantities called :math:`\bar{x}` and :math:`\bar{p}`
 # (these quantities are mathematically similar to the notions of average position and average momentum,
 # but are in fact physically connected to the phase of the light),
-# so we will denote them via :math:`\left\lvert \bar{x}, \bar{p}\right\rangle`. For the state of the qubit and cavity
-# system, we write the ket in the form :math:`\left\lvert g \right\rangle \left\lvert \bar{x}, \bar{p}\right\rangle`.
+# so we will denote them via :math:`\left\lvert \bar{x}, \bar{p}\right\rangle.` For the state of the qubit and cavity
+# system, we write the ket in the form :math:`\left\lvert g \right\rangle \left\lvert \bar{x}, \bar{p}\right\rangle.`
 # The Hamiltonian above has (approximately) the following effect:
 #
 # .. math:: \left\lvert g \right\rangle \left\lvert 0 \right\rangle \rightarrow \left\lvert g \right\rangle \left\lvert \epsilon t, (\omega_r+\chi)t \right\rangle,
@@ -375,7 +375,7 @@ papers on the topic and keep up-to-date with the newest developments.
 # .. math:: \left\lvert e \right\rangle \left\lvert 0 \right\rangle \rightarrow \left\lvert e \right\rangle \left\lvert \epsilon t, (\omega_r-\chi)t \right\rangle.
 #
 # Consequently, if the state of the qubit was initially the superposition
-# :math:`\alpha \left\lvert g \right\rangle +\beta \left\lvert e \right\rangle`, then the qubit-cavity system would evolve to the state
+# :math:`\alpha \left\lvert g \right\rangle +\beta \left\lvert e \right\rangle,` then the qubit-cavity system would evolve to the state
 #
 # .. math:: \left\lvert\psi(t)\right\rangle=\alpha \left\lvert g \right\rangle \left\lvert \epsilon t, (\omega_r+\chi)t \right\rangle +\beta \left\lvert e \right\rangle \left\lvert \epsilon t, (\omega_r-\chi)t \right\rangle.
 #
@@ -385,7 +385,7 @@ papers on the topic and keep up-to-date with the newest developments.
 # Let us see how this works in practice using PennyLane. The ``default.gaussian`` device allows us to simulate
 # coherent states of light. These states start implicitly in the vacuum (no photons) state.
 # The PennyLane function ``qml.Displacement(x,0)`` applies a *displacement operator*, which creates
-# a coherent state :math:`\left\lvert \bar{x}, 0\right\rangle`. The rotation operator ``qml.Rotation(phi)`` rotates the state
+# a coherent state :math:`\left\lvert \bar{x}, 0\right\rangle.` The rotation operator ``qml.Rotation(phi)`` rotates the state
 # :math:`\left\lvert \bar{x}, 0\right\rangle` in :math:`(x, p)` space. When applied after a large displacement,
 # it changes the value of :math:`\bar{x}` only slightly, but noticeably changes the value of :math:`\bar{p}` by shifting it
 # off from zero, as shown in the figure [#Blais2021]_:
@@ -400,8 +400,8 @@ papers on the topic and keep up-to-date with the newest developments.
 #    Translation and rotation in the position-momentum picture
 #
 # It turns out that this sequence of operations implements the evolution of the cavity state exactly. Note that here we are
-# taking :math:`\omega_r=0`, which simply corresponds to taking :math:`\omega_r` as a reference frequency, so a rotation by
-# angle :math:`\phi` actually means a rotation by :math:`\omega_r+\phi`. In PennyLane, the operations read:
+# taking :math:`\omega_r=0,` which simply corresponds to taking :math:`\omega_r` as a reference frequency, so a rotation by
+# angle :math:`\phi` actually means a rotation by :math:`\omega_r+\phi.` In PennyLane, the operations read:
 
 import pennylane as qml
 import numpy as np
@@ -569,7 +569,7 @@ print(
 #
 # The typical times in which a single-qubit gate is executed are in the order of the nanoseconds, making superconducting
 # quantum computers the fastest ones out there. Why do they have this intrinsic advantage? The reason is that the
-# Rabi frequency :math:`\Omega_R`, which grows with the size of the qubit and the magnitude of the electric field,
+# Rabi frequency :math:`\Omega_R,` which grows with the size of the qubit and the magnitude of the electric field,
 # is extremely high.  We have the technology to make very small cavities, which means we can pack strong
 # electric fields in a small region. Moreover, superconducting qubits are billions of times larger than
 # other qubits, such as atoms. The drawback is that superconducting qubit technology would be
@@ -606,7 +606,7 @@ print(
 #
 # .. math:: iSWAP = \left( \begin{array}{cccc} 1 & 0 & 0 & 0 \\ 0 & 0 & i & 0 \\ 0 & i & 0 & 0 \\ 0 & 0 & 0 & 1 \end{array} \right)
 #
-# when applied for a time :math:`t=3\pi/2J`, as shown with the following PennyLane code:
+# when applied for a time :math:`t=3\pi/2J,` as shown with the following PennyLane code:
 #
 dev3 = qml.device("lightning.qubit", wires=2)
 
