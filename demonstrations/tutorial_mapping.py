@@ -202,11 +202,11 @@ pauli_bk
 # coordinates.
 
 from pennylane import qchem
-from pennylane import numpy as np
+from jax import numpy as jnp
 
 symbols  = ['H', 'H']
-geometry = np.array([[0.0, 0.0, -0.69434785],
-                     [0.0, 0.0,  0.69434785]], requires_grad = False)
+geometry = jnp.array([[0.0, 0.0, -0.69434785],
+                     [0.0, 0.0,  0.69434785]])
 
 mol = qchem.Molecule(symbols, geometry)
 
