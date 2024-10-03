@@ -56,7 +56,7 @@ a Python library developed by Unitary Fund.
 
 ZNE in particular is also offered out of the box in Pennylane as a *differentiable* error mitigation technique,
 for usage in combination with variational workflows. More on this in the tutorial 
-`Differentiating quantum error mitigation transforms <https://pennylane.ai/qml/demos/tutorial_diffable-mitigation/>`_.
+:doc:`Differentiating quantum error mitigation transforms <tutorial_diffable-mitigation>`.
 
 
 Using ZNE in Catalyst
