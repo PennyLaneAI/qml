@@ -108,7 +108,7 @@ h = jordan_wigner(h)
 # The matrix representation of the qubit Hamiltonian in the computational basis can be diagonalized
 # to get its eigenpairs.
 
-from pennylane import numpy as np
+import numpy as np
 
 val, vec = np.linalg.eigh(h.sparse_matrix().toarray())
 print(f"eigenvalues:\n{val}")
@@ -136,9 +136,10 @@ print(f"eigenvectors:\n{np.real(vec.T)}")
 # the hydrogen molecule as an example. We first define the atom types and the atomic coordinates.
 
 import pennylane as qml
+from jax import numpy as jnp
 
 symbols = ["H", "H"]
-geometry = np.array([[-0.67294, 0.0, 0.0], [0.67294, 0.0, 0.0]], requires_grad=False)
+geometry = jnp.array([[-0.67294, 0.0, 0.0], [0.67294, 0.0, 0.0]])
 
 ##############################################################################
 # Then we compute the one- and two-electron integrals, which are the coefficients :math:`c` in the
