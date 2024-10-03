@@ -116,6 +116,7 @@ We call this a block. The block defines a variational quantum circuit that takes
 of tensors in the network.
 """
 
+import numpy as onp
 import pennylane as qml
 from pennylane import numpy as np
 
@@ -232,8 +233,8 @@ def circuit(template_weights):
 
 
 shapes = qml.SimplifiedTwoDesign.shape(n_layers=1, n_wires=4)
-weights = [np.random.random(size=shape) for shape in shapes]
-template_weights = qml._np.array([weights] * 3, dtype="object")
+weights = [onp.random.random(size=shape) for shape in shapes]
+template_weights = onp.array([weights] * 3, dtype="object")
 fig, ax = qml.draw_mpl(circuit, level="device")(template_weights)
 
 ##############################################################################
@@ -317,11 +318,11 @@ def block(weights, wires):
 
 ##############################################################################
 # As for the tensor-network architecture, we use the tree tensor-network quantum circuit.
-# We use :class:`~pennylane.BasisStatePreparation` to encode the input images.
-# The following code implements the :class:`~pennylane.BasisStatePreparation` encoding,
+# We use :class:`~pennylane.BasisState` to encode the input images.
+# The following code implements the :class:`~pennylane.BasisState` encoding,
 # followed by a :class:`~pennylane.TTN` circuit using the above ``block``. Finally, we compute the expectation
 # value of a :class:`~pennylane.PauliZ` measurement as the output.
-# The circuit diagram below shows the full circuit. The :class:`~pennylane.BasisStatePreparation`
+# The circuit diagram below shows the full circuit. The :class:`~pennylane.BasisState`
 # encoding appears in the initial :class:`~pennylane.PauliX` gates.
 
 dev = qml.device("default.qubit", wires=4)
@@ -329,7 +330,7 @@ dev = qml.device("default.qubit", wires=4)
 
 @qml.qnode(dev)
 def circuit(image, template_weights):
-    qml.BasisStatePreparation(image, wires=range(4))
+    qml.BasisState(image, wires=range(4))
     qml.TTN(
         wires=range(4),
         n_block_wires=2,
