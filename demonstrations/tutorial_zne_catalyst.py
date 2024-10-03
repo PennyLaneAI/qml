@@ -227,7 +227,7 @@ print(f"mitigated_circuit_qjit running time (best of {repeat}): {min(times):.3f}
 # Already with the simple circuit we started with, and with the simple parameters in our example,
 # we can appreciate the performance differences. That was at the cost of very minimal syntax change.
 #
-# There are still reasons to use ZNE in Pennylane without @qjit, for instance,
+# There are still reasons to use ZNE in Pennylane without :func:`~.qjit`, for instance,
 # whenever the device of choice is not supported by Catalyst. To help the users orient themselves,
 # we conlcude with a landscape of the QEM techniques available on Pennylane.
 #
