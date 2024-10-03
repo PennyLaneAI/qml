@@ -5,6 +5,10 @@ on:
     branches:
       - sc-72674-add-slug-field-to-metadata
 
+concurrency:
+  group: build-text-test-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     uses: ./.github/workflows/build-branch.yml
