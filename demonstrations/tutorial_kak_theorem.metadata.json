@@ -1,0 +1,39 @@
+{
+    "title": "The KAK theorem",
+    "authors": [
+        {
+            "username": "dwierichs"
+        }
+    ],
+    "dateOfPublication": "2024-12-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-12-05T00:00:00+00:00",
+    "categories": [
+        "Quantum Computing",
+        "Algorithms"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_kak_theorem.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_kak_theorem.png"
+        }
+    ],
+    "seoDescription": "Learn about the KAK theorem and how it powers circuit decompositions.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_kak_theorem",
+    "references": [
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_liealgebra",
+            "weight": 1.0
+        }
+    ]
+}
