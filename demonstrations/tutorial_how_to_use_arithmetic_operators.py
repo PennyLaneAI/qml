@@ -200,7 +200,7 @@ def load_f_x_y_with_OutPoly(x,y):
    qml.BasisState(0, wires=wires["output"])
 
    # applying the polynomial
-   qml.OutPoly(f, registers_wires=[wires["x"], wires["y"], wires["output"]])
+   #qml.OutPoly(f, registers_wires=[wires["x"], wires["y"], wires["output"]])
    
    return qml.sample(wires = wires["output"])
 print(load_f_x_y_with_OutPoly(x=1,y=4))
