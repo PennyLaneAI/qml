@@ -1,0 +1,43 @@
+{
+    "title": "How to build spin Hamiltonians",
+    "authors": [
+        {
+            "username": "dikshadhawan"
+        }
+    ],
+    "dateOfPublication": "2024-10-04T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-04T00:00:00+00:00",
+    "categories": [
+        "Getting Started",
+        "How-to"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_how_to_use_registers.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_how_to_use_registers.png"
+        }
+    ],
+    "seoDescription": "Learn how to build spin Hamiltonians with PennyLane.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_how_to_spin_hamiltonian",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_quantum_chemistry",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_fermionic_operators",
+            "weight": 1.0
+        }
+    ]
+}
