@@ -10,7 +10,7 @@ Well, quantum arithmetic isn't necessarily “better” at basic operations, but
 
 1. In Shor's algorithm for factoring large numbers, quantum arithmetic is crucial for performing modular exponentiation in order to execute the algorithm efficiently.
 
-2. Grover's algorithm might need to use quantum arithmetic to construct oracles that help in speeding up search problems, as shown in [#qft_arith_demo]_.
+2. Grover's algorithm might need to use quantum arithmetic to construct oracles that help in speeding up search problems, as shown in [#demo_qft_arith]_.
 
 3. Loading functions into quantum computers, which might require several quantum arithmetic operations.
 
@@ -78,7 +78,7 @@ print("output register: ", output[2])
 
 ######################################################################
 # Now, we can introduce the first quantum arithmetic operation to load :math:`f(x, y)`. The first step will be
-#  to load the constant :math:`a = 4` by using the Inplace addition operator :class:`~.pennylane.Adder`:
+# to load the constant :math:`a = 4` by using the Inplace addition operator :class:`~.pennylane.Adder`:
 
 @qml.qnode(dev)
 def circuit(x,y):
@@ -122,8 +122,7 @@ print(circuit(x=1,y=4))
 ######################################################################
 #Nice! The state [1 0 0 0 0] represents :math:`4+3\cdot xy =16`.
 #
-#The last step will involve to load the monomial terms :math:`5x` and math:`3y` by using
-# the OutPlace addition operator :class:`~.pennylane.OutAdder` and the :class:`~.pennylane.Multiplier` previously employed.
+#The last step will involve to load the monomial terms :math:`5x` and :math:`3y` by using the OutPlace addition operator :class:`~.pennylane.OutAdder` and the :class:`~.pennylane.Multiplier` previously employed.
 
 def adding_5x_3y():
 
@@ -158,7 +157,7 @@ print(circuit(x=1,y=4))
 # Could you guess what is going on?
 #
 # What's happening here is that we're running into overflow. The number 33 is too large for the number of wires we have defined in
-#  `wires[output]`. With 5 wires, we can represent numbers up to :math:`2^5=32`. Any number larger than that gets reduced to its modulo with 
+# `wires[output]`. With 5 wires, we can represent numbers up to :math:`2^5=32`. Any number larger than that gets reduced to its modulo with 
 #  respect to :math:`2^5`. We have to keep in mind that all the quantum arithmetic is modular. So, every operation we perform is with respect
 #  to a given modulo that can be set by the user, but by default will be :math:`mod=2^{\text{len(wires)}}`.
 #
@@ -209,7 +208,7 @@ print(circuit_with_Poly(x=1,y=4))
 # Conclusions
 # ------------------------------------------
 # In conclusion, understanding and implementing quantum arithmetic is a key step toward unlocking the full potential
-#  of quantum computing. While it may not replace classical efficiency for simple tasks, its role in complex algorithms 
+# of quantum computing. While it may not replace classical efficiency for simple tasks, its role in complex algorithms 
 # is undeniable. By leveraging tools like `qml.OutPoly`, you can streamline the coding of your quantum algorithms. So, 
 # whether you choose to customize your arithmetic operations or take advantage of the built-in convenience offered by PennyLane 
 # operators, you're now equipped to tackle exciting quantum challenges ahead!
