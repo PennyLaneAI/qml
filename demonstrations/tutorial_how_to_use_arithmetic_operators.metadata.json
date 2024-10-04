@@ -1,0 +1,51 @@
+{
+    "title": "How-to use Quantum Arithmetic Operators",
+    "authors": [
+        {
+            "username": "gmlejarza"
+        },
+        {
+            "username": "KetPuntoG"
+        }
+    ],
+    "dateOfPublication": "2024-10-01T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-01T00:00:00+00:00",
+    "categories": [
+        "Quantum Computing",
+        "Algorithms"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_qnn_multivariate_regression.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_qnn_multivariate_regression.png"
+        }
+    ],
+    "seoDescription": "Learn how to use the quantum arithmetic operators of Pennylane.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_how_to_use_arithmetic_operators",
+    "references": [
+        {
+            "id": "demo_qft_arith",
+            "type": "other",
+            "title": "Basic arithmetic with the quantum Fourier transform (QFT)",
+            "authors": "Guillermo Alonso",
+            "year": "2024",
+            "publisher": "",
+            "url": "https://pennylane.ai/qml/demos/tutorial_qft_arithmetics/"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_qft_arithmetics",
+            "weight": 1.0
+        }
+    ]
+}
