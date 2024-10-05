@@ -4011,31 +4011,43 @@ python-versions = ">=3.9"
 files = [
     {file = "pandas-2.2.3-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:1948ddde24197a0f7add2bdc4ca83bf2b1ef84a1bc8ccffd95eda17fd836ecb5"},
     {file = "pandas-2.2.3-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:381175499d3802cde0eabbaf6324cce0c4f5d52ca6f8c377c29ad442f50f6348"},
+    {file = "pandas-2.2.3-cp310-cp310-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:d9c45366def9a3dd85a6454c0e7908f2b3b8e9c138f5dc38fed7ce720d8453ed"},
     {file = "pandas-2.2.3-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:86976a1c5b25ae3f8ccae3a5306e443569ee3c3faf444dfd0f41cda24667ad57"},
+    {file = "pandas-2.2.3-cp310-cp310-musllinux_1_2_aarch64.whl", hash = "sha256:b8661b0238a69d7aafe156b7fa86c44b881387509653fdf857bebc5e4008ad42"},
     {file = "pandas-2.2.3-cp310-cp310-musllinux_1_2_x86_64.whl", hash = "sha256:37e0aced3e8f539eccf2e099f65cdb9c8aa85109b0be6e93e2baff94264bdc6f"},
     {file = "pandas-2.2.3-cp310-cp310-win_amd64.whl", hash = "sha256:56534ce0746a58afaf7942ba4863e0ef81c9c50d3f0ae93e9497d6a41a057645"},
     {file = "pandas-2.2.3-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:66108071e1b935240e74525006034333f98bcdb87ea116de573a6a0dccb6c039"},
     {file = "pandas-2.2.3-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:7c2875855b0ff77b2a64a0365e24455d9990730d6431b9e0ee18ad8acee13dbd"},
+    {file = "pandas-2.2.3-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:cd8d0c3be0515c12fed0bdbae072551c8b54b7192c7b1fda0ba56059a0179698"},
     {file = "pandas-2.2.3-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:c124333816c3a9b03fbeef3a9f230ba9a737e9e5bb4060aa2107a86cc0a497fc"},
+    {file = "pandas-2.2.3-cp311-cp311-musllinux_1_2_aarch64.whl", hash = "sha256:63cc132e40a2e084cf01adf0775b15ac515ba905d7dcca47e9a251819c575ef3"},
     {file = "pandas-2.2.3-cp311-cp311-musllinux_1_2_x86_64.whl", hash = "sha256:29401dbfa9ad77319367d36940cd8a0b3a11aba16063e39632d98b0e931ddf32"},
     {file = "pandas-2.2.3-cp311-cp311-win_amd64.whl", hash = "sha256:3fc6873a41186404dad67245896a6e440baacc92f5b716ccd1bc9ed2995ab2c5"},
     {file = "pandas-2.2.3-cp312-cp312-macosx_10_9_x86_64.whl", hash = "sha256:b1d432e8d08679a40e2a6d8b2f9770a5c21793a6f9f47fdd52c5ce1948a5a8a9"},
     {file = "pandas-2.2.3-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:a5a1595fe639f5988ba6a8e5bc9649af3baf26df3998a0abe56c02609392e0a4"},
+    {file = "pandas-2.2.3-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:5de54125a92bb4d1c051c0659e6fcb75256bf799a732a87184e5ea503965bce3"},
     {file = "pandas-2.2.3-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:fffb8ae78d8af97f849404f21411c95062db1496aeb3e56f146f0355c9989319"},
+    {file = "pandas-2.2.3-cp312-cp312-musllinux_1_2_aarch64.whl", hash = "sha256:6dfcb5ee8d4d50c06a51c2fffa6cff6272098ad6540aed1a76d15fb9318194d8"},
     {file = "pandas-2.2.3-cp312-cp312-musllinux_1_2_x86_64.whl", hash = "sha256:062309c1b9ea12a50e8ce661145c6aab431b1e99530d3cd60640e255778bd43a"},
     {file = "pandas-2.2.3-cp312-cp312-win_amd64.whl", hash = "sha256:59ef3764d0fe818125a5097d2ae867ca3fa64df032331b7e0917cf5d7bf66b13"},
     {file = "pandas-2.2.3-cp313-cp313-macosx_10_13_x86_64.whl", hash = "sha256:f00d1345d84d8c86a63e476bb4955e46458b304b9575dcf71102b5c705320015"},
     {file = "pandas-2.2.3-cp313-cp313-macosx_11_0_arm64.whl", hash = "sha256:3508d914817e153ad359d7e069d752cdd736a247c322d932eb89e6bc84217f28"},
+    {file = "pandas-2.2.3-cp313-cp313-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:22a9d949bfc9a502d320aa04e5d02feab689d61da4e7764b62c30b991c42c5f0"},
     {file = "pandas-2.2.3-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:f3a255b2c19987fbbe62a9dfd6cff7ff2aa9ccab3fc75218fd4b7530f01efa24"},
+    {file = "pandas-2.2.3-cp313-cp313-musllinux_1_2_aarch64.whl", hash = "sha256:800250ecdadb6d9c78eae4990da62743b857b470883fa27f652db8bdde7f6659"},
     {file = "pandas-2.2.3-cp313-cp313-musllinux_1_2_x86_64.whl", hash = "sha256:6374c452ff3ec675a8f46fd9ab25c4ad0ba590b71cf0656f8b6daa5202bca3fb"},
     {file = "pandas-2.2.3-cp313-cp313-win_amd64.whl", hash = "sha256:61c5ad4043f791b61dd4752191d9f07f0ae412515d59ba8f005832a532f8736d"},
     {file = "pandas-2.2.3-cp313-cp313t-macosx_10_13_x86_64.whl", hash = "sha256:3b71f27954685ee685317063bf13c7709a7ba74fc996b84fc6821c59b0f06468"},
     {file = "pandas-2.2.3-cp313-cp313t-macosx_11_0_arm64.whl", hash = "sha256:38cf8125c40dae9d5acc10fa66af8ea6fdf760b2714ee482ca691fc66e6fcb18"},
+    {file = "pandas-2.2.3-cp313-cp313t-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:ba96630bc17c875161df3818780af30e43be9b166ce51c9a18c1feae342906c2"},
     {file = "pandas-2.2.3-cp313-cp313t-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:1db71525a1538b30142094edb9adc10be3f3e176748cd7acc2240c2f2e5aa3a4"},
+    {file = "pandas-2.2.3-cp313-cp313t-musllinux_1_2_aarch64.whl", hash = "sha256:15c0e1e02e93116177d29ff83e8b1619c93ddc9c49083f237d4312337a61165d"},
     {file = "pandas-2.2.3-cp313-cp313t-musllinux_1_2_x86_64.whl", hash = "sha256:ad5b65698ab28ed8d7f18790a0dc58005c7629f227be9ecc1072aa74c0c1d43a"},
     {file = "pandas-2.2.3-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:bc6b93f9b966093cb0fd62ff1a7e4c09e6d546ad7c1de191767baffc57628f39"},
     {file = "pandas-2.2.3-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:5dbca4c1acd72e8eeef4753eeca07de9b1db4f398669d5994086f788a5d7cc30"},
+    {file = "pandas-2.2.3-cp39-cp39-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:8cd6d7cc958a3910f934ea8dbdf17b2364827bb4dafc38ce6eef6bb3d65ff09c"},
     {file = "pandas-2.2.3-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:99df71520d25fade9db7c1076ac94eb994f4d2673ef2aa2e86ee039b6746d20c"},
+    {file = "pandas-2.2.3-cp39-cp39-musllinux_1_2_aarch64.whl", hash = "sha256:31d0ced62d4ea3e231a9f228366919a5ea0b07440d9d4dac345376fd8e1477ea"},
     {file = "pandas-2.2.3-cp39-cp39-musllinux_1_2_x86_64.whl", hash = "sha256:7eee9e7cea6adf3e3d24e304ac6b8300646e2a5d1cd3a3c2abed9101b0846761"},
     {file = "pandas-2.2.3-cp39-cp39-win_amd64.whl", hash = "sha256:4850ba03528b6dd51d6c5d273c46f183f39a9baf3f0143e566b89450965b105e"},
     {file = "pandas-2.2.3.tar.gz", hash = "sha256:4f18ba62b61d7e192368b84517265a99b4d7ee8912f8708660fb4a366cc82667"},
@@ -4276,19 +4288,19 @@ sympy = "<1.13"
 
 [[package]]
 name = "pennylane-qrack"
-version = "0.9.7"
+version = "0.10.0"
 description = "PennyLane plugin for Qrack."
 optional = false
 python-versions = "*"
 files = [
-    {file = "pennylane_qrack-0.9.7-py3-none-macosx_12_0_x86_64.whl", hash = "sha256:2677c944b939370a642d15973ddd0d3dc8e10e951a949af60a1a66325a8c2b45"},
-    {file = "pennylane_qrack-0.9.7-py3-none-macosx_13_0_x86_64.whl", hash = "sha256:0e0783c8e392f2cbc5d2b6c868cecb19f79e0bc20b57846dbb3e1c5930344609"},
-    {file = "pennylane_qrack-0.9.7-py3-none-macosx_14_0_arm64.whl", hash = "sha256:6efc8de2666ec512069e6a8ea9e3d694d21a56741747822b67b0265edfad154e"},
-    {file = "pennylane_qrack-0.9.7-py3-none-manylinux_2_31_x86_64.whl", hash = "sha256:4224b57e312051afa0dc81bec1085e39d70bad1ebc9b87e6dce39da30eaf4202"},
-    {file = "pennylane_qrack-0.9.7-py3-none-manylinux_2_35_x86_64.whl", hash = "sha256:aa3b00e5d1a5430593719ff55e5b3ab9998e7105f550851a0511d887e74c3905"},
-    {file = "pennylane_qrack-0.9.7-py3-none-manylinux_2_39_x86_64.whl", hash = "sha256:5afc34a8b497eedf10b4a41003548ec6b51d197651906c164b97415ccf9546bf"},
-    {file = "pennylane_qrack-0.9.7-py3-none-win_amd64.whl", hash = "sha256:15dfd9a72474bac7aa3550856928947c559ced8869a43eab38ff243a733933ec"},
-    {file = "pennylane_qrack-0.9.7.tar.gz", hash = "sha256:ef928cc9ec54499d0a8dea0c918b8ba18be651aa9e687f8c6d093fe30a11c4a3"},
+    {file = "pennylane_qrack-0.10.0-py3-none-macosx_12_0_x86_64.whl", hash = "sha256:88316dc4e4ab19557813b1cf0835f6a8c8357fa618631d4f74771b8588aaf983"},
+    {file = "pennylane_qrack-0.10.0-py3-none-macosx_13_0_x86_64.whl", hash = "sha256:a933b0f5ad7e02c9450256a3e1bfd85e22b4894627bd25c91136e17f84f52fa4"},
+    {file = "pennylane_qrack-0.10.0-py3-none-macosx_14_0_arm64.whl", hash = "sha256:56864a31b22d45f9e081e85e3c78374518415404f668201e3862b1202b5841dc"},
+    {file = "pennylane_qrack-0.10.0-py3-none-manylinux_2_31_x86_64.whl", hash = "sha256:52a61ac35b2adf106cf8570678eb9da0ddf9ee2abc6e2c2da5eaca3e9dc1f1ce"},
+    {file = "pennylane_qrack-0.10.0-py3-none-manylinux_2_35_x86_64.whl", hash = "sha256:08774d0faf56659362937328269466f11b918e8b5db918f308fb95c5c14b4599"},
+    {file = "pennylane_qrack-0.10.0-py3-none-manylinux_2_39_x86_64.whl", hash = "sha256:ca5eb801c565c096e53fd47e7574867d6b13430504fffe79a20bae00cdac4251"},
+    {file = "pennylane_qrack-0.10.0-py3-none-win_amd64.whl", hash = "sha256:b7783be996a98ad9fbeb330463ac328cdb5f94924b2a6ffccc072f89d4e4d4a7"},
+    {file = "pennylane_qrack-0.10.0.tar.gz", hash = "sha256:3fa1e84d0861a6f3b92bb56ea17d621b249c77a60ecea73590dfcafffbc5fd51"},
 ]
 
 [package.dependencies]
@@ -4870,19 +4882,19 @@ files = [
 
 [[package]]
 name = "pyqrack"
-version = "1.30.30"
+version = "1.31.0"
 description = "pyqrack - Pure Python vm6502q/qrack Wrapper"
 optional = false
 python-versions = "*"
 files = [
-    {file = "pyqrack-1.30.30-py3-none-macosx_12_0_x86_64.whl", hash = "sha256:e615982358e1e4f64ad2f25021c8a353b917d1a704c27f48f21d67f3bac231d7"},
-    {file = "pyqrack-1.30.30-py3-none-macosx_13_0_x86_64.whl", hash = "sha256:1df3f774a91c42f4387f853036d1766cb75696075c59f6cb2a99bf674ceb6bb5"},
-    {file = "pyqrack-1.30.30-py3-none-macosx_14_0_arm64.whl", hash = "sha256:1e15121e483ee08496de4764704f5538973b2222a7410bcdaa8afcbd06999498"},
-    {file = "pyqrack-1.30.30-py3-none-manylinux_2_31_x86_64.whl", hash = "sha256:94ea1f4ef237ccaf97c28ae8ba5560dcd6bb0330d8f22523b8b938f7b9249372"},
-    {file = "pyqrack-1.30.30-py3-none-manylinux_2_35_x86_64.whl", hash = "sha256:3d8ee1e8c969e25e7bd5eac07fc2e073c8785ab78a778c4af3d0e55f855e71f7"},
-    {file = "pyqrack-1.30.30-py3-none-manylinux_2_39_x86_64.whl", hash = "sha256:f916145b57c970fc9e0a69200305356f724c229f1c636f40856775e2a714a186"},
-    {file = "pyqrack-1.30.30-py3-none-win_amd64.whl", hash = "sha256:ee3af39dbb30c525a31b638cfb5d2d8ee16b6e94c2fff1add019d5554ac8b85e"},
-    {file = "pyqrack-1.30.30.tar.gz", hash = "sha256:7ed73565347688ec2613d9e25e3c08245e32e5cec8de1c198238b416faa5403e"},
+    {file = "pyqrack-1.31.0-py3-none-macosx_12_0_x86_64.whl", hash = "sha256:e2b416d8f35b45f802fa73cc0f275783553e00ca93a3f92183acc22d75652aae"},
+    {file = "pyqrack-1.31.0-py3-none-macosx_13_0_x86_64.whl", hash = "sha256:7086bfd3ff3e9cbf004bbe08178d48b66c55e903d5dafaaf66654164d5251bd7"},
+    {file = "pyqrack-1.31.0-py3-none-macosx_14_0_arm64.whl", hash = "sha256:060637ffe7559efc3ce75e6f7cefde22c1c76fc014d89f9af5a5009e46b37384"},
+    {file = "pyqrack-1.31.0-py3-none-manylinux_2_31_x86_64.whl", hash = "sha256:368fd76fc948a3debac25d50de497ce84d3a5468d75394708ba730fed45dd69e"},
+    {file = "pyqrack-1.31.0-py3-none-manylinux_2_35_x86_64.whl", hash = "sha256:20ad32ba8f534245c353dc6fe3f97cf5e8bbb0c6557f4f7e0de7e5900e5ba929"},
+    {file = "pyqrack-1.31.0-py3-none-manylinux_2_39_x86_64.whl", hash = "sha256:78fd018493947a6e83fe2136859033a1555570efc9f3c749f5fa695773e663ec"},
+    {file = "pyqrack-1.31.0-py3-none-win_amd64.whl", hash = "sha256:e7a5cb4ceded007f404557f57cec9427260d494af9c8dd0cb9e056cdb43bbb7d"},
+    {file = "pyqrack-1.31.0.tar.gz", hash = "sha256:add45d584cffad64e91176589c561438f1d0346fccaaf79f81ebeba134e8ac4f"},
 ]
 
 [package.extras]
@@ -8087,4 +8099,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.10.0"
-content-hash = "bf95b620bf493a9d65469a0493cf74139dbb782c12be09ae57aad0f3c23747d5"
+content-hash = "5c524ac9de627f02beb9b749212a8804ae8a0be9f9e83f393a0f2f7114dd86af"
