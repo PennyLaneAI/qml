@@ -39,7 +39,7 @@ Post-variational quantum neural networks
 # |image1|
 # 
 # .. |image1| image:: ../_static/demonstration_assets/post-variational_quantum_neural_networks/PVdrawing.jpeg
-#    :width: 90.0%
+#    :width: 100.0%
 # 
 
 ######################################################################
@@ -61,7 +61,7 @@ Post-variational quantum neural networks
 # |image2|
 # 
 # .. |image2| image:: ../_static/demonstration_assets/post-variational_quantum_neural_networks/table.pdf
-#    :width: 90.0%
+#    :width: 100.0%
 # 
 
 ######################################################################
@@ -129,10 +129,11 @@ y_test = (y_test - 4) / 2
 # A visualization of a few data points is shown below.
 # 
 
-fig, axes = plt.subplots(nrows=1, ncols=5)
+fig, axes = plt.subplots(nrows=1, ncols=5, layout="constrained")
 for i in range(5):
     axes[i].matshow(X_train[2*i])
     axes[i].axis('off')
+fig.subplots_adjust(hspace=0.0)
 fig.tight_layout()
 plt.show()
 
@@ -156,7 +157,7 @@ plt.show()
 # |image3|
 # 
 # .. |image3| image:: ../_static/demonstration_assets/post-variational_quantum_neural_networks/featuremap.png
-#    :width: 90.0%
+#    :width: 100.0%
 # 
 
 ######################################################################
@@ -169,7 +170,7 @@ plt.show()
 # |image4|
 # 
 # .. |image4| image:: ../_static/demonstration_assets/post-variational_quantum_neural_networks/ansatz.png
-#    :width: 90.0%
+#    :width: 100.0%
 # 
 
 ######################################################################
@@ -683,7 +684,7 @@ cmap = matplotlib.colors.LinearSegmentedColormap.from_list("", tuples)
 locality = ["top qubit\n Pauli-Z", "1-local", "2-local", "3-local"]
 order = ["0th Order", "1st Order", "2nd Order", "3rd Order"]
 
-fig, axes = plt.subplots(nrows=1, ncols=2)
+fig, axes = plt.subplots(nrows=1, ncols=,layout="constrained")
 im = axes[0].imshow(train_accuracies, cmap=cmap, origin="lower")
 
 axes[0].set_yticks(np.arange(len(locality)), labels=locality)
