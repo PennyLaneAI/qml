@@ -131,7 +131,7 @@ y_test = (y_test - 4) / 2
 
 fig, axes = plt.subplots(nrows=1, ncols=5)
 for i in range(5):
-    axes[i].matshow(X_train[i])
+    axes[i].matshow(X_train[2*i])
     axes[i].axis('off')
 fig.tight_layout()
 plt.show()
