@@ -1,4 +1,5 @@
-r"""Post-Variational Quantum Neural Networks
+r"""
+Post-variational quantum neural networks
 ========================================
 """
 
@@ -12,7 +13,7 @@ r"""Post-Variational Quantum Neural Networks
 # fixed quantum circuits with a classical neural network, you can enhance trainability and keep your 
 # research on track.
 # 
-# This tutorial introduces post-variational quantum neural networks with example code from PennyLane and Jax.
+# This tutorial introduces post-variational quantum neural networks with example code from PennyLane and JAX.
 # We build variational and post-variational networks through a step-by-step process, and compare their 
 # performance on the digits dataset. 
 #
@@ -22,19 +23,19 @@ r"""Post-Variational Quantum Neural Networks
 # Background
 # ---------------------
 # Variational algorithms are proposed to solve optimization problems in chemistry, combinatorial
-# optimization and machine learning, with potential quantum advantage. [#cerezo2021variational]_ Such algorithms often operate
-# by first encoding data :math:`x` into a :math:`n`-qubit quantum state. The quantum state is then
-# transformed by an Ansatz :math:`U(\theta)`. The parameters :math:`\theta` are optimized by
+# optimization and machine learning, with potential quantum advantage [#cerezo2021variational]_. Such algorithms often operate
+# by first encoding data :math:`x` into an :math:`n`-qubit quantum state. The quantum state is then
+# transformed by an ansatz :math:`U(\theta)`, and the parameters :math:`\theta` are optimized by
 # evaluating gradients of the quantum circuit [#schuld2019evaluating]_ and calculating updates of the parameter on a classical
-# computer. `Variational algorithms <https://pennylane.ai/qml/glossary/variational_circuit/>`__ are a pre-requisite to this article.
+# computer. `Variational algorithms <https://pennylane.ai/qml/glossary/variational_circuit/>`__ are a prerequisite to this article.
 # 
-# However, many Ansätze in the variational strategy face the barren plateau problem [#mcclean2018barren]_ , which leads to difficulty in convergence
-# using gradient-based optimization techniques. Due general difficulty and lack of training gurantees
-# of variational algorithms, we develop an alternative training strategy that does not involve tuning
+# However, many ansätze in the variational strategy face the barren plateau problem [#mcclean2018barren]_, which leads to difficulty in convergence
+# using :doc:`gradient-based </glossary/quantum_gradient/>` optimization techniques. Due to the general difficulty and lack of training gurantees
+# of variational algorithms, here we will develop an alternative training strategy that does not involve tuning
 # the quantum circuit parameters. However, we continue to use the variational method as the
 # theoretical basis for optimisation.
 # 
-# We discuss “post-variational strategies” proposed in [#huang2024postvariational]_ . We take the classical combination of
+# In this Demo we will also discuss “post-variational strategies” proposed in [#huang2024postvariational]_. We take the classical combination of
 # multiple fixed quantum circuits and find the optimal combination by feeding them through a classical linear model or feed the outputs to a
 # multilayer perceptron. We shift tunable parameters from the quantum computer to the classical
 # computer, opting for ensemble strategies when optimizing quantum models. This sacrifices
@@ -51,7 +52,7 @@ r"""Post-Variational Quantum Neural Networks
 # 
 
 ######################################################################
-# We compare the post-variational strategies to the conventional variational quantum neural network in the
+# We compare the post-variational strategies to the conventional variational :doc:`quantum neural network </demos/learning2learn/>` in the
 # table below.
 # 
 
@@ -64,20 +65,20 @@ r"""Post-Variational Quantum Neural Networks
 
 ######################################################################
 # This example demonstrates how to employ the post-variational quantum neural network on the classical
-# machine learning task of image classification. Here, we solve the problem of identifying handwritten
+# machine learning task of image classification. In this demo we will solve the problem of identifying handwritten
 # digits of twos and sixes and obtain training performance better than that of variational
-# algorithms. This dataset is chosen such that the differences between variational and post variational 
+# algorithms. This dataset is chosen such that the differences between the variational and post-variational approach
 # are shown, but we note that the performances may vary for different datasets. 
 # 
 
 ######################################################################
-# The Learning Problem
-# ---------------------
+# The learning problem
+# --------------------
 # 
 
 ######################################################################
-# We train our models on the digits dataset, which we import using `sklearn`. The dataset has greyscale
-# images of size :math:`8\times 8` pixels. We partition :math:`10\%` of the dataset for
+# We will begin by training our models on the digits dataset, which we import using `sklearn`. The dataset has greyscale
+# images the size of :math:`8\times 8` pixels. We partition :math:`10\%` of the dataset for
 # testing.
 # 
 
@@ -124,7 +125,7 @@ y_test = (y_test - 4) / 2
 
 
 ######################################################################
-# A visualization of a few data points are shown below.
+# A visualization of a few data points is shown below.
 # 
 
 plt.figure()
@@ -135,13 +136,13 @@ for i in range(3,8):
 plt.show()
 
 ######################################################################
-# Setting up the Model
-# ---------------------
+# Setting up the model
+# --------------------
 # 
-# Here, we will create a simple QML model for optimization. In particular:
+# Here, we will create a simple quantum machine learning (QML) model for optimization. In particular:
 # 
 # -  We will embed our data through a series of rotation gates, this is called the feature map.
-# -  We will then have an Ansatz of rotation gates with parameters weights
+# -  We will then have an ansatz of rotation gates with parameters' weights.
 # 
 
 ######################################################################
@@ -158,8 +159,8 @@ plt.show()
 # 
 
 ######################################################################
-# We use the following circuit as our Ansatz. This Ansatz is also used as backbone for all our
-# post-variational strategies. Note that when we set all initial parameters to 0, the Ansatz evaluates to
+# We use the following circuit as our ansatz. This ansatz is also used as backbone for all our
+# post-variational strategies. Note that when we set all initial parameters to 0, the ansatz evaluates to
 # identity. 
 # 
 
@@ -171,7 +172,7 @@ plt.show()
 # 
 
 ######################################################################
-# We write code for the above Ansatz and feature map as follows.
+# We write code for the above ansatz and feature map as follows.
 # 
 
 
@@ -214,7 +215,7 @@ def ansatz(params):
 ######################################################################
 # As a baseline comparison, we first test the performance of a shallow variational algorithm on the
 # digits dataset shown above. We will build the quantum node by combining the above feature map and
-# Ansatz.
+# ansatz.
 # 
 
 dev = qml.device("default.qubit", wires=8)
@@ -303,7 +304,7 @@ print("Testing accuracy: ", var_test_acc)
 # We measure the data embedded state on different combinations of Pauli observables in this
 # post-variational strategy. We first define a series of :math:`k`-local trial observables
 # :math:`O_1, O_2, \ldots , O_m`. After computing the quantum circuits, the measurement results are
-# then combined classically, where the optimal weights of each measurement is computed via feeding our
+# then combined classically, where the optimal weights of each measurement are computed via feeding our
 # measurements through a classical multilayer perceptron.
 # 
 
@@ -335,7 +336,7 @@ def generate_paulis(identities: int, paulis: int, output: str, qubits: int, loca
 ######################################################################
 # For each image sample, we measure the output of the quantum circuit using the :math:`k`-local observables
 # sequence, and perform logistic regression on these outputs. We do this for 1-local, 2-local and
-# 3-local in the `for`-loop below.
+# 3-local observables in the `for`-loop below.
 # 
 
 # Initialize lists to store training and testing accuracies for different localities.
@@ -420,17 +421,17 @@ plt.show()
 # 
 
 ######################################################################
-# The Ansatz expansion approach does model approximation by directly expanding the parameterised
-# Ansatz into an ensemble of fixed Ansätze. Starting from a variational Ansatz, multiple
-# non-parameterized quantum circuits are constructed by Taylor expansion of the Ansatz around a
+# The ansatz expansion approach does model approximation by directly expanding the parameterised
+# ansatz into an ensemble of fixed ansätze. Starting from a variational ansatz, multiple
+# non-parameterized quantum circuits are constructed by Taylor expansion of the ansatz around a
 # suitably chosen initial setting of the parameters :math:`\theta_0`, which we set here as 0. Gradients and higher-order
-# derivatives of circuits then can be obtained by parameter-shift rule. The output of the different circuits are then fed 
+# derivatives of circuits then can be obtained by the :doc:`parameter-shift rule </glossary/parameter_shift/>`. The output sof the different circuits are then fed 
 # into a classical neural network.
 # 
 
 ######################################################################
-# The following code is used to generate a series of fixed parameters that would be encoded into the
-# Ansatz, using the above method.
+# The following code is used to generate a series of fixed parameters that can be encoded into the
+# ansatz, using the above method.
 # 
 
 def deriv_params(thetas: int, order: int):
@@ -565,18 +566,18 @@ plt.show()
 # 
 
 ######################################################################
-# Hybrid Strategy
+# Hybrid strategy
 # ---------------------
 # 
 
 ######################################################################
-# When taking the strategy of observable construction, one additionally may want to use Ansatz
+# When taking the strategy of observable construction, one additionally may want to use ansatz
 # quantum circuits to increase the complexity of the model. Hence, we discuss a simple hybrid
-# strategy that combines both the usage of Ansatz expansion and observable construction. For each
-# feature, we may first expand the Ansatz with each of our parameters, then use each :math:`k`-local
+# strategy that combines both the usage of ansatz expansion and observable construction. For each
+# feature, we may first expand the ansatz with each of our parameters, then use each :math:`k`-local
 # observable to conduct measurements.
 # 
-# Due to the high number of circuits needed to be computed in this strategy, one may choose to
+# Due to the high number of circuits that need to be computed with this strategy, one may choose to
 # further prune the circuits used in training, but this is not conducted in this demo.
 # 
 # Note that in our example, we have only tested 3 hybrid samples to reduce the running time of this
@@ -652,7 +653,7 @@ for order in range(1, 4):
 
 ######################################################################
 # Upon obtaining our hybrid results, we may now combine these results with that of the observable
-# construction and Ansatz expansion menthods, and plot all the post-variational strategies together on
+# construction and ansatz expansion menthods, and plot all the post-variational strategies together on
 # a heatmap.
 # 
 
@@ -714,20 +715,20 @@ fig.tight_layout()
 plt.show()
 
 ######################################################################
-# Experimental Results
-# ---------------------
+# Experimental results
+# --------------------
 #  
 
 ######################################################################
-# This demonstration shows that all hybrid methods exceed the variational algorithm while using the same
-# Ansatz for the Ansatz expansion and hybrid strategies. We do not expect all post-variational methods to outperform variational algorithm. 
-# For example, the Ansatz expansion up to the first order is likely to be worse than variational as it is merely a one step gradient update. 
+# This demonstration shows that all used hybrid methods exceed the variational algorithm while using the same
+# ansatz for the ansatz expansion and hybrid strategies. However, we do not expect all post-variational methods to outperform variational algorithm. 
+# For example, the ansatz expansion up to the first order is likely to be worse than the variational approach, as it is merely a one-step gradient update. 
 # 
 # From these performance results, we can obtain a glimpse of the effectiveness of each strategy. 
-# The inclusion of 1-local and 2-local observables provide a boost in accuracy when used
-# in conjunction with first order derivatives in the hybrid strategy. This implies that the addition
-# of the observable expansion strategy can serve as an heuristic to expand the expressibility to
-# Ansatz expansion method, which in itself may not be sufficient as a good training strategy.
+# The inclusion of 1-local and 2-local observables provides a boost in accuracy when used
+# in conjunction with first-order derivatives in the hybrid strategy. This implies that the addition
+# of the observable expansion strategy can serve as a heuristic to expand the expressibility to
+# ansatz expansion method, which in itself may not be sufficient as a good training strategy.
 # 
 
 ######################################################################
@@ -741,12 +742,12 @@ plt.show()
 # In this tutorial, we have implemented the post variational strategies to classify handwritten digits
 # of twos and sixes.
 # 
-# Given a well-selected set of good fixed Ansätze, the post-variational method involves training classical
+# Given a well-selected set of good fixed ansätze, the post-variational method involves training classical
 # neural networks, to which we can employ techniques to ensure good trainability. While this property of
-# post-variational methods provides well optimised result based on the set of Ansätze given, 
-# the barren plateau problems or related exponential concentration is not directly resolved. The hardness of the problem is
-# instead delegated to the selection of the set of fixed Ansätze from an exponential amount of
-# possible quantum circuits, to which one can find using the three heuristical strategies introduced in this tutorial.
+# post-variational methods provides well-optimised result based on the set of ansätze given, 
+# the barren plateau problems or the related exponential concentration are not directly resolved. The hardness of the problem is
+# instead delegated to the selection of the set of fixed ansätze from an exponential amount of
+# possible quantum circuits, which one can find using the three heuristical strategies introduced in this tutorial.
 #
 # 
 
