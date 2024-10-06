@@ -15,7 +15,7 @@ Post-variational quantum neural networks
 # 
 # This tutorial introduces post-variational quantum neural networks with example code from PennyLane and JAX.
 # We build variational and post-variational networks through a step-by-step process, and compare their 
-# performance on the digits dataset. 
+# performance on the `digits dataset <https://archive.ics.uci.edu/dataset/81/pen+based+recognition+of+handwritten+digits>`__.
 #
 # 
 
