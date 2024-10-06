@@ -127,22 +127,18 @@ Let’s implement the model depicted above!
 ######################################################################
 # Implementation of the VQLM
 # --------------------------
-# We start by importing the libraries that we will need.
+# We start by importing the librairies that we will need.
 
 import pennylane as qml
 import numpy as np
 
 import jax
-
-jax.config.update("jax_platform_name", "cpu")
-jax.config.update("jax_enable_x64", True)
-
+jax.config.update('jax_platform_name', 'cpu')
 from jax import numpy as jnp
 
 import scipy
 import matplotlib.pyplot as plt
 import sklearn
-
 ######################################################################
 # Let us construct Pauli matrices, which are used to build the Hamiltonian.
 X = np.array([[0, 1], [1, 0]])
@@ -152,11 +148,7 @@ Z = np.array([[1, 0], [0, -1]])
 sigmas = jnp.array(np.array([X, Y, Z]))  # Vector of Pauli matrices
 sigmas_sigmas = jnp.array(
     np.array(
-        [
-            np.kron(X, X),
-            np.kron(Y, Y),
-            np.kron(Z, Z),
-        ]  # Vector of tensor products of Pauli matrices
+        [np.kron(X, X), np.kron(Y, Y), np.kron(Z, Z)]  # Vector of tensor products of Pauli matrices
     )
 )
 
@@ -263,7 +255,7 @@ def trainable_layer(weight, wires):
     qml.QubitUnitary(U, wires=wires, id="U")
 
 
-# Invariant observable
+# Invariant observbale
 Heisenberg = [
     qml.PauliX(0) @ qml.PauliX(1),
     qml.PauliY(0) @ qml.PauliY(1),
