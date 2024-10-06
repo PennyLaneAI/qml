@@ -60,7 +60,7 @@ Post-variational quantum neural networks
 ######################################################################
 # |image2|
 # 
-# .. |image2| image:: ../_static/demonstration_assets/post-variational_quantum_neural_networks/table.png
+# .. |image2| image:: ../_static/demonstration_assets/post-variational_quantum_neural_networks/table.pdf
 #    :width: 90.0%
 # 
 
@@ -132,7 +132,8 @@ y_test = (y_test - 4) / 2
 fig, axes = plt.subplots(nrows=1, ncols=5)
 for i in range(5):
     axes[i].matshow(X_train[i])
-plt.axis('off')
+    axes[i].axis('off')
+fig.tight_layout()
 plt.show()
 
 ######################################################################
