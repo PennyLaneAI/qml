@@ -684,7 +684,7 @@ cmap = matplotlib.colors.LinearSegmentedColormap.from_list("", tuples)
 locality = ["top qubit\n Pauli-Z", "1-local", "2-local", "3-local"]
 order = ["0th Order", "1st Order", "2nd Order", "3rd Order"]
 
-fig, axes = plt.subplots(nrows=1, ncols=,layout="constrained")
+fig, axes = plt.subplots(nrows=1, ncols=2, layout="constrained")
 im = axes[0].imshow(train_accuracies, cmap=cmap, origin="lower")
 
 axes[0].set_yticks(np.arange(len(locality)), labels=locality)
