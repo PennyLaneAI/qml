@@ -42,7 +42,7 @@ PennyLane now provides one such differentiable quantum error mitigation techniqu
 Thus, we can improve the estimates of observables without breaking the differentiable workflow of our variational algorithm.
 We will briefly introduce these functionalities and afterwards go more in depth to explore what happens under the hood.
 
-We start by initializing a noisy device under the :class:`~.pennylane.DepolarizingChannel`:
+We start by initializing a noisy device using a noise model with :class:`~.pennylane.DepolarizingChannel` errors:
 """
 
 import pennylane as qml
@@ -54,13 +54,14 @@ from matplotlib import pyplot as plt
 n_wires = 4
 np.random.seed(1234)
 
-# Describe noise
-noise_gate = qml.DepolarizingChannel
-noise_strength = 0.05
+# Describe noise model
+fcond = qml.noise.wires_in(range(n_wires))
+noise = qml.noise.partial_wires(qml.DepolarizingChannel, 0.05)
+noise_model = qml.NoiseModel({fcond: noise})
 
 # Load devices
 dev_ideal = qml.device("default.mixed", wires=n_wires)
-dev_noisy = qml.transforms.insert(dev_ideal, noise_gate, noise_strength, position="all")
+dev_noisy = qml.add_noise(dev_ideal, noise_model=noise_model)
 
 ##############################################################################
 # We are going to use the transverse field Ising model Hamiltonian :math:`H = - \sum_i X_i X_{i+1} + 0.5 \sum_i Z_i` as our observable:
