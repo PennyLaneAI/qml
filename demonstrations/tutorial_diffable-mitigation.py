@@ -56,7 +56,9 @@ np.random.seed(1234)
 
 # Describe noise model
 fcond = qml.noise.wires_in(range(n_wires))
-noise = qml.noise.partial_wires(qml.DepolarizingChannel, 0.05)
+def noise(op, **kwargs):
+    for wire in op.wires:
+        qml.DepolarizingChannel(0.05, wires=[wire])
 noise_model = qml.NoiseModel({fcond: noise})
 
 # Load devices

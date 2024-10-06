@@ -61,7 +61,9 @@ n_wires = 4
 
 # Describe noise model
 fcond = qml.noise.wires_in(range(n_wires))
-noise = qml.noise.partial_wires(qml.PhaseDamping, 0.1)
+def noise(op, **kwargs):
+    for wire in op.wires:
+        qml.PhaseDamping(0.1, wires=[wire])
 noise_model = qml.NoiseModel({fcond: noise})
 
 # Load devices
