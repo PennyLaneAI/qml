@@ -20,29 +20,20 @@ Post-variational quantum neural networks
 # 
 
 ######################################################################
-# Background
+# Enter post-variational strategies
 # ---------------------
 # Variational algorithms are proposed to solve optimization problems in chemistry, combinatorial
 # optimization and machine learning, with potential quantum advantage [#cerezo2021variational]_. Such algorithms often operate
 # by first encoding data :math:`x` into an :math:`n`-qubit quantum state. The quantum state is then
 # transformed by an ansatz :math:`U(\theta)`, and the parameters :math:`\theta` are optimized by
 # evaluating gradients of the quantum circuit [#schuld2019evaluating]_ and calculating updates of the parameter on a classical
-# computer. `Variational algorithms <https://pennylane.ai/qml/glossary/variational_circuit/>`__ are a prerequisite to this article.
+# computer. :doc:`Variational algorithms </glossary/variational_circuit/>` are a prerequisite to this article.
 # 
 # However, many ansätze in the variational strategy face the barren plateau problem [#mcclean2018barren]_, which leads to difficulty in convergence
 # using :doc:`gradient-based </glossary/quantum_gradient/>` optimization techniques. Due to the general difficulty and lack of training gurantees
 # of variational algorithms, here we will develop an alternative training strategy that does not involve tuning
 # the quantum circuit parameters. However, we continue to use the variational method as the
 # theoretical basis for optimisation.
-# 
-# In this Demo we will also discuss “post-variational strategies” proposed in [#huang2024postvariational]_. We take the classical combination of
-# multiple fixed quantum circuits and find the optimal combination by feeding them through a classical linear model or feed the outputs to a
-# multilayer perceptron. We shift tunable parameters from the quantum computer to the classical
-# computer, opting for ensemble strategies when optimizing quantum models. This sacrifices
-# expressibility [#du2020expressive]_  of the circuit for better trainability of the entire model. Below, we discuss various
-# strategies and design principles for constructing individual quantum circuits, where the resulting
-# ensembles can be optimized with classical optimisation methods.
-# 
 
 ######################################################################
 # |image1|
@@ -52,7 +43,17 @@ Post-variational quantum neural networks
 # 
 
 ######################################################################
-# We compare the post-variational strategies to the conventional variational :doc:`quantum neural network </demos/learning2learn/>` in the
+# In this Demo we will also discuss “post-variational strategies” proposed in Ref. [#huang2024postvariational]_. We take the classical combination of
+# multiple fixed quantum circuits and find the optimal combination by feeding them through a classical linear model or feed the outputs to a
+# multilayer perceptron. We shift tunable parameters from the quantum computer to the classical
+# computer, opting for ensemble strategies when optimizing quantum models. This sacrifices
+# expressibility [#du2020expressive]_  of the circuit for better trainability of the entire model. Below, we discuss various
+# strategies and design principles for constructing individual quantum circuits, where the resulting
+# ensembles can be optimized with classical optimisation methods.
+# 
+
+######################################################################
+# We compare the post-variational strategies to the conventional variational :doc:`quantum neural network </demos/tutorial_variational_classifier/>` in the
 # table below.
 # 
 
@@ -128,11 +129,10 @@ y_test = (y_test - 4) / 2
 # A visualization of a few data points is shown below.
 # 
 
-plt.figure()
-for i in range(3,8):
-    plt.subplot(1, 5, i-2)
-    plt.matshow(X_train[i], fignum=False)
-    plt.axis('off')
+fig, axes = plt.subplots(nrows=1, ncols=5)
+for i in range(5):
+    axes[i].matshow(X_train[i], fignum=False)
+plt.axis('off')
 plt.show()
 
 ######################################################################
@@ -208,7 +208,7 @@ def ansatz(params):
     for i in range(8):
         qml.CNOT(wires=[(8 - 2 - i) % 8, (8 - i - 1) % 8])
 ######################################################################
-# Variational Algorithm
+# Variational approach
 # ---------------------
 # 
 
@@ -292,17 +292,21 @@ print("Testing accuracy: ", var_test_acc)
 
 ######################################################################
 # In this example, the variational algorithm is having trouble finding a global minimum (and this
-# problem persists even if we do hyperparameter tuning). In the following code, we can see how this
-# performance compares to our other proposed strategies.
+# problem persists even if we do hyperparameter tuning). On the other hand, given the general applicability 
+# and consequent hardness of finding suitable ansätze, we introduce three heursitical methods for building 
+# the set of quantum circuits that make up post-variational quantum neural networks, namely the observable 
+# construction heuristic, the ansatz expansion heuristic, and a hybrid of the two.
 # 
 
 ######################################################################
-# The Observable Construction Post-Variational Technique
+# Observable construction heuristic
 # ---------------------
 
 ######################################################################
-# We measure the data embedded state on different combinations of Pauli observables in this
-# post-variational strategy. We first define a series of :math:`k`-local trial observables
+# The observable construction heuristic removes the use of ansätze in the quantum and constructs measurements
+# directly on the quantum data embedded state. 
+# For simplicity, we measure the data embedded state on different combinations of Pauli observables in this
+# Demo. We first define a series of :math:`k`-local trial observables
 # :math:`O_1, O_2, \ldots , O_m`. After computing the quantum circuits, the measurement results are
 # then combined classically, where the optimal weights of each measurement are computed via feeding our
 # measurements through a classical multilayer perceptron.
@@ -416,7 +420,7 @@ plt.show()
 # 
 
 ######################################################################
-# The Ansatz Expansion Post-Variational Technique
+# Ansatz expansion heuristic
 # ---------------------
 # 
 
@@ -425,7 +429,8 @@ plt.show()
 # ansatz into an ensemble of fixed ansätze. Starting from a variational ansatz, multiple
 # non-parameterized quantum circuits are constructed by Taylor expansion of the ansatz around a
 # suitably chosen initial setting of the parameters :math:`\theta_0`, which we set here as 0. Gradients and higher-order
-# derivatives of circuits then can be obtained by the :doc:`parameter-shift rule </glossary/parameter_shift/>`. The output sof the different circuits are then fed 
+# derivatives of circuits then can be obtained by the :doc:`parameter-shift rule </glossary/parameter_shift/>`. 
+# The output sof the different circuits are then fed 
 # into a classical neural network.
 # 
 
@@ -677,40 +682,37 @@ cmap = matplotlib.colors.LinearSegmentedColormap.from_list("", tuples)
 locality = ["top qubit\n Pauli-Z", "1-local", "2-local", "3-local"]
 order = ["0th Order", "1st Order", "2nd Order", "3rd Order"]
 
-fig, ax = plt.subplots()
-im = ax.imshow(train_accuracies, cmap=cmap, origin="lower")
+fig, axes = plt.subplots(nrows=1, ncols=2)
+im = axes[0].imshow(train_accuracies, cmap=cmap, origin="lower")
 
-ax.set_yticks(np.arange(len(locality)), labels=locality)
-ax.set_xticks(np.arange(len(order)), labels=order)
-plt.setp(ax.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
+axes[0].set_yticks(np.arange(len(locality)), labels=locality)
+axes[0].set_xticks(np.arange(len(order)), labels=order)
+plt.setp(axes[0].get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
 for i in range(len(locality)):
     for j in range(len(order)):
-        text = ax.text(
+        text = axes[0].text(
             j, i, np.round(train_accuracies[i, j], 2), ha="center", va="center", color="black"
         )
-ax.text(3, 3, '\n\n(VQA)', ha="center", va="center", color="black")
+axes[0].text(3, 3, '\n\n(VQA)', ha="center", va="center", color="black")
 
-ax.set_title("Training Accuracies")
-fig.tight_layout()
-plt.show()
+axes[0].set_title("Training Accuracies")
 
 locality = ["top qubit\n Pauli-Z", "1-local", "2-local", "3-local"]
 order = ["0th Order", "1st Order", "2nd Order", "3rd Order"]
 
-fig, ax = plt.subplots()
-im = ax.imshow(test_accuracies, cmap=cmap, origin="lower")
+im = axes[1].imshow(test_accuracies, cmap=cmap, origin="lower")
 
-ax.set_yticks(np.arange(len(locality)), labels=locality)
-ax.set_xticks(np.arange(len(order)), labels=order)
-plt.setp(ax.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
+axes[1].set_yticks(np.arange(len(locality)), labels=locality)
+axes[1].set_xticks(np.arange(len(order)), labels=order)
+plt.setp(axes[1].get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
 for i in range(len(locality)):
     for j in range(len(order)):
-        text = ax.text(
+        text = axes[1].text(
             j, i, np.round(test_accuracies[i, j], 2), ha="center", va="center", color="black"
         )
-ax.text(3, 3, '\n\n(VQA)', ha="center", va="center", color="black")
+axes[1].text(3, 3, '\n\n(VQA)', ha="center", va="center", color="black")
 
-ax.set_title("Test Accuracies")
+axes[1].set_title("Test Accuracies")
 fig.tight_layout()
 plt.show()
 
@@ -737,7 +739,7 @@ plt.show()
 # 
 
 ######################################################################
-# This tutorial demonstrates post-variational quantum neural networks,
+# This tutorial demonstrates post-variational quantum neural networks [#huang2024postvariational]_,
 # an alternative implementation of quantum neural networks in the NISQ setting.
 # In this tutorial, we have implemented the post variational strategies to classify handwritten digits
 # of twos and sixes.
