@@ -1,0 +1,135 @@
+{
+    "title": "Post Variational Quantum Neural Networks",
+    "authors": [
+        {
+            "username": "elainazhu"
+        },
+        {
+            "username": "georgepwhuang"
+        }
+    ],
+    "dateOfPublication": "2024-10-07T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
+    "categories": [
+        "Quantum Machine Learning",
+        "Algorithms",
+        "Quantum Computing"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_post-variational_quantum_neural_networks.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_post-variational_quantum_neural_networks.png"
+        }
+    ],
+    "seoDescription": "Learn about post-variational quantum neural networks",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_post-variational_quantum_neural_networks",
+    "references": [
+        {
+            "id": "cerezo2021variational",
+            "type": "article",
+            "title": "Variational quantum algorithms",
+            "authors": "Marco Cerezo and Andrew Arrasmith and Ryan Babbush and Simon C. Benjamin and Suguru Endo and Keisuke Fujii and Jarrod R. McClean and Kosuke Mitarai and Xiao Yuan and Lukasz Cincio and Patrick J. Coles",
+            "year": "2021",
+            "publisher": "Nature Portfolio",
+            "journal": "Nat. Rev. Phys.",
+            "doi": "10.1038/s42254-021-00348-9",
+            "url": "https://doi.org/10.1038/s42254-021-00348-9"
+        },
+        {
+            "id": "mcclean2018barren",
+            "type": "article",
+            "title": "Barren plateaus in quantum neural network training landscapes",
+            "authors": "Jarrod R. McClean and Sergio Boixo and Vadim N. Smelyanskiy and Ryan Babbush and Hartmut Neven",
+            "year": "2018",
+            "publisher": "Nature Portfolio",
+            "journal": "Nat. Commun.",
+            "doi": "10.1038/s41467-018-07090-4",
+            "url": "https://doi.org/10.1038/s41467-018-07090-4"
+        },
+        {
+            "id": "du2020expressive",
+            "type": "article",
+            "title": "Expressive power of parametrized quantum circuits",
+            "authors": "Du, Yuxuan and Hsieh, Min-Hsiu and Liu, Tongliang and Tao, Dacheng",
+            "year": "2020",
+            "publisher": "American Physical Society",
+            "journal": "Phys. Rev. Res.",
+            "doi": "10.1103/PhysRevResearch.2.033125",
+            "url": "https://doi.org/10.1103/PhysRevResearch.2.033125"
+        },
+        {
+            "id": "schuld2019evaluating",
+            "type": "article",
+            "title": "Evaluating analytic gradients on quantum hardware",
+            "authors": "Schuld, Maria and Bergholm, Ville and Gogolin, Christian and Izaac, Josh and Killoran, Nathan",
+            "year": "2019",
+            "publisher": "American Physical Society",
+            "journal": "Phys. Rev. A",
+            "doi": "10.1103/PhysRevA.99.032331",
+            "url": "https://doi.org/10.1103/PhysRevA.99.032331"
+        },
+        {
+            "id": "huang2024postvariational",
+            "type": "article",
+            "title": "Post-variational quantum neural networks",
+            "authors": "Po-Wei Huang and Patrick Rebentrost",
+            "year": "2024",
+            "doi": "10.48550/arXiv.2307.10560",
+            "url": "https://arxiv.org/abs/2307.10560"
+        },
+        {
+            "id": "huang2020predicting",
+            "type": "article",
+            "title": "Predicting many properties of a quantum system from very few measurements",
+            "authors": "Hsin-Yuan Huang and Richard Kueng and John Preskill",
+            "year": "2024",
+            "doi": "10.1038/s41567-020-0932-7",
+            "url": "https://doi.org/10.1038/s41567-020-0932-7"
+        }
+    ],
+    "basedOnPapers": ["https://arxiv.org/abs/2307.10560"],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_variational_classifier",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_local_cost_functions",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_How_to_optimize_QML_model_using_JAX_and_Optax",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_jax_transformations",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_classical_shadows",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_diffable_shadows",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "ensemble_multi_qpu",
+            "weight": 1.0
+        }
+    ]
+}
