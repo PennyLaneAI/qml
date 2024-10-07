@@ -51,12 +51,12 @@ As a preview, this is a schematic overview of the algorithm:
     :align: center
 
 We will get to all these steps in detail below, but in short, the algorithm
-runs through five steps. It 1) creates independent MPS on small groups of qubits
-and then 2) fuses them together with mid-circuit measurements. This leaves
-the overall state with some defects, which are 3) corrected and moved to the
+runs through five steps. It (1) creates independent MPS on small groups of qubits
+and then (2) fuses them together with mid-circuit measurements. This leaves
+the overall state with some defects, which are (3) corrected and moved to the
 boundary of the state with dynamic operations and classical processing. 
-Then, all that is left to do is to 4) correct the defect at the boundary and
-finally 5) to measure two remaining bond qudits projectively.
+Then, all that is left to do is to (4) correct the defect at the boundary and
+finally (5) to measure two remaining bond qudits projectively.
 
 Building blocks
 ---------------
@@ -89,12 +89,12 @@ A general MPS with these properties is given by
 
 where :math:`\vec{m}` is a multi-index of :math:`N` indices ranging over :math:`d`,
 i.e., :math:`\vec{m}\in\{0, 1 \dots, d-1\}^N`, and :math:`\{A^{m}\}_{m}` are :math:`d`
-square matrices of equal dimension :math:`D` (Note that we are using the same
-:math:`A^m` for each physical site, due to the translation invariance).
+square matrices of equal dimension :math:`D.` (Note that we are using the same
+:math:`A^m` for each physical site, due to the translational invariance.)
 This dimension :math:`D` is called the bond dimension,
 which is a crucial quantity for the expressivity and complexity of the MPS.
 We see that :math:`|\Psi\rangle` is fully specified by the :math:`d\times D\times D=dD^2`
-numbers in the rank-3 tensor :math:`A`.
+numbers in the rank-3 tensor :math:`A.`
 However, this specification is not unique. We remove some of the redundancies by assuming
 that :math:`A` is in so-called left-canonical form, meaning that it satisfies
 
@@ -107,21 +107,21 @@ mentioned reviews for more details.
 
 **Example**
 
-As an example, consider a chain of :math:`N` qubits (:math:`d=2`) and an MPS
-:math:`|\Psi(g)\rangle` on this system with :math:`D=2`, defined by the matrices
+As an example, consider a chain of :math:`N` qubits :math:`(d=2)` and an MPS
+:math:`|\Psi(g)\rangle` on this system with :math:`D=2,` defined by the matrices
 
 .. math::
 
-    A^0 = \eta \left(\begin{matrix} 1 & 0 \\ \sqrt{-g} & 0 \end{matrix}\right)
+    A^0 = \eta \left(\begin{matrix} 1 & 0 \\ \sqrt{-g} & 0 \end{matrix}\right);
     \quad
-    A^1 = \eta \left(\begin{matrix} 0 & -\sqrt{-g} \\ 0 & 1 \end{matrix}\right)
+    A^1 = \eta \left(\begin{matrix} 0 & -\sqrt{-g} \\ 0 & 1 \end{matrix}\right),
 
 where :math:`\eta = \frac{1}{\sqrt{1-g}}` and :math:`g\in[-1, 0]` is a freely chosen parameter.
 
 This MPS is a simple yet important example (also discussed in Sec. III C 1. of [#smith]_)
 because it can be tuned from the GHZ state
 :math:`|\Psi(0)\rangle=\frac{1}{\sqrt{2}}(|0\rangle^{\otimes N} + |1\rangle^{\otimes N})`
-to the product state :math:`|\Psi(-1)\rangle=|+\rangle^{\otimes N}`, two states that differ
+to the product state :math:`|\Psi(-1)\rangle=|+\rangle^{\otimes N},` two states that differ
 greatly in their physical properties.
 
 One such property is the correlation length.
@@ -228,7 +228,7 @@ print(f"For {g=}, the theoretical correlation length is {xi=:.4f}")
 # #. Apply the unitary :math:`U` to each of the :math:`N` physical sites, with the
 #    :math:`D`-dimensional tensor factor always acting on the first bond qudit.
 #    Denoting :math:`U` acting on the :math:`i`\ th physical site and the first bond site
-#    by :math:`U^{(i)}`, this produces the state
+#    by :math:`U^{(i)}`, this produces the following state.
 #
 #    .. math::
 #
@@ -242,7 +242,7 @@ print(f"For {g=}, the theoretical correlation length is {xi=:.4f}")
 #        \sum_{\vec{m}} |\vec{m}\rangle \langle j|A^{m_1} A^{m_2}\cdots A^{m_N}|k\rangle |jk\rangle_D
 #
 #    We can see how each :math:`U^{(i)}` contributes a factor of :math:`A` and a corresponding
-#    state :math:`|m_i\rangle` on the :math:`i`\ th physical site. The same would have
+#    state :math:`|m_i\rangle` on the :math:`i`\ -th physical site. The same would have
 #    come out when applying the 3-tensor :math:`A` to the first bond site :math:`N` times.
 #
 # #. Measure the two bond qudits in the (generalized) Bell basis and postselect on the outcome
@@ -253,7 +253,7 @@ print(f"For {g=}, the theoretical correlation length is {xi=:.4f}")
 #
 #        |\psi_2\rangle
 #        = \sum_{\vec{m}} \operatorname{tr}[A^{m_1}A^{m_2}\cdots A^{m_N}]|\vec{m}\rangle
-#        = |\Psi\rangle
+#        = |\Psi\rangle.
 #
 #    Note that this step is *probabilistic* and we only succeed to produce the state if we measure
 #    the state :math:`|I\rangle`.
@@ -299,7 +299,7 @@ print(f"\nU is unitary: {np.allclose(U.conj().T @ U, np.eye(4))}")
 #
 # Now let's code up the entire sequential preparation circuit (we will be applying
 # the unitary :math:`U` to the second instead of the first bond qubit). We implement the
-# measurement \& postselection step as a separate function ``project_measure`` for
+# measurement and postselection step as a separate function ``project_measure`` for
 # easier reusability later on.
 
 
@@ -358,9 +358,9 @@ N = 7
 _ = qml.draw_mpl(sequential_circuit)(N, g)
 
 ######################################################################
-# The sequential preparation circuit already uses mid-circuit measurements as is visible
+# The sequential preparation circuit already uses mid-circuit measurements, as is visible
 # from the measurement steps on the first and last qubit, which are set to postselect the
-# outcome :math:`|0\rangle`. However, there is no feed-forward control that modifies the circuit
+# outcome :math:`|0\rangle`. However, there is no feedforward control that modifies the circuit
 # dynamically based on measured values. This will change in the following sections.
 #
 # Fusion of MPS states with mid-circuit measurements
@@ -427,7 +427,7 @@ _ = qml.draw_mpl(sequential_circuit)(N, g)
 # a defect, namely the matrix :math:`B^k` that depends to the outcome.
 #
 # In full generality, the fusion strategy may seem complicated, but it can take
-# a very simply form, as we will now see in our example:
+# a very simple form, as we will now see in our example.
 #
 # **Example**
 #
@@ -563,7 +563,7 @@ print(f"The test measurement of fusion preparation + sequential unpreparation is
 # We can recast this condition into the following dynamic circuit instructions:
 #
 # - If the first (second) bit of the measurement outcome bitstring is active, apply a Pauli-:math:`Z`
-#   (Pauli-:math:`Y`) to the first physical qubit
+#   (Pauli-:math:`Y`) to the first physical qubit.
 #
 # - If the second bit is active, apply a Pauli-:math:`X` to all other physical qubits.
 #
@@ -597,7 +597,7 @@ def push_and_correct(op_id, phys_wires):
 # measurements, and operator pushing, we have all components for the constant-depth
 # preparation algorithm. As inputs it requires the tensor :math:`A` (or the unitary
 # :math:`U` to reproduce :math:`A`), the total number of physical sites :math:`N`,
-# and a block size :math:`q`.
+# and the block size :math:`q`.
 #
 # #. Prepare :math:`\frac{N}{q}` MPS of size :math:`q`
 #    in parallel, using the sequential preparation algorithm (without the final

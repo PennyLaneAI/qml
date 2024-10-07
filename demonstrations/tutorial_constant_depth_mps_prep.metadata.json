@@ -22,7 +22,7 @@
             "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_constant_depth_mps_prep.png"
         }
     ],
-    "seoDescription": "Prepare a matrix product state in constant depth with mid-circuit measurements and feedforward control.",
+    "seoDescription": "Prepare a matrix product state (MPS) in constant depth with mid-circuit measurements and feedforward control.",
     "doi": "",
     "canonicalURL": "/qml/demos/tutorial_constant_depth_mps_prep",
     "references": [],
