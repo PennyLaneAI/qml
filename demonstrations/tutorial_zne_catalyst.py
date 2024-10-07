@@ -1,5 +1,5 @@
 r"""
-Digital zero-noise Extrapolation with Catalyst
+Digital zero-noise extrapolation with Catalyst
 ==============================================
 
 In this tutorial, you will learn how to use error mitigation, and in particular 
@@ -10,9 +10,27 @@ We'll demonstrate how to generate noise-scaled circuits, execute them on a noisy
 simulator, and use extrapolation techniques to estimate the zero-noise result, all while
 leveraging JIT compilation through Catalyst.
 
+Using ZNE with Pennylane
+------------------------
+
+The demo :doc:`Error mitigation with Mitiq and PennyLane <tutorial_error_mitigation>`
+shows how ZNE, along with other error mitigation techniques, can be carried out in Pennylane
+by using `Mitiq <https://github.com/unitaryfund/mitiq>`__, a Python library developed by Unitary Fund.
+
+ZNE in particular is also offered out of the box in Pennylane as a *differentiable* error mitigation technique,
+for usage in combination with variational workflows. More on this in the tutorial
+:doc:`Differentiating quantum error mitigation transforms <tutorial_diffable-mitigation>`.
+
+On top of the error mitigation routines offered in Pennylane, ZNE is also available for just-in-time
+(JIT) compilation. In this tutorial we see how an error mitigation routine can be
+integrated in a Catalyst workflow.
+
+At the end of the tutorial, we will compare time for the execution of ZNE routines in
+pure Pennylane vs. Pennylane Catalyst with JIT.
+
 What is ZNE
 -----------
-Zero-noise extrapolation (ZNE) is a technique used to mitigate the effect of noise on quantum
+ZNE is a technique used to mitigate the effect of noise on quantum
 computations. First introduced in [#temme2017zne]_, it helps improve the accuracy of quantum
 results by running circuits at varying noise levels and extrapolating back to a hypothetical
 zero-noise case. While this tutorial won't delve into the theory behind ZNE in detail, let's first
@@ -46,24 +64,6 @@ After executing the noise-scaled circuits, an extrapolation on the results is pe
 to estimate the zero-noise limit---the result we would expect in a noise-free scenario. 
 Catalyst provides **polynomial** and **exponential** extrapolation methods.
 
-Using ZNE with Pennylane
-------------------------
-
-The demo :doc:`Error mitigation with Mitiq and PennyLane <tutorial_error_mitigation>`
-shows how ZNE, along with other error mitigation techniques, can be carried out in Pennylane by using `Mitiq <https://github.com/unitaryfund/mitiq>`__, 
-a Python library developed by Unitary Fund.
-
-ZNE in particular is also offered out of the box in Pennylane as a *differentiable* error mitigation technique,
-for usage in combination with variational workflows. More on this in the tutorial 
-:doc:`Differentiating quantum error mitigation transforms <tutorial_diffable-mitigation>`.
-
-On top of the error mitigation routines offered in Pennylane, ZNE is also available for just-in-time 
-(JIT) compilation, starting from Catalyst v0.8.1.
-In this tutorial we see how an error mitigation routine can be integrated in a Catalyst workflow.
-
-At the end of the tutorial, we will compare time for the execution of ZNE routines in 
-pure Pennylane vs. Pennylane Catalyst with JIT. 
-
 Defining the mirror circuit
 ---------------------------
 
@@ -75,12 +75,11 @@ on the state of the first qubit, and by construction of the circuit, we expect t
 equal to 1.
 """
 
-import os
 import timeit
 
-import pennylane as qml
 import numpy as np
-from catalyst import qjit, mitigate_with_zne
+import pennylane as qml
+from catalyst import mitigate_with_zne
 
 n_wires = 5
 
@@ -162,7 +161,7 @@ extrapolation_method = partial(poly_extrapolate, order=3)
 # to define a very simple :func:`~.QNode`, which represents the mitigated version of the original circuit.
 
 
-@qjit
+@qml.qjit
 def mitigated_circuit_qjit(w1, w2):
     return mitigate_with_zne(
         noisy_qnode,
