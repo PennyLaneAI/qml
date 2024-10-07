@@ -500,7 +500,7 @@ def prepare_and_unprepare(g):
 
 
 test = prepare_and_unprepare(g)
-print(f"The test measurement of fusion preparation + sequential unpreparation is {test:.2f}")
+print(f"Test measurement of fusion preparation + sequential unpreparation is {test:.2f}")
 
 ######################################################################
 # This means we still need a way to remove the defect matrices :math:`B^k` from the
