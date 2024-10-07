@@ -130,6 +130,6 @@
       }
     },
     "required": [
-      "title", "authors", "dateOfPublication", "dateOfLastModification", "categories", "tags", "previewImages", "seoDescription", "doi", "canonicalURL", "references", "basedOnPapers", "referencedByPapers", "relatedContent"
+      "title", "authors", "dateOfPublication", "dateOfLastModification", "categories", "tags", "previewImages", "seoDescription", "doi", "references", "basedOnPapers", "referencedByPapers", "relatedContent"
     ]
   }
