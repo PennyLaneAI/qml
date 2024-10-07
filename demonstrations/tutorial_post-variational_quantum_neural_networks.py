@@ -60,7 +60,7 @@ Post-variational quantum neural networks
 ######################################################################
 # |image2|
 # 
-# .. |image2| image:: ../_static/demonstration_assets/post-variational_quantum_neural_networks/table.pdf
+# .. |image2| image:: ../_static/demonstration_assets/post-variational_quantum_neural_networks/table.png
 #    :width: 100.0%
 # 
 
