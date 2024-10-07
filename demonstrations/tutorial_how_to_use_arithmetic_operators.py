@@ -129,7 +129,7 @@ def circuit(x,y):
 
     prepare_initial_state(x, y)    #    |x> |y> |0>
     qml.Adder(4, wires["output"])  #    |x> |y> |4>
-    adding_3xy()                   #    |x> |y> |3 + 3xy>
+    adding_3xy()                   #    |x> |y> |4 + 3xy>
 
     return qml.sample(wires=wires["output"])
 
