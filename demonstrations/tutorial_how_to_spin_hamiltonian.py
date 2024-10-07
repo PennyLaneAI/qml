@@ -72,30 +72,33 @@ hamiltonian = qml.spin.fermi_hubbard("cubic", [3, 3, 3], t, u)
 lattice = qml.spin.lattice._generate_lattice('square', [3, 3])
 
 ######################################################################
-# Let's visualize this lattice to see how it looks:
+# Let's visualize this lattice to see how it looks. We create a simple function for plotting the
+# lattice.
 
 import numpy as np
 import matplotlib.pyplot as plt
 
-plt.figure(figsize=lattice.n_cells[::-1])
+def plot(lattice):
 
-nodes = lattice.lattice_points
+    plt.figure(figsize=lattice.n_cells[::-1])
+    nodes = lattice.lattice_points
 
-for edge in lattice.edges:
+    for edge in lattice.edges:
+        start_index, end_index, color = edge
+        start_pos, end_pos = nodes[start_index], nodes[end_index]
 
-    start_index, end_index, color = edge
-    start_pos, end_pos = nodes[start_index], nodes[end_index]
+        x_axis = [start_pos[0], end_pos[0]]
+        y_axis = [start_pos[1], end_pos[1]]
+        plt.plot(x_axis, y_axis, color='gold')
 
-    x_axis = [start_pos[0], end_pos[0]]
-    y_axis = [start_pos[1], end_pos[1]]
-    plt.plot(x_axis, y_axis, color='gold')
+        plt.scatter(nodes[:,0], nodes[:,1], color='dodgerblue', s=100)
+        for index, pos in enumerate(nodes):
+            plt.text(pos[0]-0.2, pos[1]+0.1, str(index), color='gray')
 
-    plt.scatter(nodes[:,0], nodes[:,1], color='dodgerblue', s=100)
-    for index, pos in enumerate(nodes):
-        plt.text(pos[0]-0.2, pos[1]+0.1, str(index), color='gray')
+    plt.axis("off")
+    plt.show()
 
-plt.axis("off")
-plt.show()
+plot(lattice)
 
 ######################################################################
 # Now, we construct the same lattice manually by explicitly defining the positions of the sites in a
@@ -157,6 +160,11 @@ vectors = [[1, 0], [0.5, np.sqrt(3) / 2]]
 n_cells = [3, 3]
 
 ######################################################################
+# Let's plot the lattice to see how it looks like.
+
+plot(Lattice(n_cells, vectors, nodes))
+
+######################################################################
 # Now we add custom edges to the lattice. We have three different edge orientations that we define
 # as
 
@@ -164,11 +172,12 @@ custom_edges = [[(0, 1), ('XX', 0.5)],
                 [(1, 2), ('YY', 0.6)],
                 [(1, 6), ('ZZ', 0.7)]]
 
-######################################################################
-# Then we construct the lattice and pass it to the spin_hamiltonian function, which is a helper
-# function that constructs a Hamiltonian from a lattice. and the Hamiltonian similar to other examples.
-
 lattice = Lattice(n_cells, vectors, nodes, custom_edges=custom_edges)
+
+######################################################################
+# Then we pass the lattice to the spin_hamiltonian function, which is a helper
+# function that constructs a Hamiltonian from a lattice.
+
 hamiltonian = qml.spin.spin_hamiltonian(lattice=lattice)
 
 ######################################################################
@@ -187,8 +196,9 @@ for edge in lattice.edges:
 hamiltonian
 
 ######################################################################
-# We compare the constructed Hamiltonian with the template we already have for the Kitaev
-# model. Can you compare them and verify that the Hamiltonians are the same?
+# See how we can easily and intuitively construct the Kitaev model Hamiltonian with the tools in
+# these tools.  You can compare the constructed Hamiltonian with the template we already have for
+# the Kitaev model and verify that the Hamiltonians are the same.
 #
 # Conclusion
 # ----------
