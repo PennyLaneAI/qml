@@ -24,9 +24,11 @@ for your problem of interest.
 # 
 
 import pennylane as qml
+
 n = [2]
 t = 0.2
 u = 0.3
+
 hamiltonian = qml.spin.fermi_hubbard("chain", n, t, u)
 hamiltonian
 
@@ -37,7 +39,6 @@ hamiltonian
 # construct the Hamiltonian for a cubic lattice with 3 sites on each direction as
 
 hamiltonian = qml.spin.fermi_hubbard("cubic", [3, 3, 3], t, u)
-hamiltonian
 
 ######################################################################
 # Similarity, a broad range of other well-investigated spin model Hamiltonians can be constructed
@@ -62,109 +63,132 @@ hamiltonian
 # where :math:`J` is the coupling defined for the Hamiltonian, :math:`h` is the strength of
 # transverse magnetic field and :math:`i,j` represent the indices for neighbouring spins.
 #
-# Our approach for doing this is to construct a Lattice object that represents the spin sites and
-# their connectivity. The Lattice object can be constructed by defining the unit cell translation
-# vectors, the positions of the sites and the number of unit cells in the lattice. Once we have the
-# Lattice object, we can use its attributes, e.g., ``vertices`` and ``edges``, to construct our
-# custom Hamiltonian.
+# Our approach for doing this is to construct a lattice that represents the spin sites and
+# their connectivity. This is done by using the Lattice class that can be constructed either by
+# calling the helper function generate_lattice or by manually constructing the object. Let's see
+# examples of both methods. First we use generate_lattice to construct a square lattice containing 9
+# sites which are all connected to their nearest neighbor.
 
-from pennylan.spin import Lattice
-from pennylane import X, Y, Z
-import numpy as np
-
-# The unit cell translation vectors
-vectors = [[1, 0], [0, 1]]
-
-# The coordinates of the nodes inside the unit cell
-nodes = [[0, 0]]
-
-# Number of unit cells in each direction
-n_cells = [2, 2]
-
-# Lattice representing the system
-lattice = Lattice(n_cells, vectors, nodes)
-
-# Coupling and onsite parameters
-coupling, onsite = 1.0, 10.0
-
-# Construct the Hamiltonian manually
-def h_custom(lattice, coupling, onsite):
-    hamiltonian = 0.0
-
-    # add two-site terms
-    for edge in lattice.edges:
-        i, j = edge[0], edge[1]
-        hamiltonian += - coupling * (Z(i) @ Z(j))
-
-    # add one-site terms
-    for vertex in range(lattice.vertices):
-        hamiltonian += -onsite * X(vertex)
-
-    return hamiltonian
-
-
-h_custom(lattice, coupling, onsite)
+lattice = qml.spin.lattice._generate_lattice('square', [3, 3])
 
 ######################################################################
-# We also have a helper function construct_lattice that helps you construct the lattice object just
-# by passing the shape of the lattice without defining the nodes and the translation vectors.
+# Let's visualize this lattice to see how it looks:
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=lattice.n_cells[::-1])
+
+nodes = lattice.lattice_points
+
+for edge in lattice.edges:
+
+    start_index, end_index, color = edge
+    start_pos, end_pos = nodes[start_index], nodes[end_index]
+
+    x_axis = [start_pos[0], end_pos[0]]
+    y_axis = [start_pos[1], end_pos[1]]
+    plt.plot(x_axis, y_axis, color='gold')
+
+    plt.scatter(nodes[:,0], nodes[:,1], color='dodgerblue', s=100)
+    for index, pos in enumerate(nodes):
+        plt.text(pos[0]-0.2, pos[1]+0.1, str(index), color='gray')
+
+plt.axis("off")
+plt.show()
+
+######################################################################
+# Now, we construct the same lattice manually by explicitly defining the positions of the sites in a
+# unit cell, the translation vectors defining the lattice and the number of cells in each direction.
+
+from pennylane.spin import Lattice
+
+nodes = [[0, 0]]  # coordinates of nodes inside the unit cell
+vectors = [[1, 0], [0, 1]] # unit cell translation vectors
+n_cells = [3, 3] # number of unit cells in each direction
+
+lattice = Lattice(n_cells, vectors, nodes)
+
+######################################################################
+# This gives us the same lattice as we created with generate_lattice but constructing the lattice
+# manually is more flexible while generate_lattice only works for some predefined lattice shapes.
 #
-# The lattice object is a very flexible and versatile tool that allows you construct more
-# complicated Hamiltonians. To show this ability, let’s look at a more advanced example.
+# Now that we have the lattice, we can use its attributes, e.g., edges and vertices, to construct
+# our transverse field Isingmodel Hamiltonian. We just need to define the coupling and onsite
+# parameters
+
+from pennylane import X, Y, Z
+
+coupling, onsite = 1.0, 1.0
+
+hamiltonian = 0.0
+# add the one-site terms
+for vertex in range(lattice.n_sites):
+    hamiltonian += -onsite * X(vertex)
+# add the coupling terms
+for edge in lattice.edges_indices:
+    i, j = edge[0], edge[1]
+    hamiltonian += - coupling * (Z(i) @ Z(j))
+
+hamiltonian
+
+######################################################################
+# In this example we just used the in-built attributes of the lattice we created without further
+# customising them. The lattice can be constructed in a very flexible way that allows constructing
+# customized Hamiltonians. Let's look at an example.
 #
 # Building customized Hamiltonians
 # --------------------------------
-#
-# Now let's look at a more complicated example and see how our existing tools allow building such
-# Hamiltonians intuitively. We chose the anisotropic Kitaev Honeycomb model where the coupling
-# parameters depend on the orientation of the bonds. We can build the Hamiltonian by building the
-# lattice manually and adding custom edges between the nodes. The custom edges can be defined based
-# on the nodes they connect. Currently, we use the following format to define a custom 'XX' edge
-# with coupling constant 0.5 between nodes 0 and 1:
+# Now we work on a more complicated Hamiltonian to see how our existing tools allow building it
+# intuitively. We chose the anisotropic Kitaev Honeycomb model where the coupling
+# parameters depend on the orientation of the bonds. [need an image here] We can build the Hamiltonian by building the
+# lattice manually and adding custom edges between the nodes. For instance, to define a custom 'XX'
+# edge with coupling constant 0.5 between nodes 0 and 1, we use:
 
-custom_edge = [[(0, 1), ('XX', 0.5)]
+custom_edge = [(0, 1), ('XX', 0.5)]
 
 ######################################################################
-# We can also support a UI where the user defines the neighbour vectors manually. This option is a
-# bit complicated and is abstracted away in the current UI. Let's now build our Hamiltonian.
-# The unit cell translation vectors
-vectors = [[1, 0], [0.5, np.sqrt(3) / 2]]
+# Let's now build our Hamiltonian. We first define the unit cell by specifying the positions of the
+# nodes and the unit cell translation vector and then define the number of unit cells in each
+# direction.
 
-# The coordinates of the nodes inside the unit cell
 nodes = [[0.5, 0.5 / 3 ** 0.5], [1, 1 / 3 ** 0.5]]
-
-# Number of unit cells in each direction
+vectors = [[1, 0], [0.5, np.sqrt(3) / 2]]
 n_cells = [3, 3]
 
-# Add custom edges to the lattice
-# the first term adds custom 'XX' edge with
-# coupling constant 0.5 between 0 and 1 nodes
+######################################################################
+# Now we add custom edges to the lattice. We have three different edge orientations that we define
+# as
+
 custom_edges = [[(0, 1), ('XX', 0.5)],
                 [(1, 2), ('YY', 0.6)],
-                [(1, 6), ('ZZ', 0.7)],
-                [(3, 6), ('XY', 0.8)]]
-
-# Lattice representing the system
-lattice = Lattice(n_cells, vectors, nodes, custom_edges=custom_edges)
-
-# Construct the Hamiltonian manually
-def h_custom(lattice):
-    opmap = {'X': X, 'Y': Y, 'Z': Z}
-
-    hamiltonian = 0.0
-
-    # add two-site terms
-    for edge in lattice.edges:
-        i, j = edge[0], edge[1]
-        k, l = edge[2][0][0], edge[2][0][1]
-        hamiltonian += opmap[k](i) @ opmap[l](j) * edge[2][1]
-    return hamiltonian
-
-h_custom(lattice)
+                [(1, 6), ('ZZ', 0.7)]]
 
 ######################################################################
-# You can compare the constructed Hamiltonian with the template we already have for the Kitaev
-# model.
+# Then we construct the lattice and pass it to the spin_hamiltonian function, which is a helper
+# function that constructs a Hamiltonian from a lattice. and the Hamiltonian similar to other examples.
+
+lattice = Lattice(n_cells, vectors, nodes, custom_edges=custom_edges)
+hamiltonian = qml.spin.spin_hamiltonian(lattice=lattice)
+
+######################################################################
+# The spin_hamiltonian function has a simple logic and loops over the custom edges and nodes
+# to build the Hamiltonian. In our example, we can also manually do that with a simple code.
+
+
+opmap = {'X': X, 'Y': Y, 'Z': Z}
+
+hamiltonian = 0.0
+for edge in lattice.edges:
+    i, j = edge[0], edge[1]
+    k, l = edge[2][0][0], edge[2][0][1]
+    hamiltonian += opmap[k](i) @ opmap[l](j) * edge[2][1]
+
+hamiltonian
+
+######################################################################
+# We compare the constructed Hamiltonian with the template we already have for the Kitaev
+# model. Can you compare them and verify that the Hamiltonians are the same?
 #
 # Conclusion
 # ----------
