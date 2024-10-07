@@ -8,7 +8,7 @@ Post-variational quantum neural networks
 # carefully crafted Ansatz for a variational algorithm is finally ready. But oh buttersticks — 
 # after a few hundred iterations, your heart sinks as you realize you have encountered the dreaded barren plateau problem, where 
 # gradients vanish and optimisation grinds to a halt. What now? Panic sets in, but then you remember the new technique 
-# you read about. You reach into your toolbox and pull out the "post-variational strategy". This approach shifts 
+# you read about. You reach into your toolbox and pull out the *post-variational strategy*. This approach shifts 
 # parameters from the quantum computer to classical computers, ensuring the convergence to a local minimum. By combining 
 # fixed quantum circuits with a classical neural network, you can enhance trainability and keep your 
 # research on track.
@@ -206,7 +206,8 @@ def ansatz(params):
     for i in range(8):
         qml.RY(params[i + 8], wires=i)
     
-    # Apply CNOT gates with qubits in reverse order (cyclically connected) to create additional entanglement
+    # Apply CNOT gates with qubits in reverse order (cyclically connected)
+    # to create additional entanglement
     for i in range(8):
         qml.CNOT(wires=[(8 - 2 - i) % 8, (8 - i - 1) % 8])
 ######################################################################
@@ -402,8 +403,10 @@ width = 0.25
 
 # Create a bar plot to visualize the training and testing accuracies.
 fig, ax = plt.subplots(layout="constrained")
-rects = ax.bar(x, train_accuracies_O, width, label="Training", color="#FF87EB")  # Training accuracy bars.
-rects = ax.bar(x + width, test_accuracies_O, width, label="Testing", color="#70CEFF")  # Testing accuracy bars.
+# Training accuracy bars:
+rects = ax.bar(x, train_accuracies_O, width, label="Training", color="#FF87EB") 
+# Testing accuracy bars:
+rects = ax.bar(x + width, test_accuracies_O, width, label="Testing", color="#70CEFF") 
 ax.bar_label(rects, padding=3)
 ax.set_xlabel("Locality")
 ax.set_ylabel("Accuracy")
@@ -442,7 +445,8 @@ plt.show()
 # 
 
 def deriv_params(thetas: int, order: int):
-    # This function generates parameter shift values for calculating derivatives of a quantum circuit.
+    # This function generates parameter shift values for calculating derivatives
+    # of a quantum circuit.
     # 'thetas' is the number of parameters in the circuit.
     # 'order' determines the order of the derivative to calculate (1st order, 2nd order, etc.).
 
@@ -518,7 +522,8 @@ for order in range(1, 4):
     # Generate the parameter shifts required for the given derivative order.
     to_measure = deriv_params(16, order)
 
-    # Transform the training dataset by applying the quantum circuit with the generated parameter shifts.
+    # Transform the training dataset by applying the quantum circuit with the
+    # generated parameter shifts.
     new_X_train = []
     for thing in X_train:
         result = circuit(thing, to_measure.T)
@@ -592,7 +597,8 @@ plt.show()
 # better results.
 # 
 
-# Initialize matrices to store training and testing accuracies for different combinations of locality and order.
+# Initialize matrices to store training and testing accuracies for different
+# combinations of locality and order.
 train_accuracies = np.zeros([4, 4])
 test_accuracies = np.zeros([4, 4])
 
@@ -623,7 +629,8 @@ for order in range(1, 4):
         # Vectorize the quantum circuit function to apply it to multiple data points in parallel.
         vcircuit = jax.vmap(circuit)
 
-        # Transform the training dataset by applying the quantum circuit with the generated parameter shifts.
+        # Transform the training dataset by applying the quantum circuit with the
+        # generated parameter shifts.
         new_X_train = np.asarray(
             vcircuit(jnp.array(X_train), jnp.array([params for i in range(len(X_train))]))
         )
