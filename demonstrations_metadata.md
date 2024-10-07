@@ -15,7 +15,7 @@ Below is given an example of a complete metadata file for a demonstration.
     "title": "Basic arithmetic with the quantum Fourier transform (QFT)",
     "authors": [
         {
-            "id": "guillermo_alonso"
+            "username": "guillermo_alonso"
         }
     ],
     "dateOfPublication": "2022-11-07T00:00:00+00:00",
@@ -38,7 +38,6 @@ Below is given an example of a complete metadata file for a demonstration.
     ],
     "seoDescription": "Learn how to use the quantum Fourier transform (QFT) to do basic arithmetic",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_qft_arithmetics",
     "references": [
         {
             "id": "Draper2000",
@@ -73,7 +72,7 @@ Below is given an example of a complete metadata file for a demonstration.
 
 ## Properties
 
-The table below gives details about the fields in the metadata JSON file for version 0.1.0.
+The table below gives details about the fields in the metadata JSON file for version 0.2.0.
 
 | Name | Is Required | Value Type | Description |
 |---|---|---|---|
@@ -86,7 +85,6 @@ The table below gives details about the fields in the metadata JSON file for ver
 | `previewImages` | Yes | `array` of `object` | An array of the different images that can be used as previews for this demo - e.g., thumbnails, social media cards (perhaps of different aspect ratios). See below for the object structure. |
 | `seoDescription` | Yes | `string` | A description of the demo suitable for SEO purposes. Ideally this should be less than 150 characters, but this is not a strict limit. It should be a full, grammatically-correct sentence ending in a full stop. |
 | `doi` | Yes, but can be an empty string | `string` | The DOI for this demo. |
-| `canonicalURL` | Yes | `url` | The canonical URL for this demo. Sometimes there might be more than one URL that points to a given page on a website. The canonical URL defines which of these should be thought of as the _primary_ or _main_ one. |
 | `references` | Yes | `array` of `object` | An array of the references used for this demo. See below for object structure. |
 | `basedOnPapers` | Yes, but can be an empty array | `array` of `string` | An array of the DOIs for the papers this demo is based on. |
 | `referencedByPapers` | Yes, but can be an empty array | `array` of `string` | An array of the DOIs of any papers that reference this demo. |
@@ -97,8 +95,8 @@ The table below gives details about the fields in the metadata JSON file for ver
 
 | Name | Is Required | Value Type | Description |
 |---|---|---|---|
-| `id` | Yes | `string` | The id of this author. |
-| `affiliation` | No | `string` | The affiliation of this author - often the university they work at. |
+| `username` | No | `string` | The username of the author's PennyLane profile. Either this field or `name` must be provided. |
+| `name` | No | `string` | The full name of the author. Either this field of `username` must be provided. |
 
 ### Preview Image Object Properties
 
@@ -118,12 +116,12 @@ The table below gives details about the fields in the metadata JSON file for ver
 | `year` | Yes | `string` | The year in which the paper or book was published. |
 | `month` | No | `string` | The month in which the paper or book was published. |
 | `journal` | No | `string` | The journal that the paper was published in. (Not relevant for books.) |
-| `publisher` | No | `string` | The publisher of the book. (Not relevant for papers.) | 
+| `publisher` | No | `string` | The publisher of the book. (Not relevant for papers.) |
 | `doi` | No | `string` | The DOI of the paper. (Not the DOI URL - just the DOI.) |
 | `url` | No | `string` | The URL of the paper or webpage. |
 | `pages` | No | `string` | The specific pages of a journal or book being referenced, as a mixed list of individual pages and page ranges - i.e., `57, 61-63, 67, 102-104`. |
 | `volume` | No | `string` | The volume of the journal or the multi-volume book. |
-| `number` | No | `string` | The number of the journal. | 
+| `number` | No | `string` | The number of the journal. |
 
 ### Related Content Object Properties
 
@@ -151,12 +149,10 @@ The table below gives details about the fields in the metadata JSON file for ver
     "title": "",
     "authors": [
         {
-            "id": "",
-            "affiliation": ""
+            "username": ""
         },
         {
-            "id": "",
-            "affiliation": ""
+            "name": ""
         }
     ],
     "dateOfPublication": "",
@@ -171,7 +167,6 @@ The table below gives details about the fields in the metadata JSON file for ver
     ],
     "seoDescription": "",
     "doi": "",
-    "canonicalURL": "",
     "references": [
         {
             "id": "",
