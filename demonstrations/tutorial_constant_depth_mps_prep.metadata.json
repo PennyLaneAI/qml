@@ -36,17 +36,12 @@
         },
         {
             "type": "demonstration",
-            "id": "tutorial_how_to_create_dynamic_mcm_circuits",
+            "id": "tutorial_mps",
             "weight": 1.0
         },
         {
             "type": "demonstration",
             "id": "tutorial_tn_circuits",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "tutorial_initial_state_preparation",
             "weight": 1.0
         }
     ]

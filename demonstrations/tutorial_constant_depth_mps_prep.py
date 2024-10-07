@@ -17,7 +17,7 @@ In this demo you will learn to prepare certain MPS with a dynamic
 quantum circuit of constant depth. We will implement the circuit, which makes use
 of mid-circuit measurements and conditionally applied operations, for a specific
 MPS. Then we will compare it to a (static) sequential circuit with linear depth.
-Throughout, we closely follow the eponymous article by Smith et al. [#smith]_.
+Throughout, we closely follow the article with similar title by Smith et al. [#smith]_.
 
 .. note::
 
@@ -40,10 +40,10 @@ Outline
 
 We will start by briefly (no, really!) introducing the building blocks for
 the algorithm from a mathematical perspective. One of these blocks
-is the sequential MPS preparation circuit to which we will compare later.
-Alongside this introduction we describe and code up each building block for a
-specific MPS. Then we combine the building blocks into the constant-depth
-algorithm by Smith et al. and run it for the example MPS.
+will be the sequential MPS preparation circuit to which we will compare later.
+Alongside this introduction we will describe and code up each building block for a
+specific MPS. Then we will combine the building blocks into the constant-depth
+algorithm by Smith et al. and will run it for the example MPS.
 As a preview, this is a schematic overview of the algorithm:
 
 .. image:: ../_static/demonstration_assets/constant_depth_mps_prep/algorithm.png
@@ -54,20 +54,20 @@ We will get to all these steps in detail below, but in short, the algorithm
 runs through five steps. It (1) creates independent MPS on small groups of qubits
 and then (2) fuses them together with mid-circuit measurements. This leaves
 the overall state with some defects, which are (3) corrected and moved to the
-boundary of the state with dynamic operations and classical processing. 
+boundary of the state with dynamic operations and classical processing.
 Then, all that is left to do is to (4) correct the defect at the boundary and
 finally (5) to measure two remaining bond qudits projectively.
 
-Building blocks
----------------
+Building blocks of the algorithm
+--------------------------------
 
 We briefly introduce MPS and a sequential circuit with linear
 depth to prepare them, as well as two tools from quantum information theory
 that we will use below: fusion of MPS with mid-circuit measurements
 and *operator pushing*.
 
-Matrix product states
-~~~~~~~~~~~~~~~~~~~~~
+Matrix product states (MPS)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Matrix product states (MPS) are an important class of quantum states.
 They can be described and manipulated conveniently on classical computers and
@@ -75,11 +75,12 @@ are able to approximate relevant states in quantum many-body systems.
 In particular, MPS can efficiently describe ground states of (gapped local)
 one-dimensional Hamiltonians, which in addition can be found efficiently using
 density matrix renormalization group (DMRG) algorithms.
-For a review of MPS see [#schollwoeck]_.
+Also check out our :doc:`introduction to matrix product states </demos/tutorial_mps>`,
+and see [#schollwoeck]_ for a review of MPS.
 
 Following [#smith]_, we will look at translation-invariant MPS
 of a quantum :math:`N`-body system where each body, or site, has local (physical)
-dimension :math:`d`. We will further restrict to periodic boundary conditions,
+dimension :math:`d.` We will further restrict to periodic boundary conditions,
 corresponding to translational invariance of the MPS on a closed loop.
 A general MPS with these properties is given by
 
@@ -87,8 +88,8 @@ A general MPS with these properties is given by
 
     |\Psi\rangle = \sum_{\vec{m}} \operatorname{tr}[A^{m_1}A^{m_2}\cdots A^{m_N}]|\vec{m}\rangle,
 
-where :math:`\vec{m}` is a multi-index of :math:`N` indices ranging over :math:`d`,
-i.e., :math:`\vec{m}\in\{0, 1 \dots, d-1\}^N`, and :math:`\{A^{m}\}_{m}` are :math:`d`
+where :math:`\vec{m}` is a multi-index of :math:`N` indices ranging over :math:`d,`
+i.e., :math:`\vec{m}\in\{0, 1 \dots, d-1\}^N,` and :math:`\{A^{m}\}_{m}` are :math:`d`
 square matrices of equal dimension :math:`D.` (Note that we are using the same
 :math:`A^m` for each physical site, due to the translational invariance.)
 This dimension :math:`D` is called the bond dimension,
@@ -131,7 +132,7 @@ For the GHZ state, a correlator between sites :math:`0` and :math:`j` is
 
     C_{\text{GHZ}}(j) = \langle Z(0) Z(j) \rangle_{\text{GHZ}} - \langle Z(0)\rangle_{\text{GHZ}}\langle Z(j)\rangle_{\text{GHZ}} = 1.
 
-That is, the correlation does not decay with the distance :math:`j`, but the correlation length is
+That is, the correlation does not decay with the distance :math:`j,` but the correlation length is
 infinite. For the product state, on the other hand, we get
 
 .. math::
@@ -180,14 +181,14 @@ print(f"For {g=}, the theoretical correlation length is {xi=:.4f}")
 # constant-depth construction uses it as a (parallelized) subroutine, and because we will
 # later compare the two approaches.
 #
-# The MPS :math:`|\Psi\rangle` above is given by the rank-3 tensor :math:`A`.
+# The MPS :math:`|\Psi\rangle` above is given by the rank-3 tensor :math:`A.`
 # We can think of this as an operator that acts on a bond site and simultaneously *creates*
 # a physical site. However, a unitary quantum circuit is not allowed to
 # create qudits out of nowhere. To fix this, we construct a unitary operation
 # from :math:`A` that already takes a physical site as input.
 # This means that we build a new rank-4 tensor :math:`U` with an additional
-# axis of dimension :math:`d`. Then we demand that :math:`U` acts like :math:`A` if this
-# new physical input axis is in the state :math:`|0\rangle`. That is, after applying :math:`U`
+# axis of dimension :math:`d.` Then we demand that :math:`U` acts like :math:`A` if this
+# new physical input axis is in the state :math:`|0\rangle.` That is, after applying :math:`U`
 # to a physical site in :math:`|0\rangle` and a bond site, we obtain the same result as
 # applying :math:`A` to the bond site alone.
 #
@@ -201,9 +202,9 @@ print(f"For {g=}, the theoretical correlation length is {xi=:.4f}")
 #
 # where :math:`C_\perp` can be any operator making :math:`U` unitary.
 #
-# In the definition of the MPS, the bond site is passed on between copies of :math:`A`,
+# In the definition of the MPS, the bond site is passed on between copies of :math:`A,`
 # sequentially creating physical sites. Likewise, we will apply our unitary :math:`U` to
-# a sequence of physical sites (each in the initial state :math:`|0\rangle`) while passing
+# a sequence of physical sites (each in the initial state :math:`|0\rangle)` while passing
 # on a single bond site. This way, we chain up the unitaries on the bond site like beads
 # on a string.
 #
@@ -211,7 +212,7 @@ print(f"For {g=}, the theoretical correlation length is {xi=:.4f}")
 #     :width: 75%
 #     :align: center
 #
-# Alongside the correspondence between :math:`U` acting on :math:`|0\rangle` and :math:`A`,
+# Alongside the correspondence between :math:`U` acting on :math:`|0\rangle` and :math:`A,`
 # these steps are visualized in the sketch above.
 # Note that the sketch deviates from standard circuit diagrams:
 # The bond qudits start at the top and throughout the circuit one of them is passed from
@@ -219,16 +220,16 @@ print(f"For {g=}, the theoretical correlation length is {xi=:.4f}")
 #
 # The sequential preparation circuit now consists of the following steps.
 #
-# #. Start in the state :math:`|\psi_0\rangle = |0\rangle^{\otimes N}\otimes |00\rangle_D`.
+# #. Start in the state :math:`|\psi_0\rangle = |0\rangle^{\otimes N}\otimes |00\rangle_D.`
 #    The last two sites are non-physical bond sites, encoded by :math:`D`-dimensional qudits.
 #
 # #. Entangle the bond qudits into the state
-#    :math:`|I\rangle = \frac{1}{\sqrt{D}}\sum_j |jj\rangle_D`.
+#    :math:`|I\rangle = \frac{1}{\sqrt{D}}\sum_j |jj\rangle_D.`
 #
 # #. Apply the unitary :math:`U` to each of the :math:`N` physical sites, with the
 #    :math:`D`-dimensional tensor factor always acting on the first bond qudit.
-#    Denoting :math:`U` acting on the :math:`i`\ th physical site and the first bond site
-#    by :math:`U^{(i)}`, this produces the following state.
+#    Denoting :math:`U` acting on the :math:`i`\ -th physical site and the first bond site
+#    by :math:`U^{(i)},` this produces the following state.
 #
 #    .. math::
 #
@@ -246,7 +247,7 @@ print(f"For {g=}, the theoretical correlation length is {xi=:.4f}")
 #    come out when applying the 3-tensor :math:`A` to the first bond site :math:`N` times.
 #
 # #. Measure the two bond qudits in the (generalized) Bell basis and postselect on the outcome
-#    being :math:`|I\rangle`. Then discard the bond qudits, which collapses :math:`|\psi_1\rangle`
+#    being :math:`|I\rangle.` Then discard the bond qudits, which collapses :math:`|\psi_1\rangle`
 #    into the state
 #
 #    .. math::
@@ -256,7 +257,7 @@ print(f"For {g=}, the theoretical correlation length is {xi=:.4f}")
 #        = |\Psi\rangle.
 #
 #    Note that this step is *probabilistic* and we only succeed to produce the state if we measure
-#    the state :math:`|I\rangle`.
+#    the state :math:`|I\rangle.`
 #
 # We see that we prepared :math:`|\Psi\rangle` with an entangling operation on the bond qudits, one unitary per
 # physical qubit, and a final basis change to measure the Bell basis. Overall, this amounts to a linear
@@ -264,8 +265,8 @@ print(f"For {g=}, the theoretical correlation length is {xi=:.4f}")
 #
 # **Example**
 #
-# For our example MPS :math:`|\Psi(g)\rangle`, let us first find the unitary :math:`U`.
-# For this, consider the fixed part of :math:`U`.
+# For our example MPS :math:`|\Psi(g)\rangle,` let us first find the unitary :math:`U.`
+# For this, consider the fixed part of :math:`U.`
 
 E_00 = np.array([[1, 0], [0, 0]])  # |0><0|
 E_10 = np.array([[0, 0], [1, 0]])  # |1><0|
@@ -312,7 +313,7 @@ qml.QubitUnitary.label = label_fn
 
 
 def sequential_preparation(g, wires):
-    """Prepare the example MPS \Psi(g) on N qubits where N is the length
+    """Prepare the example MPS Ψ(g) on N qubits where N is the length
     of the passed wires minus 2. The bond qubits are still entangled."""
     eta = 1 / np.sqrt(1 - g)
     # Define bond qubits [0, N+1] and physical qubits [1, 2, ... N]
@@ -351,8 +352,8 @@ def sequential_circuit(N, g):
 
 
 ######################################################################
-# We will verify the prepared state below, when comparing to the constant-depth
-# preparation circuit. Let's just draw the circuit for now.
+# We will use this circuit later to compare the constant-depth circuit
+# against it. For now, let's draw it.
 
 N = 7
 _ = qml.draw_mpl(sequential_circuit)(N, g)
@@ -360,7 +361,7 @@ _ = qml.draw_mpl(sequential_circuit)(N, g)
 ######################################################################
 # The sequential preparation circuit already uses mid-circuit measurements, as is visible
 # from the measurement steps on the first and last qubit, which are set to postselect the
-# outcome :math:`|0\rangle`. However, there is no feedforward control that modifies the circuit
+# outcome :math:`|0\rangle.` However, there is no feedforward control that modifies the circuit
 # dynamically based on measured values. This will change in the following sections.
 #
 # Fusion of MPS states with mid-circuit measurements
@@ -382,7 +383,7 @@ _ = qml.draw_mpl(sequential_circuit)(N, g)
 #     :width: 75%
 #     :align: center
 #
-# Consider a state :math:`|\Phi\rangle=|\Phi_1\rangle\otimes|\Phi_2\rangle`, where
+# Consider a state :math:`|\Phi\rangle=|\Phi_1\rangle\otimes|\Phi_2\rangle,` where
 #
 # .. math::
 #
@@ -411,9 +412,9 @@ _ = qml.draw_mpl(sequential_circuit)(N, g)
 #
 #     |B^k\rangle=\frac{1}{D} \sum_{j,\ell=1}^D \left(B_{j\ell}^k\right)^\ast |j\ell\rangle,
 #
-# which in turn are characterized by :math:`D\times D` matrices :math:`B^k`.
+# which in turn are characterized by :math:`D\times D` matrices :math:`B^k.`
 # We can change the basis on the bond qudits to be measured by applying the unitary
-# :math:`V=\sum_k |k\rangle\!\langle B^k|`, which leads to the state
+# :math:`V=\sum_k |k\rangle\!\langle B^k|,` which leads to the state
 #
 # .. math::
 #
@@ -421,9 +422,9 @@ _ = qml.draw_mpl(sequential_circuit)(N, g)
 #     \sum_{\vec{m}} |\vec{m}\rangle  |k\rangle_{D^2} |ip\rangle_D
 #     \langle i|A^{m_1} \cdots A^{m_K}B^kA^{m_{K+1}} \cdots A^{m_{K+L}}|p\rangle_D,
 #
-# where we used that :math:`\sum_{j,\ell} |j\rangle B^k_{j\ell}\langle\ell|=B^k`.
+# where we used that :math:`\sum_{j,\ell} |j\rangle B^k_{j\ell}\langle\ell|=B^k.`
 # We now can measure the two bond qudits and will know that for a given measurement
-# outcome :math:`k`, we obtained the MPS state on :math:`K+L` qubits, up to
+# outcome :math:`k,` we obtained the MPS state on :math:`K+L` qubits, up to
 # a defect, namely the matrix :math:`B^k` that depends to the outcome.
 #
 # In full generality, the fusion strategy may seem complicated, but it can take
@@ -444,9 +445,9 @@ _ = qml.draw_mpl(sequential_circuit)(N, g)
 # later on. There, we will see that in general the matrices :math:`B^k` and the MPS
 # tensor :math:`A` have to "play well" together.
 # As an example, this choice leads to :math:`B^1_{j\ell} = 1` for
-# :math:`(j,\ell)=(0, 1)` and :math:`(j, \ell)=(1,0)`, and :math:`B^1_{j\ell}=0`
+# :math:`(j,\ell)=(0, 1)` and :math:`(j, \ell)=(1,0),` and :math:`B^1_{j\ell}=0`
 # otherwise (note that the factor :math:`\frac{1}{\sqrt{2}}` is not part of :math:`B^k`
-# in the general equation above). This means that :math:`B^1=X`, the Pauli matrix!
+# in the general equation above). This means that :math:`B^1=X,` the Pauli matrix!
 # Similarly, we find
 #
 # .. math::
@@ -458,7 +459,7 @@ _ = qml.draw_mpl(sequential_circuit)(N, g)
 # which is similar to the ``project_measure`` function from the sequential preparation
 # routine. Note, however, that instead of postselecting, we record the measurement
 # outcome in the form of two bits representing the index :math:`k` of the operator
-# :math:`B^k`, which we will use further below.
+# :math:`B^k, which we will use further below.
 
 
 def fuse(wire_0, wire_1):
@@ -486,7 +487,7 @@ def two_qubit_mps_by_fusion(g):
 # by undoing the fusion-based preparation with the two-qubit sequential circuit
 # and measuring an exemplary expectation value.
 # If the two separately prepared MPS and the fusion step did prepare the correct
-# MPS already, the test measurement would just be :math:`\langle 00 | Z_0| 00\rangle=1`.
+# MPS already, the test measurement would just be :math:`\langle 00 | Z_0| 00\rangle=1.`
 
 
 @qml.qnode(qml.device("default.qubit", wires=6))
@@ -512,12 +513,12 @@ print(f"The test measurement of fusion preparation + sequential unpreparation is
 # The last building block we need is so-called operator pushing. In fact, whether or not an MPS
 # can be prepared with the constant-depth circuit depends on whether certain operator pushing
 # relations are satisfied between the matrices :math:`B^k` from the fusion step and the MPS
-# tensor :math:`A`. We will not go into detail about these conditions but assume here that
+# tensor :math:`A.` We will not go into detail about these conditions but assume here that
 # we work with compatible MPS and measurements.
 #
 # Operator pushing then allows us to push a defect operator :math:`B^k` from one bond
 # axis through the tensor :math:`A` of the MPS to the other bond axis and to the physical axis.
-# While doing so, the operator in general will change, i.e., we end up with different operators
+# In general, doing so will change the operator, i.e., we end up with different operators
 # :math:`C^k` and :math:`D^k` on the bond and physical axes, respectively.
 # Visually, we find:
 #
@@ -525,47 +526,48 @@ print(f"The test measurement of fusion preparation + sequential unpreparation is
 #     :width: 80%
 #     :align: center
 #
-# For simplicity, we denote a push by :math:`B^k\mapsto (C^k, D^k)`.
+# For simplicity, we denote a push by :math:`B^k\mapsto (C^k, D^k).`
 #
 # **Example**
 #
 # In the fusion step above we picked the Bell basis as measurement basis, without
 # further specifying why. As we saw, this basis leads to Pauli matrices as impurities
-# :math:`B^k`. It turns out that those matrices satisfy simple pushing relations together with
-# the tensor :math:`A` of our example MPS :math:`|\Psi(g)\rangle`, explaining this choice of
+# :math:`B^k.` It turns out that those matrices satisfy simple pushing relations together with
+# the tensor :math:`A` of our example MPS :math:`|\Psi(g)\rangle,` explaining this choice of
 # measurement basis. In particular, the relations are
 #
 # .. image:: ../_static/demonstration_assets/constant_depth_mps_prep/operator_pushing_example.png
 #     :width: 90%
 #     :align: center
 #
+# |
+#
 # That is, in the notation above we have
-# :math:`X\mapsto (Y, Y)`,
-# :math:`Y\mapsto (Y, X)`, and
-# :math:`Z\mapsto (I, Z)` as well as the trivial
-# :math:`I\mapsto (I, I)`.
-# Note that the bond axis operator either is trivial (the identity), or a Pauli-:math:`Y` operator.
+# :math:`X\mapsto (Y, Y),`
+# :math:`Y\mapsto (Y, X),` and
+# :math:`Z\mapsto (I, Z).`
+# Note that the bond axis operator either is trivial (the identity), or a Pauli :math:`Y` operator.
 # These pushing relations allow us to push the bond axis operator through to an open boundary
 # bond axis of the fused MPS. In addition, we can remove the operators on the physical axes by
 # applying the correct Pauli operation to the physical site, conditioned on the fusion measurement
 # outcomes. If we have an MPS on :math:`L` sites, pushing through a Pauli will have the
 # following effect:
 #
-# - If it is a Pauli-:math:`Y`, all physical sites need to be corrected by a Pauli-:math:`X`, and
-#   a Pauli-:math:`Y` is pushed to the opposite bond site.
+# - If it is a Pauli :math:`Y,` all physical sites need to be corrected by a Pauli :math:`X,` and
+#   a Pauli :math:`Y` is pushed to the opposite bond site.
 #
-# - If it is a Pauli-:math:`X`, a Pauli-:math:`Y` is applied to the first physical qubit, and afterwards
-#   the case above is recovered, leading to applying Pauli-:math:`X` and pushing through a Pauli-:math:`Y`.
+# - If it is a Pauli :math:`X,` a Pauli :math:`Y` is applied to the first physical qubit, and afterwards
+#   the case above is recovered, leading to applying Pauli :math:`X` and pushing through a Pauli :math:`Y.`
 #
-# - If it is a Pauli-:math:`Z`, a Pauli-:math:`Z` is applied to the first physical qubit and we are done.
+# - If it is a Pauli :math:`Z,` a Pauli :math:`Z` is applied to the first physical qubit and we are done.
 #   No operator is pushed through on the bond axis.
 #
 # We can recast this condition into the following dynamic circuit instructions:
 #
-# - If the first (second) bit of the measurement outcome bitstring is active, apply a Pauli-:math:`Z`
-#   (Pauli-:math:`Y`) to the first physical qubit.
+# - If the first/second bit of the measurement outcome bitstring is active, apply a Pauli :math:`Z/Y`
+#   to the first physical qubit.
 #
-# - If the second bit is active, apply a Pauli-:math:`X` to all other physical qubits.
+# - If the second bit is active, apply a Pauli :math:`X` to all other physical qubits.
 #
 # This pushing and correction step is captured by the following function.
 
@@ -590,14 +592,14 @@ def push_and_correct(op_id, phys_wires):
 
 
 ######################################################################
-# Piecing everything together
-# ---------------------------
+# Piecing the algorithm together
+# ------------------------------
 #
 # Now that we discussed the sequential preparation algorithm, fusion with mid-circuit
 # measurements, and operator pushing, we have all components for the constant-depth
 # preparation algorithm. As inputs it requires the tensor :math:`A` (or the unitary
-# :math:`U` to reproduce :math:`A`), the total number of physical sites :math:`N`,
-# and the block size :math:`q`.
+# :math:`U` to reproduce :math:`A)`, the total number of physical sites :math:`N,`
+# and the block size :math:`q.`
 #
 # #. Prepare :math:`\frac{N}{q}` MPS of size :math:`q`
 #    in parallel, using the sequential preparation algorithm (without the final
@@ -622,7 +624,7 @@ def push_and_correct(op_id, phys_wires):
 #     :align: center
 #
 # It is important to remember that showing the existence of suitable operator pushing
-# relations (and finding them explicitly) is a crucial step in general, which goes
+# relations (and finding them explicitly) is a crucial step of the algorithm, which goes
 # beyond the scope of the demo.
 #
 # The projective measurement step at the end is the same as for the sequential
@@ -635,15 +637,15 @@ def push_and_correct(op_id, phys_wires):
 # considerations. First, the block must be such that operator pushing relations are
 # available. Often this will determine a minimal block size, and multiples of that
 # size are valid choices as well. Second, the depth of the (parallelized) sequential
-# preparation circuits is proportional to :math:`q`, determining a key contribution
+# preparation circuits is proportional to :math:`q,` determining a key contribution
 # to the overall depth of the algorithm. Third, the sequential algorithm requires
 # two bond qudits for each block, leading to :math:`\frac{2N}{q}` auxiliary qudits
 # overall. Note how the product of the depth and the number of auxiliary qubits is
-# linear in :math:`N`.
+# linear in :math:`N.`
 #
 # **Example**
 #
-# For our example MPS :math:`|\Psi(g)\rangle`, we already defined and coded up the
+# For our example MPS :math:`|\Psi(g)\rangle,` we already defined and coded up the
 # sequential preparation circuit for a flexible number of qubits (Step 1),
 # the measurement-based fusion (Step 2), and the operator pushing and correction step
 # (Step 3). This makes putting the algorithm together quite simple. We only need to
@@ -665,7 +667,7 @@ def correct_end_bond(bond_idx, op_id):
 
 
 def constant_depth(N, g, q):
-    """Prepare the MPS |\Psi(g)> in constant depth."""
+    """Prepare the MPS |Ψ(g)> in constant depth."""
     num_blocks = N // q
     block_wires = q + 2  # 2 bond wires added
 
@@ -716,7 +718,7 @@ def constant_depth_circuit(N, g, q):
 ######################################################################
 #
 # We built the full constant-depth circuit to prepare the MPS
-# :math:`|\Psi(g)\rangle`.
+# :math:`|\Psi(g)\rangle.`
 # Before we evaluate the states it produces, let's see how the circuit looks.
 # We'll add some boxes for the individual subroutines, and recommend opening
 # the figure in a separate tab.
