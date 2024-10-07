@@ -40,7 +40,7 @@ three.
 To define tensor networks, it is important to first understand tensor contraction.
 Two or more tensors can be contracted by summing over repeated indices.
 In diagrammatic notation, the repeated indices appear as lines connecting tensors, as in the figure below. 
-We see two tensors of rank two connected by one repeated index, :math:`k`. The dimension of the
+We see two tensors of rank two connected by one repeated index, :math:`k.` The dimension of the
 repeated index is called the bond dimension.
 
 .. image:: ../_static/demonstration_assets/tn_circuits/simple_tn_color.PNG
@@ -53,7 +53,7 @@ matrix multiplication formula and can be expressed as
 .. math::
     C_{ij} = \sum_{k}A_{ik}B_{kj},
 
-where :math:`C_{ij}` denotes the entry for the :math:`i`-th row and :math:`j`-th column of the product :math:`C=AB`. 
+where :math:`C_{ij}` denotes the entry for the :math:`i`-th row and :math:`j`-th column of the product :math:`C=AB.` 
 
 A tensor network is a collection of tensors where a subset of 
 all indices are contracted. As mentioned above, we can use diagrammatic notation

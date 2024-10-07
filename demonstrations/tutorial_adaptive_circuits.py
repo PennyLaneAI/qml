@@ -203,7 +203,7 @@ for i in range(len(doubles)):
 ##############################################################################
 # The computed gradients have different values, reflecting the contribution of each gate
 # in the final state prepared by the circuit. Many of the gradient values are zero and we select
-# those gates that have a gradient above a pre-defined threshold, which we set to :math:`10^{-5}`.
+# those gates that have a gradient above a pre-defined threshold, which we set to :math:`10^{-5}.`
 
 doubles_select = [doubles[i] for i in range(len(doubles)) if abs(grads[i]) > 1.0e-5]
 doubles_select

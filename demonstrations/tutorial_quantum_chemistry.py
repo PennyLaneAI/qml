@@ -109,7 +109,7 @@ symbols, coordinates = qchem.read_structure("h2o.xyz")
 # In the second quantization formalism, the electronic wave function of the molecule
 # is represented in the occupation number basis. For :math:`M` *spin* molecular
 # orbitals, the elements of this basis are labelled as
-# :math:`\vert n_0, n_1, \dots, n_{M-1} \rangle`, where :math:`n_i = 0,1`
+# :math:`\vert n_0, n_1, \dots, n_{M-1} \rangle,` where :math:`n_i = 0,1`
 # indicates the occupation of each orbital. In this representation, the electronic
 # Hamiltonian is given by
 #
@@ -139,7 +139,7 @@ symbols, coordinates = qchem.read_structure("h2o.xyz")
 #     H = \sum_j C_j \otimes_i \sigma_i^{(j)},
 #
 # where :math:`C_j` is a scalar coefficient and :math:`\sigma_i` represents an
-# element of the Pauli group :math:`\{ I, X, Y, Z \}`.
+# element of the Pauli group :math:`\{ I, X, Y, Z \}.`
 #
 # In PennyLane we have the :func:`~.pennylane.qchem.molecular_hamiltonian`
 # function which encapsulates all the steps explained above. It simplifies the process of building
