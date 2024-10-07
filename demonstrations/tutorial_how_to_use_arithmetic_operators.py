@@ -22,7 +22,7 @@ Loading a function :math:`f(x, y)`
 ----------------------------------
 
 In this how-to guide, we will show how we can apply a polynomial function in a quantum computer using basic arithmetic.
-We will use as an example the function :math:`f(x,y)= 4 + 3xy + 5 x+ 3 y ` where the variables and the coefficients
+We will use as an example the function :math:`f(x,y)= 4 + 3xy + 5 x+ 3 y` where the variables and the coefficients
 are integer values. Therefore, the operator we want to build is:
 
 .. math::
@@ -32,7 +32,7 @@ are integer values. Therefore, the operator we want to build is:
 where :math:`x` and :math:`y` are the binary representations of the integers on which we want to apply the function.
 
 We will show how to load this function in two different ways: first, by concatenating simple arithmetic operators,
-and finally, using the OutPoly operator.
+and finally, using the `qml.OutPoly` operator.
 
 InPlace and OutPlace Operations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -72,8 +72,15 @@ print("output register: ", output[2])
 ######################################################################
 # In this example we are setting :math:`x=1` and :math:`y=4` whose binary representation are :math:`[0 0 0 1]` and :math:`[0 1 0 0]` respectively.
 #
-# Now, we can introduce the first quantum arithmetic operation to load :math:`f(x, y) =4 + 3xy + 5 x+ 3 y`. The first step will be
-# to load the constant :math:`4` by using the Inplace addition operator :class:`~.pennylane.Adder` directly on the output wires:
+# Now, the first step to load :math:`f(x, y) =4 + 3xy + 5 x+ 3 y` will be
+# to add the constant :math:`4` by using the Inplace addition operator :class:`~.pennylane.Adder` directly on the output wires:
+#
+# .. math::
+#
+#   \text{Adder}(k) |w \rangle = | w+k \rangle.
+#
+# In our example, we are considering the input :math:`|w\rangle = |0\rangle` and :math:`k = 4`.
+# Let's see how it looks like in code:
 
 @qml.qnode(dev)
 def circuit(x,y):
@@ -86,12 +93,25 @@ def circuit(x,y):
 print(circuit(x=1,y=4))
 
 ######################################################################
-# We obtained the state [0 1 0 0], i.e. :math:`4`, as expected.
+# We obtained the state [0 0 1 0 0], i.e. :math:`4`, as expected.
 # Note that we have not used the :math:`x` and :math:`y` wires for the moment since the constant term does not depend on these values.
 #
 # The next step will be to add the term :math:`3xy` by using the
-# Inplace and Outplace multiplication operators, :class:`~.pennylane.Multiplier`  and :class:`~.pennylane.OutMultiplier` respectively.
-# To do this, we first turn :math:`|x\rangle` into :math:`|3x\rangle` and then multiply it by :math:`|y\rangle`.
+# `Inplace multiplication <https://docs.pennylane.ai/en/stable/code/api/pennylane.Multiplier.html>'_
+#
+# .. math::
+#
+#   \text{Multiplier}(k) |w \rangle = | kw \rangle,
+#
+# and the `Outplace multiplication <https://docs.pennylane.ai/en/stable/code/api/pennylane.OutMultiplier.html>`_
+#
+# .. math::
+#
+#   \text{OutMultiplier} |w \rangle |z \rangle |0 \rangle = |w \rangle |z \rangle |wz \rangle.
+#
+# To do this, we first turn :math:`|x\rangle` into :math:`|3x\rangle` with the Inplace multiplication. After that
+# we will multiply the result by :math:`|y\rangle`
+# using the Outplace operator:
 
 def adding_3xy():
     # |x> --->  |3x>
@@ -118,7 +138,15 @@ print(circuit(x=1,y=4))
 ######################################################################
 #Nice! The state [1 0 0 0 0] represents :math:`4+3xy = 4 + 12 =16`.
 #
-#The last step to generate :math:`f(x, y) =4 + 3xy + 5 x+ 3 y` will involve to load the monomial terms :math:`5x` and :math:`3y` by using the OutPlace addition operator :class:`~.pennylane.OutAdder` and the :class:`~.pennylane.Multiplier` previously employed.
+# The final step to compute :math:`f(x, y)` is to generate the monomial terms :math:`5x` and :math:`3y` using the previously employed
+# :class:`~.pennylane.Multiplier`. These terms are then added to the output register using the :class:`~.pennylane.OutAdder` operator:
+#
+# .. math::
+#
+#   \text{OutAdder} |w \rangle |z \rangle |0 \rangle = |w \rangle |z \rangle |w + z \rangle,
+#
+# where in our case, :math:`|w\rangle` and :math:`|z\rangle` are :math:`|5x\rangle` and :math:`|3y\rangle` respectively.
+#
 
 def adding_5x_3y():
 
@@ -149,20 +177,20 @@ def circuit(x,y):
 print(circuit(x=1,y=4))
 
 ######################################################################
-#The result doesn't seem right, as we expect to get `f(x=1, y=4) = 33`. Can you guess why?
+# The result doesn't seem right, as we expect to get :math:`f(x=1, y=4) = 33`. Can you guess why?
 #
-#The issue is overflow. The number 33 exceeds what can be represented with the 5 wires defined in `wires["output"]`.
-# With 5 wires, we can only represent numbers up to `2^5 = 32`. Anything larger is reduced modulo `2^5`.
+# The issue is overflow. The number 33 exceeds what can be represented with the 5 wires defined in `wires["output"]`.
+# With 5 wires, we can only represent numbers up to :math:`2^5 = 32`. Anything larger is reduced modulo :math:`2^5`.
 # Quantum arithmetic is modular, so every operation is mod-based.
 #
-#To fix this and get `f(x=1, y=4) = 33`, we could just add one more wire to the output register.
+#To fix this and get :math:`f(x=1, y=4) = 33`, we could just add one more wire to the output register.
 #
 
 wires = qml.registers({"x": 4, "y": 4, "output": 6,"work_wires": 4})
 print(circuit(x=1, y=4))
 
 ######################################################################
-# Now we get the correct result :math:`f(x=1,y=4)=33`.
+# Now we get the correct result where :math:`[1 0 0 0 0 1]` is the binary representation of :math:`33`.
 
 ######################################################################
 # Using OutPoly
