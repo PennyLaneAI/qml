@@ -43,11 +43,11 @@ to solve the electronic equation:
 
 .. math:: H(R)|\Psi \rangle =  E|\Psi\rangle.
 
-From this perspective arises the concept of the electronic energy of a molecule, :math:`E(R)`,
-as a function of nuclear coordinates :math:`R`. The energy :math:`E(R)` is the expectation value
-of the molecular Hamiltonian, :math:`E(R)=\langle \Psi_0|H(R)|\Psi_0\rangle`, taken
-with respect to the ground state :math:`|\Psi_0(R)\rangle`. The potential energy surface is
-precisely this function :math:`E(R)`, which connects energies to different geometries of the
+From this perspective arises the concept of the electronic energy of a molecule, :math:`E(R),`
+as a function of nuclear coordinates :math:`R.` The energy :math:`E(R)` is the expectation value
+of the molecular Hamiltonian, :math:`E(R)=\langle \Psi_0|H(R)|\Psi_0\rangle,` taken
+with respect to the ground state :math:`|\Psi_0(R)\rangle.` The potential energy surface is
+precisely this function :math:`E(R),` which connects energies to different geometries of the
 molecule. It gives us a visual tool to understand chemical reactions by associating
 stable molecules (reactants and products) with local minima, transition states with peaks,
 and by identifying the possible routes for a chemical reaction to occur.
@@ -68,7 +68,7 @@ Bond dissociation in a Hydrogen molecule
 ----------------------------------------
 
 We now construct a potential energy surface and use it to compute equilibrium bond lengths and
-the bond dissociation energy. We begin with the simplest of molecules: :math:`H_2`.
+the bond dissociation energy. We begin with the simplest of molecules: :math:`H_2.`
 The formation or breaking of the :math:`H-H` bond is also the most
 elementary of all reactions:
 
@@ -77,7 +77,7 @@ elementary of all reactions:
 Using a minimal `basis set <https://en.wikipedia.org/wiki/STO-nG_basis_sets>`_,
 this molecular system can be described by two electrons in four
 spin-orbitals. When mapped to a qubit representation, we need a total of four qubits.
-The *Hartree-Fock (HF) state* is represented as :math:`|1100\rangle`, where the two
+The *Hartree-Fock (HF) state* is represented as :math:`|1100\rangle,` where the two
 lowest-energy orbitals are occupied, and the remaining two are unoccupied.
 
 We design a quantum circuit consisting of :class:`~.pennylane.SingleExcitation` and
@@ -191,7 +191,7 @@ plt.show()
 ##############################################################################
 # This is the potential energy surface for the dissociation of a hydrogen molecule into
 # two hydrogen atoms. It is a numerical calculation of the same type of plot that was
-# illustrated in the beginning. In a diatomic molecule such as :math:`H_2`, it
+# illustrated in the beginning. In a diatomic molecule such as :math:`H_2,` it
 # can be used to obtain the equilibrium bond length — the distance between the two atoms that
 # minimizes the total electronic energy. This is simply the minimum of the curve. We can also
 # obtain the bond dissociation energy, which is the difference in the energy of the system when
@@ -254,7 +254,7 @@ print(f"The bond dissociation energy is {bond_energy:.6f} Hartrees")
 #
 # In a minimal basis like STO-3G, this system consists of three electrons in six spin
 # molecular orbitals. This translates into a six-qubit problem, for which the Hartree-Fock state
-# is :math:`|111000\rangle`. As there is an unpaired
+# is :math:`|111000\rangle.` As there is an unpaired
 # electron, the spin multiplicity is equal to two and needs to be specified, since it differs
 # from the default value of one.
 
