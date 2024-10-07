@@ -2,21 +2,22 @@ r"""
 How-to use Quantum Arithmetic Operators
 =======================================
 
-Classical computers handle arithmetic operations like addition, subtraction, multiplication, and exponentiation with ease, thanks to decades of development. For instance, you can multiply two numbers on your phone in milliseconds!
+Classical computers handle arithmetic operations like addition, subtraction, multiplication, and exponentiation with ease. 
+For instance, you can multiply two numbers on your phone in milliseconds!
 
-In contrast, performing the same tasks on quantum computers isn't as straightforward. While they can excel at solving certain problems faster than classical computers, basic arithmetic isn't their strongest point. So why do we want to do quantum arithmetic anyway?
+Quantum computers, however, aren't as efficient at basic arithmetic. So why do we need quantum arithmetic? 
 
-Well, quantum arithmetic isn't necessarily “better” at basic operations, but it becomes essential when it serves as a part of a more complex quantum algorithm. For example:
+While it's not "better" for basic operations, it's essential in more complex quantum algorithms. For example:
 
-1. In Shor's algorithm for factoring large numbers, quantum arithmetic is crucial for performing modular exponentiation in order to execute the algorithm efficiently.
+1. In Shor's algorithm quantum arithmetic is crucial for performing modular exponentiation. 
 
-2. Grover's algorithm might need to use quantum arithmetic to construct oracles that help in speeding up search problems, as shown in [#demo_qft_arith]_.
+2. Grover's algorithm might need to use quantum arithmetic to construct oracles, as shown in [#demo_qft_arith]_.
 
-3. Loading functions into quantum computers, which might require several quantum arithmetic operations.
+3. Loading functions into quantum computers, which often requires several quantum arithmetic operations.
 
-These arithmetic operations are like building blocks. Alone, they might not offer a speedup, but when incorporated into larger algorithms, they enable the kind of powerful computations that quantum computers are designed for.
+These arithmetic operations act as building blocks that enable powerful quantum computations when integrated into larger algorithms.
 
-With PennyLane, you'll see how easy it is to build these quantum arithmetic operations and use them as subroutines in your quantum algorithms!
+With PennyLane, you'll see how easy it is to build these operations as subroutines for your quantum algorithms!
 
 
 Loading a function :math:`f(x, y)`
@@ -24,7 +25,7 @@ Loading a function :math:`f(x, y)`
 
 In this how-to guide, we will show how we can apply a polynomial function in a quantum computer using basic arithmetic.
 We will use as an example the function :math:`f(x,y)=a+b\cdot x+c\cdot y + d \cdot xy ` where the variables and the coefficients
-are integer values. We will take the values :math:`a = 4`, :math:`b = 5`,:math:`c = 3` and :math:`d = 3`, defining the desired operator as:
+are integer values. We will take the values :math:`a = 4`, :math:`b = 5`, :math:`c = 3` and :math:`d = 3`, defining the desired operator as:
 
 .. math::
 
@@ -32,9 +33,11 @@ are integer values. We will take the values :math:`a = 4`, :math:`b = 5`,:math:`
 
 where :math:`x` and :math:`y` are the binary representations of the integers on which we want to apply the function.
 
+We will show how to load this function in two different ways: first, by concatenating simple arithmetic operators,
+and finally, using the OutPoly operator.
 
 InPlace and OutPlace Operations
--------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We can load the target function into the quantum computer using different quantum arithmetic operations. 
 We will break down into pieces. We'll do a step by step load of the function :math:`f(x, y)`.
@@ -91,7 +94,7 @@ def circuit(x,y):
 print(circuit(x=1,y=4))
 
 ######################################################################
-# We obtained the state [0 1 0 0], i.e. :math:`a=4`, as expected!
+# We obtained the state [0 1 0 0], i.e. :math:`a=4`, as expected.
 #
 # The next step will be to add the term :math:`3xy` by using the
 # Inplace and Outplace multiplication operators, :class:`~.pennylane.Multiplier`  and :class:`~.pennylane.OutMultiplier` respectively.
@@ -153,31 +156,31 @@ def circuit(x,y):
 print(circuit(x=1,y=4))
 
 ######################################################################
-# The result obtained doesn't look quite right, since one would expect to obtain :math:`f(x=1,y=4)=4+ 5\cdot1+3\cdot4+ 3 \cdot 1 \cdot 4=33`... 
+# The result obtained doesn't look quite right, since one would expect to obtain :math:`f(x=1,y=4)=4+ 5\cdot1+3\cdot4+ 3 \cdot 1 \cdot 4=33`. 
 # Could you guess what is going on?
 #
 # What's happening here is that we're running into overflow. The number 33 is too large for the number of wires we have defined in
 # `wires[output]`. With 5 wires, we can represent numbers up to :math:`2^5=32`. Any number larger than that gets reduced to its modulo with 
-#  respect to :math:`2^5`. We have to keep in mind that all the quantum arithmetic is modular. So, every operation we perform is with respect
-#  to a given modulo that can be set by the user, but by default will be :math:`mod=2^{\text{len(wires)}}`.
+# respect to :math:`2^5`. We have to keep in mind that all the quantum arithmetic is modular. So, every operation we perform is with respect
+# to a given modulo that can be set by the user. By default the modulo will be set at :math:`mod=2^{\text{len(wires)}}`.
 #
-# To fix this  and get the correct result :math:`f(x=1,y=4)=33`, the simplest solution is to redefine the registers
+# To fix this and get the correct result :math:`f(x=1,y=4)=33`, the simplest solution is to redefine the registers
 # adding one more wire to the output.
 
 wires = qml.registers({"x": 4, "y": 4, "output": 6,"work_wires": 4})
 print(circuit(x=1, y=4))
 
 ######################################################################
-# Now we get the correct result :math:`f(x=1,y=4)=33`!
+# Now we get the correct result :math:`f(x=1,y=4)=33`.
 
 ######################################################################
 # Using OutPoly
-# ------------------------------------------
+# ~~~~~~~~~~~~~
 # In the last section, we showed how to use different arithmetic operations to load 
 # a function onto a quantum computer. But what if I told you there’s an easier way to do all this using just one
 # PennyLane function that handles the arithmetic for you? Pretty cool, right? I’m talking about :class:`~.pennylane.OutPoly`. 
 # This handy operator lets you load polynomials directly into quantum states, taking care of all the arithmetic in one go. 
-# Let’s check out how to load a function like :math:`f(x, y)` using :class:`~.pennylane.OutPoly`!
+# Let’s check out how to load a function like :math:`f(x, y)` using :class:`~.pennylane.OutPoly`.
 #
 # Let's first start by explicitly defining our function:
 
@@ -185,7 +188,7 @@ def f(x, y):
    return a+b*x+c*y+d*x*y
 
 ######################################################################
-# Now, let's load it into a quantum circuit!
+# Now, let's load it into a quantum circuit.
 
 ######################################################################
 
@@ -211,7 +214,7 @@ print(circuit_with_Poly(x=1,y=4))
 # of quantum computing. While it may not replace classical efficiency for simple tasks, its role in complex algorithms 
 # is undeniable. By leveraging tools like `qml.OutPoly`, you can streamline the coding of your quantum algorithms. So, 
 # whether you choose to customize your arithmetic operations or take advantage of the built-in convenience offered by PennyLane 
-# operators, you're now equipped to tackle exciting quantum challenges ahead!
+# operators, you're now equipped to tackle the exciting quantum challenges ahead.
 #
 # References
 # ----------
