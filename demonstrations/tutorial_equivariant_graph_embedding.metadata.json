@@ -23,7 +23,6 @@
     ],
     "seoDescription": "Find out more about how to embedd graphs into quantum states.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_equivariant_graph_embedding",
     "references": [
         {
             "id": "Skolik2022",

@@ -19,7 +19,6 @@
     ],
     "seoDescription": "Train a quantum convolutional neural network to classify MNIST images.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_quanvolution",
     "references": [
         {
             "id": "Henderson2019",

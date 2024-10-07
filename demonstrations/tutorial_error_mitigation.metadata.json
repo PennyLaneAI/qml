@@ -23,7 +23,6 @@
     ],
     "seoDescription": "Learn how to mitigate quantum circuits using Mitiq and PennyLane.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_error_mitigation",
     "references": [
         {
             "id": "proctor2020measuring",

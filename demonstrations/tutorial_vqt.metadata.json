@@ -19,7 +19,6 @@
     ],
     "seoDescription": "Using the Variational Quantum Thermalizer to prepare the thermal state of a Heisenberg model Hamiltonian.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_vqt",
     "references": [
         {
             "id": "Verdon2019",

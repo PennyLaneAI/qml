@@ -28,7 +28,6 @@
     ],
     "seoDescription": "Learn to use a quantum neural network to fit a multivariate function.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_qnn_multivariate_regression",
     "references": [
         {
             "id": "schuld",

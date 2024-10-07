@@ -26,7 +26,6 @@
     ],
     "seoDescription": "Learn how to quantumly detect anomalous behaviour in time series data with the help of Covalent.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_univariate_qvr",
     "references": [
         {
             "id": "Baker2022",

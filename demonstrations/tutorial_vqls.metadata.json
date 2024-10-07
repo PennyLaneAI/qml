@@ -19,7 +19,6 @@
     ],
     "seoDescription": "Implementing the variational quantum linear solver to solve a system of linear equation with a quantum device.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_vqls",
     "references": [
         {
             "id": "BravoPrieto2019",

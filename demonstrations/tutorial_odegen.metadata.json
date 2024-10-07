@@ -25,7 +25,6 @@
     ],
     "seoDescription": "Learn how to compute analytic gradients of pulse programs on quantum hardware",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_odegen",
     "references": [
         {
             "id": "Kottmann",
@@ -117,4 +116,3 @@
         }
     ]
 }
-

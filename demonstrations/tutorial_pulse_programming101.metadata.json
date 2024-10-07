@@ -24,7 +24,6 @@
     ],
     "seoDescription": "Simulating differentialble pulse programs in PennyLane with qubits",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_pulse_programming101",
     "references": [
         {
             "id": "Mitei",

@@ -25,7 +25,6 @@
     ],
     "seoDescription": "Parallelize gradient calculations with Amazon Braket",
     "doi": "",
-    "canonicalURL": "/qml/demos/braket-parallel-gradients",
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],

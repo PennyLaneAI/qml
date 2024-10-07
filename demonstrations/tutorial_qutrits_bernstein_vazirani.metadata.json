@@ -19,7 +19,6 @@
     ],
     "seoDescription": "Learn how to interpret the Bernstein–Vazirani algorithm with qutrits",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_qutrits_bernstein_vazirani",
     "references": [
         {
             "id": "bv",

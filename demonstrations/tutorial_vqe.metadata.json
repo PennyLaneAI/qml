@@ -19,7 +19,6 @@
     ],
     "seoDescription": "Find the ground state of a Hamiltonian using the variational quantum eigensolver algorithm.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_vqe",
     "references": [
         {
             "id": "peruzzo2014",

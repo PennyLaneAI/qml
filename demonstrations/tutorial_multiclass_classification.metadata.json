@@ -17,7 +17,6 @@
     ],
     "seoDescription": "Using PyTorch to implement a multiclass quantum variational classifier on MNIST data.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_multiclass_classification",
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],

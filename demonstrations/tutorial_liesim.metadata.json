@@ -24,7 +24,6 @@
     ],
     "seoDescription": "A differentiable implementation of g-sim in PennyLane",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_liesim",
     "references": [
         {
             "id": "Wiersema",

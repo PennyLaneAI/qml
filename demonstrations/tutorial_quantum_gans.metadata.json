@@ -19,7 +19,6 @@
     ],
     "seoDescription": "Explore quantum GANs to generate hand-written digits of zero",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_quantum_gans",
     "references": [
         {
             "id": "goodfellow2014",

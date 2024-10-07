@@ -25,7 +25,6 @@
     ],
     "seoDescription": "Learn how to construct adversarial attacks on classification networks and how to make quantum machine learning (QML) models more robust.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_adversarial_attacks_QML",
     "references": [
         {
             "id": "Wendlinger2024",

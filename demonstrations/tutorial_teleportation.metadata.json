@@ -24,7 +24,6 @@
     ],
     "seoDescription": "Transmit arbitrary quantum states using quantum teleportation",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_teleportation",
     "references": [
         {
             "id": "Teleportation1993",

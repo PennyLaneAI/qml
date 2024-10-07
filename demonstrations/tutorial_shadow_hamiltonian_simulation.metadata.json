@@ -24,7 +24,6 @@
     ],
     "seoDescription": "A user-friendly intro to the contents of shadow Hamiltonian simulation, a technique introduced by by Somma et al (arXiv:2407.21775), with a code implementation.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_shadow_hamiltonian_simulation",
     "references": [
         {
             "id": "Wiersema",

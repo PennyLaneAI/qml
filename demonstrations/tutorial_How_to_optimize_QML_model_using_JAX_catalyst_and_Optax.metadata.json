@@ -25,7 +25,6 @@
     ],
     "seoDescription": "Learn how to train a quantum machine learning model using PennyLane, JAX, Catalyst, and Optax.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_How_to_optimize_QML_model_using_JAX_catalyst_and_Optax",
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],

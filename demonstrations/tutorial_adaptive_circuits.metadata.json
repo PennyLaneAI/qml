@@ -23,7 +23,6 @@
     ],
     "seoDescription": "Learn how to build quantum chemistry circuits adaptively.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_adaptive_circuits",
     "references": [
         {
             "id": "peruzzo2014",

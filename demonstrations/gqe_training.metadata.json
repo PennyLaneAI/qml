@@ -3,7 +3,7 @@
     "authors": [
         {
             "username": "Joseph"
-        }, 
+        },
         {
             "username": "zy_n"
         }
@@ -24,7 +24,6 @@
     ],
     "seoDescription": "Learn how you can train a small GPT model using the generative quantum eigensolver (GQE) technique and PennyLane data.",
     "doi": "",
-    "canonicalURL": "/qml/demos/gqe_training",
     "references": [
         {
             "id": "nakaji2024",

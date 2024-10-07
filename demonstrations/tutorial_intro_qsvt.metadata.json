@@ -24,7 +24,6 @@
     ],
     "seoDescription": "Master the basics of the quantum singular value transformation",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_intro_qsvt",
     "references": [
         {
             "id": "qsvt",

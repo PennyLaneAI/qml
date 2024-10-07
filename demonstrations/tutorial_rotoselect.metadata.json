@@ -19,7 +19,6 @@
     ],
     "seoDescription": "Applying the Rotoselect optimization algorithm to find the minimum in a variational quantum algorithm.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_rotoselect",
     "references": [
         {
             "id": "Ostaszewski2019",

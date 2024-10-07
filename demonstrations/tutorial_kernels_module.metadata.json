@@ -34,7 +34,6 @@
     ],
     "seoDescription": "Kernels and alignment training with Pennylane.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_kernels_module",
     "references": [
         {
             "id": "Training_QEKs",

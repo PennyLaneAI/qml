@@ -22,7 +22,6 @@
     ],
     "seoDescription": "Learn to avoid overfitting employing quantum dropout",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_quantum_dropout",
     "references": [
         {
             "id": "dropout",

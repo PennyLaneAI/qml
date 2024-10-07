@@ -28,7 +28,6 @@
     ],
     "seoDescription": "This demonstration explains how to simulate tensor-network quantum circuits.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_tn_circuits",
     "references": [
         {
             "id": "huggins",

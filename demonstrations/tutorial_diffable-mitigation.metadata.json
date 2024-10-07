@@ -19,7 +19,6 @@
     ],
     "seoDescription": "Differentiable error mitigation",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_diffable-mitigation",
     "references": [
         {
             "id": "DiffableTransforms",

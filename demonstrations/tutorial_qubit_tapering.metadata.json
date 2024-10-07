@@ -22,7 +22,6 @@
     ],
     "seoDescription": "Learn how to taper off qubits",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_qubit_tapering",
     "references": [
         {
             "id": "bravyi2017",

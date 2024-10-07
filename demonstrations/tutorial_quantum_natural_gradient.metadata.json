@@ -19,7 +19,6 @@
     ],
     "seoDescription": "The quantum natural gradient method can achieve faster convergence for quantum machine learning problems by taking into account the intrinsic geometry of qubits.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_quantum_natural_gradient",
     "references": [
         {
             "id": "Amari1998",

@@ -19,7 +19,6 @@
     ],
     "seoDescription": "Learn how to use the adjoint method to compute gradients of quantum circuits.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_adjoint_diff",
     "references": [
         {
             "id": "Jones2020",

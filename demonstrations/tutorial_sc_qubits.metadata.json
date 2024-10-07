@@ -20,7 +20,6 @@
     ],
     "seoDescription": "Learn about quantum computers based on superconducting qubits, developed by companies such as IBM and Google.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_sc_qubits",
     "references": [
         {
             "id": "Google2019",

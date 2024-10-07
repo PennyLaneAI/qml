@@ -28,7 +28,6 @@
     ],
     "seoDescription": "Learn how to train a quantum machine learning model using PennyLane, JAX, and JAXopt.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_How_to_optimize_QML_model_using_JAX_and_JAXopt",
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],

@@ -27,7 +27,6 @@
     ],
     "seoDescription": "Learn how to enter data into a quantum computer with a quantum read-only memory (QROM) approach.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_intro_qrom",
     "references": [
         {
         "id": "unary",

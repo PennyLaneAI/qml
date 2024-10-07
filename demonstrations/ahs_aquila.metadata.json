@@ -17,7 +17,6 @@
     ],
     "seoDescription": "Perform measurements on neutral atom hardware through PennyLane",
     "doi": "",
-    "canonicalURL": "/qml/demos/ahs_aquila",
     "references": [
         {
             "id": "Semeghini",

@@ -19,7 +19,6 @@
     ],
     "seoDescription": "Using a variational quantum algorithm to optimize a quantum sensing protocol.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_quantum_metrology",
     "references": [
         {
             "id": "meyer2020",

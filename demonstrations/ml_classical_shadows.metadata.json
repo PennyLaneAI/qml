@@ -23,7 +23,6 @@
     ],
     "seoDescription": "Learn how to apply machine learning to quantum many-body problems by using classical shadow formalism and ML to predict the ground-state properties of the 2D antiferromagnetic Heisenberg model.",
     "doi": "",
-    "canonicalURL": "/qml/demos/ml_classical_shadows",
     "references": [
         {
             "id": "preskill",

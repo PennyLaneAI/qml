@@ -19,7 +19,6 @@
     ],
     "seoDescription": "Implementing the quantum approximate optimization algorithm using PennyLane to solve the MaxCut problem.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_qaoa_maxcut",
     "references": [],
     "basedOnPapers": [
         "10.48550/arXiv.1411.4028"

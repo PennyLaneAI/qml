@@ -19,7 +19,6 @@
     ],
     "seoDescription": "Use a classical recurrent neural network to initilize the parameters of a variational quatum algorithm.",
     "doi": "",
-    "canonicalURL": "/qml/demos/learning2learn",
     "references": [],
     "basedOnPapers": [
         "10.48550/arXiv.1907.05415"

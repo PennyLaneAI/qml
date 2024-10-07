@@ -28,7 +28,6 @@
     ],
     "seoDescription": "Applying QSVT for matrix inversion",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_apply_qsvt",
     "references": [
         {
             "type": "article",

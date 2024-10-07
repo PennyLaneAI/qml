@@ -25,7 +25,6 @@
     ],
     "seoDescription": "Learn how to propagate error through quantum circuits.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_error_prop",
     "references": [
         {
             "id": "TrotterError",

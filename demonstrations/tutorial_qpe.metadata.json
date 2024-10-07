@@ -27,7 +27,6 @@
     ],
     "seoDescription": "Master the basics of the quantum phase estimation",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_qpe",
     "references": [
         {
             "id": "qpe",

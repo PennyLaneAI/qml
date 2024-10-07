@@ -19,7 +19,6 @@
     ],
     "seoDescription": "Optimize and reduce the number of measurements required to evaluate a variational algorithm cost function.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_measurement_optimize",
     "references": [
         {
             "id": "peruzzo2014",

@@ -24,7 +24,6 @@
     ],
     "seoDescription": "Learn how noise models can be built and inserted into a quantum circuit in PennyLane.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_how_to_use_noise_models",
     "references": [
     ],
     "basedOnPapers": [],

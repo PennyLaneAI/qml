@@ -27,7 +27,6 @@
     ],
     "seoDescription": "Construct Hamiltonians and other observables using fermionic creation and annihilation operators.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_fermionic_operators",
     "references": [
         {
             "id": "surjan",

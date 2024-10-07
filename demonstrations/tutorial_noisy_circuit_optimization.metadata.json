@@ -19,7 +19,6 @@
     ],
     "seoDescription": "Learn how noise can affect the optimization and training of quantum computations.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_noisy_circuit_optimization",
     "references": [
         {
             "id": "arute2019",

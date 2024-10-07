@@ -25,7 +25,6 @@
     ],
     "seoDescription": "Learn how to calibrate quantum computers with reinforcement learning",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_rl_pulse",
     "references": [
         {
             "id": "BaumPRXQ21",

@@ -19,7 +19,6 @@
     ],
     "seoDescription": "Reconstruct quantum functions and compute their derivatives.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_general_parshift",
     "references": [
         {
             "id": "GenPar",

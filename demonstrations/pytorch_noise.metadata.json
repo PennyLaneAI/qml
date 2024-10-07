@@ -19,7 +19,6 @@
     ],
     "seoDescription": "Extend PyTorch with real quantum computing power, by using it to optimize a noisy quantum hardware device.",
     "doi": "",
-    "canonicalURL": "/qml/demos/pytorch_noise",
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],

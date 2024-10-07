@@ -19,7 +19,6 @@
     ],
     "seoDescription": "Learn how to use the differentiable Hartree-Fock solver",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_differentiable_HF",
     "references": [
         {
             "id": "arrazola2021",

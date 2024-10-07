@@ -22,7 +22,6 @@
     ],
     "seoDescription": "The class of functions a quantum model can learn is characterized by the structure of its corresponding Fourier series.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_expressivity_fourier_series",
     "references": [
         {
             "id": "schuld2020",

@@ -19,7 +19,6 @@
     ],
     "seoDescription": "Learn how to estimate the number of qubits and gates needed to implement quantum algorithms",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_resource_estimation",
     "references": [
         {
             "id": "vonburg2021",

@@ -19,7 +19,6 @@
     ],
     "seoDescription": "Combine PyTorch and PennyLane to train a hybrid quantum-classical image classifier using transfer learning.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_quantum_transfer_learning",
     "references": [
         {
             "id": "Mari2019",

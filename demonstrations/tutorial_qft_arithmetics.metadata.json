@@ -19,7 +19,6 @@
     ],
     "seoDescription": "Learn how to use the quantum Fourier transform (QFT) to do basic arithmetic",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_qft_arithmetics",
     "references": [
         {
             "id": "Draper2000",

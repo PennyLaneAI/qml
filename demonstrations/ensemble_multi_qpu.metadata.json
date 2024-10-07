@@ -19,7 +19,6 @@
     ],
     "seoDescription": "We demonstrate how two QPUs can be combined in parallel to help solve a machine learning classification problem, using PyTorch and PennyLane.",
     "doi": "",
-    "canonicalURL": "/qml/demos/ensemble_multi_qpu",
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],

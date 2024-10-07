@@ -19,7 +19,6 @@
     ],
     "seoDescription": "Discover the building blocks of quantum circuits for quantum chemistry",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_givens_rotations",
     "references": [
         {
             "id": "anselmetti",

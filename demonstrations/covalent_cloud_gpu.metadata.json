@@ -26,7 +26,6 @@
     ],
     "seoDescription": "Explore the process of running GPU-accelerated quantum circuit simulations on Covalent Cloud using PennyLane.",
     "doi": "",
-    "canonicalURL": "/qml/demos/covalent_cloud_gpu",
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],

@@ -22,7 +22,6 @@
     ],
     "seoDescription": "Implicitly differentiating the the solution of a VQA in PennyLane.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_implicit_diff_susceptibility",
     "references": [
         {
             "id": "Paradis2004",

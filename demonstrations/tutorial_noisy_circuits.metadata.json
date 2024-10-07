@@ -19,7 +19,6 @@
     ],
     "seoDescription": "Learn how to simulate noisy quantum circuits",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_noisy_circuits",
     "references": [
         {
             "id": "johannes",
