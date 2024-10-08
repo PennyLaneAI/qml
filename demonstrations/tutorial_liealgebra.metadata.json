@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2024-02-27T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Quantum Computing",
         "Getting Started"
@@ -24,7 +24,6 @@
     ],
     "seoDescription": "A gentle introduction to Lie theory covering the basics of Lie algebras and Lie groups in the context of quantum computing.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_liealgebra",
     "references": [
         {
             "id": "Wiersema",
@@ -114,4 +113,3 @@
         }
     ]
 }
-

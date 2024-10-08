@@ -9,7 +9,7 @@
         }
     ],
     "dateOfPublication": "2022-11-28T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-30T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Optimization"
     ],
@@ -22,7 +22,6 @@
     ],
     "seoDescription": "Implicitly differentiating the the solution of a VQA in PennyLane.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_implicit_diff_susceptibility",
     "references": [
         {
             "id": "Paradis2004",

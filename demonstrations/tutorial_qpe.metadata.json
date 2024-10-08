@@ -9,7 +9,7 @@
         }
     ],
     "dateOfPublication": "2024-01-30T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Algorithms",
         "Quantum Computing"
@@ -27,7 +27,6 @@
     ],
     "seoDescription": "Master the basics of the quantum phase estimation",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_qpe",
     "references": [
         {
             "id": "qpe",

@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2023-10-20T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-12T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Getting Started",
         "Quantum Computing"
@@ -24,7 +24,6 @@
     ],
     "seoDescription": "Transmit arbitrary quantum states using quantum teleportation",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_teleportation",
     "references": [
         {
             "id": "Teleportation1993",

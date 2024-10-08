@@ -28,7 +28,6 @@
     ],
     "seoDescription": "Learn about post-variational quantum neural networks",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_post-variational_quantum_neural_networks",
     "references": [
         {
             "id": "cerezo2021variational",

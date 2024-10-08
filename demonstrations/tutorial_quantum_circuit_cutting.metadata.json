@@ -12,7 +12,7 @@
         }
     ],
     "dateOfPublication": "2022-09-02T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-28T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Algorithms", "Quantum Computing"
     ],
@@ -25,7 +25,6 @@
     ],
     "seoDescription": "We dive into two algorithms for splitting a large quantum circuit into smaller ones.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_quantum_circuit_cutting",
     "references": [
         {
             "id": "Peng2019",
