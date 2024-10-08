@@ -17,11 +17,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/grovers_algorithm/thumbnail_tutorial_grovers_algorithm.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_qjit_compile_grovers_algorithm_with_catalyst.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_grovers_algorithm.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_qjit_compile_grovers_algorithm_with_catalyst.png"
         }
     ],
     "seoDescription": "See how to use Catalyst to just-in-time (QJIT) compile a PennyLane circuit implementing Grover's algorithm.",
