@@ -174,7 +174,7 @@ print(D.shape)
 # 
 # .. note::
 # 
-#   More generally, we can find decompositions of multi-qubit gates into local tensors by means of the ubiquitous singular valued decomposition (SVD). This is explained in detail in our MPS tutorial. 
+#   More generally, we can find decompositions of multi-qubit gates into local tensors by means of the ubiquitous singular valued decomposition (SVD). This method is explained in detail in our :doc:`MPS tutorial </demos/tutorial_mps>`. 
 
 ##############################################################################
 # The cost of contracting a network:
