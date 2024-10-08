@@ -268,7 +268,7 @@ def cost(x, target):
 
 steps = 35
 
-gd = jaxopt.GradientDescent(cost, maxiter=steps)
+gd = jaxopt.GradientDescent(cost, maxiter=steps, tol=1e-5)
 
 x = np.array(0.01)
 res = gd.run(x, ev)
