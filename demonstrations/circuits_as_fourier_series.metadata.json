@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2023-09-11T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Optimization",
         "Quantum Machine Learning"
@@ -24,7 +24,6 @@
     ],
     "seoDescription": "Learn with this interactive, code-free introduction to the idea of quantum circuits as Fourier series.",
     "doi": "",
-    "canonicalURL": "/qml/demos/circuits_as_fourier_series",
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],

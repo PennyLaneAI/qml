@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2024-06-07T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Quantum Computing",
         "Getting Started"
@@ -24,7 +24,6 @@
     ],
     "seoDescription": "A differentiable implementation of g-sim in PennyLane",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_liesim",
     "references": [
         {
             "id": "Wiersema",

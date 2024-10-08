@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2020-12-15T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Quantum Hardware",
         "Quantum Computing"
@@ -20,7 +20,6 @@
     ],
     "seoDescription": "Learn about quantum volume, and how to compute it.",
     "doi": "",
-    "canonicalURL": "/qml/demos/quantum_volume",
     "references": [
         {
             "id": "top500",

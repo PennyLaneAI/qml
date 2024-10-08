@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2019-10-11T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Optimization"
     ],
@@ -19,7 +19,6 @@
     ],
     "seoDescription": "Implementing the quantum approximate optimization algorithm using PennyLane to solve the MaxCut problem.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_qaoa_maxcut",
     "references": [],
     "basedOnPapers": [
         "10.48550/arXiv.1411.4028"

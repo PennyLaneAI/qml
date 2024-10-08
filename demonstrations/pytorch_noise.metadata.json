@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2019-10-11T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Devices and Performance"
     ],
@@ -19,7 +19,6 @@
     ],
     "seoDescription": "Extend PyTorch with real quantum computing power, by using it to optimize a noisy quantum hardware device.",
     "doi": "",
-    "canonicalURL": "/qml/demos/pytorch_noise",
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],

@@ -6,20 +6,19 @@
         }
     ],
     "dateOfPublication": "2019-10-11T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
     "tags": [],
     "previewImages": [
         {
-            "type": "thumbnail", 
+            "type": "thumbnail",
             "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_data-reuploading_classified.png"
         }
     ],
     "seoDescription": "Implement a single-qubit universal quantum classifier using PennyLane.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_data_reuploading_classifier",
     "references": [
         {
             "id": "PerezSalinas2019",
