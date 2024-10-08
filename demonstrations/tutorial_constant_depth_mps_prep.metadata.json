@@ -5,8 +5,8 @@
             "username": "dwierichs"
         }
     ],
-    "dateOfPublication": "2024-09-25T00:00:00+00:00",
-    "dateOfLastModification": "2024-09-25T00:00:00+00:00",
+    "dateOfPublication": "2024-10-09T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-09T00:00:00+00:00",
     "categories": [
         "Quantum Computing",
         "Algorithms"
@@ -24,7 +24,6 @@
     ],
     "seoDescription": "Prepare a matrix product state (MPS) in constant depth with mid-circuit measurements and feedforward control.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_constant_depth_mps_prep",
     "references": [],
     "basedOnPapers": ["10.48550/arXiv.2404.16083"],
     "referencedByPapers": [],

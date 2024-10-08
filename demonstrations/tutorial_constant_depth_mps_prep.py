@@ -17,7 +17,7 @@ In this demo you will learn to prepare certain MPS with a dynamic
 quantum circuit of constant depth. We will implement the circuit, which makes use
 of mid-circuit measurements and conditionally applied operations, for a specific
 MPS. Then we will compare it to a (static) sequential circuit with linear depth.
-Throughout, we closely follow the article with similar title by Smith et al. [#smith]_.
+Throughout, we closely follow the similarly titled article by Smith et al. [#smith]_.
 
 .. note::
 
