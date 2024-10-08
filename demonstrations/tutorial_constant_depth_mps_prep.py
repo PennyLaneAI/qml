@@ -139,7 +139,7 @@ infinite. For the product state, on the other hand, we get
 
     C_{+}(j) = \langle Z(0) Z(j) \rangle_{+} - \langle Z(0)\rangle_{+}\langle Z(j)\rangle_{+} = 0,
 
-so that correlations decay "instantaneously". The correlation length vanishes.
+so that correlations decay "instantaneously." The correlation length vanishes.
 Long-range correlated states require linear-depth circuits if we are restricted to unitary
 operations. Therefore, the constant-depth circuit for :math:`|\Psi(0)\rangle` will demonstrate
 that dynamic quantum circuits, which are not purely unitary, are more powerful than unitary
@@ -204,7 +204,7 @@ print(f"For {g=}, the theoretical correlation length is {xi=:.4f}")
 #
 # In the definition of the MPS, the bond site is passed on between copies of :math:`A,`
 # sequentially creating physical sites. Likewise, we will apply our unitary :math:`U` to
-# a sequence of physical sites (each in the initial state :math:`|0\rangle)` while passing
+# a sequence of physical sites (each in the initial state :math:`|0\rangle`) while passing
 # on a single bond site. This way, we chain up the unitaries on the bond site like beads
 # on a string.
 #
@@ -215,8 +215,9 @@ print(f"For {g=}, the theoretical correlation length is {xi=:.4f}")
 # Alongside the correspondence between :math:`U` acting on :math:`|0\rangle` and :math:`A,`
 # these steps are visualized in the sketch above.
 # Note that the sketch deviates from standard circuit diagrams:
-# The bond qudits start at the top and throughout the circuit one of them is passed from
-# the top to the bottom, instead of keeping the position of all qudits fixed.
+# Usually each wire corresponds to one qudit in the algorithm and the position of
+# the qudits is fixed through the wire position. Here, the two bond qudits start as
+# the top two wires, and one of them is moved to the bottom throughout the circuit.
 #
 # The sequential preparation circuit now consists of the following steps.
 #
@@ -598,7 +599,7 @@ def push_and_correct(op_id, phys_wires):
 # Now that we discussed the sequential preparation algorithm, fusion with mid-circuit
 # measurements, and operator pushing, we have all components for the constant-depth
 # preparation algorithm. As inputs it requires the tensor :math:`A` (or the unitary
-# :math:`U` to reproduce :math:`A)`, the total number of physical sites :math:`N,`
+# :math:`U` to reproduce :math:`A`), the total number of physical sites :math:`N,`
 # and the block size :math:`q.`
 #
 # #. Prepare :math:`\frac{N}{q}` MPS of size :math:`q`
