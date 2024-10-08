@@ -72,7 +72,7 @@ Below is given an example of a complete metadata file for a demonstration.
 
 ## Properties
 
-The table below gives details about the fields in the metadata JSON file for version 0.2.0.
+The table below gives details about the fields in the metadata JSON file for version 0.1.4.
 
 | Name | Is Required | Value Type | Description |
 |---|---|---|---|
