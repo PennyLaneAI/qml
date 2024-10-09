@@ -32,7 +32,7 @@ are integer values. Therefore, the operator we want to build is:
 where :math:`x` and :math:`y` are the binary representations of the integers on which we want to apply the function.
 
 We will show how to load this function in two different ways: first, by concatenating simple arithmetic operators,
-and finally, using the `qml.OutPoly` operator.
+and finally, using the :class:`~.pennylane.OutPoly` operator.
 
 InPlace and OutPlace Operations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -231,7 +231,7 @@ print(circuit_with_Poly(x=1,y=4))
 # ------------------------------------------
 # Understanding and implementing quantum arithmetic is a key step toward unlocking the full potential
 # of quantum computing. While it may not replace classical efficiency for simple tasks, its role in complex algorithms 
-# is undeniable. By leveraging tools like `qml.OutPoly`, you can streamline the coding of your quantum algorithms. So, 
+# is undeniable. By leveraging tools like :class:`~.pennylane.OutPoly`, you can streamline the coding of your quantum algorithms. So, 
 # whether you choose to customize your arithmetic operations or take advantage of the built-in convenience offered by PennyLane 
 # operators, you're now equipped to tackle the exciting quantum challenges ahead.
 #
