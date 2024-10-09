@@ -14,8 +14,7 @@
     "dateOfLastModification": "2024-09-09T00:00:00+00:00",
     "categories": [
         "Algorithms",
-        "Quantum Computing",
-        "How-to"
+        "Quantum Computing"
     ],
     "tags": [],
     "previewImages": [
@@ -28,7 +27,7 @@
             "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_qjit_compile_grovers_algorithm_with_catalyst.png"
         }
     ],
-    "seoDescription": "Digital Zero-Noise Extrapolation with Catalyst",
+    "seoDescription": "Learn to use error mitigation and the digital zero-noise extrapolation (ZNE) technique with Catalyst, the PennyLane framework for quantum JIT compilation.",
     "doi": "",
     "canonicalURL": "/qml/demos/tutorial_zne_catalyst",
     "references": [

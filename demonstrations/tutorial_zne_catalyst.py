@@ -3,7 +3,7 @@ Digital zero-noise extrapolation with Catalyst
 ==============================================
 
 In this tutorial, you will learn how to use error mitigation, and in particular 
-the Zero-noise extrapolation (ZNE) technique, in combination with 
+the zero-noise extrapolation (ZNE) technique, in combination with 
 `Catalyst <https://docs.pennylane.ai/projects/catalyst>`_, a framework for quantum 
 just-in-time (JIT) compilation with PennyLane. 
 We'll demonstrate how to generate noise-scaled circuits, execute them on a noisy quantum
@@ -15,7 +15,7 @@ Using ZNE with Pennylane
 
 The demo :doc:`Error mitigation with Mitiq and PennyLane <tutorial_error_mitigation>`
 shows how ZNE, along with other error mitigation techniques, can be carried out in Pennylane
-by using `Mitiq <https://github.com/unitaryfund/mitiq>`__, a Python library developed by Unitary Fund.
+by using `Mitiq <https://github.com/unitaryfund/mitiq>`__, a Python library developed by `Unitary Fund <https://unitary.fund/>`__.
 
 ZNE in particular is also offered out of the box in Pennylane as a *differentiable* error mitigation technique,
 for usage in combination with variational workflows. More on this in the tutorial
@@ -28,15 +28,15 @@ integrated in a Catalyst workflow.
 At the end of the tutorial, we will compare time for the execution of ZNE routines in
 pure Pennylane vs. Pennylane Catalyst with JIT.
 
-What is ZNE
+What is zero-noise extrapolation (ZNE)
 -----------
-ZNE is a technique used to mitigate the effect of noise on quantum
+Zero-noise extrapolation (ZNE) is a technique used to mitigate the effect of noise on quantum
 computations. First introduced in [#temme2017zne]_, it helps improve the accuracy of quantum
 results by running circuits at varying noise levels and extrapolating back to a hypothetical
 zero-noise case. While this tutorial won't delve into the theory behind ZNE in detail, let's first
 review what happens when using the protocol in practice.
 
-Stage 1: Generating Noise-Scaled Circuits
+Stage 1: Generating noise-scaled circuits
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In its digital version [#DZNEpaper]_, ZNE works by generating circuits with **increased** noise. 
@@ -68,7 +68,7 @@ Defining the mirror circuit
 ---------------------------
 
 The first step for demoing an error mitigation routine is to define a circuit. 
-Here we build a simple mirror-circuit starting off a unitary 2-design. 
+Here we build a simple mirror circuit starting off a unitary 2-design. 
 This is a typical construction for a randomized benchmarking circuit, which is used in many tasks
 in quantum computing. Given such circuit, we measure the expectation value :math:`\langle Z\rangle` 
 on the state of the first qubit, and by construction of the circuit, we expect this value to be
@@ -129,8 +129,8 @@ print(f"Error without mitigation: {abs(ideal_value - noisy_value):.3f}")
 # missing some necessary parameters. In particular we still need to specify:
 #
 # 1. The method for scaling this noise up (in Catalyst there are two options: ``global`` and
-#    ``local``)
-# 2. The noise scaling factors (i.e. how much to increase the depth of the circuit)
+#    ``local``).
+# 2. The noise scaling factors (i.e. how much to increase the depth of the circuit).
 # 3. The extrapolation technique used to estimate the ideal value (available in Catalyst are
 #    polynomial and exponential extrapolation).
 #
@@ -149,7 +149,7 @@ scale_factors = [1, 3, 5]
 # Finally, we'll choose the extrapolation technique. Both exponential and polynomial extrapolation
 # is available in the :mod:`qml.transforms <pennylane.transforms>` module, and both of these functions can be passed directly
 # into Catalyst's :func:`catalyst.mitigate_with_zne` function. In this tutorial we use polynomial extrapolation,
-# which we hypothesize it best models the behavior of the noise scenario we are considering.
+# which we hypothesize best models the behavior of the noise scenario we are considering.
 
 from pennylane.transforms import poly_extrapolate
 from functools import partial
@@ -236,7 +236,7 @@ print(f"mitigated_circuit_qjit running time (best of {repeat}): {min(times):.3f}
 #       - **ZNE extrapolation**
 #       - **Differentiable**
 #       - **JIT**
-#       - **other QEM techniques**
+#       - **Other QEM techniques**
 #     * - Pennylane + Mitiq
 #       - global, local, random
 #       - polynomial, exponential
