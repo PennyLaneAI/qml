@@ -10,7 +10,7 @@ acting on the quantum state that encapsulates the probabilistic nature of the qu
 Importantly, different sets of Kraus operators can describe the same quantum noise process,
 illustrating the non-unique nature of these representations and motivating how different quantum
 computing libraries allow storing and building them to construct noise models. In this how-to guide,
-we will first compare constructing noise models in `Qiskit <https://docs.quantum.ibm.com/>`_
+we will first compare constructing them in `Qiskit <https://docs.quantum.ibm.com/>`_
 and PennyLane, and then learn converting a Qiskit noise model into an equivalent PennyLane one.
 """
 
@@ -21,14 +21,14 @@ and PennyLane, and then learn converting a Qiskit noise model into an equivalent
 # In Qiskit, the noise models are built with the `noise module
 # <https://qiskit.github.io/qiskit-aer/apidocs/aer_noise.html>`_
 # in the ``Qiskit-Aer`` package. Each model is a `NoiseModel
-# <https://qiskit.github.io/qiskit-aer/stubs/qiskit_aer.noise.NoiseModel.html>`
+# <https://qiskit.github.io/qiskit-aer/stubs/qiskit_aer.noise.NoiseModel.html>`_
 # object that contains ``QuantumError`` to describe the errors encountered in gate operations.
 # Optionally, it may also contain a ``ReadoutError`` that describes post-measurement classical
 # readout errors.
 #
 # For example, the following builds a Qiskit noise model that would insert depolarization
 # errors for single-qubit gates, bit-flip errors for the target qubit of the two-qubit
-# gates, and thermalization errors for each qubit measurement:
+# gates, and thermalization errors for each measurement:
 #
 
 import numpy as np
@@ -154,7 +154,7 @@ plt.show()
 #
 # PennyLane provides :func:`~pennylane.from_qiskit_noise` method that
 # helps with that. We can understand using this functionality for a
-# `GenericBackendV2 <https://docs.quantum.ibm.com/api/qiskit/qiskit.providers.fake_provider.GenericBackendV2>`
+# `GenericBackendV2 <https://docs.quantum.ibm.com/api/qiskit/qiskit.providers.fake_provider.GenericBackendV2>`_
 # fake backend instance that gets instantiated with the error data generated
 # and sampled randomly from historical IBM backend data.
 #
