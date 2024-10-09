@@ -83,7 +83,7 @@ ax.set_ylim(-20, 20)
 ax.set_zlim(-40, 10)
 plt.axis('off')
 ax.scatter(xs, ys, zs, c='g',alpha=0.3)
-plt.show();
+plt.show()
 
 ##############################################################################
 # This dataset contains 126 points. Each point represents a distinct
@@ -112,7 +112,7 @@ subset_xs = qubit_coords[:, 0]
 subset_ys = qubit_coords[:, 1]
 subset_zs = qubit_coords[:, 2]
 ax.scatter(subset_xs, subset_ys, subset_zs, c='r', alpha=1.0)
-plt.show();
+plt.show()
 
 ##############################################################################
 # Converting to Cirq qubits
@@ -237,7 +237,7 @@ for corner in range(4):
             zs=[third_z[corner], third_z[(corner + 1) % 4]],
             c='grey', linestyle='--');
 
-plt.show();
+plt.show()
 
 ##############################################################################
 # In this figure, the red dots represent the specific qubits we will use in
@@ -290,10 +290,10 @@ def circuit(weights, data):
 # problem.
 # For the purposes of this demo, we will consider a very simple classifier:
 #
-# * if the first input qubit is in the state :math:`\mid 0 \rangle`, the model
+# * if the first input qubit is in the state :math:`\mid 0 \rangle,` the model
 #   should make the prediction "0", and
 #
-# * if the first input qubit is in the state :math:`\mid 1 \rangle`, the model
+# * if the first input qubit is in the state :math:`\mid 1 \rangle,` the model
 #   should predict "1" (independent of the states of all other qubits).
 #
 # In other words, the idealized trained model should learn an

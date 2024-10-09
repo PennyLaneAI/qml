@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2023-06-06T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Quantum Computing"
     ],
@@ -23,7 +23,6 @@
     ],
     "seoDescription": "Introduction to the ZX-calculus and use cases.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_zx_calculus",
     "references": [
         {
             "id": "Coecke",

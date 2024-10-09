@@ -7,7 +7,7 @@
         }
     ],
     "dateOfPublication": "2024-05-22T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": ["Quantum Machine Learning"],
     "tags": [],
     "previewImages": [
@@ -22,7 +22,6 @@
     ],
     "seoDescription": "Learn how to use the Quantum Circuit Born Machines (QCBMs).",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_qcbm",
     "references": [
         {
             "id": "Liu",

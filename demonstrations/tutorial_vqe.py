@@ -32,7 +32,7 @@ and calculate its gradient at each optimization step.
 
 In this tutorial you will learn how to implement the VQE algorithm in a few lines of code.
 As an illustrative example, we use it to find the ground state of the hydrogen
-molecule, :math:`\mathrm{H}_2`. First, we build the molecular Hamiltonian using a minimal
+molecule, :math:`\mathrm{H}_2.` First, we build the molecular Hamiltonian using a minimal
 basis set approximation. Next, we design the quantum circuit preparing the trial
 state of the molecule, and the cost function to evaluate the expectation value
 of the Hamiltonian. Finally, we select a classical optimizer, initialize the
@@ -42,34 +42,30 @@ Let's get started!
 
 Building the electronic Hamiltonian
 -----------------------------------
-The first step is to specify the molecule we want to simulate. This
-is done by providing a list with the symbols of the constituent atoms
-and a one-dimensional array with the corresponding nuclear coordinates
-in `atomic units <https://en.wikipedia.org/wiki/Hartree_atomic_units>`_.
+The first step is to specify the molecule we want to simulate. We will use
+the electronic Hamiltonian of the hydrogen molecule. A wide variety of molecular
+data, including Hamiltonians, is available on the
+`PennyLane Datasets service <https://pennylane.ai/datasets>`__. This data can
+be downloaded using the :func:`~.pennylane.data.load` function:
 """
+
 from jax import numpy as np
 import jax
 jax.config.update("jax_platform_name", "cpu")
 jax.config.update('jax_enable_x64', True)
 
-symbols = ["H", "H"]
-coordinates = np.array([[0.0, 0.0, -0.6614], [0.0, 0.0, 0.6614]])
-
-##############################################################################
-# The molecular structure can also be imported from an external file using
-# the :func:`~.pennylane.qchem.read_structure` function.
-#
-# Now, we can build the electronic Hamiltonian of the hydrogen molecule
-# using the :func:`~.pennylane.qchem.molecular_hamiltonian` function.
-
 import pennylane as qml
 
-molecule = qml.qchem.Molecule(symbols, coordinates)
-H, qubits = qml.qchem.molecular_hamiltonian(molecule)
+dataset = qml.data.load('qchem', molname="H2")[0]
+H, qubits = dataset.hamiltonian, len(dataset.hamiltonian.wires)
 print("Number of qubits = ", qubits)
 print("The Hamiltonian is ", H)
 
 ##############################################################################
+# For more details on quantum datasets, check out the
+# `Quantum Datasets <https://docs.pennylane.ai/en/stable/introduction/data.html>`__
+# documentation.
+#
 # The outputs of the function are the Hamiltonian, represented as
 # a linear combination of Pauli operators, and the number of qubits
 # required for the quantum simulations. For this example, we use a
@@ -85,18 +81,14 @@ print("The Hamiltonian is ", H)
 #
 # .. note::
 #
-#     A wide variety of molecular data, including Hamiltonians, is
-#     available on the `PennyLane Datasets service <https://pennylane.ai/datasets>`__.
-#     This data can be downloaded using the :func:`~.pennylane.data.load` function:
+#     You can also manually construct the Hamiltonian using the following code:
 #
 #     .. code-block:: python
-#     
-#         dataset = qml.data.load('qchem', molname="H2")[0]
-#         H, qubits = dataset.hamiltonian, len(dataset.hamiltonian.wires)
 #
-#     For more details, check out the
-#     `Quantum Datasets <https://docs.pennylane.ai/en/stable/introduction/data.html>`__
-#     documentation.
+#         symbols = ["H", "H"]
+#         coordinates = np.array([[0.0, 0.0, -0.6614], [0.0, 0.0, 0.6614]])
+#         molecule = qml.qchem.Molecule(symbols, coordinates)
+#         H, qubits = qml.qchem.molecular_hamiltonian(molecule)
 #
 # Implementing the VQE algorithm
 # ------------------------------
@@ -135,7 +127,7 @@ dev = qml.device("lightning.qubit", wires=qubits)
 # In this figure, the gate :math:`G^{(2)}` corresponds to the
 # :class:`~.pennylane.DoubleExcitation` operation, implemented in PennyLane
 # as a `Givens rotation <https://en.wikipedia.org/wiki/Givens_rotation>`_, which couples
-# the four-qubit states :math:`\vert 1100 \rangle` and :math:`\vert 0011 \rangle`.
+# the four-qubit states :math:`\vert 1100 \rangle` and :math:`\vert 0011 \rangle.`
 # For more details on how to use the excitation operations to build
 # quantum circuits for quantum chemistry applications see the
 # tutorial :doc:`tutorial_givens_rotations`.
@@ -153,9 +145,9 @@ print(hf)
 # on the four qubits. The next step is to compute the expectation value
 # of the molecular Hamiltonian in the trial state prepared by the circuit.
 # We do this using the :func:`~.expval` function. The decorator syntax allows us to
-# run the cost function as an executable QNode with the gate parameter :math:`\theta`:
+# run the cost function as an executable QNode with the gate parameter :math:`\theta:`
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="jax")
 def circuit(param, wires):
     qml.BasisState(hf, wires=wires)
     qml.DoubleExcitation(param, wires=[0, 1, 2, 3])

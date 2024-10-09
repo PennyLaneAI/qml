@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2020-11-02T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-14T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Devices and Performance",
         "Quantum Machine Learning"
@@ -20,7 +20,6 @@
     ],
     "seoDescription": "Learn how to create hybrid ML models in PennyLane using Keras",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_qnn_module_tf",
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],

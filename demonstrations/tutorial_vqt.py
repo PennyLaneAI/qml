@@ -27,12 +27,12 @@ This demonstration discusses theory and experiments relating to a recently propo
 ######################################################################
 # The goal of the VQT is to prepare
 # the `thermal state <https://en.wikipedia.org/wiki/KMS_state>`__
-# of a given Hamiltonian :math:`\hat{H}` at temperature :math:`T`,
+# of a given Hamiltonian :math:`\hat{H}` at temperature :math:`T,`
 # which is defined as
 #
 # .. math:: \rho_\text{thermal} \ = \ \frac{e^{- \hat{H} \beta}}{\text{Tr}(e^{- \hat{H} \beta})} \ = \ \frac{e^{- \hat{H} \beta}}{Z_{\beta}},
 #
-# where :math:`\beta \ = \ 1/T`. The thermal state is a `mixed state
+# where :math:`\beta \ = \ 1/T.` The thermal state is a `mixed state
 # <https://en.wikipedia.org/wiki/Quantum_state#Mixed_states>`__,
 # which means that can be described by an ensemble of pure states.
 # Since we are attempting to learn a mixed state, we must
@@ -40,18 +40,18 @@ This demonstration discusses theory and experiments relating to a recently propo
 # through an ansatz circuit, and minimizing the energy expectation.
 #
 # The VQT begins with an initial `density matrix
-# <https://en.wikipedia.org/wiki/Density_matrix>`__, :math:`\rho_{\theta}`,
+# <https://en.wikipedia.org/wiki/Density_matrix>`__, :math:`\rho_{\theta},`
 # described by a probability distribution parametrized by some collection
-# of parameters :math:`\theta`, and an ensemble of pure states,
-# :math:`\{|\psi_i\rangle\}`. Let :math:`p_i(\theta_i)` be the
+# of parameters :math:`\theta,` and an ensemble of pure states,
+# :math:`\{|\psi_i\rangle\}.` Let :math:`p_i(\theta_i)` be the
 # probability corresponding to the :math:`i`-th pure state. We sample from
 # this probability distribution to get some pure state
-# :math:`|\psi_k\rangle`, which we pass through a parametrized circuit,
-# :math:`U(\phi)`. From the results of this circuit, we then calculate
-# :math:`\langle \psi_k | U^{\dagger}(\phi) \hat{H}\, U(\phi) |\psi_k\rangle`.
+# :math:`|\psi_k\rangle,` which we pass through a parametrized circuit,
+# :math:`U(\phi).` From the results of this circuit, we then calculate
+# :math:`\langle \psi_k | U^{\dagger}(\phi) \hat{H}\, U(\phi) |\psi_k\rangle.`
 # Repeating this process multiple times and taking the average of these
 # expectation values gives us the the expectation value of :math:`\hat{H}`
-# with respect to :math:`U \rho_{\theta} U^{\dagger}`.
+# with respect to :math:`U \rho_{\theta} U^{\dagger}.`
 #
 # .. figure:: ../_static/demonstration_assets/vqt/ev.png
 #     :width: 100%
@@ -66,7 +66,7 @@ This demonstration discusses theory and experiments relating to a recently propo
 # In VQE, we generally try to
 # minimize :math:`\langle \psi(\theta) | \hat{H} | \psi(\theta) \rangle`
 # which, upon minimization, gives us a parametrized circuit that prepares
-# a good approximation to the ground state of :math:`\hat{H}`. In the VQT,
+# a good approximation to the ground state of :math:`\hat{H}.` In the VQT,
 # the goal is to arrive at a parametrized probability distribution, and a
 # parametrized ansatz, that generate a good approximation to the thermal
 # state. This generally involves more than calculating the energy
@@ -77,10 +77,10 @@ This demonstration discusses theory and experiments relating to a recently propo
 #
 # where :math:`S_{\theta}` is the `von Neumann entropy
 # <https://en.wikipedia.org/wiki/Von_Neumann_entropy>`__ of
-# :math:`U \rho_{\theta} U^{\dagger}`, which is the same as the von
+# :math:`U \rho_{\theta} U^{\dagger},` which is the same as the von
 # Neumann entropy of :math:`\rho_{\theta}` due to invariance of entropy
 # under unitary transformations. This cost function is minimized when
-# :math:`\hat{U}(\phi) \rho_{\theta} \hat{U}(\phi)^{\dagger} \ = \ \rho_{\text{thermal}}`,
+# :math:`\hat{U}(\phi) \rho_{\theta} \hat{U}(\phi)^{\dagger} \ = \ \rho_{\text{thermal}},`
 # so similarly to VQE, we minimize it with a classical optimizer to obtain
 # the target parameters, and thus the target state.
 #
@@ -123,7 +123,7 @@ np.random.seed(42)
 #
 # .. math:: \hat{H} \ = \ \displaystyle\sum_{(i, j) \in E} X_i X_j \ + \ Z_i Z_j \ + \ Y_i Y_j,
 #
-# where :math:`X_i`, :math:`Y_i` and :math:`Z_i` are the Pauli gates
+# where :math:`X_i,` :math:`Y_i` and :math:`Z_i` are the Pauli gates
 # acting on the :math:`i`-th qubit. In addition, :math:`E` is the set of
 # edges in the graph :math:`G \ = \ (V, \ E)` describing the interactions
 # between the qubits. In this demonstration, we define the interaction graph to
@@ -143,7 +143,7 @@ nx.draw(interaction_graph)
 
 def create_hamiltonian_matrix(n, graph):
 
-    matrix = np.zeros((2 ** n, 2 ** n))
+    matrix = np.zeros((2**n, 2**n))
 
     for i in graph.edges:
         x = y = z = 1
@@ -181,18 +181,18 @@ nr_qubits = 4
 
 ######################################################################
 # The first step of the VQT is to create the initial density matrix,
-# :math:`\rho_\theta`. In this demonstration, we let :math:`\rho_\theta` be
+# :math:`\rho_\theta.` In this demonstration, we let :math:`\rho_\theta` be
 # *factorized*, meaning that it can be written as an uncorrelated tensor
 # product of :math:`4` one-qubit density matrices that are diagonal in
 # the computational basis. The motivation is that in this factorized model,
 # the number of :math:`\theta_i` parameters needed to describe
 # :math:`\rho_\theta` scales linearly rather than exponentially with
 # the number of qubits. For each one-qubit system described by
-# :math:`\rho_\theta^i`, we have
+# :math:`\rho_\theta^i,` we have
 #
 # .. math:: \rho_{\theta}^{i} \ = \ p_i(\theta_i) |0\rangle \langle 0| \ + \ (1 \ - \ p_i(\theta_i))|1\rangle \langle1|.
 #
-# From here, all we have to do is define :math:`p_i(\theta_i)`, which we
+# From here, all we have to do is define :math:`p_i(\theta_i),` which we
 # choose to be the sigmoid
 #
 # .. math:: p_{i}(\theta_{i}) \ = \ \frac{e^{\theta_i}}{e^{\theta_i} \ + \ 1}.
@@ -205,11 +205,11 @@ def sigmoid(x):
 
 ######################################################################
 # This is a natural choice for probability function, as it has a range of
-# :math:`[0, \ 1]`, meaning that we don’t need to restrict the domain of
+# :math:`[0, \ 1],` meaning that we don’t need to restrict the domain of
 # :math:`\theta_i` to some subset of the real numbers. With the probability
 # function defined, we can write a method that gives us the diagonal
 # elements of each one-qubit density matrix, for some parameters
-# :math:`\theta`:
+# :math:`\theta:`
 #
 
 
@@ -225,7 +225,7 @@ def prob_dist(params):
 
 ######################################################################
 # With this done, we can move on to defining the ansatz circuit,
-# :math:`U(\phi)`, composed of rotational and coupling layers. The
+# :math:`U(\phi),` composed of rotational and coupling layers. The
 # rotation layer is simply ``RX``, ``RY``, and ``RZ``
 # gates applied to each qubit. We make use of the
 # ``AngleEmbedding``
@@ -266,7 +266,7 @@ def quantum_circuit(rotation_params, coupling_params, sample=None, return_state=
             unitary=qml.CRX,
             pattern="ring",
             wires=range(nr_qubits),
-            parameters=coupling_params[i]
+            parameters=coupling_params[i],
         )
 
     if return_state:
@@ -288,7 +288,11 @@ qnode = qml.QNode(quantum_circuit, dev, interface="autograd")
 
 rotation_params = [[[1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1]] for i in range(0, depth)]
 coupling_params = [[1, 1, 1, 1] for i in range(0, depth)]
-print(qml.draw(qnode, expansion_strategy="device", show_matrices=True)(rotation_params, coupling_params, sample=[1, 0, 1, 0]))
+print(
+    qml.draw(qnode, level="device", show_matrices=True)(
+        rotation_params, coupling_params, sample=[1, 0, 1, 0]
+    )
+)
 
 
 ######################################################################
@@ -326,8 +330,8 @@ def calculate_entropy(distribution):
 # distribution describing the initial mixed state, we use the ansatz to
 # calculate
 # :math:`\langle x_i | U^{\dagger}(\phi) \hat{H} \,U(\phi) |x_i\rangle` for
-# each basis state :math:`|x_i\rangle`. We then multiply each of these
-# expectation values by their corresponding :math:`(\rho_\theta)_{ii}`,
+# each basis state :math:`|x_i\rangle.` We then multiply each of these
+# expectation values by their corresponding :math:`(\rho_\theta)_{ii},`
 # which is exactly the probability of sampling :math:`|x_i\rangle` from
 # the distribution. Summing each of these terms together gives us the
 # expected value of the Hamiltonian with respect to the transformed
@@ -450,7 +454,7 @@ def prepare_state(params, device):
 
     # Initializes the density matrix
 
-    final_density_matrix = np.zeros((2 ** nr_qubits, 2 ** nr_qubits))
+    final_density_matrix = np.zeros((2**nr_qubits, 2**nr_qubits))
 
     # Prepares the optimal parameters, creates the distribution and the bitstrings
     parameters = convert_list(params)
@@ -466,12 +470,13 @@ def prepare_state(params, device):
     # and adds the result to the final density matrix
 
     for i in s:
-        state = qnode(unitary_params[0], unitary_params[1],  sample=i, return_state=True)
+        state = qnode(unitary_params[0], unitary_params[1], sample=i, return_state=True)
         for j in range(0, len(i)):
             state = np.sqrt(distribution[j][i[j]]) * state
         final_density_matrix = np.add(final_density_matrix, np.outer(state, np.conj(state)))
 
     return final_density_matrix
+
 
 # Prepares the density matrix
 prep_density_matrix = prepare_state(out_params, dev)
@@ -513,11 +518,7 @@ def create_target(qubit, beta, ham, graph):
     return final_target
 
 
-target_density_matrix = create_target(
-    nr_qubits, beta,
-    create_hamiltonian_matrix,
-    interaction_graph
-    )
+target_density_matrix = create_target(nr_qubits, beta, create_hamiltonian_matrix, interaction_graph)
 
 
 ######################################################################

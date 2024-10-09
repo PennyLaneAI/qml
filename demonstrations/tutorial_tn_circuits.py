@@ -40,7 +40,7 @@ three.
 To define tensor networks, it is important to first understand tensor contraction.
 Two or more tensors can be contracted by summing over repeated indices.
 In diagrammatic notation, the repeated indices appear as lines connecting tensors, as in the figure below. 
-We see two tensors of rank two connected by one repeated index, :math:`k`. The dimension of the
+We see two tensors of rank two connected by one repeated index, :math:`k.` The dimension of the
 repeated index is called the bond dimension.
 
 .. image:: ../_static/demonstration_assets/tn_circuits/simple_tn_color.PNG
@@ -53,7 +53,7 @@ matrix multiplication formula and can be expressed as
 .. math::
     C_{ij} = \sum_{k}A_{ik}B_{kj},
 
-where :math:`C_{ij}` denotes the entry for the :math:`i`-th row and :math:`j`-th column of the product :math:`C=AB`. 
+where :math:`C_{ij}` denotes the entry for the :math:`i`-th row and :math:`j`-th column of the product :math:`C=AB.` 
 
 A tensor network is a collection of tensors where a subset of 
 all indices are contracted. As mentioned above, we can use diagrammatic notation
@@ -150,7 +150,7 @@ def circuit(template_weights):
 np.random.seed(1)
 weights = np.random.random(size=[3, 2])
 qml.drawer.use_style("black_white")
-fig, ax = qml.draw_mpl(circuit, expansion_strategy="device")(weights)
+fig, ax = qml.draw_mpl(circuit, level="device")(weights)
 fig.set_size_inches((6, 3))
 
 ##############################################################################
@@ -196,7 +196,7 @@ def circuit(template_weights):
 
 shape = qml.StronglyEntanglingLayers.shape(n_layers=2, n_wires=2)
 template_weights = [np.random.random(size=shape)] * 3
-fig, ax = qml.draw_mpl(circuit, expansion_strategy="device")(template_weights)
+fig, ax = qml.draw_mpl(circuit, level="device")(template_weights)
 
 ##############################################################################
 # In addition to deep blocks, we can easily expand to wider blocks with more
@@ -233,8 +233,8 @@ def circuit(template_weights):
 
 shapes = qml.SimplifiedTwoDesign.shape(n_layers=1, n_wires=4)
 weights = [np.random.random(size=shape) for shape in shapes]
-template_weights = [weights] * 3
-fig, ax = qml.draw_mpl(circuit, expansion_strategy="device")(template_weights)
+template_weights = qml._np.array([weights] * 3, dtype="object")
+fig, ax = qml.draw_mpl(circuit, level="device")(template_weights)
 
 ##############################################################################
 # We can also broadcast a block to the tree tensor network architecture by using the
@@ -263,7 +263,7 @@ def circuit(template_weights):
 
 
 weights = np.random.random(size=[7, 2])
-fig, ax = qml.draw_mpl(circuit, expansion_strategy="device")(weights)
+fig, ax = qml.draw_mpl(circuit, level="device")(weights)
 fig.set_size_inches((4, 4))
 ##############################################################################
 # Classifying the bars and stripes data set
@@ -341,7 +341,7 @@ def circuit(image, template_weights):
 
 
 weights = np.random.random(size=[3, 2])
-fig, ax = qml.draw_mpl(circuit, expansion_strategy="device")(BAS[0], weights)
+fig, ax = qml.draw_mpl(circuit, level="device")(BAS[0], weights)
 fig.set_size_inches((6, 3.5))
 
 ##############################################################################
@@ -381,7 +381,7 @@ for k in range(100):
 # we can now show the full circuits and the resulting output for each image.
 
 for image in BAS:
-    fig, ax = qml.draw_mpl(circuit, expansion_strategy="device")(image, params)
+    fig, ax = qml.draw_mpl(circuit, level="device")(image, params)
     plt.figure(figsize=[1.8, 1.8])
     plt.imshow(np.reshape(image, [2, 2]), cmap="gray")
     plt.title(

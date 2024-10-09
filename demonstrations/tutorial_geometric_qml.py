@@ -62,36 +62,36 @@ theory.
 First, let's define what we mean by a group:
 
 **Definition**: A group is a set :math:`G` together with a binary operation
-on :math:`G`, here denoted :math:`\circ`, that combines any two elements
-:math:`a` and :math:`b` to form an element of :math:`G`, denoted
-:math:`a \circ b`, such that the following three requirements, known as
+on :math:`G`, here denoted :math:`\circ,` that combines any two elements
+:math:`a` and :math:`b` to form an element of :math:`G,` denoted
+:math:`a \circ b,` such that the following three requirements, known as
 group axioms, are satisfied as follows:
 
 
-1. **Associativity**: For all :math:`a, b, c` in :math:`G`, one has :math:`(a \circ b) \circ c=a \circ (b \circ c)`.
+1. **Associativity**: For all :math:`a, b, c` in :math:`G,` one has :math:`(a \circ b) \circ c=a \circ (b \circ c).`
 
-2. **Identity element**: There exists an element :math:`e` in :math:`G` such that, for every :math:`a` in :math:`G`, one 
-    has :math:`e \circ a=a` and :math:`a \circ e=a`. Such an element is unique. It is called the identity element of the
+2. **Identity element**: There exists an element :math:`e` in :math:`G` such that, for every :math:`a` in :math:`G,` one 
+    has :math:`e \circ a=a` and :math:`a \circ e=a.` Such an element is unique. It is called the identity element of the
     group.
 
 
-3. **Inverse element**: For each :math:`a` in :math:`G`, there exists an element :math:`b` in :math:`G`
-    such that :math:`a \circ b=e` and :math:`b \circ a=e`, where :math:`e` is the identity element.
-    For each :math:`a`, the element :math:`b` is unique:  it is called the inverse of :math:`a` 
-    and is commonly denoted :math:`a^{-1}`.
+3. **Inverse element**: For each :math:`a` in :math:`G,` there exists an element :math:`b` in :math:`G`
+    such that :math:`a \circ b=e` and :math:`b \circ a=e,` where :math:`e` is the identity element.
+    For each :math:`a,` the element :math:`b` is unique:  it is called the inverse of :math:`a` 
+    and is commonly denoted :math:`a^{-1}.`
 
 
 With groups defined, we are in a position to articulate what a
 representation is: Let :math:`\varphi` be a map sending :math:`g` in group
-:math:`G` to a linear map :math:`\varphi(g): V \rightarrow V`, for some
-vector space :math:`V`, which satisfies
+:math:`G` to a linear map :math:`\varphi(g): V \rightarrow V,` for some
+vector space :math:`V,` which satisfies
 
 .. math::
     \varphi\left(g_{1} g_{2}\right)=\varphi\left(g_{1}\right) \circ \varphi\left(g_{2}\right) \quad \text { for all } g_{1}, g_{2} \in G.
 
 The idea here is that just as elements in a group act on each other to 
-reach further elements, i.e., :math:`g\circ h = k`, a representation sends us 
-to a mapping acting on a vector space such that :math:`\varphi(g)\circ \varphi(h) = \varphi(k)`.
+reach further elements, i.e., :math:`g\circ h = k,` a representation sends us 
+to a mapping acting on a vector space such that :math:`\varphi(g)\circ \varphi(h) = \varphi(k).`
 In this way we are representing the structure of the group as a linear map. For a representation, our mapping must send us to the general linear
 group :math:`GL(n)` (the space of invertible :math:`n \times n` matrices with matrix multiplication as the group multiplication). Note how this
 is both a group, and by virtue of being a collection of invertible matrices, also a set of linear maps (they're all invertble matrices that can act on row vectors). 
@@ -124,7 +124,7 @@ elements that correspond to an action on a sphere that can be inverted and
 for which there exists an identity. It is also trivially the case here
 that if we consider three operations a, b, c from the set of rotations and
 reflections of the sphere, that if we combine two of them together then
-:math:`a\circ (b \circ c) = (a\circ b) \circ c`. The operations are
+:math:`a\circ (b \circ c) = (a\circ b) \circ c.` The operations are
 associative. These features turn out to literally define a group!
  
 As we've seen the group in itself is a very abstract creature; this is why we look to
@@ -137,10 +137,10 @@ restrict our gates to being unitary representations of the group.
 
 There remains one question: *what is equivariance?* With our newfound knowledge
 of group representation theory we are ready to tackle this. Let :math:`G` be our group, and
-:math:`V` and :math:`W`, with elements :math:`v` and :math:`w` respectively, be vector spaces
+:math:`V` and :math:`W,` with elements :math:`v` and :math:`w` respectively, be vector spaces
 over some field :math:`F` with a map :math:`f` between them.
 Suppose we have representations :math:`\varphi: G \rightarrow GL(V)` 
-and :math:`\psi: G \rightarrow GL(W)`. Furthermore, let's write
+and :math:`\psi: G \rightarrow GL(W).` Furthermore, let's write
 :math:`\varphi_g` for the representation of :math:`g` as a linear map on :math:`V` and :math:`\psi_g` 
 as the same group element represented as a linear map on :math:`W` respectively. We call :math:`f` *equivariant* if
 
@@ -177,7 +177,6 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 
 """
 
-
 ##############################################################################
 #
 # Noughts and Crosses
@@ -208,9 +207,9 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # **The question is, how do we encode this in our QML problem?**
 #
 # First, let us encode this problem classically. We will consider a nine-element
-# vector :math:`v`, each element of which identifies a square of
+# vector :math:`v,` each element of which identifies a square of
 # the board. The entries themselves can be
-# :math:`+1`,\ :math:`0`,\ :math:`-1,` representing a nought, no symbol, or
+# :math:`+1`,\ :math:`0,`\ :math:`-1,` representing a nought, no symbol, or
 # a cross. The label is one-hot encoded in a vector
 # :math:`y=(y_O,y_- , y_X)` with :math:`+1` in the correct label and
 # :math:`-1` in the others. For instance (-1,-1,1) would represent an X in
@@ -218,7 +217,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 
 
 ######################################################################
-# To create the quantum model let us take nine qubits and let them represent squares of our board. We'll initialise them all as :math:`|0\rangle`,
+# To create the quantum model let us take nine qubits and let them represent squares of our board. We'll initialise them all as :math:`|0\rangle,`
 # which we note leaves the board invariant under the symmetries of the problem (flip and
 # rotate all you want, it's still going to be zeroes whatever your
 # mapping). We will then look to apply single qubit :math:`R_x(\theta)`
@@ -228,7 +227,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # will have a single-qubit :math:`R_x(\theta_1)` and :math:`R_y(\theta_2)`
 # rotation at each point. We will then use :math:`CR_y(\theta_3)` for two-qubit
 # entangling gates. This implies that, for each encoding, crudely, we'll
-# need 18 single-qubit rotation parameters and :math:`\binom{9}{2}=36` 
+# need 18 single-qubit rotation parameters and :math:`\binom{9}{2}=36`
 # two-qubit gate rotations. Let's see how, by using symmetries, we can reduce
 # this.
 
@@ -251,26 +250,26 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # .. tip::
 #
 #    Let :math:`\mathcal{S}` be the group that encodes our symmetries and :math:`U` be a
-#    unitary representation of :math:`\mathcal{S}`. Then,
+#    unitary representation of :math:`\mathcal{S}.` Then,
 #
 #    .. math:: \mathcal{T}_{U}[X]=\frac{1}{|\mathcal{S}|} \sum_{s \in \mathcal{S}} U(s) X U(s)^{\dagger}
 #
 #    defines a projector onto the set of operators commuting with all
 #    elements of the representation, i.e.,
 #    :math:`\left[\mathcal{T}_{U}[X], U(s)\right]=` 0 for all :math:`X` and
-#    :math:`s \in \mathcal{S}`.
+#    :math:`s \in \mathcal{S}.`
 #
 # The twirling process applied to an arbitrary unitary will give us a new unitary that commutes with the group as we require.
-# We remember that unitary gates typically have the form :math:`W = \exp(-i\theta H)`, where :math:`H` is a Hermitian 
-# matrix called a *generator*, and :math:`\theta` may be fixed or left as a free parameter. A recipe for creating a unitary 
-# that commutes with our symmetries is to *twirl the generator of the gate*, i.e., we move from the gate 
-# :math:`W = \exp(-i\theta H)` to the gate :math:`W' = \exp(-i\theta\mathcal{T}_U[H])`. 
-# When each term in the twirling formula acts on different qubits, then this unitary 
-# would further simplify to 
+# We remember that unitary gates typically have the form :math:`W = \exp(-i\theta H),` where :math:`H` is a Hermitian
+# matrix called a *generator*, and :math:`\theta` may be fixed or left as a free parameter. A recipe for creating a unitary
+# that commutes with our symmetries is to *twirl the generator of the gate*, i.e., we move from the gate
+# :math:`W = \exp(-i\theta H)` to the gate :math:`W' = \exp(-i\theta\mathcal{T}_U[H]).`
+# When each term in the twirling formula acts on different qubits, then this unitary
+# would further simplify to
 #
 # .. math:: W' = \bigotimes_{s\in\mathcal{S}}U(s)\exp(-i\tfrac{\theta}{\vert\mathcal{S}\vert})U(s)^\dagger.
 #
-# For simplicity, we can absorb the normalization factor :math:`\vert\mathcal{S}\vert` into the free parameter :math:`\theta`.
+# For simplicity, we can absorb the normalization factor :math:`\vert\mathcal{S}\vert` into the free parameter :math:`\theta.`
 #
 # So let's look again at our choice of gates: single-qubit
 # :math:`R_x(\theta)` and :math:`R_y(\theta)` rotations, and entangling two-qubit :math:`CR_y(\phi)`
@@ -291,9 +290,9 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # the symmetry action (the sum over the symmetry group actions). Having done this
 # we can see that for a single-qubit rotation the invariant maps are rotations
 # on the central qubit, at all the corners, and at all the central
-# edges (when their rotation angles are fixed to be the same). 
+# edges (when their rotation angles are fixed to be the same).
 #
-# As an example consider the following figure, 
+# As an example consider the following figure,
 # where we take a :math:`R_x` gate in the corner and then apply all the symmetries
 # of a square. The result of this twirling leads us to have the same gate at all the corners.
 
@@ -342,7 +341,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # Now that we have a specific encoding and have decided on our observables
 # we need to choose a suitable cost function to optimise.
 # We will use an :math:`l_2` loss function acting on pairs of games and
-# labels :math:`D={(g,y)}`, where :math:`D` is our dataset.
+# labels :math:`D={(g,y)},` where :math:`D` is our dataset.
 #
 
 
@@ -354,7 +353,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 
 ######################################################################
 # Let's now implement this!
-# 
+#
 # First let's generate some games.
 # Here we are creating a small program that will play Noughts and Crosses against itself in a random fashion.
 # On completion, it spits out the winner and the winning board, with noughts as +1, draw as 0, and crosses as -1.
@@ -367,6 +366,7 @@ import random
 torch.backends.cudnn.deterministic = True
 torch.manual_seed(16)
 random.seed(16)
+
 
 #  create an empty board
 def create_board():
@@ -499,11 +499,12 @@ import pennylane as qml
 import matplotlib.pyplot as plt
 
 # Set up a nine-qubit system
-dev = qml.device("default.qubit.torch", wires=9)
+dev = qml.device("default.qubit", wires=9)
 
 ob_center = qml.PauliZ(4)
 ob_corner = (qml.PauliZ(0) + qml.PauliZ(2) + qml.PauliZ(6) + qml.PauliZ(8)) * (1 / 4)
 ob_edge = (qml.PauliZ(1) + qml.PauliZ(3) + qml.PauliZ(5) + qml.PauliZ(7)) * (1 / 4)
+
 
 # Now let's encode the data in the following qubit models, first with symmetry
 @qml.qnode(dev)
@@ -662,6 +663,7 @@ fig, ax = qml.draw_mpl(circuit_no_sym)([0] * 9, [0] * 34)
 
 import math
 
+
 def encode_game(game):
     board, res = game
     x = board * (2 * math.pi) / 3
@@ -676,8 +678,9 @@ def encode_game(game):
 
 ######################################################################
 # Recall that the loss function we're interested in is
-# :math:`\mathcal{L}(\mathcal{D})=\frac{1}{|\mathcal{D}|} \sum_{(\boldsymbol{g}, \boldsymbol{y}) \in \mathcal{D}}\|\hat{\boldsymbol{y}}(\boldsymbol{g})-\boldsymbol{y}\|_{2}^{2}`.
+# :math:`\mathcal{L}(\mathcal{D})=\frac{1}{|\mathcal{D}|} \sum_{(\boldsymbol{g}, \boldsymbol{y}) \in \mathcal{D}}\|\hat{\boldsymbol{y}}(\boldsymbol{g})-\boldsymbol{y}\|_{2}^{2}.`
 # We need to define this and then we can begin our optimisation.
+
 
 # calculate the mean square error for this classification problem
 def cost_function(params, input, target):

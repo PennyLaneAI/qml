@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2021-02-22T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Getting Started"
     ],
@@ -19,7 +19,6 @@
     ],
     "seoDescription": "Learn how to simulate noisy quantum circuits",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_noisy_circuits",
     "references": [
         {
             "id": "johannes",

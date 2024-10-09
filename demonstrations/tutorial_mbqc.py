@@ -64,7 +64,7 @@ Measurement-based quantum computation
 # .. math::    |\Phi\rangle=\Pi_{(i,j)\in E}CZ_{ij}|+⟩^{\otimes n}.
 #
 # where :math:`n` is the number of qubits, :math:`CZ_{ij}` is the controlled-:math:`Z`` gate between
-# qubits :math:`i` and :math:`j`, and :math:`|+\rangle = \frac{1}{\sqrt{2}}\big(|0\rangle + |1\rangle\big)`
+# qubits :math:`i` and :math:`j,` and :math:`|+\rangle = \frac{1}{\sqrt{2}}\big(|0\rangle + |1\rangle\big)`
 # is the :math:`+1`` eigenstate of the Pauli-:math:`X` operator. The distinction between graph
 # states and a cluster states is rather technical and details can be found in Ref.
 # [#PersistentEntanglement]_. For now, suffice to say that cluster states are a subset of graph
@@ -139,7 +139,7 @@ print(qml.draw(cluster_state)())
 # `````````````````````
 # Let's take a deeper look at the principles behind quantum teleportation using a simple example of one-qubit
 # teleportation. We start with one qubit in the state :math:`|\psi\rangle` that we want to transfer
-# to the second qubit initially in the state :math:`|0\rangle`. The figure below represents the
+# to the second qubit initially in the state :math:`|0\rangle.` The figure below represents the
 # protocol. The green box represents the creation of a cluster state, while
 # the red box represents the measurement of a qubit with the appropriate correction applied to
 # the second qubit based on the measurement outcome.
@@ -189,7 +189,7 @@ def one_bit_teleportation(input_state):
 # Now, let's prepare a random qubit state and see if the teleportation protocol is working as
 # expected. To do so, we'll generate a random normalized state :math:`|\psi\rangle = \alpha |0\rangle + \beta |1\rangle`
 # and apply the teleportation protocol to see if the resulting density matrix
-# describing the second qubit is the same as our input state :math:`|\psi\rangle`.
+# describing the second qubit is the same as our input state :math:`|\psi\rangle.`
 
 # Define helper function for random input state on n qubits
 def generate_random_state(n=1):
@@ -207,7 +207,7 @@ np.allclose(density_matrix, density_matrix_mbqc)
 
 ##############################################################################
 #
-# As we can see, :math:`|\psi\rangle`, originally the state of the first qubit, has been transported to the second qubit!
+# As we can see, :math:`|\psi\rangle,` originally the state of the first qubit, has been transported to the second qubit!
 #
 # This protocol is one of the main ingredients of one-way quantum computing. Essentially, we
 # propagate the information in one end of our cluster state to the other end through
@@ -252,8 +252,8 @@ np.allclose(density_matrix, density_matrix_mbqc)
 #
 # We will see that in our measurement-based scheme, this operation can be implemented using a linear
 # chain of 5 qubits prepared in a cluster state, as shown in the figure below [#MBQCRealization]_. The first qubit
-# :math:`t_\mathrm{in}` is prepared in some input state :math:`|\psi_\mathrm{in}\rangle`,
-# and we are interested in the final state of the output qubit :math:`t_\mathrm{out}`.
+# :math:`t_\mathrm{in}` is prepared in some input state :math:`|\psi_\mathrm{in}\rangle,`
+# and we are interested in the final state of the output qubit :math:`t_\mathrm{out}.`
 #
 # .. figure:: ../_static/demonstration_assets/mbqc/single-qubit-rotation.png
 #    :align: center
@@ -262,8 +262,8 @@ np.allclose(density_matrix, density_matrix_mbqc)
 #
 #    ..
 #
-# The input qubit :math:`t_\mathrm{in}`, together with the intermediate qubits :math:`a_1`,
-# :math:`a_2`, and :math:`a_3` are then measured in the bases
+# The input qubit :math:`t_\mathrm{in}`, together with the intermediate qubits :math:`a_1,`
+# :math:`a_2,` and :math:`a_3` are then measured in the bases
 #
 # .. math::
 #   \mathcal{B}_j(\theta_j) \equiv \left\{\frac{|0\rangle + e^{i\theta_j}|1\rangle}{\sqrt{2}},
@@ -276,8 +276,8 @@ np.allclose(density_matrix, density_matrix_mbqc)
 #   \theta_{2} = (-1)^{m_1} \beta, \quad \text{and} \quad \theta_{3} = (-1)^{m_{\mathrm{in}} + m_2} \gamma
 #
 # with :math:`m_{\mathrm{in}}, m_1, m_2 \in \{0, 1\}` being the measurement outcomes on nodes
-# :math:`t_\mathrm{in}`, :math:`a_1` and :math:`a_2`, respectively. Note that the
-# measurement basis is adaptive; the measurement on :math:`a_3`, for example, depends on the outcome
+# :math:`t_\mathrm{in}`, :math:`a_1` and :math:`a_2,` respectively. Note that the
+# measurement basis is adaptive; the measurement on :math:`a_3,` for example, depends on the outcome
 # of earlier measurements in the chain. After these operations, the state of qubit
 # :math:`t_\mathrm{out}` is given by
 #
@@ -285,7 +285,7 @@ np.allclose(density_matrix, density_matrix_mbqc)
 #    = X^{m_1 + m_3}Z^{m_{\mathrm{in}} + m_2}U(\alpha, \beta, \gamma)
 #    |\psi_{\mathrm{in}}\rangle.
 #
-# with :math:`m_3` being the measurement outcome on node :math:`a_3`. Now note that this unitary 
+# with :math:`m_3` being the measurement outcome on node :math:`a_3.` Now note that this unitary 
 # :math:`\tilde{U}` is related to our desired unitary :math:`U` up to
 # the first two Pauli terms. Luckily, we can correct for these additional Pauli gates by
 # choosing the measurement basis of qubit :math:`t_\mathrm{out}` appropriately or correcting for them classically after
@@ -293,7 +293,7 @@ np.allclose(density_matrix, density_matrix_mbqc)
 #
 # To demonstrate that this actually works, we will use PennyLane. For simplicity, we will just
 # show the ability will to perform single-axis rotations :math:`R_z(\theta)` and
-# :math:`R_x(\theta)` for arbitrary :math:`\theta \in [0, 2 \pi)`. Note that these two operations
+# :math:`R_x(\theta)` for arbitrary :math:`\theta \in [0, 2 \pi).` Note that these two operations
 # plus the CNOT also constitute a universal gate set.
 #
 # To start off, we define the :math:`R_z(\theta)` gate using two qubits with the gate-based approach
@@ -428,7 +428,7 @@ np.allclose(RX(theta, input_state), RX_MBQC(theta, input_state))
 # ``````````````````````````
 # The second ingredient for a universal quantum computing scheme is the two-qubit gate. Here, we will
 # show how to perform a CNOT operation in the measurement-based framework. The input state is given on two qubits,
-# control qubit :math:`c` and target qubit :math:`t_\mathrm{in}`. Preparing the cluster state shown in
+# control qubit :math:`c` and target qubit :math:`t_\mathrm{in}.` Preparing the cluster state shown in
 # the figure below, and measuring qubits :math:`t_\mathrm{in}` and :math:`a` in the :math:`X`-basis,
 # we implement the CNOT gate between qubits :math:`c` and :math:`t_\mathrm{out}` up to Pauli corrections [#MBQCRealization]_.
 #
@@ -510,7 +510,7 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 #    ..
 #
 #    A complete measurement-based quantum computation. Circles :math:`\odot` symbolize measurements
-#    of Pauli-:math:`Z`, vertical arrows :math:`\uparrow` are measurements of Pauli-:math:`X`, while 
+#    of Pauli-:math:`Z`, vertical arrows :math:`\uparrow` are measurements of Pauli-:math:`X,` while 
 #    tilted arrows :math:`\nwarrow` or :math:`\nearrow` refer to
 #    measurements in the :math:`xy`-plane. [#OneWay2001]_
 #
@@ -583,7 +583,7 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 # Arthur Pesah <https://arthurpesah.me/blog/2022-01-25-intro-qec-1/>`_ for a more compact
 # introduction. Instead, we will give you the gist of quantum error correction in the
 # MBQC framework. We will do so by using the surface code [#FowlerSurfaceCode]_ [#FowlerPolyestimate]_ [#GoogleQEC2022]_ as an example. This code makes use of stabilizers of the form :math:`\bigotimes_i X_i` or 
-# :math:`\bigotimes_j Z_j`, as depicted below.
+# :math:`\bigotimes_j Z_j,` as depicted below.
 #
 # .. _fig-surfacecode:
 #

@@ -103,14 +103,14 @@ due to van der Waals forces between the atoms. This is described by the interact
 
 .. math:: \hat{H}_{int} = \sum_{j=1}^{N-1}\sum_{k=j+1}^{N} \frac{C_6}{R^6_{jk}}\hat{n}_j\hat{n}_k
 
-where :math:`n_j=| r_j \rangle \langle r_j |` is the number operator acting on atom :math:`j`, :math:`R_{jk} = \lvert x_j - x_k \lvert` is the
-distance between atoms :math:`j` and :math:`k`, and :math:`C_6` is a fixed value determined by the nature of the ground
-and Rydberg states (for Aquila, :math:`5.24 \times 10^{-24} \text{rad m}^6 / \text{s}`, referring to the
+where :math:`n_j=| r_j \rangle \langle r_j |` is the number operator acting on atom :math:`j,` :math:`R_{jk} = \lvert x_j - x_k \lvert` is the
+distance between atoms :math:`j` and :math:`k,` and :math:`C_6` is a fixed value determined by the nature of the ground
+and Rydberg states (for Aquila, :math:`5.24 \times 10^{-24} \text{rad m}^6 / \text{s},` referring to the
 :math:`| 70S_{1/2} \rangle` state of the Rb-87 atom).
 
 There are two key things to be aware of in the interaction term. First, the energy contribution of
 the interaction between each pair of atoms is only non-zero when both atoms are in the Rydberg state,
-so that :math:`\langle \psi | \hat{n}_k \hat{n}_j | \psi \rangle  =1`. Second, the energy contribution for each
+so that :math:`\langle \psi | \hat{n}_k \hat{n}_j | \psi \rangle  =1.` Second, the energy contribution for each
 pair of atoms is inversely proportional to the distance between them. Thus, as we move two atoms closer
 together, it becomes increasingly energetically expensive for both to be in the Rydberg state.
 
@@ -127,13 +127,13 @@ atoms into closer proximity, we see a rapidly increasing energy cost to drive to
     :alt: A diagram of the energy levels for the ground, single excitation, and double excitation states
     :target: javascript:void(0);
 
-    Energy levels for the ground (:math:`| gg \rangle`), single Rydberg excitation (:math:`| gr \rangle`, :math:`| rg \rangle`),
+    Energy levels for the ground (:math:`| gg \rangle`), single Rydberg excitation (:math:`| gr \rangle,` :math:`| rg \rangle`),
     and double Rydberg excitation (:math:`| rr \rangle`) states
 
 The modification of the energy levels when atoms are in proximity gives rise to Rydberg blockade,
 where atoms that have been driven by a pulse that would, in isolation, leave them in the excited state
 instead remain in the ground state due to neighboring atoms being excited. The distance within which two 
-neighboring atoms are effectively prevented from both being excited is referred to as the *blockade radius* :math:`R_b`.
+neighboring atoms are effectively prevented from both being excited is referred to as the *blockade radius* :math:`R_b.`
 
 This brings us to our discussion of the second part of the Hamiltonian: the drive term.
 
@@ -142,7 +142,7 @@ The driven Rydberg Hamiltonian
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The atoms in a Rydberg system can be driven by application of a laser pulse, which can be described by 3 parameters:
-amplitude (also called Rabi frequency) :math:`\Omega`, detuning :math:`\Delta`, and phase :math:`\phi`. While in
+amplitude (also called Rabi frequency) :math:`\Omega`, detuning :math:`\Delta,` and phase :math:`\phi.` While in
 theory, a drive pulse can be applied to individual atoms, the current control setup for the Aquila hardware only
 allows the application of a global drive pulse.
 
@@ -257,14 +257,14 @@ aquila.hardware_capabilities["lattice"].dict()
 #        'positionResolution': Decimal('1E-8'),
 #        'numberSitesMax': 256}}
 #
-# We can see that the atom field has a width of :math:`75 \, \mu m` and a height of :math:`76 \, \mu m`.
+# We can see that the atom field has a width of :math:`75 \, \mu m` and a height of :math:`76 \, \mu m.`
 # Additionally, we can see that the minimum radial spacing and minimal vertical spacing between two
-# atoms are both :math:`4 \, \mu m`, and the resolution for atom placement is :math:`0.1 \, \mu m`. For more
+# atoms are both :math:`4 \, \mu m,` and the resolution for atom placement is :math:`0.1 \, \mu m.` For more
 # details accessing and interpreting these specifications, see Amazon Braket’s starter `Aquila example notebook
 # <https://github.com/aws/amazon-braket-examples/blob/main/examples/analog_hamiltonian_simulation/01_Introduction_to_Aquila.ipynb>`__.
 #
 # In PennyLane, we will specify these distances in micrometres. Let's set the coordinates to be three
-# points on an equilateral triangle with a side length of :math:`5 \, \mu m`, which should be well within
+# points on an equilateral triangle with a side length of :math:`5 \, \mu m,` which should be well within
 # the blockade radius:
 #
 
@@ -492,8 +492,8 @@ global_drive = qml.pulse.rydberg_drive(amplitude=gaussian_fn, phase=0, detuning=
 #
 # With the interaction term off, each qubit will evolve according to the unitary evolution
 # :math:`U = \text{exp}\left(-i \frac{1}{2} \int d\tau \Omega(\tau) \sigma_X \right)` and we construct
-# :math:`\Omega(t)` such that :math:`\int d\tau \frac{1}{2} \Omega(\tau) = \frac{\pi}{2}`,
-# i.e. :math:`U = \exp(-i \frac{\pi}{2} \sigma_X) = -\sigma_X`.
+# :math:`\Omega(t)` such that :math:`\int d\tau \frac{1}{2} \Omega(\tau) = \frac{\pi}{2},`
+# i.e. :math:`U = \exp(-i \frac{\pi}{2} \sigma_X) = -\sigma_X.`
 #
 # We will implement the pi-pulse using the drive term defined above, and tune the parameters of
 # the gaussian envelope to implement the desired pulse.
@@ -512,7 +512,7 @@ amplitude_params = [max_amplitude, displacement, sigma]
 params = [amplitude_params]
 ts = [0.0, 1.75]
 
-default_qubit = qml.device("default.qubit.jax", wires=3, shots=1000)
+default_qubit = qml.device("default.qubit", wires=3, shots=1000)
 
 
 @qml.qnode(default_qubit, interface="jax")

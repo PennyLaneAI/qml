@@ -50,15 +50,15 @@ Quantum models as Fourier series
 # where :math:`M` is a measurement observable and
 # :math:`U(x, \boldsymbol \theta)` is a variational quantum circuit that
 # encodes a data input :math:`x` and depends on a
-# set of parameters :math:`\boldsymbol \theta`. Here we will restrict ourselves
+# set of parameters :math:`\boldsymbol \theta.` Here we will restrict ourselves
 # to one-dimensional data inputs, but the paper motivates that higher-dimensional
 # features simply generalize to multi-dimensional Fourier series.
 #
 # The circuit itself repeats :math:`L` layers, each consisting of a data-encoding circuit
 # block :math:`S(x)` and a trainable circuit block
 # :math:`W(\boldsymbol \theta)` that is controlled by the parameters
-# :math:`\boldsymbol \theta`. The data encoding block consists of gates of
-# the form :math:`\mathcal{G}(x) = e^{-ix H}`, where :math:`H` is a
+# :math:`\boldsymbol \theta.` The data encoding block consists of gates of
+# the form :math:`\mathcal{G}(x) = e^{-ix H},` where :math:`H` is a
 # Hamiltonian. A prominent example of such gates are Pauli rotations.
 #
 
@@ -73,7 +73,7 @@ Quantum models as Fourier series
 # the "encoding Hamiltonians" in :math:`S(x)` determine the set
 # :math:`\Omega` of available "frequencies", and the remainder of the
 # circuit, including the trainable parameters, determines the coefficients
-# :math:`c_{\omega}`.
+# :math:`c_{\omega}.`
 #
 
 
@@ -98,11 +98,11 @@ Quantum models as Fourier series
 # .. math::  f_{ \boldsymbol \theta}(x) = \sum_{n \in \Omega} c_{n}(\boldsymbol \theta) e^{i  n x},
 #
 # where :math:`\Omega = \{ -r, \dots, -1, 0, 1, \dots, r\}` is a spectrum
-# of consecutive integer-valued frequencies up to degree :math:`r`.
+# of consecutive integer-valued frequencies up to degree :math:`r.`
 #
 # As a result, we expect quantum models that encode an input :math:`x` by
 # :math:`r` Pauli rotations to only be able to fit Fourier series of at
-# most degree :math:`r`.
+# most degree :math:`r.`
 #
 
 
@@ -244,7 +244,7 @@ plt.show()
 #        paper.
 #
 #     -  To get the ground truth :math:`g'(x) = \sum_{n=-2}^2 c_{n} e^{-nix}`
-#        with :math:`c_0=0.1`, :math:`c_1 = c_2 = 0.15 - 0.15i` from Figure 3,
+#        with :math:`c_0=0.1,` :math:`c_1 = c_2 = 0.15 - 0.15i` from Figure 3,
 #        you need to increase the degree to two:
 #
 #        ::
@@ -443,7 +443,7 @@ plt.show()
 ######################################################################
 # Our next task is to repeat the function-fitting experiment for a circuit
 # where the Pauli rotation gate gets repeated :math:`r` times on
-# *different* qubits, using a single layer :math:`L=1`.
+# *different* qubits, using a single layer :math:`L=1.`
 #
 # As shown in the paper, we expect similar results to the serial model: a
 # Fourier series of degree :math:`r` can only be fitted if there are at
@@ -459,7 +459,7 @@ plt.show()
 # cumbersome to train.
 #
 # We therefore follow Figure 4 in the paper and use an ansatz for
-# :math:`W`.
+# :math:`W.`
 #
 
 
@@ -622,7 +622,7 @@ plt.show()
 # .. note::
 #
 #     To reproduce the right column in Figure 4 from the paper, use the
-#     correct ground truth, :math:`r=3` and ``trainable_block_layers=3``,
+#     correct ground truth, :math:`r=3` and ``trainable_block_layers=3`,`
 #     as well as sufficiently many training steps. The amount of steps
 #     depends on the initial weights and other hyperparameters, and
 #     in some settings training may not converge to zero error at all.
@@ -644,7 +644,7 @@ plt.show()
 # from quantum models sampled from a model family defined by an
 # ansatz for the trainable circuit block. For this we need a
 # function that numerically computes the Fourier coefficients of a
-# periodic function f with period :math:`2 \pi`.
+# periodic function f with period :math:`2 \pi.`
 #
 
 

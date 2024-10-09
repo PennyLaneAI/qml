@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2024-04-09T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Getting Started",
         "Optimization",
@@ -25,7 +25,6 @@
     ],
     "seoDescription": "Learn how to calibrate quantum computers with reinforcement learning",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_rl_pulse",
     "references": [
         {
             "id": "BaumPRXQ21",

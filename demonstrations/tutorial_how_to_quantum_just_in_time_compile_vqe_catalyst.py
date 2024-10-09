@@ -19,7 +19,7 @@ compiled, optimized, and executed with a significant performance boost.
 
 We will break the implementation into three steps:
 
-1. Finding the molecular Hamiltonian for :math:`H_3^{+}`.
+1. Finding the molecular Hamiltonian for :math:`H_3^{+}.`
 2. Preparing trial ground step (ansatz).
 3. Optimizing the circuit to minimize the expectation value of the Hamiltonian.
 """
@@ -116,15 +116,14 @@ print(f"Final angle parameters: {params}")
 # When creating the cost function, we want to make sure that all parameters and arrays are created
 # using JAX. We can now decorate the cost function with :func:`~pennylane.qjit`:
 #
-
 from jax import numpy as jnp
 
-hf = jnp.array(dataset.hf_state)
+hf = np.array(dataset.hf_state)
 
 @qml.qjit
 @qml.qnode(dev)
 def cost(params):
-    qml.BasisState(hf, wires=range(qubits))
+    qml.BasisState.compute_decomposition(hf, wires=range(qubits))
     qml.DoubleExcitation(params[0], wires=[0, 1, 2, 3])
     qml.DoubleExcitation(params[1], wires=[0, 1, 4, 5])
     return qml.expval(H)

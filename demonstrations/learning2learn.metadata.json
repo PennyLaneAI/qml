@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2021-03-02T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
@@ -19,9 +19,10 @@
     ],
     "seoDescription": "Use a classical recurrent neural network to initilize the parameters of a variational quatum algorithm.",
     "doi": "",
-    "canonicalURL": "/qml/demos/learning2learn",
     "references": [],
-    "basedOnPapers": ["10.48550/arXiv.1907.05415"],
+    "basedOnPapers": [
+        "10.48550/arXiv.1907.05415"
+    ],
     "referencedByPapers": [],
     "relatedContent": [
         {

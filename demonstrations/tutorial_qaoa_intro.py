@@ -48,7 +48,7 @@ which is a unitary defined as:"""
 #
 # The time evolution operator is determined completely in terms of a Hamiltonian
 # :math:`H` and a scalar :math:`t` representing time. In fact, any unitary
-# :math:`U` can be written in the form :math:`e^{i \gamma H}`, where :math:`\gamma` is a scalar
+# :math:`U` can be written in the form :math:`e^{i \gamma H},` where :math:`\gamma` is a scalar
 # and :math:`H` is a Hermitian operator,
 # interpreted as a Hamiltonian. Thus, time evolution establishes a connection that allows us to
 # describe quantum circuits in terms of Hamiltonians. 🤯
@@ -76,15 +76,12 @@ which is a unitary defined as:"""
 #     :align: center
 #     :width: 70%
 #
-# In PennyLane, this is implemented using the :func:`~.pennylane.templates.ApproxTimeEvolution` template.
-# For example, let's say we have the following Hamiltonian:
+# In PennyLane, this is implemented using the :func:`~.pennylane.templates.ApproxTimeEvolution`
+# template. For example, let's say we have the following Hamiltonian:
 
 import pennylane as qml
 
-H = qml.Hamiltonian(
-    [1, 1, 0.5],
-    [qml.PauliX(0), qml.PauliZ(1), qml.PauliX(0) @ qml.PauliX(1)]
-)
+H = qml.Hamiltonian([1, 1, 0.5], [qml.PauliX(0), qml.PauliZ(1), qml.PauliX(0) @ qml.PauliX(1)])
 print(H)
 
 
@@ -93,17 +90,19 @@ print(H)
 # We can implement the approximate time-evolution operator corresponding to this
 # Hamiltonian:
 
-dev = qml.device('default.qubit', wires=2)
+dev = qml.device("default.qubit", wires=2)
 
 t = 1
 n = 2
+
 
 @qml.qnode(dev)
 def circuit():
     qml.ApproxTimeEvolution(H, t, n)
     return [qml.expval(qml.PauliZ(i)) for i in range(2)]
 
-print(qml.draw(circuit, expansion_strategy='device')())
+
+print(qml.draw(circuit, level="device")())
 
 ######################################################################
 # Layering circuits
@@ -126,9 +125,9 @@ print(qml.draw(circuit, expansion_strategy='device')())
 #     :width: 100%
 #
 #
-# Circuit repetition is implemented in PennyLane using the :func:`~.pennylane.layer` function. This method
-# allows us to take a function containing either quantum operations, a template, or even a single
-# quantum gate, and repeatedly apply it to a set of wires.
+# Circuit repetition is implemented in PennyLane using the :func:`~.pennylane.layer` function. This
+# method allows us to take a function containing either quantum operations, a template, or even a
+# single quantum gate, and repeatedly apply it to a set of wires.
 #
 # .. figure:: ../_static/demonstration_assets/qaoa_module/qml_layer.png
 #     :align: center
@@ -138,15 +137,18 @@ print(qml.draw(circuit, expansion_strategy='device')())
 # repeated as an argument and specify the number of repetitions. For example, let's
 # say that we want to layer the following circuit three times:
 
+
 def circ(theta):
     qml.RX(theta, wires=0)
     qml.Hadamard(wires=1)
     qml.CNOT(wires=[0, 1])
 
+
 @qml.qnode(dev)
 def circuit(param):
     circ(param)
     return [qml.expval(qml.PauliZ(i)) for i in range(2)]
+
 
 print(qml.draw(circuit)(0.5))
 
@@ -155,10 +157,12 @@ print(qml.draw(circuit)(0.5))
 # We simply pass this function into the :func:`~.pennylane.layer` function:
 #
 
+
 @qml.qnode(dev)
 def circuit(params, **kwargs):
     qml.layer(circ, 3, params)
     return [qml.expval(qml.PauliZ(i)) for i in range(2)]
+
 
 print(qml.draw(circuit)([0.3, 0.4, 0.5]))
 
@@ -182,9 +186,9 @@ print(qml.draw(circuit)([0.3, 0.4, 0.5]))
 # 1. Define a *cost Hamiltonian* :math:`H_C` such that its ground state
 #    encodes the solution to the optimization problem.
 #
-# 2. Define a *mixer Hamiltonian* :math:`H_M`.
+# 2. Define a *mixer Hamiltonian* :math:`H_M.`
 #
-# 3. Construct the circuits :math:`e^{-i \gamma H_C}` and :math:`e^{-i\alpha H_M}`. We call
+# 3. Construct the circuits :math:`e^{-i \gamma H_C}` and :math:`e^{-i\alpha H_M}.` We call
 #    these the *cost* and *mixer layers*, respectively.
 #
 # 4. Choose a parameter :math:`n\geq 1` and build the circuit
@@ -194,7 +198,7 @@ print(qml.draw(circuit)([0.3, 0.4, 0.5]))
 #
 #    consisting of repeated application of the cost and mixer layers.
 #
-# 5. Prepare an initial state, apply :math:`U(\boldsymbol\gamma,\boldsymbol\alpha)`,
+# 5. Prepare an initial state, apply :math:`U(\boldsymbol\gamma,\boldsymbol\alpha),`
 #    and use classical techniques to optimize the parameters.
 #
 # 6. After the circuit has been optimized, measurements of the output state reveal
@@ -261,7 +265,7 @@ plt.show()
 # experimenting with different mixers.
 #
 # In our case, the cost
-# Hamiltonian has two ground states, :math:`|1010\rangle` and :math:`|0110\rangle`, coinciding
+# Hamiltonian has two ground states, :math:`|1010\rangle` and :math:`|0110\rangle,` coinciding
 # with the solutions of the problem. The mixer Hamiltonian is the simple, non-commuting sum of Pauli-X
 # operations on each node of the graph:
 
@@ -288,6 +292,7 @@ def qaoa_layer(gamma, alpha):
     qaoa.cost_layer(gamma, cost_h)
     qaoa.mixer_layer(alpha, mixer_h)
 
+
 ######################################################################
 #
 # We are now ready to build the full variational circuit. The number of wires is equal to
@@ -298,6 +303,7 @@ def qaoa_layer(gamma, alpha):
 
 wires = range(4)
 depth = 2
+
 
 def circuit(params, **kwargs):
     for w in wires:
@@ -311,7 +317,7 @@ def circuit(params, **kwargs):
 # ``params[0]`` and ``params[1]`` into each layer of the circuit. That's it! The last
 # step is PennyLane's specialty: optimizing the circuit parameters.
 #
-# The cost function is the expectation value of :math:`H_C`, which we want to minimize. We
+# The cost function is the expectation value of :math:`H_C,` which we want to minimize. We
 # use the function :func:`~.pennylane.expval` which returns the
 # expectation value of the Hamiltonian with respect to the circuit's output state.
 # We also define the device on which the simulation is performed. We use the
@@ -319,6 +325,7 @@ def circuit(params, **kwargs):
 #
 
 dev = qml.device("qulacs.simulator", wires=wires)
+
 
 @qml.qnode(dev)
 def cost_function(params):
@@ -340,7 +347,7 @@ params = np.array([[0.5, 0.5], [0.5, 0.5]], requires_grad=True)
 
 ######################################################################
 #
-# Notice that we set each of the initial parameters to :math:`0.5`. For demonstration purposes,
+# Notice that we set each of the initial parameters to :math:`0.5.` For demonstration purposes,
 # we chose initial parameters that we know work fairly well, and don't get stuck in any local minima.
 #
 # The choice of initial parameters for a variational circuit is usually a difficult problem,
@@ -365,6 +372,7 @@ print(params)
 # full QAOA circuit with the optimal parameters, but this time we
 # return the probabilities of measuring each bitstring:
 #
+
 
 @qml.qnode(dev)
 def probability_circuit(gamma, alpha):
@@ -408,18 +416,18 @@ plt.show()
 # QAOA submodule as well!
 #
 # The QAOA workflow above gave us two optimal solutions: :math:`|6\rangle = |0110\rangle`
-# and :math:`|10\rangle = |1010\rangle`. What if we add a constraint
+# and :math:`|10\rangle = |1010\rangle.` What if we add a constraint
 # that made one of these solutions "better" than the other? Let's imagine that we are interested in
 # solutions that minimize the original cost function,
-# *but also colour the first and third vertices* :math:`1`. A constraint of this form will
-# favour :math:`|10\rangle`, making it the only true ground state.
+# *but also colour the first and third vertices* :math:`1.` A constraint of this form will
+# favour :math:`|10\rangle,` making it the only true ground state.
 #
 # It is easy to introduce constraints of this form in PennyLane.
 # We can use the :func:`~.pennylane.qaoa.edge_driver` cost
 # Hamiltonian to "reward" cases in which the first and last vertices of the graph
-# are :math:`0`:
+# are :math:`0:`
 
-reward_h = qaoa.edge_driver(nx.Graph([(0, 2)]), ['11'])
+reward_h = qaoa.edge_driver(nx.Graph([(0, 2)]), ["11"])
 
 ######################################################################
 #
@@ -439,15 +447,18 @@ def qaoa_layer(gamma, alpha):
     qaoa.cost_layer(gamma, new_cost_h)
     qaoa.mixer_layer(alpha, mixer_h)
 
+
 def circuit(params, **kwargs):
     for w in wires:
         qml.Hadamard(wires=w)
     qml.layer(qaoa_layer, depth, params[0], params[1])
 
+
 @qml.qnode(dev)
 def cost_function(params):
     circuit(params)
     return qml.expval(new_cost_h)
+
 
 params = np.array([[0.5, 0.5], [0.5, 0.5]], requires_grad=True)
 
@@ -463,10 +474,12 @@ print(params)
 # We then reconstruct the probability landscape with the optimal parameters:
 #
 
+
 @qml.qnode(dev)
 def probability_circuit(gamma, alpha):
     circuit([gamma, alpha])
     return qml.probs(wires=wires)
+
 
 probs = probability_circuit(params[0], params[1])
 
@@ -477,7 +490,7 @@ plt.show()
 ######################################################################
 #
 # Just as we expected, the :math:`|10\rangle` state is now favoured
-# over :math:`|6\rangle`!
+# over :math:`|6\rangle!`
 #
 
 ######################################################################

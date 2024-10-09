@@ -22,12 +22,12 @@ In classical computation, one can define a universal set of logic gate operation
 ``{AND, NOT, OR}`` that can be used to perform any boolean function. A similar analogue
 in quantum computation is to have a set of quantum gates that can approximate any unitary
 transformation up to the desired accuracy. One such universal quantum gate set is the
-:math:`\textrm{Clifford + T}` set, ``{H, S, CNOT, T}``, where the gates ``H``, ``S``, and
+:math:`\textrm{Clifford + T}` set, ``{H, S, CNOT, T}``, where the gates ``H``, ``S`,` and
 ``CNOT`` are the generators of the *Clifford group*. The elements of this group are
 called *Clifford gates*, which transform *Pauli* words to *Pauli* words under
 `conjugation <https://mathworld.wolfram.com/Conjugation.html>`__. This means an
 :math:`n`-qubit unitary :math:`C` belongs to the Clifford group if the conjugates
-:math:`C P C^{\dagger}` are also Pauli words for all :math:`n`-qubit Pauli words :math:`P`.
+:math:`C P C^{\dagger}` are also Pauli words for all :math:`n`-qubit Pauli words :math:`P.`
 We can see this ourselves by conjugating the Pauli `X` operation with the elements of
 the universal set defined above:
 
@@ -49,9 +49,9 @@ supported in PennyLane:
 5. Adjoints of the above gate operations via :func:`~pennylane.adjoint`.
 
 | Each of these gates can be uniquely described by how they transform the Pauli words. For
-  example, ``Hadamard`` conjugates :math:`X` to :math:`Z` and :math:`Z` to :math:`X`.
+  example, ``Hadamard`` conjugates :math:`X` to :math:`Z` and :math:`Z` to :math:`X.`
   Similarly, ``ISWAP`` acting on a subspace of qubits `i` and `j` conjugates :math:`X_{i}`
-  to :math:`-Z_{i}Y_{j}` and :math:`Z_{i}` to :math:`Z_{j}`. These transformations can
+  to :math:`Z_{i}Y_{j}` and :math:`Z_{i}` to :math:`Z_{j}.` These transformations can
   be presented in tabulated forms called *Clifford tableaus*, as shown below:
 
 .. figure:: ../_static/demonstration_assets/clifford_simulation/clifford_tableaus.jpeg
@@ -88,16 +88,16 @@ There are several ways for representing :math:`n`-qubit stabilizer states :math:
 and tracking their evolution with a :math:`poly(n)` number of bits. The `CHP` (CNOT-Hadamard-Phase)
 formalism, also called the *phase-sensitive* formalism, is one of these methods, where one
 efficiently describes the state using a *Stabilizer tableau* structure based on its
-``stabilizer`` set :math:`\mathcal{S}`. The `stabilizers`, represented by the elements ``s`` in
-:math:`\mathcal{S}`, are n-qubit Pauli words that have the state :math:`|\psi\rangle` as their
-:math:`+1` eigenstate, i.e., :math:`s|\psi\rangle = |\psi\rangle`,
-:math:`\forall s \in \mathcal{S}`. These are often viewed as virtual ``Z`` operators, while their
+``stabilizer`` set :math:`\mathcal{S}.` The `stabilizers,` represented by the elements ``s`` in
+:math:`\mathcal{S},` are n-qubit Pauli words that have the state :math:`|\psi\rangle` as their
+:math:`+1` eigenstate, i.e., :math:`s|\psi\rangle = |\psi\rangle,`
+:math:`\forall s \in \mathcal{S}.` These are often viewed as virtual ``Z`` operators, while their
 conjugates, termed `destabilizers` (``d``), correspond to virtual ``X`` operators, forming a
-similar set referred to as ``destabilizer`` set :math:`\mathcal{D}`.
+similar set referred to as ``destabilizer`` set :math:`\mathcal{D}.`
 
 The stabilizer tableau for an :math:`n`-qubit state is made of binary variables representing
 the Pauli words for the ``generators`` of stabilizer :math:`\mathcal{S}` and destabilizer
-:math:`\mathcal{D}`and their ``phases``. These are generally arranged as the following
+:math:`\mathcal{D}`and their ``phases`.` These are generally arranged as the following
 tabulated structure [#lowrank_2019]_:
 
 .. figure:: ../_static/demonstration_assets/clifford_simulation/stabilizer-tableau.jpeg
@@ -365,9 +365,9 @@ snapshots = qml.snapshots(state_at_each_step(circuit))()
 ######################################################################
 # We can now access the tableau state via the ``snapshots`` dictionary, where the integer keys
 # represent each step. The step ``0`` corresponds to the initial all zero :math:`|00\rangle`
-# state, which is stabilized by the Pauli operators :math:`Z_0` and :math:`Z_1`. Evolving
+# state, which is stabilized by the Pauli operators :math:`Z_0` and :math:`Z_1.` Evolving
 # it by a ``qml.X(0)`` would correspond to transforming its stabilizer generators
-# from :math:`+Z_0` to :math:`-Z_0`, while keeping the destabilizer generators the same.
+# from :math:`+Z_0` to :math:`-Z_0,` while keeping the destabilizer generators the same.
 #
 
 print("Intial State: ", tableau_to_pauli_rep(snapshots[0]))

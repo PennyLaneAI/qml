@@ -104,17 +104,17 @@ by a Hamiltonian
     H(\boldsymbol{p}, t) = H_d + \sum_{i=1}^K f_i(\boldsymbol{p_i}, t) H_i.
 
 As we can see, :math:`H` depends on the time :math:`t` and on a set of control parameters
-:math:`\boldsymbol{p}`, which is composed of one parameter vector :math:`\boldsymbol{p_i}`
+:math:`\boldsymbol{p},` which is composed of one parameter vector :math:`\boldsymbol{p_i}`
 per term. Both :math:`t` and :math:`\boldsymbol{p}`
 feed into functions :math:`f_i` that return scalar coefficients
-for the (constant) Hamiltonian terms :math:`H_i`. In addition, there is a constant drift
-Hamiltonian :math:`H_d`.
+for the (constant) Hamiltonian terms :math:`H_i.` In addition, there is a constant drift
+Hamiltonian :math:`H_d.`
 We will assume that the Hamiltonian :math:`H` fully describes the system of interest and,
 in particular, we do not consider sources of noise in the system, such as leakage, dephasing,
 or crosstalk, i.e. the accidental interaction with other parts of a larger, surrounding system.
 
 The time evolution of the state of our quantum system will be described
-by the Schrödinger equation associated with :math:`H`.
+by the Schrödinger equation associated with :math:`H.`
 However, for our purposes it will be more useful to consider the full unitary evolution that
 the Hamiltonian causes, independently of the initial state. This way, we can compare it to
 the digital target gate without iterating over different input and output states.
@@ -124,11 +124,11 @@ The Schrödinger equation dictates the behaviour of the evolution operator :math
 
     \frac{d}{dt} U(\boldsymbol{p}, t) = -i H(\boldsymbol{p}, t) U(\boldsymbol{p}, t),
 
-where we implicitly fixed the initial time of the evolution to :math:`t_0=0`.
+where we implicitly fixed the initial time of the evolution to :math:`t_0=0.`
 It is possible to simulate the dynamics of sufficiently small quantum systems on
 a classical computer by solving the ordinary differential equation (ODE) above numerically.
-For a fixed pulse duration :math:`T` and given control parameters :math:`\boldsymbol{p}`,
-a numerical ODE solver computes the matrix :math:`U(\boldsymbol{p}, T)`.
+For a fixed pulse duration :math:`T` and given control parameters :math:`\boldsymbol{p},`
+a numerical ODE solver computes the matrix :math:`U(\boldsymbol{p}, T).`
 
 How can we tell whether the evolution of the qubit system is close to the digital gate
 we aim to produce? We will need a measure of similarity, or fidelity.
@@ -156,7 +156,7 @@ purpose we write
 
 Here :math:`U_\text{target}` is the unitary matrix of the gate that we want to compile.
 We consider the total duration :math:`T` as a fixed constraint to the optimization
-problem and therefore we do not denote it as a free parameter of :math:`F`.
+problem and therefore we do not denote it as a free parameter of :math:`F.`
 
 |
 
@@ -168,7 +168,7 @@ problem and therefore we do not denote it as a free parameter of :math:`F`.
 
 |
 
-We can then maximize the fidelity :math:`F`, for example, using gradient-based
+We can then maximize the fidelity :math:`F,` for example, using gradient-based
 optimization algorithms like Adam [#KingmaBa14]_.
 But how do we obtain the gradient of a function that requires us to run an ODE solver
 to obtain its value? We are in luck! The implementation of pulse programming in PennyLane is
@@ -218,10 +218,10 @@ We simply replace the step functions above by a smooth variant, namely by sigmoi
     R_k(t, (\Omega, t_0, t_1)) &= \Omega S(t-t_0, k) S(t_1-t, k)\\
     S(t, k) &= (1+\exp(-k t))^{-1}.
 
-We introduced an additional parameter, :math:`k`, that controls the steepness of the sigmoid
+We introduced an additional parameter, :math:`k,` that controls the steepness of the sigmoid
 functions and can be adapted to the constraints posed by hardware on the maximal rate of change.
-In contrast to :math:`R_\infty`, its sister :math:`R_k` is smooth in all three arguments
-:math:`\Omega`, :math:`t_0` and :math:`t_1`, and training these three parameters with
+In contrast to :math:`R_\infty,` its sister :math:`R_k` is smooth in all three arguments
+:math:`\Omega`, :math:`t_0` and :math:`t_1,` and training these three parameters with
 automatic differentiation will not be a problem.
 
 |
@@ -242,6 +242,7 @@ directly implement the product of the two sigmoids in the function ``sigmoid_rec
     R_k(t, (\Omega, t_0, t_1), k)=
     \Omega [1+\exp(-k (t-t_0))+\exp(-k (t_1-t))+\exp(-k(t_1-t_0))]^{-1}.
 """
+
 import jax
 from jax import numpy as jnp
 
@@ -278,14 +279,14 @@ plt.ylabel("Pulse function")
 plt.show()
 
 #############################################################################
-# We see that for very large :math:`k`, the smooth rectangle becomes practically
-# indistinguishable from the original rectangle function :math:`R_\infty`. This means
+# We see that for very large :math:`k,` the smooth rectangle becomes practically
+# indistinguishable from the original rectangle function :math:`R_\infty.` This means
 # that we can consider the smooth :math:`R_k` a *generalization* of the pulse shape,
 # rather than a restriction.
 #
 # In the examples below, we will use a pulse ansatz :math:`S_k` that sums multiple smooth rectangles
 # :math:`R_k` with the same value for :math:`k` but individual start/end times
-# :math:`t_{0/1}` and amplitudes :math:`\Omega`.
+# :math:`t_{0/1}` and amplitudes :math:`\Omega.`
 # With this nicely trainable pulse shape in our hands, we now turn to the first gate
 # calibration task.
 #
@@ -295,11 +296,11 @@ plt.show()
 # In this first example we will tune a two-qubit pulse to produce a standard CNOT gate.
 #
 # We start by choosing a system Hamiltonian.
-# It contains the drift term :math:`H_d = Z_0 + Z_1`, i.e. a Pauli :math:`Z` operator
+# It contains the drift term :math:`H_d = Z_0 + Z_1,` i.e. a Pauli :math:`Z` operator
 # acting on each qubit, with a constant unit amplitude.
 # The parametrized part uses five generating terms: Pauli :math:`Z` acting on the
 # first qubit (:math:`Z_0`), all three Pauli operators acting on the second qubit
-# (:math:`X_1, Y_1, Z_1`) and a single interaction term :math:`Z_0X_1`, resembling an
+# (:math:`X_1, Y_1, Z_1`) and a single interaction term :math:`Z_0X_1,` resembling an
 # abstract cross-resonance driving term. For all coefficient functions we choose
 # the same function, :math:`f_i=S_k\ \forall i` (see the section above), but with distinct
 # parameters. That is, our Hamiltonian is
@@ -332,24 +333,24 @@ plt.show()
 # the number of parameters is much smaller than in generic discretization approaches.
 # Each coefficient function :math:`S_k` sums :math:`P` smooth rectangles
 # :math:`R_k` with individual amplitudes and start and end times. Overall, this leads to
-# :math:`n=5\cdot 3\cdot P=15P` parameters in :math:`H`.
+# :math:`n=5\cdot 3\cdot P=15P` parameters in :math:`H.`
 # In this and the next example, we chose :math:`P` heuristically.
 #
 # Before we define this Hamiltonian, we implement the sum over multiple
 # ``sigmoid_rectangle`` functions, including two normalization steps.
 # First, we normalize the start and end times of the rectangles to the interval
-# :math:`[\epsilon, T-\epsilon]`, which makes sure that the pulse amplitudes are
-# close to zero at :math:`t=0` and :math:`t=T`. Without this step, we might be
+# :math:`[\epsilon, T-\epsilon],` which makes sure that the pulse amplitudes are
+# close to zero at :math:`t=0` and :math:`t=T.` Without this step, we might be
 # tuning the pulses to be turned on (off) instantaneously at the beginning (end) of the
 # sequence, negating our effort on the pulse shape itself not to vary too quickly.
 # Second, we normalize the final output value to the interval
-# :math:`(-\Omega_\text{max}, \Omega_\text{max})`, which
+# :math:`(-\Omega_\text{max}, \Omega_\text{max}),` which
 # allows us to bound the maximal amplitudes of the pulses to a realizable range while
 # maintaining differentiability.
 #
 # For the normalization steps, we define a ``sigmoid`` and a ``normalize`` function.
 # The first is a straightforward implementation of :math:`R_k` whereas the second
-# uses the ``sigmoid`` function to normalize real numbers to the interval :math:`(-1, 1)`.
+# uses the ``sigmoid`` function to normalize real numbers to the interval :math:`(-1, 1).`
 
 
 def sigmoid(t, k=1.0):
@@ -426,7 +427,7 @@ plt.show()
 # The optimized parameters in the training workflows below will lead to more
 # sharply defined pulses that resemble rectangles more closely. The amplitude normalization
 # step in ``smooth_rectangles`` enables us to produce them in a differentiable manner,
-# as was our goal with introducing :math:`R_k`.
+# as was our goal with introducing :math:`R_k.`
 # Also note that the normalization of the final output value is not a simple clipping
 # step, but again a smooth function. As a consequence, the amplitudes ``1.9`` and ``-2.``
 # in the example above, which are not in the interval ``[-1, 1]``,
@@ -618,7 +619,7 @@ plot_optimal_pulses(hist, S_k, ops_param, T, target_name)
 #
 # In particular, the Hamiltonian uses the drift term :math:`H_d=Z_0+Z_1+Z_2`
 # and the generators are all single-qubit Pauli operators on all three qubits, together
-# with the interaction generators :math:`Z_0X_1, Z_1X_2, Z_2X_0`. Again,
+# with the interaction generators :math:`Z_0X_1, Z_1X_2, Z_2X_0.` Again,
 # all parametrized terms use the coefficient function ``smooth_rectangles``.
 # We allow for a longer pulse duration of :math:`3\pi` and five smooth rectangles in
 # each pulse shape.
@@ -691,12 +692,12 @@ max_params = params_hist[jnp.argmax(jnp.array(profit_hist))]
 # This looks promising: Adam maximized the fidelity successfully and we thus compiled
 # a pulse sequence that implements a Toffoli gate!
 # To inspect how close the compiled pulse sequence is to the Toffoli gate,
-# we can apply it to an exemplary quantum state, say :math:`|110\rangle`,
+# we can apply it to an exemplary quantum state, say :math:`|110\rangle,`
 # and investigate the returned probabilities. A perfect Toffoli gate would
 # flip the third qubit, returning a probability of one in the last entry
 # and zeros elsewhere.
 
-dev = qml.device("default.qubit.jax", wires=3)
+dev = qml.device("default.qubit", wires=3)
 
 
 @qml.qnode(dev, interface="jax")

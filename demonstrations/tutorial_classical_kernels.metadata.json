@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2022-03-01T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
@@ -19,7 +19,6 @@
     ],
     "seoDescription": "Finding a quantum kernel to approximate the Gaussian kernel.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_classical_kernels",
     "references": [
         {
             "id": "QEK",

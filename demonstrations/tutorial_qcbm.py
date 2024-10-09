@@ -25,17 +25,17 @@ samples through projective measurements on qubits, offering a faster alternative
 sampling approach [#Ack]_.
 
 For a dataset :math:`\mathcal{D} = \{x\}` with independent and identically distributed samples from
-an unknown target distribution :math:`\pi(x)`, QCBM is used to generate samples closely resembling
+an unknown target distribution :math:`\pi(x),` QCBM is used to generate samples closely resembling
 the target distribution. QCBM transforms the input product state :math:`|\textbf{0} \rangle` to a
-parameterized quantum state :math:`|\psi_\boldsymbol{\theta}\rangle`. Measuring this output state in the
-computational basis yields a sample of bits :math:`x \sim p_\theta(x)`.
+parameterized quantum state :math:`|\psi_\boldsymbol{\theta}\rangle.` Measuring this output state in the
+computational basis yields a sample of bits :math:`x \sim p_\theta(x).`
 
 .. math::
 
    p_\boldsymbol{\theta}(x) = |\langle x | \psi_\boldsymbol{\theta} \rangle|^2.
 
 The objective is to align the model probability distribution :math:`p_\boldsymbol{\theta}` with the target
-distribution :math:`\pi`.
+distribution :math:`\pi.`
 
 In this tutorial, following [#Liu]_, we will implement a gradient-based algorithm for QCBM using
 PennyLane. We describe the model and learning algorithm followed by its application to the
@@ -174,7 +174,13 @@ plt.yticks([])
 for i in range(n):
     for j in range(n):
         text = plt.text(
-            i, j, sample[j][i], ha="center", va="center", color="gray", fontsize=12
+            i,
+            j,
+            sample[j][i],
+            ha="center",
+            va="center",
+            color="gray",
+            fontsize=12,
         )
 
 print(f"\nSample bitstring: {''.join(np.array(sample.flatten(), dtype='str'))}")
@@ -242,9 +248,7 @@ weights = np.random.random(size=wshape)
 
 @qml.qnode(dev)
 def circuit(weights):
-    qml.StronglyEntanglingLayers(
-        weights=weights, ranges=[1] * n_layers, wires=range(n_qubits)
-    )
+    qml.StronglyEntanglingLayers(weights=weights, ranges=[1] * n_layers, wires=range(n_qubits))
     return qml.probs()
 
 
@@ -291,15 +295,13 @@ print(loss_2)
 # - calculates the KL divergence.
 #
 # The KL divergence [#Kull]_ is a measure of how far the predicted distribution :math:`p_\boldsymbol{\theta}(x)`
-# is from the target distribution :math:`\pi(x)`.
+# is from the target distribution :math:`\pi(x).`
 #
 
 
 @jax.jit
 def update_step(params, opt_state):
-    (loss_val, qcbm_probs), grads = jax.value_and_grad(qcbm.mmd_loss, has_aux=True)(
-        params
-    )
+    (loss_val, qcbm_probs), grads = jax.value_and_grad(qcbm.mmd_loss, has_aux=True)(params)
     updates, opt_state = opt.update(grads, opt_state)
     params = optax.apply_updates(params, updates)
     kl_div = -jnp.sum(qcbm.py * jnp.nan_to_num(jnp.log(qcbm_probs / qcbm.py)))
@@ -344,7 +346,12 @@ qcbm_probs = np.array(qcbm.circ(weights))
 plt.figure(figsize=(12, 5))
 
 plt.bar(
-    np.arange(2**size), probs, width=2.0, label=r"$\pi(x)$", alpha=0.4, color="tab:blue"
+    np.arange(2**size),
+    probs,
+    width=2.0,
+    label=r"$\pi(x)$",
+    alpha=0.4,
+    color="tab:blue",
 )
 plt.bar(
     np.arange(2**size),
@@ -374,9 +381,7 @@ plt.show()
 
 
 def circuit(weights):
-    qml.StronglyEntanglingLayers(
-        weights=weights, ranges=[1] * n_layers, wires=range(n_qubits)
-    )
+    qml.StronglyEntanglingLayers(weights=weights, ranges=[1] * n_layers, wires=range(n_qubits))
     return qml.sample()
 
 
@@ -384,9 +389,7 @@ for N in [2000, 20000]:
     dev = qml.device("default.qubit", wires=n_qubits, shots=N)
     circ = qml.QNode(circuit, device=dev)
     preds = circ(weights)
-    mask = np.any(
-        np.all(preds[:, None] == data, axis=2), axis=1
-    )  # Check for row-wise equality
+    mask = np.any(np.all(preds[:, None] == data, axis=2), axis=1)  # Check for row-wise equality
     chi = np.sum(mask) / N
     print(f"χ for N = {N}: {chi:.4f}")
 
@@ -433,8 +436,7 @@ def mixture_gaussian_pdf(x, mus, sigmas):
     mus, sigmas = np.array(mus), np.array(sigmas)
     vars = sigmas**2
     values = [
-        (1 / np.sqrt(2 * np.pi * v)) * np.exp(-((x - m) ** 2) / (2 * v))
-        for m, v in zip(mus, vars)
+        (1 / np.sqrt(2 * np.pi * v)) * np.exp(-((x - m) ** 2) / (2 * v)) for m, v in zip(mus, vars)
     ]
     values = np.sum([val / sum(val) for val in values], axis=0)
     return values / np.sum(values)
@@ -474,7 +476,7 @@ def circuit(weights):
 
 jit_circuit = jax.jit(circuit)
 
-qml.draw_mpl(circuit, expansion_strategy="device")(weights)
+qml.draw_mpl(circuit, level="device")(weights)
 plt.show()
 
 ######################################################################

@@ -35,7 +35,7 @@ picked up in an interferometer. As we use the quantum state to *probe* the encod
 
 After the parameters are encoded, we have a new state :math:`\rho(\boldsymbol{\phi})` which we then need to measure.
 We can describe any possible measurement in quantum mechanics using a `positive
-operator-valued measurement <https://en.wikipedia.org/wiki/POVM>`_ consisting of a set of operators :math:`\{ \Pi_l \}`.
+operator-valued measurement <https://en.wikipedia.org/wiki/POVM>`_ consisting of a set of operators :math:`\{ \Pi_l \}.`
 Measuring those operators gives us the output probabilities
 
 .. math:: p_l(\boldsymbol{\phi}) = \langle \Pi_l \rangle =
@@ -62,11 +62,11 @@ condition on its covariance matrix which gives a measure of the precision of the
 .. math:: \operatorname{Cov}(\hat{\boldsymbol{\varphi}}) \geq \frac{1}{n} I^{-1}_{\boldsymbol{\phi}},
 
 where :math:`n` is the number of samples and :math:`I_{\boldsymbol{\phi}}` is the *Classical Fisher Information Matrix*
-with respect to the entries of :math:`\boldsymbol{\phi}`. It is defined as
+with respect to the entries of :math:`\boldsymbol{\phi}.` It is defined as
 
 .. math:: [I_{\boldsymbol{\phi}}]_{jk} := \sum_l \frac{(\partial_j p_l)(\partial_k p_l)}{p_l},
 
-where we used :math:`\partial_j` as a shorthand notation for :math:`\frac{\partial}{\partial \phi_j}`. The Cramér-Rao
+where we used :math:`\partial_j` as a shorthand notation for :math:`\frac{\partial}{\partial \phi_j}.` The Cramér-Rao
 bound has the very powerful property that it can always be saturated in the limit of many samples! This means we are
 guaranteed that we can construct a "best estimator" for the vector of parameters.
 
@@ -77,7 +77,7 @@ a trace,
 
 .. math:: \operatorname{Tr}(W\operatorname{Cov}(\hat{\boldsymbol{\varphi}})) \geq \frac{1}{n} \operatorname{Tr}(W I^{-1}_{\boldsymbol{\phi}}).
 
-As its name suggests, :math:`W` can be used to weight the importance of the different entries of :math:`\boldsymbol{\phi}`.
+As its name suggests, :math:`W` can be used to weight the importance of the different entries of :math:`\boldsymbol{\phi}.`
 The right-hand side is now a scalar quantifying the best attainable weighted precision and can be readily used as a cost function:
 
 .. math:: C_W(\boldsymbol{\theta}, \boldsymbol{\mu}) = \operatorname{Tr}(W I^{-1}_{\boldsymbol{\phi}}(\boldsymbol{\theta}, \boldsymbol{\mu})).
@@ -91,7 +91,7 @@ With the cost function in place, we can use Pennylane to optimize the variationa
     :target: javascript:void(0)
 
 Here, the encoding process is modeled as a unitary evolution :math:`U(\boldsymbol{\phi})` followed by
-a parameter-independent noise channel :math:`\mathcal{N}`.
+a parameter-independent noise channel :math:`\mathcal{N}.`
 
 Ramsey spectroscopy
 -------------------
@@ -99,30 +99,30 @@ Ramsey spectroscopy
 In this demonstration, we will study Ramsey spectroscopy, a widely used technique for quantum metrology with atoms and ions.
 The encoded parameters are phase shifts :math:`\boldsymbol{\phi}` arising from the interaction of probe ions
 modeled as two-level systems with an external driving force. We represent the noise in the parameter encoding using a phase damping
-channel (also known as dephasing channel) with damping constant :math:`\gamma`.
+channel (also known as dephasing channel) with damping constant :math:`\gamma.`
 We consider a pure probe state on three qubits and a projective measurement, where
 the computational basis is parametrized by local unitaries.
 
-The above method is actually not limited to the estimation of the parameters :math:`\boldsymbol{\phi}`, but
+The above method is actually not limited to the estimation of the parameters :math:`\boldsymbol{\phi},` but
 can also be used to optimize estimators for functions of those parameters! To add this interesting aspect
 to the tutorial, we will seek an optimal protocol for the estimation of the *Fourier amplitudes* of the phases:
 
 .. math:: f_j(\boldsymbol{\boldsymbol{\phi}}) = \left|\sum_k \phi_k \mathrm{e}^{-i j k \frac{2\pi}{N}}\right|^2.
 
-For three phases, there are two independent amplitudes :math:`f_0` and :math:`f_1`. To include the effect of the function,
+For three phases, there are two independent amplitudes :math:`f_0` and :math:`f_1.` To include the effect of the function,
 we need to replace the classical Fisher information matrix with respect to :math:`\boldsymbol{\phi}` with the Fisher information
-matrix with respect to the entries :math:`f_0` and :math:`f_1`.
+matrix with respect to the entries :math:`f_0` and :math:`f_1.`
 To this end we can make use of the following identity which relates the two matrices:
 
 .. math:: I_{\boldsymbol{f}} = J^T I_{\boldsymbol{\phi}} J,
 
-where :math:`J_{kl} = \frac{\partial f_k}{\partial \phi_l}` is the Jacobian of :math:`\boldsymbol{f}`.
+where :math:`J_{kl} = \frac{\partial f_k}{\partial \phi_l}` is the Jacobian of :math:`\boldsymbol{f}.`
 
 We now turn to the actual implementation of the scheme.
 """
+
 import pennylane as qml
 from pennylane import numpy as np
-
 
 
 ##############################################################################
@@ -155,18 +155,22 @@ def encoding(phi, gamma):
 # we make use of the
 # `ArbitraryStatePreparation <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.templates.state_preparations.ArbitraryStatePreparation.html>`_
 # template from PennyLane.
+
+
 def ansatz(weights):
     qml.ArbitraryStatePreparation(weights, wires=[0, 1, 2])
 
+
 NUM_ANSATZ_PARAMETERS = 14
+
 
 def measurement(weights):
     for i in range(3):
-        qml.ArbitraryStatePreparation(
-            weights[2 * i : 2 * (i + 1)], wires=[i]
-        )
+        qml.ArbitraryStatePreparation(weights[2 * i : 2 * (i + 1)], wires=[i])
+
 
 NUM_MEASUREMENT_PARAMETERS = 6
+
 
 ##############################################################################
 # We now have everything at hand to model the quantum part of our experiment
@@ -180,11 +184,14 @@ def experiment(weights, phi, gamma=0.0):
 
     return qml.probs(wires=[0, 1, 2])
 
+
 # Draw the circuit at the given parameter values
-print(qml.draw(experiment, expansion_strategy='device')(
-    np.arange(NUM_ANSATZ_PARAMETERS + NUM_MEASUREMENT_PARAMETERS),
-    np.zeros(3),
-    gamma=0.2)
+print(
+    qml.draw(experiment, level="device", max_length=80)(
+        np.arange(NUM_ANSATZ_PARAMETERS + NUM_MEASUREMENT_PARAMETERS),
+        np.zeros(3),
+        gamma=0.2,
+    )
 )
 
 
@@ -222,20 +229,15 @@ def CFIM(weights, phi, gamma):
 ##############################################################################
 # As the cost function contains an inversion, we add a small regularization
 # to it to avoid inverting a singular matrix. As additional parameters, we add
-# the weighting matrix :math:`W` and the Jacobian :math:`J`.
+# the weighting matrix :math:`W` and the Jacobian :math:`J.`
 def cost(weights, phi, gamma, J, W, epsilon=1e-10):
-    return np.trace(
-        W
-        @ np.linalg.inv(
-            J.T @ CFIM(weights, phi, gamma) @ J + np.eye(2) * epsilon
-        )
-    )
+    return np.trace(W @ np.linalg.inv(J.T @ CFIM(weights, phi, gamma) @ J + np.eye(2) * epsilon))
 
 
 ##############################################################################
 # To compute the Jacobian, we make use of `sympy <https://docs.sympy.org/latest/index.html>`_.
 # The two independent Fourier amplitudes are computed using the `discrete Fourier transform matrix <https://en.wikipedia.org/wiki/DFT_matrix>`_
-# :math:`\Omega_{jk} = \frac{\omega^{jk}}{\sqrt{N}}` with :math:`\omega = \exp(-i \frac{2\pi}{N})`.
+# :math:`\Omega_{jk} = \frac{\omega^{jk}}{\sqrt{N}}` with :math:`\omega = \exp(-i \frac{2\pi}{N}).`
 import sympy
 import cmath
 
@@ -245,12 +247,10 @@ phi = sympy.Matrix([x, y, z])
 
 # Construct discrete Fourier transform matrix
 omega = sympy.exp((-1j * 2.0 * cmath.pi) / 3)
-Omega = sympy.Matrix([[1, 1, 1], [1, omega ** 1, omega ** 2]]) / sympy.sqrt(3)
+Omega = sympy.Matrix([[1, 1, 1], [1, omega**1, omega**2]]) / sympy.sqrt(3)
 
 # Compute Jacobian
-jacobian = (
-    sympy.Matrix(list(map(lambda x: abs(x) ** 2, Omega @ phi))).jacobian(phi).T
-)
+jacobian = sympy.Matrix(list(map(lambda x: abs(x) ** 2, Omega @ phi))).jacobian(phi).T
 # Lambdify converts the symbolic expression to a python function
 jacobian = sympy.lambdify((x, y, z), sympy.re(jacobian))
 
@@ -261,11 +261,12 @@ jacobian = sympy.lambdify((x, y, z), sympy.re(jacobian))
 # We can now turn to the optimization of the protocol. We will fix the dephasing
 # constant at :math:`\gamma=0.2` and the ground truth of the sensing parameters at
 # :math:`\boldsymbol{\phi} = (1.1, 0.7, -0.6)` and use an equal weighting of the
-# two Fourier amplitudes, corresponding to :math:`W = \mathbb{I}_2`.
+# two Fourier amplitudes, corresponding to :math:`W = \mathbb{I}_2.`
 gamma = 0.2
 phi = np.array([1.1, 0.7, -0.6])
 J = jacobian(*phi)
 W = np.eye(2)
+
 
 ##############################################################################
 # We are now ready to perform the optimization. We will initialize the weights
@@ -279,7 +280,10 @@ def opt_cost(weights, phi=phi, gamma=gamma, J=J, W=W):
 # Seed for reproducible results
 np.random.seed(395)
 weights = np.random.uniform(
-    0, 2 * np.pi, NUM_ANSATZ_PARAMETERS + NUM_MEASUREMENT_PARAMETERS, requires_grad=True
+    0,
+    2 * np.pi,
+    NUM_ANSATZ_PARAMETERS + NUM_MEASUREMENT_PARAMETERS,
+    requires_grad=True,
 )
 
 opt = qml.AdagradOptimizer(stepsize=0.1)
@@ -289,9 +293,7 @@ for i in range(20):
     weights, cost_ = opt.step_and_cost(opt_cost, weights)
 
     if (i + 1) % 5 == 0:
-        print(
-            "Iteration {:>4}: Cost = {:6.4f}".format(i + 1, cost_)
-        )
+        print("Iteration {:>4}: Cost = {:6.4f}".format(i + 1, cost_))
 
 ##############################################################################
 # Comparison with the standard protocol
@@ -305,11 +307,7 @@ for i in range(20):
 Ramsey_weights = np.zeros_like(weights)
 Ramsey_weights[1:6:2] = np.pi / 2
 Ramsey_weights[15:20:2] = np.pi / 2
-print(
-    "Cost for standard Ramsey sensing = {:6.4f}".format(
-        opt_cost(Ramsey_weights)
-    )
-)
+print("Cost for standard Ramsey sensing = {:6.4f}".format(opt_cost(Ramsey_weights)))
 
 ##############################################################################
 # We can now make a plot to compare the noise scaling of the above probes.
@@ -320,12 +318,8 @@ comparison_costs = {
 }
 
 for gamma in gammas:
-    comparison_costs["optimized"].append(
-        cost(weights, phi, gamma, J, W)
-    )
-    comparison_costs["standard"].append(
-        cost(Ramsey_weights, phi, gamma, J, W)
-    )
+    comparison_costs["optimized"].append(cost(weights, phi, gamma, J, W))
+    comparison_costs["standard"].append(cost(Ramsey_weights, phi, gamma, J, W))
 
 import matplotlib.pyplot as plt
 

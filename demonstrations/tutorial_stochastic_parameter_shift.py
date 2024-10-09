@@ -42,7 +42,7 @@ But how should we actually update the circuit's parameters to move us closer to 
 Borrowing a page from classical optimization and deep learning, we can use
 `gradient descent <https://en.wikipedia.org/wiki/Gradient_descent>`_.
 In this general-purpose method, we compute the derivative of a (smooth) function :math:`f` with
-respect to its parameters :math:`\theta`, i.e., its gradient :math:`\nabla_\theta f`.
+respect to its parameters :math:`\theta,` i.e., its gradient :math:`\nabla_\theta f.`
 Since the gradient always points in the direction of steepest ascent/descent, if we make small updates
 to the parameters according to
 
@@ -56,8 +56,8 @@ The Parameter-Shift Rule
 ------------------------
 
 In the quantum case, the expectation value of a circuit with respect to an measurement operator
-:math:`\hat{C}` depends smoothly on the the circuit's gate parameters :math:`\theta`. We can write this
-expectation value as :math:`\langle \hat{C}(\theta)\rangle`. This means that the derivatives
+:math:`\hat{C}` depends smoothly on the the circuit's gate parameters :math:`\theta.` We can write this
+expectation value as :math:`\langle \hat{C}(\theta)\rangle.` This means that the derivatives
 :math:`\nabla_\theta \langle \hat{C} \rangle` exist and gradient descent can be used.
 
 Before digging deeper, we will first set establish some basic notation. For simplicity, though a circuit
@@ -69,8 +69,8 @@ may contain many gates, we can concentrate on just a single gate :math:`\hat{U}`
     :width: 90%
 
 All gates appearing before :math:`\hat{U}` can be absorbed into an initial state preparation
-:math:`\vert \psi_0 \rangle`, and all gates appearing after :math:`\hat{U}` can be absorbed with the measurement
-operator :math:`\hat{C}` to make a new effective measurement operator :math:`\hat{A}`.
+:math:`\vert \psi_0 \rangle,` and all gates appearing after :math:`\hat{U}` can be absorbed with the measurement
+operator :math:`\hat{C}` to make a new effective measurement operator :math:`\hat{A}.`
 The expectation value :math:`\hat{A}` in the simpler one-gate circuit is identical to
 the expectation value :math:`\hat{C}` in the larger circuit.
 
@@ -80,7 +80,7 @@ We can also write any unitary gate in the form
 
     \hat{U}(\theta) = e^{i\theta\hat{V}},
 
-where :math:`\hat{V}` is the Hermitian *generator* of the gate :math:`\hat{U}`.
+where :math:`\hat{V}` is the Hermitian *generator* of the gate :math:`\hat{U}.`
 
 Now, how do we actually obtain the numerical values of the gradient necessary for gradient descent?
 
@@ -105,7 +105,7 @@ circuit evaluations:
 .. note::
 
     The multiplier :math:`u` in this formula is arbitrary and can differ between implementations.
-    For example, PennyLane internally uses the convention where :math:`u=\tfrac{1}{2}`.
+    For example, PennyLane internally uses the convention where :math:`u=\tfrac{1}{2}.`
 
 The parameter-shift rule is *exact*, i.e., the formula for the gradient doesn't involve any approximations.
 For quantum hardware, we can only take a finite number of samples, so we can never determine a circuit's
@@ -137,7 +137,7 @@ def rotation_circuit(theta):
 
 
 ##############################################################################
-# We will examine the gradient with respect to the parameter :math:`\theta`.
+# We will examine the gradient with respect to the parameter :math:`\theta.`
 # The parameter-shift recipe requires taking the difference of two circuit
 # evaluations, with forward and backward shifts in angles.
 # PennyLane also provides a convenience function :func:`~pennylane.grad`
@@ -169,12 +169,12 @@ plt.show()
 
 ##############################################################################
 # We have evaluated the expectation value at all possible values for the angle
-# :math:`\theta`. By inspection, we can see that the functional dependence is
-# :math:`\cos(\theta)`.
+# :math:`\theta.` By inspection, we can see that the functional dependence is
+# :math:`\cos(\theta).`
 #
 # The parameter-shift evaluations are plotted with 'x' markers.
 # Again, by simple inspection, we can see that these have the functional form
-# :math:`-\sin(\theta)`, the expected derivative of :math:`\cos(\theta)`,
+# :math:`-\sin(\theta)`, the expected derivative of :math:`\cos(\theta),`
 # and that they match the values provided by the :func:`~pennylane.grad`
 # function.
 #
@@ -183,7 +183,7 @@ plt.show()
 # some technical conditions that, if a gate satisfies them, we can guarantee
 # it has a parameter-shift rule [#schuld2018]_. Concretely, the
 # parameter-shift rule holds for any gate of the form
-# :math:`e^{i\theta\hat{G}}` where :math:`\hat{G}^2=\mathbb{1}`.
+# :math:`e^{i\theta\hat{G}}` where :math:`\hat{G}^2=\mathbb{1}.`
 # Furthermore, we can derive
 # similar parameter-shift recipes for some other gates that *don't* meet
 # this technical conditions, on a one-by-one basis.
@@ -209,7 +209,7 @@ plt.show()
 # The stochastic parameter-shift rule introduces two new ingredients to
 # the parameter-shift recipe:
 #
-# i) A random parameter :math:`s`, sampled uniformly from :math:`[0,1]`
+# i) A random parameter :math:`s,` sampled uniformly from :math:`[0,1]`
 #    (this is the origin of the "stochastic" in the name);
 # ii) Sandwiching the "shifted" gate application with one additional
 #     gate on each side.
@@ -219,10 +219,10 @@ plt.show()
 #
 # Every gate is unitary, which means they
 # have the form :math:`\hat{U}(\theta) = e^{i\theta \hat{G}}`
-# for some generator :math:`G`.
+# for some generator :math:`G.`
 # Additionally, every multi-qubit operator can be expressed as a
 # sum of tensor products of Pauli operators, so let's assume,
-# without loss of generality, the following form for :math:`\hat{G}`:
+# without loss of generality, the following form for :math:`\hat{G}:`
 #
 # .. math::
 #
@@ -239,11 +239,11 @@ plt.show()
 ##############################################################################
 # The stochastic parameter-shift rule gives the following recipe for
 # computing the gradient of the expectation value
-# :math:`\langle \hat{A} (\theta) \rangle`:
+# :math:`\langle \hat{A} (\theta) \rangle:`
 #
 # i) Sample a value for the variable :math:`s` uniformly form
-#    :math:`[0,1]`.
-# ii) In place of gate :math:`\hat{U}(\theta)`, apply the following
+#    :math:`[0,1].`
+# ii) In place of gate :math:`\hat{U}(\theta),` apply the following
 #     three gates:
 #
 #     a) :math:`e^{i(1-s)(\hat{H} + \theta\hat{V})}`
@@ -251,14 +251,14 @@ plt.show()
 #     c) :math:`e^{is(\hat{H} + \theta\hat{V})}`
 #
 #     Measure the observable :math:`\hat{A}` and call the resulting
-#     expectation value of :math:`\langle r_+\rangle`.
+#     expectation value of :math:`\langle r_+\rangle.`
 #
 # iii) Repeat step ii, but flip the sign of the angle :math:`\tfrac{\pi}{4}`
 #      in part b. Call the resulting expectation value
-#      :math:`\langle r_-\rangle`.
+#      :math:`\langle r_-\rangle.`
 #
 # The gradient can be obtained from the average value of
-# :math:`\langle r_+ \rangle - \langle r_-\rangle`, i.e.,
+# :math:`\langle r_+ \rangle - \langle r_-\rangle,` i.e.,
 #
 # .. math::
 #
@@ -342,10 +342,10 @@ plt.show()
 
 ##############################################################################
 # By inspection, we can see that the expectation values of the cross-resonance
-# gate lead to a functional form :math:`\cos(2\theta_1)`.
+# gate lead to a functional form :math:`\cos(2\theta_1).`
 # Also by inspection, the results from the stochastic parameter-shift rule
-# have the functional form :math:`-2\sin(2\theta_1)`, which is the derivative
-# of :math:`\cos(2\theta_1)`!
+# have the functional form :math:`-2\sin(2\theta_1),` which is the derivative
+# of :math:`\cos(2\theta_1)!`
 
 ##############################################################################
 # Finally, it is interesting to notice when the stochastic parameter-shift rule
@@ -357,8 +357,8 @@ plt.show()
 #     \hat{U}(\theta) = e^{i\theta\hat{V}}.
 #
 # In this case, the terms encapsulated in the operator :math:`\hat{H}` are all
-# zero, and the gates :math:`e^{i(1-s)\hat{G}}`,
-# :math:`e^{\pm i\tfrac{\pi}{4}\hat{V}}`, and :math:`e^{is\hat{G}}` which
+# zero, and the gates :math:`e^{i(1-s)\hat{G}},`
+# :math:`e^{\pm i\tfrac{\pi}{4}\hat{V}},` and :math:`e^{is\hat{G}}` which
 # appear in the stochastic parameter-shift rule all commute. Therefore,
 # we can combine them together into a single gate:
 #

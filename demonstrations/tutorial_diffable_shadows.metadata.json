@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2022-10-07T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Algorithms",
         "Quantum Computing"
@@ -20,7 +20,6 @@
     ],
     "seoDescription": "Classical shadows in the Pauli basis",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_diffable_shadows",
     "references": [
         {
             "id": "Huang2020",
@@ -60,7 +59,7 @@
         },
         {
             "type": "demonstration",
-            "id": "tutorial_ml_classical_shadows",
+            "id": "ml_classical_shadows",
             "weight": 1.0
         }
     ]

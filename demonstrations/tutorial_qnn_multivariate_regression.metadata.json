@@ -1,0 +1,83 @@
+{
+    "title": "Multidimensional regression with a variational quantum circuit",
+    "authors": [
+        {
+            "username": "gmlejarza"
+        },
+        {
+            "username": "quantumpenguin"
+        }
+    ],
+    "dateOfPublication": "2024-10-01T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
+    "categories": [
+        "Quantum Computing",
+        "Quantum Machine Learning",
+        "Getting Started"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_qnn_multivariate_regression.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_qnn_multivariate_regression.png"
+        }
+    ],
+    "seoDescription": "Learn to use a quantum neural network to fit a multivariate function.",
+    "doi": "",
+    "references": [
+        {
+            "id": "schuld",
+            "type": "article",
+            "title": "The effect of data encoding on the expressive power of variational quantum machine learning models",
+            "authors": "Maria Schuld, Ryan Sweke, Johannes Jakob Meyer",
+            "year": "2021",
+            "publisher": "",
+            "url": "https://arxiv.org/pdf/2008.08605"
+        },
+        {
+            "id": "qibo",
+            "type": "article",
+            "title": "Tutorial: Quantum Fourier Iterative Amplitude Estimation",
+            "authors": "Jorge J. Martinez de Lejarza",
+            "year": "2023",
+            "publisher": "",
+            "url": "hhttps://qibo.science/qibo/stable/code-examples/tutorials/qfiae/qfiae_demo.html"
+        },
+        {
+            "id": "demoschuld",
+            "type": "other",
+            "title": "Tutorial: Quantum models as Fourier series",
+            "authors": "Johannes Jakob Meyer, Maria Schuld",
+            "year": "2021",
+            "publisher": "",
+            "url": "https://pennylane.ai/qml/demos/tutorial_expressivity_fourier_series/"
+        },
+        {
+            "id": "demojax",
+            "type": "other",
+            "title": "How to optimize a QML model using JAX and Optax",
+            "authors": "Josh Izaac, Maria Schuld",
+            "year": "2024",
+            "publisher": "",
+            "url": "ttps://pennylane.ai/qml/demos/tutorial_How_to_optimize_QML_model_using_JAX_and_Optax/"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_How_to_optimize_QML_model_using_JAX_and_Optax",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_expressivity_fourier_series",
+            "weight": 1.0
+        }
+    ]
+}
