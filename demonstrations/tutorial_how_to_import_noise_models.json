@@ -1,12 +1,12 @@
 {
-    "title": "How to use noise models in PennyLane",
+    "title": "How to import noise models from Qiskit",
     "authors": [
         {
             "username": "whatsis"
         }
     ],
-    "dateOfPublication": "2024-10-01T00:00:00+00:00",
-    "dateOfLastModification": "2024-10-01T00:00:00+00:00",
+    "dateOfPublication": "2024-10-21T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-21T00:00:00+00:00",
     "categories": [
         "Quantum Computing",
         "How-to"
@@ -22,9 +22,9 @@
             "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_how_to_use_noise_models.png"
         }
     ],
-    "seoDescription": "Learn how noise models can be built and inserted into a quantum circuit in PennyLane.",
+    "seoDescription": "Learn how noise models can be imported into PennyLane from Qiskit.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_how_to_use_noise_models",
+    "canonicalURL": "/qml/demos/tutorial_how_to_import_noise_models",
     "references": [
     ],
     "basedOnPapers": [],
@@ -37,7 +37,7 @@
         },
         {
             "type": "demonstration",
-            "id": "tutorial_how_to_import_noise_models",
+            "id": "tutorial_how_to_use_noise_models",
             "weight": 1.0
         }
     ]
