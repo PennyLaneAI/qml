@@ -202,7 +202,11 @@ hamiltonian
 #
 # Conclusion
 # ----------
-# To be added ...
+# The spin module in PennyLane provides a set of powerful tools for constructing spin model
+# Hamiltonians. Here we learned how to use these tools to construct pre-defined Hamiltonian
+# templates, such as the Fermi-Hubbard model Hamiltonian, and use the Lattice object to construct
+# more advanced and customised models such as the Kitaev honeycomb Hamiltonian. The versatility of
+# the new spin functions and classes allows constructing any new spin model Hamiltonian intuitively.
 #
 # About the author
 # ----------------
