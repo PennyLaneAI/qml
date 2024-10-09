@@ -4103,8 +4103,7 @@ files = []
 [package.source]
 type = "git"
 url = "https://github.com/PennyLaneAI/pennylane.git"
-branch = "readout_noise"
-reference = "pennylane-update"
+reference = "readout_noise"
 
 [package.dependencies]
 appdirs = "*"
