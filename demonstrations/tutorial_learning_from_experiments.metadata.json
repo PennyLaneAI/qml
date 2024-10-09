@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2022-04-18T00:00:00+00:00",
-    "dateOfLastModification": "2024-09-19T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
@@ -19,7 +19,6 @@
     ],
     "seoDescription": "Learn how quantum memory can boost quantum machine learning algorithms",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_learning_from_experiments",
     "references": [
         {
             "id": "Huang2021",

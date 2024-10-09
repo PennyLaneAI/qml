@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2023-08-01T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Getting Started",
         "Algorithms",
@@ -25,7 +25,6 @@
     ],
     "seoDescription": "Use phase kickback to create an unbreakable quantum lock",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_phase_kickback",
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],

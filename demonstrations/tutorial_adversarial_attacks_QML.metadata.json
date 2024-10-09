@@ -10,7 +10,7 @@
         }
     ],
     "dateOfPublication": "2024-09-16T00:00:00+00:00",
-    "dateOfLastModification": "2024-09-16T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": ["Quantum Machine Learning", "Quantum Computing"],
     "tags": ["Quantum machine learning", "QML", "Adversarial attacks", "Quantum security"],
     "previewImages": [
@@ -25,7 +25,6 @@
     ],
     "seoDescription": "Learn how to construct adversarial attacks on classification networks and how to make quantum machine learning (QML) models more robust.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_adversarial_attacks_QML",
     "references": [
         {
             "id": "Wendlinger2024",
