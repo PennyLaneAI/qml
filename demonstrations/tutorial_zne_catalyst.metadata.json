@@ -20,11 +20,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_qjit_compile_grovers_algorithm_with_catalyst.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_zne_catalyst.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_qjit_compile_grovers_algorithm_with_catalyst.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_zne_catalyst.png"
         }
     ],
     "seoDescription": "Learn to use error mitigation and the digital zero-noise extrapolation (ZNE) technique with Catalyst, the PennyLane framework for quantum JIT compilation.",
