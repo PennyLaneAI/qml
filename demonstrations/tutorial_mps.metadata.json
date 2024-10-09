@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2024-09-29T00:00:00+00:00",
-    "dateOfLastModification": "2024-09-29T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Quantum Computing",
         "Algorithms",
@@ -25,7 +25,6 @@
     ],
     "seoDescription": "What is a matrix product state (MPS)? Here is all you need to know about MPS from a quantum computation and quantum simulation perspective.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_mps",
     "references": [
         {
             "id": "Baiardi",

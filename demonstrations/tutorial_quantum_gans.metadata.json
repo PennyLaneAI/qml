@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2022-02-01T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
@@ -19,7 +19,6 @@
     ],
     "seoDescription": "Explore quantum GANs to generate hand-written digits of zero",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_quantum_gans",
     "references": [
         {
             "id": "goodfellow2014",

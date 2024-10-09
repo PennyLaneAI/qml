@@ -12,7 +12,7 @@
         }
     ],
     "dateOfPublication": "2022-08-29T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
@@ -25,7 +25,6 @@
     ],
     "seoDescription": "Generalization of quantum machine learning models.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_learning_few_data",
     "references": [
         {
             "id": "CaroGeneralization",

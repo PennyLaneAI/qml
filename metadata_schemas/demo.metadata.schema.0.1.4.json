@@ -1,6 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "demo.metadata.schema.0.1.3.json",
+    "$id": "demo.metadata.schema.0.1.4.json",
     "title": "Demo Metadata",
     "description": "A QML demo's metadata",
     "type": "object",
@@ -87,11 +87,6 @@
         "type": "string",
         "pattern": "^$|^10[.]"
       },
-      "canonicalURL": {
-        "description": "The canonical URL for the demo. Sometimes there might be more than one URL that points to a given page on a website. The canonical URL defines which of these should be thought of as the primary or main one.",
-        "type": "string",
-        "pattern": "(^https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6})?\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)"
-      },
       "references": {
         "description": "An array of the references used for the demo.",
         "type": "array",
@@ -135,6 +130,6 @@
       }
     },
     "required": [
-      "title", "authors", "dateOfPublication", "dateOfLastModification", "categories", "tags", "previewImages", "seoDescription", "doi", "canonicalURL", "references", "basedOnPapers", "referencedByPapers", "relatedContent"
+      "title", "authors", "dateOfPublication", "dateOfLastModification", "categories", "tags", "previewImages", "seoDescription", "doi", "references", "basedOnPapers", "referencedByPapers", "relatedContent"
     ]
   }

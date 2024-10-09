@@ -9,7 +9,7 @@
         }
     ],
     "dateOfPublication": "2024-01-18T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning",
         "Optimization",
@@ -28,7 +28,6 @@
     ],
     "seoDescription": "Learn how to train a quantum machine learning model using PennyLane, JAX, and JAXopt.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_How_to_optimize_QML_model_using_JAX_and_JAXopt",
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],

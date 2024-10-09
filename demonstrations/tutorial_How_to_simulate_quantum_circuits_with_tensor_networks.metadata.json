@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2024-07-09T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Getting Started",
         "Quantum Computing",
@@ -28,7 +28,6 @@
     ],
     "seoDescription": "Learn how to simulate quantum circuits with tensor networks using the default.tensor PennyLane device.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_How_to_simulate_quantum_circuits_with_tensor_networks",
     "references": [
         {
             "id": "orus",
