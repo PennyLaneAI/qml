@@ -21,11 +21,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_qrack_catalyst_integration.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_qjit_compile_grovers_algorithm_with_catalyst.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_qrack_catalyst_integration.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_qjit_compile_grovers_algorithm_with_catalyst.png"
         }
     ],
     "seoDescription": "Digital Zero-Noise Extrapolation with Catalyst",
