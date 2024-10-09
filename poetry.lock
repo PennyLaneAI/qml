@@ -4217,12 +4217,12 @@ kokkos = ["pennylane-lightning-kokkos"]
 
 [[package]]
 name = "pennylane-qiskit"
-version = "0.38.0"
+version = "0.38.1"
 description = "PennyLane plugin for Qiskit"
 optional = false
 python-versions = "*"
 files = [
-    {file = "PennyLane_qiskit-0.38.0-py3-none-any.whl", hash = "sha256:2a97bbd81b935192bfcfb9d0c5292a3d6cf1721f01bf3def838e4707dfce8b85"},
+    {file = "PennyLane_qiskit-0.38.1-py3-none-any.whl"},
 ]
 
 [package.dependencies]
