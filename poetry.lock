@@ -4220,9 +4220,7 @@ version = "0.38.1"
 description = "PennyLane plugin for Qiskit"
 optional = false
 python-versions = "*"
-files = [
-    {file = "PennyLane_qiskit-0.38.1-py3-none-any.whl", hash = "sha256:a861559ca739d7512c77456807a08d9aa89b38d333681a1a8aff77f32c3ca768"},
-]
+files = []
 
 [package.dependencies]
 networkx = ">=2.2"
@@ -4233,6 +4231,11 @@ qiskit-aer = "*"
 qiskit-ibm-provider = "*"
 qiskit-ibm-runtime = "<=0.29"
 sympy = "<1.13"
+
+[package.source]
+type = "git"
+url = "https://github.com/PennyLaneAI/pennylane-qiskit.git"
+reference = "master"
 
 [[package]]
 name = "pennylane-qulacs"
