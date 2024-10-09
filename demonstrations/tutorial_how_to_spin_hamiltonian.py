@@ -13,7 +13,9 @@ for your problem of interest.
 # ---------------------
 #
 # PennyLane has a range of functions for constructing spin model Hamiltonians with minimal input
-# data needed from the user. Let’s look at the Fermi-Hubbard model as an example. This model can
+# data needed from the user. Let’s look at the
+# `Fermi-Hubbard <https://pennylane.ai/datasets/qspin/fermi-hubbard-model>`__ model as an example.
+# This model can
 # represent a chain of hydrogen atoms where each atom, or site, can hold one spin-up and one
 # spin-down particle. The Hamiltonian describing this model has two components: the kinetic energy
 # component which is parameterized by a hopping parameter and the potential energy component
@@ -51,8 +53,9 @@ hamiltonian = qml.spin.fermi_hubbard("cubic", [3, 3, 3], t, u)
 # The Hamiltonian template functions are great and simple tools for someone who just wants to build
 # a Hamiltonian quickly. However, PennyLane offers intuitive tools that can be used to construct
 # spin Hamiltonians manually which are very handy for building customized Hamiltonians. Let’s learn
-# how to use this tools by constructing the Hamiltonian for the transverse field Ising model on a
-# two-dimension lattice.
+# how to use this tools by constructing the Hamiltonian for the
+# `transverse field Ising <https://pennylane.ai/datasets/qspin/transverse-field-ising-model>`__
+# model on a two-dimension lattice.
 #
 # The Hamiltonian is represented as:
 #
@@ -78,9 +81,13 @@ lattice = qml.spin.lattice._generate_lattice('square', [3, 3])
 import numpy as np
 import matplotlib.pyplot as plt
 
-def plot(lattice):
+def plot(lattice, figsize=None):
 
-    plt.figure(figsize=lattice.n_cells[::-1])
+    if figsize:
+        plt.figure(figsize=figsize)
+    else:
+        plt.figure(figsize=lattice.n_cells[::-1])
+
     nodes = lattice.lattice_points
 
     for edge in lattice.edges:
@@ -117,7 +124,7 @@ lattice = Lattice(n_cells, vectors, nodes)
 # manually is more flexible while generate_lattice only works for some predefined lattice shapes.
 #
 # Now that we have the lattice, we can use its attributes, e.g., edges and vertices, to construct
-# our transverse field Isingmodel Hamiltonian. We just need to define the coupling and onsite
+# our transverse field Ising model Hamiltonian. We just need to define the coupling and onsite
 # parameters
 
 from pennylane import X, Y, Z
@@ -143,10 +150,11 @@ hamiltonian
 # Building customized Hamiltonians
 # --------------------------------
 # Now we work on a more complicated Hamiltonian to see how our existing tools allow building it
-# intuitively. We chose the anisotropic Kitaev Honeycomb model where the coupling
-# parameters depend on the orientation of the bonds. [need an image here] We can build the Hamiltonian by building the
-# lattice manually and adding custom edges between the nodes. For instance, to define a custom 'XX'
-# edge with coupling constant 0.5 between nodes 0 and 1, we use:
+# intuitively. We chose the anisotropic `Kitaev <https://arxiv.org/abs/cond-mat/0506438>`__
+# honeycomb model where the coupling
+# parameters depend on the orientation of the bonds. We can build the Hamiltonian by building the
+# lattice manually and adding custom edges between the nodes. For instance, to define a custom
+# ``XX`` edge with coupling constant 0.5 between nodes 0 and 1, we use:
 
 custom_edge = [(0, 1), ('XX', 0.5)]
 
@@ -162,7 +170,7 @@ n_cells = [3, 3]
 ######################################################################
 # Let's plot the lattice to see how it looks like.
 
-plot(Lattice(n_cells, vectors, nodes))
+plot(Lattice(n_cells, vectors, nodes), figsize=(5, 3))
 
 ######################################################################
 # Now we add custom edges to the lattice. We have three different edge orientations that we define
