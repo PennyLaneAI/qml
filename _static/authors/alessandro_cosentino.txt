@@ -1,4 +1,0 @@
-.. bio:: Alessandro Cosentino
-   :photo: ../_static/authors/alessandro_cosentino.png
-
-   Alessandro is a Member of Technical Staff at Unitary Fund. He holds a PhD in Computer Science from the University of Waterloo with a thesis in quantum information theory and optimization. He is an open source software advocate with contributions to both classical and quantum projects.

@@ -10,23 +10,23 @@ We'll demonstrate how to generate noise-scaled circuits, execute them on a noisy
 simulator, and use extrapolation techniques to estimate the zero-noise result, all while
 leveraging JIT compilation through Catalyst.
 
-Using ZNE with Pennylane
+Using ZNE with PennyLane
 ------------------------
 
 The demo :doc:`Error mitigation with Mitiq and PennyLane <tutorial_error_mitigation>`
-shows how ZNE, along with other error mitigation techniques, can be carried out in Pennylane
+shows how ZNE, along with other error mitigation techniques, can be carried out in PennyLane
 by using `Mitiq <https://github.com/unitaryfund/mitiq>`__, a Python library developed by `Unitary Fund <https://unitary.fund/>`__.
 
-ZNE in particular is also offered out of the box in Pennylane as a *differentiable* error mitigation technique,
+ZNE in particular is also offered out of the box in PennyLane as a *differentiable* error mitigation technique,
 for usage in combination with variational workflows. More on this in the tutorial
 :doc:`Differentiating quantum error mitigation transforms <tutorial_diffable-mitigation>`.
 
-On top of the error mitigation routines offered in Pennylane, ZNE is also available for just-in-time
+On top of the error mitigation routines offered in PennyLane, ZNE is also available for just-in-time
 (JIT) compilation. In this tutorial we see how an error mitigation routine can be
 integrated in a Catalyst workflow.
 
 At the end of the tutorial, we will compare time for the execution of ZNE routines in
-pure Pennylane vs. Pennylane Catalyst with JIT.
+pure PennyLane vs. PennyLane Catalyst with JIT.
 
 What is zero-noise extrapolation (ZNE)
 -----------
@@ -113,8 +113,7 @@ print(f"Ideal value: {ideal_value}")
 # ----------------------------
 # Let's now run the circuit through a noisy scenario. The Qrack simulator models noise by
 # applying single-qubit depolarizing noise channels to all qubits in all gates of the circuit.
-# The probability of error is specified by the value of the `noise` constructor argument (or
-# the `QRACK_GATE_DEPOLARIZATION` environment variable).
+# The probability of error is specified by the value of the ``noise`` constructor argument.
 
 NOISE_LEVEL = 0.01
 noisy_device = qml.device("qrack.simulator", n_wires, noise=NOISE_LEVEL)
@@ -200,7 +199,7 @@ def mitigated_circuit(w1, w2):
 
 zne_value = mitigated_circuit(w1, w2)
 
-print(f"Error with ZNE in Pennylane: {abs(ideal_value - zne_value):.3f}")
+print(f"Error with ZNE in PennyLane: {abs(ideal_value - zne_value):.3f}")
 
 ##############################################################################
 # To showcase the impact of JIT compilation, let's use Python's ``timeit`` module
@@ -223,9 +222,9 @@ print(f"mitigated_circuit_qjit running time (best of {repeat}): {min(times):.3f}
 # Already with the simple circuit we started with, and with the simple parameters in our example,
 # we can appreciate the performance differences. That was at the cost of very minimal syntax change.
 #
-# There are still reasons to use ZNE in Pennylane without :func:`~.qjit`, for instance,
+# There are still reasons to use ZNE in PennyLane without :func:`~.qjit`, for instance,
 # whenever the device of choice is not supported by Catalyst. To help,
-# we conlcude with a landscape of the QEM techniques available on Pennylane.
+# we conlcude with a landscape of the QEM techniques available on PennyLane.
 #
 # .. list-table::
 #     :widths: 30 20 20 20 20 30
@@ -237,13 +236,13 @@ print(f"mitigated_circuit_qjit running time (best of {repeat}): {min(times):.3f}
 #       - **Differentiable**
 #       - **JIT**
 #       - **Other QEM techniques**
-#     * - Pennylane + Mitiq
+#     * - PennyLane + Mitiq
 #       - global, local, random
 #       - polynomial, exponential
 #       -
 #       -
 #       - PEC, CDR, DDD, REM
-#     * - Pennylane transforms
+#     * - PennyLane transforms
 #       - global, local
 #       - polynomial, exponential
 #       - ✅

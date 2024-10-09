@@ -2,8 +2,7 @@
     "title": "Digital zero-noise extrapolation with Catalyst",
     "authors": [
         {
-            "id": "alessandro_cosentino",
-            "affiliation": "Unitary Fund"
+            "username": "cosenal"
         },
         {
             "id": "nate_stemen",
@@ -29,7 +28,6 @@
     ],
     "seoDescription": "Learn to use error mitigation and the digital zero-noise extrapolation (ZNE) technique with Catalyst, the PennyLane framework for quantum JIT compilation.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_zne_catalyst",
     "references": [
         {
             "id": "DZNEpaper",
@@ -49,6 +47,11 @@
         {
             "type": "demonstration",
             "id": "tutorial_error_mitigation",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "qrack",
             "weight": 1.0
         }
     ]
