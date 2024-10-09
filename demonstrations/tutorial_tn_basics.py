@@ -169,6 +169,12 @@ print(D.shape)
 # .. figure:: ../_static/demonstration_assets/tn_basics/08-cnot.png
 #     :align: center
 #     :width: 50%
+# 
+# This demonstrates the relation between the CNOT acting as a rank-4 tensor with dimensions :math:`2 \times 2 \times 2 \times 2` and its decomposition in terms of two rank-3 local tensors (:math:`T^1` and :math:`T^2`) of dimensions :math:`2 \times 2 \times 2`.
+# 
+# .. note::
+# 
+#   More generally, we can find decompositions of multi-qubit gates into local tensors by means of the ubiquitous singular valued decomposition (SVD). This method is explained in detail in our :doc:`MPS tutorial </demos/tutorial_mps>`. 
 
 ##############################################################################
 # The cost of contracting a network:
