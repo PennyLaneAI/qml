@@ -4098,9 +4098,13 @@ version = "0.38.0"
 description = "PennyLane is a cross-platform Python library for quantum computing, quantum machine learning, and quantum chemistry. Train a quantum computer the same way as a neural network."
 optional = false
 python-versions = "*"
-files = [
-    {file = "PennyLane-0.38.0-py3-none-any.whl", hash = "sha256:6a6f4e96feaffa0aafbf460be901140d6c14481cf26dc92fd050d74aaa793b47"},
-]
+files = []
+
+[package.source]
+type = "git"
+url = "https://github.com/PennyLaneAI/pennylane.git"
+branch = "readout_noise"
+reference = "pennylane-update"
 
 [package.dependencies]
 appdirs = "*"
