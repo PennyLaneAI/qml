@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2024-07-02T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Quantum Computing",
         "How-to"
@@ -24,7 +24,6 @@
     ],
     "seoDescription": "Learn how to get started using Qiskit 1.0 with PennyLane",
     "doi": "",
-    "canonicalURL": "/qml/demos/how_to_use_qiskit1_with_pennylane",
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],

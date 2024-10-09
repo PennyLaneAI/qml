@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2024-05-03T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Getting Started",
         "Quantum Computing",
@@ -25,7 +25,6 @@
     ],
     "seoDescription": "Learn how to create dynamic circuits with control flow based on mid-circuit measurements.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_how_to_create_dynamic_mcm_circuits",
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],
