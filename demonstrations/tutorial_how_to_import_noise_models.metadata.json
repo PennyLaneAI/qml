@@ -32,12 +32,12 @@
     "relatedContent": [
         {
             "type": "demonstration",
-            "id": "tutorial_noisy_circuits",
+            "id": "tutorial_how_to_use_noise_models",
             "weight": 1.0
         },
         {
             "type": "demonstration",
-            "id": "tutorial_how_to_use_noise_models",
+            "id": "tutorial_noisy_circuits",
             "weight": 1.0
         }
     ]
