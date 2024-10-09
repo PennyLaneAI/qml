@@ -100,10 +100,13 @@ set of nuclear coordinates in `atomic units
 
 """
 
-from pennylane import numpy as np
+import jax
+from jax import numpy as jnp
+
+jax.config.update("jax_enable_x64", True)
 
 symbols = ["H", "H", "H"]
-x = np.array([0.028, 0.054, 0.0, 0.986, 1.610, 0.0, 1.855, 0.002, 0.0], requires_grad=True)
+x = jnp.array([0.028, 0.054, 0.0, 0.986, 1.610, 0.0, 1.855, 0.002, 0.0], requires_grad=True)
 
 ##############################################################################
 # Next, we need to build the parametrized electronic Hamiltonian :math:`H(x).`
@@ -191,12 +194,12 @@ print(hf)
 # The ``hf`` array is used by the :class:`~.pennylane.BasisState` operation to initialize
 # the qubit register. Then, the :class:`~.pennylane.DoubleExcitation` operations are applied
 # First, we define the quantum device used to compute the expectation value.
-# In this example, we use the ``lightning.qubit`` simulator:
+# In this example, we use the ``default.qubit`` simulator:
 num_wires = 6
-dev = qml.device("lightning.qubit", wires=num_wires)
+dev = qml.device("default.qubit", wires=num_wires)
 
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev, interface="jax")
 def circuit(params, obs, wires):
     qml.BasisState(hf, wires=wires)
     qml.DoubleExcitation(params[0], wires=[0, 1, 2, 3])
@@ -259,10 +262,11 @@ def cost(params, x):
 def finite_diff(f, x, delta=0.01):
     """Compute the central-difference finite difference of a function"""
     gradient = []
+    x = jnp.ravel(x)
 
     for i in range(len(x)):
-        shift = np.zeros_like(x)
-        shift[i] += 0.5 * delta
+        shift = jnp.zeros_like(x)
+        shift = shift.at[i].set(0.5*delta)
         res = (f(x + shift) - f(x - shift)) * delta**-1
         gradient.append(res)
 
@@ -272,7 +276,7 @@ def finite_diff(f, x, delta=0.01):
 def grad_x(params, x):
     grad_h = finite_diff(H, x)
     grad = [circuit(params, obs=obs, wires=range(num_wires)) for obs in grad_h]
-    return np.array(grad)
+    return jnp.array(grad).reshape(x.shape)
 
 
 ##############################################################################
@@ -284,19 +288,13 @@ def grad_x(params, x):
 # the circuit parameters and the nuclear coordinates will be jointly optimized at
 # each optimization step. This approach does not require nested VQE
 # optimization of the circuit parameters for each set of nuclear coordinates.
-#
-# We start by defining the classical optimizers:
-
-opt_theta = qml.GradientDescentOptimizer(stepsize=0.4)
-opt_x = qml.GradientDescentOptimizer(stepsize=0.8)
-
 ##############################################################################
-# Next, we initialize the circuit parameters :math:`\theta.` The angles
+# First, we initialize the circuit parameters :math:`\theta.` The angles
 # :math:`\theta_1` and :math:`\theta_2` are set to zero so that the
 # initial state :math:`\vert\Psi(\theta_1, \theta_2)\rangle`
 # is the Hartree-Fock state.
 
-theta = np.array([0.0, 0.0], requires_grad=True)
+theta = jnp.array([0.0, 0.0], requires_grad=True)
 
 ##############################################################################
 # The initial set of nuclear coordinates :math:`x,` defined at
@@ -312,10 +310,8 @@ theta = np.array([0.0, 0.0], requires_grad=True)
 # convergence criterion used for optimizing molecular geometries in
 # quantum chemistry simulations.
 
-from functools import partial
-
 # store the values of the cost function
-energy = []
+energies = []
 
 # store the values of the bond length
 bond_length = []
@@ -323,33 +319,27 @@ bond_length = []
 # Factor to convert from Bohrs to Angstroms
 bohr_angs = 0.529177210903
 
-for n in range(100):
+theta = jnp.array([0.0, 0.0])
 
-    # Optimize the circuit parameters
-    theta.requires_grad = True
-    x.requires_grad = False
-    theta, _ = opt_theta.step(cost, theta, x)
+x = jnp.array([[0.028, 0.054, 0.0], [0.986, 1.610, 0.0], [1.855, 0.002, 0.0]])
 
-    # Optimize the nuclear coordinates
-    x.requires_grad = True
-    theta.requires_grad = False
-    _, x = opt_x.step(cost, theta, x, grad_fn=grad_x)
+for n in range(36):
+    # gradient for params
+    g_param = jax.grad(cost, argnums=[0])(theta, x)[0]
+    theta = theta - 0.25 * g_param
 
-    energy.append(cost(theta, x))
-    bond_length.append(np.linalg.norm(x[0:3] - x[3:6]) * bohr_angs)
+    # gradient for coordinates
+    value, grad = jax.value_and_grad(cost, argnums=[1])(theta, x)
+    x = x - 0.5 * grad[0]
+    energies.append(value)
+    bond_length.append(jnp.linalg.norm(x[0] - x[1]) * bohr_angs)
 
     if n % 4 == 0:
-        print(f"Step = {n},  E = {energy[-1]:.8f} Ha,  bond length = {bond_length[-1]:.5f} A")
+        print(f"Step = {n},  E = {energies[-1]:.8f} Ha,  bond length = {bond_length[-1]:.5f} A")
 
-    # Check maximum component of the nuclear gradient
-    if np.max(grad_x(theta, x)) <= 1e-05:
-        break
-
-print("\n" f"Final value of the ground-state energy = {energy[-1]:.8f} Ha")
+print("\n" f"Final value of the ground-state energy = {energies[-1]:.8f} Ha")
 print("\n" "Ground-state equilibrium geometry")
 print("%s %4s %8s %8s" % ("symbol", "x", "y", "z"))
-for i, atom in enumerate(symbols):
-    print(f"  {atom}    {x[3 * i]:.4f}   {x[3 * i + 1]:.4f}   {x[3 * i + 2]:.4f}")
 
 ##############################################################################
 # Next, we plot the values of the ground state energy of the molecule
@@ -363,7 +353,7 @@ fig.set_figwidth(12)
 
 # Add energy plot on column 1
 E_fci = -1.27443765658
-E_vqe = np.array(energy)
+E_vqe = jnp.array(energies)
 ax1 = fig.add_subplot(121)
 ax1.plot(range(n + 1), E_vqe - E_fci, "go", ls="dashed")
 ax1.plot(range(n + 1), np.full(n + 1, 0.001), color="red")
@@ -378,7 +368,7 @@ plt.yticks(fontsize=12)
 d_fci = 0.986
 ax2 = fig.add_subplot(122)
 ax2.plot(range(n + 1), bond_length, "go", ls="dashed")
-ax2.plot(range(n + 1), np.full(n + 1, d_fci), color="red")
+ax2.plot(range(n + 1), jnp.full(n + 1, d_fci), color="red")
 ax2.set_ylim([0.965, 0.99])
 ax2.set_xlabel("Optimization step", fontsize=13)
 ax2.set_ylabel("bond length ($\AA$)", fontsize=13)
