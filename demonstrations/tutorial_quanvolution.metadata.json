@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2020-03-24T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
@@ -19,7 +19,6 @@
     ],
     "seoDescription": "Train a quantum convolutional neural network to classify MNIST images.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_quanvolution",
     "references": [
         {
             "id": "Henderson2019",

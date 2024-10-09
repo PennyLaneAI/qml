@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2021-01-18T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Quantum Chemistry"
     ],
@@ -19,7 +19,6 @@
     ],
     "seoDescription": "Optimize and reduce the number of measurements required to evaluate a variational algorithm cost function.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_measurement_optimize",
     "references": [
         {
             "id": "peruzzo2014",

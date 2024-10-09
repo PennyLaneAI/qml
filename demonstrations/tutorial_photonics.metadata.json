@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2022-05-31T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Quantum Hardware",
         "Quantum Computing"
@@ -20,7 +20,6 @@
     ],
     "seoDescription": "Learn how photonic quantum computers work through code",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_photonics",
     "references": [
         {
             "id": "DiVincenzo2000",

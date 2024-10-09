@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2020-07-07T00:00:00+00:00",
-    "dateOfLastModification": "2024-09-19T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Optimization"
     ],
@@ -19,7 +19,6 @@
     ],
     "seoDescription": "Using the Variational Quantum Thermalizer to prepare the thermal state of a Heisenberg model Hamiltonian.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_vqt",
     "references": [
         {
             "id": "Verdon2019",

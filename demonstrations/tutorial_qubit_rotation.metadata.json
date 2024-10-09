@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2019-10-11T00:00:00+00:00",
-    "dateOfLastModification": "2024-09-04T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Getting Started"
     ],
@@ -19,7 +19,6 @@
     ],
     "seoDescription": "To see how PennyLane allows the easy construction and optimization of quantum functions, let's consider the 'hello world' of QML: qubit rotation.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_qubit_rotation",
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],
