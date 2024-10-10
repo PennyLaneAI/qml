@@ -5,7 +5,7 @@ Noise models describe the various ways in which a quantum system would interact 
 environment, leading to an evolution that is different from the ideal scenario and often
 captured as a quantum master equation. In general, these models are represented by a set of 
 `Kraus operators <https://pennylane.ai/qml/demos/tutorial_noisy_circuits/#noisy-operations>`_
-acting on the quantum state that encapsulates the probabilistic nature of the quantum errors.
+acting on the quantum state that encapsulates the probabilistic nature of the quantum errors. ⚡
 
 Importantly, different sets of Kraus operators can describe the same quantum noise process,
 illustrating the non-unique nature of these representations and motivating how different quantum
@@ -142,10 +142,10 @@ print("Are results equal? ", np.allclose(pl_probs, qk_probs, atol=0.01))
 # conversion of a Qiskit noise model into an equivalent PennyLane noise model.
 # The answer to this question is YES! 🤩
 #
-# We can understand using this functionality for a
+# We can see this in practice for a
 # `GenericBackendV2 <https://docs.quantum.ibm.com/api/qiskit/qiskit.providers.fake_provider.GenericBackendV2>`_
 # backend that gets instantiated with the error data generated
-# and sampled randomly from historical IBM backend data.
+# and sampled randomly from historical IBM backend data:
 #
 
 from qiskit.providers.fake_provider import GenericBackendV2
@@ -156,7 +156,7 @@ qk_noise_model = NoiseModel.from_backend(backend)
 print(qk_noise_model)
 
 ######################################################################
-# One can convert this using the :func:`~pennylane.from_qiskit_noise` function:
+# To import this into PennyLane we can use the :func:`~pennylane.from_qiskit_noise` function:
 #
 
 pl_noise_model = qml.from_qiskit_noise(qk_noise_model)
@@ -170,8 +170,8 @@ print(pl_noise_model)
 #    gate `operations <https://docs.pennylane.ai/en/stable/introduction/operations.html>`_.
 # 2. Next, the operations with noise are mapped to the corresponding error channels
 #    defined via :class:`~.pennylane.QubitChannel`.
-# 3. Finally, the Boolean conditionals for selecting the gate operations are
-#    constructed and combined based on their associated errors.
+# 3. Finally, the `Boolean conditionals <https://docs.pennylane.ai/en/stable/code/qml_noise.html#boolean-functions>`_
+#    are constructed and combined based on their associated errors.
 #
 # This can be done for any noise model defined in Qiskit with a minor catch that the
 # classical readout errors are not supported yet in PennyLane. But worry not,
