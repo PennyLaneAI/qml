@@ -193,8 +193,9 @@ print(pl_noise_model)
 #
 # Should you have any questions about using noise models in PennyLane, you can consult the
 # `noise module documentation <https://docs.pennylane.ai/en/stable/code/qml_noise.html>`_,
-# the :doc:`noise model how-to <tutorial_how_to_use_noise_models>`, or create a
-# post on the `PennyLane Discussion Forum <https://discuss.pennylane.ai>`_.
+# the :doc:`noise model how-to <tutorial_how_to_use_noise_models>`, the PennyLane Codebook
+# module on `Noisy Quantum Theory <https://pennylane.ai/codebook/#06-noisy-quantum-theory>`_,
+# or create a post on the `PennyLane Discussion Forum <https://discuss.pennylane.ai>`_.
 #
 
 ######################################################################
