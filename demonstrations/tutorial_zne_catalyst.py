@@ -10,8 +10,9 @@ We'll demonstrate how to generate noise-scaled circuits, execute them on a noisy
 simulator, and use extrapolation techniques to estimate the zero-noise result, all while
 leveraging JIT compilation through Catalyst.
 
-Using ZNE with PennyLane
-------------------------
+.. image:: ../_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_zne_catalyst.png
+    :width: 65%
+    :align: center
 
 The demo :doc:`Error mitigation with Mitiq and PennyLane <tutorial_error_mitigation>`
 shows how ZNE, along with other error mitigation techniques, can be carried out in PennyLane
@@ -34,7 +35,7 @@ Zero-noise extrapolation (ZNE) is a technique used to mitigate the effect of noi
 computations. First introduced in [#temme2017zne]_, it helps improve the accuracy of quantum
 results by running circuits at varying noise levels and extrapolating back to a hypothetical
 zero-noise case. While this tutorial won't delve into the theory behind ZNE in detail (for which we
-recommend reading the `Mitiq docs<https://mitiq.readthedocs.io/en/stable/guide/zne-5-theory.html>`_
+recommend reading the `Mitiq docs <https://mitiq.readthedocs.io/en/stable/guide/zne-5-theory.html>`_
 and the references therein), let's first review what happens when using the protocol in practice.
 
 Stage 1: Generating noise-scaled circuits
