@@ -25,8 +25,8 @@ On top of the error mitigation routines offered in PennyLane, ZNE is also availa
 (JIT) compilation. In this tutorial we see how an error mitigation routine can be
 integrated in a Catalyst workflow.
 
-At the end of the tutorial, we will compare time for the execution of ZNE routines in
-pure PennyLane vs. PennyLane Catalyst with JIT.
+At the end of the tutorial, we will compare the execution time of ZNE routines in
+pure PennyLane vs. PennyLane and Catalyst with JIT.
 
 What is zero-noise extrapolation (ZNE)
 -----------
@@ -224,7 +224,7 @@ print(f"mitigated_circuit_qjit running time (best of {repeat}): {min(times):.3f}
 #
 # There are still reasons to use ZNE in PennyLane without :func:`~.qjit`, for instance,
 # whenever the device of choice is not supported by Catalyst. To help,
-# we conlcude with a landscape of the QEM techniques available on PennyLane.
+# we conclude with a landscape of the QEM techniques available on PennyLane.
 #
 # .. list-table::
 #     :widths: 30 20 20 20 20 30
