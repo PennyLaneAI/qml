@@ -317,6 +317,11 @@ jobs:
           source ${{ steps.venv.outputs.location }}/bin/activate
           make POETRY_BIN="${{ steps.poetry.outputs.poetry_bin }}" UPGRADE_PL="${{ needs.compute-build-strategy-matrix.outputs.build-environment == 'dev' }}" environment
 
+      - name: Install OpenCL
+        run: |
+          sudo apt update
+          sudo apt install ocl-icd-opencl-dev
+      
       - name: Download Worker Load Data Artifact
         uses: actions/download-artifact@v3
         with:
