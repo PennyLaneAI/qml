@@ -30,6 +30,15 @@
     "canonicalURL": "/qml/demos/tutorial_how_to_use_arithmetic_operators",
     "references": [
         {
+            "id": "shor_exp",
+            "type": "article",
+            "title": "Shor's Factoring Algorithm and Modular Exponentiation Operators",
+            "authors": "Robert L Singleton Jr",
+            "year": "2023",
+            "publisher": "",
+            "url": "https://arxiv.org/abs/2306.09122/"
+        },
+        {
             "id": "demo_qft_arith",
             "type": "other",
             "title": "Basic arithmetic with the quantum Fourier transform (QFT)",
@@ -37,6 +46,15 @@
             "year": "2024",
             "publisher": "",
             "url": "https://pennylane.ai/qml/demos/tutorial_qft_arithmetics/"
+        },
+        {
+            "id": "sanders",
+            "type": "article",
+            "title": "Black-box quantum state preparation without arithmetic",
+            "authors": "Yuval R. Sanders, Guang Hao Low, Artur Scherer, Dominic W. Berry",
+            "year": "2018",
+            "publisher": "",
+            "url": "https://arxiv.org/abs/1807.03206/"
         }
     ],
     "basedOnPapers": [],

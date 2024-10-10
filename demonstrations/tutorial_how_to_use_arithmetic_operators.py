@@ -5,16 +5,16 @@ How-to use Quantum Arithmetic Operators
 Classical computers handle arithmetic operations like addition, subtraction, multiplication, and exponentiation with ease. 
 For instance, you can multiply two numbers on your phone in milliseconds!
 
-Quantum computers, however, aren't as efficient at basic arithmetic. So why do we need quantum arithmetic?
-While it's not "better" for basic operations, it's essential in more complex quantum algorithms. For example:
+Quantum computers can handle these operations too, but their true value lies beyond basic calculations. While we don't plan to use 
+quantum computers as calculators for everyday arithmetic, these operations play a crucial role in more advanced quantum algorithms, 
+serving as fundamental building blocks in their design and execution. For example:
 
-1. In Shor's algorithm quantum arithmetic is crucial for performing modular exponentiation. 
+1. In Shor's algorithm quantum arithmetic is crucial for performing modular exponentiation [#shor_exp]_. 
 
 2. Grover's algorithm might need to use quantum arithmetic to construct oracles, as shown in [#demo_qft_arith]_.
 
-3. Loading functions into quantum computers, which often requires several quantum arithmetic operations.
+3. Loading functions into quantum computers, which often requires several quantum arithmetic operations [#sanders]_.
 
-These arithmetic operations act as building blocks that enable powerful quantum computations when integrated into larger algorithms.
 With PennyLane, you'll see how easy it is to build these operations as subroutines for your quantum algorithms!
 
 
@@ -37,8 +37,7 @@ and finally, using the :class:`~.pennylane.OutPoly` operator.
 InPlace and OutPlace Operations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-We can load the target function into the quantum computer using different quantum arithmetic operations. 
-We will break down into pieces. We'll do a step by step load of the function :math:`f(x, y)`.
+We'll do a step by step load of the function :math:`f(x, y)`.
 
 The first thing to do is to define the `registers of wires <https://pennylane.ai/qml/demos/tutorial_how_to_use_registers/>`_
 we will work with:"""
@@ -237,12 +236,24 @@ print(circuit_with_Poly(x=1,y=4))
 #
 # References
 # ----------
+# 
+# .. [#shor_exp]
+#
+#     Robert L Singleton Jr
+#     "Shor's Factoring Algorithm and Modular Exponentiation Operators.",
+#     `arXiv:2306.09122 <https://arxiv.org/abs/2306.09122/>`__, 2023.
 #
 # .. [#demo_qft_arith]
 #
 #    Guillermo Alonso
 #    "Basic arithmetic with the quantum Fourier transform (QFT)",
 #    `Pennylane: Basic arithmetic with the quantum Fourier transform (QFT)  <https://pennylane.ai/qml/demos/tutorial_qft_arithmetics/>`__, 2024
+#
+#  .. [#sanders]
+#
+#     Yuval R. Sanders, Guang Hao Low, Artur Scherer, Dominic W. Berry
+#     "Black-box quantum state preparation without arithmetic.",
+#     `arXiv:1807.03206 <https://arxiv.org/abs/1807.03206/>`__, 2018.
 #
 # About the authors
 # -----------------
