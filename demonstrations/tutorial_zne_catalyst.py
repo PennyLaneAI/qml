@@ -33,14 +33,16 @@ What is zero-noise extrapolation (ZNE)
 Zero-noise extrapolation (ZNE) is a technique used to mitigate the effect of noise on quantum
 computations. First introduced in [#temme2017zne]_, it helps improve the accuracy of quantum
 results by running circuits at varying noise levels and extrapolating back to a hypothetical
-zero-noise case. While this tutorial won't delve into the theory behind ZNE in detail, let's first
-review what happens when using the protocol in practice.
+zero-noise case. While this tutorial won't delve into the theory behind ZNE in detail (for which we
+recommend reading the `Mitiq docs<https://mitiq.readthedocs.io/en/stable/guide/zne-5-theory.html>`_
+and the references therein), let's first review what happens when using the protocol in practice.
 
 Stage 1: Generating noise-scaled circuits
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In its digital version [#DZNEpaper]_, ZNE works by generating circuits with **increased** noise. 
-Currently, ZNE in Catalyst supports two methods for generating noise-scaled circuits:
+ZNE works by generating circuits with **increased** noise. Catalyst implements the unitary folding
+framework introduced in [#DZNEpaper]_ for generating noise-scaled circuits. In particular, 
+the following two methods are available:
 
 1. **Global folding**: If a circuit implements a global unitary :math:`U`, global folding applies
    :math:`U(U^\dagger U)^n` for some integer :math:`n`,
@@ -106,7 +108,7 @@ ideal_value = qml.QNode(circuit, device=noiseless_device)(w1, w2)
 print(f"Ideal value: {ideal_value}")
 
 ##############################################################################
-# As expected, in the noiseless scenario, the expecation value of the Pauli-Z measurement
+# In the noiseless scenario, the expectation value of the Pauli-Z measurement
 # is equal to 1, since the first qubit is back in the :math:`|0\rangle` state.
 #
 # Mitigating the noisy circuit
@@ -269,11 +271,3 @@ print(f"mitigated_circuit_qjit running time (best of {repeat}): {min(times):.3f}
 #     Tudor Giurgica-Tiron, Yousef Hindy, Ryan LaRose, Andrea Mari, and William J. Zeng
 #     "Digital zero noise extrapolation for quantum error mitigation"
 #     `arXiv:2005.10921v2 <https://arxiv.org/abs/2005.10921v2>`__, 2020.
-#
-
-##############################################################################
-# About the authors
-# -----------------
-# .. include:: ../_static/authors/alessandro_cosentino.txt
-#
-# .. include:: ../_static/authors/nate_stemen.txt
