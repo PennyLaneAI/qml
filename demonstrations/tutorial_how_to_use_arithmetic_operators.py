@@ -79,7 +79,7 @@ print("output register: ", output[2])
 #
 #   \text{Adder}(k) |w \rangle = | w+k \rangle.
 #
-# In our example, we are considering the input :math:`|w\rangle = |0\rangle` and :math:`k = 4`.
+# In our example, we are considering the input :math:`w=0` and :math:`k = 4`.
 # Let's see how it looks like in code:
 
 @qml.qnode(dev)
@@ -197,7 +197,7 @@ print(circuit(x=1, y=4))
 # ~~~~~~~~~~~~~
 # In the last section, we showed how to use different arithmetic operations to load 
 # a function onto a quantum computer. But what if I told you there's an easier way to do all this using just one
-# PennyLane function that handles the arithmetic for you? Pretty cool, right? I'm talking about :class:`~.pennylane.OutPoly`. 
+# PennyLane function that handles the arithmetic for you? I'm talking about :class:`~.pennylane.OutPoly`. 
 # This handy operator lets you load polynomials directly into quantum states, taking care of all the arithmetic in one go. 
 # Let's check out how to load a function like :math:`f(x, y)` using :class:`~.pennylane.OutPoly`.
 #
