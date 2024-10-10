@@ -9,16 +9,17 @@ acting on the quantum state that encapsulates the probabilistic nature of the qu
 
 Importantly, different sets of Kraus operators can describe the same quantum noise process,
 illustrating the non-unique nature of these representations and motivating how different quantum
-computing libraries allow storing and building them to construct noise models. In this how-to guide,
-we will first compare constructing them in `Qiskit <https://docs.quantum.ibm.com/>`_
-and PennyLane, and then learn converting a Qiskit noise model into an equivalent PennyLane one.
+computing libraries allow storing and building them to construct noise models. In this how-to
+guide, we will first compare constructing them in `Qiskit <https://docs.quantum.ibm.com/>`_
+and `PennyLane <https://docs.pennylane.ai/en/stable/code/qml.html>`_, and then
+learn converting a Qiskit noise model into an equivalent PennyLane one.
 """
 
 ######################################################################
 # Noise models in Qiskit and PennnyLane
 # -------------------------------------
 #
-# In Qiskit, the noise models are built with the `noise module
+# In Qiskit, the noise models are built using the `noise module
 # <https://qiskit.github.io/qiskit-aer/apidocs/aer_noise.html>`_
 # in the ``Qiskit-Aer`` package. Each model is a `NoiseModel
 # <https://qiskit.github.io/qiskit-aer/stubs/qiskit_aer.noise.NoiseModel.html>`_
@@ -26,7 +27,7 @@ and PennyLane, and then learn converting a Qiskit noise model into an equivalent
 # Optionally, it may also contain a ``ReadoutError`` that describes post-measurement classical
 # readout errors.
 #
-# For example, the following builds a Qiskit noise model that would insert depolarization
+# For example, the following builds a noise model that would insert depolarization
 # errors for single-qubit gates, bit-flip errors for the target qubit of the two-qubit
 # gates, and thermalization errors for each measurement:
 #
@@ -66,8 +67,8 @@ print(noise_model_qk)
 # ``conditionals`` (boolean conditions) that help select the operation to which noise
 # is to be inserted and ``noise functions`` (callables) that apply the corresponding
 # noise for the selected operation or measurement process based on some user-provided
-# ``metadata`` such as thermal-relaxation times of the qubits. This allows for a more
-# functional construction as we can see by recreating the noise model from above:
+# ``metadata``. This allows for a more functional construction as we can see by
+# recreating the noise model from above:
 #
 
 import pennylane as qml
@@ -97,9 +98,9 @@ print(noise_model_pl)
 # its essential components and makes its definition far more readable. 🧠
 #
 # Now it is important to verify whether both of these noise models work in the intended
-# (and equivalent) way. For this purpose, we test them for simulating a 3-qubits
+# (and equivalent) way. For this purpose, we can use them while simulating a
 # `GHZ state <https://en.wikipedia.org/wiki/Greenberger–Horne–Zeilinger_state>`_
-# preparation circuit using the ``default.mixed`` and ``qiskit.aer`` devices:
+# preparation circuit using ``default.mixed`` and ``qiskit.aer`` devices:
 #
 
 # Preparing the devices:
@@ -115,34 +116,23 @@ def GHZcircuit():
     return qml.counts(wires=range(n_qubits), all_outcomes=True)
 
 # Preparing the circuits:
-pl_ideal_circ = qml.QNode(GHZcircuit, dev_pl_ideal)
 pl_noisy_circ = qml.QNode(GHZcircuit, dev_pl_noisy)
 qk_noisy_circ = qml.QNode(GHZcircuit, dev_qk_noisy)
 
 print(qml.draw(pl_noisy_circ, level="device", decimals=1, max_length=250)())
 
 ######################################################################
-
-import matplotlib.pyplot as plt
+# Now let us compare the results to see the equivalence between the two noise models:
+#
 
 # Obtain the results from the simulations
-pl_ideal_res = pl_ideal_circ()
 pl_noisy_res, qk_noisy_res = pl_noisy_circ(), qk_noisy_circ()
+pl_probs = np.array(list(pl_noisy_res.values())) / n_shots
+qk_probs = np.array(list(qk_noisy_res.values())) / n_shots
 
-# Create the plot
-width = 0.15
-pos, labels = np.arange(2**n_qubits), list(pl_noisy_res.keys())
-plt.figure(figsize=(10, 4))
-plt.bar(pos - width, np.array(list(qk_noisy_res.values()))/n_shots, width, label="Noisy (Qiskit)")
-plt.bar(pos, np.array(list(pl_ideal_res.values()))/n_shots, width, label="Ideal results")
-plt.bar(pos + width, np.array(list(pl_noisy_res.values()))/n_shots, width, label="Noisy (PennyLane)")
-
-# Plot metadata
-plt.xlabel("Bitstring")
-plt.ylabel("Probability")
-plt.xticks(pos, labels)
-plt.legend()
-plt.show()
+print("PennyLane Results: ", np.round(pl_probs, 3))
+print("Qiskit Results:    ", np.round(qk_probs, 3))
+print("Are results equal? ", np.allclose(pl_probs, qk_probs, atol=0.01))
 
 ######################################################################
 # Importing Qiskit noise models
@@ -152,28 +142,29 @@ plt.show()
 # conversion of a Qiskit noise model into an equivalent PennyLane noise model.
 # The answer to this question is YES! 🤩
 #
-# PennyLane provides :func:`~pennylane.from_qiskit_noise` method that
-# helps with that. We can understand using this functionality for a
+# We can understand using this functionality for a
 # `GenericBackendV2 <https://docs.quantum.ibm.com/api/qiskit/qiskit.providers.fake_provider.GenericBackendV2>`_
-# fake backend instance that gets instantiated with the error data generated
+# backend that gets instantiated with the error data generated
 # and sampled randomly from historical IBM backend data.
 #
 
 from qiskit.providers.fake_provider import GenericBackendV2
- 
-# Generate a 5-qubit simulated backend
+
+# Generates a two-qubit simulated backend
 backend = GenericBackendV2(num_qubits=2, seed=42)
 qk_noise_model = NoiseModel.from_backend(backend)
 print(qk_noise_model)
 
 ######################################################################
+# One can convert this using the :func:`~pennylane.from_qiskit_noise` function:
+#
 
 pl_noise_model = qml.from_qiskit_noise(qk_noise_model)
 print(pl_noise_model)
 
 ######################################################################
-# As one may see this conversion leverages the standard Kraus representation of the errors
-# present in ``qk_noise_model``. Internally, this is done in a smart three-step process:
+# This conversion leverages the standard Kraus representation of the errors
+# stored in the ``qk_noise_model``. Internally, this is done in a smart three-step process:
 #
 # 1. First, all the basis gates from the noise model are mapped to the corresponding PennyLane
 #    gate `operations <https://docs.pennylane.ai/en/stable/introduction/operations.html>`_.
@@ -184,7 +175,7 @@ print(pl_noise_model)
 #
 # This can be done for any noise model defined in Qiskit with a minor catch that the
 # classical readout errors are not supported yet in PennyLane. But worry not,
-# these will be supported soon! 🧑‍💻
+# these will be supported soon too! 🧑‍💻
 #
 
 ######################################################################
@@ -203,10 +194,7 @@ print(pl_noise_model)
 # Should you have any questions about using noise models in PennyLane, you can consult the
 # `noise module documentation <https://docs.pennylane.ai/en/stable/code/qml_noise.html>`_,
 # the :doc:`noise model how-to <tutorial_how_to_use_noise_models>`, or create a
-# post on the `PennyLane Discussion Forum <https://discuss.pennylane.ai>`__.
-# You can also follow us on `X (formerly Twitter) <https://twitter.com/PennyLaneAI>`_
-# or `LinkedIn <https://www.linkedin.com/company/pennylaneai/>`__ to stay up-to-date
-# with the latest and greatest from PennyLane!
+# post on the `PennyLane Discussion Forum <https://discuss.pennylane.ai>`_.
 #
 
 ######################################################################
