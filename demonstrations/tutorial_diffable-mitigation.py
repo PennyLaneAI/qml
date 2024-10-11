@@ -88,8 +88,9 @@ def qfunc(w1, w2):
     qml.SimplifiedTwoDesign(w1, w2, wires=range(n_wires))
     return qml.expval(H)
 
-qnode_noisy = qml.QNode(qfunc, dev_noisy)
 qnode_ideal = qml.QNode(qfunc, dev_ideal)
+qnode_noisy = qml.QNode(qfunc, dev_noisy)
+qnode_noisy = qml.compile(qnode_noisy, basis_set = ["RY", "CZ"])
 
 ##############################################################################
 # We can then simply transform the noisy QNode :math:`f^{⚡}` with :func:`~.pennylane.transforms.mitigate_with_zne` to generate :math:`\tilde{f}.`

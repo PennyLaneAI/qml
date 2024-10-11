@@ -118,6 +118,7 @@ def circuit(w1, w2):
 
 ideal_qnode = qml.QNode(circuit, dev_ideal)
 noisy_qnode = qml.QNode(circuit, dev_noisy)
+noisy_qnode = qml.compile(noisy_qnode, basis_set = ["RY", "CZ"])
 
 ##############################################################################
 # First, we'll visualize the circuit:
@@ -496,6 +497,7 @@ for r, phi in zip(distances, params):
 
     ideal_energy = qml.QNode(qchem_circuit, dev_ideal)
     noisy_energy = qml.QNode(qchem_circuit, dev_noisy)
+    noisy_energy = qml.compile(noisy_energy, basis_set=["RX", "RY", "RZ", "CNOT"])
 
     ideal_energies.append(ideal_energy(phi))
     noisy_energies.append(noisy_energy(phi))
@@ -523,6 +525,7 @@ for r, phi in zip(distances, params):
         qml.DoubleExcitation(phi, wires=range(n_wires)),
     ]
     circuit = qml.tape.QuantumTape(ops)
+    [circuit], _ = qml.compile(circuit, basis_set=["RX", "RY", "RZ", "CNOT"])
 
     # Define custom executor that expands Hamiltonian measurement
     # into a linear combination of tensor products of Pauli
