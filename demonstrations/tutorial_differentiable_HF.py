@@ -267,11 +267,12 @@ print(hamiltonian)
 # hydrogen atoms.
 
 dev = qml.device("default.qubit", wires=4)
-def energy(mol):
+def energy():
     @qml.qnode(dev, interface="jax")
     def circuit(*args):
-        qml.BasisState(jnp.array([1, 1, 0, 0]), wires=range(4))
+        qml.BasisState(np.array([1, 1, 0, 0]), wires=range(4))
         qml.DoubleExcitation(*args[0], wires=[0, 1, 2, 3])
+        mol = qml.qchem.Molecule(symbols, geometry, alpha=args[3], coeff=args[2])
         H = qml.qchem.molecular_hamiltonian(mol, args=args[1:])[0]
         return qml.expval(H)
     return circuit
@@ -286,22 +287,22 @@ def energy(mol):
 # initial value of the circuit parameter
 circuit_param = jnp.array([0.0])
 
-geometry = jnp.array([[0.0, 0.0, -0.672943567415407],
-                     [0.0, 0.0, 0.672943567415407]])
+geometry = jnp.array([[0.0, 0.02, -0.672943567415407],
+                     [0.1, 0.0, 0.672943567415407]])
 
 for n in range(36):
     mol = qml.qchem.Molecule(symbols, geometry)
     args = [circuit_param, geometry, mol.coeff, mol.alpha]
     # gradient for circuit parameters
-    g_param = jax.grad(energy(mol), argnums = 0)(*args)
+    g_param = jax.grad(energy(), argnums = 0)(*args)
     circuit_param = circuit_param - 0.25 * g_param[0]
 
     # gradient for nuclear coordinates
-    forces = jax.grad(energy(mol), argnums = 1)(*args)
+    forces = jax.grad(energy(), argnums = 1)(*args)
     geometry = geometry - 0.5 * forces
 
     if n % 5 == 0:
-        print(f'n: {n}, E: {energy(mol)(*args):.8f}, Force-max: {abs(forces).max():.8f}')
+        print(f'n: {n}, E: {energy()(*args):.8f}, Force-max: {abs(forces).max():.8f}')
 
 ##############################################################################
 # After 35 steps of optimization, the forces on the atomic nuclei and the gradient of the
@@ -316,6 +317,7 @@ for n in range(36):
 # coordinates and the basis set parameters are all differentiable parameters that can be optimized
 # simultaneously.
 
+symbols = ["H", "H"]
 # initial values of the nuclear coordinates
 geometry = jnp.array([[0.0, 0.0, -0.672943567415407],
                      [0.0, 0.0, 0.672943567415407]])
@@ -339,11 +341,11 @@ for n in range(36):
     mol = qml.qchem.Molecule(symbols, geometry, alpha=alpha, coeff=coeff)
 
     # gradient for circuit parameters
-    g_param = jax.grad(energy(mol), argnums=[0, 1, 2, 3])(*args)[0]
+    g_param = jax.grad(energy(), argnums=[0, 1, 2, 3])(*args)[0]
     circuit_param = circuit_param - 0.25 * g_param[0]
 
     # gradient for nuclear coordinates
-    value, gradients = jax.value_and_grad(energy(mol), argnums=[1, 2, 3])(*args)
+    value, gradients = jax.value_and_grad(energy(), argnums=[1, 2, 3])(*args)
     geometry = geometry - 0.5 * gradients[0]
     alpha = alpha - 0.25 * gradients[2]
     coeff = coeff - 0.25 * gradients[1]
