@@ -38,7 +38,7 @@ How to quantum just-in-time (QJIT) compile Grover's algorithm with Catalyst
 # for PennyLane, which makes it possible to compile, optimize, and execute hybrid quantum–classical
 # workflows. We will also measure the performance improvement we get from using Catalyst with
 # respect to the native Python implementation and show that the runtime performance of circuits
-# compiled with Catalyst can be several orders of magnitude faster.
+# compiled with Catalyst can be approximately an order of magnitude faster.
 
 
 ######################################################################
@@ -158,9 +158,9 @@ print_most_probable_states_descending(results, N=2)
 # Quantum just-in-time compiling the circuit
 # ------------------------------------------
 #
-# At the time of writing, Catalyst is developed natively for `PennyLane's high-performance
-# simulators <https://pennylane.ai/performance/>`__ and does not support the ``"default.qubit"``
-# state-simulator device. Let's first define a new circuit using `Lightning
+# Catalyst is developed natively for `PennyLane's high-performance simulators
+# <https://pennylane.ai/performance/>`__ and, at the time of writing, does not support the
+# ``"default.qubit"`` state-simulator device. Let's first define a new circuit using `Lightning
 # <https://docs.pennylane.ai/projects/lightning>`__, which is a PennyLane plugin that provides more
 # performant state simulators written in C++. See the :doc:`Catalyst documentation
 # <catalyst:dev/devices>` for the full list of devices supported by Catalyst.
@@ -346,11 +346,19 @@ plt.show()
 ######################################################################
 # This plot illustrates the power of Catalyst: by simply wrapping our Grover's algorithm circuit as
 # a QJIT-compiled object (or AOT-compiled in this case) with :func:`~pennylane.qjit`, we have
-# achieved execution runtimes several orders of magnitude less than the native-Python PennyLane
-# circuit using ``"default.qubit"``. While the compilation step itself does incur some runtime, the
-# overall runtime of the QJIT workflow still outperforms even the circuit defined using the
-# Lightning state simulator. Moreover, since the compilation step only needs to be performed once,
-# the runtime savings are compounded with subsequent calls to the QJIT-compiled circuit. [*]_
+# achieved execution runtimes approximately an order of magnitude less than the PennyLane circuit
+# implemented using the ``"lightning.qubit"`` device.
+#
+# There is one important caveat in this example, however, which is that the compilation step itself
+# takes several times longer than the time it takes to run the circuit using the Lightning state
+# simulator directly. This is an important factor to consider when deciding whether to QJIT compile
+# your own circuits in performance-critical applications. In the case of Grover's algorithm, we only
+# needed to execute the circuit once to obtain the solution, so the runtime incurred in the
+# compilation step offsets the gain in the compiled circuit's execution time. However, should it be
+# necessary to execute your own quantum circuit many times, the runtime savings are compounded with
+# every subsequent call to the compiled circuit. Since the compilation step only needs to be
+# performed once, the *total* runtime of the QJIT workflow may begin to outperform the baseline
+# Lightning workflow as the number of circuit executions increases. [*]_
 
 
 ######################################################################
@@ -361,8 +369,10 @@ plt.show()
 # generalized Grover's algorithm using `Catalyst <https://docs.pennylane.ai/projects/catalyst>`__.
 #
 # For a circuit with :math:`n = 12` qubits, analogous to a search in a randomly ordered "database"
-# containing :math:`N = 2^{12} = 4096` entries, Catalyst offers a runtime performance several orders
-# of magnitude better than the same circuit implemented in native Python.
+# containing :math:`N = 2^{12} = 4096` entries, Catalyst offers a circuit-execution runtime
+# performance approximately an order of magnitude better than the same circuit implemented using the
+# Lightning state-simulator device, with the caveat that the compilation step itself incurs some
+# runtime over the workflow with a direct call to the Lightning-implemented circuit.
 #
 # To learn more about Catalyst and how to use it to compile and optimize your quantum programs and
 # workflows, check out the Catalyst :doc:`Quick Start <catalyst:dev/quick_start>` guide.
@@ -392,10 +402,7 @@ plt.show()
 #
 # .. [*]
 #
-#     Note that we normally wouldn't execute the same circuit multiple times to perform Grover's
-#     algorithm. This example is only to illustrate the performance improvement that QJIT compiling
-#     with Catalyst offers if it is ever necessary to execute your own quantum circuit multiple
-#     times. The performance improvements that can be achieved with Catalyst will depend on the
+#     The performance improvements that can be achieved with QJIT compilation will depend on the
 #     specific size and topology of your PennyLane circuit.
 
 
