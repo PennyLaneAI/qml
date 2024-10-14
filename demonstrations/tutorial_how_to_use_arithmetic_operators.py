@@ -151,10 +151,10 @@ print(circuit(x=1,y=4), " which represents the number ", state_to_decimal(circui
 @qml.qnode(dev)
 def circuit():
 
-    qml.BasisState(1, wires=wires["output"])                                #    |1>                                     
-    qml.Multiplier(3, wires["output"], work_wires=wires["work_wires"])      #    |1·3> 
+    qml.BasisState(1, wires=wires["x"])                                #    |1>                                     
+    qml.Multiplier(3, wires["x"], work_wires=wires["work_wires"])      #    |1·3> 
 
-    return qml.sample(wires=wires["output"])
+    return qml.sample(wires=wires["x"])
 
 print(circuit(), " which represents the number ", state_to_decimal(circuit()))
 
