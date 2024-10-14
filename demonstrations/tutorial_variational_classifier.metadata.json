@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2019-10-11T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning", "Getting Started"
     ],
@@ -19,7 +19,6 @@
     ],
     "seoDescription": "Use PennyLane to implement quantum circuits that can be trained from labelled data to classify new data samples.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_variational_classifier",
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],

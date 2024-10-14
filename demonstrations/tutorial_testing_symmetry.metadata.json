@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2023-01-24T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Algorithms",
         "Quantum Computing"
@@ -24,7 +24,6 @@
     ],
     "seoDescription": "Test if a system possesses discrete symmetries",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_testing_symmetry",
     "references": [
         {
             "id": "LaBorde2022",

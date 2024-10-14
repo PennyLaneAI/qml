@@ -330,7 +330,7 @@ def dense_to_mps(psi, bond_dim):
     Ms.append(U)
     Ss.append(Ss)
     bondL = Vd.shape[0]
-    psi = Vd
+    psi = np.tensordot(np.diag(S), Vd, 1)
 
     for _ in range(n-2):
         psi = np.reshape(psi, (2*bondL, -1)) # reshape psi[2 * bondL, (2x2x2...)]
