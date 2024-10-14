@@ -6,7 +6,7 @@ Intro:
 - Define the scope of this tutorial: basics of tensor networks, their relation to quantum circuits, and the importance of choosing the contraction paths.
 
 From matrices to tensors
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-------------------------------
 
 A common and intuitive way of thinking about tensors is as generalizations of vectors and matrices. That is, we can think of them as multi dimensional arrays - i.e., multi dimensional maps that are linear with respect to every parameter.
 A tensor of dimensions :math:`d_1 \times d_2 \times \ldots \times d_r` can be expressed as
@@ -74,7 +74,7 @@ print("Rank-3 tensor: \n", tensor_rank3)
 
 ##############################################################################
 # From matrix multiplication to tensor contractions
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# -------------------------------------------------
 #
 # Matrix-matrix and matrix-vector multiplications are familiar operations within the context of quantum computing. We can now study these operations under the lens of the tensor notation introduced above. First, a matrix and a vector can be multiplied as
 #
@@ -178,7 +178,7 @@ print(D.shape)
 
 ##############################################################################
 # The cost of contracting a network:
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
+# ----------------------------------
 # 
 # A common task when dealing with tensors is the contraction of large networks resulting in a single tensor (including scalars). To arrive to this final tensor, we can start with a single tensor and contract it with adjacent tensors one-at-a-time. The order in which this is carried out is known as the *contraction path* or *bubbling*.
 # While the final tensor is independent of the order of the contraction, the number of operations performed can vary greatly with the order in which we contract the intermediate tensors. Moreover, in a general setup, finding the optimal order of indices to be contracted is not at all a trivial task.
@@ -282,7 +282,7 @@ print(f"Computation cost for A(BC) contraction: {average_time_ms:.8f} ms")
 
 ##############################################################################
 # Contraction paths:
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# ------------------
 # 
 # In the previous section, through a toy example, we explored how the choice of the contraction path affects the computational cost of the tensor network contraction. As shown in [#Lam1997]_ , finding an optimal contraction path is equivalent to solving the "multiplication problem" and thus, it is NP-hard. In this section, we provide a general description of wide-spread techniques used to tackle this ubiquitous task.
 # 
@@ -315,11 +315,7 @@ print(f"Computation cost for A(BC) contraction: {average_time_ms:.8f} ms")
 # Further approaches introduced in [#Gray2021]_ are based on alternative common graph theoretic tasks, rather than searching over the contraction tree space, such as the `balanced bipartitioning <https://en.wikipedia.org/wiki/Balanced_number_partitioning>`_ and `community detection <https://en.wikipedia.org/wiki/Community_structure>`_ algorithms. And even though, these are only heuristics that do not guarantee an optimal contraction path, they can often achieve an arbitrarliy close to optimal performance. 
 # 
 # An extra level of optimization, known as *hyper-optimization* is introduced by the use of different algorithms to find the optimal contraction based on the specific tensor network, as some algorithms are better suited for certain network structures. For an in-depth exploration of these heuristics, please refer to [#Gray2021]_.
-# 
-# .. note::
-# 
-#   The size of (intermediate) tensors can grow exponential with the number of indices and dimensions, specially for large-scale tensor networks. Thus, we might run into memory problems when performing the contractions. A useful additional technique to split these tensors into more manageable pieces is known as *slicing*. The idea is to change space for computation time, by temporarily fixing the values of some indices in the tensors, performing independently the contraction for each fixed value and summing the results [#Gray2021]_.
-# 
+#
 # As we will explore in the next section, we can use tensor networks to simulate quantum circuits. In particular, the calculation of an expectation value corresponds to the contraction of the tensor network into a single tensor (scalar) as discussed in this section. In ``Pennylane``, this simulation can be performed using the ``DefaultTensor`` device and the method used to find the contraction path can be chosen via the ``contraction_optimizer`` keyword argument.
 
 import pennylane as qml
@@ -328,15 +324,65 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 
 ##############################################################################
 # The different types of values accepted for ``contraction_optimizer`` are determined by the ``optimize`` parameter in ``Quimb`` (see `docs <https://quimb.readthedocs.io/en/latest/tensor-circuit.html#finding-a-contraction-path-the-optimize-kwarg>`_). See `this tutorial <https://pennylane.ai/qml/demos/tutorial_How_to_simulate_quantum_circuits_with_tensor_networks/>`_ to learn more about the ``DefaultTensor`` device.
+# 
+# Slicing:
+# ^^^^^^^^
+# 
+# The size of (intermediate) tensors can grow exponential with the number of indices and dimensions, specially for large-scale tensor networks. Thus, we might run into memory problems when performing the contractions. A useful additional technique to split these tensors into more manageable pieces is known as **slicing**. 
+# 
+# The idea is to change space for computation time, by temporarily fixing the values of some indices in the tensors, performing independently the contraction for each fixed value and summing the results [#Gray2021]_.
+
 
 ##############################################################################
 # From tensor networks to quantum circuits:
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# -----------------------------------------
 # 
-# - Quantum circuits are a restricted subclass of tensor networks
-# - show examples on https://arxiv.org/pdf/1912.10049 page 8 and 9 showing a quantum circuit for a bell state, defining each component as a tensor and show their contraction.
-# - Include suggestions from Korbinian: https://github.com/PennyLaneAI/qml/pull/1193#discussion_r1719502008.
-
+# Until now, we have looked at general tensor networks, while ✨sparkling✨ the discussions with examples related to quantum circuits. Here, we leverage the components we have learned to explore this relation more in depth. 
+# 
+# First, it is important to emphasize that quantum circuits don't just "look" or "behave" like tensor networks, but rather they *are* tensor networks! Quantum Circuits are a special class of tensor networks where each horizontal wire corresponds to the Hilbert space of a single qubit and the tensors acting on these subsystems are restricted to be unitary operators.
+# 
+# A general quantum circuit acting on :math:`N` qubits can be expressed in terms of the initial quantum state :math:`\psi_0` and the unitary propagator :math:`U` such that the evolved state is
+# 
+# .. math::
+#   \psi = U \psi_0,
+# 
+# which can also be depicted diagramatically as
+# 
+# TODO: include a diagram here for the full U and the decomposition
+# 
+# In the right hand side of the equality we have assumed a specific form for the U tensor in terms of local 2-qubit gates, which is often the case when dealing with real quantum hardware. In addition, it is common for the initial state to be a product state such as :math:`|0\rangle^{\otimes N}`, hence the form of the tensor.
+# 
+# Now we can ask the important question: what quantities can we compute from this tensor network?
+# 
+# Expectation values:
+# ^^^^^^^^^^^^^^^^^^^
+# 
+# As anticipated in the previous section, a natural quantity to compute using the tensor network arising from a quantum circuit is the expectation value of an observable :math:`O` evaluated at the quantum state :math:`\psi`
+# 
+# .. math::
+#   \langle O \rangle = \langle \psi | O | \psi \rangle  = \langle \psi_0 U^\dagger  | O | U \psi_0 \rangle .
+# 
+# If the observable is a linear combination of hermitian operators (e.g., a Hamiltonian)
+# 
+# .. math::
+#   O = \sum_i c_i O_i
+# 
+# we can calculate the total expectation value "naïvely" by computing the inner product for each component :math:`O_i` and summing up the weighted results. However, it is possible to represent this operation more efficiently by means of a tensor network structure called Matrix Product Operator (MPO) [#Pirvu2010]_. Constructing these networks efficiently for hamiltonians of arbitrary structure is an interesting task, which goes beyond the scope of this tutorial.
+# 
+# When the observable of interest is *local*, i.e., it acts on a few neighbouring qubits, we can calculate the expectation value by considering only the section of the quantum circuit within the *reverse light cone* (causal cone) of the observable :math:`O_l`.
+# 
+# TODO: add a figure here showing the light cone.
+# 
+# Then, the sections outside of the light cone can be ignored as these correspond to contractions resulting in the identity: :math:`G G^\dagger = I` (see grayed area in the drawing above). This helps us decrease the size of the tensor to be contracted, and consequently, the computational expense, by focusing on the part of the evolved state with support inside the light cone of the observable 
+# 
+# .. math::
+#   \langle O_l \rangle = \langle \psi_l | O | \psi_l \rangle.
+# 
+# Sampling:
+# ^^^^^^^^^^^^^^^^^^^
+# 
+# Explain how we can use the "perfect sampling algorithm" with quantum circuits.
+# 
 ##############################################################################
 # References
 # ----------
@@ -370,3 +416,8 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 #    R. N. C. Pfeifer, J. Haegeman, and F. Verstraete.
 #    "Faster identification of optimal contraction sequences for tensor networks",
 #    `<http://dx.doi.org/10.1103/PhysRevE.90.033315>`__, Physical Review
+# 
+# .. [#Pirvu2010]
+#    B. Pirvu, V. Murg, J. I. Cirac, and F. Verstraete.
+#    "Matrix product operator representations,"
+#    `<http://dx.doi.org/10.1088/1367-2630/12/2/025012>`__, New Journal of Physics, vol. 12, no. 2, p. 025012, 2010.
