@@ -329,7 +329,7 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # The different types of values accepted for ``contraction_optimizer`` are determined by the ``optimize`` parameter in ``Quimb`` (see `docs <https://quimb.readthedocs.io/en/latest/tensor-circuit.html#finding-a-contraction-path-the-optimize-kwarg>`_) as this is the backend behind the :class:`~pennylane.devices.default_tensor.DefaultTensor` device. See `this tutorial <https://pennylane.ai/qml/demos/tutorial_How_to_simulate_quantum_circuits_with_tensor_networks/>`_ to learn more the use of this device in ``Pennylane``.
 # 
 # Slicing
-# ~~~~~~~~
+# ~~~~~~~
 # 
 # The size of (intermediate) tensors can grow exponential with the number of indices and dimensions, specially for large-scale tensor networks. Thus, we might run into memory problems when performing the contractions. A useful additional technique to split these tensors into more manageable pieces is known as **slicing**. 
 # 
@@ -338,7 +338,7 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 ##############################################################################
 # 
 # From tensor networks to quantum circuits
-# -----------------------------------------
+# ----------------------------------------
 # 
 # Until now, we have looked at general tensor networks, while ✨sparkling✨ the discussions with examples related to quantum circuits. Here, we leverage the components we have learned to explore this relation more in depth. 
 # 
@@ -391,7 +391,7 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # .. note::
 #   The method used in `Quimb <https://quimb.readthedocs.io/en/latest/index.html>`_ (the backend behind :class:`~pennylane.devices.default_tensor.DefaultTensor`) to generate samples from the quantum circuit is also based on this algorithm.
 # 
-# A cornerstone behind this algorithm is the well known `chain rule <https://en.wikipedia.org/wiki/Chain_rule_(probability)>` which allows us to write the join probability of an event using only conditional probabilities. Using this, we can express the probability of sampling the bitstring :math:`(x_1, x_2, x_3, \ldots, x_N)` from :math:`| \psi \rangle` as
+# A cornerstone behind this algorithm is the well known `chain rule <https://en.wikipedia.org/wiki/Chain_rule_(probability)>`_ which allows us to write the join probability of an event using only conditional probabilities. Using this, we can express the probability of sampling the bitstring :math:`(x_1, x_2, x_3, \ldots, x_N)` from :math:`| \psi \rangle` as
 # 
 # .. math::
 #   p(x_1, x_2, x_3, \ldots, x_N) = p(x_1) p(x_2|x_1) p(x_3| x_1 x_2) \ldots p(x_N | x_1 x_2 x_3 \ldots x_{N-1})
@@ -404,7 +404,7 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # Then, the diagonal of this :math:`2 \times 2` density matrix gives us the probability of sampling 0 or 1, i.e., :math:`p(x_1 = 0)` and :math:`p(x_2 = 1)`. This diagonal corresponds to the following probability vector
 # 
 # .. math::
-#   | p_{x_1} \rangle = \sum_{i=0}^{1} p(x_1=i) | i \rangle = diag\left( \mathrm{Tr}_{2,3,\ldots,N}(| \psi \rangle \langle \psi |) \right).
+#   | p_{x_1} \rangle = \sum_{i=0}^{1} p(x_1=i) | i \rangle = \mathrm{diag}\left( \mathrm{Tr}_{2,3,\ldots,N}(| \psi \rangle \langle \psi |) \right).
 # 
 # The tensor network corresponding to the computation of this vector is
 # 
@@ -412,14 +412,14 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 #  
 # In this diagram, we have extracted the diagonal of the reduced density matrix by contracting it with the COPY that we introduced earlier on this tutorial!
 # 
-# Once we obtain the probability vector, we can generate a random sample weighted by these probabilities, i.e., we generate a random number :math:`r \in [0,1]` and choose :math:`x_1 = 0` if :math:`r < p(x_1=0)` and :math:`x_1 = 1` otherwise. We save this sample as :math:`\hat{x_1}`.
+# Once we obtain the probability vector, we can generate a random sample weighted by these probabilities, i.e., we generate a random number :math:`r \in [0,1]` and choose :math:`x_1 = 0` if :math:`r < p(x_1=0)` and :math:`x_1 = 1` otherwise. We save this sample as :math:`\hat{x}_1`.
 # 
-# Next, we can calculate the following term :math:`p(x_2|\hat{x_1})` conditioned on the sample we have just obtained. To do so, we **project** the first qubit to be :math:`hat{x_1}`. We can do this by contracting the computational basis state :math:`| \hat{x_1} \rangle` with :math:`|\psi \rangle`, resulting in a smaller state :math:`|\psi_{x_1} \rangle`. Then, we can proceed exactly as we did in the previous step, calculating the reduced density matrix over the remaining qubits, and computing the probability vector
+# Next, we can calculate the following term :math:`p(x_2|\hat{x}_1)` conditioned on the sample we have just obtained. To do so, we **project** the first qubit to be :math:`\hat{x}_1`. We can do this by contracting the computational basis state :math:`| \hat{x}_1 \rangle` with :math:`|\psi \rangle`, resulting in a smaller state :math:`|\psi_{x_1} \rangle`. Then, we can proceed exactly as we did in the previous step, calculating the reduced density matrix over the remaining qubits, and computing the probability vector
 # 
 # .. math::
-#  | p_{x_2 | \hat{x_1}} \rangle  = \mathrm{diag} \left( \mathrm{Tr}_{3,4, \ldots,N}(| \psi_{x_1} \rangle \langle \psi_{x_1} |) \right)
+#  | p_{x_2 | \hat{x}_1} \rangle  = \mathrm{diag} \left( \mathrm{Tr}_{3,4, \ldots,N}(| \psi_{x}_1 \rangle \langle \psi_{x}_1 |) \right)
 # 
-# from which we sample the next value :math:`\hat{x_2}` and use it to compute the next term p(x_3| \hat{x_1} \hat{x_2}) using the same procedure. The following diagram shows the full tensor network for this step including the projection onto the copmutational basis state :math:`| \hat{x_1} \rangle`.
+# from which we sample the next value :math:`\hat{x}_2` and use it to compute the next term :math:`p(x_3| \hat{x}_1 \hat{x}_2)` using the same procedure. The following diagram shows the full tensor network for this step including the projection onto the copmutational basis state :math:`| \hat{x}_1 \rangle`.
 # 
 # TODO: include this diagram here
 # 
