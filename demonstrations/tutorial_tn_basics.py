@@ -157,8 +157,9 @@ print(D.shape)
 #
 # .. math::
 #   CNOT = \sum_j (T^1)_{i,j,k} \otimes (T^2)_{l,j,m}.
-#
-# It turns out :math:`T^1` and :math:`T^2` are special tensors known as the COPY and XOR tensors, respectively, and therefore have special diagrammatic representations.
+# 
+# .. note::
+#   It turns out :math:`T^1` and :math:`T^2` are special tensors known as the COPY and XOR tensors, respectively, and therefore have special diagrammatic representations. The former is defined as a tensor equal to unity when all the indices have the same value (0 or 1) and vanishes otherwise, while the latter is equal to unity when the values of the three indices contain an even number of 1's and vanishes otherwise. We anticipate that the COPY tensor can be used to obtain the diagonal of a matrix. This will be useful in the last section of this tutorial.
 #
 # .. figure:: ../_static/demonstration_assets/tn_basics/07-t1-t2.png
 #     :align: center
@@ -316,14 +317,14 @@ print(f"Computation cost for A(BC) contraction: {average_time_ms:.8f} ms")
 # 
 # An extra level of optimization, known as *hyper-optimization* is introduced by the use of different algorithms to find the optimal contraction based on the specific tensor network, as some algorithms are better suited for certain network structures. For an in-depth exploration of these heuristics, please refer to [#Gray2021]_.
 #
-# As we will explore in the next section, we can use tensor networks to simulate quantum circuits. In particular, the calculation of an expectation value corresponds to the contraction of the tensor network into a single tensor (scalar) as discussed in this section. In ``Pennylane``, this simulation can be performed using the ``DefaultTensor`` device and the method used to find the contraction path can be chosen via the ``contraction_optimizer`` keyword argument.
+# As we will explore in the next section, we can use tensor networks to simulate quantum circuits. In particular, the calculation of an expectation value corresponds to the contraction of the tensor network into a single tensor (scalar) as discussed in this section. In ``Pennylane``, this simulation can be performed using the :class:`~pennylane.devices.default_tensor.DefaultTensor` device and the method used to find the contraction path can be chosen via the ``contraction_optimizer`` keyword argument.
 
 import pennylane as qml
 
 dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 
 ##############################################################################
-# The different types of values accepted for ``contraction_optimizer`` are determined by the ``optimize`` parameter in ``Quimb`` (see `docs <https://quimb.readthedocs.io/en/latest/tensor-circuit.html#finding-a-contraction-path-the-optimize-kwarg>`_). See `this tutorial <https://pennylane.ai/qml/demos/tutorial_How_to_simulate_quantum_circuits_with_tensor_networks/>`_ to learn more about the ``DefaultTensor`` device.
+# The different types of values accepted for ``contraction_optimizer`` are determined by the ``optimize`` parameter in ``Quimb`` (see `docs <https://quimb.readthedocs.io/en/latest/tensor-circuit.html#finding-a-contraction-path-the-optimize-kwarg>`_) as this is the backend behind the :class:`~pennylane.devices.default_tensor.DefaultTensor` device. See `this tutorial <https://pennylane.ai/qml/demos/tutorial_How_to_simulate_quantum_circuits_with_tensor_networks/>`_ to learn more the use of this device in ``Pennylane``.
 # 
 # Slicing:
 # ^^^^^^^^
@@ -332,14 +333,13 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # 
 # The idea is to change space for computation time, by temporarily fixing the values of some indices in the tensors, performing independently the contraction for each fixed value and summing the results [#Gray2021]_.
 
-
 ##############################################################################
 # From tensor networks to quantum circuits:
 # -----------------------------------------
 # 
 # Until now, we have looked at general tensor networks, while ✨sparkling✨ the discussions with examples related to quantum circuits. Here, we leverage the components we have learned to explore this relation more in depth. 
 # 
-# First, it is important to emphasize that quantum circuits don't just "look" or "behave" like tensor networks, but rather they *are* tensor networks! Quantum Circuits are a special class of tensor networks where each horizontal wire corresponds to the Hilbert space of a single qubit and the tensors acting on these subsystems are restricted to be unitary operators.
+# First, it is important to emphasize that quantum circuits don't just "look" or "behave" like tensor networks, but rather they *are* tensor networks! Quantum Circuits are a special class of tensor networks where each horizontal wire corresponds to the Hilbert space of a single qubit and the tensors acting on these subsystems are restricted to be unitary operators, denoting the time evolution of the state (from left to right).
 # 
 # A general quantum circuit acting on :math:`N` qubits can be expressed in terms of the initial quantum state :math:`\psi_0` and the unitary propagator :math:`U` such that the evolved state is
 # 
@@ -350,7 +350,7 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # 
 # TODO: include a diagram here for the full U and the decomposition
 # 
-# In the right hand side of the equality we have assumed a specific form for the U tensor in terms of local 2-qubit gates, which is often the case when dealing with real quantum hardware. In addition, it is common for the initial state to be a product state such as :math:`|0\rangle^{\otimes N}`, hence the form of the tensor.
+# In the right hand side of the equality we have assumed a specific form for the U tensor in terms of local 2-qubit gates, which is often the case when dealing with real quantum hardware. In addition, it is common for the initial state to be a product state such as :math:`|0\rangle^{\otimes N}`, hence the form of the tensor in the diagram.
 # 
 # Now we can ask the important question: what quantities can we compute from this tensor network?
 # 
@@ -373,15 +373,57 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # 
 # TODO: add a figure here showing the light cone.
 # 
-# Then, the sections outside of the light cone can be ignored as these correspond to contractions resulting in the identity: :math:`G G^\dagger = I` (see grayed area in the drawing above). This helps us decrease the size of the tensor to be contracted, and consequently, the computational expense, by focusing on the part of the evolved state with support inside the light cone of the observable 
+# Then, the sections outside of the light cone can be ignored as these correspond to contractions resulting in the identity: :math:`G G^\dagger = I` (see grayed area in the drawing above). This helps us decrease the size of the tensor to be contracted, and consequently, the computational expense, by focusing on the part of the circuit with support inside the light cone of the observable - i.e., the gates that affect the calculation of the expectation value.
 # 
 # .. math::
 #   \langle O_l \rangle = \langle \psi_l | O | \psi_l \rangle.
 # 
-# Sampling:
-# ^^^^^^^^^^^^^^^^^^^
+# where :math:`\psi_l` is the section of the evolved state within the light cone of the observable.
 # 
-# Explain how we can use the "perfect sampling algorithm" with quantum circuits.
+# Sampling:
+# ^^^^^^^^^
+# 
+# We can also use the tensor network arising from a quantum circuit to sample bitstrings from the evolved probability distribution :math:`| \psi \rangle`- emulating what you would obtain from a real quantum computer. Since this is an ubiquitous task in quantum information, several algorithms have been proposed to generate samples from probability distributions represented as tensor networks. In particular, here we discuss the "Perfect Sampling Algorithm" applied to unitary tensor networks [#Ferris2012]_, as this generates uncorrelated samples, unlike markov-based approaches.
+# 
+# .. note::
+#   The method used in `Quimb <https://quimb.readthedocs.io/en/latest/index.html>`_ (the backend behind :class:`~pennylane.devices.default_tensor.DefaultTensor`) to generate samples from the quantum circuit is also based on this algorithm.
+# 
+# A cornerstone behind this algorithm is the well known `chain rule <https://en.wikipedia.org/wiki/Chain_rule_(probability)>` which allows us to write the join probability of an event using only conditional probabilities. Using this, we can express the probability of sampling the bitstring :math:`(x_1, x_2, x_3, \ldots, x_N)` from :math:`| \psi \rangle` as
+# 
+# .. math::
+#   p(x_1, x_2, x_3, \ldots, x_N) = p(x_1) p(x_2|x_1) p(x_3| x_1 x_2) \ldots p(x_N | x_1 x_2 x_3 \ldots x_{N-1})
+# 
+# Thus, to obtain a sample from the joint distribution on the left side of the equation, we can compute the terms on the right side by means of marginal distributions. First, we start by computing the marginal probability :math:`p(x_1)`. To do so, we compute the reduced density matrix :math:`\rho_{1}` by tracing out all the other qubits.
+# 
+# .. math::
+#   \rho_{1} = tr_{2,3,\ldots,N}(| \psi \rangle \langle \psi |)
+# 
+# Then, the diagonal of this :math:`2 \times 2` density matrix gives us the probability of sampling 0 or 1, i.e., :math:`p(x_1 = 0)` and :math:`p(x_2 = 1)`. This diagonal corresponds to the following probability vector
+# 
+# .. math::
+#   | p_{x_1} \rangle = \sum_{i=0}^{1} p(x_1=i) | i \rangle = diag\left( tr_{2,3,\ldots,N}(| \psi \rangle \langle \psi |) \right).
+# 
+# The tensor network corresponding to the computation of this vector is
+# 
+# TODO: add diagram here showing the whole contraction resulting in a single vector.
+#  
+# In this diagram, we have extracted the diagonal of the reduced density matrix by contracting it with the COPY that we introduced earlier on this tutorial!
+# 
+# Once we obtain the probability vector, we can generate a random sample weighted by these probabilities, i.e., we generate a random number :math:`r \in [0,1]` and choose :math:`x_1 = 0` if :math:`r < p(x_1=0)` and :math:`x_1 = 1` otherwise. We save this sample as :math:`\hat{x_1}`.
+# 
+# Next, we can calculate the following term :math:`p(x_2|\hat{x_1})` conditioned on the sample we have just obtained. To do so, we **project** the first qubit to be :math:`hat{x_1}`. We can do this by contracting the computational basis state :math:`| \hat{x_1} \rangle` with :math:`|\psi \rangle`, resulting in a smaller state :math:`|\psi_{x_1} \rangle`. Then, we can proceed exactly as we did in the previous step, calculating the reduced density matrix over the remaining qubits, and computing the probability vector
+# 
+# .. math::
+#  | p_{x_2 | \hat{x_1}} \rangle diag\left( tr_{3,4, \ldots,N}(| \psi_{x_1} \rangle \langle \psi_{x_1} |) \right)
+# 
+# from which we sample the next value :math:`\hat{x_2}` and use it to compute the next term p(x_3| \hat{x_1} \hat{x_2}) using the same procedure. The following diagram shows the full tensor network for this step including the projection onto the copmutational basis state :math:`| \hat{x_1} \rangle`.
+# 
+# TODO: include this diagram here
+# 
+# Here, similarly as done previously, we should only include in the contraction the parts of the circuit within the light cone of botht the projection and the diagonal computation. This procedure can be repeated recursively until we obtain the final sample :math:`(\hat{x}_1, \hat{x}_2, \hat{x}_3, \ldots, \hat{x}_N)`. To obtain more samples, we repeat the procedure from the beginning.
+# 
+# .. note::
+#   TODO: add a note on cacheing the results.
 # 
 ##############################################################################
 # References
@@ -421,3 +463,9 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 #    B. Pirvu, V. Murg, J. I. Cirac, and F. Verstraete.
 #    "Matrix product operator representations,"
 #    `<http://dx.doi.org/10.1088/1367-2630/12/2/025012>`__, New Journal of Physics, vol. 12, no. 2, p. 025012, 2010.
+# 
+# .. [#Ferris2012]
+#    A. J. Ferris and G. Vidal.
+#    "Perfect sampling with unitary tensor networks,"
+#    `<http://dx.doi.org/10.1103/PhysRevB.85.165146>`__, Physical Review B, vol. 85, no. 16, 2012.
+
