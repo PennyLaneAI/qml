@@ -325,13 +325,18 @@ for n in range(36):
     theta = theta - 0.4 * g_param
 
     # gradient for coordinates
-    value, grad = jax.value_and_grad(cost, argnums=1)(theta, x)
+    value, _ = jax.value_and_grad(cost, argnums=1)(theta, x)
+    grad = grad_x(theta, x)
     x = x - 0.8 * grad
     energies.append(value)
     bond_length.append(jnp.linalg.norm(x[0] - x[1]) * bohr_angs) 
 
     if n % 4 == 0:
         print(f"Step = {n},  E = {energies[-1]:.8f} Ha,  bond length = {bond_length[-1]:.5f} A")
+
+    # Check maximum component of the nuclear gradient
+    if jnp.max(grad_x(theta, x)) <= 1e-05:
+        break
 
 print("\n" f"Final value of the ground-state energy = {energies[-1]:.8f} Ha")
 print("\n" "Ground-state equilibrium geometry")
