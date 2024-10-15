@@ -341,6 +341,8 @@ for n in range(36):
 print("\n" f"Final value of the ground-state energy = {energies[-1]:.8f} Ha")
 print("\n" "Ground-state equilibrium geometry")
 print("%s %4s %8s %8s" % ("symbol", "x", "y", "z"))
+for i, atom in enumerate(symbols):
+    print(f"  {atom}    {x[0][i]:.4f}   {x[1][i]:.4f}   {x[2][i]:.4f}")
 
 ##############################################################################
 # Next, we plot the values of the ground state energy of the molecule
