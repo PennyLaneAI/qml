@@ -191,8 +191,6 @@ def circuit_1(params, excitations):
 # with respect to the Hartree-Fock state.
 
 
-jax.config.update("jax_enable_x64", True) # use double-precision numbers
-
 dev = qml.device("lightning.qubit", wires=qubits)
 cost_fn = qml.QNode(circuit_1, dev, interface="jax")
 
