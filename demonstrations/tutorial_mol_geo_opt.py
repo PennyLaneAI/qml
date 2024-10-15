@@ -322,13 +322,13 @@ bohr_angs = 0.529177210903
 for n in range(36):
     # gradient for params
     g_param = jax.grad(cost, argnums=[0])(theta, x)[0]
-    theta = theta - 0.25 * g_param
+    theta = theta - 0.4 * g_param
 
     # gradient for coordinates
-    value, grad = jax.value_and_grad(cost, argnums=[1])(theta, x)
-    x = x - 0.5 * grad[0]
+    value, grad = jax.value_and_grad(cost, argnums=1)(theta, x)
+    x = x - 0.8 * grad
     energies.append(value)
-    bond_length.append(jnp.linalg.norm(x[0] - x[1]) * bohr_angs)
+    bond_length.append(jnp.linalg.norm(x[0] - x[1]) * bohr_angs) 
 
     if n % 4 == 0:
         print(f"Step = {n},  E = {energies[-1]:.8f} Ha,  bond length = {bond_length[-1]:.5f} A")
