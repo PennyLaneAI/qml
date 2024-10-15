@@ -13,7 +13,7 @@ serving as fundamental building blocks in their design and execution. For exampl
 
 2. Grover's algorithm might need to use quantum arithmetic to construct oracles, as shown in [#demo_qft_arith]_.
 
-3. Loading functions into quantum computers, which often requires several quantum arithmetic operations [#sanders]_.
+3. Loading functions into quantum computers often requires several quantum arithmetic operations [#sanders]_.
 
 With PennyLane, you will see how easy it is to build these operations as subroutines for your quantum algorithms!
 
@@ -93,7 +93,7 @@ print("output register: ", output[2]," which represents the number ", state_to_d
 # Note that we are sampling from the circuit instead of returning the quantum state to demonstrate 
 # its immediate applicability to hardware. With a single shot, the circuit produces the expected state.
 #
-# Now we can implement and example for the :class:`~.pennylane.Adder`. We will add the constant term :math:`4` to the ``wires[x]`` register:
+# Now we can implement an example for the :class:`~.pennylane.Adder`. We will add the constant term :math:`4` to the ``wires["x"]`` register:
 
 @qml.qnode(dev)
 def circuit():
@@ -145,7 +145,7 @@ print(circuit(x=1,y=4), " which represents the number ", state_to_decimal(circui
 #   \text{Multiplier}(k) |w \rangle = | kw \rangle,
 #
 # while the :class:`~.pennylane.OutMultiplier` performs an **Outplace** operation, where the states of two wires,
-#  :math:`|x \rangle` and :math:`|y \rangle`, 
+# :math:`|x \rangle` and :math:`|y \rangle`, 
 # are multiplied together and the result is stored in a third register:
 #
 # .. math::
@@ -228,7 +228,7 @@ def adding_3xy():
 
 ######################################################################
 # Then we need to add the term :math:`5x + 3y` to the output register, which can be done by using the
-# :class:`~.pennylane.Multiplier` and :class:`~.pennylane.OutAdder operators.
+# :class:`~.pennylane.Multiplier` and :class:`~.pennylane.OutAdder` operators.
 def adding_5x_3y():
 
     # |x>|y> --->  |5x>|3y>
@@ -291,6 +291,7 @@ def f(x, y):
 
 ######################################################################
 
+wires = qml.registers({"x": 4, "y":4, "output":6,"work_wires": 4})
 @qml.qnode(dev)
 def circuit_with_Poly(x,y):
 
@@ -325,9 +326,9 @@ print(circuit_with_Poly(x=1,y=4), " which represents the number ", state_to_deci
 #
 # .. [#demo_qft_arith]
 #
-#    Guillermo Alonso
-#    "Basic arithmetic with the quantum Fourier transform (QFT).",
-#    `Pennylane: Basic arithmetic with the quantum Fourier transform (QFT)  <https://pennylane.ai/qml/demos/tutorial_qft_arithmetics/>`__, 2024.
+#     Guillermo Alonso
+#     "Basic arithmetic with the quantum Fourier transform (QFT).",
+#     `Pennylane: Basic arithmetic with the quantum Fourier transform (QFT) <https://pennylane.ai/qml/demos/tutorial_qft_arithmetics/>`__, 2024.
 #
 #  .. [#sanders]
 #
