@@ -92,24 +92,34 @@ print("output register: ", output[2]," which represents the number ", state_to_d
 # In this example we are setting :math:`x=1` and :math:`y=4` and checking the results are as expected.
 # Note that we are sampling from the circuit instead of returning the quantum state to demonstrate 
 # its immediate applicability to hardware. With a single shot, the circuit produces the expected state.
-
-# Now we can implement and example for the :class:`~.pennylane.Adder`. We will add the constant term :math:`4` to the output register:
+#
+# Now we can implement and example for the :class:`~.pennylane.Adder`. We will add the constant term :math:`4` to the ``wires[x]`` register:
 
 @qml.qnode(dev)
 def circuit():
 
-    qml.BasisState(0, wires=wires["output"]) #     |0>
-    qml.Adder(4, wires["output"])            #     |0+4>
+    # |0> --->  |0+4>
+    qml.Adder(4, wires["x"])    
 
-    return qml.sample(wires=wires["output"])
+    return qml.sample(wires=wires["x"])
 
 print(circuit(), " which represents the number ", state_to_decimal(circuit()))
 
 ######################################################################
-# We obtained the result :math:`4`, as expected.
+# We obtained the result :math:`4`, as expected. At this point, it's worth taking a moment to look
+# at the decomposition of the circuit into quantum gates and operators. 
+
+fig, _ = qml.draw_mpl(circuit, decimals = 2, style = "pennylane", level='device')()
+fig.show()
+
+######################################################################
+# Taking a look at the decomposition of :class:`~.pennylane.Adder` we can see that the addition is performed 
+# in the Fourier basis. This includes a QFT transformation, followed by rotations to perform the addition, and 
+# concludes with an inverse QFT transformation. A more detailed explanation on the decomposition of arithmetic operators can be found in
+# [#demo_qft_arith]_. 
 #
-# Now, let's see an example for the :class:`~.pennylane.OutAdder` operator to add the states
-#  :math:`|x \rangle` and :math:`|y \rangle` to the output register.
+# Now, let's see an example for the :class:`~.pennylane.OutAdder` operator to add the states 
+# :math:`|x \rangle` and :math:`|y \rangle` to the output register.
 
 @qml.qnode(dev)
 def circuit(x,y):
@@ -124,7 +134,6 @@ print(circuit(x=1,y=4), " which represents the number ", state_to_decimal(circui
 ######################################################################
 # We obtained the result :math:`5`, just as we expected.
 # 
-######################################################################
 # Multiplication  operators
 # ~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
@@ -162,7 +171,7 @@ print(circuit(), " which represents the number ", state_to_decimal(circuit()))
 # We got the expected result of :math:`3`.
 #
 # Now, let's look at an example using the :class:`~.pennylane.OutMultiplier` operator to multiply the states :math:`|x \rangle` and
-#  :math:`|y \rangle`, storing the result in the output register.
+# :math:`|y \rangle`, storing the result in the output register.
 
 @qml.qnode(dev)
 def circuit(x,y):
@@ -176,14 +185,15 @@ print(circuit(x=1,y=4), " which represents the number ", state_to_decimal(circui
 
 ######################################################################
 # Nice! 
+# 
 # After going through these educational examples, you might be curious if it's possible to 
 # use these operations for subtraction or division in a quantum computer. The answer is yes!
-# This is possible through the :function:`~.pennylane.adjoint` operation, which allows us to reverse a multiplication or addition operation, hence enabling
+# This is possible through the :func:`~.pennylane.adjoint` operation, which allows us to reverse a multiplication or addition operation, hence enabling
 # subtraction and division. We will see this in action in the following section.
 #
-######################################################################
 # Loading a polynomial into a quantum computer
 # --------------------------------------------
+#
 # Now that you are familiar with these operations, let's take it a step further and see how we can use them for something practical. 
 # We will explore how to implement a polynomial function on a quantum computer using basic arithmetic.
 # In particular, we will take as an example the function :math:`f(x,y)= 4 + 3xy + 5 x+ 3 y` where the variables :math:`x` and :math:`y`
@@ -198,7 +208,6 @@ print(circuit(x=1,y=4), " which represents the number ", state_to_decimal(circui
 # We will show how to load this function in two different ways: first, by concatenating simple modular arithmetic operators,
 # and finally, using the :class:`~.pennylane.OutPoly` operator.
 #
-######################################################################
 # Concatenating arithmetic operations
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Let's start by defining the arithmetic operations to load the function :math:`f(x,y) = 4 + 3xy + 5x + 3y` into a quantum state.
@@ -219,7 +228,7 @@ def adding_3xy():
 
 ######################################################################
 # Then we need to add the term :math:`5x + 3y` to the output register, which can be done by using the
-#  :class:`~.pennylane.Multiplier` and :class:`~.pennylane.OutAdder operators.
+# :class:`~.pennylane.Multiplier` and :class:`~.pennylane.OutAdder operators.
 def adding_5x_3y():
 
     # |x>|y> --->  |5x>|3y>
@@ -236,7 +245,7 @@ def adding_5x_3y():
 
 ######################################################################
 # In this functions, we showed how to undo the multiplication by using the adjoint operation, which in this case is useful to clean
-# the input registers `wires["x"]` and `wires["y"]` after the operation.
+# the input registers ``wires["x"]`` and ``wires["y"]`` after the operation.
 #
 # Now we can combine all these functions to load the function :math:`f(x,y)= 4 + 3xy + 5 x+ 3 y` into a quantum state.
 @qml.qnode(dev)
@@ -252,7 +261,8 @@ def circuit(x,y):
 print(circuit(x=1,y=4), " which represents the number ", state_to_decimal(circuit(x=1,y=4)))
 
 ######################################################################
-# Cool, we get the correct result :math:`33`!
+# Cool, we get the correct result 33!
+#
 # At this point, it's interesting to consider what would happen if we had chosen a smaller number of wires for the output.
 # For instance, if we had selected one less wire for the output, we would have obtained the result :math:`33 \mod 2^5 = 1`.
 
@@ -262,7 +272,6 @@ print(circuit(x=1,y=4), " which represents the number ", state_to_decimal(circui
 ######################################################################
 # With one less wire, we get :math:`1`, just like we predicted. Remember, we are working with modular arithmetic!
 #
-######################################################################
 # Using OutPoly
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
@@ -317,8 +326,8 @@ print(circuit_with_Poly(x=1,y=4), " which represents the number ", state_to_deci
 # .. [#demo_qft_arith]
 #
 #    Guillermo Alonso
-#    "Basic arithmetic with the quantum Fourier transform (QFT)",
-#    `Pennylane: Basic arithmetic with the quantum Fourier transform (QFT)  <https://pennylane.ai/qml/demos/tutorial_qft_arithmetics/>`__, 2024
+#    "Basic arithmetic with the quantum Fourier transform (QFT).",
+#    `Pennylane: Basic arithmetic with the quantum Fourier transform (QFT)  <https://pennylane.ai/qml/demos/tutorial_qft_arithmetics/>`__, 2024.
 #
 #  .. [#sanders]
 #
