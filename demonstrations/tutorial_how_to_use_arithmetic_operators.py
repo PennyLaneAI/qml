@@ -28,7 +28,9 @@ combine multiple states and store the result in a new register, leaving the orig
 In quantum computing, all arithmetic operations are modular. This means the result of any operation is reduced 
 modulo :math:`2^n`, where :math:`n` is the number of qubits in the register. This is because quantum states can only 
 represent numbers up to :math:`2^n`, so it's important to keep this in mind when working with quantum arithmetic.
-An insufficient number of wires in the quantum register could lead to overflow errors. We will come back to this point later.
+An insufficient number of wires in the quantum register could lead to overflow errors. The modulo value can also be 
+customized in Pennylane's arithmetic operators, but it must always be smaller than the default value :math:`2^n`.
+We will come back to these considerations later.
 
 Next, we will explore how to define and implement addition and multiplication operators in PennyLane.
 
