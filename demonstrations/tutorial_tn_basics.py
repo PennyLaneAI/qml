@@ -158,8 +158,7 @@ print(D.shape)
 # .. math::
 #   CNOT = \sum_j (T^1)_{i,j,k} \otimes (T^2)_{l,j,m}.
 # 
-# .. note::
-#   It turns out :math:`T^1` and :math:`T^2` are special tensors known as the COPY and XOR tensors, respectively, and therefore have special diagrammatic representations. The former is defined as a tensor equal to unity when all the indices have the same value (0 or 1) and vanishes otherwise, while the latter is equal to unity when the values of the three indices contain an even number of 1's and vanishes otherwise. We anticipate that the COPY tensor can be used to obtain the diagonal of a matrix. This will be useful in the last section of this tutorial.
+# It turns out :math:`T^1` and :math:`T^2` are special tensors known as the COPY and XOR tensors, respectively, and therefore have special diagrammatic representations. 
 #
 # .. figure:: ../_static/demonstration_assets/tn_basics/07-t1-t2.png
 #     :align: center
@@ -171,6 +170,9 @@ print(D.shape)
 #     :align: center
 #     :width: 50%
 # 
+# .. note::
+#   By looking at the elements of the COPY tensor, we can interpret it as being equal to unity when all the indices have the same value (0 or 1) and vanishing otherwise. On the other hand, the XOR tensor can be understood as being equal to unity when the values of the three indices contain an even number of 1's and vanishing otherwise. We anticipate that the COPY tensor can be used to obtain the diagonal of a matrix. This will be useful in the last section of this tutorial.
+# 
 # This demonstrates the relation between the CNOT acting as a rank-4 tensor with dimensions :math:`2 \times 2 \times 2 \times 2` and its decomposition in terms of two rank-3 local tensors (:math:`T^1` and :math:`T^2`) of dimensions :math:`2 \times 2 \times 2`.
 # 
 # .. note::
@@ -178,8 +180,8 @@ print(D.shape)
 #   More generally, we can find decompositions of multi-qubit gates into local tensors by means of the ubiquitous singular valued decomposition (SVD). This method is explained in detail in our :doc:`MPS tutorial </demos/tutorial_mps>`. 
 
 ##############################################################################
-# The cost of contracting a network:
-# ----------------------------------
+# The cost of contracting a network
+# ---------------------------------
 # 
 # A common task when dealing with tensors is the contraction of large networks resulting in a single tensor (including scalars). To arrive to this final tensor, we can start with a single tensor and contract it with adjacent tensors one-at-a-time. The order in which this is carried out is known as the *contraction path* or *bubbling*.
 # While the final tensor is independent of the order of the contraction, the number of operations performed can vary greatly with the order in which we contract the intermediate tensors. Moreover, in a general setup, finding the optimal order of indices to be contracted is not at all a trivial task.
@@ -282,8 +284,8 @@ print(f"Computation cost for A(BC) contraction: {average_time_ms:.8f} ms")
 # From this we see that the second contraction path yields a much lower complexity compared to the first one, just as we expected!
 
 ##############################################################################
-# Contraction paths:
-# ------------------
+# Contraction paths
+# -----------------
 # 
 # In the previous section, through a toy example, we explored how the choice of the contraction path affects the computational cost of the tensor network contraction. As shown in [#Lam1997]_ , finding an optimal contraction path is equivalent to solving the "multiplication problem" and thus, it is NP-hard. In this section, we provide a general description of wide-spread techniques used to tackle this ubiquitous task.
 # 
@@ -326,15 +328,16 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 ##############################################################################
 # The different types of values accepted for ``contraction_optimizer`` are determined by the ``optimize`` parameter in ``Quimb`` (see `docs <https://quimb.readthedocs.io/en/latest/tensor-circuit.html#finding-a-contraction-path-the-optimize-kwarg>`_) as this is the backend behind the :class:`~pennylane.devices.default_tensor.DefaultTensor` device. See `this tutorial <https://pennylane.ai/qml/demos/tutorial_How_to_simulate_quantum_circuits_with_tensor_networks/>`_ to learn more the use of this device in ``Pennylane``.
 # 
-# Slicing:
-# ^^^^^^^^
+# Slicing
+# ~~~~~~~~
 # 
 # The size of (intermediate) tensors can grow exponential with the number of indices and dimensions, specially for large-scale tensor networks. Thus, we might run into memory problems when performing the contractions. A useful additional technique to split these tensors into more manageable pieces is known as **slicing**. 
 # 
 # The idea is to change space for computation time, by temporarily fixing the values of some indices in the tensors, performing independently the contraction for each fixed value and summing the results [#Gray2021]_.
 
 ##############################################################################
-# From tensor networks to quantum circuits:
+# 
+# From tensor networks to quantum circuits
 # -----------------------------------------
 # 
 # Until now, we have looked at general tensor networks, while ✨sparkling✨ the discussions with examples related to quantum circuits. Here, we leverage the components we have learned to explore this relation more in depth. 
@@ -354,8 +357,8 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # 
 # Now we can ask the important question: what quantities can we compute from this tensor network?
 # 
-# Expectation values:
-# ^^^^^^^^^^^^^^^^^^^
+# Expectation values
+# ~~~~~~~~~~~~~~~~~~
 # 
 # As anticipated in the previous section, a natural quantity to compute using the tensor network arising from a quantum circuit is the expectation value of an observable :math:`O` evaluated at the quantum state :math:`\psi`
 # 
@@ -380,8 +383,8 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # 
 # where :math:`\psi_l` is the section of the evolved state within the light cone of the observable.
 # 
-# Sampling:
-# ^^^^^^^^^
+# Sampling
+# ~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # We can also use the tensor network arising from a quantum circuit to sample bitstrings from the evolved probability distribution :math:`| \psi \rangle`- emulating what you would obtain from a real quantum computer. Since this is an ubiquitous task in quantum information, several algorithms have been proposed to generate samples from probability distributions represented as tensor networks. In particular, here we discuss the "Perfect Sampling Algorithm" applied to unitary tensor networks [#Ferris2012]_, as this generates uncorrelated samples, unlike markov-based approaches.
 # 
