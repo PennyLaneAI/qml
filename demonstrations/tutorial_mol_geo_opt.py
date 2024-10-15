@@ -106,7 +106,7 @@ from jax import numpy as jnp
 jax.config.update("jax_enable_x64", True)
 
 symbols = ["H", "H", "H"]
-x = jnp.array([0.028, 0.054, 0.0, 0.986, 1.610, 0.0, 1.855, 0.002, 0.0], requires_grad=True)
+x = jnp.array([[0.028, 0.054, 0.0], [0.986, 1.610, 0.0], [1.855, 0.002, 0.0]])
 
 ##############################################################################
 # Next, we need to build the parametrized electronic Hamiltonian :math:`H(x).`
@@ -294,7 +294,7 @@ def grad_x(params, x):
 # initial state :math:`\vert\Psi(\theta_1, \theta_2)\rangle`
 # is the Hartree-Fock state.
 
-theta = jnp.array([0.0, 0.0], requires_grad=True)
+theta = jnp.array([0.0, 0.0])
 
 ##############################################################################
 # The initial set of nuclear coordinates :math:`x,` defined at
@@ -318,10 +318,6 @@ bond_length = []
 
 # Factor to convert from Bohrs to Angstroms
 bohr_angs = 0.529177210903
-
-theta = jnp.array([0.0, 0.0])
-
-x = jnp.array([[0.028, 0.054, 0.0], [0.986, 1.610, 0.0], [1.855, 0.002, 0.0]])
 
 for n in range(36):
     # gradient for params
