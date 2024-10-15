@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2021-09-13T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-08T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Quantum Chemistry"
     ],
@@ -23,7 +23,6 @@
     ],
     "seoDescription": "Learn how to build quantum chemistry circuits adaptively.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_adaptive_circuits",
     "references": [
         {
             "id": "peruzzo2014",

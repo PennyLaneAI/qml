@@ -6,10 +6,10 @@
         }
     ],
     "dateOfPublication": "2023-07-03T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
-        "Getting Started", 
-        "Algorithms", 
+        "Getting Started",
+        "Algorithms",
         "Quantum Computing"
     ],
     "tags": [],
@@ -25,7 +25,6 @@
     ],
     "seoDescription": "Learn how to find an entry in a list using Grover's Algorithm",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_grovers_algorithm",
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],

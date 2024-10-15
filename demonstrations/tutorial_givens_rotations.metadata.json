@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2021-06-30T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-08T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Quantum Chemistry"
     ],
@@ -19,7 +19,6 @@
     ],
     "seoDescription": "Discover the building blocks of quantum circuits for quantum chemistry",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_givens_rotations",
     "references": [
         {
             "id": "anselmetti",

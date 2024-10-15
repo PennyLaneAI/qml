@@ -9,7 +9,7 @@
         }
     ],
     "dateOfPublication": "2024-04-26T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-08T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning",
         "Optimization",
@@ -29,7 +29,6 @@
     ],
     "seoDescription": "Learn how to find the ground state of a molecule with VQE using PennyLane, Catalyst, and just-in-time compilation.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_how_to_quantum_just_in_time_compile_vqe_catalyst",
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],
