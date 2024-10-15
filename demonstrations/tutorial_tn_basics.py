@@ -342,12 +342,12 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # 
 # Until now, we have looked at general tensor networks, while ✨sparkling✨ the discussions with examples related to quantum circuits. Here, we leverage the components we have learned to explore this relation more in depth. 
 # 
-# First, it is important to emphasize that quantum circuits don't just "look" or "behave" like tensor networks, but rather they *are* tensor networks! Quantum Circuits are a special class of tensor networks where each horizontal wire corresponds to the Hilbert space of a single qubit and the tensors acting on these subsystems are restricted to be unitary operators, denoting the time evolution of the state (from left to right).
+# First, it is important to emphasize that quantum circuits don't just "look" or "behave" like tensor networks, but rather they **are** tensor networks! Quantum Circuits are a special class of tensor networks where each horizontal wire corresponds to the Hilbert space of a single qubit and the tensors acting on these subsystems are restricted to be unitary operators, denoting the time evolution of the state (from left to right).
 # 
-# A general quantum circuit acting on :math:`N` qubits can be expressed in terms of the initial quantum state :math:`\psi_0` and the unitary propagator :math:`U` such that the evolved state is
+# A general quantum circuit acting on :math:`N` qubits can be expressed in terms of the initial quantum state :math:`| \psi_0 \rangle` and the unitary propagator :math:`U` such that the evolved state is
 # 
 # .. math::
-#   \psi = U \psi_0,
+#   | \psi \rangle = U |\psi_0 \rangle,
 # 
 # which can also be depicted diagramatically as
 # 
@@ -399,12 +399,12 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # Thus, to obtain a sample from the joint distribution on the left side of the equation, we can compute the terms on the right side by means of marginal distributions. First, we start by computing the marginal probability :math:`p(x_1)`. To do so, we compute the reduced density matrix :math:`\rho_{1}` by tracing out all the other qubits.
 # 
 # .. math::
-#   \rho_{1} = tr_{2,3,\ldots,N}(| \psi \rangle \langle \psi |)
+#   \rho_{1} = \mathrm{Tr}_{2,3,\ldots,N}(| \psi \rangle \langle \psi |)
 # 
 # Then, the diagonal of this :math:`2 \times 2` density matrix gives us the probability of sampling 0 or 1, i.e., :math:`p(x_1 = 0)` and :math:`p(x_2 = 1)`. This diagonal corresponds to the following probability vector
 # 
 # .. math::
-#   | p_{x_1} \rangle = \sum_{i=0}^{1} p(x_1=i) | i \rangle = diag\left( tr_{2,3,\ldots,N}(| \psi \rangle \langle \psi |) \right).
+#   | p_{x_1} \rangle = \sum_{i=0}^{1} p(x_1=i) | i \rangle = diag\left( \mathrm{Tr}_{2,3,\ldots,N}(| \psi \rangle \langle \psi |) \right).
 # 
 # The tensor network corresponding to the computation of this vector is
 # 
@@ -417,7 +417,7 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # Next, we can calculate the following term :math:`p(x_2|\hat{x_1})` conditioned on the sample we have just obtained. To do so, we **project** the first qubit to be :math:`hat{x_1}`. We can do this by contracting the computational basis state :math:`| \hat{x_1} \rangle` with :math:`|\psi \rangle`, resulting in a smaller state :math:`|\psi_{x_1} \rangle`. Then, we can proceed exactly as we did in the previous step, calculating the reduced density matrix over the remaining qubits, and computing the probability vector
 # 
 # .. math::
-#  | p_{x_2 | \hat{x_1}} \rangle diag\left( tr_{3,4, \ldots,N}(| \psi_{x_1} \rangle \langle \psi_{x_1} |) \right)
+#  | p_{x_2 | \hat{x_1}} \rangle  = \mathrm{diag} \left( \mathrm{Tr}_{3,4, \ldots,N}(| \psi_{x_1} \rangle \langle \psi_{x_1} |) \right)
 # 
 # from which we sample the next value :math:`\hat{x_2}` and use it to compute the next term p(x_3| \hat{x_1} \hat{x_2}) using the same procedure. The following diagram shows the full tensor network for this step including the projection onto the copmutational basis state :math:`| \hat{x_1} \rangle`.
 # 
