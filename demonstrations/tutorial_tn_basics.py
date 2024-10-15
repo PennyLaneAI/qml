@@ -328,9 +328,6 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 ##############################################################################
 # The different types of values accepted for ``contraction_optimizer`` are determined by the ``optimize`` parameter in ``Quimb`` (see `docs <https://quimb.readthedocs.io/en/latest/tensor-circuit.html#finding-a-contraction-path-the-optimize-kwarg>`_) as this is the backend behind the :class:`~pennylane.devices.default_tensor.DefaultTensor` device. See `this tutorial <https://pennylane.ai/qml/demos/tutorial_How_to_simulate_quantum_circuits_with_tensor_networks/>`_ to learn more the use of this device in ``Pennylane``.
 # 
-# Slicing
-# ~~~~~~~
-# 
 # The size of (intermediate) tensors can grow exponential with the number of indices and dimensions, specially for large-scale tensor networks. Thus, we might run into memory problems when performing the contractions. A useful additional technique to split these tensors into more manageable pieces is known as **slicing**. 
 # 
 # The idea is to change space for computation time, by temporarily fixing the values of some indices in the tensors, performing independently the contraction for each fixed value and summing the results [#Gray2021]_.
@@ -351,7 +348,9 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # 
 # which can also be depicted diagramatically as
 # 
-# TODO: include a diagram here for the full U and the decomposition
+# .. figure:: ../_static/demonstration_assets/tn_basics/11-circuit.png
+#     :align: center
+#     :width: 35%
 # 
 # In the right hand side of the equality we have assumed a specific form for the U tensor in terms of local 2-qubit gates, which is often the case when dealing with real quantum hardware. In addition, it is common for the initial state to be a product state such as :math:`|0\rangle^{\otimes N}`, hence the form of the tensor in the diagram.
 # 
@@ -374,7 +373,9 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # 
 # When the observable of interest is *local*, i.e., it acts on a few neighbouring qubits, we can calculate the expectation value by considering only the section of the quantum circuit within the *reverse light cone* (causal cone) of the observable :math:`O_l`.
 # 
-# TODO: add a figure here showing the light cone.
+# .. figure:: ../_static/demonstration_assets/tn_basics/12-expectation-local.png
+#     :align: center
+#     :width: 35%
 # 
 # Then, the sections outside of the light cone can be ignored as these correspond to contractions resulting in the identity: :math:`G G^\dagger = I` (see grayed area in the drawing above). This helps us decrease the size of the tensor to be contracted, and consequently, the computational expense, by focusing on the part of the circuit with support inside the light cone of the observable - i.e., the gates that affect the calculation of the expectation value.
 # 
@@ -384,7 +385,7 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # where :math:`\psi_l` is the section of the evolved state within the light cone of the observable.
 # 
 # Sampling
-# ~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~
 # 
 # We can also use the tensor network arising from a quantum circuit to sample bitstrings from the evolved probability distribution :math:`| \psi \rangle`- emulating what you would obtain from a real quantum computer. Since this is an ubiquitous task in quantum information, several algorithms have been proposed to generate samples from probability distributions represented as tensor networks. In particular, here we discuss the "Perfect Sampling Algorithm" applied to unitary tensor networks [#Ferris2012]_, as this generates uncorrelated samples, unlike markov-based approaches.
 # 
@@ -408,7 +409,9 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # 
 # The tensor network corresponding to the computation of this vector is
 # 
-# TODO: add diagram here showing the whole contraction resulting in a single vector.
+# .. figure:: ../_static/demonstration_assets/tn_basics/13-sample.png
+#     :align: center
+#     :width: 35%
 #  
 # In this diagram, we have extracted the diagonal of the reduced density matrix by contracting it with the COPY that we introduced earlier on this tutorial!
 # 
@@ -419,9 +422,11 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # .. math::
 #  | p_{x_2 | \hat{x}_1} \rangle  = \mathrm{diag} \left( \mathrm{Tr}_{3,4, \ldots,N}(| \psi_{x}_1 \rangle \langle \psi_{x}_1 |) \right)
 # 
-# from which we sample the next value :math:`\hat{x}_2` and use it to compute the next term :math:`p(x_3| \hat{x}_1 \hat{x}_2)` using the same procedure. The following diagram shows the full tensor network for this step including the projection onto the copmutational basis state :math:`| \hat{x}_1 \rangle`.
+# from which we sample the next value :math:`\hat{x}_2` and use it to compute the next term :math:`p(x_3| \hat{x}_1 \hat{x}_2)` using the same procedure. The following diagram shows the full tensor network for this step including the projection onto the computational basis state :math:`| \hat{x}_1 \rangle`.
 # 
-# TODO: include this diagram here
+# .. figure:: ../_static/demonstration_assets/tn_basics/14-sample-contd.png
+#     :align: center
+#     :width: 35%
 # 
 # Here, similarly as done previously, we should only include in the contraction the parts of the circuit within the light cone of botht the projection and the diagonal computation. This procedure can be repeated recursively until we obtain the final sample :math:`(\hat{x}_1, \hat{x}_2, \hat{x}_3, \ldots, \hat{x}_N)`. To obtain more samples, we repeat the procedure from the beginning.
 # 
