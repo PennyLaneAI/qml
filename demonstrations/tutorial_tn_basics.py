@@ -333,9 +333,8 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # The idea is to change space for computation time, by temporarily fixing the values of some indices in the tensors, performing independently the contraction for each fixed value and summing the results [#Gray2021]_.
 
 ##############################################################################
-# 
-# From tensor networks to quantum circuits
-# ----------------------------------------
+# Quantum circuits are tensor networks
+# ------------------------------------
 # 
 # Until now, we have looked at general tensor networks, while ✨sparkling✨ the discussions with examples related to quantum circuits. Here, we leverage the components we have learned to explore this relation more in depth. 
 # 
@@ -424,7 +423,7 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # 
 # from which we sample the next value :math:`\hat{x}_2` and use it to compute the next term :math:`p(x_3| \hat{x}_1 \hat{x}_2)` using the same procedure. The following diagram shows the full tensor network for this step including the projection onto the computational basis state :math:`| \hat{x}_1 \rangle`.
 # 
-# .. figure:: ../_static/demonstration_assets/tn_basics/14-sample-contd.png
+# .. figure:: ../_static/demonstration_assets/tn_basics/14-sample-cntd.png
 #     :align: center
 #     :width: 30%
 # 
