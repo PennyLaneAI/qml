@@ -426,7 +426,7 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # 
 # .. figure:: ../_static/demonstration_assets/tn_basics/14-sample-contd.png
 #     :align: center
-#     :width: 35%
+#     :width: 30%
 # 
 # Here, similarly as done previously, we should only include in the contraction the parts of the circuit within the light cone of botht the projection and the diagonal computation. This procedure can be repeated recursively until we obtain the final sample :math:`(\hat{x}_1, \hat{x}_2, \hat{x}_3, \ldots, \hat{x}_N)`. To obtain more samples, we repeat the procedure from the beginning.
 # 
