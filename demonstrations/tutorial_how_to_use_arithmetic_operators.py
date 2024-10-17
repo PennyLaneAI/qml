@@ -96,20 +96,21 @@ print("output register: ", output[2]," which represents the number ", state_to_d
 # Note that we are sampling from the circuit instead of returning the quantum state to demonstrate 
 # its immediate applicability to hardware. With a single shot, the circuit produces the expected state.
 #
-# Now we can implement an example for the :class:`~.pennylane.Adder`. We will add the integer :math:`4` to the ``wires["x"]`` register:
+# Now we can implement an example for the :class:`~.pennylane.Adder`. We will add the integer :math:`5` to the ``wires["x"]`` register
+# that stores the state :math:`|x \rangle=|1 \rangle` previously prepared.
 
 @qml.qnode(dev)
-def circuit():
+def circuit(x,y):
 
-    # |0> --->  |0+4>
-    qml.Adder(4, wires["x"])    
+    prepare_initial_state(x, y)     # |x> |y>
+    qml.Adder(5, wires["x"])        # |x+5> |y> 
 
     return qml.sample(wires=wires["x"])
 
-print(circuit(), " which represents the number ", state_to_decimal(circuit()))
+print(circuit(x=1,y=4), " which represents the number ", state_to_decimal(circuit(x=1,y=4)))
 
 ######################################################################
-# We obtained the result :math:`4`, as expected. At this point, it's worth taking a moment to look
+# We obtained the result :math:`6`, as expected. At this point, it's worth taking a moment to look
 # at the decomposition of the circuit into quantum gates and operators. 
 
 fig, _ = qml.draw_mpl(circuit, decimals = 2, style = "pennylane", level='device')()
