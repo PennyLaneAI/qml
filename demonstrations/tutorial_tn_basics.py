@@ -284,55 +284,6 @@ print(f"Computation cost for A(BC) contraction: {average_time_ms:.8f} ms")
 # From this we see that the second contraction path yields a much lower complexity compared to the first one, just as we expected!
 
 ##############################################################################
-# Contraction paths
-# -----------------
-# 
-# In the previous section, through a toy example, we explored how the choice of the contraction path affects the computational cost of the tensor network contraction. As shown in [#Lam1997]_ , finding an optimal contraction path is equivalent to solving the "multiplication problem" and thus, it is NP-hard. In this section, we provide a general description of wide-spread techniques used to tackle this ubiquitous task.
-# 
-# First, we set up the framework of the problem. While multiway contractions - contractions between more than 2 tensors at a time - are possible, we will consider only pairwise contractions since the former can always be decomposed in terms of the latter. In addition, contracting a tensor network need not result in a single tensor. However, here we consider only the single tensor case as it underlies the more general scenario [#Gray2021]_. 
-# 
-# The underlying idea behind finding a contraction path is based on the construction of the computational graph, i.e., a rooted binary tree - also known as the **contraction tree** - that specifies the sequence of pairwise contractions to be executed. In this tree structure, a leaf node corresponds to a tensor from the original network (blue tensors) and the pairwise contractions (red lines) give rise to the intermediate tensors (red tensors) corresponding to the rest of the nodes in the contraction tree. 
-# 
-# .. figure:: ../_static/demonstration_assets/tn_basics/10-contraction-tree.png
-#     :align: center
-#     :width: 50%
-# 
-# Transforming a tensor network with an arbitrary structure into this binary tree can be achieved by a *tree embedding* of the tensor network graph [#Bienstock1990]_. Thus, optimization of the contraction path is equivalent to a search over tree embeddings of the network.
-# 
-# .. note::
-# 
-#   Besides finding a contraction path that minimizes the computational cost, we can also attempt to find a path that optimizes the memory cost. That is, a contraction path in which all intermediate tensors are below a certain size.
-# 
-# Now, how do we traverse the space of trees to optimize over? The most straightforward idea is to perform an exhaustic search through all of them. As explained in [#Pfeifer2014]_, this can be done (with some additional improvements) using the following well known algorithms:
-# 
-# - Depth-first search
-# - Breadth-first search
-# - Dynamic programming
-# 
-# While the exhaustive approach scales like :math:`\mathcal{O}(N!)`, with :math:`N` the number of tensors in the network, it can handle a handful of tensors within seconds, providing a good benchmark. In addition, compared to the following algorithms, the exhaustive search guarantees to find the global minimum optimizing the desired metric - space and/or time.
-# 
-# .. note::
-# 
-#   A recursive implementation of the depth-first search is used by default in the well known package ``opt_einsum`` `(see docs) <https://optimized-einsum.readthedocs.io/en/stable/optimal_path.html>`_.
-# 
-# Further approaches introduced in [#Gray2021]_ are based on alternative common graph theoretic tasks, rather than searching over the contraction tree space, such as the `balanced bipartitioning <https://en.wikipedia.org/wiki/Balanced_number_partitioning>`_ and `community detection <https://en.wikipedia.org/wiki/Community_structure>`_ algorithms. And even though, these are only heuristics that do not guarantee an optimal contraction path, they can often achieve an arbitrarliy close to optimal performance. 
-# 
-# An extra level of optimization, known as *hyper-optimization* is introduced by the use of different algorithms to find the optimal contraction based on the specific tensor network, as some algorithms are better suited for certain network structures. For an in-depth exploration of these heuristics, please refer to [#Gray2021]_.
-#
-# As we will explore in the next section, we can use tensor networks to simulate quantum circuits. In particular, the calculation of an expectation value corresponds to the contraction of the tensor network into a single tensor (scalar) as discussed in this section. In ``Pennylane``, this simulation can be performed using the :class:`~pennylane.devices.default_tensor.DefaultTensor` device and the method used to find the contraction path can be chosen via the ``contraction_optimizer`` keyword argument.
-
-import pennylane as qml
-
-dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
-
-##############################################################################
-# The different types of values accepted for ``contraction_optimizer`` are determined by the ``optimize`` parameter in ``Quimb`` (see `docs <https://quimb.readthedocs.io/en/latest/tensor-circuit.html#finding-a-contraction-path-the-optimize-kwarg>`_) as this is the backend behind the :class:`~pennylane.devices.default_tensor.DefaultTensor` device. See `this tutorial <https://pennylane.ai/qml/demos/tutorial_How_to_simulate_quantum_circuits_with_tensor_networks/>`_ to learn more the use of this device in ``Pennylane``.
-# 
-# The size of (intermediate) tensors can grow exponential with the number of indices and dimensions, specially for large-scale tensor networks. Thus, we might run into memory problems when performing the contractions. A useful additional technique to split these tensors into more manageable pieces is known as **slicing**. 
-# 
-# The idea is to change space for computation time, by temporarily fixing the values of some indices in the tensors, performing independently the contraction for each fixed value and summing the results [#Gray2021]_.
-
-##############################################################################
 # Quantum circuits are tensor networks
 # ------------------------------------
 # 
