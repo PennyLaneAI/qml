@@ -117,7 +117,7 @@ pl_ideal_circ = qml.QNode(GHZcircuit, dev_pl_ideal)
 pl_noisy_circ = qml.add_noise(pl_ideal_circ, noise_model=noise_model_pl)
 qk_noisy_circ = qml.QNode(GHZcircuit, dev_qk_noisy)
 
-print(qml.draw(pl_noisy_circ, level="device", decimals=1, max_length=250)())
+print(qml.draw(pl_noisy_circ, decimals=1, max_length=250)())
 
 ######################################################################
 # Now let us compare the results to see the equivalence between the two noise models:
