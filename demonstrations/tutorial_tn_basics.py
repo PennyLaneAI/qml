@@ -284,8 +284,8 @@ print(f"Computation cost for A(BC) contraction: {average_time_ms:.8f} ms")
 # From this we see that the second contraction path yields a much lower complexity compared to the first one, just as we expected!
 
 ##############################################################################
-# Quantum circuits are tensor networks
-# ------------------------------------
+# Quantum circuits are tensor networks!
+# -------------------------------------
 # 
 # Until now, we have looked at general tensor networks, while ✨sparkling✨ the discussions with examples related to quantum circuits. Here, we leverage the components we have learned to explore this relation more in depth. 
 # 
