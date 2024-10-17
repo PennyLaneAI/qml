@@ -113,7 +113,7 @@ print(circuit(x=1,y=4), " which represents the number ", state_to_decimal(circui
 # We obtained the result :math:`6`, as expected. At this point, it's worth taking a moment to look
 # at the decomposition of the circuit into quantum gates and operators. 
 
-fig, _ = qml.draw_mpl(circuit, decimals = 2, style = "pennylane", level='device')()
+fig, _ = qml.draw_mpl(circuit, decimals = 2, style = "pennylane", level='device')(x=1,y=4)
 fig.show()
 
 ######################################################################
