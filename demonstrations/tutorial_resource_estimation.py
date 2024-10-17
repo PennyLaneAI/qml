@@ -65,12 +65,16 @@ the water molecule at its equilibrium geometry with the
 `6-31g basis set <https://en.wikipedia.org/wiki/Basis_set_(chemistry)>`_ as an example.
 """
 import pennylane as qml
-from pennylane import numpy as np
+import numpy as np
+from jax import numpy as jnp
+import jax
+
+jax.config.update("jax_enable_x64", True)
 
 symbols = ['O', 'H', 'H']
-geometry = np.array([[0.00000000,  0.00000000,  0.28377432],
+geometry = jnp.array([[0.00000000,  0.00000000,  0.28377432],
                      [0.00000000,  1.45278171, -1.00662237],
-                     [0.00000000, -1.45278171, -1.00662237]], requires_grad=False)
+                     [0.00000000, -1.45278171, -1.00662237]])
 
 ##############################################################################
 # Then we construct a molecule object and compute the one- and two-electron
@@ -136,7 +140,7 @@ fig.tight_layout()
 
 planewaves = 100000
 electrons = 156
-vectors = np.array([[9.49,  0.00,  0.00],
+vectors = jnp.array([[9.49,  0.00,  0.00],
                     [0.00, 10.20,  0.00],
                     [0.00,  0.00, 11.83]])
 
