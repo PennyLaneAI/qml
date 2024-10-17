@@ -73,8 +73,6 @@ print(noise_model_qk)
 
 import pennylane as qml
 
-noise_model_pl = NoiseModel()
-
 gate1_fcond = qml.noise.op_in(["U1", "U2", "U3"]) & qml.noise.wires_in(range(n_qubits))
 gate1_noise = qml.noise.partial_wires(qml.DepolarizingChannel, prob_gate)
 
@@ -106,7 +104,6 @@ print(noise_model_pl)
 # Preparing the devices:
 n_shots = int(2e5)
 dev_pl_ideal = qml.device("default.mixed", wires=n_qubits, shots=n_shots)
-dev_pl_noisy = qml.add_noise(dev_pl_ideal, noise_model_pl)
 dev_qk_noisy = qml.device("qiskit.aer", wires=n_qubits, shots=n_shots, noise_model=noise_model_qk)
 
 def GHZcircuit():
@@ -116,7 +113,8 @@ def GHZcircuit():
     return qml.counts(wires=range(n_qubits), all_outcomes=True)
 
 # Preparing the circuits:
-pl_noisy_circ = qml.QNode(GHZcircuit, dev_pl_noisy)
+pl_ideal_circ = qml.QNode(GHZcircuit, dev_pl_ideal)
+pl_noisy_circ = qml.add_noise(pl_ideal_circ, noise_model=noise_model_pl)
 qk_noisy_circ = qml.QNode(GHZcircuit, dev_qk_noisy)
 
 print(qml.draw(pl_noisy_circ, level="device", decimals=1, max_length=250)())
