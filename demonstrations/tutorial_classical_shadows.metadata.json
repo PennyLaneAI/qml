@@ -2,14 +2,14 @@
     "title": "Classical shadows",
     "authors": [
         {
-            "id": "roeland_wiersema"
+            "username": "therooler"
         },
         {
             "id": "brian_doolittle"
         }
     ],
     "dateOfPublication": "2021-06-14T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-14T00:00:00+00:00",
     "categories": [
         "Algorithms"
     ],
@@ -22,7 +22,6 @@
     ],
     "seoDescription": "Learn how to construct classical shadows and use them to estimate observables.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_classical_shadows",
     "references": [
         {
             "id": "Mauro2003",

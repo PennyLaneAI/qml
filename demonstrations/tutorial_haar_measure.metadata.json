@@ -2,11 +2,11 @@
     "title": "Understanding the Haar measure",
     "authors": [
         {
-            "id": "olivia_di_matteo"
+            "username": "glassnotes"
         }
     ],
     "dateOfPublication": "2021-03-22T00:00:00+00:00",
-    "dateOfLastModification": "2024-09-03T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-11T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning",
         "Quantum Computing"
@@ -20,7 +20,6 @@
     ],
     "seoDescription": "Learn all about the Haar measure and how to randomly sample quantum states.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_haar_measure",
     "references": [
         {
             "id": "NandC2000",

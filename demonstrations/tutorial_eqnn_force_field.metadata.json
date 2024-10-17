@@ -2,14 +2,14 @@
     "title": "Symmetry-invariant quantum machine learning force fields",
     "authors": [
         {
-            "id": "oriel_kiss"
+            "username": "orielkiss"
         },
         {
             "id": "isabel_nha_minh_le"
         }
     ],
     "dateOfPublication": "2024-03-12T00:00:00+00:00",
-    "dateOfLastModification": "2024-09-16T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-15T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning",
         "Quantum Chemistry"
@@ -27,7 +27,6 @@
     ],
     "seoDescription": "What is equivariant quantum machine learning for chemistry?",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_eqnn_force_field",
     "references": [
         {
             "id": "Le",

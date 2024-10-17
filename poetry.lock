@@ -2181,7 +2181,6 @@ description = "Python AST that abstracts the underlying Python version"
 optional = false
 python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,>=2.7"
 files = [
-    {file = "gast-0.6.0-py3-none-any.whl", hash = "sha256:52b182313f7330389f72b069ba00f174cfe2a06411099547288839c6cbafbd54"},
     {file = "gast-0.6.0.tar.gz", hash = "sha256:88fc5300d32c7ac6ca7b515310862f71e6fdf2c029bbec7c66c0f5dd47b6b1fb"},
 ]
 
@@ -5568,28 +5567,42 @@ tests = ["coverage", "pytest", "pytest-cov"]
 
 [[package]]
 name = "qulacs"
-version = "0.1.10.1"
+version = "0.6.1"
 description = "Quantum circuit simulator for research"
 optional = false
 python-versions = "*"
 files = [
-    {file = "Qulacs-0.1.10.1-cp27-cp27m-macosx_10_9_x86_64.whl", hash = "sha256:661a4ffa036867c742c4e14539f036179c25970bec499c84c0cea6489297fdfc"},
-    {file = "Qulacs-0.1.10.1-cp27-cp27m-manylinux2010_x86_64.whl", hash = "sha256:34bb1f2de70bd4fbed452e81215ea6fabb228f3c2046f7913b6ae97b9c02c3f5"},
-    {file = "Qulacs-0.1.10.1-cp27-cp27mu-manylinux2010_x86_64.whl", hash = "sha256:3c3d3e30c5982954d9449fb5403f7bd448ad8b1f480b6a989afc02855aa8b18b"},
-    {file = "Qulacs-0.1.10.1-cp35-cp35m-macosx_10_9_x86_64.whl", hash = "sha256:50b66546f38acf0746a8057f416e1d087205db0edf4127db5d6b0d05541962e9"},
-    {file = "Qulacs-0.1.10.1-cp35-cp35m-manylinux2010_x86_64.whl", hash = "sha256:89bdb2ed6c62c6f3c02cea1f6296877967631b8d3511be1f85287b674e178226"},
-    {file = "Qulacs-0.1.10.1-cp35-cp35m-win_amd64.whl", hash = "sha256:96c948587a83a6f2c42686f7f684b61d028eb70be64d271e807ddad94e083336"},
-    {file = "Qulacs-0.1.10.1-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:6120f10a5553d713f18d756eae2d76c7c2334bf2c9e1405589d6992a792e6c18"},
-    {file = "Qulacs-0.1.10.1-cp36-cp36m-manylinux2010_x86_64.whl", hash = "sha256:40ea157a9bf1975e79c67d4e314f89a138ff60a751ede1e82118ec68ec1eccbc"},
-    {file = "Qulacs-0.1.10.1-cp36-cp36m-win_amd64.whl", hash = "sha256:5e1d8dc0c01c455a5a84d163a7ecfc8476e219ea5a31a1df387231fcce870ff1"},
-    {file = "Qulacs-0.1.10.1-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:5db539ac42b8b33d3b42cc5f759e82d1fff2e9f6d61a365da611083b048fd487"},
-    {file = "Qulacs-0.1.10.1-cp37-cp37m-manylinux2010_x86_64.whl", hash = "sha256:68510e18f9c9024408a9a7c0adfc79f8d8eabe79610719f2247989010149fe42"},
-    {file = "Qulacs-0.1.10.1-cp37-cp37m-win_amd64.whl", hash = "sha256:ec687a6e1dc253e26939b068322d6f717f307108f7f5037401d0d98509781362"},
-    {file = "Qulacs-0.1.10.1-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:7a17363d1992d299d5d71b14d47d603316c57404bb9699a1893d3fc3a3b0b058"},
-    {file = "Qulacs-0.1.10.1-cp38-cp38-manylinux2010_x86_64.whl", hash = "sha256:621e84f7efbee9b76ee047066cb94cf328ec94fbcab789ac47ebed1fa5a130c5"},
-    {file = "Qulacs-0.1.10.1-cp38-cp38-win_amd64.whl", hash = "sha256:cf8cd499d9c2fa99ef79e6f800e24cba46d2a1e56a3ce30df288a29deb6458a9"},
-    {file = "Qulacs-0.1.10.1.tar.gz", hash = "sha256:d4313b1792b55bbbfea88ce6291185ed48f9da712418aa9f9931c1c8a8226e6c"},
+    {file = "qulacs-0.6.1-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:f1f1951e9cb55e11ded47b7a652bb03b06f986ba19e6c2ea76b40b159f297f62"},
+    {file = "qulacs-0.6.1-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:7b922972a7b9a827c16dc9e2c14478f276ead2eacad7d545db03ab795854b94f"},
+    {file = "qulacs-0.6.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:a6892d39d46e1b5bd89def6cb96e67316abcb04ba1e1a5d894a2d7a155c0eb27"},
+    {file = "qulacs-0.6.1-cp310-cp310-win_amd64.whl", hash = "sha256:df0f0d0fe6f53ea628960ab32239ba0dd92a5e4b88a2936a24442fd64e58e515"},
+    {file = "qulacs-0.6.1-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:fea830bebadd34f07fb35680c11e7cd712343ea8dbead0d5ef417c70605a4ea4"},
+    {file = "qulacs-0.6.1-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:4807a134e00a9d6f20c488036933ad7c570ba07bcb813c8afd2b06f60c8c98a1"},
+    {file = "qulacs-0.6.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:2ea1c78fda2830a52702cffb7f22b3900282329ac5dcfa7c947dd00b0b126ba5"},
+    {file = "qulacs-0.6.1-cp311-cp311-win_amd64.whl", hash = "sha256:dc18d30a7e809786df0007a7bd7a918f53cc60369ae19a671cb55b65ea5056e5"},
+    {file = "qulacs-0.6.1-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:3f29acc7b86913612ba2b39241b365e0dea9925a4929998dfc2eb94e7d43b81e"},
+    {file = "qulacs-0.6.1-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:69f9ce7c836e0b755a158a4cc392b49ea414c6eb37b109ec3149d7b1f13005dc"},
+    {file = "qulacs-0.6.1-cp37-cp37m-win_amd64.whl", hash = "sha256:536212f0742efa49a6fc91c4c3349b48e669d47f7881a90f88c491d19ef7e732"},
+    {file = "qulacs-0.6.1-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:17142f904cb62f688f76feee07742072bfb9817992dbe5fa73da667e04425c55"},
+    {file = "qulacs-0.6.1-cp38-cp38-macosx_11_0_arm64.whl", hash = "sha256:4c50733917f1b01b11e6be177255fab1be7af5563984f9c06827d038b4af4585"},
+    {file = "qulacs-0.6.1-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:4bd699a68034a2a29e153d30735b561f57f0796bb4d30b2576d1cce1671e8d0b"},
+    {file = "qulacs-0.6.1-cp38-cp38-win_amd64.whl", hash = "sha256:7e251102e157f36ade2b16ff34d65d55515f88ca0bf5be0a93f50232fd08eb97"},
+    {file = "qulacs-0.6.1-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:b553c82db86e9e972b7cfdb816276123cc15aa4877375e8be14c48ec381109aa"},
+    {file = "qulacs-0.6.1-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:60ed40efbeed8141ca171fceefbfa581d93a961601e4053b731262900724e383"},
+    {file = "qulacs-0.6.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:06aaf7a7a01e6179a0362e170c923ac5834b8d0c5433a677dbcfed9aa9fdff02"},
+    {file = "qulacs-0.6.1-cp39-cp39-win_amd64.whl", hash = "sha256:331a8084ed08b0e356149e51a756afd6c628fceb070d64c500d2c657351de909"},
+    {file = "qulacs-0.6.1.tar.gz", hash = "sha256:f958f26de98a37c519ff092167d440931a3ee77f8f628e2ab7441fe15322c28a"},
 ]
+
+[package.dependencies]
+numpy = "*"
+scipy = "*"
+
+[package.extras]
+ci = ["black", "flake8", "isort", "mypy", "openfermion", "pybind11-stubgen", "pytest"]
+dev = ["black", "flake8", "isort", "mypy", "openfermion", "pybind11-stubgen", "pytest"]
+doc = ["breathe (==4.33.*)", "exhale (==0.3.*)", "ipykernel (==6.17.*)", "myst-parser (==0.18.*)", "nbsphinx (==0.8.*)", "sphinx (==4.5.0)", "sphinx-autoapi (==2.0.*)", "sphinx-copybutton (==0.5.*)", "sphinx-rtd-theme (==1.0.*)"]
+test = ["openfermion"]
 
 [[package]]
 name = "qutip"

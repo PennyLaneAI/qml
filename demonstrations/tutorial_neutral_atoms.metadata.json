@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2023-05-30T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-30T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Quantum Hardware",
         "Quantum Computing"
@@ -24,7 +24,6 @@
     ],
     "seoDescription": "Learn how neutral atom quantum devices work using code.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_neutral_atoms",
     "references": [
         {
             "id": "Aquila2022",

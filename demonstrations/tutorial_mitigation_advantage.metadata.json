@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2023-06-16T00:00:00+00:00",
-    "dateOfLastModification": "2024-09-03T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Quantum Hardware",
         "Quantum Computing"
@@ -24,7 +24,6 @@
     ],
     "seoDescription": "Using IBM's 127-qubit quantum computer to simulate deep quantum circuits using Zero Noise Extrapolation",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_mitigation_advantage",
     "references": [
         {
             "id": "ibm",
