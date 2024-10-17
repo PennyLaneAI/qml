@@ -2181,6 +2181,7 @@ description = "Python AST that abstracts the underlying Python version"
 optional = false
 python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,>=2.7"
 files = [
+    {file = "gast-0.6.0-py3-none-any.whl", hash = "sha256:52b182313f7330389f72b069ba00f174cfe2a06411099547288839c6cbafbd54"},
     {file = "gast-0.6.0.tar.gz", hash = "sha256:88fc5300d32c7ac6ca7b515310862f71e6fdf2c029bbec7c66c0f5dd47b6b1fb"},
 ]
 
@@ -4220,6 +4221,7 @@ description = "PennyLane plugin for Qiskit"
 optional = false
 python-versions = "*"
 files = []
+develop = false
 
 [package.dependencies]
 networkx = ">=2.2"
@@ -8021,4 +8023,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.10.0"
-content-hash = "8cd5e7de9968195d8702e4310a0e0097c08b7d128c10ae40d3a4bfc95c80e070"
+content-hash = "901f6882d20329e8e1a693fecb2406f1107b2ad5e1d627a0c91d22e2be569939"
