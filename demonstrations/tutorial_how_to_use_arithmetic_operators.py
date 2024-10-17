@@ -270,7 +270,8 @@ print(circuit(x=1,y=4), " which represents the number ", state_to_decimal(circui
 # At this point, it's interesting to consider what would happen if we had chosen a smaller number of wires for the output.
 # For instance, if we had selected one less wire for the output, we would have obtained the result :math:`33 \mod 2^5 = 1`.
 
-wires = qml.registers({"x": 4, "y": 4, "output": 5})
+wires = qml.registers({"x": 4, "y": 4, "output": 5,"work_wires": 4})
+
 print(circuit(x=1,y=4), " which represents the number ", state_to_decimal(circuit(x=1,y=4)))
 
 ######################################################################
