@@ -29,15 +29,6 @@ jobs:
         uses: actions/checkout@v4
         ref: 'dev'
 
-      # - name: Nightly Merge
-      #   uses: robotology/gh-action-nightly-merge@v1.3.3
-      #   with:
-      #     stable_branch: 'master'
-      #     development_branch: 'dev'
-      #     allow_ff: false
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.NIGHTLY_TOKEN }}
-
       - name: Nightly Merge
         env:
           MERGE_ARGS: --verbose --no-ff --allow-unrelated-histories
@@ -52,6 +43,8 @@ jobs:
             git merge --abort
             exit 1
           else
-            echo "Merged master into dev successfully"
-            exit 0
+            echo "Merged master into dev successfully; pushing"
           fi
+
+          git push
+
