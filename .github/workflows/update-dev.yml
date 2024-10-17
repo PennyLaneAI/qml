@@ -27,12 +27,31 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        ref: 'dev'
+
+      # - name: Nightly Merge
+      #   uses: robotology/gh-action-nightly-merge@v1.3.3
+      #   with:
+      #     stable_branch: 'master'
+      #     development_branch: 'dev'
+      #     allow_ff: false
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.NIGHTLY_TOKEN }}
 
       - name: Nightly Merge
-        uses: robotology/gh-action-nightly-merge@v1.3.3
-        with:
-          stable_branch: 'master'
-          development_branch: 'dev'
-          allow_ff: false
         env:
-          GITHUB_TOKEN: ${{ secrets.NIGHTLY_TOKEN }}
+          MERGE_ARGS: --verbose --no-ff --allow-unrelated-histories
+        run: |
+          git config --global user.email '${{ secrets.AUTO_UPDATE_VERSION_RINGO_EMAIL }}'
+          git config --global user.name "ringo-but-quantum"
+
+          git merge $MERGE_ARGS master
+
+          if [[ $? -ne 0 ]]; then
+            echo "Merge conflicts detected; aborting"
+            git merge --abort
+            exit 1
+          else
+            echo "Merged master into dev successfully"
+            exit 0
+          fi
