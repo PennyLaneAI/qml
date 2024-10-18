@@ -74,6 +74,6 @@
             "link": "https://github.com/amazon-braket/amazon-braket-examples/blob/main/examples/pennylane/3_Hydrogen_Molecule_geometry_with_VQE/3_Hydrogen_Molecule_geometry_with_VQE.ipynb",
             "logo": "/_static/hardware_logos/aws.png"
         }
-    ]
+    ],
     "discussionForumUrl": "https://discuss.pennylane.ai/t/a-brief-overview-of-vqe-demo/7333"
 }
