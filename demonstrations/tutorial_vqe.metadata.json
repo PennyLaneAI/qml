@@ -75,4 +75,5 @@
             "logo": "/_static/hardware_logos/aws.png"
         }
     ]
+    "discussionForumUrl": "https://discuss.pennylane.ai/t/a-brief-overview-of-vqe-demo/7333"
 }
