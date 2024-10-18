@@ -64,6 +64,6 @@
             "id": "function_fitting_qsp",
             "weight": 1.0
         }
-    ]
+    ],
     "discussionForumUrl": "https://discuss.pennylane.ai/t/qsvt-algorithm-computing-the-angles-for-projector-controlled-phase-gate/3203"
 }
