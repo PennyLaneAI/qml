@@ -333,8 +333,10 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # The idea is to change space for computation time, by temporarily fixing the values of some indices in the tensors, performing independently the contraction for each fixed value and summing the results [#Gray2021]_.
 
 ##############################################################################
-# The cost of contracting a network
+# Quantum circuits are tensor networks
 # ---------------------------------
+# 
+# Until now, we have looked at general tensor networks, while ✨sparkling✨ the discussions with examples related to quantum circuits. Here, we leverage the components we have learned to explore this relation more in depth. 
 # 
 # First, it is important to emphasize that quantum circuits don't just "look" or "behave" like tensor networks, but rather they **are** tensor networks! Quantum Circuits are a special class of tensor networks where each horizontal wire corresponds to the Hilbert space of a single qubit and the tensors acting on these subsystems are restricted to be unitary operators, denoting the time evolution of the state (from left to right).
 # 
@@ -429,7 +431,7 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # 
 # .. note::
 #   TODO: add a note on cacheing the results.
-# 
+
 ##############################################################################
 # References
 # ----------
@@ -473,4 +475,3 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 #    A. J. Ferris and G. Vidal.
 #    "Perfect sampling with unitary tensor networks,"
 #    `<http://dx.doi.org/10.1103/PhysRevB.85.165146>`__, Physical Review B, vol. 85, no. 16, 2012.
-
