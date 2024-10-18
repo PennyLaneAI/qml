@@ -2,14 +2,14 @@
     "title": "Classical shadows",
     "authors": [
         {
-            "id": "roeland_wiersema"
+            "username": "therooler"
         },
         {
             "id": "brian_doolittle"
         }
     ],
     "dateOfPublication": "2021-06-14T00:00:00+00:00",
-    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-14T00:00:00+00:00",
     "categories": [
         "Algorithms"
     ],
