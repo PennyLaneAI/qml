@@ -38,5 +38,6 @@
             "id": "ensemble_multi_qpu",
             "weight": 1.0
         }
-    ]
+    ],
+    "discussionForumUrl": "https://discuss.pennylane.ai/t/variational-classifier-demo-question-on-padding/3367"
 }
