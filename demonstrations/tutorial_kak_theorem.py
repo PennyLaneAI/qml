@@ -33,15 +33,12 @@ to accompany the mathematical derivation in code.
     at your favourite linear algebra material, for the latter see our
     :doc:`introduction to (dynamical) Lie algebras </demos/tutorial_liealgebra/>`.
 
+TODO: DO WE NEED MORE INTRODUCTION HERE?
 
-Introduction
-------------
+Lie algebras and their groups
+-----------------------------
 
-Basic mathematical objects
---------------------------
-
-Introduce the mathematical objects that will play together to yield
-the KAK theorem.
+#TODO
 
 (Semi-)simple Lie algebras
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -92,9 +89,11 @@ Of course we could also check the closure manually for this small example.
 
 from itertools import product, combinations
 import pennylane as qml
+from pennylane import X, Y, Z
 import numpy as np
+import matplotlib.pyplot as plt
 
-su2 = [qml.X(0), qml.Y(0), qml.Z(0)]
+su2 = [X(0), Y(0), Z(0)]
 print(f"su(2) is {len(su2)}-dimensional")
 
 all_hermitian = all(qml.equal(qml.adjoint(op).simplify(), op) for op in su2)
@@ -122,8 +121,8 @@ print(f"All operators are traceless: {np.allclose(traces, 0.)}")
 #     In particular, our example here is of the latter type, so it is not only semisimple,
 #     but even simple.
 #
-# Group and algebra interaction
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Lie group from Lie algebra
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # The topic of Lie groups and Lie algebras is a large field of study and there are many
 # things we could talk about in this section. For the sake of brevity, however, we will
@@ -142,6 +141,9 @@ print(f"All operators are traceless: {np.allclose(traces, 0.)}")
 # As we usually think about the unitary algebras :math:`\mathfrak{u}` and their
 # subalgebras, the correspondence is well-known to quantum practitioners: Exponentiate
 # a skew-Hermitian matrix to obtain a unitary operation, i.e., a quantum gate.
+#
+# Interaction between group and algebra
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # We will make use of a particular interaction between the algebra :math:`\mathfrak{g}` and
 # its group :math:`\mathcal{G}`, called the *adjoint action* of :math:`\mathcal{G}` on :math:`\mathfrak{g}`.
@@ -187,8 +189,11 @@ print(f"All operators are traceless: {np.allclose(traces, 0.)}")
 #
 #     Consider a curve through :math:`\mathcal{G}` given by
 #
-# Subalgebras and Cartan decomposition
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Symmetric spaces
+# ----------------
+#
+# Subalgebras and Cartan decompositions
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # A *subalgebra* :math:`\mathfrak{k}` of a Lie algebra :math:`\mathfrak{g}` is a
 # vector subspace that is closed under the Lie bracket. Overall, this means that
@@ -291,7 +296,7 @@ def check_cartan_decomposition(g, k, space_name):
     p = [g_op for g_op in g if is_orthogonal(g_op, k)]
     print(
         f"k has dimension {len(k)}, p has dimension {len(p)}, which combine to "
-        f"the dimension {len(su2)} of su(2): {len(k)+len(p)==len(su2)}"
+        f"the dimension {len(g)} of g: {len(k)+len(p)==len(g)}"
     )
 
     # Check reductive property
@@ -319,48 +324,9 @@ def check_cartan_decomposition(g, k, space_name):
     return p
 
 
-u1 = [qml.Z(0)]
+u1 = [Z(0)]
 space_name = "SU(2)/U(1)"
 p = check_cartan_decomposition(su2, u1, space_name)
-
-"""
-# Subalgebra
-k = [qml.X(0), qml.Y(0), qml.Z(0), qml.X(1), qml.Y(1), qml.Z(1)]
-# Check Lie closure of k
-k_lie_closed = qml.pauli.dla.lie_closure(k)
-print(f"The Lie closure of k is as large as k itself: {len(k_lie_closed)==len(k)}.")
-
-# Orthogonal complement of k
-p = [op for op in su4 if np.allclose([inner_product(op, k_op) for k_op in k], 0)]
-print(
-    f"k has dimension {len(k)}, p has dimension {len(p)}, which combine to "
-    f"the dimension {len(su4)} of su(4): {len(k)+len(p)==len(su4)}"
-)
-
-# Check reductive property
-k_p_commutators = [
-    k_op.pauli_rep.commutator(p_op.pauli_rep) for k_op, p_op in product(k, p)
-]
-k_p_coms_in_p = [
-    np.allclose([inner_product(com, k_op) for k_op in k], 0)
-    for com in k_p_commutators
-]
-print(f"All commutators in [k, p] are in p (orthogonal to k): {all(k_p_coms_in_p)}.")
-if all(k_p_coms_in_p):
-    print("SU(4)/(SU(2)xSU(2)) is a reductive homogeneous space.")
-
-# Check symmetric property
-p_p_commutators = [
-    op1.pauli_rep.commutator(op2.pauli_rep) for op1, op2 in combinations(p, r=2)
-]
-p_p_coms_in_k = [
-    np.allclose([inner_product(com, p_op) for p_op in p], 0)
-    for com in p_p_commutators
-]
-print(f"All commutators in [p, p] are in k (orthogonal to p): {all(p_p_coms_in_k)}.")
-if all(p_p_coms_in_k):
-    print("SU(4)/(SU(2)xSU(2)) is a symmetric space.")
-"""
 
 ######################################################################
 # Cartan subalgebras
@@ -445,19 +411,18 @@ a = p[1]
 
 # Rotate CSA by applying vertical group element
 eta = 0.6
-# The factor -2 compensates the convention -1/2 in the RZ gate
-# TODO
-# a_prime = qml.simplify(qml.prod(qml.RZ(-2 * eta, 0), a, qml.RZ(2 * eta, 0)))
-# a_prime = qml.RZ(-2 * eta, 0).pauli_rep @ a.pauli_rep
-# print(f"The rotated CSA a' is generated by {a_prime}")
 
+# The factor -2 compensates the convention -1/2 in the RZ gate
+a_prime = qml.RZ(-2 * eta, 0) @ a @ qml.RZ(2 * eta, 0)
 a_prime_expected = np.cos(2 * eta) * a + np.sin(2 * eta) * p[0]
-# a_primes_equal = qml.equal(a_prime_expected, a_prime)
-# print(f"This matches the expected rotated CSA from theory: {a_primes_equal}")
+a_primes_equal = np.allclose(qml.matrix(a_prime_expected), qml.matrix(a_prime))
+print(
+    f"The numerically rotated CSA matches the expectation from theory: {a_primes_equal}"
+)
 
 ######################################################################
-# Involutions
-# ~~~~~~~~~~~
+# Cartan involutions
+# ~~~~~~~~~~~~~~~~~~
 #
 # In practice, there often is a more convenient way to a Cartan decomposition
 # than by specifying the subalgebra :math:`\mathfrak{k}` or its horizontal counterpart
@@ -471,7 +436,8 @@ a_prime_expected = np.cos(2 * eta) * a + np.sin(2 * eta) * p[0]
 # #. It is compatible with the commutator, i.e., :math:`\theta([x, y])=[\theta(x),\theta(y)]`, and
 # #. It is an *involution*, i.e., :math:`\theta(\theta(x)) = x`.
 #
-# Put compactly, we demand that :math:`\theta` be an *involutive automorphism* of :math:`\mathfrak{g}`.
+# In short, we demand that :math:`\theta` be an *involutive automorphism* of :math:`\mathfrak{g}`.
+#
 # As an involution, :math:`\theta` only can have the eigenvalues :math:`\pm 1`, with associated
 # eigenspaces :math:`\mathfrak{g}_\pm`. Let's see what happens when we compute commutators between
 # elements :math:`x_\pm\in\mathfrak{g}_\pm`:
@@ -569,7 +535,7 @@ a_prime_expected = np.cos(2 * eta) * a + np.sin(2 * eta) * p[0]
 
 
 def theta_Z(x):
-    return qml.simplify(qml.Z(0) @ x @ qml.Z(0))
+    return qml.simplify(Z(0) @ x @ Z(0))
 
 
 theta_of_u1 = [theta_Z(x) for x in u1]
@@ -591,7 +557,7 @@ print(f"p is the -1 eigenspace: {p_is_su2_minus}")
 
 
 def theta_Y(x):
-    return qml.simplify(qml.Y(0) @ x @ qml.Y(0))
+    return qml.simplify(Y(0) @ x @ Y(0))
 
 
 eigvals = []
@@ -610,7 +576,7 @@ print(
 ######################################################################
 # This worked! a new involution gave us a new subalgebra and Cartan decomposition.
 #
-# .. adminition:: Mathematical detail
+# .. admonition:: Mathematical detail
 #     :class: note
 #
 #     You might already see that the two different decompositions created by :math:`\theta_Z`
@@ -620,8 +586,8 @@ print(
 #     plays a big role when talking about decompositions without getting stuck on details
 #     like the choice of basis or the representation of the algebra.
 #
-# KAK theorem
-# ~~~~~~~~~~~
+# The KAK theorem
+# ---------------
 #
 # Now that we covered all prerequisites, we are ready for our main result. It consists of two steps
 # that are good to know my themselves, so we will look at both of them in sequence. We will not conduct
@@ -675,7 +641,9 @@ print(
 #
 # .. math::
 #
-#     \mathcal{G} &= \mathcal{K} \mathcal{A} \mathcal{K} \quad\textbf{(KAK Theorem).}
+#     \mathcal{G}
+#     &= \{\exp(y_1) \exp(a) \exp(y_2) | a\in\mathfrak{a}, \ y_{1, 2}\in\mathfrak{k}\}\\
+#     &= \mathcal{K} \mathcal{A} \mathcal{K} \qquad\textbf{(KAK Theorem).}
 #
 # It teaches us that any group element can be decomposed into two factors from the Lie subgroup and
 # the exponential of a CSA element, i.e., of commuting elements from the horizontal subspace
@@ -704,16 +672,102 @@ print(qml.Rot(0.5, 0.2, -1.6, wires=0).decomposition())
 # And that's it for our main discussion. We conclude this demo by applying the
 # KAK theorem to the group of arbitrary two-qubit gates.
 #
-# Two-qubit KAK decomposition
-# ---------------------------
+# Application: Two-qubit gate decomposition
+# -----------------------------------------
 #
-# - Algebra/subalgebra :math:`\mathfrak{g} =\mathfrak{su}(4) | \mathfrak{k} =\mathfrak{su}(2) \oplus \mathfrak{su}(2)`
-# - Involution: EvenOdd
-# - CSA: :math:`\mathfrak{a} = \langle\{XX, YY, ZZ\}\rangle_{i\mathbb{R}}`
-# - KAK decomposition :math:`U= (A\otimes B) \exp(i(\eta_x XX+\eta_y YY +\eta_z ZZ)) (C\otimes D)`.
-# - [optional] Mention Cartan coordinates
+# Two-qubit operations are described by the special unitary group :math:`SU(4)` and
+# here we will use a decomposition of its algebra :math:`\mathfrak{su}(4)` to decompose
+# such gates.
+# Specifically, we use the subalgebra that generates single-qubit operations independently
+# on either qubit, :math:`\mathfrak{su}(2)\oplus\mathfrak{su}(2)`. Let's set it up with our
+# tool from earlier:
+
+# Define su(4). Skip first entry of Pauli group, which is the identity
+su4 = list(qml.pauli.pauli_group(2))[1:]
+print(f"su(4) is {len(su4)}-dimensional")
+
+# Define subalgebra su(2) ⊕ su(2)
+su2_su2 = [X(0), Y(0), Z(0), X(1), Y(1), Z(1)]
+space_name = "SU(4)/(SU(2)xSU(2))"
+p = check_cartan_decomposition(su4, su2_su2, space_name)
 
 ######################################################################
+# .. admonition:: Mathematical detail
+#     :class: note
+#
+#     The accompanying involution sorts operators by the number of qubits on which they are
+#     supported (:math:`\mathfrak{k}` is supported on one, :math:`\mathfrak{p}` on two).
+#     This can be realized with the operation
+#
+#     .. math::
+#
+#         \theta(x) = -Y_0Y_1 x^T Y_0Y_1.
+#
+#     Intuitively, the conjugation by :math:`Y_0Y_1` adds a minus
+#     sign for each :math:`X` and :math:`Z` factor in :math:`x`, and the transposition
+#     adds a minus sign for each :math:`Y`. Taken together, each Pauli operator contributes
+#     a minus sign. Finally, as we want the single-qubit operators to receive no sign in total,
+#     we add a minus sign overall.
+#
+# Now we can pick a Cartan subalgebra within :math:`\mathfrak{p}`, the vector space
+# of all two-qubit Paulis. A common choice for this decomposition is
+#
+# .. math::
+#
+#     \mathfrak{a} = \text{span}_{\mathbb{R}}\{iX_0X_1, iY_0Y_1, iZ_0Z_1\}
+#
+# Clearly, these three operators commute, making :math:`\mathfrak{a}` Abelian.
+# They also form a *maximal* Abelian algebra within :math:`\mathfrak{p}`, which is less obvious.
+#
+# The KAK theorem now tells us that any two-qubit gate :math:`U,` being part of
+# :math:`SU(4)`, can be implemented by a sequence
+#
+# .. math::
+#
+#     U &= \exp(y_1) \exp(a)\exp(y_2)\\
+#     &= \exp(i[\varphi^x_0 X_0 + \varphi^y_0 Y_0 + \varphi^z_0 Z_0])
+#     \exp(i[\varphi^x_1 X_1 + \varphi^y_1 Y_1 + \varphi^z_1 Z_1])\\
+#     &\times \exp(i [\eta^x X_0X_1 + \eta^y Y_0Y_1 + \eta^z Z_0Z_1])\\
+#     &\times \exp(i[\vartheta^x_0 X_0 + \vartheta^y_0 Y_0 + \vartheta^z_0 Z_0])
+#     \exp(i[\vartheta^x_1 X_1 + \vartheta^y_1 Y_1 + \vartheta^z_1 Z_1]).
+#
+# Here we decomposed the exponentials of the vertical elements :math:`y_{1,2}` further by splitting them
+# into exponentials acting on the first and second qubit, respectively.
+#
+# The three parameters :math:`\eta^{x, y, z}` sometimes are called the Cartan coordinates
+# of :math:`U`, and they can be used, e.g., to assess the smallest-possible duration to
+# implement the gate in hardware.
+#
+# With this result, we can implement a template that can create any two-qubit gate.
+# We'll use :class:`~.pennylane.Rot` for the single-qubit exponentials (which changes
+# the meaning of the angles, but maintains coverage) and are allowed to
+# split the Cartan subalgebra term :math:`\exp(a)` into three exponentials, as the
+# terms commute.
+#
+
+
+def su4_gate(params):
+    phi0, phi1, eta, theta0, theta1 = np.split(params, range(3, 15, 3))
+    qml.Rot(*phi0, wires=0)
+    qml.Rot(*phi1, wires=1)
+    qml.IsingXX(eta[0], wires=[0, 1])
+    qml.IsingYY(eta[1], wires=[0, 1])
+    qml.IsingZZ(eta[2], wires=[0, 1])
+    qml.Rot(*theta0, wires=0)
+    qml.Rot(*theta1, wires=1)
+
+
+params = np.random.random(15)
+fig, ax = qml.draw_mpl(su4_gate, wire_order=[0, 1])(params)
+
+######################################################################
+# And that's a wrap on our KAK theorem application for two-qubit gates!
+#
+# You may have noticed that the theorem only states the existence of a
+# decomposition, but does not provide a constructive way of finding
+# :math:`y_{1,2}` and :math:`a` for a given gate :math:`U`. If you are
+# curious about this question, watch out for follow-up demos!
+#
 # Conclusion
 # ----------
 #
