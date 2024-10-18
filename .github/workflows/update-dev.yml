@@ -40,10 +40,7 @@ jobs:
           git config --global user.name $CONFIG_USERNAME
           git remote set-url origin https://${{ secrets.NIGHTLY_TOKEN }}@github.com/PennyLaneAI/qml.git
 
-          git checkout -b update-dev-test-branch
-          git push -u origin update-dev-test-branch
-
-          # git fetch origin master
-          # git merge $MERGE_ARGS origin/master
-          # git push
+          git fetch origin master
+          git merge $MERGE_ARGS origin/master
+          git push
 
