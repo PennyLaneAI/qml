@@ -32,15 +32,16 @@ jobs:
 
       - name: Nightly Merge
         env:
-          MERGE_ARGS: --verbose --no-ff --allow-unrelated-histories
+          MERGE_ARGS: --verbose --no-ff --allow-unrelated-histories --no-edit
           CONFIG_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
           CONFIG_USERNAME: github-actions[bot]
         run: |
           git config --global user.email $CONFIG_EMAIL
           git config --global user.name $CONFIG_USERNAME
-          git remote set-url origin https://${{ secrets.NIGHTLY_TOKEN }}@github.com/PennyLaneAI/qml.git
+          git remote set-url origin https://x-access-token:${{ secrets.NIGHTLY_TOKEN }}@github.com/PennyLaneAI/qml.git
 
           git fetch origin master
+          (git checkout master && git pull) || git checkout -b master origin/master
           git merge $MERGE_ARGS origin/master
           git push
 
