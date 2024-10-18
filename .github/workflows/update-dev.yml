@@ -32,9 +32,12 @@ jobs:
       - name: Nightly Merge
         env:
           MERGE_ARGS: --verbose --no-ff --allow-unrelated-histories
+          CONFIG_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+          CONFIG_USERNAME: github-actions[bot]
         run: |
-          git config --global user.email '${{ secrets.AUTO_UPDATE_VERSION_RINGO_EMAIL }}'
-          git config --global user.name "ringo-but-quantum"
+          git config --global user.email $CONFIG_EMAIL
+          git config --global user.name $CONFIG_USERNAME
+          git remote set-url origin https://${{ secrets.NIGHTLY_TOKEN }}@https://github.com/PennyLaneAI/qml.git
 
           git merge $MERGE_ARGS master
 
