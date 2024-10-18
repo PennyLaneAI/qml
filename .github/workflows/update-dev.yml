@@ -42,14 +42,5 @@ jobs:
 
           git fetch origin master
           git merge $MERGE_ARGS origin/master
-
-          if [[ $? -ne 0 ]]; then
-            echo "Merge conflicts detected; aborting"
-            git merge --abort
-            exit 1
-          else
-            echo "Merged master into dev successfully; pushing"
-          fi
-
           git push
 
