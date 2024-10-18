@@ -41,7 +41,7 @@ jobs:
           git remote set-url origin https://${{ secrets.NIGHTLY_TOKEN }}@github.com/PennyLaneAI/qml.git
 
           git fetch origin master
-          git merge $MERGE_ARGS master
+          git merge $MERGE_ARGS origin/master
 
           if [[ $? -ne 0 ]]; then
             echo "Merge conflicts detected; aborting"
