@@ -41,8 +41,8 @@ jobs:
           git remote set-url origin https://${{ secrets.NIGHTLY_TOKEN }}@github.com/PennyLaneAI/qml.git
 
           git checkout -b update-dev-test-branch
-          git push -u origin
-          exit 0
+          git push -u origin update-dev-test-branch
+
           # git fetch origin master
           # git merge $MERGE_ARGS origin/master
           # git push
