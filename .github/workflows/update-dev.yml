@@ -32,7 +32,8 @@ jobs:
 
       - name: Nightly Merge
         env:
-          MERGE_ARGS: --verbose --no-ff --allow-unrelated-histories
+          # MERGE_ARGS: --verbose --no-ff --allow-unrelated-histories
+          MERGE_ARGS: --verbose --no-ff
           CONFIG_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
           CONFIG_USERNAME: github-actions[bot]
         run: |
