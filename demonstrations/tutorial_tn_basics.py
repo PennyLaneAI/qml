@@ -1,9 +1,13 @@
-r"""Tutorial: ABC of tensor networks
+r"""Tutorial: ABC of tensor networks for quantum circuits
 =============================================================
 
-Intro:
-- introduce where are tensor networks used (physics, math, machine learning), why are they so widely spread, and mention how they are not just a data structure but also a diagrammatic language for formal reasoning and even proofs!
-- Define the scope of this tutorial: basics of tensor networks, their relation to quantum circuits, and the importance of choosing the contraction paths.
+If you are in the domain of quantum computing or quantum information, chances are that you have heard (maybe a lot) tensor networks being brough to the conversation. In fact, they are not only useful in these areas, but actually there a rather widespread "tool" with applications ranging from physics, math and computer science.
+
+Part of the excitement surrounding tensor networks is due to their ability to represent complex data using an efficient representation, which allows for - among other things- fast classical simulations. In addition, the diagramatic language accompanying tensor networks makes working with them intuitive and suitable to describe a vast range of mathematical concepts, among them quantum circuits.
+
+In this tutorial, we aim to provide an introduction to tensor networks with a focus on its applications for quantum computing. We choose to start by discussing the basic notions and definitions of tensors and tensor networks, and work our way up to more advanced topics such as contraction paths and algorithms used to simulate quantum computers using tensor networks.
+
+Without further a do, let us dive right in! 🤓📚
 
 From matrices to tensors
 -------------------------------
@@ -14,7 +18,7 @@ A tensor of dimensions :math:`d_1 \times d_2 \times \ldots \times d_r` can be ex
 .. math::
     T_{i_1, i_2, \ldots, i_r} \in \mathbb{C}^{d_1 \times d_2 \times \ldots \times d_r}.
     
-Where each :math:`i_n` is an *index* of dimension :math:`d_n` - it can take values ranging from :math:`1` to :math:`d_n`-, and the number of indices :math:`r` is known as the *rank* of the tensor. We say :math:`T` is a rank-r tensor.
+Where each :math:`i_n` is an *index* of dimension :math:`d_n` - it takes integer values such that :math:`i_n \in [1, d_n] - and the number of indices :math:`r` is known as the *rank* of the tensor. We say :math:`T` is a rank-:math:`r` tensor.
 
 .. tip::
     Some authors refer to the indices of the tensors as their dimensions. In this tutorial, these two concepts will have have different meanings, although related.
@@ -39,7 +43,7 @@ When working within the quantum computing notation, we adopt the convention that
 
 .. figure:: ../_static/demonstration_assets/tn_basics/03-braket.png
     :align: center
-    :width: 50%
+    :width: 55%
 
 .. tip::
     The diagrammatic representation of tensors is rooted in category theory, which equips the diagrams with all the relevant information so they can used in proofs and formal reasoning! [#Selinger2010]_
@@ -84,7 +88,7 @@ print("Rank-3 tensor: \n", tensor_rank3)
 #
 # .. figure:: ../_static/demonstration_assets/tn_basics/04-matrix-vector.png
 #     :align: center
-#     :width: 50%
+#     :width: 55%
 # 
 # .. note::
 # 
@@ -98,7 +102,7 @@ print("Rank-3 tensor: \n", tensor_rank3)
 # 
 # .. figure:: ../_static/demonstration_assets/tn_basics/05-matrix-matrix.png
 #     :align: center
-#     :width: 50%
+#     :width: 55%
 #
 # In this case, the resulting tensor has two dangling indices, :math:`i` and :math:`k`, which defines a matrix, as expected!
 #
@@ -111,7 +115,7 @@ print("Rank-3 tensor: \n", tensor_rank3)
 #
 # .. figure:: ../_static/demonstration_assets/tn_basics/06-tensor-tensor.png
 #     :align: center
-#     :width: 50%
+#     :width: 55%
 #
 # With the above contraction we have formed a network of tensors, i.e., a **Tensor Network**!
 #
@@ -132,6 +136,9 @@ D = np.einsum("ijk, jlm, kmn -> iln", A, B, C)
 print(D.shape)
 
 ##############################################################################
+# The CNOT gate
+# ~~~~~~~~~~~~~
+# 
 # To end this section, we want to discuss a common example of a tensor network contraction arising in quantum computing, namely the **CNOT** gate. The CNOT gate can be expressed in the computational basis as
 #
 # .. math::
@@ -162,7 +169,7 @@ print(D.shape)
 #
 # .. figure:: ../_static/demonstration_assets/tn_basics/07-t1-t2.png
 #     :align: center
-#     :width: 55%
+#     :width: 60%
 #
 # Then, their contraction results in the well known CNOT quantum circuit representation.
 #
@@ -429,7 +436,7 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # .. math::
 #   | p_{x_2 | \hat{x}_1} \rangle  = \mathrm{diag} \left( \mathrm{Tr}_{3,4, \ldots,N}(| \psi_{x_1} \rangle \langle \psi_{x_1} |) \right).
 # 
-# From this vector, we sample the next value :math:`\hat{x}_2` (just like we sampled :math:`\hat{x}_1}`) and use it to compute the next term :math:`p(x_3| \hat{x}_1 \hat{x}_2)` using the same procedure. The following diagram shows the full tensor network for this step including the projection onto the computational basis state :math:`| \hat{x}_1 \rangle`.
+# From this vector, we sample the next value :math:`\hat{x}_2` (just like we sampled :math:`\hat{x}_1`) and use it to compute the next term :math:`p(x_3| \hat{x}_1 \hat{x}_2)` using the same procedure. The following diagram shows the full tensor network for this step including the projection onto the computational basis state :math:`| \hat{x}_1 \rangle`.
 # 
 # .. figure:: ../_static/demonstration_assets/tn_basics/14-sample-cntd.png
 #     :align: center
@@ -439,6 +446,13 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # 
 # .. note::
 #   We can reduce the computational cost of this algorithm by **caching** results from previous contractions. When we draw a new sample that partially matches a previously explored configuration (marginal probability), we can reuse the cached results and avoid contracting this part of the network over again. For example, let's assume we have performed the perfect sampling algorithm once and obtained the sample :math:`0110`. If the next sample we need to generate starts with the substring :math:`01`, we can reuse the marginal probabilies up to :math:`p(x_3|01)` and only calculate the new parts of the sequence. The same caching idea can be applied to other tensor network algorithms involving many contractions.
+
+##############################################################################
+# 
+# Conclusion
+# ----------
+# 
+# 
 
 ##############################################################################
 # References
