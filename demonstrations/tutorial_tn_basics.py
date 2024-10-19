@@ -1,7 +1,7 @@
 r"""Tutorial: ABC of tensor networks for quantum circuits
 =============================================================
 
-If you are in the domain of quantum computing or quantum information, chances are that you have heard (maybe a lot) tensor networks being brough to the conversation. In fact, they are not only useful in these areas, but actually there a rather widespread "tool" with applications ranging from physics, math and computer science.
+If you are in the domain of quantum computing or quantum information, chances are that you have heard (maybe a lot) tensor networks being brough to the conversation. In fact, they are not only useful in these areas, but actually they are rather a widespread "tool" with applications ranging from physics, math and computer science.
 
 Part of the excitement surrounding tensor networks is due to their ability to represent complex data using an efficient representation, which allows for - among other things- fast classical simulations. In addition, the diagramatic language accompanying tensor networks makes working with them intuitive and suitable to describe a vast range of mathematical concepts, among them quantum circuits.
 
@@ -18,7 +18,7 @@ A tensor of dimensions :math:`d_1 \times d_2 \times \ldots \times d_r` can be ex
 .. math::
     T_{i_1, i_2, \ldots, i_r} \in \mathbb{C}^{d_1 \times d_2 \times \ldots \times d_r}.
     
-Where each :math:`i_n` is an *index* of dimension :math:`d_n` - it takes integer values such that :math:`i_n \in [1, d_n] - and the number of indices :math:`r` is known as the *rank* of the tensor. We say :math:`T` is a rank-:math:`r` tensor.
+Where each :math:`i_n` is an *index* of dimension :math:`d_n` - it takes integer values such that :math:`i_n \in [1, d_n]` - and the number of indices :math:`r` is known as the *rank* of the tensor. We say :math:`T` is a rank-:math:`r` tensor.
 
 .. tip::
     Some authors refer to the indices of the tensors as their dimensions. In this tutorial, these two concepts will have have different meanings, although related.
@@ -46,7 +46,7 @@ When working within the quantum computing notation, we adopt the convention that
     :width: 55%
 
 .. tip::
-    The diagrammatic representation of tensors is rooted in category theory, which equips the diagrams with all the relevant information so they can used in proofs and formal reasoning! [#Selinger2010]_
+    The diagrammatic representation of tensors is rooted in category theory, which equips the diagrams with all the relevant information so they can used in proofs and formal reasoning! 💡 [#Selinger2010]_
 
 Creating a tensor in code is straightforward, and chances are you have already created one yourself. Using ``Numpy``, all we have to do is to create a ``np.array`` of the desired rank. For instance, we can start crearting a rank-1 tensor (a vector).
 """
@@ -73,7 +73,7 @@ print("dimensions: ", tensor_rank3.shape)
 print("Rank-3 tensor: \n", tensor_rank3)
 
 ##############################################################################
-# We can create a tensor of arbitrary rank following a similar procedure. This recursive approach is instructive to understand a rank-r tensor as made up of rank-(r-1) tensors, which translates to the code as adding an additional level in the nested bracket structure ``[tensor_rank_r-1]``.
+# We can create a tensor of arbitrary rank following a similar procedure. This recursive approach is instructive to understand a rank-:math:`r` tensor as made up of rank-:math:`(r-1)` tensors, which translates to the code as adding an additional level in the nested bracket structure ``[tensor_rank_r-1]``.
 #
 
 ##############################################################################
@@ -106,7 +106,7 @@ print("Rank-3 tensor: \n", tensor_rank3)
 #
 # In this case, the resulting tensor has two dangling indices, :math:`i` and :math:`k`, which defines a matrix, as expected!
 #
-# We can now generalize this concept to tensors, and consequently, to more than a pair of legs being contracted. For example, let us look at three tensors :math:`A_{i,j,k}`, :math:`B_{j,l,m}` and :math:`C_{k,m,n}`. To contract them, all we need to do is to sum over repeated indices (:math:`j`, :math:`k`, :math:`m`), just as we would do in `Einstein convention <https://en.wikipedia.org/wiki/Einstein_notation>`_. Thus, the (i,l,n)-th element of the resulting tensor :math:`D` is
+# We can now generalize this concept to tensors, and consequently, to more than a pair of legs being contracted. For example, let us look at three tensors :math:`A_{i,j,k}`, :math:`B_{j,l,m}` and :math:`C_{k,m,n}`. To contract them, all we need to do is to sum over repeated indices (:math:`j`, :math:`k`, :math:`m`), just as we would do in `Einstein convention <https://en.wikipedia.org/wiki/Einstein_notation>`_. Thus, the :math:`(i,l,n)`-th element of the resulting tensor :math:`D` is
 #
 # .. math::
 #     (D)_{i,l,n} = \sum_{j,k,m} A_{i,j,k} B_{j,l,m} C_{k,m,n} .
@@ -122,7 +122,7 @@ print("Rank-3 tensor: \n", tensor_rank3)
 # .. tip::
 #   A common question arising when drawing a tensor is "what is the correct order to draw the indices". For instance, in the figure above we have adopted the convention that a tensor :math:`A_{i,j,k}` corresponds to a diagram with the the first leg (:math:`i`) pointing left, the second leg (:math:`j`) pointing upwards and the third leg (:math:`k`) pointing right, and similarly for the other two tensors. However, this need not be the case. We could have defined the first leg to be the one pointing upwards, for example. Based on the use case, and the user, some conventions might seem more natural than others. The only important thing to keep in mind is to be consistent. In other words, once we choose a convetion for the order, we should apply it to all the tensors to avoid contracting the wrong indices ❌.
 #
-# Remember we pointed out the similarity in the notation between the tensor network contractions and Einstein notation? Then, it doesn't come as a suprise that we can perform a contraction using the function ``np.einsum``. To do so, we can start creating the 3 tensors to be contracted by reshaping a 1D array (created using``np.arange``) into rank-3 tensors of the correct dimensions.
+# Remember we pointed out the similarity in the notation between the tensor network contractions and Einstein notation? Then, it doesn't come as a suprise that we can perform a contraction using the function ``np.einsum``. To do so, we can start creating the 3 tensors to be contracted by reshaping a 1D array (created using ``np.arange``) into rank-3 tensors of the correct dimensions.
 
 # Create the individual rank-3 tensors
 A = np.arange(6).reshape(1, 2, 3)  # ijk
@@ -130,7 +130,7 @@ B = np.arange(6).reshape(2, 3, 1)  # jlm
 C = np.arange(6).reshape(3, 1, 2)  # kmn
 
 ##############################################################################
-# The ``np.einsum`` function takes as inputs the tensors to be contracted and a string showing the indices of the each tensor and (optionally) the indices of the output tensor.
+# The ``np.einsum`` function takes as inputs the tensors to be contracted and a string showing the indices of each tensor and (optionally) the indices of the output tensor.
 
 D = np.einsum("ijk, jlm, kmn -> iln", A, B, C)
 print(D.shape)
@@ -160,7 +160,7 @@ print(D.shape)
 #           X
 #         \end{pmatrix}
 #
-# This means :math:`(T^1)_{i,j,k}` and :math:`(T^2)_{l,j,m}` are two rank-3 tensors, where the index :math:`j` "*picks*" the elements in the column vector while the first and last indices correspond to the indices of the internal tensors (matrices). For instance, the :math:`j = 0`-th element of :math:`T^1` and :math:`T^2` are :math:`|0\rangle \langle 0 |` and :math:`I`, respectively. And similarly for their :math:`j = 1`-st element. This means we can redefine the CNOT expression from above as
+# This means :math:`(T^1)_{i,j,k}` and :math:`(T^2)_{l,j,m}` are two rank-3 tensors, where the index :math:`j` *"picks"* the elements in the column vector while the first and last indices correspond to the indices of the internal tensors (matrices). For instance, the :math:`j = 0`-th element of :math:`T^1` and :math:`T^2` are :math:`|0\rangle \langle 0 |` and :math:`I`, respectively. And similarly for their :math:`j = 1`-st element. This means we can redefine the CNOT expression from above as
 #
 # .. math::
 #   CNOT = \sum_j (T^1)_{i,j,k} \otimes (T^2)_{l,j,m}.
@@ -452,7 +452,11 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # Conclusion
 # ----------
 # 
+# And that is it for this tutorial!
 # 
+# Although the world of tensor networks and their relation to quantum computing is vastly wider than what we could ever cover in one tutorial, we hope that after this explanations you now feel equipped with the tools needed dive deeper into this topic by yourself. 🔍
+# 
+# If you want to learn more about how to use tensor networks as a diagramatic tool, check out `these amazing lectures notes <https://arxiv.org/pdf/1912.10049>`_ by J.Biamonte. In addition, check out `this website <https://tensornetwork.org/about/>`_ for great explanations on many important algorithms and tensor network structures by Flatiron Institute.
 
 ##############################################################################
 # References
