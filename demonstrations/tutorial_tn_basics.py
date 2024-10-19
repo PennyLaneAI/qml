@@ -452,11 +452,11 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # Conclusion
 # ----------
 # 
-# And that is it for this tutorial!
-# 
-# Although the world of tensor networks and their relation to quantum computing is vastly wider than what we could ever cover in one tutorial, we hope that after this explanations you now feel equipped with the tools needed dive deeper into this topic by yourself. 🔍
+# Although the world of tensor networks and their relation to quantum computing is vastly wider than what we could ever cover in one tutorial, we hope that after this explanations you now feel equipped with the tools needed to dive deeper into this topic by yourself. 🔍
 # 
 # If you want to learn more about how to use tensor networks as a diagramatic tool, check out `these amazing lectures notes <https://arxiv.org/pdf/1912.10049>`_ by J.Biamonte. In addition, check out `this website <https://tensornetwork.org/about/>`_ for great explanations on many important algorithms and tensor network structures by Flatiron Institute.
+# 
+# And that is it for this tutorial! 🎉
 
 ##############################################################################
 # References
@@ -501,3 +501,8 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 #    A. J. Ferris and G. Vidal.
 #    "Perfect sampling with unitary tensor networks,"
 #    `<http://dx.doi.org/10.1103/PhysRevB.85.165146>`__, Physical Review B, vol. 85, no. 16, 2012.
+
+##############################################################################
+# About the author
+# ----------------
+#
