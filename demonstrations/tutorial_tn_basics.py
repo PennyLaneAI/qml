@@ -25,13 +25,13 @@ A beautiful and powerful tool accompanying tensors (networks) is their graphical
     
 .. figure:: ../_static/demonstration_assets/tn_basics/01-tensor.png
     :align: center
-    :width: 50%
+    :width: 40%
 
 We can apply this same idea to represent a scalar, a vector and a matrix:
 
 .. figure:: ../_static/demonstration_assets/tn_basics/02-tensors.png
     :align: center
-    :width: 50%
+    :width: 40%
 
 Does the last diagram seem familiar? It is because this is the representation of a single-qubit gate! We will see later in this tutorial the relation between quantum circuits and tensor networks. 
 
@@ -162,13 +162,15 @@ print(D.shape)
 #
 # .. figure:: ../_static/demonstration_assets/tn_basics/07-t1-t2.png
 #     :align: center
-#     :width: 50%
+#     :width: 55%
 #
 # Then, their contraction results in the well known CNOT quantum circuit representation.
 #
+# TODO: add a tensor with for legs with the label CNOT after everything.
+# 
 # .. figure:: ../_static/demonstration_assets/tn_basics/08-cnot.png
 #     :align: center
-#     :width: 50%
+#     :width: 45%
 # 
 # .. note::
 #   By looking at the elements of the COPY tensor, we can interpret it as being equal to unity when all the indices have the same value (0 or 1) and vanishing otherwise. On the other hand, the XOR tensor can be understood as being equal to unity when the values of the three indices contain an even number of 1's and vanishing otherwise. We anticipate that the COPY tensor can be used to obtain the diagonal of a matrix. This will be useful in the last section of this tutorial.
@@ -349,7 +351,7 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # 
 # .. figure:: ../_static/demonstration_assets/tn_basics/11-circuit.png
 #     :align: center
-#     :width: 35%
+#     :width: 45%
 # 
 # In the right hand side of the equality we have assumed a specific form for the U tensor in terms of local 2-qubit gates, which is often the case when dealing with real quantum hardware. In addition, it is common for the initial state to be a product state such as :math:`|0\rangle^{\otimes N}`, hence the form of the tensor in the diagram.
 # 
@@ -358,40 +360,46 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # Expectation values
 # ~~~~~~~~~~~~~~~~~~
 # 
-# As anticipated in the previous section, a natural quantity to compute using the tensor network arising from a quantum circuit is the expectation value of an observable :math:`O` evaluated at the quantum state :math:`\psi`
+# As anticipated in the previous section, a natural quantity to compute using the tensor network arising from a quantum circuit is the expectation value of an observable :math:`O` evaluated at the quantum state :math:`|\psi \rangle`
 # 
 # .. math::
-#   \langle O \rangle = \langle \psi | O | \psi \rangle  = \langle \psi_0 U^\dagger  | O | U \psi_0 \rangle .
+#   \langle O \rangle = \langle \psi | O | \psi \rangle  = \langle \psi_0| U^\dagger O U |\psi_0 \rangle .
 # 
 # If the observable is a linear combination of hermitian operators (e.g., a Hamiltonian)
 # 
 # .. math::
 #   O = \sum_i c_i O_i
 # 
-# we can calculate the total expectation value "naïvely" by computing the inner product for each component :math:`O_i` and summing up the weighted results. However, it is possible to represent this operation more efficiently by means of a tensor network structure called Matrix Product Operator (MPO) [#Pirvu2010]_. Constructing these networks efficiently for hamiltonians of arbitrary structure is an interesting task, which goes beyond the scope of this tutorial.
+# we can calculate the total expectation value "naïvely" by computing the inner product for each component :math:`O_i` and summing up the weighted results.
+# 
+# .. math::
+#   O = \sum_i c_i \langle O_i \rangle = \sum_i c_i \langle \psi | O_i | \psi \rangle.
+# 
+# However, it is possible to perform this operation more efficiently using tensor networks by means of a structure called Matrix Product Operator (MPO) [#Pirvu2010]_. The idea is to construct an efficient representation of the observable :math:`O` which can be contracted with the tensor network from :math:`|\psi \rangle`. Constructing these networks efficiently for hamiltonians of arbitrary structure is an interesting task, which goes beyond the scope of this tutorial.
 # 
 # When the observable of interest is *local*, i.e., it acts on a few neighbouring qubits, we can calculate the expectation value by considering only the section of the quantum circuit within the *reverse light cone* (causal cone) of the observable :math:`O_l`.
+# TODO: here and in the other figures showing light cones, I can add = diagram without gates out of the light cone to show really how it decreases. 
 # 
 # .. figure:: ../_static/demonstration_assets/tn_basics/12-expectation-local.png
 #     :align: center
-#     :width: 35%
+#     :width: 45%
 # 
-# Then, the sections outside of the light cone can be ignored as these correspond to contractions resulting in the identity: :math:`G G^\dagger = I` (see grayed area in the drawing above). This helps us decrease the size of the tensor to be contracted, and consequently, the computational expense, by focusing on the part of the circuit with support inside the light cone of the observable - i.e., the gates that affect the calculation of the expectation value.
+# Then, the sections outside of the light cone (grayed-out gates in the figure above) can be ignored since these are contractions resulting in the identity: :math:`G G^\dagger = I`. This helps us decrease the size of the tensor to be contracted, and consequently, the computational expense, by focusing on the section of the circuit with support inside the light cone of the observable - i.e., the gates that affect the calculation of the expectation value.
 # 
 # .. math::
-#   \langle O_l \rangle = \langle \psi_l | O | \psi_l \rangle.
+#   \langle O_l \rangle = \langle \psi_l | O_l | \psi_l \rangle.
 # 
-# where :math:`\psi_l` is the section of the evolved state within the light cone of the observable.
+# where :math:`| \psi_l \rangle` is the section of the evolved state within the light cone of :math:`O_l`.
 # 
 # Sampling
 # ~~~~~~~~
 # 
-# We can also use the tensor network arising from a quantum circuit to sample bitstrings from the evolved probability distribution :math:`| \psi \rangle`- emulating what you would obtain from a real quantum computer. Since this is an ubiquitous task in quantum information, several algorithms have been proposed to generate samples from probability distributions represented as tensor networks. In particular, here we discuss the "Perfect Sampling Algorithm" applied to unitary tensor networks [#Ferris2012]_, as this generates uncorrelated samples, unlike markov-based approaches.
+# In addition to calculating expectation values, we can also use the tensor network arising from a quantum circuit to sample bitstrings from the evolved probability distribution :math:`| \psi \rangle` - emulating what you would obtain from a real quantum computer. Since this is an ubiquitous task in quantum information, several algorithms have been proposed to generate samples from probability distributions represented as tensor networks. In particular, here we discuss the "Perfect Sampling Algorithm" applied to unitary tensor networks [#Ferris2012]_, as this generates uncorrelated samples, unlike markov-based approaches.
 # 
 # .. note::
 #   The method used in `Quimb <https://quimb.readthedocs.io/en/latest/index.html>`_ (the backend behind :class:`~pennylane.devices.default_tensor.DefaultTensor`) to generate samples from the quantum circuit is also based on this algorithm.
 # 
-# A cornerstone behind this algorithm is the well known `chain rule <https://en.wikipedia.org/wiki/Chain_rule_(probability)>`_ which allows us to write the join probability of an event using only conditional probabilities. Using this, we can express the probability of sampling the bitstring :math:`(x_1, x_2, x_3, \ldots, x_N)` from :math:`| \psi \rangle` as
+# A cornerstone behind this algorithm is the well known `chain rule <https://en.wikipedia.org/wiki/Chain_rule_(probability)>`_ which allows us to write the joint probability of an event using only conditional probabilities. Using this, we can express the probability of sampling the bitstring :math:`(x_1, x_2, x_3, \ldots, x_N)` from :math:`| \psi \rangle` as
 # 
 # .. math::
 #   p(x_1, x_2, x_3, \ldots, x_N) = p(x_1) p(x_2|x_1) p(x_3| x_1 x_2) \ldots p(x_N | x_1 x_2 x_3 \ldots x_{N-1})
@@ -404,33 +412,33 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # Then, the diagonal of this :math:`2 \times 2` density matrix gives us the probability of sampling 0 or 1, i.e., :math:`p(x_1 = 0)` and :math:`p(x_2 = 1)`. This diagonal corresponds to the following probability vector
 # 
 # .. math::
-#   | p_{x_1} \rangle = \sum_{i=0}^{1} p(x_1=i) | i \rangle = \mathrm{diag}\left( \mathrm{Tr}_{2,3,\ldots,N}(| \psi \rangle \langle \psi |) \right).
+#   | p_{x_1} \rangle = \sum_{i=0}^{1} p(x_1=i) | i \rangle =  \mathrm{diag}(\rho_1) = \mathrm{diag}\left( \mathrm{Tr}_{2,3,\ldots,N}(| \psi \rangle \langle \psi |) \right).
 # 
 # The tensor network corresponding to the computation of this vector is
 # 
 # .. figure:: ../_static/demonstration_assets/tn_basics/13-sample.png
 #     :align: center
-#     :width: 35%
-#  
-# In this diagram, we have extracted the diagonal of the reduced density matrix by contracting it with the COPY that we introduced earlier on this tutorial!
+#     :width: 45%
+# .. note:: 
+#   In this diagram, we have extracted the diagonal of the reduced density matrix by contracting it with the COPY tensor introduced earlier on this tutorial!
 # 
-# Once we obtain the probability vector, we can generate a random sample weighted by these probabilities, i.e., we generate a random number :math:`r \in [0,1]` and choose :math:`x_1 = 0` if :math:`r < p(x_1=0)` and :math:`x_1 = 1` otherwise. We save this sample as :math:`\hat{x}_1`.
+# Once we obtain the probability vector, we can generate a random sample weighted by these probabilities. To do so, we generate a random number :math:`r \in [0,1]` and choose :math:`x_1 = 0` if :math:`r < p(x_1=0)` and :math:`x_1 = 1` otherwise. We save this sample as :math:`\hat{x}_1`.
 # 
-# Next, we can calculate the following term :math:`p(x_2|\hat{x}_1)` conditioned on the sample we have just obtained. To do so, we **project** the first qubit to be :math:`\hat{x}_1`. We can do this by contracting the computational basis state :math:`| \hat{x}_1 \rangle` with :math:`|\psi \rangle`, resulting in a smaller state :math:`|\psi_{x_1} \rangle`. Then, we can proceed exactly as we did in the previous step, calculating the reduced density matrix over the remaining qubits, and computing the probability vector
+# Next, we can calculate the following term :math:`p(x_2|\hat{x}_1)` conditioned on the sample we have just obtained. To accomplish this, we **project** the first qubit to be :math:`\hat{x}_1`. We can do this by contracting the computational basis state :math:`| \hat{x}_1 \rangle` with :math:`|\psi \rangle`, resulting in a smaller state :math:`|\psi_{x_1} \rangle`. Then, we can proceed exactly as we did in the previous step, calculating the reduced density matrix :math:`\rho_2` by tracing out the remaining qubits :math:`3,4,\ldots,N` and computing the probability vector from its diagonal
 # 
 # .. math::
-#  | p_{x_2 | \hat{x}_1} \rangle  = \mathrm{diag} \left( \mathrm{Tr}_{3,4, \ldots,N}(| \psi_{x}_1 \rangle \langle \psi_{x}_1 |) \right)
+#   | p_{x_2 | \hat{x}_1} \rangle  = \mathrm{diag} \left( \mathrm{Tr}_{3,4, \ldots,N}(| \psi_{x_1} \rangle \langle \psi_{x_1} |) \right).
 # 
-# from which we sample the next value :math:`\hat{x}_2` and use it to compute the next term :math:`p(x_3| \hat{x}_1 \hat{x}_2)` using the same procedure. The following diagram shows the full tensor network for this step including the projection onto the computational basis state :math:`| \hat{x}_1 \rangle`.
+# From this vector, we sample the next value :math:`\hat{x}_2` (just like we sampled :math:`\hat{x}_1}`) and use it to compute the next term :math:`p(x_3| \hat{x}_1 \hat{x}_2)` using the same procedure. The following diagram shows the full tensor network for this step including the projection onto the computational basis state :math:`| \hat{x}_1 \rangle`.
 # 
 # .. figure:: ../_static/demonstration_assets/tn_basics/14-sample-cntd.png
 #     :align: center
-#     :width: 30%
+#     :width: 45%
 # 
-# Here, similarly as done previously, we should only include in the contraction the parts of the circuit within the light cone of botht the projection and the diagonal computation. This procedure can be repeated recursively until we obtain the final sample :math:`(\hat{x}_1, \hat{x}_2, \hat{x}_3, \ldots, \hat{x}_N)`. To obtain more samples, we repeat the procedure from the beginning.
+# Analogously as done with the expectation values, these contractions only involve the sections of the circuit within the light cone of **both** the projection with :math:`| \hat{x}_1 \rangle` and the contraction with the COPY tensor (diagonal computation). This procedure can be repeated recursively using the chain rule equation until we obtain the full bitstring :math:`(\hat{x}_1, \hat{x}_2, \hat{x}_3, \ldots, \hat{x}_N)`. To obtain more samples, we repeat the procedure from the beginning - this is what makes every sample memoryless or a perfect sample from the probability distribution.
 # 
 # .. note::
-#   TODO: add a note on cacheing the results.
+#   We can reduce the computational cost of this algorithm by **caching** results from previous contractions. When we draw a new sample that partially matches a previously explored configuration (marginal probability), we can reuse the cached results and avoid contracting this part of the network over again. For example, let's assume we have performed the perfect sampling algorithm once and obtained the sample :math:`0110`. If the next sample we need to generate starts with the substring :math:`01`, we can reuse the marginal probabilies up to :math:`p(x_3|01)` and only calculate the new parts of the sequence. The same caching idea can be applied to other tensor network algorithms involving many contractions.
 
 ##############################################################################
 # References
