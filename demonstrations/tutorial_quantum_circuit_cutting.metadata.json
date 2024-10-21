@@ -2,17 +2,17 @@
     "title": "Quantum Circuit Cutting",
     "authors": [
         {
-            "id": "gideon_uchehara"
+            "username": "gideonuchehara"
         },
         {
-            "id": "matija_medvidovic"
+            "username": "Matematija"
         },
         {
             "id": "anuj_apte"
         }
     ],
     "dateOfPublication": "2022-09-02T00:00:00+00:00",
-    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-18T00:00:00+00:00",
     "categories": [
         "Algorithms", "Quantum Computing"
     ],
