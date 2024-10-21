@@ -12,7 +12,7 @@ Measurement optimization
    tutorial_quantum_chemistry Building molecular Hamiltonians
    tutorial_qaoa_intro Intro to QAOA
 
-*Author: Josh Izaac — Posted: 18 January 2021. Last updated: 29 August 2023.*
+*Author: Josh Izaac — Posted: 18 January 2021. Last updated: 8 August 2024.*
 
 The variational quantum eigensolver (VQE) is the OG variational quantum algorithm. Harnessing
 near-term quantum hardware to solve for the electronic structure of molecules, VQE is *the*
@@ -110,11 +110,13 @@ function to download the dataset of the molecule.
 
 import functools
 import warnings
-from pennylane import numpy as np
+import jax
+from jax import numpy as jnp
 import pennylane as qml
 
+jax.config.update("jax_enable_x64", True)
 
-dataset = qml.data.load('qchem', molname="H2", bondlength=0.7)[0]
+dataset = qml.data.load("qchem", molname="H2", bondlength=0.7)[0]
 H, num_qubits = dataset.hamiltonian, len(dataset.hamiltonian.wires)
 
 print("Required number of qubits:", num_qubits)
@@ -141,7 +143,7 @@ ansatz = functools.partial(
 )
 
 # generate the cost function
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev, interface="jax")
 def cost_circuit(params):
     ansatz(params, wires=range(num_qubits))
     return qml.expval(H)
@@ -150,7 +152,9 @@ def cost_circuit(params):
 # If we evaluate this cost function, we can see that it corresponds to 15 different
 # executions under the hood—one per expectation value:
 
-params = np.random.normal(0, np.pi, len(singles) + len(doubles))
+from jax import random as random
+key, scale = random.PRNGKey(0), jnp.pi
+params = random.normal(key, shape=(len(singles) + len(doubles),)) * scale
 with qml.Tracker(dev) as tracker:  # track the number of executions
     print("Cost function value:", cost_circuit(params))
 
@@ -387,20 +391,20 @@ obs = [
 
 dev = qml.device("default.qubit", wires=3)
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev, interface="jax")
 def circuit1(weights):
     qml.StronglyEntanglingLayers(weights, wires=range(3))
     return qml.expval(obs[0])
 
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev, interface="jax")
 def circuit2(weights):
     qml.StronglyEntanglingLayers(weights, wires=range(3))
     return qml.expval(obs[1])
 
 param_shape = qml.templates.StronglyEntanglingLayers.shape(n_layers=3, n_wires=3)
-rng = np.random.default_rng(192933)
-weights = rng.normal(scale=0.1, size=param_shape)
+key, scale = random.PRNGKey(192933), 0.1
+weights = scale * random.normal(key, shape=param_shape)
 
 print("Expectation value of XYI = ", circuit1(weights))
 print("Expectation value of XIZ = ", circuit2(weights))
@@ -409,15 +413,15 @@ print("Expectation value of XIZ = ", circuit2(weights))
 # Now, let's use our QWC approach to reduce this down to a *single* measurement
 # of the probabilities in the shared eigenbasis of both QWC observables:
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev, interface="jax")
 def circuit_qwc(weights):
     qml.StronglyEntanglingLayers(weights, wires=range(3))
 
     # rotate wire 0 into the shared eigenbasis
-    qml.RY(-np.pi / 2, wires=0)
+    qml.RY(-jnp.pi / 2, wires=0)
 
     # rotate wire 1 into the shared eigenbasis
-    qml.RX(np.pi / 2, wires=1)
+    qml.RX(jnp.pi / 2, wires=1)
 
     # wire 2 does not require a rotation
 
@@ -427,7 +431,6 @@ def circuit_qwc(weights):
 
 rotated_probs = circuit_qwc(weights)
 print(rotated_probs)
-
 
 ##############################################################################
 # We're not quite there yet; we have only calculated the probabilities of the variational circuit
@@ -440,12 +443,12 @@ print(rotated_probs)
 # generate the eigenvalues of the full Pauli terms, making sure that the order
 # of the eigenvalues in the Kronecker product corresponds to the tensor product.
 
-eigenvalues_XYI = np.kron(np.kron([1, -1], [1, -1]), [1, 1])
-eigenvalues_XIZ = np.kron(np.kron([1, -1], [1, 1]), [1, -1])
+eigenvalues_XYI = jnp.kron(jnp.kron(jnp.array([1, -1]), jnp.array([1, -1])), jnp.array([1, 1]))
+eigenvalues_XIZ = jnp.kron(jnp.kron(jnp.array([1, -1]), jnp.array([1, 1])), jnp.array([1, -1]))
 
 # Taking the linear combination of the eigenvalues and the probabilities
-print("Expectation value of XYI = ", np.dot(eigenvalues_XYI, rotated_probs))
-print("Expectation value of XIZ = ", np.dot(eigenvalues_XIZ, rotated_probs))
+print("Expectation value of XYI = ", jnp.dot(eigenvalues_XYI, rotated_probs))
+print("Expectation value of XIZ = ", jnp.dot(eigenvalues_XIZ, rotated_probs))
 
 
 ##############################################################################
@@ -455,7 +458,7 @@ print("Expectation value of XIZ = ", np.dot(eigenvalues_XIZ, rotated_probs))
 # Luckily, PennyLane automatically performs this QWC grouping under the hood. We simply
 # return the two QWC Pauli terms from the QNode:
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev, interface="jax")
 def circuit(weights):
     qml.StronglyEntanglingLayers(weights, wires=range(3))
     return [
@@ -711,15 +714,16 @@ rotations, measurements = qml.pauli.diagonalize_qwc_groupings(obs_groupings)
 # However, this isn't strictly necessary—recall previously that the QNode
 # has the capability to *automatically* measure qubit-wise commuting observables!
 
-dev = qml.device("default.qubit", wires=4)
+dev = qml.device("lightning.qubit", wires=4)
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev, interface="jax")
 def circuit(weights, group=None, **kwargs):
     qml.StronglyEntanglingLayers(weights, wires=range(4))
     return [qml.expval(o) for o in group]
 
 param_shape = qml.templates.StronglyEntanglingLayers.shape(n_layers=3, n_wires=4)
-weights = np.random.normal(scale=0.1, size=param_shape)
+key = random.PRNGKey(1)
+weights = random.normal(key, shape=param_shape) * 0.1
 result = [circuit(weights, group=g) for g in obs_groupings]
 
 print("Term expectation values:")
@@ -728,7 +732,7 @@ for group, expvals in enumerate(result):
 
 # Since all the coefficients of the Hamiltonian are unity,
 # we can simply sum the expectation values.
-print("<H> = ", np.sum(np.hstack(result)))
+print("<H> = ", jnp.sum(jnp.hstack(result)))
 
 
 ##############################################################################
@@ -737,9 +741,9 @@ print("<H> = ", np.sum(np.hstack(result)))
 # problems), we can use the option ``grouping_type="qwc"`` in :class:`~.pennylane.Hamiltonian` to
 # automatically optimize the measurements.
 
-H = qml.Hamiltonian(coeffs=np.ones(len(terms)), observables=terms, grouping_type="qwc")
+H = qml.Hamiltonian(coeffs=jnp.ones(len(terms)), observables=terms, grouping_type="qwc")
 _, H_ops = H.terms()
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev, interface="jax")
 def cost_fn(weights):
     qml.StronglyEntanglingLayers(weights, wires=range(4))
     return qml.expval(H)
