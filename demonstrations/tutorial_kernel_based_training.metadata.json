@@ -28,5 +28,6 @@
             "id": "tutorial_variational_classifier",
             "weight": 1.0
         }
-    ]
+    ],
+    "discussionForumUrl": "https://discuss.pennylane.ai/t/kernel-based-training-demonstration/1017"
 }
