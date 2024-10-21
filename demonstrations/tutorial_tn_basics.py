@@ -173,7 +173,6 @@ print(D.shape)
 #
 # Then, their contraction results in the well known CNOT quantum circuit representation.
 #
-# TODO: add a tensor with for legs with the label CNOT after everything.
 # 
 # .. figure:: ../_static/demonstration_assets/tn_basics/08-cnot.png
 #     :align: center
@@ -385,7 +384,6 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # However, it is possible to perform this operation more efficiently using tensor networks by means of a structure called Matrix Product Operator (MPO) [#Pirvu2010]_. The idea is to construct an efficient representation of the observable :math:`O` which can be contracted with the tensor network from :math:`|\psi \rangle`. Constructing these networks efficiently for hamiltonians of arbitrary structure is an interesting task, which goes beyond the scope of this tutorial.
 # 
 # When the observable of interest is *local*, i.e., it acts on a few neighbouring qubits, we can calculate the expectation value by considering only the section of the quantum circuit within the *reverse light cone* (causal cone) of the observable :math:`O_l`.
-# TODO: here and in the other figures showing light cones, I can add = diagram without gates out of the light cone to show really how it decreases. 
 # 
 # .. figure:: ../_static/demonstration_assets/tn_basics/12-expectation-local.png
 #     :align: center
