@@ -34,5 +34,6 @@
             "id": "tutorial_qft_arithmetics",
             "weight": 1.0
         }
-    ]
+    ],
+    "discussionForumUrl": "https://discuss.pennylane.ai/t/understanding-grover/3340"
 }
