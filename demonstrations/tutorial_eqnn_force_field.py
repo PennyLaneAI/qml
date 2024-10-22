@@ -127,7 +127,7 @@ Let’s implement the model depicted above!
 ######################################################################
 # Implementation of the VQLM
 # --------------------------
-# We start by importing the librairies that we will need.
+# We start by importing the libraries that we will need.
 
 import pennylane as qml
 import numpy as np
