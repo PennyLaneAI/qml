@@ -130,9 +130,10 @@ y_test = (y_test - 4) / 2
 #
 
 fig, axes = plt.subplots(nrows=2, ncols=3, layout="constrained")
-for i in range(6):
-    axes[i].matshow(X_train[2*i])
-    axes[i].axis('off')
+for i in range(2):
+    for j in range(3):
+      axes[i][j].matshow(X_train[2*(i+j)])
+      axes[i][j].axis('off')
 fig.subplots_adjust(hspace=0.0)
 fig.tight_layout()
 plt.show()
