@@ -255,7 +255,7 @@ def trainable_layer(weight, wires):
     qml.QubitUnitary(U, wires=wires, id="U")
 
 
-# Invariant observbale
+# Invariant observable
 Heisenberg = [
     qml.PauliX(0) @ qml.PauliX(1),
     qml.PauliY(0) @ qml.PauliY(1),
