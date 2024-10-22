@@ -285,7 +285,7 @@ print(f"Starting with HF state took {len(results_hf)} iterations until convergen
 # And compare with how things go when you run it with the CISD initial state:
 
 
-def cost_fn(param):
+def cost_fn_cisd(param):
     return circuit_VQE(param, initial_state=wf_cisd)
 
 
@@ -293,13 +293,13 @@ theta = jnp.array(jnp.zeros(len(excitations)))
 delta_E, iteration = 10, 0
 results_cisd = []
 opt_state = opt.init(theta)
-prev_energy = cost_fn(theta)
+prev_energy = cost_fn_cisd(theta)
 
 while abs(delta_E) > 1e-5:
-    gradient = jax.grad(cost_fn)(theta)
+    gradient = jax.grad(cost_fn_cisd)(theta)
     updates, opt_state = opt.update(gradient, opt_state)
     theta = optax.apply_updates(theta, updates)
-    new_energy = cost_fn(theta)
+    new_energy = cost_fn_cisd(theta)
     delta_E = new_energy - prev_energy
     prev_energy = new_energy
     results_cisd.append(new_energy)
