@@ -62,10 +62,13 @@ Note that the atomic coordinates are in `Bohr <https://en.wikipedia.org/wiki/Boh
 
 import pennylane as qml
 import jax
-from pennylane import qchem
-from pennylane import numpy as np
-from jax import numpy as jnp
+import numpy as np
 import time
+
+from pennylane import qchem
+from jax import numpy as jnp
+
+jax.config.update("jax_enable_x64", True)
 
 symbols = ["Li", "H"]
 geometry = np.array([[0.0, 0.0, 0.0], [0.0, 0.0, 2.969280527]])
@@ -237,7 +240,7 @@ for n in range(20):
 
 
 def circuit_2(params, excitations, gates_select, params_select):
-    qml.BasisState.compute_decomposition(hf_state, wires=range(qubits))
+    qml.BasisState(hf_state, wires=range(qubits))
 
     for i, gate in enumerate(gates_select):
         if len(gate) == 4:
@@ -343,7 +346,7 @@ params = jnp.zeros(len(excitations))
 
 @qml.qnode(dev, diff_method="parameter-shift", interface="jax")
 def circuit(params):
-    qml.BasisState.compute_decomposition(hf_state, wires=range(qubits))
+    qml.BasisState(hf_state, wires=range(qubits))
 
     for i, excitation in enumerate(excitations):
         if len(excitation) == 4:
