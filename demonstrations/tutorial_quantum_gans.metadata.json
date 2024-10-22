@@ -47,5 +47,6 @@
             "id": "tutorial_QGAN",
             "weight": 1.0
         }
-    ]
+    ],
+    "discussionForumUrl": "https://discuss.pennylane.ai/t/questions-on-qgan-tutorial/2607"
 }
