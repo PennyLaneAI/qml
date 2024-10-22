@@ -222,6 +222,7 @@ wf_hf = import_state(hf_primer)
 
 import pennylane as qml
 from pennylane import qchem
+from jax import numpy as jnp
 
 # generate the molecular Hamiltonian for H3+
 symbols = ["H", "H", "H"]
@@ -259,7 +260,6 @@ def cost_fn(param):
 # Next, we create the VQE optimizer, initialize the variational parameters and run the VQE optimization.
 import optax
 import jax
-from jax import numpy as jnp
 
 opt = optax.sgd(learning_rate=0.4)  # sgd stands for StochasticGradientDescent
 theta = jnp.array(jnp.zeros(len(excitations)))
