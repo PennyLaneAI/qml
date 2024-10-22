@@ -303,7 +303,7 @@ while abs(delta_E) > 1e-5:
     delta_E = new_energy - prev_energy
     prev_energy = new_energy
     results_cisd.append(new_energy)
-    if len(results_hf) % 5 == 0:
+    if len(results_cisd) % 5 == 0:
         print(f"Step = {len(results_cisd)},  Energy = {new_energy:.6f} Ha")
 print(
     f"Starting with CISD state took {len(results_cisd)} iterations until convergence."
