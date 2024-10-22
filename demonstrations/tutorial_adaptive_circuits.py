@@ -221,11 +221,10 @@ doubles_select
 
 import optax
 
-init_params = jnp.zeros(len(doubles_select))
+params_doubles = jnp.zeros(len(doubles_select))
 
 opt = optax.sgd(learning_rate=0.5) # sgd stands for StochasticGradientDescent
-opt_state = opt.init(init_params)
-params_doubles = init_params
+opt_state = opt.init(params_doubles)
 
 for n in range(20):
     gradient = jax.grad(cost_fn, argnums=0)(params_doubles, excitations=doubles_select)
@@ -296,7 +295,7 @@ cost_fn = qml.QNode(circuit_1, dev, interface="jax")
 params = jnp.zeros(len(doubles_select + singles_select))
 
 gates_select = doubles_select + singles_select
-opt_state = opt.init(init_params)
+opt_state = opt.init(params)
 
 for n in range(20):
     t1 = time.time()
