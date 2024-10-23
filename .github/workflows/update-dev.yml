@@ -36,5 +36,8 @@ jobs:
           PUSH_TOKEN: ${{ secrets.NIGHTLY_TOKEN }}
           CONFIG_USERNAME: github-actions[bot]
           CONFIG_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
-        run: sh .github/workflows/merge.sh
+        run: |
+          pwd
+          ls
+          # sh .github/workflows/merge.sh
 
