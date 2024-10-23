@@ -41,6 +41,9 @@ jobs:
           git remote set-url origin https://x-access-token:${{ secrets.NIGHTLY_TOKEN }}@github.com/PennyLaneAI/qml.git
 
           git fetch origin master
-          git merge $MERGE_ARGS origin/master
-          git push
+          (git checkout master && git pull)||git checkout -b master origin/master
+
+          git checkout dev
+          git merge $MERGE_ARGS master
+          git push origin dev
 
