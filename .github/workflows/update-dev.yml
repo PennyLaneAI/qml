@@ -38,6 +38,6 @@ jobs:
           CONFIG_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
         run: |
           pwd
-          ls
+          ls -a
           # sh .github/workflows/merge.sh
 
