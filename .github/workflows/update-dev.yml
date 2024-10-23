@@ -41,7 +41,7 @@ jobs:
           # https://github.com/robotology/gh-action-nightly-merge/blob/master/entrypoint.sh
 
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
-          git remote set-url origin https://x-access-token:$PUSH_TOKEN@github.com/$GITHUB_REPOSITORY.git
+          git remote set-url origin https://x-access-token:$PUSH_TOKEN@github.com/$GITHUB_REPOSITORY
           git config --global user.name "$CONFIG_USERNAME"
           git config --global user.email "$CONFIG_EMAIL"
 
