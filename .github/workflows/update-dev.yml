@@ -27,8 +27,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          ref: 'update-update-dev'
 
       - name: Nightly Merge
         env:
@@ -48,10 +46,10 @@ jobs:
           git config --global user.email "$CONFIG_EMAIL"
 
           git fetch origin $MERGE_HEAD
-          (git checkout $MERGE_HEAD && git pull)||git checkout -b $MERGE_HEAD origin/$MERGE_HEAD
+          git checkout $MERGE_HEAD || git checkout -b $MERGE_HEAD origin/$MERGE_HEAD
 
           git fetch origin $MERGE_BASE
-          (git checkout $MERGE_BASE && git pull)||git checkout -b $MERGE_BASE origin/$MERGE_BASE
+          git checkout $MERGE_BASE || git checkout -b $MERGE_BASE origin/$MERGE_BASE
 
           git merge $MERGE_ARGS $MERGE_HEAD
           git push origin $MERGE_BASE
