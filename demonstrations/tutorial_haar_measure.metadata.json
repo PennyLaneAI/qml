@@ -2,11 +2,11 @@
     "title": "Understanding the Haar measure",
     "authors": [
         {
-            "id": "olivia_di_matteo"
+            "username": "glassnotes"
         }
     ],
     "dateOfPublication": "2021-03-22T00:00:00+00:00",
-    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-11T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning",
         "Quantum Computing"
@@ -139,5 +139,6 @@
             "id": "tutorial_barren_plateaus",
             "weight": 1.0
         }
-    ]
+    ],
+    "discussionForumUrl": "https://discuss.pennylane.ai/t/understanding-the-haar-measure-demo/7334"
 }

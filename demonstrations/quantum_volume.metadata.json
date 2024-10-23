@@ -2,11 +2,11 @@
     "title": "Quantum volume",
     "authors": [
         {
-            "id": "olivia_di_matteo"
+            "username": "glassnotes"
         }
     ],
     "dateOfPublication": "2020-12-15T00:00:00+00:00",
-    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-11T00:00:00+00:00",
     "categories": [
         "Quantum Hardware",
         "Quantum Computing"
