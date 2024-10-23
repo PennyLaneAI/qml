@@ -10,7 +10,7 @@ MERGE_BASE=dev
 MERGE_ARGS="--no-ff --allow-unrelated-histories --no-edit"
 
 git config --global --add safe.directory "$GITHUB_WORKSPACE"
-git remote set-url origin https://x-access-token:${PUSH_TOKEN}@github.com/$GITHUB_REPOSITORY.git
+git remote set-url origin https://x-access-token:$PUSH_TOKEN@github.com/$GITHUB_REPOSITORY.git
 git config --global user.name "$CONFIG_USERNAME"
 git config --global user.email "$CONFIG_EMAIL"
 
