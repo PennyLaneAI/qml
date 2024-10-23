@@ -32,18 +32,9 @@ jobs:
 
       - name: Nightly Merge
         env:
-          MERGE_ARGS: --verbose --no-ff --allow-unrelated-histories --no-edit
-          CONFIG_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+          GITHUB_REPOSITORY: PennyLaneAI/qml
+          PUSH_TOKEN: ${{ secrets.NIGHTLY_TOKEN }}
           CONFIG_USERNAME: github-actions[bot]
-        run: |
-          git config --global user.email $CONFIG_EMAIL
-          git config --global user.name $CONFIG_USERNAME
-          git remote set-url origin https://x-access-token:${{ secrets.NIGHTLY_TOKEN }}@github.com/PennyLaneAI/qml.git
-
-          git fetch origin master
-          (git checkout master && git pull)||git checkout -b master origin/master
-
-          git checkout dev
-          git merge $MERGE_ARGS master
-          git push origin dev
+          CONFIG_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+        run: ./.github/workflows/merge.sh
 
