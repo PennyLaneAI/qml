@@ -28,7 +28,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: 'dev'
+          ref: 'update-update-dev'
 
       - name: Nightly Merge
         env:
@@ -36,8 +36,5 @@ jobs:
           PUSH_TOKEN: ${{ secrets.NIGHTLY_TOKEN }}
           CONFIG_USERNAME: github-actions[bot]
           CONFIG_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
-        run: |
-          pwd
-          ls -a
-          # sh .github/workflows/merge.sh
+        run: ./.github/workflows/merge.sh
 
