@@ -468,5 +468,3 @@ print(f"Ratio of reaction rates is {ratio:.0f}")
 # About the authors
 # -----------------
 # .. include:: ../_static/authors/varun_rishi.txt
-#
-# .. include:: ../_static/authors/juan_miguel_arrazola.txt
