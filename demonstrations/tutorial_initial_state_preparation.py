@@ -157,8 +157,6 @@ print(f"CCSD-based state vector: \n{np.round(wf_ccsd.real, 4)}")
 # Let's take this opportunity to create the Hartree-Fock initial state, to compare the
 # other states against it later on.
 
-import numpy as np
-
 hf_primer = ([[3, 0, 0]], np.array([1.0]))
 wf_hf = import_state(hf_primer)
 
