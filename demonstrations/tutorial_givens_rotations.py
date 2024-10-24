@@ -186,7 +186,6 @@ This can be implemented in PennyLane as follows:
 
 import pennylane as qml
 from jax import numpy as jnp
-import numpy as np
 
 dev = qml.device('lightning.qubit', wires=3)
 
@@ -288,6 +287,8 @@ output = circuit2(x, y)
 # involve only states with three particles.
 
 # constructs binary representation of states with non-zero amplitude
+import numpy as np
+
 states = [np.binary_repr(i, width=6) for i in range(len(output)) if output[i] != 0]
 print(states)
 
