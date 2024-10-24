@@ -382,4 +382,3 @@ print("\n" f"Optimal value of the circuit parameters = {params}")
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/alain_delgado.txt
