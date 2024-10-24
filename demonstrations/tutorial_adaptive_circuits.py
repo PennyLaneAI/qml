@@ -71,7 +71,7 @@ from jax import numpy as jnp
 jax.config.update("jax_enable_x64", True)
 
 symbols = ["Li", "H"]
-geometry = jnp.array([[0.0, 0.0, 0.0], [0.0, 0.0, 2.969280527]])
+geometry = np.array([[0.0, 0.0, 0.0], [0.0, 0.0, 2.969280527]])
 molecule = qchem.Molecule(symbols, geometry)
 
 ##############################################################################
@@ -177,8 +177,17 @@ for i in range(len(operator_pool)):
 #
 # We create a circuit that applies a selected group of gates to the reference Hartree-Fock state.
 
+
+# Re-define H using Jax Arrays
+molecule = qchem.Molecule(symbols, jnp.array(geometry))
+H, qubits = qchem.molecular_hamiltonian(
+    molecule,
+    active_electrons=2,
+    active_orbitals=5
+)
+
 def circuit_1(params, excitations):
-    qml.BasisState(hf_state, wires=range(qubits))
+    qml.BasisState(jnp.array(hf_state), wires=range(qubits))
 
     for i, excitation in enumerate(excitations):
         if len(excitation) == 4:
