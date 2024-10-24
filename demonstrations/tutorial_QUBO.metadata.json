@@ -26,5 +26,7 @@
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],
-    "relatedContent": []
+    "relatedContent": [
+    ],
+    "discussionForumUrl": "https://discuss.pennylane.ai/t/quadratic-unconstrained-binary-optimization-qubo-demo/7339"
 }
