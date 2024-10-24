@@ -1,9 +1,9 @@
 r"""Importing noise models from Qiskit
 =======================================
 
-Noise models describe the various ways in which a quantum system would interact with its
-environment, leading to an evolution that is different from the ideal scenario and often
-captured as a quantum master equation. In general, these models are represented by a set of 
+Noise models describe the various ways in which a quantum system would interact
+with its environment, leading to an evolution that is different from the ideal
+scenario. In general, these models are represented by a set of
 `Kraus operators <https://pennylane.ai/qml/demos/tutorial_noisy_circuits/#noisy-operations>`_
 acting on the quantum state that encapsulates the probabilistic nature of the quantum errors. ⚡
 
@@ -63,11 +63,11 @@ for idx, qubit in enumerate(range(3)):
 print(noise_model_qk)
 
 ######################################################################
-# In contrast, the noise models in PennyLane are :class:`~.pennylane.NoiseModel` with
-# ``conditionals`` (boolean conditions) that help select the operation to which noise
-# is to be inserted and ``noise functions`` (callables) that apply the corresponding
+# In contrast, the noise models in PennyLane are :class:`~.pennylane.NoiseModel`
+# objects with Boolean conditions that help select the operation for which
+# noise is to be inserted and ``noise functions`` (callables) that apply the corresponding
 # noise for the selected operation or measurement process based on some user-provided
-# ``metadata``. This allows for a more functional construction as we can see by
+# ``metadata``. This allows for a more functional construction, as we can see by
 # recreating the noise model from above:
 #
 
@@ -92,13 +92,13 @@ noise_model_pl = qml.NoiseModel(
 print(noise_model_pl)
 
 ######################################################################
-# Therefore, defining the noise model this way gives us more flexibility on
-# its essential components and makes its definition far more readable. 🧠
+# For more information on noise models in PennyLane, check out our
+# :doc:`how-to for noise models in PennyLane <tutorial_how_to_use_noise_models>`.
 #
-# It is important to verify whether these noise models work the intended
-# (and equivalent) way. For this purpose, we can use them while simulating a
+# It is important to verify whether these noise models work the intended way.
+# For this purpose, we can use them while simulating a
 # `GHZ state <https://en.wikipedia.org/wiki/Greenberger–Horne–Zeilinger_state>`_
-# preparation circuit using ``default.mixed`` and ``qiskit.aer`` devices:
+# using the ``default.mixed`` and ``qiskit.aer`` devices:
 #
 
 # Preparing the devices:
@@ -136,9 +136,8 @@ print("Are results equal? ", np.allclose(pl_probs, qk_probs, atol=0.01))
 # Importing Qiskit noise models
 # -----------------------------
 #
-# We hope some of you would have wondered if one could automate this
-# conversion of a Qiskit noise model into an equivalent PennyLane noise model.
-# The answer to this question is YES! 🤩
+# Conversion of a Qiskit noise model into an equivalent PennyLane noise model
+# can be automated with :func:`~.pennylane.from_qiskit_noise`!
 #
 # We can see this in practice for a
 # `GenericBackendV2 <https://docs.quantum.ibm.com/api/qiskit/qiskit.providers.fake_provider.GenericBackendV2>`_
@@ -171,9 +170,8 @@ print(pl_noise_model)
 # 3. Finally, the `Boolean conditionals <https://docs.pennylane.ai/en/stable/code/qml_noise.html#boolean-functions>`_
 #    are constructed and combined based on their associated errors.
 #
-# This can be done for any noise model defined in Qiskit with a minor catch that the
-# classical readout errors are not supported yet in PennyLane. But worry not,
-# these will be supported soon too! 🧑‍💻
+# This can be done for any noise model defined in Qiskit, with a minor catch that
+# the classical readout errors are not supported yet in PennyLane.
 #
 
 ######################################################################
@@ -183,16 +181,16 @@ print(pl_noise_model)
 
 ######################################################################
 # Qiskit provides noise models and tools that one could use to mirror the behaviour of quantum
-# devices. Integrating them into PennyLane is a powerful way to enable users to perform noisy
-# simulations that help them study the effects of noise on quantum circuits and develop noise-robust
-# quantum algorithms. As shown in this how-to guide, users can construct these noise models based
-# on the Qiskit ones either manually by building one-to-one mapping for each kind of error or
-# automatically using the provided conversion functionality. 💪
+# devices. Integrating them into PennyLane is a powerful way to enable users to perform
+# differentiable noisy simulations that help them study the effects of noise on quantum circuits
+# and develop noise-robust quantum algorithms. As shown in this how-to guide, users can construct
+# these noise models based on the Qiskit ones by either manually by building an one-to-one mapping
+# for each kind of error or automatically using the :func:`~.pennylane.from_qiskit_noise`. 💪
 #
 # Should you have any questions about using noise models in PennyLane, you can consult the
 # `noise module documentation <https://docs.pennylane.ai/en/stable/code/qml_noise.html>`_,
-# the :doc:`noise model how-to <tutorial_how_to_use_noise_models>`, the PennyLane Codebook
-# module on `Noisy Quantum Theory <https://pennylane.ai/codebook/#06-noisy-quantum-theory>`_,
+# the PennyLane Codebook module on
+# `Noisy Quantum Theory <https://pennylane.ai/codebook/#06-noisy-quantum-theory>`_,
 # or create a post on the `PennyLane Discussion Forum <https://discuss.pennylane.ai>`_.
 #
 
