@@ -23,18 +23,19 @@ InPlace and OutPlace arithmetic operations
 Let's begin by defining the terms "Inplace" and "Outplace" in the context of arithmetic operators. 
 Inplace operators, like the Adder and Multiplier, directly modify the original quantum state by updating a 
 specific register's state. In contrast, Outplace operators, such as the OutAdder and OutMultiplier, 
-combine multiple states and store the result in a new register, leaving the original states unchanged.
+combine multiple states and store the result in a new register, leaving the original states unchanged. Both kind of operators are
+illustrated in the following figure:
+
+.. figure:: ../_static/demonstration_assets/how_to_use_arithmetic_operators/in_outplace.jpg
+  :align: center
+  :width: 90%
 
 In quantum computing, all arithmetic operations are inherently modular. This means that the result of any 
-operation is reduced modulo :math:mod, where the default is :math:mod=2^n, with :math:n being the number of 
-qubits in the register.Quantum states can represent numbers up to this limit, which is why PennyLane uses it 
-as the default modulo for arithmetic operations. However, users can specify a custom value smaller than this 
-default. It's important to keep this modular behavior in mind when working with quantum arithmetic, as using 
-too few qubits in a quantum register could lead to overflow errors. We will come back to this point later.
-
-Next, we will explore how to define and implement addition and multiplication operators in PennyLane.
-
-Let's start by defining the Inplace and Outplace arithmetic addition operations. 
+operation is reduced modulo :math:`\text{mod}`, where the Pennylane default is :math:`\text{mod}=2^n`, 
+with :math:`n` being the number of qubits in the register. Quantum states can represent numbers up to this limit. 
+However, users can specify a custom value smaller than this default. It's important to keep this modular behavior 
+in mind when working with quantum arithmetic, as using 
+too few qubits in a quantum register could lead to overflow issues. We will come back to this point later. 
 
 Addition operators
 ~~~~~~~~~~~~~~~~~~
@@ -55,9 +56,7 @@ added together and the result is stored in a third wire:
 
    \text{OutAdder} |x \rangle |y \rangle |0 \rangle = |x \rangle |y \rangle |x + y \rangle.
 
-Let's see how to implement these operators in Pennylane.
-
-The first thing to do is to define the `registers of wires <https://pennylane.ai/qml/demos/tutorial_how_to_use_registers/>`_
+To implement these operators in Pennylane, the first step is to define the `registers of wires <https://pennylane.ai/qml/demos/tutorial_how_to_use_registers/>`_
 we will work with:
 """
 
@@ -81,21 +80,25 @@ def circuit(x,y):
     prepare_initial_state(x, y)
     return [qml.sample(wires=wires[name]) for name in ["x", "y", "output"]]
 
-output = circuit(x=1,y=4)
+######################################################################
+# Next, for understandability, we will use an auxiliary function that will 
+# take 1 sample from the circuit and return the associated decimal number.
+# Note that we are sampling from the circuit instead of returning the quantum state to demonstrate 
+# its immediate applicability to hardware. With a single shot, the circuit produces the expected state.
 
 def state_to_decimal(binary_array):
     # Convert a binary array to a decimal number
     return sum(bit * (2 ** idx) for idx, bit in enumerate(reversed(binary_array)))
 
+######################################################################
+# In this example we are setting :math:`x=1` and :math:`y=4` and checking the results are as expected.
+
+output = circuit(x=1,y=4)
 print("x register: ", output[0]," which represents the number ", state_to_decimal(output[0]))
 print("y register: ", output[1]," which represents the number ", state_to_decimal(output[1]))
 print("output register: ", output[2]," which represents the number ", state_to_decimal(output[2]))
 
 ######################################################################
-# In this example we are setting :math:`x=1` and :math:`y=4` and checking the results are as expected.
-# Note that we are sampling from the circuit instead of returning the quantum state to demonstrate 
-# its immediate applicability to hardware. With a single shot, the circuit produces the expected state.
-#
 # Now we can implement an example for the :class:`~.pennylane.Adder`. We will add the integer :math:`5` to the ``wires["x"]`` register
 # that stores the state :math:`|x \rangle=|1 \rangle` previously prepared.
 
@@ -113,7 +116,7 @@ print(circuit(x=1,y=4), " which represents the number ", state_to_decimal(circui
 # We obtained the result :math:`6`, as expected. At this point, it's worth taking a moment to look
 # at the decomposition of the circuit into quantum gates and operators. 
 
-fig, _ = qml.draw_mpl(circuit, decimals = 2, style = "pennylane", level='device')(x=1,y=4)
+fig, _ = qml.draw_mpl(circuit, decimals = 2, style = "pennylane", level='device')(x=1,y=0)
 fig.show()
 
 ######################################################################
@@ -162,14 +165,14 @@ print(circuit(x=1,y=4), " which represents the number ", state_to_decimal(circui
 # for instance :math:`k=3`:
 
 @qml.qnode(dev)
-def circuit():
+def circuit(x):
 
-    qml.BasisState(1, wires=wires["x"])                                #    |1>                                     
-    qml.Multiplier(3, wires["x"], work_wires=wires["work_wires"])      #    |1·3> 
+    prepare_initial_state(x, 0)                                         #    |x>                                    
+    qml.Multiplier(3, wires["x"], work_wires=wires["work_wires"])       #    |3x> 
 
     return qml.sample(wires=wires["x"])
 
-print(circuit(), " which represents the number ", state_to_decimal(circuit()))
+print(circuit(x=1), " which represents the number ", state_to_decimal(circuit(x=1)))
 
 ######################################################################
 # We got the expected result of :math:`3`.
@@ -190,10 +193,8 @@ print(circuit(x=1,y=4), " which represents the number ", state_to_decimal(circui
 ######################################################################
 # Nice! 
 # 
-# After going through these educational examples, you might be curious if it's possible to 
-# use these operations for subtraction or division in a quantum computer. The answer is yes!
-# This is possible through the :func:`~.pennylane.adjoint` operation, which allows us to reverse a multiplication or addition operation, hence enabling
-# modular division and subtraction. We will see this in action in the following section.
+# Note that even though we only covered addition and multiplication, modular subtraction 
+# and division come for free thanks to the :func:`~.pennylane.adjoint` operator.
 #
 # Loading a polynomial into a quantum computer
 # --------------------------------------------
@@ -216,9 +217,10 @@ print(circuit(x=1,y=4), " which represents the number ", state_to_decimal(circui
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Let's start by defining the arithmetic operations to load the function :math:`f(x,y) = 4 + 3xy + 5x + 3y` into a quantum state.
 #
-# First, we need to define a function that will add the term :math:`3xy` to the output register. We will utilize
-# the :class:`~.pennylane.Multiplier` and :class:`~.pennylane.OutMultiplier` operators for this. Note that we will need to use the
-# adjoint function to undo certain multiplications and clean up the input registers after performing the operations.
+# First, we need to define a function that will add the term :math:`3xy` to the output register. We will use
+# the :class:`~.pennylane.Multiplier` and :class:`~.pennylane.OutMultiplier` operators for this. Also, we will employ the
+# adjoint function to undo certain multiplications and clean up the input registers after performing the operations,
+# since :math:`U` does not modify the input registers.
 
 def adding_3xy():
     # |x> --->  |3x>
@@ -234,6 +236,7 @@ def adding_3xy():
 ######################################################################
 # Then we need to add the term :math:`5x + 3y` to the output register, which can be done by using the
 # :class:`~.pennylane.Multiplier` and :class:`~.pennylane.OutAdder` operators.
+
 def adding_5x_3y():
 
     # |x>|y> --->  |5x>|3y>
@@ -249,10 +252,8 @@ def adding_5x_3y():
     qml.adjoint(qml.Multiplier)(3, wires["y"], work_wires=wires["work_wires"])
 
 ######################################################################
-# In this functions, we showed how to undo the multiplication by using the adjoint operation, which in this case is useful to clean
-# the input registers ``wires["x"]`` and ``wires["y"]`` after the operation.
-#
 # Now we can combine all these functions to load the function :math:`f(x,y)= 4 + 3xy + 5 x+ 3 y` into a quantum state.
+
 @qml.qnode(dev)
 def circuit(x,y):
 
@@ -266,7 +267,7 @@ def circuit(x,y):
 print(circuit(x=1,y=4), " which represents the number ", state_to_decimal(circuit(x=1,y=4)))
 
 ######################################################################
-# Cool, we get the correct result 33!
+# Cool, we get the correct result :math:`f(1,4)=33`!
 #
 # At this point, it's interesting to consider what would happen if we had chosen a smaller number of wires for the output.
 # For instance, if we had selected one less wire for the output, we would have obtained the result :math:`33 \mod 2^5 = 1`.
@@ -304,8 +305,7 @@ def circuit_with_Poly(x,y):
    prepare_initial_state(x, y)
    qml.OutPoly(
        f, 
-       x_wires = wires["x"],
-       y_wires = wires["y"],
+       input_registers= [wires["x"], wires["y"]],
        output_wires = wires["output"])
    
    return qml.sample(wires = wires["output"])
