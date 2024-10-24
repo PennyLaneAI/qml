@@ -108,7 +108,7 @@ import numpy as np
 from jax import numpy as jnp
 
 symbols = ["H", "H"]
-coordinates = np.array([[0.0, 0.0, -0.6614], [0.0, 0.0, 0.6614]])
+coordinates = jnp.array([[0.0, 0.0, -0.6614], [0.0, 0.0, 0.6614]])
 basis_set = "sto-3g"
 electrons = 2
 

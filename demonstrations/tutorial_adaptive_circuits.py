@@ -71,7 +71,7 @@ from jax import numpy as jnp
 jax.config.update("jax_enable_x64", True)
 
 symbols = ["Li", "H"]
-geometry = np.array([[0.0, 0.0, 0.0], [0.0, 0.0, 2.969280527]])
+geometry = jnp.array([[0.0, 0.0, 0.0], [0.0, 0.0, 2.969280527]])
 molecule = qchem.Molecule(symbols, geometry)
 
 ##############################################################################
