@@ -45,11 +45,12 @@ jobs:
           git config --global user.name "$CONFIG_USERNAME"
           git config --global user.email "$CONFIG_EMAIL"
 
-          git fetch origin $MERGE_HEAD
+          git fetch origin
+          
           (git checkout $MERGE_HEAD && git pull)
 
-          git fetch origin $MERGE_BASE
-          (git checkout $MERGE_HEAD && git pull)
+
+          (git checkout $MERGE_BASE && git pull)
 
           git merge $MERGE_ARGS $MERGE_HEAD
           git push origin $MERGE_BASE
