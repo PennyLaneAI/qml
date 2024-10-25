@@ -1,37 +1,37 @@
 r"""Tutorial: ABC of tensor networks for quantum circuits
 =============================================================
 
-If you are in the domain of quantum computing or quantum information, chances are that you have heard (maybe a lot) tensor networks being brough to the conversation. In fact, they are not only useful in these areas, but actually they are rather a widespread "tool" with applications ranging from physics, math and computer science.
+If you are in the domain of quantum computing or quantum information, chances are that you have heard (maybe a lot) about tensor networks being brought into the conversation. In fact, they are not only useful in these areas, but actually they are rather a widespread "tool" with applications ranging across physics, math, and computer science.
 
-Part of the excitement surrounding tensor networks is due to their ability to represent complex data using an efficient representation, which allows for - among other things- fast classical simulations. In addition, the diagramatic language accompanying tensor networks makes working with them intuitive and suitable to describe a vast range of mathematical concepts, among them quantum circuits.
+Part of the excitement surrounding tensor networks is due to their ability to represent complex data efficiently, which allows for — among other things — fast classical simulations. In addition, the diagrammatic language accompanying tensor networks makes working with them intuitive and suitable for describing a vast range of mathematical concepts, including quantum circuits.
 
-In this tutorial, we aim to provide an introduction to tensor networks with a focus on its applications for quantum computing. We choose to start by discussing the basic notions and definitions of tensors and tensor networks, and work our way up to more advanced topics such as contraction paths and algorithms used to simulate quantum computers using tensor networks.
+In this tutorial, we aim to provide an introduction to tensor networks with a focus on their applications in quantum computing. We choose to start by discussing the basic notions and definitions of tensors and tensor networks, and work our way up to more advanced topics such as contraction paths and algorithms used to simulate quantum computers using tensor networks.
 
-Without further a do, let us dive right in! 🤓📚
+Without further ado, let’s dive right in! 🤓📚
+
 
 From matrices to tensors
 -------------------------------
 
-A common and intuitive way of thinking about tensors is as generalizations of vectors and matrices. That is, we can think of them as multi dimensional arrays - i.e., multi dimensional maps that are linear with respect to every parameter.
-A tensor of dimensions :math:`d_1 \times d_2 \times \ldots \times d_r` can be expressed as
+A common and intuitive way of thinking about tensors is as generalizations of vectors and matrices. That is, we can think of them as multidimensional arrays—i.e., multidimensional maps that are linear with respect to every parameter. A tensor of dimensions :math:`d_1 \times d_2 \times \ldots \times d_r` can be expressed as
 
 .. math::
-    T_{i_1, i_2, \ldots, i_r} \in \mathbb{C}^{d_1 \times d_2 \times \ldots \times d_r}.
+    T_{i_1, i_2, \ldots, i_r} \in \mathbb{C}^{d_1 \times d_2 \times \ldots \times d_r},
     
-Where each :math:`i_n` is an *index* of dimension :math:`d_n` - it takes integer values such that :math:`i_n \in [1, d_n]` - and the number of indices :math:`r` is known as the *rank* of the tensor. We say :math:`T` is a rank-:math:`r` tensor.
+where each :math:`i_n` is an *index* of dimension :math:`d_n`—it takes integer values such that :math:`i_n \in [1, d_n]`—and the number of indices :math:`r` is known as the *rank* of the tensor. We say :math:`T` is a rank-:math:`r` tensor.
 
 .. tip::
-    Some authors refer to the indices of the tensors as their dimensions. In this tutorial, these two concepts will have have different meanings, although related.
+    Some authors refer to the indices of the tensors as their dimensions. In this tutorial, these two concepts will have different meanings, although related.
 
-For example, a scalar :math:`s` is a rank-0 tensor, a vector :math:`v_i` is a rank-1 tensor and a matrix :math:`G_{i,j}` is a rank-2 tensor.
+For example, a scalar :math:`s` is a rank-0 tensor, a vector :math:`v_i` is a rank-1 tensor, and a matrix :math:`G_{i,j}` is a rank-2 tensor.
     
 A beautiful and powerful tool accompanying tensors (networks) is their graphical language representation. The diagram of a tensor is simply a geometric shape with a leg sticking out of it for every index in the tensor. For example,
-    
+
 .. figure:: ../_static/demonstration_assets/tn_basics/01-tensor.png
     :align: center
     :width: 40%
 
-We can apply this same idea to represent a scalar, a vector and a matrix:
+We can apply this same idea to represent a scalar, a vector, and a matrix:
 
 .. figure:: ../_static/demonstration_assets/tn_basics/02-tensors.png
     :align: center
@@ -39,16 +39,16 @@ We can apply this same idea to represent a scalar, a vector and a matrix:
 
 Does the last diagram seem familiar? It is because this is the representation of a single-qubit gate! We will see later in this tutorial the relation between quantum circuits and tensor networks. 
 
-When working within the quantum computing notation, we adopt the convention that writing the leg of a quantum state (i.e., a vector) towards the right direction corresponds to a ket, i.e., a vector living in the Hilbert space, while drawing the legs to the left means they are a bra vector, i.e., living in the dual space.
+When working within the quantum computing notation, we adopt the convention that drawing the leg of a quantum state (i.e., a vector) to the right corresponds to a ket, i.e., a vector living in the Hilbert space, while drawing the legs to the left means they are a bra vector, i.e., living in the dual space.
 
 .. figure:: ../_static/demonstration_assets/tn_basics/03-braket.png
     :align: center
     :width: 55%
 
 .. tip::
-    The diagrammatic representation of tensors is rooted in category theory, which equips the diagrams with all the relevant information so they can used in proofs and formal reasoning! 💡 [#Selinger2010]_
+    The diagrammatic representation of tensors is rooted in category theory, which equips the diagrams with all the relevant information so they can be used in proofs and formal reasoning! 💡 [#Selinger2010]_
 
-Creating a tensor in code is straightforward, and chances are you have already created one yourself. Using ``Numpy``, all we have to do is to create a ``np.array`` of the desired rank. For instance, we can start crearting a rank-1 tensor (a vector).
+Creating a tensor in code is straightforward, and chances are you have already created one yourself. Using ``Numpy``, all we have to do is create a ``np.array`` of the desired rank. For instance, we can start by creating a rank-1 tensor (a vector).
 """
 
 import numpy as np
