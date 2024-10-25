@@ -32,7 +32,6 @@ jobs:
 
       - name: Nightly Merge
         env:
-          PUSH_TOKEN: ${{ secrets.NIGHTLY_TOKEN }}
           CONFIG_USERNAME: GitHub Nightly Merge Action
           CONFIG_EMAIL: actions@github.com
           MERGE_HEAD: master
@@ -45,11 +44,10 @@ jobs:
           git config --global user.name "$CONFIG_USERNAME"
           git config --global user.email "$CONFIG_EMAIL"
 
-          git fetch origin
-          
+          git fetch origin $MERGE_HEAD
           (git checkout $MERGE_HEAD && git pull)
 
-
+          git fetch origin $MERGE_BASE
           (git checkout $MERGE_BASE && git pull)
 
           git merge $MERGE_ARGS $MERGE_HEAD
