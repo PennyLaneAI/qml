@@ -26,7 +26,9 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.NIGHTLY_TOKEN }}
 
       - name: Nightly Merge
         env:
@@ -40,8 +42,6 @@ jobs:
           # This script is adapted from the robotology/gh-action-nightly-merge@v1.5.2 GitHub action:
           # https://github.com/robotology/gh-action-nightly-merge/blob/master/entrypoint.sh
 
-          git config --global --add safe.directory "$GITHUB_WORKSPACE"
-          git remote set-url origin https://x-access-token:${!PUSH_TOKEN}@github.com/PennyLaneAI/qml.git
           git config --global user.name "$CONFIG_USERNAME"
           git config --global user.email "$CONFIG_EMAIL"
 
