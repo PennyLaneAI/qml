@@ -386,7 +386,7 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # 
 # .. figure:: ../_static/demonstration_assets/tn_basics/12-expectation-local.png
 #     :align: center
-#     :width: 45%
+#     :width: 60%
 # 
 # Then, the sections outside of the light cone (grayed-out gates in the figure above) can be ignored since these are contractions resulting in the identity: :math:`G G^\dagger = I`. This helps us decrease the size of the tensor to be contracted, and consequently, the computational expense, by focusing on the section of the circuit with support inside the light cone of the observable - i.e., the gates that affect the calculation of the expectation value.
 # 
@@ -422,7 +422,7 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # 
 # .. figure:: ../_static/demonstration_assets/tn_basics/13-sample.png
 #     :align: center
-#     :width: 45%
+#     :width: 60%
 # .. note:: 
 #   In this diagram, we have extracted the diagonal of the reduced density matrix by contracting it with the COPY tensor introduced earlier in this tutorial!
 # 
@@ -437,7 +437,7 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # 
 # .. figure:: ../_static/demonstration_assets/tn_basics/14-sample-cntd.png
 #     :align: center
-#     :width: 45%
+#     :width: 60%
 # 
 # Analogously as done with the expectation values, these contractions only involve the sections of the circuit within the light cone of **both** the projection with :math:`| \hat{x}_1 \rangle` and the contraction with the COPY tensor (diagonal computation). This procedure can be repeated recursively using the chain rule equation until we obtain the full bitstring :math:`(\hat{x}_1, \hat{x}_2, \hat{x}_3, \ldots, \hat{x}_N)`. To obtain more samples, we repeat the procedure from the beginning - this is what makes every sample memoryless or a perfect sample from the probability distribution.
 # 
