@@ -289,7 +289,7 @@ for op in doubles_fermi:
 # Note that we need to exponentiate these operators to be able to use them in the circuit
 # [#Yordanov]_. We also use a set of pre-defined parameters to construct the excitation gates.
 
-params = np.array([0.22347661, 0.0, 0.0])
+params = jnp.array([0.22347661, 0.0, 0.0])
 
 dev = qml.device("default.qubit", wires=qubits)
 
