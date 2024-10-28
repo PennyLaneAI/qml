@@ -224,3 +224,6 @@ hamiltonian
 # ----------------
 #
 # .. include:: ../_static/authors/diksha_dhawan.txt
+#
+# .. include:: ../_static/authors/soran_jahangiri.txt
+#
