@@ -4120,7 +4120,7 @@ kernels = ["cvxopt", "cvxpy"]
 [package.source]
 type = "git"
 url = "https://github.com/PennyLaneAI/pennylane.git"
-reference = "readout_noise"
+reference = "master"
 
 [[package]]
 name = "pennylane-catalyst"

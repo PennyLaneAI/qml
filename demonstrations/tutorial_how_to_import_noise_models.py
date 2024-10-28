@@ -29,38 +29,35 @@ learn how to convert a Qiskit noise model into an equivalent PennyLane one.
 #
 # For example, the following builds a noise model that would insert depolarization
 # errors for single-qubit gates, bit-flip errors for the target qubit of the two-qubit
-# gates, and thermalization errors for each measurement:
+# gates, and amplitude damping errors for each measurement:
 #
 
 import numpy as np
 from qiskit_aer.noise import (
-    depolarizing_error, pauli_error, thermal_relaxation_error, NoiseModel
+    amplitude_damping_error, depolarizing_error, pauli_error, NoiseModel
 )
 
 # Noise model metadata
 n_qubits = 3
 prob_gate, prob_flip, prob_exc = 0.2, 0.1, 0.2
-Tgs = np.random.uniform(1000, 1005, size=n_qubits)
-T1s = np.random.normal(50e3, 10e3, n_qubits)
-T2s = np.random.normal(70e3, 10e3, n_qubits)
-T2s = np.min((T2s, 2*T1s), axis=0) # T2 <= 2*T1
+prob_meas = np.random.default_rng(42).uniform(0, 0.2, n_qubits)
 
 # Building the noise models
-noise_model_qk = NoiseModel()
+model_qk = NoiseModel()
 
 error_gate1 = depolarizing_error(prob_gate, 1)
-noise_model_qk.add_all_qubit_quantum_error(error_gate1, ["u1", "u2", "u3"])
+model_qk.add_all_qubit_quantum_error(error_gate1, ["u1", "u2", "u3"])
 
 error_gate2 = pauli_error([('X', prob_flip), ('I', 1 - prob_flip)]).tensor(
     pauli_error([('I', 1)])
 )
-noise_model_qk.add_all_qubit_quantum_error(error_gate2, ["cx"])
+model_qk.add_all_qubit_quantum_error(error_gate2, ["cx"])
 
-for idx, qubit in enumerate(range(3)):
-    error_meas = thermal_relaxation_error(T1s[idx], T2s[idx], Tgs[idx], prob_exc)
-    noise_model_qk.add_quantum_error(error_meas, "measure", [qubit])
+for qubit in range(n_qubits):
+    error_meas = amplitude_damping_error(prob_meas[qubit], prob_exc)
+    model_qk.add_quantum_error(error_meas, "measure", [qubit])
 
-print(noise_model_qk)
+print(model_qk)
 
 ######################################################################
 # In contrast, the noise models in PennyLane are :class:`~.pennylane.NoiseModel`
@@ -83,28 +80,30 @@ def gate2_noise(op, **metadata):
 rmeas_fcond = qml.noise.meas_eq(qml.counts)
 def rmeas_noise(op, **metadata):
     for wire in op.wires:
-        qml.ThermalRelaxationError(prob_exc, T1s[wire], T2s[wire], Tgs[wire], wires=wire)
+        qml.GeneralizedAmplitudeDamping(prob_meas[wire], p=1-prob_exc, wires=wire)
 
-noise_model_pl = qml.NoiseModel(
+model_pl = qml.NoiseModel(
     {gate1_fcond: gate1_noise, gate2_fcond: gate2_noise}, {rmeas_fcond: rmeas_noise},
 )
 
-print(noise_model_pl)
+print(model_pl)
 
 ######################################################################
 # For more information on noise models in PennyLane, check out our
 # :doc:`how-to for noise models in PennyLane <tutorial_how_to_use_noise_models>`.
 #
 # It is important to verify whether these noise models work the intended way.
-# For this purpose, we can use them while simulating a
+# For this purpose, we will use them while simulating a
 # `GHZ state <https://en.wikipedia.org/wiki/Greenberger–Horne–Zeilinger_state>`_
-# using the ``default.mixed`` and ``qiskit.aer`` devices:
+# using the ``default.mixed`` and ``qiskit.aer`` devices. Note that while we
+# would require :func:`~.pennylane.add_noise` transform for adding the PennyLane
+# noise model, the Qiskit noise model can be provided in the device definition itself:
 #
 
 # Preparing the devices:
 n_shots = int(2e5)
 dev_pl_ideal = qml.device("default.mixed", wires=n_qubits, shots=n_shots)
-dev_qk_noisy = qml.device("qiskit.aer", wires=n_qubits, shots=n_shots, noise_model=noise_model_qk)
+dev_qk_noisy = qml.device("qiskit.aer", wires=n_qubits, shots=n_shots, noise_model=model_qk)
 
 def GHZcircuit():
     qml.U2(0, np.pi, wires=[0])
@@ -114,17 +113,16 @@ def GHZcircuit():
 
 # Preparing the circuits:
 pl_ideal_circ = qml.QNode(GHZcircuit, dev_pl_ideal)
-pl_noisy_circ = qml.add_noise(pl_ideal_circ, noise_model=noise_model_pl)
+pl_noisy_circ = qml.add_noise(pl_ideal_circ, noise_model=model_pl)
 qk_noisy_circ = qml.QNode(GHZcircuit, dev_qk_noisy)
 
-print(qml.draw(pl_noisy_circ, decimals=1, max_length=250)())
+# Preparing the results:
+pl_noisy_res, qk_noisy_res = pl_noisy_circ(), qk_noisy_circ()
 
 ######################################################################
 # Now let us compare the results to see the equivalence between the two noise models:
 #
 
-# Obtain the results from the simulations
-pl_noisy_res, qk_noisy_res = pl_noisy_circ(), qk_noisy_circ()
 pl_probs = np.array(list(pl_noisy_res.values())) / n_shots
 qk_probs = np.array(list(qk_noisy_res.values())) / n_shots
 
