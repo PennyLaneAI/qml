@@ -37,12 +37,12 @@ from qiskit_aer.noise import (
     amplitude_damping_error, depolarizing_error, pauli_error, NoiseModel
 )
 
-# Noise model metadata
+# Metadata for the noise model
 n_qubits = 3
 prob_gate, prob_flip, prob_exc = 0.2, 0.1, 0.2
 prob_meas = np.random.default_rng(42).uniform(0, 0.2, n_qubits)
 
-# Building the noise models
+# Building the qiskit noise model
 model_qk = NoiseModel()
 
 error_gate1 = depolarizing_error(prob_gate, 1)
@@ -82,6 +82,7 @@ def rmeas_noise(op, **metadata):
     for wire in op.wires:
         qml.GeneralizedAmplitudeDamping(prob_meas[wire], p=1-prob_exc, wires=wire)
 
+# Building the pennylane noise model
 model_pl = qml.NoiseModel(
     {gate1_fcond: gate1_noise, gate2_fcond: gate2_noise}, {rmeas_fcond: rmeas_noise},
 )
@@ -100,7 +101,7 @@ print(model_pl)
 # noise model, the Qiskit noise model can be provided in the device definition itself:
 #
 
-# Preparing the devices:
+# Preparing the devices
 n_shots = int(2e5)
 dev_pl_ideal = qml.device("default.mixed", wires=n_qubits, shots=n_shots)
 dev_qk_noisy = qml.device("qiskit.aer", wires=n_qubits, shots=n_shots, noise_model=model_qk)
@@ -111,12 +112,12 @@ def GHZcircuit():
         qml.CNOT([wire, wire + 1])
     return qml.counts(wires=range(n_qubits), all_outcomes=True)
 
-# Preparing the circuits:
+# Preparing the circuits
 pl_ideal_circ = qml.QNode(GHZcircuit, dev_pl_ideal)
 pl_noisy_circ = qml.add_noise(pl_ideal_circ, noise_model=model_pl)
 qk_noisy_circ = qml.QNode(GHZcircuit, dev_qk_noisy)
 
-# Preparing the results:
+# Preparing the results
 pl_noisy_res, qk_noisy_res = pl_noisy_circ(), qk_noisy_circ()
 
 ######################################################################
@@ -145,7 +146,6 @@ print("Are results equal? ", np.allclose(pl_probs, qk_probs, atol=0.01))
 
 from qiskit.providers.fake_provider import GenericBackendV2
 
-# Generates a two-qubit simulated backend
 backend = GenericBackendV2(num_qubits=2, seed=42)
 qk_noise_model = NoiseModel.from_backend(backend)
 print(qk_noise_model)
