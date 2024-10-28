@@ -119,9 +119,9 @@ print(f"Ideal value: {ideal_value}")
 # The probability of error is specified by the value of the ``noise`` constructor argument.
 
 NOISE_LEVEL = 0.01
-noisy_device = qml.device("qrack.simulator", n_wires, noise=NOISE_LEVEL)
+noisy_device = qml.device("qrack.simulator", n_wires, shots=1000, noise=NOISE_LEVEL)
 
-noisy_qnode = qml.QNode(circuit, device=noisy_device)
+noisy_qnode = qml.QNode(circuit, device=noisy_device, mcm_method="one-shot")
 noisy_value = noisy_qnode(w1, w2)
 print(f"Error without mitigation: {abs(ideal_value - noisy_value):.3f}")
 
