@@ -3,13 +3,13 @@
     "authors": [
         {
             "username": "Joseph"
-        }, 
+        },
         {
             "username": "zy_n"
         }
     ],
     "dateOfPublication": "2024-09-20T00:00:00+00:00",
-    "dateOfLastModification": "2024-09-20T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": ["Quantum Machine Learning", "Quantum Chemistry", "Algorithms"],
     "tags": [],
     "previewImages": [
@@ -24,7 +24,6 @@
     ],
     "seoDescription": "Learn how you can train a small GPT model using the generative quantum eigensolver (GQE) technique and PennyLane data.",
     "doi": "",
-    "canonicalURL": "/qml/demos/gqe_training",
     "references": [
         {
             "id": "nakaji2024",

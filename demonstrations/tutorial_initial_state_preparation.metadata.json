@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2023-10-20T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Quantum Chemistry"
     ],
@@ -23,7 +23,6 @@
     ],
     "seoDescription": "Prepare initial states for quantum algorithms from output of traditional quantum chemistry methods.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_initial_state_preparation",
     "references": [
     ],
     "basedOnPapers": [],

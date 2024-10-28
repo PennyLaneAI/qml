@@ -12,7 +12,7 @@
         }
     ],
     "dateOfPublication": "2023-06-20T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-08T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Devices and Performance"
     ],
@@ -29,7 +29,6 @@
     ],
     "seoDescription": "Learn how to use IBM devices with PennyLane.",
     "doi": "",
-    "canonicalURL": "/qml/demos/ibm_pennylane",
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],

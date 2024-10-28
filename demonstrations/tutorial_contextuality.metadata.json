@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2023-09-06T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
@@ -23,7 +23,6 @@
     ],
     "seoDescription": "Train a problem-inspired ansatz on a contextuality-inspired dataset.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_contextuality",
     "references": [
         {
             "id": "paper",

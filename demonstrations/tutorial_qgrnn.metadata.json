@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2020-07-27T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
@@ -19,7 +19,6 @@
     ],
     "seoDescription": "Using a quantum graph recurrent neural network to learn quantum dynamics.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_qgrnn",
     "references": [
         {
             "id": "Verdon2019",

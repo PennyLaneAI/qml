@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2024-05-10T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Getting Started",
         "Quantum Computing"
@@ -24,7 +24,6 @@
     ],
     "seoDescription": "Learn the basics of mid-circuit measurements and how to use them in PennyLane.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_mcm_introduction",
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],
