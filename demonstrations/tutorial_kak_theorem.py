@@ -77,7 +77,7 @@ We will look at a more involved example at the end of the demo.
     There is a simple way to see this; Multiplying a skew-Hermitian matrix
     :math:`x\in\mathfrak{su}(n)` by a complex number :math:`c\in\mathbb{C}` will yield
     :math:`(cx)^\dagger=\overline{c} x^\dagger=-\overline{c} x,` so that
-    the result might no longer be in the algebra! If we keep it to real scalars
+    the result might no longer be skew-Hermitian, i.e. no longer in the algebra! If we keep it to real scalars
     :math:`c\in\mathbb{R}` only, we have :math:`\overline{c}=c,` so that
     :math:`(cx)^\dagger=-cx` and we're fine.
 
@@ -104,7 +104,7 @@ print(f"su(2) is {len(su2)}-dimensional")
 all_hermitian = all(qml.equal(qml.adjoint(op).simplify(), op) for op in su2)
 print(f"The operators are all Hermitian: {all_hermitian}")
 
-su2_lie_closed = qml.pauli.dla.lie_closure(su2)
+su2_lie_closed = qml.lie_closure(su2)
 print(f"The Lie closure of su(2) is {len(su2_lie_closed)}-dimensional.")
 
 traces = [op.pauli_rep.trace() for op in su2]
@@ -482,7 +482,7 @@ print(f"The rotated CSAs match between numerics and theory: {a_primes_equal}")
 #
 # As an involution, :math:`\theta` only can have the eigenvalues :math:`\pm 1,` with associated
 # eigenspaces :math:`\mathfrak{g}_\pm.` Let's see what happens when we compute commutators between
-# elements :math:`x_\pm\in\mathfrak{g}_\pm:`
+# elements :math:`x_\pm\in\mathfrak{g}_\pm \Leftrightarrow \theta(x_\pm) = \pm x_pm:`
 #
 # .. math::
 #
@@ -765,7 +765,7 @@ p = check_cartan_decomposition(su4, su2_su2, space_name)
 #
 #     \mathfrak{a} = \text{span}_{\mathbb{R}}\{iX_0X_1, iY_0Y_1, iZ_0Z_1\}
 #
-# Clearly, these three operators commute, making :math:`\mathfrak{a}` Abelian.
+# These three operators commute, making :math:`\mathfrak{a}` Abelian.
 # They also form a *maximal* Abelian algebra within :math:`\mathfrak{p},` which is less obvious.
 #
 # The KAK theorem now tells us that any two-qubit gate :math:`U,` being part of
