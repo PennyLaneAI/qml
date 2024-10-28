@@ -63,13 +63,15 @@ hamiltonian = qml.spin.fermi_hubbard("cubic", [3, 3, 3], hopping, coulomb)
 #     H =  -J \sum_{<i,j>} \sigma_i^{z} \sigma_j^{z} - h\sum_{i} \sigma_{i}^{x},
 #
 # where :math:`J` is the coupling defined for the Hamiltonian, :math:`h` is the strength of
-# transverse magnetic field, and :math:`i,j> represent spins indices. The notation :math:`<i,j>` indicates the sum is taken over neighbouring spins in the lattice.
+# transverse magnetic field, and :math:`<i,j> represent spins indices. The notation :math:`<i,j>`
+# indicates the sum is taken over neighbouring spins in the lattice.
 #
 # Our approach for doing this is to construct a lattice that represents the spin sites and
-# their connectivity. This is done by using the Lattice class that can be constructed either by
-# calling the helper function :func:`~.pennylane.spin.generate_lattice` or by manually constructing the object. Let's see
-# examples of both methods. First we use generate_lattice to construct a square lattice containing :math:`9=3\times 3`
-# sites which are all connected to their nearest neighbor.
+# their connectivity. This is done by using the :class:`~.pennylane.spin.Lattice` class that can be
+# constructed either by calling the helper function :func:`~.pennylane.spin.generate_lattice` or by
+# manually constructing the object. Let's see examples of both methods. First we use
+# :func:`~.pennylane.spin.generate_lattice` to construct a square lattice containing
+# :math:`9 = 3 \times 3` sites which are all connected to their nearest neighbor.
 
 lattice = qml.spin.lattice.generate_lattice('square', [3, 3])
 
@@ -108,20 +110,27 @@ plot(lattice)
 
 ######################################################################
 # Now, we construct the same lattice manually by explicitly defining the positions of the sites in a
-# unit cell, the translation vectors defining the lattice and the number of cells in each direction.
+# unit cell, the primitive translation vectors defining the lattice and the number of cells in each
+# direction. Recall that a unit cell is the smallest repeating unit of a lattice.
+#
+# Our ``square`` lattice can be constructed, in a two-dimensional Cartesian coordinate system, with
+# one lattice point located on the origin and two primitive translation vectors defined as the
+# standard unit vectors along the :math:`x` and :math:`y` directions. We also assume that the
+# lattice has three unit cells along each direction.
 
 from pennylane.spin import Lattice
 
-nodes = [[0, 0]]  # coordinates of nodes inside the unit cell
-vectors = [[1, 0], [0, 1]] # unit cell translation vectors
+nodes = [[0, 0]]  # coordinate of the lattice cite
+vectors = [[1, 0], [0, 1]] # primitive translation vectors
 n_cells = [3, 3] # number of unit cells in each direction
 
 lattice = Lattice(n_cells, vectors, nodes)
 
 ######################################################################
-# This gives us the same lattice as we created with generate_lattice but constructing the lattice
-# manually is more flexible while :func:`~.pennylane.spin.generate_lattice` only works for some
-# predefined `lattice shapes <https://docs.pennylane.ai/en/latest/code/api/pennylane.spin.generate_lattice.html#lattice-details>`__.
+# This gives us the same lattice as we created with :func:`~.pennylane.spin.generate_lattice` but
+# constructing the lattice manually is more flexible while :func:`~.pennylane.spin.generate_lattice`
+# only works for some predefined
+# `lattice shapes <https://docs.pennylane.ai/en/latest/code/api/pennylane.spin.generate_lattice.html#lattice-details>`__.
 #
 # Now that we have the lattice, we can use its attributes, e.g., edges and vertices, to construct
 # our transverse field Ising model Hamiltonian. We just need to define the coupling and onsite
@@ -183,8 +192,8 @@ custom_edges = [[(0, 1), ('XX', 0.5)],
 lattice = Lattice(n_cells, vectors, nodes, custom_edges=custom_edges)
 
 ######################################################################
-# Then we pass the lattice to the spin_hamiltonian function, which is a helper
-# function that constructs a Hamiltonian from a lattice.
+# Then we pass the lattice to the :func:`~.pennylane.spin.spin_hamiltonian` function, which is a
+# helper function that constructs a Hamiltonian from a lattice.
 
 hamiltonian = qml.spin.spin_hamiltonian(lattice=lattice)
 
@@ -211,12 +220,12 @@ hamiltonian
 #
 # Conclusion
 # ----------
-# The spin module in PennyLane provides a set of powerful tools for constructing spin 
+# The spin module in PennyLane provides a set of powerful tools for constructing spin
 # Hamiltonians. Here we learned how to use these tools to construct pre-defined Hamiltonian
-# templates, such as the Fermi-Hubbard model Hamiltonian, and use the Lattice object to construct
-# more advanced and customised models such as the Kitaev honeycomb Hamiltonian. The versatility of
-# the new spin functions and classes allow you to quickly construct any new spin model Hamiltonian
-# intuitively.
+# templates, such as the Fermi-Hubbard model Hamiltonian, and use the
+# :class:`~.pennylane.spin.Lattice` object to construct more advanced and customised models such as
+# the Kitaev honeycomb Hamiltonian. The versatility of the new spin functions and classes allow you
+# to quickly construct any new spin model Hamiltonian intuitively.
 #
 # About the author
 # ----------------
