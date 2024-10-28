@@ -1,11 +1,11 @@
 r"""Tutorial: ABC of tensor networks for quantum circuits
 =============================================================
 
-If you are in the domain of quantum computing or quantum information, chances are that you have heard (maybe a lot) about tensor networks being brought into the conversation. In fact, they are not only useful in these areas, but actually they are rather a widespread "tool" with applications ranging across physics, math, and computer science.
+If you are in the domain of quantum computing or quantum information, chances are you have heard (maybe a lot) about tensor networks being brought into the conversation. They are not only useful in these areas, but actually, they are a rather widespread "tool" with applications ranging across physics, math, and computer science.
 
 Part of the excitement surrounding tensor networks is due to their ability to represent complex data efficiently, which allows for — among other things — fast classical simulations. In addition, the diagrammatic language accompanying tensor networks makes working with them intuitive and suitable for describing a vast range of mathematical concepts, including quantum circuits.
 
-In this tutorial, we aim to provide an introduction to tensor networks with a focus on their applications in quantum computing. We choose to start by discussing the basic notions and definitions of tensors and tensor networks, and work our way up to more advanced topics such as contraction paths and algorithms used to simulate quantum computers using tensor networks.
+In this tutorial, we aim to provide an introduction to tensor networks with a focus on their applications in quantum computing. We choose to start by discussing the basic notions and definitions of tensors and tensor networks and work our way up to more advanced topics such as contraction paths and algorithms used to simulate quantum computers using tensor networks.
 
 Without further ado, let’s dive right in! 🤓📚
 
@@ -73,7 +73,7 @@ print("dimensions: ", tensor_rank3.shape)
 print("Rank-3 tensor: \n", tensor_rank3)
 
 ##############################################################################
-# We can create a tensor of arbitrary rank following a similar procedure. This recursive approach is instructive to understand a rank-:math:`r` tensor as made up of rank-:math:`(r-1)` tensors, which translates to the code as adding an additional level in the nested bracket structure ``[tensor_rank_r-1]``.
+# We can create a tensor of arbitrary rank following a similar procedure. This recursive approach illustrates how a rank-:math:`r` tensor can be seen as consisting of nested rank-:math:`(r-1)` tensors, represented in code by adding another level to the nested bracket structure ``[tensor_rank_r-1]``.
 #
 
 ##############################################################################
@@ -102,9 +102,9 @@ print("Rank-3 tensor: \n", tensor_rank3)
 #     :align: center
 #     :width: 55%
 #
-# Here, the resulting tensor has two dangling indices, :math:i and :math:k, defining a matrix, as expected!
+# Here, the resulting tensor has two dangling indices, :math:`i` and :math:`k`, defining a matrix, as expected!
 #
-# We can now generalize this concept to tensors, and consequently, to more than two legs being contracted. For example, let us look at three tensors :math:`A_{i,j,k}`, :math:`B_{j,l,m}` and :math:`C_{k,m,n}`. To contract them, all we need to do is to sum over repeated indices (:math:`j`, :math:`k`, :math:`m`), just as we would do in `Einstein convention <https://en.wikipedia.org/wiki/Einstein_notation>`_. Thus, the :math:`(i,l,n)`-th element of the resulting tensor :math:`D` is
+# We can now generalize this concept to tensors, and consequently, to more than two legs being contracted. For example, let us look at three tensors :math:`A_{i,j,k}`, :math:`B_{j,l,m}`, and :math:`C_{k,m,n}`. To contract them, all we need to do is to sum over repeated indices (:math:`j`, :math:`k`, :math:`m`), just as we would do in `Einstein convention <https://en.wikipedia.org/wiki/Einstein_notation>`_. Thus, the :math:`(i,l,n)`-th element of the resulting tensor :math:`D` is
 #
 # .. math::
 #     (D)_{i,l,n} = \sum_{j,k,m} A_{i,j,k} B_{j,l,m} C_{k,m,n} .
@@ -118,10 +118,9 @@ print("Rank-3 tensor: \n", tensor_rank3)
 # With the above contraction, we have formed a network of tensors, i.e., a **Tensor Network**!
 #
 # .. tip::
-#   A common question arising when drawing a tensor is "what is the correct order to draw the indices?". For instance, in the figure above, we have adopted the convention that a tensor :math:`A_{i,j,k}` corresponds to a diagram with the first leg (:math:`i`) pointing left, the second leg (:math:`j`) pointing upwards, and the third leg (:math:`k`) pointing right, and similarly for the other two tensors. However, this need not be the case. We could have defined the first leg to be the one pointing upwards, for example. Based on the use case, and the user, some conventions might seem more natural than others. The only important thing to keep in mind is to be consistent. In other words, once we choose a convention for the order, we should apply it to all the tensors to avoid contracting the wrong indices ❌.
+#   A common question arising when drawing a tensor is "What is the correct order to draw the indices?". For instance, in the figure above, we have adopted the convention that a tensor :math:`A_{i,j,k}` corresponds to a diagram with the first leg (:math:`i`) pointing left, the second leg (:math:`j`) pointing upwards, and the third leg (:math:`k`) pointing right, and similarly for the other two tensors. However, this need not be the case. We could have defined the first leg to be the one pointing upwards, for example. Based on the use case, and the user, some conventions might seem more natural than others. The only important thing to keep in mind is to be consistent. In other words, once we choose a convention for the order, we should apply it to all the tensors to avoid contracting the wrong indices ❌.
 #
 # Remember the similarity between tensor network contractions and Einstein notation? Then, it doesn't come as a surprise that we can perform a contraction using the function ``np.einsum``. To do so, we can start by creating the 3 tensors to be contracted by reshaping a 1D array (created using ``np.arange``) into rank-3 tensors of the correct dimensions.
-
 
 # Create the individual rank-3 tensors
 A = np.arange(6).reshape(1, 2, 3)  # ijk
@@ -164,7 +163,7 @@ print(D.shape)
 # .. math::
 #   CNOT = \sum_j (T^1)_{i,j,k} \otimes (T^2)_{l,j,m}.
 # 
-# It turns out :math:`T^1` and :math:`T^2` are special tensors known as the COPY and XOR tensors, respectively, and therefore have special diagrammatic representations. 
+# It turns out : that math:`T^1` and :math:`T^2` are special tensors known as the COPY and XOR tensors, respectively, and therefore have special diagrammatic representations. 
 #
 # .. figure:: ../_static/demonstration_assets/tn_basics/07-t1-t2.png
 #     :align: center
@@ -178,19 +177,19 @@ print(D.shape)
 #     :width: 45%
 # 
 # .. note::
-#   By looking at the elements of the COPY tensor, we can interpret it as being equal to unity when all the indices have the same value (0 or 1) and vanishing otherwise. On the other hand, the XOR tensor can be understood as being equal to unity when the values of the three indices contain an even number of 1's, and vanishing otherwise. We anticipate that the COPY tensor can be used to obtain the diagonal of a matrix. This will be useful in the last section of this tutorial.
+#   By looking at the elements of the COPY tensor, we can interpret it as being equal to unity when all the indices have the same value (0 or 1) and vanishing otherwise. On the other hand, the XOR tensor can be understood as being equal to unity when the values of the three indices contain an even number of 1's and vanishing otherwise. We anticipate that the COPY tensor can be used to obtain the diagonal of a matrix. This will be useful in the last section of this tutorial.
 # 
 # This demonstrates the relation between the CNOT acting as a rank-4 tensor with dimensions :math:`2 \times 2 \times 2 \times 2` and its decomposition in terms of two rank-3 local tensors (:math:`T^1` and :math:`T^2`) of dimensions :math:`2 \times 2 \times 2`.
 # 
 # .. note::
 # 
-#   More generally, we can find decompositions of multi-qubit gates into local tensors by means of the ubiquitous singular value decomposition (SVD). This method is explained in detail in our :doc:`MPS tutorial </demos/tutorial_mps>`.
+#   More generally, we can find decompositions of multi-qubit gates into local tensors employing the ubiquitous singular value decomposition (SVD). This method is explained in detail in our :doc:`MPS tutorial </demos/tutorial_mps>`.
 
 ##############################################################################
 # The cost of contracting a network
 # ---------------------------------
 # 
-# A common task when dealing with tensors is the contraction of large networks resulting in a single tensor (including scalars). To arrive at this final tensor, we can start with a single tensor and contract it with adjacent tensors one-at-a-time. The order in which this is carried out is known as the *contraction path* or *bubbling*.
+# A common task when dealing with tensors is the contraction of large networks resulting in a single tensor (including scalars). To arrive at this final tensor, we can start with a single tensor and contract it with adjacent tensors one at a time. The order in which this is carried out is known as the *contraction path* or *bubbling*.
 # While the final tensor is independent of the order of the contraction, the number of operations performed can vary greatly depending on the order in which we contract the intermediate tensors. Moreover, in a general setup, finding the optimal order of indices to be contracted is not a trivial task.
 # 
 # .. note::
@@ -386,7 +385,7 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # 
 # .. figure:: ../_static/demonstration_assets/tn_basics/12-expectation-local.png
 #     :align: center
-#     :width: 65%
+#     :width: 70%
 # 
 # Then, the sections outside of the light cone (grayed-out gates in the figure above) can be ignored since these are contractions resulting in the identity: :math:`G G^\dagger = I`. This helps us decrease the size of the tensor to be contracted, and consequently, the computational expense, by focusing on the section of the circuit with support inside the light cone of the observable - i.e., the gates that affect the calculation of the expectation value.
 # 
@@ -422,7 +421,7 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # 
 # .. figure:: ../_static/demonstration_assets/tn_basics/13-sample.png
 #     :align: center
-#     :width: 65%
+#     :width: 70%
 # .. note:: 
 #   In this diagram, we have extracted the diagonal of the reduced density matrix by contracting it with the COPY tensor introduced earlier in this tutorial!
 # 
@@ -437,7 +436,7 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # 
 # .. figure:: ../_static/demonstration_assets/tn_basics/14-sample-cntd.png
 #     :align: center
-#     :width: 65%
+#     :width: 70%
 # 
 # Analogously as done with the expectation values, these contractions only involve the sections of the circuit within the light cone of **both** the projection with :math:`| \hat{x}_1 \rangle` and the contraction with the COPY tensor (diagonal computation). This procedure can be repeated recursively using the chain rule equation until we obtain the full bitstring :math:`(\hat{x}_1, \hat{x}_2, \hat{x}_3, \ldots, \hat{x}_N)`. To obtain more samples, we repeat the procedure from the beginning - this is what makes every sample memoryless or a perfect sample from the probability distribution.
 # 
@@ -451,7 +450,7 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # 
 # Although the world of tensor networks and their relation to quantum computing is vastly wider than what we could ever cover in one tutorial, we hope that after these explanations you now feel equipped with the tools needed to dive deeper into this topic by yourself. 🔍
 # 
-# If you want to learn more about how to use tensor networks as a diagrammatic tool, check out `these amazing lecture notes <https://arxiv.org/pdf/1912.10049>`_ by J.Biamonte. In addition, check out `this website <https://tensornetwork.org/about/>`_ for great explanations on many important algorithms and tensor network structures by Flatiron Institute.
+# If you want to learn more about using tensor networks as a diagrammatic tool, check out `these amazing lecture notes <https://arxiv.org/pdf/1912.10049>`_ by J.Biamonte. In addition, check out `this website <https://tensornetwork.org/about/>`_ for great explanations on many important algorithms and tensor network structures by Flatiron Institute.
 # 
 # And that is it for this tutorial! 🎉
 
