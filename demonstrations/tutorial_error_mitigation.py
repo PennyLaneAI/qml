@@ -116,7 +116,7 @@ def circuit(w1, w2):
 
 ideal_qnode = qml.QNode(circuit, dev_ideal)
 noisy_qnode = qml.QNode(circuit, dev_noisy)
-noisy_qnode = qml.compile(noisy_qnode, basis_set = ["RY", "CZ"])
+noisy_qnode = qml.transforms.decompose(noisy_qnode, gate_set = ["RY", "CZ"])
 
 ##############################################################################
 # First, we'll visualize the circuit:
