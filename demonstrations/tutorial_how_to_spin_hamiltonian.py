@@ -12,39 +12,40 @@ for your problem of interest.
 # Hamiltonian templates
 # ---------------------
 #
-# PennyLane has a range of functions for constructing spin model Hamiltonians with minimal input
-# data needed from the user. Let’s look at the
-# `Fermi-Hubbard <https://pennylane.ai/datasets/qspin/fermi-hubbard-model>`__ model as an example.
+# PennyLane has a range of `functions <https://docs.pennylane.ai/en/latest/code/qml_spin.html#hamiltonian-functions>`__
+# for constructing spin model Hamiltonians with minimal input data needed from the user. Let’s look
+# at the `Fermi-Hubbard <https://en.wikipedia.org/wiki/Hubbard_model>`__ model as an example.
 # This model can
 # represent a chain of hydrogen atoms where each atom, or site, can hold one spin-up and one
 # spin-down particle. The Hamiltonian describing this model has two components: the kinetic energy
 # component which is parameterized by a hopping parameter and the potential energy component
 # parameterized by the on-site interaction strength. The Fermi-Hubbard Hamiltonian can then be
-# constructed in PennyLane by passing the hoping and interaction parameters to the fermi_hubbard
-# function. We also need to provide information about the number of sites we would like to be
-# included in our Hamiltonian.
+# constructed in PennyLane by passing the hopping and interaction parameters to the
+# :func:`~.pennylane.spin.fermi_hubbard` function. We also need to provide information about the
+# number of sites we would like to be included in our Hamiltonian.
 # 
 
 import pennylane as qml
 
-n = [2]
-t = 0.2
-u = 0.3
+n_cells = [2]
+hopping = 0.2
+coulomb = 0.3
 
-hamiltonian = qml.spin.fermi_hubbard("chain", n, t, u)
+hamiltonian = qml.spin.fermi_hubbard("chain", n_cells, hopping, coulomb)
 hamiltonian
 
 ######################################################################
-# The fermi_hubbard function is general enough to go beyond the simple “chain” model and construct
+# The :func:`~.pennylane.spin.fermi_hubbard` function is general enough to go beyond the simple “chain” model and construct
 # the Hamiltonian for a wide range of two-dimensional and three-dimensional lattice shapes. For
 # those cases, we need to provide the number of sites in each direction of the lattice. We can
-# construct the Hamiltonian for a cubic lattice with 3 sites on each direction as
+# construct the Hamiltonian for a cubic lattice with 3 sites in each direction as
 
-hamiltonian = qml.spin.fermi_hubbard("cubic", [3, 3, 3], t, u)
+hamiltonian = qml.spin.fermi_hubbard("cubic", [3, 3, 3], hopping, coulomb)
 
 ######################################################################
-# Similarity, a broad range of other well-investigated spin model Hamiltonians can be constructed
-# with the dedicated functions available in the spin module, by just providing the lattice
+# Similarly, a broad range of other well-investigated spin model Hamiltonians can be constructed
+# with the dedicated functions available in the `qml.spin
+# <https://docs.pennylane.ai/en/latest/code/qml_spin>`__ module, by just providing the lattice
 # information and the Hamiltonian parameters.
 #
 # Building Hamiltonians manually
@@ -53,9 +54,9 @@ hamiltonian = qml.spin.fermi_hubbard("cubic", [3, 3, 3], t, u)
 # The Hamiltonian template functions are great and simple tools for someone who just wants to build
 # a Hamiltonian quickly. However, PennyLane offers intuitive tools that can be used to construct
 # spin Hamiltonians manually which are very handy for building customized Hamiltonians. Let’s learn
-# how to use this tools by constructing the Hamiltonian for the
+# how to use these tools by constructing the Hamiltonian for the
 # `transverse field Ising <https://pennylane.ai/datasets/qspin/transverse-field-ising-model>`__
-# model on a two-dimension lattice.
+# model on a two-dimensional lattice.
 #
 # The Hamiltonian is represented as:
 #
@@ -68,11 +69,11 @@ hamiltonian = qml.spin.fermi_hubbard("cubic", [3, 3, 3], t, u)
 #
 # Our approach for doing this is to construct a lattice that represents the spin sites and
 # their connectivity. This is done by using the Lattice class that can be constructed either by
-# calling the helper function generate_lattice or by manually constructing the object. Let's see
+# calling the helper function :func:`~.pennylane.spin.generate_lattice` or by manually constructing the object. Let's see
 # examples of both methods. First we use generate_lattice to construct a square lattice containing 9
 # sites which are all connected to their nearest neighbor.
 
-lattice = qml.spin.lattice._generate_lattice('square', [3, 3])
+lattice = qml.spin.lattice.generate_lattice('square', [3, 3])
 
 ######################################################################
 # Let's visualize this lattice to see how it looks. We create a simple function for plotting the
@@ -121,7 +122,8 @@ lattice = Lattice(n_cells, vectors, nodes)
 
 ######################################################################
 # This gives us the same lattice as we created with generate_lattice but constructing the lattice
-# manually is more flexible while generate_lattice only works for some predefined lattice shapes.
+# manually is more flexible while :func:`~.pennylane.spin.generate_lattice` only works for some
+# predefined `lattice shapes <https://docs.pennylane.ai/en/latest/code/api/pennylane.spin.generate_lattice.html#lattice-details>`__.
 #
 # Now that we have the lattice, we can use its attributes, e.g., edges and vertices, to construct
 # our transverse field Ising model Hamiltonian. We just need to define the coupling and onsite
@@ -144,7 +146,7 @@ hamiltonian
 
 ######################################################################
 # In this example we just used the in-built attributes of the lattice we created without further
-# customising them. The lattice can be constructed in a very flexible way that allows constructing
+# customising them. The lattice can be constructed in a more flexible way that allows constructing
 # customized Hamiltonians. Let's look at an example.
 #
 # Building customized Hamiltonians
@@ -189,7 +191,7 @@ lattice = Lattice(n_cells, vectors, nodes, custom_edges=custom_edges)
 hamiltonian = qml.spin.spin_hamiltonian(lattice=lattice)
 
 ######################################################################
-# The spin_hamiltonian function has a simple logic and loops over the custom edges and nodes
+# The :func:`~.pennylane.spin.spin_hamiltonian` function has a simple logic and loops over the custom edges and nodes
 # to build the Hamiltonian. In our example, we can also manually do that with a simple code.
 
 
