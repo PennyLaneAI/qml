@@ -1,11 +1,9 @@
 r"""How to build spin Hamiltonians
 ==================================
-Spin systems provide simple but powerful models for studying problems in physics, chemistry and
-quantum computing. The quantum spin models are typically described by a Hamiltonian that can be used
-in a quantum algorithm to explore properties of the spin modes that are intractable with classical
-computational methods. PennyLane provides a powerful set of tools that enables the users to
+Systems of interacting spins provide simple but powerful models for studying problems in physics, chemistry, and
+quantum computing. PennyLane provides a powerful set of tools that enables the users to
 intuitively construct a broad range of spin Hamiltonians. Here we show you how to use these tools
-for your problem of interest.
+to easily construct a variety of spin Hamiltonians such as the transverse-field Ising model, the Fermi-Hubbard model, and the Kitaev honeycomb model.
 """
 
 ######################################################################
@@ -52,8 +50,8 @@ hamiltonian = qml.spin.fermi_hubbard("cubic", [3, 3, 3], hopping, coulomb)
 # ------------------------------
 #
 # The Hamiltonian template functions are great and simple tools for someone who just wants to build
-# a Hamiltonian quickly. However, PennyLane offers intuitive tools that can be used to construct
-# spin Hamiltonians manually which are very handy for building customized Hamiltonians. Let’s learn
+# a Hamiltonian quickly. PennyLane also offers tools that can be used to construct
+# spin Hamiltonians manually, which are useful for building customized Hamiltonians. Let’s learn
 # how to use these tools by constructing the Hamiltonian for the
 # `transverse field Ising <https://pennylane.ai/datasets/qspin/transverse-field-ising-model>`__
 # model on a two-dimensional lattice.
@@ -62,15 +60,15 @@ hamiltonian = qml.spin.fermi_hubbard("cubic", [3, 3, 3], hopping, coulomb)
 #
 # .. math::
 #
-#     \hat{H} =  -J \sum_{<i,j>} \sigma_i^{z} \sigma_j^{z} - h\sum_{i} \sigma_{i}^{x},
+#     H =  -J \sum_{<i,j>} \sigma_i^{z} \sigma_j^{z} - h\sum_{i} \sigma_{i}^{x},
 #
 # where :math:`J` is the coupling defined for the Hamiltonian, :math:`h` is the strength of
-# transverse magnetic field and :math:`i,j` represent the indices for neighbouring spins.
+# transverse magnetic field, and :math:`i,j> represent spins indices. The notation :math:`<i,j>` indicates the sum is taken over neighbouring spins in the lattice.
 #
 # Our approach for doing this is to construct a lattice that represents the spin sites and
 # their connectivity. This is done by using the Lattice class that can be constructed either by
 # calling the helper function :func:`~.pennylane.spin.generate_lattice` or by manually constructing the object. Let's see
-# examples of both methods. First we use generate_lattice to construct a square lattice containing 9
+# examples of both methods. First we use generate_lattice to construct a square lattice containing :math:`9=3\times 3`
 # sites which are all connected to their nearest neighbor.
 
 lattice = qml.spin.lattice.generate_lattice('square', [3, 3])
@@ -153,8 +151,8 @@ hamiltonian
 # --------------------------------
 # Now we work on a more complicated Hamiltonian to see how our existing tools allow building it
 # intuitively. We chose the anisotropic `Kitaev <https://arxiv.org/abs/cond-mat/0506438>`__
-# honeycomb model where the coupling
-# parameters depend on the orientation of the bonds. We can build the Hamiltonian by building the
+# honeycomb model, where the coupling
+# parameters depend on the orientation of the bonds. We can construct the Hamiltonian by building the
 # lattice manually and adding custom edges between the nodes. For instance, to define a custom
 # ``XX`` edge with coupling constant 0.5 between nodes 0 and 1, we use:
 
@@ -170,7 +168,7 @@ vectors = [[1, 0], [0.5, np.sqrt(3) / 2]]
 n_cells = [3, 3]
 
 ######################################################################
-# Let's plot the lattice to see how it looks like.
+# Let's plot the lattice to see how it looks.
 
 plot(Lattice(n_cells, vectors, nodes), figsize=(5, 3))
 
@@ -213,7 +211,7 @@ hamiltonian
 #
 # Conclusion
 # ----------
-# The spin module in PennyLane provides a set of powerful tools for constructing spin model
+# The spin module in PennyLane provides a set of powerful tools for constructing spin 
 # Hamiltonians. Here we learned how to use these tools to construct pre-defined Hamiltonian
 # templates, such as the Fermi-Hubbard model Hamiltonian, and use the Lattice object to construct
 # more advanced and customised models such as the Kitaev honeycomb Hamiltonian. The versatility of
