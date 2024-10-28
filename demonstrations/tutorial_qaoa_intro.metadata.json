@@ -28,5 +28,6 @@
             "id": "tutorial_qaoa_maxcut",
             "weight": 1.0
         }
-    ]
+    ],
+    "discussionForumUrl": "https://discuss.pennylane.ai/t/qaoa-and-optimization/5188"
 }

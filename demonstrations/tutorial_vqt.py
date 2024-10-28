@@ -110,7 +110,6 @@ This demonstration discusses theory and experiments relating to a recently propo
 import pennylane as qml
 from matplotlib import pyplot as plt
 import numpy as np
-from numpy import array
 import scipy
 from scipy.optimize import minimize
 import networkx as nx
@@ -250,6 +249,14 @@ def single_rotation(phi_params, qubits):
 #
 
 
+def CRX_ring(parameters, wires):
+    """Apply a controlled RX on all wires in a ring pattern"""
+    n_wires = len(wires)
+
+    for param, w in zip(parameters, wires):
+        qml.CRX(param, wires=[w % n_wires, (w + 1) % n_wires])
+
+
 depth = 4
 dev = qml.device("lightning.qubit", wires=nr_qubits)
 
@@ -257,17 +264,12 @@ dev = qml.device("lightning.qubit", wires=nr_qubits)
 def quantum_circuit(rotation_params, coupling_params, sample=None, return_state=False):
 
     # Prepares the initial basis state corresponding to the sample
-    qml.BasisStatePreparation(sample, wires=range(nr_qubits))
+    qml.BasisState(sample, wires=range(nr_qubits))
 
     # Prepares the variational ansatz for the circuit
     for i in range(0, depth):
         single_rotation(rotation_params[i], range(nr_qubits))
-        qml.broadcast(
-            unitary=qml.CRX,
-            pattern="ring",
-            wires=range(nr_qubits),
-            parameters=coupling_params[i],
-        )
+        CRX_ring(coupling_params[i], list(range(nr_qubits)))
 
     if return_state:
         return qml.state()
