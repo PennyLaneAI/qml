@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2020-10-13T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Quantum Chemistry"
     ],
@@ -19,7 +19,6 @@
     ],
     "seoDescription": "Find the lowest-energy states of a Hamiltonian in different spin sectors",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_vqe_spin_sectors",
     "references": [
         {
             "id": "peruzzo2014",

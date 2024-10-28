@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2023-07-13T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
@@ -23,7 +23,6 @@
     ],
     "seoDescription": "Find out more about how to embedd graphs into quantum states.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_equivariant_graph_embedding",
     "references": [
         {
             "id": "Skolik2022",

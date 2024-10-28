@@ -9,7 +9,7 @@
         }
     ],
     "dateOfPublication": "2024-05-24T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
@@ -26,7 +26,6 @@
     ],
     "seoDescription": "Explore the process of running GPU-accelerated quantum circuit simulations on Covalent Cloud using PennyLane.",
     "doi": "",
-    "canonicalURL": "/qml/demos/covalent_cloud_gpu",
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],

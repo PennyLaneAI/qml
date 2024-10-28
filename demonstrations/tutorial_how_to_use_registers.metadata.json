@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2024-09-05T00:00:00+00:00",
-    "dateOfLastModification": "2024-09-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Getting Started",
         "How-to"
@@ -24,7 +24,6 @@
     ],
     "seoDescription": "Learn how wire registers can be built and used in PennyLane.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_how_to_use_registers",
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],

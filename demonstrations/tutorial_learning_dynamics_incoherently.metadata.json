@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2024-08-15T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-15T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning",
         "How-to"
@@ -24,7 +24,6 @@
     ],
     "seoDescription": "Learn how to reproduce an unknown quantum process with classical shadow measurements",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_learning_dynamics_incoherently",
     "references": [
         {
             "id": "jerbi2023power",
@@ -55,12 +54,12 @@
         {
             "type": "demonstration",
             "id": "tutorial_classical_shadows",
-            "weight": 1.0            
+            "weight": 1.0
         },
         {
             "type": "demonstration",
             "id": "tutorial_variational_classifier",
-            "weight": 1.0            
+            "weight": 1.0
         }
     ]
 }

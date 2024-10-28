@@ -810,7 +810,3 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 #     expressibility to gradient magnitudes and barren plateaus". (`arXiv
 #     <https://arxiv.org/abs/2101.02138>`__)
 #
-#
-# About the author
-# ----------------
-# .. include:: ../_static/authors/olivia_di_matteo.txt

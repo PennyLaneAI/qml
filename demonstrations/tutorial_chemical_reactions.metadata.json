@@ -9,7 +9,7 @@
         }
     ],
     "dateOfPublication": "2021-07-23T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Quantum Chemistry"
     ],
@@ -22,7 +22,6 @@
     ],
     "seoDescription": "Construct potential energy surfaces for chemical reactions",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_chemical_reactions",
     "references": [
         {
             "id": "motta2020",
