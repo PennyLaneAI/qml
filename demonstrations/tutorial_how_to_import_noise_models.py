@@ -5,7 +5,7 @@ Noise models describe the various ways in which a quantum system would interact
 with its environment, leading to an evolution that is different from the ideal
 scenario. In general, these models are represented by a set of
 `Kraus operators <https://pennylane.ai/qml/demos/tutorial_noisy_circuits/#noisy-operations>`_
-acting on the quantum state that encapsulates the probabilistic nature of the quantum errors. ⚡
+acting on the quantum state that encapsulates the probabilistic nature of quantum errors. ⚡
 
 Importantly, different sets of Kraus operators can describe the same quantum noise process,
 illustrating the non-unique nature of these representations and motivating how different quantum
@@ -90,7 +90,7 @@ print(model_pl)
 
 ######################################################################
 # For more information on noise models in PennyLane, check out our
-# :doc:`how-to for noise models in PennyLane <tutorial_how_to_use_noise_models>`.
+# :doc:`how-to for noise models in PennyLane <tutorial_how_to_use_noise_models>`. 🧑‍🏫
 #
 # It is important to verify whether these noise models work the intended way.
 # For this purpose, we will use them while simulating a
@@ -135,7 +135,7 @@ print("Are results equal? ", np.allclose(pl_probs, qk_probs, atol=0.01))
 # -----------------------------
 #
 # Conversion of a Qiskit noise model into an equivalent PennyLane noise model
-# can be automated with :func:`~.pennylane.from_qiskit_noise`!
+# can be automated with :func:`~.pennylane.from_qiskit_noise`! 🤖
 #
 # We can see this in practice for a
 # `GenericBackendV2 <https://docs.quantum.ibm.com/api/qiskit/qiskit.providers.fake_provider.GenericBackendV2>`_
