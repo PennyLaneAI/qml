@@ -206,9 +206,10 @@ for edge in lattice.edges:
 hamiltonian
 
 ######################################################################
-# See how we can easily and intuitively construct the Kitaev model Hamiltonian with the tools in
-# these tools.  You can compare the constructed Hamiltonian with the template we already have for
-# the Kitaev model and verify that the Hamiltonians are the same.
+# See how we can easily and intuitively construct the Kitaev model Hamiltonian with the tools
+# available in the `qml.spin <https://docs.pennylane.ai/en/latest/code/qml_spin>`__ module. You can
+# compare the constructed Hamiltonian with the template we already have for the Kitaev model and
+# verify that the Hamiltonians are the same.
 #
 # Conclusion
 # ----------
@@ -216,7 +217,8 @@ hamiltonian
 # Hamiltonians. Here we learned how to use these tools to construct pre-defined Hamiltonian
 # templates, such as the Fermi-Hubbard model Hamiltonian, and use the Lattice object to construct
 # more advanced and customised models such as the Kitaev honeycomb Hamiltonian. The versatility of
-# the new spin functions and classes allows constructing any new spin model Hamiltonian intuitively.
+# the new spin functions and classes allow you to quickly construct any new spin model Hamiltonian
+# intuitively.
 #
 # About the author
 # ----------------
