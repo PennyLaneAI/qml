@@ -30,10 +30,10 @@ illustrated in the following figure:
   :width: 90%
 
 In quantum computing, all arithmetic operations are inherently `modular <https://en.wikipedia.org/wiki/Modular_arithmetic/>`_. 
-The default behavior in PennyLane is to perform operations modulo :math: `2^n`, 
-where :math: `n` is the number of wires in the register. For example, if :math: `n=6`, the result of adding 32 and 43 is 11, 
-because the sum is calculated as :math: `(32 + 43) = 75`, which is then reduced to :math: `75 \mod 64 = 11` (since :math: `2^6 = 64`). 
-That means that quantum registers of :math: `n` wires can  represent numbers up to :math: `2^n`. 
+The default behavior in PennyLane is to perform operations modulo :math:`2^n`, 
+where :math:`n` is the number of wires in the register. For example, if :math:`n=6`, the result of adding 32 and 43 is 11, 
+because the sum is calculated as :math:`(32 + 43) = 75`, which is then reduced to :math:`75 \mod 64 = 11` (since :math:`2^6 = 64`). 
+That means that quantum registers of :math:`n` wires can  represent numbers up to :math:`2^n`. 
 However, users can specify a custom value smaller than this default. It's important to keep this modular behavior 
 in mind when working with quantum arithmetic, as using 
 too few qubits in a quantum register could lead to overflow issues. We will come back to this point later. 
