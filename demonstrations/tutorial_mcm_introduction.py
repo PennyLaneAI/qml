@@ -360,7 +360,7 @@ import numpy as np
 magic_state = np.array([1, np.exp(1j * np.pi / 4)]) / np.sqrt(2)
 
 def t_gadget(wire, aux_wire):
-    qml.QubitStateVector(magic_state, aux_wire)
+    qml.StatePrep(magic_state, aux_wire)
     qml.CNOT([wire, aux_wire])
     mcm = qml.measure(aux_wire, reset=True)  # Resetting disentangles aux qubit
     qml.cond(mcm, qml.S)(wire)  # Apply qml.S(wire) if mcm was 1

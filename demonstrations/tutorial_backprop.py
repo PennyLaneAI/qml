@@ -55,7 +55,7 @@ quantum circuit, but with shifted parameter values (hence the name, parameter-sh
 Let's have a go implementing the parameter-shift rule manually in PennyLane.
 """
 import pennylane as qml
-from jax import numpy as np
+from jax import numpy as jnp
 from matplotlib import pyplot as plt
 import jax
 
@@ -69,19 +69,28 @@ key = jax.random.PRNGKey(42)
 # create a device to execute the circuit on
 dev = qml.device("default.qubit", wires=3)
 
+
+def CNOT_ring(wires):
+    """Apply CNOTs in a ring pattern"""
+    n_wires = len(wires)
+
+    for w in wires:
+        qml.CNOT([w % n_wires, (w + 1) % n_wires])
+
+
 @qml.qnode(dev, diff_method="parameter-shift")
 def circuit(params):
     qml.RX(params[0], wires=0)
     qml.RY(params[1], wires=1)
     qml.RZ(params[2], wires=2)
 
-    qml.broadcast(qml.CNOT, wires=[0, 1, 2], pattern="ring")
+    CNOT_ring(wires=[0, 1, 2])
 
     qml.RX(params[3], wires=0)
     qml.RY(params[4], wires=1)
     qml.RZ(params[5], wires=2)
 
-    qml.broadcast(qml.CNOT, wires=[0, 1, 2], pattern="ring")
+    CNOT_ring(wires=[0, 1, 2])
     return qml.expval(qml.PauliY(0) @ qml.PauliZ(2))
 
 
@@ -109,10 +118,10 @@ plt.show()
 
 def parameter_shift_term(qnode, params, i):
     shifted = params.copy()
-    shifted = shifted.at[i].add(np.pi/2)
+    shifted = shifted.at[i].add(jnp.pi/2)
     forward = qnode(shifted)  # forward evaluation
 
-    shifted = shifted.at[i].add(-np.pi)
+    shifted = shifted.at[i].add(-jnp.pi)
     backward = qnode(shifted) # backward evaluation
 
     return 0.5 * (forward - backward)
@@ -125,7 +134,7 @@ print(parameter_shift_term(circuit, params, 0))
 # to loop over the index ``i``:
 
 def parameter_shift(qnode, params):
-    gradients = np.zeros([len(params)])
+    gradients = jnp.zeros([len(params)])
 
     for i in range(len(params)):
         gradients = gradients.at[i].set(parameter_shift_term(qnode, params, i))
@@ -147,7 +156,7 @@ print(grad_function(params)[0])
 # Alternatively, we can directly compute quantum gradients of QNodes using
 # PennyLane's built in :mod:`qml.gradients <pennylane.gradients>` module:
 
-print(np.stack(qml.gradients.param_shift(circuit)(params)))
+print(jnp.stack(qml.gradients.param_shift(circuit)(params)))
 
 ##############################################################################
 # If you count the number of quantum evaluations, you will notice that we had to evaluate the circuit
@@ -372,10 +381,10 @@ for depth in range(0, 21):
     t = timeit.repeat("grad_qnode_backprop(params)", globals=globals(), number=num, repeat=reps)
     gradient_backprop.append([num_params, min(t) / num])
 
-gradient_shift = np.array(gradient_shift).T
-gradient_backprop = np.array(gradient_backprop).T
-forward_shift = np.array(forward_shift).T
-forward_backprop = np.array(forward_backprop).T
+gradient_shift = jnp.array(gradient_shift).T
+gradient_backprop = jnp.array(gradient_backprop).T
+forward_shift = jnp.array(forward_shift).T
+forward_backprop = jnp.array(forward_backprop).T
 
 ##############################################################################
 # We now import matplotlib, and plot the results.
@@ -419,8 +428,8 @@ ax.plot(*gradient_backprop, '.-', label="Backprop")
 # perform a least squares regression to determine the linear best fit/gradient
 # for the normalized time vs. number of parameters
 x = gradient_shift[0]
-m_shift, c_shift = np.polyfit(*gradient_shift, deg=1)
-m_back, c_back = np.polyfit(*gradient_backprop, deg=1)
+m_shift, c_shift = jnp.polyfit(*gradient_shift, deg=1)
+m_back, c_back = jnp.polyfit(*gradient_backprop, deg=1)
 
 ax.plot(x, m_shift * x + c_shift, '--', label=f"{m_shift:.2f}p{c_shift:+.2f}")
 ax.plot(x, m_back * x + c_back, '--', label=f"{m_back:.2f}p{c_back:+.2f}")

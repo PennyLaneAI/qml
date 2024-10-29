@@ -250,7 +250,9 @@ def layer(x, params, wires, i0=0, inc=1):
         i += inc
         qml.RY(params[0, j], wires=[wire])
 
-    qml.broadcast(unitary=qml.CRZ, pattern="ring", wires=wires, parameters=params[1])
+    n_wires = len(wires)
+    for p, w in zip(params[1], wires):
+        qml.CRZ(p, wires=[w % n_wires, (w + 1) % n_wires])
 
 
 ##############################################################################
