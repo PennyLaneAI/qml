@@ -66,13 +66,12 @@ the water molecule at its equilibrium geometry with the
 """
 import pennylane as qml
 import numpy as np
-from jax import numpy as jnp
 import jax
 
 jax.config.update("jax_enable_x64", True)
 
 symbols = ['O', 'H', 'H']
-geometry = jnp.array([[0.00000000,  0.00000000,  0.28377432],
+geometry = np.array([[0.00000000,  0.00000000,  0.28377432],
                      [0.00000000,  1.45278171, -1.00662237],
                      [0.00000000, -1.45278171, -1.00662237]])
 
@@ -140,7 +139,7 @@ fig.tight_layout()
 
 planewaves = 100000
 electrons = 156
-vectors = jnp.array([[9.49,  0.00,  0.00],
+vectors = np.array([[9.49,  0.00,  0.00],
                     [0.00, 10.20,  0.00],
                     [0.00,  0.00, 11.83]])
 
