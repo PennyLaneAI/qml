@@ -56,16 +56,17 @@ commutator.
 
 Our working example in this demo will be the *special unitary* algebra in two dimensions,
 :math:`\mathfrak{su}(2).`
-It consists of traceless complex-valued skew-Hermitian :math:`2\times 2` matrices, i.e.,
+It consists of traceless complex-valued skew-Hermitian :math:`2\times 2` matrices, which we
+can conveniently describe using the Pauli matrices:
 
 .. math::
 
     \mathfrak{su}(2)
-    &= \left\{x \in \mathbb{C}^{(2\times 2)} {\large|} x^\dagger = -x , \text{tr}[x]=0\right\}\\
     &= \left\{\left(\begin{array} i a & b + ic \\ -b + ic & -i a \end{array}\right)
-    {\large |} a, b, c \in \mathbb{R}\right\}.
+    {\large |} a, b, c \in \mathbb{R}\right\}\\
+    &= \left\{i(a Z + b Y + c X)| a, b, c \in \mathbb{R}\right\}.
 
-We will look at a more involved example at the end of the demo.
+We will also look at a more involved example at the end of the demo.
 
 .. admonition:: Mathematical detail
     :class: note
@@ -83,10 +84,9 @@ We will look at a more involved example at the end of the demo.
 
     We will only consider real Lie algebras here.
 
-Let us set up :math:`\mathfrak{su}(2)` in code. For this, we use Pauli operators as a basis
-for traceless Hermitian :math:`2\times 2` matrices.
+Let us set up :math:`\mathfrak{su}(2)` in code.
 Note that the algebra itself consists of *skew*-Hermitian matrices, but we will work
-with the Hermitian counterparts as inputs.
+with the Hermitian counterparts as inputs, i.e., we will skip the factor :math:`i.`
 We can check that :math:`\mathfrak{su}(2)` is closed under commutators, by
 computing all nested commutators, the so-called *Lie closure*, and observing
 that the closure is not larger than :math:`\mathfrak{su}(2)` itself.
@@ -175,7 +175,8 @@ print(f"All operators are traceless: {np.allclose(traces, 0.)}")
 #
 #     \text{Ad}_{\exp(x)}(y) = \exp(\text{ad}_x) (y),
 #
-# where we applied the exponential map to :math:`\text{ad}_x` via its series representation.
+# where we applied the exponential map to :math:`\text{ad}_x`, which maps from :math:`\mathfrak{g}`
+# to itself, via its series representation.
 # We will refer to this relationship as *adjoint identity*.
 # We talk about Ad and ad in more detail in the box below, and refer to our tutorial on
 # :doc:`g-sim: Lie algebraic classical simulations </demos/tutorial_liesim/>` for
@@ -192,23 +193,19 @@ print(f"All operators are traceless: {np.allclose(traces, 0.)}")
 #         \Psi: \mathcal{G} \times \mathcal{G} \to \mathcal{G},
 #         \ (\exp(x),\exp(y))\mapsto \Psi_{\exp(x)}(\exp(y)) = \exp(x) \exp(y)\exp(-x).
 #
-#     The map :math:`\Psi_{\exp(x)}` is a smooth map from the Lie group :math:`\mathcal{G}`
-#     to itself, so that we may differentiate it. This leads to the differential
-#     :math:`\text{Ad}_{\exp(x)}=d\Psi_{\exp(x)}` which maps the tangent spaces of
-#     :math:`\mathcal{G}` to itself. In particular, at the identity :math:`e=\exp(0)` where
+#     The map :math:`\Psi_{\exp(x)}` (with fixed subscript) is a smooth map from the Lie group
+#     :math:`\mathcal{G}` to itself, so that we may differentiate it. This leads to the
+#     differential :math:`\text{Ad}_{\exp(x)}=d\Psi_{\exp(x)}` which maps the tangent spaces of
+#     :math:`\mathcal{G}` to itself. At the identity, where
 #     the algebra :math:`\mathfrak{g}` forms the tangent space, we find
 #
 #     .. math::
 #
-#         \text{Ad}_{\exp(x)} : \mathfrak{g} \to \mathfrak{g},
-#         \ y\mapsto \exp(x) y \exp(-x).
+#         \text{Ad} : \mathcal{G} \times\mathfrak{g} \to \mathfrak{g},
+#         \ (\exp(x), y)\mapsto \exp(x) y \exp(-x).
 #
 #     This is the adjoint action of :math:`\mathcal{G}` on :math:`\mathfrak{g}` as we
 #     introduced above.
-#     If we want to understand this interaction abstractly, it is useful to view this
-#     transformation as the modification of the tangent vector :math:`y` to a new tangent
-#     vector that gives rise to the curve :math:`\exp(x) \exp(ty)\exp(-x)` instead of the
-#     original curve :math:`\exp(ty).` We will not go into detail here.
 #
 #     Now that we have the adjoint action of :math:`\mathcal{G}` on :math:`\mathfrak{g},`
 #     we can differentiate it with respect to the subscript argument:
@@ -224,7 +221,7 @@ print(f"All operators are traceless: {np.allclose(traces, 0.)}")
 #     :math:`x` on the vector space that is the algebra itself. That is, we found the
 #     *adjoint representation* of :math:`\mathfrak{g}.`
 #
-#     Finally, note that the adjoint identity can be proven by with similar tools as above,
+#     Finally, note that the adjoint identity can be proven with similar tools as above,
 #     i.e., chaining derivatives and exponentiation suitably. #TODO ref
 #
 # Symmetric spaces
@@ -320,7 +317,7 @@ def is_orthogonal(op, basis):
 #
 # .. math::
 #
-#     \mathfrak{k} = \mathbb{R} iZ.
+#     \mathfrak{k} = \text{span}_{\mathbb{R}} \{iZ\}.
 #
 # Let us define it in code, and check whether it gives rise to a Cartan decomposition.
 # As we want to look at another example later, we wrap everything in a function.
@@ -437,14 +434,14 @@ p = check_cartan_decomposition(su2, u1, space_name)
 # For our example, we established the decomposition
 # :math:`\mathfrak{su}(2)=\mathfrak{u}(1)\oplus \mathfrak{p}` with the two-dimensional horizontal
 # space :math:`\mathfrak{p} = \text{span}_{\mathbb{R}}\{iX, iY\}.` Starting with the subspace
-# :math:`\mathfrak{a}=\mathbb{R} iY,` we see that we immediately reach a maximal Abelian
+# :math:`\mathfrak{a}=\text{span}_{\mathbb{R}} \{iY\},` we see that we immediately reach a maximal Abelian
 # subalgebra, i.e., a CSA, because :math:`[Y, X]\neq 0.` Applying a rotation :math:`\exp(i\eta Z)`
 # to this CSA gives us a new CSA via
 #
 # .. math::
 #
-#     \mathfrak{a}'=\exp(i\eta Z) (\mathbb{R} iY) \exp(-i\eta Z)
-#     = \mathbb{R} (\cos(2\eta) iY + \sin(2\eta) iX).
+#     \mathfrak{a}'=\{\exp(i\eta Z) (c iY) \exp(-i\eta Z) | c\in\mathbb{R}\}
+#     =\{c\cos(2\eta) iY + c\sin(2\eta) iX | c\in\mathbb{R}\} .
 #
 # The vertical group element :math:`\exp(i\eta Z)` simply rotates the CSA within
 # :math:`\mathfrak{p}!` Let us not forget to define the CSA in code.
@@ -533,7 +530,10 @@ print(f"The rotated CSAs match between numerics and theory: {a_primes_equal}")
 #     =\Pi_{\mathfrak{k}}-\Pi_{\mathfrak{p}}
 #     = \mathbb{I}_{\mathfrak{g}},
 #
-# where we used the properties of the projectors.
+# where we used the projectors' property :math:`\Pi_{\mathfrak{k}}^2=\Pi_{\mathfrak{k}}` and
+# :math:`\Pi_{\mathfrak{p}}^2=\Pi_{\mathfrak{p}}`, as well as the fact that
+# :math:`\Pi_{\mathfrak{k}}\Pi_{\mathfrak{p}}=\Pi_{\mathfrak{p}}\Pi_{\mathfrak{k}}=0` because
+# the spaces :math:`\mathfrak{k}` and :math:`\mathfrak{p}` are orthogonal to each other.
 #
 # .. admonition:: Mathematical detail
 #     :class: note
@@ -577,9 +577,9 @@ print(f"The rotated CSAs match between numerics and theory: {a_primes_equal}")
 #
 # **Example**
 #
-# In our example, an involution that reproduces our choice :math:`\mathfrak{k}=\mathbb{R} iZ` is
-# :math:`\theta_Z(x) = Z x Z` (Convince yourself that it is an involution that respects
-# commutators).
+# In our example, an involution that reproduces our choice
+# :math:`\mathfrak{k}=\text{span}_{\mathbb{R}} \{iZ\}` is :math:`\theta_Z(x) = Z x Z`
+# (Convince yourself that it is an involution that respects commutators).
 
 
 def theta_Z(x):
@@ -595,9 +595,9 @@ p_is_su2_minus = all(qml.equal(-x, theta_of_x) for x, theta_of_x in zip(p, theta
 print(f"p is the -1 eigenspace: {p_is_su2_minus}")
 
 ######################################################################
-#
 # We can easily get a new subalgebra by modifying the involution, say, to
-# :math:`\theta_Y(x) = Y x Y,` expecting that :math:`k_Y=\mathbb{R} iY` becomes the new subalgebra.
+# :math:`\theta_Y(x) = Y x Y,` expecting that :math:`k_Y=\text{span}_{\mathbb{R}} \{iZ\}`
+# becomes the new subalgebra.
 
 
 def theta_Y(x):
@@ -646,19 +646,20 @@ print(f"Under theta_Y, the operators\n{su2}\nhave the eigenvalues\n{eigvals}")
 #
 # .. math::
 #
-#     \mathcal{G} = \mathcal{K}\mathcal{P}, \text{ or }\ \forall\ G\in\mathcal{G}
-#     \exists K\in\mathcal{K}, x\in\mathcal{m}: G = K \exp(x).
+#     \mathcal{G} &= \mathcal{K}\mathcal{P}, \text{ or }\\
+#     \forall\ G\in\mathcal{G}\exists K\in\mathcal{K}, x\in\mathcal{m}: G &= K \exp(x).
 #
 # This "KP" decomposition can be seen as the "group version" of
 # :math:`\mathfrak{g} = \mathfrak{k} \oplus\mathfrak{p}.`
 #
 # The second step is the further decomposition of the space :math:`\mathcal{P}=\exp(\mathfrak{p}).`
-# We start by fixing a Cartan subalgebra (CSA) :math:`\mathfrak{a}\subset\mathfrak{p}.`
-# Given a horizontal vector :math:`x\in\mathfrak{p},` we can construct a second CSA
-# :math:`\mathfrak{a}_x\subset\mathfrak{p}` that contains :math:`x.` Now, recall that for any two
-# CSAs there is a subalgebra element :math:`y\in\mathfrak{k}` such that the adjoint action of
-# :math:`\exp(y)` maps one CSA to the other. In particular, there is a :math:`y\in\mathfrak{k}`
-# so that
+# For this we first need to fix a Cartan subalgebra (CSA) :math:`\mathfrak{a}\subset\mathfrak{p}.`
+# The CSA might be given through some application or contextual information, but there is no
+# canonical choice.
+# Given a horizontal vector :math:`x\in\mathfrak{p},` we can always construct a second CSA
+# :math:`\mathfrak{a}_x\subset\mathfrak{p}` that contains :math:`x.` As any two CSAs can be mapped
+# to each other by some subalgebra element :math:`y\in\mathfrak{k}` using the adjoint action Ad,
+# we know that a :math:`y` exists such that
 #
 # .. math::
 #
@@ -673,13 +674,14 @@ print(f"Under theta_Y, the operators\n{su2}\nhave the eigenvalues\n{eigvals}")
 #
 # As we discussed, the converse inclusion also must hold for a reductive space, so that we
 # may even replace :math:`\subset` by an equality.
-# Now we can use :math:`\exp(\text{Ad}_{\exp(-y)} x)=\text{Ad}_{\exp(-y)}\exp(x)` to move
+# Now we can use :math:`\exp(\text{Ad}_{K} x)=\text{Ad}_{K}\exp(x)` to move
 # this statement to the group level,
 #
 # .. math::
 #
 #     \mathcal{P}
 #     = \{\exp(\exp(-y) \mathfrak{a} \exp(y)) | y\in\mathfrak{k}\}
+#     = \{\exp(K^{-1} \mathfrak{a} K) | K\in\mathcal{K}\}
 #     = \{K^{-1} \mathcal{A} K | K\in\mathcal{K}\},
 #
 # where we abbreviated :math:`\mathcal{A} = \exp(\mathfrak{a}).`
@@ -712,7 +714,7 @@ print(qml.Rot(0.5, 0.2, -1.6, wires=0).decomposition())
 ######################################################################
 # Other choices for involutions or---equivalently---subalgebras :math:`\mathfrak{k}` will
 # lead to other decompositions of ``Rot``. For example, using :math:`\theta_Y` from above
-# together with the CSA :math:`\mathfrak{a_Y}=\mathbb{R} iX,` we find the decomposition
+# together with the CSA :math:`\mathfrak{a_Y}=\text{span}_{\mathbb{R}} \{iX\},` we find the decomposition
 #
 # .. math::
 #
@@ -814,8 +816,8 @@ fig, ax = qml.draw_mpl(su4_gate, wire_order=[0, 1])(params)
 #
 # You may have noticed that the theorem only states the existence of a
 # decomposition, but does not provide a constructive way of finding
-# :math:`y_{1,2}` and :math:`a` for a given gate :math:`U.` If you are
-# curious about this question, watch out for follow-up demos!
+# :math:`y_{1,2}` and :math:`a` for a given gate :math:`U.` For this,
+# some additional work is required, as explained in [#kokcu]_, for example.
 #
 # Conclusion
 # ----------
@@ -831,8 +833,7 @@ fig, ax = qml.draw_mpl(su4_gate, wire_order=[0, 1])(params)
 # in quantum optimal control, and for trainability analyses. For Lie algebraic
 # classical simulation of quantum circuits, check the
 # :doc:`g-sim </demos/tutorial_liesim/>` and
-# :doc:`(g+P)-sim </demos/tutorial_liesim_extension/>` demos, and stay posted for
-# a brand new demo on compiling Hamiltonian simulation circuits with the KAK theorem!
+# :doc:`(g+P)-sim </demos/tutorial_liesim_extension/>` demos.
 #
 # References
 # ----------
