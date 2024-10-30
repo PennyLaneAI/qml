@@ -342,7 +342,7 @@ print(circuit_with_Poly(x=1,y=4), " ---> ", state_to_decimal(circuit_with_Poly(x
 # References
 # ----------
 # 
-# .. [#shor_exp]
+#  .. [#shor_exp]
 #
 #     Robert L Singleton Jr
 #     "Shor's Factoring Algorithm and Modular Exponentiation Operators.",
