@@ -35,7 +35,7 @@ Fermi-Hubbard model, and the Kitaev honeycomb model.
 # and spin-down fermions at site :math:`i`. The Fermi-Hubbard Hamiltonian can then be
 # constructed in PennyLane by passing the hopping and interaction parameters to the
 # :func:`~.pennylane.spin.fermi_hubbard` function. We also need to specify the shape of the lattice,
-# which is ``chain`` in our example. For a full list od supported lattice shapes see the
+# which is ``chain`` in our example. For a full list of supported lattice shapes see the
 # :func:`~.pennylane.spin.fermi_hubbard` documentation. The number of sites we would like to include
 # in our Hamiltonian should also be defined as a list of integers for
 # :math:`x, y, z` directions, depending on the lattice shape. Note that for our ``chain`` model we
@@ -89,7 +89,7 @@ hamiltonian = qml.spin.fermi_hubbard("cubic", [3, 3, 3], hopping, coulomb)
 # constructed either by calling the helper function :func:`~.pennylane.spin.generate_lattice` or by
 # manually constructing the object. Let's see examples of both methods. First we use
 # :func:`~.pennylane.spin.generate_lattice` to construct a square lattice containing
-# :math:`9 = 3 \times 3` sites which are all connected to their nearest neighbor.
+# :math:`3 \times 3 = 9` sites which are all connected to their nearest neighbor.
 
 lattice = qml.spin.generate_lattice('square', [3, 3])
 
@@ -212,8 +212,8 @@ plot(Lattice(n_cells, vectors, positions), figsize=(5, 5))
 
 ######################################################################
 # Now we add custom edges to the lattice. In our example, we define four types of custom
-# edges: the first types is the one that connects node 0 to 1, the second type is defined to connect
-# node 0 to 2 and the third and forth types connect node 1 to 3 and 2 to 3, respectively. Note that
+# edges: the first type is the one that connects node 0 to 1, the second type is defined to connect
+# node 0 to 2 and the third and fourth types connect node 1 to 3 and 2 to 3, respectively. Note that
 # this is an arbitrary selection. You can define any type of custom edge you would like.
 
 custom_edges = [[(0, 1), ('XX', 0.5)],
@@ -262,7 +262,7 @@ hamiltonian
 # Hamiltonians. Here we learned how to use these tools to construct pre-defined Hamiltonian
 # templates, such as the Fermi-Hubbard model Hamiltonian, and use the
 # :class:`~.pennylane.spin.Lattice` object to construct more advanced and customised models such as
-# the Kitaev honeycomb Hamiltonian. The versatility of the new spin functions and classes allow you
+# the Kitaev honeycomb Hamiltonian. The versatility of the new spin functions and classes allows you
 # to quickly construct any new spin model Hamiltonian intuitively.
 #
 # References
@@ -279,8 +279,8 @@ hamiltonian
 #     "Refraction and band isotropy in 2D square-like Archimedean photonic crystal lattices",
 #     Opt. Express 16, 4048, 2008.
 #
-# About the author
-# ----------------
+# About the authors
+# ------------------
 #
 # .. include:: ../_static/authors/diksha_dhawan.txt
 #
