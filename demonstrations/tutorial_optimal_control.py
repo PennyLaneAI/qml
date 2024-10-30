@@ -506,7 +506,6 @@ times = [jnp.linspace(eps, T - eps, P * 2) for op in ops_param]
 # All initial parameters: small alternating amplitudes and times
 params = [jnp.hstack([jnp.array([0.1 * (-1) ** i for i in range(P)]), time]) for time in times]
 
-
 #############################################################################
 # Now we are all set up to train the parameters of the pulse sequence to produce
 # our target gate, the CNOT. We will use the Adam optimizer [#KingmaBa14]_, implemented in the
