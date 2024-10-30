@@ -33,7 +33,7 @@ Fermi-Hubbard model, and the Kitaev honeycomb model.
 # :math:`\left< i,j \right>` represents the indices of neighbouring spins, :math:`\sigma` is the spin
 # degree of freedom, and :math:`n_{i \uparrow}, n_{i \downarrow}` are number operators for spin-up
 # and spin-down fermions at site :math:`i`. The Fermi-Hubbard Hamiltonian can then be
-# constructed in PennyLane by passing the hoping and interaction parameters to the
+# constructed in PennyLane by passing the hopping and interaction parameters to the
 # :func:`~.pennylane.spin.fermi_hubbard` function. We also need to specify the shape of the lattice,
 # which is ``chain`` in our example. For a full list od supported lattice shapes see the
 # :func:`~.pennylane.spin.fermi_hubbard` documentation. The number of sites we would like to include
