@@ -62,9 +62,9 @@ print(model_qk)
 ######################################################################
 # In contrast, the noise models in PennyLane are :class:`~.pennylane.NoiseModel`
 # objects with Boolean conditions that help select the operation for which
-# noise is to be inserted and ``noise functions`` (callables) that apply the corresponding
+# noise is to be inserted and noise functions that apply the corresponding
 # noise for the selected operation or measurement process based on some user-provided
-# ``metadata``. This allows for a more functional construction, as we can see by
+# metadata. This allows for a more functional construction, as we can see by
 # recreating the noise model from above:
 #
 
@@ -96,9 +96,10 @@ print(model_pl)
 # It is important to verify whether these noise models work the intended way.
 # For this purpose, we will use them while simulating a
 # `GHZ state <https://en.wikipedia.org/wiki/Greenberger–Horne–Zeilinger_state>`_
-# using the ``default.mixed`` and ``qiskit.aer`` devices. Note that while we
-# would require :func:`~.pennylane.add_noise` transform for adding the PennyLane
-# noise model, the Qiskit noise model can be provided in the device definition itself:
+# using the :mod:`default.mixed <pennylane.devices.default_mixed>` and ``qiskit.aer``
+# devices. Note that while we would require :func:`~.pennylane.add_noise` transform
+# for adding the PennyLane noise model, the Qiskit noise model can be provided in
+# the device definition itself:
 #
 
 # Preparing the devices
@@ -129,7 +130,6 @@ qk_probs = np.array(list(qk_noisy_res.values())) / n_shots
 
 print("PennyLane Results: ", np.round(pl_probs, 3))
 print("Qiskit Results:    ", np.round(qk_probs, 3))
-print("Are results equal? ", np.allclose(pl_probs, qk_probs, atol=0.01))
 
 ######################################################################
 # Importing Qiskit noise models
@@ -170,7 +170,12 @@ print(pl_noise_model)
 #
 # This can be done for any noise model defined in Qiskit, with a minor catch that
 # the classical readout errors are not supported yet in PennyLane.
+# However, we can easily re-insert quantum readout errors into our converted noise model.
+# Here's an example that adds ``rmeas_fcond``` and ``rmeas_noise``` (defined earlier) to the above:
 #
+
+pl_noise_model += {"meas_map": {rmeas_fcond: rmeas_noise}}
+print(pl_noise_model.meas_map)
 
 ######################################################################
 # Conclusion
