@@ -342,13 +342,13 @@ print(circuit_with_Poly(x=1,y=4), " ---> ", state_to_decimal(circuit_with_Poly(x
 # References
 # ----------
 # 
-#  .. [#shor_exp]
+# .. [#shor_exp]
 #
 #     Robert L Singleton Jr
 #     "Shor's Factoring Algorithm and Modular Exponentiation Operators.",
 #     `arXiv:2306.09122 <https://arxiv.org/abs/2306.09122/>`__, 2023.
 #
-#  .. [#sanders]
+# .. [#sanders]
 #
 #     Yuval R. Sanders, Guang Hao Low, Artur Scherer, Dominic W. Berry
 #     "Black-box quantum state preparation without arithmetic.",
