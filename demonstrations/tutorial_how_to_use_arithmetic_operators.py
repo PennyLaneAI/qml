@@ -10,12 +10,16 @@ serving as fundamental building blocks in their design and execution. For exampl
 
 1. In Shor's algorithm quantum arithmetic is crucial for performing modular exponentiation [#shor_exp]_. 
 
-2. Grover's algorithm might need to use quantum arithmetic to construct oracles, as shown in [#demo_qft_arith]_.
+2. Grover's algorithm might need to use quantum arithmetic to construct oracles, as shown in `this related demo <https://pennylane.ai/qml/demos/tutorial_qft_arithmetics/>`_.
 
 3. Loading data or preparing initial states on a quantum computer often requires several quantum arithmetic operations [#sanders]_.
 
 With PennyLane, you will see how easy it is to build these operations as subroutines for your quantum algorithms!
 
+.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_how_to_use_arithmetic_operators.png
+    :align: center
+    :width: 70%
+    :target: javascript:void(0)
 
 InPlace and OutPlace arithmetic operations
 ------------------------------------------
@@ -29,7 +33,7 @@ illustrated in the following figure:
   :align: center
   :width: 90%
 
-In quantum computing, all arithmetic operations are inherently `modular <https://en.wikipedia.org/wiki/Modular_arithmetic/>`_. 
+In quantum computing, all arithmetic operations are inherently `modular <https://en.wikipedia.org/wiki/Modular_arithmetic>`_. 
 The default behavior in PennyLane is to perform operations modulo :math:`2^n`, 
 where :math:`n` is the number of wires in the register. For example, if :math:`n=6`, the result of adding 32 and 43 is 11, 
 because the sum is calculated as :math:`(32 + 43) = 75`, which is then reduced to :math:`75 \mod 64 = 11` (since :math:`2^6 = 64`). 
@@ -51,14 +55,14 @@ The :class:`~.pennylane.Adder` performs an Inplace operation, adding an integer 
 
 On the other hand, the :class:`~.pennylane.OutAdder` performs an Outplace operation, where the states of two 
 wires, :math:`|x \rangle` and :math:`|y \rangle` are 
-added together and the result is stored in a third wire:
+added together and the result is stored in a third register:
 
 .. math::
 
    \text{OutAdder} |x \rangle |y \rangle |0 \rangle = |x \rangle |y \rangle |x + y \rangle.
 
 To implement these operators in Pennylane, the first step is to define the `registers of wires <https://pennylane.ai/qml/demos/tutorial_how_to_use_registers/>`_
-we will work with. Note that we always need to define the `work_wires` register to implement the :class:`~.pennylane.Multiplier` operator.
+we will work with. Note that we need to define the ``work_wires`` register to implement the :class:`~.pennylane.Multiplier` operator.
 """
 
 import pennylane as qml
@@ -71,7 +75,7 @@ wires = qml.registers({"x": 4, "y":4, "output":6,"work_wires": 4})
 # operation, where we initialize specific values to :math:`x` and :math:`y`. Note that in this example we use computational basis states, but
 # you could introduce any quantum state as input.
 
-def product_basis_state(x,y):
+def product_basis_state(x=0,y=0):
     qml.BasisState(x, wires=wires["x"])
     qml.BasisState(y, wires=wires["y"])
 
@@ -106,7 +110,7 @@ print("output register: ", output[2]," ---> ", state_to_decimal(output[2]))
 @qml.qnode(dev)
 def circuit(x):
 
-    product_basis_state(x, 0)       # |x> 
+    product_basis_state(x)          # |x> 
     qml.Adder(5, wires["x"])        # |x+5> 
 
     return qml.sample(wires=wires["x"])
@@ -167,7 +171,7 @@ print(circuit(x=2,y=3), " ---> ", state_to_decimal(circuit(x=2,y=3)))
 @qml.qnode(dev)
 def circuit(x):
 
-    product_basis_state(x, 0)                                        #    |x>                                    
+    product_basis_state(x)                                           #    |x>                                    
     qml.Multiplier(3, wires["x"], work_wires=wires["work_wires"])    #    |3x> 
 
     return qml.sample(wires=wires["x"])
@@ -194,13 +198,13 @@ print(circuit(x=4,y=2), " ---> ", state_to_decimal(circuit(x=4,y=2)))
 # Nice! 
 # 
 # Note that even though we only covered addition and multiplication, modular subtraction 
-# and division are the inverse operations of addition and multiplication, respectively. The inverse of a quantum cirucit 
-# can be implemented with the :func:`~.pennylane.adjoint` operator. Let's see an example of modular substraction:
+# and division are the inverse operations of addition and multiplication, respectively. The inverse of a quantum circuit 
+# can be implemented with the :func:`~.pennylane.adjoint` operator. Let's see an example of modular subtraction:
 
 @qml.qnode(dev)
 def circuit(x):
 
-    product_basis_state(x, 0)                  # |x> 
+    product_basis_state(x)                     # |x> 
     qml.adjoint(qml.Adder(3, wires["x"]))      # |x-3>  
 
     return qml.sample(wires=wires["x"])

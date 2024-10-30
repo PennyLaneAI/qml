@@ -18,11 +18,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_qnn_multivariate_regression.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_how_to_use_arithmetic_operators.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_qnn_multivariate_regression.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_how_to_use_arithmetic_operators.png"
         }
     ],
     "seoDescription": "Learn how to use the quantum arithmetic operators of Pennylane.",
@@ -37,15 +37,6 @@
             "year": "2023",
             "publisher": "",
             "url": "https://arxiv.org/abs/2306.09122/"
-        },
-        {
-            "id": "demo_qft_arith",
-            "type": "other",
-            "title": "Basic arithmetic with the quantum Fourier transform (QFT)",
-            "authors": "Guillermo Alonso",
-            "year": "2024",
-            "publisher": "",
-            "url": "https://pennylane.ai/qml/demos/tutorial_qft_arithmetics/"
         },
         {
             "id": "sanders",
