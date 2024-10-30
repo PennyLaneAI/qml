@@ -18,7 +18,7 @@ With PennyLane, you will see how easy it is to build these operations as subrout
 
 .. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_how_to_use_arithmetic_operators.png
     :align: center
-    :width: 70%
+    :width: 60%
     :target: javascript:void(0)
 
 InPlace and OutPlace arithmetic operations
@@ -47,11 +47,11 @@ Addition operators
 
 There are two addition operators in PennyLane: the :class:`~.pennylane.Adder` and the :class:`~.pennylane.OutAdder`.
 
-The :class:`~.pennylane.Adder` performs an Inplace operation, adding an integer value :math:`k` to the state of the wires :math:`|w \rangle`. It is defined as:
+The :class:`~.pennylane.Adder` performs an Inplace operation, adding an integer value :math:`k` to the state of the wires :math:`|x \rangle`. It is defined as:
 
 .. math::
 
-   \text{Adder}(k) |w \rangle = | w+k \rangle.
+   \text{Adder}(k) |x \rangle = | x+k \rangle.
 
 On the other hand, the :class:`~.pennylane.OutAdder` performs an Outplace operation, where the states of two 
 wires, :math:`|x \rangle` and :math:`|y \rangle` are 
@@ -150,11 +150,11 @@ print(circuit(x=2,y=3), " ---> ", state_to_decimal(circuit(x=2,y=3)))
 # ~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # There are two multiplication operators in PennyLane: the :class:`~.pennylane.Multiplier` and the :class:`~.pennylane.OutMultiplier`.
-# The class :class:`~.pennylane.Multiplier` performs an Inplace operation, multiplying the state of the wires :math:`|w \rangle` by an integer :math:`k`. It is defined as:
+# The class :class:`~.pennylane.Multiplier` performs an Inplace operation, multiplying the state of the wires :math:`|x \rangle` by an integer :math:`k`. It is defined as:
 #
 # .. math::
 #
-#   \text{Multiplier}(k) |w \rangle = | kw \rangle.
+#   \text{Multiplier}(k) |x \rangle = | kx \rangle.
 #
 # The :class:`~.pennylane.OutMultiplier` performs an Outplace operation, where the states of two 
 # registers :math:`|x \rangle` and :math:`|y \rangle`, 
