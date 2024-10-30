@@ -57,7 +57,7 @@ hamiltonian = qml.spin.fermi_hubbard("cubic", [3, 3, 3], hopping, coulomb)
 ######################################################################
 # Similarly, a broad range of other well-investigated spin model Hamiltonians can be constructed
 # with the dedicated functions available in the `qml.spin
-# <https://docs.pennylane.ai/en/latest/code/qml_spin.html#hamiltonian-functions>`__ module, by just
+# <https://docs.pennylane.ai/en/latest/code/qml_spin.html>`__ module, by just
 # providing the lattice information and the Hamiltonian parameters.
 #
 # Building Hamiltonians manually
@@ -67,7 +67,7 @@ hamiltonian = qml.spin.fermi_hubbard("cubic", [3, 3, 3], hopping, coulomb)
 # a Hamiltonian quickly. PennyLane also offers tools that can be used to construct
 # spin Hamiltonians manually, which are useful for building customized Hamiltonians. Let’s learn
 # how to use these tools by constructing the Hamiltonian for the
-# `transverse field Ising <https://pennylane.ai/datasets/qspin/transverse-field-ising-model>`__
+# `transverse field Ising <https://docs.pennylane.ai/en/latest/code/api/pennylane.spin.transverse_ising.html>`__
 # model on a two-dimensional lattice.
 #
 # The Hamiltonian is represented as:
@@ -77,7 +77,7 @@ hamiltonian = qml.spin.fermi_hubbard("cubic", [3, 3, 3], hopping, coulomb)
 #     H =  -J \sum_{<i,j>} \sigma_i^{z} \sigma_j^{z} - h\sum_{i} \sigma_{i}^{x},
 #
 # where :math:`J` is the coupling defined for the Hamiltonian, :math:`h` is the strength of
-# transverse magnetic field, and :math:`<i,j> represents the indices of neighbouring spins.
+# transverse magnetic field, and :math:`<i,j>` represents the indices of neighbouring spins.
 #
 # Our approach for doing this is to construct a lattice that represents the spin sites and
 # their connectivity. This is done by using the :class:`~.pennylane.spin.Lattice` class that can be
@@ -127,7 +127,7 @@ plot(lattice)
 # unit cell, the primitive translation vectors defining the lattice and the number of cells in each
 # direction [#ashcroft]_. Recall that a unit cell is the smallest repeating unit of a lattice.
 #
-# Let's create a `square-octagon <https://arxiv.org/abs/1005.3815>`__ lattice manually. Our lattice
+# Let's create a square-octagon [#jovanovic]_ lattice manually. Our lattice
 # can be constructed in a two-dimensional Cartesian coordinate system with two primitive
 # translation vectors defined as vectors along the :math:`x` and :math:`y` directions and four
 # lattice point located inside the unit cell. We also assume that the lattice has three unit cells
@@ -135,7 +135,8 @@ plot(lattice)
 
 from pennylane.spin import Lattice
 
-positions = [[0.2, 0.5], [0.5, 0.2], [0.5, 0.8], [0.8, 0.5]] # coordinate of the lattice cites
+positions = [[0.2, 0.5], [0.5, 0.2],
+             [0.5, 0.8], [0.8, 0.5]] # coordinate of cites
 vectors = [[1, 0], [0, 1]] # primitive translation vectors
 n_cells = [3, 3] # number of unit cells in each direction
 
@@ -178,7 +179,7 @@ hamiltonian
 # Adding custom nodes and edges
 # -----------------------------
 # Now we work on a more complicated Hamiltonian to see how our existing tools allow building it
-# intuitively. We construct the anisotropic square-trigonal model, where the coupling parameters
+# intuitively. We construct the anisotropic square-trigonal [#jovanovic]_ model, where the coupling parameters
 # depend on the orientation of the bonds. We can construct the Hamiltonian by building the
 # lattice manually and adding custom edges between the nodes. For instance, to define a custom
 # ``XX`` edge with coupling constant 0.5 between nodes 0 and 1, we use:
@@ -220,7 +221,7 @@ lattice = Lattice(n_cells, vectors, positions, custom_edges=custom_edges)
 ######################################################################
 # Let's print the lattice edges and check that our custom edge types are set correctly.
 
-lattice.edges
+print(lattice.edges)
 
 ######################################################################
 # You can compare these edges with the lattice plotted above and verify the correct translation of
@@ -247,7 +248,7 @@ hamiltonian
 
 ######################################################################
 # You can see that it is easy and intuitive to construct this anisotropic Hamiltonian with the tools
-# available in the `qml.spin <https://docs.pennylane.ai/en/latest/code/qml_spin>`__ module. You can
+# available in the `qml.spin <https://docs.pennylane.ai/en/latest/code/qml_spin.html>`__ module. You can
 # use these tools to construct custom Hamiltonians for other interesting systems.
 #
 # Conclusion
@@ -265,7 +266,13 @@ hamiltonian
 # .. [#ashcroft]
 #
 #     Neil W. Ashcroft, David N. Mermin,
-#     "Solid state physics", New York: Saunders College Publishing, 1976
+#     "Solid state physics", New York: Saunders College Publishing, 1976.
+#
+# .. [#jovanovic]
+#
+#     D. Jovanovic, R. Gajic, K. Hingerl,
+#     "Refraction and band isotropy in 2D square-like Archimedean photonic crystal lattices",
+#     Opt. Express 16, 4048, 2008.
 #
 # About the author
 # ----------------
