@@ -12,20 +12,25 @@ Fermi-Hubbard model, and the Kitaev honeycomb model.
 # ---------------------
 #
 # PennyLane has a range of `functions <https://docs.pennylane.ai/en/latest/code/qml_spin.html#hamiltonian-functions>`__
-# for constructing spin model Hamiltonians with minimal input needed from the user. Let’s look
+# for constructing spin model Hamiltonians with minimal input needed from the user. To construct the
+# Hamiltonian, we basically need to specify the lattice that describes spin cites and the
+# Hamiltonian parameters such as those that describe the interaction between the cites. Then we pass
+# this information to the function dedicated to a model. Let’s look
 # at the `Fermi-Hubbard <https://en.wikipedia.org/wiki/Hubbard_model>`__ model as an example.
-# This model can represent a chain of hydrogen atoms where each atom, or site, can hold one spin-up
-# and one spin-down particle. The `Hamiltonian <https://docs.pennylane.ai/en/latest/code/api/pennylane.spin.fermi_hubbard.html>`__
+#
+# The Fermi-Hubbard model can represent a chain of hydrogen atoms where each atom, or site, can hold
+# one spin-up and one spin-down particle. The
+# `Hamiltonian <https://docs.pennylane.ai/en/latest/code/api/pennylane.spin.fermi_hubbard.html>`__
 # describing this model has two components: the kinetic energy component which is parameterized by a
 # hopping parameter, :math:`t`, and the potential energy component parameterized by the on-site
 # interaction strength, :math:`U`.
 #
 # .. math::
 #
-#     H = -t\sum_{<i,j>, \sigma} c_{i\sigma}^{\dagger}c_{j\sigma} + U\sum_{i}n_{i \uparrow} n_{i\downarrow}.
+#     H = -t\sum_{\left< i,j \right>, \sigma} c_{i\sigma}^{\dagger}c_{j\sigma} + U\sum_{i}n_{i \uparrow} n_{i\downarrow}.
 #
 # The terms :math:`c^{\dagger}`, :math:`c` are the creation and annihilation operators,
-# :math:`<i,j>` represents the indices of neighbouring spins, :math:`\sigma` is the spin
+# :math:`\left< i,j \right>` represents the indices of neighbouring spins, :math:`\sigma` is the spin
 # degree of freedom, and :math:`n_{i \uparrow}, n_{i \downarrow}` are number operators for spin-up
 # and spin-down fermions at site :math:`i`. The Fermi-Hubbard Hamiltonian can then be
 # constructed in PennyLane by passing the hoping and interaction parameters to the
@@ -74,10 +79,10 @@ hamiltonian = qml.spin.fermi_hubbard("cubic", [3, 3, 3], hopping, coulomb)
 #
 # .. math::
 #
-#     H =  -J \sum_{<i,j>} \sigma_i^{z} \sigma_j^{z} - h\sum_{i} \sigma_{i}^{x},
+#     H =  -J \sum_{\left< i,j \right>} \sigma_i^{z} \sigma_j^{z} - h\sum_{i} \sigma_{i}^{x},
 #
 # where :math:`J` is the coupling defined for the Hamiltonian, :math:`h` is the strength of
-# transverse magnetic field, and :math:`<i,j>` represents the indices of neighbouring spins.
+# transverse magnetic field, and :math:`\left< i,j \right>` represents the indices of neighbouring spins.
 #
 # Our approach for doing this is to construct a lattice that represents the spin sites and
 # their connectivity. This is done by using the :class:`~.pennylane.spin.Lattice` class that can be
