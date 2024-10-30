@@ -29,7 +29,7 @@ specific register's state. In contrast, Outplace operators, such as the :class:`
 combine multiple states and store the result in a new register, leaving the original states unchanged. Both kind of operators are
 illustrated in the following figure:
 
-.. figure:: ../_static/demonstration_assets/how_to_use_arithmetic_operators/in_outplace.jpg
+.. figure:: ../_static/demonstration_assets/how_to_use_arithmetic_operators/in_outplace.png
   :align: center
   :width: 90%
 
@@ -347,12 +347,6 @@ print(circuit_with_Poly(x=1,y=4), " ---> ", state_to_decimal(circuit_with_Poly(x
 #     Robert L Singleton Jr
 #     "Shor's Factoring Algorithm and Modular Exponentiation Operators.",
 #     `arXiv:2306.09122 <https://arxiv.org/abs/2306.09122/>`__, 2023.
-#
-# .. [#demo_qft_arith]
-#
-#     Guillermo Alonso
-#     "Basic arithmetic with the quantum Fourier transform (QFT).",
-#     `Pennylane: Basic arithmetic with the quantum Fourier transform (QFT) <https://pennylane.ai/qml/demos/tutorial_qft_arithmetics/>`__, 2024.
 #
 #  .. [#sanders]
 #
