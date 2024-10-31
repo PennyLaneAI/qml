@@ -35,8 +35,7 @@ illustrated in the following figure:
 
 In quantum computing, all arithmetic operations are inherently `modular <https://en.wikipedia.org/wiki/Modular_arithmetic>`_. 
 The default behavior in PennyLane is to perform operations modulo :math:`2^n`, 
-where :math:`n` is the number of wires in the register. For example, if :math:`n=6`, the result of adding 32 and 43 is 11, 
-because the sum is calculated as :math:`(32 + 43) = 75`, which is then reduced to :math:`75 \mod 64 = 11` (since :math:`2^6 = 64`). 
+where :math:`n` is the number of wires in the register. For example, if :math:`n=6`, we have :math:`(32 + 43) = 75 = 11 \mod 64`,  (since :math:`2^6 = 64`). 
 That means that quantum registers of :math:`n` wires can  represent numbers up to :math:`2^n`. 
 However, users can specify a custom value smaller than this default. It's important to keep this modular behavior 
 in mind when working with quantum arithmetic, as using 
@@ -62,7 +61,7 @@ added together and the result is stored in a third register:
    \text{OutAdder} |x \rangle |y \rangle |0 \rangle = |x \rangle |y \rangle |x + y \rangle.
 
 To implement these operators in Pennylane, the first step is to define the `registers of wires <https://pennylane.ai/qml/demos/tutorial_how_to_use_registers/>`_
-we will work with. Note that we need to define the ``work_wires`` register to implement the :class:`~.pennylane.Multiplier` operator.
+we will work with. We define wires for input registers, the output register, and also additional ``work_wires`` that will be important when we later discuss the :class:`~.pennylane.Multiplier` operator.
 """
 
 import pennylane as qml
@@ -179,7 +178,7 @@ def circuit(x):
 print(circuit(x=2), " ---> ", state_to_decimal(circuit(x=2)))
 
 ######################################################################
-# We got the expected result of :math:`3 \cdot 2 = 6`.
+# We got the expected result of :math:`3 \times 2 = 6`.
 #
 # Now, let's look at an example using the :class:`~.pennylane.OutMultiplier` operator to multiply the states :math:`|x \rangle` and
 # :math:`|y \rangle`, storing the result in the output register.
@@ -195,11 +194,9 @@ def circuit(x,y):
 print(circuit(x=4,y=2), " ---> ", state_to_decimal(circuit(x=4,y=2)))
 
 ######################################################################
-# Nice! 
-# 
-# Note that even though we only covered addition and multiplication, modular subtraction 
-# and division are the inverse operations of addition and multiplication, respectively. The inverse of a quantum circuit 
-# can be implemented with the :func:`~.pennylane.adjoint` operator. Let's see an example of modular subtraction:
+# Nice! Modular subtraction and division can also be implemented as the inverses of addition and 
+# multiplication, respectively. The inverse of a quantum circuit can be implemented with the 
+# :func:`~.pennylane.adjoint` operator. Let's see an example of modular subtraction:
 
 @qml.qnode(dev)
 def circuit(x):
@@ -217,8 +214,8 @@ print(circuit(x=6), " ---> ", state_to_decimal(circuit(x=6)))
 #
 # Now that you are familiar with these operations, let's take it a step further and see how we can use them for something more complicated. 
 # We will explore how to implement a polynomial function on a quantum computer using basic arithmetic.
-# In particular, we will take as an example the function :math:`f(x,y)= 4 + 3xy + 5 x+ 3 y` where the variables :math:`x` and :math:`y`
-# are integer values. Therefore, the operator we want to build is:
+# In particular, we will use :math:`f(x,y)= 4 + 3xy + 5 x+ 3 y`  as an example, where the variables :math:`x` and
+# :math:`y` are integer values. Therefore, the operator we want to build is:
 #
 # .. math::
 # 
@@ -233,8 +230,7 @@ print(circuit(x=6), " ---> ", state_to_decimal(circuit(x=6)))
 #
 # First, we need to define a function that will add the term :math:`3xy` to the output register. We will use
 # the :class:`~.pennylane.Multiplier` and :class:`~.pennylane.OutMultiplier` operators for this. Also, we will employ the
-# adjoint function to undo certain multiplications and clean up the input registers after performing the operations,
-# since :math:`U` does not modify the input registers.
+# adjoint function to undo certain multiplications since :math:`U` does not modify the input registers.
 
 def adding_3xy():
     # |x> --->  |3x>
