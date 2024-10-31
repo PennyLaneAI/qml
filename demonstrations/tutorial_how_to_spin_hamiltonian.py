@@ -28,7 +28,7 @@ Fermi-Hubbard model, the Kitaev honeycomb model, and more.
 # The Fermi-Hubbard
 # `Hamiltonian <https://docs.pennylane.ai/en/latest/code/api/pennylane.spin.fermi_hubbard.html>`__
 # has a kinetic energy component, which is parameterized by a hopping parameter :math:`t`, and a
-# potential energy component parameterized by the on-site interaction strength, :math:`U`.
+# potential energy component parameterized by the on-site Coulomb interaction strength, :math:`U`.
 #
 # .. math::
 #
@@ -42,11 +42,13 @@ Fermi-Hubbard model, the Kitaev honeycomb model, and more.
 # The Fermi-Hubbard Hamiltonian can be
 # constructed in PennyLane by passing the hopping and interaction parameters to the
 # :func:`~.pennylane.spin.fermi_hubbard` function. We also need to specify the shape of the lattice
-# that describes the positions of the spin cites. A full list of supported lattice shapes is
+# that describes the positions of the spin sites. A full list of supported lattice shapes is
 # provided in the :func:`~.pennylane.spin.generate_lattice` documentation. We can also define the
-# number of sites we would like to include in our Hamiltonian as a list of integers for
+# number of lattice cells we would like to include in our Hamiltonian as a list of integers for
 # :math:`x, y, z` directions, depending on the lattice shape. Here we generate the Fermi-Hubbard on
-# a ``square`` lattice which is repeated two times in each direction.
+# a ``square`` lattice of shape :math:`2 \times 2`. The ``square`` lattice is constructed from unit
+# cells that contain only one site such that we will have :math:`2 \times 2 = 4` sites in total. We
+# will provide more details on constructing lattices in the following sections.
 
 import pennylane as qml
 
@@ -58,7 +60,7 @@ hamiltonian = qml.spin.fermi_hubbard("square", n_cells, hopping, coulomb)
 hamiltonian
 
 ######################################################################
-# Similarly, we can construct the Hamiltonian for a cubic lattice with 5 sites in each direction as
+# Similarly, we can construct the Hamiltonian for a :math:`5 \times 5 \times 5` cubic lattice as
 
 hamiltonian = qml.spin.fermi_hubbard("cubic", [5, 5, 5], hopping, coulomb)
 
@@ -83,7 +85,7 @@ hamiltonian = qml.spin.heisenberg("square", n_cells=[2, 2], coupling=np.array([0
 # Transverse-field Ising model
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 # The Transverse-field Ising
-# `Hamiltonian <https://docs.pennylane.ai/en/latest/code/api/pennylane.spin.heisenberg.html>`__
+# `Hamiltonian <https://docs.pennylane.ai/en/latest/code/api/pennylane.spin.transverse_ising.html>`__
 # is defined as
 #
 # .. math::
@@ -100,7 +102,7 @@ hamiltonian = qml.spin.transverse_ising("square", n_cells=[2, 2], coupling=0.5, 
 # Kitaev honeycomb model
 # ^^^^^^^^^^^^^^^^^^^^^^
 # The Kitaev model
-# `Hamiltonian <https://docs.pennylane.ai/en/latest/code/api/pennylane.spin.heisenberg.html>`__
+# `Hamiltonian <https://docs.pennylane.ai/en/latest/code/api/pennylane.spin.kitaev.html>`__
 # on the honeycomb lattice is defined as
 #
 # .. math::
@@ -122,7 +124,7 @@ hamiltonian = qml.spin.kitaev(n_cells=[2, 2], coupling=np.array([0.5, 0.6, 0.7])
 # Haldane model
 # ^^^^^^^^^^^^^
 # The Haldane model
-# `Hamiltonian <https://docs.pennylane.ai/en/latest/code/api/pennylane.spin.heisenberg.html>`__
+# `Hamiltonian <https://docs.pennylane.ai/en/latest/code/api/pennylane.spin.haldane.html>`__
 # is defined as
 #
 # .. math::
@@ -145,7 +147,7 @@ hamiltonian = qml.spin.haldane("square", n_cells=[2, 2], hopping=0.5, hopping_ne
 # Emery model
 # ^^^^^^^^^^^
 # The Emery model
-# `Hamiltonian <https://docs.pennylane.ai/en/latest/code/api/pennylane.spin.heisenberg.html>`__
+# `Hamiltonian <https://docs.pennylane.ai/en/latest/code/api/pennylane.spin.emery.html>`__
 # is defined as
 #
 # .. math::
@@ -188,7 +190,8 @@ hamiltonian = qml.spin.emery("square", n_cells=[2, 2], hopping=0.5, coulomb=1.0,
 # constructed either by calling the helper function :func:`~.pennylane.spin.generate_lattice` or by
 # manually constructing the object. Let's see examples of both methods. First we use
 # :func:`~.pennylane.spin.generate_lattice` to construct a square lattice containing
-# :math:`3 \times 3 = 9` sites which are all connected to their nearest neighbor.
+# :math:`3 \times 3 = 9` cells. Because each cell of the ``square`` lattice contains only one
+# site, we get :math:`9` sites in total which are all connected to their nearest neighbor.
 
 lattice = qml.spin.generate_lattice('square', [3, 3])
 
@@ -233,14 +236,14 @@ plot(lattice)
 #
 # Let's create a square-octagon [#jovanovic]_ lattice manually. Our lattice
 # can be constructed in a two-dimensional Cartesian coordinate system with two primitive
-# translation vectors defined as vectors along the :math:`x` and :math:`y` directions and four
+# translation vectors defined as unit vectors along the :math:`x` and :math:`y` directions and four
 # lattice point located inside the unit cell. We also assume that the lattice has three unit cells
 # along each direction.
 
 from pennylane.spin import Lattice
 
 positions = [[0.2, 0.5], [0.5, 0.2],
-             [0.5, 0.8], [0.8, 0.5]] # coordinate of cites
+             [0.5, 0.8], [0.8, 0.5]] # coordinates of sites
 vectors = [[1, 0], [0, 1]] # primitive translation vectors
 n_cells = [3, 3] # number of unit cells in each direction
 
@@ -280,8 +283,8 @@ hamiltonian
 # customising them. The lattice can be constructed in a more flexible way that allows constructing
 # customized Hamiltonians. Let's look at an example.
 #
-# Adding custom nodes and edges
-# -----------------------------
+# Adding custom edges
+# ^^^^^^^^^^^^^^^^^^^
 # Now we work on a more complicated Hamiltonian to see how our existing tools allow building it
 # intuitively. We construct the anisotropic square-trigonal [#jovanovic]_ model, where the coupling parameters
 # depend on the orientation of the bonds. We can construct the Hamiltonian by building the
