@@ -5,7 +5,14 @@ chemistry, and quantum computing. PennyLane provides a powerful set of tools tha
 to intuitively construct a broad range of spin Hamiltonians. Here we show you how to use these tools
 to easily construct a variety of spin Hamiltonians such as the transverse-field Ising model, the
 Fermi-Hubbard model, and the Kitaev honeycomb model.
+
+.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_how_to_build_spin_hamiltonians.png
+    :align: center
+    :width: 70%
+    :target: javascript:void(0)
 """
+
+
 
 ######################################################################
 # Hamiltonian templates
