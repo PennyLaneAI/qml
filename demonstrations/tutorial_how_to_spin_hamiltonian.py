@@ -69,7 +69,7 @@ hamiltonian = qml.spin.fermi_hubbard("cubic", [5, 5, 5], hopping, coulomb)
 # `Hamiltonian <https://docs.pennylane.ai/en/latest/code/api/pennylane.spin.heisenberg.html>`__
 # is defined as
 #
-# ..math::
+# .. math::
 #
 #     H = J\sum_{ < i, j >}(\sigma_i ^ x\sigma_j ^ x + \sigma_i ^ y\sigma_j ^ y + \sigma_i ^ z\sigma_j ^ z),
 #
@@ -86,7 +86,7 @@ hamiltonian = qml.spin.heisenberg("square", n_cells=[2, 2], coupling=np.array([0
 # `Hamiltonian <https://docs.pennylane.ai/en/latest/code/api/pennylane.spin.heisenberg.html>`__
 # is defined as
 #
-# ..math::
+# .. math::
 #
 #     H = -J \sum_{<i,j>} \sigma_i^{z} \sigma_j^{z} - h\sum_{i} \sigma_{i}^{x},
 #
@@ -103,7 +103,7 @@ hamiltonian = qml.spin.transverse_ising("square", n_cells=[2, 2], coupling=0.5, 
 # `Hamiltonian <https://docs.pennylane.ai/en/latest/code/api/pennylane.spin.heisenberg.html>`__
 # on the honeycomb lattice is defined as
 #
-# ..math::
+# .. math::
 #
 #     H = K_X \sum_{\langle i,j \rangle \in X}\sigma_i^x\sigma_j^x +
 #     \:\: K_Y \sum_{\langle i,j \rangle \in Y}\sigma_i^y\sigma_j^y +
@@ -125,7 +125,7 @@ hamiltonian = qml.spin.kitaev(n_cells=[2, 2], coupling=np.array([0.5, 0.6, 0.7])
 # `Hamiltonian <https://docs.pennylane.ai/en/latest/code/api/pennylane.spin.heisenberg.html>`__
 # is defined as
 #
-# ..math::
+# .. math::
 #
 #     H = - t^{1} \sum_{\langle i,j \rangle, \sigma}
 #         c_{i\sigma}^\dagger c_{j\sigma}
@@ -148,7 +148,7 @@ hamiltonian = qml.spin.haldane("square", n_cells=[2, 2], hopping=0.5, hopping_ne
 # `Hamiltonian <https://docs.pennylane.ai/en/latest/code/api/pennylane.spin.heisenberg.html>`__
 # is defined as
 #
-# ..math::
+# .. math::
 #
 #     H = - t \sum_{\langle i,j \rangle, \sigma} c_{i\sigma}^{\dagger}c_{j\sigma}
 #         + U \sum_{i} n_{i \uparrow} n_{i\downarrow} + V \sum_{<i,j>} (n_{i \uparrow} +
