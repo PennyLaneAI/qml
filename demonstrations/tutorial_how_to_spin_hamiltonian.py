@@ -3,8 +3,8 @@ r"""How to build spin Hamiltonians
 Systems of interacting spins provide simple but powerful models for studying problems in physics,
 chemistry, and quantum computing. PennyLane provides a comprehensive set of tools that enables users
 to intuitively construct a broad range of spin Hamiltonians. Here we show you how to use these tools
-to easily construct spin Hamiltonians for models such as the transverse-field Ising model, the
-Fermi-Hubbard model, the Kitaev honeycomb model, and more.
+to easily construct spin Hamiltonians for models such as the transverse-field Ising model,
+Fermi-Hubbard model, Kitaev honeycomb model, and more.
 
 .. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_how_to_build_spin_hamiltonians.png
     :align: center
@@ -19,7 +19,7 @@ Fermi-Hubbard model, the Kitaev honeycomb model, and more.
 # `functions <https://docs.pennylane.ai/en/latest/code/qml_spin.html#hamiltonian-functions>`__
 # for constructing spin model Hamiltonians with minimal input from the user. To construct the
 # Hamiltonian, we need information about the spatial distribution of the spin sites—specified
-# by a lattice shape—and the strength of interactions in the system. Then we pass
+# by a lattice shape and the strength of interactions in the system. Then we pass
 # this information to the desired function defining a spin model. Let’s look at some examples for
 # the models that are currently supported in PennyLane.
 #
@@ -78,8 +78,7 @@ hamiltonian = qml.spin.fermi_hubbard("cubic", [5, 5, 5], hopping, coulomb)
 # where :math:`J` is the coupling constant, :math:`\left< i,j \right>` represents the indices for neighbouring
 # sites and :math:`\sigma` is a Pauli operator. The Hamiltonian can be constructed as
 
-import numpy as np
-hamiltonian = qml.spin.heisenberg("square", n_cells=[2, 2], coupling=np.array([0.5, 0.5, 0.5]))
+hamiltonian = qml.spin.heisenberg("square", n_cells=[2, 2], coupling=[0.5, 0.5, 0.5])
 
 ######################################################################
 # Transverse-field Ising model
@@ -116,7 +115,7 @@ hamiltonian = qml.spin.transverse_ising("square", n_cells=[2, 2], coupling=0.5, 
 # constants defined for the Hamiltonian in each direction. In PennyLane,
 # the Hamiltonian can be constructed as
 
-hamiltonian = qml.spin.kitaev(n_cells=[2, 2], coupling=np.array([0.5, 0.6, 0.7]))
+hamiltonian = qml.spin.kitaev(n_cells=[2, 2], coupling=[0.5, 0.6, 0.7])
 
 ######################################################################
 # Haldane model
@@ -269,12 +268,13 @@ hamiltonian = 0.0
 # add the one-site terms
 for vertex in range(lattice.n_sites):
     hamiltonian += -onsite * X(vertex)
+
 # add the coupling terms
 for edge in lattice.edges_indices:
     i, j = edge[0], edge[1]
     hamiltonian += - coupling * (Z(i) @ Z(j))
 
-hamiltonian
+print(hamiltonian)
 
 ######################################################################
 # In this example, we just used the built-in attributes of our custom lattice without further
@@ -287,7 +287,7 @@ hamiltonian
 # intuitively. We construct the anisotropic square-trigonal [#jovanovic]_ model, where the coupling parameters
 # depend on the orientation of the bonds. We can construct the Hamiltonian by building the
 # lattice manually and adding custom edges between the nodes. For instance, to define a custom
-# ``XX`` edge with coupling constant 0.5 between nodes 0 and 1, we use:
+# ``XX`` edge with coupling constant :math:`0.5` between nodes 0 and 1, we use:
 
 custom_edge = [(0, 1), ('XX', 0.5)]
 
@@ -349,7 +349,7 @@ for edge in lattice.edges:
     k, l = edge[2][0][0], edge[2][0][1]
     hamiltonian += opmap[k](i) @ opmap[l](j) * edge[2][1]
 
-hamiltonian
+print(hamiltonian)
 
 ######################################################################
 # You can see that it is easy and intuitive to construct this anisotropic Hamiltonian with the tools
