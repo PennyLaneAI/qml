@@ -4,6 +4,7 @@
 QAOA for MaxCut
 ===============
 """
+
 ##############################################################################
 # In this tutorial we implement the quantum approximate optimization algorithm (QAOA) for the MaxCut
 # problem as proposed by `Farhi, Goldstone, and Gutmann (2014) <https://arxiv.org/abs/1411.4028>`__. First, we
@@ -99,6 +100,10 @@ QAOA for MaxCut
 #
 # |
 #
+# .. note::
+#     An alternative implementation of :math:`U_{C_l}` would be :math:`ZZ(\gamma_l)`, available
+#     via :class:`~.pennylane.IsingZZ` in PennyLane.
+#
 # Let :math:`\langle \boldsymbol{\gamma},
 # \boldsymbol{\beta} | C | \boldsymbol{\gamma},\boldsymbol{\beta} \rangle` be the expectation of the objective operator.
 # In the next section, we will use PennyLane to perform classical optimization
@@ -133,7 +138,8 @@ QAOA for MaxCut
 import pennylane as qml
 from pennylane import numpy as np
 
-np.random.seed(42)
+seed = 42
+np.random.seed(seed)
 
 ##############################################################################
 # Operators
@@ -149,6 +155,7 @@ np.random.seed(42)
 n_wires = 4
 graph = [(0, 1), (0, 3), (1, 2), (2, 3)]
 
+
 # unitary operator U_B with parameter beta
 def U_B(beta):
     for wire in range(n_wires):
@@ -161,14 +168,17 @@ def U_C(gamma):
         qml.CNOT(wires=edge)
         qml.RZ(gamma, wires=edge[1])
         qml.CNOT(wires=edge)
+        # Could also do
+        # IsingZZ(gamma, wires=edge)
 
 
 ##############################################################################
 # We will need a way to convert a bitstring, representing a sample of multiple qubits
 # in the computational basis, to integer or base-10 form.
 
+
 def bitstring_to_int(bit_string_sample):
-    return int(2**np.arange(len(bit_string_sample)) @ bit_string_sample[::-1])
+    return int(2 ** np.arange(len(bit_string_sample)) @ bit_string_sample[::-1])
 
 
 ##############################################################################
@@ -176,34 +186,41 @@ def bitstring_to_int(bit_string_sample):
 # ~~~~~~~
 # Next, we create a quantum device with 4 qubits.
 
-dev = qml.device("lightning.qubit", wires=n_wires, shots=1)
+dev = qml.device("lightning.qubit", wires=n_wires, shots=1000)
 
 ##############################################################################
-# We also require a quantum node which will apply the operators according to the
-# angle parameters, and return the expectation value of the observable
-# :math:`\sigma_z^{j}\sigma_z^{k}` to be used in each term of the objective function later on. The
-# argument ``edge`` specifies the chosen edge term in the objective function, :math:`(j,k).`
+# We also require a quantum node which will apply the operators according to the angle parameters,
+# and return the expectation value of :math:`\sum_{\text{edge} (j,k)}\sigma_z^{j}\sigma_z^k`
+# for the cost Hamiltonian :math:`C.`
+# We set up this node to take the parameters ``gammas`` and ``betas`` as inputs, which determine
+# the number of layers (repeated applications of :math:`U_BU_C`) of the circuit via their length.
+# We also give the node a keyword argument ``return_samples``. If set to ``False`` (default), the
+# expectation value of the cost Hamiltonian is returned.
 # Once optimized, the same quantum node can be used for sampling an approximately optimal bitstring
-# if executed with the ``edge`` keyword set to ``None``. Additionally, we specify the number of layers
-# (repeated applications of :math:`U_BU_C`) using the keyword ``n_layers`.`
+# by setting ``return_samples=True``.
 
 
 @qml.qnode(dev)
-def circuit(gammas, betas, return_samples, n_layers=1):
+def circuit(gammas, betas, return_samples=False):
     # apply Hadamards to get the n qubit |+> state
     for wire in range(n_wires):
         qml.Hadamard(wires=wire)
     # p instances of unitary operators
-    for i in range(n_layers):
-        U_C(gammas[i])
-        U_B(betas[i])
+    for gamma, beta in zip(gammas, betas):
+        U_C(gamma)
+        U_B(beta)
+
     if return_samples:
-        # measurement phase
+        # sample bitstrings to obtain cuts
         return qml.sample()
-    # during the optimization phase we are evaluating a term
-    # in the objective using expval
-    H = qml.sum(*(qml.Z(w1) @ qml.Z(w2) for w1, w2 in graph))
-    return qml.expval(H)
+    # during the optimization phase we are evaluating the objective using expval
+    C = qml.sum(*(qml.Z(w1) @ qml.Z(w2) for w1, w2 in graph))
+    return qml.expval(C)
+
+
+def objective(params):
+    """Minimize the negative of the objective function C by postprocessing the QNnode output."""
+    return -0.5 * (len(graph) - circuit(*params))
 
 
 ##############################################################################
@@ -211,13 +228,11 @@ def circuit(gammas, betas, return_samples, n_layers=1):
 # ~~~~~~~~~~~~
 # Finally, we optimize the objective over the
 # angle parameters :math:`\boldsymbol{\gamma}` (``params[0]``) and :math:`\boldsymbol{\beta}`
-# (``params[1]``)
-# and then sample the optimized
-# circuit multiple times to yield a distribution of bitstrings. One of the optimal partitions
-# (:math:`z=0101` or :math:`z=1010`) should be the most frequently sampled bitstring.
-# We perform a maximization of :math:`C` by
-# minimizing :math:`-C,` following the convention that optimizations are cast as minimizations
-# in PennyLane.
+# (``params[1]``) and then sample the optimized
+# circuit multiple times to yield a distribution of bitstrings. The optimal partitions
+# (:math:`z=0101` or :math:`z=1010`) should be the most frequently sampled bitstrings.
+# We perform a maximization of :math:`C` by minimizing :math:`-C,` following the convention
+# that optimizations are cast as minimizations in PennyLane.
 
 
 def qaoa_maxcut(n_layers=1):
@@ -226,54 +241,46 @@ def qaoa_maxcut(n_layers=1):
     # initialize the parameters near zero
     init_params = 0.01 * np.random.rand(2, n_layers, requires_grad=True)
 
-    # minimize the negative of the objective function
-    def objective(params):
-        gammas = params[0]
-        betas = params[1]
-        # objective for the MaxCut problem
-        return -0.5 * (1 - circuit(gammas, betas, return_samples=False, n_layers=n_layers))
-
     # initialize optimizer: Adagrad works well empirically
     opt = qml.AdagradOptimizer(stepsize=0.5)
 
     # optimize parameters in objective
-    params = init_params
+    params = init_params.copy()
     steps = 30
     for i in range(steps):
         params = opt.step(objective, params)
         if (i + 1) % 5 == 0:
-            print(f"Objective after step {i+1:5d}: {-objective(params): .7f}")
+            print(f"Objective after step {i+1:3d}: {-objective(params): .7f}")
 
-    # sample 100 bitstrings and convert them to integers
-    n_samples = 100
-    bitstrings = circuit(*params, return_samples=True, n_layers=n_layers, shots=n_samples)
+    # sample 100 bitstrings by setting return_samples=True and the QNode shot count to 100
+    bitstrings = circuit(*params, return_samples=True, shots=20)
+    # convert the samples bitstrings to integers
     sampled_ints = [bitstring_to_int(string) for string in bitstrings]
 
     # print optimal parameters and most frequently sampled bitstring
     counts = np.bincount(np.array(sampled_ints))
     most_freq_bit_string = np.argmax(counts)
-    print(f"Optimized (gamma, beta) vectors:\n{params[:, :n_layers]}")
+    print(f"Optimized parameter vectors:\ngamma: {params[0]}\nbeta:  {params[1]}")
     print(f"Most frequently sampled bit string is: {most_freq_bit_string:04b}")
 
     return -objective(params), sampled_ints
 
 
-# perform qaoa on our graph with p=1,2 and
-# keep the bitstring sample lists
+# perform QAOA on our graph with p=1,2 and keep the lists of sampled integers
 int_samples1 = qaoa_maxcut(n_layers=1)[1]
 int_samples2 = qaoa_maxcut(n_layers=2)[1]
 
 ##############################################################################
+# For ``n_layers=1``, we find an objective function value of around :math:`C=3.`
 # In the case where we set ``n_layers=2``, we recover the optimal
-# objective function :math:`C=4`
-
-##############################################################################
+# objective function :math:`C=4.`
+#
 # Plotting the results
 # --------------------
 # We can plot the distribution of measurements obtained from the optimized circuits. As
 # expected for this graph, the partitions 0101 and 1010 are measured with the highest frequencies,
-# and in the case where we set ``n_layers=2`` we obtain one of the optimal partitions with close
-# to 100% certainty.
+# and in the case where we set ``n_layers=2`` we obtain one of the optimal partitions with
+# 100% certainty.
 
 import matplotlib.pyplot as plt
 
