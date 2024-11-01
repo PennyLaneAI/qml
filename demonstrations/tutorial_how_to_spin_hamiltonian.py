@@ -17,8 +17,9 @@ Fermi-Hubbard model, Kitaev honeycomb model, and more.
 # ---------------------
 # PennyLane provides a set of built-in
 # `functions <https://docs.pennylane.ai/en/latest/code/qml_spin.html#hamiltonian-functions>`__
-# for constructing spin model Hamiltonians with minimal input from the user. To construct the
-# Hamiltonian, we need information about the spatial distribution of the spin sites—specified
+# in the `qml.spin <https://docs.pennylane.ai/en/latest/code/qml_spin.html>`__ module for
+# constructing spin model Hamiltonians with minimal input from the user. To construct the
+# Hamiltonian, we need information about the spatial distribution of the spin sites specified
 # by a lattice shape and the strength of interactions in the system. Then we pass
 # this information to the desired function defining a spin model. Let’s look at some examples for
 # the models that are currently supported in PennyLane.
@@ -28,7 +29,7 @@ Fermi-Hubbard model, Kitaev honeycomb model, and more.
 # The Fermi-Hubbard
 # `Hamiltonian <https://docs.pennylane.ai/en/latest/code/api/pennylane.spin.fermi_hubbard.html>`__
 # has a kinetic energy component, which is parameterized by a hopping parameter :math:`t`, and a
-# potential energy component parameterized by the on-site Coulomb interaction strength, :math:`U`.
+# potential energy component parameterized by the on-site interaction strength, :math:`U`.
 #
 # .. math::
 #
@@ -37,7 +38,7 @@ Fermi-Hubbard model, Kitaev honeycomb model, and more.
 # The terms :math:`c^{\dagger}`, :math:`c` are the creation and annihilation operators,
 # :math:`\left< i,j \right>` represents the indices of neighbouring spins, :math:`\sigma` is the spin
 # degree of freedom, and :math:`n_{i \uparrow}, n_{i \downarrow}` are the number operators for the spin-up
-# and spin-down fermions at site :math:`i`.
+# and spin-down fermions at site :math:`i`, denoted by :math:`0` and :math:`1`.
 #
 # The Fermi-Hubbard Hamiltonian can be
 # constructed in PennyLane by passing the hopping and interaction parameters to the
@@ -54,15 +55,15 @@ import pennylane as qml
 
 n_cells = [2, 2]
 hopping = 0.2
-coulomb = 0.3
+onsite = 0.3
 
-hamiltonian = qml.spin.fermi_hubbard("square", n_cells, hopping, coulomb)
-hamiltonian
+hamiltonian = qml.spin.fermi_hubbard("square", n_cells, hopping, onsite)
+print(hamiltonian)
 
 ######################################################################
 # Similarly, we can construct the Hamiltonian for a :math:`5 \times 5 \times 5` cubic lattice as
 
-hamiltonian = qml.spin.fermi_hubbard("cubic", [5, 5, 5], hopping, coulomb)
+hamiltonian = qml.spin.fermi_hubbard("cubic", [5, 5, 5], hopping, onsite)
 
 ######################################################################
 # Heisenberg model
@@ -78,7 +79,8 @@ hamiltonian = qml.spin.fermi_hubbard("cubic", [5, 5, 5], hopping, coulomb)
 # where :math:`J` is the coupling constant, :math:`\left< i,j \right>` represents the indices for neighbouring
 # sites and :math:`\sigma` is a Pauli operator. The Hamiltonian can be constructed as
 
-hamiltonian = qml.spin.heisenberg("square", n_cells=[2, 2], coupling=[0.5, 0.5, 0.5])
+coupling = [0.5, 0.5, 0.5]
+hamiltonian = qml.spin.heisenberg("square", n_cells, coupling)
 
 ######################################################################
 # Transverse-field Ising model
@@ -95,7 +97,8 @@ hamiltonian = qml.spin.heisenberg("square", n_cells=[2, 2], coupling=[0.5, 0.5, 
 # field, :math:`\left< i,j \right>` represents the indices for neighbouring sites and :math:`\sigma` is a Pauli
 # operator. The Hamiltonian can be constructed as
 
-hamiltonian = qml.spin.transverse_ising("square", n_cells=[2, 2], coupling=0.5, h=1.0)
+coupling, h = 0.5, 1.0
+hamiltonian = qml.spin.transverse_ising("square", n_cells, coupling, h)
 
 ######################################################################
 # Kitaev honeycomb model
@@ -115,7 +118,8 @@ hamiltonian = qml.spin.transverse_ising("square", n_cells=[2, 2], coupling=0.5, 
 # constants defined for the Hamiltonian in each direction. In PennyLane,
 # the Hamiltonian can be constructed as
 
-hamiltonian = qml.spin.kitaev(n_cells=[2, 2], coupling=[0.5, 0.6, 0.7])
+coupling = [0.5, 0.6, 0.7]
+hamiltonian = qml.spin.kitaev(n_cells, coupling)
 
 ######################################################################
 # Haldane model
@@ -138,7 +142,10 @@ hamiltonian = qml.spin.kitaev(n_cells=[2, 2], coupling=[0.5, 0.6, 0.7])
 # function assumes two fermions with opposite spins on each lattice site. The Hamiltonian can be
 # constructed using
 
-hamiltonian = qml.spin.haldane("square", n_cells=[2, 2], hopping=0.5, hopping_next=1.0, phi=0.1)
+hopping = 0.5
+hopping_next = 1.0
+phi = 0.1
+hamiltonian = qml.spin.haldane("square", n_cells, hopping, hopping_next, phi)
 
 ######################################################################
 # Emery model
@@ -161,7 +168,10 @@ hamiltonian = qml.spin.haldane("square", n_cells=[2, 2], hopping=0.5, hopping_ne
 # two fermions with opposite spins on each lattice site. The Hamiltonian can be
 # constructed as
 
-hamiltonian = qml.spin.emery("square", n_cells=[2, 2], hopping=0.5, coulomb=1.0, intersite_coupling=0.2)
+hopping = 0.5
+coulomb = 1.0
+intersite_coupling = 0.2
+hamiltonian = qml.spin.emery("square", n_cells, hopping, coulomb, intersite_coupling)
 
 ######################################################################
 # Building Hamiltonians manually
@@ -200,10 +210,10 @@ import matplotlib.pyplot as plt
 
 def plot(lattice, figsize=None, showlabel=True):
 
-    if figsize:
-        plt.figure(figsize=figsize)
-    else:
-        plt.figure(figsize=lattice.n_cells[::-1])
+    if not figsize:
+        figsize = lattice.n_cells[::-1]
+
+    plt.figure(figsize=figsize)
 
     nodes = lattice.lattice_points
 
@@ -294,7 +304,7 @@ custom_edge = [(0, 1), ('XX', 0.5)]
 ######################################################################
 # Let's now build our Hamiltonian. We first define the unit cell by specifying the positions of the
 # nodes and the translation vectors and then define the number of unit cells in each
-# direction.
+# direction [#jovanovic]_.
 
 positions = [[0.1830127018922193, 0.3169872981077807],
              [0.3169872981077807, 0.8169872981077807],
