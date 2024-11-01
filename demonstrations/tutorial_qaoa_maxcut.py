@@ -138,8 +138,7 @@ QAOA for MaxCut
 import pennylane as qml
 from pennylane import numpy as np
 
-seed = 42
-np.random.seed(seed)
+np.random.seed(42)
 
 ##############################################################################
 # Operators
@@ -186,7 +185,7 @@ def bitstring_to_int(bit_string_sample):
 # ~~~~~~~
 # Next, we create a quantum device with 4 qubits.
 
-dev = qml.device("lightning.qubit", wires=n_wires, shots=1000)
+dev = qml.device("lightning.qubit", wires=n_wires, shots=20)
 
 ##############################################################################
 # We also require a quantum node which will apply the operators according to the angle parameters,
@@ -253,7 +252,7 @@ def qaoa_maxcut(n_layers=1):
             print(f"Objective after step {i+1:3d}: {-objective(params): .7f}")
 
     # sample 100 bitstrings by setting return_samples=True and the QNode shot count to 100
-    bitstrings = circuit(*params, return_samples=True, shots=20)
+    bitstrings = circuit(*params, return_samples=True, shots=100)
     # convert the samples bitstrings to integers
     sampled_ints = [bitstring_to_int(string) for string in bitstrings]
 
