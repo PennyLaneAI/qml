@@ -95,8 +95,9 @@ print(model_pl)
 #
 # It is important to verify whether these noise models work the intended way.
 # For this purpose, we will use them while simulating a
-# `GHZ state <https://en.wikipedia.org/wiki/Greenberger–Horne–Zeilinger_state>`_
-# using the :mod:`default.mixed <pennylane.devices.default_mixed>` and ``qiskit.aer``
+# `GHZ state <https://en.wikipedia.org/wiki/Greenberger–Horne–Zeilinger_state>`_ using the
+# `default.mixed <https://docs.pennylane.ai/en/stable/code/api/pennylane.devices.default_mixed.html>`_
+# and `qiskit.aer <https://docs.pennylane.ai/projects/qiskit/en/latest/devices/aer.html>`_
 # devices. Note that while we would require :func:`~.pennylane.add_noise` transform
 # for adding the PennyLane noise model, the Qiskit noise model can be provided in
 # the device definition itself:
@@ -155,7 +156,6 @@ print(qk_noise_model)
 #
 
 pl_noise_model = qml.from_qiskit_noise(qk_noise_model)
-print(pl_noise_model)
 
 ######################################################################
 # This conversion leverages the standard Kraus representation of the errors
@@ -171,11 +171,11 @@ print(pl_noise_model)
 # This can be done for any noise model defined in Qiskit, with a minor catch that
 # the classical readout errors are not supported yet in PennyLane.
 # However, we can easily re-insert quantum readout errors into our converted noise model.
-# Here's an example that adds ``rmeas_fcond``` and ``rmeas_noise``` (defined earlier) to the above:
+# Here's an example that adds ``rmeas_fcond`` and ``rmeas_noise`` (defined earlier) to the above:
 #
 
 pl_noise_model += {"meas_map": {rmeas_fcond: rmeas_noise}}
-print(pl_noise_model.meas_map)
+print(pl_noise_model)
 
 ######################################################################
 # Conclusion
