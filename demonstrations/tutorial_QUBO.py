@@ -235,7 +235,7 @@ print(f"The minimum cost is  {min_cost}")
 # .. math:: S = 2^0 s_0 + 2^1 s_1 + 2^2 s_2 + 2^3 s_3 + 2^4 s_4
 #
 # To compact our equation later, let’s rename our slack variables by :math:`s_0=x_5`, :math:`s_1=x_6,`
-# :math:`s_3=x_7`, :math:`s_4=x_8,` and :math:`s_5=x_9.` Then we have
+# :math:`s_2=x_7`, :math:`s_3=x_8,` and :math:`s_4=x_9.` Then we have
 #
 # .. math::  S = 1 x_5 + 2 x_6 + 4 x_7 + 8 x_8 + 16 x_9.
 #
@@ -352,19 +352,19 @@ from collections import defaultdict
 import pennylane as qml
 
 shots = 5000  # Number of samples used
-dev = qml.device("default.qubit", shots=shots)
+dev = qml.device("default.qubit", shots=shots, wires=n_qubits)
 
 
 @qml.qnode(dev)
 def qaoa_circuit(gammas, betas, h, J, num_qubits):
     wmax = max(
-        np.max(np.abs(list(h.values()))), np.max(np.abs(list(h.values())))
+        np.max(np.abs(list(h.values()))), np.max(np.abs(list(J.values())))
     )  # Normalizing the Hamiltonian is a good idea
     p = len(gammas)
     # Apply the initial layer of Hadamard gates to all qubits
     for i in range(num_qubits):
         qml.Hadamard(wires=i)
-    # repeat p layers the circuit shown in Fig. 1
+
     for layer in range(p):
         # ---------- COST HAMILTONIAN ----------
         for ki, v in h.items():  # single-qubit terms
