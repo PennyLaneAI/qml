@@ -352,11 +352,11 @@ from collections import defaultdict
 import pennylane as qml
 
 shots = 5000  # Number of samples used
-dev = qml.device("default.qubit", shots=shots)
+dev = qml.device("default.qubit", shots=shots, wires=n_qubits)
 
 
 @qml.qnode(dev)
-def qaoa_circuit(gammas, betas, h, J, num_qubits, wires=n_qubits):
+def qaoa_circuit(gammas, betas, h, J, num_qubits):
     wmax = max(
         np.max(np.abs(list(h.values()))), np.max(np.abs(list(J.values())))
     )  # Normalizing the Hamiltonian is a good idea
