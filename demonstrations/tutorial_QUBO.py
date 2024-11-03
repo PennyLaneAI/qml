@@ -356,7 +356,7 @@ dev = qml.device("default.qubit", shots=shots)
 
 
 @qml.qnode(dev)
-def qaoa_circuit(gammas, betas, h, J, num_qubits, wires=num_qubits):
+def qaoa_circuit(gammas, betas, h, J, num_qubits, wires=n_qubits):
     wmax = max(
         np.max(np.abs(list(h.values()))), np.max(np.abs(list(J.values())))
     )  # Normalizing the Hamiltonian is a good idea
