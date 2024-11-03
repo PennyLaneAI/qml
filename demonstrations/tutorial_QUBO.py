@@ -352,7 +352,7 @@ from collections import defaultdict
 import pennylane as qml
 
 shots = 5000  # Number of samples used
-dev = qml.device("default.qubit", shots=shots, wires=num_qubits)
+dev = qml.device("default.qubit", shots=shots)
 
 
 @qml.qnode(dev)
