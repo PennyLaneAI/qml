@@ -38,7 +38,7 @@ model and more!
 # The terms :math:`c^{\dagger}, c` are the creation and annihilation operators,
 # :math:`\left< i,j \right>` represents the indices of neighbouring spins, :math:`\sigma` is the spin
 # degree of freedom, and :math:`n_{i \uparrow}, n_{i \downarrow}` are the number operators for the spin-up
-# and spin-down fermions at site :math:`i`, denoted by :math:`0` and :math:`1`.
+# and spin-down fermions at site :math:`i`, denoted by :math:`0` and :math:`1` respectively.
 #
 # The Fermi–Hubbard Hamiltonian can be
 # constructed in PennyLane by passing the hopping and interaction parameters to the
@@ -79,7 +79,7 @@ hamiltonian = qml.spin.fermi_hubbard("cubic", [5, 5, 5], hopping, onsite)
 #     H = J\sum_{ < i, j >}(\sigma_i ^ x\sigma_j ^ x + \sigma_i ^ y\sigma_j ^ y + \sigma_i ^ z\sigma_j ^ z),
 #
 # where :math:`J` is the coupling constant, :math:`\left< i,j \right>` represents the indices for neighbouring
-# sites and :math:`\sigma` is a Pauli operator. The Hamiltonian can be constructed as follows.
+# sites, and :math:`\sigma` is a Pauli operator. The Hamiltonian can be constructed as follows.
 
 coupling = [0.5, 0.5, 0.5]
 hamiltonian = qml.spin.heisenberg("square", n_cells, coupling)
@@ -176,8 +176,7 @@ hamiltonian = qml.spin.emery("square", n_cells, hopping, coulomb, intersite_coup
 # Building Hamiltonians manually
 # ------------------------------
 # The Hamiltonian template functions are great and simple tools for someone who just wants to build
-# a Hamiltonian quickly. PennyLane also offers tools that can be used to construct
-# spin Hamiltonians manually, which are useful for building customized Hamiltonians. Let’s learn
+# a Hamiltonian quickly. PennyLane also offers tools for building customized Hamiltonians. Let’s learn
 # how to use these tools by constructing the Hamiltonian for the
 # `transverse-field Ising model <https://docs.pennylane.ai/en/latest/code/api/pennylane.spin.transverse_ising.html>`__
 # on a two-dimensional lattice.
@@ -322,7 +321,7 @@ plot(Lattice(n_cells, vectors, positions), figsize=(5, 5))
 ######################################################################
 # Now we add custom edges to the lattice. In our example, we define four types of custom
 # edges: the first type is the one that connects node 0 to 1, the second type is defined to connect
-# node 0 to 2 and the third and fourth types connect node 1 to 3 and 2 to 3, respectively. Note that
+# node 0 to 2, and the third and fourth types connect node 1 to 3 and 2 to 3, respectively. Note that
 # this is an arbitrary selection. You can define any type of custom edge you would like.
 
 custom_edges = [[(0, 1), ('XX', 0.5)],
