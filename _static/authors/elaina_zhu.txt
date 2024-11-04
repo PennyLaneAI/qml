@@ -1,0 +1,4 @@
+.. bio:: Elaina Zhu
+   :photo: ../_static/authors/elaina_zhu.jpeg
+
+   Elaina is a undergraduate student at Oxford University, interning at CQT. She is interested in research in the intersection of quantum technologies and computer science.

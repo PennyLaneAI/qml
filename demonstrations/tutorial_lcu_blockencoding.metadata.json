@@ -12,7 +12,7 @@
         }
     ],
     "dateOfPublication": "2023-10-25T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Algorithms",
         "Quantum Computing"
@@ -30,7 +30,6 @@
     ],
     "seoDescription": "Master the basics of LCUs and their applications",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_lcu_blockencoding",
     "references": [
         {
             "id": "qsvt",
@@ -56,5 +55,6 @@
             "id": "tutorial_apply_qsvt",
             "weight": 1.0
         }
-    ]
+    ],
+    "discussionForumUrl": "https://discuss.pennylane.ai/t/lcu-demo-comment/7316"
 }

@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2024-08-06T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Quantum Computing",
         "Algorithms"
@@ -24,7 +24,6 @@
     ],
     "seoDescription": "A user-friendly intro to the contents of shadow Hamiltonian simulation, a technique introduced by by Somma et al (arXiv:2407.21775), with a code implementation.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_shadow_hamiltonian_simulation",
     "references": [
         {
             "id": "Wiersema",

@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2020-05-25T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Optimization"
     ],
@@ -19,7 +19,6 @@
     ],
     "seoDescription": "Differentiate any qubit gate with the stochastic parameter-shift rule.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_stochastic_parameter_shift",
     "references": [
         {
             "id": "banchi2020",

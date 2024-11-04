@@ -38,7 +38,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{ inputs.branch }}
           fetch-depth: 1
@@ -51,11 +51,21 @@ jobs:
           path: qml_text
 
       - name: Copy Concatenated Metadata into Build
-        run: >
-          jq -s .
-          $(find demonstrations -name "*.metadata.json" -type f
-          ! -name "demonstrations_categories.metadata.json")
-          > ${{ steps.qml_text.outputs.download-path }}/demos/metadata.json
+        run: |
+          tmp_metadata_json=$(mktemp)
+          out_metadata_json=${{ steps.qml_text.outputs.download-path }}/demos/metadata.json
+
+          filepaths=$(
+            find demonstrations -name "*.metadata.json" -type f \
+            ! -name "demonstrations_categories.metadata.json" \
+          )
+
+          for filepath in $filepaths; do
+              slug=$(basename $filepath .metadata.json)
+              jq ". += {\"slug\": \"$slug\"}" < $filepath >> $tmp_metadata_json
+          done
+
+          jq --slurp --sort-keys . < $tmp_metadata_json > $out_metadata_json
 
       - name: Upload
         uses: XanaduAI/cloud-actions/push-to-s3-and-invalidate-cloudfront@main

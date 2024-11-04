@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2020-09-09T00:00:00+00:00",
-    "dateOfLastModification": "2024-09-19T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Optimization"
     ],
@@ -19,7 +19,6 @@
     ],
     "seoDescription": "Local cost functions are cost formulations for variational quantum circuits that are more robust to barren plateaus.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_local_cost_functions",
     "references": [
         {
             "id": "Cerezo2020",
