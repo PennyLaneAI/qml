@@ -87,8 +87,8 @@ hamiltonian = qml.spin.heisenberg("square", n_cells, coupling)
 ######################################################################
 # Transverse-field Ising model
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-# The Transverse-field Ising
-# `Hamiltonian <https://docs.pennylane.ai/en/latest/code/api/pennylane.spin.transverse_ising.html>`__
+# The `transverse-field Ising model (TFIM) Hamiltonian
+# <https://docs.pennylane.ai/en/latest/code/api/pennylane.spin.transverse_ising.html>`__
 # is defined as
 #
 # .. math::

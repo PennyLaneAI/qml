@@ -41,6 +41,11 @@
             "type": "demonstration",
             "id": "tutorial_fermionic_operators",
             "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_isingmodel_PyTorch",
+            "weight": 1.0
         }
     ]
 }
