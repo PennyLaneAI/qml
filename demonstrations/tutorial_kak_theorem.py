@@ -133,7 +133,7 @@ print(f"All operators are traceless: {np.allclose(traces, 0.)}")
 # The topic of Lie groups and Lie algebras is a large field of study and there are many
 # things we could talk about in this section. For the sake of brevity, however, we will
 # only list a few important properties that are needed further below. For more details
-# and proofs, refer to your favourite Lie theory book, which might be #TODO
+# and proofs, refer to your favourite Lie theory book, which could be [#hall]_ or [#tu]_.
 #
 # The Lie group :math:`\mathcal{G}` associated to a Lie algebra :math:`\mathfrak{g}` is given
 # by the exponential map applied to the algebra:
@@ -222,14 +222,15 @@ print(f"All operators are traceless: {np.allclose(traces, 0.)}")
 #     *adjoint representation* of :math:`\mathfrak{g}.`
 #
 #     Finally, note that the adjoint identity can be proven with similar tools as above,
-#     i.e., chaining derivatives and exponentiation suitably. #TODO ref
+#     i.e., chaining derivatives and exponentiation suitably.
 #
 # Symmetric spaces
 # ----------------
 #
 # Symmetric spaces are a popular field of study both in physics and mathematics.
 # We will not go into depth regarding their interpretation or classification, but refer the
-# interested reader to #TODO refs.
+# interested reader to the broad existing literature, including [#arvanitogeorgos]_ and
+# [#helgason]_.
 # In the following, we mostly care about the algebraic structure of symmetric spaces.
 #
 # Subalgebras and Cartan decompositions
@@ -295,12 +296,12 @@ def is_orthogonal(op, basis):
 #     = \sum_{n=0}^\infty \frac{1}{n!} \underset{\in\mathfrak{p}}{\underbrace{(\text{ad}_y)^n (x)}}
 #     \in \mathfrak{p}.
 #
-# If the reductive property holds, the quotient space :math:`G/K` of the groups of
+# If the reductive property holds, the quotient space :math:`\mathcal{G}/\mathcal{K}` of the groups of
 # :math:`\mathfrak{g}` and :math:`\mathfrak{k}` (see detail box below) is called a
 # *reductive homogeneous space*. If both properties hold, :math:`(\mathfrak{k}, \mathfrak{p})` is
 # called a *Cartan pair* and we call :math:`\mathfrak{g}=\mathfrak{k} \oplus \mathfrak{p}` a
 # *Cartan decomposition*. :math:`(\mathfrak{g}, \mathfrak{k})` is named a *symmetric pair*
-# and the quotient :math:`G/K` is a *symmetric space*.
+# and the quotient :math:`\mathcal{G}/\mathcal{K}` is a *symmetric space*.
 # Symmetric spaces are relevant for a wide range of applications in physics
 # and have been studied a lot throughout the last hundred years.
 #
@@ -314,16 +315,18 @@ def is_orthogonal(op, basis):
 # .. admonition:: Mathematical detail
 #     :class: note
 #
-#     The *quotient space* of a Lie group :math:`G` and a subgroup :math:`K` is the space of
-#     cosets of :math:`K,` i.e., :math:`G/K = \{gK | g\in G\}.` In this space, two elements
-#     are equal if they just differ by multiplying an element from :math:`K` from the left
-#     to one of them. The quotient space is a manifold like the two groups :math:`G` and
-#     :math:`K,` but in general it will *not* be a group itself. For example, a product
-#     of two elements is :math:`(g'K)(gK)=g'g(g^{-1} K g) K,` which only is of the form
-#     :math:`g'' K` if :math:`g^{-1} K g\subset K.` Subgroups for which this condition holds
-#     for any :math:`g\in G` are called *normal subgroups*.
+#     The *quotient space* of a Lie group :math:`\mathcal{G}` and a subgroup :math:`\mathcal{K}`
+#     is the space of cosets of :math:`\mathcal{K},` i.e., 
+#     :math:`\mathcal{G}/\mathcal{K} = \{g\mathcal{K} | g\in G\}.` In this space, two elements are
+#     equal if they just differ by multiplying an element from :math:`\mathcal{K}` from the left
+#     to one of them. The quotient space is a manifold like the two groups :math:`\mathcal{G}` and
+#     :math:`\mathcal{K},` but in general it will *not* be a group itself. For example, a product
+#     of two elements is 
+#     :math:`(g'\mathcal{K})(g\mathcal{K})=g'g(g^{-1} \mathcal{K} g) \mathcal{K},` which only is 
+#     a coset again if :math:`g^{-1} \mathcal{K} g\subset \mathcal{K}.` Subgroups for which this
+#     condition holds for any :math:`g\in \mathcal{G}` are called *normal subgroups*.
 #     We are interested in cases where the symmetric property holds, which excludes normal
-#     subgroups, and :math:`G/K` will not be a group.
+#     subgroups, and :math:`\mathcal{G`/\mathcal{K}` will not be a group.
 #
 # **Example**
 #
@@ -666,13 +669,13 @@ print(f"Under theta_Y, the operators\n{su2}\nhave the eigenvalues\n{eigvals}")
 # The first step is a decomposition of the Lie group :math:`\mathcal{G}=\exp(\mathfrak{g})`
 # into the Lie subgroup
 # :math:`\mathcal{K}=\exp(\mathfrak{k})` and the exponential of the horizontal space,
-# :math:`\mathcal{P}=\exp(\mathfrak{p}),` *which is not a group*. The decomposition is a simple
-# product within :math:`\mathcal{G}:`
+# :math:`\mathcal{P}=\exp(\mathfrak{p}),` *which is not a group* (see box on quotient spaces).
+# The decomposition is a simple product within :math:`\mathcal{G}:`
 #
 # .. math::
 #
 #     \mathcal{G} &= \mathcal{K}\mathcal{P}, \text{ or }\\
-#     \forall\ G\in\mathcal{G}\exists K\in\mathcal{K}, x\in\mathcal{m}: G &= K \exp(x).
+#     \forall\ G\in\mathcal{G}\ \ \exists K\in\mathcal{K}, x\in\mathfrak{p}: \ G &= K \exp(x).
 #
 # This "KP" decomposition can be seen as the "group version" of
 # :math:`\mathfrak{g} = \mathfrak{k} \oplus\mathfrak{p}.`
@@ -717,19 +720,19 @@ print(f"Under theta_Y, the operators\n{su2}\nhave the eigenvalues\n{eigvals}")
 # .. math::
 #
 #     \mathcal{G}
-#     &= \{\exp(y_1) \exp(a) \exp(y_2) | a\in\mathfrak{a}, \ y_{1, 2}\in\mathfrak{k}\}\\
-#     &= \mathcal{K} \mathcal{A} \mathcal{K} \qquad\textbf{(KAK Theorem).}
+#     = \{\exp(y_1) \exp(a) \exp(y_2) | a\in\mathfrak{a}, \ y_{1, 2}\in\mathfrak{k}\}
+#     = \mathcal{K} \mathcal{A} \mathcal{K} \qquad\textbf{(KAK Theorem).}
 #
 # It teaches us that any group element can be decomposed into two factors from the Lie subgroup and
 # the exponential of a CSA element, i.e., of commuting elements from the horizontal subspace
 # :math:`\mathfrak{p}.` This may already hint at the usefulness of the KAK theorem for matrix
 # factorizations in general, and for quantum circuit decompositions in particular.
-# Given a group operation :math:`g=\exp(x)` with :math:`x\in\mathfrak{g}`, there are two
+# Given a group operation :math:`G=\exp(x)` with :math:`x\in\mathfrak{g}`, there are two
 # subalgebra elements :math:`y_{1,2}\in\mathfrak{k}` (or subgroup elements
-# :math:`k_{1,2}=\exp(y_{1,2})\in K`) and a Cartan subgalgebra element :math:`a\in\mathfrak{a}` so
-# that :math:`g=k_1 \exp(a) k_2`. If :math:`g` happens to be from the subspace
-# :math:`\mathcal{P}\subset\mathcal{G}`, we know that the two subgroup elements will be related,
-# namely :math:`g=k_1\exp(a)k_1^\dagger`.
+# :math:`K_{1,2}=\exp(y_{1,2})\in \mathcal{K}`) and a Cartan subgalgebra element
+# :math:`a\in\mathfrak{a}` so that :math:`G=K_1 \exp(a) K_2`. If :math:`g` happens to be from
+# the subspace :math:`\mathcal{P}\subset\mathcal{G}`, we know that the two subgroup elements 
+# will be related, namely :math:`G=K\exp(a)K^\dagger`.
 #
 # **Example**
 #
@@ -848,7 +851,7 @@ fig, ax = qml.draw_mpl(su4_gate, wire_order=[0, 1])(params)
 # You may have noticed that the theorem only states the existence of a
 # decomposition, but does not provide a constructive way of finding
 # :math:`y_{1,2}` and :math:`a` for a given gate :math:`U.` For this,
-# some additional work is required, as explained in [#kokcu]_, for example.
+# some additional work is required, as explained in [#kokcu_fdhs]_, for example.
 #
 # Conclusion
 # ----------
@@ -860,20 +863,89 @@ fig, ax = qml.draw_mpl(su4_gate, wire_order=[0, 1])(params)
 #
 # If you are interested in other applications of Lie theory in the field of
 # quantum computing, you are in luck! It has been a handy tool throughout the last
-# decades, e.g., for the simulation and compression of quantum circuits, # TODO: REFS
-# in quantum optimal control, and for trainability analyses. For Lie algebraic
-# classical simulation of quantum circuits, check the
-# :doc:`g-sim </demos/tutorial_liesim/>` and
+# decades, e.g., for the simulation of quantum circuits [#somma]_ [#goh]_ and their
+# compression [#kokcu_comp]_ [#gu]_, in quantum optimal control [#dirr]_, and for trainability
+# analyses [#fontana]_ [#ragone]_. For Lie algebraic classical simulation of quantum circuits,
+# also take a look at the :doc:`g-sim </demos/tutorial_liesim/>` and
 # :doc:`(g+P)-sim </demos/tutorial_liesim_extension/>` demos.
 #
 # References
 # ----------
 #
-# .. [#khaneja_glaser]
+# .. [#hall]
 #
-#     Navin Khaneja, Steffen Glaser
-#     "Cartan decomposition of SU(2^n), constructive controllability of spin systems and universal quantum computing"
-#     `arXiv:quant-ph/0010100 <https://arxiv.org/abs/quant-ph/0010100>`__, 2000
+#     Brian C. Hall
+#     "Lie Groups, Lie Algebras, and Representations. An Elementary Introduction"
+#     `Graduate Texts in Mathematics, Springer <https://link.springer.com/book/10.1007/978-3-319-13467-3>`__, 2015.
+#
+# .. [#tu]
+#
+#     Loring W. Tu
+#     "An Introduction to Manifolds"
+#     `Universitext, Springer <https://link.springer.com/book/10.1007/978-1-4419-7400-6>`__, 2011.
+#
+# .. [#arvanitogeorgos]
+#
+#     Andreas Arvanitogeorgos
+#     "An Introduction to Lie Groups and the Geometry of Homogeneous Spaces"
+#     `Student Mathematical Library **22** <https://bookstore.ams.org/stml-22>`__, 2003
+#
+# .. [#helgason]
+#
+#     Sigurdur Helgason
+#     "Differential geometry, Lie groups, and symmetric spaces"
+#     `Graduate Studies in Mathematics **34** <https://bookstore.ams.org/gsm-34/>`__, 2001
+#
+# .. [#goh]
+#
+#     Matthew L. Goh, Martin Larocca, Lukasz Cincio, M. Cerezo, Frédéric Sauvage
+#     "Lie-algebraic classical simulations for variational quantum computing"
+#     `arXiv:2308.01432 <https://arxiv.org/abs/2308.01432>`__, 2023.
+#
+# .. [#somma]
+#
+#     Rolando D. Somma
+#     "Quantum Computation, Complexity, and Many-Body Physics"
+#     `arXiv:quant-ph/0512209 <https://arxiv.org/abs/quant-ph/0512209>`__, 2005.
+#
+# .. [#kokcu_fdhs]
+#
+#     Efekan Kökcü, Thomas Steckmann, Yan Wang, J. K. Freericks, Eugene F. Dumitrescu, Alexander F. Kemper
+#     "Fixed Depth Hamiltonian Simulation via Cartan Decomposition"
+#     `arXiv:2104.00728 <https://arxiv.org/abs/2104.00728>`__, 2021.
+#     `PRL (closed access) <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.129.070501>`__, 2022.
+#
+# .. [#kokcu_comp]
+#
+#     Efekan Kökcü, Daan Camps, Lindsay Bassman, James K. Freericks, Wibe A. de Jong, Roel Van Beeumen, Alexander F. Kemper
+#     "Algebraic Compression of Quantum Circuits for Hamiltonian Evolution"
+#     `arXiv:2108.03282 <https://arxiv.org/abs/2108.03282>`__, 2021.
+#     `PRA (closed access) <https://journals.aps.org/pra/abstract/10.1103/PhysRevA.105.032420>`__, 2022.
+#
+# .. [#gu]
+#
+#     Shouzhen Gu, Rolando D. Somma, Burak Şahinoğlu
+#     "Fast-forwarding quantum evolution"
+#     `Quantum **5** <https://quantum-journal.org/papers/q-2021-11-15-577/>`__, 2021.
+#
+# .. [#dirr]
+#
+#     G. Dirr, U. Helmke
+#     "Lie Theory for Quantum Control"
+#     `GAMM-Mitteilungen **31** <https://onlinelibrary.wiley.com/doi/abs/10.1002/gamm.200890003>`__, 2008.
+#
+# .. [#fontana]
+#
+#     Enrico Fontana, Dylan Herman, Shouvanik Chakrabarti, Niraj Kumar, Romina Yalovetzky, Jamie Heredge, Shree Hari Sureshbabu, Marco Pistoia
+#     "The Adjoint Is All You Need: Characterizing Barren Plateaus in Quantum Ansätze"
+#     `Nat. Commun. **15** <https://www.nature.com/articles/s41467-024-49910-w>`__, 2024.
+#
+# .. [#ragone]
+#
+#     Michael Ragone, Bojko N. Bakalov, Frédéric Sauvage, Alexander F. Kemper, Carlos Ortiz Marrero, Martin Larocca, M. Cerezo
+#     "A Unified Theory of Barren Plateaus for Deep Parametrized Quantum Circuits"
+#     `Nat. Commun. **15** <https://www.nature.com/articles/s41467-024-49909-3>`__, 2024.
 #
 # About the author
 # ----------------
+
