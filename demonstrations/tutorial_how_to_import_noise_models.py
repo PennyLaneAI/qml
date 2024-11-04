@@ -1,35 +1,37 @@
-r"""Importing noise models from Qiskit
-=======================================
+r"""How to import noise models from Qiskit
+==========================================
 
-Noise models describe the various ways in which a quantum system would interact
-with its environment, leading to an evolution that is different from the ideal
-scenario. In general, these models are represented by a set of
+Noise models how a quantum system interacts interacts with its environment,
+leading to an evolution that is different from the isolated scenario.
+These models are typically represented by a set of
 `Kraus operators <https://pennylane.ai/qml/demos/tutorial_noisy_circuits/#noisy-operations>`_
 acting on the quantum state that encapsulates the probabilistic nature of quantum errors. ⚡
 
 Importantly, different sets of Kraus operators can describe the same quantum noise process,
-illustrating the non-unique nature of these representations and motivating how different quantum
-computing libraries allow storing and building them to construct noise models. In this how-to
-guide, we will first compare constructing them in `Qiskit <https://docs.quantum.ibm.com/>`_
-and `PennyLane <https://docs.pennylane.ai/en/stable/code/qml.html>`_, then
-learn how to convert a Qiskit noise model into an equivalent PennyLane one.
+illustrating the non-unique nature of these representations. This motivates how different
+quantum computing libraries allow storing and building such operators to construct
+noise models. In this how-to guide, we will first compare constructing noise models in
+`Qiskit <https://docs.quantum.ibm.com/>`_ and
+`PennyLane <https://docs.pennylane.ai/en/stable/code/qml.html>`_, and
+then learn how to convert a Qiskit noise model into an equivalent PennyLane one.
 """
 
 ######################################################################
-# Noise models in Qiskit and PennnyLane
-# -------------------------------------
+# Noise models in Qiskit and PennyLane
+# ------------------------------------
 #
 # In Qiskit, the noise models are built using the `noise module
 # <https://qiskit.github.io/qiskit-aer/apidocs/aer_noise.html>`_
 # in the ``Qiskit-Aer`` package. Each model is a `NoiseModel
-# <https://qiskit.github.io/qiskit-aer/stubs/qiskit_aer.noise.NoiseModel.html>`_
-# object that contains ``QuantumError`` to describe the errors encountered in gate operations.
-# Optionally, it may also have a ``ReadoutError`` that describes post-measurement classical
-# readout errors.
+# <https://qiskit.github.io/qiskit-aer/stubs/qiskit_aer.noise.NoiseModel.html>`_ object that
+# contains `QuantumError <https://qiskit.github.io/qiskit-aer/stubs/qiskit_aer.noise.QuantumError.html>`_
+# to describe the errors encountered in gate operations. Optionally, it may also have a
+# `ReadoutError <https://qiskit.github.io/qiskit-aer/stubs/qiskit_aer.noise.ReadoutError.html>`_
+# that describes post-measurement classical readout errors.
 #
-# For example, the following builds a noise model that would insert depolarization
-# errors for single-qubit gates, bit-flip errors for the target qubit of the two-qubit
-# gates, and amplitude damping errors for each measurement:
+# Let's build a noise model that inserts depolarization errors for single-qubit gates,
+# bit-flip errors for the target qubit of the two-qubit gates,
+# and amplitude damping errors for each measurement:
 #
 
 import numpy as np
@@ -37,24 +39,24 @@ from qiskit_aer.noise import (
     amplitude_damping_error, depolarizing_error, pauli_error, NoiseModel
 )
 
-# Metadata for the noise model
-n_qubits = 3
-prob_gate, prob_flip, prob_exc = 0.2, 0.1, 0.2
-prob_meas = np.random.default_rng(42).uniform(0, 0.2, n_qubits)
-
 # Building the qiskit noise model
 model_qk = NoiseModel()
 
-error_gate1 = depolarizing_error(prob_gate, 1)
+prob_depol = 0.2
+error_gate1 = depolarizing_error(prob_depol, 1)
 model_qk.add_all_qubit_quantum_error(error_gate1, ["u1", "u2", "u3"])
 
-error_gate2 = pauli_error([('X', prob_flip), ('I', 1 - prob_flip)]).tensor(
+prob_bit_flip = 0.1
+error_gate2 = pauli_error([('X', prob_bit_flip), ('I', 1 - prob_bit_flip)]).tensor(
     pauli_error([('I', 1)])
 )
 model_qk.add_all_qubit_quantum_error(error_gate2, ["cx"])
 
+n_qubits = 3
+exc_population = 0.2
+prob_ampl_damp = np.random.default_rng(42).uniform(0, 0.2, n_qubits)
 for qubit in range(n_qubits):
-    error_meas = amplitude_damping_error(prob_meas[qubit], prob_exc)
+    error_meas = amplitude_damping_error(prob_ampl_damp[qubit], exc_population)
     model_qk.add_quantum_error(error_meas, "measure", [qubit])
 
 print(model_qk)
@@ -62,25 +64,27 @@ print(model_qk)
 ######################################################################
 # In contrast, the noise models in PennyLane are :class:`~.pennylane.NoiseModel`
 # objects with Boolean conditions that help select the operation for which
-# noise is to be inserted and noise functions that apply the corresponding
-# noise for the selected operation or measurement process based on some user-provided
-# metadata. This allows for a more functional construction, as we can see by
-# recreating the noise model from above:
+# noise is to be inserted. These conditions are mapped to noise functions
+# that apply (or queue) the corresponding noise for the selected operation
+# or measurement process based on some user-provided metadata. This allows
+# for a more functional construction, as we can see by recreating the
+# above noise model as shown below. For more information on this, check out our
+# :doc:`how-to for noise models in PennyLane <tutorial_how_to_use_noise_models>`. 🧑‍🏫
 #
 
 import pennylane as qml
 
 gate1_fcond = qml.noise.op_in(["U1", "U2", "U3"]) & qml.noise.wires_in(range(n_qubits))
-gate1_noise = qml.noise.partial_wires(qml.DepolarizingChannel, prob_gate)
+gate1_noise = qml.noise.partial_wires(qml.DepolarizingChannel, prob_depol)
 
 gate2_fcond = qml.noise.op_eq("CNOT")
 def gate2_noise(op, **metadata):
-    qml.BitFlip(prob_flip, op.wires[1])
+    qml.BitFlip(prob_bit_flip, op.wires[1])
 
 rmeas_fcond = qml.noise.meas_eq(qml.counts)
 def rmeas_noise(op, **metadata):
     for wire in op.wires:
-        qml.GeneralizedAmplitudeDamping(prob_meas[wire], p=1-prob_exc, wires=wire)
+        qml.GeneralizedAmplitudeDamping(prob_ampl_damp[wire], 1 - exc_population, wire)
 
 # Building the pennylane noise model
 model_pl = qml.NoiseModel(
@@ -90,9 +94,6 @@ model_pl = qml.NoiseModel(
 print(model_pl)
 
 ######################################################################
-# For more information on noise models in PennyLane, check out our
-# :doc:`how-to for noise models in PennyLane <tutorial_how_to_use_noise_models>`. 🧑‍🏫
-#
 # It is important to verify whether these noise models work the intended way.
 # For this purpose, we will use them while simulating a
 # `GHZ state <https://en.wikipedia.org/wiki/Greenberger–Horne–Zeilinger_state>`_
@@ -171,7 +172,7 @@ print(pl_noise_model)
 # This can be done for any noise model defined in Qiskit, with a minor catch that
 # the classical readout errors are not supported yet in PennyLane.
 # However, we can easily re-insert quantum readout errors into our converted noise model.
-# Here's an example that adds ``rmeas_fcond``` and ``rmeas_noise``` (defined earlier) to the above:
+# Here's an example that adds ``rmeas_fcond`` and ``rmeas_noise`` (defined earlier) to the above:
 #
 
 pl_noise_model += {"meas_map": {rmeas_fcond: rmeas_noise}}
