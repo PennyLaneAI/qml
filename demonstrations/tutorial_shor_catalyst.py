@@ -17,76 +17,83 @@ JIT compilation of Shor's algorithm with PennyLane and Catalyst
 """
 
 ##############################################################################
-# As quantum computing hardware continues to scale up, the way we write and
-# interact with quantum software is evolving. Writing and optimizing quantum
-# circuits by hand for algorithms with hundreds or thousands of qubits is
-# unsustainable, even for the most seasoned quantum programmers. To develop
-# large-scale algorithms, we need frameworks that allow us to sit at a
-# comfortable level of abstraction, and tools we can trust to do the heavy
-# lifting under the hood. The integration of version 0.34 of PennyLane with
-# `Catalyst <https://docs.pennylane.ai/projects/catalyst/en/latest/index.html>`_
-# represents a positive step in this direction. This demonstration shows how
-# Catalyst enables an implementation of Shor's factoring algorithm that is
-# just-in-time compiled from end-to-end, classical control structure and all.
-# We also focus on how 
-# 
-# Compiling classical and quantum code
-# ------------------------------------
-#
-# Hybrid quantum-classical algorithms
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#
 # The past few years stimulated a lot of discussion about *hybrid
 # quantum-classical algorithms*. For a time, this terminology was synonymous
 # with *variational algorithms*. However, integration with classical
-# co-processors is necessary for every quantum algorithm, even ones we consider
-# quintessentially quantum.
+# co-processors is necessary for every quantum algorithm, even ones considered
+# quintessentially quantum. 
 #
-# For instance, Shor's famous factoring algorithm leverages an exponential
-# speedup afforded by quantum order finding. But, have a look at the expression
-# of Shor's algorithm in the code below:
+# Shor's famous factoring algorith [CITE] is one such example. Have a look at the
+# example code below:
+
+import jax.numpy as jnp
 
 def shors_algorithm(N):
-    # Potential factors, p * q = N
     p, q = 0, 0
 
     while p * q != N:
-        # Randomly select a number between 2 and N - 1
-        a = random.choice(2, N - 1)
+        a = jnp.random.choice(jnp.arange(2, N - 1))
 
-        # Check if it is already a factor of N
-        if gcd(N, a) != 1:
-             p = gcd(N, a)
-             return p, N // p
+        if jnp.gcd(N, a) != 1:
+            p = jnp.gcd(N, a)
+            return p, N // p
 
-        # If not, run a quantum subroutine to guess the order r s.t. a ** r = N
         guess_r = guess_order(N, a)
 
-        # Check validity of solution
         if guess_r % 2 == 0:
             guess_square_root = (a ** (guess_r // 2)) % N
 
             # Ensure the guessed solution is non-trivial
             if guess_square_root not in [1, N - 1]:
-                p = gcd(N, guess_square_root - 1)
-                q = gcd(N, guess_square_root + 1)
+                p = jnp.gcd(N, guess_square_root - 1)
+                q = jnp.gcd(N, guess_square_root + 1)
 
     return p, q
 
 ######################################################################
-# If you didn't know this was Shor's algorithm, would you even realize it was
-# quantum? The classical and quantum parts are closely intertwined, as output
-# sampled from a quantum subroutine is post-processed by classical
-# number-theoretic routines. Furthermore, the abstraction level is so high that
-# there is not a quantum circuit in sight! A programmer doesn't actually need to
-# know anything quantum is happening, as long as the software library can
-# effectively generate and compile appropriate quantum code (though, they should
-# probably have at least some awareness, since the output of ``guess_order`` is
-# probabilistic!). This raises the question, then, of what gets compiled, and
-# how.
+# If you saw this code out-of-context, would you even realize this is a quantum
+# algorithm? There are no quantum circuits in sight!
 #
-# Quantum compilation
-# ^^^^^^^^^^^^^^^^^^^
+# As quantum hardware continues to scale up, the way we think about quantum
+# programming is evolving in tandem. Writing circuits gate-by-gate for
+# algorithms with hundreds or thousands of qubits is unsustainable. Morever, a
+# programmer doesn't actually need to know anything quantum is happening, if the
+# software library can generate and compile appropriate quantum code (though,
+# they should probably have at least some awareness, since the output of
+# ``guess_order`` is probabilistic!).  This raises some questions: what gets
+# compiled, where and how does compilation happen, and what do we gain?
+#
+# Over the past year, PennyLane has become increasingly integrated with
+# `Catalyst
+# <https://docs.pennylane.ai/projects/catalyst/en/latest/index.html>`_, which
+# for just-in-time compilation of classical and quantum code together. In this
+# demo, we will leverage this to develop an implementation of Shor's factoring
+# algorithm that is just-in-time compiled from end-to-end, classical control
+# structure and all. In particular, we will see how to leverage Catalyst's
+# mid-circuit measurement capabilities to reduce the size of quantum circuits,
+# and how JIT compilation enables faster execution overall.
+#
+# Crash course on Shor's algorithm
+# --------------------------------
+#
+# Looking back at the code above, we can see that Shor's algorithm is broken
+# down into a couple distinct steps. Suppose we wish to decompose an integer
+# :math:`N` into its two constituent prime factors, :math:`p` and :math:`q`.
+#
+#  - First, we randomly select a candidate integer, :math:`a`, between 2 and
+#    :math:`N-1` (before proceeding, we double check that we did not get lucky and randomly select one of the true factors)
+#  - Using our chosen a, we proceed to the quantum part of the algorithm: order-finding.
+#    Quantum circuits are generated, and the circuit is executed on a device. The results
+#    are used to make a guess for a non-trivial square root.
+#  - If the square root is non-trivial, we test whether we found the factors. Otherwise, we try again
+#    with more shots. Eventually, we try with a different value of a.
+#    
+# For a full description of Shor's algorithm, the interested reader is referred
+# to the relevant module in the `PennyLane Codebook
+# <https://pennylane.ai/codebook/10-shors-algorithm/>`_. What's important here
+# for us is to note that for each new value of :math:`a` (and more generally,
+# each possible :math:`N`), we must compile and optimize many large quantum
+# circuits, each of which consists of many nested subroutines.
 #
 # In both classical and quantum programming, compilation is the process of
 # translating operations expressed in high-level languages down to the language
@@ -153,23 +160,6 @@ def shors_algorithm(N):
 # Just-in-time compilation involves compiling code *during* execution, for instance,
 # while an interpreter is doing its job. 
 #
-#
-#
-#
-#
-# Shor's algorithm ----------------
-
-# First, let's do a quick recap of Shor's algorithm.
-
-# The classical part
-# ^^^^^^^^^^^^^^^^^^
-
-# TODO: graphic
-
-# TODO: brief explanation of the number theory behind the algo
-
-
-# TODO: insert code here
 
 ######################################################################
 # The quantum part
