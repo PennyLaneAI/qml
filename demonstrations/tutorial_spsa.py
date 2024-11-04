@@ -6,7 +6,7 @@ Optimization using SPSA
 .. meta::
     :property="og:description": Use the simultaneous perturbation stochastic
         approximation algorithm to optimize variational circuits in PennyLane.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//spsa_mntn.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/spsa_mntn.png
 
 .. related::
 
@@ -46,7 +46,7 @@ positive and a negative shift in the parameter values.
 
 As there are two circuit evaluations for each free parameter, the number of
 overall quantum circuit executions for computing a quantum gradient can be expected
-to scale as :math:`O(p)`  with the number of free parameters :math:`p`.
+to scale as :math:`O(p)`  with the number of free parameters :math:`p.`
 This scaling can be very costly for optimization tasks with many
 free parameters. For the overall optimization this scaling means we need
 :math:`O(pn)` quantum circuit evaluations, where :math:`n` is the number of
@@ -85,12 +85,12 @@ iterative optimization algorithm. Let's consider a differentiable cost function
 :math:`L(\theta)` where :math:`\theta` is a :math:`p`-dimensional vector and
 where the optimization problem can be translated into finding a optimal
 parameter setting :math:`\theta^*`
-at which :math:`\frac{\partial L}{\partial \theta} = 0`.  It is assumed that
+at which :math:`\frac{\partial L}{\partial \theta} = 0.`  It is assumed that
 measurements of :math:`L(\theta)` are available at various values of
 :math:`\theta`---this is exactly the problem that we'd consider when optimizing
 quantum functions!
 
-SPSA starts with an initial parameter vector :math:`\hat{\theta}_{0}`.
+SPSA starts with an initial parameter vector :math:`\hat{\theta}_{0}.`
 Its update rule is very similar to the one of standard gradient descent:
 
 .. math:: \hat{\theta}_{k+1} = \hat{\theta}_{k} - a_{k}\hat{g}_{k}(\hat{\theta}_{k}),
@@ -102,8 +102,8 @@ based on prior measurements of the cost function, and :math:`a_{k}` is a
 positive number [#spall_overview]_.
 
 One of the advantages of SPSA is that it is robust to noise that may occur
-when measuring the function :math:`L`. Therefore, let's consider the function
-:math:`y(\theta)=L(\theta) + \varepsilon`, where :math:`\varepsilon` is some
+when measuring the function :math:`L.` Therefore, let's consider the function
+:math:`y(\theta)=L(\theta) + \varepsilon,` where :math:`\varepsilon` is some
 perturbation of the output. In SPSA, the estimated gradient at each iteration
 step is expressed as
 
@@ -116,7 +116,7 @@ stochasticity of the technique comes from the fact that for each iteration step
 :math:`k` the components of the :math:`\Delta_{k}` perturbation vector are
 randomly generated using a zero-mean distribution. In most cases, the Rademacher
 distribution is used, meaning each parameter is simultaneously perturbed by
-either :math:`\pm c_k`.
+either :math:`\pm c_k.`
 
 It is this perturbation that makes SPSA robust to noise — since every
 parameter is already being shifted, additional shifts due to noise are less
@@ -158,12 +158,13 @@ the pieces of an example optimization to come together:
 * initial parameters: the correct shape can be computed by the ``shape`` method of the ansatz.
   We also use a seed so that we can simulate the same optimization every time
   (except for the device noise and shot noise).
-* an observable: :math:`\bigotimes_{i=0}^{N-1}\sigma_z^i`, where :math:`N` stands
+* an observable: :math:`\bigotimes_{i=0}^{N-1}\sigma_z^i,` where :math:`N` stands
   for the number of qubits.
 * the number of layers in the ansatz and the number of wires.
   We choose five layers and four wires.
 
 """
+
 import pennylane as qml
 from pennylane import numpy as np
 
@@ -209,7 +210,9 @@ def run_optimizer(opt, cost_function, init_param, num_steps, interval, execs_per
     cost_history.append(cost_function(param))
     exec_history = [0]
 
-    print(f"\nRunning the {opt.__class__.__name__} optimizer for {num_steps} iterations.")
+    print(
+        f"\nRunning the {opt.__class__.__name__} optimizer for {num_steps} iterations."
+    )
     for step in range(num_steps):
         # Print out the status of the optimization
         if step % interval == 0:
@@ -254,7 +257,7 @@ def run_optimizer(opt, cost_function, init_param, num_steps, interval, execs_per
 # strongly on the specific problem), [#spall_implementation]_ includes
 # guidelines for the selection. In our case, the initial values for :math:`c`
 # and :math:`a` were selected as a result of a grid search to ensure a fast
-# convergence.  We further note that apart from :math:`c` and :math:`a`, there
+# convergence.  We further note that apart from :math:`c` and :math:`a,` there
 # are further coefficients that are initialized in the ``SPSAOptimizer``
 # using the previously mentioned guidelines. For more details, also consider the
 # `PennyLane documentation of the optimizer
@@ -309,8 +312,12 @@ plt.show()
 # Let's take a deeper dive to see how much better it actually is by computing
 # the ratio of required circuit executions to reach an absolute accuracy of 0.01.
 #
-grad_execs_to_prec = exec_history_grad[np.where(np.array(cost_history_grad) < -0.99)[0][0]]
-spsa_execs_to_prec = exec_history_spsa[np.where(np.array(cost_history_spsa) < -0.99)[0][0]]
+grad_execs_to_prec = exec_history_grad[
+    np.where(np.array(cost_history_grad) < -0.99)[0][0]
+]
+spsa_execs_to_prec = exec_history_spsa[
+    np.where(np.array(cost_history_spsa) < -0.99)[0][0]
+]
 print(f"Circuit execution ratio: {np.round(grad_execs_to_prec/spsa_execs_to_prec, 3)}.")
 
 ##############################################################################
@@ -323,7 +330,7 @@ print(f"Circuit execution ratio: {np.round(grad_execs_to_prec/spsa_execs_to_prec
 #
 # Now that we've explored the theoretical underpinnings of SPSA and its use for a
 # toy problem optimization, let's use it
-# to optimize a real chemical system, namely that of the hydrogen molecule :math:`H_2`.
+# to optimize a real chemical system, namely that of the hydrogen molecule :math:`H_2.`
 # This molecule was studied previously in the :doc:`introductory variational quantum
 # eigensolver (VQE) demo </demos/tutorial_vqe>`, and so we will reuse some of
 # that machinery below to set up the problem.
@@ -335,9 +342,11 @@ print(f"Circuit execution ratio: {np.round(grad_execs_to_prec/spsa_execs_to_prec
 from pennylane import qchem
 
 symbols = ["H", "H"]
-coordinates = np.array([0.0, 0.0, -0.6614, 0.0, 0.0, 0.6614])
-h2_ham, num_qubits = qchem.molecular_hamiltonian(symbols, coordinates)
-h2_ham = qml.Hamiltonian(qml.math.real(h2_ham.coeffs), h2_ham.ops)
+coordinates = np.array([[0.0, 0.0, -0.6614], [0.0, 0.0, 0.6614]])
+molecule = qchem.Molecule(symbols, coordinates)
+h2_ham, num_qubits = qchem.molecular_hamiltonian(molecule)
+h2_ham_coeffs, h2_ham_ops = h2_ham.terms()
+h2_ham = qml.Hamiltonian(qml.math.real(h2_ham_coeffs), h2_ham_ops)
 
 true_energy = -1.136189454088
 
@@ -371,8 +380,8 @@ def ansatz(param, wires):
 # IBMProvider().backends()  # List all available backends
 # dev = qml.device("qiskit.ibmq", wires=num_qubits, backend="ibmq_lima")
 
-from qiskit.providers.aer import noise
-from qiskit.providers.fake_provider import FakeLima
+from qiskit_ibm_runtime.fake_provider import FakeLima
+from qiskit_aer import noise
 
 # Load a fake backed to create a noise model, and create a device using that model
 noise_model = noise.NoiseModel.from_backend(FakeLima())

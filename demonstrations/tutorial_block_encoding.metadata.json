@@ -2,17 +2,17 @@
     "title": "Block Encodings",
     "authors": [
       {
-            "id": "jay_soni"
+            "username": "Jay"
         },
       {
-            "id": "diego_guala"
+            "username": "Diego"
         },
       {
-            "id": "soran_jahangiri"
+            "username": "soran"
         }
     ],
     "dateOfPublication": "2023-11-28T00:00:00+00:00",
-    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Quantum Computing",
         "Algorithms"
@@ -25,12 +25,11 @@
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_Block_Encodings_Matrix_Oracle.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_Block_Encodings_Matrix_Oracle.png"
         }
     ],
     "seoDescription": "Learn about methods to achieve block-encoding for a given matrix.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_block_encoding",
     "references": [
         {
             "id": "Daan2023",

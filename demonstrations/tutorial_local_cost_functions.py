@@ -58,7 +58,6 @@ local cost functions.
 We first need to import the following modules.
 """
 
-
 import pennylane as qml
 from pennylane import numpy as np
 import matplotlib.pyplot as plt
@@ -89,7 +88,7 @@ dev = qml.device("lightning.qubit", wires=wires, shots=10000)
 #
 # We will also define our cost functions here. Since we are trying to
 # learn the identity gate, a natural cost function is 1 minus the probability of measuring the
-# zero state, denoted here as :math:`1 - p_{|0\rangle}`.
+# zero state, denoted here as :math:`1 - p_{|0\rangle}.`
 #
 # .. math:: C = \langle  \psi(\theta) | \left(I - |0\rangle \langle 0|\right)  | \psi(\theta)  \rangle   =1-p_{|0\rangle}
 #
@@ -129,8 +128,7 @@ global_circuit = qml.QNode(global_cost_simple, dev, interface="autograd")
 local_circuit = qml.QNode(local_cost_simple, dev, interface="autograd")
 
 def cost_local(rotations):
-    return 1 - np.sum([i for (i, _) in local_circuit(rotations)])/wires
-
+    return 1 - np.sum([i for (i, _) in local_circuit(rotations)]) / wires
 
 def cost_global(rotations):
     return 1 - global_circuit(rotations)[0]
@@ -245,6 +243,7 @@ def global_cost_simple(rotations):
         qml.RY(rotations[1][i], wires=i)
     qml.broadcast(qml.CNOT, wires=range(wires), pattern="chain")
     return qml.probs(wires=range(wires))
+
 def local_cost_simple(rotations):
     for i in range(wires):
         qml.RX(rotations[0][i], wires=i)
@@ -258,6 +257,7 @@ local_circuit = qml.QNode(local_cost_simple, dev, interface="autograd")
 
 def cost_local(rotations):
     return 1 - local_circuit(rotations)[0]
+
 def cost_global(rotations):
     return 1 - global_circuit(rotations)[0]
 
@@ -343,8 +343,8 @@ cost_global(params_local)
 # us the exact representation.
 #
 
-dev.shots = None
-global_circuit = qml.QNode(global_cost_simple, dev, interface="autograd")
+_dev = qml.device("lightning.qubit", wires=wires, shots=None)
+global_circuit = qml.QNode(global_cost_simple, _dev, interface="autograd")
 print(
     "Current cost: "
     + str(cost_global(params_local))
@@ -377,7 +377,6 @@ def tunable_cost_simple(rotations):
 def cost_tunable(rotations):
     return 1 - tunable_circuit(rotations)[0]
 
-dev.shots = 10000
 tunable_circuit = qml.QNode(tunable_cost_simple, dev, interface="autograd")
 locality = 2
 params_tunable = params_local

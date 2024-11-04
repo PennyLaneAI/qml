@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2022-07-18T00:00:00+00:00",
-    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Optimization"
     ],
@@ -14,12 +14,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_quantum_natural_SPSA_optimizer.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_quantum_natural_SPSA_optimizer.png"
         }
     ],
     "seoDescription": "Introduction to the Quantum natural SPSA optimizer, which reduces the number of quantum measurements in the optimization.",
     "doi": "",
-    "canonicalURL": "/qml/demos/qnspsa",
     "references": [
         {
             "id": "Gacon2021",

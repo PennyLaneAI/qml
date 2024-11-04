@@ -2,11 +2,11 @@
     "title": "Quantum volume",
     "authors": [
         {
-            "id": "olivia_di_matteo"
+            "username": "glassnotes"
         }
     ],
     "dateOfPublication": "2020-12-15T00:00:00+00:00",
-    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-11T00:00:00+00:00",
     "categories": [
         "Quantum Hardware",
         "Quantum Computing"
@@ -15,12 +15,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_quantum_volume.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_quantum_volume.png"
         }
     ],
     "seoDescription": "Learn about quantum volume, and how to compute it.",
     "doi": "",
-    "canonicalURL": "/qml/demos/quantum_volume",
     "references": [
         {
             "id": "top500",

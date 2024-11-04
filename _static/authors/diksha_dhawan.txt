@@ -1,0 +1,4 @@
+.. bio:: Diksha Dhawan
+   :photo: ../_static/authors/diksha_dhawan.png
+
+   Diksha is a quantum software developer at Xanadu. Her work is focused on implementing quantum computing algorithms for quantum chemistry.

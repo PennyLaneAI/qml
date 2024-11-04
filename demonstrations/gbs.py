@@ -8,7 +8,7 @@ Quantum advantage with Gaussian Boson Sampling
 .. meta::
     :property="og:description": Using light to perform tasks beyond the reach of classical computers.
 
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//gbs_expt2.png
+    :property="og:image": https://pennylane.ai/qml/_static/demo_thumbnails/opengraph_demo_thumbnails/gbs_expt2.png
 
 .. related::
 
@@ -25,16 +25,16 @@ Quantum advantage with Gaussian Boson Sampling
 On the journey to large-scale fault-tolerant quantum computers, one of the first major
 milestones is to demonstrate a quantum device carrying out tasks that are beyond the reach of
 any classical algorithm. The launch of Xanadu's Borealis device marked an important milestone
-within the quantum computing community, wherein our very own quantum computational advantage 
-experiment using quantum photonics was demonstrated in our `Nature paper <https://xanadu.ai/qca-paper>`__.  
-Among other quantum advantage achievements are the Google Quantum team's experiment as can be seen in their paper 
-`Quantum supremacy using a programmable superconducting processor <https://www.nature.com/articles/s41586-019-1666-5>`__ [#Arute2019]_,  
-and the experiment from the team led by Chao-Yang Lu and Jian-Wei as can be seen in their paper 
+within the quantum computing community, wherein our very own quantum computational advantage
+experiment using quantum photonics was demonstrated in our `Nature paper <https://xanadu.ai/qca-paper>`__.
+Among other quantum advantage achievements are the Google Quantum team's experiment as can be seen in their paper
+`Quantum supremacy using a programmable superconducting processor <https://www.nature.com/articles/s41586-019-1666-5>`__ [#Arute2019]_,
+and the experiment from the team led by Chao-Yang Lu and Jian-Wei as can be seen in their paper
 `Quantum computational advantage using photons <https://science.sciencemag.org/content/early/2020/12/02/science.abe8770?rss=1>`__
-[#Zhong2020]_. 
+[#Zhong2020]_.
 
 While Google's experiment performed the task of :doc:`random circuit sampling </demos/qsim_beyond_classical>`
-using a superconducting processor, both Chao-Yang Lu and Jian-Wei's team and Xanadu leveraged the 
+using a superconducting processor, both Chao-Yang Lu and Jian-Wei's team and Xanadu leveraged the
 quantum properties of light to tackle a task called
 `Gaussian Boson Sampling <https://strawberryfields.ai/photonics/concepts/gbs.html>`__ (GBS).
 
@@ -48,12 +48,12 @@ via the cloud, check out the
 
 |
 
-.. image:: /_static/demonstration_assets/gbs_expt2.png
+.. image:: /_static/demonstration_assets/gbs/gbs_expt2.png
     :align: center
     :width: 80%
     :target: javascript:void(0);
 
-.. figure:: /_static/demonstration_assets/gbs_expt1.png
+.. figure:: /_static/demonstration_assets/gbs/gbs_expt1.png
     :align: center
     :width: 80%
     :target: javascript:void(0);
@@ -116,10 +116,10 @@ squeezed states and injecting them into a 100-mode interferometer. In this demo,
 in order to keep things classically simulable, we will stick to a much simpler setting
 consisting of 4 squeezed states injected into a 4-mode interferometer. At a high level,
 an interferometer on :math:`N` modes can be represented using an :math:`N\times N` unitary
-matrix :math:`U`. When decomposed into a quantum optical circuit, the interferometer will
+matrix :math:`U.` When decomposed into a quantum optical circuit, the interferometer will
 be made up of beamsplitters and phase shifters.
 
-.. image:: /_static/demonstration_assets/gbs_circuit2.png
+.. image:: /_static/demonstration_assets/gbs/gbs_circuit2.png
     :align: center
     :width: 90%
     :target: javascript:void(0);
@@ -191,8 +191,8 @@ def gbs_circuit():
 ######################################################################
 # A couple of things to note in this particular example:
 #
-# 1. To prepare the input single mode squeezed vacuum state :math:`|re^{i\phi}\rangle`,
-#    where :math:`r = 1` and :math:`\phi=0`, we
+# 1. To prepare the input single mode squeezed vacuum state :math:`|re^{i\phi}\rangle,`
+#    where :math:`r = 1` and :math:`\phi=0,` we
 #    apply a squeezing gate (:class:`~pennylane.Squeezing`) to each of the wires (initially in
 #    the vacuum state).
 #
@@ -201,7 +201,7 @@ def gbs_circuit():
 #    decomposes the unitary matrix representing the linear interferometer into single-mode
 #    rotation gates (:class:`~pennylane.PhaseShift`) and two-mode beamsplitters
 #    (:class:`~pennylane.Beamsplitter`). After applying the interferometer, we will denote the
-#    output state by :math:`|\psi'\rangle`.
+#    output state by :math:`|\psi'\rangle.`
 #
 # 3. GBS takes place physically in an infinite-dimensional Hilbert space,
 #    which is not practical for simulation. We need to set an upper limit on the maximum
@@ -264,7 +264,7 @@ for i in measure_states:
 #     \frac{\left|\text{Haf}[(U(\bigoplus_i\mathrm{tanh}(r_i))U^T)]_{st}\right|^2}{\prod_{i=1}^N \cosh(r_i)}
 #
 # i.e., the sampled single-photon probability distribution is proportional to the **hafnian** of a
-# submatrix of :math:`U(\bigoplus_i\mathrm{tanh}(r_i))U^T`.
+# submatrix of :math:`U(\bigoplus_i\mathrm{tanh}(r_i))U^T.`
 #
 # .. note::
 #
@@ -275,7 +275,7 @@ for i in measure_states:
 #     where :math:`\text{PMP}_{2N}` is the set of all perfect matching permutations of :math:`2N` elements. In graph theory, the
 #     hafnian calculates the number of perfect `matchings
 #     <https://en.wikipedia.org/wiki/Matching_(graph_theory)>`_ in a graph with
-#     adjacency matrix :math:`A`.
+#     adjacency matrix :math:`A.`
 #
 #     Compare this to the permanent, which calculates the number of perfect matchings on a *bipartite*
 #     graph. Notably, the permanent appears in vanilla Boson Sampling in a similar way
@@ -293,9 +293,9 @@ for i in measure_states:
 # calculating or approximating the hafnian must also be a classically hard problem. This lies behind
 # the classical hardness of GBS.
 #
-# In this demo, we will use the same squeezing parameter, :math:`z=r`, for
+# In this demo, we will use the same squeezing parameter, :math:`z=r,` for
 # all input states; this allows us to simplify this equation. To start with, the hafnian expression
-# simply becomes :math:`\text{Haf}[(UU^T\mathrm{tanh}(r))]_{st}`, removing the need for the direct sum.
+# simply becomes :math:`\text{Haf}[(UU^T\mathrm{tanh}(r))]_{st},` removing the need for the direct sum.
 #
 # Thus, we have
 #
@@ -317,14 +317,14 @@ from thewalrus import hafnian as haf
 
 ######################################################################
 # Now, for the right-hand side numerator, we first calculate the submatrix
-# :math:`A = [(UU^T\mathrm{tanh}(r))]_{st}`:
+# :math:`A = [(UU^T\mathrm{tanh}(r))]_{st}:`
 
 A = np.dot(U, U.T) * np.tanh(1)
 
 ######################################################################
 # In GBS, we determine the submatrix by taking the
 # rows and columns corresponding to the measured Fock state. For example, to calculate the submatrix
-# in the case of the output measurement :math:`\left|{1,1,0,0}\right\rangle`,
+# in the case of the output measurement :math:`\left|{1,1,0,0}\right\rangle,`
 # we have
 
 print(A[:, [0, 1]][[0, 1]])
@@ -340,7 +340,7 @@ print(A[:, [0, 1]][[0, 1]])
 #
 ######################################################################
 # i.e., we consider only the rows and columns where a photon was detected, which gives us
-# the submatrix corresponding to indices :math:`0` and :math:`1`.
+# the submatrix corresponding to indices :math:`0` and :math:`1.`
 
 ######################################################################
 # Comparing to simulation
@@ -400,7 +400,7 @@ print(probs[0, 1, 0, 1])
 ######################################################################
 # **Measuring** :math:`|1,1,1,1\rangle` **at the output**
 #
-# This corresponds to the hafnian of the full matrix :math:`A=UU^T\mathrm{tanh}(r)`:
+# This corresponds to the hafnian of the full matrix :math:`A=UU^T\mathrm{tanh}(r):`
 
 A = np.dot(U, U.T) * np.tanh(1)
 print(np.abs(haf(A)) ** 2 / np.cosh(1) ** 4)
@@ -419,7 +419,7 @@ print(probs[1, 1, 1, 1])
 # **Measuring** :math:`|2,0,0,0\rangle` **at the output**
 #
 # Since we have two photons in mode ``q[0]``, we take two copies of the
-# first row and first column, making sure to divide by :math:`2!`:
+# first row and first column, making sure to divide by :math:`2!:`
 
 A = (np.dot(U, U.T) * np.tanh(1))[:, [0, 0]][[0, 0]]
 print(np.abs(haf(A)) ** 2 / (2 * np.cosh(1) ** 4))

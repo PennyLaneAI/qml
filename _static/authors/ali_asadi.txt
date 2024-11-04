@@ -1,0 +1,4 @@
+.. bio:: Ali Asadi
+   :photo: ../_static/authors/ali_asadi.png
+
+   Ali is a senior quantum software developer and Technical Lead of Performance at Xanadu. He specializes in the realm of high-performance computing, implementing and fine-tuning simulators and classical-quantum workflows across the PennyLane stack.

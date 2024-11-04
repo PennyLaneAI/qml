@@ -3,7 +3,7 @@ r"""Pulse programming on Rydberg atom hardware
 
 .. meta::
     :property="og:description": Perform measurements on neutral atom hardware through PennyLane
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_pulse_on_hardware.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/thumbnail_tutorial_pulse_on_hardware.png
 
 .. related::
    tutorial_pasqal Quantum computation with neutral atoms
@@ -103,14 +103,14 @@ due to van der Waals forces between the atoms. This is described by the interact
 
 .. math:: \hat{H}_{int} = \sum_{j=1}^{N-1}\sum_{k=j+1}^{N} \frac{C_6}{R^6_{jk}}\hat{n}_j\hat{n}_k
 
-where :math:`n_j=| r_j \rangle \langle r_j |` is the number operator acting on atom :math:`j`, :math:`R_{jk} = \lvert x_j - x_k \lvert` is the
-distance between atoms :math:`j` and :math:`k`, and :math:`C_6` is a fixed value determined by the nature of the ground
-and Rydberg states (for Aquila, :math:`5.24 \times 10^{-24} \text{rad m}^6 / \text{s}`, referring to the
+where :math:`n_j=| r_j \rangle \langle r_j |` is the number operator acting on atom :math:`j,` :math:`R_{jk} = \lvert x_j - x_k \lvert` is the
+distance between atoms :math:`j` and :math:`k,` and :math:`C_6` is a fixed value determined by the nature of the ground
+and Rydberg states (for Aquila, :math:`5.24 \times 10^{-24} \text{rad m}^6 / \text{s},` referring to the
 :math:`| 70S_{1/2} \rangle` state of the Rb-87 atom).
 
 There are two key things to be aware of in the interaction term. First, the energy contribution of
 the interaction between each pair of atoms is only non-zero when both atoms are in the Rydberg state,
-so that :math:`\langle \psi | \hat{n}_k \hat{n}_j | \psi \rangle  =1`. Second, the energy contribution for each
+so that :math:`\langle \psi | \hat{n}_k \hat{n}_j | \psi \rangle  =1.` Second, the energy contribution for each
 pair of atoms is inversely proportional to the distance between them. Thus, as we move two atoms closer
 together, it becomes increasingly energetically expensive for both to be in the Rydberg state.
 
@@ -127,13 +127,13 @@ atoms into closer proximity, we see a rapidly increasing energy cost to drive to
     :alt: A diagram of the energy levels for the ground, single excitation, and double excitation states
     :target: javascript:void(0);
 
-    Energy levels for the ground (:math:`| gg \rangle`), single Rydberg excitation (:math:`| gr \rangle`, :math:`| rg \rangle`),
+    Energy levels for the ground (:math:`| gg \rangle`), single Rydberg excitation (:math:`| gr \rangle,` :math:`| rg \rangle`),
     and double Rydberg excitation (:math:`| rr \rangle`) states
 
 The modification of the energy levels when atoms are in proximity gives rise to Rydberg blockade,
 where atoms that have been driven by a pulse that would, in isolation, leave them in the excited state
 instead remain in the ground state due to neighboring atoms being excited. The distance within which two 
-neighboring atoms are effectively prevented from both being excited is referred to as the *blockade radius* :math:`R_b`.
+neighboring atoms are effectively prevented from both being excited is referred to as the *blockade radius* :math:`R_b.`
 
 This brings us to our discussion of the second part of the Hamiltonian: the drive term.
 
@@ -142,7 +142,7 @@ The driven Rydberg Hamiltonian
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The atoms in a Rydberg system can be driven by application of a laser pulse, which can be described by 3 parameters:
-amplitude (also called Rabi frequency) :math:`\Omega`, detuning :math:`\Delta`, and phase :math:`\phi`. While in
+amplitude (also called Rabi frequency) :math:`\Omega`, detuning :math:`\Delta,` and phase :math:`\phi.` While in
 theory, a drive pulse can be applied to individual atoms, the current control setup for the Aquila hardware only
 allows the application of a global drive pulse.
 
@@ -254,17 +254,17 @@ aquila.hardware_capabilities["lattice"].dict()
 #      {'area': {'width': Decimal('0.000075'), 'height': Decimal('0.000076')},
 #       'geometry': {'spacingRadialMin': Decimal('0.000004'),
 #        'spacingVerticalMin': Decimal('0.000004'),
-#        'positionResolution': Decimal('1E-7'),
+#        'positionResolution': Decimal('1E-8'),
 #        'numberSitesMax': 256}}
 #
-# We can see that the atom field has a width of :math:`75 \, \mu m` and a height of :math:`76 \, \mu m`.
+# We can see that the atom field has a width of :math:`75 \, \mu m` and a height of :math:`76 \, \mu m.`
 # Additionally, we can see that the minimum radial spacing and minimal vertical spacing between two
-# atoms are both :math:`4 \, \mu m`, and the resolution for atom placement is :math:`0.1 \, \mu m`. For more
+# atoms are both :math:`4 \, \mu m,` and the resolution for atom placement is :math:`0.1 \, \mu m.` For more
 # details accessing and interpreting these specifications, see Amazon Braket’s starter `Aquila example notebook
 # <https://github.com/aws/amazon-braket-examples/blob/main/examples/analog_hamiltonian_simulation/01_Introduction_to_Aquila.ipynb>`__.
 #
 # In PennyLane, we will specify these distances in micrometres. Let's set the coordinates to be three
-# points on an equilateral triangle with a side length of :math:`5 \, \mu m`, which should be well within
+# points on an equilateral triangle with a side length of :math:`5 \, \mu m,` which should be well within
 # the blockade radius:
 #
 
@@ -289,6 +289,7 @@ print(f"coordinates: {coordinates}")
 plt.scatter([x for x, y in coordinates], [y for x, y in coordinates])
 plt.xlabel("μm")
 plt.ylabel("μm")
+plt.show()
 
 ##############################################################################
 # .. figure:: ../_static/demonstration_assets/ahs_aquila/rydberg_blockade_coordinates.png
@@ -347,16 +348,17 @@ aquila.hardware_capabilities["rydberg"].dict()
 #       'rydbergGlobal': {'rabiFrequencyRange': (Decimal('0.0'),
 #         Decimal('15800000.0')),
 #        'rabiFrequencyResolution': Decimal('400.0'),
-#        'rabiFrequencySlewRateMax': Decimal('250000000000000.0'),
+#        'rabiFrequencySlewRateMax': Decimal('400000000000000.0'),
 #        'detuningRange': (Decimal('-125000000.0'), Decimal('125000000.0')),
 #        'detuningResolution': Decimal('0.2'),
-#        'detuningSlewRateMax': Decimal('2500000000000000.0'),
+#        'detuningSlewRateMax': Decimal('6000000000000000.0'),
 #        'phaseRange': (Decimal('-99.0'), Decimal('99.0')),
 #        'phaseResolution': Decimal('5E-7'),
 #        'timeResolution': Decimal('1E-9'),
 #        'timeDeltaMin': Decimal('5E-8'),
 #        'timeMin': Decimal('0.0'),
-#        'timeMax': Decimal('0.000004')}}
+#        'timeMax': Decimal('0.000004')},
+#       'rydbergLocal': None}
 #
 # It is important to note that these quantities are in radians per second rather than Hz where relevant, and
 # are all in SI units. This means that for amplitude and detuning, we will need to convert from angular
@@ -436,7 +438,7 @@ import jax.numpy as jnp
 
 
 def gaussian_fn(p, t):
-    return p[0] * jnp.exp(-((t-p[1])**2) / (2*p[2]**2))
+    return p[0] * jnp.exp(-((t - p[1]) ** 2) / (2 * p[2] ** 2))
 
 
 # Visualize pulse, time in μs
@@ -453,6 +455,7 @@ plt.xlabel("Time [$\mu s$]")
 plt.ylabel("Amplitude [MHz]")
 
 plt.plot(time, y)
+plt.show()
 
 ##############################################################################
 #
@@ -467,10 +470,7 @@ plt.plot(time, y)
 # We can then define our drive using via :func:`~pennylane.pulse.rydberg_drive`:
 #
 
-global_drive = qml.pulse.rydberg_drive(amplitude=gaussian_fn,
-                                       phase=0,
-                                       detuning=0,
-                                       wires=[0, 1, 2])
+global_drive = qml.pulse.rydberg_drive(amplitude=gaussian_fn, phase=0, detuning=0, wires=[0, 1, 2])
 
 ######################################################################
 # With only amplitude as non-zero, the overall driven Hamiltonian in this case simplifies to:
@@ -492,8 +492,8 @@ global_drive = qml.pulse.rydberg_drive(amplitude=gaussian_fn,
 #
 # With the interaction term off, each qubit will evolve according to the unitary evolution
 # :math:`U = \text{exp}\left(-i \frac{1}{2} \int d\tau \Omega(\tau) \sigma_X \right)` and we construct
-# :math:`\Omega(t)` such that :math:`\int d\tau \frac{1}{2} \Omega(\tau) = \frac{\pi}{2}`,
-# i.e. :math:`U = \exp(-i \frac{\pi}{2} \sigma_X) = -\sigma_X`.
+# :math:`\Omega(t)` such that :math:`\int d\tau \frac{1}{2} \Omega(\tau) = \frac{\pi}{2},`
+# i.e. :math:`U = \exp(-i \frac{\pi}{2} \sigma_X) = -\sigma_X.`
 #
 # We will implement the pi-pulse using the drive term defined above, and tune the parameters of
 # the gaussian envelope to implement the desired pulse.
@@ -512,7 +512,7 @@ amplitude_params = [max_amplitude, displacement, sigma]
 params = [amplitude_params]
 ts = [0.0, 1.75]
 
-default_qubit = qml.device("default.qubit.jax", wires=3, shots=1000)
+default_qubit = qml.device("default.qubit", wires=3, shots=1000)
 
 
 @qml.qnode(default_qubit, interface="jax")
@@ -606,7 +606,7 @@ amplitude = [gaussian_fn(amplitude_params, t) for t in times]
 start_val = amplitude[0]
 stop_val = amplitude[-1]
 max_val = np.max(amplitude)
-max_rate = np.max([(amplitude[i + 1] - amplitude[i]) / timestep for i in range(len(times)-1)])
+max_rate = np.max([(amplitude[i + 1] - amplitude[i]) / timestep for i in range(len(times) - 1)])
 
 print(f"start value: {start_val:.3} MHz")
 print(f"stop value: {stop_val:.3} MHz")
@@ -636,10 +636,7 @@ print(f"maximum rate of change: {max_rate:.3} MHz/s")
 #
 
 amp_fn = qml.pulse.rect(gaussian_fn, windows=[0.01, 1.749])
-global_drive = qml.pulse.rydberg_drive(amplitude=amp_fn,
-                                       phase=0,
-                                       detuning=0,
-                                       wires=[0, 1, 2])
+global_drive = qml.pulse.rydberg_drive(amplitude=amp_fn, phase=0, detuning=0, wires=[0, 1, 2])
 
 ######################################################################
 # At this point we could skip directly to defining a ``qnode`` using the ``aquila`` device and running our
@@ -679,6 +676,7 @@ plt.scatter(op_x_coordinates, op_y_coordinates, marker="x", label="Input registe
 plt.xlabel("μm")
 plt.ylabel("μm")
 plt.legend()
+plt.show()
 
 ##############################################################################
 #
@@ -705,8 +703,7 @@ amp_setpoints = ahs_program.hamiltonian.amplitude.time_series
 # values for plotting the function defined in PennyLane for amplitude
 input_times = np.linspace(*ts, 1000)
 input_amplitudes = [
-    qml.pulse.rect(gaussian_fn, windows=[0.01, 1.749])(amplitude_params, _t)
-    for _t in input_times
+    qml.pulse.rect(gaussian_fn, windows=[0.01, 1.749])(amplitude_params, _t) for _t in input_times
 ]
 
 # plot PL input and hardware setpoints for comparison

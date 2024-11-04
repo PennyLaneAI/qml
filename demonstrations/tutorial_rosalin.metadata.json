@@ -2,11 +2,11 @@
     "title": "Frugal shot optimization with Rosalin",
     "authors": [
         {
-            "id": "josh_izaac"
+            "username": "josh"
         }
     ],
     "dateOfPublication": "2020-05-19T00:00:00+00:00",
-    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Optimization"
     ],
@@ -14,12 +14,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_frugal_shot_optimization_Rosalin.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_frugal_shot_optimization_Rosalin.png"
         }
     ],
     "seoDescription": "The Rosalin optimizer uses a measurement-frugal optimization strategy to minimize the number of times a quantum computer is accessed.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_rosalin",
     "references": [
         {
             "id": "arrasmith2020",
@@ -58,7 +57,7 @@
             "url": "https://quantum-journal.org/papers/q-2020-05-11-263/"
         }
     ],
-    "basedOnPapers": [],
+    "basedOnPapers": ["10.48550/arXiv.2004.06252"],
     "referencedByPapers": [],
     "relatedContent": [
         {

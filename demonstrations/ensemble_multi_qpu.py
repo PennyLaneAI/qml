@@ -6,7 +6,7 @@ Ensemble classification with Rigetti and Qiskit devices
     :property="og:description": We demonstrate how two QPUs can be
         combined in parallel to help solve a machine learning classification problem,
         using PyTorch and PennyLane.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//ensemble_diagram.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/ensemble_diagram.png
 
 .. related
 
@@ -16,6 +16,12 @@ Ensemble classification with Rigetti and Qiskit devices
 
 This tutorial outlines how two QPUs can be combined in parallel to help solve a machine learning
 classification problem.
+
+.. warning::
+    This demo does not work with the latest version of Qiskit or the Pennylane-Qiskit plugin.
+    It is compatible with ``qiskit==0.46`` and ``pennylane-qiskit==0.35.1``. Older versions of
+    Qiskit and the Pennylane-Qiskit plugin should not be installed in environments with an
+    existing installation of Qiskit 1.0 or above.
 
 We use the ``rigetti.qvm`` device to simulate one QPU and the ``qiskit.aer`` device to
 simulate another. Each QPU makes an independent prediction, and an ensemble model is
@@ -46,6 +52,16 @@ from matplotlib.patches import Patch
 # /interfaces.html>`_, which can be installed from `here
 # <https://pytorch.org/get-started/locally/>`__.
 #
+# .. warning::
+#    Rigetti's QVM and Quil Compiler services must be running for this tutorial to execute. They
+#    can be installed by consulting the `Rigetti documentation
+#    <http://docs.rigetti.com/qcs/>`__ or, for users with Docker, by running:
+#
+#    .. code-block:: bash
+#
+#        docker run -d -p 5555:5555 rigetti/quilc -R -p 5555
+#        docker run -d -p 5000:5000 rigetti/qvm -S -p 5000
+#
 # Load data
 # ---------
 #
@@ -74,7 +90,7 @@ x = pca.transform(x)
 
 ##############################################################################
 # We will be encoding these two features into quantum circuits using :class:`~.pennylane.RX`
-# rotations, and hence renormalize our features to be between :math:`[-\pi, \pi]`.
+# rotations, and hence renormalize our features to be between :math:`[-\pi, \pi].`
 
 
 x_min = np.min(x, axis=0)
@@ -186,15 +202,6 @@ devs = [dev0, dev1]
 #    swap ``qiskit.aer`` for ``qiskit.ibmq`` and specify their chosen backend (see `here
 #    <https://docs.pennylane.ai/projects/qiskit/en/latest/devices/ibmq.html>`__).
 #
-# .. warning::
-#    Rigetti's QVM and Quil Compiler services must be running for this tutorial to execute. They
-#    can be installed by consulting the `Rigetti documentation
-#    <http://docs.rigetti.com/qcs/>`__ or, for users with Docker, by running:
-#
-#    .. code-block:: bash
-#
-#        docker run -d -p 5555:5555 rigetti/quilc -R -p 5555
-#        docker run -d -p 5000:5000 rigetti/qvm -S -p 5000
 #
 # The circuits for both QPUs are shown in the figure below:
 #
@@ -259,9 +266,8 @@ def decision(softmax):
 
 def predict_point(params, x_point=None, parallel=True):
     if parallel:
-        results = tuple(dask.delayed(q)(params, x=x_point) for q in qnodes)
-        results = dask.compute(*results, scheduler="threads")
-        results = torch.tensor(torch.vstack(results))
+        results = tuple(dask.delayed(q)(params, x=torch.from_numpy(x_point)) for q in qnodes)
+        results = torch.tensor(dask.compute(*results, scheduler="threads"))
     else:
         results = tuple(q(params, x=x_point) for q in qnodes)
         results = torch.tensor(results)

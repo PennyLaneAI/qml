@@ -2,7 +2,7 @@
     "title": "Generalization in QML from few training data",
     "authors": [
         {
-            "id": "korbinian_kottmann"
+            "username": "Qottmann"
         },
         {
             "id": "luis_mantilla_calderon"
@@ -12,7 +12,7 @@
         }
     ],
     "dateOfPublication": "2022-08-29T00:00:00+00:00",
-    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
@@ -20,12 +20,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_generalization_QML.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_generalization_QML.png"
         }
     ],
     "seoDescription": "Generalization of quantum machine learning models.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_learning_few_data",
     "references": [
         {
             "id": "CaroGeneralization",
@@ -74,7 +73,7 @@
             "url": ""
         }
     ],
-    "basedOnPapers": [],
+    "basedOnPapers": ["10.48550/arXiv.2111.05292"],
     "referencedByPapers": [],
     "relatedContent": [
         {

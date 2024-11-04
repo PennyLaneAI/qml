@@ -1,0 +1,4 @@
+.. bio:: Francesco Scala
+   :photo: ../_static/authors/francesco_scala.jpg
+
+   Francesco Scala is a Ph.D. student in QML at the University of Pavia, Italy. His main research deals with both theoretical and numerical aspects of QML algorithms and Quantum Neural Networks, focusing in particular on overparametrization and regularization.

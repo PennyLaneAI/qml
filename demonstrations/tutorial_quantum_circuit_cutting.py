@@ -38,15 +38,15 @@ Background: Understanding the Pauli cutting method
 --------------------------------------------------
 
 Consider a two-level quantum system in an arbitrary state, described by
-density matrix :math:`\rho`. The quantum state :math:`\rho` can be expressed
+density matrix :math:`\rho.` The quantum state :math:`\rho` can be expressed
 as a linear combination of the Pauli matrices:
 
 .. math::
     \rho = \frac{1}{2}\sum_{i=1}^{8} c_i Tr(\rho O_i)\rho_i.
 
-Here, we have denoted Pauli matrices by :math:`O_i`, their
+Here, we have denoted Pauli matrices by :math:`O_i,` their
 eigenprojectors by :math:`\rho_i` and their corresponding eigenvalues by
-:math:`c_i`. In the above equation,
+:math:`c_i.` In the above equation,
 
 .. math::
     O_1 = O_2 = I,
@@ -84,9 +84,9 @@ The above equation can be implemented as a quantum circuit on a quantum
 computer. To do this, each term :math:`Tr(\rho O_i)\rho_i` in the equation
 is broken into two parts. The first part, :math:`Tr(\rho O_i)` is the
 expectation of the observable :math:`O_i` when the system is in the state
-:math:`\rho`. Let's call this first circuit subcircuit-:math:`u`.
+:math:`\rho`. Let's call this first circuit subcircuit-:math:`u.`
 The second part, :math:`\rho_i` is initialization or preparation of the
-eigenstate, :math:`\rho_i`. Let's call this Second circuit subcircuit-:math:`v`.
+eigenstate, :math:`\rho_i`. Let's call this Second circuit subcircuit-:math:`v.`
 The above equation shows how we can recover a quantum state after a cut is made
 on one of its qubits as shown in figure 1. This forms the core of quantum
 circuit cutting.
@@ -94,9 +94,9 @@ circuit cutting.
 It turns out that we only have to do three measurements
 :math:`\left (Tr(\rho X), Tr(\rho Y), Tr(\rho Z) \right)` for
 subcircuit-:math:`u` and initialize subcircuit-:math:`v` with only four
-states: :math:`\left | {0} \right\rangle`,
-:math:`\left | {1} \right\rangle`, :math:`\left | {+} \right\rangle` and
-:math:`\left | {+i} \right\rangle`. The other two nontrivial expectation
+states: :math:`\left | {0} \right\rangle,`
+:math:`\left | {1} \right\rangle,` :math:`\left | {+} \right\rangle` and
+:math:`\left | {+i} \right\rangle.` The other two nontrivial expectation
 values for states :math:`\left | {-} \right\rangle` and
 :math:`\left | {- i} \right\rangle` can be derived with classical
 post-processing.
@@ -339,7 +339,7 @@ circuit(x)
 # the `Haar Measure demo <https://pennylane.ai/qml/demos/tutorial_haar_measure.html>`__.
 #
 # More precisely, let :math:`P(U)` be a polynomial with homogeneous degree at most two in
-# the entries of a unitary matrix :math:`U`, and degree two in the complex
+# the entries of a unitary matrix :math:`U,` and degree two in the complex
 # conjugates of those entries. A unitary 2-design is a set of :math:`L`
 # unitaries :math:`\{U_{L}\}` such that
 #
@@ -358,11 +358,11 @@ circuit(x)
 #     Figure 4. Illustration of Randomized Circuit Cutting based on Two-Designs. Taken from [#Lowe2022]_.
 #
 # If :math:`k` qubits are being cut, then the dimensionality of the
-# Hilbert space is :math:`d=2^{k}`. The key idea of Randomized Circuit Cutting
+# Hilbert space is :math:`d=2^{k}.` The key idea of Randomized Circuit Cutting
 # is to employ two different quantum channels with probabilities such that together
 # they comprise a resolution of Identity. In the randomized measurement circuit
 # cutting procedure, we trace out the :math:`k` qubits and prepare a random basis
-# state with probability :math:`d/(2d+1)`. For a linear operator
+# state with probability :math:`d/(2d+1).` For a linear operator
 # :math:`X \in \mathbf{L}(\mathbb{C}^{d})` acting on the :math:`k` qubits,
 # this operation corresponds to the completely depolarizing channel
 #
@@ -370,7 +370,7 @@ circuit(x)
 #
 # Otherwise, we perform a measure-and-prepare protocol based on
 # a unitary 2-design (e.g. a random Clifford) with probability
-# :math:`(d+1)/(2d+1)`, corresponding to the channel
+# :math:`(d+1)/(2d+1),` corresponding to the channel
 #
 # .. math::  \Psi_{0}(X) = \frac{1}{d+1}\left(\textrm{Tr}(X)\mathbf{1} + X\right)~.
 #
@@ -390,8 +390,8 @@ circuit(x)
 #
 # By employing this procedure, we can estimate the outcome of the original
 # circuit by using the cut circuits. For an error threshold of
-# :math:`\varepsilon`, the associated overhead is
-# :math:`O(4^{k}(n+k^{2})/\varepsilon^{2})`. When :math:`k` is a small
+# :math:`\varepsilon,` the associated overhead is
+# :math:`O(4^{k}(n+k^{2})/\varepsilon^{2}).` When :math:`k` is a small
 # constant and the circuit is cut into roughly two equal halves, this
 # procedure effectively doubles the number of qubits that can be
 # simulated given a quantum device, since the overhead is :math:`O(4^k)`
@@ -410,11 +410,11 @@ circuit(x)
 # `Quantum Approximate Optimization
 # Algorithm <https://pennylane.ai/qml/demos/tutorial_qaoa_intro.html>`__
 # (QAOA). In its simplest form, QAOA concerns itself with finding a
-# lowest energy state of a *cost Hamiltonian* :math:`H_{\mathcal{C}}`:
+# lowest energy state of a *cost Hamiltonian* :math:`H_{\mathcal{C}}:`
 #
 # .. math::   H_\mathcal{C} = \frac{1}{|E|} \sum _{(i, j) \in E} Z_i Z_j
 #
-# on a graph :math:`G=(V,E)`, where :math:`Z_i` is a Pauli-:math:`Z`
+# on a graph :math:`G=(V,E),` where :math:`Z_i` is a Pauli-:math:`Z`
 # operator. The normalization factor is just here so that expectation
 # values do not lie outside the :math:`[-1,1]` interval.
 #
@@ -423,7 +423,7 @@ circuit(x)
 #
 # Suppose that we have a specific class of graphs we care about and
 # someone already provided us with optimal angles :math:`\gamma` and
-# :math:`\beta` for QAOA of depth :math:`p=1`. Here’s how to map the input
+# :math:`\beta` for QAOA of depth :math:`p=1.` Here’s how to map the input
 # graph :math:`G` to the QAOA circuit that solves our problem:
 #
 # .. figure:: ../_static/demonstration_assets/quantum_circuit_cutting/graph_to_circuit.svg
@@ -596,7 +596,7 @@ for i, shots in enumerate(shot_counts):
 #
 # As noted earlier, the easiest way to mathematically represent the
 # randomized channel-based method is to write down Kraus operators for the
-# relevant channels, :math:`\Psi _0` and :math:`\Psi _1`. Once we have
+# relevant channels, :math:`\Psi _0` and :math:`\Psi _1.` Once we have
 # represented them in explicit matrix form, we can simply use ``qml.QubitChannel``.
 #
 #
@@ -607,7 +607,7 @@ for i, shots in enumerate(shot_counts):
 #
 #   \left\vert i \right\rangle \mapsto (0, \ldots, 1,\ldots,0)
 #
-# with the 1 positioned at index :math:`i`. Therefore:
+# with the 1 positioned at index :math:`i.` Therefore:
 #
 # .. math::
 #
@@ -619,7 +619,7 @@ for i, shots in enumerate(shot_counts):
 #        0 & 0 & \cdots & 0 & 0 \\
 #    \end{pmatrix}
 #
-# where the 1 sits at column :math:`i` and row :math:`j`.
+# where the 1 sits at column :math:`i` and row :math:`j.`
 #
 # Given this representation, a neat way to get all Kraus operators’ matrix
 # representations is the following:
@@ -650,7 +650,7 @@ def make_kraus_ops(num_wires: int):
 
 ######################################################################
 # Our next task is to generate two new ``QuantumTape`` objects from our
-# existing ``tape``, one for :math:`\Psi _0` and one for :math:`\Psi _1`.
+# existing ``tape``, one for :math:`\Psi _0` and one for :math:`\Psi _1.`
 # Currently, a ``qml.WireCut`` dummy gate is used to represent the cut
 # position and size. So, iterating through gates in ``tape``:
 #
@@ -738,11 +738,12 @@ print(f"Channel 1: {channel_shots[1]} times.")
 # Time to run the simulator!
 #
 
-device.shots = channel_shots[0].item()
+tape0 = QuantumTape(ops=ops_0, measurements=tape.measurements, shots=channel_shots[0].item())
+tape1 = QuantumTape(ops=ops_1, measurements=tape.measurements, shots=channel_shots[1].item())
+
 (shots0,) = qml.execute([tape0], device=device, cache=False, gradient_fn=None)
 samples[choices == 0] = shots0
 
-device.shots = channel_shots[1].item()
 (shots1,) = qml.execute([tape1], device=device, cache=False, gradient_fn=None)
 samples[choices == 1] = shots1
 
@@ -757,7 +758,7 @@ samples[choices == 1] = shots1
 #    \left\langle H_\mathcal{C} (x) \right\rangle  = (d +1) \left\langle H_\mathcal{C} (x) \right\rangle _{z=0} - d \left\langle H_\mathcal{C} (x) \right\rangle _{z=1},
 #
 # where :math:`d=2^k` and :math:`z=0,1` corresponds to circuits with inserted
-# channels :math:`\Psi _{0,1}`.
+# channels :math:`\Psi _{0,1}.`
 #
 
 d = 2**k
@@ -813,7 +814,7 @@ _ = ax.legend(frameon=True, loc="lower right", fontsize=20)
 # We see that the randomized method converges faster than the Pauli method
 # - fewer shots will get us a better estimate of the true cost function.
 # This is even more apparent when we increase the number of shots and go
-# to larger graphs and/or QAOA depths :math:`p`. For example, here are
+# to larger graphs and/or QAOA depths :math:`p.` For example, here are
 # some results that include cost variances as well as mean values for a
 # varying number of shots.
 #
@@ -832,7 +833,7 @@ _ = ax.legend(frameon=True, loc="lower right", fontsize=20)
 # practice, for larger cuts, we see that it offers a performance that is orders of magnitude
 # better than that of the Pauli method. For larger circuits, even at
 # :math:`10^6` shots, Pauli estimates still sometimes leave the allowed
-# interval of :math:`[-1,1]`.
+# interval of :math:`[-1,1].`
 #
 # However, these improvements come at the cost of increased circuit depth
 # due to inserting random Clifford gates and additional classical
@@ -866,7 +867,7 @@ _ = ax.legend(frameon=True, loc="lower right", fontsize=20)
 #     “problem”.
 #
 # Note that, in these cases, memory requirements of classical simulation
-# are increased from :math:`O(2^n)` to :math:`O(4^n)`. However, this is
+# are increased from :math:`O(2^n)` to :math:`O(4^n).` However, this is
 # only a constraint for classical simulation where we have to choose
 # between state-vector and density-matrix approaches. Real quantum
 # devices don’t have such limitations, of course.

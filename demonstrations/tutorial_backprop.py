@@ -5,7 +5,7 @@ Quantum gradients with backpropagation
 .. meta::
     :property="og:description": Using backpropagation can speed up training of quantum circuits compared to the parameter-shift rule—if you are using a simulator.
 
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//sphx_glr_tutorial_backprop_002.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/sphx_glr_tutorial_backprop_002.png
 
 .. related::
 
@@ -30,7 +30,7 @@ The parameter-shift rule
 ------------------------
 
 The parameter-shift rule states that, given a variational quantum circuit :math:`U(\boldsymbol
-\theta)` composed of parametrized Pauli rotations, and some measured observable :math:`\hat{B}`, the
+\theta)` composed of parametrized Pauli rotations, and some measured observable :math:`\hat{B},` the
 derivative of the expectation value
 
 .. math::
@@ -112,7 +112,7 @@ def parameter_shift_term(qnode, params, i):
     shifted = shifted.at[i].add(np.pi/2)
     forward = qnode(shifted)  # forward evaluation
 
-    shifted = shifted.at[i].add(-np.pi/2)
+    shifted = shifted.at[i].add(-np.pi)
     backward = qnode(shifted) # backward evaluation
 
     return 0.5 * (forward - backward)
@@ -147,7 +147,7 @@ print(grad_function(params)[0])
 # Alternatively, we can directly compute quantum gradients of QNodes using
 # PennyLane's built in :mod:`qml.gradients <pennylane.gradients>` module:
 
-print(qml.gradients.param_shift(circuit)(params))
+print(np.stack(qml.gradients.param_shift(circuit)(params)))
 
 ##############################################################################
 # If you count the number of quantum evaluations, you will notice that we had to evaluate the circuit
@@ -400,7 +400,7 @@ plt.show()
 # We can see that the computational time for the parameter-shift rule increases with
 # increasing number of parameters, as expected, whereas the computational time
 # for backpropagation appears much more constant, with perhaps a minute linear increase
-# with :math:`p`. Note that the plots are not perfectly linear, with some 'bumpiness' or
+# with :math:`p.` Note that the plots are not perfectly linear, with some 'bumpiness' or
 # noisiness. This is likely due to low-level operating system jitter, and
 # other environmental fluctuations—increasing the number of repeats can help smooth
 # out the plot.
@@ -439,7 +439,7 @@ plt.show()
 #     <br>
 #
 # We can now see clearly that there is constant overhead for backpropagation with
-# ``default.qubit``, but the parameter-shift rule scales as :math:`\sim 2p`.
+# ``default.qubit``, but the parameter-shift rule scales as :math:`\sim 2p.`
 #
 #
 # About the author

@@ -134,7 +134,7 @@ opt_state = opt.init(params)
 # -  Update the parameters via ``optax.apply_updates``
 #
 
-def update_step(params, opt_state, data, targets):
+def update_step(opt, params, opt_state, data, targets):
     loss_val, grads = jax.value_and_grad(loss_fn)(params, data, targets)
     updates, opt_state = opt.update(grads, opt_state)
     params = optax.apply_updates(params, updates)
@@ -143,7 +143,7 @@ def update_step(params, opt_state, data, targets):
 loss_history = []
 
 for i in range(100):
-    params, opt_state, loss_val = update_step(params, opt_state, data, targets)
+    params, opt_state, loss_val = update_step(opt, params, opt_state, data, targets)
 
     if i % 5 == 0:
         print(f"Step: {i} Loss: {loss_val}")
@@ -161,6 +161,9 @@ for i in range(100):
 # not happening in Python, but is compiled and executed natively. This avoids (potentially costly) data
 # transfer between Python and our JIT compiled cost function with each update step.
 #
+
+# Define the optimizer we want to work with
+opt = optax.adam(learning_rate=0.3)
 
 @jax.jit
 def update_step_jit(i, args):
@@ -180,9 +183,8 @@ def update_step_jit(i, args):
 
 @jax.jit
 def optimization_jit(params, data, targets, print_training=False):
-    opt = optax.adam(learning_rate=0.3)
-    opt_state = opt.init(params)
 
+    opt_state = opt.init(params)
     args = (params, opt_state, data, targets, print_training)
     (params, opt_state, _, _, _) = jax.lax.fori_loop(0, 100, update_step_jit, args)
 
@@ -213,7 +215,7 @@ def optimization(params, data, targets):
     opt_state = opt.init(params)
 
     for i in range(100):
-        params, opt_state, loss_val = update_step(params, opt_state, data, targets)
+        params, opt_state, loss_val = update_step(opt, params, opt_state, data, targets)
 
     return params
 

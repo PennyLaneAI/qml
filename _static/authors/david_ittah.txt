@@ -1,0 +1,4 @@
+.. bio:: David Ittah
+   :photo: ../_static/authors/david_ittah.jpg
+
+   David is a senior quantum software developer and Technical Lead of Compilation at Xanadu, working on the Catalyst compilation stack for PennyLane. His interests lie in quantum compilation, quantum intermediate representations, and utilizing classical compilation infrastructure for quantum programming.

@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2019-12-19T00:00:00+00:00",
-    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
@@ -14,12 +14,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_tutorial_quantum_transfer_learning.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_tutorial_quantum_transfer_learning.png"
         }
     ],
     "seoDescription": "Combine PyTorch and PennyLane to train a hybrid quantum-classical image classifier using transfer learning.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_quantum_transfer_learning",
     "references": [
         {
             "id": "Mari2019",
@@ -60,5 +59,6 @@
     ],
     "basedOnPapers": [],
     "referencedByPapers": [],
-    "relatedContent": []
+    "relatedContent": [],
+    "discussionForumUrl": "https://discuss.pennylane.ai/t/can-quantum-transfer-learning-be-used-for-multi-classification/3963"
 }

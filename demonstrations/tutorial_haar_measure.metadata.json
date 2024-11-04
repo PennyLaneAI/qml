@@ -2,11 +2,11 @@
     "title": "Understanding the Haar measure",
     "authors": [
         {
-            "id": "olivia_di_matteo"
+            "username": "glassnotes"
         }
     ],
     "dateOfPublication": "2021-03-22T00:00:00+00:00",
-    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-11T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning",
         "Quantum Computing"
@@ -15,12 +15,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_understanding_Haar_measure.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_understanding_Haar_measure.png"
         }
     ],
     "seoDescription": "Learn all about the Haar measure and how to randomly sample quantum states.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_haar_measure",
     "references": [
         {
             "id": "NandC2000",
@@ -140,5 +139,6 @@
             "id": "tutorial_barren_plateaus",
             "weight": 1.0
         }
-    ]
+    ],
+    "discussionForumUrl": "https://discuss.pennylane.ai/t/understanding-the-haar-measure-demo/7334"
 }

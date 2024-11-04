@@ -7,7 +7,7 @@ PyTorch and noisy devices
 .. meta::
     :property="og:description": Extend PyTorch with real quantum computing power,
         by using it to optimize a noisy quantum hardware device.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//bloch.gif
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/bloch.gif
 
 .. related::
 
@@ -25,9 +25,16 @@ Amazon Braket.
 To follow along with this tutorial on your own computer, you will require the
 following dependencies:
 
-* The `Rigetti SDK <https://qcs.rigetti.com/sdk-downloads>`_, which contains the quantum virtual
+* Rigetti's QVM and Quil Compiler services. One option for setting this up is the
+  `Rigetti SDK <https://qcs.rigetti.com/sdk-downloads>`_, which contains the quantum virtual
   machine (QVM) and quilc quantum compiler. Once installed, the QVM and quilc can be
   started by running the commands ``quilc -S`` and ``qvm -S`` in separate terminal windows.
+  Alternatively, for users with Docker, the QVM and Quil Compiler services can be run with commands:
+
+  .. code-block:: bash
+
+      docker run -d -p 5555:5555 rigetti/quilc -R -p 5555
+      docker run -d -p 5000:5000 rigetti/qvm -S -p 5000
 
 * `PennyLane-Rigetti plugin <https://docs.pennylane.ai/projects/rigetti/en/latest/>`_, in order
   to access the QVM as a PennyLane device. This can be installed via pip:
@@ -108,9 +115,9 @@ def circuit(phi, theta):
 #
 # We can now create our optimization cost function. To introduce some additional
 # complexity into the system, rather than simply training the variational circuit
-# to 'flip a qubit' from state :math:`\left|0\right\rangle` to state :math:`\left|1\right\rangle`, let's also
+# to 'flip a qubit' from state :math:`\left|0\right\rangle` to state :math:`\left|1\right\rangle,` let's also
 # modify the target state every 100 steps. For example, for the first 100 steps,
-# the target state will be :math:`\left|1\right\rangle`; this will then change to :math:`\left|0\right\rangle`
+# the target state will be :math:`\left|1\right\rangle;` this will then change to :math:`\left|0\right\rangle`
 # for steps 100 and 200, before changing back to state :math:`\left|1\right\rangle` for steps 200
 # to 300, and so on.
 
@@ -198,7 +205,7 @@ my_bucket = "amazon-braket-Your-Bucket-Name"  # the name of the bucket
 my_prefix = "Your-Folder-Name"  # the name of the folder in the bucket
 s3_folder = (my_bucket, my_prefix)
 
-device_arn = "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-2"
+device_arn = "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"
 
 qpu = qml.device(
     "braket.aws.qubit",
@@ -208,7 +215,7 @@ qpu = qml.device(
 )
 
 # Note: swap dev to qpu here to use the QPU
-# Warning: check the pricing of Aspen-M-2 on Braket to make
+# Warning: check the pricing of Aspen-M-3 on Braket to make
 # sure you are aware of the costs associated with running the
 # optimization below.
 @qml.qnode(dev, interface="torch")

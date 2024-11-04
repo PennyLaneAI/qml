@@ -65,38 +65,38 @@ as a black-box controller to optimize the parameters of
 variational quantum algorithms, as shown in the figure below. The cost
 function used is the expectation value :math:`\langle H \rangle_{\boldsymbol{\theta}} = \langle \psi_{\boldsymbol{\theta}} | H | \psi_{\boldsymbol{\theta}}\rangle`
 of a Hamiltonian :math:`H` with respect to the parametrized state
-:math:`|\psi_\boldsymbol{\theta}\rangle` evolved by applying the variational quantum circuit to the zero state :math:`|00\cdots0\rangle`.
+:math:`|\psi_\boldsymbol{\theta}\rangle` evolved by applying the variational quantum circuit to the zero state :math:`|00\cdots0\rangle.`
 
 .. figure:: ../_static/demonstration_assets/learning2learn/HybridLSTM.png
     :align: center
     :width: 100%
 
 Given parameters :math:`\boldsymbol{\theta}_{t-1}` of the variational quantum circuit,
-the cost function :math:`y_{t-1}`, and the hidden state of the
+the cost function :math:`y_{t-1},` and the hidden state of the
 classical network :math:`\boldsymbol{h}_{t-1}` at the previous time step, the
 recurrent neural network proposes a new
-guess for the parameters :math:`\boldsymbol{\theta}_t`, which are
+guess for the parameters :math:`\boldsymbol{\theta}_t,` which are
 then fed into the quantum computer to evaluate the
-cost function :math:`y_t`. By repeating this cycle a few times, and
+cost function :math:`y_t.` By repeating this cycle a few times, and
 by training the weights of the recurrent neural network to minimize
-the loss function :math:`y_t`, a good initialization heuristic is
+the loss function :math:`y_t,` a good initialization heuristic is
 found for the parameters :math:`\boldsymbol{\theta}` of the variational
 quantum circuit.
 
 At a given iteration, the RNN receives as input the previous cost
 function :math:`y_t` evaluated on the quantum computer, where
-:math:`y_t` is the estimate of :math:`\langle H\rangle_{t}`, as well as
+:math:`y_t` is the estimate of :math:`\langle H\rangle_{t},` as well as
 the parameters :math:`\boldsymbol{\theta}_t` for which the variational
 circuit was evaluated. The RNN at this time step also receives
 information stored in its internal hidden state from the previous time
-step :math:`\boldsymbol{h}_t`. The RNN itself has trainable parameters :math:`\phi`,
+step :math:`\boldsymbol{h}_t.` The RNN itself has trainable parameters :math:`\phi,`
 and hence it applies the parametrized mapping:
 
 .. math::  \boldsymbol{h}_{t+1}, \boldsymbol{\theta}_{t+1} = \text{RNN}_{\phi}(\boldsymbol{h}_{t}, \boldsymbol{\theta}_{t}, y_{t}),
 
 which generates a new suggestion for the variational parameters as well
 as a new internal state.
-Upon training the weights :math:`\phi`, the RNN
+Upon training the weights :math:`\phi,` the RNN
 eventually learns a good heuristic to suggest optimal parameters for the
 quantum circuit.
 
@@ -112,12 +112,12 @@ There are multiple VQAs for which this hybrid training routine could
 be used, some of them directly analyzed in [#l2l]_. In the
 following, we focus on one such example, the
 Quantum Approximate Optimization Algorithm (QAOA) for solving
-the MaxCut problem [#maxcutwiki]_. Thus, referring to the picture above,
+the MaxCut problem [#maxcut]_. Thus, referring to the picture above,
 the shape of the variational circuit is the one dictated by the QAOA
 ansatz, and such a quantum circuit is used to evaluate the cost
 Hamiltonian :math:`H` of the MaxCut problem.
-Check out this great tutorial on
-how to use QAOA for solving graph problems: https://pennylane.ai/qml/demos/tutorial_qaoa_intro.html
+You can check out a great tutorial on
+[how to use QAOA for solving graph problems](https://pennylane.ai/qml/demos/tutorial_qaoa_intro.html).
 
 .. note::
    Running the tutorial (excluding the Appendix) requires approx. ~13m.
@@ -139,6 +139,8 @@ from pennylane import qaoa
 
 # Classical Machine Learning
 import tensorflow as tf
+
+tf.get_logger().setLevel("ERROR")
 
 # Generation of graphs
 import networkx as nx
@@ -237,8 +239,7 @@ def qaoa_from_graph(graph, n_layers=1):
     def hamiltonian(params, **kwargs):
         """Evaluate the cost Hamiltonian, given the angles and the graph."""
 
-        # We set the default.qubit.tf device for seamless integration with TensorFlow
-        dev = qml.device("default.qubit.tf", wires=len(graph.nodes))
+        dev = qml.device("default.qubit", wires=len(graph.nodes))
 
         # This qnode evaluates the expectation value of the cost hamiltonian operator
         cost = qml.QNode(circuit, dev, diff_method="backprop", interface="tf")
@@ -371,7 +372,9 @@ def recurrent_loop(graph_cost, n_layers=1, intermediate_steps=False):
     # We perform five consecutive calls to 'rnn_iteration', thus creating the
     # recurrent loop. More iterations lead to better results, at the cost of
     # more computationally intensive simulations.
-    out0 = rnn_iteration([initial_cost, initial_params, initial_h, initial_c], graph_cost)
+    out0 = rnn_iteration(
+        [initial_cost, initial_params, initial_h, initial_c], graph_cost
+    )
     out1 = rnn_iteration(out0, graph_cost)
     out2 = rnn_iteration(out1, graph_cost)
     out3 = rnn_iteration(out2, graph_cost)
@@ -405,7 +408,7 @@ def recurrent_loop(graph_cost, n_layers=1, intermediate_steps=False):
 # where :math:`{\bf y}_t(\phi) = (y_1, \cdots, y_5)` contains the
 # Hamiltonian cost functions from all iterations, and :math:`{\bf w}` are
 # just some coefficients weighting the different steps in the recurrent
-# loop. In this case, we used :math:`{\bf w}=\frac{1}{5} (0.1, 0.2, 0.3, 0.4, 0.5)`,
+# loop. In this case, we used :math:`{\bf w}=\frac{1}{5} (0.1, 0.2, 0.3, 0.4, 0.5),`
 # to give more importance to the last steps rather than the initial steps.
 # Intuitively in this way the RNN is more free (low coefficient) to
 # explore a larger portion of parameter space during the first steps of
@@ -415,7 +418,7 @@ def recurrent_loop(graph_cost, n_layers=1, intermediate_steps=False):
 # the training procedure of the RNN. However, using values also from
 # intermediate steps allows for a smoother suggestion routine, since even
 # non-optimal parameter suggestions from early steps are penalized using
-# :math:`\cal{L}(\phi)`.
+# :math:`\cal{L}(\phi).`
 #
 
 
@@ -583,7 +586,7 @@ plt.grid(ls="--", lw=2, alpha=0.25)
 plt.ylabel("Cost function", fontsize=12)
 plt.xlabel("Iteration", fontsize=12)
 plt.legend()
-ax.set_xticks([0, 5, 10, 15, 20]);
+ax.set_xticks([0, 5, 10, 15, 20])
 plt.show()
 
 ######################################################################
@@ -673,7 +676,7 @@ plt.grid(ls="--", lw=2, alpha=0.25)
 plt.legend()
 plt.ylabel("Cost function", fontsize=12)
 plt.xlabel("Iteration", fontsize=12)
-ax.set_xticks([0, 5, 10, 15, 20]);
+ax.set_xticks([0, 5, 10, 15, 20])
 plt.show()
 
 ######################################################################
@@ -776,9 +779,9 @@ plt.show()
 #       "Barren plateaus in quantum neural network training landscapes",
 #       `Nat Commun 9, 4812 <https://www.nature.com/articles/s41467-018-07090-4>`__ (2018).
 #
-# .. [#maxcutwiki]
+# .. [#maxcut]
 #
-#       MaxCut problem: https://en.wikipedia.org/wiki/Maximum_cut.
+#       MaxCut problem: `https://pennylane.ai/qml/demos/tutorial_qaoa_maxcut/ <PennyLane Demo — QAOA for MaxCut>`__.
 #
 #
 #
@@ -807,7 +810,7 @@ plt.show()
 # Thus, we might want to challenge our model to learn a good
 # initialization heuristic for a non-specific graph, with an arbitrary
 # number of nodes. For this purpose, let’s create a training dataset
-# containing graphs with a different number of nodes :math:`n`, taken in
+# containing graphs with a different number of nodes :math:`n,` taken in
 # the interval :math:`n \in [7,9]` (that is, our dataset now contains
 # graphs having either 7, 8 and 9 nodes).
 #
@@ -823,6 +826,7 @@ gs_cost_list = [qaoa_from_graph(g) for g in gs]
 
 # Shuffle the dataset
 import random
+
 random.seed(1234)
 random.shuffle(gs_cost_list)
 
@@ -926,7 +930,7 @@ plt.grid(ls="--", lw=2, alpha=0.25)
 plt.legend()
 plt.ylabel("Cost function", fontsize=12)
 plt.xlabel("Iteration", fontsize=12)
-ax.set_xticks([0, 5, 10, 15, 20]);
+ax.set_xticks([0, 5, 10, 15, 20])
 plt.show()
 
 ######################################################################
@@ -1025,7 +1029,9 @@ class QRNN(tf.keras.layers.Layer):
         _params = tf.reshape(new_params, shape=(2, self.qaoa_p))
 
         # Cost evaluation, and reshaping to be consistent with other Keras tensors
-        new_cost = tf.reshape(tf.cast(self.expectation(_params), dtype=tf.float32), shape=(1, 1))
+        new_cost = tf.reshape(
+            tf.cast(self.expectation(_params), dtype=tf.float32), shape=(1, 1)
+        )
 
         return [new_cost, new_params, new_h, new_c]
 
@@ -1056,7 +1062,8 @@ loss = tf.keras.layers.average([0.15 * out0[0], 0.35 * out1[0], 0.5 * out2[0]])
 
 # Definition of a Keras Model
 model = tf.keras.Model(
-    inputs=[inp_cost, inp_params, inp_h, inp_c], outputs=[out0[1], out1[1], out2[1], loss]
+    inputs=[inp_cost, inp_params, inp_h, inp_c],
+    outputs=[out0[1], out1[1], out2[1], loss],
 )
 
 model.summary()

@@ -52,10 +52,9 @@ Let’s setup an algorithm that makes use of both classical and quantum resource
 
 .. warning::
 
-    The following demo is only compatible with Python version 3.10 and PennyLane v0.32.
+    The following demo is only compatible with Python version 3.10.
 
 """
-
 
 ######################################################################
 # First, we define a quantum simulator to run the algorithm on. In this example, we will use the Braket
@@ -161,7 +160,8 @@ qubit_rotation(5, stepsize=0.5)
 # you may provide the device argument as string of the form: ``"local:<provider>/<simulator_name>"`` or simply ``None``.
 # For example, you may set ``"local:pennylane/lightning.qubit"`` for the `PennyLane lightning simulator <https://pennylane.ai/performance>`__.
 #
-# In the following code, we annotate the ``qubit_rotation`` function from above.
+# In the following code, we annotate the ``qubit_rotation`` function from above. It is redefined inside the
+# `hybrid_job` context as the job only has access to local variables and functions.
 #
 
 from braket.jobs import hybrid_job
@@ -169,7 +169,25 @@ from braket.jobs import hybrid_job
 
 @hybrid_job(device="local:pennylane/lightning.qubit")
 def qubit_rotation_hybrid_job(num_steps=1, stepsize=0.5):
-    return qubit_rotation(num_steps=num_steps, stepsize=stepsize)
+    device = qml.device("lightning.qubit", wires=1)
+
+    @qml.qnode(device)
+    def circuit(params):
+        qml.RX(params[0], wires=0)
+        qml.RY(params[1], wires=0)
+        return qml.expval(qml.PauliZ(0))
+
+    opt = qml.GradientDescentOptimizer(stepsize=stepsize)
+    params = np.array([0.5, 0.75])
+
+    for i in range(num_steps):
+        # update the circuit parameters
+        params = opt.step(circuit, params)
+        expval = circuit(params)
+
+        log_metric(metric_name="expval", iteration_number=i, value=expval)
+
+    return params
 
 
 ######################################################################
@@ -231,8 +249,9 @@ job.result()
 
 import pandas as pd
 import matplotlib.pyplot as plt
+from braket.jobs.metrics_data.definitions import MetricType
 
-df = pd.DataFrame(job.metrics())
+df = pd.DataFrame(job.metrics(metric_type=MetricType.ITERATION_NUMBER))
 df.sort_values(by=["iteration_number"], inplace=True)
 
 plt.plot(df["iteration_number"], df["expval"], "-o", color="orange")
@@ -354,7 +373,7 @@ qpu_job.result()
 # is not as smooth as the simulator, but the minimum still is detected correctly!
 #
 
-df = pd.DataFrame(qpu_job.metrics())
+df = pd.DataFrame(qpu_job.metrics(metric_type=MetricType.ITERATION_NUMBER))
 df.sort_values(by=["iteration_number"], inplace=True)
 
 plt.plot(df["iteration_number"], df["expval"], "-o", color="teal")

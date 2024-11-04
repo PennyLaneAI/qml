@@ -26,13 +26,30 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.NIGHTLY_TOKEN }}
+          fetch-depth: 0  # We want entire git-history to avoid any merge conflicts
 
       - name: Nightly Merge
-        uses: robotology/gh-action-nightly-merge@v1.3.3
-        with:
-          stable_branch: 'master'
-          development_branch: 'dev'
-          allow_ff: false
         env:
-          GITHUB_TOKEN: ${{ secrets.NIGHTLY_TOKEN }}
+          CONFIG_USERNAME: GitHub Nightly Merge Action
+          CONFIG_EMAIL: actions@github.com
+          MERGE_HEAD: master
+          MERGE_BASE: dev
+          MERGE_ARGS: --no-ff --allow-unrelated-histories --no-edit
+        run: |
+          # This script is adapted from the robotology/gh-action-nightly-merge@v1.5.2 GitHub action:
+          # https://github.com/robotology/gh-action-nightly-merge/blob/master/entrypoint.sh
+
+          git config --global user.name "$CONFIG_USERNAME"
+          git config --global user.email "$CONFIG_EMAIL"
+
+          git fetch origin $MERGE_HEAD
+          (git checkout $MERGE_HEAD && git pull origin $MERGE_HEAD)
+
+          git fetch origin $MERGE_BASE
+          (git checkout $MERGE_BASE && git pull origin $MERGE_BASE)
+
+          git merge $MERGE_ARGS $MERGE_HEAD
+          git push origin $MERGE_BASE

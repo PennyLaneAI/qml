@@ -7,10 +7,10 @@ Adjoint Differentiation
 
 .. meta::
     :property="og:description": Benchmarking file for adjoint diff demonstration.
-    :property="og:image": https://pennylane.ai/qml/_static/thumbs/code.png
+    :property="og:image": https://pennylane.ai/qml/_static/demo_thumbnails/opengraph_demo_thumbnails/code.png
 
 
-*Author: Christina Lee — Posted: 23 November 2021. Last updated: 23 November 2021.*
+*Author: Christina Lee — Posted: 23 November 2021. Last updated: 04 July 2024.*
 
 """
 
@@ -98,13 +98,14 @@ def layers_scaling(n_wires, n_layers):
 
 
 if __name__ == "__main__":
-    layers_list = [1, 3, 5, 7, 9]
-    n_wires = 5
-    adjoint_layers, backprop_layers, ps_layers = layers_scaling(n_wires, layers_list)
 
     wires_list = [3, 6, 9, 12, 15]
-    n_layers = 3
+    n_layers = 6
     adjoint_wires, backprop_wires, ps_wires = wires_scaling(wires_list, n_layers)
+
+    layers_list = [3, 9, 15, 21, 27]
+    n_wires = 12
+    adjoint_layers, backprop_layers, ps_layers = layers_scaling(n_wires, layers_list)
 
     # Generating the graphic
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 4))
@@ -132,7 +133,7 @@ if __name__ == "__main__":
     ax2.set_ylabel("Time")
     ax2.set_title("Scaling with Layers")
 
-    plt.savefig("adjoint_diff/scaling.png")
+    plt.savefig("scaling.png")
 
 ##############################################################################
 #

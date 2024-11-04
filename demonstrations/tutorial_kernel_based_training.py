@@ -9,7 +9,7 @@ Kernel-based training of quantum models with scikit-learn
 
 .. meta::
     :property="og:description": Train a quantum machine learning model based on the idea of quantum kernels.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//kernel_based_scaling.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/kernel_based_scaling.png
 
 .. related::
 
@@ -87,7 +87,7 @@ After working through this demo, you will:
 # where :math:`| \phi(x)\rangle` is prepared
 # by a fixed `embedding
 # circuit <https://pennylane.ai/qml/glossary/quantum_embedding.html>`__ that
-# encodes data inputs :math:`x`,
+# encodes data inputs :math:`x,`
 # and :math:`\mathcal{M}` is an arbitrary observable. This model includes variational
 # quantum machine learning models, since the observable can
 # effectively be implemented by a simple measurement that is preceded by a
@@ -104,7 +104,7 @@ After working through this demo, you will:
 # For example, applying a circuit :math:`G(\theta)` and then
 # measuring the Pauli-Z observable :math:`\sigma^0_z` of the first qubit
 # implements the trainable measurement
-# :math:`\mathcal{M}(\theta) = G^{\dagger}(\theta) \sigma^0_z G(\theta)`.
+# :math:`\mathcal{M}(\theta) = G^{\dagger}(\theta) \sigma^0_z G(\theta).`
 #
 # The main practical consequence of approaching quantum machine learning with a
 # kernel approach is that instead of training :math:`f` variationally,
@@ -133,8 +133,8 @@ After working through this demo, you will:
 #
 #    .. math::  \min_f  \lambda\;  \mathrm{tr}\{\mathcal{M}^2\} + \frac{1}{M}\sum_{m=1}^M L(f(x^m), y^m),
 #
-#    which is a regularized empirical risk with training data samples :math:`(x^m, y^m)_{m=1\dots M}`,
-#    regularization strength :math:`\lambda \in \mathbb{R}`, and loss function :math:`L`.
+#    which is a regularized empirical risk with training data samples :math:`(x^m, y^m)_{m=1\dots M},`
+#    regularization strength :math:`\lambda \in \mathbb{R},` and loss function :math:`L.`
 #
 #    Theory predicts that kernel-based training will always find better or equally good
 #    minima of this risk. However, to show this here we would have
@@ -172,7 +172,6 @@ from sklearn.metrics import accuracy_score
 
 import pennylane as qml
 from pennylane.templates import AngleEmbedding, StronglyEntanglingLayers
-from pennylane.operation import Tensor
 
 import matplotlib.pyplot as plt
 
@@ -217,14 +216,14 @@ n_qubits
 
 
 ######################################################################
-# To implement the kernel we could prepare the two states :math:`| \phi(x) \rangle`, :math:`| \phi(x') \rangle`
-# on different sets of qubits with angle-embedding routines :math:`S(x), S(x')`,
+# To implement the kernel we could prepare the two states :math:`| \phi(x) \rangle,` :math:`| \phi(x') \rangle`
+# on different sets of qubits with angle-embedding routines :math:`S(x), S(x'),`
 # and measure their overlap with a small routine called a `SWAP test <https://en.wikipedia.org/wiki/Swap_test>`__.
 #
 # However, we need only half the number of qubits if we prepare
 # :math:`| \phi(x)\rangle` and then apply the inverse embedding
 # with :math:`x'` on the same qubits. We then measure the projector onto
-# the initial state :math:`|0..0\rangle \langle 0..0|`.
+# the initial state :math:`|0..0\rangle \langle 0..0|.`
 #
 # .. figure:: ../_static/demonstration_assets/kernel_based_training/kernel_circuit.png
 #       :align: center
@@ -251,7 +250,7 @@ n_qubits
 
 dev_kernel = qml.device("lightning.qubit", wires=n_qubits)
 
-projector = np.zeros((2**n_qubits, 2**n_qubits))
+projector = np.zeros((2 ** n_qubits, 2 ** n_qubits))
 projector[0, 0] = 1
 
 @qml.qnode(dev_kernel)
@@ -298,16 +297,16 @@ svm = SVC(kernel=kernel_matrix).fit(X_train, y_train)
 # Let’s compute the accuracy on the test set.
 #
 
-predictions = svm.predict(X_test)
-accuracy_score(predictions, y_test)
-
+with dev_kernel.tracker:
+    predictions = svm.predict(X_test)
+    accuracy_score(predictions, y_test)
 
 ######################################################################
 # The SVM predicted all test points correctly.
 # How many times was the quantum device evaluated?
 #
 
-dev_kernel.num_executions
+dev_kernel.tracker.totals['executions']
 
 
 ######################################################################
@@ -341,11 +340,11 @@ def circuit_evals_kernel(n_data, split):
 
 
 ######################################################################
-# With :math:`M = 75` and :math:`M_{\rm pred} = 25`, the number of kernel evaluations
+# With :math:`M = 75` and :math:`M_{\rm pred} = 25,` the number of kernel evaluations
 # can therefore be estimated as:
 #
 
-circuit_evals_kernel(n_data=len(X), split=len(X_train) /(len(X_train) + len(X_test)))
+circuit_evals_kernel(n_data=len(X), split=len(X_train) / (len(X_train) + len(X_test)))
 
 
 ######################################################################
@@ -485,9 +484,11 @@ def quantum_model_predict(X_pred, trained_params, trained_bias):
 n_layers = 2
 batch_size = 20
 steps = 100
-trained_params, trained_bias, loss_history = quantum_model_train(n_layers, steps, batch_size)
 
-pred_test = quantum_model_predict(X_test, trained_params, trained_bias)
+with dev_var.tracker:
+    trained_params, trained_bias, loss_history = quantum_model_train(n_layers, steps, batch_size)
+    pred_test = quantum_model_predict(X_test, trained_params, trained_bias)
+
 print("accuracy on test set:", accuracy_score(pred_test, y_test))
 
 plt.plot(loss_history)
@@ -506,7 +507,7 @@ plt.show()
 # How often was the device executed?
 #
 
-dev_var.num_executions
+dev_var.tracker.totals['executions']
 
 
 ######################################################################
@@ -545,7 +546,7 @@ circuit_evals_variational(
     n_params=len(trained_params.flatten()),
     n_steps=steps,
     shift_terms=2,
-    split=len(X_train) /(len(X_train) + len(X_test)),
+    split=len(X_train) / (len(X_train) + len(X_test)),
     batch_size=batch_size,
 )
 
@@ -587,7 +588,7 @@ model_evals_nn(
     n_data=len(X),
     n_params=len(trained_params.flatten()),
     n_steps=steps,
-    split=len(X_train) /(len(X_train) + len(X_test)),
+    split=len(X_train) / (len(X_train) + len(X_test)),
     batch_size=batch_size,
 )
 
@@ -630,9 +631,8 @@ nn_training = []
 x_axis = range(0, 2000, 100)
 
 for M in x_axis:
-
     var1 = circuit_evals_variational(
-        n_data=M, n_params=M, n_steps=M,  shift_terms=2, split=0.75, batch_size=1
+        n_data=M, n_params=M, n_steps=M, shift_terms=2, split=0.75, batch_size=1
     )
     variational_training1.append(var1)
 
@@ -660,7 +660,6 @@ plt.ylabel("number of evaluations")
 plt.legend()
 plt.tight_layout()
 plt.show()
-
 
 
 ######################################################################

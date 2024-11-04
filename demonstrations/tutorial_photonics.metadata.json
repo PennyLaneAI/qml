@@ -2,11 +2,11 @@
     "title": "Photonic quantum computers",
     "authors": [
         {
-            "id": "alvaro_ballon"
+            "username": "alvaro"
         }
     ],
     "dateOfPublication": "2022-05-31T00:00:00+00:00",
-    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Quantum Hardware",
         "Quantum Computing"
@@ -15,12 +15,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_photonic_QC.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_photonic_QC.png"
         }
     ],
     "seoDescription": "Learn how photonic quantum computers work through code",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_photonics",
     "references": [
         {
             "id": "DiVincenzo2000",
@@ -138,5 +137,6 @@
             "id": "gbs",
             "weight": 1.0
         }
-    ]
+    ],
+    "discussionForumUrl": "https://discuss.pennylane.ai/t/photonic-quantum-computers-demo/7335"
 }

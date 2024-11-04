@@ -2,17 +2,17 @@
     "title": "Linear combination of unitaries and block encodings",
     "authors": [
         {
-            "id": "juan_miguel_arrazola"
+            "username": "ixfoduap"
         },
         {
-            "id": "diego_guala"
+            "username": "Diego"
         },
         {
-            "id": "jay_soni"
+            "username": "Jay"
         }
     ],
     "dateOfPublication": "2023-10-25T00:00:00+00:00",
-    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Algorithms",
         "Quantum Computing"
@@ -25,12 +25,11 @@
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_lcu_blockencoding.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_lcu_blockencoding.png"
         }
     ],
     "seoDescription": "Master the basics of LCUs and their applications",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_lcu_blockencoding",
     "references": [
         {
             "id": "qsvt",
@@ -56,5 +55,6 @@
             "id": "tutorial_apply_qsvt",
             "weight": 1.0
         }
-    ]
+    ],
+    "discussionForumUrl": "https://discuss.pennylane.ai/t/lcu-demo-comment/7316"
 }

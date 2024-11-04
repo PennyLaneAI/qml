@@ -2,11 +2,11 @@
     "title": "Learning shallow quantum circuits with local inversions and circuit sewing",
     "authors": [
         {
-            "id": "korbinian_kottmann"
+            "username": "Qottmann"
         }
     ],
     "dateOfPublication": "2024-01-24T00:00:00+00:00",
-    "dateOfLastModification": "2024-01-24T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Optimization",
         "Quantum Computing",
@@ -20,12 +20,11 @@
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_learningshallow.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_learningshallow.png"
         }
     ],
     "seoDescription": "Learn how to do circuit sewing with local inversions, which play a crucial role in learning shallow quantum circuits",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_learningshallow",
     "references": [
         {
             "id": "Huang",
@@ -84,4 +83,3 @@
         }
     ]
 }
-

@@ -4,7 +4,7 @@ QSVT in Practice
 
 .. meta::
     :property="og:description": Quantum Singular Value Transformation algorithm
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_intro_qsvt.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/thumbnail_intro_qsvt.png
 
 .. related::
 
@@ -71,25 +71,25 @@ print(my_circuit.tape.expand().draw())
 # Problem
 # -------
 # The most convenient way to represent a linear system of equations is as a matrix vector problem.
-# Given a matrix :math:`A` and a vector :math:`\vec{b}`, we want to solve :math:`A \cdot \vec{x} = \vec{b}`.
-# This ultimately requires computing :math:`\vec{x} = A^{-1} \cdot \vec{b}`, where for simplicity we
+# Given a matrix :math:`A` and a vector :math:`\vec{b},` we want to solve :math:`A \cdot \vec{x} = \vec{b}.`
+# This ultimately requires computing :math:`\vec{x} = A^{-1} \cdot \vec{b},` where for simplicity we
 # assume that :math:`A` is invertible.
 #
-# :math:`A^{-1}` can be constructed directly by inverting the singular values of :math:`A^{T}`. We can
+# :math:`A^{-1}` can be constructed directly by inverting the singular values of :math:`A^{T}.` We can
 # leverage QSVT to accomplish this by finding the phase angles which apply a polynomial approximation
-# to the transformation :math:`\frac{1}{x}`. This may seem simple in theory, but in practice there are
+# to the transformation :math:`\frac{1}{x}.` This may seem simple in theory, but in practice there are
 # a few technical details that need to be addressed.
 #
-# First, it is difficult to approximate :math:`\frac{1}{x}` close to :math:`x=0`. This leads to
+# First, it is difficult to approximate :math:`\frac{1}{x}` close to :math:`x=0.` This leads to
 # large degree polynomials and very deep quantum circuits. However, it turns out that
 # we only need a good approximation up to the smallest singular value of the target matrix.
 # We introduce the parameter :math:`\kappa` that defines the domain :math:`[\frac{1}{\kappa}, 1]` for which the
 # approximation should be good.
 #
 # Second, the QSVT algorithm produces polynomials which are bounded in magnitude by one on
-# the domain :math:`x \in [-1, 1]`. However, :math:`\frac{1}{x}` falls outside the bounds on
+# the domain :math:`x \in [-1, 1].` However, :math:`\frac{1}{x}` falls outside the bounds on
 # this domain. To remedy this, we introduce a scale factor :math:`s` and approximate
-# :math:`s \cdot \frac{1}{x}`.
+# :math:`s \cdot \frac{1}{x}.`
 #
 # Obtaining Phase Angles
 # ----------------------
@@ -137,14 +137,14 @@ phi_pyqsp = [-2.287, 2.776, -1.163, 0.408, -0.16, -0.387, 0.385, -0.726, 0.456, 
 # Let's confirm that these angles perform the correct transformation.
 # We use the :func:`~.pennylane.matrix()` function to obtain the output matrix
 # of the QSVT circuit. The top-left entry is a polynomial approximation whose
-# real component corresponds to our target function :math:`P(x)`.
+# real component corresponds to our target function :math:`P(x).`
 
 x_vals = np.linspace(0, 1, 50)
 target_y_vals = [s * (1 / x) for x in np.linspace(s, 1, 50)]
 
 qsvt_y_vals = []
 for x in x_vals:
-    poly_x = qml.matrix(qml.qsvt)(
+    poly_x = qml.matrix(qml.qsvt, wire_order=[0])(
         x, phi_pyqsp, wires=[0], convention="Wx"  # specify angles using convention=`Wx`
     )
     qsvt_y_vals.append(np.real(poly_x[0, 0]))
@@ -166,7 +166,7 @@ plt.show()
 
 ###############################################################################
 # Yay! We were able to get an approximation of the function :math:`s \cdot \frac{1}{x}` on the
-# domain :math:`[\frac{1}{\kappa}, 1]`.
+# domain :math:`[\frac{1}{\kappa}, 1].`
 #
 #
 # Phase Angles from Optimization
@@ -219,7 +219,7 @@ def target_func(x):
 def loss_func(phi):
     sum_square_error = 0
     for x in samples_x:
-        qsvt_matrix = qml.matrix(sum_even_odd_circ)(x, phi, ancilla_wire="ancilla", wires=[0])
+        qsvt_matrix = qml.matrix(sum_even_odd_circ, wire_order=["ancilla", 0])(x, phi, ancilla_wire="ancilla", wires=[0])
         qsvt_val = qsvt_matrix[0, 0]
         sum_square_error += (np.real(qsvt_val) - target_func(x)) ** 2
 
@@ -256,7 +256,7 @@ inv_x = [target_func(x) for x in samples_inv]
 
 samples_x = np.linspace(0, 1, 100)
 qsvt_y_vals = [
-    np.real(qml.matrix(sum_even_odd_circ)(x, phi, "ancilla", wires=[0])[0, 0])
+    np.real(qml.matrix(sum_even_odd_circ, wire_order=["ancilla", 0])(x, phi, "ancilla", wires=[0])[0, 0])
     for x in samples_x
 ]
 
@@ -284,14 +284,14 @@ plt.show()
 #
 # In general, the imaginary part of this transformation will not be zero. We need an operator
 # which only applies the real component. Note that we can express the real part of a complex number
-# :math:`z` as :math:`Re[z] = \frac{1}{2}(z + z^{*})`. Similarly, for operators this is given by:
+# :math:`z` as :math:`Re[z] = \frac{1}{2}(z + z^{*}).` Similarly, for operators this is given by:
 #
 # .. math::
 #
 #    \hat{U}_{real}(\vec{\phi}) = \frac{1}{2} \ ( \hat{U}_{qsvt}(\vec{\phi}) + \hat{U}^{*}_{qsvt}(\vec{\phi}) ).
 #
 # Here we use a two-term LCU to define the quantum function for this operator. We obtain the complex
-# conjugate of :math:`\hat{U}_{qsvt}` by taking the adjoint of the operator block-encoding :math:`A^{T}`:
+# conjugate of :math:`\hat{U}_{qsvt}` by taking the adjoint of the operator block-encoding :math:`A^{T}:`
 
 
 def real_u(A, phi):
@@ -307,7 +307,7 @@ def real_u(A, phi):
 #
 # Solving a Linear System with QSVT
 # ---------------------------------
-# Our goal is to solve the equation :math:`A \cdot \vec{x} = \vec{b}`. This method assumes
+# Our goal is to solve the equation :math:`A \cdot \vec{x} = \vec{b}.` This method assumes
 # the matrix we will invert is hermitian. Let's begin by defining the specific matrix :math:`A`
 # and vector :math:`\vec{b}` :
 #

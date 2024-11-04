@@ -2,14 +2,14 @@
     "title": "Intro to Quantum Phase Estimation",
     "authors": [
         {
-            "id": "juan_miguel_arrazola"
+            "username": "ixfoduap"
         },
         {
-            "id": "guillermo_alonso"
+            "username": "KetPuntoG"
         }
     ],
     "dateOfPublication": "2024-01-30T00:00:00+00:00",
-    "dateOfLastModification": "2024-01-30T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Algorithms",
         "Quantum Computing"
@@ -22,12 +22,11 @@
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_Quantum_Phase_Estimation_2023-11-27.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_Quantum_Phase_Estimation_2023-11-27.png"
         }
     ],
     "seoDescription": "Master the basics of the quantum phase estimation",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_qpe",
     "references": [
         {
             "id": "qpe",
@@ -56,5 +55,6 @@
             "id": "tutorial_phase_kickback",
             "weight": 1.0
         }
-    ]
+    ],
+    "discussionForumUrl": "https://discuss.pennylane.ai/t/introduction-to-quantum-phase-estimation-demo/7337"
 }

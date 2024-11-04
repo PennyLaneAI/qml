@@ -2,11 +2,11 @@
     "title": "Resource estimation for quantum chemistry",
     "authors": [
         {
-            "id": "soran_jahangiri"
+            "username": "soran"
         }
     ],
     "dateOfPublication": "2022-11-21T00:00:00+00:00",
-    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Quantum Chemistry"
     ],
@@ -14,12 +14,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_resource_estimation_QChem.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_resource_estimation_QChem.png"
         }
     ],
     "seoDescription": "Learn how to estimate the number of qubits and gates needed to implement quantum algorithms",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_resource_estimation",
     "references": [
         {
             "id": "vonburg2021",
@@ -45,8 +44,8 @@
             "title": "Quantum simulation of battery materials using ionic pseudopotentials",
             "authors": "Modjtaba Shokrian Zini, Alain Delgado, Roberto dos Reis, et al.",
             "year": "2023",
-            "journal": "arXiv:2302.07981",
-            "url": "https://arxiv.org/abs/2302.07981"
+            "journal": "Quantum",
+            "url": "https://quantum-journal.org/papers/q-2023-07-10-1049"
         },
         {
             "id": "delgado2022",

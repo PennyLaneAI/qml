@@ -2,11 +2,11 @@
     "title": "An equivariant graph embedding",
     "authors": [
         {
-            "id": "maria_schuld"
+            "username": "mariaschuld"
         }
     ],
     "dateOfPublication": "2023-07-13T00:00:00+00:00",
-    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
@@ -18,12 +18,11 @@
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_equivariant_graph_embedding.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_equivariant_graph_embedding.png"
         }
     ],
     "seoDescription": "Find out more about how to embedd graphs into quantum states.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_equivariant_graph_embedding",
     "references": [
         {
             "id": "Skolik2022",
@@ -44,7 +43,7 @@
             "url": "https://arxiv.org/abs/2210.08566"
         }
     ],
-    "basedOnPapers": [],
+    "basedOnPapers": ["10.48550/arXiv.2205.06109"],
     "referencedByPapers": [],
     "relatedContent": [
         {

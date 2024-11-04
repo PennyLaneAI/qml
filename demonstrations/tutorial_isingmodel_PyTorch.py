@@ -7,7 +7,7 @@ r"""
 .. meta::
     :property="og:description": This demonstration uses the PyTorch interface of
         PennyLane to optimize a 3-qubit Ising model.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//isingspins.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/isingspins.png
 
 .. related::
 
@@ -39,7 +39,7 @@ device with PyTorch. In the absence of external fields, the Hamiltonian for this
 where each spin can be in the +1 or -1 spin state and :math:`J_{ij}` are the nearest-neighbour coupling strengths.
 
 For simplicity, the first spin can be assumed
-to be in the "up" state (+1 eigenstate of Pauli-Z operator) and the coupling matrix can be set to :math:`J = [1,-1]`. The rotation angles for the other two spins are then optimized
+to be in the "up" state (+1 eigenstate of Pauli-Z operator) and the coupling matrix can be set to :math:`J = [1,-1].` The rotation angles for the other two spins are then optimized
 so that the energy of the system is minimized for the given couplings.
 """
 

@@ -1,0 +1,4 @@
+.. bio:: Maxi Wendlinger
+   :photo: ../_static/authors/maxi_wendlinger.jpg
+
+   Maxi Wendlinger is a researcher at Fraunhofer AISEC interested in the applications of cybersecurity in the era of Artificial Intelligence and Quantum Computing. He is currently pursuing his M.Sc. in Informatics at Technical University of Munich (TUM) with focus on Deep Learning and Quantum Computing.

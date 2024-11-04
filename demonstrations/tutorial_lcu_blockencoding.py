@@ -2,12 +2,12 @@ r"""Linear combination of unitaries and block encodings
 =============================================================
 
 If I (Juan Miguel) had to summarize quantum computing in one sentence, it would be this: information is
-encoded in quantum states and processed using `unitary operations <https://codebook.xanadu.ai/I.3>`_.
+encoded in quantum states and processed using `unitary operations <https://pennylane.ai/codebook/01-introduction-to-quantum-computing/03-unitary-matrices/>`_.
 The challenge of quantum algorithms is to design and build these unitaries to perform interesting and
 useful tasks with the encoded information. My colleague `Nathan Wiebe <https://scholar.google.ca/citations?user=DSgKHOQAAAAJ&hl=en>`_
 once told me that some of his early research was motivated by a simple
 question: Quantum computers can implement products of unitaries --- after all,
-that's how we build circuits from a `universal gate set <https://codebook.xanadu.ai/I.7>`_.
+that's how we build circuits from a `universal gate set <https://pennylane.ai/codebook/02-single-qubit-gates/04-universal-gate-sets/>`_.
 But what about **sums of unitaries**? 🤔
 
 In this tutorial, we will teach you the basics of one of the most versatile tools in quantum algorithms:
@@ -36,7 +36,7 @@ an operator :math:`A` in terms of coefficients :math:`\alpha_{k}` and unitaries 
 .. math:: A =  \sum_{k=0}^{N-1} \alpha_k U_k.
 
 A general way to build LCUs is to employ properties of the **Pauli basis**.
-This is the set of all products of Pauli matrices :math:`\{I, X, Y, Z\}`. For the space of operators
+This is the set of all products of Pauli matrices :math:`\{I, X, Y, Z\}.` For the space of operators
 acting on :math:`n` qubits, this set forms a complete basis. Thus, any operator can be expressed in the Pauli basis,
 which immediately gives an LCU decomposition. PennyLane allows you to decompose any matrix into the Pauli basis using the
 :func:`~.pennylane.pauli_decompose` function. The coefficients :math:`\alpha_k` and the unitaries
@@ -59,10 +59,11 @@ A = np.array(
 )
 
 LCU = qml.pauli_decompose(A)
+LCU_coeffs, LCU_ops = LCU.terms()
 
 print(f"LCU decomposition:\n {LCU}")
-print(f"Coefficients:\n {LCU.coeffs}")
-print(f"Unitaries:\n {LCU.ops}")
+print(f"Coefficients:\n {LCU_coeffs}")
+print(f"Unitaries:\n {LCU_ops}")
 
 
 ##############################################################################
@@ -85,7 +86,7 @@ print(f"Unitaries:\n {LCU.ops}")
 #
 # .. math:: \text{PREP}|0\rangle = \sum_k \sqrt{\frac{|\alpha_k|}{\lambda}}|k\rangle,
 #
-# where :math:`\lambda` is a normalization constant defined as :math:`\lambda = \sum_k |\alpha_k|`,
+# where :math:`\lambda` is a normalization constant defined as :math:`\lambda = \sum_k |\alpha_k|,`
 # and the select (SEL) operator:
 #
 # .. math:: \text{SEL}|k\rangle |\psi\rangle = |k\rangle U_k |\psi\rangle.
@@ -106,7 +107,7 @@ print(f"Unitaries:\n {LCU.ops}")
 #
 # If you're up for it, it's illuminating to go through the math and show how :math:`A` comes out on the right
 # side of the equation.
-# (Tip: calculate the action of :math:`\text{PREP}^\dagger` on :math:`\langle 0|`, not on the output
+# (Tip: calculate the action of :math:`\text{PREP}^\dagger` on :math:`\langle 0|,` not on the output
 # state after :math:`\text{SEL} \cdot \text{PREP}`).
 #
 # Otherwise, the intuitive way to understand this equation is that we apply PREP, SEL, and then invert PREP. If
@@ -126,13 +127,13 @@ print(f"Unitaries:\n {LCU.ops}")
 #
 # .. math:: U = \text{PREP}^\dagger \cdot \text{SEL} \cdot \text{PREP}
 #
-# is a **block encoding** of :math:`A`, up to normalization. The reason for this name is that if we write :math:`U`
+# is a **block encoding** of :math:`A,` up to normalization. The reason for this name is that if we write :math:`U`
 # as a matrix, the operator :math:`A` is encoded inside a block of :math:`U` as
 #
 # .. math:: U = \begin{bmatrix} A & \cdot \\ \cdot & \cdot \end{bmatrix}.
 #
 # This block is defined by the subspace of all states where the auxiliary qubits are in state
-# :math:`|0\rangle`.
+# :math:`|0\rangle.`
 #
 #
 # PennyLane supports the direct implementation of `prepare <https://docs.pennylane.ai/en/stable/code/api/pennylane.StatePrep.html>`_
@@ -144,7 +145,7 @@ print(f"Unitaries:\n {LCU.ops}")
 dev1 = qml.device("default.qubit", wires=1)
 
 # normalized square roots of coefficients
-alphas = (np.sqrt(LCU.coeffs) / np.linalg.norm(np.sqrt(LCU.coeffs)))
+alphas = (np.sqrt(LCU_coeffs) / np.linalg.norm(np.sqrt(LCU_coeffs)))
 
 
 @qml.qnode(dev1)
@@ -167,7 +168,7 @@ import matplotlib.pyplot as plt
 dev2 = qml.device("default.qubit", wires=3)
 
 # unitaries
-ops = LCU.ops
+ops = LCU_ops
 # relabeling wires: 0 → 1, and 1 → 2
 unitaries = [qml.map_wires(op, {0: 1, 1: 2}) for op in ops]
 
@@ -183,7 +184,7 @@ plt.show()
 ##############################################################################
 # Based on the controlled operations, the circuit above will flip the measured qubit
 # if the input is :math:`|1\rangle` and leave it unchanged if the
-# input is :math:`|0\rangle`. The output expectation values correspond to these states:
+# input is :math:`|0\rangle.` The output expectation values correspond to these states:
 
 print('Expectation value for input |0>:', sel_circuit([0]))
 print('Expectation value for input |1>:', sel_circuit([1]))
@@ -218,8 +219,8 @@ print(np.real(np.round(output_matrix,2)))
 # Application: Projectors
 # -----------------------
 # Suppose we wanted to project our quantum state :math:`|\psi\rangle` onto the state
-# :math:`|\phi\rangle`. We could accomplish this by applying the projector
-# :math:`| \phi \rangle\langle \phi |` to :math:`|\psi\rangle`. However, we cannot directly apply
+# :math:`|\phi\rangle.` We could accomplish this by applying the projector
+# :math:`| \phi \rangle\langle \phi |` to :math:`|\psi\rangle.` However, we cannot directly apply
 # projectors as gates in our quantum circuits because they are **not** unitary operations.
 # We can instead use a simple LCU decomposition which holds for any projector:
 #
@@ -258,7 +259,7 @@ def lcu_circuit():  # block_encode
     return qml.state()
 
 
-output_matrix = qml.matrix(lcu_circuit)()
+output_matrix = qml.matrix(lcu_circuit, wire_order=["ancilla", 0])()
 print("Block-encoded projector:\n")
 print(np.real(np.round(output_matrix,2)))
 

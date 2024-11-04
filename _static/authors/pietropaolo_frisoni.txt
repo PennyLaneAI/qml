@@ -1,0 +1,4 @@
+.. bio:: Pietropaolo Frisoni
+   :photo: ../_static/authors/pietropaolo_frisoni.jpg
+
+   Pietropaolo is a quantum software developer at Xanadu. His background is in theoretical physics and quantum gravity, with a focus on scientific computing.

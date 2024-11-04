@@ -5,7 +5,7 @@ Adaptive circuits for quantum chemistry
 
 .. meta::
     :property="og:description": Learn how to build quantum chemistry circuits adaptively
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_adaptive_circuits.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/thumbnail_adaptive_circuits.png
 
 .. related::
     tutorial_quantum_chemistry Building molecular Hamiltonians
@@ -66,7 +66,8 @@ from pennylane import numpy as np
 import time
 
 symbols = ["Li", "H"]
-geometry = np.array([0.0, 0.0, 0.0, 0.0, 0.0, 2.969280527])
+geometry = np.array([[0.0, 0.0, 0.0], [0.0, 0.0, 2.969280527]])
+molecule = qchem.Molecule(symbols, geometry)
 
 ##############################################################################
 # We now compute the molecular Hamiltonian in the
@@ -78,8 +79,7 @@ geometry = np.array([0.0, 0.0, 0.0, 0.0, 0.0, 2.969280527])
 # state and all of the excited states.
 
 H, qubits = qchem.molecular_hamiltonian(
-    symbols,
-    geometry,
+    molecule,
     active_electrons=2,
     active_orbitals=5
 )
@@ -203,7 +203,7 @@ for i in range(len(doubles)):
 ##############################################################################
 # The computed gradients have different values, reflecting the contribution of each gate
 # in the final state prepared by the circuit. Many of the gradient values are zero and we select
-# those gates that have a gradient above a pre-defined threshold, which we set to :math:`10^{-5}`.
+# those gates that have a gradient above a pre-defined threshold, which we set to :math:`10^{-5}.`
 
 doubles_select = [doubles[i] for i in range(len(doubles)) if abs(grads[i]) > 1.0e-5]
 doubles_select

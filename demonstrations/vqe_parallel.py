@@ -7,7 +7,7 @@ VQE with parallel QPUs with Rigetti
 .. meta::
     :property="og:description": Using parallel QPUs to
         speed up the calculation of the potential energy surface of molecular Hamiltonian.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//vqe_diagram.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/vqe_diagram.png
 
 .. related::
 
@@ -20,7 +20,7 @@ calculation of the potential energy surface of molecular hydrogen (:math:`H_2`).
 
 Using a VQE setup, we task two devices from the
 `PennyLane-Rigetti <https://docs.pennylane.ai/projects/rigetti/en/latest/>`__ plugin with evaluating
-separate terms in the qubit Hamiltonian of :math:`H_2`. As these devices are allowed to operate
+separate terms in the qubit Hamiltonian of :math:`H_2.` As these devices are allowed to operate
 asynchronously, i.e., at the same time and without having to wait for each other,
 the calculation can be performed in roughly half the time.
 
@@ -75,9 +75,10 @@ hamiltonians = [d.hamiltonian for d in datasets]
 # matrices. Let's take a look more closely at one of the Hamiltonians:
 
 h = hamiltonians[0]
+_, h_ops = h.terms()
 
-print("Number of terms: {}\n".format(len(h.ops)))
-for op in h.ops:
+print("Number of terms: {}\n".format(len(h_ops)))
+for op in h_ops:
     print("Measurement {} on wires {}".format(op.name, op.wires))
 
 ##############################################################################
@@ -209,15 +210,16 @@ print(f"Evaluation time: {dt_seq:.2f} s")
 
 
 def compute_energy_parallel(H, devs, param):
-    assert len(H.ops) == len(devs)
+    H_coeffs, H_ops = H.terms()
+    assert len(H_ops) == len(devs)
     results = []
 
-    for i in range(len(H.ops)):
+    for i in range(len(H_ops)):
         qnode = qml.QNode(circuit, devs[i])
-        results.append(dask.delayed(qnode)(param, H.ops[i]))
+        results.append(dask.delayed(qnode)(param, H_ops[i]))
 
     results = dask.compute(*results, scheduler="threads")
-    result = sum(c * r for c, r in zip(H.coeffs, results))
+    result = sum(c * r for c, r in zip(H_coeffs, results))
     return result
 
 
@@ -250,11 +252,12 @@ print(f"Evaluation time: {dt_par:.2f} s")
 
 
 def compute_energy_parallel_optimized(H, devs, param):
-    assert len(H.ops) == len(devs)
+    H_coeffs, H_ops = H.terms()
+    assert len(H_ops) == len(devs)
     results = []
 
     obs_groupings, coeffs_groupings = qml.pauli.group_observables(
-        H.ops, H.coeffs, "qwc"
+        H_ops, H_coeffs, "qwc"
     )
 
     for i, (obs, coeffs) in enumerate(zip(obs_groupings, coeffs_groupings)):
