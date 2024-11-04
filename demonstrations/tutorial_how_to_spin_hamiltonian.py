@@ -3,9 +3,14 @@ r"""How to build spin Hamiltonians
 Systems of interacting spins provide simple but powerful models for studying problems in physics,
 chemistry, and quantum computing. PennyLane offers a comprehensive set of tools that enables users
 to intuitively construct a broad range of spin Hamiltonians. Here we show you how to use these tools
-to easily construct spin Hamiltonians for models such as the Fermi–Hubbard model, the Heisenberg
-model, the transverse-field Ising model, Kitaev's honeycomb model, the Haldane model, the Emery
-model and more!
+to easily construct spin Hamiltonians for models such as
+the `Fermi–Hubbard <https://en.wikipedia.org/wiki/Hubbard_model>`__ model,
+the `Heisenberg <https://en.wikipedia.org/wiki/Quantum_Heisenberg_model>`__ model,
+the `transverse-field Ising <https://en.wikipedia.org/wiki/Transverse-field_Ising_model>`__ model,
+the `Kitaev's honeycomb <https://arxiv.org/abs/cond-mat/0506438>`__ model,
+the `Haldane <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.61.2015>`__ model,
+the `Emery <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.58.2794>`__ model,
+and more!
 
 .. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_how_to_build_spin_hamiltonians.png
     :align: center
@@ -19,11 +24,9 @@ model and more!
 # PennyLane provides a set of built-in
 # `functions <https://docs.pennylane.ai/en/latest/code/qml_spin.html#hamiltonian-functions>`__
 # in the `qml.spin <https://docs.pennylane.ai/en/latest/code/qml_spin.html>`__ module for
-# constructing spin model Hamiltonians with minimal input from the user. To construct the
-# Hamiltonian, we need information about the spatial distribution of the spin sites specified
-# by a lattice shape and the strength of interactions in the system. Then we pass
-# this information to the desired function defining a spin model. Let’s look at some examples for
-# the models that are currently supported in PennyLane.
+# constructing spin Hamiltonians with minimal input needed from the user: we only need to specify
+# the lattice that describes spin sites and the parameters that describe the interactions in our
+# system. Let’s look at some examples for the models that are currently supported in PennyLane.
 #
 # Fermi–Hubbard model
 # ^^^^^^^^^^^^^^^^^^^
@@ -36,9 +39,10 @@ model and more!
 #     H = -t\sum_{\left< i,j \right>, \sigma} c_{i\sigma}^{\dagger}c_{j\sigma} + U\sum_{i}n_{i \uparrow} n_{i\downarrow}.
 #
 # The terms :math:`c^{\dagger}, c` are the creation and annihilation operators,
-# :math:`\left< i,j \right>` represents the indices of neighbouring spins, :math:`\sigma` is the spin
-# degree of freedom, and :math:`n_{i \uparrow}, n_{i \downarrow}` are the number operators for the spin-up
-# and spin-down fermions at site :math:`i`, denoted by :math:`0` and :math:`1` respectively.
+# :math:`\left< i,j \right>` represents the indices of neighbouring spins, :math:`\sigma` is the
+# spin degree of freedom, and :math:`n_{i \uparrow}, n_{i \downarrow}` are the number operators for
+# the spin-up and spin-down fermions at site :math:`i`, denoted by :math:`0` and :math:`1`
+# respectively. This model is often used as a simplified model to investigate superconductivity.
 #
 # The Fermi–Hubbard Hamiltonian can be
 # constructed in PennyLane by passing the hopping and interaction parameters to the
@@ -61,7 +65,7 @@ hopping = 0.2
 onsite = 0.3
 
 hamiltonian = qml.spin.fermi_hubbard("square", n_cells, hopping, onsite)
-print(hamiltonian)
+hamiltonian
 
 ######################################################################
 # Similarly, we can construct the Hamiltonian for a :math:`5 \times 5 \times 5` cubic lattice as follows.
@@ -241,7 +245,7 @@ plot(lattice)
 #
 # Let's create a square-octagon [#jovanovic]_ lattice manually. Our lattice
 # can be constructed in a two-dimensional Cartesian coordinate system with two primitive
-# translation vectors defined as unit vectors along the :math:`x` and :math:`y` directions and four
+# translation vectors defined as unit vectors along the :math:`x` and :math:`y` directions, and four
 # lattice point located inside the unit cell. We also assume that the lattice has three unit cells
 # along each direction.
 
@@ -270,7 +274,7 @@ plot(lattice, figsize = (5, 5), showlabel=False)
 
 from pennylane import X, Y, Z
 
-coupling, onsite = 1.0, 1.0
+coupling, onsite = 0.25, 0.75
 
 hamiltonian = 0.0
 # add the one-site terms
@@ -282,17 +286,17 @@ for edge in lattice.edges_indices:
     i, j = edge[0], edge[1]
     hamiltonian += - coupling * (Z(i) @ Z(j))
 
-print(hamiltonian)
+hamiltonian
 
 ######################################################################
 # In this example, we just used the built-in attributes of our custom lattice without further
-# customising them. The lattice can be constructed in a more flexible way that allows us to construct
-# customized Hamiltonians. Let's look at an example.
+# customising them. The lattice can be constructed in a more flexible way that allows us to build
+# fully general spin Hamiltonians. Let's look at an example.
 #
 # Building anisotropic Hamiltonians
 # ---------------------------------
-# Now we work on a more complicated Hamiltonian to see how our existing tools allow us to build it
-# intuitively. We construct the anisotropic square-trigonal [#jovanovic]_ model, where the coupling parameters
+# Now we work on a more complicated Hamiltonian. We construct the anisotropic square-trigonal
+# [#jovanovic]_ model, where the coupling parameters
 # depend on the orientation of the bonds. We can construct the Hamiltonian by building the
 # lattice manually and adding custom edges between the nodes. For instance, to define a custom
 # ``XX`` edge with the coupling constant :math:`0.5` between nodes 0 and 1, we use the following.
@@ -304,10 +308,10 @@ custom_edge = [(0, 1), ('XX', 0.5)]
 # nodes and the translation vectors and then define the number of unit cells in each
 # direction [#jovanovic]_.
 
-positions = [[0.1830127018922193, 0.3169872981077807],
-             [0.3169872981077807, 0.8169872981077807],
-             [0.6830127018922193, 0.1830127018922193],
-             [0.8169872981077807, 0.6830127018922193]]
+positions = [[0.1830, 0.3169],
+             [0.3169, 0.8169],
+             [0.6830, 0.1830],
+             [0.8169, 0.6830]]
 
 vectors = [[1, 0], [0, 1]]
 
@@ -334,7 +338,7 @@ lattice = Lattice(n_cells, vectors, positions, custom_edges=custom_edges)
 ######################################################################
 # Let's print the lattice edges and check that our custom edge types are set correctly.
 
-print(lattice.edges)
+lattice.edges
 
 ######################################################################
 # You can compare these edges with the lattice plotted above and verify the correct translation of
@@ -357,7 +361,7 @@ for edge in lattice.edges:
     k, l = edge[2][0][0], edge[2][0][1]
     hamiltonian += opmap[k](i) @ opmap[l](j) * edge[2][1]
 
-print(hamiltonian)
+hamiltonian
 
 ######################################################################
 # You can see that it is easy and intuitive to construct this anisotropic Hamiltonian with the tools
