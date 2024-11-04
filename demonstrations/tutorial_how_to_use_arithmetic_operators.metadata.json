@@ -56,6 +56,11 @@
             "type": "demonstration",
             "id": "tutorial_qft_arithmetics",
             "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_how_to_use_registers",
+            "weight": 1.0
         }
     ]
 }
