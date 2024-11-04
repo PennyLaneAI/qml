@@ -724,6 +724,12 @@ print(f"Under theta_Y, the operators\n{su2}\nhave the eigenvalues\n{eigvals}")
 # the exponential of a CSA element, i.e., of commuting elements from the horizontal subspace
 # :math:`\mathfrak{p}.` This may already hint at the usefulness of the KAK theorem for matrix
 # factorizations in general, and for quantum circuit decompositions in particular.
+# Given a group operation :math:`g=\exp(x)` with :math:`x\in\mathfrak{g}`, there are two
+# subalgebra elements :math:`y_{1,2}\in\mathfrak{k}` (or subgroup elements
+# :math:`k_{1,2}=\exp(y_{1,2})\in K`) and a Cartan subgalgebra element :math:`a\in\mathfrak{a}` so
+# that :math:`g=k_1 \exp(a) k_2`. If :math:`g` happens to be from the subspace
+# :math:`\mathcal{P}\subset\mathcal{G}`, we know that the two subgroup elements will be related,
+# namely :math:`g=k_1\exp(a)k_1^\dagger`.
 #
 # **Example**
 #
