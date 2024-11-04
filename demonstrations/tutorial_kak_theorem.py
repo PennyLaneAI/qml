@@ -316,13 +316,13 @@ def is_orthogonal(op, basis):
 #     :class: note
 #
 #     The *quotient space* of a Lie group :math:`\mathcal{G}` and a subgroup :math:`\mathcal{K}`
-#     is the space of cosets of :math:`\mathcal{K},` i.e., 
+#     is the space of cosets of :math:`\mathcal{K},` i.e.,
 #     :math:`\mathcal{G}/\mathcal{K} = \{g\mathcal{K} | g\in G\}.` In this space, two elements are
 #     equal if they just differ by multiplying an element from :math:`\mathcal{K}` from the left
 #     to one of them. The quotient space is a manifold like the two groups :math:`\mathcal{G}` and
 #     :math:`\mathcal{K},` but in general it will *not* be a group itself. For example, a product
-#     of two elements is 
-#     :math:`(g'\mathcal{K})(g\mathcal{K})=g'g(g^{-1} \mathcal{K} g) \mathcal{K},` which only is 
+#     of two elements is
+#     :math:`(g'\mathcal{K})(g\mathcal{K})=g'g(g^{-1} \mathcal{K} g) \mathcal{K},` which only is
 #     a coset again if :math:`g^{-1} \mathcal{K} g\subset \mathcal{K}.` Subgroups for which this
 #     condition holds for any :math:`g\in \mathcal{G}` are called *normal subgroups*.
 #     We are interested in cases where the symmetric property holds, which excludes normal
@@ -731,7 +731,7 @@ print(f"Under theta_Y, the operators\n{su2}\nhave the eigenvalues\n{eigvals}")
 # subalgebra elements :math:`y_{1,2}\in\mathfrak{k}` (or subgroup elements
 # :math:`K_{1,2}=\exp(y_{1,2})\in \mathcal{K}`) and a Cartan subgalgebra element
 # :math:`a\in\mathfrak{a}` so that :math:`G=K_1 \exp(a) K_2`. If :math:`g` happens to be from
-# the subspace :math:`\mathcal{P}\subset\mathcal{G}`, we know that the two subgroup elements 
+# the subspace :math:`\mathcal{P}\subset\mathcal{G}`, we know that the two subgroup elements
 # will be related, namely :math:`G=K\exp(a)K^\dagger`.
 #
 # **Example**
@@ -948,4 +948,3 @@ fig, ax = qml.draw_mpl(su4_gate, wire_order=[0, 1])(params)
 #
 # About the author
 # ----------------
-
