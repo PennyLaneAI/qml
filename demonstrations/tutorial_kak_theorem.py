@@ -295,11 +295,11 @@ def is_orthogonal(op, basis):
 #     = \sum_{n=0}^\infty \frac{1}{n!} \underset{\in\mathfrak{p}}{\underbrace{(\text{ad}_y)^n (x)}}
 #     \in \mathfrak{p}.
 #
-# If the reductive property holds, the quotient space :math:`G/K` of the groups
-# of :math:`\mathfrak{g}` and :math:`\mathfrak{k}` is called a *reductive homogeneous space*.
-# If both properties hold, :math:`(\mathfrak{k}, \mathfrak{p})` is called a *Cartan pair* and
-# we call :math:`\mathfrak{g}=\mathfrak{k} \oplus \mathfrak{p}` a *Cartan decomposition*.
-# :math:`(\mathfrak{g}, \mathfrak{k})` is named a *symmetric pair*
+# If the reductive property holds, the quotient space :math:`G/K` of the groups of
+# :math:`\mathfrak{g}` and :math:`\mathfrak{k}` (see detail box below) is called a
+# *reductive homogeneous space*. If both properties hold, :math:`(\mathfrak{k}, \mathfrak{p})` is
+# called a *Cartan pair* and we call :math:`\mathfrak{g}=\mathfrak{k} \oplus \mathfrak{p}` a
+# *Cartan decomposition*. :math:`(\mathfrak{g}, \mathfrak{k})` is named a *symmetric pair*
 # and the quotient :math:`G/K` is a *symmetric space*.
 # Symmetric spaces are relevant for a wide range of applications in physics
 # and have been studied a lot throughout the last hundred years.
@@ -307,8 +307,23 @@ def is_orthogonal(op, basis):
 # .. admonition:: Nomenclature
 #     :class: warning
 #
-#     Depending on context and field, there are sometimes additional requirements
-#     for :math:`\mathfrak{g}=\mathfrak{k}\oplus\mathfrak{p}` to be called a Cartan decomposition.
+#     Depending on context and field, there sometimes are additional requirements
+#     for :math:`\mathfrak{g}=\mathfrak{k}\oplus\mathfrak{p}` to be called a Cartan decomposition
+#     and for :math:`(\mathfrak{k}, \mathfrak{p})` to be a Cartan pair.
+#
+# .. admonition:: Mathematical detail
+#     :class: note
+#
+#     The *quotient space* of a Lie group :math:`G` and a subgroup :math:`K` is the space of
+#     cosets of :math:`K,` i.e., :math:`G/K = \{gK | g\in G\}.` In this space, two elements
+#     are equal if they just differ by multiplying an element from :math:`K` from the left
+#     to one of them. The quotient space is a manifold like the two groups :math:`G` and
+#     :math:`K,` but in general it will *not* be a group itself. For example, a product
+#     of two elements is :math:`(g'K)(gK)=g'g(g^{-1} K g) K,` which only is of the form
+#     :math:`g'' K` if :math:`g^{-1} K g\subset K.` Subgroups for which this condition holds
+#     for any :math:`g\in G` are called *normal subgroups*.
+#     We are interested in cases where the symmetric property holds, which excludes normal
+#     subgroups, and :math:`G/K` will not be a group.
 #
 # **Example**
 #
@@ -622,11 +637,21 @@ print(f"Under theta_Y, the operators\n{su2}\nhave the eigenvalues\n{eigvals}")
 #     :class: note
 #
 #     You might already see that the two different decompositions created by :math:`\theta_Z`
-#     and :math:`\theta_Y` are very similar. There is a whole field of study
-#     characterizing---and even fully classifying---the possible Cartan decompositions
-#     of semisimple Lie algebras. We will not go into detail here, but this classification
+#     and :math:`\theta_Y` are very similar. There is a whole field of study that
+#     characterizes---and even fully classifies---the possible Cartan decompositions
+#     of semisimple Lie algebras. This classification
 #     plays a big role when talking about decompositions without getting stuck on details
 #     like the choice of basis or the representation of the algebra as matrices.
+#     For example, there are only three types of Cartan decompositions of the special
+#     unitary group :math:`SU(n)`, called AI, AII, and AIII. The subalgebras :math:`\mathfrak{k}`
+#     for these decompositions are the special orthogonal algebra :math:`\mathfrak{so}(n)` (AI),
+#     the unitary symplectic algebra :math:`\mathfrak{sp}(n)` (AII), and a sum of (special) unitary
+#     algebras :math:`\mathfrak{su}(p)\oplus\mathfrak{su}(q)\oplus\mathfrak{u}(1)`
+#     (AIII, :math:`p+q=n`).
+#     Their involutions are usually represented by complex conjugation (AI), by the adjoint
+#     action with a Pauli operator (AIII, for qubits, :math:`p=q=2^{N-1}`), or by both in
+#     sequence (AII). It is instructive to try and see why those three are *not* equivalent
+#     under a unitary basis change!
 #
 # The KAK theorem
 # ---------------
