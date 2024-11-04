@@ -15,9 +15,10 @@ serving as fundamental building blocks in their design and execution. For exampl
 
 3. Loading data or preparing initial states on a quantum computer often requires several quantum arithmetic operations [#sanders]_.
 
-With PennyLane, you will see how easy it is to build quantum arithmetic operations as subroutines for your quantum algorithms!
+With PennyLane, you will see how easy it is to build quantum arithmetic operations as subroutines for your algorithms. 
+Knowing your way around these operators could be just the thing to streamline your algorithm design!
 
-.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_how_to_use_arithmetic_operators.png
+.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_how_to_use_quantum_arithmetic_operators.png
     :align: center
     :width: 60%
     :target: javascript:void(0)
@@ -30,7 +31,7 @@ specific register's state. In contrast, out-place operators, such as the :class:
 combine multiple states and store the result in a new register, leaving the original states unchanged. Both kinds of operators are
 illustrated in the following figure.
 
-.. figure:: ../_static/demonstration_assets/how_to_use_arithmetic_operators/in_outplace.png
+.. figure:: ../_static/demonstration_assets/how_to_use_quantum_arithmetic_operators/in_outplace.png
   :align: center
   :width: 90%
 

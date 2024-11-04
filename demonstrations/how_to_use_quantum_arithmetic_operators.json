@@ -19,16 +19,16 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_how_to_use_arithmetic_operators.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_how_to_use_quantum_arithmetic_operators.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_how_to_use_arithmetic_operators.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_how_to_use_quantum_arithmetic_operators.png"
         }
     ],
     "seoDescription": "Learn how to use the quantum arithmetic operators of Pennylane.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_how_to_use_arithmetic_operators",
+    "canonicalURL": "/qml/demos/tutorial_how_to_use_quantum_arithmetic_operators",
     "references": [
         {
             "id": "shor_exp",
