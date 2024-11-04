@@ -1,10 +1,11 @@
 r"""How to build spin Hamiltonians
 ==================================
 Systems of interacting spins provide simple but powerful models for studying problems in physics,
-chemistry, and quantum computing. PennyLane provides a comprehensive set of tools that enables users
+chemistry, and quantum computing. PennyLane offers a comprehensive set of tools that enables users
 to intuitively construct a broad range of spin Hamiltonians. Here we show you how to use these tools
-to easily construct spin Hamiltonians for models such as the transverse-field Ising model,
-Fermi-Hubbard model, Kitaev honeycomb model, and more.
+to easily construct spin Hamiltonians for models such as the Fermi–Hubbard model, the Heisenberg
+model, the transverse-field Ising model, Kitaev's honeycomb model, the Haldane model, the Emery
+model and more!
 
 .. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_how_to_build_spin_hamiltonians.png
     :align: center
@@ -27,8 +28,8 @@ Fermi-Hubbard model, Kitaev honeycomb model, and more.
 # Fermi–Hubbard model
 # ^^^^^^^^^^^^^^^^^^^
 # The `Fermi–Hubbard model Hamiltonian <https://docs.pennylane.ai/en/latest/code/api/pennylane.spin.fermi_hubbard.html>`__
-# has a kinetic energy component, which is parameterized by a hopping parameter :math:`t` and a
-# potential energy component parameterized by the on-site interaction strength, :math:`U`.
+# has a kinetic energy component, which is parameterized by a hopping parameter :math:`t`, and a
+# potential energy component which is parameterized by the on-site interaction strength, :math:`U`.
 #
 # .. math::
 #
@@ -47,10 +48,11 @@ Fermi-Hubbard model, Kitaev honeycomb model, and more.
 # 
 # We can also define the
 # number of lattice cells we would like to include in our Hamiltonian as a list of integers for
-# :math:`x, y, z` directions, depending on the lattice shape. Here we generate the Fermi-Hubbard on
-# a ``square`` lattice of shape :math:`2 \times 2`. The ``square`` lattice is constructed from unit
-# cells that contain only one site such that we will have :math:`2 \times 2 = 4` sites in total. We
-# will provide more details on constructing lattices in the following sections.
+# :math:`x, y, z` directions, depending on the lattice shape. Here we generate the Fermi–Hubbard
+# Hamiltonian on a ``square`` lattice of shape :math:`2 \times 2`. The ``square`` lattice is
+# constructed from unit cells that contain only one site such that we will have
+# :math:`2 \times 2 = 4` sites in total. We will provide more details on constructing lattices in
+# the following sections.
 
 import pennylane as qml
 
@@ -102,7 +104,7 @@ hamiltonian = qml.spin.transverse_ising("square", n_cells, coupling, h)
 
 ######################################################################
 # Kitaev's honeycomb model
-# ^^^^^^^^^^^^^^^^^^^^^^
+# ^^^^^^^^^^^^^^^^^^^^^^^^
 # The `Kitaev honeycomb model Hamiltonian <https://docs.pennylane.ai/en/latest/code/api/pennylane.spin.kitaev.html>`__
 # is defined on the honeycomb lattice, as
 #
@@ -288,8 +290,8 @@ print(hamiltonian)
 # customising them. The lattice can be constructed in a more flexible way that allows us to construct
 # customized Hamiltonians. Let's look at an example.
 #
-# Adding custom edges
-# ^^^^^^^^^^^^^^^^^^^
+# Building anisotropic Hamiltonians
+# ---------------------------------
 # Now we work on a more complicated Hamiltonian to see how our existing tools allow us to build it
 # intuitively. We construct the anisotropic square-trigonal [#jovanovic]_ model, where the coupling parameters
 # depend on the orientation of the bonds. We can construct the Hamiltonian by building the
