@@ -6,12 +6,12 @@
         }
     ],
     "dateOfPublication": "2024-04-12T00:00:00+00:00",
-    "dateOfLastModification": "2024-09-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Devices and Performance"
     ],
     "tags": [],
-    "previewImages": [  
+    "previewImages": [
         {
             "type": "thumbnail",
             "uri": "/_static/demonstration_assets/clifford_simulation/thumbnail_clifford_circuit_simulations.png"
@@ -23,7 +23,6 @@
     ],
     "seoDescription": "Perform efficient simulations for Clifford circuits.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_clifford_circuit_simulations",
     "references": [
         {
             "id": "supremecy_exp1",

@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2024-07-22T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Quantum Computing"
     ],
@@ -23,7 +23,6 @@
     ],
     "seoDescription": "This is your ultimate guide to PennyLane if you already know Qiskit.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_guide_to_pennylane_knowing_qiskit",
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],

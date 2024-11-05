@@ -9,7 +9,7 @@
         }
     ],
     "dateOfPublication": "2024-09-18T00:00:00+00:00",
-    "dateOfLastModification": "2024-09-18T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Algorithms",
         "Quantum Computing"
@@ -27,7 +27,6 @@
     ],
     "seoDescription": "Learn how to enter data into a quantum computer with a quantum read-only memory (QROM) approach.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_intro_qrom",
     "references": [
         {
         "id": "unary",

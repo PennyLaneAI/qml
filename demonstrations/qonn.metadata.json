@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2020-08-05T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Optimization"
     ],
@@ -19,7 +19,6 @@
     ],
     "seoDescription": "Optimizing a quantum optical neural network using PennyLane.",
     "doi": "",
-    "canonicalURL": "/qml/demos/qonn",
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],

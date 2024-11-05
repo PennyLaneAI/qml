@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2022-11-21T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Quantum Chemistry"
     ],
@@ -19,7 +19,6 @@
     ],
     "seoDescription": "Learn how to estimate the number of qubits and gates needed to implement quantum algorithms",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_resource_estimation",
     "references": [
         {
             "id": "vonburg2021",

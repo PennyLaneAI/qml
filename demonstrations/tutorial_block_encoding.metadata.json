@@ -12,7 +12,7 @@
         }
     ],
     "dateOfPublication": "2023-11-28T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Quantum Computing",
         "Algorithms"
@@ -30,7 +30,6 @@
     ],
     "seoDescription": "Learn about methods to achieve block-encoding for a given matrix.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_block_encoding",
     "references": [
         {
             "id": "Daan2023",

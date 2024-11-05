@@ -738,7 +738,3 @@ print(f"Clifford mean fidelity    = {clifford_fid_mean}")
 #    approach to mutually orthogonal Latin squares*. J. Phys. A: Math. Theor. 47 (43) 435303.
 #    `(arXiv) <https://arxiv.org/abs/1408.6742>`__.
 #
-#
-# About the author
-# ----------------
-# .. include:: ../_static/authors/olivia_di_matteo.txt
