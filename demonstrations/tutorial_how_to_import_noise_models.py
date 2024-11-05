@@ -140,10 +140,10 @@ print("Are results equal? ", np.allclose(pl_probs, qk_probs, atol=1e-2))
 #
 # PennyLane provides the :func:`~.pennylane.from_qiskit_noise` function to
 # easily convert a Qiskit noise model into an equivalent PennyLane noise model.
-# Let's look at an example for a `GenericBackendV2
+# Let's look at an example of a noise model based on the `GenericBackendV2
 # <https://docs.quantum.ibm.com/api/qiskit/qiskit.providers.fake_provider.GenericBackendV2>`_
 # backend that gets instantiated with the error data generated and sampled randomly from
-# historical IBM backend data.We import the noise model based on this data into PennyLane:
+# historical IBM backend data.
 #
 
 from qiskit.providers.fake_provider import GenericBackendV2
@@ -153,6 +153,8 @@ qk_noise_model = NoiseModel.from_backend(backend)
 print(qk_noise_model)
 
 ######################################################################
+# To import this noise model as a PennyLane one, we simply do:
+#
 
 pl_noise_model = qml.from_qiskit_noise(qk_noise_model)
 print(pl_noise_model)
