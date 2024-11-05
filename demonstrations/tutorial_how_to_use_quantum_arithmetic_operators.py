@@ -1,5 +1,5 @@
 r"""
-How-to use Quantum Arithmetic Operators
+How to use quantum arithmetic operators
 =======================================
 
 Classical computers handle arithmetic operations like addition, subtraction, multiplication, and exponentiation with ease. 
