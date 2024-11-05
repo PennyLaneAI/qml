@@ -333,7 +333,7 @@ plt.show()
 ######################################################################
 # This plot illustrates the power of Catalyst: by simply wrapping our Grover's algorithm circuit as
 # a QJIT-compiled object (or AOT-compiled in this case) with :func:`~pennylane.qjit`, we have
-# achieved execution runtimes approximately an order of magnitude less than the PennyLane circuit
+# achieved execution runtimes approximately an order of magnitude shorter than the PennyLane circuit
 # implemented using the ``"lightning.qubit"`` device.
 #
 # There is one important caveat in this example, however, which is that the compilation step itself
