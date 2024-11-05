@@ -152,6 +152,8 @@ backend = GenericBackendV2(num_qubits=2, seed=42)
 qk_noise_model = NoiseModel.from_backend(backend)
 print("Qiskit Noise Model:\n", qk_noise_model)
 
+######################################################################
+
 pl_noise_model = qml.from_qiskit_noise(qk_noise_model)
 print("PennyLane Noise Model:\n", pl_noise_model)
 
