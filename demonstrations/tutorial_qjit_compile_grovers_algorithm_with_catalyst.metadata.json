@@ -26,7 +26,6 @@
     ],
     "seoDescription": "See how to use Catalyst to just-in-time (QJIT) compile a PennyLane circuit implementing Grover's algorithm.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_qjit_compile_grovers_algorithm_with_catalyst",
     "references": [
         {
             "id": "Grover1996",

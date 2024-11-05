@@ -23,8 +23,8 @@ How to quantum just-in-time (QJIT) compile Grover's algorithm with Catalyst
 # proposed by Lov Grover in 1996 [#Grover1996]_, to solve unstructured search problems using a
 # `quantum computer <https://pennylane.ai/qml/quantum-computing/>`__. For example, we could use
 # Grover's algorithm to search for a phone number in a randomly ordered database containing
-# :math:`N` entries and say with high probability that the database contains the number being
-# searched by performing :math:`O(\sqrt{N})` queries on the database, whereas a classical search
+# :math:`N` entries and say (with high probability) that the database contains that number
+# by performing :math:`O(\sqrt{N})` queries on the database, whereas a classical search
 # algorithm would require :math:`O(N)` queries to perform the same task.
 #
 # More formally, the problem is defined as a search for a string of bits in a list containing
@@ -49,11 +49,11 @@ How to quantum just-in-time (QJIT) compile Grover's algorithm with Catalyst
 # the generalized Grover's algorithm in PennyLane. The procedure is as follows:
 #
 # #. Initialize the system to an equal superposition over all states.
-# #. Perform :math:`r(N, M)` *Grover iterations:*
+# #. Perform :math:`r(N, M)` *Grover iterations*:
 #
-#    #. Apply the unitary *oracle operator* :math:`U_\omega`, implemented using
-#       :class:`~.pennylane.FlipSign`, for each solution index :math:`\omega`.
-#    #. Apply the *Grover diffusion operator* :math:`U_D`, implemented using
+#    #. Apply the unitary *oracle operator*, :math:`U_\omega,` implemented using
+#       :class:`~.pennylane.FlipSign`, for each solution index :math:`\omega.`
+#    #. Apply the *Grover diffusion operator*, :math:`U_D,` implemented using
 #       :class:`~.pennylane.GroverOperator`.
 #
 # #. Measure the resulting quantum state in the computational basis.
@@ -69,7 +69,7 @@ How to quantum just-in-time (QJIT) compile Grover's algorithm with Catalyst
 # containing all possible :math:`n`-qubit states.
 #
 # First, we'll import the required packages and define the Grover's algorithm circuit, as we did in
-# the :doc:`previous tutorial <tutorial_grovers_algorithm>`:
+# the :doc:`previous tutorial <tutorial_grovers_algorithm>`.
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -130,7 +130,7 @@ results = circuit_default_qubit()
 ######################################################################
 # Let's quickly confirm that Grover's algorithm correctly identified the solution states
 # :math:`\vert 0\rangle ^{\otimes n}` and :math:`\vert 1\rangle ^{\otimes n}` as the most likely
-# states to be measured:
+# states to be measured.
 
 
 def most_probable_states_descending(probs, N):
@@ -174,7 +174,7 @@ def circuit_lightning():
 
 
 ######################################################################
-# Then, to QJIT compile our circuit with Catalyst, we simply wrap it with :func:`~pennylane.qjit`:
+# Then, to QJIT compile our circuit with Catalyst, we simply wrap it with :func:`~pennylane.qjit`.
 
 circuit_qjit = qml.qjit(circuit_lightning)
 
@@ -189,7 +189,7 @@ circuit_qjit = qml.qjit(circuit_lightning)
 #
 #     In this tutorial, however, you'll notice that our ``grover_circuit`` function is able to use
 #     native Python control flow without the need to convert the Python ``for`` loops to the
-#     qjit-compatible :func:`~.for_loop`, for instance, and without using AutoGraph. The reason we
+#     QJIT-compatible :func:`~.for_loop`, for instance, and without using AutoGraph. The reason we
 #     are able to do so here is because the circuit we have compiled, ``circuit_lightning``, is:
 #
 #     * unparameterized, meaning it takes in no input arguments, thus the control flow of the circuit
@@ -206,18 +206,18 @@ circuit_qjit = qml.qjit(circuit_lightning)
 
 
 ######################################################################
-# We now have our QJIT object ``circuit_qjit``. A small detail to note in this case is that because
-# the function ``circuit_lightning`` takes no input arguments, Catalyst will in fact *ahead-of-time*
+# We now have our QJIT object, ``circuit_qjit``. A small detail to note in this case is that because
+# the function ``circuit_lightning`` takes no input arguments, Catalyst will, in fact, *ahead-of-time*
 # (AOT) compile the circuit at instantiation, meaning that when we call this QJIT object for the
 # first time, the compilation will have already taken place, and Catalyst will execute the compiled
 # code. With JIT compilation, by contrast, the compilation is triggered at the first call site
 # rather than at instantiation. See the `Compilation Modes
 # <https://docs.pennylane.ai/projects/catalyst/en/stable/dev/quick_start.html#compilation-modes>`__
-# documentation in the Catalyst :doc:`Quick Start <catalyst:dev/quick_start>` guide for more
+# documentation in the :doc:`Catalyst Quick Start<catalyst:dev/quick_start>` guide for more
 # information on the difference between JIT and AOT compilation.
 #
 # The compilation step will incur some runtime overhead, which we will measure below. Let's first
-# call the compiled circuit and confirm that we get the same results:
+# call the compiled circuit and confirm that we get the same results.
 
 results_qjit = circuit_qjit()
 print_most_probable_states_descending(results_qjit, N=2)
@@ -375,7 +375,7 @@ plt.show()
 # runtime over the workflow with a direct call to the Lightning-implemented circuit.
 #
 # To learn more about Catalyst and how to use it to compile and optimize your quantum programs and
-# workflows, check out the Catalyst :doc:`Quick Start <catalyst:dev/quick_start>` guide.
+# workflows, check out the :doc:`Catalyst Quick Start<catalyst:dev/quick_start>` guide.
 
 
 ######################################################################
@@ -406,8 +406,3 @@ plt.show()
 #     specific size and topology of your PennyLane circuit.
 
 
-######################################################################
-# About the author
-# ----------------
-#
-# .. include:: ../_static/authors/joey_carter.txt
