@@ -27,7 +27,7 @@ then learn how to convert a Qiskit noise model into an equivalent PennyLane one.
 # <https://qiskit.github.io/qiskit-aer/stubs/qiskit_aer.noise.QuantumError.html>`_
 # to describe the errors encountered in gate operations. Optionally, it may also have a
 # `ReadoutError <https://qiskit.github.io/qiskit-aer/stubs/qiskit_aer.noise.ReadoutError.html>`_
-# that describes classical readout errors.
+# that describes the classical readout errors.
 #
 # Let's build a Qiskit noise model that inserts *depolarization* errors for single-qubit gates,
 # *bit-flip* errors for the target qubit of the two-qubit gates,
@@ -142,8 +142,8 @@ print("Are results equal? ", np.allclose(pl_probs, qk_probs, atol=1e-2))
 # easily convert a Qiskit noise model into an equivalent PennyLane noise model.
 # Let's look at an example for a `GenericBackendV2
 # <https://docs.quantum.ibm.com/api/qiskit/qiskit.providers.fake_provider.GenericBackendV2>`_
-# backend that gets instantiated with the error data generated
-# and sampled randomly from historical IBM backend data:
+# backend that gets instantiated with the error data generated and sampled randomly from
+# historical IBM backend data.We import the noise model based on this data into PennyLane:
 #
 
 from qiskit.providers.fake_provider import GenericBackendV2
@@ -152,12 +152,8 @@ backend = GenericBackendV2(num_qubits=2, seed=42)
 qk_noise_model = NoiseModel.from_backend(backend)
 print(qk_noise_model)
 
-######################################################################
-# We use the :func:`~pennylane.from_qiskit_noise` function to import this noise model
-# into PennyLane:
-#
-
 pl_noise_model = qml.from_qiskit_noise(qk_noise_model)
+print(pl_noise_model)
 
 ######################################################################
 # This conversion leverages the standard Kraus representation of the errors
