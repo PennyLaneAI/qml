@@ -1,20 +1,7 @@
-r""".. role:: html(raw)
-   :format: html
-
+"""
 How to quantum just-in-time (QJIT) compile Grover's algorithm with Catalyst
 ====================================================================
 
-.. meta::
-    :property="og:description": This demonstration illustrates how to use
-        Catalyst to just-in-time (QJIT) compile a PennyLane circuit implementing
-        Grover's algorithm.
-
-.. related::
-
-    tutorial_grovers_algorithm Grover's Algorithm
-    tutorial_how_to_quantum_just_in_time_compile_vqe_catalyst How to quantum just-in-time compile VQE with Catalyst
-
-*Author: Joey Carter — Posted: 19 September 2024.*
 """
 
 ######################################################################
