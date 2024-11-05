@@ -325,8 +325,9 @@ def is_orthogonal(op, basis):
 #     :math:`(g'\mathcal{K})(g\mathcal{K})=g'g(g^{-1} \mathcal{K} g) \mathcal{K},` which only is
 #     a coset again if :math:`g^{-1} \mathcal{K} g\subset \mathcal{K}.` Subgroups for which this
 #     condition holds for any :math:`g\in \mathcal{G}` are called *normal subgroups*.
-#     We are interested in cases where the symmetric property holds, which excludes normal
-#     subgroups, and :math:`\mathcal{G`/\mathcal{K}` will not be a group.
+#     We are interested in cases where the symmetric property
+#     :math:`[\mathfrak{p}, \mathfrak{p}] \subset \mathfrak{k}` holds, which excludes (non-Abelian)
+#     normal subgroups, and thus :math:`\mathcal{G`/\mathcal{K}` will not be a group.
 #
 # **Example**
 #
@@ -730,9 +731,19 @@ print(f"Under theta_Y, the operators\n{su2}\nhave the eigenvalues\n{eigvals}")
 # Given a group operation :math:`G=\exp(x)` with :math:`x\in\mathfrak{g}`, there are two
 # subalgebra elements :math:`y_{1,2}\in\mathfrak{k}` (or subgroup elements
 # :math:`K_{1,2}=\exp(y_{1,2})\in \mathcal{K}`) and a Cartan subgalgebra element
-# :math:`a\in\mathfrak{a}` so that :math:`G=K_1 \exp(a) K_2`. If :math:`g` happens to be from
-# the subspace :math:`\mathcal{P}\subset\mathcal{G}`, we know that the two subgroup elements
-# will be related, namely :math:`G=K\exp(a)K^\dagger`.
+# :math:`a\in\mathfrak{a}` so that
+#
+# .. math::
+#
+#     G\in\mathcal{G} \quad\Rightarrow\quad G=K_1 \exp(a) K_2.
+#
+# If :math:`x` happens to be from the horizontal subspace :math:`\mathfrak{p}`, so that
+# :math:`G\in \mathcal{P}\subset\mathcal{G}`, we know that the two subgroup elements :math:`K_1` 
+# and :math:`K_2` will in fact be related, namely
+#
+# .. math::
+#
+#     G\in\mathcal{P} \quad\Rightarrow\quad G=K\exp(a)K^\dagger.
 #
 # **Example**
 #
