@@ -2,10 +2,10 @@
     "title": "Running GPU-accelerated quantum circuit simulations on Covalent Cloud using PennyLane",
     "authors": [
         {
-            "id": "santosh_kumar_radha"
+            "username": "skradha"
         },
         {
-            "id": "ara_ghukasyan"
+            "username": "aghukasyan"
         }
     ],
     "dateOfPublication": "2024-05-24T00:00:00+00:00",
