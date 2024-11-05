@@ -330,7 +330,7 @@ print(circuit_with_Poly(x=1,y=4), " (binary) ---> ", state_to_decimal(circuit_wi
 # of defining your own arithmetic operations or the convenience of using the :class:`~.pennylane.OutPoly` function.
 
 ######################################################################
-# Conclusion
+# Conclusion 
 # ------------------------------------------
 # Understanding and implementing quantum arithmetic is a key step toward unlocking the full potential
 # of quantum computing. By leveraging quantum arithmetic operations in PennyLane, you can streamline 
