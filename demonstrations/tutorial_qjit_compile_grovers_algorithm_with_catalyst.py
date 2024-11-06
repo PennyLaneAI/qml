@@ -14,7 +14,7 @@ How to quantum just-in-time (QJIT) compile Grover's algorithm with Catalyst
 # performing :math:`O(\sqrt{N})` queries on the database, whereas a classical search algorithm would
 # require :math:`O(N)` queries to perform the same task.
 #
-# More formally, the problem is defined as a search for a string of bits in a list containing
+# More formally, the *unstructured search problem* is defined as a search for a string of bits in a list containing
 # :math:`N` items given an *oracle access function* :math:`f(x).` This function is defined such that
 # :math:`f(x) = 1` if :math:`x` is the bitstring we are looking for (the *solution*), and
 # :math:`f(x) = 0` otherwise. The generalized form of Grover's algorithm accepts :math:`M`
