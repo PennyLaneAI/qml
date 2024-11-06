@@ -177,12 +177,13 @@ circuit_qjit = qml.qjit(circuit_lightning)
 #     In this tutorial, however, you'll notice that our ``grover_circuit`` function is able to use
 #     native Python control flow without the need to convert the Python ``for`` loops to the
 #     QJIT-compatible :func:`~.for_loop`, for instance, and without using AutoGraph. The reason we
-#     are able to do so here is because the circuit we have compiled, ``circuit_lightning``, is:
+#     are able to do so here is twofold:
 #
-#     * unparameterized, meaning it takes in no input arguments, thus the control flow of the circuit
-#       does not depend on any dynamic variables (whose values are known only at run time); and
+#     * The circuit we have compiled, ``circuit_lightning``, is *unparameterized*, meaning it takes
+#       in no input arguments. Thus, the control flow of the circuit does not depend on any dynamic
+#       variables (whose values are known only at run time).
 #
-#     * the ranges of the ``for`` loops depend only on static variables (i.e., constants known at
+#     * The ranges of the ``for`` loops depend only on static variables (i.e., constants known at
 #       compile time), in this case Python-native numerics and lists, and NumPy arrays.
 #
 #     Hence, the complete control flow of the circuit is known at compile time, which allows us to
