@@ -14,11 +14,11 @@ How to quantum just-in-time (QJIT) compile Grover's algorithm with Catalyst
 # performing :math:`O(\sqrt{N})` queries on the database, whereas a classical search algorithm would
 # require :math:`O(N)` queries to perform the same task.
 #
-# More formally, the *unstructured search problem* is defined as a search for a string of bits in a list containing
-# :math:`N` items given an *oracle access function* :math:`f(x).` This function is defined such that
-# :math:`f(x) = 1` if :math:`x` is the bitstring we are looking for (the *solution*), and
-# :math:`f(x) = 0` otherwise. The generalized form of Grover's algorithm accepts :math:`M`
-# solutions, with :math:`1 \leq M \leq N.`
+# More formally, the *unstructured search problem* is defined as a search for a string of bits in a
+# list containing :math:`N` items given an *oracle access function* :math:`f(x).` This function is
+# defined such that :math:`f(x) = 1` if :math:`x` is the bitstring we are looking for (the
+# *solution*), and :math:`f(x) = 0` otherwise. The generalized form of Grover's algorithm accepts
+# :math:`M` solutions, with :math:`1 \leq M \leq N.`
 #
 # In this tutorial, we will implement the generalized Grover's algorithm using `Catalyst
 # <https://docs.pennylane.ai/projects/catalyst>`__, a quantum just-in-time (QJIT) compiler framework
