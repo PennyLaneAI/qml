@@ -163,7 +163,7 @@ n_shots = 100  # the number of times we can use each unitary
 
 import pennylane as qml
 from pennylane.templates.layers import RandomLayers
-import numpy as np
+from pennylane import numpy as np
 
 np.random.seed(234087)
 
@@ -346,12 +346,6 @@ qubits = 8
 dev = qml.device("lightning.qubit", wires=qubits * 2, shots=n_shots)
 
 
-def CNOT_sequence(control_wires, target_wires):
-    """Apply CNOTs in sequence using the provided control and target wires"""
-    for c_wire, t_wire in zip(control_wires, target_wires):
-        qml.CNOT([c_wire, t_wire])
-
-
 @qml.qnode(dev)
 def enhanced_circuit(ts=False):
     "implement the enhanced circuit, using a random unitary"
@@ -367,10 +361,14 @@ def enhanced_circuit(ts=False):
     for q in range(qubits):
         qml.Hadamard(wires=q)
 
-    CNOT_sequence(control_wires=range(qubits), target_wires=range(qubits, 2 * qubits))
+    qml.broadcast(
+        qml.CNOT, pattern=[[q, qubits + q] for q in range(qubits)], wires=range(qubits * 2)
+    )
     RandomLayers(weights, wires=range(0, qubits), rotations=ops, seed=seed)
     RandomLayers(weights, wires=range(qubits, 2 * qubits), rotations=ops, seed=seed)
-    CNOT_sequence(control_wires=range(qubits), target_wires=range(qubits, 2 * qubits))
+    qml.broadcast(
+        qml.CNOT, pattern=[[q, qubits + q] for q in range(qubits)], wires=range(qubits * 2)
+    )
 
     for q in range(qubits):
         qml.Hadamard(wires=q)
@@ -481,11 +479,15 @@ def enhanced_circuit(ts=False):
     for q in range(qubits):
         qml.Hadamard(wires=q)
 
-    CNOT_sequence(control_wires=range(qubits), target_wires=range(qubits, 2 * qubits))
+    qml.broadcast(
+        qml.CNOT, pattern=[[q, qubits + q] for q in range(qubits)], wires=range(qubits * 2)
+    )
     RandomLayers(weights, wires=range(0, qubits), rotations=ops, seed=seed)
     RandomLayers(weights, wires=range(qubits, 2 * qubits), rotations=ops, seed=seed)
     noise_layer(np.pi / 4)  # added noise layer
-    CNOT_sequence(control_wires=range(qubits, 2 * qubits), target_wires=range(qubits))
+    qml.broadcast(
+        qml.CNOT, pattern=[[qubits + q, q] for q in range(qubits)], wires=range(qubits * 2)
+    )
 
     for q in range(qubits):
         qml.Hadamard(wires=qubits + q)
