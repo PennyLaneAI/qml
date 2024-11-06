@@ -404,7 +404,7 @@ hamiltonian
 # .. [#ashcroft]
 #
 #     Neil W. Ashcroft, David N. Mermin,
-#     "Solid state physics", New York: Saunders College Publishing, 1976.
+#     "Solid state physics", Chapter 4, New York: Saunders College Publishing, 1976.
 #
 # .. [#jovanovic]
 #
