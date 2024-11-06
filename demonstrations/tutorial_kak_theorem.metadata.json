@@ -115,15 +115,15 @@
             "url": "https://journals.aps.org/pra/abstract/10.1103/PhysRevA.105.032420"
         },
         {
-            id: "gu",
-            type: "article",
-            title: "Fast-forwarding quantum evolution",
-            authors: "Shouzhen Gu, Rolando D. Somma, Burak Şahinoğlu",
-            year: "2021",
-            publisher: "",
-            journal: "Quantum",
-            doi: "10.22331/q-2021-11-15-577",
-            url: "https://quantum-journal.org/papers/q-2021-11-15-577/#"
+            "id": "gu",
+            "type": "article",
+            "title": "Fast-forwarding quantum evolution",
+            "authors": "Shouzhen Gu, Rolando D. Somma, Burak Şahinoğlu",
+            "year": "2021",
+            "publisher": "",
+            "journal": "Quantum",
+            "doi": "10.22331/q-2021-11-15-577",
+            "url": "https://quantum-journal.org/papers/q-2021-11-15-577/#"
         },
         {
             "id": "dirr",
