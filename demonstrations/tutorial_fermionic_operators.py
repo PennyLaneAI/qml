@@ -40,7 +40,7 @@ a1 = FermiA(1)
 
 fermi_word = a0_dag * a1
 fermi_sentence = 1.3 * a0_dag * a1 + 2.4 * a1
-fermi_sentence
+print(fermi_sentence)
 
 ##############################################################################
 # In this simple example, we first created the operator :math:`a^{\dagger}_0 a_1` and then created
@@ -48,7 +48,7 @@ fermi_sentence
 # arithmetic operations between Fermi words and Fermi sentences.
 
 fermi_sentence = fermi_sentence * fermi_word + 2.3 * fermi_word
-fermi_sentence
+print(fermi_sentence)
 
 ##############################################################################
 # Beyond multiplication, summation, and subtraction, we can exponentiate fermionic operators in
@@ -61,7 +61,7 @@ fermi_sentence
 # in the same way that you would write down the operator on a piece of paper:
 
 fermi_sentence = 1.2 * a0_dag + 0.5 * a1 - 2.3 * (a0_dag * a1) ** 2
-fermi_sentence
+print(fermi_sentence)
 
 ##############################################################################
 # This Fermi sentence can be mapped to the qubit basis using the
