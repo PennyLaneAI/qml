@@ -164,10 +164,55 @@ def shors_algorithm(N):
 ######################################################################
 # The quantum part
 # ^^^^^^^^^^^^^^^^
+#
+# In this section we'll describe the quantum circuits we use for the quantum
+# part of Shor's algorithm, i.e., the order-finding routine. The presented
+# implementation is based on that of [#Beauregard2003]_.
+#
+# Order finding is an application of *quantum phase estimation*. The operator
+# whose phase is being estimated is :math:`U_a`, 
+#
+# ..math ::
+#
+#     U_a \vert x \rangle = \vert ax \pmod N \rangle
+#
+# where :math:`\vert x \rangle` is the basis state corresponding to the binary
+# representation of the integer :math:`x`, and :math:`a` is the
+# randomly-generated integer discussed above. The full circuit for QPE is shown
+# below.
+#
+# .. figure:: ../_static/demonstration_assets/shor_catalyst/qpe_full.svg
+#    :scale: 100%
+#    :align: center
+#    :alt: Quantum phase estimation circuit for order finding.
+#
+# This high-level view of the circuit hides a lot of the complexity,
+# though. First and foremost, the actual implementation details of :math:`U_a`
+# are not yet defined, and a significant number of auxiliary qubits are required
+# for its implementation. There is also the issue of precision, which is
+# governed by the number of estimation wires, :math:`t`. A better estimate will
+# make finding a solution more likely. However, increasing :math:`t` adds
+# overhead in circuit depth, and has the added simulation costs that come from
+# increasing the size of the Hilbert space.
+#
+# In what follows, we will some shortcuts afforded by Catalyst. Specifically,
+# with mid-circuit measurement and reset we can reduce the number of estimation
+# wires to :math:`t=1`. A great deal of the arithmetic operations will be
+# performed in the Fourier basis; and since we know :math:`a` in advance, we can
+# vary circuit structure on the fly and save resources.  Finally, additional
+# mid-circuit measurements can be used in lieu of uncomputation.
+#
+# Let's start by zooming in on the implementation of the controlled :math:`U_a`.
 # 
-# TODO: explain how the modular exponentiation circuits work (not sure yet how to
-# best include these, because some are quite large)
+# .. figure:: ../_static/demonstration_assets/shor_catalyst/c-ua.svg
+#    :scale: 100%
+#    :align: center
+#    :alt: Quantum phase estimation circuit for order finding.
+#
+# We require an equal-sized auxiliary register. The operation :math:`M_a` is multiplication
+# modulo :math:`N`, which we will zoom in on below.
 # 
+#
 # TODO: explain how iterative phase estimation is being used here with Catalyst
 # and mid-circuit measurements.
 
@@ -200,6 +245,11 @@ def shors_algorithm(N):
 #
 #     Alfred V Aho, Monica S Lam, Ravi Sethi, Jeffrey D Ullman. (2007)
 #     *Compilers Principles, Techniques, And Tools*. Pearson Education, Inc.
+#
+# .. [#Beauregard2003]
+#
+#     Stephane Beauregard. (2003) *Circuit for Shor's algorithm using :math:`2n+3` qubits.*
+#     Quantum Information and Computation, Vol. 3, No. 2 (2003) pp. 175-185.
 #
 # About the author
 # ----------------
