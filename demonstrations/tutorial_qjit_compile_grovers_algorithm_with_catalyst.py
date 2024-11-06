@@ -15,10 +15,10 @@ How to quantum just-in-time (QJIT) compile Grover's algorithm with Catalyst
 # algorithm would require :math:`O(N)` queries to perform the same task.
 #
 # More formally, the problem is defined as a search for a string of bits in a list containing
-# :math:`N` items given an *oracle access function* :math:`f(x)`. This function is defined such that
+# :math:`N` items given an *oracle access function* :math:`f(x).` This function is defined such that
 # :math:`f(x) = 1` if :math:`x` is the bitstring we are looking for (the *solution*), and
 # :math:`f(x) = 0` otherwise. The generalized form of Grover's algorithm accepts :math:`M`
-# solutions, with :math:`1 \leq M \leq N`.
+# solutions, with :math:`1 \leq M \leq N.`
 #
 # In this tutorial, we will implement the generalized Grover's algorithm using `Catalyst
 # <https://docs.pennylane.ai/projects/catalyst>`__, a quantum just-in-time (QJIT) compiler framework
@@ -51,7 +51,7 @@ How to quantum just-in-time (QJIT) compile Grover's algorithm with Catalyst
 # .. math:: r(N, M) \approx \left \lceil \frac{\pi}{4} \sqrt{\frac{N}{M}} \right \rceil .
 #
 # For simplicity, throughout the rest of this tutorial we will consider the search for the :math:`M
-# = 2` solution states :math:`\vert 0\rangle ^{\otimes n}` and :math:`\vert 1\rangle ^{\otimes n}`,
+# = 2` solution states :math:`\vert 0\rangle ^{\otimes n}` and :math:`\vert 1\rangle ^{\otimes n},`
 # where :math:`n = \log_2 N` is the number of qubits, in a "database" of size :math:`N = 2^n`
 # containing all possible :math:`n`-qubit states.
 #
@@ -99,7 +99,7 @@ def grover_circuit(num_qubits):
 # We'll begin with a circuit defined using the default state-simulator device, ``"default.qubit"``,
 # as our baseline. See the documentation in :func:`~.pennylane.device` for a list of other supported
 # devices. To run our performance benchmarks, we'll increase the number of qubits in our circuit to
-# :math:`n = 12`.
+# :math:`n = 12.`
 
 NUM_QUBITS = 12
 
