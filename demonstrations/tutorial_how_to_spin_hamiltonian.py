@@ -357,7 +357,7 @@ lattice = Lattice(n_cells, vectors, positions, custom_edges=custom_edges)
 ######################################################################
 # Let's print the lattice edges and check that our custom edge types are set correctly.
 
-lattice.edges
+print(lattice.edges)
 
 ######################################################################
 # You can compare these edges with the lattice plotted above and verify the correct translation of
