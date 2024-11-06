@@ -241,16 +241,14 @@ def global_cost_simple(rotations):
     for i in range(wires):
         qml.RX(rotations[0][i], wires=i)
         qml.RY(rotations[1][i], wires=i)
-    for i in range(wires - 1):
-        qml.CNOT([i, i + 1])
+    qml.broadcast(qml.CNOT, wires=range(wires), pattern="chain")
     return qml.probs(wires=range(wires))
 
 def local_cost_simple(rotations):
     for i in range(wires):
         qml.RX(rotations[0][i], wires=i)
         qml.RY(rotations[1][i], wires=i)
-    for i in range(wires - 1):
-        qml.CNOT([i, i + 1])
+    qml.broadcast(qml.CNOT, wires=range(wires), pattern="chain")
     return qml.probs(wires=[0])
 
 global_circuit = qml.QNode(global_cost_simple, dev, interface="autograd")
@@ -373,8 +371,7 @@ def tunable_cost_simple(rotations):
     for i in range(wires):
         qml.RX(rotations[0][i], wires=i)
         qml.RY(rotations[1][i], wires=i)
-    for i in range(wires - 1):
-        qml.CNOT([i, i + 1])
+    qml.broadcast(qml.CNOT, wires=range(wires), pattern="chain")
     return qml.probs(range(locality))
 
 def cost_tunable(rotations):
