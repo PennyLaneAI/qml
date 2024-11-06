@@ -3,7 +3,7 @@ r"""The KAK theorem
 
 The KAK theorem is a beautiful mathematical result from Lie theory, with
 particular relevance for quantum computing. It can be seen as a
-generalization of the singular value decomposition, and therefore falls
+generalization of the singular value decomposition, and falls
 under the large umbrella of matrix factorizations. This allows us to
 use it for quantum circuit decompositions.
 
@@ -22,6 +22,9 @@ two-qubit unitaries into rotation gates as an application of the KAK theorem.
     :width: 60%
     :target: javascript:void(0)
 
+Along the way, we will put some non-essential mathematical details
+as well as a few gotchas regarding the nomenclature into boxes such as this one:
+
 .. admonition:: Prerequisites
     :class: note
 
@@ -30,14 +33,12 @@ two-qubit unitaries into rotation gates as an application of the KAK theorem.
     at your favourite linear algebra material. For the latter also see our
     :doc:`introduction to (dynamical) Lie algebras </demos/tutorial_liealgebra/>`.
 
-Along the way, we will box up some non-essential mathematical details
-as well as a few gotchas regarding the nomenclature.
 Without further ado, let's get started!
 
 Lie algebras and their groups
 -----------------------------
 
-We start by introducing Lie algebras, their Lie groups,
+We start with Lie algebras, their Lie groups,
 and a particular interaction between the two, the *adjoint action*.
 
 Lie algebras
@@ -68,7 +69,7 @@ can conveniently describe using the Pauli matrices:
 
 We will also look at a more involved example at the end of the demo.
 
-.. admonition:: Mathematical detail
+.. admonition:: Math detail: our Lie algebras are real
     :class: note
 
     :math:`\mathfrak{su}(n)` is a *real* Lie algebra, i.e., it is a vector space over the
@@ -115,15 +116,14 @@ print(f"All operators are traceless: {np.allclose(traces, 0.)}")
 # space, as expected from the explicit expression above.
 # We also picked a correct representation with traceless operators.
 #
-# .. admonition:: Mathematical detail
+# .. admonition:: Math detail: (semi-)simple Lie algebras
 #     :class: note
 #
 #     Our main result for this demo will be the KAK theorem, which applies to
-#     so-called *semisimple* Lie algebras. We will not go into detail about this notion, but
-#     it often is sufficient to think of them as the algebras that are composed from
-#     three types of *simple* building blocks, namely
-#     (1) special orthogonal algebras :math:`\mathfrak{so}(n),` (2) unitary symplectic algebras
-#     :math:`\mathfrak{sp}(n),` and (3) special unitary algebras :math:`\mathfrak{su}(n).`
+#     so-called *semisimple* Lie algebras, which are in turn composed of *simple* Lie algebras
+#     as building blocks. Without going into detail, it often is sufficient to think of these
+#     blocks as (1) special orthogonal algebras :math:`\mathfrak{so}(n),` (2) unitary symplectic
+#     algebras :math:`\mathfrak{sp}(n),` and (3) special unitary algebras :math:`\mathfrak{su}(n).`
 #     In particular, our example here is of the latter type, so it is not only semisimple,
 #     but even simple.
 #
@@ -178,7 +178,7 @@ print(f"All operators are traceless: {np.allclose(traces, 0.)}")
 # where we applied the exponential map to :math:`\text{ad}_x`, which maps from :math:`\mathfrak{g}`
 # to itself, via its series representation.
 # We will refer to this relationship as *adjoint identity*.
-# We talk about Ad and ad in more detail in the box below, and refer to our tutorial on
+# We talk about Ad and ad in more detail in the box below, and refer to our demo
 # :doc:`g-sim: Lie algebraic classical simulations </demos/tutorial_liesim/>` for
 # further discussion.
 #
@@ -269,7 +269,7 @@ def is_orthogonal(op, basis):
 #
 # .. math::
 #
-#     \mathfrak{p} = \{x\in\mathfrak{g} | \langle x, y\rangle=0 \forall y\mathfrak{k}\}.
+#     \mathfrak{p} = \{x\in\mathfrak{g} | \langle x, y\rangle=0 \ \forall \ y\in\mathfrak{k}\}.
 #
 # In this context, :math:`\mathfrak{k}` is commonly called the *vertical space*,
 # :math:`\mathfrak{p}` accordingly is the *horizontal space*.
@@ -282,22 +282,23 @@ def is_orthogonal(op, basis):
 #     [\mathfrak{p}, \mathfrak{p}] \subset& \mathfrak{k} \qquad \text{(Symmetric property)}.
 #
 # The first property tells us that :math:`\mathfrak{p}` is left intact by the adjoint action of
-# :math:`\mathfrak{k}` and that :math:`\mathfrak{p}` behaves like the "opposite" of a
-# subalgebra, i.e., all commutators lie in its complement, the subalgebra :math:`\mathfrak{k}.`
-# Due to the adjoint identity from above, the first property also holds for group elements
-# acting on algebra elements; For all :math:`x\in\mathfrak{p}` and :math:`y\in\mathfrak{k},`
-# we have
+# :math:`\mathfrak{k}`. The second property suggests that :math:`\mathfrak{p}` behaves like the
+# "opposite" of a subalgebra, i.e., all commutators lie in its complement, the subalgebra
+# :math:`\mathfrak{k}.` Due to the adjoint identity from above, the first property also holds for
+# group elements acting on algebra elements; for all :math:`x\in\mathfrak{p}` and
+# :math:`K\in\mathcal{K}=\exp(\mathfrak{k}),` we have
 #
 # .. math::
 #
 #     K x K^\dagger
 #     = \exp(y) x \exp(-y)
+#     = \text{Ad}_{\exp(y)}(x)
 #     = \exp(\text{ad}_y) (x)
 #     = \sum_{n=0}^\infty \frac{1}{n!} \underset{\in\mathfrak{p}}{\underbrace{(\text{ad}_y)^n (x)}}
 #     \in \mathfrak{p}.
 #
-# If the reductive property holds, the quotient space :math:`\mathcal{G}/\mathcal{K}` of the groups of
-# :math:`\mathfrak{g}` and :math:`\mathfrak{k}` (see detail box below) is called a
+# If the reductive property holds, the quotient space :math:`\mathcal{G}/\mathcal{K}` of the groups
+# of :math:`\mathfrak{g}` and :math:`\mathfrak{k}` (see detail box below) is called a
 # *reductive homogeneous space*. If both properties hold, :math:`(\mathfrak{k}, \mathfrak{p})` is
 # called a *Cartan pair* and we call :math:`\mathfrak{g}=\mathfrak{k} \oplus \mathfrak{p}` a
 # *Cartan decomposition*. :math:`(\mathfrak{g}, \mathfrak{k})` is named a *symmetric pair*
@@ -305,14 +306,14 @@ def is_orthogonal(op, basis):
 # Symmetric spaces are relevant for a wide range of applications in physics
 # and have been studied a lot throughout the last hundred years.
 #
-# .. admonition:: Nomenclature
+# .. admonition:: Nomenclature: Cartan decomposition/pair
 #     :class: warning
 #
 #     Depending on context and field, there sometimes are additional requirements
 #     for :math:`\mathfrak{g}=\mathfrak{k}\oplus\mathfrak{p}` to be called a Cartan decomposition
 #     and for :math:`(\mathfrak{k}, \mathfrak{p})` to be a Cartan pair.
 #
-# .. admonition:: Mathematical detail
+# .. admonition:: Math detail: quotient space
 #     :class: note
 #
 #     The *quotient space* of a Lie group :math:`\mathcal{G}` and a subgroup :math:`\mathcal{K}`
@@ -332,7 +333,7 @@ def is_orthogonal(op, basis):
 # **Example**
 #
 # For our example, we consider the subalgebra :math:`\mathfrak{k}=\mathfrak{u}(1)`
-# of :math:`\mathfrak{su}(2)` generating Pauli-Z rotations:
+# of :math:`\mathfrak{su}(2)` that generates Pauli :math:`Z` rotations:
 #
 # .. math::
 #
@@ -349,7 +350,7 @@ def check_cartan_decomposition(g, k, space_name):
     # Check Lie closure of k
     k_lie_closure = qml.pauli.dla.lie_closure(k)
     k_is_closed = len(k_lie_closure) == len(k)
-    print(f"The Lie closure of k is as large as k itself: {k_is_closed}.")
+    print(f"The Lie closure of k is as big as k itself: {k_is_closed}.")
 
     # Orthogonal complement of k, assuming that everything is given in the same basis.
     p = [g_op for g_op in g if is_orthogonal(g_op, k)]
@@ -399,7 +400,7 @@ p = check_cartan_decomposition(su2, u1, space_name)
 #     [x, y] \in [\mathfrak{a}, \mathfrak{a}] \subset [\mathfrak{p}, \mathfrak{p}]
 #     \subset \mathfrak{k} &\Rightarrow [x, y]\in\mathfrak{k}\ \text{(symmetric property)}.
 #
-# That is, the commutator must lie in both orthogonal complements :math:`\mathfrak{k}` and
+# That is, the commutator must lie in *both* orthogonal complements :math:`\mathfrak{k}` and
 # :math:`\mathfrak{p},` which only have the zero vector in common. This tells us that *all*
 # commutators in :math:`\mathfrak{a}` vanish, making it an *Abelian* subalgebra:
 #
@@ -410,13 +411,14 @@ p = check_cartan_decomposition(su2, u1, space_name)
 # Such an Abelian subalgebra is a (horizontal) *Cartan subalgebra (CSA)* if it is *maximal*,
 # i.e., if it can not be made any larger (higher-dimensional) without leaving :math:`\mathfrak{p}.`
 #
-# .. admonition:: Nomenclature
+# .. admonition:: Nomenclature: Cartan subalgebra
 #     :class: warning
 #
 #     Depending on context and field, there are inequivalent notions of Cartan subalgebras.
 #     In particular, there is a common notion of Cartan subalgebras which are not contained
 #     in a horizontal space. Throughout this demo, we always mean a *horizontal*
-#     maximal Abelian subalgebra :math:`\mathfrak{a}\subset\mathfrak{p}.`
+#     maximal Abelian subalgebra :math:`\mathfrak{a}\subset\mathfrak{p}.` The two notions
+#     can be made compatible by being precise about the space of which the subalgebra is a CSA.
 #
 # How many different CSAs are there? Given a CSA :math:`\mathfrak{a},` we can pick a vertical
 # element :math:`y\in\mathfrak{k}` and apply the corresponding group element :math:`K=\exp(y)` to
@@ -427,12 +429,12 @@ p = check_cartan_decomposition(su2, u1, space_name)
 #
 # .. math::
 #
-#     [K x_1 K^\dagger, K x_2 K^\dagger] = K [x_1, x_2] K^\dagger = 0
+#     [K x_1 K^\dagger, K x_2 K^\dagger] = K [x_1, x_2] K^\dagger = K 0 K^\dagger = 0
 #     \quad \forall\ x_{1, 2}\in\mathfrak{a}.
 #
-# Finally, we are guaranteed that :math:`K\mathfrak{a} K^\dagger` remains maximal.
+# Finally, we are guaranteed that :math:`K\mathfrak{a} K^\dagger` remains maximal:
 #
-# .. admonition:: Mathematical detail
+# .. admonition:: Math detail: CSAs remain maximal
 #     :class: note
 #
 #     The reason that :math:`K\mathfrak{a} K^\dagger` is maximal if :math:`\mathfrak{a}` was, is
@@ -444,7 +446,7 @@ p = check_cartan_decomposition(su2, u1, space_name)
 # For most :math:`y\in\mathfrak{k},` applying :math:`K=\exp(y)` in this way will yield a
 # *different* CSA, so that we find a whole continuum of them.
 # It turns out that they *all* can be found by starting with *any*
-# :math:`\mathfrak{a}` and applying all of :math:`\exp(\mathfrak{k})` to it.
+# :math:`\mathfrak{a}` and applying all of :math:`\mathcal{K}` to it.
 #
 # *This is what powers the KAK theorem.*
 #
@@ -454,8 +456,8 @@ p = check_cartan_decomposition(su2, u1, space_name)
 # :math:`\mathfrak{su}(2)=\mathfrak{u}(1)\oplus \mathfrak{p}` with the two-dimensional horizontal
 # space :math:`\mathfrak{p} = \text{span}_{\mathbb{R}}\{iX, iY\}.` Starting with the subspace
 # :math:`\mathfrak{a}=\text{span}_{\mathbb{R}} \{iY\},` we see that we immediately reach a maximal Abelian
-# subalgebra, i.e., a CSA, because :math:`[Y, X]\neq 0.` Applying a rotation :math:`\exp(i\eta Z)`
-# to this CSA gives us a new CSA via
+# subalgebra (a CSA), because :math:`[Y, X]\neq 0.` Applying a rotation
+# :math:`\exp(i\eta Z)\in\mathcal{K}` to this CSA gives us a new CSA via
 #
 # .. math::
 #
@@ -463,12 +465,12 @@ p = check_cartan_decomposition(su2, u1, space_name)
 #     =\{c\cos(2\eta) iY + c\sin(2\eta) iX | c\in\mathbb{R}\} .
 #
 # The vertical group element :math:`\exp(i\eta Z)` simply rotates the CSA within
-# :math:`\mathfrak{p}!` Let us not forget to define the CSA in code.
+# :math:`\mathfrak{p}.` Let us not forget to define the CSA in code.
 
 # CSA generator: iY
 a = p[1]
 
-# Rotate CSA by applying vertical group element
+# Rotate CSA by applying some vertical group element exp(i eta Z)
 eta = 0.6
 # The factor -2 compensates the convention -1/2 in the RZ gate
 a_prime = qml.RZ(-2 * eta, 0) @ a @ qml.RZ(2 * eta, 0)
@@ -482,7 +484,7 @@ print(f"The rotated CSAs match between numerics and theory: {a_primes_equal}")
 # Cartan involutions
 # ~~~~~~~~~~~~~~~~~~
 #
-# In practice, there often is a more convenient way to a Cartan decomposition
+# In practice, there often is a more convenient way to obtain a Cartan decomposition
 # than by specifying the subalgebra :math:`\mathfrak{k}` or its horizontal counterpart
 # :math:`\mathfrak{p}` manually. It goes as follows.
 #
@@ -492,21 +494,22 @@ print(f"The rotated CSAs match between numerics and theory: {a_primes_equal}")
 #
 # #. It is linear, i.e., :math:`\theta(x + cy)=\theta(x) +c \theta(y),`
 # #. It is compatible with the commutator, i.e., :math:`\theta([x, y])=[\theta(x),\theta(y)],` and
-# #. It is an *involution*, i.e., :math:`\theta(\theta(x)) = x.`
+# #. It is an *involution*, i.e., :math:`\theta(\theta(x)) = x,`
+#    or :math:`\theta^2=\mathbb{I}_{\mathfrak{g}}`
 #
 # In short, we demand that :math:`\theta` be an *involutive automorphism* of :math:`\mathfrak{g}.`
 #
 # As an involution, :math:`\theta` only can have the eigenvalues :math:`\pm 1,` with associated
 # eigenspaces :math:`\mathfrak{g}_\pm.` Let's see what happens when we compute commutators between
-# elements :math:`x_\pm\in\mathfrak{g}_\pm \Leftrightarrow \theta(x_\pm) = \pm x_pm:`
+# elements :math:`x_\pm\in\mathfrak{g}_\pm \Leftrightarrow \theta(x_\pm) = \pm x_\pm:`
 #
 # .. math::
 #
-#     \theta([x_+, x_+]) = [\theta(x_+), \theta(x_+)] = [x_+, x_+]
+#     &\theta([x_+, x_+]) = [\theta(x_+), \theta(x_+)] = [x_+, x_+]
 #     &\ \Rightarrow\ [x_+, x_+]\in\mathfrak{g}_+\\
-#     \theta([x_+, x_-]) = [\theta(x_+), \theta(x_-)] = -[x_+, x_-]
+#     &\theta([x_+, x_-]) = [\theta(x_+), \theta(x_-)] = -[x_+, x_-]
 #     &\ \Rightarrow\ [x_+, x_-]\in\mathfrak{g}_-\\
-#     \theta([x_-, x_-]) = [\theta(x_-), \theta(x_-)] = (-1)^2 [x_-, x_-]
+#     &\theta([x_-, x_-]) = [\theta(x_-), \theta(x_-)] = (-1)^2 [x_-, x_-]
 #     &\ \Rightarrow\ [x_-, x_-]\in\mathfrak{g}_+.
 #
 # Or, in other words,
@@ -520,7 +523,7 @@ print(f"The rotated CSAs match between numerics and theory: {a_primes_equal}")
 #
 # We might want to call such a :math:`\theta` a *Cartan involution*.
 #
-# .. admonition:: Nomenclature
+# .. admonition:: Nomenclature: Cartan involution
 #     :class: warning
 #
 #     Some people do so, some people again require more properties for such an
@@ -546,7 +549,7 @@ print(f"The rotated CSAs match between numerics and theory: {a_primes_equal}")
 #     \theta_{\mathfrak{k}}^2=(\Pi_{\mathfrak{k}}-\Pi_{\mathfrak{p}})^2
 #     = \Pi_{\mathfrak{k}}^2-\Pi_{\mathfrak{k}}\Pi_{\mathfrak{p}}
 #     -\Pi_{\mathfrak{p}}\Pi_{\mathfrak{k}}+\Pi_{\mathfrak{p}}^2
-#     =\Pi_{\mathfrak{k}}-\Pi_{\mathfrak{p}}
+#     =\Pi_{\mathfrak{k}}+\Pi_{\mathfrak{p}}
 #     = \mathbb{I}_{\mathfrak{g}},
 #
 # where we used the projectors' property :math:`\Pi_{\mathfrak{k}}^2=\Pi_{\mathfrak{k}}` and
@@ -554,33 +557,24 @@ print(f"The rotated CSAs match between numerics and theory: {a_primes_equal}")
 # :math:`\Pi_{\mathfrak{k}}\Pi_{\mathfrak{p}}=\Pi_{\mathfrak{p}}\Pi_{\mathfrak{k}}=0` because
 # the spaces :math:`\mathfrak{k}` and :math:`\mathfrak{p}` are orthogonal to each other.
 #
-# .. admonition:: Mathematical detail
+# .. admonition:: Math detail: :math:`\theta_{\mathfrak{k}}` is a homomorphism
 #     :class: note
 #
-#     To see that :math:`\theta_{\mathfrak{k}}` is compatible with the commutator, we compute
-#     the action of the projectors on it:
+#     To see that :math:`\theta_{\mathfrak{k}}` is compatible with the commutator, i.e.,
+#     an algebra homomorphism, see how a commutator :math:`[x, y]` splits:
 #
 #     .. math::
 #
-#         \Pi_{\mathfrak{k}}([x, y])
-#         &= \Pi_{\mathfrak{k}}([\Pi_{\mathfrak{k}}(x) + \Pi_{\mathfrak{p}}(x), \Pi_{\mathfrak{k}}(y) + \Pi_{\mathfrak{p}}(y) \\
-#         &= \Pi_{\mathfrak{k}}(\underset{\in \mathfrak{k}}{\underbrace{[\Pi_{\mathfrak{k}}(x), \Pi_{\mathfrak{k}}(y)]}})
-#         \Pi_{\mathfrak{k}}(\underset{\in \mathfrak{p}}{\underbrace{[\Pi_{\mathfrak{k}}(x), \Pi_{\mathfrak{p}}(y)]}})
-#         \Pi_{\mathfrak{k}}(\underset{\in \mathfrak{p}}{\underbrace{[\Pi_{\mathfrak{p}}(x), \Pi_{\mathfrak{k}}(y)]}})
-#         \Pi_{\mathfrak{k}}(\underset{\in \mathfrak{k}}{\underbrace{[\Pi_{\mathfrak{p}}(x), \Pi_{\mathfrak{p}}(y)]}})\\
-#         &= [\Pi_{\mathfrak{k}}(x), \Pi_{\mathfrak{k}}(y)] + [\Pi_{\mathfrak{p}}(x), \Pi_{\mathfrak{p}}(y)]\\
-#         \Pi_{\mathfrak{p}}([x, y])
-#         &= \Pi_{\mathfrak{p}}([\Pi_{\mathfrak{k}}(x) + \Pi_{\mathfrak{p}}(x), \Pi_{\mathfrak{k}}(y) + \Pi_{\mathfrak{p}}(y) \\
-#         &= \Pi_{\mathfrak{p}}(\underset{\in \mathfrak{k}}{\underbrace{[\Pi_{\mathfrak{k}}(x), \Pi_{\mathfrak{k}}(y)]}})
-#         \Pi_{\mathfrak{p}}(\underset{\in \mathfrak{p}}{\underbrace{[\Pi_{\mathfrak{k}}(x), \Pi_{\mathfrak{p}}(y)]}})
-#         \Pi_{\mathfrak{p}}(\underset{\in \mathfrak{p}}{\underbrace{[\Pi_{\mathfrak{p}}(x), \Pi_{\mathfrak{k}}(y)]}})
-#         \Pi_{\mathfrak{p}}(\underset{\in \mathfrak{k}}{\underbrace{[\Pi_{\mathfrak{p}}(x), \Pi_{\mathfrak{p}}(y)]}})\\
-#         &= [\Pi_{\mathfrak{k}}(x), \Pi_{\mathfrak{p}}(y)] + [\Pi_{\mathfrak{p}}(x), \Pi_{\mathfrak{k}}(y)].
+#         [x, y]
+#         &= [\Pi_{\mathfrak{k}}(x) + \Pi_{\mathfrak{p}}(x), \Pi_{\mathfrak{k}}(y) + \Pi_{\mathfrak{p}}(y)] \\
+#         &= \underset{\in \mathfrak{k}}{\underbrace{[\Pi_{\mathfrak{k}}(x), \Pi_{\mathfrak{k}}(y)]}}
+#         +\underset{\in \mathfrak{p}}{\underbrace{[\Pi_{\mathfrak{k}}(x), \Pi_{\mathfrak{p}}(y)]}}
+#         +\underset{\in \mathfrak{p}}{\underbrace{[\Pi_{\mathfrak{p}}(x), \Pi_{\mathfrak{k}}(y)]}}
+#         +\underset{\in \mathfrak{k}}{\underbrace{[\Pi_{\mathfrak{p}}(x), \Pi_{\mathfrak{p}}(y)]}},
 #
-#     Here we used :math:`\mathbb{I}_{\mathfrak{g}} = \Pi_{\mathfrak{k}} + \Pi_{\mathfrak{p}}` and the
+#     where we used :math:`\mathbb{I}_{\mathfrak{g}} = \Pi_{\mathfrak{k}} + \Pi_{\mathfrak{p}}` and the
 #     commutation relations between :math:`\mathfrak{k}` and :math:`\mathfrak{p}.`
-#
-#     We can put thes pieces together to get
+#     We can use this split to compute
 #
 #     .. math::
 #
@@ -591,6 +585,8 @@ print(f"The rotated CSAs match between numerics and theory: {a_primes_equal}")
 #         &=[\Pi_{\mathfrak{k}}(x) -\Pi_{\mathfrak{p}}(x), \Pi_{\mathfrak{k}}(y)-\Pi_{\mathfrak{p}}(y)]\\
 #         &=[\theta_{\mathfrak{k}} (x),\theta_{\mathfrak{k}} (y)].
 #
+#     Thus, :math:`\theta_{\mathfrak{k}}` indeed is compatible with the commutator.
+#
 # This shows us that we can easily switch between a Cartan involution and a Cartan
 # decomposition, in either direction!
 #
@@ -598,7 +594,8 @@ print(f"The rotated CSAs match between numerics and theory: {a_primes_equal}")
 #
 # In our example, an involution that reproduces our choice
 # :math:`\mathfrak{k}=\text{span}_{\mathbb{R}} \{iZ\}` is :math:`\theta_Z(x) = Z x Z`
-# (Convince yourself that it is an involution that respects commutators).
+# (Convince yourself that it is an involution that respects commutators, or verify that
+# it matches :math:`\theta_{\mathfrak{k}}` from above).
 
 
 def theta_Z(x):
@@ -615,8 +612,8 @@ print(f"p is the -1 eigenspace: {p_is_su2_minus}")
 
 ######################################################################
 # We can easily get a new subalgebra by modifying the involution, say, to
-# :math:`\theta_Y(x) = Y x Y,` expecting that :math:`k_Y=\text{span}_{\mathbb{R}} \{iZ\}`
-# becomes the new subalgebra.
+# :math:`\theta_Y(x) = Y x Y,` expecting that
+# :math:`\mathfrak{k}_Y=\text{span}_{\mathbb{R}} \{iY\}` becomes the new subalgebra.
 
 
 def theta_Y(x):
@@ -637,7 +634,7 @@ print(f"Under theta_Y, the operators\n{su2}\nhave the eigenvalues\n{eigvals}")
 ######################################################################
 # This worked! a new involution gave us a new subalgebra and Cartan decomposition.
 #
-# .. admonition:: Mathematical detail
+# .. admonition:: Math detail: classification of Cartan decompositions
 #     :class: note
 #
 #     You might already see that the two different decompositions created by :math:`\theta_Z`
@@ -646,15 +643,15 @@ print(f"Under theta_Y, the operators\n{su2}\nhave the eigenvalues\n{eigvals}")
 #     of semisimple Lie algebras. This classification
 #     plays a big role when talking about decompositions without getting stuck on details
 #     like the choice of basis or the representation of the algebra as matrices.
-#     For example, there are only three types of Cartan decompositions of the special
-#     unitary group :math:`SU(n)`, called AI, AII, and AIII. The subalgebras :math:`\mathfrak{k}`
-#     for these decompositions are the special orthogonal algebra :math:`\mathfrak{so}(n)` (AI),
-#     the unitary symplectic algebra :math:`\mathfrak{sp}(n)` (AII), and a sum of (special) unitary
-#     algebras :math:`\mathfrak{su}(p)\oplus\mathfrak{su}(q)\oplus\mathfrak{u}(1)`
-#     (AIII, :math:`p+q=n`).
+#     For example, there are only three types of Cartan decompositions of the special unitary
+#     algebra :math:`\mathfrak{su}(n)`, called AI, AII, and AIII. The subalgebras
+#     :math:`\mathfrak{k}` for these decompositions are the special orthogonal algebra
+#     :math:`\mathfrak{so}(n)` (AI), the unitary symplectic algebra :math:`\mathfrak{sp}(n)` (AII),
+#     and a sum of (special) unitary algebras
+#     :math:`\mathfrak{su}(p)\oplus\mathfrak{su}(q)\oplus\mathfrak{u}(1)` (AIII, :math:`p+q=n`).
 #     Their involutions are usually represented by complex conjugation (AI), by the adjoint
-#     action with a Pauli operator (AIII, for qubits, :math:`p=q=2^{N-1}`), or by both in
-#     sequence (AII). It is instructive to try and see why those three are *not* equivalent
+#     action with a Pauli operator (AIII, for qubits, :math:`p=q=2^{N-1}`), or by both
+#     (AII). It is instructive to try and see why those three are *not* equivalent
 #     under a unitary basis change!
 #
 # The KAK theorem
@@ -679,11 +676,12 @@ print(f"Under theta_Y, the operators\n{su2}\nhave the eigenvalues\n{eigvals}")
 #     \forall\ G\in\mathcal{G}\ \ \exists K\in\mathcal{K}, x\in\mathfrak{p}: \ G &= K \exp(x).
 #
 # This "KP" decomposition can be seen as the "group version" of
-# :math:`\mathfrak{g} = \mathfrak{k} \oplus\mathfrak{p}.`
+# :math:`\mathfrak{g} = \mathfrak{k} \oplus\mathfrak{p}` and is known as a *global* Cartan
+# decomposition of :math:`\mathcal{G}.`
 #
 # The second step is the further decomposition of the space :math:`\mathcal{P}=\exp(\mathfrak{p}).`
 # For this we first need to fix a Cartan subalgebra (CSA) :math:`\mathfrak{a}\subset\mathfrak{p}.`
-# The CSA might be given through some application or contextual information, but there is no
+# The CSA might be given through some application or from context, but there is no
 # canonical choice.
 # Given a horizontal vector :math:`x\in\mathfrak{p},` we can always construct a second CSA
 # :math:`\mathfrak{a}_x\subset\mathfrak{p}` that contains :math:`x.` As any two CSAs can be mapped
@@ -738,7 +736,7 @@ print(f"Under theta_Y, the operators\n{su2}\nhave the eigenvalues\n{eigvals}")
 #     G\in\mathcal{G} \quad\Rightarrow\quad G=K_1 \exp(a) K_2.
 #
 # If :math:`x` happens to be from the horizontal subspace :math:`\mathfrak{p}`, so that
-# :math:`G\in \mathcal{P}\subset\mathcal{G}`, we know that the two subgroup elements :math:`K_1` 
+# :math:`G\in \mathcal{P}\subset\mathcal{G}`, we know that the two subgroup elements :math:`K_1`
 # and :math:`K_2` will in fact be related, namely
 #
 # .. math::
@@ -752,14 +750,30 @@ print(f"Under theta_Y, the operators\n{su2}\nhave the eigenvalues\n{eigvals}")
 # :math:`\mathcal{K}=\{\exp(i\eta Z) | \eta\in\mathbb{R}\},` a CSA gate
 # :math:`\mathcal{A}=\{\exp(i\varphi Y) | \eta\in\mathbb{R}\},` and another gate from
 # :math:`\mathcal{K}.` We rediscovered a standard decomposition of an arbitrary
-# :class:`~.pennylane.Rot` gate!
+# :math:`SU(2)` gate! PennyLane produces it with :func:`~.pennylane.ops.one_qubit_decomposition`:
 
-print(qml.Rot(0.5, 0.2, -1.6, wires=0).decomposition())
+x = 0.2j * su2[0] - 0.1j * su2[1] - 0.2j * su2[2]
+G = qml.math.linalg.expm(qml.matrix(x))
+print(qml.ops.one_qubit_decomposition(G, 0, rotations="ZYZ"))
+
+######################################################################
+# If we pick a "horizontal gate", i.e., a gate :math:`G\in\mathcal{P}`, we obtain the same
+# rotation angle for the initial and final :math:`R_Z` rotations, up to the expected sign, and
+# a shift by some multiple of :math:`2\pi`.
+
+horizontal_x = -0.1j * p[0] - 4.1j * p[1]
+print(horizontal_x)
+P = qml.math.linalg.expm(qml.matrix(horizontal_x))
+decomp = qml.ops.one_qubit_decomposition(P, 0, rotations="ZYZ")
+print(decomp)
+angle_match = np.isclose((decomp[0].data[0] + decomp[-1].data[0])%(2*np.pi), 0.)
+print(f"First and last rotation angle match up to sign and shift by 2kπ: {angle_match}")
 
 ######################################################################
 # Other choices for involutions or---equivalently---subalgebras :math:`\mathfrak{k}` will
 # lead to other decompositions of ``Rot``. For example, using :math:`\theta_Y` from above
-# together with the CSA :math:`\mathfrak{a_Y}=\text{span}_{\mathbb{R}} \{iX\},` we find the decomposition
+# together with the CSA :math:`\mathfrak{a_Y}=\text{span}_{\mathbb{R}} \{iX\},` we find the
+# decomposition
 #
 # .. math::
 #
@@ -788,7 +802,7 @@ space_name = "SU(4)/(SU(2)xSU(2))"
 p = check_cartan_decomposition(su4, su2_su2, space_name)
 
 ######################################################################
-# .. admonition:: Mathematical detail
+# .. admonition:: Math detail: involution for two-qubit decomposition
 #     :class: note
 #
 #     The accompanying involution sorts operators by the number of qubits on which they are
@@ -802,11 +816,11 @@ p = check_cartan_decomposition(su4, su2_su2, space_name)
 #     Intuitively, the conjugation by :math:`Y_0Y_1` adds a minus
 #     sign for each :math:`X` and :math:`Z` factor in :math:`x,` and the transposition
 #     adds a minus sign for each :math:`Y.` Taken together, each Pauli operator contributes
-#     a minus sign. Finally, as we want the single-qubit operators to receive no sign in total,
-#     we add a minus sign overall.
+#     a minus sign. Finally, as we want the single-qubit operators to receive no sign in total
+#     (:math:`\mathfrak{k}` is the :math:`+1` eigenspace), we add a minus sign overall.
 #
 # Now we can pick a Cartan subalgebra within :math:`\mathfrak{p},` the vector space
-# of all two-qubit Paulis. A common choice for this decomposition is
+# of all two-qubit Paulis. A common choice is
 #
 # .. math::
 #
@@ -830,7 +844,7 @@ p = check_cartan_decomposition(su4, su2_su2, space_name)
 # Here we decomposed the exponentials of the vertical elements :math:`y_{1,2}` further by
 # splitting them into exponentials acting on the first and second qubit, respectively.
 #
-# The three parameters :math:`\eta^{x, y, z}` sometimes are called the Cartan coordinates
+# The three parameters :math:`\eta^{x, y, z}` sometimes are called the *Cartan coordinates*
 # of :math:`U,` and they can be used, e.g., to assess the smallest-possible duration to
 # implement the gate in hardware.
 #
@@ -870,7 +884,8 @@ fig, ax = qml.draw_mpl(su4_gate, wire_order=[0, 1])(params)
 # In this demo we learned about the KAK theorem and how it uses a Cartan
 # decomposition of a Lie algebra to decompose its Lie group.
 # This allows us to break down arbitrary quantum gates from that group,
-# as we implemented in code for the group of two-qubit gates :math:`SU(4).`
+# as we implemented in code for the groups of single-qubit and two-qubit gates,
+# :math:`SU(2).` and :math:`SU(4).`
 #
 # If you are interested in other applications of Lie theory in the field of
 # quantum computing, you are in luck! It has been a handy tool throughout the last
