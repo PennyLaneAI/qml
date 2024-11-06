@@ -49,31 +49,35 @@ accurately calculate the potential energy surface of molecular hydrogen.
 Mitigating noise in a simple circuit
 ------------------------------------
 
-We first need a noisy device to execute our circuit on. Let's keep things simple for now by loading
-the :mod:`default.mixed <pennylane.devices.default_mixed>` simulator and artificially adding
-:class:`PhaseDamping <pennylane.PhaseDamping>` noise.
+We first need a noisy device to execute our circuit on. Let's keep things simple
+for now by loading the :mod:`default.mixed <pennylane.devices.default_mixed>` simulator
+and artificially adding :class:`PhaseDamping <pennylane.PhaseDamping>` noise using a
+:class:`NoiseModel <pennylane.NoiseModel>`.
 """
 
 import pennylane as qml
 
 n_wires = 4
 
-# Describe noise
-noise_gate = qml.PhaseDamping
-noise_strength = 0.1
+# Describe noise model
+fcond = qml.noise.wires_in(range(n_wires))
+noise = qml.noise.partial_wires(qml.PhaseDamping, 0.1)
+noise_model = qml.NoiseModel({fcond: noise})
 
 # Load devices
 dev_ideal = qml.device("default.mixed", wires=n_wires)
-dev_noisy = qml.transforms.insert(dev_ideal, noise_gate, noise_strength)
+dev_noisy = qml.add_noise(dev_ideal, noise_model=noise_model)
 
 ###############################################################################
-# In the above, we load a noise-free device ``dev_ideal`` and a noisy device ``dev_noisy``, which
-# is constructed from the :func:`qml.transforms.insert <pennylane.transforms.insert>` transform.
-# This transform works by intercepting each circuit executed on the device and adding the
-# :class:`PhaseDamping <pennylane.PhaseDamping>` noise channel directly after every gate in the
-# circuit. To get a better understanding of noise channels like
-# :class:`PhaseDamping <pennylane.PhaseDamping>`, check out the :doc:`tutorial_noisy_circuits`
-# tutorial.
+# In the above, we load a noise-free device ``dev_ideal`` and a noisy device ``dev_noisy``,
+# which is constructed from the :func:`qml.add_noise <pennylane.transforms.add_noise>`
+# transform. This transform works by intercepting each circuit executed on the device and
+# adding the noise to it based on the ``noise_model``. For example, in this case, it will
+# add :class:`PhaseDamping <pennylane.PhaseDamping>` noise channel after every gate in the
+# circuit acting on wires :math:`[0, 1, 2, 3]`. To get a better understanding of noise
+# channels like :class:`PhaseDamping <pennylane.PhaseDamping>` and using noise models,
+# check out the :doc:`tutorial_noisy_circuits` and :doc:`tutorial_how_to_use_noise_models`
+# tutorials, respectively.
 #
 # The next step is to define our circuit. Inspired by the mirror circuits concept introduced by
 # Proctor *et al.* [#proctor2020measuring]_ let's fix a circuit that applies a unitary :math:`U`
@@ -112,6 +116,7 @@ def circuit(w1, w2):
 
 ideal_qnode = qml.QNode(circuit, dev_ideal)
 noisy_qnode = qml.QNode(circuit, dev_noisy)
+noisy_qnode = qml.transforms.decompose(noisy_qnode, gate_set = ["RY", "CZ"])
 
 ##############################################################################
 # First, we'll visualize the circuit:
@@ -490,6 +495,7 @@ for r, phi in zip(distances, params):
 
     ideal_energy = qml.QNode(qchem_circuit, dev_ideal)
     noisy_energy = qml.QNode(qchem_circuit, dev_noisy)
+    noisy_energy = qml.transforms.decompose(noisy_energy, gate_set=["RX", "RY", "RZ", "CNOT"])
 
     ideal_energies.append(ideal_energy(phi))
     noisy_energies.append(noisy_energy(phi))
@@ -517,6 +523,7 @@ for r, phi in zip(distances, params):
         qml.DoubleExcitation(phi, wires=range(n_wires)),
     ]
     circuit = qml.tape.QuantumTape(ops)
+    [circuit], _ = qml.transforms.decompose(circuit, gate_set=["RX", "RY", "RZ", "CNOT"])
 
     # Define custom executor that expands Hamiltonian measurement
     # into a linear combination of tensor products of Pauli

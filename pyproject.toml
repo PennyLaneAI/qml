@@ -39,10 +39,10 @@ pypandoc = "1.5"
 #      The latest commit from GitHub is used instead      #
 ###########################################################
 pennylane = "0.39.0"
-pennylane-cirq = "0.36.0"
+pennylane-cirq = "0.39.0"
 pennylane-qiskit = "0.39.0"
-pennylane-qulacs = "0.36.0"
-pennylane-catalyst = "0.8.1"
+pennylane-qulacs = "0.39.0"
+pennylane-catalyst = "0.9.0"
 ##########################################################
 
 
