@@ -888,8 +888,3 @@ for idx, prob in enumerate(two_sigma_below):
 #    and Operating Systems (pp. 1001–1014)
 #    (2019). <https://dl.acm.org/doi/10.1145/3297858.3304023>`__ New York, NY,
 #    USA: Association for Computing Machinery.
-#
-#
-# About the author
-# ----------------
-# .. include:: ../_static/authors/olivia_di_matteo.txt
