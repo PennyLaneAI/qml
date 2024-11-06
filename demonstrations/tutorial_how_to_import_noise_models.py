@@ -4,11 +4,11 @@ r"""How to import noise models from Qiskit
 Noise models describe how a quantum system interacts with its environment.
 These models are typically represented by a set of
 `Kraus operators <https://pennylane.ai/qml/demos/tutorial_noisy_circuits/#noisy-operations>`_
-that encapsulates the probabilistic nature of quantum errors. ⚡
+that encapsulates the probabilistic nature of quantum errors. Interestingly, different sets
+of Kraus operators can represent the same quantum noise process. The non-unique nature of
+these representations allows quantum computing libraries to use different approaches for
+storing and building Kraus operators to construct noise models.
 
-A quantum noise process can be described by different sets of Kraus operators.
-The non-unique nature of these representations allows quantum computing libraries to use
-different approaches for storing and building Kraus operators to construct noise models.
 In this how-to guide, we will first compare the construction of noise models in
 `Qiskit <https://docs.quantum.ibm.com/>`_ and
 `PennyLane <https://docs.pennylane.ai/en/stable/code/qml.html>`_, and
@@ -63,10 +63,10 @@ print(model_qk)
 
 ######################################################################
 # In contrast, the noise models in PennyLane are :class:`~.pennylane.NoiseModel`
-# objects with Boolean conditions that help select the operation for which
+# objects with Boolean conditions that select the operation for which
 # we want to apply noise. These conditions are mapped to noise functions
 # that apply (or queue) the corresponding noise for the selected operation
-# or measurement process based on some user-provided metadata. This allows
+# or measurement process based on user-provided metadata. This allows
 # for a more functional construction, as we can see by recreating the
 # above noise model as shown below. For more information on this, check out our
 # :doc:`how-to for noise models in PennyLane <tutorial_how_to_use_noise_models>`. 🧑‍🏫
@@ -99,8 +99,8 @@ print(model_pl)
 # `GHZ state <https://en.wikipedia.org/wiki/Greenberger–Horne–Zeilinger_state>`_ using the
 # `default.mixed <https://docs.pennylane.ai/en/stable/code/api/pennylane.devices.default_mixed.html>`_
 # and `qiskit.aer <https://docs.pennylane.ai/projects/qiskit/en/latest/devices/aer.html>`_
-# devices. Note that while we would require :func:`~.pennylane.add_noise` transform
-# for adding the PennyLane noise model, the Qiskit noise model can be provided in
+# devices. Note that we require :func:`~.pennylane.add_noise` transform for
+# adding the PennyLane noise model but the Qiskit noise model is provided in
 # the device definition itself:
 #
 
@@ -170,10 +170,11 @@ print(pl_noise_model)
 # 3. Finally, the `Boolean conditionals <https://docs.pennylane.ai/en/stable/code/qml_noise.html#boolean-functions>`_
 #    are constructed and combined based on their associated errors.
 #
-# This can be done for any noise model defined in Qiskit, with a minor catch that
+# This can be done for any noise model defined in Qiskit with a minor catch that
 # the classical readout errors are not supported yet in PennyLane.
 # However, we can easily re-insert quantum readout errors into our converted noise model.
-# Here's an example that adds ``rmeas_fcond`` and ``rmeas_noise`` (defined earlier) to the above:
+# Here's an example that adds ``rmeas_fcond`` and ``rmeas_noise`` (defined earlier) to
+# ``pl_noise_model``:
 #
 
 pl_noise_model += {"meas_map": {rmeas_fcond: rmeas_noise}}
@@ -185,7 +186,7 @@ print(pl_noise_model.meas_map)
 #
 
 ######################################################################
-# Qiskit provides noise models and tools that one could use to mirror the behaviour of quantum
+# Qiskit provides noise models and tools that could be used to mirror the behaviour of quantum
 # devices. Integrating them into PennyLane is a powerful way to enable users to perform
 # differentiable noisy simulations that help them study the effects of noise on quantum circuits
 # and develop noise-robust quantum algorithms. In this how-to guide, we learned how to construct
