@@ -10,9 +10,9 @@ How to quantum just-in-time (QJIT) compile Grover's algorithm with Catalyst
 # proposed by Lov Grover in 1996 [#Grover1996]_, to solve unstructured search problems using a
 # `quantum computer <https://pennylane.ai/qml/quantum-computing/>`__. For example, we could use
 # Grover's algorithm to search for a phone number in a randomly ordered database containing
-# :math:`N` entries and say (with high probability) that the database contains that number
-# by performing :math:`O(\sqrt{N})` queries on the database, whereas a classical search
-# algorithm would require :math:`O(N)` queries to perform the same task.
+# :math:`N` entries and say (with high probability) that the database contains that number by
+# performing :math:`O(\sqrt{N})` queries on the database, whereas a classical search algorithm would
+# require :math:`O(N)` queries to perform the same task.
 #
 # More formally, the problem is defined as a search for a string of bits in a list containing
 # :math:`N` items given an *oracle access function* :math:`f(x).` This function is defined such that
@@ -195,13 +195,13 @@ circuit_qjit = qml.qjit(circuit_lightning)
 
 ######################################################################
 # We now have our QJIT object, ``circuit_qjit``. A small detail to note in this case is that because
-# the function ``circuit_lightning`` takes no input arguments, Catalyst will, in fact, *ahead-of-time*
-# (AOT) compile the circuit at instantiation, meaning that when we call this QJIT object for the
-# first time, the compilation will have already taken place, and Catalyst will execute the compiled
-# code. With JIT compilation, by contrast, the compilation is triggered at the first call site
-# rather than at instantiation. See the `Compilation Modes
+# the function ``circuit_lightning`` takes no input arguments, Catalyst will, in fact,
+# *ahead-of-time* (AOT) compile the circuit at instantiation, meaning that when we call this QJIT
+# object for the first time, the compilation will have already taken place, and Catalyst will
+# execute the compiled code. With JIT compilation, by contrast, the compilation is triggered at the
+# first call site rather than at instantiation. See the `Compilation Modes
 # <https://docs.pennylane.ai/projects/catalyst/en/stable/dev/quick_start.html#compilation-modes>`__
-# documentation in the :doc:`Catalyst Quick Start<catalyst:dev/quick_start>` guide for more
+# documentation in the :doc:`Catalyst Quick Start <catalyst:dev/quick_start>` guide for more
 # information on the difference between JIT and AOT compilation.
 #
 # The compilation step will incur some runtime overhead, which we will measure below. Let's first
@@ -363,7 +363,7 @@ plt.show()
 # runtime over the workflow with a direct call to the Lightning-implemented circuit.
 #
 # To learn more about Catalyst and how to use it to compile and optimize your quantum programs and
-# workflows, check out the :doc:`Catalyst Quick Start<catalyst:dev/quick_start>` guide.
+# workflows, check out the :doc:`Catalyst Quick Start <catalyst:dev/quick_start>` guide.
 
 
 ######################################################################
@@ -392,5 +392,3 @@ plt.show()
 #
 #     The performance improvements that can be achieved with QJIT compilation will depend on the
 #     specific size and topology of your PennyLane circuit.
-
-
