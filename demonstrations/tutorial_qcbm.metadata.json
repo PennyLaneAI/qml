@@ -2,12 +2,11 @@
     "title": "Quantum Circuit Born Machines",
     "authors": [
         {
-            "id": "gopal_ramesh_dahale",
-			"affiliation": "Indian Institute of Technology Bhilai"
+            "username": "grdahale"
         }
     ],
     "dateOfPublication": "2024-05-22T00:00:00+00:00",
-    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
+    "dateOfLastModification": "2024-11-06T00:00:00+00:00",
     "categories": ["Quantum Machine Learning"],
     "tags": [],
     "previewImages": [

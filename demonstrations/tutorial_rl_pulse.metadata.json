@@ -2,11 +2,11 @@
     "title": "Gate calibration with reinforcement learning",
     "authors": [
         {
-            "id": "borja_requena"
+            "username": "brequena"
         }
     ],
     "dateOfPublication": "2024-04-09T00:00:00+00:00",
-    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
+    "dateOfLastModification": "2024-11-06T00:00:00+00:00",
     "categories": [
         "Getting Started",
         "Optimization",
