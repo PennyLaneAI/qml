@@ -26,6 +26,11 @@ How to quantum just-in-time (QJIT) compile Grover's algorithm with Catalyst
 # workflows. We will also measure the performance improvement we get from using Catalyst with
 # respect to the native Python implementation and show that the runtime performance of circuits
 # compiled with Catalyst can be approximately an order of magnitude faster.
+# 
+# .. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_qjit_compile_grovers_algorithm_with_catalyst.png
+#     :align: center
+#     :width: 70%
+#     :target: javascript:void(0)
 
 
 ######################################################################
