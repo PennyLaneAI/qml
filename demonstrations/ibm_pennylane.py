@@ -13,6 +13,11 @@ Using PennyLane with IBM's quantum devices and Qiskit
 
 *Authors: Kaur Kristjuhan, Clara Ferreira Cores, Mark Nicholas Jones; Molecular Quantum Solutions (MQS) — Posted: 20 June 2023. Last updated: 8 Aug 2024.*
 
+.. warning::
+    This demo includes some outdated features and may not work as intended. 
+    It can still be used as a guideline, but please consult the `PennyLane-Qiskit plugin documentation <https://docs.pennylane.ai/projects/qiskit/en/stable/>`__
+    to get the most up-to-date information on the features and usage of this plugin.
+
 Bigger and better quantum computers are built every year. Instead of waiting for the perfect quantum computer to be
 released, we can already try out the best hardware that exists today. Experimenting on cutting-edge devices helps us
 understand the technology and improve the way we develop quantum software. PennyLane is a fantastic tool for prototyping
