@@ -504,7 +504,7 @@ P = 3  # Number of rectangles P
 # Initial parameters for the start and end times of the rectangles
 times = [jnp.linspace(eps, T - eps, P * 2) for op in ops_param]
 # All initial parameters: small alternating amplitudes and times
-params = [jnp.hstack([[0.1 * (-1) ** i for i in range(P)], time]) for time in times]
+params = [jnp.hstack([jnp.array([0.1 * (-1) ** i for i in range(P)]), time]) for time in times]
 
 #############################################################################
 # Now we are all set up to train the parameters of the pulse sequence to produce
@@ -679,7 +679,7 @@ grad = jax.jit(jax.grad(profit))
 # produced plot.
 
 times = [jnp.linspace(eps, T - eps, P * 2) for op in ops_param]
-params = [jnp.hstack([[0.2 * (-1) ** i for i in range(P)], time]) for time in times]
+params = [jnp.hstack([jnp.array([0.2 * (-1) ** i for i in range(P)]), time]) for time in times]
 
 num_steps = 1200
 learning_rate = -2e-3
