@@ -16,7 +16,7 @@ Using PennyLane with IBM's quantum devices and Qiskit
 .. warning::
     This demo includes some outdated features and may not work as intended. 
     It can still be used as a guideline, but please consult the `PennyLane-Qiskit plugin documentation <https://docs.pennylane.ai/projects/qiskit/en/stable/>`__
-    to get the most up-to-date information on features and usage of this plugin.
+    to get the most up-to-date information on the features and usage of this plugin.
 
 Bigger and better quantum computers are built every year. Instead of waiting for the perfect quantum computer to be
 released, we can already try out the best hardware that exists today. Experimenting on cutting-edge devices helps us
