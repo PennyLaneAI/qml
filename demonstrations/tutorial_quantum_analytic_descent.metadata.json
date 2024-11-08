@@ -2,14 +2,14 @@
     "title": "Quantum analytic descent",
     "authors": [
         {
-            "id": "elies_gil-fuster"
+            "username": "egfuster"
         },
         {
-            "id": "david_wierichs"
+            "username": "dwierichs"
         }
     ],
     "dateOfPublication": "2021-06-30T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-11-06T00:00:00+00:00",
     "categories": [
         "Optimization"
     ],
@@ -22,7 +22,6 @@
     ],
     "seoDescription": "Implement the Quantum analytic descent algorithm for VQE.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_quantum_analytic_descent",
     "references": [
         {
             "id": "QAD",

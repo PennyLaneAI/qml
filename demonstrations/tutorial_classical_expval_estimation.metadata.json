@@ -6,12 +6,12 @@
         }
     ],
     "dateOfPublication": "2024-09-10T00:00:00+00:00",
-    "dateOfLastModification": "2024-09-10T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Quantum Computing"
     ],
     "tags": [],
-    "previewImages": [  
+    "previewImages": [
         {
             "type": "thumbnail",
             "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_classical_expval_estimation.png"
@@ -23,7 +23,6 @@
     ],
     "seoDescription": "Estimate expectation values from parametrized quantum circuits efficiently on average with truncated Pauli propagation.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_classical_expval_estimation",
     "references": [
         {
             "id": "gottesman",

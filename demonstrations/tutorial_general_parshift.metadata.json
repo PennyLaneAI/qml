@@ -2,11 +2,11 @@
     "title": "Generalized parameter-shift rules",
     "authors": [
         {
-            "id": "david_wierichs"
+            "username": "dwierichs"
         }
     ],
     "dateOfPublication": "2021-08-23T00:00:00+00:00",
-    "dateOfLastModification": "2024-09-04T00:00:00+00:00",
+    "dateOfLastModification": "2024-11-06T00:00:00+00:00",
     "categories": [
         "Optimization"
     ],
@@ -19,7 +19,6 @@
     ],
     "seoDescription": "Reconstruct quantum functions and compute their derivatives.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_general_parshift",
     "references": [
         {
             "id": "GenPar",

@@ -21,13 +21,13 @@ The discrete Fourier transform (DFT) takes as input a vector :math:`(x_0, \dots,
 .. math::
   y_k = \sum_{j = 0}^{N-1} x_j \exp \left(-\frac{2\pi i kj}{N}\right).
 
-For ease of comparison we assume :math:`N = 2^n`. The idea of the QFT is to perform the same operation but in a quantum state :math:`|x\rangle = \sum_{i = 0}^{N-1} x_i |i\rangle`.
+For ease of comparison we assume :math:`N = 2^n`. The idea of the QFT is to perform the same operation but in a quantum state :math:`|x\rangle = \sum_{i = 0}^{N-1} x_i |i\rangle.`
 In this case, the output is another quantum state :math:`|y\rangle = \sum_{i = 0}^{N-1} y_i |i\rangle` where:
 
 .. math::
     y_k = \frac{1}{\sqrt{N}} \sum_{j = 0}^{N-1} x_j \exp \left(\frac{2\pi i kj}{N} \right).
 
-For historical reasons, the sign of the exponent is positive in the defintion of the QFT, as opposed to a negative exponent in the DFT. Therefore the DFT technically coincides with the inverse operation :math:`\text{QFT}^{\dagger}` . Also, in the QFT we include normalization factor :math:`\frac{1}{\sqrt{N}}`.
+For historical reasons, the sign of the exponent is positive in the defintion of the QFT, as opposed to a negative exponent in the DFT. Therefore the DFT technically coincides with the inverse operation :math:`\text{QFT}^{\dagger}` . Also, in the QFT we include normalization factor :math:`\frac{1}{\sqrt{N}}.`
 
 These transformations are linear and can be represented by a matrix. Let's verify that they actually match using scipy's implementation of the DFT and PennyLane's implementation of the QFT:
 """
@@ -58,14 +58,14 @@ print(np.round(qft_inverse.matrix(), 2))
 #
 #    \text{QFT}|x\rangle = \bigotimes_{k = n-1}^{0} \left (|0\rangle + \exp \left (\frac{2\pi i 2^k}{2^n} x  \right) |1\rangle \right ),
 #
-# for :math:`x \in [0, \dots, N-1]`. The nice thing about this formula is that it expresses the output state as a tensor product of single-qubit states. We call :math:`U_k` the unitary operator that is able to prepare the state of the k-th qubit. This operator is defined as:
+# for :math:`x \in [0, \dots, N-1].` The nice thing about this formula is that it expresses the output state as a tensor product of single-qubit states. We call :math:`U_k` the unitary operator that is able to prepare the state of the k-th qubit. This operator is defined as:
 #
 # .. math::
 #
 #    U_k |x\rangle = |x_0 \dots x_{k-1}\rangle \otimes \left (|0\rangle + \exp \left (\frac{2\pi i 2^k}{2^n} x  \right) |1\rangle \right ) \otimes |x_{k+1} \dots x_{n-1}\rangle,
 #
-# where :math:`|x\rangle = |x_0 \dots x_{n-1}\rangle`.
-# We can build :math:`U_k` with one Hadamard gate and controlled :class:`~.pennylane.PhaseShift` gates. Below we show an animation of the operator for the particular case of :math:`n = 4` and :math:`k = 1`.
+# where :math:`|x\rangle = |x_0 \dots x_{n-1}\rangle.`
+# We can build :math:`U_k` with one Hadamard gate and controlled :class:`~.pennylane.PhaseShift` gates. Below we show an animation of the operator for the particular case of :math:`n = 4` and :math:`k = 1.`
 # We represent the phase-shift gates with a box indicating the phase that they apply.
 #
 # .. figure:: ../_static/demonstration_assets/qft/qft_gif.gif
@@ -106,7 +106,7 @@ qml.draw_mpl(circuit, decimals = 2, style = "pennylane")()
 plt.show()
 
 #############################################
-# Note that the numerical arguments are :math:`\frac{\pi}{2} \approx 1.57`, :math:`\frac{\pi}{4} \approx 0.79` and  :math:`\frac{\pi}{8} \approx 0.39` (rounded to the first two decimal places).
+# Note that the numerical arguments are :math:`\frac{\pi}{2} \approx 1.57,` :math:`\frac{\pi}{4} \approx 0.79` and  :math:`\frac{\pi}{8} \approx 0.39` (rounded to the first two decimal places).
 #
 # Quantum Fourier transform in practice
 # --------------------------------------
@@ -118,7 +118,7 @@ plt.show()
 #
 #    |\psi\rangle = \frac{1}{\sqrt{2^5}} \sum_{x=0}^{31} \exp \left (\frac{-2 \pi i x}{10} \right)|x\rangle,
 #
-# whose associated period is :math:`10`. We will use the QFT in PennyLane to find that period,
+# whose associated period is :math:`10.` We will use the QFT in PennyLane to find that period,
 # but first let's visualize the state by drawing the amplitudes:
 
 
@@ -164,11 +164,11 @@ plt.ylabel("probs")
 plt.show()
 
 #############################################
-# The output has a clear peak at  :math:`|x\rangle = 3`.
+# The output has a clear peak at  :math:`|x\rangle = 3.`
 # This value corresponds to an approximation of :math:`2^nf` where :math:`f` is the frequency and :math:`n` is the
 # number of qubits.
 # Once we know the frequency, we invert it to obtain the period :math:`T` of our state.
-# In this case, the period is :math:`T = 2^5 / 3 \sim 10.33`, close to the real value of :math:`10`.
+# In this case, the period is :math:`T = 2^5 / 3 \sim 10.33,` close to the real value of :math:`10.`
 #
 # Conclusion
 # ----------

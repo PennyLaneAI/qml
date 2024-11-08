@@ -29,13 +29,13 @@ a complicated curve — now called the folium of Descartes:
    :align: center
 
 With its cubic terms, this curve represents an implicit equation which cannot be
-written as a simple expression :math:`y = f(x)`. Therefore the task of calculating
+written as a simple expression :math:`y = f(x).` Therefore the task of calculating
 the tangent function seemed formidable for the method Descartes had then, 
 except at the vertex. Fermat successfully provided the tangents at not just the
 vertex but at any other point on the curve, baffling Descartes and legitimizing
 the intellectual superiority of Fermat. The technique used by Fermat was
 *implicit differentiation* [#Paradis2004]_. In the above equation, we can begin
-by take derivatives on both sides and re-arrange the terms to obtain :math:`dy/dx`.
+by take derivatives on both sides and re-arrange the terms to obtain :math:`dy/dx.`
 
 .. math::
 
@@ -56,14 +56,14 @@ the power of automatic differentiation to situations where we are not able to
 explicitly write down the solution to a problem. As a concrete example, consider
 a variational quantum algorithm (VQA) that computes the ground-state solution of
 a parameterized Hamiltonian :math:`H(a)` using a variational ansatz
-:math:`|\psi_{z}\rangle`, where :math:`z` are the variational parameters. This leads to the solution
+:math:`|\psi_{z}\rangle,` where :math:`z` are the variational parameters. This leads to the solution
 
 .. math::
 
     z^{*}(a) = \arg\,\min_{z} \langle \psi_{z}|H(a)|\psi_z\rangle.
 
-As we change :math:`H(a)`, the solution also changes, but we do not obtain an
-explicit function for :math:`z^{*}(a)`. If we are interested in the properties of the
+As we change :math:`H(a),` the solution also changes, but we do not obtain an
+explicit function for :math:`z^{*}(a).` If we are interested in the properties of the
 solution state, we could measure the expectation values of some operator
 :math:`A` as
 
@@ -71,7 +71,7 @@ solution state, we could measure the expectation values of some operator
 
     \langle A \rangle (a) = \langle \psi_{z^{*}(a)}| A | \psi_{z^{*}(a)}\rangle.
 
-With a VQA, we can find a solution to the optimization for a fixed :math:`H(a)`.
+With a VQA, we can find a solution to the optimization for a fixed :math:`H(a).`
 However, just like with the folium of Descartes, we do not have an explicit solution,
 so the gradient :math:`\partial_a \langle A \rangle (a)` is not easy to compute.
 The solution is only implicitly defined.
@@ -115,11 +115,11 @@ We consider the differentiation of a solution of the root-finding problem, defin
     f(z, a) = 0.
 
 A function :math:`z^{*}(a)` that satisfies :math:`f(z^{*}(a), a) = 0` gives a
-solution map for fixed values of :math:`a`. An explicit analytical solution
+solution map for fixed values of :math:`a.` An explicit analytical solution
 is, however, difficult to obtain in general. This means that the direct differentiation of
 :math:`\partial_a z^{*}(a)` is not always possible. Despite that, some iterative
 algorithms may be able to compute the solution by starting from an initial set of values
-for :math:`z`, e.g., using a fixed-point solver. The optimality condition 
+for :math:`z,` e.g., using a fixed-point solver. The optimality condition 
 :math:`f(z^{*}(a), a) = 0` tells the solver when a solution is found.
 
 Implicit differentiation can be used to compute :math:`\partial_a z^{*}(a)`
@@ -136,8 +136,8 @@ the complex domain and we state the theorem (informally) below [#Chang2003]_.
 .. topic:: Implicit function theorem (IFT) (informal)
 
     If :math:`f(z, a)` is some analytic function where in a local neighbourhood
-    around :math:`(z_0, a_0)` we have :math:`f(z_0, a_0) = 0`, there exists an
-    analytic solution :math:`z^{*}(a)` that satisfies :math:`f(z^{*}(a), a) = 0`.
+    around :math:`(z_0, a_0)` we have :math:`f(z_0, a_0) = 0,` there exists an
+    analytic solution :math:`z^{*}(a)` that satisfies :math:`f(z^{*}(a), a) = 0.`
 
 
 .. figure:: ../_static/demonstration_assets/implicit_diff/implicit_diff.png
@@ -146,10 +146,10 @@ the complex domain and we state the theorem (informally) below [#Chang2003]_.
    :align: center
 
 In the figure above we can see solutions to the optimality condition 
-:math:`f(z, a) = 0 ` (red stars), which defines a curve :math:`z^{*}(a)`. 
+:math:`f(z, a) = 0 ` (red stars), which defines a curve :math:`z^{*}(a).` 
 According to the IFT, the solution function is analytic, which means it can be
 differentiated at the solution points by simply differentiating
-the above equation with respect to :math:`a`, as
+the above equation with respect to :math:`a,` as
 
 .. math::
     
@@ -172,8 +172,8 @@ cost function is zero — i.e.,
 
     f(z, a) = \partial_z g(z, a) = 0.
 
-Then, as long as we have the solution, :math:`z^{*}(a)`, and the partial derivatives at the solution (in this case the Hessian of the
-cost function :math:`g(z, a)`), :math:`(\partial_a f, \partial_z f)`, we can compute implicit gradients. Note that,
+Then, as long as we have the solution, :math:`z^{*}(a),` and the partial derivatives at the solution (in this case the Hessian of the
+cost function :math:`g(z, a)`), :math:`(\partial_a f, \partial_z f),` we can compute implicit gradients. Note that,
 for a multivariate function, the inversion
 :math:`(\partial_{z} f(z_0, a_0) )^{-1}` needs to be defined and easy to
 compute. It is possible to approximate this inversion in a clever way by constructing
@@ -190,8 +190,8 @@ Implicit differentiation through a variational quantum algorithm
 
 We now discuss how the idea of implicit differentiation can be applied to
 variational quantum algorithms. Let us take a parameterized Hamiltonian
-:math:`H(a)`, where :math:`a` is a parameter that can be continuously varied.
-If :math:`|\psi_{z}\rangle` is a variational solution to the ground state of :math:`H(a)`,
+:math:`H(a),` where :math:`a` is a parameter that can be continuously varied.
+If :math:`|\psi_{z}\rangle` is a variational solution to the ground state of :math:`H(a),`
 then we can find a :math:`z^*(a)` that minimizes the ground state energy, i.e.,
 
 .. math::
@@ -242,9 +242,9 @@ is
     
     \langle A\rangle = \langle \psi_{z^*}| A| \psi_{z^*}\rangle.
 
-In the case where :math:`A` is just the energy, i.e., :math:`A = H(a)`, the
+In the case where :math:`A` is just the energy, i.e., :math:`A = H(a),` the
 Hellmann–Feynman theorem allows us to easily compute the gradient. However, for
-a general operator we need the gradients :math:`\partial_a z^{*}(a)`, which means that implicit differentiation is a very elegant way to go beyond the
+a general operator we need the gradients :math:`\partial_a z^{*}(a),` which means that implicit differentiation is a very elegant way to go beyond the
 Hellmann–Feynman theorem for arbitrary expectation values.
 
 Let us now dive into the code and implementation.
@@ -287,7 +287,7 @@ jax.config.update("jax_enable_x64", True)
 # of the operator :math:`A` that also defines the parametric part of the
 # Hamiltonian. However, this is not necessary and we could compute gradients for
 # any other operator using implicit differentiation, as we have access to the
-# gradients :math:`\partial_a z^{*}(a)`.
+# gradients :math:`\partial_a z^{*}(a).`
 
 N = 4
 J = 1.0
@@ -368,7 +368,7 @@ z_star_exact = ground_state_solution_map_exact(a)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # Let us now compute the susceptibility function by taking gradients of the
-# expectation value of our operator :math:`A` w.r.t `a`. We can use `jax.vmap`
+# expectation value of our operator :math:`A` w.r.t `a.` We can use `jax.vmap`
 # to vectorize the computation over different values of `a`.
 
 

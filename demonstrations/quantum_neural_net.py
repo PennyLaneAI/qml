@@ -686,7 +686,7 @@ for it in range(500):
 #
 #
 # Finally, we collect the predictions of the trained model for 50 values
-# in the range :math:`[-1,1]`:
+# in the range :math:`[-1,1]:`
 
 x_pred = np.linspace(-1, 1, 50)
 predictions = [quantum_neural_net(var, x_) for x_ in x_pred]

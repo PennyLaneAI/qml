@@ -2,11 +2,11 @@
     "title": "Here comes the SU(N): multivariate quantum gates and gradients",
     "authors": [
         {
-            "id": "david_wierichs"
+            "username": "dwierichs"
         }
     ],
     "dateOfPublication": "2023-04-03T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-11-06T00:00:00+00:00",
     "categories": [
         "Optimization"
     ],
@@ -23,7 +23,6 @@
     ],
     "seoDescription": "Learn about multivariate quantum gates for optimization",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_here_comes_the_sun",
     "references": [
         {
             "id": "vatan",

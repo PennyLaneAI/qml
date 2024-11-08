@@ -2,26 +2,26 @@
     "title": "Training and evaluating quantum kernels",
     "authors": [
         {
-            "id": "peter-jan_derks"
+            "username": "pjderks"
         },
         {
-            "id": "paul_k_faehrmann"
+            "username": "pkfaehrmann"
         },
         {
-            "id": "elies_gil-fuster"
+            "username": "egfuster"
         },
         {
-            "id": "thomas_hubregtsen"
+            "username": "thubregtsen"
         },
         {
-            "id": "johannes_jakob_meyer"
+            "username": "jjmeyer"
         },
         {
-            "id": "david_wierichs"
+            "username": "dwierichs"
         }
     ],
     "dateOfPublication": "2021-06-24T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-11-06T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
@@ -34,7 +34,6 @@
     ],
     "seoDescription": "Kernels and alignment training with Pennylane.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_kernels_module",
     "references": [
         {
             "id": "Training_QEKs",

@@ -1,0 +1,4 @@
+.. bio:: Serene Shum
+   :photo: ../_static/authors/serene_shum.jpg
+
+   Serene Shum is a PhD student in the Department of Physics at the University of Toronto working on quantum simulation algorithms. She is currently a resident at Xanadu.

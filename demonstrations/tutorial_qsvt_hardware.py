@@ -20,14 +20,14 @@ to the next level.
 Calculating angles
 ------------------
 
-Our goal is to apply a polynomial transformation to a given Hamiltonian, i.e., :math:`p(\mathcal{H})`. To achieve this, we must consider the two
+Our goal is to apply a polynomial transformation to a given Hamiltonian, i.e., :math:`p(\mathcal{H}).` To achieve this, we must consider the two
 fundamental components of the QSVT algorithm:
 
 - **Projection angles**: A list of angles that will determine the coefficients of the polynomial to be applied.
 - **Block encoding**: The strategy used to encode the Hamiltonian. We will use the :doc:`linear combinations of unitaries <demos/tutorial_lcu_blockencoding>` approach via the PennyLane :class:`~.qml.PrepSelPrep` operation.
 
 Calculating angles is not a trivial task, but there are tools such as `pyqsp <https://github.com/ichuang/pyqsp/tree/master/pyqsp>`_ that do the job for us.
-For instance, to find the angles to apply the polynomial :math:`p(x) = -x + \frac{x^3}{2}+ \frac{x^5}{2}`, we can run this code:
+For instance, to find the angles to apply the polynomial :math:`p(x) = -x + \frac{x^3}{2}+ \frac{x^5}{2},` we can run this code:
 
 .. code-block:: python
 
@@ -142,7 +142,7 @@ print(np.round(matrix[: 2 ** len(H.wires), : 2 ** len(H.wires)], 4))
 # to be easily executed on hardware devices with PennyLane.
 #
 # Please also note that QSVT encodes the desired polynomial :math:`p(\mathcal{H})` as well as
-# a polynomial :math:`i q(\mathcal{H})`. To isolate :math:`p(\mathcal{H})`, we have used an auxiliary qubit and considered that
+# a polynomial :math:`i q(\mathcal{H}).` To isolate :math:`p(\mathcal{H}),` we have used an auxiliary qubit and considered that
 # the sum of a complex number and its conjugate gives us twice its real part. We
 # recommend :doc:`this demo </demos/tutorial_apply_qsvt>` to learn more about the structure
 # of the circuit.

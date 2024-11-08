@@ -127,7 +127,7 @@ representation of quantum states below:
     The zero state and plus state as a ZX-diagram.
 
 Similarly, you get the :math:`\vert 1\rangle` state and :math:`\vert -\rangle` state by replacing the zero phase with
-:math:`\pi`.
+:math:`\pi.`
 
 The phases are :math:`2\pi` periodic, and when a phase is equal to :math:`0` we omit the zero symbol from the spider.
 A simple green vertex is a Z-spider with zero phase and a simple red vertex is an X-spider with zero phase.
@@ -306,7 +306,7 @@ In the ordinary quantum circuit notation, we can summarize the procedure as foll
     The teleportation circuit.
 
 Let us convert this quantum circuit into a ZX-diagram. The measurements are represented by the state X-spider
-parameterized with boolean parameters :math:`\alpha` and :math:`\beta`. The cup represents the maximally entangled
+parameterized with boolean parameters :math:`\alpha` and :math:`\beta.` The cup represents the maximally entangled
 state shared between Alice and Bob. As you might expect from earlier comments about bending wires, their shared state
 is Choi-Jamiolkowski-equivalent to the identity linear map.
 
@@ -342,11 +342,11 @@ the introduction of a new generator: the multi-leg H-box, defined as follows:
 
 The parameter :math:`a` can be any complex number, and the sum  is over all :math:`i_1, ... , i_m, j_1, ... ,
 j_n \in \{0, 1\}`. Therefore, an H-box represents a matrix where its entries are equal to :math:`1` except for the
-bottom right element, which is \ :math:`a`. This will allow us to concisely express the Toffoli gate, as we will see
+bottom right element, which is \ :math:`a.` This will allow us to concisely express the Toffoli gate, as we will see
 shortly.
 
-An H-box with one input wire and one output wire, with :math:`a=-1`, is a Hadamard gate up to global phase. Thus,
-we omit the parameter when it is equal to :math:`-1`. The Hadamard gate is sometimes represented by a blue edge
+An H-box with one input wire and one output wire, with :math:`a=-1,` is a Hadamard gate up to global phase. Thus,
+we omit the parameter when it is equal to :math:`-1.` The Hadamard gate is sometimes represented by a blue edge
 rather than a box.
 
 Thanks to the introduction of the multi-leg H-box, the Toffoli gate can be represented with three Z-spiders and three
@@ -387,8 +387,8 @@ it always applies an X-spider on the target. It means that we have a bit flip on
 
     Toffoli-diagram applied on the :math:`|11\rangle` state.
 
-If you do the same procedure with the others states on the two controls (:math:`|00\rangle`, :math:`|11\rangle`,
-:math:`|10\rangle`, :math:`|01\rangle`) with slightly different rules (the explosion rule), you will always end up with
+If you do the same procedure with the others states on the two controls (:math:`|00\rangle`, :math:`|11\rangle,`
+:math:`|10\rangle,` :math:`|01\rangle`) with slightly different rules (the explosion rule), you will always end up with
 an empty target and identical states for the controls. We then have proved that our ZXH-diagram is indeed the Toffoli
 gate!
 
@@ -413,7 +413,7 @@ Partial derivative as a ZX-diagram
 
 Let's first describe the problem. Without loss of generalization, let's suppose that we begin with the pure state
 :math:`|0\rangle` on all :math:`n` qubits. Then we apply a parameterized unitary :math:`U` that depends on :math:`\vec{
-\theta}=(\theta_1, ..., \theta_m)`, where :math:`\theta_i \in [0, 2\pi]`.
+\theta}=(\theta_1, ..., \theta_m)`, where :math:`\theta_i \in [0, 2\pi].`
 
 Consequently, the expectation value of a Hamiltonian :math:`H` is given by:
 
@@ -422,8 +422,8 @@ Consequently, the expectation value of a Hamiltonian :math:`H` is given by:
 We have seen that any circuit can be represented by a ZX diagram, but once again, we want to use the graph-like form
 (see the Graph optimization and circuit extraction section). There are multiple rules that ensure the transformation
 to a graph-like diagram. We replace the 0 state by red phaseless spiders, and we transform the parameterized circuit
-to its graph-like ZX diagram. We call the obtained diagram :math:`G_U(\vec{\theta})`, this diagram is equal to
-the unitary up to a constant :math:`c`.
+to its graph-like ZX diagram. We call the obtained diagram :math:`G_U(\vec{\theta}),` this diagram is equal to
+the unitary up to a constant :math:`c.`
 
 .. figure:: ../_static/demonstration_assets/zx_calculus/hamiltonian_diagram.jpg
     :align: center
@@ -438,7 +438,7 @@ the following:
 
     Theorem 2: The derivative of the expectation value of a Hamiltonian given a parameterized as a ZX-diagram.
 
-Let's prove theorem 2, and first we consider a partial derivative on the spider with respect to :math:`\theta_j`. The
+Let's prove theorem 2, and first we consider a partial derivative on the spider with respect to :math:`\theta_j.` The
 spider necessarily appears on both sides, but they have phases of opposite signs and inverse inputs/outputs. By simply
 writing their definitions and expanding the formula, we obtain:
 
@@ -476,7 +476,7 @@ its graph-like diagram.
 
     The whole circuit is translated to a graph-like ZX-diagram.
 
-We then apply the previous theorem to get the partial derivative relative to :math:`\theta_1`.
+We then apply the previous theorem to get the partial derivative relative to :math:`\theta_1.`
 
 .. figure:: ../_static/demonstration_assets/zx_calculus/param_shift_1_2.jpg
     :align: center
@@ -601,9 +601,9 @@ print(tape.operations)
 # Interior spiders are the one without inputs or outputs connected to them. We introduce some names for the spiders
 # depending on their phases:
 #
-# 1. A Pauli spider has a phase that is a multiple of :math:`\pi`.
-# 2. A Clifford spider has a phase that is a multiple of :math:`\frac{\pi}{2}`.
-# 3. A proper Clifford spider is a Clifford spider with a phase which is an odd multiple of :math:`\frac{\pi}{2}`.
+# 1. A Pauli spider has a phase that is a multiple of :math:`\pi.`
+# 2. A Clifford spider has a phase that is a multiple of :math:`\frac{\pi}{2}.`
+# 3. A proper Clifford spider is a Clifford spider with a phase which is an odd multiple of :math:`\frac{\pi}{2}.`
 #
 # Theorem 5.4 in [#Duncan2020]_ provides an algorithm which takes a graph-like diagram and performs the following:
 #
@@ -612,10 +612,10 @@ print(tape.operations)
 # 3. Remove interior Pauli spiders adjacent to a boundary spider.
 #
 # This procedure is implemented in PyZX as the :func:`~.pyzx.full_reduce` function. The complexity of the procedure is
-# :math:`\mathcal{O}(n^3)`, where :math:`n` is the number of spiders. Let's create an example with the circuit
+# :math:`\mathcal{O}(n^3),` where :math:`n` is the number of spiders. Let's create an example with the circuit
 # `mod_5_4 <https://github.com/njross/optimizer/blob/master/Arithmetic_and_Toffoli/mod5_4_before>`__. The circuit
-# :math:`63` gates: :math:`28` :class:`~.pennylane.T`. gates, :math:`28` :class:`~.pennylane.CNOT`, :math:`6`
-# :class:`~.pennylane.Hadamard` and :math:`1` :class:`~.pennylane.PauliX`.
+# :math:`63` gates: :math:`28` :class:`~.pennylane.T.` gates, :math:`28` :class:`~.pennylane.CNOT,` :math:`6`
+# :class:`~.pennylane.Hadamard` and :math:`1` :class:`~.pennylane.PauliX.`
 #
 
 
@@ -781,8 +781,8 @@ print("Circuit gates:", specs["resources"].gate_types)
 #############################################################################
 #
 # We have reduced the T-count! Taking a full census, the circuit contains :math:`53` gates: :math:`8`
-# :class:`~.pennylane.T` gates, :math:`28` :class:`~.pennylane.CNOT`, :math:`6` :class:`~.pennylane.Hadamard`,
-# :math:`1` :class:`~.pennylane.PauliX` and :math:`10` :class:`~.pennylane.S`. We successfully reduced the T-count by
+# :class:`~.pennylane.T` gates, :math:`28` :class:`~.pennylane.CNOT`, :math:`6` :class:`~.pennylane.Hadamard,`
+# :math:`1` :class:`~.pennylane.PauliX` and :math:`10` :class:`~.pennylane.S.` We successfully reduced the T-count by
 # 20 and have 10 additional :class:`~.pennylane.S` gates. The number of :class:`~.pennylane.CNOT` gates remained the
 # same.
 #

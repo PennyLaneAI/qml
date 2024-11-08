@@ -59,7 +59,7 @@ use its states to represent occupied :math:`|1\rangle` or unoccupied
 :math:`|0\rangle` spin orbitals.
 
 An :math:`n`-qubit state with `Hamming weight <https://en.wikipedia.org/wiki/Hamming_weight>`_
-:math:`k`, i.e., with :math:`k` qubits in state :math:`|1\rangle`, represents a state of
+:math:`k`, i.e., with :math:`k` qubits in state :math:`|1\rangle,` represents a state of
 :math:`k` electrons in :math:`n` spin orbitals. For example :math:`|1010\rangle` is a state of
 two electrons in two spin orbitals. More generally, superpositions over all basis states with a
 fixed number of particles are valid states of the electrons in a molecule. These are states such as
@@ -69,7 +69,7 @@ fixed number of particles are valid states of the electrons in a molecule. These
     |\psi\rangle = c_1|1100\rangle + c_2|1010\rangle + c_3|1001\rangle + c_4|0110\rangle +
     c_5|0101\rangle + c_6|0011\rangle,
 
-for some coefficients :math:`c_i`.
+for some coefficients :math:`c_i.`
 
 .. figure:: ../_static/demonstration_assets/givens_rotations/orbitals_states.png
     :align: center
@@ -96,8 +96,8 @@ Consider single-qubit gates. In their most general form, they perform the transf
     U|0\rangle &= a |0\rangle + b |1\rangle,\\
     U|1\rangle &= c |1\rangle + d |0\rangle,
 
-where :math:`|a|^2+|b|^2=|c|^2+|d|^2=1` and :math:`ab^* + cd^*=0`. This gate is
-particle-conserving only if :math:`b=d=0`, which means that the only single-qubit gates that
+where :math:`|a|^2+|b|^2=|c|^2+|d|^2=1` and :math:`ab^* + cd^*=0.` This gate is
+particle-conserving only if :math:`b=d=0,` which means that the only single-qubit gates that
 preserve particle number are diagonal gates of the form
 
 .. math::
@@ -120,7 +120,7 @@ We have:
 - :math:`|01\rangle,|10\rangle` with one particle, and
 - :math:`|11\rangle` with two particles.
 
-We can now consider transformations that couple the states :math:`|01\rangle,|10\rangle`. These
+We can now consider transformations that couple the states :math:`|01\rangle,|10\rangle.` These
 are gates of the form
 
 .. math::
@@ -162,8 +162,8 @@ from the first to the second qubit.
 
 This gate is implemented in PennyLane as the :class:`~.pennylane.SingleExcitation` operation.
 We can use it to prepare an equal superposition of three-qubit states with a single particle
-:math:`\frac{1}{\sqrt{3}}(|001\rangle + |010\rangle + |100\rangle)`. We apply two single
-excitation gates with parameters :math:`\theta, \phi` to the initial state :math:`|100\rangle`.
+:math:`\frac{1}{\sqrt{3}}(|001\rangle + |010\rangle + |100\rangle).` We apply two single
+excitation gates with parameters :math:`\theta, \phi` to the initial state :math:`|100\rangle.`
 The excitation gates act on qubits 0,1 and 0,2 respectively. This yields the state
 
 .. math::
@@ -171,9 +171,9 @@ The excitation gates act on qubits 0,1 and 0,2 respectively. This yields the sta
     |\psi\rangle = \cos(\theta/2)\cos(\phi/2)|100\rangle - \sin(\theta/2)|010\rangle -
     \cos(\theta/2)\sin(\phi/2)|001\rangle.
 
-Since the amplitude of :math:`|010\rangle` must be :math:`1/\sqrt{3}`, we conclude that
-:math:`-\sin(\theta/2)=1/\sqrt{3}`. This in turn implies that :math:`\cos(\theta/2)=\sqrt{2/3}` and
-therefore :math:`-\sin(\phi/2)=1/\sqrt{2}`. Thus, to prepare an equal superposition state we
+Since the amplitude of :math:`|010\rangle` must be :math:`1/\sqrt{3},` we conclude that
+:math:`-\sin(\theta/2)=1/\sqrt{3}.` This in turn implies that :math:`\cos(\theta/2)=\sqrt{2/3}` and
+therefore :math:`-\sin(\phi/2)=1/\sqrt{2}.` Thus, to prepare an equal superposition state we
 choose the angles of rotation to be
 
 .. math::
@@ -204,8 +204,8 @@ print(circuit(x, y))
 
 ##############################################################################
 # The components of the output state are ordered according to their binary
-# representation, so entry 1 is :math:`|001\rangle`, entry 2 is :math:`|010\rangle`, and entry 4 is
-# :math:`|100\rangle`, meaning we indeed prepared the desired state. We can check this by
+# representation, so entry 1 is :math:`|001\rangle`, entry 2 is :math:`|010\rangle,` and entry 4 is
+# :math:`|100\rangle,` meaning we indeed prepared the desired state. We can check this by
 # reshaping the output state
 
 tensor_state = circuit(x, y).reshape(2, 2, 2)
@@ -216,7 +216,7 @@ print("Amplitude of state |100> = ", tensor_state[1, 0, 0])
 ##############################################################################
 # We can also study **double excitations** involving the transfer of two particles. For example,
 # consider a Givens rotation in the subspace spanned by the states
-# :math:`|1100\rangle` and :math:`|0011\rangle`. These
+# :math:`|1100\rangle` and :math:`|0011\rangle.` These
 # states differ by a double excitation since we can map :math:`|1100\rangle` to
 # :math:`|0011\rangle` by exciting the particles from the first two qubits to the last two.
 # Mathematically, this gate can be represented by a unitary :math:`G^{(2)}(\theta)` that performs
@@ -241,8 +241,8 @@ print("Amplitude of state |100> = ", tensor_state[1, 0, 0])
 # In the context of quantum chemistry, it is common to consider excitations on a fixed reference
 # state and include only the excitations that preserve the spin orientation of the electron.
 # For a system with :math:`n` qubits and :math:`k` particles, this reference state is typically
-# chosen as the state with the first :math:`k` qubits in state :math:`|1\rangle`, and the remainder
-# in state :math:`|0\rangle`.
+# chosen as the state with the first :math:`k` qubits in state :math:`|1\rangle,` and the remainder
+# in state :math:`|0\rangle.`
 # PennyLane allows you to obtain all such excitations using the function
 # :func:`~.pennylane.qchem.excitations`. Let's employ it to build a circuit that includes
 # all single and double excitations acting on a reference state of three particles in six qubits.
@@ -340,19 +340,19 @@ print(states)
 #
 # while leaving all other basis states unchanged. This gate only excites a particle
 # from the second to third qubit, and vice versa, if the first (control) qubit is in state
-# :math:`|1\rangle`. This is a useful property: as the name suggests, it provides us with better
+# :math:`|1\rangle.` This is a useful property: as the name suggests, it provides us with better
 # control over the transformations we want to apply. Suppose we aim to prepare the state
 #
 # .. math::
 #   |\psi\rangle = \frac{1}{2}(|110000\rangle + |001100\rangle + |000011\rangle + |100100\rangle).
 #
 # Some inspection is enough to see that the states :math:`|001100\rangle` and :math:`|000011\rangle`
-# differ by a double excitation from the reference state :math:`|110000\rangle`. Meanwhile, the state
+# differ by a double excitation from the reference state :math:`|110000\rangle.` Meanwhile, the state
 # :math:`|100100\rangle` differs by a single excitation. It is thus tempting to think that applying
 # two double-excitation gates and a single-excitation gate can be used to prepare the target state.
 # It won't work! Applying the single-excitation gate on qubits 1 and 3 will also lead to an
 # undesired contribution for the state :math:`|011000\rangle` through a coupling with
-# :math:`|001100\rangle`. Let's check that this is the case:
+# :math:`|001100\rangle.` Let's check that this is the case:
 
 dev = qml.device('default.qubit', wires=6)
 
@@ -373,10 +373,10 @@ states = [np.binary_repr(i, width=6) for i in range(len(output)) if output[i] !=
 print(states)
 
 ##############################################################################
-# Indeed, we have a non-zero coefficient for :math:`|011000\rangle`. To address this problem,
+# Indeed, we have a non-zero coefficient for :math:`|011000\rangle.` To address this problem,
 # we can instead apply the single-excitation gate controlled on the
 # state of the first qubit. This ensures that there is no coupling with the state :math:`|
-# 001100\rangle` since here the first qubit is in state :math:`|0\rangle`. Let's implement the circuit
+# 001100\rangle` since here the first qubit is in state :math:`|0\rangle.` Let's implement the circuit
 # above, this time controlling on the state of the first qubit and verify that we can prepare the
 # desired state. To perform the control, we use the :func:`~.pennylane.ctrl` transform:
 
@@ -414,7 +414,7 @@ print(states)
 #     A circuit for preparing four-qubit states with two particles.
 #
 #
-# Starting from the reference state :math:`|1100\rangle`, we create a superposition
+# Starting from the reference state :math:`|1100\rangle,` we create a superposition
 # with the state :math:`|1010\rangle` by applying a single-excitation gate on qubits 1 and 2.
 # Similarly, we create a superposition with the state :math:`|1001\rangle` with a single
 # excitation between qubits 1 and 3. This leaves us with a state of the form
@@ -433,7 +433,7 @@ print(states)
 #
 # which is our intended outcome. Let's use this approach to create an equal superposition over
 # all two-particle states on four qubits. We follow the same strategy as before, setting the angle
-# of the :math:`k`-th Givens rotation as :math:`-2 \arcsin(1/\sqrt{n-k})`, where :math:`n` is the
+# of the :math:`k`-th Givens rotation as :math:`-2 \arcsin(1/\sqrt{n-k}),` where :math:`n` is the
 # number of basis states in the superposition.
 
 dev = qml.device('default.qubit', wires=4)

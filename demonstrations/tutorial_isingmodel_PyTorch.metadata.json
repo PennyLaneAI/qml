@@ -2,11 +2,11 @@
     "title": "3-qubit Ising model in PyTorch",
     "authors": [
         {
-            "id": "aroosa_ijaz"
+            "username": "aijaz"
         }
     ],
     "dateOfPublication": "2019-10-16T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-11-06T00:00:00+00:00",
     "categories": [
         "Optimization"
     ],
@@ -19,7 +19,6 @@
     ],
     "seoDescription": "This demonstration uses the PyTorch interface of PennyLane to optimize a 3-qubit Ising model.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_isingmodel_PyTorch",
     "references": [
         {
             "id": "Schuld2018",

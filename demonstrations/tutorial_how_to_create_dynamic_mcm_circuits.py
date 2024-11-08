@@ -79,7 +79,7 @@ print(circuit(x))
 # - Single-qubit rotations and a layer of :class:`~.pennylane.CNOT` gates create an entangled state
 #   on the first three qubits.
 #
-# - The first three qubits are measured and for each measured :math:`0`, another qubit is excited
+# - The first three qubits are measured and for each measured :math:`0,` another qubit is excited
 #   from the :math:`|0\rangle` state to the :math:`|1\rangle` state.
 #
 # First, we define a quantum subprogram that creates the initial state:

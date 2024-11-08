@@ -15,11 +15,11 @@ At the same time, they are known to be difficult to train [#Anschuetz]_.
 The authors of [#Huang]_ tackle the question of whether or not shallow circuits are efficiently learnable.
 
 
-Given some unknown unitary circuit :math:`U`, learning the circuit constitutes finding a unitary :math:`V` that faithfully resembles :math:`U`'s action.
+Given some unknown unitary circuit :math:`U,` learning the circuit constitutes finding a unitary :math:`V` that faithfully resembles :math:`U's` action.
 This can be either fully performing the same operation (:math:`U V^\dagger = 1`) or resembling the action on a fixed input state
-(:math:`U |\phi\rangle = V |\phi\rangle`, where often :math:`|\phi\rangle = |0 \rangle^{\otimes n}`).
-The authors go through both scenarios with different levels of restrictions on the allowed gate set and locality of the target circuit :math:`U`.
-In this demo, we are mainly going to focus on learning the action on :math:`|0 \rangle^{\otimes n}`, i.e. :math:`U |0\rangle^{\otimes n} = V |0\rangle^{\otimes n}`.
+(:math:`U |\phi\rangle = V |\phi\rangle,` where often :math:`|\phi\rangle = |0 \rangle^{\otimes n}`).
+The authors go through both scenarios with different levels of restrictions on the allowed gate set and locality of the target circuit :math:`U.`
+In this demo, we are mainly going to focus on learning the action on :math:`|0 \rangle^{\otimes n},` i.e. :math:`U |0\rangle^{\otimes n} = V |0\rangle^{\otimes n}.`
 
 
 At the heart of the solutions to all these scenarios lies the use of local inversions that undo the effect of the unitary, 
@@ -30,7 +30,7 @@ Local Inversions
 
 A local inversion is a unitary circuit that locally disentangles one qubit after a previous, different unitary entangled them. Let us 
 make an explicit example in PennyLane after some boilerplate imports. Let us look at a very shallow unitary circuit
-:math:`U^\text{test} = \text{CNOT}_{(0, 1)}\text{CNOT}_{(2, 3)}\text{CNOT}_{(1, 2)} H^{\otimes n}`.
+:math:`U^\text{test} = \text{CNOT}_{(0, 1)}\text{CNOT}_{(2, 3)}\text{CNOT}_{(1, 2)} H^{\otimes n}.`
 """
 import pennylane as qml
 import numpy as np
@@ -49,10 +49,10 @@ plt.show()
 
 ##############################################################################
 # We now want to locally invert it. That is, we want to apply a second unitary 
-# :math:`V_0` such that :math:`\text{tr}_{\neq 0} \left[V_0 U (|0 \rangle \langle 0|)^{\otimes n} U^\dagger V^\dagger_0\right] = |0 \rangle \langle 0|_0`,
+# :math:`V_0` such that :math:`\text{tr}_{\neq 0} \left[V_0 U (|0 \rangle \langle 0|)^{\otimes n} U^\dagger V^\dagger_0\right] = |0 \rangle \langle 0|_0,`
 # where we trace out all but wire ``0``.
 # For that, we just follow the light-cone of the qubit that we want to invert
-# and perform the inverse operations in reverse order in :math:`V_0`.
+# and perform the inverse operations in reverse order in :math:`V_0.`
 
 def V_0():
     qml.CNOT((0, 1))
@@ -71,7 +71,7 @@ print(np.allclose(local_inversion(), np.array([[1., 0.], [0., 0.]])))
 
 ##############################################################################
 # After performing :math:`U^\text{test}` and the inversion of qubit 
-# :math:`0`, :math:`V_0`, we find the reduced state :math:`|0 \rangle \langle 0|` on the correct qubit.
+# :math:`0`, :math:`V_0,` we find the reduced state :math:`|0 \rangle \langle 0|` on the correct qubit.
 #
 # Local inversions are not unique and finding one is easier than finding global inversions.
 # But constructing a global inversion from all possible local inversions is highly non-trivial
@@ -81,7 +81,7 @@ print(np.allclose(local_inversion(), np.array([[1., 0.], [0., 0.]])))
 #
 # To do that, we construct the other local inversions in the same way as before by just following 
 # back the light-cones of the respective qubits. In general these would have to be learned, more on that later. Here we just
-# reverse-engineer them from knowing :math:`U^\text{test}`.
+# reverse-engineer them from knowing :math:`U^\text{test}.`
 
 def V_1():
     qml.CNOT((0, 1))
@@ -103,12 +103,12 @@ def V_3():
 # Circuit Sewing
 # --------------
 #
-# So how does knowing local inversions :math:`\{V_0, V_1, V_2, V_3\}` help us with solving the original goal of finding a global inversion :math:`U V = \mathbb{1}`?
+# So how does knowing local inversions :math:`\{V_0, V_1, V_2, V_3\}` help us with solving the original goal of finding a global inversion :math:`U V = \mathbb{1}?`
 # The authors introduce a clever trick that they coin `circuit sewing`. It works by swapping out the decoupled qubit with an ancilla register and restoring ("repairing") the unitary on the remaining wires. 
 # Let us walk through this process step by step.
 #
 # We already saw how to decouple qubit :math:`0` in ``local_inversion()`` above. We continue by swapping out
-# the decoupled wire with an ancilla qubit and "repairing" the circuit by applying :math:`V^\dagger_0`.
+# the decoupled wire with an ancilla qubit and "repairing" the circuit by applying :math:`V^\dagger_0.`
 # (This is called "repairing" because :math:`V_1` can now decouple qubit 1, which would not be possible in general without that step.)
 # We label all ancilla wires by ``[n + 0, n + 1, .. 2n-1]`` to have an easy 1-to-1 correspondence and we see that qubit ``1`` is successfully decoupled.
 # For completeness, we also check that the swapped out qubit (now moved to wire ``n + 0``) is decoupled still.
@@ -213,7 +213,7 @@ np.allclose(V_dagger_test(), np.outer(psi0, psi0))
 
 ##############################################################################
 #
-# Everything after ``U_test()`` in ``V_dagger_test`` constitutes :math:`(V^\text{sew})^\dagger`.
+# Everything after ``U_test()`` in ``V_dagger_test`` constitutes :math:`(V^\text{sew})^\dagger.`
 
 def V_dagger():
     V_0()                 # disentangle qubit 0
@@ -245,10 +245,10 @@ def V_dagger():
 # Numerical Experiment
 # --------------------
 #
-# The actual learning in this procedure happens in obtaining the local inversions :math:`\{V_0, V_1, V_2, V_3\}`.
-# The paper relies on existence proofs from gate synthesis [#Shende]_ and suggests brute-force searching via enumerate-and-test to find suitable :math:`\{V_i\}`.
+# The actual learning in this procedure happens in obtaining the local inversions :math:`\{V_0, V_1, V_2, V_3\}.`
+# The paper relies on existence proofs from gate synthesis [#Shende]_ and suggests brute-force searching via enumerate-and-test to find suitable :math:`\{V_i\}.`
 # The idea is to essentially take a big enough set of possible :math:`\{V_i\}` and post-select those that fulfill 
-# :math:`||V^\dagger_i U^\dagger P_i U V_i - P_i|| < \epsilon` for :math:`P_i \in \{X, Y, Z\}`, which the authors 
+# :math:`||V^\dagger_i U^\dagger P_i U V_i - P_i|| < \epsilon` for :math:`P_i \in \{X, Y, Z\},` which the authors 
 # show suffices as a criterium to have an approximate local inversion.
 #
 # Instead of doing that, let us here look at an explicit example by constructing a target unitary of some structure and a variational Ansatz for 
@@ -277,7 +277,7 @@ qml.draw_mpl(U_target)(wires)
 plt.show()
 
 ##############################################################################
-# Putting on blindfolds and assuming we don't know the circuit structure of :math:`U^\text{target}`, we set up a variational Ansatz for the local inversions :math:`V_i` with the following structure.
+# Putting on blindfolds and assuming we don't know the circuit structure of :math:`U^\text{target},` we set up a variational Ansatz for the local inversions :math:`V_i` with the following structure.
 
 n_layers = 2
 
@@ -347,7 +347,7 @@ def run_opt(value_and_grad, theta, n_epochs=100, lr=0.1, b1=0.9, b2=0.999):
 dev = qml.device("default.qubit")
 
 ##############################################################################
-# As a cost function, we perform state tomography after applying :math:`U^\text{target}` and our Ansatz :math:`V_i`.
+# As a cost function, we perform state tomography after applying :math:`U^\text{target}` and our Ansatz :math:`V_i.`
 # Our aim is to bring the state on qubit ``i`` back to the north pole of the Bloch sphere, and we specify our cost function accordingly.
 
 @qml.qnode(dev, interface="jax")
@@ -416,16 +416,16 @@ print(np.allclose(sewing_test(), np.outer(psi0, psi0), atol=1e-1))
 #
 # .. note::
 #     We mainly focussed on the case of constructing :math:`V^\text{sew}` such that :math:`V^\text{sew} U |0 \rangle^{\otimes n} = |0 \rangle^{\otimes n}` as it already
-#     nicely captures the main technical method that is circuit sewing. This is different to learning the full unitary, i.e. :math:`V` such that :math:`U V = 1`.
+#     nicely captures the main technical method that is circuit sewing. This is different to learning the full unitary, i.e. :math:`V` such that :math:`U V = 1.`
 #
 #     For this, the circuit sewing works in the exact same way. The main difference is that the local inversions are now full inversions in the sense of
-#     :math:`\text{tr}_{\neq 0}\left[V_i U\right] = \mathbb{1}_i` (whereas before we just had :math:`V_i U |0 \rangle^{\otimes n} = |0 \rangle^{\otimes n}`, which is a simpler case).
+#     :math:`\text{tr}_{\neq 0}\left[V_i U\right] = \mathbb{1}_i` (whereas before we just had :math:`V_i U |0 \rangle^{\otimes n} = |0 \rangle^{\otimes n},` which is a simpler case).
 #     The authors show that a sufficient condition for full inversion is achieved by minimizing
 #
 #     .. math:: \sum_{P\in \{X, Y, Z\}} ||V^\dagger_i U^\dagger P_i U V_i - P_i ||.
 #
 #     In the paper, the authors suggest to brute-force search the whole space of possible :math:`V_i` and post-select those for which the distance to :math:`P_i` is small.
-#     The terms are evaluated by randomly sampling input (product) states :math:`|\phi_j\rangle` and computing expectation values of :math:`\langle \phi_j | V^\dagger_i U^\dagger P_i U V_i |\phi_j\rangle`.
+#     The terms are evaluated by randomly sampling input (product) states :math:`|\phi_j\rangle` and computing expectation values of :math:`\langle \phi_j | V^\dagger_i U^\dagger P_i U V_i |\phi_j\rangle.`
 #     In particular, samples for all possible candidates of :math:`V_i` are generated.
 #     Another possibility is to perform state tomography of the single qubit states and compare that with the input state.
 #     Either way, the circuit sewing after obtaining the learned local inversions is the same as described above.

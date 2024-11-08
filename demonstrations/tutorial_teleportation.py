@@ -73,8 +73,8 @@ First, let's take the inner product of the left-hand sides of the two equations:
     (\langle \psi \vert \otimes \langle s \vert) U^\dagger U(\vert \varphi\rangle \otimes \vert s\rangle ) = \langle \psi \vert \varphi\rangle \  \langle s \vert s\rangle
 
 Since :math:`\langle s \vert s\rangle` equals 1, this evaluates to
-:math:`\langle \psi \vert \varphi \rangle`. Next, we compare the inner product of the
-right-hand sides of the two equations: :math:`(\langle \psi \vert \varphi \rangle)^2`.
+:math:`\langle \psi \vert \varphi \rangle.` Next, we compare the inner product of the
+right-hand sides of the two equations: :math:`(\langle \psi \vert \varphi \rangle)^2.`
 These inner products must be equal, and they are only equal if they are a value that
 squares to itself. The only valid values for the inner product then are 1 and 0. But
 if the inner product is 1, the states are the same; on the other hand, if the inner
@@ -100,11 +100,11 @@ step at a time.
 # Teleportation involves three qubits. Two of them are held by Alice, and the
 # third by Bob. We'll denote their states using subscripts:
 #
-# 1. :math:`\vert\cdot\rangle_S`, Alice's first qubit that she will prepare in
+# 1. :math:`\vert\cdot\rangle_S,` Alice's first qubit that she will prepare in
 #    some arbitrary state
-# 2. :math:`\vert\cdot\rangle_A`, Alice's auxiliary (or "ancilla") qubit that
+# 2. :math:`\vert\cdot\rangle_A,` Alice's auxiliary (or "ancilla") qubit that
 #    she will entangle with Bob's qubit for communication purposes
-# 3. :math:`\vert \cdot\rangle_B`, Bob's qubit that will receive the teleported
+# 3. :math:`\vert \cdot\rangle_B,` Bob's qubit that will receive the teleported
 #    state
 #
 # Together, their starting state is:
@@ -194,12 +194,12 @@ def entangle_qubits():
 # back to the computational one, and simulate a measurement in the Bell basis.
 #
 # After the basis transform, if we observe the first two qubits to be in the state
-# :math:`\vert 00\rangle`, this would correspond to the outcome :math:`\vert \psi_+\rangle` in
-# the Bell basis, :math:`\vert 11\rangle` would correspond to :math:`\vert \phi_-\rangle`,
+# :math:`\vert 00\rangle,` this would correspond to the outcome :math:`\vert \psi_+\rangle` in
+# the Bell basis, :math:`\vert 11\rangle` would correspond to :math:`\vert \phi_-\rangle,`
 # etc. Let's perform this change of basis, one step at a time.
 #
 # Suppose we write our initial state :math:`\vert \psi\rangle` as
-# :math:`\alpha\vert 0\rangle + \beta\vert 1\rangle`, with :math:`\alpha` and
+# :math:`\alpha\vert 0\rangle + \beta\vert 1\rangle,` with :math:`\alpha` and
 # :math:`\beta` being complex coefficients. Expanding out the terms from (1), we obtain:
 #
 # .. math::
@@ -251,12 +251,12 @@ def basis_rotation():
 #
 # Let's take another look at equation (2). If Alice measures her two qubits in the
 # computational basis, she is equally likely to obtain any of the four possible
-# outcomes. If she observes the first two qubits in the state :math:`\vert 00 \rangle`,
+# outcomes. If she observes the first two qubits in the state :math:`\vert 00 \rangle,`
 # she would immediately know that Bob's qubit was in the state
-# :math:`\alpha \vert 0 \rangle + \beta \vert 1 \rangle`, which is precisely the
+# :math:`\alpha \vert 0 \rangle + \beta \vert 1 \rangle,` which is precisely the
 # state we are trying to teleport!
 #
-# If instead she observed the qubits in state :math:`\vert 01\rangle`, she'd still
+# If instead she observed the qubits in state :math:`\vert 01\rangle,` she'd still
 # know what state Bob has, but it's a little off from the original state. In particular,
 # we have:
 #
@@ -266,7 +266,7 @@ def basis_rotation():
 #
 # After obtaining these results, Alice could tell Bob to simply apply an X
 # gate to his qubit to recover the original state. Similarly, if she obtained
-# :math:`\vert 10\rangle`, she would tell him to apply a Z gate.
+# :math:`\vert 10\rangle,` she would tell him to apply a Z gate.
 #
 # In the `"traditional" version of quantum
 # teleportation <https://quantum.country/teleportation>`__ [#Teleportation1993]_,

@@ -9,7 +9,7 @@
         }
     ],
     "dateOfPublication": "2024-09-09T00:00:00+00:00",
-    "dateOfLastModification": "2024-09-09T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Quantum Computing",
         "Algorithms"
@@ -27,7 +27,6 @@
     ],
     "seoDescription": "Learn how to use, visualize and apply qubitization, a block-encoding technique in quantum computing.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_qubitization",
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],

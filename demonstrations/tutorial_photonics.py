@@ -242,7 +242,7 @@ print("Variance of p-quadrature: {}".format(vacuum_var_p()))
 #
 # The density has the shape of a 2-dimensional Gaussian surface, hence the name. *For Gaussian
 # states only*, the density is exactly equal to the so-called `Wigner function <https://en.wikipedia.org/wiki/Wigner_quasiprobability_distribution>`__ :math:`W(x,p),`
-# defined using the wave function :math:`\psi(x)`:
+# defined using the wave function :math:`\psi(x):`
 #
 # .. math:: W(x,p) = \frac{1}{\pi\hbar}\int_{-\infty}^{\infty}\psi^{*}(x+y)\psi(x-y)e^{2ipy/\hbar}dy.
 #
@@ -477,7 +477,7 @@ plt.show()
 # this amounts to rotating the point :math:`(\bar{x},\bar{p})` around the origin.
 #
 # So far, we have focused on changing the mean values of :math:`x` and :math:`p.`
-# But what if we also want to change the spread of the quadratures while keeping :math:`\Delta x\Delta p =1`?.
+# But what if we also want to change the spread of the quadratures while keeping :math:`\Delta x\Delta p =1?`.
 # This would "squeeze" the Wigner function in one direction. Aptly, the resulting state
 # is known as a *squeezed state*, which is more difficult to obtain.
 # It requires shining light through non-linear
@@ -650,7 +650,7 @@ print(
 #
 # Trying the above with many input states should convince you that this setup, known as *homodyne measurement*,
 # allows us to measure the quadratures :math:`\hat{X}` and :math:`\hat{P}.` Feel free to play around
-# changing the values of :math:`\phi` and :math:`a`!
+# changing the values of :math:`\phi` and :math:`a!`
 #
 # Beyond Gaussian states
 # ~~~~~~~~~~~~~~~~~~~~~~

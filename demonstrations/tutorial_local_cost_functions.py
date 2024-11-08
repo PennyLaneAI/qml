@@ -88,7 +88,7 @@ dev = qml.device("lightning.qubit", wires=wires, shots=10000)
 #
 # We will also define our cost functions here. Since we are trying to
 # learn the identity gate, a natural cost function is 1 minus the probability of measuring the
-# zero state, denoted here as :math:`1 - p_{|0\rangle}`.
+# zero state, denoted here as :math:`1 - p_{|0\rangle}.`
 #
 # .. math:: C = \langle  \psi(\theta) | \left(I - |0\rangle \langle 0|\right)  | \psi(\theta)  \rangle   =1-p_{|0\rangle}
 #
@@ -241,14 +241,16 @@ def global_cost_simple(rotations):
     for i in range(wires):
         qml.RX(rotations[0][i], wires=i)
         qml.RY(rotations[1][i], wires=i)
-    qml.broadcast(qml.CNOT, wires=range(wires), pattern="chain")
+    for i in range(wires - 1):
+        qml.CNOT([i, i + 1])
     return qml.probs(wires=range(wires))
 
 def local_cost_simple(rotations):
     for i in range(wires):
         qml.RX(rotations[0][i], wires=i)
         qml.RY(rotations[1][i], wires=i)
-    qml.broadcast(qml.CNOT, wires=range(wires), pattern="chain")
+    for i in range(wires - 1):
+        qml.CNOT([i, i + 1])
     return qml.probs(wires=[0])
 
 global_circuit = qml.QNode(global_cost_simple, dev, interface="autograd")
@@ -371,7 +373,8 @@ def tunable_cost_simple(rotations):
     for i in range(wires):
         qml.RX(rotations[0][i], wires=i)
         qml.RY(rotations[1][i], wires=i)
-    qml.broadcast(qml.CNOT, wires=range(wires), pattern="chain")
+    for i in range(wires - 1):
+        qml.CNOT([i, i + 1])
     return qml.probs(range(locality))
 
 def cost_tunable(rotations):

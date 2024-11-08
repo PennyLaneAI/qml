@@ -75,7 +75,7 @@ Let’s get started!
 # Here, we will only briefly review the main idea behind standard VQE
 # and highlight the important concepts in connection with CB-VQE.
 #
-# Given a Hamiltonian :math:`H`, the main goal of VQE is to find the ground state energy of a system governed by the Schrödinger
+# Given a Hamiltonian :math:`H,` the main goal of VQE is to find the ground state energy of a system governed by the Schrödinger
 # equation
 #
 # .. math:: H \vert \phi \rangle = E  \vert \phi \rangle.
@@ -88,7 +88,7 @@ Let’s get started!
 # .. math:: E = \langle \phi \vert H \vert \phi \rangle.
 #
 # In VQE, we prepare a statevector :math:`\vert \phi \rangle` by applying
-# the parameterized ansatz :math:`A(\Theta)`, represented by a unitary matrix,
+# the parameterized ansatz :math:`A(\Theta),` represented by a unitary matrix,
 # to an initial state :math:`\vert 0 \rangle^{\otimes n}` where :math:`n` is the number of qubits. Then, the parameters :math:`\Theta` are
 # optimized to minimize a cost function, which in this case is the energy:
 #
@@ -125,7 +125,7 @@ hf = qchem.hf_state(electrons, qubits)
 
 
 ######################################################################
-# Next, we implement the ansatz :math:`A(\Theta)`. In this case, we use the
+# Next, we implement the ansatz :math:`A(\Theta).` In this case, we use the
 # class :class:`~.pennylane.AllSinglesDoubles`, which enables us to apply all possible combinations of single and
 # double excitations obeying the Pauli principle to the Hartree-Fock
 # state. Single and double excitation gates, denoted :math:`G^{(1)}(\Theta)` and :math:`G^{(2)}(\Theta)` respectively, are
@@ -185,7 +185,7 @@ print("Optimal parameters:", theta_opt)
 ######################################################################
 # Note that as an output we obtain the VQE approximation to the ground
 # state energy and a set of optimized parameters :math:`\Theta` that
-# define the ground state through the ansatz :math:`A(\Theta)`. We will need
+# define the ground state through the ansatz :math:`A(\Theta).` We will need
 # to save these two quantities, as they are necessary to implement CB-VQE
 # in the following steps.
 #
@@ -201,7 +201,7 @@ print("Optimal parameters:", theta_opt)
 # `generalized eigenvalue problem <https://en.wikipedia.org/wiki/Generalized_eigenvalue_problem>`__.
 # The main idea is to restrict the problem of finding the ground state to
 # an eigenvalue problem in a subspace :math:`\mathcal{H}^{\prime}` of the
-# complete Hilbert space :math:`\mathcal{H}`. If this subspace is spanned
+# complete Hilbert space :math:`\mathcal{H}.` If this subspace is spanned
 # by a combination of both classical and quantum states, we can run parts
 # of our algorithm on classical hardware and thus reduce the number of
 # measurements needed to reach a certain precision threshold. The generalized
@@ -215,7 +215,7 @@ print("Optimal parameters:", theta_opt)
 #
 # .. math:: \bar{H}_{\alpha, \beta} = \langle \phi_\alpha \vert H \vert \phi_\beta \rangle,
 #
-# for all :math:`\vert \phi_\alpha \rangle` and :math:`\vert \phi_\beta \rangle` in :math:`\mathcal{H}^{\prime}`.
+# for all :math:`\vert \phi_\alpha \rangle` and :math:`\vert \phi_\beta \rangle` in :math:`\mathcal{H}^{\prime}.`
 # For a complete orthonormal basis, the overlap matrix
 # :math:`\bar{S}` would simply be the identity matrix. However, we need to
 # take a more general approach which works for a subspace spanned by
@@ -224,7 +224,7 @@ print("Optimal parameters:", theta_opt)
 #
 # .. math:: \bar{S}_{\alpha, \beta} = \langle \phi_\alpha \vert \phi_\beta \rangle,
 #
-# for all :math:`\vert \phi_\alpha \rangle` and :math:`\vert \phi_\beta \rangle` in :math:`\mathcal{H}^{\prime}`.
+# for all :math:`\vert \phi_\alpha \rangle` and :math:`\vert \phi_\beta \rangle` in :math:`\mathcal{H}^{\prime}.`
 # Finally, note that :math:`\vec{v}` and :math:`\lambda` are the eigenvectors and
 # eigenvalues respectively. Our goal is to find the lowest
 # eigenvalue :math:`\lambda_0.`
@@ -239,7 +239,7 @@ print("Optimal parameters:", theta_opt)
 #
 # We will consider the simplest case in which the subspace is spanned only
 # by one classical state :math:`\vert \phi_{HF} \rangle` and one quantum
-# state :math:`\vert \phi_{q} \rangle`. More precisely, we define the
+# state :math:`\vert \phi_{q} \rangle.` More precisely, we define the
 # classical state to be a single
 # `Slater determinant <https://en.wikipedia.org/wiki/Slater_determinant>`__,
 # which directly hints towards using the *Hartree-Fock* state for several
@@ -252,15 +252,15 @@ print("Optimal parameters:", theta_opt)
 
 ######################################################################
 # To summarize, our goal is to build the Hamiltonian :math:`\bar{H}` and
-# the overlap matrix :math:`\bar{S}`, which act on the subspace
+# the overlap matrix :math:`\bar{S},` which act on the subspace
 # :math:`\mathcal{H}^{\prime} \subseteq \mathcal{H}` spanned by
-# :math:`\{\vert \phi_{HF} \rangle, \vert \phi_q \rangle\}`. These will be
+# :math:`\{\vert \phi_{HF} \rangle, \vert \phi_q \rangle\}.` These will be
 # two-dimensional matrices, and in the following sections we will show how
 # to compute all their entries step by step.
 #
 # As done previously, we start by importing *PennyLane*, *Qchem* and
 # differentiable *NumPy* followed by defining the molecular Hamiltonian in
-# the Hartree-Fock basis for :math:`H_2`.
+# the Hartree-Fock basis for :math:`H_2.`
 #
 
 symbols = ["H", "H"]
@@ -280,7 +280,7 @@ H, qubits = qchem.molecular_hamiltonian(molecule)
 
 ######################################################################
 # We first set out to calculate the purely classical part of the
-# Hamiltonian :math:`H`. Since we only have one classical state this will
+# Hamiltonian :math:`H.` Since we only have one classical state this will
 # already correspond to a scalar energy value. The terms can be expressed
 # as
 #
@@ -297,9 +297,9 @@ H, qubits = qchem.molecular_hamiltonian(molecule)
 # fermionic Hamiltonian, which is the Hamiltonian on the basis of Slater
 # determinants. The basis is organized in lexicographic order, meaning
 # that if we want the entry corresponding to the Hartree-Fock determinant
-# :math:`\vert 1100 \rangle`, we will have to take the entry
-# :math:`H_{i,i}`, where :math:`1100` is the binary representation of the
-# index :math:`i`.
+# :math:`\vert 1100 \rangle,` we will have to take the entry
+# :math:`H_{i,i},` where :math:`1100` is the binary representation of the
+# index :math:`i.`
 #
 
 hf_state = qchem.hf_state(electrons, qubits)
@@ -333,7 +333,7 @@ S11 = 1
 # quantum state can be written as
 # :math:`\vert \phi_{q} \rangle = A(\Theta^*) \vert \phi_{HF} \rangle`
 # where :math:`A(\Theta^*)` is the ansatz of the VQE with the optimised
-# parameters :math:`\Theta^*`. Once again, we have
+# parameters :math:`\Theta^*.` Once again, we have
 # :math:`S_{22}=\langle \phi_{q} \vert \phi_{q} \rangle = 1` for the
 # overlap matrix.
 #
@@ -363,7 +363,7 @@ S22 = 1
 # advantage of the classical part of the problem while still calculating a
 # classically-intractable quantity by using the so-called
 # `Hadamard test <https://en.wikipedia.org/wiki/Hadamard_test_(quantum_computation)>`__
-# to construct :math:`H_{12}`. The Hadamard test is a prime example of an
+# to construct :math:`H_{12}.` The Hadamard test is a prime example of an
 # indirect measurement, which allows us to measure properties of a state
 # without (completely) destroying it.
 #
@@ -394,21 +394,21 @@ S22 = 1
 # expression of each Slater determinant.
 #
 # The Hadamard test is required to compute the real part of
-# :math:`\langle \phi_q \vert i \rangle`.
+# :math:`\langle \phi_q \vert i \rangle.`
 #
 # To implement the Hadamard test, we need a register of :math:`n` qubits
 # given by the size of the molecular Hamiltonian (:math:`n=4` in our case)
 # initialized in the state :math:`\rvert 0 \rangle^{\otimes n}` and an ancillary
 # qubit prepared in the :math:`\rvert 0 \rangle` state.
 #
-# In order to generate :math:`\langle \phi_q \vert i \rangle`, we take
+# In order to generate :math:`\langle \phi_q \vert i \rangle,` we take
 # :math:`U_q` such that
-# :math:`U_q \vert 0 \rangle^{\otimes n} = \vert \phi_q \rangle`.
+# :math:`U_q \vert 0 \rangle^{\otimes n} = \vert \phi_q \rangle.`
 # This is equivalent to using the standard VQE ansatz with the optimized
 # parameters :math:`\Theta^*` that we obtained in the previous section
-# :math:`U_q = A(\Theta^*)`. Moreover,
+# :math:`U_q = A(\Theta^*).` Moreover,
 # we also need :math:`U_i` such that
-# :math:`U_i \vert 0^n \rangle = \vert \phi_i \rangle`. In this case, this
+# :math:`U_i \vert 0^n \rangle = \vert \phi_i \rangle.` In this case, this
 # is just a mapping of a classical basis state into the circuit consisting
 # of :math:`X` gates and can be easily implemented using PennyLane’s
 # function ``qml.BasisState(i, n))``.

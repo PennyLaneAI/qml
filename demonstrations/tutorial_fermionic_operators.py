@@ -40,15 +40,15 @@ a1 = FermiA(1)
 
 fermi_word = a0_dag * a1
 fermi_sentence = 1.3 * a0_dag * a1 + 2.4 * a1
-fermi_sentence
+print(fermi_sentence)
 
 ##############################################################################
 # In this simple example, we first created the operator :math:`a^{\dagger}_0 a_1` and then created
-# the linear combination :math:`1.3 a^{\dagger}_0 a_1 + 2.4 a_1`. We can also perform
+# the linear combination :math:`1.3 a^{\dagger}_0 a_1 + 2.4 a_1.` We can also perform
 # arithmetic operations between Fermi words and Fermi sentences.
 
 fermi_sentence = fermi_sentence * fermi_word + 2.3 * fermi_word
-fermi_sentence
+print(fermi_sentence)
 
 ##############################################################################
 # Beyond multiplication, summation, and subtraction, we can exponentiate fermionic operators in
@@ -61,7 +61,7 @@ fermi_sentence
 # in the same way that you would write down the operator on a piece of paper:
 
 fermi_sentence = 1.2 * a0_dag + 0.5 * a1 - 2.3 * (a0_dag * a1) ** 2
-fermi_sentence
+print(fermi_sentence)
 
 ##############################################################################
 # This Fermi sentence can be mapped to the qubit basis using the
@@ -92,7 +92,7 @@ pauli_sentence
 #         \beta \left (a^{\dagger}_0 a_1  + a^{\dagger}_1 a_0 \right ).
 #
 # This Hamiltonian can be constructed with pre-defined values :math:`\alpha = 0.01` and
-# :math:`\beta = -0.02`.
+# :math:`\beta = -0.02.`
 
 h1 = 0.01 * (FermiC(0) * FermiA(0) + FermiC(1) * FermiA(1))
 h2 = -0.02 * (FermiC(0) * FermiA(1) + FermiC(1) * FermiA(0))
@@ -154,7 +154,7 @@ core, one, two = qml.qchem.electron_integrals(mol)()
 # pairs is the same to simplify the calculation of the integrals. However, to properly account for
 # all electrons, we need to duplicate the integrals for electrons with the same spin. For example,
 # the :math:`pq` integral, which is the integral over the orbital :math:`p` and the orbital
-# :math:`q`, can be used
+# :math:`q,` can be used
 # for both spin-up and spin-down electrons. Then, if we have a :math:`2 \times 2` matrix of such
 # integrals, it will become a :math:`4 \times 4` matrix. The code block below simply extends the
 # integrals by duplicating terms to account for both spin-up and spin-down electrons.

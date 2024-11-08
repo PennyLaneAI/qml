@@ -43,7 +43,7 @@ QAOA for MaxCut
 #   C(z) = \sum_{\alpha=1}^{m}C_\alpha(z),
 #
 # where :math:`C` counts the number of edges cut. :math:`C_\alpha(z)=1` if :math:`z` places one vertex from the
-# :math:`\alpha^\text{th}` edge in set :math:`A` and the other in set :math:`B`, and :math:`C_\alpha(z)=0` otherwise.
+# :math:`\alpha^\text{th}` edge in set :math:`A` and the other in set :math:`B,` and :math:`C_\alpha(z)=0` otherwise.
 # Finding a cut which yields the maximum possible value of :math:`C` is an NP-complete problem, so our best hope for a
 # polynomial-time algorithm lies in an approximate optimization.
 # In the case of MaxCut, this means finding a partition :math:`z` which
@@ -51,12 +51,12 @@ QAOA for MaxCut
 #
 # We can represent the assignment of vertices to set :math:`A` or :math:`B` using a bitstring,
 # :math:`z=z_1...z_n` where :math:`z_i=0` if the :math:`i^\text{th}` vertex is in :math:`A` and
-# :math:`z_i = 1` if it is in :math:`B`. For instance,
+# :math:`z_i = 1` if it is in :math:`B.` For instance,
 # in the situation depicted in the figure above the bitstring representation is :math:`z=0101\text{,}`
 # indicating that the :math:`0^{\text{th}}` and :math:`2^{\text{nd}}` vertices are in :math:`A`
 # while the :math:`1^{\text{st}}` and :math:`3^{\text{rd}}` are in
-# :math:`B`. This assignment yields a value for the objective function (the number of yellow lines cut)
-# :math:`C=4`, which turns out to be the maximum cut. In the following sections,
+# :math:`B.` This assignment yields a value for the objective function (the number of yellow lines cut)
+# :math:`C=4,` which turns out to be the maximum cut. In the following sections,
 # we will represent partitions using computational basis states and use PennyLane to
 # rediscover this maximum cut.
 #
@@ -66,13 +66,13 @@ QAOA for MaxCut
 # ~~~~~~~~~~~~~~~~~~~~
 # This section describes implementing a circuit for QAOA using basic unitary gates to find approximate
 # solutions to the MaxCut problem.
-# Firstly, denoting the partitions using computational basis states :math:`|z\rangle`, we can represent the terms in the
+# Firstly, denoting the partitions using computational basis states :math:`|z\rangle,` we can represent the terms in the
 # objective function as operators acting on these states
 #
 # .. math::
 #   C_\alpha = \frac{1}{2}\left(1-\sigma_{z}^j\sigma_{z}^k\right),
 #
-# where the :math:`\alpha\text{th}` edge is between vertices :math:`(j,k)`.
+# where the :math:`\alpha\text{th}` edge is between vertices :math:`(j,k).`
 # :math:`C_\alpha` has eigenvalue 1 if and only if the :math:`j\text{th}` and :math:`k\text{th}`
 # qubits have different z-axis measurement values, representing separate partitions.
 # The objective function :math:`C` can be considered a diagonal operator with integer eigenvalues.
@@ -86,7 +86,7 @@ QAOA for MaxCut
 # We aim to explore the space of bitstring states for a superposition which is likely to yield a
 # large value for the :math:`C` operator upon performing a measurement in the computational basis.
 # Using the :math:`2p` angle parameters
-# :math:`\boldsymbol{\gamma} = \gamma_1\gamma_2...\gamma_p`, :math:`\boldsymbol{\beta} = \beta_1\beta_2...\beta_p`
+# :math:`\boldsymbol{\gamma} = \gamma_1\gamma_2...\gamma_p,` :math:`\boldsymbol{\beta} = \beta_1\beta_2...\beta_p`
 # we perform a sequence of operations on our initial state:
 #
 # .. math::
@@ -112,7 +112,7 @@ QAOA for MaxCut
 # Let :math:`\langle \boldsymbol{\gamma},
 # \boldsymbol{\beta} | C | \boldsymbol{\gamma},\boldsymbol{\beta} \rangle` be the expectation of the objective operator.
 # In the next section, we will use PennyLane to perform classical optimization
-# over the circuit parameters :math:`(\boldsymbol{\gamma}, \boldsymbol{\beta})`.
+# over the circuit parameters :math:`(\boldsymbol{\gamma}, \boldsymbol{\beta}).`
 # This will specify a state :math:`|\boldsymbol{\gamma},\boldsymbol{\beta}\rangle` which is
 # likely to yield an approximately optimal partition :math:`|z\rangle` upon performing a measurement in the
 # computational basis.
@@ -127,7 +127,7 @@ QAOA for MaxCut
 # |
 #
 # Qualitatively, QAOA tries to evolve the initial state into the plane of the
-# :math:`|0101\rangle`, :math:`|1010\rangle` basis states (see figure above).
+# :math:`|0101\rangle,` :math:`|1010\rangle` basis states (see figure above).
 #
 #
 # Implementing QAOA in PennyLane
@@ -195,10 +195,10 @@ dev = qml.device("lightning.qubit", wires=n_wires, shots=1)
 # We also require a quantum node which will apply the operators according to the
 # angle parameters, and return the expectation value of the observable
 # :math:`\sigma_z^{j}\sigma_z^{k}` to be used in each term of the objective function later on. The
-# argument ``edge`` specifies the chosen edge term in the objective function, :math:`(j,k)`.
+# argument ``edge`` specifies the chosen edge term in the objective function, :math:`(j,k).`
 # Once optimized, the same quantum node can be used for sampling an approximately optimal bitstring
 # if executed with the ``edge`` keyword set to ``None``. Additionally, we specify the number of layers
-# (repeated applications of :math:`U_BU_C`) using the keyword ``n_layers``.
+# (repeated applications of :math:`U_BU_C`) using the keyword ``n_layers`.`
 
 
 @qml.qnode(dev)
@@ -229,7 +229,7 @@ def circuit(gammas, betas, edge=None, n_layers=1):
 # circuit multiple times to yield a distribution of bitstrings. One of the optimal partitions
 # (:math:`z=0101` or :math:`z=1010`) should be the most frequently sampled bitstring.
 # We perform a maximization of :math:`C` by
-# minimizing :math:`-C`, following the convention that optimizations are cast as minimizations
+# minimizing :math:`-C,` following the convention that optimizations are cast as minimizations
 # in PennyLane.
 
 

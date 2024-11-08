@@ -2,14 +2,14 @@
     "title": "Modelling chemical reactions on a quantum computer",
     "authors": [
         {
-            "id": "varun_rishi"
+            "username": "vrishi"
         },
         {
             "username": "ixfoduap"
         }
     ],
     "dateOfPublication": "2021-07-23T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
+    "dateOfLastModification": "2024-11-06T00:00:00+00:00",
     "categories": [
         "Quantum Chemistry"
     ],
@@ -22,7 +22,6 @@
     ],
     "seoDescription": "Construct potential energy surfaces for chemical reactions",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_chemical_reactions",
     "references": [
         {
             "id": "motta2020",

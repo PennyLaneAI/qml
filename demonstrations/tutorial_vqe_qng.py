@@ -37,7 +37,7 @@ from pennylane import numpy as np
 import pennylane as qml
 
 ##############################################################################
-# For this simple example, we consider the following single-qubit Hamiltonian: :math:`\sigma_x + \sigma_z`.
+# For this simple example, we consider the following single-qubit Hamiltonian: :math:`\sigma_x + \sigma_z.`
 #
 # We define the device:
 
@@ -82,7 +82,7 @@ init_params = np.array([3.97507603, 3.00854038], requires_grad=True)
 
 ##############################################################################
 # We will carry out each optimization over a maximum of 500 steps. As was done in the VQE
-# tutorial, we aim to reach a convergence tolerance of around :math:`10^{-6}`.
+# tutorial, we aim to reach a convergence tolerance of around :math:`10^{-6}.`
 # We use a step size of 0.01.
 
 max_iterations = 500
@@ -289,7 +289,7 @@ def ansatz(params, wires=[0, 1, 2, 3]):
 
 
 ##############################################################################
-# Note that the qubit register has been initialized to :math:`|1100\rangle`, which encodes for
+# Note that the qubit register has been initialized to :math:`|1100\rangle,` which encodes for
 # the Hartree-Fock state of the hydrogen molecule described in the minimal basis.
 # Again, we define the cost function to be the following QNode that measures ``expval(H)``:
 

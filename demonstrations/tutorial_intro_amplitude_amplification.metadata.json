@@ -9,7 +9,7 @@
         }
     ],
     "dateOfPublication": "2024-05-07T00:00:00+00:00",
-    "dateOfLastModification": "2024-08-06T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Quantum Computing",
         "Algorithms"
@@ -27,7 +27,6 @@
     ],
     "seoDescription": "Learn Amplitude Amplification from scratch and how to use fixed-point quantum search",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_intro_amplitude_amplification",
     "references": [
         {
             "id": "ampamp",

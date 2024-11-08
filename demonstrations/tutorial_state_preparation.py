@@ -39,11 +39,11 @@ how to:
 #
 # where :math:`\sigma_x, \sigma_y, \sigma_z` are the Pauli matrices. Any
 # Bloch vector corresponds to a valid density matrix as long as
-# :math:`\|\vec{a}\|\leq 1`.
+# :math:`\|\vec{a}\|\leq 1.`
 #
-# The *purity* of a state is defined as :math:`p=\text{Tr}(\rho^2)`, which
-# for a qubit is bounded as :math:`1/2\leq p\leq 1`. The state is pure if
-# :math:`p=1` and maximally mixed if :math:`p=1/2`. In this example, we
+# The *purity* of a state is defined as :math:`p=\text{Tr}(\rho^2),` which
+# for a qubit is bounded as :math:`1/2\leq p\leq 1.` The state is pure if
+# :math:`p=1` and maximally mixed if :math:`p=1/2.` In this example, we
 # select the target state by choosing a random Bloch vector and
 # renormalizing it to have a specified purity.
 #
@@ -87,7 +87,7 @@ Paulis[2] = torch.tensor([[1, 0], [0, -1]])
 # axes, followed by three CNOT gates entangling all qubits. Initial gate
 # parameters are chosen at random from a normal distribution. Importantly,
 # when declaring the layer function, we introduce an input parameter
-# :math:`j`, which allows us to later call each layer individually.
+# :math:`j,` which allows us to later call each layer individually.
 
 # number of qubits in the circuit
 nr_qubits = 3

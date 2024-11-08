@@ -65,38 +65,38 @@ as a black-box controller to optimize the parameters of
 variational quantum algorithms, as shown in the figure below. The cost
 function used is the expectation value :math:`\langle H \rangle_{\boldsymbol{\theta}} = \langle \psi_{\boldsymbol{\theta}} | H | \psi_{\boldsymbol{\theta}}\rangle`
 of a Hamiltonian :math:`H` with respect to the parametrized state
-:math:`|\psi_\boldsymbol{\theta}\rangle` evolved by applying the variational quantum circuit to the zero state :math:`|00\cdots0\rangle`.
+:math:`|\psi_\boldsymbol{\theta}\rangle` evolved by applying the variational quantum circuit to the zero state :math:`|00\cdots0\rangle.`
 
 .. figure:: ../_static/demonstration_assets/learning2learn/HybridLSTM.png
     :align: center
     :width: 100%
 
 Given parameters :math:`\boldsymbol{\theta}_{t-1}` of the variational quantum circuit,
-the cost function :math:`y_{t-1}`, and the hidden state of the
+the cost function :math:`y_{t-1},` and the hidden state of the
 classical network :math:`\boldsymbol{h}_{t-1}` at the previous time step, the
 recurrent neural network proposes a new
-guess for the parameters :math:`\boldsymbol{\theta}_t`, which are
+guess for the parameters :math:`\boldsymbol{\theta}_t,` which are
 then fed into the quantum computer to evaluate the
-cost function :math:`y_t`. By repeating this cycle a few times, and
+cost function :math:`y_t.` By repeating this cycle a few times, and
 by training the weights of the recurrent neural network to minimize
-the loss function :math:`y_t`, a good initialization heuristic is
+the loss function :math:`y_t,` a good initialization heuristic is
 found for the parameters :math:`\boldsymbol{\theta}` of the variational
 quantum circuit.
 
 At a given iteration, the RNN receives as input the previous cost
 function :math:`y_t` evaluated on the quantum computer, where
-:math:`y_t` is the estimate of :math:`\langle H\rangle_{t}`, as well as
+:math:`y_t` is the estimate of :math:`\langle H\rangle_{t},` as well as
 the parameters :math:`\boldsymbol{\theta}_t` for which the variational
 circuit was evaluated. The RNN at this time step also receives
 information stored in its internal hidden state from the previous time
-step :math:`\boldsymbol{h}_t`. The RNN itself has trainable parameters :math:`\phi`,
+step :math:`\boldsymbol{h}_t.` The RNN itself has trainable parameters :math:`\phi,`
 and hence it applies the parametrized mapping:
 
 .. math::  \boldsymbol{h}_{t+1}, \boldsymbol{\theta}_{t+1} = \text{RNN}_{\phi}(\boldsymbol{h}_{t}, \boldsymbol{\theta}_{t}, y_{t}),
 
 which generates a new suggestion for the variational parameters as well
 as a new internal state.
-Upon training the weights :math:`\phi`, the RNN
+Upon training the weights :math:`\phi,` the RNN
 eventually learns a good heuristic to suggest optimal parameters for the
 quantum circuit.
 
@@ -408,7 +408,7 @@ def recurrent_loop(graph_cost, n_layers=1, intermediate_steps=False):
 # where :math:`{\bf y}_t(\phi) = (y_1, \cdots, y_5)` contains the
 # Hamiltonian cost functions from all iterations, and :math:`{\bf w}` are
 # just some coefficients weighting the different steps in the recurrent
-# loop. In this case, we used :math:`{\bf w}=\frac{1}{5} (0.1, 0.2, 0.3, 0.4, 0.5)`,
+# loop. In this case, we used :math:`{\bf w}=\frac{1}{5} (0.1, 0.2, 0.3, 0.4, 0.5),`
 # to give more importance to the last steps rather than the initial steps.
 # Intuitively in this way the RNN is more free (low coefficient) to
 # explore a larger portion of parameter space during the first steps of
@@ -418,7 +418,7 @@ def recurrent_loop(graph_cost, n_layers=1, intermediate_steps=False):
 # the training procedure of the RNN. However, using values also from
 # intermediate steps allows for a smoother suggestion routine, since even
 # non-optimal parameter suggestions from early steps are penalized using
-# :math:`\cal{L}(\phi)`.
+# :math:`\cal{L}(\phi).`
 #
 
 
@@ -810,7 +810,7 @@ plt.show()
 # Thus, we might want to challenge our model to learn a good
 # initialization heuristic for a non-specific graph, with an arbitrary
 # number of nodes. For this purpose, let’s create a training dataset
-# containing graphs with a different number of nodes :math:`n`, taken in
+# containing graphs with a different number of nodes :math:`n,` taken in
 # the interval :math:`n \in [7,9]` (that is, our dataset now contains
 # graphs having either 7, 8 and 9 nodes).
 #

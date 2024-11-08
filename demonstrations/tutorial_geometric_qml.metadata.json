@@ -2,11 +2,11 @@
     "title": "Introduction to Geometric Quantum Machine Learning",
     "authors": [
         {
-            "id": "richard_east"
+            "username": "reast"
         }
     ],
     "dateOfPublication": "2022-10-18T00:00:00+00:00",
-    "dateOfLastModification": "2024-09-04T00:00:00+00:00",
+    "dateOfLastModification": "2024-11-06T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
@@ -19,7 +19,6 @@
     ],
     "seoDescription": "Using the natural symmetries in a quantum learning problem can improve learning",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_geometric_qml",
     "references": [
         {
             "id": "Bronstein2021",

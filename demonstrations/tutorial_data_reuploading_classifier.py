@@ -69,7 +69,7 @@ In order to load data onto a single qubit, we use a unitary operation
 :math:`U(x_1, x_2, x_3)` which is just a parameterized
 matrix multiplication representing the rotation of the state vector in
 the Bloch sphere. E.g., to load :math:`(x_1, x_2)` into the qubit, we
-just start from some initial state vector, :math:`|0 \rangle`,
+just start from some initial state vector, :math:`|0 \rangle,`
 apply the unitary operation :math:`U(x_1, x_2, 0)` and end up at a new
 point on the Bloch sphere. Here we have padded 0 since our data is only
 2D. Pérez-Salinas et al. (2019) discuss how to load a higher
@@ -83,9 +83,9 @@ Model parameters with data re-uploading
 Once we load the data onto the quantum circuit, we want to have some
 trainable nonlinear model similar to a neural network as well as a way of
 learning the weights of the model from data. This is again done with
-unitaries, :math:`U(\theta_1, \theta_2, \theta_3)`, such that we load the
+unitaries, :math:`U(\theta_1, \theta_2, \theta_3),` such that we load the
 data first and then apply the weights to form a single layer
-:math:`L(\vec \theta, \vec x) = U(\vec \theta)U(\vec x)`. In principle,
+:math:`L(\vec \theta, \vec x) = U(\vec \theta)U(\vec x).` In principle,
 this is just application of two matrix multiplications on an input
 vector initialized to some value. In order to increase the number of
 trainable parameters (similar to increasing neurons in a single layer of
@@ -110,7 +110,7 @@ bit quantum. After the application of the layers, we will end up at some
 point on the Bloch sphere due to the sequence of unitaries implementing
 rotations of the input. These are still just linear transformations of
 the input state. Now, the output of the model should be a class label
-which can be encoded as fixed vectors (Blue = :math:`[1, 0]`, Red =
+which can be encoded as fixed vectors (Blue = :math:`[1, 0],` Red =
 :math:`[0, 1]`) on the Bloch sphere. We want to end up at either of them
 after transforming our input state through alternate applications of
 data layer and weights.
@@ -120,7 +120,7 @@ one or other class. This happens when we measure the quantum state which
 leads to its projection as either the state 0 or 1. We can compute the
 fidelity (or closeness) of the output state to the class label making
 the output state jump to either :math:`| 0 \rangle` or
-:math:`|1\rangle`. By repeating this process several times, we can
+:math:`|1\rangle.` By repeating this process several times, we can
 compute the probability or overlap of our output to both labels and
 assign a class based on the label our output has a higher overlap. This
 is much like having a set of output neurons and selecting the one which

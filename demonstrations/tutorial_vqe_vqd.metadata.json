@@ -9,7 +9,7 @@
         }
     ],
     "dateOfPublication": "2024-08-26T00:00:00+00:00",
-    "dateOfLastModification": "2024-09-16T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
         "Quantum Chemistry",
         "How-to"
@@ -27,7 +27,6 @@
     ],
     "seoDescription": "Learn how to use variational quantum deflation (VQD) to find the first excited state energy of the hydrogen molecule.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_vqe_vqd",
     "references": [
         {
 
