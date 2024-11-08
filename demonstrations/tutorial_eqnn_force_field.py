@@ -144,6 +144,10 @@ import matplotlib.pyplot as plt
 import sklearn
 
 ######################################################################
+# To speed up the computation, we also import catalyst, a jit compiler for PennyLane quantum programs.
+import catalyst
+
+######################################################################
 # Let us construct Pauli matrices, which are used to build the Hamiltonian.
 X = np.array([[0, 1], [1, 0]])
 Y = np.array([[0, -1.0j], [1.0j, 0]])
@@ -301,10 +305,13 @@ num_qubits = active_atoms * rep
 #################################
 
 
-dev = qml.device("default.qubit", wires=num_qubits)
+######################################################################
+# To speed up the computation, we will be using catalyst to compile our quantum program, and we will be
+# running our program on the lightning backend instead of the default qubit backend.
+dev = qml.device("lightning.qubit", wires=num_qubits)
 
 
-@qml.qnode(dev, interface="jax")
+@qml.qnode(dev)
 def vqlm(data, params):
 
     weights = params["params"]["weights"]
@@ -396,25 +403,27 @@ data_train, data_test = (
 )
 
 #################################
-# We will know define the cost function and how to train the model using Jax. We will use the mean-square-error loss function.
-# To speed up the computation, we use the decorator ``@jax.jit`` to do just-in-time compilation for this execution. This means the first execution will typically take a little longer with the
-# benefit that all following executions will be significantly faster, see the `Jax docs on jitting <https://jax.readthedocs.io/en/latest/jax-101/02-jitting.html>`_.
+# We will now define the cost function and how to train the model using Jax. We will use the mean-square-error loss function.
+# To speed up the computation, we use the decorator ``@catalyst.qjit`` to do just-in-time compilation for this execution. This means the first execution will typically take a little longer with the
+# benefit that all following executions will be significantly faster, see the `Catalyst documentation <https://docs.pennylane.ai/projects/catalyst/en/stable/index.html>`_.
 
 #################################
 from jax.example_libraries import optimizers
 
 # We vectorize the model over the data points
-vec_vqlm = jax.vmap(vqlm, (0, None), 0)
+vec_vqlm = catalyst.vmap(
+    vqlm,
+    in_axes=(0, {"params": {"alphas": None, "epsilon": None, "weights": None}}),
+    out_axes=0,
+)
 
 
 # Mean-squared-error loss function
-@jax.jit
 def mse_loss(predictions, targets):
     return jnp.mean(0.5 * (predictions - targets) ** 2)
 
 
 # Make prediction and compute the loss
-@jax.jit
 def cost(weights, loss_data):
     data, E_target, F_target = loss_data
     E_pred = vec_vqlm(data, weights)
@@ -424,17 +433,19 @@ def cost(weights, loss_data):
 
 
 # Perform one training step
-@jax.jit
+# This function will be repeatedly called, so we qjit it to exploit the saved runtime from many runs.
+@catalyst.qjit
 def train_step(step_i, opt_state, loss_data):
 
     net_params = get_params(opt_state)
-    loss, grads = jax.value_and_grad(cost, argnums=0)(net_params, loss_data)
-
+    loss = cost(net_params, loss_data)
+    grads = catalyst.grad(cost, method="fd", h=1e-13, argnums=0)(net_params, loss_data)
     return loss, opt_update(step_i, grads, opt_state)
 
 
 # Return prediction and loss at inference times, e.g. for testing
-@jax.jit
+# This function is also repeatedly called, so qjit it.
+@catalyst.qjit
 def inference(loss_data, opt_state):
 
     data, E_target, F_target = loss_data
