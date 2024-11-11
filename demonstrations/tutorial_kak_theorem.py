@@ -49,7 +49,8 @@ we will use. To warm up, however, let us briefly talk about Lie algebras (for de
 see our :doc:`intro to (dynamical) Lie algebras </demos/tutorial_liealgebra/>`).
 
 A *Lie algebra* :math:`\mathfrak{g}` is a vector space with an additional operation
-that takes two vectors to a new vector, the *Lie bracket*.
+that takes two vectors to a new vector, the *Lie bracket*. :math:`\mathfrak{g}` must be
+closed under the Lie bracket to form an algebra.
 For our purposes, the vectors will always be matrices and the Lie bracket will be the matrix
 commutator.
 
@@ -63,9 +64,9 @@ can conveniently describe using the Pauli matrices:
 .. math::
 
     \mathfrak{su}(2)
-    &= \left\{\left(\begin{array} i a & b + ic \\ -b + ic & -i a \end{array}\right)
+    &= \left\{i\left(\begin{array}{cc} a & b-ic \\ b+ic & -a \end{array}\right)
     {\large |} a, b, c \in \mathbb{R}\right\}\\
-    &= \left\{i(a Z + b Y + c X)| a, b, c \in \mathbb{R}\right\}.
+    &= \left\{i(a Z + b X + c Y)| a, b, c \in \mathbb{R}\right\}.
 
 We will also look at a more involved example at the end of the demo.
 
@@ -119,9 +120,9 @@ print(f"All operators are traceless: {np.allclose(traces, 0.)}")
 # .. admonition:: Math detail: (semi-)simple Lie algebras
 #     :class: note
 #
-#     Our main result for this demo will be the KAK theorem, which applies to
-#     so-called *semisimple* Lie algebras, which are in turn composed of *simple* Lie algebras
-#     as building blocks. Without going into detail, it often is sufficient to think of these
+#     Our main result for this demo will be the KAK theorem, which applies to so-called
+#     *semisimple* Lie algebras, which are in turn composed of *simple* Lie algebras as building
+#     blocks. Without going into detail, it often is sufficient to think of these building
 #     blocks as (1) special orthogonal algebras :math:`\mathfrak{so}(n),` (2) unitary symplectic
 #     algebras :math:`\mathfrak{sp}(n),` and (3) special unitary algebras :math:`\mathfrak{su}(n).`
 #     In particular, our example here is of the latter type, so it is not only semisimple,
@@ -140,7 +141,7 @@ print(f"All operators are traceless: {np.allclose(traces, 0.)}")
 #
 # .. math::
 #
-#     \exp : \mathfrak{g} \to \exp(\mathfrak{g})=\mathcal{G}, \ x\mapsto \exp(x).
+#     \mathcal{G}=\exp(\mathfrak{g}).
 #
 # We will only consider Lie groups :math:`\exp(\mathfrak{g})` arising from a Lie algebra
 # :math:`\mathfrak{g}` here.
@@ -177,7 +178,7 @@ print(f"All operators are traceless: {np.allclose(traces, 0.)}")
 #
 # where we applied the exponential map to :math:`\text{ad}_x`, which maps from :math:`\mathfrak{g}`
 # to itself, via its series representation.
-# We will refer to this relationship as *adjoint identity*.
+# We will refer to this relationship as the *adjoint identity*.
 # We talk about Ad and ad in more detail in the box below, and refer to our demo
 # :doc:`g-sim: Lie algebraic classical simulations </demos/tutorial_liesim/>` for
 # further discussion.
@@ -309,9 +310,11 @@ def is_orthogonal(op, basis):
 # .. admonition:: Nomenclature: Cartan decomposition/pair
 #     :class: warning
 #
-#     Depending on context and field, there sometimes are additional requirements
-#     for :math:`\mathfrak{g}=\mathfrak{k}\oplus\mathfrak{p}` to be called a Cartan decomposition
-#     and for :math:`(\mathfrak{k}, \mathfrak{p})` to be a Cartan pair.
+#     Depending on context and field, there sometimes is an additional requirement
+#     for :math:`\mathfrak{g}=\mathfrak{k}\oplus\mathfrak{p}` to be called a Cartan decomposition.
+#     Without going into detail, this requirement is that the so-called *Killing form* must be
+#     negative definite on :math:`\mathfrak{k}` and positive definite on :math:`\mathfrak{p}`
+#     [#helgason]_.
 #
 # .. admonition:: Math detail: quotient space
 #     :class: note
@@ -328,7 +331,8 @@ def is_orthogonal(op, basis):
 #     condition holds for any :math:`g\in \mathcal{G}` are called *normal subgroups*.
 #     We are interested in cases where the symmetric property
 #     :math:`[\mathfrak{p}, \mathfrak{p}] \subset \mathfrak{k}` holds, which excludes (non-Abelian)
-#     normal subgroups, and thus :math:`\mathcal{G`/\mathcal{K}` will not be a group.
+#     normal subgroups, and thus our quotient space :math:`\mathcal{G`/\mathcal{K}` will not be
+#     a group.
 #
 # **Example**
 #
@@ -649,6 +653,8 @@ print(f"Under theta_Y, the operators\n{su2}\nhave the eigenvalues\n{eigvals}")
 #     :math:`\mathfrak{so}(n)` (AI), the unitary symplectic algebra :math:`\mathfrak{sp}(n)` (AII),
 #     and a sum of (special) unitary algebras
 #     :math:`\mathfrak{su}(p)\oplus\mathfrak{su}(q)\oplus\mathfrak{u}(1)` (AIII, :math:`p+q=n`).
+#     For a quick overview, see for example the `Wikipedia entry on symmetric spaces
+#     <https://en.wikipedia.org/wiki/Symmetric_space#Classification_of_Riemannian_symmetric_spaces>`__.
 #     Their involutions are usually represented by complex conjugation (AI), by the adjoint
 #     action with a Pauli operator (AIII, for qubits, :math:`p=q=2^{N-1}`), or by both
 #     (AII). It is instructive to try and see why those three are *not* equivalent
@@ -707,6 +713,7 @@ print(f"Under theta_Y, the operators\n{su2}\nhave the eigenvalues\n{eigvals}")
 # .. math::
 #
 #     \mathcal{P}
+#     =\exp(\mathfrak{p})
 #     = \{\exp(\exp(-y) \mathfrak{a} \exp(y)) | y\in\mathfrak{k}\}
 #     = \{\exp(K^{-1} \mathfrak{a} K) | K\in\mathcal{K}\}
 #     = \{K^{-1} \mathcal{A} K | K\in\mathcal{K}\},
@@ -719,7 +726,9 @@ print(f"Under theta_Y, the operators\n{su2}\nhave the eigenvalues\n{eigvals}")
 # .. math::
 #
 #     \mathcal{G}
-#     = \{\exp(y_1) \exp(a) \exp(y_2) | a\in\mathfrak{a}, \ y_{1, 2}\in\mathfrak{k}\}
+#     =\mathcal{K}\mathcal{P}
+#     = \mathcal{K}\{K^{-1} \mathcal{A} K | K\in\mathcal{K}\},
+#     = \{K_1 \mathcal{A} K_2 | K_{1,2}\in\mathcal{K}\},
 #     = \mathcal{K} \mathcal{A} \mathcal{K} \qquad\textbf{(KAK Theorem).}
 #
 # It teaches us that any group element can be decomposed into two factors from the Lie subgroup and
