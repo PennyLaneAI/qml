@@ -18,12 +18,12 @@ A common and intuitive way of thinking about tensors is as generalizations of ve
 .. math::
     T_{i_1, i_2, \ldots, i_r} \in \mathbb{C}^{d_1 \times d_2 \times \ldots \times d_r},
     
-where each :math:`i_n` is an *index* of dimension :math:`d_n`—it takes integer values such that :math:`i_n \in [1, d_n]`—and the number of indices :math:`r` is known as the *rank* of the tensor. We say :math:`T` is a rank-:math:`r` tensor.
-
-.. tip::
-    Some authors refer to the indices of the tensors as their dimensions. In this tutorial, these two concepts will have different meanings, although related.
+where each :math:`i_n` is an *index* of dimension :math:`d_n` and the number of indices :math:`r` is known as the *rank* of the tensor. We say :math:`T` is a rank-:math:`r` tensor.
 
 For example, a scalar :math:`s` is a rank-0 tensor, a vector :math:`v_i` is a rank-1 tensor, and a matrix :math:`G_{i,j}` is a rank-2 tensor.
+
+.. note::
+    Some authors refer to the indices :math:`i_n` as the "dimensions of the tensor". In this tutorial, however, the term "dimensions" :math:`d_n` instead refers to the range of values that each index :math:`i_n` can take, specifically :math:`i_n \in [1, d_n]`, meaning :math:`i_n` takes integer values within this range.
     
 A beautiful and powerful tool accompanying tensors (networks) is their graphical language representation. The diagram of a tensor is simply a geometric shape with a leg sticking out of it for every index in the tensor. For example,
 
@@ -73,7 +73,7 @@ print("dimensions: ", tensor_rank3.shape)
 print("Rank-3 tensor: \n", tensor_rank3)
 
 ##############################################################################
-# We can create a tensor of arbitrary rank following a similar procedure. This recursive approach illustrates how a rank-:math:`r` tensor can be seen as consisting of nested rank-:math:`(r-1)` tensors, represented in code by adding another level to the nested bracket structure ``[tensor_rank_r-1]``.
+# We can create a tensor of arbitrary rank following a similar procedure. This recursive approach illustrates how a rank-:math:`r` tensor can be seen as consisting of nested rank-:math:`(r-1)` tensors. This translates into code as adding another level to the nested bracket structure: ``[tensor_rank_r-1]``.
 #
 
 ##############################################################################
@@ -104,12 +104,12 @@ print("Rank-3 tensor: \n", tensor_rank3)
 #
 # Here, the resulting tensor has two dangling indices, :math:`i` and :math:`k`, defining a matrix, as expected!
 #
-# We can now generalize this concept to tensors, and consequently, to more than two legs being contracted. For example, let us look at three tensors :math:`A_{i,j,k}`, :math:`B_{j,l,m}`, and :math:`C_{k,m,n}`. To contract them, all we need to do is to sum over repeated indices (:math:`j`, :math:`k`, :math:`m`), just as we would do in `Einstein convention <https://en.wikipedia.org/wiki/Einstein_notation>`_. Thus, the :math:`(i,l,n)`-th element of the resulting tensor :math:`D` is
+# We can now generalize this concept to tensors, and consequently, to more than two legs being contracted. For example, let us look at three tensors :math:`A_{i,j,k}`, :math:`B_{j,l,m}`, and :math:`C_{k,m,n}`. To contract them, all we need to do is to sum over repeated indices (:math:`j`, :math:`k`, :math:`m`), just as we would do in `Einstein convention <https://en.wikipedia.org/wiki/Einstein_notation>`_. To obtain the :math:`(i,l,n)`-th element of the resulting tensor :math:`D`, we perform this contraction by using the tensor product :math:`\otimes` between the 3 tensors and summing over :math:`j, k, m` [#Bridgeman2017]_
 #
 # .. math::
-#     (D)_{i,l,n} = \sum_{j,k,m} A_{i,j,k} B_{j,l,m} C_{k,m,n} .
+#     (D)_{i,l,n} = \sum_{j,k,m} A_{i,j,k} \otimes B_{j,l,m} \otimes C_{k,m,n} = \sum_{j,k,m} A_{i,j,k} B_{j,l,m} C_{k,m,n} .
 #
-# Notice how the resulting rank-3 tensor consists of the remaining open legs from the initial tensors :math:`(i,l,n)`. The diagrammatic representation of this equation is obtained by connecting all the legs with the same indices.
+# Notice how the resulting rank-3 tensor consists of the remaining open legs from the initial tensors :math:`(i,l,n)`. It is customary to omit the tensor product from the contraction expression, just as we did in the last part of this equation. The diagrammatic representation of this equation is obtained by connecting all the legs with the same indices.
 #
 # .. figure:: ../_static/demonstration_assets/tn_basics/06-tensor-tensor.png
 #     :align: center
@@ -117,7 +117,7 @@ print("Rank-3 tensor: \n", tensor_rank3)
 #
 # With the above contraction, we have formed a network of tensors, i.e., a **Tensor Network**!
 #
-# .. tip::
+# .. note::
 #   A common question arising when drawing a tensor is "What is the correct order to draw the indices?". For instance, in the figure above, we have adopted the convention that a tensor :math:`A_{i,j,k}` corresponds to a diagram with the first leg (:math:`i`) pointing left, the second leg (:math:`j`) pointing upwards, and the third leg (:math:`k`) pointing right, and similarly for the other two tensors. However, this need not be the case. We could have defined the first leg to be the one pointing upwards, for example. Based on the use case, and the user, some conventions might seem more natural than others. The only important thing to keep in mind is to be consistent. In other words, once we choose a convention for the order, we should apply it to all the tensors to avoid contracting the wrong indices ❌.
 #
 # Remember the similarity between tensor network contractions and Einstein notation? Then, it doesn't come as a surprise that we can perform a contraction using the function ``np.einsum``. To do so, we can start by creating the 3 tensors to be contracted by reshaping a 1D array (created using ``np.arange``) into rank-3 tensors of the correct dimensions.
@@ -158,12 +158,12 @@ print(D.shape)
 #           X
 #         \end{pmatrix}
 #
-# This means :math:`(T^1)_{i,j,k}` and :math:`(T^2)_{l,j,m}` are two rank-3 tensors, where the index :math:`j` *"picks"* the elements in the column vector while the first and last indices correspond to the indices of the internal tensors (matrices). For instance, the :math:`j = 0`-th element of :math:`T^1` and :math:`T^2` are :math:`|0\rangle \langle 0 |` and :math:`I`, respectively, and similarly for their :math:`j = 1`-st element. This means we can redefine the CNOT expression from above as
+# This means :math:`(T^1)_{i,j,k}` and :math:`(T^2)_{l,j,m}` are two rank-3 tensors, where the index :math:`j` *"picks"* the elements in the column vector while the the other two indices correspond to the indices of the internal tensors (matrices). For instance, the :math:`j = 0`-th element of :math:`T^1` and :math:`T^2` are :math:`|0\rangle \langle 0 |` and :math:`I`, respectively, and similarly for their :math:`j = 1`-st element. This means we can redefine the CNOT expression from above as
 #
 # .. math::
-#   CNOT = \sum_j (T^1)_{i,j,k} \otimes (T^2)_{l,j,m}.
+#   \mathrm{CNOT}_{i,l,k,m} = \sum_j (T^1)_{i,j,k} \otimes (T^2)_{l,j,m} = \sum_j T^1{i, j, k} T^2_{l, j, m}.
 # 
-# It turns out : that math:`T^1` and :math:`T^2` are special tensors known as the COPY and XOR tensors, respectively, and therefore have special diagrammatic representations. 
+# It turns out that :math:`T^1` and :math:`T^2` are special tensors known as the COPY and XOR tensors, respectively, and therefore have special diagrammatic representations. 
 #
 # .. figure:: ../_static/demonstration_assets/tn_basics/07-t1-t2.png
 #     :align: center
@@ -206,13 +206,13 @@ print(D.shape)
 # .. math::
 #   \mathcal{O}(d_i \times d_j \times d_k)
 # 
-# To illustrate the importance of choosing an efficient contraction path, let us look at a similar contraction between 3 rank-3 tensors, as shown in the previous section.
+# To illustrate the importance of choosing an efficient contraction path, let us look at a similar contraction between 3 rank-3 tensors: :math:`A_{i,j,k} \in \mathbb{C}^{d_i \times d_j \times d_k}`, :math:`B_{j,l,m} \in \mathbb{C}^{d_j \times d_l \times d_m}`, and :math:`C_{k,m,n} \in \mathbb{C}^{d_k \times d_m \times d_n}`.
 # 
 # .. figure:: ../_static/demonstration_assets/tn_basics/09-contraction.png
 #     :align: center
 #     :width: 50%
 # 
-# In this case, the tensors are such that :math:`A_{i,j,k} \in \mathcal{C}^{d_i \times d_j \times d_j}`, :math:`B_{j,l,m} \in \mathcal{C}^{d_j \times 1 \times d_m}`, and :math:`C_{k,m,n} \in \mathcal{C}^{d_j \times d_m \times d_i}`. First, we look at the complexity of contracting :math:`(AB)` and then :math:`C`. Following the procedure explained above, the first contraction results in a complexity of
+# In particular, let us look at an example where :math:`d_k = d_j`, :math:`d_l = 1`, and :math:`d_n = d_i`.  First, we look at the complexity of contracting :math:`(AB)` and then :math:`C`. Following the procedure explained above, the first contraction results in a complexity of
 # 
 # .. math::
 #   \sum_{j} A_{i,j,k} B_{j,l,m} \implies \mathcal{O}(d_i \times d_m \times d_j^2 )
@@ -233,7 +233,8 @@ print(D.shape)
 #   \sum_{j, k} A_{i,j,k} (BC)_{j,l,k,n}  \implies \mathcal{O}(d_i^2 \times d_j^2) .
 # 
 # This means the second contraction path results in an asymptotic cost of :math:`\mathcal{O}(d_i^2 \times d_j^2)`—lower than the first contraction path.
-# To see this in practice, let us perform the above contraction using ``np.einsum``. First, we create 3 tensors with the correct dimensions.
+# 
+# To see this in practice, let us implement the above contractions using ``np.einsum``. First, we create the 3 tensors with dimensions as specified in the example above.
 
 import timeit
 
@@ -241,9 +242,11 @@ di = 1000
 dm = 100
 dj = 10
 
-A = np.arange(di*dj*dj).reshape(di,dj,dj) # ijk
-B = np.arange(dj*1*dm).reshape(dj,1,dm) # jlm
-C = np.arange(dj*dm*di).reshape(dj,dm,di) # kmn
+np.random.seed(20)
+
+A = np.random.rand(di, dj, dj) # ijk
+B = np.random.rand(dj,1,dm) # jlm
+C = np.random.rand(dj,dm,di) # kmn
 
 ##############################################################################
 # Then, we perform the individual contractions between pairs of tensors and time them using ``timeit``. We repeat the contraction ``20`` times and average the computation time to account for smaller fluctuations. First, we start by contracting :math:`A` and :math:`B`.
@@ -359,7 +362,7 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # 
 # In the right-hand side of the equality we have assumed a specific form for the U tensor in terms of local 2-qubit gates, which is often the case when dealing with real quantum hardware. In addition, it is common for the initial state to be a product state such as :math:`|0\rangle^{\otimes N}`, hence the form of the tensor in the diagram.
 # 
-# Now we can ask the important question: what quantities can we compute from this tensor network?
+# Now we can ask the important question: what quantities can we compute from this tensor network? 🤔
 # 
 # Expectation values
 # ~~~~~~~~~~~~~~~~~~
@@ -467,6 +470,11 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 #    I. Arad and Z. Landau.
 #    "Quantum computation and the evaluation of tensor networks",
 #    `<https://arxiv.org/abs/0805.0040>`__, 2010.
+# 
+# .. [#Bridgeman2017]
+#    J. C. Bridgeman and C. T. Chubb.
+#    "Hand-waving and interpretive dance: an introductory course on tensor networks,"
+#    `<http://dx.doi.org/10.1088/1751-8121/aa6dc3>`__, Journal of Physics A: Mathematical and Theoretical, vol. 50, no. 22, 2017.
 # 
 # .. [#Lam1997]
 #    C.-C. Lam, P. Sadayappan, and R. Wenger.
