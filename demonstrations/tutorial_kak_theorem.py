@@ -775,7 +775,7 @@ print(horizontal_x)
 P = qml.math.linalg.expm(qml.matrix(horizontal_x))
 decomp = qml.ops.one_qubit_decomposition(P, 0, rotations="ZYZ")
 print(decomp)
-angle_match = np.isclose((decomp[0].data[0] + decomp[-1].data[0])%(2*np.pi), 0.)
+angle_match = np.isclose((decomp[0].data[0] + decomp[-1].data[0]) % (2 * np.pi), 0.0)
 print(f"First and last rotation angle match up to sign and shift by 2kπ: {angle_match}")
 
 ######################################################################
