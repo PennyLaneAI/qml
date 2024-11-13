@@ -3,9 +3,11 @@ r"""The KAK theorem
 
 The KAK theorem is a beautiful mathematical result from Lie theory, with
 particular relevance for quantum computing. It can be seen as a
-generalization of the singular value decomposition, and falls
-under the large umbrella of matrix factorizations. This allows us to
-use it for quantum circuit decompositions.
+generalization of the singular value decomposition, as it decomposes a group
+element :math:`U` (think: unitary operator) into :math:`U=K_1AK_2`, where
+:math:`K_{1,2}` and :math:`A` belong to special subgroups that we will introduce.
+This means the KAK theorem falls under the large umbrella of matrix factorizations,
+and it allows us to use it for quantum circuit decompositions.
 
 In this demo, we will discuss so-called symmetric spaces, which arise from
 certain subgroups of Lie groups. For this, we will focus on the Lie algebras
