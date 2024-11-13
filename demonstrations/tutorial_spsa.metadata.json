@@ -2,14 +2,14 @@
     "title": "Optimization using SPSA",
     "authors": [
         {
-            "id": "antal_szava"
+            "username": "aszava"
         },
         {
-            "id": "david_wierichs"
+            "username": "dwierichs"
         }
     ],
     "dateOfPublication": "2023-03-19T00:00:00+00:00",
-    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
+    "dateOfLastModification": "2024-11-06T00:00:00+00:00",
     "categories": [
         "Optimization"
     ],

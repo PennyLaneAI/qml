@@ -2,11 +2,11 @@
     "title": "Beyond classical computing with qsim",
     "authors": [
         {
-            "id": "theodor_isacsson"
+            "username": "tisacsson"
         }
     ],
     "dateOfPublication": "2020-11-30T00:00:00+00:00",
-    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
+    "dateOfLastModification": "2024-11-06T00:00:00+00:00",
     "categories": [
         "Quantum Hardware",
         "Quantum Computing"
