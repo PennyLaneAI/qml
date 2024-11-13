@@ -1,8 +1,8 @@
 r"""
-Digital zero-noise extrapolation with Catalyst
-==============================================
+Digital zero-noise extrapolation (ZNE) with Catalyst
+====================================================
 
-In this tutorial, you will learn how to use error mitigation, and in particular 
+In this tutorial, you will learn how to use :doc:`error mitigation <tutorial_error_mitigation>`, and in particular 
 the zero-noise extrapolation (ZNE) technique, in combination with 
 `Catalyst <https://docs.pennylane.ai/projects/catalyst>`_, a framework for quantum 
 just-in-time (JIT) compilation with PennyLane. 
@@ -11,7 +11,7 @@ simulator, and use extrapolation techniques to estimate the zero-noise result, a
 leveraging JIT compilation through Catalyst.
 
 .. image:: ../_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_zne_catalyst.png
-    :width: 65%
+    :width: 70%
     :align: center
 
 The demo :doc:`Error mitigation with Mitiq and PennyLane <tutorial_error_mitigation>`
@@ -30,7 +30,7 @@ At the end of the tutorial, we will compare the execution time of ZNE routines i
 pure PennyLane vs. PennyLane and Catalyst with JIT.
 
 What is zero-noise extrapolation (ZNE)
------------
+--------------------------------------
 Zero-noise extrapolation (ZNE) is a technique used to mitigate the effect of noise on quantum
 computations. First introduced in [#temme2017zne]_, it helps improve the accuracy of quantum
 results by running circuits at varying noise levels and extrapolating back to a hypothetical
@@ -71,7 +71,7 @@ Defining the mirror circuit
 ---------------------------
 
 The first step for demoing an error mitigation routine is to define a circuit. 
-Here we build a simple mirror circuit starting off a unitary 2-design. 
+Here we build a simple mirror circuit starting off a `unitary 2-design <https://en.wikipedia.org/wiki/Quantum_t-design>`__. 
 This is a typical construction for a randomized benchmarking circuit, which is used in many tasks
 in quantum computing. Given such circuit, we measure the expectation value :math:`\langle Z\rangle` 
 on the state of the first qubit, and by construction of the circuit, we expect this value to be
