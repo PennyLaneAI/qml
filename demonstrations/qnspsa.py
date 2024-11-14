@@ -356,13 +356,11 @@ print("Estimated SPSA gradient:\n", grad)
 # 0 (minimum overlap) and 1 (perfect overlap).
 #
 
-from copy import copy
-
 def get_overlap_tape(qnode, params1, params2):
     tape_forward = qml.workflow.construct_tape(qnode)(*params1)
     tape_inv = qml.workflow.construct_tape(qnode)(*params2)
 
-    ops = tape_forward.operations + list(qml.adjoint(copy(op)) for op in reversed(tape_inv.operations))
+    ops = tape_forward.operations + list(qml.adjoint(op) for op in reversed(tape_inv.operations))
     return qml.tape.QuantumTape(ops, [qml.probs(wires=tape_forward.wires)])
 
 def get_state_overlap(tape):
