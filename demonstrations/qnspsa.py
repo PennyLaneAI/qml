@@ -358,22 +358,17 @@ print("Estimated SPSA gradient:\n", grad)
 
 from copy import copy
 
-
-def get_operations(qnode, params):
-    qnode.construct([params], {})
-    return qnode.tape.operations
-
-
 def get_overlap_tape(qnode, params1, params2):
-    op_forward = get_operations(qnode, params1)
-    op_inv = get_operations(qnode, params2)
+    tape_forward = qml.workflow.construct_tape(qnode)(*params1)
+    tape_inv = qml.workflow.construct_tape(qnode)(*params2)
+
+    ops = tape_forward.operations + list(qml.adjoint(copy(op)) for op in reversed(tape_inv.operations))
 
     with qml.tape.QuantumTape() as tape:
-        for op in op_forward:
+        for op in ops:
             qml.apply(op)
-        for op in reversed(op_inv):
-            qml.adjoint(copy(op))
-        qml.probs(wires=qnode.tape.wires.labels)
+        qml.probs(wires=tape_forward.wires.labels)
+
     return tape
 
 
@@ -833,10 +828,8 @@ class QNSPSA:
         # used to estimate the gradient per optimization step. The sampled
         # direction is of the shape of the input parameter.
         direction = self.__get_perturbation_direction(params)
-        cost.construct([params + self.finite_diff_step * direction], {})
-        tape_forward = cost.tape.copy(copy_operations=True)
-        cost.construct([params - self.finite_diff_step * direction], {})
-        tape_backward = cost.tape.copy(copy_operations=True)
+        tape_forward = qml.workflow.construct_tape(cost)(*[params + self.finite_diff_step * direction])
+        tape_backward = qml.workflow.construct_tape(cost)(*[params - self.finite_diff_step * direction])
         return [tape_forward, tape_backward], direction
 
     def __update_tensor(self, tensor_raw):
@@ -864,21 +857,7 @@ class QNSPSA:
         return tapes, dir_vecs
 
     def __get_overlap_tape(self, cost, params1, params2):
-        op_forward = self.__get_operations(cost, params1)
-        op_inv = self.__get_operations(cost, params2)
-
-        with qml.tape.QuantumTape() as tape:
-            for op in op_forward:
-                qml.apply(op)
-            for op in reversed(op_inv):
-                qml.adjoint(copy(op))
-            qml.probs(wires=cost.tape.wires.labels)
-        return tape
-
-    def __get_operations(self, cost, params):
-        # Given a QNode, returns the list of operations before the measurement.
-        cost.construct([params], {})
-        return cost.tape.operations
+        return get_overlap_tape(cost, params1, params2)
 
     def __get_tensor_moving_avg(self, metric_tensor):
         # For numerical stability: averaging on the Fubini-Study metric tensor.
@@ -893,10 +872,8 @@ class QNSPSA:
 
     def __apply_blocking(self, cost, params_curr, params_next):
         # For numerical stability: apply the blocking condition on the parameter update.
-        cost.construct([params_curr], {})
-        tape_loss_curr = cost.tape.copy(copy_operations=True)
-        cost.construct([params_next], {})
-        tape_loss_next = cost.tape.copy(copy_operations=True)
+        tape_loss_curr = qml.workflow.construct_tape(cost)(*[params_curr])
+        tape_loss_next = qml.workflow.construct_tape(cost)(*[params_next])
 
         loss_curr, loss_next = qml.execute([tape_loss_curr, tape_loss_next], cost.device, None)
         # self.k has been updated earlier.

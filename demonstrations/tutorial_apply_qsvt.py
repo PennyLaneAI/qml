@@ -55,7 +55,7 @@ def my_circuit(phase_angles):
 ###############################################################################
 # We can now execute the circuit and visualize it.
 
-my_circuit(phase_angles)
+tape = qml.workflow.construct_tape(my_circuit)(phase_angles)
 print(qml.draw(my_circuit)(phase_angles))
 
 ###############################################################################
@@ -63,7 +63,7 @@ print(qml.draw(my_circuit)(phase_angles))
 # operation is composed of repeated applications of the :class:`~.pennylane.BlockEncode` and
 # :class:`~.pennylane.PCPhase` (:math:`\Pi_{\phi}`) operations.
 
-print(my_circuit.tape.expand().draw())
+print(tape.expand().draw())
 
 ###############################################################################
 # Now let's look at an application of QSVT --- solving a linear system of equations.
