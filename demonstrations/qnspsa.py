@@ -363,14 +363,7 @@ def get_overlap_tape(qnode, params1, params2):
     tape_inv = qml.workflow.construct_tape(qnode)(*params2)
 
     ops = tape_forward.operations + list(qml.adjoint(copy(op)) for op in reversed(tape_inv.operations))
-
-    with qml.tape.QuantumTape() as tape:
-        for op in ops:
-            qml.apply(op)
-        qml.probs(wires=tape_forward.wires.labels)
-
-    return tape
-
+    return qml.tape.QuantumTape(ops, [qml.probs(wires=tape_forward.wires)])
 
 def get_state_overlap(tape):
     return qml.execute([tape], dev, None)[0][0]
