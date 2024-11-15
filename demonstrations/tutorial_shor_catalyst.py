@@ -165,14 +165,18 @@ def shors_algorithm(N):
 # The quantum part
 # ^^^^^^^^^^^^^^^^
 #
-# In this section we'll describe the quantum circuits we use for the quantum
-# part of Shor's algorithm, i.e., the order-finding routine. The presented
-# implementation is based on that of [#Beauregard2003]_.
+# In this section we'll describe the circuits used for the quantum part of
+# Shor's algorithm, i.e., the order-finding routine. The presented
+# implementation is based on that of [#Beauregard2003]_. For an integer
+# :math:`N` whose binary representation requires :math:`n = \lceil \log_2 N
+# \rceil` bits, our circuit requires :math:`2n + 3` qubits. Of these qubits,
+# :math:`n + 1` are used for computation, while the remaining :math:`n + 2` are
+# auxiliary.
 #
 # Order finding is an application of *quantum phase estimation*. The operator
-# whose phase is being estimated is :math:`U_a`, 
+# whose phase is being estimated is :math:`U_a`,
 #
-# ..math ::
+# .. math::
 #
 #     U_a \vert x \rangle = \vert ax \pmod N \rangle
 #
@@ -182,36 +186,158 @@ def shors_algorithm(N):
 # below.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/qpe_full.svg
-#    :scale: 100%
+#    :scale: 120%
 #    :align: center
 #    :alt: Quantum phase estimation circuit for order finding.
 #
-# This high-level view of the circuit hides a lot of the complexity,
-# though. First and foremost, the actual implementation details of :math:`U_a`
-# are not yet defined, and a significant number of auxiliary qubits are required
-# for its implementation. There is also the issue of precision, which is
-# governed by the number of estimation wires, :math:`t`. A better estimate will
-# make finding a solution more likely. However, increasing :math:`t` adds
-# overhead in circuit depth, and has the added simulation costs that come from
-# increasing the size of the Hilbert space.
+# This high-level view of the circuit hides its complexity, though. First and
+# foremost, the actual implementation details of :math:`U_a` are not yet
+# defined. In fact, a significant number of auxiliary qubits are required. There
+# is also the issue of precision, which is governed by the number of estimation
+# wires, :math:`t`. More estimation wires means finding a solution is more
+# likely. However, increasing :math:`t` adds overhead in circuit depth, and adds
+# classical simulation due to the increased size of Hilbert space.
 #
-# In what follows, we will some shortcuts afforded by Catalyst. Specifically,
-# with mid-circuit measurement and reset we can reduce the number of estimation
-# wires to :math:`t=1`. A great deal of the arithmetic operations will be
-# performed in the Fourier basis; and since we know :math:`a` in advance, we can
-# vary circuit structure on the fly and save resources.  Finally, additional
-# mid-circuit measurements can be used in lieu of uncomputation.
+# In what follows, we will take some shortcuts afforded by the hybrid nature of
+# the computation, and from Catalyst. Specifically, with mid-circuit measurement
+# and reset we can reduce the number of estimation wires to :math:`t=1`. A great
+# deal of the arithmetic operations will be performed in the Fourier basis; and
+# since we know :math:`a` in advance, we can vary circuit structure on the fly
+# and save resources.  Finally, additional mid-circuit measurements can be used
+# in lieu of uncomputation.
 #
-# Let's start by zooming in on the implementation of the controlled :math:`U_a`.
+# First, let us consider the controlled :math:`U_a^{2^k}`. This is a prime
+# example of how our classical knowledge can simplify the computation. Naively,
+# we may this we must implement a controlled :math:`U_a` operation :math:`2^k`
+# times. However, note 
+#
+# .. math::
+#
+#     U_a^{2^k}\vert x \rangle = \vert (a \cdot a \cdots a) x \pmod N \rangle = \vert a^{2^k}x \pmod N \rangle = U_{a^{2^k}} \vert x \rangle
+#
+# Since :math:`a` is known in advance, we can classically evaluate its powers,
+# and implement the circuit below instead:
+#
+#
+# .. figure:: ../_static/demonstration_assets/shor_catalyst/qpe_full_modified_power.svg
+#    :scale: 120%
+#    :align: center
+#    :alt: Order finding with controlled operations that take advantage of classical precomputation.
+#
+# There is a tradeoff here: if we were performing circuit optimization, we would
+# have to separately optimize the circuit for each :math:`a^{2^k}`. However,
+# the additional compilation time is outweighed by the fact that we now have
+# only :math:`t` controlled operations to implement, rather than :math:`1 + 2 +
+# 4 + ... 2^{t -1}`. Furthermore, we will be able to jit-compile the circuit
+# construction.
+#
+# Next, let's zoom in on the controlled :math:`U_a`. 
 # 
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/c-ua.svg
-#    :scale: 100%
+#    :scale: 120%
 #    :align: center
 #    :alt: Quantum phase estimation circuit for order finding.
 #
-# We require an equal-sized auxiliary register. The operation :math:`M_a` is multiplication
-# modulo :math:`N`, which we will zoom in on below.
+# The control qubit, :math:`\vert c\rangle`, is an estimation qubit. The
+# register :math:`\vert x \rangle` and the auxiliary register contain :math:`n +
+# 1` and :math:`n + 2` qubits respectively, for reasons we elaborate on
+# below.
+#
+# The next operation of interest, :math:`M_a`, adds the (multiplied) contents of one register to another, in place, and modulo :math:`N`,
 # 
+# .. math::
+#
+#     M_a \vert x \rangle \vert b \rangle \vert 0 \rangle =  \vert x \rangle \vert (b + ax) \pmod N \rangle \vert 0 \rangle
+#
+#
+# Ignoring the control qubit, we can validate that the circuit above implements
+# :math:`U_a`: (for readability, we omit the "mod :math:`N`", which is implicit on all arithmetic):
+#
+# .. math::
+#
+#     \begin{eqnarray}
+#       M_a \vert x \rangle \vert 0 \rangle^{\otimes n + 1} \vert 0 \rangle &=&  \vert x \rangle \vert ax \rangle \vert 0 \rangle \\
+#      SWAP (\vert x \rangle \vert ax \rangle ) \vert 0 \rangle &=&  \vert ax \rangle \vert x \rangle \vert 0 \rangle \\
+#     M_{a^{-1}}^\dagger \vert ax \rangle \vert x \rangle  \vert 0 \rangle &=& \vert ax\rangle \vert x - a^{-1}(ax) \rangle \vert 0 \\
+#      &=& \vert ax \rangle \vert 0 \rangle^{\otimes n + 1} \vert 0 \rangle
+#     \end{eqnarray}
+#
+# At a high level, the implementation of :math:`M_a` looks like this:
+#
+# .. figure:: ../_static/demonstration_assets/shor_catalyst/doubly-controlled-adder.svg
+#    :scale: 120%
+#    :align: center
+#    :alt: In-place addition modulo N with the Fourier adder.
+#
+# At first glance, is it not clear how exactly :math:`a x` is getting
+# created. The qubits of :math:`\vert x \rangle` are being used as control
+# qubits for some operation that depends on :math:`a` multiplied by various
+# powers of 2. There is also a QFT before and after those operations, whose
+# purpose is unclear.
+#
+# These special operations are actually performing *addition in the Fourier
+# basis*. This is another trick that we can leverage because we know :math:`a`
+# in advance. Rather than performing explicit addition on the bits in the
+# computational basis states registers, we can apply a Fourier transform, adjust
+# the phases based on the bit values of the number we wish to add, then inverse
+# Fourier transform to obtain the result. We present the circuit for the
+# *Fourier adder*, :math:`\Phi`, below.
+#
+# .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder.svg
+#    :scale: 120%
+#    :align: center
+#    :alt: Addition in the Fourier basis.
+#
+# The gates XX are phase shifts; the explicit value depends on. TODO: finish.
+#
+# An important point about Fourier basis addition is that it is *not* modulo
+# :math:`N`. While both :math:`a` and :math:`b` are less than :math:`N`, their
+# sum may be greater than :math:`N`. To avoid overflow, we use a register of
+# :math:`n + 1` qubits instead (this is the source of some of the auxiliary
+# qubits, referred to earlier).
+#
+# As one may expect, :math:`\Phi^\dagger` performs subtraction. However, one
+# must now take into consideration the possibility of underflow.
+#
+# .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_adjoint.svg
+#    :scale: 120%
+#    :align: center
+#    :alt: Subtraction in the Fourier basis.
+#
+# Returning to our implementation of :math:`M_a`, we see an operation
+# :math:`\Phi_+` which is similar to :math:`Phi`, but it (a) uses an auxiliary
+# qubit, and (b) works modulo :math:`N`. The idea behind :math:`\Phi_+` is that
+# we still use Fourier basis addition and subtraction, but apply corrections
+# if overflow is detected.
+#
+# .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_modulo_n.svg
+#    :scale: 100%
+#    :align: center
+#    :alt: Addition in the Fourier basis modulo N.
+#
+# In the circuit above, we first add :math:`a` to :math:`b`, then subtract
+# :math:`N` in case we had :math:`a + b > N`. However, if that wasn't the case,
+# we subtracted :math:`N` for no reason, causing underflow. This would manifest
+# as a 1 in the top-most qubit (the auxiliary qubit added to account for
+# overflow). That 1 can be detected by applying a CNOT down to the auxiliary
+# qubit, which performs controlled addition to add back :math:`N` if
+# needed. Note we must exit the Fourier basis to detect it the underflow. The
+# remainder of the circuit returns the auxiliary qubit to its original state.
+#
+# Uncomputing the auxiliary qubit here is basically as much work as performing
+# the operation itself. Here is where we can leverage Catalyst to perform a
+# major optimization: rather than uncomputing, we can simply measure the
+# auxiliary qubit, add back :math:`N` based on the outcome, then reset it to
+# :math:`\vert 0 \rangle`!
+#
+# .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_modulo_n_mcm.svg
+#    :scale: 120%
+#    :align: center
+#    :alt: Addition in the Fourier basis modulo N.
+#
+# This optimization cuts down the number of gates in the :math:`M_a` circuit by
+# essentially half, which is a major savings.
+#
 #
 # TODO: explain how iterative phase estimation is being used here with Catalyst
 # and mid-circuit measurements.
@@ -248,7 +374,7 @@ def shors_algorithm(N):
 #
 # .. [#Beauregard2003]
 #
-#     Stephane Beauregard. (2003) *Circuit for Shor's algorithm using :math:`2n+3` qubits.*
+#     Stephane Beauregard. (2003) *Circuit for Shor's algorithm using 2n+3 qubits.*
 #     Quantum Information and Computation, Vol. 3, No. 2 (2003) pp. 175-185.
 #
 # About the author
