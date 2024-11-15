@@ -154,7 +154,7 @@ scale_factors = [1, 3, 5]
 # Finally, we'll choose the extrapolation technique. Both exponential and polynomial extrapolation
 # is available in the :mod:`qml.transforms <pennylane.transforms>` module, and both of these functions can be passed directly
 # into Catalyst's :func:`catalyst.mitigate_with_zne` function. In this tutorial we use polynomial extrapolation,
-# which we hypothesize it best models the behavior of the noise scenario we are considering.
+# which we hypothesize best models the behavior of the noise scenario we are considering.
 
 from pennylane.transforms import poly_extrapolate
 from functools import partial
@@ -245,7 +245,7 @@ print(f"mitigated_circuit_qjit running time (best of {repeat}): {min(times):.3f}
 #
 # There are still reasons to use ZNE in PennyLane without :func:`~.qjit`, for instance,
 # whenever the device of choice is not supported by Catalyst. To help,
-# we conclude with a landscape of the QEM techniques available on the PennyLane ecosystem.
+# we conclude with a landscape of the QEM techniques available in the PennyLane ecosystem.
 #
 # .. list-table::
 #     :widths: 30 20 20 20 20 30
