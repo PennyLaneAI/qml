@@ -16,7 +16,8 @@ leveraging JIT compilation through Catalyst.
 
 The demo :doc:`Error mitigation with Mitiq and PennyLane <tutorial_error_mitigation>`
 shows how ZNE, along with other error mitigation techniques, can be carried out in PennyLane
-by using `Mitiq <https://github.com/unitaryfund/mitiq>`__, a Python library developed by `Unitary Fund <https://unitary.fund/>`__.
+by using `Mitiq <https://github.com/unitaryfund/mitiq>`__, a Python library developed 
+by `Unitary Fund <https://unitary.fund/>`__.
 
 ZNE in particular is also offered out of the box in PennyLane as a *differentiable* error mitigation technique,
 for usage in combination with variational workflows. More on this in the tutorial
@@ -32,17 +33,17 @@ pure PennyLane vs. PennyLane and Catalyst with JIT.
 What is zero-noise extrapolation (ZNE)
 --------------------------------------
 Zero-noise extrapolation (ZNE) is a technique used to mitigate the effect of noise on quantum
-computations. First introduced in [#temme2017zne]_, it helps improve the accuracy of quantum
+computations. First introduced in [#zne-2017]_, it helps improve the accuracy of quantum
 results by running circuits at varying noise levels and extrapolating back to a hypothetical
 zero-noise case. While this tutorial won't delve into the theory behind ZNE in detail (for which we
 recommend reading the `Mitiq docs <https://mitiq.readthedocs.io/en/stable/guide/zne-5-theory.html>`_
-and the references therein), let's first review what happens when using the protocol in practice.
+and the references, including Mitiq's whitepaper [#mitiq-2022]_), let's first review what happens when using the protocol in practice.
 
 Stage 1: Generating noise-scaled circuits
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ZNE works by generating circuits with **increased** noise. Catalyst implements the unitary folding
-framework introduced in [#DZNEpaper]_ for generating noise-scaled circuits. In particular, 
+framework introduced in [#dzne-2020]_ for generating noise-scaled circuits. In particular, 
 the following two methods are available:
 
 1. **Global folding**: If a circuit implements a global unitary :math:`U`, global folding applies
@@ -67,6 +68,10 @@ After executing the noise-scaled circuits, an extrapolation on the results is pe
 to estimate the zero-noise limit---the result we would expect in a noise-free scenario. 
 Catalyst provides **polynomial** and **exponential** extrapolation methods.
 
+These three stages illustrate what happens behind the scenes when using a ZNE routine. 
+However, from the user's perspective, one only needs to define the initial circuit, 
+the noise scaling method, and the extrapolation method. The rest is taken care of by Catalyst.
+
 Defining the mirror circuit
 ---------------------------
 
@@ -84,21 +89,19 @@ import numpy as np
 import pennylane as qml
 from catalyst import mitigate_with_zne
 
-n_wires = 5
+n_wires = 3
 
 np.random.seed(42)
 
-n_layers = 10
+n_layers = 5
 template = qml.SimplifiedTwoDesign
 weights_shape = template.shape(n_layers, n_wires)
 w1, w2 = [2 * np.pi * np.random.random(s) for s in weights_shape]
-
 
 def circuit(w1, w2):
     template(w1, w2, wires=range(n_wires))
     qml.adjoint(template)(w1, w2, wires=range(n_wires))
     return qml.expval(qml.PauliZ(0))
-
 
 ##############################################################################
 # As a sanity check, we first execute the circuit on the Qrack simulator without any noise.
@@ -151,12 +154,12 @@ scale_factors = [1, 3, 5]
 # Finally, we'll choose the extrapolation technique. Both exponential and polynomial extrapolation
 # is available in the :mod:`qml.transforms <pennylane.transforms>` module, and both of these functions can be passed directly
 # into Catalyst's :func:`catalyst.mitigate_with_zne` function. In this tutorial we use polynomial extrapolation,
-# which we hypothesize best models the behavior of the noise scenario we are considering.
+# which we hypothesize it best models the behavior of the noise scenario we are considering.
 
 from pennylane.transforms import poly_extrapolate
 from functools import partial
 
-extrapolation_method = partial(poly_extrapolate, order=3)
+extrapolation_method = partial(poly_extrapolate, order=2)
 
 ##############################################################################
 # We're now ready to run our example using ZNE with Catalyst! Putting these all together we're able
@@ -205,8 +208,23 @@ zne_value = mitigated_circuit(w1, w2)
 print(f"Error with ZNE in PennyLane: {abs(ideal_value - zne_value):.3f}")
 
 ##############################################################################
-# To showcase the impact of JIT compilation, let's use Python's ``timeit`` module
-# to measure execution time of ``mitigated_circuit_qjit`` vs. ``mitigated_circuit``:
+# To showcase the impact of JIT compilation, we use Python's ``timeit`` module
+# to measure execution time of ``mitigated_circuit_qjit`` vs. ``mitigated_circuit``.
+# 
+# Note: for the purpose of this last example, we reduce the number of shots of the simulator to 100,
+# since we don't need the accuracy required for the previous demonstration. We do so in order to 
+# reduce the running time of this tutorial, while still showcasing the performance differences.  
+noisy_device = qml.device("qrack.simulator", n_wires, shots=100, noise=NOISE_LEVEL)
+noisy_qnode = qml.QNode(circuit, device=noisy_device, mcm_method="one-shot")
+
+@qml.qjit
+def mitigated_circuit_qjit(w1, w2):
+    return mitigate_with_zne(
+        noisy_qnode,
+        scale_factors=scale_factors,
+        extrapolate=extrapolation_method,
+        folding=folding_method,
+    )(w1, w2)
 
 repeat = 5  # number of timing runs
 number = 5  # number of loops executed in each timing run
@@ -227,10 +245,11 @@ print(f"mitigated_circuit_qjit running time (best of {repeat}): {min(times):.3f}
 #
 # There are still reasons to use ZNE in PennyLane without :func:`~.qjit`, for instance,
 # whenever the device of choice is not supported by Catalyst. To help,
-# we conclude with a landscape of the QEM techniques available on PennyLane.
+# we conclude with a landscape of the QEM techniques available on the PennyLane ecosystem.
 #
 # .. list-table::
 #     :widths: 30 20 20 20 20 30
+#     :align: center
 #     :header-rows: 1
 #
 #     * - **Framework**
@@ -242,21 +261,21 @@ print(f"mitigated_circuit_qjit running time (best of {repeat}): {min(times):.3f}
 #     * - PennyLane + Mitiq
 #       - global, local, random
 #       - polynomial, exponential
-#       -
-#       -
-#       - PEC, CDR, DDD, REM
+#       - –
+#       - –
+#       - ✅
 #     * - PennyLane transforms
 #       - global, local
 #       - polynomial, exponential
 #       - ✅
-#       -
-#       -
+#       - –
+#       - –
 #     * - Catalyst (experimental)
 #       - global, local
 #       - polynomial, exponential
 #       - ✅
 #       - ✅
-#       -
+#       - –
 
 
 ##############################################################################
@@ -264,11 +283,18 @@ print(f"mitigated_circuit_qjit running time (best of {repeat}): {min(times):.3f}
 # References
 # ----------
 #
-# .. [#temme2017zne] K. Temme, S. Bravyi, J. M. Gambetta
-#     `"Error Mitigation for Short-Depth Quantum Circuits" <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.119.180509>`_,
+# .. [#zne-2017] K. Temme, S. Bravyi, J. M. Gambetta
+#     `"Error Mitigation for Short-Depth Quantum Circuits" <https://arxiv.org/abs/1612.02058>`_,
 #     Phys. Rev. Lett. 119, 180509 (2017).
 #
-# .. [#DZNEpaper]
-#     Tudor Giurgica-Tiron, Yousef Hindy, Ryan LaRose, Andrea Mari, and William J. Zeng
-#     "Digital zero noise extrapolation for quantum error mitigation"
-#     `arXiv:2005.10921v2 <https://arxiv.org/abs/2005.10921v2>`__, 2020.
+# .. [#dzne-2020] Tudor Giurgica-Tiron, Yousef Hindy, Ryan LaRose, Andrea Mari, and William J. Zeng, 
+#     `"Digital zero noise extrapolation for quantum error mitigation" <https://arxiv.org/abs/2005.10921v2>`__, 
+#     IEEE International Conference on Quantum Computing and Engineering (2020).
+#
+# .. [#mitiq-2022]
+#     Ryan LaRose and Andrea Mari and Sarah Kaiser and Peter J. Karalekas and Andre A. Alves and 
+#     Piotr Czarnik and Mohamed El Mandouh and Max H. Gordon and Yousef Hindy and Aaron Robertson 
+#     and Purva Thakre and Misty Wahl and Danny Samuel and Rahul Mistri and Maxime Tremblay 
+#     and Nick Gardner and Nathaniel T. Stemen and Nathan Shammah and William J. Zeng, 
+#     `"Mitiq: A software package for error mitigation on noisy quantum computers" <https://doi.org/10.22331/q-2022-08-11-774>`__, 
+#     Quantum (2022).
