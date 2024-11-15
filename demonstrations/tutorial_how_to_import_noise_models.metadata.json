@@ -15,11 +15,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_how_to_use_noise_models.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_how_to_import_noise_models.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_how_to_use_noise_models.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_how_to_import_noise_models.png"
         }
     ],
     "seoDescription": "Learn how noise models can be imported into PennyLane from Qiskit.",
