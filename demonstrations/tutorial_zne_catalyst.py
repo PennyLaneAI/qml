@@ -247,18 +247,35 @@ print(f"mitigated_circuit_qjit running time (best of {repeat}): {min(times):.3f}
 # whenever the device of choice is not supported by Catalyst. To help,
 # we conclude with a landscape of the QEM techniques available in the PennyLane ecosystem.
 #
-# .. rst-class:: docstable
+# .. list-table::
+#     :widths: 30 20 20 20 20 30
+#     :align: center
+#     :header-rows: 0
 #
-#     +-------------------------+-----------------------+-------------------------+----------------+----------------+----------------------+
-#     | .. centered::           | .. centered::         | .. centered::           | .. centered::  | .. centered::  | .. centered::        |
-#     |  Framework              |  ZNE folding          | ZNE extrapolation       | Differentiable | JIT            | Other QEM techniques |
-#     +=========================+=======================+=========================+================+================+======================+
-#     | PennyLane + Mitiq       | global, local, random | polynomial, exponential | –              | –              | ✅                    |
-#     +-------------------------+-----------------------+-------------------------+----------------+----------------+----------------------+
-#     | PennyLane transforms    | global, local         | polynomial, exponential | ✅              | –              | –                    |
-#     +-------------------------+-----------------------+-------------------------+----------------+----------------+----------------------+
-#     | Catalyst (experimental) | global, local         | polynomial, exponential | ✅              | ✅              | –                    +
-#     +-------------------------+-----------------------+-------------------------+----------------+----------------+----------------------+
+#     * - **Framework**
+#       - **ZNE folding**
+#       - **ZNE extrapolation**
+#       - **Differentiable**
+#       - **JIT**
+#       - **Other QEM techniques**
+#     * - PennyLane + Mitiq
+#       - global, local, random
+#       - polynomial, exponential
+#       - –
+#       - –
+#       - ✅
+#     * - PennyLane transforms
+#       - global, local
+#       - polynomial, exponential
+#       - ✅
+#       - –
+#       - –
+#     * - Catalyst (experimental)
+#       - global, local
+#       - polynomial, exponential
+#       - ✅
+#       - ✅
+#       - –
 
 
 ##############################################################################
