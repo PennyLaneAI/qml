@@ -2,14 +2,14 @@
     "title": "Measurement-based quantum computation",
     "authors": [
         {
-            "id": "joost_bus"
+            "username": "jbus"
         },
         {
-            "id": "radoica_draskic"
+            "username": "rdraskic"
         }
     ],
     "dateOfPublication": "2022-12-05T00:00:00+00:00",
-    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
+    "dateOfLastModification": "2024-11-06T00:00:00+00:00",
     "categories": [
         "Quantum Hardware",
         "Quantum Computing"

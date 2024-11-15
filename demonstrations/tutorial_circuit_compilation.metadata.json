@@ -2,11 +2,11 @@
     "title": "Compilation of quantum circuits",
     "authors": [
         {
-            "id": "borja_requena"
+            "username": "brequena"
         }
     ],
     "dateOfPublication": "2023-06-14T00:00:00+00:00",
-    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
+    "dateOfLastModification": "2024-11-06T00:00:00+00:00",
     "categories": [
         "Getting Started",
         "Devices and Performance"

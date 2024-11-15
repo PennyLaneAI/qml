@@ -8,11 +8,11 @@
             "username": "Matematija"
         },
         {
-            "id": "anuj_apte"
+            "username": "aapte"
         }
     ],
     "dateOfPublication": "2022-09-02T00:00:00+00:00",
-    "dateOfLastModification": "2024-10-18T00:00:00+00:00",
+    "dateOfLastModification": "2024-11-06T00:00:00+00:00",
     "categories": [
         "Algorithms", "Quantum Computing"
     ],

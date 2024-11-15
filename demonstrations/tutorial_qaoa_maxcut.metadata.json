@@ -2,11 +2,11 @@
     "title": "QAOA for MaxCut",
     "authors": [
         {
-            "id": "angus_lowe"
+            "username": "alowe"
         }
     ],
     "dateOfPublication": "2019-10-11T00:00:00+00:00",
-    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
+    "dateOfLastModification": "2024-11-06T00:00:00+00:00",
     "categories": [
         "Optimization"
     ],
