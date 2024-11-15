@@ -1,4 +1,3 @@
-
 r""".. role:: html(raw)
    :format: html
 
