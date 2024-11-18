@@ -333,7 +333,7 @@ def is_orthogonal(op, basis):
 #     condition holds for any :math:`g\in \mathcal{G}` are called *normal subgroups*.
 #     We are interested in cases where the symmetric property
 #     :math:`[\mathfrak{p}, \mathfrak{p}] \subset \mathfrak{k}` holds, which excludes (non-Abelian)
-#     normal subgroups, and thus our quotient space :math:`\mathcal{G`/\mathcal{K}` will not be
+#     normal subgroups, and thus our quotient space :math:`\mathcal{G}/\mathcal{K}` will not be
 #     a group.
 #
 # **Example**
