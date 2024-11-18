@@ -225,7 +225,7 @@ work_wires = [5, 6, 7, 8, 9, 10, 11, 12]
 
 
 # Line added for drawing purposes only
-@partial(qml.transforms.decompose, max_expansion=1)
+@partial(qml.transforms.decompose, max_expansion=2)
 @qml.qnode(qml.device("default.qubit", shots=1))
 def circuit(index):
     qml.BasisState(index, wires=control_wires)
