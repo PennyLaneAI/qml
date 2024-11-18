@@ -1,134 +1,134 @@
-##############################################################################
-# QAOA for MaxCut
-# ===============
-# In this tutorial we implement the quantum approximate optimization algorithm (QAOA) for the MaxCut
-# problem as proposed by `Farhi, Goldstone, and Gutmann (2014) <https://arxiv.org/abs/1411.4028>`__. First, we
-# give an overview of the MaxCut problem using a simple example, a graph with 4 vertices and 4 edges. We then
-# show how to find the maximum cut by running the QAOA algorithm using PennyLane.
-#
-# Background
-# ----------
-#
-# The MaxCut problem
-# ~~~~~~~~~~~~~~~~~~
-# The aim of MaxCut is to maximize the number of edges (yellow lines) in a graph that are "cut" by
-# a given partition of the vertices (blue circles) into two sets (see figure below).
-#
-# .. figure:: ../_static/demonstration_assets/qaoa_maxcut/qaoa_maxcut_partition.png
-#    :align: center
-#    :scale: 65%
-#    :alt: qaoa_operators
-#
-# |
-#
-# Consider a graph with :math:`m` edges and :math:`n` vertices. We seek the partition
-# :math:`z` of the vertices into two sets
-# :math:`A` and :math:`B` which maximizes
-#
-# .. math::
-#   C(z) = \sum_{\alpha=1}^{m}C_\alpha(z),
-#
-# where :math:`C` counts the number of edges cut. :math:`C_\alpha(z)=1` if :math:`z` places one vertex from the
-# :math:`\alpha^\text{th}` edge in set :math:`A` and the other in set :math:`B,` and :math:`C_\alpha(z)=0` otherwise.
-# Finding a cut which yields the maximum possible value of :math:`C` is an NP-complete problem, so our best hope for a
-# polynomial-time algorithm lies in an approximate optimization.
-# In the case of MaxCut, this means finding a partition :math:`z` which
-# yields a value for :math:`C(z)` that is close to the maximum possible value.
-#
-# We can represent the assignment of vertices to set :math:`A` or :math:`B` using a bitstring,
-# :math:`z=z_1...z_n` where :math:`z_i=0` if the :math:`i^\text{th}` vertex is in :math:`A` and
-# :math:`z_i = 1` if it is in :math:`B.` For instance,
-# in the situation depicted in the figure above the bitstring representation is :math:`z=0101\text{,}`
-# indicating that the :math:`0^{\text{th}}` and :math:`2^{\text{nd}}` vertices are in :math:`A`
-# while the :math:`1^{\text{st}}` and :math:`3^{\text{rd}}` are in
-# :math:`B.` This assignment yields a value for the objective function (the number of yellow lines cut)
-# :math:`C=4,` which turns out to be the maximum cut. In the following sections,
-# we will represent partitions using computational basis states and use PennyLane to
-# rediscover this maximum cut.
-#
-# .. note:: In the graph above, :math:`z=1010` could equally well serve as the maximum cut.
-#
-# A circuit for QAOA
-# ~~~~~~~~~~~~~~~~~~~~
-# This section describes implementing a circuit for QAOA using basic unitary gates to find approximate
-# solutions to the MaxCut problem.
-# Firstly, denoting the partitions using computational basis states :math:`|z\rangle,` we can represent the terms in the
-# objective function as operators acting on these states
-#
-# .. math::
-#   C_\alpha = \frac{1}{2}\left(1-\sigma_{z}^j\sigma_{z}^k\right),
-#
-# where the :math:`\alpha\text{th}` edge is between vertices :math:`(j,k).`
-# :math:`C_\alpha` has eigenvalue 1 if and only if the :math:`j\text{th}` and :math:`k\text{th}`
-# qubits have different z-axis measurement values, representing separate partitions.
-# The objective function :math:`C` can be considered a diagonal operator with integer eigenvalues.
-#
-# QAOA starts with a uniform superposition over the :math:`n` bitstring basis states,
-#
-# .. math::
-#   |+_{n}\rangle = \frac{1}{\sqrt{2^n}}\sum_{z\in \{0,1\}^n} |z\rangle.
-#
-#
-# We aim to explore the space of bitstring states for a superposition which is likely to yield a
-# large value for the :math:`C` operator upon performing a measurement in the computational basis.
-# Using the :math:`2p` angle parameters
-# :math:`\boldsymbol{\gamma} = \gamma_1\gamma_2...\gamma_p,` :math:`\boldsymbol{\beta} = \beta_1\beta_2...\beta_p`
-# we perform a sequence of operations on our initial state:
-#
-# .. math::
-#   |\boldsymbol{\gamma},\boldsymbol{\beta}\rangle = U_{B_p}U_{C_p}U_{B_{p-1}}U_{C_{p-1}}...U_{B_1}U_{C_1}|+_n\rangle
-#
-# where the operators have the explicit forms
-#
-# .. math::
-#   U_{B_l} &= e^{-i\beta_lB} = \prod_{j=1}^n e^{-i\beta_l\sigma_x^j}, \\
-#   U_{C_l} &= e^{-i\gamma_lC} = \prod_{\text{edge (j,k)}} e^{-i\gamma_l(1-\sigma_z^j\sigma_z^k)/2}.
-#
-# In other words, we make :math:`p` layers of parametrized :math:`U_bU_C` gates.
-# These can be implemented on a quantum circuit using the gates depicted below, up to an irrelevant constant
-# that gets absorbed into the parameters.
-#
-# .. figure:: ../_static/demonstration_assets/qaoa_maxcut/qaoa_operators.png
-#    :align: center
-#    :scale: 100%
-#    :alt: qaoa_operators
-#
-# |
-#
-# .. note::
-#     An alternative implementation of :math:`U_{C_l}` would be :math:`ZZ(\gamma_l)`, available
-#     via :class:`~.pennylane.IsingZZ` in PennyLane.
-#
-# Let :math:`\langle \boldsymbol{\gamma},
-# \boldsymbol{\beta} | C | \boldsymbol{\gamma},\boldsymbol{\beta} \rangle` be the expectation of the objective operator.
-# In the next section, we will use PennyLane to perform classical optimization
-# over the circuit parameters :math:`(\boldsymbol{\gamma}, \boldsymbol{\beta}).`
-# This will specify a state :math:`|\boldsymbol{\gamma},\boldsymbol{\beta}\rangle` which is
-# likely to yield an approximately optimal partition :math:`|z\rangle` upon performing a measurement in the
-# computational basis.
-# In the case of the graph shown above, we want to measure either 0101 or 1010 from our state since these correspond to
-# the optimal partitions.
-#
-# .. figure:: ../_static/demonstration_assets/qaoa_maxcut/qaoa_optimal_state.png
-#   :align: center
-#   :scale: 60%
-#   :alt: optimal_state
-#
-# |
-#
-# Qualitatively, QAOA tries to evolve the initial state into the plane of the
-# :math:`|0101\rangle,` :math:`|1010\rangle` basis states (see figure above).
-#
-#
-# Implementing QAOA in PennyLane
-# ------------------------------
-#
-# Imports and setup
-# ~~~~~~~~~~~~~~~~~
-#
-# To get started, we import PennyLane along with the PennyLane-provided
-# version of NumPy.
+r"""QAOA for MaxCut
+===================
 
+In this tutorial we implement the quantum approximate optimization algorithm (QAOA) for the MaxCut
+problem as proposed by `Farhi, Goldstone, and Gutmann (2014) <https://arxiv.org/abs/1411.4028>`__. First, we
+give an overview of the MaxCut problem using a simple example, a graph with 4 vertices and 4 edges. We then
+show how to find the maximum cut by running the QAOA algorithm using PennyLane.
+
+Background
+----------
+
+The MaxCut problem
+~~~~~~~~~~~~~~~~~~
+The aim of MaxCut is to maximize the number of edges (yellow lines) in a graph that are "cut" by
+a given partition of the vertices (blue circles) into two sets (see figure below).
+
+.. figure:: ../_static/demonstration_assets/qaoa_maxcut/qaoa_maxcut_partition.png
+   :align: center
+   :scale: 65%
+   :alt: qaoa_operators
+
+|
+
+Consider a graph with :math:`m` edges and :math:`n` vertices. We seek the partition
+:math:`z` of the vertices into two sets
+:math:`A` and :math:`B` which maximizes
+
+.. math::
+  C(z) = \sum_{\alpha=1}^{m}C_\alpha(z),
+
+where :math:`C` counts the number of edges cut. :math:`C_\alpha(z)=1` if :math:`z` places one vertex from the
+:math:`\alpha^\text{th}` edge in set :math:`A` and the other in set :math:`B,` and :math:`C_\alpha(z)=0` otherwise.
+Finding a cut which yields the maximum possible value of :math:`C` is an NP-complete problem, so our best hope for a
+polynomial-time algorithm lies in an approximate optimization.
+In the case of MaxCut, this means finding a partition :math:`z` which
+yields a value for :math:`C(z)` that is close to the maximum possible value.
+
+We can represent the assignment of vertices to set :math:`A` or :math:`B` using a bitstring,
+:math:`z=z_1...z_n` where :math:`z_i=0` if the :math:`i^\text{th}` vertex is in :math:`A` and
+:math:`z_i = 1` if it is in :math:`B.` For instance,
+in the situation depicted in the figure above the bitstring representation is :math:`z=0101\text{,}`
+indicating that the :math:`0^{\text{th}}` and :math:`2^{\text{nd}}` vertices are in :math:`A`
+while the :math:`1^{\text{st}}` and :math:`3^{\text{rd}}` are in
+:math:`B.` This assignment yields a value for the objective function (the number of yellow lines cut)
+:math:`C=4,` which turns out to be the maximum cut. In the following sections,
+we will represent partitions using computational basis states and use PennyLane to
+rediscover this maximum cut.
+
+.. note:: In the graph above, :math:`z=1010` could equally well serve as the maximum cut.
+
+A circuit for QAOA
+~~~~~~~~~~~~~~~~~~~~
+This section describes implementing a circuit for QAOA using basic unitary gates to find approximate
+solutions to the MaxCut problem.
+Firstly, denoting the partitions using computational basis states :math:`|z\rangle,` we can represent the terms in the
+objective function as operators acting on these states
+
+.. math::
+  C_\alpha = \frac{1}{2}\left(1-\sigma_{z}^j\sigma_{z}^k\right),
+
+where the :math:`\alpha\text{th}` edge is between vertices :math:`(j,k).`
+:math:`C_\alpha` has eigenvalue 1 if and only if the :math:`j\text{th}` and :math:`k\text{th}`
+qubits have different z-axis measurement values, representing separate partitions.
+The objective function :math:`C` can be considered a diagonal operator with integer eigenvalues.
+
+QAOA starts with a uniform superposition over the :math:`n` bitstring basis states,
+
+.. math::
+  |+_{n}\rangle = \frac{1}{\sqrt{2^n}}\sum_{z\in \{0,1\}^n} |z\rangle.
+
+
+We aim to explore the space of bitstring states for a superposition which is likely to yield a
+large value for the :math:`C` operator upon performing a measurement in the computational basis.
+Using the :math:`2p` angle parameters
+:math:`\boldsymbol{\gamma} = \gamma_1\gamma_2...\gamma_p,` :math:`\boldsymbol{\beta} = \beta_1\beta_2...\beta_p`
+we perform a sequence of operations on our initial state:
+
+.. math::
+  |\boldsymbol{\gamma},\boldsymbol{\beta}\rangle = U_{B_p}U_{C_p}U_{B_{p-1}}U_{C_{p-1}}...U_{B_1}U_{C_1}|+_n\rangle
+
+where the operators have the explicit forms
+
+.. math::
+  U_{B_l} &= e^{-i\beta_lB} = \prod_{j=1}^n e^{-i\beta_l\sigma_x^j}, \\
+  U_{C_l} &= e^{-i\gamma_lC} = \prod_{\text{edge (j,k)}} e^{-i\gamma_l(1-\sigma_z^j\sigma_z^k)/2}.
+
+In other words, we make :math:`p` layers of parametrized :math:`U_bU_C` gates.
+These can be implemented on a quantum circuit using the gates depicted below, up to an irrelevant constant
+that gets absorbed into the parameters.
+
+.. figure:: ../_static/demonstration_assets/qaoa_maxcut/qaoa_operators.png
+   :align: center
+   :scale: 100%
+   :alt: qaoa_operators
+
+|
+
+.. note::
+    An alternative implementation of :math:`U_{C_l}` would be :math:`ZZ(\gamma_l)`, available
+    via :class:`~.pennylane.IsingZZ` in PennyLane.
+
+Let :math:`\langle \boldsymbol{\gamma},
+\boldsymbol{\beta} | C | \boldsymbol{\gamma},\boldsymbol{\beta} \rangle` be the expectation of the objective operator.
+In the next section, we will use PennyLane to perform classical optimization
+over the circuit parameters :math:`(\boldsymbol{\gamma}, \boldsymbol{\beta}).`
+This will specify a state :math:`|\boldsymbol{\gamma},\boldsymbol{\beta}\rangle` which is
+likely to yield an approximately optimal partition :math:`|z\rangle` upon performing a measurement in the
+computational basis.
+In the case of the graph shown above, we want to measure either 0101 or 1010 from our state since these correspond to
+the optimal partitions.
+
+.. figure:: ../_static/demonstration_assets/qaoa_maxcut/qaoa_optimal_state.png
+  :align: center
+  :scale: 60%
+  :alt: optimal_state
+
+|
+
+Qualitatively, QAOA tries to evolve the initial state into the plane of the
+:math:`|0101\rangle,` :math:`|1010\rangle` basis states (see figure above).
+
+
+Implementing QAOA in PennyLane
+------------------------------
+
+Imports and setup
+~~~~~~~~~~~~~~~~~
+
+To get started, we import PennyLane along with the PennyLane-provided
+version of NumPy.
+"""
 
 import pennylane as qml
 from pennylane import numpy as np
