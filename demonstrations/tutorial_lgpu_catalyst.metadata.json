@@ -1,0 +1,34 @@
+{
+    "title": "How to use Catalyst to just-in-time (QJIT) compile and execute a PennyLane hybrid program on NVIDIA GPUs",
+    "authors": [
+        {
+            "username": "list_of_authors"
+        }
+    ],
+    "dateOfPublication": "n/a",
+    "dateOfLastModification": "n/a",
+    "categories": [
+        "Devices and Performance",
+        "How-to",
+        "Quantum Computing",
+        "Catalyst",
+        "Lightning-GPU"
+    ],
+    "tags": [],
+    "seoDescription": "See how to use Catalyst to just-in-time (QJIT) compile and execute a PennyLane hybrid program on NVIDIA GPUs.",
+    "doi": "",
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_how_to_quantum_just_in_time_compile_vqe_catalyst",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_qjit_compile_grovers_algorithm_with_catalyst",
+            "weight": 1.0
+        }
+    ]
+}
