@@ -100,7 +100,7 @@ print(f"Ground state energy: {circuit()}")
 from functools import partial
 
 # This line is added to better visualise the circuit
-@partial(qml.devices.preprocess.decompose, stopping_condition = lambda obj:False, max_expansion=1)
+@partial(qml.transforms.decompose, max_expansion=1)
 
 def ansatz(theta, wires):
     singles, doubles = qml.qchem.excitations(2, n_qubits)
