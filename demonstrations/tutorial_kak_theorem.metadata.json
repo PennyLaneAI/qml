@@ -24,7 +24,6 @@
     ],
     "seoDescription": "Learn about the KAK theorem and how it powers circuit decompositions.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_kak_theorem",
     "references": [
         {
             "id": "hall",

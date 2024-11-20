@@ -4,7 +4,7 @@ r"""The KAK theorem
 The KAK theorem is a beautiful mathematical result from Lie theory, with
 particular relevance for quantum computing. It can be seen as a
 generalization of the singular value decomposition, as it decomposes a group
-element :math:`U` (think: unitary operator) into :math:`U=K_1AK_2`, where
+element :math:`U` (think: unitary operator) into :math:`U=K_1AK_2,` where
 :math:`K_{1,2}` and :math:`A` belong to special subgroups that we will introduce.
 This means the KAK theorem falls under the large umbrella of matrix factorizations,
 and it allows us to use it for quantum circuit decompositions.
@@ -21,7 +21,7 @@ two-qubit unitaries into rotation gates as an application of the KAK theorem.
 
 .. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_kak_theorem.png
     :align: center
-    :width: 60%
+    :width: 70%
     :target: javascript:void(0)
 
 Along the way, we will put some non-essential mathematical details
@@ -32,7 +32,7 @@ as well as a few gotchas regarding the nomenclature into boxes such as this one:
 
     In the following we will assume a basic understanding of vector spaces,
     linear maps, and Lie algebras. To review those topics, we recommend a look
-    at your favourite linear algebra material. For the latter also see our
+    at your favourite linear algebra material. For the latter, also see our
     :doc:`introduction to (dynamical) Lie algebras </demos/tutorial_liealgebra/>`.
 
 Without further ado, let's get started!
@@ -51,8 +51,8 @@ we will use. To warm up, however, let us briefly talk about Lie algebras (for de
 see our :doc:`intro to (dynamical) Lie algebras </demos/tutorial_liealgebra/>`).
 
 A *Lie algebra* :math:`\mathfrak{g}` is a vector space with an additional operation
-that takes two vectors to a new vector, the *Lie bracket*. :math:`\mathfrak{g}` must be
-closed under the Lie bracket to form an algebra.
+that takes two vectors to a new vector, the *Lie bracket*. To form an algebra, :math:`\mathfrak{g}` must be
+closed under the Lie bracket.
 For our purposes, the vectors will always be matrices and the Lie bracket will be the matrix
 commutator.
 
@@ -75,11 +75,11 @@ We will also look at a more involved example at the end of the demo.
 .. admonition:: Math detail: our Lie algebras are real
     :class: note
 
-    :math:`\mathfrak{su}(n)` is a *real* Lie algebra, i.e., it is a vector space over the
-    real numbers :math:`\mathbb{R}.` This means that scalar-vector multiplication is
+    The algebra :math:`\mathfrak{su}(n)` is a *real* Lie algebra, i.e., it is a vector space over the
+    real numbers, :math:`\mathbb{R}.` This means that scalar-vector multiplication is
     only valid between vectors (complex-valued matrices) and real scalars.
 
-    There is a simple way to see this; Multiplying a skew-Hermitian matrix
+    There is a simple way to see this. Multiplying a skew-Hermitian matrix
     :math:`x\in\mathfrak{su}(n)` by a complex number :math:`c\in\mathbb{C}` will yield
     :math:`(cx)^\dagger=\overline{c} x^\dagger=-\overline{c} x,` so that
     the result might no longer be skew-Hermitian, i.e. no longer in the algebra! If we keep it to real scalars
@@ -91,10 +91,10 @@ We will also look at a more involved example at the end of the demo.
 Let us set up :math:`\mathfrak{su}(2)` in code.
 Note that the algebra itself consists of *skew*-Hermitian matrices, but we will work
 with the Hermitian counterparts as inputs, i.e., we will skip the factor :math:`i.`
-We can check that :math:`\mathfrak{su}(2)` is closed under commutators, by
+We can check that :math:`\mathfrak{su}(2)` is closed under commutators by
 computing all nested commutators, the so-called *Lie closure*, and observing
 that the closure is not larger than :math:`\mathfrak{su}(2)` itself.
-Of course we could also check the closure manually for this small example.
+Of course, we could also check the closure manually for this small example.
 """
 
 from itertools import product, combinations
@@ -115,11 +115,11 @@ traces = [op.pauli_rep.trace() for op in su2]
 print(f"All operators are traceless: {np.allclose(traces, 0.)}")
 
 ######################################################################
-# We find that :math:`\mathfrak{su}(2)` indeed is closed, and that it is a 3-dimensional
+# We find that :math:`\mathfrak{su}(2)` is indeed closed, and that it is a 3-dimensional
 # space, as expected from the explicit expression above.
 # We also picked a correct representation with traceless operators.
 #
-# .. admonition:: Math detail: (semi-)simple Lie algebras
+# .. admonition:: Math detail: (semi)simple Lie algebras
 #     :class: note
 #
 #     Our main result for this demo will be the KAK theorem, which applies to so-called
@@ -178,7 +178,7 @@ print(f"All operators are traceless: {np.allclose(traces, 0.)}")
 #
 #     \text{Ad}_{\exp(x)}(y) = \exp(\text{ad}_x) (y),
 #
-# where we applied the exponential map to :math:`\text{ad}_x`, which maps from :math:`\mathfrak{g}`
+# where we applied the exponential map to :math:`\text{ad}_x,` which maps from :math:`\mathfrak{g}`
 # to itself, via its series representation.
 # We will refer to this relationship as the *adjoint identity*.
 # We talk about Ad and ad in more detail in the box below, and refer to our demo
@@ -198,7 +198,7 @@ print(f"All operators are traceless: {np.allclose(traces, 0.)}")
 #
 #     The map :math:`\Psi_{\exp(x)}` (with fixed subscript) is a smooth map from the Lie group
 #     :math:`\mathcal{G}` to itself, so that we may differentiate it. This leads to the
-#     differential :math:`\text{Ad}_{\exp(x)}=d\Psi_{\exp(x)}` which maps the tangent spaces of
+#     differential :math:`\text{Ad}_{\exp(x)}=d\Psi_{\exp(x)},` which maps the tangent spaces of
 #     :math:`\mathcal{G}` to itself. At the identity, where
 #     the algebra :math:`\mathfrak{g}` forms the tangent space, we find
 #
@@ -285,7 +285,7 @@ def is_orthogonal(op, basis):
 #     [\mathfrak{p}, \mathfrak{p}] \subset& \mathfrak{k} \qquad \text{(Symmetric property)}.
 #
 # The first property tells us that :math:`\mathfrak{p}` is left intact by the adjoint action of
-# :math:`\mathfrak{k}`. The second property suggests that :math:`\mathfrak{p}` behaves like the
+# :math:`\mathfrak{k}.` The second property suggests that :math:`\mathfrak{p}` behaves like the
 # "opposite" of a subalgebra, i.e., all commutators lie in its complement, the subalgebra
 # :math:`\mathfrak{k}.` Due to the adjoint identity from above, the first property also holds for
 # group elements acting on algebra elements; for all :math:`x\in\mathfrak{p}` and
@@ -501,7 +501,7 @@ print(f"The rotated CSAs match between numerics and theory: {a_primes_equal}")
 # #. It is linear, i.e., :math:`\theta(x + cy)=\theta(x) +c \theta(y),`
 # #. It is compatible with the commutator, i.e., :math:`\theta([x, y])=[\theta(x),\theta(y)],` and
 # #. It is an *involution*, i.e., :math:`\theta(\theta(x)) = x,`
-#    or :math:`\theta^2=\mathbb{I}_{\mathfrak{g}}`
+#    or :math:`\theta^2=\mathbb{I}_{\mathfrak{g}}.`
 #
 # In short, we demand that :math:`\theta` be an *involutive automorphism* of :math:`\mathfrak{g}.`
 #
@@ -559,7 +559,7 @@ print(f"The rotated CSAs match between numerics and theory: {a_primes_equal}")
 #     = \mathbb{I}_{\mathfrak{g}},
 #
 # where we used the projectors' property :math:`\Pi_{\mathfrak{k}}^2=\Pi_{\mathfrak{k}}` and
-# :math:`\Pi_{\mathfrak{p}}^2=\Pi_{\mathfrak{p}}`, as well as the fact that
+# :math:`\Pi_{\mathfrak{p}}^2=\Pi_{\mathfrak{p}},` as well as the fact that
 # :math:`\Pi_{\mathfrak{k}}\Pi_{\mathfrak{p}}=\Pi_{\mathfrak{p}}\Pi_{\mathfrak{k}}=0` because
 # the spaces :math:`\mathfrak{k}` and :math:`\mathfrak{p}` are orthogonal to each other.
 #
@@ -600,7 +600,7 @@ print(f"The rotated CSAs match between numerics and theory: {a_primes_equal}")
 #
 # In our example, an involution that reproduces our choice
 # :math:`\mathfrak{k}=\text{span}_{\mathbb{R}} \{iZ\}` is :math:`\theta_Z(x) = Z x Z`
-# (Convince yourself that it is an involution that respects commutators, or verify that
+# (convince yourself that it is an involution that respects commutators, or verify that
 # it matches :math:`\theta_{\mathfrak{k}}` from above).
 
 
@@ -638,7 +638,7 @@ for x in su2:
 print(f"Under theta_Y, the operators\n{su2}\nhave the eigenvalues\n{eigvals}")
 
 ######################################################################
-# This worked! a new involution gave us a new subalgebra and Cartan decomposition.
+# This worked! A new involution gave us a new subalgebra and Cartan decomposition.
 #
 # .. admonition:: Math detail: classification of Cartan decompositions
 #     :class: note
@@ -650,7 +650,7 @@ print(f"Under theta_Y, the operators\n{su2}\nhave the eigenvalues\n{eigvals}")
 #     plays a big role when talking about decompositions without getting stuck on details
 #     like the choice of basis or the representation of the algebra as matrices.
 #     For example, there are only three types of Cartan decompositions of the special unitary
-#     algebra :math:`\mathfrak{su}(n)`, called AI, AII, and AIII. The subalgebras
+#     algebra :math:`\mathfrak{su}(n),` called AI, AII, and AIII. The subalgebras
 #     :math:`\mathfrak{k}` for these decompositions are the special orthogonal algebra
 #     :math:`\mathfrak{so}(n)` (AI), the unitary symplectic algebra :math:`\mathfrak{sp}(n)` (AII),
 #     and a sum of (special) unitary algebras
@@ -737,7 +737,7 @@ print(f"Under theta_Y, the operators\n{su2}\nhave the eigenvalues\n{eigvals}")
 # the exponential of a CSA element, i.e., of commuting elements from the horizontal subspace
 # :math:`\mathfrak{p}.` This may already hint at the usefulness of the KAK theorem for matrix
 # factorizations in general, and for quantum circuit decompositions in particular.
-# Given a group operation :math:`G=\exp(x)` with :math:`x\in\mathfrak{g}`, there are two
+# Given a group operation :math:`G=\exp(x)` with :math:`x\in\mathfrak{g},` there are two
 # subalgebra elements :math:`y_{1,2}\in\mathfrak{k}` (or subgroup elements
 # :math:`K_{1,2}=\exp(y_{1,2})\in \mathcal{K}`) and a Cartan subgalgebra element
 # :math:`a\in\mathfrak{a}` so that
@@ -746,8 +746,8 @@ print(f"Under theta_Y, the operators\n{su2}\nhave the eigenvalues\n{eigvals}")
 #
 #     G\in\mathcal{G} \quad\Rightarrow\quad G=K_1 \exp(a) K_2.
 #
-# If :math:`x` happens to be from the horizontal subspace :math:`\mathfrak{p}`, so that
-# :math:`G\in \mathcal{P}\subset\mathcal{G}`, we know that the two subgroup elements :math:`K_1`
+# If :math:`x` happens to be from the horizontal subspace :math:`\mathfrak{p},` so that
+# :math:`G\in \mathcal{P}\subset\mathcal{G},` we know that the two subgroup elements :math:`K_1`
 # and :math:`K_2` will in fact be related, namely
 #
 # .. math::
@@ -770,7 +770,7 @@ print(qml.ops.one_qubit_decomposition(G, 0, rotations="ZYZ"))
 ######################################################################
 # If we pick a "horizontal gate", i.e., a gate :math:`G\in\mathcal{P}`, we obtain the same
 # rotation angle for the initial and final :math:`R_Z` rotations, up to the expected sign, and
-# a shift by some multiple of :math:`2\pi`.
+# a shift by some multiple of :math:`2\pi.`
 
 horizontal_x = -0.1j * p[0] - 4.1j * p[1]
 print(horizontal_x)
@@ -835,7 +835,7 @@ p = check_cartan_decomposition(su4, su2_su2, space_name)
 #
 # .. math::
 #
-#     \mathfrak{a} = \text{span}_{\mathbb{R}}\{iX_0X_1, iY_0Y_1, iZ_0Z_1\}
+#     \mathfrak{a} = \text{span}_{\mathbb{R}}\{iX_0X_1, iY_0Y_1, iZ_0Z_1\}.
 #
 # These three operators commute, making :math:`\mathfrak{a}` Abelian.
 # They also form a *maximal* Abelian algebra within :math:`\mathfrak{p},` which is less obvious.
@@ -896,7 +896,7 @@ fig, ax = qml.draw_mpl(su4_gate, wire_order=[0, 1])(params)
 # decomposition of a Lie algebra to decompose its Lie group.
 # This allows us to break down arbitrary quantum gates from that group,
 # as we implemented in code for the groups of single-qubit and two-qubit gates,
-# :math:`SU(2).` and :math:`SU(4).`
+# :math:`SU(2)` and :math:`SU(4).`
 #
 # If you are interested in other applications of Lie theory in the field of
 # quantum computing, you are in luck! It has been a handy tool throughout the last
