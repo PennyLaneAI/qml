@@ -60,13 +60,13 @@ commutator.
 **Example**
 
 Our working example in this demo will be the *special unitary* algebra in two dimensions,
-:math:`\mathfrak{s}\mathfrak{u}(2).`
+:math:`\mathfrak{s}`:math:`\mathfrak{u}(2).`
 It consists of traceless complex-valued skew-Hermitian :math:`2\times 2` matrices, which we
 can conveniently describe using the Pauli matrices:
 
 .. math::
 
-    \mathfrak{s}\mathfrak{u}(2)
+    \mathfrak{s}`:math:`\mathfrak{u}(2)
     &= \left\{i\left(\begin{array}{cc} a & b-ic \\ b+ic & -a \end{array}\right)
     {\large |} a, b, c \in \mathbb{R}\right\}\\
     &= \left\{i(a Z + b X + c Y)| a, b, c \in \mathbb{R}\right\}.
@@ -76,12 +76,12 @@ We will also look at a more involved example at the end of the demo.
 .. admonition:: Math detail: our Lie algebras are real
     :class: note
 
-    The algebra :math:`\mathfrak{s}\mathfrak{u}(n)` is a *real* Lie algebra, i.e., it is a vector space over the
+    The algebra :math:`\mathfrak{s}`:math:`\mathfrak{u}(n)` is a *real* Lie algebra, i.e., it is a vector space over the
     real numbers, :math:`\mathbb{R}.` This means that scalar-vector multiplication is
     only valid between vectors (complex-valued matrices) and real scalars.
 
     There is a simple way to see this. Multiplying a skew-Hermitian matrix
-    :math:`x\in\mathfrak{s}\mathfrak{u}(n)` by a complex number :math:`c\in\mathbb{C}` will yield
+    :math:`x\in\mathfrak{s}`:math:`\mathfrak{u}(n)` by a complex number :math:`c\in\mathbb{C}` will yield
     :math:`(cx)^\dagger=\overline{c} x^\dagger=-\overline{c} x,` so that
     the result might no longer be skew-Hermitian, i.e. no longer in the algebra! If we keep it to real scalars
     :math:`c\in\mathbb{R}` only, we have :math:`\overline{c}=c,` so that
@@ -89,12 +89,12 @@ We will also look at a more involved example at the end of the demo.
 
     We will only consider real Lie algebras here.
 
-Let us set up :math:`\mathfrak{s}\mathfrak{u}(2)` in code.
+Let us set up :math:`\mathfrak{s}`:math:`\mathfrak{u}(2)` in code.
 Note that the algebra itself consists of *skew*-Hermitian matrices, but we will work
 with the Hermitian counterparts as inputs, i.e., we will skip the factor :math:`i.`
-We can check that :math:`\mathfrak{s}\mathfrak{u}(2)` is closed under commutators by
+We can check that :math:`\mathfrak{s}`:math:`\mathfrak{u}(2)` is closed under commutators by
 computing all nested commutators, the so-called *Lie closure*, and observing
-that the closure is not larger than :math:`\mathfrak{s}\mathfrak{u}(2)` itself.
+that the closure is not larger than :math:`\mathfrak{s}`:math:`\mathfrak{u}(2)` itself.
 Of course, we could also check the closure manually for this small example.
 """
 
@@ -116,7 +116,7 @@ traces = [op.pauli_rep.trace() for op in su2]
 print(f"All operators are traceless: {np.allclose(traces, 0.)}")
 
 ######################################################################
-# We find that :math:`\mathfrak{s}\mathfrak{u}(2)` is indeed closed, and that it is a 3-dimensional
+# We find that :math:`\mathfrak{s}`:math:`\mathfrak{u}(2)` is indeed closed, and that it is a 3-dimensional
 # space, as expected from the explicit expression above.
 # We also picked a correct representation with traceless operators.
 #
@@ -127,7 +127,7 @@ print(f"All operators are traceless: {np.allclose(traces, 0.)}")
 #     *semisimple* Lie algebras, which are in turn composed of *simple* Lie algebras as building
 #     blocks. Without going into detail, it often is sufficient to think of these building
 #     blocks as (1) special orthogonal algebras :math:`\mathfrak{so}(n),` (2) unitary symplectic
-#     algebras :math:`\mathfrak{sp}(n),` and (3) special unitary algebras :math:`\mathfrak{s}\mathfrak{u}(n).`
+#     algebras :math:`\mathfrak{sp}(n),` and (3) special unitary algebras :math:`\mathfrak{s}`:math:`\mathfrak{u}(n).`
 #     In particular, our example here is of the latter type, so it is not only semisimple,
 #     but even simple.
 #
@@ -152,8 +152,8 @@ print(f"All operators are traceless: {np.allclose(traces, 0.)}")
 # subalgebras, the correspondence is well-known to quantum practitioners: Exponentiate
 # a skew-Hermitian matrix to obtain a unitary operation, i.e., a quantum gate.
 #
-# Interaction between Lie algebra and its group
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Interaction between Lie groups and algebras
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # We will make use of a particular interaction between the algebra :math:`\mathfrak{g}` and
 # its group :math:`\mathcal{G},` called the *adjoint action* of :math:`\mathcal{G}` on
@@ -340,7 +340,7 @@ def is_orthogonal(op, basis):
 # **Example**
 #
 # For our example, we consider the subalgebra :math:`\mathfrak{k}=\mathfrak{u}(1)`
-# of :math:`\mathfrak{s}\mathfrak{u}(2)` that generates Pauli-:math:`Z` rotations:
+# of :math:`\mathfrak{s}`:math:`\mathfrak{u}(2)` that generates Pauli-:math:`Z` rotations:
 #
 # .. math::
 #
@@ -460,7 +460,7 @@ p = check_cartan_decomposition(su2, u1, space_name)
 # **Example**
 #
 # For our example, we established the decomposition
-# :math:`\mathfrak{s}\mathfrak{u}(2)=\mathfrak{u}(1)\oplus \mathfrak{p}` with the two-dimensional horizontal
+# :math:`\mathfrak{s}`:math:`\mathfrak{u}(2)=\mathfrak{u}(1)\oplus \mathfrak{p}` with the two-dimensional horizontal
 # space :math:`\mathfrak{p} = \text{span}_{\mathbb{R}}\{iX, iY\}.` Starting with the subspace
 # :math:`\mathfrak{a}=\text{span}_{\mathbb{R}} \{iY\},` we see that we immediately reach a maximal Abelian
 # subalgebra (a CSA), because :math:`[Y, X]\neq 0.` Applying a rotation
@@ -651,11 +651,11 @@ print(f"Under theta_Y, the operators\n{su2}\nhave the eigenvalues\n{eigvals}")
 #     plays a big role when talking about decompositions without getting stuck on details
 #     like the choice of basis or the representation of the algebra as matrices.
 #     For example, there are only three types of Cartan decompositions of the special unitary
-#     algebra :math:`\mathfrak{s}\mathfrak{u}(n),` called AI, AII, and AIII. The subalgebras
+#     algebra :math:`\mathfrak{s}`:math:`\mathfrak{u}(n),` called AI, AII, and AIII. The subalgebras
 #     :math:`\mathfrak{k}` for these decompositions are the special orthogonal algebra
 #     :math:`\mathfrak{so}(n)` (AI), the unitary symplectic algebra :math:`\mathfrak{sp}(n)` (AII),
 #     and a sum of (special) unitary algebras
-#     :math:`\mathfrak{s}\mathfrak{u}(p)\oplus\mathfrak{s}\mathfrak{u}(q)\oplus\mathfrak{u}(1)` (AIII, :math:`p+q=n`).
+#     :math:`\mathfrak{s}`:math:`\mathfrak{u}(p)\oplus\mathfrak{s}`:math:`\mathfrak{u}(q)\oplus\mathfrak{u}(1)` (AIII, :math:`p+q=n`).
 #     For a quick overview, see for example the `Wikipedia entry on symmetric spaces
 #     <https://en.wikipedia.org/wiki/Symmetric_space#Classification_of_Riemannian_symmetric_spaces>`__.
 #     Their involutions are usually represented by complex conjugation (AI), by the adjoint
@@ -757,7 +757,7 @@ print(f"Under theta_Y, the operators\n{su2}\nhave the eigenvalues\n{eigvals}")
 #
 # **Example**
 #
-# Applying what we just learned to our example on :math:`\mathfrak{s}\mathfrak{u}(2),` we can state that
+# Applying what we just learned to our example on :math:`\mathfrak{s}`:math:`\mathfrak{u}(2),` we can state that
 # any single-qubit gate can be implemented by running a gate from
 # :math:`\mathcal{K}=\{\exp(i\eta Z) | \eta\in\mathbb{R}\},` a CSA gate
 # :math:`\mathcal{A}=\{\exp(i\varphi Y) | \eta\in\mathbb{R}\},` and another gate from
@@ -798,10 +798,10 @@ print(f"First and last rotation angle match up to sign and shift by 2kπ: {angle
 # -----------------------------------------
 #
 # Two-qubit operations are described by the special unitary group :math:`SU(4)` and
-# here we will use a decomposition of its algebra :math:`\mathfrak{s}\mathfrak{u}(4)` to decompose
+# here we will use a decomposition of its algebra :math:`\mathfrak{s}`:math:`\mathfrak{u}(4)` to decompose
 # such gates.
 # Specifically, we use the subalgebra that generates single-qubit operations independently
-# on either qubit, :math:`\mathfrak{s}\mathfrak{u}(2)\oplus\mathfrak{s}\mathfrak{u}(2).` Let's set it up with our
+# on either qubit, :math:`\mathfrak{s}`:math:`\mathfrak{u}(2)\oplus\mathfrak{s}`:math:`\mathfrak{u}(2).` Let's set it up with our
 # tool from earlier:
 
 # Define su(4). Skip first entry of Pauli group, which is the identity
