@@ -4,12 +4,12 @@
         {
             "username": "Jay"
         },
-      {
-            "id": "jarrett_smalley"
+        {
+            "username": "jsmalley"
         }
     ],
     "dateOfPublication": "2023-08-22T00:00:00+00:00",
-    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
+    "dateOfLastModification": "2024-11-06T00:00:00+00:00",
     "categories": [
         "Quantum Computing",
         "Algorithms",
