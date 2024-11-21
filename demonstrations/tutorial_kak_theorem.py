@@ -3,7 +3,7 @@ r"""The KAK theorem
 
 The KAK theorem is a beautiful mathematical result from Lie theory, with
 particular relevance for quantum computing. It can be seen as a
-generalization of the singular value decomposition, as it decomposes a group
+generalization of the singular value decomposition (SVD), as it decomposes a group
 element :math:`U` (think: unitary operator) into :math:`U=K_1AK_2,` where
 :math:`K_{1,2}` and :math:`A` belong to special subgroups that we will introduce.
 This means the KAK theorem falls under the large umbrella of matrix factorizations,
@@ -76,7 +76,7 @@ We will also look at a more involved example at the end of the demo.
 .. admonition:: Math detail: our Lie algebras are real
     :class: note
 
-    The algebra :math:`\mathfrak{su}(n)` is a *real* Lie algebra, i.e., it is a vector space over the
+    The algebra :math:`\mathfrak{su}(n)` is a *real* Lie algebra, i.e., it is a vector space over
     real numbers, :math:`\mathbb{R}.` This means that scalar-vector multiplication is
     only valid between vectors (complex-valued matrices) and real scalars.
 
