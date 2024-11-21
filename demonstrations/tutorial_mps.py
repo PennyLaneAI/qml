@@ -134,7 +134,7 @@ plt.show()
 ##############################################################################
 # 
 # We are later going to do the same trick with state vectors.
-# Note that the compressed information is encoded in :math:`U,` :math:`S` and :math:`V^\dagger.`
+# Note that the compressed information is encoded in :math:`U,` :math:`\Lambda` and :math:`V^\dagger.`
 # If we want to retrieve the actual image :math:`M` (or state vector), we still need to reconstruct the full :math:`334 \times 542` pixels.
 # Luckily, as we will later see in the case of MPS, we can retrieve all relevant information efficiently from the compressed components without ever 
 # having to reconstruct the full state vector.
@@ -209,7 +209,7 @@ U, Lambda, Vd = np.linalg.svd(psi, full_matrices=False)
 #
 # Note that because :math:`\Lambda` is diagonal, it has the same virtual index on either side.
 #
-# We keep the :math:`U` tensors. We want to maintain the convention that they are of the shape ``(virtual_left, physical, virtual_right)`.`
+# We keep the :math:`U` tensors. We want to maintain the convention that they are of the shape ``(virtual_left, physical, virtual_right).``
 # Because there is no virtual index on the left for the first site, we introduce a dummy index of size ``1``.
 # This is just to make the bookkeeping of the final MPS a bit simpler, as all tensors have the same shape structure.
 
@@ -328,7 +328,7 @@ def dense_to_mps(psi, bond_dim):
     U, S, Vd = split(psi, bond_dim)  # psi[2, (2x2x..)] = U[2, mu] S[mu] Vd[mu, (2x2x2x..)]
 
     Ms.append(U)
-    Ss.append(Ss)
+    Ss.append(S)
     bondL = Vd.shape[0]
     psi = np.tensordot(np.diag(S), Vd, 1)
 
@@ -336,7 +336,7 @@ def dense_to_mps(psi, bond_dim):
         psi = np.reshape(psi, (2*bondL, -1)) # reshape psi[2 * bondL, (2x2x2...)]
         U, S, Vd = split(psi, bond_dim) # psi[2, (2x2x..)] = U[2, mu] S[mu] Vd[mu, (2x2x2x..)]
         Ms.append(U)
-        Ss.append(Ss)
+        Ss.append(S)
 
         psi = np.tensordot(np.diag(S), Vd, 1)
         bondL = Vd.shape[0]
