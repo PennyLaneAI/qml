@@ -10,8 +10,9 @@ The non-unique nature of these representations allows quantum computing librarie
 different approaches for storing and building Kraus operators to construct noise models. 
 In this how-to guide, we will first compare the construction of noise models in
 `Qiskit <https://docs.quantum.ibm.com/>`_ and
-`PennyLane <https://docs.pennylane.ai/en/stable/code/qml.html>`_, and
-then learn how to convert a Qiskit noise model into an equivalent PennyLane one.
+`PennyLane <https://docs.pennylane.ai/en/stable/code/qml.html>`_. Then, we will learn how to
+convert a Qiskit noise model into an equivalent PennyLane one, allowing users to import any
+custom user-defined or fake backend-based noise models.
 """
 
 ######################################################################
@@ -38,19 +39,22 @@ from qiskit_aer.noise import (
     amplitude_damping_error, depolarizing_error, pauli_error, NoiseModel
 )
 
-# Building the qiskit noise model
+# Building the Qiskit noise model
 model_qk = NoiseModel()
 
+# Depolarization error for single-qubit gates
 prob_depol = 0.2
 error_gate1 = depolarizing_error(prob_depol, 1)
 model_qk.add_all_qubit_quantum_error(error_gate1, ["u1", "u2", "u3"])
 
+# Bit flip errors for two-qubit gate
 prob_bit_flip = 0.1
 error_gate2 = pauli_error([('X', prob_bit_flip), ('I', 1 - prob_bit_flip)]).tensor(
     pauli_error([('I', 1)])
 )
 model_qk.add_all_qubit_quantum_error(error_gate2, ["cx"])
 
+# Amplitude damping error for measurements
 n_qubits = 3
 exc_population = 0.2
 prob_ampl_damp = np.random.default_rng(42).uniform(0, 0.2, n_qubits)
@@ -73,19 +77,22 @@ print(model_qk)
 
 import pennylane as qml
 
+# Depolarization error for single-qubit gates
 gate1_fcond = qml.noise.op_in(["U1", "U2", "U3"]) & qml.noise.wires_in(range(n_qubits))
 gate1_noise = qml.noise.partial_wires(qml.DepolarizingChannel, prob_depol)
 
+# Bit flip errors for two-qubit gate
 gate2_fcond = qml.noise.op_eq("CNOT")
 def gate2_noise(op, **metadata):
     qml.BitFlip(prob_bit_flip, op.wires[1])
 
+# Readout errors for measurements
 rmeas_fcond = qml.noise.meas_eq(qml.counts)
 def rmeas_noise(op, **metadata):
     for wire in op.wires:
         qml.GeneralizedAmplitudeDamping(prob_ampl_damp[wire], 1 - exc_population, wire)
 
-# Building the pennylane noise model
+# Building the PennyLane noise model
 model_pl = qml.NoiseModel(
     {gate1_fcond: gate1_noise, gate2_fcond: gate2_noise}, {rmeas_fcond: rmeas_noise},
 )
@@ -104,7 +111,7 @@ print(model_pl)
 #
 
 # Preparing the devices
-n_shots = int(2e5)
+n_shots = int(2e6)
 dev_pl_ideal = qml.device("default.mixed", wires=n_qubits, shots=n_shots)
 dev_qk_noisy = qml.device("qiskit.aer", wires=n_qubits, shots=n_shots, noise_model=model_qk)
 
@@ -123,7 +130,7 @@ qk_noisy_circ = qml.QNode(GHZcircuit, dev_qk_noisy)
 pl_noisy_res, qk_noisy_res = pl_noisy_circ(), qk_noisy_circ()
 
 ######################################################################
-# Now let's compare the results to see the equivalence between the two noise models:
+# Now let's look at the results to compare the two noise models:
 #
 
 pl_probs = np.array(list(pl_noisy_res.values())) / n_shots
@@ -132,6 +139,13 @@ qk_probs = np.array(list(qk_noisy_res.values())) / n_shots
 print("PennyLane Results: ", np.round(pl_probs, 3))
 print("Qiskit Results:    ", np.round(qk_probs, 3))
 print("Are results equal? ", np.allclose(pl_probs, qk_probs, atol=1e-2))
+
+######################################################################
+# As the results are equal within a targeted tolerance,
+# we can confirm that the two noise models are equivalent.
+# Note that this tolerance can be further suppressed by
+# increasing the number of shots (``n_shots``) in the simulation.
+#
 
 ######################################################################
 # Importing Qiskit noise models
@@ -195,8 +209,8 @@ print(pl_noise_model.meas_map)
 #
 # Should you have any questions about using noise models in PennyLane, you can consult the
 # `noise module documentation <https://docs.pennylane.ai/en/stable/code/qml_noise.html>`_,
-# the PennyLane Codebook module on
-# `Noisy Quantum Theory <https://pennylane.ai/codebook/#06-noisy-quantum-theory>`_,
+# the `PennyLane Codebook module on Noisy Quantum Theory
+# <https://pennylane.ai/codebook/#06-noisy-quantum-theory>`_,
 # or create a post on the `PennyLane Discussion Forum <https://discuss.pennylane.ai>`_.
 #
 
