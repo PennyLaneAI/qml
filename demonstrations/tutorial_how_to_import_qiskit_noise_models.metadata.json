@@ -19,7 +19,7 @@
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_how_to_import_qiskit_qnoise_models.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_how_to_import_qiskit_noise_models.png"
         }
     ],
     "seoDescription": "Learn how noise models can be imported into PennyLane from Qiskit.",
