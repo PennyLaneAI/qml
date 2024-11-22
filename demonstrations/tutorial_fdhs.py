@@ -369,6 +369,7 @@ Us_trotter500 = jax.vmap(lambda t: qml.matrix(qml.TrotterProduct(H, time=t, n=50
 res_kak = 1 - jnp.abs(jnp.einsum("bij,bji->b", Us_exact.conj(), Us_kak)) / 2**n_wires
 res_trotter50 = 1 - jnp.abs(jnp.einsum("bij,bji->b", Us_exact.conj(), Us_trotter50)) / 2**n_wires
 res_trotter500 = 1 - jnp.abs(jnp.einsum("bij,bji->b", Us_exact.conj(), Us_trotter500)) / 2**n_wires
+
 plt.plot(ts, res_kak, label="KAK")
 plt.plot(ts, res_trotter50, "x--", label="50 Trotter steps")
 plt.plot(ts, res_trotter500, ".-", label="500 Trotter steps")
@@ -391,8 +392,8 @@ plt.show()
 # Conclusion
 # ----------
 #
-# We learned about the powerful and versatile tool of KAK circuit decompositions and applied it to
-# time evolution operators. These decompositions exist 
+# We learned about the powerful and versatile tool of KAK circuit decomposition and applied it to
+# time evolution operators.
 #
 
 
