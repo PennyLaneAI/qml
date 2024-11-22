@@ -349,20 +349,40 @@ trace_distance(U_exact_m, U_kak_m)
 # Note that this is valid for arbitrary :math:`t`, such that in that sense the Hamiltonian simulation operator has a fixed depth.
 
 ##############################################################################
-# Comparison with Trotter products
-# --------------------------------
+# Time evolutions
+# ---------------
 # 
-# We can compare this with the standard method for computing time evolution operators, Suzuki-Trotter products (see :class:`TrotterProduct`).
+# We can compute multiple time evolutions and see that the 
 #
+
+ts = jnp.linspace(0.2, 1., 10)
+
+Us_exact = jax.vmap(lambda t: qml.matrix(qml.exp(-1j * t * H), wire_order=range(n_wires)))(ts)
+
+def Us_kak(t):
+    return Kc_m.conj().T @ jax.scipy.linalg.expm(-1j * t * h_0_m) @ Kc_m
+
+Us_kak = jax.vmap(Us_kak)(ts)
+Us_trotter50 = jax.vmap(lambda t: qml.matrix(qml.TrotterProduct(H, time=t, n=50, order=4), wire_order=range(n_wires)))(ts)
+Us_trotter500 = jax.vmap(lambda t: qml.matrix(qml.TrotterProduct(H, time=t, n=500, order=4), wire_order=range(n_wires)))(ts)
+
+res_kak = 1 - jnp.abs(jnp.einsum("bij,bji->b", Us_exact.conj(), Us_kak)) / 2**n_wires
+res_trotter50 = 1 - jnp.abs(jnp.einsum("bij,bji->b", Us_exact.conj(), Us_trotter50)) / 2**n_wires
+res_trotter500 = 1 - jnp.abs(jnp.einsum("bij,bji->b", Us_exact.conj(), Us_trotter500)) / 2**n_wires
+plt.plot(ts, res_kak, label="KAK")
+plt.plot(ts, res_trotter50, "x--", label="50 Trotter steps")
+plt.plot(ts, res_trotter500, ".-", label="500 Trotter steps")
+plt.ylabel("empirical error")
+plt.xlabel("t")
+# plt.yscale("log")
+plt.legend()
+plt.show()
 
 
 ##############################################################################
-#
-#
-
-
-##############################################################################
-#
+# The KAK decomposition is particularly well-suited for smaller systems as the circuit depth is equal to the
+# dimension of the subspaces, in particular :math:`2 |\mathfrak{k}| + |\mathfrak{h}|`. Note, however,
+# that these dimensions typically scale exponentially in the system size.
 #
 
 
@@ -371,7 +391,8 @@ trace_distance(U_exact_m, U_kak_m)
 # Conclusion
 # ----------
 #
-# many good
+# We learned about the powerful and versatile tool of KAK circuit decompositions and applied it to
+# time evolution operators. These decompositions exist 
 #
 
 
