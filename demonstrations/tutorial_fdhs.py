@@ -142,7 +142,7 @@ len(g), len(k), len(m)
 #     [\mathfrak{m}, \mathfrak{m}] \subseteq \mathfrak{k} & \text{ (symmetric property)}
 #     \end{align}
 #
-# In particular, :math:`\mathfrak{k}` is a subalgebra of :math:`\mathfrak{g}`, whereas :math:`\mathfrak{m}` is not.
+# In particular, :math:`\mathfrak{k}` is closed under commutation and is therefore a subalgebra, whereas :math:`\mathfrak{m}` is not.
 # This also has the consequence that the associated Lie group :math:`\mathcal{K} := e^{i \mathfrak{k}}` is a subgroup
 # of the associated Lie group :math:`\mathcal{G} := e^{i \mathfrak{g}}`.
 #
@@ -150,7 +150,7 @@ len(g), len(k), len(m)
 # -----------------
 # 
 # With this we have identified the first subgroup (:math:`\mathcal{K}`) of the KAK decomposition. The other subgroup
-# is induced by the so-called (horizontal) Cartan subalgebra :math:`\mathfrak{a}`. This is a maximal Abelian subalgebra of :math:`\mathfrak{m}`, i.e. it is not unique.
+# is induced by the so-called (horizontal) Cartan subalgebra :math:`\mathfrak{h}`. This is a maximal Abelian subalgebra of :math:`\mathfrak{m}` and is not unique.
 # For the case of Pauli words we can simply pick any element in :math:`\mathfrak{m}` and collect all other operators in :math:`\mathfrak{m}`
 # that commute with it.
 #
@@ -210,8 +210,8 @@ len(g), len(k), len(mtilde), len(h)
 # 
 # .. math:: f(\theta) = \langle K(\theta) v K(\theta)^\dagger, H\rangle
 # 
-# where :math:`\langle \cdot, \cdot \rangle` is some inner product (in our case the trace inner product).
-# This construction uses the operator :math:`v = \sum_j \pi^j h_j \in \mathcal{h}`
+# where :math:`\langle \cdot, \cdot \rangle` is some inner product (in our case the trace inner product :math:`\langle A, B \rangle = \text{tr}(A^\dagger B)`).
+# This construction uses the operator :math:`v = \sum_j \pi^j h_j \in \mathfrak{h}`
 # that is such that :math:`e^{i t v}` is dense in :math:`e^{i \mathcal{h}}`.
 # The latter means that for any point in :math:`e^{i \mathcal{h}}` there is a :math:`t` such that :math:`e^{i t v}` reaches it.
 # Let us construct it.
@@ -231,7 +231,7 @@ v_m = jnp.array(v_m)
 # for the vertical unitary.
 # 
 # Now we just have to define the cost function and find an extremum.
-# In this case we are going to just use gradient descent to minimize the cost function to a minimum.
+# In this case we are going to use gradient descent to minimize the cost function to a minimum.
 # We are going to use ``jax`` and ``optax`` and write some boilerplate for the optimization procedure.
 
 def run_opt(
@@ -293,6 +293,7 @@ thetas, energy, _ = run_opt(loss, theta0, n_epochs=500)
 plt.plot(energy)
 plt.xlabel("epochs")
 plt.ylabel("cost")
+plt.show()
 
 ##############################################################################
 # This gives us the optimal values of the parameters :math:`\theta_\text{opt}` of :math:`K(\theta_\text{opt}) =: K_c`.
@@ -308,8 +309,11 @@ Kc_m = qml.matrix(K, wire_order=range(n_wires))(theta_opt, k)
 
 h_0_m = Kc_m @ H_m @ Kc_m.conj().T
 h_0 = qml.pauli_decompose(h_0_m)
-a_vspace = qml.pauli.PauliVSpace(h)
-not a_vspace.is_independent(h_0.pauli_rep)
+print(len(h_0))
+
+# assure that h_0 is in \mathfrak{h}
+h_vspace = qml.pauli.PauliVSpace(h)
+not h_vspace.is_independent(h_0.pauli_rep, tol=1e-2)
 
 ##############################################################################
 #
