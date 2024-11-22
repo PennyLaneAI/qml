@@ -36,7 +36,7 @@
         },
         {
             "type": "demonstration",
-            "id": "tutorial_how_to_import_noise_models",
+            "id": "tutorial_how_to_import_qiskit_noise_models",
             "weight": 1.0
         }
     ]
