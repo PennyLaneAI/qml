@@ -7,7 +7,7 @@ Introduction
 ------------
 
 The KAK theorem is an important result from Lie theory that states that any Lie group element :math:`U` can be decomposed
-as :math:`U = K_1 A K_2`, where :math:`K_{1, 2}` and :math:`A` are elements of two separate special sub-groups
+as :math:`U = K_1 A K_2`, where :math:`K_{1, 2}` and :math:`A` are elements of two special sub-groups
 :math:`\mathcal{K}` and :math:`\mathcal{A}`, respectively. You can think of this KAK decomposition as a generalization of
 the singular value decomposition to Lie groups.
 
@@ -19,16 +19,19 @@ are left- and right-unitary with :math:`\mu = \min(m, n)`.
 In the case of the KAK decomposition, :math:`\mathcal{A}` is an Abelian subgroup such that all its elements are commuting,
 just as is the case for diagonal matrices.
 
+We can use this general result from Lie theory as a powerful circuit decomposition technique.
+
 Goal
 ----
 
 Unitary gates in quantum computing are described by the special orthogonal Lie group :math:`SU(2^n)`, so we can use the KAK
 theorem to decompose quantum gates into :math:`U = K_1 A K_2`. While the mathematical statement is rather straight-forward,
 actually finding this decomposition is not. We are going to follow the recipe prescribed in 
-`Fixed Depth Hamiltonian Simulation via Cartan Decomposition <https://arxiv.org/abs/2104.00728>`__ [#Kökcü]_.
+`Fixed Depth Hamiltonian Simulation via Cartan Decomposition <https://arxiv.org/abs/2104.00728>`__ [#Kökcü]_, 
+that tackles this decomposition on the level of the associated Lie algebra via Cartan decomposition.
 
 In particular, we are going to consider the problem of time-evolving a Hermitian operator :math:`H` the generates the time-evolution unitary :math:`U = e^{-i t H}`.
-We are going to perform a special case of KAK decomposition, a KhK decomposition if you will, on the algebra level of H in terms of
+We are going to perform a special case of KAK decomposition, a "KhK decomposition" if you will, on the algebra level of H in terms of
 
 .. math:: H = K^\dagger h_0 K.
 
@@ -36,7 +39,7 @@ This then induces the KAK decomposition on the group level as
 
 .. math:: e^{-i t H} = K^\dagger e^{-i t h_0} K.
 
-Let us walk through an explicit example, doing theory and a concrete example side-by-side.
+Let us walk through an explicit example, doing theory and code side-by-side.
 For that we are going to use the Heisenberg model generators and Hamiltonian for :math:`n=4` qubits.
 The foundation to a KAK decomposition is a Cartan decomposition of the associated Lie algebra :math:`\mathfrak{g}`.
 For that, let us first construct it and import some libraries that we are going to use later.
@@ -73,8 +76,8 @@ g = [op.pauli_rep for op in g]
 # A Cartan decomposition is a bipartition :math:`\mathfrak{g} = \mathcal{k} \oplus \mathcal{m}` into a vertical subspace
 # :math:`\mathfrak{k}` and an orthogonal horizontal subspace :math:`\mathfrak{m}`. In practice, it can be induced by an
 # involution function :math:`\Theta` that fulfils :math:`\Theta(\Theta(g)) = g \forall g \in \mathfrak{g}`. Different 
-# involutions lead to different types of Cartan decompositions, which have been fully classified by Cartan, 
-# see `wikipedia <https://en.wikipedia.org/wiki/Symmetric_space#Classification_result>`__.
+# involutions lead to different types of Cartan decompositions, which have been fully classified by Cartan 
+# (see `wikipedia <https://en.wikipedia.org/wiki/Symmetric_space#Classification_result>`__).
 # 
 # .. note::
 #     Note that :math:`\mathfrak{k}` is the small letter k in
@@ -82,7 +85,7 @@ g = [op.pauli_rep for op in g]
 #     common - not our - choice for the vertical subspace in a Cartan decomposition.
 #
 # One common choice of involution is the so-called even-odd involution for Pauli words
-# :math:`P = P_1 \otimes P_2 .. \otimes P_n` where `P_j \in \{I, X, Y, Z\}`.
+# :math:`P = P_1 \otimes P_2 .. \otimes P_n` where :math:`P_j \in \{I, X, Y, Z\}`.
 # It essentially counts whether the number of non-identity Pauli operators in the Pauli word is even or odd.
 
 def even_odd_involution(op):
@@ -97,8 +100,8 @@ even_odd_involution(X(0)), even_odd_involution(X(0) @ Y(3))
 ##############################################################################
 # 
 # The vertical and horizontal subspaces are the two eigenspaces of the involution, corresponding to the :math:`\pm 1` eigenvalues.
-# In particular, we have :math:`\Theta(\mathfrak{k}) = \mathfrak{k}` and :math:`\Theta(\mathfrak{m}) = - \mathfrak{m}`
-# So in order to perform the Cartan decomposition :math:`\mathfrak{g} = \mathcal{k} \oplus \mathcal{m}`, we simply
+# In particular, we have :math:`\Theta(\mathfrak{k}) = \mathfrak{k}` and :math:`\Theta(\mathfrak{m}) = - \mathfrak{m}`.
+# So in order to perform the Cartan decomposition :math:`\mathfrak{g} = \mathfrak{k} \oplus \mathfrak{m}`, we simply
 # sort the operators by whether or not they yield a plus or minus sign from the involution function.
 
 def cartan_decomposition(g, involution):
@@ -136,7 +139,8 @@ len(g), len(k), len(m)
 #     \begin{align}
 #     [\mathfrak{k}, \mathfrak{k}] \subseteq \mathfrak{k} & \text{ (subalgebra)}\\
 #     [\mathfrak{k}, \mathfrak{m}] \subseteq \mathfrak{m} & \text{ (reductive property)}\\
-#     [\mathfrak{m}, \mathfrak{m}] \subseteq \mathfrak{k} & \text{ (symmetric property)}\\
+#     [\mathfrak{m}, \mathfrak{m}] \subseteq \mathfrak{k} & \text{ (symmetric property)}
+#     \end{align}
 #
 # In particular, :math:`\mathfrak{k}` is a subalgebra of :math:`\mathfrak{g}`, whereas :math:`\mathfrak{m}` is not.
 # This also has the consequence that the associated Lie group :math:`\mathcal{K} := e^{i \mathfrak{k}}` is a subgroup
