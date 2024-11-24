@@ -380,7 +380,7 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 #     :align: center
 #     :width: 45%
 # 
-# In the right-hand side of the equality we have assumed a specific form for the U tensor in terms of local 2-qubit gates, which is often the case when dealing with real quantum hardware. In addition, it is common for the initial state to be a product state such as :math:`|0\rangle^{\otimes N}`, hence the form of the tensor in the diagram.
+# In the right-hand side of the equality we have assumed a specific form for the U tensor in terms of local 2-qubit gates, which is often the case when dealing with real quantum hardware. In addition, it is common for the initial state to be a product state such as :math:`|0\rangle^{\otimes N}`, hence the form of the tensor in the diagram as :math:`N` independent tensors of rank-1. However, an arbitrary input state is in general represented as one big rank-:math:`N` tensor.
 # 
 # Now we can ask ourselves: what quantities can we compute from this tensor network? 🤔
 # 
@@ -461,21 +461,25 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 #     :align: center
 #     :width: 70%
 # 
-# Analogously as done with the expectation values, these contractions only involve the sections of the circuit within the light cone of *both* the projection with :math:`| \hat{x}_1 \rangle` and the contraction with the COPY tensor (diagonal computation). This procedure can be repeated recursively using the chain rule equation until we obtain the full bitstring :math:`(\hat{x}_1, \hat{x}_2, \hat{x}_3, \ldots, \hat{x}_N)`. To obtain more samples, we repeat the procedure from the beginning - this is what makes every sample memoryless or a perfect sample from the probability distribution.
+# Analogously as done with the expectation values, these contractions only involve the sections of the circuit within the light cone of *both* the projection with :math:`| \hat{x}_1 \rangle` and the contraction with the COPY tensor (diagonal computation). This procedure can be repeated recursively using the chain rule equation until we obtain the full bitstring :math:`(\hat{x}_1, \hat{x}_2, \hat{x}_3, \ldots, \hat{x}_N)`. Then to obtain more samples, we just repeat the procedure from the beginning!
 # 
 # .. note::
-#   We can reduce the computational cost of this algorithm by **caching** results from previous contractions. When we draw a new sample that partially matches a previously explored configuration (marginal probability), we can reuse the cached results and avoid contracting this part of the network over again. For example, let's assume we have performed the perfect sampling algorithm once and obtained the sample :math:`0110`. If the next sample we need to generate starts with the substring :math:`01`, we can reuse the marginal probabilities up to :math:`p(x_3|01)` and only calculate the new parts of the sequence. The same caching idea can be applied to other tensor network algorithms involving many contractions.
+#   By generating each bitstring independently from each other, i.e., by restarting the sampling algorithm without knowledge of the previous samples, we ensure perfect sampling from the probability distribution, contrary to other Markov-based algorithms [#Schuch2008]_ . We then say the sample is *memoryless*.
+# 
+# We can reduce the computational cost of the sampling algorithm by **caching** results from previous contractions. When we draw a new sample that partially matches a previously explored configuration (marginal probability), we can reuse the cached results and avoid contracting this part of the network over again. 
+# 
+# For example, let's assume we have performed the perfect sampling algorithm once and obtained the sample :math:`0110`. If the next sample we need to generate starts with the substring :math:`01`, we can reuse the marginal probabilities up to :math:`p(x_3|01)` and only calculate the new parts of the sequence. The same caching idea can be applied to other tensor network algorithms involving many contractions.
 
 ##############################################################################
 # 
 # Conclusion
 # ----------
 # 
+# And that is it for this tutorial! 🎉
+# 
 # Although the world of tensor networks and their relation to quantum computing is vastly wider than what we could ever cover in one tutorial, we hope that after these explanations you now feel equipped with the tools needed to dive deeper into this topic by yourself. 🔍
 # 
-# If you want to learn more about using tensor networks as a diagrammatic tool, check out `these amazing lecture notes <https://arxiv.org/pdf/1912.10049>`_ by J.Biamonte. In addition, check out `this website <https://tensornetwork.org/about/>`_ for great explanations on many important algorithms and tensor network structures by Flatiron Institute.
-# 
-# And that is it for this tutorial! 🎉
+# If you want to learn more about using tensor networks as a diagrammatic tool, check out `these amazing lecture notes <https://arxiv.org/pdf/1912.10049>`_ by J.Biamonte. In addition, check out `this website <https://tensornetwork.org/about/>`_ for great explanations on many important algorithms and tensor network structures by Flatiron Institute  .  
 
 ##############################################################################
 # References
@@ -525,6 +529,12 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 #    A. J. Ferris and G. Vidal.
 #    "Perfect sampling with unitary tensor networks,"
 #    `<http://dx.doi.org/10.1103/PhysRevB.85.165146>`__, Physical Review B, vol. 85, no. 16, 2012.
+# 
+# .. [#Schuch2008]
+#    N. Schuch, M. M. Wolf, F. Verstraete, and J. I. Cirac.  
+#    "Simulation of Quantum Many-Body Systems with Strings of Operators and Monte Carlo Tensor Contractions,"  
+#    `<https://doi.org/10.1103/PhysRevLett.100.040501>`__, Physical Review Letters, vol. 100, no. 4, Jan 2008.
+
 
 ##############################################################################
 # About the author
