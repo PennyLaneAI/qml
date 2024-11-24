@@ -108,7 +108,7 @@ print("Rank-3 tensor: \n", tensor_rank3)
 #
 # Here, the resulting tensor has two dangling indices, :math:`i` and :math:`k`, defining a matrix, as expected!
 #
-# We can now generalize this concept to tensors, and consequently, to more than two legs being contracted. For example, let us look at three tensors :math:`A_{i,j,k}`, :math:`B_{j,l,m}`, and :math:`C_{k,m,n}`. To contract them, all we need to do is to sum over repeated indices (:math:`j`, :math:`k`, :math:`m`), just as we would do in `Einstein convention <https://en.wikipedia.org/wiki/Einstein_notation>`_. To obtain the :math:`(i,l,n)`-th element of the resulting tensor :math:`D`, we perform this contraction by using the tensor product :math:`\otimes` between the 3 tensors and summing over :math:`j, k, m` [#Bridgeman2017]_
+# We can now generalize this concept to tensors, and consequently, to more than two legs being contracted. For example, let us look at three tensors :math:`A_{i,j,k}`, :math:`B_{j,l,m}`, and :math:`C_{k,m,n}`. To contract them, all we need to do is to sum over repeated indices (:math:`j`, :math:`k`, :math:`m`). To obtain the :math:`(i,l,n)`-th element of the resulting tensor :math:`D`, we perform this contraction by using the tensor product :math:`\otimes` between the 3 tensors and summing over :math:`j, k, m` [#Bridgeman2017]_
 #
 # .. math::
 #     (D)_{i,l,n} = \sum_{j,k,m} A_{i,j,k} \otimes B_{j,l,m} \otimes C_{k,m,n} = \sum_{j,k,m} A_{i,j,k} B_{j,l,m} C_{k,m,n} .
@@ -124,7 +124,7 @@ print("Rank-3 tensor: \n", tensor_rank3)
 # .. note::
 #   A common question arising when drawing a tensor is "What is the correct order to draw the indices?". For instance, in the figure above, we have adopted the convention that a tensor :math:`A_{i,j,k}` corresponds to a diagram with the first leg (:math:`i`) pointing left, the second leg (:math:`j`) pointing upwards, and the third leg (:math:`k`) pointing right, and similarly for the other two tensors. However, this need not be the case. We could have defined the first leg to be the one pointing upwards, for example. Based on the use case, and the user, some conventions might seem more natural than others. The only important thing to keep in mind is to be consistent. In other words, once we choose a convention for the order, we should apply it to all the tensors to avoid contracting the wrong indices ❌.
 #
-# Remember the similarity between tensor network contractions and Einstein notation? Then, it doesn't come as a surprise that we can perform a contraction using the function ``np.einsum``. To do so, we can start by creating the 3 tensors to be contracted by reshaping a 1D array (created using ``np.arange``) into rank-3 tensors of the correct dimensions.
+# In our code, we can perform a tensor contraction using the ``Numpy`` function ``np.einsum``. To do so, we can start by creating the 3 tensors to be contracted by reshaping a 1D array (created using ``np.arange``) into rank-3 tensors of the correct dimensions.
 
 # Create the individual rank-3 tensors
 A = np.arange(6).reshape(1, 2, 3)  # ijk
@@ -239,7 +239,7 @@ print(D.shape)
 # 
 # This means the second contraction path results in an asymptotic cost of :math:`\mathcal{O}(d_i^2 \times d_j^2)`—lower than the first contraction path.
 # 
-# To see this in practice, let us implement the above contractions using ``np.einsum``. First, we create the 3 tensors with dimensions as specified in the example above.
+# To see this in practice, let us implement the above contractions using ``np.einsum``. First, we create the 3 tensors with the dimensions specified in the example above. We demonstrate a different form of creating tensors of the desired dimensions using the ``random`` module.
 
 import timeit
 
