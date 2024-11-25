@@ -1,0 +1,84 @@
+{
+    "title": "Digital zero-noise extrapolation with Catalyst",
+    "authors": [
+        {
+            "username": "cosenal"
+        },
+        {
+            "username": "natestemen"
+        }
+    ],
+    "dateOfPublication": "2024-11-15T00:00:00+00:00",
+    "dateOfLastModification": "2024-11-15T00:00:00+00:00",
+    "categories": [
+        "Algorithms",
+        "Quantum Computing"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_zne_catalyst.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_zne_catalyst.png"
+        }
+    ],
+    "seoDescription": "Learn to use error mitigation and the digital zero-noise extrapolation (ZNE) technique with Catalyst, the PennyLane framework for quantum JIT compilation.",
+    "doi": "",
+    "references": [
+        {
+            "id": "dzne-2020",
+            "type": "article",
+            "title": "Digital zero noise extrapolation for quantum error mitigation",
+            "authors": "Tudor Giurgica-Tiron, Yousef Hindy, Ryan LaRose, Andrea Mari, and William J. Zeng",
+            "year": "2020",
+            "publisher": "IEEE",
+            "journal": "2020 IEEE International Conference on Quantum Computing and Engineering (QCE)",
+            "doi": "10.1109/QCE49297.2020.00045",
+            "url": "https://arxiv.org/abs/2005.10921v2"
+        },
+        {
+            "id": "zne-2017",
+            "type": "article",
+            "title": "Error Mitigation for Short-Depth Quantum Circuits",
+            "authors": "K. Temme, S. Bravyi, J. M. Gambetta",
+            "year": "2017",
+            "publisher": "",
+            "journal": "Phys. Rev. Lett. 119, 180509",
+            "doi": "10.1103/PhysRevLett.119.180509",
+            "url": "https://arxiv.org/abs/1612.02058"
+        },
+        {
+            "id": "mitiq-2022",
+            "type": "article",
+            "title": "Mitiq: A software package for error mitigation on noisy quantum computers",
+            "authors": "Ryan LaRose and Andrea Mari and Sarah Kaiser and Peter J. Karalekas and Andre A. Alves and Piotr Czarnik and Mohamed El Mandouh and Max H. Gordon and Yousef Hindy and Aaron Robertson and Purva Thakre and Misty Wahl and Danny Samuel and Rahul Mistri and Maxime Tremblay and Nick Gardner and Nathaniel T. Stemen and Nathan Shammah and William J. Zeng",
+            "year": "2022",
+            "publisher": "Verein zur Forderung des Open Access Publizierens in den Quantenwissenschaften",
+            "journal": "Quantum",
+            "doi": "10.22331/q-2022-08-11-774",
+            "url": "https://doi.org/10.22331/q-2022-08-11-774"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_error_mitigation",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "qrack",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_diffable-mitigation",
+            "weight": 1.0
+        }
+    ]
+}
