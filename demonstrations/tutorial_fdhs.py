@@ -216,7 +216,7 @@ len(g), len(k), len(mtilde), len(h)
 # The latter means that for any point in :math:`e^{i \mathcal{h}}` there is a :math:`t` such that :math:`e^{i t v}` reaches it.
 # Let us construct it.
 
-gammas = [np.pi**i for i in range(len(h))]
+gammas = [np.pi**i % 2 for i in range(1, len(h)+1)]
 
 v = qml.dot(gammas, h)
 v_m = qml.matrix(v, wire_order=range(n_wires))
@@ -241,7 +241,8 @@ def run_opt(
     lr=0.1,
 ):
     """Boilerplate jax optimization"""
-    optimizer = optax.adam(learning_rate=lr)
+    value_and_grad = jax.jit(jax.value_and_grad(loss))
+    optimizer = optax.lbfgs(learning_rate=lr, memory_size=100)
     opt_state = optimizer.init(theta)
 
     energy = []
@@ -251,7 +252,7 @@ def run_opt(
     @jax.jit
     def step(opt_state, theta):
         val, grad_circuit = value_and_grad(theta)
-        updates, opt_state = optimizer.update(grad_circuit, opt_state)
+        updates, opt_state = optimizer.update(grad_circuit, opt_state, theta, value=val, grad=grad_circuit, value_fn=loss)
         theta = optax.apply_updates(theta, updates)
 
         return opt_state, theta, val
@@ -281,7 +282,6 @@ def K(theta, k):
         qml.exp(-1j * th * k_j.operation())
 
 @jax.jit
-@jax.value_and_grad
 def loss(theta):
     K_m = qml.matrix(K, wire_order=range(n_wires))(theta, k)
     A = K_m @ v_m @ K_m.conj().T
@@ -289,7 +289,7 @@ def loss(theta):
 
 theta0 = jnp.ones(len(k), dtype=float)
 
-thetas, energy, _ = run_opt(loss, theta0, n_epochs=500)
+thetas, energy, _ = run_opt(loss, theta0, n_epochs=2000, lr=0.05)
 plt.plot(energy)
 plt.xlabel("epochs")
 plt.ylabel("cost")
@@ -307,7 +307,7 @@ Kc_m = qml.matrix(K, wire_order=range(n_wires))(theta_opt, k)
 # 
 # .. math:: h_0 = K_c H K_c^\dagger.
 
-h_0_m = Kc_m @ H_m @ Kc_m.conj().T
+h_0_m = Kc_m.conj().T @ H_m @ Kc_m
 h_0 = qml.pauli_decompose(h_0_m)
 print(len(h_0))
 
@@ -324,7 +324,7 @@ not h_vspace.is_independent(h_0.pauli_rep, tol=1e-2)
 # This trivially reproduces the original Hamiltonian.
 #
 
-H_re = Kc_m.conj().T @ h_0_m @ Kc_m
+H_re = Kc_m @ h_0_m @ Kc_m.conj().T
 np.allclose(H_re, H_m)
 
 ##############################################################################
@@ -336,9 +336,9 @@ U_exact = qml.exp(-1j * t * H)
 U_exact_m = qml.matrix(U_exact, wire_order=range(n_wires))
 
 def U_kak(theta_opt, t):
-    K(theta_opt, k)
-    qml.exp(-1j * t * h_0)
     qml.adjoint(K)(theta_opt, k)
+    qml.exp(-1j * t * h_0)
+    K(theta_opt, k)
 
 U_kak_m = qml.matrix(U_kak, wire_order=range(n_wires))(theta_opt, t)
 
@@ -346,7 +346,6 @@ def trace_distance(A, B):
     return 1 - np.abs(np.trace(A.conj().T @ B))/len(A)
 
 trace_distance(U_exact_m, U_kak_m)
-
 
 
 
@@ -368,19 +367,19 @@ ts = jnp.linspace(0.2, 1., 10)
 Us_exact = jax.vmap(lambda t: qml.matrix(qml.exp(-1j * t * H), wire_order=range(n_wires)))(ts)
 
 def Us_kak(t):
-    return Kc_m.conj().T @ jax.scipy.linalg.expm(-1j * t * h_0_m) @ Kc_m
+    return Kc_m @ jax.scipy.linalg.expm(-1j * t * h_0_m) @ Kc_m.conj().T
 
 Us_kak = jax.vmap(Us_kak)(ts)
-Us_trotter50 = jax.vmap(lambda t: qml.matrix(qml.TrotterProduct(H, time=t, n=50, order=4), wire_order=range(n_wires)))(ts)
-Us_trotter500 = jax.vmap(lambda t: qml.matrix(qml.TrotterProduct(H, time=t, n=500, order=4), wire_order=range(n_wires)))(ts)
+Us_trotter5 = jax.vmap(lambda t: qml.matrix(qml.TrotterProduct(H, time=-t, n=5, order=4), wire_order=range(n_wires)))(ts)
+Us_trotter50 = jax.vmap(lambda t: qml.matrix(qml.TrotterProduct(H, time=-t, n=50, order=4), wire_order=range(n_wires)))(ts)
 
 res_kak = 1 - jnp.abs(jnp.einsum("bij,bji->b", Us_exact.conj(), Us_kak)) / 2**n_wires
+res_trotter5 = 1 - jnp.abs(jnp.einsum("bij,bji->b", Us_exact.conj(), Us_trotter5)) / 2**n_wires
 res_trotter50 = 1 - jnp.abs(jnp.einsum("bij,bji->b", Us_exact.conj(), Us_trotter50)) / 2**n_wires
-res_trotter500 = 1 - jnp.abs(jnp.einsum("bij,bji->b", Us_exact.conj(), Us_trotter500)) / 2**n_wires
 
 plt.plot(ts, res_kak, label="KAK")
-plt.plot(ts, res_trotter50, "x--", label="50 Trotter steps")
-plt.plot(ts, res_trotter500, ".-", label="500 Trotter steps")
+plt.plot(ts, res_trotter5, "x--", label="5 Trotter steps")
+plt.plot(ts, res_trotter50, ".-", label="50 Trotter steps")
 plt.ylabel("empirical error")
 plt.xlabel("t")
 # plt.yscale("log")
