@@ -234,6 +234,7 @@ v = qml.dot(gammas, h)
 v_m = qml.matrix(v, wire_order=range(n_wires))
 v_m = jnp.array(v_m)
 
+
 ##############################################################################
 # 
 # This procedure has the advantage that we can use an already decomposed ansatz
@@ -301,11 +302,13 @@ def loss(theta):
 
 theta0 = jnp.ones(len(k), dtype=float)
 
-thetas, energy, _ = run_opt(loss, theta0, n_epochs=2000, lr=0.05)
-plt.plot(energy)
+thetas, energy, _ = run_opt(loss, theta0, n_epochs=600, lr=0.05)
+plt.plot(energy - np.min(energy))
 plt.xlabel("epochs")
 plt.ylabel("cost")
+plt.yscale("log")
 plt.show()
+
 
 ##############################################################################
 # This gives us the optimal values of the parameters :math:`\theta_\text{opt}` of :math:`K(\theta_\text{opt}) =: K_c`.
@@ -321,11 +324,12 @@ Kc_m = qml.matrix(K, wire_order=range(n_wires))(theta_opt, k)
 
 h_0_m = Kc_m.conj().T @ H_m @ Kc_m
 h_0 = qml.pauli_decompose(h_0_m)
+
 print(len(h_0))
 
 # assure that h_0 is in \mathfrak{h}
 h_vspace = qml.pauli.PauliVSpace(h)
-not h_vspace.is_independent(h_0.pauli_rep, tol=1e-2)
+not h_vspace.is_independent(h_0.pauli_rep)
 
 ##############################################################################
 #
@@ -374,7 +378,7 @@ trace_distance(U_exact_m, U_kak_m)
 # We can compute multiple time evolutions and see that the 
 #
 
-ts = jnp.linspace(0.2, 1., 10)
+ts = jnp.linspace(1., 5., 10)
 
 Us_exact = jax.vmap(lambda t: qml.matrix(qml.exp(-1j * t * H), wire_order=range(n_wires)))(ts)
 
@@ -389,17 +393,20 @@ res_kak = 1 - jnp.abs(jnp.einsum("bij,bji->b", Us_exact.conj(), Us_kak)) / 2**n_
 res_trotter5 = 1 - jnp.abs(jnp.einsum("bij,bji->b", Us_exact.conj(), Us_trotter5)) / 2**n_wires
 res_trotter50 = 1 - jnp.abs(jnp.einsum("bij,bji->b", Us_exact.conj(), Us_trotter50)) / 2**n_wires
 
-plt.plot(ts, res_kak, label="KAK")
+plt.plot(ts, res_kak+1e-15, label="KAK") # displace by machine precision to see it still in plot
 plt.plot(ts, res_trotter5, "x--", label="5 Trotter steps")
 plt.plot(ts, res_trotter50, ".-", label="50 Trotter steps")
 plt.ylabel("empirical error")
 plt.xlabel("t")
-# plt.yscale("log")
+plt.yscale("log")
 plt.legend()
 plt.show()
 
 
 ##############################################################################
+# We see the expected behavior of Suzuki-Trotter product formulas getting worse with increase of time
+# while the KAK error is constant zero.
+#
 # The KAK decomposition is particularly well-suited for smaller systems as the circuit depth is equal to the
 # dimension of the subspaces, in particular :math:`2 |\mathfrak{k}| + |\mathfrak{h}|`. Note, however,
 # that these dimensions typically scale exponentially in the system size.
