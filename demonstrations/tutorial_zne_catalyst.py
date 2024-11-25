@@ -76,7 +76,9 @@ the noise scaling method, and the extrapolation method. The rest is taken care o
 ##############################################################################
 # .. note ::
 #
-#    To follow along with this demonstration, it is required to install Catalyst, as well as the PennyLane-Qrack plugin. 
+#    To follow along with this demonstration, it is required to
+#    `install Catalyst <https://docs.pennylane.ai/projects/catalyst/en/stable/dev/installation.html>`__,
+#    as well as the `PennyLane-Qrack plugin <https://pennylane-qrack.readthedocs.io/en/latest/installation.html>`__.
 #
 #    .. code-block:: bash
 #
