@@ -1,17 +1,25 @@
 r"""Fixed Depth Hamiltonian Simulation via Cartan Decomposition
 ===============================================================
 
-abstract
+We introduce the powerful Lie theoretic decomposition technique for Hamiltonians, :math:`H = K h K^\dagger`,
+that lets you time-evolve by arbitrary times with fixed depth, :math:`e^{-i t H} = K e^{-i t h} K^\dagger`.
+In particular, we follow the approach in [#Kökcü]_ that directly provides us with a (fixed depth) circuit
+decomposition of the unitaries :math:`K` and :math:`e^{-i t h}`.
+
+Sounds too good to be true? There are of course caveats, mostly of practical nature.
+One of them is that the Lie algebra of H, in terms of which
+this decomposition is based, becomes too large to handle. This is still an extremely
+powerful mathematical result integral for quantum compilation, circuit optimization and Hamiltonian simulation.
 
 Introduction
 ------------
 
-The KAK theorem is an important result from Lie theory that states that any Lie group element :math:`U` can be decomposed
+The :doc:`KAK theorem </demos/tutorial_kak_theorem>` is an important result from Lie theory that states that any Lie group element :math:`U` can be decomposed
 as :math:`U = K_1 A K_2`, where :math:`K_{1, 2}` and :math:`A` are elements of two special sub-groups
-:math:`\mathcal{K}` and :math:`\mathcal{A}`, respectively. You can think of this KAK decomposition as a generalization of
-the singular value decomposition to Lie groups.
+:math:`\mathcal{K}` and :math:`\mathcal{A}`, respectively. In special cases, the decomposition simplifies to :math:`U = K A K^\dagger`.
 
-For that, recall that the singular value decomposition states that any
+You can think of this KAK decomposition as a generalization of
+the singular value decomposition to Lie groups. For that, recall that the singular value decomposition states that any
 matrix :math:`M \in \mathbb{C}^{m \times n}` can be decomposed as :math:`M = U \Lambda V^\dagger`, where :math:`\Lambda`
 are the diagonal singular values and :math:`U \in \mathbb{C}^{m \times \mu}` and :math:`V^\dagger \in \mathbb{C}^{\mu \times n}`
 are left- and right-unitary with :math:`\mu = \min(m, n)`.
@@ -20,6 +28,10 @@ In the case of the KAK decomposition, :math:`\mathcal{A}` is an Abelian subgroup
 just as is the case for diagonal matrices.
 
 We can use this general result from Lie theory as a powerful circuit decomposition technique.
+
+.. note:: We recommend a basic understanding of Lie algebras, see e.g. :doc:`our intro for quantum practitioners </demos/tutorial_liealgebra>`.
+    Otherwise this demo should be self-contained. For the mathematically inclined we further recommend our :doc:`demo on the KAK theorem </demos/tutorial_kak_theorem>`
+    that dives into the mathematical depths of the theorem and provides more background info.
 
 Goal
 ----
@@ -422,47 +434,11 @@ plt.show()
 #     "Fixed Depth Hamiltonian Simulation via Cartan Decomposition"
 #     `arXiv:2104.00728 <https://arxiv.org/abs/2104.00728>`__, 2021.
 #
-# .. [#Wiersma]
+# .. [#Chu]
 #
-#     Roeland Wiersema, Efekan Kökcü, Alexander F. Kemper, Bojko N. Bakalov
-#     "Classification of dynamical Lie algebras for translation-invariant 2-local spin systems in one dimension"
-#     `arXiv:2309.05690 <https://arxiv.org/abs/2309.05690>`__, 2023.
-#
-# .. [#Meyer]
-#
-#     Johannes Jakob Meyer, Marian Mularski, Elies Gil-Fuster, Antonio Anna Mele, Francesco Arzani, Alissa Wilms, Jens Eisert
-#     "Exploiting symmetry in variational quantum machine learning"
-#     `arXiv:2205.06217 <https://arxiv.org/abs/2205.06217>`__, 2022.
-#
-# .. [#Nguyen]
-#
-#     Quynh T. Nguyen, Louis Schatzki, Paolo Braccia, Michael Ragone, Patrick J. Coles, Frederic Sauvage, Martin Larocca, M. Cerezo
-#     "Theory for Equivariant Quantum Neural Networks"
-#     `arXiv:2210.08566 <https://arxiv.org/abs/2210.08566>`__, 2022.
-#
-# .. [#Fontana]
-#
-#     Enrico Fontana, Dylan Herman, Shouvanik Chakrabarti, Niraj Kumar, Romina Yalovetzky, Jamie Heredge, Shree Hari Sureshbabu, Marco Pistoia
-#     "The Adjoint Is All You Need: Characterizing Barren Plateaus in Quantum Ansätze"
-#     `arXiv:2309.07902 <https://arxiv.org/abs/2309.07902>`__, 2023.
-#
-# .. [#Ragone]
-#
-#     Michael Ragone, Bojko N. Bakalov, Frédéric Sauvage, Alexander F. Kemper, Carlos Ortiz Marrero, Martin Larocca, M. Cerezo
-#     "A Unified Theory of Barren Plateaus for Deep Parametrized Quantum Circuits"
-#     `arXiv:2309.09342 <https://arxiv.org/abs/2309.09342>`__, 2023.
-#
-# .. [#Goh]
-#
-#     Matthew L. Goh, Martin Larocca, Lukasz Cincio, M. Cerezo, Frédéric Sauvage
-#     "Lie-algebraic classical simulations for variational quantum computing"
-#     `arXiv:2308.01432 <https://arxiv.org/abs/2308.01432>`__, 2023.
-#
-# .. [#Somma]
-#
-#     Rolando D. Somma
-#     "Quantum Computation, Complexity, and Many-Body Physics"
-#     `arXiv:quant-ph/0512209 <https://arxiv.org/abs/quant-ph/0512209>`__, 2005.
+#     Moody T. Chu
+#     "Lax dynamics for Cartan decomposition with applications to Hamiltonian simulation"
+#     `doi:10.1093/imanum/drad018 <https://doi.org/10.1093/imanum/drad018>`__, `preprint PDF <https://mtchu.math.ncsu.edu/Research/Papers/Cartan_02.pdf>`__ 2024.
 #
 #
 
