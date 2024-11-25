@@ -144,7 +144,7 @@ import matplotlib.pyplot as plt
 import sklearn
 
 ######################################################################
-# To speed up the computation, we also import catalyst, a jit compiler for PennyLane quantum programs.
+# To speed up the computation, we also import `Catalyst <https://docs.pennylane.ai/projects/catalyst/en/stable/index.html>`_, a jit compiler for PennyLane quantum programs.
 import catalyst
 
 ######################################################################
@@ -306,8 +306,7 @@ num_qubits = active_atoms * rep
 
 
 ######################################################################
-# To speed up the computation, we will be using catalyst to compile our quantum program, and we will be
-# running our program on the lightning backend instead of the default qubit backend.
+# We will be running our program using `lightning.qubit`, our performant state-vector simulator.
 dev = qml.device("lightning.qubit", wires=num_qubits)
 
 
@@ -404,8 +403,8 @@ data_train, data_test = (
 
 #################################
 # We will now define the cost function and how to train the model using Jax. We will use the mean-square-error loss function.
-# To speed up the computation, we use the decorator ``@catalyst.qjit`` to do just-in-time compilation for this execution. This means the first execution will typically take a little longer with the
-# benefit that all following executions will be significantly faster, see the `Catalyst documentation <https://docs.pennylane.ai/projects/catalyst/en/stable/index.html>`_.
+# We use the decorator ``@catalyst.qjit`` to do just-in-time compilation for this execution. This means the first execution will typically take a little longer with the
+# benefit that all following executions will be significantly faster (see the `Catalyst documentation <https://docs.pennylane.ai/projects/catalyst/en/stable/index.html>`_).
 
 #################################
 from jax.example_libraries import optimizers
