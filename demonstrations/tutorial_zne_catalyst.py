@@ -71,19 +71,27 @@ Catalyst provides **polynomial** and **exponential** extrapolation methods.
 These three stages illustrate what happens behind the scenes when using a ZNE routine. 
 However, from the user's perspective, one only needs to define the initial circuit, 
 the noise scaling method, and the extrapolation method. The rest is taken care of by Catalyst.
-
-Defining the mirror circuit
----------------------------
-
-The first step for demoing an error mitigation routine is to define a circuit. 
-Here we build a simple mirror circuit starting off a `unitary 2-design <https://en.wikipedia.org/wiki/Quantum_t-design>`__. 
-This is a typical construction for a randomized benchmarking circuit, which is used in many tasks
-in quantum computing. Given such circuit, we measure the expectation value :math:`\langle Z\rangle` 
-on the state of the first qubit, and by construction of the circuit, we expect this value to be
-equal to 1.
 """
 
-import timeit
+##############################################################################
+# .. note ::
+#
+#    To follow along this demonstration, it is required to install Catalyst, as well as the PennyLane-Qrack plugin. 
+#
+#    .. code-block:: bash
+#
+#      pip install -U pennylane-catalyst pennylane-qrack 
+# 
+
+##############################################################################
+# Defining the mirror circuit
+# ---------------------------
+# The first step for demoing an error mitigation routine is to define a circuit. 
+# Here we build a simple mirror circuit starting off a `unitary 2-design <https://en.wikipedia.org/wiki/Quantum_t-design>`__. 
+# This is a typical construction for a randomized benchmarking circuit, which is used in many tasks
+# in quantum computing. Given such circuit, we measure the expectation value :math:`\langle Z\rangle` 
+# on the state of the first qubit, and by construction of the circuit, we expect this value to be
+# equal to 1.
 
 import numpy as np
 import pennylane as qml
@@ -214,6 +222,8 @@ print(f"Error with ZNE in PennyLane: {abs(ideal_value - zne_value):.3f}")
 # Note: for the purpose of this last example, we reduce the number of shots of the simulator to 100,
 # since we don't need the accuracy required for the previous demonstration. We do so in order to 
 # reduce the running time of this tutorial, while still showcasing the performance differences.  
+import timeit
+
 noisy_device = qml.device("qrack.simulator", n_wires, shots=100, noise=NOISE_LEVEL)
 noisy_qnode = qml.QNode(circuit, device=noisy_device, mcm_method="one-shot")
 
