@@ -216,7 +216,8 @@ len(g), len(k), len(mtilde), len(h)
 # The latter means that for any point in :math:`e^{i \mathcal{h}}` there is a :math:`t` such that :math:`e^{i t v}` reaches it.
 # Let us construct it.
 
-gammas = [np.pi**i for i in range(len(h))]
+gammas = jnp.array([np.pi**i for i in range(len(h))])
+gammas /= jnp.linalg.norm(gammas) # normalization to avoid very large numbers
 
 v = qml.dot(gammas, h)
 v_m = qml.matrix(v, wire_order=range(n_wires))
