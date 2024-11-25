@@ -216,12 +216,7 @@ len(g), len(k), len(mtilde), len(h)
 # The latter means that for any point in :math:`e^{i \mathcal{h}}` there is a :math:`t` such that :math:`e^{i t v}` reaches it.
 # Let us construct it.
 
-<<<<<<< HEAD
-gammas = jnp.array([np.pi**i for i in range(len(h))])
-gammas /= jnp.linalg.norm(gammas) # normalization to avoid very large numbers
-=======
 gammas = [np.pi**i % 2 for i in range(1, len(h)+1)]
->>>>>>> 0ef11440a91dc5c1dc9d989b4d09f3d4e558ef22
 
 v = qml.dot(gammas, h)
 v_m = qml.matrix(v, wire_order=range(n_wires))
@@ -403,9 +398,15 @@ plt.show()
 # 
 # Conclusion
 # ----------
-#
-# We learned about the powerful and versatile tool of KAK circuit decomposition and applied it to
-# time evolution operators.
+# 
+# The KAK theorem is a very general mathematical result with far-reaching consequences.
+# While there is no canonical way of obtaining an actual decomposition in practice, we followed
+# the approach of [#Kökcü]_ that uses a specifically designed loss function and variational
+# optimization to find the decomposition.
+# This approach has the advantage that the resulting decomposition is itself already decomposed in terms of rotation gates in the original Lie algebra,
+# as opposed to other methods such as [#Chu]_ that find :math:`K` as a whole.
+# We provided a flexible pipeline that lets users find KAK decompositions in PennyLane for systems with small 
+# DLA and specifically decomposed the Heisenberg model Hamiltonian with :math:`n=4` qubits that has a DLA of dimension :math:`64-1` (:math:`\mathfrak{s u}(2^{n-1})`).
 #
 
 
