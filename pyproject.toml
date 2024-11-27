@@ -65,7 +65,7 @@ optax = "0.2.3"
 flax = "0.9.0"
 qutip = "4.7.3"
 mitiq = "0.32.0"
-pennylane-qrack = "0.11.0"
+pennylane-qrack = { git = "https://github.com/astralcai/pennylane-qrack.git", branch = "new-cap" }
 pyqrack = "1.32.12"
 zstd = "*"
 dill = "*"
