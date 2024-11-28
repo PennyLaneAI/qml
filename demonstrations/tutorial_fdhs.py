@@ -399,9 +399,15 @@ Us_kak = jax.vmap(Us_kak)(ts)
 Us_trotter5 = jax.vmap(lambda t: qml.matrix(qml.TrotterProduct(H, time=-t, n=5, order=4), wire_order=range(n_wires)))(ts)
 Us_trotter50 = jax.vmap(lambda t: qml.matrix(qml.TrotterProduct(H, time=-t, n=50, order=4), wire_order=range(n_wires)))(ts)
 
-res_kak = 1 - jnp.abs(jnp.einsum("bij,bji->b", Us_exact.conj(), Us_kak)) / 2**n_wires
-res_trotter5 = 1 - jnp.abs(jnp.einsum("bij,bji->b", Us_exact.conj(), Us_trotter5)) / 2**n_wires
-res_trotter50 = 1 - jnp.abs(jnp.einsum("bij,bji->b", Us_exact.conj(), Us_trotter50)) / 2**n_wires
+def compute_res(Us):
+    # vectorized trace inner product
+    res = jnp.abs(jnp.einsum("bij,bji->b", Us_exact.conj(), Us))
+    res /= 2**n_wires
+    return 1 - res
+
+res_kak = compute_res(Us_kak)
+res_trotter5 = compute_res(Us_trotter5)
+res_trotter50 = compute_res(Us_trotter50)
 
 plt.plot(ts, res_kak+1e-15, label="KAK") # displace by machine precision to see it still in plot
 plt.plot(ts, res_trotter5, "x--", label="5 Trotter steps")
