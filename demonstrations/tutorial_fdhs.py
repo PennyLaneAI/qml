@@ -385,7 +385,7 @@ trace_distance(U_exact_m, U_kak_m)
 # Time evolutions
 # ---------------
 # 
-# We can compute multiple time evolutions and see that the 
+# We compute multiple time evolutions for different times and compare Suzuki-Trotter product with the KAK decomposition circuit.
 #
 
 ts = jnp.linspace(1., 5., 10)
