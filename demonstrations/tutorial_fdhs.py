@@ -41,8 +41,8 @@ actually finding this decomposition is not. We are going to follow the recipe pr
 `Fixed Depth Hamiltonian Simulation via Cartan Decomposition <https://arxiv.org/abs/2104.00728>`__ [#Kökcü]_, 
 that tackles this decomposition on the level of the associated Lie algebra via Cartan decomposition.
 
-In particular, we are going to consider the problem of time-evolving a Hermitian operator :math:`H` that generates the time-evolution unitary :math:`U = e^{-i t H}`.
-We are going to perform a special case of KAK decomposition, a "KhK decomposition" if you will, on the algebra level of H in terms of
+In particular, we are going to consider the problem of time-evolving a Hermitian operator :math:`H` the generates the time-evolution unitary :math:`U = e^{-i t H}`.
+We are going to perform a special case of KAK decomposition, a "KhK decomposition" if you will, on the algebraic level in terms of
 
 .. math:: H = K^\dagger h_0 K.
 
@@ -88,11 +88,11 @@ g = [op.pauli_rep for op in g]
 # Cartan decomposition
 # --------------------
 # 
-# A Cartan decomposition is a bipartition :math:`\mathfrak{g} = \mathcal{k} \oplus \mathcal{m}` into a vertical subspace
+# A Cartan decomposition is a bipartition :math:`\mathfrak{g} = \mathfrak{k} \oplus \mathfrak{m}` into a vertical subspace
 # :math:`\mathfrak{k}` and an orthogonal horizontal subspace :math:`\mathfrak{m}`. In practice, it can be induced by an
-# involution function :math:`\Theta` that fulfils :math:`\Theta(\Theta(g)) = g \forall g \in \mathfrak{g}`. Different 
+# involution function :math:`\Theta` that fulfils :math:`\Theta(\Theta(g)) = g \ \forall g \in \mathfrak{g}`. Different 
 # involutions lead to different types of Cartan decompositions, which have been fully classified by Cartan 
-# (see `wikipedia <https://en.wikipedia.org/wiki/Symmetric_space#Classification_result>`__).
+# (see `Wikipedia <https://en.wikipedia.org/wiki/Symmetric_space#Classification_result>`__).
 # 
 # .. note::
 #     Note that :math:`\mathfrak{k}` is the small letter k in
@@ -184,16 +184,20 @@ def _commutes_with_all(candidate, ops):
     return True
 
 def cartan_subalgebra(m, which=0):
-    r"""Compute the Cartan subalgebra from the odd parity space :math:`\mathfrak{m}` of the Cartan decomposition
+    """Compute the Cartan subalgebra from the odd parity space :math:`\mathfrak{m}`
+    of the Cartan decomposition
 
-    This implementation is specific for cases of bases of m with pure Pauli words as detailed in Appendix C in `2104.00728 <https://arxiv.org/abs/2104.00728>`__.
+    This implementation is specific for cases of bases of m with pure Pauli words as
+    detailed in Appendix C in `2104.00728 <https://arxiv.org/abs/2104.00728>`__.
     
     Args:
-        m (List[PauliSentence]): the odd parity subspace :math:`\Theta(\mathfrak{m}) = \mathfrak{m}
-        which (int): Choice for initial element of m from which to construct the maximal Abelian subalgebra
+        m (List[PauliSentence]): the odd parity subspace :math:`\Theta(x) = -x
+        which (int): Choice for initial element of m from which to construct 
+            the maximal Abelian subalgebra
     
     Returns:
-        mtilde (List): remaining elements of :math:`\mathfrak{m}` s.t. :math:`\mathfrak{m} = \tilde{\mathfrak{m}} \oplus \mathfrak{h}`.
+        mtilde (List): remaining elements of :math:`\mathfrak{m}`
+            s.t. :math:`\mathfrak{m} = \tilde{\mathfrak{m}} \oplus \mathfrak{h}`.
         h (List): Cartan subalgebra :math:`\mathfrak{h}`.
 
     """
@@ -222,14 +226,14 @@ len(g), len(k), len(mtilde), len(h)
 # ---------------
 #
 # Obtaining the actual decomposition is highly non-trivial and there is no canonical way to go about computing it in terms of linear algebra sub-routines.
-# In [#Kökcü]_, the authors propose to find the extrema of the cost function
+# In [#Kökcü]_, the authors propose to find the a local extremum of the cost function
 # 
 # .. math:: f(\theta) = \langle K(\theta) v K(\theta)^\dagger, H\rangle
 # 
 # where :math:`\langle \cdot, \cdot \rangle` is some inner product (in our case the trace inner product :math:`\langle A, B \rangle = \text{tr}(A^\dagger B)`).
 # This construction uses the operator :math:`v = \sum_j \pi^j h_j \in \mathfrak{h}`
 # that is such that :math:`e^{i t v}` is dense in :math:`e^{i \mathcal{h}}`.
-# The latter means that for any point in :math:`e^{i \mathcal{h}}` there is a :math:`t` such that :math:`e^{i t v}` reaches it.
+# The latter means that for any point in :math:`e^{i \mathcal{h}}` there is a :math:`t` such that :math:`e^{i t v}` approximates it.
 # Let us construct it.
 
 gammas = [np.pi**i % 2 for i in range(1, len(h)+1)]
@@ -269,7 +273,9 @@ def run_opt(
     @jax.jit
     def step(opt_state, theta):
         val, grad_circuit = value_and_grad(theta)
-        updates, opt_state = optimizer.update(grad_circuit, opt_state, theta, value=val, grad=grad_circuit, value_fn=loss)
+        updates, opt_state = optimizer.update(
+            grad_circuit, opt_state, theta, value=val, grad=grad_circuit, value_fn=loss
+        )
         theta = optax.apply_updates(theta, updates)
 
         return opt_state, theta, val
@@ -373,7 +379,7 @@ trace_distance(U_exact_m, U_kak_m)
 
 ##############################################################################
 # Indeed we find that the KAK decomposition that we found reproduces the unitary evolution operator.
-# Note that this is valid for arbitrary :math:`t`, such that in that sense the Hamiltonian simulation operator has a fixed depth.
+# Note that this is valid for arbitrary :math:`t`, such that the Hamiltonian simulation operator has a fixed depth.
 
 ##############################################################################
 # Time evolutions
