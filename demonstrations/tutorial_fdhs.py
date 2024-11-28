@@ -441,7 +441,7 @@ plt.show()
 # This approach has the advantage that the resulting decomposition is itself already decomposed in terms of rotation gates in the original Lie algebra,
 # as opposed to other methods such as [#Chu]_ that find :math:`K` as a whole.
 # We provided a flexible pipeline that lets users find KAK decompositions in PennyLane for systems with small 
-# DLA and specifically decomposed the Heisenberg model Hamiltonian with :math:`n=4` qubits that has a DLA of dimension :math:`64-1` (:math:`\mathfrak{s u}(2^{n-1})`).
+# DLA and specifically decomposed the Heisenberg model Hamiltonian with :math:`n=4` qubits that has a DLA of dimension :math:`60` (:math:`\left(\mathfrak{s u}(2^{n-2})\right)^{\oplus 4}`).
 #
 
 
