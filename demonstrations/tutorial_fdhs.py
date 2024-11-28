@@ -7,8 +7,7 @@ In particular, we follow the approach in [#Kökcü]_ that directly provides us w
 decomposition of the unitaries :math:`K` and :math:`e^{-i t h}`.
 
 Sounds too good to be true? There are of course caveats, mostly of practical nature.
-One of them is that the Lie algebra of H, in terms of which
-this decomposition is based, becomes too large to handle. This is still an extremely
+One of them is that the relevant Lie algebra becomes too large to handle. This is still an extremely
 powerful mathematical result integral for quantum compilation, circuit optimization and Hamiltonian simulation.
 
 Introduction
@@ -29,20 +28,20 @@ just as is the case for diagonal matrices.
 
 We can use this general result from Lie theory as a powerful circuit decomposition technique.
 
-.. note:: We recommend a basic understanding of Lie algebras, see e.g. :doc:`our intro for quantum practitioners </demos/tutorial_liealgebra>`.
+.. note:: We recommend a basic understanding of Lie algebras, see e.g. our :doc:`intro for quantum practitioners </demos/tutorial_liealgebra>`.
     Otherwise this demo should be self-contained. For the mathematically inclined we further recommend our :doc:`demo on the KAK theorem </demos/tutorial_kak_theorem>`
     that dives into the mathematical depths of the theorem and provides more background info.
 
 Goal
 ----
 
-Unitary gates in quantum computing are described by the special orthogonal Lie group :math:`SU(2^n)`, so we can use the KAK
+Unitary gates in quantum computing are described by the special unitary Lie group :math:`SU(2^n)`, so we can use the KAK
 theorem to decompose quantum gates into :math:`U = K_1 A K_2`. While the mathematical statement is rather straight-forward,
 actually finding this decomposition is not. We are going to follow the recipe prescribed in 
 `Fixed Depth Hamiltonian Simulation via Cartan Decomposition <https://arxiv.org/abs/2104.00728>`__ [#Kökcü]_, 
 that tackles this decomposition on the level of the associated Lie algebra via Cartan decomposition.
 
-In particular, we are going to consider the problem of time-evolving a Hermitian operator :math:`H` the generates the time-evolution unitary :math:`U = e^{-i t H}`.
+In particular, we are going to consider the problem of time-evolving a Hermitian operator :math:`H` that generates the time-evolution unitary :math:`U = e^{-i t H}`.
 We are going to perform a special case of KAK decomposition, a "KhK decomposition" if you will, on the algebra level of H in terms of
 
 .. math:: H = K^\dagger h_0 K.
@@ -52,7 +51,11 @@ This then induces the KAK decomposition on the group level as
 .. math:: e^{-i t H} = K^\dagger e^{-i t h_0} K.
 
 Let us walk through an explicit example, doing theory and code side-by-side.
-For that we are going to use the Heisenberg model generators and Hamiltonian for :math:`n=4` qubits.
+
+For that we are going to use the generators of the Heisenberg model Hamiltonian for :math:`n=4` qubits on a one dimensional chain,
+
+.. math:: \{X_i X_{i+1}, Z_i Z_{i+1}, Z_i Z_{i+1}\}_{i=0}^{2}.
+
 The foundation to a KAK decomposition is a Cartan decomposition of the associated Lie algebra :math:`\mathfrak{g}`.
 For that, let us first construct it and import some libraries that we are going to use later.
 
@@ -115,6 +118,7 @@ even_odd_involution(X(0)), even_odd_involution(X(0) @ Y(3))
 # In particular, we have :math:`\Theta(\mathfrak{k}) = \mathfrak{k}` and :math:`\Theta(\mathfrak{m}) = - \mathfrak{m}`.
 # So in order to perform the Cartan decomposition :math:`\mathfrak{g} = \mathfrak{k} \oplus \mathfrak{m}`, we simply
 # sort the operators by whether or not they yield a plus or minus sign from the involution function.
+# This is possible because the operators and involution nicely align with the eigenspace decomposition.
 
 def cartan_decomposition(g, involution):
     """Cartan Decomposition g = k + m
@@ -124,15 +128,15 @@ def cartan_decomposition(g, involution):
         involution (callable): Involution function :math:`\Theta(\cdot)` to act on PauliSentence ops, should return ``0/1`` or ``True/False``.
     
     Returns:
-        k (List[PauliSentence]): the even parity subspace :math:`\Theta(\mathfrak{k}) = \mathfrak{k}`
-        m (List[PauliSentence]): the odd parity subspace :math:`\Theta(\mathfrak{m}) = \mathfrak{m}` """
+        k (List[PauliSentence]): the vertical subspace :math:`\Theta(x) = x`
+        m (List[PauliSentence]): the horizontal subspace :math:`\Theta(x) = -x` """
     m = []
     k = []
 
     for op in g:
-        if involution(op): # odd parity
+        if involution(op): # when involution returns True, vertical space
             k.append(op)
-        else: # even parity
+        else: # when involution returns False, horizontal space
             m.append(op)
     return k, m
 
@@ -170,7 +174,7 @@ len(g), len(k), len(m)
 # where :math:`\tilde{\mathfrak{m}}` is just the remainder of :math:`\mathfrak{m}`.
 
 def _commutes_with_all(candidate, ops):
-    """Check if ``candidate commutes with all ``ops``"""
+    r"""Check if ``candidate`` commutes with all ``ops``"""
     for op in ops:
         com = candidate.commutator(op)
         com.simplify()
@@ -180,7 +184,7 @@ def _commutes_with_all(candidate, ops):
     return True
 
 def cartan_subalgebra(m, which=0):
-    """Compute the Cartan subalgebra from the odd parity space :math:`\mathfrak{m}` of the Cartan decomposition
+    r"""Compute the Cartan subalgebra from the odd parity space :math:`\mathfrak{m}` of the Cartan decomposition
 
     This implementation is specific for cases of bases of m with pure Pauli words as detailed in Appendix C in `2104.00728 <https://arxiv.org/abs/2104.00728>`__.
     
@@ -190,7 +194,7 @@ def cartan_subalgebra(m, which=0):
     
     Returns:
         mtilde (List): remaining elements of :math:`\mathfrak{m}` s.t. :math:`\mathfrak{m} = \tilde{\mathfrak{m}} \oplus \mathfrak{h}`.
-        a (List): Cartan subalgebra
+        h (List): Cartan subalgebra :math:`\mathfrak{h}`.
 
     """
 
@@ -333,7 +337,7 @@ not h_vspace.is_independent(h_0.pauli_rep)
 
 ##############################################################################
 #
-# This (trivially) gives us the KhK decomposition of :math:`H`,
+# This gives us the KhK decomposition of :math:`H`,
 # 
 # .. math:: H = K_c^\dagger h_0 K_c
 # 
