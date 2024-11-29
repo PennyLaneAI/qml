@@ -182,14 +182,14 @@ def _commutes_with_all(candidate, ops):
     return True
 
 def cartan_subalgebra(m, which=0):
-    """Compute the Cartan subalgebra from the odd parity space :math:`\mathfrak{m}`
+    """Compute the Cartan subalgebra from the horizontal subspace :math:`\mathfrak{m}`
     of the Cartan decomposition
 
     This implementation is specific for cases of bases of m with pure Pauli words as
     detailed in Appendix C in `2104.00728 <https://arxiv.org/abs/2104.00728>`__.
     
     Args:
-        m (List[PauliSentence]): the odd parity subspace :math:`\Theta(x) = -x
+        m (List[PauliSentence]): the horizontal subspace :math:`\Theta(x) = -x
         which (int): Choice for initial element of m from which to construct 
             the maximal Abelian subalgebra
     
