@@ -106,9 +106,7 @@ g = [op.pauli_rep for op in g]
 def even_odd_involution(op):
     """Generalization of EvenOdd to sums of Paulis"""
     [pw] = op.pauli_rep
-    parity = len(pw) % 2
-
-    return parity
+    return len(pw) % 2
 
 even_odd_involution(X(0)), even_odd_involution(X(0) @ Y(3))
 
@@ -134,9 +132,9 @@ def cartan_decomposition(g, involution):
     k = []
 
     for op in g:
-        if involution(op): # when involution returns True, vertical space
+        if involution(op): # vertical space when involution returns True
             k.append(op)
-        else: # when involution returns False, horizontal space
+        else: # horizontal space when involution returns False
             m.append(op)
     return k, m
 
