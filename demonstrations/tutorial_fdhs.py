@@ -1,10 +1,10 @@
 r"""Fixed Depth Hamiltonian Simulation via Cartan Decomposition
 ===============================================================
 
-We introduce the powerful Lie theoretic decomposition technique for Hamiltonians, :math:`H = K h K^\dagger`,
-that lets you time-evolve by arbitrary times with fixed depth, :math:`e^{-i t H} = K e^{-i t h} K^\dagger`.
+We introduce the powerful Lie theoretic decomposition technique for Hamiltonians, :math:`H = K h K^\dagger,`
+that lets you time-evolve by arbitrary times with fixed depth, :math:`e^{-i t H} = K e^{-i t h} K^\dagger.`
 In particular, we follow the approach in [#Kökcü]_ that directly provides us with a (fixed depth) circuit
-decomposition of the unitaries :math:`K` and :math:`e^{-i t h}`.
+decomposition of the unitaries :math:`K` and :math:`e^{-i t h}.`
 
 Sounds too good to be true? There are of course caveats, mostly of practical nature.
 One of them is that the relevant Lie algebra becomes too large to handle. This is still an extremely
@@ -14,14 +14,14 @@ Introduction
 ------------
 
 The :doc:`KAK theorem </demos/tutorial_kak_theorem>` is an important result from Lie theory that states that any Lie group element :math:`U` can be decomposed
-as :math:`U = K_1 A K_2`, where :math:`K_{1, 2}` and :math:`A` are elements of two special sub-groups
-:math:`\mathcal{K}` and :math:`\mathcal{A}`, respectively. In special cases, the decomposition simplifies to :math:`U = K A K^\dagger`.
+as :math:`U = K_1 A K_2,` where :math:`K_{1, 2}` and :math:`A` are elements of two special sub-groups
+:math:`\mathcal{K}` and :math:`\mathcal{A},` respectively. In special cases, the decomposition simplifies to :math:`U = K A K^\dagger.`
 
 You can think of this KAK decomposition as a generalization of
 the singular value decomposition to Lie groups. For that, recall that the singular value decomposition states that any
-matrix :math:`M \in \mathbb{C}^{m \times n}` can be decomposed as :math:`M = U \Lambda V^\dagger`, where :math:`\Lambda`
+matrix :math:`M \in \mathbb{C}^{m \times n}` can be decomposed as :math:`M = U \Lambda V^\dagger,` where :math:`\Lambda`
 are the diagonal singular values and :math:`U \in \mathbb{C}^{m \times \mu}` and :math:`V^\dagger \in \mathbb{C}^{\mu \times n}`
-are left- and right-unitary with :math:`\mu = \min(m, n)`.
+are left- and right-unitary with :math:`\mu = \min(m, n).`
 
 In the case of the KAK decomposition, :math:`\mathcal{A}` is an Abelian subgroup such that all its elements are commuting,
 just as is the case for diagonal matrices.
@@ -35,13 +35,13 @@ We can use this general result from Lie theory as a powerful circuit decompositi
 Goal
 ----
 
-Unitary gates in quantum computing are described by the special unitary Lie group :math:`SU(2^n)`, so we can use the KAK
-theorem to decompose quantum gates into :math:`U = K_1 A K_2`. While the mathematical statement is rather straight-forward,
+Unitary gates in quantum computing are described by the special unitary Lie group :math:`SU(2^n),` so we can use the KAK
+theorem to decompose quantum gates into :math:`U = K_1 A K_2.` While the mathematical statement is rather straight-forward,
 actually finding this decomposition is not. We are going to follow the recipe prescribed in 
 `Fixed Depth Hamiltonian Simulation via Cartan Decomposition <https://arxiv.org/abs/2104.00728>`__ [#Kökcü]_, 
 that tackles this decomposition on the level of the associated Lie algebra via Cartan decomposition.
 
-In particular, we are going to consider the problem of time-evolving a Hermitian operator :math:`H` the generates the time-evolution unitary :math:`U = e^{-i t H}`.
+In particular, we are going to consider the problem of time-evolving a Hermitian operator :math:`H` the generates the time-evolution unitary :math:`U = e^{-i t H}.`
 We are going to perform a special case of KAK decomposition, a "KhK decomposition" if you will, on the algebraic level in terms of
 
 .. math:: H = K^\dagger h_0 K.
@@ -54,9 +54,9 @@ Let us walk through an explicit example, doing theory and code side-by-side.
 
 For that we are going to use the generators of the Heisenberg model Hamiltonian for :math:`n=4` qubits on a one dimensional chain,
 
-.. math:: \{X_i X_{i+1}, Z_i Z_{i+1}, Z_i Z_{i+1}\}_{i=0}^{2}.
+.. math:: \{X_i X_{i+1}, Y_i Y_{i+1}, Z_i Z_{i+1}\}_{i=0}^{2}.
 
-The foundation to a KAK decomposition is a Cartan decomposition of the associated Lie algebra :math:`\mathfrak{g}`.
+The foundation to a KAK decomposition is a Cartan decomposition of the associated Lie algebra :math:`\mathfrak{g}.`
 For that, let us first construct it and import some libraries that we are going to use later.
 
 
@@ -89,8 +89,8 @@ g = [op.pauli_rep for op in g]
 # --------------------
 # 
 # A Cartan decomposition is a bipartition :math:`\mathfrak{g} = \mathfrak{k} \oplus \mathfrak{m}` into a vertical subspace
-# :math:`\mathfrak{k}` and an orthogonal horizontal subspace :math:`\mathfrak{m}`. In practice, it can be induced by an
-# involution function :math:`\Theta` that fulfils :math:`\Theta(\Theta(g)) = g \ \forall g \in \mathfrak{g}`. Different 
+# :math:`\mathfrak{k}` and an orthogonal horizontal subspace :math:`\mathfrak{m}.` In practice, it can be induced by an
+# involution function :math:`\Theta` that fulfils :math:`\Theta(\Theta(g)) = g \ \forall g \in \mathfrak{g}.` Different 
 # involutions lead to different types of Cartan decompositions, which have been fully classified by Cartan 
 # (see `Wikipedia <https://en.wikipedia.org/wiki/Symmetric_space#Classification_result>`__).
 # 
@@ -100,7 +100,7 @@ g = [op.pauli_rep for op in g]
 #     common - not our - choice for the vertical subspace in a Cartan decomposition.
 #
 # One common choice of involution is the so-called even-odd involution for Pauli words
-# :math:`P = P_1 \otimes P_2 .. \otimes P_n` where :math:`P_j \in \{I, X, Y, Z\}`.
+# :math:`P = P_1 \otimes P_2 .. \otimes P_n` where :math:`P_j \in \{I, X, Y, Z\}.`
 # It essentially counts whether the number of non-identity Pauli operators in the Pauli word is even or odd.
 
 def even_odd_involution(op):
@@ -115,8 +115,8 @@ even_odd_involution(X(0)), even_odd_involution(X(0) @ Y(3))
 ##############################################################################
 # 
 # The vertical and horizontal subspaces are the two eigenspaces of the involution, corresponding to the :math:`\pm 1` eigenvalues.
-# In particular, we have :math:`\Theta(\mathfrak{k}) = \mathfrak{k}` and :math:`\Theta(\mathfrak{m}) = - \mathfrak{m}`.
-# So in order to perform the Cartan decomposition :math:`\mathfrak{g} = \mathfrak{k} \oplus \mathfrak{m}`, we simply
+# In particular, we have :math:`\Theta(\mathfrak{k}) = \mathfrak{k}` and :math:`\Theta(\mathfrak{m}) = - \mathfrak{m}.`
+# So in order to perform the Cartan decomposition :math:`\mathfrak{g} = \mathfrak{k} \oplus \mathfrak{m},` we simply
 # sort the operators by whether or not they yield a plus or minus sign from the involution function.
 # This is possible because the operators and involution nicely align with the eigenspace decomposition.
 
@@ -160,18 +160,18 @@ len(g), len(k), len(m)
 #
 # In particular, :math:`\mathfrak{k}` is closed under commutation and is therefore a subalgebra, whereas :math:`\mathfrak{m}` is not.
 # This also has the consequence that the associated Lie group :math:`\mathcal{K} := e^{i \mathfrak{k}}` is a subgroup
-# of the associated Lie group :math:`\mathcal{G} := e^{i \mathfrak{g}}`.
+# of the associated Lie group :math:`\mathcal{G} := e^{i \mathfrak{g}}.`
 #
 # Cartan subalgebra
 # -----------------
 # 
 # With this we have identified the first subgroup (:math:`\mathcal{K}`) of the KAK decomposition. The other subgroup
-# is induced by the so-called (horizontal) Cartan subalgebra :math:`\mathfrak{h}`. This is a maximal Abelian subalgebra of :math:`\mathfrak{m}` and is not unique.
+# is induced by the so-called (horizontal) Cartan subalgebra :math:`\mathfrak{h}.` This is a maximal Abelian subalgebra of :math:`\mathfrak{m}` and is not unique.
 # For the case of Pauli words we can simply pick any element in :math:`\mathfrak{m}` and collect all other operators in :math:`\mathfrak{m}`
 # that commute with it.
 #
-# We then obtain a further split of the vector space :math:`\mathfrak{m} = \tilde{\mathfrak{m}} \oplus \mathfrak{h}`,
-# where :math:`\tilde{\mathfrak{m}}` is just the remainder of :math:`\mathfrak{m}`.
+# We then obtain a further split of the vector space :math:`\mathfrak{m} = \tilde{\mathfrak{m}} \oplus \mathfrak{h},`
+# where :math:`\tilde{\mathfrak{m}}` is just the remainder of :math:`\mathfrak{m}.`
 
 def _commutes_with_all(candidate, ops):
     r"""Check if ``candidate`` commutes with all ``ops``"""
@@ -219,7 +219,7 @@ mtilde, h = cartan_subalgebra(m)
 len(g), len(k), len(mtilde), len(h)
 
 ##############################################################################
-# We now have the Cartan decomposition :math:`\mathfrak{g} = \mathfrak{k} \oplus \tilde{\mathfrak{m}} \oplus \mathfrak{h}``
+# We now have the Cartan decomposition :math:`\mathfrak{g} = \mathfrak{k} \oplus \tilde{\mathfrak{m}} \oplus \mathfrak{h}`
 # and with that all the necessary ingredients for the KAK decomposition.
 # 
 # Variational KhK
@@ -232,7 +232,7 @@ len(g), len(k), len(mtilde), len(h)
 # 
 # where :math:`\langle \cdot, \cdot \rangle` is some inner product (in our case the trace inner product :math:`\langle A, B \rangle = \text{tr}(A^\dagger B)`).
 # This construction uses the operator :math:`v = \sum_j \pi^j h_j \in \mathfrak{h}`
-# that is such that :math:`e^{i t v}` is dense in :math:`e^{i \mathcal{h}}`.
+# that is such that :math:`e^{i t v}` is dense in :math:`e^{i \mathcal{h}}.`
 # The latter means that for any point in :math:`e^{i \mathcal{h}}` there is a :math:`t` such that :math:`e^{i t v}` approximates it.
 # Let us construct it.
 
@@ -321,14 +321,14 @@ plt.show()
 
 
 ##############################################################################
-# This gives us the optimal values of the parameters :math:`\theta_\text{opt}` of :math:`K(\theta_\text{opt}) =: K_c`.
+# This gives us the optimal values of the parameters :math:`\theta_\text{opt}` of :math:`K(\theta_\text{opt}) =: K_c.`
 
 theta_opt = thetas[-1]
 Kc_m = qml.matrix(K, wire_order=range(n_wires))(theta_opt, k)
 
 ##############################################################################
 # The special element :math:`h_0` from the Cartan subalgebra :math:`\mathfrak{h}` is given by
-# rotating the Hamiltonian by the critical :math:`K_c`.
+# rotating the Hamiltonian by the critical :math:`K_c,`
 # 
 # .. math:: h_0 = K_c H K_c^\dagger.
 
@@ -343,9 +343,9 @@ not h_vspace.is_independent(h_0.pauli_rep)
 
 ##############################################################################
 #
-# This gives us the KhK decomposition of :math:`H`,
+# This gives us the KhK decomposition of :math:`H,`
 # 
-# .. math:: H = K_c^\dagger h_0 K_c
+# .. math:: H = K_c^\dagger h_0 K_c.
 # 
 # This trivially reproduces the original Hamiltonian.
 #
@@ -379,7 +379,7 @@ trace_distance(U_exact_m, U_kak_m)
 
 ##############################################################################
 # Indeed we find that the KAK decomposition that we found reproduces the unitary evolution operator.
-# Note that this is valid for arbitrary :math:`t`, such that the Hamiltonian simulation operator has a fixed depth.
+# Note that this is valid for arbitrary :math:`t,` such that the Hamiltonian simulation operator has a fixed depth.
 
 ##############################################################################
 # Time evolutions
@@ -424,7 +424,7 @@ plt.show()
 # while the KAK error is constant zero.
 #
 # The KAK decomposition is particularly well-suited for smaller systems as the circuit depth is equal to the
-# dimension of the subspaces, in particular :math:`2 |\mathfrak{k}| + |\mathfrak{h}|`. Note, however,
+# dimension of the subspaces, in particular :math:`2 |\mathfrak{k}| + |\mathfrak{h}|.` Note, however,
 # that these dimensions typically scale exponentially in the system size.
 #
 
