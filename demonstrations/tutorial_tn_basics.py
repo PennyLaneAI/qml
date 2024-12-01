@@ -1,18 +1,23 @@
 r"""Tutorial: ABC of tensor networks for quantum circuits
 =============================================================
 
-If you are in the domain of quantum computing or quantum information, chances are you have heard (maybe a lot) about tensor networks being brought into the conversation. Actually, they are a rather widespread "tool" with applications ranging across physics, math, and computer science.
+If you are in the domain of quantum computing or quantum information, chances are you have heard (maybe a lot) about tensor networks being brought into the conversation. In fact, tensor networks are a rather widespread "tool" with applications ranging across physics, math, and computer science.
 
 Part of the excitement surrounding tensor networks is due to their ability to represent complex data efficiently, which allows for — among other things — fast classical simulations. In addition, the diagrammatic language accompanying tensor networks makes working with them intuitive and suitable for describing a vast range of mathematical concepts, including quantum circuits.
 
-The first sections aim to introduce the basic notions and definitions of tensor networks to those quantum practitioners familiar with quantum computing but who are new to the tensor networks world 🌎. 
+The :ref:`first part of this tutorial <part_one>` aims to introduce the basic notions and definitions of tensor networks to those quantum practitioners familiar with quantum computing but who are new to the tensor networks world 🌎.
 
-Then, building on this introduction, in the following sections we explore topics akin to more seasoned 🧂 readers who want to learn about concepts and algorithms used to connect tensor networks and quantum computing - like those used to simulate the output of a quantum circuit.
+Then, building on this introduction, in the :ref:`second part <part_two>` we explore topics akin to more seasoned 🧂 readers who want to learn about concepts and algorithms used to connect tensor networks and quantum computing - like those used to simulate the output of a quantum circuit.
 
 Without further ado, let’s dive right in! 🤓📚
 
+.. _part_one:
+
+Part 1: A first glimpse into the tensor networks world 🔍👀
+----------------------------------------------------------
+
 From matrices to tensors
--------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 First, we start by answering the question: what is a tensor❓
 
@@ -82,7 +87,7 @@ print("Rank-3 tensor: \n", tensor_rank3)
 
 ##############################################################################
 # From matrix multiplication to tensor contractions
-# -------------------------------------------------
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # Matrix-matrix and matrix-vector multiplications are familiar operations within the context of quantum computing. We can now study these operations through the lens of the tensor notation introduced above. First, a matrix and a vector can be multiplied as
 #
@@ -100,7 +105,7 @@ print("Rank-3 tensor: \n", tensor_rank3)
 # We see that summing over the shared index :math:`i` is equivalent to **contracting** the corresponding legs from the matrix and vector diagrams. As expected, the result of this multiplication is another rank-1 tensor with dangling leg :math:`j`. Similarly, we can look at the matrix-matrix multiplication:
 #
 # .. math::
-#     (G^3)_{i,k} = G^2 \cdot G^1 = \sum_j G^{2}_{j,k} G^{1}_{i,j}
+#     (G^3)_{i,k} = G^2 \cdot G^1 = \sum_j G^{1}_{i,j} G^{2}_{j,k} 
 #
 # .. figure:: ../_static/demonstration_assets/tn_basics/05-matrix-matrix.png
 #     :align: center
@@ -108,12 +113,17 @@ print("Rank-3 tensor: \n", tensor_rank3)
 #
 # Here, the resulting tensor has two dangling indices, :math:`i` and :math:`k`, defining a matrix, as expected!
 #
-# We can now generalize this concept to tensors, and consequently, to more than two legs being contracted. For example, let us look at three tensors :math:`A_{i,j,k}`, :math:`B_{j,l,m}`, and :math:`C_{k,m,n}`. To contract them, all we need to do is to sum over repeated indices (:math:`j`, :math:`k`, :math:`m`). To obtain the :math:`(i,l,n)`-th element of the resulting tensor :math:`D`, we perform this contraction by using the tensor product :math:`\otimes` between the 3 tensors and summing over :math:`j, k, m` [#Bridgeman2017]_
+# We can now generalize this concept to tensors, and consequently, to more than two legs being contracted. For example, let us look at three tensors :math:`A_{i,j,k}`, :math:`B_{j,l,m}`, and :math:`C_{k,m,n}`. To contract them, all we need to do is to sum over repeated indices (:math:`j`, :math:`k`, :math:`m`). To obtain the :math:`(i,l,n)`-th element of the resulting tensor :math:`D`, we perform this contraction by summing over :math:`j, k, m` 
+# 
+# .. math::
+#     (D)_{i,l,n} =  \sum_{j,k,m} A_{i,j,k} B_{j,l,m} C_{k,m,n} .
+#
+# Using the tensor product :math:`\otimes` between the 3 tensors and summing over the repeated indices we can obtain a similar expression for the full tensor :math:`D` [#Bridgeman2017]_
 #
 # .. math::
-#     (D)_{i,l,n} = \sum_{j,k,m} A_{i,j,k} \otimes B_{j,l,m} \otimes C_{k,m,n} = \sum_{j,k,m} A_{i,j,k} B_{j,l,m} C_{k,m,n} .
+#     D_{i,l,n} = \sum_{j,k,m} A_{i,j,k} \otimes B_{j,l,m} \otimes C_{k,m,n}.
 #
-# Notice how the resulting rank-3 tensor consists of the remaining open legs from the initial tensors :math:`(i,l,n)`. It is customary to omit the tensor product from the contraction expression, just as we did in the last part of this equation. The diagrammatic representation of this equation is obtained by connecting all the legs with the same indices.
+# The resulting rank-3 tensor consists of the remaining open legs from the initial tensors :math:`(i,l,n)`. The first equation involving only scalars is the more widely used expression for the contraction operation, and thus, we will use it throughout this tutorial unless otherwise stated. The diagrammatic representation of this contraction is obtained by connecting all the legs with the same indices.
 #
 # .. figure:: ../_static/demonstration_assets/tn_basics/06-tensor-tensor.png
 #     :align: center
@@ -139,12 +149,12 @@ print(D.shape)
 
 ##############################################################################
 # The CNOT gate
-# ~~~~~~~~~~~~~
+# ^^^^^^^^^^^^^
 # 
 # To end this section, we want to discuss a common example of a tensor network contraction arising in quantum computing, namely the **CNOT** gate. The CNOT gate can be expressed in the computational basis as
 #
 # .. math::
-#   CNOT = |0\rangle \langle 0 | \otimes I + |1\rangle \langle 1 | \otimes X.
+#   \mathrm{CNOT} = |0\rangle \langle 0 | \otimes I + |1\rangle \langle 1 | \otimes X.
 #
 # That is, if the control qubit is in the :math:`|1\rangle` state, we apply the :math:`X` gate on the target qubit; otherwise, we leave it untouched. However, we can also rewrite this equation as a contraction. To do so, we define two tensors:
 #
@@ -162,10 +172,15 @@ print(D.shape)
 #           X
 #         \end{pmatrix}
 #
-# This means :math:`(T^1)_{i,j,k}` and :math:`(T^2)_{l,j,m}` are two rank-3 tensors, where the index :math:`j` *picks* the elements in the column vector while the the other two indices correspond to the indices of the internal tensors (matrices). For instance, the :math:`j = 0`-th element of :math:`T^1` and :math:`T^2` are :math:`|0\rangle \langle 0 |` and :math:`I`, respectively, and similarly for their :math:`j = 1`-st element. This means we can redefine the CNOT expression from above as
+# This means :math:`T^1_{i,j,k}` and :math:`T^2_{l,j,m}` are two rank-3 tensors, where the index :math:`j` *picks* the elements in the column vector while the other two indices correspond to the indices of the internal tensors (matrices). For instance, the :math:`j = 0`-th element of :math:`T^1` and :math:`T^2` are :math:`|0\rangle \langle 0 |` and :math:`I`, respectively, and similarly for their :math:`j = 1`-st element. This means we can redefine the CNOT expression from above as
 #
 # .. math::
-#   \mathrm{CNOT}_{i,l,k,m} = \sum_j (T^1)_{i,j,k} \otimes (T^2)_{l,j,m} = \sum_j (T^1)_{i,j,k} (T^2)_{l,j,m}.
+#   \mathrm{CNOT}_{i,l,k,m} = \sum_j T^1_{i,j,k} \otimes T^2_{l,j,m} .
+# 
+# We recognize this expression as the second definition for the contraction operation we introduced earlier. Hence, the CNOT gate can be seen as the contraction between :math:`T^1` and :math:`T^2`.
+# 
+# .. math::
+#   (\mathrm{CNOT})_{i,l,k,m} = \sum_j (T^1)_{i,j,k} (T^2)_{l,j,m}. 
 # 
 # It turns out that :math:`T^1` and :math:`T^2` are special tensors known as the COPY and XOR tensors, respectively, and therefore have special diagrammatic representations. 
 #
@@ -175,7 +190,6 @@ print(D.shape)
 #
 # Then, their contraction results in the well-known CNOT quantum circuit representation.
 #
-# 
 # .. figure:: ../_static/demonstration_assets/tn_basics/08-cnot.png
 #     :align: center
 #     :width: 45%
@@ -187,11 +201,11 @@ print(D.shape)
 # 
 # .. note::
 # 
-#   More generally, we can find decompositions of multi-qubit gates into local tensors employing the ubiquitous singular value decomposition (SVD). This method is explained in detail in our :doc:`MPS tutorial </demos/tutorial_mps>`.
+#   More generally, we can find decompositions of multi-qubit gates into local tensors employing the ubiquitous singular value decomposition (SVD). This method is explained in detail in our :doc:`MPS tutorial </demos/tutorial_mps>`. This decomposition is helpful when contracting non-local tensors in, e.g., a quantum circuit.
 
 ##############################################################################
 # The cost of contracting a network
-# ---------------------------------
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # A common task when dealing with tensors is the contraction of large networks resulting in a single tensor (including scalars). To arrive at this final tensor, we can start with a single tensor and contract it with adjacent tensors one at a time. The order in which this is carried out is known as the **contraction path** or **bubbling**.
 # 
@@ -308,8 +322,13 @@ print(f"Computation cost for A(BC) contraction: {average_time_ms:.8f} ms")
 # To help you with this endeavour, in the following sections we will summarize some ubiquitous algorithms used to connect tensor networks and quantum computers. These topics can become quite technical real fast, and thus, we can only scratch the surface in this demo. For this reason, we will reference the relevant sources when pertinent. Now, take a sip of coffee, brace yourself, and let's continue! ☕️ 
 
 ##############################################################################
+# .. _part_two:
+
+# Part 2: Connecting tensor networks and quantum circuits 🔌
+# -----------------------------------------------------------
+# 
 # Contraction paths
-# -----------------
+# ~~~~~~~~~~~~~~~~~
 # 
 # In the previous section, we explored how the choice of the contraction path affects the computational cost of the tensor network contraction through a toy example. As shown in [#Lam1997]_, finding an optimal contraction path is equivalent to solving the "multiplication problem," and thus, it is NP-hard. In this section, we provide a general description of the widespread techniques used to tackle this ubiquitous task.
 # 
@@ -353,7 +372,7 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # The different types of values accepted for ``contraction_optimizer`` are determined by the ``optimize`` parameter in ``Quimb`` (see `docs <https://quimb.readthedocs.io/en/latest/tensor-circuit.html#finding-a-contraction-path-the-optimize-kwarg>`_) as this is the backend behind the :class:`~pennylane.devices.default_tensor.DefaultTensor` device. See `this tutorial <https://pennylane.ai/qml/demos/tutorial_How_to_simulate_quantum_circuits_with_tensor_networks/>`_ to learn more the use of this device in ``Pennylane``.
 # 
 # Slicing
-# ~~~~~~~
+# ^^^^^^^
 # 
 # The size of (intermediate) tensors can grow exponentially with the number of indices and dimensions, especially for large-scale tensor networks. Thus, we might run into memory problems when performing the contractions. A useful additional technique to split these tensors into more manageable pieces is known as **slicing**. 
 # 
@@ -363,7 +382,7 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 
 ##############################################################################
 # Quantum circuits are tensor networks
-# ------------------------------------
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # Until now, we have looked at general tensor networks, while ✨sparkling✨ the discussions with examples related to quantum circuits. Here, we leverage the components we have learned to explore this relation more in-depth. 
 # 
@@ -385,7 +404,7 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # Now we can ask ourselves: what quantities can we compute from this tensor network? 🤔
 # 
 # Expectation values
-# ~~~~~~~~~~~~~~~~~~
+# ^^^^^^^^^^^^^^^^^^
 # 
 # As anticipated in the previous section, a natural quantity to compute using the tensor network arising from a quantum circuit is the expectation value of an observable :math:`O` evaluated at the quantum state :math:`|\psi \rangle`
 # 
@@ -418,7 +437,7 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # where :math:`| \psi_l \rangle` is the section of the evolved state within the light cone of :math:`O_l`.
 # 
 # Sampling
-# ~~~~~~~~
+# ^^^^^^^^
 # 
 # In addition to calculating expectation values, we can also use the tensor network arising from a quantum circuit to sample bitstrings from the evolved probability distribution :math:`| \psi \rangle` - emulating what you would obtain from a real quantum computer. Since this is a ubiquitous task in quantum information, several algorithms have been proposed to generate samples from probability distributions represented as tensor networks. In particular, here we discuss the "Perfect Sampling Algorithm" applied to unitary tensor networks [#Ferris2012]_, as this generates uncorrelated samples, unlike Markov-based approaches.
 # 
@@ -477,7 +496,7 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # 
 # And that is it for this tutorial! 🎉
 # 
-# Although the world of tensor networks and their relation to quantum computing is vastly wider than what we could ever cover in one tutorial, we hope that after these explanations you now feel equipped with the tools needed to dive deeper into this topic by yourself. 🔍
+# Although the world of tensor networks and their relation to quantum computing is vastly wider than what we could ever cover in one tutorial, we hope that after these explanations you now feel equipped with the tools needed to dive deeper into this topic by yourself. 🔍🛠️
 # 
 # If you want to learn more about using tensor networks as a diagrammatic tool, check out `these amazing lecture notes <https://arxiv.org/pdf/1912.10049>`_ by J.Biamonte. In addition, check out `this website <https://tensornetwork.org/about/>`_ for great explanations on many important algorithms and tensor network structures by Flatiron Institute  .  
 
