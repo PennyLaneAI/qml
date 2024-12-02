@@ -3,8 +3,7 @@ r"""How to build spin Hamiltonians
 Systems of interacting spins provide simple but powerful models for studying problems in physics,
 chemistry, and quantum computing. PennyLane offers a comprehensive set of tools that enables users
 to intuitively construct a broad range of spin Hamiltonians. Here we show you how to use these tools
-to easily construct spin Hamiltonians for models such as
-the `Fermi–Hubbard <https://en.wikipedia.org/wiki/Hubbard_model>`__ model,
+to easily construct spin Hamiltonians for the `Fermi–Hubbard <https://en.wikipedia.org/wiki/Hubbard_model>`__ model,
 the `Heisenberg <https://en.wikipedia.org/wiki/Quantum_Heisenberg_model>`__ model,
 the `transverse-field Ising <https://en.wikipedia.org/wiki/Transverse-field_Ising_model>`__ model,
 the `Kitaev's honeycomb <https://arxiv.org/abs/cond-mat/0506438>`__ model,
@@ -105,7 +104,7 @@ lattice = qml.spin.generate_lattice('square', n_cells)
 plot(lattice)
 
 ######################################################################
-# Note that we currently support the following in-built lattice shapes: ``chain``, ``square``,
+# We currently support the following in-built lattice shapes: ``chain``, ``square``,
 # ``rectangle``, ``triangle``, ``honeycomb``,  ``kagome``, ``lieb``, ``cubic``, ``bcc``, ``fcc``
 # and ``diamond``. More details are provided
 # `here <https://docs.pennylane.ai/en/latest/code/api/pennylane.spin.generate_lattice.html>`__.
