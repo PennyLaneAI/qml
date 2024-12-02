@@ -2,11 +2,11 @@
     "title": "Approximating a classical kernel with a quantum computer",
     "authors": [
         {
-            "id": "elies_gil-fuster"
+            "username": "egfuster"
         }
     ],
     "dateOfPublication": "2022-03-01T00:00:00+00:00",
-    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
+    "dateOfLastModification": "2024-11-06T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
