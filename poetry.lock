@@ -361,17 +361,17 @@ files = [
 
 [[package]]
 name = "bluequbit"
-version = "0.8.1b1"
+version = "0.9.2b1"
 description = "Python SDK to BlueQubit app"
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.9"
 files = [
-    {file = "bluequbit-0.8.1b1-py3-none-any.whl", hash = "sha256:0c6bd231f46db2a336fe1de0498f9faeafe2a3d13e8efda5e9568615c127e2a7"},
-    {file = "bluequbit-0.8.1b1.tar.gz", hash = "sha256:832f9c5b3f50c594659e470af5fda3fd33b0ebd5a3c5af40922db94eba314b86"},
+    {file = "bluequbit-0.9.2b1-py3-none-any.whl", hash = "sha256:c880b990303c8cf4f8407cdc0d412e13d53e47457a93f982c50e74cdfde23ae7"},
+    {file = "bluequbit-0.9.2b1.tar.gz", hash = "sha256:389c27d3460d83c1bd7f647adba099c3d1b781aa6b9099b866027151a0c6d761"},
 ]
 
 [package.dependencies]
-numpy = ">=1.21,<2.0"
+numpy = ">=1.21,<2.1"
 packaging = "*"
 python-dateutil = ">=2.8,<3.0"
 requests = ">=2.28,<3.0"
@@ -8102,4 +8102,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.10.0"
-content-hash = "11afd24368571885b3aec28224556e3bb58e749e3157fb803ab50b4d679afd28"
+content-hash = "9ff50f9efe9e179766186ce88e96a576746c688de6f33c6fe220e08816e12dce"
