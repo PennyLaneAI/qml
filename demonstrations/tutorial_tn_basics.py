@@ -323,7 +323,7 @@ print(f"Computation cost for A(BC) contraction: {average_time_ms:.8f} ms")
 
 ##############################################################################
 # .. _part_two:
-
+# 
 # Part 2: Connecting tensor networks and quantum circuits 🔌
 # -----------------------------------------------------------
 # 
