@@ -284,7 +284,7 @@ def shors_algorithm(N):
 # *Fourier adder*, :math:`\Phi`, below.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder.svg
-#    :scale: 120%
+#    :scale: 120% 
 #    :align: center
 #    :alt: Addition in the Fourier basis.
 #
@@ -299,13 +299,13 @@ def shors_algorithm(N):
 # As one may expect, :math:`\Phi^\dagger` performs subtraction. However, one
 # must now take into consideration the possibility of underflow.
 #
-# .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_adjoint.svg
+# .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_adjoint.svg 
 #    :scale: 120%
 #    :align: center
 #    :alt: Subtraction in the Fourier basis.
 #
 # Returning to our implementation of :math:`M_a`, we see an operation
-# :math:`\Phi_+` which is similar to :math:`Phi`, but it (a) uses an auxiliary
+# :math:`\Phi_+` which is similar to :math:`\Phi`, but it (a) uses an auxiliary
 # qubit, and (b) works modulo :math:`N`. The idea behind :math:`\Phi_+` is that
 # we still use Fourier basis addition and subtraction, but apply corrections
 # if overflow is detected.
