@@ -558,4 +558,5 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 ##############################################################################
 # About the author
 # ----------------
-#
+# 
+# 
