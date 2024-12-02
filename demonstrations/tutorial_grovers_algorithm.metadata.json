@@ -2,11 +2,11 @@
     "title": "Grover's Algorithm",
     "authors": [
         {
-            "id": "ludmila_botelho"
+            "username": "lbotelho"
         }
     ],
     "dateOfPublication": "2023-07-03T00:00:00+00:00",
-    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
+    "dateOfLastModification": "2024-11-06T00:00:00+00:00",
     "categories": [
         "Getting Started",
         "Algorithms",
@@ -34,5 +34,6 @@
             "id": "tutorial_qft_arithmetics",
             "weight": 1.0
         }
-    ]
+    ],
+    "discussionForumUrl": "https://discuss.pennylane.ai/t/understanding-grover/3340"
 }

@@ -2,14 +2,14 @@
     "title": "Classical shadows",
     "authors": [
         {
-            "id": "roeland_wiersema"
+            "username": "therooler"
         },
         {
-            "id": "brian_doolittle"
+            "username": "bdoolittle"
         }
     ],
     "dateOfPublication": "2021-06-14T00:00:00+00:00",
-    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
+    "dateOfLastModification": "2024-11-06T00:00:00+00:00",
     "categories": [
         "Algorithms"
     ],
@@ -69,5 +69,6 @@
             "id": "tutorial_quantum_metrology",
             "weight": 1.0
         }
-    ]
+    ],
+    "discussionForumUrl": "https://discuss.pennylane.ai/t/classical-shadows-in-calculating-fidelity/3727"
 }

@@ -5,17 +5,17 @@
             "username": "Diego"
         },
         {
-            "id": "esther_cruz-rico"
+            "username": "ecrico"
         },
         {
-            "id": "shaoming_zhang"
+            "username": "szhang"
         },
         {
             "username": "ixfoduap"
         }
     ],
     "dateOfPublication": "2022-03-29T00:00:00+00:00",
-    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
+    "dateOfLastModification": "2024-11-06T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
@@ -56,5 +56,6 @@
             "id": "tutorial_variational_classifier",
             "weight": 1.0
         }
-    ]
+    ],
+    "discussionForumUrl": "https://discuss.pennylane.ai/t/tensor-network-quantum-circuits-demo/7340"
 }

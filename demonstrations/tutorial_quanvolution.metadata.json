@@ -2,11 +2,11 @@
     "title": "Quanvolutional Neural Networks",
     "authors": [
         {
-            "id": "andrea_mari"
+            "username": "amari"
         }
     ],
     "dateOfPublication": "2020-03-24T00:00:00+00:00",
-    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
+    "dateOfLastModification": "2024-11-06T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
@@ -32,5 +32,6 @@
     ],
     "basedOnPapers": ["10.48550/arXiv.1904.04767"],
     "referencedByPapers": [],
-    "relatedContent": []
+    "relatedContent": [],
+    "discussionForumUrl": "https://discuss.pennylane.ai/t/quanvolutional-neural-networks/7296"
 }
