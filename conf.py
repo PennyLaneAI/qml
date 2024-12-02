@@ -84,7 +84,7 @@ sphinx_gallery_conf = {
     "backreferences_dir"  : "backreferences",
     "doc_module"          : ("pennylane"),
     "junit": "../test-results/sphinx-gallery/junit.xml",
-    'reset_modules': ("module_resets.reset_jax", "matplotlib", "seaborn"),
+    "reset_modules": ("module_resets.reset_jax", "matplotlib", "seaborn"),
 }
 
 

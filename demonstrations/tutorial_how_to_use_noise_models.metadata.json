@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2024-10-01T00:00:00+00:00",
-    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
+    "dateOfLastModification": "2024-11-22T00:00:00+00:00",
     "categories": [
         "Quantum Computing",
         "How-to"
@@ -32,6 +32,11 @@
         {
             "type": "demonstration",
             "id": "tutorial_noisy_circuits",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_how_to_import_qiskit_noise_models",
             "weight": 1.0
         }
     ]
