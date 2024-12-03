@@ -7,7 +7,7 @@ In particular, we follow the approach in [#Kökcü]_ that directly provides us w
 decomposition of the unitaries :math:`K` and :math:`e^{-i t h}.`
 
 Sounds too good to be true? There are of course caveats, mostly of practical nature.
-One of them is that the relevant Lie algebra becomes too large to handle. This is still an extremely
+One of them is that the relevant Lie algebra becomes too large to handle. Yet, this is still an extremely
 powerful mathematical result integral for quantum compilation, circuit optimization and Hamiltonian simulation.
 
 Introduction
@@ -41,7 +41,7 @@ actually finding this decomposition is not. We are going to follow the recipe pr
 `Fixed Depth Hamiltonian Simulation via Cartan Decomposition <https://arxiv.org/abs/2104.00728>`__ [#Kökcü]_, 
 that tackles this decomposition on the level of the associated Lie algebra via Cartan decomposition.
 
-In particular, we are going to consider the problem of time-evolving a Hermitian operator :math:`H` the generates the time-evolution unitary :math:`U = e^{-i t H}.`
+In particular, we are going to consider the problem of time-evolving a Hermitian operator :math:`H` that generates the time-evolution unitary :math:`U = e^{-i t H}.`
 We are going to perform a special case of KAK decomposition, a "KhK decomposition" if you will, on the algebraic level in terms of
 
 .. math:: H = K^\dagger h_0 K.
@@ -52,7 +52,7 @@ This then induces the KAK decomposition on the group level as
 
 Let us walk through an explicit example, doing theory and code side-by-side.
 
-For that we are going to use the generators of the Heisenberg model Hamiltonian for :math:`n=4` qubits on a one dimensional chain,
+For that we are going to use the generators of the Heisenberg model Hamiltonian for :math:`n=4` qubits on a one-dimensional chain,
 
 .. math:: \{X_i X_{i+1}, Y_i Y_{i+1}, Z_i Z_{i+1}\}_{i=0}^{2}.
 
@@ -159,6 +159,16 @@ len(g), len(k), len(m)
 # In particular, :math:`\mathfrak{k}` is closed under commutation and is therefore a subalgebra, whereas :math:`\mathfrak{m}` is not.
 # This also has the consequence that the associated Lie group :math:`\mathcal{K} := e^{i \mathfrak{k}}` is a subgroup
 # of the associated Lie group :math:`\mathcal{G} := e^{i \mathfrak{g}}.`
+# 
+# We mentioned earlier that we are aiming to do a special case of KAK decomposition where the second unitary :math:`K_2 = K_1^\dagger`.
+# This is possible whenever the operator that we want to decompose is in the horizontal subspace :math:`\mathfrak{m}`, i.e. we want :math:`\Theta(H) = -H`.
+# The chosen :math:`H` and :math:`\Theta` fulfil this property, as can be easily verified.
+#
+
+for op in H.operands:
+    assert not even_odd_involution(op)
+
+##############################################################################
 #
 # Cartan subalgebra
 # -----------------
@@ -231,8 +241,8 @@ len(g), len(k), len(mtilde), len(h)
 # where :math:`\langle \cdot, \cdot \rangle` is some inner product (in our case the trace inner product :math:`\langle A, B \rangle = \text{tr}(A^\dagger B)`).
 # This construction uses the operator :math:`v = \sum_j \pi^j h_j \in \mathfrak{h}`
 # that is such that :math:`e^{i t v}` is dense in :math:`e^{i \mathcal{h}}.`
-# The latter means that for any point in :math:`e^{i \mathcal{h}}` there is a :math:`t` such that :math:`e^{i t v}` approximates it.
-# Let us construct it.
+# The latter means that for any :math:`e^{i \mathcal{h}}` there is a :math:`t \in \mathbb{R}` such that :math:`e^{i t v}` approximates it.
+# Let us construct it. To numerically avoid very large vectors, we take :math:`\pi (\text{mod} 2)` which preserves the dense property of :math:`v`.
 
 gammas = [np.pi**i % 2 for i in range(1, len(h)+1)]
 
@@ -252,6 +262,12 @@ v_m = jnp.array(v_m)
 # Now we just have to define the cost function and find an extremum.
 # In this case we are going to use gradient descent to minimize the cost function to a minimum.
 # We are going to use ``jax`` and ``optax`` and write some boilerplate for the optimization procedure.
+#
+# .. note:: 
+#     You can check our demos on parameter optimization in jax with 
+#     :doc:`optax </demos/tutorial_How_to_optimize_QML_model_using_JAX_and_Optax>` or 
+#     `JAXOpt </demos/tutorial_How_to_optimize_QML_model_using_JAX_and_JAXopt>`.
+#
 
 def run_opt(
     value_and_grad,
@@ -340,8 +356,11 @@ h_vspace = qml.pauli.PauliVSpace(h)
 not h_vspace.is_independent(h_0.pauli_rep)
 
 ##############################################################################
+# 
+# The fact that :math:`K_c H K_c^\dagger \in \mathfrak{h}` is crucial for this decomposition to be valid and meaningful.
+# Otherwise :math:`h_0` could be anything and we arrive back at the original problem of decomposing :math:`e^{-i t h_0}`.
 #
-# This gives us the KhK decomposition of :math:`H,`
+# Overall, this gives us the KhK decomposition of :math:`H,`
 # 
 # .. math:: H = K_c^\dagger h_0 K_c.
 # 
