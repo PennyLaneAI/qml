@@ -364,6 +364,8 @@ not h_vspace.is_independent(h_0.pauli_rep)
 # 
 # The fact that :math:`K_c H K_c^\dagger \in \mathfrak{h}` is crucial for this decomposition to be valid and meaningful.
 # Otherwise :math:`h_0` could be anything and we arrive back at the original problem of decomposing :math:`e^{-i t h_0}`.
+# Here we know that :math:`h_0` is composed of elements of an Abelian Lie algebra :math:`\mathfrak{h}`, such that we can
+# trivially decompose its unitary as :math:`e^{-i t h_0} = e^{-i t \sum_{j=1}^{|\mathfrak{h}|} c_j h_j}` as :math:`\prod_{j=1}^{|\mathfrak{h}|} e^{-i t c_j h_j}`.
 #
 # Overall, this gives us the KhK decomposition of :math:`H,`
 # 
