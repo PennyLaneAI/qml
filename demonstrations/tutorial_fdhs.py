@@ -271,7 +271,7 @@ v_m = jnp.array(v_m)
 # .. note:: 
 #     You can check our demos on parameter optimization in jax with 
 #     :doc:`optax </demos/tutorial_How_to_optimize_QML_model_using_JAX_and_Optax>` or 
-#     `JAXOpt </demos/tutorial_How_to_optimize_QML_model_using_JAX_and_JAXopt>`.
+#     :doc:`JAXOpt </demos/tutorial_How_to_optimize_QML_model_using_JAX_and_JAXopt>`.
 #
 
 def run_opt(
