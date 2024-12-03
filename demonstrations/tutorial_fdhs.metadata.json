@@ -5,8 +5,8 @@
             "username": "Qottmann"
         }
     ],
-    "dateOfPublication": "2024-02-27T00:00:00+00:00",
-    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
+    "dateOfPublication": "2024-12-13T00:00:00+00:00",
+    "dateOfLastModification": "2024-12-13T00:00:00+00:00",
     "categories": [
         "Quantum Computing"
     ],
@@ -14,100 +14,50 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/liealgebra/thumbnail_liealgebra.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_fdhs.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_liealgebra.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_fdhs.png"
         }
     ],
-    "seoDescription": "A quick summary of arXiv:2104.00728, 'Fixed Depth Hamiltonian Simulation via Cartan Decomposition' with code implementations in PennyLane.",
+    "seoDescription": "Using Cartan decomposition and the KAK theorem to decompose unitary gates following the approach in 'Fixed Depth Hamiltonian Simulation via Cartan Decomposition' (arXiv:2104.00728) with code implementations in PennyLane.",
     "doi": "",
     "references": [
         {
-            "id": "Wiersema",
+            "id": "Kökcü",
             "type": "preprint",
-            "title": "Classification of dynamical Lie algebras for translation-invariant 2-local spin systems in one dimension",
-            "authors": "Roeland Wiersema, Efekan Kökcü, Alexander F. Kemper, Bojko N. Bakalov",
-            "year": "2023",
+            "title": "Fixed Depth Hamiltonian Simulation via Cartan Decomposition",
+            "authors": "Efekan Kökcü, Thomas Steckmann, Yan Wang, J. K. Freericks, Eugene F. Dumitrescu, Alexander F. Kemper",
+            "year": "2021",
             "publisher": "",
             "journal": "",
-            "doi": "10.48550/arXiv.2309.05690",
-            "url": "https://arxiv.org/abs/2309.05690"
+            "doi": "10.48550/arXiv.2104.00728",
+            "url": "https://arxiv.org/abs/2104.00728"
         },
         {
-            "id": "Meyer",
-            "type": "article",
-            "title": "Exploiting symmetry in variational quantum machine learning",
-            "authors": "Johannes Jakob Meyer, Marian Mularski, Elies Gil-Fuster, Antonio Anna Mele, Francesco Arzani, Alissa Wilms, Jens Eisert",
-            "year": "2022",
-            "publisher": "",
-            "journal": "",
-            "doi": "10.48550/arXiv.2205.06217",
-            "url": "https://arxiv.org/abs/2205.06217"
-        },
-        {
-            "id": "Nguyen",
+            "id": "Chu",
             "type": "preprint",
-            "title": "Theory for Equivariant Quantum Neural Networks",
-            "authors": "Quynh T. Nguyen, Louis Schatzki, Paolo Braccia, Michael Ragone, Patrick J. Coles, Frederic Sauvage, Martin Larocca, M. Cerezo",
-            "year": "2022",
+            "title": "Lax dynamics for Cartan decomposition with applications to Hamiltonian simulation",
+            "authors": "Moody T. Chu",
+            "year": "2024",
             "publisher": "",
             "journal": "",
-            "doi": "10.48550/arXiv.2210.08566",
-            "url": "https://arxiv.org/abs/2210.08566"
-        },
-        {
-            "id": "Fontana",
-            "type": "article",
-            "title": "The Adjoint Is All You Need: Characterizing Barren Plateaus in Quantum Ansätze",
-            "authors": "Enrico Fontana, Dylan Herman, Shouvanik Chakrabarti, Niraj Kumar, Romina Yalovetzky, Jamie Heredge, Shree Hari Sureshbabu, Marco Pistoia",
-            "year": "2023",
-            "publisher": "",
-            "journal": "",
-            "doi": "10.48550/arXiv.2309.07902",
-            "url": "https://arxiv.org/abs/2309.07902"
-        },
-        {
-            "id": "Ragone",
-            "type": "preprint",
-            "title": "A Unified Theory of Barren Plateaus for Deep Parametrized Quantum Circuits",
-            "authors": "Michael Ragone, Bojko N. Bakalov, Frédéric Sauvage, Alexander F. Kemper, Carlos Ortiz Marrero, Martin Larocca, M. Cerezo",
-            "year": "2023",
-            "publisher": "",
-            "journal": "",
-            "doi": "10.48550/arXiv.2309.09342",
-            "url": "https://arxiv.org/abs/2309.09342"
-        },
-        {
-            "id": "Goh",
-            "type": "preprint",
-            "title": "Lie-algebraic classical simulations for variational quantum computing",
-            "authors": "Matthew L. Goh, Martin Larocca, Lukasz Cincio, M. Cerezo, Frédéric Sauvage",
-            "year": "2023",
-            "publisher": "",
-            "journal": "",
-            "doi": "10.48550/arXiv.2308.01432",
-            "url": "https://arxiv.org/abs/2308.01432"
-        },
-        {
-            "id": "Somma",
-            "type": "preprint",
-            "title": "Quantum Computation, Complexity, and Many-Body Physics",
-            "authors": "Rolando D. Somma",
-            "year": "2005",
-            "publisher": "",
-            "journal": "",
-            "doi": "10.48550/arXiv.quant-ph/0512209",
-            "url": "https://arxiv.org/abs/quant-ph/0512209"
+            "doi": "10.1093/imanum/drad018",
+            "url": "https://mtchu.math.ncsu.edu/Research/Papers/Cartan_02.pdf"
         }
     ],
-    "basedOnPapers": [],
+    "basedOnPapers": ["10.48550/arXiv.2104.00728"],
     "referencedByPapers": [],
     "relatedContent": [
         {
             "type": "demonstration",
-            "id": "tutorial_geometric_qml",
+            "id": "tutorial_kak_theorem",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_liealgebra",
             "weight": 1.0
         }
     ]
