@@ -3,12 +3,12 @@ r"""How to build spin Hamiltonians
 Systems of interacting spins provide simple but powerful models for studying problems in physics,
 chemistry, and quantum computing. PennyLane offers a comprehensive set of tools that enables users
 to intuitively construct a broad range of spin Hamiltonians. Here we show you how to use these tools
-to easily construct spin Hamiltonians for the `Fermi–Hubbard <https://en.wikipedia.org/wiki/Hubbard_model>`__ model,
-the `Heisenberg <https://en.wikipedia.org/wiki/Quantum_Heisenberg_model>`__ model,
-the `transverse-field Ising <https://en.wikipedia.org/wiki/Transverse-field_Ising_model>`__ model,
-the `Kitaev's honeycomb <https://arxiv.org/abs/cond-mat/0506438>`__ model,
-the `Haldane <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.61.2015>`__ model,
-the `Emery <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.58.2794>`__ model,
+to easily construct spin Hamiltonians for the `Fermi–Hubbard model <https://en.wikipedia.org/wiki/Hubbard_model>`__,
+the `Heisenberg model <https://en.wikipedia.org/wiki/Quantum_Heisenberg_model>`__,
+the `transverse-field Ising model <https://en.wikipedia.org/wiki/Transverse-field_Ising_model>`__,
+the `Kitaev's honeycomb model <https://arxiv.org/abs/cond-mat/0506438>`__,
+the `Haldane model <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.61.2015>`__,
+the `Emery model <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.58.2794>`__,
 and more!
 
 .. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_how_to_build_spin_hamiltonians.png
@@ -31,7 +31,7 @@ and more!
 # ^^^^^^^^^^^^^^^^^^^
 # The `Fermi–Hubbard model Hamiltonian <https://docs.pennylane.ai/en/latest/code/api/pennylane.spin.fermi_hubbard.html>`__
 # has a kinetic energy component, which is parameterized by a hopping parameter :math:`t`, and a
-# potential energy component which is parameterized by the on-site interaction strength, :math:`U`.
+# potential energy component which is parameterized by the on-site interaction strength, :math:`U`:
 #
 # .. math::
 #
@@ -46,7 +46,8 @@ and more!
 # The Fermi–Hubbard Hamiltonian can be
 # constructed in PennyLane by passing the hopping and interaction parameters to the
 # :func:`~.pennylane.spin.fermi_hubbard` function. We also need to specify the shape of the lattice
-# that describes the positions of the spin sites. A full list of supported lattice shapes is
+# that describes the positions of the spin sites. We will show an example here, and the full list of
+# supported lattice shapes is
 # provided in the :func:`~.pennylane.spin.generate_lattice` documentation.
 # 
 # We can also define the
@@ -69,18 +70,20 @@ hamiltonian
 
 ######################################################################
 # Let's also visualize the square lattice we created. To do that, we need to
-# create a simple plotting function and also the helper function
+# create a simple plotting function, as well as the helper function
 # :func:`~.pennylane.spin.generate_lattice`, which you will learn more about in the next sections.
 
 import matplotlib.pyplot as plt
 
 def plot(lattice, figsize=None, showlabel=True):
 
+    # initialize the plot
     if not figsize:
         figsize = lattice.n_cells[::-1]
 
     plt.figure(figsize=figsize)
 
+    # get lattice nodes and edges and plot them
     nodes = lattice.lattice_points
 
     for edge in lattice.edges:
@@ -287,8 +290,8 @@ plot(lattice, figsize = (5, 5), showlabel=False)
 # our transverse-field Ising model Hamiltonian. For instance, we can access the number of sites
 # with ``lattice.n_sites`` and the indices that define each edge with ``lattice.edges_indices``. For
 # the full list of attributes, please see the documentation of the :class:`~.pennylane.spin.Lattice`
-# class. We also need to define the coupling, :math:`J`, and onsite :math:`h` parameters of the
-# Hamiltonian.
+# class. We also need to define the coupling, :math:`J`, and onsite parameters of the
+# Hamiltonian, :math:`h`.
 
 from pennylane import X, Y, Z
 
@@ -388,7 +391,8 @@ hamiltonian
 #
 # Conclusion
 # ----------
-# The spin module in PennyLane provides a set of powerful tools for constructing spin Hamiltonians.
+# The `spin module <https://docs.pennylane.ai/en/latest/code/qml_spin.html>`__ in PennyLane provides
+# a set of powerful tools for constructing spin Hamiltonians.
 # Here we learned how to use these tools to construct predefined Hamiltonian templates such as the
 # Fermi–Hubbard Hamiltonian. This can be done with our built-in functions that currently support
 # several commonly used spin models and a variety of lattice shapes. More importantly, PennyLane
@@ -402,8 +406,8 @@ hamiltonian
 #
 # .. [#ashcroft]
 #
-#     Neil W. Ashcroft, David N. Mermin,
-#     "Solid state physics", Chapter 4, New York: Saunders College Publishing, 1976.
+#     N. W. Ashcroft, D. N. Mermin,
+#     "Solid State Physics", Chapter 4, New York: Saunders College Publishing, 1976.
 #
 # .. [#jovanovic]
 #
