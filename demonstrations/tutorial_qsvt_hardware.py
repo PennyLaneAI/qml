@@ -48,10 +48,7 @@ print(angles_pl)
 #    from pyqsp.angle_sequence import QuantumSignalProcessingPhases
 #    import numpy as np
 #
-#    # Define the polynomial, the coefficients are in the order of the polynomial degree.
-#    poly = np.array([0,-1, 0, 0.5, 0 , 0.5])
-#
-#    ang_seq = QuantumSignalProcessingPhases(poly, signal_operator="Wx")
+#    ang_seq = QuantumSignalProcessingPhases(np.array(poly), signal_operator="Wx")
 #
 # The angles obtained after execution are as follows:
 
@@ -84,8 +81,8 @@ def convert_angles(angles):
     return angles + update_vals
 
 
-angles_pg = convert_angles(ang_seq)
-print(angles_pg)
+angles_pq = convert_angles(ang_seq)
+print(angles_pq)
 
 ######################################################################
 # Using the angles computed with :func:`~.pennylane.poly_to_angles` or ``pyqsp``, we can now start
