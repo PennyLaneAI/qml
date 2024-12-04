@@ -85,13 +85,12 @@ The results of the
 theorem can then be extended to show that using additional rotations, it is possible to
 find :math:`d+1` angles that implement any real polynomial of parity :math:`d \mod 2` and maximum degree :math:`d.`
 Multiple QSP sequences can then be used to implement real polynomials of indefinite parity.
-Finding the desired angles can be done efficiently in practice, but identifying the best
-methods is an active area of research. You can learn more in our `QSP demo <https://pennylane.ai/qml/demos/function_fitting_qsp.html>`_
-and in Ref. [#unification]_.
+Finding the desired angles can be a challenge, but you don't have to worry about this since
+it is calculated internally by PennyLane's :class:`~pennylane.qsvt` functionality.
 
-For now, let's look at a simple example of how quantum signal processing can be implemented using
+Let's look at a simple example of how quantum signal processing can be implemented using
 PennyLane. We aim to perform a transformation by the Legendre polynomial
-:math:`(5 x^3 - 3x)/2,` for which we use pre-computed optimal angles.
+:math:`(5 x^3 - 3x)/2`.
 As you will soon learn, QSP can be viewed as a special case of QSVT. We thus use the :func:`~.pennylane.qsvt`
 operation to construct the output matrix and compare the resulting transformation to
 the target polynomial.
@@ -103,24 +102,17 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def target_poly(a):
-    return 0.5 * (5 * a**3 - 3 * a)
-
-
-# pre-optimized angles
-angles = [-0.20409113, -0.91173829, 0.91173829, 0.20409113]
-
+target_poly = [0, -3 * 0.5, 0, 5 * 0.5]
 
 def qsvt_output(a):
     # output matrix
-    out = qml.matrix(qml.qsvt(a, angles, wires=[0]))
+    out = qml.matrix(qml.qsvt(a, target_poly, wires=[0]))
     return out[0, 0]  # top-left entry
 
 
 a_vals = np.linspace(-1, 1, 50)
 qsvt = [np.real(qsvt_output(a)) for a in a_vals]  # neglect small imaginary part
-target = [target_poly(a) for a in a_vals]
-
+target = [np.polyval(target_poly[::-1], a) for a in a_vals] # evaluate polynomial
 
 plt.plot(a_vals, target, label="target")
 plt.plot(a_vals, qsvt, "*", label="qsvt")
@@ -258,7 +250,7 @@ print(np.round(qml.matrix(pcp), 2))
 eigvals = np.linspace(-1, 1, 16)
 A = np.diag(eigvals)  # 16-dim matrix
 wire_order = list(range(5))
-U_A = qml.matrix(qml.qsvt, wire_order=wire_order)(A, angles, wires=wire_order)  # block-encoded in 5-qubit system
+U_A = qml.matrix(qml.qsvt, wire_order=wire_order)(A, target_poly, wires=wire_order)  # block-encoded in 5-qubit system
 
 qsvt_A = np.real(np.diagonal(U_A))[:16]  # retrieve transformed eigenvalues
 
