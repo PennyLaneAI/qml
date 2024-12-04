@@ -32,7 +32,7 @@ Preliminaries
 -------------
 For a refresher on the basics of QSVT check out our :doc:`Intro to QSVT </demos/tutorial_intro_qsvt>`
 tutorial. Let's recall how to apply QSVT in a circuit. This requires two pieces of information
-as input: the matrix to be transformed and a set of phase angles which determine the polynomial
+as input: the block encoding of the matrix to be transformed and a set projectors which determine the polynomial
 transformation. For now, we use placeholder values for the phase angles; we'll later describe
 how to obtain them. The code below shows how to construct a basic QSVT circuit on two qubits:
 """
@@ -45,18 +45,21 @@ dev = qml.device("default.qubit", wires=[0, 1])
 A = np.array([[0.1, 0.2], [0.3, 0.4]])
 phase_angles = np.array([0.0, 1.0, 2.0, 3.0])
 
+block_encoding = qml.BlockEncode(A, wires=[0, 1])
+projectors = [qml.PCPhase(angle, dim=2, wires=[0, 1]) for angle in phase_angles]
+
 
 @qml.qnode(dev)
-def my_circuit(phase_angles):
-    qml.qsvt(A, phase_angles, wires=[0, 1])
+def my_circuit():
+    qml.QSVT(block_encoding, projectors)
     return qml.state()
 
 
 ###############################################################################
 # We can now execute the circuit and visualize it.
 
-my_circuit(phase_angles)
-print(qml.draw(my_circuit)(phase_angles))
+my_circuit()
+print(qml.draw(my_circuit)())
 
 ###############################################################################
 # We can inspect details by drawing the expanded circuit. The :class:`~.pennylane.QSVT`
@@ -120,6 +123,7 @@ print(my_circuit.tape.expand().draw())
 kappa = 4
 s = 0.10145775
 phi_pyqsp = [-2.287, 2.776, -1.163, 0.408, -0.16, -0.387, 0.385, -0.726, 0.456, 0.062, -0.468, 0.393, 0.028, -0.567, 0.76, -0.432, -0.011, 0.323, -0.573, 0.82, -1.096, 1.407, -1.735, 2.046, -2.321, 2.569, -2.819, -0.011, 2.71, -2.382, 2.574, 0.028, -2.749, 2.673, 0.062, -2.685, 2.416, 0.385, -0.387, -0.16, 0.408, -1.163, -0.365, 2.426]
+phi_qsvt = qml.transform_angles(phi_pyqsp, "QSP", "QSVT")  # convert pyqsp angles to qsvt
 
 ###############################################################################
 # .. note::
@@ -144,9 +148,11 @@ target_y_vals = [s * (1 / x) for x in np.linspace(s, 1, 50)]
 
 qsvt_y_vals = []
 for x in x_vals:
-    poly_x = qml.matrix(qml.qsvt, wire_order=[0])(
-        x, phi_pyqsp, wires=[0], convention="Wx"  # specify angles using convention=`Wx`
-    )
+
+    block_encoding = qml.BlockEncode(x, wires=[0])
+    projectors = [qml.PCPhase(angle, dim=1, wires=[0]) for angle in phi_qsvt]
+
+    poly_x = qml.matrix(qml.QSVT, wire_order=[0])(block_encoding, projectors)
     qsvt_y_vals.append(np.real(poly_x[0, 0]))
 
 ###############################################################################
@@ -186,13 +192,16 @@ plt.show()
 
 
 def sum_even_odd_circ(x, phi, ancilla_wire, wires):
-    phi1, phi2 = phi[: len(phi) // 2], phi[len(phi) // 2:]
+    phi1, phi2 = phi[: len(phi) // 2], phi[len(phi) // 2 :]
 
     qml.Hadamard(wires=ancilla_wire)  # equal superposition
 
-    # apply even and odd polynomial approx
-    qml.ctrl(qml.qsvt, control=(ancilla_wire,), control_values=(0,))(x, phi1, wires=wires)
-    qml.ctrl(qml.qsvt, control=(ancilla_wire,), control_values=(1,))(x, phi2, wires=wires)
+    qml.ctrl(qml.QSVT, control=(ancilla_wire,), control_values=(0,))(
+        qml.BlockEncode(x, wires=wires), [qml.PCPhase(angle, dim=1, wires=wires) for angle in phi1]
+    )
+    qml.ctrl(qml.QSVT, control=(ancilla_wire,), control_values=(1,))(
+        qml.BlockEncode(x, wires=wires), [qml.PCPhase(angle, dim=1, wires=wires) for angle in phi2]
+    )
 
     qml.Hadamard(wires=ancilla_wire)  # un-prepare superposition
 
@@ -213,13 +222,17 @@ phi = np.random.rand(51)
 
 samples_x = np.linspace(1 / kappa, 1, 100)
 
+
 def target_func(x):
     return s * (1 / x)
+
 
 def loss_func(phi):
     sum_square_error = 0
     for x in samples_x:
-        qsvt_matrix = qml.matrix(sum_even_odd_circ, wire_order=["ancilla", 0])(x, phi, ancilla_wire="ancilla", wires=[0])
+        qsvt_matrix = qml.matrix(sum_even_odd_circ, wire_order=["ancilla", 0])(
+            x, phi, ancilla_wire="ancilla", wires=[0]
+        )
         qsvt_val = qsvt_matrix[0, 0]
         sum_square_error += (np.real(qsvt_val) - target_func(x)) ** 2
 
@@ -256,7 +269,9 @@ inv_x = [target_func(x) for x in samples_inv]
 
 samples_x = np.linspace(0, 1, 100)
 qsvt_y_vals = [
-    np.real(qml.matrix(sum_even_odd_circ, wire_order=["ancilla", 0])(x, phi, "ancilla", wires=[0])[0, 0])
+    np.real(
+        qml.matrix(sum_even_odd_circ, wire_order=["ancilla", 0])(x, phi, "ancilla", wires=[0])[0, 0]
+    )
     for x in samples_x
 ]
 
@@ -297,10 +312,15 @@ plt.show()
 def real_u(A, phi):
     qml.Hadamard(wires="ancilla1")
 
-    qml.ctrl(sum_even_odd_circ, control=("ancilla1",), control_values=(0,))(A, phi, "ancilla2", [0, 1, 2])
-    qml.ctrl(qml.adjoint(sum_even_odd_circ), control=("ancilla1",), control_values=(1,))(A.T, phi, "ancilla2", [0, 1, 2])
+    qml.ctrl(sum_even_odd_circ, control=("ancilla1",), control_values=(0,))(
+        A, phi, "ancilla2", [0, 1, 2]
+    )
+    qml.ctrl(qml.adjoint(sum_even_odd_circ), control=("ancilla1",), control_values=(1,))(
+        A.T, phi, "ancilla2", [0, 1, 2]
+    )
 
     qml.Hadamard(wires="ancilla1")
+
 
 ###############################################################################
 # Let's take everything we have learned and apply it to solve a linear system of equations.
