@@ -9,7 +9,7 @@ the `transverse-field Ising model <https://en.wikipedia.org/wiki/Transverse-fiel
 the `Kitaev's honeycomb model <https://arxiv.org/abs/cond-mat/0506438>`__,
 the `Haldane model <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.61.2015>`__,
 the `Emery model <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.58.2794>`__,
-and more!
+and more, some of which you can already explore in detail using `PennyLane Spin Systems Datasets <https://pennylane.ai/datasets/collection/qspin>`__!
 
 .. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_how_to_build_spin_hamiltonians.png
     :align: center
