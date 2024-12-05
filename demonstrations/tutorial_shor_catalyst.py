@@ -477,9 +477,9 @@ def shors_algorithm(N):
 #    :align: center
 #    :alt: QPE circuit with one estimation qubit.
 #
-#
-# Replacing the controlled :math:`U`s with the subroutines derived above, Shor's
+# Replacing the controlled :math:`U` gates with the subroutines derived above, Shor's
 # algorithm requires :math:`2n + 3` qubits in total.
+#
 
 # TODO: insert code here
 
