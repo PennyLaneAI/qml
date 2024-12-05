@@ -65,10 +65,12 @@ optax = "0.2.3"
 flax = "0.9.0"
 qutip = "4.7.3"
 mitiq = "0.32.0"
+pennylane-qrack = "0.11.1"
+pyqrack = "1.32.12"
 zstd = "*"
 dill = "*"
 stim = "*"
-bluequbit = "0.8.1b1"
+bluequbit = "0.9.3b1"
 quimb = "1.8.2"
 aiohttp = "3.9.5"
 fsspec = "2024.6.1"
@@ -81,11 +83,11 @@ sphinx-gallery = "0.17.1"
 
 # Install a difference version of torch from PyPI as the one from PyTorch repo is not compatible with MacOS
 torch = [
-    { version = "2.1.2", markers = "sys_platform == 'darwin' and platform_machine == 'arm64'" },
+    { version = "2.1.2", source = "PyPI", markers = "sys_platform == 'darwin' and platform_machine == 'arm64'" },
     { version = "2.1.2+cpu", source = "pytorch-cpu", markers = "platform_machine == 'x86_64'" }
 ]
 torchvision = [
-    { version = "0.16.2", markers = "sys_platform == 'darwin' and platform_machine == 'arm64'" },
+    { version = "0.16.2", source = "PyPI", markers = "sys_platform == 'darwin' and platform_machine == 'arm64'" },
     { version = "0.16.2+cpu", source = "pytorch-cpu", markers = "platform_machine == 'x86_64'" }
 ]
 
