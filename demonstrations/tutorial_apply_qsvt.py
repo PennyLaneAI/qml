@@ -66,8 +66,7 @@ print(qml.draw(my_circuit)())
 # operation is composed of repeated applications of the :class:`~.pennylane.BlockEncode` and
 # :class:`~.pennylane.PCPhase` (:math:`\Pi_{\phi}`) operations.
 
-print(my_circuit.tape.expand().draw())
-
+print(qml.draw(my_circuit, level='device')())
 ###############################################################################
 # Now let's look at an application of QSVT --- solving a linear system of equations.
 #
@@ -194,13 +193,14 @@ plt.show()
 def sum_even_odd_circ(x, phi, ancilla_wire, wires):
     phi1, phi2 = phi[: len(phi) // 2], phi[len(phi) // 2 :]
 
+    dim = 1 if len(np.array(x).shape) == 0 else np.array(x).shape[0]
     qml.Hadamard(wires=ancilla_wire)  # equal superposition
 
     qml.ctrl(qml.QSVT, control=(ancilla_wire,), control_values=(0,))(
-        qml.BlockEncode(x, wires=wires), [qml.PCPhase(angle, dim=1, wires=wires) for angle in phi1]
+        qml.BlockEncode(x, wires=wires), [qml.PCPhase(angle, dim= dim, wires=wires) for angle in phi1]
     )
     qml.ctrl(qml.QSVT, control=(ancilla_wire,), control_values=(1,))(
-        qml.BlockEncode(x, wires=wires), [qml.PCPhase(angle, dim=1, wires=wires) for angle in phi2]
+        qml.BlockEncode(x, wires=wires), [qml.PCPhase(angle, dim= dim, wires=wires) for angle in phi2]
     )
 
     qml.Hadamard(wires=ancilla_wire)  # un-prepare superposition
@@ -313,11 +313,9 @@ def real_u(A, phi):
     qml.Hadamard(wires="ancilla1")
 
     qml.ctrl(sum_even_odd_circ, control=("ancilla1",), control_values=(0,))(
-        A, phi, "ancilla2", [0, 1, 2]
-    )
+        A, phi, "ancilla2", [0, 1, 2])
     qml.ctrl(qml.adjoint(sum_even_odd_circ), control=("ancilla1",), control_values=(1,))(
-        A.T, phi, "ancilla2", [0, 1, 2]
-    )
+        A.T, phi, "ancilla2", [0, 1, 2])
 
     qml.Hadamard(wires="ancilla1")
 
