@@ -27,7 +27,6 @@
     ],
     "seoDescription": "Learn how to build spin Hamiltonians with PennyLane.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_how_to_spin_hamiltonian",
     "references": [
         {
             "id": "ashcroft",
