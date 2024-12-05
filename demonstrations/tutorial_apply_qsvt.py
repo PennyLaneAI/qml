@@ -40,7 +40,7 @@ how to obtain them. The code below shows how to construct a basic QSVT circuit o
 import pennylane as qml
 from pennylane import numpy as np
 
-dev = qml.device("default.qubit", wires=[0, 1])
+dev = qml.device("lightning.qubit", wires=[0, 1])
 
 A = np.array([[0.1, 0.2], [0.3, 0.4]])
 phase_angles = np.array([0.0, 1.0, 2.0, 3.0])
@@ -59,14 +59,15 @@ def my_circuit():
 # We can now execute the circuit and visualize it.
 
 my_circuit()
-print(qml.draw(my_circuit)())
+print(qml.draw(my_circuit, level = "top")())
 
 ###############################################################################
 # We can inspect details by drawing the expanded circuit. The :class:`~.pennylane.QSVT`
 # operation is composed of repeated applications of the :class:`~.pennylane.BlockEncode` and
 # :class:`~.pennylane.PCPhase` (:math:`\Pi_{\phi}`) operations.
 
-print(qml.draw(my_circuit, level='device')())
+print(qml.draw(my_circuit)())
+
 ###############################################################################
 # Now let's look at an application of QSVT --- solving a linear system of equations.
 #
