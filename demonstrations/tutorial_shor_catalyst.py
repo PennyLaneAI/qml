@@ -277,11 +277,11 @@ def shors_algorithm(N):
 # purpose is unclear.
 #
 # These special operations are actually performing *addition in the Fourier
-# basis* [#Draper2000]_.. This is another trick we can leverage because we know
-# :math:`a` in advance. Rather than performing explicit addition on bits in the
-# computational basis states registers, we can apply a Fourier transform, adjust
-# the phases based on the bit values of the number we wish to add, then inverse
-# Fourier transform to obtain the result. We present the circuit for the
+# basis* [#Draper2000]_. This is another trick we can leverage with prior
+# knowledge of :math:`a`. Rather than performing explicit addition on bits in
+# the computational basis state registers, we can apply a Fourier transform,
+# adjust the phases based on the bit values of the number we wish to add, then
+# inverse Fourier transform to obtain the result. We present the circuit for the
 # *Fourier adder*, :math:`\Phi`, below.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder.svg
@@ -396,12 +396,12 @@ def shors_algorithm(N):
 # Recall once again that we are using this to implement a single :math:`M_a`
 # operation.  Returning to the implementation of :math:`M_a`, we are adding
 # :math:`2^{k}a` modulo :math:`N` to :math:`b`, conditioned on the value of the
-# bit :math:`x_{n - 1 - k}`, in the Fourier basis.  We can re-express this as a
-# sum (all modulo :math:`N`),
+# bit :math:`x_{k}`, in the Fourier basis. We can re-express this as a sum (all
+# modulo :math:`N`) to find
 #
 # .. math::
 #
-#     \begin{equation}
+#     \begin{equation*}
 #     b + x_{0} \cdot 2^0 a + x_{1} \cdot 2^1 a + \cdots x_{n-1} \cdot 2^{n-1} a  = b + a \sum_{k=0}^{n-1} x_{k} 2^k =  b + a x
 #     \end{equation*}
 #
