@@ -70,6 +70,8 @@ angles_pyqsp = qml.transform_angles(ang_seq, "QSP", "QSVT")
 print(angles_pyqsp)
 
 ######################################################################
+# Note that these angles are not exactly the same as those obtained with
+# :func:`~.pennylane.poly_to_angles`, but they will both produce the same polynomial transformation.
 # Using the angles computed with :func:`~.pennylane.poly_to_angles` or ``pyqsp``, we can now start
 # working with the template.
 #
