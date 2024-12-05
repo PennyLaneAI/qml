@@ -63,26 +63,11 @@ ang_seq = [
 
 ######################################################################
 # The angles obtained by ``pyqsp`` are in the
-# context of QSP and are not the same as the ones we have to use in QSVT. Moreover, these angles have been calculated following the "Wx"
-# convention [#unification]_, while :class:`~.qml.PrepSelPrep` follows a different one. That is why
-# we must transform the angles:
+# context of QSP and are not the same as the ones we have to use in QSVT.
+# We can use the :func:`~.pennylane.transform_angles` function to transform the angles:
 
-import numpy as np
-
-
-def convert_angles(angles):
-    num_angles = len(angles)
-    update_vals = np.zeros(num_angles)
-
-    update_vals[0] = 3 * np.pi / 4 - (3 + len(angles) % 4) * np.pi / 2
-    update_vals[1:-1] = np.pi / 2
-    update_vals[-1] = -np.pi / 4
-
-    return angles + update_vals
-
-
-angles_pq = convert_angles(ang_seq)
-print(angles_pq)
+angles_pyqsp = qml.transform_angles(ang_seq, "QSP", "QSVT")
+print(angles_pyqsp)
 
 ######################################################################
 # Using the angles computed with :func:`~.pennylane.poly_to_angles` or ``pyqsp``, we can now start
@@ -97,6 +82,7 @@ print(angles_pq)
 # a Hamiltonian and manually apply the polynomial of interest:
 
 import pennylane as qml
+import numpy as np
 from numpy.linalg import matrix_power as mpow
 
 coeffs = np.array([0.2, -0.7, -0.6])
