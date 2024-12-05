@@ -32,8 +32,8 @@ Let's try both tools to calculate the angles for applying the
 polynomial :math:`p(x) = -x + \frac{x^3}{2}+ \frac{x^5}{2}`.
 
 The :func:`~.pennylane.poly_to_angles` function in PennyLane accepts the coefficients of the
-polynomial, ordered from lowest to highest power, as input. We also need to the routine for which
-the angles are computed, which is ``'QSVT'`` here.
+polynomial, ordered from lowest to highest power, as input. We also need to define the routine for
+which the angles are computed, which is ``'QSVT'`` here.
 """
 import pennylane as qml
 poly = [0, -1.0, 0, 1/2, 0, 1/2]
@@ -62,7 +62,7 @@ ang_seq = [
 ]
 
 ######################################################################
-# The angles obtained by ``pyqsp`` are in the
+# The ``pyqsp`` angles are obtained in the
 # context of QSP and are not the same as the ones we have to use in QSVT.
 # We can use the :func:`~.pennylane.transform_angles` function to transform the angles:
 
