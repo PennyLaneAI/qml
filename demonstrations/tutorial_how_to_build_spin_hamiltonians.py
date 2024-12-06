@@ -415,3 +415,6 @@ hamiltonian
 #     "Refraction and band isotropy in 2D square-like Archimedean photonic crystal lattices",
 #     Opt. Express 16, 4048, 2008.
 #
+# About the authors
+# -----------------
+#
