@@ -184,7 +184,7 @@ def shors_algorithm(N):
 # integer discussed above. The full QPE circuit is shown below.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/qpe_full.svg
-#    :scale: 120%
+#    :width: 600
 #    :align: center
 #    :alt: Quantum phase estimation circuit for order finding.
 #
@@ -218,7 +218,7 @@ def shors_algorithm(N):
 #
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/qpe_full_modified_power.svg
-#    :scale: 120%
+#    :width: 600
 #    :align: center
 #    :alt: Order finding with controlled operations that take advantage of classical precomputation.
 #
@@ -232,7 +232,7 @@ def shors_algorithm(N):
 # Next, let's zoom in on an arbitrary controlled-:math:`U_a`. 
 # 
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/c-ua.svg
-#    :scale: 120%
+#    :width: 800 
 #    :align: center
 #    :alt: Quantum phase estimation circuit for order finding.
 #
@@ -266,7 +266,7 @@ def shors_algorithm(N):
 # At a high level, the implementation of :math:`M_a` looks like this:
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/doubly-controlled-adder.svg
-#    :scale: 110%
+#    :width: 800 
 #    :align: center
 #    :alt: In-place addition modulo N with the Fourier adder.
 #
@@ -285,7 +285,7 @@ def shors_algorithm(N):
 # *Fourier adder*, :math:`\Phi`, below.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder.svg
-#    :scale: 120% 
+#    :width: 800 
 #    :align: center
 #    :alt: Addition in the Fourier basis.
 #
@@ -296,7 +296,7 @@ def shors_algorithm(N):
 # and :math:`b = \sum_{k=0}^{n-1} 2^k b_k`.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_explanation-1.svg 
-#    :scale: 140%
+#    :width: 800 
 #    :align: center
 #    :alt: The Quantum Fourier Transform.
 #
@@ -311,7 +311,7 @@ def shors_algorithm(N):
 # Fourier transform in a very particular way:
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_explanation-2.svg 
-#    :scale: 140%
+#    :width: 800 
 #    :align: center
 #    :alt: Adding one integer to another with the Quantum Fourier Transform.
 #
@@ -323,7 +323,7 @@ def shors_algorithm(N):
 # are then adding :math:`a` to :math:`b`, up to an inverse Fourier transform!
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_explanation-3.svg 
-#    :scale: 140%
+#    :width: 800 
 #    :align: center
 #    :alt: Adding one integer to another with the Quantum Fourier Transform.
 #
@@ -346,7 +346,7 @@ def shors_algorithm(N):
 # The final circuit for the Fourier adder is
 # 
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_explanation-4.svg 
-#    :scale: 140%
+#    :width: 500 
 #    :align: center
 #    :alt: Full Fourier adder.
 #
@@ -354,7 +354,7 @@ def shors_algorithm(N):
 # also consider the possibility of underflow in the output.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_adjoint.svg 
-#    :scale: 120%
+#    :width: 500 
 #    :align: center
 #    :alt: Subtraction in the Fourier basis.
 #
@@ -365,7 +365,7 @@ def shors_algorithm(N):
 # overflow is detected.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_modulo_n.svg
-#    :scale: 100%
+#    :width: 800 
 #    :align: center
 #    :alt: Addition in the Fourier basis modulo N.
 #
@@ -451,7 +451,7 @@ def shors_algorithm(N):
 # the need for classical controls.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/qpe_full_modified_power_with_qft-5.svg
-#    :scale: 90%
+#    :width: 800
 #    :align: center
 #    :alt: QPE circuit with inverse QFT expanded, last estimation qubit reused, and rotation gates adjusted.
 #
@@ -478,9 +478,13 @@ def shors_algorithm(N):
 #    :alt: QPE circuit with one estimation qubit.
 #
 # Replacing the controlled :math:`U` gates with the subroutines derived above, Shor's
-# algorithm requires :math:`2n + 3` qubits in total.
+# algorithm requires :math:`2n + 3` qubits in total, as summarized in the graphic below.
 #
-
+# .. figure:: ../_static/demonstration_assets/shor_catalyst/qpe_full_combined.svg
+#    :width: 800
+#    :align: center
+#    :alt: Full implementation of QPE circuit.
+#
 # TODO: insert code here
 
 
