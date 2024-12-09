@@ -85,8 +85,8 @@ The results of the
 theorem can then be extended to show that using additional rotations, it is possible to
 find :math:`d+1` angles that implement any real polynomial of parity :math:`d \mod 2` and maximum degree :math:`d.`
 Multiple QSP sequences can then be used to implement real polynomials of indefinite parity.
-Finding the desired angles can be a challenge, but you don't have to worry about this since
-it is calculated internally by PennyLane's :class:`~pennylane.qsvt` functionality.
+Finding the desired angles can be done efficiently in practice, but identifying the best
+methods is an active area of research. The :class:`~pennylane.qsvt` function in PennyLane computes the angles internally.
 
 Let's look at a simple example of how quantum signal processing can be implemented using
 PennyLane. We aim to perform a transformation by the Legendre polynomial
