@@ -104,15 +104,16 @@ import matplotlib.pyplot as plt
 
 target_poly = [0, -3 * 0.5, 0, 5 * 0.5]
 
+
 def qsvt_output(a):
     # output matrix
-    out = qml.matrix(qml.qsvt(a, target_poly, wires=[0]))
+    out = qml.matrix(qml.qsvt(a, target_poly, encoding_wires=[0], block_encoding="embedding"))
     return out[0, 0]  # top-left entry
 
 
 a_vals = np.linspace(-1, 1, 50)
 qsvt = [np.real(qsvt_output(a)) for a in a_vals]  # neglect small imaginary part
-target = [np.polyval(target_poly[::-1], a) for a in a_vals] # evaluate polynomial
+target = [np.polyval(target_poly[::-1], a) for a in a_vals]  # evaluate polynomial
 
 plt.plot(a_vals, target, label="target")
 plt.plot(a_vals, qsvt, "*", label="qsvt")
@@ -250,7 +251,9 @@ print(np.round(qml.matrix(pcp), 2))
 eigvals = np.linspace(-1, 1, 16)
 A = np.diag(eigvals)  # 16-dim matrix
 wire_order = list(range(5))
-U_A = qml.matrix(qml.qsvt, wire_order=wire_order)(A, target_poly, wires=wire_order)  # block-encoded in 5-qubit system
+U_A = qml.matrix(qml.qsvt, wire_order=wire_order)(
+    A, target_poly, encoding_wires=wire_order, block_encoding="embedding"
+)  # block-encoded in 5-qubit system
 
 qsvt_A = np.real(np.diagonal(U_A))[:16]  # retrieve transformed eigenvalues
 
