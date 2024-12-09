@@ -394,11 +394,11 @@ def shors_algorithm(N):
 #
 # This completes our implementation of the controlled-:math:`U_{a^{2^k}}`. The
 # current qubit count is :math:`t + 2n + 2`. There is one major optimization
-# left: reducing the number of estimation qubits. A higher :math:`t` means
-# finding a solution is more likely, but it adds overhead in both circuit depth,
-# and classical simulation memory and time due to the increased size of Hilbert
-# space. Below we show how the :math:`t` can be reduced to 1 without
-# compromising precision or classical memory, and with comparable circuit depth.
+# left: reducing the number of estimation qubits. A higher :math:`t` gives a
+# more accurate estimate of phase, but adds overhead in both circuit depth, and
+# classical simulation memory and time. Below we show how the :math:`t` can be
+# reduced to 1 without compromising precision or classical memory, and with
+# comparable circuit depth.
 #
 # Let's return to the QPE routine and expand the final inverse QFT.
 #
@@ -407,19 +407,20 @@ def shors_algorithm(N):
 #    :align: center
 #    :alt: QPE circuit with inverse QFT expanded.
 #
-# Look carefully at the last estimation qubit: after the final Hadamard, it is
-# used only for controlled gates. As such, we can simply measure it, and apply
-# subsequent operations controlled on the classical outcome, :math:`\theta_0`.
+# Look carefully at the qubit in :math:`\vert \theta_0\rangle`. After the final
+# Hadamard, it is used only for controlled gates. Thus, we can just measure it
+# and apply subsequent operations controlled on the classical outcome,
+# :math:`\theta_0`.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/qpe_full_modified_power_with_qft-2.svg
 #    :width: 800
 #    :align: center
 #    :alt: QPE circuit with inverse QFT expanded and last estimation qubit measured off.
 #
-# But, we can once again do better by dynamically modifying the circuit based on
-# this classical information. Instead of applying a controlled
-# :math:`R^\dagger_2`, we can apply :math:`R^\dagger` where the rotation angle is 0 if :math:`\theta_0 = 0`, and
-# :math:`\pi` if :math:`\theta_1`, i.e., :math:`R^\dagger_{2 \theta_0}`.
+# Once again, we can do better by dynamically modifying the circuit based on
+# classical information. Instead of applying controlled :math:`R^\dagger_2`, we
+# can apply :math:`R^\dagger` where the rotation angle is 0 if :math:`\theta_0 =
+# 0`, and :math:`\pi` if :math:`\theta_1`, i.e., :math:`R^\dagger_{2 \theta_0}`.
 # The same can be done for all other gates controlled on :math:`\theta_0`.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/qpe_full_modified_power_with_qft-3.svg
@@ -427,9 +428,10 @@ def shors_algorithm(N):
 #    :align: center
 #    :alt: QPE circuit with inverse QFT expanded, last estimation qubit measured, and rotation gates adjusted.
 #
-# Now, let's leverage this trick again with the second last estimation qubit,
-# and improve things even more by noting that once the last qubit is measured,
-# we can reset and repurpose it to play the role of the second last qubit.
+# We'll leverage this trick again with the second-last estimation
+# qubit. Moreover, we can make a further improvement by noting that once the
+# last qubit is measured, we can reset and repurpose it to play the role of the
+# second last qubit.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/qpe_full_modified_power_with_qft-4.svg
 #    :width: 800
@@ -444,20 +446,19 @@ def shors_algorithm(N):
 #    :align: center
 #    :alt: QPE circuit with inverse QFT expanded, last estimation qubit reused, and rotation gates adjusted.
 #
-# We can now do this for each remaining estimation qubit, adding more and more
-# rotations as we go, each depending on the previous measurement outcomes.
+# We can do this for all remaining estimation qubits, adding more rotations
+# depending on previous measurement outcomes.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/qpe_full_modified_power_with_qft-6.svg
 #    :width: 800
 #    :align: center
 #    :alt: QPE circuit with one estimation qubit, and unmerged rotation gates.
 #
-# Finally, since these are simply :math:`RZ` gates, we can merge each group into
-# one. Define
+# Finally, since these are all :math:`RZ`, we can merge them. Let
 #
 # .. math::
 #
-#     \mathbf{M}_{k} = \begin{pmatrix} 1 & 0 \\ 0 & e^{-2\pi i\sum_{\ell=0}^{k}  \frac{\theta_{\ell}}{2^{k + 2 - \ell}}} \end{pmatrix}
+#     \mathbf{M}_{k} = \begin{pmatrix} 1 & 0 \\ 0 & e^{-2\pi i\sum_{\ell=0}^{k}  \frac{\theta_{\ell}}{2^{k + 2 - \ell}}} \end{pmatrix}.
 #
 # With a bit of index gymnastics, we obtain our final QPE algorithm with a single estimation qubit:
 #
@@ -466,8 +467,9 @@ def shors_algorithm(N):
 #    :align: center
 #    :alt: QPE circuit with one estimation qubit.
 #
-# Replacing the controlled :math:`U` gates with the subroutines derived above, Shor's
-# algorithm requires :math:`2n + 3` qubits in total, as summarized in the graphic below.
+# Replacing the controlled-:math:`U_a` with the subroutines derived above, we
+# see Shor's algorithm requires :math:`2n + 3` qubits in total, as summarized in
+# the graphic below.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/qpe_full_combined.svg
 #    :width: 800
