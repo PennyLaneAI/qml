@@ -107,7 +107,10 @@ target_poly = [0, -3 * 0.5, 0, 5 * 0.5]
 
 def qsvt_output(a):
     # output matrix
-    out = qml.matrix(qml.qsvt([[a]], target_poly, encoding_wires=[0], block_encoding="embedding"))
+    out = qml.matrix(qml.qsvt(a,
+                              target_poly,
+                              encoding_wires=[0],
+                              block_encoding="embedding"))
     return out[0, 0]  # top-left entry
 
 

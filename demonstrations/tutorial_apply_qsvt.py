@@ -190,19 +190,20 @@ plt.show()
 # We apply each QSVT operation, even or odd, conditioned on the ancilla. Finally, the ancilla
 # qubit is reset.
 
-
 def sum_even_odd_circ(x, phi, ancilla_wire, wires):
     phi1, phi2 = phi[: len(phi) // 2], phi[len(phi) // 2 :]
+    block_encode = qml.BlockEncode(x, wires=wires)
 
-    dim = 1 if len(np.array(x).shape) == 0 else np.array(x).shape[0]
     qml.Hadamard(wires=ancilla_wire)  # equal superposition
 
-    qml.ctrl(qml.QSVT, control=(ancilla_wire,), control_values=(0,))(
-        qml.BlockEncode(x, wires=wires), [qml.PCPhase(angle, dim= dim, wires=wires) for angle in phi1]
-    )
-    qml.ctrl(qml.QSVT, control=(ancilla_wire,), control_values=(1,))(
-        qml.BlockEncode(x, wires=wires), [qml.PCPhase(angle, dim= dim, wires=wires) for angle in phi2]
-    )
+    # apply even and odd polynomial approx
+
+    dim = x.shape[0] if x.ndim > 0 else 1
+    projectors_even = [qml.PCPhase(angle, dim= dim, wires=wires) for angle in phi1]
+    qml.ctrl(qml.QSVT, control=(ancilla_wire,), control_values=(0,))(block_encode, projectors_even)
+
+    projectors_odd = [qml.PCPhase(angle, dim= dim, wires=wires) for angle in phi2]
+    qml.ctrl(qml.QSVT, control=(ancilla_wire,), control_values=(0,))(block_encode, projectors_odd)
 
     qml.Hadamard(wires=ancilla_wire)  # un-prepare superposition
 
@@ -223,17 +224,13 @@ phi = np.random.rand(51)
 
 samples_x = np.linspace(1 / kappa, 1, 100)
 
-
 def target_func(x):
     return s * (1 / x)
-
 
 def loss_func(phi):
     sum_square_error = 0
     for x in samples_x:
-        qsvt_matrix = qml.matrix(sum_even_odd_circ, wire_order=["ancilla", 0])(
-            x, phi, ancilla_wire="ancilla", wires=[0]
-        )
+        qsvt_matrix = qml.matrix(sum_even_odd_circ, wire_order=["ancilla", 0])(x, phi, ancilla_wire="ancilla", wires=[0])
         qsvt_val = qsvt_matrix[0, 0]
         sum_square_error += (np.real(qsvt_val) - target_func(x)) ** 2
 
@@ -270,9 +267,7 @@ inv_x = [target_func(x) for x in samples_inv]
 
 samples_x = np.linspace(0, 1, 100)
 qsvt_y_vals = [
-    np.real(
-        qml.matrix(sum_even_odd_circ, wire_order=["ancilla", 0])(x, phi, "ancilla", wires=[0])[0, 0]
-    )
+    np.real(qml.matrix(sum_even_odd_circ, wire_order=["ancilla", 0])(x, phi, "ancilla", wires=[0])[0, 0])
     for x in samples_x
 ]
 
@@ -313,13 +308,10 @@ plt.show()
 def real_u(A, phi):
     qml.Hadamard(wires="ancilla1")
 
-    qml.ctrl(sum_even_odd_circ, control=("ancilla1",), control_values=(0,))(
-        A, phi, "ancilla2", [0, 1, 2])
-    qml.ctrl(qml.adjoint(sum_even_odd_circ), control=("ancilla1",), control_values=(1,))(
-        A.T, phi, "ancilla2", [0, 1, 2])
+    qml.ctrl(sum_even_odd_circ, control=("ancilla1",), control_values=(0,))(A, phi, "ancilla2", [0, 1, 2])
+    qml.ctrl(qml.adjoint(sum_even_odd_circ), control=("ancilla1",), control_values=(1,))(A.T, phi, "ancilla2", [0, 1, 2])
 
     qml.Hadamard(wires="ancilla1")
-
 
 ###############################################################################
 # Let's take everything we have learned and apply it to solve a linear system of equations.
