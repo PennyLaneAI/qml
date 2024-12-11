@@ -306,7 +306,7 @@ params = jnp.zeros(len(doubles_select + singles_select))
 gates_select = doubles_select + singles_select
 opt_state = opt.init(params)
 
-for n in range(20):
+for n in range(10):
     t1 = time.time()
     gradient = jax.grad(cost_fn, argnums=0)(params, excitations=doubles_select)
     updates, opt_state = opt.update(gradient, opt_state)
@@ -365,7 +365,7 @@ def circuit(params):
     return qml.expval(qml.SparseHamiltonian(H_sparse, wires=range(qubits)))
 
 
-for n in range(20):
+for n in range(10):
     t1 = time.time()
     gradient = jax.grad(cost_fn, argnums=0)(params, excitations=doubles_select)
     updates, opt_state = opt.update(gradient, opt_state)

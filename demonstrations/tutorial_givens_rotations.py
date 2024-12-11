@@ -186,7 +186,9 @@ This can be implemented in PennyLane as follows:
 
 import pennylane as qml
 from jax import numpy as jnp
+import jax
 
+jax.config.update("jax_enable_x64", True)
 dev = qml.device('lightning.qubit', wires=3)
 
 @qml.qnode(dev, interface="jax")

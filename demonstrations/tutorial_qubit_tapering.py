@@ -123,7 +123,9 @@ coordinates.
 """
 import pennylane as qml
 from jax import numpy as jnp
+import jax
 
+jax.config.update("jax_enable_x64", True)
 symbols = ["He", "H"]
 geometry = jnp.array([[0.00000000, 0.00000000, -0.87818361],
                      [0.00000000, 0.00000000,  0.87818362]])
