@@ -203,6 +203,9 @@ pauli_bk
 
 from pennylane import qchem
 from jax import numpy as jnp
+import jax
+
+jax.config.update("jax_enable_x64", True)
 
 symbols  = ['H', 'H']
 geometry = jnp.array([[0.0, 0.0, -0.69434785],
