@@ -195,5 +195,10 @@ print(f"Final angle parameters: {final_params}")
 #
 
 ######################################################################
-# About the author
-# ----------------
+# About the authors
+# -----------------
+#
+# .. include:: ../_static/authors/ali_asadi.txt
+#
+# .. include:: ../_static/authors/josh_izaac.txt
+#

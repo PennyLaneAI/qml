@@ -2,11 +2,11 @@
     "title": "Variational Quantum Linear Solver",
     "authors": [
         {
-            "id": "andrea_mari"
+            "username": "amari"
         }
     ],
     "dateOfPublication": "2019-11-04T00:00:00+00:00",
-    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
+    "dateOfLastModification": "2024-11-06T00:00:00+00:00",
     "categories": [
         "Optimization"
     ],

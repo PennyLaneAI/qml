@@ -2,11 +2,11 @@
     "title": "Using JAX with PennyLane",
     "authors": [
         {
-            "id": "chase_roberts"
+            "username": "croberts"
         }
     ],
     "dateOfPublication": "2021-04-12T00:00:00+00:00",
-    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
+    "dateOfLastModification": "2024-11-06T00:00:00+00:00",
     "categories": [
         "Devices and Performance"
     ],
