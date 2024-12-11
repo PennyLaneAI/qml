@@ -4174,11 +4174,6 @@ typing-extensions = "*"
 [package.extras]
 kernels = ["cvxopt", "cvxpy"]
 
-[package.source]
-type = "git"
-url = "https://github.com/PennyLaneAI/pennylane.git"
-reference = "remove_requires_grad_prototype"
-
 [[package]]
 name = "pennylane-catalyst"
 version = "0.9.0"
