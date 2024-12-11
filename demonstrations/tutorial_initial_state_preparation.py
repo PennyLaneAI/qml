@@ -258,6 +258,7 @@ def cost_fn(param):
 # Next, we create the VQE optimizer, initialize the variational parameters and run the VQE optimization.
 import optax
 import jax
+jax.config.update("jax_enable_x64", True)
 
 opt = optax.sgd(learning_rate=0.4)  # sgd stands for StochasticGradientDescent
 theta = jnp.array(jnp.zeros(len(excitations)))
