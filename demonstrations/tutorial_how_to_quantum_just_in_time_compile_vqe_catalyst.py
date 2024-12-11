@@ -153,23 +153,17 @@ opt = optax.sgd(learning_rate=0.4)
 @qml.qjit
 def update_step(i, params, opt_state):
     """Perform a single gradient update step"""
-    grads = catalyst.grad(cost)(params)
+    energy, grads = catalyst.value_and_grad(cost)(params)
     updates, opt_state = opt.update(grads, opt_state)
     params = optax.apply_updates(params, updates)
+    catalyst.debug.print("Step = {i},  Energy = {energy:.8f} Ha", i=i, energy=energy)
     return (params, opt_state)
-
-loss_history = []
 
 opt_state = opt.init(init_params)
 params = init_params
 
 for i in range(10):
     params, opt_state = update_step(i, params, opt_state)
-    loss_val = cost(params)
-
-    print(f"--- Step: {i}, Energy: {loss_val:.8f}")
-
-    loss_history.append(loss_val)
 
 ######################################################################
 # Step 4: QJIT-compile the optimization
