@@ -463,5 +463,5 @@ visualize_data(perturbed_x.reshape(-1, 16, 16), y_vis, adversarial_class_output)
 #
 
 ######################################################################
-# About the author
-# ----------------
+# About the authors
+# -----------------

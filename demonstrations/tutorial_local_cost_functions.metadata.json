@@ -2,11 +2,11 @@
     "title": "Alleviating barren plateaus with local cost functions",
     "authors": [
         {
-            "id": "thomas_storwick"
+            "username": "tstorwick"
         }
     ],
     "dateOfPublication": "2020-09-09T00:00:00+00:00",
-    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
+    "dateOfLastModification": "2024-11-06T00:00:00+00:00",
     "categories": [
         "Optimization"
     ],
