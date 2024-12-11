@@ -254,12 +254,24 @@ def shors_algorithm(N):
 # where we've omitted the "mod :math:`N`" for readability, and used the fact
 # that the adjoint of addition is subtraction.
 #
-# A high-level implementation of :math:`M_a` is shown below.
+# A high-level implementation of a controled :math:`M_a` is shown below.
 #
-# .. figure:: ../_static/demonstration_assets/shor_catalyst/doubly-controlled-adder.svg
+# .. figure:: ../_static/demonstration_assets/shor_catalyst/doubly-controlled-adder-with-control.svg
 #    :width: 700 
 #    :align: center
-#    :alt: In-place addition modulo N with the Fourier adder.
+#    :alt: Doubly-controlled adder.
+#
+# First, note that the controls on the QFTs are not needed. If we were to remove
+# them, and :math:`\vert c \rangle = \vert 1 \rangle`, the circuit will work as
+# expected. If instead :math:`\vert c \rangle = \vert 0 \rangle`, they would
+# run, then cancel each other out, since none of the interior operations would
+# execute (note that this optimization is broadly applicable, and quite
+# useful!). We are left, then, with the circuit below.
+#
+# .. figure:: ../_static/demonstration_assets/shor_catalyst/doubly-controlled-adder-with-control-not-on-qft.svg
+#    :width: 700 
+#    :align: center
+#    :alt: Doubly-controlled adder.
 #
 # At first glance, it may not be clear how :math:`a x` is created. The qubits in
 # register :math:`\vert x \rangle` are controlling operations that depend on
@@ -352,26 +364,57 @@ def shors_algorithm(N):
 # Returning to :math:`M_a`, we have :math:`\Phi_+` which is similar to
 # :math:`\Phi`, but it (a) uses an auxiliary qubit, and (b) works modulo
 # :math:`N`. :math:`\Phi_+` still uses Fourier basis addition and subtraction,
-# but also applies corrections if overflow is detected.
+# but also applies corrections if overflow is detected. Let's consider a single
+# instance of a controlled :math:`\Phi_+(a)`, sandwiched between a QFT and
+# inverse QFT.  
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_modulo_n.svg
 #    :width: 800 
 #    :align: center
 #    :alt: Addition in the Fourier basis modulo N.
 #
-# The circuit above first adds :math:`a` to :math:`b`, then subtracts :math:`N`
-# if :math:`a + b >= N`. However, if :math:`a + b < N` we subtracted :math:`N`
-# for no reason, causing underflow. This would manifest as a 1 in the top-most
-# qubit (the auxiliary qubit we added to :math:`\Phi` to account for
-# overflow). This 1 can be detected by applying a CNOT down to an auxiliary
-# qubit, which performs controlled addition of :math:`N` if needed. Note we must
-# exit the Fourier basis to detect underflow. The remainder of the circuit
-# returns the auxiliary qubit to its original state.
+# Here we've applied the same tricks to remove controls on the internal QFT
+# and inverse QFT operations.
 #
-# Uncomputing the auxiliary qubit here is just as much work as performing the
-# operation itself. Thankfully, we can leverage Catalyst to perform a major
-# optimization: rather than uncomputing, simply measure the auxiliary qubit, add
-# back :math:`N` based on the classical outcome, then reset it to :math:`\vert 0 \rangle`!
+# Let's step through this circuit, assuming the control qubit is in :math:`\vert
+# 1 \rangle` (if it was :math:`\vert 0 \rangle`, only the QFTs are applied, and
+# they cancel out). First, we add :math:`a` to :math:`b`, then subtract
+# :math:`N`. If :math:`a + b \geq N`, this gives us the correct result modulo
+# :math:`N`, and the topmost qubit is in state 0. The CNOT down to the auxiliary
+# qubit does not trigger.  We then subtract :math:`a`; this will cause
+# underflow, leading to the topmost qubit being in state :math:`\vert 1
+# \rangle`. The controlled-on-0 CNOT does not trigger either, and we simply add
+# :math:`a` back.
+# 
+# However, if :math:`a + b < N` we subtracted :math:`N` for no reason, causing
+# underflow. The top-most qubit will be in :math:`\vert 1 \rangle` (recall we
+# added that qubit to :math:`\Phi` to account for precisely this; note too that
+# we must exit the Fourier basis to detect underflow). We flip the auxiliary
+# qubit, and perform controlled addition of :math:`N`. The remainder of the
+# circuit returns the auxiliary qubit to its original state. If there was
+# originally underflow, we subtract :math:`a` and there is now no underflow, so
+# the auxiliary qubit is returned to :math:`\vert 0 \rangle`.
+#
+# We can use similar tricks to remove additional pairs of controls, denoted by
+# colours in the circuit below.
+#
+# .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_modulo_n-less-controls-coloured.svg
+#    :width: 800 
+#    :align: center
+#    :alt: Addition in the Fourier basis modulo N.
+#
+# This leaves us with the following circuit.
+#
+# .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_modulo_n-less-controls.svg
+#    :width: 800 
+#    :align: center
+#    :alt: Addition in the Fourier basis modulo N.
+#
+# We can see here that uncomputing the auxiliary qubit is just as much work as
+# performing the operation itself! Thankfully, we can leverage Catalyst to
+# perform a major optimization: rather than uncomputing, simply measure the
+# auxiliary qubit, add back :math:`N` based on the classical outcome, then reset
+# it to :math:`\vert 0 \rangle`!
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_modulo_n_mcm.svg
 #    :scale: 120%
@@ -379,7 +422,9 @@ def shors_algorithm(N):
 #    :alt: Addition in the Fourier basis modulo N.
 #
 # This optimization cuts down the number of gates in :math:`M_a` by essentially
-# half, which is a major savings.
+# half, which is a major savings. All the same optimizations can be made in the
+# case above, too, where this entire operation is controlled on an additional
+# qubit, :math:`\vert c \rangle`.
 #
 # Recall that :math:`\Phi_+` is used as part of :math:`M_a` to add
 # :math:`2^{k}a` modulo :math:`N` to :math:`b` (conditioned on the value of
