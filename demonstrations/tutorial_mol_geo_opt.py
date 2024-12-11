@@ -322,7 +322,7 @@ bohr_angs = 0.529177210903
 for n in range(36):
     # gradient for params
     g_param = jax.grad(cost, argnums=[0])(theta, x)[0]
-    theta = theta - 0.4 * g_param
+    theta = theta - 0.8 * g_param
 
     # gradient for coordinates
     value, _ = jax.value_and_grad(cost, argnums=1)(theta, x)
@@ -335,7 +335,7 @@ for n in range(36):
         print(f"Step = {n},  E = {energies[-1]:.8f} Ha,  bond length = {bond_length[-1]:.5f} A")
 
     # Check maximum component of the nuclear gradient
-    if jnp.max(grad_x(theta, x)) <= 1e-05:
+    if jnp.max(grad_x(theta, x)) <= 1e-04:
         break
 
 print("\n" f"Final value of the ground-state energy = {energies[-1]:.8f} Ha")
