@@ -75,7 +75,7 @@ dev = qml.device("default.qubit", shots=1)
 
 
 # This line is included for drawing purposes only.
-@partial(qml.devices.preprocess.decompose, stopping_condition=lambda obj: False, max_expansion=1)
+@partial(qml.transforms.decompose, max_expansion=1)
 
 @qml.qnode(dev)
 def circuit(index):
@@ -225,7 +225,7 @@ work_wires = [5, 6, 7, 8, 9, 10, 11, 12]
 
 
 # Line added for drawing purposes only
-@partial(qml.devices.preprocess.decompose, stopping_condition=lambda obj: False, max_expansion=2)
+@partial(qml.transforms.decompose, max_expansion=2)
 @qml.qnode(qml.device("default.qubit", shots=1))
 def circuit(index):
     qml.BasisState(index, wires=control_wires)
