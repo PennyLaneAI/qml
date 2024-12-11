@@ -235,7 +235,7 @@ params_doubles = jnp.zeros(len(doubles_select))
 opt = optax.sgd(learning_rate=0.5) # sgd stands for StochasticGradientDescent
 opt_state = opt.init(params_doubles)
 
-for n in range(20):
+for n in range(10):
     gradient = jax.grad(cost_fn, argnums=0)(params_doubles, excitations=doubles_select)
     updates, opt_state = opt.update(gradient, opt_state)
     params_doubles = optax.apply_updates(params_doubles, updates)
