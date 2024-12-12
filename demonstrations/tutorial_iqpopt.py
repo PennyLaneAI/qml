@@ -53,9 +53,9 @@ r"""IQPopt: Fast optimization of IQP circuits in JAX
 # 
 
 ######################################################################
-# Creating a circuit
+# Creating an IQP circuit with pennylane
 
-# ------------------
+# --------------------------------------
 
 # 
 
@@ -70,22 +70,9 @@ r"""IQPopt: Fast optimization of IQP circuits in JAX
 
 # 
 
-# To define such a circuit (with input state :math:`\vert 0 \rangle`) we need to specify the number of
+# To define such a circuit, we need a way to represent the parameterized gates. A set of gates will be
 
-# qubits and the parameterized gates
-
-# 
-
-import iqpopt as iqp
-from iqpopt.utils import local_gates
-
-n_qubits = 3
-gates = local_gates(n_qubits, 2) # all gates with max weight 2
-
-circuit = iqp.IqpSimulator(n_qubits, gates)
-
-######################################################################
-# A set of gates is specified by a list
+# specified by a list
 
 # 
 
@@ -109,9 +96,11 @@ circuit = iqp.IqpSimulator(n_qubits, gates)
 
 # 
 
-# that contains the generators of the gates. Since all gates have Pauli X type generators, a generator
+# that contains the generators of the gates (each generator with an independent trainable parameter).
 
-# is represented by a list that specifies which qubits are acted on by an X operator. For example,
+# Since all gates have Pauli X type generators, a generator will be represented by a list that
+
+# specifies which qubits are acted on by an X operator. For example,
 
 # 
 
@@ -143,9 +132,7 @@ circuit = iqp.IqpSimulator(n_qubits, gates)
 
 # 
 
-# The previous example prepares a three qubit circuit with all single and two qubit gates via the
-
-# function local_gates, i.e.
+# Here is how to prepare a three qubit circuit with all the possible single and two qubit gates
 
 # 
 
@@ -169,112 +156,342 @@ circuit = iqp.IqpSimulator(n_qubits, gates)
 
 # 
 
-######################################################################
-# Estimating expectation values
+# In order to be more general and have more than one generator with the same trainable parameter, we
 
-# -----------------------------
+# are going to group the generators with a tuple. Therefore, if the first and second generators share
 
-# 
-
-######################################################################
-# The class method ``IqpSimulator.op_expval()`` is used to provide estimates of expectation values.
-
-# The function requires a parameter array ``params``, a PauliZ operator specified by its binary
-
-# representation ``op``, the number of samples ``n_samples`` that controls the precision of the
-
-# approximation (the more the better), and a JAX pseudo random number generator key to seed the
-
-# randomness of the sampling.
+# the same parameter, then
 
 # 
 
-# Below is a simple example implementing this for the three qubit circuit defined above, which returns
+# .. raw:: html
 
-# the expectation value estimate as well as its standard error.
+# 
+
+#    <center>
+
+# 
+
+# gates = [([0], [1]), ([2],), ([0,1],), ([0,2],), ([1,2],)]
+
+# 
+
+# .. raw:: html
+
+# 
+
+#    </center>
+
+# 
+
+# As we can see, the rest of the generators are alone in their own tuple. This would be the final form
+
+# of our gates parameter, which will define our circuit from now on.
+
+# 
+
+# Let's now put it in practice and build a pennylane circuit out of this ``gates`` parameter. The
+
+# circuit will be build thanks to the following identity:
+
+# 
+
+# .. math:: \text{exp}(i\theta_j X_j) = H^{\otimes n} \text{exp}(i\theta_j Z_j) H^{\otimes n}
+
+# 
+
+# where :math:`H` is the Hadamard matrix and :math:`Z_j` is the same tensor product of Paulis, but now
+
+# instead of Pauli X there are Pauli Z with the corresponding identities.
+
+# 
+
+# Our pennyalne circuit (with input state :math:`\vert 0 \rangle`) would therefore be the following.
+
+# 
+
+import pennylane as qml
+import numpy as np
+
+def penn_iqp_gates(params: np.ndarray, gates: list, n_qubits: int):
+    """IQP circuit in pennylane form.
+
+    Args:
+        params (np.ndarray): The parameters of the IQP gates.
+        gates (list): The gates representation of the IQP circuit.
+        n_qubits (int): The total number of qubits in the circuit.
+    """
+
+    for i in range(n_qubits):
+        qml.Hadamard(i)
+
+    for par, gate in zip(params, gates):
+        for gen in gate:
+            qml.MultiRZ(2*par, wires=gen)
+
+    for i in range(n_qubits):
+        qml.Hadamard(i)
+
+######################################################################
+# Now, we want to measure our circuit. As we said, all measurements are diagonal in the computational
+
+# (Z) basis, and we will therefore represent them with a bitstring. 1s, wherever there are Pauli Z,
+
+# and 0s, wherever there are identities. In this way, an operator such as:
+
+# 
+
+# .. math:: O = Z \otimes I \otimes Z
+
+# 
+
+# will be converted to
+
+# 
+
+# .. raw:: html
+
+# 
+
+#    <center>
+
+# 
+
+# op = [1,0,1]
+
+# 
+
+# .. raw:: html
+
+# 
+
+#    </center>
+
+# 
+
+# The final circuit that allow us to measure these type of expectation values is the following.
+
+# 
+
+def penn_obs(op: np.ndarray) -> qml.operation.Observable:
+    """Returns a pennylane observable from a bitstring representation.
+
+    Args:
+        op (np.ndarray): Bitstring representation of the Z operator.
+
+    Returns:
+        qml.Observable: Pennylane observable.
+    """
+    for i, z in enumerate(op):
+        if i==0:
+            if z:
+                obs = qml.Z(i)
+            else:
+                obs = qml.I(i)
+        else:
+            if z:
+                obs @= qml.Z(i)
+    return obs
+
+def penn_iqp_circuit(params: np.ndarray, gates: list, op: np.ndarray, n_qubits: int) -> qml.measurements.ExpectationMP:
+    """Defines the circuit that calculates the expectation value of the operator with the IQP circuit with pennylane tools.
+
+    Args:
+        params (np.ndarray): The parameters of the IQP gates.
+        gates (list): The gates representation of the IQP circuit.
+        op (np.ndarray): Bitstring representation of the Z operator.
+        n_qubits (int): The total number of qubits in the circuit.
+
+    Returns:
+        qml.measurements.ExpectationMP: Pennylane circuit with an expectation value.
+    """
+    penn_iqp_gates(params, gates, n_qubits)
+    obs = penn_obs(op)
+    return qml.expval(obs)
+
+def penn_iqp_op_expval(params: np.ndarray, gates: list, op: np.ndarray, n_qubits: int) -> float:
+    """Calculates the expectation value of the operator with the IQP circuit with pennylane tools.
+
+    Args:
+        params (np.ndarray): The parameters of the IQP gates.
+        gates (list): The gates representation of the IQP circuit.
+        op (np.ndarray): Bitstring representation of the Z operator.
+        n_qubits (int): The total number of qubits in the circuit.
+
+    Returns:
+        float: Expectation value.
+    """
+    dev = qml.device("lightning.qubit", wires=n_qubits)
+    penn_iqp_circuit_exe = qml.QNode(penn_iqp_circuit, dev)
+    return penn_iqp_circuit_exe(params, gates, op, n_qubits)
+
+######################################################################
+# With this, we can now calculate all expectation of Pauli Z tensors of any IQP circuit we can think
+
+# of. Let's see an example.
+
+# 
+
+n_qubits = 3
+gates = [([0], [1]), ([2],), ([0,1],), ([0,2],), ([1,2],)] # same gates as in the example above
+op = np.array([1,0,1]) # operator ZIZ
+params = np.random.rand(len(gates)) # random parameters for all the gates (remember we have 5 gates with 6 generators in total)
+
+penn_op_expval = penn_iqp_op_expval(params, gates, op, n_qubits)
+print(penn_op_expval)
+
+######################################################################
+# Estimating expectation values with IQPopt
+
+# -----------------------------------------
+
+# 
+
+# With this new package we can perform the same calculations our pennylane circuit above is able to
+
+# do. Although, this time, only with approximations instead of exact values. The gain is that we can
+
+# work with a very large amount of qubits.
+
+# 
+
+# After some calculations, one can arrive at the following expression when calculating the expectation
+
+# value of any tensor product of Pauli Z operators
+
+# 
+
+# .. math:: \langle Z_{\boldsymbol{a}} \rangle = \mathbb{E}_{\boldsymbol{z}\sim U}\Big[ \cos\Big(\sum_j \theta_{j}(-1)^{\boldsymbol{g}_{j}\cdot \boldsymbol{z}}(1-(-1)^{\boldsymbol{g}_j\cdot \boldsymbol{a}}\Big) \Big],
+
+# 
+
+# where :math:`\boldsymbol{a}` is the bitstring form of the operator we want to calculate the
+
+# expectation value of, :math:`\boldsymbol{z}` are bitstring samples from the multi-qubit system taken
+
+# from the uniform distribution, :math:`\theta_{j}` are the trainable parameters and
+
+# :math:`\boldsymbol{g}_{j}` are the different generators also in bitstring form. The dots are dot
+
+# products between the bitstrings taken as vectors of 1s and 0s.
+
+# 
+
+# We could classically calculate this expression exactly, but it would require an exponentially large
+
+# amount of :math:`\boldsymbol{z}` samples with the increasing number of qubits. To aliviate this, we
+
+# can replace the expectation with an empirical mean and compute an unbiased estimate of
+
+# :math:`\langle Z_{\boldsymbol{a}} \rangle` efficiently. That is, if we sample a batch of :math:`s`
+
+# bit strings :math:`\{\boldsymbol{z}_i\}` from the uniform distribution and compute the sample mean
+
+# 
+
+# .. math:: \hat{\langle Z_{\boldsymbol{a}}\rangle} = \frac{1}{s}\sum_{i}\cos\Big(\sum_j \theta_j(-1)^{\boldsymbol{g}_j\cdot \boldsymbol{z}_i}(1-(-1)^{\boldsymbol{g}_j\cdot \boldsymbol{a}})\Big),
+
+# 
+
+# we obtain an unbiased estimate :math:`\hat{\langle Z_{\boldsymbol{a}}\rangle}` of
+
+# :math:`\langle Z_{\boldsymbol{a}}\rangle`; i.e. we have that
+
+# :math:`\mathbb{E}[\hat{\langle Z_{\boldsymbol{a}}\rangle}] = \langle Z_{\boldsymbol{a}}\rangle`. The
+
+# error of this approximation is well known since, by the central limit theorem, the standard
+
+# deviation of the sample mean of a bounded random variable decreases as
+
+# :math:`\mathcal{O}(1/\sqrt{s})`.
+
+# 
+
+# Let's see now how to use the IQPopt package to calculate expectation values, using the same
+
+# arguments we used in the previous example. First, we create the circuit object with ``IqpSimulator``
+
+# only with the number of qubits of the circuit and the ``gates`` parameter already explained:
+
+# 
+
+import iqpopt as iqp
+
+small_circuit = iqp.IqpSimulator(n_qubits, gates)
+
+######################################################################
+# Now, we use the class method ``IqpSimulator.op_expval()``, which is the one that provides these
+
+# estimates. This function requires a parameter array ``params``, a PauliZ operator specified by its
+
+# binary representation ``op``, a new parameter ``n_samples`` (the number of samples :math:`s`) that
+
+# controls the precision of the approximation (the more the better), and a JAX pseudo random number
+
+# generator key to seed the randomness of the sampling. It returns the expectation value estimate as
+
+# well as its standard error.
+
+# 
+
+# Using the same ``params`` and ``op`` as before:
 
 # 
 
 import jax
-import jax.numpy as jnp
-import numpy as np
 
-op = jnp.array([0,1,0]) # Pauli Z on the second qubit
-params = jnp.array(np.random.rand(len(circuit.gates)))
 n_samples = 1000
 key = jax.random.PRNGKey(42)
 
-expval, std = circuit.op_expval(params, op, n_samples, key)
+expval, std = small_circuit.op_expval(params, op, n_samples, key)
 
 print(expval, std)
 
 ######################################################################
-# The function also allows for fast batch evaluation of expectation values. If we specify a batch of
+# Since the calculation on ``iqpopt``\ 's side is stochastic, the result is not exactly the same than
 
-# operators ``ops`` by an array we can batch evaluate the expectation values and errors in parallel
+# the one obtained with pennylane. But, as we can see, they are within std error. You can try
+
+# increasing ``n_samples`` in order to obtain closer approximations.
+
+# 
+
+# This function also allows for fast batch evaluation of expectation values. If we specify a batch of
+
+# operators ``ops`` by an array, we can batch evaluate the expectation values and errors in parallel
 
 # with the same syntax.
 
 # 
 
-ops = jnp.array([[1,0,0],[0,1,0],[0,0,1]]) # batch of single qubit Pauli Zs
+ops = np.array([[1,0,0],[0,1,0],[0,0,1]]) # batch of single qubit Pauli Zs
 
-expvals, stds = circuit.op_expval(params, ops, n_samples, key)
+expvals, stds = small_circuit.op_expval(params, ops, n_samples, key)
 
 print(expvals, stds)
 
 ######################################################################
-# Testing the expectation values with Pennylane
+# With pennylane it would be very time consuming to pass the 30 qubit mark, but with IQPopt, we can
 
-# ---------------------------------------------
-
-# 
-
-######################################################################
-# When using new software, it is always good practice to check your results if possible. In our case
-
-# we have Pennylane, a well tested library that does this calculations for a small number of qubits.
-
-# On the `package's github <https://github.com/XanaduAI/iqpopt>`__ you can find already made functions
-
-# that calculate the same expectation values as ``.op_expval()``, taking the necessary info from an
-
-# ``IqpSimulator`` object.
+# easily go way further than that.
 
 # 
 
-# Let's first download these functions so we don't have to build them again:
+from iqpopt.utils import local_gates
 
-# 
+n_qubits = 1000
+gates = local_gates(n_qubits, 1) # 1000 single qubit generators with independent trainable parameters
 
-import requests
+large_circuit = iqp.IqpSimulator(n_qubits, gates)
 
-req = requests.get("https://raw.githubusercontent.com/XanaduAI/iqpopt/refs/heads/main/tests/pennylane_functions.py?token=GHSAT0AAAAAACYVZBT5V4YNS5U2YD6COCQYZ2YM32Q")
+params = np.random.rand(len(gates))
+op = np.random.randint(0, 2, n_qubits)
+n_samples = 1000
+key = jax.random.PRNGKey(42)
 
-with open("pennylane_functions.py", "wb") as f:
-    f.write(req.content)
+expval, std = large_circuit.op_expval(params, op, n_samples, key)
 
-######################################################################
-# Using the same ``params`` and ``op`` as before (but using ``numpy`` arrays instead of
-
-# ``jax.numpy``), let's see the pennylane's result.
-
-# 
-
-from pennylane_functions import penn_op_expval
-
-penn_expval = penn_op_expval(circuit, np.array(params), np.array(op))
-
-print(penn_expval)
-
-######################################################################
-# Since the calculation on ``iqpopt``\ 's side is stochastic, the results are not exactly the same,
-
-# but as we can see, they are within std error. You can try increasing ``n_samples`` in order to
-
-# obtain closer approximations.
-
-# 
+print(expval, std)
 
 ######################################################################
 # Sampling and probabilities
@@ -286,43 +503,66 @@ print(penn_expval)
 ######################################################################
 # We can also view a parameterized IQP circuit as a generative model that generates samples of binary
 
-# vectors according to the distribution :raw-latex:`\begin{align}
-
-# q_{\boldsymbol{\theta}}(\boldsymbol{x}) \equiv q(\boldsymbol{x}\vert\boldsymbol{\theta})=\vert\bra{\boldsymbol{x}}U(\boldsymbol{\theta})\ket{0}\vert^2.
-
-# \end{align}` For low amounts of qubits, we can use Penylane's arsenal and know the output
-
-# probabilities of the circuit as well as sample from it. Note that there is not an efficient
-
-# algorithm to do these, so, for large numbers of qubits, these methods will either take too long or
-
-# not work at all.
+# vectors according to the distribution
 
 # 
 
-# These functions are already implemented in the ``IqpSimulator`` object, so we don't have to download
-
-# them.
+# .. math:: q_{\boldsymbol{\theta}}(\boldsymbol{x}) \equiv q(\boldsymbol{x}\vert\boldsymbol{\theta})=\vert\bra{\boldsymbol{x}}U(\boldsymbol{\theta})\ket{0}\vert^2.
 
 # 
 
-sample = circuit.sample(params, shots=1)
+# For a low amount of qubits, we can use Pennylane's arsenal and know the output probabilities of the
+
+# circuit as well as sample from it. Note that there is not an efficient algorithm to do these, so,
+
+# for large numbers of qubits, these methods will either take too long or not work at all.
+
+# 
+
+# These functions are already implemented in the ``IqpSimulator`` object. The ``.probs()`` method
+
+# works as it does in pennylane, the returned array of probabilities is in lexicographic order.
+
+# 
+
+sample = small_circuit.sample(params, shots=1)
 print(sample)
 
-probabilities = circuit.probs(params)
+probabilities = small_circuit.probs(params)
+print(probabilities)
+
+sample = large_circuit.sample(params, shots=1)
+print(sample)
+
+probabilities = large_circuit.probs(params)
 print(probabilities)
 
 ######################################################################
-# The ``.probs()`` method works as it does in pennylane, the returned array of probabilities is in
+# As we can see, we can't sample or know the probabilities of the circuit for the large one. The only
 
-# lexicographic order.
+# efficient approximation algorithm we have is for the calculation of expectation values. In the
+
+# following figure, you can see how the time scales with the different methods when we increase the
+
+# number of qubits. The calculation of expectation values is the only one that remains linear instead
+
+# of increasing exponentially.
 
 # 
 
 ######################################################################
-# Optimizing a circuit
+# .. figure:: ../_static/demonstration_assets/iqpopt/sample_time.png
 
-# --------------------
+#    :alt: Time vs n_qubits
+
+# 
+
+#    Time vs n_qubits
+
+######################################################################
+# Optimizing an IQPopt circuit
+
+# ----------------------------
 
 # 
 
@@ -331,11 +571,13 @@ print(probabilities)
 
 # define a loss function (also called an objective function), an optimizer and an initial stepsize for
 
-# the gradient descent. Continuing our example from before, below we define a simple loss function
+# the gradient descent. Continuing our ``small_circuit`` example from before, below we define a simple
 
-# that is a sum of expectation values returned by ``.op_expval()`` .
+# loss function that is a sum of expectation values returned by ``.op_expval()`` .
 
 # 
+
+import jax.numpy as jnp
 
 def loss_fn(params, circuit, ops, n_samples, key):
     expvals = circuit.op_expval(params, ops, n_samples, key)[0]
@@ -362,12 +604,12 @@ trainer = iqp.Trainer(optimizer, loss_fn, stepsize)
 import matplotlib.pyplot as plt
 
 n_iters = 1000
-params_init = np.random.normal(0, 1, len(circuit.gates))
+params_init = np.random.normal(0, 1, len(small_circuit.gates))
 n_samples = 100
 
 loss_kwargs = {
     "params": params_init,
-    "circuit": circuit,
+    "circuit": small_circuit,
     "ops": ops,
     "n_samples": n_samples,
     "key": key,
@@ -500,80 +742,19 @@ plt.plot(trainer.losses)
 plt.show()
 
 ######################################################################
-# Kernel Generalized Empirical Likelihood
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-# 
-
-# In order to probe how well a generative model captures a distribution of high-dimensional data, we
-
-# can use the Kernel Generalized Empirical Likelihood [10]. This metric is a measure of the closeness
-
-# of two distributions while also serving as a tool to evaluate mode dropping.
-
-# 
-
-# As before, if samples are available from the generative model, we have a straightforward
-
-# implementation of the KGEL test:
-
-# 
-
-n_qubits = 10
-
-# toy dataset of low weight bitstrings
-X = np.random.binomial(1, 0.2, size=(1000, n_qubits))
-
-n_witness = 10
-T = X[-n_witness:] # witness points (sampled from the ground truth distribution)
-X = X[:-n_witness] # ground truth for the kgel test
-
-# model samples
-Y = np.random.binomial(1, 0.3, size=(1000, n_qubits))
-
-sigma = median_heuristic(X) #bandwidth for KGEL
-kgel, p_kgel = gen.kgel_opt_samples(T, X, Y, sigma)
-print(kgel)
-
-######################################################################
-# To evaluate the KGEL for a model given by a ``IqpSimulator`` object, we need to use another
-
-# implementation based on the calculation of expectation values of PauliZ operators. Let's see how
-
-# well the last trained circuit matches the ground truth with the KGEL test:
-
-# 
-
-n_witness = 10
-T = X_train[-n_witness:] # witness points (sampled from the ground truth distribution)
-X = X_train[:-n_witness] # ground truth for the kgel test
-
-sigma = median_heuristic(X)
-kgel, p_kgel = gen.kgel_opt_iqp(circuit,
-                                trained_params,
-                                T,
-                                X,
-                                sigma,
-                                n_ops=1000,
-                                n_samples=1000,
-                                key=jax.random.PRNGKey(42))
-print(kgel)
-
-######################################################################
 # References:
 
 # 
 
-# [1] Michael J Bremner, Richard Jozsa, and Dan J Shepherd. "Classical simulation of commuting
+# [1] Michael J Bremner, Richard Jozsa, and Dan J Shepherd. "Classical simulation of com- muting
 
-# quantum computations implies collapse of the polynomial hierarchy". In: Proceedings of the Royal
+# quantum computations implies collapse of the polynomial hierarchy". In: Proceed- ings of the Royal
 
 # Society A: Mathematical, Physical and Engineering Sciences 467.2126 (2011), pp. 459-472 (page 1).
 
 # 
 
-# [2] Michael J Bremner, Ashley Montanaro, and Dan J Shepherd. "Average-case complexity versus
+# [2] Michael J Bremner, Ashley Montanaro, and Dan J Shepherd. "Average-case complex- ity versus
 
 # approximate simulation of commuting quantum computations". In: Physical review letters 117.8 (2016),
 
@@ -623,19 +804,11 @@ print(kgel)
 
 # 
 
-# [9] Arthur Gretton, Karsten M. Borgwardt, Malte J. Rasch, Bernhard Schölkopf, and Alexander Smola.
+# [9] Arthur Gretton, Karsten M. Borgwardt, Malte J. Rasch, Bernhard Schölkopf, and Alexan- der Smola.
 
 # "A Kernel Two-Sample Test". In: Journal of Machine Learning Research 13.25 (2012), pp. 723-773. url:
 
 # http://jmlr.org/papers/v13/gretton12a.html (page 14).
-
-# 
-
-# [10] Suman Ravuri, Mélanie Rey, Shakir Mohamed, and Marc Deisenroth. Understanding Deep Generative
-
-# Models with Generalized Empirical Likelihoods. 2023. arXiv: 2306.09780 [cs.LG]. url:
-
-# https://arxiv.org/abs/2306.09780 (pages 3, 16).
 
 # 
 

@@ -1,0 +1,32 @@
+{
+    "title": "IQPopt: Fast optimization of IQP circuits in JAX",
+    "authors": [
+        {
+            "username": "erik.recio"
+        }
+    ],
+    "dateOfPublication": "2024-12-12T00:00:00+00:00",
+    "dateOfLastModification": "2024-12-12T00:00:00+00:00",
+    "categories": [
+        "Optimization"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_iqpopt.png"
+        }
+    ],
+    "seoDescription": "Showing how to use the package IQPopt and optimize IQP circuits really fast.",
+    "doi": "",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "tutorial",
+            "id": "tutorial_iqpopt_package",
+            "weight": 1.0
+        }
+    ]
+}
