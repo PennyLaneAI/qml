@@ -62,7 +62,7 @@ For that, we are going to use the generators of the Heisenberg model Hamiltonian
 .. math:: \{X_i X_{i+1}, Y_i Y_{i+1}, Z_i Z_{i+1}\}_{i=0}^{2}.
 
 The foundation of a KAK decomposition is a Cartan decomposition of the associated Lie algebra :math:`\mathfrak{g}.`
-Now, let us first construct it and import some libraries that we are going to use later.
+Now, let us first import some libraries that we are going to use later and construct :math:`\mathfrak{g}.`
 
 
 """
