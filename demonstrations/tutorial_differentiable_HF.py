@@ -115,8 +115,7 @@ geometry = jnp.array([[-0.672943567415407, 0.0, 0.0],
                      [ 0.672943567415407, 0.0, 0.0]])
 
 ##############################################################################
-# The use of ``requires_grad=True`` specifies that the nuclear coordinates are differentiable
-# parameters. We can now compute the Hartree-Fock energy and its gradient with respect to the
+# We can now compute the Hartree-Fock energy and its gradient with respect to the
 # nuclear coordinates. To do that, we create a molecule object that stores all the molecular
 # parameters needed to perform a Hartree-Fock calculation.
 
