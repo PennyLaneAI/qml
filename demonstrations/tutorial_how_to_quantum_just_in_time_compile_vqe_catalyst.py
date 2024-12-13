@@ -141,7 +141,7 @@ cost(init_params)
 # not JAX compatible.
 #
 # Instead, we can use `Optax <https://github.com/google-deepmind/optax>`__, a library designed for
-# optimization using JAX, as well as the :func:`~.catalyst.grad` function, which allows us to
+# optimization using JAX, as well as the :func:`~.catalyst.value_and_grad` function, which allows us to
 # differentiate through quantum just-in-time compiled workflows.
 #
 
