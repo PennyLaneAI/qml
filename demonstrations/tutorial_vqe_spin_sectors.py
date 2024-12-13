@@ -10,7 +10,7 @@ VQE in different spin sectors
    tutorial_vqe A brief overview of VQE
    vqe_parallel VQE with parallel QPUs with Rigetti
 
-*Author: Alain Delgado — Posted: 13 October 2020. Last updated: 8 August 2024.*
+*Author: Alain Delgado — Posted: 13 October 2020. Last updated: 25 June 2022.*
 
 The Variational Quantum Eigensolver (VQE) algorithm is an approach for finding the
 lowest-energy state of a molecule using a quantum computer [#peruzzo2014]_.

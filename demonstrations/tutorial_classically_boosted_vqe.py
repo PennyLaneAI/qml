@@ -12,7 +12,7 @@ Classically-boosted variational quantum eigensolver
     tutorial_vqe Variational Quantum Eigensolver
 
 *Authors: Joana Fraxanet & Isidor Schoch (Xanadu Residents).
-Posted: 31 October 2022. Last updated: 8 August 2024.*
+Posted: 31 October 2022. Last updated: 31 October 2022.*
 
 One of the most important applications of quantum computers is expected
 to be the computation of ground-state energies of complicated molecules
