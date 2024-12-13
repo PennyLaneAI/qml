@@ -468,6 +468,10 @@ plt.show()
 # We provided a flexible pipeline that lets users find KAK decompositions in PennyLane for systems with small 
 # DLA and specifically decomposed the Heisenberg model Hamiltonian with :math:`n=4` qubits that has a DLA of dimension :math:`60` (:math:`\left(\mathfrak{s u}(2^{n-2})\right)^{\oplus 4}`).
 #
+# As most DLAs scale exponentially in the number of qubits, KAK decompositions are limited to small system sizes 
+# or special cases of systems with small DLAs.
+# This is in line with the notion that fast-forwarding is generally not possible and limited to special systems.
+# In particular, a KAK decomposition is ultimately always a fast-forwarding of a Hamiltonian.
 
 
 
