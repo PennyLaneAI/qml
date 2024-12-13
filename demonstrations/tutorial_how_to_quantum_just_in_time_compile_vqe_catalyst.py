@@ -142,7 +142,10 @@ cost(init_params)
 #
 # Instead, we can use `Optax <https://github.com/google-deepmind/optax>`__, a library designed for
 # optimization using JAX, as well as the :func:`~.catalyst.value_and_grad` function, which allows us to
-# differentiate through quantum just-in-time compiled workflows.
+# differentiate through quantum just-in-time compiled workflows while also returning the cost value.
+# Here we use :func:`~.catalyst.value_and_grad` as we want to be able to print out and track our
+# cost function during execution, but if this is not required the :func:`~.catalyst.grad` function
+# can be used instead.
 #
 
 import catalyst
