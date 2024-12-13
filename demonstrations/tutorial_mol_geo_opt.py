@@ -288,7 +288,7 @@ def grad_x(params, x):
 # the circuit parameters and the nuclear coordinates will be jointly optimized at
 # each optimization step. This approach does not require nested VQE
 # optimization of the circuit parameters for each set of nuclear coordinates.
-##############################################################################
+#
 # First, we initialize the circuit parameters :math:`\theta.` The angles
 # :math:`\theta_1` and :math:`\theta_2` are set to zero so that the
 # initial state :math:`\vert\Psi(\theta_1, \theta_2)\rangle`
@@ -303,7 +303,7 @@ theta = jnp.array([0.0, 0.0])
 # for the starting geometry that we are aiming to improve due to the electronic
 # correlation effects included in the trial state :math:`\vert\Psi(\theta)\rangle.`
 #
-# We carry out the optimization over a maximum of 100 steps.
+# We carry out the optimization over a maximum of 36 steps.
 # The circuit parameters and the nuclear coordinates are optimized until the
 # maximum component of the nuclear gradient :math:`\nabla_x g(\theta,x)` is
 # less than or equal to :math:`10^{-5}` Hartree/Bohr. Typically, this is the
