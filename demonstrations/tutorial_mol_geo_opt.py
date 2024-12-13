@@ -385,7 +385,7 @@ plt.show()
 ##############################################################################
 # |
 # Notice that despite the fact that the ground-state energy is already converged
-# within chemical accuracy (:math:`0.0016` Ha) after the fourth iteration, more
+# within chemical accuracy (:math:`0.0016` Ha) after the first iteration, more
 # optimization steps are required to find the equilibrium bond length of the
 # molecule.
 #
