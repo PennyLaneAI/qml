@@ -99,7 +99,8 @@ g = [op.pauli_rep for op in g]
 # involutions lead to different types of Cartan decompositions, which have been fully classified by Cartan 
 # (see `Wikipedia <https://en.wikipedia.org/wiki/Symmetric_space#Classification_result>`__).
 # 
-# .. note::
+# .. admonition:: Notation
+#     :class: note
 #     Note that :math:`\mathfrak{k}` is the small letter k in
 #     `Fraktur <https://en.wikipedia.org/wiki/Fraktur>`__ and a 
 #     common - not our - choice for the vertical subspace in a Cartan decomposition.
@@ -460,7 +461,7 @@ plt.show()
 # 
 # The KAK theorem is a very general mathematical result with far-reaching consequences.
 # While there is no canonical way of obtaining an actual decomposition in practice, we followed
-# the approach of [#Kökcü]_ that uses a specifically designed loss function and variational
+# the approach of [#Kökcü]_ which uses a specifically designed loss function and variational
 # optimization to find the decomposition.
 # This approach has the advantage that the resulting decomposition is itself already decomposed in terms of rotation gates in the original Lie algebra,
 # as opposed to other methods such as [#Chu]_ that find :math:`K` as a whole.
