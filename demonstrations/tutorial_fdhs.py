@@ -7,8 +7,8 @@ In particular, we follow the approach in [#Kökcü]_ that directly provides us w
 decomposition of the unitaries :math:`K` and :math:`e^{-i t h}.`
 
 Sounds too good to be true? There are of course caveats, mostly of practical nature.
-One of them is that the relevant Lie algebra becomes too large to handle. Yet, this is still an extremely
-powerful mathematical result integral for quantum compilation, circuit optimization and Hamiltonian simulation.
+One is that the relevant Lie algebra becomes too large to handle. Yet, this is still an extremely
+powerful mathematical result integral for quantum compilation, circuit optimization, and Hamiltonian simulation.
 
 .. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_fdhs.png
     :align: center
@@ -28,7 +28,7 @@ matrix :math:`M \in \mathbb{C}^{m \times n}` can be decomposed as :math:`M = U \
 are the diagonal singular values and :math:`U \in \mathbb{C}^{m \times \mu}` and :math:`V^\dagger \in \mathbb{C}^{\mu \times n}`
 are left- and right-unitary with :math:`\mu = \min(m, n).`
 
-In the case of the KAK decomposition, :math:`\mathcal{A}` is an Abelian subgroup such that all its elements are commuting,
+In the case of the KAK decomposition, :math:`\mathcal{A}` is an Abelian subgroup in which all its elements are commuting,
 just as is the case for diagonal matrices.
 
 We can use this general result from Lie theory as a powerful circuit decomposition technique.
@@ -41,10 +41,10 @@ Goal
 ----
 
 Unitary gates in quantum computing are described by the special unitary Lie group :math:`SU(2^n),` so we can use the KAK
-theorem to decompose quantum gates into :math:`U = K_1 A K_2.` While the mathematical statement is rather straight-forward,
+theorem to decompose quantum gates into :math:`U = K_1 A K_2.` While the mathematical statement is rather straightforward,
 actually finding this decomposition is not. We are going to follow the recipe prescribed in 
 `Fixed Depth Hamiltonian Simulation via Cartan Decomposition <https://arxiv.org/abs/2104.00728>`__ [#Kökcü]_, 
-that tackles this decomposition on the level of the associated Lie algebra via Cartan decomposition.
+which tackles this decomposition on the level of the associated Lie algebra via Cartan decomposition.
 
 In particular, we are going to consider the problem of time-evolving a Hermitian operator :math:`H` that generates the time-evolution unitary :math:`U = e^{-i t H}.`
 We are going to perform a special case of KAK decomposition, a "KhK decomposition" if you will, on the algebraic level in terms of
@@ -57,12 +57,12 @@ This then induces the KAK decomposition on the group level as
 
 Let us walk through an explicit example, doing theory and code side-by-side.
 
-For that we are going to use the generators of the Heisenberg model Hamiltonian for :math:`n=4` qubits on a one-dimensional chain,
+For that, we are going to use the generators of the Heisenberg model Hamiltonian for :math:`n=4` qubits on a one-dimensional chain,
 
 .. math:: \{X_i X_{i+1}, Y_i Y_{i+1}, Z_i Z_{i+1}\}_{i=0}^{2}.
 
-The foundation to a KAK decomposition is a Cartan decomposition of the associated Lie algebra :math:`\mathfrak{g}.`
-For that, let us first construct it and import some libraries that we are going to use later.
+The foundation of a KAK decomposition is a Cartan decomposition of the associated Lie algebra :math:`\mathfrak{g}.`
+Now, let us first construct it and import some libraries that we are going to use later.
 
 
 """
@@ -95,7 +95,7 @@ g = [op.pauli_rep for op in g]
 # 
 # A Cartan decomposition is a bipartition :math:`\mathfrak{g} = \mathfrak{k} \oplus \mathfrak{m}` into a vertical subspace
 # :math:`\mathfrak{k}` and an orthogonal horizontal subspace :math:`\mathfrak{m}.` In practice, it can be induced by an
-# involution function :math:`\Theta` that fulfils :math:`\Theta(\Theta(g)) = g \ \forall g \in \mathfrak{g}.` Different 
+# involution function :math:`\Theta` that fulfills :math:`\Theta(\Theta(g)) = g \ \forall g \in \mathfrak{g}.` Different 
 # involutions lead to different types of Cartan decompositions, which have been fully classified by Cartan 
 # (see `Wikipedia <https://en.wikipedia.org/wiki/Symmetric_space#Classification_result>`__).
 # 
@@ -152,7 +152,7 @@ len(g), len(k), len(m)
 # into a :math:`24`-dimensional vertical subspace and a :math:`36`-dimensional subspace.
 #
 # Note that not every bipartition of a Lie algebra constitutes a Cartan decomposition.
-# For that, the subspaces need to fulfil the following three commutation relations
+# For that, the subspaces need to fulfill the following three commutation relations
 #
 # .. math::
 #     \begin{align}
@@ -167,7 +167,7 @@ len(g), len(k), len(m)
 # 
 # We mentioned earlier that we are aiming to do a special case of KAK decomposition where the second unitary :math:`K_2 = K_1^\dagger`.
 # This is possible whenever the operator that we want to decompose is in the horizontal subspace :math:`\mathfrak{m}`, i.e. we want :math:`\Theta(H) = -H`.
-# The chosen :math:`H` and :math:`\Theta` fulfil this property, as can be easily verified.
+# The chosen :math:`H` and :math:`\Theta` fulfill this property, as can be easily verified.
 #
 
 for op in H.operands:
@@ -180,7 +180,7 @@ for op in H.operands:
 # 
 # With this we have identified the first subgroup (:math:`\mathcal{K}`) of the KAK decomposition. The other subgroup
 # is induced by the so-called (horizontal) Cartan subalgebra :math:`\mathfrak{h}.` This is a maximal Abelian subalgebra of :math:`\mathfrak{m}` and is not unique.
-# For the case of Pauli words we can simply pick any element in :math:`\mathfrak{m}` and collect all other operators in :math:`\mathfrak{m}`
+# For the case of Pauli words, we can simply pick any element in :math:`\mathfrak{m}` and collect all other operators in :math:`\mathfrak{m}`
 # that commute with it.
 #
 # We then obtain a further split of the vector space :math:`\mathfrak{m} = \tilde{\mathfrak{m}} \oplus \mathfrak{h},`
@@ -205,7 +205,7 @@ def cartan_subalgebra(m, which=0):
     
     Args:
         m (List[PauliSentence]): the horizontal subspace :math:`\Theta(x) = -x
-        which (int): Choice for initial element of m from which to construct 
+        which (int): Choice for the initial element of m from which to construct 
             the maximal Abelian subalgebra
     
     Returns:
@@ -239,7 +239,7 @@ len(g), len(k), len(mtilde), len(h)
 # ---------------
 #
 # Obtaining the actual decomposition is highly non-trivial and there is no canonical way to go about computing it in terms of linear algebra sub-routines.
-# In [#Kökcü]_, the authors propose to find the a local extremum of the cost function
+# In [#Kökcü]_, the authors propose to find a local extremum of the cost function
 # 
 # .. math:: f(\theta) = \langle K(\theta) v K(\theta)^\dagger, H\rangle
 # 
@@ -265,7 +265,7 @@ v_m = jnp.array(v_m)
 # for the vertical unitary.
 # 
 # Now we just have to define the cost function and find an extremum.
-# In this case we are going to use gradient descent to minimize the cost function to a minimum.
+# In this case, we are going to use gradient descent to minimize the cost function to a minimum.
 # We are going to use ``jax`` and ``optax`` and write some boilerplate for the optimization procedure.
 #
 # .. note:: 
@@ -363,7 +363,7 @@ not h_vspace.is_independent(h_0.pauli_rep)
 ##############################################################################
 # 
 # The fact that :math:`K_c H K_c^\dagger \in \mathfrak{h}` is crucial for this decomposition to be valid and meaningful.
-# Otherwise :math:`h_0` could be anything and we arrive back at the original problem of decomposing :math:`e^{-i t h_0}`.
+# Otherwise, :math:`h_0` could be anything and we arrive back at the original problem of decomposing :math:`e^{-i t h_0}`.
 # Here we know that :math:`h_0` is composed of elements of an Abelian Lie algebra :math:`\mathfrak{h}`, such that we can
 # trivially decompose its unitary as :math:`e^{-i t h_0} = e^{-i t \sum_{j=1}^{|\mathfrak{h}|} c_j h_j}` as :math:`\prod_{j=1}^{|\mathfrak{h}|} e^{-i t c_j h_j}`.
 #
@@ -409,7 +409,7 @@ trace_distance(U_exact_m, U_kak_m)
 # Time evolutions
 # ---------------
 # 
-# We compute multiple time evolutions for different times and compare Suzuki-Trotter product with the KAK decomposition circuit.
+# We compute multiple time evolutions for different times and compare Suzuki-Trotter products with the KAK decomposition circuit.
 #
 
 ts = jnp.linspace(1., 5., 10)
@@ -444,7 +444,7 @@ plt.show()
 
 
 ##############################################################################
-# We see the expected behavior of Suzuki-Trotter product formulas getting worse with increase of time
+# We see the expected behavior of Suzuki-Trotter product formulas getting worse with an increase in time
 # while the KAK error is constant zero.
 #
 # The KAK decomposition is particularly well-suited for smaller systems as the circuit depth is equal to the
