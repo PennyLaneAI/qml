@@ -154,7 +154,7 @@ len(g), len(k), len(m)
 # into a :math:`24`-dimensional vertical subspace and a :math:`36`-dimensional subspace.
 #
 # Note that not every bipartition of a Lie algebra constitutes a Cartan decomposition.
-# For that, the subspaces need to fulfill the following three commutation relations
+# For that, the subspaces need to fulfill the following three commutation relations.
 #
 # .. math::
 #     \begin{align}
