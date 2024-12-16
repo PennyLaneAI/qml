@@ -1,9 +1,9 @@
 r"""Fixed Depth Hamiltonian Simulation via Cartan Decomposition
 ===============================================================
 
-We introduce the powerful Lie theoretic decomposition technique for Hamiltonians, :math:`H = K h K^\dagger,`
-that lets you time-evolve by arbitrary times with fixed depth, :math:`e^{-i t H} = K e^{-i t h} K^\dagger.`
-In particular, we follow the approach in [#Kökcü]_ that directly provides us with a (fixed depth) circuit
+We introduce the powerful Lie-theoretic decomposition technique for Hamiltonians, :math:`H = K h K^\dagger,`
+that lets you perform time-evolution by arbitrary times with fixed depth, :math:`e^{-i t H} = K e^{-i t h} K^\dagger.`
+In particular, we follow the approach in [#Kökcü]_ that directly provides us with a (fixed-depth) circuit
 decomposition of the unitaries :math:`K` and :math:`e^{-i t h}.`
 
 Sounds too good to be true? There are of course caveats, mostly of practical nature.
@@ -34,7 +34,7 @@ just as is the case for diagonal matrices.
 We can use this general result from Lie theory as a powerful circuit decomposition technique.
 
 .. note:: We recommend a basic understanding of Lie algebras, see e.g. our :doc:`intro for quantum practitioners </demos/tutorial_liealgebra>`.
-    Otherwise this demo should be self-contained. For the mathematically inclined we further recommend our :doc:`demo on the KAK theorem </demos/tutorial_kak_theorem>`
+    Otherwise, this demo should be self-contained, though for the mathematically inclined, we further recommend our :doc:`demo on the KAK theorem </demos/tutorial_kak_theorem>`
     that dives into the mathematical depths of the theorem and provides more background info.
 
 Goal: Fast-forwarding time evolutions using the KAK decomposition
@@ -106,8 +106,8 @@ g = [op.pauli_rep for op in g]
 #     `Fraktur <https://en.wikipedia.org/wiki/Fraktur>`__ and a 
 #     common - not our - choice for the vertical subspace in a Cartan decomposition.
 #
-# One common choice of involution is the so-called even-odd involution for Pauli words
-# :math:`P = P_1 \otimes P_2 .. \otimes P_n` where :math:`P_j \in \{I, X, Y, Z\}.`
+# One common choice of involution is the so-called even-odd involution for Pauli words,
+# :math:`P = P_1 \otimes P_2 .. \otimes P_n,` where :math:`P_j \in \{I, X, Y, Z\}.`
 # It essentially counts whether the number of non-identity Pauli operators in the Pauli word is even or odd.
 
 def even_odd_involution(op):
@@ -150,8 +150,8 @@ len(g), len(k), len(m)
 
 
 ##############################################################################
-# We have successfully decomposed the :math:`60`-dimensional Lie algebra 
-# into a :math:`24`-dimensional vertical subspace and a :math:`36`-dimensional subspace.
+# We have successfully decomposed the 60-dimensional Lie algebra 
+# into a 24-dimensional vertical subspace and a 36-dimensional subspace.
 #
 # Note that not every bipartition of a Lie algebra constitutes a Cartan decomposition.
 # For that, the subspaces need to fulfill the following three commutation relations.
@@ -167,7 +167,7 @@ len(g), len(k), len(m)
 # This also has the consequence that the associated Lie group :math:`\mathcal{K} := e^{i \mathfrak{k}}` is a subgroup
 # of the associated Lie group :math:`\mathcal{G} := e^{i \mathfrak{g}}.`
 # 
-# We mentioned earlier that we are aiming to do a special case of KAK decomposition where the second unitary :math:`K_2 = K_1^\dagger`.
+# We mentioned earlier that we are aiming to do a special case of KAK decomposition where the second unitary :math:`K_2 = K_1^\dagger.`
 # This is possible whenever the operator that we want to decompose is in the horizontal subspace :math:`\mathfrak{m}`, i.e. we want :math:`\Theta(H) = -H`.
 # The chosen :math:`H` and :math:`\Theta` fulfill this property, as can be easily verified.
 #
@@ -180,8 +180,8 @@ for op in H.operands:
 # Cartan subalgebra
 # -----------------
 # 
-# With this we have identified the first subgroup (:math:`\mathcal{K}`) of the KAK decomposition. The other subgroup
-# is induced by the so-called (horizontal) Cartan subalgebra :math:`\mathfrak{h}.` This is a maximal Abelian subalgebra of :math:`\mathfrak{m}` and is not unique.
+# With this we have identified the first subgroup, :math:`\mathcal{K},` of the KAK decomposition. The other subgroup
+# is induced by the so-called (horizontal) Cartan subalgebra :math:`\mathfrak{h}.` This is a maximal Abelian subalgebra of :math:`\mathfrak{m}` and it is not unique.
 # For the case of Pauli words, we can simply pick any element in :math:`\mathfrak{m}` and collect all other operators in :math:`\mathfrak{m}`
 # that commute with it.
 #
@@ -245,11 +245,11 @@ len(g), len(k), len(mtilde), len(h)
 # 
 # .. math:: f(\theta) = \langle K(\theta) v K(\theta)^\dagger, H\rangle
 # 
-# where :math:`\langle \cdot, \cdot \rangle` is some inner product (in our case the trace inner product :math:`\langle A, B \rangle = \text{tr}(A^\dagger B)`).
+# where :math:`\langle \cdot, \cdot \rangle` is some inner product (in our case, the trace inner product :math:`\langle A, B \rangle = \text{tr}(A^\dagger B)).`
 # This construction uses the operator :math:`v = \sum_j \pi^j h_j \in \mathfrak{h}`
 # that is such that :math:`e^{i t v}` is dense in :math:`e^{i \mathcal{h}}.`
 # The latter means that for any :math:`e^{i \mathcal{h}}` there is a :math:`t \in \mathbb{R}` such that :math:`e^{i t v}` approximates it.
-# Let us construct it. To numerically avoid very large vectors, we take :math:`\pi (\text{mod} 2)` which preserves the dense property of :math:`v`.
+# Let us construct it. To numerically avoid very large vectors, we take :math:`\pi (\text{mod} 2),` which preserves the dense property of :math:`v`.
 
 gammas = [np.pi**i % 2 for i in range(1, len(h)+1)]
 
@@ -271,8 +271,8 @@ v_m = jnp.array(v_m)
 # We are going to use ``jax`` and ``optax`` and write some boilerplate for the optimization procedure.
 #
 # .. note:: 
-#     You can check our demos on parameter optimization in jax with 
-#     :doc:`optax </demos/tutorial_How_to_optimize_QML_model_using_JAX_and_Optax>` or 
+#     You can check our demos on parameter optimization in JAX with 
+#     :doc:`Optax </demos/tutorial_How_to_optimize_QML_model_using_JAX_and_Optax>` or 
 #     :doc:`JAXOpt </demos/tutorial_How_to_optimize_QML_model_using_JAX_and_JAXopt>`.
 #
 
@@ -282,7 +282,7 @@ def run_opt(
     n_epochs=500,
     lr=0.1,
 ):
-    """Boilerplate jax optimization"""
+    """Boilerplate JAX optimization"""
     value_and_grad = jax.jit(jax.value_and_grad(loss))
     optimizer = optax.lbfgs(learning_rate=lr, memory_size=100)
     opt_state = optimizer.init(theta)
@@ -367,7 +367,7 @@ not h_vspace.is_independent(h_0.pauli_rep)
 # The fact that :math:`K_c H K_c^\dagger \in \mathfrak{h}` is crucial for this decomposition to be valid and meaningful.
 # Otherwise, :math:`h_0` could be anything and we arrive back at the original problem of decomposing :math:`e^{-i t h_0}`.
 # Here we know that :math:`h_0` is composed of elements of an Abelian Lie algebra :math:`\mathfrak{h}`, such that we can
-# trivially decompose its unitary as :math:`e^{-i t h_0} = e^{-i t \sum_{j=1}^{|\mathfrak{h}|} c_j h_j}` as :math:`\prod_{j=1}^{|\mathfrak{h}|} e^{-i t c_j h_j}`.
+# trivially decompose its unitary as :math:`e^{-i t h_0} = e^{-i t \sum_{j=1}^{|\mathfrak{h}|} c_j h_j}` as :math:`\prod_{j=1}^{|\mathfrak{h}|} e^{-i t c_j h_j}.`
 #
 # Overall, this gives us the KhK decomposition of :math:`H,`
 # 
@@ -411,7 +411,7 @@ trace_distance(U_exact_m, U_kak_m)
 # Time evolutions
 # ---------------
 # 
-# We compute multiple time evolutions for different times and compare Suzuki-Trotter products with the KAK decomposition circuit.
+# We compute multiple time evolutions for different times and compare Suzuki—Trotter products with the KAK decomposition circuit.
 #
 
 ts = jnp.linspace(1., 5., 10)
@@ -446,7 +446,7 @@ plt.show()
 
 
 ##############################################################################
-# We see the expected behavior of Suzuki-Trotter product formulas getting worse with an increase in time
+# We see the expected behavior of Suzuki—Trotter product formulas getting worse with an increase in time
 # while the KAK error is constant zero.
 #
 # The KAK decomposition is particularly well-suited for smaller systems as the circuit depth is equal to the
@@ -467,7 +467,7 @@ plt.show()
 # This approach has the advantage that the resulting decomposition is itself already decomposed in terms of rotation gates in the original Lie algebra,
 # as opposed to other methods such as [#Chu]_ that find :math:`K` as a whole.
 # We provided a flexible pipeline that lets users find KAK decompositions in PennyLane for systems with small 
-# DLA and specifically decomposed the Heisenberg model Hamiltonian with :math:`n=4` qubits that has a DLA of dimension :math:`60` (:math:`\left(\mathfrak{s u}(2^{n-2})\right)^{\oplus 4}`).
+# DLA (:doc:`Dynamical Lie Algebras <tutorial_liealgebra>`) and specifically decomposed the Heisenberg model Hamiltonian with :math:`n=4` qubits that has a DLA of dimension :math:`60` (:math:`\left(\mathfrak{s u}(2^{n-2})\right)^{\oplus 4}`).
 #
 # As most DLAs scale exponentially in the number of qubits, KAK decompositions are limited to small system sizes 
 # or special cases of systems with small DLAs.
