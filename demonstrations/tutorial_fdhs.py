@@ -244,7 +244,7 @@ len(g), len(k), len(mtilde), len(h)
 # 
 # .. math:: f(\theta) = \langle K(\theta) v K(\theta)^\dagger, H\rangle
 # 
-# where :math:`\langle \cdot, \cdot \rangle` is some inner product (in our case the trace inner product :math:`\langle A, B \rangle = \text{tr}(A^\dagger B)`).
+# where :math:`\langle \cdot, \cdot \rangle` is some inner product (in our case, the trace inner product :math:`\langle A, B \rangle = \text{tr}(A^\dagger B)).`
 # This construction uses the operator :math:`v = \sum_j \pi^j h_j \in \mathfrak{h}`
 # that is such that :math:`e^{i t v}` is dense in :math:`e^{i \mathcal{h}}.`
 # The latter means that for any :math:`e^{i \mathcal{h}}` there is a :math:`t \in \mathbb{R}` such that :math:`e^{i t v}` approximates it.
