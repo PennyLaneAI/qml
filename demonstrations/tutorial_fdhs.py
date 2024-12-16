@@ -37,8 +37,8 @@ We can use this general result from Lie theory as a powerful circuit decompositi
     Otherwise this demo should be self-contained. For the mathematically inclined we further recommend our :doc:`demo on the KAK theorem </demos/tutorial_kak_theorem>`
     that dives into the mathematical depths of the theorem and provides more background info.
 
-Goal
-----
+Goal: Fast-forwarding time evolutions using the KAK decomposition
+-----------------------------------------------------------------
 
 Unitary gates in quantum computing are described by the special unitary Lie group :math:`SU(2^n),` so we can use the KAK
 theorem to decompose quantum gates into :math:`U = K_1 A K_2.` While the mathematical statement is rather straightforward,
