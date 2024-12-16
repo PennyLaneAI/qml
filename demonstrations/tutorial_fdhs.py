@@ -101,6 +101,7 @@ g = [op.pauli_rep for op in g]
 # 
 # .. admonition:: Notation
 #     :class: note
+#
 #     Note that :math:`\mathfrak{k}` is the small letter k in
 #     `Fraktur <https://en.wikipedia.org/wiki/Fraktur>`__ and a 
 #     common - not our - choice for the vertical subspace in a Cartan decomposition.
