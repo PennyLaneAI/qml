@@ -520,7 +520,190 @@ def shors_algorithm(N):
 #    :align: center
 #    :alt: Full implementation of QPE circuit.
 #
-# TODO: insert code here
+
+######################################################################
+# Catalyst implementation
+# -----------------------
+#
+# Now that we have all our circuits in hand, we can code up the full
+# implementation of Shor's algorithm. Below, we have the set of subroutines
+# defined in the previous section.
+#
+
+from jax import numpy as jnp
+
+import pennylane as qml
+import catalyst
+from catalyst import measure
+catalyst.autograph_strict_conversion = True
+
+from utils import modular_inverse
+
+
+def QFT(wires):
+    """The standard QFT, redefined because the PennyLane one uses terminal SWAPs."""
+    shifts = jnp.array([2 * jnp.pi * 2**-i for i in range(2, len(wires) + 1)])
+
+    for i in range(len(wires)):
+        qml.Hadamard(wires[i])
+
+        for j in range(len(shifts) - i):
+            qml.ControlledPhaseShift(shifts[j], wires=[wires[(i + 1) + j], wires[i]])
+
+
+def fourier_adder_phase_shift(a, wires):
+    """Sends QFT(|b>) -> QFT(|b + a>). Acts on n + 1 qubits, n = ceil(log2(b)) + 1."""
+    n = len(wires)
+    a_bits = jnp.unpackbits(jnp.array([a]).view("uint8"), bitorder="little")[:n][::-1]
+    powers_of_two = jnp.array([1 / (2**k) for k in range(1, n + 1)])
+    # Computing the phases requires a bit of index gymnastics
+    phases = jnp.array([jnp.dot(a_bits[k:], powers_of_two[: n - k]) for k in range(n)])
+
+    for i in range(len(wires)):
+        qml.PhaseShift(2 * jnp.pi * phases[i], wires=wires[i])
+
+
+def doubly_controlled_adder(N, a, control_wires, wires, aux_wire):
+    """Sends |c>|xk>QFT(|b>)|0> -> |c>|xk>QFT(|b + c xk a) mod N>)|0>."""
+
+    # Add a + b, then subtract N to account for potential overflow
+    qml.ctrl(fourier_adder_phase_shift, control=control_wires)(a, wires)
+    qml.adjoint(fourier_adder_phase_shift)(N, wires)
+
+    # Check overflow conditions using CNOT, then measurement. Re-add N if needed.
+    qml.adjoint(QFT)(wires)
+    qml.CNOT(wires=[wires[0], aux_wire])
+    QFT(wires)
+
+    was_greater_than_N = measure(aux_wire, reset=True)
+
+    if was_greater_than_N:
+        fourier_adder_phase_shift(N, wires)
+
+
+def doubly_controlled_subtraction(N, a, control_wires, wires, aux_wire):
+    """Sends |c>|xk>QFT(|b>)|0> -> |c>|xk>QFT(|b - c xk a) mod N>)|0>.
+    We need this as a dedicated routine because we cannot take the adjoint of
+    doubly_controlled_adder due to the mid-circuit measurement."""
+    
+    # Subtract a, check the overflow wire, and add N back if needed.
+    qml.ctrl(qml.adjoint(fourier_adder_phase_shift), control=control_wires)(a, wires)
+
+    qml.adjoint(QFT)(wires)
+    qml.CNOT(wires=[wires[0], aux_wire])
+    QFT(wires)
+
+    was_less_than_zero = measure(aux_wire, reset=True)
+
+    if was_less_than_zero:
+        fourier_adder_phase_shift(N, wires)
+
+
+def controlled_ua(N, a, control_wire, target_wires, aux_wires):
+    """Sends |c>|x>|0> to |c>|ax mod N>|0> if |c> = |1>."""
+    n = len(target_wires)
+
+    # Controlled multiplication by a mod N; |c>|x>|b>|0> to |c>|x>|(b + ax) mod N>|0>
+    QFT(wires=aux_wires[:-1])
+
+    for i in range(n):
+        power_of_a = (a * (2**i)) % N
+        doubly_controlled_adder(
+            N, power_of_a, [control_wire, target_wires[n - i - 1]], aux_wires[:-1], aux_wires[-1]
+        )
+
+    qml.adjoint(QFT)(wires=aux_wires[:-1])
+
+    # C-SWAP with two CNOTs and a Toffoli. Note that the target and aux
+    # registers have n and n + 1 qubits respectively.
+    for i in range(n):
+        qml.CNOT(wires=[aux_wires[i + 1], target_wires[i]])
+        qml.Toffoli(wires=[control_wire, target_wires[i], aux_wires[i + 1]])
+        qml.CNOT(wires=[aux_wires[i + 1], target_wires[i]])
+
+    # Adjoint of controlled multiplication with the modular inverse of a
+    a_mod_inv = modular_inverse(a, N)
+
+    QFT(wires=aux_wires[:-1])
+
+    for i in range(n):
+        power_of_a_inv = (a_mod_inv * (2 ** (n - i - 1))) % N
+        doubly_controlled_subtraction(
+            N, power_of_a_inv, [control_wire, target_wires[i]], aux_wires[:-1], aux_wires[-1]
+        )
+
+    qml.adjoint(QFT)(wires=aux_wires[:-1])
+
+    
+######################################################################
+# Next, let's put everything together into the order-finding routine
+# that is part of Shor's algorithm. We can implement the entire algorithm
+# within the ``@qml.qjit`` decorator.
+
+@qml.qjit(autograph=True, static_argnums=(2, 3))
+def shors_algorithm(N, a, n_bits, max_shots=100):
+    """Execute Shor's algorithm and return the factors of N, if found."""
+    estimation_wire = 0
+    target_wires = jnp.arange(n_bits) + 1
+    aux_wires = jnp.arange(n_bits + 2) + n_bits + 1
+
+    dev = qml.device("lightning.qubit", wires=2 * n_bits + 3, shots=1)
+
+    # Order-finding routine - the "quantum part"
+    @qml.qnode(dev)
+    def run_qpe(a):
+        meas_results = jnp.zeros((n_bits,), dtype=jnp.int32)
+        cumulative_phase = jnp.array(0.0)
+        phase_divisors = 2.0 ** jnp.arange(n_bits + 1, 1, -1)
+
+        qml.PauliX(wires=target_wires[-1])
+
+        for i in range(n_bits):
+            power_of_a = (a ** (2 ** (n_bits - 1 - i))) % N
+
+            qml.Hadamard(wires=estimation_wire)
+            controlled_ua(N, power_of_a, estimation_wire, target_wires, aux_wires)
+            qml.PhaseShift(cumulative_phase, wires=estimation_wire)
+            meas_results[i] = measure(estimation_wire, reset=True)
+            
+            cumulative_phase = -2 * jnp.pi * jnp.sum(meas_results / jnp.roll(phase_divisors, i + 1))
+
+        return meas_results
+
+    # The classical part
+    shot_idx = 0
+    p, q = jnp.array(0, dtype=jnp.int32), jnp.array(0, dtype=jnp.int32)
+
+    while p * q != N and shot_idx < max_shots:
+        sample = run_qpe(a)
+        phase = fractional_binary_to_float(sample)
+        guess_r = phase_to_order(phase, N)
+
+        # If the guess order is even, we may have a non-trivial square root.
+        # If so, try to compute p and q.
+        if guess_r % 2 == 0:
+            guess_square_root = (a ** (guess_r // 2)) % N
+
+            if guess_square_root != 1 and guess_square_root != N - 1:
+                p = jnp.gcd(guess_square_root - 1, N).astype(jnp.int32)
+
+                if p != 1:
+                    q = N // p
+                else:
+                    q = jnp.gcd(guess_square_root + 1, N).astype(jnp.int32)
+
+                    if q != 1:
+                        p = N // q
+        shot_idx += 1
+
+    return p, q, shot_idx
+
+
+######################################################################
+# To actually run this, we need to choose a value of ``a``. In principle, we
+# could incorporate random generation of ``a`` within the function
+# above. However, this cannot be qjitted. Note too that we passed in ``n_bits``
+# as a static argument.
 
 
 ######################################################################
