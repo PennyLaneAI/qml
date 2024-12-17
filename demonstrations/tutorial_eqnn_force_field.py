@@ -10,6 +10,7 @@ use geometric quantum machine learning to drive molecular dynamics as introduced
 will take as an example a triatomic molecule of :math:`H_2O.`
 
 
+
 Introduction
 -----------------------------------
 
