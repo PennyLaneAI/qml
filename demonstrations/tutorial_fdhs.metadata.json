@@ -22,7 +22,7 @@
             "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_fdhs.png"
         }
     ],
-    "seoDescription": "Using Cartan decomposition and the KAK theorem to decompose unitary gates following the approach in 'Fixed Depth Hamiltonian Simulation via Cartan Decomposition' (arXiv:2104.00728) with code implementations in PennyLane.",
+    "seoDescription": "Using Cartan decomposition and the KAK theorem to decompose unitary gates following the approach in the paper Fixed Depth Hamiltonian Simulation via Cartan Decomposition (arXiv:2104.00728) with a code implementation in PennyLane.",
     "doi": "",
     "references": [
         {
