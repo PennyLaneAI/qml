@@ -104,7 +104,7 @@ g = [op.pauli_rep for op in g]
 #
 #     Note that :math:`\mathfrak{k}` is the small letter k in
 #     `Fraktur <https://en.wikipedia.org/wiki/Fraktur>`__ and a 
-#     common - not our - choice for the vertical subspace in a Cartan decomposition.
+#     common — not our — choice for the vertical subspace in a Cartan decomposition.
 #
 # One common choice of involution is the so-called even-odd involution for Pauli words,
 # :math:`P = P_1 \otimes P_2 .. \otimes P_n,` where :math:`P_j \in \{I, X, Y, Z\}.`
