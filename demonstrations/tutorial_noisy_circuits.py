@@ -150,7 +150,7 @@ def bitflip_circuit(p):
 ps = [0.001, 0.01, 0.1, 0.2]
 for p in ps:
     result = bitflip_circuit(p)
-    print(f"QNode output for bit flip probability {result["expval"]} is v:.4f}")
+    print(f"QNode output for bit flip probability {p} is {result["expval"]:.4f}")
 
 
 ######################################################################
