@@ -1,4 +1,4 @@
-r"""Fixed Depth Hamiltonian Simulation via Cartan Decomposition
+r"""Fixed depth Hamiltonian simulation via Cartan decomposition
 ===============================================================
 
 We introduce the powerful Lie-theoretic decomposition technique for Hamiltonians, :math:`H = K h K^\dagger,`
