@@ -7,7 +7,7 @@ In particular, we follow the approach in [#Kökcü]_ that directly provides us w
 decomposition of the unitaries :math:`K` and :math:`e^{-i t h}.`
 
 Sounds too good to be true? There are of course caveats, mostly of practical nature.
-One is that the relevant Lie algebra becomes too large to handle. Yet, this is still an extremely
+One is that the relevant Lie algebra quickly becomes too large to handle. Yet, this is still an extremely
 powerful mathematical result integral for quantum compilation, circuit optimization, and Hamiltonian simulation.
 
 .. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_fdhs.png
