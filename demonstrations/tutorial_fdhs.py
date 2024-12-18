@@ -240,7 +240,7 @@ len(g), len(k), len(mtilde), len(h)
 # Variational KhK
 # ---------------
 #
-# Obtaining the actual decomposition is highly non-trivial and there is no canonical way to go about computing it in terms of linear algebra sub-routines.
+# Despite the process shown in the previous section, performing the actual KAK decomposition is usually highly non-trivial and there is no canonical way to go about computing it in terms of linear algebra sub-routines.
 # In [#Kökcü]_, the authors propose to find a local extremum of the cost function
 # 
 # .. math:: f(\theta) = \langle K(\theta) v K(\theta)^\dagger, H\rangle
