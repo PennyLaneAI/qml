@@ -1,4 +1,4 @@
-r"""Introducing (Dynamical) Lie Algebras for quantum practitioners
+r"""Introducing (dynamical) Lie algebras for quantum practitioners
 ==================================================================
 
 Are you a quantum practitioner that has so far successfully avoided learning about Lie groups and Lie algebras,
