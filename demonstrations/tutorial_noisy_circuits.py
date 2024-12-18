@@ -144,13 +144,13 @@ def bitflip_circuit(p):
     qml.CNOT(wires=[0, 1])
     qml.BitFlip(p, wires=0)
     qml.BitFlip(p, wires=1)
-    return {"expval": qml.expval(qml.PauliZ(0) @ qml.PauliZ(1)), "state": qml.state()}
+    return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1)), qml.state()
 
 
 ps = [0.001, 0.01, 0.1, 0.2]
 for p in ps:
     result = bitflip_circuit(p)
-    print(f"QNode output for bit flip probability {p} is {result["expval"]:.4f}")
+    print(f"QNode output for bit flip probability {p} is {result[0]:.4f}")
 
 
 ######################################################################
@@ -159,7 +159,7 @@ for p in ps:
 # mitigation and error correction are so important. We can use PennyLane to look under the hood and
 # see the output state of the circuit for the largest noise parameter
 
-print(f"Output state for bit flip probability {p} is \n{result["state"]}")
+print(f"Output state for bit flip probability {p} is \n{result[1]}")
 
 ######################################################################
 # Besides the bit flip channel, PennyLane supports several other noisy channels that are commonly
