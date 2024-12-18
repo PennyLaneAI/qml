@@ -237,11 +237,15 @@ len(g), len(k), len(mtilde), len(h)
 # We now have the Cartan decomposition :math:`\mathfrak{g} = \mathfrak{k} \oplus \tilde{\mathfrak{m}} \oplus \mathfrak{h}`
 # and with that all the necessary ingredients for the KAK decomposition.
 # 
-# Variational KhK
-# ---------------
+# Variational KhK decomposition
+# -----------------------------
 #
-# Obtaining the actual decomposition is highly non-trivial and there is no canonical way to go about computing it in terms of linear algebra sub-routines.
-# In [#Kökcü]_, the authors propose to find a local extremum of the cost function
+# The KAK theorem is not constructive in the sense that it proves that there exists such a decomposition, but there is no general way of obtaining
+# it. In particular, there are no linear algebra subroutines implemented in ``numpy`` or ``scipy`` that just compute it for us.
+# Here, we follow the construction of [#Kökcü]_ for the special case of :math:`H` being in the horizontal space and the decomposition 
+# simplifying to :math:`H = K^\dagger h K`.
+#
+# The authors propose to find a local extremum of the cost function
 # 
 # .. math:: f(\theta) = \langle K(\theta) v K(\theta)^\dagger, H\rangle
 # 
