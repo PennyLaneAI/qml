@@ -10,7 +10,7 @@ Sounds too good to be true? There are of course caveats, mostly of practical nat
 One is that the relevant Lie algebra becomes too large to handle. Yet, this is still an extremely
 powerful mathematical result integral for quantum compilation, circuit optimization, and Hamiltonian simulation.
 
-.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_fdhs.png
+.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_fixed_depth_hamiltonian_simulation_via_cartan_decomposition.png
     :align: center
     :width: 70%
     :target: javascript:void(0)
