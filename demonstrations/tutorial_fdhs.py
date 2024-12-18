@@ -57,7 +57,7 @@ This then induces the KAK decomposition on the group level as
 
 Let us walk through an explicit example, doing theory and code side-by-side.
 
-For that, we are going to use the generators of the Heisenberg model Hamiltonian for :math:`n=4` qubits on a one-dimensional chain,
+For that, we are going to use the generators of the `Heisenberg model <https://en.wikipedia.org/wiki/Quantum_Heisenberg_model>`__ Hamiltonian for :math:`n=4` qubits on a one-dimensional chain,
 
 .. math:: \{X_i X_{i+1}, Y_i Y_{i+1}, Z_i Z_{i+1}\}_{i=0}^{2}.
 
