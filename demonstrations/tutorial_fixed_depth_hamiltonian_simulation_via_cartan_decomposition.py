@@ -6,10 +6,9 @@ that lets you perform time-evolution by arbitrary times with fixed depth, :math:
 In particular, we follow the approach in [#Kökcü]_ that directly provides us with a (fixed-depth) circuit
 decomposition of the unitaries :math:`K` and :math:`e^{-i t h_0}.`
 
-Sounds too good to be true? There are of course caveats as this fast-forwards the Hamiltonian, which
-can become prohibitively expensive.
+Sounds too good to be true? There are of course caveats as this fast-forwards the Hamiltonian.
 In this algebraic setting, the crucial property is the size of the relevant :doc:`dynamical Lie algebra </demos/tutorial_liealgebra>` (DLA).
-Most systems yield an exponentially large DLA, making them hard to manage in practice (no fast-forwarding).
+Most systems yield an exponentially large DLA, making them hard to manage in practice (i.e., fast-forwarding is not possible).
 Yet, this is still an extremely powerful mathematical result integral for quantum compilation,
 circuit optimization, and Hamiltonian simulation.
 
@@ -417,15 +416,16 @@ trace_distance(U_exact_m, U_kak_m)
 # Note that this is valid for arbitrary :math:`t,` such that the Hamiltonian simulation operator has a fixed depth.
 #
 # .. admonition:: Choice of algebra representation
+#     :class: note
 #
 #     In the case of Pauli words, we could make use of the well-known commutation relations of Pauli operators and treat the whole calculation semi-analytically
 #     (as is done in [#Kökcü]_).
 #     Here, we have chosen the full :math:`2^n` Hilbert space representation of the involved operators as this is actually faster for the chosen size :math:`n=4`.
 #
-#     More generally, we can use the adjoint action theorem introdcued in our :doc:`g-sim demo </demos/tutorial_liesim` and perform all computations in the
+#     More generally, we can use the adjoint action theorem introdcued in our :doc:`g-sim demo </demos/tutorial_liesim>` and perform all computations in the
 #     adjoint representation of the algebra. In that case, the dimension of the algebra is the determining factor. This is useful when a low-dimensional Lie algebra
 #     is embedded in a high dimensional Hilbert space. For example, the operators :math:`S^x_\text{total} = \sum_{j=1}^n X_j,`
-#     :math:`S^y_\text{total} = \sum_{j=1}^n Y_j` and :math:`S^z_\text{total} = \sum_{j=1}^n Z_j` make up :math:`\mathfrak{su}(2)` of dimension :math:`3` is embedded
+#     :math:`S^y_\text{total} = \sum_{j=1}^n Y_j` and :math:`S^z_\text{total} = \sum_{j=1}^n Z_j` make up :math:`\mathfrak{su}(2)` of dimension :math:`3`, but are embedded
 #     in a :math:`2^n`-dimensional Hilbert space.
 #
 
