@@ -51,11 +51,11 @@ which tackles this decomposition on the level of the associated Lie algebra via 
 In particular, we are going to consider the problem of time-evolving a Hermitian operator :math:`H` that generates the time-evolution unitary :math:`U = e^{-i t H}.`
 We are going to perform a special case of KAK decomposition, a "KhK decomposition" if you will, on the algebraic level in terms of
 
-.. math:: H = K^\dagger h_0 K.
+.. math:: H = K h_0 K^\dagger.
 
 This then induces the KAK decomposition on the group level as
 
-.. math:: e^{-i t H} = K^\dagger e^{-i t h_0} K.
+.. math:: e^{-i t H} = K e^{-i t h_0} K^\dagger.
 
 Let us walk through an explicit example, doing theory and code side-by-side.
 
@@ -357,7 +357,7 @@ Kc_m = qml.matrix(K, wire_order=range(n_wires))(theta_opt, k)
 # The special element :math:`h_0` from the Cartan subalgebra :math:`\mathfrak{h}` is given by
 # rotating the Hamiltonian by the critical :math:`K_c,`
 # 
-# .. math:: h_0 = K_c H K_c^\dagger.
+# .. math:: h_0 = K_c^\dagger H K_c.
 
 h_0_m = Kc_m.conj().T @ H_m @ Kc_m
 h_0 = qml.pauli_decompose(h_0_m)
@@ -370,14 +370,16 @@ not h_vspace.is_independent(h_0.pauli_rep)
 
 ##############################################################################
 # 
-# The fact that :math:`K_c H K_c^\dagger \in \mathfrak{h}` is crucial for this decomposition to be valid and meaningful.
+# The fact that :math:`K_c^\dagger H K_c \in \mathfrak{h}` is crucial for this decomposition to be valid and meaningful.
 # Otherwise, :math:`h_0` could be anything and we arrive back at the original problem of decomposing :math:`e^{-i t h_0}`.
 # Here we know that :math:`h_0` is composed of elements of an Abelian Lie algebra :math:`\mathfrak{h}`, such that we can
-# trivially decompose its unitary as :math:`e^{-i t h_0} = e^{-i t \sum_{j=1}^{|\mathfrak{h}|} c_j h_j}` as :math:`\prod_{j=1}^{|\mathfrak{h}|} e^{-i t c_j h_j}.`
+# trivially decompose its unitary as 
+# 
+# .. math:: e^{-i t h_0} = e^{-i t \sum_{j=1}^{|\mathfrak{h}|} c_j h_j} = \prod_{j=1}^{|\mathfrak{h}|} e^{-i t c_j h_j}.
 #
 # Overall, this gives us the KhK decomposition of :math:`H,`
 # 
-# .. math:: H = K_c^\dagger h_0 K_c.
+# .. math:: H = K_c h_0 K_c^\dagger.
 # 
 # This trivially reproduces the original Hamiltonian.
 #
