@@ -97,7 +97,7 @@ g = [op.pauli_rep for op in g]
 # :math:`\mathfrak{k}` and an orthogonal horizontal subspace :math:`\mathfrak{m}.` In practice, it can be induced by an
 # involution function :math:`\Theta` that fulfills :math:`\Theta(\Theta(g)) = g \ \forall g \in \mathfrak{g}.` Different 
 # involutions lead to different types of Cartan decompositions, which have been fully classified by Cartan 
-# (see `the results of the classification of Riemannian symmetric spaces <https://en.wikipedia.org/wiki/Symmetric_space#Classification_result>`__).
+# (see `the classification of symmetric spaces by Cartan <https://en.wikipedia.org/wiki/Symmetric_space#Classification_result>`__).
 # 
 # .. admonition:: Notation
 #     :class: note
