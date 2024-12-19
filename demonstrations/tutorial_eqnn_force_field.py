@@ -485,11 +485,12 @@ running_loss = []
 # We train our VQLM using stochastic gradient descent.
 
 
-num_batches = 5000  # number of optimization steps
-batch_size = 256  # number of training data per batch
+num_batches = 200 # 5000  # number of optimization steps
+batch_size = 5 # 256  # number of training data per batch
 
 
 for ibatch in range(num_batches):
+    #print(ibatch)
     # select a batch of training points
     batch = np.random.choice(np.arange(np.shape(data_train)[0]), batch_size, replace=False)
 
