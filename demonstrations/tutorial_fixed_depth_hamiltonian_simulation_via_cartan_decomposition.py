@@ -6,9 +6,10 @@ that lets you perform time-evolution by arbitrary times with fixed depth, :math:
 In particular, we follow the approach in [#Kökcü]_ that directly provides us with a (fixed-depth) circuit
 decomposition of the unitaries :math:`K` and :math:`e^{-i t h_0}.`
 
-Sounds too good to be true? There are of course caveats as this constitutes a fast-forwarding.
-In this algebraic setting, fast-forwarding is prohibited whenever the relevant :doc:`dynamical Lie algebra </demos/tutorial_liealgebra>` (DLA)
-becomes too large to handle, which is often the case as most systems yield an exponentially large DLA.
+Sounds too good to be true? There are of course caveats as this fast-forwards the Hamiltonian, which
+can become prohibitively expensive.
+In this algebraic setting, the crucial property is the size of the relevant :doc:`dynamical Lie algebra </demos/tutorial_liealgebra>` (DLA).
+Most systems yield an exponentially large DLA, making them hard to manage in practice (no fast-forwarding).
 Yet, this is still an extremely powerful mathematical result integral for quantum compilation,
 circuit optimization, and Hamiltonian simulation.
 
