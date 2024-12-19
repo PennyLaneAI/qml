@@ -1,5 +1,5 @@
 {
-    "title": "Fixed Depth Hamiltonian Simulation via Cartan Decomposition",
+    "title": "Fixed depth Hamiltonian simulation via Cartan decomposition",
     "authors": [
         {
             "username": "Qottmann"
@@ -15,11 +15,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_fdhs.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_fixed_depth_hamiltonian_simulation_via_cartan_decomposition.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_fdhs.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_fixed_depth_hamiltonian_simulation_via_cartan_decomposition.png"
         }
     ],
     "seoDescription": "Using Cartan decomposition and the KAK theorem to decompose unitary gates following the approach in the paper Fixed Depth Hamiltonian Simulation via Cartan Decomposition (arXiv:2104.00728) with a code implementation in PennyLane.",

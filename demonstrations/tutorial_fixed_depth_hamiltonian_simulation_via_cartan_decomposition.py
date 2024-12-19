@@ -1,4 +1,4 @@
-r"""Fixed Depth Hamiltonian Simulation via Cartan Decomposition
+r"""Fixed depth Hamiltonian simulation via Cartan decomposition
 ===============================================================
 
 We introduce the powerful Lie-theoretic decomposition technique for Hamiltonians, :math:`H = K h K^\dagger,`
@@ -10,7 +10,7 @@ Sounds too good to be true? There are of course caveats, mostly of practical nat
 One is that the relevant Lie algebra quickly becomes too large to handle. Yet, this is still an extremely
 powerful mathematical result integral for quantum compilation, circuit optimization, and Hamiltonian simulation.
 
-.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_fdhs.png
+.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_fixed_depth_hamiltonian_simulation_via_cartan_decomposition.png
     :align: center
     :width: 70%
     :target: javascript:void(0)
@@ -33,7 +33,7 @@ just as is the case for diagonal matrices.
 
 We can use this general result from Lie theory as a powerful circuit decomposition technique.
 
-.. note:: We recommend a basic understanding of Lie algebras, see e.g. our :doc:`intro for quantum practitioners </demos/tutorial_liealgebra>`.
+.. note:: We recommend a basic understanding of Lie algebras, see e.g. our :doc:`introduction to (dynamical) Lie algebras for quantum practitioners </demos/tutorial_liealgebra>`.
     Otherwise, this demo should be self-contained, though for the mathematically inclined, we further recommend our :doc:`demo on the KAK theorem </demos/tutorial_kak_theorem>`
     that dives into the mathematical depths of the theorem and provides more background info.
 
@@ -57,7 +57,7 @@ This then induces the KAK decomposition on the group level as
 
 Let us walk through an explicit example, doing theory and code side-by-side.
 
-For that, we are going to use the generators of the Heisenberg model Hamiltonian for :math:`n=4` qubits on a one-dimensional chain,
+For that, we are going to use the generators of the `Heisenberg model <https://en.wikipedia.org/wiki/Quantum_Heisenberg_model>`__ Hamiltonian for :math:`n=4` qubits on a one-dimensional chain,
 
 .. math:: \{X_i X_{i+1}, Y_i Y_{i+1}, Z_i Z_{i+1}\}_{i=0}^{2}.
 
@@ -104,7 +104,7 @@ g = [op.pauli_rep for op in g]
 #
 #     Note that :math:`\mathfrak{k}` is the small letter k in
 #     `Fraktur <https://en.wikipedia.org/wiki/Fraktur>`__ and a 
-#     common - not our - choice for the vertical subspace in a Cartan decomposition.
+#     common — not our — choice for the vertical subspace in a Cartan decomposition.
 #
 # One common choice of involution is the so-called even-odd involution for Pauli words,
 # :math:`P = P_1 \otimes P_2 .. \otimes P_n,` where :math:`P_j \in \{I, X, Y, Z\}.`
