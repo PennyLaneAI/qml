@@ -1,10 +1,10 @@
 r"""Fixed depth Hamiltonian simulation via Cartan decomposition
 ===============================================================
 
-We introduce the powerful Lie-theoretic decomposition technique for Hamiltonians, :math:`H = K h K^\dagger,`
-that lets you perform time-evolution by arbitrary times with fixed depth, :math:`e^{-i t H} = K e^{-i t h} K^\dagger.`
+We introduce the powerful Lie-theoretic decomposition technique for Hamiltonians, :math:`H = K h_0 K^\dagger,`
+that lets you perform time-evolution by arbitrary times with fixed depth, :math:`e^{-i t H} = K e^{-i t h_0} K^\dagger.`
 In particular, we follow the approach in [#Kökcü]_ that directly provides us with a (fixed-depth) circuit
-decomposition of the unitaries :math:`K` and :math:`e^{-i t h}.`
+decomposition of the unitaries :math:`K` and :math:`e^{-i t h_0}.`
 
 Sounds too good to be true? There are of course caveats as this constitutes a fast-forwarding.
 In this algebraic setting, fast-forwarding is prohibited whenever the relevant :doc:`dynamical Lie algebra </demos/tutorial_liealgebra>` (DLA)
