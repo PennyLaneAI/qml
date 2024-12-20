@@ -8,7 +8,9 @@ readme = "README.md"
 homepage = "https://pennylane.ai/qml/"
 repository = "https://github.com/PennyLaneAI/qml"
 keywords = ["demo", "qml", "tensorflow", "automatic-differentiation", "tutorials", "pytorch", "autograd", "quantum-computing", "neural-networks", "quantum-chemistry", "key-concepts", "quantum-machine-learning"]
-
+packages = [
+    {include = "qml", from = "lib"}
+]
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
@@ -18,8 +20,14 @@ name = "pytorch-cpu"
 url = "https://download.pytorch.org/whl/cpu"
 priority = "explicit"
 
+[tool.poetry.scripts]
+my_package_cli = 'qml.app:app'
+
 [tool.poetry.dependencies]
 python = "~3.10.0"
+typer = "^0.15.1"
+poetry = ">1.7"
+poetry-plugin-export = "^1.8.0"
 
 # Base dependencies needed to build the website without any code execution (*-norun)
 [tool.poetry.group.base.dependencies]
@@ -31,6 +39,7 @@ numpy = "~1.24"
 pyyaml = "^6.0.1"
 pennylane-sphinx-theme = { git = "https://github.com/PennyLaneAI/pennylane-sphinx-theme.git", branch = "sphinx-update" }
 pypandoc = "1.5"
+pennylane = "0.39.0"
 
 [tool.poetry.group.executable-dependencies.dependencies]
 ###########################################################
@@ -38,7 +47,6 @@ pypandoc = "1.5"
 # These pinned versions of PL are NOT used for Dev builds #
 #      The latest commit from GitHub is used instead      #
 ###########################################################
-pennylane = "0.39.0"
 pennylane-cirq = "0.39.0"
 pennylane-qiskit = "0.39.0"
 pennylane-qulacs = "0.39.0"
@@ -106,4 +114,7 @@ optional = true
 [tool.poetry.group.metadata-validation.dependencies]
 jsonschema = { extras = ["format"], version = "~4.17.3" }
 check-jsonschema = "^0.23.3"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.8.4"
 

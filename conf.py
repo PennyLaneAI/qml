@@ -19,6 +19,7 @@ import numpy as np
 from jinja2 import FileSystemLoader, Environment
 import yaml
 from pennylane import PennyLaneDeprecationWarning
+from pathlib import Path
 
 sys.path.insert(0, os.path.abspath("."))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
@@ -56,12 +57,12 @@ extensions = [
     "extension",
 ]
 
-
 html_baseurl = "https://pennylane.ai/qml/"
+demo_staging_dir = os.getenv("DEMO_STAGING_DIR", "demonstrations")
 
 sphinx_gallery_conf = {
     # path to your example scripts
-    "examples_dirs": ["demonstrations"],
+    "examples_dirs": [demo_staging_dir],
     # path where to save gallery generated examples
     "gallery_dirs": ["demos"],
     # execute files that match the following filename pattern,
@@ -85,6 +86,8 @@ sphinx_gallery_conf = {
     "doc_module"          : ("pennylane"),
     "junit": "../test-results/sphinx-gallery/junit.xml",
     "reset_modules": ("module_resets.reset_jax", "matplotlib", "seaborn"),
+    "show_signature": False,
+    'download_all_examples': False,
 }
 
 
@@ -136,7 +139,7 @@ language = None
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "*venv", "sphinxext"]
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "*venv", "*venv-build", "sphinxext"]
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = "sphinx"
