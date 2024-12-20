@@ -433,7 +433,7 @@ trace_distance(U_exact_m, U_kak_m)
 # Time evolutions
 # ---------------
 # 
-# We compute multiple time evolutions for different times and compare Suzuki—Trotter products with the KAK decomposition circuit.
+# We compute multiple time evolutions for different times and compare Suzuki–Trotter products with the KAK decomposition circuit.
 #
 
 ts = jnp.linspace(1., 5., 10)
@@ -468,7 +468,7 @@ plt.show()
 
 
 ##############################################################################
-# We see the expected behavior of Suzuki—Trotter product formulas getting worse with an increase in time
+# We see the expected behavior of Suzuki–Trotter product formulas getting worse with an increase in time
 # while the KAK error is constant zero.
 #
 # The KAK decomposition is particularly well-suited for smaller systems as the circuit depth is equal to the
