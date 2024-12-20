@@ -113,7 +113,6 @@ g = [op.pauli_rep for op in g]
 # It essentially counts whether the number of non-identity Pauli operators in the Pauli word is even or odd.
 
 def even_odd_involution(op):
-    """Generalization of EvenOdd to sums of Paulis"""
     [pw] = op.pauli_rep
     return len(pw) % 2
 
