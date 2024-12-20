@@ -1,0 +1,5 @@
+covalent==0.227.0rc0
+covalent_cloud
+matplotlib
+pennylane
+scikit-learn

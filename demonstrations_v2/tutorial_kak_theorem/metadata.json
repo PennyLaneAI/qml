@@ -1,0 +1,174 @@
+{
+  "title": "The KAK theorem",
+  "authors": [
+    {
+      "username": "dwierichs"
+    }
+  ],
+  "dateOfPublication": "2024-11-25T00:00:00+00:00",
+  "dateOfLastModification": "2024-11-25T00:00:00+00:00",
+  "categories": [
+    "Quantum Computing",
+    "Algorithms"
+  ],
+  "tags": [],
+  "previewImages": [
+    {
+      "type": "thumbnail",
+      "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_kak_theorem.png"
+    },
+    {
+      "type": "large_thumbnail",
+      "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_kak_theorem.png"
+    }
+  ],
+  "seoDescription": "Learn about the KAK theorem and how it powers circuit decompositions.",
+  "doi": "",
+  "references": [
+    {
+      "id": "hall",
+      "type": "book",
+      "title": "Lie Groups, Lie Algebras, and Representations. An Elementary Introduction",
+      "authors": "Brian C. Hall",
+      "year": "2015",
+      "publisher": "Springer",
+      "journal": "Graduate Texts in Mathematics",
+      "doi": "10.1007/978-3-319-13467-3",
+      "url": "https://link.springer.com/book/10.1007/978-3-319-13467-3"
+    },
+    {
+      "id": "tu",
+      "type": "book",
+      "title": "An Introduction to Manifolds",
+      "authors": "Loring W. Tu",
+      "year": "2011",
+      "publisher": "Springer",
+      "journal": "Universitext",
+      "doi": "10.1007/978-1-4419-7400-6",
+      "url": "https://link.springer.com/book/10.1007/978-1-4419-7400-6"
+    },
+    {
+      "id": "arvanitogeorgos",
+      "type": "book",
+      "title": "An Introduction to Lie Groups and the Geometry of Homogeneous Spaces",
+      "authors": "Andreas Arvanitogeorgos",
+      "year": "2003",
+      "publisher": "American Mathematical Society",
+      "journal": "Student Mathematical Library",
+      "url": "https://bookstore.ams.org/stml-22"
+    },
+    {
+      "id": "helgason",
+      "type": "book",
+      "title": "Differential geometry, Lie groups, and symmetric spaces",
+      "authors": "Sigurdur Helgason",
+      "year": "2001",
+      "publisher": "American Mathematical Society",
+      "journal": "Graduate Studies in Mathematics",
+      "doi": "10.1090/gsm/034",
+      "url": "https://bookstore.ams.org/gsm-34"
+    },
+    {
+      "id": "goh",
+      "type": "preprint",
+      "title": "lie-algebraic classical simulations for variational quantum computing",
+      "authors": "matthew l. goh, martin larocca, lukasz cincio, m. cerezo, fr\u00e9d\u00e9ric sauvage",
+      "year": "2023",
+      "publisher": "",
+      "journal": "",
+      "doi": "10.48550/arxiv.2308.01432",
+      "url": "https://arxiv.org/abs/2308.01432"
+    },
+    {
+      "id": "somma",
+      "type": "preprint",
+      "title": "quantum computation, complexity, and many-body physics",
+      "authors": "rolando d. somma",
+      "year": "2005",
+      "publisher": "",
+      "journal": "",
+      "doi": "10.48550/arxiv.quant-ph/0512209",
+      "url": "https://arxiv.org/abs/quant-ph/0512209"
+    },
+    {
+      "id": "kokcu_fdhs",
+      "type": "article",
+      "title": "Fixed Depth Hamiltonian Simulation via Cartan Decomposition",
+      "authors": "Efekan K\u00f6kc\u00fc, Thomas Steckmann, Yan Wang, J.\u2009K. Freericks, Eugene F. Dumitrescu, Alexander F. Kemper",
+      "year": "2022",
+      "publisher": "American Physical Society",
+      "journal": "",
+      "doi": "10.1103/PhysRevLett.129.070501",
+      "url": "https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.129.070501"
+    },
+    {
+      "id": "kokcu_comp",
+      "type": "article",
+      "title": "Algebraic Compression of Quantum Circuits for Hamiltonian Evolution",
+      "authors": "Efekan K\u00f6kc\u00fc, Daan Camps, Lindsay Bassman, James K. Freericks, Wibe A. de Jong, Roel Van Beeumen, Alexander F. Kemper",
+      "year": "2022",
+      "publisher": "American Physical Society",
+      "journal": "",
+      "doi": "10.1103/PhysRevA.105.032420",
+      "url": "https://journals.aps.org/pra/abstract/10.1103/PhysRevA.105.032420"
+    },
+    {
+      "id": "gu",
+      "type": "article",
+      "title": "Fast-forwarding quantum evolution",
+      "authors": "Shouzhen Gu, Rolando D. Somma, Burak \u015eahino\u011flu",
+      "year": "2021",
+      "publisher": "",
+      "journal": "Quantum",
+      "doi": "10.22331/q-2021-11-15-577",
+      "url": "https://quantum-journal.org/papers/q-2021-11-15-577/#"
+    },
+    {
+      "id": "dirr",
+      "type": "article",
+      "title": "Lie Theory for Quantum Control",
+      "authors": "G. Dirr, U. Helmke",
+      "year": "2008",
+      "publisher": "Gesellschaft f\u00fcr Angewandte Mathematik und Mechanik",
+      "journal": "Surveys for Applied Mathematics and Mechanics",
+      "doi": "10.1002/gamm.200890003",
+      "url": "https://onlinelibrary.wiley.com/doi/abs/10.1002/gamm.200890003"
+    },
+    {
+      "id": "fontana",
+      "type": "article",
+      "title": "the adjoint is all you need: characterizing barren plateaus in quantum ans\u00e4tze",
+      "authors": "enrico fontana, dylan herman, shouvanik chakrabarti, niraj kumar, romina yalovetzky, jamie heredge, shree hari sureshbabu, marco pistoia",
+      "year": "2023",
+      "publisher": "",
+      "journal": "",
+      "doi": "10.48550/arxiv.2309.07902",
+      "url": "https://arxiv.org/abs/2309.07902"
+    },
+    {
+      "id": "ragone",
+      "type": "preprint",
+      "title": "a unified theory of barren plateaus for deep parametrized quantum circuits",
+      "authors": "michael ragone, bojko n. bakalov, fr\u00e9d\u00e9ric sauvage, alexander f. kemper, carlos ortiz marrero, martin larocca, m. cerezo",
+      "year": "2023",
+      "publisher": "",
+      "journal": "",
+      "doi": "10.48550/arxiv.2309.09342",
+      "url": "https://arxiv.org/abs/2309.09342"
+    }
+  ],
+  "basedOnPapers": [],
+  "referencedByPapers": [],
+  "relatedContent": [
+    {
+      "type": "demonstration",
+      "id": "tutorial_liealgebra",
+      "weight": 1.0
+    },
+    {
+      "type": "demonstration",
+      "id": "tutorial_liesim",
+      "weight": 1.0
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+covalent==0.227.0rc0
+matplotlib
+pennylane
+torch

@@ -1,0 +1,8 @@
+dimod
+docplex
+dwave-ocean-sdk==7.0.0
+matplotlib
+numpy
+openqaoa-core
+pandas
+pennylane
