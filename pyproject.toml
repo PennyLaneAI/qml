@@ -86,17 +86,16 @@ h5py = "3.11.0"
 qiskit = ">=1.0.0"
 qiskit-aer = ">=0.14.0"
 sphinxcontrib-applehelp = "1.0.8"
-sphinx-gallery = "0.17.1"
 
 
 # Install a difference version of torch from PyPI as the one from PyTorch repo is not compatible with MacOS
 torch = [
-    { version = "2.1.2", source = "PyPI", markers = "sys_platform == 'darwin' and platform_machine == 'arm64'" },
-    { version = "2.1.2+cpu", source = "pytorch-cpu", markers = "platform_machine == 'x86_64'" }
+    { version = "2.1.2", source = "PyPI", markers = "sys_platform == 'darwin'" },
+    { version = "2.1.2+cpu", source = "pytorch-cpu", markers = "sys_platform != 'darwin'" }
 ]
 torchvision = [
-    { version = "0.16.2", source = "PyPI", markers = "sys_platform == 'darwin' and platform_machine == 'arm64'" },
-    { version = "0.16.2+cpu", source = "pytorch-cpu", markers = "platform_machine == 'x86_64'" }
+    { version = "0.16.2", source = "PyPI", markers = "sys_platform == 'darwin'" },
+    { version = "0.16.2+cpu", source = "pytorch-cpu", markers = "sys_platform != 'darwin'"}
 ]
 
 # The following packages are platform locked to not install on MacOS as the installation breaks

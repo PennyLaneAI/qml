@@ -1,7 +1,6 @@
 from dulwich.repo import Repo
 from pathlib import Path
 import functools
-from qml.lib.virtual_env import Virtualenv
 
 
 class Context:
@@ -25,11 +24,6 @@ class Context:
     @property
     def build_venv_path(self) -> Path:
         return self.repo_root / ".venv-build"
-
-    def build_venv(self) -> "Virtualenv":
-        venv = Virtualenv(self.build_venv_path)
-
-        return venv
 
     @functools.cached_property
     def cwd(self) -> Path:
