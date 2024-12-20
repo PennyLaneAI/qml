@@ -11,6 +11,7 @@ keywords = ["demo", "qml", "tensorflow", "automatic-differentiation", "tutorials
 packages = [
     {include = "qml", from = "lib"}
 ]
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
@@ -21,16 +22,17 @@ url = "https://download.pytorch.org/whl/cpu"
 priority = "explicit"
 
 [tool.poetry.scripts]
-my_package_cli = 'qml.app:app'
+qml = 'qml.app:app'
 
 [tool.poetry.dependencies]
 python = "~3.10.0"
 typer = "^0.15.1"
 poetry = ">1.7"
 poetry-plugin-export = "^1.8.0"
+dulwich = "<0.22"
 
-# Base dependencies needed to build the website without any code execution (*-norun)
 [tool.poetry.group.base.dependencies]
+# Base dependencies needed to build the website without any code execution (*-norun)
 sphinx = ">=5.0.2"
 sphinx_gallery = "0.17.1"
 Jinja2 = "3.0.3"
@@ -47,6 +49,7 @@ pennylane = "0.39.0"
 # These pinned versions of PL are NOT used for Dev builds #
 #      The latest commit from GitHub is used instead      #
 ###########################################################
+pennylane = "0.39.0"
 pennylane-cirq = "0.39.0"
 pennylane-qiskit = "0.39.0"
 pennylane-qulacs = "0.39.0"
