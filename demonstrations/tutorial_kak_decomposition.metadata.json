@@ -1,5 +1,5 @@
 {
-    "title": "The KAK theorem",
+    "title": "The KAK decomposition",
     "authors": [
         {
             "username": "dwierichs"
@@ -15,14 +15,14 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_kak_theorem.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_kak_decomposition.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_kak_theorem.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_kak_decomposition.png"
         }
     ],
-    "seoDescription": "Learn about the KAK theorem and how it powers circuit decompositions.",
+    "seoDescription": "Learn about the KAK decomposition and how it powers circuit decompositions.",
     "doi": "",
     "references": [
         {
