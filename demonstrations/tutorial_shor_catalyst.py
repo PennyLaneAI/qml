@@ -23,7 +23,7 @@ JIT compilation of Shor's algorithm with PennyLane and Catalyst
 # co-processors is necessary for every quantum algorithm, even ones considered
 # quintessentially quantum. 
 #
-# Shor's famous factoring algorith [CITE] is one such example. Have a look at the
+# Shor's famous factoring algorithm [#Shor1997]_ is one such example. Have a look at the
 # example code below:
 
 import jax.numpy as jnp
@@ -43,7 +43,6 @@ def shors_algorithm(N):
         if guess_r % 2 == 0:
             guess_square_root = (a ** (guess_r // 2)) % N
 
-            # Ensure the guessed solution is non-trivial
             if guess_square_root not in [1, N - 1]:
                 p = jnp.gcd(N, guess_square_root - 1)
                 q = jnp.gcd(N, guess_square_root + 1)
@@ -51,8 +50,9 @@ def shors_algorithm(N):
     return p, q
 
 ######################################################################
-# If you saw this code out-of-context, would you even realize this is a quantum
-# algorithm? There are no quantum circuits in sight!
+# If you saw this code out-of-context, would it even occur to you that it was a
+# quantum algorithm? There are no quantum circuits in sight, and the only "q" is
+# a variable name!
 #
 # As quantum hardware continues to scale up, the way we think about quantum
 # programming is evolving in tandem. Writing circuits gate-by-gate for
@@ -173,7 +173,7 @@ def shors_algorithm(N):
 # :math:`n + 2` are auxiliary.
 #
 # Order finding is an application of *quantum phase estimation*. We wish to 
-# estimate the phase, :math:`theta`, of the operator :math:`U_a`,
+# estimate the phase, :math:`\theta`, of the operator :math:`U_a`,
 #
 # .. math::
 #
@@ -287,13 +287,15 @@ def shors_algorithm(N):
 # adder*, :math:`\Phi`, below.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder.svg
-#    :width: 500 
+#    :width: 800 
 #    :align: center
 #    :alt: Addition in the Fourier basis.
 #
-# The :math:`\mathbf{R}_k` are phase shifts, to be described below. To see how
-# this works, let's first take a closer look at the QFT. The qubit ordering in
-# the circuit is such that for an :math:`n`-bit integer :math:`b`, :math:`\vert
+# In the third circuit, we've absorbed the Fourier transforms into the basis
+# states, and denoted this using a calligraphic letter.  The
+# :math:`\mathbf{R}_k` are phase shifts, to be described below. To see how this
+# works, let's first take a closer look at the QFT. The qubit ordering in the
+# circuit is such that for an :math:`n`-bit integer :math:`b`, :math:`\vert
 # b\rangle = \vert b_{n-1} \cdots b_0\rangle` and :math:`b = \sum_{k=0}^{n-1}
 # 2^k b_k`.
 #
@@ -318,7 +320,7 @@ def shors_algorithm(N):
 #    :align: center
 #    :alt: Adding one integer to another with the Quantum Fourier Transform.
 #
-# We observe each qubit in :math:`\vert b \rangle` icks up a phase that depends
+# We observe each qubit in :math:`\vert b \rangle` picks up a phase that depends
 # on the bits in :math:`a`. In particular, bit :math:`b_k` accumulates
 # information about all the bits in :math:`a` with an equal or lower index,
 # :math:`a_0, \ldots, a_{k}`. The effect is that of adding :math:`a_k` to
@@ -336,11 +338,10 @@ def shors_algorithm(N):
 # :math:`\vert b\rangle` register (initialized to :math:`\vert 0 \rangle`). This
 # is the source of one of the auxiliary qubits mentioned earlier.
 #
-# Now, note that we don't actually need a second register of qubits in our
-# case. Since we know :math:`a` in advance, we can precompute the amount of
-# phase to apply: on qubit :math:`\vert b_k \rangle`, we must rotate by
-# :math:`\sum_{\ell=0}^{k} \frac{a_\ell}{2^{\ell+1}}`. We'll express this as a
-# new gate,
+# In our case, we don't actually need a second register of qubits. Since we know :math:`a`
+# in advance, we can precompute the amount of phase to apply: on qubit
+# :math:`\vert b_k \rangle`, we must rotate by :math:`\sum_{\ell=0}^{k}
+# \frac{a_\ell}{2^{\ell+1}}`. We'll express this as a new gate,
 #
 # .. math::
 #
@@ -357,7 +358,7 @@ def shors_algorithm(N):
 # also consider the possibility of underflow.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_adjoint.svg 
-#    :width: 350 
+#    :width: 500 
 #    :align: center
 #    :alt: Subtraction in the Fourier basis.
 #
@@ -365,8 +366,7 @@ def shors_algorithm(N):
 # :math:`\Phi`, but it (a) uses an auxiliary qubit, and (b) works modulo
 # :math:`N`. :math:`\Phi_+` still uses Fourier basis addition and subtraction,
 # but also applies corrections if overflow is detected. Let's consider a single
-# instance of a controlled :math:`\Phi_+(a)`, sandwiched between a QFT and
-# inverse QFT.  
+# instance of a controlled :math:`\Phi_+(a)`,
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_modulo_n.svg
 #    :width: 800 
@@ -728,20 +728,26 @@ def shors_algorithm(N, a, n_bits, max_shots=100):
 # References
 # ----------
 #
+# .. [#Shor1997]
+#
+#     Peter W. Shor (1997) *Polynomial-Time Algorithms for Prime Factorization
+#     and Discrete Logarithms on a Quantum Computer*. SIAM Journal on Computing,
+#     Vol. 26, Iss. 5.
+#
 # .. [#PurpleDragonBook]
 #
-#     Alfred V Aho, Monica S Lam, Ravi Sethi, Jeffrey D Ullman. (2007)
+#     Alfred V Aho, Monica S Lam, Ravi Sethi, Jeffrey D Ullman (2007)
 #     *Compilers Principles, Techniques, And Tools*. Pearson Education, Inc.
 #
 # .. [#Beauregard2003]
 #
-#     Stephane Beauregard. (2003) *Circuit for Shor's algorithm using 2n+3 qubits.*
+#     Stephane Beauregard (2003) *Circuit for Shor's algorithm using 2n+3 qubits.*
 #     Quantum Information and Computation, Vol. 3, No. 2 (2003) pp. 175-185.
 #
 # .. [#Draper2000]
 #
-#     Thomas G. Draper (2000) *Addition on a Quantum Computer.*
-#     arXiv preprint, arXiv:quant-ph/0008033.
+#     Thomas G. Draper (2000) *Addition on a Quantum Computer.* arXiv preprint,
+#     arXiv:quant-ph/0008033.
 #
 # About the author
 # ----------------
