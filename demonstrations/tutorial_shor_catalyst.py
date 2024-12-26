@@ -520,14 +520,19 @@ def shors_algorithm(N):
 #    :align: center
 #    :alt: Full implementation of QPE circuit.
 #
+# From this, we see some additional optimizations are possible. In particular,
+# the QFT and inverse QFT are being applied before and after each :math:`M_a`
+# block, so we can remove the ones that occur between the different
+# controlled-:math:`U_a` such that the only ones remaining are the very first
+# and last, and those before and after the controlled SWAPs.
 
 ######################################################################
 # Catalyst implementation
 # -----------------------
 #
-# Now that we have all our circuits in hand, we can code up the full
-# implementation of Shor's algorithm. Below, we have the set of subroutines
-# defined in the previous section.
+# With all our circuits in hand, we can code up the full implementation of
+# Shor's algorithm. Below, we have the set of subroutines defined in the
+# previous section.
 #
 
 from jax import numpy as jnp
@@ -604,8 +609,6 @@ def controlled_ua(N, a, control_wire, target_wires, aux_wires):
     n = len(target_wires)
 
     # Controlled multiplication by a mod N; |c>|x>|b>|0> to |c>|x>|(b + ax) mod N>|0>
-    QFT(wires=aux_wires[:-1])
-
     for i in range(n):
         power_of_a = (a * (2**i)) % N
         doubly_controlled_adder(
@@ -632,8 +635,6 @@ def controlled_ua(N, a, control_wire, target_wires, aux_wires):
             N, power_of_a_inv, [control_wire, target_wires[i]], aux_wires[:-1], aux_wires[-1]
         )
 
-    qml.adjoint(QFT)(wires=aux_wires[:-1])
-
     
 ######################################################################
 # Next, let's put everything together into the order-finding routine
@@ -655,18 +656,23 @@ def shors_algorithm(N, a, n_bits, max_shots=100):
         meas_results = jnp.zeros((n_bits,), dtype=jnp.int32)
         cumulative_phase = jnp.array(0.0)
         phase_divisors = 2.0 ** jnp.arange(n_bits + 1, 1, -1)
-
+        
         qml.PauliX(wires=target_wires[-1])
 
+        QFT(wires=aux_wires[:-1])
+        
         for i in range(n_bits):
             power_of_a = (a ** (2 ** (n_bits - 1 - i))) % N
 
             qml.Hadamard(wires=estimation_wire)
             controlled_ua(N, power_of_a, estimation_wire, target_wires, aux_wires)
+
+            # Measure, then compute corrective phase for next round
             qml.PhaseShift(cumulative_phase, wires=estimation_wire)
             meas_results[i] = measure(estimation_wire, reset=True)
-            
             cumulative_phase = -2 * jnp.pi * jnp.sum(meas_results / jnp.roll(phase_divisors, i + 1))
+
+        qml.adjoint(QFT)(wires=aux_wires[:-1])            
 
         return meas_results
 
