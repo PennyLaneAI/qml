@@ -12,8 +12,8 @@ i.e., we can use it for quantum circuit decompositions.
 
 In this demo, we will dive into Lie algebras and their groups. Then, we will discuss
 so-called symmetric spaces, which arise from certain subgroups of those Lie groups.
-With these tools in our hands, we will then learn about the KAK decomposition itself, which
-exploits a so-called Cartan decomposition to break up such a Lie group.
+With these tools in our hands, we will then learn about the KAK decomposition itself,
+breaking up the Lie group into the subgroup and the symmetric space.
 
 We will make all steps explicit on a toy example on paper and in code, which splits
 single-qubit gates into a well-known sequence of rotations.
@@ -893,8 +893,8 @@ fig, ax = qml.draw_mpl(su4_gate, wire_order=[0, 1])(params)
 # Conclusion
 # ----------
 #
-# In this demo we learned about the KAK decomposition and how it uses a Cartan
-# decomposition of a Lie algebra to decompose its Lie group.
+# In this demo we learned about the KAK decomposition and how it breaks up a
+# Lie group using the Cartan decomposition of its Lie algebra.
 # This allows us to break down arbitrary quantum gates from that group,
 # as we implemented in code for the groups of single-qubit and two-qubit gates,
 # :math:`SU(2)` and :math:`SU(4).`
