@@ -213,7 +213,7 @@ print(D.shape)
 # 
 # .. note::
 # 
-#   Actually, finding the optimal contraction path of a tensor network is an NP-complete problem [#Arad]_.
+#   Actually, finding the optimal contraction path of a tensor network with an arbitrary structure is an NP-complete problem [#Arad]_.
 # 
 # For this reason, in this section we will look at how to calculate the computational cost or the **complexity** of a tensor network contraction. First, we look at a simple matrix-matrix contraction. Given rank-2 tensors :math:`G^1_{i,j}` and :math:`G^2_{j,k}`, we have seen that the :math:`(i,k)`-th element of the resulting contraction along the :math:`j`-th index is
 # 
@@ -330,7 +330,11 @@ print(f"Computation cost for A(BC) contraction: {average_time_ms:.8f} ms")
 # Contraction paths
 # ~~~~~~~~~~~~~~~~~
 # 
-# In the previous section, we explored how the choice of the contraction path affects the computational cost of the tensor network contraction through a toy example. As shown in [#Lam1997]_, finding an optimal contraction path is equivalent to solving the "multiplication problem," and thus, it is NP-hard. In this section, we provide a general description of the widespread techniques used to tackle this ubiquitous task.
+# In the previous section, we explored how the choice of the contraction path affects the computational cost of the tensor network contraction through a toy example. As shown in [#Lam1997]_, finding an optimal contraction path is equivalent to solving the "multiplication problem," and thus, it is in general NP-hard. In this section, we provide a general description of the widespread techniques used to tackle this ubiquitous task.
+# 
+# .. note::
+# 
+#   In special cases, by restricting the geometry and/or the values of the tensor networks, it is possible to find provable efficient contraction paths. A well-studied tensor network ansatz with efficient contraction schemes is the Matrix Product States (MPS) [#Schollwoeck2011]_. This section will, however, focus on tensor networks with arbitary structure.
 # 
 # First, we set up the framework of the problem. While multiway contractions - contractions between more than 2 tensors at a time - are possible, we will consider only pairwise contractions since the former can always be decomposed in terms of the latter. In addition, contracting a tensor network doesn't need to result in a single tensor. However, here we consider only the single tensor case as it underlies the more general scenario [#Gray2021]_. 
 # 
@@ -553,6 +557,12 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 #    N. Schuch, M. M. Wolf, F. Verstraete, and J. I. Cirac.  
 #    "Simulation of Quantum Many-Body Systems with Strings of Operators and Monte Carlo Tensor Contractions,"  
 #    `<https://doi.org/10.1103/PhysRevLett.100.040501>`__, Physical Review Letters, vol. 100, no. 4, Jan 2008.
+# 
+# .. [#Schollwoeck2011]
+#    U. Schollwöck.  
+#    "The density-matrix renormalization group in the age of matrix product states,"  
+#    `<https://doi.org/10.1016/j.aop.2010.09.012>`__, Annals of Physics, vol. 326, no. 1, pp. 96–192, Jan 2011.
+
 
 
 ##############################################################################
