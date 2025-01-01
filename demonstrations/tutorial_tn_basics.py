@@ -56,7 +56,7 @@ When working within the quantum computing notation, we adopt the convention that
 .. tip::
     The diagrammatic representation of tensors is rooted in category theory, which equips the diagrams with all the relevant information so they can be used in proofs and formal reasoning! 💡 [#Selinger2010]_
 
-Creating a tensor in code is straightforward, and chances are you have already created one yourself. Using ``Numpy``, all we have to do is create a ``np.array`` of the desired rank. For instance, we can start by creating a rank-1 tensor (a vector).
+Creating a tensor in code is straightforward, and chances are you have already created one yourself. Using ``numpy``, all we have to do is create a ``np.array`` of the desired rank. For instance, we can start by creating a rank-1 tensor (a vector).
 """
 
 import numpy as np
