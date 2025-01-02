@@ -41,11 +41,12 @@ kwargs_mps = {
 # Parameters of the quantum circuit
 theta = 0.5
 phi = 0.1
-n=1011
+n = 1011
 num_qubits = 100
 
 # Instantiate the device with the MPS method and the specified kwargs
 dev = qml.device("lightning.tensor", wires=num_qubits, method="mps", **kwargs_mps)
+
 
 # Define the quantum circuit
 @qml.qnode(dev)
@@ -61,6 +62,7 @@ def circuit(theta, phi, n, num_qubits):
         qml.X(num_qubits - 1) @ qml.Y(num_qubits - 2) @ qml.Z(num_qubits - 3)
     )
 
+
 ######################################################################
 # We set the maximum bond dimension to 128 and the ``cutoff`` parameter is set to the machine epsilon of the ``numpy.complex128`` data type.
 # For this circuit, retaining a maximum of 128 singular values in the singular value decomposition is more than enough to represent the quantum state accurately.
@@ -68,7 +70,7 @@ def circuit(theta, phi, n, num_qubits):
 # Please note that the accepted keyword arguments for ``lightning.tensor`` are slightly different from the ``default.tensor`` device.
 #
 # In general, a circuit run on a ``lightning.tensor`` device could be faster than on a CPU-based ``default.tensor`` device, given a sufficient large bond dimension is used in the
-# calculations. The eaxct performance of those devices depends on the gates in the specific circuit. For example, the ``lightning.tensor`` device natively supports multi-controlled 1-wire target gates, 
+# calculations. The eaxct performance of those devices depends on the gates in the specific circuit. For example, the ``lightning.tensor`` device natively supports multi-controlled 1-wire target gates,
 # such as the `qml.FlipSign` operator, which is widely used in the Grover algorithm.
 #
 #
@@ -114,6 +116,7 @@ num_qubits = 100
 # Instantiate the device with the TN method and the specified kwargs
 dev = qml.device("lightning.tensor", wires=num_qubits, method="tn")
 
+
 @qml.qnode(dev)
 def circuit(theta, depth, n, num_qubits):
     for i in range(num_qubits):
@@ -125,9 +128,9 @@ def circuit(theta, depth, n, num_qubits):
             qml.RZ(theta, wires=i)
         for i in range(1, num_qubits - 1, 2):
             qml.CZ(wires=[i, i + 1])
-    for i in range(num_qubits-1):
+    for i in range(num_qubits - 1):
         qml.CNOT(wires=[i, (i + 1)])
-    qml.FlipSign(n, wires=range(num_qubits)) 
+    qml.FlipSign(n, wires=range(num_qubits))
     return qml.expval(qml.X(num_qubits - 1))
 
 
