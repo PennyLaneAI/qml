@@ -334,7 +334,7 @@ print(f"Computation cost for A(BC) contraction: {average_time_ms:.8f} ms")
 # 
 # .. note::
 # 
-#   In special cases, by restricting the geometry and/or the values of the tensor networks, it is possible to find provable efficient contraction paths. A well-studied tensor network ansatz with efficient contraction schemes is the Matrix Product States (MPS) [#Schollwoeck2011]_. This section will, however, focus on tensor networks with arbitary structure.
+#   In special cases, by restricting the geometry and/or the values of the tensor networks, it is possible to find provable efficient contraction paths. A well-studied tensor network ansatz with efficient contraction schemes is the Matrix Product States (MPS) [#Schollwoeck2011]_. This section will, however, focus on tensor networks with arbitrary structure.
 # 
 # First, we set up the framework of the problem. While multiway contractions - contractions between more than 2 tensors at a time - are possible, we will consider only pairwise contractions since the former can always be decomposed in terms of the latter. In addition, contracting a tensor network doesn't need to result in a single tensor. However, here we consider only the single tensor case as it underlies the more general scenario [#Gray2021]_. 
 # 
