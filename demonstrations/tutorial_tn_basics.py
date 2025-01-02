@@ -231,27 +231,27 @@ print(D.shape)
 #     :align: center
 #     :width: 50%
 # 
-# In particular, let us look at an example where :math:`d_k = d_j`, :math:`d_l = 1`, and :math:`d_n = d_i`.  First, we look at the complexity of contracting :math:`(AB)` and then :math:`C`. Following the procedure explained above, the first contraction results in a complexity of
+# In particular, let us look at an example where :math:`d_l = 1`, :math:`d_k = d_j = 10`, :math:`dm = 100`, and :math:`d_n = d_i = 1000`.  First, we look at the complexity of contracting :math:`(AB)` and then :math:`C`. Following the procedure explained above, the first contraction results in a complexity of
 # 
 # .. math::
-#   \sum_{j} A_{i,j,k} B_{j,l,m} \implies \mathcal{O}(d_i \times d_m \times d_j^2 )
+#   \sum_{j} A_{i,j,k} B_{j,l,m} \implies \mathcal{O}(d_i \times d_m \times d_j^2 ) = \mathcal{O}(10^7)
 # 
 # Then, contracting the resulting tensor :math:`(AB)_{i, k, l, m}` with :math:`C_{k,m,n}` requires
 # 
 # .. math::
-#   \sum_{k, m} (AB)_{i, k, l, m} C_{k,m,n}  \implies \mathcal{O}(d_j \times d_m \times d_i^2)
+#   \sum_{k, m} (AB)_{i, k, l, m} C_{k,m,n}  \implies \mathcal{O}(d_j \times d_m \times d_i^2) = \mathcal{O}(10^9)
 # 
-# operations. Assuming :math:`d_j \leq d_m \leq d_i`, asymptotically, the whole contraction will have a cost of :math:`\mathcal{O}(d_j \times d_m \times d_i^2)`. Alternatively, we could first contract :math:`B` and :math:`C`, incurring the cost
+# operations. Since :math:`d_j \leq d_m \leq d_i`, asymptotically, the whole contraction will have a cost of :math:`\mathcal{O}(d_j \times d_m \times d_i^2) = \mathcal{O}(10^9)`. Alternatively, we could first contract :math:`B` and :math:`C`, incurring the cost
 # 
 # .. math::
-#   \sum_{m}  B_{j,l,m} C_{k,m,n} \implies \mathcal{O}(d_i \times d_m \times d_j^2 ) .
+#   \sum_{m}  B_{j,l,m} C_{k,m,n} \implies \mathcal{O}(d_i \times d_m \times d_j^2 ) = \mathcal{O}(10^7).
 # 
 # Then, contracting the result with :math:`A` results in
 # 
 # .. math::
-#   \sum_{j, k} A_{i,j,k} (BC)_{j,l,k,n}  \implies \mathcal{O}(d_i^2 \times d_j^2) .
+#   \sum_{j, k} A_{i,j,k} (BC)_{j,l,k,n}  \implies \mathcal{O}(d_i^2 \times d_j^2) = \mathcal{O}(10^8).
 # 
-# This means the second contraction path results in an asymptotic cost of :math:`\mathcal{O}(d_i^2 \times d_j^2)`—lower than the first contraction path.
+# This means the second contraction path results in an asymptotic cost of :math:`\mathcal{O}(d_i^2 \times d_j^2) = \mathcal{O}(10^8)`— lower than the first contraction path.
 # 
 # To see this in practice, let us implement the above contractions using ``np.einsum``. First, we create the 3 tensors with the dimensions specified in the example above. We demonstrate a different form of creating tensors of the desired dimensions using the ``random`` module.
 
@@ -309,7 +309,7 @@ average_time_ms = execution_time * 1000 / iterations
 print(f"Computation cost for A(BC) contraction: {average_time_ms:.8f} ms")
 
 ##############################################################################
-# From this, we see that the second contraction path results in a much lower complexity compared to the first one, just as we expected! 💪
+# From this, we see that the second contraction path results in a lower complexity compared to the first one, just as we expected! 💪
 
 ##############################################################################
 # Intermezzo 
