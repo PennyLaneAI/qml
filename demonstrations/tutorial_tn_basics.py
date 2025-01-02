@@ -134,7 +134,7 @@ print("Rank-3 tensor: \n", tensor_rank3)
 # .. note::
 #   A common question arising when drawing a tensor is "What is the correct order to draw the indices?". For instance, in the figure above, we have adopted the convention that a tensor :math:`A_{i,j,k}` corresponds to a diagram with the first leg (:math:`i`) pointing left, the second leg (:math:`j`) pointing upwards, and the third leg (:math:`k`) pointing right, and similarly for the other two tensors. However, this need not be the case. We could have defined the first leg to be the one pointing upwards, for example. Based on the use case, and the user, some conventions might seem more natural than others. The only important thing to keep in mind is to be consistent. In other words, once we choose a convention for the order, we should apply it to all the tensors to avoid contracting the wrong indices ❌.
 #
-# In our code, we can perform a tensor contraction using the ``Numpy`` function ``np.einsum``. To do so, we can start by creating the 3 tensors to be contracted by reshaping a 1D array (created using ``np.arange``) into rank-3 tensors of the correct dimensions.
+# In our code, we can perform a tensor contraction using the ``numpy`` function ``np.einsum``. To do so, we can start by creating the 3 tensors to be contracted by reshaping a 1D array (created using ``np.arange``) into rank-3 tensors of the correct dimensions.
 
 # Create the individual rank-3 tensors
 A = np.arange(6).reshape(1, 2, 3)  # ijk
