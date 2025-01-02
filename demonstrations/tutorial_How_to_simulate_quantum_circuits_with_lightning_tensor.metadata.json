@@ -1,0 +1,41 @@
+{
+    "title": "How to simulate quantum circuits with tensor networks with lightning.tensor",
+    "authors": [
+        {
+            "username": "sshu"
+        }
+    ],
+    "dateOfPublication": "2025-01-01T00:00:00+00:00",
+    "dateOfLastModification": "2025-01-01T00:00:00+00:00",
+    "categories": [
+        "Getting Started",
+        "Quantum Computing",
+        "Devices and Performance",
+        "How-to"
+    ],
+    "tags": [
+        "how to"
+    ],
+    "seoDescription": "Learn how to simulate quantum circuits with tensor networks with the lightning.tensor PennyLane device.",
+    "doi": "",
+    "references": [
+        {
+            "id": "orus",
+            "type": "article",
+            "title": "A practical introduction to tensor networks: Matrix product states and projected entangled pair states",
+            "authors": "R. Orús",
+            "year": "2014",
+            "journal": "Annals of Physics",
+            "url": "https://www.sciencedirect.com/science/article/pii/S0003491614001596"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_tn_circuits_lightning_tensor",
+            "weight": 1.0
+        }
+    ]
+}
