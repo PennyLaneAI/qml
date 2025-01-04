@@ -92,7 +92,7 @@ print("Rank-3 tensor: \n", tensor_rank3)
 # Matrix-matrix and matrix-vector multiplications are familiar operations within the context of quantum computing. We can now study these operations through the lens of the tensor notation introduced above. First, a matrix and a vector can be multiplied as
 #
 # .. math::
-#     (w)_j = G \cdot v = \sum_i G_{i, j} v_i
+#     (w)_j = G \cdot v = \sum_i G_{j, i} v_i
 #
 # .. figure:: ../_static/demonstration_assets/tn_basics/04-matrix-vector.png
 #     :align: center
@@ -100,12 +100,12 @@ print("Rank-3 tensor: \n", tensor_rank3)
 #
 # .. note::
 #
-#   Recall we are adopting the convention of drawing a ket vector with its leg pointing right, as done in quantum circuits. In turn, this means the "input" index of a matrix —its column index— points towards the left, while the 'output' index —its row index— points to the right.
+#   Recall we are adopting the convention of drawing a ket vector with its leg pointing right, as done in quantum circuits. In turn, this means the "input" index of a matrix —its column index— points towards the left while the 'output' index —its row index— points to the right. In the example above for :math:`G_{j, i}`, the input and output indices are index :math:`i` and index :math:`j`, respectively.
 #
 # We see that summing over the shared index :math:`i` is equivalent to **contracting** the corresponding legs from the matrix and vector diagrams. As expected, the result of this multiplication is another rank-1 tensor with dangling leg :math:`j`. Similarly, we can look at the matrix-matrix multiplication:
 #
 # .. math::
-#     (G^3)_{i,k} = G^2 \cdot G^1 = \sum_j G^{1}_{i,j} G^{2}_{j,k} 
+#     (G^3)_{k,i} = G^2 \cdot G^1 = \sum_j G^{2}_{k,j} G^{1}_{j,i}
 #
 # .. figure:: ../_static/demonstration_assets/tn_basics/05-matrix-matrix.png
 #     :align: center
@@ -275,8 +275,8 @@ iterations = 20
 contraction = "np.einsum('ijk, jlm -> iklm', A, B)"
 execution_time = timeit.timeit(contraction, globals=globals(), number=iterations)
 
-average_time_ms = execution_time * 1000 / iterations
-print(f"Computation cost for AB contraction: {average_time_ms:.8f} ms")
+time_AB = execution_time * 1000 / iterations
+print(f"Computation cost for AB contraction: {time_AB:.8f} ms")
 
 ##############################################################################
 # Then, we contract the result with :math:`C`.
@@ -285,8 +285,8 @@ AB = np.einsum('ijk, jlm -> iklm', A, B)
 contraction = "np.einsum('iklm, kmn -> iln', AB, C)"
 execution_time = timeit.timeit(contraction, globals=globals(), number=iterations)
 
-average_time_ms = execution_time * 1000 / iterations
-print(f"Computation cost for (AB)C contraction: {average_time_ms:.8f} ms")
+time_ABC = execution_time * 1000 / iterations
+print(f"Computation cost for (AB)C contraction: {time_ABC:.8f} ms")
 
 ##############################################################################
 # As expected, the last contraction is much more costly than the first one. We now repeat the procedure, contracting :math:`B` and :math:`C` first. 
@@ -294,19 +294,23 @@ print(f"Computation cost for (AB)C contraction: {average_time_ms:.8f} ms")
 contraction = "np.einsum('jlm, kmn -> jlkn', B, C)"
 execution_time = timeit.timeit(contraction, globals=globals(), number=iterations)
 
-average_time_ms = execution_time * 1000 / iterations
-print(f"Computation cost for BC contraction: {average_time_ms:.8f} ms")
+time_BC = execution_time * 1000 / iterations
+print(f"Computation cost for BC contraction: {time_BC:.8f} ms")
 
 ##############################################################################
-# We see that this contraction is of the same order of magnitude as the contraction between :math:`A` and :math:`B`, as expected from the complexity analysis, since they both yield :math:`\mathcal{O}(d_i \times d_m \times d_j^2 )`. Then, we perform the contraction between the resulting tensor and :math:`A`.
+# We see that this contraction is of the same order of magnitude as the contraction between :math:`A` and :math:`B`, as expected from the complexity analysis, since they both yield :math:`\mathcal{O}(d_i \times d_m \times d_j^2 ) = \mathcal{O}(10^7)`. Then, we perform the contraction between the resulting tensor and :math:`A`.
 
 BC = np.einsum('jlm, kmn -> jlkn', B, C)
 
 contraction = "np.einsum('ijk, jlkn -> iln', A, BC)"
 execution_time = timeit.timeit(contraction, globals=globals(), number=iterations)
 
-average_time_ms = execution_time * 1000 / iterations
-print(f"Computation cost for A(BC) contraction: {average_time_ms:.8f} ms")
+time_BCA = execution_time * 1000 / iterations
+print(f"Computation cost for A(BC) contraction: {time_BCA:.8f} ms")
+
+print(f"Computation cost for path 1: {time_AB + time_ABC}")
+print(f"Computation cost for path 2: {time_BC + time_BCA}")
+
 
 ##############################################################################
 # From this, we see that the second contraction path results in a lower complexity compared to the first one, just as we expected! 💪
