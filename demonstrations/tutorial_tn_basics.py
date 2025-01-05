@@ -231,7 +231,7 @@ print(D.shape)
 #     :align: center
 #     :width: 50%
 # 
-# In particular, let us look at an example where :math:`d_l = 1`, :math:`d_k = d_j = 10`, :math:`dm = 100`, and :math:`d_n = d_i = 1000`.  First, we look at the complexity of contracting :math:`(AB)` and then :math:`C`. Following the procedure explained above, the first contraction results in a complexity of
+# In particular, let us look at an example where :math:`d_l = 1`, :math:`d_k = d_j = 10`, :math:`d_m = 10^2`, and :math:`d_n = d_i = 10^3`.  First, we look at the complexity of contracting :math:`(AB)` and then :math:`C`. Following the procedure explained above, the first contraction results in a complexity of
 # 
 # .. math::
 #   \sum_{j} A_{i,j,k} B_{j,l,m} \implies \mathcal{O}(d_i \times d_m \times d_j^2 ) = \mathcal{O}(10^7)
@@ -308,9 +308,11 @@ execution_time = timeit.timeit(contraction, globals=globals(), number=iterations
 time_BCA = execution_time * 1000 / iterations
 print(f"Computation cost for A(BC) contraction: {time_BCA:.8f} ms")
 
+##############################################################################
+# Then, the total time for each of the paths is:
+
 print(f"Computation cost for path 1: {time_AB + time_ABC}")
 print(f"Computation cost for path 2: {time_BC + time_BCA}")
-
 
 ##############################################################################
 # From this, we see that the second contraction path results in a lower complexity compared to the first one, just as we expected! 💪
