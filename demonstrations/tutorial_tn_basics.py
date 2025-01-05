@@ -31,7 +31,7 @@ where each :math:`i_n` is an **index** of dimension :math:`d_n` and the number o
 For example, a scalar :math:`s` is a rank-0 tensor, a vector :math:`v_i` is a rank-1 tensor, and a matrix :math:`G_{j,i}` is a rank-2 tensor.
 
 .. note::
-    Some authors refer to the indices :math:`i_n` as the "dimensions of the tensor". In this tutorial, however, the term **dimension** refers to the range of integer values :math:`d_n` that each index :math:`i_n` can take, namely :math:`i_n \in {1, \ldots, d_n}`.
+    Some authors refer to the indices :math:`i_n` as the "dimensions of the tensor". In this tutorial, however, the term **dimension** refers to the range of integer values :math:`d_n` that each index :math:`i_n` can take, namely :math:`i_n \in \{1, \ldots, d_n\}`.
     
 A beautiful and powerful tool accompanying tensors is their graphical language representation. The diagram of a tensor is simply a geometric shape with a leg sticking out of it for every index in the tensor. For example,
 
