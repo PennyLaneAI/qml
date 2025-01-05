@@ -19,19 +19,19 @@ Part 1: A first glimpse into the tensor networks world 🔍👀
 From matrices to tensors
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-First, we start by answering the question: what is a tensor❓
+First, we start by answering the question: **what is a tensor** ⁉️
 
 A common and intuitive way of thinking about tensors is as generalizations of vectors and matrices. That is, we can think of them as multidimensional arrays—i.e., multidimensional maps that are linear with respect to every parameter. A tensor of dimensions :math:`d_1 \times d_2 \times \ldots \times d_r` can be expressed as
 
 .. math::
     T_{i_1, i_2, \ldots, i_r} \in \mathbb{C}^{d_1 \times d_2 \times \ldots \times d_r},
     
-where each :math:`i_n` is an **index** of dimension :math:`d_n` and the number of indices :math:`r` is known as the **rank** of the tensor. We say :math:`T` is a rank-:math:`r` tensor.
+where each :math:`i_n` is an **index** of dimension :math:`d_n` and the number of indices :math:`r` is known as the **rank** of the tensor. We say :math:`T` is a rank-:math:`r` tensor. We will denote the :math:`(i_1, i_2, \ldots, i_r)`-th entry of the tensor :math:`T` as :math:`(T)_{i_1, i_2, \ldots, i_r}` — this is a single number.
 
-For example, a scalar :math:`s` is a rank-0 tensor, a vector :math:`v_i` is a rank-1 tensor, and a matrix :math:`G_{i,j}` is a rank-2 tensor.
+For example, a scalar :math:`s` is a rank-0 tensor, a vector :math:`v_i` is a rank-1 tensor, and a matrix :math:`G_{j,i}` is a rank-2 tensor.
 
 .. note::
-    Some authors refer to the indices :math:`i_n` as the "dimensions of the tensor". In this tutorial, however, the term "dimensions" :math:`d_n` instead refers to the range of values that each index :math:`i_n` can take, specifically :math:`i_n \in [1, d_n]`, meaning :math:`i_n` takes integer values within this range.
+    Some authors refer to the indices :math:`i_n` as the "dimensions of the tensor". In this tutorial, however, the term **dimension** refers to the range of integer values :math:`d_n` that each index :math:`i_n` can take, namely :math:`i_n \in {1, \ldots, d_n}`.
     
 A beautiful and powerful tool accompanying tensors is their graphical language representation. The diagram of a tensor is simply a geometric shape with a leg sticking out of it for every index in the tensor. For example,
 
@@ -53,7 +53,7 @@ When working within the quantum computing notation, we adopt the convention that
     :align: center
     :width: 55%
 
-.. tip::
+.. note::
     The diagrammatic representation of tensors is rooted in category theory, which equips the diagrams with all the relevant information so they can be used in proofs and formal reasoning! 💡 [#Selinger2010]_
 
 Creating a tensor in code is straightforward, and chances are you have already created one yourself. Using ``numpy``, all we have to do is create a ``np.array`` of the desired rank. For instance, we can start by creating a rank-1 tensor (a vector).
@@ -89,10 +89,10 @@ print("Rank-3 tensor: \n", tensor_rank3)
 # From matrix multiplication to tensor contractions
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# Matrix-matrix and matrix-vector multiplications are familiar operations within the context of quantum computing. We can now study these operations through the lens of the tensor notation introduced above. First, a matrix and a vector can be multiplied as
+# Matrix-matrix and matrix-vector multiplications are familiar operations within the context of quantum computing. We can now study these operations through the lens of the tensor notation introduced above. First, a matrix :math:`G` and a vector :math:`v` can be multiplied such that the :math:`j`-th element of the resulting vector is
 #
 # .. math::
-#     (w)_j = G \cdot v = \sum_i G_{j, i} v_i
+#     (w)_j = \sum_i (G)_{j, i} (v)_i .
 #
 # .. figure:: ../_static/demonstration_assets/tn_basics/04-matrix-vector.png
 #     :align: center
@@ -100,12 +100,12 @@ print("Rank-3 tensor: \n", tensor_rank3)
 #
 # .. note::
 #
-#   Recall we are adopting the convention of drawing a ket vector with its leg pointing right, as done in quantum circuits. In turn, this means the "input" index of a matrix —its column index— points towards the left while the 'output' index —its row index— points to the right. In the example above for :math:`G_{j, i}`, the input and output indices are index :math:`i` and index :math:`j`, respectively.
+#   Recall we are adopting the convention of drawing a ket vector with its leg pointing right, as done in quantum circuits. In turn, this means the "input" index of a matrix —its column index— points towards the left while the "output" index —its row index— points to the right. In the example above for :math:`G_{j, i}`, the input and output indices are index :math:`i` and index :math:`j`, respectively.
 #
-# We see that summing over the shared index :math:`i` is equivalent to **contracting** the corresponding legs from the matrix and vector diagrams. As expected, the result of this multiplication is another rank-1 tensor with dangling leg :math:`j`. Similarly, we can look at the matrix-matrix multiplication:
+# We see that summing over the shared index :math:`i` is equivalent to **contracting** the corresponding legs from the matrix and vector diagrams. As expected, the result of this multiplication is another rank-1 tensor with dangling leg :math:`j`. Similarly, we can look at the matrix-matrix multiplication :math:`G^3 = G^2 \cdot G^1` and its :math:`(k,i)`-th element is given by 
 #
 # .. math::
-#     (G^3)_{k,i} = G^2 \cdot G^1 = \sum_j G^{2}_{k,j} G^{1}_{j,i}
+#     (G^3)_{k,i} = \sum_j (G^2)_{k,j} (G^1)_{j,i} .
 #
 # .. figure:: ../_static/demonstration_assets/tn_basics/05-matrix-matrix.png
 #     :align: center
@@ -116,7 +116,7 @@ print("Rank-3 tensor: \n", tensor_rank3)
 # We can now generalize this concept to tensors, and consequently, to more than two legs being contracted. For example, let us look at three tensors :math:`A_{i,j,k}`, :math:`B_{j,l,m}`, and :math:`C_{k,m,n}`. To contract them, all we need to do is to sum over repeated indices (:math:`j`, :math:`k`, :math:`m`). To obtain the :math:`(i,l,n)`-th element of the resulting tensor :math:`D`, we perform this contraction by summing over :math:`j, k, m` 
 # 
 # .. math::
-#     (D)_{i,l,n} =  \sum_{j,k,m} A_{i,j,k} B_{j,l,m} C_{k,m,n} .
+#     (D)_{i,l,n} =  \sum_{j,k,m} (A)_{i,j,k} (B)_{j,l,m} (C)_{k,m,n} .
 #
 # Using the tensor product :math:`\otimes` between the 3 tensors and summing over the repeated indices we can obtain a similar expression for the full tensor :math:`D` [#Bridgeman2017]_
 #
@@ -215,12 +215,12 @@ print(D.shape)
 # 
 #   Actually, finding the optimal contraction path of a tensor network with an arbitrary structure is an NP-complete problem [#Arad]_.
 # 
-# For this reason, in this section we will look at how to calculate the computational cost or the **complexity** of a tensor network contraction. First, we look at a simple matrix-matrix contraction. Given rank-2 tensors :math:`G^1_{i,j}` and :math:`G^2_{j,k}`, we have seen that the :math:`(i,k)`-th element of the resulting contraction along the :math:`j`-th index is
+# For this reason, in this section we will look at how to calculate the computational cost or the **complexity** of a tensor network contraction. First, we look at a simple matrix-matrix contraction. Given rank-2 tensors :math:`G^1_{j,i}` and :math:`G^2_{k,j}`, we have seen that the :math:`(k,i)`-th element of the resulting contraction along the :math:`j`-th index is
 # 
 # .. math::
-#   (G^3)_{i,k} = G^2 \cdot G^1 = \sum_{j=1}^{d_j} G^{2}_{j,k} G^{1}_{i,j}
+#   (G^3)_{k,i} = \sum_{j=1}^{d_j} (G^2)_{k,j} (G^1)_{j,i}
 # 
-# where the indices :math:`i, j, k` have dimensions :math:`d_i, d_j, d_k`, respectively. Thus, obtaining the :math:`(i,k)`-th element requires :math:`\mathcal{O}(d_j)` operations. To construct the full tensor :math:`G^3`, we must repeat this procedure :math:`d_i \times d_k` times (once for every possible value of :math:`i` and :math:`k`). Therefore, the total complexity of the contraction is
+# where the indices :math:`(i, j, k)` have dimensions :math:`(d_i, d_j, d_k)`, respectively. Thus, obtaining the :math:`(k,i)`-th element requires :math:`\mathcal{O}(d_j)` operations. To construct the full tensor :math:`G^3`, we must repeat this procedure :math:`d_i \times d_k` times (once for every possible value of :math:`i` and :math:`k`). Therefore, the total complexity of the contraction is
 # 
 # .. math::
 #   \mathcal{O}(d_i \times d_j \times d_k)
@@ -231,25 +231,25 @@ print(D.shape)
 #     :align: center
 #     :width: 50%
 # 
-# In particular, let us look at an example where :math:`d_l = 1`, :math:`d_k = d_j = 10`, :math:`d_m = 10^2`, and :math:`d_n = d_i = 10^3`.  First, we look at the complexity of contracting :math:`(AB)` and then :math:`C`. Following the procedure explained above, the first contraction results in a complexity of
+# In particular, let us look at an example where :math:`d_l = 1`, :math:`d_k = d_j = 10`, :math:`d_m = 10^2`, and :math:`d_n = d_i = 10^3`.  First, we look at the complexity of contracting :math:`AB` followed by its contraction with :math:`C`. As outlined in the procedure above, the first contraction results in a complexity of
 # 
 # .. math::
-#   \sum_{j} A_{i,j,k} B_{j,l,m} \implies \mathcal{O}(d_i \times d_m \times d_j^2 ) = \mathcal{O}(10^7)
+#   \sum_{j} (A)_{i,j,k} (B)_{j,l,m} \implies \mathcal{O}(d_i \times d_m \times d_j^2 ) = \mathcal{O}(10^7)
 # 
-# Then, contracting the resulting tensor :math:`(AB)_{i, k, l, m}` with :math:`C_{k,m,n}` requires
-# 
-# .. math::
-#   \sum_{k, m} (AB)_{i, k, l, m} C_{k,m,n}  \implies \mathcal{O}(d_j \times d_m \times d_i^2) = \mathcal{O}(10^9)
-# 
-# operations. Since :math:`d_j \leq d_m \leq d_i`, asymptotically, the whole contraction will have a cost of :math:`\mathcal{O}(d_j \times d_m \times d_i^2) = \mathcal{O}(10^9)`. Alternatively, we could first contract :math:`B` and :math:`C`, incurring the cost
+# Then, contracting the resulting tensor :math:`AB_{i, k, l, m}` with :math:`C_{k,m,n}` requires
 # 
 # .. math::
-#   \sum_{m}  B_{j,l,m} C_{k,m,n} \implies \mathcal{O}(d_i \times d_m \times d_j^2 ) = \mathcal{O}(10^7).
+#   \sum_{k, m} (AB)_{i, k, l, m} (C)_{k,m,n}  \implies \mathcal{O}(d_j \times d_m \times d_i^2) = \mathcal{O}(10^9)
 # 
-# Then, contracting the result with :math:`A` results in
+# operations. Since :math:`d_j < d_m < d_i`, asymptotically, the whole contraction will have a cost of :math:`\mathcal{O}(d_j \times d_m \times d_i^2) = \mathcal{O}(10^9)`. Alternatively, we could first contract :math:`B` and :math:`C`, incurring the cost
 # 
 # .. math::
-#   \sum_{j, k} A_{i,j,k} (BC)_{j,l,k,n}  \implies \mathcal{O}(d_i^2 \times d_j^2) = \mathcal{O}(10^8).
+#   \sum_{m} (B)_{j,l,m} (C)_{k,m,n} \implies \mathcal{O}(d_i \times d_m \times d_j^2 ) = \mathcal{O}(10^7).
+# 
+# Then, contracting the resulting tensor with :math:`A` results in
+# 
+# .. math::
+#   \sum_{j, k} (A)_{i,j,k} (BC)_{j,l,k,n}  \implies \mathcal{O}(d_i^2 \times d_j^2) = \mathcal{O}(10^8).
 # 
 # This means the second contraction path results in an asymptotic cost of :math:`\mathcal{O}(d_i^2 \times d_j^2) = \mathcal{O}(10^8)`— lower than the first contraction path.
 # 
@@ -309,7 +309,7 @@ time_BCA = execution_time * 1000 / iterations
 print(f"Computation cost for A(BC) contraction: {time_BCA:.8f} ms")
 
 ##############################################################################
-# Then, the total time for each of the paths is:
+# We can then compare the total time for each of the paths:
 
 print(f"Computation cost for path 1: {time_AB + time_ABC}")
 print(f"Computation cost for path 2: {time_BC + time_BCA}")
@@ -340,7 +340,7 @@ print(f"Computation cost for path 2: {time_BC + time_BCA}")
 # 
 # .. note::
 # 
-#   In special cases, by restricting the geometry and/or the values of the tensor networks, it is possible to find provable efficient contraction paths. A well-studied tensor network ansatz with efficient contraction schemes is the Matrix Product States (MPS) [#Schollwoeck2011]_. This section will, however, focus on tensor networks with arbitrary structure.
+#   In special cases, by restricting the geometry and/or the values of the tensor networks, it is possible to find provable efficient contraction paths. A well-studied tensor network ansatz with efficient contraction schemes is the Matrix Product States (MPS) [#Schollwoeck2011]_. This section will, however, focus on tensor networks with arbitrary structures.
 # 
 # First, we set up the framework of the problem. While multiway contractions - contractions between more than 2 tensors at a time - are possible, we will consider only pairwise contractions since the former can always be decomposed in terms of the latter. In addition, contracting a tensor network doesn't need to result in a single tensor. However, here we consider only the single tensor case as it underlies the more general scenario [#Gray2021]_. 
 # 
@@ -388,7 +388,7 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # 
 # The idea is to change space for computation time, by temporarily fixing the values of some indices in the tensors, performing independently the contraction for each fixed value, and summing the results [#Gray2021]_.
 # 
-# To end this demo, let us answer the question: how can we use tensor networks to simulate the output of a quantum circuit ⁉️
+# To end this demo, let us answer the question: **how can we use tensor networks to simulate the output of a quantum circuit** ⁉️
 
 ##############################################################################
 # Quantum circuits are tensor networks
