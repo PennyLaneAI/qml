@@ -373,49 +373,38 @@ def shors_algorithm(N):
 #    :align: center
 #    :alt: Addition in the Fourier basis modulo N.
 #
-# Here we've applied the same tricks to remove controls on QFT / inverse QFT pairs.
-#
-# Let's step through this circuit, assuming the control qubit is in :math:`\vert
-# 1 \rangle` (if it was :math:`\vert 0 \rangle`, only the QFTs are applied, and
-# they cancel out). First, we add :math:`a` to :math:`b`, then subtract
-# :math:`N`. If :math:`a + b \geq N`, we get overflow on the top qubit (which
-# was included to account for precisely this), but subtraction gives us the
-# correct result modulo :math:`N`. After shifting back to the computational
-# basis, the topmost qubit is in :math:`\vert 0 \rangle` so the CNOT does not
-# trigger. When we next subtract :math:`a` we cause underflow, leading to the
-# topmost qubit being in :math:`\vert 1 \rangle`. The controlled-on-0 CNOT
-# doesn't trigger either, and we simply add :math:`a` back.
+# Let's step through the various cases of this circuit, keeping in mind that
+# :math:`a < N` and :math:`b < N`, and the register has :math:`n + 1` bits.
 # 
-# However, if :math:`a + b < N`, we subtracted :math:`N` for no reason, causing
-# underflow. The top-most qubit will be in :math:`\vert 1 \rangle`. We flip the auxiliary
-# qubit, and perform controlled addition of :math:`N`. The remainder of the
-# circuit returns the auxiliary qubit to its original state. If there was
-# originally underflow, we subtract :math:`a` and there is now no underflow, so
-# the auxiliary qubit is returned to :math:`\vert 0 \rangle`.
+# Suppose the control qubits are in both :math:`\vert 1 \rangle`. We add
+# :math:`a` to :math:`b`, then subtract :math:`N`. If :math:`a + b \geq N`, we
+# get overflow on the top qubit (which was included to account for precisely
+# this), but subtraction gives us the correct result modulo :math:`N`. After
+# shifting back to the computational basis, the topmost qubit is in :math:`\vert
+# 0 \rangle` so the CNOT does not trigger. Next, we subtract :math:`a` from a
+# register in the state :math:`\vert a + b - N \pmod N \rangle`. We obtain `\vert b -
+# N \rangle`, which, since `b < N`, leads to underflow. The top bit in
+# state :math:`\vert 1 \rangle` does not trigger the controlled-on-zero CNOT,
+# and our auxiliary qubit is untouched.
 #
-# We can use similar tricks to remove additional pairs of controls, denoted by
-# colours in the circuit below.
+# If we didn't have overflow before, we would have subtracted :math:`N` for no
+# reason, leading to underflow. The topmost qubit is in state :math:`\vert 1
+# \rangle`, the CNOT triggers, and :math:`N` would be added back. The register
+# now contains :math:`\vert b + a`. Subtracting :math:`a` puts the register in
+# state :math:`\vert b \rangle`, which by design has no overflow; the
+# controlled-on-zero CNOT triggers, and the auxiliary qubit is returned to
+# :math:`\vert 0 \rangle`.
 #
-# .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_modulo_n-less-controls-coloured.svg
-#    :width: 800 
-#    :align: center
-#    :alt: Addition in the Fourier basis modulo N.
+# If the control qubits were not both :math:`\vert a \rangle`, :math:`N` is
+# always subtracted, the CNOT triggers, and so :math:`N` is added back. The
+# topmost qubit is always left in :math:`\vert 0 \rangle`, and the
+# controlled-on-zero CNOT flips the auxiliary qubit back to its starting state.
 #
-# This leaves us with the following circuit. Note that all these optimizations
-# can also be made when the entire operation is controlled on an additional
-# qubit, :math:`\vert c \rangle` (only the initial :math:`\Phi(a)` will be
-# doubly controlled).
-#
-# .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_modulo_n-less-controls.svg
-#    :width: 800 
-#    :align: center
-#    :alt: Addition in the Fourier basis modulo N.
-#
-# Notice how uncomputing the auxiliary qubit is just as much work as performing
-# the operation itself! Thankfully, we can leverage Catalyst to perform a major
-# optimization: rather than uncomputing, simply measure the auxiliary qubit, add
-# back :math:`N` based on the classical outcome, then reset it to :math:`\vert 0
-# \rangle`!
+# Notice, however, that uncomputing the auxiliary qubit is just as much work as
+# performing the operation itself! Thankfully, we can leverage Catalyst to
+# perform a major optimization: rather than uncomputing, simply measure the
+# auxiliary qubit, add back :math:`N` based on the classical outcome, then reset
+# it to :math:`\vert 0 \rangle`!
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_modulo_n_mcm.svg
 #    :scale: 120%
