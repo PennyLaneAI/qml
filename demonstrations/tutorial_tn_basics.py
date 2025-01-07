@@ -379,7 +379,7 @@ import pennylane as qml
 dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 
 ##############################################################################
-# The different types of values accepted for ``contraction_optimizer`` are determined by the ``optimize`` parameter in ``Quimb`` (see `docs <https://quimb.readthedocs.io/en/latest/tensor-circuit.html#finding-a-contraction-path-the-optimize-kwarg>`_) as this is the backend behind the :class:`~pennylane.devices.default_tensor.DefaultTensor` device. See `this tutorial <https://pennylane.ai/qml/demos/tutorial_How_to_simulate_quantum_circuits_with_tensor_networks/>`_ to learn more the use of this device in ``Pennylane``.
+# The different types of values accepted for ``contraction_optimizer`` are determined by the ``optimize`` parameter in ``Quimb`` (see `docs <https://quimb.readthedocs.io/en/latest/tensor-circuit.html#finding-a-contraction-path-the-optimize-kwarg>`_) as this is the backend behind the :class:`~pennylane.devices.default_tensor.DefaultTensor` device. See `this tutorial <https://pennylane.ai/qml/demos/tutorial_How_to_simulate_quantum_circuits_with_tensor_networks/>`_ to learn more about the use of this device in ``Pennylane``.
 # 
 # Slicing
 # ^^^^^^^
@@ -409,7 +409,7 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 #     :align: center
 #     :width: 45%
 # 
-# In the right-hand side of the equality we have assumed a specific form for the U tensor in terms of local 2-qubit gates, which is often the case when dealing with real quantum hardware. In addition, it is common for the initial state to be a product state such as :math:`|0\rangle^{\otimes N}`, hence the form of the tensor in the diagram as :math:`N` independent tensors of rank-1. However, an arbitrary input state is in general represented as one big rank-:math:`N` tensor.
+# In the right-hand side of the equality we have assumed a specific form for the :math:`U` tensor in terms of local 2-qubit gates, which is often the case when dealing with real quantum hardware. In addition, it is common for the initial state to be a product state such as :math:`|0\rangle^{\otimes N}`, hence the form of the tensor in the diagram as :math:`N` independent tensors of rank-1. However, an arbitrary input state is in general represented as one big rank-:math:`N` tensor.
 # 
 # Now we can ask ourselves: what quantities can we compute from this tensor network? 🤔
 # 
@@ -424,9 +424,9 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # If the observable is a linear combination of hermitian operators (e.g., a Hamiltonian)
 # 
 # .. math::
-#   O = \sum_i c_i O_i.
+#   O = \sum_i c_i O_i ,
 # 
-# We can calculate the total expectation value "naïvely" by computing the inner product for each component :math:`O_i` and summing up the weighted results.
+# we can calculate the total expectation value "naïvely" by computing the inner product for each component :math:`O_i` and summing up the weighted results:
 # 
 # .. math::
 #   O = \sum_i c_i \langle O_i \rangle = \sum_i c_i \langle \psi | O_i | \psi \rangle.
