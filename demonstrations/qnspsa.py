@@ -913,8 +913,11 @@ for i in range(300):
 # The optimizer performs reasonably well: the loss drops over optimization
 # steps and converges finally. We then reproduce the benchmarking test
 # between the gradient descent, quantum natural gradient descent, SPSA and
-# QN-SPSA in Fig. 1(b) of reference [#Gacon2021]_ with the following job. You
-# can find a more detailed version of the example in this
+# QN-SPSA in Fig. 1(b) of reference [#Gacon2021]_ with the following job. 
+#
+# .. warning:: 
+# The following code is incomplete and might require additional attention. 
+# You can find a more detailed version of the example in this
 # `notebook <https://github.com/aws/amazon-braket-examples/blob/main/examples/hybrid_jobs/6_QNSPSA_optimizer_with_embedded_simulator/qnspsa_with_embedded_simulator.ipynb>`__,
 # with its dependencies in the `source_scripts`
 # `folder <https://github.com/aws/amazon-braket-examples/blob/main/examples/hybrid_jobs/6_QNSPSA_optimizer_with_embedded_simulator/source_scripts/>`__.
