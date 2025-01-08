@@ -22,9 +22,8 @@ Check the latest functionality in the :class:`documentation <.pennylane_lightnin
 # Simulating a quantum circuit with the MPS method
 # ------------------------------------------------
 #
-# Let's start by showing how to simulate a quantum circuit using the MPS method.
-# We consider a simple short-depth quantum circuit that can be efficiently simulated with such a method.
-# The number of gates increases with the number of qubits.
+# Let's start by showing how to simulate a quantum circuit using the MPS method. Generally, the MPS method can be used to simulate quantum circuits that are too large for state-vector simulations or too deep (higher degree of entanglement) for the exact TN contract method.
+# The circuit we show here is a simple example to demonstrate the features of a MPS method mentioned above.
 #
 
 import pennylane as qml
@@ -41,6 +40,7 @@ kwargs_mps = {
 # Parameters of the quantum circuit
 theta = 0.5
 phi = 0.1
+depth = 10
 n = 1011
 num_qubits = 100
 
@@ -51,13 +51,14 @@ dev = qml.device("lightning.tensor", wires=num_qubits, method="mps", **kwargs_mp
 # Define the quantum circuit
 @qml.qnode(dev)
 def circuit(theta, phi, n, num_qubits):
-    for qubit in range(num_qubits - 4):
-        qml.RX(theta, wires=qubit + 1)
-        qml.CNOT(wires=[qubit, qubit + 1])
-        qml.RY(phi, wires=qubit + 1)
-        qml.DoubleExcitation(theta, wires=[qubit, qubit + 1, qubit + 3, qubit + 4])
-        qml.Toffoli(wires=[qubit + 1, qubit + 3, qubit + 4])
-        qml.FlipSign(n, wires=range(num_qubits))
+    for _ in range(1, depth - 1):
+        for qubit in range(num_qubits - 1):
+            qml.RX(theta, wires=qubit)
+            qml.CNOT(wires=[qubit, qubit + 1])
+            qml.RY(phi, wires=qubit)
+            qml.DoubleExcitation(theta, wires=[qubit, qubit + 1, qubit + 3, qubit + 4])
+            qml.Toffoli(wires=[qubit + 1, qubit + 3, qubit + 4])
+            qml.FlipSign(n, wires=range(num_qubits))
     return qml.expval(
         qml.X(num_qubits - 1) @ qml.Y(num_qubits - 2) @ qml.Z(num_qubits - 3)
     )
@@ -98,8 +99,7 @@ print(f"Execution time: {end_time - start_time:.4f} seconds")
 #
 # The TN method fully captures the etanglement among qubits without approximation and is more accurately than the MPS method. While, it might require more computational and memory resources than the MPS method.
 # The memory resource required for the TN method is proportional to the number of entangled qubits. Therefore, the TN method is more suitable for simulating shadow quantum circuits with a less degree of entanglement.
-# #
-# In the following example, we consider a simple quantum circuit with a configurable depth. As in the previous circuit, the number of gates increases with the number of qubits.
+# In the following example, we consider a shadow quantum circuit with a configurable depth and less entangled gates.
 #
 
 import pennylane as qml
@@ -130,7 +130,6 @@ def circuit(theta, depth, n, num_qubits):
             qml.CZ(wires=[i, i + 1])
     for i in range(num_qubits - 1):
         qml.CNOT(wires=[i, (i + 1)])
-    qml.FlipSign(n, wires=range(num_qubits))
     return qml.expval(qml.X(num_qubits - 1))
 
 
@@ -145,6 +144,12 @@ print(f"Execution time: {end_time - start_time:.4f} seconds")
 ######################################################################
 # Here, we lazily attach each gate to the tensor network and only perform the contraction when a measurement call is requested.
 # Note that the TN method could be more memory-intensive than the MPS method, as it requires storing the full tensor network.
+
+######################################################################
+# Conclusion
+# ----------
+# In this tutorial, we have shown how to simulate quantum circuits using the ``lightning.tensor`` device in PennyLane. We have demonstrated how to simulate quantum circuits using the MPS and TN methods, which are supported by the ``lightning.tensor`` device.
+# Note that the ``lightning.tensor`` device is still under active development, and further improvements, new features, and additional tutorials/demos are expected in future releases.
 
 ######################################################################
 # References
