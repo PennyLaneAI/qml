@@ -15,6 +15,9 @@ VQE with parallel QPUs with Rigetti
 
 *Author: Tom Bromley — Posted: 14 February 2020. Last updated: 29 August 2023.*
 
+.. warning::
+    This demo is only compatible with PennyLane v0.40 or below. To use Rigetti hardware with newer versions of PennyLane please use the `PennyLane-Braket plugin <https://amazon-braket-pennylane-plugin-python.readthedocs.io/en/stable/index.html>`__ instead.
+
 This tutorial showcases how using asynchronously-evaluated parallel QPUs can speed up the
 calculation of the potential energy surface of molecular hydrogen (:math:`H_2`).
 
