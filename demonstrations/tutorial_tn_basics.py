@@ -234,22 +234,22 @@ print(D.shape)
 # In particular, let us look at an example where :math:`d_l = 1`, :math:`d_k = d_j = 10`, :math:`d_m = 10^2`, and :math:`d_n = d_i = 10^3`.  First, we look at the complexity of contracting :math:`AB` followed by its contraction with :math:`C`. As outlined in the procedure above, the first contraction results in a complexity of
 # 
 # .. math::
-#   \sum_{j} (A)_{i,j,k} (B)_{j,l,m} \implies \mathcal{O}(d_i \times d_m \times d_j^2 ) = \mathcal{O}(10^7)
+#   \sum_{j} (A)_{i,j,k} (B)_{j,l,m} \implies \mathcal{O}(d_i \times d_m \times d_j^2 ) = \mathcal{O}(10^3 10^2 (10^1)^2) = \mathcal{O}(10^7)
 # 
 # Then, contracting the resulting tensor :math:`AB_{i, k, l, m}` with :math:`C_{k,m,n}` requires
 # 
 # .. math::
-#   \sum_{k, m} (AB)_{i, k, l, m} (C)_{k,m,n}  \implies \mathcal{O}(d_j \times d_m \times d_i^2) = \mathcal{O}(10^9)
+#   \sum_{k, m} (AB)_{i, k, l, m} (C)_{k,m,n}  \implies \mathcal{O}(d_j \times d_m \times d_i^2) = \mathcal{O}(10^1 10^2 (10^3)^2) = \mathcal{O}(10^9)
 # 
 # operations. Since :math:`d_j < d_m < d_i`, asymptotically, the whole contraction will have a cost of :math:`\mathcal{O}(d_j \times d_m \times d_i^2) = \mathcal{O}(10^9)`. Alternatively, we could first contract :math:`B` and :math:`C`, incurring the cost
 # 
 # .. math::
-#   \sum_{m} (B)_{j,l,m} (C)_{k,m,n} \implies \mathcal{O}(d_i \times d_m \times d_j^2 ) = \mathcal{O}(10^7).
+#   \sum_{m} (B)_{j,l,m} (C)_{k,m,n} \implies \mathcal{O}(d_i \times d_m \times d_j^2 ) = \mathcal{O}(10^3 10^2 (10^1)^2) = \mathcal{O}(10^7).
 # 
 # Then, contracting the resulting tensor with :math:`A` results in
 # 
 # .. math::
-#   \sum_{j, k} (A)_{i,j,k} (BC)_{j,l,k,n}  \implies \mathcal{O}(d_i^2 \times d_j^2) = \mathcal{O}(10^8).
+#   \sum_{j, k} (A)_{i,j,k} (BC)_{j,l,k,n}  \implies \mathcal{O}(d_i^2 \times d_j^2) = \mathcal{O}((10^3)^2 (10^1)^2) =\mathcal{O}(10^8).
 # 
 # This means the second contraction path results in an asymptotic cost of :math:`\mathcal{O}(d_i^2 \times d_j^2) = \mathcal{O}(10^8)`— lower than the first contraction path.
 # 
