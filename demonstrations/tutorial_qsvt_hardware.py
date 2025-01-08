@@ -26,22 +26,31 @@ fundamental components of the QSVT algorithm:
 - **Projection angles**: A list of angles that will determine the coefficients of the polynomial to be applied.
 - **Block encoding**: The strategy used to encode the Hamiltonian. We will use the :doc:`linear combinations of unitaries <demos/tutorial_lcu_blockencoding>` approach via the PennyLane :class:`~.qml.PrepSelPrep` operation.
 
-Calculating angles is not a trivial task, but there are tools such as `pyqsp <https://github.com/ichuang/pyqsp/tree/master/pyqsp>`_ that do the job for us.
-For instance, to find the angles to apply the polynomial :math:`p(x) = -x + \frac{x^3}{2}+ \frac{x^5}{2},` we can run this code:
+Calculating angles is not a trivial task, but we can use the PennyLane function :func:`~.pennylane.poly_to_angles`
+to obtain them. There are also tools such as `pyqsp <https://github.com/ichuang/pyqsp/tree/master/pyqsp>`_ that can do the job for us.
+Let's try both tools to calculate the angles for applying the
+polynomial :math:`p(x) = -x + \frac{x^3}{2}+ \frac{x^5}{2}`.
 
-.. code-block:: python
-
-   from pyqsp.angle_sequence import QuantumSignalProcessingPhases
-   import numpy as np
-
-   # Define the polynomial, the coefficients are in the order of the polynomial degree.
-   poly = np.array([0,-1, 0, 0.5, 0 , 0.5])
-
-   ang_seq = QuantumSignalProcessingPhases(poly, signal_operator="Wx")
-
-The angles obtained after execution are as follows:
-
+The :func:`~.pennylane.poly_to_angles` function in PennyLane accepts the coefficients of the
+polynomial, ordered from lowest to highest power, as input. We also need to define the routine for
+which the angles are computed, which is ``'QSVT'`` here.
 """
+import pennylane as qml
+poly = [0, -1.0, 0, 1/2, 0, 1/2]
+angles_pl = qml.poly_to_angles(poly, "QSVT")
+print(angles_pl)
+
+######################################################################
+# To find the angles with ``pyqsp`` we can run this code:
+#
+# .. code-block:: python
+#
+#    from pyqsp.angle_sequence import QuantumSignalProcessingPhases
+#    import numpy as np
+#
+#    ang_seq = QuantumSignalProcessingPhases(np.array(poly), signal_operator="Wx")
+#
+# The angles obtained after execution are as follows:
 
 ang_seq = [
     -1.5115007723754004,
@@ -53,31 +62,18 @@ ang_seq = [
 ]
 
 ######################################################################
-# We use these angles to apply the polynomial transformation.
-# However, we are not finished yet: these angles have been calculated following the "Wx"
-# convention [#unification]_, while :class:`~.qml.PrepSelPrep` follows a different one. Moreover, the angles obtained in the
-# context of QSP (the ones given by ``pyqsp``) are not the same as the ones we have to use in QSVT. That is why
-# we must transform the angles:
+# The ``pyqsp`` angles are obtained in the
+# context of QSP and are not the same as the ones we have to use in QSVT.
+# We can use the :func:`~.pennylane.transform_angles` function to transform the angles:
 
-import numpy as np
-
-
-def convert_angles(angles):
-    num_angles = len(angles)
-    update_vals = np.zeros(num_angles)
-
-    update_vals[0] = 3 * np.pi / 4 - (3 + len(angles) % 4) * np.pi / 2
-    update_vals[1:-1] = np.pi / 2
-    update_vals[-1] = -np.pi / 4
-
-    return angles + update_vals
-
-
-angles = convert_angles(ang_seq)
-print(angles)
+angles_pyqsp = qml.transform_angles(ang_seq, "QSP", "QSVT")
+print(angles_pyqsp)
 
 ######################################################################
-# Using these angles, we can now start working with the template.
+# Note that these angles are not exactly the same as those obtained with
+# :func:`~.pennylane.poly_to_angles`, but they will both produce the same polynomial transformation.
+# Using the angles computed with :func:`~.pennylane.poly_to_angles` or ``pyqsp``, we can now start
+# working with the template.
 #
 # QSVT on hardware
 # -----------------
@@ -88,6 +84,7 @@ print(angles)
 # a Hamiltonian and manually apply the polynomial of interest:
 
 import pennylane as qml
+import numpy as np
 from numpy.linalg import matrix_power as mpow
 
 coeffs = np.array([0.2, -0.7, -0.6])
@@ -113,8 +110,8 @@ control_wires = [1, 2]
 block_encode = qml.PrepSelPrep(H, control=control_wires)
 
 projectors = [
-    qml.PCPhase(angles[i], dim=2 ** len(H.wires), wires=control_wires + H.wires)
-    for i in range(len(angles))
+    qml.PCPhase(angles_pl[i], dim=2 ** len(H.wires), wires=control_wires + H.wires)
+    for i in range(len(angles_pl))
 ]
 
 
