@@ -88,7 +88,7 @@ print(f"Execution time: {end_time - start_time:.4f} seconds")
 # Unlike ``default.tensor``, the graph contraction operation is not carried out immediately after each gate application.
 # Instead, the tensor network is lazily built up, and the contraction is performed only when the final MPS state calcalution is requested.
 #
-# To learn more about the MPS method and its theoretical background, we refer to the extensive literature available on the subject, such as [#orus]_ and [#bayraktar]_.
+# To learn more about the MPS method and its theoretical background, we refer to the `Default.Tensor Demo<demos/tutorial_How_to_simulate_quantum_circuits_with_tensor_networks>`.
 #
 
 ######################################################################
@@ -149,20 +149,6 @@ print(f"Execution time: {end_time - start_time:.4f} seconds")
 # In this tutorial, we have shown how to simulate quantum circuits using the ``lightning.tensor`` device in PennyLane. We have demonstrated how to simulate quantum circuits using the MPS and TN methods, which are supported by the ``lightning.tensor`` device.
 # Note that the ``lightning.tensor`` device is still under active development, and further improvements, new features, and additional tutorials/demos are expected in future releases.
 
-######################################################################
-# References
-# ----------
-# .. [#orus]
-#
-#    R. Orús, Annals of Physics 349, 117 (2014), ISSN 0003-
-#    4916, URL https://www.sciencedirect.com/science/article/pii/S0003491614001596.
-#
-# .. [#bayraktar]
-#
-#    Bayraktar, Harun, et al. arXiv:2308.01999 (2023).
-#    URL https://arxiv.org/abs/2308.01999.
-
-######################################################################
 # About the author
 # ----------------
 # .. include:: ../_static/authors/shuli_shu.txt
