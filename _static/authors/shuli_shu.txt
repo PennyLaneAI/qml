@@ -1,4 +1,4 @@
 .. bio:: Shuli Shu
    :photo: ../_static/authors/shuli_shu.jpg
 
-   Shuli is a quantum software developer at Xanadu, where he focuses on accelerating high-performance quantum software platforms with parallel computation and GPUs. He holds a Ph.D in engineering.
+   Shuli is a senior quantum software developer at Xanadu, where he focuses on accelerating high-performance quantum software platforms with parallel computation and GPUs. He holds a Ph.D in engineering.
