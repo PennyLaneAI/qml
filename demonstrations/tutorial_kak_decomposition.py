@@ -1,26 +1,26 @@
-r"""The KAK theorem
-===================
+r"""The KAK decomposition
+=========================
 
-The KAK theorem is a beautiful mathematical result from Lie theory, with
+The KAK decomposition is a beautiful mathematical result from Lie theory, with
 particular relevance for quantum computing. It can be seen as a
 generalization of the singular value decomposition (SVD), as it decomposes a group
 element :math:`U` (think: unitary operator) into :math:`U=K_1AK_2,` where
 :math:`K_{1,2}` and :math:`A` belong to special subgroups that we will introduce.
-This means the KAK theorem falls under the large umbrella of matrix factorizations,
+This means the KAK decomposition falls under the large umbrella of matrix factorizations,
 and it allows us to break down arbitrary quantum circuits into smaller building blocks,
 i.e., we can use it for quantum circuit decompositions.
 
 In this demo, we will dive into Lie algebras and their groups. Then, we will discuss
 so-called symmetric spaces, which arise from certain subgroups of those Lie groups.
-With these tools in our hands, we will then learn about the KAK theorem itself, which
-exploits a so-called Cartan decomposition to break up such a Lie group.
+With these tools in our hands, we will then learn about the KAK decomposition itself,
+breaking up the Lie group into the subgroup and the symmetric space.
 
 We will make all steps explicit on a toy example on paper and in code, which splits
 single-qubit gates into a well-known sequence of rotations.
 Finally, we will get to know a handy decomposition of arbitrary
-two-qubit unitaries into rotation gates as another application of the KAK theorem.
+two-qubit unitaries into rotation gates as another application of the KAK decomposition.
 
-.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_kak_theorem.png
+.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_kak_decomposition.png
     :align: center
     :width: 70%
     :target: javascript:void(0)
@@ -123,7 +123,7 @@ print(f"All operators are traceless: {np.allclose(traces, 0.)}")
 # .. admonition:: Math detail: (semi)simple Lie algebras
 #     :class: note
 #
-#     Our main result for this demo will be the KAK theorem, which applies to so-called
+#     Our main result for this demo will be the KAK decomposition, which applies to so-called
 #     *semisimple* Lie algebras, which are in turn composed of *simple* Lie algebras as building
 #     blocks. Without going into detail, it often is sufficient to think of these building
 #     blocks as (1) special orthogonal algebras :math:`\mathfrak{so}(n),` (2) unitary symplectic
@@ -277,7 +277,7 @@ def is_orthogonal(op, basis):
 #
 # In this context, :math:`\mathfrak{k}` is commonly called the *vertical space*,
 # :math:`\mathfrak{p}` accordingly is the *horizontal space*.
-# The KAK theorem will apply to scenarios in which these spaces satisfy additional
+# The KAK decomposition will apply to scenarios in which these spaces satisfy additional
 # commutation relations, which do not hold for all subalgebras:
 #
 # .. math::
@@ -455,7 +455,7 @@ p = check_cartan_decomposition(su2, u1, space_name)
 # It turns out that they *all* can be found by starting with *any*
 # :math:`\mathfrak{a}` and applying all of :math:`\mathcal{K}` to it.
 #
-# *This is what powers the KAK theorem.*
+# *This is what powers the KAK decomposition.*
 #
 # **Example**
 #
@@ -663,8 +663,8 @@ print(f"Under theta_Y, the operators\n{su2}\nhave the eigenvalues\n{eigvals}")
 #     (AII). It is instructive to try and see why those three are *not* equivalent
 #     under a unitary basis change!
 #
-# The KAK theorem
-# ---------------
+# The KAK decomposition
+# ---------------------
 #
 # Now that we covered all prerequisites, we are ready for our main result. It consists of two
 # steps that are good to know individually, so we will look at both of them in sequence.
@@ -724,7 +724,7 @@ print(f"Under theta_Y, the operators\n{su2}\nhave the eigenvalues\n{eigvals}")
 # where we abbreviated :math:`\mathcal{A} = \exp(\mathfrak{a}).`
 #
 # Chaining the two steps together and combining the left factor :math:`K^{-1}` with the group
-# :math:`\mathcal{K}` in the *KP* decomposition, we obtain the *KAK theorem*
+# :math:`\mathcal{K}` in the *KP* decomposition, we obtain the *KAK decomposition*
 #
 # .. math::
 #
@@ -732,11 +732,11 @@ print(f"Under theta_Y, the operators\n{su2}\nhave the eigenvalues\n{eigvals}")
 #     =\mathcal{K}\mathcal{P}
 #     = \mathcal{K}\{K^{-1} \mathcal{A} K | K\in\mathcal{K}\},
 #     = \{K_1 \mathcal{A} K_2 | K_{1,2}\in\mathcal{K}\},
-#     = \mathcal{K} \mathcal{A} \mathcal{K} \qquad\textbf{(KAK Theorem).}
+#     = \mathcal{K} \mathcal{A} \mathcal{K} \qquad\textbf{(KAK Decomposition).}
 #
 # It teaches us that any group element can be decomposed into two factors from the Lie subgroup and
 # the exponential of a CSA element, i.e., of commuting elements from the horizontal subspace
-# :math:`\mathfrak{p}.` This may already hint at the usefulness of the KAK theorem for matrix
+# :math:`\mathfrak{p}.` This may already hint at the usefulness of the KAK decomposition for matrix
 # factorizations in general, and for quantum circuit decompositions in particular.
 # Given a group operation :math:`G=\exp(x)` with :math:`x\in\mathfrak{g},` there are two
 # subalgebra elements :math:`y_{1,2}\in\mathfrak{k}` (or subgroup elements
@@ -792,7 +792,7 @@ print(f"First and last rotation angle match up to sign and shift by 2kπ: {angle
 #     \text{Rot}(\phi, \theta, \omega) = R_Y(\eta_1) R_X(\vartheta) R_Y(\eta_2).
 #
 # And that's it for our main discussion. We conclude this demo by applying the
-# KAK theorem to the group of arbitrary two-qubit gates.
+# KAK decomposition to the group of arbitrary two-qubit gates.
 #
 # Application: Two-qubit gate decomposition
 # -----------------------------------------
@@ -841,7 +841,7 @@ p = check_cartan_decomposition(su4, su2_su2, space_name)
 # These three operators commute, making :math:`\mathfrak{a}` Abelian.
 # They also form a *maximal* Abelian algebra within :math:`\mathfrak{p},` which is less obvious.
 #
-# The KAK theorem now tells us that any two-qubit gate :math:`U,` being part of
+# The KAK decomposition now tells us that any two-qubit gate :math:`U,` being part of
 # :math:`SU(4),` can be implemented by a sequence
 #
 # .. math::
@@ -883,9 +883,9 @@ params = np.random.random(15)
 fig, ax = qml.draw_mpl(su4_gate, wire_order=[0, 1])(params)
 
 ######################################################################
-# And that's a wrap on our KAK theorem application for two-qubit gates!
+# And that's a wrap on our application of the KAK decomposition for two-qubit gates!
 #
-# You may have noticed that the theorem only states the existence of a
+# You may have noticed that this mathematical result only states the existence of a
 # decomposition, but does not provide a constructive way of finding
 # :math:`y_{1,2}` and :math:`a` for a given gate :math:`U.` For this,
 # some additional work is required, as explained in [#kokcu_fdhs]_, for example.
@@ -893,8 +893,8 @@ fig, ax = qml.draw_mpl(su4_gate, wire_order=[0, 1])(params)
 # Conclusion
 # ----------
 #
-# In this demo we learned about the KAK theorem and how it uses a Cartan
-# decomposition of a Lie algebra to decompose its Lie group.
+# In this demo we learned about the KAK decomposition and how it breaks up a
+# Lie group using the Cartan decomposition of its Lie algebra.
 # This allows us to break down arbitrary quantum gates from that group,
 # as we implemented in code for the groups of single-qubit and two-qubit gates,
 # :math:`SU(2)` and :math:`SU(4).`
