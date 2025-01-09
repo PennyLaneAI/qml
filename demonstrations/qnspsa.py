@@ -916,10 +916,10 @@ for i in range(300):
 # QN-SPSA in Fig. 1(b) of reference [#Gacon2021]_ with the following job. 
 #
 # .. warning:: 
-#   The following code is incomplete and might require additional attention. 
-#   You can find a more detailed version of the example in this
+#   The code required to plot the results of the example below is not provided, but a similar
+#   example can be found in this
 #   `notebook <https://github.com/aws/amazon-braket-examples/blob/main/examples/hybrid_jobs/6_QNSPSA_optimizer_with_embedded_simulator/qnspsa_with_embedded_simulator.ipynb>`__,
-#   with its dependencies in the `source_scripts`
+#   with all its dependencies included in the `source_scripts`
 #   `folder <https://github.com/aws/amazon-braket-examples/blob/main/examples/hybrid_jobs/6_QNSPSA_optimizer_with_embedded_simulator/source_scripts/>`__.
 #
 # .. note::
