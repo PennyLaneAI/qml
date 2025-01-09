@@ -52,7 +52,7 @@ dev = qml.device("lightning.tensor", wires=num_qubits, method="mps", **kwargs_mp
 @qml.qnode(dev)
 def circuit(theta, phi, n, num_qubits):
     for _ in range(1, depth - 1):
-        for qubit in range(num_qubits - 1):
+        for qubit in range(num_qubits - 4):
             qml.RX(theta, wires=qubit)
             qml.CNOT(wires=[qubit, qubit + 1])
             qml.RY(phi, wires=qubit)
@@ -85,7 +85,7 @@ print(f"Result: {result}")
 print(f"Execution time: {end_time - start_time:.4f} seconds")
 
 ######################################################################
-# Unlike ``default.tensor``, the graph contrction operation is not carried out immediately after each gate application.
+# Unlike ``default.tensor``, the graph contraction operation is not carried out immediately after each gate application.
 # Instead, the tensor network is lazily built up, and the contraction is performed only when the final MPS state calcalution is requested.
 #
 # To learn more about the MPS method and its theoretical background, we refer to the extensive literature available on the subject, such as [#orus]_ and [#bayraktar]_.
@@ -95,7 +95,7 @@ print(f"Execution time: {end_time - start_time:.4f} seconds")
 # Simulating a quantum circuit with the TN method
 # -----------------------------------------------
 #
-# The TN method fully captures the etanglement among qubits without approximation and is more accurately than the MPS method. While, it might require more computational and memory resources than the MPS method.
+# The TN method fully captures the entanglement among qubits without approximation and is more accurate than the MPS method. While, it might require more computational and memory resources than the MPS method.
 # The memory resource required for the TN method is proportional to the number of entangled qubits. Therefore, the TN method is more suitable for simulating shadow quantum circuits with a less degree of entanglement.
 # In the following example, we consider a shadow quantum circuit with a configurable depth and less entangled gates.
 #
