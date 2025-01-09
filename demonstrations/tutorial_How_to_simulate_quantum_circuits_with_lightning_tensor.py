@@ -59,9 +59,7 @@ def circuit(theta, phi, n, num_qubits):
             qml.DoubleExcitation(theta, wires=[qubit, qubit + 1, qubit + 3, qubit + 4])
             qml.Toffoli(wires=[qubit + 1, qubit + 3, qubit + 4])
             qml.FlipSign(n, wires=range(num_qubits))
-    return qml.expval(
-        qml.X(num_qubits - 1) @ qml.Y(num_qubits - 2) @ qml.Z(num_qubits - 3)
-    )
+    return qml.expval(qml.X(num_qubits - 1) @ qml.Y(num_qubits - 2) @ qml.Z(num_qubits - 3))
 
 
 ######################################################################
