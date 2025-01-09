@@ -338,7 +338,7 @@ def loss(theta):
 
 theta0 = jnp.ones(len(k), dtype=float)
 
-thetas, energy, _ = run_opt(loss, theta0, n_epochs=1200, lr=0.05)
+thetas, energy, _ = run_opt(loss, theta0, n_epochs=1000, lr=0.05)
 plt.plot(energy - np.min(energy))
 plt.xlabel("epochs")
 plt.ylabel("cost")
