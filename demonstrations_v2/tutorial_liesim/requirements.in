@@ -1,0 +1,7 @@
+datetime
+jax
+jaxlib
+matplotlib
+numpy
+optax
+pennylane

@@ -1,0 +1,6 @@
+matplotlib
+numpy
+pennylane
+qiskit_ibm_runtime
+rustworkx
+strawberryfields
