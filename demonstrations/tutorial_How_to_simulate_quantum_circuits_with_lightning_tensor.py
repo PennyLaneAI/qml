@@ -69,7 +69,7 @@ def circuit(theta, phi, n, num_qubits):
 # Please note that the accepted keyword arguments for ``lightning.tensor`` are slightly different from the ``default.tensor`` device.
 #
 # In general, a circuit run on a ``lightning.tensor`` device could be faster than on a CPU-based ``default.tensor`` device, given a sufficient large bond dimension is used in the
-# calculations. The eaxct performance of those devices depends on the gates in the specific circuit. For example, the ``lightning.tensor`` device natively supports multi-controlled 1-wire target gates,
+# calculations. The exact performance of those devices depends on the gates in the specific circuit. For example, the ``lightning.tensor`` device natively supports multi-controlled 1-wire target gates,
 # such as the `qml.FlipSign` operator, which is widely used in the Grover algorithm.
 #
 #
