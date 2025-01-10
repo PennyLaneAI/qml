@@ -198,9 +198,9 @@ devs = [dev0, dev1]
 ##############################################################################
 # .. note::
 #    If you have access to Rigetti hardware, you can swap out ``rigetti.qvm`` for ``rigetti.qpu``
-#    and specify the hardware device to run on. Users with access to the IBM Q Experience can
-#    swap ``qiskit.aer`` for ``qiskit.ibmq`` and specify their chosen backend (see `here
-#    <https://docs.pennylane.ai/projects/qiskit/en/latest/devices/ibmq.html>`__).
+#    and specify the hardware device to run on. Users with access to the IBM hardware can
+#    swap ``qiskit.aer`` for ``qiskit.remote`` and specify their chosen backend (see `here
+#    <https://docs.pennylane.ai/projects/qiskit/en/latest/devices/remote.html>`__).
 #
 #
 # The circuits for both QPUs are shown in the figure below:
