@@ -1,0 +1,32 @@
+{
+    "title": "How to simulate quantum circuits with tensor networks with lightning.tensor",
+    "authors": [
+        {
+            "username": "sshu"
+        }
+    ],
+    "dateOfPublication": "2025-01-10T00:00:00+00:00",
+    "dateOfLastModification": "2025-01-10T00:00:00+00:00",
+    "categories": [
+        "Getting Started",
+        "Quantum Computing",
+        "Devices and Performance",
+        "How-to"
+    ],
+    "tags": [
+        "how to"
+    ],
+    "previewImages": "",
+    "seoDescription": "Learn how to simulate quantum circuits with tensor networks using the lightning.tensor PennyLane device.",
+    "doi": "",
+    "references":"",
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_tn_circuits",
+            "weight": 1.0
+        }
+    ]
+}
