@@ -12,8 +12,8 @@ r"""Pulse programming on OQC Lucy in PennyLane
 *Author: Korbinian Kottmann — Posted: 30 October 2023.*
 
 .. warning::
-    The OQC Lucy device has been retired on Amazon Braket and is no longer accessible. As there is no alternative 
-    at this time, this demo should be used for educational purposes only.
+    The OQC Lucy device is no longer available on Amazon Braket. As there is no alternative at this time, this
+    demo is now intended for educational purposes only.
 
 Pulse-level access to quantum computers offers many interesting new avenues in
 quantum optimal control, variational quantum algorithms and device-aware algorithm design.
