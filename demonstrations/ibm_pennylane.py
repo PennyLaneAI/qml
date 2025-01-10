@@ -127,7 +127,7 @@ print(Aer.backends())
 #
 # .. warning::
 #
-#    By default, this demo uses the online simulator (`ibmq_qasm_simulator`), which is free at the 
+#    By default, this demo uses the online simulator (`ibmq_qasm_simulator`), which is free at the
 #    time of writing. However:
 #    - IBM Quantum's policies may change, and simulators could become paid services.
 #    - Always verify current pricing and access policies on the IBM Quantum platform.
@@ -153,8 +153,9 @@ service = QiskitRuntimeService()
 backend = service.backend("ibmq_qasm_simulator")
 
 try:
-    # Although we only need 4 qubits, our device supports a maximum of 31 qubits, therefore we initialize with wires=31
-    dev = qml.device("qiskit.remote", wires=31, backend=backend)
+    # Our device supports a maximum of 31 qubits
+    NUM_QUBITS_SUPPORTED = 31
+    dev = qml.device("qiskit.remote", wires=NUM_QUBITS_SUPPORTED, backend=backend)
 except Exception as e:
     print(e)
 
