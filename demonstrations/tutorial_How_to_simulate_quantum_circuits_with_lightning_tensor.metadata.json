@@ -16,10 +16,10 @@
     "tags": [
         "how to"
     ],
-    "previewImages": "",
+    "previewImages": [],
     "seoDescription": "Learn how to simulate quantum circuits with tensor networks using the lightning.tensor PennyLane device.",
     "doi": "",
-    "references":"",
+    "references":[],
     "basedOnPapers": [],
     "referencedByPapers": [],
     "relatedContent": [
