@@ -67,7 +67,7 @@ jobs:
           make html
           zip -r /tmp/qml_demos.zip demos
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         with:
           name: built-website-dev
           path: |
@@ -136,7 +136,7 @@ jobs:
           make html
           zip -r /tmp/qml_demos.zip demos
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         with:
           name: built-website-master
           path: |
@@ -156,7 +156,7 @@ jobs:
     - name: Create dev dir
       run: mkdir /tmp/dev/
 
-    - uses: actions/download-artifact@v2
+    - uses: actions/download-artifact@v4
       with:
         name: built-website-dev
         path: /tmp/dev/
@@ -164,7 +164,7 @@ jobs:
     - name: Create master dir
       run: mkdir /tmp/master/
 
-    - uses: actions/download-artifact@v2
+    - uses: actions/download-artifact@v4
       with:
         name: built-website-master
         path: /tmp/master/
@@ -186,7 +186,7 @@ jobs:
         git commit -m "Update the demonstration differences found"
         git push
 
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v4
       with:
         name: demo_diffs
         path: |
