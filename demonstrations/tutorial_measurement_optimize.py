@@ -725,7 +725,7 @@ def circuit(weights, group=None, **kwargs):
 param_shape = qml.templates.StronglyEntanglingLayers.shape(n_layers=3, n_wires=4)
 key = random.PRNGKey(1)
 weights = random.normal(key, shape=param_shape) * 0.1
-result = [circuit(weights, group=g) for g in obs_groupings]
+result = [jnp.array(circuit(weights, group=g)) for g in obs_groupings]
 
 print("Term expectation values:")
 for group, expvals in enumerate(result):
