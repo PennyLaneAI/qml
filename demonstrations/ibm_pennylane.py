@@ -149,12 +149,11 @@ qubits = 4
 # Initialize QiskitRuntimeService
 service = QiskitRuntimeService()
 
-# Use an online simulator available on IBM Cloud
+# Use the `ibmq_qasm_simulator` available on IBM Cloud
 backend = service.backend("ibmq_qasm_simulator")
 
 try:
-    # Although we only need 4 qubits, our device supports a maximum of 31 qubits, therefore we
-    # initialize with wires=31
+    # Although we only need 4 qubits, our device supports a maximum of 31 qubits, therefore we initialize with wires=31
     dev = qml.device("qiskit.remote", wires=31, backend=backend)
 except Exception as e:
     print(e)
