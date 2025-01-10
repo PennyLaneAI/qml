@@ -18,10 +18,10 @@ This tutorial outlines how two QPUs can be combined in parallel to help solve a 
 classification problem.
 
 .. warning::
-    This demo does not work with the latest version of Qiskit or the Pennylane-Qiskit plugin.
-    It is compatible with ``qiskit==0.46`` and ``pennylane-qiskit==0.35.1``. Older versions of
-    Qiskit and the Pennylane-Qiskit plugin should not be installed in environments with an
-    existing installation of Qiskit 1.0 or above.
+    This demo does not work with the latest version of Qiskit or the Pennylane-Qiskit plugin and
+    is compatible with Python versions 3.10 and lower. It is compatible with ``qiskit==0.46`` and 
+    ``pennylane-qiskit==0.35.1``. Older versions of Qiskit and the Pennylane-Qiskit plugin should 
+    not be installed in environments with an existing installation of Qiskit 1.0 or above.
 
 We use the ``rigetti.qvm`` device to simulate one QPU and the ``qiskit.aer`` device to
 simulate another. Each QPU makes an independent prediction, and an ensemble model is
