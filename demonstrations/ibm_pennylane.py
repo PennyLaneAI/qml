@@ -124,6 +124,17 @@ print(Aer.backends())
 #
 # First, we set up our problem as usual, and then retrieve a program ID from IBM, which gives us a
 # place to upload our job:
+#
+# .. warning::
+#
+#    By default, this demo uses the online simulator (`ibmq_qasm_simulator`), which is free at the 
+#    time of writing. However:
+#    - IBM Quantum's policies may change, and simulators could become paid services.
+#    - Always verify current pricing and access policies on the IBM Quantum platform.
+#
+#    This demo can also run on quantum hardware by updating the backend variable accordingly. Be aware:
+#    - Access to IBM Quantum hardware is not free and may result in substantial costs.
+#    - Ensure you are aware of these costs and comfortable with them before proceeding.
 
 from pennylane import numpy as pnp
 from qiskit_ibm_runtime import QiskitRuntimeService
@@ -135,13 +146,16 @@ import pennylane as qml
 H = dataset.hamiltonian
 qubits = 4
 
+# Initialize QiskitRuntimeService
 service = QiskitRuntimeService()
-# Gets a 127 qubit device from IBM
-backend = service.least_busy(n_qubits=127, simulator=False, operational=True)
+
+# Use an online simulator available on IBM Cloud
+backend = service.backend("ibmq_qasm_simulator")
 
 try:
-    # Although we only need 4 qubits, our device has 127 qubits, therefore we initialize with wires=127
-    dev = qml.device("qiskit.remote", wires=127, backend=backend)
+    # Although we only need 4 qubits, our device supports a maximum of 31 qubits, therefore we
+    # initialize with wires=31
+    dev = qml.device("qiskit.remote", wires=31, backend=backend)
 except Exception as e:
     print(e)
 
