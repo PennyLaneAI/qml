@@ -91,21 +91,21 @@ g = qml.lie_closure(gens)
 g = [op.pauli_rep for op in g]
 
 ##############################################################################
-# 
+#
 # Cartan decomposition
 # --------------------
-# 
+#
 # A Cartan decomposition is a bipartition :math:`\mathfrak{g} = \mathfrak{k} \oplus \mathfrak{m}` into a vertical subspace
 # :math:`\mathfrak{k}` and an orthogonal horizontal subspace :math:`\mathfrak{m}.` In practice, it can be induced by an
-# involution function :math:`\Theta` that fulfills :math:`\Theta(\Theta(g)) = g \ \forall g \in \mathfrak{g}.` Different 
-# involutions lead to different types of Cartan decompositions, which have been fully classified by Cartan 
+# involution function :math:`\Theta` that fulfills :math:`\Theta(\Theta(g)) = g \ \forall g \in \mathfrak{g}.` Different
+# involutions lead to different types of Cartan decompositions, which have been fully classified by Cartan
 # (see `the classification of symmetric spaces by Cartan <https://en.wikipedia.org/wiki/Symmetric_space#Classification_result>`__).
-# 
+#
 # .. admonition:: Notation
 #     :class: note
 #
 #     Note that :math:`\mathfrak{k}` is the small letter k in
-#     `Fraktur <https://en.wikipedia.org/wiki/Fraktur>`__ and a 
+#     `Fraktur <https://en.wikipedia.org/wiki/Fraktur>`__ and a
 #     common — not our — choice for the vertical subspace in a Cartan decomposition.
 #
 # One common choice of involution is the so-called even-odd involution for Pauli words,
@@ -119,7 +119,7 @@ def even_odd_involution(op):
 even_odd_involution(X(0)), even_odd_involution(X(0) @ Y(3))
 
 ##############################################################################
-# 
+#
 # The vertical and horizontal subspaces are the two eigenspaces of the involution, corresponding to the :math:`\pm 1` eigenvalues.
 # In particular, we have :math:`\Theta(\mathfrak{k}) = \mathfrak{k}` and :math:`\Theta(\mathfrak{m}) = - \mathfrak{m}.`
 # So in order to perform the Cartan decomposition :math:`\mathfrak{g} = \mathfrak{k} \oplus \mathfrak{m},` we simply
@@ -151,7 +151,7 @@ len(g), len(k), len(m)
 
 
 ##############################################################################
-# We have successfully decomposed the 60-dimensional Lie algebra 
+# We have successfully decomposed the 60-dimensional Lie algebra
 # into a 24-dimensional vertical subspace and a 36-dimensional subspace.
 #
 # Note that not every bipartition of a Lie algebra constitutes a Cartan decomposition.
@@ -167,7 +167,7 @@ len(g), len(k), len(m)
 # In particular, :math:`\mathfrak{k}` is closed under commutation and is therefore a subalgebra, whereas :math:`\mathfrak{m}` is not.
 # This also has the consequence that the associated Lie group :math:`\mathcal{K} := e^{i \mathfrak{k}}` is a subgroup
 # of the associated Lie group :math:`\mathcal{G} := e^{i \mathfrak{g}}.`
-# 
+#
 # We mentioned earlier that we are aiming to do a special case of KAK decomposition where the second unitary :math:`K_2 = K_1^\dagger.`
 # This is possible whenever the operator that we want to decompose is in the horizontal subspace :math:`\mathfrak{m}`, i.e. we want :math:`\Theta(H) = -H`.
 # The chosen :math:`H` and :math:`\Theta` fulfill this property, as can be easily verified.
@@ -180,7 +180,7 @@ for op in H.operands:
 #
 # Cartan subalgebra
 # -----------------
-# 
+#
 # With this we have identified the first subgroup, :math:`\mathcal{K},` of the KAK decomposition. The other subgroup
 # is induced by the so-called (horizontal) Cartan subalgebra :math:`\mathfrak{h}.` This is a maximal Abelian subalgebra of :math:`\mathfrak{m}` and it is not unique.
 # For the case of Pauli words, we can simply pick any element in :math:`\mathfrak{m}` and collect all other operators in :math:`\mathfrak{m}`
@@ -237,19 +237,19 @@ len(g), len(k), len(mtilde), len(h)
 ##############################################################################
 # We now have the Cartan decomposition :math:`\mathfrak{g} = \mathfrak{k} \oplus \tilde{\mathfrak{m}} \oplus \mathfrak{h}`
 # and with that all the necessary ingredients for the KAK decomposition.
-# 
+#
 # Variational KhK decomposition
 # -----------------------------
 #
 # The KAK theorem is not constructive in the sense that it proves that there exists such a decomposition, but there is no general way of obtaining
 # it. In particular, there are no linear algebra subroutines implemented in ``numpy`` or ``scipy`` that just compute it for us.
-# Here, we follow the construction of [#Kökcü]_ for the special case of :math:`H` being in the horizontal space and the decomposition 
+# Here, we follow the construction of [#Kökcü]_ for the special case of :math:`H` being in the horizontal space and the decomposition
 # simplifying to :math:`H = K^\dagger h K`.
 #
 # The authors propose to find a local extremum of the cost function
-# 
+#
 # .. math:: f(\theta) = \langle K(\theta) v K(\theta)^\dagger, H\rangle
-# 
+#
 # where :math:`\langle \cdot, \cdot \rangle` is some inner product (in our case, the trace inner product :math:`\langle A, B \rangle = \text{tr}(A^\dagger B)).`
 # This construction uses the operator :math:`v = \sum_j \pi^j h_j \in \mathfrak{h}`
 # that is such that :math:`e^{i t v}` is dense in :math:`e^{i \mathcal{h}}.`
@@ -264,20 +264,20 @@ v_m = jnp.array(v_m)
 
 
 ##############################################################################
-# 
+#
 # This procedure has the advantage that we can use an already decomposed ansatz
-# 
+#
 # .. math:: K(\theta) = \prod_j e^{-i \theta_j k_j}
-# 
+#
 # for the vertical unitary.
-# 
+#
 # Now we just have to define the cost function and find an extremum.
 # In this case, we are going to use gradient descent to minimize the cost function to a minimum.
 # We are going to use ``jax`` and ``optax`` and write some boilerplate for the optimization procedure.
 #
-# .. note:: 
-#     You can check our demos on parameter optimization in JAX with 
-#     :doc:`Optax </demos/tutorial_How_to_optimize_QML_model_using_JAX_and_Optax>` or 
+# .. note::
+#     You can check our demos on parameter optimization in JAX with
+#     :doc:`Optax </demos/tutorial_How_to_optimize_QML_model_using_JAX_and_Optax>` or
 #     :doc:`JAXOpt </demos/tutorial_How_to_optimize_QML_model_using_JAX_and_JAXopt>`.
 #
 
@@ -338,7 +338,7 @@ def loss(theta):
 
 theta0 = jnp.ones(len(k), dtype=float)
 
-thetas, energy, _ = run_opt(loss, theta0, n_epochs=600, lr=0.05)
+thetas, energy, _ = run_opt(loss, theta0, n_epochs=1000, lr=0.05)
 plt.plot(energy - np.min(energy))
 plt.xlabel("epochs")
 plt.ylabel("cost")
@@ -355,7 +355,7 @@ Kc_m = qml.matrix(K, wire_order=range(n_wires))(theta_opt, k)
 ##############################################################################
 # The special element :math:`h_0` from the Cartan subalgebra :math:`\mathfrak{h}` is given by
 # rotating the Hamiltonian by the critical :math:`K_c,`
-# 
+#
 # .. math:: h_0 = K_c^\dagger H K_c.
 
 h_0_m = Kc_m.conj().T @ H_m @ Kc_m
@@ -368,18 +368,18 @@ h_vspace = qml.pauli.PauliVSpace(h)
 not h_vspace.is_independent(h_0.pauli_rep)
 
 ##############################################################################
-# 
+#
 # The fact that :math:`K_c^\dagger H K_c \in \mathfrak{h}` is crucial for this decomposition to be valid and meaningful.
 # Otherwise, :math:`h_0` could be anything and we arrive back at the original problem of decomposing :math:`e^{-i t h_0}`.
 # Here we know that :math:`h_0` is composed of elements of an Abelian Lie algebra :math:`\mathfrak{h}`, such that we can
-# trivially decompose its unitary as 
-# 
+# trivially decompose its unitary as
+#
 # .. math:: e^{-i t h_0} = e^{-i t \sum_{j=1}^{|\mathfrak{h}|} c_j h_j} = \prod_{j=1}^{|\mathfrak{h}|} e^{-i t c_j h_j}.
 #
 # Overall, this gives us the KhK decomposition of :math:`H,`
-# 
+#
 # .. math:: H = K_c h_0 K_c^\dagger.
-# 
+#
 # This trivially reproduces the original Hamiltonian.
 #
 
@@ -407,9 +407,6 @@ def trace_distance(A, B):
 trace_distance(U_exact_m, U_kak_m)
 
 
-
-
-
 ##############################################################################
 # Indeed we find that the KAK decomposition that we found reproduces the unitary evolution operator.
 # Note that this is valid for arbitrary :math:`t,` such that the Hamiltonian simulation operator has a fixed depth.
@@ -431,7 +428,7 @@ trace_distance(U_exact_m, U_kak_m)
 ##############################################################################
 # Time evolutions
 # ---------------
-# 
+#
 # We compute multiple time evolutions for different times and compare Suzuki–Trotter products with the KAK decomposition circuit.
 #
 
@@ -477,28 +474,27 @@ plt.show()
 
 
 ##############################################################################
-# 
+#
 # Conclusion
 # ----------
-# 
+#
 # The KAK theorem is a very general mathematical result with far-reaching consequences.
 # While there is no canonical way of obtaining an actual decomposition in practice, we followed
 # the approach of [#Kökcü]_ which uses a specifically designed loss function and variational
 # optimization to find the decomposition.
 # This approach has the advantage that the resulting decomposition is itself already decomposed in terms of rotation gates in the original Lie algebra,
 # as opposed to other methods such as [#Chu]_ that find :math:`K` as a whole.
-# We provided a flexible pipeline that lets users find KAK decompositions in PennyLane for systems with small 
+# We provided a flexible pipeline that lets users find KAK decompositions in PennyLane for systems with small
 # DLA (:doc:`Dynamical Lie Algebras <tutorial_liealgebra>`) and specifically decomposed the Heisenberg model Hamiltonian with :math:`n=4` qubits that has a DLA of dimension :math:`60` (:math:`\left(\mathfrak{s u}(2^{n-2})\right)^{\oplus 4}`).
 #
-# As most DLAs scale exponentially in the number of qubits, KAK decompositions are limited to small system sizes 
+# As most DLAs scale exponentially in the number of qubits, KAK decompositions are limited to small system sizes
 # or special cases of systems with small DLAs.
 # This is in line with the notion that fast-forwarding is generally not possible and limited to special systems.
 # In particular, a KAK decomposition is ultimately always a fast-forwarding of a Hamiltonian.
 
 
-
 ##############################################################################
-# 
+#
 # References
 # ----------
 #

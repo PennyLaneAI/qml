@@ -609,14 +609,16 @@ with warnings.catch_warnings():
     ])
 
     plt.margins(x=0.1)
+    coords = nx.spring_layout(G, seed=1)
     nx.draw(
         G,
+        coords,
         labels={node: format_pauli_word(node) for node in terms},
         with_labels=True,
         node_size=500,
         font_size=8,
         node_color="#9eded1",
-        edge_color="#c1c1c1"
+        edge_color="#c1c1c1",
     )
 
     ##############################################################################
@@ -624,7 +626,7 @@ with warnings.catch_warnings():
     # version above!):
 
     C = nx.complement(G)
-    coords = nx.spring_layout(C)
+    coords = nx.spring_layout(C, seed=1)
 
     nx.draw(
         C,
@@ -636,7 +638,6 @@ with warnings.catch_warnings():
         node_color="#9eded1",
         edge_color="#c1c1c1"
     )
-
 
     ##############################################################################
     # Now that we have the complement graph, we can perform a greedy coloring to
@@ -724,7 +725,7 @@ def circuit(weights, group=None, **kwargs):
 param_shape = qml.templates.StronglyEntanglingLayers.shape(n_layers=3, n_wires=4)
 key = random.PRNGKey(1)
 weights = random.normal(key, shape=param_shape) * 0.1
-result = [circuit(weights, group=g) for g in obs_groupings]
+result = [jnp.array(circuit(weights, group=g)) for g in obs_groupings]
 
 print("Term expectation values:")
 for group, expvals in enumerate(result):
@@ -794,7 +795,7 @@ print("Number of required measurements after optimization:", len(groups))
 #
 #     Qubit-wise commuting group information for a wide variety of molecules has been
 #     pre-computed, and is available for download in
-#     in the `PennyLane Datasets library <https://pennylane.ai/datasets>`__. 
+#     in the `PennyLane Datasets library <https://pennylane.ai/datasets>`__.
 
 ##############################################################################
 # References
@@ -840,4 +841,3 @@ print("Number of required measurements after optimization:", len(groups))
 #
 # About the author
 # ----------------
-
