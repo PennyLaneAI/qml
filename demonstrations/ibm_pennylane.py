@@ -128,13 +128,12 @@ print(Aer.backends())
 # .. warning::
 #
 #    By default, this demo uses the online simulator (`ibmq_qasm_simulator`), which is free at the
-#    time of writing. However:
-#    - IBM Quantum's policies may change, and simulators could become paid services.
-#    - Always verify current pricing and access policies on the IBM Quantum platform.
+#    time of writing. Please note that IBM Quantum's policies may change, and simulators could become paid services.
+#    Always verify current pricing and access policies on the IBM Quantum platform.
 #
-#    This demo can also run on quantum hardware by updating the backend variable accordingly. Be aware:
-#    - Access to IBM Quantum hardware is not free and may result in substantial costs.
-#    - Ensure you are aware of these costs and comfortable with them before proceeding.
+#    This demo can also run on quantum hardware by updating the backend variable accordingly. Be aware, that access
+#    to IBM Quantum hardware is not free and may result in substantial costs. Ensure you are aware of these costs
+#    and comfortable with them before proceeding.
 
 from pennylane import numpy as pnp
 from qiskit_ibm_runtime import QiskitRuntimeService
