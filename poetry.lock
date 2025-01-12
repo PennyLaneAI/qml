@@ -4148,7 +4148,7 @@ scipy = ">=1.6.0"
 
 [[package]]
 name = "pennylane"
-version = "0.39.0"
+version = "0.40.0"
 description = "PennyLane is a cross-platform Python library for quantum computing, quantum machine learning, and quantum chemistry. Train a quantum computer the same way as a neural network."
 optional = false
 python-versions = "*"
