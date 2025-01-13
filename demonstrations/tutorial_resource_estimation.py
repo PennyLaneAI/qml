@@ -315,4 +315,4 @@ fig.tight_layout()
 #     <https://journals.aps.org/pra/abstract/10.1103/PhysRevA.106.032428>`__
 # About the author
 # ----------------
-# .. include:: ../_static/authors/soran_jahangiri.txt
+#

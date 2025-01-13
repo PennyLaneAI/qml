@@ -495,4 +495,4 @@ print("Output state =", output)
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/juan_miguel_arrazola.txt
+#

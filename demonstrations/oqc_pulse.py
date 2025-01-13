@@ -545,4 +545,4 @@ ax.set_ylim((-1.05, 1.05))
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/korbinian_kottmann.txt
+#

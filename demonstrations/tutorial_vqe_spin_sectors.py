@@ -376,4 +376,4 @@ print("\n" f"Optimal value of the circuit parameters = {theta}")
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/alain_delgado.txt
+#

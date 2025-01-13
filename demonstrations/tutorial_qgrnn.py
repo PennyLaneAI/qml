@@ -675,4 +675,4 @@ print(f"\nNon-Existing Edge Parameters: {[val.unwrap() for val in weights_noedge
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/jack_ceroni.txt
+#

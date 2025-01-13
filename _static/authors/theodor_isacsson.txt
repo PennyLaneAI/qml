@@ -1,4 +1,0 @@
-.. bio:: Theodor Isacsson
-   :photo: ../_static/authors/theodor_isacsson.jpg
-
-   Theodor is a quantum software engineer based in Vancouver. He's currently at D-Wave Systems, having previously worked on the quantum software stack at Xanadu, where he contributed to packages such as Strawberry Fields, The Walrus and PennyLane.

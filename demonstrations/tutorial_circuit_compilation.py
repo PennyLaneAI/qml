@@ -241,4 +241,4 @@ plt.show()
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/borja_requena.txt
+#

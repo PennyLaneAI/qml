@@ -227,4 +227,4 @@ print(openfermion_op)
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/soran_jahangiri.txt
+#

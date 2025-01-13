@@ -333,9 +333,9 @@ print("Model output for permutation of A, and with permuted observable: ", resul
 #    Theory for Equivariant Quantum Neural Networks.
 #    `arXiv:2210.08566 <https://arxiv.org/abs/2210.08566>`__
 # 
-# About the author 
-# -------------------------
-# .. include:: ../_static/authors/maria_schuld.txt
+# About the author
+# ----------------
+#
 
 
 

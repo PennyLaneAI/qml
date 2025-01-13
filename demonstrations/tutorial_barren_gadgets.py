@@ -387,5 +387,4 @@ plt.show()
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/simon_cichy.txt
 #

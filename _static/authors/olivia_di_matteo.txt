@@ -1,4 +1,0 @@
-.. bio:: Olivia Di Matteo
-   :photo: ../_static/authors/olivia_di_matteo.png
-
-   Olivia is an Assistant Professor in the Department of Electrical and Computer Engineering at The University of British Columbia. Her research interests are quantum compilation, software, and algorithms.

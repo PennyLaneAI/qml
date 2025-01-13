@@ -1181,4 +1181,4 @@ for t, s in zip(pred, ["out0", "out1", "out2", "Loss"]):
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/stefano_mangini.txt
+#

@@ -360,8 +360,6 @@ plt.show()
 # This tutorial has demonstrated how and why to use quantum computing hardware provided by IBM using PennyLane. To read
 # more about the details and possibilities of the PennyLane-Qiskit plugin, `read the documentation <https://docs.pennylane.ai/projects/qiskit/en/latest/index.html>`__.
 #
-# About the authors
+# About the author
 # ----------------
-# .. include:: ../_static/authors/kaur_kristjuhan.txt
-# .. include:: ../_static/authors/clara_ferreira_cores.txt
-# .. include:: ../_static/authors/mark_nicholas_jones.txt
+#

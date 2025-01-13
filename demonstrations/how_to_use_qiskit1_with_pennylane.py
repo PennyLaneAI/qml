@@ -430,5 +430,4 @@ print(f"Optimized cost function value: {new_loss}")
 ######################################################################
 # About the author
 # ----------------
-# .. include:: ../_static/authors/isaac_de_vlugt.txt
 #

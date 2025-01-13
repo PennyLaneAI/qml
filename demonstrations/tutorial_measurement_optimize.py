@@ -836,4 +836,4 @@ print("Number of required measurements after optimization:", len(groups))
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/josh_izaac.txt
+#

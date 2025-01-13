@@ -596,10 +596,6 @@ plt.show()
 #     `Journal of Open Source Software <https://doi.org/10.21105/joss.00747>`__, 2019.
 #
 #
-# About the authors
-# -----------------
-# .. include:: ../_static/authors/korbinian_kottmann.txt
+# About the author
+# ----------------
 #
-# .. include:: ../_static/authors/luis_mantilla_calderon.txt
-#
-# .. include:: ../_static/authors/maurice_weber.txt

@@ -251,4 +251,4 @@ for i in range(400):
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/josh_izaac.txt
+#

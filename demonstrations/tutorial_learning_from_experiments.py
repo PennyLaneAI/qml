@@ -539,4 +539,4 @@ plt.show()
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/joseph_bowles.txt
+#

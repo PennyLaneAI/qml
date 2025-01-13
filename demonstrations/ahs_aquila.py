@@ -818,4 +818,4 @@ circuit(params)
 ##############################################################################
 # About the author
 # ----------------
-# .. include:: ../_static/authors/lillian_frederiksen.txt
+#

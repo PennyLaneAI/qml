@@ -183,4 +183,4 @@ check_key(lock, incorrect_key)
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/danial_motlagh.txt
+#
