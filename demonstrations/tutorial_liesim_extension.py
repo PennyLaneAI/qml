@@ -414,7 +414,7 @@ adjoint_repr = qml.structure_constants(Moment[comp_moment])
 #
 # We can now choose arbitrary DLA gates and a maximum of `one` :math:`P` gate to evolve the expectation value vector.
 
-P_index = Moment[comp_moment].index(1.*p) # pick the gate in the Moment space that p corrresponds to
+P_index = Moment[comp_moment].index(1.*p) # pick the gate in the Moment space that p corresponds to
 
 e_t = e_in
 e_t = expm(0.5 * adjoint_repr[dim_g-1]) @ e_t # the same U gate
