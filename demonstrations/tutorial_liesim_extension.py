@@ -133,7 +133,7 @@ U = expm(theta * gate)
 #
 # For that, let us construct a concrete example. First we pick two elements from :math:`\mathfrak{g}` such that their product is not in :math:`\mathfrak{g}.`
 
-p = dla[-5] @ dla[-2]
+p = dla[-5] @ dla[-1]
 p = next(iter(p)) # strip any scalar coefficients
 dla_vspace = qml.pauli.PauliVSpace(dla, dtype=complex)
 dla_vspace.is_independent(p.pauli_rep)
@@ -414,9 +414,11 @@ adjoint_repr = qml.structure_constants(Moment[comp_moment])
 #
 # We can now choose arbitrary DLA gates and a maximum of `one` :math:`P` gate to evolve the expectation value vector.
 
+P_index = Moment[comp_moment].index(1.*p) # pick the gate in the Moment space that p corrresponds to
+
 e_t = e_in
 e_t = expm(0.5 * adjoint_repr[dim_g-1]) @ e_t # the same U gate
-e_t = expm(0.5 * adjoint_repr[74]) @ e_t      # the same P gate
+e_t = expm(0.5 * adjoint_repr[P_index]) @ e_t      # the same P gate
 e_t = expm(0.5 * adjoint_repr[dim_g-2]) @ e_t # the same V gate
 
 ##############################################################################
