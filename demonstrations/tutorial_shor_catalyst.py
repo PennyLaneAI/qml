@@ -373,46 +373,32 @@ def shors_algorithm(N):
 #    :align: center
 #    :alt: Addition in the Fourier basis modulo N.
 #
-# Let's step through the various cases of this circuit, keeping in mind that
+# Let's step through the various cases of this circuit, keeping in mind 
 # :math:`a < N` and :math:`b < N`, and the register has :math:`n + 1` bits.
 # 
-# Suppose the control qubits are in both :math:`\vert 1 \rangle`. We add
+# Suppose the control qubits are both :math:`\vert 1 \rangle`. We add
 # :math:`a` to :math:`b`, then subtract :math:`N`. If :math:`a + b \geq N`, we
 # get overflow on the top qubit (which was included to account for precisely
 # this), but subtraction gives us the correct result modulo :math:`N`. After
 # shifting back to the computational basis, the topmost qubit is in :math:`\vert
-# 0 \rangle` so the CNOT does not trigger. Next, we subtract :math:`a` from a
-# register in the state :math:`\vert a + b - N \pmod N \rangle`. We obtain `\vert b -
+# 0 \rangle` so the CNOT does not trigger. Next, we subtract :math:`a` from the
+# register in, now in state :math:`\vert a + b - N \pmod N \rangle`. We obtain :math:`\vert b -
 # N \rangle`, which, since `b < N`, leads to underflow. The top bit in
 # state :math:`\vert 1 \rangle` does not trigger the controlled-on-zero CNOT,
 # and our auxiliary qubit is untouched.
 #
 # If we didn't have overflow before, we would have subtracted :math:`N` for no
-# reason, leading to underflow. The topmost qubit is in state :math:`\vert 1
+# reason, leading to underflow. The topmost qubit would be :math:`\vert 1
 # \rangle`, the CNOT triggers, and :math:`N` would be added back. The register
-# now contains :math:`\vert b + a`. Subtracting :math:`a` puts the register in
-# state :math:`\vert b \rangle`, which by design has no overflow; the
+# then contains :math:`\vert b + a \rangle`. Subtracting :math:`a` puts the register in
+# state :math:`\vert b \rangle`, which by design will not overflow; the
 # controlled-on-zero CNOT triggers, and the auxiliary qubit is returned to
 # :math:`\vert 0 \rangle`.
 #
-# If the control qubits were not both :math:`\vert a \rangle`, :math:`N` is
-# always subtracted, the CNOT triggers, and so :math:`N` is added back. The
-# topmost qubit is always left in :math:`\vert 0 \rangle`, and the
-# controlled-on-zero CNOT flips the auxiliary qubit back to its starting state.
-#
-# Notice, however, that uncomputing the auxiliary qubit is just as much work as
-# performing the operation itself! Thankfully, we can leverage Catalyst to
-# perform a major optimization: rather than uncomputing, simply measure the
-# auxiliary qubit, add back :math:`N` based on the classical outcome, then reset
-# it to :math:`\vert 0 \rangle`!
-#
-# .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_modulo_n_mcm.svg
-#    :scale: 120%
-#    :align: center
-#    :alt: Addition in the Fourier basis modulo N.
-#
-# This optimization cuts down the number of gates in :math:`M_a` by essentially
-# half, which is a major savings.
+# If the control qubits were not both :math:`\vert 1 \rangle`, :math:`N` is
+# always subtracted and the CNOT triggers (since :math:`b < N`), but :math:`N`
+# is added back. For the same reasoning, though, the controlled-on-zero CNOT
+# always triggers and correctly uncomputes the auxiliary qubit.
 #
 # Recall that :math:`\Phi_+` is used as part of :math:`M_a` to add
 # :math:`2^{k}a` modulo :math:`N` to :math:`b` (conditioned on the value of
@@ -426,12 +412,59 @@ def shors_algorithm(N):
 #     \end{equation*}
 #
 # This completes our implementation of the controlled-:math:`U_{a^{2^k}}`. The
-# current qubit count is :math:`t + 2n + 2`. There is one major optimization
-# left: reducing the number of estimation qubits. A higher :math:`t` gives a
+# full circuit, on all :math:`t + 2n + 2` qubits,  is shown below.
+#
+# .. figure:: ../_static/demonstration_assets/shor_catalyst/qpe_full_combined_multi_est_wires.svg
+#    :width: 500
+#    :align: center
+#    :alt: Full QPE circuit, all t estimation wires, and decompositions.
+#
+# Taking advantage of classical information
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+# Above, we incorporated some information about :math:`a` in our implementation
+# of the Fourier adder. There are a few other places we can use this information
+# to our advantage, in addition to one major optimization to cut the number of
+# estimation wires down to 1.
+#
+# First, let's consider the initial controlled :math:`U_{a^{2^0}} = U_a`. In
+# Shor's algorithm, we know :math:`a` is selected from between 2 and :math:`N-2`
+# inclusive; moreover, the only basis state this operation applies to is
+# :math:`\vert 1 \rangle`, which gets sent to :math:`\vert a \rangle`. But this
+# is effectively just doing a controlled addition of :math:`a - 1`; we are
+# better off doing this addition (in the Fourier basis). There will never be any
+# overflow, and moreover, we save a significant number of resources! TODO: count them.
+#
+# Next, let's look to the doubly-controlled adders that are controlled on both
+# estimation qubits, and the bits in the target register. Consider the state of
+# the system after the initial controlled operation:
+#
+# .. math::
+#
+#     \begin{equation*}
+#     \vert + \rangle ^{\otimes (t - 1)} \frac{1}{\sqrt{2}} \left( \vert 0 \rangle \vert 1 \rangle + \vert 1 \rangle \vert a \rangle \right)
+#     \end{equation*}
+#
+# The doubly-controlled :math:`\Phi_+` will only get triggered in cases where
+# the bits in the target have the potential to be :math:`1`. The only two basis
+# states available, however, are :math:`\vert 1 \rangle` and :math:`\vert a
+# \rangle`. The only operations that can have any effect are the one controlled
+# on the bottom qubit, and any qubits corresponding to locations of :math:`1` in
+# the binary representation of :math:`a`. In order words, we only need to apply
+# doubly-controlled operations on the qubits where the logical OR of the bit
+# representations of :math:`1` and `a` are 1! Depending on the value of
+# :math:`a`, this could be major savings, especially at the beginning of the
+# algorithm!
+#
+#
+#
+# Finally, let's deal with those estimation qubits. A higher :math:`t` gives a
 # more accurate estimate of phase, but adds overhead in both circuit depth, and
 # classical simulation memory and time. Below we show how the :math:`t` can be
 # reduced to 1 without compromising precision or classical memory, and with
 # comparable circuit depth.
+#
+#
 #
 # Let's return to the QPE routine and expand the final inverse QFT.
 #
@@ -453,7 +486,7 @@ def shors_algorithm(N):
 # Once again, we can do better by dynamically modifying the circuit based on
 # classical information. Instead of applying controlled :math:`R^\dagger_2`, we
 # can apply :math:`R^\dagger` where the rotation angle is 0 if :math:`\theta_0 =
-# 0`, and :math:`\pi` if :math:`\theta_1`, i.e., :math:`R^\dagger_{2 \theta_0}`.
+# 0`, and :math:`-2\pi i/2^2` if :math:`\theta_0 = 1`, i.e., :math:`R^\dagger_{2 \theta_0}`.
 # The same can be done for all other gates controlled on :math:`\theta_0`.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/qpe_full_modified_power_with_qft-3.svg

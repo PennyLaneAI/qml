@@ -2121,8 +2121,8 @@
      inkscape:deskcolor="#505050"
      showgrid="false"
      inkscape:zoom="2.3870583"
-     inkscape:cx="550.46834"
-     inkscape:cy="63.257777"
+     inkscape:cx="376.19525"
+     inkscape:cy="63.257776"
      inkscape:window-width="1916"
      inkscape:window-height="1033"
      inkscape:window-x="1920"
@@ -2286,8 +2286,9 @@
        sodipodi:nodetypes="cc" />
     <path
        style="fill:none;stroke:#000000;stroke-width:0.750002px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 146.96248,-371.90259 v 17.09524"
-       id="path29671" />
+       d="m 146.96248,-384.03709 0,29.22974"
+       id="path29671"
+       sodipodi:nodetypes="cc" />
     <path
        style="fill:none;stroke:#000000;stroke-width:0.750002px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 277.23273,-384.22477 0,28.9259"
