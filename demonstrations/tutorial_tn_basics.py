@@ -13,7 +13,7 @@ Without further ado, let’s dive right in! 🤓📚
 
 .. _part_one:
 
-Part 1: A first glimpse into the tensor networks world 🔍👀
+Part 1: A first glimpse into the tensor networks world
 ----------------------------------------------------------
 
 From matrices to tensors
