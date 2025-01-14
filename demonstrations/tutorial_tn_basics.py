@@ -1,13 +1,13 @@
 r"""Tutorial: ABC of tensor networks for quantum circuits
 =============================================================
 
-If you are in the domain of quantum computing or quantum information, chances are you have heard (maybe a lot) about tensor networks being brought into the conversation. In fact, tensor networks are a rather widespread "tool" with applications ranging across physics, math, and computer science.
+If you are well-versed in the topics of quantum computing or quantum information, chances are you have heard (maybe a lot) about tensor networks. In fact, tensor networks are a rather widespread "tool" with applications ranging across physics, math, and computer science.
 
-Part of the excitement surrounding tensor networks is due to their ability to represent complex data efficiently, which allows for — among other things — fast classical simulations. In addition, the diagrammatic language accompanying tensor networks makes working with them intuitive and suitable for describing a vast range of mathematical concepts, including quantum circuits.
+Part of the excitement surrounding tensor networks is due to their ability to represent complex data efficiently, which allows for—among other things—fast classical simulations. In addition, the diagrammatic language accompanying tensor networks makes working with them intuitive and suitable for describing a vast range of mathematical concepts, including quantum circuits.
 
-The :ref:`first part of this tutorial <part_one>` aims to introduce the basic notions and definitions of tensor networks to those quantum practitioners familiar with quantum computing but who are new to the tensor networks world 🌎.
+The :ref:`first part of this tutorial <part_one>` introduces the basic tensor network notions and definitions to quantum practitioners who are familiar with quantum computing but new to the tensor networks world.
 
-Then, building on this introduction, in the :ref:`second part <part_two>` we explore topics akin to more seasoned 🧂 readers who want to learn about concepts and algorithms used to connect tensor networks and quantum computing - like those used to simulate the output of a quantum circuit.
+Then, building on this introduction, in the :ref:`second part <part_two>` we explore topics aimed at more seasoned readers. Check this section out if you want to understand how tensor networks and quantum circuits are related!
 
 Without further ado, let’s dive right in! 🤓📚
 
@@ -45,7 +45,7 @@ We can apply this same idea to represent a scalar, a vector, and a matrix:
     :align: center
     :width: 40%
 
-Does the last diagram seem familiar? It is because this is the representation of a single-qubit gate! We will see later in this tutorial the relation between quantum circuits and tensor networks. 
+Does the last diagram seem familiar? It is because this is the representation of a single-qubit gate! Later in this tutorial, we will study the relation between quantum circuits and tensor networks. 
 
 When working within the quantum computing notation, we adopt the convention that drawing the leg of a quantum state (i.e., a vector) to the right corresponds to a ket, i.e., a vector living in the Hilbert space, while drawing the legs to the left means they are a bra vector, i.e., living in the dual space.
 
@@ -100,7 +100,7 @@ print("Rank-3 tensor: \n", tensor_rank3)
 #
 # .. note::
 #
-#   Recall we are adopting the convention of drawing a ket vector with its leg pointing right, as done in quantum circuits. In turn, this means the "input" index of a matrix —its column index— points towards the left while the "output" index —its row index— points to the right. In the example above for :math:`G_{j, i}`, the input and output indices are index :math:`i` and index :math:`j`, respectively.
+#   Recall we are adopting the convention of drawing a ket vector with its leg pointing right, as done in quantum circuits. In turn, this means the "input" index of a matrix—its column index—points towards the left while the "output" index—its row index—points to the right. In the example above for :math:`G_{j, i}`, the input and output indices are index :math:`i` and index :math:`j`, respectively.
 #
 # We see that summing over the shared index :math:`i` is equivalent to **contracting** the corresponding legs from the matrix and vector diagrams. As expected, the result of this multiplication is another rank-1 tensor with dangling leg :math:`j`. Similarly, we can look at the matrix-matrix multiplication :math:`G^3 = G^2 \cdot G^1` and its :math:`(k,i)`-th element is given by 
 #
@@ -160,7 +160,7 @@ print(D.shape)
 #
 # .. math::
 #   T^1 = \begin{pmatrix}
-#           |0\rangle \langle 0\\
+#           |0\rangle \langle 0|\\
 #           |1\rangle \langle 1 |
 #         \end{pmatrix}
 #
@@ -170,14 +170,14 @@ print(D.shape)
 #   T^2 = \begin{pmatrix}
 #           I \\
 #           X
-#         \end{pmatrix}
+#         \end{pmatrix}.
 #
-# This means :math:`T^1_{i,j,k}` and :math:`T^2_{l,j,m}` are two rank-3 tensors, where the index :math:`j` *picks* the elements in the column vector while the other two indices correspond to the indices of the internal tensors (matrices). For instance, the :math:`j = 0`-th element of :math:`T^1` and :math:`T^2` are :math:`|0\rangle \langle 0 |` and :math:`I`, respectively, and similarly for their :math:`j = 1`-st element. This means we can redefine the CNOT expression from above as
+# This means :math:`T^1_{i,j,k}` and :math:`T^2_{l,j,m}` are two rank-3 tensors, where the index :math:`j` *picks* the elements in the column vector while the other two indices correspond to the indices of the internal tensors (matrices). For instance, the :math:`j = 0` element of :math:`T^1` and :math:`T^2` are :math:`|0\rangle \langle 0 |` and :math:`I`, respectively, and math:`|1\rangle \langle 1|` and and :math:`X` for their :math:`j = 1` element. This means we can redefine the CNOT expression from above as
 #
 # .. math::
 #   \mathrm{CNOT}_{i,l,k,m} = \sum_j T^1_{i,j,k} \otimes T^2_{l,j,m} .
 # 
-# We recognize this expression as the second definition for the contraction operation we introduced earlier. Hence, the CNOT gate can be seen as the contraction between :math:`T^1` and :math:`T^2`.
+# We recognize this expression as the second definition for the contraction operation we introduced earlier. Hence, the CNOT gate can be seen as the contraction between :math:`T^1` and :math:`T^2:`
 # 
 # .. math::
 #   (\mathrm{CNOT})_{i,l,k,m} = \sum_j (T^1)_{i,j,k} (T^2)_{l,j,m}. 
@@ -195,7 +195,7 @@ print(D.shape)
 #     :width: 45%
 # 
 # .. note::
-#   By looking at the elements of the COPY tensor, we can interpret it as being equal to unity when all the indices have the same value (0 or 1) and vanishing otherwise. On the other hand, the XOR tensor can be understood as being equal to unity when the values of the three indices contain an even number of 1's and vanishing otherwise. We anticipate that the COPY tensor can be used to obtain the diagonal of a matrix. This will be useful in the last section of this tutorial.
+#   By looking at the elements of the COPY tensor, we can interpret them as being equal to :math:`1` when all the indices have the same value (0 or 1) and vanishing otherwise. On the other hand, the elements of the XOR tensor can be understood as being equal to :math:`1` when the values of the three indices contain an even number of 1's and vanishing otherwise. We anticipate that the COPY tensor can be used to obtain the diagonal of a matrix. This will be useful in the last section of this tutorial.
 # 
 # This demonstrates the relation between the CNOT acting as a rank-4 tensor with dimensions :math:`2 \times 2 \times 2 \times 2` and its decomposition in terms of two rank-3 local tensors (:math:`T^1` and :math:`T^2`) of dimensions :math:`2 \times 2 \times 2`.
 # 
@@ -215,17 +215,17 @@ print(D.shape)
 # 
 #   Actually, finding the optimal contraction path of a tensor network with an arbitrary structure is an NP-complete problem [#Arad]_.
 # 
-# For this reason, in this section we will look at how to calculate the computational cost or the **complexity** of a tensor network contraction. First, we look at a simple matrix-matrix contraction. Given rank-2 tensors :math:`G^1_{j,i}` and :math:`G^2_{k,j}`, we have seen that the :math:`(k,i)`-th element of the resulting contraction along the :math:`j`-th index is
+# For this reason, in this section we will look at how to calculate the computational cost or the **complexity** of a tensor network contraction. First, we look at a simple matrix-matrix contraction. Given two rank-2 tensors :math:`G^1_{j,i}` and :math:`G^2_{k,j}`, we have seen that the :math:`(k,i)`-th element of the resulting contraction along the :math:`j`-th index is
 # 
 # .. math::
-#   (G^3)_{k,i} = \sum_{j=1}^{d_j} (G^2)_{k,j} (G^1)_{j,i}
+#   (G^3)_{k,i} = \sum_{j=1}^{d_j} (G^2)_{k,j} (G^1)_{j,i},
 # 
 # where the indices :math:`(i, j, k)` have dimensions :math:`(d_i, d_j, d_k)`, respectively. Thus, obtaining the :math:`(k,i)`-th element requires :math:`\mathcal{O}(d_j)` operations. To construct the full tensor :math:`G^3`, we must repeat this procedure :math:`d_i \times d_k` times (once for every possible value of :math:`i` and :math:`k`). Therefore, the total complexity of the contraction is
 # 
 # .. math::
 #   \mathcal{O}(d_i \times d_j \times d_k)
 # 
-# To illustrate the importance of choosing an efficient contraction path, let us look at a similar contraction between 3 rank-3 tensors: :math:`A_{i,j,k} \in \mathbb{C}^{d_i \times d_j \times d_k}`, :math:`B_{j,l,m} \in \mathbb{C}^{d_j \times d_l \times d_m}`, and :math:`C_{k,m,n} \in \mathbb{C}^{d_k \times d_m \times d_n}`.
+# To illustrate the importance of choosing an efficient contraction path, let us look at a similar contraction between three rank-3 tensors: :math:`A_{i,j,k} \in \mathbb{C}^{d_i \times d_j \times d_k}`, :math:`B_{j,l,m} \in \mathbb{C}^{d_j \times d_l \times d_m}`, and :math:`C_{k,m,n} \in \mathbb{C}^{d_k \times d_m \times d_n}`.
 # 
 # .. figure:: ../_static/demonstration_assets/tn_basics/09-contraction.png
 #     :align: center
@@ -251,7 +251,7 @@ print(D.shape)
 # .. math::
 #   \sum_{j, k} (A)_{i,j,k} (BC)_{j,l,k,n}  \implies \mathcal{O}(d_i^2 \times d_j^2) = \mathcal{O}((10^3)^2 (10^1)^2) =\mathcal{O}(10^8).
 # 
-# This means the second contraction path results in an asymptotic cost of :math:`\mathcal{O}(d_i^2 \times d_j^2) = \mathcal{O}(10^8)`— lower than the first contraction path.
+# This means the second contraction path results in an asymptotic cost of :math:`\mathcal{O}(d_i^2 \times d_j^2) = \mathcal{O}(10^8)`—lower than the first contraction path.
 # 
 # To see this in practice, let us implement the above contractions using ``np.einsum``. First, we create the 3 tensors with the dimensions specified in the example above. We demonstrate a different form of creating tensors of the desired dimensions using the ``random`` module.
 
@@ -325,7 +325,7 @@ print(f"Computation cost for path 2: {time_BC + time_BCA}")
 # 
 # Perhaps you even feel motivated to dive deeper into the vast world of tensor networks! 🧐
 # 
-# To help you with this endeavour, in the following sections we will summarize some ubiquitous algorithms used to connect tensor networks and quantum computers. These topics can become quite technical real fast, and thus, we can only scratch the surface in this demo. For this reason, we will reference the relevant sources when pertinent. Now, take a sip of coffee, brace yourself, and let's continue! ☕️ 
+# To help you with this endeavour, in the following sections we will summarize some ubiquitous algorithms used to connect tensor networks and quantum computers. These topics can become quite technical real fast, so we can only scratch the surface in this demo. For this reason, we will reference the relevant sources when pertinent. Now, take a sip of coffee, brace yourself, and let's continue! ☕️ 
 
 ##############################################################################
 # .. _part_two:
@@ -340,11 +340,11 @@ print(f"Computation cost for path 2: {time_BC + time_BCA}")
 # 
 # .. note::
 # 
-#   In special cases, by restricting the geometry and/or the values of the tensor networks, it is possible to find provable efficient contraction paths. A well-studied tensor network ansatz with efficient contraction schemes is the Matrix Product States (MPS) [#Schollwoeck2011]_. This section will, however, focus on tensor networks with arbitrary structures.
+#   In special cases, by restricting the geometry and/or the values of the tensor networks, it is possible to find provably efficient contraction paths. A well-studied tensor network ansatz with efficient contraction schemes is the Matrix Product States (MPS) [#Schollwoeck2011]_. This section will, however, focus on tensor networks with arbitrary structures.
 # 
-# First, we set up the framework of the problem. While multiway contractions - contractions between more than 2 tensors at a time - are possible, we will consider only pairwise contractions since the former can always be decomposed in terms of the latter. In addition, contracting a tensor network doesn't need to result in a single tensor. However, here we consider only the single tensor case as it underlies the more general scenario [#Gray2021]_. 
+# First, we set up the framework of the problem. While multiway contractions—contractions between more than 2 tensors at a time—are possible, we will consider only pairwise contractions since the former can always be decomposed in terms of the latter. In addition, contracting a tensor network doesn't need to result in a single tensor. However, here we consider only the single tensor case as it underlies the more general scenario [#Gray2021]_. 
 # 
-# The underlying idea behind finding a contraction path is based on the construction of the computational graph, i.e., a rooted binary tree - also known as the **contraction tree** - that specifies the sequence of pairwise contractions to be executed. In this tree structure, a leaf node corresponds to a tensor from the original network (blue tensors) and the pairwise contractions (red lines) give rise to the intermediate tensors (red tensors) corresponding to the rest of the nodes in the contraction tree. 
+# The underlying idea behind finding a contraction path is based on the construction of the computational graph, i.e., a rooted binary tree—also known as the **contraction tree**—that specifies the sequence of pairwise contractions to be executed. In this tree structure, a leaf node corresponds to a tensor from the original network (blue tensors) and the pairwise contractions (red lines) give rise to the intermediate tensors (red tensors) corresponding to the rest of the nodes in the contraction tree. 
 # 
 # .. figure:: ../_static/demonstration_assets/tn_basics/10-contraction-tree.png
 #     :align: center
@@ -372,7 +372,7 @@ print(f"Computation cost for path 2: {time_BC + time_BCA}")
 # 
 # An extra level of optimization, known as **hyper-optimization** is introduced by the use of different algorithms to find the optimal contraction based on the specific tensor network, as some algorithms are better suited for certain network structures. For an in-depth exploration of these heuristics, please refer to [#Gray2021]_.
 #
-# As we will explore in the next section, we can use tensor networks to simulate quantum circuits. In particular, the calculation of an expectation value corresponds to the contraction of the tensor network into a single tensor (scalar) as discussed in this section. In ``Pennylane``, this simulation can be performed using the :class:`~pennylane.devices.default_tensor.DefaultTensor` device, and the method used to find the contraction path can be chosen via the ``contraction_optimizer`` keyword argument.
+# As we will explore in the next section, we can use tensor networks to simulate quantum circuits. In particular, the calculation of an expectation value corresponds to the contraction of the tensor network into a single tensor (scalar). In ``Pennylane``, this simulation can be performed using the :class:`~pennylane.devices.default_tensor.DefaultTensor` device, and the method used to find the contraction path can be chosen via the ``contraction_optimizer`` keyword argument.
 
 import pennylane as qml
 
@@ -396,7 +396,7 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # 
 # Until now, we have looked at general tensor networks, while ✨sparkling✨ the discussions with examples related to quantum circuits. Here, we leverage the components we have learned to explore this relation more in-depth. 
 # 
-# First, it is important to emphasize that quantum circuits don't just "look" or "behave" like tensor networks, but rather they **are** tensor networks! Quantum Circuits are a special class of tensor networks where each horizontal wire corresponds to the Hilbert space of a single qubit and the tensors acting on these subsystems are restricted to be unitary operators, denoting the time evolution of the state (from left to right).
+# First, it is important to emphasize that quantum circuits don't just "look" or "behave" like tensor networks, but rather they **are** tensor networks! Quantum circuits are a special class of tensor networks where each horizontal wire corresponds to the Hilbert space of a single qubit and the tensors acting on these subsystems are restricted to be unitary operators, denoting the time evolution of the state (from left to right).
 # 
 # A general quantum circuit acting on :math:`N` qubits can be expressed in terms of the initial quantum state :math:`| \psi_0 \rangle` and the unitary propagator :math:`U` such that the evolved state is
 # 
@@ -439,32 +439,32 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 #     :align: center
 #     :width: 70%
 # 
-# Then, the sections outside of the light cone (grayed-out gates in the figure above) can be ignored since these are contractions resulting in the identity: :math:`G G^\dagger = I`. This helps us decrease the size of the tensor to be contracted, and consequently, the computational expense, by focusing on the section of the circuit with support inside the light cone of the observable - i.e., the gates that affect the calculation of the expectation value.
+# Then, the sections outside of the light cone (grayed-out gates in the figure above) can be ignored since these are contractions resulting in the identity: :math:`G G^\dagger = I`. This helps us decrease the size of the tensor to be contracted, and consequently, the computational expense, by focusing on the section of the circuit with support inside the light cone of the observable—i.e., the gates that affect the calculation of the expectation value
 # 
 # .. math::
-#   \langle O_l \rangle = \langle \psi_l | O_l | \psi_l \rangle.
+#   \langle O_l \rangle = \langle \psi_l | O_l | \psi_l \rangle,
 # 
 # where :math:`| \psi_l \rangle` is the section of the evolved state within the light cone of :math:`O_l`.
 # 
 # Sampling
 # ^^^^^^^^
 # 
-# In addition to calculating expectation values, we can also use the tensor network arising from a quantum circuit to sample bitstrings from the evolved probability distribution :math:`| \psi \rangle` - emulating what you would obtain from a real quantum computer. Since this is a ubiquitous task in quantum information, several algorithms have been proposed to generate samples from probability distributions represented as tensor networks. In particular, here we discuss the "Perfect Sampling Algorithm" applied to unitary tensor networks [#Ferris2012]_, as this generates uncorrelated samples, unlike Markov-based approaches.
+# In addition to calculating expectation values, we can also use the tensor network arising from a quantum circuit to sample bitstrings from the evolved probability distribution :math:`| \psi \rangle`—emulating what you would obtain from a real quantum computer. Since this is a ubiquitous task in quantum information, several algorithms have been proposed to generate samples from probability distributions represented as tensor networks. In particular, here we discuss the "Perfect Sampling Algorithm" applied to unitary tensor networks [#Ferris2012]_, as this generates uncorrelated samples, unlike Markov-based approaches.
 # 
 # .. note::
 #   The method used in `Quimb <https://quimb.readthedocs.io/en/latest/index.html>`_ (the backend behind :class:`~pennylane.devices.default_tensor.DefaultTensor`) to generate samples from the quantum circuit is also based on this algorithm.
 # 
-# A cornerstone behind this algorithm is the well-known `chain rule <https://en.wikipedia.org/wiki/Chain_rule_(probability)>`_ which allows us to write the joint probability of an event using only conditional probabilities. Using this, we can express the probability of sampling the bitstring :math:`(x_1, x_2, x_3, \ldots, x_N)` from :math:`| \psi \rangle` as
+# A cornerstone behind this algorithm is the well-known `chain rule <https://en.wikipedia.org/wiki/Chain_rule_(probability)>`_, which allows us to write the joint probability of an event using only conditional probabilities. Using this, we can express the probability of sampling the bitstring :math:`(x_1, x_2, x_3, \ldots, x_N)` from :math:`| \psi \rangle` as
 # 
 # .. math::
-#   p(x_1, x_2, x_3, \ldots, x_N) = p(x_1) p(x_2|x_1) p(x_3| x_1 x_2) \ldots p(x_N | x_1 x_2 x_3 \ldots x_{N-1})
+#   p(x_1, x_2, x_3, \ldots, x_N) = p(x_1) p(x_2|x_1) p(x_3| x_1 x_2) \ldots p(x_N | x_1 x_2 x_3 \ldots x_{N-1}).
 # 
-# Thus, to obtain a sample from the joint distribution on the left side of the equation, we can compute the terms on the right side by means of marginal distributions. First, we start by computing the marginal probability :math:`p(x_1)`. To do so, we compute the reduced density matrix :math:`\rho_{1}` by tracing out all the other qubits.
+# Thus, to obtain a sample from the joint distribution on the left side of the equation, we can compute the terms on the right side by means of marginal distributions. First, we start by computing the marginal probability :math:`p(x_1)`. To do so, we compute the reduced density matrix :math:`\rho_{1}` by tracing out all the other qubits:
 # 
 # .. math::
-#   \rho_{1} = \mathrm{Tr}_{2,3,\ldots,N}(| \psi \rangle \langle \psi |)
+#   \rho_{1} = \mathrm{Tr}_{2,3,\ldots,N}(| \psi \rangle \langle \psi |).
 # 
-# Then, the diagonal of this :math:`2 \times 2` density matrix gives us the probability of sampling 0 or 1, i.e., :math:`p(x_1 = 0)` and :math:`p(x_2 = 1)`. This diagonal corresponds to the following probability vector
+# Then, the diagonal of this :math:`2 \times 2` density matrix gives us the probability of sampling 0 or 1, i.e., :math:`p(x_1 = 0)` and :math:`p(x_1 = 1)`. This diagonal corresponds to the following probability vector
 # 
 # .. math::
 #   | p_{x_1} \rangle = \sum_{i=0}^{1} p(x_1=i) | i \rangle =  \mathrm{diag}(\rho_1) = \mathrm{diag}\left( \mathrm{Tr}_{2,3,\ldots,N}(| \psi \rangle \langle \psi |) \right).
