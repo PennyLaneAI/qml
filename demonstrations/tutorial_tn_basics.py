@@ -433,13 +433,13 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # 
 # However, it is possible to perform this operation more efficiently using tensor networks by means of a structure called Matrix Product Operator (MPO) [#Pirvu2010]_. The idea is to construct an efficient representation of the observable :math:`O` which can be contracted with the tensor network from :math:`|\psi \rangle`. Constructing these networks efficiently for Hamiltonians of arbitrary structure is an interesting task, which goes beyond the scope of this tutorial.
 # 
-# When the observable of interest is *local*, i.e., it acts on a few neighbouring qubits, we can calculate the expectation value by considering only the section of the quantum circuit within the **reverse light cone** (causal cone) of the observable :math:`O_l`.
+# When the observable of interest is *local*, i.e., it acts on a few neighbouring qubits, we can calculate the expectation value by considering only the section of the quantum circuit within the **reverse light cone** (causal cone) of the observable :math:`O_l`—i.e., the gates that affect the calculation of the expectation value.
 # 
 # .. figure:: ../_static/demonstration_assets/tn_basics/12-expectation-local.png
 #     :align: center
 #     :width: 70%
 # 
-# Then, the sections outside of the light cone (grayed-out gates in the figure above) can be ignored since these are contractions resulting in the identity: :math:`G G^\dagger = I`. This helps us decrease the size of the tensor to be contracted, and consequently, the computational expense, by focusing on the section of the circuit with support inside the light cone of the observable—i.e., the gates that affect the calculation of the expectation value
+# Then, the sections outside of the light cone (grayed-out gates in the figure above) can be ignored since these are contractions resulting in the identity: :math:`G G^\dagger = I`. This helps us decrease the size of the tensor to be contracted, and consequently, the computational expense, by focusing on the section of the circuit with support inside the light cone of the observable
 # 
 # .. math::
 #   \langle O_l \rangle = \langle \psi_l | O_l | \psi_l \rangle,
