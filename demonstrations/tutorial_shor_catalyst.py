@@ -422,22 +422,31 @@ def shors_algorithm(N):
 # Taking advantage of classical information
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# Above, we incorporated some information about :math:`a` in our implementation
-# of the Fourier adder. There are a few other places we can use this information
-# to our advantage, in addition to one major optimization to cut the number of
-# estimation wires down to 1.
+# Above, we incorporated information about :math:`a` in the implementation
+# of the Fourier adder. There are a few other places we can use classical information
+# to our advantage.
 #
-# First, let's consider the initial controlled :math:`U_{a^{2^0}} = U_a`. In
-# Shor's algorithm, we know :math:`a` is selected from between 2 and :math:`N-2`
-# inclusive; moreover, the only basis state this operation applies to is
-# :math:`\vert 1 \rangle`, which gets sent to :math:`\vert a \rangle`. But this
-# is effectively just doing a controlled addition of :math:`a - 1`; we are
-# better off doing this addition (in the Fourier basis). There will never be any
-# overflow, and moreover, we save a significant number of resources! TODO: count them.
+# First, consider the initial controlled :math:`U_{a^{2^0}} = U_a`. The only
+# basis state this operation applies to is :math:`\vert 1 \rangle`, which gets
+# sent to :math:`\vert a \rangle` when the operation triggers. This is
+# effectively just doing controlled addition of :math:`a - 1` to
+# :math:`1`. Since :math:`a` is selected from between :math:`2` and :math:`N-2`
+# inclusive, the addition is guaranteed to never overflow. This means we can
+# simply do a controlled Fourier addition, and save a significant number of
+# resources!  TODO: count them.
 #
-# Next, let's look to the doubly-controlled adders that are controlled on both
-# estimation qubits, and the bits in the target register. Consider the state of
-# the system after the initial controlled operation:
+# Next, let's look to the doubly-controlled adders in the implementation of the
+# controlled :math:`M_a`. Below, we show a simplified instance of the controlled
+# :math:`M_a` that reflects the state of the auxiliary registers.
+#
+# .. figure:: ../_static/demonstration_assets/shor_catalyst/doubly-controlled-adder-simplified.svg
+#    :width: 600
+#    :align: center
+#    :alt: The controlled multiplier circuit in the context of Shor's algorithm.
+#
+# The doubly-controlled adders are controlled on both estimation qubits, and the
+# bits in the target register. Now, consider the state of the system after the
+# initial controlled-:math:`U_a`:
 #
 # .. math::
 #
@@ -445,26 +454,47 @@ def shors_algorithm(N):
 #     \vert + \rangle ^{\otimes (t - 1)} \frac{1}{\sqrt{2}} \left( \vert 0 \rangle \vert 1 \rangle + \vert 1 \rangle \vert a \rangle \right)
 #     \end{equation*}
 #
-# The doubly-controlled :math:`\Phi_+` will only get triggered in cases where
-# the bits in the target have the potential to be :math:`1`. The only two basis
-# states available, however, are :math:`\vert 1 \rangle` and :math:`\vert a
-# \rangle`. The only operations that can have any effect are the one controlled
-# on the bottom qubit, and any qubits corresponding to locations of :math:`1` in
-# the binary representation of :math:`a`. In order words, we only need to apply
-# doubly-controlled operations on the qubits where the logical OR of the bit
-# representations of :math:`1` and `a` are 1! Depending on the value of
-# :math:`a`, this could be major savings, especially at the beginning of the
-# algorithm!
+# In the next controlled operation, controlled-:math:`U_{a^2}`, the
+# doubly-controlled :math:`\Phi_+` will only trigger when the bits in the target
+# register are :math:`1`. Since the only two basis states present are
+# :math:`\vert 1 \rangle` and :math:`\vert a \rangle`, the only operations that
+# triger are those with the second control on the bottom-most qubit, and any
+# qubits corresponding to locations of :math:`1`s in the binary representation
+# of :math:`a`. More formally, we only need doubly-controlled operations on
+# qubits where the logical OR of the bit representations of :math:`1` and `a`
+# are 1! An example, for :math:`a = 5`, is shown below.
+#
+# .. figure:: ../_static/demonstration_assets/shor_catalyst/doubly-controlled-adder-simplified-states.svg
+#    :width: 800
+#    :align: center
+#    :alt: The controlled multiplier circuit in the context of Shor's algorithm.
+# 
+# Depending on the choice of :math:`a`, this could be major savings, especially
+# at the beginning of the algorithm, since not many basis states are involved
+# yet. The same trick can be used in the portion of the controlled-:math:`U_a`
+# after the controlled SWAPs, as demonstrated below.
+#
+# .. figure:: ../_static/demonstration_assets/shor_catalyst/c-ua-basis-states-optimization.svg
+#    :width: 600
+#    :align: center
+#    :alt:
+# 
+# Eventually, we will see diminishing returns, because each
+# controlled-:math:`U_{a^{2^k}}` leads to more terms in the superposition. At
+# the :math:`k`'th iteration, the control register contains a superposition of
+# :math:`\{ \vert a^j\}`, j = 0, \ldots, 2^{k - 1}` (inclusive), and after the
+# controlled SWAPs, the relevant superposition is :math:`\{ \vert a^j\}`, j =
+# 2^{k-1}+1, \ldots, 2^{k} - 1`.
 #
 #
+# The "single-qubit" QPE
+# ~~~~~~~~~~~~~~~~~~~~~~
 #
 # Finally, let's deal with those estimation qubits. A higher :math:`t` gives a
-# more accurate estimate of phase, but adds overhead in both circuit depth, and
-# classical simulation memory and time. Below we show how the :math:`t` can be
-# reduced to 1 without compromising precision or classical memory, and with
-# comparable circuit depth.
-#
-#
+# more accurate estimate of phase, but adds overhead in circuit depth, classical
+# simulation memory, and time. Below we show how :math:`t` can be reduced to 1
+# without compromising precision or classical memory, and with comparable
+# circuit depth. TODO: cite.
 #
 # Let's return to the QPE routine and expand the final inverse QFT.
 #
