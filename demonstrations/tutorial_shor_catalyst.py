@@ -482,19 +482,24 @@ def shors_algorithm(N):
 # Eventually, we will see diminishing returns, because each
 # controlled-:math:`U_{a^{2^k}}` leads to more terms in the superposition. At
 # the :math:`k`'th iteration, the control register contains a superposition of
-# :math:`\{ \vert a^j\}`, j = 0, \ldots, 2^{k - 1}` (inclusive), and after the
-# controlled SWAPs, the relevant superposition is :math:`\{ \vert a^j\}`, j =
+# :math:`\{ \vert a^j\}, j = 0, \ldots, 2^{k - 1}` (inclusive), and after the
+# controlled SWAPs, the relevant superposition is :math:`\{ \vert a^j\}, j =
 # 2^{k-1}+1, \ldots, 2^{k} - 1`.
 #
+# A similar simplification can be made within each doubly-controlled
+# :math:`\Phi_+` operation. Recall that the bulk of the :math:`\Phi_+` is
+# necessary for detecting and correcting for overflow after running
+# :math:`Phi(a)`. But, if we just keep track of the superposition, and the
+# classical powers of :math:`a` modulo :math:`N`, we know in advance when it
+# will be needed. A hypothetical example is shown below.
+#
+# .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_modulo_n_streamlined.svg
+#    :width: 600
+#    :align: center
+#    :alt:
 #
 # The "single-qubit" QPE
 # ~~~~~~~~~~~~~~~~~~~~~~
-#
-# Finally, let's deal with those estimation qubits. A higher :math:`t` gives a
-# more accurate estimate of phase, but adds overhead in circuit depth, classical
-# simulation memory, and time. Below we show how :math:`t` can be reduced to 1
-# without compromising precision or classical memory, and with comparable
-# circuit depth. TODO: cite.
 #
 # Let's return to the QPE routine and expand the final inverse QFT.
 #
