@@ -489,9 +489,9 @@ def shors_algorithm(N):
 # A similar simplification can be made within each doubly-controlled
 # :math:`\Phi_+` operation. Recall that the bulk of the :math:`\Phi_+` is
 # necessary for detecting and correcting for overflow after running
-# :math:`Phi(a)`. But, if we just keep track of the superposition, and the
-# classical powers of :math:`a` modulo :math:`N`, we know in advance when it
-# will be needed. A hypothetical example is shown below.
+# :math:`\Phi(a)`. But, if we keep track of the powers of :math:`a` modulo
+# :math:`N` in the superposition classically, we know in advance when it will be
+# needed. A hypothetical example is shown below.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_modulo_n_streamlined.svg
 #    :width: 600
