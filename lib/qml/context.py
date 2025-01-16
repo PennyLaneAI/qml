@@ -19,14 +19,17 @@ class Context:
 
     @property
     def build_dir(self) -> Path:
+        """Path to the build directory."""
         return self.repo_root / "_build"
 
     @property
     def build_venv_path(self) -> Path:
+        """Path to virtual environment for building demos."""
         return self.repo_root / ".venv-build"
 
     @functools.cached_property
     def cwd(self) -> Path:
+        """Current working directory of the process."""
         return Path.cwd().resolve()
 
     @functools.cached_property
