@@ -399,3 +399,5 @@ plt.show()
 #     specific size and topology of your PennyLane circuit.
 
 ######################################################################
+# About the author
+# ----------------

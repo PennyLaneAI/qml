@@ -661,3 +661,6 @@ plt.show()
 #     <https://quantum-journal.org/papers/q-2020-05-11-263/>`__ (2020).
 #
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/josh_izaac.txt

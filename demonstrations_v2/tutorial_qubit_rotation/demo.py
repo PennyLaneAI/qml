@@ -368,3 +368,6 @@ print("Optimized rotation angles: {}".format(params))
 # continuous-variable (CV) quantum nodes.
 #
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/josh_izaac.txt

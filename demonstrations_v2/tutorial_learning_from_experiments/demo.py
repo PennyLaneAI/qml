@@ -537,3 +537,6 @@ plt.show()
 # `arxiv:2111.05881 <https://arxiv.org/abs/2111.05881>`__ (2021)
 #
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/joseph_bowles.txt

@@ -289,3 +289,6 @@ print(f"Accuracy: {accuracy * 100}%")
 # perform on realistic datasets?
 
 ##############################################################################
+# About the author
+# ----------------
+# .. include:: ../_static/authors/thomas_bromley.txt

@@ -285,3 +285,7 @@ plt.show()
 #     `arXiv:2112.05821 <https://arxiv.org/abs/2112.05821>`__, 2021.
 #
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/korbinian_kottmann.txt
+

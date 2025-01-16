@@ -468,3 +468,6 @@ plt.show()
 # 45.1-3 (1989): 503-528.
 #
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/shahnawaz_ahmed.txt

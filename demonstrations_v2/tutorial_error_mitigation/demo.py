@@ -435,10 +435,10 @@ execute_with_zne(circuit, executor, factory=factory, scale_noise=fold_global)
 # hardware. Suppose we want to simulate the ``ibmq_lima`` hardware device available on IBMQ. We
 # can load a noise model that represents this device using:
 
-from qiskit_ibm_runtime.fake_provider import FakeLimaV2
+from qiskit_ibm_runtime.fake_provider import FakeLima
 from qiskit_aer.noise import NoiseModel
 
-backend = FakeLimaV2()
+backend = FakeLima()
 noise_model = NoiseModel.from_backend(backend)
 
 ##############################################################################
@@ -593,3 +593,8 @@ plt.show()
 #             IEEE International Conference on Quantum Computing and Engineering (2020).
 #
 #
+# About the authors
+# -----------------
+# .. include:: ../_static/authors/thomas_bromley.txt
+#
+# .. include:: ../_static/authors/andrea_mari.txt

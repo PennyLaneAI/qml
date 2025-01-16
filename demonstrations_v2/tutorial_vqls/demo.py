@@ -528,3 +528,6 @@ plt.show()
 #    `arXiv:1909.05820 <https://arxiv.org/abs/1909.05820>`__, 2019.
 #
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/andrea_mari.txt

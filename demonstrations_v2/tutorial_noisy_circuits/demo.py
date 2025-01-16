@@ -295,3 +295,7 @@ print(f"Optimized noise parameter p = {sigmoid(x.take(0)):.4f}")
 #     multi-parameter estimation." `arXiv:2006.06303 (2020) <https://arxiv.org/abs/2006.06303>`__.
 #
 #
+# About the author
+# ----------------
+#
+# .. include:: ../_static/authors/juan_miguel_arrazola.txt

@@ -167,3 +167,6 @@ print("Optimized phi:{:8f}".format(params[2]))
 # hybrid qubit-CV-classical computation using PennyLane.
 #
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/josh_izaac.txt

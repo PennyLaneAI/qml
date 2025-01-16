@@ -1100,3 +1100,6 @@ print(np.isclose(np.exp(-1j*np.pi/4)*ion_cnot([1,1]),cnot_gate([1,1])))
 #     <https://www.nature.com/articles/s41586-020-2811-x>`__.
 #     (`arXiv <https://arxiv.org/abs/2001.05052>`__)
 #
+# About the author
+# ~~~~~~~~~~~~~~~~
+# .. include:: ../_static/authors/alvaro_ballon.txt

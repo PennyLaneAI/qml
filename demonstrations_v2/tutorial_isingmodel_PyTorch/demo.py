@@ -249,3 +249,6 @@ with torch.no_grad():
 # `Journal of Combinatorial Optimization <https://link.springer.com/article/10.1007/s10878-014-9734-0>`__, 2014.
 #
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/aroosa_ijaz.txt

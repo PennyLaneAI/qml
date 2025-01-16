@@ -739,3 +739,6 @@ plt.show()
 # .. image:: ../_static/demonstration_assets/quantum_neural_net/qnn_output_30_0.png
 
 ##############################################################################
+# About the author
+# ----------------
+# .. include:: ../_static/authors/maria_schuld.txt

@@ -290,3 +290,6 @@ plt.show()
 #    `Arxiv <https://arxiv.org/pdf/2310.18410.pdf>`__, 2023
 #
 #
+# About the authors
+# -----------------
+#

@@ -367,3 +367,6 @@ plt.show()
 #
 
 ##############################################################################
+# About the author
+# ----------------
+# .. include:: ../_static/authors/korbinian_kottmann.txt

@@ -313,3 +313,6 @@ fig.tight_layout()
 #     "Simulating key properties of lithium-ion batteries with a fault-tolerant quantum computer".
 #     `Phys. Rev. A 106, 032428 (2022)
 #     <https://journals.aps.org/pra/abstract/10.1103/PhysRevA.106.032428>`__
+# About the author
+# ----------------
+# .. include:: ../_static/authors/soran_jahangiri.txt

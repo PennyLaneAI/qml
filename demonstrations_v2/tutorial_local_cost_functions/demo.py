@@ -532,3 +532,6 @@ for runs in range(samples):
 #   `arXiv:2001.00550 <https://arxiv.org/abs/2001.00550>`__
 #
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/thomas_storwick.txt

@@ -557,3 +557,8 @@ print("CB-VQE energy %.4f" % (energy_CBVQE))
 #     M. D. Radin. (2021) "Classically-Boosted Variational Quantum Eigensolver",
 #     `arXiv:2106.04755 [quant-ph] <https://arxiv.org/abs/2106.04755>`__ (2021)
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/joana_fraxanet.txt
+#
+# .. include:: ../_static/authors/isidor_schoch.txt

@@ -243,3 +243,5 @@ print(error)
 #     <https://journals.aps.org/prx/abstract/10.1103/PhysRevX.11.011020>`__
 #
 #
+# About the author
+# ----------------

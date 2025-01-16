@@ -841,3 +841,6 @@ plot_optimal_pulses(hist, S_k, ops_param, T, target_name)
 #     `arxiv:1003.3750 <https://arxiv.org/abs/1003.3750>`__, 2011
 #
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/david_wierichs.txt

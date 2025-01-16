@@ -357,3 +357,6 @@ print("Final cost value: {}".format(cost()))
 #    <https://arxiv.org/abs/1712.02727>`__, 2017.
 #
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/nathan_killoran.txt

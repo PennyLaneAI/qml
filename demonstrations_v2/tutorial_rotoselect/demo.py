@@ -465,3 +465,6 @@ plt.show()
 #    `arxiv:1905.09692 <https://arxiv.org/abs/1905.09692>`__, 2019.
 
 ##############################################################################
+# About the author
+# ----------------
+# .. include:: ../_static/authors/angus_lowe.txt

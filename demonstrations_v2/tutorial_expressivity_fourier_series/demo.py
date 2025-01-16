@@ -856,3 +856,8 @@ def random_weights():
 #     `arXiv:2008.08605 <https://arxiv.org/abs/2008.08605>`__ (2020).
 #
 #
+# About the authors
+# -----------------
+# .. include:: ../_static/authors/maria_schuld.txt
+#
+# .. include:: ../_static/authors/johannes_jakob_meyer.txt

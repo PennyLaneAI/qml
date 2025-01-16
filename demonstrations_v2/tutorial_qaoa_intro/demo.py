@@ -511,3 +511,6 @@ plt.show()
 #     :width: 90%
 #
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/jack_ceroni.txt

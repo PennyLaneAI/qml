@@ -451,3 +451,6 @@ plt.show()
 # ``default.qubit``, but the parameter-shift rule scales as :math:`\sim 2p.`
 #
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/josh_izaac.txt

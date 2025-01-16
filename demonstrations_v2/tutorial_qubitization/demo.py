@@ -165,3 +165,5 @@ print("E = ", lambda_ * np.cos(2 * np.pi * np.argmax(results) / 2 ** (len(estima
 #
 # In this demo, we explored the concept of qubitization and one of its applications. To achieve this, we combined several key concepts, including `block encoding <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding/>`_, `quantum phase estimation <https://pennylane.ai/qml/demos/tutorial_qpe/>`_, and `amplitude amplification <https://pennylane.ai/qml/demos/tutorial_intro_amplitude_amplification/>`_. This algorithm serves as a foundation for more advanced techniques like `quantum singular value transformation <https://pennylane.ai/qml/demos/tutorial_intro_qsvt/>`_. We encourage you to continue studying these methods and apply them in your research.
 #
+# About the authors
+# ------------------

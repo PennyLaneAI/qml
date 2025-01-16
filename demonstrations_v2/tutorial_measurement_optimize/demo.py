@@ -834,3 +834,6 @@ print("Number of required measurements after optimization:", len(groups))
 #     152.12 (2020): 124114. <https://aip.scitation.org/doi/10.1063/1.5141458>`__
 #
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/josh_izaac.txt

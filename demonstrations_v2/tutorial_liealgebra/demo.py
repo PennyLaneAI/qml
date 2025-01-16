@@ -1,4 +1,4 @@
-r"""Introducing (Dynamical) Lie Algebras for quantum practitioners
+r"""Introducing (dynamical) Lie algebras for quantum practitioners
 ==================================================================
 
 Are you a quantum practitioner that has so far successfully avoided learning about Lie groups and Lie algebras,
@@ -456,3 +456,6 @@ print(qml.commutator(SY, SZ) == (2j*SX).simplify())
 #
 
 ##############################################################################
+# About the author
+# ----------------
+# .. include:: ../_static/authors/korbinian_kottmann.txt

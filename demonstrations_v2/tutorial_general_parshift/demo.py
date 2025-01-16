@@ -886,3 +886,6 @@ print(f"Second-order finite difference:    {np.round(np.array(fd_der2), 6)}")
 # .. _Rotosolve_code: https://pennylane.readthedocs.io/en/stable/code/api/pennylane.RotosolveOptimizer.html
 
 ##############################################################################
+# About the author
+# ----------------
+# .. include:: ../_static/authors/david_wierichs.txt

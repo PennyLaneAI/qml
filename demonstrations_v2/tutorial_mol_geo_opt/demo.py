@@ -465,3 +465,6 @@ plt.show()
 #     `Advances in Chemical Sciences (1987)
 #     <https://onlinelibrary.wiley.com/doi/10.1002/9780470142943.ch4>`__
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/alain_delgado.txt

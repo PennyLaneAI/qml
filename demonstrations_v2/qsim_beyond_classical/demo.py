@@ -581,3 +581,6 @@ print("\rObserved:", f"{np.mean(f_circuit):.7f}".rjust(27))
 #     <https://medium.com/@sohaib.alam/unpacking-the-quantum-supremacy-benchmark-with-python-67a46709d>`__
 #
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/theodor_isacsson.txt

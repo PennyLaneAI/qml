@@ -472,3 +472,6 @@ print(qml.draw(quantum_neural_net)(var_init, X[0]))
 #        ──╰BS(-3.48,1.40)──R(0.00)─────Kerr(1.57)─┤  <n>
 #
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/theodor_isacsson.txt

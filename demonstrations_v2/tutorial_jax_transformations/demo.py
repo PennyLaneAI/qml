@@ -306,3 +306,6 @@ print(f"key2: {circuit(key2, jnp.pi/2)}")
 # The future looks bright for this field, and we're excited to see what you build!
 #
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/chase_roberts.txt

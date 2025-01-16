@@ -629,3 +629,7 @@ plt.show()
 #
 
 ######################################################################
+# About the author
+# ----------------
+# .. include:: ../_static/authors/isabel_le.txt
+# .. include:: ../_static/authors/oriel_kiss.txt

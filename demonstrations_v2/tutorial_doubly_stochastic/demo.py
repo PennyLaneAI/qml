@@ -402,3 +402,6 @@ print("Adaptive QSGD min energy = ", qnode_analytic(params))
 #    <https://arxiv.org/abs/1910.01155>`__, 2019.
 #
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/josh_izaac.txt

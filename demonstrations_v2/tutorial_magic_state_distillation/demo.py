@@ -333,3 +333,6 @@ plt.show()
 #    `arXiv preprint arXiv:1205.6715 (2012) <https://arxiv.org/abs/1205.6715>`__.
 
 ######################################################################
+# About the author
+# ----------------
+# .. include:: ../_static/authors/david_ittah.txt

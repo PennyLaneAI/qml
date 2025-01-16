@@ -225,3 +225,6 @@ print(openfermion_op)
 # 4. Finally, we can convert PySCF wave functions to PennyLane state vectors using the
 #    :func:`~.pennylane.qchem.import_state` function.
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/soran_jahangiri.txt

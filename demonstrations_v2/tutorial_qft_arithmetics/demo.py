@@ -428,3 +428,8 @@ plt.show()
 #     Thomas G. Draper, "Addition on a Quantum Computer". `arXiv:quant-ph/0008033 <https://arxiv.org/abs/quant-ph/0008033>`__.
 #
 #
+# About the author
+# ----------------
+#
+# .. include:: ../_static/authors/guillermo_alonso.txt
+#

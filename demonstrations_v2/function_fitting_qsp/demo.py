@@ -574,3 +574,7 @@ qsp_model_runner.plot_result()
 # 040203 <https://arxiv.org/abs/2105.02859>`__\ *, 2021.*
 #
 #
+# About the author
+# ~~~~~~~~~~~~~~~~
+# .. include:: ../_static/authors/jay_soni.txt
+#

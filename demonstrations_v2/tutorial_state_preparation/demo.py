@@ -196,3 +196,6 @@ print("Target Bloch vector = ", bloch_v.numpy())
 print("Output Bloch vector = ", output_bloch_v)
 
 ##############################################################################
+# About the author
+# ----------------
+# .. include:: ../_static/authors/juan_miguel_arrazola.txt

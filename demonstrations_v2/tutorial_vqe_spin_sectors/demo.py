@@ -374,3 +374,6 @@ print("\n" f"Optimal value of the circuit parameters = {theta}")
 #     "Universal quantum circuits for quantum chemistry". `arXiv:2106.13839, (2021)
 #     <https://arxiv.org/abs/2106.13839>`__
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/alain_delgado.txt

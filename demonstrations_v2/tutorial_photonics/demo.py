@@ -961,3 +961,6 @@ print(
 #     <https://quantum-journal.org/papers/q-2021-02-04-392/>`__.
 #     (`arXiv <https://arxiv.org/abs/2010.02905>`__)
 #
+# About the author
+# ~~~~~~~~~~~~~~~~
+# .. include:: ../_static/authors/alvaro_ballon.txt

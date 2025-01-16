@@ -390,3 +390,6 @@ plt.show()
 #     M. A. Nielsen, and I. L. Chuang (2000) "Quantum Computation and Quantum Information",
 #     Cambridge University Press.
 # 
+# About the author
+# ----------------
+# .. include:: ../_static/authors/ludmila_botelho.txt

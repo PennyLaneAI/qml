@@ -1264,3 +1264,7 @@ stop = os.system("covalent stop")
 #   (2020)
 #
 #
+# About the authors
+# ----------------
+# .. include:: ../_static/authors/jack_stephen_baker.txt
+# .. include:: ../_static/authors/santosh_kumar_radha.txt

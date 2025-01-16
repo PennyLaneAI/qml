@@ -606,3 +606,10 @@ df.sort_values(by=["iteration_number"]).plot(x="iteration_number", y="cost")
 #
 
 ##############################################################################
+# About the authors
+# -----------------
+# .. include:: ../_static/authors/thomas_bromley.txt
+#
+# .. include:: ../_static/authors/maria_schuld.txt
+#
+# .. include:: ../_static/authors/matthew_beach.txt

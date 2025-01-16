@@ -1,71 +1,71 @@
 {
-  "title": "How to build spin Hamiltonians",
-  "authors": [
-    {
-      "username": "ddhawan"
-    },
-    {
-      "username": "soran"
-    }
-  ],
-  "dateOfPublication": "2024-12-05T00:00:00+00:00",
-  "dateOfLastModification": "2024-12-05T00:00:00+00:00",
-  "categories": [
-    "Getting Started",
-    "How-to"
-  ],
-  "tags": [],
-  "previewImages": [
-    {
-      "type": "thumbnail",
-      "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_how_to_build_spin_hamiltonians.png"
-    },
-    {
-      "type": "large_thumbnail",
-      "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_how_to_build_spin_hamiltonians.png"
-    }
-  ],
-  "seoDescription": "Learn how to build spin Hamiltonians with PennyLane.",
-  "doi": "",
-  "references": [
-    {
-      "id": "ashcroft",
-      "type": "book",
-      "title": "Solid State Physics",
-      "authors": "N. W. Ashcroft, D. N. Mermin",
-      "year": "1976",
-      "publisher": "New York: Saunders College Publishing",
-      "url": "https://en.wikipedia.org/wiki/Ashcroft_and_Mermin"
-    },
-    {
-      "id": "jovanovic",
-      "type": "article",
-      "title": "Refraction and band isotropy in 2D square-like Archimedean photonic crystal lattices",
-      "authors": "D. Jovanovic, R. Gajic, K. Hingerl",
-      "journal": "Opt. Express",
-      "volume": "16",
-      "pages": "4048--4058",
-      "year": "2008",
-      "url": "https://opg.optica.org/oe/fulltext.cfm?uri=oe-16-6-4048&id=154856"
-    }
-  ],
-  "basedOnPapers": [],
-  "referencedByPapers": [],
-  "relatedContent": [
-    {
-      "type": "demonstration",
-      "id": "tutorial_quantum_chemistry",
-      "weight": 1.0
-    },
-    {
-      "type": "demonstration",
-      "id": "tutorial_fermionic_operators",
-      "weight": 1.0
-    },
-    {
-      "type": "demonstration",
-      "id": "tutorial_isingmodel_PyTorch",
-      "weight": 1.0
-    }
-  ]
+    "title": "How to build spin Hamiltonians",
+    "authors": [
+        {
+            "username": "ddhawan"
+        },
+        {
+            "username": "soran"
+        }
+    ],
+    "dateOfPublication": "2024-12-05T00:00:00+00:00",
+    "dateOfLastModification": "2024-12-06T00:00:00+00:00",
+    "categories": [
+        "Getting Started",
+        "How-to"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_how_to_build_spin_hamiltonians.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_how_to_build_spin_hamiltonians.png"
+        }
+    ],
+    "seoDescription": "Learn how to build spin Hamiltonians with PennyLane.",
+    "doi": "",
+    "references": [
+        {
+            "id": "ashcroft",
+            "type": "book",
+            "title": "Solid State Physics",
+            "authors": "N. W. Ashcroft, D. N. Mermin",
+            "year": "1976",
+            "publisher": "New York: Saunders College Publishing",
+            "url": "https://en.wikipedia.org/wiki/Ashcroft_and_Mermin"
+        },
+        {
+            "id": "jovanovic",
+            "type": "article",
+            "title": "Refraction and band isotropy in 2D square-like Archimedean photonic crystal lattices",
+            "authors": "D. Jovanovic, R. Gajic, K. Hingerl",
+            "journal": "Opt. Express",
+            "volume": "16",
+            "pages": "4048--4058",
+            "year": "2008",
+            "url": "https://opg.optica.org/oe/fulltext.cfm?uri=oe-16-6-4048&id=154856"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_quantum_chemistry",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_fermionic_operators",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_isingmodel_PyTorch",
+            "weight": 1.0
+        }
+    ]
 }

@@ -552,3 +552,7 @@ plt.show()
 #    `Quantum, 5, 567 <https://quantum-journal.org/papers/q-2021-10-20-567/>`__, Oct 2021
 
 ##############################################################################
+# About the author
+# ----------------
+# .. include:: ../_static/authors/antal_szava.txt
+# .. include:: ../_static/authors/david_wierichs.txt

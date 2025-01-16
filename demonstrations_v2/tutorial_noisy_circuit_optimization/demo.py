@@ -541,3 +541,6 @@ plt.show()
 #    <https://arxiv.org/abs/2006.06303>`__, 2020.
 #
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/nathan_killoran.txt

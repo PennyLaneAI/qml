@@ -181,3 +181,6 @@ check_key(lock, incorrect_key)
 # incredible quantum lock-picking skills! 
 #
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/danial_motlagh.txt

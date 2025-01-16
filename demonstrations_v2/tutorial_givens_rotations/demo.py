@@ -493,3 +493,6 @@ print("Output state =", output)
 #   quantum circuits for quantum chemistry", arXiv:2106.13839, (2021)
 #
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/juan_miguel_arrazola.txt

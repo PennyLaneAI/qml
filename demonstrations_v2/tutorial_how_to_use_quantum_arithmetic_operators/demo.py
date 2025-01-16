@@ -356,3 +356,5 @@ print(circuit_with_Poly(x=1,y=4), " (binary) ---> ", state_to_decimal(circuit_wi
 #
 
 ######################################################################
+# About the authors
+# -----------------

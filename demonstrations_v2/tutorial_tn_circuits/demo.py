@@ -416,3 +416,12 @@ for image in BAS:
 #    4916, URL https://www.sciencedirect.com/science/article/pii/S0003491614001596.
 #
 #
+# About the authors
+# ^^^^^^^^^^^^^^^^^
+# .. include:: ../_static/authors/diego_guala.txt
+#
+# .. include:: ../_static/authors/esther_cruz-rico.txt
+#
+# .. include:: ../_static/authors/shaoming_zhang.txt
+#
+# .. include:: ../_static/authors/juan_miguel_arrazola.txt

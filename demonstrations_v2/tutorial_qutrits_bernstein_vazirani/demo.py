@@ -403,3 +403,7 @@ print(f"The value of a is {a}")
 # .. [#toffoli_qutrits]
 #     Alexey Galda, Michael Cubeddu, Naoki Kanazawa, Prineha Narang, Nathan Earnest-Noble, `"Implementing a Ternary Decomposition of the Toffoli Gate on Fixed-FrequencyTransmon Qutrits".
 #     <https://arxiv.org/pdf/2109.00558.pdf>`__
+# About the author
+# ----------------
+# .. include:: ../_static/authors/guillermo_alonso.txt
+

@@ -874,3 +874,6 @@ def H_evolve(state, phi, time):
 #     <https://research.ibm.com/blog/heavy-hex-lattice>`__.
 #     IBM Research Blog. Retrieved 2022-03-15
 #
+# About the author
+# ~~~~~~~~~~~~~~~~
+# .. include:: ../_static/authors/alvaro_ballon.txt

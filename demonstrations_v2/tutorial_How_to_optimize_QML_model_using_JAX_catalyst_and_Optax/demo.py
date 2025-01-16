@@ -215,3 +215,8 @@ result = min(times) / num
 print(f"Quantum jitting the entire optimization (best of {reps}): {result} sec per loop")
 
 ######################################################################
+# About the author
+# ----------------
+#
+# .. include:: ../_static/authors/josh_izaac.txt
+#

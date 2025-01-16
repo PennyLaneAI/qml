@@ -463,3 +463,6 @@ print("The asymmetry for Hasym is", asymm(Hasym, 1e-4), ".")
 #
 
 ##############################################################################
+# About the author
+# ----------------
+# .. include:: ../_static/authors/david_wakeham.txt

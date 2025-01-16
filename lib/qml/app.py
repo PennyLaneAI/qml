@@ -1,6 +1,6 @@
 import typer
 from qml.context import Context
-from qml.lib import demo
+from qml.lib import demo, fs
 import shutil
 import logging
 from typing import Annotated
@@ -48,3 +48,32 @@ def build(
         target=target,
         execute=execute,
     )
+
+
+@app.command()
+def sync_v2():
+    """Copy new and changed demos from /demonstrations to /demonstrations_v2."""
+    ctx = Context()
+    for v1_demo in (ctx.repo_root / "demonstrations").glob("*.py"):
+        demo_name = v1_demo.stem
+        v1_metadata = v1_demo.with_suffix(".metadata.json")
+
+        v2_demo_dir = ctx.demos_dir / demo_name
+        v2_demo = v2_demo_dir / "demo.py"
+        v2_metadata = v2_demo_dir / "metadata.json"
+
+        if not v2_demo_dir.exists():
+            v2_demo_dir.mkdir()
+            shutil.copy2(v1_demo, v2_demo)
+            shutil.copy2(v1_metadata, v2_metadata)
+            with open(v2_demo / "requirements.in", "w"):
+                pass
+
+            print(
+                f"Copied new demo {v1_demo} to {v2_demo_dir}. Please updated the requirements.in file."
+            )
+        else:
+            for src, dest in [(v1_demo, v2_demo), (v1_metadata, v2_metadata)]:
+                if not dest.exists() or fs.file_sha(src) != fs.file_sha(dest):
+                    shutil.copy2(src, dest)
+                    print(f"Updated {dest} from {src}")

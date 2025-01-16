@@ -857,3 +857,6 @@ plt.show()
 #    <https://proceedings.neurips.cc/paper/2018/file/5a4be1fa34e62bb8a6ec6b91d2462f5a-Paper.pdf>`__ (2018)
 #
 #
+# About the author
+# ----------------
+

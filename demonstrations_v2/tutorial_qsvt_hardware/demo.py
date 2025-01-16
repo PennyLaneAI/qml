@@ -162,3 +162,6 @@ print(np.round(matrix[: 2 ** len(H.wires), : 2 ** len(H.wires)], 4))
 #     "A Grand Unification of Quantum Algorithms".
 #     `arXiv preprint arXiv:2105.02859 <https://arxiv.org/abs/2105.02859>`__.
 #
+# About the author
+# ----------------
+#

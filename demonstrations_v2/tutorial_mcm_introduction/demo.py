@@ -467,3 +467,6 @@ print(f"<X₀> with initial state |->: {test_t_gadget('-'):4.1f}")
 #     `arXiv quant-ph/0002039 <https://arxiv.org/abs/quant-ph/0002039>`__, 2000
 #
 #
+# About the author
+# ----------------
+#

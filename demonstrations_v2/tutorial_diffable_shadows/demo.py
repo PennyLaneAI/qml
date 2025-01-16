@@ -503,3 +503,6 @@ plt.show()
 #     `arXiv:2201.01471 <https://arxiv.org/abs/2201.01471>`__, 2022.
 
 ##############################################################################
+# About the author
+# ----------------
+# .. include:: ../_static/authors/korbinian_kottmann.txt

@@ -984,3 +984,5 @@ fig, ax = qml.draw_mpl(su4_gate, wire_order=[0, 1])(params)
 #     "A Unified Theory of Barren Plateaus for Deep Parametrized Quantum Circuits"
 #     `Nat. Commun. **15** <https://www.nature.com/articles/s41467-024-49909-3>`__, 2024.
 #
+# About the author
+# ----------------

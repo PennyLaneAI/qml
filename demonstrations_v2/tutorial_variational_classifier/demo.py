@@ -552,3 +552,6 @@ plt.show()
 # the two different classes, which allows it to classify even the unseen validation data with
 # perfect accuracy.
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/maria_schuld.txt

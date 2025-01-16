@@ -494,3 +494,6 @@ plt.show()
 #    `arXiv:1909.05074 <https://arxiv.org/abs/1909.05074>`__, 2019.
 #
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/josh_izaac.txt

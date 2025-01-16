@@ -476,3 +476,8 @@ print(probs[2, 0, 0, 0])
 #     photonic fault-tolerant quantum computer. arXiv preprint arXiv:2010.02905.
 #
 #
+# About the authors
+# -----------------
+# .. include:: ../_static/authors/josh_izaac.txt
+#
+# .. include:: ../_static/authors/nathan_killoran.txt

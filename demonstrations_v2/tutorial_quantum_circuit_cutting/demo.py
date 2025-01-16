@@ -887,3 +887,10 @@ _ = ax.legend(frameon=True, loc="lower right", fontsize=20)
 #     (`arXiv <https://arxiv.org/abs/2207.14734>`__)
 #
 #
+# About the authors
+# -----------------
+# .. include:: ../_static/authors/gideon_uchehara.txt
+#
+# .. include:: ../_static/authors/matija_medvidovic.txt
+#
+# .. include:: ../_static/authors/anuj_apte.txt

@@ -142,3 +142,6 @@ if __name__ == "__main__":
 #     :align: center
 #
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/christina_lee.txt

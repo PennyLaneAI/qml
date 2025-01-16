@@ -447,3 +447,6 @@ print(qubit_rotation(0.5, 0.1))
 # functions can be combined in many different and interesting ways.
 #
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/josh_izaac.txt

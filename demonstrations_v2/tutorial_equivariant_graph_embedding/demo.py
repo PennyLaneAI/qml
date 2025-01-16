@@ -24,7 +24,7 @@ An equivariant graph embedding
 #
 # For example, the graph in the image above is represented by each of the two equivalent adjacency matrices. 
 # The top matrix can be transformed into the bottom matrix 
-# by swapping the first row with the third row, then swapping the third column with the third column, then the  
+# by swapping the first row with the third row, then swapping the third column with the first column, then the  
 # new first row with the second, and finally the first colum with the second.
 #
 # But the number of such permutations grows factorially with the number of nodes in the graph, which 
@@ -333,3 +333,10 @@ print("Model output for permutation of A, and with permuted observable: ", resul
 #    Theory for Equivariant Quantum Neural Networks.
 #    `arXiv:2210.08566 <https://arxiv.org/abs/2210.08566>`__
 # 
+# About the author 
+# -------------------------
+# .. include:: ../_static/authors/maria_schuld.txt
+
+
+
+

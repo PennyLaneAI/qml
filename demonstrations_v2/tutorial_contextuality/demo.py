@@ -802,3 +802,6 @@ plt.show()
 #     `arXiv:2206.11740 <https://arxiv.org/abs/2206.11740>`__, 2022.
 #
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/joseph_bowles.txt

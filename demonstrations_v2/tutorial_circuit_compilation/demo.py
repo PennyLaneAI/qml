@@ -239,3 +239,6 @@ plt.show()
 # :mod:`~pennylane.transforms` module. Furthermore, you can even learn how to create your own in
 # `this blogpost <https://pennylane.ai/blog/2021/08/how-to-write-quantum-function-transforms-in-pennylane/>`__.
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/borja_requena.txt

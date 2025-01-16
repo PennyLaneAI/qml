@@ -210,3 +210,6 @@ dev.draw(color="auto", show_inds=True, return_fig=True)
 #    4916, URL https://www.sciencedirect.com/science/article/pii/S0003491614001596.
 
 ######################################################################
+# About the author
+# ----------------
+# .. include:: ../_static/authors/pietropaolo_frisoni.txt

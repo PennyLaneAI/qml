@@ -307,3 +307,8 @@ for n in range(1, 41):
 #
 #
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/utkarsh_azad.txt
+#
+# .. include:: ../_static/authors/soran_jahangiri.txt

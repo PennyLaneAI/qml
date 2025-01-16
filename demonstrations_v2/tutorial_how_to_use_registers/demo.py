@@ -180,3 +180,7 @@ print("Eigenvalue: ", lamb * np.cos(2 * np.pi * (np.argmax(output)) / 2 ** len(r
 # algorithms are described as acting upon registers and sub-registers; using wire registers
 # can greatly streamline the implementation from theory to code. 
 #
+# About the author
+# ----------------
+#
+# .. include:: ../_static/authors/austin_huang.txt

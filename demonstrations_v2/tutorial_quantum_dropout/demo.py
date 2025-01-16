@@ -698,3 +698,5 @@ plt.show()
 #    *Theory of overparametrization in quantum neural networks*.
 #    `Nat. Comp. Science, 3, 542–551. <http://dx.doi.org/10.1038/s43588-023-00467-6>`__.
 #
+# About the author
+# ----------------

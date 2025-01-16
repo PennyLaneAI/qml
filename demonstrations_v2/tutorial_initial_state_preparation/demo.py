@@ -337,3 +337,6 @@ print(np.dot(wf_cisd, wf_ccsd).real)
 # used in our example, the CISD state was sufficient: however, in more correlated 
 # molecules, DMRG and SHCI initial states typically provide the best speed-ups.
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/stepan_fomichev.txt

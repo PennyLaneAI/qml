@@ -543,3 +543,6 @@ ax.set_ylim((-1.05, 1.05))
 #     `arXiv:2309.16756 <https://arxiv.org/abs/2309.16756>`__, 2023.
 #
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/korbinian_kottmann.txt

@@ -225,3 +225,6 @@ np.linalg.eigh(h.sparse_matrix().toarray())[0].min()
 #     Peter R. Surjan, "Second Quantized Approach to Quantum Chemistry". Springer-Verlag, 1989.
 #
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/soran_jahangiri.txt

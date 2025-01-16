@@ -290,3 +290,6 @@ plt.show()
 #     quantum computation of electronic structure". `Journal of Chemical Physics 137, 224109 (2012).
 #     <https://aip.scitation.org/doi/abs/10.1063/1.4768229>`__
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/alain_delgado.txt

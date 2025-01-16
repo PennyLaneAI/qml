@@ -388,3 +388,6 @@ for n in range(36):
 #     Structure Theory". Dover Publications, 1996.
 #
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/soran_jahangiri.txt

@@ -556,3 +556,6 @@ plt.show()
 #    PhD thesis, University of Waterloo, 2014.
 #
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/andrea_mari.txt

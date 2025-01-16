@@ -1012,3 +1012,6 @@ print("Move x excitation around z excitation: ", x_around_z)
 #    `Reviews in Mathematical Physics 32.02 (2020): 2030002. <https://doi.org/10.1142/S0129055X20300022>`__
 #    (`arXiv <https://arxiv.org/pdf/1712.01258.pdf>`__)
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/christina_lee.txt

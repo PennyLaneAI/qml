@@ -818,3 +818,6 @@ print(
 #    K. Wintersperger et al. (2023) "Neutral Atom Quantum Computing Hardware: Performance and End-User Perspective",
 #    (`arXiv <https://arxiv.org/abs/2304.14360>`__)
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/alvaro_ballon.txt

@@ -430,3 +430,6 @@ print("Target output state\n", target_matrices_shadow[0])
 #
 
 ##############################################################################
+# About the author
+# ------------------
+#

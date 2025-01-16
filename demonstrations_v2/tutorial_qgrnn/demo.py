@@ -673,3 +673,6 @@ print(f"\nNon-Existing Edge Parameters: {[val.unwrap() for val in weights_noedge
 #    `arXiv:1909.12264 <https://arxiv.org/abs/1909.12264>`__.
 #
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/jack_ceroni.txt

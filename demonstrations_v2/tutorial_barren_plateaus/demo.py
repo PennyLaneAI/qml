@@ -209,3 +209,6 @@ plt.show()
 #    parametrized quantum circuits. arXiv preprint arXiv:1903.05076 (2019).
 #
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/shahnawaz_ahmed.txt

@@ -816,3 +816,6 @@ circuit(params)
 #     `Amazon Quantum Computing Blog <https://aws.amazon.com/blogs/quantum-computing/realizing-quantum-spin-liquid-phase-on-an-analog-hamiltonian-rydberg-simulator/>`__, 2021.
 
 ##############################################################################
+# About the author
+# ----------------
+# .. include:: ../_static/authors/lillian_frederiksen.txt

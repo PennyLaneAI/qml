@@ -402,3 +402,8 @@ print("computed x:", np.round(normalized_computed_x, 3))
 #    `Quantum 3, 190 <https://quantum-journal.org/papers/q-2019-10-07-190/>`__, 2019
 
 ##############################################################################
+# About the author
+# ----------------
+# .. include:: ../_static/authors/jay_soni.txt
+#
+# .. include:: ../_static/authors/jarrett_smalley.txt

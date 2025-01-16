@@ -385,3 +385,6 @@ plt.grid(True)
 # ``shots=1024``).
 
 ##############################################################################
+# About the author
+# ----------------
+# .. include:: ../_static/authors/thomas_bromley.txt

@@ -865,3 +865,6 @@ print("Circuit gates:", specs["resources"].gate_types)
 #    `ArXiv <https://arxiv.org/pdf/2202.09194.pdf>`__.
 #
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/romain_moyard.txt

@@ -273,3 +273,6 @@ plt.show()
 #     `arXiv:2201.09866 <https://arxiv.org/abs/2201.09866>`__, 2022.
 #
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/korbinian_kottmann.txt

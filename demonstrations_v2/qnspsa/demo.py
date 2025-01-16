@@ -1038,3 +1038,6 @@ job = AwsQuantumJob.create(
 #    36th IEEE Conference on Decision and Control (Vol. 2, pp. 1417-1424).
 #    IEEE <https://ieeexplore.ieee.org/document/657661>`__.
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/yiheng_duan.txt

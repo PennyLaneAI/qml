@@ -597,3 +597,6 @@ plt.show()
 #    `arXiv:2010.06201 <https://arxiv.org/abs/2010.06201>`__ (2020).
 #
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/james_ellis.txt

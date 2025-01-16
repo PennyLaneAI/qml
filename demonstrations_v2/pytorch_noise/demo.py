@@ -249,3 +249,6 @@ for i in range(400):
 # .. note:: For more details on the PyTorch interface, see :doc:`introduction/interfaces/torch`.
 #
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/josh_izaac.txt

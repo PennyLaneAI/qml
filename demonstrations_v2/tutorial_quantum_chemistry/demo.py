@@ -78,7 +78,7 @@ coordinates = np.array([[-0.0399, -0.0038, 0.0], [1.5780, 0.8540, 0.0], [2.7909,
 
 from pennylane import qchem
 
-symbols, coordinates = qchem.read_structure("quantum_chemistry/h2o.xyz")
+symbols, coordinates = qchem.read_structure("h2o.xyz")
 
 ##############################################################################
 # The xyz format is supported.
@@ -326,3 +326,6 @@ print(H)
 #     `Journal of Chemical Theory and Computation 14, 2017 (2018).
 #     <https://pubs.acs.org/doi/abs/10.1021/acs.jctc.8b00032>`_
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/alain_delgado.txt
