@@ -30,7 +30,7 @@ def build(
     execute: Annotated[
         bool, typer.Option(help="Whether to execute demos and generate output cells")
     ] = False,
-):
+) -> None:
     """Build the named demos."""
     ctx = Context()
     demo_names = demo_names or []

@@ -92,7 +92,7 @@ def build(
     demos: Sequence[Demo],
     target: BuildTarget,
     execute: bool,
-):
+) -> None:
     """Build the provided demos using 'sphinx-build', optionally
     executing them to generate plots and cell outputs.
 

@@ -20,7 +20,7 @@ def poetry_export(
             listed. Otherwise, include only dependencies from the main
             group.
 
-    Raies:
+    Raises:
         CalledProcessError: The command does not complete successfully
     """
     cmd = [
