@@ -15,6 +15,9 @@ VQE with parallel QPUs with Rigetti
 
 *Author: Tom Bromley — Posted: 14 February 2020. Last updated: 29 August 2023.*
 
+.. warning::
+    This demo requires Python <=3.10 and uses the PennyLane-Rigetti plugin, which is only compatible with PennyLane v0.40 or below. To run this demo with newer versions of PennyLane, you will need to use `a different simulator device <https://pennylane.ai/plugins>`__.
+
 This tutorial showcases how using asynchronously-evaluated parallel QPUs can speed up the
 calculation of the potential energy surface of molecular hydrogen (:math:`H_2`).
 
@@ -79,7 +82,7 @@ _, h_ops = h.terms()
 
 print("Number of terms: {}\n".format(len(h_ops)))
 for op in h_ops:
-    print("Measurement {} on wires {}".format(op.name, op.wires))
+    print("Measurement {} on wires {}".format(str(op), op.wires))
 
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
@@ -89,21 +92,21 @@ for op in h_ops:
 #
 #    Number of terms: 15
 #
-#    Measurement Identity on wires <Wires = [0]>
-#    Measurement PauliZ on wires <Wires = [0]>
-#    Measurement PauliZ on wires <Wires = [1]>
-#    Measurement ['PauliZ', 'PauliZ'] on wires <Wires = [0, 1]>
-#    Measurement ['PauliY', 'PauliX', 'PauliX', 'PauliY'] on wires <Wires = [0, 1, 2, 3]>
-#    Measurement ['PauliY', 'PauliY', 'PauliX', 'PauliX'] on wires <Wires = [0, 1, 2, 3]>
-#    Measurement ['PauliX', 'PauliX', 'PauliY', 'PauliY'] on wires <Wires = [0, 1, 2, 3]>
-#    Measurement ['PauliX', 'PauliY', 'PauliY', 'PauliX'] on wires <Wires = [0, 1, 2, 3]>
-#    Measurement PauliZ on wires <Wires = [2]>
-#    Measurement ['PauliZ', 'PauliZ'] on wires <Wires = [0, 2]>
-#    Measurement PauliZ on wires <Wires = [3]>
-#    Measurement ['PauliZ', 'PauliZ'] on wires <Wires = [0, 3]>
-#    Measurement ['PauliZ', 'PauliZ'] on wires <Wires = [1, 2]>
-#    Measurement ['PauliZ', 'PauliZ'] on wires <Wires = [1, 3]>
-#    Measurement ['PauliZ', 'PauliZ'] on wires <Wires = [2, 3]>
+#    Measurement I(0) on wires Wires([0])
+#    Measurement Z(0) on wires Wires([0])
+#    Measurement Z(1) on wires Wires([1])
+#    Measurement Z(0) @ Z(1) on wires Wires([0, 1])
+#    Measurement Y(0) @ X(1) @ X(2) @ Y(3) on wires Wires([0, 1, 2, 3])
+#    Measurement Y(0) @ Y(1) @ X(2) @ X(3) on wires Wires([0, 1, 2, 3])
+#    Measurement X(0) @ X(1) @ Y(2) @ Y(3) on wires Wires([0, 1, 2, 3])
+#    Measurement X(0) @ Y(1) @ Y(2) @ X(3) on wires Wires([0, 1, 2, 3])
+#    Measurement Z(2) on wires Wires([2])
+#    Measurement Z(0) @ Z(2) on wires Wires([0, 2])
+#    Measurement Z(3) on wires Wires([3])
+#    Measurement Z(0) @ Z(3) on wires Wires([0, 3])
+#    Measurement Z(1) @ Z(2) on wires Wires([1, 2])
+#    Measurement Z(1) @ Z(3) on wires Wires([1, 3])
+#    Measurement Z(2) @ Z(3) on wires Wires([2, 3])
 
 ##############################################################################
 # Defining the energy function

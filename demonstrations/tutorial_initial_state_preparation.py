@@ -49,13 +49,11 @@ orbitals (:func:`~.pennylane.qchem.import_state` works for unrestricted orbitals
 
 from pyscf import gto, scf, ci
 from pennylane.qchem import import_state
-from pennylane import numpy as np
+import numpy as np
 
 R = 1.2
 # create the H3+ molecule
-mol = gto.M(atom=[["H", (0, 0, 0)],
-                  ["H", (0, 0, R)],
-                  ["H", (0, 0, 2 * R)]], charge=1)
+mol = gto.M(atom=[["H", (0, 0, 0)], ["H", (0, 0, R)], ["H", (0, 0, 2 * R)]], charge=1)
 # perfrom restricted Hartree-Fock and then CISD
 myhf = scf.RHF(mol).run()
 myci = ci.CISD(myhf).run()
@@ -76,7 +74,7 @@ print(f"CISD-based state vector: \n{np.round(wf_cisd.real, 4)}")
 ##############################################################################
 # CCSD states
 # ~~~~~~~~~~~
-# The function :func:`~.pennylane.qchem.import_state` is general and works similarly for CCSD. It can 
+# The function :func:`~.pennylane.qchem.import_state` is general and works similarly for CCSD. It can
 # automatically detect the input type and apply the appropriate conversion protocol. 
 
 from pyscf import cc
@@ -159,8 +157,6 @@ print(f"CCSD-based state vector: \n{np.round(wf_ccsd.real, 4)}")
 # Let's take this opportunity to create the Hartree-Fock initial state, to compare the
 # other states against it later on.
 
-from pennylane import numpy as np
-
 hf_primer = ([[3, 0, 0]], np.array([1.0]))
 wf_hf = import_state(hf_primer)
 
@@ -224,10 +220,11 @@ wf_hf = import_state(hf_primer)
 
 import pennylane as qml
 from pennylane import qchem
+from jax import numpy as jnp
 
 # generate the molecular Hamiltonian for H3+
 symbols = ["H", "H", "H"]
-geometry = np.array([[0, 0, 0], [0, 0, R/0.529], [0, 0, 2*R/0.529]])
+geometry = jnp.array([[0, 0, 0], [0, 0, R/0.529], [0, 0, 2*R/0.529]])
 molecule = qchem.Molecule(symbols, geometry, charge=1)
 
 H2mol, qubits = qchem.molecular_hamiltonian(molecule)
@@ -252,19 +249,32 @@ def circuit_VQE(theta, initial_state):
             qml.SingleExcitation(theta[i], wires=excitation)
     return qml.expval(H2mol)
 
+
+def cost_fn(param):
+    return circuit_VQE(param, initial_state=wf_hf)
+
+
 ##############################################################################
 # Next, we create the VQE optimizer, initialize the variational parameters and run the VQE optimization.
+import optax
+import jax
+jax.config.update("jax_enable_x64", True)
 
-opt = qml.GradientDescentOptimizer(stepsize=0.4)
-theta = np.array(np.zeros(len(excitations)), requires_grad=True)
+opt = optax.sgd(learning_rate=0.4)  # sgd stands for StochasticGradientDescent
+theta = jnp.array(jnp.zeros(len(excitations)))
 delta_E, iteration = 10, 0
 results_hf = []
+opt_state = opt.init(theta)
+prev_energy = cost_fn(theta)
 
 # run the VQE optimization loop until convergence threshold is reached
 while abs(delta_E) > 1e-5:
-    theta, prev_energy = opt.step_and_cost(circuit_VQE, theta, initial_state=wf_hf)
-    new_energy = circuit_VQE(theta, initial_state=wf_hf)
+    gradient = jax.grad(cost_fn)(theta)
+    updates, opt_state = opt.update(gradient, opt_state)
+    theta = optax.apply_updates(theta, updates)
+    new_energy = cost_fn(theta)
     delta_E = new_energy - prev_energy
+    prev_energy = new_energy
     results_hf.append(new_energy)
     if len(results_hf) % 5 == 0:
         print(f"Step = {len(results_hf)},  Energy = {new_energy:.6f} Ha")
@@ -273,18 +283,30 @@ print(f"Starting with HF state took {len(results_hf)} iterations until convergen
 ##############################################################################
 # And compare with how things go when you run it with the CISD initial state:
 
-theta = np.array(np.zeros(len(excitations)), requires_grad=True)
+
+def cost_fn_cisd(param):
+    return circuit_VQE(param, initial_state=wf_cisd)
+
+
+theta = jnp.array(jnp.zeros(len(excitations)))
 delta_E, iteration = 10, 0
 results_cisd = []
+opt_state = opt.init(theta)
+prev_energy = cost_fn_cisd(theta)
 
 while abs(delta_E) > 1e-5:
-    theta, prev_energy = opt.step_and_cost(circuit_VQE, theta, initial_state=wf_cisd)
-    new_energy = circuit_VQE(theta, initial_state=wf_cisd)
+    gradient = jax.grad(cost_fn_cisd)(theta)
+    updates, opt_state = opt.update(gradient, opt_state)
+    theta = optax.apply_updates(theta, updates)
+    new_energy = cost_fn_cisd(theta)
     delta_E = new_energy - prev_energy
+    prev_energy = new_energy
     results_cisd.append(new_energy)
     if len(results_cisd) % 5 == 0:
         print(f"Step = {len(results_cisd)},  Energy = {new_energy:.6f} Ha")
-print(f"Starting with CISD state took {len(results_cisd)} iterations until convergence.")
+print(
+    f"Starting with CISD state took {len(results_cisd)} iterations until convergence."
+)
 
 ##############################################################################
 # Let's visualize the comparison between the two initial states, and see that indeed 

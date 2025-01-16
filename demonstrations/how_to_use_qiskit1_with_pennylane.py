@@ -242,7 +242,7 @@ pl_qfunc = qml.from_qiskit(qc, measurements=measurements)
 #
 
 pl_circuit = qml.QNode(pl_qfunc, device=qml.device("lightning.qubit", wires=n))
-pl_circuit()
+print(pl_circuit())
 
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
@@ -263,7 +263,7 @@ measurements = [qml.classical_shadow(wires=range(n))]
 pl_qfunc = qml.from_qiskit(qc, measurements=measurements)
 
 pl_circuit = qml.QNode(pl_qfunc, device=qml.device("default.qubit", wires=n))
-pl_circuit(shots=5)
+print(pl_circuit(shots=5))
 
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
@@ -304,6 +304,7 @@ pl_circuit(shots=5)
 #
 
 from qiskit.circuit import ParameterVector, Parameter
+from matplotlib import pyplot as plt
 
 n = 3
 
@@ -316,6 +317,8 @@ qc.ry(angles1[1], [1])
 qc.ry(angle2, [2])
 
 qc.draw("mpl")
+plt.show()
+
 
 ######################################################################
 # .. rst-class:: image-no-text-wrap
@@ -349,7 +352,8 @@ phis = np.array([0.6, 0.7])
 theta = np.array([0.19])
 
 print(differentiable_circuit(phis, theta))
-print(qml.draw_mpl(differentiable_circuit)(phis, theta))
+qml.draw_mpl(differentiable_circuit, style="pennylane")(phis, theta)
+plt.show()
 
 ######################################################################
 # .. rst-class:: sphx-glr-script-out

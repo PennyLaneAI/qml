@@ -273,7 +273,7 @@ def executor(circuits, dev=dev_noisy):
         )
         circuits_with_meas.append(circuit_with_meas)
 
-    return qml.execute(circuits_with_meas, dev, gradient_fn=None)
+    return qml.execute(circuits_with_meas, dev, diff_method=None)
 
 
 ##############################################################################
@@ -540,7 +540,7 @@ for r, phi in zip(distances, params):
         circuits, postproc = qml.transforms.split_non_commuting(
             circuit_with_meas, grouping_strategy=None
         )
-        circuits_executed = qml.execute(circuits, dev_noisy, gradient_fn=None)
+        circuits_executed = qml.execute(circuits, dev_noisy, diff_method=None)
         return postproc(circuits_executed)
 
     mitig_energy = execute_with_zne(circuit, executor, scale_noise=fold_global)

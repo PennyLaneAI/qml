@@ -61,9 +61,14 @@ Note that the atomic coordinates are in `Bohr <https://en.wikipedia.org/wiki/Boh
 """
 
 import pennylane as qml
-from pennylane import qchem
-from pennylane import numpy as np
+import jax
+import numpy as np
 import time
+
+from pennylane import qchem
+from jax import numpy as jnp
+
+jax.config.update("jax_enable_x64", True)
 
 symbols = ["Li", "H"]
 geometry = np.array([[0.0, 0.0, 0.0], [0.0, 0.0, 2.969280527]])
@@ -172,8 +177,17 @@ for i in range(len(operator_pool)):
 #
 # We create a circuit that applies a selected group of gates to the reference Hartree-Fock state.
 
+
+# Re-define H using Jax Arrays
+molecule = qchem.Molecule(symbols, jnp.array(geometry))
+H, qubits = qchem.molecular_hamiltonian(
+    molecule,
+    active_electrons=2,
+    active_orbitals=5
+)
+
 def circuit_1(params, excitations):
-    qml.BasisState(hf_state, wires=range(qubits))
+    qml.BasisState(jnp.array(hf_state), wires=range(qubits))
 
     for i, excitation in enumerate(excitations):
         if len(excitation) == 4:
@@ -189,10 +203,10 @@ def circuit_1(params, excitations):
 # with respect to the Hartree-Fock state.
 
 
-dev = qml.device("default.qubit", wires=qubits)
-cost_fn = qml.QNode(circuit_1, dev, interface="autograd")
+dev = qml.device("lightning.qubit", wires=qubits)
+cost_fn = qml.QNode(circuit_1, dev, interface="jax")
 
-circuit_gradient = qml.grad(cost_fn, argnum=0)
+circuit_gradient = jax.grad(cost_fn, argnums=0)
 
 params = [0.0] * len(doubles)
 grads = circuit_gradient(params, excitations=doubles)
@@ -214,12 +228,17 @@ doubles_select
 # the updated parameters for the selected gates. We also need to define an optimizer. Note that the
 # optimization is not very costly as we only have six gates in our circuit.
 
-opt = qml.GradientDescentOptimizer(stepsize=0.5)
+import optax
 
-params_doubles = np.zeros(len(doubles_select), requires_grad=True)
+params_doubles = jnp.zeros(len(doubles_select))
 
-for n in range(20):
-    params_doubles = opt.step(cost_fn, params_doubles, excitations=doubles_select)
+opt = optax.sgd(learning_rate=0.5) # sgd stands for StochasticGradientDescent
+opt_state = opt.init(params_doubles)
+
+for n in range(10):
+    gradient = jax.grad(cost_fn, argnums=0)(params_doubles, excitations=doubles_select)
+    updates, opt_state = opt.update(gradient, opt_state)
+    params_doubles = optax.apply_updates(params_doubles, updates)
 
 ##############################################################################
 # Now, we keep the selected gates in the circuit and compute the gradients with respect to all of
@@ -248,8 +267,8 @@ def circuit_2(params, excitations, gates_select, params_select):
 ##############################################################################
 #  We now compute the gradients for the single excitation gates.
 
-cost_fn = qml.QNode(circuit_2, dev, interface="autograd")
-circuit_gradient = qml.grad(cost_fn, argnum=0)
+cost_fn = qml.QNode(circuit_2, dev, interface="jax")
+circuit_gradient = jax.grad(cost_fn, argnums=0)
 params = [0.0] * len(singles)
 
 grads = circuit_gradient(
@@ -280,15 +299,19 @@ singles_select
 # We perform a final circuit optimization to get the ground-state energy. The resulting energy
 # should match the exact energy of the ground electronic state of LiH which is -7.8825378193 Ha.
 
-cost_fn = qml.QNode(circuit_1, dev, interface="autograd")
+cost_fn = qml.QNode(circuit_1, dev, interface="jax")
 
-params = np.zeros(len(doubles_select + singles_select), requires_grad=True)
+params = jnp.zeros(len(doubles_select + singles_select))
 
 gates_select = doubles_select + singles_select
+opt_state = opt.init(params)
 
-for n in range(20):
+for n in range(10):
     t1 = time.time()
-    params, energy = opt.step_and_cost(cost_fn, params, excitations=gates_select)
+    gradient = jax.grad(cost_fn, argnums=0)(params, excitations=doubles_select)
+    updates, opt_state = opt.update(gradient, opt_state)
+    params = optax.apply_updates(params, updates)
+    energy = cost_fn(params, doubles_select)
     t2 = time.time()
     print("n = {:},  E = {:.8f} H, t = {:.2f} s".format(n, energy, t2 - t1))
 
@@ -327,9 +350,9 @@ H_sparse
 
 excitations = doubles_select + singles_select
 
-params = np.zeros(len(excitations), requires_grad=True)
+params = jnp.zeros(len(excitations))
 
-@qml.qnode(dev, diff_method="parameter-shift", interface="autograd")
+@qml.qnode(dev, diff_method="parameter-shift", interface="jax")
 def circuit(params):
     qml.BasisState(hf_state, wires=range(qubits))
 
@@ -342,9 +365,12 @@ def circuit(params):
     return qml.expval(qml.SparseHamiltonian(H_sparse, wires=range(qubits)))
 
 
-for n in range(20):
+for n in range(10):
     t1 = time.time()
-    params, energy = opt.step_and_cost(circuit, params)
+    gradient = jax.grad(cost_fn, argnums=0)(params, excitations=doubles_select)
+    updates, opt_state = opt.update(gradient, opt_state)
+    params = optax.apply_updates(params, updates)
+    energy = cost_fn(params, doubles_select)
     t2 = time.time()
     print("n = {:},  E = {:.8f} H, t = {:.2f} s".format(n, energy, t2 - t1))
 
