@@ -14,6 +14,7 @@ def poetry_export(
     """Executes `poetry export` with the given Python interpreter.
 
     Args:
+        python: Path to Python executable
         output: Path to output file
         format: Format, either 'constraints.txt' or 'requirements.txt'
         groups: If provided, only include dependencies from the groups
@@ -51,7 +52,18 @@ def pip_install(
     quiet: bool = True,
 ):
     """Executes `pip install` with the given python
-    interpreter and args."""
+    interpreter and args.
+
+    Args:
+        python: Path to python executable
+        args: Command line args passed to pip install
+        requirements: Path to a requirements file
+        constraints: Path to a constriants file
+        quiet: Whether to suppress output to stdout
+
+    Raises:
+        CalledProcessError: The command does not complete successfully
+    """
     cmd = [str(python), "-m", "pip", "install"]
     if requirements:
         cmd.extend(("--requirement", str(requirements)))
