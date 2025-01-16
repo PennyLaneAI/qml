@@ -78,7 +78,7 @@ coordinates = np.array([[-0.0399, -0.0038, 0.0], [1.5780, 0.8540, 0.0], [2.7909,
 
 from pennylane import qchem
 
-symbols, coordinates = qchem.read_structure("h2o.xyz")
+symbols, coordinates = qchem.read_structure("quantum_chemistry/h2o.xyz")
 
 ##############################################################################
 # The xyz format is supported.
