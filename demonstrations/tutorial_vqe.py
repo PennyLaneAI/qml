@@ -133,7 +133,7 @@ dev = qml.device("lightning.qubit", wires=qubits)
 # tutorial :doc:`tutorial_givens_rotations`.
 #
 # Implementing the circuit above using PennyLane is straightforward. First, we use the
-# :func:`~.qchem.hf_state` function to generate the vector representing the Hartree-Fock state.
+# :func:`~.pennylane.qchem.hf_state` function to generate the vector representing the Hartree-Fock state.
 
 electrons = 2
 hf = qml.qchem.hf_state(electrons, qubits)
