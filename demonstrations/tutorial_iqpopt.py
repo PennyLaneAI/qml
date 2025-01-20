@@ -501,15 +501,27 @@ print(expval, std)
 sample = small_circuit.sample(params, shots=1)
 print(sample)
 
+# 
+
 probabilities = small_circuit.probs(params)
 print(probabilities)
 
-sample = large_circuit.sample(params, shots=1)
-print(sample)
+# 
 
-probabilities = large_circuit.probs(params)
-print(probabilities)
+try:
+    sample = large_circuit.sample(params, shots=1)
+    print(sample)
+except Exception as e:
+    print(e)
 
+# 
+
+try:
+    probabilities = large_circuit.probs(params)
+    print(probabilities)
+except Exception as e:
+    print(e)
+    
 ######################################################################
 # As we can see, we can't sample or know the probabilities of the circuit for the large one. The only
 
@@ -796,10 +808,14 @@ plt.hist(np.sum(samples_untrained, axis=1), bins=20, range=[0,20])
 plt.title("Histogram of the untrained circuit")
 plt.show()
 
+# 
+
 samples_trained = circuit.sample(trainer.final_params, 1000)
 plt.hist(np.sum(samples_trained, axis=1), bins=20, range=[0,20])
 plt.title("Histogram of the trained circuit")
 plt.show()
+
+# 
 
 plt.hist(np.sum(X_train, axis=1), bins=20, range=[0,20])
 plt.title("Histogram of the ground truth")
