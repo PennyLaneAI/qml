@@ -26,9 +26,8 @@
             "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_tensor_network_basics.png"
         }
     ],
-    "seoDescription": "An introductory tutorial to tensor networks.",
+    "seoDescription": "Discover the fundamentals of tensor networks with this comprehensive demo. Learn how tensors generalize vectors and matrices, explore their intuitive diagrams, and see how they connect to quantum circuits, with insights for both beginners and advanced readers.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_tn_basics",
     "references": [
         {
             "id": "Selinger2010",
