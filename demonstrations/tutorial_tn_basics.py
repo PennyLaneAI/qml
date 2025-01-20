@@ -1,11 +1,11 @@
 r"""Tutorial: ABC of tensor networks for quantum circuits
 =============================================================
 
-If you are well-versed in the topics of quantum computing or quantum information, chances are you have heard (maybe a lot) about tensor networks. In fact, tensor networks are a rather widespread "tool" with applications ranging across physics, math, and computer science.
+If you are well-versed in the topics of quantum computing or quantum information, chances are you have heard (quite often) about tensor networks. In fact, tensor networks are a widely used tool with applications ranging across physics, math, and computer science.
 
 Part of the excitement surrounding tensor networks is due to their ability to represent complex data efficiently, which allows for—among other things—fast classical simulations. In addition, the diagrammatic language accompanying tensor networks makes working with them intuitive and suitable for describing a vast range of mathematical concepts, including quantum circuits.
 
-The :ref:`first part of this tutorial <part_one>` introduces the basic tensor network notions and definitions to quantum practitioners who are familiar with quantum computing but new to the tensor networks world.
+The :ref:`first part of this tutorial <part_one>` introduces the basic tensor network notions and definitions to quantum practitioners who are familiar with quantum computing but new to tensor networks.
 
 Then, building on this introduction, in the :ref:`second part <part_two>` we explore topics aimed at more seasoned readers. Check this section out if you want to understand how tensor networks and quantum circuits are related!
 
@@ -13,7 +13,7 @@ Without further ado, let’s dive right in! 🤓📚
 
 .. _part_one:
 
-Part 1: A first glimpse into the tensor networks world
+A first glimpse into the tensor networks world
 ----------------------------------------------------------
 
 From matrices to tensors
@@ -83,7 +83,7 @@ print("Rank-3 tensor: \n", tensor_rank3)
 ##############################################################################
 # We can create a tensor of arbitrary rank following a similar procedure. This recursive approach illustrates how a rank-:math:`r` tensor can be seen as consisting of nested rank-:math:`(r-1)` tensors. This translates into code as adding another level to the nested bracket structure: ``[tensor_rank_r-1]``.
 #
-# Now that we know what a tensor is (and can even code it up 💻), let us look at how to combine them to create a tensor network.
+# Now that we understand what a tensor is—and even know how to code one—let us look at how to combine them to create a tensor network.
 
 ##############################################################################
 # From matrix multiplication to tensor contractions
@@ -132,7 +132,7 @@ print("Rank-3 tensor: \n", tensor_rank3)
 # With the above contraction, we have formed a network of tensors, i.e., a **tensor network**!
 #
 # .. note::
-#   A common question arising when drawing a tensor is "What is the correct order to draw the indices?". For instance, in the figure above, we have adopted the convention that a tensor :math:`A_{i,j,k}` corresponds to a diagram with the first leg (:math:`i`) pointing left, the second leg (:math:`j`) pointing upwards, and the third leg (:math:`k`) pointing right, and similarly for the other two tensors. However, this need not be the case. We could have defined the first leg to be the one pointing upwards, for example. Based on the use case, and the user, some conventions might seem more natural than others. The only important thing to keep in mind is to be consistent. In other words, once we choose a convention for the order, we should apply it to all the tensors to avoid contracting the wrong indices ❌.
+#   A common question arising when drawing a tensor is "What is the correct order to draw the indices?" For instance, in the figure above, we have adopted the convention that a tensor :math:`A_{i,j,k}` corresponds to a diagram with the first leg (:math:`i`) pointing left, the second leg (:math:`j`) pointing upwards, and the third leg (:math:`k`) pointing right, and similarly for the other two tensors. However, this need not be the case. We could have defined the first leg to be the one pointing upwards, for example. Based on the use case, and the user, some conventions might seem more natural than others. The only important thing to keep in mind is to be consistent. In other words, once we choose a convention for the order, we should apply it to all the tensors to avoid contracting the wrong indices.
 #
 # In our code, we can perform a tensor contraction using the ``numpy`` function ``np.einsum``. To do so, we can start by creating the 3 tensors to be contracted by reshaping a 1D array (created using ``np.arange``) into rank-3 tensors of the correct dimensions.
 
@@ -201,7 +201,7 @@ print(D.shape)
 # 
 # .. note::
 # 
-#   More generally, we can find decompositions of multi-qubit gates into local tensors employing the ubiquitous singular value decomposition (SVD). This method is explained in detail in our :doc:`MPS tutorial </demos/tutorial_mps>`. This decomposition is helpful when contracting non-local tensors in, e.g., a quantum circuit.
+#   More generally, we can find decompositions of multi-qubit gates into local tensors employing the ubiquitous singular value decomposition (SVD). This method is explained in detail in our :doc:`introduction to matrix product states for quantum practitioners demo </demos/tutorial_mps>`. This decomposition is helpful when contracting non-local tensors, as is often required in quantum circuits.
 
 ##############################################################################
 # The cost of contracting a network
@@ -323,14 +323,14 @@ print(f"Computation cost for path 2: {time_BC + time_BCA}")
 # 
 # So far, we have discussed the definition of a tensor, how to combine them to create a tensor network, and how to calculate the complexity of the contraction operations. Hopefully, after this brief introduction, you will feel more comfortable whenever tensor networks are brought into the conversation.
 # 
-# Perhaps you even feel motivated to dive deeper into the vast world of tensor networks! 🧐
+# Perhaps you even feel motivated to dive deeper into the vast world of tensor networks!
 # 
 # To help you with this endeavour, in the following sections we will summarize some ubiquitous algorithms used to connect tensor networks and quantum computers. These topics can become quite technical real fast, so we can only scratch the surface in this demo. For this reason, we will reference the relevant sources when pertinent. Now, take a sip of coffee, brace yourself, and let's continue! ☕️ 
 
 ##############################################################################
 # .. _part_two:
 # 
-# Part 2: Connecting tensor networks and quantum circuits 🔌
+# Connecting tensor networks and quantum circuits
 # -----------------------------------------------------------
 # 
 # Contraction paths
@@ -379,7 +379,7 @@ import pennylane as qml
 dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 
 ##############################################################################
-# The different types of values accepted for ``contraction_optimizer`` are determined by the ``optimize`` parameter in ``Quimb`` (see `docs <https://quimb.readthedocs.io/en/latest/tensor-circuit.html#finding-a-contraction-path-the-optimize-kwarg>`_) as this is the backend behind the :class:`~pennylane.devices.default_tensor.DefaultTensor` device. See `this tutorial <https://pennylane.ai/qml/demos/tutorial_How_to_simulate_quantum_circuits_with_tensor_networks/>`_ to learn more about the use of this device in ``Pennylane``.
+# The different types of values accepted for ``contraction_optimizer`` are determined by the ``optimize`` parameter in ``Quimb`` (see `docs <https://quimb.readthedocs.io/en/latest/tensor-circuit.html#finding-a-contraction-path-the-optimize-kwarg>`_) as this is the backend behind the :class:`~pennylane.devices.default_tensor.DefaultTensor` device. See our `simulate quantum circuits with tensor networks demo <https://pennylane.ai/qml/demos/tutorial_How_to_simulate_quantum_circuits_with_tensor_networks/>`_ to learn more about the use of this device in ``Pennylane``.
 # 
 # Slicing
 # ^^^^^^^
@@ -504,9 +504,9 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # Conclusion
 # ----------
 # 
-# And that is it for this tutorial! 🎉
+# And that is it for this demo! 🎉
 # 
-# Although the world of tensor networks and their relation to quantum computing is vastly wider than what we could ever cover in one tutorial, we hope that after these explanations you now feel equipped with the tools needed to dive deeper into this topic by yourself. 🔍🛠️
+# Although the world of tensor networks and their relation to quantum computing is vastly wider than what we could ever cover in one tutorial, we hope that after these explanations you now feel equipped with the tools needed to dive deeper into this topic by yourself.
 # 
 # If you want to learn more about using tensor networks as a diagrammatic tool, check out `these amazing lecture notes <https://arxiv.org/pdf/1912.10049>`_ by J.Biamonte. In addition, check out `this website <https://tensornetwork.org/about/>`_ for great explanations on many important algorithms and tensor network structures by Flatiron Institute  .  
 
