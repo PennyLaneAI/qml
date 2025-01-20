@@ -381,7 +381,8 @@ print("Applying X(0): ", tableau_to_pauli_rep(snapshots[1]))
 # Let's examine the remaining operations to confirm this.
 #
 
-circuit_ops = circuit.tape.operations
+tape = qml.workflow.construct_tape(circuit)()
+circuit_ops = tape.operations
 print("Circ. Ops: ", circuit_ops)
 
 for step in range(1, len(circuit_ops)):
