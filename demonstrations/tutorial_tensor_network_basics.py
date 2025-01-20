@@ -519,7 +519,7 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 #    "A Survey of Graphical Languages for Monoidal Categories",
 #    `<http://dx.doi.org/10.1007/978-3-642-12821-9_4>`__, in *New Structures for Physics*, Springer Berlin Heidelberg, pp. 289–355, 2010.
 # 
-# .. [#Arad]
+# .. [#Arad2010]
 #    I. Arad and Z. Landau.
 #    "Quantum computation and the evaluation of tensor networks",
 #    `<https://arxiv.org/abs/0805.0040>`__, 2010.
