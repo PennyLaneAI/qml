@@ -11,7 +11,9 @@
     "dateOfPublication": "2024-08-06T00:00:00+00:00",
     "dateOfLastModification": "2024-08-06T00:00:00+00:00",
     "categories": [
-        "Getting Started"
+        "Getting Started",
+        "Quantum Computing",
+        "Algorithms"
     ],
     "tags": [],
     "previewImages": [
@@ -29,25 +31,146 @@
     "canonicalURL": "/qml/demos/tutorial_tn_basics",
     "references": [
         {
-            "id": "huggins",
-            "type": "article",
-            "title": "Towards quantum machine learning with tensor networks",
-            "authors": "W. Huggins, P. Patil, B. Mitchell, K. B. Whaley, and E. M. Stoudenmire",
-            "year": "2019",
-            "journal": "Quantum Science and Technology",
-            "url": "http://dx.doi.org/10.1088/2058-9565/aaea94"
+            "id": "Selinger2010",
+            "type": "book-chapter",
+            "title": "A Survey of Graphical Languages for Monoidal Categories",
+            "authors": "P. Selinger",
+            "year": "2010",
+            "publisher": "Springer Berlin Heidelberg",
+            "journal": "New Structures for Physics",
+            "doi": "10.1007/978-3-642-12821-9_4",
+            "url": "http://dx.doi.org/10.1007/978-3-642-12821-9_4"
         },
         {
-            "id": "orus",
+            "id": "Arad2010",
+            "type": "preprint",
+            "title": "Quantum computation and the evaluation of tensor networks",
+            "authors": "I. Arad, Z. Landau",
+            "year": "2010",
+            "publisher": "",
+            "journal": "",
+            "doi": "",
+            "url": "https://arxiv.org/abs/0805.0040"
+        },
+        {
+            "id": "Bridgeman2017",
+            "type": "journal-article",
+            "title": "Hand-waving and interpretive dance: an introductory course on tensor networks",
+            "authors": "J. C. Bridgeman, C. T. Chubb",
+            "year": "2017",
+            "publisher": "",
+            "journal": "Journal of Physics A: Mathematical and Theoretical",
+            "doi": "10.1088/1751-8121/aa6dc3",
+            "url": "http://dx.doi.org/10.1088/1751-8121/aa6dc3"
+        },
+        {
+            "id": "Lam1997",
+            "type": "journal-article",
+            "title": "On Optimizing a Class of Multi-Dimensional Loops with Reduction for Parallel Execution",
+            "authors": "C.-C. Lam, P. Sadayappan, R. Wenger",
+            "year": "1997",
+            "publisher": "",
+            "journal": "Parallel Processing Letters",
+            "doi": "10.1142/S0129626497000176",
+            "url": "https://doi.org/10.1142/S0129626497000176"
+        },
+        {
+            "id": "Gray2021",
+            "type": "journal-article",
+            "title": "Hyper-optimized tensor network contraction",
+            "authors": "J. Gray, S. Kourtis, S. Choi",
+            "year": "2021",
+            "publisher": "",
+            "journal": "Quantum",
+            "doi": "10.22331/q-2021-03-15-410",
+            "url": "https://quantum-journal.org/papers/q-2021-03-15-410/"
+        },
+        {
+            "id": "Bienstock1990",
             "type": "article",
-            "title": "A practical introduction to tensor networks: Matrix product states and projected entangled pair states",
-            "authors": "R. Orús",
+            "title": "On embedding graphs in trees",
+            "authors": "Dan Bienstock",
+            "year": "1990",
+            "journal": "Journal of Combinatorial Theory, Series B",
+            "volume": "49",
+            "number": "1",
+            "pages": "103–136",
+            "doi": "10.1016/0095-8956(90)90066-9",
+            "url": "https://www.sciencedirect.com/science/article/pii/0095895690900669"
+        },
+        {
+            "id": "Pfeifer2014",
+            "type": "journal-article",
+            "title": "Faster identification of optimal contraction sequences for tensor networks",
+            "authors": "R. N. C. Pfeifer, J. Haegeman, F. Verstraete",
             "year": "2014",
+            "publisher": "",
+            "journal": "Physical Review E",
+            "doi": "10.1103/PhysRevE.90.033315",
+            "url": "http://dx.doi.org/10.1103/PhysRevE.90.033315"
+        },
+        {
+            "id": "Pirvu2010",
+            "type": "journal-article",
+            "title": "Matrix product operator representations",
+            "authors": "B. Pirvu, V. Murg, J. I. Cirac, F. Verstraete",
+            "year": "2010",
+            "publisher": "",
+            "journal": "New Journal of Physics",
+            "doi": "10.1088/1367-2630/12/2/025012",
+            "url": "http://dx.doi.org/10.1088/1367-2630/12/2/025012"
+        },
+        {
+            "id": "Ferris2012",
+            "type": "journal-article",
+            "title": "Perfect sampling with unitary tensor networks",
+            "authors": "A. J. Ferris, G. Vidal",
+            "year": "2012",
+            "publisher": "",
+            "journal": "Physical Review B",
+            "doi": "10.1103/PhysRevB.85.165146",
+            "url": "http://dx.doi.org/10.1103/PhysRevB.85.165146"
+        },
+        {
+            "id": "Schuch2008",
+            "type": "journal-article",
+            "title": "Simulation of Quantum Many-Body Systems with Strings of Operators and Monte Carlo Tensor Contractions",
+            "authors": "N. Schuch, M. M. Wolf, F. Verstraete, J. I. Cirac",
+            "year": "2008",
+            "publisher": "",
+            "journal": "Physical Review Letters",
+            "doi": "10.1103/PhysRevLett.100.040501",
+            "url": "https://doi.org/10.1103/PhysRevLett.100.040501"
+        },
+        {
+            "id": "Schollwoeck2011",
+            "type": "journal-article",
+            "title": "The density-matrix renormalization group in the age of matrix product states",
+            "authors": "U. Schollwöck",
+            "year": "2011",
+            "publisher": "",
             "journal": "Annals of Physics",
-            "url": "https://www.sciencedirect.com/science/article/pii/S0003491614001596"
+            "doi": "10.1016/j.aop.2010.09.012",
+            "url": "https://doi.org/10.1016/j.aop.2010.09.012"
         }
     ],
     "basedOnPapers": [],
     "referencedByPapers": [],
-    "relatedContent": []
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_tn_circuits",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_mps",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_How_to_simulate_quantum_circuits_with_tensor_networks",
+            "weight": 1.0
+        }
+    ]
 }
