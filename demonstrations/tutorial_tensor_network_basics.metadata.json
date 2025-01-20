@@ -32,7 +32,7 @@
     "references": [
         {
             "id": "Selinger2010",
-            "type": "book-chapter",
+            "type": "book",
             "title": "A Survey of Graphical Languages for Monoidal Categories",
             "authors": "P. Selinger",
             "year": "2010",
@@ -54,7 +54,7 @@
         },
         {
             "id": "Bridgeman2017",
-            "type": "journal-article",
+            "type": "article",
             "title": "Hand-waving and interpretive dance: an introductory course on tensor networks",
             "authors": "J. C. Bridgeman, C. T. Chubb",
             "year": "2017",
@@ -65,7 +65,7 @@
         },
         {
             "id": "Lam1997",
-            "type": "journal-article",
+            "type": "article",
             "title": "On Optimizing a Class of Multi-Dimensional Loops with Reduction for Parallel Execution",
             "authors": "C.-C. Lam, P. Sadayappan, R. Wenger",
             "year": "1997",
@@ -76,7 +76,7 @@
         },
         {
             "id": "Gray2021",
-            "type": "journal-article",
+            "type": "article",
             "title": "Hyper-optimized tensor network contraction",
             "authors": "J. Gray, S. Kourtis, S. Choi",
             "year": "2021",
@@ -100,7 +100,7 @@
         },
         {
             "id": "Pfeifer2014",
-            "type": "journal-article",
+            "type": "article",
             "title": "Faster identification of optimal contraction sequences for tensor networks",
             "authors": "R. N. C. Pfeifer, J. Haegeman, F. Verstraete",
             "year": "2014",
@@ -111,7 +111,7 @@
         },
         {
             "id": "Pirvu2010",
-            "type": "journal-article",
+            "type": "article",
             "title": "Matrix product operator representations",
             "authors": "B. Pirvu, V. Murg, J. I. Cirac, F. Verstraete",
             "year": "2010",
@@ -122,7 +122,7 @@
         },
         {
             "id": "Ferris2012",
-            "type": "journal-article",
+            "type": "article",
             "title": "Perfect sampling with unitary tensor networks",
             "authors": "A. J. Ferris, G. Vidal",
             "year": "2012",
@@ -133,7 +133,7 @@
         },
         {
             "id": "Schuch2008",
-            "type": "journal-article",
+            "type": "article",
             "title": "Simulation of Quantum Many-Body Systems with Strings of Operators and Monte Carlo Tensor Contractions",
             "authors": "N. Schuch, M. M. Wolf, F. Verstraete, J. I. Cirac",
             "year": "2008",
@@ -144,7 +144,7 @@
         },
         {
             "id": "Schollwoeck2011",
-            "type": "journal-article",
+            "type": "article",
             "title": "The density-matrix renormalization group in the age of matrix product states",
             "authors": "U. Schollwöck",
             "year": "2011",
