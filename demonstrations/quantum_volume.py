@@ -343,19 +343,17 @@ def permute_qubits(num_qubits):
 
 ##############################################################################
 #
-# Next, we need to apply SU(4) gates to pairs of qubits. PennyLane doesn't have
-# built-in functionality to generate these random matrices, however its cousin
-# `Strawberry Fields <https://strawberryfields.ai/>`_ does! We will use the
-# ``random_interferometer`` method, which can generate unitary matrices uniformly
+# Next, we need to apply SU(4) gates to pairs of qubits.
+# We can use scipy to generate unitary matrices uniformly
 # at random. This function actually generates elements of U(4), but they are
 # essentially equivalent up to a global phase.
 
-from strawberryfields.utils import random_interferometer
+from scipy.stats import unitary_group
 
 def apply_random_su4_layer(num_qubits):
     for qubit_idx in range(0, num_qubits, 2):
         if qubit_idx < num_qubits - 1:
-            rand_haar_su4 = random_interferometer(N=4)
+            rand_haar_su4 = unitary_group.rvs(4)
             qml.QubitUnitary(rand_haar_su4, wires=[qubit_idx, qubit_idx + 1])
 
 
@@ -386,9 +384,10 @@ dev_ideal = qml.device("lightning.qubit", shots=None, wires=num_qubits)
 m = 3  # number of qubits
 
 with qml.tape.QuantumTape() as tape:
-    qml.layer(qv_circuit_layer, m, num_qubits=m)
+    for _ in range(m):
+        qv_circuit_layer(m)
 
-expanded_tape = tape.expand(stop_at=lambda op: isinstance(op, qml.QubitUnitary))
+(expanded_tape, ), _ = qml.transforms.decompose(tape, gate_set={qml.QubitUnitary, qml.SWAP})
 print(qml.drawer.tape_text(expanded_tape, wire_order=dev_ideal.wires, show_all_wires=True, show_matrices=True))
 
 
@@ -487,12 +486,11 @@ def heavy_output_set(m, probs):
 #
 
 # Adds a measurement of the first m qubits to the previous circuit
-with tape:
-    qml.probs(wires=range(m))
+tape = tape.copy(measurements=[qml.probs(wires=range(m))])
 
 # Run the circuit, compute heavy outputs, and print results
-output_probs = qml.execute([tape], dev_ideal, None)  # returns a list of result !
-output_probs = output_probs[0].reshape(2 ** m, )
+[output_probs] = qml.execute([tape], dev_ideal)  # returns a list of result !
+output_probs = output_probs.reshape(2 ** m, )
 heavy_outputs, prob_heavy_output = heavy_output_set(m, output_probs)
 
 print("State\tProbability")
@@ -583,10 +581,6 @@ mpl_draw(FakeLimaV2().coupling_map.graph)
 # Lima noise model. Again, we won't be running on Lima directly ---
 # we'll set up a local device to simulate its behaviour.
 #
-
-dev_noisy = qml.device("qiskit.remote", wires=5, shots=1000, backend=FakeLimaV2())
-
-##############################################################################
 #
 # As a final point, since we are allowed to do as much optimization as we like,
 # let's put the compiler to work. The compiler will perform a number of
@@ -594,14 +588,15 @@ dev_noisy = qml.device("qiskit.remote", wires=5, shots=1000, backend=FakeLimaV2(
 # qubit placement and routing techniques [#sabre]_ in order to fit the circuits
 # on the hardware graph in the best way possible.
 
-dev_noisy.set_transpile_args(
-    **{
+
+transpile_args = {
         "optimization_level": 3,
         "coupling_map": FakeLimaV2().coupling_map,
         "layout_method": "sabre",
         "routing_method": "sabre",
     }
-)
+
+dev_noisy = qml.device("qiskit.remote", wires=5, shots=1000, backend=FakeLimaV2(), **transpile_args)
 
 
 ##############################################################################
@@ -625,28 +620,28 @@ for m in range(min_m, max_m + 1):
     for trial in range(num_trials):
 
         # Simulate the circuit analytically
-        with qml.tape.QuantumTape() as tape:
-            qml.layer(qv_circuit_layer, m, num_qubits=m)
+        with qml.tape.QuantumTape() as tape_probs:
+            for _ in range(m):
+                qv_circuit_layer(m)
             qml.probs(wires=range(m))
+        
+        # when using qml.execute, shots must be on the tape
+        tape_counts = tape_probs.copy(measurements=[qml.counts()], shots=1000)
 
-        output_probs = qml.execute([tape], dev_ideal, None)
+        output_probs = qml.execute([tape_probs], dev_ideal)
         output_probs = output_probs[0].reshape(2 ** m, )
         heavy_outputs, prob_heavy_output = heavy_output_set(m, output_probs)
 
         # Execute circuit on the noisy device
-        qml.execute([tape], dev_noisy, None)
-
-        # Get the output bit strings; flip ordering of qubits to match PennyLane
-        counts = dev_noisy._current_job.result().get_counts()
-        reordered_counts = {x[::-1]: counts[x] for x in counts.keys()}
+        [counts] = qml.execute([tape_counts], dev_noisy)
 
         device_heavy_outputs = np.sum(
             [
-                reordered_counts[x] if x[:m] in heavy_outputs else 0
-                for x in reordered_counts.keys()
+                counts[x] if x[:m] in heavy_outputs else 0
+                for x in counts.keys()
             ]
         )
-        fraction_device_heavy_output = device_heavy_outputs / dev_noisy.shots
+        fraction_device_heavy_output = device_heavy_outputs / dev_noisy.shots.total_shots
 
         probs_ideal[m - min_m, trial] = prob_heavy_output
         probs_noisy[m - min_m, trial] = fraction_device_heavy_output

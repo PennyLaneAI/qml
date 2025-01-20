@@ -134,7 +134,7 @@ import numpy as np
 
 import jax
 
-jax.config.update("jax_platform_name", "cpu")
+jax.config.update('jax_platform_name', 'cpu')
 jax.config.update("jax_enable_x64", True)
 
 from jax import numpy as jnp
@@ -155,7 +155,7 @@ sigmas_sigmas = jnp.array(
         [
             np.kron(X, X),
             np.kron(Y, Y),
-            np.kron(Z, Z),
+            np.kron(Z, Z)
         ]  # Vector of tensor products of Pauli matrices
     )
 )

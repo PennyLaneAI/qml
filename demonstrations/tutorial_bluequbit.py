@@ -41,10 +41,6 @@ import pennylane as qml
 import matplotlib.pyplot as plt
 import numpy as np
 
-# This filter will suppress deprecation warnings for viewability
-import warnings
-warnings.filterwarnings("ignore", "QubitDevice", qml.PennyLaneDeprecationWarning)
-
 
 def bell_pair():
     qml.Hadamard(0)

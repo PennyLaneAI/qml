@@ -410,8 +410,8 @@ def estimate_shadow_obs(shadow, observable, k=10):
         target_obs = np.array([map_name_to_int[observable.name]])
         target_locs = np.array([observable.wires[0]])
     else:
-        target_obs = np.array([map_name_to_int[o.name] for o in observable.obs])
-        target_locs = np.array([o.wires[0] for o in observable.obs])
+        target_obs = np.array([map_name_to_int[o.name] for o in observable.operands])
+        target_locs = np.array([o.wires[0] for o in observable.operands])
 
     # perform median of means to return the result
     means = []
@@ -859,4 +859,3 @@ plt.show()
 #
 # About the author
 # ----------------
-
