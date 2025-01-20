@@ -19,7 +19,7 @@ A first glimpse into the tensor networks world
 From matrices to tensors
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-First, we start by answering the question: **what is a tensor** ⁉️
+First, we start by answering the question: **what is a tensor?**
 
 A common and intuitive way of thinking about tensors is as generalizations of vectors and matrices. That is, we can think of them as multidimensional arrays—i.e., multidimensional maps that are linear with respect to every parameter. A tensor of dimensions :math:`d_1 \times d_2 \times \ldots \times d_r` can be expressed as
 
@@ -388,7 +388,7 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # 
 # The idea is to change space for computation time, by temporarily fixing the values of some indices in the tensors, performing independently the contraction for each fixed value, and summing the results [#Gray2021]_.
 # 
-# To end this demo, let us answer the question: **how can we use tensor networks to simulate the output of a quantum circuit** ⁉️
+# To end this demo, let us answer the question: **how can we use tensor networks to simulate the output of a quantum circuit?**
 
 ##############################################################################
 # Quantum circuits are tensor networks
