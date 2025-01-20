@@ -1,4 +1,4 @@
-r"""Tutorial: ABC of tensor networks for quantum circuits
+r"""Introducing tensor networks for quantum practicioners
 =============================================================
 
 If you are well-versed in the topics of quantum computing or quantum information, chances are you have heard (quite often) about tensor networks. In fact, tensor networks are a widely used tool with applications ranging across physics, math, and computer science.
@@ -132,7 +132,7 @@ print("Rank-3 tensor: \n", tensor_rank3)
 # With the above contraction, we have formed a network of tensors, i.e., a **tensor network**!
 #
 # .. note::
-#   A common question arising when drawing a tensor is "What is the correct order to draw the indices?" For instance, in the figure above, we have adopted the convention that a tensor :math:`A_{i,j,k}` corresponds to a diagram with the first leg (:math:`i`) pointing left, the second leg (:math:`j`) pointing upwards, and the third leg (:math:`k`) pointing right, and similarly for the other two tensors. However, this need not be the case. We could have defined the first leg to be the one pointing upwards, for example. Based on the use case, and the user, some conventions might seem more natural than others. The only important thing to keep in mind is to be consistent. In other words, once we choose a convention for the order, we should apply it to all the tensors to avoid contracting the wrong indices.
+#   A common question arising when drawing a tensor is: "What is the correct order to draw the indices?" For instance, in the figure above, we have adopted the convention that a tensor :math:`A_{i,j,k}` corresponds to a diagram with the first leg (:math:`i`) pointing left, the second leg (:math:`j`) pointing upwards, and the third leg (:math:`k`) pointing right, and similarly for the other two tensors. However, this need not be the case. We could have defined the first leg to be the one pointing upwards, for example. Based on the use case, and the user, some conventions might seem more natural than others. The only important thing to keep in mind is to be consistent. In other words, once we choose a convention for the order, we should apply it to all the tensors to avoid contracting the wrong indices.
 #
 # In our code, we can perform a tensor contraction using the ``numpy`` function ``np.einsum``. To do so, we can start by creating the 3 tensors to be contracted by reshaping a 1D array (created using ``np.arange``) into rank-3 tensors of the correct dimensions.
 
