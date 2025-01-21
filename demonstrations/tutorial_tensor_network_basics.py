@@ -172,7 +172,7 @@ print(D.shape)
 #           X
 #         \end{pmatrix}.
 #
-# This means :math:`T^1_{i,j,k}` and :math:`T^2_{l,j,m}` are two rank-3 tensors, where the index :math:`j` *picks* the elements in the column vector while the other two indices correspond to the indices of the internal tensors (matrices). Specifically, the :math:`j = 0` element of :math:`T^1` and :math:`T^2` are :math:`|0\rangle \langle 0 |` and :math:`I`, respectively, and :math:`|1\rangle \langle 1|` and and :math:`X` for their :math:`j = 1` element. This means we can redefine the CNOT expression from above as
+# This means :math:`T^1_{i,j,k}` and :math:`T^2_{l,j,m}` are two rank-3 tensors, where the index :math:`j` *picks* the elements in the column vector while the other two indices correspond to the indices of the internal tensors (matrices). Specifically, the :math:`j = 0` element of :math:`T^1` and :math:`T^2` are :math:`|0\rangle \langle 0 |` and :math:`I`, respectively; with :math:`|1\rangle \langle 1|` and :math:`X` for their :math:`j = 1` element. This means we can redefine the CNOT expression from above as
 #
 # .. math::
 #   \mathrm{CNOT}_{i,l,k,m} = \sum_j T^1_{i,j,k} \otimes T^2_{l,j,m} .
