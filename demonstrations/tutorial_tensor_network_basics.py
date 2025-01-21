@@ -1,5 +1,5 @@
 r"""Introducing tensor networks for quantum practicioners
-=============================================================
+=========================================================
 
 If you are well-versed in the topics of quantum computing or quantum information, chances are you have heard (quite often) about tensor networks. In fact, tensor networks are a widely used tool with applications ranging across physics, math, and computer science.
 
@@ -14,7 +14,7 @@ Without further ado, let’s dive right in! 🤓📚
 .. _part_one:
 
 A first glimpse into the tensor networks world
-----------------------------------------------------------
+----------------------------------------------
 
 From matrices to tensors
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -508,7 +508,7 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # 
 # Although the world of tensor networks and their relation to quantum computing is vastly wider than what we could ever cover in one tutorial, we hope that after these explanations you now feel equipped with the tools needed to dive deeper into this topic by yourself.
 # 
-# If you want to learn more about using tensor networks as a diagrammatic tool, check out `these amazing lecture notes <https://arxiv.org/pdf/1912.10049>`_ by J.Biamonte. In addition, check out `this website <https://tensornetwork.org/about/>`_ for great explanations on many important algorithms and tensor network structures by Flatiron Institute  .  
+# If you want to learn more about using tensor networks as a diagrammatic tool, check out these amazing `lecture notes on quantum tensor networks <https://arxiv.org/pdf/1912.10049>`_ by J.Biamonte. In addition, check out the `Tensor Network website <https://tensornetwork.org/about/>`_ for great explanations on many important algorithms and tensor network structures by Flatiron Institute  .  
 
 ##############################################################################
 # References
