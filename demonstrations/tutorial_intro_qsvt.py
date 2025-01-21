@@ -73,8 +73,8 @@ transformed to a polynomial of higher degree, and by interleaving signal-process
 it's possible to tune the coefficients of the polynomial. For example
 
 .. math:: S(-\pi/2) U(a) S(\pi/2) U(a) S(0) = \begin{pmatrix}
-    2a^2-1 & 0\\
-    0 & 2a^2 -1
+    2a^2-1 & 2a\sqrt{1-a^2}\\
+    -2a\sqrt{1-a^2} & 2a^2 -1
     \end{pmatrix}.
 
 The main quantum signal processing theorem states that it is possible to find
