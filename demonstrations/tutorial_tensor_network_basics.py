@@ -213,7 +213,7 @@ print(D.shape)
 # 
 # .. note::
 # 
-#   Actually, finding the optimal contraction path of a tensor network with an arbitrary structure is an NP-complete problem [#Arad]_.
+#   Actually, finding the optimal contraction path of a tensor network with an arbitrary structure is an NP-complete problem [#Arad2010]_.
 # 
 # For this reason, in this section we will look at how to calculate the computational cost or the **complexity** of a tensor network contraction. First, we look at a simple matrix-matrix contraction. Given two rank-2 tensors :math:`G^1_{j,i}` and :math:`G^2_{k,j}`, we have seen that the :math:`(k,i)`-th element of the resulting contraction along the :math:`j`-th index is
 # 
