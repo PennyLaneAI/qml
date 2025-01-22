@@ -1,7 +1,7 @@
 r"""Introducing tensor networks for quantum practicioners
 =========================================================
 
-If you are well-versed in the topics of quantum computing or quantum information, chances are you have heard (quite often) about tensor networks. In fact, tensor networks are a widely used tool with applications ranging across physics, math, and computer science.
+If you are well-versed in the topics of `quantum computing <https://pennylane.ai/qml/what-is-quantum-computing>`__ or quantum information, chances are you have heard (quite often) about tensor networks. In fact, tensor networks are a widely used tool with applications ranging across physics, math, and computer science.
 
 Part of the excitement surrounding tensor networks is due to their ability to represent complex data efficiently, which allows for—among other things—fast classical simulations. In addition, the diagrammatic language accompanying tensor networks makes working with them intuitive and suitable for describing a vast range of mathematical concepts, including quantum circuits.
 
@@ -151,7 +151,7 @@ print(D.shape)
 # The CNOT gate
 # ^^^^^^^^^^^^^
 # 
-# To end this section, we want to discuss a common example of a tensor network contraction arising in quantum computing, namely the **CNOT** gate. The CNOT gate can be expressed in the computational basis as
+# To end this section, we want to discuss a common example of a tensor network contraction arising in quantum computing, namely the **CNOT** gate. The `CNOT gate <https://docs.pennylane.ai/en/stable/code/api/pennylane.CNOT.html>`__ can be expressed in the computational basis as
 #
 # .. math::
 #   \mathrm{CNOT} = |0\rangle \langle 0 | \otimes I + |1\rangle \langle 1 | \otimes X.
@@ -201,7 +201,7 @@ print(D.shape)
 # 
 # .. note::
 # 
-#   More generally, we can find decompositions of multi-qubit gates into local tensors employing the ubiquitous singular value decomposition (SVD). This method is explained in detail in our :doc:`introduction to matrix product states for quantum practitioners demo </demos/tutorial_mps>`. This decomposition is helpful when contracting non-local tensors, as is often required in quantum circuits.
+#   More generally, we can find decompositions of multi-qubit gates into local tensors employing the ubiquitous singular value decomposition (`SVD <https://docs.pennylane.ai/en/stable/code/api/pennylane.math.svd.html>`__). This method is explained in detail in our :doc:`introduction to matrix product states for quantum practitioners demo </demos/tutorial_mps>`. This decomposition is helpful when contracting non-local tensors, as is often required in quantum circuits.
 
 ##############################################################################
 # The cost of contracting a network
