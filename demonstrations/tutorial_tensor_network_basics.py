@@ -5,6 +5,11 @@ If you are well-versed in the topics of `quantum computing <https://pennylane.ai
 
 Part of the excitement surrounding tensor networks is due to their ability to represent complex data efficiently, which allows for—among other things—fast classical simulations. In addition, the diagrammatic language accompanying tensor networks makes working with them intuitive and suitable for describing a vast range of mathematical concepts, including quantum circuits.
 
+.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_tensor_network_basics.png
+    :align: center
+    :width: 70%
+    :target: javascript:void(0)
+
 The :ref:`first part of this tutorial <part_one>` introduces the basic tensor network notions and definitions to quantum practitioners who are familiar with quantum computing but new to tensor networks.
 
 Then, building on this introduction, in the :ref:`second part <part_two>` we explore topics aimed at more seasoned readers. Check this section out if you want to understand how tensor networks and quantum circuits are related!
