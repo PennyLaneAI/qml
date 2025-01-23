@@ -1,4 +1,4 @@
-r"""Introducing tensor networks for quantum practicioners
+r"""Introducing tensor networks for quantum practitioners
 =========================================================
 
 If you are well-versed in the topics of `quantum computing <https://pennylane.ai/qml/what-is-quantum-computing>`__ or quantum information, chances are you have heard (quite often) about tensor networks. In fact, tensor networks are a widely used tool with applications ranging across physics, math, and computer science.
