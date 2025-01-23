@@ -628,21 +628,6 @@ trained_plot_data = plot_decision_boundaries(svm_trained, plt.gca())
 #     `Artificial Intelligence Review 43.2: 179-192 <https://link.springer.com/article/10.1007/s10462-012-9369-4>`__, 2015.
 #
 #
-# About the authors
-# -----------------
-# .. include:: ../_static/authors/peter-jan_derks.txt
+# About the author
+# ----------------
 #
-#
-# .. include:: ../_static/authors/paul_k_faehrmann.txt
-#
-#
-# .. include:: ../_static/authors/elies_gil-fuster.txt
-#
-#
-# .. include:: ../_static/authors/tom_hubregtsen.txt
-#
-#
-# .. include:: ../_static/authors/johannes_jakob_meyer.txt
-#
-#
-# .. include:: ../_static/authors/david_wierichs.txt

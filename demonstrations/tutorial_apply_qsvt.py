@@ -415,6 +415,4 @@ print("computed x:", np.round(normalized_computed_x, 3))
 ##############################################################################
 # About the author
 # ----------------
-# .. include:: ../_static/authors/jay_soni.txt
 #
-# .. include:: ../_static/authors/jarrett_smalley.txt

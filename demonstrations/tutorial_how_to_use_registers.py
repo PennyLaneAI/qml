@@ -183,4 +183,3 @@ print("Eigenvalue: ", lamb * np.cos(2 * np.pi * (np.argmax(output)) / 2 ** len(r
 # About the author
 # ----------------
 #
-# .. include:: ../_static/authors/austin_huang.txt

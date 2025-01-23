@@ -1,4 +1,0 @@
-.. bio:: Joost Bus
-   :photo: ../_static/authors/joost_bus.webp
-
-    I am a MSc student in Quantum Engineering at ETH Zürich who likes to explore how to wield quantum physics for technology. This summer, I am working with the architecture team on FlamingPy as a Xanadu resident.

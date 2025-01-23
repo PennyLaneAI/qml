@@ -514,4 +514,4 @@ plt.show()
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/jack_ceroni.txt
+#

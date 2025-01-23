@@ -227,3 +227,4 @@ print(openfermion_op)
 #
 # About the author
 # ----------------
+#

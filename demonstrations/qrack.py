@@ -462,4 +462,4 @@ print("Qrack cross entropy with Lightning:", validate(12), "out of 1.0")
 ##############################################################################
 # About the author
 # ----------------
-# .. include:: ../_static/authors/dan_strano.txt
+#

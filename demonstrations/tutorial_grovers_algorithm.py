@@ -392,4 +392,4 @@ plt.show()
 # 
 # About the author
 # ----------------
-# .. include:: ../_static/authors/ludmila_botelho.txt
+#

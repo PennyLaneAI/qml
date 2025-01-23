@@ -251,4 +251,4 @@ with torch.no_grad():
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/aroosa_ijaz.txt
+#

@@ -1,4 +1,0 @@
-.. bio:: Jack Stephen Baker
-   :photo: ../_static/authors/jack_stephen_baker.png
-
-   Jack is a quantum algorithms researcher at Agnostiq specializing in quantum machine learning and optimization.

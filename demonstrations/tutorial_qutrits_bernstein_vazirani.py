@@ -405,5 +405,5 @@ print(f"The value of a is {a}")
 #     <https://arxiv.org/pdf/2109.00558.pdf>`__
 # About the author
 # ----------------
-# .. include:: ../_static/authors/guillermo_alonso.txt
+#
 

@@ -806,9 +806,6 @@ plt.show()
 #
 
 ##############################################################################
-#
-# About the authors
+# About the author
 # ----------------
 #
-# .. include:: ../_static/authors/joost_bus.txt
-# .. include:: ../_static/authors/radoica_draskic.txt

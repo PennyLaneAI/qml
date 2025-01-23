@@ -1,4 +1,0 @@
-.. bio:: Utkarsh Azad
-   :photo: ../_static/authors/utkarsh_azad.png
-
-   Utkarsh is a quantum software researcher at Xanadu, working on making quantum computing more useful and accessible, with a focus on exploring its applications in natural sciences.
