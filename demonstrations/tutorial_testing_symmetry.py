@@ -308,14 +308,14 @@ def prep_plus():
 
 # Implement controlled symmetry operations on system
 def CU_sys():
-    qml.ControlledQubitUnitary(c_mat @ c_mat, control_wires=[aux[0]], wires=system)
-    qml.ControlledQubitUnitary(c_mat, control_wires=[aux[1]], wires=system)
+    qml.ControlledQubitUnitary(c_mat @ c_mat, wires=[aux[0]] + system)
+    qml.ControlledQubitUnitary(c_mat, wires=[aux[1]] + system)
 
 
 # Implement controlled symmetry operations on copy
 def CU_cpy():
-    qml.ControlledQubitUnitary(c_mat @ c_mat, control_wires=[aux[0]], wires=copy)
-    qml.ControlledQubitUnitary(c_mat, control_wires=[aux[1]], wires=copy)
+    qml.ControlledQubitUnitary(c_mat @ c_mat, wires=[aux[0]] + copy)
+    qml.ControlledQubitUnitary(c_mat, wires=[aux[1]] + copy)
 
 ######################################################################
 # Let’s combine everything and actually run our circuit!

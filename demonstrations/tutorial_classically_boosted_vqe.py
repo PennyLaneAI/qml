@@ -449,7 +449,7 @@ def hadamard_test(Uq, Ucl, component="real"):
 
     qml.Hadamard(wires=[0])
     qml.ControlledQubitUnitary(
-        Uq.conjugate().T @ Ucl, control_wires=[0], wires=wires[1:]
+        Uq.conjugate().T @ Ucl, wires
     )
     qml.Hadamard(wires=[0])
 
