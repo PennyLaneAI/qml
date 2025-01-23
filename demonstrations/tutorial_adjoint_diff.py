@@ -455,4 +455,4 @@ print(jax.grad(circuit_adjoint)(x))
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/christina_lee.txt
+#

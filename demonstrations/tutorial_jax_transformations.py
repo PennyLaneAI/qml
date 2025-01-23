@@ -308,4 +308,4 @@ print(f"key2: {circuit(key2, jnp.pi/2)}")
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/chase_roberts.txt
+#

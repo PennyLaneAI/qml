@@ -1,4 +1,0 @@
-.. bio:: Joseph Bowles
-   :photo: ../_static/authors/joseph_bowles.jpg
-
-   Joseph is a researcher at Xanadu working at the intersection between machine learning, quantum computing and the foundations of quantum information theory.

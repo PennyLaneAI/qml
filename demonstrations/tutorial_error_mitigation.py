@@ -593,8 +593,6 @@ plt.show()
 #             IEEE International Conference on Quantum Computing and Engineering (2020).
 #
 #
-# About the authors
-# -----------------
-# .. include:: ../_static/authors/thomas_bromley.txt
+# About the author
+# ----------------
 #
-# .. include:: ../_static/authors/andrea_mari.txt

@@ -212,4 +212,4 @@ dev.draw(color="auto", show_inds=True, return_fig=True)
 ######################################################################
 # About the author
 # ----------------
-# .. include:: ../_static/authors/pietropaolo_frisoni.txt
+#

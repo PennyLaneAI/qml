@@ -458,4 +458,4 @@ print(qml.commutator(SY, SZ) == (2j*SX).simplify())
 ##############################################################################
 # About the author
 # ----------------
-# .. include:: ../_static/authors/korbinian_kottmann.txt
+#

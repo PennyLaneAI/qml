@@ -359,4 +359,4 @@ print("Final cost value: {}".format(cost()))
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/nathan_killoran.txt
+#

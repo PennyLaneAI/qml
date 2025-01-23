@@ -390,4 +390,4 @@ for n in range(36):
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/soran_jahangiri.txt
+#

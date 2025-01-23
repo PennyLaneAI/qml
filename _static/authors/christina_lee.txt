@@ -1,4 +1,0 @@
-.. bio:: Christina Lee
-   :photo: ../_static/authors/christina_lee.JPG
-
-   Christina is currently a quantum software developer at Xanadu working on PennyLane. Outside of coding, she enjoys running, yoga, and piano.
