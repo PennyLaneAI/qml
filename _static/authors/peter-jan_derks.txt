@@ -1,4 +1,0 @@
-.. bio:: Peter-Jan Derks
-   :photo: ../_static/authors/peter-jan_derks.png
-
-   Peter-Jan is a PhD student in Berlin supervised by Jens Eisert. He is excited about designing near-term quantum error correction experiments and programming decoders.

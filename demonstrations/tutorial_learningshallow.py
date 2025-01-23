@@ -465,4 +465,4 @@ print(np.allclose(sewing_test(), np.outer(psi0, psi0), atol=1e-1))
 ##############################################################################
 # About the author
 # ----------------
-# .. include:: ../_static/authors/korbinian_kottmann.txt
+#

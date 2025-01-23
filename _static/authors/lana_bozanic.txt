@@ -1,4 +1,0 @@
-.. bio:: Lana Bozanic
-   :photo: ../_static/authors/lana_bozanic.jpeg
-
-   Lana is a Mathematical Physics undergraduate at the University of Waterloo. She has spent time pursuing her research interests in quantum optics at the Institute for Quantum Computing (IQC) & the University of Ottawa, as well as particle physics at the University of Toronto.

@@ -1,4 +1,0 @@
-.. bio:: Matija Medvidović
-   :photo: ../_static/authors/matija_medvidovic.jpeg
-
-   Matija is a PhD student at Columbia University and the Flatiron Institute in New York. He works with machine learning methods to study quantum many-body physics and quantum computers. He is currently a part of the Xanadu Residency Program. He is a firm believer in keeping bios short and concise.
