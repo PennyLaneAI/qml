@@ -375,7 +375,7 @@ print(f"Computation cost for path 2: {time_BC + time_BCA}")
 # 
 # Further approaches introduced in [#Gray2021]_ are based on alternative common graph-theoretic tasks, rather than searching over the contraction tree space, such as the `balanced bi-partitioning <https://en.wikipedia.org/wiki/Balanced_number_partitioning>`_ and `community detection <https://en.wikipedia.org/wiki/Community_structure>`_ algorithms. And even though these are only heuristics that do not guarantee an optimal contraction path, they can often achieve an arbitrarily close to optimal performance. 
 # 
-# An extra level of optimization, known as **hyper-optimization** is introduced by the use of different algorithms to find the optimal contraction based on the specific tensor network, as some algorithms are better suited for certain network structures. For an in-depth exploration of these heuristics, please refer to [#Gray2021]_.
+# An extra level of optimization, known as **hyper-optimization**, is introduced by the use of different algorithms to find the optimal contraction based on the specific tensor network, as some algorithms are better suited for certain network structures. For an in-depth exploration of these heuristics, please refer to [#Gray2021]_.
 #
 # As we will explore in the next section, we can use tensor networks to simulate quantum circuits. In particular, the calculation of an expectation value corresponds to the contraction of the tensor network into a single tensor (scalar). In ``Pennylane``, this simulation can be performed using the :class:`~pennylane.devices.default_tensor.DefaultTensor` device, and the method used to find the contraction path can be chosen via the ``contraction_optimizer`` keyword argument.
 
@@ -513,7 +513,7 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # 
 # Although the world of tensor networks and their relation to quantum computing is vastly wider than what we could ever cover in one tutorial, we hope that after these explanations you now feel equipped with the tools needed to dive deeper into this topic by yourself.
 # 
-# If you want to learn more about using tensor networks as a diagrammatic tool, check out these amazing `lecture notes on quantum tensor networks <https://arxiv.org/pdf/1912.10049>`_ by J.Biamonte. In addition, check out the `Tensor Network website <https://tensornetwork.org/about/>`_ for great explanations on many important algorithms and tensor network structures by Flatiron Institute  .  
+# If you want to learn more about using tensor networks as a diagrammatic tool, check out these amazing `lecture notes on quantum tensor networks <https://arxiv.org/pdf/1912.10049>`_ by J.Biamonte. In addition, check out the `Tensor Network website <https://tensornetwork.org/about/>`_ for great explanations on many important algorithms and tensor network structures by Flatiron Institute.  
 
 ##############################################################################
 # References
