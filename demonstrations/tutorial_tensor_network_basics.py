@@ -10,7 +10,7 @@ Part of the excitement surrounding tensor networks is due to their ability to re
     :width: 70%
     :target: javascript:void(0)
 
-The :ref:`first part of this tutorial <part_one>` introduces the basic tensor network notions and definitions to quantum practitioners who are familiar with quantum computing but new to tensor networks.
+The :ref:`first part of this demo <part_one>` introduces the basic tensor network notions and definitions to quantum practitioners who are familiar with quantum computing but new to tensor networks.
 
 Then, building on this introduction, in the :ref:`second part <part_two>` we explore topics aimed at more seasoned readers. Check this section out if you want to understand how tensor networks and quantum circuits are related!
 
@@ -36,7 +36,7 @@ where each :math:`i_n` is an **index** of dimension :math:`d_n` and the number o
 For example, a scalar :math:`s` is a rank-0 tensor, a vector :math:`v_i` is a rank-1 tensor, and a matrix :math:`G_{j,i}` is a rank-2 tensor.
 
 .. note::
-    Some authors refer to the indices :math:`i_n` as the "dimensions of the tensor". In this tutorial, however, the term **dimension** refers to the range of integer values :math:`d_n` that each index :math:`i_n` can take, namely :math:`i_n \in \{1, \ldots, d_n\}`.
+    Some authors refer to the indices :math:`i_n` as the "dimensions of the tensor". In this demo, however, the term **dimension** refers to the range of integer values :math:`d_n` that each index :math:`i_n` can take, namely :math:`i_n \in \{1, \ldots, d_n\}`.
     
 A beautiful and powerful tool accompanying tensors is their graphical language representation. The diagram of a tensor is simply a geometric shape with a leg sticking out of it for every index in the tensor. For example,
 
@@ -50,7 +50,7 @@ We can apply this same idea to represent a scalar, a vector, and a matrix:
     :align: center
     :width: 40%
 
-Does the last diagram seem familiar? It is because this is the representation of a single-qubit gate! Later in this tutorial, we will study the relation between quantum circuits and tensor networks. 
+Does the last diagram seem familiar? It is because this is the representation of a single-qubit gate! Later in this demo, we will study the relation between quantum circuits and tensor networks. 
 
 When working within the quantum computing notation, we adopt the convention that drawing the leg of a quantum state (i.e., a vector) to the right corresponds to a ket, i.e., a vector living in the Hilbert space, while drawing the legs to the left means they are a bra vector, i.e., living in the dual space.
 
@@ -128,7 +128,7 @@ print("Rank-3 tensor: \n", tensor_rank3)
 # .. math::
 #     D_{i,l,n} = \sum_{j,k,m} A_{i,j,k} \otimes B_{j,l,m} \otimes C_{k,m,n}.
 #
-# The resulting rank-3 tensor consists of the remaining open legs from the initial tensors :math:`(i,l,n)`. The first equation involving only scalars is the more widely used expression for the contraction operation, and thus, we will use it throughout this tutorial unless otherwise stated. The diagrammatic representation of this contraction is obtained by connecting all the legs with the same indices.
+# The resulting rank-3 tensor consists of the remaining open legs from the initial tensors :math:`(i,l,n)`. The first equation involving only scalars is the more widely used expression for the contraction operation, and thus, we will use it throughout this demo unless otherwise stated. The diagrammatic representation of this contraction is obtained by connecting all the legs with the same indices.
 #
 # .. figure:: ../_static/demonstration_assets/tn_basics/06-tensor-tensor.png
 #     :align: center
@@ -200,7 +200,7 @@ print(D.shape)
 #     :width: 45%
 # 
 # .. note::
-#   By looking at the elements of the COPY tensor, we can interpret them as being equal to :math:`1` when all the indices have the same value (0 or 1) and vanishing otherwise. On the other hand, the elements of the XOR tensor can be understood as being equal to :math:`1` when the values of the three indices contain an even number of 1's and vanishing otherwise. We anticipate that the COPY tensor can be used to obtain the diagonal of a matrix. This will be useful in the last section of this tutorial.
+#   By looking at the elements of the COPY tensor, we can interpret them as being equal to :math:`1` when all the indices have the same value (0 or 1) and vanishing otherwise. On the other hand, the elements of the XOR tensor can be understood as being equal to :math:`1` when the values of the three indices contain an even number of 1's and vanishing otherwise. We anticipate that the COPY tensor can be used to obtain the diagonal of a matrix. This will be useful in the last section of this demo.
 # 
 # This demonstrates the relation between the CNOT acting as a rank-4 tensor with dimensions :math:`2 \times 2 \times 2 \times 2` and its decomposition in terms of two rank-3 local tensors (:math:`T^1` and :math:`T^2`) of dimensions :math:`2 \times 2 \times 2`.
 # 
@@ -436,7 +436,7 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # .. math::
 #   O = \sum_i c_i \langle O_i \rangle = \sum_i c_i \langle \psi | O_i | \psi \rangle.
 # 
-# However, it is possible to perform this operation more efficiently using tensor networks by means of a structure called Matrix Product Operator (MPO) [#Pirvu2010]_. The idea is to construct an efficient representation of the observable :math:`O` which can be contracted with the tensor network from :math:`|\psi \rangle`. Constructing these networks efficiently for Hamiltonians of arbitrary structure is an interesting task, which goes beyond the scope of this tutorial.
+# However, it is possible to perform this operation more efficiently using tensor networks by means of a structure called Matrix Product Operator (MPO) [#Pirvu2010]_. The idea is to construct an efficient representation of the observable :math:`O` which can be contracted with the tensor network from :math:`|\psi \rangle`. Constructing these networks efficiently for Hamiltonians of arbitrary structure is an interesting task, which goes beyond the scope of this demo.
 # 
 # When the observable of interest is *local*, i.e., it acts on a few neighbouring qubits, we can calculate the expectation value by considering only the section of the quantum circuit within the **reverse light cone** (causal cone) of the observable :math:`O_l`—i.e., the gates that affect the calculation of the expectation value.
 # 
@@ -480,7 +480,7 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 #     :align: center
 #     :width: 70%
 # .. note:: 
-#   In this diagram, we have extracted the diagonal of the reduced density matrix by contracting it with the COPY tensor introduced earlier in this tutorial!
+#   In this diagram, we have extracted the diagonal of the reduced density matrix by contracting it with the COPY tensor introduced earlier in this demo!
 # 
 # Once we obtain the probability vector, we can generate a random sample weighted by these probabilities. To do so, we generate a random number :math:`r \in [0,1]` and choose :math:`x_1 = 0` if :math:`r < p(x_1=0)` and :math:`x_1 = 1` otherwise. We save this sample as :math:`\hat{x}_1`.
 # 
@@ -511,7 +511,7 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 # 
 # And that is it for this demo! 🎉
 # 
-# Although the world of tensor networks and their relation to quantum computing is vastly wider than what we could ever cover in one tutorial, we hope that after these explanations you now feel equipped with the tools needed to dive deeper into this topic by yourself.
+# Although the world of tensor networks and their relation to quantum computing is vastly wider than what we could ever cover in one demo, we hope that after these explanations you now feel equipped with the tools needed to dive deeper into this topic by yourself.
 # 
 # If you want to learn more about using tensor networks as a diagrammatic tool, check out these amazing `lecture notes on quantum tensor networks <https://arxiv.org/pdf/1912.10049>`_ by J.Biamonte. In addition, check out the `Tensor Network website <https://tensornetwork.org/about/>`_ for great explanations on many important algorithms and tensor network structures by Flatiron Institute.  
 
