@@ -2,7 +2,7 @@
     "title": "IQPopt: Fast optimization of IQP circuits in JAX",
     "authors": [
         {
-            "username": "josephbowles"
+            "username": "erikrecio"
         }
     ],
     "dateOfPublication": "2024-12-12T00:00:00+00:00",
