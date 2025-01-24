@@ -24,8 +24,6 @@ IQP circuit optimization
 # Parameterized IQP circuits
 # --------------------------
 # 
-######################################################################
-# 
 # IQP is designed to optimize a class of IQP circuits called *parameterized IQP circuits*. These are
 # comprised of gates :math:`\text{exp}(i\theta_j X_j)`, where the generator :math:`X_j` is a tensor
 # product of Pauli X operators acting on some subset of qubits and :math:`\theta_j` is a trainable
@@ -77,11 +75,9 @@ gates = [[[0]], [[1]], [[2]], [[0,1]], [[0,2]], [[1,2]]]
 ######################################################################
 # i.e., all one and two body generators acting on three qubits.
 # 
-######################################################################
 # Expectation values
 # ------------------
 # 
-######################################################################
 # IQPopt can be applied to problems that involve measuring expectation values of Pauli Z tensors of
 # parameterized IQP circuits.
 # 
@@ -104,11 +100,9 @@ gates = [[[0]], [[1]], [[2]], [[0,1]], [[0,2]], [[1,2]]]
 # 
 # Let's now put this into practice and build a pennylane circuit out of a ``gates`` list.
 # 
-######################################################################
 # Creating an IQP circuit with pennylane
 # --------------------------------------
 # 
-######################################################################
 # To build a parameterized IQP circuit in PennyLane, we can use the MultiRZ function, making use of
 # the identity
 # 
@@ -208,6 +202,7 @@ penn_op_expval = penn_iqp_op_expval(params, gates, op, n_qubits)
 print(penn_op_expval)
 
 ######################################################################
+# 
 # Estimating expectation values with IQPopt
 # -----------------------------------------
 # 
@@ -306,10 +301,10 @@ expval, std = large_circuit.op_expval(params, op, n_samples, key)
 print(expval, std)
 
 ######################################################################
+# 
 # Sampling and probabilities
 # --------------------------
 # 
-######################################################################
 # If we measure the output qubits of an IQP circuit we generate samples of binary vectors according to
 # the distribution
 # 
@@ -397,11 +392,9 @@ plt.show()
 # exponentially, however expectation values are very efficient (the scaling can be shown to be
 # linear).
 # 
-######################################################################
 # Optimizing an IQPopt circuit
 # ----------------------------
 # 
-######################################################################
 # Circuits can be optimized via a separate ``Trainer`` class. To instantiate a trainer object we first
 # define a loss function (also called an objective function), an optimizer and an initial stepsize for
 # the gradient descent. Continuing our ``small_circuit`` example from before, below we define a simple
@@ -449,7 +442,6 @@ plt.show()
 # This training process finds its global minimum at loss = -3.0, which is the minimum possible with
 # the defined loss function.
 # 
-######################################################################
 # Generative machine learning tools
 # ---------------------------------
 # 
@@ -458,7 +450,6 @@ plt.show()
 # is hard, these circuits may lead to advantages for generative machine learning tasks relative to
 # classical models!
 # 
-######################################################################
 # Training via the maximum mean discrepancy loss
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
@@ -585,6 +576,7 @@ plt.show()
 # result, it has the potential to uncover insights that were previously inaccessible.
 # 
 ######################################################################
+# 
 # References:
 # 
 # .. [#1] 
