@@ -1,9 +1,8 @@
 r"""IQPopt: Fast optimization of IQP circuits in JAX
-
 ===============================================================
 
 Instantaneous Quantum Polynomial (IQP) circuits are a class of circuits that are expected to be hard
-to sample from using classical computers [2]. In this demo we take a look at the pacakge IQPopt [#1]_,
+to sample from using classical computers [2]. In this demo we take a look at the pacakge IQPopt [#Recio]_,
 which shows that despite this, such circuits can still be optimized efficiently!
 
 As we will see, this hinges on a suprising fact about these circuits: while sampling is hard,
@@ -309,7 +308,7 @@ print(expval, std)
 # If we measure the output qubits of an IQP circuit we generate samples of binary vectors according to
 # the distribution
 # 
-# .. math:: q_{\boldsymbol{\theta}}(\boldsymbol{x}) \equiv q(\boldsymbol{x}\vert\boldsymbol{\theta})=\vert\bra{\boldsymbol{x}}U(\boldsymbol{\theta})\ket{0}\vert^2.
+# .. math:: q_{\boldsymbol{\theta}}(\boldsymbol{x}) \equiv q(\boldsymbol{x}\vert\boldsymbol{\theta})=\vert (\langle \boldsymbol{x} \vert U(\boldsymbol{\theta})\vert 0 \rangle )\vert^2.
 # 
 # Where :math:`U(\boldsymbol{\theta})` is the parametrized IQP gates. For a low number of qubits, we
 # can use Pennylane to obtain the output probabilities of the circuit as well as sample from it. Note
@@ -576,11 +575,10 @@ plt.show()
 # to explore systems that are too intricate for traditional pen-and-paper calculations and, as a
 # result, it has the potential to uncover insights that were previously inaccessible.
 # 
-######################################################################
-# 
-# References:
-# 
-# .. [#1] 
+# References
+# ----------
+#
+# .. [#Recio] 
 # 
 #      Erik Recio, Joseph Bowles. 
 #      "IQPopt: Fast optimization of instantaneous quantum polynomial
