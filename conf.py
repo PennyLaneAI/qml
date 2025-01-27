@@ -19,7 +19,6 @@ import numpy as np
 from jinja2 import FileSystemLoader, Environment
 import yaml
 from pennylane import PennyLaneDeprecationWarning
-from pathlib import Path
 
 sys.path.insert(0, os.path.abspath("."))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
@@ -86,8 +85,6 @@ sphinx_gallery_conf = {
     "doc_module"          : ("pennylane"),
     "junit": "../test-results/sphinx-gallery/junit.xml",
     "reset_modules": ("module_resets.reset_jax", "matplotlib", "seaborn"),
-    "show_signature": False,
-    'download_all_examples': False,
 }
 
 
