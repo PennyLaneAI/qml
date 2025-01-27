@@ -3,7 +3,8 @@ from qml.context import Context
 from qml.lib import demo, fs
 import shutil
 import logging
-from typing import Annotated
+from typing import Annotated, Optional
+import typing
 
 
 logging.basicConfig(level=logging.INFO)
@@ -19,14 +20,14 @@ def help():
 @app.command()
 def build(
     demo_names: Annotated[
-        list[str],
+        Optional[list[str]],
         typer.Argument(
             help="Names of demos to build. If not provided, build all demos."
         ),
     ] = None,
-    target: Annotated[
+    format: Annotated[
         demo.BuildTarget, typer.Option(help="Format to build demos")
-    ] = "html",
+    ] = typing.cast(demo.BuildTarget, "html"),
     execute: Annotated[
         bool, typer.Option(help="Whether to execute demos and generate output cells")
     ] = False,
@@ -45,7 +46,7 @@ def build(
         build_dir=ctx.build_dir,
         venv_path=ctx.build_venv_path,
         demos=demos,
-        target=target,
+        target=format,
         execute=execute,
     )
 
