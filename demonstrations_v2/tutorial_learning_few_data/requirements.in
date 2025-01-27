@@ -1,9 +1,6 @@
 jax
 jaxlib
-matplotlib
-numpy
 optax
 pandas
-pennylane
 seaborn
 scikit-learn

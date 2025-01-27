@@ -1,7 +1,5 @@
 flax
 jax
 jaxlib
-matplotlib
 optax
-pennylane
 qutip

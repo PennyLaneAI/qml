@@ -1,6 +1,3 @@
 jax
 jaxlib
-matplotlib
-numpy
 optax
-pennylane

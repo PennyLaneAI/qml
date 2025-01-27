@@ -1,7 +1,4 @@
 jax
 jaxlib
-matplotlib
-numpy
 optax
-pennylane
 scikit-learn

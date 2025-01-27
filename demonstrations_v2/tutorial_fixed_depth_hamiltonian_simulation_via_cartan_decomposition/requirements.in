@@ -1,5 +1,3 @@
 optax
 jax
 jaxlib
-numpy
-pennylane

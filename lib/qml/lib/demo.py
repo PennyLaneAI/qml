@@ -10,6 +10,7 @@ from logging import getLogger
 import subprocess
 from enum import Enum
 import re
+import functools
 
 logger = getLogger("qml")
 
@@ -24,6 +25,16 @@ class BuildTarget(Enum):
 @dataclass
 class Demo:
     """Represents a demo and its metadata."""
+
+    CORE_DEPENDENCIES = frozenset(
+        (
+            "matplotlib",
+            "numpy",
+            "pennylane",
+        )
+    )
+    """Dependencies installed for every demo that do not
+    need to be specified by `requirements.in`."""
 
     name: str
     path: Path
@@ -40,10 +51,13 @@ class Demo:
         return self.path / "metadata.json"
 
     @property
-    def requirements_file(self) -> Path:
+    def requirements_file(self) -> Path | None:
         """Path to a requirements file containing
         unversioned dependencies for this demo."""
-        return self.path / "requirements.in"
+        if (path := self.path / "requirements.in").exists():
+            return path
+
+        return None
 
     @property
     def resources(self) -> Sequence[Path]:
@@ -59,11 +73,15 @@ class Demo:
         """Whether this demo can be exeucted."""
         return self.name.startswith("tutorial_")
 
-    def requirements(self):
+    @functools.cached_property
+    def requirements(self) -> frozenset[str]:
         """Return a list of this demo's unversioned
         requirements."""
-        with open(self.requirements_file, "r") as f:
-            return f.read().splitlines()
+        if path := self.requirements_file:
+            with open(path, "r") as f:
+                return frozenset(f.read().splitlines())
+
+        return frozenset()
 
 
 def find(search_dir: Path, *names: str) -> Iterator[Demo]:
@@ -92,6 +110,7 @@ def build(
     demos: Sequence[Demo],
     target: BuildTarget,
     execute: bool,
+    quiet: bool = False,
 ) -> None:
     """Build the provided demos using 'sphinx-build', optionally
     executing them to generate plots and cell outputs.
@@ -126,7 +145,7 @@ def build(
 
     _install_build_dependencies(build_venv, build_dir)
     if execute:
-        _install_execution_dependencies(build_venv, build_dir, demos)
+        _install_execution_dependencies(build_venv, build_dir, demos, quiet=quiet)
 
     cmd = [
         str(build_venv.path / "bin" / "sphinx-build"),
@@ -156,7 +175,7 @@ def _install_build_dependencies(venv: Virtualenv, build_dir: Path):
 
 
 def _install_execution_dependencies(
-    venv: Virtualenv, build_dir: Path, demos: Sequence[Demo]
+    venv: Virtualenv, build_dir: Path, demos: Sequence[Demo], quiet: bool
 ):
     """Install dependencies for executing provided demos into
     `venv`."""
@@ -170,16 +189,14 @@ def _install_execution_dependencies(
     if sys.platform == "darwin":
         _fix_pytorch_constraint_macos(constraints_file)
 
-    requirements: set[str] = set()
+    requirements: set[str] = set(Demo.CORE_DEPENDENCIES)
     for demo in demos:
         if demo.executable:
-            requirements.update(demo.requirements())
+            requirements.update(demo.requirements)
 
     logger.info("Installing execution dependencies")
     cmds.pip_install(
-        venv.python,
-        *requirements,
-        constraints=constraints_file,
+        venv.python, *requirements, constraints=constraints_file, quiet=quiet
     )
 
 
