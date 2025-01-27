@@ -246,8 +246,9 @@ import networkx as nx
 
 edges = [(0, 1), (1, 2), (2, 0), (2, 3)]
 graph = nx.Graph(edges)
+positions = nx.spring_layout(graph, seed=1)
 
-nx.draw(graph, with_labels=True)
+nx.draw(graph, with_labels=True, pos=positions)
 plt.show()
 
 
@@ -513,4 +514,4 @@ plt.show()
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/jack_ceroni.txt
+#

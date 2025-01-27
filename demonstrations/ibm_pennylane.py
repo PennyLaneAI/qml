@@ -124,6 +124,16 @@ print(Aer.backends())
 #
 # First, we set up our problem as usual, and then retrieve a program ID from IBM, which gives us a
 # place to upload our job:
+#
+# .. warning::
+#
+#    By default, this demo uses the online simulator (`ibmq_qasm_simulator`), which is free at the
+#    time of writing. Please note that IBM Quantum's policies may change, and simulators could become paid services.
+#    Always verify current pricing and access policies on the IBM Quantum platform.
+#
+#    This demo can also run on quantum hardware by updating the backend variable accordingly. Be aware, that access
+#    to IBM Quantum hardware is not free and may result in substantial costs. Ensure you are aware of these costs
+#    and comfortable with them before proceeding.
 
 from pennylane import numpy as pnp
 from qiskit_ibm_runtime import QiskitRuntimeService
@@ -135,13 +145,16 @@ import pennylane as qml
 H = dataset.hamiltonian
 qubits = 4
 
+# Initialize QiskitRuntimeService
 service = QiskitRuntimeService()
-# Gets a 127 qubit device from IBM
-backend = service.least_busy(n_qubits=127, simulator=False, operational=True)
+
+# Use the `ibmq_qasm_simulator` available on IBM Cloud
+backend = service.backend("ibmq_qasm_simulator")
 
 try:
-    # Although we only need 4 qubits, our device has 127 qubits, therefore we initialize with wires=127
-    dev = qml.device("qiskit.remote", wires=127, backend=backend)
+    # Our device supports a maximum of 31 qubits
+    NUM_QUBITS_SUPPORTED = 31
+    dev = qml.device("qiskit.remote", wires=NUM_QUBITS_SUPPORTED, backend=backend)
 except Exception as e:
     print(e)
 
@@ -360,8 +373,6 @@ plt.show()
 # This tutorial has demonstrated how and why to use quantum computing hardware provided by IBM using PennyLane. To read
 # more about the details and possibilities of the PennyLane-Qiskit plugin, `read the documentation <https://docs.pennylane.ai/projects/qiskit/en/latest/index.html>`__.
 #
-# About the authors
+# About the author
 # ----------------
-# .. include:: ../_static/authors/kaur_kristjuhan.txt
-# .. include:: ../_static/authors/clara_ferreira_cores.txt
-# .. include:: ../_static/authors/mark_nicholas_jones.txt
+#

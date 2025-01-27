@@ -1,4 +1,0 @@
-.. bio:: Yiheng Duan
-   :photo: ../_static/authors/yiheng_duan.jpeg
-
-   Yiheng is an Applied Scientist at AWS Braket. Yiheng works at the intersection of quantum computing and machine learning and can be reached via yiheng@amazon.com.

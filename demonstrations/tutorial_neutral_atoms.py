@@ -820,4 +820,4 @@ print(
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/alvaro_ballon.txt
+#

@@ -328,4 +328,4 @@ print(H)
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/alain_delgado.txt
+#

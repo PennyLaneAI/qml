@@ -224,10 +224,10 @@ qubits = range(qubit_number)
 
 
 ising_graph = nx.cycle_graph(qubit_number)
+positions = nx.spring_layout(ising_graph, seed=1)
 
 print(f"Edges: {ising_graph.edges}")
-nx.draw(ising_graph)
-
+nx.draw(ising_graph, pos=positions)
 
 
 ######################################################################
@@ -301,8 +301,6 @@ def create_hamiltonian_matrix(n_qubits, graph, weights, bias):
 ham_matrix = create_hamiltonian_matrix(qubit_number, ising_graph, target_weights, target_bias)
 plt.matshow(ham_matrix, cmap="hot")
 plt.show()
-
-
 
 
 ######################################################################
@@ -472,9 +470,10 @@ trotter_step = 0.01  # Trotter step size
 # Defines the interaction graph for the new qubit system
 
 new_ising_graph = nx.complete_graph(reg2)
+positions = nx.spring_layout(new_ising_graph, seed=1)
 
 print(f"Edges: {new_ising_graph.edges}")
-nx.draw(new_ising_graph)
+nx.draw(new_ising_graph, pos=positions)
 
 
 ######################################################################
@@ -611,8 +610,6 @@ plt.subplots_adjust(wspace=0.3, hspace=0.3)
 plt.show()
 
 
-
-
 ######################################################################
 # These images look very similar, indicating that the QGRNN has done a good job
 # learning the target Hamiltonian.
@@ -675,4 +672,4 @@ print(f"\nNon-Existing Edge Parameters: {[val.unwrap() for val in weights_noedge
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/jack_ceroni.txt
+#

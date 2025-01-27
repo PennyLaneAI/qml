@@ -48,12 +48,12 @@ backend as:
 """
 
 import pennylane as qml
-from pennylane import numpy as np
+import numpy as np
 
 symbols = ["H", "O", "H"]
 geometry = np.array([[-0.0399, -0.0038, 0.0000],
                      [ 1.5780,  0.8540, 0.0000],
-                     [ 2.7909, -0.5159, 0.0000]], requires_grad = False)
+                     [ 2.7909, -0.5159, 0.0000]])
 molecule = qml.qchem.Molecule(symbols, geometry)
 
 H, qubits = qml.qchem.molecular_hamiltonian(molecule, method="pyscf")
@@ -227,4 +227,4 @@ print(openfermion_op)
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/soran_jahangiri.txt
+#

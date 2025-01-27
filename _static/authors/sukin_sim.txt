@@ -1,4 +1,0 @@
-.. bio:: Sukin Sim
-   :photo: ../_static/authors/sukin_sim.png
-
-   Sukin (Dylan) completed their PhD in Chemical Physics at Harvard University and currently works as a quantum research scientist. Their research interests include the development of algorithms and circuit compilation schemes for fault-tolerant quantum computers.

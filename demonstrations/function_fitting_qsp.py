@@ -576,5 +576,3 @@ qsp_model_runner.plot_result()
 #
 # About the author
 # ~~~~~~~~~~~~~~~~
-# .. include:: ../_static/authors/jay_soni.txt
-#

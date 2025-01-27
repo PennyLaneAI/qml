@@ -769,4 +769,4 @@ plt.show()
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/elies_gil-fuster.txt
+#

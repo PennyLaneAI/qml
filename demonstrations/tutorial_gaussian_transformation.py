@@ -169,4 +169,4 @@ print("Optimized phi:{:8f}".format(params[2]))
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/josh_izaac.txt
+#

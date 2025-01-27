@@ -130,7 +130,9 @@ import networkx as nx
 
 edges = [(0, 1), (1, 2), (2, 0), (2, 3), (1, 4)]
 graph = nx.Graph(edges)
-nx.draw(graph, with_labels=True, node_color="#e377c2")
+positions = nx.spring_layout(graph, seed=1)
+nx.draw(graph, with_labels=True, node_color="#e377c2", pos=positions)
+plt.show()
 
 ######################################################################
 # We must first encode this combinatorial problem into a cost Hamiltonian :math:`H_c.` This ends up being
@@ -320,7 +322,9 @@ plt.show()
 
 graph = nx.Graph(edges)
 cmap = ["#00b4d9"]*3 + ["#e377c2"]*2
-nx.draw(graph, with_labels=True, node_color=cmap)
+positions = nx.spring_layout(graph, seed=1)
+nx.draw(graph, with_labels=True, node_color=cmap, pos=positions)
+plt.show()
 
 ######################################################################
 # Benchmarking FALQON
@@ -394,7 +398,9 @@ nx.draw(graph, with_labels=True, node_color=cmap)
 
 new_edges = [(0, 1), (1, 2), (2, 0), (2, 3), (1, 4), (4, 5), (5, 2), (0, 6)]
 new_graph = nx.Graph(new_edges)
-nx.draw(new_graph, with_labels=True, node_color="#e377c2")
+positions = nx.spring_layout(new_graph, seed=1)
+nx.draw(new_graph, with_labels=True, node_color="#e377c2", pos=positions)
+plt.show()
 
 ######################################################################
 # We can now use the PennyLane QAOA module to create a QAOA circuit corresponding to the MaxClique problem. For this
@@ -473,8 +479,6 @@ plt.show()
 # Magann, A. B., Rudinger, K. M., Grace, M. D., & Sarovar, M. (2021). Feedback-based quantum optimization. arXiv preprint `arXiv:2103.08619 <https://arxiv.org/abs/2103.08619>`__.
 #
 #
-# About the authors
-# -----------------
-# .. include:: ../_static/authors/david_wakeham.txt
+# About the author
+# ----------------
 #
-# .. include:: ../_static/authors/jack_ceroni.txt
