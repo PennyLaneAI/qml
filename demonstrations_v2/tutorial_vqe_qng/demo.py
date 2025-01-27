@@ -473,10 +473,6 @@ plt.show()
 #     <https://www.nature.com/articles/ncomms5213?origin=ppub>`__
 #
 #
-# About the authors
-# -----------------
-# .. include:: ../_static/authors/maggie_li.txt
+# About the author
+# ----------------
 #
-# .. include:: ../_static/authors/lana_bozanic.txt
-#
-# .. include:: ../_static/authors/sukin_sim.txt

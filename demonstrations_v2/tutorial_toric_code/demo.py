@@ -1014,4 +1014,4 @@ print("Move x excitation around z excitation: ", x_around_z)
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/christina_lee.txt
+#

@@ -289,4 +289,4 @@ print(f"Generator Bloch vector: {bloch_vector_generator(gen_weights)}")
 ##############################################################################
 # About the author
 # ----------------
-# .. include:: ../_static/authors/nathan_killoran.txt
+#

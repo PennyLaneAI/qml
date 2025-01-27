@@ -67,7 +67,7 @@ def sync_v2():
             v2_demo_dir.mkdir()
             shutil.copy2(v1_demo, v2_demo)
             shutil.copy2(v1_metadata, v2_metadata)
-            with open(v2_demo / "requirements.in", "w"):
+            with open(v2_demo_dir / "requirements.in", "w"):
                 pass
 
             print(

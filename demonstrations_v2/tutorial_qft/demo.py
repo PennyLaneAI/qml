@@ -97,7 +97,7 @@ import matplotlib.pyplot as plt
 plt.style.use('pennylane.drawer.plot')
 
 # This line is to expand the circuit to see the operators
-@partial(qml.devices.preprocess.decompose, stopping_condition = lambda obj: False, max_expansion=1)
+@partial(qml.transforms.decompose, max_expansion=1)
 
 def circuit():
     qml.QFT(wires=range(4))

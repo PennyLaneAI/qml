@@ -572,4 +572,4 @@ print("Trace Distance: " + str(trace_distance(target_density_matrix, prep_densit
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/jack_ceroni.txt
+#

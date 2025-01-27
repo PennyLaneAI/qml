@@ -713,8 +713,6 @@ plt.show()
 #             Ph.D. thesis, Caltech, eprint quantph/9705052.
 #
 #
-# About the authors
-# #################
-# .. include:: ../_static/authors/roeland_wiersema.txt
+# About the author
+# ----------------
 #
-# .. include:: ../_static/authors/brian_doolittle.txt

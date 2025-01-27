@@ -867,4 +867,4 @@ print("Circuit gates:", specs["resources"].gate_types)
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/romain_moyard.txt
+#

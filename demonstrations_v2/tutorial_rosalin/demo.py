@@ -663,4 +663,4 @@ plt.show()
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/josh_izaac.txt
+#

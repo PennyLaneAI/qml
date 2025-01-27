@@ -356,26 +356,12 @@ print("Estimated SPSA gradient:\n", grad)
 # 0 (minimum overlap) and 1 (perfect overlap).
 #
 
-from copy import copy
-
-
-def get_operations(qnode, params):
-    qnode.construct([params], {})
-    return qnode.tape.operations
-
-
 def get_overlap_tape(qnode, params1, params2):
-    op_forward = get_operations(qnode, params1)
-    op_inv = get_operations(qnode, params2)
+    tape_forward = qml.workflow.construct_tape(qnode)(*params1)
+    tape_inv = qml.workflow.construct_tape(qnode)(*params2)
 
-    with qml.tape.QuantumTape() as tape:
-        for op in op_forward:
-            qml.apply(op)
-        for op in reversed(op_inv):
-            qml.adjoint(copy(op))
-        qml.probs(wires=qnode.tape.wires.labels)
-    return tape
-
+    ops = tape_forward.operations + list(qml.adjoint(op) for op in reversed(tape_inv.operations))
+    return qml.tape.QuantumTape(ops, [qml.probs(wires=tape_forward.wires)])
 
 def get_state_overlap(tape):
     return qml.execute([tape], dev, None)[0][0]
@@ -833,10 +819,8 @@ class QNSPSA:
         # used to estimate the gradient per optimization step. The sampled
         # direction is of the shape of the input parameter.
         direction = self.__get_perturbation_direction(params)
-        cost.construct([params + self.finite_diff_step * direction], {})
-        tape_forward = cost.tape.copy(copy_operations=True)
-        cost.construct([params - self.finite_diff_step * direction], {})
-        tape_backward = cost.tape.copy(copy_operations=True)
+        tape_forward = qml.workflow.construct_tape(cost)(*[params + self.finite_diff_step * direction])
+        tape_backward = qml.workflow.construct_tape(cost)(*[params - self.finite_diff_step * direction])
         return [tape_forward, tape_backward], direction
 
     def __update_tensor(self, tensor_raw):
@@ -864,21 +848,7 @@ class QNSPSA:
         return tapes, dir_vecs
 
     def __get_overlap_tape(self, cost, params1, params2):
-        op_forward = self.__get_operations(cost, params1)
-        op_inv = self.__get_operations(cost, params2)
-
-        with qml.tape.QuantumTape() as tape:
-            for op in op_forward:
-                qml.apply(op)
-            for op in reversed(op_inv):
-                qml.adjoint(copy(op))
-            qml.probs(wires=cost.tape.wires.labels)
-        return tape
-
-    def __get_operations(self, cost, params):
-        # Given a QNode, returns the list of operations before the measurement.
-        cost.construct([params], {})
-        return cost.tape.operations
+        return get_overlap_tape(cost, params1, params2)
 
     def __get_tensor_moving_avg(self, metric_tensor):
         # For numerical stability: averaging on the Fubini-Study metric tensor.
@@ -893,10 +863,8 @@ class QNSPSA:
 
     def __apply_blocking(self, cost, params_curr, params_next):
         # For numerical stability: apply the blocking condition on the parameter update.
-        cost.construct([params_curr], {})
-        tape_loss_curr = cost.tape.copy(copy_operations=True)
-        cost.construct([params_next], {})
-        tape_loss_next = cost.tape.copy(copy_operations=True)
+        tape_loss_curr = qml.workflow.construct_tape(cost)(*[params_curr])
+        tape_loss_next = qml.workflow.construct_tape(cost)(*[params_next])
 
         loss_curr, loss_next = qml.execute([tape_loss_curr, tape_loss_next], cost.device, None)
         # self.k has been updated earlier.
@@ -945,11 +913,14 @@ for i in range(300):
 # The optimizer performs reasonably well: the loss drops over optimization
 # steps and converges finally. We then reproduce the benchmarking test
 # between the gradient descent, quantum natural gradient descent, SPSA and
-# QN-SPSA in Fig. 1(b) of reference [#Gacon2021]_ with the following job. You
-# can find a more detailed version of the example in this
-# `notebook <https://github.com/aws/amazon-braket-examples/blob/main/examples/hybrid_jobs/6_QNSPSA_optimizer_with_embedded_simulator/qnspsa_with_embedded_simulator.ipynb>`__,
-# with its dependencies in the `source_scripts`
-# `folder <https://github.com/aws/amazon-braket-examples/blob/main/examples/hybrid_jobs/6_QNSPSA_optimizer_with_embedded_simulator/source_scripts/>`__.
+# QN-SPSA in Fig. 1(b) of reference [#Gacon2021]_ with the following job. 
+#
+# .. warning:: 
+#   The code required to plot the results of the example below is not provided, but a similar
+#   example can be found in this
+#   `notebook <https://github.com/aws/amazon-braket-examples/blob/main/examples/hybrid_jobs/6_QNSPSA_optimizer_with_embedded_simulator/qnspsa_with_embedded_simulator.ipynb>`__,
+#   with all its dependencies included in the `source_scripts`
+#   `folder <https://github.com/aws/amazon-braket-examples/blob/main/examples/hybrid_jobs/6_QNSPSA_optimizer_with_embedded_simulator/source_scripts/>`__.
 #
 # .. note::
 #     In order for the remainder of this demo to work, you will need to have done 3 things:
@@ -1040,4 +1011,4 @@ job = AwsQuantumJob.create(
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/yiheng_duan.txt
+#

@@ -554,4 +554,4 @@ plt.show()
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/maria_schuld.txt
+#
