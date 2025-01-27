@@ -103,6 +103,13 @@ def find(search_dir: Path, *names: str) -> Iterator[Demo]:
         yield Demo(name=name, path=demo_dir.resolve())
 
 
+def search(search_dir: Path, pattern: str) -> Iterator[str]:
+    """Yield demo names in `search_dir` matching `pattern`."""
+    for path in search_dir.glob(pattern=pattern):
+        if (path / "demo.py").exists():
+            yield path.name
+
+
 def build(
     sphinx_dir: Path,
     build_dir: Path,
