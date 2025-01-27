@@ -41,7 +41,7 @@ numpy = "~1.24"
 pyyaml = "^6.0.1"
 pennylane-sphinx-theme = { git = "https://github.com/PennyLaneAI/pennylane-sphinx-theme.git", branch = "sphinx-update" }
 pypandoc = "1.5"
-pennylane = "0.39.0"
+pennylane = "0.40.0"
 
 [tool.poetry.group.executable-dependencies.dependencies]
 ###########################################################
