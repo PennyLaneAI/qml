@@ -38,13 +38,15 @@ with ``qml.qjit`` and run as usual!
 
 import pennylane as qml
 
+
 @qml.qjit
 @qml.qnode(qml.device("lightning.gpu", wires=2))
 def circuit(theta):
     qml.Hadamard(wires=0)
     qml.RX(theta, wires=1)
-    qml.CNOT(wires=[0,1])
+    qml.CNOT(wires=[0, 1])
     return qml.expval(qml.PauliZ(wires=1))
+
 
 circuit(0.7)
 
@@ -66,7 +68,7 @@ circuit(0.7)
 # residing in a GPU data buffer, we leverage the built-in GPU-aware C++ measurement processes
 # of Lightning-GPU to directly calculate the results on the GPU data.
 #
-# 
+#
 # In PennyLane v0.40.0, we enhanced and expanded the C++ API of ``lightning.gpu`` with built-in features
 # designed to improve the overall integration experience with Catalyst. This update ensures that
 # ``lightning.gpu`` achieves feature parity with both ``lightning.qubit`` and ``lightning.kokkos``,
@@ -84,7 +86,7 @@ circuit(0.7)
 # Start with the state :math:`|\psi \rangle |0\rangle`, the QPE problems estimates
 # the phase of the eigenvalue of a given unitary operator :math:`U` and one of its
 # eigenstates :math:`|\psi \rangle.`
-# 
+#
 # The algorithm can be defined as follows:
 #
 # 1. Apply Hadamard gates to all estimation qubits to implement a uniform superposition.
@@ -121,8 +123,10 @@ estimation_wires = range(4, 6)
 
 num_wires = len(target_wires) + len(estimation_wires)
 
+
 def U(wires):
     return qml.PhaseShift(2 * np.pi / 5, wires=wires)
+
 
 @qml.qjit(autograph=True)
 @qml.qnode(qml.device("lightning.gpu", wires=num_wires))
@@ -139,6 +143,7 @@ def circuit_qpe():
     qml.adjoint(qml.QFT)(wires=estimation_wires)
 
     return qml.probs(wires=estimation_wires)
+
 
 ######################################################################
 #
