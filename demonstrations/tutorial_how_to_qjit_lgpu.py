@@ -124,7 +124,7 @@ num_wires = len(target_wires) + len(estimation_wires)
 def U(wires):
     return qml.PhaseShift(2 * np.pi / 5, wires=wires)
 
-@qml.qjit
+@qml.qjit(autograph=True)
 @qml.qnode(qml.device("lightning.gpu", wires=num_wires))
 def circuit_qpe():
     # initialize state as |1...1>
@@ -160,10 +160,10 @@ def circuit_qpe():
 #
 # In this example, we get up to 70x overall execution speedup of the QPE workflow
 # comparing ``lightning.qubit`` and ``lightning.gpu`` when running
-# the just-in-time (QJIT) compiled of ``circuit_qpe``. As the entire program is QJIT compiled,
-# we can observe a better performance for executing the compiled program than non-compilation
-# pathway in PennyLane.
-#
+# the just-in-time (QJIT) compiled of ``circuit_qpe``.
+# Since the entire program, including the for-loops, is QJIT compiled,
+# we observe improved performance when running the compiled program
+# compared to the non-compiled regular pathway in PennyLane.
 #
 # Conclusion
 # ----------
