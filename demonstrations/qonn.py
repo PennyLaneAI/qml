@@ -474,4 +474,4 @@ print(qml.draw(quantum_neural_net)(var_init, X[0]))
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/theodor_isacsson.txt
+#

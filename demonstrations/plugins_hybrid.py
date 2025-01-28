@@ -449,4 +449,4 @@ print(qubit_rotation(0.5, 0.1))
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/josh_izaac.txt
+#

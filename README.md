@@ -81,19 +81,14 @@ quantum computing paper/result.
     * To maintain quality and performance, every image should be twice (2X) its visible dimension size on the web page, and at a minimum of `150 ppi/dpi` (preferably `300 ppi/dpi`).
   </details><br>
 
-- Add and select an author photo from the `_static/authors` folder. The image name should be as `<author name>_<author surname>.<format>`. If this is a new author and their image is not a headshot, store the original image as `<author name>_<author surname>_original.<format>` and create a cropped headshot with the aforementioned name.
-  
-- In the same folder create a `<author name>.txt` file where to include the bio following this structure:
+- Lastly, your demo will need an accompanying _metadata_ file. This file should be named
+  the same as your python file, but with the `.py` extension replaced with
+  `.metadata.json`. Check out the `demonstrations_metadata.md` file in this repo for
+  details on how to format that file and what to include.
 
-  ```txt
-  .. bio:: <author name> <author surname>
-   :photo: ../_static/authors/<author name>_<author surname>.<format>
-
-   <author's bio>
-  ```
-  Note that if you want to include a middle name, it must be included in both the first and second line and in the file name.
+- Include the author's information in the `.metadata.json` file. This can be either the author's PennyLane profile `username` or their `name`. If you provide the PennyLane profile username, the author details will be sourced directly from that profile, and the demo will then appear as a contribution on the author's profile.
   
-- Your bio will be added at the end of the demo automatically. Don't forget to end with the following line
+- Don't forget to end with the following line
 
   ```python
   ##############################################################################
@@ -101,11 +96,6 @@ quantum computing paper/result.
   # ----------------
   # 
   ```
-
-- Lastly, your demo will need an accompanying _metadata_ file. This file should be named
-  the same as your python file, but with the `.py` extension replaced with
-  `.metadata.json`. Check out the `demonstrations_metadata.md` file in this repo for
-  details on how to format that file and what to include.
 
 - At this point, run your script through the [Black Python formatter](https://github.com/psf/black),
 

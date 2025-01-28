@@ -1,4 +1,0 @@
-.. bio:: Anuj Apte
-   :photo: ../_static/authors/anuj_apte.jpg
-
-   Anuj is a PhD student at the University of Chicago. His research interests include quantum field theory with applications to topological phases and quantum computing.

@@ -1,4 +1,0 @@
-.. bio:: Maggie Li
-   :photo: ../_static/authors/maggie_li.jpg
-
-   Maggie is a student interested in how quantum computing and information theory can be applied to and inform our understanding of biology.

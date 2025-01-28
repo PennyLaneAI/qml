@@ -332,7 +332,11 @@ print("Model output for permutation of A, and with permuted observable: ", resul
 #    Patrick J. Coles, Frédéric Sauvage, Martín Larocca and Marco Cerezo (2022).
 #    Theory for Equivariant Quantum Neural Networks.
 #    `arXiv:2210.08566 <https://arxiv.org/abs/2210.08566>`__
-#
+# 
 # About the author
-# -------------------------
-# .. include:: ../_static/authors/maria_schuld.txt
+# ----------------
+#
+
+
+
+

@@ -534,4 +534,4 @@ for runs in range(samples):
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/thomas_storwick.txt
+#
