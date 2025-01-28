@@ -45,10 +45,10 @@ ordinary differential equation (ODE) solvers for computing gradient recipes of q
 that can be executed on hardware.
 
 
-SPS & ODEgen
-------------
+SPS and ODEgen gradient rules
+-----------------------------
 
-Let us start by deriving both the SPS rule and ODEgen.
+Let us start by deriving both the SPS and ODEgen rules.
 
 We are interested in cost functions of the form
 
@@ -163,6 +163,7 @@ for two qubits. The ground state of this Hamiltonian is the maximally entangled 
 Let us define it in PennyLane and also import some libraries that we are going to need for this demo.
 
 """
+
 import pennylane as qml
 import numpy as np
 import jax.numpy as jnp
