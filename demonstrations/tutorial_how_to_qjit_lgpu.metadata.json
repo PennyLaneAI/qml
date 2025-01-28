@@ -1,0 +1,54 @@
+{
+    "title": "How to run QJIT compiled PennyLane programs on NVIDIA GPUs",
+    "authors": [
+        {
+            "username": "maliasadi"
+        },
+        {
+            "username": "sshu"
+        }
+    ],
+    "dateOfPublication": "2025-01-10T00:00:00+00:00",
+    "dateOfLastModification": "2025-01-10T00:00:00+00:00",
+    "categories": [
+        "Catalyst",
+        "Getting Started",
+        "Quantum Computing",
+        "Devices and Performance",
+        "How-to"
+    ],
+    "tags": [
+        "how to"
+    ],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": ""
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": ""
+        }
+    ],
+    "seoDescription": "Learn how to quantum just-in-time (QJIT) compile and run PennyLane programs on NVIDIA GPUs.",
+    "doi": "",
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_qpe",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_how_to_quantum_just_in_time_compile_vqe_catalyst",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_qjit_compile_grovers_algorithm_with_catalyst",
+            "weight": 1.0
+        }
+    ]
+}
