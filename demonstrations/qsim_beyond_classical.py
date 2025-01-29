@@ -583,4 +583,4 @@ print("\rObserved:", f"{np.mean(f_circuit):.7f}".rjust(27))
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/theodor_isacsson.txt
+#

@@ -585,6 +585,4 @@ print("CB-VQE energy %.4f" % (energy_CBVQE))
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/joana_fraxanet.txt
 #
-# .. include:: ../_static/authors/isidor_schoch.txt

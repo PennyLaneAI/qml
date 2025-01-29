@@ -228,4 +228,4 @@ np.linalg.eigh(h.sparse_matrix().toarray())[0].min()
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/soran_jahangiri.txt
+#

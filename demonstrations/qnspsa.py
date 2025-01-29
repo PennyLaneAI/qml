@@ -1011,4 +1011,4 @@ job = AwsQuantumJob.create(
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/yiheng_duan.txt
+#

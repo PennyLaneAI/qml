@@ -335,4 +335,4 @@ plt.show()
 ######################################################################
 # About the author
 # ----------------
-# .. include:: ../_static/authors/david_ittah.txt
+#

@@ -359,4 +359,4 @@ plt.show()
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/johannes_jakob_meyer.txt
+#

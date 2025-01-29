@@ -741,4 +741,4 @@ fig.show()
 ######################################################################
 # About the author
 # ----------------
-# .. include:: ../_static/authors/alejandro_montanez.txt
+#

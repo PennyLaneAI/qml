@@ -144,4 +144,4 @@ if __name__ == "__main__":
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/christina_lee.txt
+#

@@ -543,4 +543,4 @@ plt.show()
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/nathan_killoran.txt
+#
