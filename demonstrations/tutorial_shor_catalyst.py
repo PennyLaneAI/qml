@@ -588,11 +588,65 @@ def shors_algorithm(N):
 # -----------------------
 #
 # With all our circuits in hand, we can code up the full implementation of
-# Shor's algorithm. Below, we have the set of subroutines defined in the
-# previous section.
-#
+# Shor's algorithm.
+# 
+# First, we require a few utility functions for modular arithemetic:
+# exponentiation by repeated squaring (to avoid integer overflow when
+# exponentiating large numbers), and computation of inverses modulo
+# :math:`N`. Note that the first can be accomplished in regular Python using the
+# built-in ``pow`` method. However, this is not JITable and there is no
+# equivalent in JAX NumPy, so we build our own.
 
 from jax import numpy as jnp
+
+
+def repeated_squaring(a, exponent, N):
+    """QJIT-compatible function to determine (a ** power) % N.
+
+    Source: https://en.wikipedia.org/wiki/Modular_exponentiation#Left-to-right_binary_method
+    """
+    # Get number of bits in exponent; adjust for case when it's a power of 2
+    num_exp_bits = jnp.array(jnp.log2(exponent), dtype=jnp.int32) + 1
+    if jnp.isclose(num_exp_bits, jnp.log2(exponent)):
+        num_exp_bits += 1
+
+    exp_bits = jnp.array(jnp.unpackbits(jnp.array([exponent]).view("uint8"), bitorder="little"))
+
+    result = jnp.array(1, dtype=jnp.int32)
+    x = jnp.array(a, dtype=jnp.int32)
+    idx = 0
+
+    while idx < num_exp_bits:
+        if exp_bits[idx] == 1:
+            result = (result * x) % N
+        x = (x**2) % N
+        idx += 1
+
+    return result
+
+def modular_inverse(a, N):
+    """QJIT compatible modular multiplicative inverse routine.
+
+    Source: https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm#Modular_integers
+    """
+    t = jnp.array(0, dtype=jnp.int32)
+    newt = jnp.array(1, dtype=jnp.int32)
+    r = jnp.array(N, dtype=jnp.int32)
+    newr = jnp.array(a, dtype=jnp.int32)
+
+    while newr != 0:
+        quotient = r // newr
+        t, newt = newt, t - quotient * newt
+        r, newr = newr, r - quotient * newr
+
+    if t < 0:
+        t = t + N
+
+    return t
+
+
+######################################################################
+# Next, we require a few helper functions for the phase estimation.
 
 import pennylane as qml
 import catalyst
