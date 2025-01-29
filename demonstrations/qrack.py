@@ -276,6 +276,11 @@ plt.show()
 #
 # Comparing performance
 # ---------------------
+# .. note::
+#   These results were obtained using Ubuntu 22.04 LTS, Linux kernel version 5.19.0-35-generic,
+#   using one Intel(R) Core(TM) i9-10980HK CPU @ 2.40GHz, one NVIDIA GeForce RTX 3080 Laptop GPU,
+#   and 32 GB of SK hynix 3200 MT/s DDR4 in 2x16 GB row configuration.
+#   Results may differ if run on other system configurations.
 # We've already seen that the Qrack device back end can do some tasks that most other simulators, or
 # basically any other simulator, simply can't do, like 60-qubit-wide special cases of the QFT or GHZ state
 # preparation with a Clifford or universal (QBDD) simulation algorithm, for example. However,
@@ -438,7 +443,7 @@ print("Qrack cross entropy with Lightning:", validate(12), "out of 1.0")
 # choice of devices or device initialization, to handle a mixture of wide and narrow qubit registers in your subroutines.
 
 ##############################################################################
-# 
+#
 # References
 # ----------
 #
@@ -457,4 +462,4 @@ print("Qrack cross entropy with Lightning:", validate(12), "out of 1.0")
 ##############################################################################
 # About the author
 # ----------------
-# .. include:: ../_static/authors/dan_strano.txt
+#

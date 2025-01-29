@@ -13,6 +13,9 @@ Learning to learn with quantum neural networks
 
 *Author: Stefano Mangini — Posted: 02 March 2021. Last updated: 15 September 2021.*
 
+.. warning::
+    This demo is only compatible with TensorFlow version ``2.9`` or below.
+    Otherwise, the output of some cells and plots may differ.
 
 In this demo we recreate the architecture proposed
 in *Learning to learn with quantum neural networks via
@@ -1181,4 +1184,4 @@ for t, s in zip(pred, ["out0", "out1", "out2", "Loss"]):
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/stefano_mangini.txt
+#

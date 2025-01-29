@@ -554,5 +554,4 @@ plt.show()
 ##############################################################################
 # About the author
 # ----------------
-# .. include:: ../_static/authors/antal_szava.txt
-# .. include:: ../_static/authors/david_wierichs.txt
+#

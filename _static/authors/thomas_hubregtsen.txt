@@ -1,4 +1,0 @@
-.. bio:: Thomas Hubregtsen
-   :photo: ../_static/authors/thomas_hubregtsen.jpg
-
-   Thomas is a researcher working on the full big data and machine learning pipeline. He previously worked at IBM Research, BMW Research and Google X. He is currently co-founding a startup while finishing up his PhD in the Eisert Group at FU Berlin. His personal website is https://hubregtsen.com/.

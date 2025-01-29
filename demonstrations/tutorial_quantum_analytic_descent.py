@@ -707,8 +707,6 @@ leg = ax.legend()
 #     `arXiv preprint arXiv:2008.06517 <https://arxiv.org/abs/2008.06517>`__.
 #
 #
-# About the authors
-# -----------------
-# .. include:: ../_static/authors/elies_gil-fuster.txt
+# About the author
+# ----------------
 #
-# .. include:: ../_static/authors/david_wierichs.txt

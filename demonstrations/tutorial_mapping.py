@@ -202,11 +202,14 @@ pauli_bk
 # coordinates.
 
 from pennylane import qchem
-from pennylane import numpy as np
+from jax import numpy as jnp
+import jax
+
+jax.config.update("jax_enable_x64", True)
 
 symbols  = ['H', 'H']
-geometry = np.array([[0.0, 0.0, -0.69434785],
-                     [0.0, 0.0,  0.69434785]], requires_grad = False)
+geometry = jnp.array([[0.0, 0.0, -0.69434785],
+                     [0.0, 0.0,  0.69434785]])
 
 mol = qchem.Molecule(symbols, geometry)
 
@@ -289,7 +292,7 @@ for op in doubles_fermi:
 # Note that we need to exponentiate these operators to be able to use them in the circuit
 # [#Yordanov]_. We also use a set of pre-defined parameters to construct the excitation gates.
 
-params = np.array([0.22347661, 0.0, 0.0])
+params = jnp.array([0.22347661, 0.0, 0.0])
 
 dev = qml.device("default.qubit", wires=qubits)
 

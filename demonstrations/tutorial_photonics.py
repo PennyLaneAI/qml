@@ -962,5 +962,5 @@ print(
 #     (`arXiv <https://arxiv.org/abs/2010.02905>`__)
 #
 # About the author
-# ~~~~~~~~~~~~~~~~
-# .. include:: ../_static/authors/alvaro_ballon.txt
+# ----------------
+#

@@ -801,4 +801,3 @@ Check out the documentation on the `Fourier module <https://docs.pennylane.ai/en
 # About the author
 # ----------------
 #
-# .. include:: ../_static/authors/david_wakeham.txt

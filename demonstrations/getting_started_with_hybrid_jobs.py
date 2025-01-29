@@ -304,6 +304,10 @@ plt.show()
 # .. note::
 #   AWS devices must be declared within the body of the decorated function.
 #
+# .. warning:: 
+#   The Rigetti device used in this demo, AspenM3, has been retired. For an updated list of available hardware through 
+#   Amazon Braket, please consult the `supported regions and devices documentation <https://docs.aws.amazon.com/braket/latest/developerguide/braket-devices.html>`__. The general steps outlined below still hold regardless of the choice of device, though.
+#
 
 from braket.devices import Devices
 
@@ -404,4 +408,4 @@ plt.show()
 ##############################################################################
 # About the author
 # ----------------
-# .. include:: ../_static/authors/matthew_beach.txt
+#

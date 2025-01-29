@@ -843,4 +843,4 @@ plot_optimal_pulses(hist, S_k, ops_param, T, target_name)
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/david_wierichs.txt
+#
