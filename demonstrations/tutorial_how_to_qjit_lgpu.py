@@ -3,9 +3,9 @@ How to run QJIT compiled PennyLane programs on NVIDIA GPUs
 ==========================================================
 
 
-Our NVIDIA exclusive GPU-enabled state-vector simulator, Lightning-GPU, has been
+Our CUDA-backed GPU-enabled state-vector simulator, Lightning-GPU, has been
 recently integrated to `Catalyst <https://docs.pennylane.ai/projects/catalyst>`__.
-This enables just-in-time (QJIT) compiled quantum operations to execute on
+This enables quantum just-in-time (QJIT) compiled quantum operations to execute on
 `cuQuantum <https://developer.nvidia.com/cuquantum-sdk>`__ compatible GPUs.
 
 Here, we'll show you how to use NVIDIA's floating-point GPU workhorses to unlock
@@ -24,14 +24,14 @@ Set up your environment
 To bring the power of `Lightning-GPU <https://docs.pennylane.ai/projects/lightning/en/stable/lightning_gpu/device.html>`__
 to `Catalyst <https://docs.pennylane.ai/projects/catalyst>`__, we need a Linux machine with
 `the NVIDIA cuQuantum <https://developer.nvidia.com/cuquantum-sdk>`__
-libraries which require a CUDA capable GPU of generation SM 7.0 (Volta) and greater.
-Then, you can install PennyLane, Lightning-GPU and Catalyst from PyPI via
+libraries, and a CUDA capable GPU of generation SM 7.0 (Volta) and greater.
+You can install PennyLane, Lightning-GPU and Catalyst from PyPI via
 
 ``` console
     pip install "pennylane==0.40.0" "pennylane-lightning-gpu==0.40.0" "pennylane-catalyst==0.10.0"
 ```
 
-Now you can simply create a ``lixghtning.gpu`` device, compile your circuit
+Now you can simply create a ``lightning.gpu`` device, compile your circuit
 with ``qml.qjit`` and run as usual!
 
 """
@@ -40,7 +40,7 @@ import pennylane as qml
 
 
 @qml.qjit
-@qml.qnode(qml.device("lightning.gpu", wires=2))
+@qml.qnode(qml.device("lightning.gpu", wires=20))
 def circuit(theta):
     qml.Hadamard(wires=0)
     qml.RX(theta, wires=1)
@@ -54,9 +54,9 @@ circuit(0.7)
 # How it works?
 # -------------
 #
-# ``lightning.gpu`` is interfaced with Catalyst by implementing the C++ Catalyst Runtime device API.
+# ``lightning.gpu`` interfaces with Catalyst via the C++ Runtime device API.
 # The runtime treats devices as a black-box through a handful of function calls.
-# This would minimize the Catalyst <> Device memory footprints and avoid ownership borrowing
+# This helps to minimize the Catalyst-to-device memory footprints and avoid ownership borrowing
 # of the on-device state-vector data.
 # The runtime initializes an instance of the device and all quantum operations will be offloaded
 # to the appropriate kernel and functions in the cuQuantum
@@ -64,16 +64,15 @@ circuit(0.7)
 #
 # Dispite the use of ``lightning.gpu`` in PennyLane, Catalyst doesn't interface with the device
 # in Python, avoiding NumPy data-buffer copies to the GPU device.
-# To ensure the best overall performance, once all operations are aopplied to the state-vector
-# residing in a GPU data buffer, we leverage the built-in GPU-aware C++ measurement processes
-# of Lightning-GPU to directly calculate the results on the GPU data.
+# To ensure the best overall performance, once all operations are applied to the state-vector
+# we leverage the built-in GPU-aware C++ measurement processes
+# of Lightning-GPU to directly calculate the results on the GPU-hosted data.
 #
 #
 # In PennyLane v0.40.0, we enhanced and expanded the C++ API of ``lightning.gpu`` with built-in features
 # designed to improve the overall integration experience with Catalyst. This update ensures that
 # ``lightning.gpu`` achieves feature parity with both ``lightning.qubit`` and ``lightning.kokkos``,
-# providing native support for arbitrary-controlled operations and differentiation methods.\
-# Consequently, we use v0.40.0 throughout this tutorial.
+# providing native support for arbitrary-controlled operations and differentiation methods.
 #
 # What about performance?
 # -----------------------
@@ -83,7 +82,7 @@ circuit(0.7)
 # `demo <https://pennylane.ai/qml/demos/tutorial_qpe>`__
 # to highlight the performance of ``lightning.gpu`` with QJIT.
 #
-# Start with the state :math:`|\psi \rangle |0\rangle`, the QPE problems estimates
+# Starting with the state :math:`|\psi \rangle |0\rangle`, the QPE algorithm estimates
 # the phase of the eigenvalue of a given unitary operator :math:`U` and one of its
 # eigenstates :math:`|\psi \rangle.`
 #
@@ -165,7 +164,7 @@ def circuit_qpe():
 #
 # In this example, we get up to 70x overall execution speedup of the QPE workflow
 # comparing ``lightning.qubit`` and ``lightning.gpu`` when running
-# the just-in-time (QJIT) compiled of ``circuit_qpe``.
+# the quantum just-in-time (QJIT) compiled of ``circuit_qpe``.
 # Since the entire program, including the for-loops, is QJIT compiled,
 # we observe improved performance when running the compiled program
 # compared to the non-compiled regular pathway in PennyLane.
