@@ -31,6 +31,7 @@
     ],
     "seoDescription": "Learn how to quantum just-in-time (QJIT) compile and run PennyLane programs on NVIDIA GPUs.",
     "doi": "",
+    "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],
     "relatedContent": [
