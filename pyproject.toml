@@ -87,7 +87,7 @@ aiohttp = "3.9.5"
 fsspec = "2024.6.1"
 h5py = "3.11.0"
 qiskit = ">=1.0.0"
-qiskit-aer = ">=0.14.0"
+qiskit-aer = ">=0.14.0,<0.16.0"
 sphinxcontrib-applehelp = "1.0.8"
 
 
