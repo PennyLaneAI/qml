@@ -1,5 +1,5 @@
-flax
+flax==0.9.0
 jax
 jaxlib
 optax
-qutip
+qutip==4.7.3

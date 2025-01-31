@@ -1,4 +1,4 @@
 networkx
-neural_tangents
+neural_tangents==0.6.2
 scipy
 scikit-learn

@@ -47,6 +47,7 @@ def build(
         venv_path=ctx.build_venv_path,
         demos=demos,
         target=format,
+        constraints_file=ctx.repo_root / "constraints.txt",
         execute=execute,
     )
 

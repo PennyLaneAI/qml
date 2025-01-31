@@ -1,5 +1,5 @@
 dimod
 docplex
 dwave-ocean-sdk==7.0.0
-openqaoa-core
+openqaoa-core==0.2.5
 pandas

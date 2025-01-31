@@ -1,4 +1,4 @@
-mitiq
+mitiq==0.32.0
 qiskit
 qiskit_aer
 qiskit_ibm_runtime

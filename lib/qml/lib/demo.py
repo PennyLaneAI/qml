@@ -4,6 +4,7 @@ from collections.abc import Sequence, Iterator
 import shutil
 from qml.lib import fs, cmds
 from qml.lib.virtual_env import Virtualenv
+from qml.lib.pip_tools import RequirementsGenerator
 import os
 import sys
 from logging import getLogger
@@ -11,6 +12,7 @@ import subprocess
 from enum import Enum
 import re
 import functools
+import requirements
 
 logger = getLogger("qml")
 
@@ -75,13 +77,16 @@ class Demo:
 
     @functools.cached_property
     def requirements(self) -> frozenset[str]:
-        """Return a list of this demo's unversioned
-        requirements."""
-        if path := self.requirements_file:
-            with open(path, "r") as f:
-                return frozenset(f.read().splitlines())
+        if not (path := self.requirements_file):
+            return self.CORE_DEPENDENCIES
 
-        return frozenset()
+        reqs = set(self.CORE_DEPENDENCIES)
+        with open(path, "r") as f:
+            for req in requirements.parse(f):
+                reqs.discard(req.name)
+                reqs.add(req.line)
+
+        return frozenset(reqs)
 
 
 def find(search_dir: Path, *names: str) -> Iterator[Demo]:
@@ -117,6 +122,7 @@ def build(
     demos: Sequence[Demo],
     target: BuildTarget,
     execute: bool,
+    constraints_file: Path,
     quiet: bool = False,
 ) -> None:
     """Build the provided demos using 'sphinx-build', optionally
@@ -134,25 +140,59 @@ def build(
     logger.info("Building %d demos", len(demos))
 
     build_venv = Virtualenv(venv_path)
+    _install_build_dependencies(build_venv, build_dir)
+
+    requirements_generator = RequirementsGenerator(
+        build_venv,
+        global_constraints_file=constraints_file,
+        extra_index_urls=("https://download.pytorch.org/whl/cpu",),
+    )
+
+    for demo in demos:
+        _build_demo(
+            sphinx_dir=sphinx_dir,
+            build_dir=build_dir,
+            build_venv=build_venv,
+            requirements_generator=requirements_generator,
+            target=target,
+            execute=execute,
+            demo=demo,
+        )
+
+
+def _build_demo(
+    sphinx_dir: Path,
+    build_dir: Path,
+    build_venv: Virtualenv,
+    demo: Demo,
+    target: BuildTarget,
+    requirements_generator: "RequirementsGenerator",
+    execute: bool,
+    quiet: bool = False,
+):
+    out_dir = sphinx_dir / "demos" / demo.name
+    if out_dir.exists():
+        shutil.rmtree(out_dir)
+    out_dir.mkdir(parents=True)
+
+    with open(out_dir / "requirements.txt", "w") as f:
+        f.write(requirements_generator.generate_requirements(demo.requirements))
+
+    if execute:
+        cmds.pip_install(build_venv.python, requirements=(out_dir / "requirements.txt"))
+
     stage_dir = build_dir / "demonstrations"
     if stage_dir.exists():
         shutil.rmtree(stage_dir)
-
     stage_dir.mkdir(parents=True)
+
     # Need a 'GALLERY_HEADER' file for sphinx-gallery
     with open(stage_dir / "GALLERY_HEADER.rst", "w"):
         pass
 
-    for demo in demos:
-        # Use copy2 to perserve file modification time
-        shutil.copy2(demo.py_file, (stage_dir / demo.name).with_suffix(".py"))
-
-        for resource in demo.resources:
-            fs.copy_any(resource, (stage_dir / resource.name))
-
-    _install_build_dependencies(build_venv, build_dir)
-    if execute:
-        _install_execution_dependencies(build_venv, build_dir, demos, quiet=quiet)
+    shutil.copy2(demo.py_file, (stage_dir / demo.name).with_suffix(".py"))
+    for resource in demo.resources:
+        fs.copy_any(resource, (stage_dir / resource.name))
 
     cmd = [
         str(build_venv.path / "bin" / "sphinx-build"),
@@ -163,7 +203,10 @@ def build(
         cmd.extend(("-D", "plot_gallery=0"))
 
     cmd.extend((str(sphinx_dir), str(build_dir / target.value)))
-    sphinx_env = os.environ | {"DEMO_STAGING_DIR": str(stage_dir.resolve())}
+    sphinx_env = os.environ | {
+        "DEMO_STAGING_DIR": str(stage_dir.resolve()),
+        "GALLERY_OUTPUT_DIR": str(out_dir.resolve()),
+    }
     subprocess.run(cmd, env=sphinx_env).check_returncode()
 
 
@@ -181,6 +224,20 @@ def _install_build_dependencies(venv: Virtualenv, build_dir: Path):
     cmds.pip_install(venv.python, "-r", build_requirements_file)
 
 
+def _generate_constraints(build_dir: Path):
+    constraints_file = (build_dir / "constraints.txt").resolve()
+    cmds.poetry_export(
+        sys.executable,
+        constraints_file,
+        format="constraints.txt",
+        groups=("executable-dependencies",),
+    )
+    if sys.platform == "darwin":
+        _fix_pytorch_constraint_macos(constraints_file)
+
+    return constraints_file
+
+
 def _install_execution_dependencies(
     venv: Virtualenv, build_dir: Path, demos: Sequence[Demo], quiet: bool
 ):
@@ -190,7 +247,7 @@ def _install_execution_dependencies(
     cmds.poetry_export(
         sys.executable,
         constraints_file,
-        format="constraints.txt",
+        format="requirements.txt",
         groups=("executable-dependencies",),
     )
     if sys.platform == "darwin":
