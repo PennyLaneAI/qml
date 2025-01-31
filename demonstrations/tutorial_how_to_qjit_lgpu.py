@@ -1,10 +1,11 @@
 r"""
-How to run QJIT compiled PennyLane programs on CUDA-backed GPUs
-===============================================================
+How to run quantum just-in-time (QJIT) compiled PennyLane programs on GPUs
+==========================================================================
 
 
-Our CUDA-backed GPU-enabled state-vector simulator, Lightning-GPU, has been
-recently integrated to `Catalyst <https://docs.pennylane.ai/projects/catalyst>`__.
+Our CUDA-backed GPU-enabled state-vector simulator,
+`Lightning-GPU <https://docs.pennylane.ai/projects/lightning/en/stable/lightning_gpu/device.html>`__,
+has been recently integrated to `Catalyst <https://docs.pennylane.ai/projects/catalyst>`__.
 This enables quantum just-in-time (QJIT) compiled quantum operations to execute on
 `cuQuantum <https://developer.nvidia.com/cuquantum-sdk>`__ compatible GPUs.
 
@@ -22,24 +23,22 @@ the performance of your QJIT-compiled programs.
 Set up your environment
 -----------------------
 
-To bring the power of `Lightning-GPU <https://docs.pennylane.ai/projects/lightning/en/stable/lightning_gpu/device.html>`__
-to `Catalyst <https://docs.pennylane.ai/projects/catalyst>`__, we suggest to follow the
+To bring the power of Lightning-GPU to Catalyst, we suggest to follow the
 `Lightning-GPU <https://docs.pennylane.ai/projects/lightning/en/stable/lightning_gpu/installation.html>`__
 and `Catalyst <https://docs.pennylane.ai/projects/catalyst/en/stable/dev/installation.html>`__
 installation guidelines. On an up-to-date Linux X86_64 or ARM64 machines with CUDA-12,
-you can install PennyLane, Lightning-GPU and Catalyst from PyPI via
+you can install these libraries from PyPI via
 
 .. code-block:: bash
 
     pip install pennylane pennylane-lightning-gpu pennylane-catalyst --upgrade
 
-Simply create a PennyLane's ``lightning.gpu`` device, compile your circuit with ``qml.qjit``,
+Simply create a ``lightning.gpu`` device, compile your circuit with :func:`~.qjit`,
 and run it as usual!
 
 .. code-block:: python
 
     import pennylane as qml
-
 
     @qml.qjit
     @qml.qnode(qml.device("lightning.gpu", wires=20))
@@ -47,10 +46,9 @@ and run it as usual!
         for i in range(20):
             qml.Hadamard(wires=i)
             qml.RX(theta, wires=i)
+
         return qml.probs()
 
-
-    circuit(0.7)
 
 How it works?
 -------------
@@ -80,17 +78,18 @@ What about performance?
 
 We use the quantum phase estimation (QPE) algorithm from this
 `demo <https://pennylane.ai/qml/demos/tutorial_qpe>`__
-to highlight the performance of ``lightning.gpu`` with QJIT.
+to highlight the performance of ``lightning.gpu`` with :func:`~.qjit`.
 
 Starting with the state :math:`|\psi \rangle |0\rangle`, the QPE algorithm estimates
-the phase of the eigenvalue of a given unitary operator :math:`U` and one of its
+the phase of the eigenvalue of a given unitary operator :math:`U` with one of its
 eigenstates :math:`|\psi \rangle.`
 
 The algorithm can be defined as follows:
 
-1. Apply Hadamard gates to all estimation qubits to implement a uniform superposition.
+1. Apply :class:`~.Hadamard` gates to all estimation qubits to implement a uniform superposition.
 
-2. Apply a :class:`~.ControlledSequence` operation to creates a sequence of controlled gates on the estimation qubits.
+2. Apply a :class:`~.ControlledSequence` operation to creates a sequence of controlled gates on
+   the estimation qubits.
 
 3. Apply the inverse quantum Fourier transform to the estimation qubits.
 
@@ -98,12 +97,12 @@ The algorithm can be defined as follows:
 
 .. figure:: ../_static/demonstration_assets/qpe/qpe.png
     :align: center
-    :width: 80%
+    :width: 75%
 
     The quantum phase estimation circuit.
 
 This algorithm is particularly interesting for
-`PennyLane-Lightning <https://docs.pennylane.ai/projects/lightning/en/stable/>`__
+`PennyLane-Lightning <https://docs.pennylane.ai/projects/lightning/en/stable>`__
 simulators because its performance depends on how efficiently both regular
 and arbitrarily controlled gates are handled in these simulators.
 
@@ -118,13 +117,10 @@ to accept an arbitrary number of target wires.
 
     target_wires = range(0, 4)
     estimation_wires = range(4, 6)
-
     num_wires = len(target_wires) + len(estimation_wires)
-
 
     def U(wires):
         return qml.PhaseShift(2 * np.pi / 5, wires=wires)
-
 
     @qml.qjit(autograph=True)
     @qml.qnode(qml.device("lightning.gpu", wires=num_wires))
@@ -142,18 +138,21 @@ to accept an arbitrary number of target wires.
 
         return qml.probs(wires=estimation_wires)
 
-In this program, we only use 4 target wires and 2 estimated wires to
+In this example, we only use 4 target wires and 2 estimated wires to
 estimate the phase by measuring the last 2 wires.
-This program initializes a state-vector with 6-wires and apply
-12 natively supported regular, adjoint and multi-controlled gates on ``lightning.gpu``
+This program initializes a state-vector with 6-wire and apply
+12 natively supported regular, adjoint and multi-controlled gates on ``lightning.gpu``.
+Given the small number of wires and gates, we shouldn't expect any performance gains
+from executing the program on GPUs, as the overhead of device initialization would
+likely outweigh any potential benefits.
+
 We know for the fact that the precision of the estimated phase is determined
 by the size of ``estimation_wires`` in the algorithm.
 
 To show the power of GPU workhorses, let's increase the range of ``estimation_wires``
-in the code above for a better estimated phase percision and greater performance.
-We run our benchmarks on a NVIDIA Grace-Hopper (GH200) server with an installation of
-Lightning-GPU v0.40.0 Linux ARM64 PyPI wheels.
-
+in the code above for a better estimated phase percision and performance.
+We run our benchmarks on a NVIDIA Grace-Hopper (GH200) server with
+Lightning-GPU v0.40 and Catalyst v0.10 Linux ARM64 PyPI wheels.
 
 .. figure:: ../_static/demonstration_assets/qpe/tutorial_qjit_lgpu_results.png
     :align: center
@@ -161,7 +160,7 @@ Lightning-GPU v0.40.0 Linux ARM64 PyPI wheels.
 
 In this example, we get up to 70x overall execution speedup of the QPE workflow
 comparing ``lightning.qubit`` and ``lightning.gpu`` when running
-the quantum just-in-time (QJIT) compiled of ``circuit_qpe``.
+the quantum just-in-time (QJIT) compiled ``circuit_qpe``.
 Since the entire program, including the for-loops, is QJIT compiled,
 we observe improved performance when running the compiled program
 compared to the non-compiled regular pathway in PennyLane.
@@ -169,14 +168,16 @@ compared to the non-compiled regular pathway in PennyLane.
 Conclusion
 ----------
 
-This tutorial has demonstrated how to execute a quantum just-in-time compiled PennyLane hybrid program
-on CUDA-backed GPUs by leveraging the performance of `Lightning-GPU <https://docs.pennylane.ai/projects/lightning/en/stable/lightning_gpu/device.html>`__.
+This tutorial has demonstrated how to execute a quantum just-in-time compiled PennyLane
+hybrid program on CUDA-backed GPUs backed by
+`Lightning-GPU <https://docs.pennylane.ai/projects/lightning/en/stable/lightning_gpu/device.html>`__.
 We further explored the performance of
 ``lightning.gpu`` integration with `Catalyst <https://docs.pennylane.ai/projects/catalyst>`__
-highlighting the run-time of QPE with and without QJIT compilation.
+highlighting the run-time of QPE with and without :func:`~.qjit` compilation.
 
-To learn more about Catalyst and how to use it to compile and optimize your quantum programs and workflows,
-check out the `Catalyst Quick Start <https://docs.pennylane.ai/projects/catalyst/en/stable/dev/quick_start.html>`__ guide.
+To learn more about Catalyst and how to use it to compile and optimize your quantum programs
+and workflows, check out the
+`Catalyst Quick Start <https://docs.pennylane.ai/projects/catalyst/en/stable/dev/quick_start.html>`__ guide.
 
 About the authors
 -----------------

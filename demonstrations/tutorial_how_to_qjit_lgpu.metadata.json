@@ -1,5 +1,5 @@
 {
-    "title": "How to run QJIT compiled PennyLane programs on CUDA-backed GPUs",
+    "title": "How to run quantum just-in-time (QJIT) compiled PennyLane programs on GPUs",
     "authors": [
         {
             "username": "maliasadi"
@@ -8,8 +8,8 @@
             "username": "sshu"
         }
     ],
-    "dateOfPublication": "2025-01-10T00:00:00+00:00",
-    "dateOfLastModification": "2025-01-10T00:00:00+00:00",
+    "dateOfPublication": "2025-01-25T00:00:00+00:00",
+    "dateOfLastModification": "2025-01-25T00:00:00+00:00",
     "categories": [
         "Getting Started",
         "Quantum Computing",
