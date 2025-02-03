@@ -1,0 +1,6 @@
+jax
+jaxlib
+optax
+pandas
+seaborn
+scikit-learn

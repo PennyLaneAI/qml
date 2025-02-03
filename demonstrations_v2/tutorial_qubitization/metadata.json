@@ -1,0 +1,50 @@
+{
+    "title": "Intro to qubitization",
+    "authors": [
+        {
+            "username": "KetPuntoG"
+        },
+        {
+            "username": "ixfoduap"
+        }
+    ],
+    "dateOfPublication": "2024-09-09T00:00:00+00:00",
+    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
+    "categories": [
+        "Quantum Computing",
+        "Algorithms"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_qubitization.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_qubitization.png"
+        }
+    ],
+    "seoDescription": "Learn how to use, visualize and apply qubitization, a block-encoding technique in quantum computing.",
+    "doi": "",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_intro_amplitude_amplification",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_qpe",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_lcu_blockencoding",
+            "weight": 1.0
+        }
+    ]
+}

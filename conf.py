@@ -56,12 +56,12 @@ extensions = [
     "extension",
 ]
 
-
 html_baseurl = "https://pennylane.ai/qml/"
+demo_staging_dir = os.getenv("DEMO_STAGING_DIR", "demonstrations")
 
 sphinx_gallery_conf = {
     # path to your example scripts
-    "examples_dirs": ["demonstrations"],
+    "examples_dirs": [demo_staging_dir],
     # path where to save gallery generated examples
     "gallery_dirs": ["demos"],
     # execute files that match the following filename pattern,
@@ -133,7 +133,7 @@ language = None
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "*venv", "sphinxext"]
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "*venv", "*venv-build", "sphinxext"]
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = "sphinx"
