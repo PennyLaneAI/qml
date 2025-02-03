@@ -1,0 +1,4 @@
+.. bio:: Erik Recio
+   :photo: ../_static/authors/erik_recio.jpg
+
+   Erik is a quantum researcher at ICFO and is doing his PhD on Quantum Machine Learning.
