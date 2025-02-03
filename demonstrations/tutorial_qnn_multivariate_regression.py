@@ -247,7 +247,7 @@ ax2.set_title(f' Predicted \nAccuracy: {round(r2*100,3)}%')
 
 # Show the plot
 plt.tight_layout(pad=3.7)
-
+plt.show()
 ######################################################################
 # Cool! We have managed to successfully fit a multidimensional function using a parametrized quantum circuit!
 
