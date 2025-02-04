@@ -26,7 +26,7 @@ Set up your environment
 To bring the power of Lightning-GPU to Catalyst, we suggest to follow the
 `Lightning-GPU <https://docs.pennylane.ai/projects/lightning/en/stable/lightning_gpu/installation.html>`__
 and `Catalyst <https://docs.pennylane.ai/projects/catalyst/en/stable/dev/installation.html>`__
-installation guidelines. On an up-to-date Linux X86_64 or ARM64 machines with CUDA-12,
+installation guidelines. On Linux X86_64 or ARM64 machines with CUDA-12,
 you can install these libraries from PyPI via
 
 .. code-block:: bash
@@ -140,7 +140,7 @@ to accept an arbitrary number of target wires.
 
 In this example, we only use 4 target wires and 2 estimated wires to
 estimate the phase by measuring the last 2 wires.
-This program initializes a state-vector with 6-wire and apply
+This program initializes a state-vector with 6-wire and applies
 12 natively supported regular, adjoint and multi-controlled gates on ``lightning.gpu``.
 Given the small number of wires and gates, we shouldn't expect any performance gains
 from executing the program on GPUs, as the overhead of device initialization would
@@ -149,17 +149,17 @@ likely outweigh any potential benefits.
 We know for the fact that the precision of the estimated phase is determined
 by the size of ``estimation_wires`` in the algorithm.
 
-To show the power of GPU workhorses, let's increase the range of ``estimation_wires``
-in the code above for a better estimated phase percision and performance.
+Let's increase the range of ``estimation_wires`` in the code above to get a
+higher precision of the phase estimation, with great performance doing so.
 We run our benchmarks on a NVIDIA Grace-Hopper (GH200) server with
-Lightning-GPU v0.40 and Catalyst v0.10 Linux ARM64 PyPI wheels.
+Lightning-GPU's and Catalyst's Linux ARM64 PyPI wheels.
 
 .. figure:: ../_static/demonstration_assets/qpe/tutorial_qjit_lgpu_results.png
     :align: center
     :width: 80%
 
 In this example, we get up to 70x overall execution speedup of the QPE workflow
-comparing ``lightning.qubit`` and ``lightning.gpu`` when running
+comparing ``lightning.gpu`` to ``lightning.qubit`` when running
 the quantum just-in-time (QJIT) compiled ``circuit_qpe``.
 Since the entire program, including the for-loops, is QJIT compiled,
 we observe improved performance when running the compiled program
@@ -168,7 +168,7 @@ compared to the non-compiled regular pathway in PennyLane.
 Conclusion
 ----------
 
-This tutorial has demonstrated how to execute a quantum just-in-time compiled PennyLane
+This tutorial demonstrates how to execute a quantum just-in-time compiled PennyLane
 hybrid program on CUDA-backed GPUs backed by
 `Lightning-GPU <https://docs.pennylane.ai/projects/lightning/en/stable/lightning_gpu/device.html>`__.
 We further explored the performance of
