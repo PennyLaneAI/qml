@@ -103,8 +103,8 @@ The algorithm can be defined as follows:
 
 This algorithm is particularly interesting for
 `PennyLane-Lightning <https://docs.pennylane.ai/projects/lightning/en/stable>`__
-simulators because its performance depends on how efficiently both regular
-and arbitrarily controlled gates are handled in these simulators.
+simulators because its performance requires an efficient implementation of both regular
+and arbitrarily controlled gates.
 
 Let's implement this in PennyLane! We'll use the same code from
 `the QPE demo <https://pennylane.ai/qml/demos/tutorial_qpe>`__
@@ -138,8 +138,8 @@ to accept an arbitrary number of target wires.
 
         return qml.probs(wires=estimation_wires)
 
-In this example, we only use 4 target wires and 2 estimated wires to
-estimate the phase by measuring the last 2 wires.
+In this example, we only use 4 target wires and
+we estimate the phase by measuring 2 estimation wires.
 This program initializes a state-vector with 6-wire and applies
 12 natively supported regular, adjoint and multi-controlled gates on ``lightning.gpu``.
 Given the small number of wires and gates, we shouldn't expect any performance gains
