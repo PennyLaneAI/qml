@@ -1,5 +1,5 @@
 {
-    "title": "How to run quantum just-in-time (QJIT) compiled PennyLane programs on GPUs",
+    "title": "Lightning-GPU with QJIT",
     "authors": [
         {
             "username": "maliasadi"
@@ -11,7 +11,6 @@
     "dateOfPublication": "2025-01-25T00:00:00+00:00",
     "dateOfLastModification": "2025-01-25T00:00:00+00:00",
     "categories": [
-        "Getting Started",
         "Quantum Computing",
         "Devices and Performance",
         "How-to"
@@ -29,7 +28,7 @@
             "uri": ""
         }
     ],
-    "seoDescription": "Learn how to quantum just-in-time (QJIT) compile and run PennyLane programs on CUDA-backed GPUs.",
+    "seoDescription": "Use PennyLane, Catalyst, and Lightning-GPU to boost the runtime performance of your workflows.",
     "doi": "",
     "references": [],
     "basedOnPapers": [],
