@@ -1,5 +1,4 @@
 import subprocess
-from .virtual_env import Virtualenv
 from collections import defaultdict
 from pathlib import Path
 import requirements
@@ -17,12 +16,12 @@ class RequirementsGenerator:
 
     def __init__(
         self,
-        venv: Virtualenv,
+        python_bin: Path,
         global_constraints_file: Path,
         *,
         extra_index_urls: Sequence[str] | None = None,
     ):
-        self.venv = venv
+        self.python_bin = python_bin
 
         global_constraints: dict[str, tuple[str, ...]] = defaultdict(tuple)
         with open(global_constraints_file, "r") as f:
@@ -64,31 +63,33 @@ class RequirementsGenerator:
                 for req_str in requirements_in:
                     f.write(req_str + "\n")
 
+            cmd = [
+                str(self.python_bin),
+                "-m",
+                "uv",
+                "pip",
+                "compile",
+                "--index-strategy",
+                "unsafe-best-match",
+                "--emit-index-url",
+                "--constraints",
+                str(constraints_file),
+                "--output-file",
+                str(requirements_file),
+                "--no-header",
+                "--no-strip-extras",
+                "--no-strip-markers",
+                "--universal",
+                "--quiet",
+                "--no-annotate",
+            ]
+            for index_url in self.extra_index_urls:
+                cmd.extend(("--extra-index-url", index_url))
+
+            cmd.append(str(requirements_file))
+
             subprocess.run(
-                (
-                    self.venv.python,
-                    "-m",
-                    "uv",
-                    "pip",
-                    "compile",
-                    "--no-deps",
-                    "--index-strategy",
-                    "unsafe-best-match",
-                    "--extra-index-url",
-                    "https://download.pytorch.org/whl/cpu",
-                    "--emit-index-url",
-                    "--constraints",
-                    str(constraints_file),
-                    "--output-file",
-                    str(requirements_file),
-                    "--no-header",
-                    "--no-strip-extras",
-                    "--no-strip-markers",
-                    "--universal",
-                    "--quiet",
-                    "--no-annotate",
-                    str(requirements_file),
-                )
+                cmd,
             ).check_returncode()
 
             with open(requirements_file, "r") as f:

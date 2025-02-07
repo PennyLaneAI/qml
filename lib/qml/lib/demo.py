@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from collections.abc import Sequence, Iterator
 import shutil
 from qml.lib import fs, cmds
@@ -12,6 +12,9 @@ import subprocess
 from enum import Enum
 import functools
 import requirements
+import json
+import lxml.html
+
 
 logger = getLogger("qml")
 
@@ -142,7 +145,7 @@ def build(
     _install_build_dependencies(build_venv, build_dir)
 
     requirements_generator = RequirementsGenerator(
-        build_venv,
+        Path(sys.executable),
         global_constraints_file=constraints_file,
         extra_index_urls=("https://download.pytorch.org/whl/cpu",),
     )
@@ -156,6 +159,7 @@ def build(
             target=target,
             execute=execute,
             demo=demo,
+            package=target is BuildTarget.JSON,
         )
 
 
@@ -167,10 +171,11 @@ def _build_demo(
     target: BuildTarget,
     requirements_generator: "RequirementsGenerator",
     execute: bool,
-    quiet: bool = False,
+    package: bool,
 ):
     out_dir = sphinx_dir / "demos" / demo.name
     fs.clean_dir(out_dir)
+    execute = execute and demo.executable
 
     with open(out_dir / "requirements.txt", "w") as f:
         f.write(requirements_generator.generate_requirements(demo.requirements))
@@ -204,6 +209,15 @@ def _build_demo(
     }
     subprocess.run(cmd, env=sphinx_env).check_returncode()
 
+    if package:
+        _package_demo(
+            demo,
+            build_dir / "pack",
+            sphinx_dir / "_static",
+            build_dir / target.value,
+            out_dir,
+        )
+
 
 def _install_build_dependencies(venv: Virtualenv, build_dir: Path):
     """Install dependencies for running sphinx-build into `venv`."""
@@ -216,4 +230,92 @@ def _install_build_dependencies(venv: Virtualenv, build_dir: Path):
         groups=("base",),
         format="requirements.txt",
     )
-    cmds.pip_install(venv.python, "-r", build_requirements_file)
+    cmds.pip_install(venv.python, "-r", build_requirements_file, use_uv=False)
+
+
+def _package_demo(
+    demo: Demo,
+    pack_dir: Path,
+    static_dir: Path,
+    sphinx_output: Path,
+    sphinx_gallery_output: Path,
+):
+    """Package a demo into a .zip file for distribution.
+
+    Args:
+        demo: The demo to package
+        pack_dir: The directory in which to place the packaged demo
+        static_dir: The /static directory in the repo root
+        sphinx_output: The directory containing the sphinx output
+        sphinx_gallery_output: The directory containing files genreated by
+            sphinx-gallery
+    """
+    dest = pack_dir / demo.name
+    fs.clean_dir(dest)
+
+    with open(
+        (sphinx_output / "demos" / demo.name / demo.name).with_suffix(".fjson"), "r"
+    ) as f:
+        html_body = json.load(f)["body"]
+
+    asset_paths: set[tuple[Path, str]] = set()
+    html_body: str = lxml.html.rewrite_links(
+        html_body,
+        functools.partial(
+            _link_rewriter, static_dir, sphinx_output / "_images", asset_paths
+        ),
+    )
+    with open(dest / "body.html", "w") as f:
+        f.write(html_body)
+
+    for asset, asset_dest in asset_paths:
+        fs.copy_parents(asset, Path(dest, "_assets", asset_dest))
+
+    shutil.copy(
+        (sphinx_gallery_output / demo.name).with_suffix(".ipynb"), dest / "demo.ipynb"
+    )
+    shutil.copy(demo.metadata_file, dest / "metadata.json")
+    shutil.copy(demo.py_file, dest / "demo.py")
+    shutil.copy(sphinx_gallery_output / "requirements.txt", dest / "requirements.txt")
+    for resource in demo.resources:
+        fs.copy_any(resource, dest / resource.relative_to(demo.path))
+
+    with open(demo.metadata_file, "r") as f:
+        metadata = json.load(f)
+
+    for preview_image in metadata["previewImages"]:
+        if (uri := preview_image["uri"]).startswith("/_static/"):
+            src = static_dir / uri.removeprefix("/_static/")
+            path = PurePosixPath(
+                "_assets", "thumbnails", preview_image["type"]
+            ).with_suffix(src.suffix)
+            preview_image["uri"] = path.as_posix()
+            fs.copy_parents(src, dest / path)
+
+    for hardware in metadata.get("hardware", []):
+        if (uri := hardware["logo"]).startswith("/_static/"):
+            src = static_dir / uri.removeprefix("/_static/")
+            path = PurePosixPath("_assets", "logos", Path(src).name)
+            hardware["logo"] = path.as_posix()
+            fs.copy_parents(src, dest / path)
+
+    with open(dest / "metadata.json", "w") as f:
+        json.dump(metadata, f, indent=2)
+
+    zip_file = shutil.make_archive(dest.name, "zip", dest.parent, dest.name)
+    shutil.move(zip_file, pack_dir / f"{demo.name}.zip")
+
+
+def _link_rewriter(
+    static_dir: Path, image_dir: Path, asset_paths: set[tuple[Path, str]], link: str
+):
+    if "_images/" in link:
+        _, path = link.split("_images/", maxsplit=2)
+        asset_paths.add((image_dir / path, f"images/{path}"))
+        return f"_assets/images/{path}"
+    elif "_static/" in link:
+        _, path = link.split("_static/", maxsplit=2)
+        asset_paths.add((static_dir / path, f"static/{path}"))
+        return f"_assets/static/{path}"
+
+    return link

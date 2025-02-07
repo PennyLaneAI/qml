@@ -23,4 +23,3 @@ torchvision==0.16.2+cpu ; sys_platform != 'darwin'
 torchvision==0.16.2 ; sys_platform == 'darwin'
 tensorflow==2.14.1
 optax==0.2.3
-

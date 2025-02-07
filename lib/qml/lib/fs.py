@@ -11,6 +11,12 @@ def copy_any(src: Path, dest: Path, exist_ok: bool = False):
         shutil.copy2(src, dest)
 
 
+def copy_parents(src: Path, dest: Path):
+    """Copy `src` to `dest` with all parent directories."""
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(src, dest)
+
+
 def file_sha(path: Path) -> bytes:
     """Return the SHA256 hash of file at ``path``."""
     with open(path, "rb") as f:
