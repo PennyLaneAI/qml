@@ -284,7 +284,7 @@ for n in range(2, 5):
     print(f"open: {len(periodic_)} = {2*n*(2*n-1)} = 2 * 2n * (2n - 1)/2")
 
 ###############################################################
-# This Ising-type Lie algebra is one of only a few handful DLAs that have polynomial scaling, see [#Wiersma]_ for a full classification in 1D
+# This Ising-type Lie algebra is one of only a few handful DLAs that have polynomial scaling (see [#Wiersma]_ for a full classification in 1D)
 # and are thus efficiently simulatable [#Somma]_ [#Goh]_. Less common but also relevant
 # is the `symplectic algebra <https://en.wikipedia.org/wiki/Symplectic_group>`_ :math:`\mathfrak{sp}(2N).`
 #
