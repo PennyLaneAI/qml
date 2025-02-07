@@ -15,6 +15,7 @@ import requirements
 import json
 import lxml.html
 
+
 logger = getLogger("qml")
 
 
@@ -231,21 +232,6 @@ def _install_build_dependencies(venv: Virtualenv, build_dir: Path):
     cmds.pip_install(venv.python, "-r", build_requirements_file, use_uv=False)
 
 
-def _link_rewriter(
-    static_dir: Path, image_dir: Path, asset_paths: set[tuple[Path, str]], link: str
-):
-    if "_images/" in link:
-        _, path = link.split("_images/", maxsplit=2)
-        asset_paths.add((image_dir / path, f"images/{path}"))
-        return f"_assets/images/{path}"
-    elif "_static/" in link:
-        _, path = link.split("_static/", maxsplit=2)
-        asset_paths.add((static_dir / path, f"static/{path}"))
-        return f"_assets/static/{path}"
-
-    return link
-
-
 def _package_demo(
     demo: Demo,
     pack_dir: Path,
@@ -253,6 +239,16 @@ def _package_demo(
     sphinx_output: Path,
     sphinx_gallery_output: Path,
 ):
+    """Package a demo into a .zip file for distribution.
+
+    Args:
+        demo: The demo to package
+        pack_dir: The directory in which to place the packaged demo
+        static_dir: The /static directory in the repo root
+        sphinx_output: The directory containing the sphinx output
+        sphinx_gallery_output: The directory containing files genreated by
+            sphinx-gallery
+    """
     dest = pack_dir / demo.name
     fs.clean_dir(dest)
 
@@ -295,5 +291,30 @@ def _package_demo(
             preview_image["uri"] = path.as_posix()
             fs.copy_parents(src, dest / path)
 
+    for hardware in metadata.get("hardware", []):
+        if (uri := hardware["logo"]).startswith("/_static/"):
+            src = static_dir / uri.removeprefix("/_static/")
+            path = PurePosixPath("_assets", "logos", Path(src).name)
+            hardware["logo"] = path.as_posix()
+            fs.copy_parents(src, dest / path)
+
     with open(dest / "metadata.json", "w") as f:
         json.dump(metadata, f, indent=2)
+
+    zip_file = shutil.make_archive(dest.name, "zip", dest.parent, dest.name)
+    shutil.move(zip_file, pack_dir / f"{demo.name}.zip")
+
+
+def _link_rewriter(
+    static_dir: Path, image_dir: Path, asset_paths: set[tuple[Path, str]], link: str
+):
+    if "_images/" in link:
+        _, path = link.split("_images/", maxsplit=2)
+        asset_paths.add((image_dir / path, f"images/{path}"))
+        return f"_assets/images/{path}"
+    elif "_static/" in link:
+        _, path = link.split("_static/", maxsplit=2)
+        asset_paths.add((static_dir / path, f"static/{path}"))
+        return f"_assets/static/{path}"
+
+    return link
