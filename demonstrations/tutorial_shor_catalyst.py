@@ -21,12 +21,13 @@ JIT compilation of Shor's algorithm with PennyLane and Catalyst
 # quantum-classical algorithms*. For a time, this terminology was synonymous
 # with *variational algorithms*. However, integration with classical
 # co-processors is necessary for every quantum algorithm, even ones considered
-# quintessentially quantum. 
+# quintessentially quantum.
 #
 # Shor's famous factoring algorithm [#Shor1997]_ is one such example. Have a look at the
 # example code below:
 
 import jax.numpy as jnp
+
 
 def shors_algorithm(N):
     p, q = 0, 0
@@ -48,6 +49,7 @@ def shors_algorithm(N):
                 q = jnp.gcd(N, guess_square_root + 1)
 
     return p, q
+
 
 ######################################################################
 # If you saw this code out-of-context, would it even occur to you that it was a
@@ -87,7 +89,7 @@ def shors_algorithm(N):
 #    are used to make a guess for a non-trivial square root.
 #  - If the square root is non-trivial, we test whether we found the factors. Otherwise, we try again
 #    with more shots. Eventually, we try with a different value of a.
-#    
+#
 # For a full description of Shor's algorithm, the interested reader is referred
 # to the relevant module in the `PennyLane Codebook
 # <https://pennylane.ai/codebook/10-shors-algorithm/>`_. What's important here
@@ -149,7 +151,7 @@ def shors_algorithm(N):
 # On the other hand, in *interpreted* languages (like Python), both the source
 # program and inputs are fed to the interpreter, which processes them line
 # by line, and directly gives us the program output.
-# 
+#
 # Compiled and interpreted languages, and languages within each category, all
 # have unique strengths and weakness. Compilation will generally lead to faster
 # execution, but can be harder to debug than interpretation, where execution can
@@ -158,7 +160,7 @@ def shors_algorithm(N):
 # that lies, in some sense, at the boundary between the two.
 #
 # Just-in-time compilation involves compiling code *during* execution, for instance,
-# while an interpreter is doing its job. 
+# while an interpreter is doing its job.
 #
 
 ######################################################################
@@ -225,7 +227,7 @@ def shors_algorithm(N):
 # :math:`t` controlled operations, instead of :math:`1 + 2 + 4 + \cdots +
 # 2^{t-1} = 2^t - 1`.
 #
-# Next, let's zoom in on an arbitrary controlled-:math:`U_a`. 
+# Next, let's zoom in on an arbitrary controlled-:math:`U_a`.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/c-ua.svg
 #    :width: 700
@@ -241,7 +243,7 @@ def shors_algorithm(N):
 #
 # :math:`M_a` multiplies the contents of one register by :math:`a` and adds it to
 # another register, in place and modulo :math:`N`,
-# 
+#
 # .. math::
 #
 #     M_a \vert x \rangle \vert b \rangle \vert 0 \rangle =  \vert x \rangle \vert (b + ax) \pmod N \rangle \vert 0 \rangle.
@@ -264,12 +266,12 @@ def shors_algorithm(N):
 # A high-level implementation of a controlled :math:`M_a` is shown below.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/doubly-controlled-adder-with-control.svg
-#    :width: 700 
+#    :width: 700
 #    :align: center
 #    :alt: Controlled addition of :math:`ax` using a series of double-controlled Fourier adders.
 #
 #    Circuit for controlled addition of :math:`ax` using a series of double-controlled Fourier adders.
-#    [#Beauregard2003]_. 
+#    [#Beauregard2003]_.
 #
 # First, note the controls on the quantum Fourier transforms (QFTs) are not
 # needed. If we remove them and :math:`\vert c \rangle = \vert 1 \rangle`, the
@@ -279,7 +281,7 @@ def shors_algorithm(N):
 # useful!). This yields the circuit below.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/doubly-controlled-adder-with-control-not-on-qft.svg
-#    :width: 700 
+#    :width: 700
 #    :align: center
 #    :alt: Controlled addition of :math:`ax` using a series of double-controlled Fourier adders, controls on QFT removed.
 #
@@ -299,7 +301,7 @@ def shors_algorithm(N):
 # addition*, :math:`\Phi`, is shown below.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder.svg
-#    :width: 700 
+#    :width: 700
 #    :align: center
 #    :alt: Addition in the Fourier basis.
 #
@@ -311,7 +313,7 @@ def shors_algorithm(N):
 #
 # To understand how Fourier addition works, we begin by revisiting the QFT.
 #
-# .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_explanation-1.svg 
+# .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_explanation-1.svg
 #    :width: 800
 #    :align: center
 #    :alt: The Quantum Fourier Transform.
@@ -334,7 +336,7 @@ def shors_algorithm(N):
 # addition of phases to qubits in :math:`\vert b \rangle` (after a QFT is
 # applied) in a very particular way:
 #
-# .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_explanation-2.svg 
+# .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_explanation-2.svg
 #    :width: 800
 #    :align: center
 #    :alt: Adding one integer to another with the Quantum Fourier Transform.
@@ -370,16 +372,16 @@ def shors_algorithm(N):
 #
 # The final circuit for the Fourier adder is
 #
-# .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_explanation-4.svg 
-#    :width: 500 
+# .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_explanation-4.svg
+#    :width: 500
 #    :align: center
 #    :alt: Full Fourier adder.
 #
 # As one may expect, :math:`\Phi^\dagger` performs subtraction. However, we must
 # also consider the possibility of underflow.
 #
-# .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_adjoint.svg 
-#    :width: 500 
+# .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_adjoint.svg
+#    :width: 500
 #    :align: center
 #    :alt: Subtraction in the Fourier basis.
 #
@@ -388,7 +390,7 @@ def shors_algorithm(N):
 # auxiliary qubit and some extra operations, it will work modulo :math:`N`.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_modulo_n.svg
-#    :width: 800 
+#    :width: 800
 #    :align: center
 #    :alt: Addition in the Fourier basis modulo N.
 #
@@ -491,7 +493,7 @@ def shors_algorithm(N):
 #    :alt: Leveraging knowledge of :math:`a` to eliminate unnecessary doubly-controlled additions.
 #
 #    Leveraging knowledge of :math:`a` to eliminate unnecessary doubly-controlled additions.
-# 
+#
 # Depending on the choice of :math:`a`, this could be major savings, especially
 # at the beginning of the algorithm where very few basis states are
 # involved. The same trick can be used in the portion of the
@@ -530,7 +532,7 @@ def shors_algorithm(N):
 #  This last optimization will not be included in our implementation. We again
 #  expect it to have diminishing returns as more iterations of the algorthm are
 #  performed.
-# 
+#
 #
 # The "single-qubit" QPE
 # ~~~~~~~~~~~~~~~~~~~~~~
@@ -621,7 +623,7 @@ def shors_algorithm(N):
 # the QFT and inverse QFT are applied before and after each :math:`M_a` block,
 # so we can remove the ones that occur between the different controlled
 # :math:`U_a` such that the only ones remaining are the very first and last, and
-# those before and after the controlled SWAPs. 
+# those before and after the controlled SWAPs.
 
 ######################################################################
 # Catalyst implementation
@@ -629,7 +631,7 @@ def shors_algorithm(N):
 #
 # With all our circuits in hand, we can code up the full implementation of
 # Shor's algorithm in PennyLane and Catalyst.
-# 
+#
 # First, we require some utility functions for modular arithemetic:
 # exponentiation by repeated squaring (to avoid overflow when exponentiating
 # large integers), and computation of inverses modulo :math:`N`. Note that the
@@ -769,6 +771,7 @@ def phase_to_order(phase, max_denominator):
 import pennylane as qml
 import catalyst
 from catalyst import measure
+
 catalyst.autograph_strict_conversion = True
 
 from utils import modular_inverse
@@ -783,7 +786,6 @@ def QFT(wires):
 
         for j in range(len(shifts) - i):
             qml.ControlledPhaseShift(shifts[j], wires=[wires[(i + 1) + j], wires[i]])
-
 
 
 def fourier_adder_phase_shift(a, wires):
@@ -832,8 +834,6 @@ def controlled_ua(N, a, control_wire, target_wires, aux_wires, mult_a_mask, mult
     for i in range(n):
         if mult_a_mask[n - i - 1] > 0:
             pow_a = (a * (2**i)) % N
-
-            # u print(f"Applying controlled multiplication from wire {n - i - 1} to add {pow_a}")
             doubly_controlled_adder(
                 N, pow_a, [control_wire, target_wires[n - i - 1]], aux_wires[:-1], aux_wires[-1]
             )
@@ -863,73 +863,122 @@ def controlled_ua(N, a, control_wire, target_wires, aux_wires, mult_a_mask, mult
                 aux_wires[-1],
             )
 
+
 ######################################################################
 # Next, let's put everything together into the order-finding routine
 # that is part of Shor's algorithm. We can implement the entire algorithm
 # within the ``@qml.qjit`` decorator.
 
-@qml.qjit(autograph=True, static_argnums=(2, 3))
-def shors_algorithm(N, a, n_bits, max_shots=100):
-    """Execute Shor's algorithm and return the factors of N, if found."""
-    estimation_wire = 0
+
+@qml.qjit(autograph=True, static_argnums=(2))
+def shors_algorithm(N, a, n_bits):
+    """Execute Shor's algorithm and return a solution.
+
+    Order-finding is essentially QPE with some post-processing. In this function,
+    we use a special version of QPE that performs measure-and-reset.
+
+    Args:
+        N (int): The number we are trying to factor. Guaranteed to be the product
+            of two unique prime numbers.
+        a (int): Random integer guess for finding a non-trivial square root.
+        n_bits (int): The number of bits in N
+        shots (int): The number of shots to take for each candidate value of a
+
+    Returns:
+        int, int: If a solution is found, returns p, q such that N = pq. Otherwise
+        returns 0, 0.
+    """
+    est_wire = 0
     target_wires = jnp.arange(n_bits) + 1
     aux_wires = jnp.arange(n_bits + 2) + n_bits + 1
 
     dev = qml.device("lightning.qubit", wires=2 * n_bits + 3, shots=1)
 
-    # Order-finding routine - the "quantum part"
     @qml.qnode(dev)
     def run_qpe(a):
         meas_results = jnp.zeros((n_bits,), dtype=jnp.int32)
         cumulative_phase = jnp.array(0.0)
         phase_divisors = 2.0 ** jnp.arange(n_bits + 1, 1, -1)
-        
+
+        a_mask = jnp.zeros(n_bits, dtype=jnp.int64)
+        a_mask = a_mask.at[0].set(1) + jnp.array(
+            jnp.unpackbits(jnp.array([a]).view("uint8"), bitorder="little")[:n_bits]
+        )
+        a_inv_mask = a_mask
+
         qml.PauliX(wires=target_wires[-1])
 
         QFT(wires=aux_wires[:-1])
-        
-        for i in range(n_bits):
-            power_of_a = (a ** (2 ** (n_bits - 1 - i))) % N
 
-            qml.Hadamard(wires=estimation_wire)
-            controlled_ua(N, power_of_a, estimation_wire, target_wires, aux_wires)
+        # First iteration: add a - 1 using the Fourier adder.
+        qml.Hadamard(wires=est_wire)
 
-            # Measure, then compute corrective phase for next round
-            qml.PhaseShift(cumulative_phase, wires=estimation_wire)
-            meas_results[i] = measure(estimation_wire, reset=True)
-            cumulative_phase = -2 * jnp.pi * jnp.sum(meas_results / jnp.roll(phase_divisors, i + 1))
+        QFT(wires=target_wires)
+        qml.ctrl(fourier_adder_phase_shift, control=est_wire)(a - 1, target_wires)
+        qml.adjoint(QFT)(wires=target_wires)
 
-        qml.adjoint(QFT)(wires=aux_wires[:-1])    
+        qml.Hadamard(wires=est_wire)
+        meas_results[0] = measure(est_wire, reset=True)
+        cumulative_phase = -2 * jnp.pi * jnp.sum(meas_results / jnp.roll(phase_divisors, 1))
+
+        # For subsequent iterations, determine powers of a, and controlled U_a when needed
+        # (i.e., when the power is not equal to 1) using the two "mask" variables.
+        powers_cua = jnp.array([repeated_squaring(a, 2**p, N) for p in range(n_bits)])
+
+        loop_bound = n_bits
+        if jnp.min(powers_cua) == 1:
+            loop_bound = jnp.argmin(powers_cua)
+
+        for pow_a_idx in range(1, loop_bound):
+            pow_cua = powers_cua[pow_a_idx]
+
+            if not jnp.all(a_inv_mask):
+                for power in range(2**pow_a_idx, 2 ** (pow_a_idx + 1)):
+                    next_pow_a = jnp.array([repeated_squaring(a, power, N)])
+                    a_inv_mask = a_inv_mask + jnp.array(
+                        jnp.unpackbits(next_pow_a.view("uint8"), bitorder="little")[:n_bits]
+                    )
+
+            qml.Hadamard(wires=est_wire)
+
+            controlled_ua(N, pow_cua, est_wire, target_wires, aux_wires, a_mask, a_inv_mask)
+
+            a_mask = a_mask + a_inv_mask
+            a_inv_mask = jnp.zeros_like(a_inv_mask)
+
+            qml.PhaseShift(cumulative_phase, wires=est_wire)
+            qml.Hadamard(wires=est_wire)
+            meas_results[pow_a_idx] = measure(est_wire, reset=True)
+            cumulative_phase = (
+                -2 * jnp.pi * jnp.sum(meas_results / jnp.roll(phase_divisors, pow_a_idx + 1))
+            )
+
+        qml.adjoint(QFT)(wires=aux_wires[:-1])
 
         return meas_results
 
-    # The classical part
-    shot_idx = 0
+    # The "classical part" of Shor's algorithm is compiled alongside the quantum part
     p, q = jnp.array(0, dtype=jnp.int32), jnp.array(0, dtype=jnp.int32)
 
-    while p * q != N and shot_idx < max_shots:
-        sample = run_qpe(a)
-        phase = fractional_binary_to_float(sample)
-        guess_r = phase_to_order(phase, N)
+    sample = run_qpe(a)
+    phase = fractional_binary_to_float(sample)
+    guess_r = phase_to_order(phase, N)
 
-        # If the guess order is even, we may have a non-trivial square root.
-        # If so, try to compute p and q.
-        if guess_r % 2 == 0:
-            guess_square_root = (a ** (guess_r // 2)) % N
+    if guess_r % 2 == 0:
+        guess_square_root = (a ** (guess_r // 2)) % N
 
-            if guess_square_root != 1 and guess_square_root != N - 1:
-                p = jnp.gcd(guess_square_root - 1, N).astype(jnp.int32)
+        if guess_square_root != 1 and guess_square_root != N - 1:
+            p = jnp.gcd(guess_square_root - 1, N).astype(jnp.int32)
 
-                if p != 1:
-                    q = N // p
-                else:
-                    q = jnp.gcd(guess_square_root + 1, N).astype(jnp.int32)
+            if p != 1:
+                q = N // p
+            else:
+                q = jnp.gcd(guess_square_root + 1, N).astype(jnp.int32)
 
-                    if q != 1:
-                        p = N // q
-        shot_idx += 1
+                if q != 1:
+                    p = N // q
 
-    return p, q, shot_idx
+    return p, q
 
 
 ######################################################################
@@ -942,20 +991,20 @@ def shors_algorithm(N, a, n_bits, max_shots=100):
 ######################################################################
 # JIT compilation and performance
 # -------------------------------
-# 
+#
 # TODO: show how everything gets put together and JITted
 #
 # TODO: discussions about technical details and challenges; autograph and
 # control flow, dynamically-sized arrays, etc.
-# 
-# TODO: plots of performance 
+#
+# TODO: plots of performance
 
 # TODO: relevant code
 
 ######################################################################
 # Conclusions
 # -----------
-# 
+#
 # TODO
 #
 # References
