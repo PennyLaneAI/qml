@@ -139,13 +139,13 @@ def penn_iqp_gates(params: np.ndarray, gates: list, n_qubits: int):
 # specified by lists of the form ``op`` above.
 # 
 def penn_obs(op: np.ndarray) -> qml.operation.Observable:
-    """Returns a pennylane observable from a bitstring representation.
+    """Returns a PennyLane observable from a bitstring representation.
 
     Args:
         op (np.ndarray): Bitstring representation of the Z operator.
 
     Returns:
-        qml.Observable: Pennylane observable.
+        qml.Observable: PennyLane observable.
     """
     for i, z in enumerate(op):
         if i==0:
@@ -159,7 +159,7 @@ def penn_obs(op: np.ndarray) -> qml.operation.Observable:
     return obs
 
 def penn_iqp_circuit(params: np.ndarray, gates: list, op: np.ndarray, n_qubits: int) -> qml.measurements.ExpectationMP:
-    """Defines the circuit that calculates the expectation value of the operator with the IQP circuit with pennylane tools.
+    """Defines the circuit that calculates the expectation value of the operator with the IQP circuit with PennyLane tools.
 
     Args:
         params (np.ndarray): The parameters of the IQP gates.
@@ -168,14 +168,14 @@ def penn_iqp_circuit(params: np.ndarray, gates: list, op: np.ndarray, n_qubits: 
         n_qubits (int): The total number of qubits in the circuit.
 
     Returns:
-        qml.measurements.ExpectationMP: Pennylane circuit with an expectation value.
+        qml.measurements.ExpectationMP: PennyLane circuit with an expectation value.
     """
     penn_iqp_gates(params, gates, n_qubits)
     obs = penn_obs(op)
     return qml.expval(obs)
 
 def penn_iqp_op_expval(params: np.ndarray, gates: list, op: np.ndarray, n_qubits: int) -> float:
-    """Calculates the expectation value of the operator with the IQP circuit with pennylane tools.
+    """Calculates the expectation value of the operator with the IQP circuit with PennyLane tools.
 
     Args:
         params (np.ndarray): The parameters of the IQP gates.
@@ -191,7 +191,7 @@ def penn_iqp_op_expval(params: np.ndarray, gates: list, op: np.ndarray, n_qubits
     return penn_iqp_circuit_exe(params, gates, op, n_qubits)
 
 ######################################################################
-# With this, we can now calculate all expectation values of Pauli Z tensors of any parameterizec IQP
+# With this, we can now calculate all expectation values of Pauli Z tensors of any parameterized IQP
 # circuit we can think of. Let's see an example using our ``gates`` list from above.
 # 
 n_qubits = 3
@@ -219,7 +219,7 @@ print(penn_op_expval)
 # expectation value of, :math:`\boldsymbol{z}` are bitstring samples taken from the uniform
 # distribution, :math:`\theta_{j}` are the trainable parameters and :math:`\boldsymbol{g}_{j}` are the
 # different generators also in bitstring form. Although this expression is exact, computing the
-# expectation exactly requires an infite number of samples :math:`\boldsymbol{z}`. Instead, we can
+# expectation exactly requires an infinite number of samples :math:`\boldsymbol{z}`. Instead, we can
 # replace the expectation with an empirical mean and compute an unbiased estimate of
 # :math:`\langle Z_{\boldsymbol{a}} \rangle` efficiently. That is, if we sample a batch of :math:`s`
 # bitstrings :math:`\{\boldsymbol{z}_i\}` from the uniform distribution and compute the sample mean
@@ -233,7 +233,7 @@ print(penn_op_expval)
 # deviation of the sample mean of a bounded random variable decreases as
 # :math:`\mathcal{O}(1/\sqrt{s})`.
 # 
-# Lets see now how to use the IQPopt package to calculate expectation values, using the same
+# Lets see now how to use the IQPopt package to calculate expectation values, based on the same
 # arguments we used in the previous example. First, we create the circuit object with ``IqpSimulator``
 # only with the number of qubits of the circuit and the ``gates`` parameter already explained:
 # 
@@ -261,8 +261,8 @@ expval, std = small_circuit.op_expval(params, op, n_samples, key)
 print(expval, std)
 
 ######################################################################
-# Since the calculation on ``iqpopt``\ 's side is stochastic, the result is not exactly the same than
-# the one obtained with pennylane. But, as we can see, they are within std error. You can try
+# Since the calculation on ``iqpopt``\ 's side is stochastic, the result is not exactly the same as
+# the one obtained with PennyLane. But, as we can see, they are within the standard error `std`. You can try
 # increasing ``n_samples`` in order to obtain closer approximations.
 # 
 # This function also allows for fast batch evaluation of expectation values. If we specify a batch of
@@ -276,7 +276,7 @@ expvals, stds = small_circuit.op_expval(params, ops, n_samples, key)
 print(expvals, stds)
 
 ######################################################################
-# With pennylane it would be very time consuming to pass the 30 qubit mark, but with IQPopt, we can
+# With PennyLane, it would be very time consuming to pass the 30 qubit mark, but with IQPopt, we can
 # easily go way further than that.
 # 
 n_qubits = 1000
@@ -305,18 +305,18 @@ print(expval, std)
 # Sampling and probabilities
 # --------------------------
 # 
-# If we measure the output qubits of an IQP circuit we generate samples of binary vectors according to
+# If we measure the output qubits of an IQP circuit, we generate samples of binary vectors according to
 # the distribution
 # 
 # .. math:: q_{\boldsymbol{\theta}}(\boldsymbol{x}) \equiv q(\boldsymbol{x}\vert\boldsymbol{\theta})=\vert (\langle \boldsymbol{x} \vert U(\boldsymbol{\theta})\vert 0 \rangle )\vert^2.
 # 
 # Where :math:`U(\boldsymbol{\theta})` is the parametrized IQP gates. For a low number of qubits, we
-# can use Pennylane to obtain the output probabilities of the circuit as well as sample from it. Note
+# can use PennyLane to obtain the output probabilities of the circuit as well as sample from it. Note
 # that there is not an efficient algorithm to do these so for large numbers of qubits so PennyLane
 # returns an error in this case.
 # 
 # These functions are already implemented in the ``IqpSimulator`` object. The ``.probs()`` method
-# works as it does in pennylane, the returned array of probabilities is in lexicographic order.
+# works as it does in PennyLane, where the returned array of probabilities is in lexicographic order.
 # 
 sample = small_circuit.sample(params, shots=1)
 print(sample)
@@ -395,7 +395,7 @@ plt.show()
 # Optimizing an IQPopt circuit
 # ----------------------------
 # 
-# Circuits can be optimized via a separate ``Trainer`` class. To instantiate a trainer object we first
+# Circuits can be optimized via a separate ``Trainer`` class. To instantiate a trainer object, we first
 # define a loss function (also called an objective function), an optimizer and an initial stepsize for
 # the gradient descent. Continuing our ``small_circuit`` example from before, below we define a simple
 # loss function that is a sum of expectation values returned by ``.op_expval()`` .
@@ -477,7 +477,7 @@ mmd = genq.mmd_loss_samples(X1, X2, sigma)
 print(mmd)
 
 ######################################################################
-# This metric can also be estimated efficiently with expectation values of PauliZ operators only [7].
+# This metric can also be estimated efficiently with expectation values of Pauli Z operators only [7].
 # This means that if we have an ``IqpSimulator`` object, we can also estiamte the MMD loss.
 # 
 # The implementation in the ``gen_qml`` module only needs an additional parameter, ``n_ops``, that
@@ -543,7 +543,7 @@ plt.show()
 
 ######################################################################
 # We can now try to see how well this generative IQP circuit resembles the ground truth. Since we are
-# not working with a large number of qubits, we can sample from the circuit with the pennylane
+# not working with a large number of qubits, we can sample from the circuit with the PennyLane
 # machinery. We can then compare our trained and untrained samples with the ground truth through a
 # histogram of the bitstring weights and evaluate the distributions.
 # 
@@ -567,10 +567,10 @@ plt.show()
 
 ######################################################################
 # As we can see the trained circuit closely resembles the ground truth distribution. Although we won't
-# cover it in this demo, the pacakge also contains tools to evaluate generative models and invtesigate
+# cover it in this demo, the package also contains tools to evaluate generative models and investigate
 # model dropping via the Kernel Generalized Empirical Likelikood.
 # 
-# As a final takeaway, we remark that IQPopt is perhaps the only tool for researchers analyze large
+# As a final takeaway, we remark that IQPopt is perhaps the only tool for researchers to analyze large
 # circuits with potential advantages using numerical methods. By doing so, it opens up opportunities
 # to explore systems that are too intricate for traditional pen-and-paper calculations and, as a
 # result, it has the potential to uncover insights that were previously inaccessible.
