@@ -71,17 +71,18 @@ class RequirementsGenerator:
                 "compile",
                 "--index-strategy",
                 "unsafe-best-match",
-                "--emit-index-url",
-                "--constraints",
-                str(constraints_file),
-                "--output-file",
-                str(requirements_file),
                 "--no-header",
                 "--no-strip-extras",
                 "--no-strip-markers",
                 "--universal",
                 "--quiet",
                 "--no-annotate",
+                "--no-deps",
+                "--emit-index-url",
+                "--constraints",
+                str(constraints_file),
+                "--output-file",
+                str(requirements_file),
             ]
             for index_url in self.extra_index_urls:
                 cmd.extend(("--extra-index-url", index_url))
