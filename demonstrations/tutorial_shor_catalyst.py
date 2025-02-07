@@ -165,68 +165,75 @@ def shors_algorithm(N):
 # The quantum part
 # ^^^^^^^^^^^^^^^^
 #
-# In this section we describe the circuits that make up the quantum subroutine
-# in Shor's algorithm, i.e., the order-finding routine. The presented
+# In this section we describe the circuits comprising the quantum subroutine
+# in Shor's algorithm, i.e., the order-finding algorithm. The presented
 # implementation is based on [#Beauregard2003]_. For an integer :math:`N` with
 # an :math:`n = \lceil \log_2 N \rceil`-bit representation, the circuit requires
-# :math:`2n + 3` qubits. Of these, :math:`n + 1` are for computation and
+# :math:`2n + 3` qubits, where :math:`n + 1` are for computation and
 # :math:`n + 2` are auxiliary.
 #
-# Order finding is an application of *quantum phase estimation*. We wish to 
-# estimate the phase, :math:`\theta`, of the operator :math:`U_a`,
+# Order finding is an application of *quantum phase estimation* (QPE) for the
+# operator
 #
 # .. math::
 #
 #     U_a \vert x \rangle = \vert ax \pmod N \rangle
 #
-# where the :math:`\vert x \rangle` is the binary representation of integer
+# where :math:`\vert x \rangle` is the binary representation of integer
 # :math:`x`, and :math:`a` is the randomly-generated integer discussed
-# above. The full QPE circuit, using :math:`t` estimation wires, is presented
-# below.
+# above. The full QPE circuit for producing a :math:`t`-bit estimate of the
+# phase :math:`\theta` is presented below.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/qpe_full.svg
 #    :width: 600
 #    :align: center
 #    :alt: Quantum phase estimation circuit for order finding.
 #
-# This high-level view of the circuit hides its complexity, given that the
+#    Initial circuit for order finding with quantum phase estimation (QPE).
+#
+# This high-level view of the circuit hides its complexity, since the
 # implementation details of :math:`U_a` are not shown and auxiliary qubits are
 # omitted. In what follows, we'll leverage shortcuts afforded by the hybrid
-# nature of computation, and from Catalyst. Specifically, with mid-circuit
+# nature of computation, and Catalyst. Specifically, with mid-circuit
 # measurement and reset we can reduce the number of estimation wires to
-# :math:`t=1`. Most of the required arithmetic will be performed in the Fourier
-# basis. Since we know :math:`a` in advance, we can vary circuit structure on
-# the fly and save resources. Finally, additional mid-circuit measurements can
-# be used in lieu of uncomputation.
+# :math:`t=1`. Most of the arithmetic will be performed in the Fourier
+# basis. Moreover, since we know :math:`a` in advance, we can vary circuit
+# structure on the fly and save resources.
 #
-# First, we'll use our knowledge of classical parameters to simplify the
+# First, we'll use our classical knowledge of :math:`a` to simplify the
 # implementation of the controlled :math:`U_a^{2^k}`. Naively, it looks like we
 # must apply a controlled :math:`U_a` operation :math:`2^k` times. However, note
 #
 # .. math::
 #
-#     U_a^{2^k}\vert x \rangle = \vert (a \cdot a \cdots a) x \pmod N \rangle = \vert a^{2^k}x \pmod N \rangle = U_{a^{2^k}} \vert x \rangle
+#     U_a^{2^k}\vert x \rangle = \vert (a \cdot a \cdots a) x \pmod N \rangle = \vert a^{2^k}x \pmod N \rangle = U_{a^{2^k}} \vert x \rangle.
 #
-# Since :math:`a` is known in advance, we can classically evaluate
-# :math:`a^{2^k}` and implement controlled-:math:`U_{a^{2^k}}` instead.
+# But since :math:`a` is known, we can classically evaluate :math:`a^{2^k} \pmod
+# N` and implement controlled-:math:`U_{a^{2^k}}` instead.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/qpe_full_modified_power.svg
 #    :width: 600
 #    :align: center
 #    :alt: Order finding with controlled operations that take advantage of classical precomputation.
 #
-# There is a tradeoff here: since each controlled operation is now different, we
-# will have to optimize each circuit separately during compilation. However,
-# additional compilation time could be outweighed by the fact that we must now
-# run only :math:`t` controlled operations, instead of :math:`1 + 2 + 4 + \cdots
-# + 2^{t-1} = 2^t - 1`. Later we'll also jit-compile the circuit construction.
+#    Leveraging knowledge of :math:`a` allows us to precompute powers for the
+#    controlled :math:`U_a`.
+#
+# There is a tradeoff here, however. Each controlled operation is different, so
+# we must compile and optimize more than one circuit. However, additional
+# compilation time could be outweighed by the fact that we now run only
+# :math:`t` controlled operations, instead of :math:`1 + 2 + 4 + \cdots +
+# 2^{t-1} = 2^t - 1`.
 #
 # Next, let's zoom in on an arbitrary controlled-:math:`U_a`. 
-# 
+#
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/c-ua.svg
 #    :width: 700
 #    :align: center
 #    :alt: Quantum phase estimation circuit for order finding.
+#
+#    Implementing a controlled :math:`U_a` with modular arithmetic
+#    [#Beauregard2003]_.
 #
 # The control qubit, :math:`\vert c\rangle`, is an estimation qubit. The
 # register :math:`\vert x \rangle` and the auxiliary register contain :math:`n`
@@ -239,7 +246,7 @@ def shors_algorithm(N):
 #
 #     M_a \vert x \rangle \vert b \rangle \vert 0 \rangle =  \vert x \rangle \vert (b + ax) \pmod N \rangle \vert 0 \rangle.
 #
-# Ignoring the control qubit, let's validate that this circuit implements
+# Ignoring the control qubit, we can validate this circuit implements
 # :math:`U_a`:
 #
 # .. math::
@@ -254,93 +261,107 @@ def shors_algorithm(N):
 # where we've omitted the "mod :math:`N`" for readability, and used the fact
 # that the adjoint of addition is subtraction.
 #
-# A high-level implementation of a controled :math:`M_a` is shown below.
+# A high-level implementation of a controlled :math:`M_a` is shown below.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/doubly-controlled-adder-with-control.svg
 #    :width: 700 
 #    :align: center
-#    :alt: Doubly-controlled adder.
+#    :alt: Controlled addition of :math:`ax` using a series of double-controlled Fourier adders.
 #
-# First, note that the controls on the QFTs are not needed. If we remove them
-# and :math:`\vert c \rangle = \vert 1 \rangle`, the circuit works as
-# expected. If :math:`\vert c \rangle = \vert 0 \rangle`, they would run but
-# cancel each other out, since none of the interior operations execute (note
-# that this optimization is broadly applicable, and quite useful!). This yields
-# the circuit below.
+#    Circuit for controlled addition of :math:`ax` using a series of double-controlled Fourier adders.
+#    [#Beauregard2003]_. 
+#
+# First, note the controls on the quantum Fourier transforms (QFTs) are not
+# needed. If we remove them and :math:`\vert c \rangle = \vert 1 \rangle`, the
+# circuit works as expected. If :math:`\vert c \rangle = \vert 0 \rangle`, they
+# run, but cancel each other out since none of the interior operations execute
+# (this optimization is broadly applicable to controlled operations, and quite
+# useful!). This yields the circuit below.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/doubly-controlled-adder-with-control-not-on-qft.svg
 #    :width: 700 
 #    :align: center
-#    :alt: Doubly-controlled adder.
+#    :alt: Controlled addition of :math:`ax` using a series of double-controlled Fourier adders, controls on QFT removed.
 #
-# At first glance, it may not be clear how :math:`a x` is created. The qubits in
-# register :math:`\vert x \rangle` are controlling operations that depend on
-# :math:`a`, multiplied by various powers of 2. There is also a QFT before and
-# after, whose purpose is unclear.
+#    The controls on the QFT can be removed without altering the function of the circuit
+#    [#Beauregard2003]_.
+#
+# At first glance it not clear how :math:`a x` is obtained. The qubits in
+# register :math:`\vert x \rangle` control operations that depend on :math:`a`
+# multiplied by various powers of 2. There is a QFT before and after, whose
+# purpose is unclear, and we have yet to define :math:`\Phi_+`.
 #
 # These special operations perform *addition in the Fourier basis*
-# [#Draper2000]_. This is another trick we can leverage, given prior knowledge
-# of :math:`a`. Rather than performing explicit addition on bits in
-# computational basis states, we can apply a Fourier transform, adjust the
-# phases based on the bits in the number we wish to add, then inverse Fourier
-# transform to obtain the result. We present the circuit for the *Fourier
-# adder*, :math:`\Phi`, below.
+# [#Draper2000]_. This is another trick we can leverage given prior knowledge of
+# :math:`a`. Rather than performing addition on bits in computational basis
+# states, we can apply a QFT, adjust the phases based on the bits of the number
+# being added, then inverse QFT to obtain the result. The circuit for *Fourier
+# addition*, :math:`\Phi`, is shown below.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder.svg
-#    :width: 800 
+#    :width: 700 
 #    :align: center
 #    :alt: Addition in the Fourier basis.
 #
+#    Circuit for addition in the Fourier basis [#Draper2000]_.
+#
 # In the third circuit, we've absorbed the Fourier transforms into the basis
-# states, and denoted this using a calligraphic letter.  The
-# :math:`\mathbf{R}_k` are phase shifts, to be described below. To see how this
-# works, let's first take a closer look at the QFT. The qubit ordering in the
-# circuit is such that for an :math:`n`-bit integer :math:`b`, :math:`\vert
-# b\rangle = \vert b_{n-1} \cdots b_0\rangle` and :math:`b = \sum_{k=0}^{n-1}
-# 2^k b_k`.
+# states, and denoted this by calligraphic letters. The :math:`\mathbf{R}_k` are
+# phase shifts based on :math:`a`, and will be described below.
+#
+# To understand how Fourier addition works, we begin by revisiting the QFT.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_explanation-1.svg 
-#    :width: 800 
+#    :width: 800
 #    :align: center
 #    :alt: The Quantum Fourier Transform.
 #
-# where
+#    Circuit for the quantum Fourier transform. Note the big-endian qubit ordering with
+#    no terminal SWAP gates.
+#
+# In this circuit we define the phase gate
 #
 # .. math::
 #
 #     R_k = \begin{pmatrix} 1 & 0 \\ 0 & e^{\frac{2\pi i}{2^k}} \end{pmatrix}.
 #
-# Let's add a new register, prepared in the basis state :math:`\vert a \rangle`.
-# In the next circuit, we control on qubits in :math:`\vert a \rangle` to modify
-# the phases in :math:`\vert b \rangle` (after a QFT is applied) in a very
-# particular way:
+# The qubits are ordered using big endian notation. For an :math:`n`-bit integer
+# :math:`b`, :math:`\vert b\rangle = \vert b_{n-1} \cdots b_0\rangle` and
+# :math:`b = \sum_{k=0}^{n-1} 2^k b_k`.
+#
+# Suppose we wish to add :math:`a` to :math:`b`. We can add a new register
+# prepared in :math:`\vert a \rangle`, and use its qubits to control the
+# addition of phases to qubits in :math:`\vert b \rangle` (after a QFT is
+# applied) in a very particular way:
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_explanation-2.svg 
-#    :width: 800 
+#    :width: 800
 #    :align: center
 #    :alt: Adding one integer to another with the Quantum Fourier Transform.
 #
-# We observe each qubit in :math:`\vert b \rangle` picks up a phase that depends
-# on the bits in :math:`a`. In particular, bit :math:`b_k` accumulates
-# information about all the bits in :math:`a` with an equal or lower index,
-# :math:`a_0, \ldots, a_{k}`. The effect is that of adding :math:`a_k` to
-# :math:`b_k`; looking across the entire register, we are adding :math:`a` to
-# :math:`b`, up to an inverse Fourier transform!
+#    Fourier addition of :math:`a` to :math:`b`. The bit values of :math:`a`
+#    determine the amount of phase added to the qubits in :math:`b` [#Draper2000]_.
 #
-# .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_explanation-3.svg 
-#    :width: 800 
+# Each qubit in :math:`\vert b \rangle` picks up a phase that depends on the
+# bits in :math:`a`. In particular, the :math:`k`'th bit of :math:`b`
+# accumulates information about all the bits in :math:`a` with an equal or lower
+# index, :math:`a_0, \ldots, a_{k}`. This adds :math:`a_k` to :math:`b_k`; the
+# cumulative effect adds :math:`a` to :math:`b`, up to an inverse QFT!
+#
+# .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_explanation-3.svg
+#    :width: 800
 #    :align: center
 #    :alt: Adding one integer to another with the Quantum Fourier Transform.
 #
 # However, we must be careful. Fourier basis addition is *not* automatically
 # modulo :math:`N`. If the sum :math:`b + a` requires :math:`n+ 1` bits, it will
-# overflow. To handle that, one extra qubit is added to the top of the
-# :math:`\vert b\rangle` register (initialized to :math:`\vert 0 \rangle`). This
-# is the source of one of the auxiliary qubits mentioned earlier.
+# overflow. To handle that, one extra qubit is added to the :math:`\vert
+# b\rangle` register (initialized to :math:`\vert 0 \rangle`). This is the
+# source of one of the auxiliary qubits mentioned earlier.
 #
-# In our case, we don't actually need a second register of qubits. Since we know :math:`a`
-# in advance, we can precompute the amount of phase to apply: on qubit
-# :math:`\vert b_k \rangle`, we must rotate by :math:`\sum_{\ell=0}^{k}
+# In our case, a second register of qubits is not required. Since we know
+# :math:`a` in advance, we can precompute the amount of phase to apply: qubit
+# :math:`\vert b_k \rangle` must be rotated by :math:`\sum_{\ell=0}^{k}
 # \frac{a_\ell}{2^{\ell+1}}`. We'll express this as a new gate,
 #
 # .. math::
@@ -362,48 +383,47 @@ def shors_algorithm(N):
 #    :align: center
 #    :alt: Subtraction in the Fourier basis.
 #
-# Returning to :math:`M_a`, we have :math:`\Phi_+` which is similar to
-# :math:`\Phi`, but it (a) uses an auxiliary qubit, and (b) works modulo
-# :math:`N`. :math:`\Phi_+` still uses Fourier basis addition and subtraction,
-# but also applies corrections if overflow is detected. Let's consider a single
-# instance of a controlled :math:`\Phi_+(a)`,
+# Returning to :math:`M_a`, we have a doubly-controlled
+# :math:`\Phi_+`. :math:`\Phi_+` is similar to :math:`\Phi` but by using an
+# auxiliary qubit and some extra operations, it will work modulo :math:`N`.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_modulo_n.svg
 #    :width: 800 
 #    :align: center
 #    :alt: Addition in the Fourier basis modulo N.
 #
-# Let's step through the various cases of this circuit, keeping in mind 
-# :math:`a < N` and :math:`b < N`, and the register has :math:`n + 1` bits.
-# 
-# Suppose the control qubits are both :math:`\vert 1 \rangle`. We add
-# :math:`a` to :math:`b`, then subtract :math:`N`. If :math:`a + b \geq N`, we
-# get overflow on the top qubit (which was included to account for precisely
-# this), but subtraction gives us the correct result modulo :math:`N`. After
-# shifting back to the computational basis, the topmost qubit is in :math:`\vert
-# 0 \rangle` so the CNOT does not trigger. Next, we subtract :math:`a` from the
-# register in, now in state :math:`\vert a + b - N \pmod N \rangle`. We obtain :math:`\vert b -
-# N \rangle`, which, since `b < N`, leads to underflow. The top bit in
-# state :math:`\vert 1 \rangle` does not trigger the controlled-on-zero CNOT,
-# and our auxiliary qubit is untouched.
+#    Circuit for doubly-controlled Fourier addition modulo :math:`N` [#Beauregard2003]_.
 #
-# If we didn't have overflow before, we would have subtracted :math:`N` for no
-# reason, leading to underflow. The topmost qubit would be :math:`\vert 1
-# \rangle`, the CNOT triggers, and :math:`N` would be added back. The register
-# then contains :math:`\vert b + a \rangle`. Subtracting :math:`a` puts the register in
-# state :math:`\vert b \rangle`, which by design will not overflow; the
+# Let's analyze this circuit, keeping in mind :math:`a < N` and :math:`b < N`,
+# and the main register has :math:`n + 1` bits.
+#
+# Suppose both control qubits are :math:`\vert 1 \rangle`. We add :math:`a` to
+# :math:`b`, then subtract :math:`N`. If :math:`a + b \geq N`, we get overflow
+# on the top qubit (which was included to account for precisely this), but
+# subtraction gives us the correct result modulo :math:`N`. After shifting back
+# to the computational basis with the :math:`QFT^\dagger`, the topmost qubit is
+# in :math:`\vert 0 \rangle` so the CNOT does not trigger. Next, we subtract
+# :math:`a` from the register, in state :math:`\vert a + b - N \pmod N \rangle`,
+# to obtain :math:`\vert b - N \rangle`. Since :math:`b < N`, there is
+# underflow. The top qubit, now in state :math:`\vert 1 \rangle`, does not
+# trigger the controlled-on-zero CNOT, and the auxiliary qubit is untouched.
+#
+# If instead :math:`a + b < N`, we subtracted :math:`N` for no reason, leading
+# to underflow. The topmost qubit is :math:`\vert 1 \rangle`, the CNOT will
+# trigger, and :math:`N` gets added back. The register then contains
+# :math:`\vert b + a \rangle`. Subtracting :math:`a` puts the register in state
+# :math:`\vert b \rangle`, which by design will not overflow; the
 # controlled-on-zero CNOT triggers, and the auxiliary qubit is returned to
 # :math:`\vert 0 \rangle`.
 #
-# If the control qubits were not both :math:`\vert 1 \rangle`, :math:`N` is
-# always subtracted and the CNOT triggers (since :math:`b < N`), but :math:`N`
-# is added back. For the same reasoning, though, the controlled-on-zero CNOT
-# always triggers and correctly uncomputes the auxiliary qubit.
+# If the control qubits are not both :math:`\vert 1 \rangle`, :math:`N` is
+# subtracted and the CNOT triggers (since :math:`b < N`), but :math:`N` is
+# always added back. By similar reasoning, the controlled-on-zero CNOT always
+# triggers and correctly uncomputes the auxiliary qubit.
 #
-# Recall that :math:`\Phi_+` is used as part of :math:`M_a` to add
-# :math:`2^{k}a` modulo :math:`N` to :math:`b` (conditioned on the value of
-# :math:`x_{k}`) in the Fourier basis. Re-expressing this as a sum (all
-# modulo :math:`N`), we find
+# Recall that :math:`\Phi_+` is used in :math:`M_a` to add :math:`2^{k}a` to
+# :math:`b` (controlled on :math:`x_{k}`) in the Fourier basis.  In total, we
+# obtain (modulo :math:`N`)
 #
 # .. math::
 #
@@ -412,32 +432,34 @@ def shors_algorithm(N):
 #     \end{equation*}
 #
 # This completes our implementation of the controlled-:math:`U_{a^{2^k}}`. The
-# full circuit, on all :math:`t + 2n + 2` qubits,  is shown below.
+# full circuit, on :math:`t + 2n + 2` qubits, is below.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/qpe_full_combined_multi_est_wires.svg
 #    :width: 500
 #    :align: center
 #    :alt: Full QPE circuit, all t estimation wires, and decompositions.
 #
+#    Initial circuit for order finding with QPE, and subroutine decompositions.
+#
+#
 # Taking advantage of classical information
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# Above, we incorporated information about :math:`a` in the implementation
-# of the Fourier adder. There are a few other places we can use classical information
-# to our advantage.
+# Above, we incorporated information about :math:`a` in the controlled
+# :math:`U_a` and the Fourier adder. There are some other places we can use
+# classical information to our advantage.
 #
 # First, consider the initial controlled :math:`U_{a^{2^0}} = U_a`. The only
 # basis state this operation applies to is :math:`\vert 1 \rangle`, which gets
-# sent to :math:`\vert a \rangle` when the operation triggers. This is
-# effectively just doing controlled addition of :math:`a - 1` to
-# :math:`1`. Since :math:`a` is selected from between :math:`2` and :math:`N-2`
-# inclusive, the addition is guaranteed to never overflow. This means we can
-# simply do a controlled Fourier addition, and save a significant number of
-# resources!  TODO: count them.
+# sent to :math:`\vert a \rangle`. This is effectively just doing controlled
+# addition of :math:`a - 1` to :math:`1`. Since :math:`a` is selected from
+# between :math:`2` and :math:`N-2` inclusive, the addition is guaranteed to
+# never overflow. This means we can simply do a controlled Fourier addition, and
+# save a significant number of resources!
 #
-# Next, let's look to the doubly-controlled adders in the implementation of the
-# controlled :math:`M_a`. Below, we show a simplified instance of the controlled
-# :math:`M_a` that reflects the state of the auxiliary registers.
+# Next, consider the sequence of doubly-controlled adders in the controlled
+# :math:`M_a`. Below, we show the initial instance of the controlled
+# :math:`M_a`, where the auxiliary register is in state :math:`\vert 0 \rangle`.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/doubly-controlled-adder-simplified.svg
 #    :width: 600
@@ -445,8 +467,8 @@ def shors_algorithm(N):
 #    :alt: The controlled multiplier circuit in the context of Shor's algorithm.
 #
 # The doubly-controlled adders are controlled on both estimation qubits, and the
-# bits in the target register. Now, consider the state of the system after the
-# initial controlled-:math:`U_a`:
+# bits in the target register. Consider the state of the system after the
+# initial controlled-:math:`U_a` (or, rather, controlled addition of :math:`a-1`,
 #
 # .. math::
 #
@@ -454,54 +476,69 @@ def shors_algorithm(N):
 #     \vert + \rangle ^{\otimes (t - 1)} \frac{1}{\sqrt{2}} \left( \vert 0 \rangle \vert 1 \rangle + \vert 1 \rangle \vert a \rangle \right)
 #     \end{equation*}
 #
-# In the next controlled operation, controlled-:math:`U_{a^2}`, the
-# doubly-controlled :math:`\Phi_+` will only trigger when the bits in the target
-# register are :math:`1`. Since the only two basis states present are
-# :math:`\vert 1 \rangle` and :math:`\vert a \rangle`, the only operations that
-# triger are those with the second control on the bottom-most qubit, and any
-# qubits corresponding to locations of :math:`1`s in the binary representation
-# of :math:`a`. More formally, we only need doubly-controlled operations on
-# qubits where the logical OR of the bit representations of :math:`1` and `a`
-# are 1! An example, for :math:`a = 5`, is shown below.
+# The next controlled operation is controlled-:math:`U_{a^2}`. Since the only
+# two basis states present are :math:`\vert 1 \rangle` and :math:`\vert a
+# \rangle`, the only doubly-controlled :math:`\Phi_+` that trigger are the first
+# one (with the second control on the bottom-most qubit), and those controlled
+# on qubits that are :math:`1` in the binary representation of
+# :math:`a`. Mathematically, we only need doubly-controlled operations on qubits
+# where the logical OR of the bit representations of :math:`1` and `a` are 1! An
+# example, for :math:`a = 5`, is shown below.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/doubly-controlled-adder-simplified-states.svg
 #    :width: 800
 #    :align: center
-#    :alt: The controlled multiplier circuit in the context of Shor's algorithm.
+#    :alt: Leveraging knowledge of :math:`a` to eliminate unnecessary doubly-controlled additions.
+#
+#    Leveraging knowledge of :math:`a` to eliminate unnecessary doubly-controlled additions.
 # 
 # Depending on the choice of :math:`a`, this could be major savings, especially
-# at the beginning of the algorithm, since not many basis states are involved
-# yet. The same trick can be used in the portion of the controlled-:math:`U_a`
-# after the controlled SWAPs, as demonstrated below.
+# at the beginning of the algorithm where very few basis states are
+# involved. The same trick can be used in the portion of the
+# controlled-:math:`U_a` after the controlled SWAPs, as demonstrated below.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/c-ua-basis-states-optimization.svg
 #    :width: 600
 #    :align: center
-#    :alt:
-# 
-# Eventually, we will see diminishing returns, because each
-# controlled-:math:`U_{a^{2^k}}` leads to more terms in the superposition. At
-# the :math:`k`'th iteration, the control register contains a superposition of
+#    :alt: Removing doubly-controlled additions based on expected terms in the register superposition.
+#
+#    Doubly-controlled operations can be removed from both controlled multiplications, if
+#    one keeps track of the basis states involved.
+#
+# Eventually we expect diminishing returns, because each controlled
+# :math:`U_{a^{2^k}}` contributes more terms to the superposition. Before the
+# :math:`k`'th iteration, the control register contains a superposition of
 # :math:`\{ \vert a^j\}, j = 0, \ldots, 2^{k - 1}` (inclusive), and after the
 # controlled SWAPs, the relevant superposition is :math:`\{ \vert a^j\}, j =
 # 2^{k-1}+1, \ldots, 2^{k} - 1`.
 #
 # A similar simplification can be made within each doubly-controlled
-# :math:`\Phi_+` operation. Recall that the bulk of the :math:`\Phi_+` is
-# necessary for detecting and correcting for overflow after running
-# :math:`\Phi(a)`. But, if we keep track of the powers of :math:`a` modulo
-# :math:`N` in the superposition classically, we know in advance when it will be
-# needed. A hypothetical example is shown below.
+# :math:`\Phi_+`. Recall that the bulk of :math:`\Phi_+` is for detecting and
+# correcting for overflow after running :math:`\Phi(a)`. But, if we keep track
+# of the powers of :math:`a` modulo :math:`N` in the superposition classically,
+# we know in advance when it will be needed. A hypothetical example is shown
+# below.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_modulo_n_streamlined.svg
 #    :width: 600
 #    :align: center
-#    :alt:
+#    :alt: Advanced detection and removal of overflow correction in doubly-controlled operations.
+#
+#    Advanced detection and removal of overflow correction in doubly-controlled
+#    operations can lead to significant resource savings.
+#
+#  This last optimization will not be included in our implementation. We again
+#  expect it to have diminishing returns as more iterations of the algorthm are
+#  performed.
+# 
 #
 # The "single-qubit" QPE
 # ~~~~~~~~~~~~~~~~~~~~~~
 #
-# Let's return to the QPE routine and expand the final inverse QFT.
+# The optimizations described in the previous section focus on reducing the
+# number of operations. We can also reduce the amount of qubits using a
+# well-known trick for the QFT. Let's return to the QPE circuit and expand the
+# final inverse QFT.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/qpe_full_modified_power_with_qft.svg
 #    :width: 800
@@ -568,6 +605,9 @@ def shors_algorithm(N):
 #    :align: center
 #    :alt: QPE circuit with one estimation qubit.
 #
+#
+# The final Shor circuit
+# ~~~~~~~~~~~~~~~~~~~~~~
 # Replacing the controlled-:math:`U_a` with the subroutines derived above, we
 # see Shor's algorithm requires :math:`2n + 3` qubits in total, as summarized in
 # the graphic below.
@@ -578,54 +618,52 @@ def shors_algorithm(N):
 #    :alt: Full implementation of QPE circuit.
 #
 # From this, we see some additional optimizations are possible. In particular,
-# the QFT and inverse QFT are being applied before and after each :math:`M_a`
-# block, so we can remove the ones that occur between the different
-# controlled-:math:`U_a` such that the only ones remaining are the very first
-# and last, and those before and after the controlled SWAPs.
+# the QFT and inverse QFT are applied before and after each :math:`M_a` block,
+# so we can remove the ones that occur between the different controlled
+# :math:`U_a` such that the only ones remaining are the very first and last, and
+# those before and after the controlled SWAPs. 
 
 ######################################################################
 # Catalyst implementation
 # -----------------------
 #
 # With all our circuits in hand, we can code up the full implementation of
-# Shor's algorithm.
+# Shor's algorithm in PennyLane and Catalyst.
 # 
-# First, we require a few utility functions for modular arithemetic:
-# exponentiation by repeated squaring (to avoid integer overflow when
-# exponentiating large numbers), and computation of inverses modulo
-# :math:`N`. Note that the first can be accomplished in regular Python using the
-# built-in ``pow`` method. However, this is not JITable and there is no
-# equivalent in JAX NumPy, so we build our own.
+# First, we require some utility functions for modular arithemetic:
+# exponentiation by repeated squaring (to avoid overflow when exponentiating
+# large integers), and computation of inverses modulo :math:`N`. Note that the
+# first can be accomplished in regular Python using the built-in ``pow``
+# method. However, this is not JIT-compatible and there is no equivalent in JAX NumPy.
 
 from jax import numpy as jnp
 
 
 def repeated_squaring(a, exponent, N):
-    """QJIT-compatible function to determine (a ** power) % N.
+    """QJIT-compatible function to determine (a ** exp) % N.
 
     Source: https://en.wikipedia.org/wiki/Modular_exponentiation#Left-to-right_binary_method
     """
-    # Get number of bits in exponent; adjust for case when it's a power of 2
-    num_exp_bits = jnp.array(jnp.log2(exponent), dtype=jnp.int32) + 1
-    if jnp.isclose(num_exp_bits, jnp.log2(exponent)):
-        num_exp_bits += 1
-
-    exp_bits = jnp.array(jnp.unpackbits(jnp.array([exponent]).view("uint8"), bitorder="little"))
+    bits = jnp.array(jnp.unpackbits(jnp.array([exp]).view("uint8"), bitorder="little"))
+    total_bits_one = jnp.sum(bits)
 
     result = jnp.array(1, dtype=jnp.int32)
     x = jnp.array(a, dtype=jnp.int32)
-    idx = 0
 
-    while idx < num_exp_bits:
-        if exp_bits[idx] == 1:
+    idx, num_bits_added = 0, 0
+
+    while num_bits_added < total_bits_one:
+        if bits[idx] == 1:
             result = (result * x) % N
+            num_bits_added += 1
         x = (x**2) % N
         idx += 1
 
     return result
 
+
 def modular_inverse(a, N):
-    """QJIT compatible modular multiplicative inverse routine.
+    """QJIT-compatible modular multiplicative inverse routine.
 
     Source: https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm#Modular_integers
     """
@@ -783,7 +821,7 @@ def shors_algorithm(N, a, n_bits, max_shots=100):
             meas_results[i] = measure(estimation_wire, reset=True)
             cumulative_phase = -2 * jnp.pi * jnp.sum(meas_results / jnp.roll(phase_divisors, i + 1))
 
-        qml.adjoint(QFT)(wires=aux_wires[:-1])            
+        qml.adjoint(QFT)(wires=aux_wires[:-1])    
 
         return meas_results
 
