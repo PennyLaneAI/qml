@@ -10,7 +10,6 @@ import sys
 from logging import getLogger
 import subprocess
 from enum import Enum
-import re
 import functools
 import requirements
 
@@ -171,21 +170,17 @@ def _build_demo(
     quiet: bool = False,
 ):
     out_dir = sphinx_dir / "demos" / demo.name
-    if out_dir.exists():
-        shutil.rmtree(out_dir)
-    out_dir.mkdir(parents=True)
+    fs.clean_dir(out_dir)
 
     with open(out_dir / "requirements.txt", "w") as f:
         f.write(requirements_generator.generate_requirements(demo.requirements))
 
     if execute:
+        logger.info("Installing dependencies for demo '%s'", demo.name)
         cmds.pip_install(build_venv.python, requirements=(out_dir / "requirements.txt"))
 
     stage_dir = build_dir / "demonstrations"
-    if stage_dir.exists():
-        shutil.rmtree(stage_dir)
-    stage_dir.mkdir(parents=True)
-
+    fs.clean_dir(stage_dir)
     # Need a 'GALLERY_HEADER' file for sphinx-gallery
     with open(stage_dir / "GALLERY_HEADER.rst", "w"):
         pass
@@ -222,62 +217,3 @@ def _install_build_dependencies(venv: Virtualenv, build_dir: Path):
         format="requirements.txt",
     )
     cmds.pip_install(venv.python, "-r", build_requirements_file)
-
-
-def _generate_constraints(build_dir: Path):
-    constraints_file = (build_dir / "constraints.txt").resolve()
-    cmds.poetry_export(
-        sys.executable,
-        constraints_file,
-        format="constraints.txt",
-        groups=("executable-dependencies",),
-    )
-    if sys.platform == "darwin":
-        _fix_pytorch_constraint_macos(constraints_file)
-
-    return constraints_file
-
-
-def _install_execution_dependencies(
-    venv: Virtualenv, build_dir: Path, demos: Sequence[Demo], quiet: bool
-):
-    """Install dependencies for executing provided demos into
-    `venv`."""
-    constraints_file = (build_dir / "constraints.txt").resolve()
-    cmds.poetry_export(
-        sys.executable,
-        constraints_file,
-        format="requirements.txt",
-        groups=("executable-dependencies",),
-    )
-    if sys.platform == "darwin":
-        _fix_pytorch_constraint_macos(constraints_file)
-
-    requirements: set[str] = set(Demo.CORE_DEPENDENCIES)
-    for demo in demos:
-        if demo.executable:
-            requirements.update(demo.requirements)
-
-    logger.info("Installing execution dependencies")
-    cmds.pip_install(
-        venv.python, *requirements, constraints=constraints_file, quiet=quiet
-    )
-
-
-def _fix_pytorch_constraint_macos(constraints_file: Path):
-    """`poetry export` keeps the '+cpu' extra on torch and torchvision when exporting
-    on MacOS, which uses the PyPi wheels. Because the wheels have no '+cpu' extra on
-    PyPi, package resolution will fail.
-
-    This function strips the +cpu extra from the constraint.
-    """
-    with open(constraints_file, "r") as f:
-        constraints = f.read()
-
-    for pattern in (r"(torch==[0-9\.]+)\+cpu", r"(torchvision==[0-9\.]+)\+cpu"):
-        constraints = re.sub(
-            pattern, lambda m: m.group(1), constraints, flags=re.MULTILINE
-        )
-
-    with open(constraints_file, "w") as f:
-        f.write(constraints)

@@ -64,7 +64,15 @@ def pip_install(
     Raises:
         CalledProcessError: The command does not complete successfully
     """
-    cmd = [str(python), "-m", "uv", "pip", "install"]
+    cmd = [
+        str(python),
+        "-m",
+        "uv",
+        "pip",
+        "install",
+        "--index-strategy",
+        "unsafe-best-match",
+    ]
     if requirements:
         cmd.extend(("--requirement", str(requirements)))
     if constraints:

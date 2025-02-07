@@ -71,6 +71,7 @@ class RequirementsGenerator:
                     "uv",
                     "pip",
                     "compile",
+                    "--no-deps",
                     "--index-strategy",
                     "unsafe-best-match",
                     "--extra-index-url",

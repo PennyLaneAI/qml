@@ -18,3 +18,11 @@ def file_sha(path: Path) -> bytes:
         m.update(f.read())
 
         return m.digest()
+
+
+def clean_dir(path: Path) -> None:
+    """Creates empty directory at ``path``. If it already exists, delete its contents."""
+    if path.exists():
+        shutil.rmtree(path)
+
+    path.mkdir(parents=True, exist_ok=True)
