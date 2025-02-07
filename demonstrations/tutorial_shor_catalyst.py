@@ -451,13 +451,18 @@ def shors_algorithm(N):
 # :math:`U_a` and the Fourier adder. There are some other places we can use
 # classical information to our advantage.
 #
-# First, consider the initial controlled :math:`U_{a^{2^0}} = U_a`. The only
-# basis state this operation applies to is :math:`\vert 1 \rangle`, which gets
-# sent to :math:`\vert a \rangle`. This is effectively just doing controlled
-# addition of :math:`a - 1` to :math:`1`. Since :math:`a` is selected from
-# between :math:`2` and :math:`N-2` inclusive, the addition is guaranteed to
-# never overflow. This means we can simply do a controlled Fourier addition, and
-# save a significant number of resources!
+# First, consider the controlled :math:`U_{a^{2^0}} = U_a` at the beginning of
+# the algorithm. The only basis state this operation applies to is :math:`\vert
+# 1 \rangle`, which gets sent to :math:`\vert a \rangle`. This is effectively
+# just doing controlled addition of :math:`a - 1` to :math:`1`. Since :math:`a`
+# is selected from between :math:`2` and :math:`N-2` inclusive, the addition is
+# guaranteed to never overflow. This means we can simply do a controlled Fourier
+# addition, and save a significant number of resources!
+#
+# We can also make some optimizations to the end of the algorithm by keeping
+# track of the powers of :math:`a`. If at iteration :math:`k` we have
+# :math:`a^{2^k} = 1`, no further multiplication is necessary, and we can
+# effectively terminate the algorithm early.
 #
 # Next, consider the sequence of doubly-controlled adders in the controlled
 # :math:`M_a`. Below, we show the initial instance of the controlled
@@ -538,9 +543,9 @@ def shors_algorithm(N):
 # ~~~~~~~~~~~~~~~~~~~~~~
 #
 # The optimizations described in the previous section focus on reducing the
-# number of operations. We can also reduce the amount of qubits using a
-# well-known trick for the QFT. Let's return to the QPE circuit and expand the
-# final inverse QFT.
+# number of operations, or depth of the circuit. The number of qubits, or width,
+# can be reduced using a well-known trick for the QFT. Let's return to the QPE
+# circuit and expand the final inverse QFT.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/qpe_full_modified_power_with_qft.svg
 #    :width: 800
@@ -641,7 +646,7 @@ def shors_algorithm(N):
 from jax import numpy as jnp
 
 
-def repeated_squaring(a, exponent, N):
+def repeated_squaring(a, exp, N):
     """QJIT-compatible function to determine (a ** exp) % N.
 
     Source: https://en.wikipedia.org/wiki/Modular_exponentiation#Left-to-right_binary_method
@@ -774,8 +779,6 @@ from catalyst import measure
 
 catalyst.autograph_strict_conversion = True
 
-from utils import modular_inverse
-
 
 def QFT(wires):
     """The standard QFT, redefined because the PennyLane one uses terminal SWAPs."""
@@ -789,7 +792,7 @@ def QFT(wires):
 
 
 def fourier_adder_phase_shift(a, wires):
-    """Sends QFT(|b>) -> QFT(|b + a>). Acts on n + 1 qubits, n = ceil(log2(b)) + 1."""
+    """Sends QFT(|b>) -> QFT(|b + a>)."""
     n = len(wires)
     a_bits = jnp.unpackbits(jnp.array([a]).view("uint8"), bitorder="little")[:n][::-1]
     powers_of_two = jnp.array([1 / (2**k) for k in range(1, n + 1)])
@@ -830,7 +833,7 @@ def controlled_ua(N, a, control_wire, target_wires, aux_wires, mult_a_mask, mult
     """
     n = len(target_wires)
 
-    # The current superposition of terms in the register
+    # Apply double-controlled additions where bits of a can be 1.
     for i in range(n):
         if mult_a_mask[n - i - 1] > 0:
             pow_a = (a * (2**i)) % N
@@ -872,22 +875,7 @@ def controlled_ua(N, a, control_wire, target_wires, aux_wires, mult_a_mask, mult
 
 @qml.qjit(autograph=True, static_argnums=(2))
 def shors_algorithm(N, a, n_bits):
-    """Execute Shor's algorithm and return a solution.
-
-    Order-finding is essentially QPE with some post-processing. In this function,
-    we use a special version of QPE that performs measure-and-reset.
-
-    Args:
-        N (int): The number we are trying to factor. Guaranteed to be the product
-            of two unique prime numbers.
-        a (int): Random integer guess for finding a non-trivial square root.
-        n_bits (int): The number of bits in N
-        shots (int): The number of shots to take for each candidate value of a
-
-    Returns:
-        int, int: If a solution is found, returns p, q such that N = pq. Otherwise
-        returns 0, 0.
-    """
+    """Execute Shor's algorithm: return a guess for the prime factors of N."""
     est_wire = 0
     target_wires = jnp.arange(n_bits) + 1
     aux_wires = jnp.arange(n_bits + 2) + n_bits + 1
@@ -921,8 +909,9 @@ def shors_algorithm(N, a, n_bits):
         meas_results[0] = measure(est_wire, reset=True)
         cumulative_phase = -2 * jnp.pi * jnp.sum(meas_results / jnp.roll(phase_divisors, 1))
 
-        # For subsequent iterations, determine powers of a, and controlled U_a when needed
-        # (i.e., when the power is not equal to 1) using the two "mask" variables.
+        # For subsequent iterations, determine powers of a, and apply controlled
+        # U_a when the power is not 1. Unnecessarily double-controlled
+        # operations are removed, based on values stored in the two "mask" variables.
         powers_cua = jnp.array([repeated_squaring(a, 2**p, N) for p in range(n_bits)])
 
         loop_bound = n_bits
@@ -957,7 +946,7 @@ def shors_algorithm(N, a, n_bits):
 
         return meas_results
 
-    # The "classical part" of Shor's algorithm is compiled alongside the quantum part
+    # The "classical part" of Shor's algorithm is JIT-compiled along with the circuit
     p, q = jnp.array(0, dtype=jnp.int32), jnp.array(0, dtype=jnp.int32)
 
     sample = run_qpe(a)
@@ -982,11 +971,45 @@ def shors_algorithm(N, a, n_bits):
 
 
 ######################################################################
-# To actually run this, we need to choose a value of ``a``. In principle, we
-# could incorporate random generation of ``a`` within the function
-# above. However, this cannot be qjitted. Note too that we passed in ``n_bits``
-# as a static argument.
+# To actually run this, we must choose a value of ``a``. In principle, we could
+# incorporate random generation of ``a`` within the function above. However,
+# this cannot be qjitted. Passing ``n_bits`` as a static argument is also to
+# work around limitations of JIT compilation. These will be explored in the next
+# section. For now, let us verify our algorithm can successfully factor.
 
+from jax import random
+
+
+def factor_with_shor(N, n_shots=100):
+    key = random.PRNGKey(123456789)
+    key, subkey = random.split(key)
+
+    a_choices = jnp.array(list(range(2, N - 1)))
+    a = random.choice(subkey, a_choices)
+
+    while jnp.gcd(a, N) == 1:
+        key, subkey = random.split(key)
+        a = random.choice(subkey, a_choices)
+
+    # The number of bits of N determines the size of the registers.
+    n_bits = int(jnp.ceil(jnp.log2(N)))
+
+    p, q = 0, 0
+
+    # Get the success probabilities
+    num_success = 0
+    for _ in range(n_shots):
+        candidate_p, candidate_q = shors_algorithm(N, a, n_bits)
+        if candidate_p * candidate_q == N:
+            p, q = candidate_p, candidate_q
+            num_success += 1
+
+    return p, q, num_success / n_shots
+
+
+N = 15
+p, q, success_prob = factor_with_shor(N)
+print(f"N = {p} x {q}. Success probability is {success_prob}")
 
 ######################################################################
 # JIT compilation and performance
