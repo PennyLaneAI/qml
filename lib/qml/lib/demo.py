@@ -175,6 +175,7 @@ def _build_demo(
 ):
     out_dir = sphinx_dir / "demos" / demo.name
     fs.clean_dir(out_dir)
+    execute = execute and demo.executable
 
     with open(out_dir / "requirements.txt", "w") as f:
         f.write(requirements_generator.generate_requirements(demo.requirements))
