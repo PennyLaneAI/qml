@@ -50,6 +50,7 @@ def pip_install(
     requirements: Path | None = None,
     constraints: Path | None = None,
     quiet: bool = True,
+    use_uv: bool = True,
 ):
     """Executes `pip install` with the given python
     interpreter and args.
@@ -64,15 +65,20 @@ def pip_install(
     Raises:
         CalledProcessError: The command does not complete successfully
     """
-    cmd = [
-        str(python),
-        "-m",
-        "uv",
-        "pip",
-        "install",
-        "--index-strategy",
-        "unsafe-best-match",
-    ]
+    cmd = [str(python), "-m"]
+    if use_uv:
+        cmd.extend(
+            [
+                "uv",
+                "pip",
+                "install",
+                "--index-strategy",
+                "unsafe-best-match",
+            ]
+        )
+    else:
+        cmd.extend(["pip", "install"])
+
     if requirements:
         cmd.extend(("--requirement", str(requirements)))
     if constraints:
