@@ -686,6 +686,86 @@ def modular_inverse(a, N):
 ######################################################################
 # Next, we require a few helper functions for the phase estimation.
 
+
+def fractional_binary_to_float(sample):
+    """Convert an n-bit sample [k1, k2, ..., kn] to a floating point
+    value using fractional binary representation,
+
+        k = (k1 / 2) + (k2 / 2 ** 2) + ... + (kn / 2 ** n)
+    """
+    powers_of_two = 2 ** (jnp.arange(len(sample)) + 1)
+    return jnp.sum(sample / powers_of_two)
+
+
+def as_integer_ratio(f):
+    """QJIT compatible conversion of a floating point number to two 64-bit
+    integers such that their quotient equals the input to available precision.
+    """
+    mantissa, exponent = jnp.frexp(f)
+
+    i = 0
+    while jnp.logical_and(i < 300, mantissa != jnp.floor(mantissa)):
+        mantissa = mantissa * 2.0
+        exponent = exponent - 1
+        i += 1
+
+    numerator = jnp.asarray(mantissa, dtype=jnp.int64)
+    denominator = jnp.asarray(1, dtype=jnp.int64)
+    abs_exponent = jnp.abs(exponent)
+
+    if exponent > 0:
+        num_to_return, denom_to_return = numerator << abs_exponent, denominator
+    else:
+        num_to_return, denom_to_return = numerator, denominator << abs_exponent
+
+    return num_to_return, denom_to_return
+
+
+def phase_to_order(phase, max_denominator):
+    """Given some floating-point phase, estimate integers s, r such
+    that s / r = phase, where r is no greater than some specified value.
+
+    Uses a JIT-compatible re-implementation of Fraction.limit_denominator.
+    """
+    numerator, denominator = as_integer_ratio(phase)
+
+    order = 0
+
+    if denominator <= max_denominator:
+        order = denominator
+
+    else:
+        p0, q0, p1, q1 = 0, 1, 1, 0
+
+        a = numerator // denominator
+        q2 = q0 + a * q1
+
+        while q2 < max_denominator:
+            p0, q0, p1, q1 = p1, q1, p0 + a * p1, q2
+            numerator, denominator = denominator, numerator - a * denominator
+
+            a = numerator // denominator
+            q2 = q0 + a * q1
+
+        k = (max_denominator - q0) // q1
+        bound1 = p0 + k * p1 / q0 + k * q1
+        bound2 = p1 / q1
+
+        loop_res = 0
+
+        if jnp.abs(bound2 - phase) <= jnp.abs(bound1 - phase):
+            loop_res = q1
+        else:
+            loop_res = q0 + k * q1
+
+        order = loop_res
+
+    return order
+
+
+######################################################################
+# Next, we provide the implementations of the circuits derived in the previous section.
+
 import pennylane as qml
 import catalyst
 from catalyst import measure
@@ -705,69 +785,63 @@ def QFT(wires):
             qml.ControlledPhaseShift(shifts[j], wires=[wires[(i + 1) + j], wires[i]])
 
 
+
 def fourier_adder_phase_shift(a, wires):
     """Sends QFT(|b>) -> QFT(|b + a>). Acts on n + 1 qubits, n = ceil(log2(b)) + 1."""
     n = len(wires)
     a_bits = jnp.unpackbits(jnp.array([a]).view("uint8"), bitorder="little")[:n][::-1]
     powers_of_two = jnp.array([1 / (2**k) for k in range(1, n + 1)])
-    # Computing the phases requires a bit of index gymnastics
     phases = jnp.array([jnp.dot(a_bits[k:], powers_of_two[: n - k]) for k in range(n)])
 
     for i in range(len(wires)):
-        qml.PhaseShift(2 * jnp.pi * phases[i], wires=wires[i])
+        if phases[i] != 0:
+            qml.PhaseShift(2 * jnp.pi * phases[i], wires=wires[i])
 
 
 def doubly_controlled_adder(N, a, control_wires, wires, aux_wire):
     """Sends |c>|xk>QFT(|b>)|0> -> |c>|xk>QFT(|b + c xk a) mod N>)|0>."""
-
-    # Add a + b, then subtract N to account for potential overflow
     qml.ctrl(fourier_adder_phase_shift, control=control_wires)(a, wires)
+
     qml.adjoint(fourier_adder_phase_shift)(N, wires)
 
-    # Check overflow conditions using CNOT, then measurement. Re-add N if needed.
     qml.adjoint(QFT)(wires)
     qml.CNOT(wires=[wires[0], aux_wire])
     QFT(wires)
 
-    was_greater_than_N = measure(aux_wire, reset=True)
+    qml.ctrl(fourier_adder_phase_shift, control=aux_wire)(N, wires)
 
-    if was_greater_than_N:
-        fourier_adder_phase_shift(N, wires)
-
-
-def doubly_controlled_subtraction(N, a, control_wires, wires, aux_wire):
-    """Sends |c>|xk>QFT(|b>)|0> -> |c>|xk>QFT(|b - c xk a) mod N>)|0>.
-    We need this as a dedicated routine because we cannot take the adjoint of
-    doubly_controlled_adder due to the mid-circuit measurement."""
-    
-    # Subtract a, check the overflow wire, and add N back if needed.
-    qml.ctrl(qml.adjoint(fourier_adder_phase_shift), control=control_wires)(a, wires)
+    qml.adjoint(qml.ctrl(fourier_adder_phase_shift, control=control_wires))(a, wires)
 
     qml.adjoint(QFT)(wires)
+    qml.PauliX(wires=wires[0])
     qml.CNOT(wires=[wires[0], aux_wire])
+    qml.PauliX(wires=wires[0])
     QFT(wires)
 
-    was_less_than_zero = measure(aux_wire, reset=True)
-
-    if was_less_than_zero:
-        fourier_adder_phase_shift(N, wires)
+    qml.ctrl(fourier_adder_phase_shift, control=control_wires)(a, wires)
 
 
-def controlled_ua(N, a, control_wire, target_wires, aux_wires):
-    """Sends |c>|x>|0> to |c>|ax mod N>|0> if |c> = |1>."""
+def controlled_ua(N, a, control_wire, target_wires, aux_wires, mult_a_mask, mult_a_inv_mask):
+    """Sends |c>|x>|0> to |c>|ax mod N>|0> if c = 1.
+
+    The mask arguments allow for the removal of unnecessary double-controlled additions.
+    """
     n = len(target_wires)
 
-    # Controlled multiplication by a mod N; |c>|x>|b>|0> to |c>|x>|(b + ax) mod N>|0>
+    # The current superposition of terms in the register
     for i in range(n):
-        power_of_a = (a * (2**i)) % N
-        doubly_controlled_adder(
-            N, power_of_a, [control_wire, target_wires[n - i - 1]], aux_wires[:-1], aux_wires[-1]
-        )
+        if mult_a_mask[n - i - 1] > 0:
+            pow_a = (a * (2**i)) % N
+
+            # u print(f"Applying controlled multiplication from wire {n - i - 1} to add {pow_a}")
+            doubly_controlled_adder(
+                N, pow_a, [control_wire, target_wires[n - i - 1]], aux_wires[:-1], aux_wires[-1]
+            )
 
     qml.adjoint(QFT)(wires=aux_wires[:-1])
 
-    # C-SWAP with two CNOTs and a Toffoli. Note that the target and aux
-    # registers have n and n + 1 qubits respectively.
+    # Controlled SWAP the target and aux wires; note that the top-most aux wire
+    # is only to catch overflow, so we ignore it here.
     for i in range(n):
         qml.CNOT(wires=[aux_wires[i + 1], target_wires[i]])
         qml.Toffoli(wires=[control_wire, target_wires[i], aux_wires[i + 1]])
@@ -779,12 +853,16 @@ def controlled_ua(N, a, control_wire, target_wires, aux_wires):
     QFT(wires=aux_wires[:-1])
 
     for i in range(n):
-        power_of_a_inv = (a_mod_inv * (2 ** (n - i - 1))) % N
-        doubly_controlled_subtraction(
-            N, power_of_a_inv, [control_wire, target_wires[i]], aux_wires[:-1], aux_wires[-1]
-        )
+        if mult_a_inv_mask[i] > 0:
+            pow_a_inv = (a_mod_inv * (2 ** (n - i - 1))) % N
+            qml.adjoint(doubly_controlled_adder)(
+                N,
+                pow_a_inv,
+                [control_wire, target_wires[i]],
+                aux_wires[:-1],
+                aux_wires[-1],
+            )
 
-    
 ######################################################################
 # Next, let's put everything together into the order-finding routine
 # that is part of Shor's algorithm. We can implement the entire algorithm
