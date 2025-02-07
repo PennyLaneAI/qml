@@ -1015,8 +1015,48 @@ print(f"N = {p} x {q}. Success probability is {success_prob}")
 # JIT compilation and performance
 # -------------------------------
 #
-# TODO: show how everything gets put together and JITted
-#
+# Let us now validate that JIT compilation is happening properly. We will run
+# the algorithm for a series of different ``N`` with the same bit width, and
+# different values of ``a``. We expect the very first execution, for the very
+# first ``N`` and ``a``, to take longer than the rest.
+
+# Some 6-bit numbers
+N_values = [33, 39, 51, 55, 57]
+n_bits = int(jnp.ceil(jnp.log2(N_values[0])))
+
+num_a = 3
+
+execution_times = []
+
+key = random.PRNGKey(1010101)
+
+for N in N_values:
+    a_choices = jnp.array(list(range(2, N - 1)))
+    unique_a = []
+
+    while len(unique_a) != num_a:
+        key, subkey = random.split(key)
+        a = random.choice(subkey, a_choices)
+        if jnp.gcd(a, N) == 1:
+            continue
+        unique_a.append(a)
+
+    for a in unique_a:
+        # Initial JIT compilation time
+        start = time.time()
+        p, q = shors_algorithm(N, a, n_bits)
+        end = time.time()
+        execution_times.append((N, a, end - start))
+
+        # Get subsequent runtimes
+        start = time.time()
+        p, q = shors_algorithm(N, a, n_bits)
+        end = time.time()
+        execution_times.append((N, a, end - start))
+
+print(execution_times)
+
+
 # TODO: discussions about technical details and challenges; autograph and
 # control flow, dynamically-sized arrays, etc.
 #
