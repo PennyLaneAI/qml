@@ -35,6 +35,8 @@ class Demo:
             "matplotlib",
             "numpy",
             "pennylane",
+            "jax",
+            "jaxlib"
         )
     )
     """Dependencies installed for every demo that do not
@@ -182,7 +184,9 @@ def _build_demo(
 
     if execute:
         logger.info("Installing dependencies for demo '%s'", demo.name)
-        cmds.pip_install(build_venv.python, requirements=(out_dir / "requirements.txt"))
+        cmds.pip_install(
+            build_venv.python, requirements=out_dir / "requirements.txt", quiet=True
+        )
 
     stage_dir = build_dir / "demonstrations"
     fs.clean_dir(stage_dir)
