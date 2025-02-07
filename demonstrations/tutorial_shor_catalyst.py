@@ -1,11 +1,11 @@
 r""".. role:: html(raw)
    :format: html
 
-JIT compilation of Shor's algorithm with PennyLane and Catalyst
+JIT compiling Shor's algorithm with PennyLane and Catalyst
 ===============================================================
 
 .. meta::
-    :property="og:description": JIT compile Shor's algorithm from end-to-end.
+    :property="og:description": JIT compile Shor's algorithm from end-to-end with PennyLane and Catalyst.
 
     :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//fano.png
 
