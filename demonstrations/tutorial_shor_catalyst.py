@@ -1020,6 +1020,9 @@ print(f"N = {p} x {q}. Success probability is {success_prob}")
 # different values of ``a``. We expect the very first execution, for the very
 # first ``N`` and ``a``, to take longer than the rest.
 
+import time
+import matplotlib.pyplot as plt
+
 # Some 6-bit numbers
 N_values = [33, 39, 51, 55, 57]
 n_bits = int(jnp.ceil(jnp.log2(N_values[0])))
@@ -1054,8 +1057,11 @@ for N in N_values:
         end = time.time()
         execution_times.append((N, a, end - start))
 
-print(execution_times)
+labels = [str(ex[:1]) for ex in execution_times]
+times = [ex[2] for ex in execution_times]
 
+plt.scatter(range(len(times)), times)
+plt.ylabel("Time (s)")
 
 # TODO: discussions about technical details and challenges; autograph and
 # control flow, dynamically-sized arrays, etc.
