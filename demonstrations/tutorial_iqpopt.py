@@ -2,7 +2,7 @@ r"""IQPopt: Fast optimization of IQP circuits in JAX
 ===============================================================
 
 Instantaneous Quantum Polynomial (IQP) circuits are a class of circuits that are expected to be hard
-to sample from using classical computers [2]. In this demo we take a look at the pacakge IQPopt [#Recio]_,
+to sample from using classical computers [#bremner1]_. In this demo we take a look at the pacakge IQPopt [#recio1]_,
 which shows that despite this, such circuits can still be optimized efficiently!
 
 As we will see, this hinges on a suprising fact about these circuits: while sampling is hard,
@@ -210,7 +210,7 @@ print(penn_op_expval)
 # this time, only with approximations instead of exact values. The gain is that we can work with very
 # large circuits.
 # 
-# Starting from a paper [5] from Van den Nest (Theorem 3), one can arrive at the following expression
+# Starting from a paper [#nest]_ from Van den Nest (Theorem 3), one can arrive at the following expression
 # for expectation values of Pauli Z operators
 # 
 # .. math:: \langle Z_{\boldsymbol{a}} \rangle = \mathbb{E}_{\boldsymbol{z}\sim U}\Big[ \cos\Big(\sum_j \theta_{j}(-1)^{\boldsymbol{g}_{j}\cdot \boldsymbol{z}}(1-(-1)^{\boldsymbol{g}_j\cdot \boldsymbol{a}}\Big) \Big],
@@ -453,7 +453,7 @@ plt.show()
 # Training via the maximum mean discrepancy loss
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
-# The Maximum Mean Discrepancy (MMD) [6] is an integral probability metric that measures the
+# The Maximum Mean Discrepancy (MMD) [#gretton]_ is an integral probability metric that measures the
 # similarity between two probability distributions, and can serve as a loss function to train
 # generative models.
 # 
@@ -477,7 +477,7 @@ mmd = genq.mmd_loss_samples(X1, X2, sigma)
 print(mmd)
 
 ######################################################################
-# This metric can also be estimated efficiently with expectation values of Pauli Z operators only [7].
+# This metric can also be estimated efficiently with expectation values of Pauli Z operators only [#recio2].
 # This means that if we have an ``IqpSimulator`` object, we can also estiamte the MMD loss.
 # 
 # The implementation in the ``gen_qml`` module only needs an additional parameter, ``n_ops``, that
@@ -578,36 +578,52 @@ plt.show()
 # References
 # ----------
 #
-# .. [#Recio] 
+# .. [#bremner1] 
 # 
-#      Erik Recio, Joseph Bowles. 
-#      "IQPopt: Fast optimization of instantaneous quantum polynomial
-#      circuits in JAX".
-#      `arXiv:2501.04776 <https://arxiv.org/abs/2501.04776>`__,2025
+#     Michael J Bremner, Richard Jozsa, Dan J Shepherd. 
+#     "Classical simulation of commuting quantum computations implies collapse of the polynomial hierarchy"
+#     `arXiv:1005.1407 <https://arxiv.org/abs/1005.1407>`__, 2010.
+#
+# .. [#recio1] 
 # 
-# [2] Michael J Bremner, Richard Jozsa, and Dan J Shepherd. "Classical simulation of commuting quantum
-# computations implies collapse of the polynomial hierarchy". In: Proceedings of the Royal Society A:
-# Mathematical, Physical and Engineering Sciences 467.2126 (2011), pp. 459-472 (page 1).
+#     Erik Recio, Joseph Bowles. 
+#     "IQPopt: Fast optimization of instantaneous quantum polynomial circuits in JAX".
+#     `arXiv:2501.04776 <https://arxiv.org/abs/2501.04776>`__, 2025.
+#
+# .. [#bremner2] 
 # 
-# [3] Michael J Bremner, Ashley Montanaro, and Dan J Shepherd. "Achieving quantum supremacy with
-# sparse and noisy commuting quantum computations". In: Quantum 1 (2017), p. 8 (page 1).
-# 
-# [4] Dolev Bluvstein, Simon J Evered, Alexandra A Geim, Sophie H Li, Hengyun Zhou, Tom Manovitz,
-# Sepehr Ebadi, Madelyn Cain, Marcin Kalinowski, Dominik Hangleiter, et al. "Logical quantum processor
-# based on reconfigurable atom arrays". In: Nature 626.7997 (2024), pp. 58-65 (pages 1, 2).
-# 
-# [5] M. Van den Nest. "Simulating quantum computers with probabilistic methods". 2010. arXiv:
-# 0911.1624 [quant-ph]. url: https://arxiv.org/abs/0911.1624 (pages 2, 5).
-# 
-# [6] Arthur Gretton, Karsten M. Borgwardt, Malte J. Rasch, Bernhard Schölkopf, and Alexander Smola.
-# "A Kernel Two-Sample Test". In: Journal of Machine Learning Research 13.25 (2012), pp. 723-773. url:
-# http://jmlr.org/papers/v13/gretton12a.html (page 14).
-# 
-# [7] Erik Recio, Shahnawaz Ahmed, Joseph Bowles. "How to train a 1000 qubit quantum generative model
-# on a laptop", in preparation
-# 
-# [8] Suman Ravuri, Mélanie Rey, Shakir Mohamed, Marc Peter Deisenroth, "Understanding Deep Generative
-# Models with Generalized Empirical Likelihoods"
+#     Erik Recio, Joseph Bowles. 
+#     "Achieving quantum supremacy with sparse and noisy commuting quantum computations".
+#     `https://quantum-journal.org/papers/q-2017-04-25-8/ <https://quantum-journal.org/papers/q-2017-04-25-8/>`__, in Quantum 1 (2017), p. 8 (page 1), 2017.
+#
+# .. [#bluvstein]
+#
+#    Dolev Bluvstein, Simon J Evered, Alexandra A Geim, Sophie H Li, Hengyun Zhou, Tom Manovitz, Sepehr Ebadi, Madelyn Cain, Marcin Kalinowski, Dominik Hangleiter, et al.   
+#    "Logical quantum processor based on reconfigurable atom arrays"
+#    `https://www.nature.com/articles/s41586-023-06927-3 <https://www.nature.com/articles/s41586-023-06927-3>`__, in Nature 626.7997 (2024), pp. 58-65 (pages 1, 2), 2024.
+#
+# .. [#nest]
+#
+#    M. Van den Nest.   
+#    "Simulating quantum computers with probabilistic methods"
+#    `arXiv:0911.1624 <https://arxiv.org/abs/0911.1624>`__, 2010.
+#
+# .. [#gretton]
+#
+#    Arthur Gretton, Karsten M. Borgwardt, Malte J. Rasch, Bernhard Schölkopf, Alexander Smola. 
+#    "A Kernel Two-Sample Test"
+#    `http://jmlr.org/papers/v13/gretton12a.html <http://jmlr.org/papers/v13/gretton12a.html>`__, in Journal of Machine Learning Research 13.25, pp. 723-773, 2012.
+#
+# .. [#recio2]
+#
+#    Erik Recio, Shahnawaz Ahmed, Joseph Bowles. 
+#    "How to train a 1000 qubit quantum generative model on a laptop", in preparation
+#
+# .. [#ravuri]
+#
+#    Suman Ravuri, Mélanie Rey, Shakir Mohamed, Marc Peter Deisenroth. 
+#    "Understanding Deep Generative Models with Generalized Empirical Likelihoods"
+#    `arXiv:2306.09780 <https://arxiv.org/abs/2306.09780>`__, 2023.
 # 
 # About the author
 # ----------------
