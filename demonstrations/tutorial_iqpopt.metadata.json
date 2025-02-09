@@ -79,26 +79,6 @@
             "url": "https://arxiv.org/abs/0911.1624"
         },
         {
-            "id": "gretton",
-            "type": "",
-            "title": "A Kernel Two-Sample Test",
-            "authors": "Arthur Gretton, Karsten M. Borgwardt, Malte J. Rasch, Bernhard Schölkopf, Alexander Smola",
-            "year": "2012",
-            "publisher": "",
-            "journal": "",
-            "url": "http://jmlr.org/papers/v13/gretton12a.html"
-        },
-        {
-            "id": "recio2",
-            "type": "",
-            "title": "How to train a 1000 qubit quantum generative model on a laptop",
-            "authors": "Erik Recio, Shahnawaz Ahmed, Joseph Bowles",
-            "year": "",
-            "publisher": "",
-            "journal": "",
-            "url": ""
-        },
-        {
             "id": "ravuri",
             "type": "preprint",
             "title": "Understanding Deep Generative Models with Generalized Empirical Likelihoods",
