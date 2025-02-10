@@ -37,7 +37,17 @@
     "relatedContent": [
         {
             "type": "demonstration",
-            "id": "tutorial_qpe",
+            "id": "tutorial_jax_transformations",
+            "weight": 1.0
+        }, 
+        {
+            "type": "demonstration",
+            "id": "tutorial_qjit_compile_grovers_algorithm_with_catalyst",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_how_to_quantum_just_in_time_compile_vqe_catalyst",
             "weight": 1.0
         }
     ]

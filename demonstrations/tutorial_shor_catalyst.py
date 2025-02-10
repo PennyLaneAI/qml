@@ -11,9 +11,9 @@ JIT compiling Shor's algorithm with PennyLane and Catalyst
 
 .. related::
 
-    tutorial_iterative_quantum_phase_estimation IPE demo (update when available)
-
-*Author: Olivia Di Matteo — Posted: X Y 2024. Last updated: X Y 2024.*
+    tutorial_jax_transformations
+    tutorial_how_to_quantum_just_in_time_compile_vqe_catalyst
+    tutorial_qjit_compile_grovers_algorithm_with_catalyst
 """
 
 ##############################################################################
