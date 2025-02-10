@@ -20,7 +20,7 @@
             "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_iqpopt.png"
         }
     ],
-    "seoDescription": "Showing how to use the package IQPopt and optimize IQP circuits really fast.",
+    "seoDescription": "Learn how to speed up the optimization of Instantaneous Quantum Polynomial (IQP) circuits using the IQPopt package.",
     "doi": "",
     "references": [
         {
