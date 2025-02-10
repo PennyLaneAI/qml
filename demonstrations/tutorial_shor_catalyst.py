@@ -23,8 +23,9 @@ JIT compiling Shor's algorithm with PennyLane and Catalyst
 # co-processors is necessary for every quantum algorithm, even ones considered
 # quintessentially quantum.
 #
-# Shor's famous factoring algorithm [#Shor1997]_ is one such example. Have a look at the
-# example code below:
+# Shor's famous factoring algorithm [#Shor1997]_ is one such example. Suppose we
+# wish to decompose an integer :math:`N` into two constituent prime factors,
+# :math:`p` and :math:`q`. Have a look at the example code below:
 
 import jax.numpy as jnp
 
@@ -74,8 +75,8 @@ def shors_algorithm(N):
 # classical control structure and all. Moreover, we can demonstrate that
 # compilation happens only once per bit-width of the integer being factored.
 #
-# Background: compilation
-# ----------------------------------------
+# Compilation
+# -----------
 #
 # Classical compilation
 # ^^^^^^^^^^^^^^^^^^^^^
@@ -100,21 +101,28 @@ def shors_algorithm(N):
 # debugging is often easier because execution can be paused partway to inspect
 # the program state or view diagnostic information [#PurpleDragonBook]_.
 #
-# In between these two extremes lies an alterantive: *just-in-time compilation*.
+# In between these two extremes lies an alternative: *just-in-time compilation*.
 # Just-in-time, or JIT compilation, is compilation that happens *during*
 # execution. If a programmer indicate that a particular function should be JIT
 # compiled, the first time the interpreter sees it, it will spend a little more
 # time to construct its own internal compiled version of that function. The next
 # time that function is executed, the previously-compiled version can be reused,
-# provided the structure of the inputs has not changed.
+# provided the structure of the inputs hasn't changed.
+#
+# .. figure:: ../_static/demonstration_assets/shor_catalyst/compilation_comparison.png
+#    :scale: 75%
+#    :align: center
+#    :alt: From compilation to interpretation.
 #
 # Quantum compilation
 # ^^^^^^^^^^^^^^^^^^^
-# Quantum compilation, like its classical counterpart, lowers an algorithm
-# (assumed for now to be a circuit) from its expression in a high-level language
-# down to a low-level one. It involves multiple passes over the code, through
-# one or more intermediate representations, and both machine-independent and
-# dependent optimizations.
+# Quantum compilation, like its classical counterpart, lowers an algorithm from
+# its expression in a high-level language down to a low-level one. The bulk of
+# this process involves converting a circuit from a more generic, abstract gate
+# set to a sequence of gates that satisfy the constraints of a particular
+# hardware device. Quantum compilation also involves multiple passes over the
+# code through one or more intermediate representations, and both
+# machine-independent and dependent optimizations, as depicted below.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/compilation-stack.svg
 #    :scale: 75%
@@ -127,71 +135,81 @@ def shors_algorithm(N):
 #    techniques).
 #
 # Developing automated compilation tools is a very active and important area of
-# research, and is a major requirement for today's quantum software stacks. Even if a
-# library contains many functions for pre-written quantum circuits, without a
-# proper compiler a user would be left to optimize and map them to hardware by hand.
-# This is an extremely laborious (and error-prone!) process, and furthermore,
-# is unlikely to be optimal.
+# research, and is a major requirement for today's quantum software stacks. Even
+# if a library contains implementations for specific quantum circuits (e.g., the
+# Fourier transform or a multi-controlled operation or phase estimation),
+# without a proper compiler a user would be left to optimize and map them to
+# hardware by hand. This is an extremely laborious (and error-prone!) process,
+# and furthermore, is unlikely to be optimal.
 #
+# Let's suppose we want compile and optimize our quantum circuits for Shor's
+# algorithm to factor the integer :math:`N`. Recalling the pseudocode above,
+# let's break the algorithm down into a couple distinct steps to identify where
+# quantum compilation happens.
+#
+#  - Randomly select an integer, :math:`a`, between 2 and
+#    :math:`N-1` (double check we didn't get lucky and randomly select one of the true factors)
+#  - Execute order finding on a quantum computer, and use the measurement results to  guess a candidate non-trivial square root.
+#  - If the square root is non-trivial, test whether we found the factors. Otherwise, try taking more shots, or try a different :math:`a`.
+#
+# For a full description of Shor's algorithm, the interested reader is referred
+# to the `PennyLane Codebook
+# <https://pennylane.ai/codebook/10-shors-algorithm/>`_.  What's important here
+# is the following. Even if we have a good compiler, every random choice of
+# ``a`` yields a different quantum circuit (as we will discuss in the
+# implementation details below). Each circuit, generated independently at
+# runtime, must be compiled and optimized, leading to a huge overhead in
+# computation time. One could potentially generate, optimize, and store circuits
+# and subroutines for reuse. But note that they depend on both ``a`` and ``N``,
+# where in a cryptographic context, ``N`` relates to a public key which is
+# unique for every entity. Moreover, for sizes of cryptographic relevance, ``N``
+# will be a 2048-bit integer or larger! This amount of reuse and recompilation
+# suggests that JIT compilation is worth investigating.
 #
 # Quantum just-in-time compilation
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
-# In standard PennyLane, quantum circuit execution can be JIT compiled using the
+# In standard PennyLane, quantum circuit execution can be JIT-compiled using the
 # JAX framework. If you want to learn more, you can check out the `JAX
 # documentation <https://docs.jax.dev/en/latest/jit-compilation.html>`_ ` and
 # the `PennyLane demo
 # <https://pennylane.ai/qml/demos/tutorial_jax_transformations>` on the
 # subject. But this will only compile a single circuit; what about all the other
-# code around it? Moreover, what if you also wanted to optimize that quantum
+# code around it? Moreover, what if you also wanted to optimize that `quantum
 # circuit, based on contextual information? This is where Catalyst comes in.
 #
-#
-# Let's imagine we have such a tool, and we want to run Shor's algorithm. We can
-# see Shor's algorithm is broken down into a couple distinct steps. Suppose we
-# wish to decompose an integer :math:`N` into two constituent prime factors,
-# :math:`p` and :math:`q`.
-#
-#  - First, we randomly select a candidate integer, :math:`a`, between 2 and
-#    :math:`N-1` (before proceeding, we double check that we did not get lucky and randomly select one of the true factors)
-#  - Using our chosen a, we proceed to the quantum part of the algorithm: order-finding.
-#    Quantum circuits are generated, and the circuit is executed on a device. The results
-#    are used to make a guess for a non-trivial square root.
-#  - If the square root is non-trivial, we test whether we found the factors. Otherwise, we try again
-#    with more shots. Eventually, we try with a different value of a.
-#
-# For a full description of Shor's algorithm, the interested reader is referred
-# to the relevant module in the `PennyLane Codebook
-# <https://pennylane.ai/codebook/10-shors-algorithm/>`_.
-# What's important here is the following. Even if we have a good compiler, every random choice of ``a`` yields a
-# different quantum circuit (as we will discuss in the implementation details
-# below). Each of these circuits, generated independently at runtime, would need
-# to be compiled and optimized, leading to a huge overhead in computation
-# time. One could potentially generate, optimize, and store circuits and
-# subroutines for reuse. But note that they depend on both ``a`` and ``N``,
-# where in a cryptographic context, ``N`` relates to a public key which is
-# unique for every entity. Morever, for sizes of cryptographic relevance, ``N``
-# will be a 2048-bit integer or larger!
-#What's important here
-# for us is to note that for each new value of :math:`a` (and more generally,
-# each possible :math:`N`), we must compile and optimize many large quantum
-# circuits, each of which consists of many nested subroutines.
-#
-#
-# The previous discussion also neglects the fact that the quantum computation
-# happens within the context of an algorithm that includes classical code and
-# control flow. In Shor's algorithm, this is fairly minimal, but one can imagine
-# larger workflows with substantial classical subroutines that themselves must
-# be compiled and optimized, perhaps even in tandem with the quantum code. This
-# is where Catalyst and quantum just-in-time compilation come into play.
-#
-#
+# Catalyst allows us to quantum JIT (QJIT) compile, the *entire* algorithm from
+# end-to-end. On the surface, it looks to be as simple as  doing the following:
+
+import pennylane as qml
+
+@qml.qjit
+def shors_algorithm(N):
+    # Implementation goes here
+    return p, q
 
 ######################################################################
-# The quantum part
-# ^^^^^^^^^^^^^^^^
+# Unfortunately it is not quite so simple, and requires some special-purpose
+# functions and data manipulation. But in the next section, we will show how to
+# fully QJIT the most important parts, resulting in the following signature:
+
+@qml.qjit(autograph=True, static_argnums=(2))
+def shors_algorithm(N, a, n_bits):
+    # Implementation goes here
+    return p, q
+
+######################################################################
+# We will also see many examples of how knowledge of :math:`a` can be used to
+# generate more optimal quantum circuits during the construction phase, within
+# the QJITted function.
 #
-# In this section we describe the circuits comprising the quantum subroutine
+# QJIT compiling Shor's algorithm
+# -------------------------------
+#
+# Quantum subroutines
+# ^^^^^^^^^^^^^^^^^^^
+#
+# This section describes the circuits comprising the quantum subroutine
 # in Shor's algorithm, i.e., the order-finding algorithm. The presented
 # implementation is based on [#Beauregard2003]_. For an integer :math:`N` with
 # an :math:`n = \lceil \log_2 N \rceil`-bit representation, the circuit requires
@@ -656,7 +674,7 @@ def shors_algorithm(N):
 
 ######################################################################
 # Catalyst implementation
-# -----------------------
+# ^^^^^^^^^^^^^^^^^^^^^^^
 #
 # With all our circuits in hand, we can code up the full implementation of
 # Shor's algorithm in PennyLane and Catalyst.
@@ -994,8 +1012,8 @@ def shors_algorithm(N, a, n_bits):
 # To actually run this, we must choose a value of ``a``. In principle, we could
 # incorporate random generation of ``a`` within the function above. However,
 # this cannot be qjitted. Passing ``n_bits`` as a static argument is also to
-# work around limitations of JIT compilation. These will be explored in the next
-# section. For now, let us verify our algorithm can successfully factor.
+# work around limitations of QJIT compilation. For now, let us verify our
+# algorithm can successfully factor.
 
 from jax import random
 
@@ -1032,10 +1050,10 @@ p, q, success_prob = factor_with_shor(N)
 print(f"N = {p} x {q}. Success probability is {success_prob}")
 
 ######################################################################
-# JIT compilation and performance
-# -------------------------------
+# Performance and validation
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
-# Let us now validate that JIT compilation is happening properly. We will run
+# Let us now verify that QJIT compilation is happening properly. We will run
 # the algorithm for a series of different ``N`` with the same bit width, and
 # different values of ``a``. We expect the first execution, for the very
 # first ``N`` and ``a``, to take longer than the rest.
@@ -1094,7 +1112,7 @@ plt.ylabel("Runtime (s)")
 # Conclusions
 # -----------
 #
-# TODO!
+# 
 #
 # References
 # ----------
