@@ -62,44 +62,46 @@ def shors_algorithm(N):
 # programmer doesn't actually need to know anything quantum is happening, if the
 # software library can generate and compile appropriate quantum code (though,
 # they should probably have at least some awareness, since the output of
-# ``guess_order`` is probabilistic!).  This raises some questions: what gets
-# compiled, where and how does compilation happen, and what do we gain?
+# ``guess_order`` is probabilistic!).  This raises the important question of
+# what exactly gets compiled, as well as where, when, and how compilation
+# happens.
 #
-# Over the past year, PennyLane has become increasingly integrated with
-# `Catalyst
-# <https://docs.pennylane.ai/projects/catalyst/en/latest/index.html>`_, which
-# for just-in-time compilation of classical and quantum code together. In this
-# demo, we will leverage this to develop an implementation of Shor's factoring
-# algorithm that is just-in-time compiled from end-to-end, classical control
-# structure and all. In particular, we will see how to leverage Catalyst's
-# mid-circuit measurement capabilities to reduce the size of quantum circuits,
-# and how JIT compilation enables faster execution overall.
+# Over the past year, PennyLane has been integrated with `Catalyst
+# <https://docs.pennylane.ai/projects/catalyst/en/latest/index.html>`_, allowing
+# for quantum just-in-time compilation of classical and quantum code
+# together. This demo leverages that integration to implement a version of
+# Shor's factoring algorithm that is just-in-time compiled from end-to-end,
+# classical control structure and all. Moreover, we can demonstrate that
+# compilation happens only once per bit-width of the integer being factored.
 #
-# Crash course on Shor's algorithm
-# --------------------------------
+# JIT compiling classical and quantum code
+# ----------------------------------------
+# Compilation is the process of translating operations expressed in a high-level
+# language to a low-level language.
+# In language like C and C++, compilation happens
+# offline prior to executing your code. Your input program is sent to a compiler,
+# which outputs a new program in assembly code. An assembler then turns this
+# into a machine-executable program which you can run and feed inputs
+# to. [#PurpleDragonBook]_.
 #
-# Looking back at the code above, we can see that Shor's algorithm is broken
-# down into a couple distinct steps. Suppose we wish to decompose an integer
-# :math:`N` into its two constituent prime factors, :math:`p` and :math:`q`.
+# However, compilation is not the only way to execute a program.
+# Python, for example, is an *interpreted* languages. Both a source
+# program and inputs are fed to the interpreter, which processes them line
+# by line, and directly gives us the program output.
 #
-#  - First, we randomly select a candidate integer, :math:`a`, between 2 and
-#    :math:`N-1` (before proceeding, we double check that we did not get lucky and randomly select one of the true factors)
-#  - Using our chosen a, we proceed to the quantum part of the algorithm: order-finding.
-#    Quantum circuits are generated, and the circuit is executed on a device. The results
-#    are used to make a guess for a non-trivial square root.
-#  - If the square root is non-trivial, we test whether we found the factors. Otherwise, we try again
-#    with more shots. Eventually, we try with a different value of a.
+# Compiled and interpreted languages, and languages within each category, all
+# have unique strengths and weakness. Compilation will generally lead to faster
+# execution, because you can make optimizations that take into account the
+# overall struture of the program. On debugging is often easier in an
+# interpreted language because you can pause execution partway to inspect
+# variables and program state.  directly view diagnostic information
+# [#PurpleDragonBook]_.
 #
-# For a full description of Shor's algorithm, the interested reader is referred
-# to the relevant module in the `PennyLane Codebook
-# <https://pennylane.ai/codebook/10-shors-algorithm/>`_. What's important here
-# for us is to note that for each new value of :math:`a` (and more generally,
-# each possible :math:`N`), we must compile and optimize many large quantum
-# circuits, each of which consists of many nested subroutines.
+# In between these two extremes lies an alterantive: *just-in-time compilation*.
+# Just-in-time compilation is compilation that happens *during* execution, for
+# instance, while a Python interpreter is doing its job.
 #
-# In both classical and quantum programming, compilation is the process of
-# translating operations expressed in high-level languages down to the language
-# of the hardware. As depicted below, it involves multiple passes over the code,
+# As depicted below, it involves multiple passes over the code,
 # through one or more intermediate representations, and both machine-independent and
 # dependent optimizations.
 #
@@ -114,7 +116,7 @@ def shors_algorithm(N):
 #    techniques).
 #
 # Developing automated compilation tools is a very active and important area of
-# research, and is a major requirement for today's software stacks. Even if a
+# research, and is a major requirement for today's quantum software stacks. Even if a
 # library contains many functions for pre-written quantum circuits, without a
 # proper compiler a user would be left to optimize and map them to hardware by hand.
 # This is an extremely laborious (and error-prone!) process, and furthermore,
@@ -138,29 +140,25 @@ def shors_algorithm(N):
 # be compiled and optimized, perhaps even in tandem with the quantum code. This
 # is where Catalyst and quantum just-in-time compilation come into play.
 #
+# Looking back at the code above, we see Shor's algorithm is broken
+# down into a couple distinct steps. Suppose we wish to decompose an integer
+# :math:`N` into two constituent prime factors, :math:`p` and :math:`q`.
 #
-# JIT compiling classical and quantum code
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#  - First, we randomly select a candidate integer, :math:`a`, between 2 and
+#    :math:`N-1` (before proceeding, we double check that we did not get lucky and randomly select one of the true factors)
+#  - Using our chosen a, we proceed to the quantum part of the algorithm: order-finding.
+#    Quantum circuits are generated, and the circuit is executed on a device. The results
+#    are used to make a guess for a non-trivial square root.
+#  - If the square root is non-trivial, we test whether we found the factors. Otherwise, we try again
+#    with more shots. Eventually, we try with a different value of a.
 #
-# In *compiled* languages, like C and C++, compilation is a process that happens
-# offline prior to executing your code. An input program is sent to a compiler,
-# which outputs a new program in assembly code. An assembler then turns this
-# into a machine-executable program which you can run and feed inputs
-# to. [#PurpleDragonBook]_.
+# For a full description of Shor's algorithm, the interested reader is referred
+# to the relevant module in the `PennyLane Codebook
+# <https://pennylane.ai/codebook/10-shors-algorithm/>`_. What's important here
+# for us is to note that for each new value of :math:`a` (and more generally,
+# each possible :math:`N`), we must compile and optimize many large quantum
+# circuits, each of which consists of many nested subroutines.
 #
-# On the other hand, in *interpreted* languages (like Python), both the source
-# program and inputs are fed to the interpreter, which processes them line
-# by line, and directly gives us the program output.
-#
-# Compiled and interpreted languages, and languages within each category, all
-# have unique strengths and weakness. Compilation will generally lead to faster
-# execution, but can be harder to debug than interpretation, where execution can
-# halt partway and provide direct diagnostic information about where something
-# went wrong [#PurpleDragonBook]_. *Just-in-time compilation* offers a solution
-# that lies, in some sense, at the boundary between the two.
-#
-# Just-in-time compilation involves compiling code *during* execution, for instance,
-# while an interpreter is doing its job.
 #
 
 ######################################################################
@@ -1017,7 +1015,7 @@ print(f"N = {p} x {q}. Success probability is {success_prob}")
 #
 # Let us now validate that JIT compilation is happening properly. We will run
 # the algorithm for a series of different ``N`` with the same bit width, and
-# different values of ``a``. We expect the very first execution, for the very
+# different values of ``a``. We expect the first execution, for the very
 # first ``N`` and ``a``, to take longer than the rest.
 
 import time
@@ -1045,30 +1043,30 @@ for N in N_values:
         unique_a.append(a)
 
     for a in unique_a:
-        # Initial JIT compilation time
         start = time.time()
         p, q = shors_algorithm(N, a, n_bits)
         end = time.time()
         execution_times.append((N, a, end - start))
 
-        # Get subsequent runtimes
         start = time.time()
         p, q = shors_algorithm(N, a, n_bits)
         end = time.time()
         execution_times.append((N, a, end - start))
-
-labels = [str(ex[:1]) for ex in execution_times]
+ 
+labels = [f"{ex[0]}, {int(ex[1])}" for ex in execution_times][::2]
 times = [ex[2] for ex in execution_times]
 
-plt.scatter(range(len(times)), times)
-plt.ylabel("Time (s)")
+plt.scatter(range(len(times)), times, c=[ex[0] for ex in execution_times])
+plt.xticks(range(0, len(times), 2), labels=labels, rotation=80)
+plt.xlabel("N, a")
+plt.ylabel("Runtime (s)")
 
-# TODO: discussions about technical details and challenges; autograph and
-# control flow, dynamically-sized arrays, etc.
-#
-# TODO: plots of performance
+######################################################################
+# This plot demonstrates exactly what we suspect: changing :math:`N` and
+# :math:`a` does not lead to recompilation of the program! This will be
+# particularly valuable for large :math:`N`, where compilation time may become
+# long.
 
-# TODO: relevant code
 
 ######################################################################
 # Conclusions
