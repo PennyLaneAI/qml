@@ -733,7 +733,7 @@ def modular_inverse(a, N):
 
 
 ######################################################################
-# Next, we require a few helper functions for the phase estimation.
+# We require a few helper functions for phase estimation.
 
 
 def fractional_binary_to_float(sample):
@@ -813,7 +813,7 @@ def phase_to_order(phase, max_denominator):
 
 
 ######################################################################
-# Next, we provide the implementations of the circuits derived in the previous section.
+# Below, we have the implementations of the circuits derived in the previous section.
 
 import pennylane as qml
 import catalyst
@@ -906,9 +906,8 @@ def controlled_ua(N, a, control_wire, target_wires, aux_wires, mult_a_mask, mult
 
 
 ######################################################################
-# Next, let's put everything together into the order-finding routine
-# that is part of Shor's algorithm. We can implement the entire algorithm
-# within the ``@qml.qjit`` decorator.
+# Finally, let's put it all together in the core portion of Shor's algorithm,
+# under the ``@qml.qjit`` decorator.
 
 
 @qml.qjit(autograph=True, static_argnums=(2))
@@ -1099,7 +1098,7 @@ times = [ex[2] for ex in execution_times]
 plt.scatter(range(len(times)), times, c=[ex[0] for ex in execution_times])
 plt.xticks(range(0, len(times), 2), labels=labels, rotation=80)
 plt.xlabel("N, a")
-plt.ylabel("Runtime (s)")
+plt.ylabel("Runtime (s)");
 
 ######################################################################
 # This plot demonstrates exactly what we suspect: changing :math:`N` and
@@ -1112,7 +1111,17 @@ plt.ylabel("Runtime (s)")
 # Conclusions
 # -----------
 #
-# 
+# The ability to leverage a tool like Catalyst means we can quickly generate,
+# compile, and optimize very large circuits, even within the context of a larger
+# workflow. There is still much work to be done, however. For one, the generated
+# circuits are not being optimized, so the resource counts will be large and
+# impractical. One also observes that, even though "higher-level" optimizations
+# become possible, there is still a significant amount of manual labour involved
+# in implementing them. Compilation tools that can, e.g., automatically
+# determine how subroutines can be simplified based on classical information or
+# on an input quantum superposition, would be valuable to develop, as they would
+# co-optimization of the classical and quantum parts of a workflow.
+#
 #
 # References
 # ----------
