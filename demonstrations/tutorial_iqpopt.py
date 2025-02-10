@@ -39,7 +39,7 @@ parameter. We will represent the parameterized gates by a list
 #    </center>
 # 
 # that specifies the generators of the gates (each generator with an independent trainable parameter).
-# Each element of ``gates`` corresponds to a different parameter, and is a list of lists of integers
+# Each element of ``gates`` is associated with a different parameter, and is a list of lists of integers
 # that specify the generators for that parameter. For example,
 # 
 # .. raw:: html
@@ -80,8 +80,8 @@ gates = [[[0]], [[1]], [[2]], [[0,1]], [[0,2]], [[1,2]]]
 # IQPopt can be applied to problems that involve measuring expectation values of Pauli Z tensors of
 # parameterized IQP circuits.
 # 
-# We will represent these observables with binary lists, where a non-zero element specifies that
-# presence of a Pauli Z operator on that qubit. For example, for a three qubit circuit the operator
+# We will represent these observables with binary lists, where a nonzero element denotes the
+# presence of a Pauli Z operator on that qubit. For example, in a three-qubit circuit, the operator
 # 
 # .. math:: O = Z \otimes I \otimes Z
 # 
@@ -97,12 +97,12 @@ gates = [[[0]], [[1]], [[2]], [[0,1]], [[0,2]], [[1,2]]]
 # 
 #    </center>
 # 
-# Let's now put this into practice and build a pennylane circuit out of a ``gates`` list.
+# Let's now put this into practice and build a PennyLane circuit out of a ``gates`` list.
 # 
-# Creating an IQP circuit with pennylane
+# Creating an IQP circuit with PennyLane
 # --------------------------------------
 # 
-# To build a parameterized IQP circuit in PennyLane, we can use the MultiRZ function, making use of
+# To build a parameterized IQP circuit in PennyLane, we can use the :class:`~pennylane.MultiRZ` function, making use of
 # the identity
 # 
 # .. math:: \text{exp}(i\theta_j X_j) = H^{\otimes n} \text{exp}(i\theta_j Z_j) H^{\otimes n},
@@ -205,8 +205,7 @@ print(penn_op_expval)
 # Estimating expectation values with IQPopt
 # -----------------------------------------
 # 
-# IQPopt is able to perform the same operations our pennylane circuit above is able to do. Although,
-# this time, only with approximations instead of exact values. The gain is that we can work with very
+# IQPopt can perform the same operations our PennyLane circuit above is able to, although using approximations instead of exact values. The benefit is that we can work with very
 # large circuits.
 # 
 # Starting from a paper [#nest]_ from Van den Nest (Theorem 3), one can arrive at the following expression
@@ -214,11 +213,13 @@ print(penn_op_expval)
 # 
 # .. math:: \langle Z_{\boldsymbol{a}} \rangle = \mathbb{E}_{\boldsymbol{z}\sim U}\Big[ \cos\Big(\sum_j \theta_{j}(-1)^{\boldsymbol{g}_{j}\cdot \boldsymbol{z}}(1-(-1)^{\boldsymbol{g}_j\cdot \boldsymbol{a}}\Big) \Big],
 # 
-# where :math:`\boldsymbol{a}` is the bitstring form of the operator we want to calculate the
-# expectation value of, :math:`\boldsymbol{z}` are bitstring samples taken from the uniform
-# distribution, :math:`\theta_{j}` are the trainable parameters and :math:`\boldsymbol{g}_{j}` are the
-# different generators also in bitstring form. Although this expression is exact, computing the
-# expectation exactly requires an infinite number of samples :math:`\boldsymbol{z}`. Instead, we can
+# where: 
+# - :math:`\boldsymbol{a}` is is the bitstring representation of the operator whose expectation value we want to compute.
+# - :math:`\boldsymbol{z}` represents bitstring samples drawn from a uniform distribution.
+# - :math:`\theta_{j}` are the trainable parameters.
+# - :math:`\boldsymbol{g}_{j}` are the different generators, also represented as bitstrings.
+#
+#Although this expression is exact, computing the expectation exactly requires an infinite number of samples :math:`\boldsymbol{z}`. Instead, we can
 # replace the expectation with an empirical mean and compute an unbiased estimate of
 # :math:`\langle Z_{\boldsymbol{a}} \rangle` efficiently. That is, if we sample a batch of :math:`s`
 # bitstrings :math:`\{\boldsymbol{z}_i\}` from the uniform distribution and compute the sample mean
@@ -226,15 +227,20 @@ print(penn_op_expval)
 # .. math:: \hat{\langle Z_{\boldsymbol{a}}\rangle} = \frac{1}{s}\sum_{i}\cos\Big(\sum_j \theta_j(-1)^{\boldsymbol{g}_j\cdot \boldsymbol{z}_i}(1-(-1)^{\boldsymbol{g}_j\cdot \boldsymbol{a}})\Big),
 # 
 # we obtain an unbiased estimate :math:`\hat{\langle Z_{\boldsymbol{a}}\rangle}` of
-# :math:`\langle Z_{\boldsymbol{a}}\rangle`; i.e. we have that
-# :math:`\mathbb{E}[\hat{\langle Z_{\boldsymbol{a}}\rangle}] = \langle Z_{\boldsymbol{a}}\rangle`. The
-# error of this approximation is well known since, by the central limit theorem, the standard
+# :math:`\langle Z_{\boldsymbol{a}}\rangle`, meaning that
+#
+# :math:`\mathbb{E}[\hat{\langle Z_{\boldsymbol{a}}\rangle}] = \langle Z_{\boldsymbol{a}}\rangle` 
+#
+# The error of this approximation is well known since, by the central limit theorem, the standard
 # deviation of the sample mean of a bounded random variable decreases as
-# :math:`\mathcal{O}(1/\sqrt{s})`.
+#
+# :math:`\mathcal{O}(1/\sqrt{s})`
+#
+#where :math:`s` is the number of samples.
 # 
 # Lets see now how to use the IQPopt package to calculate expectation values, based on the same
 # arguments in the previous example. First, we create the circuit object with ``IqpSimulator``,
-# only with the number of qubits of the circuit and the ``gates`` parameter already explained:
+# which takes in the number of qubits ``n_qubits`` and the ``gates`` in our usual format:
 # 
 import iqpopt as iqp
 
@@ -260,9 +266,9 @@ expval, std = small_circuit.op_expval(params, op, n_samples, key)
 print(expval, std)
 
 ######################################################################
-# Since the calculation on ``iqpopt``\ 's side is stochastic, the result is not exactly the same as
-# the one obtained with PennyLane. But, as we can see, they are within the standard error `std`. You can try
-# increasing ``n_samples`` in order to obtain closer approximations.
+# Since the calculation in IQPopt is stochastic, the result is not exactly the same as
+# the one obtained with PennyLane. However, as we can see, they are within the standard error `std`. You can try
+# increasing ``n_samples`` in order to obtain a more accurate approximation.
 # 
 # This function also allows for fast batch evaluation of expectation values. If we specify a batch of
 # operators ``ops`` by an array, we can batch evaluate the expectation values and errors in parallel
@@ -275,8 +281,7 @@ expvals, stds = small_circuit.op_expval(params, ops, n_samples, key)
 print(expvals, stds)
 
 ######################################################################
-# With PennyLane, it would be very time consuming to pass the 30 qubit mark, but with IQPopt, we can
-# easily go way further than that.
+# With PennyLane, surpassing 30 qubits would be extremely time-consuming. However, with IQPopt, we can scale far beyond that with ease.
 # 
 n_qubits = 1000
 n_gates = 1000
@@ -309,9 +314,9 @@ print(expval, std)
 # 
 # .. math:: q_{\boldsymbol{\theta}}(\boldsymbol{x}) \equiv q(\boldsymbol{x}\vert\boldsymbol{\theta})=\vert (\langle \boldsymbol{x} \vert U(\boldsymbol{\theta})\vert 0 \rangle )\vert^2.
 # 
-# Where :math:`U(\boldsymbol{\theta})` is the parametrized IQP gates. For a low number of qubits, we
+# where :math:`U(\boldsymbol{\theta})` is the parametrized IQP gates. For a low number of qubits, we
 # can use PennyLane to obtain the output probabilities of the circuit as well as sample from it. Note
-# that there is not an efficient algorithm to do these so for large numbers of qubits so PennyLane
+# that there is not an efficient algorithm to do this for large numbers of qubits, so PennyLane
 # returns an error in this case.
 # 
 # These functions are already implemented in the ``IqpSimulator`` object. The ``.probs()`` method
@@ -395,9 +400,9 @@ plt.show()
 # ----------------------------
 # 
 # Circuits can be optimized via a separate ``Trainer`` class. To instantiate a trainer object, we first
-# define a loss function (also called an objective function), an optimizer and an initial stepsize for
+# define a loss function (also called an objective function), an `optimizer <https://docs.pennylane.ai/en/stable/introduction/interfaces.html#optimizers>`__, and an initial `stepsize` for
 # the gradient descent. Continuing our ``small_circuit`` example from before, below we define a simple
-# loss function that is a sum of expectation values returned by ``.op_expval()`` .
+# loss function that is a sum of expectation values returned by ``op_expval()`` .
 # 
 import jax.numpy as jnp
 
@@ -445,7 +450,7 @@ plt.show()
 # ---------------------------------
 # 
 # The package contains a dedicated module ``gen_qml`` with functionality to train and evaluate
-# generative models expressed as ``IqpSimulator`` circuits. Note that since sampling from IQP circuits
+# generative models expressed as ``IqpSimulator`` circuits. Note that, since sampling from IQP circuits
 # is hard, these circuits may lead to advantages for generative machine learning tasks relative to
 # classical models!
 # 
@@ -459,8 +464,7 @@ plt.show()
 # .. math::  \text{MMD}^2(\boldsymbol{\theta}) = \mathbb{E}_{\boldsymbol{x},\boldsymbol{y}\sim q_{\boldsymbol{\theta}} }[k(\boldsymbol{x},\boldsymbol{y})] - 2  \mathbb{E}_{\boldsymbol{x} \sim q_{\boldsymbol{\theta}},\boldsymbol{y}\sim p }[k(\boldsymbol{x},\boldsymbol{y})] + \mathbb{E}_{\boldsymbol{x},\boldsymbol{y}\sim p }[k(\boldsymbol{x},\boldsymbol{y})] \,,
 # 
 # Using a Gaussian kernel, it has one parameter called ``sigma``, the bandwidth of this kernel. This
-# metric is usually calculated with samples from both probability distributions and we have an
-# implementation ready for this case in the ``gen_qml`` module.
+# metric is typically calculated using samples from both probability distributions, and we have an implementation available for this in the ``gen_qml`` module.
 # 
 import iqpopt.gen_qml as genq
 from iqpopt.gen_qml.utils import median_heuristic
@@ -476,8 +480,8 @@ mmd = genq.mmd_loss_samples(X1, X2, sigma)
 print(mmd)
 
 ######################################################################
-# This metric can also be estimated efficiently with expectation values of Pauli Z operators only [#recio2].
-# This means that if we have an ``IqpSimulator`` object, we can also estiamte the MMD loss.
+# This metric can also be estimated efficiently with expectation values of Pauli Z operators only [#recio2]_.
+# This means that if we have an ``IqpSimulator`` object, we can also estimate the MMD loss.
 # 
 # The implementation in the ``gen_qml`` module only needs an additional parameter, ``n_ops``, that
 # controls the accuracy of this value. For each of these ``n_ops``, an expectation value will be
