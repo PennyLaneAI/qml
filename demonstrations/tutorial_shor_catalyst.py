@@ -74,35 +74,46 @@ def shors_algorithm(N):
 # classical control structure and all. Moreover, we can demonstrate that
 # compilation happens only once per bit-width of the integer being factored.
 #
-# JIT compiling classical and quantum code
+# Background: compilation
 # ----------------------------------------
+#
+# Classical compilation
+# ^^^^^^^^^^^^^^^^^^^^^
 # Compilation is the process of translating operations expressed in a high-level
-# language to a low-level language.
-# In language like C and C++, compilation happens
-# offline prior to executing your code. Your input program is sent to a compiler,
-# which outputs a new program in assembly code. An assembler then turns this
-# into a machine-executable program which you can run and feed inputs
-# to. [#PurpleDragonBook]_.
+# language to a low-level language.  In language like C and C++, compilation
+# happens offline prior to executing your code. A compiler takes a program as
+# input and sends it through a sequence of *passes* that perform tasks such as
+# syntax analysis, code generation, and optimization. A compiler outputs a
+# new program in assembly code; the assembler then turns this into a
+# machine-executable program that you can provide inputs to and then run
+# [#PurpleDragonBook]_.
 #
 # However, compilation is not the only way to execute a program.
 # Python, for example, is an *interpreted* languages. Both a source
 # program and inputs are fed to the interpreter, which processes them line
 # by line, and directly gives us the program output.
 #
-# Compiled and interpreted languages, and languages within each category, all
-# have unique strengths and weakness. Compilation will generally lead to faster
-# execution, because you can make optimizations that take into account the
-# overall struture of the program. On debugging is often easier in an
-# interpreted language because you can pause execution partway to inspect
-# variables and program state.  directly view diagnostic information
-# [#PurpleDragonBook]_.
+# Compilation and interpretation each have strengths and weakness. Compilation
+# will generally lead to faster execution, because optimizations can consider
+# the overall struture of a program. However, the executable code is not
+# human-readable, and thus harder to debug. Interpretation is slower, but
+# debugging is often easier because execution can be paused partway to inspect
+# the program state or view diagnostic information [#PurpleDragonBook]_.
 #
 # In between these two extremes lies an alterantive: *just-in-time compilation*.
-# Just-in-time compilation is compilation that happens *during* execution, for
-# instance, while a Python interpreter is doing its job.
+# Just-in-time, or JIT compilation, is compilation that happens *during*
+# execution. If a programmer indicate that a particular function should be JIT
+# compiled, the first time the interpreter sees it, it will spend a little more
+# time to construct its own internal compiled version of that function. The next
+# time that function is executed, the previously-compiled version can be reused,
+# provided the structure of the inputs has not changed.
 #
-# As depicted below, it involves multiple passes over the code,
-# through one or more intermediate representations, and both machine-independent and
+# Quantum compilation
+# ^^^^^^^^^^^^^^^^^^^
+# Quantum compilation, like its classical counterpart, lowers an algorithm
+# (assumed for now to be a circuit) from its expression in a high-level language
+# down to a low-level one. It involves multiple passes over the code, through
+# one or more intermediate representations, and both machine-independent and
 # dependent optimizations.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/compilation-stack.svg
@@ -122,27 +133,24 @@ def shors_algorithm(N):
 # This is an extremely laborious (and error-prone!) process, and furthermore,
 # is unlikely to be optimal.
 #
-# However, our implementation of Shor's algorithm surfaces another complication.
-# Even if we have a good compiler, every random choice of ``a`` yields a
-# different quantum circuit (as we will discuss in the implementation details
-# below). Each of these circuits, generated independently at runtime, would need
-# to be compiled and optimized, leading to a huge overhead in computation
-# time. One could potentially generate, optimize, and store circuits and
-# subroutines for reuse. But note that they depend on both ``a`` and ``N``,
-# where in a cryptographic context, ``N`` relates to a public key which is
-# unique for every entity. Morever, for sizes of cryptographic relevance, ``N``
-# will be a 2048-bit integer or larger!
 #
-# The previous discussion also neglects the fact that the quantum computation
-# happens within the context of an algorithm that includes classical code and
-# control flow. In Shor's algorithm, this is fairly minimal, but one can imagine
-# larger workflows with substantial classical subroutines that themselves must
-# be compiled and optimized, perhaps even in tandem with the quantum code. This
-# is where Catalyst and quantum just-in-time compilation come into play.
+# Quantum just-in-time compilation
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
-# Looking back at the code above, we see Shor's algorithm is broken
-# down into a couple distinct steps. Suppose we wish to decompose an integer
-# :math:`N` into two constituent prime factors, :math:`p` and :math:`q`.
+# In standard PennyLane, quantum circuit execution can be JIT compiled using the
+# JAX framework. If you want to learn more, you can check out the `JAX
+# documentation <https://docs.jax.dev/en/latest/jit-compilation.html>`_ ` and
+# the `PennyLane demo
+# <https://pennylane.ai/qml/demos/tutorial_jax_transformations>` on the
+# subject. But this will only compile a single circuit; what about all the other
+# code around it? Moreover, what if you also wanted to optimize that quantum
+# circuit, based on contextual information? This is where Catalyst comes in.
+#
+#
+# Let's imagine we have such a tool, and we want to run Shor's algorithm. We can
+# see Shor's algorithm is broken down into a couple distinct steps. Suppose we
+# wish to decompose an integer :math:`N` into two constituent prime factors,
+# :math:`p` and :math:`q`.
 #
 #  - First, we randomly select a candidate integer, :math:`a`, between 2 and
 #    :math:`N-1` (before proceeding, we double check that we did not get lucky and randomly select one of the true factors)
@@ -154,10 +162,28 @@ def shors_algorithm(N):
 #
 # For a full description of Shor's algorithm, the interested reader is referred
 # to the relevant module in the `PennyLane Codebook
-# <https://pennylane.ai/codebook/10-shors-algorithm/>`_. What's important here
+# <https://pennylane.ai/codebook/10-shors-algorithm/>`_.
+# What's important here is the following. Even if we have a good compiler, every random choice of ``a`` yields a
+# different quantum circuit (as we will discuss in the implementation details
+# below). Each of these circuits, generated independently at runtime, would need
+# to be compiled and optimized, leading to a huge overhead in computation
+# time. One could potentially generate, optimize, and store circuits and
+# subroutines for reuse. But note that they depend on both ``a`` and ``N``,
+# where in a cryptographic context, ``N`` relates to a public key which is
+# unique for every entity. Morever, for sizes of cryptographic relevance, ``N``
+# will be a 2048-bit integer or larger!
+#What's important here
 # for us is to note that for each new value of :math:`a` (and more generally,
 # each possible :math:`N`), we must compile and optimize many large quantum
 # circuits, each of which consists of many nested subroutines.
+#
+#
+# The previous discussion also neglects the fact that the quantum computation
+# happens within the context of an algorithm that includes classical code and
+# control flow. In Shor's algorithm, this is fairly minimal, but one can imagine
+# larger workflows with substantial classical subroutines that themselves must
+# be compiled and optimized, perhaps even in tandem with the quantum code. This
+# is where Catalyst and quantum just-in-time compilation come into play.
 #
 #
 
