@@ -14,7 +14,6 @@ estimating expectation values of certain observables is easy.
     :target: javascript:void(0)
     :alt: IQP circuit optimization
 
-figure 1: IQP circuit optimization
 
 Parameterized IQP circuits
 --------------------------
@@ -41,7 +40,7 @@ parameter. We will represent the parameterized gates by a list
 # 
 # that specifies the generators of the gates (each generator with an independent trainable parameter).
 # Each element of ``gates`` corresponds to a different parameter, and is a list of lists of integers
-# that specifiy the generators for that parameter. For example,
+# that specify the generators for that parameter. For example,
 # 
 # .. raw:: html
 # 
@@ -73,7 +72,7 @@ parameter. We will represent the parameterized gates by a list
 # 
 gates = [[[0]], [[1]], [[2]], [[0,1]], [[0,2]], [[1,2]]]
 ######################################################################
-# i.e., all one and two body generators acting on three qubits.
+# Note that all of them are one and two body generators acting on three qubits.
 # 
 # Expectation values
 # ------------------
@@ -106,17 +105,17 @@ gates = [[[0]], [[1]], [[2]], [[0,1]], [[0,2]], [[1,2]]]
 # To build a parameterized IQP circuit in PennyLane, we can use the MultiRZ function, making use of
 # the identity
 # 
-# .. math:: \text{exp}(i\theta_j X_j) = H^{\otimes n} \text{exp}(i\theta_j Z_j) H^{\otimes n}
+# .. math:: \text{exp}(i\theta_j X_j) = H^{\otimes n} \text{exp}(i\theta_j Z_j) H^{\otimes n},
 # 
 # where :math:`H` is the Hadamard matrix and :math:`Z_j` is the operator obtained by replacing the
-# Pauli X operators by Pauli Z operators in :math:`X_j`. Our pennyalne circuit (with input state
+# Pauli X operators by Pauli Z operators in :math:`X_j`. Our PennyLane circuit (with input state
 # :math:`\vert 0 \rangle`) is therefore the following.
 # 
 import pennylane as qml
 import numpy as np
 
 def penn_iqp_gates(params: np.ndarray, gates: list, n_qubits: int):
-    """IQP circuit in pennylane form.
+    """IQP circuit in PennyLane form.
 
     Args:
         params (np.ndarray): The parameters of the IQP gates.
@@ -234,7 +233,7 @@ print(penn_op_expval)
 # :math:`\mathcal{O}(1/\sqrt{s})`.
 # 
 # Lets see now how to use the IQPopt package to calculate expectation values, based on the same
-# arguments we used in the previous example. First, we create the circuit object with ``IqpSimulator``
+# arguments in the previous example. First, we create the circuit object with ``IqpSimulator``,
 # only with the number of qubits of the circuit and the ``gates`` parameter already explained:
 # 
 import iqpopt as iqp
@@ -454,7 +453,7 @@ plt.show()
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # The Maximum Mean Discrepancy (MMD) [#gretton]_ is an integral probability metric that measures the
-# similarity between two probability distributions, and can serve as a loss function to train
+# similarity between two probability distributions and can serve as a loss function to train
 # generative models.
 # 
 # .. math::  \text{MMD}^2(\boldsymbol{\theta}) = \mathbb{E}_{\boldsymbol{x},\boldsymbol{y}\sim q_{\boldsymbol{\theta}} }[k(\boldsymbol{x},\boldsymbol{y})] - 2  \mathbb{E}_{\boldsymbol{x} \sim q_{\boldsymbol{\theta}},\boldsymbol{y}\sim p }[k(\boldsymbol{x},\boldsymbol{y})] + \mathbb{E}_{\boldsymbol{x},\boldsymbol{y}\sim p }[k(\boldsymbol{x},\boldsymbol{y})] \,,
