@@ -661,7 +661,7 @@ def repeated_squaring(a, exp, N):
         if bits[idx] == 1:
             result = (result * x) % N
             num_bits_added += 1
-        x = (x**2) % N
+        x = (x ** 2) % N
         idx += 1
 
     return result
@@ -780,7 +780,7 @@ catalyst.autograph_strict_conversion = True
 
 def QFT(wires):
     """The standard QFT, redefined because the PennyLane one uses terminal SWAPs."""
-    shifts = jnp.array([2 * jnp.pi * 2**-i for i in range(2, len(wires) + 1)])
+    shifts = jnp.array([2 * jnp.pi * 2 ** -i for i in range(2, len(wires) + 1)])
 
     for i in range(len(wires)):
         qml.Hadamard(wires[i])
@@ -793,7 +793,7 @@ def fourier_adder_phase_shift(a, wires):
     """Sends QFT(|b>) -> QFT(|b + a>)."""
     n = len(wires)
     a_bits = jnp.unpackbits(jnp.array([a]).view("uint8"), bitorder="little")[:n][::-1]
-    powers_of_two = jnp.array([1 / (2**k) for k in range(1, n + 1)])
+    powers_of_two = jnp.array([1 / (2 ** k) for k in range(1, n + 1)])
     phases = jnp.array([jnp.dot(a_bits[k:], powers_of_two[: n - k]) for k in range(n)])
 
     for i in range(len(wires)):
@@ -834,7 +834,7 @@ def controlled_ua(N, a, control_wire, target_wires, aux_wires, mult_a_mask, mult
     # Apply double-controlled additions where bits of a can be 1.
     for i in range(n):
         if mult_a_mask[n - i - 1] > 0:
-            pow_a = (a * (2**i)) % N
+            pow_a = (a * (2 ** i)) % N
             doubly_controlled_adder(
                 N, pow_a, [control_wire, target_wires[n - i - 1]], aux_wires[:-1], aux_wires[-1]
             )
@@ -857,11 +857,7 @@ def controlled_ua(N, a, control_wire, target_wires, aux_wires, mult_a_mask, mult
         if mult_a_inv_mask[i] > 0:
             pow_a_inv = (a_mod_inv * (2 ** (n - i - 1))) % N
             qml.adjoint(doubly_controlled_adder)(
-                N,
-                pow_a_inv,
-                [control_wire, target_wires[i]],
-                aux_wires[:-1],
-                aux_wires[-1],
+                N, pow_a_inv, [control_wire, target_wires[i]], aux_wires[:-1], aux_wires[-1],
             )
 
 
@@ -910,7 +906,7 @@ def shors_algorithm(N, a, n_bits):
         # For subsequent iterations, determine powers of a, and apply controlled
         # U_a when the power is not 1. Unnecessarily double-controlled
         # operations are removed, based on values stored in the two "mask" variables.
-        powers_cua = jnp.array([repeated_squaring(a, 2**p, N) for p in range(n_bits)])
+        powers_cua = jnp.array([repeated_squaring(a, 2 ** p, N) for p in range(n_bits)])
 
         loop_bound = n_bits
         if jnp.min(powers_cua) == 1:
@@ -920,7 +916,7 @@ def shors_algorithm(N, a, n_bits):
             pow_cua = powers_cua[pow_a_idx]
 
             if not jnp.all(a_inv_mask):
-                for power in range(2**pow_a_idx, 2 ** (pow_a_idx + 1)):
+                for power in range(2 ** pow_a_idx, 2 ** (pow_a_idx + 1)):
                     next_pow_a = jnp.array([repeated_squaring(a, power, N)])
                     a_inv_mask = a_inv_mask + jnp.array(
                         jnp.unpackbits(next_pow_a.view("uint8"), bitorder="little")[:n_bits]
@@ -1052,7 +1048,7 @@ for N in N_values:
         p, q = shors_algorithm(N, a, n_bits)
         end = time.time()
         execution_times.append((N, a, end - start))
- 
+
 labels = [f"{ex[0]}, {int(ex[1])}" for ex in execution_times][::2]
 times = [ex[2] for ex in execution_times]
 
