@@ -30,15 +30,7 @@ class BuildTarget(Enum):
 class Demo:
     """Represents a demo and its metadata."""
 
-    CORE_DEPENDENCIES = frozenset(
-        (
-            "matplotlib",
-            "numpy",
-            "pennylane",
-            "jax",
-            "jaxlib"
-        )
-    )
+    CORE_DEPENDENCIES = frozenset(("matplotlib", "numpy", "pennylane", "jax", "jaxlib"))
     """Dependencies installed for every demo that do not
     need to be specified by `requirements.in`."""
 
@@ -128,6 +120,7 @@ def build(
     execute: bool,
     constraints_file: Path,
     quiet: bool = False,
+    keep_going: bool = False,
 ) -> None:
     """Build the provided demos using 'sphinx-build', optionally
     executing them to generate plots and cell outputs.
@@ -141,6 +134,7 @@ def build(
         target: The target build format
         execute: Whether to execute demos
     """
+    failed: list[str] = []
     logger.info("Building %d demos", len(demos))
 
     build_venv = Virtualenv(venv_path)
@@ -153,16 +147,27 @@ def build(
     )
 
     for demo in demos:
-        _build_demo(
-            sphinx_dir=sphinx_dir,
-            build_dir=build_dir,
-            build_venv=build_venv,
-            requirements_generator=requirements_generator,
-            target=target,
-            execute=execute,
-            demo=demo,
-            package=target is BuildTarget.JSON,
-        )
+        try:
+            _build_demo(
+                sphinx_dir=sphinx_dir,
+                build_dir=build_dir,
+                build_venv=build_venv,
+                requirements_generator=requirements_generator,
+                target=target,
+                execute=execute,
+                demo=demo,
+                package=target is BuildTarget.JSON,
+                quiet=quiet,
+            )
+        except subprocess.CalledProcessError as exc:
+            if not keep_going:
+                raise exc
+
+            failed.append(demo.name)
+            logger.error("sphinx build failed for demo '%s'", demo.name, exc_info=True)
+
+    if failed:
+        raise RuntimeError("Failed to build demos: " + ", ".join(failed))
 
 
 def _build_demo(
@@ -174,6 +179,7 @@ def _build_demo(
     requirements_generator: "RequirementsGenerator",
     execute: bool,
     package: bool,
+    quiet: bool,
 ):
     out_dir = sphinx_dir / "demos" / demo.name
     fs.clean_dir(out_dir)
@@ -211,7 +217,12 @@ def _build_demo(
         "DEMO_STAGING_DIR": str(stage_dir.resolve()),
         "GALLERY_OUTPUT_DIR": str(out_dir.resolve()),
     }
-    subprocess.run(cmd, env=sphinx_env).check_returncode()
+    if quiet:
+        stdout, stderr = subprocess.PIPE, subprocess.PIPE
+    else:
+        stdout, stderr = None, None
+
+    subprocess.run(cmd, env=sphinx_env, stdout=stdout, stderr=stderr).check_returncode()
 
     if package:
         _package_demo(

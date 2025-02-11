@@ -55,7 +55,7 @@ def main():
             try:
                 session.put(url, files={"file": f}).raise_for_status()
             except requests.HTTPError:
-                logger.error("Failed to deploy '%s' to '%s'", path, url)
+                logger.error("Failed to deploy '%s' to '%s', '%s'", path, exc_info=True)
                 sys.exit(1)
 
         logger.info("Deployed '%s' to '%s'", path, url)
