@@ -1,0 +1,23 @@
+name: Build and Deploy Demos
+on:
+  push:
+    branches:
+      - sc-81925-qml-repository-ci-pushes-newly-built-demos
+
+jobs:
+  build:
+    uses: ./.github/workflows/build-demos.yml
+    with:
+      branch: ${{ github.ref }}
+      artifact-name: demo-build-${{ github.sha }}
+      demo-names: 'tutorial_diffable_shadows covalent_cloud_gpu tutorial_barren_gadgets'
+
+  deploy:
+    needs: build
+    uses: ./.github/workflows/deploy-demos.yml
+    with:
+      environment: dev
+      artifact-name: demo-build-${{ github.sha }}
+      preview: false
+      branch: sc-81925-qml-repository-ci-pushes-newly-built-demos
+    secrets: inherit
