@@ -18,5 +18,5 @@ jobs:
       environment: swc-dev
       artifact-name: ${{ needs.build.outputs.artifact-name }}
       preview: false
-      branch: ${{ github.ref}}
+      branch: ${{ github.ref }}
     secrets: inherit
