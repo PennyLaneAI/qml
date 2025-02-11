@@ -13,6 +13,7 @@ jaxopt==0.8.3
 aiohttp==3.9.5
 fsspec==2024.6.1
 h5py==3.11.0
+openfermionpyscf==0.5
 openqaoa-core==0.2.5
 qiskit>=1.0.0
 qiskit-aer>=0.14.0,<0.16.0
