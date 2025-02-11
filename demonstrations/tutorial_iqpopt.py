@@ -569,7 +569,8 @@ plt.show()
 ######################################################################
 # As we can see the trained circuit closely resembles the ground truth distribution. Although we won't
 # cover it in this demo, the package also contains tools to evaluate generative models and investigate
-# model dropping via the Kernel Generalized Empirical Likelikood.
+# model dropping via the Kernel Generalized Empirical Likelikood [#ravuri]_.
+#
 # Conclusion
 # ---------------------------------
 # 
