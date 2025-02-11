@@ -29,6 +29,7 @@ parser.add_argument(
     help="Whether to deploy to the preview site.",
 )
 
+
 def main():
     args = parser.parse_args()
     preview: str = args.preview
@@ -58,7 +59,6 @@ def main():
             except requests.HTTPError:
                 logger.error("Failed to deploy '%s' to '%s'", path, url, exc_info=True)
                 sys.exit(1)
-
 
 
 if __name__ == "__main__":

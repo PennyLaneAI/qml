@@ -317,8 +317,9 @@ def _package_demo(
     with open(dest / "metadata.json", "w") as f:
         json.dump(metadata, f, indent=2)
 
-    zip_file = shutil.make_archive(dest.name, "zip", dest.parent, dest.name)
-    shutil.move(zip_file, pack_dir / f"{demo.name}.zip")
+    zip_file = shutil.make_archive(
+        base_name=str(pack_dir / dest.name), format="zip", base_dir=dest, root_dir=dest
+    )
 
 
 def _link_rewriter(
