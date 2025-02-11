@@ -570,9 +570,10 @@ plt.show()
 # As we can see the trained circuit closely resembles the ground truth distribution. Although we won't
 # cover it in this demo, the package also contains tools to evaluate generative models and investigate
 # model dropping via the Kernel Generalized Empirical Likelikood.
+# Conclusion
+# ---------------------------------
 # 
-# As a final takeaway, we remark that IQPopt is perhaps the only tool for researchers to analyze large
-# circuits with potential advantages using numerical methods. By doing so, it opens up opportunities
+# As a final takeaway, IQPopt stands out as perhaps the only tool that enables researchers to analyze large-scale circuits with potential advantages using numerical methods. By doing so, it opens up opportunities
 # to explore systems that are too intricate for traditional pen-and-paper calculations and, as a
 # result, it has the potential to uncover insights that were previously inaccessible.
 # 
