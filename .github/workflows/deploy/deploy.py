@@ -52,13 +52,13 @@ def main():
             endpoint_url=endpoint_url, slug=slug, preview=preview
         )
         with open(path, "rb") as f:
+            logger.info("Deploying '%s' to '%s'", path, url)
             try:
                 session.put(url, files={"file": f}).raise_for_status()
             except requests.HTTPError:
                 logger.error("Failed to deploy '%s' to '%s'", path, url, exc_info=True)
                 sys.exit(1)
 
-        logger.info("Deployed '%s' to '%s'", path, url)
 
 
 if __name__ == "__main__":
