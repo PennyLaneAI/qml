@@ -9,7 +9,7 @@ jobs:
     uses: ./.github/workflows/build-demos.yml
     with:
       branch: ${{ github.ref }}
-      demo-names: 'tutorial_diffable_shadows covalent_cloud_gpu tutorial_barren_gadgets'
+      demo-names: 'covalent_cloud_gpu tutorial_barren_gadgets'
 
   deploy:
     needs: build
