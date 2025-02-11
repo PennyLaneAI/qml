@@ -2,7 +2,7 @@ name: Build and Deploy Demos
 on:
   push:
     branches:
-      - sc-81925-qml-repository-ci-pushes-newly-built-demos
+      - sc-79849-implement-improved-demo-build-pipeline
 
 jobs:
   build:
