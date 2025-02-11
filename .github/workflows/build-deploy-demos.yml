@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    uses: ./.github/workflows/deploy/build-demos.yml
+    uses: ./.github/workflows/build-demos.yml
     with:
       branch: ${{ github.ref }}
       artifact-name: demo-build-${{ github.sha }}
@@ -14,7 +14,7 @@ jobs:
 
   deploy:
     needs: build
-    uses: ./.github/workflows/deploy/deploy-demos.yml
+    uses: ./.github/workflows/deploy-demos.yml
     with:
       environment: dev
       artifact-name: demo-build-${{ github.sha }}
