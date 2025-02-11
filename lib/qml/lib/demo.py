@@ -222,6 +222,7 @@ def _build_demo(
     else:
         stdout, stderr = None, None
 
+    logger.info("Running sphinx-build for demo '%s'", demo.name)
     subprocess.run(cmd, env=sphinx_env, stdout=stdout, stderr=stderr).check_returncode()
 
     if package:

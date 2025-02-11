@@ -31,6 +31,10 @@ def build(
     execute: Annotated[
         bool, typer.Option(help="Whether to execute demos and generate output cells")
     ] = False,
+    quiet: Annotated[bool, typer.Option(help="Suppress sphinx output")] = False,
+    keep_going: Annotated[
+        bool, typer.Option(help="Continue if sphinx-build fails for a demo")
+    ] = False,
 ) -> None:
     """Build the named demos."""
     ctx = Context()
@@ -49,6 +53,8 @@ def build(
         target=format,
         constraints_file=ctx.repo_root / "constraints.txt",
         execute=execute,
+        quiet=quiet,
+        keep_going=keep_going,
     )
 
 

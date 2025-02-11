@@ -8,8 +8,10 @@ jobs:
   build:
     uses: ./.github/workflows/build-demos.yml
     with:
-      branch: ${{ github.ref }}
+      ref: ${{ github.ref }}
       demo-names: 'covalent_cloud_gpu gbs'
+      save-artifact: true
+      keep-going: false
 
   deploy:
     needs: build

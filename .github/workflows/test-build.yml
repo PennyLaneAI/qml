@@ -1,0 +1,15 @@
+name: Build and Deploy Demos
+on:
+  push:
+    branches:
+      - sc-79849-implement-improved-demo-build-pipeline
+
+jobs:
+  build:
+    uses: ./.github/workflows/build-demos.yml
+    with:
+      ref: ${{ github.ref }}
+      save-artifact: false
+      keep-going: true
+      quiet: true
+      

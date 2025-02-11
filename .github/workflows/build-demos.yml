@@ -2,8 +2,8 @@ name: Build demos
 on:
   workflow_call:
     inputs:
-      branch:
-        description: The QML branch to checkout and build demos for
+      ref:
+        description: Branch, tag or commit SHA to checkout
         required: true
         type: string
       demo-names:
@@ -12,21 +12,46 @@ on:
         required: false
         type: string
         default: ''
+      save-artifact:
+        description: |
+          Whether to save the built demos as an artifact.
+        required: false
+        type: boolean
+        default: true
+      artifact-name:
+        description: Name of the artifact containing the built demos (defaults to demo-build-{ref})
+        required: false
+        type: string
+        default: demo-build-${{ inputs.ref }}
+      execute:
+        description: Whether to execute demos during the build process
+        required: false
+        type: boolean
+        default: true
+      keep-going:
+        description: Whether to keep going if a demo fails to build
+        required: false
+        type: boolean
+        default: false
+      quiet:
+        description: |
+          Whether to suppress output from the build process
+        required: false
+        type: boolean
+        default: false
     outputs:
       artifact-name:
         description: "Name of the artifact containing the built demos"
-        value: ${{ jobs.build-demos.outputs.artifact-name }}
+        value: ${{ inputs.artifact-name }}
 
 jobs:
   build-demos:
     runs-on: ubuntu-latest
-    outputs:
-      artifact-name: ${{ steps.artifact-name.outputs.artifact-name }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.branch }}
+          ref: ${{ inputs.ref }}
           fetch-depth: 1
 
       - name: Install pandoc
@@ -43,18 +68,18 @@ jobs:
       - name: Build demos
         run: |
           qml build \
-            --execute \
             --format json \
+            ${{ inputs.execute && '--execute' || '--no-execute' }} \
+            ${{ inputs.keep-going && '--keep-going' || '--no-keep-going' }} \
+            ${{ inputs.quiet && '--quiet' || '--no-quiet' }} \
             ${{ inputs.demo-names }}
-
-      - name: Get artifact name
-        id: artifact-name
-        run: echo "artifact-name=demo-build-${{ github.sha }}" >> $GITHUB_OUTPUT
       
       - name: Upload artifacts
         id: upload-artifacts
+        if: ${{ inputs.save-artifact }}
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ steps.artifact-name.outputs.artifact-name }}
+          name: ${{ inputs.artifact-name }}
           path: _build/pack/*.zip
           retention-days: 1
+          overwrite: true
