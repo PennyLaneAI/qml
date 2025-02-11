@@ -15,7 +15,7 @@ jobs:
     needs: build
     uses: ./.github/workflows/deploy-demos.yml
     with:
-      environment: dev
+      environment: swc-dev
       artifact-name: ${{ needs.build.outputs.artifact-name }}
       preview: false
       branch: ${{ github.ref}}
