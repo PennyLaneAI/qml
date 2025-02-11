@@ -30,7 +30,17 @@ class BuildTarget(Enum):
 class Demo:
     """Represents a demo and its metadata."""
 
-    CORE_DEPENDENCIES = frozenset(("matplotlib", "numpy", "pennylane", "jax", "jaxlib"))
+    CORE_DEPENDENCIES = frozenset(
+        (
+            "matplotlib",
+            "numpy",
+            "pennylane",
+            "pennylane-lightning",
+            "pennylane-catalyst",
+            "jax",
+            "jaxlib",
+        )
+    )
     """Dependencies installed for every demo that do not
     need to be specified by `requirements.in`."""
 
