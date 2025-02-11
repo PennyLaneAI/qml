@@ -19,7 +19,7 @@ on:
         default: sc-81925-qml-repository-ci-pushes-newly-built-demos
 
 jobs:
-  build-demos:
+  deploy-demos:
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     env:
