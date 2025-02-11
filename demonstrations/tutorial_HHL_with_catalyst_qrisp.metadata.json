@@ -1,0 +1,44 @@
+{
+    "title": "HHL with Qrisp x Catalyst",
+    "authors": [
+        {
+            "username": ""
+        }
+    ],
+    "dateOfPublication": "2025-02-11T09:00:00+00:00",
+    "dateOfLastModification": "2025-02-11T09:00:00+00:00",
+    "categories": ["How-to"],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": ""
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": ""
+        }
+    ],
+    "seoDescription": "",
+    "doi": "",
+    "references": [
+        {
+            "id": "Draper2000",
+            "type": "preprint",
+            "title": "Addition on a Quantum Computer",
+            "authors": "Thomas G. Draper",
+            "year": "2000",
+            "doi": "10.48550/arXiv.quant-ph/0008033",
+            "url": "https://arxiv.org/abs/quant-ph/0008033"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "",
+            "weight": 1.0
+        }
+    ]
+}
