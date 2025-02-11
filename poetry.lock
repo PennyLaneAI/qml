@@ -5626,22 +5626,6 @@ setuptools = "*"
 wheel = ">=0.25.0"
 
 [[package]]
-name = "pypandoc-binary"
-version = "1.15"
-description = "Thin wrapper for pandoc."
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "pypandoc_binary-1.15-py3-none-macosx_10_9_x86_64.whl", hash = "sha256:12a43df66f59cb489a9a2659b6f049ec103132e43e4f284b7e33e7ae4dd9cadb"},
-    {file = "pypandoc_binary-1.15-py3-none-macosx_11_0_arm64.whl", hash = "sha256:79b215279a6470d3e2a24135826b446f44259f6abce361e31d713ac1b0b5aa69"},
-    {file = "pypandoc_binary-1.15-py3-none-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:fa29176f4eb9eb93f555dac6926a8d53c6ab4fd2deba3a1edb002e04899b237d"},
-    {file = "pypandoc_binary-1.15-py3-none-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:df54edb00331a8fc80516c71cd81de69954512163037c3d4577c315091a0d6f6"},
-    {file = "pypandoc_binary-1.15-py3-none-musllinux_1_1_aarch64.whl", hash = "sha256:e465a09e8aac18e8fda37516a6d1a891e51cdd1d066ab585f85a81620de575e2"},
-    {file = "pypandoc_binary-1.15-py3-none-musllinux_1_1_x86_64.whl", hash = "sha256:f9ebdf92059e9c1ae5231ee193d1fdafbc0188d5ec9d5f53e95fa21a42339481"},
-    {file = "pypandoc_binary-1.15-py3-none-win_amd64.whl", hash = "sha256:de7a234ffb674a4e650490acc7a5986161e2fd8b5bb106f1c9ffc30d76d2cf23"},
-]
-
-[[package]]
 name = "pyparsing"
 version = "3.0.9"
 description = "pyparsing module - Classes and methods to define and execute parsing grammars"
@@ -9355,4 +9339,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.10.0"
-content-hash = "002523a2f3c0b82a0aaaec0b080e195c276fec7102ecac30caa91af8c3dfc320"
+content-hash = "bd5c369f183c35cf054090471692ea9ab48dc632fabc106054a27f8db8a14ad3"
