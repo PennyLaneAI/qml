@@ -6,19 +6,22 @@ on:
         description: The QML branch to checkout and build demos for
         required: true
         type: string
-      artifact-name:
-        description: Name of artifact to upload demo builds to
-        type: string
       demo-names:
         description: |
           Instead of building all demos, only build the demos specified in this list.
         required: false
         type: string
         default: ''
+    outputs:
+      artifact-name:
+        description: "Name of the artifact containing the built demos"
+        value: ${{ jobs.build-demos.outputs.artifact-name }}
 
 jobs:
   build-demos:
     runs-on: ubuntu-latest
+    outputs:
+      artifact-name: ${{ steps.artifact-name.outputs.artifact-name }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -49,7 +52,6 @@ jobs:
         id: upload-artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ inputs.artifact-name }}
+          name: ${{ steps.artifact-name.outputs.artifact-name }}
           path: _build/pack/*.zip
           retention-days: 1
-

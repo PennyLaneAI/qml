@@ -9,7 +9,6 @@ jobs:
     uses: ./.github/workflows/build-demos.yml
     with:
       branch: ${{ github.ref }}
-      artifact-name: demo-build-${{ github.sha }}
       demo-names: 'tutorial_diffable_shadows covalent_cloud_gpu tutorial_barren_gadgets'
 
   deploy:
@@ -17,7 +16,7 @@ jobs:
     uses: ./.github/workflows/deploy-demos.yml
     with:
       environment: dev
-      artifact-name: demo-build-${{ github.sha }}
+      artifact-name: ${{ needs.build.outputs.artifact-name }}
       preview: false
-      branch: sc-81925-qml-repository-ci-pushes-newly-built-demos
+      branch: ${{ github.ref}}
     secrets: inherit
