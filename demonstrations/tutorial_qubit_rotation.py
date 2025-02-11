@@ -370,4 +370,4 @@ print("Optimized rotation angles: {}".format(params))
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/josh_izaac.txt
+#

@@ -211,4 +211,4 @@ plt.show()
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/shahnawaz_ahmed.txt
+#

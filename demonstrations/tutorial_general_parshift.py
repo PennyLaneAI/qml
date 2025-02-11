@@ -888,4 +888,4 @@ print(f"Second-order finite difference:    {np.round(np.array(fd_der2), 6)}")
 ##############################################################################
 # About the author
 # ----------------
-# .. include:: ../_static/authors/david_wierichs.txt
+#

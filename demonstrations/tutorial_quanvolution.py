@@ -371,4 +371,4 @@ plt.show()
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/andrea_mari.txt
+#

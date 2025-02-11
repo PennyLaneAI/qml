@@ -309,4 +309,4 @@ plt.show()
 ##############################################################################
 # About the author
 # ----------------
-# .. include:: ../_static/authors/juan_miguel_arrazola.txt
+#

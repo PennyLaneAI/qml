@@ -875,5 +875,5 @@ def H_evolve(state, phi, time):
 #     IBM Research Blog. Retrieved 2022-03-15
 #
 # About the author
-# ~~~~~~~~~~~~~~~~
-# .. include:: ../_static/authors/alvaro_ballon.txt
+# ----------------
+#
