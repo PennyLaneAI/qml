@@ -2,7 +2,7 @@ r"""IQPopt: Fast optimization of IQP circuits in JAX
 ===============================================================
 
 Instantaneous Quantum Polynomial (IQP) circuits are a class of circuits that are expected to be hard
-to sample from using classical computers [#bremner1]_. In this demo we take a look at the pacakge IQPopt [#recio1]_,
+to sample from using classical computers [#bremner1]_. In this demo, we take a look at the [IQPopt](https://github.com/XanaduAI/iqpopt) package [#recio1]_,
 which shows that despite this, such circuits can still be optimized efficiently!
 
 As we will see, this hinges on a suprising fact about these circuits: while sampling is hard,
