@@ -270,9 +270,7 @@ print(expval, std)
 # the one obtained with PennyLane. However, as we can see, they are within the standard error `std`. You can try
 # increasing ``n_samples`` in order to obtain a more accurate approximation.
 # 
-# This function also allows for fast batch evaluation of expectation values. If we specify a batch of
-# operators ``ops`` by an array, we can batch evaluate the expectation values and errors in parallel
-# with the same syntax.
+# Additionally, this function supports fast batch evaluation of expectation values. By specifying a batch of operators ``ops`` as an array, we can compute expectation values and errors in parallel using the same syntax.
 # 
 ops = np.array([[1,0,0],[0,1,0],[0,0,1]]) # batch of single qubit Pauli Zs
 
