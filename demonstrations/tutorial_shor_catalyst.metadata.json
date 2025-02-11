@@ -21,6 +21,25 @@
     "doi": "",
     "references": [
         {
+            "id": "Shor1997",
+            "type": "article",
+            "title": "Polynomial-Time Algorithms for Prime Factorization and Discrete Logarithms on a Quantum Computer",
+            "authors": "Peter W. Shor",
+            "year": "1997",
+            "journal": "SIAM Journal on Computing Vol. 26, Iss. 5",
+            "doi": "10.1137/S0097539795293172",
+            "url": "https://doi.org/10.1137/S0097539795293172"
+        },
+        {
+            "id": "PurpleDragonBook",
+            "type": "book",
+            "title": "Compilers: Principles, Techniques, And Tools",
+            "authors": "Alfred V Aho, Monica S Lam, Ravi Sethi, Jeffrey D Ullman",
+            "year": "2007",
+            "publisher": "Pearson",
+            "url": "https://www.pearson.com/en-us/subject-catalog/p/compilers-principles-techniques-and-tools/P200000003472/9780133002140"
+        },
+        {
             "id": "Beauregard2003",
             "type": "article",
             "title": "Circuit for Shor's algorithm using 2n+3 qubits",
@@ -29,6 +48,16 @@
             "journal": "Quantum Info. Comput.",
             "doi": "10.5555/2011517.2011525",
             "url": "https://dl.acm.org/doi/10.5555/2011517.2011525"
+        },
+        {
+            "id": "Draper2000",
+            "type": "preprint",
+            "title": "Addition on a Quantum Computer",
+            "authors": "Thomas G. Draper",
+            "year": "2000",
+            "journal": "",
+            "doi": "10.48550/arXiv.quant-ph/0008033",
+            "url": "https://doi.org/10.48550/arXiv.quant-ph/0008033"
         }
     ],
     "basedOnPapers": [

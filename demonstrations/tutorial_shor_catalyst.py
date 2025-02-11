@@ -1133,7 +1133,7 @@ plt.ylabel("Runtime (s)");
 # .. [#PurpleDragonBook]
 #
 #     Alfred V Aho, Monica S Lam, Ravi Sethi, Jeffrey D Ullman (2007)
-#     *Compilers Principles, Techniques, And Tools*. Pearson Education, Inc.
+#     *Compilers: Principles, Techniques, And Tools*. Pearson Education, Inc.
 #
 # .. [#Beauregard2003]
 #
