@@ -20,7 +20,7 @@ Parameterized IQP circuits
 
 IQP is designed to optimize a class of IQP circuits called *parameterized IQP circuits*. These are
 comprised of gates :math:`\text{exp}(i\theta_j X_j)`, where the generator :math:`X_j` is a tensor
-product of Pauli X operators acting on some subset of qubits and :math:`\theta_j` is a trainable
+product of `Pauli X operators <https://docs.pennylane.ai/en/stable/code/api/pennylane.PauliX.html>`__ acting on some subset of qubits and :math:`\theta_j` is a trainable
 parameter. We will represent the parameterized gates by a list
 
 
