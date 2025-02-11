@@ -6,6 +6,7 @@ on:
 
 jobs:
   build:
+    concurrency: ${{ github.workflow }}
     uses: ./.github/workflows/build-demos.yml
     with:
       ref: ${{ github.ref }}

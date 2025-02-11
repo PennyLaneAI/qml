@@ -175,6 +175,8 @@ def build(
 
             failed.append(demo.name)
             logger.error("sphinx build failed for demo '%s'", demo.name, exc_info=True)
+            if quiet:
+                print(exc.stdout)
 
     if failed:
         raise RuntimeError("Failed to build demos: " + ", ".join(failed))
@@ -228,12 +230,14 @@ def _build_demo(
         "GALLERY_OUTPUT_DIR": str(out_dir.resolve()),
     }
     if quiet:
-        stdout, stderr = subprocess.PIPE, subprocess.PIPE
+        stdout, stderr, text = subprocess.PIPE, subprocess.STDOUT, True
     else:
-        stdout, stderr = None, None
+        stdout, stderr, text = None, None, None
 
     logger.info("Running sphinx-build for demo '%s'", demo.name)
-    subprocess.run(cmd, env=sphinx_env, stdout=stdout, stderr=stderr).check_returncode()
+    subprocess.run(
+        cmd, env=sphinx_env, stdout=stdout, stderr=stderr, text=text
+    ).check_returncode()
 
     if package:
         _package_demo(
