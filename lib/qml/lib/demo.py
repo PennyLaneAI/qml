@@ -14,6 +14,8 @@ import functools
 import requirements
 import json
 import lxml.html
+from qml.context import Context
+import tempfile
 
 
 logger = getLogger("qml")
@@ -109,7 +111,7 @@ def find(search_dir: Path, *names: str) -> Iterator[Demo]:
     for name in set(names):
         demo_dir = search_dir / name
         if not (demo_dir / "demo.py").exists():
-            raise ValueError(f"No demo exists with name '{name}")
+            raise ValueError(f"No demo exists with name '{name}'")
 
         yield Demo(name=name, path=demo_dir.resolve())
 
@@ -122,13 +124,10 @@ def search(search_dir: Path, pattern: str) -> Iterator[str]:
 
 
 def build(
-    sphinx_dir: Path,
-    build_dir: Path,
-    venv_path: Path,
+    ctx: Context,
     demos: Sequence[Demo],
     target: BuildTarget,
     execute: bool,
-    constraints_file: Path,
     quiet: bool = False,
     keep_going: bool = False,
 ) -> None:
@@ -147,20 +146,20 @@ def build(
     failed: list[str] = []
     logger.info("Building %d demos", len(demos))
 
-    build_venv = Virtualenv(venv_path)
-    _install_build_dependencies(build_venv, build_dir)
+    build_venv = Virtualenv(ctx.build_venv_path)
+    _install_build_dependencies(build_venv, ctx.build_dir)
 
     requirements_generator = RequirementsGenerator(
         Path(sys.executable),
-        global_constraints_file=constraints_file,
+        global_constraints_file=ctx.constraints_file,
         extra_index_urls=("https://download.pytorch.org/whl/cpu",),
     )
 
     for demo in demos:
         try:
             _build_demo(
-                sphinx_dir=sphinx_dir,
-                build_dir=build_dir,
+                sphinx_dir=ctx.repo_root,
+                build_dir=ctx.build_dir,
                 build_venv=build_venv,
                 requirements_generator=requirements_generator,
                 target=target,
@@ -176,10 +175,14 @@ def build(
             failed.append(demo.name)
             logger.error("sphinx build failed for demo '%s'", demo.name, exc_info=True)
             if quiet:
-                print(exc.stdout)
+                if (error_summary := _find_sphinx_gallery_execution_error(exc.stdout)):
+                    print(error_summary)
+                else:
+                    print(exc.stdout)
 
     if failed:
         raise RuntimeError("Failed to build demos: " + ", ".join(failed))
+
 
 
 def _build_demo(
@@ -354,3 +357,10 @@ def _link_rewriter(
         return f"_assets/static/{path}"
 
     return link
+
+def _find_sphinx_gallery_execution_error(stdout: str) -> str | None:
+    i = stdout.find("Here is a summary of the problems encountered when running the examples:")
+    if i != -1:
+        return stdout[i:]
+    
+    return None

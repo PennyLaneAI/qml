@@ -46,12 +46,9 @@ def build(
         ctx.repo_root / "_static", ctx.build_dir / "_static", dirs_exist_ok=True
     )
     demo.build(
-        sphinx_dir=ctx.repo_root,
-        build_dir=ctx.build_dir,
-        venv_path=ctx.build_venv_path,
+        ctx,
         demos=demos,
         target=format,
-        constraints_file=ctx.repo_root / "constraints.txt",
         execute=execute,
         quiet=quiet,
         keep_going=keep_going,
