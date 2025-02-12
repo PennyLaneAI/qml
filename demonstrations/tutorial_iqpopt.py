@@ -301,7 +301,8 @@ key = jax.random.PRNGKey(42)
 
 expval, std = large_circuit.op_expval(params, op, n_samples, key)
 
-print(expval, std)
+print("Expectation value: ", expval)
+print("Standard error: ", std)
 
 ######################################################################
 # 
