@@ -198,7 +198,7 @@ op = np.array([1,0,1]) # operator ZIZ
 params = np.random.rand(len(gates)) # random parameters for all the gates (remember we have 5 gates with 6 generators in total)
 
 penn_op_expval = penn_iqp_op_expval(params, gates, op, n_qubits)
-print(penn_op_expval)
+print("Expectation value: ", penn_op_expval)
 
 ######################################################################
 # 
