@@ -77,7 +77,7 @@ gates = [[[0]], [[1]], [[2]], [[0,1]], [[0,2]], [[1,2]]]
 # Expectation values
 # ------------------
 # 
-# IQPopt can be applied to problems that involve measuring expectation values of Pauli Z tensors of
+# IQPopt can be applied to problems that involve measuring expectation values of tensor products of Pauli Z observables of
 # parameterized IQP circuits.
 # 
 # We will represent these observables with binary lists, where a nonzero element denotes the
