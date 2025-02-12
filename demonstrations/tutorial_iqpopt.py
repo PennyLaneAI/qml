@@ -53,7 +53,7 @@ parameter. We will represent the parameterized gates by a list
 #    </center>
 # 
 # specifies that the generator of the first gate is :math:`X\otimes X` acting on
-# the first two qubits of the circuit. A generator
+# the first two qubits of the circuit, i.e. `wires` `0` and `1`. A generator
 # 
 # .. raw:: html
 # 
