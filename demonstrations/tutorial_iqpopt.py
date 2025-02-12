@@ -277,7 +277,8 @@ ops = np.array([[1,0,0],[0,1,0],[0,0,1]]) # batch of single qubit Pauli Zs
 
 expvals, stds = small_circuit.op_expval(params, ops, n_samples, key)
 
-print(expvals, stds)
+print("Expectation values: ", expvals)
+print("Standard errors: ", stds)
 
 ######################################################################
 # With PennyLane, surpassing 30 qubits would be extremely time-consuming. However, with IQPopt, we can scale far beyond that with ease.
