@@ -6,7 +6,9 @@ on:
 
 jobs:
   build:
-    concurrency: ${{ github.workflow }}
+    concurrency:
+      group: ${{ github.workflow }}
+      cancel-in-progress: true
     uses: ./.github/workflows/build-demos.yml
     with:
       ref: ${{ github.ref }}
