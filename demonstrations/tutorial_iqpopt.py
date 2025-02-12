@@ -312,7 +312,7 @@ print("Standard error: ", std)
 # If we measure the output qubits of an IQP circuit, we generate samples of binary vectors according to
 # the distribution
 # 
-# .. math:: q_{\boldsymbol{\theta}}(\boldsymbol{x}) \equiv q(\boldsymbol{x}\vert\boldsymbol{\theta})=\vert (\langle \boldsymbol{x} \vert U(\boldsymbol{\theta})\vert 0 \rangle )\vert^2.
+# .. math:: q_{\boldsymbol{\theta}}(\boldsymbol{x}) \equiv q(\boldsymbol{x}\vert\boldsymbol{\theta})=\vert (\langle \boldsymbol{x} \vert U(\boldsymbol{\theta})\vert 0 \rangle )\vert^2,
 # 
 # where :math:`U(\boldsymbol{\theta})` is the parametrized IQP gates. For a low number of qubits, we
 # can use PennyLane to obtain the output probabilities of the circuit as well as sample from it. Note
