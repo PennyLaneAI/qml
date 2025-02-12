@@ -263,7 +263,8 @@ key = jax.random.PRNGKey(66)
 
 expval, std = small_circuit.op_expval(params, op, n_samples, key)
 
-print(expval, std)
+print("Expectation value:  ", expval)
+print("Standard error: ", std)
 
 ######################################################################
 # Since the calculation in IQPopt is stochastic, the result is not exactly the same as
