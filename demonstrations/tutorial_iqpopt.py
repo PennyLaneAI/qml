@@ -8,7 +8,7 @@ which shows that despite this, such circuits can still be optimized efficiently!
 As we will see, this hinges on a suprising fact about these circuits: while sampling is hard,
 estimating expectation values of certain observables is easy.
 
-.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_kak_decomposition.png
+.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_iqp_circuit_optimization_jax.png
     :align: center
     :width: 70%
     :target: javascript:void(0)

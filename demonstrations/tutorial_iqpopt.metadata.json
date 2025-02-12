@@ -8,16 +8,21 @@
             "username": "josephbowles"
         }
     ],
-    "dateOfPublication": "2024-12-12T00:00:00+00:00",
-    "dateOfLastModification": "2025-01-16T00:00:00+00:00",
+    "dateOfPublication": "2025-02-14T09:00:00+00:00",
+    "dateOfLastModification": "2025-02-14T09:00:00+00:00",
     "categories": [
-        "Optimization"
+        "Optimization",
+        "Algorithms"
     ],
     "tags": [],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_iqpopt.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_iqp_circuit_optimization_jax.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_iqp_circuit_optimization_jax.png"
         }
     ],
     "seoDescription": "Learn how to speed up the optimization of Instantaneous Quantum Polynomial (IQP) circuits using the IQPopt package.",
