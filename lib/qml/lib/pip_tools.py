@@ -77,7 +77,6 @@ class RequirementsGenerator:
                 "--universal",
                 "--quiet",
                 "--no-annotate",
-                "--no-deps",
                 "--emit-index-url",
                 "--constraints",
                 str(constraints_file),

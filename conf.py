@@ -58,7 +58,13 @@ extensions = [
 
 html_baseurl = "https://pennylane.ai/qml/"
 demo_staging_dir = os.getenv("DEMO_STAGING_DIR", "demonstrations")
-gallery_output_dir = os.getenv("GALLERY_OUTPUT_DIR", "demos")
+
+if (output_dir := os.getenv("GALLERY_OUTPUT_DIR")):
+    gallery_output_dir = output_dir
+    include_patterns = ["index.rst", f"{output_dir}/*.rst"]
+else:
+    gallery_output_dir = "demos"
+    include_patterns = ["**"]
 
 sphinx_gallery_conf = {
     # path to your example scripts
@@ -86,6 +92,7 @@ sphinx_gallery_conf = {
     "doc_module"          : ("pennylane"),
     "junit": "../test-results/sphinx-gallery/junit.xml",
     "reset_modules": ("module_resets.reset_jax", "matplotlib", "seaborn"),
+    "show_signature": False,
 }
 
 

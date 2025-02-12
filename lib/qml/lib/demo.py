@@ -228,6 +228,9 @@ def _build_demo(
     sphinx_env = os.environ | {
         "DEMO_STAGING_DIR": str(stage_dir.resolve()),
         "GALLERY_OUTPUT_DIR": str(out_dir.resolve()),
+        "SPHINX_INCLUDE_PATTERN": str(
+            (out_dir / demo.name).with_suffix(".rst").relative_to(sphinx_dir)
+        ),
     }
     if quiet:
         stdout, stderr, text = subprocess.PIPE, subprocess.STDOUT, True
@@ -299,7 +302,11 @@ def _package_demo(
         f.write(html_body)
 
     for asset, asset_dest in asset_paths:
-        fs.copy_parents(asset, Path(dest, "_assets", asset_dest))
+        try:
+            fs.copy_parents(asset, Path(dest, "_assets", asset_dest))
+        except FileNotFoundError:
+            logger.warning("Could not find asset '%s' for demo '%s'", asset, demo.name)
+            continue
 
     shutil.copy(
         (sphinx_gallery_output / demo.name).with_suffix(".ipynb"), dest / "demo.ipynb"
@@ -332,7 +339,7 @@ def _package_demo(
     with open(dest / "metadata.json", "w") as f:
         json.dump(metadata, f, indent=2)
 
-    zip_file = shutil.make_archive(
+    shutil.make_archive(
         base_name=str(pack_dir / dest.name), format="zip", base_dir=dest, root_dir=dest
     )
 
