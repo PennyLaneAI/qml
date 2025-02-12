@@ -1,4 +1,4 @@
-name: Build and Deploy Demos
+name: Test demo builds
 on:
   push:
     branches:

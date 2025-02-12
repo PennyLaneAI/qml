@@ -227,10 +227,7 @@ def _build_demo(
     cmd.extend((str(sphinx_dir), str(build_dir / target.value)))
     sphinx_env = os.environ | {
         "DEMO_STAGING_DIR": str(stage_dir.resolve()),
-        "GALLERY_OUTPUT_DIR": str(out_dir.resolve()),
-        "SPHINX_INCLUDE_PATTERN": str(
-            (out_dir / demo.name).with_suffix(".rst").relative_to(sphinx_dir)
-        ),
+        "GALLERY_OUTPUT_DIR": str(out_dir.resolve().relative_to(sphinx_dir)),
     }
     if quiet:
         stdout, stderr, text = subprocess.PIPE, subprocess.STDOUT, True

@@ -19,6 +19,7 @@ import numpy as np
 from jinja2 import FileSystemLoader, Environment
 import yaml
 from pennylane import PennyLaneDeprecationWarning
+from pathlib import Path
 
 sys.path.insert(0, os.path.abspath("."))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
