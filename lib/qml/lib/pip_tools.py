@@ -27,7 +27,6 @@ class RequirementsGenerator:
                 global_constraints[req.name] += (req.line,)
 
         self.global_constraints = global_constraints
-        self.extra_index_urls = extra_index_urls if extra_index_urls else ()
         self._requirements_in_cache: dict[frozenset[str], str] = {}
 
     def generate_requirements(self, requirements_in: frozenset[str]):
