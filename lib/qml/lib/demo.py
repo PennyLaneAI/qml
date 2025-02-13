@@ -15,7 +15,6 @@ import requirements
 import json
 import lxml.html
 from qml.context import Context
-import tempfile
 
 
 logger = getLogger("qml")
@@ -173,16 +172,18 @@ def build(
                 raise exc
 
             failed.append(demo.name)
-            logger.error("sphinx build failed for demo '%s'", demo.name, exc_info=True)
+            logger.error("Build failed for demo '%s'", demo.name)
             if quiet:
-                if (error_summary := _find_sphinx_gallery_execution_error(exc.stdout)):
-                    print(error_summary)
-                else:
-                    print(exc.stdout)
+                if (
+                    error_summary := _find_sphinx_gallery_execution_error(exc.stdout)
+                    is None
+                ):
+                    error_summary = exc.stdout
+
+                logger.error("%s", error_summary)
 
     if failed:
         raise RuntimeError("Failed to build demos: " + ", ".join(failed))
-
 
 
 def _build_demo(
@@ -196,6 +197,8 @@ def _build_demo(
     package: bool,
     quiet: bool,
 ):
+    logger.info("Building '%s', execute=%s", demo.name, execute)
+
     out_dir = sphinx_dir / "demos" / demo.name
     fs.clean_dir(out_dir)
     execute = execute and demo.executable
@@ -204,7 +207,6 @@ def _build_demo(
         f.write(requirements_generator.generate_requirements(demo.requirements))
 
     if execute:
-        logger.info("Installing dependencies for demo '%s'", demo.name)
         cmds.pip_install(
             build_venv.python, requirements=out_dir / "requirements.txt", quiet=True
         )
@@ -237,7 +239,6 @@ def _build_demo(
     else:
         stdout, stderr, text = None, None, None
 
-    logger.info("Running sphinx-build for demo '%s'", demo.name)
     subprocess.run(
         cmd, env=sphinx_env, stdout=stdout, stderr=stderr, text=text
     ).check_returncode()
@@ -358,9 +359,12 @@ def _link_rewriter(
 
     return link
 
+
 def _find_sphinx_gallery_execution_error(stdout: str) -> str | None:
-    i = stdout.find("Here is a summary of the problems encountered when running the examples:")
+    i = stdout.find(
+        "Here is a summary of the problems encountered when running the examples:"
+    )
     if i != -1:
         return stdout[i:]
-    
+
     return None

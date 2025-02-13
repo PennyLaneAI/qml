@@ -36,7 +36,7 @@ class Context:
     def repo(self) -> Repo:
         """dulwich ``Repo`` object for the repo."""
         return Repo.discover()
-    
+
     @property
     def constraints_file(self) -> Path:
         return self.repo_root / "constraints.txt"

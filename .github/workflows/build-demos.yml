@@ -23,11 +23,6 @@ on:
         required: false
         type: string
         default: demo-build-${{ inputs.ref }}
-      execute:
-        description: Whether to execute demos during the build process
-        required: false
-        type: boolean
-        default: true
       keep-going:
         description: Whether to keep going if a demo fails to build
         required: false
@@ -54,8 +49,11 @@ jobs:
           ref: ${{ inputs.ref }}
           fetch-depth: 1
 
-      - name: Install pandoc
-        run: sudo apt-get install -y pandoc
+      - name: Install pandoc and opencl
+        run: |
+          sudo apt-get install -y \
+            ocl-icd-opencl-dev \
+            pandoc 
 
       - name: Setup Python
         uses: actions/setup-python@v4
@@ -69,7 +67,7 @@ jobs:
         run: |
           qml build \
             --format json \
-            ${{ inputs.execute && '--execute' || '--no-execute' }} \
+            --execute \
             ${{ inputs.keep-going && '--keep-going' || '--no-keep-going' }} \
             ${{ inputs.quiet && '--quiet' || '--no-quiet' }} \
             ${{ inputs.demo-names }}
