@@ -7,6 +7,7 @@ Using PennyLane with IBM's quantum devices and Qiskit
     :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/thumbnail_tutorial_ibm_pennylane.png
 
 .. related::
+###
 
    quantum_volume Quantum Volume
    tutorial_vqe A brief overview of VQE
