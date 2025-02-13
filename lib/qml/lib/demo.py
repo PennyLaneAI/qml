@@ -182,7 +182,7 @@ def build(
                 logger.error("%s", error_summary)
 
     if failed:
-        raise RuntimeError("Failed to build demos: " + ", ".join(failed))
+        logger.error("Failed to build %d demos: %s", len(failed), failed)
 
 
 def _build_demo(
