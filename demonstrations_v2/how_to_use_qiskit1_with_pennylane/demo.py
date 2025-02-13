@@ -13,6 +13,8 @@ anyone familiar with
 Qiskit to jump into the PennyLane ecosystem and land on both feet.
 In this demo, we want to show you how easy these features are to use, letting you make that
 aforementioned jump like it’s nothing 😌.
+
+CHANGES!!!
 """
 
 ######################################################################

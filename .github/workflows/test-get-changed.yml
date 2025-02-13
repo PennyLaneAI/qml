@@ -1,0 +1,23 @@
+name: Build and Deploy Demos
+on:
+  pull_request:
+    branches:
+      - sc-79849-implement-improved-demo-build-pipeline
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+    
+      - name: Get changed
+        id: get-changed
+        uses: ./.github/actions/get-changed-demos
+    
+      - name: Echo updated
+        run: echo ${{ steps.get-changed.outputs.updated }}
+
+      - name: Echo deleted
+        run: echo ${{ steps.get-changed.outputs.deleted }}
+
