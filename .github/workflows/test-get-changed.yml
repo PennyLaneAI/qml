@@ -1,4 +1,4 @@
-name: Build and Deploy Demos
+name: Find changed demos
 on:
   pull_request:
     branches:
