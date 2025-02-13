@@ -2,7 +2,7 @@ r"""IQPopt: Fast optimization of IQP circuits in JAX
 ===============================================================
 
 Instantaneous Quantum Polynomial (IQP) circuits are a class of circuits that are expected to be hard
-to sample from using classical computers [#bremner1]_. In this demo, we take a look at the [IQPopt](https://github.com/XanaduAI/iqpopt) package [#recio1]_,
+to sample from using classical computers [#bremner1]_. In this demo, we take a look at the `IQPopt <https://github.com/XanaduAI/iqpopt>`__ package [#recio1]_,
 which shows that despite this, such circuits can still be optimized efficiently!
 
 As we will see, this hinges on a suprising fact about these circuits: while sampling is hard,
@@ -32,7 +32,7 @@ parameter. We will represent the parameterized gates by a list
 # 
 #    <center>
 # 
-# gates = [gen1, gen2, ...]
+# ``gates = [gen1, gen2, ...]`
 # 
 # .. raw:: html
 # 
@@ -46,7 +46,7 @@ parameter. We will represent the parameterized gates by a list
 # 
 #    <center>
 # 
-# gen1 = [[0,1]]
+# ``gen1 = [[0,1]]``
 # 
 # .. raw:: html
 # 
@@ -59,7 +59,7 @@ parameter. We will represent the parameterized gates by a list
 # 
 #    <center>
 # 
-# gen1 = [[0,1], [0]]
+# ``gen1 = [[0,1], [0]]``
 # 
 # .. raw:: html
 # 
@@ -91,7 +91,7 @@ gates = [[[0]], [[1]], [[2]], [[0,1]], [[0,2]], [[1,2]]]
 # 
 #    <center>
 # 
-# op = [1,0,1]
+# ``op = [1,0,1]``
 # 
 # .. raw:: html
 # 
@@ -219,7 +219,7 @@ print("Expectation value: ", penn_op_expval)
 # - :math:`\theta_{j}` are the trainable parameters.
 # - :math:`\boldsymbol{g}_{j}` are the different generators, also represented as bitstrings.
 #
-#Although this expression is exact, computing the expectation exactly requires an infinite number of samples :math:`\boldsymbol{z}`. Instead, we can
+# Although this expression is exact, computing the expectation exactly requires an infinite number of samples :math:`\boldsymbol{z}`. Instead, we can
 # replace the expectation with an empirical mean and compute an unbiased estimate of
 # :math:`\langle Z_{\boldsymbol{a}} \rangle` efficiently. That is, if we sample a batch of :math:`s`
 # bitstrings :math:`\{\boldsymbol{z}_i\}` from the uniform distribution and compute the sample mean
@@ -229,14 +229,14 @@ print("Expectation value: ", penn_op_expval)
 # we obtain an unbiased estimate :math:`\hat{\langle Z_{\boldsymbol{a}}\rangle}` of
 # :math:`\langle Z_{\boldsymbol{a}}\rangle`, meaning that
 #
-# :math:`\mathbb{E}[\hat{\langle Z_{\boldsymbol{a}}\rangle}] = \langle Z_{\boldsymbol{a}}\rangle` 
+# .. :math:`\mathbb{E}[\hat{\langle Z_{\boldsymbol{a}}\rangle}] = \langle Z_{\boldsymbol{a}}\rangle` 
 #
 # The error of this approximation is well known since, by the central limit theorem, the standard
 # deviation of the sample mean of a bounded random variable decreases as
 #
-# :math:`\mathcal{O}(1/\sqrt{s})`
+# .. :math:`\mathcal{O}(1/\sqrt{s})`
 #
-#where :math:`s` is the number of samples.
+# where :math:`s` is the number of samples.
 # 
 # Lets see now how to use the IQPopt package to calculate expectation values, based on the same
 # arguments in the previous example. First, we create the circuit object with ``IqpSimulator``,
@@ -631,6 +631,6 @@ plt.show()
 #    "Understanding Deep Generative Models with Generalized Empirical Likelihoods"
 #    `arXiv:2306.09780 <https://arxiv.org/abs/2306.09780>`__, 2023.
 # 
-# About the author
+# About the authors
 # ----------------
 # 
