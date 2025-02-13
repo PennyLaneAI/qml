@@ -12,7 +12,7 @@ jobs:
     uses: ./.github/workflows/build-demos.yml
     with:
       ref: ${{ github.ref }}
-      demo-names: 'tutorial_kak_theorem tutorial_eqnn_force_field tutorial_quantum_transfer_learning tutorial_zne_catalyst'
+      demo-names: 'tutorial_eqnn_force_field tutorial_quantum_transfer_learning tutorial_zne_catalyst'
       save-artifact: false
       keep-going: true
       quiet: true
