@@ -18,7 +18,7 @@ jobs:
         id: get-changed
         uses: ./.github/actions/get-changed-demos
         with:
-            json: true
+            json: false
 
       - name: Echo updated
         run: echo ${{ steps.get-changed.outputs.updated }}
