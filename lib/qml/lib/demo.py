@@ -176,8 +176,7 @@ def build(
             if quiet:
                 if (
                     error_summary := _find_sphinx_gallery_execution_error(exc.stdout)
-                    is None
-                ):
+                ) is None:
                     error_summary = exc.stdout
 
                 logger.error("%s", error_summary)
