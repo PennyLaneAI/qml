@@ -12,14 +12,12 @@ class RequirementsGenerator:
     by a global 'constraints.txt' file."""
 
     global_constraints: Mapping[str, Sequence[str]]
-    extra_index_urls: Sequence[str]
+    extra_index_urls: Sequence[str] = ("https://download.pytorch.org/whl/cpu",)
 
     def __init__(
         self,
         python_bin: Path,
         global_constraints_file: Path,
-        *,
-        extra_index_urls: Sequence[str] | None = None,
     ):
         self.python_bin = python_bin
 

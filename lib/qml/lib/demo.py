@@ -33,13 +33,16 @@ class Demo:
 
     CORE_DEPENDENCIES = frozenset(
         (
+            "aiohttp",
+            "fsspec",
+            "h5py",
+            "jax",
+            "jaxlib",
             "matplotlib",
             "numpy",
             "pennylane",
             "pennylane-lightning",
             "pennylane-catalyst",
-            "jax",
-            "jaxlib",
         )
     )
     """Dependencies installed for every demo that do not
@@ -151,7 +154,6 @@ def build(
     requirements_generator = RequirementsGenerator(
         Path(sys.executable),
         global_constraints_file=ctx.constraints_file,
-        extra_index_urls=("https://download.pytorch.org/whl/cpu",),
     )
 
     for demo in demos:
@@ -196,11 +198,11 @@ def _build_demo(
     package: bool,
     quiet: bool,
 ):
+    execute = execute and demo.executable
     logger.info("Building '%s', execute=%s", demo.name, execute)
 
     out_dir = sphinx_dir / "demos" / demo.name
     fs.clean_dir(out_dir)
-    execute = execute and demo.executable
 
     with open(out_dir / "requirements.txt", "w") as f:
         f.write(requirements_generator.generate_requirements(demo.requirements))
