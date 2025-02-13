@@ -146,6 +146,7 @@ def build(
         execute: Whether to execute demos
     """
     failed: list[str] = []
+    done = 0
     logger.info("Building %d demos", len(demos))
 
     build_venv = Virtualenv(ctx.build_venv_path)
@@ -157,6 +158,15 @@ def build(
     )
 
     for demo in demos:
+        execute = execute and demo.executable
+        logger.info(
+            "Building '%s' (%d/%d), execute=%s",
+            demo.name,
+            done + 1,
+            len(demos),
+            execute,
+        )
+
         try:
             _build_demo(
                 sphinx_dir=ctx.repo_root,
@@ -198,9 +208,6 @@ def _build_demo(
     package: bool,
     quiet: bool,
 ):
-    execute = execute and demo.executable
-    logger.info("Building '%s', execute=%s", demo.name, execute)
-
     out_dir = sphinx_dir / "demos" / demo.name
     fs.clean_dir(out_dir)
 
@@ -362,6 +369,9 @@ def _link_rewriter(
 
 
 def _find_sphinx_gallery_execution_error(stdout: str) -> str | None:
+    """Parse the error section from sphinx-gallery output.
+
+    Returns `None` if the error section could not be found."""
     i = stdout.find(
         "Here is a summary of the problems encountered when running the examples:"
     )
