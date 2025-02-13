@@ -7,10 +7,10 @@ inputs:
 outputs:
   updated:
     description: 'Names of new or updated demos'
-    value: ${{ steps.changed-files.all_changed_files }}
+    value: ${{ steps.changed-files.outputs.all_changed_files }}
   deleted:
     description: 'Names of deleted demos'
-    value: ${{ steps.changed-files.deleted_files }}
+    value: ${{ steps.changed-files.outputs.deleted_files }}
 runs:
   using: "composite"
   steps:
@@ -61,11 +61,3 @@ runs:
         # Specify a relative path under 
         # `$GITHUB_WORKSPACE` to locate the repository. 
         path: 'demonstrations_v2'
-
-
-
-
-  
-
-
-

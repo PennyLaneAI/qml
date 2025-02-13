@@ -16,9 +16,6 @@ jobs:
         uses: ./.github/actions/get-changed-demos
         with:
             json: true
-    
-      - name: Debug dirs
-        run: ls demonstrations_v2/
 
       - name: Echo updated
         run: echo ${{ steps.get-changed.outputs.updated }}
