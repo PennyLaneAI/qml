@@ -18,8 +18,8 @@ jobs:
             json: true
     
       - name: Debug dirs
-        run: echo ls demonstrations_v2/
-        
+        run: ls demonstrations_v2/
+
       - name: Echo updated
         run: echo ${{ steps.get-changed.outputs.updated }}
 
