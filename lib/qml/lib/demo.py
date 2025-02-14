@@ -159,10 +159,11 @@ def build(
 
     for demo in demos:
         execute_demo = execute and demo.executable
+        done += 1
         logger.info(
             "Building '%s' (%d/%d), execute=%s",
             demo.name,
-            done + 1,
+            done,
             len(demos),
             execute,
         )
