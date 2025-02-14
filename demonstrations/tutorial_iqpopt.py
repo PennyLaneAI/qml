@@ -344,7 +344,7 @@ except Exception as e:
 ######################################################################
 # As we can see, we can't sample or know the probabilities of the circuit for the large one. The only
 # efficient approximation algorithm we have is for the calculation of expectation values. Let's see
-# how time scales for each of the methods.
+# how time scales for each of the methods using a logarithmic plot.
 # 
 import time
 import matplotlib.pyplot as plt
