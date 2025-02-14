@@ -198,6 +198,7 @@ print(qb & qb_1)
 # Comparisons, however, are not limited to only QuantumBools, but also for other types, like the
 # previously mentioned QuantumFloats:
 
+
 a = qrisp.QuantumFloat(4)
 qrisp.h(a[3])
 qb_3 = a >= 4
@@ -216,6 +217,7 @@ print(qb_3.qs.statevector())
 
 ######################################################################
 # We can also compare a QuantumFloat to another one:
+
 
 b = qrisp.QuantumFloat(3)
 b[:] = 4
@@ -479,8 +481,8 @@ def fake_inversion(qf, res=None):
 # :math:`\lambda=2^{-3}`, which is :math:`0.001` in binary, the function would produce
 # :math:`\lambda^{-1}=2^3`, which in binary is 1000.
 #
-# Let’s see if it works as intended!
-#
+# Let’s see if it works as intended.
+
 
 qf = qrisp.QuantumFloat(3, -3)
 qrisp.x(qf[2])
@@ -496,72 +498,40 @@ print(qrisp.multi_measurement([qf, res]))
 #    {(0.125, 8): 0.3333333333333333, (0.25, 4): 0.3333333333333333, (0.5, 2): 0.3333333333333333}
 
 ######################################################################
-# Next, we define the function **HHL_encoding** that performs **Steps 1-4** and prepares the state
+# Next, we define the function ``HHL_encoding`` that performs **Steps 1-4** and prepares the state
 # :math:`\ket{\Psi_4}`. But, how do get the values :math:`\widetilde{\lambda}^{-1}_i` into the
 # amplitudes of the states, i.e. how do we go from :math:`\ket{\Psi_3}` to :math:`\ket{\Psi_4}`?
 #
 # Recently, efficient methods for black-box quantum state preparation that avoid arithmetic were
 # proposed, see `Sanders et al. <https://arxiv.org/pdf/1807.03206>`__, `Wang et
 # al. <https://arxiv.org/pdf/2012.11056>`__ In this demo, we use a routine proposed in the latter
-# reference.
+# reference which is based on a comparison between integers. This is implemented via the
+# aforementioned comparisons for QuantumFloats.
 #
-# To simplify the notation, we write :math:`y^{(i)}=\widetilde{\lambda}^{-1}_i`. Consider the binary
-# representation :math:`(y_0,\dotsc,y_{n-1})` of an unsigned integer
-# :math:`y=\sum_{j=0}^{n-1}2^j y_j`. We observe that
+# To simplify the notation, we write :math:`y^{(i)}=\widetilde{\lambda}^{-1}_i`. Recall that the
+# values :math:`y^{(i)}` represent unsigned integers between :math:`0` and :math:`2^n-1$`.
 #
-# .. math::  \dfrac{y}{2^n} = \dfrac{1}{2^n}\sum_{j=0}^{n-1}2^j y_j = \dfrac{1}{2^n}\sum_{j=0}^{n-1}\left(\sum_{k=1}^{2^j}y_j\right)
-#
-# We start by peparing a uniform superposition of :math:`2^n` states in a ``case_indicator``
-# QuantumFloat, and initializing a target QuantumBool ``qbl`` in state :math:`\ket{0}`.
-#
-# From the equation above we observe:
-#
-# - For qubit :math:`y_{n-1}` the coefficient is :math:`2^{n-1}`, hence if :math:`y_{n-1}=1`, the
-#   target ``qbl`` is flipped for half of the :math:`2^n` states, i.e. the states where the first
-#   qubit of ``case_indicator`` is 0.
-#
-# - For qubit :math:`y_{n-2}` the coefficient is :math:`2^{n-2}`, hence if :math:`y_{n-2}=1`, the
-#   target ``qbl`` is flipped for half of the remaining :math:`2^{n-1}` states, i.e. the states where
-#   the first two qubits of ``case_indicator`` are :math:`(1,0)`.
-#
-# The same holds true for :math:`y_{n-3}` etc. That is, for the qubit :math:`y_{n-j}` the coefficient
-# is :math:`2^{n-j}`, hence if :math:`y_{n-j}=1`, the target ``qbl`` is flipped for the states where
-# the first :math:`j` qubits of ``case_indicator`` are :math:`(1,\dotsc,1,0)=2^j-1`.
-#
-# Finally, the ``case_indicator`` is unprepared. Essentially, one can think of this as a `Linear
-# Combination of Unitaries <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding>`__ procedure,
-# where PREP prepares a uniform superposition of the ``case_indicator`` and SEL applies a
-# controlled-NOT with control :math:`y_{n-j}` and target ``qbl`` for the states where the first
-# :math:`j` qubits of ``case_indicator`` are :math:`(1,\dotsc,1,0)=2^j-1`. The figure below shows this
-# as a circuit.
-
-
-######################################################################
-# ILLUSTRATION OF THE CIRCUIT
-
-
-######################################################################
 # Starting from the state
 #
 # .. math::  \ket{\Psi_3} = \sum_i \beta_i\ket{u_i}\ket{\widetilde{\lambda_i}}\ket{y^{(i)}}_{\text{res}}
 #
-# we obtain the state
+# we pepare a uniform superposition of $2^n$ states in a ``case_indicator`` QuantumFloat.
 #
-# .. math::  \ket{\Psi_3'} = \sum_i \dfrac{y^{(i)}}{2^n}\beta_i\ket{u_i}\ket{\widetilde{\lambda_i}}\ket{y^{(i)}}_{\text{res}}\ket{0}_{\text{case}}\ket{1}_{\text{qbl}} + \ket{\Phi}
+# .. math::  \ket{\Psi_3'} = \sum_i \beta_i\ket{u_i}\ket{\widetilde{\lambda_i}}\ket{y^{(i)}}_{\text{res}}\otimes\frac{1}{\sqrt{2^n}}\sum_{x=0}^{2^n-1}\ket{x}_{\text{case}}
 #
-# where :math:`\ket{\Phi}` is an orthogonal state with the last variables not in
-# :math:`\ket{0}_{\text{case}}\ket{1}_{\text{qbl}}`.
+# Next, we calculate the comparison $a\geq b$ between the ``res`` and the ``case_indicator`` into a QuantumBool ``qbl``.
 #
-# Hence, upon measuring the ``case_indicator`` in state :math:`\ket{0}` and the target ``qbl`` in
-# state :math:`\ket{1}`, the desired state is prepared. Therefore, **Steps 1-4** are preformed as
-# repeat-until-success (RUS) routine. The probability of success could be further increased by
-# oblivious `amplitude
-# amplification <https://pennylane.ai/qml/demos/tutorial_intro_amplitude_amplification>`__ in order to
-# obain an optimal asymptotic scaling.
+# .. math::  \ket{\Psi_3''} = \sum_i \beta_i\ket{u_i}\ket{\widetilde{\lambda_i}}\ket{y^{(i)}}_{\text{res}}\otimes\frac{1}{\sqrt{2^n}}\left(\sum_{x=0}^{y^{(i)}-1}\ket{x}_{\text{case}}\ket{0}_{\text{qbl}} + \sum_{x=y^{(i)}}^{2^n-1}\ket{x}_{\text{case}}\ket{1}_{\text{qbl}}\right)
+#
+# Finally, the ``case_indicator`` is unprepared with $n$ Hadamards and we obtain the state
+#
+# .. math::  \ket{\Psi_3'''} = \sum_i \dfrac{y^{(i)}}{2^n}\beta_i\ket{u_i}\ket{\widetilde{\lambda_i}}\ket{y^{(i)}}_{\text{res}}\ket{0}_{\text{case}}\ket{0}_{\text{qbl}} + \ket{\Phi}
+#
+# where :math:`\ket{\Phi}` is an orthogonal state with the last variables not in :math:`\ket{0}_{\text{case}}\ket{0}_{\text{qbl}}`. Hence, upon measuring the ``case_indicator`` in state $\ket{0}$ and the target ``qbl`` in state $\ket{0}$, the desired state is prepared.
+#
+# **Steps 1-4** are preformed as a repeat-until-success (RUS) routine. This decorator converts the function to be executed within a repeat-until-success (RUS) procedure. The function must return a boolean value as first return value and is repeatedly executed until the first return value is True.
 
 
-# This decorator converts the function to be executed within a repeat-until-success (RUS) procedure.
-# The function must return a boolean value as first return value and is repeatedly executed until the first return value is True.
 @qrisp.RUS(static_argnums=[0, 1])
 def HHL_encoding(b, hamiltonian_evolution, n, precision):
 
@@ -573,39 +543,22 @@ def HHL_encoding(b, hamiltonian_evolution, n, precision):
     qpe_res = QPE(qf, hamiltonian_evolution, precision=precision)  # Step 2
     inv_res = fake_inversion(qpe_res)  # Step 3
 
-    n = inv_res.size
-    qbl = qrisp.QuantumBool()
-    case_indicator = qrisp.QuantumFloat(n)
-    # Auxiliary variable to evalutate the case_indicator.
-    control_qbl = qrisp.QuantumBool()
+    case_indicator = qrisp.QuantumFloat(inv_res.size)
 
     with qrisp.conjugate(qrisp.h)(case_indicator):
-        for i in qrisp.jrange(n):
-            # Identify states where the first i qubits represent 2^i-1.
-            qrisp.mcx(
-                case_indicator[: i + 1], control_qbl[0], method="balauca", ctrl_state=2**i - 1
-            )
+        qbl = case_indicator >= inv_res
 
-            qrisp.mcx([control_qbl[0], inv_res[n - 1 - i]], qbl[0])
+    cancellation_bool = (qrisp.measure(case_indicator) == 0) & (qrisp.measure(qbl) == 0)
 
-            # Uncompute the auxiliary variable.
-            qrisp.mcx(
-                case_indicator[: i + 1], control_qbl[0], method="balauca", ctrl_state=2**i - 1
-            )
-
-    control_qbl.delete()
-
-    # Measure whether the iteration was sucessfull
-    success_bool = (qrisp.measure(case_indicator) == 0) & (qrisp.measure(qbl) == 1)
-
-    # The RUS decorator expects a function, which returns the
-    # (classical) success bool as it's first return value.
-    # Any other return values can be quantum or classical
-    return success_bool, qf, qpe_res, inv_res
+    # The first return value is a boolean value. Additional return values are QuantumVaraibles.
+    return cancellation_bool, qf, qpe_res, inv_res
 
 
 ######################################################################
-# Finally, we put all things together into the **HHL** function.
+# The probability of success could be further increased by oblivious `amplitude amplification <https://pennylane.ai/qml/demos/tutorial_intro_amplitude_amplification>`__ in order
+# to obtain an optimal asymptotic scaling.
+#
+# Finally, we put all things together into the ``HHL`` function.
 #
 # This function takes the follwoing arguments:
 #
@@ -652,7 +605,6 @@ from qrisp.operators import QubitOperator
 import numpy as np
 
 A = np.array([[3 / 8, 1 / 8], [1 / 8, 3 / 8]])
-
 b = np.array([1, 1])
 
 H = QubitOperator.from_matrix(A).to_pauli()
