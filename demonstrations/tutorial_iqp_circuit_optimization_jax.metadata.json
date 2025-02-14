@@ -1,5 +1,5 @@
 {
-    "title": "Fast optimization of Instantaneous Quantum Polynomial Circuits",
+    "title": "Fast optimization of instantaneous quantum polynomial circuits",
     "authors": [
         {
             "username": "erikrecio"
@@ -106,7 +106,7 @@
             "url": "https://arxiv.org/abs/2410.20935"
         }      
     ],
-    "basedOnPapers": [],
+    "basedOnPapers": ["10.48550/arXiv.2501.04776"],
     "referencedByPapers": [],
     "relatedContent": [
         {
