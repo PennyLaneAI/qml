@@ -331,7 +331,7 @@ print("Probabilities: ", probabilities)
 # 
 try:
     sample = large_circuit.sample(params, shots=1)
-    print(sample)
+    print(sample) # large circuit will return error
 except Exception as e:
     print(e)
 # 
