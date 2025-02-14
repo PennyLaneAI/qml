@@ -215,7 +215,8 @@ print("Expectation value: ", penn_op_expval)
 # .. math:: \langle Z_{\boldsymbol{a}} \rangle = \mathbb{E}_{\boldsymbol{z}\sim U}\Big[ \cos\Big(\sum_j \theta_{j}(-1)^{\boldsymbol{g}_{j}\cdot \boldsymbol{z}}(1-(-1)^{\boldsymbol{g}_j\cdot \boldsymbol{a}}\Big) \Big],
 #
 # where:
-# - :math:`\boldsymbol{a}` is is the bitstring representation of the operator whose expectation value we want to compute.
+#
+# - :math:`\boldsymbol{a}` is the bitstring representation of the operator whose expectation value we want to compute.
 # - :math:`\boldsymbol{z}` represents bitstring samples drawn from the uniform distribution :math:`U`.
 # - :math:`\theta_{j}` are the trainable parameters.
 # - :math:`\boldsymbol{g}_{j}` are the different generators, also represented as bitstrings.
@@ -239,7 +240,7 @@ print("Expectation value: ", penn_op_expval)
 #
 # where :math:`s` is the number of samples.
 #
-# Lets see now how to use the IQPopt package to calculate expectation values, based on the same
+# Let's see now how to use the IQPopt package to calculate expectation values, based on the same
 # arguments in the previous example. First, we create the circuit object with ``IqpSimulator``,
 # which takes in the number of qubits ``n_qubits`` and the ``gates`` in our usual format:
 #
