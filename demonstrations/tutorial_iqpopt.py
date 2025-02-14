@@ -559,7 +559,7 @@ plt.hist(np.sum(samples_trained, axis=1), bins=20, range=[0,20], alpha=0.5, labe
 plt.hist(np.sum(X_train, axis=1), bins=20, range=[0,20], alpha=0.5, label = 'ground truth')
 plt.xlabel('bitstring weight')
 plt.ylabel('count')
-plt.legned()
+plt.legend()
 plt.show()
 
 ######################################################################
