@@ -327,7 +327,7 @@ sample = small_circuit.sample(params, shots=1)
 print(sample)
 # 
 probabilities = small_circuit.probs(params)
-print(probabilities)
+print("Probabilities: ", probabilities)
 # 
 try:
     sample = large_circuit.sample(params, shots=1)
