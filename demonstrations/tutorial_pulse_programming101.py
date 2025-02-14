@@ -327,7 +327,8 @@ dev = qml.device("default.qubit", wires=range(n_wires))
 
 
 def qnode(theta, t=duration):
-    @qml.qnode(dev, interface="jax")
+
+    @qml.qnode(dev)
     def _qnode_inner(theta, t=duration):
         qml.BasisState(jnp.array(data.tapered_hf_state), wires=H_obj.wires)
         qml.evolve(H_pulse)(params=(*theta, *theta), t=t)
