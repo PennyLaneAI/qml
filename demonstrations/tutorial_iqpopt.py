@@ -338,7 +338,7 @@ except Exception as e:
 
 try:
     probabilities = large_circuit.probs(params)
-    print(probabilities)
+    print(probabilities) # large circuit will return error
 except Exception as e:
     print(e)
 
@@ -507,7 +507,7 @@ circuit = iqp.IqpSimulator(n_qubits, gates)
 params = np.random.normal(0, 0.1, len(gates))
 sigma = median_heuristic(ground_truth)/3 # bandwidth for MMD
 
-print(sigma)
+print("Sigma:", sigma)
 
 mmd = genq.mmd_loss_iqp(params,
                        circuit,
@@ -516,7 +516,7 @@ mmd = genq.mmd_loss_iqp(params,
                        n_ops=1000,
                        n_samples=1000,
                        key=jax.random.PRNGKey(42))
-print(mmd)
+print("MMD: ", mmd)
 
 ######################################################################
 # Now, similar to what we did a few sections back in *Optimizing a circuit*, this function can be used
