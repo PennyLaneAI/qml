@@ -81,3 +81,7 @@ environment:
 			$$PYTHON_VENV_PATH/bin/python -m pip install --upgrade git+https://github.com/PennyLaneAI/pennylane.git#egg=pennylane;\
 		fi;\
 	fi
+
+fmt:
+	poetry run ruff check --fix lib/
+	poetry run ruff format lib/

@@ -1,0 +1,83 @@
+name: Build demos
+on:
+  workflow_call:
+    inputs:
+      ref:
+        description: Branch, tag or commit SHA to checkout
+        required: true
+        type: string
+      demo-names:
+        description: |
+          Instead of building all demos, only build the demos specified in this list.
+        required: false
+        type: string
+        default: ''
+      save-artifact:
+        description: |
+          Whether to save the built demos as an artifact.
+        required: false
+        type: boolean
+        default: true
+      artifact-name:
+        description: Name of the artifact containing the built demos (defaults to demo-build-{ref})
+        required: false
+        type: string
+        default: demo-build-${{ inputs.ref }}
+      keep-going:
+        description: Whether to keep going if a demo fails to build
+        required: false
+        type: boolean
+        default: false
+      quiet:
+        description: |
+          Whether to suppress output from the build process
+        required: false
+        type: boolean
+        default: false
+    outputs:
+      artifact-name:
+        description: "Name of the artifact containing the built demos"
+        value: ${{ inputs.artifact-name }}
+
+jobs:
+  build-demos:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+          fetch-depth: 1
+
+      - name: Install pandoc and opencl
+        run: |
+          sudo apt-get install -y \
+            ocl-icd-opencl-dev \
+            pandoc 
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: pip install . && poetry config warnings.export false
+
+      - name: Build demos
+        run: |
+          qml build \
+            --format json \
+            --execute \
+            ${{ inputs.keep-going && '--keep-going' || '--no-keep-going' }} \
+            ${{ inputs.quiet && '--quiet' || '--no-quiet' }} \
+            ${{ inputs.demo-names }}
+      
+      - name: Upload artifacts
+        id: upload-artifacts
+        if: ${{ inputs.save-artifact }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.artifact-name }}
+          path: _build/pack/*.zip
+          retention-days: 1
+          overwrite: true

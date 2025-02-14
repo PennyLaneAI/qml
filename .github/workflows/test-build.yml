@@ -1,0 +1,18 @@
+name: Test demo builds
+on:
+  push:
+    branches:
+      - sc-79849-implement-improved-demo-build-pipeline
+
+jobs:
+  build:
+    concurrency:
+      group: ${{ github.workflow }}
+      cancel-in-progress: true
+    uses: ./.github/workflows/build-demos.yml
+    with:
+      ref: ${{ github.ref }}
+      save-artifact: false
+      keep-going: true
+      quiet: true
+      
