@@ -325,11 +325,16 @@ H_pulse = H_D + H_C
 
 dev = qml.device("default.qubit", wires=range(n_wires))
 
-@qml.qnode(dev, interface="jax")
+
 def qnode(theta, t=duration):
-    qml.BasisState(jnp.array(data.tapered_hf_state), wires=H_obj.wires)
-    qml.evolve(H_pulse)(params=(*theta, *theta), t=t)
-    return qml.expval(H_obj)
+    @qml.qnode(dev, interface="jax")
+    def _qnode_inner(theta, t=duration):
+        qml.BasisState(jnp.array(data.tapered_hf_state), wires=H_obj.wires)
+        qml.evolve(H_pulse)(params=(*theta, *theta), t=t)
+        return qml.expval(H_obj)
+
+    expectation_value = _qnode_inner(theta, t)  # Execute the qnode
+    return jnp.real(expectation_value)  # Extract real part
 
 
 value_and_grad = jax.jit(jax.value_and_grad(qnode))
