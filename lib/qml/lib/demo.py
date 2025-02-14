@@ -82,7 +82,7 @@ class Demo:
 
     @property
     def executable(self) -> bool:
-        """Whether this demo can be exeucted."""
+        """Whether this demo can be executed."""
         return self.name.startswith("tutorial_")
 
     @functools.cached_property
@@ -158,7 +158,7 @@ def build(
     )
 
     for demo in demos:
-        execute = execute and demo.executable
+        execute_demo = execute and demo.executable
         logger.info(
             "Building '%s' (%d/%d), execute=%s",
             demo.name,
@@ -174,7 +174,7 @@ def build(
                 build_venv=build_venv,
                 requirements_generator=requirements_generator,
                 target=target,
-                execute=execute,
+                execute=execute_demo,
                 demo=demo,
                 package=target is BuildTarget.JSON,
                 quiet=quiet,
