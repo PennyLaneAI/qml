@@ -2,7 +2,7 @@ r"""Fast optimization of Instantaneous Quantum Polynomial Circuits
 ===============================================================
 
 Instantaneous Quantum Polynomial (IQP) circuits are a class of circuits that are expected to be hard
-to sample from using classical computers [#marshall]_. In this demo, we take a look at the `IQPopt <https://github.com/XanaduAI/iqpopt>`__ package [#recio1]_,
+to sample from using classical computers [#marshall1]_. In this demo, we take a look at the `IQPopt <https://github.com/XanaduAI/iqpopt>`__ package [#recio1]_,
 which shows that despite this, such circuits can still be optimized efficiently!
 
 As we will see, this hinges on a surprising fact about these circuits: while sampling is hard,
@@ -209,7 +209,7 @@ print("Expectation value: ", penn_op_expval)
 # IQPopt can perform the same operations our PennyLane circuit above, although using approximations instead of exact values. The benefit is that we can work with very
 # large circuits.
 #
-# Starting from a paper [#nest]_ from Van den Nest (Theorem 3), one can arrive at the following expression
+# Starting from a paper on simulating quantum computers with probabilistic methods [#nest]_ from Van den Nest (Theorem 3), one can arrive at the following expression
 # for expectation values of Pauli Z operators
 #
 # .. math:: \langle Z_{\boldsymbol{a}} \rangle = \mathbb{E}_{\boldsymbol{z}\sim U}\Big[ \cos\Big(\sum_j \theta_{j}(-1)^{\boldsymbol{g}_{j}\cdot \boldsymbol{z}}(1-(-1)^{\boldsymbol{g}_j\cdot \boldsymbol{a}}\Big) \Big],
@@ -486,7 +486,7 @@ mmd = genq.mmd_loss_samples(X1, X2, sigma)
 print(mmd)
 
 ######################################################################
-# This metric can also be estimated efficiently with expectation values of Pauli Z operators only [#recio2]_.
+# This metric can also be estimated efficiently with expectation values of Pauli Z operators only [#recio1]_.
 # This means that if we have an ``IqpSimulator`` object, we can also estimate the MMD loss.
 #
 # The implementation in the ``gen_qml`` module only needs an additional parameter, ``n_ops``, that

@@ -1,5 +1,5 @@
 {
-    "title": "IQPopt: Fast optimization of IQP circuits in JAX",
+    "title": "Fast optimization of Instantaneous Quantum Polynomial Circuits",
     "authors": [
         {
             "username": "erikrecio"
@@ -93,7 +93,18 @@
             "journal": "",
             "doi": "10.48550/arXiv.2306.09780",
             "url": "https://arxiv.org/abs/2306.09780"
-        }   
+        },
+        {
+            "id": "marshall1",
+            "type": "preprint",
+            "title": "Improved separation between quantum and classical computers for sampling and functional tasks",
+            "authors": "Simon C. Marshall, Scott Aaronson, Vedran Dunjko",
+            "year": "2024",
+            "publisher": "",
+            "journal": "",
+            "doi": "10.48550/arXiv.2410.20935",
+            "url": "https://arxiv.org/abs/2410.20935"
+        }      
     ],
     "basedOnPapers": [],
     "referencedByPapers": [],
