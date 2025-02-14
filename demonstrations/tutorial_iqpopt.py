@@ -230,12 +230,12 @@ print("Expectation value: ", penn_op_expval)
 # we obtain an unbiased estimate :math:`\hat{\langle Z_{\boldsymbol{a}}\rangle}` of
 # :math:`\langle Z_{\boldsymbol{a}}\rangle`, meaning that
 #
-# .. :math:\mathbb{E}[\hat{\langle Z_{\boldsymbol{a}}\rangle}] = \langle Z_{\boldsymbol{a}}\rangle
+# .. :math:: \mathbb{E}[\hat{\langle Z_{\boldsymbol{a}}\rangle}] = \langle Z_{\boldsymbol{a}}\rangle
 #
 # The error of this approximation is well known since, by the central limit theorem, the standard
 # deviation of the sample mean of a bounded random variable decreases as
 #
-# .. :math:\mathcal{O}(1/\sqrt{s})
+# .. :math:: \mathcal{O}(1/\sqrt{s})
 #
 # where :math:`s` is the number of samples.
 #
