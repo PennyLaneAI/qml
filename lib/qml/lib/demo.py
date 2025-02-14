@@ -165,7 +165,7 @@ def build(
             demo.name,
             done,
             len(demos),
-            execute,
+            execute_demo,
         )
 
         try:
