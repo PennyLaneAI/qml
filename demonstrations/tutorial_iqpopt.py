@@ -324,7 +324,7 @@ print("Standard error: ", std)
 # works as it does in PennyLane, where the returned array of probabilities is in lexicographic order.
 # 
 sample = small_circuit.sample(params, shots=1)
-print(sample)
+print("Sample: ", sample)
 # 
 probabilities = small_circuit.probs(params)
 print("Probabilities: ", probabilities)
