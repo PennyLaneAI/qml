@@ -6094,6 +6094,7 @@ files = [
     {file = "qiskit_aer-0.16.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:c3b45b37ce5534241b48dcc742fb65fb3cd5fa27276aa503172654a629ad005d"},
     {file = "qiskit_aer-0.16.0-cp311-cp311-win32.whl", hash = "sha256:14938b2fad8e582f7f6028f81bdfbfdd49464e2ecf5b947ebbd71b82db546092"},
     {file = "qiskit_aer-0.16.0-cp311-cp311-win_amd64.whl", hash = "sha256:4b8b4e71b72ed3a5bf2017e0747138e6b4af63dffcb0e4adc07a15070d5004d8"},
+    {file = "qiskit_aer-0.16.0-cp312-cp312-macosx_10_13_x86_64.whl", hash = "sha256:4f56c6cc217c11aeeabe3f256eb292ce8bc431a8562dc837f63eeec403af3e45"},
     {file = "qiskit_aer-0.16.0-cp312-cp312-macosx_10_9_x86_64.whl", hash = "sha256:9215cbbf23131ef7e3b351e4d60b173a1692488e64c931f5c1263c021670bdb0"},
     {file = "qiskit_aer-0.16.0-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:31c6d67ce6e59b2b3bf2ecb2ba96135a8916f6685cf76c19441ed5f36a85e1ee"},
     {file = "qiskit_aer-0.16.0-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:b8807f2104e7e535463b0a3d0eb5118dd53a46981b413bb2622c4745400d4514"},
@@ -6102,6 +6103,12 @@ files = [
     {file = "qiskit_aer-0.16.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:cc5af1729837a3ec6a72e3bda2ca3db199dfa96a42aebeafce4566d2d9a69e1d"},
     {file = "qiskit_aer-0.16.0-cp312-cp312-win32.whl", hash = "sha256:74020573abb393dd7ab2a82776ccf784075e9010d18cf061a8431076848b4b02"},
     {file = "qiskit_aer-0.16.0-cp312-cp312-win_amd64.whl", hash = "sha256:5471bd0300ada4820221562a381eae5e50c0c95ecb6723f3c02be27014ef732b"},
+    {file = "qiskit_aer-0.16.0-cp313-cp313-macosx_10_13_x86_64.whl", hash = "sha256:74eb1cd3c577d0f1c77ddb1c1d30f3a04321b44f5578fd137b2fbbaccb1f049b"},
+    {file = "qiskit_aer-0.16.0-cp313-cp313-macosx_11_0_arm64.whl", hash = "sha256:d8df82c397ead56e26bfde69c4a9892f870eea17dd1201cd6aac249772d2da22"},
+    {file = "qiskit_aer-0.16.0-cp313-cp313-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:dbd8ae6f5c724cb0cb90cb47581c49055045355626ee73ab3627e7432a49e94d"},
+    {file = "qiskit_aer-0.16.0-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:2c2b3a905b27486e3df643a56b85cbbf47e997a3b3676b376bec35c6c1961390"},
+    {file = "qiskit_aer-0.16.0-cp313-cp313-win32.whl", hash = "sha256:858d777f5d8c2bf0c98e10b72a1e6f427edb4f39981baea26102f37c9d56076b"},
+    {file = "qiskit_aer-0.16.0-cp313-cp313-win_amd64.whl", hash = "sha256:a7a6af5c47afd2733d88ce3e172e3f54df622d8b38b97baea6fe6641530e2e91"},
     {file = "qiskit_aer-0.16.0-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:72a18342e4d6753bd7e6c565df2229b5caf88919fd80be5aade92016fdd7854d"},
     {file = "qiskit_aer-0.16.0-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:84520e4fc024742fd54c2934a02641f43410c814f5118a301c733a4c0d634e7a"},
     {file = "qiskit_aer-0.16.0-cp38-cp38-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:14f262f9de0795863291b8a331dec2dbed0c2aa439ff2cea5c47d51b88f063ff"},
@@ -6173,6 +6180,37 @@ requests = ">=2.19"
 requests-ntlm = ">=1.1.0"
 urllib3 = ">=1.21.1"
 websocket-client = ">=1.5.1"
+
+[[package]]
+name = "qrisp"
+version = "0.6.1"
+description = "Qrisp - A high level language for gate-based quantum computing"
+optional = false
+python-versions = ">=3.8"
+groups = ["executable-dependencies"]
+files = [
+    {file = "qrisp-0.6.1-py3-none-any.whl", hash = "sha256:20c28423e259e96b39d4482f8d5eb21d42468f90df5ffc168505ead45e3946be"},
+    {file = "qrisp-0.6.1.tar.gz", hash = "sha256:28360441276ba42b8cb5d2930883835f85e07f8e08971a2277951ef36d76d145"},
+]
+
+[package.dependencies]
+dill = "*"
+flask = "*"
+jax = "0.4.28"
+jaxlib = "0.4.28"
+matplotlib = ">=3.5.1"
+networkx = "*"
+numba = "*"
+psutil = "*"
+pyyaml = "*"
+qiskit = ">=0.44.0"
+requests = "*"
+scipy = ">=1.10.0"
+tdqm = "*"
+waitress = "*"
+
+[package.extras]
+iqm = ["qiskit-iqm"]
 
 [[package]]
 name = "quil"
@@ -7503,6 +7541,21 @@ files = [
 ]
 
 [[package]]
+name = "tdqm"
+version = "0.0.1"
+description = "Alias for typos of tqdm"
+optional = false
+python-versions = "*"
+groups = ["executable-dependencies"]
+files = [
+    {file = "tdqm-0.0.1-py2-none-any.whl", hash = "sha256:85680e5b7d78470cd80f87f348180f3fc924afe799f472e0f2e71bc82927e0c1"},
+    {file = "tdqm-0.0.1.tar.gz", hash = "sha256:f050004a76b1d22f70b78209b48781353c82440215b6ba7d22b1f499b05a0101"},
+]
+
+[package.dependencies]
+tqdm = "*"
+
+[[package]]
 name = "tenacity"
 version = "8.5.0"
 description = "Retry code until it succeeds"
@@ -8255,6 +8308,22 @@ docs = ["Sphinx (>=4.1.2,<4.2.0)", "sphinx-rtd-theme (>=0.5.2,<0.6.0)", "sphinxc
 test = ["aiohttp (>=3.10.5)", "flake8 (>=5.0,<6.0)", "mypy (>=0.800)", "psutil", "pyOpenSSL (>=23.0.0,<23.1.0)", "pycodestyle (>=2.9.0,<2.10.0)"]
 
 [[package]]
+name = "waitress"
+version = "3.0.2"
+description = "Waitress WSGI server"
+optional = false
+python-versions = ">=3.9.0"
+groups = ["executable-dependencies"]
+files = [
+    {file = "waitress-3.0.2-py3-none-any.whl", hash = "sha256:c56d67fd6e87c2ee598b76abdd4e96cfad1f24cacdea5078d382b1f9d7b5ed2e"},
+    {file = "waitress-3.0.2.tar.gz", hash = "sha256:682aaaf2af0c44ada4abfb70ded36393f0e307f4ab9456a215ce0020baefc31f"},
+]
+
+[package.extras]
+docs = ["Sphinx (>=1.8.1)", "docutils", "pylons-sphinx-themes (>=1.0.9)"]
+testing = ["coverage (>=7.6.0)", "pytest", "pytest-cov"]
+
+[[package]]
 name = "watchdog"
 version = "6.0.0"
 description = "Filesystem events monitoring"
@@ -8905,4 +8974,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = "~3.10.0"
-content-hash = "d06eacfbb69be7f50a0ce901c7f6842e745855b5a88b9994977d9818e21f7d67"
+content-hash = "c87a6dc8fa0374cca907e1acfc205c0b78a942edeb53cb0bafa5f3e2314016e5"
