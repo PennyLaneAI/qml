@@ -515,19 +515,19 @@ print(qrisp.multi_measurement([qf, res]))
 #
 # .. math::  \ket{\Psi_3} = \sum_i \beta_i\ket{u_i}\ket{\widetilde{\lambda_i}}\ket{y^{(i)}}_{\text{res}}
 #
-# we pepare a uniform superposition of $2^n$ states in a ``case_indicator`` QuantumFloat.
+# we pepare a uniform superposition of :math:`2^n` states in a ``case_indicator`` QuantumFloat.
 #
 # .. math::  \ket{\Psi_3'} = \sum_i \beta_i\ket{u_i}\ket{\widetilde{\lambda_i}}\ket{y^{(i)}}_{\text{res}}\otimes\frac{1}{\sqrt{2^n}}\sum_{x=0}^{2^n-1}\ket{x}_{\text{case}}
 #
-# Next, we calculate the comparison $a\geq b$ between the ``res`` and the ``case_indicator`` into a QuantumBool ``qbl``.
+# Next, we calculate the comparison :math:`a\geq b` between the ``res`` and the ``case_indicator`` into a QuantumBool ``qbl``.
 #
 # .. math::  \ket{\Psi_3''} = \sum_i \beta_i\ket{u_i}\ket{\widetilde{\lambda_i}}\ket{y^{(i)}}_{\text{res}}\otimes\frac{1}{\sqrt{2^n}}\left(\sum_{x=0}^{y^{(i)}-1}\ket{x}_{\text{case}}\ket{0}_{\text{qbl}} + \sum_{x=y^{(i)}}^{2^n-1}\ket{x}_{\text{case}}\ket{1}_{\text{qbl}}\right)
 #
-# Finally, the ``case_indicator`` is unprepared with $n$ Hadamards and we obtain the state
+# Finally, the ``case_indicator`` is unprepared with :math:`n` Hadamards and we obtain the state
 #
 # .. math::  \ket{\Psi_3'''} = \sum_i \dfrac{y^{(i)}}{2^n}\beta_i\ket{u_i}\ket{\widetilde{\lambda_i}}\ket{y^{(i)}}_{\text{res}}\ket{0}_{\text{case}}\ket{0}_{\text{qbl}} + \ket{\Phi}
 #
-# where :math:`\ket{\Phi}` is an orthogonal state with the last variables not in :math:`\ket{0}_{\text{case}}\ket{0}_{\text{qbl}}`. Hence, upon measuring the ``case_indicator`` in state $\ket{0}$ and the target ``qbl`` in state $\ket{0}$, the desired state is prepared.
+# where :math:`\ket{\Phi}` is an orthogonal state with the last variables not in :math:`\ket{0}_{\text{case}}\ket{0}_{\text{qbl}}`. Hence, upon measuring the ``case_indicator`` in state :math:`\ket{0}` and the target ``qbl`` in state $\ket{0}$, the desired state is prepared.
 #
 # **Steps 1-4** are preformed as a repeat-until-success (RUS) routine. This decorator converts the function to be executed within a repeat-until-success (RUS) procedure. The function must return a boolean value as first return value and is repeatedly executed until the first return value is True.
 

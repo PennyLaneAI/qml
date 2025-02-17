@@ -5808,14 +5808,14 @@ websocket-client = ">=1.5.1"
 
 [[package]]
 name = "qrisp"
-version = "0.6"
+version = "0.6.1"
 description = "Qrisp - A high level language for gate-based quantum computing"
 optional = false
 python-versions = ">=3.8"
 groups = ["executable-dependencies"]
 files = [
-    {file = "qrisp-0.6-py3-none-any.whl", hash = "sha256:c681af84623c1a578c6e883cdc0e3640ed3d5d7acb1d6718f0bad8ef12eedc34"},
-    {file = "qrisp-0.6.tar.gz", hash = "sha256:4400bf8df97aeccb0c0f1f21d10aac3da734af3183aff5c8309bd7a005bb6114"},
+    {file = "qrisp-0.6.1-py3-none-any.whl", hash = "sha256:20c28423e259e96b39d4482f8d5eb21d42468f90df5ffc168505ead45e3946be"},
+    {file = "qrisp-0.6.1.tar.gz", hash = "sha256:28360441276ba42b8cb5d2930883835f85e07f8e08971a2277951ef36d76d145"},
 ]
 
 [package.dependencies]
@@ -8514,4 +8514,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = "~3.10.0"
-content-hash = "63a591aee69e71778974c4b634ee5b074fe1e95a1fcb939fa04c4a0c37180545"
+content-hash = "66b7b5a094d8f8168858bf281c1494abff122f3ced3fac2295dff12906cc055a"
