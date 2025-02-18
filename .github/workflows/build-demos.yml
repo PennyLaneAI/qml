@@ -53,10 +53,10 @@ jobs:
     steps:
       - name: Create job chunk array
         id: get-chunk-array
-        run: printf "chunk-array=%s" $(jq -nc '[$ARGS.positional | _nwise(${{ inputs.batch_size }})]' --args ${{ inputs.demo-names }})
+        run: printf "chunk-array=%s" $(jq -nc '[$ARGS.positional | _nwise(${{ inputs.batch_size }})]' --args ${{ inputs.demo-names }}) >> $GITHUB_OUTPUT
       - name: Get chunk indexes
         id: get-chunk-indexes
-        run: printf "chunk-indexes=%s" $(jq -nc '${{ steps.get-chunk-array.outputs.chunk-array }} | [range(0, length)]')
+        run: printf "chunk-indexes=%s" $(jq -nc '${{ steps.get-chunk-array.outputs.chunk-array }} | [range(0, length)]') >> $GITHUB_OUTPUT
 
   build-demos:
     runs-on: ubuntu-latest
@@ -87,7 +87,7 @@ jobs:
       
       - name: Make demo name list
         id: demo-name-list
-        run: printf "demo-names=%s" $(jq -nc '${{ needs.generate-matrix.outputs.chunk-array }}[${{ matrix.chunk-index }}]' | tr -s '\n"' ' ')
+        run: printf "demo-names=%s" $(jq -nc '${{ needs.generate-matrix.outputs.chunk-array }}[${{ matrix.chunk-index }}]' | tr -s '\n"' ' ') >> $GITHUB_OUTPUT
 
       - name: Build demos
         run: |
