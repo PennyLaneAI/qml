@@ -49,7 +49,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       chunk-array: ${{ steps.get-chunk-array.outputs.chunk-array }}
-      chunk-indexes: ${{ steps.get-chunk-array.outputs.chunk-indexes }}
+      chunk-indexes: ${{ steps.get-chunk-indexes.outputs.chunk-indexes }}
     steps:
       - name: Create job chunk array
         id: get-chunk-array
