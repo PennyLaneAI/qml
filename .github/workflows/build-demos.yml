@@ -101,7 +101,7 @@ jobs:
       
       - name: Make demo name list
         id: demo-name-list
-        run: printf "demo-names=%s" "$(jq -nc '${{ needs.generate-matrix.outputs.chunk-array }}[${{ matrix.chunk-index }}]' | tr -s '\n"' ' ')" >> $GITHUB_OUTPUT
+        run: printf "demo-names=%s" "$(jq -nc '${{ needs.generate-matrix.outputs.chunk-array }}[${{ matrix.chunk-index }}][]' | tr -s '\n"' ' ')" >> $GITHUB_OUTPUT
 
       - name: Build demos
         run: |
