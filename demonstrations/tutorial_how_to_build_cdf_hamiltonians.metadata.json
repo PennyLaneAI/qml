@@ -1,0 +1,52 @@
+{
+    "title": "How to build compressed double factorized Hamiltonians",
+    "authors": [
+        {
+            "username": "whatsis"
+        }
+    ],
+    "dateOfPublication": "2025-02-28T00:00:00+00:00",
+    "dateOfLastModification": "2025-02-18T00:00:00+00:00",
+    "categories": [
+        "Getting Started",
+        "How-to"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_how_to_build_spin_hamiltonians.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_how_to_build_spin_hamiltonians.png"
+        }
+    ],
+    "seoDescription": "Learn how to build compressed double factorized Hamiltonians with PennyLane.",
+    "doi": "",
+    "references": [
+        {
+            "id": "arXiv:2304.13772",
+            "type": "article",
+            "title": "Block-Invariant Symmetry Shift: Preprocessing technique for second-quantized Hamiltonians to improve their decompositions to Linear Combination of Unitaries",
+            "authors": "Ignacio Loaiza, Artur F. Izmaylov",
+            "year": "2023",
+            "publisher": "arXiv",
+            "url": "https://arxiv.org/pdf/2304.13772"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_quantum_chemistry",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_fermionic_operators",
+            "weight": 1.0
+        }
+    ]
+}
