@@ -51,9 +51,23 @@ jobs:
       chunk-array: ${{ steps.get-chunk-array.outputs.chunk-array }}
       chunk-indexes: ${{ steps.get-chunk-indexes.outputs.chunk-indexes }}
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+          fetch-depth: 1
+      - name: Get demo names
+        id: get-demo-names
+        run: |
+          if [ -z "${{ inputs.demo-names }}" ];
+          then
+            printf "demo-names=%s" $(cd demonstrations_v2 && ls | tr '\n' ' ') >> $GITHUB_OUTPUT
+          else
+            printf "demo-names=%s" "${{ inputs.demo-names }}" >> $GITHUB_OUTPUT
+          fi
       - name: Create job chunk array
         id: get-chunk-array
-        run: printf "chunk-array=%s" $(jq -nc '[$ARGS.positional | _nwise(${{ inputs.batch_size }})]' --args ${{ inputs.demo-names }}) >> $GITHUB_OUTPUT
+        run: printf "chunk-array=%s" $(jq -nc '[$ARGS.positional | _nwise(${{ inputs.batch_size }})]' --args ${{ steps.get-demo-names.outputs.demo-names }}) >> $GITHUB_OUTPUT
       - name: Get chunk indexes
         id: get-chunk-indexes
         run: printf "chunk-indexes=%s" $(jq -nc '${{ steps.get-chunk-array.outputs.chunk-array }} | [range(0, length)]') >> $GITHUB_OUTPUT
