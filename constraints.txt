@@ -24,6 +24,8 @@ torchvision==0.16.2+cpu ; sys_platform != 'darwin'
 torchvision==0.16.2 ; sys_platform == 'darwin'
 tensorflow==2.14.1
 optax==0.2.3
+quimb==1.8.2
+kahypar==1.1.7
 
 # build dependencies must be compatible with demo dependencies
 sphinx>=5.0.2

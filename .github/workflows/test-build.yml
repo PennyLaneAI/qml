@@ -12,7 +12,8 @@ jobs:
     uses: ./.github/workflows/build-demos.yml
     with:
       ref: ${{ github.ref }}
-      save-artifact: false
+      save-artifact: true
+      artifact-name: ${{ github.ref }}
       keep-going: true
       quiet: true
       
