@@ -267,13 +267,13 @@ print(comparison.qs.statevector())
 # A quick tl;dr.: Quantum Phase Estimation is an important subroutine in many quantum algorithms, like
 # the HHL as you will get to learn. A short summary of what problem QPE solves can be stated as:
 #
-# Given a unitary :math:`U` and quantum state :math:`\ket{\psi}` which is an eigenvector of :math:`U`:
+# Given a unitary :math:`U` and quantum state :math:`|\psi\rangle` which is an eigenvector of :math:`U`:
 #
-# .. math::  U \ket{\psi} = e^{i 2 \pi \phi}\ket{\psi}
+# .. math::  U |\psi\rangle = e^{i 2 \pi \phi}|\psi\rangle
 #
-# applying quantum phase estimation to :math:`U` and :math:`\ket{\psi}` returns a quantum register
+# applying quantum phase estimation to :math:`U` and :math:`|\psi\rangle` returns a quantum register
 # containing an estimate for the value of :math:`\phi`,
-# i.e. :math:`\text{QPE}_{U} \ket{\psi} \ket{0} = \ket{\psi} \ket{\phi}`
+# i.e. :math:`\text{QPE}_{U} |\psi\rangle |0\rangle = |\psi\rangle |\phi\rangle`
 #
 # This can be implemented within a few lines of code in Qrisp:
 
@@ -338,7 +338,7 @@ res = QPE(psi, U, precision=3)
 #
 # The quantum state is now:
 #
-# .. math::  \frac{1}{2} \text{QPE}_{U}(\ket{0} + \ket{1} + \ket{2} + \ket{3})\ket{0} = \frac{1}{2} (\ket{0}\ket{0} + \ket{1}\ket{\phi_1} + \ket{2}\ket{\phi_2} +\ket{3}\ket{\phi_1 + \phi_2})
+# .. math::  \frac{1}{2} \text{QPE}_{U}(|0\rangle + |1\rangle + |2\rangle + |3\rangle)|0\rangle = \frac{1}{2} (|0\rangle|0\rangle + |1\rangle|\phi_1\rangle + |2\rangle|\phi_2\rangle +|3\rangle|\phi_1 + \phi_2\rangle)
 #
 # We verify by measuring ``psi`` togehter with ``res``:
 
@@ -385,7 +385,7 @@ main()
 #
 # Given an :math:`N`-by-:math:`N` Hermitian matrix :math:`A` and an :math:`N`-dimensional vector
 # :math:`b`, the Quantum Linear Systems Problem (QSLP) consists of preparing a quantum state
-# :math:`\ket{x}` with amplitudes proportional to the solution :math:`x` of the linear system of
+# :math:`|x\rangle` with amplitudes proportional to the solution :math:`x` of the linear system of
 # equations :math:`Ax=b`. Thereby, it can exhibit an exponential speedup over classical methods for
 # certain sparse matrices :math:`A`. The HHL quantum algorithm and, more generally, quantum linear
 # systems algorithms, hold significant promise for accelerating computations in fields that rely
@@ -394,22 +394,22 @@ main()
 #
 # In its eigenbasis, the matrix :math:`A` can be written as
 #
-# .. math::  A = \sum_i \lambda_i\ket{u_i}\bra{u_i}
+# .. math::  A = \sum_i \lambda_i|u_i\rangle\langle u_i|
 #
-# where :math:`\ket{u_i}` is an eigenvector of :math:`A` corresponding to the eigenvalue
+# where :math:`|u_i\rangle` is an eigenvector of :math:`A` corresponding to the eigenvalue
 # :math:`\lambda_i`.
 #
-# We define the quantum states :math:`\ket{b}` and :math:`\ket{x}` as
+# We define the quantum states :math:`|b\rangle` and :math:`|x\rangle` as
 #
-# .. math::  \ket{b} = \dfrac{\sum_i b_i\ket{i}}{\|\sum_i b_i\ket{i}\|} = \sum_i \beta_i\ket{u_i} \quad\text{and}\quad \ket{x} = \dfrac{\sum_i x_i\ket{i}}{\|\sum_i x_i\ket{i}\|} = \sum_i \gamma_i\ket{u_i}
+# .. math::  |b\rangle = \dfrac{\sum_i b_i|i\rangle}{\|\sum_i b_i|i\rangle\|} = \sum_i \beta_i|u_i\rangle \quad\text{and}\quad |x\rangle = \dfrac{\sum_i x_i|i\rangle}{\|\sum_i x_i|i\rangle\|} = \sum_i \gamma_i|u_i\rangle
 #
-# where :math:`\ket{b}` and :math:`\ket{x}` are expressed in the eigenbasis of :math:`A`.
+# where :math:`|b\rangle` and :math:`|x\rangle` are expressed in the eigenbasis of :math:`A`.
 #
 # Solving the linerar system amounts to
 #
-# .. math:: \begin{align}\ket{x}&=A^{-1}\ket{b}\\&=\bigg(\sum_{i=0}^{N-1}\lambda_i^{-1}\ket{u_i}\bra{u_i}\bigg)\sum_j\beta_j\ket{u_j}\\&=\sum_{i=0}^{N-1}\lambda_i^{-1}\beta_i\ket{u_i}\end{align}
+# .. math:: \begin{align}|x\rangle&=A^{-1}|b\rangle\\&=\bigg(\sum_{i=0}^{N-1}\lambda_i^{-1}|u_i\rangle\langle u_i|\bigg)\sum_j\beta_j|u_j\rangle\\&=\sum_{i=0}^{N-1}\lambda_i^{-1}\beta_i|u_i\rangle\end{align}
 #
-# You might wonder why we can’t just apply :math:`A^{-1}` directly to :math:`\ket{b}`? This is
+# You might wonder why we can’t just apply :math:`A^{-1}` directly to :math:`|b\rangle`? This is
 # because, in general, the matix :math:`A` is not unitary. However, we will circumnavigate this by
 # exploiting that the Hamiltonian evolution :math:`U=e^{itA}` is unitary for a Hermitian matrix
 # :math:`A`. And this brings us to the HHL algorithm.
@@ -418,35 +418,35 @@ main()
 #
 # - Step 1: We start by preparing the state
 #
-#   .. math::  \ket{\Psi_1} = \ket{b} = \sum_i \beta_i\ket{u_i}
+#   .. math::  |\Psi_1\rangle = |b\rangle = \sum_i \beta_i|u_i\rangle
 #
 # - Step 2: Applying **Quantum Phase Estimation** with respect to the Hamiltonian evolution
 #   :math:`U=e^{itA}` yields the state
 #
-#   .. math::  \ket{\Psi_2} = \sum_i \beta_i\ket{u_i}\ket{\lambda_jt/2\pi} = \sum_i \beta_i\ket{u_i}\ket{\widetilde{\lambda_i}}
+#   .. math::  |\Psi_2\rangle = \sum_i \beta_i|u_i\rangle|\lambda_jt/2\pi\rangle = \sum_i \beta_i|u_i\rangle|\widetilde{\lambda_i}\rangle
 #
 #   To simplify notation, we write :math:`\widetilde{\lambda}_i=\lambda_jt/2\pi`.
 #
 # - Step 3: Performing the inversion of the eigenvalues
 #   :math:`\widetilde{\lambda}_i\rightarrow\widetilde{\lambda}_i^{-1}` yields the state
 #
-#   .. math::  \ket{\Psi_3} = \sum_i \beta_i\ket{u_i}\ket{\widetilde{\lambda_i}}\ket{\widetilde{\lambda_i^{-1}}}
+#   .. math::  |\Psi_3\rangle = \sum_i \beta_i|u_i\rangle|\widetilde{\lambda_i}\rangle|\widetilde{\lambda_i^{-1}}\rangle
 #
 # - Step 4: The amplitudes are multiplied by the inverse eigenvalues
 #   :math:`\widetilde{\lambda}_i^{-1}` to obtain the state
 #
-#   .. math::  \ket{\Psi_4} = \sum_i \lambda_i^{-1}\beta_i\ket{u_i}\ket{\widetilde{\lambda}_i}\ket{\widetilde{\lambda}_i^{-1}}
+#   .. math::  |\Psi_4\rangle = \sum_i \lambda_i^{-1}\beta_i|u_i\rangle|\widetilde{\lambda}_i\rangle|\widetilde{\lambda}_i^{-1}\rangle
 #
 #   This is achieved by means of a repeat-until-success procedure that applies **Steps 1-3** as a
 #   subroutine. Stay tuned for more details below!
 #
-# - Step 5: As a final step, we uncompute the variables :math:`\ket{\widetilde{\lambda}^{-1}}` and
-#   :math:`\ket{\widetilde{\lambda}}`, and obtain the state
+# - Step 5: As a final step, we uncompute the variables :math:`|\widetilde{\lambda}^{-1}\rangle` and
+#   :math:`|\widetilde{\lambda}\rangle`, and obtain the state
 #
-#   .. math::  \ket{\Psi_5} = \sum_i \lambda_i^{-1}\beta_i\ket{u_i} = \ket{x}
+#   .. math::  |\Psi_5\rangle = \sum_i \lambda_i^{-1}\beta_i|u_i\rangle = |x\rangle
 #
-# This concludes the HHL algorithm. The variable initialized in state :math:`\ket{b}` is now found in
-# state :math:`\ket{x}`. As shown in the `original paper <https://arxiv.org/pdf/0811.3171>`__, the
+# This concludes the HHL algorithm. The variable initialized in state :math:`|b\rangle` is now found in
+# state :math:`|x\rangle`. As shown in the `original paper <https://arxiv.org/pdf/0811.3171>`__, the
 # runtime of this algorithm is :math:`\mathcal{O}(\log(N)s^2\kappa^2/\epsilon)` where :math:`s` and
 # :math:`\kappa` are the sparsity and condition number of the matrix :math:`A`, respectively, and
 # :math:`\epsilon` is the precison of the solution. The logarithmic dependence on the dimension
@@ -499,8 +499,8 @@ print(qrisp.multi_measurement([qf, res]))
 
 ######################################################################
 # Next, we define the function ``HHL_encoding`` that performs **Steps 1-4** and prepares the state
-# :math:`\ket{\Psi_4}`. But, how do get the values :math:`\widetilde{\lambda}^{-1}_i` into the
-# amplitudes of the states, i.e. how do we go from :math:`\ket{\Psi_3}` to :math:`\ket{\Psi_4}`?
+# :math:`|\Psi_4\rangle`. But, how do get the values :math:`\widetilde{\lambda}^{-1}_i` into the
+# amplitudes of the states, i.e. how do we go from :math:`|\Psi_3\rangle` to :math:`|\Psi_4\rangle`?
 #
 # Recently, efficient methods for black-box quantum state preparation that avoid arithmetic were
 # proposed, see `Sanders et al. <https://arxiv.org/pdf/1807.03206>`__, `Wang et
@@ -513,21 +513,21 @@ print(qrisp.multi_measurement([qf, res]))
 #
 # Starting from the state
 #
-# .. math::  \ket{\Psi_3} = \sum_i \beta_i\ket{u_i}\ket{\widetilde{\lambda_i}}\ket{y^{(i)}}_{\text{res}}
+# .. math::  |\Psi_3\rangle = \sum_i \beta_i|u_i\rangle|\widetilde{\lambda_i}\rangle|y^{(i)}}_{\text{res}\rangle
 #
 # we pepare a uniform superposition of :math:`2^n` states in a ``case_indicator`` QuantumFloat.
 #
-# .. math::  \ket{\Psi_3'} = \sum_i \beta_i\ket{u_i}\ket{\widetilde{\lambda_i}}\ket{y^{(i)}}_{\text{res}}\otimes\frac{1}{\sqrt{2^n}}\sum_{x=0}^{2^n-1}\ket{x}_{\text{case}}
+# .. math::  |\Psi_3'\rangle = \sum_i \beta_i|u_i\rangle|\widetilde{\lambda_i}\rangle|y^{(i)}\rangle_{\text{res}}\otimes\frac{1}{\sqrt{2^n}}\sum_{x=0}^{2^n-1}|x\rangle_{\text{case}}
 #
 # Next, we calculate the comparison :math:`a\geq b` between the ``res`` and the ``case_indicator`` into a QuantumBool ``qbl``.
 #
-# .. math::  \ket{\Psi_3''} = \sum_i \beta_i\ket{u_i}\ket{\widetilde{\lambda_i}}\ket{y^{(i)}}_{\text{res}}\otimes\frac{1}{\sqrt{2^n}}\left(\sum_{x=0}^{y^{(i)}-1}\ket{x}_{\text{case}}\ket{0}_{\text{qbl}} + \sum_{x=y^{(i)}}^{2^n-1}\ket{x}_{\text{case}}\ket{1}_{\text{qbl}}\right)
+# .. math::  |\Psi_3''\rangle = \sum_i \beta_i|u_i\rangle|\widetilde{\lambda_i}\rangle|y^{(i)}\rangle_{\text{res}}\otimes\frac{1}{\sqrt{2^n}}\left(\sum_{x=0}^{y^{(i)}-1}|x\rangle_{\text{case}}|0\rangle_{\text{qbl}} + \sum_{x=y^{(i)}}^{2^n-1}|x\rangle_{\text{case}}|1\rangle_{\text{qbl}}\right)
 #
 # Finally, the ``case_indicator`` is unprepared with :math:`n` Hadamards and we obtain the state
 #
-# .. math::  \ket{\Psi_3'''} = \sum_i \dfrac{y^{(i)}}{2^n}\beta_i\ket{u_i}\ket{\widetilde{\lambda_i}}\ket{y^{(i)}}_{\text{res}}\ket{0}_{\text{case}}\ket{0}_{\text{qbl}} + \ket{\Phi}
+# .. math::  |\Psi_3'''\rangle = \sum_i \dfrac{y^{(i)}}{2^n}\beta_i|u_i\rangle|\widetilde{\lambda_i}\rangle|y^{(i)}}_{\text{res}\rangle|0\rangle_{\text{case}}|0\rangle_{\text{qbl}} + |\Phi\rangle
 #
-# where :math:`\ket{\Phi}` is an orthogonal state with the last variables not in :math:`\ket{0}_{\text{case}}\ket{0}_{\text{qbl}}`. Hence, upon measuring the ``case_indicator`` in state :math:`\ket{0}` and the target ``qbl`` in state $\ket{0}$, the desired state is prepared.
+# where :math:`|\Phi\rangle` is an orthogonal state with the last variables not in :math:`|0\rangle_{\text{case}}|0\rangle_{\text{qbl}}`. Hence, upon measuring the ``case_indicator`` in state :math:`|0\rangle` and the target ``qbl`` in state $|0\rangle$, the desired state is prepared.
 #
 # **Steps 1-4** are preformed as a repeat-until-success (RUS) routine. This decorator converts the function to be executed within a repeat-until-success (RUS) procedure. The function must return a boolean value as first return value and is repeatedly executed until the first return value is True.
 
@@ -564,13 +564,13 @@ def HHL_encoding(b, hamiltonian_evolution, n, precision):
 #
 # - ``b`` The vector :math:`b`.
 # - ``hamiltonian_evolution`` A function performing hamiltonian_evolution :math:`e^{itA}`.
-# - ``n`` The number of qubits encoding the state :math:`\ket{b}` (:math:`N=2^n`).
+# - ``n`` The number of qubits encoding the state :math:`|b\rangle` (:math:`N=2^n`).
 # - ``precision`` The precison of the quantum phase estimation.
 #
-# The HHL function uses the previously defined subroutine to prepare the state :math:`\ket{\Psi_4}`
-# and subsequently uncomputes the :math:`\ket{\widetilde{\lambda}}` and :math:`\ket{\lambda}` quantum
-# variables leaving the first variable, that was initialized in state :math:`\ket{b}`, in the target
-# state :math:`\ket{x}`.
+# The HHL function uses the previously defined subroutine to prepare the state :math:`|\Psi_4}`
+# and subsequently uncomputes the :math:`|\widetilde{\lambda}\rangle` and :math:`|\lambda\rangle` quantum
+# variables leaving the first variable, that was initialized in state :math:`|b\rangle`, in the target
+# state :math:`|x\rangle`.
 
 
 def HHL(b, hamiltonian_evolution, n, precision):
