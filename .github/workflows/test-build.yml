@@ -11,9 +11,9 @@ jobs:
       cancel-in-progress: true
     uses: ./.github/workflows/build-demos.yml
     with:
-      ref: ${{ github.ref }}
+      ref: ${{ github.sha }}
       save-artifact: true
-      artifact-name: ${{ github.ref }}
+      artifact-name: ${{ github.sha }}
       keep-going: true
       quiet: true
       
