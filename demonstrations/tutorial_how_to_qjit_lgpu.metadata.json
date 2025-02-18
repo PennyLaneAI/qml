@@ -1,5 +1,5 @@
 {
-    "title": "Lightning-GPU with QJIT",
+    "title": "How to use Catalyst with Lightning-GPU",
     "authors": [
         {
             "username": "maliasadi"
@@ -11,8 +11,10 @@
     "dateOfPublication": "2025-01-25T00:00:00+00:00",
     "dateOfLastModification": "2025-01-25T00:00:00+00:00",
     "categories": [
-        "Quantum Computing",
+        "Getting Started",
+        "Quantum Chemistry",
         "Devices and Performance",
+        "Quantum Computing",
         "How-to"
     ],
     "tags": [
@@ -28,17 +30,12 @@
             "uri": ""
         }
     ],
-    "seoDescription": "Use PennyLane, Catalyst, and Lightning-GPU to boost the runtime performance of your workflows.",
+    "seoDescription": "Learn how to use Catalyst with Lightning-GPU to boost the runtime performance of your quantum programs.",
     "doi": "",
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],
     "relatedContent": [
-        {
-            "type": "demonstration",
-            "id": "tutorial_qpe",
-            "weight": 1.0
-        },
         {
             "type": "demonstration",
             "id": "tutorial_how_to_quantum_just_in_time_compile_vqe_catalyst",
@@ -48,6 +45,11 @@
             "type": "demonstration",
             "id": "tutorial_qjit_compile_grovers_algorithm_with_catalyst",
             "weight": 1.0
-        }
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_How_to_optimize_QML_model_using_JAX_catalyst_and_Optax",
+            "weight": 1.0
+        },
     ]
 }
