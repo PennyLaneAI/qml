@@ -34,14 +34,36 @@ on:
         required: false
         type: boolean
         default: false
+      batch_size:
+        description: |
+          Number of demos to build per job
+        type: number
+        default: 10
     outputs:
       artifact-name:
         description: "Name of the artifact containing the built demos"
         value: ${{ inputs.artifact-name }}
 
 jobs:
+  generate-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      chunk-array: ${{ steps.get-chunk-array.outputs.chunk-array }}
+      chunk-indexes: ${{ steps.get-chunk-array.outputs.chunk-indexes }}
+    steps:
+      - name: Create job chunk array
+        id: get-chunk-array
+        run: printf "chunk-array=%s" $(jq -nc '[$ARGS.positional | _nwise(${{ inputs.batch_size }})]' --args ${{ inputs.demo-names }})
+      - name: Get chunk indexes
+        id: get-chunk-indexes
+        run: printf "chunk-indexes=%s" $(jq -nc '${{ steps.get-chunk-array.outputs.chunk-array }} | [range(0, length)]')
+
   build-demos:
     runs-on: ubuntu-latest
+    needs: [generate-matrix]
+    strategy:
+      matrix:
+        chunk-index: ${{ fromJson(needs.generate-matrix.outputs.chunk-indexes) }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -62,6 +84,10 @@ jobs:
 
       - name: Install dependencies
         run: pip install . && poetry config warnings.export false
+      
+      - name: Make demo name list
+        id: demo-name-list
+        run: printf "demo-names=%s" $(jq -nc '${{ needs.generate-matrix.outputs.chunk-array }}[${{ matrix.chunk-index }}]' | tr -s '\n"' ' ')
 
       - name: Build demos
         run: |
@@ -70,7 +96,7 @@ jobs:
             --execute \
             ${{ inputs.keep-going && '--keep-going' || '--no-keep-going' }} \
             ${{ inputs.quiet && '--quiet' || '--no-quiet' }} \
-            ${{ inputs.demo-names }}
+            ${{ steps.demo-name-list.outputs.demo-names }}
       
       - name: Upload artifacts
         id: upload-artifacts
