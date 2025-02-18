@@ -61,7 +61,7 @@ jobs:
         run: |
           if [ -z "${{ inputs.demo-names }}" ];
           then
-            printf "demo-names=%s" $(cd demonstrations_v2 && ls | tr '\n' ' ') >> $GITHUB_OUTPUT
+            printf "demo-names=%s" "$(cd demonstrations_v2 && ls | tr '\n' ' ')" >> $GITHUB_OUTPUT
           else
             printf "demo-names=%s" "${{ inputs.demo-names }}" >> $GITHUB_OUTPUT
           fi
