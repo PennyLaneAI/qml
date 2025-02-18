@@ -26,14 +26,17 @@ yet. If you feel addressed with this assumption, please don’t fret - we explai
 necessary for you to follow along even if not already fluent in Qrisp. So, join us on this Magical
 Mystery Tour in the world of Qrisp, Catalyst, and HHL.
 
-Qrisp is a high-level open-source programming framework. It offers an alternative approach to
-circuit construction and algorithm development with its defining feature - QuantumVariables. This
-approach allows the user to step away from focusing on qubits and gates for circuit construction
-when developing algorithms, and instead allows the user to code in terms of variables and functions
-similarly to how one would program classically.
+.. admonition:: What is Qrisp?
+    :class: note
 
-Qrisp also supports a modular architecture, allowing you to use, replace, and optimize code
-components easily. You will get to see this in play a bit later in this tutorial.
+    Qrisp is a high-level open-source programming framework. It offers an alternative approach to
+    circuit construction and algorithm development with its defining feature - QuantumVariables. This
+    approach allows the user to step away from focusing on qubits and gates for circuit construction
+    when developing algorithms, and instead allows the user to code in terms of variables and functions
+    similarly to how one would program classically.
+
+    Qrisp also supports a modular architecture, allowing you to use, replace, and optimize code
+    components easily. You will get to see this in play a bit later in this tutorial.
 
 You can install Qrisp to experiment with this implementation yourself, at your own pace, by calling
 ``pip install qrisp``.
@@ -115,11 +118,12 @@ print(a)
 # Here, ``msize=3`` indicates the amount of mantissa qubits and ``exponent=-2`` indicates, you guessed
 # correctly, the exponent.
 #
-# For unsigned QuantumFloats, the decoder function is given by
+# .. tip::
+#     For unsigned QuantumFloats, the decoder function is given by
 #
-# .. math::  f_k(i) = i2^k
+#     .. math::  f_k(i) = i2^k
 #
-# where :math:`k` is the exponent.
+#     where :math:`k` is the exponent.
 #
 # Recalling the demo on `How to use quantum arithmetic
 # operators <https://pennylane.ai/qml/demos/tutorial_how_to_use_quantum_arithmetic_operators>`__, here
@@ -239,13 +243,16 @@ print(comparison.qs.statevector())
 # problem sizes. Apart from significantly speeding up compilation, Jasp provides the functionality to
 # integrate classical real-time computations.
 #
-# What is a real-time computation? It’s a classical computation that happens during the quantum
-# computation, while the quantum computer stays in superposition. This computation has to happen much
-# faster than the coherence time, so performing that computation by waiting for the Python interpreter
-# is impossible. Real-time computations are essential for many techniques in error correction, such as
-# syndrom decoding or magic state distillation. On the algorithmic level, real-time computations also
-# become more popular since they are so much cheaper than the quantum equivalent. Examples are
-# Gidney’s adder or repeat until success protocols like HHL.
+# .. admonition:: What is a real-time computation?
+#     :class: note
+#
+#     A real-time computation is a classical computation that happens during the quantum
+#     computation, while the quantum computer stays in superposition. This computation has to happen much
+#     faster than the coherence time, so performing that computation by waiting for the Python interpreter
+#     is impossible. Real-time computations are essential for many techniques in error correction, such as
+#     syndrom decoding or magic state distillation. On the algorithmic level, real-time computations also
+#     become more popular since they are so much cheaper than the quantum equivalent. Examples are
+#     Gidney’s adder or repeat until success protocols like HHL.
 #
 # Jasp is a module that provides `JAX <https://jax.readthedocs.io/en/latest/quickstart.html>`__
 # primitives for Qrisp syntax and therefore makes Qrisp JAX-traceable. How does this work in practice?
@@ -264,16 +271,18 @@ print(comparison.qs.statevector())
 # demo <https://pennylane.ai/qml/demos/tutorial_qpe>`__, and instead focus on how QPE is implemented
 # in Qrisp, and later showcase how to use it in the HHL implementation.
 #
-# A quick tl;dr.: Quantum Phase Estimation is an important subroutine in many quantum algorithms, like
-# the HHL as you will get to learn. A short summary of what problem QPE solves can be stated as:
+# .. admonition:: Quantum Phase Estimation (QPE)
+#     :class: note
+#     Quantum Phase Estimation is an important subroutine in many quantum algorithms, like
+#     the HHL as you will get to learn. A short summary of what problem QPE solves can be stated as:
 #
-# Given a unitary :math:`U` and quantum state :math:`|\psi\rangle` which is an eigenvector of :math:`U`:
+#     Given a unitary :math:`U` and quantum state :math:`|\psi\rangle` which is an eigenvector of :math:`U`:
 #
-# .. math::  U |\psi\rangle = e^{i 2 \pi \phi}|\psi\rangle
+#     .. math::  U |\psi\rangle = e^{i 2 \pi \phi}|\psi\rangle
 #
-# applying quantum phase estimation to :math:`U` and :math:`|\psi\rangle` returns a quantum register
-# containing an estimate for the value of :math:`\phi`,
-# i.e. :math:`\text{QPE}_{U} |\psi\rangle |0\rangle = |\psi\rangle |\phi\rangle`
+#     applying quantum phase estimation to :math:`U` and :math:`|\psi\rangle` returns a quantum register
+#     containing an estimate for the value of :math:`\phi`,
+#     i.e. :math:`\text{QPE}_{U} |\psi\rangle |0\rangle = |\psi\rangle |\phi\rangle`
 #
 # This can be implemented within a few lines of code in Qrisp:
 
@@ -476,10 +485,11 @@ def fake_inversion(qf, res=None):
 
 
 ######################################################################
-# Essentially, the controlled-NOT operations in the loop reverse the positions of the bits in input
-# variable and place them in the result variable in the opposite order. For example, for
-# :math:`\lambda=2^{-3}`, which is :math:`0.001` in binary, the function would produce
-# :math:`\lambda^{-1}=2^3`, which in binary is 1000.
+# .. tip::
+#     Essentially, the controlled-NOT operations in the loop reverse the positions of the bits in input
+#     variable and place them in the result variable in the opposite order. For example, for
+#     :math:`\lambda=2^{-3}`, which is :math:`0.001` in binary, the function would produce
+#     :math:`\lambda^{-1}=2^3`, which in binary is 1000.
 #
 # Let’s see if it works as intended.
 
@@ -932,7 +942,7 @@ print(samples)
 #    arithmetic”, `Physical review letters 122(2),
 #    020502 <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.122.020502>`__, 2019.
 #
-# 3. R. Seidel, S. Bock, R. Zander, M. Petric, N. Steinmann, N. Tcholtchev, M. Hauswirth, “Qrisp: A
+# 3. R. Seidel, S. Bock, R. Zander, M. Petrič, N. Steinmann, N. Tcholtchev, M. Hauswirth, “Qrisp: A
 #    Framework for Compilable High-Level Programming of Gate-Based Quantum Computers”,
 #    https://arxiv.org/abs/2406.14792, 2024.
 #
