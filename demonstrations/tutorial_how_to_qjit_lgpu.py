@@ -15,10 +15,11 @@ For more information on Catalyst, refer to the
 To learn more about Lightning-GPU, visit the
 `Lightning-GPU documentation <https://docs.pennylane.ai/projects/lightning/en/stable/lightning_gpu/device.html>`__.
 
-.. figure:: ../_static/demonstration_assets/qpe/tutorial_qjit_lgpu.png
+.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_Lightning_GPU_Catalyst.png
      :align: center
-     :width: 80%
-     :target: javascript:void(0);
+     :width: 70%
+     :target: javascript:void(0)
+     :alt: Lightning-GPU with Catalyst 
 
 Using ``lightning.gpu`` is particularly beneficial when dealing with large quantum circuits or
 when running simulations that require significant computational resources.
@@ -135,10 +136,13 @@ for more information on how to compile VQE with Catalyst.
 
 Note that in the above example, we didn't use ``method="adjoint"`` as the adjoint-jacobian
 differentaion method is the default gradiant method in Lightning-GPU.
+You can learn more about the different gradient methods by checking the
+`Catalyst Quantum Gradients <https://docs.pennylane.ai/projects/catalyst/en/stable/dev/quick_start.html#calculating-quantum-gradients>`__
+documentation.
 
-If you haven't used Catalyst, we hope this demonstration encouraged you to check out the
+If you haven't used Catalyst, we hope this demonstration has encouraged you to check out the
 `Catalyst Quick Start <https://docs.pennylane.ai/projects/catalyst/en/stable/dev/quick_start.html>`__ guide
-and use it to optimize and compile your quantum-classical programs.
+and use it to compile and optimize your quantum-classical programs.
 
 About the authors
 -----------------
