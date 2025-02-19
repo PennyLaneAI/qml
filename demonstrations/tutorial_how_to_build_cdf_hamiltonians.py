@@ -1,6 +1,5 @@
-r"""
-Introduction
-~~~~~~~~~~~~~
+r"""How to build compressed double factorized Hamiltonians
+==========================================================
 
 The Hamiltonian :math:`H` of molecular systems with :math:`N` orbitals in the second-quantized
 form can be expressed as a sum of one-body (:math:`h_{pq}`) and two-body (:math:`g_{pqrs}`) terms
@@ -8,10 +7,10 @@ as follows:
 
 .. math::  H = \mu + \sum_{\sigma, pq} h_{pq} a^\dagger_{\sigma, p} a_{\sigma, q} + \frac{1}{2} \sum_{\sigma \tau, pqrs} h_{pqrs} a^\dagger_{\sigma, p} a^\dagger_{\tau, q} a_{\tau, r} a_{\sigma, s},
 
-where :math:`a^\dagger` (:math:`a`) is the creation (annihilation) operator, :math:`\mu` is
-the nuclear repulsion energy, :math:`\sigma \in {\uparrow, \downarrow}` represents the spin,
+where :math:`a^\dagger` (:math:`a`) is the creation (annihilation) operator, :math:`\mu` is the
+nuclear repulsion energy constant, :math:`\sigma \in {\uparrow, \downarrow}` represents the spin,
 and :math:`p, q, r, s` are the orbital indices. In PennyLane, we can obtain the :math:`\mu`,
-:math:`h_{pq}` and :math:`g_{pqrs}` using the :func:`~pennylane.qchem.electron_integrals`:
+:math:`h_{pq}` and :math:`g_{pqrs}` using the :func:`~pennylane.qchem.electron_integrals` function:
 """
 
 import pennylane as qml
@@ -31,7 +30,7 @@ print(f"One-body and two-body tensor shapes: {one_body.shape}, {two_body.shape}"
 #
 # .. math::  H_{\text{C}} = \mu + \sum_{\sigma, pq} T_{pq} a^\dagger_{\sigma, p} a_{\sigma, q} + \sum_{\sigma \tau, pqrs} V_{pqrs} a^\dagger_{\sigma, p} a_{\sigma, q} a_{\tau, r} a_{\tau, s}.
 #
-# We can easily obtain the modified terms for doing this using:
+# We can easily obtain the modified terms for doing this with:
 #
 
 two_chem = 0.5 * qml.math.swapaxes(two_body, 1, 3)  # V_pqrs
@@ -39,7 +38,7 @@ one_chem = one_body - qml.math.einsum("prrs", two_chem)  # T_pq
 
 ######################################################################
 # Constructing double factorized Hamiltonians
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# -------------------------------------------
 #
 # A key feature of the above representation is that the two-body terms can be factorized into
 # sum of low-rank terms, which can be used to efficiently simulate the Hamiltonian. Hence, the
@@ -51,21 +50,22 @@ one_chem = one_body - qml.math.einsum("prrs", two_chem)  # T_pq
 #
 # We can do this as shown below using the :func:`~pennylane.qchem.factorize` method,
 # which performs an eigenvalue or Cholesky decomposition to obtain the symmetric tensors
-# :math:``L^{(t)}``. This decomposition is called the *explicit* double factorization as it exact,
+# :math:`L^{(t)}`. This decomposition is called the *explicit* double factorization as it exact,
 # i.e, :math:`V_{pqrs} = \sum_t^T L_{pq}^{(t)} L_{rs}^{(t) {\dagger}}`, where the core and leaf
-# tensors are obtained by further diagonalizing each term :math:``L^{(t)}``:
+# tensors are obtained by further diagonalizing each term :math:`L^{(t)}`. In PennyLane, we can
+# truncate the resulting terms by discarding the ones with individual contributions below a
+# specified threshold by using the ``tol_factor`` keyword argument:
 #
 
-factors, _, _ = qml.qchem.factorize(two_chem, cholesky=True)
+factors, _, _ = qml.qchem.factorize(two_chem, cholesky=True, tol_factor=1e-5)
+print("Shape of the factors: ", factors.shape)
 
 approx_two_chem = qml.math.tensordot(factors, factors, axes=([0], [0]))
 assert qml.math.allclose(approx_two_chem, two_chem, atol=1e-5)
 
-print("Shapes of the factors: ", factors.shape)
-
 ######################################################################
 # We can further improve the above factorization by employing the block-invariant symmetry shift
-# (BLISS) method [`arXiv:2304.13772 <https://arxiv.org/pdf/2304.13772>`_] to decrease the one-norm
+# (BLISS) method [#bliss]_ to decrease the one-norm
 # and the spectral range of the above Hamiltonian:
 #
 
@@ -82,23 +82,28 @@ norm_shift = (
 print(f"Decrease in one-norm: {norm_shift}")
 
 ######################################################################
-# Moreover, in many practical cases, the number of terms :math:`T` in the above
+# Moreover, in many practical scenarios, the number of terms :math:`T` in the above
 # factorization can be truncated to give :math:`H^\prime`, such that the approximation error
-# :math:`\epsilon \geq ||H_{\text{C}} - H_{\text{C}}^\prime||`. This limits the number of terms
-# :math:`O(N)` from :math:`O(N^2)` and is referred to as the *compressed* double factorization.
-# One way to perform this is to directly truncate the factorization with a threshold, while another
-# is to start with random :math:`O(N)` orthornormal and symmetric tensors and optimizing them based
+# :math:`\epsilon \geq ||H_{\text{C}} - H^\prime||`. This is referred to as the
+# *compressed* double factorization, as it reduces the number of terms in the factorization
+# of the two-body term to :math:`O(N)` from :math:`O(N^2)`. One possible way to do this is to
+# directly truncate the factorization with a threshold error tolerance, while another way is
+# to begin with random :math:`O(N)` orthornormal and symmetric tensors and optimizing them based
 # on the following cost function :math:``\mathcal{L}`` in a greedy layered-wise manner:
 #
-# .. math::  \mathcal{L}(U, Z) = \frac{1}{2} \bigg|V_{pqrs} - \sum_t^T \sum_{ij} U_{pi}^{(t)} U_{pj}^{(t)} Z_{ij}^{(t)} U_{qk}^{(t)} U_{ql}^{(t)}\bigg|_{\text{F}} + \rho \sum_t^T \sum_{ij} \bigg|Z_{ij}^{(t)}\bigg|^{\gamma}.
+# .. math::  \mathcal{L}(U, Z) = \frac{1}{2} \bigg|V_{pqrs} - \sum_t^T \sum_{ij} U_{pi}^{(t)} U_{pj}^{(t)} Z_{ij}^{(t)} U_{qk}^{(t)} U_{ql}^{(t)}\bigg|_{\text{F}} + \rho \sum_t^T \sum_{ij} \bigg|Z_{ij}^{(t)}\bigg|^{\gamma},
 #
-# These can be done by using the ``tol_factor`` and ``compressed=True`` keyword arguments,
-# respectively, in the :func:`~pennylane.qchem.factorize` method as shown below:
+# where :math:`|\cdot|_{\text{F}}` computes the Frobenius norm, :math:`\rho`
+# is a constant scaling factor, and :math:`|\cdot|^\gamma` specifies the optional
+# L1 and L2 regularization [#cdf]_. In PennyLane, these can be achieved by using
+# the ``compressed=True`` and ``regularization`` keyword arguments, respectively,
+# in the :func:`~pennylane.qchem.factorize` method as shown below:
 #
 
 _, two_body_cores, two_body_leaves = qml.qchem.factorize(
     two_shift, tol_factor=1e-2, cholesky=True, compressed=True
 )
+print(f"Two-body tensors' shape: {two_body_cores.shape, two_body_leaves.shape}")
 
 approx_two_shift = qml.math.einsum(
     "tpk,tqk,tkl,trl,tsl->pqrs",
@@ -106,12 +111,9 @@ approx_two_shift = qml.math.einsum(
 )
 assert qml.math.allclose(approx_two_shift, two_shift, atol=1e-2)
 
-print(f"Two-body tensors' shape: {two_body_cores.shape, two_body_leaves.shape}")
-
 ######################################################################
 # We can obtain a similar decomposition for the one-body terms in terms of orthornormal and
-# symmetric tensors to express the entire Hamiltonian in terms of the core and leaf tensors.
-# This can be done using the:
+# symmetric tensors to express the entire Hamiltonian in terms of the core and leaf tensors:
 #
 
 one_body_eigvals, one_body_eigvecs = qml.math.linalg.eigh(one_shift)
@@ -123,26 +125,26 @@ print(f"One-body tensors' shape: {two_body_cores.shape, two_body_leaves.shape}")
 
 ######################################################################
 # Simulating double factorized Hamiltonians
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# -----------------------------------------
 #
 # In general, the Suzuki-Trotter product formula provides a method to approximate the evolution
-# operator :math:`e^{iHt}` for some time :math:`t` with symmetrized products :math:`S_m(t/n)` of
-# order :math:`m \in [1, 2, 4, 6, \ldots]`, repeated :math:`n` times. This can be easily implemented
-# using the :class:`~.pennylane.TrotterProduct` operation that defines the products :math:`S_m(t/n)`
-# recursively and therefore leading to an exponential scaling in its complexity with the number of
-# terms in the Hamiltonian, making it inefficient for larger system sizes.
+# operator :math:`e^{iHt}` for a time :math:`t` with symmetrized products :math:`S_m` of some order
+# :math:`m \in [1, 2, 4, 6, \ldots]`, repeated multiple times [#trotter]_. This can be easily
+# implemented using the :class:`~.pennylane.TrotterProduct` operation that defines these products
+# recursively for a given number of steps and therefore leads to an exponential scaling in its
+# complexity with the number of terms in the Hamiltonian, making it inefficient for larger systems.
 #
-# This could be mitigated to a great extent by employing the compressed double factorized form of
-# the Hamiltonian to perform the above approximation of the evolution operator. While doing this
-# is not directly supported in PennyLane in the form of a template, we can still implement the
-# first-order Trotter approximation using the following :func:`CDFTrotterProduct` function
-# that uses the compressed double factorized form of the Hamiltonian:
+# Such a scaling behaviour could be managed to a great extent by working with the compressed double
+# factorized form of the Hamiltonian to perform the above approximation of the evolution operator.
+# While doing this is not directly supported in PennyLane in the form of a template, we can still
+# implement the first-order Trotter approximation using the following :func:`CDFTrotterProduct`
+# function that uses the compressed double factorized form of the Hamiltonian:
 #
 
 import itertools as it
 
 
-def CDFTrotterProduct(nuc_core, one_body_cdf, two_body_cdf, time, steps=1):
+def CDFTrotterProduct(nuc_core, one_body_cdf, two_body_cdf, time, num_steps=1):
     """Implements a first-order Trotter circuit for a CDF Hamiltonian.
 
     Args:
@@ -150,7 +152,7 @@ def CDFTrotterProduct(nuc_core, one_body_cdf, two_body_cdf, time, steps=1):
         one_body_cdf (tuple): A tuple containing the core and leaf tensors for the one-body terms.
         two_body_cdf (tuple): A tuple containing the core and leaf tensors for the two-body terms.
         time (float): The total time for the evolution.
-        steps (int): The number of Trotter steps. Default is 1.
+        num_steps (int): The number of Trotter steps. Default is 1.
 
     """
     norbs = qml.math.shape(one_body_cdf[0])[1]
@@ -161,14 +163,14 @@ def CDFTrotterProduct(nuc_core, one_body_cdf, two_body_cdf, time, steps=1):
     norms = qml.math.linalg.norm(cores, axis=(1, 2))
     ranks = qml.math.argsort(norms)
 
-    step = time / steps
+    step = time / num_steps
     cores, leaves, btypes = cores[ranks], leaves[ranks], btypes[ranks]
 
     basis_mat = qml.math.eye(norbs)
     qml.BasisRotation(unitary_matrix=basis_mat, wires=range(0, 2 * norbs, 2))
     qml.BasisRotation(unitary_matrix=basis_mat, wires=range(1, 2 * norbs, 2))
 
-    for _ in range(steps):
+    for _ in range(num_steps):
         for core, leaf, btype in zip(cores, leaves, btypes):
             # we undo the previous basis rotation and apply the new one
             qml.BasisRotation(unitary_matrix=basis_mat @ leaf, wires=range(0, 2 * norbs, 2))
@@ -186,7 +188,8 @@ def CDFTrotterProduct(nuc_core, one_body_cdf, two_body_cdf, time, steps=1):
                     cval = core[odx1, odx2]
                     for sigma, tau in it.product(range(2), repeat=2):
                         if odx1 != odx2 or sigma != tau:
-                            qml.MultiRZ(step * cval / 4.0, wires=[2 * odx1 + sigma, 2 * odx2 + tau])
+                            two_wires = [2 * odx1 + sigma, 2 * odx2 + tau]
+                            qml.MultiRZ(step * cval / 4.0, wires=two_wires)
                 qml.GlobalPhase(
                     -step / 2.0 * (qml.math.sum(core) - qml.math.trace(core) / 2),
                     wires=range(2 * norbs),
@@ -196,32 +199,30 @@ def CDFTrotterProduct(nuc_core, one_body_cdf, two_body_cdf, time, steps=1):
 
 
 ######################################################################
-# We can use it to simulate the evolution of the Hamiltonian for a given number of steps
-# by starting from the ``hf_state`` as shown below:
+# We can use it to simulate the evolution of the Hamiltonian described in the double factorized form
+# for a given number of steps ``num_steps`` and starting from the Hartree-Fock state ``hf_state``:
 #
 
-num_wires, time = 2 * mol.n_orbitals, 1.0
+# Define the terms for the CDF Hamiltonian
 one_body_cdf, two_body_cdf = (one_body_cores, one_body_leaves), (two_body_cores, two_body_leaves)
 
+num_wires, time = 2 * mol.n_orbitals, 1.0
 hf_state = qml.qchem.hf_state(electrons=mol.n_electrons, orbitals=num_wires)
 
-dev = qml.device("lightning.qubit", wires=num_wires)
-
-
-@qml.qnode(dev)
-def cdf_circuit(steps):
+@qml.qnode(qml.device("lightning.qubit", wires=num_wires))
+def cdf_circuit(num_steps):
     qml.BasisState(hf_state, wires=range(num_wires))
-    CDFTrotterProduct(core_shift, one_body_cdf, two_body_cdf, time, steps=steps)
+    CDFTrotterProduct(core_shift, one_body_cdf, two_body_cdf, time, num_steps=num_steps)
     return qml.state()
 
-
-circuit_state = cdf_circuit(steps=20)
+circuit_state = cdf_circuit(num_steps=20)
 
 ######################################################################
-# Moreover, we can test it by evolving the Hartree-Fock state analytically ourselves
-# and testing the fidelities of the two states, ``circuit_state`` and ``evolved_state``:
+# We can test it by evolving the Hartree-Fock state analytically ourselves
+# and testing the fidelity of the ``evolved_state`` with the ``circuit_state``:
 #
 
+from pennylane.math import fidelity_statevector
 from scipy.linalg import expm
 
 init_state_vec = qml.math.array([1] + [0] * (2**num_wires - 1))
@@ -230,7 +231,7 @@ hf_state_vec = qml.matrix(qml.BasisState(hf_state, wires=range(num_wires))) @ in
 H = qml.qchem.molecular_hamiltonian(mol)[0]
 evolved_state = expm(1j * qml.matrix(H) * time) @ hf_state_vec
 
-print(f"Fidelity of two states: {qml.math.fidelity_statevector(circuit_state, evolved_state)}")
+print(f"Fidelity of two states: {fidelity_statevector(circuit_state, evolved_state)}")
 
 ######################################################################
 # Conclusion

@@ -26,13 +26,31 @@
     "doi": "",
     "references": [
         {
-            "id": "arXiv:2304.13772",
+            "id": "bliss",
             "type": "article",
             "title": "Block-Invariant Symmetry Shift: Preprocessing technique for second-quantized Hamiltonians to improve their decompositions to Linear Combination of Unitaries",
             "authors": "Ignacio Loaiza, Artur F. Izmaylov",
             "year": "2023",
             "publisher": "arXiv",
-            "url": "https://arxiv.org/pdf/2304.13772"
+            "url": "https://arxiv.org/abs/2304.13772"
+        },
+        {
+            "id": "cdf",
+            "type": "article",
+            "title": "Accelerating Quantum Computations of Chemistry Through Regularized Compressed Double Factorization",
+            "authors": "Oumarou Oumarou, Maximilian Scheurer, Robert M. Parrish, Edward G. Hohenstein, Christian Gogolin",
+            "year": "2024",
+            "publisher": "Quantum",
+            "url": "https://doi.org/10.22331/q-2024-06-13-1371"
+        },
+        {
+            "id": "trotter",
+            "type": "article",
+            "title": "Trotter error bounds and dynamic multi-product formulas for Hamiltonian simulation",
+            "authors": "Sergiy Zhuk, Niall Robertson, Sergey Bravyi",
+            "year": "2023",
+            "publisher": "arXiv",
+            "url": "https://arxiv.org/pdf/2306.12569"
         }
     ],
     "basedOnPapers": [],
