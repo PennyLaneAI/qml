@@ -31,7 +31,7 @@ packages from the Python Package Index (PyPI):
 
     pip install pennylane pennylane-catalyst pennylane-lightning-gpu
 
-You can also install these pacakges on Google Colab.
+You can also install these packages on Google Colab.
 The installation instructions can be found `here <https://pennylane.ai/install>`__.
 
 How to use 💡
@@ -94,7 +94,7 @@ of linear algebra to apply gates to the state-vector memory buffer,
 extract measurement results, or calculate the circuit differentiation,
 we can leverage GPUs to scale the heavy-lifting parts of the simulation.
 
-Let's show this on an example!
+Let's show this using an example!
 We use the quantum phase estimation (QPE) algorithm from this
 `demo <https://pennylane.ai/qml/demos/tutorial_qpe>`__
 with :func:`~.qjit` on ``lightning.gpu``.
@@ -146,7 +146,7 @@ a few natively supported regular, adjoint and multi-controlled gates on
 
 Updating the range of ``estimation_wires`` in the code above
 would yeild to a higher precision of the phase estimation, but
-for simulators it means applying many more number of gates on a
+for simulators this amounts to applying many more gates on an
 exponentially larger state-vector.
 
 We run this script on a NVIDIA Grace-Hopper (GH200) server with
