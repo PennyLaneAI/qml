@@ -12,10 +12,11 @@ Here, we'll show you how to use Lightning-GPU
 to run larger quantum circuits more efficiently and boost
 the performance of your QJIT-compiled programs.
 
-.. figure:: ../_static/demonstration_assets/qpe/tutorial_qjit_lgpu.png
+.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_Lightning_GPU_Catalyst.png
      :align: center
-     :width: 80%
-     :target: javascript:void(0);
+     :width: 70%
+     :target: javascript:void(0)
+     :alt: Lightning-GPU with Catalyst 
 
 Set up your environment 🏗️
 --------------------------
