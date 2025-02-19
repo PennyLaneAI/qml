@@ -231,20 +231,18 @@ Before getting into the technical details of the algorithm, let's get a high-lev
 #
 
 import covalent as ct
-import subprocess
 import os
+import time
 
 # Set up Covalent server
-subprocess.run(
-    ["covalent", "start"], env={
-        "COVALENT_SERVER_IFACE_ANY": "1",
-        **os.environ
-    }
-).check_returncode()
+os.environ["COVALENT_SERVER_IFACE_ANY"] = "1"
+os.system("covalent start")
 # If you run into any out-of-memory issues with Dask when running this notebook,
 # Try reducing the number of workers and making a specific memory request. I.e.:
-# subprocess.Popen(["covalent", "start",  "-m", "2GiB", "-n", "2")
+# os.system("covalent start -m "2GiB" -n 2")
 # try covalent –help for more info
+time.sleep(2)  # give the Dask cluster some time to launch
+
 
 ######################################################################
 # Generating univariate synthetic time series
@@ -268,6 +266,7 @@ import torch
 GLOBAL_SEED = 1989
 torch.manual_seed(GLOBAL_SEED)
 torch.set_default_tensor_type(torch.DoubleTensor)
+
 
 @ct.electron
 def generate_normal_time_series_set(
@@ -329,7 +328,6 @@ plt.ylabel("$y(t)$")
 plt.xlabel("t")
 plt.grid()
 leg = plt.legend()
-
 
 ######################################################################
 # Taking a look at the above, the generated series are what we wanted. We have
@@ -1195,8 +1193,6 @@ test_dispatch_id = ct.dispatch(testing_workflow)(**testing_options)
 ct_test_results = ct.get_result(dispatch_id=test_dispatch_id, wait=True)
 accs_list = ct_test_results.result
 
-
-
 ######################################################################
 # Finally, we plot the results below.
 #
@@ -1216,12 +1212,7 @@ leg = plt.legend()
 #
 
 # Shut down the covalent server
-subprocess.run(
-    ["covalent", "stop"], env={
-        "COVALENT_SERVER_IFACE_ANY": "1",
-        **os.environ
-    }
-).check_returncode()
+stop = os.system("covalent stop")
 
 ######################################################################
 # Conclusions
