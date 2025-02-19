@@ -16,7 +16,7 @@ and :math:`p, q, r, s` are the orbital indices. In PennyLane, we can obtain the 
 import pennylane as qml
 
 symbols = ["H", "H", "H", "H"]
-geometry = qml.math.array([[0.0, 0.0, -0.2], [0.0, 0.0, -0.1], [0.0, 0.0, +0.1], [0.0, 0.0, +0.2]])
+geometry = qml.math.array([[0., 0., -0.2], [0., 0., -0.1], [0., 0., 0.1], [0., 0., 0.2]])
 
 mol = qml.qchem.Molecule(symbols, geometry)
 nuc_core, one_body, two_body = qml.qchem.electron_integrals(mol)()
@@ -84,12 +84,12 @@ print(f"Decrease in one-norm: {norm_shift}")
 ######################################################################
 # Moreover, in many practical scenarios, the number of terms :math:`T` in the above
 # factorization can be truncated to give :math:`H^\prime`, such that the approximation error
-# :math:`\epsilon \geq ||H_{\text{C}} - H^\prime||`. This is referred to as the
+# ||H_{\text{C}} - H^\prime||` remains below a desired threshold. This is referred to as the
 # *compressed* double factorization, as it reduces the number of terms in the factorization
 # of the two-body term to :math:`O(N)` from :math:`O(N^2)`. One possible way to do this is to
 # directly truncate the factorization with a threshold error tolerance, while another way is
 # to begin with random :math:`O(N)` orthornormal and symmetric tensors and optimizing them based
-# on the following cost function :math:``\mathcal{L}`` in a greedy layered-wise manner:
+# on the following cost function :math:`\mathcal{L}` in a greedy layered-wise manner:
 #
 # .. math::  \mathcal{L}(U, Z) = \frac{1}{2} \bigg|V_{pqrs} - \sum_t^T \sum_{ij} U_{pi}^{(t)} U_{pj}^{(t)} Z_{ij}^{(t)} U_{qk}^{(t)} U_{ql}^{(t)}\bigg|_{\text{F}} + \rho \sum_t^T \sum_{ij} \bigg|Z_{ij}^{(t)}\bigg|^{\gamma},
 #
@@ -234,8 +234,8 @@ circuit_state = cdf_circuit(num_steps=20)
 from pennylane.math import fidelity_statevector
 from scipy.linalg import expm
 
-init_state_vec = qml.math.array([1] + [0] * (2**num_wires - 1))
-hf_state_vec = qml.matrix(qml.BasisState(hf_state, wires=range(num_wires))) @ init_state_vec
+init_state = qml.math.array([1] + [0] * (2**num_wires - 1))
+hf_state_vec = qml.matrix(qml.BasisState(hf_state, wires=range(num_wires))) @ init_state
 
 H = qml.qchem.molecular_hamiltonian(mol)[0]
 evolved_state = expm(1j * qml.matrix(H) * time) @ hf_state_vec
