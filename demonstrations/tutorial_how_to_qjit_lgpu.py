@@ -15,11 +15,12 @@ For more information on Catalyst, refer to the
 To learn more about Lightning-GPU, visit the
 `Lightning-GPU documentation <https://docs.pennylane.ai/projects/lightning/en/stable/lightning_gpu/device.html>`__.
 
-.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_Lightning_GPU_Catalyst.png
+
+.. figure:: ../_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_Lightning_GPU_Catalyst.png
      :align: center
-     :width: 70%
+     :width: 80%
      :target: javascript:void(0)
-     :alt: Lightning-GPU with Catalyst 
+     :alt: How to use Catalyst with Lightning-GPU
 
 Using ``lightning.gpu`` is particularly beneficial when dealing with large quantum circuits or
 when running simulations that require significant computational resources.
