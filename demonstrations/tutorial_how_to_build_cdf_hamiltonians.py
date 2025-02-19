@@ -234,8 +234,9 @@ evolved_state = expm(1j * qml.matrix(H) * time) @ hf_state_vec
 print(f"Fidelity of two states: {fidelity_statevector(circuit_state, evolved_state)}")
 
 ######################################################################
+#
 # Conclusion
-# ----------
+# -----------
 #
 # Compressed double-factorized representation for the Hamiltonians serves three key purposes.
 # First, it allows for a more compact representation that can be stored and manipulated with
@@ -247,7 +248,7 @@ print(f"Fidelity of two states: {fidelity_statevector(circuit_state, evolved_sta
 # relatively promising path to reducing the complexity of fault-tolerant quantum algorithms.
 #
 # References
-# ----------
+# -----------
 #
 # .. [#bliss]
 #
@@ -267,7 +268,6 @@ print(f"Fidelity of two states: {fidelity_statevector(circuit_state, evolved_sta
 #     "Trotter error bounds and dynamic multi-product formulas for Hamiltonian simulation",
 #     arXiv:2306.12569, 2023.
 #
-######################################################################
 # About the author
 # ----------------
 #
