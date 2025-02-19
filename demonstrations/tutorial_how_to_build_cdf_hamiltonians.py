@@ -246,7 +246,27 @@ print(f"Fidelity of two states: {fidelity_statevector(circuit_state, evolved_sta
 # Therefore, employing CDF-based Hamiltonians for quantum chemistry problems provides a
 # relatively promising path to reducing the complexity of fault-tolerant quantum algorithms.
 #
-
+# References
+# ----------
+#
+# .. [#bliss]
+#
+#     Ignacio Loaiza, Artur F. Izmaylov,
+#     "Block-Invariant Symmetry Shift: Preprocessing technique for second-quantized Hamiltonians to improve their decompositions to Linear Combination of Unitaries",
+#     arXiv:2304.13772, 2023.
+#
+# .. [#cdf]
+#
+#     Oumarou Oumarou, Maximilian Scheurer, Robert M. Parrish, Edward G. Hohenstein, Christian Gogolin,
+#     "Accelerating Quantum Computations of Chemistry Through Regularized Compressed Double Factorization",
+#     Quantum 8, 1371, 2024.
+#
+# .. [#trotter]
+#
+#     Sergiy Zhuk, Niall Robertson, Sergey Bravyi,
+#     "Trotter error bounds and dynamic multi-product formulas for Hamiltonian simulation",
+#     arXiv:2306.12569, 2023.
+#
 ######################################################################
 # About the author
 # ----------------
