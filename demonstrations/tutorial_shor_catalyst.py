@@ -65,7 +65,7 @@ def shors_algorithm(N):
 # As quantum hardware continues to scale up, the way we think about quantum
 # programming is evolving in tandem. Writing circuits gate-by-gate for
 # algorithms with hundreds or thousands of qubits is unsustainable. Moreover, a
-# programmer really need to know anything quantum is happening, if the software
+# programmer doesn't really need to know anything quantum is happening, if the software
 # library can generate and compile appropriate quantum code (though, they should
 # probably have at least some awareness, since the output of ``guess_order`` is
 # probabilistic!).  This raises the important question of what exactly gets
@@ -85,7 +85,7 @@ def shors_algorithm(N):
 # Classical compilation
 # ^^^^^^^^^^^^^^^^^^^^^
 # Compilation is the process of translating operations expressed in a high-level
-# language to a low-level language.  In language like C and C++, compilation
+# language to a low-level language.  In languages like C and C++, compilation
 # happens offline prior to code execution. A compiler takes a program as
 # input and sends it through a sequence of *passes* that perform tasks such as
 # syntax analysis, code generation, and optimization. A compiler outputs a
@@ -98,7 +98,7 @@ def shors_algorithm(N):
 # interpreter, which processes them line by line and directly yields the program
 # output.
 #
-# Compilation and interpretation each have strengths and weakness. Compilation
+# Compilation and interpretation each have strengths and weaknesses. Compilation
 # generally leads to faster execution, because optimizations can consider
 # the overall structure of a program. However, the executable code is not
 # human-readable and thus harder to debug. Interpretation is slower, but
@@ -310,7 +310,7 @@ def shors_algorithm(N, a, n_bits):
 #    :align: center
 #    :alt: Controlled addition of :math:`ax` using a series of double-controlled Fourier adders.
 #
-#    Circuit for controlled addition of :math:`ax` using a series of double-controlled Fourier adders.
+#    Circuit for controlled multiplication of :math:`ax` using a series of double-controlled Fourier adders.
 #    [#Beauregard2003]_.
 #
 # First, note the controls on the quantum Fourier transforms (QFTs) are not
@@ -337,7 +337,7 @@ def shors_algorithm(N, a, n_bits):
 # [#Draper2000]_. This is another trick we can leverage given prior knowledge of
 # :math:`a`. Rather than performing addition on bits in computational basis
 # states, we can apply a QFT, adjust the phases based on the bits of the number
-# being added, then inverse QFT to obtain the result. The circuit for *Fourier
+# being added, and then reverse the QFT to obtain the result. The circuit for *Fourier
 # addition*, :math:`\Phi`, is shown below.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder.svg
