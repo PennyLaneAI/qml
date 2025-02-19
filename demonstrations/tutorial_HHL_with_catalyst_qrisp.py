@@ -178,7 +178,7 @@ print(qb)
 #    {False: 0.5, True: 0.5}                                                              [2K
 
 ######################################################################
-# With a second QuantumBool we can demonstrate and evaluate some logical functions:
+# With a second QuantumBool, we can demonstrate and evaluate some logical functions:
 
 
 qb_1 = qrisp.QuantumBool()
@@ -217,7 +217,7 @@ print(qb_3.qs.statevector())
 #    sqrt(2)*(|0>*|False> + |8>*|True>)/2                                                 [2K
 
 ######################################################################
-# We can also compare a QuantumFloat to another one:
+# We can also compare one QuantumFloat to another:
 
 
 b = qrisp.QuantumFloat(3)
@@ -247,7 +247,7 @@ print(comparison.qs.statevector())
 #     computation, while the quantum computer stays in superposition. This computation has to happen much
 #     faster than the coherence time, so performing that computation by waiting for the Python interpreter
 #     is impossible. Real-time computations are essential for many techniques in error correction, such as
-#     syndrom decoding or magic state distillation. On the algorithmic level, real-time computations also
+#     syndrome decoding or magic state distillation. On the algorithmic level, real-time computations have also
 #     become more popular since they are so much cheaper than the quantum equivalent. Examples are
 #     Gidney’s adder or repeat until success protocols like HHL.
 #
@@ -258,7 +258,7 @@ print(comparison.qs.statevector())
 # `QIR <https://learn.microsoft.com/en-us/azure/quantum/concepts-qir>`__ using the Catalyst framework.
 #
 # The Qrisp syntax is intended to work seamlessly in the regular Python mode, primarily for learning,
-# testing and experimenting with small scale quantum programs, as well as in Jasp mode for large scale
+# testing, and experimenting with small scale quantum programs, as well as in Jasp mode for large scale
 # quantum programs with real-time hybrid computations running on fault-tolerant quantum hardware.
 #
 # QPE in Qrisp
@@ -316,7 +316,7 @@ def QPE(psi, U, precision=None, res=None):
 # transformation of ``res``.
 #
 # Note that compared to other similar implementations, :math:`U` is given as a Python function
-# (instead of a circuit object) allowing for slim and elegant implementations.
+# (instead of a circuit object), allowing for slim and elegant implementations.
 #
 # Let’s take a look at a simple example.
 
@@ -360,7 +360,7 @@ print(qrisp.multi_measurement([psi, res]))
 #    {(0, 0.0): 0.25, (1, 0.5): 0.25, (2, 0.125): 0.25, (3, 0.625): 0.25}                 [2K
 
 ######################################################################
-# This example can also seamlessly be executed in Jasp mode: In this case, the terminal_sampling
+# This example can also seamlessly be executed in Jasp mode: In this case, the ``terminal_sampling``
 # decorator performs a hybrid simulation and afterwards samples from the resulting quantum state.
 
 
@@ -525,11 +525,11 @@ print(qrisp.multi_measurement([qf, res]))
 #
 # we pepare a uniform superposition of :math:`2^n` states in a ``case_indicator`` QuantumFloat.
 #
-# .. math::  |\Psi_3'\rangle = \sum_i \beta_i|u_i\rangle|\widetilde{\lambda_i}\rangle|y^{(i)}\rangle_{\text{res}}\otimes\frac{1}{\sqrt{2^n}}\sum_{x=0}^{2^n-1}|x\rangle_{\text{case}}
+# .. math::  |\Psi_3'\rangle = \sum_i \beta_i|u_i\rangle|\widetilde{\lambda}_i\rangle|y^{(i)}\rangle_{\text{res}}\otimes\frac{1}{\sqrt{2^n}}\sum_{x=0}^{2^n-1}|x\rangle_{\text{case}}
 #
 # Next, we calculate the comparison :math:`a\geq b` between the ``res`` and the ``case_indicator`` into a QuantumBool ``qbl``.
 #
-# .. math::  |\Psi_3''\rangle = \sum_i \beta_i|u_i\rangle|\widetilde{\lambda_i}\rangle|y^{(i)}\rangle_{\text{res}}\otimes\frac{1}{\sqrt{2^n}}\left(\sum_{x=0}^{y^{(i)}-1}|x\rangle_{\text{case}}|0\rangle_{\text{qbl}} + \sum_{x=y^{(i)}}^{2^n-1}|x\rangle_{\text{case}}|1\rangle_{\text{qbl}}\right)
+# .. math::  |\Psi_3''\rangle = \sum_i \beta_i|u_i\rangle|\widetilde{\lambda}_i\rangle|y^{(i)}\rangle_{\text{res}}\otimes\frac{1}{\sqrt{2^n}}\left(\sum_{x=0}^{y^{(i)}-1}|x\rangle_{\text{case}}|0\rangle_{\text{qbl}} + \sum_{x=y^{(i)}}^{2^n-1}|x\rangle_{\text{case}}|1\rangle_{\text{qbl}}\right)
 #
 # Finally, the ``case_indicator`` is unprepared with :math:`n` Hadamards and we obtain the state
 #
@@ -779,19 +779,22 @@ print(x)
 # part of the tutorial showcasing the awesomeness of QJIT compilation with Catalyst, let’s rewind for
 # a second, take a deep breath, and go through the steps and concepts you learned so far.
 #
-# Starting with getting familiar with Qrisp’s approach to programming through the use of
-# QuantumVariables, we foreshadowed the two QuantumTypes used in the implementation of HHL:
-# QuantumFloats, and QuantumBools. Following a quick mention of Jasp and the ability of doing
-# real-time computations using this module, the qrispy QPE implementation was demonstrated with a
-# simple example.
+# .. admonition:: Intermezzo: Quick Recap
+#     :class: note
 #
-# Equipped with a theoretical introduction to HHL and outlining the steps required to perform this
-# algorithm, you got to see how to first encode the first 4 steps and making use of the repeat until
-# success feature of Jasp.
+#     Starting with getting familiar with Qrisp’s approach to programming through the use of
+#     QuantumVariables, we foreshadowed the two QuantumTypes used in the implementation of HHL:
+#     QuantumFloats, and QuantumBools. Following a quick mention of Jasp and the ability of doing
+#     real-time computations using this module, the qrispy QPE implementation was demonstrated with a
+#     simple example.
 #
-# Then, putting everything together, we combined the previously defined building blocks (read: Python
-# functions) - the HHL_encoding and QPE - into a simple function. With a brief feature apperance of
-# Hamiltonian simulation you then successfully managed to solve two systems of linear equations.
+#     Equipped with a theoretical introduction to HHL and outlining the steps required to perform this
+#     algorithm, you got to see how to first encode the first 4 steps and make use of the repeat until
+#     success feature of Jasp.
+#
+#     Then, putting everything together, we combined the previously defined building blocks (read: Python
+#     functions) - the HHL_encoding and QPE - into a simple function. With a brief feature apperance of
+#     Hamiltonian simulation you then successfully managed to solve two systems of linear equations.
 #
 # Before moving on to the part of the tutorial showcasing the Catalyst capabilities, let’s just
 # appreciate one last time how elegantly we can call the HHL algorithm:
