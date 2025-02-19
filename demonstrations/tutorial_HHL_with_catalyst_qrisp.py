@@ -119,11 +119,8 @@ print(a)
 # correctly, the exponent.
 #
 # .. tip::
-#     For unsigned QuantumFloats, the decoder function is given by
-#
-#     .. math::  f_k(i) = i2^k
-#
-#     where :math:`k` is the exponent.
+#     For unsigned QuantumFloats, the decoder function is given by :math:`f_k(i) = i2^k`, where
+#     :math:`k` is the exponent.
 #
 # Recalling the demo on `How to use quantum arithmetic
 # operators <https://pennylane.ai/qml/demos/tutorial_how_to_use_quantum_arithmetic_operators>`__, here
@@ -273,6 +270,7 @@ print(comparison.qs.statevector())
 #
 # .. admonition:: Quantum Phase Estimation (QPE)
 #     :class: note
+#
 #     Quantum Phase Estimation is an important subroutine in many quantum algorithms, like
 #     the HHL as you will get to learn. A short summary of what problem QPE solves can be stated as:
 #
@@ -282,7 +280,7 @@ print(comparison.qs.statevector())
 #
 #     applying quantum phase estimation to :math:`U` and :math:`|\psi\rangle` returns a quantum register
 #     containing an estimate for the value of :math:`\phi`,
-#     i.e. :math:`\text{QPE}_{U} |\psi\rangle |0\rangle = |\psi\rangle |\phi\rangle`
+#     i.e. :math:`\text{QPE}_{U} |\psi\rangle |0\rangle = |\psi\rangle |\phi\rangle`.
 #
 # This can be implemented within a few lines of code in Qrisp:
 
@@ -432,14 +430,14 @@ main()
 # - Step 2: Applying **Quantum Phase Estimation** with respect to the Hamiltonian evolution
 #   :math:`U=e^{itA}` yields the state
 #
-#   .. math::  |\Psi_2\rangle = \sum_i \beta_i|u_i\rangle|\lambda_jt/2\pi\rangle = \sum_i \beta_i|u_i\rangle|\widetilde{\lambda_i}\rangle
+#   .. math::  |\Psi_2\rangle = \sum_i \beta_i|u_i\rangle|\lambda_jt/2\pi\rangle = \sum_i \beta_i|u_i\rangle|\widetilde{\lambda}_i\rangle
 #
 #   To simplify notation, we write :math:`\widetilde{\lambda}_i=\lambda_jt/2\pi`.
 #
 # - Step 3: Performing the inversion of the eigenvalues
 #   :math:`\widetilde{\lambda}_i\rightarrow\widetilde{\lambda}_i^{-1}` yields the state
 #
-#   .. math::  |\Psi_3\rangle = \sum_i \beta_i|u_i\rangle|\widetilde{\lambda_i}\rangle|\widetilde{\lambda_i^{-1}}\rangle
+#   .. math::  |\Psi_3\rangle = \sum_i \beta_i|u_i\rangle|\widetilde{\lambda}_i\rangle|\widetilde{\lambda}_i^{-1}\rangle
 #
 # - Step 4: The amplitudes are multiplied by the inverse eigenvalues
 #   :math:`\widetilde{\lambda}_i^{-1}` to obtain the state
@@ -523,7 +521,7 @@ print(qrisp.multi_measurement([qf, res]))
 #
 # Starting from the state
 #
-# .. math::  |\Psi_3\rangle = \sum_i \beta_i|u_i\rangle|\widetilde{\lambda_i}\rangle|y^{(i)}}_{\text{res}\rangle
+# .. math::  |\Psi_3\rangle = \sum_i \beta_i|u_i\rangle|\widetilde{\lambda}_i\rangle|y^{(i)}\rangle_{\text{res}}
 #
 # we pepare a uniform superposition of :math:`2^n` states in a ``case_indicator`` QuantumFloat.
 #
@@ -535,9 +533,9 @@ print(qrisp.multi_measurement([qf, res]))
 #
 # Finally, the ``case_indicator`` is unprepared with :math:`n` Hadamards and we obtain the state
 #
-# .. math::  |\Psi_3'''\rangle = \sum_i \dfrac{y^{(i)}}{2^n}\beta_i|u_i\rangle|\widetilde{\lambda_i}\rangle|y^{(i)}}_{\text{res}\rangle|0\rangle_{\text{case}}|0\rangle_{\text{qbl}} + |\Phi\rangle
+# .. math::  |\Psi_3'''\rangle = \sum_i \dfrac{y^{(i)}}{2^n}\beta_i|u_i\rangle|\widetilde{\lambda}_i\rangle|y^{(i)}\rangle_{\text{res}}|0\rangle_{\text{case}}|0\rangle_{\text{qbl}} + |\Phi\rangle
 #
-# where :math:`|\Phi\rangle` is an orthogonal state with the last variables not in :math:`|0\rangle_{\text{case}}|0\rangle_{\text{qbl}}`. Hence, upon measuring the ``case_indicator`` in state :math:`|0\rangle` and the target ``qbl`` in state $|0\rangle$, the desired state is prepared.
+# where :math:`|\Phi\rangle` is an orthogonal state with the last variables not in :math:`|0\rangle_{\text{case}}|0\rangle_{\text{qbl}}`. Hence, upon measuring the ``case_indicator`` in state :math:`|0\rangle` and the target ``qbl`` in state :math:`|0\rangle`, the desired state is prepared.
 #
 # **Steps 1-4** are preformed as a repeat-until-success (RUS) routine. This decorator converts the function to be executed within a repeat-until-success (RUS) procedure. The function must return a boolean value as first return value and is repeatedly executed until the first return value is True.
 
@@ -577,7 +575,7 @@ def HHL_encoding(b, hamiltonian_evolution, n, precision):
 # - ``n`` The number of qubits encoding the state :math:`|b\rangle` (:math:`N=2^n`).
 # - ``precision`` The precison of the quantum phase estimation.
 #
-# The HHL function uses the previously defined subroutine to prepare the state :math:`|\Psi_4}`
+# The HHL function uses the previously defined subroutine to prepare the state :math:`|\Psi_4\rangle`
 # and subsequently uncomputes the :math:`|\widetilde{\lambda}\rangle` and :math:`|\lambda\rangle` quantum
 # variables leaving the first variable, that was initialized in state :math:`|b\rangle`, in the target
 # state :math:`|x\rangle`.
@@ -669,7 +667,7 @@ print(x)
 ######################################################################
 # Et voila! Now, let’s tackle some more complicated examples! Next, we try some randomly generated
 # matrices whose eigenvalues are inverse powers of 2, i.e. of the form :math:`2^{-k}` for :math:`k<K`.
-# To facilitate fast simulations, we restrict ourselves to :math:`K=4` (required ``precision``\ of
+# To facilitate fast simulations, we restrict ourselves to :math:`K=4` (required ``precision`` of
 # QPE) as the runtime of the HHL algorithm scales linearly in the inverse precision
 # :math:`\epsilon=2^{-K}` (and therefore exponentially in :math:`K`).
 
