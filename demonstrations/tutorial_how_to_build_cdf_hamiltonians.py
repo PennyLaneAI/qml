@@ -28,7 +28,7 @@ print(f"One-body and two-body tensor shapes: {one_body.shape}, {two_body.shape}"
 # `chemist notation <http://vergil.chemistry.gatech.edu/notes/permsymm/permsymm.pdf>`_ to rewrite
 # the Hamiltonian as :math:`H_{\text{C}}` with :math:`T_{pq} = h_{pq} - 0.5 \sum_{s} g_{pssq}`:
 #
-# .. math::  H_{\text{C}} = \mu + \sum_{\sigma, pq} T_{pq} a^\dagger_{\sigma, p} a_{\sigma, q} + \sum_{\sigma \tau, pqrs} V_{pqrs} a^\dagger_{\sigma, p} a_{\sigma, q} a_{\tau, r} a_{\tau, s}.
+# .. math::  H_{\text{C}} = \mu + \sum_{\sigma, pq} T_{pq} a^\dagger_{\sigma, p} a_{\sigma, q} + \sum_{\sigma \tau, pqrs} V_{pqrs} a^\dagger_{\sigma, p} a_{\sigma, q} a^\dagger_{\tau, r} a_{\tau, s}.
 #
 # We can easily obtain the modified terms for doing this with:
 #
@@ -112,10 +112,18 @@ approx_two_shift = qml.math.einsum(
 assert qml.math.allclose(approx_two_shift, two_shift, atol=1e-2)
 
 ######################################################################
-# We can obtain a similar decomposition for the one-body terms in terms of orthornormal and
-# symmetric tensors to express the entire Hamiltonian in terms of the core and leaf tensors:
+# From the above factorization, we first obtain obtain an one-body correction term from
+# the terms that would result in operations on the same orbitals. We can then decompose
+# the one-body terms using orthornormal and symmetric tensors, as well, allowing us to
+# express the entire Hamiltonian as sum of the products of core and leaf tensors:
 #
 
+two_core_prime = (qml.math.eye(mol.n_orbitals) * two_body_cores.sum(axis=-1)[:, None, :])
+one_body_extra = qml.math.einsum(
+    'tpk,tkk,tqk->pq', two_body_leaves, two_core_prime, two_body_leaves
+)
+
+one_body_eigvals, one_body_eigvecs = qml.math.linalg.eigh(one_shift + one_body_extra)
 one_body_eigvals, one_body_eigvecs = qml.math.linalg.eigh(one_shift)
 
 one_body_cores = qml.math.expand_dims(qml.math.diag(one_body_eigvals), axis=0)
@@ -128,11 +136,12 @@ print(f"One-body tensors' shape: {two_body_cores.shape, two_body_leaves.shape}")
 # -----------------------------------------
 #
 # In general, the Suzuki-Trotter product formula provides a method to approximate the evolution
-# operator :math:`e^{iHt}` for a time :math:`t` with symmetrized products :math:`S_m` of some order
-# :math:`m \in [1, 2, 4, 6, \ldots]`, repeated multiple times [#trotter]_. This can be easily
-# implemented using the :class:`~.pennylane.TrotterProduct` operation that defines these products
-# recursively for a given number of steps and therefore leads to an exponential scaling in its
-# complexity with the number of terms in the Hamiltonian, making it inefficient for larger systems.
+# operator :math:`e^{iHt}` for a time :math:`t` with symmetrized products :math:`S_m` defined
+# for an order :math:`m \in [1, 2, 4, \ldots, 2k \in \mathbb{N}]` and repeated multiple times
+# [#trotter]_. This can be easily implemented using the :class:`~.pennylane.TrotterProduct`
+# operation that defines those products recursively for a given number of steps and therefore
+# leads to an exponential scaling in its complexity with the number of terms in the Hamiltonian,
+# making it inefficient for larger system sizes.
 #
 # Such a scaling behaviour could be managed to a great extent by working with the compressed double
 # factorized form of the Hamiltonian to perform the above approximation of the evolution operator.
