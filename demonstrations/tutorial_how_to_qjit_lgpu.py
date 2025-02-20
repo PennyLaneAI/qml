@@ -2,19 +2,20 @@ r"""
 How to use Catalyst with Lightning-GPU
 =======================================
 
-`Catalyst <https://docs.pennylane.ai/projects/catalyst>`__
-is a quantum just-in-time (QJIT) compiler framework that optimizes
-and compiles hybrid (quantum and classical) PennyLane's programs.
+We have been sharing details about how to use
+`Catalyst <https://docs.pennylane.ai/projects/catalyst>`__,
+our quantum just-in-time (QJIT) compiler framework,
+to optimize and compile hybrid quantum-classical programs
+with different PennyLane devices.
+Here, we will demonstrate how to leverage the power of
 `Lightning-GPU <https://docs.pennylane.ai/projects/lightning/en/stable/lightning_gpu/device.html>`__
-is a CUDA-backed state-vector simulator that enables fast quantum circuit simulations on NVIDIA GPUs.
+to accelerate your quantum simulations.
 
-Using Lightning-GPU is particularly beneficial when dealing with large quantum circuits or
-when running simulations that require significant computational resources.
-By offloading the heavy linear algebra operations to GPUs,
-we can achieve substantial performance improvements.
 
-Here, we will demonstrate how to leverage the power of Catalyst
-and Lightning-GPU to accelerate quantum simulations.
+Lightning-GPU is our high-performance CUDA-backed state-vector simulator for PennyLane.
+This device enables fast quantum circuit simulations on NVIDIA GPUs
+and has been recently integrated with Catalyst.
+
 
 .. figure:: ../_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_Lightning_GPU_Catalyst.png
      :align: center
@@ -29,11 +30,16 @@ to highlight Catalyst with Lightning-GPU features.
 Setting up your environment
 ----------------------------
 
+Using Lightning-GPU is particularly beneficial when dealing with large quantum circuits or
+when running simulations that require significant computational resources.
+By offloading the heavy linear algebra operations to GPUs,
+we can achieve substantial performance improvements.
+
 Lightning-GPU can be used on systems equipped with NVIDIA GPUs of generation SM 7.0 (Volta) and greater,
 specifically, it is optimized for Linux X86-64 or ARM64 machines with CUDA-12 installed.
 
-To bring the power of Lightning-GPU to Catalyst, you need to install PennyLane,
-the :func:`~.qjit` compiler framework, and the ``lightning.gpu`` device.
+To use Catalyst with Lightning-GPU, you need to install PennyLane,
+the :func:`~.qjit` compiler framework, and the Lightning-GPU plugin (``lightning.gpu``).
 These packages can be installed from the Python Package Index (PyPI) using the following command:
 
 .. code-block:: bash
@@ -43,22 +49,23 @@ These packages can be installed from the Python Package Index (PyPI) using the f
 If you are using a different hardware configuration or operating system,
 you may need to install these packages from source.
 Detailed instructions for source installation can be found
-in the respective documentation of each package.
+in the respective `documentation <https://pennylane.ai/install>`__ of each package.
 
-A simple circuit with Lightning-GPU and QJIT
----------------------------------------------
 
-Here we use a simple example to demonstrate the support.
+Compile and run a simple circuit
+---------------------------------
 
-First, we create a ``lightning.gpu`` device with 20 wires.
-We then define a quantum circuit that applies layers of :func:`RZ` and :func:`RY`
+Here we use a simple PennyLane's circuit to demonstrate the support.
+
+First, we create a ``lightning.gpu`` device with 20 qubits using the :func:`pennylane.device` function.
+We then define a quantum circuit that applies layers of :func:`pennylane.RZ` and :func:`pennylane.RY`
 rotations to each wire, and returns the expectation value as the measurement result.
 
-To compile the circuit with Catalyst, we use the :func:`~.qjit` decorator.
-The `autograph=True <https://docs.pennylane.ai/projects/catalyst/en/stable/dev/autograph.html>`__
-compilation option compiles the circuit with for-loops,
-this allows Catalyst to capture control-flow operations without unrolling,
-reduces the compilation time and generates a more efficient program.
+To compile the circuit with Catalyst, we use the :func:`pennylane.qjit` decorator.
+The ``autograph=True`` compilation option compiles the circuit with for-loops,
+this allows Catalyst to efficiently
+`capture control-flow operations <https://docs.pennylane.ai/projects/catalyst/en/stable/dev/autograph.html>`__,
+reduces the compilation time, and generates a more efficient program.
 
 .. code-block:: python
 
@@ -90,14 +97,14 @@ reduces the compilation time and generates a more efficient program.
     # Initialize the weights
     weights = jax.random.uniform(key, shape=(3 * num_wires,), dtype=jnp.float32)
 
-    >>> circuit(weights)
+.. code-block:: python
 
-.. code-block:: bash
+    >>> circuit(weights)
 
     1.7712995142661776
 
 Lightning-GPU has feature parity with
-`other Lightning state-vector simulators <https://docs.pennylane.ai/projects/lightning/en/stable>`__,
+`the rest of Lightning state-vector simulators <https://docs.pennylane.ai/projects/lightning/en/stable>`__,
 providing native support for many PennyLane's operations and measurement processes with
 a fast adjoint-Jacobian differentiation implementation.
 
@@ -105,16 +112,15 @@ In the next section, we demonstrate how to compute the gradient of your quantum 
 using the native adjoint-Jacobian method on this device.
 
 
+Compute gradients
+------------------
 
-Computing gradients
---------------------
-
-We use :func:`~.grad` to compute the gradient of the ``circuit`` with respect to ``weights``.
+We use :func:`pennylane.grad` to compute the gradient of the ``circuit`` with respect to
+a set of trainable arguments.
 This method is particularly useful for variational quantum algorithms
 where the gradient of the cost function with respect to the circuit parameters is required.
 You can check on `this demo <https://pennylane.ai/qml/demos/tutorial_how_to_quantum_just_in_time_compile_vqe_catalyst>`__
-for more information on how to compile VQE with Catalyst.
-
+for more information on how to compile and optimize VQE with Catalyst.
 
 .. code-block:: python
 
@@ -123,15 +129,17 @@ for more information on how to compile VQE with Catalyst.
         g = qml.grad(circuit)
         return g(params)
 
-    >>> workflow(weights)
 
-... code-block:: bash
+.. code-block:: python
+
+    >>> workflow(weights)
 
     [ 8.8817842e-16  ...  -6.2915415e-01  0.0000000e+00]
 
-Note that in the above example, we didn't use ``method="adjoint"`` as the adjoint-jacobian
-differentaion method is the default gradiant method in Lightning-GPU.
-You can learn more about the different gradient methods by checking the
+Note that in the above example, we didn't use ``method="adjoint"``.
+The adjoint-Jacobian is the default gradient method when you compile
+and run your program on Lightning-GPU.
+You can learn more about the different gradient support by checking the
 `Catalyst Quantum Gradients <https://docs.pennylane.ai/projects/catalyst/en/stable/dev/quick_start.html#calculating-quantum-gradients>`__
 documentation.
 
