@@ -26,11 +26,11 @@ print(f"One-body and two-body tensor shapes: {one_body.shape}, {two_body.shape}"
 ######################################################################
 # In the above expression, the two-body terms can be rearranged to :math:`V_{pqrs}` in the
 # `chemist notation <http://vergil.chemistry.gatech.edu/notes/permsymm/permsymm.pdf>`_ to rewrite
-# the Hamiltonian as :math:`H_{\text{C}}` with :math:`T_{pq} = h_{pq} - 0.5 \sum_{s} g_{pssq}`:
+# the above Hamiltonian as :math:`H_{\text{C}}` with :math:`T_{pq} = h_{pq} - 0.5 \sum_{s} g_{pssq}`:
 #
 # .. math::  H_{\text{C}} = \mu + \sum_{\sigma, pq} T_{pq} a^\dagger_{\sigma, p} a_{\sigma, q} + \sum_{\sigma \tau, pqrs} V_{pqrs} a^\dagger_{\sigma, p} a_{\sigma, q} a^\dagger_{\tau, r} a_{\tau, s}.
 #
-# We can easily obtain the modified terms for doing this with:
+# We can easily obtain the modified one-body and two-body tensors for doing this with:
 #
 
 two_chem = 0.5 * qml.math.swapaxes(two_body, 1, 3)  # V_pqrs
@@ -64,15 +64,15 @@ approx_two_chem = qml.math.tensordot(factors, factors, axes=([0], [0]))
 assert qml.math.allclose(approx_two_chem, two_chem, atol=1e-5)
 
 ######################################################################
-# We can further improve the above factorization by employing the block-invariant symmetry shift
-# (BLISS) method [#bliss]_ to decrease the one-norm
-# and the spectral range of the above Hamiltonian:
+# We can further improve the above factorization by employing the block-invariant symmetry
+# shift (BLISS) [#bliss]_ to decrease the one-norm and the spectral range of the above
+# Hamiltonian using the :func:`~pennylane.qchem.symmetry_shift` method:
 #
 
 from pennylane.resource import DoubleFactorization as DF
 
 core_shift, one_shift, two_shift = qml.qchem.symmetry_shift(
-    nuc_core, one_chem, two_chem, n_elec=mol.n_electrons
+    nuc_core, one_chem, two_chem, n_elec = mol.n_electrons
 )
 
 norm_shift = (
@@ -84,8 +84,8 @@ print(f"Decrease in one-norm: {norm_shift}")
 ######################################################################
 # Moreover, in many practical scenarios, the number of terms :math:`T` in the above
 # factorization can be truncated to give :math:`H^\prime`, such that the approximation error
-# ||H_{\text{C}} - H^\prime||` remains below a desired threshold. This is referred to as the
-# *compressed* double factorization, as it reduces the number of terms in the factorization
+# :math:`||H_{\text{C}} - H^\prime||` remains below a desired threshold. This is referred to as
+# the *compressed* double factorization, as it reduces the number of terms in the factorization
 # of the two-body term to :math:`O(N)` from :math:`O(N^2)`. One possible way to do this is to
 # directly truncate the factorization with a threshold error tolerance, while another way is
 # to begin with random :math:`O(N)` orthornormal and symmetric tensors and optimizing them based
@@ -112,10 +112,11 @@ approx_two_shift = qml.math.einsum(
 assert qml.math.allclose(approx_two_shift, two_shift, atol=1e-2)
 
 ######################################################################
-# From the above factorization, we first obtain obtain an one-body correction term from
-# the terms that would result in operations on the same orbitals. We can then decompose
-# the one-body terms using orthornormal and symmetric tensors, as well, allowing us to
-# express the entire Hamiltonian as sum of the products of core and leaf tensors:
+# We can clearly see that the number of terms in the factorization decreases from
+# :math:`10` to :math:`6` in the above example, which is a significant reduction. Next,
+# we can also decompose the one-body terms using the orthornormal and symmetric tensors.
+# This can be done by first obtaining the one-body correction based on the above two-body
+# terms and then performing an eigenvalue decomposition on the corrected one-body terms:
 #
 
 two_core_prime = (qml.math.eye(mol.n_orbitals) * two_body_cores.sum(axis=-1)[:, None, :])
@@ -124,12 +125,19 @@ one_body_extra = qml.math.einsum(
 )
 
 one_body_eigvals, one_body_eigvecs = qml.math.linalg.eigh(one_shift + one_body_extra)
-one_body_eigvals, one_body_eigvecs = qml.math.linalg.eigh(one_shift)
-
 one_body_cores = qml.math.expand_dims(qml.math.diag(one_body_eigvals), axis=0)
 one_body_leaves = qml.math.expand_dims(one_body_eigvecs, axis=0)
 
 print(f"One-body tensors' shape: {two_body_cores.shape, two_body_leaves.shape}")
+
+######################################################################
+# We can now express the entire Hamiltonian as sum of the products of core and leaf tensors
+# and define the terms for a Hamiltonian in the double factorized form:
+#
+
+nuc_core_cdf = core_shift[0]
+one_body_cdf = (one_body_cores, one_body_leaves)
+two_body_cdf = (two_body_cores, two_body_leaves)
 
 ######################################################################
 # Simulating double factorized Hamiltonians
@@ -152,14 +160,13 @@ print(f"One-body tensors' shape: {two_body_cores.shape, two_body_leaves.shape}")
 
 import itertools as it
 
-
-def CDFTrotterProduct(nuc_core, one_body_cdf, two_body_cdf, time, num_steps=1):
+def CDFTrotterProduct(nuc_core_cdf, one_body_cdf, two_body_cdf, time, num_steps=1):
     """Implements a first-order Trotter circuit for a CDF Hamiltonian.
 
     Args:
-        nuc_core (array): The nuclear core energy.
-        one_body_cdf (tuple): A tuple containing the core and leaf tensors for the one-body terms.
-        two_body_cdf (tuple): A tuple containing the core and leaf tensors for the two-body terms.
+        nuc_core_cdf (float): The nuclear core energy.
+        one_body_cdf (tuple): core and leaf tensors for the one-body terms.
+        two_body_cdf (tuple): core and leaf tensors for the two-body terms.
         time (float): The total time for the evolution.
         num_steps (int): The number of Trotter steps. Default is 1.
 
@@ -169,10 +176,8 @@ def CDFTrotterProduct(nuc_core, one_body_cdf, two_body_cdf, time, num_steps=1):
     leaves = qml.math.concatenate((one_body_cdf[1], two_body_cdf[1]), axis=0)
     btypes = qml.math.array([1] * len(one_body_cdf[0]) + [2] * len(two_body_cdf[0]))
 
-    norms = qml.math.linalg.norm(cores, axis=(1, 2))
-    ranks = qml.math.argsort(norms)
-
     step = time / num_steps
+    ranks = qml.math.argsort(qml.math.linalg.norm(cores, axis=(1, 2)))
     cores, leaves, btypes = cores[ranks], leaves[ranks], btypes[ranks]
 
     basis_mat = qml.math.eye(norbs)
@@ -204,16 +209,12 @@ def CDFTrotterProduct(nuc_core, one_body_cdf, two_body_cdf, time, num_steps=1):
                     wires=range(2 * norbs),
                 )
 
-    qml.GlobalPhase(nuc_core[0] * time, wires=range(2 * norbs))
-
+    qml.GlobalPhase(nuc_core_cdf * time, wires=range(2 * norbs))
 
 ######################################################################
 # We can use it to simulate the evolution of the Hamiltonian described in the double factorized form
 # for a given number of steps ``num_steps`` and starting from the Hartree-Fock state ``hf_state``:
 #
-
-# Define the terms for the CDF Hamiltonian
-one_body_cdf, two_body_cdf = (one_body_cores, one_body_leaves), (two_body_cores, two_body_leaves)
 
 num_wires, time = 2 * mol.n_orbitals, 1.0
 hf_state = qml.qchem.hf_state(electrons=mol.n_electrons, orbitals=num_wires)
@@ -221,7 +222,7 @@ hf_state = qml.qchem.hf_state(electrons=mol.n_electrons, orbitals=num_wires)
 @qml.qnode(qml.device("lightning.qubit", wires=num_wires))
 def cdf_circuit(num_steps):
     qml.BasisState(hf_state, wires=range(num_wires))
-    CDFTrotterProduct(core_shift, one_body_cdf, two_body_cdf, time, num_steps=num_steps)
+    CDFTrotterProduct(nuc_core_cdf, one_body_cdf, two_body_cdf, time, num_steps=num_steps)
     return qml.state()
 
 circuit_state = cdf_circuit(num_steps=20)
