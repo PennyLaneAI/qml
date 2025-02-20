@@ -133,11 +133,11 @@ print(f"One-body tensors' shape: {two_body_cores.shape, two_body_leaves.shape}")
 ######################################################################
 # We can now express the entire Hamiltonian as sum of the products of core and leaf tensors
 #
-# .. math:: H_{\text{CDF}} = \mu + \sum_{\sigma} U^{(0)}_{\sigma} \sum_{p} Z^{(0)}_{p} a^\dagger_{\sigma, p} a_{\sigma, p} U_{\sigma}^{(0)\ \dagger} + \sum_t^T \sum_{\sigma, \tau} U_{\sigma, \tau}^{(t)} \left( \sum_{pq} Z_{pq}^{(t)} \right) U_{\sigma, \tau}^{(t)\ \dagger},
+# .. math:: H_{\text{CDF}} = \mu + \sum_{\sigma} U^{(0)}_{\sigma}\left( \sum_{p} Z^{(0)}_{p} a^\dagger_{\sigma, p} a_{\sigma, p} \righ) tU_{\sigma}^{(0)\ \dagger} + \sum_t^T \sum_{\sigma, \tau} U_{\sigma, \tau}^{(t)} \left( \sum_{pq} Z_{pq}^{(t)} \right) U_{\sigma, \tau}^{(t)\ \dagger},
 #
 # and specify each term in the above summation for a Hamiltonian in the double factorized
-# form as ``nuc_core_cdf`` (:math:`\mu`), ``one_body_cdf`` (:math:` Z^{(0)}, U^{(0)}`) and
-# ``two_body_cdf`` (:math:` Z^{(t)}, U^{(t)}`):
+# form as ``nuc_core_cdf`` (:math:`\mu`), ``one_body_cdf`` (:math:`Z^{(0)}, U^{(0)}`) and
+# ``two_body_cdf`` (:math:`Z^{(t)}, U^{(t)}`):
 #
 
 nuc_core_cdf = core_shift[0]
@@ -145,10 +145,12 @@ one_body_cdf = (one_body_cores, one_body_leaves)
 two_body_cdf = (two_body_cores, two_body_leaves)
 
 ######################################################################
-# We can now use the above representation to transform the Hamiltonian to qubit basis via
-# Jordan-Wigner transformation, which uses math:`a_p^\dagger a_p = n_p = 0.5 * (1 - z_p)`.
-# The resulting qubit Hamiltonian can be used in simulations just like any other Hamiltonian,
-# but with more efficient circuit constructions, which we will see in the upcoming section.
+# The above representation allows obtaining the Hamiltonian in the qubit basis via
+# Jordan-Wigner transformation, which uses :math:`a_p^\dagger a_p = n_p = 0.5 * (1 - z_p)`.
+# One can obtain the coefficients and observables of such a Hamiltonian with
+# :func:`~pennylane.qchem.basis_rotation`, which automatically accounts for the spin.
+# However, to be efficient when simulating these Hamiltonians, we can account for the
+# spin during the circuit construction itself, which we will see in the next section.
 #
 
 ######################################################################
