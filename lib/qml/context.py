@@ -40,7 +40,3 @@ class Context:
     @property
     def constraints_file(self) -> Path:
         return self.repo_root / "constraints.txt"
-
-    @property
-    def build_requirements_file(self) -> Path:
-        return self.repo_root / "requirements-build.txt"
