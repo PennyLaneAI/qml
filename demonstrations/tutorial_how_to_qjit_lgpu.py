@@ -6,7 +6,7 @@ We have been sharing details about how to use
 `Catalyst <https://docs.pennylane.ai/projects/catalyst>`__,
 our quantum just-in-time (QJIT) compiler framework,
 to optimize and compile hybrid quantum-classical programs
-with different PennyLane devices.
+with different `PennyLane devices <https://pennylane.ai/plugins>`__.
 Here, we will demonstrate how to leverage the power of
 `Lightning-GPU <https://docs.pennylane.ai/projects/lightning/en/stable/lightning_gpu/device.html>`__
 to accelerate your quantum simulations.
@@ -17,7 +17,7 @@ This device enables fast quantum circuit simulations on NVIDIA GPUs
 and has been recently integrated with Catalyst.
 
 
-.. figure:: ../_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_Lightning_GPU_Catalyst.png
+.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_Lightning_GPU_Catalyst.png
      :align: center
      :width: 80%
      :target: javascript:void(0)
@@ -59,13 +59,13 @@ Here we use a simple PennyLane's circuit to demonstrate the support.
 
 First, we create a ``lightning.gpu`` device with 20 qubits using the :func:`pennylane.device` function.
 We then define a quantum circuit that applies layers of :func:`pennylane.RZ` and :func:`pennylane.RY`
-rotations to each wire, and returns the expectation value as the measurement result.
+rotations to each wire and returns the expectation value as the measurement result.
 
 To compile the circuit with Catalyst, we use the :func:`pennylane.qjit` decorator.
-The ``autograph=True`` compilation option compiles the circuit with for-loops,
-this allows Catalyst to efficiently
+The ``autograph=True`` compilation option compiles the circuit with for-loops.
+This allows Catalyst to efficiently
 `capture control-flow operations <https://docs.pennylane.ai/projects/catalyst/en/stable/dev/autograph.html>`__,
-reduces the compilation time, and generates a more efficient program.
+reduce the compilation time, and generate a more efficient program.
 
 .. code-block:: python
 
