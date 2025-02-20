@@ -51,7 +51,7 @@ def pip_install(
     constraints: Path | None = None,
     quiet: bool = True,
     use_uv: bool = True,
-):
+) -> None:
     """Executes `pip install` with the given python
     interpreter and args.
 
@@ -87,4 +87,38 @@ def pip_install(
         cmd.append("--quiet")
 
     cmd.extend(str(arg) for arg in args)
+    subprocess.run(cmd).check_returncode()
+
+
+def pip_sync(
+    python: str | Path,
+    requirements: Path,
+    *args: Path | str,
+    quiet: bool = True,
+) -> None:
+    """Run `uv sync` with the given arguments.
+
+    Args:
+        python: Path to python executable
+        args: Command line args passed to pip install
+        requirements: Path to a requirements file
+        args: Extra requirements files or args to pass to `uv`.
+        quiet: Whether to suppress output to stdout
+    """
+
+    cmd = [
+        str(python),
+        "-m",
+        "uv",
+        "pip",
+        "sync",
+        "--index-strategy",
+        "unsafe-best-match",
+        str(requirements),
+        *(str(arg) for arg in args),
+    ]
+
+    if quiet:
+        cmd.append("--quiet")
+
     subprocess.run(cmd).check_returncode()

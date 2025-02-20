@@ -17,14 +17,15 @@ class RequirementsGenerator:
     def __init__(
         self,
         python_bin: Path,
-        global_constraints_file: Path,
+        *global_constraints_files: Path,
     ):
         self.python_bin = python_bin
 
         global_constraints: dict[str, tuple[str, ...]] = defaultdict(tuple)
-        with open(global_constraints_file, "r") as f:
-            for req in requirements.parse(f):
-                global_constraints[req.name] += (req.line,)
+        for constraints_file in global_constraints_files:
+            with open(constraints_file, "r") as f:
+                for req in requirements.parse(f):
+                    global_constraints[req.name] += (req.line,)
 
         self.global_constraints = global_constraints
         self._requirements_in_cache: dict[frozenset[str], str] = {}

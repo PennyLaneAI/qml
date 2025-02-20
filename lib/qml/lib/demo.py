@@ -31,8 +31,24 @@ class BuildTarget(Enum):
 class Demo:
     """Represents a demo and its metadata."""
 
+    BUILD_DEPENDENCIES = frozenset(
+        (
+            # Sphinx dependencies
+            "sphinx",
+            "sphinx_gallery",
+            "Jinja2",
+            "markupsafe",
+            "pyyaml",
+            "pypandoc",
+            "pennylane-sphinx-theme",
+            "numpy",
+            "pennylane",
+        )
+    )
+
     CORE_DEPENDENCIES = frozenset(
         (
+            # Execution dependencies
             "aiohttp",
             "fsspec",
             "h5py",
@@ -83,18 +99,24 @@ class Demo:
     @property
     def executable(self) -> bool:
         """Whether this demo can be executed."""
-        return self.name.startswith("tutorial_")
+        return (
+            self.name.startswith("tutorial_") and self.name != "tutorial_univariate_qvr"
+        )
 
-    @functools.cached_property
-    def requirements(self) -> frozenset[str]:
-        if not (path := self.requirements_file):
-            return self.CORE_DEPENDENCIES
+    def requirements(self, execute: bool) -> frozenset[str]:
+        execute = execute and self.executable
 
-        reqs = set(self.CORE_DEPENDENCIES)
-        with open(path, "r") as f:
-            for req in requirements.parse(f):
-                reqs.discard(req.name)
-                reqs.add(req.line)
+        reqs: set[str] = set(self.BUILD_DEPENDENCIES)
+        if not execute:
+            return frozenset(reqs)
+
+        reqs.update(self.CORE_DEPENDENCIES)
+
+        if path := self.requirements_file:
+            with open(path, "r") as f:
+                for req in requirements.parse(f):
+                    reqs.discard(req.name)
+                    reqs.add(req.line)
 
         return frozenset(reqs)
 
@@ -150,11 +172,9 @@ def build(
     logger.info("Building %d demos", len(demos))
 
     build_venv = Virtualenv(ctx.build_venv_path)
-    _install_build_dependencies(build_venv, ctx.build_dir)
-
     requirements_generator = RequirementsGenerator(
         Path(sys.executable),
-        global_constraints_file=ctx.constraints_file,
+        ctx.constraints_file,
     )
 
     for demo in demos:
@@ -170,13 +190,13 @@ def build(
 
         try:
             _build_demo(
+                demo,
                 sphinx_dir=ctx.repo_root,
                 build_dir=ctx.build_dir,
                 build_venv=build_venv,
                 requirements_generator=requirements_generator,
                 target=target,
                 execute=execute_demo,
-                demo=demo,
                 package=target is BuildTarget.JSON,
                 quiet=quiet,
             )
@@ -199,10 +219,11 @@ def build(
 
 
 def _build_demo(
+    demo: Demo,
+    *,
     sphinx_dir: Path,
     build_dir: Path,
     build_venv: Virtualenv,
-    demo: Demo,
     target: BuildTarget,
     requirements_generator: "RequirementsGenerator",
     execute: bool,
@@ -213,12 +234,13 @@ def _build_demo(
     fs.clean_dir(out_dir)
 
     with open(out_dir / "requirements.txt", "w") as f:
-        f.write(requirements_generator.generate_requirements(demo.requirements))
-
-    if execute:
-        cmds.pip_install(
-            build_venv.python, requirements=out_dir / "requirements.txt", quiet=True
+        f.write(
+            requirements_generator.generate_requirements(
+                demo.requirements(execute=execute)
+            )
         )
+
+    cmds.pip_sync(build_venv.python, out_dir / "requirements.txt", quiet=True)
 
     stage_dir = build_dir / "demonstrations"
     fs.clean_dir(stage_dir)
@@ -262,7 +284,7 @@ def _build_demo(
         )
 
 
-def _install_build_dependencies(venv: Virtualenv, build_dir: Path):
+def _install_build_dependencies(venv: Virtualenv, build_dir: Path) -> Path:
     """Install dependencies for running sphinx-build into `venv`."""
     logger.info("Installing sphinx-build dependencies")
 
@@ -274,6 +296,8 @@ def _install_build_dependencies(venv: Virtualenv, build_dir: Path):
         format="requirements.txt",
     )
     cmds.pip_install(venv.python, "-r", build_requirements_file, use_uv=False)
+
+    return build_requirements_file
 
 
 def _package_demo(
