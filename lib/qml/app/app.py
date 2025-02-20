@@ -1,6 +1,6 @@
 import typer
 from qml.context import Context
-from qml.lib import demo, fs
+from qml.lib import demo, repo
 import shutil
 import logging
 from typing import Annotated, Optional
@@ -77,6 +77,6 @@ def sync_v2():
             )
         else:
             for src, dest in [(v1_demo, v2_demo), (v1_metadata, v2_metadata)]:
-                if not dest.exists() or fs.file_sha(src) != fs.file_sha(dest):
+                if repo.file_should_update(ctx.repo, src, dest):
                     shutil.copy2(src, dest)
                     print(f"Updated {dest} from {src}")
