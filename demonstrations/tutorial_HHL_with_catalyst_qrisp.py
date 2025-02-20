@@ -465,7 +465,7 @@ main()
 # --------------------------
 # Let’s put theory into practice and dive into an implementation of the HHL algorithm in Qrisp.
 #
-# As a fist step, we define a function that performs the inversion :math:`\lambda\mapsto\lambda^{-1}`.
+# As a fisrt step, we define a function that performs the inversion :math:`\lambda\mapsto\lambda^{-1}`.
 # In this example, we restict ourselves to an implementation that works for values
 # :math:`\lambda=2^{-k}` for :math:`k\in\mathbb N`. (As shown above, a general inversion is available
 # in Qrisp and will soon be updated to be compatible with QJIT compilation!)
@@ -511,8 +511,7 @@ print(qrisp.multi_measurement([qf, res]))
 # amplitudes of the states, i.e. how do we go from :math:`|\Psi_3\rangle` to :math:`|\Psi_4\rangle`?
 #
 # Recently, efficient methods for black-box quantum state preparation that avoid arithmetic were
-# proposed, see `Sanders et al. <https://arxiv.org/pdf/1807.03206>`__, `Wang et
-# al. <https://arxiv.org/pdf/2012.11056>`__ In this demo, we use a routine proposed in the latter
+# proposed, see `Bausch <https://quantum-journal.org/papers/q-2022-08-04-773/>`__, `Sanders et al. <https://arxiv.org/pdf/1807.03206>`__. In this demo, we use a routine proposed in the latter
 # reference which is based on a comparison between integers. This is implemented via the
 # aforementioned comparisons for QuantumFloats.
 #
@@ -947,10 +946,7 @@ print(samples)
 #    Framework for Compilable High-Level Programming of Gate-Based Quantum Computers”,
 #    https://arxiv.org/abs/2406.14792, 2024.
 #
-# 4. S. Wang, Z. Wang, G. Cui, L. Fan, S. Shi, R. Shang, W. Li, Z. Wei, Y. Gu, “Quantum Amplitude
-#    Arithmetic”, https://arxiv.org/pdf/2012.11056, 2020.
-#
-# 5. A. Zaman, H. J. Morrell, H. Y. Wong, “A Step-by-Step HHL Algorithm Walkthrough to Enhance
+# 4. A. Zaman, H. J. Morrell, H. Y. Wong, “A Step-by-Step HHL Algorithm Walkthrough to Enhance
 #    Understanding of Critical Quantum Computing Concepts”, `IEEE Access
 #    11 <https://ieeexplore.ieee.org/document/10189828>`__, 2023.
 
