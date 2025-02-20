@@ -242,6 +242,8 @@ def _build_demo(
     sphinx_env = os.environ | {
         "DEMO_STAGING_DIR": str(stage_dir.resolve()),
         "GALLERY_OUTPUT_DIR": str(out_dir.resolve().relative_to(sphinx_dir)),
+        # Make sure demos can find scripts installed in the build venv
+        "PATH": f"{os.environ['PATH']}:{build_venv.path / 'bin'}",
     }
     if quiet:
         stdout, stderr, text = subprocess.PIPE, subprocess.STDOUT, True

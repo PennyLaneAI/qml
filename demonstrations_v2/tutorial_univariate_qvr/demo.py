@@ -233,10 +233,16 @@ Before getting into the technical details of the algorithm, let's get a high-lev
 import covalent as ct
 import os
 import time
+import subprocess
+import sys
+from pathlib import Path
 
 # Set up Covalent server
 os.environ["COVALENT_SERVER_IFACE_ANY"] = "1"
-os.system("covalent start")
+subprocess.run(
+    ["covalent", "start"],
+    env=os.environ).check_returncode()
+
 # If you run into any out-of-memory issues with Dask when running this notebook,
 # Try reducing the number of workers and making a specific memory request. I.e.:
 # os.system("covalent start -m "2GiB" -n 2")
@@ -834,6 +840,9 @@ tr_dispatch_id = ct.dispatch(training_workflow)(**training_options)
 #
 
 ct_tr_results = ct.get_result(dispatch_id=tr_dispatch_id, wait=True)
+if ct_tr_results.error:
+    raise RuntimeError(ct_tr_results.error)
+
 results_dict = ct_tr_results.result
 
 
@@ -1212,7 +1221,9 @@ leg = plt.legend()
 #
 
 # Shut down the covalent server
-stop = os.system("covalent stop")
+subprocess.run(
+    ["covalent", "stop"],
+    env=os.environ).check_returncode()
 
 ######################################################################
 # Conclusions
