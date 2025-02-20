@@ -133,15 +133,23 @@ print(f"One-body tensors' shape: {two_body_cores.shape, two_body_leaves.shape}")
 ######################################################################
 # We can now express the entire Hamiltonian as sum of the products of core and leaf tensors
 #
-# .. math:: H_{\text{CDF}} = \mu^{\prime} + \sum_{sigma} U^{(0)}_{\sigma} \sum_{p} Z^{0}_{p} a^\dagger_{\sigma, p} a_{\sigma, p} U_{\sigma}^{(0)\ \dagger} + \sum_t^T \sum_{\sigma, \tau} U_{\sigma, \tau}^{(t)} \left( \sum_{pq} Z_{pq}^{(t)} \right) U_{\sigma, \tau}^{(t)\ \dagger},
+# .. math:: H_{\text{CDF}} = \mu + \sum_{\sigma} U^{(0)}_{\sigma} \sum_{p} Z^{(0)}_{p} a^\dagger_{\sigma, p} a_{\sigma, p} U_{\sigma}^{(0)\ \dagger} + \sum_t^T \sum_{\sigma, \tau} U_{\sigma, \tau}^{(t)} \left( \sum_{pq} Z_{pq}^{(t)} \right) U_{\sigma, \tau}^{(t)\ \dagger},
 #
 # and specify each term in the above summation for a Hamiltonian in the double factorized
-# form as ``nuc_core_cdf``, ``one_body_cdf`` and ``two_body_cdf``:
+# form as ``nuc_core_cdf`` (:math:`\mu`), ``one_body_cdf`` (:math:` Z^{(0)}, U^{(0)}`) and
+# ``two_body_cdf`` (:math:` Z^{(t)}, U^{(t)}`):
 #
 
 nuc_core_cdf = core_shift[0]
 one_body_cdf = (one_body_cores, one_body_leaves)
 two_body_cdf = (two_body_cores, two_body_leaves)
+
+######################################################################
+# We can now use the above representation to transform the Hamiltonian to qubit basis via
+# Jordan-Wigner transformation, which uses math:`a_p^\dagger a_p = n_p = 0.5 * (1 - z_p)`.
+# The resulting qubit Hamiltonian can be used in simulations just like any other Hamiltonian,
+# but with more efficient circuit constructions, which we will see in the upcoming section.
+#
 
 ######################################################################
 # Simulating double factorized Hamiltonians
@@ -173,7 +181,6 @@ def CDFTrotterProduct(nuc_core_cdf, one_body_cdf, two_body_cdf, time, num_steps=
         two_body_cdf (tuple): core and leaf tensors for the two-body terms.
         time (float): The total time for the evolution.
         num_steps (int): The number of Trotter steps. Default is 1.
-
     """
     norbs = qml.math.shape(one_body_cdf[0])[1]
     cores = qml.math.concatenate((one_body_cdf[0], two_body_cdf[0]), axis=0)
@@ -249,6 +256,10 @@ print(f"Fidelity of two states: {fidelity_statevector(circuit_state, evolved_sta
 
 ######################################################################
 #
+# As we can see, the fidelity of the evolved state from the circuit is close to
+# :math:`1.0`, which indicates that the evolution of the CDF Hamiltonian sufficiently
+# matches that of the original one.
+#
 # Conclusion
 # -----------
 #
@@ -268,19 +279,19 @@ print(f"Fidelity of two states: {fidelity_statevector(circuit_state, evolved_sta
 #
 #     Ignacio Loaiza, Artur F. Izmaylov,
 #     "Block-Invariant Symmetry Shift: Preprocessing technique for second-quantized Hamiltonians to improve their decompositions to Linear Combination of Unitaries",
-#     arXiv:2304.13772, 2023.
+#     `arXiv:2304.13772 <https://arxiv.org/abs/2304.13772>`__, 2023.
 #
 # .. [#cdf]
 #
 #     Oumarou Oumarou, Maximilian Scheurer, Robert M. Parrish, Edward G. Hohenstein, Christian Gogolin,
 #     "Accelerating Quantum Computations of Chemistry Through Regularized Compressed Double Factorization",
-#     Quantum 8, 1371, 2024.
+#     `Quantum 8, 1371 <https://doi.org/10.22331/q-2024-06-13-1371>`__, 2024.
 #
 # .. [#trotter]
 #
 #     Sergiy Zhuk, Niall Robertson, Sergey Bravyi,
 #     "Trotter error bounds and dynamic multi-product formulas for Hamiltonian simulation",
-#     arXiv:2306.12569, 2023.
+#     `arXiv:2306.12569 <https://arxiv.org/abs/2306.12569>`__, 2023.
 #
 # About the author
 # ----------------
