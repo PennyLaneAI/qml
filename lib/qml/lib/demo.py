@@ -240,7 +240,12 @@ def _build_demo(
             )
         )
 
-    cmds.pip_sync(build_venv.python, out_dir / "requirements.txt", quiet=True)
+    cmds.pip_sync(
+        sys.executable,
+        out_dir / "requirements.txt",
+        target_python=build_venv.python,
+        quiet=True,
+    )
 
     stage_dir = build_dir / "demonstrations"
     fs.clean_dir(stage_dir)

@@ -94,6 +94,7 @@ def pip_sync(
     python: str | Path,
     requirements: Path,
     *args: Path | str,
+    target_python: Path | None = None,
     quiet: bool = True,
 ) -> None:
     """Run `uv sync` with the given arguments.
@@ -117,6 +118,8 @@ def pip_sync(
         str(requirements),
         *(str(arg) for arg in args),
     ]
+    if target_python:
+        cmd.extend(["--python", str(python)])
 
     if quiet:
         cmd.append("--quiet")
