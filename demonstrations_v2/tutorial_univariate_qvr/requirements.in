@@ -1,0 +1,3 @@
+covalent==0.227.0rc0
+torch
+dask[delayed]

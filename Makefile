@@ -82,3 +82,7 @@ environment:
 			$$PYTHON_VENV_PATH/bin/python -m pip install --upgrade git+https://github.com/XanaduAI/iqpopt.git#egg=iqpopt;\
 		fi;\
 	fi
+
+fmt:
+	poetry run ruff check --fix lib/
+	poetry run ruff format lib/
