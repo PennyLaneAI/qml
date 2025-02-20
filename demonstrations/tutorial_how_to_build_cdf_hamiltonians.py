@@ -132,7 +132,11 @@ print(f"One-body tensors' shape: {two_body_cores.shape, two_body_leaves.shape}")
 
 ######################################################################
 # We can now express the entire Hamiltonian as sum of the products of core and leaf tensors
-# and define the terms for a Hamiltonian in the double factorized form:
+#
+# .. math:: H_{\text{CDF}} = \mu^{\prime} + \sum_{sigma} U^{(0)}_{\sigma} \sum_{p} Z^{0}_{p} a^\dagger_{\sigma, p} a_{\sigma, p} U_{\sigma}^{(0)\ \dagger} + \sum_t^T \sum_{\sigma, \tau} U_{\sigma, \tau}^{(t)} \left( \sum_{pq} Z_{pq}^{(t)} \right) U_{\sigma, \tau}^{(t)\ \dagger},
+#
+# and specify each term in the above summation for a Hamiltonian in the double factorized
+# form as ``nuc_core_cdf``, ``one_body_cdf`` and ``two_body_cdf``:
 #
 
 nuc_core_cdf = core_shift[0]
