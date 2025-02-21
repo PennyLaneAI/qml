@@ -144,12 +144,12 @@ to highlight Catalyst with Lightning-GPU features.
 #    [ 8.8817842e-16 ... -6.2915415e-01  0.0000000e+00]
 #
 #
-# Optimize parameters
-# --------------------
-#
 # Note that in the above example, we didn't use ``method="adjoint"``.
 # The adjoint-Jacobian is the default gradient method when you compile
 # and run your program on Lightning-GPU.
+#
+# Optimize parameters
+# --------------------
 #
 # Now that we have seen how to leverage the device differentiation capabilities,
 # we can move on to further optimizing the circuit parameters using Catalyst.
