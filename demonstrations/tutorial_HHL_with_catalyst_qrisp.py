@@ -17,6 +17,10 @@ introduction to Qrisp, QuantumVariables and QuantumTypes, the implementation of 
 Estimation (QPE), before putting it into a higher gear with the HHL implementation and showcase of
 the Catalyst features.
 
+.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_HHL_with_catalyst_qrisp.png
+    :align: center
+    :width: 70%
+    :target: javascript:void(0)
 
 Intro to Qrisp
 --------------
