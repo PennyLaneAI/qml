@@ -196,7 +196,7 @@ to highlight Catalyst with Lightning-GPU features.
 #    Step = 9
 #    [1.24479175e-01 ... 9.45755959e-01 4.64060426e-01]
 #
-##############################################################################
+#
 # We used `Optax <https://github.com/google-deepmind/optax>`__,
 # a library designed for optimization using JAX,
 # as well as the QJIT-compatible :func:`~pennylane.for_loop` function
