@@ -171,7 +171,6 @@ to QJIT-compile the entire optimization workflow.
     opt = optax.sgd(learning_rate=0.4)
 
     def update_step(i, params, opt_state):
-        """Perform a single gradient update step"""
         energy, grads = catalyst.value_and_grad(circuit)(params)
         updates, opt_state = opt.update(grads, opt_state)
         params = optax.apply_updates(params, updates)
