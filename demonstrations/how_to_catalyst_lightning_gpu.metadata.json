@@ -1,0 +1,53 @@
+{
+    "title": "How to use Catalyst with Lightning-GPU",
+    "authors": [
+        {
+            "username": "maliasadi"
+        },
+        {
+            "username": "sshu"
+        }
+    ],
+    "dateOfPublication": "2025-02-21T09:00:00+00:00",
+    "dateOfLastModification": "2025-02-21T09:00:00+00:00",
+    "categories": [
+        "Getting Started",
+        "Quantum Chemistry",
+        "Devices and Performance",
+        "Quantum Computing",
+        "How-to"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "../_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_Lightning_GPU_Catalyst.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "../_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_Lightning_GPU_Catalyst.png"
+        }
+    ],
+    "seoDescription": "Learn how to use Catalyst with Lightning-GPU to boost the runtime performance of your quantum programs.",
+    "doi": "",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_how_to_quantum_just_in_time_compile_vqe_catalyst",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_qjit_compile_grovers_algorithm_with_catalyst",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_How_to_optimize_QML_model_using_JAX_catalyst_and_Optax",
+            "weight": 1.0
+        }
+    ]
+}
