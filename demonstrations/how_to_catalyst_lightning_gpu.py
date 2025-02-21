@@ -142,8 +142,8 @@ to highlight Catalyst with Lightning-GPU features.
 #  .. code-block:: none
 #
 #    [ 8.8817842e-16 ... -6.2915415e-01  0.0000000e+00]
-
-##############################################################################
+#
+#
 # Optimize parameters
 # --------------------
 #
@@ -178,7 +178,7 @@ to highlight Catalyst with Lightning-GPU features.
 #         return params
 #
 #     >>> optimization(weights)
-#
+
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
@@ -195,7 +195,7 @@ to highlight Catalyst with Lightning-GPU features.
 #    Step = 8
 #    Step = 9
 #    [1.24479175e-01 ... 9.45755959e-01 4.64060426e-01]
-
+#
 ##############################################################################
 # We used `Optax <https://github.com/google-deepmind/optax>`__,
 # a library designed for optimization using JAX,
