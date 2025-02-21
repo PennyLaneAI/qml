@@ -56,7 +56,7 @@ to highlight Catalyst with Lightning-GPU features.
 ##############################################################################
 # Compile and run a circuit
 # --------------------------
-
+#
 # Here, we use a simple PennyLane circuit to demonstrate
 # how to compile and run a quantum program on Lightning-GPU with Catalyst.
 #
@@ -69,7 +69,7 @@ to highlight Catalyst with Lightning-GPU features.
 # This allows Catalyst to efficiently
 # :doc:`capture control-flow operations <catalyst:dev/autograph>`,
 # reduce the compilation time, and generate a more efficient program.
-
+#
 # .. code-block:: python
 #
 #     import pennylane as qml
@@ -105,10 +105,11 @@ to highlight Catalyst with Lightning-GPU features.
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-# .. code-block:: none
+#  .. code-block:: none
 #
-#   1.7712995142661776
+#    1.7712995142661776
 
+##############################################################################
 # Lightning-GPU has feature parity with
 # `the rest of Lightning state-vector simulators <https://docs.pennylane.ai/projects/lightning/en/stable>`__,
 # providing native support for many PennyLane's operations and measurement processes with
@@ -140,10 +141,10 @@ to highlight Catalyst with Lightning-GPU features.
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-# .. code-block:: none
+#  .. code-block:: none
 #
-#   [ 8.8817842e-16 ... -6.2915415e-01  0.0000000e+00]
-#
+#    [ 8.8817842e-16 ... -6.2915415e-01  0.0000000e+00]
+
 ##############################################################################
 # Optimize parameters
 # --------------------
@@ -179,23 +180,25 @@ to highlight Catalyst with Lightning-GPU features.
 #         return params
 #
 #     >>> optimization(weights)
+#
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-# .. code-block:: none
+#  .. code-block:: none
 #
-#   Step = 0
-#   Step = 1
-#   Step = 2
-#   Step = 3
-#   Step = 4
-#   Step = 5
-#   Step = 6
-#   Step = 7
-#   Step = 8
-#   Step = 9
-#   [1.24479175e-01 ... 9.45755959e-01 4.64060426e-01]
+#    Step = 0
+#    Step = 1
+#    Step = 2
+#    Step = 3
+#    Step = 4
+#    Step = 5
+#    Step = 6
+#    Step = 7
+#    Step = 8
+#    Step = 9
+#    [1.24479175e-01 ... 9.45755959e-01 4.64060426e-01]
 
+##############################################################################
 # We used `Optax <https://github.com/google-deepmind/optax>`__,
 # a library designed for optimization using JAX,
 # as well as the QJIT-compatible :func:`~pennylane.for_loop` function
@@ -205,13 +208,13 @@ to highlight Catalyst with Lightning-GPU features.
 ##############################################################################
 # Précis
 # -------
-
+#
 # In this tutorial, we have shown how to use Catalyst with Lightning-GPU
 # to accelerate quantum simulations on NVIDIA GPUs.
 # We have compiled a simple quantum circuit with Catalyst,
 # computed the gradient of the circuit using the adjoint-Jacobian method,
 # and optimized the circuit parameters using Catalyst and Optax.
-
+#
 # To learn more about all the integrated devices,
 # check out the :doc:`Catalyst Devices <catalyst:dev/devices>` guide.
 
