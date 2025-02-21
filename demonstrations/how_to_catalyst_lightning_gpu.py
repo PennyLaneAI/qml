@@ -108,16 +108,14 @@ to highlight Catalyst with Lightning-GPU features.
 #  .. code-block:: none
 #
 #    1.7712995142661776
-
-##############################################################################
-# Lightning-GPU has feature parity with
-# `the rest of Lightning state-vector simulators <https://docs.pennylane.ai/projects/lightning/en/stable>`__,
+#
+# Lightning-GPU has feature parity with `the rest of Lightning state-vector simulators <https://docs.pennylane.ai/projects/lightning/en/stable>`__,
 # providing native support for many PennyLane's operations and measurement processes with
 # a fast adjoint-Jacobian differentiation implementation.
 #
 # In the next section, we demonstrate how to compute the gradient of your quantum programs
 # using the native adjoint-Jacobian method on this device.
-#
+
 ##############################################################################
 # Compute gradients
 # ------------------
@@ -158,7 +156,7 @@ to highlight Catalyst with Lightning-GPU features.
 # We follow the same steps as in
 # `the VQE demo <https://pennylane.ai/qml/demos/tutorial_how_to_quantum_just_in_time_compile_vqe_catalyst>`__,
 # to QJIT-compile the entire optimization workflow.
-
+#
 # .. code-block:: python
 #
 #     import catalyst
