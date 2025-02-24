@@ -6,10 +6,10 @@ methods for solving linear system problems :math:`Ax=b` for certain sparse matri
 this demo, you will learn how to implement this algorithm in the high-level language
 `Qrisp <https://www.qrisp.eu>`__.
 
-The programm features hybrid quantum-classical workflows and is
+The program features hybrid quantum-classical workflows and is
 compiled using `Catalyst <https://docs.pennylane.ai/projects/catalyst/en/stable/index.html>`__, a
 quantum just-in-time (QJIT) compiler framework. The goal of this demo is to showcase how Qrisp and
-Catalyst complement each other for implementing advanced quantum algorithms and compling them for
+Catalyst complement each other for implementing advanced quantum algorithms and compiling them for
 practically relevant problem sizes.
 
 In order to make this demo self-sufficient, it is structured such that it first offers a brief
@@ -25,7 +25,7 @@ the Catalyst features.
 Intro to Qrisp
 --------------
 
-Since this demo is featured here, there is a certain likelihood that you haven’t heard about Qrisp
+Since this demo is featured here, you may not have heard about Qrisp
 yet. If you feel addressed with this assumption, please don’t fret - we explain all the concepts
 necessary for you to follow along even if not already fluent in Qrisp. So, join us on this Magical
 Mystery Tour in the world of Qrisp, Catalyst, and HHL.
@@ -40,7 +40,7 @@ Mystery Tour in the world of Qrisp, Catalyst, and HHL.
     similarly to how one would program classically.
 
     Qrisp also supports a modular architecture, allowing you to use, replace, and optimize code
-    components easily. You will get to see this in play a bit later in this tutorial.
+    components easily. We'll demonstrate this later in this demo.
 
 You can install Qrisp to experiment with this implementation yourself, at your own pace, by calling
 ``pip install qrisp``.
@@ -97,7 +97,7 @@ print(qv.qs)
 #    QuantumVariable qv_0
 
 ######################################################################
-# So far, this doesn’t yet seem that different from what you are used to, but it provides the
+# So far, this doesn’t seem that different from what you are used to, but it provides the
 # nurturing ground for other neat features like QuantumTypes.
 #
 # QuantumFloat
@@ -158,7 +158,7 @@ print(f)
 #    {2.5: 1.0}
 
 ######################################################################
-# Another QuantumType we will use in this tutorial are the QuantumBools, representing boolean truth
+# Another QuantumType we will use in this demo are the QuantumBools, representing boolean truth
 # values. They can be either used for comparison, or as a return type of comparison operators. We can
 # also perform operations on them:
 
@@ -233,7 +233,7 @@ print(comparison.qs.statevector())
 # Jasp
 # ~~~~
 #
-# Jasp is a submodule of Qrisp that allows you to scale up your Qrisp code to to practically relevant
+# Jasp is a submodule of Qrisp that allows you to scale up your Qrisp code to practically relevant
 # problem sizes. Apart from significantly speeding up compilation, Jasp provides the functionality to
 # integrate classical real-time computations.
 #
@@ -300,15 +300,15 @@ def QPE(psi, U, precision=None, res=None):
 
 ######################################################################
 # The first step here is to create the QuantumFloat ``res`` which will contain the result. The first
-# argument specifies the amount of mantissa qubits, the QuantumFloat should contain and the second
-# argument specifies the exponent. Having :math:`n` mantissa qubits and and exponent of :math:`-n`
+# argument specifies the amount of mantissa qubits the QuantumFloat should contain and the second
+# argument specifies the exponent. Having :math:`n` mantissa qubits and exponent of :math:`-n`
 # means that this QuantumFloat can represent values between 0 and 1 with a granularity of
 # :math:`2^{-n}`. Subsequently, we apply an Hadamard gate to all qubits of ``res`` and continue by
 # performing controlled evaluations of :math:`U`. This is achieved by using the
 # ``with control(res[i]):`` statement. This statement enters a ControlEnvironment such that every
 # quantum operation inside the indented code block will be controlled on the :math:`i`-th qubit of
 # ``res``. The ``for i in jrange(res.size)``\ statement performs a loop with a dynamic bound in Jasp
-# mode. The intricacies of what exactly this means are beyond the scope of this tutorial. You can just
+# mode. The intricacies of what exactly this means are beyond the scope of this demo. You can just
 # treat it like a normal ``range``. We conclude the algorithm by performing an inverse quantum fourier
 # transformation of ``res``.
 #
@@ -406,7 +406,7 @@ main()
 #
 # where :math:`|b\rangle` and :math:`|x\rangle` are expressed in the eigenbasis of :math:`A`.
 #
-# Solving the linerar system amounts to
+# Solving the linear system amounts to
 #
 # .. math:: \begin{align}|x\rangle&=A^{-1}|b\rangle\\&=\bigg(\sum_{i=0}^{N-1}\lambda_i^{-1}|u_i\rangle\langle u_i|\bigg)\sum_j\beta_j|u_j\rangle\\&=\sum_{i=0}^{N-1}\lambda_i^{-1}\beta_i|u_i\rangle\end{align}
 #
@@ -459,8 +459,8 @@ main()
 # --------------------------
 # Let’s put theory into practice and dive into an implementation of the HHL algorithm in Qrisp.
 #
-# As a fisrt step, we define a function that performs the inversion :math:`\lambda\mapsto\lambda^{-1}`.
-# In this example, we restict ourselves to an implementation that works for values
+# As a first step, we define a function that performs the inversion :math:`\lambda\mapsto\lambda^{-1}`.
+# In this example, we restrict ourselves to an implementation that works for values
 # :math:`\lambda=2^{-k}` for :math:`k\in\mathbb N`. (As shown above, a general inversion is available
 # in Qrisp and will soon be updated to be compatible with QJIT compilation!)
 
@@ -505,7 +505,7 @@ print(qrisp.multi_measurement([qf, res]))
 # amplitudes of the states, i.e. how do we go from :math:`|\Psi_3\rangle` to :math:`|\Psi_4\rangle`?
 #
 # Recently, efficient methods for black-box quantum state preparation that avoid arithmetic were
-# proposed, see `Bausch <https://quantum-journal.org/papers/q-2022-08-04-773/>`__, `Sanders et al. <https://arxiv.org/pdf/1807.03206>`__. In this demo, we use a routine proposed in the latter
+# proposed, see `Bausch <https://quantum-journal.org/papers/q-2022-08-04-773/>`__ and `Sanders et al. <https://arxiv.org/pdf/1807.03206>`__. In this demo, we use a routine proposed in the latter
 # reference which is based on a comparison between integers. This is implemented via the
 # aforementioned comparisons for QuantumFloats.
 #
@@ -516,7 +516,7 @@ print(qrisp.multi_measurement([qf, res]))
 #
 # .. math::  |\Psi_3\rangle = \sum_i \beta_i|u_i\rangle|\widetilde{\lambda}_i\rangle|y^{(i)}\rangle_{\text{res}}
 #
-# we pepare a uniform superposition of :math:`2^n` states in a ``case_indicator`` QuantumFloat.
+# we prepare a uniform superposition of :math:`2^n` states in a ``case_indicator`` QuantumFloat.
 #
 # .. math::  |\Psi_3'\rangle = \sum_i \beta_i|u_i\rangle|\widetilde{\lambda}_i\rangle|y^{(i)}\rangle_{\text{res}}\otimes\frac{1}{\sqrt{2^n}}\sum_{x=0}^{2^n-1}|x\rangle_{\text{case}}
 #
@@ -530,7 +530,7 @@ print(qrisp.multi_measurement([qf, res]))
 #
 # where :math:`|\Phi\rangle` is an orthogonal state with the last variables not in :math:`|0\rangle_{\text{case}}|0\rangle_{\text{qbl}}`. Hence, upon measuring the ``case_indicator`` in state :math:`|0\rangle` and the target ``qbl`` in state :math:`|0\rangle`, the desired state is prepared.
 #
-# **Steps 1-4** are preformed as a repeat-until-success (RUS) routine. This decorator converts the function to be executed within a repeat-until-success (RUS) procedure. The function must return a boolean value as first return value and is repeatedly executed until the first return value is True.
+# **Steps 1-4** are performed as a repeat-until-success (RUS) routine. This decorator converts the function to be executed within a RUS procedure. The function must return a Boolean value as first return value and is repeatedly executed until the first return value is True.
 
 
 @qrisp.RUS(static_argnums=[0, 1])
@@ -551,22 +551,22 @@ def HHL_encoding(b, hamiltonian_evolution, n, precision):
 
     cancellation_bool = (qrisp.measure(case_indicator) == 0) & (qrisp.measure(qbl) == 0)
 
-    # The first return value is a boolean value. Additional return values are QuantumVaraibles.
+    # The first return value is a boolean value. Additional return values are QuantumVariables.
     return cancellation_bool, qf, qpe_res, inv_res
 
 
 ######################################################################
-# The probability of success could be further increased by oblivious `amplitude amplification <https://pennylane.ai/qml/demos/tutorial_intro_amplitude_amplification>`__ in order
-# to obtain an optimal asymptotic scaling.
+# The probability of success could be further increased by oblivious `amplitude amplification <https://pennylane.ai/qml/demos/tutorial_intro_amplitude_amplification>`__ to achieve
+# optimal asymptotic scaling.
 #
 # Finally, we put all things together into the ``HHL`` function.
 #
 # This function takes the follwoing arguments:
 #
-# - ``b`` The vector :math:`b`.
-# - ``hamiltonian_evolution`` A function performing hamiltonian_evolution :math:`e^{itA}`.
-# - ``n`` The number of qubits encoding the state :math:`|b\rangle` (:math:`N=2^n`).
-# - ``precision`` The precison of the quantum phase estimation.
+# - ``b``: The vector :math:`b`.
+# - ``hamiltonian_evolution``: A function performing hamiltonian_evolution :math:`e^{itA}`.
+# - ``n``: The number of qubits encoding the state :math:`|b\rangle` (:math:`N=2^n`).
+# - ``precision``: The precision of the quantum phase estimation.
 #
 # The HHL function uses the previously defined subroutine to prepare the state :math:`|\Psi_4\rangle`
 # and subsequently uncomputes the :math:`|\widetilde{\lambda}\rangle` and :math:`|\lambda\rangle` quantum
@@ -594,7 +594,7 @@ def HHL(b, hamiltonian_evolution, n, precision):
 # Application: Solving systems of linear equations
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# Let’s try a first simple example. First, the matrix :math:`A` is repesented as a Pauli operator
+# Let’s try a first simple example. First, the matrix :math:`A` is represented as a Pauli operator
 # :math:`H` and the Hamiltonian evolution unitary :math:`U=e^{itH}` is obtained by Trotterization with
 # 1 step (as the Pauli terms commute in this case). We choose :math:`t=\pi` to ensure that
 # :math:`\widetilde{\lambda}_i=\lambda_i t/2\pi` are of the form :math:`2^{-k}` for a positive integer
@@ -620,7 +620,7 @@ def U(qf):
 # .. _terminal_sampling:
 #
 # The ``terminal_sampling`` decorator performs a hybrid simulation and afterwards samples from the
-# resulting quantum state. We convert the resulting measurement probabilities to amplitudes by appling
+# resulting quantum state. We convert the resulting measurement probabilities to amplitudes by applying
 # the square root. Note that, minus signs of amplitudes cannot be recovered from measurement
 # probabilities.
 
@@ -768,8 +768,8 @@ print(x)
 #      0.04179596  0.63878104]
 
 ######################################################################
-# First of all, kudos for making it to this point of the tutorial. Prior to proceeding to the final
-# part of the tutorial showcasing the awesomeness of QJIT compilation with Catalyst, let’s rewind for
+# First of all, kudos for making it to this point of the demo. Prior to proceeding to the final
+# part of the demo showcasing the awesomeness of QJIT compilation with Catalyst, let’s rewind for
 # a second, take a deep breath, and go through the steps and concepts you learned so far.
 #
 # .. admonition:: Intermezzo: Quick Recap
@@ -778,7 +778,7 @@ print(x)
 #     Starting with getting familiar with Qrisp’s approach to programming through the use of
 #     QuantumVariables, we foreshadowed the two QuantumTypes used in the implementation of HHL:
 #     QuantumFloats, and QuantumBools. Following a quick mention of Jasp and the ability of doing
-#     real-time computations using this module, the qrispy QPE implementation was demonstrated with a
+#     real-time computations using this module, the 'Qrisp-y' QPE implementation was demonstrated with a
 #     simple example.
 #
 #     Equipped with a theoretical introduction to HHL and outlining the steps required to perform this
@@ -789,7 +789,7 @@ print(x)
 #     functions) - the HHL_encoding and QPE - into a simple function. With a brief feature apperance of
 #     Hamiltonian simulation you then successfully managed to solve two systems of linear equations.
 #
-# Before moving on to the part of the tutorial showcasing the Catalyst capabilities, let’s just
+# Before moving on to the part of the demo showcasing Catalyst's capabilities, let’s
 # appreciate one last time how elegantly we can call the HHL algorithm:
 # ``x = HHL(b, hamiltonian_evolution, n, precision)``.
 #
@@ -810,8 +810,8 @@ print(x)
 # `here <https://www.frontiersin.org/journals/physics/articles/10.3389/fphy.2022.940293/full>`__.
 #
 # Jasp has been built with a direct Catalyst integration implying Jasp programs can be converted to
-# QIR via the Catalyst pipeline. This conversion is really simple: You simply capture the Qrisp
-# computation using the ``make_jaspr`` function and afterwards call ``to_qir``.
+# QIR via the Catalyst pipeline. This conversion is straightforward: You simply capture the Qrisp
+# computation using the ``make_jaspr`` function and then call ``to_qir``.
 
 
 def main():
@@ -821,7 +821,7 @@ def main():
     # quantum variable returned by the HHL algorithm)
     # Within the above examples, we used the terminal_sampling
     # decorator, which is a convenience feature and allows
-    # a much fast sampling procedure.
+    # a much faster sampling procedure.
     # The terminal_sampling decorator expects a function returning
     # quantum variables, while most other evaluation modes require
     # classical return values.
@@ -869,10 +869,10 @@ print(qir_str[:2000])
 # The Catalyst runtime
 # --------------------
 #
-# Jasp is also capable of targeting the Catalyst execution runtime (i.e. the Lightning simulator).
+# Jasp is also capable of targeting the Catalyst execution runtime (i.e., the Lightning simulator).
 # There are, however, still some simulator features to be implemented on Jasp side, which prevents
 # efficient sampling. We restrict the demonstration to the smaller examples from above to limit the
-# overal execution time required. (Warning: The execution may take more than 15 minutes.)
+# overall execution time required. (Warning: The execution may take more than 15 minutes.)
 
 
 A = np.array([[3 / 8, 1 / 8], [1 / 8, 3 / 8]])
@@ -909,17 +909,17 @@ print(samples)
 
 ######################################################################
 # Scrolling back to the :ref:`terminal_sampling` cell, we see that the
-# expectated distribution is 50/50 between one and zero, which roughly agrees to the result of the
-# previous cell and concludes this tutorial.
+# expected distribution is 50/50 between one and zero, which roughly agrees to the result of the
+# previous cell and concludes this demo.
 #
 # Conclusion
 # ----------
 #
-# In this demo we have shown how to implement the HHL algorithm featuring classical real-time
+# In this demo, we have shown how to implement the HHL algorithm featuring classical real-time
 # computations in the high-level language Qrisp. This algorithm is important in a variety of use cases
 # such as solving differential equations, accelerating machine learning, and more generally, any task
 # that involves solving linear systems of equations. Along the way, we have dipped into advanced
-# concepts such as Linear Combination of Unitaries or Hamiltonian simulation. Moreover, we have
+# concepts such as Linear Combination of Unitaries and Hamiltonian simulation. Moreover, we have
 # demonstrated how Qrisp and Catalyst complement each other for translating a high-level
 # implementation into low-level QIR.
 #
@@ -946,7 +946,7 @@ print(samples)
 
 
 ##############################################################################
-# About the author
+# About the authors
 # ----------------
 #
 #
