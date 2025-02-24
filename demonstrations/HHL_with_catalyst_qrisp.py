@@ -152,17 +152,10 @@ print(f)
 #
 # .. code-block:: none
 #
-#    An NVIDIA GPU may be present on this machine, but a CUDA-enabled jaxlib is not installed. Falling back to cpu.
-
-######################################################################
-# .. rst-class:: sphx-glr-script-out
-#
-# .. code-block:: none
-#
-#    {7: 1.0}                                                                             [2K
-#    {-2: 1.0}                                                                            [2K
-#    {-4: 1.0}                                                                            [2K
-#    {2.5: 1.0}                                                                           [2K
+#    {7: 1.0}
+#    {-2: 1.0}
+#    {-4: 1.0}
+#    {2.5: 1.0}
 
 ######################################################################
 # Another QuantumType we will use in this tutorial are the QuantumBools, representing boolean truth
@@ -179,7 +172,7 @@ print(qb)
 #
 # .. code-block:: none
 #
-#    {False: 0.5, True: 0.5}                                                              [2K
+#    {False: 0.5, True: 0.5}
 
 ######################################################################
 # With a second QuantumBool, we can demonstrate and evaluate some logical functions:
@@ -195,9 +188,9 @@ print(qb & qb_1)
 #
 # .. code-block:: none
 #
-#    {False: 1.0}                                                                         [2K
-#    {False: 0.5, True: 0.5}                                                              [2K
-#    {False: 1.0}                                                                         [2K
+#    {False: 1.0}
+#    {False: 0.5, True: 0.5}
+#    {False: 1.0}
 
 ######################################################################
 # Comparisons, however, are not limited to only QuantumBools, but also for other types, like the
@@ -216,9 +209,9 @@ print(qb_3.qs.statevector())
 #
 # .. code-block:: none
 #
-#    {0: 0.5, 8: 0.5}                                                                     [2K
-#    {False: 0.5, True: 0.5}                                                              [2K
-#    sqrt(2)*(|0>*|False> + |8>*|True>)/2                                                 [2K
+#    {0: 0.5, 8: 0.5}
+#    {False: 0.5, True: 0.5}
+#    sqrt(2)*(|0>*|False> + |8>*|True>)/2
 
 ######################################################################
 # We can also compare one QuantumFloat to another:
@@ -234,7 +227,7 @@ print(comparison.qs.statevector())
 #
 # .. code-block:: none
 #
-#    sqrt(2)*(|0>*|False>*|4>*|True> + |8>*|True>*|4>*|False>)/2                          [2K
+#    sqrt(2)*(|0>*|False>*|4>*|True> + |8>*|True>*|4>*|False>)/2
 
 ######################################################################
 # Jasp
@@ -361,7 +354,7 @@ print(qrisp.multi_measurement([psi, res]))
 #
 # .. code-block:: none
 #
-#    {(0, 0.0): 0.25, (1, 0.5): 0.25, (2, 0.125): 0.25, (3, 0.625): 0.25}                 [2K
+#    {(0, 0.0): 0.25, (1, 0.5): 0.25, (2, 0.125): 0.25, (3, 0.625): 0.25}
 
 ######################################################################
 # This example can also seamlessly be executed in Jasp mode: In this case, the ``terminal_sampling``
@@ -385,10 +378,7 @@ main()
 #
 # .. code-block:: none
 #
-#                                                                                         [2K# .. rst-class:: sphx-glr-script-out
-#
-# .. code-block:: none
-#
+#    {0.625: 1.0}
 
 ######################################################################
 # The HHL algorithm
@@ -627,6 +617,8 @@ def U(qf):
 
 
 ######################################################################
+# .. _terminal_sampling:
+#
 # The ``terminal_sampling`` decorator performs a hybrid simulation and afterwards samples from the
 # resulting quantum state. We convert the resulting measurement probabilities to amplitudes by appling
 # the square root. Note that, minus signs of amplitudes cannot be recovered from measurement
@@ -651,7 +643,7 @@ print(res_dict)
 #
 # .. code-block:: none
 #
-#    {0.0: 0.7071067811865476, 1.0: 0.7071067811865476}                                   [2K
+#    {0.0: 0.7071067811865476, 1.0: 0.7071067811865476}
 
 ######################################################################
 # Finally, let’s compare to the classical result.
@@ -717,26 +709,26 @@ print(b)
 # .. code-block:: none
 #
 #    Hermitian matrix A:
-#    [[ 0.2530098  -0.0306418  -0.02393759 -0.03482885 -0.00772438 -0.00386646
-#      -0.0538227   0.1034769 ]
-#     [-0.0306418   0.31434637  0.05997223 -0.02995664  0.08752793  0.00046589
-#      -0.01816993 -0.01303441]
-#     [-0.02393759  0.05997223  0.24123322  0.04350934  0.06856464  0.00170155
-#      -0.02392206 -0.10026846]
-#     [-0.03482885 -0.02995664  0.04350934  0.32304179 -0.08719649 -0.02950604
-#       0.07254225 -0.08082727]
-#     [-0.00772438  0.08752793  0.06856464 -0.08719649  0.34813058 -0.03792927
-#      -0.02428807 -0.01518821]
-#     [-0.00386646  0.00046589  0.00170155 -0.02950604 -0.03792927  0.16093245
-#      -0.02988776 -0.01191407]
-#     [-0.0538227  -0.01816993 -0.02392206  0.07254225 -0.02428807 -0.02988776
-#       0.19709585 -0.02091689]
-#     [ 0.1034769  -0.01303441 -0.10026846 -0.08082727 -0.01518821 -0.01191407
-#      -0.02091689  0.28720995]]
+#    [[ 0.19252221  0.03518761 -0.08725666  0.02288045  0.04538538  0.03247052
+#      -0.06519315 -0.06229545]
+#     [ 0.03518761  0.28758984  0.03595881  0.06702119  0.03489919  0.07145221
+#       0.07085617 -0.10555209]
+#     [-0.08725666  0.03595881  0.28859598  0.00165777 -0.05503796 -0.03801707
+#       0.13179087  0.03443008]
+#     [ 0.02288045  0.06702119  0.00165777  0.26810863 -0.12651043  0.00385685
+#      -0.01492278 -0.10505962]
+#     [ 0.04538538  0.03489919 -0.05503796 -0.12651043  0.34469893  0.07605711
+#       0.01253655  0.02660667]
+#     [ 0.03247052  0.07145221 -0.03801707  0.00385685  0.07605711  0.31567327
+#       0.080171   -0.01770181]
+#     [-0.06519315  0.07085617  0.13179087 -0.01492278  0.01253655  0.080171
+#       0.30119828  0.03446737]
+#     [-0.06229545 -0.10555209  0.03443008 -0.10505962  0.02660667 -0.01770181
+#       0.03446737  0.25161286]]
 #    Eigenvalues:
-#    [0.5   0.25  0.125 0.5   0.125 0.25  0.25  0.125]
+#    [0.25  0.5   0.5   0.125 0.125 0.5   0.125 0.125]
 #    b:
-#    [1 0 1 1 1 1 0 0]
+#    [1 0 0 0 0 0 0 1]
 
 
 @qrisp.terminal_sampling
@@ -757,10 +749,8 @@ np.array([res_dict[key] for key in sorted(res_dict)])
 #
 # .. code-block:: none
 #
-#                                                                                         [2K# .. rst-class:: sphx-glr-script-out
-#
-# .. code-block:: none
-#
+#    array([0.73688311, 0.11916253, 0.09056467, 0.11650071, 0.09336856,
+#           0.04641304, 0.04607175, 0.63877596])
 
 ######################################################################
 # Let’s compare to the classical solution:
@@ -774,8 +764,8 @@ print(x)
 #
 # .. code-block:: none
 #
-#    [ 0.37273098 -0.06708905  0.24579786  0.39862931  0.38287243  0.6756947
-#      0.14101042  0.11920652]
+#    [ 0.73761732  0.11838953  0.08853343  0.11632373 -0.09299411 -0.04581715
+#      0.04179596  0.63878104]
 
 ######################################################################
 # First of all, kudos for making it to this point of the tutorial. Prior to proceeding to the final
@@ -848,7 +838,7 @@ print(qir_str[:2000])
 #
 # .. code-block:: none
 #
-#    ; ModuleID = 'LLVMDialectModule'                                                     [2K
+#    ; ModuleID = 'LLVMDialectModule'
 #    source_filename = "LLVMDialectModule"
 #    target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 #    target triple = "x86_64-unknown-linux-gnu"
@@ -915,10 +905,10 @@ print(samples)
 #
 # .. code-block:: none
 #
-#    [1.0, 1.0, 0.0, 1.0, 0.0]                                                            [2K
+#    [1.0, 1.0, 0.0, 1.0, 0.0]
 
 ######################################################################
-# Scrolling back to the ```terminal_sampling`` cell <#terminal_sampling>`__, we see that the
+# Scrolling back to the :ref:`terminal_sampling` cell, we see that the
 # expectated distribution is 50/50 between one and zero, which roughly agrees to the result of the
 # previous cell and concludes this tutorial.
 #
