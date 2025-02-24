@@ -8,8 +8,8 @@
             "username": "sshu"
         }
     ],
-    "dateOfPublication": "2025-02-21T09:00:00+00:00",
-    "dateOfLastModification": "2025-02-21T09:00:00+00:00",
+    "dateOfPublication": "2025-02-21T10:00:00+00:00",
+    "dateOfLastModification": "2025-02-21T10:00:00+00:00",
     "categories": [
         "Getting Started",
         "Quantum Chemistry",
@@ -21,11 +21,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "../_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_Lightning_GPU_Catalyst.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_Lightning_GPU_Catalyst.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "../_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_Lightning_GPU_Catalyst.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_Lightning_GPU_Catalyst.png"
         }
     ],
     "seoDescription": "Learn how to use Catalyst with Lightning-GPU to boost the runtime performance of your quantum programs.",
