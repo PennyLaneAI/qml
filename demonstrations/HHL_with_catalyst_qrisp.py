@@ -244,7 +244,7 @@ print(comparison.qs.statevector())
 #     computation, while the quantum computer stays in superposition. This computation has to happen much
 #     faster than the coherence time, so performing that computation by waiting for the Python interpreter
 #     is impossible. Real-time computations are essential for many techniques in error correction, such as
-#     syndrome decoding or magic state distillation. On the algorithmic level, real-time computations have also
+#     syndrome decoding or `magic state distillation <https://pennylane.ai/qml/demos/tutorial_magic_state_distillation>`__. On the algorithmic level, real-time computations have also
 #     become more popular since they are so much cheaper than the quantum equivalent. Examples are
 #     Gidney’s adder or repeat until success protocols like HHL.
 #
@@ -261,8 +261,8 @@ print(comparison.qs.statevector())
 # QPE in Qrisp
 # ~~~~~~~~~~~~
 #
-# For deepening your understanding of QPE, we would like to refer you to another `Pennylane
-# demo <https://pennylane.ai/qml/demos/tutorial_qpe>`__, and instead focus on how QPE is implemented
+# For deepening your understanding of QPE, we would like to refer you to the `Intro
+# to Quantum Phase Estimation demo<https://pennylane.ai/qml/demos/tutorial_qpe>`__, and instead focus on how QPE is implemented
 # in Qrisp, and later showcase how to use it in the HHL implementation.
 #
 # .. admonition:: Quantum Phase Estimation (QPE)
@@ -344,7 +344,7 @@ res = QPE(psi, U, precision=3)
 #
 # .. math::  \frac{1}{2} \text{QPE}_{U}(|0\rangle + |1\rangle + |2\rangle + |3\rangle)|0\rangle = \frac{1}{2} (|0\rangle|0\rangle + |1\rangle|\phi_1\rangle + |2\rangle|\phi_2\rangle +|3\rangle|\phi_1 + \phi_2\rangle)
 #
-# We verify by measuring ``psi`` togehter with ``res``:
+# We verify by measuring ``psi`` together with ``res``:
 
 
 print(qrisp.multi_measurement([psi, res]))
@@ -447,7 +447,8 @@ main()
 #   .. math::  |\Psi_5\rangle = \sum_i \lambda_i^{-1}\beta_i|u_i\rangle = |x\rangle
 #
 # This concludes the HHL algorithm. The variable initialized in state :math:`|b\rangle` is now found in
-# state :math:`|x\rangle`. As shown in the `original paper <https://arxiv.org/pdf/0811.3171>`__, the
+# state :math:`|x\rangle`. As shown in the original paper on `Quantum algorithm for linear systems of equations
+# <https://arxiv.org/pdf/0811.3171>`__, the
 # runtime of this algorithm is :math:`\mathcal{O}(\log(N)s^2\kappa^2/\epsilon)` where :math:`s` and
 # :math:`\kappa` are the sparsity and condition number of the matrix :math:`A`, respectively, and
 # :math:`\epsilon` is the precison of the solution. The logarithmic dependence on the dimension
@@ -596,7 +597,7 @@ def HHL(b, hamiltonian_evolution, n, precision):
 #
 # Let’s try a first simple example. First, the matrix :math:`A` is represented as a Pauli operator
 # :math:`H` and the Hamiltonian evolution unitary :math:`U=e^{itH}` is obtained by Trotterization with
-# 1 step (as the Pauli terms commute in this case). We choose :math:`t=\pi` to ensure that
+# one step (as the Pauli terms commute in this case). We choose :math:`t=\pi` to ensure that
 # :math:`\widetilde{\lambda}_i=\lambda_i t/2\pi` are of the form :math:`2^{-k}` for a positive integer
 # :math:`k`. This is enabled by the Qrisp’s ``QubitOperator`` class providing the tools to describe,
 # optimize and efficiently simulate quantum Hamiltonians.
@@ -621,7 +622,7 @@ def U(qf):
 #
 # The ``terminal_sampling`` decorator performs a hybrid simulation and afterwards samples from the
 # resulting quantum state. We convert the resulting measurement probabilities to amplitudes by applying
-# the square root. Note that, minus signs of amplitudes cannot be recovered from measurement
+# the square root. Note that minus signs of amplitudes cannot be recovered from measurement
 # probabilities.
 
 
@@ -786,7 +787,7 @@ print(x)
 #     success feature of Jasp.
 #
 #     Then, putting everything together, we combined the previously defined building blocks (read: Python
-#     functions) - the HHL_encoding and QPE - into a simple function. With a brief feature apperance of
+#     functions)—the HHL_encoding and QPE—into a simple function. With a brief feature appearance of
 #     Hamiltonian simulation you then successfully managed to solve two systems of linear equations.
 #
 # Before moving on to the part of the demo showcasing Catalyst's capabilities, let’s
@@ -806,8 +807,9 @@ print(x)
 # QIR essentially embeds quantum aspects into `LLVM <https://llvm.org/docs/>`__, which is the
 # foundation of a lot of modern compiler infrastructure. This implies QIR based software stacks are
 # able to integrate a large part of established classical software and also express real-time control
-# structures. Read more about QIR here `here <https://www.qir-alliance.org/>`__ and
-# `here <https://www.frontiersin.org/journals/physics/articles/10.3389/fphy.2022.940293/full>`__.
+# structures. Read more about QIR at the `QIR Alliance website <https://www.qir-alliance.org/>`__ and
+# the `Advancing hybrid quantum–classical computation with real-time execution paper
+# <https://www.frontiersin.org/journals/physics/articles/10.3389/fphy.2022.940293/full>`__.
 #
 # Jasp has been built with a direct Catalyst integration implying Jasp programs can be converted to
 # QIR via the Catalyst pipeline. This conversion is straightforward: You simply capture the Qrisp
