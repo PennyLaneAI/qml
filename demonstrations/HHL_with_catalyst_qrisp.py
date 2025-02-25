@@ -398,7 +398,7 @@ main()
 # :math:`b`, the Quantum Linear Systems Problem (QSLP) consists of preparing a quantum state
 # :math:`|x\rangle` with amplitudes proportional to the solution :math:`x` of the linear system of
 # equations :math:`Ax=b`. Thereby, it can exhibit an exponential speedup over classical methods for
-# certain sparse matrices :math:`A`. The HHL quantum algorithm [#HHL_2009]_, [#HHL_step-by-step_2023]_ and, more generally, quantum linear
+# certain sparse matrices :math:`A`. The HHL quantum algorithm [#HHL_2009]_ [#HHL_step-by-step_2023]_ and, more generally, quantum linear
 # systems algorithms, hold significant promise for accelerating computations in fields that rely
 # heavily on solving linear systems of equations, such as `solving differential
 # equations <https://arxiv.org/abs/2202.01054v4>`__, or accelerating machine learning.
@@ -939,11 +939,11 @@ print(samples)
 # References
 # ----------
 #
-# .. [#Bausch_2022]
+# .. [#qrisp_2024]
 #
-#     J. Bausch,
-#     "Fast Black-Box Quantum State Preparation",
-#     `Quantum 6, 773 <https://quantum-journal.org/papers/q-2022-08-04-773/#>`__, 2022.
+#     R. Seidel, S. Bock, R. Zander, M. Petrič, N. Steinmann, N. Tcholtchev, M. Hauswirth,
+#     "Qrisp: A Framework for Compilable High-Level Programming of Gate-Based Quantum Computers",
+#     `arXiv:2406.14792 <https://arxiv.org/abs/2406.14792>`__, 2024.
 #
 # .. [#HHL_2009]
 #
@@ -951,23 +951,23 @@ print(samples)
 #     "Quantum Algorithm for Linear Systems of Equations",
 #     `Physical Review Letters 103(15), 150503 <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.103.150502>`__, 2009.
 #
-# .. [#Sanders_2019]
-#
-#     Y. R. Sanders, G. H. Low, A. Scherer, D. W. Berry,
-#     "Black-Box Quantum State Preparation without Arithmetic",
-#     `Physical review letters 122(2), 020502 <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.122.020502>`__, 2019.
-#
-# .. [#qrisp_2024]
-#
-#     R. Seidel, S. Bock, R. Zander, M. Petrič, N. Steinmann, N. Tcholtchev, M. Hauswirth,
-#     "Qrisp: A Framework for Compilable High-Level Programming of Gate-Based Quantum Computers",
-#     `arXiv:2406.14792 <https://arxiv.org/abs/2406.14792>`__, 2024.
-#
 # .. [#HHL_step-by-step_2023]
 #
 #     A. Zaman, H. J. Morrell, H. Y. Wong,
 #     "A Step-by-Step HHL Algorithm Walkthrough to Enhance Understanding of Critical Quantum Computing Concepts",
 #     `IEEE Access 11 <https://ieeexplore.ieee.org/document/10189828>`__, 2023.
+#
+# .. [#Bausch_2022]
+#
+#     J. Bausch,
+#     "Fast Black-Box Quantum State Preparation",
+#     `Quantum 6, 773 <https://quantum-journal.org/papers/q-2022-08-04-773/#>`__, 2022.
+#
+# .. [#Sanders_2019]
+#
+#     Y. R. Sanders, G. H. Low, A. Scherer, D. W. Berry,
+#     "Black-Box Quantum State Preparation without Arithmetic",
+#     `Physical review letters 122(2), 020502 <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.122.020502>`__, 2019.
 
 
 ##############################################################################
