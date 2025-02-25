@@ -18,6 +18,24 @@ on:
         type: string
         default: sc-81925-qml-repository-ci-pushes-newly-built-demos
 
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Environment to deploy to
+        type: environment
+        required: true
+      artifact-name:
+        description: Name of artifact containing demo zip files
+        type: string
+      preview:
+        description: Whether to deploy demos as preview
+        type: boolean
+        required: true
+      branch:
+        description: Branch to checkout
+        type: string
+        default: sc-81925-qml-repository-ci-pushes-newly-built-demos
+
 jobs:
   deploy-demos:
     runs-on: ubuntu-latest
@@ -44,7 +62,7 @@ jobs:
           python-version: '3.10'
       
       - name: Install python requirements
-        run: pip install -r .github/workflows/deploy/requirements.txt
+        run: pip install -r .github/workflows/qml_pipeline_v2/requirements.txt
       
       - name: Fetch demo build artifact
         uses: actions/download-artifact@v4
