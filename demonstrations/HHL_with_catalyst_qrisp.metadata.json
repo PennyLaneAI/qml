@@ -28,7 +28,7 @@
             "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_HHL_with_catalyst_qrisp.png"
         }
     ],
-    "seoDescription": "SEO description to be filled in (TBD)",
+    "seoDescription": "Learn how to implement the HHL quantum algorithm for solving linear systems using Qrisp and Catalyst.",
     "doi": "",
     "references": [
         {
@@ -44,5 +44,20 @@
     "basedOnPapers": [],
     "referencedByPapers": [],
     "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_qjit_compile_grovers_algorithm_with_catalyst",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_how_to_quantum_just_in_time_compile_vqe_catalyst",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_qpe",
+            "weight": 1.0
+        }
     ]
 }
