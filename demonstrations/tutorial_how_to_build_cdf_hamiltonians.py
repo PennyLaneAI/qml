@@ -232,10 +232,11 @@ def core_unitary_rotation(core, norbs, body_type):
 # We can now use them to approximate the evolution operator :math:`e^{iHt}` for a time
 # :math:`t` with the Suzuki-Trotter product formula, which uses symmetrized products
 # :math:`S_m` defined for an order :math:`m \in [1, 2, 4, \ldots, 2k \in \mathbb{N}]`
-# and repeated multiple times [#trotter]_. In general, this can be easily implemented using
-# the :class:`~.pennylane.TrotterProduct` operation that defines those products recursively
-# for a given number of steps and therefore leads to an exponential scaling in its complexity
-# with the number of terms in the Hamiltonian, making it inefficient for larger system sizes.
+# and repeated multiple times [#trotter]_. In general, this can be easily implemented for
+# standard non-factorized Hamiltonians using the :class:`~.pennylane.TrotterProduct` operation
+# that defines those products recursively for a given number of steps and therefore leads
+# to an exponential scaling in its complexity with the number of terms in the Hamiltonian,
+# making it inefficient for larger system sizes.
 #
 # Such a scaling behaviour could be managed to a great extent by working with the compressed
 # double factorized form of the Hamiltonian as it allows reducing the number of terms in the
