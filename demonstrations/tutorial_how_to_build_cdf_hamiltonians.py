@@ -40,7 +40,7 @@ print(f"One-body and two-body tensor shapes: {one_body.shape}, {two_body.shape}"
 # To do this, we rewrite the above Hamiltonian as :math:`H_{\text{C}}`, with the
 # transformed one-body tensor :math:`T_{pq} = h_{pq} - 0.5 \sum_{s} g_{pssq}` as:
 #
-# .. math::  H_{\text{C}} = \mu + \sum_{\sigma, pq} T_{pq} a^\dagger_{\sigma, p} a_{\sigma, q} + \sum_{\sigma \tau, pqrs} V_{pqrs} a^\dagger_{\sigma, p} a_{\sigma, q} a^\dagger_{\tau, r} a_{\tau, s}.
+# .. math::  H_{\text{C}} = \mu + \sum_{\sigma \in {\uparrow, \downarrow}} \sum_{pq} T_{pq} a^\dagger_{\sigma, p} a_{\sigma, q} + \sum_{\sigma, \tau \in {\uparrow, \downarrow}} \sum_{pqrs} V_{pqrs} a^\dagger_{\sigma, p} a_{\sigma, q} a^\dagger_{\tau, r} a_{\tau, s}.
 #
 # We can easily obtain the above modified one-body and two-body tensors by doing the following:
 #
@@ -57,20 +57,24 @@ one_chem = one_body - qml.math.einsum("prrs", two_chem)  # T_pq
 # -------------------------------------------
 #
 # The double factorization of a Hamiltonian can be described as a Hamiltonian manipulation
-# technique based on decomposing the :math:`V_{pqrs}` to orthonormal core tensors (:math:`Z`)
-# and symmetric leaf tensors (:math:`U`) such that the Hamiltonian can be expressed as [#cdf2]_:
+# technique based on decomposing the :math:`V_{pqrs}` to symmetric tensors :math:`L^{(t)}`
+# called *factors*, such that :math:`V_{pqrs} = \sum_t^T L_{pq}^{(t)} L_{rs}^{(t) {\dagger}}`
+# and the rank :math:`T \leq N^2`. We can do this by performing an eigenvalue, or Cholesky
+# decomposition of the two-body tensor. Moreover, each of these tensors can be further
+# eigendecomposed as :math:`L^{(t)}_{pq} = \sum_{i} U_{pi}^{(t)} W_i^{(t)} U_{qi}^{(t)}`
+# with :math:`Z_{ij}^{(t)} = W_i^{(t)} W_j^{(t)}` to further obtain orthonormal *core*
+# tensors (:math:`Z`) and symmetric *leaf* tensors (:math:`U`) such that the Hamiltonian
+# can be expressed as the following after the second tensor factorization [#cdf2]_:
 #
-# .. math::  V_{pqrs} \approx \sum_t^T \sum_{ij} U_{pi}^{(t)} U_{pj}^{(t)} Z_{ij}^{(t)} U_{qk}^{(t)} U_{ql}^{(t)}
+# .. math::  V_{pqrs} \approx \sum_t^T \sum_{ij} U_{pi}^{(t)} U_{pj}^{(t)} Z_{ij}^{(t)} U_{qk}^{(t)} U_{ql}^{(t)}.
 #
-# We can do this as shown below using the :func:`~pennylane.qchem.factorize` function,
-# which performs an eigenvalue, or Cholesky decomposition, to obtain the symmetric tensors
-# :math:`L^{(t)}`, such that, :math:`V_{pqrs} = \sum_t^T L_{pq}^{(t)} L_{rs}^{(t) {\dagger}}`
-# with rank :math:`T \leq N^2`. This decomposition is called the *explicit* double
-# factorization (XDF) as it is exact, and the core and leaf tensors are obtained by further
-# eigendecomposing each term :math:`L^{(t)}_{pq} = \sum_{i} U_{pi}^{(t)} W_i^{(t)} U_{qi}^{(t)}`
-# with :math:`Z_{ij}^{(t)} = W_i^{(t)} W_j^{(t)}`. In PennyLane, we can truncate the resulting
-# symmetric terms by discarding the ones with individual contributions below a specified threshold
-# by using the ``tol_factor`` and their individual ranks via ``tol_eigval`` keyword arguments:
+# This decomposition is referred to as the *explicit* double factorization (XDF) and allows
+# decreasing the number of terms in the to :math:`O(N^3)` from :math:`O(N^4)`, assuming the
+# rank of second tensor factorization will be :math:`O(N)`. In PennyLane, this can be done
+# using the :func:`~pennylane.qchem.factorize` function, where we can truncate the resulting
+# factors by discarding the ones with individual contributions below a specified threshold
+# and the rank of their second factorization using the ``tol_factor`` and ``tol_eigval``
+# keyword arguments, respectively, as shown below:
 #
 
 factors, _, _ = qml.qchem.factorize(two_chem, cholesky=True, tol_factor=1e-5)
@@ -95,7 +99,7 @@ core_shift, one_shift, two_shift = qml.qchem.symmetry_shift(
 
 ######################################################################
 # We can compare the improvement in the one-norm of the shifted Hamiltonian over the original
-# one by using the :class:`~.pennylane.resource.DoubleFactorization`'s ``lamb`` method:
+# one by accessing the :class:`~.pennylane.resource.DoubleFactorization`'s ``lamb`` attribute:
 #
 
 from pennylane.resource import DoubleFactorization as DF
@@ -115,7 +119,7 @@ print(f"Decrease in one-norm: {norm_shift}")
 # :math:`H^\prime`, such that the approximation error :math:`||H_{\text{C}} - H^\prime||`
 # remains below a desired threshold. This is referred to as the *compressed* double factorization
 # (CDF) as it reduces the number of terms in the factorization of the two-body term to :math:`O(N)`
-# from :math:`O(N^2)`, and it achieves lower approximation errors than the truncated XDF. This can
+# from :math:`O(N^3)`, and it achieves lower approximation errors than the truncated XDF. This can
 # be done by beginning with random :math:`N` orthornormal and symmetric tensors and optimizing
 # them based on the following cost function :math:`\mathcal{L}` in a greedy layered-wise manner:
 #
@@ -221,9 +225,8 @@ def core_unitary_rotation(core, norbs, body_type):
                 if odx1 != odx2 or sigma != tau:
                     two_wires = [2 * odx1 + sigma, 2 * odx2 + tau]
                     qml.MultiRZ(cval / 4.0, wires=two_wires)
-        qml.GlobalPhase(
-            -0.5 * qml.math.sum(core) - 0.25 * qml.math.trace(core), wires=range(2 * norbs)
-        )
+        gphase = 0.5 * qml.math.sum(core) + 0.25 * qml.math.trace(core)
+        qml.GlobalPhase(-gphase, wires=range(2 * norbs))
 
 ######################################################################
 # We can now use them to approximate the evolution operator :math:`e^{iHt}` for a time
@@ -236,7 +239,7 @@ def core_unitary_rotation(core, norbs, body_type):
 #
 # Such a scaling behaviour could be managed to a great extent by working with the compressed
 # double factorized form of the Hamiltonian as it allows reducing the number of terms in the
-# Hamiltonian from :math:`O(N^2)` to :math:`O(N)`. While doing this is not directly supported
+# Hamiltonian from :math:`O(N^4)` to :math:`O(N)`. While doing this is not directly supported
 # in PennyLane in the form of a template, we can still implement the first-order Trotter
 # approximation using the following :func:`CDFTrotterProduct` function that uses the
 # compressed double factorized form of the Hamiltonian with the ``leaf_unitary_rotation``
@@ -280,9 +283,9 @@ def CDFTrotterProduct(nuc_core_cdf, one_body_cdf, two_body_cdf, time, num_steps=
     qml.GlobalPhase(nuc_core_cdf * time, wires=range(2 * norbs))
 
 ######################################################################
-# We can use it to simulate the evolution of the linear hydrogen chain Hamiltonian described
-# in the double factorized form for a given number of steps ``num_steps`` and starting from
-# the Hartree-Fock state ``hf_state``:
+# We can use it to simulate the evolution of the linear hydrogen chain Hamiltonian H:math:`_4`
+# described in the compressed double factorized form for a given number of steps ``num_steps``
+# and starting from the Hartree-Fock state ``hf_state``:
 #
 
 num_wires, time = 2 * mol.n_orbitals, 1.0
