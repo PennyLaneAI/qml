@@ -12,15 +12,15 @@ quantum just-in-time (QJIT) compiler framework. The goal of this demo is to show
 Catalyst complement each other for implementing advanced quantum algorithms and compiling them for
 practically relevant problem sizes.
 
-In order to make this demo self-sufficient, it is structured such that it first offers a brief
-introduction to Qrisp, QuantumVariables and QuantumTypes, the implementation of Quantum Phase
-Estimation (QPE), before putting it into a higher gear with the HHL implementation and showcase of
-the Catalyst features.
-
 .. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_HHL_with_catalyst_qrisp.png
     :align: center
     :width: 70%
     :target: javascript:void(0)
+
+In order to make this demo self-sufficient, it is structured such that it first offers a brief
+introduction to Qrisp, QuantumVariables and QuantumTypes, the implementation of Quantum Phase
+Estimation (QPE), before putting it into a higher gear with the HHL implementation and showcase of
+the Catalyst features.
 
 Intro to Qrisp
 --------------
@@ -30,11 +30,11 @@ yet. If you feel addressed with this assumption, please don’t fret—we explai
 necessary for you to follow along even if not already fluent in Qrisp. So, join us on this Magical
 Mystery Tour in the world of Qrisp, Catalyst, and HHL.
 
-What is Qrisp? Qrisp is a high-level open-source programming framework. It offers an alternative 
-approach to circuit construction and algorithm development with its defining feature—
-QuantumVariables. This approach allows the user to step away from focusing on qubits and gates for 
-circuit construction when developing algorithms, and instead allows the user to code in terms of 
-variables and functions similarly to how one would program classically.
+What is Qrisp? Qrisp [#qrisp_2024]_ is a high-level open-source programming framework. It offers an alternative
+approach to circuit construction and algorithm development with its defining
+feature—QuantumVariables. This approach allows the user to step away from focusing on qubits and
+gates for circuit construction when developing algorithms, and instead allows the user to code in
+terms of variables and functions similarly to how one would program classically.
 
 Qrisp also supports a modular architecture, allowing you to use, replace, and optimize code
 components easily. We'll demonstrate this later in this demo.
@@ -65,7 +65,7 @@ qv = qrisp.QuantumVariable(5)
 
 # Apply gates to the QuantumVariable.
 qrisp.h(qv[0])
-qrisp.z(qv) # Z gate applied to all qubits
+qrisp.z(qv)  # Z gate applied to all qubits
 qrisp.cx(qv[0], qv[3])
 
 # Print the quantum circuit.
@@ -117,7 +117,7 @@ print(a)
 
 ######################################################################
 # Here, ``msize=3`` indicates the amount of mantissa qubits, which represent the significant digits of
-# a number in a floating-point representation, and ``exponent=-2`` indicates, you guessed correctly, 
+# a number in a floating-point representation, and ``exponent=-2`` indicates, you guessed correctly,
 # the exponent.
 #
 # .. tip::
@@ -265,7 +265,7 @@ print(comparison.qs.statevector())
 # ~~~~~~~~~~~~
 #
 # For deepening your understanding of QPE, we would like to refer you to the `Intro
-# to Quantum Phase Estimation demo<https://pennylane.ai/qml/demos/tutorial_qpe>`__, and instead focus on how QPE is implemented
+# to Quantum Phase Estimation demo <https://pennylane.ai/qml/demos/tutorial_qpe>`__, and instead focus on how QPE is implemented
 # in Qrisp, and later showcase how to use it in the HHL implementation.
 #
 # .. admonition:: Quantum Phase Estimation (QPE)
@@ -328,7 +328,7 @@ def U(psi):
     phi_1 = 0.5
     phi_2 = 0.125
 
-    qrisp.p(phi_1 * 2 * np.pi, psi[0]) # p applies a phase gate
+    qrisp.p(phi_1 * 2 * np.pi, psi[0])  # p applies a phase gate
     qrisp.p(phi_2 * 2 * np.pi, psi[1])
 
 
@@ -362,7 +362,7 @@ print(qrisp.multi_measurement([psi, res]))
 ######################################################################
 # Here, the measurement results are given by a dictionary, where the keys are are tuples representing
 # the values of ``psi`` and ``res``, and the corresponding values are the measurement probabilities.
-# 
+#
 # This example can also seamlessly be executed in Jasp mode: In this case, the ``terminal_sampling``
 # decorator performs a hybrid simulation and afterwards samples from the resulting quantum state.
 
@@ -376,6 +376,7 @@ def main():
 
     return res
 
+
 main()
 
 ######################################################################
@@ -387,9 +388,9 @@ main()
 
 ######################################################################
 # Executing the ``main`` function with the ``terminal_sampling`` decorator returns the measurement
-# results for the variable ``res``. As expected, setting ``qf`` to :math:`3`, we obtain the correct 
+# results for the variable ``res``. As expected, setting ``qf`` to :math:`3`, we obtain the correct
 # result :math:`\phi_1 + \phi_2 = 0.625`.
-# 
+#
 #
 # The HHL algorithm
 # -----------------
@@ -398,7 +399,7 @@ main()
 # :math:`b`, the Quantum Linear Systems Problem (QSLP) consists of preparing a quantum state
 # :math:`|x\rangle` with amplitudes proportional to the solution :math:`x` of the linear system of
 # equations :math:`Ax=b`. Thereby, it can exhibit an exponential speedup over classical methods for
-# certain sparse matrices :math:`A`. The HHL quantum algorithm and, more generally, quantum linear
+# certain sparse matrices :math:`A`. The HHL quantum algorithm [#HHL_2009]_, [#HHL_step-by-step_2023]_ and, more generally, quantum linear
 # systems algorithms, hold significant promise for accelerating computations in fields that rely
 # heavily on solving linear systems of equations, such as `solving differential
 # equations <https://arxiv.org/abs/2202.01054v4>`__, or accelerating machine learning.
@@ -457,8 +458,7 @@ main()
 #   .. math::  |\Psi_5\rangle = \sum_i \lambda_i^{-1}\beta_i|u_i\rangle = |x\rangle
 #
 # This concludes the HHL algorithm. The variable initialized in state :math:`|b\rangle` is now found in
-# state :math:`|x\rangle`. As shown in the original paper on `Quantum algorithm for linear systems of equations
-# <https://arxiv.org/pdf/0811.3171>`__, the
+# state :math:`|x\rangle`. As shown in the original paper [#HHL_2009]_, the
 # runtime of this algorithm is :math:`\mathcal{O}(\log(N)s^2\kappa^2/\epsilon)` where :math:`s` and
 # :math:`\kappa` are the sparsity and condition number of the matrix :math:`A`, respectively, and
 # :math:`\epsilon` is the precision of the solution. The logarithmic dependence on the dimension
@@ -516,7 +516,7 @@ print(qrisp.multi_measurement([qf, res]))
 # amplitudes of the states, i.e. how do we go from :math:`|\Psi_3\rangle` to :math:`|\Psi_4\rangle`?
 #
 # Recently, efficient methods for black-box quantum state preparation that avoid arithmetic were
-# proposed, see `Bausch <https://quantum-journal.org/papers/q-2022-08-04-773/>`__ and `Sanders et al. <https://arxiv.org/pdf/1807.03206>`__. In this demo, we use a routine proposed in the latter
+# proposed, see Bausch [#Bausch_2022]_ and Sanders et al. [#Sanders_2019]_. In this demo, we use a routine proposed in the latter
 # reference which is based on a comparison between integers. This is implemented via the
 # aforementioned comparisons for QuantumFloats.
 #
@@ -940,21 +940,35 @@ print(samples)
 # References
 # ----------
 #
-# 1. A. W. Harrow, A. Hassidim, S. Lloyd, “Quantum ALgorithm for linear Systems of Equations”,
-#    `Physical Review Letters 103(15),
-#    150503 <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.103.150502>`__, 2009.
+# .. [#Bausch_2022]
 #
-# 2. Y. R. Sanders, G. H. Low, A. Scherer, D. W. Berry, “Black-box quantum state preparation without
-#    arithmetic”, `Physical review letters 122(2),
-#    020502 <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.122.020502>`__, 2019.
+#     J. Bausch
+#     "Fast Blax-Box Quantum State Preparation"
+#     `Quantum 6, 773 <https://quantum-journal.org/papers/q-2022-08-04-773/#>`__, 2022.
 #
-# 3. R. Seidel, S. Bock, R. Zander, M. Petrič, N. Steinmann, N. Tcholtchev, M. Hauswirth, “Qrisp: A
-#    Framework for Compilable High-Level Programming of Gate-Based Quantum Computers”,
-#    https://arxiv.org/abs/2406.14792, 2024.
+# .. [#HHL_2009]
 #
-# 4. A. Zaman, H. J. Morrell, H. Y. Wong, “A Step-by-Step HHL Algorithm Walkthrough to Enhance
-#    Understanding of Critical Quantum Computing Concepts”, `IEEE Access
-#    11 <https://ieeexplore.ieee.org/document/10189828>`__, 2023.
+#     A. W. Harrow, A. Hassidim, S. Lloyd
+#     "Quantum Algorithm for linear Systems of Equations"
+#     `Physical Review Letters 103(15), 150503 <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.103.150502>`__, 2009.
+#
+# .. [#Sanders_2019]
+#
+#     Y. R. Sanders, G. H. Low, A. Scherer, D. W. Berry
+#     "Black-box quantum state preparation without arithmetic"
+#     `Physical review letters 122(2), 020502 <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.122.020502>`__, 2019.
+#
+# .. [#qrisp_2024]
+#
+#     R. Seidel, S. Bock, R. Zander, M. Petrič, N. Steinmann, N. Tcholtchev, M. Hauswirth
+#     "Qrisp: A Framework for Compilable High-Level Programming of Gate-Based Quantum Computers"
+#     `arXiv:2406.14792 <https://arxiv.org/abs/2406.14792>`__, 2024.
+#
+# .. [#HHL_step-by-step_2023]
+#
+#     A. Zaman, H. J. Morrell, H. Y. Wong
+#     "A Step-by-Step HHL Algorithm Walkthrough to Enhance Understanding of Critical Quantum Computing Concepts"
+#     `IEEE Access 11 <https://ieeexplore.ieee.org/document/10189828>`__, 2023.
 
 
 ##############################################################################
