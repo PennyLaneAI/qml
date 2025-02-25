@@ -44,6 +44,15 @@
             "url": "https://doi.org/10.22331/q-2024-06-13-1371"
         },
         {
+            "id": "cdf2",
+            "type": "article",
+            "title": "Quantum Filter Diagonalization with Compressed Double-Factorized Hamiltonians",
+            "authors": "OJeffrey Cohn, Mario Motta, Robert M. Parrish",
+            "year": "2021",
+            "publisher": "PRX Quantum",
+            "url": "https://doi.org/10.1103/PRXQuantum.2.040352"
+        },
+        {
             "id": "trotter",
             "type": "article",
             "title": "Trotter error bounds and dynamic multi-product formulas for Hamiltonian simulation",
