@@ -1,5 +1,5 @@
-r"""How to implement the HHL algorithm using Qrisp and Catalyst?
-============================================================
+r"""How to implement the HHL algorithm using Qrisp and Catalyst
+===========================================================
 
 The Harrow-Hassidim-Lloyd (HHL) quantum algorithm offers an exponential speed-up over classical
 methods for solving linear system problems :math:`Ax=b` for certain sparse matrices :math:`A`. In
@@ -17,10 +17,10 @@ practically relevant problem sizes.
     :width: 70%
     :target: javascript:void(0)
 
-In order to make this demo self-sufficient, it is structured such that it first offers a brief
-introduction to Qrisp, QuantumVariables and QuantumTypes, the implementation of Quantum Phase
-Estimation (QPE), before putting it into a higher gear with the HHL implementation and showcase of
-the Catalyst features.
+In order to make this demo self-contained, it begins with a brief
+introduction to Qrisp, QuantumVariables and QuantumTypes, and the implementation of Quantum Phase
+Estimation (QPE). It then shifts into a higher gear with the HHL implementation in Qrisp and showcasing 
+of the Catalyst features.
 
 Intro to Qrisp
 --------------
@@ -376,7 +376,6 @@ def main():
 
     return res
 
-
 main()
 
 ######################################################################
@@ -558,7 +557,7 @@ def HHL_encoding(b, hamiltonian_evolution, n, precision):
     case_indicator = qrisp.QuantumFloat(inv_res.size)
 
     with qrisp.conjugate(qrisp.h)(case_indicator):
-        qbl = case_indicator >= inv_res
+        qbl = (case_indicator >= inv_res)
 
     cancellation_bool = (qrisp.measure(case_indicator) == 0) & (qrisp.measure(qbl) == 0)
 
