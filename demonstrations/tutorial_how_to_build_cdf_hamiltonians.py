@@ -229,7 +229,7 @@ def core_unitary_rotation(core, norbs, body_type):
         qml.GlobalPhase(-gphase, wires=range(2 * norbs))
 
 ######################################################################
-# We can now use them to approximate the evolution operator :math:`e^{iHt}` for a time
+# We can now use them to approximate the evolution operator :math:`e^{-iHt}` for a time
 # :math:`t` with the Suzuki-Trotter product formula, which uses symmetrized products
 # :math:`S_m` defined for an order :math:`m \in [1, 2, 4, \ldots, 2k \in \mathbb{N}]`
 # and repeated multiple times [#trotter]_. In general, this can be easily implemented for
@@ -312,7 +312,7 @@ init_state = qml.math.array([1] + [0] * (2**num_wires - 1))
 hf_state_vec = qml.matrix(qml.BasisState(hf_state, wires=range(num_wires))) @ init_state
 
 H = qml.qchem.molecular_hamiltonian(mol)[0]
-evolved_state = expm(1j * qml.matrix(H) * time) @ hf_state_vec
+evolved_state = expm(-1j * qml.matrix(H) * time) @ hf_state_vec
 
 print(f"Fidelity of two states: {fidelity_statevector(circuit_state, evolved_state)}")
 
