@@ -59,12 +59,13 @@ one_chem = one_body - qml.math.einsum("prrs", two_chem)  # T_pq
 # The double factorization of a Hamiltonian can be described as a Hamiltonian manipulation
 # technique based on decomposing the :math:`V_{pqrs}` to symmetric tensors :math:`L^{(t)}`
 # called *factors*, such that :math:`V_{pqrs} = \sum_t^T L_{pq}^{(t)} L_{rs}^{(t) {\dagger}}`
-# and the rank :math:`T \leq N^2`. We can do this by performing an eigenvalue, or Cholesky
-# decomposition of the two-body tensor. Moreover, each of these tensors can be further
-# eigendecomposed as :math:`L^{(t)}_{pq} = \sum_{i} U_{pi}^{(t)} W_i^{(t)} U_{qi}^{(t)}` to
-# obtain the orthonormal core tensors (:math:`Z`) and the symmetric leaf tensors (:math:`U`)
-# such that the two-body tensor can be expressed as the following after the second tensor
-# factorization with :math:`Z_{ij}^{(t)} = W_i^{(t)} W_j^{(t)}` [#cdf2]_:
+# and the rank :math:`T \leq N^2`. We can do this by performing an eigenvalue, or a pivoted
+# Cholesky decomposition (``cholesky=True``), of the modified two-body tensor.
+# Moreover, each of these tensors can be further eigendecomposed as
+# :math:`L^{(t)}_{pq} = \sum_{i} U_{pi}^{(t)} W_i^{(t)} U_{qi}^{(t)}` to obtain the
+# orthonormal core tensors (:math:`Z`) and the symmetric leaf tensors (:math:`U`)
+# such that the two-body tensor can be expressed as the following after the second
+# tensor factorization with :math:`Z_{ij}^{(t)} = W_i^{(t)} W_j^{(t)}` [#cdf2]_:
 #
 # .. math::  V_{pqrs} \approx \sum_t^T \sum_{ij} U_{pi}^{(t)} U_{pj}^{(t)} Z_{ij}^{(t)} U_{qk}^{(t)} U_{ql}^{(t)}.
 #
