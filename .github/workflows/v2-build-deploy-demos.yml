@@ -1,4 +1,4 @@
-name: Build and Deploy Demos
+name: Build and Deploy V2 Demos
 on:
   push:
     branches:
@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    uses: ./.github/workflows/build-demos.yml
+    uses: ./.github/workflows/v2-build-demos.yml
     with:
       ref: ${{ github.ref }}
       demo-names: 'covalent_cloud_gpu gbs'
@@ -15,7 +15,7 @@ jobs:
 
   deploy:
     needs: build
-    uses: ./.github/workflows/deploy-demos.yml
+    uses: ./.github/workflows/v2-deploy-demos.yml
     with:
       environment: swc-dev
       artifact-name: ${{ needs.build.outputs.artifact-name }}

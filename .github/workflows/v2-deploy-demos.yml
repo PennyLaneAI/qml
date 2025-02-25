@@ -1,4 +1,4 @@
-name: Deploy demos
+name: Deploy V2 Demos
 on:
   workflow_call:
     inputs:
@@ -54,7 +54,7 @@ jobs:
 
       - name: Deploy demos
         run: |
-          python3 .github/workflows/deploy/deploy.py \
+          python3 .github/workflows/qml_pipeline_v2/deploy.py \
             --preview ${{ inputs.preview }} \
             _build/pack/*.zip
 

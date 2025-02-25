@@ -1,4 +1,4 @@
-name: Build demos
+name: Build V2 Demos
 on:
   workflow_call:
     inputs:
