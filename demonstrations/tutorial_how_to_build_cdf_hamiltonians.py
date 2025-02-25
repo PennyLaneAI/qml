@@ -116,7 +116,7 @@ print(f"Decrease in one-norm: {norm_shift}")
 # remains below a desired threshold. This is referred to as the *compressed* double factorization
 # (CDF) as it reduces the number of terms in the factorization of the two-body term to :math:`O(N)`
 # from :math:`O(N^2)`, and it achieves lower approximation errors than the truncated XDF. This can
-# be done by beginning with random :math:`O(N)` orthornormal and symmetric tensors and optimizing
+# be done by beginning with random :math:`N` orthornormal and symmetric tensors and optimizing
 # them based on the following cost function :math:`\mathcal{L}` in a greedy layered-wise manner:
 #
 # .. math::  \mathcal{L}(U, Z) = \frac{1}{2} \bigg|V_{pqrs} - \sum_t^T \sum_{ij} U_{pi}^{(t)} U_{pj}^{(t)} Z_{ij}^{(t)} U_{qk}^{(t)} U_{ql}^{(t)}\bigg|_{\text{F}} + \rho \sum_t^T \sum_{ij} \bigg|Z_{ij}^{(t)}\bigg|^{\gamma},
@@ -161,7 +161,7 @@ print(f"One-body tensors' shape: {two_body_cores.shape, two_body_leaves.shape}")
 ######################################################################
 # We can now express the entire Hamiltonian as sum of the products of core and leaf tensors
 #
-# .. math:: H_{\text{CDF}} = \mu + \sum_{\sigma} U^{(0)}_{\sigma} \left( \sum_{p} Z^{(0)}_{p} a^\dagger_{\sigma, p} a_{\sigma, p} \right) U_{\sigma}^{(0)\ \dagger} + \sum_t^T \sum_{\sigma, \tau} U_{\sigma, \tau}^{(t)} \left( \sum_{pq} Z_{pq}^{(t)} a^\dagger_{\sigma, p} a_{\sigma, p} a^\dagger_{\tau, q} a_{\tau, q} \right) U_{\sigma, \tau}^{(t)\ \dagger},
+# .. math:: H_{\text{CDF}} = \mu + \sum_{\sigma \in {\uparrow, \downarrow}} U^{(0)}_{\sigma} \left( \sum_{p} Z^{(0)}_{p} a^\dagger_{\sigma, p} a_{\sigma, p} \right) U_{\sigma}^{(0)\ \dagger} + \sum_t^T \sum_{\sigma, \tau \in {\uparrow, \downarrow}} U_{\sigma, \tau}^{(t)} \left( \sum_{pq} Z_{pq}^{(t)} a^\dagger_{\sigma, p} a_{\sigma, p} a^\dagger_{\tau, q} a_{\tau, q} \right) U_{\sigma, \tau}^{(t)\ \dagger},
 #
 # and specify each term in the above summation for a Hamiltonian in the double factorized
 # form as ``nuc_core_cdf`` (:math:`\mu`), ``one_body_cdf`` (:math:`Z^{(0)}, U^{(0)}`) and
@@ -189,17 +189,12 @@ two_body_cdf = (two_body_cores, two_body_leaves)
 # we will first need to learn how to apply the unitary operations represented by the
 # exponentiated leaf and core tensors. The former can be done using the
 # :class:`~.pennylane.BasisRotation` operation, which implements the unitary transformation
-# :math:`exp \left( \sum_{pq}[\log U]_{pq} (a^\dagger_p a_q - a^\dagger_q a_p) \right)`.
+# :math:`\exp \left( \sum_{pq}[\log U]_{pq} (a^\dagger_p a_q - a^\dagger_q a_p) \right)`.
 # The following ``leaf_unitary_rotation`` function does this for a leaf tensor:
 #
 
 def leaf_unitary_rotation(leaf, norbs):
-    """Applies the basis rotation transformation corresponding to the leaf tensor.
-    
-    Args:
-        leaf (TensorLike): the leaf tensor.
-        norbs (int): the number of spatial orbitals.
-    """
+    """Applies the basis rotation transformation corresponding to the leaf tensor."""
     basis_mat = qml.math.kron(leaf, qml.math.eye(2)) # account for spin
     qml.BasisRotation(unitary_matrix=basis_mat, wires=range(2 * norbs))
 
@@ -211,15 +206,8 @@ def leaf_unitary_rotation(leaf, norbs):
 # corresponding global phases with :class:`~.pennylane.GlobalPhase`:
 #
 
-# step * core
 def core_unitary_rotation(core, norbs, body_type):
-    """Applies the unitary transformation corresponding to the core tensor.
-
-    Args:
-        core (TensorLike): the core tensor.
-        norbs (int): the number of spatial orbitals.
-        body_type (str): the type of the body term.
-    """
+    """Applies the unitary transformation corresponding to the core tensor."""
     if body_type == "one_body":  # gates for one-body term
         for wire, cval in enumerate(qml.math.diag(core)):
             for sigma in [0, 1]:
@@ -325,7 +313,6 @@ evolved_state = expm(1j * qml.matrix(H) * time) @ hf_state_vec
 print(f"Fidelity of two states: {fidelity_statevector(circuit_state, evolved_state)}")
 
 ######################################################################
-#
 # As we can see, the fidelity of the evolved state from the circuit is close to
 # :math:`1.0`, which indicates that the evolution of the CDF Hamiltonian sufficiently
 # matches that of the original one.
