@@ -9,7 +9,7 @@ jobs:
     concurrency:
       group: ${{ github.workflow }}
       cancel-in-progress: true
-    uses: ./.github/workflows/build-demos.yml
+    uses: ./.github/workflows/v2-build-demos.yml
     with:
       ref: ${{ github.sha }}
       save-artifact: true
