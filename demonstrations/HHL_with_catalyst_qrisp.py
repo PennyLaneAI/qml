@@ -1,5 +1,5 @@
-r"""HHL with Qrisp x Catalyst
-=========================
+r"""How to implement the HHL algorithm using Qrisp and Catalyst?
+============================================================
 
 The Harrow-Hassidim-Lloyd (HHL) quantum algorithm offers an exponential speed-up over classical
 methods for solving linear system problems :math:`Ax=b` for certain sparse matrices :math:`A`. In
@@ -26,21 +26,18 @@ Intro to Qrisp
 --------------
 
 Since this demo is featured here, you may not have heard about Qrisp
-yet. If you feel addressed with this assumption, please don’t fret - we explain all the concepts
+yet. If you feel addressed with this assumption, please don’t fret—we explain all the concepts
 necessary for you to follow along even if not already fluent in Qrisp. So, join us on this Magical
 Mystery Tour in the world of Qrisp, Catalyst, and HHL.
 
-.. admonition:: What is Qrisp?
-    :class: note
+What is Qrisp? Qrisp is a high-level open-source programming framework. It offers an alternative 
+approach to circuit construction and algorithm development with its defining feature—
+QuantumVariables. This approach allows the user to step away from focusing on qubits and gates for 
+circuit construction when developing algorithms, and instead allows the user to code in terms of 
+variables and functions similarly to how one would program classically.
 
-    Qrisp is a high-level open-source programming framework. It offers an alternative approach to
-    circuit construction and algorithm development with its defining feature - QuantumVariables. This
-    approach allows the user to step away from focusing on qubits and gates for circuit construction
-    when developing algorithms, and instead allows the user to code in terms of variables and functions
-    similarly to how one would program classically.
-
-    Qrisp also supports a modular architecture, allowing you to use, replace, and optimize code
-    components easily. We'll demonstrate this later in this demo.
+Qrisp also supports a modular architecture, allowing you to use, replace, and optimize code
+components easily. We'll demonstrate this later in this demo.
 
 You can install Qrisp to experiment with this implementation yourself, at your own pace, by calling
 ``pip install qrisp``.
@@ -68,7 +65,7 @@ qv = qrisp.QuantumVariable(5)
 
 # Apply gates to the QuantumVariable.
 qrisp.h(qv[0])
-qrisp.z(qv)
+qrisp.z(qv) # Z gate applied to all qubits
 qrisp.cx(qv[0], qv[3])
 
 # Print the quantum circuit.
@@ -119,12 +116,18 @@ print(a)
 #    {0.0: 0.125, 0.25: 0.125, 0.5: 0.125, 0.75: 0.125, 1.0: 0.125, 1.25: 0.125, 1.5: 0.125, 1.75: 0.125}
 
 ######################################################################
-# Here, ``msize=3`` indicates the amount of mantissa qubits and ``exponent=-2`` indicates, you guessed
-# correctly, the exponent.
+# Here, ``msize=3`` indicates the amount of mantissa qubits, which represent the significant digits of
+# a number in a floating-point representation, and ``exponent=-2`` indicates, you guessed correctly, 
+# the exponent.
 #
 # .. tip::
-#     For unsigned QuantumFloats, the decoder function is given by :math:`f_k(i) = i2^k`, where
+#     For unsigned QuantumFloats, the decoder function is given by :math:`f_k(i) = i2^k`, where :math:`i`
+#     is represented by the mantissa qubits, and
 #     :math:`k` is the exponent.
+#
+# The output is a dictionary of measurement results, where the keys represent the values of the
+# QuantumFloat ``a``, and the corresponding values are the measurement probabilities. By applying the
+# Hadamard to ``a``, we create a superposition of all the values our QuantumFloat can hold.
 #
 # Recalling the demo on `How to use quantum arithmetic
 # operators <https://pennylane.ai/qml/demos/tutorial_how_to_use_quantum_arithmetic_operators>`__, here
@@ -325,7 +328,7 @@ def U(psi):
     phi_1 = 0.5
     phi_2 = 0.125
 
-    qrisp.p(phi_1 * 2 * np.pi, psi[0])
+    qrisp.p(phi_1 * 2 * np.pi, psi[0]) # p applies a phase gate
     qrisp.p(phi_2 * 2 * np.pi, psi[1])
 
 
@@ -357,6 +360,9 @@ print(qrisp.multi_measurement([psi, res]))
 #    {(0, 0.0): 0.25, (1, 0.5): 0.25, (2, 0.125): 0.25, (3, 0.625): 0.25}
 
 ######################################################################
+# Here, the measurement results are given by a dictionary, where the keys are are tuples representing
+# the values of ``psi`` and ``res``, and the corresponding values are the measurement probabilities.
+# 
 # This example can also seamlessly be executed in Jasp mode: In this case, the ``terminal_sampling``
 # decorator performs a hybrid simulation and afterwards samples from the resulting quantum state.
 
@@ -370,7 +376,6 @@ def main():
 
     return res
 
-
 main()
 
 ######################################################################
@@ -381,6 +386,11 @@ main()
 #    {0.625: 1.0}
 
 ######################################################################
+# Executing the ``main`` function with the ``terminal_sampling`` decorator returns the measurement
+# results for the variable ``res``. As expected, setting ``qf`` to :math:`3`, we obtain the correct 
+# result :math:`\phi_1 + \phi_2 = 0.625`.
+# 
+#
 # The HHL algorithm
 # -----------------
 #
@@ -451,7 +461,7 @@ main()
 # <https://arxiv.org/pdf/0811.3171>`__, the
 # runtime of this algorithm is :math:`\mathcal{O}(\log(N)s^2\kappa^2/\epsilon)` where :math:`s` and
 # :math:`\kappa` are the sparsity and condition number of the matrix :math:`A`, respectively, and
-# :math:`\epsilon` is the precison of the solution. The logarithmic dependence on the dimension
+# :math:`\epsilon` is the precision of the solution. The logarithmic dependence on the dimension
 # :math:`N` is the source of an exponential advantage over classical methods.
 #
 #
