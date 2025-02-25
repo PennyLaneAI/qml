@@ -458,7 +458,7 @@ main()
 #   .. math::  |\Psi_5\rangle = \sum_i \lambda_i^{-1}\beta_i|u_i\rangle = |x\rangle
 #
 # This concludes the HHL algorithm. The variable initialized in state :math:`|b\rangle` is now found in
-# state :math:`|x\rangle`. As shown in the original paper [#HHL_2009]_, the
+# state :math:`|x\rangle`. As shown in the original HHL paper, the
 # runtime of this algorithm is :math:`\mathcal{O}(\log(N)s^2\kappa^2/\epsilon)` where :math:`s` and
 # :math:`\kappa` are the sparsity and condition number of the matrix :math:`A`, respectively, and
 # :math:`\epsilon` is the precision of the solution. The logarithmic dependence on the dimension
@@ -942,32 +942,32 @@ print(samples)
 #
 # .. [#Bausch_2022]
 #
-#     J. Bausch
-#     "Fast Blax-Box Quantum State Preparation"
+#     J. Bausch,
+#     "Fast Black-Box Quantum State Preparation",
 #     `Quantum 6, 773 <https://quantum-journal.org/papers/q-2022-08-04-773/#>`__, 2022.
 #
 # .. [#HHL_2009]
 #
-#     A. W. Harrow, A. Hassidim, S. Lloyd
-#     "Quantum Algorithm for linear Systems of Equations"
+#     A. W. Harrow, A. Hassidim, S. Lloyd,
+#     "Quantum Algorithm for Linear Systems of Equations",
 #     `Physical Review Letters 103(15), 150503 <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.103.150502>`__, 2009.
 #
 # .. [#Sanders_2019]
 #
-#     Y. R. Sanders, G. H. Low, A. Scherer, D. W. Berry
-#     "Black-box quantum state preparation without arithmetic"
+#     Y. R. Sanders, G. H. Low, A. Scherer, D. W. Berry,
+#     "Black-Box Quantum State Preparation without Arithmetic",
 #     `Physical review letters 122(2), 020502 <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.122.020502>`__, 2019.
 #
 # .. [#qrisp_2024]
 #
-#     R. Seidel, S. Bock, R. Zander, M. Petrič, N. Steinmann, N. Tcholtchev, M. Hauswirth
-#     "Qrisp: A Framework for Compilable High-Level Programming of Gate-Based Quantum Computers"
+#     R. Seidel, S. Bock, R. Zander, M. Petrič, N. Steinmann, N. Tcholtchev, M. Hauswirth,
+#     "Qrisp: A Framework for Compilable High-Level Programming of Gate-Based Quantum Computers",
 #     `arXiv:2406.14792 <https://arxiv.org/abs/2406.14792>`__, 2024.
 #
 # .. [#HHL_step-by-step_2023]
 #
-#     A. Zaman, H. J. Morrell, H. Y. Wong
-#     "A Step-by-Step HHL Algorithm Walkthrough to Enhance Understanding of Critical Quantum Computing Concepts"
+#     A. Zaman, H. J. Morrell, H. Y. Wong,
+#     "A Step-by-Step HHL Algorithm Walkthrough to Enhance Understanding of Critical Quantum Computing Concepts",
 #     `IEEE Access 11 <https://ieeexplore.ieee.org/document/10189828>`__, 2023.
 
 
