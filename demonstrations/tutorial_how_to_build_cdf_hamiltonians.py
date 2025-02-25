@@ -61,20 +61,20 @@ one_chem = one_body - qml.math.einsum("prrs", two_chem)  # T_pq
 # called *factors*, such that :math:`V_{pqrs} = \sum_t^T L_{pq}^{(t)} L_{rs}^{(t) {\dagger}}`
 # and the rank :math:`T \leq N^2`. We can do this by performing an eigenvalue, or Cholesky
 # decomposition of the two-body tensor. Moreover, each of these tensors can be further
-# eigendecomposed as :math:`L^{(t)}_{pq} = \sum_{i} U_{pi}^{(t)} W_i^{(t)} U_{qi}^{(t)}`
-# with :math:`Z_{ij}^{(t)} = W_i^{(t)} W_j^{(t)}` to further obtain orthonormal *core*
-# tensors (:math:`Z`) and symmetric *leaf* tensors (:math:`U`) such that the Hamiltonian
-# can be expressed as the following after the second tensor factorization [#cdf2]_:
+# eigendecomposed as :math:`L^{(t)}_{pq} = \sum_{i} U_{pi}^{(t)} W_i^{(t)} U_{qi}^{(t)}` to
+# obtain the orthonormal core tensors (:math:`Z`) with :math:`Z_{ij}^{(t)} = W_i^{(t)} W_j^{(t)}`
+# and the symmetric leaf tensors (:math:`U`) such that the two-body tensor can be expressed as
+# the following after the second tensor factorization [#cdf2]_:
 #
 # .. math::  V_{pqrs} \approx \sum_t^T \sum_{ij} U_{pi}^{(t)} U_{pj}^{(t)} Z_{ij}^{(t)} U_{qk}^{(t)} U_{ql}^{(t)}.
 #
 # This decomposition is referred to as the *explicit* double factorization (XDF) and allows
-# decreasing the number of terms in the to :math:`O(N^3)` from :math:`O(N^4)`, assuming the
-# rank of second tensor factorization will be :math:`O(N)`. In PennyLane, this can be done
-# using the :func:`~pennylane.qchem.factorize` function, where we can truncate the resulting
-# factors by discarding the ones with individual contributions below a specified threshold
-# and the rank of their second factorization using the ``tol_factor`` and ``tol_eigval``
-# keyword arguments, respectively, as shown below:
+# decreasing the number of terms in the qubit basis to :math:`O(N^3)` from :math:`O(N^4)`,
+# assuming the rank of second tensor factorization will be :math:`O(N)`. In PennyLane,
+# this can be done using the :func:`~pennylane.qchem.factorize` function, where we can
+# truncate the resulting factors by discarding the ones with individual contributions below
+# a specified threshold and the ranks of their second factorization using the ``tol_factor``
+# and ``tol_eigval`` keyword arguments, respectively, as shown below:
 #
 
 factors, _, _ = qml.qchem.factorize(two_chem, cholesky=True, tol_factor=1e-5)
