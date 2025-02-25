@@ -62,9 +62,9 @@ one_chem = one_body - qml.math.einsum("prrs", two_chem)  # T_pq
 # and the rank :math:`T \leq N^2`. We can do this by performing an eigenvalue, or Cholesky
 # decomposition of the two-body tensor. Moreover, each of these tensors can be further
 # eigendecomposed as :math:`L^{(t)}_{pq} = \sum_{i} U_{pi}^{(t)} W_i^{(t)} U_{qi}^{(t)}` to
-# obtain the orthonormal core tensors (:math:`Z`) with :math:`Z_{ij}^{(t)} = W_i^{(t)} W_j^{(t)}`
-# and the symmetric leaf tensors (:math:`U`) such that the two-body tensor can be expressed as
-# the following after the second tensor factorization [#cdf2]_:
+# obtain the orthonormal core tensors (:math:`Z`) and the symmetric leaf tensors (:math:`U`)
+# such that the two-body tensor can be expressed as the following after the second tensor
+# factorization with :math:`Z_{ij}^{(t)} = W_i^{(t)} W_j^{(t)}` [#cdf2]_:
 #
 # .. math::  V_{pqrs} \approx \sum_t^T \sum_{ij} U_{pi}^{(t)} U_{pj}^{(t)} Z_{ij}^{(t)} U_{qk}^{(t)} U_{ql}^{(t)}.
 #
@@ -104,11 +104,9 @@ core_shift, one_shift, two_shift = qml.qchem.symmetry_shift(
 
 from pennylane.resource import DoubleFactorization as DF
 
-norm_shift = (
-    DF(one_chem, two_chem, chemist_notation=True).lamb
-    - DF(one_shift, two_shift, chemist_notation=True).lamb
-)
-print(f"Decrease in one-norm: {norm_shift}")
+DF_chem_norm = DF(one_chem, two_chem, chemist_notation=True).lamb
+DF_shift_norm =  DF(one_shift, two_shift, chemist_notation=True).lamb
+print(f"Decrease in one-norm: {DF_chem_norm - DF_shift_norm}")
 
 ######################################################################
 # Compressing the double factorized Hamiltonians
@@ -205,9 +203,10 @@ def leaf_unitary_rotation(leaf, norbs):
 ######################################################################
 # The above can be decomposed in terms of the Givens rotation networks that can be efficiently
 # implemented on the quantum hardware. Similarly, the unitary transformation for the core tensor
-# can also be applied efficiently using the :class:`~.pennylane.RZ` and :class:`~.pennylane.MultiRZ`
-# operations via the following ``core_unitary_rotation`` function while accounting for the
-# corresponding global phases with :class:`~.pennylane.GlobalPhase`:
+# can also be applied efficiently via the ``core_unitary_rotation`` function. It uses the
+# :class:`~.pennylane.RZ` and :class:`~.pennylane.MultiRZ` operations for implementing the
+# exponentiated Pauli tensors for the one- and two-body core tensors, respectively, and
+# :class:`~.pennylane.GlobalPhase` for the corresponding global phases:
 #
 
 def core_unitary_rotation(core, norbs, body_type):
@@ -284,7 +283,7 @@ def CDFTrotterProduct(nuc_core_cdf, one_body_cdf, two_body_cdf, time, num_steps=
     qml.GlobalPhase(nuc_core_cdf * time, wires=range(2 * norbs))
 
 ######################################################################
-# We can use it to simulate the evolution of the linear hydrogen chain Hamiltonian H:math:`_4`
+# We can use it to simulate the evolution of the linear hydrogen chain Hamiltonian H\ :math:`_4`
 # described in the compressed double factorized form for a given number of steps ``num_steps``
 # and starting from the Hartree-Fock state ``hf_state``:
 #
