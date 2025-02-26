@@ -1,4 +1,4 @@
-r"""How to implement the HHL algorithm using Qrisp and Catalyst
+r"""Solving systems of linear equations via HHL using Qrisp and Catalyst
 ===========================================================
 
 The Harrow-Hassidim-Lloyd (HHL) quantum algorithm offers an exponential speed-up over classical
@@ -12,7 +12,7 @@ quantum just-in-time (QJIT) compiler framework. The goal of this demo is to show
 Catalyst complement each other for implementing advanced quantum algorithms and compiling them for
 practically relevant problem sizes.
 
-.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_HHL_with_catalyst_qrisp.png
+.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_linear_equations_hhl_qrisp_catalyst.png
     :align: center
     :width: 70%
     :target: javascript:void(0)

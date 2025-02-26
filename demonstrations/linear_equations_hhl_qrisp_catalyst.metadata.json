@@ -1,5 +1,5 @@
 {
-    "title": "HHL with Qrisp x Catalyst",
+    "title": "Solving systems of linear equations via HHL using Qrisp and Catalyst",
     "authors": [
         {
             "username": "renezander"
@@ -11,21 +11,21 @@
             "username": "matic_p"
         }
     ],
-    "dateOfPublication": "2025-02-11T09:00:00+00:00",
-    "dateOfLastModification": "2025-02-11T09:00:00+00:00",
+    "dateOfPublication": "2025-02-26T09:00:00+00:00",
+    "dateOfLastModification": "2025-02-26T09:00:00+00:00",
     "categories": [
-        "How-to",
-        "Algorithms"
+        "Algorithms",
+        "Quantum Computing"
     ],
     "tags": [],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_HHL_with_catalyst_qrisp.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_linear_equations_hhl_qrisp_catalyst.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_HHL_with_catalyst_qrisp.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_linear_equations_hhl_qrisp_catalyst.png"
         }
     ],
     "seoDescription": "Learn how to implement the HHL quantum algorithm for solving linear systems using Qrisp and Catalyst.",
