@@ -183,9 +183,9 @@ one_body_cdf = (one_body_cores, one_body_leaves)
 two_body_cdf = (two_body_cores, two_body_leaves)
 
 ######################################################################
-# The above representation enables obtaining the measurement grouping of the Hamiltonian
-# for reducing the shot requirements for measurements in the qubit basis. This makes use of
-# the Jordan-Wigner transformation (:math:`a_p^\dagger a_p = n_p = 0.5 * (1 - z_p)`), where
+# The above representation enables obtaining the measurement grouping of the Hamiltonian for
+# reducing the shot requirements for measurements in the qubit basis. This makes use of the
+# Jordan-Wigner transformation, :math:`a_p^\dagger a_p = n_p \mapsto 0.5 * (1 - z_p)`, where
 # each term within the basis transformation :math:`U^{(i)}` could be measured simultaneously.
 # One can obtain the corresponding Pauli terms and basis transformation for these groupings
 # using the :func:`~pennylane.qchem.basis_rotation` function, which automatically accounts
