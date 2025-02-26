@@ -66,7 +66,7 @@ one_chem = one_body - qml.math.einsum("prrs", two_chem)  # T_pq
 # Moreover, each of these tensors can be further eigendecomposed as
 # :math:`L^{(t)}_{pq} = \sum_{i} U_{pi}^{(t)} W_i^{(t)} U_{qi}^{(t)}` to perform a second
 # tensor factorization. This enables us to express the above double factorized two-body tensor
-# in terms of orthonormal core tensors (:math:`Z`) and the symmetric leaf tensors (:math:`U`),
+# in terms of orthonormal core tensors (:math:`Z^{(t)}`) and the symmetric leaf tensors (:math:`U^{(t)}`),
 # such that:
 #
 # .. math::  V_{pqrs} \approx \sum_t^T \sum_{ij} U_{pi}^{(t)} U_{pj}^{(t)} Z_{ij}^{(t)} U_{qk}^{(t)} U_{ql}^{(t)},
@@ -113,8 +113,8 @@ DF_shift_norm =  DF(one_shift, two_shift, chemist_notation=True).lamb
 print(f"Decrease in one-norm: {DF_chem_norm - DF_shift_norm}")
 
 ######################################################################
-# Compressing the double factorized Hamiltonian
-# ---------------------------------------------
+# Compressing the double factorization
+# -------------------------------------
 #
 # In many practical scenarios, the above double factorization can be further optimized by
 # obtaining a numerical tensor-fitting of the decomposed two-body terms to give :math:`V^\prime`,
@@ -165,8 +165,8 @@ one_body_leaves = qml.math.expand_dims(one_body_eigvecs, axis=0)
 print(f"One-body tensors' shape: {two_body_cores.shape, two_body_leaves.shape}")
 
 ######################################################################
-# Constructing the double factorized Hamiltonian
-# -----------------------------------------------
+# Constructing double factorized Hamiltonian
+# -------------------------------------------
 #
 # Using the above factorization of one-body and two-body terms, we can now express
 # the entire Hamiltonian more compactly as sum of the products of core and leaf tensors:
@@ -315,10 +315,10 @@ circuit_state = cdf_circuit(num_steps=10)
 from pennylane.math import fidelity_statevector
 from scipy.linalg import expm
 
-init_state = qml.math.array([1] + [0] * (2**num_wires - 1))
+init_state = qml.math.array([1] + [0] * (2**num_wires - 1)) # |00...0>
 hf_state_vec = qml.matrix(qml.BasisState(hf_state, wires=range(num_wires))) @ init_state
 
-H = qml.qchem.molecular_hamiltonian(mol)[0]
+H = qml.qchem.molecular_hamiltonian(mol)[0] # original Hamiltonian
 evolved_state = expm(-1j * qml.matrix(H) * time) @ hf_state_vec
 
 print(f"Fidelity of two states: {fidelity_statevector(circuit_state, evolved_state)}")
