@@ -122,7 +122,7 @@ print(f"Decrease in one-norm: {DF_chem_norm - DF_shift_norm}")
 # This is referred to as the *compressed* double factorization (CDF) as it reduces the number of
 # terms in the factorization of the two-body term to :math:`O(N)` from :math:`O(N^3)`, and it
 # achieves lower approximation errors than the truncated XDF. This can be done by beginning with
-# random :math:`N` orthornormal and symmetric tensors and optimizing them based on the following
+# :math:`N` random core and leaf tensors and optimizing them based on the following
 # cost function :math:`\mathcal{L}` in a greedy layered-wise manner:
 #
 # .. math::  \mathcal{L}(U, Z) = \frac{1}{2} \bigg|V_{pqrs} - \sum_t^T \sum_{ij} U_{pi}^{(t)} U_{pj}^{(t)} Z_{ij}^{(t)} U_{qk}^{(t)} U_{ql}^{(t)}\bigg|_{\text{F}} + \rho \sum_t^T \sum_{ij} \bigg|Z_{ij}^{(t)}\bigg|^{\gamma},
