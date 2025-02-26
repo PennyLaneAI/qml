@@ -165,8 +165,8 @@ one_body_leaves = qml.math.expand_dims(one_body_eigvecs, axis=0)
 print(f"One-body tensors' shape: {two_body_cores.shape, two_body_leaves.shape}")
 
 ######################################################################
-# Constructing double factorized Hamiltonian
-# -------------------------------------------
+# Constructing the double factorized Hamiltonian
+# -----------------------------------------------
 #
 # Using the above factorization of one-body and two-body terms, we can now express
 # the entire Hamiltonian more compactly as sum of the products of core and leaf tensors:
@@ -195,8 +195,8 @@ two_body_cdf = (two_body_cores, two_body_leaves)
 #
 
 ######################################################################
-# Simulating double factorized Hamiltonian
-# ----------------------------------------
+# Simulating the double factorized Hamiltonian
+# ---------------------------------------------
 #
 # To simulate the Hamiltonian in the double factorized form,
 # we will first need to learn how to apply the unitary operations represented by the
