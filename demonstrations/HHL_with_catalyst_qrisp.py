@@ -434,9 +434,9 @@ main()
 # - Step 2: Applying **Quantum Phase Estimation** with respect to the Hamiltonian evolution
 #   :math:`U=e^{itA}` yields the state
 #
-#   .. math::  |\Psi_2\rangle = \sum_i \beta_i|u_i\rangle|\lambda_jt/2\pi\rangle = \sum_i \beta_i|u_i\rangle|\widetilde{\lambda}_i\rangle
+#   .. math::  |\Psi_2\rangle = \sum_i \beta_i|u_i\rangle|\lambda_it/2\pi\rangle = \sum_i \beta_i|u_i\rangle|\widetilde{\lambda}_i\rangle
 #
-#   To simplify notation, we write :math:`\widetilde{\lambda}_i=\lambda_jt/2\pi`.
+#   To simplify notation, we write :math:`\widetilde{\lambda}_i=\lambda_it/2\pi`.
 #
 # - Step 3: Performing the inversion of the eigenvalues
 #   :math:`\widetilde{\lambda}_i\rightarrow\widetilde{\lambda}_i^{-1}` yields the state
