@@ -3,8 +3,8 @@ r"""How to build compressed double factorized Hamiltonians
 
 Two primary concerns for the quantum algorithms for quantum chemistry simulations of the
 electronic Hamiltonians are the dependency of their runtime on its one-norm and their shot
-requirements on the number of its terms. In this how-to, we will learn how to tackle both of
-these via a technique called compressed double factorization that involves approximately
+requirements on the number of its terms. In this tutorial, we will learn how to tackle both
+of these via a technique called compressed double factorization that involves approximately
 representing the Hamiltonian in the form of tensor contractions that require a linear depth
 circuit with Givens rotations for simulations and has a linear combination of unitaries (LCU)
 representation suitable for error-corrected algorithms [#cdf]_.
@@ -66,8 +66,8 @@ one_chem = one_body - qml.math.einsum("prrs", two_chem)  # T_pq
 # Moreover, each of these tensors can be further eigendecomposed as
 # :math:`L^{(t)}_{pq} = \sum_{i} U_{pi}^{(t)} W_i^{(t)} U_{qi}^{(t)}` to perform a second
 # tensor factorization. This enables us to express the above double factorized two-body tensor
-# in terms of orthonormal core tensors (:math:`Z^{(t)}`) and the symmetric leaf tensors (:math:`U^{(t)}`),
-# such that:
+# in terms of orthonormal core tensors (:math:`Z^{(t)}`) and symmetric leaf tensors
+# (:math:`U^{(t)}`) as:
 #
 # .. math::  V_{pqrs} \approx \sum_t^T \sum_{ij} U_{pi}^{(t)} U_{pj}^{(t)} Z_{ij}^{(t)} U_{qk}^{(t)} U_{ql}^{(t)},
 #
