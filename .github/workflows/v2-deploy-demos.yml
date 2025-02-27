@@ -1,0 +1,70 @@
+name: Deploy V2 Demos
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: Environment to deploy to
+        type: string
+        required: true
+      artifact-name:
+        description: Name of artifact containing demo zip files
+        type: string
+      preview:
+        description: Whether to deploy demos as preview
+        type: boolean
+        required: true
+
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Environment to deploy to
+        type: environment
+        required: true
+      artifact-name:
+        description: Name of artifact containing demo builds
+        type: string
+      preview:
+        description: Whether to deploy demos as preview
+        type: boolean
+        required: true
+
+jobs:
+  deploy-demos:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    env:
+      DEPLOYMENT_ENDPOINT_URL: ${{ secrets.DEPLOYMENT_ENDPOINT_URL }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.branch }}
+          fetch-depth: 1
+      
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: "us-east-1"
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      
+      - name: Install python requirements
+        run: pip install -r .github/workflows/qml_pipeline_v2/requirements.txt
+      
+      - name: Fetch demo build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.artifact-name }}
+          path: _build/pack
+
+      - name: Deploy demos
+        run: |
+          python3 .github/workflows/qml_pipeline_v2/deploy.py \
+            --preview ${{ inputs.preview }} \
+            _build/pack/*.zip
+

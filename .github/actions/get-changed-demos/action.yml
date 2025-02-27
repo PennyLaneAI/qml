@@ -1,0 +1,63 @@
+name: 'Get Changed Demos'
+description: 'Get demos that have changed'
+inputs:
+  json:
+    description: Output as a JSON list
+    default: false
+outputs:
+  updated:
+    description: 'Names of new or updated demos'
+    value: ${{ steps.changed-files.outputs.all_changed_files }}
+  deleted:
+    description: 'Names of deleted demos'
+    value: ${{ steps.changed-files.outputs.deleted_files }}
+runs:
+  using: "composite"
+  steps:
+    - id: changed-files
+      uses: tj-actions/changed-files@v45
+      with:
+        # Exclude changes outside the current 
+        # directory and show path names 
+        # relative to it. NOTE: This 
+        # requires you to specify the 
+        # top-level directory via the `path` 
+        # input. 
+        diff_relative: true
+        # Output unique changed directories instead 
+        # of filenames. NOTE: This returns 
+        # `.` for changed files located 
+        # in the current working directory 
+        # which defaults to `$GITHUB_WORKSPACE`. 
+        dir_names: true
+        # Include only directories that have 
+        # been deleted as opposed to 
+        # directory names of files that 
+        # have been deleted in the 
+        # `deleted_files` output when `dir_names` is 
+        # set to `true`. 
+        dir_names_deleted_files_include_only_deleted_dirs: true
+        # Exclude the current directory represented 
+        # by `.` from the output 
+        # when `dir_names` is set to 
+        # `true`. 
+        dir_names_exclude_current_dir: true
+        # Separator used to split the 
+        # `dir_names_include_files` input
+        dir_names_include_files_separator: ' '
+        # Limit the directory output to 
+        # a maximum depth e.g `test/test1/test2` 
+        # with max depth of `2` 
+        # returns `test/test1`. 
+        dir_names_max_depth: 1
+        # Output list of changed files 
+        # in a JSON formatted string 
+        # which can be used for 
+        # matrix jobs. Example: https://github.com/tj-actions/changed-files/blob/main/.github/workflows/matrix-example.yml 
+        json: ${{ inputs.json }}
+        # Output renamed files as deleted 
+        # and added files. 
+        output_renamed_files_as_deleted_and_added: true
+        # Specify a relative path under 
+        # `$GITHUB_WORKSPACE` to locate the repository. 
+        path: 'demonstrations_v2'
