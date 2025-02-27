@@ -156,8 +156,8 @@ assert qml.math.allclose(approx_two_shift, two_shift, atol=1e-2)
 # Constructing the double-factorized Hamiltonian
 # -----------------------------------------------
 #
-# We can eigendecompose the one-body tensor to obtain similar orthornormal (:math:`U^{(0)}`)
-# and symmetric tensors (:math:`Z^{(0)}`) for the one-body term and use the above compressed
+# We can eigendecompose the one-body tensor to obtain similar orthornormal :math:`U^{(0)}` and
+# symmetric :math:`Z^{(0)}` tensors for the one-body term and use the above compressed
 # factorization of the two-body term to express the Hamiltonian in the double-factorized form
 # as sum of the products of core and leaf tensors:
 #
@@ -169,15 +169,15 @@ assert qml.math.allclose(approx_two_shift, two_shift, atol=1e-2)
 # operator and :math:`z_p` is the Pauli-Z operation acting on the qubit corresponding to
 # orbital :math:`p`. The mapped form naturally gives rise to a measurement grouping, where
 # the terms within the basis transformation :math:`U^{(i)}` can be measured simultaneously,
-# and can be obtained using the :func:`~pennylane.qchem.basis_rotation` function.
+# and can be obtained with the :func:`~pennylane.qchem.basis_rotation` function.
 #
 # Another advantage of the double-factorized form is the efficient simulation of the Hamiltonian
-# evolution. To motivate this, we point out that mapping a two-body term to the qubit basis will
-# result in two additional one-qubit Pauli-Z terms. As these will also appear in their evolution,
-# we can simplify the simulation circuit by accounting for these additional terms directly in the
-# one-body tensor itself by obtaining an one-body correction (``one_body_extra``) for it. We can
-# then decompose the corrected one-body terms into the orthornormal :math:`U^{\prime(0)}` and
-# symmetric tensors :math:`Z^{\prime(0)}` as follows:
+# evolution. Before discussing it in the next section, we note that mapping a two-body term
+# to the qubit basis will result in two additional one-qubit Pauli-Z terms. As these will also
+# appear in their evolution, we can simplify their simulation circuit by accounting for these
+# additional terms directly in the one-body tensor itself by obtaining an one-body correction
+# (``one_body_extra``) for it. We can then decompose the corrected one-body terms into the
+# orthornormal :math:`U^{\prime(0)}` and symmetric :math:`Z^{\prime(0)}` tensors instead:
 #
 
 two_core_prime = (qml.math.eye(mol.n_orbitals) * two_body_cores.sum(axis=-1)[:, None, :])
@@ -194,7 +194,7 @@ print(f"One-body tensors' shape: {one_body_cores.shape, one_body_leaves.shape}")
 
 ######################################################################
 # We can now specify the Hamiltonian programmatically in the (compressed)
-# double-factorized form as a dictionary with following three keys:
+# double-factorized form as a ``dict`` object with the following three keys:
 # ``nuc_constant`` (:math:`\mu`),
 # ``core_tensors`` (:math:`\left[ Z^{\prime(0)}, Z^{(t)}, \ldots \right]`), and
 # ``leaf_tensors`` (:math:`\left[ U^{\prime(0)}, U^{(t)}, \ldots \right]`):
@@ -294,9 +294,9 @@ def CDFTrotterStep(time, cdf_ham, wires):
     qml.GlobalPhase(cdf_ham["nuc_constant"] * time, wires=wires)
 
 ######################################################################
-# We can use this function to simulate the evolution of the linear hydrogen chain Hamiltonian
-# :math:`H_4` described in the compressed double-factorized form for a given number of steps
-# ``n_steps`` and starting from the Hartree-Fock state ``hf_state``:
+# We can use this function to simulate the evolution of the :math:`H_4` Hamiltonian
+# described in the compressed double-factorized form for a given number of
+# steps ``n_steps`` and starting from a Hartree-Fock state ``hf_state``:
 #
 
 time, circ_wires = 1.0, range(2 * mol.n_orbitals)
