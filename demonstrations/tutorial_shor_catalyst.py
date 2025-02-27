@@ -71,13 +71,13 @@ def shors_algorithm(N):
 # probabilistic!).  This raises the important question of what exactly gets
 # compiled, as well as where, when, and how that compilation happens.
 #
-# Over the past year, PennyLane has been integrated with `Catalyst
-# <https://docs.pennylane.ai/projects/catalyst/en/latest/index.html>`_, allowing
-# for quantum just-in-time compilation of classical and quantum code
-# together. This demo leverages that integration to implement a version of
-# Shor's factoring algorithm that is just-in-time compiled from end-to-end,
-# classical control structure and all. Even better, that compilation happens
-# only once per distinct bit-width of the integers being factored.
+# In PennyLane, both classical and quantum code can be compiled together using
+# the `Catalyst
+# <https://docs.pennylane.ai/projects/catalyst/en/latest/index.html>`_,
+# library. This demo leverages that integration to implement a version of Shor's
+# factoring algorithm that is just-in-time compiled from end-to-end, classical
+# control structure and all. Even better, that compilation happens only once per
+# distinct bit-width of the integers being factored.
 #
 # Compilation
 # -----------
