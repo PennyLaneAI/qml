@@ -343,9 +343,9 @@ print(qml.commutator(H, SZ))
 # Now that we know that the Heisenberg model Hamiltonian commutes with any :math:`S_\text{tot}^{\alpha}` for :math:`\alpha \in \{x, y, z\},` we also know that any observable
 # composed of the total spin components
 #
-# .. math:: \hat{O} = c_x S^x_\text{tot} + c_x S^y_\text{tot} + c_x S^z_\text{tot}
+# .. math:: \hat{O} = c_x S^x_\text{tot} + c_y S^y_\text{tot} + c_z S^z_\text{tot}
 #
-# commutes with the Hamiltonian,
+# with arbitrary real coefficients :math:`c_x, c_y, c_z \in \mathbb{R}` commutes with the Hamiltonian,
 #
 # .. math:: [\hat{O}, H_\text{Heis}] = 0.
 #
