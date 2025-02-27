@@ -214,8 +214,8 @@ def shors_algorithm(N, a, n_bits):
 # :math:`2n + 3` qubits, where :math:`n + 1` are for computation and
 # :math:`n + 2` are auxiliary.
 #
-# Order finding is an application of *quantum phase estimation* (QPE) for the
-# operator
+# Order finding is an application of *quantum phase estimation* (:doc:` QPE
+# </demos/tutorial_qpe>`) for the operator
 #
 # .. math::
 #
