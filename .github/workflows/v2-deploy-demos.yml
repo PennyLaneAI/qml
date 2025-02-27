@@ -13,10 +13,6 @@ on:
         description: Whether to deploy demos as preview
         type: boolean
         required: true
-      branch:
-        description: Branch to checkout
-        type: string
-        default: sc-81925-qml-repository-ci-pushes-newly-built-demos
 
   workflow_dispatch:
     inputs:
@@ -31,10 +27,6 @@ on:
         description: Whether to deploy demos as preview
         type: boolean
         required: true
-      branch:
-        description: Branch to checkout
-        type: string
-        default: sc-81925-qml-repository-ci-pushes-newly-built-demos
 
 jobs:
   deploy-demos:

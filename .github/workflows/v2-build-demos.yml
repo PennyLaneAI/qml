@@ -39,6 +39,7 @@ on:
           Number of demos to build per job
         type: number
         default: 10
+
     outputs:
       artifact-name:
         description: "Name of the artifact containing the built demos"
@@ -64,7 +65,7 @@ on:
         default: true
       artifact-name:
         description: Name of the artifact containing the built demos (defaults to demo-build-{ref})
-        required: false
+        required: true
         type: string
         default: ''
       keep-going:
