@@ -250,7 +250,7 @@ def shors_algorithm(N, a, n_bits):
 #
 #     U_a^{2^k}\vert x \rangle = \vert (a \cdot a \cdots a) x \pmod N \rangle = \vert a^{2^k}x \pmod N \rangle = U_{a^{2^k}} \vert x \rangle.
 #
-# But since :math:`a` is known, we can classically evaluate :math:`a^{2^k} \pmod
+# Since :math:`a` is known, we can classically evaluate :math:`a^{2^k} \pmod
 # N` and implement controlled-:math:`U_{a^{2^k}}` instead.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/qpe_full_modified_power.svg
@@ -310,7 +310,7 @@ def shors_algorithm(N, a, n_bits):
 #    :align: center
 #    :alt: Controlled addition of :math:`ax` using a series of double-controlled Fourier adders.
 #
-#    Circuit for controlled multiplication of :math:`ax` using a series of double-controlled Fourier adders.
+#    Circuit for controlled multiplication of :math:`ax` using a series of double-controlled Fourier adders (modulo :math:`N`).
 #    [#Beauregard2003]_.
 #
 # First, note the controls on the quantum Fourier transforms (QFTs) are not
@@ -337,144 +337,46 @@ def shors_algorithm(N, a, n_bits):
 # [#Draper2000]_. This is another trick we can leverage given prior knowledge of
 # :math:`a`. Rather than performing addition on bits in computational basis
 # states, we can apply a QFT, adjust the phases based on the bits of the number
-# being added, and then reverse the QFT to obtain the result. The circuit for *Fourier
-# addition*, :math:`\Phi`, is shown below.
+# being added, and then reverse the QFT to obtain the result. The circuit for
+# *Fourier addition*, :math:`\Phi`, is shown below.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder.svg
 #    :width: 700
 #    :align: center
 #    :alt: Addition in the Fourier basis.
 #
-#    Circuit for addition in the Fourier basis [#Draper2000]_.
+#    Circuit for addition in the Fourier basis [#Draper2000]_. The calligraphic
+#    letters indicate states already transformed to the Fourier basis.
 #
-# In the third circuit, we've absorbed the Fourier transforms into the basis
-# states, and denoted this by calligraphic letters. The :math:`\mathbf{R}_k` are
-# phase shifts based on :math:`a`, and will be described below.
-#
-# To understand how Fourier addition works, we begin by revisiting the QFT.
-#
-# .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_explanation-1.svg
-#    :width: 800
-#    :align: center
-#    :alt: The Quantum Fourier Transform.
-#
-#    Circuit for the quantum Fourier transform. Note the big-endian qubit ordering with
-#    no terminal SWAP gates.
-#
-# In this circuit we define the phase gate
-#
-# .. math::
-#
-#     R_k = \begin{pmatrix} 1 & 0 \\ 0 & e^{\frac{2\pi i}{2^k}} \end{pmatrix}.
-#
-# The qubits are ordered using big endian notation. For an :math:`n`-bit integer
-# :math:`b`, :math:`\vert b\rangle = \vert b_{n-1} \cdots b_0\rangle` and
-# :math:`b = \sum_{k=0}^{n-1} 2^k b_k`.
-#
-# Suppose we wish to add :math:`a` to :math:`b`. We can add a new register
-# prepared in :math:`\vert a \rangle`, and use its qubits to control the
-# addition of phases to qubits in :math:`\vert b \rangle` (after a QFT is
-# applied) in a very particular way:
-#
-# .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_explanation-2.svg
-#    :width: 800
-#    :align: center
-#    :alt: Adding one integer to another with the Quantum Fourier Transform.
-#
-#    Fourier addition of :math:`a` to :math:`b`. The bit values of :math:`a`
-#    determine the amount of phase added to the qubits in :math:`b` [#Draper2000]_.
-#
-# Each qubit in :math:`\vert b \rangle` picks up a phase that depends on the
-# bits in :math:`a`. In particular, the :math:`k`'th bit of :math:`b`
-# accumulates information about all the bits in :math:`a` with an equal or lower
-# index, :math:`a_0, \ldots, a_{k}`. This adds :math:`a_k` to :math:`b_k`; the
-# cumulative effect adds :math:`a` to :math:`b`, up to an inverse QFT!
-#
-# .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_explanation-3.svg
-#    :width: 800
-#    :align: center
-#    :alt: Adding one integer to another with the Quantum Fourier Transform.
-#
-# However, we must be careful. Fourier basis addition is *not* automatically
-# modulo :math:`N`. If the sum :math:`b + a` requires :math:`n+ 1` bits, it will
-# overflow. To handle that, one extra qubit is added to the :math:`\vert
-# b\rangle` register (initialized to :math:`\vert 0 \rangle`). This is the
-# source of one of the auxiliary qubits mentioned earlier.
-#
-# In our case, a second register of qubits is not required. Since we know
-# :math:`a` in advance, we can precompute the amount of phase to apply: qubit
-# :math:`\vert b_k \rangle` must be rotated by :math:`\sum_{\ell=0}^{k}
-# \frac{a_\ell}{2^{\ell+1}}`. We'll express this as a new gate,
+# Fourier addition of two :math:`n`-bit numbers requires :math:`n+1` qubits, to
+# account for the possibility of overflow during addition (this constitutes one
+# of our auxiliary qubits). The rotation angles, which depend on the binary
+# representation of :math:`a`, are defined as
 #
 # .. math::
 #
 #     \mathbf{R}_k = \begin{pmatrix} 1 & 0 \\ 0 & e^{2\pi i\sum_{\ell=0}^{k} \frac{a_\ell}{2^{\ell+1}}} \end{pmatrix}.
 #
-# The final circuit for the Fourier adder is
-#
-# .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_explanation-4.svg
-#    :width: 500
-#    :align: center
-#    :alt: Full Fourier adder.
-#
-# As one may expect, :math:`\Phi^\dagger` performs subtraction. However, we must
-# also consider the possibility of underflow.
-#
-# .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_adjoint.svg
-#    :width: 500
-#    :align: center
-#    :alt: Subtraction in the Fourier basis.
+# A detailed derivation of this circuit is included in the
+# :ref:`appendix <appendix_fourier_adder>`.
 #
 # Returning to :math:`M_a`, we have a doubly-controlled
-# :math:`\Phi_+`. :math:`\Phi_+` is similar to :math:`\Phi` but by using an
-# auxiliary qubit and some extra operations, it will work modulo :math:`N`.
+# :math:`\Phi_+`. :math:`\Phi_+` is similar to :math:`\Phi`, but by using
+# another auxiliary qubit and some extra operations, it will work modulo
+# :math:`N`.  An explanation of this circuit's structure is also provided in an
+# :ref:`appendix <appendix_fourier_adder_modulo_n>`.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_modulo_n.svg
 #    :width: 800
 #    :align: center
 #    :alt: Addition in the Fourier basis modulo N.
 #
-#    Circuit for doubly-controlled Fourier addition modulo :math:`N` [#Beauregard2003]_.
-#
-# Let's analyze this circuit, keeping in mind :math:`a < N` and :math:`b < N`,
-# and the main register has :math:`n + 1` bits.
-#
-# Suppose both control qubits are :math:`\vert 1 \rangle`. We add :math:`a` to
-# :math:`b`, then subtract :math:`N`. If :math:`a + b \geq N`, we get overflow
-# on the top qubit (which was included to account for precisely this), but
-# subtraction gives us the correct result modulo :math:`N`. After shifting back
-# to the computational basis with the :math:`QFT^\dagger`, the topmost qubit is
-# in :math:`\vert 0 \rangle` so the CNOT does not trigger. Next, we subtract
-# :math:`a` from the register, in state :math:`\vert a + b - N \pmod N \rangle`,
-# to obtain :math:`\vert b - N \rangle`. Since :math:`b < N`, there is
-# underflow. The top qubit, now in state :math:`\vert 1 \rangle`, does not
-# trigger the controlled-on-zero CNOT, and the auxiliary qubit is untouched.
-#
-# If instead :math:`a + b < N`, we subtracted :math:`N` for no reason, leading
-# to underflow. The topmost qubit is :math:`\vert 1 \rangle`, the CNOT will
-# trigger, and :math:`N` gets added back. The register then contains
-# :math:`\vert b + a \rangle`. Subtracting :math:`a` puts the register in state
-# :math:`\vert b \rangle`, which by design will not overflow; the
-# controlled-on-zero CNOT triggers, and the auxiliary qubit is returned to
-# :math:`\vert 0 \rangle`.
-#
-# If the control qubits are not both :math:`\vert 1 \rangle`, :math:`N` is
-# subtracted and the CNOT triggers (since :math:`b < N`), but :math:`N` is
-# always added back. By similar reasoning, the controlled-on-zero CNOT always
-# triggers and correctly uncomputes the auxiliary qubit.
-#
-# Recall that :math:`\Phi_+` is used in :math:`M_a` to add :math:`2^{k}a` to
-# :math:`b` (controlled on :math:`x_{k}`) in the Fourier basis.  In total, we
-# obtain (modulo :math:`N`)
-#
-# .. math::
-#
-#     \begin{equation*}
-#     b + x_{0} \cdot 2^0 a + x_{1} \cdot 2^1 a + \cdots x_{n-1} \cdot 2^{n-1} a  = b + a \sum_{k=0}^{n-1} x_{k} 2^k =  b + a x.
-#     \end{equation*}
-#
+#    Circuit for doubly-controlled Fourier addition modulo :math:`N`
+#    [#Beauregard2003]_. The calligraphic letters indicate states already
+#    transformed to the Fourier basis.
+# 
 # This completes our implementation of the controlled-:math:`U_{a^{2^k}}`. The
-# full circuit, on :math:`t + 2n + 2` qubits, is below.
+# full circuit, shown below, uses :math:`t + 2n + 2` qubits.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/qpe_full_combined_multi_est_wires.svg
 #    :width: 500
@@ -574,10 +476,9 @@ def shors_algorithm(N, a, n_bits):
 #    Advanced detection and removal of overflow correction in doubly-controlled
 #    operations can lead to significant resource savings.
 #
-#  This last optimization will not be included in our implementation. We again
-#  expect it to have diminishing returns as more iterations of the algorithm are
-#  performed.
-#
+# This last optimization will not be included in our implementation. We again
+# expect it to have diminishing returns as more iterations of the algorithm are
+# performed.
 #
 # The "single-qubit" QPE
 # ~~~~~~~~~~~~~~~~~~~~~~
@@ -592,66 +493,29 @@ def shors_algorithm(N, a, n_bits):
 #    :align: center
 #    :alt: QPE circuit with inverse QFT expanded.
 #
-# Look carefully at the qubit in :math:`\vert \theta_0\rangle`. After the final
-# Hadamard, it is used only for controlled gates. Thus, we can just measure it
-# and apply subsequent operations controlled on the classical outcome,
-# :math:`\theta_0`.
-#
-# .. figure:: ../_static/demonstration_assets/shor_catalyst/qpe_full_modified_power_with_qft-2.svg
-#    :width: 800
-#    :align: center
-#    :alt: QPE circuit with inverse QFT expanded and last estimation qubit measured off.
-#
-# Once again, we can do better by dynamically modifying the circuit based on
-# classical information. Instead of applying controlled :math:`R^\dagger_2`, we
-# can apply :math:`R^\dagger` where the rotation angle is 0 if :math:`\theta_0 =
-# 0`, and :math:`-2\pi i/2^2` if :math:`\theta_0 = 1`, i.e., :math:`R^\dagger_{2 \theta_0}`.
-# The same can be done for all other gates controlled on :math:`\theta_0`.
-#
-# .. figure:: ../_static/demonstration_assets/shor_catalyst/qpe_full_modified_power_with_qft-3.svg
-#    :width: 800
-#    :align: center
-#    :alt: QPE circuit with inverse QFT expanded, last estimation qubit measured, and rotation gates adjusted.
-#
-# We'll leverage this trick again with the second-last estimation
-# qubit. Moreover, we can make a further improvement by noting that once the
-# last qubit is measured, we can reset and repurpose it to play the role of the
-# second last qubit.
-#
-# .. figure:: ../_static/demonstration_assets/shor_catalyst/qpe_full_modified_power_with_qft-4.svg
-#    :width: 800
-#    :align: center
-#    :alt: QPE circuit with inverse QFT expanded and last estimation qubit reused.
-#
-# Once again, we adjust rotation angles based on measurement values, removing
-# the need for classical controls.
-#
-# .. figure:: ../_static/demonstration_assets/shor_catalyst/qpe_full_modified_power_with_qft-5.svg
-#    :width: 800
-#    :align: center
-#    :alt: QPE circuit with inverse QFT expanded, last estimation qubit reused, and rotation gates adjusted.
-#
-# We can do this for all remaining estimation qubits, adding more rotations
-# depending on previous measurement outcomes.
-#
-# .. figure:: ../_static/demonstration_assets/shor_catalyst/qpe_full_modified_power_with_qft-6.svg
-#    :width: 800
-#    :align: center
-#    :alt: QPE circuit with one estimation qubit, and unmerged rotation gates.
-#
-# Finally, since these are all :math:`RZ`, we can merge them. Let
+# Consider the bottom estimation wire. After the final Hadamard, this qubit only
+# applies controlled operations. Rather than preserving its state, we can make a
+# measurement and apply rotations classically controlled on the outcome
+# (essentially, the reverse of the deferred measurement process). The same can
+# be done for the next estimation wire; rotations applied to the remaining
+# estimation wires then depend on the previous two measurement outcomes. We can
+# repeat this process for all remaining estimation wires. Moreover, we can
+# simply reuse the *same* qubit for *all* estimation wires, provided we keep
+# track of the measurement outcomes classically, and apply an appropriate
+# :math:`RZ` rotation,
 #
 # .. math::
 #
 #     \mathbf{M}_{k} = \begin{pmatrix} 1 & 0 \\ 0 & e^{-2\pi i\sum_{\ell=0}^{k}  \frac{\theta_{\ell}}{2^{k + 2 - \ell}}} \end{pmatrix}.
 #
-# With a bit of index gymnastics, we obtain our final QPE algorithm with a single estimation qubit:
+# This allows us to reformulate the QPE algorithm as:
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/qpe_full_modified_power_with_qft-7.svg
 #    :width: 800
 #    :align: center
 #    :alt: QPE circuit with one estimation qubit.
 #
+# A step-by-step example is included in :ref:`appendix <appendix_single_qubit_qpe>`.
 #
 # The final Shor circuit
 # ~~~~~~~~~~~~~~~~~~~~~~
@@ -1148,3 +1012,230 @@ plt.ylabel("Runtime (s)");
 # About the author
 # ----------------
 # .. include:: ../_static/authors/olivia_di_matteo.txt
+#
+#
+# Appendix: fun with Fourier transforms
+# -------------------------------------
+#
+# This appendix provides a detailed derivation of the circuits for addition and
+# subtraction in the Fourier basis (both the generic and the modulo :math:`N`
+# case), as well as the full explanation of the one-qubit QPE trick.
+#
+# .. _appendix_fourier_adder:
+#
+# Standard Fourier addition
+# ^^^^^^^^^^^^^^^^^^^^^^^^^
+#
+# We recall the circuit from the main text.
+#
+# .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder.svg
+#    :width: 700
+#    :align: center
+#    :alt: Addition in the Fourier basis.
+#
+#    Circuit for addition in the Fourier basis [#Draper2000]_.
+#
+# In the third circuit, we've absorbed the Fourier transforms into the basis
+# states, and denoted this by calligraphic letters. The :math:`\mathbf{R}_k` are
+# phase shifts based on :math:`a`, and will be described below.
+#
+# To understand how Fourier addition works, we begin by revisiting the QFT.
+#
+# .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_explanation-1.svg
+#    :width: 800
+#    :align: center
+#    :alt: The Quantum Fourier Transform.
+#
+#    Circuit for the quantum Fourier transform. Note the big-endian qubit ordering with
+#    no terminal SWAP gates.
+#
+# In this circuit we define the phase gate
+#
+# .. math::
+#
+#     R_k = \begin{pmatrix} 1 & 0 \\ 0 & e^{\frac{2\pi i}{2^k}} \end{pmatrix}.
+#
+# The qubits are ordered using big endian notation. For an :math:`n`-bit integer
+# :math:`b`, :math:`\vert b\rangle = \vert b_{n-1} \cdots b_0\rangle` and
+# :math:`b = \sum_{k=0}^{n-1} 2^k b_k`.
+#
+# Suppose we wish to add :math:`a` to :math:`b`. We can add a new register
+# prepared in :math:`\vert a \rangle`, and use its qubits to control the
+# addition of phases to qubits in :math:`\vert b \rangle` (after a QFT is
+# applied) in a very particular way:
+#
+# .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_explanation-2.svg
+#    :width: 800
+#    :align: center
+#    :alt: Adding one integer to another with the Quantum Fourier Transform.
+#
+#    Fourier addition of :math:`a` to :math:`b`. The bit values of :math:`a`
+#    determine the amount of phase added to the qubits in :math:`b` [#Draper2000]_.
+#
+# Each qubit in :math:`\vert b \rangle` picks up a phase that depends on the
+# bits in :math:`a`. In particular, the :math:`k`'th bit of :math:`b`
+# accumulates information about all the bits in :math:`a` with an equal or lower
+# index, :math:`a_0, \ldots, a_{k}`. This adds :math:`a_k` to :math:`b_k`; the
+# cumulative effect adds :math:`a` to :math:`b`, up to an inverse QFT!
+#
+# .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_explanation-3.svg
+#    :width: 800
+#    :align: center
+#    :alt: Adding one integer to another with the Quantum Fourier Transform.
+#
+# However, we must be careful. Fourier basis addition is *not* automatically
+# modulo :math:`N`. If the sum :math:`b + a` requires :math:`n+ 1` bits, it will
+# overflow. To handle that, one extra qubit is added to the :math:`\vert
+# b\rangle` register (initialized to :math:`\vert 0 \rangle`). This is the
+# source of one of the auxiliary qubits mentioned earlier.
+#
+# In our case, a second register of qubits is not required. Since we know
+# :math:`a` in advance, we can precompute the amount of phase to apply: qubit
+# :math:`\vert b_k \rangle` must be rotated by :math:`\sum_{\ell=0}^{k}
+# \frac{a_\ell}{2^{\ell+1}}`. We'll express this as a new gate,
+#
+# .. math::
+#
+#     \mathbf{R}_k = \begin{pmatrix} 1 & 0 \\ 0 & e^{2\pi i\sum_{\ell=0}^{k} \frac{a_\ell}{2^{\ell+1}}} \end{pmatrix}.
+#
+# The final circuit for the Fourier adder is
+#
+# .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_explanation-4.svg
+#    :width: 500
+#    :align: center
+#    :alt: Full Fourier adder.
+#
+#
+# As one may expect, :math:`\Phi^\dagger` performs subtraction. However, we must
+# also consider the possibility of underflow.
+#
+# .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_adjoint.svg
+#    :width: 500
+#    :align: center
+#    :alt: Subtraction in the Fourier basis.
+#
+# .. _appendix_fourier_adder_modulo_n:
+#
+# Doubly-controlled Fourier addition modulo :math:`N`
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#
+# Let's analyze below circuit, keeping in mind :math:`a < N` and :math:`b < N`,
+# and the main register has :math:`n + 1` bits.
+#
+# .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_modulo_n.svg
+#    :width: 800
+#    :align: center
+#    :alt: Addition in the Fourier basis modulo N.
+#
+#    Circuit for doubly-controlled Fourier addition modulo :math:`N`
+#    [#Beauregard2003]_. The calligraphic letters indicate states already
+#    transformed to the Fourier basis.
+#
+# Suppose both control qubits are :math:`\vert 1 \rangle`. We add :math:`a` to
+# :math:`b`, then subtract :math:`N`. If :math:`a + b \geq N`, we get overflow
+# on the top qubit (which was included to account for precisely this), but
+# subtraction gives us the correct result modulo :math:`N`. After shifting back
+# to the computational basis with the :math:`QFT^\dagger`, the topmost qubit is
+# in :math:`\vert 0 \rangle` so the CNOT does not trigger. Next, we subtract
+# :math:`a` from the register, in state :math:`\vert a + b - N \pmod N \rangle`,
+# to obtain :math:`\vert b - N \rangle`. Since :math:`b < N`, there is
+# underflow. The top qubit, now in state :math:`\vert 1 \rangle`, does not
+# trigger the controlled-on-zero CNOT, and the auxiliary qubit is untouched.
+#
+# If instead :math:`a + b < N`, we subtracted :math:`N` for no reason, leading
+# to underflow. The topmost qubit is :math:`\vert 1 \rangle`, the CNOT will
+# trigger, and :math:`N` gets added back. The register then contains
+# :math:`\vert b + a \rangle`. Subtracting :math:`a` puts the register in state
+# :math:`\vert b \rangle`, which by design will not overflow; the
+# controlled-on-zero CNOT triggers, and the auxiliary qubit is returned to
+# :math:`\vert 0 \rangle`.
+#
+# If the control qubits are not both :math:`\vert 1 \rangle`, :math:`N` is
+# subtracted and the CNOT triggers (since :math:`b < N`), but :math:`N` is
+# always added back. By similar reasoning, the controlled-on-zero CNOT always
+# triggers and correctly uncomputes the auxiliary qubit.
+#
+# Recall that :math:`\Phi_+` is used in :math:`M_a` to add :math:`2^{k}a` to
+# :math:`b` (controlled on :math:`x_{k}`) in the Fourier basis.  In total, we
+# obtain (modulo :math:`N`)
+#
+# .. math::
+#
+#     \begin{equation*}
+#     b + x_{0} \cdot 2^0 a + x_{1} \cdot 2^1 a + \cdots x_{n-1} \cdot 2^{n-1} a  = b + a \sum_{k=0}^{n-1} x_{k} 2^k =  b + a x.
+#     \end{equation*}
+#
+# .. _appendix_single_qubit_qpe:
+#
+# QPE with one estimation wire
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#
+# Here we show how the inverse QFT in QPE can be implemented using a single
+# estimation wire when mid-circuit measurement and feedforward are available.
+# Our starting point is the full algorithm below.
+#
+# .. figure:: ../_static/demonstration_assets/shor_catalyst/qpe_full_modified_power_with_qft.svg
+#    :width: 800
+#    :align: center
+#    :alt: QPE circuit with inverse QFT expanded.
+#
+# Look carefully at the qubit in :math:`\vert \theta_0\rangle`. After the final
+# Hadamard, it is used only for controlled gates. Thus, we can just measure it
+# and apply subsequent operations controlled on the classical outcome,
+# :math:`\theta_0`.
+#
+# .. figure:: ../_static/demonstration_assets/shor_catalyst/qpe_full_modified_power_with_qft-2.svg
+#    :width: 800
+#    :align: center
+#    :alt: QPE circuit with inverse QFT expanded and last estimation qubit measured off.
+#
+# Once again, we can do better by dynamically modifying the circuit based on
+# classical information. Instead of applying controlled :math:`R^\dagger_2`, we
+# can apply :math:`R^\dagger` where the rotation angle is 0 if :math:`\theta_0 =
+# 0`, and :math:`-2\pi i/2^2` if :math:`\theta_0 = 1`, i.e., :math:`R^\dagger_{2 \theta_0}`.
+# The same can be done for all other gates controlled on :math:`\theta_0`.
+#
+# .. figure:: ../_static/demonstration_assets/shor_catalyst/qpe_full_modified_power_with_qft-3.svg
+#    :width: 800
+#    :align: center
+#    :alt: QPE circuit with inverse QFT expanded, last estimation qubit measured, and rotation gates adjusted.
+#
+# We'll leverage this trick again with the second-last estimation
+# qubit. Moreover, we can make a further improvement by noting that once the
+# last qubit is measured, we can reset and repurpose it to play the role of the
+# second last qubit.
+#
+# .. figure:: ../_static/demonstration_assets/shor_catalyst/qpe_full_modified_power_with_qft-4.svg
+#    :width: 800
+#    :align: center
+#    :alt: QPE circuit with inverse QFT expanded and last estimation qubit reused.
+#
+# Once again, we adjust rotation angles based on measurement values, removing
+# the need for classical controls.
+#
+# .. figure:: ../_static/demonstration_assets/shor_catalyst/qpe_full_modified_power_with_qft-5.svg
+#    :width: 800
+#    :align: center
+#    :alt: QPE circuit with inverse QFT expanded, last estimation qubit reused, and rotation gates adjusted.
+#
+# We can do this for all remaining estimation qubits, adding more rotations
+# depending on previous measurement outcomes.
+#
+# .. figure:: ../_static/demonstration_assets/shor_catalyst/qpe_full_modified_power_with_qft-6.svg
+#    :width: 800
+#    :align: center
+#    :alt: QPE circuit with one estimation qubit, and unmerged rotation gates.
+#
+# Finally, since these are all :math:`RZ`, we can merge them. Let
+#
+# .. math::
+#
+#     \mathbf{M}_{k} = \begin{pmatrix} 1 & 0 \\ 0 & e^{-2\pi i\sum_{\ell=0}^{k}  \frac{\theta_{\ell}}{2^{k + 2 - \ell}}} \end{pmatrix}.
+#
+# With a bit of index gymnastics, we obtain our final QPE algorithm with a single estimation qubit:
+#
+# .. figure:: ../_static/demonstration_assets/shor_catalyst/qpe_full_modified_power_with_qft-7.svg
+#    :width: 800
+#    :align: center
+#    :alt: QPE circuit with one estimation qubit.
+#
