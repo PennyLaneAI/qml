@@ -84,14 +84,15 @@ def shors_algorithm(N):
 #
 # Classical compilation
 # ^^^^^^^^^^^^^^^^^^^^^
+#
 # Compilation is the process of translating operations expressed in a high-level
 # language to a low-level language.  In languages like C and C++, compilation
-# happens offline prior to code execution. A compiler takes a program as
-# input and sends it through a sequence of *passes* that perform tasks such as
-# syntax analysis, code generation, and optimization. A compiler outputs a
-# new program in assembly code; an assembler turns that into a
-# machine-executable program that is provided inputs and run
-# [#PurpleDragonBook]_.
+# happens offline prior to code execution. A compiler takes a program as input
+# and sends it through a sequence of *passes* that perform tasks such as syntax
+# analysis, code generation, and optimization. The compiler outputs a new
+# program in assembly code, which is passed on to an assembler. The assembler
+# translates this code into a machine-executable program that we can feed inputs
+# to, then run [#PurpleDragonBook]_.
 #
 # Compilation is not the only way to execute a program. Python, for example, is
 # an *interpreted* language. Both a source program and inputs are fed to the
