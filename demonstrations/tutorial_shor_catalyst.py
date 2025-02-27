@@ -879,7 +879,7 @@ def shors_algorithm(N, a, n_bits):
 from jax import random
 
 
-def factor_with_shor(N, n_shots=100):
+def factor_with_shor(N, n_trials=100):
     key = random.PRNGKey(123456789)
     key, subkey = random.split(key)
 
@@ -897,13 +897,13 @@ def factor_with_shor(N, n_shots=100):
 
     # Get the success probabilities
     num_success = 0
-    for _ in range(n_shots):
+    for _ in range(n_trials):
         candidate_p, candidate_q = shors_algorithm(N, a, n_bits)
         if candidate_p * candidate_q == N:
             p, q = candidate_p, candidate_q
             num_success += 1
 
-    return p, q, num_success / n_shots
+    return p, q, num_success / n_trials
 
 
 N = 15
@@ -960,7 +960,8 @@ times = [ex[2] for ex in execution_times]
 plt.scatter(range(len(times)), times, c=[ex[0] for ex in execution_times])
 plt.xticks(range(0, len(times), 2), labels=labels, rotation=80)
 plt.xlabel("N, a")
-plt.ylabel("Runtime (s)");
+plt.ylabel("Runtime (s)")
+plt.show()
 
 ######################################################################
 # This plot demonstrates exactly what we suspect: changing :math:`N` and
