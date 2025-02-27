@@ -98,6 +98,14 @@ class Demo:
 
         return frozenset(reqs)
 
+def get(search_dir: Path, name: str) -> Demo | None:
+    """Get demo with `name`, if it exists."""
+    demo = Demo(name=name, path=search_dir / name)
+
+    if not demo.py_file.exists():
+        return None
+    
+    return demo
 
 def find(search_dir: Path, *names: str) -> Iterator[Demo]:
     """Find demos with given names in `search_dir`."""

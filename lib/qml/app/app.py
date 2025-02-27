@@ -5,7 +5,8 @@ import shutil
 import logging
 from typing import Annotated, Optional
 import typing
-
+import inflection
+import re
 
 logging.basicConfig(level=logging.INFO)
 
@@ -53,6 +54,42 @@ def build(
         quiet=quiet,
         keep_going=keep_going,
     )
+
+@app.command()
+def new():
+    """Create a new demo."""
+    ctx = Context()
+    title: str = typer.prompt("Title")
+    name_default = re.sub(r"\s+", "_", inflection.underscore(title))
+
+    while True:
+        name = typer.prompt("Name", name_default)
+        slug  = f"tutorial_{name}" if not name.startswith("tutorial_") else name
+        if demo.get(ctx.demos_dir, slug):
+            print(f"Demo with name '{name}' already exists")
+        else:
+            break
+
+    description = typer.prompt("Description", "")
+
+    author_prompt = "Author's pennylane.ai username"
+    authors: list[str] = []
+    authors.append(typer.prompt(author_prompt))
+
+    while True:
+        if not typer.confirm("Add another author?"):
+            break
+
+        authors.append(typer.prompt(author_prompt))
+
+        
+    
+    
+
+        
+
+
+
 
 
 @app.command()
