@@ -1,12 +1,14 @@
 import typer
 from qml.context import Context
-from qml.lib import demo, repo
+from qml.lib import demo, repo, cli, fs, template
 import shutil
 import logging
 from typing import Annotated, Optional
 import typing
 import inflection
 import re
+import json
+import rich
 
 logging.basicConfig(level=logging.INFO)
 
@@ -55,17 +57,19 @@ def build(
         keep_going=keep_going,
     )
 
+
 @app.command()
 def new():
     """Create a new demo."""
     ctx = Context()
     title: str = typer.prompt("Title")
     name_default = re.sub(r"\s+", "_", inflection.underscore(title))
+    if not name_default.startswith("tutorial_"):
+        name_default = "tutorial_" + name_default
 
     while True:
-        name = typer.prompt("Name", name_default)
-        slug  = f"tutorial_{name}" if not name.startswith("tutorial_") else name
-        if demo.get(ctx.demos_dir, slug):
+        name: str = typer.prompt("Name", name_default)
+        if demo.get(ctx.demos_dir, name):
             print(f"Demo with name '{name}' already exists")
         else:
             break
@@ -82,14 +86,42 @@ def new():
 
         authors.append(typer.prompt(author_prompt))
 
-        
-    
-    
+    small_thumbnail = cli.prompt_path("Thumbnail image")
+    large_thumbnail = cli.prompt_path("Large thumbnail image")
 
-        
+    demo_dir = ctx.demos_dir / name
+    demo_dir.mkdir(exist_ok=True)
 
+    if small_thumbnail:
+        dest = (demo_dir / "thumbnail").with_suffix(small_thumbnail.suffix)
+        fs.copy_parents(small_thumbnail, dest)
+        small_thumbnail = str(dest.relative_to(demo_dir))
 
+    if large_thumbnail:
+        dest = (demo_dir / "large_thumbnail").with_suffix(large_thumbnail.suffix)
+        fs.copy_parents(large_thumbnail, dest)
+        large_thumbnail = str(dest.relative_to(demo_dir))
 
+    with open(demo_dir / "demo.py", "w") as f:
+        f.write(template.demo(title))
+
+    with open(demo_dir / "metadata.json", "w") as f:
+        json.dump(
+            template.metadata(
+                title=title,
+                description=description,
+                authors=authors,
+                thumbnail=small_thumbnail,
+                large_thumbnail=large_thumbnail,
+                categories=[],
+            ),
+            f,
+            indent=2,
+        )
+
+    rich.print(
+        f"Created new demo in [bold]{demo_dir.relative_to(ctx.repo_root)}[/bold]"
+    )
 
 
 @app.command()
