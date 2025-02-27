@@ -255,10 +255,9 @@ def core_unitary_rotation(core, body_type, wires):
 # a time :math:`t` with the Suzuki-Trotter product formula, which uses symmetrized products
 # :math:`S_m` defined for an order :math:`m \in [1, 2, 4, \ldots, 2k \in \mathbb{N}]`
 # and repeated multiple times [#trotter]_. In general, this can be easily implemented for
-# standard non-factorized Hamiltonians using the :class:`~.pennylane.TrotterProduct` operation.
-# But this method defines Suzuki-Trotter products recursively, leading to an exponential
-# scaling in its complexity with the number of terms in the Hamiltonian,
-# making it inefficient for larger system sizes.
+# standard non-factorized Hamiltonians using the :class:`~.pennylane.TrotterProduct` operation,
+# which defines these products recursively, leading to an exponential scaling in its complexity
+# with the number of terms in the Hamiltonian and making it inefficient for larger system sizes.
 #
 # Exponential scaling can be improved to a great extent by working with the compressed
 # double-factorized form of the Hamiltonian as it allows reducing the number of terms in the
@@ -266,7 +265,7 @@ def core_unitary_rotation(core, body_type, wires):
 # in PennyLane in the form of a template, we can still implement the first-order Trotter step
 # using the following :func:`CDFTrotterStep` function that uses the CDF Hamiltonian with the
 # ``leaf_unitary_rotation`` and ``core_unitary_rotation`` functions defined earlier. We can
-# then use it with the :func:`~.pennylane.trotterize` function to expand it to implement any
+# then use it with the :func:`~.pennylane.trotterize` function to implement any
 # higher-order Suzuki-Trotter products.
 #
 
@@ -296,22 +295,20 @@ def CDFTrotterStep(time, cdf_ham, wires):
 
 ######################################################################
 # We can use this function to simulate the evolution of the linear hydrogen chain Hamiltonian
-# H\ :math:`_4` described in the compressed double-factorized form for a given number of steps
-# ``num_steps`` and starting from the Hartree-Fock state ``hf_state``:
+# :math:`H_4` described in the compressed double-factorized form for a given number of steps
+# ``n_steps`` and starting from the Hartree-Fock state ``hf_state``:
 #
 
-num_wires, time = 2 * mol.n_orbitals, 1.0
-hf_state = qml.qchem.hf_state(electrons=mol.n_electrons, orbitals=num_wires)
+time, circ_wires = 1.0, range(2 * mol.n_orbitals)
+hf_state = qml.qchem.hf_state(electrons=mol.n_electrons, orbitals=len(circ_wires))
 
-@qml.qnode(qml.device("lightning.qubit", wires=num_wires))
-def cdf_circuit(num_steps, order):
-    qml.BasisState(hf_state, wires=range(num_wires))
-    qml.trotterize(CDFTrotterStep, n=num_steps, order=order)(
-        time, cdf_hamiltonian, range(num_wires)
-    )
+@qml.qnode(qml.device("lightning.qubit", wires=circ_wires))
+def cdf_circuit(n_steps, order):
+    qml.BasisState(hf_state, wires=circ_wires)
+    qml.trotterize(CDFTrotterStep, n_steps, order)(time, cdf_hamiltonian, circ_wires)
     return qml.state()
 
-circuit_state = cdf_circuit(num_steps=10, order=2)
+circuit_state = cdf_circuit(n_steps=10, order=2)
 
 ######################################################################
 # We can test the accuracy of the Hamiltonian simulation via ``cdf_circuit`` by
@@ -322,11 +319,11 @@ circuit_state = cdf_circuit(num_steps=10, order=2)
 from pennylane.math import fidelity_statevector
 from scipy.linalg import expm
 
-init_state = qml.math.array([1] + [0] * (2**num_wires - 1)) # state vector for |00...0>
-hf_state_vec = qml.matrix(qml.BasisState(hf_state, wires=range(num_wires))) @ init_state
+init_state = qml.math.array([1] + [0] * (2**len(circ_wires) - 1)) # statevector |0...0>
+hf_state_vec = qml.matrix(qml.BasisState(hf_state, wires=circ_wires)) @ init_state
 
 H = qml.qchem.molecular_hamiltonian(mol)[0] # original Hamiltonian
-evolved_state = expm(-1j * qml.matrix(H) * time) @ hf_state_vec # e^{-iHt} @ |HF> 
+evolved_state = expm(-1j * qml.matrix(H) * time) @ hf_state_vec # e^{-iHt} @ |HF>
 
 print(f"Fidelity of two states: {fidelity_statevector(circuit_state, evolved_state)}")
 
