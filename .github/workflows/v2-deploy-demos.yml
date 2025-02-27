@@ -21,7 +21,7 @@ on:
         type: environment
         required: true
       artifact-name:
-        description: Name of artifact containing demo zip files
+        description: Name of artifact containing demo builds
         type: string
       preview:
         description: Whether to deploy demos as preview
