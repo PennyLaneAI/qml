@@ -1,13 +1,13 @@
 r"""How to build compressed double factorized Hamiltonians
 ==========================================================
 
-Two primary concerns for the quantum algorithms for quantum chemistry simulations of the
-electronic Hamiltonians are the dependency of their runtime on its one-norm and their shot
-requirements on the number of its terms. In this tutorial, we will learn how to tackle both
-of these via a technique called compressed double factorization that involves approximately
-representing the Hamiltonian in the form of tensor contractions that require a linear depth
-circuit with Givens rotations for simulations and has a linear combination of unitaries (LCU)
-representation suitable for error-corrected algorithms [#cdf]_.
+Compressed double factorization offers a powerful approach to overcome key limitations in
+quantum chemistry simulations. Specifically, it tackles the runtime's dependency on the
+Hamiltonian's one-norm and the shot requirements linked to the number of terms [#cdf]_. In this
+tutorial, we will first learn how to construct the electronic Hamiltonian in the compressed
+double factorized form using tensor contractions. We will then show how this technique allows
+having a linear combination of unitaries (LCU) representation suitable for error-corrected
+algorithms and facilitates efficient simulations via linear-depth circuits with Givens rotations.
 
 Revisiting the electronic Hamiltonian
 -------------------------------------
@@ -102,10 +102,10 @@ core_shift, one_shift, two_shift = qml.qchem.symmetry_shift(
 )
 
 ######################################################################
-# We can these shifted core, one-body and two-body terms to obtain a double factorized
-# representation of the Hamiltonian that has a lower one-norm than the original one. For instance,
-# we can compare the improvement in the one-norm of the shifted Hamiltonian over the original
-# one by accessing the :class:`~.pennylane.resource.DoubleFactorization`'s ``lamb`` attribute:
+# We can use these shifted terms to obtain a double factorized representation of the
+# Hamiltonian that has a lower one-norm than the original one. For instance, we can
+# compare the improvement in the one-norm of the shifted Hamiltonian over the original one
+# by accessing the :class:`~.pennylane.resource.DoubleFactorization`'s ``lamb`` attribute:
 #
 
 from pennylane.resource import DoubleFactorization as DF
@@ -189,9 +189,11 @@ one_body_leaves = qml.math.expand_dims(one_body_eigvecs, axis=0)
 print(f"One-body tensors' shape: {one_body_cores.shape, one_body_leaves.shape}")
 
 ######################################################################
-# We can now specify the Hamiltonian more compactly in the double factorized form
-# using the following three terms, `nuc_core_cdf`` (:math:`\mu`), ``one_body_cdf``
-# (:math:`Z^{\prime(0)}, U^{\prime(0)}`) and ``two_body_cdf`` (:math:`Z^{(t)}, U^{(t)}`):
+# We can specify the Hamiltonian programmatically in the double factorized form
+# using three terms, ``nuc_core_cdf`` (:math:`\mu`), ``one_body_cdf``
+# (:math:`Z^{\prime(0)}, U^{\prime(0)}`), and ``two_body_cdf`` (:math:`Z^{(t)}, U^{(t)}`),
+# which we will use in the next section:
+#
 
 nuc_core_cdf = core_shift[0]
 one_body_cdf = (one_body_cores, one_body_leaves)
@@ -201,9 +203,8 @@ two_body_cdf = (two_body_cores, two_body_leaves)
 # Simulating the double factorized Hamiltonian
 # ---------------------------------------------
 #
-# To simulate the above Hamiltonian in the double factorized form, we will
-# first need to learn how to apply the unitary operations represented by
-# the exponentiated leaf and core tensors. The former can be done using the
+# To simulate the above Hamiltonian, we will first need to learn how to apply the unitary operations
+# represented by the exponentiated leaf and core tensors. The former can be done using the
 # :class:`~.pennylane.BasisRotation` operation, which implements the unitary transformation
 # :math:`\exp \left( \sum_{pq}[\log U]_{pq} (a^\dagger_p a_q - a^\dagger_q a_p) \right)`.
 # The following ``leaf_unitary_rotation`` function does this for a leaf tensor:
@@ -215,11 +216,11 @@ def leaf_unitary_rotation(leaf, norbs):
     qml.BasisRotation(unitary_matrix=basis_mat, wires=range(2 * norbs))
 
 ######################################################################
-# The above can be decomposed in terms of the Givens rotation networks that can be efficiently
+# The above can be decomposed using Givens rotation networks that can be efficiently
 # implemented on quantum hardware. Similarly, the unitary transformation for the core tensor
 # can also be applied efficiently via the ``core_unitary_rotation`` function. It uses the
 # :class:`~.pennylane.RZ` and :class:`~.pennylane.MultiRZ` operations for implementing the
-# single-qubit Z and two-qubit ZZ-rotations for the one-body and two-body core tensors,
+# Pauli :math:`Z` and :math:`ZZ`-rotations for the one-body and two-body core tensors,
 # respectively, and :class:`~.pennylane.GlobalPhase` for the corresponding global phases:
 #
 
