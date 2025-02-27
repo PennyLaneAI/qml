@@ -403,8 +403,9 @@ def shors_algorithm(N, a, n_bits):
 #
 # We can also make some optimizations to the end of the algorithm by keeping
 # track of the powers of :math:`a`. If at iteration :math:`k` we have
-# :math:`a^{2^k} = 1`, no further multiplication is necessary, and we can
-# effectively terminate the algorithm early.
+# :math:`a^{2^k} = 1`, no further multiplication is necessary because we would
+# be multiplying by 1. In fact, we can terminate the algorithm early because
+# we've found the order of :math:`a` is simply :math:`2^k`.
 #
 # Next, consider the sequence of doubly-controlled adders in the controlled
 # :math:`M_a`. Below, we show the initial instance of the controlled
