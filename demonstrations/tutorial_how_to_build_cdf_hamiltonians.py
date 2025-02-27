@@ -139,13 +139,13 @@ print(f"Decrease in one-norm: {DF_chem_norm - DF_shift_norm}")
 
 _, two_body_cores, two_body_leaves = qml.qchem.factorize(
     two_shift, tol_factor=1e-2, cholesky=True, compressed=True, regularization="L2"
-)
+) # compressed double-factorized shifted two-body terms with "L2" regularization
 print(f"Two-body tensors' shape: {two_body_cores.shape, two_body_leaves.shape}")
 
 approx_two_shift = qml.math.einsum(
     "tpk,tqk,tkl,trl,tsl->pqrs",
     two_body_leaves, two_body_leaves, two_body_cores, two_body_leaves, two_body_leaves
-)
+) # computing V^\prime and comparing it with V below
 assert qml.math.allclose(approx_two_shift, two_shift, atol=1e-2)
 
 ######################################################################
@@ -326,7 +326,7 @@ init_state = qml.math.array([1] + [0] * (2**num_wires - 1)) # state vector for |
 hf_state_vec = qml.matrix(qml.BasisState(hf_state, wires=range(num_wires))) @ init_state
 
 H = qml.qchem.molecular_hamiltonian(mol)[0] # original Hamiltonian
-evolved_state = expm(-1j * qml.matrix(H) * time) @ hf_state_vec
+evolved_state = expm(-1j * qml.matrix(H) * time) @ hf_state_vec # e^{-iHt} @ |HF> 
 
 print(f"Fidelity of two states: {fidelity_statevector(circuit_state, evolved_state)}")
 
