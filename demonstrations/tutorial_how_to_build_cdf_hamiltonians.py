@@ -154,31 +154,27 @@ assert qml.math.allclose(approx_two_shift, two_shift, atol=1e-2)
 # Constructing the double factorized Hamiltonian
 # -----------------------------------------------
 #
-# We can eigendecompose the one-body tensor to obtain similar orthornormal and symmetric
-# tensors for the one-body term and use the above compressed factorization of the two-body term
-# to express the Hamiltonian in the double factorized form as:
+# We can eigendecompose the one-body tensor to obtain similar orthornormal and symmetric tensors
+# for the one-body term and use the above compressed factorization of the two-body term to express
+# the Hamiltonian in the double factorized form as sum of the products of core and leaf tensors:
 #
-# .. math:: H_{\text{CDF}} = \mu + \sum_{\sigma \in {\uparrow, \downarrow}} U^{(0)}_{\sigma} \left( \sum_{p} Z^{(0)}_{p} a^\dagger_{\sigma, p} a_{\sigma, p} \right) U_{\sigma}^{(0)\ \dagger} + \sum_t^T \sum_{\sigma, \tau \in {\uparrow, \downarrow}} U_{\sigma, \tau}^{(t)} \left( \sum_{pq} Z_{pq}^{(t)} a^\dagger_{\sigma, p} a_{\sigma, p} a^\dagger_{\tau, q} a_{\tau, q} \right) U_{\sigma, \tau}^{(t)\ \dagger},
+# .. math:: H_{\text{CDF}} = \mu + \sum_{\sigma \in {\uparrow, \downarrow}} U^{(0)}_{\sigma} \left( \sum_{p} Z^{(0)}_{p} a^\dagger_{\sigma, p} a_{\sigma, p} \right) U_{\sigma}^{(0)\ \dagger} + \sum_t^T \sum_{\sigma, \tau \in {\uparrow, \downarrow}} U_{\sigma, \tau}^{(t)} \left( \sum_{pq} Z_{pq}^{(t)} a^\dagger_{\sigma, p} a_{\sigma, p} a^\dagger_{\tau, q} a_{\tau, q} \right) U_{\sigma, \tau}^{(t)\ \dagger}.
 #
-# where (:math:`Z^{(0)}, U^{(0)}`) and (:math:`Z^{(t)}, U^{(t)}`) are the core and leaf tensors for
-# one-body and two-body terms, respectively. The above Hamiltonian can be easily mapped to the qubit
-# basis via the `Jordan-Wigner transformation <https://pennylane.ai/qml/demos/tutorial_mapping>`_
-# using :math:`a_p^\dagger a_p = n_p \mapsto 0.5 * (1 - z_p)`, where :math:`n_p` is the number
+# The above Hamiltonian can be easily mapped to the qubit basis via
+# `Jordan-Wigner transformation <https://pennylane.ai/qml/demos/tutorial_mapping>`_ using
+# :math:`a_p^\dagger a_p = n_p \mapsto 0.5 * (1 - z_p)`, where :math:`n_p` is the number
 # operator and :math:`z_p` is the Pauli-Z operation acting on the qubit corresponding to
-# orbital :math:`p`. This will allow us to obtain the measurement groupings of the Hamiltonian
-# for reducing the shot requirements for measurements, where each grouping consist of the terms
-# within the basis transformation :math:`U^{(i)}` that can be measured simultaneously. We can
-# obtain the corresponding Pauli terms and basis transformation for these groupings using the
-# :func:`~pennylane.qchem.basis_rotation` function, which automatically accounts for the spin.
+# orbital :math:`p`. The mapped form naturally gives rise to a measurement grouping, where
+# the terms within the basis transformation :math:`U^{(i)}` can be measured simultaneously,
+# and can be obtained using the :func:`~pennylane.qchem.basis_rotation` function.
 #
-# However, this is not the only advantage of the double factorized form. It also allows for an
-# efficient simulation of the Hamiltonian evolution. To understand this better, we first note that
-# the Jordan-Wigner transformation of the two-body terms will result in some additional one-qubit
-# Pauli-Z terms, i.e., one-body terms, which will appear in their evolution as well. As we will
-# see in the next section, we can simplify the simulation circuit for the two-body terms by
-# accounting for these additional terms directly in the one-body tensor itself by obtaining an
-# one-body correction for it. We can then decompose the corrected one-body terms into the
-# orthornormal :math:`U^{\prime(0)}` and symmetric tensors :math:`Z^{\prime(0)}` as follows:
+# Another advantage of the double factorized form is the efficient simulation of the Hamiltonian
+# evolution. To motivate this, we point out that mapping a two-body term to the qubit basis will
+# result in two additional one-qubit Pauli-Z terms. As these will also appear in their evolution.
+# we can simplify the simulation circuit by accounting for these additional terms directly in the
+# one-body tensor itself by obtaining an one-body correction (``one_body_extra``) for it. We can
+# then decompose the corrected one-body terms into the orthornormal :math:`U^{\prime(0)}` and
+# symmetric tensors :math:`Z^{\prime(0)}` as follows:
 #
 
 two_core_prime = (qml.math.eye(mol.n_orbitals) * two_body_cores.sum(axis=-1)[:, None, :])
