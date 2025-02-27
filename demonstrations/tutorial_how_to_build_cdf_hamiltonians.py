@@ -76,9 +76,9 @@ one_chem = one_body - qml.math.einsum("prrs", two_chem)  # T_pq
 # tensor factorization will be :math:`O(N)`. In PennyLane, this can be done using the
 # :func:`~pennylane.qchem.factorize` function, where one can choose the decomposition method
 # for the first tensor factorization, truncate the resulting factors by discarding the ones
-# with individual contributions below a specified threshold, and the ranks of their second
-# factorization using the ``cholesky``, ``tol_factor``, and ``tol_eigval`` keyword
-# arguments, respectively, as shown below:
+# with individual contributions below a specified threshold, and control the ranks of
+# their second factorization using the ``cholesky``, ``tol_factor``, and ``tol_eigval``
+# keyword arguments, respectively, as shown below:
 #
 
 factors, _, _ = qml.qchem.factorize(two_chem, cholesky=True, tol_factor=1e-5)
