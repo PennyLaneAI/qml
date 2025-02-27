@@ -3,7 +3,7 @@
 
 <svg
    sodipodi:docname="compilation-stack.svg"
-   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
    id="svg28806"
    version="1.1"
    viewBox="0 0 170.28292 159.17537"
@@ -314,25 +314,28 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.47797194"
-     inkscape:cx="260.3518"
-     inkscape:cy="689.67723"
+     inkscape:zoom="1.3519088"
+     inkscape:cx="394.99706"
+     inkscape:cy="255.56458"
      inkscape:document-units="mm"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="g4139"
      showgrid="false"
      inkscape:window-width="1916"
-     inkscape:window-height="1033"
-     inkscape:window-x="0"
-     inkscape:window-y="22"
+     inkscape:window-height="1036"
+     inkscape:window-x="1920"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:pagecheckerboard="0"
      showguides="true"
      width="159.04143mm"
-     inkscape:guide-bbox="true">
+     inkscape:guide-bbox="true"
+     inkscape:showpageshadow="2"
+     inkscape:deskcolor="#d1d1d1">
     <sodipodi:guide
        position="-213.62337,215.29322"
        orientation="1,0"
-       id="guide9027" />
+       id="guide9027"
+       inkscape:locked="false" />
   </sodipodi:namedview>
   <metadata
      id="metadata28803">
@@ -500,8 +503,7 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccccccc" />
     <g
-       aria-label="Quantum software
-(Human-readable code)"
+       aria-label="Quantum software (Human-readable code)"
        id="text15949-6"
        style="font-size:4.9389px;line-height:1.25;font-family:Inconsolata;-inkscape-font-specification:Inconsolata;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;stroke-width:0.264583">
       <path
@@ -699,8 +701,7 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccccccc" />
     <g
-       aria-label="Low-level circuit description
-(Elementary gates / quantum assembly)"
+       aria-label="Low-level circuit description (Elementary gates / quantum assembly)"
        id="text15949-9-46"
        style="font-size:4.9389px;line-height:1.25;font-family:Inconsolata;-inkscape-font-specification:Inconsolata;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;stroke-width:0.264583">
       <path
@@ -977,8 +978,7 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccccccc" />
     <g
-       aria-label="Pulse-level description 
-(Language of control electronics)"
+       aria-label="Pulse-level description  (Language of control electronics)"
        id="text15949-9-4-7"
        style="font-size:4.9389px;line-height:1.25;font-family:Inconsolata;-inkscape-font-specification:Inconsolata;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583">
       <path
@@ -1222,26 +1222,24 @@
          id="path97173-6"
          inkscape:connector-curvature="0" />
       <path
-         style="opacity:0.316;vector-effect:none;fill:#ffcc00;fill-opacity:1;stroke:#ffcc00;stroke-width:0.822887px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;paint-order:stroke markers fill"
-         d="m -41.153088,118.30316 h 23.574114 v 0 12.68511 0 c -0.04608,0 -23.574114,0 -23.574114,0 v 0 z"
+         style="opacity:0.316;vector-effect:none;fill:#ffcc00;fill-opacity:1;stroke:#ffcc00;stroke-width:1.26547px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;paint-order:stroke markers fill"
+         d="m -58.243052,118.52446 h 57.76779805 v 0 12.24251 0 c -0.11291,0 -57.76779805,0 -57.76779805,0 v 0 z"
          id="path97173"
          inkscape:connector-curvature="0" />
-      <g
-         aria-label="US"
-         id="text15949-62-2-8"
-         style="font-size:10.1806px;line-height:1.25;font-family:Inconsolata;-inkscape-font-specification:Inconsolata;letter-spacing:0px;word-spacing:0px;stroke-width:0.545387">
-        <path
-           d="m -33.972743,121.42864 v 4.16387 c 0,0.44794 0.01018,0.87553 0.244334,1.3133 0.34614,0.65155 1.058782,0.98751 1.801966,0.98751 0.733003,0 1.445645,-0.32578 1.801966,-0.9977 0.244335,-0.43776 0.254515,-0.87553 0.254515,-1.34383 v -4.12315 h -0.671919 v 4.14351 c 0,0.32578 -0.01018,0.64137 -0.16289,0.96715 -0.234154,0.48867 -0.712642,0.74319 -1.211491,0.74319 -0.49885,0 -0.977338,-0.2647 -1.201311,-0.75337 -0.152709,-0.30541 -0.152709,-0.62101 -0.152709,-0.93661 v -3.83809 c 0,-0.0407 0,-0.0814 0.04072,-0.13235 0.02036,-0.0305 0.06108,-0.0814 0.06108,-0.14252 0,-0.0102 0,-0.0306 -0.01018,-0.0509 z"
-           id="path68558" />
-        <path
-           d="m -24.973112,122.19219 c -0.427586,-0.51921 -1.058783,-0.79409 -1.751064,-0.79409 -1.150407,0 -1.934314,0.75337 -1.934314,1.6289 0,0.3665 0.142529,0.84499 0.67192,1.23185 0.590475,0.43777 1.506729,0.65156 1.985217,0.95698 0.417405,0.25451 0.529391,0.59047 0.529391,0.87553 0,0.54975 -0.468307,1.15041 -1.384561,1.15041 -0.692281,0 -1.231853,-0.34615 -1.51691,-0.70247 -0.03054,-0.0407 -0.03054,-0.0611 -0.03054,-0.1018 0,-0.0204 0,-0.0815 -0.04072,-0.10181 l -0.427585,0.733 c 0.498849,0.53958 1.211491,0.81445 1.995397,0.81445 1.547452,0 2.117565,-1.03842 2.117565,-1.83251 0,-0.33595 -0.101806,-0.77372 -0.498849,-1.1504 -0.549753,-0.51921 -1.445645,-0.70246 -2.02594,-1.03842 -0.529391,-0.3156 -0.641377,-0.69228 -0.641377,-0.9468 0,-0.48867 0.417404,-0.92643 1.140227,-0.92643 0.590475,0 1.048602,0.26469 1.292936,0.62101 0.03054,0.0407 0.02036,0.0611 0.02036,0.10181 0,0.0611 0.03054,0.0814 0.0509,0.0814 z"
-           id="path68560" />
-      </g>
+      <text
+         xml:space="preserve"
+         style="font-size:8.11398px;line-height:1.25;font-family:Inconsolata;-inkscape-font-specification:Inconsolata;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffbb;fill-opacity:0.796478;stroke:none;stroke-width:0.165947;stroke-linecap:square;stroke-dasharray:0.304273, 1.21709"
+         x="-29.424065"
+         y="126.47136"
+         id="text1655"><tspan
+           sodipodi:role="line"
+           id="tspan1653"
+           style="fill:#000000;stroke:none;stroke-width:0.165947"
+           x="-29.424065"
+           y="126.47136">Programmer</tspan></text>
     </g>
     <g
-       aria-label="Circuit synthesis
-Unrolling and decomposition
-Circuit optimization"
+       aria-label="Circuit synthesis Unrolling and decomposition Circuit optimization"
        transform="scale(1.0370631,0.96426148)"
        id="text15949-3"
        style="font-size:4.76606px;line-height:1.25;font-family:Inconsolata;-inkscape-font-specification:Inconsolata;letter-spacing:0px;word-spacing:0px;stroke-width:0.255324">
@@ -1487,10 +1485,7 @@ Circuit optimization"
          id="path68555" />
     </g>
     <g
-       aria-label="Native-gate transpilation
-Circuit optimization
-Qubit placement (mapping)
-Qubit routing"
+       aria-label="Native-gate transpilation Circuit optimization Qubit placement (mapping) Qubit routing"
        transform="scale(1.0370631,0.96426148)"
        id="text15949-3-7"
        style="font-size:4.76606px;line-height:1.25;font-family:Inconsolata;-inkscape-font-specification:Inconsolata;letter-spacing:0px;word-spacing:0px;stroke-width:0.255324">
@@ -1808,8 +1803,7 @@ Qubit routing"
          id="path68434" />
     </g>
     <g
-       aria-label="Pulse optimization
-Pulse scheduling"
+       aria-label="Pulse optimization Pulse scheduling"
        transform="scale(1.0370631,0.96426148)"
        id="text15949-3-7-5"
        style="font-size:4.76606px;line-height:1.25;font-family:Inconsolata;-inkscape-font-specification:Inconsolata;letter-spacing:0px;word-spacing:0px;stroke-width:0.255324">
