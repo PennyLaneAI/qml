@@ -18,6 +18,7 @@ class RequirementsGenerator:
         self,
         python_bin: Path,
         global_constraints_file: Path,
+        overrides_file: Path | None = None,
     ):
         self.python_bin = python_bin
 
@@ -25,6 +26,14 @@ class RequirementsGenerator:
         with open(global_constraints_file, "r") as f:
             for req in requirements.parse(f):
                 global_constraints[req.name] += (req.line,)
+
+        if overrides_file:
+            overrides: dict[str, tuple[str, ...]] = defaultdict(tuple)
+            with open(overrides_file, "r") as f:
+                for req in requirements.parse(f):
+                    overrides[req.name] += (req.line,)
+
+            global_constraints.update(overrides)
 
         self.global_constraints = global_constraints
         self._requirements_in_cache: dict[frozenset[str], str] = {}

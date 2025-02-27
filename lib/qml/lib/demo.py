@@ -132,6 +132,7 @@ def build(
     execute: bool,
     quiet: bool = False,
     keep_going: bool = False,
+    overrides_file: Path | None = None,
 ) -> None:
     """Build the provided demos using 'sphinx-build', optionally
     executing them to generate plots and cell outputs.
@@ -155,6 +156,7 @@ def build(
     requirements_generator = RequirementsGenerator(
         Path(sys.executable),
         global_constraints_file=ctx.constraints_file,
+        overrides_file=overrides_file,
     )
 
     for demo in demos:

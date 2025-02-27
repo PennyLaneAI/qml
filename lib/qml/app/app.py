@@ -5,6 +5,7 @@ import shutil
 import logging
 from typing import Annotated, Optional
 import typing
+from pathlib import Path
 
 
 logging.basicConfig(level=logging.INFO)
@@ -35,6 +36,10 @@ def build(
     keep_going: Annotated[
         bool, typer.Option(help="Continue if sphinx-build fails for a demo")
     ] = False,
+    overrides_file: Annotated[
+        Optional[str],
+        typer.Option(help="Requirements file containing dependency version overrides"),
+    ] = None,
 ) -> None:
     """Build the named demos."""
     ctx = Context()
@@ -52,6 +57,7 @@ def build(
         execute=execute,
         quiet=quiet,
         keep_going=keep_going,
+        overrides_file=Path(overrides_file) if overrides_file else None,
     )
 
 
