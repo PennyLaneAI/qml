@@ -189,15 +189,18 @@ one_body_leaves = qml.math.expand_dims(one_body_eigvecs, axis=0)
 print(f"One-body tensors' shape: {one_body_cores.shape, one_body_leaves.shape}")
 
 ######################################################################
-# We can specify the Hamiltonian programmatically in the double factorized form
-# using three terms, ``nuc_core_cdf`` (:math:`\mu`), ``one_body_cdf``
-# (:math:`Z^{\prime(0)}, U^{\prime(0)}`), and ``two_body_cdf`` (:math:`Z^{(t)}, U^{(t)}`),
-# which we will use in the next section:
+# We can now specify the Hamiltonian programmatically in the (compressed)
+# double factorized form as a dictionary with following three keys:
+# ``nuc_constant`` (:math:`\mu`),
+# ``core_tensors`` ([:math:`[Z^{\prime(0)}, Z^{(t)}, \ldots]`), and
+# ``leaf_tensors`` ([:math:`[U^{\prime(0)}, U^{(t)}, \ldots]`)):
 #
 
-nuc_core_cdf = core_shift[0]
-one_body_cdf = (one_body_cores, one_body_leaves)
-two_body_cdf = (two_body_cores, two_body_leaves)
+cdf_hamiltonian = {
+    "nuc_constant": core_shift[0],
+    "core_tensors": qml.math.concatenate((one_body_cores, two_body_cores), axis=0),
+    "leaf_tensors": qml.math.concatenate((one_body_leaves, two_body_leaves), axis=0),
+}
 
 ######################################################################
 # Simulating the double factorized Hamiltonian
@@ -210,10 +213,10 @@ two_body_cdf = (two_body_cores, two_body_leaves)
 # The following ``leaf_unitary_rotation`` function does this for a leaf tensor:
 #
 
-def leaf_unitary_rotation(leaf, norbs):
+def leaf_unitary_rotation(leaf, wires):
     """Applies the basis rotation transformation corresponding to the leaf tensor."""
     basis_mat = qml.math.kron(leaf, qml.math.eye(2)) # account for spin
-    qml.BasisRotation(unitary_matrix=basis_mat, wires=range(2 * norbs))
+    qml.BasisRotation(unitary_matrix=basis_mat, wires=wires)
 
 ######################################################################
 # The above can be decomposed using Givens rotation networks that can be efficiently
@@ -224,23 +227,23 @@ def leaf_unitary_rotation(leaf, norbs):
 # respectively, and :class:`~.pennylane.GlobalPhase` for the corresponding global phases:
 #
 
-def core_unitary_rotation(core, norbs, body_type):
+def core_unitary_rotation(core, body_type, wires):
     """Applies the unitary transformation corresponding to the core tensor."""
-    if body_type == "one_body":  # gates for one-body term
+    if body_type == "one_body":  # implements one-body term
         for wire, cval in enumerate(qml.math.diag(core)):
             for sigma in [0, 1]:
                 qml.RZ(-cval, wires=2 * wire + sigma)
-        qml.GlobalPhase(qml.math.sum(core), wires=range(2 * norbs))
+        qml.GlobalPhase(qml.math.sum(core), wires=wires)
 
-    else:  # gates for two-body term
-        for odx1, odx2 in it.product(range(norbs), repeat=2):
+    if body_type == "two_body":  # implements two-body term
+        for odx1, odx2 in it.product(range(len(wires) // 2), repeat=2):
             cval = core[odx1, odx2]
             for sigma, tau in it.product(range(2), repeat=2):
                 if odx1 != odx2 or sigma != tau:
                     two_wires = [2 * odx1 + sigma, 2 * odx2 + tau]
                     qml.MultiRZ(cval / 4.0, wires=two_wires)
         gphase = 0.5 * qml.math.sum(core) + 0.25 * qml.math.trace(core)
-        qml.GlobalPhase(-gphase, wires=range(2 * norbs))
+        qml.GlobalPhase(-gphase, wires=wires)
 
 ######################################################################
 # We can now use these functions to approximate the evolution operator :math:`e^{-iHt}` for
@@ -252,47 +255,42 @@ def core_unitary_rotation(core, norbs, body_type):
 # scaling in its complexity with the number of terms in the Hamiltonian,
 # making it inefficient for larger system sizes.
 #
-# Such a scaling behaviour could be managed to a great extent by working with the compressed
+# Exponential scaling can be improved to a great extent by working with the compressed
 # double factorized form of the Hamiltonian as it allows reducing the number of terms in the
 # Hamiltonian from :math:`O(N^4)` to :math:`O(N)`. While doing this is not directly supported
-# in PennyLane in the form of a template, we can still implement the first-order Trotter
-# approximation using the following :func:`CDFTrotterProduct` function that uses the
-# compressed double factorized form of the Hamiltonian with the ``leaf_unitary_rotation``
-# and ``core_unitary_rotation`` functions defined earlier:
+# in PennyLane in the form of a template, we can still implement the first-order Trotter step
+# using the following :func:`CDFTrotterStep` function that uses the CDF Hamiltonian with the
+# ``leaf_unitary_rotation`` and ``core_unitary_rotation`` functions defined earlier. We can
+# then use it with the :func:`~.pennylane.trotterize` function to expand it to implement any
+# higher-order Suzuki-Trotter products.
 #
 
 import itertools as it
 
-def CDFTrotterProduct(nuc_core_cdf, one_body_cdf, two_body_cdf, time, num_steps=1):
-    """Implements a first-order Trotter circuit for a CDF Hamiltonian.
+def CDFTrotterStep(time, cdf_ham, wires):
+    """Implements a first-order Trotter step for a CDF Hamiltonian.
 
     Args:
-        nuc_core_cdf (float): The nuclear core energy.
-        one_body_cdf (tuple): core and leaf tensors for the one-body terms.
-        two_body_cdf (tuple): core and leaf tensors for the two-body terms.
-        time (float): The total time for the evolution.
-        num_steps (int): The number of Trotter steps. Default is 1.
+        time (float): time-step for a Trotter step.
+        cdf_ham (dict): dictionary describing the CDF Hamiltonian.
+        wires (list): list of integers representing the qubits.
     """
-    norbs = qml.math.shape(one_body_cdf[0])[1]
-    cores = qml.math.concatenate((one_body_cdf[0], two_body_cdf[0]), axis=0)
-    leaves = qml.math.concatenate((one_body_cdf[1], two_body_cdf[1]), axis=0)
-    btypes = qml.math.array([1] * len(one_body_cdf[0]) + [2] * len(two_body_cdf[0]))
+    cores, leaves = cdf_ham["core_tensors"], cdf_ham["leaf_tensors"]
 
-    step = time / num_steps
-    for _ in range(num_steps):
-        for core, leaf, btype in zip(cores, leaves, btypes):
-            # apply the basis rotation for leaf tensor
-            leaf_unitary_rotation(leaf, norbs)
+    for bidx, (core, leaf) in enumerate(zip(cores, leaves)):
+        # apply the basis rotation for leaf tensor
+        leaf_unitary_rotation(leaf, wires)
 
-            # apply the rotation for core tensor scaled by the step size
-            body_type = "one_body" if btype == 1 else "two_body"
-            core_unitary_rotation(step * core, norbs, body_type)
+        # apply the rotation for core tensor scaled by the time-step
+        # Note: only the first term is one-body, others are two-body
+        body_type = "two_body" if bidx else "one_body"
+        core_unitary_rotation(time * core, body_type, wires)
 
-            # revert the above change-of-basis for leaf tensor
-            leaf_unitary_rotation(leaf.conjugate().T, norbs)
+        # revert the above change-of-basis for leaf tensor
+        leaf_unitary_rotation(leaf.conjugate().T, wires)
 
     # apply the globals phase based on the nuclear core energy
-    qml.GlobalPhase(nuc_core_cdf * time, wires=range(2 * norbs))
+    qml.GlobalPhase(cdf_ham["nuc_constant"] * time, wires=wires)
 
 ######################################################################
 # We can use this function to simulate the evolution of the linear hydrogen chain Hamiltonian
@@ -304,12 +302,14 @@ num_wires, time = 2 * mol.n_orbitals, 1.0
 hf_state = qml.qchem.hf_state(electrons=mol.n_electrons, orbitals=num_wires)
 
 @qml.qnode(qml.device("lightning.qubit", wires=num_wires))
-def cdf_circuit(num_steps):
+def cdf_circuit(num_steps, order):
     qml.BasisState(hf_state, wires=range(num_wires))
-    CDFTrotterProduct(nuc_core_cdf, one_body_cdf, two_body_cdf, time, num_steps=num_steps)
+    qml.trotterize(CDFTrotterStep, n=num_steps, order=order)(
+        time, cdf_hamiltonian, range(num_wires)
+    )
     return qml.state()
 
-circuit_state = cdf_circuit(num_steps=10)
+circuit_state = cdf_circuit(num_steps=10, order=2)
 
 ######################################################################
 # We can test the accuracy of the Hamiltonian simulation via ``cdf_circuit`` by
