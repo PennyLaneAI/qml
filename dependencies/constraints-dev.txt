@@ -1,7 +1,7 @@
 # Specifies global constraints for the dev build
 
 --extra-index-url https://test.pypi.org/simple/
---extra-index-url https://download.pytorch.org/whl/cpu"
+--extra-index-url https://download.pytorch.org/whl/cpu
 
 pennylane @ git+https://github.com/PennyLaneAI/pennylane.git#egg=pennylane
 pennylane-qiskit @ git+https://github.com/PennyLaneAI/pennylane-qiskit.git#egg=pennylane-qiskit
