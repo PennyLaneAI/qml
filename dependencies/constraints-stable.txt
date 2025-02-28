@@ -1,5 +1,5 @@
 # Specifies global constraints for the stable build
---extra-index-url https://download.pytorch.org/whl/cpu"
+--extra-index-url https://download.pytorch.org/whl/cpu
 pennylane==0.40.0
 pennylane-cirq==0.40.0
 pennylane-qiskit==0.40.0
