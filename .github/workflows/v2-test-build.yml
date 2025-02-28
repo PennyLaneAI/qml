@@ -1,4 +1,4 @@
-name: Build Website
+name: V2 - Test Builds
 on:
   pull_request:
     branches:
