@@ -1,0 +1,32 @@
+# Specifies global constraints for the stable build
+--extra-index-url https://download.pytorch.org/whl/cpu"
+pennylane==0.40.0
+pennylane-cirq==0.40.0
+pennylane-qiskit==0.40.0
+pennylane-qulacs==0.40.0
+pennylane-catalyst==0.10.0
+pennylane-qrack==0.11.1
+
+pyqrack==1.32.12
+numpy~=1.24
+matplotlib==3.7.2
+jax==0.4.28
+jaxlib==0.4.28
+jaxopt==0.8.3
+aiohttp==3.9.5
+fsspec==2024.6.1
+h5py==3.11.0
+openfermionpyscf==0.5
+openqaoa-core==0.2.5
+qiskit>=1.0.0
+qiskit-aer>=0.14.0,<0.16.0
+qiskit_ibm_runtime==0.29.0
+torch==2.1.2+cpu ; sys_platform != 'darwin'
+torch==2.1.2 ; sys_platform == 'darwin'
+torchvision==0.16.2+cpu ; sys_platform != 'darwin'
+torchvision==0.16.2 ; sys_platform == 'darwin'
+tensorflow==2.14.1
+optax==0.2.3
+quimb==1.8.2
+kahypar==1.1.7
+

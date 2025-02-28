@@ -18,6 +18,8 @@ class RequirementsGenerator:
         self,
         python_bin: Path,
         global_constraints_file: Path,
+        extra_index_urls: Sequence[str] | None = None,
+        pre: bool = False,
     ):
         self.python_bin = python_bin
 

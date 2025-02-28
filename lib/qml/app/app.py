@@ -38,6 +38,7 @@ def build(
     keep_going: Annotated[
         bool, typer.Option(help="Continue if sphinx-build fails for a demo")
     ] = False,
+    dev: Annotated[bool, typer.Option(help="Whether to use dev dependencies")] = False,
 ) -> None:
     """Build the named demos."""
     ctx = Context()
@@ -55,6 +56,7 @@ def build(
         execute=execute,
         quiet=quiet,
         keep_going=keep_going,
+        dev=dev,
     )
 
 

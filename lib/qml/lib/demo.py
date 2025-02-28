@@ -4,7 +4,6 @@ from collections.abc import Sequence, Iterator
 import shutil
 from qml.lib import fs, cmds
 from qml.lib.virtual_env import Virtualenv
-from qml.lib.pip_tools import RequirementsGenerator
 import os
 import sys
 from logging import getLogger
@@ -142,6 +141,7 @@ def build(
     execute: bool,
     quiet: bool = False,
     keep_going: bool = False,
+    dev: bool = False,
 ) -> None:
     """Build the provided demos using 'sphinx-build', optionally
     executing them to generate plots and cell outputs.
@@ -160,11 +160,8 @@ def build(
     logger.info("Building %d demos", len(demos))
 
     build_venv = Virtualenv(ctx.build_venv_path)
-    _install_build_dependencies(build_venv, ctx.build_dir)
-
-    requirements_generator = RequirementsGenerator(
-        Path(sys.executable),
-        global_constraints_file=ctx.constraints_file,
+    cmds.pip_install(
+        build_venv.python, requirements=ctx.build_requirements_file, use_uv=False
     )
 
     for demo in demos:
@@ -180,15 +177,14 @@ def build(
 
         try:
             _build_demo(
-                sphinx_dir=ctx.repo_root,
-                build_dir=ctx.build_dir,
+                ctx,
                 build_venv=build_venv,
-                requirements_generator=requirements_generator,
                 target=target,
                 execute=execute_demo,
                 demo=demo,
                 package=target is BuildTarget.JSON,
                 quiet=quiet,
+                dev=dev,
             )
         except subprocess.CalledProcessError as exc:
             if not keep_going:
@@ -208,29 +204,48 @@ def build(
         raise RuntimeError(f"Failed to build {len(failed)} demos", failed)
 
 
+def generate_requirements(
+    ctx: Context, demo: Demo, dev: bool, output_file: Path
+) -> None:
+    constraints = [ctx.build_requirements_file]
+    if dev:
+        constraints.append(ctx.dev_constraints_file)
+    else:
+        constraints.append(ctx.stable_constraints_file)
+
+    requirements_in = [ctx.core_requirements_file]
+    if demo.requirements_file:
+        requirements_in.append(demo.requirements_file)
+
+    cmds.pip_compile(
+        sys.executable,
+        output_file,
+        *requirements_in,
+        constraints_files=constraints,
+        prerelease=dev,
+    )
+
+
 def _build_demo(
-    sphinx_dir: Path,
-    build_dir: Path,
+    ctx: Context,
     build_venv: Virtualenv,
     demo: Demo,
     target: BuildTarget,
-    requirements_generator: "RequirementsGenerator",
     execute: bool,
     package: bool,
     quiet: bool,
+    dev: bool,
 ):
-    out_dir = sphinx_dir / "demos" / demo.name
+    out_dir = ctx.repo_root / "demos" / demo.name
     fs.clean_dir(out_dir)
 
-    with open(out_dir / "requirements.txt", "w") as f:
-        f.write(requirements_generator.generate_requirements(demo.requirements))
-
+    generate_requirements(ctx, demo, dev, out_dir / "requirements.txt")
     if execute:
         cmds.pip_install(
             build_venv.python, requirements=out_dir / "requirements.txt", quiet=True
         )
 
-    stage_dir = build_dir / "demonstrations"
+    stage_dir = ctx.build_dir / "demonstrations"
     fs.clean_dir(stage_dir)
     # Need a 'GALLERY_HEADER' file for sphinx-gallery
     with open(stage_dir / "GALLERY_HEADER.rst", "w"):
@@ -248,10 +263,10 @@ def _build_demo(
     if not execute:
         cmd.extend(("-D", "plot_gallery=0"))
 
-    cmd.extend((str(sphinx_dir), str(build_dir / target.value)))
+    cmd.extend((str(ctx.repo_root), str(ctx.build_dir / target.value)))
     sphinx_env = os.environ | {
         "DEMO_STAGING_DIR": str(stage_dir.resolve()),
-        "GALLERY_OUTPUT_DIR": str(out_dir.resolve().relative_to(sphinx_dir)),
+        "GALLERY_OUTPUT_DIR": str(out_dir.resolve().relative_to(ctx.repo_root)),
         # Make sure demos can find scripts installed in the build venv
         "PATH": f"{os.environ['PATH']}:{build_venv.path / 'bin'}",
     }
@@ -267,9 +282,9 @@ def _build_demo(
     if package:
         _package_demo(
             demo,
-            build_dir / "pack",
-            sphinx_dir / "_static",
-            build_dir / target.value,
+            ctx.build_dir / "pack",
+            ctx.repo_root / "_static",
+            ctx.build_dir / target.value,
             out_dir,
         )
 

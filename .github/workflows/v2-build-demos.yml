@@ -12,6 +12,11 @@ on:
         required: false
         type: string
         default: ''
+      dev:
+        description: Whether to use development dependencies
+        required: false
+        type: boolean
+        default: false
       save-artifact:
         description: |
           Whether to save the built demos as an artifact.
@@ -56,6 +61,11 @@ on:
         required: false
         type: string
         default: ''
+      dev:
+          description: Whether to use development dependencies
+          required: false
+          type: boolean
+          default: false
       save-artifact:
         description: |
           Whether to save the built demos as an artifact.
@@ -164,7 +174,8 @@ jobs:
             --execute \
             ${{ inputs.keep-going && '--keep-going' || '--no-keep-going' }} \
             ${{ inputs.quiet && '--quiet' || '--no-quiet' }} \
-            ${{ steps.demo-name-list.outputs.demo-names }}
+            ${{ steps.demo-name-list.outputs.demo-names }} \
+            ${{ inputs.dev && '--dev' || '--no-dev' }}
       
       - name: Upload artifacts
         id: upload-artifacts
