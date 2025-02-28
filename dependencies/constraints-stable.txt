@@ -7,6 +7,7 @@ pennylane-qulacs==0.40.0
 pennylane-catalyst==0.10.0
 pennylane-qrack==0.11.1
 
+chex<1.0.0
 pyqrack==1.32.12
 numpy~=1.24
 matplotlib==3.7.2
@@ -29,4 +30,3 @@ tensorflow==2.14.1
 optax==0.2.3
 quimb==1.8.2
 kahypar==1.1.7
-

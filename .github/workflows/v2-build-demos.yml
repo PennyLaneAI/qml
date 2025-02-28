@@ -8,18 +8,17 @@ on:
         type: string
       demo-names:
         description: |
-          Instead of building all demos, only build the demos specified in this list.
+          Only build the demos specified in this list.
         required: false
         type: string
         default: ''
       dev:
-        description: Whether to use development dependencies
+        description: Use development dependencies
         required: false
         type: boolean
         default: false
       save-artifact:
-        description: |
-          Whether to save the built demos as an artifact.
+        description: Save the built demos as an artifact.
         required: false
         type: boolean
         default: true
@@ -29,19 +28,17 @@ on:
         type: string
         default: ''
       keep-going:
-        description: Whether to keep going if a demo fails to build
+        description: Keep going if a demo fails to build
         required: false
         type: boolean
         default: false
       quiet:
-        description: |
-          Whether to suppress output from the build process
+        description: Suppress output from the build process
         required: false
         type: boolean
         default: false
       batch_size:
-        description: |
-          Number of demos to build per job
+        description: Number of demos to build per job
         type: number
         default: 10
     outputs:
@@ -62,29 +59,27 @@ on:
         type: string
         default: ''
       dev:
-          description: Whether to use development dependencies
+          description: Use development dependencies
           required: false
           type: boolean
           default: false
       save-artifact:
-        description: |
-          Whether to save the built demos as an artifact.
+        description: Save the built demos as an artifact.
         required: false
         type: boolean
         default: true
       artifact-name:
-        description: Name of the artifact containing the built demos (defaults to demo-build-{ref})
+        description: Name of the build artifact (defaults to demo-build-{ref})
         required: false
         type: string
         default: ''
       keep-going:
-        description: Whether to keep going if a demo fails to build
+        description: Keep going if a demo fails to build
         required: false
         type: boolean
         default: false
       quiet:
-        description: |
-          Whether to suppress output from the build process
+        description: Suppress output from the build process
         required: false
         type: boolean
         default: false

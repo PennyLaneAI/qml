@@ -242,7 +242,11 @@ def _build_demo(
     generate_requirements(ctx, demo, dev, out_dir / "requirements.txt")
     if execute:
         cmds.pip_install(
-            build_venv.python, requirements=out_dir / "requirements.txt", quiet=True, pre=dev
+            build_venv.python,
+            "--upgrade",
+            requirements=out_dir / "requirements.txt",
+            quiet=True,
+            pre=dev,
         )
 
     stage_dir = ctx.build_dir / "demonstrations"
