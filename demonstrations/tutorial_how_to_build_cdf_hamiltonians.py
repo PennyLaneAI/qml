@@ -44,7 +44,7 @@ print(f"One-body and two-body tensor shapes: {one_body.shape}, {two_body.shape}"
 # .. math::  H_{\text{C}} = \mu + \sum_{\sigma \in {\uparrow, \downarrow}} \sum_{pq} T_{pq} a^\dagger_{\sigma, p} a_{\sigma, q} + \sum_{\sigma, \tau \in {\uparrow, \downarrow}} \sum_{pqrs} V_{pqrs} a^\dagger_{\sigma, p} a_{\sigma, q} a^\dagger_{\tau, r} a_{\tau, s},
 #
 # with the transformed one-body terms :math:`T_{pq} = h_{pq} - 0.5 \sum_{s} g_{pssq}`.
-# We can easily obtain these modified one-body and two-body tensors with the following:
+# We can easily obtain these tensors with:
 #
 
 two_chem = 0.5 * qml.math.swapaxes(two_body, 1, 3)  # V_pqrs
@@ -74,11 +74,10 @@ one_chem = one_body - qml.math.einsum("prrs", two_chem)  # T_pq
 # to as the *explicit* double factorization (XDF) and decreases the number of terms
 # in the qubit basis to :math:`O(N^3)` from :math:`O(N^4)`, assuming the rank of second
 # tensor factorization will be :math:`O(N)`. In PennyLane, this can be done using the
-# :func:`~pennylane.qchem.factorize` function, where one can choose the decomposition method
-# for the first tensor factorization, truncate the resulting factors by discarding the ones
-# with individual contributions below a specified threshold, and control the ranks of
-# their second factorization using the ``cholesky``, ``tol_factor``, and ``tol_eigval``
-# keyword arguments, respectively, as shown below:
+# :func:`~pennylane.qchem.factorize` function, where one can choose the decomposition method for
+# the first tensor factorization (``cholesky``), truncate the resulting factors by discarding
+# the ones with individual contributions below a specified threshold (``tol_factor``), and
+# optionally control the ranks of their second factorization (``tol_eigval``) as shown below:
 #
 
 factors, _, _ = qml.qchem.factorize(two_chem, cholesky=True, tol_factor=1e-5)
@@ -196,8 +195,8 @@ print(f"One-body tensors' shape: {one_body_cores.shape, one_body_leaves.shape}")
 # We can now specify the Hamiltonian programmatically in the (compressed)
 # double-factorized form as a ``dict`` object with the following three keys:
 # ``nuc_constant`` (:math:`\mu`),
-# ``core_tensors`` (:math:`\left[ Z^{\prime(0)}, Z^{(t)}, \ldots \right]`), and
-# ``leaf_tensors`` (:math:`\left[ U^{\prime(0)}, U^{(t)}, \ldots \right]`):
+# ``core_tensors`` (:math:`\left[ Z^{\prime(0)}, Z^{(t_1)}, \ldots, Z^{(t_T)} \right]`), and
+# ``leaf_tensors`` (:math:`\left[ U^{\prime(0)}, U^{(t_1)}, \ldots, U^{(t_T)} \right]`):
 #
 
 cdf_hamiltonian = {
@@ -226,8 +225,8 @@ def leaf_unitary_rotation(leaf, wires):
 # The above can be decomposed using Givens rotation networks that can be efficiently
 # implemented on quantum hardware. Similarly, the unitary transformation for the core tensor
 # can also be applied efficiently via the ``core_unitary_rotation`` function. It uses the
-# :class:`~.pennylane.RZ` and :class:`~.pennylane.MultiRZ` operations for implementing the
-# Pauli :math:`Z` and :math:`ZZ`-rotations for the one-body and two-body core tensors,
+# :class:`~.pennylane.RZ` and :class:`~.pennylane.MultiRZ` gates for implementing
+# Pauli :math:`Z` and :math:`ZZ`-rotations for the one- and two-body core tensors,
 # respectively, and :class:`~.pennylane.GlobalPhase` for the corresponding global phases:
 #
 
