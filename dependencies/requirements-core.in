@@ -10,3 +10,4 @@ numpy
 pennylane
 pennylane-lightning
 pennylane-catalyst
+optax
