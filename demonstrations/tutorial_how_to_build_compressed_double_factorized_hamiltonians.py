@@ -12,7 +12,7 @@ algorithms and facilitates efficient simulations via linear-depth circuits with 
 Revisiting the electronic Hamiltonian
 -------------------------------------
 
-The Hamiltonian a molecular systems in the second-quantized form can be expressed as a
+The Hamiltonian of a molecular system in the second-quantized form can be expressed as a
 sum of the one-body and two-body terms as follows:
 
 .. math::  H = \mu + \sum_{\sigma, pq} h_{pq} a^\dagger_{\sigma, p} a_{\sigma, q} + \frac{1}{2} \sum_{\sigma \tau, pqrs} g_{pqrs} a^\dagger_{\sigma, p} a^\dagger_{\tau, q} a_{\tau, r} a_{\sigma, s},
@@ -38,21 +38,21 @@ print(f"One-body and two-body tensor shapes: {one_body.shape}, {two_body.shape}"
 # In the above expression, the two-body tensor :math:`g_{pqrs}`
 # can be rearranged to define :math:`V_{pqrs}` in the `chemist notation
 # <http://vergil.chemistry.gatech.edu/notes/permsymm/permsymm.pdf>`_,
-# which leads to an one-body offset term :math:`\sum_{s} g_{pssq}`. This
+# which leads to a one-body offset term :math:`\sum_{s} V_{pssq}`. This
 # allows us to rewrite the above Hamiltonian as:
 #
 # .. math::  H_{\text{C}} = \mu + \sum_{\sigma \in {\uparrow, \downarrow}} \sum_{pq} T_{pq} a^\dagger_{\sigma, p} a_{\sigma, q} + \sum_{\sigma, \tau \in {\uparrow, \downarrow}} \sum_{pqrs} V_{pqrs} a^\dagger_{\sigma, p} a_{\sigma, q} a^\dagger_{\tau, r} a_{\tau, s},
 #
-# with the transformed one-body terms :math:`T_{pq} = h_{pq} - 0.5 \sum_{s} g_{pssq}`.
+# with the transformed one-body terms :math:`T_{pq} = h_{pq} - 0.5 \sum_{s} g_{pqss}`.
 # We can easily obtain these tensors with:
 #
 
 two_chem = 0.5 * qml.math.swapaxes(two_body, 1, 3)  # V_pqrs
-one_chem = one_body - qml.math.einsum("prrs", two_chem)  # T_pq
+one_chem = one_body - 0.5 * qml.math.einsum("pqss", two_body)  # T_pq
 
 ######################################################################
 # A key feature of this representation is that the modified two-body terms can be factorized
-# into sum of low-rank terms, which can be used to efficiently simulate the Hamiltonian. We
+# into a sum of low-rank terms, which can be used to efficiently simulate the Hamiltonian. We
 # will see how to do this with double factorization methods in the next section.
 #
 # Double factorizing the Hamiltonian
@@ -150,12 +150,12 @@ assert qml.math.allclose(approx_two_shift, two_shift, atol=1e-2)
 ######################################################################
 # The previous shape output for the factors ``(10, 4, 4)`` meant we had :math:`10` two-body
 # terms in our factorization. Therefore, having ``(6, 4, 4)`` clearly shows that the number
-# of terms in the factorization in the above example, which is quite a significant!
+# of terms in the factorization in the above example, which is quite significant!
 #
 # Constructing the double-factorized Hamiltonian
 # -----------------------------------------------
 #
-# We can eigendecompose the one-body tensor to obtain similar orthornormal :math:`U^{(0)}` and
+# We can eigendecompose the one-body tensor to obtain similar orthonormal :math:`U^{(0)}` and
 # symmetric :math:`Z^{(0)}` tensors for the one-body term and use the above compressed
 # factorization of the two-body term to express the Hamiltonian in the double-factorized form
 # as sum of the products of core and leaf tensors:
@@ -176,7 +176,7 @@ assert qml.math.allclose(approx_two_shift, two_shift, atol=1e-2)
 # appear in their evolution, we can simplify their simulation circuit by accounting for these
 # additional terms directly in the one-body tensor itself by obtaining an one-body correction
 # (``one_body_extra``) for it. We can then decompose the corrected one-body terms into the
-# orthornormal :math:`U^{\prime(0)}` and symmetric :math:`Z^{\prime(0)}` tensors instead:
+# orthonormal :math:`U^{\prime(0)}` and symmetric :math:`Z^{\prime(0)}` tensors instead:
 #
 
 two_core_prime = (qml.math.eye(mol.n_orbitals) * two_body_cores.sum(axis=-1)[:, None, :])
