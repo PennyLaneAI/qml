@@ -53,8 +53,8 @@ one_chem = one_body - 0.5 * qml.math.einsum("pqss", two_body)  # T_pq
 
 ######################################################################
 # A key feature of this representation is that the modified two-body terms can be factorized
-# into a sum of low-rank terms, which can be used to efficiently simulate the Hamiltonian. We
-# will see how to do this with double factorization methods in the next section.
+# into a sum of low-rank terms, which can be used to efficiently simulate the Hamiltonian.
+# We will see how to do this with double factorization methods in the next section.
 #
 # Double factorizing the Hamiltonian
 # -----------------------------------
