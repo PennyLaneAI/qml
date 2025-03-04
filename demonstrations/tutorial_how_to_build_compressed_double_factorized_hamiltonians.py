@@ -36,11 +36,11 @@ nuc_core, one_body, two_body = qml.qchem.electron_integrals(mol)()
 print(f"One-body and two-body tensor shapes: {one_body.shape}, {two_body.shape}")
 
 ######################################################################
-# In the above expression, the two-body tensor :math:`g_{pqrs}`
+# In the above expression of :math:`H`, the two-body tensor :math:`g_{pqrs}`
 # can be rearranged to define :math:`V_{pqrs}` in the `chemist notation
 # <http://vergil.chemistry.gatech.edu/notes/permsymm/permsymm.pdf>`_,
 # which leads to a one-body offset term :math:`\sum_{s} V_{pssq}`. This
-# allows us to rewrite the above Hamiltonian as:
+# allows us to rewrite the Hamiltonian as:
 #
 # .. math::  H_{\text{C}} = \mu + \sum_{\sigma \in {\uparrow, \downarrow}} \sum_{pq} T_{pq} a^\dagger_{\sigma, p} a_{\sigma, q} + \sum_{\sigma, \tau \in {\uparrow, \downarrow}} \sum_{pqrs} V_{pqrs} a^\dagger_{\sigma, p} a_{\sigma, q} a^\dagger_{\tau, r} a_{\tau, s},
 #
@@ -159,9 +159,9 @@ assert qml.math.allclose(approx_two_shift, two_shift, atol=1e-2)
 # -----------------------------------------------
 #
 # We can eigendecompose the one-body tensor to obtain similar orthonormal :math:`U^{(0)}` and
-# symmetric :math:`Z^{(0)}` tensors for the one-body term and use the above compressed
-# factorization of the two-body term to express the Hamiltonian in the double-factorized form
-# as sum of the products of core and leaf tensors:
+# symmetric :math:`Z^{(0)}` tensors for the one-body term and use the compressed factorization
+# of the two-body term described in the previous section to express the Hamiltonian in the
+# double-factorized form as sum of the products of core and leaf tensors:
 #
 # .. math:: H_{\text{CDF}} = \mu + \sum_{\sigma \in {\uparrow, \downarrow}} U^{(0)}_{\sigma} \left( \sum_{p} Z^{(0)}_{p} a^\dagger_{\sigma, p} a_{\sigma, p} \right) U_{\sigma}^{(0)\ \dagger} + \sum_t^T \sum_{\sigma, \tau \in {\uparrow, \downarrow}} U_{\sigma, \tau}^{(t)} \left( \sum_{pq} Z_{pq}^{(t)} a^\dagger_{\sigma, p} a_{\sigma, p} a^\dagger_{\tau, q} a_{\tau, q} \right) U_{\sigma, \tau}^{(t)\ \dagger}.
 #
@@ -291,7 +291,7 @@ def CDFTrotterStep(time, cdf_ham, wires):
         body_type = "two_body" if bidx else "one_body"
         core_unitary_rotation(time * core, body_type, wires)
 
-        # revert the above change-of-basis for leaf tensor
+        # revert the change-of-basis for leaf tensor
         leaf_unitary_rotation(leaf.conjugate().T, wires)
 
     # apply the global phase gate based on the nuclear core energy
