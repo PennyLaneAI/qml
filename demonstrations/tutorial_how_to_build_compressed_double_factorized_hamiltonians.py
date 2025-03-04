@@ -217,7 +217,7 @@ cdf_hamiltonian = {
 # :class:`~.pennylane.BasisRotation` operation, which implements the unitary transformation
 # :math:`\exp \left( \sum_{pq}[\log U]_{pq} (a^\dagger_p a_q - a^\dagger_q a_p) \right)`
 # using the `Givens rotation networks
-# <https://docs.pennylane.ai/en/stable/code/api/pennylane.qchem.givens_decomposition.html>`
+# <https://docs.pennylane.ai/en/stable/code/api/pennylane.qchem.givens_decomposition.html>`_
 # that can be efficiently implemented on quantum hardware. The ``leaf_unitary_rotation``
 # function below does this for a leaf tensor:
 #
@@ -228,10 +228,10 @@ def leaf_unitary_rotation(leaf, wires):
     qml.BasisRotation(unitary_matrix=basis_mat, wires=wires)
 
 ######################################################################
-# Similarly, the unitary transformation for the core tensor
-# can also be applied efficiently via the ``core_unitary_rotation`` function. It uses the
-# :class:`~.pennylane.RZ` and :class:`~.pennylane.MultiRZ` gates for implementing
-# Pauli :math:`Z` and :math:`ZZ`-rotations for the one- and two-body core tensors,
+# Similarly, the unitary transformation for core tensors
+# be applied efficiently via the ``core_unitary_rotation`` function. It uses the
+# :class:`~.pennylane.RZ` and :class:`~.pennylane.IsingZZ` gates for implementing the
+# diagonal and entangling phase rotations for the one- and two-body core tensors,
 # respectively, and :class:`~.pennylane.GlobalPhase` for the corresponding global phases:
 #
 
@@ -250,7 +250,7 @@ def core_unitary_rotation(core, body_type, wires):
             cval = core[odx1, odx2]
             for sigma, tau in it.product(range(2), repeat=2):
                 if odx1 != odx2 or sigma != tau:
-                    qml.MultiRZ(cval / 4.0, wires=[2*odx1+sigma, 2*odx2+tau])
+                    qml.IsingZZ(cval / 4.0, wires=[2*odx1+sigma, 2*odx2+tau])
         gphase = 0.5 * qml.math.sum(core) + 0.25 * qml.math.trace(core)
         qml.GlobalPhase(-gphase, wires=wires)
 
