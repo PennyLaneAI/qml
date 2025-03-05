@@ -45,7 +45,7 @@ print(f"One-body and two-body tensor shapes: {one_body.shape}, {two_body.shape}"
 # .. math::  H_{\text{C}} = \mu + \sum_{\sigma \in {\uparrow, \downarrow}} \sum_{pq} T_{pq} a^\dagger_{\sigma, p} a_{\sigma, q} + \sum_{\sigma, \tau \in {\uparrow, \downarrow}} \sum_{pqrs} V_{pqrs} a^\dagger_{\sigma, p} a_{\sigma, q} a^\dagger_{\tau, r} a_{\tau, s},
 #
 # with the transformed one-body terms :math:`T_{pq} = h_{pq} - 0.5 \sum_{s} g_{pqss}`.
-# We can easily obtain the :math:`V_{pqrs}` and :math:`T_{pq}` tensors as:
+# We can obtain the :math:`V_{pqrs}` and :math:`T_{pq}` tensors as:
 #
 
 two_chem = 0.5 * qml.math.swapaxes(two_body, 1, 3)  # V_pqrs
@@ -54,7 +54,7 @@ one_chem = one_body - 0.5 * qml.math.einsum("pqss", two_body)  # T_pq
 ######################################################################
 # A key feature of this representation is that the modified two-body terms can be factorized
 # into a sum of low-rank terms, which can be used to efficiently simulate the Hamiltonian [#cdf2]_.
-# We will see how to do this with double factorization methods in the next section.
+# We will see how to do this with the double-factorization methods in the next section.
 #
 # Double factorizing the Hamiltonian
 # -----------------------------------
@@ -135,7 +135,7 @@ print(f"Decrease in one-norm: {DF_chem_norm - DF_shift_norm}")
 # where :math:`|\cdot|_{\text{F}}` denotes the Frobenius norm, :math:`\rho` is a constant
 # scaling factor, and :math:`|\cdot|^\gamma` specifies the optional L1 and L2 `regularization
 # <https://en.wikipedia.org/wiki/Regularization_(mathematics)#L1_and_L2_Regularization>`_
-# that improves the energy variance of the resulting representation. In PennyLane, the
+# that improves the energy variance of the resulting representation. In PennyLane, this
 # compression can be done by using the ``compressed=True`` keyword argument in the
 # :func:`~pennylane.qchem.factorize` function. The regularization term will be included
 # if the ``regularization`` keyword argument is set to either ``"L1"`` or ``"L2"``:
