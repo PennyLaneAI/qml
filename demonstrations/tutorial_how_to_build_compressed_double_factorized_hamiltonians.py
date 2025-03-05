@@ -134,7 +134,7 @@ print(f"Decrease in one-norm: {DF_chem_norm - DF_shift_norm}")
 #
 # where :math:`|\cdot|_{\text{F}}` denotes the Frobenius norm, :math:`\rho` is a constant
 # scaling factor, and :math:`|\cdot|^\gamma` specifies the optional L1 and L2 `regularization
-# <https://en.wikipedia.org/wiki/Regularization_(mathematics)#L1_and_L2_Regularization>`
+# <https://en.wikipedia.org/wiki/Regularization_(mathematics)#L1_and_L2_Regularization>`_
 # that improves the energy variance of the resulting representation. In PennyLane, the
 # compression can be done by using the ``compressed=True`` keyword argument in the
 # :func:`~pennylane.qchem.factorize` function. The regularization term will be included
@@ -169,13 +169,13 @@ assert qml.math.allclose(approx_two_shift, two_shift, atol=1e-2)
 # .. math:: H_{\text{CDF}} = \mu + \sum_{\sigma \in {\uparrow, \downarrow}} U^{(0)}_{\sigma} \left( \sum_{p} Z^{(0)}_{p} a^\dagger_{\sigma, p} a_{\sigma, p} \right) U_{\sigma}^{(0)\ \dagger} + \sum_t^T \sum_{\sigma, \tau \in {\uparrow, \downarrow}} U_{\sigma, \tau}^{(t)} \left( \sum_{pq} Z_{pq}^{(t)} a^\dagger_{\sigma, p} a_{\sigma, p} a^\dagger_{\tau, q} a_{\tau, q} \right) U_{\sigma, \tau}^{(t)\ \dagger}.
 #
 # This Hamiltonian can be easily mapped to the qubit basis via `Jordan-Wigner
-# transformation <https://pennylane.ai/qml/demos/tutorial_mapping>`_ using
+# transformation <https://pennylane.ai/qml/demos/tutorial_mapping>`_ (JWT) using
 # :math:`a_p^\dagger a_p = n_p \mapsto 0.5 * (1 - z_p)`, where :math:`n_p` is the number
 # operator and :math:`z_p` is the Pauli-Z operation acting on the qubit corresponding to
 # orbital :math:`p`. The mapped form naturally gives rise to a measurement grouping, where
 # the terms within the basis transformation :math:`U^{(i)}` can be measured simultaneously.
 # These can be obtained with the :func:`~pennylane.qchem.basis_rotation` function, which
-# performs the double-factorization and the Jordan-Wigner mapping automatically.
+# performs the double-factorization and JWT automatically.
 #
 # Another advantage of the double-factorized form is the efficient simulation of the Hamiltonian
 # evolution. Before discussing it in the next section, we note that mapping a two-body term to
