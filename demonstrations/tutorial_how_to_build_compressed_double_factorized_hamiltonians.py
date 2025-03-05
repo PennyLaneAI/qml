@@ -3,12 +3,12 @@ r"""How to build compressed double-factorized Hamiltonians
 
 Compressed double factorization offers a powerful approach to overcome key limitations in
 quantum chemistry simulations. Specifically, it tackles the runtime's dependency on the
-Hamiltonian's one-norm and the shot requirements linked to the number of terms [#cdf]_. In this
-tutorial, we will learn how to construct the electronic Hamiltonian in the compressed
+Hamiltonian's one-norm and the shot requirements linked to the number of terms [#cdf]_.
+In this tutorial, we will learn how to construct the electronic Hamiltonian in the compressed
 double-factorized form using tensor contractions. We will also show how this technique allows
 having a linear combination of unitaries (LCU) representation suitable for error-corrected
-error-corrected algorithms, which facilitates efficient simulations via linear-depth circuits
-with Givens rotations.
+algorithms, which facilitates efficient simulations via linear-depth circuits with
+`Givens rotations <https://arxiv.org/abs/1711.04789>`_.
 
 Constructing the electronic Hamiltonian
 ----------------------------------------
@@ -45,7 +45,7 @@ print(f"One-body and two-body tensor shapes: {one_body.shape}, {two_body.shape}"
 # .. math::  H_{\text{C}} = \mu + \sum_{\sigma \in {\uparrow, \downarrow}} \sum_{pq} T_{pq} a^\dagger_{\sigma, p} a_{\sigma, q} + \sum_{\sigma, \tau \in {\uparrow, \downarrow}} \sum_{pqrs} V_{pqrs} a^\dagger_{\sigma, p} a_{\sigma, q} a^\dagger_{\tau, r} a_{\tau, s},
 #
 # with the transformed one-body terms :math:`T_{pq} = h_{pq} - 0.5 \sum_{s} g_{pqss}`.
-# We can easily obtain these tensors with:
+# We can easily obtain the :math:`V_{pqrs}` and :math:`T_{pq}` tensors as:
 #
 
 two_chem = 0.5 * qml.math.swapaxes(two_body, 1, 3)  # V_pqrs
@@ -53,7 +53,7 @@ one_chem = one_body - 0.5 * qml.math.einsum("pqss", two_body)  # T_pq
 
 ######################################################################
 # A key feature of this representation is that the modified two-body terms can be factorized
-# into a sum of low-rank terms, which can be used to efficiently simulate the Hamiltonian.
+# into a sum of low-rank terms, which can be used to efficiently simulate the Hamiltonian [#cdf2]_.
 # We will see how to do this with double factorization methods in the next section.
 #
 # Double factorizing the Hamiltonian
@@ -64,18 +64,18 @@ one_chem = one_body - 0.5 * qml.math.einsum("pqss", two_body)  # T_pq
 # called *factors*, such that :math:`V_{pqrs} = \sum_t^T L_{pq}^{(t)} L_{rs}^{(t) {\dagger}}`
 # and the rank :math:`T \leq N^2`, where :math:`N` is the number of orbitals. We can do this
 # by performing an eigenvalue or a pivoted Cholesky decomposition of the modified two-body
-# tensor. Moreover, each of these tensors can be further eigendecomposed as
+# tensor. Moreover, each of the :math:`L^{(t)}` can be further eigendecomposed as
 # :math:`L^{(t)}_{pq} = \sum_{i} U_{pi}^{(t)} W_i^{(t)} U_{qi}^{(t)}` to perform a second
-# tensor factorization. This enables us to express the above double-factorized two-body
-# tensor in terms of orthonormal core tensors (:math:`Z^{(t)}`) and symmetric leaf tensors
-# (:math:`U^{(t)}`) as [#cdf2]_:
+# tensor factorization. This enables us to express the two-body tensor :math:`V_{pqrs}` in
+# the following double-factorized form in terms of orthonormal core tensors :math:`Z^{(t)}`
+# and symmetric leaf tensors :math:`U^{(t)}` [#cdf2]_:
 #
 # .. math::  V_{pqrs} \approx \sum_t^T \sum_{ij} U_{pi}^{(t)} U_{pj}^{(t)} Z_{ij}^{(t)} U_{qk}^{(t)} U_{ql}^{(t)},
 #
 # where :math:`Z_{ij}^{(t)} = W_i^{(t)} W_j^{(t)}`. This decomposition is referred
 # to as the *explicit* double factorization (XDF) and decreases the number of terms
-# in the qubit basis from :math:`O(N^4)` to :math:`O(N^3)`, assuming the rank of second
-# tensor factorization to be :math:`O(N)`. In PennyLane, this can be done using the
+# in the qubit basis from :math:`O(N^4)` to :math:`O(N^3)`, assuming the rank of the
+# second tensor factorization to be :math:`O(N)`. In PennyLane, this can be done using the
 # :func:`~pennylane.qchem.factorize` function, where one can choose the decomposition method for
 # the first tensor factorization (``cholesky``), truncate the resulting factors by discarding
 # the ones with individual contributions below a specified threshold (``tol_factor``), and
@@ -92,10 +92,12 @@ assert qml.math.allclose(approx_two_chem, two_chem, atol=1e-5)
 # Performing block-invariant symmetry shift
 # ------------------------------------------
 #
-# We can further improve the above factorization by employing the block-invariant symmetry
-# shift (BLISS) [#bliss]_, which modifies the Hamiltonian's action on the undesired
-# electron-number subspace. This helps decrease the one-norm and the spectral range of the
-# Hamiltonian and can be done via the :func:`~pennylane.qchem.symmetry_shift` function:
+# We can further improve the double-factorization by employing the block-invariant
+# symmetry shift (BLISS) technique, which modifies the Hamiltonian's action on the
+# undesired electron-number subspace [#bliss]_. It helps decrease the one-norm and
+# the spectral range of the Hamiltonian. In PennyLane, this symmetry shift can be
+# done using the :func:`~pennylane.qchem.symmetry_shift` function, which returns
+# the symmetry-shifted integral tensors and core constant:
 #
 
 core_shift, one_shift, two_shift = qml.qchem.symmetry_shift(
@@ -103,8 +105,8 @@ core_shift, one_shift, two_shift = qml.qchem.symmetry_shift(
 ) # symmetry-shifted terms of the Hamiltonian
 
 ######################################################################
-# We can use these shifted terms to obtain a double-factorized representation of the
-# Hamiltonian that has a lower one-norm than the original one. For instance, we can
+# Then we can use these shifted terms to obtain a double-factorized representation of
+# the Hamiltonian that has a lower one-norm than the original one. For instance, we can
 # compare the improvement in the one-norm of the shifted Hamiltonian over the original one
 # by accessing the :class:`~.pennylane.resource.DoubleFactorization`'s ``lamb`` attribute:
 #
@@ -119,23 +121,24 @@ print(f"Decrease in one-norm: {DF_chem_norm - DF_shift_norm}")
 # Compressing the double factorization
 # -------------------------------------
 #
-# In many practical scenarios, the above double factorization can be further optimized by
+# In many practical scenarios, the double factorization method can be further optimized by
 # performing a numerical tensor-fitting of the decomposed two-body terms to obtain :math:`V^\prime`
 # such that the approximation error :math:`||V - V^\prime||` remains below a desired threshold
 # [#cdf]_. This is referred to as the *compressed* double factorization (CDF) as it reduces the
-# number of terms in the factorization of the two-body term to :math:`O(N)` from :math:`O(N^3)`
+# number of terms in the factorization of the two-body term from :math:`O(N^3)` to :math:`O(N)`
 # and achieves lower approximation errors than the truncated XDF. Compression can be done by
 # beginning with :math:`O(N)` random core and leaf tensors and optimizing them based on the
-# following cost function :math:`\mathcal{L}` in a greedy layered-wise manner:
+# following cost function :math:`\mathcal{L}` in a greedy manner:
 #
 # .. math::  \mathcal{L}(U, Z) = \frac{1}{2} \bigg|V_{pqrs} - \sum_t^T \sum_{ij} U_{pi}^{(t)} U_{pj}^{(t)} Z_{ij}^{(t)} U_{qk}^{(t)} U_{ql}^{(t)}\bigg|_{\text{F}} + \rho \sum_t^T \sum_{ij} \bigg|Z_{ij}^{(t)}\bigg|^{\gamma},
 #
 # where :math:`|\cdot|_{\text{F}}` denotes the Frobenius norm, :math:`\rho` is a constant
-# scaling factor, and :math:`|\cdot|^\gamma` specifies the optional L1 and L2 regularization
-# that improves the energy variance of the resulting representation. In PennyLane,
-# the compression can be done by using the ``compressed=True`` keyword argument in
-# the :func:`~pennylane.qchem.factorize` function and will use the regularization term
-# if the ``regularization`` keyword argument is specified with ``"L1"`` or ``"L2"``:
+# scaling factor, and :math:`|\cdot|^\gamma` specifies the optional L1 and L2 `regularization
+# <https://en.wikipedia.org/wiki/Regularization_(mathematics)#L1_and_L2_Regularization>`
+# that improves the energy variance of the resulting representation. In PennyLane, the
+# compression can be done by using the ``compressed=True`` keyword argument in the
+# :func:`~pennylane.qchem.factorize` function. The regularization term will be included
+# if the ``regularization`` keyword argument is set to either ``"L1"`` or ``"L2"``:
 #
 
 _, two_body_cores, two_body_leaves = qml.qchem.factorize(
@@ -151,9 +154,9 @@ assert qml.math.allclose(approx_two_shift, two_shift, atol=1e-2)
 
 ######################################################################
 # While the previous shape output for the factors ``(10, 4, 4)`` meant we had :math:`10` two-body
-# terms in our factorization, the current shape output ``(6, 4, 4)`` indicates we have :math:`6`
-# terms. This means that the number of terms in the factorization has decreased almost by half,
-# which is quite significant!
+# terms in our factorization, the current shape output ``(6, 4, 4)`` indicates that we have
+# :math:`6` terms. This means that the number of terms in the factorization has decreased almost
+# by half, which is quite significant!
 #
 # Constructing the double-factorized Hamiltonian
 # -----------------------------------------------
@@ -161,25 +164,25 @@ assert qml.math.allclose(approx_two_shift, two_shift, atol=1e-2)
 # We can eigendecompose the one-body tensor to obtain similar orthonormal :math:`U^{(0)}` and
 # symmetric :math:`Z^{(0)}` tensors for the one-body term and use the compressed factorization
 # of the two-body term described in the previous section to express the Hamiltonian in the
-# double-factorized form as sum of the products of core and leaf tensors:
+# double-factorized form as:
 #
 # .. math:: H_{\text{CDF}} = \mu + \sum_{\sigma \in {\uparrow, \downarrow}} U^{(0)}_{\sigma} \left( \sum_{p} Z^{(0)}_{p} a^\dagger_{\sigma, p} a_{\sigma, p} \right) U_{\sigma}^{(0)\ \dagger} + \sum_t^T \sum_{\sigma, \tau \in {\uparrow, \downarrow}} U_{\sigma, \tau}^{(t)} \left( \sum_{pq} Z_{pq}^{(t)} a^\dagger_{\sigma, p} a_{\sigma, p} a^\dagger_{\tau, q} a_{\tau, q} \right) U_{\sigma, \tau}^{(t)\ \dagger}.
 #
-# The above Hamiltonian can be easily mapped to the qubit basis via
-# `Jordan-Wigner transformation <https://pennylane.ai/qml/demos/tutorial_mapping>`_ using
+# This Hamiltonian can be easily mapped to the qubit basis via `Jordan-Wigner
+# transformation <https://pennylane.ai/qml/demos/tutorial_mapping>`_ using
 # :math:`a_p^\dagger a_p = n_p \mapsto 0.5 * (1 - z_p)`, where :math:`n_p` is the number
 # operator and :math:`z_p` is the Pauli-Z operation acting on the qubit corresponding to
 # orbital :math:`p`. The mapped form naturally gives rise to a measurement grouping, where
-# the terms within the basis transformation :math:`U^{(i)}` can be measured simultaneously,
-# and can be obtained with the :func:`~pennylane.qchem.basis_rotation` function.
+# the terms within the basis transformation :math:`U^{(i)}` can be measured simultaneously.
+# These can be obtained with the :func:`~pennylane.qchem.basis_rotation` function, which
+# performs the double-factorization and the Jordan-Wigner mapping automatically.
 #
 # Another advantage of the double-factorized form is the efficient simulation of the Hamiltonian
-# evolution. Before discussing it in the next section, we note that mapping a two-body term
-# to the qubit basis will result in two additional one-qubit Pauli-Z terms. As these will also
-# appear in their evolution, we can simplify their simulation circuit by accounting for these
-# additional terms directly in the one-body tensor itself by obtaining an one-body correction
-# (``one_body_extra``) for it. We can then decompose the corrected one-body terms into the
-# orthonormal :math:`U^{\prime(0)}` and symmetric :math:`Z^{\prime(0)}` tensors instead:
+# evolution. Before discussing it in the next section, we note that mapping a two-body term to
+# the qubit basis will result in two additional one-qubit Pauli-Z terms. We can simplify their
+# simulation circuits by accounting for these additional terms directly in the one-body tensor
+# using a correction ``one_body_extra``. We can then decompose the corrected one-body terms into
+# the orthonormal :math:`U^{\prime(0)}` and symmetric :math:`Z^{\prime(0)}` tensors instead:
 #
 
 two_core_prime = (qml.math.eye(mol.n_orbitals) * two_body_cores.sum(axis=-1)[:, None, :])
@@ -206,13 +209,14 @@ cdf_hamiltonian = {
     "nuc_constant": core_shift[0],
     "core_tensors": qml.math.concatenate((one_body_cores, two_body_cores), axis=0),
     "leaf_tensors": qml.math.concatenate((one_body_leaves, two_body_leaves), axis=0),
-} # double-factorized Hamiltonian with compressed two-body terms
+} # CDF Hamiltonian
 
 ######################################################################
 # Simulating the double-factorized Hamiltonian
 # ---------------------------------------------
 #
-# To simulate the above Hamiltonian, we will first need to learn how to apply the unitary operations
+# To simulate the time evolution of the CDF Hamiltonian,
+# we will first need to learn how to apply the unitary operations
 # represented by the exponentiated leaf and core tensors. The former can be done using the
 # :class:`~.pennylane.BasisRotation` operation, which implements the unitary transformation
 # :math:`\exp \left( \sum_{pq}[\log U]_{pq} (a^\dagger_p a_q - a^\dagger_q a_p) \right)`
@@ -228,10 +232,10 @@ def leaf_unitary_rotation(leaf, wires):
     qml.BasisRotation(unitary_matrix=basis_mat, wires=wires)
 
 ######################################################################
-# Similarly, the unitary transformation for core tensors
-# be applied efficiently via the ``core_unitary_rotation`` function. It uses the
-# :class:`~.pennylane.RZ` and :class:`~.pennylane.IsingZZ` gates for implementing the
-# diagonal and entangling phase rotations for the one- and two-body core tensors,
+# Similarly, the unitary transformation for the core tensors can be applied efficiently
+# via the ``core_unitary_rotation`` function defined below. The function uses the
+# :class:`~.pennylane.RZ` and :class:`~.pennylane.IsingZZ` gates for implementing
+# the diagonal and entangling phase rotations for the one- and two-body core tensors,
 # respectively, and :class:`~.pennylane.GlobalPhase` for the corresponding global phases:
 #
 
@@ -263,14 +267,14 @@ def core_unitary_rotation(core, body_type, wires):
 # which defines these products recursively, leading to an exponential scaling in its complexity
 # with the number of terms in the Hamiltonian and making it inefficient for larger system sizes.
 #
-# Exponential scaling can be improved to a great extent by working with the compressed
+# The exponential scaling can be improved to a great extent by working with the compressed
 # double-factorized form of the Hamiltonian as it allows reducing the number of terms in the
 # Hamiltonian from :math:`O(N^4)` to :math:`O(N)`. While doing this is not directly supported
-# in PennyLane in the form of a template, we can still implement the first-order Trotter step
-# using the following :func:`CDFTrotterStep` function that uses the CDF Hamiltonian with the
-# ``leaf_unitary_rotation`` and ``core_unitary_rotation`` functions defined earlier. We can
-# then use it with the :func:`~.pennylane.trotterize` function to implement any
-# higher-order Suzuki-Trotter products.
+# in PennyLane in the form of a template, we can still implement the first-order Trotter
+# step using the following :func:`CDFTrotterStep` function that uses the CDF Hamiltonian
+# with the ``leaf_unitary_rotation`` and ``core_unitary_rotation`` functions defined earlier.
+# We can then use the :func:`~.pennylane.trotterize` function to implement any higher-order
+# Suzuki-Trotter products.
 #
 
 def CDFTrotterStep(time, cdf_ham, wires):
@@ -298,7 +302,7 @@ def CDFTrotterStep(time, cdf_ham, wires):
     qml.GlobalPhase(cdf_ham["nuc_constant"] * time, wires=wires)
 
 ######################################################################
-# We can use this function to simulate the evolution of the :math:`H_4` Hamiltonian
+# We now use this function to simulate the evolution of the :math:`H_4` Hamiltonian
 # described in the compressed double-factorized form for a given number of
 # steps ``n_steps`` and starting from a Hartree-Fock state ``hf_state``
 # with the following circuit that applies a second-order Trotter product:
@@ -316,8 +320,8 @@ def cdf_circuit(n_steps, order):
 circuit_state = cdf_circuit(n_steps=10, order=2)
 
 ######################################################################
-# We can test the accuracy of the Hamiltonian simulation via ``cdf_circuit`` by
-# evolving the Hartree-Fock state analytically ourselves and testing the fidelity
+# We now test the accuracy of the Hamiltonian simulation by evolving the
+# Hartree-Fock state analytically ourselves and testing the fidelity
 # of the ``evolved_state`` with the ``circuit_state``:
 #
 
@@ -342,12 +346,12 @@ print(f"Fidelity of two states: {fidelity_statevector(circuit_state, evolved_sta
 # -----------
 #
 # Compressed double-factorized representation for the Hamiltonians serves three key purposes.
-# First, it allows for a more compact representation that can be stored and manipulated with
-# greater ease. Second, it provides for more efficient simulations for approximating the
-# Hamiltonian evolution as the number of terms is at least quadratically lesser. Third, the
-# compact representation can be further manipulated to reduce the one-norm of the Hamiltonians
-# which helps reduce the direct simulation when using block encoding or qubitization techniques.
-# Therefore, employing CDF-based Hamiltonians for quantum chemistry problems provides a
+# First, it provides for a more compact representation of the Hamiltonian that can be stored
+# and manipulated easier. Second, it allows more efficient simulations of the Hamiltonian
+# time evolution because the number of terms is reduced quadratically. Third, the compact
+# representation can be further manipulated to reduce the one-norm of the Hamiltonian, which
+# helps reduce the simulation cost when using block encoding or qubitization techniques.
+# Overall, employing CDF-based Hamiltonians for quantum chemistry problems provides a
 # relatively promising path to reducing the complexity of fault-tolerant quantum algorithms.
 #
 # References
