@@ -10,6 +10,11 @@ having a linear combination of unitaries (LCU) representation suitable for error
 algorithms, which facilitates efficient simulations via linear-depth circuits with
 `Givens rotations <https://arxiv.org/abs/1711.04789>`_.
 
+.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_how_to_build_cdf_hamiltonians.png
+    :align: center
+    :width: 70%
+    :target: javascript:void(0)
+
 Constructing the electronic Hamiltonian
 ----------------------------------------
 
