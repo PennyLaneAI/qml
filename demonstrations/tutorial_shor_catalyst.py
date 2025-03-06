@@ -182,20 +182,24 @@ def shors_algorithm(N):
 
 import pennylane as qml
 
+
 @qml.qjit
 def shors_algorithm(N):
     # Implementation goes here
     return p, q
+
 
 ######################################################################
 # Unfortunately it is not quite so simple, and requires some special-purpose
 # functions and data manipulation. But in the next section, we will show how to
 # QJIT the most important parts, resulting in the following signature:
 
+
 @qml.qjit(autograph=True, static_argnums=(2))
 def shors_algorithm(N, a, n_bits):
     # Implementation goes here
     return p, q
+
 
 ######################################################################
 # We will find ways to leverage knowledge of :math:`a` to
@@ -374,7 +378,7 @@ def shors_algorithm(N, a, n_bits):
 #    Circuit for doubly-controlled Fourier addition modulo :math:`N`
 #    [#Beauregard2003]_. The calligraphic letters indicate states already
 #    transformed to the Fourier basis.
-# 
+#
 # This completes our implementation of the controlled-:math:`U_{a^{2^k}}`. The
 # full circuit, shown below, uses :math:`t + 2n + 2` qubits.
 #
@@ -567,7 +571,7 @@ def repeated_squaring(a, exp, N):
         if bits[idx] == 1:
             result = (result * x) % N
             num_bits_added += 1
-        x = (x ** 2) % N
+        x = (x**2) % N
         idx += 1
 
     return result
@@ -686,7 +690,7 @@ catalyst.autograph_strict_conversion = True
 
 def QFT(wires):
     """The standard QFT, redefined because the PennyLane one uses terminal SWAPs."""
-    shifts = jnp.array([2 * jnp.pi * 2 ** -i for i in range(2, len(wires) + 1)])
+    shifts = jnp.array([2 * jnp.pi * 2**-i for i in range(2, len(wires) + 1)])
 
     for i in range(len(wires)):
         qml.Hadamard(wires[i])
@@ -699,7 +703,7 @@ def fourier_adder_phase_shift(a, wires):
     """Sends QFT(|b>) -> QFT(|b + a>)."""
     n = len(wires)
     a_bits = jnp.unpackbits(jnp.array([a]).view("uint8"), bitorder="little")[:n][::-1]
-    powers_of_two = jnp.array([1 / (2 ** k) for k in range(1, n + 1)])
+    powers_of_two = jnp.array([1 / (2**k) for k in range(1, n + 1)])
     phases = jnp.array([jnp.dot(a_bits[k:], powers_of_two[: n - k]) for k in range(n)])
 
     for i in range(len(wires)):
@@ -740,7 +744,7 @@ def controlled_ua(N, a, control_wire, target_wires, aux_wires, mult_a_mask, mult
     # Apply double-controlled additions where bits of a can be 1.
     for i in range(n):
         if mult_a_mask[n - i - 1] > 0:
-            pow_a = (a * (2 ** i)) % N
+            pow_a = (a * (2**i)) % N
             doubly_controlled_adder(
                 N, pow_a, [control_wire, target_wires[n - i - 1]], aux_wires[:-1], aux_wires[-1]
             )
@@ -763,7 +767,11 @@ def controlled_ua(N, a, control_wire, target_wires, aux_wires, mult_a_mask, mult
         if mult_a_inv_mask[i] > 0:
             pow_a_inv = (a_mod_inv * (2 ** (n - i - 1))) % N
             qml.adjoint(doubly_controlled_adder)(
-                N, pow_a_inv, [control_wire, target_wires[i]], aux_wires[:-1], aux_wires[-1],
+                N,
+                pow_a_inv,
+                [control_wire, target_wires[i]],
+                aux_wires[:-1],
+                aux_wires[-1],
             )
 
 
@@ -771,10 +779,23 @@ def controlled_ua(N, a, control_wire, target_wires, aux_wires, mult_a_mask, mult
 # Finally, let's put it all together in the core portion of Shor's algorithm,
 # under the ``@qml.qjit`` decorator.
 
+from jax import random
 
-@qml.qjit(autograph=True, static_argnums=(2))
-def shors_algorithm(N, a, n_bits):
-    """Execute Shor's algorithm: return a guess for the prime factors of N."""
+
+# ``n_bits`` is a static argument because ``jnp.arange`` does not currently
+# support dynamically-shaped arrays when jitted.
+@qml.qjit(autograph=True, static_argnums=(3, 4))
+def shors_algorithm(N, key, a, n_bits, n_trials):
+    # If no explicit a is passed (denoted by a = 0), randomly choose a
+    # non-trivial value of a that does not have a common factor with N.
+    if a == 0:
+        key, subkey = random.split(key)
+        a = random.randint(subkey, (1,), 2, N - 1)[0]
+
+        while jnp.gcd(a, N) != 1:
+            key, subkey = random.split(key)
+            a = random.randint(subkey, (1,), 2, N - 1)[0]
+
     est_wire = 0
     target_wires = jnp.arange(n_bits) + 1
     aux_wires = jnp.arange(n_bits + 2) + n_bits + 1
@@ -811,7 +832,7 @@ def shors_algorithm(N, a, n_bits):
         # For subsequent iterations, determine powers of a, and apply controlled
         # U_a when the power is not 1. Unnecessarily double-controlled
         # operations are removed, based on values stored in the two "mask" variables.
-        powers_cua = jnp.array([repeated_squaring(a, 2 ** p, N) for p in range(n_bits)])
+        powers_cua = jnp.array([repeated_squaring(a, 2**p, N) for p in range(n_bits)])
 
         loop_bound = n_bits
         if jnp.min(powers_cua) == 1:
@@ -821,7 +842,7 @@ def shors_algorithm(N, a, n_bits):
             pow_cua = powers_cua[pow_a_idx]
 
             if not jnp.all(a_inv_mask):
-                for power in range(2 ** pow_a_idx, 2 ** (pow_a_idx + 1)):
+                for power in range(2**pow_a_idx, 2 ** (pow_a_idx + 1)):
                     next_pow_a = jnp.array([repeated_squaring(a, power, N)])
                     a_inv_mask = a_inv_mask + jnp.array(
                         jnp.unpackbits(next_pow_a.view("uint8"), bitorder="little")[:n_bits]
@@ -845,79 +866,60 @@ def shors_algorithm(N, a, n_bits):
 
         return meas_results
 
-    # The "classical part" of Shor's algorithm is JIT-compiled along with the circuit
     p, q = jnp.array(0, dtype=jnp.int32), jnp.array(0, dtype=jnp.int32)
+    successful_trials = jnp.array(0, dtype=jnp.int32)
 
-    sample = run_qpe(a)
-    phase = fractional_binary_to_float(sample)
-    guess_r = phase_to_order(phase, N)
+    for _ in range(n_trials):
+        sample = run_qpe(a)
+        phase = fractional_binary_to_float(sample)
+        guess_r = phase_to_order(phase, N)
 
-    if guess_r % 2 == 0:
-        guess_square_root = (a ** (guess_r // 2)) % N
+        # If the guess order is even, we may have a non-trivial square root.
+        # If so, try to compute p and q.
+        if guess_r % 2 == 0:
+            guess_square_root = (a ** (guess_r // 2)) % N
 
-        if guess_square_root != 1 and guess_square_root != N - 1:
-            p = jnp.gcd(guess_square_root - 1, N).astype(jnp.int32)
+            if guess_square_root != 1 and guess_square_root != N - 1:
+                candidate_p = jnp.gcd(guess_square_root - 1, N).astype(jnp.int32)
 
-            if p != 1:
-                q = N // p
-            else:
-                q = jnp.gcd(guess_square_root + 1, N).astype(jnp.int32)
+                if candidate_p != 1:
+                    candidate_q = N // candidate_p
+                else:
+                    candidate_q = jnp.gcd(guess_square_root + 1, N).astype(jnp.int32)
 
-                if q != 1:
-                    p = N // q
+                    if candidate_q != 1:
+                        candidate_p = N // candidate_q
 
-    return p, q
+                if candidate_p * candidate_q == N:
+                    p, q = candidate_p, candidate_q
+                    successful_trials += 1
+
+    return p, q, key, a, successful_trials / n_trials
 
 
 ######################################################################
-# To run the algorithm, we must randomly choose ``a``. In principle, we could
-# randomly generate ``a`` within the function above. However, this cannot
-# currently be QJITted. Passing ``n_bits`` as a static argument is also to work
-# around some QJIT limitations. For now, let's see if our algorithm can
-# successfully factor.
-
-from jax import random
+# Let's ensure the algorithm can successfully factor a small case, :math:`N =
+# 15`. We will randomly generate :math:`a` within the function, and do 100 shots
+# of the phase estimation procedure to get an idea of the success probability.
 
 
-def factor_with_shor(N, n_trials=100):
-    key = random.PRNGKey(123456789)
-    key, subkey = random.split(key)
-
-    a_choices = jnp.array(list(range(2, N - 1)))
-    a = random.choice(subkey, a_choices)
-
-    while jnp.gcd(a, N) == 1:
-        key, subkey = random.split(key)
-        a = random.choice(subkey, a_choices)
-
-    # The number of bits of N determines the size of the registers.
-    n_bits = int(jnp.ceil(jnp.log2(N)))
-
-    p, q = 0, 0
-
-    # Get the success probabilities
-    num_success = 0
-    for _ in range(n_trials):
-        candidate_p, candidate_q = shors_algorithm(N, a, n_bits)
-        if candidate_p * candidate_q == N:
-            p, q = candidate_p, candidate_q
-            num_success += 1
-
-    return p, q, num_success / n_trials
-
+key = random.PRNGKey(123456789)
 
 N = 15
-p, q, success_prob = factor_with_shor(N)
-print(f"N = {p} x {q}. Success probability is {success_prob}")
+n_bits = int(jnp.ceil(jnp.log2(N)))
+
+p, q, _, a, success_prob = shors_algorithm(N, key.astype(jnp.uint32), 0, n_bits, 100)
+
+print(f"Found {N} = {p} x {q} (using random a = {a}) with probability {success_prob:.2f}")
 
 ######################################################################
 # Performance and validation
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
-# We will now verify that QJIT compilation is happening properly. We will run
-# the algorithm for different ``N`` with the same bit width, and different
-# values of ``a``. We expect the first execution, for the very first ``N`` and
-# ``a``, to take longer than the rest.
+# Next, let's verify QJIT compilation is happening properly. We will run the
+# algorithm for different ``N`` with the same bit width, and different values of
+# ``a``. We expect the first execution, for the very first ``N`` and ``a``, to
+# take longer than the rest.
 
 import time
 import matplotlib.pyplot as plt
@@ -933,24 +935,22 @@ execution_times = []
 key = random.PRNGKey(1010101)
 
 for N in N_values:
-    a_choices = jnp.array(list(range(2, N - 1)))
     unique_a = []
 
     while len(unique_a) != num_a:
-        key, subkey = random.split(key)
-        a = random.choice(subkey, a_choices)
-        if jnp.gcd(a, N) == 1:
-            continue
-        unique_a.append(a)
+        key, subkey = random.split(key.astype(jnp.uint32))
+        a = random.randint(subkey, (1,), 2, N - 1)[0]
+        if jnp.gcd(a, N) == 1 and a not in unique_a:
+            unique_a.append(a)
 
     for a in unique_a:
         start = time.time()
-        p, q = shors_algorithm(N, a, n_bits)
+        p, q, key, _, _ = shors_algorithm(N, key.astype(jnp.uint32), a, n_bits, 1)
         end = time.time()
         execution_times.append((N, a, end - start))
 
         start = time.time()
-        p, q = shors_algorithm(N, a, n_bits)
+        p, q, key, _, _ = shors_algorithm(N, key.astype(jnp.uint32), a, n_bits, 1)
         end = time.time()
         execution_times.append((N, a, end - start))
 
@@ -961,6 +961,7 @@ plt.scatter(range(len(times)), times, c=[ex[0] for ex in execution_times])
 plt.xticks(range(0, len(times), 2), labels=labels, rotation=80)
 plt.xlabel("N, a")
 plt.ylabel("Runtime (s)")
+plt.tight_layout()
 plt.show()
 
 ######################################################################
