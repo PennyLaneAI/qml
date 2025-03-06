@@ -803,7 +803,7 @@ def shors_algorithm(N, key, a, n_bits, n_trials):
     dev = qml.device("lightning.qubit", wires=2 * n_bits + 3, shots=1)
 
     @qml.qnode(dev)
-    def run_qpe(a):
+    def run_qpe():
         meas_results = jnp.zeros((n_bits,), dtype=jnp.int32)
         cumulative_phase = jnp.array(0.0)
         phase_divisors = 2.0 ** jnp.arange(n_bits + 1, 1, -1)
@@ -870,14 +870,14 @@ def shors_algorithm(N, key, a, n_bits, n_trials):
     successful_trials = jnp.array(0, dtype=jnp.int32)
 
     for _ in range(n_trials):
-        sample = run_qpe(a)
+        sample = run_qpe()
         phase = fractional_binary_to_float(sample)
         guess_r = phase_to_order(phase, N)
 
         # If the guess order is even, we may have a non-trivial square root.
         # If so, try to compute p and q.
         if guess_r % 2 == 0:
-            guess_square_root = (a ** (guess_r // 2)) % N
+            guess_square_root = repeated_squaring(a, guess_r // 2, N)
 
             if guess_square_root != 1 and guess_square_root != N - 1:
                 candidate_p = jnp.gcd(guess_square_root - 1, N).astype(jnp.int32)
@@ -969,9 +969,202 @@ plt.show()
 # :math:`a` does not lead to recompilation of the program! This will be
 # particularly valuable for large :math:`N`, where traditional circuit processing times can
 # grow very large.
+#
+# To show this more explicitly, let's fix :math:`a = 2`, and generate
+# Shor circuits for many different :math:`N` using both the QJIT-ted version,
+# and the plain PennyLane version below. Note that they will make use of many of the same
+# subroutines and optimizations, but due to limitations on how PennyLane handles
+# mid-circuit measurements, we must use ``qml.cond`` and explicit PhaseShifts.
+#
+
+
+def shors_algorithm_no_qjit(N, key, a, n_bits, n_trials):
+    est_wire = 0
+    target_wires = list(range(1, n_bits + 1))
+    aux_wires = list(range(n_bits + 1, 2 * n_bits + 3))
+
+    dev = qml.device("lightning.qubit", wires=2 * n_bits + 3, shots=1)
+
+    @qml.qnode(dev)
+    def run_qpe():
+        a_mask = jnp.zeros(n_bits, dtype=jnp.int64)
+        a_mask = a_mask.at[0].set(1) + jnp.array(
+            jnp.unpackbits(jnp.array([a]).view("uint8"), bitorder="little")[:n_bits]
+        )
+        a_inv_mask = a_mask
+
+        measurements = []
+
+        qml.PauliX(wires=target_wires[-1])
+
+        QFT(wires=aux_wires[:-1])
+
+        qml.Hadamard(wires=est_wire)
+
+        QFT(wires=target_wires)
+        qml.ctrl(fourier_adder_phase_shift, control=est_wire)(a - 1, target_wires)
+        qml.adjoint(QFT)(wires=target_wires)
+
+        qml.Hadamard(wires=est_wire)
+        measurements.append(qml.measure(est_wire, reset=True))
+
+        powers_cua = jnp.array([repeated_squaring(a, 2**p, N) for p in range(n_bits)])
+
+        loop_bound = n_bits
+        if jnp.min(powers_cua) == 1:
+            loop_bound = jnp.argmin(powers_cua)
+
+        for pow_a_idx in range(1, loop_bound):
+            pow_cua = powers_cua[pow_a_idx]
+
+            if not jnp.all(a_inv_mask):
+                for power in range(2**pow_a_idx, 2 ** (pow_a_idx + 1)):
+                    next_pow_a = jnp.array([repeated_squaring(a, power, N)])
+                    a_inv_mask = a_inv_mask + jnp.array(
+                        jnp.unpackbits(next_pow_a.view("uint8"), bitorder="little")[:n_bits]
+                    )
+
+            qml.Hadamard(wires=est_wire)
+
+            controlled_ua(N, pow_cua, est_wire, target_wires, aux_wires, a_mask, a_inv_mask)
+
+            a_mask = a_mask + a_inv_mask
+            a_inv_mask = jnp.zeros_like(a_inv_mask)
+
+            # The main difference
+            for meas_idx, meas in enumerate(measurements):
+                qml.cond(meas, qml.PhaseShift)(
+                    -2 * jnp.pi / 2 ** (pow_a_idx + 2 - meas_idx), wires=est_wire
+                )
+
+            qml.Hadamard(wires=est_wire)
+            measurements.append(qml.measure(est_wire, reset=True))
+
+        qml.adjoint(QFT)(wires=aux_wires[:-1])
+
+        return qml.sample(measurements)
+
+    p, q = jnp.array(0, dtype=jnp.int32), jnp.array(0, dtype=jnp.int32)
+    successful_trials = jnp.array(0, dtype=jnp.int32)
+
+    for _ in range(n_trials):
+        sample = jnp.array([run_qpe()])
+        phase = fractional_binary_to_float(sample)
+        guess_r = phase_to_order(phase, N)
+
+        if guess_r % 2 == 0:
+            guess_square_root = repeated_squaring(a, guess_r // 2, N)
+
+            if guess_square_root != 1 and guess_square_root != N - 1:
+                candidate_p = jnp.gcd(guess_square_root - 1, N).astype(jnp.int32)
+
+                if candidate_p != 1:
+                    candidate_q = N // candidate_p
+                else:
+                    candidate_q = jnp.gcd(guess_square_root + 1, N).astype(jnp.int32)
+
+                    if candidate_q != 1:
+                        candidate_p = N // candidate_q
+
+                if candidate_p * candidate_q == N:
+                    p, q = candidate_p, candidate_q
+                    successful_trials += 1
+
+    return p, q, key, a, successful_trials / n_trials
 
 
 ######################################################################
+# Let's do the same experiment,
+
+execution_times_qjit = []
+execution_times = []
+
+key = random.PRNGKey(1010101)
+
+for N in N_values:
+    unique_a = []
+
+    while len(unique_a) != num_a:
+        key, subkey = random.split(key.astype(jnp.uint32))
+        a = random.randint(subkey, (1,), 2, N - 1)[0]
+        if jnp.gcd(a, N) == 1 and a not in unique_a:
+            unique_a.append(a)
+
+    for a in unique_a:
+        # QJIT times
+        start = time.time()
+        p, q, _, _, _ = shors_algorithm(N, key.astype(jnp.uint32), a, n_bits, 1)
+        end = time.time()
+        execution_times_qjit.append((N, a, end - start))
+
+        start = time.time()
+        p, q, _, _, _ = shors_algorithm(N, key.astype(jnp.uint32), a, n_bits, 1)
+        end = time.time()
+        execution_times_qjit.append((N, a, end - start))
+
+        # No QJIT times
+        start = time.time()
+        p, q, _, _, _ = shors_algorithm_no_qjit(N, key.astype(jnp.uint32), a, n_bits, 1)
+        end = time.time()
+        execution_times.append((N, a, end - start))
+
+        start = time.time()
+        p, q, _, _, _ = shors_algorithm_no_qjit(N, key.astype(jnp.uint32), a, n_bits, 1)
+        end = time.time()
+        execution_times.append((N, a, end - start))
+
+labels = [f"{ex[0]}, {int(ex[1])}" for ex in execution_times][::2]
+times_qjit = [ex[2] for ex in execution_times_qjit]
+times = [ex[2] for ex in execution_times]
+
+plt.scatter(range(len(times)), times_qjit, c=[ex[0] for ex in execution_times_qjit], label="QJIT")
+plt.scatter(range(len(times)), times, c=[ex[0] for ex in execution_times], marker="v", label="No QJIT")
+plt.xticks(range(0, len(times), 2), labels=labels, rotation=80)
+plt.xlabel("N, a")
+plt.ylabel("Runtime (s)")
+plt.legend()
+plt.tight_layout()
+plt.show()
+
+######################################################################
+# Without QJIT, different values of :math:`a` for the same :math:`N` can have
+# wildly different execution times! This is largly due to the :math:`a`-specific
+# optimizations. When we use QJIT, we get the benefits of that optimization
+# *and* comparable performance across any choice of :math:`a`.
+#
+# Finally, let's compare different values of N with same choice of :math:`a`.
+
+N_values = [15, 21, 33, 39, 51, 55, 57, 65]
+execution_times_qjit = []
+execution_times = []
+
+for N in N_values:
+    start = time.time()
+    p, q, key, _, _ = shors_algorithm(N, key.astype(jnp.uint32), 2, n_bits, 1)
+    end = time.time()
+    execution_times_qjit.append(end - start)
+
+    start = time.time()
+    p, q, key, _, _ = shors_algorithm_no_qjit(N, key.astype(jnp.uint32), 2, n_bits, 1)
+    end = time.time()
+    execution_times.append(end - start)
+
+plt.scatter(range(len(N_values)), execution_times_qjit, label="QJIT")
+plt.scatter(range(len(N_values)), execution_times, label="No QJIT")
+plt.xticks(range(0, len(N_values)), labels=N_values, rotation=80)
+plt.xlabel("N")
+plt.ylabel("Runtime (s)")
+plt.legend()
+plt.tight_layout()
+plt.show()
+
+
+######################################################################
+# Again we will see that there is some variation, but for a fixed bit-width,
+# there is almost no variability in run time when we use QJIT. Without QJIT, the
+# runtime for different :math:`N`, even with the same bit width, may differ
+# greatly.
+#
 # Conclusions
 # -----------
 #
