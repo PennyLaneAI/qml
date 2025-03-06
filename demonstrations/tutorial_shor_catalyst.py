@@ -967,8 +967,8 @@ plt.show()
 ######################################################################
 # This plot demonstrates exactly what we suspect: changing :math:`N` and
 # :math:`a` does not lead to recompilation of the program! This will be
-# particularly valuable for large :math:`N`, where compilation time may become
-# long.
+# particularly valuable for large :math:`N`, where traditional circuit processing times can
+# grow very large.
 
 
 ######################################################################
