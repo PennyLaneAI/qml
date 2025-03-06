@@ -784,7 +784,7 @@ from jax import random
 
 # ``n_bits`` is a static argument because ``jnp.arange`` does not currently
 # support dynamically-shaped arrays when jitted.
-@qml.qjit(autograph=True, static_argnums=(3, 4))
+@qml.qjit(autograph=True, static_argnums=(3))
 def shors_algorithm(N, key, a, n_bits, n_trials):
     # If no explicit a is passed (denoted by a = 0), randomly choose a
     # non-trivial value of a that does not have a common factor with N.
