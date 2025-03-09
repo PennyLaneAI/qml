@@ -372,13 +372,13 @@ def shors_algorithm(N, n_bits):
 #     \mathbf{R}_k = \begin{pmatrix} 1 & 0 \\ 0 & e^{2\pi i\sum_{\ell=0}^{k} \frac{a_\ell}{2^{\ell+1}}} \end{pmatrix}.
 #
 # A detailed derivation of this circuit is included in the
-# :ref:`appendix <appendix_fourier_adder>`.
+# :ref:`Appendix <appendix_fourier_adder>`.
 #
 # Our :math:`\Phi`, however, does not work modulo :math:`N`.  Returning to
 # :math:`M_a`, note we have a modified version, :math:`\Phi_+`. This
 # :math:`\Phi_+`, through use of another auxiliary qubit and some extra
 # operations, does work modulo :math:`N`.  An explanation of :math:`\Phi_+`'s
-# structure is also provided in an :ref:`appendix
+# structure is also provided in the :ref:`Appendix
 # <appendix_fourier_adder_modulo_n>`.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_modulo_n.svg
@@ -513,7 +513,7 @@ def shors_algorithm(N, n_bits):
 #    :align: center
 #    :alt: QPE circuit with one estimation qubit.
 #
-# A step-by-step example is included in :ref:`appendix <appendix_single_qubit_qpe>`.
+# A step-by-step example is included in the :ref:`Appendix <appendix_single_qubit_qpe>`.
 #
 # The final Shor circuit
 # ~~~~~~~~~~~~~~~~~~~~~~
@@ -592,7 +592,7 @@ def modular_inverse(a, N):
 
 
 ######################################################################
-# We require a few helper functions for phase estimation.
+# We also require a few helper functions for phase estimation.
 
 
 def fractional_binary_to_float(sample):
@@ -630,10 +630,8 @@ def as_integer_ratio(f):
 
 
 def phase_to_order(phase, max_denominator):
-    """Given some floating-point phase, estimate integers s, r such
-    that s / r = phase, where r is no greater than some specified value.
-
-    Uses a JIT-compatible re-implementation of Fraction.limit_denominator.
+    """Given some floating-point phase, estimate integers s, r such that s / r =
+    phase.  Uses a JIT-compatible re-implementation of Fraction.limit_denominator.
     """
     numerator, denominator = as_integer_ratio(phase)
 
@@ -705,7 +703,7 @@ def fourier_adder_phase_shift(a, wires):
 
 
 def doubly_controlled_adder(N, a, control_wires, wires, aux_wire):
-    """Sends |c>|xk>QFT(|b>)|0> -> |c>|xk>QFT(|b + c xk a) mod N>)|0>."""
+    """Sends |c>|x>QFT(|b>)|0> -> |c>|x>QFT(|b + c x a) mod N>)|0>."""
     qml.ctrl(fourier_adder_phase_shift, control=control_wires)(a, wires)
 
     qml.adjoint(fourier_adder_phase_shift)(N, wires)
@@ -823,8 +821,8 @@ def shors_algorithm(N, key, a, n_bits, n_trials):
         cumulative_phase = -2 * jnp.pi * jnp.sum(meas_results / jnp.roll(phase_divisors, 1))
 
         # For subsequent iterations, determine powers of a, and apply controlled
-        # U_a when the power is not 1. Unnecessarily double-controlled
-        # operations are removed, based on values stored in the two "mask" variables.
+        # U_a when the power is not 1. Unnecessary double-controlled operations
+        # are removed, based on values stored in the two "mask" variables.
         powers_cua = jnp.array([repeated_squaring(a, 2**p, N) for p in range(n_bits)])
 
         loop_bound = n_bits
@@ -942,16 +940,12 @@ for N in N_values:
         end = time.time()
         execution_times.append((N, a, end - start))
 
-        start = time.time()
-        p, q, key, _, _ = shors_algorithm(N, key.astype(jnp.uint32), a, n_bits, 1)
-        end = time.time()
-        execution_times.append((N, a, end - start))
 
-labels = [f"{ex[0]}, {int(ex[1])}" for ex in execution_times][::2]
+labels = [f"{ex[0]}, {int(ex[1])}" for ex in execution_times]
 times = [ex[2] for ex in execution_times]
 
 plt.scatter(range(len(times)), times, c=[ex[0] for ex in execution_times])
-plt.xticks(range(0, len(times), 2), labels=labels, rotation=80)
+plt.xticks(range(len(times)), labels=labels, rotation=80)
 plt.xlabel("N, a")
 plt.ylabel("Runtime (s)")
 plt.tight_layout()
@@ -963,12 +957,12 @@ plt.show()
 # particularly valuable for large :math:`N`, where traditional circuit processing times can
 # grow very large.
 #
-# To show this more explicitly, let's fix :math:`a = 2`, and generate
-# Shor circuits for many different :math:`N` using both the QJIT-ted version,
-# and the plain PennyLane version below. Note that they will make use of many of the same
-# subroutines and optimizations, but due to limitations on how PennyLane handles
-# mid-circuit measurements, we must use ``qml.cond`` and explicit PhaseShifts.
-#
+# To show this more explicitly, let's fix :math:`a = 2`, and generate Shor
+# circuits for many different :math:`N` using both the QJIT version, and the
+# plain PennyLane version below. Note the standard PennyLane version makes use
+# of many of the same subroutines and optimizations, but due to limitations on
+# how PennyLane handles mid-circuit measurements, we must use ``qml.cond`` and
+# explicit PhaseShifts.
 
 
 def shors_algorithm_no_qjit(N, key, a, n_bits, n_trials):
@@ -1024,7 +1018,7 @@ def shors_algorithm_no_qjit(N, key, a, n_bits, n_trials):
             a_mask = a_mask + a_inv_mask
             a_inv_mask = jnp.zeros_like(a_inv_mask)
 
-            # The main difference
+            # The main difference with the QJIT version
             for meas_idx, meas in enumerate(measurements):
                 qml.cond(meas, qml.PhaseShift)(
                     -2 * jnp.pi / 2 ** (pow_a_idx + 2 - meas_idx), wires=est_wire
@@ -1067,10 +1061,11 @@ def shors_algorithm_no_qjit(N, key, a, n_bits, n_trials):
 
 
 ######################################################################
-# Let's do the same experiment,
+# Let's do the same experiment as before, with three different choices of
+# :math:`a` for each :math:`N`.
 
 execution_times_qjit = []
-execution_times = []
+execution_times_standard = []
 
 key = random.PRNGKey(1010101)
 
@@ -1090,29 +1085,23 @@ for N in N_values:
         end = time.time()
         execution_times_qjit.append((N, a, end - start))
 
-        start = time.time()
-        p, q, _, _, _ = shors_algorithm(N, key.astype(jnp.uint32), a, n_bits, 1)
-        end = time.time()
-        execution_times_qjit.append((N, a, end - start))
-
         # No QJIT times
         start = time.time()
         p, q, _, _, _ = shors_algorithm_no_qjit(N, key.astype(jnp.uint32), a, n_bits, 1)
         end = time.time()
-        execution_times.append((N, a, end - start))
+        execution_times_standard.append((N, a, end - start))
 
-        start = time.time()
-        p, q, _, _, _ = shors_algorithm_no_qjit(N, key.astype(jnp.uint32), a, n_bits, 1)
-        end = time.time()
-        execution_times.append((N, a, end - start))
 
-labels = [f"{ex[0]}, {int(ex[1])}" for ex in execution_times][::2]
+labels = [f"{ex[0]}, {int(ex[1])}" for ex in execution_times_qjit]
+colours = [ex[0] for ex in execution_times_qjit]
+
 times_qjit = [ex[2] for ex in execution_times_qjit]
-times = [ex[2] for ex in execution_times]
+times_standard = [ex[2] for ex in execution_times_standard]
 
-plt.scatter(range(len(times)), times_qjit, c=[ex[0] for ex in execution_times_qjit], label="QJIT")
-plt.scatter(range(len(times)), times, c=[ex[0] for ex in execution_times], marker="v", label="No QJIT")
-plt.xticks(range(0, len(times), 2), labels=labels, rotation=80)
+
+plt.scatter(range(len(times)), times_qjit, c=colours, label="QJIT")
+plt.scatter(range(len(times)), times_standard, c=colours, marker="v", label="Standard")
+plt.xticks(range(0, len(times)), labels=labels, rotation=80)
 plt.xlabel("N, a")
 plt.ylabel("Runtime (s)")
 plt.legend()
@@ -1121,7 +1110,7 @@ plt.show()
 
 ######################################################################
 # Without QJIT, different values of :math:`a` for the same :math:`N` can have
-# wildly different execution times! This is largly due to the :math:`a`-specific
+# wildly different execution times! This is largely due to the :math:`a`-specific
 # optimizations. When we use QJIT, we get the benefits of that optimization
 # *and* comparable performance across any choice of :math:`a`.
 #
@@ -1129,7 +1118,7 @@ plt.show()
 
 N_values = [15, 21, 33, 39, 51, 55, 57, 65]
 execution_times_qjit = []
-execution_times = []
+execution_times_standard = []
 
 for N in N_values:
     start = time.time()
@@ -1140,10 +1129,10 @@ for N in N_values:
     start = time.time()
     p, q, key, _, _ = shors_algorithm_no_qjit(N, key.astype(jnp.uint32), 2, n_bits, 1)
     end = time.time()
-    execution_times.append(end - start)
+    execution_times_standard.append(end - start)
 
 plt.scatter(range(len(N_values)), execution_times_qjit, label="QJIT")
-plt.scatter(range(len(N_values)), execution_times, label="No QJIT")
+plt.scatter(range(len(N_values)), execution_times_standard, label="No QJIT")
 plt.xticks(range(0, len(N_values)), labels=N_values, rotation=80)
 plt.xlabel("N")
 plt.ylabel("Runtime (s)")
@@ -1153,10 +1142,10 @@ plt.show()
 
 
 ######################################################################
-# Again we will see that there is some variation, but for a fixed bit-width,
-# there is almost no variability in run time when we use QJIT. Without QJIT, the
-# runtime for different :math:`N`, even with the same bit width, may differ
-# greatly.
+# Here we see observe that without QJIT, the runtime for different :math:`N`,
+# even with the same bit width, may differ greatly. QJIT enables more consistent
+# performance, and greatly benefits from reuse of the cached program.
+# Preliminary experiments show this to be true even for larger problem sizes!
 #
 # Conclusions
 # -----------
