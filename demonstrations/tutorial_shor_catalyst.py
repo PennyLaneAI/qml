@@ -1132,7 +1132,7 @@ for N in N_values:
     execution_times_standard.append(end - start)
 
 plt.scatter(range(len(N_values)), execution_times_qjit, label="QJIT")
-plt.scatter(range(len(N_values)), execution_times_standard, label="No QJIT")
+plt.scatter(range(len(N_values)), execution_times_standard, marker="v", label="Standard")
 plt.xticks(range(0, len(N_values)), labels=N_values, rotation=80)
 plt.xlabel("N")
 plt.ylabel("Runtime (s)")
