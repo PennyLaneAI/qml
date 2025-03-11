@@ -1,12 +1,12 @@
 {
-    "title": "Period finding -- a problem at the heart of quantum computing",
+    "title": "Period finding: A problem at the heart of quantum computing",
     "authors": [
         {
             "username": "mariaschuld"
         },
     ],
-    "dateOfPublication": "2025-02-XXT10:00:00+00:00",
-    "dateOfLastModification": "2025-02-XXT10:00:00+00:00",
+    "dateOfPublication": "2025-03-31T10:00:00+00:00",
+    "dateOfLastModification": "2025-03-31T10:00:00+00:00",
     "categories": [
         "Getting Started",
         "Quantum Computing",
@@ -27,6 +27,5 @@
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],
-    "relatedContent": [
-    ]
+    "relatedContent": []
 }
