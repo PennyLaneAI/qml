@@ -1,4 +1,4 @@
-r"""Introducing (Dynamical) Lie Algebras for quantum practitioners
+r"""Introducing (dynamical) Lie algebras for quantum practitioners
 ==================================================================
 
 Are you a quantum practitioner that has so far successfully avoided learning about Lie groups and Lie algebras,
@@ -284,7 +284,7 @@ for n in range(2, 5):
     print(f"open: {len(periodic_)} = {2*n*(2*n-1)} = 2 * 2n * (2n - 1)/2")
 
 ###############################################################
-# This Ising-type Lie algebra is one of only a few handful DLAs that have polynomial scaling, see [#Wiersma]_ for a full classification in 1D
+# This Ising-type Lie algebra is one of only a few handful DLAs that have polynomial scaling (see [#Wiersma]_ for a full classification in 1D)
 # and are thus efficiently simulatable [#Somma]_ [#Goh]_. Less common but also relevant
 # is the `symplectic algebra <https://en.wikipedia.org/wiki/Symplectic_group>`_ :math:`\mathfrak{sp}(2N).`
 #
@@ -343,9 +343,9 @@ print(qml.commutator(H, SZ))
 # Now that we know that the Heisenberg model Hamiltonian commutes with any :math:`S_\text{tot}^{\alpha}` for :math:`\alpha \in \{x, y, z\},` we also know that any observable
 # composed of the total spin components
 #
-# .. math:: \hat{O} = c_x S^x_\text{tot} + c_x S^y_\text{tot} + c_x S^z_\text{tot}
+# .. math:: \hat{O} = c_x S^x_\text{tot} + c_y S^y_\text{tot} + c_z S^z_\text{tot}
 #
-# commutes with the Hamiltonian,
+# with arbitrary real coefficients :math:`c_x, c_y, c_z \in \mathbb{R}` commutes with the Hamiltonian,
 #
 # .. math:: [\hat{O}, H_\text{Heis}] = 0.
 #
@@ -458,4 +458,4 @@ print(qml.commutator(SY, SZ) == (2j*SX).simplify())
 ##############################################################################
 # About the author
 # ----------------
-# .. include:: ../_static/authors/korbinian_kottmann.txt
+#

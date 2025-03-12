@@ -141,8 +141,11 @@ cost(init_params)
 # not JAX compatible.
 #
 # Instead, we can use `Optax <https://github.com/google-deepmind/optax>`__, a library designed for
-# optimization using JAX, as well as the :func:`~.catalyst.grad` function, which allows us to
-# differentiate through quantum just-in-time compiled workflows.
+# optimization using JAX, as well as the :func:`~.catalyst.value_and_grad` function, which allows us to
+# differentiate through quantum just-in-time compiled workflows while also returning the cost value.
+# Here we use :func:`~.catalyst.value_and_grad` as we want to be able to print out and track our
+# cost function during execution, but if this is not required the :func:`~.catalyst.grad` function
+# can be used instead.
 #
 
 import catalyst
@@ -153,23 +156,17 @@ opt = optax.sgd(learning_rate=0.4)
 @qml.qjit
 def update_step(i, params, opt_state):
     """Perform a single gradient update step"""
-    grads = catalyst.grad(cost)(params)
+    energy, grads = catalyst.value_and_grad(cost)(params)
     updates, opt_state = opt.update(grads, opt_state)
     params = optax.apply_updates(params, updates)
+    catalyst.debug.print("Step = {i},  Energy = {energy:.8f} Ha", i=i, energy=energy)
     return (params, opt_state)
-
-loss_history = []
 
 opt_state = opt.init(init_params)
 params = init_params
 
 for i in range(10):
     params, opt_state = update_step(i, params, opt_state)
-    loss_val = cost(params)
-
-    print(f"--- Step: {i}, Energy: {loss_val:.8f}")
-
-    loss_history.append(loss_val)
 
 ######################################################################
 # Step 4: QJIT-compile the optimization
@@ -195,10 +192,6 @@ print(f"Final angle parameters: {final_params}")
 #
 
 ######################################################################
-# About the authors
-# -----------------
-#
-# .. include:: ../_static/authors/ali_asadi.txt
-#
-# .. include:: ../_static/authors/josh_izaac.txt
+# About the author
+# ----------------
 #
