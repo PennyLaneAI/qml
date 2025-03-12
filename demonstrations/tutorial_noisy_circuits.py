@@ -299,4 +299,3 @@ print(f"Optimized noise parameter p = {sigmoid(x.take(0)):.4f}")
 # About the author
 # ----------------
 #
-# .. include:: ../_static/authors/juan_miguel_arrazola.txt
