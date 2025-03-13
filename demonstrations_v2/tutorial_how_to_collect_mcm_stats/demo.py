@@ -25,7 +25,7 @@ running --- mid-circuit measurement statistics!
 # We start by defining a quantum circuit ansatz that switches between a layer of simple rotation gates
 # (:class:`~.pennylane.RX`), mid-circuit measurements(:func:`~.pennylane.measure`), and a layer
 # of entangling two-qubit gates (:class:`~.pennylane.CNOT`) between the first and all other qubits.
-# The ansatz then returns the list of four MCM values, so that we can process them further in a full quantum circuit
+# The ansatz then returns the list of four MCM values, so that we can process them further in a full quantum circuit.
 # As we will treat the first wire differently than all other wires, we define it as separate variable.
 #
 # Along the way, we perform some standard imports and set a randomness seed.
