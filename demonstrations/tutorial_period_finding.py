@@ -2,17 +2,15 @@ r"""
 Period finding -- a problem at the heart of quantum computing
 =============================================================
 
-*Authors: Maria Schuld — Posted: XXX.*
-
 You might have heard that Shor's algorithm is an instance of "period finding". You might also have heard that, more generally, this is an example of an *Abelian hidden subgroup problem* solved by a quantum computer's stunning ability to implement the Fourier transform efficiently on an intractable number of  function values. Hidden subgroup problems and quantum Fourier transforms were all the rage in the quantum computing literature in the 2000's.
 
 While trends may have moved on, the idea of extracting group structure from the Fourier spectrum is still at the very core of what quantum computers could be useful for. Scott Aaronson, for example, in his 2022 commentary "How Much Structure Is Needed for Huge Quantum Speedup?" uses the following hierarchy:
 
-.. figure:: ../_static/demonstration_assets/period-finding/aaronson_fig6.png
+.. figure:: ../_static/demonstration_assets/period_finding/aaronson_fig6.png
     :align: center
     :width: 75%
 
-However, group theory is a huge hurdle for even some of the more seasoned quantum enthusiasts. This demo wants to give a glimpse of what this "Abelian structure" is all about. Luckily, the fruit-fly example of a hidden subgroup problem is just the task of finding the period of a integer-valued function - something one can appreciate without much group jargon. A fantastic place for further reading is the review of hidden subgroup problems by Childs & Dam (2008) [#Childs]_.
+However, group theory is a huge hurdle for even some of the more seasoned quantum enthusiasts. This demo wants to give a glimpse of what this "Abelian structure" is all about. Luckily, the fruit-fly example of a hidden subgroup problem is just the task of finding the period of a integer-valued function - something one can appreciate without much group jargon. A fantastic place for further reading is the review of hidden subgroup problems by Childs & Dam (2008) [#Childs2008]_.
 """
 
 #####################################################################
@@ -25,7 +23,7 @@ However, group theory is a huge hurdle for even some of the more seasoned quantu
 # further technical requirement, which is that the function does not have the same value within a
 # period. Here is an example of such a function with a period of :math:`4`:
 #
-# .. figure:: ../_static/demonstration_assets/period-finding/periodic_function.png
+# .. figure:: ../_static/demonstration_assets/period_finding/periodic_function.png
 #    :align: center
 #    :width: 90%
 #
@@ -47,12 +45,12 @@ However, group theory is a huge hurdle for even some of the more seasoned quantu
 # period finding --- and the algorithm to follow --- can be generalised to other groups and
 # subgroups. It can even be used for some instances of non-Abelian groups.
 #
-# .. figure:: ../_static/demonstration_assets/period-finding/periodic_function_groups.png
+# .. figure:: ../_static/demonstration_assets/period_finding/periodic_function_groups.png
 #    :align: center
 #    :width: 90%
 #
 # The quantum algorithm to find the period of the function above is really simple. Encode the
-# function into a quantum state of the form :math:`\sum_x |x\rangle |f(x) \rangle `, apply the quantum
+# function into a quantum state of the form :math:`\sum_x |x \rangle |f(x) \rangle`, apply the quantum
 # Fourier transform on the first register, and measure. We then need to do a bit of post-
 # processing: The state we measure, written as an integer, is a multiple of the number of periods
 # that "fit" into the x-domain. The period is then the number of integers divided by the number
@@ -104,7 +102,7 @@ plt.show()
 
 #####################################################################
 # We will represent the :math:`x` and :math:`y` values of this function as computational basis states
-# :math:`| x \rangle | f(x) \rangle `. The amplitudes belonging to that state can be interpreted as a
+# :math:`| x \rangle | f(x) \rangle`. The amplitudes belonging to that state can be interpreted as a
 # "weight" for a specific function value. The algorithm, however, will only have uniform weights
 # in every step.
 #
@@ -207,7 +205,7 @@ samples = circuit()
 #####################################################################
 # The classical postprocessing is quick, but uses some involved algebraic ideas you might have
 # last seen at school. If you are curious about the details, you'll find them in
-# Childs & Dam (2013), Section IVa.
+# Childs & Dam (2013) [#Childs2008]_, Section IVa.
 
 from fractions import Fraction
 from math import lcm
@@ -226,10 +224,12 @@ result = lcm(denominator1, denominator2)
 print(f"Hidden period: {result}")
 
 #####################################################################
-# Yay, we've found the hidden period! Now, of course this is only impressive if we increase the
+# Yay, we've found the hidden period! Now, of course this is only impressive if we increase the 
 # number of qubits. We can find the hidden period of a function defined on :math:`2^n` values in time
-# :math:`O(n log(n))`.
-#
+# :math:`O(n \mathrm{log}(n))`.
+
+
+#####################################################################
 # A peep at the states involved
 ###############################
 #
@@ -263,12 +263,12 @@ for state, ax in zip(states_to_plot, axes):
     sizes_real = []
     for x_, y_ in zip(x, y):
         idx = to_int(to_binary(x_, 4) + to_binary(y_, 3))
-        sizes_real.append(200 * real[idx])
+        sizes_real.append(200 * np.abs(real[idx]))
 
     sizes_imag = []
     for x_, y_ in zip(x, y):
         idx = to_int(to_binary(x_, 4) + to_binary(y_, 3))
-        sizes_imag.append(200 * imag[idx])
+        sizes_imag.append(200 * np.abs(imag[idx]))
 
     ax.scatter(np.array(x), y, s=sizes_real, c="green", alpha=0.5)
     ax.scatter(np.array(x), y, s=sizes_imag, c="pink", alpha=0.5)
@@ -276,20 +276,22 @@ for state, ax in zip(states_to_plot, axes):
     ax.set_ylabel("f(x)")
 
 plt.xlabel("x")
-green = mpatches.Patch(color="green", label="real part")
-pink = mpatches.Patch(color="pink", label="imaginary part")
+green = mpatches.Patch(color="green", label="abs(real part)")
+pink = mpatches.Patch(color="pink", label="abs(imaginary part)")
 plt.legend(handles=[green, pink])
 plt.tight_layout()
 plt.show()
 
 #####################################################################
-# First of all, we see that the oracle really prepared a quantum state that we can interpret as
+# First of all, we see that the oracle really prepared a quantum state that we can interpret as 
 # our periodic function `f`.
 #
 # Furthermore, the state representing the Fourier spectrum looks actually quite interesting. But
 # the important feature of this state is also clearly visible: Amplitudes concentrate in :math:`x`
 # values that are multiples of :math:`2`. And :math:`2` was exactly the amount of periods of :math:`8` that fit into :math:`16`.
-#
+
+
+#####################################################################
 # What is the "Abelian structure" exploited by the quantum Fourier transform?
 #############################################################################
 #
@@ -303,7 +305,8 @@ plt.show()
 #
 #     \sum_k \left(e^{\frac{2 \pi i 2 k}{12}} + e^{\frac{2 \pi i 10 k}{12}} \right)  |k \rangle.
 #
-# Somewhat magically, for some :math:`|k \rangle`, all exponential functions in the sum evaluate to :math:`1`, # while for all others, the functions cancel each other out and evaluate to exactly zero.
+# Somewhat magically, for some :math:`|k \rangle`, all exponential functions in the sum evaluate to :math:`1`, 
+# while for all others, the functions cancel each other out and evaluate to exactly zero.
 
 for k in range(12):
     res = np.exp(2 * np.pi * 1j * 2 * k / 16) + np.exp(2 * np.pi * 1j * 10 * k / 16)
@@ -325,17 +328,18 @@ for k in range(12):
 # the quantum Fourier transform. So far this has only found application for rather abstract
 # problems. Even though cryptography, impacted by Shor's algorithm, is what one might consider a
 # "real-world" application, it is an outlier, since problems in cryptography are artificially
-# *constucted* from abstract mathematical mechanisms. A fascinating question is whether "real",
-# messy real-world applications, like material science or data analysis, could benefit from this
+# *constucted* from abstract mathematical mechanisms. A fascinating question is whether "real"
+# real-world applications, like material science or data analysis, could benefit from this
 # remarkable confluence of group structure and quantum theory.
 #
 #
 ##############################################################################
 # References
 # ##########
-# .. [#Childs2008] Andrew Childs, Vim van Dam,
-#             `"Quantum algorithms for algebraic problems" <https://arxiv.org/pdf/0812.0380>`_,
-#             Reviews of Modern Physics 82.1 (2010): 1-52.
+#
+# .. [#Childs2008] 
+#    Andrew Childs, Vim van Dam, `"Quantum algorithms for algebraic problems" <https://arxiv.org/pdf/0812.0380>`_,
+#    Reviews of Modern Physics 82.1 (2010): 1-52.
 #
 # About the author
 # ----------------
