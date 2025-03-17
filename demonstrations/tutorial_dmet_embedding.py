@@ -1,4 +1,4 @@
-r"""Quantum Defect Embedding Theory (QDET)
+r"""Density Matrix Embedding Theory (DMET)
 =========================================
 Materials simulation presents a crucial challenge in quantum chemistry, as understanding and predicting the properties of 
 complex materials is essential for advancements in technology and science. While Density Functional Theory (DFT) is 
