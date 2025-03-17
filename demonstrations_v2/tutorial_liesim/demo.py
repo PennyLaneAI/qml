@@ -186,7 +186,7 @@ generators += [Z(i) for i in range(n)]
 # work with PauliSentence instances for efficiency
 generators = [op.pauli_rep for op in generators]
 
-dla = qml.pauli.lie_closure(generators, pauli=True)
+dla = qml.lie_closure(generators, pauli=True)
 dim_g = len(dla)
 
 ##############################################################################
@@ -239,7 +239,7 @@ w = jnp.array(w)
 # the forward pass of the expectation value computation. For demonstration purposes,
 # we choose a random subset of ``depth=10`` generators for gates from the DLA.
 
-adjoint_repr = qml.pauli.structure_constants(dla)
+adjoint_repr = qml.structure_constants(dla)
 
 depth = 10
 gate_choice = np.random.choice(dim_g, size=depth)
