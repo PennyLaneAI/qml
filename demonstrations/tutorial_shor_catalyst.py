@@ -5,7 +5,7 @@ JIT compiling Shor's algorithm with PennyLane and Catalyst
 ===============================================================
 
 .. meta::
-    :property="og:description": JIT compile Shor's algorithm from end-to-end with PennyLane and Catalyst.
+    :property="og:description": JIT compile Shor's algorithm from beginning to end with PennyLane and Catalyst.
 
     :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//fano.png
 
@@ -23,7 +23,7 @@ JIT compiling Shor's algorithm with PennyLane and Catalyst
 # The past few years stimulated a lot of discussion about *hybrid
 # quantum-classical algorithms*. For a time, this terminology was synonymous
 # with *variational algorithms*. However, integration with classical
-# co-processors is necessary for every quantum algorithm, even ones considered
+# coprocessors is necessary for every quantum algorithm, even ones considered
 # quintessentially quantum.
 #
 # Shor's famous factoring algorithm [#Shor1997]_ is one such example. Consider
@@ -58,9 +58,9 @@ def shors_algorithm(N):
 
 
 ######################################################################
-# If you saw this code out of context, would it even occur to you it is for a
-# quantum algorithm? There are no quantum circuits in sight, and the only "q" is
-# a variable name!
+# If you saw this code out of context, would it even occur to you that it's for
+# a quantum algorithm? There are no quantum circuits in sight, and the only "q"
+# is a variable name!
 #
 # As quantum hardware continues to scale up, the way we reason about quantum
 # programming is evolving in tandem. Writing circuits gate-by-gate for
@@ -88,7 +88,7 @@ def shors_algorithm(N):
 # ^^^^^^^^^^^^^^^^^^^^^
 #
 # Compilation is the process of translating operations expressed in a high-level
-# language to a low-level language.  In languages like C and C++, compilation
+# language to a low-level language.  In compiled languages like C and C++, compilation
 # happens offline prior to code execution. A compiler takes a program as input
 # and sends it through a sequence of *passes* that perform tasks such as syntax
 # analysis, code generation, and optimization. The compiler outputs a new
@@ -148,41 +148,39 @@ def shors_algorithm(N):
 # hardware by hand. This is a laborious (and error-prone!) process, and
 # furthermore, is unlikely to be optimal.
 #
-# Suppose we want compile and optimize quantum circuits for Shor's algorithm to
-# factor an integer :math:`N`. Recalling the pseudocode above, let's break the
-# algorithm down into a few distinct steps to identify where quantum compilation
-# happens (for a full description of Shor's algorithm, the interested reader is
-# referred to the `PennyLane Codebook
+# Suppose we want to compile and optimize quantum circuits for Shor's algorithm
+# to factor an integer :math:`N`. Recalling the pseudocode above, let's break
+# the algorithm down into a few distinct steps to identify where quantum
+# compilation happens (for a full description of Shor's algorithm, the
+# interested reader is referred to the `PennyLane Codebook
 # <https://pennylane.ai/codebook/10-shors-algorithm/>`_).
 #
 #  - Randomly select an integer, :math:`a`, between 2 and
 #    :math:`N-1` (double check we didn't get lucky and :math:`a` has a common factor with :math:`N`)
-#  - Execute *order finding* on a quantum computer, and use the measurement
-#    results to guess a candidate non-trivial square root
-#  - If the square root is non-trivial, test if we found valid factors. Otherwise, take more shots, or try a different :math:`a`.
+#  - Using :math:`N` and :math:`a`, generate a circuit for *order finding* on a quantum computer. Execute it, and use the measurement results to obtain a candidate non-trivial square root
+#  - If the square root is non-trivial, test for valid factors. Otherwise, take more measurement shots, or try a different :math:`a`.
 #
-# The key thing to note is that for every :math:`N` and ``a``, a different
+# The key thing to note is that for every :math:`N` and :math:`a`, a different
 # quantum circuit must be generated, compiled and optimized. Even with a good
 # compiler this will lead to a huge computational overhead! Recall also that in
-# a cryptographic context, ``N`` relates to a public key that is unique for
-# every entity. Moreover, for sizes of cryptographic relevance, ``N`` will be a
-# 2048-bit integer (or larger)! It would be ideal if we could reuse and share
-# some of this work across different :math:`a` and :math:`N`. To that end, JIT
-# compilation is a worthwhile option to explore.
+# a cryptographic context, :math:`N` relates to a public key that is unique for
+# every entity. Moreover, for sizes of cryptographic relevance, :math:`N` will
+# be a 2048-bit integer (or larger)! It would be ideal if we could reuse and
+# share some of this work across different :math:`a` and :math:`N`. To that end,
+# JIT compilation is a worthwhile option to explore.
 #
 # Quantum just-in-time compilation
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
-# In standard PennyLane, quantum circuit execution can be JIT-compiled with
-# JAX. To learn more, check out the JAX documentation [#JAXJIT]_
-# <https://docs.jax.dev/en/latest/jit-compilation.html>`_ and the
-# (:doc:`PennyLane demo </demos/tutorial_jax_transformations>`) on the
-# subject. But this only compiles a single circuit; what about all the other
-# code around it? What if you also wanted to optimize that quantum circuit based
-# on contextual information?
+# In standard PennyLane, quantum circuit execution can be JIT compiled with
+# JAX. To learn more, check out the JAX documentation [#JAXJIT]_ and the
+# :doc:`PennyLane demo </demos/tutorial_jax_transformations>` on the
+# subject. But, this only compiles a single circuit. What about all the other
+# code around it? What if you also wanted to optimize that quantum circuit,
+# based on contextual information?
 #
 # This is where Catalyst comes in. Catalyst enables quantum JIT (QJIT)
-# compilation of the *entire* algorithm from end-to-end. On the surface, it
+# compilation of the *entire* algorithm from beginning to end. On the surface, it
 # looks to be as simple as the following:
 
 import pennylane as qml
@@ -195,9 +193,9 @@ def shors_algorithm(N):
 
 
 ######################################################################
-# In practice, it is not so simple, and we will require some special-purpose
-# functions and data manipulation. But ultimatley, we will show how to QJIT the
-# most important parts such that the signature can be as minimal as
+# In practice, it is not so simple, and requires some special-purpose functions
+# and data manipulation. But ultimately, we will show how to QJIT the most
+# important parts such that the signature can be as minimal as this:
 
 
 @qml.qjit(autograph=True, static_argnums=(1))
@@ -207,8 +205,8 @@ def shors_algorithm(N, n_bits):
 
 
 ######################################################################
-# Along the way, we will also leverage knowledge of :math:`a` to construct more
-# optimal quantum circuits within the QJITted function.
+# Furthermore, along the way we'll leverage the structure of :math:`a` to
+# construct more optimal quantum circuits in the QJITted function.
 #
 # QJIT compiling Shor's algorithm
 # -------------------------------
@@ -223,16 +221,15 @@ def shors_algorithm(N, n_bits):
 # This section outlines the quantum circuits used in the order-finding
 # subroutine. The presented implementation is based on that of Beauregard
 # [#Beauregard2003]_. For an integer :math:`N` with an :math:`n = \lceil \log_2
-# N \rceil`-bit representation, the implementation requires :math:`2n + 3`
-# qubits, where :math:`n + 1` are for computation and :math:`n + 2` are
-# auxiliary.
+# N \rceil`-bit representation, we require :math:`2n + 3` qubits, where :math:`n
+# + 1` are for computation and :math:`n + 2` are auxiliary.
 #
 # Order finding is an application of *quantum phase estimation*
 # (:doc:`QPE </demos/tutorial_qpe>`) for the operator
 #
 # .. math::
 #
-#     U_a \vert x \rangle = \vert ax \pmod N \rangle
+#     U_a \vert x \rangle = \vert ax \pmod N \rangle,
 #
 # where :math:`\vert x \rangle` is the binary representation of integer
 # :math:`x`, and :math:`a` is the randomly-generated integer discussed
@@ -252,7 +249,8 @@ def shors_algorithm(N, n_bits):
 # nature of computation. Specifically, with mid-circuit measurement and reset we
 # can reduce the number of estimation wires to :math:`t=1`. Most arithmetic will
 # be performed in the Fourier basis. Finally, with Catalyst we can vary circuit
-# structure based on :math:`a` to save resources, *even though its value isn't known until runtime*.
+# structure based on :math:`a` to save resources, *even though its value isn't
+# known until runtime*.
 #
 # First, we'll use our classical knowledge of :math:`a` to simplify the
 # implementation of the controlled :math:`U_a^{2^k}`. Naively, it looks like we
@@ -332,7 +330,7 @@ def shors_algorithm(N, n_bits):
 # circuit works as expected. If :math:`\vert c \rangle = \vert 0 \rangle`, they
 # run, but cancel each other out since none of the operations in between will
 # execute (this optimization is broadly applicable to controlled operations, and
-# quite useful!). This yields the circuit below.
+# quite useful!).
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/doubly-controlled-adder-with-control-not-on-qft.svg
 #    :width: 700
@@ -342,7 +340,7 @@ def shors_algorithm(N, n_bits):
 #    The controls on the QFT can be removed without altering the effect of the circuit
 #    [#Beauregard2003]_.
 #
-# At first glance it not clear how :math:`a x` is obtained. The qubits in
+# At first glance ,it not clear how this produces :math:`a x`. The qubits in
 # register :math:`\vert x \rangle` control operations that depend on :math:`a`
 # multiplied by various powers of 2. There is a QFT before and after, whose
 # purpose is unclear, and we have yet to define :math:`\Phi_+`.
@@ -359,11 +357,11 @@ def shors_algorithm(N, n_bits):
 #    :align: center
 #    :alt: Addition in the Fourier basis.
 #
-#    Circuit for addition in the Fourier basis [#Draper2000]_. The calligraphic
-#    letters indicate states already transformed to the Fourier basis.
+#    Circuit for addition in the Fourier basis [#Draper2000]_. Calligraphic
+#    letters indicate basis states converted to the Fourier basis.
 #
-# Fourier addition of two :math:`n`-bit numbers uses :math:`n+1` qubits as it
-# account for the possibility of overflow during addition (this constitutes one
+# Fourier addition of two :math:`n`-bit numbers uses :math:`n+1` qubits, as it
+# accounts for the possibility of *overflow* during addition (this constitutes one
 # of our auxiliary qubits). The :math:`\mathbf{R}_k` are rotations that depend
 # on the binary representation of :math:`a`,
 #
@@ -387,8 +385,8 @@ def shors_algorithm(N, n_bits):
 #    :alt: Addition in the Fourier basis modulo N.
 #
 #    Circuit for doubly-controlled Fourier addition modulo :math:`N`
-#    [#Beauregard2003]_. The calligraphic letters indicate states already
-#    transformed to the Fourier basis.
+#    [#Beauregard2003]_. Calligraphic letters indicate basis states converted to
+#    the Fourier basis.
 #
 # This completes our implementation of the controlled :math:`U_{a^{2^k}}`. The
 # full circuit, shown below, uses :math:`t + 2n + 2` qubits.
@@ -405,9 +403,9 @@ def shors_algorithm(N, n_bits):
 # Taking advantage of classical information
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# Above, information about :math:`a` we incorporated in the controlled
-# :math:`U_a` and the Fourier adder. Below, we identify a few other places where
-# classical information can be leveraged.
+# Above, we incorporated information about :math:`a` in the controlled
+# :math:`U_a` and the Fourier adder. In what follows, we identify a few other
+# places where classical information can be leveraged.
 #
 # First, consider the controlled :math:`U_{a^{2^0}} = U_a` at the beginning of
 # the algorithm. The only basis state this operation applies to is :math:`\vert
@@ -423,19 +421,20 @@ def shors_algorithm(N, n_bits):
 # be multiplying by 1. In fact, we can terminate the algorithm early because
 # we've found the order of :math:`a` is simply :math:`2^k`.
 #
-# There are also some more non-trivial optimizations. Consider the sequence of
-# doubly-controlled adders in the controlled :math:`M_a`. Below, we show the
-# initial instance where the auxiliary register is in state :math:`\vert 0
-# \rangle`.
+# There are also less-trivial optimizations we can make. Consider the
+# sequence of doubly-controlled adders in the controlled :math:`M_a`. Below, we
+# show the initial instance where the auxiliary register is in state
+# :math:`\vert 0 \rangle`.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/doubly-controlled-adder-simplified.svg
 #    :width: 600
 #    :align: center
 #    :alt: The controlled multiplier circuit in the context of Shor's algorithm.
 #
-# The doubly-controlled adders are controlled on both estimation qubits, and the
-# bits in the target register. Consider the state of the system after the
-# initial controlled-:math:`U_a` (or, rather, controlled addition of :math:`a-1`),
+# The doubly-controlled adders are each controlled on an estimation qubit, and a
+# qubit in the target register. Consider the state of the system after the
+# initial controlled-:math:`U_a` (or, rather, controlled addition of
+# :math:`a-1`),
 #
 # .. math::
 #
@@ -449,8 +448,8 @@ def shors_algorithm(N, n_bits):
 # one (with the second control on the bottom-most qubit), and those controlled
 # on qubits that are :math:`1` in the binary representation of :math:`a`. Thus,
 # we only need doubly-controlled operations on qubits where the logical OR of
-# the bit representations of :math:`1` and `a` are 1! An example, for :math:`a =
-# 5`, is shown below.
+# the bit representations of :math:`1` and `a` are 1! We present here an example
+# for :math:`a = 5`.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/doubly-controlled-adder-simplified-states.svg
 #    :width: 800
@@ -461,8 +460,7 @@ def shors_algorithm(N, n_bits):
 #
 # Depending on :math:`a`, this could be major savings, especially at the
 # beginning of the algorithm where very few basis states are involved. The same
-# trick can be used in the portion of the controlled-:math:`U_a` after the
-# controlled SWAPs, as demonstrated below.
+# trick can be used after the controlled SWAPs, as demonstrated below.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/c-ua-basis-states-optimization.svg
 #    :width: 600
@@ -487,9 +485,10 @@ def shors_algorithm(N, n_bits):
 # using a well-known trick for the QFT. Let's return to the QPE circuit and
 # expand the final inverse QFT.
 #
-# .. figure::
-#    ../_static/demonstration_assets/shor_catalyst/qpe_full_modified_power_with_qft.svg
-#    :width: 800 :align: center :alt: QPE circuit with inverse QFT expanded.
+# .. figure:: ../_static/demonstration_assets/shor_catalyst/qpe_full_modified_power_with_qft.svg
+#    :width: 800
+#    :align: center
+#    :alt: QPE circuit with inverse QFT expanded.
 #
 # Consider the bottom estimation wire. After the final Hadamard, this qubit only
 # applies controlled operations. Rather than preserving its state, we can make a
@@ -905,8 +904,8 @@ print(f"Found {N} = {p} x {q} (using random a = {a}) with probability {success_p
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
 # Next, let's verify QJIT compilation is happening properly. We will run the
-# algorithm for different ``N`` with the same bit width, and different values of
-# ``a``. We expect the first execution, for the very first ``N`` and ``a``, to
+# algorithm for different :math:`N` with the same bit width, and different values of
+# :math:`a`. We expect the first execution, for the very first :math:`N` and :math:`a`, to
 # take longer than the rest.
 
 import time
@@ -951,15 +950,15 @@ plt.show()
 ######################################################################
 # This plot demonstrates exactly what we suspect: changing :math:`N` and
 # :math:`a` does not lead to recompilation of the program! This will be
-# particularly valuable for large :math:`N`, where traditional circuit processing times can
-# grow very large.
+# particularly valuable for large :math:`N`, where traditional circuit
+# processing times can grow very large.
 #
 # To show this more explicitly, let's fix :math:`a = 2`, and generate Shor
 # circuits for many different :math:`N` using both the QJIT version, and the
 # plain PennyLane version below. Note the standard PennyLane version makes use
 # of many of the same subroutines and optimizations, but due to limitations on
 # how PennyLane handles mid-circuit measurements, we must use ``qml.cond`` and
-# explicit PhaseShifts.
+# explicit ``qml.PhaseShift`` gates.
 
 
 def shors_algorithm_no_qjit(N, key, a, n_bits, n_trials):
@@ -1107,9 +1106,9 @@ plt.show()
 
 ######################################################################
 # Without QJIT, different values of :math:`a` for the same :math:`N` can have
-# wildly different execution times! This is largely due to the :math:`a`-specific
-# optimizations. When we use QJIT, we get the benefits of that optimization
-# *and* comparable performance across any choice of :math:`a`.
+# wildly different execution times! This is largely due to the
+# :math:`a`-specific optimizations. When we use QJIT, we get the benefits of
+# that optimization *and* comparable performance across any choice of :math:`a`.
 #
 # Finally, let's compare different values of N with same choice of :math:`a`.
 
@@ -1139,7 +1138,7 @@ plt.show()
 
 
 ######################################################################
-# Here we see observe that without QJIT, the runtime for different :math:`N`,
+# Here we observe that without QJIT, the runtime for different :math:`N`,
 # even with the same bit width, may differ greatly. QJIT enables more consistent
 # performance, and greatly benefits from reuse of the cached program.
 # Preliminary experiments show this to be true even for larger problem sizes!
@@ -1149,8 +1148,9 @@ plt.show()
 #
 # The ability to leverage a tool like Catalyst means we can quickly generate,
 # compile, and optimize very large circuits, even within the context of a larger
-# workflow. As a bonus, using JIT compilation means that after the first execution, thse optimizations come
-# at no extra cost, even though they depend on runtime values!
+# workflow. As a bonus, using JIT compilation means that after the first
+# execution, these optimizations come at no extra cost, even though they depend
+# on runtime values!
 #
 # There is still much work to be done, however. For one, the generated
 # circuits are not optimized at the individual gate level, so the resource
@@ -1161,6 +1161,11 @@ plt.show()
 # classical information or on the input quantum superposition would be valuable
 # to develop, as they would enable co-optimization of the classical and quantum
 # parts of workflows.
+#
+# *Acknowledgements*: The author thanks the Catalyst team for their support and
+# for developing the features needed to carry out this project. Thanks
+# especially to David Ittah for developing JIT-compatible implementations of
+# utility functions needed for modular exponentiation and phase estimation.
 #
 #
 # References
@@ -1258,8 +1263,8 @@ plt.show()
 # Each qubit in :math:`\vert b \rangle` picks up a phase that depends on the
 # bits in :math:`a`. In particular, the :math:`k`'th bit of :math:`b`
 # accumulates information about all the bits in :math:`a` with an equal or lower
-# index, :math:`a_0, \ldots, a_{k}`. This adds :math:`a_k` to :math:`b_k`; the
-# cumulative effect adds :math:`a` to :math:`b`, up to an inverse QFT!
+# index, :math:`a_0, \ldots, a_{k}`. This adds :math:`a_k` to :math:`b_k`, and
+# the cumulative effect adds :math:`a` to :math:`b`, up to an inverse QFT.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_explanation-3.svg
 #    :width: 800
@@ -1311,7 +1316,7 @@ plt.show()
 #    :alt: Addition in the Fourier basis modulo N.
 #
 #    Circuit for doubly-controlled Fourier addition modulo :math:`N`
-#    [#Beauregard2003]_. The calligraphic letters indicate states already
+#    [#Beauregard2003]_. Calligraphic letters indicate states already
 #    transformed to the Fourier basis.
 #
 # Suppose both control qubits are :math:`\vert 1 \rangle`. We add :math:`a` to
@@ -1372,11 +1377,12 @@ plt.show()
 #    :align: center
 #    :alt: QPE circuit with inverse QFT expanded and last estimation qubit measured off.
 #
-# Once again, we can do better by dynamically modifying the circuit based on
-# classical information. Instead of applying controlled :math:`R^\dagger_2`, we
+# However, we can do better if we can directly modify the circuit based on the
+# measurement outcomes. Instead of applying controlled :math:`R^\dagger_2`, we
 # can apply :math:`R^\dagger` where the rotation angle is 0 if :math:`\theta_0 =
-# 0`, and :math:`-2\pi i/2^2` if :math:`\theta_0 = 1`, i.e., :math:`R^\dagger_{2 \theta_0}`.
-# The same can be done for all other gates controlled on :math:`\theta_0`.
+# 0`, and :math:`-2\pi i/2^2` if :math:`\theta_0 = 1`, i.e., :math:`R^\dagger_{2
+# \theta_0}`.  The same can be done for all other gates controlled on
+# :math:`\theta_0`.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/qpe_full_modified_power_with_qft-3.svg
 #    :width: 800
@@ -1386,14 +1392,14 @@ plt.show()
 # We'll leverage this trick again with the second-last estimation
 # qubit. Moreover, we can make a further improvement by noting that once the
 # last qubit is measured, we can reset and repurpose it to play the role of the
-# second last qubit.
+# second-last qubit.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/qpe_full_modified_power_with_qft-4.svg
 #    :width: 800
 #    :align: center
 #    :alt: QPE circuit with inverse QFT expanded and last estimation qubit reused.
 #
-# Once again, we adjust rotation angles based on measurement values, removing
+# Next, we adjust rotation angles based on measurement values, removing
 # the need for classical controls.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/qpe_full_modified_power_with_qft-5.svg
