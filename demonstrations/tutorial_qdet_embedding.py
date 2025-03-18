@@ -5,15 +5,15 @@ physics. These simulations often require computationally intractable methods for
 solution. However, many interesting problems in quantum chemistry and condensed matter physics
 feature a strongly correlated region, which requires accurate quantum treatment, embedded within a
 larger environment that could be properly treated with cheaper approximations.  Examples of such
-systems include point defects in materials [], active site of catalysts [], surface phenomenon such
-as adsorption [] and many more. Embedding theories serve as powerful tools for effectively
+systems include point defects in materials [#Galli]_, active site of catalysts [#SJRLee]_, surface phenomenon such
+as adsorption [#Gagliardi]_ and many more. Embedding theories serve as powerful tools for effectively
 addressing such problems.
 
 The core idea behind embedding methods is to partition the system and treat the strongly correlated
 subsystem accurately, using high-level quantum mechanical methods, while approximating the effects
 of the surrounding environment in a way that retains computational efficiency. In this demo, we show
 how to implement the quantum defect embedding theory (QDET). The method has been successfully
-applied to calculate [...]. An important advantage of QDET is its compatibility with quantum
+applied to study defects in CaO and to calculate excitations of the negatively charged NV center in diamond. An important advantage of QDET is its compatibility with quantum
 algorithms as we explain in the following sections. The method can be implemented for calculating
 a variety of ground state, excited state and dynamic properties of materials. These make QDET a
 powerful method for affordable quantum simulation of materials.
@@ -214,8 +214,14 @@ qubit_op = observable([t, v], mapping="jordan_wigner")
 # Conclusion
 # ----------
 # The quantum density embedding theory is a novel framework for simulating strongly correlated
-# quantum systems.
-#
+# quantum systems and has been successfully used for studying defects in solids. Applicability of
+# QDET is not limited to defects, it can be used for other systems where a strongly correlated subsystem
+#  is embedded in a weakly correlated environment. QDET is able to surpass the problem of correction of double
+# counting of interactions within the active space faced by some other embedding theories 
+# such as DFT+DMFT.  Green's function based formulation of QDET ensures exact removal of double counting 
+# corrections at GW level of theory, thus removing the approximation present in the initial DFT based formulation. 
+# Another major advantage of QDET is the ease with which it can be used with quantum computers in a hybrid framework.
+# 
 # References
 # ----------
 #
@@ -223,6 +229,19 @@ qubit_op = observable([t, v], mapping="jordan_wigner")
 #
 #     N. W. Ashcroft, D. N. Mermin,
 #     "Solid State Physics", Chapter 4, New York: Saunders College Publishing, 1976.
+#
+# .. [#Galli]
+#
+#    Joel Davidsson, Mykyta Onizhuk, *et al.*, "Discovery of atomic clock-like spin defects in simple oxides from first principles"
+#    `ArXiv <https://arxiv.org/pdf/2302.07523>`__.
+#
+# .. [#SJRLee]
+#    Sebastian J. R. Lee, Feizhi Ding, *et al.*, "Analytical Gradients for Projection-Based Wavefunction-in-DFT Embedding."
+#    `ArXiv <https://arxiv.org/pdf/1903.05830>`__.
+#
+# .. [#Gagliardi]
+#    Abhishek Mitra, Matthew Hermes, *et al.*, "Periodic Density Matrix Embedding for CO Adsorption on the MgO(001)Surface."
+#    `ChemRxiv <https://chemrxiv.org/engage/chemrxiv/article-details/62b0b0c40bba5d82606d2cae>`__.
 #
 # About the authors
 # -----------------
