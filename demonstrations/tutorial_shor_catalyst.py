@@ -76,7 +76,7 @@ def shors_algorithm(N):
 # single workflow, using the `Catalyst
 # <https://docs.pennylane.ai/projects/catalyst/en/latest/index.html>`_
 # library. This demo leverages their integration to implement Shor's factoring
-# algorithm using just-in-time compilation from end-to-end, i.e., classical
+# algorithm using just-in-time compilation from beginning to end, i.e., classical
 # control structure and all. Even better, compilation happens only once per
 # distinct *bit-width* of the factored integers, which can lead to huge savings
 # in compilation time for realistic problem sizes.
@@ -251,8 +251,8 @@ def shors_algorithm(N, n_bits):
 # what follows, we'll leverage shortcuts afforded by Catalyst and the hybrid
 # nature of computation. Specifically, with mid-circuit measurement and reset we
 # can reduce the number of estimation wires to :math:`t=1`. Most arithmetic will
-# be performed in the Fourier basis. Moreover, since we know :math:`a` in
-# advance, we can vary circuit structure on the fly and save resources.
+# be performed in the Fourier basis. Finally, with Catalyst we can vary circuit
+# structure based on :math:`a` to save resources, *even though its value isn't known until runtime*.
 #
 # First, we'll use our classical knowledge of :math:`a` to simplify the
 # implementation of the controlled :math:`U_a^{2^k}`. Naively, it looks like we
@@ -780,9 +780,6 @@ def shors_algorithm(N, key, a, n_bits, n_trials):
     # If no explicit a is passed (denoted by a = 0), randomly choose a
     # non-trivial value of a that does not have a common factor with N.
     if a == 0:
-        key, subkey = random.split(key)
-        a = random.randint(subkey, (1,), 2, N - 1)[0]
-
         while jnp.gcd(a, N) != 1:
             key, subkey = random.split(key)
             a = random.randint(subkey, (1,), 2, N - 1)[0]
@@ -1152,7 +1149,10 @@ plt.show()
 #
 # The ability to leverage a tool like Catalyst means we can quickly generate,
 # compile, and optimize very large circuits, even within the context of a larger
-# workflow. There is still much work to be done, however. For one, the generated
+# workflow. As a bonus, using JIT compilation means that after the first execution, thse optimizations come
+# at no extra cost, even though they depend on runtime values!
+#
+# There is still much work to be done, however. For one, the generated
 # circuits are not optimized at the individual gate level, so the resource
 # counts will be large and impractical. One also observes that, even though
 # "higher-level" optimizations become possible, there is still a significant
