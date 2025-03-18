@@ -20,7 +20,7 @@ circuit optimization, and Hamiltonian simulation.
 Introduction
 ------------
 
-The :doc:`KAK theorem </demos/tutorial_kak_decomposition>` is an important result from Lie theory that states that any Lie group element :math:`U` can be decomposed
+The :doc:`KAK decomposition </demos/tutorial_kak_decomposition>` is an important result from Lie theory that states that any Lie group element :math:`U` can be decomposed
 as :math:`U = K_1 A K_2,` where :math:`K_{1, 2}` and :math:`A` are elements of two special sub-groups
 :math:`\mathcal{K}` and :math:`\mathcal{A},` respectively. In special cases, the decomposition simplifies to :math:`U = K A K^\dagger.`
 
@@ -36,14 +36,14 @@ just as is the case for diagonal matrices.
 We can use this general result from Lie theory as a powerful circuit decomposition technique.
 
 .. note:: We recommend a basic understanding of Lie algebras, see e.g. our :doc:`introduction to (dynamical) Lie algebras for quantum practitioners </demos/tutorial_liealgebra>`.
-    Otherwise, this demo should be self-contained, though for the mathematically inclined, we further recommend our :doc:`demo on the KAK theorem </demos/tutorial_kak_decomposition>`
-    that dives into the mathematical depths of the theorem and provides more background info.
+    Otherwise, this demo should be self-contained, though for the mathematically inclined, we further recommend our :doc:`demo on the KAK decomposition </demos/tutorial_kak_decomposition>`
+    that dives into the mathematical depths of the decomposition and provides more background info.
 
 Goal: Fast-forwarding time evolutions using the KAK decomposition
 -----------------------------------------------------------------
 
 Unitary gates in quantum computing are described by the special unitary Lie group :math:`SU(2^n),` so we can use the KAK
-theorem to decompose quantum gates into :math:`U = K_1 A K_2.` While the mathematical statement is rather straightforward,
+decomposition to factorize quantum gates into :math:`U = K_1 A K_2.` While the mathematical statement is rather straightforward,
 actually finding this decomposition is not. We are going to follow the recipe prescribed in 
 `Fixed Depth Hamiltonian Simulation via Cartan Decomposition <https://arxiv.org/abs/2104.00728>`__ [#Kökcü]_, 
 which tackles this decomposition on the level of the associated Lie algebra via Cartan decomposition.
@@ -111,6 +111,7 @@ g = [op.pauli_rep for op in g]
 # One common choice of involution is the so-called even-odd involution for Pauli words,
 # :math:`P = P_1 \otimes P_2 .. \otimes P_n,` where :math:`P_j \in \{I, X, Y, Z\}.`
 # It essentially counts whether the number of non-identity Pauli operators in the Pauli word is even or odd.
+# This involution also is readily available in PennyLane as :func:`~.pennylane.liealg.even_odd_involution`.
 
 def even_odd_involution(op):
     [pw] = op.pauli_rep
@@ -125,8 +126,9 @@ even_odd_involution(X(0)), even_odd_involution(X(0) @ Y(3))
 # So in order to perform the Cartan decomposition :math:`\mathfrak{g} = \mathfrak{k} \oplus \mathfrak{m},` we simply
 # sort the operators by whether or not they yield a plus or minus sign from the involution function.
 # This is possible because the operators and involution nicely align with the eigenspace decomposition.
+# The following is a copy of :func:`~.pennylane.liealg.cartan_decomp`.
 
-def cartan_decomposition(g, involution):
+def cartan_decomp(g, involution):
     """Cartan Decomposition g = k + m
     
     Args:
@@ -146,7 +148,7 @@ def cartan_decomposition(g, involution):
             m.append(op)
     return k, m
 
-k, m = cartan_decomposition(g, even_odd_involution)
+k, m = cartan_decomp(g, even_odd_involution)
 len(g), len(k), len(m)
 
 
@@ -188,6 +190,8 @@ for op in H.operands:
 #
 # We then obtain a further split of the vector space :math:`\mathfrak{m} = \tilde{\mathfrak{m}} \oplus \mathfrak{h},`
 # where :math:`\tilde{\mathfrak{m}}` is just the remainder of :math:`\mathfrak{m}.`
+# A more versatile function to compute Cartan subalgebras is available in PennyLane
+# as :func:`~.pennylane.liealg.cartan_subalgebra`.
 
 def _commutes_with_all(candidate, ops):
     r"""Check if ``candidate`` commutes with all ``ops``"""
@@ -241,7 +245,7 @@ len(g), len(k), len(mtilde), len(h)
 # Variational KhK decomposition
 # -----------------------------
 #
-# The KAK theorem is not constructive in the sense that it proves that there exists such a decomposition, but there is no general way of obtaining
+# The KAK decomposition is not constructive in the sense that it proves that there exists such a decomposition, but there is no general way of obtaining
 # it. In particular, there are no linear algebra subroutines implemented in ``numpy`` or ``scipy`` that just compute it for us.
 # Here, we follow the construction of [#Kökcü]_ for the special case of :math:`H` being in the horizontal space and the decomposition
 # simplifying to :math:`H = K^\dagger h K`.
@@ -478,7 +482,7 @@ plt.show()
 # Conclusion
 # ----------
 #
-# The KAK theorem is a very general mathematical result with far-reaching consequences.
+# The KAK decomposition is a very general mathematical result with far-reaching consequences.
 # While there is no canonical way of obtaining an actual decomposition in practice, we followed
 # the approach of [#Kökcü]_ which uses a specifically designed loss function and variational
 # optimization to find the decomposition.
