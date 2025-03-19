@@ -68,7 +68,7 @@ However, group theory is a huge hurdle for even some of the more seasoned quantu
 
 #####################################################################
 # Implementation
-################
+# ----------------
 
 import pennylane as qml
 import numpy as np
