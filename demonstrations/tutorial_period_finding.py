@@ -288,7 +288,7 @@ plt.show()
 # the important feature of this state is also clearly visible: Amplitudes concentrate in :math:`x`
 # values that are multiples of 2. And 2 was exactly the amount of periods of 8 that fit into 16.
 
-#############################################################################
+#####################################################################
 # What is the "Abelian structure" exploited by the quantum Fourier transform?
 # ----------------------------------------------------------------------------
 #
@@ -332,7 +332,6 @@ for k in range(12):
 # remarkable confluence of group structure and quantum theory.
 #
 #
-##############################################################################
 # References
 # ------------
 #
