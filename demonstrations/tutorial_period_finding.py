@@ -229,7 +229,7 @@ print(f"Hidden period: {result}")
 
 #####################################################################
 # A peep at the states involved
-###############################
+# -----------------------------
 #
 # Somehow the quantum Fourier transform exposed the information we needed. Let's have a closer
 # look at the states that were prepared, by making use of the snapshots we recorded during the
