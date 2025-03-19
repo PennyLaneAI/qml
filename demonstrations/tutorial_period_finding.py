@@ -15,7 +15,7 @@ However, group theory is a huge hurdle for even some of the more seasoned quantu
 
 #####################################################################
 # Problem statement
-# #################
+# -------------------
 #
 # Consider a function :math:`f(x)` that maps from integers, say the numbers between 0 and 11, to
 # some other domain, such as the numbers between 0 and 3. The function is guaranteed to have a
@@ -68,7 +68,7 @@ However, group theory is a huge hurdle for even some of the more seasoned quantu
 
 #####################################################################
 # Implementation
-################
+# ----------------
 
 import pennylane as qml
 import numpy as np
@@ -229,7 +229,7 @@ print(f"Hidden period: {result}")
 
 #####################################################################
 # A peep at the states involved
-###############################
+# -----------------------------
 #
 # Somehow the quantum Fourier transform exposed the information we needed. Let's have a closer
 # look at the states that were prepared, by making use of the snapshots we recorded during the
@@ -288,9 +288,9 @@ plt.show()
 # the important feature of this state is also clearly visible: Amplitudes concentrate in :math:`x`
 # values that are multiples of 2. And 2 was exactly the amount of periods of 8 that fit into 16.
 
-#############################################################################
+#####################################################################
 # What is the "Abelian structure" exploited by the quantum Fourier transform?
-#############################################################################
+# ----------------------------------------------------------------------------
 #
 # Why does the Fourier transform prepare a state with such a convenient structure? Let us have a
 # look how it acts on a superposition of inputs :math:`x` for which :math:`f(x)` has the same value, such as
@@ -332,9 +332,8 @@ for k in range(12):
 # remarkable confluence of group structure and quantum theory.
 #
 #
-##############################################################################
 # References
-# ##########
+# ------------
 #
 # .. [#Childs2010] 
 #    Andrew Childs, Vim van Dam, `"Quantum algorithms for algebraic problems" <https://arxiv.org/pdf/0812.0380>`_,
