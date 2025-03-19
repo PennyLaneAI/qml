@@ -334,7 +334,7 @@ for k in range(12):
 #
 ##############################################################################
 # References
-# ##########
+# ------------
 #
 # .. [#Childs2010] 
 #    Andrew Childs, Vim van Dam, `"Quantum algorithms for algebraic problems" <https://arxiv.org/pdf/0812.0380>`_,
