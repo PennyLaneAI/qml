@@ -290,7 +290,7 @@ plt.show()
 
 #############################################################################
 # What is the "Abelian structure" exploited by the quantum Fourier transform?
-#############################################################################
+# ----------------------------------------------------------------------------
 #
 # Why does the Fourier transform prepare a state with such a convenient structure? Let us have a
 # look how it acts on a superposition of inputs :math:`x` for which :math:`f(x)` has the same value, such as
