@@ -225,7 +225,9 @@ print(f"Hidden period: {result}")
 # Yay, we've found the hidden period! Now, of course this is only impressive if we increase the 
 # number of qubits. We can find the hidden period of a function defined on :math:`2^n` values in time
 # :math:`O(n \mathrm{log}(n))`.
-#
+
+
+#####################################################################
 # A peep at the states involved
 ###############################
 #
@@ -285,7 +287,8 @@ plt.show()
 # Furthermore, the state representing the Fourier spectrum looks actually quite interesting. But
 # the important feature of this state is also clearly visible: Amplitudes concentrate in :math:`x`
 # values that are multiples of 2. And 2 was exactly the amount of periods of 8 that fit into 16.
-#
+
+#############################################################################
 # What is the "Abelian structure" exploited by the quantum Fourier transform?
 #############################################################################
 #
