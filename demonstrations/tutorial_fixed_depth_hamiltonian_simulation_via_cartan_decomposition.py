@@ -74,6 +74,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pennylane as qml
 from pennylane import X, Y, Z
+from pennylane.liealg import even_odd_involution, cartan_decomp, cartan_subalgebra
 
 import jax
 import jax.numpy as jnp
@@ -111,11 +112,8 @@ g = [op.pauli_rep for op in g]
 # One common choice of involution is the so-called even-odd involution for Pauli words,
 # :math:`P = P_1 \otimes P_2 .. \otimes P_n,` where :math:`P_j \in \{I, X, Y, Z\}.`
 # It essentially counts whether the number of non-identity Pauli operators in the Pauli word is even or odd.
-# This involution also is readily available in PennyLane as :func:`~.pennylane.liealg.even_odd_involution`.
-
-def even_odd_involution(op):
-    [pw] = op.pauli_rep
-    return len(pw) % 2
+# It is readily available in PennyLane as :func:`~.pennylane.liealg.even_odd_involution`, which 
+# we already imported above.
 
 even_odd_involution(X(0)), even_odd_involution(X(0) @ Y(3))
 
@@ -126,31 +124,9 @@ even_odd_involution(X(0)), even_odd_involution(X(0) @ Y(3))
 # So in order to perform the Cartan decomposition :math:`\mathfrak{g} = \mathfrak{k} \oplus \mathfrak{m},` we simply
 # sort the operators by whether or not they yield a plus or minus sign from the involution function.
 # This is possible because the operators and involution nicely align with the eigenspace decomposition.
-# The following is a copy of :func:`~.pennylane.liealg.cartan_decomp`.
-
-def cartan_decomp(g, involution):
-    """Cartan Decomposition g = k + m
-    
-    Args:
-        g (List[PauliSentence]): the (dynamical) Lie algebra to decompose
-        involution (callable): Involution function :math:`\Theta(\cdot)` to act on PauliSentence ops, should return ``0/1`` or ``True/False``.
-    
-    Returns:
-        k (List[PauliSentence]): the vertical subspace :math:`\Theta(x) = x`
-        m (List[PauliSentence]): the horizontal subspace :math:`\Theta(x) = -x` """
-    m = []
-    k = []
-
-    for op in g:
-        if involution(op): # vertical space when involution returns True
-            k.append(op)
-        else: # horizontal space when involution returns False
-            m.append(op)
-    return k, m
 
 k, m = cartan_decomp(g, even_odd_involution)
 len(g), len(k), len(m)
-
 
 ##############################################################################
 # We have successfully decomposed the 60-dimensional Lie algebra
@@ -189,53 +165,11 @@ for op in H.operands:
 # that commute with it.
 #
 # We then obtain a further split of the vector space :math:`\mathfrak{m} = \tilde{\mathfrak{m}} \oplus \mathfrak{h},`
-# where :math:`\tilde{\mathfrak{m}}` is just the remainder of :math:`\mathfrak{m}.`
-# A more versatile function to compute Cartan subalgebras is available in PennyLane
-# as :func:`~.pennylane.liealg.cartan_subalgebra`.
+# where :math:`\tilde{\mathfrak{m}}` is just the remainder of :math:`\mathfrak{m}.` The function
+# :func:`~.pennylane.liealg.cartan_subalgebra` returns some additional information, which we will
+# not use here.
 
-def _commutes_with_all(candidate, ops):
-    r"""Check if ``candidate`` commutes with all ``ops``"""
-    for op in ops:
-        com = candidate.commutator(op)
-        com.simplify()
-        
-        if not len(com) == 0:
-            return False
-    return True
-
-def cartan_subalgebra(m, which=0):
-    """Compute the Cartan subalgebra from the horizontal subspace :math:`\mathfrak{m}`
-    of the Cartan decomposition
-
-    This implementation is specific for cases of bases of m with pure Pauli words as
-    detailed in Appendix C in `2104.00728 <https://arxiv.org/abs/2104.00728>`__.
-    
-    Args:
-        m (List[PauliSentence]): the horizontal subspace :math:`\Theta(x) = -x
-        which (int): Choice for the initial element of m from which to construct 
-            the maximal Abelian subalgebra
-    
-    Returns:
-        mtilde (List): remaining elements of :math:`\mathfrak{m}`
-            s.t. :math:`\mathfrak{m} = \tilde{\mathfrak{m}} \oplus \mathfrak{h}`.
-        h (List): Cartan subalgebra :math:`\mathfrak{h}`.
-
-    """
-
-    h = [m[which]] # first candidate
-    mtilde = m.copy()
-
-    for m_i in m:
-        if _commutes_with_all(m_i, h):
-            if m_i not in h:
-                h.append(m_i)
-    
-    for h_i in h:
-        mtilde.remove(h_i)
-    
-    return mtilde, h
-
-mtilde, h = cartan_subalgebra(m)
+*_, mtilde, h, _ = cartan_subalgebra(k, m)
 len(g), len(k), len(mtilde), len(h)
 
 ##############################################################################
