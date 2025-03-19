@@ -15,7 +15,7 @@ However, group theory is a huge hurdle for even some of the more seasoned quantu
 
 #####################################################################
 # Problem statement
-# #################
+# -------------------
 #
 # Consider a function :math:`f(x)` that maps from integers, say the numbers between 0 and 11, to
 # some other domain, such as the numbers between 0 and 3. The function is guaranteed to have a
