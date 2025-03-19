@@ -24,6 +24,32 @@ a DMET calculation.
 ######################################################################
 # Theory
 # ------
+# DMET is a wavefunction based embedding approach, which uses density matrices for combining the low-level description 
+# of the environment with a high-level description of the impurity. The core of DMET relies on the Schmidt decomposition,
+# which allows us to analyze the degree of entanglement between the impurity and its environment. Suppose we have a system
+# partitioned into impurity and the environment, the state, :math:`\ket{\Psi}` of such a system can be 
+# represented as the tensor product of the Hilbert space of the two subsytems
+# .. math::
+#
+#     \ket{\Psi} = \sum_{ij}\psi_{ij}\ket{i}_{imp}\ket{j}_{env}
+# 
+# Schmidt decomposition of the coefficient tensor, :math:`\psi_{ij}`, thus allows us to identify the states
+# in the environment which have overlap with the impurity. This helps reduce the size of the Hilbert space of the 
+# environment to be equal to the size of the impurity, and thus define a set of states referred to as bath. We are
+# then able to project the full Hamiltonian to the space of impurity and bath states, known as embedding space.
+# .. math::
+#
+#      \hat{H}^{imp} = \hat{P} \hat{H}^{sys}\hat{P}
+# 
+# We must note here that the Schmidt decomposition requires  apriori knowledge of the wavefunction. DMET, therefore, 
+# operates through a systematic iterative approach, starting with a meanfield description of the wavefunction and 
+# refining it through feedback from solution of impurity Hamiltonian.
+#
+# The DMET procedure starts by getting an approximate description of the system, which is used to partition the system
+# into impurity and bath. We are then able to project the original Hamiltonian to this embedded space and  
+# solve it using a highly accurate method. This high-level description of impurity is then used to 
+# embed the updated correlation back into the full system, thus improving the initial approximation 
+# self-consistently. Let's take a look at the implementation of these steps.
 #
 ######################################################################
 # Implementation
@@ -62,7 +88,7 @@ kpts = Lat.kpts
 ######################################################################
 # Now we have a description of our system and can start obtaining the fragment and bath orbitals.
 #
-# Constructing the bath orbitals
+# Meanfield Calculation
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 # We perform a mean-field calculation on the whole system through Hartree-Fock with density
 # fitted integrals using PySCF.
@@ -85,7 +111,7 @@ kmf.kernel()
 # In this example, we choose to keep all the valence orbitals in the unit cell in the
 # impurity, while the bath contains the virtual orbitals, and the orbitals belonging to the
 # rest of the supercell become part of the unentangled environment.
-from libdmet.lo.iao import reference_mol, get_labels, get_idx
+from libdmet.lo.iao import get_labels
 
 labels, val_labels, virt_labels = get_labels(cell, minao="MINAO")
 
@@ -96,7 +122,7 @@ nvirt = len(virt_labels)
 Lat.set_val_virt_core(nval, nvirt, ncore)
 print(labels, nval, nvirt)
 ######################################################################
-# Further, we rotate the integrals into the embedding basis and obtain the rotated Hamiltonian
+# Further, we rotate the integrals into a localized basis and obtain the rotated Hamiltonian
 
 from libdmet.basis_transform import make_basis
 
@@ -111,7 +137,7 @@ Lat.set_Ham(kmf, gdf, C_ao_lo, eri_symmetry=4)
 # We implement each step of the process in a function and 
 # then call these functions to perform the calculations. This can be done once for one iteration,
 # referred to as single-shot DMET or we can call them iteratively to perform self-consistent DMET.
-# Let's start by constructing the impurity Hamiltonian, 
+# Let's start by constructing the impurity Hamiltonian
 def construct_impurity_hamiltonian(Lat, vcor, filling, mu, last_dmu, int_bath=True):
 
     rho, mu, res = dmet.HartreeFock(Lat, vcor, filling, mu,
@@ -155,7 +181,7 @@ def solve_full_system(Lat, rhoEmb, EnergyEmb, basis, ImpHam, last_dmu, solver_in
 # as self-consistent DMET, where a correlation potential is introduced to account for the interactions 
 # between the impurity and its environment. We start with an initial guess of zero for this correlation
 #  potential and optimize it by minimizing the difference between density matrices obtained from the
-#  mean-field Hamiltonian and the impurity Hamiltonian. Now, we initialize the correlation potential
+#  mean-field Hamiltonian and the impurity Hamiltonian. Let's initialize the correlation potential
 # and define a function to optimize it.
 import libdmet.dmet.Hubbard as dmet
 vcor = dmet.VcorLocal(restricted=True, bogoliubov=False, nscsites=Lat.nscsites)
@@ -173,7 +199,6 @@ def fit_correlation_potential(rhoEmb, Lat, basis, vcor):
 # the full execution. We set up this loop by defining the maximum number of iterations and a convergence
 # criteria. Here, we are using both energy and correlation potential as our convergence parameters, so we 
 # define the initial values and convergence tolerance for both.
-
 maxIter = 10
 E_old = 0.0
 dVcor_per_ele = None
@@ -194,5 +219,35 @@ for i in range(maxIter):
         print("DMET Energy per cell: ", EnergyImp*Lat.nscsites/1)
         break
 
+# This concludes the DMET procedure. At this point, we should note that we are still limited by the number
+#  of orbitals we can have in the impurity because the cost of using a high-level solver such as FCI increases
+#  exponentially with increase in system size. One way to solve this problem could be through the use of 
+# quantum computing algorithm as solver. Next, we see how we can convert this impurity Hamiltonian to a 
+# qubit Hamiltonian through PennyLane to pave the path for using it with quantum algorithms.
+#  The ImpHam object generated above provides us with one-body and two-body integrals along with the 
+# nuclear repulsion energy which can be accessed as follows:
+norb = ImpHam.norb
+H1 = ImpHam.H1["cd"]
+H2 = ImpHam.H2["ccdd"][0]
 
+# The two-body integrals here are saved in a two-dimensional array with a 4-fold permutation symmetry. 
+# We can convert this to a 4 dimensional array by using the ao2mo routine in PySCF [add reference] and 
+# further to physicist notation using numpy. These one-body and two-body integrals can then be used to 
+# generate the qubit Hamiltonian for PennyLane.
+from pyscf import ao2mo
+import pennylane as qml
+from pennylane.qchem import one_particle, two_particle, observable
 
+H2 = ao2mo.restore(1, H2, norb)
+
+t = one_particle(H1[0])
+v = two_particle(np.swapaxes(H2, 1, 3)) # Swap to physicist's notation
+qubit_op = observable([t,v], mapping="jordan_wigner")
+eigval_qubit = qml.eigvals(qml.SparseHamiltonian(qubit_op.sparse_matrix(), wires = qubit_op.wires))
+print("eigenvalue from PennyLane: ", eigval_qubit)
+print("embedding energy: ", EnergyEmb)
+
+# We obtained the qubit Hamiltonian for embedded system here and diagonalized it to get the eigenvalues,
+#  and show that this eigenvalue matches the energy we obtained for the embedded system above.
+#  We can also get ground state energy for the system from this value
+#  by solving for the full system as done above in the self-consistency loop using solve_full_system function.
