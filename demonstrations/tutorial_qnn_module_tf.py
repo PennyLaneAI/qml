@@ -81,6 +81,7 @@ plt.show()
 # operations from the :doc:`templates <introduction/templates>` module.
 
 import pennylane as qml
+import warnings
 
 n_qubits = 2
 dev = qml.device("default.qubit", wires=n_qubits)
@@ -117,7 +118,9 @@ weight_shapes = {"weights": (n_layers, n_qubits)}
 #
 # Now that ``weight_shapes`` is defined, it is easy to then convert the QNode:
 
-qlayer = qml.qnn.KerasLayer(qnode, weight_shapes, output_dim=n_qubits)
+with warnings.catch_warnings():
+    warnings.filterwarnings('ignore', category=qml.PennyLaneDeprecationWarning)
+    qlayer = qml.qnn.KerasLayer(qnode, weight_shapes, output_dim=n_qubits)
 
 ###############################################################################
 # With this done, the QNode can now be treated just like any other Keras layer and we can proceed
@@ -200,10 +203,13 @@ fitting = model.fit(X, y_hot, epochs=6, batch_size=5, validation_split=0.25, ver
 # <https://keras.io/guides/functional_api/>`__:
 
 # re-define the layers
-clayer_1 = tf.keras.layers.Dense(4)
-qlayer_1 = qml.qnn.KerasLayer(qnode, weight_shapes, output_dim=n_qubits)
-qlayer_2 = qml.qnn.KerasLayer(qnode, weight_shapes, output_dim=n_qubits)
-clayer_2 = tf.keras.layers.Dense(2, activation="softmax")
+
+with warnings.catch_warnings():
+    warnings.filterwarnings('ignore', category=qml.PennyLaneDeprecationWarning)
+    clayer_1 = tf.keras.layers.Dense(4)
+    qlayer_1 = qml.qnn.KerasLayer(qnode, weight_shapes, output_dim=n_qubits)
+    qlayer_2 = qml.qnn.KerasLayer(qnode, weight_shapes, output_dim=n_qubits)
+    clayer_2 = tf.keras.layers.Dense(2, activation="softmax")
 
 # construct the model
 inputs = tf.keras.Input(shape=(2,))
