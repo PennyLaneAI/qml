@@ -215,13 +215,15 @@ qubit_op = observable([t, v], mapping="jordan_wigner")
 # ----------
 # The quantum density embedding theory is a novel framework for simulating strongly correlated
 # quantum systems and has been successfully used for studying defects in solids. Applicability of
-# QDET is not limited to defects, it can be used for other systems where a strongly correlated subsystem
+# QDET however is not limited to defects, it can be used for other systems where a strongly correlated subsystem
 #  is embedded in a weakly correlated environment. QDET is able to surpass the problem of correction of double
 # counting of interactions within the active space faced by some other embedding theories 
 # such as DFT+DMFT.  Green's function based formulation of QDET ensures exact removal of double counting 
-# corrections at GW level of theory, thus removing the approximation present in the initial DFT based formulation. 
-# Another major advantage of QDET is the ease with which it can be used with quantum computers in a hybrid framework.
-# 
+# corrections at GW level of theory, thus removing the approximation present in the initial DFT based formulation. This 
+# formulation also helps capture the response properties and provides access to excited state properties.
+# Another major advantage of QDET is the ease with which it can be used with quantum computers in a hybrid framework. 
+# Therefore, We can conlcude here that QDET is a powerful embedding approach for simulating complex quantum systems.
+#  
 # References
 # ----------
 #
