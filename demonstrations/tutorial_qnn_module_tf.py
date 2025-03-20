@@ -3,7 +3,10 @@ Turning quantum nodes into Keras Layers
 =======================================
 
 .. warning::
-    Keras 2 is no longer actively maintained.  Please consider using torch instead of TensorFlow/Keras 2.
+
+    This demo is only compatible with PennyLane version 0.40 or below.
+    For usage with a later version of PennyLane, please consider using
+    :doc:`PyTorch <tutorial_qnn_module_torch>`, or JAX and Flax.
 
 .. meta::
     :property="og:description": Learn how to create hybrid ML models in PennyLane using Keras
