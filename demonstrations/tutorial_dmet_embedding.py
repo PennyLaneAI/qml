@@ -25,7 +25,7 @@ a DMET calculation.
 # Theory
 # ------
 # DMET is a wavefunction based embedding approach, which uses density matrices for combining the low-level description 
-# of the environment with a high-level description of the impurity. The core of DMET relies on the Schmidt decomposition,
+# of the environment with a high-level description of the impurity. DMET relies on Schmidt decomposition,
 # which allows us to analyze the degree of entanglement between the impurity and its environment. Suppose we have a system
 # partitioned into impurity and the environment, the state, :math:`\ket{\Psi}` of such a system can be 
 # represented as the tensor product of the Hilbert space of the two subsytems
@@ -40,7 +40,8 @@ a DMET calculation.
 # .. math::
 #
 #      \hat{H}^{imp} = \hat{P} \hat{H}^{sys}\hat{P}
-# 
+#
+# where P is the projection operator.
 # We must note here that the Schmidt decomposition requires  apriori knowledge of the wavefunction. DMET, therefore, 
 # operates through a systematic iterative approach, starting with a meanfield description of the wavefunction and 
 # refining it through feedback from solution of impurity Hamiltonian.
@@ -84,12 +85,8 @@ kmesh = [1, 1, 3]
 Lat = lattice.Lattice(cell, kmesh)
 filling = cell.nelectron / (Lat.nscsites*2.0)
 kpts = Lat.kpts
-#
+
 ######################################################################
-# Now we have a description of our system and can start obtaining the fragment and bath orbitals.
-#
-# Meanfield Calculation
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 # We perform a mean-field calculation on the whole system through Hartree-Fock with density
 # fitted integrals using PySCF.
 gdf = df.GDF(cell, kpts)
@@ -102,6 +99,19 @@ kmf.with_df._cderi = 'gdf_ints.h5'
 kmf.conv_tol = 1e-12
 kmf.max_cycle = 200
 kmf.kernel()
+
+# Localization and Paritioning of Orbital Space
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# Now we have a description of our system and can start obtaining the fragment and bath orbitals.
+# This requires the localization of the basis of orbitals, we could use any localized basis here, 
+# for example, molecular orbitals(MO), intrinsic atomic orbitals(IAO), etc. Here, we 
+# rotate the one-electron and two-electron integrals into IAO basis.
+
+from libdmet.basis_transform import make_basis
+
+C_ao_iao, C_ao_iao_val, C_ao_iao_virt, lo_labels = make_basis.get_C_ao_lo_iao(Lat, kmf, minao="MINAO", full_return=True, return_labels=True)
+C_ao_lo = Lat.symmetrize_lo(C_ao_iao)
+Lat.set_Ham(kmf, gdf, C_ao_lo, eri_symmetry=4)
 
 ######################################################################
 # In quantum chemistry calculations, we can choose the bath and impurity by looking at the
@@ -121,23 +131,15 @@ nvirt = len(virt_labels)
 
 Lat.set_val_virt_core(nval, nvirt, ncore)
 print(labels, nval, nvirt)
-######################################################################
-# Further, we rotate the integrals into a localized basis and obtain the rotated Hamiltonian
-
-from libdmet.basis_transform import make_basis
-
-C_ao_iao, C_ao_iao_val, C_ao_iao_virt, lo_labels = make_basis.get_C_ao_lo_iao(Lat, kmf, minao="MINAO", full_return=True, return_labels=True)
-C_ao_lo = Lat.symmetrize_lo(C_ao_iao)
-Lat.set_Ham(kmf, gdf, C_ao_lo, eri_symmetry=4)
 
 ######################################################################
-# DMET
+# Self-Consistent DMET
 # ^^^^^^^^^^^^^^^^^^^^
 # Now that we have a description of our fragment and bath orbitals, we can implement DMET. 
 # We implement each step of the process in a function and 
 # then call these functions to perform the calculations. This can be done once for one iteration,
 # referred to as single-shot DMET or we can call them iteratively to perform self-consistent DMET.
-# Let's start by constructing the impurity Hamiltonian
+# Let's start by constructing the impurity Hamiltonian,
 def construct_impurity_hamiltonian(Lat, vcor, filling, mu, last_dmu, int_bath=True):
 
     rho, mu, res = dmet.HartreeFock(Lat, vcor, filling, mu,
