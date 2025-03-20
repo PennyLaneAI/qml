@@ -2,6 +2,9 @@
 Turning quantum nodes into Keras Layers
 =======================================
 
+.. warning::
+    Keras 2 is no longer actively maintained.  Please consider using torch instead of TensorFlow/Keras 2.
+
 .. meta::
     :property="og:description": Learn how to create hybrid ML models in PennyLane using Keras
     :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/Keras_logo.png
