@@ -13,7 +13,8 @@ The core idea behind embedding methods is to partition the system and treat the 
 subsystem accurately, using high-level quantum mechanical methods, while approximating the effects
 of the surrounding environment in a way that retains computational efficiency. In this demo, we show
 how to implement the quantum defect embedding theory (QDET). The method has been successfully
-applied to study defects in CaO and to calculate excitations of the negatively charged NV center in diamond. An important advantage of QDET is its compatibility with quantum
+applied to study defects in CaO and to calculate excitations of the negatively charged NV center in diamond. 
+An important advantage of QDET is its compatibility with quantum
 algorithms as we explain in the following sections. The method can be implemented for calculating
 a variety of ground state, excited state and dynamic properties of materials. These make QDET a
 powerful method for affordable quantum simulation of materials.
@@ -84,6 +85,7 @@ mpirun -n 2 pw.x -i pw.in > pw.out
 #
 #     L_n = \int_{V \in \ohm} d^3 r |\Psi_n^{KS}(r)|^
 #
+# where $V$ is the identified volume including the impurity within the supercell volume $\ohm$.
 # We will use the WEST program to compute the localization factor. This requires creating another
 # input file ``westpp.in`` as shown below.
 
