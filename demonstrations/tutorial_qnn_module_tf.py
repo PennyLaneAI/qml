@@ -6,7 +6,7 @@ Turning quantum nodes into Keras Layers
 
     This demo is only compatible with PennyLane version 0.40 or below.
     For usage with a later version of PennyLane, please consider using
-    :doc:`PyTorch <tutorial_qnn_module_torch>`, or JAX and Flax.
+    :doc:`PyTorch <tutorial_qnn_module_torch>` or :doc:`JAX <tutorial_How_to_optimize_QML_model_using_JAX_and_Optax>`__.
 
 .. meta::
     :property="og:description": Learn how to create hybrid ML models in PennyLane using Keras
