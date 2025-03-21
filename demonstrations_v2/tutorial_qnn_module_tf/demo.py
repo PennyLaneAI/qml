@@ -1,4 +1,7 @@
 r"""
+.. role:: html(raw)
+    :format: html
+
 Turning quantum nodes into Keras Layers
 =======================================
 
