@@ -38,7 +38,7 @@ Circuits and Hamiltonians
 When considering quantum circuits, it is often convenient to define them by a
 series of quantum gates. But there are many instances where
 it is useful to think of a quantum circuit in terms of a
-`Hamiltonian <https://en.wikipedia.org/wiki/Hamiltonian_(quantum_mechanics)>`__.
+`Hamiltonian <https://pennylane.ai/codebook/hamiltonian-time-evolution/hamiltonians>`__.
 Indeed, gates are physically implemented by performing time evolution under a carefully engineered
 Hamiltonian. These transformations are described by the time evolution operator,
 which is a unitary defined as:"""
