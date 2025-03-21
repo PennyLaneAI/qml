@@ -25,7 +25,7 @@ Creating neural networks in `Keras <https://keras.io/>`__ is easy. Models are co
 elementary *layers* and can be trained using a high-level API. For example, the following code
 defines a two-layer network that could be used for binary classification:
 """
-##############################################################################
+#
 # .. code-block:: python
 #
 #     import tensorflow as tf
