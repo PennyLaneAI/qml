@@ -235,11 +235,10 @@ defines a two-layer network that could be used for binary classification:
 #
 # This model can also be constructed using the `Functional API
 # <https://keras.io/guides/functional_api/>`__:
-
-# re-define the layers
 #
 #  .. code-block:: python
 #
+#     # re-define the layers
 #     clayer_1 = tf.keras.layers.Dense(4)
 #     qlayer_1 = qml.qnn.KerasLayer(qnode, weight_shapes, output_dim=n_qubits)
 #     qlayer_2 = qml.qnn.KerasLayer(qnode, weight_shapes, output_dim=n_qubits)
