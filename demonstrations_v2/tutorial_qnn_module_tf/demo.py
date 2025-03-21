@@ -96,7 +96,6 @@ defines a two-layer network that could be used for binary classification:
 # .. code-block:: python
 #
 #     import pennylane as qml
-#     import warnings
 #
 #     n_qubits = 2
 #     dev = qml.device("default.qubit", wires=n_qubits)
