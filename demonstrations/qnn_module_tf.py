@@ -80,7 +80,7 @@ defines a two-layer network that could be used for binary classification:
 #     plt.scatter(X[:, 0], X[:, 1], c=c)
 #     plt.show()
 #
-# .. figure:: /_static/demonstration_assets/qnn_module/sphx_glr_tutorial_qnn_module_tf_001.png
+# .. figure:: /_static/demonstration_assets/qnn_module/sphx_glr_qnn_module_tf_001.png
 #    :width: 100%
 #    :align: center
 
