@@ -10,7 +10,7 @@ Turning quantum nodes into Keras Layers
 
    tutorial_qnn_module_torch Turning quantum nodes into Torch Layers
 
-*Author: Tom Bromley — Posted: 02 November 2020. Last updated: 28 January 2021.*
+*Author: Tom Bromley — Posted: 02 November 2020. Last updated: 21 March 2025.*
 
 .. warning::
 
