@@ -21,17 +21,18 @@ Creating neural networks in `Keras <https://keras.io/>`__ is easy. Models are co
 elementary *layers* and can be trained using a high-level API. For example, the following code
 defines a two-layer network that could be used for binary classification:
 """
-
-import tensorflow as tf
-import warnings
-
-tf.keras.backend.set_floatx('float64')
-
-layer_1 = tf.keras.layers.Dense(2)
-layer_2 = tf.keras.layers.Dense(2, activation="softmax")
-
-model = tf.keras.Sequential([layer_1, layer_2])
-model.compile(loss="mae")
+##############################################################################
+# .. code-block:: python
+#
+#     import tensorflow as tf
+#
+#     tf.keras.backend.set_floatx('float64')
+#
+#     layer_1 = tf.keras.layers.Dense(2)
+#     layer_2 = tf.keras.layers.Dense(2, activation="softmax")
+#
+#     model = tf.keras.Sequential([layer_1, layer_2])
+#     model.compile(loss="mae")
 
 ###############################################################################
 # The model can then be trained using `model.fit()
@@ -56,22 +57,28 @@ model.compile(loss="mae")
 # model is constructed. Our objective is to classify points generated from scikit-learn's
 # binary-class
 # `make_moons() <https://scikit-learn.org/stable/modules/generated/sklearn.datasets.make_moons.html>`__ dataset:
-
-import matplotlib.pyplot as plt
-import numpy as np
-from sklearn.datasets import make_moons
-
-# Set random seeds
-np.random.seed(42)
-tf.random.set_seed(42)
-
-X, y = make_moons(n_samples=200, noise=0.1)
-y_hot = tf.keras.utils.to_categorical(y, num_classes=2)  # one-hot encoded labels
-
-c = ["#1f77b4" if y_ == 0 else "#ff7f0e" for y_ in y]  # colours for each class
-plt.axis("off")
-plt.scatter(X[:, 0], X[:, 1], c=c)
-plt.show()
+#
+# .. code-block:: python
+#
+#     import matplotlib.pyplot as plt
+#     import numpy as np
+#     from sklearn.datasets import make_moons
+#     
+#     # Set random seeds
+#     np.random.seed(42)
+#     tf.random.set_seed(42)
+#     
+#     X, y = make_moons(n_samples=200, noise=0.1)
+#     y_hot = tf.keras.utils.to_categorical(y, num_classes=2)  # one-hot encoded labels
+#     
+#     c = ["#1f77b4" if y_ == 0 else "#ff7f0e" for y_ in y]  # colours for each class
+#     plt.axis("off")
+#     plt.scatter(X[:, 0], X[:, 1], c=c)
+#     plt.show()
+#
+# .. figure:: /_static/demonstration_assets/qnn_module/sphx_glr_tutorial_qnn_module_tf_001.png
+#    :width: 100%
+#    :align: center
 
 ###############################################################################
 # Defining a QNode
@@ -85,17 +92,20 @@ plt.show()
 # two-qubit QNode using the
 # :doc:`default.qubit <code/api/pennylane.devices.default_qubit.DefaultQubit>` simulator and
 # operations from the :doc:`templates <introduction/templates>` module.
-
-import pennylane as qml
-
-n_qubits = 2
-dev = qml.device("default.qubit", wires=n_qubits)
-
-@qml.qnode(dev)
-def qnode(inputs, weights):
-    qml.AngleEmbedding(inputs, wires=range(n_qubits))
-    qml.BasicEntanglerLayers(weights, wires=range(n_qubits))
-    return [qml.expval(qml.PauliZ(wires=i)) for i in range(n_qubits)]
+#
+# .. code-block:: python
+#
+#     import pennylane as qml
+#     import warnings
+#
+#     n_qubits = 2
+#     dev = qml.device("default.qubit", wires=n_qubits)
+#
+#     @qml.qnode(dev)
+#     def qnode(inputs, weights):
+#         qml.AngleEmbedding(inputs, wires=range(n_qubits))
+#         qml.BasicEntanglerLayers(weights, wires=range(n_qubits))
+#         return [qml.expval(qml.PauliZ(wires=i)) for i in range(n_qubits)]
 
 ###############################################################################
 # Interfacing with Keras
@@ -112,9 +122,11 @@ def qnode(inputs, weights):
 # weights. For the QNode to be successfully converted to a layer in Keras, we need to provide the
 # details of the shape of each trainable weight for them to be initialized. The ``weight_shapes``
 # dictionary maps from the argument names of the QNode to corresponding shapes:
-
-n_layers = 6
-weight_shapes = {"weights": (n_layers, n_qubits)}
+#
+# .. code-block:: python
+#
+#     n_layers = 6
+#     weight_shapes = {"weights": (n_layers, n_qubits)}
 
 ###############################################################################
 # In our example, the ``weights`` argument of the QNode is trainable and has shape given by
@@ -122,11 +134,10 @@ weight_shapes = {"weights": (n_layers, n_qubits)}
 # :func:`~pennylane.templates.layers.BasicEntanglerLayers`.
 #
 # Now that ``weight_shapes`` is defined, it is easy to then convert the QNode:
-
-
-with warnings.catch_warnings():
-    warnings.filterwarnings('ignore', category=qml.PennyLaneDeprecationWarning)
-    qlayer = qml.qnn.KerasLayer(qnode, weight_shapes, output_dim=n_qubits)
+#
+# .. code-block:: python
+#
+#     qlayer = qml.qnn.KerasLayer(qnode, weight_shapes, output_dim=n_qubits)
 
 ###############################################################################
 # With this done, the QNode can now be treated just like any other Keras layer and we can proceed
@@ -150,10 +161,12 @@ with warnings.catch_warnings():
 #
 # We can construct the model using the
 # `Sequential <https://www.tensorflow.org/api_docs/python/tf/keras/Sequential>`__ API:
-
-clayer_1 = tf.keras.layers.Dense(2)
-clayer_2 = tf.keras.layers.Dense(2, activation="softmax")
-model = tf.keras.models.Sequential([clayer_1, qlayer, clayer_2])
+#
+# .. code-block:: python
+#
+#     clayer_1 = tf.keras.layers.Dense(2)
+#     clayer_2 = tf.keras.layers.Dense(2, activation="softmax")
+#     model = tf.keras.models.Sequential([clayer_1, qlayer, clayer_2])
 
 ###############################################################################
 # Training the model
@@ -163,19 +176,31 @@ model = tf.keras.models.Sequential([clayer_1, qlayer, clayer_2])
 # approach. We'll use the
 # standard `SGD <https://www.tensorflow.org/api_docs/python/tf/keras/optimizers/SGD>`__ optimizer
 # and the mean absolute error loss function:
-
-opt = tf.keras.optimizers.SGD(learning_rate=0.2)
-model.compile(opt, loss="mae", metrics=["accuracy"])
+#
+# .. code-block:: python
+#
+#     opt = tf.keras.optimizers.SGD(learning_rate=0.2)
+#     model.compile(opt, loss="mae", metrics=["accuracy"])
 
 ###############################################################################
 # Note that there are more advanced combinations of optimizer and loss function, but here we are
 # focusing on the basics.
 #
 # The model is now ready to be trained!
+#
+# .. code-block:: python
+#
+#     fitting = model.fit(X, y_hot, epochs=6, batch_size=5, validation_split=0.25, verbose=2)
 
-fitting = model.fit(X, y_hot, epochs=6, batch_size=5, validation_split=0.25, verbose=2)
-
-###############################################################################
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  .. code-block:: none
+#
+#    Epoch 1/6
+#    30/30 - 4s - loss: 0.1522 - accuracy: 0.8733 - val_loss: 0.1925 - val_accuracy: 0.8200 - 4s/epoch - 117ms/step
+#
+#
 # How did we do? The model looks to have successfully trained and the accuracy on both the
 # training and validation datasets is reasonably high. In practice, we would aim to push the
 # accuracy higher by thinking carefully about the model design and the choice of hyperparameters
@@ -209,34 +234,44 @@ fitting = model.fit(X, y_hot, epochs=6, batch_size=5, validation_split=0.25, ver
 # <https://keras.io/guides/functional_api/>`__:
 
 # re-define the layers
-
-with warnings.catch_warnings():
-    warnings.filterwarnings('ignore', category=qml.PennyLaneDeprecationWarning)
-    clayer_1 = tf.keras.layers.Dense(4)
-    qlayer_1 = qml.qnn.KerasLayer(qnode, weight_shapes, output_dim=n_qubits)
-    qlayer_2 = qml.qnn.KerasLayer(qnode, weight_shapes, output_dim=n_qubits)
-    clayer_2 = tf.keras.layers.Dense(2, activation="softmax")
-
-# construct the model
-inputs = tf.keras.Input(shape=(2,))
-x = clayer_1(inputs)
-x_1, x_2 = tf.split(x, 2, axis=1)
-x_1 = qlayer_1(x_1)
-x_2 = qlayer_2(x_2)
-x = tf.concat([x_1, x_2], axis=1)
-outputs = clayer_2(x)
-
-model = tf.keras.Model(inputs=inputs, outputs=outputs)
+#
+#  .. code-block:: python
+#
+#     clayer_1 = tf.keras.layers.Dense(4)
+#     qlayer_1 = qml.qnn.KerasLayer(qnode, weight_shapes, output_dim=n_qubits)
+#     qlayer_2 = qml.qnn.KerasLayer(qnode, weight_shapes, output_dim=n_qubits)
+#     clayer_2 = tf.keras.layers.Dense(2, activation="softmax")
+#
+#     # construct the model
+#     inputs = tf.keras.Input(shape=(2,))
+#     x = clayer_1(inputs)
+#     x_1, x_2 = tf.split(x, 2, axis=1)
+#     x_1 = qlayer_1(x_1)
+#     x_2 = qlayer_2(x_2)
+#     x = tf.concat([x_1, x_2], axis=1)
+#     outputs = clayer_2(x)
+#
+#     model = tf.keras.Model(inputs=inputs, outputs=outputs)
 
 ###############################################################################
 # As a final step, let's train the model to check if it's working:
+#
+# .. code-block:: python
+#
+#     opt = tf.keras.optimizers.SGD(learning_rate=0.2)
+#     model.compile(opt, loss="mae", metrics=["accuracy"])
+#
+#     fitting = model.fit(X, y_hot, epochs=6, batch_size=5, validation_split=0.25, verbose=2)
 
-opt = tf.keras.optimizers.SGD(learning_rate=0.2)
-model.compile(opt, loss="mae", metrics=["accuracy"])
-
-fitting = model.fit(X, y_hot, epochs=6, batch_size=5, validation_split=0.25, verbose=2)
-
-###############################################################################
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  .. code-block:: none
+#
+#    Epoch 1/6
+#    30/30 - 7s - loss: 0.1465 - accuracy: 0.8733 - val_loss: 0.1753 - val_accuracy: 0.8200 - 7s/epoch - 221ms/step
+#
+#
 # Great! We've mastered the basics of constructing hybrid classical-quantum models using
 # PennyLane and Keras. Can you think of any interesting hybrid models to construct? How do they
 # perform on realistic datasets?
