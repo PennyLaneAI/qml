@@ -2,7 +2,7 @@ r"""
 Period finding -- A problem at the heart of quantum computing
 =============================================================
 
-You might have heard that Shor's algorithm is an instance of "period finding". You might also have heard that, more generally, this is an example of an *Abelian hidden subgroup problem* solved by a quantum computer's stunning ability to implement the Fourier transform efficiently for an intractable number of function values. Hidden subgroup problems and quantum Fourier transforms were all the rage in the quantum computing literature in the 2000's.
+You might have heard that Shor's algorithm is an instance of "period finding". You might also have heard that, more generally, this is an example of an *Abelian hidden subgroup problem* solved by a quantum computer's stunning ability to implement the Fourier transform efficiently for an intractable number of function values. Hidden subgroup problems and quantum Fourier transforms were all the rage in the quantum computing literature in the 2000s.
 
 While trends may have moved on, the idea of extracting group structure from the Fourier spectrum is still at the very core of what quantum computers could be useful for. Scott Aaronson, for example, in his 2022 commentary "How Much Structure Is Needed for Huge Quantum Speedup?" presents the following hierarchy:
 
@@ -10,7 +10,7 @@ While trends may have moved on, the idea of extracting group structure from the 
     :align: center
     :width: 75%
 
-However, group theory is a huge hurdle for even some of the more seasoned quantum enthusiasts. This demo wants to give a glimpse of what this "Abelian structure" is all about. Luckily, the fruit-fly example of a hidden subgroup problem is just the task of finding the period of a integer-valued function - something one can appreciate without much group jargon. A fantastic resource to read up on the basics is the review of hidden subgroup problems by Childs & van Dam (2010) [#Childs2010]_.
+However, group theory is a huge hurdle for even some of the more seasoned quantum enthusiasts. This demo wants to give a glimpse of what this "Abelian structure" is all about. Luckily, the fruit-fly example of a hidden subgroup problem is just the task of finding the period of a integer valued function - something one can appreciate without much group jargon. A fantastic resource to read up on the basics is the review of hidden subgroup problems by Childs & van Dam (2010) [#Childs2010]_.
 """
 
 #####################################################################
@@ -37,8 +37,24 @@ However, group theory is a huge hurdle for even some of the more seasoned quantu
 #
 # What does period finding have to do with groups? Well, in the language of group theory, the
 # integers from 0 to 11 (together with an appropriate operation, like addition modulo 12) form a
-# so-called *cyclic group*, which is an example of *Abelian* groups that Aaronson referred to above. The
-# values {0,4,8} form a *subgroup* that is "generated" by the period 4. Finding the period
+# so-called *cyclic group*, which is an example of *Abelian* groups that Aaronson referred to above. 
+#
+# .. admonition:: Abelian group
+#     :class: note
+#
+#     A group is a set of elements that has:
+#       1. an operation that maps two elements a and b of the set into a third element of the set, for example c = a + b,
+#       2. an "identity element" e such that e + a = a for any element a, and
+#       3. an inverse -a for every element a, such that a + (-a) = e.
+#
+#     A group is called "Abelian" if a + b = b + a for all a and b, otherwise it is called non-Abelian. 
+#     In general, Abelian groups are simpler to work with than non-Abelian groups.
+#
+#     With this definition we can easily see that the group of integers {0,1,...,11} with addition modulo 12 forms an Abelian group: 
+#     there is an addition operation such that a + b = b + a, the element 0 is the identity element since 0 + a = a for 
+#     all a, and the inverse of element a modulo 12 is 12 - a.
+#
+# The values {0,4,8} form a *subgroup* that is "generated" by the period 4. Finding the period
 # means to find the subgroup. The function is said to "hide" the subgroup, since it has the same
 # value on all its elements, effectively labeling them. It is also constant on the *cosets* of
 # the subgroups, which are shifted sets of the form {0+s, 4+s, 8+s} (where s is an
@@ -56,11 +72,12 @@ However, group theory is a huge hurdle for even some of the more seasoned quantu
 # function into a quantum state of the form :math:`\sum_x |x \rangle |f(x) \rangle`, apply the quantum
 # Fourier transform on the first register, and measure. We then need to do a bit of post-
 # processing: The state we measure, written as an integer, is a multiple of the number of periods
-# that "fit" into the x-domain. The period is then the number of integers divided by the number
-# of periods. In the example above, the quantum algorithm would return random bistrings that can be
+# that "fit" into the x-domain. The number of periods is then the biggest number that divides all the measurement outcomes, 
+# and the period is the number of integers divided by the number of periods. 
+# In the example above, the quantum algorithm would return random bistrings that can be
 # interpreted as integers {0, 3, 6, 9}. By sampling only two distinct values, say 6 and
-# 9, we can determine the common denominator as 3, which is the number of periods fitting
-# into 12. From there we can recover 12/3 = 4.
+# 9, we can determine the largest common divisor as 3, which is the number of periods fitting
+# into 12. From there we can recover the number of periods 12/3 = 4.
 #
 # We'll now implement this recipe, but use a more convenient cyclic group of 16 elements
 # {0,..,15}, which can be exactly represented by 4 qubits.
@@ -105,7 +122,7 @@ plt.show()
 # We will represent the :math:`x` and :math:`f(x)` values of this function as computational basis states
 # :math:`| x \rangle | f(x) \rangle`. The amplitudes belonging to that state can be interpreted as a
 # "weight" for a specific function value. 
-# To give an example, the point :math:`f(2) = 3` can be expressed by preparing a state that has a
+# To give an example, the point :math:`f(2) = 2` can be expressed by preparing a state that has a
 # nonzero uniform amplitude at :math:`| 0010 \rangle | 11 \rangle`, but zero amplitudes at the states
 # :math:`| 0010 \rangle | 00 \rangle`, :math:`| 0010 \rangle | 01 \rangle`, :math:`| 0010 \rangle | 10 \rangle`.
 #
