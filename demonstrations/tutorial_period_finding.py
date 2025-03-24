@@ -220,7 +220,7 @@ samples = circuit()
 # The classical post-processing is relatively simple for period finding (whereas 
 # for general hidden subgroup problems it requires some less trivial algebra). 
 # If you are curious about the details, you'll find them in
-# Childs & Dam (2013) [#Childs2010]_, Section IVa.
+# Childs & van Dam (2013) [#Childs2010]_, Section IVa.
 
 from fractions import Fraction
 from math import lcm
