@@ -5,7 +5,9 @@ complex materials is essential for advancements in technology and science. While
 the current workhorse in this field due to its balance between accuracy and computational efficiency, it often falls short in 
 accurately capturing the intricate electron correlation effects found in strongly correlated materials. As a result, 
 researchers often turn to more sophisticated methods, such as full configuration interaction or coupled cluster theory, 
-which provide better accuracy but come at a significantly higher computational cost. Embedding theories provide a balanced 
+which provide better accuracy but come at a significantly higher computational cost. 
+
+Embedding theories provide a balanced 
 midpoint solution that enhances our ability to simulate materials accurately and efficiently. The core idea behind embedding 
 is to treat the strongly correlated subsystem accurately using high-level quantum mechanical methods while approximating
 the effects of the surrounding environment in a way that retains computational efficiency. 
