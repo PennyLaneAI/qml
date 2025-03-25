@@ -13,7 +13,7 @@ is to treat the strongly correlated subsystem accurately using high-level quantu
 the effects of the surrounding environment in a way that retains computational efficiency. 
 Density matrix embedding theory (DMET) is an efficient wave-function-based embedding approach to treat strongly 
 correlated systems. Here, we present a demonstration of how to run DMET calculations through an existing library called 
-libDMET, along with the intructions on how we can use the generated Hamiltonian with PennyLane to use it with quantum 
+libDMET, along with the instructions on how we can use the generated DMET Hamiltonian with PennyLane to use it with quantum 
 computing algorithms. We begin by providing a high-level introduction to DMET, followed by a tutorial on how to set up 
 a DMET calculation.
 
