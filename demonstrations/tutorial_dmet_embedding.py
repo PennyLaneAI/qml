@@ -61,7 +61,7 @@ a DMET calculation.
 #
 # Constructing the system
 # ^^^^^^^^^^^^^^^^^^^^^^^
-# We begin by defining a periodic system using the PySCF interface to create a cell object
+# We begin by defining a periodic system using PySCF to create a cell object
 # representing a hydrogen chain with 6 atoms. The lattice vectors are specified to define the
 # geometry of the unit cell, within this unit cell, we place two hydrogen atoms: one at the origin
 # (0.0, 0.0, 0.0) and the other at (0.0, 0.0, 0.75), corresponding to a bond length of
