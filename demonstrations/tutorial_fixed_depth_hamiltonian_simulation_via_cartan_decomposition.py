@@ -74,7 +74,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pennylane as qml
 from pennylane import X, Y, Z
-from pennylane.liealg import even_odd_involution, cartan_decomp, cartan_subalgebra
+from pennylane.liealg import even_odd_involution, cartan_decomp, horizontal_cartan_subalgebra
 
 import jax
 import jax.numpy as jnp
@@ -166,10 +166,10 @@ for op in H.operands:
 #
 # We then obtain a further split of the vector space :math:`\mathfrak{m} = \tilde{\mathfrak{m}} \oplus \mathfrak{h},`
 # where :math:`\tilde{\mathfrak{m}}` is just the remainder of :math:`\mathfrak{m}.` The function
-# :func:`~.pennylane.liealg.cartan_subalgebra` returns some additional information, which we will
+# :func:`~.pennylane.liealg.horizontal_cartan_subalgebra` returns some additional information, which we will
 # not use here.
 
-g, k, mtilde, h, _ = cartan_subalgebra(k, m)
+g, k, mtilde, h, _ = horizontal_cartan_subalgebra(k, m)
 len(g), len(k), len(mtilde), len(h)
 
 ##############################################################################
