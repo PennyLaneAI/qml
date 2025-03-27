@@ -1,4 +1,4 @@
-r"""Supervised and Unsipervised Quantum Machine Learning models for the phase detection of the ANNNI spin model
+r"""Supervised and Unsupervised Quantum Machine Learning Models for the Phase Detection of the ANNNI Spin Model
 ==========================================================
 
 Quantum Machine Learning (QML) models provide a natural framework for analyzing quantum many-body systems due to the direct mapping between spins and qubits.
@@ -640,7 +640,7 @@ plt.show()
 #
 #     Alberto Peruzzo, Jarrod McClean, Peter Shadbolt, Man-Hong Yung, Xiao-Qi Zhou, Peter J. Love, Alán Aspuru-Guzik, Jeremy L. O'Brien,
 #     "A variational eigenvalue solver on a quantum processor",
-#     `Nat Commun 5, 4213 <https://www.nature.com/articles/ncomms5213>`__, 2013.
+#     `Nat. Commun. 5, 4213 <https://www.nature.com/articles/ncomms5213>`__, 2013.
 #
 # .. [#Kottmann]
 #
@@ -658,7 +658,7 @@ plt.show()
 #
 #     Matthias C. Caro, Hsin-Yuan Huang, Marco Cerezo, Kunal Sharma, Andrew Sornborger, Lukasz Cincio, Patrick J. Coles,
 #     "Generalization in quantum machine learning from few training data",
-#     `Nat Commun 13, 4919 <https://www.nature.com/articles/s41467-022-32550-3>`__, 2022.
+#     `Nat. Commun. 13, 4919 <https://www.nature.com/articles/s41467-022-32550-3>`__, 2022.
 #
 # About the author
 # ----------------
