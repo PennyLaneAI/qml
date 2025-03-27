@@ -18,15 +18,23 @@ we explore the phase diagram of the Axial Next-Nearest-Neighbor Ising (ANNNI) mo
     :width: 70%
     :target: javascript:void(0)
 
+    Figure 1. Add a caption here
+
 The ANNNI model
 --------------------------------------------------------------------------------
 
 The ANNNI model describes a spin system with three types of competing interactions. Its Hamiltonian is given by:
+
 .. math::  H =   -J \sum_{i=1}^{N} \sigma_x^i\sigma_x^{i+1} - \kappa \sigma_x^{i}\sigma_x^{i+2} + h \sigma_z^i \tag{1}
+
 where:
+
 * :math:`\sigma_a^i` are the Pauli matrices acting on the :math:`i`-th spin (:math:`a \in \{x, y, z\}`).
+
 * :math:`J` is the nearest-neighbor coupling constant, which we set to :math:`1` without any loss of generality.
+
 * :math:`\kappa` controls the strength next-nearest-neighbor interaction.
+
 * :math:`h` represents the the transverse magnetic field strength.
 
 Without loss of generality, we set :math:`J = 1` and consider open boundary conditions for positive :math:`\kappa` and :math:`h`.
@@ -86,19 +94,25 @@ def get_H(num_spins, k, h):
 # Due to the competition between the three types of interactions, the ANNNI model exhibits a rich and complex phase diagram:
 #
 # * **Ising transition line** occurs at:  
+#   
 #   .. math::  h_I(\kappa) \approx \frac{1 - \kappa}{\kappa} \left(1 - \sqrt{\frac{1 - 3 \kappa + 4 \kappa^2 }{1 - \kappa}} \right)\tag{2} 
-#   which separates the _ferromagnetic_ phase from the _paramagnetic_ phase.
+#   
+#   which separates the *ferromagnetic* phase from the *paramagnetic* phase.
 #
 # * **Kosterlitz-Thouless (KT) transition line** occurs at:  
+#   
 #   .. math::  h_C(\kappa) \approx 1.05 \sqrt{(\kappa - 0.5) (\kappa - 0.1)} \tag{3}  
-#   which separates the _paramagnetic_ phase from the _antiphase_.
+#   
+#   which separates the *paramagnetic* phase from the *antiphase*.
 #
 #
 # Additionally, another phase transition has been numerically addressed but not yet confirmed:
 #
 # * **Berezinskii-Kosterlitz-Thouless (BKT) transition line** occurs at:  
+#   
 #   .. math::  h_{BKT} \approx 1.05 (\kappa - 0.5) \tag{4}
-#   which entirely lies within the _antiphase_ region.
+#   
+#   which entirely lies within the *antiphase* region.
 #
 
 def kt_transition(k):
@@ -125,7 +139,11 @@ def get_phase(k, h):
     return 2 # else it is Paramagnetic
 
 ######################################################################
-# .. image:: ../_static/demonstration_assets/annni/annni_pd.png
+# .. figure:: ../_static/demonstration_assets/annni/annni_pd.png
+#     :align: center
+#     :width: 70%
+#     :target: javascript:void(0)
+#     Figure 2. Add a caption here
 # 
 # State Preparation
 # -----------------
@@ -133,13 +151,15 @@ def get_phase(k, h):
 # In this section, we prepare the ground states of the system, which will serve as inputs for both QML models. Several methods can be used:
 #
 # * **Variational Quantum Eigensolver (VQE)**  
+#   
 #   VQE is a technique introduced in [#Peruzzo]_, which leverages the Rayleigh-Ritz variational principle to approximate the lowest-energy states of a given Hamiltonian, as demonstrated in the :doc:`demo on VQE </demos/tutorial_vqe>`.  
 #
 # * **Matrix Product States (MPS)**  
+#   
 #   MPS can be efficiently computed on classical hardware at a low cost and provide accurate approximations for local quantum systems. Several techniques are being developed to optimally embed MPS into quantum circuits as seen for example in the :doc:`demo on Constant-depth preparation of MPS with dynamic circuits </demos/tutorial_constant_depth_mps_prep>`.  
 #
 #
-# For simplicity, in this demo, we compute the ground state directly by finding the _eigenvector_ corresponding to the lowest _eigenvalue of the Hamiltonian. The resulting states are then loaded into the quantum circuits using PennyLane’s :func:`~pennylane.StatePrep`.  
+# For simplicity, in this demo, we compute the ground state directly by finding the *eigenvector* corresponding to the lowest eigenvalue of the Hamiltonian. The resulting states are then loaded into the quantum circuits using PennyLane’s :class:`~pennylane.StatePrep`.  
 #
 # It is important to note that this approach is only feasible within the classically simulable regime, as it becomes quickly intractable for larger system sizes.
 # 
@@ -188,16 +208,16 @@ psis = vmap(vmap(diagonalize_H))(H_matrices)
 #
 # For the output, we consider the model’s probability vector :math:`P(\kappa, h)` over the four computational basis states of the final two-qubit system, obtained using :func:`~pennylane.probs`. Each computational basis state is mapped to a specific phase:
 #
-# * :math:`\ket{00}`: Ferromagnetic
-# * :math:`\ket{01}`: Antiphase
-# * :math:`\ket{10}`: Paramagnetic
-# * :math:`\ket{11}`: Trash class
+# * :math:`\vert 00 \rangle`: Ferromagnetic
+# * :math:`\vert 01 \rangle`: Antiphase
+# * :math:`\vert 10 \rangle`: Paramagnetic
+# * :math:`\vert 11 \rangle`: Trash class
 #
 # Circuit Definition
 # ^^^^^^^^^^^^^^^^^^
 #
 # We now define and implement the QCNN circuit. The `qcnn_ansatz` function builds the QCNN architecture by alternating convolution and pooling layers 
-# until only two qubits remain. The `qcnn_circuit` function embeds an input quantum state through :func:`~pennylane.StatePrep`, applies the QCNN ansatz, and returns 
+# until only two qubits remain. The `qcnn_circuit` function embeds an input quantum state through :class:`~pennylane.StatePrep`, applies the QCNN ansatz, and returns 
 # the probability distribution over the final two-qubit system. Finally, we vectorize the circuit for efficient evaluation:
 
 def qcnn_ansatz(num_qubits, params):
@@ -292,7 +312,9 @@ qml.draw_mpl(qcnn_circuit)(np.arange(num_params), psis[0,0])
 # .. math::  \mathcal{L} = -\frac{1}{N} \sum_{i=1}^{N} \sum_{j} y_j^{\frac1T} \log \tilde{p}_j^\frac1T   \tag{5}
 #
 # where:
+#
 # * :math:`y_j` represents the one-hot encoded labels for the three phases
+# 
 # * :math:`T` is a temperature factor that controls the sharpness of the predicted probability distribution.
 
 def cross_entropy(pred, Y, T):
@@ -311,7 +333,8 @@ def cross_entropy(pred, Y, T):
 # The analytical points of the ANNNI model correspond to specific regions of the phase diagram where the system simplifies into well-understood limits:
 #
 # * **Transverse-field Ising model** at :math:`\kappa = 0` in which we only have the magnetic field and the nearest neighbor interactions;
-# * **_Quasi classical_ model**  at :math:`h=0` in which we only have the nearest and next-nearest neighbor interactions.
+# 
+# * **Quasi classical model**  at :math:`h=0` in which we only have the nearest and next-nearest neighbor interactions.
 #
 # For these points, we can derive the labels analytically which will then be used for the training of the QCNNs. 
 
@@ -319,7 +342,11 @@ def cross_entropy(pred, Y, T):
 analytical_mask = (K == 0) | (H == 0)
 
 ######################################################################
-# .. image:: ../_static/demonstration_assets/annni/annni_pd_analytical.png
+# .. figure:: ../_static/demonstration_assets/annni/annni_pd_analytical.png
+#     :align: center
+#     :width: 70%
+#     :target: javascript:void(0)
+#     Figure 3. Add a caption here
 
 def train_qcnn(num_epochs, lr, T, seed):
     """Training function of the QCNN architecture"""
@@ -443,7 +470,7 @@ plt.show()
 # Circuit Definition
 # ^^^^^^^^^^^^^^^^^^
 #
-# We now define and implement the QAD circuit. The `anomaly_ansatz` function builds the QAD architecture. The `anomaly_circuit` function embeds an input quantum state through :func:`~pennylane.StatePrep`, applies the QAD ansatz, and returns the expectation values of the _trash qubits_ used to evaluate the compression score:
+# We now define and implement the QAD circuit. The `anomaly_ansatz` function builds the QAD architecture. The `anomaly_circuit` function embeds an input quantum state through :class:`~pennylane.StatePrep`, applies the QAD ansatz, and returns the expectation values of the *trash qubits* used to evaluate the compression score:
 
 def anomaly_ansatz(n_qubit, params):
     """Ansatz of the QAD model
@@ -513,11 +540,15 @@ qml.draw_mpl(anomaly_circuit)(np.arange(num_anomaly_params), psis[0,0])
 # The training process for this architecture follows these steps:
 #
 # 1. **Selection of Training Event:**  
+#    
 #    A single quantum state is selected as the training event.
 #
 # 2. **Compression Objective:**  
+#    
 #    The training is performed to achieve the compression of the selected quantum state. This is done by minimizing the following loss function, known as the *compression score*:
+#    
 #    .. math::  \mathcal{C} = \frac{1}{2}\sum_{j\in q_T} (1-\left<Z_j\right>)\tag{7}
+#    
 #    where :math:`q_T` refers to the set of trash qubits, which make up :math:`N/2` of the total.
 #   
 #    By doing so, all the information of the input quantum state is compressed in the remaining non-measured qubits.
@@ -597,7 +628,7 @@ plt.scatter([0 +.3/len(ks)], [0 + .5/len(hs)], color='r', marker = 'x', label="T
 
 plt.legend(), plt.xlabel("k"), plt.ylabel("h"), plt.title("Phase Diagram")
 cbar = plt.colorbar(im)
-cbar.set_label(r"Compression Score  :math:`\mathcal{C}`")
+cbar.set_label(r"Compression Score  $\mathcal{C}$")
 plt.show()
 
 ######################################################################
