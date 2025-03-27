@@ -88,7 +88,7 @@ def get_H(num_spins, k, h):
     return H
 
 ######################################################################
-# Defining Phase Transition Lines
+# Defining phase transition lines
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 # 
 # Due to the competition between the three types of interactions, the ANNNI model exhibits a rich and complex phase diagram:
@@ -145,7 +145,7 @@ def get_phase(k, h):
 #     :target: javascript:void(0)
 #     Figure 2. Add a caption here
 # 
-# State Preparation
+# State preparation
 # -----------------
 #
 # In this section, we prepare the ground states of the system, which will serve as inputs for both QML models. Several methods can be used:
@@ -163,7 +163,7 @@ def get_phase(k, h):
 #
 # It is important to note that this approach is only feasible within the classically simulable regime, as it becomes quickly intractable for larger system sizes.
 # 
-# Computing the Ground States
+# Computing the ground states
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 # We implement a function to compute the ground state by diagonalizing the Hamiltonian
 
@@ -195,7 +195,7 @@ psis = vmap(vmap(diagonalize_H))(H_matrices)
 
 ######################################################################
 #
-# Supervised Learning of Phases: QCNN
+# Supervised learning of phases: QCNN
 # -----------------------------------
 #
 # QCNNs are a class of quantum circuits first introduced in [#Cong]_, inspired by their classical counterparts, Convolutional Neural Networks (CNNs). Like CNNs, QCNNs aim to learn representations from input data by leveraging its local properties. In this implementation, these local properties correspond to the interactions between neighbouring spins.
@@ -213,7 +213,7 @@ psis = vmap(vmap(diagonalize_H))(H_matrices)
 # * :math:`\vert 10 \rangle`: Paramagnetic
 # * :math:`\vert 11 \rangle`: Trash class
 #
-# Circuit Definition
+# Circuit definition
 # ^^^^^^^^^^^^^^^^^^
 #
 # We now define and implement the QCNN circuit. The `qcnn_ansatz` function builds the QCNN architecture by alternating convolution and pooling layers 
@@ -301,7 +301,7 @@ def qcnn_circuit(params, state):
 vectorized_qcnn_circuit = vmap(jit(qcnn_circuit), in_axes=(None, 0))
 
 # Draw the QCNN Architecture
-qml.draw_mpl(qcnn_circuit)(np.arange(num_params), psis[0,0])
+qml.draw_mpl(qcnn_circuit)(np.arange(num_params), psis[0,0]);
 
 ######################################################################
 # Training of the QCNN
@@ -455,10 +455,10 @@ plt.show()
 #
 # In addition, [#Cea]_ presents an analysis of the QCNN’s performance as the number of qubits (hence the system's size) increases, showing that the overlap between trash class and the expected Floating phase becomes more accurate.  
 #
-# Unsupervised Learning of Phases: Quantum Anomaly Detection
+# Unsupervised learning of phases: Quantum Anomaly Detection
 # ----------------------------------------------------------
 # 
-# Quantum Anomaly Detection was first introduced in [#Kottmann]_ and serves as the quantum counterpart of an Auto-Encoder, with only the encoding (forward) process being trained (due to the inversion property of quantum unitaries).
+# Quantum Anomaly Detection (QAD) was first introduced in [#Kottmann]_ and serves as the quantum counterpart of an Auto-Encoder, with only the encoding (forward) process being trained (due to the inversion property of quantum unitaries).
 # 
 # In this approach, a single state :math:`|\psi(\kappa, h)\rangle` from the ANNNI model is optimised to find the best circuit parameters such that:
 # 
@@ -467,7 +467,7 @@ plt.show()
 # 
 # This means we seek a unitary transformation that disentangles the input state into a compressed state :math:`|\phi\rangle` for a subset of qubits (referred to as non-trash qubits) while mapping the remaining qubits (called trash qubits) to the zero state.
 #
-# Circuit Definition
+# Circuit definition
 # ^^^^^^^^^^^^^^^^^^
 #
 # We now define and implement the QAD circuit. The `anomaly_ansatz` function builds the QAD architecture. The `anomaly_circuit` function embeds an input quantum state through :class:`~pennylane.StatePrep`, applies the QAD ansatz, and returns the expectation values of the *trash qubits* used to evaluate the compression score:
@@ -531,7 +531,7 @@ jitted_anomaly_circuit = jit(anomaly_circuit)
 vectorized_anomaly_circuit = vmap(jitted_anomaly_circuit, in_axes=(None, 0))
 
 # Draw the QAD Architecture
-qml.draw_mpl(anomaly_circuit)(np.arange(num_anomaly_params), psis[0,0])
+qml.draw_mpl(anomaly_circuit)(np.arange(num_anomaly_params), psis[0,0]);
 
 ######################################################################
 # Training of the QAD
@@ -641,11 +641,11 @@ plt.show()
 #
 # Quantum many-body systems present a compelling use case for QML models. In this tutorial, we explored two different approaches:
 #
-#  * **Supervised learning**: The QCNN effectively generalizes phase classification beyond its training data, aligning with phase boundaries identified by classical methods.
+# * **Supervised learning**: The QCNN effectively generalizes phase classification beyond its training data, aligning with phase boundaries identified by classical methods.
 #
-#  * **Unsupervised learning**: QAD successfully distinguishes different quantum phases without requiring labelled training data, making it ideal for systems with unknown structures.
+# * **Unsupervised learning**: QAD successfully distinguishes different quantum phases without requiring labelled training data, making it ideal for systems with unknown structures.
 #
-#  These techniques could be valuable for studying spin systems beyond classical simulability, particularly when non-local interactions are present and tensor network methods become inadequate.
+# These techniques could be valuable for studying spin systems beyond classical simulability, particularly when non-local interactions are present and tensor network methods become inadequate.
 # 
 # Acknowledgements
 # ----------------
