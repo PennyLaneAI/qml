@@ -258,7 +258,8 @@ print("embedding energy: ", energy_emb)
 # Density matrix embedding theory is a robust method, designed to tackle simulation of complex systems, 
 # by dividing them into subsystems. It is specifically suited for studying the ground state properties of
 # a system. It provides for a computationally efficient alternative to dynamic quantum embedding schemes 
-# such as dynamic meanfield theory(DMFT), as it uses density matrix for embedding instead of the Green's function. 
+# such as dynamic meanfield theory(DMFT), as it uses density matrix for embedding instead of the Green's function
+# and has limited number of bath orbitals. 
 # It has been successfully used for studying various strongly correlated molecular and periodic systems. 
 #
 # References
