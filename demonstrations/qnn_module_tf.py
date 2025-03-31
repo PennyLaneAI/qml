@@ -75,7 +75,8 @@ c = ["#1f77b4" if y_ == 0 else "#ff7f0e" for y_ in y]  # colours for each class
 plt.axis("off")
 plt.scatter(X[:, 0], X[:, 1], c=c)
 plt.show()
-#
+
+##############################################################################
 # .. figure:: /_static/demonstration_assets/qnn_module/sphx_glr_qnn_module_tf_001.png
 #    :width: 100%
 #    :align: center
