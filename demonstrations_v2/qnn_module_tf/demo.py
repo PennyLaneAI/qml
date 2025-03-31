@@ -185,7 +185,17 @@ fitting = model.fit(X, y_hot, epochs=6, batch_size=5, validation_split=0.25, ver
 #  .. code-block:: none
 #
 #    Epoch 1/6
-#    30/30 - 4s - loss: 0.1522 - accuracy: 0.8733 - val_loss: 0.1925 - val_accuracy: 0.8200 - 4s/epoch - 117ms/step
+#    30/30 - 4s - loss: 0.4153 - accuracy: 0.7333 - val_loss: 0.3183 - val_accuracy: 0.7800 - 4s/epoch - 123ms/step
+#    Epoch 2/6
+#    30/30 - 4s - loss: 0.2927 - accuracy: 0.8000 - val_loss: 0.2475 - val_accuracy: 0.8400 - 4s/epoch - 130ms/step
+#    Epoch 3/6
+#    30/30 - 4s - loss: 0.2272 - accuracy: 0.8333 - val_loss: 0.2111 - val_accuracy: 0.8200 - 4s/epoch - 119ms/step
+#    Epoch 4/6
+#    30/30 - 4s - loss: 0.1963 - accuracy: 0.8667 - val_loss: 0.1917 - val_accuracy: 0.8600 - 4s/epoch - 118ms/step
+#    Epoch 5/6
+#    30/30 - 4s - loss: 0.1772 - accuracy: 0.8667 - val_loss: 0.1828 - val_accuracy: 0.8600 - 4s/epoch - 117ms/step
+#    Epoch 6/6
+#    30/30 - 4s - loss: 0.1603 - accuracy: 0.8733 - val_loss: 0.2006 - val_accuracy: 0.8200 - 4s/epoch - 117ms/step
 #
 #
 # How did we do? The model looks to have successfully trained and the accuracy on both the
@@ -251,7 +261,17 @@ fitting = model.fit(X, y_hot, epochs=6, batch_size=5, validation_split=0.25, ver
 #  .. code-block:: none
 #
 #    Epoch 1/6
-#    30/30 - 7s - loss: 0.1465 - accuracy: 0.8733 - val_loss: 0.1753 - val_accuracy: 0.8200 - 7s/epoch - 221ms/step
+#    30/30 - 7s - loss: 0.3682 - accuracy: 0.7467 - val_loss: 0.2550 - val_accuracy: 0.8000 - 7s/epoch - 229ms/step
+#    Epoch 2/6
+#    30/30 - 7s - loss: 0.2428 - accuracy: 0.8067 - val_loss: 0.2105 - val_accuracy: 0.8400 - 7s/epoch - 224ms/step
+#    Epoch 3/6
+#    30/30 - 7s - loss: 0.2001 - accuracy: 0.8333 - val_loss: 0.1901 - val_accuracy: 0.8200 - 7s/epoch - 220ms/step
+#    Epoch 4/6
+#    30/30 - 7s - loss: 0.1816 - accuracy: 0.8600 - val_loss: 0.1776 - val_accuracy: 0.8200 - 7s/epoch - 224ms/step
+#    Epoch 5/6
+#    30/30 - 7s - loss: 0.1661 - accuracy: 0.8667 - val_loss: 0.1711 - val_accuracy: 0.8600 - 7s/epoch - 224ms/step
+#    Epoch 6/6
+#    30/30 - 7s - loss: 0.1520 - accuracy: 0.8600 - val_loss: 0.1807 - val_accuracy: 0.8200 - 7s/epoch - 221ms/step
 #
 #
 # Great! We've mastered the basics of constructing hybrid classical-quantum models using
