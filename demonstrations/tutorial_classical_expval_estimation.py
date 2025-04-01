@@ -1,5 +1,5 @@
 r"""
-Classically estimating expectation values from parametrized quantum circuits
+Pauli Propogation: Classically estimating expectation values from parametrized quantum circuits
 ============================================================================
 
 In the race between classical and `quantum computing <https://pennylane.ai/qml/quantum-computing/>`__, an important question
