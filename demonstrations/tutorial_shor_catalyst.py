@@ -17,20 +17,24 @@ JIT compiling Shor's algorithm with PennyLane and Catalyst
     tutorial_jax_transformations
     tutorial_how_to_quantum_just_in_time_compile_vqe_catalyst
     tutorial_qjit_compile_grovers_algorithm_with_catalyst
-"""
+    
+The past few years stimulated a lot of discussion about *hybrid
+quantum-classical algorithms*. For a time, this terminology was synonymous
+with *variational algorithms*. However, integration with classical
+coprocessors is necessary for every quantum algorithm, even ones considered
+quintessentially quantum.
 
-##############################################################################
-# The past few years stimulated a lot of discussion about *hybrid
-# quantum-classical algorithms*. For a time, this terminology was synonymous
-# with *variational algorithms*. However, integration with classical
-# coprocessors is necessary for every quantum algorithm, even ones considered
-# quintessentially quantum.
-#
-# Shor's famous factoring algorithm [#Shor1997]_ is one such example. Consider
-# an integer :math:`N`, promised to be the product of two primes, :math:`p` and
-# :math:`q`. Shor's algorithm uses a quantum computer to solve this problem with
-# exponentially-better scaling than the best-known classical algorithm. But,
-# have a look at the code below:
+.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_shor_algorithm_catalyst_pennylane.png
+    :align: center
+    :width: 70%
+    :target: javascript:void(0)
+
+Shor's famous factoring algorithm [#Shor1997]_ is one such example. Consider
+an integer :math:`N`, promised to be the product of two primes, :math:`p` and
+:math:`q`. Shor's algorithm uses a quantum computer to solve this problem with
+exponentially-better scaling than the best-known classical algorithm. But,
+have a look at the code below:
+"""
 
 import jax.numpy as jnp
 

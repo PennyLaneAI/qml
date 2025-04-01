@@ -5,8 +5,8 @@
             "username": "glassnotes"
         }
     ],
-    "dateOfPublication": "2025-03-01T00:00:00+00:00",
-    "dateOfLastModification": "2025-03-01T00:00:00+00:00",
+    "dateOfPublication": "2025-03-01T09:00:00+00:00",
+    "dateOfLastModification": "2025-03-01T09:00:00+00:00",
     "categories": [
         "Quantum Computing"
     ],
@@ -14,7 +14,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_variationally_quantum_linear_solver.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_shor_algorithm_catalyst_pennylane.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_shor_algorithm_catalyst_pennylane.png"
         }
     ],
     "seoDescription": "JIT compile Shor's algorithm from end-to-end with PennyLane and Catalyst.",
