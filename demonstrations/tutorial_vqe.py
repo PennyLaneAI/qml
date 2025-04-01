@@ -108,7 +108,7 @@ dev = qml.device("lightning.qubit", wires=qubits)
 # where :math:`\theta` is the variational parameter to be optimized in order to find
 # the best approximation to the true ground state. In the Jordan-Wigner [#seeley2012]_ encoding,
 # the first term :math:`|1100\rangle` represents the `Hartree-Fock (HF) state
-# <https://en.wikipedia.org/wiki/Hartree%E2%80%93Fock_method>`_ where the two electrons in
+# <https://pennylane.ai/blog/2022/09/how-to-use-the-hartree-fock-method-in-pennylane>`_ where the two electrons in
 # the molecule occupy the lowest-energy orbitals. The second term :math:`|0011\rangle`
 # encodes a double excitation of the HF state where the two particles are excited from
 # qubits 0, 1 to 2, 3.
@@ -292,4 +292,4 @@ plt.show()
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/alain_delgado.txt
+#

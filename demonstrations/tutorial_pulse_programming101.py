@@ -322,15 +322,21 @@ H_pulse = H_D + H_C
 
 ##############################################################################
 # Now we define the ``qnode`` that computes the expectation value of the molecular Hamiltonian.
+# We need to wrap the ``qnode`` in a function so that we can convert the expectation value to a real number.
+# This will enable use to make use of gradient descent methods that require real-valued loss functions.
 
 dev = qml.device("default.qubit", wires=range(n_wires))
 
-@qml.qnode(dev, interface="jax")
 def qnode(theta, t=duration):
-    qml.BasisState(jnp.array(data.tapered_hf_state), wires=H_obj.wires)
-    qml.evolve(H_pulse)(params=(*theta, *theta), t=t)
-    return qml.expval(H_obj)
 
+    @qml.qnode(dev)
+    def _qnode_inner(theta, t=duration):
+        qml.BasisState(jnp.array(data.tapered_hf_state), wires=H_obj.wires)
+        qml.evolve(H_pulse)(params=(*theta, *theta), t=t)
+        return qml.expval(H_obj)
+
+    expectation_value = _qnode_inner(theta, t)  # Execute the qnode
+    return jnp.real(expectation_value)  # Typecast to real number
 
 value_and_grad = jax.jit(jax.value_and_grad(qnode))
 
@@ -484,4 +490,4 @@ plt.show()
 ##############################################################################
 # About the author
 # ----------------
-# .. include:: ../_static/authors/korbinian_kottmann.txt
+#

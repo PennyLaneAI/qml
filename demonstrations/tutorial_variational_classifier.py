@@ -128,7 +128,6 @@ def circuit(weights, x):
 def variational_classifier(weights, bias, x):
     return circuit(weights, x) + bias
 
-
 ##############################################################################
 # Cost
 # ~~~~
@@ -554,4 +553,4 @@ plt.show()
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/maria_schuld.txt
+#

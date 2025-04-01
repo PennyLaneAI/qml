@@ -1,4 +1,0 @@
-.. bio:: Chase Roberts
-   :photo: ../_static/authors/chase_roberts.png
-
-   Chase is a software engineer mainly focused on HPC applications. He enjoys fast computers and his cats.

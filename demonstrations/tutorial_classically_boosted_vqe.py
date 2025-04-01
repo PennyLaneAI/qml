@@ -449,7 +449,7 @@ def hadamard_test(Uq, Ucl, component="real"):
 
     qml.Hadamard(wires=[0])
     qml.ControlledQubitUnitary(
-        Uq.conjugate().T @ Ucl, control_wires=[0], wires=wires[1:]
+        Uq.conjugate().T @ Ucl, wires=wires
     )
     qml.Hadamard(wires=[0])
 
@@ -585,6 +585,4 @@ print("CB-VQE energy %.4f" % (energy_CBVQE))
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/joana_fraxanet.txt
 #
-# .. include:: ../_static/authors/isidor_schoch.txt
