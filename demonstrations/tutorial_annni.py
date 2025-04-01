@@ -139,10 +139,11 @@ def get_phase(k, h):
     return 2 # else it is Paramagnetic
 
 ######################################################################
-# .. figure:: ../_static/demonstration_assets/annni/annni_pd.png
+# .. figure:: ../_static/demonstration_assets/annni/annni_pd_L.png
 #     :align: center
 #     :width: 70%
 #     :target: javascript:void(0)
+#     
 #     Figure 2. Add a caption here
 # 
 # State preparation
@@ -342,10 +343,11 @@ def cross_entropy(pred, Y, T):
 analytical_mask = (K == 0) | (H == 0)
 
 ######################################################################
-# .. figure:: ../_static/demonstration_assets/annni/annni_pd_analytical.png
+# .. figure:: ../_static/demonstration_assets/annni/annni_pd_analytical_L.png
 #     :align: center
 #     :width: 70%
 #     :target: javascript:void(0)
+#     
 #     Figure 3. Add a caption here
 
 def train_qcnn(num_epochs, lr, T, seed):
