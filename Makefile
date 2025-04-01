@@ -78,7 +78,7 @@ environment:
 			$$PYTHON_VENV_PATH/bin/python -m pip install --upgrade git+https://github.com/PennyLaneAI/pennylane-qulacs.git#egg=pennylane-qulacs;\
 			$$PYTHON_VENV_PATH/bin/python -m pip install --extra-index-url https://test.pypi.org/simple/ PennyLane-Catalyst --pre --upgrade;\
 			$$PYTHON_VENV_PATH/bin/python -m pip install --extra-index-url https://test.pypi.org/simple/ PennyLane-Lightning --pre --upgrade;\
-			$$PYTHON_VENV_PATH/bin/python -m pip install --upgrade git+https://github.com/PennyLaneAI/pennylane.git#egg=pennylane;\
+			$$PYTHON_VENV_PATH/bin/python -m pip install --upgrade git+https://github.com/PennyLaneAI/pennylane.git@v0.41.0-rc0#egg=pennylane;\
 			$$PYTHON_VENV_PATH/bin/python -m pip install --upgrade git+https://github.com/XanaduAI/iqpopt.git#egg=iqpopt;\
 		fi;\
 	fi
