@@ -8,7 +8,9 @@
     "dateOfPublication": "2025-03-01T09:00:00+00:00",
     "dateOfLastModification": "2025-03-01T09:00:00+00:00",
     "categories": [
-        "Quantum Computing"
+        "Algorithms",
+        "Quantum Computing",
+        "Devices and Performance"
     ],
     "tags": [],
     "previewImages": [

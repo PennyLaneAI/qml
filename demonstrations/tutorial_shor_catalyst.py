@@ -3,20 +3,6 @@ r""".. role:: html(raw)
 
 JIT compiling Shor's algorithm with PennyLane and Catalyst
 ===============================================================
-
-.. meta::
-    :property="og:description": JIT compile Shor's algorithm from beginning to end with PennyLane and Catalyst.
-
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//fano.png
-
-
-*Author: Olivia Di Matteo — Posted: March X 2025. Last updated: March X 2025.*
-
-.. related::
-
-    tutorial_jax_transformations
-    tutorial_how_to_quantum_just_in_time_compile_vqe_catalyst
-    tutorial_qjit_compile_grovers_algorithm_with_catalyst
     
 The past few years stimulated a lot of discussion about *hybrid
 quantum-classical algorithms*. For a time, this terminology was synonymous
@@ -166,7 +152,7 @@ def shors_algorithm(N):
 #
 # The key thing to note is that for every :math:`N` and :math:`a`, a different
 # quantum circuit must be generated, compiled and optimized. Even with a good
-# compiler this will lead to a huge computational overhead! Recall also that in
+# compiler, this will lead to a huge computational overhead! Recall also that in
 # a cryptographic context, :math:`N` relates to a public key that is unique for
 # every entity. Moreover, for sizes of cryptographic relevance, :math:`N` will
 # be a 2048-bit integer (or larger)! It would be ideal if we could reuse and
@@ -179,7 +165,7 @@ def shors_algorithm(N):
 # In standard PennyLane, quantum circuit execution can be JIT compiled with
 # JAX. To learn more, check out the JAX documentation [#JAXJIT]_ and the
 # :doc:`PennyLane demo </demos/tutorial_jax_transformations>` on the
-# subject. But, this only compiles a single circuit. What about all the other
+# subject. But this only compiles a single circuit. What about all the other
 # code around it? What if you also wanted to optimize that quantum circuit,
 # based on contextual information?
 #
@@ -250,9 +236,9 @@ def shors_algorithm(N, n_bits):
 # This high-level view hides the circuit's complexity; the implementation
 # details of :math:`U_a` are not shown, and auxiliary qubits are omitted. In
 # what follows, we'll leverage shortcuts afforded by Catalyst and the hybrid
-# nature of computation. Specifically, with mid-circuit measurement and reset we
+# nature of computation. Specifically, with mid-circuit measurement and reset, we
 # can reduce the number of estimation wires to :math:`t=1`. Most arithmetic will
-# be performed in the Fourier basis. Finally, with Catalyst we can vary circuit
+# be performed in the Fourier basis. Finally, with Catalyst, we can vary circuit
 # structure based on :math:`a` to save resources, *even though its value isn't
 # known until runtime*.
 #
@@ -304,7 +290,7 @@ def shors_algorithm(N, n_bits):
 #
 #     M_a \vert x \rangle \vert b \rangle \vert 0 \rangle =  \vert x \rangle \vert (b + ax) \pmod N \rangle \vert 0 \rangle.
 #
-# Ignoring the control qubit, we can validate this circuit implements
+# Ignoring the control qubit, we can validate that this circuit implements
 # :math:`U_a`:
 #
 # .. math::
@@ -329,7 +315,7 @@ def shors_algorithm(N, n_bits):
 #    Circuit for controlled multiplication of :math:`ax` using a series of double-controlled Fourier adders (modulo :math:`N`).
 #    [#Beauregard2003]_.
 #
-# First, note the controls on the quantum Fourier transforms (QFTs) are not
+# First, note that the controls on the quantum Fourier transforms (QFTs) are not
 # needed. If we remove them and :math:`\vert c \rangle = \vert 1 \rangle`, the
 # circuit works as expected. If :math:`\vert c \rangle = \vert 0 \rangle`, they
 # run, but cancel each other out since none of the operations in between will
@@ -344,16 +330,16 @@ def shors_algorithm(N, n_bits):
 #    The controls on the QFT can be removed without altering the effect of the circuit
 #    [#Beauregard2003]_.
 #
-# At first glance ,it not clear how this produces :math:`a x`. The qubits in
+# At first glance, it's not clear how this produces :math:`a x`. The qubits in
 # register :math:`\vert x \rangle` control operations that depend on :math:`a`
 # multiplied by various powers of 2. There is a QFT before and after, whose
-# purpose is unclear, and we have yet to define :math:`\Phi_+`.
+# purpose is unclear, and we have yet to define the Fourier adders :math:`\Phi_+`.
 #
 # These special operations perform *addition in the Fourier basis*
 # [#Draper2000]_. This is another trick we can leverage given prior knowledge of
 # :math:`a`. Rather than performing addition on bits in computational basis
 # states, we apply a QFT, adjust the phases based on the bits of the number
-# being added, then inverse QFT to obtain the result in the computational
+# being added, and then an inverse QFT to obtain the result in the computational
 # basis. The *Fourier addition* circuit, :math:`\Phi`, is shown below.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder.svg
@@ -420,9 +406,9 @@ def shors_algorithm(N, n_bits):
 # addition, and save a significant number of resources!
 #
 # We can also make some optimizations to the end of the algorithm by keeping
-# track of the powers of :math:`a`. If at iteration :math:`k` we have
+# track of the powers of :math:`a`. If, at iteration :math:`k,` we have
 # :math:`a^{2^k} = 1`, no further multiplication is necessary because we would
-# be multiplying by 1. In fact, we can terminate the algorithm early because
+# be multiplying by :math:`1.` In fact, we can terminate the algorithm early because
 # we've found the order of :math:`a` is simply :math:`2^k`.
 #
 # There are also less-trivial optimizations we can make. Consider the
@@ -435,7 +421,7 @@ def shors_algorithm(N, n_bits):
 #    :align: center
 #    :alt: The controlled multiplier circuit in the context of Shor's algorithm.
 #
-# The doubly-controlled adders are each controlled on an estimation qubit, and a
+# The doubly-controlled adders are each controlled on an estimation qubit and a
 # qubit in the target register. Consider the state of the system after the
 # initial controlled-:math:`U_a` (or, rather, controlled addition of
 # :math:`a-1`),
@@ -443,16 +429,16 @@ def shors_algorithm(N, n_bits):
 # .. math::
 #
 #     \begin{equation*}
-#     \vert + \rangle ^{\otimes (t - 1)} \frac{1}{\sqrt{2}} \left( \vert 0 \rangle \vert 1 \rangle + \vert 1 \rangle \vert a \rangle \right)
+#     \vert + \rangle ^{\otimes (t - 1)} \frac{1}{\sqrt{2}} \left( \vert 0 \rangle \vert 1 \rangle + \vert 1 \rangle \vert a \rangle \right).
 #     \end{equation*}
 #
 # The next controlled operation is controlled :math:`U_{a^2}`. Since the only
 # two basis states present are :math:`\vert 1 \rangle` and :math:`\vert a
 # \rangle`, the only doubly-controlled :math:`\Phi_+` that trigger are the first
-# one (with the second control on the bottom-most qubit), and those controlled
+# one (with the second control on the bottom-most qubit) and those controlled
 # on qubits that are :math:`1` in the binary representation of :math:`a`. Thus,
 # we only need doubly-controlled operations on qubits where the logical OR of
-# the bit representations of :math:`1` and `a` are 1! We present here an example
+# the bit representations of :math:`1` and :math:`a` are :math:`1!` We present here an example
 # for :math:`a = 5`.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/doubly-controlled-adder-simplified-states.svg
@@ -476,7 +462,7 @@ def shors_algorithm(N, n_bits):
 #
 # Eventually we expect diminishing returns because each controlled
 # :math:`U_{a^{2^k}}` contributes more terms to the superposition. Before the
-# :math:`k`'th iteration, the control register contains a superposition of
+# :math:`k-`th iteration, the control register contains a superposition of
 # :math:`\{ \vert a^j \rangle \}, j = 0, \ldots, 2^{k - 1}` (inclusive), and after the
 # controlled SWAPs, the relevant superposition is :math:`\{ \vert a^j \rangle \}, j =
 # 2^{k-1}+1, \ldots, 2^{k} - 1`.
@@ -1201,10 +1187,6 @@ plt.show()
 #     Thomas G. Draper (2000) *Addition on a Quantum Computer.* arXiv preprint,
 #     arXiv:quant-ph/0008033.
 #
-# About the author
-# ----------------
-# .. include:: ../_static/authors/olivia_di_matteo.txt
-#
 #
 # Appendix: fun with Fourier transforms
 # -------------------------------------
@@ -1431,4 +1413,7 @@ plt.show()
 #    :width: 800
 #    :align: center
 #    :alt: QPE circuit with one estimation qubit.
+#
+# About the author
+# ----------------
 #
