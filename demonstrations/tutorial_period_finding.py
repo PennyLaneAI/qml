@@ -355,6 +355,8 @@ for k in range(12):
 # References
 # ------------
 #
+# .. [#Aaronson22]_ Scott Aaronson, "How Much Structure Is Needed for #    Huge Quantum Speedups?" <https://arxiv.org/pdf/2209.06930>`_
+# 
 # .. [#Childs2010] 
 #    Andrew Childs, Vim van Dam, `"Quantum algorithms for algebraic problems" <https://arxiv.org/pdf/0812.0380>`_,
 #    Reviews of Modern Physics 82.1 (2010): 1-52.
