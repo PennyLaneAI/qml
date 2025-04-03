@@ -30,9 +30,9 @@ However, group theory is a huge hurdle for even some of the more seasoned quantu
 #    :align: center
 #    :width: 70%
 #    :target: javascript:void(0);
+#    :figwidth: 70%
 #    
 #    Figure 2. Example of a discrete periodic function f(x) over the integers x = 0,...,11. 
-#    
 #    The function only takes the same value when moving exactly 4 integers on the x-axis.
 #
 # Importantly, we assume that we have *black-box access* to that function. For a python coder this 
@@ -126,14 +126,18 @@ def f(x):
 # let's plot this!
 x = range(16)
 y = [f(x_) for x_ in x]
-plt.scatter(x, y)
-plt.title("Periodic function")
-plt.ylabel("f(x)")
-plt.xlabel("x")
-plt.figtext(0.5, 0.01, "Figure 4. Periodic function f(x)", horizontalalignment='center')
+fig = plt.figure()
+ax = fig.add_axes((0.1, 0.2, 0.8, 0.7))
+ax.scatter(x, y)
+ax.set_title("Periodic function")
+ax.set_ylabel("f(x)")
+ax.set_xlabel("x")
+fig.text(0.5, 0.05, "Figure 4. Periodic function f(x)", horizontalalignment='center')
+fig.tight_layout()
 plt.show()
 
 #####################################################################
+# 
 # We will represent the :math:`x` and :math:`f(x)` values of this function as computational basis states
 # :math:`| x \rangle | f(x) \rangle`. The amplitudes belonging to that state can be interpreted as a
 # "weight" for a specific function value. 
@@ -309,11 +313,12 @@ plt.xlabel("x")
 green = mpatches.Patch(color="green", label="abs(real part)")
 pink = mpatches.Patch(color="pink", label="abs(imaginary part)")
 plt.legend(handles=[green, pink])
-plt.tight_layout()
-plt.figtext(0.5, 0.01, "Figure 5. Representing the Fourier spectrum", horizontalalignment='center')
+fig.text(0.5, 0.05, "Figure 5. Representing the Fourier spectrum", horizontalalignment='center')
+fig.tight_layout()
 plt.show()
 
 #####################################################################
+# 
 # First of all, we see that the oracle really prepared a quantum state that we can interpret as 
 # our periodic function ``f``.
 #
