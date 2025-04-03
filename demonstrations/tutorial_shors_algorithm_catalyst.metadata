@@ -1,5 +1,5 @@
 {
-    "title": "JIT compiling Shor's algorithm with PennyLane and Catalyst",
+    "title": "Quantum just-in-time compiling Shor's algorithm with Catalyst",
     "authors": [
         {
             "username": "glassnotes"

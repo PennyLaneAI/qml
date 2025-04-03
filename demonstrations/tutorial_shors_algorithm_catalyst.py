@@ -1,8 +1,8 @@
 r""".. role:: html(raw)
    :format: html
 
-JIT compiling Shor's algorithm with PennyLane and Catalyst
-===============================================================
+Quantum just-in-time compiling Shor's algorithm with Catalyst
+=============================================================
     
 The past few years stimulated a lot of discussion about *hybrid
 quantum-classical algorithms*. For a time, this terminology was synonymous
