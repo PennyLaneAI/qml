@@ -664,7 +664,8 @@ def phase_to_order(phase, max_denominator):
 
 
 ######################################################################
-# Below, we have the implementations of the circuits derived in the previous section.
+# Below, we have the implementations of the arithmetic circuits derived in the
+# previous section.
 
 import pennylane as qml
 import catalyst
@@ -796,8 +797,12 @@ def shors_algorithm(N, key, a, n_bits, n_trials):
         )
         a_inv_mask = a_mask
 
+        # Initialize the target register of QPE in |1>
         qml.PauliX(wires=target_wires[-1])
 
+        # The "first" QFT on the auxiliary register; required here because
+        # QFT are largely omitted in the modular arithmetic routines due to
+        # cancellation between adjacent blocks of the algorithm. 
         QFT(wires=aux_wires[:-1])
 
         # First iteration: add a - 1 using the Fourier adder.
@@ -807,6 +812,7 @@ def shors_algorithm(N, key, a, n_bits, n_trials):
         qml.ctrl(fourier_adder_phase_shift, control=est_wire)(a - 1, target_wires)
         qml.adjoint(QFT)(wires=target_wires)
 
+        # Measure the estimation wire and store the phase 
         qml.Hadamard(wires=est_wire)
         meas_results[0] = measure(est_wire, reset=True)
         cumulative_phase = -2 * jnp.pi * jnp.sum(meas_results / jnp.roll(phase_divisors, 1))
@@ -820,6 +826,7 @@ def shors_algorithm(N, key, a, n_bits, n_trials):
         if jnp.min(powers_cua) == 1:
             loop_bound = jnp.argmin(powers_cua)
 
+        # The core of the QPE routine
         for pow_a_idx in range(1, loop_bound):
             pow_cua = powers_cua[pow_a_idx]
 
@@ -837,6 +844,7 @@ def shors_algorithm(N, key, a, n_bits, n_trials):
             a_mask = a_mask + a_inv_mask
             a_inv_mask = jnp.zeros_like(a_inv_mask)
 
+            # Rotate the estimation wire by the accumulated phase, then measure and reset it
             qml.PhaseShift(cumulative_phase, wires=est_wire)
             qml.Hadamard(wires=est_wire)
             meas_results[pow_a_idx] = measure(est_wire, reset=True)
@@ -844,10 +852,14 @@ def shors_algorithm(N, key, a, n_bits, n_trials):
                 -2 * jnp.pi * jnp.sum(meas_results / jnp.roll(phase_divisors, pow_a_idx + 1))
             )
 
+        # The adjoint partner of the QFT from the beginning, to reset the auxiliary register
         qml.adjoint(QFT)(wires=aux_wires[:-1])
 
         return meas_results
 
+    # The "classical" part of Shor's algorithm: run QPE, extract a candidate
+    # order, then check whether a valid solution is found. We run multiple trials,
+    # and return a success probability.
     p, q = jnp.array(0, dtype=jnp.int32), jnp.array(0, dtype=jnp.int32)
     successful_trials = jnp.array(0, dtype=jnp.int32)
 
