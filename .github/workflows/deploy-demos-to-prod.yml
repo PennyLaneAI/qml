@@ -37,7 +37,7 @@ jobs:
         env:
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         with:
-          token: ${{ secrets.PL_SITE_PROD_QML_REACT_PAT }}
+          token: ${{ secrets.QML_REACT_MASTER }}
           repository: XanaduAI/pennylane.ai-react
           event-type: build-pl-site-main
           client-payload: '{"actor": "${{ github.actor }}", "triggering_actor": "${{ github.triggering_actor }}", "source_run_url": "${{ env.RUN_URL }}"}'
