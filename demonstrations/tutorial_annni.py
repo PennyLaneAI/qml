@@ -48,8 +48,6 @@ from jax import jit, vmap, value_and_grad, random, config
 from jax import numpy as jnp
 import optax
 
-import tqdm
-
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap, BoundaryNorm
 from IPython.display import Image, display
@@ -298,7 +296,9 @@ def qcnn_circuit(params, state):
 vectorized_qcnn_circuit = vmap(jit(qcnn_circuit), in_axes=(None, 0))
 
 # Draw the QCNN Architecture
-Fig = qml.draw_mpl(qcnn_circuit)(np.arange(num_params), psis[0,0])
+fig,ax = qml.draw_mpl(qcnn_circuit)(np.arange(num_params), psis[0,0])
+
+fig.text(0.5, 0.01, "Figure 3. QCNN Architecture", horizontalalignment='center')
 
 ######################################################################
 # Training of the QCNN
@@ -344,7 +344,7 @@ analytical_mask = (K == 0) | (H == 0)
 #     :width: 50%
 #     :target: javascript:void(0)
 #     
-#     Figure 3. Add a caption here
+#     Figure 4. Add a caption here
 
 def train_qcnn(num_epochs, lr, T, seed):
     """Training function of the QCNN architecture"""
@@ -367,10 +367,9 @@ def train_qcnn(num_epochs, lr, T, seed):
     # Initialize Adam optimizer
     optimizer = optax.adam(learning_rate=lr)
     optimizer_state = optimizer.init(params)
-    progress_bar = tqdm.tqdm(range(num_epochs))
-    
+
     loss_curve = []
-    for epoch in progress_bar:
+    for epoch in range(num_epochs):
         key, subkey = random.split(key)
 
         # Get random indices for a batch
@@ -390,10 +389,9 @@ def train_qcnn(num_epochs, lr, T, seed):
         
         loss_curve.append(loss)
 
-        #progress_bar.update(1)
         if epoch%10==0:
-            progress_bar.set_description(f"LOSS: {loss:.4f}")
-    
+            print(f"Epoch : {epoch} | Loss: {loss:.4f}")
+            
     return params, loss_curve
 
 trained_params, loss_curve = train_qcnn(num_epochs=100, lr=1e-2, T=.1, seed=seed) 
@@ -403,7 +401,10 @@ plt.figure(figsize=(6, 3))
 plt.plot(loss_curve, label="Loss", color="blue", linewidth=2)
 plt.xlabel("Epochs"), plt.ylabel("Cross-Entropy Loss")
 plt.title("QCNN Training Loss Curve")
-plt.legend(), plt.grid(), plt.show();
+plt.legend()
+plt.grid()
+plt.figtext(0.5, 0.01, "Figure 5. QCNN Training Cross-Entropy Loss Curve", horizontalalignment='center')
+plt.show()
 
 ######################################################################
 # After the training, much alike in [#Monaco]_ and [#Caro]_, we can inspect the model's generalization capabilities, 
@@ -448,6 +449,7 @@ plt.plot([], [], 'k', label='Transition lines')
 plt.xlabel("k"), plt.ylabel("h")
 plt.title("QCNN Classification")
 plt.legend()
+plt.figtext(0.5, 0.01, "Figure 6. QCNN Classification", horizontalalignment='center')
 plt.show()
 
 ######################################################################
@@ -531,7 +533,8 @@ jitted_anomaly_circuit = jit(anomaly_circuit)
 vectorized_anomaly_circuit = vmap(jitted_anomaly_circuit, in_axes=(None, 0))
 
 # Draw the QAD Architecture
-Fig2 = qml.draw_mpl(anomaly_circuit)(np.arange(num_anomaly_params), psis[0,0])
+fig,ax = qml.draw_mpl(anomaly_circuit)(np.arange(num_anomaly_params), psis[0,0])
+fig.text(0.5, 0.01, "Figure 7. QAD Architecture", horizontalalignment='center')
 
 ######################################################################
 # Training of the QAD
@@ -578,10 +581,9 @@ def train_anomaly(num_epochs, lr, seed):
 
     optimizer = optax.adam(learning_rate=lr)
     optimizer_state = optimizer.init(params)
-    progress_bar = tqdm.tqdm(range(num_epochs))
     
     loss_curve = []
-    for epoch in progress_bar:
+    for epoch in range(num_epochs):
         # Get random indices for a batch
         key, subkey = random.split(key)
 
@@ -593,10 +595,9 @@ def train_anomaly(num_epochs, lr, seed):
         params = optax.apply_updates(params, updates)
 
         loss_curve.append(loss)
-
-        #progress_bar.update(1)
+        
         if epoch%10==0:
-            progress_bar.set_description(f"LOSS: {loss:.4f}")
+            print(f"Epoch : {epoch} | Loss: {loss:.4f}")
     
     return params, loss_curve
 
@@ -607,7 +608,10 @@ plt.figure(figsize=(6, 3))
 plt.plot(anomaly_loss_curve, label="Loss", color="blue", linewidth=2)
 plt.xlabel("Epochs"), plt.ylabel("Compression Loss")
 plt.title("Anomaly Training Loss Curve")
-plt.legend(), plt.grid(), plt.show();
+plt.legend()
+plt.grid()
+plt.figtext(0.5, 0.01, "Figure 8. Anomaly training compression loss curve", horizontalalignment='center')
+plt.show()
 
 ######################################################################
 # After training the circuit to optimally compress the (0,0)(0,0) state, we evaluate the compression score for all other input states using the learned parameters.
@@ -631,6 +635,7 @@ plt.scatter([0 +.3/len(ks)], [0 + .5/len(hs)], color='r', marker = 'x', label="T
 plt.legend(), plt.xlabel("k"), plt.ylabel("h"), plt.title("Phase Diagram")
 cbar = plt.colorbar(im)
 cbar.set_label(r"Compression Score  $\mathcal{C}$")
+plt.figtext(0.5, 0.01, "Figure 9. Compression score for each state in the phase diagram", horizontalalignment='center')
 plt.show()
 
 ######################################################################
