@@ -1,6 +1,6 @@
 r"""
 Pauli Propagation: Classically estimating expectation values from parametrized quantum circuits
-==============================================================================================
+===============================================================================================
 
 In the race between classical and `quantum computing <https://pennylane.ai/qml/quantum-computing/>`__, an important question
 is whether there exist efficient classical algorithms to simulate quantum
