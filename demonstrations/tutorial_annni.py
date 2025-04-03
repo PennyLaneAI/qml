@@ -54,7 +54,7 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap, BoundaryNorm
 from IPython.display import Image, display
 
-config.update("jax_enable_x64", False)
+config.update("jax_enable_x64", True)
 
 seed = 123456
 
@@ -141,7 +141,7 @@ def get_phase(k, h):
 ######################################################################
 # .. figure:: ../_static/demonstration_assets/annni/annni_pd_L.png
 #     :align: center
-#     :width: 70%
+#     :width: 50%
 #     :target: javascript:void(0)
 #     
 #     Figure 2. Add a caption here
@@ -182,14 +182,10 @@ K, H = np.meshgrid(ks, hs)
 H_matrices = np.empty((len(ks), len(hs), 2**num_qubits, 2**num_qubits))
 phases = np.empty((len(ks), len(hs)), dtype=int)
 
-progress_gs = tqdm.tqdm(range(len(ks) * len(hs)))
 for x, k in enumerate(ks):
     for y, h in enumerate(hs):
         H_matrices[y, x] = np.real(qml.matrix(get_H(num_qubits, k, h))) # Get Hamiltonian matrix
         phases[y, x] = get_phase(k, h)  # Get the respective phase given k and h
-
-        progress_gs.update(1)
-        progress_gs.set_description(f"k : {k:.2f} | h: {h:.2f}")
 
 # Vectorized diagonalization
 psis = vmap(vmap(diagonalize_H))(H_matrices)
@@ -302,7 +298,7 @@ def qcnn_circuit(params, state):
 vectorized_qcnn_circuit = vmap(jit(qcnn_circuit), in_axes=(None, 0))
 
 # Draw the QCNN Architecture
-qml.draw_mpl(qcnn_circuit)(np.arange(num_params), psis[0,0]);
+Fig = qml.draw_mpl(qcnn_circuit)(np.arange(num_params), psis[0,0])
 
 ######################################################################
 # Training of the QCNN
@@ -345,7 +341,7 @@ analytical_mask = (K == 0) | (H == 0)
 ######################################################################
 # .. figure:: ../_static/demonstration_assets/annni/annni_pd_analytical_L.png
 #     :align: center
-#     :width: 70%
+#     :width: 50%
 #     :target: javascript:void(0)
 #     
 #     Figure 3. Add a caption here
@@ -392,9 +388,11 @@ def train_qcnn(num_epochs, lr, T, seed):
         updates, optimizer_state = optimizer.update(grads, optimizer_state)
         params = optax.apply_updates(params, updates)
         
-        progress_bar.update(1)
         loss_curve.append(loss)
-        progress_bar.set_description(f"LOSS: {loss:.4f}")
+
+        #progress_bar.update(1)
+        if epoch%10==0:
+            progress_bar.set_description(f"LOSS: {loss:.4f}")
     
     return params, loss_curve
 
@@ -533,7 +531,7 @@ jitted_anomaly_circuit = jit(anomaly_circuit)
 vectorized_anomaly_circuit = vmap(jitted_anomaly_circuit, in_axes=(None, 0))
 
 # Draw the QAD Architecture
-qml.draw_mpl(anomaly_circuit)(np.arange(num_anomaly_params), psis[0,0]);
+Fig2 = qml.draw_mpl(anomaly_circuit)(np.arange(num_anomaly_params), psis[0,0])
 
 ######################################################################
 # Training of the QAD
@@ -593,10 +591,12 @@ def train_anomaly(num_epochs, lr, seed):
         # Update parameters
         updates, optimizer_state = optimizer.update(grads, optimizer_state)
         params = optax.apply_updates(params, updates)
-        
-        progress_bar.update(1)
+
         loss_curve.append(loss)
-        progress_bar.set_description(f"LOSS: {loss:.4f}")
+
+        #progress_bar.update(1)
+        if epoch%10==0:
+            progress_bar.set_description(f"LOSS: {loss:.4f}")
     
     return params, loss_curve
 
