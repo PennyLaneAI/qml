@@ -11,6 +11,8 @@ While trends may have moved on, the idea of extracting group structure from the 
     :width: 75%
     :target: javascript:void(0);
 
+    Figure 1. Aaronson's 'hierarchy of structure' for quantum algorithms (Fig. 6 in [#Aaronson22]_)
+
 However, group theory is a huge hurdle for even some of the more seasoned quantum enthusiasts. This demo wants to give a glimpse of what this "Abelian structure" is all about. Luckily, the fruit-fly example of a hidden subgroup problem is just the task of finding the period of a integer valued function - something one can appreciate without much group jargon. A fantastic resource to read up on the basics is the review of hidden subgroup problems by Childs & van Dam (2010) [#Childs2010]_.
 """
 
@@ -28,6 +30,9 @@ However, group theory is a huge hurdle for even some of the more seasoned quantu
 #    :align: center
 #    :width: 70%
 #    :target: javascript:void(0);
+#    
+#    Figure 2. Example of a discrete periodic function f(x) over the integers x = 0,...,11. 
+#    The function only takes the same value when moving exactly 4 integers on the x-axis.
 #
 # Importantly, we assume that we have *black-box access* to that function. For a python coder this 
 # abstract technical term is actually quite intuitive: imagine some part of your code returns a python function ``f`` 
@@ -66,6 +71,8 @@ However, group theory is a huge hurdle for even some of the more seasoned quantu
 #    :align: center
 #    :width: 70%
 #    :target: javascript:void(0);
+#    
+#    Figure 3. Periodic function from above, from the perspective of group theory.
 #
 # This jargon hopefully does not scare you, but should illustrate that
 # period finding --- and the algorithm we will have a look at here --- can be generalised to other groups and
