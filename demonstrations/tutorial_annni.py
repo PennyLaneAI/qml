@@ -297,8 +297,7 @@ vectorized_qcnn_circuit = vmap(jit(qcnn_circuit), in_axes=(None, 0))
 
 # Draw the QCNN Architecture
 fig,ax = qml.draw_mpl(qcnn_circuit)(np.arange(num_params), psis[0,0])
-
-fig.text(0.5, 0.01, "Figure 3. QCNN Architecture", horizontalalignment='center')
+fig.suptitle("Figure 3. QCNN Architecture", horizontalalignment='center');
 
 ######################################################################
 # Training of the QCNN
@@ -534,7 +533,7 @@ vectorized_anomaly_circuit = vmap(jitted_anomaly_circuit, in_axes=(None, 0))
 
 # Draw the QAD Architecture
 fig,ax = qml.draw_mpl(anomaly_circuit)(np.arange(num_anomaly_params), psis[0,0])
-fig.text(0.5, 0.01, "Figure 7. QAD Architecture", horizontalalignment='center')
+fig.suptitle("Figure 7. QAD Architecture", horizontalalignment='center');
 
 ######################################################################
 # Training of the QAD
@@ -603,14 +602,16 @@ def train_anomaly(num_epochs, lr, seed):
 
 trained_anomaly_params, anomaly_loss_curve = train_anomaly(num_epochs=100, lr=1e-1, seed=seed) 
 
+######################################################################
 # Plot the loss curve
+
 plt.figure(figsize=(6, 3))
 plt.plot(anomaly_loss_curve, label="Loss", color="blue", linewidth=2)
 plt.xlabel("Epochs"), plt.ylabel("Compression Loss")
 plt.title("Anomaly Training Loss Curve")
 plt.legend()
 plt.grid()
-plt.figtext(0.5, 0.01, "Figure 8. Anomaly training compression loss curve", horizontalalignment='center')
+plt.figtext(0.5, -0.05, "Figure 8. Anomaly training compression loss curve", horizontalalignment='center')
 plt.show()
 
 ######################################################################
@@ -635,10 +636,11 @@ plt.scatter([0 +.3/len(ks)], [0 + .5/len(hs)], color='r', marker = 'x', label="T
 plt.legend(), plt.xlabel("k"), plt.ylabel("h"), plt.title("Phase Diagram")
 cbar = plt.colorbar(im)
 cbar.set_label(r"Compression Score  $\mathcal{C}$")
-plt.figtext(0.5, 0.01, "Figure 9. Compression score for each state in the phase diagram", horizontalalignment='center')
+plt.figtext(0.5, -0.05, "Figure 9. Compression score for each state in the phase diagram", horizontalalignment='center')
 plt.show()
 
 ######################################################################
+# 
 # As expected, the compression score is nearly zero within the ferromagnetic phase, while higher scores are observed in the other regions. Surprisingly, the other regions display distinct compression scores that remain consistent within their respective areas.
 # 
 # Using this model, we can clearly identify the three phases and their locations. Furthermore, as observed in [#Cea]_, by increasing the system size (around ~20 spins), a fourth phase emerges in the anticipated floating phase region. These regions are expected to become more sharply defined at larger system sizes, with more pronounced transitions between phases.
