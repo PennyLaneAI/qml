@@ -32,6 +32,7 @@ However, group theory is a huge hurdle for even some of the more seasoned quantu
 #    :target: javascript:void(0);
 #    
 #    Figure 2. Example of a discrete periodic function f(x) over the integers x = 0,...,11. 
+#    
 #    The function only takes the same value when moving exactly 4 integers on the x-axis.
 #
 # Importantly, we assume that we have *black-box access* to that function. For a python coder this 
@@ -126,6 +127,10 @@ def f(x):
 x = range(16)
 y = [f(x_) for x_ in x]
 plt.scatter(x, y)
+plt.set_title("Periodic function")
+plt.set_ylabel("f(x)")
+plt.set_xlabel("x")
+plt.figtext(0.5, 0.01, "Figure 4. Periodic function f(x)", horizontalalignment='center')
 plt.show()
 
 #####################################################################
@@ -305,6 +310,7 @@ green = mpatches.Patch(color="green", label="abs(real part)")
 pink = mpatches.Patch(color="pink", label="abs(imaginary part)")
 plt.legend(handles=[green, pink])
 plt.tight_layout()
+plt.figtext(0.5, 0.01, "Figure 5. Representing the Fourier spectrum", horizontalalignment='center')
 plt.show()
 
 #####################################################################
@@ -362,11 +368,15 @@ for k in range(12):
 # References
 # ------------
 #
-# .. [#Aaronson22]_ Scott Aaronson, "How Much Structure Is Needed for #    Huge Quantum Speedups?" <https://arxiv.org/pdf/2209.06930>`_
+# .. [#Aaronson22] 
+#    
+#     Scott Aaronson, "How Much Structure Is Needed for Huge Quantum Speedups?", 
+#     `arXiv:2209.06930 <https://arxiv.org/pdf/2209.06930>`__, 2022
 # 
 # .. [#Childs2010] 
-#    Andrew Childs, Vim van Dam, `"Quantum algorithms for algebraic problems" <https://arxiv.org/pdf/0812.0380>`_,
-#    Reviews of Modern Physics 82.1 (2010): 1-52.
+#    
+#     Andrew Childs, Vim van Dam, "Quantum algorithms for algebraic problems", 
+#     `Reviews of Modern Physics 82.1: 1-52. <https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.82.1>`__, 2010
 #
 # About the author
 # ----------------
