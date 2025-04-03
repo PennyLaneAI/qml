@@ -28,9 +28,9 @@ However, group theory is a huge hurdle for even some of the more seasoned quantu
 #
 # .. figure:: ../_static/demonstration_assets/period_finding/periodic_function.png
 #    :align: center
-#    :width: 70%
+#    :width: 90%
 #    :target: javascript:void(0);
-#    :figwidth: 70%
+#    :figwidth: 80%
 #    
 #    Figure 2. Example of a discrete periodic function f(x) over the integers x = 0,...,11. 
 #    The function only takes the same value when moving exactly 4 integers on the x-axis.
@@ -133,7 +133,6 @@ ax.set_title("Periodic function")
 ax.set_ylabel("f(x)")
 ax.set_xlabel("x")
 fig.text(0.5, 0.05, "Figure 4. Periodic function f(x)", horizontalalignment='center')
-fig.tight_layout()
 plt.show()
 
 #####################################################################
@@ -313,7 +312,7 @@ plt.xlabel("x")
 green = mpatches.Patch(color="green", label="abs(real part)")
 pink = mpatches.Patch(color="pink", label="abs(imaginary part)")
 plt.legend(handles=[green, pink])
-fig.text(0.5, 0.05, "Figure 5. Representing the Fourier spectrum", horizontalalignment='center')
+fig.text(0.5, -0.05, "Figure 5. Representing the Fourier spectrum", horizontalalignment='center')
 fig.tight_layout()
 plt.show()
 
