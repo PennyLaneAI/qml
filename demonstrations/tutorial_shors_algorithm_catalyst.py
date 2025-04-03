@@ -262,7 +262,8 @@ def shors_algorithm(N, n_bits):
 #    Leveraging knowledge of :math:`a` allows us to precompute powers for the
 #    controlled :math:`U_a`.
 #
-# However, there is a tradeoff. Each controlled operation is different, so we
+# However, there is a tradeoff. The implementation of :math:`U_{a^{2^k}}` will
+# be different for each power of :math:`a`:, so we
 # must compile and optimize more than one circuit. On the other hand, we now run
 # only :math:`t` controlled operations instead of :math:`1 + 2 + 4 + \cdots +
 # 2^{t-1} = 2^t - 1`. The additional compilation time is likely to be outweighed
@@ -312,7 +313,8 @@ def shors_algorithm(N, n_bits):
 #    :align: center
 #    :alt: Controlled addition of :math:`ax` using a series of double-controlled Fourier adders.
 #
-#    Circuit for controlled multiplication of :math:`ax` using a series of double-controlled Fourier adders (modulo :math:`N`).
+#    Circuit for controlled multiplication of :math:`ax`. The circuit element labeled :math:`\Phi_+` 
+#    performs addition modulo :math:`N` in the Fourier basis (see main text for a full description)
 #    [#Beauregard2003]_.
 #
 # First, note that the controls on the quantum Fourier transforms (QFTs) are not
@@ -333,17 +335,21 @@ def shors_algorithm(N, n_bits):
 # At first glance, it's not clear how this produces :math:`a x`. The qubits in
 # register :math:`\vert x \rangle` control operations that depend on :math:`a`
 # multiplied by various powers of 2. There is a QFT before and after, whose
-# purpose is unclear, and we have yet to define the Fourier adders :math:`\Phi_+`.
+# purpose is unclear, and we have yet to define the gate labelled :math:`\Phi_+`.
 #
-# These special operations perform *addition in the Fourier basis*
-# [#Draper2000]_. This is another trick we can leverage given prior knowledge of
-# :math:`a`. Rather than performing addition on bits in computational basis
-# states, we apply a QFT, adjust the phases based on the bits of the number
-# being added, and then an inverse QFT to obtain the result in the computational
-# basis. The *Fourier addition* circuit, :math:`\Phi`, is shown below.
+# The operation, :math:`\Phi_+`, performs addition modulo :math:`N` in the
+# *Fourier basis* [#Draper2000]_. This is another trick that leverages
+# prior knowledge of :math:`a`. Rather than performing addition on bits in
+# computational basis states, we apply a QFT, adjust the phases based on the
+# bits of the number being added, and then an inverse QFT to obtain the result
+# in the computational basis.
+#
+# To understand how Fourier addition works, let's begin with the simpler case of
+# non-modular addition. The regular addition circuit, denoted by :math:`\Phi`,
+# is shown below.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder.svg
-#    :width: 700
+#    :width: 750
 #    :align: center
 #    :alt: Addition in the Fourier basis.
 #
@@ -362,12 +368,11 @@ def shors_algorithm(N, n_bits):
 # A detailed derivation of this circuit is included in the
 # :ref:`Appendix <appendix_fourier_adder>`.
 #
-# Our :math:`\Phi`, however, does not work modulo :math:`N`.  Returning to
-# :math:`M_a`, note we have a modified version, :math:`\Phi_+`. This
-# :math:`\Phi_+`, through use of another auxiliary qubit and some extra
-# operations, does work modulo :math:`N`.  An explanation of :math:`\Phi_+`'s
-# structure is also provided in the :ref:`Appendix
-# <appendix_fourier_adder_modulo_n>`.
+# Next, we must augment Fourier addition to work modulo :math:`N` (i.e.,
+# :math:`\Phi_+`). This can be done by adding an auxiliary qubit and a sequence
+# of operations to compensate for any overflow that occurs during addition. A
+# full explanation of Fourier addition modulo :math:`N` is also provided in the
+# :ref:`Appendix <appendix_fourier_adder_modulo_n>`.
 #
 # .. figure:: ../_static/demonstration_assets/shor_catalyst/fourier_adder_modulo_n.svg
 #    :width: 800
@@ -462,7 +467,7 @@ def shors_algorithm(N, n_bits):
 #
 # Eventually we expect diminishing returns because each controlled
 # :math:`U_{a^{2^k}}` contributes more terms to the superposition. Before the
-# :math:`k-`th iteration, the control register contains a superposition of
+# :math:`k-` th iteration, the control register contains a superposition of
 # :math:`\{ \vert a^j \rangle \}, j = 0, \ldots, 2^{k - 1}` (inclusive), and after the
 # controlled SWAPs, the relevant superposition is :math:`\{ \vert a^j \rangle \}, j =
 # 2^{k-1}+1, \ldots, 2^{k} - 1`.
