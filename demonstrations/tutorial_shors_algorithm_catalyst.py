@@ -263,7 +263,7 @@ def shors_algorithm(N, n_bits):
 #    controlled :math:`U_a`.
 #
 # However, there is a tradeoff. The implementation of :math:`U_{a^{2^k}}` will
-# be different for each power of :math:`a`:, so we
+# be different for each power of :math:`a`, so we
 # must compile and optimize more than one circuit. On the other hand, we now run
 # only :math:`t` controlled operations instead of :math:`1 + 2 + 4 + \cdots +
 # 2^{t-1} = 2^t - 1`. The additional compilation time is likely to be outweighed
