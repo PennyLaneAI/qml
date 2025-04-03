@@ -127,9 +127,9 @@ def f(x):
 x = range(16)
 y = [f(x_) for x_ in x]
 plt.scatter(x, y)
-plt.set_title("Periodic function")
-plt.set_ylabel("f(x)")
-plt.set_xlabel("x")
+plt.title("Periodic function")
+plt.ylabel("f(x)")
+plt.xlabel("x")
 plt.figtext(0.5, 0.01, "Figure 4. Periodic function f(x)", horizontalalignment='center')
 plt.show()
 
