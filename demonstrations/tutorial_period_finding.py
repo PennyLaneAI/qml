@@ -312,7 +312,7 @@ plt.xlabel("x")
 green = mpatches.Patch(color="green", label="abs(real part)")
 pink = mpatches.Patch(color="pink", label="abs(imaginary part)")
 plt.legend(handles=[green, pink])
-fig.text(0.5, -0.05, "Figure 5. Representing the Fourier spectrum", horizontalalignment='center')
+fig.suptitle("Figure 5. Representing the Fourier spectrum", horizontalalignment='center')
 fig.tight_layout()
 plt.show()
 
