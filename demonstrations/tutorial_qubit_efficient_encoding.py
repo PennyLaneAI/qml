@@ -428,7 +428,7 @@ def decode_binary_string(x, height, width):
     return mask
 
 
-mask = decode_binary_string(x, height, width)
+mask = decode_binary_string(binary_solution, height, width)
 plt.imshow(mask, interpolation="nearest", cmap=plt.cm.gray, vmin=0, vmax=1)
 plt.axis("off")
 plt.show()
