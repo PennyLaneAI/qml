@@ -13,11 +13,11 @@ While trends may have moved on, the idea of extracting group structure from the 
 
     Figure 1. Aaronson's 'hierarchy of structure' for quantum algorithms (Fig. 6 in [#Aaronson22]_)
 
-However, group theory is a huge hurdle for even some of the more seasoned quantum enthusiasts. This demo wants to give a glimpse of what this "Abelian structure" is all about. Luckily, the fruit-fly example of a hidden subgroup problem is just the task of finding the period of a integer valued function - something one can appreciate without much group jargon. A fantastic resource to read up on the basics is the review of hidden subgroup problems by Childs & van Dam (2010) [#Childs2010]_.
+However, group theory is a huge hurdle for even some of the more seasoned quantum enthusiasts. This demo wants to give a glimpse of what this "Abelian structure" is all about. Luckily, the fruit-fly example of a hidden subgroup problem is just the task of finding the period of a integer valued function—something one can appreciate without much group jargon. A fantastic resource to read up on the basics is the review of hidden subgroup problems by Childs & van Dam (2010) [#Childs2010]_.
 """
 
 #####################################################################
-# Problem statement
+# The period finding problem
 # -------------------
 #
 # Consider a function :math:`f(x)` that maps from integers, say the numbers between 0 and 11, to
@@ -81,8 +81,8 @@ However, group theory is a huge hurdle for even some of the more seasoned quantu
 #
 # The quantum algorithm to find the period of the function above is really simple. Encode the
 # function into a quantum state of the form :math:`\sum_x |x \rangle |f(x) \rangle`, apply the quantum
-# Fourier transform on the first register, and measure. We then need to do a bit of post-
-# processing: The state we measure, written as an integer, is a multiple of the number of periods
+# Fourier transform on the first register, and measure. We then need to do a bit of post-processing:
+# The state we measure, written as an integer, is a multiple of the number of periods
 # that "fit" into the x-domain. The number of periods is then the biggest number that divides all the measurement outcomes, 
 # and the period is the number of integers divided by the number of periods. 
 # In the example above, the quantum algorithm would return random bistrings that can be
@@ -95,7 +95,7 @@ However, group theory is a huge hurdle for even some of the more seasoned quantu
 
 
 #####################################################################
-# Implementation
+# Implementation of period finding in PennyLane
 # ----------------
 
 import pennylane as qml
@@ -159,7 +159,7 @@ def to_binary(integer, n):
 # Now we need an oracle that implements the function ``f`` in "quantum parallel". Applied to a
 # superposition of inputs, :math:`\sum_x |x \rangle |0 \rangle`, this unitary prepares the state
 # :math:`\sum_x |x \rangle |f(x) \rangle`. There are many such unitaries and here we'll somewhat hack it 
-# together by defining a matrix that does the job. Of course, in a real application this 
+# together by defining a matrix that does the job. Of course, in a real application, this 
 # would be a quantum circuit defined by a sequence of gates.
 
 
@@ -199,7 +199,7 @@ def Oracle(f):
 
 #####################################################################
 # Now we're ready to go. Let's implement the famous period finding algorithm. It consists of a
-# quantum routine and a classical postprocessing step. As mentioned, the quantum part is simple: prepare the
+# quantum routine and a classical post-processing step. As mentioned, the quantum part is simple: prepare the
 # desired initial state :math:`\sum_x |x \rangle |f(x) \rangle`, apply the quantum Fourier transform
 # onto the :math:`|x\rangle`-register, and measure in the computational basis. Effectively, this
 # measures in the "Fourier basis", which is where all the magic happens.
@@ -267,7 +267,7 @@ print(f"Hidden period: {result}")
 # -----------------------------
 #
 # Somehow the quantum Fourier transform exposed the information we needed. Let's have a closer
-# look at the states that were prepared, by making use of the snapshots we recorded during the
+# look at the states that were prepared by making use of the snapshots we recorded during the
 # circuit simulation.
 
 dev = qml.device("default.qubit", wires=7, shots=1)
