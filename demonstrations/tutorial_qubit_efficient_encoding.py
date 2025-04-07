@@ -382,7 +382,9 @@ def decode(optimal_params):
 
 
 def objective_value(x, w):
-    return np.dot(x, np.dot(w, x))
+    x = np.asarray(x).flatten()
+    w = np.asarray(w)
+    return float(x @ w @ x)
 
 
 def new_nisq_algo_solver(G, optimizer_method="Powell", initial_params_seed=123):
