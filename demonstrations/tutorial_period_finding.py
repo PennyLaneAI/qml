@@ -4,7 +4,7 @@ Period finding -- A problem at the heart of quantum computing
 
 You might have heard that Shor's algorithm is an instance of "period finding". You might also have heard that, more generally, this is an example of an *Abelian hidden subgroup problem* solved by a quantum computer's stunning ability to implement the Fourier transform efficiently for an intractable number of function values. Hidden subgroup problems and quantum Fourier transforms were all the rage in the quantum computing literature in the 2000s.
 
-While trends may have moved on, the idea of extracting group structure from the Fourier spectrum is still at the very core of what quantum computers could be useful for. Scott Aaronson, for example, in his 2022 commentary "How Much Structure Is Needed for Huge Quantum Speedup?" [#Aaronson22]_ presents the following hierarchy:
+While trends may have moved on, the idea of extracting group structure from the Fourier spectrum is still at the very core of what quantum computers could be useful for. Scott Aaronson, for example, in his 2022 commentary "How Much Structure Is Needed for Huge Quantum Speedup?" presents the following hierarchy:
 
 .. figure:: ../_static/demonstration_assets/period_finding/aaronson_fig6.png
     :align: center
@@ -35,7 +35,7 @@ However, group theory is a huge hurdle for even some of the more seasoned quantu
 #    Figure 2. Example of a discrete periodic function f(x) over the integers x = 0,...,11. 
 #    The function only takes the same value when moving exactly 4 integers on the x-axis.
 #
-# Importantly, we assume that we have *black-box access* to that function. For a python coder this 
+# Importantly, we assume that we have *black-box access* to that function. For a python coder, this 
 # abstract technical term is actually quite intuitive: imagine some part of your code returns a python function ``f`` 
 # that you can call by using integers :math:`x \in \{0,..,11\}` as arguments, like ``f(2)``. However, 
 # you have no knowledge of the definition ``def f(x)`` --- your only way to
