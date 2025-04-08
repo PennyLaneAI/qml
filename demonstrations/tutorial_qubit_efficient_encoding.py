@@ -1,189 +1,113 @@
-r"""Qubit-Efficient Encoding Techniques for Solving QUBO Problems
+r"""
 
-===================================
+.. _qubit_efficient_encoding:
+
+Qubit-Efficient Encoding Techniques for Solving QUBO Problems
+=============================================================
 
 """
 
 ######################################################################
-# 🧠 Introduction
-
-# ---------------
-
-#
+# Introduction
+# ------------
 
 # Classical algorithms are already incredibly effective at solving many optimization problems —
-
 # especially when the number of variables is in the low thousands. However, when scaling up to
-
 # problems involving **tens or hundreds of thousands** of binary variables, classical solvers begin to
-
 # falter due to the **combinatorial explosion** in the search space.
 
-#
-
 # Quantum computing offers a compelling alternative — not by brute force, but by **exploring
-
 # exponentially large solution spaces in parallel** using quantum superposition and entanglement. One
-
 # popular quantum algorithm for such problems is the **Quantum Approximate Optimization Algorithm
-
 # (QAOA)** [#qaoa]_, a textbook example of a variational quantum algorithm (VQA). However, QAOA requires
-
 # **one qubit per binary variable**, which becomes **prohibitively resource-intensive** for
-
 # large-scale problems.
 
-#
-
 # For instance, solving a QUBO (Quadratic Unconstrained Binary Optimization) problem with 10,000
-
 # variables using QAOA would require 10,000 logical qubits — a scale **far beyond current quantum
-
 # hardware capabilities**.
 
-#
 
 ######################################################################
-# 🔍 Why Qubit-Efficient Methods?
-
-# -------------------------------
-
-#
+# Why Qubit-Efficient Methods?
+# ----------------------------
 
 # This demo explores **qubit-efficient alternatives** to QAOA that are not only suitable for today’s
-
 # NISQ (Noisy Intermediate-Scale Quantum) devices, but also **generalizable across combinatorial
-
 # optimization problems**.
 
-#
-
 # We specifically demonstrate these methods in the context of **unsupervised image segmentation**, by:
-
-#
-
 # 1. Formulating segmentation as a **min-cut problem** over a graph derived from the image.
-
 # 2. Reformulating the min-cut as a **QUBO problem**.
-
 # 3. Solving the QUBO using **qubit-efficient VQAs**, namely [#smv-nisq-seg]_:
-
-#
-
 #    - **Parametric Gate Encoding (PGE)**
-
 #    - **Ancilla Basis Encoding (ABE)**
-
 #    - **Adaptive Cost Encoding (ACE)**
 
-#
-
 # These methods only require a **logarithmic number of qubits** with respect to the problem size
-
 # (i.e., number of binary variables). This makes them **scalable and implementable** even on near-term
-
-# quantum hardware. Moreover, the exact graph-based image segmentation technique have been explored
-
+# quantum hardware. Moreover, the exact graph-based image segmentation technique has been explored
 # also using quantum annealers [#smv-qseg]_.
 
-#
-
 # While this demo walks through an image segmentation example, the encoding schemes presented here can
-
 # be applied to **any binary combinatorial optimization problem**.
-
 # .. figure:: ../_static/demonstration_assets/qubit_efficient_encoding/vqa-segmentation.png
 #    :scale: 75%
 #    :align: center
-#    :alt: Architecture for segmenting an image by transforming it into a graph and solving the corresponding minimum cut as a QUBO problem using variational quantum circuits [#smv-nisq-seg]_.
-#
-#    Architecture for segmenting an image by transforming it into a graph and solving the corresponding minimum cut as a QUBO problem using variational quantum circuits [#smv-nisq-seg]_.
-
-# --------------
-
-#
+#    :alt: Architecture for segmenting an image by transforming it into a graph and solving the corresponding minimum cut as a QUBO problem using variational quantum circuits (Fig. 1 in [#smv-nisq-seg]_).
+#    Architecture for segmenting an image by transforming it into a graph and solving the corresponding minimum cut as a QUBO problem using variational quantum circuits (Fig. 1 in [#smv-nisq-seg]_).
 
 ######################################################################
-# 🧱 Import dependencies
-
-# ----------------------
-
+# Import dependencies
+# -------------------
 #
 
 # We begin by importing the standard Python libraries for graph construction and visualization, and
-
 # PennyLane modules for quantum circuit construction and simulation. This setup ensures a seamless
-
 # interface for hybrid quantum-classical processing.
-
-#
 
 import numpy as np
 import networkx as nx
 import pennylane as qml
 from scipy.optimize import minimize, differential_evolution
 import matplotlib.pyplot as plt
-
 from math import ceil, log2
 import time
 
 ######################################################################
-# 🖼️ Generate an Example Image
-
-# ----------------------------
-
-#
-
+# Generate an Example Image
+# -------------------------
 # To keep things intuitive, we generate a toy grayscale image. This synthetic image will be segmented
-
 # using quantum algorithms.
 
-#
-
 # We use a simple 4×4 grid for clarity. The pixel intensities will act as a proxy for similarity when
-
 # we later construct a graph. Each pixel becomes a vertex, and edges represent similarity (e.g.,
-
 # inverse of intensity difference).
 
-#
-
-height, width = 4, 4
-image = np.array(
-    [
-        [0.97, 0.87, 0.09, 0.92],
-        [0.93, 0.10, 0.12, 0.93],
-        [0.94, 0.15, 0.88, 0.94],
-        [0.92, 0.17, 0.10, 0.92],
-    ]
-)
+height,width = 4,4
+image = np.array([
+       [0.97,  0.92, 0.05, 0.92],
+       [0.93,  0.10, 0.12, 0.93],
+       [0.94,  0.15, 0.88, 0.94],
+       [0.98,  0.17, 0.10, 0.92]
+       ])
 
 
-plt.imshow(image, interpolation="nearest", cmap=plt.cm.gray, vmin=0, vmax=1)
-plt.axis("off")
+plt.imshow(image, interpolation='nearest', cmap=plt.cm.gray, vmin=0, vmax=1)
+plt.xticks([])
+plt.yticks([])
 plt.show()
 
 ######################################################################
-# 🔗 Representing Image as a Graph
-
-# --------------------------------
-
-#
-
+# Representing Image as a Graph
+# -----------------------------
 # | Each image is modeled as an undirected weighted grid graph:
-
-# | - Each pixel becomes a node. - An edge exists between neighboring pixels. - The weight reflects
-
-#   similarity (e.g., inverse absolute difference in grayscale values).
-
-#
+# | - Each pixel becomes a node. 
+# | - An edge exists between neighboring pixels. 
+# | - The weight reflect similarity (e.g., inverse absolute difference in grayscale values).
 
 # This transforms the segmentation task into a **minimum cut problem**, where the goal is to partition
-
 # the graph to minimize the sum of cut edge weights.
-
-#
-
 
 def image_to_grid_graph(gray_img, sigma=0.5):
     # Convert image to grayscale
@@ -257,12 +181,8 @@ def image_to_grid_graph(gray_img, sigma=0.5):
 
 pixel_values, elist, nx_elist, normalized_elist, normalized_nx_elist = image_to_grid_graph(image)
 
-
-pixel_values, elist, nx_elist, normalized_elist, normalized_nx_elist
-
 G = nx.grid_2d_graph(image.shape[0], image.shape[1])
 G.add_weighted_edges_from(normalized_nx_elist)
-
 
 def draw(G):
     plt.figure(figsize=(6, 6))
@@ -279,65 +199,27 @@ def draw(G):
     )
     plt.axis("off")
 
-
-#   plt.savefig("2x2_graph.jpg", dpi=600, bbox_inches='tight', pad_inches=0)
 draw(G)
 plt.show()
 
 ######################################################################
-# 🔁 Parametric Gate Encoding (PGE)
-
-# ---------------------------------
-
-#
-
+# Parametric Gate Encoding (PGE)
+# ------------------------------
 # In PGE, we directly encode the binary segmentation mask in the rotation parameters of a diagonal
-
 # gate [#pge]_.
-
-#
-
 # Only :math:`\log_2(n)` qubits are required, which is a **huge gain** over methods like QAOA that
-
 # need :math:`O(n)`.
-
-#
-
 # Quantum Circuit:
-
 # ~~~~~~~~~~~~~~~~
-
-#
-
 # - Apply Hadamard gates to initialize a uniform superposition.
-
 # - Apply a diagonal gate :math:`U(\vec{\theta})` whose entries encode binary values using a
-
 #   thresholding function :math:`f(\theta_i)`.
-
 # - Evaluate the cost function:
-
-#
-
 #   .. math::
-
-#
-
-#
-
 #      C(\vec{\theta}) = \langle \psi(\vec{\theta}) | L_G | \psi(\vec{\theta}) \rangle
-
-#
-
 #   where :math:`L_G` is the graph Laplacian.
-
-#
-
 # The result is optimized using a classical optimizer, and :math:`\theta_i` are mapped to bits
-
 # depending on whether :math:`\theta_i < \pi` or not.
-
-#
 
 n = G.number_of_nodes()
 n_qubits = int(np.ceil(np.log2(n)))
@@ -353,17 +235,14 @@ def R(theta):
 # Define a PennyLane quantum device (using default.qubit simulator)
 dev = qml.device("default.qubit", wires=n_qubits)
 
-
 # Quantum circuit as a QNode
 @qml.qnode(dev)
 def circuit(params, H):
-    # N = len(params)
     N = int(np.log2(len(params)))
     for i in range(N):
         qml.Hadamard(wires=i)
 
     diagonal_elements = [np.exp(1j * np.pi * R(param)) for param in params]
-    # qml.DiagonalQubitUnitary(np.diag(diagonal_elements), wires=list(range(N)))
     qml.DiagonalQubitUnitary(diagonal_elements, wires=list(range(N)))
 
     return qml.expval(qml.Hermitian(H, wires=list(range(N))))
@@ -430,63 +309,30 @@ def decode_binary_string(x, height, width):
 
 mask = decode_binary_string(binary_solution, height, width)
 plt.imshow(mask, interpolation="nearest", cmap=plt.cm.gray, vmin=0, vmax=1)
-plt.axis("off")
+plt.xticks([])
+plt.yticks([])
 plt.show()
 
-
 ######################################################################
-# 🧪 Ancilla Basis Encoding (ABE)
-
-# -------------------------------
-
-#
-
+# Ancilla Basis Encoding (ABE)
+# ----------------------------
 # | ABE uses :math:`\log_2(n) + 1` qubits:
-
 # | - :math:`\log_2(n)` **register qubits** represent binary states.
-
 # | - One **ancilla qubit** helps encode the binary decision.
 
-#
-
 # Each computational basis state of the register corresponds to one binary variable. The ancilla
-
 # qubit’s amplitude is used to decide the bit value [#abe]_:
 
-#
-
 # .. math::
-
-#
-
-#
-
 #    x_{v_i} = \begin{cases} 0 & \text{if } |a_i|^2 > |b_i|^2 \\ 1 & \text{otherwise} \end{cases}
-
-#
-
 # The cost function is parameterized over **expectation values** of basis state projectors:
-
-#
-
 # .. math::
-
-#
-
-#
-
 #    C(\vec{\theta}) = \sum_{i,j} Q_{ij} \frac{\langle \hat{P}_i^1 \rangle \langle \hat{P}_j^1 \rangle}{\langle \hat{P}_i \rangle \langle \hat{P}_j \rangle} (1 - \delta_{ij}) + \sum_i Q_{ii} \frac{\langle \hat{P}_i^1 \rangle}{\langle \hat{P}_i \rangle}
-
 # .. figure:: ../_static/demonstration_assets/qubit_efficient_encoding/ABE_ACE.png
 #    :scale: 75%
 #    :align: center
-#    :alt: Quantum circuit of ABE/ACE for solving QUBO of size 4 using 3 qubits (2 register + 1 ancilla). Basis state amplitudes are used to decode the binary solution [#smv-nisq-seg]_.
-#
-#    Quantum circuit of ABE/ACE for solving QUBO of size 4 using 3 qubits (2 register + 1 ancilla). Basis state amplitudes are used to decode the binary solution [#smv-nisq-seg]_.
-
-
-#
-
+#    :alt: Quantum circuit of ABE/ACE for solving QUBO of size 4 using 3 qubits (2 register + 1 ancilla). Basis state amplitudes are used to decode the binary solution (Fig. 3 in [#smv-nisq-seg]_).
+#    Quantum circuit of ABE/ACE for solving QUBO of size 4 using 3 qubits (2 register + 1 ancilla). Basis state amplitudes are used to decode the binary solution (Fig. 3 in [#smv-nisq-seg]_).
 
 def get_qubo_matrix(W):
     """Computes the QUBO matrix for the Minimum Cut problem given a weight matrix W."""
@@ -498,9 +344,7 @@ def get_qubo_matrix(W):
         for j in range(n):
             if i != j:
                 Q[i, j] = -W[i, j]  # Off-diagonal terms (negative adjacency)
-
     return Q
-
 
 def get_circuit(nq, n_layers):
     def circuit(params):
@@ -512,9 +356,7 @@ def get_circuit(nq, n_layers):
             for qubit_i in range(nq):
                 qml.RY(params[(nq * layer_i) + qubit_i], wires=qubit_i)
         return qml.probs(wires=range(nq))
-
     return circuit
-
 
 def get_projectors(probabilities, n_c):
     P, P1 = [0] * n_c, [0] * n_c
@@ -525,10 +367,8 @@ def get_projectors(probabilities, n_c):
             P1[index] += v
     return P, P1
 
-
 def objective_value(x, w):
     return sum(w[i, j] * x[i] * (1 - x[j]) for i in range(len(x)) for j in range(len(x)))
-
 
 def decode_probabilities(probabilities):
     binary_solution, n_r = [], len(list(probabilities.keys())[0]) - 1
@@ -541,7 +381,6 @@ def decode_probabilities(probabilities):
         elif one_state in probabilities:
             binary_solution.append(1)
     return binary_solution
-
 
 def evaluate_cost(params, circuit, qubo_matrix):
     global valid_probabilities, optimization_iteration_count, best_cost, best_params
@@ -576,7 +415,6 @@ def evaluate_cost(params, circuit, qubo_matrix):
 
     print(f"@ Iteration {optimization_iteration_count} Cost :", cost)
     return cost
-
 
 def ancilla_basis_encoding(
     G, initial_params, n_layers=1, optimizer_method="differential_evolution"
@@ -616,15 +454,11 @@ def ancilla_basis_encoding(
     print("binary_solution", binary_solution)
     return binary_solution, best_cost, objective_value(np.array(binary_solution), w), best_params
 
-
 ######################################################################
 # Although the code can handle various methods available in ``scipy.minimize``, in this demo we will
-
 # be using a more robust genetic algorithm ``differential_evolution`` as the classical optimizer.
 
-#
-
-initial_params_seed, scipy_optimizer_method, n_layers = 42, "differential_evolution", 4
+initial_params_seed, scipy_optimizer_method, n_layers = 111, "differential_evolution", 4
 nq = ceil(log2(len(G.nodes()))) + 1
 np.random.seed(initial_params_seed)
 initial_params = np.random.uniform(low=-np.pi, high=np.pi, size=nq * n_layers)
@@ -638,46 +472,22 @@ print(solution, value, cut_value, optimal_params)
 
 mask = decode_binary_string(solution, height, width)
 plt.imshow(mask, interpolation="nearest", cmap=plt.cm.gray, vmin=0, vmax=1)
-plt.axis("off")
+plt.xticks([])
+plt.yticks([])
 plt.show()
 
 ######################################################################
-# 🔁 Adaptive Cost Encoding (ACE)
-
-# -------------------------------
-
-#
-
+# Adaptive Cost Encoding (ACE)
+# ----------------------------
 # ACE modifies ABE by skipping the QUBO formulation entirely during evaluation.
-
-#
-
 # Instead of optimizing over probabilities, we decode a binary vector :math:`x` from the measured
-
 # output and evaluate the **original min-cut cost function** directly [#smv-nisq-seg]_:
-
-#
-
 # .. math::
-
-#
-
-#
-
 #    C(x) = \sum_{i < j} x_i (1 - x_j) w(v_i, v_j)
-
-#
-
 # This: - Removes the need for a QUBO matrix, which can have loss of generality for constrained
-
 # optimization problems when the penalty coefficient is not set appropriately. - Improves convergence
-
 # (the cost function is discrete and combinatorial). - Aligns optimization directly with the true task
-
 # objective.
-
-#
-
 
 def evaluate_cost_mincut(params, circuit, w):
     global valid_probabilities, optimization_iteration_count, best_cost, best_params
@@ -705,8 +515,7 @@ def evaluate_cost_mincut(params, circuit, w):
     print(f"@ Iteration {optimization_iteration_count} Cost :", cost)
     return cost
 
-
-def adaptive_cost_encoding_de(
+def adaptive_cost_encoding(
     G, initial_params, n_layers=1, optimizer_method="differential_evolution"
 ):
     w = nx.adjacency_matrix(G).todense()
@@ -746,14 +555,13 @@ def adaptive_cost_encoding_de(
     print("binary_solution", binary_solution)
     return binary_solution, best_cost, objective_value(np.array(binary_solution), w), best_params
 
-
-initial_params_seed, scipy_optimizer_method, n_layers = 42, "differential_evolution", 4
+initial_params_seed, scipy_optimizer_method, n_layers = 111, "differential_evolution", 4
 nq = ceil(log2(len(G.nodes()))) + 1
 np.random.seed(initial_params_seed)
 initial_params = np.random.uniform(low=-np.pi, high=np.pi, size=nq * n_layers)
 print(f"Executing QC with {n_layers} layers and Differential Evolution optimizer.")
 start_time = time.time()
-solution, value, cut_value, optimal_params = adaptive_cost_encoding_de(
+solution, value, cut_value, optimal_params = adaptive_cost_encoding(
     G, initial_params, n_layers, optimizer_method=scipy_optimizer_method
 )
 end_time = time.time()
@@ -761,131 +569,61 @@ print(solution, value, cut_value, optimal_params)
 
 mask = decode_binary_string(solution, height, width)
 plt.imshow(mask, interpolation="nearest", cmap=plt.cm.gray, vmin=0, vmax=1)
-plt.axis("off")
+plt.xticks([])
+plt.yticks([])
 plt.show()
 
 ######################################################################
-# 📈 Evaluation & Observations
-
+# Evaluation & Observations
 # ----------------------------
-
-#
-
 # - PGE has a compact circuit but many parameters.
-
 # - ABE introduces a more efficient encoding at the cost of probabilistic decoding.
-
 # - ACE improves convergence by using the real problem cost and avoiding indirect probability-based
-
 #   objectives.
-
-#
-
 # Theoretical scaling advantages: - Qubit requirement is :math:`O(\log n)`. - Parametric gates and
-
 # depth grow modestly with problem size.
-
-#
-
 # Given L as the number of ansatz layers, n is the number of QUBO variables, here’s the complexity 
-
 # comparison of QAOA, PGE, and ABE/ACE in terms of quantum resources for solving QUBO problems.
-
-
 # .. figure:: ../_static/demonstration_assets/qubit_efficient_encoding/scalability.png
 #    :scale: 75%
 #    :align: center
-#    :alt: Scalability analysis of VQAs for solving QUBO problems in terms of quantum resources [#smv-nisq-seg]_.
-#
-#    Scalability analysis of VQAs for solving QUBO problems in terms of quantum resources [#smv-nisq-seg]_.
-
-#
+#    :alt: Scalability analysis of VQAs for solving QUBO problems in terms of quantum resources (Table 2 in [#smv-nisq-seg]_).
+#    Scalability analysis of VQAs for solving QUBO problems in terms of quantum resources (Table 2 in [#smv-nisq-seg]_).
 
 ######################################################################
-# 📎 Final Notes
-
+# Final Notes
 # --------------
-
-#
-
 # This demo showcases a scalable, qubit-efficient strategy for quantum-enhanced image segmentation.
-
-#
-
 # By formulating image segmentation as a graph cut, reducing it to a QUBO, and then solving with
-
 # advanced encodings like PGE, ABE, and ACE, we show that near-term quantum devices can tackle
-
 # meaningful vision tasks.
 
-#
-
 ######################################################################
-# --------------
-
-#
-
-# 📄 References
-
+# References
 # -------------
-
-#
-
 #  .. [#smv-nisq-seg]
-
 #           S. M. Venkatesh, A. Macaluso, M. Nuske, M. Klusch, and A. Dengel, “Qubit-Efficient Variational
-
 #           Quantum Algorithms for Image Segmentation,” 2024 IEEE International Conference on Quantum Computing
-
 #           and Engineering (QCE), Montreal, QC, Canada, 2024, pp. 450–456. DOI:
-
 #           `10.1109/QCE60285.2024.00059 <https://doi.org/10.1109/QCE60285.2024.00059>`__,
-
 #           `arXiv:2405.14405 <https://arxiv.org/abs/2405.14405>`__
-
-#
-
 # .. [#smv-qseg]
-
 #           S. M. Venkatesh, A. Macaluso, M. Nuske, M. Klusch and A. Dengel, “Q-Seg: Quantum Annealing-Based
-
 #           Unsupervised Image Segmentation,” in IEEE Computer Graphics and Applications, vol. 44, no. 5,
-
 #           pp. 27-39, Sept.-Oct. 2024, doi:
-
 #           `10.1109/MCG.2024.3455012 <https://doi.org/10.1109/MCG.2024.3455012>`__,
-
 #           `arXiv:2311.12912 <https://arxiv.org/abs/2311.12912>`__.
-
-#
-
 # .. [#qaoa]
-
 #           Farhi, E., Goldstone, J., & Gutmann, S. (2014). A quantum approximate optimization algorithm.
-
 #           arXiv preprint `arXiv:1411.4028 <https://arxiv.org/abs/1411.4028>`__.
-
-#
-
 # .. [#pge]
-
 #           Rančić, M. J. (2023). Noisy intermediate-scale quantum computing algorithm for solving an
-
 #           n-vertex MaxCut problem with log (n) qubits. Physical Review Research, 5(1), L012021. DOI:
-
 #           `10.1103/PhysRevResearch.5.L012021 <https://doi.org/10.1103/PhysRevResearch.5.L012021>`__
-
-#
-
 # .. [#abe]
-
 #           Tan, B., Lemonde, M. A., Thanasilp, S., Tangpanitanon, J., & Angelakis, D. G. (2021).
-
 #           Qubit-efficient encoding schemes for binary optimisation problems. Quantum, 5, 454. DOI:
-
 #           `10.22331/q-2021-05-04-454 <https://doi.org/10.22331/q-2021-05-04-454>`__
-
-#
 
 ######################################################################
 # About the author
