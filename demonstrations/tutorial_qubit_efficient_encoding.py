@@ -1,5 +1,4 @@
 r"""
-
 .. _qubit_efficient_encoding:
 
 Qubit-Efficient Encoding Techniques for Solving QUBO Problems
@@ -10,7 +9,6 @@ Qubit-Efficient Encoding Techniques for Solving QUBO Problems
 ######################################################################
 # Introduction
 # ------------
-
 # Classical algorithms are already incredibly effective at solving many optimization problems —
 # especially when the number of variables is in the low thousands. However, when scaling up to
 # problems involving **tens or hundreds of thousands** of binary variables, classical solvers begin to
@@ -31,7 +29,6 @@ Qubit-Efficient Encoding Techniques for Solving QUBO Problems
 ######################################################################
 # Why Qubit-Efficient Methods?
 # ----------------------------
-
 # This demo explores **qubit-efficient alternatives** to QAOA that are not only suitable for today’s
 # NISQ (Noisy Intermediate-Scale Quantum) devices, but also **generalizable across combinatorial
 # optimization problems**.
@@ -60,8 +57,6 @@ Qubit-Efficient Encoding Techniques for Solving QUBO Problems
 ######################################################################
 # Import dependencies
 # -------------------
-#
-
 # We begin by importing the standard Python libraries for graph construction and visualization, and
 # PennyLane modules for quantum circuit construction and simulation. This setup ensures a seamless
 # interface for hybrid quantum-classical processing.
@@ -592,7 +587,7 @@ plt.show()
 
 ######################################################################
 # Final Notes
-# --------------
+# -----------
 # This demo showcases a scalable, qubit-efficient strategy for quantum-enhanced image segmentation.
 # By formulating image segmentation as a graph cut, reducing it to a QUBO, and then solving with
 # advanced encodings like PGE, ABE, and ACE, we show that near-term quantum devices can tackle
@@ -600,7 +595,7 @@ plt.show()
 
 ######################################################################
 # References
-# -------------
+# ----------
 #  .. [#smv-nisq-seg]
 #           S. M. Venkatesh, A. Macaluso, M. Nuske, M. Klusch, and A. Dengel, “Qubit-Efficient Variational
 #           Quantum Algorithms for Image Segmentation,” 2024 IEEE International Conference on Quantum Computing
