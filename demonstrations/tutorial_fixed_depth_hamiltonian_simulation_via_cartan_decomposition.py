@@ -220,10 +220,10 @@ v_m = jnp.array(v_m)
 #
 
 def run_opt(
-    value_and_grad,
+    loss,
     theta,
-    n_epochs=500,
-    lr=0.1,
+    n_epochs=1000,
+    lr=0.05,
 ):
     """Boilerplate JAX optimization"""
     value_and_grad = jax.jit(jax.value_and_grad(loss))
@@ -274,7 +274,7 @@ def loss(theta):
     A = K_m @ v_m @ K_m.conj().T
     return jnp.trace(A.conj().T @ H_m).real
 
-theta0 = jnp.ones(len(k), dtype=float)
+theta0 = jax.random.normal(jax.random.PRNGKey(1), shape=(len(k),), dtype=float)
 
 thetas, energy, _ = run_opt(loss, theta0, n_epochs=1000, lr=0.05)
 plt.plot(energy - np.min(energy))
@@ -304,6 +304,11 @@ print(len(h_0))
 # assure that h_0 is in \mathfrak{h}
 h_vspace = qml.pauli.PauliVSpace(h)
 not h_vspace.is_independent(h_0.pauli_rep)
+
+# check that all operands commute
+from pennylane.liealg import check_abelian
+check_abelian(h_0.operands)
+
 
 ##############################################################################
 #
