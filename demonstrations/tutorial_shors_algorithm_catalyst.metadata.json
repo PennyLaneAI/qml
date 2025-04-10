@@ -1,0 +1,98 @@
+{
+    "title": "Quantum just-in-time compiling Shor's algorithm with Catalyst",
+    "authors": [
+        {
+            "username": "glassnotes"
+        }
+    ],
+    "dateOfPublication": "2025-04-04T09:00:00+00:00",
+    "dateOfLastModification": "2025-04-04T09:00:00+00:00",
+    "categories": [
+        "Algorithms",
+        "Quantum Computing",
+        "Devices and Performance"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_shor_algorithm_catalyst_pennylane.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_shor_algorithm_catalyst_pennylane.png"
+        }
+    ],
+    "seoDescription": "Just-in-time compile Shor's algorithm from end-to-end with PennyLane and Catalyst.",
+    "doi": "",
+    "references": [
+        {
+            "id": "Shor1997",
+            "type": "article",
+            "title": "Polynomial-Time Algorithms for Prime Factorization and Discrete Logarithms on a Quantum Computer",
+            "authors": "Peter W. Shor",
+            "year": "1997",
+            "journal": "SIAM Journal on Computing Vol. 26, Iss. 5",
+            "doi": "10.1137/S0097539795293172",
+            "url": "https://doi.org/10.1137/S0097539795293172"
+        },
+        {
+            "id": "PurpleDragonBook",
+            "type": "book",
+            "title": "Compilers: Principles, Techniques, And Tools",
+            "authors": "Alfred V Aho, Monica S Lam, Ravi Sethi, Jeffrey D Ullman",
+            "year": "2007",
+            "publisher": "Pearson",
+            "url": "https://www.pearson.com/en-us/subject-catalog/p/compilers-principles-techniques-and-tools/P200000003472/9780133002140"
+        },
+        {
+            "id": "JAXJIT",
+            "type": "webpage",
+            "title": "Just-in-time compilation",
+            "authors": "The JAX Authors",
+            "year": "2024",
+            "publisher": "",
+            "url": "https://docs.jax.dev/en/latest/jit-compilation.html"
+        },
+        {
+            "id": "Beauregard2003",
+            "type": "article",
+            "title": "Circuit for Shor's algorithm using 2n+3 qubits",
+            "authors": "Stephane Beauregard",
+            "year": "2003",
+            "journal": "Quantum Info. Comput.",
+            "doi": "10.5555/2011517.2011525",
+            "url": "https://dl.acm.org/doi/10.5555/2011517.2011525"
+        },
+        {
+            "id": "Draper2000",
+            "type": "preprint",
+            "title": "Addition on a Quantum Computer",
+            "authors": "Thomas G. Draper",
+            "year": "2000",
+            "journal": "",
+            "doi": "10.48550/arXiv.quant-ph/0008033",
+            "url": "https://doi.org/10.48550/arXiv.quant-ph/0008033"
+        }
+    ],
+    "basedOnPapers": [
+    ],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_jax_transformations",
+            "weight": 1.0
+        }, 
+        {
+            "type": "demonstration",
+            "id": "tutorial_qjit_compile_grovers_algorithm_with_catalyst",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_how_to_quantum_just_in_time_compile_vqe_catalyst",
+            "weight": 1.0
+        }
+    ]
+}
