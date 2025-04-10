@@ -547,6 +547,13 @@ manager = plt.figure().canvas.manager
 manager.canvas.figure = fig
 fig.set_canvas(manager.canvas)
 
+# Expand limits by 10% to "zoom out"
+zoom_factor = 0.1
+x_margin = (xlim[1] - xlim[0]) * zoom_factor
+y_margin = (ylim[1] - ylim[0]) * zoom_factor
+ax.set_xlim(xlim[0] - x_margin, xlim[1] + x_margin)
+ax.set_ylim(ylim[0] - y_margin, ylim[1] + y_margin)
+
 plt.show()
 
 #############################################################################
