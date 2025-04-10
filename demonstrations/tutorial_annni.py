@@ -140,7 +140,6 @@ def get_phase(k, h):
 #     :width: 50%
 #     :target: javascript:void(0)
 #     
-#     Figure 2. Add a caption here
 # 
 # State preparation
 # -----------------
@@ -397,10 +396,9 @@ trained_params, loss_curve = train_qcnn(num_epochs=100, lr=1e-2, T=.1, seed=seed
 plt.figure(figsize=(6, 3))
 plt.plot(loss_curve, label="Loss", color="blue", linewidth=2)
 plt.xlabel("Epochs"), plt.ylabel("Cross-Entropy Loss")
-plt.title("QCNN Training Loss Curve")
+plt.title("Figure 5. QCNN Training Cross-Entropy Loss Curve")
 plt.legend()
 plt.grid()
-plt.figtext(0.5, 0.01, "Figure 5. QCNN Training Cross-Entropy Loss Curve", horizontalalignment='center')
 plt.show()
 
 ######################################################################
@@ -439,14 +437,13 @@ plt.plot(k_vals1, ising_transition(k_vals1), 'k')
 plt.plot(k_vals2, kt_transition(k_vals2), 'k')
 plt.plot(k_vals2, bkt_transition(k_vals2), 'k', ls = '--')
 
-for color, phase in zip(colors, phase_labels):
+for color, phase in zip(colors, phase_labels[:-1]):
     plt.scatter([], [], color=color, label=phase, edgecolors='black')
 plt.plot([], [], 'k', label='Transition lines')
 
 plt.xlabel("k"), plt.ylabel("h")
-plt.title("QCNN Classification")
+plt.title("Figure 6. QCNN Classification")
 plt.legend()
-plt.figtext(0.5, 0.01, "Figure 6. QCNN Classification", horizontalalignment='center')
 plt.show()
 
 ######################################################################
@@ -602,10 +599,9 @@ trained_anomaly_params, anomaly_loss_curve = train_anomaly(num_epochs=100, lr=1e
 plt.figure(figsize=(6, 3))
 plt.plot(anomaly_loss_curve, label="Loss", color="blue", linewidth=2)
 plt.xlabel("Epochs"), plt.ylabel("Compression Loss")
-plt.title("Anomaly Training Loss Curve")
+plt.title("Figure 8. Anomaly training compression loss curve")
 plt.legend()
 plt.grid()
-plt.figtext(0.5, -0.05, "Figure 8. Anomaly training compression loss curve", horizontalalignment='center')
 plt.show()
 
 ######################################################################
@@ -627,10 +623,9 @@ plt.plot(np.linspace(0.5, 1.0, 50), kt_transition(np.linspace(0.5, 1.0, 50)), 'k
 plt.plot([], [], 'k', label='Transition Lines')
 plt.scatter([0 +.3/len(ks)], [0 + .5/len(hs)], color='r', marker = 'x', label="Training point", s=50)
 
-plt.legend(), plt.xlabel("k"), plt.ylabel("h"), plt.title("Phase Diagram")
+plt.legend(), plt.xlabel("k"), plt.ylabel("h"), plt.title("Figure 9. Compression score for each state in the phase diagram")
 cbar = plt.colorbar(im)
 cbar.set_label(r"Compression Score  $\mathcal{C}$")
-plt.figtext(0.5, -0.05, "Figure 9. Compression score for each state in the phase diagram", horizontalalignment='center')
 plt.show()
 
 ######################################################################
