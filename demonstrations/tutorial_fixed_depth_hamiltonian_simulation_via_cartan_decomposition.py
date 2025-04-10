@@ -297,17 +297,13 @@ Kc_m = qml.matrix(K, wire_order=range(n_wires))(theta_opt, k)
 # .. math:: h_0 = K_c^\dagger H K_c.
 
 h_0_m = Kc_m.conj().T @ H_m @ Kc_m
-h_0 = qml.pauli_decompose(h_0_m)
 
-print(len(h_0))
+# decompose h_0_m in terms of the basis of h
+basis = [qml.matrix(op, wire_order=range(n_wires)) for op in h]
+coeffs = qml.pauli.trace_inner_product(h_0_m, basis)
 
-# assure that h_0 is in \mathfrak{h}
-h_vspace = qml.pauli.PauliVSpace(h)
-not h_vspace.is_independent(h_0.pauli_rep)
-
-# check that all operands commute
-from pennylane.liealg import check_abelian
-check_abelian(h_0.operands)
+# ensure that decomposition is correct, i.e. h_0_m is truely an element of just h
+assert np.allclose(np.sum([c * op for c, op in zip(coeffs, basis)], axis=0), h_0_m)
 
 
 ##############################################################################
