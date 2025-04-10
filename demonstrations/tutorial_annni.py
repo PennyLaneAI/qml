@@ -23,19 +23,19 @@ we explore the phase diagram of the Axial Next-Nearest-Neighbor Ising (ANNNI) mo
 The ANNNI model
 --------------------------------------------------------------------------------
 
-The ANNNI model describes a spin system with three types of competing interactions. Its Hamiltonian is given by:
+The ANNNI model describes a spin system with three types of competing interactions. Its Hamiltonian is given by
 
-.. math::  H =   -J \sum_{i=1}^{N} \sigma_x^i\sigma_x^{i+1} - \kappa \sigma_x^{i}\sigma_x^{i+2} + h \sigma_z^i \tag{1}
+.. math::  H =   -J \sum_{i=1}^{N} \sigma_x^i\sigma_x^{i+1} - \kappa \sigma_x^{i}\sigma_x^{i+2} + h \sigma_z^i, \tag{1}
 
-where:
+where
 
-* :math:`\sigma_a^i` are the Pauli matrices acting on the :math:`i`-th spin (:math:`a \in \{x, y, z\}`).
+* :math:`\sigma_a^i` are the Pauli matrices acting on the :math:`i`-th spin (:math:`a \in \{x, y, z\}`),
 
-* :math:`J` is the nearest-neighbor coupling constant, which we set to :math:`1` without any loss of generality.
+* :math:`J` is the nearest-neighbor coupling constant, which we set to :math:`1` without any loss of generality,
 
-* :math:`\kappa` controls the strength next-nearest-neighbor interaction.
+* :math:`\kappa` controls the strength next-nearest-neighbor interaction,
 
-* :math:`h` represents the the transverse magnetic field strength.
+* :math:and `h` represents the the transverse magnetic field strength.
 
 Without loss of generality, we set :math:`J = 1` and consider open boundary conditions for positive :math:`\kappa` and :math:`h`.
 
@@ -89,26 +89,24 @@ def get_H(num_spins, k, h):
 # Defining phase transition lines
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 # 
-# Due to the competition between the three types of interactions, the ANNNI model exhibits a rich and complex phase diagram:
+# Due to the competition between the three types of interactions, the ANNNI model exhibits a rich and complex phase diagram.
 #
-# * **Ising transition line** occurs at:  
+# * **Ising transition line** occurs at  
 #   
-#   .. math::  h_I(\kappa) \approx \frac{1 - \kappa}{\kappa} \left(1 - \sqrt{\frac{1 - 3 \kappa + 4 \kappa^2 }{1 - \kappa}} \right)\tag{2} 
+#   .. math::  h_I(\kappa) \approx \frac{1 - \kappa}{\kappa} \left(1 - \sqrt{\frac{1 - 3 \kappa + 4 \kappa^2 }{1 - \kappa}} \right),\tag{2} 
 #   
 #   which separates the *ferromagnetic* phase from the *paramagnetic* phase.
 #
-# * **Kosterlitz-Thouless (KT) transition line** occurs at:  
+# * **Kosterlitz-Thouless (KT) transition line** occurs at  
 #   
-#   .. math::  h_C(\kappa) \approx 1.05 \sqrt{(\kappa - 0.5) (\kappa - 0.1)} \tag{3}  
+#   .. math::  h_C(\kappa) \approx 1.05 \sqrt{(\kappa - 0.5) (\kappa - 0.1)}, \tag{3}  
 #   
 #   which separates the *paramagnetic* phase from the *antiphase*.
 #
 #
-# Additionally, another phase transition has been numerically addressed but not yet confirmed:
-#
-# * **Berezinskii-Kosterlitz-Thouless (BKT) transition line** occurs at:  
+# Additionally, another phase transition has been numerically addressed but not yet confirmed. The **Berezinskii-Kosterlitz-Thouless (BKT) transition line** occurs at  
 #   
-#   .. math::  h_{BKT} \approx 1.05 (\kappa - 0.5) \tag{4}
+#   .. math::  h_{BKT} \approx 1.05 (\kappa - 0.5), \tag{4}
 #   
 #   which entirely lies within the *antiphase* region.
 #
@@ -164,7 +162,7 @@ def get_phase(k, h):
 # 
 # Computing the ground states
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-# We implement a function to compute the ground state by diagonalizing the Hamiltonian
+# We implement a function to compute the ground state by diagonalizing the Hamiltonian.
 
 def diagonalize_H(H_matrix):
     """Returns the lowest eigenvector of the Hamiltonian matrix."""
@@ -197,23 +195,23 @@ psis = vmap(vmap(diagonalize_H))(H_matrices)
 #
 # A QCNN consists of two main components:
 #
-# * **Convolution layers**: Alternating unitaries are applied to pairs of neighbouring spins.
+# * **Convolution layers**: alternating unitaries are applied to pairs of neighbouring spins.
 #
-# * **Pooling layers**: Half of the qubits are measured, and based on the measurement outcome, different rotations are applied to the remaining qubits.
+# * **Pooling layers**: half of the qubits are measured, and based on the measurement outcome, different rotations are applied to the remaining qubits.
 #
-# For the output, we consider the model’s probability vector :math:`P(\kappa, h)` over the four computational basis states of the final two-qubit system, obtained using :func:`~pennylane.probs`. Each computational basis state is mapped to a specific phase:
+# For the output, we consider the model’s probability vector :math:`P(\kappa, h)` over the four computational basis states of the final two-qubit system, obtained using :func:`~pennylane.probs`. Each computational basis state is mapped to a specific phase as follows.
 #
-# * :math:`\vert 00 \rangle`: Ferromagnetic
-# * :math:`\vert 01 \rangle`: Antiphase
-# * :math:`\vert 10 \rangle`: Paramagnetic
-# * :math:`\vert 11 \rangle`: Trash class
+# * :math:`\vert 00 \rangle`: Ferromagnetic.
+# * :math:`\vert 01 \rangle`: Antiphase.
+# * :math:`\vert 10 \rangle`: Paramagnetic.
+# * :math:`\vert 11 \rangle`: Trash class.
 #
 # Circuit definition
 # ^^^^^^^^^^^^^^^^^^
 #
 # We now define and implement the QCNN circuit. The `qcnn_ansatz` function builds the QCNN architecture by alternating convolution and pooling layers 
 # until only two qubits remain. The `qcnn_circuit` function embeds an input quantum state through :class:`~pennylane.StatePrep`, applies the QCNN ansatz, and returns 
-# the probability distribution over the final two-qubit system. Finally, we vectorize the circuit for efficient evaluation:
+# the probability distribution over the final two-qubit system. Finally, we vectorize the circuit for efficient evaluation.
 
 def qcnn_ansatz(num_qubits, params):
     """Ansatz of the QCNN model
@@ -303,15 +301,15 @@ fig.suptitle("Figure 3. QCNN Architecture", horizontalalignment='center');
 # Training of the QCNN
 # ^^^^^^^^^^^^^^^^^^^^
 #
-# The training is performed by minimizing the **Cross Entropy loss** on the output probabilities:
+# The training is performed by minimizing the **Cross Entropy loss** on the output probabilities
 #
-# .. math::  \mathcal{L} = -\frac{1}{N} \sum_{i=1}^{N} \sum_{j} y_j^{\frac1T} \log \tilde{p}_j^\frac1T   \tag{5}
+# .. math::  \mathcal{L} = -\frac{1}{N} \sum_{i=1}^{N} \sum_{j} y_j^{\frac1T} \log \tilde{p}_j^\frac1T,   \tag{5}
 #
-# where:
+# where
 #
-# * :math:`y_j` represents the one-hot encoded labels for the three phases
+# * :math:`y_j` represents the one-hot encoded labels for the three phases,
 # 
-# * :math:`T` is a temperature factor that controls the sharpness of the predicted probability distribution.
+# * :math:and `T` is a temperature factor that controls the sharpness of the predicted probability distribution.
 
 def cross_entropy(pred, Y, T):
     """Multi-class cross entropy loss function"""
@@ -326,9 +324,9 @@ def cross_entropy(pred, Y, T):
     return jnp.mean(loss)
 
 ######################################################################
-# The analytical points of the ANNNI model correspond to specific regions of the phase diagram where the system simplifies into well-understood limits:
+# The analytical points of the ANNNI model correspond to specific regions of the phase diagram where the system simplifies into two well-understood limits:
 #
-# * **Transverse-field Ising model** at :math:`\kappa = 0` in which we only have the magnetic field and the nearest neighbor interactions;
+# * **Transverse-field Ising model** at :math:`\kappa = 0` in which we only have the magnetic field and the nearest neighbor interactions.
 # 
 # * **Quasi classical model**  at :math:`h=0` in which we only have the nearest and next-nearest neighbor interactions.
 #
@@ -454,7 +452,7 @@ plt.show()
 ######################################################################
 # Despite only being trained on the left and bottom borders of the phase diagram, the QCNN successfully generalizes across the entire diagram, aligning with the phase boundaries predicted by DMRG.
 #
-# In addition, [#Cea]_ presents an analysis of the QCNN’s performance as the number of qubits (hence the system's size) increases, showing that the overlap between trash class and the expected Floating phase becomes more accurate.  
+# In addition, [#Cea]_ presents an analysis of the QCNN’s performance as the number of qubits (hence the system's size) increases, showing that the overlap between trash class and the expected floating phase becomes more accurate.  
 #
 # Unsupervised learning of phases: Quantum Anomaly Detection
 # ----------------------------------------------------------
@@ -466,12 +464,12 @@ plt.show()
 # 
 # .. math::  V(\theta)|\psi(\kappa, h)\rangle = |\phi\rangle^{N-K} \otimes |0\rangle^{\otimes K}\tag{6}
 # 
-# This means we seek a unitary transformation that disentangles the input state into a compressed state :math:`|\phi\rangle` for a subset of qubits (referred to as non-trash qubits) while mapping the remaining qubits (called trash qubits) to the zero state.
+# This means that we seek a unitary transformation that disentangles the input state into a compressed state :math:`|\phi\rangle` for a subset of qubits (referred to as non-trash qubits) while mapping the remaining qubits (called trash qubits) to the zero state.
 #
 # Circuit definition
 # ^^^^^^^^^^^^^^^^^^
 #
-# We now define and implement the QAD circuit. The `anomaly_ansatz` function builds the QAD architecture. The `anomaly_circuit` function embeds an input quantum state through :class:`~pennylane.StatePrep`, applies the QAD ansatz, and returns the expectation values of the *trash qubits* used to evaluate the compression score:
+# We now define and implement the QAD circuit. The `anomaly_ansatz` function builds the QAD architecture. The `anomaly_circuit` function embeds an input quantum state through :class:`~pennylane.StatePrep`, applies the QAD ansatz, and returns the expectation values of the *trash qubits* used to evaluate the compression score.
 
 def anomaly_ansatz(n_qubit, params):
     """Ansatz of the QAD model
@@ -541,15 +539,11 @@ fig.suptitle("Figure 7. QAD Architecture", horizontalalignment='center');
 #
 # The training process for this architecture follows these steps:
 #
-# 1. **Selection of Training Event:**  
-#    
-#    A single quantum state is selected as the training event.
+# 1. **Selection of Training Event:** a single quantum state is selected as the training event.
 #
-# 2. **Compression Objective:**  
+# 2. **Compression Objective:** the training is performed to achieve the compression of the selected quantum state. This is done by minimizing the following loss function, known as the *compression score*:
 #    
-#    The training is performed to achieve the compression of the selected quantum state. This is done by minimizing the following loss function, known as the *compression score*:
-#    
-#    .. math::  \mathcal{C} = \frac{1}{2}\sum_{j\in q_T} (1-\left<Z_j\right>)\tag{7}
+#    .. math::  \mathcal{C} = \frac{1}{2}\sum_{j\in q_T} (1-\left<Z_j\right>),\tag{7}
 #    
 #    where :math:`q_T` refers to the set of trash qubits, which make up :math:`N/2` of the total.
 #   
@@ -650,7 +644,7 @@ plt.show()
 #
 # Quantum many-body systems present a compelling use case for QML models. In this tutorial, we explored two different approaches:
 #
-# * **Supervised learning**: The QCNN effectively generalizes phase classification beyond its training data, aligning with phase boundaries identified by classical methods.
+# * **Supervised learning**: the QCNN effectively generalizes phase classification beyond its training data, aligning with phase boundaries identified by classical methods.
 #
 # * **Unsupervised learning**: QAD successfully distinguishes different quantum phases without requiring labelled training data, making it ideal for systems with unknown structures.
 #
