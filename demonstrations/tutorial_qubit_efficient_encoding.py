@@ -13,14 +13,14 @@ Qubit-Efficient Encoding Techniques for Solving QUBO Problems
 # especially when the number of variables is in the low thousands. However, when scaling up to
 # problems involving **tens or hundreds of thousands** of binary variables, classical solvers begin to
 # falter due to the **combinatorial explosion** in the search space.
-
+#
 # Quantum computing offers a compelling alternative — not by brute force, but by **exploring
 # exponentially large solution spaces in parallel** using quantum superposition and entanglement. One
 # popular quantum algorithm for such problems is the **Quantum Approximate Optimization Algorithm
 # (QAOA)** [#qaoa]_, a textbook example of a variational quantum algorithm (VQA). However, QAOA requires
 # **one qubit per binary variable**, which becomes **prohibitively resource-intensive** for
 # large-scale problems.
-
+#
 # For instance, solving a QUBO (Quadratic Unconstrained Binary Optimization) problem with 10,000
 # variables using QAOA would require 10,000 logical qubits — a scale **far beyond current quantum
 # hardware capabilities**.
@@ -32,7 +32,7 @@ Qubit-Efficient Encoding Techniques for Solving QUBO Problems
 # This demo explores **qubit-efficient alternatives** to QAOA that are not only suitable for today’s
 # NISQ (Noisy Intermediate-Scale Quantum) devices, but also **generalizable across combinatorial
 # optimization problems**.
-
+#
 # We specifically demonstrate these methods in the context of **unsupervised image segmentation**, by:
 # 1. Formulating segmentation as a **min-cut problem** over a graph derived from the image.
 # 2. Reformulating the min-cut as a **QUBO problem**.
@@ -40,12 +40,12 @@ Qubit-Efficient Encoding Techniques for Solving QUBO Problems
 #    - **Parametric Gate Encoding (PGE)**
 #    - **Ancilla Basis Encoding (ABE)**
 #    - **Adaptive Cost Encoding (ACE)**
-
+#
 # These methods only require a **logarithmic number of qubits** with respect to the problem size
 # (i.e., number of binary variables). This makes them **scalable and implementable** even on near-term
 # quantum hardware. Moreover, the exact graph-based image segmentation technique has been explored
 # also using quantum annealers [#smv-qseg]_.
-
+#
 # While this demo walks through an image segmentation example, the encoding schemes presented here can
 # be applied to **any binary combinatorial optimization problem**.
 # .. figure:: ../_static/demonstration_assets/qubit_efficient_encoding/vqa-segmentation.png
@@ -74,7 +74,7 @@ import time
 # -------------------------
 # To keep things intuitive, we generate a toy grayscale image. This synthetic image will be segmented
 # using quantum algorithms.
-
+#
 # We use a simple 4×4 grid for clarity. The pixel intensities will act as a proxy for similarity when
 # we later construct a graph. Each pixel becomes a vertex, and edges represent similarity (e.g.,
 # inverse of intensity difference).
@@ -100,7 +100,7 @@ plt.show()
 # | - Each pixel becomes a node. 
 # | - An edge exists between neighboring pixels. 
 # | - The weight reflect similarity (e.g., inverse absolute difference in grayscale values).
-
+#
 # This transforms the segmentation task into a **minimum cut problem**, where the goal is to partition
 # the graph to minimize the sum of cut edge weights.
 
@@ -204,16 +204,16 @@ plt.show()
 # gate [#pge]_.
 # Only :math:`\log_2(n)` qubits are required, which is a **huge gain** over methods like QAOA that
 # need :math:`O(n)`.
-# Quantum Circuit:
+#
+# **Quantum Circuit:**
 # ~~~~~~~~~~~~~~~~
 # - Apply Hadamard gates to initialize a uniform superposition.
-# - Apply a diagonal gate :math:`U(\vec{\theta})` whose entries encode binary values using a
-#   thresholding function :math:`f(\theta_i)`.
+# - Apply a diagonal gate :math:`U(\vec{\theta})` whose entries encode binary values using a thresholding function :math:`f(\theta_i)`.
 # - Evaluate the cost function:
 #   .. math::
 #      C(\vec{\theta}) = \langle \psi(\vec{\theta}) | L_G | \psi(\vec{\theta}) \rangle
 #   where :math:`L_G` is the graph Laplacian.
-# The result is optimized using a classical optimizer, and :math:`\theta_i` are mapped to bits
+# The result is optimized using a classical optimizer, and :math:`\theta_i` are mapped to binary values
 # depending on whether :math:`\theta_i < \pi` or not.
 
 n = G.number_of_nodes()
@@ -292,8 +292,6 @@ def new_nisq_algo_solver(G, optimizer_method="Powell", initial_params_seed=123):
 
 
 binary_solution, expectation_value, cut_value = new_nisq_algo_solver(G, optimizer_method="Powell")
-binary_solution, expectation_value, cut_value
-
 
 def decode_binary_string(x, height, width):
     mask = np.zeros([height, width])
@@ -314,10 +312,10 @@ plt.show()
 # | ABE uses :math:`\log_2(n) + 1` qubits:
 # | - :math:`\log_2(n)` **register qubits** represent binary states.
 # | - One **ancilla qubit** helps encode the binary decision.
-
+#
 # Each computational basis state of the register corresponds to one binary variable. The ancilla
 # qubit’s amplitude is used to decide the bit value [#abe]_:
-
+#
 # .. math::
 #    x_{v_i} = \begin{cases} 0 & \text{if } |a_i|^2 > |b_i|^2 \\ 1 & \text{otherwise} \end{cases}
 # The cost function is parameterized over **expectation values** of basis state projectors:
@@ -326,8 +324,8 @@ plt.show()
 # .. figure:: ../_static/demonstration_assets/qubit_efficient_encoding/ABE_ACE.png
 #    :scale: 75%
 #    :align: center
-#    :alt: Quantum circuit of ABE/ACE for solving QUBO of size 4 using 3 qubits (2 register + 1 ancilla). Basis state amplitudes are used to decode the binary solution (Fig. 3 in [#smv-nisq-seg]_).
-#    Quantum circuit of ABE/ACE for solving QUBO of size 4 using 3 qubits (2 register + 1 ancilla). Basis state amplitudes are used to decode the binary solution (Fig. 3 in [#smv-nisq-seg]_).
+#    :alt: Example of a quantum circuit of ABE/ACE for solving QUBO of size 4 using 3 qubits (2 register + 1 ancilla), whereas in this demo we are solving a QUBO of size 16, so we are simulating 5 qubits. Basis state amplitudes are used to decode the binary solution (Fig. 3 in [#smv-nisq-seg]_).
+#    Example of a quantum circuit of ABE/ACE for solving QUBO of size 4 using 3 qubits (2 register + 1 ancilla), whereas in this demo we are solving a QUBO of size 16, so we are simulating 5 qubits. Basis state amplitudes are used to decode the binary solution (Fig. 3 in [#smv-nisq-seg]_).
 
 def get_qubo_matrix(W):
     """Computes the QUBO matrix for the Minimum Cut problem given a weight matrix W."""
@@ -430,7 +428,7 @@ def ancilla_basis_encoding(
             args=(qnode, Q),
             strategy="best1bin",
             maxiter=100,
-            popsize=10,
+            popsize=15,
         )
     else:
         optimization_result = minimize(
@@ -452,8 +450,9 @@ def ancilla_basis_encoding(
 ######################################################################
 # Although the code can handle various methods available in ``scipy.minimize``, in this demo we will
 # be using a more robust genetic algorithm ``differential_evolution`` as the classical optimizer.
+# You can vary the population size and/or the number of iteration for larger problems in order to find the optimal solution.
 
-initial_params_seed, scipy_optimizer_method, n_layers = 111, "differential_evolution", 4
+initial_params_seed, scipy_optimizer_method, n_layers = 1234, "differential_evolution", 5
 nq = ceil(log2(len(G.nodes()))) + 1
 np.random.seed(initial_params_seed)
 initial_params = np.random.uniform(low=-np.pi, high=np.pi, size=nq * n_layers)
@@ -529,7 +528,7 @@ def adaptive_cost_encoding(
             args=(qnode, w),
             strategy="best1bin",
             maxiter=100,
-            popsize=10,
+            popsize=15,
         )
     else:
         optimization_result = minimize(
@@ -550,7 +549,7 @@ def adaptive_cost_encoding(
     print("binary_solution", binary_solution)
     return binary_solution, best_cost, objective_value(np.array(binary_solution), w), best_params
 
-initial_params_seed, scipy_optimizer_method, n_layers = 111, "differential_evolution", 4
+initial_params_seed, scipy_optimizer_method, n_layers = 1234, "differential_evolution", 5
 nq = ceil(log2(len(G.nodes()))) + 1
 np.random.seed(initial_params_seed)
 initial_params = np.random.uniform(low=-np.pi, high=np.pi, size=nq * n_layers)
