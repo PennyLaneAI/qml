@@ -553,7 +553,7 @@ xlim = ax.get_xlim()
 ylim = ax.get_ylim()
 
 # Expand limits by 10% to "zoom out"
-zoom_factor = 0.1
+zoom_factor = 0.2
 x_margin = (xlim[1] - xlim[0]) * zoom_factor
 y_margin = (ylim[1] - ylim[0]) * zoom_factor
 ax.set_xlim(xlim[0] - x_margin, xlim[1] + x_margin)
