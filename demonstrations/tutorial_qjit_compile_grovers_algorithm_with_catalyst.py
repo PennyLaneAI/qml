@@ -4,6 +4,7 @@ How to quantum just-in-time (QJIT) compile Grover's algorithm with Catalyst
 
 """
 
+
 ######################################################################
 # `Grover's algorithm </codebook/#05-grovers-algorithm>`__ is an `oracle
 # </codebook/04-basic-quantum-algorithms/02-the-magic-8-ball/>`__-based quantum algorithm, first
