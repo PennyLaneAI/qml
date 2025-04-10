@@ -274,7 +274,7 @@ def loss(theta):
     A = K_m @ v_m @ K_m.conj().T
     return jnp.trace(A.conj().T @ H_m).real
 
-theta0 = jax.random.normal(jax.random.PRNGKey(1), shape=(len(k),), dtype=float)
+theta0 = jax.random.normal(jax.random.PRNGKey(0), shape=(len(k),), dtype=float)
 
 thetas, energy, _ = run_opt(loss, theta0, n_epochs=1000, lr=0.05)
 plt.plot(energy - np.min(energy))
@@ -337,6 +337,7 @@ np.allclose(H_re, H_m)
 t = 1.
 U_exact = qml.exp(-1j * t * H)
 U_exact_m = qml.matrix(U_exact, wire_order=range(n_wires))
+h_0  = qml.dot(coeffs, h)
 
 def U_kak(theta_opt, t):
     qml.adjoint(K)(theta_opt, k)
