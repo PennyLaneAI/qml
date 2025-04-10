@@ -305,6 +305,10 @@ coeffs = qml.pauli.trace_inner_product(h_0_m, basis)
 # ensure that decomposition is correct, i.e. h_0_m is truely an element of just h
 assert np.allclose(np.sum([c * op for c, op in zip(coeffs, basis)], axis=0), h_0_m)
 
+# sanity check that the horizontal CSA is Abelian, i.e. all its elements commute
+from pennylane.liealg import check_abelian
+check_abelian(h)
+
 
 ##############################################################################
 #
