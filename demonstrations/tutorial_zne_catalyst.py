@@ -19,6 +19,7 @@ shows how ZNE, along with other error mitigation techniques, can be carried out 
 by using `Mitiq <https://github.com/unitaryfund/mitiq>`__, a Python library developed 
 by `Unitary Fund <https://unitary.fund/>`__.
 
+
 ZNE in particular is also offered out of the box in PennyLane as a *differentiable* error mitigation technique,
 for usage in combination with variational workflows. More on this in the tutorial
 :doc:`Differentiating quantum error mitigation transforms <tutorial_diffable-mitigation>`.
