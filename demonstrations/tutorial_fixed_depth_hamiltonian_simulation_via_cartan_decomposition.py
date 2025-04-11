@@ -169,7 +169,7 @@ for op in H.operands:
 # :func:`~.pennylane.liealg.horizontal_cartan_subalgebra` returns some additional information, which we will
 # not use here.
 
-g, k, mtilde, h, _ = horizontal_cartan_subalgebra(k, m, verbose=True)
+g, k, mtilde, h, _ = horizontal_cartan_subalgebra(k, m, verbose=True, tol=1e-8)
 len(g), len(k), len(mtilde), len(h)
 
 ##############################################################################
