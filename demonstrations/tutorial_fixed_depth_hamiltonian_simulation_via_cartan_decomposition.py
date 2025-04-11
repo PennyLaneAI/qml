@@ -169,7 +169,7 @@ for op in H.operands:
 # :func:`~.pennylane.liealg.horizontal_cartan_subalgebra` returns some additional information, which we will
 # not use here.
 
-g, k, mtilde, h, _ = horizontal_cartan_subalgebra(k, m, verbose=True, tol=1e-8)
+g, k, mtilde, h, _ = horizontal_cartan_subalgebra(k, m, tol=1e-8)
 len(g), len(k), len(mtilde), len(h)
 
 ##############################################################################
@@ -304,23 +304,11 @@ coeffs = qml.pauli.trace_inner_product(h_0_m, basis)
 
 # ensure that decomposition is correct, i.e. h_0_m is truely an element of just h
 h_0_m_recomposed = np.sum([c * op for c, op in zip(coeffs, basis)], axis=0)
-import warnings
-warnings.warn(f"Max abs diff: {np.max(np.abs(h_0_m_recomposed - h_0_m))}")
-
-
-max_diff = np.max(np.abs(h_0_m_recomposed - h_0_m))
-close = np.allclose(h_0_m_recomposed, h_0_m, atol=1e-10)
-
-# Will always show in CI and Sphinx logs
-warnings.warn(f"[DEBUG] Max abs diff: {max_diff}, All close: {close}")
-
-# Optionally raise with context
-# if not close:
-#     raise AssertionError(f"[DEBUG] Arrays not close — max diff: {max_diff}")
+print("Decomposition of h_0 is faithful: ", np.allclose(h_0_m_recomposed, h_0_m, atol=1e-10))
 
 # sanity check that the horizontal CSA is Abelian, i.e. all its elements commute
 from pennylane.liealg import check_abelian
-check_abelian(h)
+print("All elements in h commute with each other: ", check_abelian(h))
 
 
 ##############################################################################
