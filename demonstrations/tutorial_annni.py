@@ -35,7 +35,7 @@ where
 
 * :math:`\kappa` controls the strength next-nearest-neighbor interaction,
 
-* :math:and `h` represents the the transverse magnetic field strength.
+* and :math:`h` represents the the transverse magnetic field strength.
 
 Without loss of generality, we set :math:`J = 1` and consider open boundary conditions for positive :math:`\kappa` and :math:`h`.
 
