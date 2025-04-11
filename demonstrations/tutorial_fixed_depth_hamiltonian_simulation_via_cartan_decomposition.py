@@ -307,8 +307,7 @@ h_0_m_recomposed = np.sum([c * op for c, op in zip(coeffs, basis)], axis=0)
 print("Decomposition of h_0 is faithful: ", np.allclose(h_0_m_recomposed, h_0_m, atol=1e-10))
 
 # sanity check that the horizontal CSA is Abelian, i.e. all its elements commute
-from pennylane.liealg import check_abelian
-print("All elements in h commute with each other: ", check_abelian(h))
+print("All elements in h commute with each other: ", qml.liealg.check_abelian(h))
 
 
 ##############################################################################
