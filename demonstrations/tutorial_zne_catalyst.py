@@ -85,6 +85,7 @@ the noise scaling method, and the extrapolation method. The rest is taken care o
 #      pip install -U pennylane-catalyst pennylane-qrack 
 # 
 
+
 ##############################################################################
 # Defining the mirror circuit
 # ---------------------------
