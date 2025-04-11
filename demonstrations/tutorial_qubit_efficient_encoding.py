@@ -34,9 +34,9 @@ Qubit-Efficient Encoding Techniques for Solving QUBO Problems
 # optimization problems**.
 #
 # We specifically demonstrate these methods in the context of **unsupervised image segmentation**, by:
-# 1. Formulating segmentation as a **min-cut problem** over a graph derived from the image.
-# 2. Reformulating the min-cut as a **QUBO problem**.
-# 3. Solving the QUBO using **qubit-efficient VQAs**, namely [#smv-nisq-seg]_:
+# - Formulating segmentation as a **min-cut problem** over a graph derived from the image.
+# - Reformulating the min-cut as a **QUBO problem**.
+# - Solving the QUBO using **qubit-efficient VQAs**, namely [#smv-nisq-seg]_:
 #    - **Parametric Gate Encoding (PGE)**
 #    - **Ancilla Basis Encoding (ABE)**
 #    - **Adaptive Cost Encoding (ACE)**
@@ -48,6 +48,7 @@ Qubit-Efficient Encoding Techniques for Solving QUBO Problems
 #
 # While this demo walks through an image segmentation example, the encoding schemes presented here can
 # be applied to **any binary combinatorial optimization problem**.
+# 
 # .. figure:: ../_static/demonstration_assets/qubit_efficient_encoding/vqa-segmentation.png
 #    :scale: 75%
 #    :align: center
@@ -210,7 +211,8 @@ plt.show()
 # - Apply Hadamard gates to initialize a uniform superposition.
 # - Apply a diagonal gate :math:`U(\vec{\theta})` whose entries encode binary values using a thresholding function :math:`f(\theta_i)`.
 # - Evaluate the cost function:
-#   .. math::
+#   
+# .. math::
 #      C(\vec{\theta}) = \langle \psi(\vec{\theta}) | L_G | \psi(\vec{\theta}) \rangle
 #   where :math:`L_G` is the graph Laplacian.
 # The result is optimized using a classical optimizer, and :math:`\theta_i` are mapped to binary values
@@ -319,8 +321,10 @@ plt.show()
 # .. math::
 #    x_{v_i} = \begin{cases} 0 & \text{if } |a_i|^2 > |b_i|^2 \\ 1 & \text{otherwise} \end{cases}
 # The cost function is parameterized over **expectation values** of basis state projectors:
+# 
 # .. math::
 #    C(\vec{\theta}) = \sum_{i,j} Q_{ij} \frac{\langle \hat{P}_i^1 \rangle \langle \hat{P}_j^1 \rangle}{\langle \hat{P}_i \rangle \langle \hat{P}_j \rangle} (1 - \delta_{ij}) + \sum_i Q_{ii} \frac{\langle \hat{P}_i^1 \rangle}{\langle \hat{P}_i \rangle}
+# 
 # .. figure:: ../_static/demonstration_assets/qubit_efficient_encoding/ABE_ACE.png
 #    :scale: 75%
 #    :align: center
@@ -476,6 +480,7 @@ plt.show()
 # ACE modifies ABE by skipping the QUBO formulation entirely during evaluation.
 # Instead of optimizing over probabilities, we decode a binary vector :math:`x` from the measured
 # output and evaluate the **original min-cut cost function** directly [#smv-nisq-seg]_:
+# 
 # .. math::
 #    C(x) = \sum_{i < j} x_i (1 - x_j) w(v_i, v_j)
 # This: - Removes the need for a QUBO matrix, which can have loss of generality for constrained
@@ -578,6 +583,7 @@ plt.show()
 # depth grow modestly with problem size.
 # Given L as the number of ansatz layers, n is the number of QUBO variables, here’s the complexity 
 # comparison of QAOA, PGE, and ABE/ACE in terms of quantum resources for solving QUBO problems.
+# 
 # .. figure:: ../_static/demonstration_assets/qubit_efficient_encoding/scalability.png
 #    :scale: 75%
 #    :align: center
