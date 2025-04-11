@@ -104,7 +104,7 @@ def get_H(num_spins, k, h):
 #   which separates the *paramagnetic* phase from the *antiphase*.
 #
 #
-# Additionally, another phase transition has been numerically addressed but not yet confirmed. The **Berezinskii-Kosterlitz-Thouless (BKT) transition line** occurs at  
+# * **Additionally, another phase transition has been numerically addressed but not yet confirmed. The **Berezinskii-Kosterlitz-Thouless (BKT) transition line** occurs at  
 #   
 #   .. math::  h_{BKT} \approx 1.05 (\kappa - 0.5), \tag{4}
 #   
@@ -379,9 +379,6 @@ def train_qcnn(num_epochs, lr, T, seed):
         params = optax.apply_updates(params, updates)
         
         loss_curve.append(loss)
-
-        if epoch%10==0:
-            print(f"Epoch : {epoch} | Loss: {loss:.4f}")
             
     return params, loss_curve
 
@@ -579,15 +576,11 @@ def train_anomaly(num_epochs, lr, seed):
         params = optax.apply_updates(params, updates)
 
         loss_curve.append(loss)
-        
-        if epoch%10==0:
-            print(f"Epoch : {epoch} | Loss: {loss:.4f}")
     
     return params, loss_curve
 
 trained_anomaly_params, anomaly_loss_curve = train_anomaly(num_epochs=100, lr=1e-1, seed=seed) 
 
-######################################################################
 # Plot the loss curve
 
 plt.figure(figsize=(6, 3))
@@ -597,6 +590,7 @@ plt.title("Figure 6. Anomaly training compression loss curve")
 plt.legend()
 plt.grid()
 plt.show()
+
 
 ######################################################################
 # After training the circuit to optimally compress the (0,0)(0,0) state, we evaluate the compression score for all other input states using the learned parameters.
