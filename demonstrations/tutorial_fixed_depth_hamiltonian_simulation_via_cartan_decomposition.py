@@ -169,7 +169,7 @@ for op in H.operands:
 # :func:`~.pennylane.liealg.horizontal_cartan_subalgebra` returns some additional information, which we will
 # not use here.
 
-g, k, mtilde, h, _ = horizontal_cartan_subalgebra(k, m)
+g, k, mtilde, h, _ = horizontal_cartan_subalgebra(k, m, tol=1e-8)
 len(g), len(k), len(mtilde), len(h)
 
 ##############################################################################
@@ -220,10 +220,10 @@ v_m = jnp.array(v_m)
 #
 
 def run_opt(
-    value_and_grad,
+    loss,
     theta,
-    n_epochs=500,
-    lr=0.1,
+    n_epochs=1000,
+    lr=0.05,
 ):
     """Boilerplate JAX optimization"""
     value_and_grad = jax.jit(jax.value_and_grad(loss))
@@ -274,7 +274,7 @@ def loss(theta):
     A = K_m @ v_m @ K_m.conj().T
     return jnp.trace(A.conj().T @ H_m).real
 
-theta0 = jnp.ones(len(k), dtype=float)
+theta0 = jax.random.normal(jax.random.PRNGKey(0), shape=(len(k),), dtype=float)
 
 thetas, energy, _ = run_opt(loss, theta0, n_epochs=1000, lr=0.05)
 plt.plot(energy - np.min(energy))
@@ -297,13 +297,18 @@ Kc_m = qml.matrix(K, wire_order=range(n_wires))(theta_opt, k)
 # .. math:: h_0 = K_c^\dagger H K_c.
 
 h_0_m = Kc_m.conj().T @ H_m @ Kc_m
-h_0 = qml.pauli_decompose(h_0_m)
 
-print(len(h_0))
+# decompose h_0_m in terms of the basis of h
+basis = [qml.matrix(op, wire_order=range(n_wires)) for op in h]
+coeffs = qml.pauli.trace_inner_product(h_0_m, basis)
 
-# assure that h_0 is in \mathfrak{h}
-h_vspace = qml.pauli.PauliVSpace(h)
-not h_vspace.is_independent(h_0.pauli_rep)
+# ensure that decomposition is correct, i.e. h_0_m is truely an element of just h
+h_0_m_recomposed = np.sum([c * op for c, op in zip(coeffs, basis)], axis=0)
+print("Decomposition of h_0 is faithful: ", np.allclose(h_0_m_recomposed, h_0_m, atol=1e-10))
+
+# sanity check that the horizontal CSA is Abelian, i.e. all its elements commute
+print("All elements in h commute with each other: ", qml.liealg.check_abelian(h))
+
 
 ##############################################################################
 #
@@ -331,6 +336,7 @@ np.allclose(H_re, H_m)
 t = 1.
 U_exact = qml.exp(-1j * t * H)
 U_exact_m = qml.matrix(U_exact, wire_order=range(n_wires))
+h_0  = qml.dot(coeffs, h)
 
 def U_kak(theta_opt, t):
     qml.adjoint(K)(theta_opt, k)
