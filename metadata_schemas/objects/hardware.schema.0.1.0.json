@@ -10,7 +10,8 @@
       "enum": [
         "aws",
         "covalent",
-        "bluequbit"
+        "bluequbit",
+        "qbraid"
       ]
     },
     "link": {
