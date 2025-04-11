@@ -139,7 +139,6 @@ def get_phase(k, h):
 #     :align: center
 #     :width: 50%
 #     :target: javascript:void(0)
-#     
 # 
 # State preparation
 # -----------------
@@ -186,7 +185,6 @@ for x, k in enumerate(ks):
 psis = vmap(vmap(diagonalize_H))(H_matrices)
 
 ######################################################################
-#
 # Supervised learning of phases: QCNN
 # -----------------------------------
 #
@@ -294,7 +292,6 @@ vectorized_qcnn_circuit = vmap(jit(qcnn_circuit), in_axes=(None, 0))
 
 # Draw the QCNN Architecture
 fig,ax = qml.draw_mpl(qcnn_circuit)(np.arange(num_params), psis[0,0])
-fig.suptitle("Figure 3. QCNN Architecture", horizontalalignment='center');
 
 ######################################################################
 # Training of the QCNN
@@ -339,8 +336,6 @@ analytical_mask = (K == 0) | (H == 0)
 #     :align: center
 #     :width: 50%
 #     :target: javascript:void(0)
-#     
-#     Figure 4. Add a caption here
 
 def train_qcnn(num_epochs, lr, T, seed):
     """Training function of the QCNN architecture"""
@@ -396,7 +391,7 @@ trained_params, loss_curve = train_qcnn(num_epochs=100, lr=1e-2, T=.1, seed=seed
 plt.figure(figsize=(6, 3))
 plt.plot(loss_curve, label="Loss", color="blue", linewidth=2)
 plt.xlabel("Epochs"), plt.ylabel("Cross-Entropy Loss")
-plt.title("Figure 5. QCNN Training Cross-Entropy Loss Curve")
+plt.title("Figure 4. QCNN Training Cross-Entropy Loss Curve")
 plt.legend()
 plt.grid()
 plt.show()
@@ -442,7 +437,7 @@ for color, phase in zip(colors, phase_labels[:-1]):
 plt.plot([], [], 'k', label='Transition lines')
 
 plt.xlabel("k"), plt.ylabel("h")
-plt.title("Figure 6. QCNN Classification")
+plt.title("Figure 5. QCNN Classification")
 plt.legend()
 plt.show()
 
@@ -528,7 +523,6 @@ vectorized_anomaly_circuit = vmap(jitted_anomaly_circuit, in_axes=(None, 0))
 
 # Draw the QAD Architecture
 fig,ax = qml.draw_mpl(anomaly_circuit)(np.arange(num_anomaly_params), psis[0,0])
-fig.suptitle("Figure 7. QAD Architecture", horizontalalignment='center');
 
 ######################################################################
 # Training of the QAD
@@ -599,7 +593,7 @@ trained_anomaly_params, anomaly_loss_curve = train_anomaly(num_epochs=100, lr=1e
 plt.figure(figsize=(6, 3))
 plt.plot(anomaly_loss_curve, label="Loss", color="blue", linewidth=2)
 plt.xlabel("Epochs"), plt.ylabel("Compression Loss")
-plt.title("Figure 8. Anomaly training compression loss curve")
+plt.title("Figure 6. Anomaly training compression loss curve")
 plt.legend()
 plt.grid()
 plt.show()
@@ -623,7 +617,7 @@ plt.plot(np.linspace(0.5, 1.0, 50), kt_transition(np.linspace(0.5, 1.0, 50)), 'k
 plt.plot([], [], 'k', label='Transition Lines')
 plt.scatter([0 +.3/len(ks)], [0 + .5/len(hs)], color='r', marker = 'x', label="Training point", s=50)
 
-plt.legend(), plt.xlabel("k"), plt.ylabel("h"), plt.title("Figure 9. Compression score for each state in the phase diagram")
+plt.legend(), plt.xlabel("k"), plt.ylabel("h"), plt.title("Figure 7. Phase diagram with QAD")
 cbar = plt.colorbar(im)
 cbar.set_label(r"Compression Score  $\mathcal{C}$")
 plt.show()
