@@ -91,20 +91,20 @@ def get_H(num_spins, k, h):
 # 
 # Due to the competition between the three types of interactions, the ANNNI model exhibits a rich and complex phase diagram.
 #
-# * **Ising transition line** occurs at  
+# * The **Ising transition line** occurs at  
 #   
 #   .. math::  h_I(\kappa) \approx \frac{1 - \kappa}{\kappa} \left(1 - \sqrt{\frac{1 - 3 \kappa + 4 \kappa^2 }{1 - \kappa}} \right),\tag{2} 
 #   
 #   which separates the *ferromagnetic* phase from the *paramagnetic* phase.
 #
-# * **Kosterlitz-Thouless (KT) transition line** occurs at  
+# * The **Kosterlitz-Thouless (KT) transition line** occurs at  
 #   
 #   .. math::  h_C(\kappa) \approx 1.05 \sqrt{(\kappa - 0.5) (\kappa - 0.1)}, \tag{3}  
 #   
 #   which separates the *paramagnetic* phase from the *antiphase*.
 #
 #
-# * **Additionally, another phase transition has been numerically addressed but not yet confirmed. The **Berezinskii-Kosterlitz-Thouless (BKT) transition line** occurs at  
+# * Additionally, another phase transition has been numerically addressed but not yet confirmed. The **Berezinskii-Kosterlitz-Thouless (BKT) transition line** occurs at  
 #   
 #   .. math::  h_{BKT} \approx 1.05 (\kappa - 0.5), \tag{4}
 #   
