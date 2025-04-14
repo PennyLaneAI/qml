@@ -64,7 +64,7 @@ side = 20      # Discretization of the Phase Diagram
 # Implementing the Hamiltonian
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
-# In Pennylane, we can easily build the ANNNI's spin Hamiltonian following the same approach as the 
+# In PennyLane, we can easily build the ANNNI's spin Hamiltonian following the same approach as the 
 # :doc:`demo on spin Hamiltonians </demos/tutorial_how_to_build_spin_hamiltonians>`:
 
 def get_H(num_spins, k, h):
