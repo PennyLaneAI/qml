@@ -38,7 +38,7 @@ However, group theory is a huge hurdle for even some of the more seasoned quantu
 # Importantly, we assume that we have *black-box access* to that function. For a python coder, this 
 # abstract technical term is actually quite intuitive: imagine some part of your code returns a python function ``f`` 
 # that you can call by using integers :math:`x \in \{0,..,11\}` as arguments, like ``f(2)``. However, 
-# you have no knowledge of the definition ``def f(x)`` --- your only way to
+# you have no knowledge of the definition ``def f(x)``. Your only way to
 # learn about the function is to evaluate it at every point. We're ultimately interested in cases
 # where there are too many x-values to evaluate each function value and recover the period in a
 # brute force manner.
@@ -76,7 +76,7 @@ However, group theory is a huge hurdle for even some of the more seasoned quantu
 #    Figure 3. Periodic function from above, from the perspective of group theory.
 #
 # This jargon hopefully does not scare you, but should illustrate that
-# period finding --- and the algorithm we will have a look at here --- can be generalised to other groups and
+# period finding—and the algorithm we will have a look at here—can be generalised to other groups and
 # subgroups. It can even be efficiently run for some instances of non-Abelian groups.
 #
 # The quantum algorithm to find the period of the function above is really simple. Encode the
@@ -104,8 +104,8 @@ import matplotlib.pyplot as plt
 
 #####################################################################
 # First we need to define the periodic function :math:`f(x)`. As mentioned, this function is considered
-# unknown in principle, but we can call it on a classical computer, and --- theoretically, by turning the
-# classical logical circuit into a reversible quantum circuit --- we assume we can also call it on a quantum computer. The call
+# unknown in principle, but we can call it on a classical computer, and—theoretically, by turning the
+# classical logical circuit into a reversible quantum circuit—we assume we can also call it on a quantum computer. The call
 # on a quantum computer can be implemented in parallel for a superposition of inputs, which is
 # part of the trick of this algorithm.
 
