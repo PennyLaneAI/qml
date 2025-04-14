@@ -15,6 +15,17 @@ Introduction
 Rules of the game
 -----------------
 
+Data qubits as surface code tiles
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Basic operations
+^^^^^^^^^^^^^^^^
+
+Surface codes
+^^^^^^^^^^^^^
+
+
+
 
 Data blocks design
 ------------------
