@@ -58,3 +58,13 @@ jobs:
       keep-going: false
       quiet: false
       batch_size: 10
+
+  # Step 4. Deploy demos
+  deploy-demos:
+    uses: ./.github/workflows/v2-deploy-demos.yml
+    needs: build-changed-demos
+    with:
+      environment: ${{ github.event.pull_request.base.ref }}
+      artifact-name: demo-build-${{ github.event.pull_request.head.sha }}
+      preview: true
+      branch: ${{ github.event.pull_request.head.ref }}
