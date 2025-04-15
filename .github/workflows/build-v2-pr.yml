@@ -32,6 +32,9 @@ jobs:
 
       # User forks the repo and creates a PR to the dev branch
       # If the PR is a fork, we need to cancel the workflow and comment on the PR
+      - name: Checkout
+        uses: actions/checkout@v4
+        
       - name: Check if PR is a fork
         if: github.event.pull_request.head.repo.full_name != github.repository
         run: |
