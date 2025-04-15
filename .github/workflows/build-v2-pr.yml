@@ -25,7 +25,7 @@ jobs:
     uses: ./.github/workflows/v2-build-demos.yml
     with:
       ref: ${{ github.sha }}
-      demo-names: 'qrack, gbs'
+      demo-names: 'qrack gbs'
       dev: ${{ github.event.pull_request.base.ref == 'dev' }}
       save-artifact: true
       artifact-name: demo-build-${{ github.sha }}
