@@ -40,7 +40,7 @@ jobs:
 
       - name: Get Changed Demos
         id: changed_demos
-        uses: ./.github/actions/get-changed-demos
+        uses: ./.github/actions/get-changed-demos/action.yml
         with:
           json: true
       
@@ -55,4 +55,19 @@ jobs:
           keep-going: false
           quiet: false
           batch_size: 10
-        
+  
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event.pull_request.base.ref == 'dev' || github.event.pull_request.base.ref == 'master'
+    steps:
+      # Pseudo code for deploying the demos — echos
+      - name: Upload demos
+        run: |
+          echo "Deploying demos to the server"
+      
+      - name: Post comment of preview link (Maybe?)
+        run: |
+          echo "Post a comment on the PR with the link to the preview"
+          echo "Comment posted on PR with preview link"
+          echo of all the demos that were built and their links
