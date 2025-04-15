@@ -22,13 +22,37 @@ concurrency:
 
 jobs:
   build:
-    uses: ./.github/workflows/v2-build-demos.yml
-    with:
-      ref: ${{ github.sha }}
-      demo-names: 'qrack gbs'
-      dev: ${{ github.event.pull_request.base.ref == 'dev' }}
-      save-artifact: true
-      artifact-name: demo-build-${{ github.sha }}
-      keep-going: false
-      quiet: false
-      batch_size: 10
+    runs-on: ubuntu-latest
+    
+    steps:
+      # If a PR is a fork, we need do not run the workflow, all external demo submissions
+      # should be done via fork but require a review before merged into a branch for testing and secondary review/ a final review.cancel-timeout-minutes: 
+      
+      # Example of a PR that is a fork and what a user would see if they tried to run the workflow
+
+      # User forks the repo and creates a PR to the dev branch
+      # If the PR is a fork, we need to cancel the workflow and comment on the PR
+      - name: Check if PR is a fork
+        if: github.event.pull_request.head.repo.full_name != github.repository
+        run: |
+          echo "This workflow does not run on forks, and requires a review before being merged into a branch for testing and secondary or final review."
+          exit 1
+
+      - name: Get Changed Demos
+        id: changed_demos
+        uses: ./.github/actions/get-changed-demos
+        with:
+          json: true
+      
+      - name: Build
+        uses: ./.github/workflows/v2-build-demos.yml
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          demo-names: ${{ steps.changed_demos.outputs.updated }}
+          dev: ${{ github.event.pull_request.base.ref == 'dev' }}
+          save-artifact: true
+          artifact-name: demo-build-${{ github.event.pull_request.head.sha }}
+          keep-going: false
+          quiet: false
+          batch_size: 10
+        
