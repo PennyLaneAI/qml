@@ -31,14 +31,14 @@ jobs:
           echo "This workflow does not run on forks, and requires a review before being merged into a branch for testing and secondary or final review."
           exit 1
 
-      # - name: Checkout
-      #   uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
         
-      # - name: Get Changed Demos
-      #   id: changed-demos
-      #   uses: ./.github/actions/get-changed-demos
-      #   with:
-      #     json: true
+      - name: Get Changed Demos
+        id: changed-demos
+        uses: ./.github/actions/get-changed-demos
+        with:
+          json: true
       
       - name: Build
         uses: ./.github/workflows/v2-build-demos.yml
