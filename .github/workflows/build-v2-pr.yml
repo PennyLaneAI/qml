@@ -39,7 +39,11 @@ jobs:
       - name: Prepare Changed Demos Output
         id: prepare-output
         run: |
-          echo "::set-output name=changed-demos::${{ steps.get-changed-demos.outputs.changed-demos }}"
+          echo "${{ steps.get-changed-demos.outputs.changed-demos }}" > $GITHUB_ENV
+          # echo "${{ steps.get-changed-demos.outputs.deleted-demos }}" > $GITHUB_ENV
+        env:
+          changed-demos: ${{ steps.get-changed-demos.outputs.changed-demos }}
+          # deleted-demos: ${{ steps.get-changed-demos.outputs.deleted-demos }}
 
   # Step 3. Build changed demos
   build-changed-demos:
