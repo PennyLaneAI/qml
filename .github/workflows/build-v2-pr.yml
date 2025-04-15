@@ -40,17 +40,18 @@ jobs:
         with:
           json: true
       
-      - name: Build
+      - name: Build V2 Demos
         uses: ./.github/workflows/v2-build-demos.yml
         with:
           ref: ${{ github.event.pull_request.head.sha }}
-          demo-names: ${{ steps.changed-demos.outputs.updated }}
+          demo-names: ${{ steps.changed-demos.outputs.changed-demos }}
           dev: ${{ github.event.pull_request.base.ref == 'dev' }}
           save-artifact: true
           artifact-name: demo-build-${{ github.event.pull_request.head.sha }}
           keep-going: false
           quiet: false
           batch_size: 10
+
         
       - name: Deploy
         run: |
