@@ -1,20 +1,8 @@
-# AC:
-# - v2_build_demos workflow runs when a commit is pushed to a pull request
-# - Only changed/added demos should be built on a commit
-# - Changed demos are deployed as previews
-# - PRs targeting the dev branch use development dependencies
-# - PRs targeting master use the stable dependencies (constraints.txt)
-
-#  We want to create a Workflow that runs on pull requests to the dev branch and master branch
-# depending on if the branch is dev or master, we want to use different dependencies
-# we want to use the stable dependencies for master and the development dependencies for dev, so we will need to check the branch being targeted and determine which dependencies to use. The workflow "Build V2 Demos" has a bool variable for this
-
 name: Build V2 Demos on Pull Request
 
 on:
   pull_request:
     branches: [master, dev]
-    # Runs on pull requests where the target branch is dev or master
 
 concurrency:
   group: build-v2-demos-${{ github.ref }}
@@ -33,7 +21,12 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v4
-        
+        with:
+          fetch-depth: 0
+
+      - name: List workspace contents
+        run: ls -R .github
+
       - name: Get Changed Demos
         id: changed-demos
         uses: ./.github/actions/get-changed-demos
@@ -52,10 +45,6 @@ jobs:
           quiet: false
           batch_size: 10
 
-        
       - name: Deploy
         run: |
-          # Deploy the built demos to a preview environment
-          # This is a placeholder for the actual deployment step
           echo "Deploying demos..."
-          # Add your deployment commands here
