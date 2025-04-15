@@ -68,3 +68,5 @@ jobs:
       artifact-name: demo-build-${{ github.event.pull_request.head.sha }}
       preview: true
       branch: ${{ github.event.pull_request.head.ref }}
+    secrets: inherit
+    
