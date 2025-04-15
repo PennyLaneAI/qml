@@ -44,7 +44,7 @@ jobs:
         uses: ./.github/workflows/v2-build-demos.yml
         with:
           ref: ${{ github.event.pull_request.head.sha }}
-          demo-names: 'gbs'
+          demo-names: ${{ steps.changed-demos.outputs.updated }}
           dev: ${{ github.event.pull_request.base.ref == 'dev' }}
           save-artifact: true
           artifact-name: demo-build-${{ github.event.pull_request.head.sha }}
