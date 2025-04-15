@@ -4,12 +4,17 @@ Period finding -- A problem at the heart of quantum computing
 
 You might have heard that Shor's algorithm is an instance of "period finding". You might also have heard that, more generally, this is an example of an *Abelian hidden subgroup problem* solved by a quantum computer's stunning ability to implement the Fourier transform efficiently for an intractable number of function values. Hidden subgroup problems and quantum Fourier transforms were all the rage in the quantum computing literature in the 2000s.
 
-While trends may have moved on, the idea of extracting group structure from the Fourier spectrum is still at the very core of what quantum computers could be useful for. Scott Aaronson, for example, in his 2022 commentary "How Much Structure Is Needed for Huge Quantum Speedup?" presents the following hierarchy:
-
-.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_period_finding.png
+.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_qjit_compile_grovers_algorithm_with_catalyst.png
     :align: center
     :width: 70%
     :target: javascript:void(0)
+
+While trends may have moved on, the idea of extracting group structure from the Fourier spectrum is still at the very core of what quantum computers could be useful for. Scott Aaronson, for example, in his 2022 commentary "How Much Structure Is Needed for Huge Quantum Speedup?" presents the following hierarchy:
+
+.. figure:: ../_static/demonstration_assets/period_finding/aaronson_fig6.png
+    :align: center
+    :width: 75%
+    :target: javascript:void(0);
 
     Figure 1. Aaronson's 'hierarchy of structure' for quantum algorithms (Fig. 6 in [#Aaronson22]_)
 
