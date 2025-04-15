@@ -51,7 +51,8 @@ jobs:
     needs: prepare-changed-demos-list
     with:
       ref: ${{ github.event.pull_request.head.sha }}
-      demo-names: ${{ needs.prepare-changed-demos-list.outputs.updated }}
+      # demo-names: ${{ needs.prepare-changed-demos-list.outputs.updated }}
+      demo-names: 'tutorial_qpe tutorial_QUBO'
       dev: ${{ github.event.pull_request.base.ref == 'dev' }}
       save-artifact: true
       artifact-name: demo-build-${{ github.event.pull_request.head.sha }}
