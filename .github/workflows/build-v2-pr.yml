@@ -21,21 +21,14 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  set_build_params:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Get Changed Demos
-        run: echo "I will eventually get the changed demos"
-
-      - name: Make and echo saying dev requirements
-        run: echo "I will run the dev requirements"
-        if: github.event.pull_request.base.ref == 'dev'
-      
-      - name: Make and echo saying master requirements
-        run: echo "I will run the master requirements"
-        if: github.event.pull_request.base.ref == 'master'
-        
+  build:
+    uses: ./.github/workflows/v2-build-demos.yml
+    with:
+      ref: ${{ github.sha }}
+      demo-names: 'qrack, gbs'
+      dev: ${{ github.event.pull_request.base.ref == 'dev' }}
+      save-artifact: true
+      artifact-name: demo-build-${{ github.sha }}
+      keep-going: false
+      quiet: false
+      batch_size: 10
