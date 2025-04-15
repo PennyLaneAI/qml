@@ -34,11 +34,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         
-      - name: Get Changed Demos
-        id: changed-demos
-        uses: ./.github/actions/get-changed-demos
-        with:
-          json: true
+      # - name: Get Changed Demos
+      #   id: changed-demos
+      #   uses: ./.github/actions/get-changed-demos
+      #   with:
+      #     json: true
       
       - name: Build
         uses: ./.github/workflows/v2-build-demos.yml
