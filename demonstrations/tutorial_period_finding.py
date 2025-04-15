@@ -4,7 +4,7 @@ Period finding -- A problem at the heart of quantum computing
 
 You might have heard that Shor's algorithm is an instance of "period finding". You might also have heard that, more generally, this is an example of an *Abelian hidden subgroup problem* solved by a quantum computer's stunning ability to implement the Fourier transform efficiently for an intractable number of function values. Hidden subgroup problems and quantum Fourier transforms were all the rage in the quantum computing literature in the 2000s.
 
-.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_qjit_compile_grovers_algorithm_with_catalyst.png
+.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_period_finding.png
     :align: center
     :width: 70%
     :target: javascript:void(0)
