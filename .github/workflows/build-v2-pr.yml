@@ -31,11 +31,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Get Changed Demos
+      - name: Get changed demos
         id: get-changed-demos
         uses: ./.github/actions/get-changed-demos
       
-      - name: Output Changed Demos
+      - name: Output changed demos
         run: |
           echo "Updated Demos: ${{ steps.get-changed-demos.outputs.updated }}"
           echo "Deleted Demos: ${{ steps.get-changed-demos.outputs.deleted }}"
