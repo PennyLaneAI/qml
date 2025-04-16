@@ -238,7 +238,6 @@ measure_states = [(0, 0, 0, 0), (1, 1, 0, 0), (0, 1, 0, 1), (1, 1, 1, 1), (2, 0,
 # different Fock states at the output, and print them out
 for i in measure_states:
     print(f"|{''.join(str(j) for j in i)}>: {probs[i]}")
-    
 
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
