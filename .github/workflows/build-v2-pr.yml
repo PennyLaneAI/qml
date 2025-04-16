@@ -42,11 +42,11 @@ jobs:
       
       # If no changes are found, exit workflow
       - name: Exit if no changes
-        if: steps.get-changed-demos.outputs.updated == '[]' && steps.get-changed-demos.outputs.deleted == '[]'
+        if: steps.get-changed-demos.outputs.updated == '' || steps.get-changed-demos.outputs.deleted == ''
         run: |
-          echo "No changes found in demos."
-          exit 0
-
+          echo "No changes found in demos. Exiting workflow."
+          exit 1
+          
   # build-updated-demos:
   #   uses: ./.github/workflows/v2-build-demos.yml
   #   needs: identify-changed-demos
