@@ -1,4 +1,7 @@
-"""
+r"""
+.. role:: html(raw)
+    :format: html
+
 Turning quantum nodes into Keras Layers
 =======================================
 
@@ -10,7 +13,13 @@ Turning quantum nodes into Keras Layers
 
    tutorial_qnn_module_torch Turning quantum nodes into Torch Layers
 
-*Author: Tom Bromley — Posted: 02 November 2020. Last updated: 28 January 2021.*
+*Author: Tom Bromley — Posted: 02 November 2020. Last updated: 21 March 2025.*
+
+.. warning::
+
+    This demo is only compatible with PennyLane version 0.40 or below.
+    For usage with a later version of PennyLane, please consider using
+    :doc:`PyTorch <tutorial_qnn_module_torch>` or :doc:`JAX <tutorial_How_to_optimize_QML_model_using_JAX_and_Optax>`.
 
 Creating neural networks in `Keras <https://keras.io/>`__ is easy. Models are constructed from
 elementary *layers* and can be trained using a high-level API. For example, the following code
@@ -66,6 +75,11 @@ c = ["#1f77b4" if y_ == 0 else "#ff7f0e" for y_ in y]  # colours for each class
 plt.axis("off")
 plt.scatter(X[:, 0], X[:, 1], c=c)
 plt.show()
+
+##############################################################################
+# .. figure:: /_static/demonstration_assets/qnn_module/sphx_glr_qnn_module_tf_001.png
+#    :width: 100%
+#    :align: center
 
 ###############################################################################
 # Defining a QNode
@@ -166,7 +180,25 @@ model.compile(opt, loss="mae", metrics=["accuracy"])
 
 fitting = model.fit(X, y_hot, epochs=6, batch_size=5, validation_split=0.25, verbose=2)
 
-###############################################################################
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  .. code-block:: none
+#
+#    Epoch 1/6
+#    30/30 - 4s - loss: 0.4153 - accuracy: 0.7333 - val_loss: 0.3183 - val_accuracy: 0.7800 - 4s/epoch - 123ms/step
+#    Epoch 2/6
+#    30/30 - 4s - loss: 0.2927 - accuracy: 0.8000 - val_loss: 0.2475 - val_accuracy: 0.8400 - 4s/epoch - 130ms/step
+#    Epoch 3/6
+#    30/30 - 4s - loss: 0.2272 - accuracy: 0.8333 - val_loss: 0.2111 - val_accuracy: 0.8200 - 4s/epoch - 119ms/step
+#    Epoch 4/6
+#    30/30 - 4s - loss: 0.1963 - accuracy: 0.8667 - val_loss: 0.1917 - val_accuracy: 0.8600 - 4s/epoch - 118ms/step
+#    Epoch 5/6
+#    30/30 - 4s - loss: 0.1772 - accuracy: 0.8667 - val_loss: 0.1828 - val_accuracy: 0.8600 - 4s/epoch - 117ms/step
+#    Epoch 6/6
+#    30/30 - 4s - loss: 0.1603 - accuracy: 0.8733 - val_loss: 0.2006 - val_accuracy: 0.8200 - 4s/epoch - 117ms/step
+#
+#
 # How did we do? The model looks to have successfully trained and the accuracy on both the
 # training and validation datasets is reasonably high. In practice, we would aim to push the
 # accuracy higher by thinking carefully about the model design and the choice of hyperparameters
@@ -224,7 +256,25 @@ model.compile(opt, loss="mae", metrics=["accuracy"])
 
 fitting = model.fit(X, y_hot, epochs=6, batch_size=5, validation_split=0.25, verbose=2)
 
-###############################################################################
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  .. code-block:: none
+#
+#    Epoch 1/6
+#    30/30 - 7s - loss: 0.3682 - accuracy: 0.7467 - val_loss: 0.2550 - val_accuracy: 0.8000 - 7s/epoch - 229ms/step
+#    Epoch 2/6
+#    30/30 - 7s - loss: 0.2428 - accuracy: 0.8067 - val_loss: 0.2105 - val_accuracy: 0.8400 - 7s/epoch - 224ms/step
+#    Epoch 3/6
+#    30/30 - 7s - loss: 0.2001 - accuracy: 0.8333 - val_loss: 0.1901 - val_accuracy: 0.8200 - 7s/epoch - 220ms/step
+#    Epoch 4/6
+#    30/30 - 7s - loss: 0.1816 - accuracy: 0.8600 - val_loss: 0.1776 - val_accuracy: 0.8200 - 7s/epoch - 224ms/step
+#    Epoch 5/6
+#    30/30 - 7s - loss: 0.1661 - accuracy: 0.8667 - val_loss: 0.1711 - val_accuracy: 0.8600 - 7s/epoch - 224ms/step
+#    Epoch 6/6
+#    30/30 - 7s - loss: 0.1520 - accuracy: 0.8600 - val_loss: 0.1807 - val_accuracy: 0.8200 - 7s/epoch - 221ms/step
+#
+#
 # Great! We've mastered the basics of constructing hybrid classical-quantum models using
 # PennyLane and Keras. Can you think of any interesting hybrid models to construct? How do they
 # perform on realistic datasets?
