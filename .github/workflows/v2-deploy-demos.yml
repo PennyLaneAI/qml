@@ -16,7 +16,7 @@ on:
       branch:
         description: Branch to checkout
         type: string
-        default: sc-81925-qml-repository-ci-pushes-newly-built-demos
+        default: sc-81925-qml-repository-ci-pushes-newly-built-demos ## Should this be updated, this seems out of date? Or should it be removed completely?
 
   workflow_dispatch:
     inputs:
@@ -34,7 +34,7 @@ on:
       branch:
         description: Branch to checkout
         type: string
-        default: sc-81925-qml-repository-ci-pushes-newly-built-demos
+        default: sc-81925-qml-repository-ci-pushes-newly-built-demos ## Should this be updated, this seems out of date? Or should it be removed completely?
 
 jobs:
   deploy-demos:
@@ -76,3 +76,6 @@ jobs:
             --preview ${{ inputs.preview }} \
             _build/pack/*.zip
 
+### TODO: ###
+# - Access whether or not the default branch argument should be set, or if should be removed completely
+#    - See lines 16 and 34

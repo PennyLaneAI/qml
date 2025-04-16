@@ -3,6 +3,8 @@ on:
   pull_request:
     branches: [master, dev]
 
+# TODO: Add permissions to this workflow
+
 concurrency:
   group: build-v2-demos-${{ github.ref }}
   cancel-in-progress: true
@@ -65,9 +67,9 @@ jobs:
     uses: ./.github/workflows/v2-deploy-demos.yml
     needs: build-changed-demos
     with:
-      environment: ${{ github.event.pull_request.base.ref }}
+      environment: 'swc-staging' # Is the environment dev or master? or is it swc-dev or swc-prod?
       artifact-name: demo-build-${{ github.event.pull_request.head.sha }}
-      preview: true
+      preview: true # should this be dynamic? or should it always be true as this a PR workflow?
       branch: ${{ github.event.pull_request.head.ref }}
     secrets: inherit
     
