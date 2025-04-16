@@ -39,29 +39,36 @@ jobs:
         run: |
           echo "Updated Demos: ${{ steps.get-changed-demos.outputs.updated }}"
           echo "Deleted Demos: ${{ steps.get-changed-demos.outputs.deleted }}"
+      
+      # If no changes are found, exit workflow
+      - name: Exit if no changes
+        if: steps.get-changed-demos.outputs.updated == '[]' && steps.get-changed-demos.outputs.deleted == '[]'
+        run: |
+          echo "No changes found in demos."
+          exit 0
 
-  build-updated-demos:
-    uses: ./.github/workflows/v2-build-demos.yml
-    needs: identify-changed-demos
-    with:
-      ref: ${{ github.event.pull_request.head.sha }}
-      demo-names: ${{ needs.identify-changed-demos.outputs.updated }}
-      dev: ${{ github.event.pull_request.base.ref == 'dev' }}
-      save-artifact: true
-      artifact-name: demo-build-${{ github.event.pull_request.head.sha }}
-      keep-going: false
-      quiet: false
-      batch_size: 10
+  # build-updated-demos:
+  #   uses: ./.github/workflows/v2-build-demos.yml
+  #   needs: identify-changed-demos
+  #   with:
+  #     ref: ${{ github.event.pull_request.head.sha }}
+  #     demo-names: ${{ needs.identify-changed-demos.outputs.updated }}
+  #     dev: ${{ github.event.pull_request.base.ref == 'dev' }}
+  #     save-artifact: true
+  #     artifact-name: demo-build-${{ github.event.pull_request.head.sha }}
+  #     keep-going: false
+  #     quiet: false
+  #     batch_size: 10
 
-  deploy-preview-demos:
-    uses: ./.github/workflows/v2-deploy-demos.yml
-    needs: build-updated-demos
-    with:
-      environment: 'swc-staging' ## In a subsequent PR, this should be changed to the appropriate environment that internal and third parties can access
-      artifact-name: demo-build-${{ github.event.pull_request.head.sha }}
-      preview: true
-      branch: ${{ github.event.pull_request.head.ref }}
-    secrets: inherit
+  # deploy-preview-demos:
+  #   uses: ./.github/workflows/v2-deploy-demos.yml
+  #   needs: build-updated-demos
+  #   with:
+  #     environment: 'swc-staging' ## In a subsequent PR, this should be changed to the appropriate environment that internal and third parties can access
+  #     artifact-name: demo-build-${{ github.event.pull_request.head.sha }}
+  #     preview: true
+  #     branch: ${{ github.event.pull_request.head.ref }}
+  #   secrets: inherit
 
 # TODOS: In subsequent PRs, the following should be added:
   # 1. Add a step to determine the SWC environment to deploy to (Always prod?)
