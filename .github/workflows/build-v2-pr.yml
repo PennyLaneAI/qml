@@ -10,7 +10,6 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # Step 1. Check if PR is a fork
   check-if-fork:
     runs-on: ubuntu-latest
     steps:
@@ -20,7 +19,6 @@ jobs:
           echo "This workflow does not run on forks, and requires a review before being merged into a branch for testing and secondary or final review."
           exit 1
   
-  # Step 2. Create output of changed demos for build-demos step
   prepare-changed-demos-list:
     runs-on: ubuntu-latest
     needs: check-if-fork
@@ -29,8 +27,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Get Changed Demos
         id: get-changed-demos
@@ -46,30 +42,32 @@ jobs:
         env:
           changed-demos: ${{ steps.get-changed-demos.outputs.changed-demos }}
           # deleted-demos: ${{ steps.get-changed-demos.outputs.deleted-demos }}
+      
+      - name: Print all demos to logging
+        run: |
+          echo "Changed Demos: ${{ steps.get-changed-demos.outputs.changed-demos }}"
 
-  # Step 3. Build changed demos
-  build-changed-demos:
-    uses: ./.github/workflows/v2-build-demos.yml
-    needs: prepare-changed-demos-list
-    with:
-      ref: ${{ github.event.pull_request.head.sha }}
-      # demo-names: ${{ needs.prepare-changed-demos-list.outputs.updated }}
-      demo-names: 'tutorial_qpe tutorial_QUBO'
-      dev: ${{ github.event.pull_request.base.ref == 'dev' }}
-      save-artifact: true
-      artifact-name: demo-build-${{ github.event.pull_request.head.sha }}
-      keep-going: false
-      quiet: false
-      batch_size: 10
+  # build-changed-demos:
+  #   uses: ./.github/workflows/v2-build-demos.yml
+  #   needs: prepare-changed-demos-list
+  #   with:
+  #     ref: ${{ github.event.pull_request.head.sha }}
+  #     # demo-names: ${{ needs.prepare-changed-demos-list.outputs.updated }}
+  #     demo-names: 'tutorial_qpe tutorial_QUBO'
+  #     dev: ${{ github.event.pull_request.base.ref == 'dev' }}
+  #     save-artifact: true
+  #     artifact-name: demo-build-${{ github.event.pull_request.head.sha }}
+  #     keep-going: false
+  #     quiet: false
+  #     batch_size: 10
 
-  # Step 4. Deploy demos
-  deploy-demos:
-    uses: ./.github/workflows/v2-deploy-demos.yml
-    needs: build-changed-demos
-    with:
-      environment: 'swc-staging' # Is the environment dev or master? or is it swc-dev or swc-prod?
-      artifact-name: demo-build-${{ github.event.pull_request.head.sha }}
-      preview: true # should this be dynamic? or should it always be true as this a PR workflow?
-      branch: ${{ github.event.pull_request.head.ref }}
-    secrets: inherit
+  # deploy-demos:
+  #   uses: ./.github/workflows/v2-deploy-demos.yml
+  #   needs: build-changed-demos
+  #   with:
+  #     environment: 'swc-staging'
+  #     artifact-name: demo-build-${{ github.event.pull_request.head.sha }}
+  #     preview: true
+  #     branch: ${{ github.event.pull_request.head.ref }}
+  #   secrets: inherit
     
