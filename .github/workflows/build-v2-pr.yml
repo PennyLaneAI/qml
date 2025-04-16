@@ -1,27 +1,29 @@
-name: Build and Deploy V2 Demos on Pull Request
+name: Build and Deploy V2 Demo Previews on Pull Requests
 on:
   pull_request:
     branches: [master, dev]
 
-# TODO: Add permissions to this workflow
+permissions:
+  contents: read
+  pull-requests: write
 
 concurrency:
   group: build-v2-demos-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  check-if-fork:
+  validate-pr-source:
     runs-on: ubuntu-latest
     steps:
       - name: Check if PR is a fork
         if: github.event.pull_request.head.repo.full_name != github.repository
         run: |
-          echo "This workflow does not run on forks, and requires a review before being merged into a branch for testing and secondary or final review."
+          echo "Skipping workflow for forked PRs"
           exit 1
   
-  prepare-changed-demos-list:
+  identify-changed-demos:
     runs-on: ubuntu-latest
-    needs: check-if-fork
+    needs: validate-pr-source
     outputs:
       updated: ${{ steps.get-changed-demos.outputs.updated }}
       deleted: ${{ steps.get-changed-demos.outputs.deleted }}
@@ -32,20 +34,18 @@ jobs:
       - name: Get Changed Demos
         id: get-changed-demos
         uses: ./.github/actions/get-changed-demos
-        with:
-          json: false
       
-      - name: Print Changed Demos
+      - name: Output Changed Demos
         run: |
           echo "Updated Demos: ${{ steps.get-changed-demos.outputs.updated }}"
           echo "Deleted Demos: ${{ steps.get-changed-demos.outputs.deleted }}"
 
-  build-changed-demos:
+  build-updated-demos:
     uses: ./.github/workflows/v2-build-demos.yml
-    needs: prepare-changed-demos-list
+    needs: identify-changed-demos
     with:
       ref: ${{ github.event.pull_request.head.sha }}
-      demo-names: ${{ needs.prepare-changed-demos-list.outputs.updated }}
+      demo-names: ${{ needs.identify-changed-demos.outputs.updated }}
       dev: ${{ github.event.pull_request.base.ref == 'dev' }}
       save-artifact: true
       artifact-name: demo-build-${{ github.event.pull_request.head.sha }}
@@ -53,13 +53,17 @@ jobs:
       quiet: false
       batch_size: 10
 
-  deploy-demos:
+  deploy-preview-demos:
     uses: ./.github/workflows/v2-deploy-demos.yml
-    needs: build-changed-demos
+    needs: build-updated-demos
     with:
-      environment: 'swc-staging'
+      environment: 'swc-staging' ## In a subsequent PR, this should be changed to the appropriate environment that internal and third parties can access
       artifact-name: demo-build-${{ github.event.pull_request.head.sha }}
       preview: true
       branch: ${{ github.event.pull_request.head.ref }}
     secrets: inherit
-    
+
+# TODOS: In subsequent PRs, the following should be added:
+  # 1. Add a step to determine the SWC environment to deploy to (Always prod?)
+  # 2. Add a step to post a comment on the PR with the preview URL.
+  # 3. Determine whether or not we can/want to delete demos.
