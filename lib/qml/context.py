@@ -38,5 +38,17 @@ class Context:
         return Repo.discover()
 
     @property
-    def constraints_file(self) -> Path:
-        return self.repo_root / "constraints.txt"
+    def core_requirements_file(self) -> Path:
+        return self.repo_root / "dependencies" / "requirements-core.in"
+
+    @property
+    def stable_constraints_file(self) -> Path:
+        return self.repo_root / "dependencies" / "constraints-stable.txt"
+
+    @property
+    def dev_constraints_file(self) -> Path:
+        return self.repo_root / "dependencies" / "constraints-dev.txt"
+
+    @property
+    def build_requirements_file(self) -> Path:
+        return self.repo_root / "dependencies" / "requirements-build.txt"
