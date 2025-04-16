@@ -33,7 +33,7 @@ jobs:
         id: get-changed-demos
         uses: ./.github/actions/get-changed-demos
         with:
-          json: true
+          json: false
       
       - name: Print Changed Demos
         run: |
