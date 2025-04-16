@@ -73,3 +73,4 @@ jobs:
 #   1. Add a step to determine the SWC environment to deploy to (Always prod?)
 #   2. Add a step to post a comment on the PR with the preview URL.
 #   3. Determine whether or not we can/want to delete demos.
+#   4. Add a logging to tell third parties how they can fork then get approval to merge to a branch within our repo.
