@@ -123,7 +123,7 @@ hf = np.array(dataset.hf_state)
 @qml.qjit
 @qml.qnode(dev)
 def cost(params):
-    qml.BasisState.compute_decomposition(hf, wires=range(qubits))
+    qml.BasisState(hf, wires=range(qubits))
     qml.DoubleExcitation(params[0], wires=[0, 1, 2, 3])
     qml.DoubleExcitation(params[1], wires=[0, 1, 4, 5])
     return qml.expval(H)
