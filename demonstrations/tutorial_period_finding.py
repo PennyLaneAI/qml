@@ -13,7 +13,7 @@ While trends may have moved on, the idea of extracting group structure from the 
 
     Figure 1. Aaronson's 'hierarchy of structure' for quantum algorithms (Fig. 6 in [#Aaronson22]_)
 
-However, group theory is a huge hurdle for even some of the more seasoned quantum enthusiasts. This demo wants to give a glimpse of what this "Abelian structure" is all about. Luckily, the fruit-fly example of a hidden subgroup problem is just the task of finding the period of a integer valued function—something one can appreciate without much group jargon. A fantastic resource to read up on the basics is the review of hidden subgroup problems by Childs & van Dam (2010) [#Childs2010]_.
+However, group theory is a huge hurdle for even some of the more seasoned quantum enthusiasts. This demo wants to give a glimpse of what this "Abelian structure" is all about. Luckily, the fruit-fly example of a hidden subgroup problem is just the task of finding the period of an integer valued function—something one can appreciate without much group jargon. A fantastic resource to read up on the basics is the review of hidden subgroup problems by Childs & van Dam (2010) [#Childs2010]_.
 """
 
 #####################################################################
