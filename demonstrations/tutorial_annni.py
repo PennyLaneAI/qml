@@ -143,17 +143,7 @@ def get_phase(k, h):
 # State preparation
 # -----------------
 #
-# In this section, we prepare the ground states of the system, which will serve as inputs for both QML models. Several methods can be used:
-#
-# * **Variational Quantum Eigensolver (VQE)**  
-#   
-#   VQE is a technique introduced in [#Peruzzo]_, which leverages the Rayleigh-Ritz variational principle to approximate the lowest-energy states of a given Hamiltonian, as demonstrated in the :doc:`demo on VQE </demos/tutorial_vqe>`.  
-#
-# * **Matrix Product States (MPS)**  
-#   
-#   MPS can be efficiently computed on classical hardware at a low cost and provide accurate approximations for local quantum systems. Several techniques are being developed to optimally embed MPS into quantum circuits as seen for example in the :doc:`demo on Constant-depth preparation of MPS with dynamic circuits </demos/tutorial_constant_depth_mps_prep>`.  
-#
-#
+# In this section, we prepare the ground states of the system, which will serve as inputs for both QML models. Several methods can be used, including **Variational Quantum Eigensolver (VQE)**, introduced in [#Peruzzo]_ and demonstrated in the :doc:`demo on VQE </demos/tutorial_vqe>`, and **Matrix Product States (MPS)**, illustrated in the :doc:`demo on Constant-depth preparation of MPS with dynamic circuits </demos/tutorial_constant_depth_mps_prep>`.  
 # For simplicity, in this demo, we compute the ground state directly by finding the *eigenvector* corresponding to the lowest eigenvalue of the Hamiltonian. The resulting states are then loaded into the quantum circuits using PennyLane’s :class:`~pennylane.StatePrep`.  
 #
 # It is important to note that this approach is only feasible within the classically simulable regime, as it becomes quickly intractable for larger system sizes.
