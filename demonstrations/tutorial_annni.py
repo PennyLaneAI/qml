@@ -583,7 +583,7 @@ plt.show()
 
 
 ######################################################################
-# After training the circuit to optimally compress the (0,0)(0,0) state, we evaluate the compression score for all other input states using the learned parameters.
+# After training the circuit to optimally compress the (0,0) state, we evaluate the compression score for all other input states using the learned parameters.
 # 
 # The model is expected to achieve near-optimal compression for states similar to the training state (namely those belonging to the same phase) resulting in a low compression score. Conversely, states from different phases should exhibit poorer compression, leading to a higher compression score.
 
