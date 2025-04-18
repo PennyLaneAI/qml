@@ -18,7 +18,17 @@ jobs:
       - name: Check if PR is a fork
         if: github.event.pull_request.head.repo.full_name != github.repository
         run: |
-          echo "Skipping workflow for forked PRs"
+          echo "============================================================"
+          echo "⚠️  Preview build skipped for this PR ⚠️"
+          echo ""
+          echo "This pull request is from a forked repository."
+          echo "For security reasons (e.g., protecting environment secrets),"
+          echo "our deployment previews only run for branches within the"
+          echo "main PennyLaneAI repository."
+          echo ""
+          echo "If you'd like help testing this change, feel free to ping a"
+          echo "maintainer — we can move your branch internally to trigger a preview build."
+          echo "============================================================"
           exit 1
   
   identify-changed-demos:
