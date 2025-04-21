@@ -289,13 +289,16 @@ fig,ax = qml.draw_mpl(qcnn_circuit)(np.arange(num_params), psis[0,0])
 #
 # The training is performed by minimizing the **Cross Entropy loss** on the output probabilities
 #
-# .. math::  \mathcal{L} = -\frac{1}{N} \sum_{i=1}^{N} \sum_{j} y_j^{\frac1T} \log \tilde{p}_j^\frac1T,   \tag{5}
+# .. math::  \mathcal{L} = -\frac{1}{|S|} \sum_{(\kappa, h) \in S} \sum_{j} y_j^{\frac1T}(\kappa, h) \log(p_j)^\frac1T(\kappa, h),   \tag{5}
 #
-# where
+# where:
+# * :math:`S` is the training set,
 #
-# * :math:`y_j` represents the one-hot encoded labels for the three phases,
+# * :math:`p_j(\kappa, h)` is the model’s predicted probability of the system at :math:`(\kappa, h)` being in the :math:`j`-th phase,
+#
+# * :math:`y_j(\kappa, h)` represents the one-hot encoded labels for the three phases,
 # 
-# * :math:and `T` is a temperature factor that controls the sharpness of the predicted probability distribution.
+# * and :math:`T` is a temperature factor that controls the sharpness of the predicted probability distribution.
 
 def cross_entropy(pred, Y, T):
     """Multi-class cross entropy loss function"""
@@ -436,14 +439,13 @@ plt.show()
 # Unsupervised learning of phases: Quantum Anomaly Detection
 # ----------------------------------------------------------
 # 
-# Quantum Anomaly Detection (QAD) was first introduced in [#Kottmann]_ and serves as the quantum counterpart of an Auto-Encoder, with only the encoding (forward) process being trained (due to the inversion property of quantum unitaries).
+# Quantum Anomaly Detection (QAD), introduced in [#Kottmann]_, is the quantum version of an autoencoder. However, unlike classical autoencoders, only the encoding (forward) process is trained here. This is because quantum operations are invertible, making a separate decoder unnecessary.
 # 
-# In this approach, a single state :math:`|\psi(\kappa, h)\rangle` from the ANNNI model is optimised to find the best circuit parameters such that:
-# 
+# In this method, we start with a single quantum state :math:`|\psi(\kappa, h)\rangle` taken from the ANNNI model. The goal is to optimize the parameters :math:`theta` of a quantum circuit :math:`V(\theta)` so that it transforms the chosen input state into the following form:
 # 
 # .. math::  V(\theta)|\psi(\kappa, h)\rangle = |\phi\rangle^{N-K} \otimes |0\rangle^{\otimes K}\tag{6}
 # 
-# This means that we seek a unitary transformation that disentangles the input state into a compressed state :math:`|\phi\rangle` for a subset of qubits (referred to as non-trash qubits) while mapping the remaining qubits (called trash qubits) to the zero state.
+# The equation above means that we are trying to find a unitary transformation that "compresses" the important information of the original state into a smaller number of qubits :math:`(N-K)`, while disentangling and resetting the remaining :math:`K` qubits to the trivial state :math:`|0\rangle`. In other words, the circuit learns to isolate the relevant features of the quantum state into :math:`|\phi\rangle`.
 #
 # Circuit definition
 # ^^^^^^^^^^^^^^^^^^
