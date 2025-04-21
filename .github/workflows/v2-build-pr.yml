@@ -79,9 +79,6 @@ jobs:
       branch: ${{ github.event.pull_request.head.ref }}
     secrets: inherit
 
-# XanaduAI/cloud-actions/create-and-update-pull-request-comment@main
-# Uses the updated output from the get-changed-demos action to create a comment on the PR
-# with the xandu cloud actuibs create-and-update-pull-request-comment@main
   comment-on-pr:
     runs-on: ubuntu-latest
     needs: [identify-changed-demos, build-updated-demos, deploy-preview-demos]
