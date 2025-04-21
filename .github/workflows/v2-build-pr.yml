@@ -99,9 +99,13 @@ jobs:
           echo "The following demos have been updated and deployed:" >> comment.md
           echo "" >> comment.md
 
-          for demo in "${demos[@]}"; do
+            echo "<details><summary>Updated Demos</summary>" >> comment.md
+            echo "" >> comment.md
+            for demo in "${demos[@]}"; do
             echo "- [$demo](https://pennylane.ai/qml/demonstrations/$demo?preview=true)" >> comment.md
-          done
+            done
+            echo "" >> comment.md
+            echo "</details>" >> comment.md
 
           echo "" >> comment.md
           echo "_This comment updates automatically if you push more commits._" >> comment.md
