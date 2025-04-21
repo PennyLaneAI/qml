@@ -215,5 +215,3 @@ jobs:
         uses: geekyeggo/delete-artifact@v5
         with:
             name: ${{ needs.generate-build-variables.outputs.artifact-name }}-c*
-
-  
