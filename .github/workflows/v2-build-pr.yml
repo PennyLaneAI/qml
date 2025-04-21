@@ -1,4 +1,4 @@
-name: Build V2 Demo Previews on Pull Requests
+name: V2 Build PR
 
 on:
   pull_request:

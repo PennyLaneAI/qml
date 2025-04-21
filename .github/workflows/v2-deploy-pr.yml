@@ -1,8 +1,9 @@
-name: Deploy V2 Demo Previews on Pull Requests
+name: V2 Deploy PR
 
 on:
   workflow_run:
-    workflows: ['Build V2 Demo Previews on Pull Requests']
+    workflows:
+      - V2 Build PR
     types:
       - completed
 
