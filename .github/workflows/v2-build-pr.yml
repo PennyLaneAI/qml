@@ -1,39 +1,19 @@
-name: Build and Deploy V2 Demo Previews on Pull Requests
+name: Build V2 Demo Previews on Pull Requests
+
 on:
   pull_request:
     branches: [master, dev]
 
 permissions:
   contents: read
-  pull-requests: write
 
 concurrency:
   group: build-v2-demos-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  validate-pr-source:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check if PR is a fork
-        if: github.event.pull_request.head.repo.full_name != github.repository
-        run: |
-          echo "============================================================"
-          echo "⚠️  Preview build skipped for this PR ⚠️"
-          echo ""
-          echo "This pull request is from a forked repository."
-          echo "For security reasons (e.g., protecting environment secrets),"
-          echo "our deployment previews only run for branches within the"
-          echo "main PennyLaneAI repository."
-          echo ""
-          echo "If you'd like help testing this change, feel free to ping a"
-          echo "maintainer — we can move your branch internally to trigger a preview build."
-          echo "============================================================"
-          exit 1
-  
   identify-changed-demos:
     runs-on: ubuntu-latest
-    needs: validate-pr-source
     outputs:
       updated: ${{ steps.get-changed-demos.outputs.updated }}
       deleted: ${{ steps.get-changed-demos.outputs.deleted }}
@@ -44,18 +24,18 @@ jobs:
       - name: Get changed demos
         id: get-changed-demos
         uses: ./.github/actions/get-changed-demos
-      
+
       - name: Output changed demos
         run: |
           echo "Updated Demos: ${{ steps.get-changed-demos.outputs.updated }}"
           echo "Deleted Demos: ${{ steps.get-changed-demos.outputs.deleted }}"
-      
+
       - name: Exit if no changes
         if: steps.get-changed-demos.outputs.updated == ''
         run: |
           echo "No changes found in demos. Exiting workflow."
           exit 1
-  
+
   build-updated-demos:
     uses: ./.github/workflows/v2-build-demos.yml
     needs: identify-changed-demos
@@ -68,56 +48,3 @@ jobs:
       keep-going: false
       quiet: false
       batch_size: 10
-
-  deploy-preview-demos:
-    uses: ./.github/workflows/v2-deploy-demos.yml
-    needs: build-updated-demos
-    with:
-      environment: 'swc-staging' ## In a subsequent PR, this should be changed to the appropriate environment that internal and third parties can access
-      artifact-name: demo-build-${{ github.event.pull_request.head.sha }}
-      preview: true
-      branch: ${{ github.event.pull_request.head.ref }}
-    secrets: inherit
-
-  comment-on-pr:
-    runs-on: ubuntu-latest
-    needs: [identify-changed-demos, build-updated-demos, deploy-preview-demos]
-    if: needs.identify-changed-demos.outputs.updated != ''
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Build PR Comment Body
-        id: generate-comment
-        run: |
-          updated="${{ needs.identify-changed-demos.outputs.updated }}"
-          IFS=' ' read -r -a demos <<< "$updated"
-
-          echo "**Thanks for the pull request!**" > comment.md
-          echo "" >> comment.md
-          echo "The following demos have been updated and deployed:" >> comment.md
-          echo "" >> comment.md
-
-            echo "<details><summary>Updated Demos</summary>" >> comment.md
-            echo "" >> comment.md
-            for demo in "${demos[@]}"; do
-            echo "- [$demo](https://pennylane.ai/qml/demos/$demo?preview=true)" >> comment.md
-            done
-            echo "" >> comment.md
-            echo "</details>" >> comment.md
-
-          echo "" >> comment.md
-          echo "_This comment updates automatically if you push more commits._" >> comment.md
-
-          # Save the content as output
-          echo "comment_body<<EOF" >> $GITHUB_OUTPUT
-          cat comment.md >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-
-      - name: Comment on PR
-        uses: XanaduAI/cloud-actions/create-and-update-pull-request-comment@main
-        with:
-          github_token: ${{ github.token }}
-          pull_request_number: ${{ github.event.pull_request.number }}
-          comment_body: ${{ steps.generate-comment.outputs.comment_body }}
