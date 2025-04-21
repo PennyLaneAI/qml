@@ -79,8 +79,44 @@ jobs:
       branch: ${{ github.event.pull_request.head.ref }}
     secrets: inherit
 
-# TODOS: In subsequent PRs, the following should be added:
-#   1. Add a step to determine the SWC environment to deploy to (Always prod?)
-#   2. Add a step to post a comment on the PR with the preview URL.
-#   3. Determine whether or not we can/want to delete demos.
-#   4. Add a logging to tell third parties how they can fork then get approval to merge to a branch within our repo.
+# XanaduAI/cloud-actions/create-and-update-pull-request-comment@main
+# Uses the updated output from the get-changed-demos action to create a comment on the PR
+# with the xandu cloud actuibs create-and-update-pull-request-comment@main
+  comment-on-pr:
+    runs-on: ubuntu-latest
+    needs: [identify-changed-demos, build-updated-demos, deploy-preview-demos]
+    if: needs.identify-changed-demos.outputs.updated != ''
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build PR Comment Body
+        id: generate-comment
+        run: |
+          updated="${{ needs.identify-changed-demos.outputs.updated }}"
+          IFS=' ' read -r -a demos <<< "$updated"
+
+          echo "**Thanks for the pull request!**" > comment.md
+          echo "" >> comment.md
+          echo "The following demos have been updated and deployed:" >> comment.md
+          echo "" >> comment.md
+
+          for demo in "${demos[@]}"; do
+            echo "- [$demo](https://pennylane.ai/qml/demonstrations/$demo?preview=true)" >> comment.md
+          done
+
+          echo "" >> comment.md
+          echo "_This comment updates automatically if you push more commits._" >> comment.md
+
+          # Save the content as output
+          echo "comment_body<<EOF" >> $GITHUB_OUTPUT
+          cat comment.md >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Comment on PR
+        uses: XanaduAI/cloud-actions/create-and-update-pull-request-comment@main
+        with:
+          github_token: ${{ github.token }}
+          pull_request_number: ${{ github.event.pull_request.number }}
+          comment_body: ${{ steps.generate-comment.outputs.comment_body }}
