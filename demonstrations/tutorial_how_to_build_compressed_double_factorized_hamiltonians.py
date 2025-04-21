@@ -234,7 +234,7 @@ cdf_hamiltonian = {
 def leaf_unitary_rotation(leaf, wires):
     """Applies the basis rotation transformation corresponding to the leaf tensor."""
     basis_mat = qml.math.kron(leaf, qml.math.eye(2)) # account for spin
-    qml.BasisRotation(unitary_matrix=basis_mat, wires=wires)
+    return qml.BasisRotation(unitary_matrix=basis_mat, wires=wires)
 
 ######################################################################
 # Similarly, the unitary transformation for the core tensors can be applied efficiently
@@ -248,20 +248,23 @@ import itertools as it
 
 def core_unitary_rotation(core, body_type, wires):
     """Applies the unitary transformation corresponding to the core tensor."""
+    ops = []
     if body_type == "one_body":  # implements one-body term
         for wire, cval in enumerate(qml.math.diag(core)):
             for sigma in [0, 1]:
-                qml.RZ(-cval, wires=2 * wire + sigma)
-        qml.GlobalPhase(qml.math.sum(core), wires=wires)
+                ops.append(qml.RZ(-cval, wires=2 * wire + sigma))
+        ops.append(qml.GlobalPhase(qml.math.sum(core), wires=wires))
 
     if body_type == "two_body":  # implements two-body term
         for odx1, odx2 in it.product(range(len(wires) // 2), repeat=2):
             cval = core[odx1, odx2]
             for sigma, tau in it.product(range(2), repeat=2):
                 if odx1 != odx2 or sigma != tau:
-                    qml.IsingZZ(cval / 4.0, wires=[2*odx1+sigma, 2*odx2+tau])
+                    ops.append(qml.IsingZZ(cval / 4.0, wires=[2*odx1+sigma, 2*odx2+tau]))
         gphase = 0.5 * qml.math.sum(core) + 0.25 * qml.math.trace(core)
-        qml.GlobalPhase(-gphase, wires=wires)
+        ops.append(qml.GlobalPhase(-gphase, wires=wires))
+
+    return ops
 
 ######################################################################
 # We can now use these functions to approximate the evolution operator :math:`e^{-iHt}` for
@@ -292,16 +295,16 @@ def CDFTrotterStep(time, cdf_ham, wires):
     """
     cores, leaves = cdf_ham["core_tensors"], cdf_ham["leaf_tensors"]
     for bidx, (core, leaf) in enumerate(zip(cores, leaves)):
-        # apply the basis rotation for leaf tensor
-        leaf_unitary_rotation(leaf, wires)
-
-        # apply the rotation for core tensor scaled by the time-step
         # Note: only the first term is one-body, others are two-body
         body_type = "two_body" if bidx else "one_body"
-        core_unitary_rotation(time * core, body_type, wires)
-
-        # revert the change-of-basis for leaf tensor
-        leaf_unitary_rotation(leaf.conjugate().T, wires)
+        qml.prod(
+            # apply the basis rotation for leaf tensor
+            leaf_unitary_rotation(leaf, wires),
+            # apply the rotation for core tensor scaled by the time-step
+            *core_unitary_rotation(time * core, body_type, wires),
+            # revert the change-of-basis for leaf tensor
+            leaf_unitary_rotation(leaf.conjugate().T, wires),
+        )
 
     # apply the global phase gate based on the nuclear core energy
     qml.GlobalPhase(cdf_ham["nuc_constant"] * time, wires=wires)
