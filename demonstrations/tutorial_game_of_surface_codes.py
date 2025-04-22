@@ -8,6 +8,10 @@ Introduction
 
 The game of surface codes [#Litinski]_ is a high-level framework for designing surface code quantum computing architectures.
 The game helps us understand space-time trade-offs, where e.g. designs with a higher qubit overhead allow for faster computations and vice versa.
+E.g., a space-efficient design might allow a computation with :math:`10^8` qubits to run in :math:`4` hours using :math:`55k` physical qubits, 
+whereas and intermediate design may run the same computation in :math:`22` minutes using :math:`120k` physical qubits, 
+or a time-optimized design in :math:`1` second using :math:`1500` interconnected quantum computers with :math:`220k` physical qubits, each.
+
 One can draw a rough comparison to microchip design in classical computing, 
 where the equivalent game would be about how to arrange the transistors of a chip to perform fast and efficient computations.
 
@@ -52,7 +56,6 @@ Basic operations
 
 Every operation in the game has an associated time cost that we measure in units of 🕒. These correspond more or less to surface code cycles.
 There are some discrepancies but the correspondance is close enough to weigh out space-time trade-offs in architecture designs.
-
 
 
 
