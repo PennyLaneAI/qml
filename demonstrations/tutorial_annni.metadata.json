@@ -5,8 +5,8 @@
             "username": "SaverioMonaco"
         }
     ],
-    "dateOfPublication": "2025-04-15T00:00:00+00:00",
-    "dateOfLastModification": "2025-04-15T00:00:00+00:00",
+    "dateOfPublication": "2025-04-25T00:00:00+00:00",
+    "dateOfLastModification": "2025-04-25T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
@@ -14,11 +14,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/annni/annni_sketch.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_CERN_ANNNI.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_Block_Encodings_Matrix_Oracle.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_CERN_ANNNI.png"
         }
     ],
     "seoDescription": "Based on the paper Quantum phase detection generalization from marginal quantum neural network models, explore the phase diagram of the Axial Next-Nearest-Neighbor Ising (ANNNI) model using both supervised and unsupervised learning methods.",

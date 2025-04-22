@@ -13,12 +13,12 @@ we explore the phase diagram of the Axial Next-Nearest-Neighbor Ising (ANNNI) mo
 
 * **Unsupervised model**: Quantum Anomaly Detection (QAD) requires minimal prior knowledge and efficiently identifies potential phase boundaries, making it a valuable tool for systems with unknown structures.
 
-.. figure:: ../_static/demonstration_assets/annni/annni_sketch.png
+.. figure:: ../_static/demonstration_assets/annni/OGthumbnail_CERN_ANNNI.png
     :align: center
     :width: 70%
     :target: javascript:void(0)
 
-    Figure 1. Add a caption here
+    Figure 1. Adding an ANNNI Ising to the cake
 
 The ANNNI model
 --------------------------------------------------------------------------------
@@ -379,7 +379,6 @@ def train_qcnn(num_epochs, lr, T, seed):
 trained_params, loss_curve = train_qcnn(num_epochs=100, lr=1e-2, T=.1, seed=seed) 
 
 # Plot the loss curve
-# plt.figure(figsize=(6, 3))
 plt.plot(loss_curve, label="Loss", color="blue", linewidth=2)
 plt.xlabel("Epochs"), plt.ylabel("Cross-Entropy Loss")
 plt.title("Figure 4. QCNN Training Cross-Entropy Loss Curve")
@@ -406,7 +405,6 @@ bounds = [-0.5, 0.5, 1.5, 2.5, 3.5]
 norm = BoundaryNorm(bounds, cmap.N)
 
 # Plot the predictions over the phase diagram
-# plt.figure(figsize=(4, 4))
 plt.imshow(
     predicted_classes.reshape(side, side),
     cmap=cmap,
@@ -575,7 +573,6 @@ trained_anomaly_params, anomaly_loss_curve = train_anomaly(num_epochs=100, lr=1e
 
 # Plot the loss curve
 
-# plt.figure(figsize=(6, 3))
 plt.plot(anomaly_loss_curve, label="Loss", color="blue", linewidth=2)
 plt.xlabel("Epochs"), plt.ylabel("Compression Loss")
 plt.title("Figure 6. Anomaly training compression loss curve")
@@ -593,7 +590,6 @@ plt.show()
 compressions = vectorized_anomaly_circuit(trained_anomaly_params, psis.reshape(-1, 2**num_qubits))
 compressions = jnp.mean(1 - jnp.array(compressions), axis = 0)
 
-# plt.figure(figsize=(4.6, 4))
 im = plt.imshow(compressions.reshape(side, side), aspect="auto", origin="lower", extent=[0, 1, 0, 2])
 
 # Plot transition lines (assuming ising_transition and kt_transition are defined)
