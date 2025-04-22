@@ -1,28 +1,50 @@
 r"""A Game of Surface Codes: Large-Scale Quantum Computing with Lattice Surgery
 ===============================================================================
 
-asd
-
-.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_fixed_depth_hamiltonian_simulation_via_cartan_decomposition.png
-    :align: center
-    :width: 70%
-    :target: javascript:void(0)
+abstract
 
 Introduction
 ------------
 
+The game of surface codes [#Litinski]_ is a high-level framework for designing surface code quantum computing architectures.
+The game helps us understand space-time trade-offs, where e.g. designs with a higher qubit overhead allow for faster computations and vice versa.
+
+The game can be understood entirely from the rules described in the next section. 
+However, it still helps to understand the correspondences in physical fault tolerant quantum computing (FTQC) architectures.
+First of all it is important to note that we consider surface codes that implement :doc:`(Clifford + T) <compilation/clifford-t-gate-set>` circuits.
+In particular, these circuits can be mapped entirely to just performing :doc:`Pauli product measurements <compilation/pauli-product-measurement>`.
+Hence, we mainly care about which types of measurements we can perform in the rule description below.
+
+We also note that the patches that represent qubits correspond to surface code qubits.
+There is a detailed explanation in Appendix A in [#Litinski]_ that describes the surface code realizations of all operations that we are going to see.
+These are useful to know in order to grasp the full depth of the game, but are not essential to understanding its rules and concluding design principles.
 
 Rules of the game
 -----------------
 
+The game is played on a board of tiles, where patches correspond to qubits.
+Underlying these tiles are physical qubits that are statically arranged.
+But we should view qubit patches as dynamic entities that appear, move around, deform and disappear again.
+
 Data qubits as surface code tiles
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Data qubits are realized by patches that at least occupy one tile, but potentially multiple.
+They always have four distinct boundaries corresponding to X (dotted) and Z (solid) edges.
+Two-qubit patches have 6 distinct boundaries, corresponding to the single X and Z operators of each qubit, as well as the two products XX and ZZ.
+This is shown in the figure below.
+
+.. figure:: ../_static/demonstration_assets/game_of_surface_codes/qubit_definition.png
+    :align: center
+    :width: 50%
+    :target: javascript:void(0)
+
+    Qubits are defined as patches of tiles on the board. 
+    A single qubit can occupy one tile (a) or multiple tiles (b), where dotted lines correspond to X and solid lines to Z operators.
+    Two-qubit patches (c) have 6 boundaries corresponding to the single :math:`X`, :math:`Z` and :math:`XX` and :math:`ZZ` operators.
+
 Basic operations
 ^^^^^^^^^^^^^^^^
-
-Surface codes
-^^^^^^^^^^^^^
 
 
 
