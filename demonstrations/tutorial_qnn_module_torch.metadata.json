@@ -26,7 +26,7 @@
     "relatedContent": [
         {
             "type": "demonstration",
-            "id": "tutorial_qnn_module_tf",
+            "id": "qnn_module_tf",
             "weight": 1.0
         }
     ]
