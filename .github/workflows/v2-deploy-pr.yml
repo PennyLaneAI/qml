@@ -3,7 +3,7 @@ name: V2 Deploy PR
 on:
   workflow_run:
     workflows:
-      - V2 Build PR
+      - ./.github/workflows/v2-build-pr.yml
     types:
       - completed
 
@@ -25,4 +25,3 @@ jobs:
       preview: true
       branch: ${{ github.event.workflow_run.head_branch }}
     secrets: inherit
-
