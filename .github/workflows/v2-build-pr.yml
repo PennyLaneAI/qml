@@ -2,7 +2,7 @@ name: V2 Build PR
 
 on:
   pull_request:
-    branches: [master, dev]
+    branches: [master, dev, sc-85409-v-demos-are-built-on-pull-request]
 
 permissions:
   contents: read
@@ -48,3 +48,29 @@ jobs:
       keep-going: false
       quiet: false
       batch_size: 10
+  
+  # If successful, save the PR number to a artifact called demo-build-pr-number
+  upload:
+    needs: build-updated-demos
+    runs-on: ubuntu-latest
+    steps:
+      - name: Save Demo Build PR Number
+        id: save-pr-number
+        env:
+          PR_NUMBER: ${{ github.event.number }}
+        run: |
+          mkdir -p ./pr
+          echo $PR_NUMBER > ./pr/pr_number
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pr_number
+          path: pr/
+
+      - name: Print PR Number from Artifact
+        id: print-pr-number
+        run: |
+          echo "PR Number: ${{ steps.save-pr-number.outputs.PR_NUMBER }}"
+          echo "PR Number from Artifact: $(cat ./pr/pr_number)"
+          echo "PR Number from Artifact (without quotes): $(cat ./pr/pr_number | tr -d '\"')"
+          echo "PR Number from Artifact (without quotes): ${{ steps.save-pr-number.outputs.PR_NUMBER }}"
+          
