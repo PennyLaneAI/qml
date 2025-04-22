@@ -99,7 +99,7 @@ def TFIM(n):
     generators += [Z(i) for i in range(n)]
     generators = [op.pauli_rep for op in generators]
 
-    dla = qml.pauli.lie_closure(generators, pauli=True)
+    dla = qml.lie_closure(generators, pauli=True)
     dim_dla = len(dla)
     return generators, dla, dim_dla
 

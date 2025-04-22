@@ -8,7 +8,7 @@ Turning quantum nodes into Torch Layers
 
 .. related::
 
-   tutorial_qnn_module_tf Turning quantum nodes into Keras Layers
+   qnn_module_tf Turning quantum nodes into Keras Layers
 
 *Author: Tom Bromley — Posted: 02 November 2020. Last updated: 28 January 2021.*
 
@@ -37,7 +37,7 @@ model = torch.nn.Sequential(*layers)
 # .. note::
 #
 #     A similar demo explaining how to
-#     :doc:`turn quantum nodes into Keras layers <tutorial_qnn_module_tf>`
+#     :doc:`turn quantum nodes into Keras layers <qnn_module_tf>`
 #     is also available.
 #
 # Fixing the dataset and problem
