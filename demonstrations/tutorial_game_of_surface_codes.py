@@ -8,7 +8,7 @@ Introduction
 
 The game of surface codes [#Litinski]_ is a high-level framework for designing surface code quantum computing architectures.
 The game helps us understand space-time trade-offs, where e.g. designs with a higher qubit overhead allow for faster computations and vice versa.
-E.g., a space-efficient design might allow a computation with :math:`10^8` qubits to run in :math:`4` hours using :math:`55k` physical qubits, 
+E.g., a space-efficient design might allow a computation with :math:`10^8` T gates to run in :math:`4` hours using :math:`55k` physical qubits, 
 whereas and intermediate design may run the same computation in :math:`22` minutes using :math:`120k` physical qubits, 
 or a time-optimized design in :math:`1` second using :math:`1500` interconnected quantum computers with :math:`220k` physical qubits, each.
 
@@ -18,12 +18,14 @@ where the equivalent game would be about how to arrange the transistors of a chi
 The game can be understood entirely from the rules described in the next section. 
 However, it still helps to understand the correspondences in physical fault tolerant quantum computing (FTQC) architectures.
 First of all it is important to note that we consider surface codes that implement :doc:`(Clifford + T) <compilation/clifford-t-gate-set>` circuits.
-In particular, these circuits can be mapped entirely to just performing :doc:`Pauli product measurements <compilation/pauli-product-measurement>`.
-Hence, we mainly care about which types of measurements we can perform in the rule description below.
+In particular, these circuits can be mapped to just performing :doc:`Pauli product measurements <compilation/pauli-product-measurement>`.
+This is because all Clifford operations can be moved to the end of the circuit and merged with measurements. 
+The remaining non-Clifford gates are realized by :doc:`magic state injection <glossary/what-are-magic-states>` and more Clifford operations that can again be merged with measurements again.
+Hence, we mainly care about performing measurements on qubits in arbitrary bases.
 
 We also note that the patches that represent qubits correspond to surface code qubits.
 There is a detailed explanation in Appendix A in [#Litinski]_ that describes the surface code realizations of all operations that we are going to see.
-These are useful to know in order to grasp the full depth of the game, but are not essential to understanding its rules and concluding design principles.
+These are useful to know in order to grasp the full depth of the game, but are not essential to understanding its rules and concluding design principles explained in this demo.
 
 Rules of the game
 -----------------
@@ -56,6 +58,10 @@ Basic operations
 
 Every operation in the game has an associated time cost that we measure in units of 🕒. These correspond more or less to surface code cycles.
 There are some discrepancies but the correspondance is close enough to weigh out space-time trade-offs in architecture designs.
+We are not going to give an exhaustive overview of all possible operations, but focus on a few important ones and fill the remaining gaps necessary for the architecture designs in the respective sections below.
+
+- X and Z measurement
+- Y measurement
 
 
 
