@@ -35,9 +35,6 @@ import pennylane as qml
 symbols = ["H", "H", "H", "H"]
 geometry = qml.math.array([[0., 0., -0.2], [0., 0., -0.1], [0., 0., 0.1], [0., 0., 0.2]])
 
-#symbols = ["H", "H"]#, "H", "H"]
-#geometry = qml.math.array([[0., 0., -0.2], [0., 0., -0.1]])#, [0., 0., 0.1], [0., 0., 0.2]])
-
 mol = qml.qchem.Molecule(symbols, geometry)
 nuc_core, one_body, two_body = qml.qchem.electron_integrals(mol)()
 
