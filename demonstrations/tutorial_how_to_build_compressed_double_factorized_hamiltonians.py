@@ -35,6 +35,9 @@ import pennylane as qml
 symbols = ["H", "H", "H", "H"]
 geometry = qml.math.array([[0., 0., -0.2], [0., 0., -0.1], [0., 0., 0.1], [0., 0., 0.2]])
 
+#symbols = ["H", "H"]#, "H", "H"]
+#geometry = qml.math.array([[0., 0., -0.2], [0., 0., -0.1]])#, [0., 0., 0.1], [0., 0., 0.2]])
+
 mol = qml.qchem.Molecule(symbols, geometry)
 nuc_core, one_body, two_body = qml.qchem.electron_integrals(mol)()
 
@@ -147,7 +150,7 @@ print(f"Decrease in one-norm: {DF_chem_norm - DF_shift_norm}")
 #
 
 _, two_body_cores, two_body_leaves = qml.qchem.factorize(
-    two_shift, tol_factor=1e-2, cholesky=True, compressed=True, regularization="L2"
+    two_shift, tol_factor=1e-2, cholesky=True, compressed=True, regularization="L2",
 ) # compressed double-factorized shifted two-body terms with "L2" regularization
 print(f"Two-body tensors' shape: {two_body_cores.shape, two_body_leaves.shape}")
 
@@ -257,11 +260,11 @@ def core_unitary_rotation(core, body_type, wires):
 
     if body_type == "two_body":  # implements two-body term
         for odx1, odx2 in it.product(range(len(wires) // 2), repeat=2):
-            cval = core[odx1, odx2]
+            cval = core[odx1, odx2] / 4.0
             for sigma, tau in it.product(range(2), repeat=2):
                 if odx1 != odx2 or sigma != tau:
-                    ops.append(qml.IsingZZ(cval / 4.0, wires=[2*odx1+sigma, 2*odx2+tau]))
-        gphase = 0.5 * qml.math.sum(core) + 0.25 * qml.math.trace(core)
+                    ops.append(qml.IsingZZ(cval, wires=[2*odx1+sigma, 2*odx2+tau]))
+        gphase = 0.5 * qml.math.sum(core) - 0.25 * qml.math.trace(core)
         ops.append(qml.GlobalPhase(-gphase, wires=wires))
 
     return ops
@@ -298,16 +301,13 @@ def CDFTrotterStep(time, cdf_ham, wires):
         # Note: only the first term is one-body, others are two-body
         body_type = "two_body" if bidx else "one_body"
         qml.prod(
-            # apply the basis rotation for leaf tensor
-            leaf_unitary_rotation(leaf, wires),
-            # apply the rotation for core tensor scaled by the time-step
-            *core_unitary_rotation(time * core, body_type, wires),
             # revert the change-of-basis for leaf tensor
             leaf_unitary_rotation(leaf.conjugate().T, wires),
-        )
-
-    # apply the global phase gate based on the nuclear core energy
-    qml.GlobalPhase(cdf_ham["nuc_constant"] * time, wires=wires)
+            # apply the rotation for core tensor scaled by the time-step
+            *core_unitary_rotation(time * core, body_type, wires),
+            # apply the basis rotation for leaf tensor
+            leaf_unitary_rotation(leaf, wires),
+        ) # Note: prod applies operations in the reverse order (right-to-left).
 
 ######################################################################
 # We now use this function to simulate the evolution of the :math:`H_4` Hamiltonian
@@ -323,6 +323,7 @@ hf_state = qml.qchem.hf_state(electrons=mol.n_electrons, orbitals=len(circ_wires
 def cdf_circuit(n_steps, order):
     qml.BasisState(hf_state, wires=circ_wires)
     qml.trotterize(CDFTrotterStep, n_steps, order)(time, cdf_hamiltonian, circ_wires)
+    qml.GlobalPhase(cdf_hamiltonian["nuc_constant"], wires=circ_wires)
     return qml.state()
 
 circuit_state = cdf_circuit(n_steps=10, order=2)
