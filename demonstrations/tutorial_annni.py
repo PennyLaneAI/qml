@@ -289,9 +289,10 @@ fig,ax = qml.draw_mpl(qcnn_circuit)(np.arange(num_params), psis[0,0])
 #
 # The training is performed by minimizing the **Cross Entropy loss** on the output probabilities
 #
-# .. math::  \mathcal{L} = -\frac{1}{|S|} \sum_{(\kappa, h) \in S} \sum_{j} y_j^{\frac1T}(\kappa, h) \log(p_j)^\frac1T(\kappa, h),   \tag{5}
+# .. math::  \mathcal{L} = -\frac{1}{|S|} \sum_{(\kappa, h) \in S} \sum_{j} y_j^{\frac1T}(\kappa, h) \log(p_j(\kappa, h))^\frac1T,   \tag{5}
 #
-# where:
+# where
+#
 # * :math:`S` is the training set,
 #
 # * :math:`p_j(\kappa, h)` is the model’s predicted probability of the system at :math:`(\kappa, h)` being in the :math:`j`-th phase,
@@ -315,9 +316,9 @@ def cross_entropy(pred, Y, T):
 ######################################################################
 # The analytical points of the ANNNI model correspond to specific regions of the phase diagram where the system simplifies into two well-understood limits:
 #
-# * **Transverse-field Ising model** at :math:`\kappa = 0` in which we only have the magnetic field and the nearest neighbor interactions.
+# * **Transverse-field Ising model** at :math:`\kappa = 0` in which we only have the magnetic field and the nearest-neighbor interactions.
 # 
-# * **Quasi classical model**  at :math:`h=0` in which we only have the nearest and next-nearest neighbor interactions.
+# * **Quasi classical model**  at :math:`h=0` in which we only have the nearest and next-nearest-neighbor interactions.
 #
 # For these points, we can derive the labels analytically which will then be used for the training of the QCNNs. 
 
@@ -441,7 +442,7 @@ plt.show()
 # 
 # Quantum Anomaly Detection (QAD), introduced in [#Kottmann]_, is the quantum version of an autoencoder. However, unlike classical autoencoders, only the encoding (forward) process is trained here. This is because quantum operations are invertible, making a separate decoder unnecessary.
 # 
-# In this method, we start with a single quantum state :math:`|\psi(\kappa, h)\rangle` taken from the ANNNI model. The goal is to optimize the parameters :math:`theta` of a quantum circuit :math:`V(\theta)` so that it transforms the chosen input state into the following form:
+# In this method, we start with a single quantum state :math:`|\psi(\kappa, h)\rangle` taken from the ANNNI model. The goal is to optimize the parameters :math:`\theta` of a quantum circuit :math:`V(\theta)` so that it transforms the chosen input state into the following form:
 # 
 # .. math::  V(\theta)|\psi(\kappa, h)\rangle = |\phi\rangle^{N-K} \otimes |0\rangle^{\otimes K}\tag{6}
 # 
@@ -526,7 +527,6 @@ fig,ax = qml.draw_mpl(anomaly_circuit)(np.arange(num_anomaly_params), psis[0,0])
 #    .. math::  \mathcal{C} = \frac{1}{2}\sum_{j\in q_T} (1-\left<Z_j\right>),\tag{7}
 #    
 #    where :math:`q_T` refers to the set of trash qubits, which make up :math:`N/2` of the total.
-#   
 #    By doing so, all the information of the input quantum state is compressed in the remaining non-measured qubits.
 #   
 # In this case, the selected quantum state corresponds to the trivial case with :math:`\kappa = 0` and :math:`h = 0`.
