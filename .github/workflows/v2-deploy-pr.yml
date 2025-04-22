@@ -13,7 +13,7 @@ permissions:
   contents: read  
 
 concurrency:
-  group: build-v2-demos-${{ github.event.workflow_run.head_branch }}
+  group: deploy-v2-demos-${{ github.event.workflow_run.head_branch }}
   cancel-in-progress: true
 
 jobs:

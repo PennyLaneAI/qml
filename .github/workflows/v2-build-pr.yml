@@ -8,7 +8,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: build-v2-demos-${{ github.ref }}
+  group: build-v2-demos-${{ github.event.pull_request.head.sha }}
   cancel-in-progress: true
 
 jobs:
