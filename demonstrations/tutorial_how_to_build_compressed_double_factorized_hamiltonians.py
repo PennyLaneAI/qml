@@ -35,9 +35,6 @@ import pennylane as qml
 symbols = ["H", "H", "H", "H"]
 geometry = qml.math.array([[0., 0., -0.2], [0., 0., -0.1], [0., 0., 0.1], [0., 0., 0.2]])
 
-#symbols = ["H", "H"]#, "H", "H"]
-#geometry = qml.math.array([[0., 0., -0.2], [0., 0., -0.1]])#, [0., 0., 0.1], [0., 0., 0.2]])
-
 mol = qml.qchem.Molecule(symbols, geometry)
 nuc_core, one_body, two_body = qml.qchem.electron_integrals(mol)()
 
@@ -150,7 +147,7 @@ print(f"Decrease in one-norm: {DF_chem_norm - DF_shift_norm}")
 #
 
 _, two_body_cores, two_body_leaves = qml.qchem.factorize(
-    two_shift, tol_factor=1e-2, cholesky=True, compressed=True, regularization="L2",
+    two_shift, tol_factor=1e-2, cholesky=True, compressed=True, regularization="L2"
 ) # compressed double-factorized shifted two-body terms with "L2" regularization
 print(f"Two-body tensors' shape: {two_body_cores.shape, two_body_leaves.shape}")
 
