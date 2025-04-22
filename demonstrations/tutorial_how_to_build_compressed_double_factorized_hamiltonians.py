@@ -263,7 +263,6 @@ def core_unitary_rotation(core, body_type, wires):
                     ops.append(qml.IsingZZ(cval, wires=[2*odx1+sigma, 2*odx2+tau]))
         gphase = 0.5 * qml.math.sum(core) - 0.25 * qml.math.trace(core)
         ops.append(qml.GlobalPhase(-gphase, wires=wires))
-
     return ops
 
 ######################################################################
