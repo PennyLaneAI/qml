@@ -389,7 +389,7 @@ plt.show()
 ######################################################################
 # After the training, much alike in [#Monaco]_ and [#Caro]_, we can inspect the model's generalization capabilities, 
 # by obtaining the predicted phase for every point across the 2D phase diagram and compare these predictions 
-# with the phase boundaries identified through DMRG methods.
+# with the phase boundaries identified through density matrix renormalization group (DMRG) methods.
 
 # Take the predicted classes for each point in the phase diagram
 predicted_classes = np.argmax(
