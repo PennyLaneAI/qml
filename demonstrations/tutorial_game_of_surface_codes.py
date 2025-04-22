@@ -8,6 +8,8 @@ Introduction
 
 The game of surface codes [#Litinski]_ is a high-level framework for designing surface code quantum computing architectures.
 The game helps us understand space-time trade-offs, where e.g. designs with a higher qubit overhead allow for faster computations and vice versa.
+One can draw a rough comparison to microchip design in classical computing, 
+where the equivalent game would be about how to arrange the transistors of a chip to perform fast and efficient computations.
 
 The game can be understood entirely from the rules described in the next section. 
 However, it still helps to understand the correspondences in physical fault tolerant quantum computing (FTQC) architectures.
@@ -25,6 +27,8 @@ Rules of the game
 The game is played on a board of tiles, where patches correspond to qubits.
 Underlying these tiles are physical qubits that are statically arranged.
 But we should view qubit patches as dynamic entities that appear, move around, deform and disappear again.
+The goal of this demo will be to understand the design principles and space-time trade-offs for surface code architectures.
+We are going to introduce the necessary rules of the game in this section.
 
 Data qubits as surface code tiles
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -45,6 +49,9 @@ This is shown in the figure below.
 
 Basic operations
 ^^^^^^^^^^^^^^^^
+
+Every operation in the game has an associated time cost that we measure in units of 🕒. These correspond more or less to surface code cycles.
+There are some discrepancies but the correspondance is close enough to weigh out space-time trade-offs in architecture designs.
 
 
 
