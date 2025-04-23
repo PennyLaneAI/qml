@@ -48,12 +48,13 @@ This is shown in the figure below.
     Qubits are defined as patches of tiles on the board. 
     A single qubit can occupy one tile (a) or multiple tiles (b), where dotted lines correspond to X and solid lines to Z operators.
 
-Basic operations
-^^^^^^^^^^^^^^^^
-
 Every operation in the game has an associated time cost that we measure in units of 🕒. These correspond more or less to surface code cycles.
 There are some discrepancies but the correspondance is close enough to weigh out space-time trade-offs in architecture designs.
 We are not going to give an exhaustive overview of all possible operations, but focus on a few important ones and fill the remaining gaps necessary for the architecture designs in the respective sections below.
+
+
+Arbitrary Pauli product measurements
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 At the cost of 1🕒 we can measure patches in the X and Z basis. If two patches share a border, one can measure the product of their shared edges as highlighted by the blue region in the figure below.
 
@@ -94,18 +95,76 @@ which is the most crucial operation in this framework, since everything is mappe
 
     Measuring $Y_1 X_3 Z_4 X_5$ via a joint auxiliary qubit in 1🕒. In principle multi-qubit measurements with many qubits come at the same cost as with fewer qubit, however the requirement of having an auxiliary region connecting all qubits may demand extra formations.
 
+Non-Clifford Pauli rotations
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Non-Clifford Pauli rotations $e^{-i \frac{\pi}{8} P}$ for some Pauli word $P$ are realized via `magic state distillation and injection <https://pennylane.ai/qml/glossary/what-are-magic-states>`__.
+Magic state distillation blocks are a crucial part of the architecture design that we are going to cover later. 
+For the moment we assume that we have means to prepare magic states $|m\rangle = |0\rangle + e^{-i \frac{\pi}{4}} |1\rangle$ on special qubit tiles (distillation blocks).
+Magic state injection in this case then refers to the following protocol:
 
-- X and Z measurement
-- Y measurement
+.. figure:: ../_static/demonstration_assets/game_of_surface_codes/magic_state_injection.png
+    :align: center
+    :width: 50%
+    :target: javascript:void(0)
 
+    Performing a non-Clifford $\pi/8$ rotation corresponds to performing the joint measurement of the Pauli word and $Z$ on the magic state qubit. The additionally classically controlled Clifford rotations can be merged again with the measurements at the end of the circuit.
 
+Take for example the Pauli word $P = Z_1 Y_2 X_4$ on the architecture layout below. 
+This design allows one to directly perform $e^{-i \frac{\pi}{8} P}$ as we have access to all of $X, Y, Z$ on each qubit, as well as the Z edge for the magic state qubit.
+
+.. figure:: ../_static/demonstration_assets/game_of_surface_codes/non_clifford_rotation.png
+    :align: center
+    :width: 50%
+    :target: javascript:void(0)
+
+    Performing $e^{-i \frac{\pi}{8} Z_1 Y_2 X_4}$ by measuring $Z_1 Y_2 X_4 Z_m$. The remaining Clifford Pauli rotations are merged with the terminal measurements at the end of the circuit via compilation.
+
+We are going to see in the next section that one of the biggest problems is performing Y rotations and measurements (same thing, really, in this framework).
 
 Data blocks design
 ------------------
 
+We now have all the necessary tools to understand different designs and their space-time tradeoffs.
+
 Compact data blocks
 ^^^^^^^^^^^^^^^^^^^
+
+The compact data block has the following form. The middle aisle is going to be used as an auxiliary qubit region.
+
+.. figure:: ../_static/demonstration_assets/game_of_surface_codes/compact_block.png
+    :align: center
+    :width: 50%
+    :target: javascript:void(0)
+
+    The compact data block design is efficient in space. However, only one edge is exposed to the auxiliary qubit region in the middle.
+
+This design only uses $\frac{3}{2}n$ tiles and 3 additional ones for a magic state distillation block.
+The biggest drawback is rather obvious: we can only access $Z$ measurements in the auxiliary qubit region. In order to perform joint $X$ measurements,
+we can perform a patch rotation at a cost of 3🕒:
+
+.. figure:: ../_static/demonstration_assets/game_of_surface_codes/batch_rotation.png
+    :align: center
+    :width: 50%
+    :target: javascript:void(0)
+
+    A patch rotation can be used to expose the $X$ edge to the auxiliary qubit region.
+
+An additional problem of this design is the fact that there is no space for qubits to deform to in order to perform Y measurements.
+This can be remedied by making use of the identity 
+
+.. math:: e^{i \frac{\pi}{8} Y} = e^{-i \frac{\pi}{4} Z} e^{i \frac{\pi}{8} X} e^{i \frac{\pi}{4} Z}.
+
+The second (first in the circuit) Clifford rotation $e^{i \frac{\pi}{4} Z}$ needs to be explicitly performed in this case. The first one can be merged again with the terminal measurements of the circuit.
+Such a rotation $e^{i \frac{\pi}{4} P}$ can be performed with a joint measurement of $P \otimes Y$, similar to the magic state distillation circuit:
+
+.. figure:: ../_static/demonstration_assets/game_of_surface_codes/clifford_rotation.png
+    :align: center
+    :width: 50%
+    :target: javascript:void(0)
+
+    A patch rotation can be used to expose the $X$ edge to the auxiliary qubit region.
+
 
 Intermediate data blocks
 ^^^^^^^^^^^^^^^^^^^^^^^^
