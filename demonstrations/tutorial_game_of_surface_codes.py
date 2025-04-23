@@ -118,7 +118,7 @@ This design allows one to directly perform $e^{-i \frac{\pi}{8} P}$ as we have a
     :width: 50%
     :target: javascript:void(0)
 
-    Performing $e^{-i \frac{\pi}{8} Z_1 Y_2 X_4}$ by measuring $Z_1 Y_2 X_4 Z_m$. The remaining Clifford Pauli rotations are merged with the terminal measurements at the end of the circuit via compilation.
+    Performing $e^{-i \frac{\pi}{8} Z_1 Y_2 X_4}$ by measuring $Z_1 Y_2 X_4 Z_m$. The additional measurement $X$ on the magic state qubit is not shown and has no additional cost. The remaining Clifford Pauli rotations are merged with the terminal measurements at the end of the circuit via compilation.
 
 We are going to see in the next section that one of the biggest problems is performing Y rotations and measurements (same thing, really, in this framework).
 
@@ -150,6 +150,8 @@ we can perform a patch rotation at a cost of 3🕒:
 
     A patch rotation can be used to expose the $X$ edge to the auxiliary qubit region.
 
+The worst thing that can happen is to have two opposite qubits require an X measurement, e.g. qubits (3 and 4) or (5 and 6). If either or both occurs, it takes a total of 6🕒 to rotate the batches.
+
 An additional problem of this design is the fact that there is no space for qubits to deform to in order to perform Y measurements.
 This can be remedied by making use of the identity 
 
@@ -163,7 +165,33 @@ Such a rotation $e^{i \frac{\pi}{4} P}$ can be performed with a joint measuremen
     :width: 50%
     :target: javascript:void(0)
 
-    A patch rotation can be used to expose the $X$ edge to the auxiliary qubit region.
+    A Clifford rotation $e^{i \frac{\pi}{4} P}$ is performed by measuring $P \otimes Y$
+
+In particular, we still need to be able to perform a $Y$ measurement _somewhere_.
+In this case we just outsourced it to another resource qubit, which we can use for all others and for which we left space in the bottom left corner of the compact data block.
+For example, we can perform the rotation $e^{i \frac{\pi}{4} Z_3 Z_5 Z_6}$ at a cost of 1🕒 in the following way:
+
+.. figure:: ../_static/demonstration_assets/game_of_surface_codes/clifford_rotation_356.png
+    :align: center
+    :width: 50%
+    :target: javascript:void(0)
+
+    A Clifford rotation $e^{i \frac{\pi}{4} Z_3 Z_5 Z_6}$ is performed by measuring $Z_3 Z_5 Z_6 \otimes Y_\text{resource}$ with the additional resource qubit in the bottom left corner of the compact block.
+
+The worst case here is having an even number of $Y$ operators in the Pauli word, as it requires two distinct $\frac{\pi}{4}$ rotations, each costing 2🕒.
+
+Overall, in the worst case scenario an operation can cost 9🕒. This consists of the base cost of 1🕒 for performing the Pauli measaurement, 2🕒 for having an even number of $Y$ operators, and 6🕒 when opposite qubit patches require $X$ measurements.
+The following protocol shows such a scenario by performing $e^{i \frac{\pi}{8} Y_1 Y_3 Z_4 Y_5 Y_6}$, which is realized by $e^{i \frac{\pi}{4} X_1 X_3 Z_4 X_5 X_6} e^{i \frac{\pi}{4} Z_3 Z_5 Z_6} e^{i \frac{\pi}{4} Z_1}$.
+
+.. figure:: ../_static/demonstration_assets/game_of_surface_codes/compact_block_worst_case.png
+    :align: center
+    :width: 90%
+    :target: javascript:void(0)
+
+    Worst case scenario in the compact block when performing $e^{i \frac{\pi}{8} Y_1 Y_3 Z_4 Y_5 Y_6}$.
+    Step 2 measures $Z_1$ together with $Y$ on the resource qubit in order to perform the $e^{i \frac{\pi}{4} Z_1}$ rotation at 1🕒. Step 3 performs the additional $X$ on the resource qubit at 0🕒.
+    Same for steps 4 and 5 for performing $e^{i \frac{\pi}{4} Z_3 Z_5 Z_6}$ at 1🕒 overall.
+    Steps 6 and 7 perform the patch rotations at 3🕒, each. And the final measurement of $X_1 X_3 Z_4 X_5 X_6 Z_m$ at another 1🕒 completes the computation.
 
 
 Intermediate data blocks
