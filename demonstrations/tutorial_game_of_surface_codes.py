@@ -202,8 +202,52 @@ The following protocol shows such a scenario by performing :math:`e^{i \frac{\pi
 Intermediate data blocks
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
+The intermediate data block design gets rid of the problem of potentially having blocking :math:`X`
+measurements on opposite qubit patches by simply removing the second row and laying out all qubits in a linear fashion.
+
+.. figure:: ../_static/demonstration_assets/game_of_surface_codes/intermediate_block.png
+    :align: center
+    :width: 50%
+    :target: javascript:void(0)
+
+    Intermediate data block design.
+
+As such, this architecture occupies :math:`2n + 4` tiles. One can get additional saving by having the auxiliary qubit region be flexibly the lower or upper row.
+This way, one can save on the extra cost of rotating patches back to their original position.
+Overall we get a maximum of 2🕒 for the rotations. Adding the base cost of 1🕒 for the measurement
+and the maximum 2🕒 for the additional Clifford :math:`\pi/4` Z rotations as in the compact block design,
+we obtain a maximum cost of 5🕒.
+
+
 Fast data blocks
 ^^^^^^^^^^^^^^^^
+
+In order to be able to access Y operations directly, we need both Z and X edge exposed to the auxiliary qubit region, demanding 2 tiles for 1 qubit.
+We ommitted this in the rule description before as it is only relevant for the fast data block, but we can realize 2 qubits on a patch of 2 tiles:
+
+.. figure:: ../_static/demonstration_assets/game_of_surface_codes/2q_patch.png
+    :align: center
+    :width: 50%
+    :target: javascript:void(0)
+
+    Two qubits can be realized by a patch on two tiles. The patch now has 6 distinct edges, corresponding to the operators as indicated in the figure.
+
+With this extra trick up our sleeve, we can construct the fast data block consisting of two-qubit patches with all-encompassing auxiliary qubit region.
+
+.. figure:: ../_static/demonstration_assets/game_of_surface_codes/fast_block.png
+    :align: center
+    :width: 50%
+    :target: javascript:void(0)
+
+    Fast data block design.
+
+Here, all 15 distinct Pauli operators are readily available. This is because we have 
+:math:`X_1`, :math:`X_1 \otimes X_2`, math:`Z_2` and :math:`Z_1 \otimes Z_2` and all products thereof available.
+For example, we can realize :math:`X_2` via :math:`X_1 (X_1 \otimes X_2)` and we have 
+:math:`Y_1 \propto (X_1) (Z_1) = (X_1) (Z_1 \otimes Z_2) (Z_2)`. With the same logic we can obtain :math:`Y_2` and :math:`Z_1`.
+Further, we have operators like :math:`X_1 Y_1 \propto (X_1 \otimes X_2) Z_2` and :math:`Y_1 X_2 \propto X_1 \otimes (X_1) (X_2) (Z_2) (Z_1 \otimes Z_2)`.
+
+The cost for performing a non-Clifford Pauli rotation therefore is just 1🕒.
 
 Distillation blocks design
 --------------------------
