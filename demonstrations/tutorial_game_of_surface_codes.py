@@ -109,7 +109,9 @@ Magic state injection in this case then refers to the following protocol:
     :width: 50%
     :target: javascript:void(0)
 
-    Performing a non-Clifford :math:`\pi/8` rotation corresponds to performing the joint measurement of the Pauli word and :math:`Z` on the magic state qubit. The additionally classically controlled Clifford rotations can be merged again with the measurements at the end of the circuit.
+    Performing a non-Clifford :math:`\pi/8` rotation corresponds to performing the joint measurement of the Pauli word and :math:`Z` on the magic state qubit.
+    The measurement of :math:`P \otimes Z_m` costs 1🕒, the subsequent :math:`X` measurement is free.
+    The additional classically controlled Clifford rotations can be merged again with the measurements at the end of the circuit.
 
 Take for example the Pauli word :math:`P = Z_1 Y_2 X_4` on the architecture layout below. 
 This design allows one to directly perform :math:`e^{-i \frac{\pi}{8} P}` as we have access to all of :math:`X, Y, Z` on each qubit, as well as the :math:`Z` edge for the magic state qubit.
@@ -144,16 +146,17 @@ This design only uses :math:`\frac{3}{2}n` tiles and 3 additional ones for a mag
 The biggest drawback is rather obvious: we can only access :math:`Z` measurements in the auxiliary qubit region. In order to perform joint :math:`X` measurements,
 we can perform a patch rotation at a cost of 3🕒:
 
-.. figure:: ../_static/demonstration_assets/game_of_surface_codes/batch_rotation.png
+.. figure:: ../_static/demonstration_assets/game_of_surface_codes/patch_rotation.png
     :align: center
     :width: 50%
     :target: javascript:void(0)
 
     A patch rotation can be used to expose the :math:`X` edge to the auxiliary qubit region.
 
-The worst thing that can happen is to have two opposite qubits require an X measurement, e.g. qubits (3 and 4) or (5 and 6). If either or both occurs, it takes a total of 6🕒 to rotate the batches.
+The worst thing that can happen is to have two opposite qubits require an X measurement, 
+e.g. qubits (3 and 4) or (5 and 6). If either or both occurs, it takes a total of 6🕒 to rotate the patches.
 
-An additional problem of this design is the fact that there is no space for qubits to deform to in order to perform Y measurements.
+An additional problem of this design is the fact that there is no tiles for qubits to expand to in order to perform Y measurements.
 This can be remedied by making use of the identity 
 
 .. math:: e^{i \frac{\pi}{8} Y} = e^{-i \frac{\pi}{4} Z} e^{i \frac{\pi}{8} X} e^{i \frac{\pi}{4} Z}.
@@ -168,7 +171,7 @@ Such a rotation :math:`e^{i \frac{\pi}{4} P}` can be performed with a joint meas
 
     A Clifford rotation :math:`e^{i \frac{\pi}{4} P}` is performed by measuring :math:`P \otimes Y`.
 
-In particular, we still need to be able to perform a :math:`Y` measurement _somewhere_.
+In particular, we still need to be able to perform a :math:`Y` measurement `somewhere`.
 In this case we just outsourced it to another resource qubit, which we can use for all others and for which we left space in the bottom left corner of the compact data block.
 For example, we can perform the rotation :math:`e^{i \frac{\pi}{4} Z_3 Z_5 Z_6}` at a cost of 1🕒 in the following way:
 
@@ -190,9 +193,10 @@ The following protocol shows such a scenario by performing :math:`e^{i \frac{\pi
     :target: javascript:void(0)
 
     Worst case scenario in the compact block when performing :math:`e^{i \frac{\pi}{8} Y_1 Y_3 Z_4 Y_5 Y_6}`.
-    Step 2 measures :math:`Z_1` together with :math:`Y` on the resource qubit in order to perform the :math:`e^{i \frac{\pi}{4} Z_1}` rotation at 1🕒. Step 3 performs the additional :math:`X` on the resource qubit at 0🕒.
+    Step 2 measures :math:`Z_1` together with :math:`Y` on the resource qubit in order to perform the :math:`e^{i \frac{\pi}{4} Z_1}` rotation at 1🕒.
+    Step 3 performs the additional :math:`X` measurement on the resource qubit at 0🕒.
     Same for steps 4 and 5 for performing :math:`e^{i \frac{\pi}{4} Z_3 Z_5 Z_6}` at 1🕒 overall.
-    Steps 6 and 7 perform the patch rotations at 3🕒, each. And the final measurement of :math:`X_1 X_3 Z_4 X_5 X_6 Z_m` at another 1🕒 completes the computation.
+    Steps 6 and 7 perform the patch rotations at 3🕒, each. And the final measurement of :math:`X_1 X_3 Z_4 X_5 X_6 Z_m` at another 1🕒 in step 8 completes the computation.
 
 
 Intermediate data blocks
