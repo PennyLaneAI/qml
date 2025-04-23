@@ -36,12 +36,12 @@ jobs:
         if: steps.get-changed-demos.outputs.updated == ''
         run: |
           echo "No changes found in demos. Exiting workflow."
-          exit 1
 
   # Step 2: Build demos
   build:
     uses: ./.github/workflows/v2-build-demos.yml
     needs: identify-changed-demos
+    if: needs.identify-changed-demos.outputs.updated != ''
     with:
       ref: ${{ github.event.pull_request.head.sha }}
       demo-names: ${{ needs.identify-changed-demos.outputs.updated }}
@@ -58,6 +58,7 @@ jobs:
     needs:
       - build
       - identify-changed-demos
+    if: needs.identify-changed-demos.outputs.updated != ''
     steps:
       - name: Save Pull Request Event Context
         if: github.event_name == 'pull_request'
