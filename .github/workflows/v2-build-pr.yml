@@ -2,7 +2,8 @@ name: V2 Build PR
 
 on:
   pull_request:
-    branches: [master, dev, sc-85409-v-demos-are-built-on-pull-request]
+    # remove v2 after testing
+    branches: [master, dev, v2]
 
 permissions:
   contents: read
@@ -12,31 +13,37 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # Step 1: Identify changed demos
   identify-changed-demos:
     runs-on: ubuntu-latest
     outputs:
       updated: ${{ steps.get-changed-demos.outputs.updated }}
       deleted: ${{ steps.get-changed-demos.outputs.deleted }}
     steps:
+      # Checkout the repository
       - name: Checkout
         uses: actions/checkout@v4
 
+      # Identify changed demos
       - name: Get changed demos
         id: get-changed-demos
         uses: ./.github/actions/get-changed-demos
 
+      # Output the changed demos for debugging
       - name: Output changed demos
         run: |
           echo "Updated Demos: ${{ steps.get-changed-demos.outputs.updated }}"
           echo "Deleted Demos: ${{ steps.get-changed-demos.outputs.deleted }}"
 
+      # Exit workflow if no changes are found
       - name: Exit if no changes
         if: steps.get-changed-demos.outputs.updated == ''
         run: |
           echo "No changes found in demos. Exiting workflow."
           exit 1
 
-  build-updated-demos:
+  # Step 2: Build demos
+  build:
     uses: ./.github/workflows/v2-build-demos.yml
     needs: identify-changed-demos
     with:
@@ -48,29 +55,34 @@ jobs:
       keep-going: false
       quiet: false
       batch_size: 10
-  
-  # If successful, save the PR number to a artifact called demo-build-pr-number
-  upload:
-    needs: build-updated-demos
-    runs-on: ubuntu-latest
-    steps:
-      - name: Save Demo Build PR Number
-        id: save-pr-number
-        env:
-          PR_NUMBER: ${{ github.event.number }}
-        run: |
-          mkdir -p ./pr
-          echo $PR_NUMBER > ./pr/pr_number
-      - uses: actions/upload-artifact@v4
-        with:
-          name: pr_number
-          path: pr/
 
-      - name: Print PR Number from Artifact
-        id: print-pr-number
+  # Step 3: Save build context
+  save-build-context:
+    runs-on: ubuntu-latest
+    needs:
+      - build
+      - identify-changed-demos
+    steps:
+      # Save pull request event context to a temporary file
+      - name: Save Pull Request Event Context
+        if: github.event_name == 'pull_request'
         run: |
-          echo "PR Number: ${{ steps.save-pr-number.outputs.PR_NUMBER }}"
-          echo "PR Number from Artifact: $(cat ./pr/pr_number)"
-          echo "PR Number from Artifact (without quotes): $(cat ./pr/pr_number | tr -d '\"')"
-          echo "PR Number from Artifact (without quotes): ${{ steps.save-pr-number.outputs.PR_NUMBER }}"
-          
+          mkdir -p /tmp/pr
+          cat >/tmp/pr/pr_info.json <<EOL
+          {
+            "id": "${{ github.event.pull_request.number }}",
+            "ref": "${{ github.event.pull_request.head.sha }}",
+            "ref_name": "${{ github.event.pull_request.head.ref }}",
+            "updated_demos": "${{ needs.identify-changed-demos.outputs.updated }}",
+            "deleted_demos": "${{ needs.identify-changed-demos.outputs.deleted }}"
+          }
+          EOL
+
+      # Upload the pull request context as an artifact
+      - name: Upload Pull Request Event Context as Artifact
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr_info
+          path: /tmp/pr
+          retention-days: 30
