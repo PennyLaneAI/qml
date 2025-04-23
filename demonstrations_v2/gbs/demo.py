@@ -12,7 +12,6 @@ Quantum advantage with Gaussian Boson Sampling
 
 .. related::
 
-
     tutorial_gaussian_transformation Gaussian transformation
     qsim_beyond_classical Beyond classical computing with qsim
     qonn Optimizing a quantum optical neural network
