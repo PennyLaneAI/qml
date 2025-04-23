@@ -56,36 +56,36 @@ We are not going to give an exhaustive overview of all possible operations, but 
 Arbitrary Pauli product measurements
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-At the cost of 1🕒 we can measure patches in the X and Z basis. If two patches share a border, one can measure the product of their shared edges as highlighted by the blue region in the figure below.
+At the cost of 0🕒 we can measure patches in the X and Z basis. If two patches share a border, one can measure the product of their shared edges as highlighted by the blue region in the figure below at the cost of 1🕒.
 
 .. figure:: ../_static/demonstration_assets/game_of_surface_codes/ZZ_measurement.png
     :align: center
     :width: 20%
     :target: javascript:void(0)
 
-    Simultaneously measuring the patches of two adjacent patches corresponds to the product of their neighboring edges. Here, we measure $ZZ$.
+    Simultaneously measuring the patches of two adjacent patches corresponds to the product of their neighboring edges. Here, we measure :math:`ZZ`.
 
-In particular, if the shared edge contains both Z and X edges, we can measure in the Y basis. In the following example, the upper qubit A has both operator edges $Z_A$ and $X_A$ exposed.
-Measuring it together with the auxillary qubit B, initialized in the $|0\rangle$ state below, we measure $(Z_A X_A) \otimes Z_B \propto Y_A \otimes Z_B$ alltogether.
+In particular, if the shared edge contains both Z and X edges, we can measure in the Y basis. In the following example, the upper qubit A has both operator edges :math:`Z_A` and :math:`X_A` exposed.
+Measuring it together with the auxillary qubit B, initialized in the :math:`|0\rangle` state below, we measure :math:`(Z_A X_A) \otimes Z_B \propto Y_A \otimes Z_B` alltogether.
 
 .. figure:: ../_static/demonstration_assets/game_of_surface_codes/Y_measurement.png
     :align: center
     :width: 20%
     :target: javascript:void(0)
 
-    $Y$ operators can be measured by having both X and Z edges be exposed with an adjacent auxiliary qubit. The measurement corresponds to the product of all involved operators, involving $Z_A X_A \propto Y_A$.
+    `Y` operators can be measured by having both X and Z edges be exposed with an adjacent auxiliary qubit. The measurement corresponds to the product of all involved operators, involving `Z_A X_A \propto Y_A`.
 
-In practice, we measure a single qubit patch in the Y basis by utilizing an auxiliary qubit. If we start off from a single square patch we first need to deform it at the cost of 1🕒, initialize an auxiliary qubit at no cost, and perform the joint measurement as shown above (1🕒).
-The entire protocol is shown below:
+If we want to measure a single qubit patch in practice, we start off deforming it at the cost of 1🕒, initialize an auxiliary qubit at no cost, and perform the joint measurement as shown above (1🕒).
+The entire protocol costs 2🕒 and is shown below:
 
 .. figure:: ../_static/demonstration_assets/game_of_surface_codes/Y_measurement_protocol.png
     :align: center
     :width: 50%
     :target: javascript:void(0)
 
-    The protocol for measuring a single qubit in the Y basis involves deforming the patch (Step 2, 1🕒), initializing an auxillary qubit in $|0\rangle$ (0🕒), simultaneously measure both patches (1🕒) and deforming the qubit back again.
+    The protocol for measuring a single qubit in the Y basis involves deforming the patch (Step 2, 1🕒), initializing an auxillary qubit in :math:`|0\rangle` (0🕒), simultaneously measuring both patches (1🕒) and deforming the qubit back again (0🕒).
 
-Auxiliary qubits play an important role as they allow measuring products Pauli operators on different qubits, 
+Auxiliary qubits play an important role as they allow measuring products of Pauli operators on different qubits, 
 which is the most crucial operation in this framework, since everything is mapped to `Pauli product measurements <https://pennylane.ai/compilation/pauli-product-measurement>`__.
 
 .. figure:: ../_static/demonstration_assets/game_of_surface_codes/PPM.png
@@ -93,14 +93,15 @@ which is the most crucial operation in this framework, since everything is mappe
     :width: 30%
     :target: javascript:void(0)
 
-    Measuring $Y_1 X_3 Z_4 X_5$ via a joint auxiliary qubit in 1🕒. In principle multi-qubit measurements with many qubits come at the same cost as with fewer qubit, however the requirement of having an auxiliary region connecting all qubits may demand extra formations.
+    Measuring :math:`Y_1 X_3 Z_4 X_5` via a joint auxiliary qubit in 1🕒. In principle multi-qubit measurements with many qubits come at the same cost as with fewer qubit.
+    However, the requirement of having an auxiliary region connecting all qubits may demand extra deformations.
 
 Non-Clifford Pauli rotations
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Non-Clifford Pauli rotations $e^{-i \frac{\pi}{8} P}$ for some Pauli word $P$ are realized via `magic state distillation and injection <https://pennylane.ai/qml/glossary/what-are-magic-states>`__.
+Non-Clifford Pauli rotations :math:`e^{-i \frac{\pi}{8} P}` for some Pauli word :math:`P` are realized via `magic state distillation and injection <https://pennylane.ai/qml/glossary/what-are-magic-states>`__.
 Magic state distillation blocks are a crucial part of the architecture design that we are going to cover later. 
-For the moment we assume that we have means to prepare magic states $|m\rangle = |0\rangle + e^{-i \frac{\pi}{4}} |1\rangle$ on special qubit tiles (distillation blocks).
+For the moment we assume that we have means to prepare magic states :math:`|m\rangle = |0\rangle + e^{-i \frac{\pi}{4}} |1\rangle` on special qubit tiles (distillation blocks).
 Magic state injection in this case then refers to the following protocol:
 
 .. figure:: ../_static/demonstration_assets/game_of_surface_codes/magic_state_injection.png
@@ -108,17 +109,17 @@ Magic state injection in this case then refers to the following protocol:
     :width: 50%
     :target: javascript:void(0)
 
-    Performing a non-Clifford $\pi/8$ rotation corresponds to performing the joint measurement of the Pauli word and $Z$ on the magic state qubit. The additionally classically controlled Clifford rotations can be merged again with the measurements at the end of the circuit.
+    Performing a non-Clifford :math:`\pi/8` rotation corresponds to performing the joint measurement of the Pauli word and :math:`Z` on the magic state qubit. The additionally classically controlled Clifford rotations can be merged again with the measurements at the end of the circuit.
 
-Take for example the Pauli word $P = Z_1 Y_2 X_4$ on the architecture layout below. 
-This design allows one to directly perform $e^{-i \frac{\pi}{8} P}$ as we have access to all of $X, Y, Z$ on each qubit, as well as the Z edge for the magic state qubit.
+Take for example the Pauli word :math:`P = Z_1 Y_2 X_4` on the architecture layout below. 
+This design allows one to directly perform :math:`e^{-i \frac{\pi}{8} P}` as we have access to all of :math:`X, Y, Z` on each qubit, as well as the :math:`Z` edge for the magic state qubit.
 
 .. figure:: ../_static/demonstration_assets/game_of_surface_codes/non_clifford_rotation.png
     :align: center
     :width: 50%
     :target: javascript:void(0)
 
-    Performing $e^{-i \frac{\pi}{8} Z_1 Y_2 X_4}$ by measuring $Z_1 Y_2 X_4 Z_m$. The additional measurement $X$ on the magic state qubit is not shown and has no additional cost. The remaining Clifford Pauli rotations are merged with the terminal measurements at the end of the circuit via compilation.
+    Performing :math:`e^{-i \frac{\pi}{8} Z_1 Y_2 X_4}` by measuring :math:`Z_1 Y_2 X_4 Z_m`. The additional measurement :math:`X` on the magic state qubit is not shown and has no additional cost. The remaining Clifford Pauli rotations are merged with the terminal measurements at the end of the circuit via compilation.
 
 We are going to see in the next section that one of the biggest problems is performing Y rotations and measurements (same thing, really, in this framework).
 
@@ -139,8 +140,8 @@ The compact data block has the following form. The middle aisle is going to be u
 
     The compact data block design is efficient in space. However, only one edge is exposed to the auxiliary qubit region in the middle.
 
-This design only uses $\frac{3}{2}n$ tiles and 3 additional ones for a magic state distillation block.
-The biggest drawback is rather obvious: we can only access $Z$ measurements in the auxiliary qubit region. In order to perform joint $X$ measurements,
+This design only uses :math:`\frac{3}{2}n` tiles and 3 additional ones for a magic state distillation block.
+The biggest drawback is rather obvious: we can only access :math:`Z` measurements in the auxiliary qubit region. In order to perform joint :math:`X` measurements,
 we can perform a patch rotation at a cost of 3🕒:
 
 .. figure:: ../_static/demonstration_assets/game_of_surface_codes/batch_rotation.png
@@ -148,7 +149,7 @@ we can perform a patch rotation at a cost of 3🕒:
     :width: 50%
     :target: javascript:void(0)
 
-    A patch rotation can be used to expose the $X$ edge to the auxiliary qubit region.
+    A patch rotation can be used to expose the :math:`X` edge to the auxiliary qubit region.
 
 The worst thing that can happen is to have two opposite qubits require an X measurement, e.g. qubits (3 and 4) or (5 and 6). If either or both occurs, it takes a total of 6🕒 to rotate the batches.
 
@@ -157,41 +158,41 @@ This can be remedied by making use of the identity
 
 .. math:: e^{i \frac{\pi}{8} Y} = e^{-i \frac{\pi}{4} Z} e^{i \frac{\pi}{8} X} e^{i \frac{\pi}{4} Z}.
 
-The second (first in the circuit) Clifford rotation $e^{i \frac{\pi}{4} Z}$ needs to be explicitly performed in this case. The first one can be merged again with the terminal measurements of the circuit.
-Such a rotation $e^{i \frac{\pi}{4} P}$ can be performed with a joint measurement of $P \otimes Y$, similar to the magic state distillation circuit:
+The second (first in the circuit) Clifford rotation :math:`e^{i \frac{\pi}{4} Z}` needs to be explicitly performed in this case. The first one can be merged again with the terminal measurements of the circuit.
+Such a rotation :math:`e^{i \frac{\pi}{4} P}` can be performed with a joint measurement of :math:`P \otimes Y`, similar to the magic state distillation circuit:
 
 .. figure:: ../_static/demonstration_assets/game_of_surface_codes/clifford_rotation.png
     :align: center
     :width: 50%
     :target: javascript:void(0)
 
-    A Clifford rotation $e^{i \frac{\pi}{4} P}$ is performed by measuring $P \otimes Y$
+    A Clifford rotation :math:`e^{i \frac{\pi}{4} P}` is performed by measuring :math:`P \otimes Y`.
 
-In particular, we still need to be able to perform a $Y$ measurement _somewhere_.
+In particular, we still need to be able to perform a :math:`Y` measurement _somewhere_.
 In this case we just outsourced it to another resource qubit, which we can use for all others and for which we left space in the bottom left corner of the compact data block.
-For example, we can perform the rotation $e^{i \frac{\pi}{4} Z_3 Z_5 Z_6}$ at a cost of 1🕒 in the following way:
+For example, we can perform the rotation :math:`e^{i \frac{\pi}{4} Z_3 Z_5 Z_6}` at a cost of 1🕒 in the following way:
 
 .. figure:: ../_static/demonstration_assets/game_of_surface_codes/clifford_rotation_356.png
     :align: center
     :width: 50%
     :target: javascript:void(0)
 
-    A Clifford rotation $e^{i \frac{\pi}{4} Z_3 Z_5 Z_6}$ is performed by measuring $Z_3 Z_5 Z_6 \otimes Y_\text{resource}$ with the additional resource qubit in the bottom left corner of the compact block.
+    A Clifford rotation :math:`e^{i \frac{\pi}{4} Z_3 Z_5 Z_6}` is performed by measuring :math:`Z_3 Z_5 Z_6 \otimes Y_\text{resource}` with the additional resource qubit in the bottom left corner of the compact block.
 
-The worst case here is having an even number of $Y$ operators in the Pauli word, as it requires two distinct $\frac{\pi}{4}$ rotations, each costing 2🕒.
+The worst case here is having an even number of :math:`Y` operators in the Pauli word, as it requires two distinct :math:`\frac{\pi}{4}` rotations, each costing 2🕒.
 
-Overall, in the worst case scenario an operation can cost 9🕒. This consists of the base cost of 1🕒 for performing the Pauli measaurement, 2🕒 for having an even number of $Y$ operators, and 6🕒 when opposite qubit patches require $X$ measurements.
-The following protocol shows such a scenario by performing $e^{i \frac{\pi}{8} Y_1 Y_3 Z_4 Y_5 Y_6}$, which is realized by $e^{i \frac{\pi}{4} X_1 X_3 Z_4 X_5 X_6} e^{i \frac{\pi}{4} Z_3 Z_5 Z_6} e^{i \frac{\pi}{4} Z_1}$.
+Overall, in the worst case scenario an operation can cost 9🕒. This consists of the base cost of 1🕒 for performing the Pauli measaurement, 2🕒 for having an even number of :math:`Y` operators, and 6🕒 when opposite qubit patches require :math:`X` measurements.
+The following protocol shows such a scenario by performing :math:`e^{i \frac{\pi}{8} Y_1 Y_3 Z_4 Y_5 Y_6}`, which is realized by :math:`e^{i \frac{\pi}{4} X_1 X_3 Z_4 X_5 X_6} e^{i \frac{\pi}{4} Z_3 Z_5 Z_6} e^{i \frac{\pi}{4} Z_1}`.
 
 .. figure:: ../_static/demonstration_assets/game_of_surface_codes/compact_block_worst_case.png
     :align: center
     :width: 90%
     :target: javascript:void(0)
 
-    Worst case scenario in the compact block when performing $e^{i \frac{\pi}{8} Y_1 Y_3 Z_4 Y_5 Y_6}$.
-    Step 2 measures $Z_1$ together with $Y$ on the resource qubit in order to perform the $e^{i \frac{\pi}{4} Z_1}$ rotation at 1🕒. Step 3 performs the additional $X$ on the resource qubit at 0🕒.
-    Same for steps 4 and 5 for performing $e^{i \frac{\pi}{4} Z_3 Z_5 Z_6}$ at 1🕒 overall.
-    Steps 6 and 7 perform the patch rotations at 3🕒, each. And the final measurement of $X_1 X_3 Z_4 X_5 X_6 Z_m$ at another 1🕒 completes the computation.
+    Worst case scenario in the compact block when performing :math:`e^{i \frac{\pi}{8} Y_1 Y_3 Z_4 Y_5 Y_6}`.
+    Step 2 measures :math:`Z_1` together with :math:`Y` on the resource qubit in order to perform the :math:`e^{i \frac{\pi}{4} Z_1}` rotation at 1🕒. Step 3 performs the additional :math:`X` on the resource qubit at 0🕒.
+    Same for steps 4 and 5 for performing :math:`e^{i \frac{\pi}{4} Z_3 Z_5 Z_6}` at 1🕒 overall.
+    Steps 6 and 7 perform the patch rotations at 3🕒, each. And the final measurement of :math:`X_1 X_3 Z_4 X_5 X_6 Z_m` at another 1🕒 completes the computation.
 
 
 Intermediate data blocks
