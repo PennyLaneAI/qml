@@ -106,7 +106,7 @@ jobs:
       - name: Create markdown comment from demo names
         id: generate-markdown
         run: |
-          demos="demo1 demo2 demo3"
+          demos="${{ needs.prepare-build-context.outputs.updated_demos }}"
           
           comment="### Preview(s) are ready! :tada:\n"
           comment+="<details>\n"
