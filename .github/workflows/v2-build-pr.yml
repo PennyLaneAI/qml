@@ -20,22 +20,18 @@ jobs:
       updated: ${{ steps.get-changed-demos.outputs.updated }}
       deleted: ${{ steps.get-changed-demos.outputs.deleted }}
     steps:
-      # Checkout the repository
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Identify changed demos
       - name: Get changed demos
         id: get-changed-demos
         uses: ./.github/actions/get-changed-demos
 
-      # Output the changed demos for debugging
       - name: Output changed demos
         run: |
           echo "Updated Demos: ${{ steps.get-changed-demos.outputs.updated }}"
           echo "Deleted Demos: ${{ steps.get-changed-demos.outputs.deleted }}"
 
-      # Exit workflow if no changes are found
       - name: Exit if no changes
         if: steps.get-changed-demos.outputs.updated == ''
         run: |
@@ -63,7 +59,6 @@ jobs:
       - build
       - identify-changed-demos
     steps:
-      # Save pull request event context to a temporary file
       - name: Save Pull Request Event Context
         if: github.event_name == 'pull_request'
         run: |
@@ -78,7 +73,6 @@ jobs:
           }
           EOL
 
-      # Upload the pull request context as an artifact
       - name: Upload Pull Request Event Context as Artifact
         if: github.event_name == 'pull_request'
         uses: actions/upload-artifact@v4

@@ -22,7 +22,6 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.workflow_run.conclusion == 'success'
     steps:
-      # Download the build context artifact
       - name: Download Build Context
         uses: XanaduAI/cloud-actions/download-github-workflow-artifact@main
         with:
@@ -30,7 +29,6 @@ jobs:
           artifact_name_regex: '^pr_info$'
           github_token: ${{ github.token }}
 
-      # Check if the build context file exists
       - name: Check if Build Context file exists
         id: build_context
         env:
@@ -40,12 +38,10 @@ jobs:
             echo "result=$context_artifact_file_name" >> $GITHUB_OUTPUT
           fi
 
-      # Unpack the build information if the file exists
       - name: Unpack Build Information
         if: steps.build_context.outputs.result != ''
         run: unzip ${{ steps.build_context.outputs.result }}
 
-      # Read the build information from the unpacked file
       - name: Read Build Information
         id: read_build_info
         if: steps.build_context.outputs.result != ''
@@ -56,7 +52,6 @@ jobs:
             const buildData = fs.readFileSync('pr_info.json', 'utf8');
             return JSON.parse(buildData);
 
-      # Parse pull request event information
       - name: Parse Pull Request Event Information
         id: pr_info
         if: github.event.workflow_run.event == 'pull_request' && steps.build_context.outputs.result != ''
@@ -73,7 +68,6 @@ jobs:
           echo "updated_demos=$(cat updated_demos.json)" >> $GITHUB_OUTPUT
           echo "deleted_demos=$(cat deleted_demos.json)" >> $GITHUB_OUTPUT
 
-      # Set job outputs for downstream jobs
       - name: Set job outputs
         if: github.event.workflow_run.event == 'pull_request' && steps.build_context.outputs.result != ''
         id: set_job_outputs
@@ -103,13 +97,12 @@ jobs:
       branch: ${{ needs.prepare-build-context.outputs.pr_ref_name }}
     secrets: inherit
   
-  # Step 3: Generate a comment with the demo names
+  # Step 3: Create a comment on the PR with the demo links
   generate-comment:
     runs-on: ubuntu-latest
     needs: prepare-build-context
     if: github.event.workflow_run.event == 'pull_request' && needs.prepare-build-context.outputs.pr_id != ''
     steps:
-      # Generate a markdown comment with demo names
       - name: Create markdown comment from demo names
         id: generate-markdown
         run: |
@@ -130,7 +123,6 @@ jobs:
           # Set the markdown as an output variable
           echo "::set-output name=markdown::$comment"
 
-      # Post the comment on the pull request
       - name: Comment on PR
         id: comment-on-pr
         uses: XanaduAI/cloud-actions/create-and-update-pull-request-comment@main
