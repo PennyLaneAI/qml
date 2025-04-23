@@ -17,15 +17,15 @@ where the equivalent game would be about how to arrange the transistors of a chi
 
 The game can be understood entirely from the rules described in the next section. 
 However, it still helps to understand the correspondences in physical fault tolerant quantum computing (FTQC) architectures.
-First of all it is important to note that we consider surface codes that implement :doc:`(Clifford + T) <compilation/clifford-t-gate-set>` circuits.
-In particular, these circuits can be mapped to just performing :doc:`Pauli product measurements <compilation/pauli-product-measurement>`.
+First of all it is important to note that we consider surface codes that implement `(Clifford + T) <https://pennylane.ai/compilation/clifford-t-gate-set>`__ circuits.
+In particular, these circuits can be compiled to circuits that just perform `Pauli product measurements <https://pennylane.ai/compilation/pauli-product-measurement>`__.
 This is because all Clifford operations can be moved to the end of the circuit and merged with measurements. 
-The remaining non-Clifford gates are realized by :doc:`magic state injection <glossary/what-are-magic-states>` and more Clifford operations that can again be merged with measurements again.
-Hence, we mainly care about performing measurements on qubits in arbitrary bases.
+The remaining non-Clifford gates are realized by `magic state injection <https://pennylane.ai/qml/glossary/what-are-magic-states>`__ and more Clifford operations, which can be merged with measurements again.
+Hence, we mainly care about performing measurements on qubits in arbitrary bases and efficiently distilling and injecting magic states.
 
 We also note that the patches that represent qubits correspond to surface code qubits.
 There is a detailed explanation in Appendix A in [#Litinski]_ that describes the surface code realizations of all operations that we are going to see.
-These are useful to know in order to grasp the full depth of the game, but are not essential to understanding its rules and concluding design principles explained in this demo.
+These are useful to know in order to grasp the full depth of the game, but are not essential to understanding its rules and concluding design principles that we cover in this demo.
 
 Rules of the game
 -----------------
@@ -36,22 +36,17 @@ But we should view qubit patches as dynamic entities that appear, move around, d
 The goal of this demo will be to understand the design principles and space-time trade-offs for surface code architectures.
 We are going to introduce the necessary rules of the game in this section.
 
-Data qubits as surface code tiles
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
 Data qubits are realized by patches that at least occupy one tile, but potentially multiple.
 They always have four distinct boundaries corresponding to X (dotted) and Z (solid) edges.
-Two-qubit patches have 6 distinct boundaries, corresponding to the single X and Z operators of each qubit, as well as the two products XX and ZZ.
 This is shown in the figure below.
 
-.. figure:: ../_static/demonstration_assets/game_of_surface_codes/qubit_definition.png
+.. figure:: ../_static/demonstration_assets/game_of_surface_codes/qubit_definition_cropped.png
     :align: center
     :width: 50%
     :target: javascript:void(0)
 
     Qubits are defined as patches of tiles on the board. 
     A single qubit can occupy one tile (a) or multiple tiles (b), where dotted lines correspond to X and solid lines to Z operators.
-    Two-qubit patches (c) have 6 boundaries corresponding to the single :math:`X`, :math:`Z` and :math:`XX` and :math:`ZZ` operators.
 
 Basic operations
 ^^^^^^^^^^^^^^^^
@@ -59,6 +54,47 @@ Basic operations
 Every operation in the game has an associated time cost that we measure in units of 🕒. These correspond more or less to surface code cycles.
 There are some discrepancies but the correspondance is close enough to weigh out space-time trade-offs in architecture designs.
 We are not going to give an exhaustive overview of all possible operations, but focus on a few important ones and fill the remaining gaps necessary for the architecture designs in the respective sections below.
+
+At the cost of 1🕒 we can measure patches in the X and Z basis. If two patches share a border, one can measure the product of their shared edges as highlighted by the blue region in the figure below.
+
+.. figure:: ../_static/demonstration_assets/game_of_surface_codes/ZZ_measurement.png
+    :align: center
+    :width: 20%
+    :target: javascript:void(0)
+
+    Simultaneously measuring the patches of two adjacent patches corresponds to the product of their neighboring edges. Here, we measure $ZZ$.
+
+In particular, if the shared edge contains both Z and X edges, we can measure in the Y basis. In the following example, the upper qubit A has both operator edges $Z_A$ and $X_A$ exposed.
+Measuring it together with the auxillary qubit B, initialized in the $|0\rangle$ state below, we measure $(Z_A X_A) \otimes Z_B \propto Y_A \otimes Z_B$ alltogether.
+
+.. figure:: ../_static/demonstration_assets/game_of_surface_codes/Y_measurement.png
+    :align: center
+    :width: 20%
+    :target: javascript:void(0)
+
+    $Y$ operators can be measured by having both X and Z edges be exposed with an adjacent auxiliary qubit. The measurement corresponds to the product of all involved operators, involving $Z_A X_A \propto Y_A$.
+
+In practice, we measure a single qubit patch in the Y basis by utilizing an auxiliary qubit. If we start off from a single square patch we first need to deform it at the cost of 1🕒, initialize an auxiliary qubit at no cost, and perform the joint measurement as shown above (1🕒).
+The entire protocol is shown below:
+
+.. figure:: ../_static/demonstration_assets/game_of_surface_codes/Y_measurement_protocol.png
+    :align: center
+    :width: 50%
+    :target: javascript:void(0)
+
+    The protocol for measuring a single qubit in the Y basis involves deforming the patch (Step 2, 1🕒), initializing an auxillary qubit in $|0\rangle$ (0🕒), simultaneously measure both patches (1🕒) and deforming the qubit back again.
+
+Auxiliary qubits play an important role as they allow measuring products Pauli operators on different qubits, 
+which is the most crucial operation in this framework, since everything is mapped to `Pauli product measurements <https://pennylane.ai/compilation/pauli-product-measurement>`__.
+
+.. figure:: ../_static/demonstration_assets/game_of_surface_codes/PPM.png
+    :align: center
+    :width: 30%
+    :target: javascript:void(0)
+
+    Measuring $Y_1 X_3 Z_4 X_5$ via a joint auxiliary qubit in 1🕒. In principle multi-qubit measurements with many qubits come at the same cost as with fewer qubit, however the requirement of having an auxiliary region connecting all qubits may demand extra formations.
+
+
 
 - X and Z measurement
 - Y measurement
@@ -76,6 +112,9 @@ Intermediate data blocks
 
 Fast data blocks
 ^^^^^^^^^^^^^^^^
+
+Distillation blocks design
+--------------------------
 
 
 """
