@@ -19,6 +19,7 @@ jobs:
     outputs:
       updated: ${{ steps.get-changed-demos.outputs.updated }}
       deleted: ${{ steps.get-changed-demos.outputs.deleted }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -39,9 +40,10 @@ jobs:
 
   # Step 2: Build demos
   build:
-    uses: ./.github/workflows/v2-build-demos.yml
-    needs: identify-changed-demos
     if: needs.identify-changed-demos.outputs.updated != ''
+    uses: ./.github/workflows/v2-build-demos.yml
+    needs: 
+      - identify-changed-demos
     with:
       ref: ${{ github.event.pull_request.head.sha }}
       demo-names: ${{ needs.identify-changed-demos.outputs.updated }}
@@ -58,7 +60,6 @@ jobs:
     needs:
       - build
       - identify-changed-demos
-    if: needs.identify-changed-demos.outputs.updated != ''
     steps:
       - name: Save Pull Request Event Context
         if: github.event_name == 'pull_request'
@@ -75,7 +76,6 @@ jobs:
           EOL
 
       - name: Upload Pull Request Event Context as Artifact
-        if: github.event_name == 'pull_request'
         uses: actions/upload-artifact@v4
         with:
           name: pr_info

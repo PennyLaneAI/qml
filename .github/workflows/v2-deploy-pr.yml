@@ -19,8 +19,8 @@ concurrency:
 jobs:
   # Step 1: Prepare the build context
   prepare-build-context:
-    runs-on: ubuntu-latest
     if: github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
     steps:
       - name: Download Build Context
         uses: XanaduAI/cloud-actions/download-github-workflow-artifact@main
@@ -86,9 +86,9 @@ jobs:
 
   # Step 2: Deploy the demos to SWC
   deploy-preview-demos:
+    if: github.event.workflow_run.event == 'pull_request' && needs.prepare-build-context.result == 'success'
     uses: ./.github/workflows/v2-deploy-demos.yml
     needs: prepare-build-context
-    if: github.event.workflow_run.event == 'pull_request' && needs.prepare-build-context.result == 'success'
     with:
       # TODO: Update SWC environment to "swc-prod"
       environment: 'swc-staging' 
@@ -99,9 +99,9 @@ jobs:
   
   # Step 3: Create a comment on the PR with the demo links
   generate-comment:
+    if: github.event.workflow_run.event == 'pull_request' && needs.prepare-build-context.outputs.pr_id != ''
     runs-on: ubuntu-latest
     needs: prepare-build-context
-    if: github.event.workflow_run.event == 'pull_request' && needs.prepare-build-context.outputs.pr_id != ''
     steps:
       - name: Create markdown comment from demo names
         id: generate-markdown
@@ -120,7 +120,6 @@ jobs:
           comment+="\n"
           comment+="</details>"
 
-          # Set the markdown as an output variable
           echo "::set-output name=markdown::$comment"
 
       - name: Comment on PR
