@@ -9,7 +9,7 @@ Introduction
 The game of surface codes [#Litinski]_ is a high-level framework for designing surface code quantum computing architectures.
 The game helps us understand space-time trade-offs, where e.g. designs with a higher qubit overhead allow for faster computations and vice versa.
 E.g., a space-efficient design might allow a computation with :math:`10^8` T gates to run in :math:`4` hours using :math:`55k` physical qubits, 
-whereas and intermediate design may run the same computation in :math:`22` minutes using :math:`120k` physical qubits, 
+whereas an intermediate design may run the same computation in :math:`22` minutes using :math:`120k` physical qubits, 
 or a time-optimized design in :math:`1` second using :math:`1500` interconnected quantum computers with :math:`220k` physical qubits, each.
 
 One can draw a rough comparison to microchip design in classical computing, 
@@ -247,10 +247,14 @@ For example, we can realize :math:`X_2` via :math:`X_1 (X_1 \otimes X_2)` and we
 :math:`Y_1 \propto (X_1) (Z_1) = (X_1) (Z_1 \otimes Z_2) (Z_2)`. With the same logic we can obtain :math:`Y_2` and :math:`Z_1`.
 Further, we have operators like :math:`X_1 Y_1 \propto (X_1 \otimes X_2) Z_2` and :math:`Y_1 X_2 \propto X_1 \otimes (X_1) (X_2) (Z_2) (Z_1 \otimes Z_2)`.
 
-The cost for performing a non-Clifford Pauli rotation therefore is just 1🕒.
+The maximum time cost for performing a non-Clifford Pauli rotation therefore is just 1🕒.
 
 Distillation blocks design
 --------------------------
+
+So far we have only been concerned with data blocks that perform Pauli product measurements and assumed magic states to be available
+for consumption.
+These magic states need to be distilled in separate blocks, which can in principle be of the same design as data blocks.
 
 
 """
