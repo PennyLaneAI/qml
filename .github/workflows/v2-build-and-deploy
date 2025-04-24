@@ -1,40 +1,42 @@
-name: V2 Build and Deploy Demonstrations
+name: V2 Build and Deploy Demos
 
 on:
   workflow_dispatch:
     inputs:
       environment:
         description: SWC environment to deploy to
-        type: string
-        required: true
         options:
           - swc-staging
           - swc-prod
           - swc-dev
-      as-previews:
-        description: Whether to deploy demos as preview
-        type: boolean
         required: true
-        default: false
+        type: choice
       branch:
-        description: Branch to build and deploy
-        type: string
-        required: false
-        default: v2 # Change to main or dev
+        default: master
+        description: Branch to build demos against `master` (stable) or `dev` (latest)
+        options:
+          - master
+          - dev
+        required: true
+        type: choice
       demos:
-        description: Demos to build and deploy (space-separated string)
-        type: string
+        description: Demos to build and deploy, if all demos are to be built leave blank
         required: false
-        default: all # Change to specific demo names if needed
-    
+        type: string
+      as-previews:
+        default: false
+        description: Whether to deploy demos as preview
+        required: true
+        type: boolean
+
+
 jobs:
   build:
     uses: ./.github/workflows/v2-build-demos.yml
     with:
       ref: ${{ github.event.inputs.branch }}
-      demo-names: |
-        [ "${{ github.event.inputs.demos }}" == "all" ] && echo "" || echo "${{ github.event.inputs.demos }}"
-      dev: false
+      demo-names: ${{ github.event.inputs.demos }}
+      dev: ${{ github.event.inputs.branch == 'dev' }}
       save-artifact: true
       artifact-name: build-and-deploy-${{ github.event.inputs.branch }}
       keep-going: false
@@ -42,13 +44,10 @@ jobs:
       batch_size: 10
 
   deploy:
-    if: github.event.workflow_run.event == 'pull_request' && needs.prepare-build-context.result == 'success'
     uses: ./.github/workflows/v2-deploy-demos.yml
-    needs: prepare-build-context
     with:
       environment: ${{ github.event.inputs.environment }}
       artifact-name: build-and-deploy-${{ github.event.inputs.branch }}
-      preview: true
-      branch: ${{ needs.prepare-build-context.outputs.pr_ref_name }}
+      preview: ${{ github.event.inputs.as-previews }}
+      branch: ${{ github.event.inputs.branch }}
     secrets: inherit
-
