@@ -1,4 +1,4 @@
-name: Build and Deploy V2 Demos
+name: V2 Build and Deploy Demonstrations
 
 on:
   workflow_dispatch:
