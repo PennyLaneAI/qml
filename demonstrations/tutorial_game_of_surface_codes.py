@@ -185,7 +185,7 @@ For example, we can perform the rotation :math:`e^{i \frac{\pi}{4} Z_3 Z_5 Z_6}`
 The worst case here is having an even number of :math:`Y` operators in the Pauli word, as it requires two distinct :math:`\frac{\pi}{4}` rotations, each costing 2🕒.
 
 Overall, in the worst case scenario an operation can cost 9🕒. This consists of the base cost of 1🕒 for performing the Pauli measaurement, 2🕒 for having an even number of :math:`Y` operators, and 6🕒 when opposite qubit patches require :math:`X` measurements.
-The following protocol shows such a scenario by performing :math:`e^{i \frac{\pi}{8} Y_1 Y_3 Z_4 Y_5 Y_6}`, which is realized by :math:`e^{i \frac{\pi}{4} X_1 X_3 Z_4 X_5 X_6} e^{i \frac{\pi}{4} Z_3 Z_5 Z_6} e^{i \frac{\pi}{4} Z_1}`.
+The following protocol shows such a scenario by performing :math:`e^{i \frac{\pi}{8} Y_1 Y_3 Z_4 Y_5 Y_6}`, which is realized by :math:`e^{i \frac{\pi}{8} X_1 X_3 Z_4 X_5 X_6} e^{i \frac{\pi}{4} Z_3 Z_5 Z_6} e^{i \frac{\pi}{4} Z_1}`.
 
 .. figure:: ../_static/demonstration_assets/game_of_surface_codes/compact_block_worst_case.png
     :align: center
