@@ -1,0 +1,54 @@
+name: Build and Deploy V2 Demos
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: SWC environment to deploy to
+        type: string
+        required: true
+        options:
+          - swc-staging
+          - swc-prod
+          - swc-dev
+      as-previews:
+        description: Whether to deploy demos as preview
+        type: boolean
+        required: true
+        default: false
+      branch:
+        description: Branch to build and deploy
+        type: string
+        required: false
+        default: v2 # Change to main or dev
+      demos:
+        description: Demos to build and deploy (space-separated string)
+        type: string
+        required: false
+        default: all # Change to specific demo names if needed
+    
+jobs:
+  build:
+    uses: ./.github/workflows/v2-build-demos.yml
+    with:
+      ref: ${{ github.event.inputs.branch }}
+      demo-names: |
+        [ "${{ github.event.inputs.demos }}" == "all" ] && echo "" || echo "${{ github.event.inputs.demos }}"
+      dev: false
+      save-artifact: true
+      artifact-name: build-and-deploy-${{ github.event.inputs.branch }}
+      keep-going: false
+      quiet: false
+      batch_size: 10
+
+  deploy:
+    if: github.event.workflow_run.event == 'pull_request' && needs.prepare-build-context.result == 'success'
+    uses: ./.github/workflows/v2-deploy-demos.yml
+    needs: prepare-build-context
+    with:
+      environment: ${{ github.event.inputs.environment }}
+      artifact-name: build-and-deploy-${{ github.event.inputs.branch }}
+      preview: true
+      branch: ${{ needs.prepare-build-context.outputs.pr_ref_name }}
+    secrets: inherit
+    
