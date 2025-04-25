@@ -26,13 +26,14 @@ Hence, we mainly care about performing measurements on qubits in arbitrary bases
 We also note that the patches that represent qubits correspond to surface code qubits.
 There is a detailed explanation in Appendix A in [#Litinski]_ that describes the surface code realizations of all operations that we are going to see.
 These are useful to know in order to grasp the full depth of the game, but are not essential to understanding its rules and concluding design principles that we cover in this demo.
+For further reading on these subjects, we recommend the `blog posts on the surface code and quantum error correction <https://arthurpesah.me/blog/>`__ by Arthur Pesah, our :doc:`demo on the toric code <tutorial_toric_code>`, as well as the three-part series on the `toric code <https://decodoku.blogspot.com/2016/03/6-toric-code.html>`__ by James Wooton
 
 Rules of the game
 -----------------
 
 The game is played on a board of tiles, where patches correspond to qubits.
-Underlying these tiles are physical qubits that are statically arranged.
-But we should view qubit patches as dynamic entities that appear, move around, deform and disappear again.
+Underlying these tiles are physical qubits that are statically arranged (:math:`2d^2` physical qubits per tile for code distance :math:`d`).
+But we should view logical qubit patches as dynamic entities that can appear, move around, deform and disappear again.
 The goal of this demo will be to understand the design principles and space-time trade-offs for surface code architectures.
 We are going to introduce the necessary rules of the game in this section.
 
@@ -47,6 +48,7 @@ This is shown in the figure below.
 
     Qubits are defined as patches of tiles on the board. 
     A single qubit can occupy one tile (a) or multiple tiles (b), where dotted lines correspond to X and solid lines to Z operators.
+    **
 
 Every operation in the game has an associated time cost that we measure in units of 🕒. These correspond more or less to surface code cycles.
 There are some discrepancies but the correspondance is close enough to weigh out space-time trade-offs in architecture designs.
@@ -64,6 +66,7 @@ At the cost of 0🕒 we can measure patches in the X and Z basis. If two patches
     :target: javascript:void(0)
 
     Simultaneously measuring the patches of two adjacent patches corresponds to the product of their neighboring edges. Here, we measure :math:`ZZ`.
+    **
 
 In particular, if the shared edge contains both Z and X edges, we can measure in the Y basis. In the following example, the upper qubit A has both operator edges :math:`Z_A` and :math:`X_A` exposed.
 Measuring it together with the auxillary qubit B, initialized in the :math:`|0\rangle` state below, we measure :math:`(Z_A X_A) \otimes Z_B \propto Y_A \otimes Z_B` alltogether.
@@ -74,6 +77,7 @@ Measuring it together with the auxillary qubit B, initialized in the :math:`|0\r
     :target: javascript:void(0)
 
     `Y` operators can be measured by having both X and Z edges be exposed with an adjacent auxiliary qubit. The measurement corresponds to the product of all involved operators, involving :math:`Z_A X_A \propto Y_A`.
+    **
 
 If we want to measure a single qubit patch in practice, we start off deforming it at the cost of 1🕒, initialize an auxiliary qubit at no cost, and perform the joint measurement as shown above (1🕒).
 The entire protocol costs 2🕒 and is shown below:
@@ -84,6 +88,7 @@ The entire protocol costs 2🕒 and is shown below:
     :target: javascript:void(0)
 
     The protocol for measuring a single qubit in the Y basis involves deforming the patch (Step 2, 1🕒), initializing an auxillary qubit in :math:`|0\rangle` (0🕒), simultaneously measuring both patches (1🕒) and deforming the qubit back again (0🕒).
+    **
 
 Auxiliary qubits play an important role as they allow measuring products of Pauli operators on different qubits, 
 which is the most crucial operation in this framework, since everything is mapped to `Pauli product measurements <https://pennylane.ai/compilation/pauli-product-measurement>`__.
@@ -95,6 +100,7 @@ which is the most crucial operation in this framework, since everything is mappe
 
     Measuring :math:`Y_1 X_3 Z_4 X_5` via a joint auxiliary qubit in 1🕒. In principle multi-qubit measurements with many qubits come at the same cost as with fewer qubit.
     However, the requirement of having an auxiliary region connecting all qubits may demand extra deformations.
+    **
 
 Non-Clifford Pauli rotations
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -112,6 +118,7 @@ Magic state injection in this case then refers to the following protocol:
     Performing a non-Clifford :math:`\pi/8` rotation corresponds to performing the joint measurement of the Pauli word and :math:`Z` on the magic state qubit.
     The measurement of :math:`P \otimes Z_m` costs 1🕒, the subsequent :math:`X` measurement is free.
     The additional classically controlled Clifford rotations can be merged again with the measurements at the end of the circuit.
+    **
 
 Take for example the Pauli word :math:`P = Z_1 Y_2 X_4` on the architecture layout below. 
 This design allows one to directly perform :math:`e^{-i \frac{\pi}{8} P}` as we have access to all of :math:`X, Y, Z` on each qubit, as well as the :math:`Z` edge for the magic state qubit.
@@ -122,6 +129,7 @@ This design allows one to directly perform :math:`e^{-i \frac{\pi}{8} P}` as we 
     :target: javascript:void(0)
 
     Performing :math:`e^{-i \frac{\pi}{8} Z_1 Y_2 X_4}` by measuring :math:`Z_1 Y_2 X_4 Z_m`. The additional measurement :math:`X` on the magic state qubit is not shown and has no additional cost. The remaining Clifford Pauli rotations are merged with the terminal measurements at the end of the circuit via compilation.
+    **
 
 We are going to see in the next section that one of the biggest problems is performing Y rotations and measurements (same thing, really, in this framework).
 
@@ -141,6 +149,7 @@ The compact data block has the following form. The middle aisle is going to be u
     :target: javascript:void(0)
 
     The compact data block design is efficient in space. However, only one edge is exposed to the auxiliary qubit region in the middle.
+    **
 
 This design only uses :math:`\frac{3}{2}n + 3` tiles for :math:`n` qubits.
 The biggest drawback is rather obvious: we can only access :math:`Z` measurements in the auxiliary qubit region. In order to perform joint :math:`X` measurements,
@@ -152,6 +161,7 @@ we can perform a patch rotation at a cost of 3🕒:
     :target: javascript:void(0)
 
     A patch rotation can be used to expose the :math:`X` edge to the auxiliary qubit region.
+    **
 
 The worst thing that can happen is to have two opposite qubits require an X measurement, 
 e.g. qubits (3 and 4) or (5 and 6). If either or both occurs, it takes a total of 6🕒 to rotate the patches.
@@ -170,6 +180,7 @@ Such a rotation :math:`e^{i \frac{\pi}{4} P}` can be performed with a joint meas
     :target: javascript:void(0)
 
     A Clifford rotation :math:`e^{i \frac{\pi}{4} P}` is performed by measuring :math:`P \otimes Y`.
+    **
 
 In particular, we still need to be able to perform a :math:`Y` measurement `somewhere`.
 In this case we just outsourced it to another resource qubit, which we can use for all others and for which we left space in the bottom left corner of the compact data block.
@@ -181,6 +192,7 @@ For example, we can perform the rotation :math:`e^{i \frac{\pi}{4} Z_3 Z_5 Z_6}`
     :target: javascript:void(0)
 
     A Clifford rotation :math:`e^{i \frac{\pi}{4} Z_3 Z_5 Z_6}` is performed by measuring :math:`Z_3 Z_5 Z_6 \otimes Y_\text{resource}` with the additional resource qubit in the bottom left corner of the compact block.
+    **
 
 The worst case here is having an even number of :math:`Y` operators in the Pauli word, as it requires two distinct :math:`\frac{\pi}{4}` rotations, each costing 2🕒.
 
@@ -197,6 +209,7 @@ The following protocol shows such a scenario by performing :math:`e^{i \frac{\pi
     Step 3 performs the additional :math:`X` measurement on the resource qubit at 0🕒.
     Same for steps 4 and 5 for performing :math:`e^{i \frac{\pi}{4} Z_3 Z_5 Z_6}` at 1🕒 overall.
     Steps 6 and 7 perform the patch rotations at 3🕒, each. And the final measurement of :math:`X_1 X_3 Z_4 X_5 X_6 Z_m` at another 1🕒 in step 8 completes the computation.
+    **
 
 
 Intermediate data blocks
@@ -211,6 +224,7 @@ measurements on opposite qubit patches by simply removing the second row and lay
     :target: javascript:void(0)
 
     Intermediate data block design.
+    **
 
 As such, this architecture occupies :math:`2n + 4` tiles. One can get additional saving by having the auxiliary qubit region be flexibly the lower or upper row.
 This way, one can save on the extra cost of rotating patches back to their original position.
@@ -231,6 +245,7 @@ We ommitted this in the rule description before as it is only relevant for the f
     :target: javascript:void(0)
 
     Two qubits can be realized by a patch on two tiles. The patch now has 6 distinct edges, corresponding to the operators as indicated in the figure.
+    **
 
 With this extra trick up our sleeve, we can construct the fast data block consisting of two-qubit patches with all-encompassing auxiliary qubit region.
 
@@ -240,6 +255,7 @@ With this extra trick up our sleeve, we can construct the fast data block consis
     :target: javascript:void(0)
 
     Fast data block design.
+    **
 
 Here, all 15 distinct Pauli operators are readily available. This is because we have 
 :math:`X_1`, :math:`X_1 \otimes X_2`, :math:`Z_2`, :math:`Z_1 \otimes Z_2` and all products thereof available.
@@ -275,6 +291,7 @@ The distillation circuit is given by the following, with the details described i
     15-to-1 distillation protocol. Each :math:`\frac{\pi}{8}` rotation involves a magic state injection with an error-prone magic state.
     In total, we have :math:`4+11` magic states, each with error probability :math:`p` and output a magic state :math:`|m\rangle` on the
     fifth qubit with probability :math:`35p^3`.
+    **
 
 Because all operations in the protocol are Z measurements, we can use the compact data block design to perform this compilation. 
 Another trick the author of [#Litinski]_ proposes is to use the auto-corrected magic state injection protocol below that avoids the additional Clifford :math:`\frac{\pi}{4}` Pauli rotation (and note that the other Clifford :math:`\frac{\pi}{2}` Pauli rotation is just a sign flip in classical processing).
@@ -286,6 +303,7 @@ Another trick the author of [#Litinski]_ proposes is to use the auto-corrected m
 
     The auto-corrected magic state injection protocol avoids the additional Clifford :math:`\frac{\pi}{4}` Pauli rotation from above at the cost of having an additional qubit that is measured.
     However, note that the first two measurements commute and can be performed simultaneously. 
+    **
 
 Using this injection protocol to perform the non-Clifford :math:`\frac{\pi}{8}` rotations using the error prone magic states, the 15-to-1 protocol on a compact data block is performed in the following way:
 
@@ -297,6 +315,7 @@ Using this injection protocol to perform the non-Clifford :math:`\frac{\pi}{8}` 
     The 15-to-1 protocol executed on a compact data block using the auto-corrected magic state injection subroutine in each of the repeating steps. 
     Note that both :math:`P \otimes Z_m` and :math:`Z_m \otimes Y_{|0\rangle}` measurements are performed simultaneously.
     If all :math:`X` measurements on qubits 1-4 in step 23 yield a :math:`+1` result, a magic state is successfully prepared on qubit 5. The probability for failure is :math:`35p^3`.
+    **
 
 The 15-to-1 distillation protocol produces a magic state with error probability :math:`35p^3` in 11🕒 on 11 tiles.
 
@@ -320,43 +339,40 @@ A minimal setup can be seen below. It consists of 100 logical qubits on 153 tile
     :target: javascript:void(0)
 
     Minimal setup with 100 logical qubits on 153 tiles and 11 extra tiles for a compact distillation block.
+    **
 
-In this setup, a magic state is produced every 11🕒 with probability 
+For a code distance of :math:`d=13` we would require :math:`164 \cdot 2 \cdot d^2 \approx 55k` physical qubits.
+An example computation with :math:`10^8` T gates at a code cycle of :math:`1\mu s` would finish in :math:`d \cdot 11🕒 \codt 10^8 \approx 4h`.
+
+In this setup, a magic state is produced every 11🕒 and takes at most 9🕒 for consumption.
+The bottleneck is in the magic state distillation, and overall this setup takes 11🕒 per non-Clifford gate.
+The most straight-forward way to speed this up is by adding magic state distillation blocks. Adding just one other distillation block halves the T-gate production time to 5.5🕒.
+Now it makes sense to use the intermediate data block design, which takes at most 5🕒 for T-gate consumption:
+
+.. figure:: ../_static/demonstration_assets/game_of_surface_codes/intermediate_setup.png
+    :align: center
+    :width: 99%
+    :target: javascript:void(0)
+
+    Intermediate setup consisting of the intermediate data block and two 15-to-1 distillation blocks on each end.
+    **
+
+In this case we require 222 tiles, so :math:`222 \cdot 2 \cdot d^2 \approx 75k` physical qubits, and a the same computation mentioned before would finish in half the time after about :math:`2h`.
+
+
+Conclusion
+----------
+
+We've introduced a high-level description that allows us to reason about space-time trade-offs in FTQC architecture designs.
+We have seen some basic prototypes that allow computations involving :math:`10^8` T gates in orders of hours using :math:`55k` or :math:`75k` physical qubits.
+With this knowledge, we should be able to follow the more involved tricks discussed in sections 4 and 5 in [#Litinski]_, that we have not covered in this demo yet.
+
+**: Images from `Game of Surface Codes <https://quantum-journal.org/papers/q-2019-03-05-128/>`__ by Daniel Litinski, `CC BY 4.0 <https://creativecommons.org/licenses/by/4.0/>`__
+
 """
-import numpy as np
-import pennylane as qml
-from pennylane import X, Y, Z, I
-
-import matplotlib.pyplot as plt
-
 
 ##############################################################################
 #
-
-##############################################################################
-#
-
-##############################################################################
-#
-
-##############################################################################
-#
-
-##############################################################################
-#
-
-##############################################################################
-#
-
-
-
-
-##############################################################################
-#
-# Conclusion
-# ----------
-#
-# asd
 
 
 ##############################################################################
@@ -369,6 +385,11 @@ import matplotlib.pyplot as plt
 #     Daniel Litinski
 #     "A Game of Surface Codes: Large-Scale Quantum Computing with Lattice Surgery"
 #     `arXiv:1808.02892 <https://arxiv.org/abs/1808.02892v3>`__, 2018.
+#
+# .. [#Pesah]
+#
+#     Arthur Pesah
+#     `"An interactive introduction to the surface code" <https://arthurpesah.me/blog/2023-05-13-surface-code/>`__, 2023.
 #
 #
 
