@@ -142,7 +142,7 @@ The compact data block has the following form. The middle aisle is going to be u
 
     The compact data block design is efficient in space. However, only one edge is exposed to the auxiliary qubit region in the middle.
 
-This design only uses :math:`\frac{3}{2}n` tiles and 3 additional ones for a magic state distillation block.
+This design only uses :math:`\frac{3}{2}n + 3` tiles for :math:`n` qubits.
 The biggest drawback is rather obvious: we can only access :math:`Z` measurements in the auxiliary qubit region. In order to perform joint :math:`X` measurements,
 we can perform a patch rotation at a cost of 3🕒:
 
