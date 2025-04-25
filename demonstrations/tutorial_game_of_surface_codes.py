@@ -242,10 +242,10 @@ With this extra trick up our sleeve, we can construct the fast data block consis
     Fast data block design.
 
 Here, all 15 distinct Pauli operators are readily available. This is because we have 
-:math:`X_1`, :math:`X_1 \otimes X_2`, math:`Z_2` and :math:`Z_1 \otimes Z_2` and all products thereof available.
+:math:`X_1`, :math:`X_1 \otimes X_2`, :math:`Z_2`, :math:`Z_1 \otimes Z_2` and all products thereof available.
 For example, we can realize :math:`X_2` via :math:`X_1 (X_1 \otimes X_2)` and we have 
 :math:`Y_1 \propto (X_1) (Z_1) = (X_1) (Z_1 \otimes Z_2) (Z_2)`. With the same logic we can obtain :math:`Y_2` and :math:`Z_1`.
-Further, we have operators like :math:`X_1 Y_1 \propto (X_1 \otimes X_2) Z_2` and :math:`Y_1 X_2 \propto X_1 \otimes (X_1) (X_2) (Z_2) (Z_1 \otimes Z_2)`.
+Further, we have operators like :math:`X_1 Y_1 \propto (X_1 \otimes X_2) Z_2`, :math:`Z_1 \otimes X_2 = X_1 (X_1 \otimes X_2) Z_2 (Z_1 \otimes Z_2)` and :math:`Y_1 X_2 \propto (X_1 \otimes X_2) (Z_2) (Z_1 \otimes Z_2)`.
 
 The maximum time cost for performing a non-Clifford Pauli rotation therefore is just 1🕒.
 
