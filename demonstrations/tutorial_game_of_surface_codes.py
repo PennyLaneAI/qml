@@ -247,14 +247,62 @@ For example, we can realize :math:`X_2` via :math:`X_1 (X_1 \otimes X_2)` and we
 :math:`Y_1 \propto (X_1) (Z_1) = (X_1) (Z_1 \otimes Z_2) (Z_2)`. With the same logic we can obtain :math:`Y_2` and :math:`Z_1`.
 Further, we have operators like :math:`X_1 Y_1 \propto (X_1 \otimes X_2) Z_2`, :math:`Z_1 \otimes X_2 = X_1 (X_1 \otimes X_2) Z_2 (Z_1 \otimes Z_2)` and :math:`Y_1 X_2 \propto (X_1 \otimes X_2) (Z_2) (Z_1 \otimes Z_2)`.
 
-The maximum time cost for performing a non-Clifford Pauli rotation therefore is just 1🕒.
+The maximum time cost for performing a non-Clifford Pauli rotation therefore is just 1🕒 on the fast data block.
 
 Distillation blocks design
 --------------------------
 
 So far we have only been concerned with data blocks that perform Pauli product measurements and assumed magic states to be available
 for consumption.
-These magic states need to be distilled in separate blocks, which can in principle be of the same design as data blocks.
+These magic states need to be distilled in separate blocks, which can in principle be of the same design as data blocks. But since
+the blocks are used for a fixed protocol, this knowledge can be used for simplifications.
+
+There are different approaches to perform magic state distillation. We consider the case where we can prepare a magic state with error probability :math:`p`.
+The distillation protocol is then such that this error probability is decreased to an acceptable level. All other operations of the protocol are Clifford and can thus be
+performed fault-tolerantly. We are going to go through the simplest protocol in a 15-to-1 distillation block.
+
+15-to-1 distillation
+^^^^^^^^^^^^^^^^^^^^
+
+This protocol uses 15 error-prone magic states with probability :math:`p` and outputs a single magic state with error probability of :math:`35p^3`. 
+The distillation circuit is given by the following, with the details described in section 3.1 in [#Litinski]_:
+
+.. figure:: ../_static/demonstration_assets/game_of_surface_codes/15-to-1.png
+    :align: center
+    :width: 50%
+    :target: javascript:void(0)
+
+    15-to-1 distillation protocol. Each :math:`\frac{\pi}{8}` rotation involves a magic state injection with an error-prone magic state.
+    In total, we have :math:`4+11` magic states, each with error probability :math:`p` and output a magic state :math:`|m\rangle` on the
+    fifth qubit with probability :math:`35p^3`.
+
+Because all operations in the protocol are Z measurements, we can use the compact data block design to perform this compilation. 
+Another trick the author of [#Litinski]_ proposes is to use the auto-corrected magic state injection protocol below that avoids the additional Clifford :math:`\frac{\pi}{4}` Pauli rotation (and note that the other Clifford :math:`\frac{\pi}{2}` Pauli rotation is just a sign flip in classical processing).
+
+.. figure:: ../_static/demonstration_assets/game_of_surface_codes/auto-corrected-non-clifford.png
+    :align: center
+    :width: 50%
+    :target: javascript:void(0)
+
+    The auto-corrected magic state injection protocol avoids the additional Clifford :math:`\frac{\pi}{4}` Pauli rotation from above at the cost of having an additional qubit that is measured.
+    However, note that the first two measurements commute and can be performed simultaneously. 
+
+Using this injection protocol to perform the non-Clifford :math:`\frac{\pi}{8}` rotations using the error prone magic states, the 15-to-1 protocol on a compact data block is performed in the following way:
+
+.. figure:: ../_static/demonstration_assets/game_of_surface_codes/15-to-1-protocol.png
+    :align: center
+    :width: 99%
+    :target: javascript:void(0)
+
+    The 15-to-1 protocol executed on a compact data block using the auto-corrected magic state injection subroutine in each of the repeating steps. 
+    Note that both :math:`P \otimes Z_m` and :math:`Z_m \otimes Y_{|0\rangle}` measurements are performed simultaneously.
+
+
+Quantum computer designs
+------------------------
+
+Minimal setup
+^^^^^^^^^^^^^
 
 
 """
