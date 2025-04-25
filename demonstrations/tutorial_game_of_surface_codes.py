@@ -296,15 +296,32 @@ Using this injection protocol to perform the non-Clifford :math:`\frac{\pi}{8}` 
 
     The 15-to-1 protocol executed on a compact data block using the auto-corrected magic state injection subroutine in each of the repeating steps. 
     Note that both :math:`P \otimes Z_m` and :math:`Z_m \otimes Y_{|0\rangle}` measurements are performed simultaneously.
+    If all :math:`X` measurements on qubits 1-4 in step 23 yield a :math:`+1` result, a magic state is successfully prepared on qubit 5. The probability for failure is :math:`35p^3`.
 
+The 15-to-1 distillation protocol produces a magic state with error probability :math:`35p^3` in 11🕒 on 11 tiles.
 
 Quantum computer designs
 ------------------------
 
-Minimal setup
-^^^^^^^^^^^^^
+The 15-to-1 distillation protocol is the simplest of a variety of protocols with each their different characteristics.
+The best choice for distillation protocol heavily depends on the error probabilities of the quantum computer in use,
+as well as the overall tolerance for errors we allow to still occur.
+For example, assume we tolerate T errors of :math:`10^{-10}` and have physical errors of probability :math:`p=10^{-4}`, then
+the 15-to-1 protocol would suffice as it has a failure probability of :math:`35p^3 = 3.5 \times 10^{-11} < 10^{-10}`.
 
+Another consideration is to combine data and distillation blocks that match in their maximum time requirements.
+Since the 15-to-1 distillation above takes 11🕒 to procude a magic state, there is no point in using the fast or intermediate data blocks, and we can just resort to the compact one.
 
+A minimal setup can be seen below. It consists of 100 logical qubits on 153 tiles in a compact block, as well as a 15-to-1 distillation block using another 11 tiles.
+
+.. figure:: ../_static/demonstration_assets/game_of_surface_codes/15-to-1-protocol.png
+    :align: center
+    :width: 99%
+    :target: javascript:void(0)
+
+    Minimal setup with 100 logical qubits on 153 tiles and 11 extra tiles for a compact distillation block.
+
+In this setup, a magic state is produced every 11🕒 with probability 
 """
 import numpy as np
 import pennylane as qml
