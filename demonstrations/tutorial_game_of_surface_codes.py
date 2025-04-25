@@ -273,14 +273,15 @@ for consumption.
 These magic states need to be distilled in separate blocks, which can in principle be of the same design as data blocks. But since
 the blocks are used for a fixed protocol, this knowledge can be used for simplifications.
 
-There are different approaches to perform magic state distillation. We consider the case where we can prepare a magic state with error probability :math:`p`.
-The distillation protocol is then such that this error probability is decreased to an acceptable level. All other operations of the protocol are Clifford and can thus be
-performed fault-tolerantly. We are going to go through the simplest protocol in a 15-to-1 distillation block.
+There are different approaches to perform magic state distillation. We consider the case where we can prepare a magic state with infidelity :math:`p`.
+The distillation protocol is then such that this infidelity is decreased to an acceptable level. All other operations of the protocol are Clifford, so we can measure if an error has occured.
+This then determines the success probability of the protocol, which in the case below is roughly :math:`(1-p)^n` for an :math:`n`-qubit protocol.
+We are going to go through the simplest protocol in a 15-to-1 distillation block.
 
 15-to-1 distillation
 ^^^^^^^^^^^^^^^^^^^^
 
-This protocol uses 15 error-prone magic states with probability :math:`p` and outputs a single magic state with error probability of :math:`35p^3`. 
+This protocol uses 15 imperfect magic states with infidelity :math:`p` and outputs a single magic state with infidelity of :math:`35p^3`. 
 The distillation circuit is given by the following, with the details described in section 3.1 in [#Litinski]_:
 
 .. figure:: ../_static/demonstration_assets/game_of_surface_codes/15-to-1.png
@@ -289,8 +290,8 @@ The distillation circuit is given by the following, with the details described i
     :target: javascript:void(0)
 
     15-to-1 distillation protocol. Each :math:`\frac{\pi}{8}` rotation involves a magic state injection with an error-prone magic state.
-    In total, we have :math:`4+11` magic states, each with error probability :math:`p` and output a magic state :math:`|m\rangle` on the
-    fifth qubit with probability :math:`35p^3`.
+    In total, we have :math:`4+11` magic states, each with infidelity :math:`p` and output a magic state :math:`|m\rangle` on the
+    fifth qubit with infidelity :math:`35p^3`.
     **
 
 Because all operations in the protocol are Z measurements, we can use the compact data block design to perform the distillation. 
@@ -314,10 +315,10 @@ Using this injection protocol to perform the non-Clifford :math:`\frac{\pi}{8}` 
 
     The 15-to-1 protocol executed on a compact data block using the auto-corrected magic state injection subroutine in each of the repeating steps. 
     Note that both :math:`P \otimes Z_m` and :math:`Z_m \otimes Y_{|0\rangle}` measurements are performed simultaneously.
-    If all :math:`X` measurements on qubits 1-4 in step 23 yield a :math:`+1` result, a magic state is successfully prepared on qubit 5. The probability for failure is :math:`35p^3`.
+    If all :math:`X` measurements on qubits 1-4 in step 23 yield a :math:`+1` result, a magic state is successfully prepared on qubit 5. The probability for failure is roughly :math:`(1-p)^n`.
     **
 
-The 15-to-1 distillation protocol produces a magic state with error probability :math:`35p^3` in 11🕒 on 11 tiles.
+The 15-to-1 distillation protocol produces a magic state in 11🕒 on 11 tiles.
 
 Quantum computer designs
 ------------------------
@@ -325,8 +326,8 @@ Quantum computer designs
 The 15-to-1 distillation protocol is the simplest of a variety of protocols with each their different characteristics.
 The best choice for distillation protocol heavily depends on the error probabilities of the quantum computer in use,
 as well as the overall tolerance for errors we allow to still occur.
-For example, assume we tolerate T errors of :math:`10^{-10}` and have physical errors of probability :math:`p=10^{-4}`, then
-the 15-to-1 protocol would suffice as it has a failure probability of :math:`35p^3 = 3.5 \times 10^{-11} < 10^{-10}`.
+For example, assume we tolerate T infidelity of :math:`10^{-10}` and have :math:`p=10^{-4}`, then
+the 15-to-1 protocol would suffice as it yields an infidelity of :math:`35p^3 = 3.5 \times 10^{-11} < 10^{-10}`.
 
 Another consideration is to combine data and distillation blocks that match in their maximum time requirements.
 Since the 15-to-1 distillation above takes 11🕒 to procude a magic state, there is no point in using the fast or intermediate data blocks, and we can just resort to the compact one.
@@ -363,7 +364,7 @@ In this case we require 222 tiles, so :math:`222 \cdot 2 \cdot d^2 \approx 75k` 
 Conclusion
 ----------
 
-We've introduced a high-level description that allows us to reason about space-time trade-offs in FTQC architecture designs.
+We've been introduced to a high-level description that allows us to reason about space-time trade-offs in FTQC architecture designs.
 We have seen some basic prototypes that allow computations involving :math:`10^8` T gates in orders of hours using :math:`55k` or :math:`75k` physical qubits.
 With this knowledge, we should be able to follow the more involved tricks discussed in sections 4 and 5 in [#Litinski]_, that we have not covered in this demo yet.
 
