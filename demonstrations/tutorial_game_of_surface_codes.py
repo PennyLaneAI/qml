@@ -73,7 +73,7 @@ Measuring it together with the auxillary qubit B, initialized in the :math:`|0\r
     :width: 20%
     :target: javascript:void(0)
 
-    `Y` operators can be measured by having both X and Z edges be exposed with an adjacent auxiliary qubit. The measurement corresponds to the product of all involved operators, involving `Z_A X_A \propto Y_A`.
+    `Y` operators can be measured by having both X and Z edges be exposed with an adjacent auxiliary qubit. The measurement corresponds to the product of all involved operators, involving :math:`Z_A X_A \propto Y_A`.
 
 If we want to measure a single qubit patch in practice, we start off deforming it at the cost of 1🕒, initialize an auxiliary qubit at no cost, and perform the joint measurement as shown above (1🕒).
 The entire protocol costs 2🕒 and is shown below:
