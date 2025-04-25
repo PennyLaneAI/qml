@@ -293,7 +293,7 @@ The distillation circuit is given by the following, with the details described i
     fifth qubit with probability :math:`35p^3`.
     **
 
-Because all operations in the protocol are Z measurements, we can use the compact data block design to perform this compilation. 
+Because all operations in the protocol are Z measurements, we can use the compact data block design to perform the distillation. 
 Another trick the author of [#Litinski]_ proposes is to use the auto-corrected magic state injection protocol below that avoids the additional Clifford :math:`\frac{\pi}{4}` Pauli rotation (and note that the other Clifford :math:`\frac{\pi}{2}` Pauli rotation is just a sign flip in classical processing).
 
 .. figure:: ../_static/demonstration_assets/game_of_surface_codes/auto-corrected-non-clifford.png
@@ -333,16 +333,16 @@ Since the 15-to-1 distillation above takes 11🕒 to procude a magic state, ther
 
 A minimal setup can be seen below. It consists of 100 logical qubits on 153 tiles in a compact block, as well as a 15-to-1 distillation block using another 11 tiles.
 
-.. figure:: ../_static/demonstration_assets/game_of_surface_codes/15-to-1-protocol.png
+.. figure:: ../_static/demonstration_assets/game_of_surface_codes/minimal-setup.png
     :align: center
-    :width: 99%
+    :width: 50%
     :target: javascript:void(0)
 
     Minimal setup with 100 logical qubits on 153 tiles and 11 extra tiles for a compact distillation block.
     **
 
 For a code distance of :math:`d=13` we would require :math:`164 \cdot 2 \cdot d^2 \approx 55k` physical qubits.
-An example computation with :math:`10^8` T gates at a code cycle of :math:`1\mu s` would finish in :math:`d \cdot 11🕒 \codt 10^8 \approx 4h`.
+An example computation with :math:`10^8` T gates at a code cycle of :math:`1\mu s` would finish in :math:`d \cdot 11🕒 \cdot 10^8 \approx 4h`.
 
 In this setup, a magic state is produced every 11🕒 and takes at most 9🕒 for consumption.
 The bottleneck is in the magic state distillation, and overall this setup takes 11🕒 per non-Clifford gate.
@@ -351,13 +351,13 @@ Now it makes sense to use the intermediate data block design, which takes at mos
 
 .. figure:: ../_static/demonstration_assets/game_of_surface_codes/intermediate_setup.png
     :align: center
-    :width: 99%
+    :width: 70%
     :target: javascript:void(0)
 
     Intermediate setup consisting of the intermediate data block and two 15-to-1 distillation blocks on each end.
     **
 
-In this case we require 222 tiles, so :math:`222 \cdot 2 \cdot d^2 \approx 75k` physical qubits, and a the same computation mentioned before would finish in half the time after about :math:`2h`.
+In this case we require 222 tiles, so :math:`222 \cdot 2 \cdot d^2 \approx 75k` physical qubits, and the same computation mentioned before would finish in half the time after about :math:`2h`.
 
 
 Conclusion
@@ -385,11 +385,6 @@ With this knowledge, we should be able to follow the more involved tricks discus
 #     Daniel Litinski
 #     "A Game of Surface Codes: Large-Scale Quantum Computing with Lattice Surgery"
 #     `arXiv:1808.02892 <https://arxiv.org/abs/1808.02892v3>`__, 2018.
-#
-# .. [#Pesah]
-#
-#     Arthur Pesah
-#     `"An interactive introduction to the surface code" <https://arthurpesah.me/blog/2023-05-13-surface-code/>`__, 2023.
 #
 #
 
