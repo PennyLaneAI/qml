@@ -13,7 +13,7 @@ we explore the phase diagram of the Axial Next-Nearest-Neighbor Ising (ANNNI) mo
 
 * **Unsupervised model**: Quantum Anomaly Detection (QAD) requires minimal prior knowledge and efficiently identifies potential phase boundaries, making it a valuable tool for systems with unknown structures.
 
-.. figure:: ../_static/demonstration_assets/annni/OGthumbnail_CERN_ANNNI.png
+.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_CERN_ANNNI.png
     :align: center
     :width: 70%
     :target: javascript:void(0)
@@ -398,6 +398,7 @@ bounds = [-0.5, 0.5, 1.5, 2.5, 3.5]
 norm = BoundaryNorm(bounds, cmap.N)
 
 # Plot the predictions over the phase diagram
+plt.figure(figsize=(4,4), constrained_layout=True)
 plt.imshow(
     predicted_classes.reshape(side, side),
     cmap=cmap,
