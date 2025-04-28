@@ -94,7 +94,6 @@ jobs:
       environment: 'swc-staging' 
       artifact-name: demo-build-${{ needs.prepare-build-context.outputs.pr_ref }}
       preview: true
-      branch: ${{ needs.prepare-build-context.outputs.pr_ref_name }}
     secrets: inherit
   
   # Step 3: Create a comment on the PR with the demo links
