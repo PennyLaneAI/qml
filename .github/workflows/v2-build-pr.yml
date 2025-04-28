@@ -62,7 +62,6 @@ jobs:
       - identify-changed-demos
     steps:
       - name: Save Pull Request Event Context
-        if: github.event_name == 'pull_request'
         run: |
           mkdir -p /tmp/pr
           cat >/tmp/pr/pr_info.json <<EOL
