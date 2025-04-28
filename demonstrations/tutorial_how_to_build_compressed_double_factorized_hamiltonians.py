@@ -75,7 +75,7 @@ one_chem = one_body - 0.5 * qml.math.einsum("pqss", two_body)  # T_pq
 # the following double-factorized form in terms of orthonormal core tensors :math:`Z^{(t)}`
 # and symmetric leaf tensors :math:`U^{(t)}` [#cdf2]_:
 #
-# .. math::  V_{pqrs} \approx \sum_t^T \sum_{ij} U_{pi}^{(t)} U_{qj}^{(t)} Z_{ij}^{(t)} U_{rk}^{(t)} U_{sl}^{(t)},
+# .. math::  V_{pqrs} \approx \sum_t^T \sum_{ij} U_{pi}^{(t)} U_{qi}^{(t)} Z_{ij}^{(t)} U_{rj}^{(t)} U_{sj}^{(t)},
 #
 # where :math:`Z_{ij}^{(t)} = W_i^{(t)} W_j^{(t)}`. This decomposition is referred
 # to as the *explicit* double factorization (XDF) and decreases the number of terms
