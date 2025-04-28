@@ -45,7 +45,7 @@ jobs:
       - name: Read Build Information
         id: read_build_info
         if: steps.build_context.outputs.result != ''
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           script: |
             const fs = require('fs');
