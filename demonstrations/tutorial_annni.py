@@ -369,7 +369,7 @@ def train_qcnn(num_epochs, lr, T, seed):
             
     return params, loss_curve
 
-trained_params, loss_curve = train_qcnn(num_epochs=100, lr=1e-2, T=.1, seed=seed) 
+trained_params, loss_curve = train_qcnn(num_epochs=100, lr=5e-2, T=.5, seed=seed) 
 
 # Plot the loss curve
 plt.plot(loss_curve, label="Loss", color="blue", linewidth=2)
