@@ -524,7 +524,7 @@ fig,ax = qml.draw_mpl(anomaly_circuit)(np.arange(num_anomaly_params), psis[0,0])
 # In this case, the selected quantum state corresponds to the trivial case with :math:`\kappa = 0` and :math:`h = 0`.
 
 def train_anomaly(num_epochs, lr, seed):
-    """Training function of the QCNN architecture"""
+    """Training function of the QAD architecture"""
 
     # Initialize PRNG key
     key = random.PRNGKey(seed)
