@@ -75,7 +75,7 @@ one_chem = one_body - 0.5 * qml.math.einsum("pqss", two_body)  # T_pq
 # the following double-factorized form in terms of orthonormal core tensors :math:`Z^{(t)}`
 # and symmetric leaf tensors :math:`U^{(t)}` [#cdf2]_:
 #
-# .. math::  V_{pqrs} \approx \sum_t^T \sum_{ij} U_{pi}^{(t)} U_{pj}^{(t)} Z_{ij}^{(t)} U_{qk}^{(t)} U_{ql}^{(t)},
+# .. math::  V_{pqrs} \approx \sum_t^T \sum_{ij} U_{pi}^{(t)} U_{qi}^{(t)} Z_{ij}^{(t)} U_{rj}^{(t)} U_{sj}^{(t)},
 #
 # where :math:`Z_{ij}^{(t)} = W_i^{(t)} W_j^{(t)}`. This decomposition is referred
 # to as the *explicit* double factorization (XDF) and decreases the number of terms
@@ -234,7 +234,7 @@ cdf_hamiltonian = {
 def leaf_unitary_rotation(leaf, wires):
     """Applies the basis rotation transformation corresponding to the leaf tensor."""
     basis_mat = qml.math.kron(leaf, qml.math.eye(2)) # account for spin
-    qml.BasisRotation(unitary_matrix=basis_mat, wires=wires)
+    return qml.BasisRotation(unitary_matrix=basis_mat, wires=wires)
 
 ######################################################################
 # Similarly, the unitary transformation for the core tensors can be applied efficiently
@@ -248,20 +248,22 @@ import itertools as it
 
 def core_unitary_rotation(core, body_type, wires):
     """Applies the unitary transformation corresponding to the core tensor."""
+    ops = []
     if body_type == "one_body":  # implements one-body term
         for wire, cval in enumerate(qml.math.diag(core)):
             for sigma in [0, 1]:
-                qml.RZ(-cval, wires=2 * wire + sigma)
-        qml.GlobalPhase(qml.math.sum(core), wires=wires)
+                ops.append(qml.RZ(-cval, wires=2 * wire + sigma))
+        ops.append(qml.GlobalPhase(qml.math.sum(core), wires=wires))
 
     if body_type == "two_body":  # implements two-body term
         for odx1, odx2 in it.product(range(len(wires) // 2), repeat=2):
-            cval = core[odx1, odx2]
+            cval = core[odx1, odx2] / 4.0
             for sigma, tau in it.product(range(2), repeat=2):
                 if odx1 != odx2 or sigma != tau:
-                    qml.IsingZZ(cval / 4.0, wires=[2*odx1+sigma, 2*odx2+tau])
-        gphase = 0.5 * qml.math.sum(core) + 0.25 * qml.math.trace(core)
-        qml.GlobalPhase(-gphase, wires=wires)
+                    ops.append(qml.IsingZZ(cval, wires=[2*odx1+sigma, 2*odx2+tau]))
+        gphase = 0.5 * qml.math.sum(core) - 0.25 * qml.math.trace(core)
+        ops.append(qml.GlobalPhase(-gphase, wires=wires))
+    return ops
 
 ######################################################################
 # We can now use these functions to approximate the evolution operator :math:`e^{-iHt}` for
@@ -292,19 +294,16 @@ def CDFTrotterStep(time, cdf_ham, wires):
     """
     cores, leaves = cdf_ham["core_tensors"], cdf_ham["leaf_tensors"]
     for bidx, (core, leaf) in enumerate(zip(cores, leaves)):
-        # apply the basis rotation for leaf tensor
-        leaf_unitary_rotation(leaf, wires)
-
-        # apply the rotation for core tensor scaled by the time-step
         # Note: only the first term is one-body, others are two-body
         body_type = "two_body" if bidx else "one_body"
-        core_unitary_rotation(time * core, body_type, wires)
-
-        # revert the change-of-basis for leaf tensor
-        leaf_unitary_rotation(leaf.conjugate().T, wires)
-
-    # apply the global phase gate based on the nuclear core energy
-    qml.GlobalPhase(cdf_ham["nuc_constant"] * time, wires=wires)
+        qml.prod(
+            # revert the change-of-basis for leaf tensor
+            leaf_unitary_rotation(leaf.conjugate().T, wires),
+            # apply the rotation for core tensor scaled by the time-step
+            *core_unitary_rotation(time * core, body_type, wires),
+            # apply the basis rotation for leaf tensor
+            leaf_unitary_rotation(leaf, wires),
+        ) # Note: prod applies operations in the reverse order (right-to-left).
 
 ######################################################################
 # We now use this function to simulate the evolution of the :math:`H_4` Hamiltonian
@@ -320,6 +319,7 @@ hf_state = qml.qchem.hf_state(electrons=mol.n_electrons, orbitals=len(circ_wires
 def cdf_circuit(n_steps, order):
     qml.BasisState(hf_state, wires=circ_wires)
     qml.trotterize(CDFTrotterStep, n_steps, order)(time, cdf_hamiltonian, circ_wires)
+    qml.GlobalPhase(cdf_hamiltonian["nuc_constant"], wires=circ_wires)
     return qml.state()
 
 circuit_state = cdf_circuit(n_steps=10, order=2)
