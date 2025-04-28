@@ -1,0 +1,47 @@
+{
+    "title": "Quantum Defect Embedding Theory",
+    "authors": [
+        {
+            "username": "ddhawan"
+        }
+    ],
+    "dateOfPublication": "2025-04-28T00:00:00+00:00",
+    "dateOfLastModification": "2025-04-28T00:00:00+00:00",
+    "categories": [
+        "Getting Started",
+        "How-to"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_how_to_build_spin_hamiltonians.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_how_to_build_spin_hamiltonians.png"
+        }
+    ],
+    "seoDescription": "Learn how to build a Quantum Defect Embedding Theory (QDET) Hamiltonian.",
+    "doi": "",
+    "references": [
+        {
+            "id": "ashcroft",
+            "type": "book",
+            "title": "Solid State Physics",
+            "authors": "N. W. Ashcroft, D. N. Mermin",
+            "year": "1976",
+            "publisher": "New York: Saunders College Publishing",
+            "url": "https://en.wikipedia.org/wiki/Ashcroft_and_Mermin"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_quantum_chemistry",
+            "weight": 1.0
+        }
+    ]
+}
