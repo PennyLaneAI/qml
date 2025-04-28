@@ -112,9 +112,9 @@ jobs:
           comment+="<details>\n"
           comment+="<summary>Toggle to view preview links</summary>\n"
           comment+="\n"
-
+          # TODO: Switch to prod once testing is complete
           for demo in $demos; do
-            comment+="- [$demo](https://pennylane.ai/qml/demos/$demo?preview=true)\n"
+            comment+="- [$demo](https://staging.pennylane.ai/qml/demos/$demo?preview=true)\n"
           done
       
           comment+="\n"
