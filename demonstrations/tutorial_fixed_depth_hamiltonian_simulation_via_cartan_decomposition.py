@@ -20,7 +20,7 @@ circuit optimization, and Hamiltonian simulation.
 Introduction
 ------------
 
-The :doc:`KAK theorem </demos/tutorial_kak_decomposition>` is an important result from Lie theory that states that any Lie group element :math:`U` can be decomposed
+The :doc:`KAK decomposition </demos/tutorial_kak_decomposition>` is an important result from Lie theory that states that any Lie group element :math:`U` can be decomposed
 as :math:`U = K_1 A K_2,` where :math:`K_{1, 2}` and :math:`A` are elements of two special sub-groups
 :math:`\mathcal{K}` and :math:`\mathcal{A},` respectively. In special cases, the decomposition simplifies to :math:`U = K A K^\dagger.`
 
@@ -36,14 +36,14 @@ just as is the case for diagonal matrices.
 We can use this general result from Lie theory as a powerful circuit decomposition technique.
 
 .. note:: We recommend a basic understanding of Lie algebras, see e.g. our :doc:`introduction to (dynamical) Lie algebras for quantum practitioners </demos/tutorial_liealgebra>`.
-    Otherwise, this demo should be self-contained, though for the mathematically inclined, we further recommend our :doc:`demo on the KAK theorem </demos/tutorial_kak_decomposition>`
-    that dives into the mathematical depths of the theorem and provides more background info.
+    Otherwise, this demo should be self-contained, though for the mathematically inclined, we further recommend our :doc:`demo on the KAK decomposition </demos/tutorial_kak_decomposition>`
+    that dives into the mathematical depths of the decomposition and provides more background info.
 
 Goal: Fast-forwarding time evolutions using the KAK decomposition
 -----------------------------------------------------------------
 
 Unitary gates in quantum computing are described by the special unitary Lie group :math:`SU(2^n),` so we can use the KAK
-theorem to decompose quantum gates into :math:`U = K_1 A K_2.` While the mathematical statement is rather straightforward,
+decomposition to factorize quantum gates into :math:`U = K_1 A K_2.` While the mathematical statement is rather straightforward,
 actually finding this decomposition is not. We are going to follow the recipe prescribed in 
 `Fixed Depth Hamiltonian Simulation via Cartan Decomposition <https://arxiv.org/abs/2104.00728>`__ [#Kökcü]_, 
 which tackles this decomposition on the level of the associated Lie algebra via Cartan decomposition.
@@ -74,6 +74,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pennylane as qml
 from pennylane import X, Y, Z
+from pennylane.liealg import even_odd_involution, cartan_decomp, horizontal_cartan_subalgebra
 
 import jax
 import jax.numpy as jnp
@@ -111,10 +112,8 @@ g = [op.pauli_rep for op in g]
 # One common choice of involution is the so-called even-odd involution for Pauli words,
 # :math:`P = P_1 \otimes P_2 .. \otimes P_n,` where :math:`P_j \in \{I, X, Y, Z\}.`
 # It essentially counts whether the number of non-identity Pauli operators in the Pauli word is even or odd.
-
-def even_odd_involution(op):
-    [pw] = op.pauli_rep
-    return len(pw) % 2
+# It is readily available in PennyLane as :func:`~.pennylane.liealg.even_odd_involution`, which 
+# we already imported above.
 
 even_odd_involution(X(0)), even_odd_involution(X(0) @ Y(3))
 
@@ -126,29 +125,8 @@ even_odd_involution(X(0)), even_odd_involution(X(0) @ Y(3))
 # sort the operators by whether or not they yield a plus or minus sign from the involution function.
 # This is possible because the operators and involution nicely align with the eigenspace decomposition.
 
-def cartan_decomposition(g, involution):
-    """Cartan Decomposition g = k + m
-    
-    Args:
-        g (List[PauliSentence]): the (dynamical) Lie algebra to decompose
-        involution (callable): Involution function :math:`\Theta(\cdot)` to act on PauliSentence ops, should return ``0/1`` or ``True/False``.
-    
-    Returns:
-        k (List[PauliSentence]): the vertical subspace :math:`\Theta(x) = x`
-        m (List[PauliSentence]): the horizontal subspace :math:`\Theta(x) = -x` """
-    m = []
-    k = []
-
-    for op in g:
-        if involution(op): # vertical space when involution returns True
-            k.append(op)
-        else: # horizontal space when involution returns False
-            m.append(op)
-    return k, m
-
-k, m = cartan_decomposition(g, even_odd_involution)
+k, m = cartan_decomp(g, even_odd_involution)
 len(g), len(k), len(m)
-
 
 ##############################################################################
 # We have successfully decomposed the 60-dimensional Lie algebra
@@ -187,51 +165,11 @@ for op in H.operands:
 # that commute with it.
 #
 # We then obtain a further split of the vector space :math:`\mathfrak{m} = \tilde{\mathfrak{m}} \oplus \mathfrak{h},`
-# where :math:`\tilde{\mathfrak{m}}` is just the remainder of :math:`\mathfrak{m}.`
+# where :math:`\tilde{\mathfrak{m}}` is just the remainder of :math:`\mathfrak{m}.` The function
+# :func:`~.pennylane.liealg.horizontal_cartan_subalgebra` returns some additional information, which we will
+# not use here.
 
-def _commutes_with_all(candidate, ops):
-    r"""Check if ``candidate`` commutes with all ``ops``"""
-    for op in ops:
-        com = candidate.commutator(op)
-        com.simplify()
-        
-        if not len(com) == 0:
-            return False
-    return True
-
-def cartan_subalgebra(m, which=0):
-    """Compute the Cartan subalgebra from the horizontal subspace :math:`\mathfrak{m}`
-    of the Cartan decomposition
-
-    This implementation is specific for cases of bases of m with pure Pauli words as
-    detailed in Appendix C in `2104.00728 <https://arxiv.org/abs/2104.00728>`__.
-    
-    Args:
-        m (List[PauliSentence]): the horizontal subspace :math:`\Theta(x) = -x
-        which (int): Choice for the initial element of m from which to construct 
-            the maximal Abelian subalgebra
-    
-    Returns:
-        mtilde (List): remaining elements of :math:`\mathfrak{m}`
-            s.t. :math:`\mathfrak{m} = \tilde{\mathfrak{m}} \oplus \mathfrak{h}`.
-        h (List): Cartan subalgebra :math:`\mathfrak{h}`.
-
-    """
-
-    h = [m[which]] # first candidate
-    mtilde = m.copy()
-
-    for m_i in m:
-        if _commutes_with_all(m_i, h):
-            if m_i not in h:
-                h.append(m_i)
-    
-    for h_i in h:
-        mtilde.remove(h_i)
-    
-    return mtilde, h
-
-mtilde, h = cartan_subalgebra(m)
+g, k, mtilde, h, _ = horizontal_cartan_subalgebra(k, m, tol=1e-8)
 len(g), len(k), len(mtilde), len(h)
 
 ##############################################################################
@@ -241,7 +179,7 @@ len(g), len(k), len(mtilde), len(h)
 # Variational KhK decomposition
 # -----------------------------
 #
-# The KAK theorem is not constructive in the sense that it proves that there exists such a decomposition, but there is no general way of obtaining
+# The KAK decomposition is not constructive in the sense that it proves that there exists such a decomposition, but there is no general way of obtaining
 # it. In particular, there are no linear algebra subroutines implemented in ``numpy`` or ``scipy`` that just compute it for us.
 # Here, we follow the construction of [#Kökcü]_ for the special case of :math:`H` being in the horizontal space and the decomposition
 # simplifying to :math:`H = K^\dagger h K`.
@@ -282,10 +220,10 @@ v_m = jnp.array(v_m)
 #
 
 def run_opt(
-    value_and_grad,
+    loss,
     theta,
-    n_epochs=500,
-    lr=0.1,
+    n_epochs=1000,
+    lr=0.05,
 ):
     """Boilerplate JAX optimization"""
     value_and_grad = jax.jit(jax.value_and_grad(loss))
@@ -336,7 +274,7 @@ def loss(theta):
     A = K_m @ v_m @ K_m.conj().T
     return jnp.trace(A.conj().T @ H_m).real
 
-theta0 = jnp.ones(len(k), dtype=float)
+theta0 = jax.random.normal(jax.random.PRNGKey(0), shape=(len(k),), dtype=float)
 
 thetas, energy, _ = run_opt(loss, theta0, n_epochs=1000, lr=0.05)
 plt.plot(energy - np.min(energy))
@@ -359,13 +297,18 @@ Kc_m = qml.matrix(K, wire_order=range(n_wires))(theta_opt, k)
 # .. math:: h_0 = K_c^\dagger H K_c.
 
 h_0_m = Kc_m.conj().T @ H_m @ Kc_m
-h_0 = qml.pauli_decompose(h_0_m)
 
-print(len(h_0))
+# decompose h_0_m in terms of the basis of h
+basis = [qml.matrix(op, wire_order=range(n_wires)) for op in h]
+coeffs = qml.pauli.trace_inner_product(h_0_m, basis)
 
-# assure that h_0 is in \mathfrak{h}
-h_vspace = qml.pauli.PauliVSpace(h)
-not h_vspace.is_independent(h_0.pauli_rep)
+# ensure that decomposition is correct, i.e. h_0_m is truely an element of just h
+h_0_m_recomposed = np.sum([c * op for c, op in zip(coeffs, basis)], axis=0)
+print("Decomposition of h_0 is faithful: ", np.allclose(h_0_m_recomposed, h_0_m, atol=1e-10))
+
+# sanity check that the horizontal CSA is Abelian, i.e. all its elements commute
+print("All elements in h commute with each other: ", qml.liealg.check_abelian(h))
+
 
 ##############################################################################
 #
@@ -393,6 +336,7 @@ np.allclose(H_re, H_m)
 t = 1.
 U_exact = qml.exp(-1j * t * H)
 U_exact_m = qml.matrix(U_exact, wire_order=range(n_wires))
+h_0  = qml.dot(coeffs, h)
 
 def U_kak(theta_opt, t):
     qml.adjoint(K)(theta_opt, k)
@@ -478,7 +422,7 @@ plt.show()
 # Conclusion
 # ----------
 #
-# The KAK theorem is a very general mathematical result with far-reaching consequences.
+# The KAK decomposition is a very general mathematical result with far-reaching consequences.
 # While there is no canonical way of obtaining an actual decomposition in practice, we followed
 # the approach of [#Kökcü]_ which uses a specifically designed loss function and variational
 # optimization to find the decomposition.

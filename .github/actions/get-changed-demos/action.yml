@@ -15,7 +15,7 @@ runs:
   using: "composite"
   steps:
     - id: changed-files
-      uses: tj-actions/changed-files@v45
+      uses: tj-actions/changed-files@v46
       with:
         # Exclude changes outside the current 
         # directory and show path names 
