@@ -624,7 +624,7 @@ plt.show()
 # Acknowledgements
 # ----------------
 # 
-# The author would like to acknowledge the contributions and support of Michele Grossi, Sofia Vallecorsa, Oriel Kiss and Enrique Rico Ortega from the CERN Quantum Technology Initiative, and Antonio Mandarino, and María Cea Fernández.
+# The author would like to acknowledge the contributions and support of Michele Grossi, Sofia Vallecorsa, Oriel Kiss and Enrique Rico Ortega from the CERN Quantum Technology Initiative, and Antonio Mandarino, and María Cea Fernández. The author also gratefully acknowledges the support of DESY (Deutsches Elektronen-Synchrotron).
 # 
 # References
 # -----------
