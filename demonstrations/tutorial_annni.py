@@ -346,6 +346,9 @@ def train_qcnn(num_epochs, lr, T, seed):
     # Consider only analytical points for the training
     X_train, Y_train = psis[analytical_mask], phases[analytical_mask]
     
+    # Convert labels to one-hot encoding
+    Y_train_onehot = jnp.eye(4)[Y_train]
+
     # Randomly initialize the parameters
     params = random.normal(subkey, (num_params,))
 
@@ -355,18 +358,8 @@ def train_qcnn(num_epochs, lr, T, seed):
 
     loss_curve = []
     for epoch in range(num_epochs):
-        key, subkey = random.split(key)
-
-        # Get random indices for a batch
-        batch_indices = random.choice(subkey, len(X_train), shape=(15,), replace=False)
-        
-        # Select the corresponding data
-        X_batch = jnp.array(X_train[batch_indices])
-        # Convert labels to one-hot encoding
-        Y_batch = jnp.eye(4)[Y_train[batch_indices]]
-
         # Compute loss and gradients
-        loss, grads = value_and_grad(loss_fun)(params, X_batch, Y_batch)
+        loss, grads = value_and_grad(loss_fun)(params, X_train, Y_train_onehot)
         
         # Update parameters
         updates, optimizer_state = optimizer.update(grads, optimizer_state)
