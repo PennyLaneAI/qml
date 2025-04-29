@@ -344,7 +344,7 @@ plt.show()
 # while for all others, the functions cancel each other out and evaluate exactly to zero.
 
 for k in range(16):
-    res = np.exp(2 * np.pi * 1j * 2 * k / 16) + np.exp(2 * np.pi * 1j * 10 * k / 16)
+    res = 0.5*(np.exp(2 * np.pi * 1j * 2 * k / 16) + np.exp(2 * np.pi * 1j * 10 * k / 16))
     print(f"k={k} --- {np.round(res, 13)}")
 
 #####################################################################
