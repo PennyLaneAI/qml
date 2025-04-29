@@ -85,7 +85,7 @@ However, group theory is a huge hurdle for even some of the more seasoned quantu
 # The state we measure, written as an integer, is a multiple of the number of periods
 # that "fit" into the x-domain. The number of periods is then the biggest number that divides all the measurement outcomes, 
 # and the period is the number of integers divided by the number of periods. 
-# In the example above, the quantum algorithm would return random bistrings that can be
+# In the example above, the quantum algorithm would return random bitstrings that can be
 # interpreted as integers {0, 3, 6, 9}. By sampling only two distinct values, say 6 and
 # 9, we can determine the largest common divisor as 3, which is the number of periods fitting
 # into 12. From there we can recover the number of periods 12/3 = 4.
