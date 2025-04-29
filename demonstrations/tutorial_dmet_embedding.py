@@ -1,21 +1,21 @@
 r"""Density Matrix Embedding Theory (DMET)
 =========================================
-Materials simulation presents a crucial challenge in quantum chemistry, as understanding and predicting the properties of 
-complex materials is essential for advancements in technology and science. While Density Functional Theory (DFT) is 
-the current workhorse in this field due to its balance between accuracy and computational efficiency, it often falls short in 
-accurately capturing the intricate electron correlation effects found in strongly correlated materials. As a result, 
-researchers often turn to more sophisticated methods, such as full configuration interaction or coupled cluster theory, 
-which provide better accuracy but come at a significantly higher computational cost. 
+Materials simulation presents a crucial challenge in quantum chemistry. Density Functional Theory
+(DFT) is currently the workhorse for simulating materials due to its balance between accuracy and
+computational efficiency. However, it often falls short in accurately capturing the intricate
+electron correlation effects found in strongly correlated materials. As a result, researchers often
+turn to more sophisticated methods, such as full configuration interaction or coupled cluster
+theory, which provide better accuracy but come at a significantly higher computational cost.
 
-Embedding theories provide a balanced 
-midpoint solution that enhances our ability to simulate materials accurately and efficiently. The core idea behind embedding 
-is that the system is divided into two parts: impurity, strongly correlated subsystem that requires an exact description, and 
-its environment, which can be treated with an approximate but computationally efficient method.
-Density matrix embedding theory (DMET) is an efficient wave-function-based embedding approach to treat strongly 
-correlated systems. Here, we present a demonstration of how to run DMET calculations through an existing library called 
-libDMET, along with the instructions on how we can use the generated DMET Hamiltonian with PennyLane to use it with quantum 
-computing algorithms. We begin by providing a high-level introduction to DMET, followed by a tutorial on how to set up 
-a DMET calculation.
+Embedding theories provide a balanced midpoint solution that enhances our ability to simulate
+materials accurately and efficiently. The core idea behind embedding is that the system is divided
+ into two parts: an impurity which is a strongly correlated subsystem that requires exact
+description and an environment which can be treated with approximate but computationally efficient
+method.
+
+Density matrix embedding theory (DMET) is an efficient embedding approach to treat strongly
+correlated systems. Here we provide a brief introduction of the method and demonstrate how to run
+DMET calculations to construct a Hamiltonian that can be used in a quantum algorithm.
 
 .. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_how_to_build_spin_hamiltonians.png
     :align: center
@@ -26,23 +26,41 @@ a DMET calculation.
 ######################################################################
 # Theory
 # ------
-# DMET is a wavefunction based embedding approach, which uses density matrices for combining the low-level description 
-# of the environment with a high-level description of the impurity. DMET relies on Schmidt decomposition,
-# which allows us to analyze the degree of entanglement between the two subsystems. The state, :math:`\ket{\Psi}` of 
-# the partitioned system can be represented as the tensor product of the Hilbert space of the two subsystems.
-# Singular value decomposition (SVD) of the coefficient tensor, :math:`\psi_{ij}`, of this tensor product 
-# thus allows us to identify the states
-# in the environment which have overlap with the impurity. This helps truncate the size of the Hilbert space of the 
-# environment to be equal to the size of the impurity, and thus define a set of states referred to as bath. We are
-# then able to project the full Hamiltonian to the space of impurity and bath states, known as embedding space.
+# The wave function for the embedded system composed of the impurity and the environment can be
+# simply represented as
+#
+# .. math::
+#
+#      | \Psi \rangle = \sum_i^{N_I} \sum_j^{N_E} \Psi_{ij} | I_i \rangle | E_j \rangle,
+#
+# where :math:`I_i` and :math:`E_j` are basis states of the impurity :math:`I` and environment
+# :math:`E`, respectively, :math:`\Psi_{ij}` is the matrix of coefficients and :math:`N` is the
+# number of sites, e.g., orbitals. The key idea in DMET is to perform a singular value decomposition
+# of the coefficient matrix :math:`\Psi_{ij} = \sum_{\alpha} U_{i \alpha} \lambda_{\alpha} V_{\alpha j}`
+# and rearrange the wave functions such that
+#
+# .. math::
+#
+#      | \Psi \rangle = \sum_{\alpha}^{N} \lambda_{\alpha} | A_{\alpha} \rangle | B_{\alpha} \rangle,
+#
+# where :math:`A_{\alpha} = \sum_i U_{i \alpha} | I_i \rangle` are states obtained from rotations of
+# :math:`I_i` to a new basis and :math:`B_{\alpha} = \sum_j V_{j \alpha} | E_j \rangle` are bath
+# states representing the portion of the environment that interacts with the impurity. Note that the
+# number of bath states is identical by the number of fragment states, regardless of the size of the
+# environment. This new decomposition is the Schmidt decomposition of the system wave function.
+#
+# We are now able to project the full Hamiltonian to the space of impurity and bath states, known as
+# embedding space.
+#
 # .. math::
 #
 #      \hat{H}^{imp} = \hat{P} \hat{H}^{sys}\hat{P}
 #
-# where P is the projection operator.
-# We must note here that the Schmidt decomposition requires  apriori knowledge of the wavefunction. DMET, therefore, 
-# operates through a systematic iterative approach, starting with a meanfield description of the wavefunction and 
-# refining it through feedback from solution of impurity Hamiltonian.
+# where :math:`P` is the projection operator.
+#
+# Note here that the Schmidt decomposition requires apriori knowledge of the wavefunction. DMET,
+# therefore, operates through a systematic iterative approach, starting with a meanfield description
+# of the wavefunction and  refining it through feedback from solution of impurity Hamiltonian.
 #
 # The DMET procedure starts by getting an approximate description of the system, which is used to partition the system
 # into impurity and bath. We are then able to project the original Hamiltonian to this embedded space and  
