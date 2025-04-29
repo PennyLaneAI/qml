@@ -1,0 +1,130 @@
+name: V2 Deploy PR
+
+on:
+  workflow_run:
+    workflows:
+      - "V2 Build PR"
+    types:
+      - completed
+
+permissions:
+  actions: read
+  pull-requests: write
+  contents: read
+
+concurrency:
+  group: deploy-v2-demos-${{ github.event.workflow_run.head_branch }}
+  cancel-in-progress: true
+
+jobs:
+  # Step 1: Prepare the build context
+  prepare-build-context:
+    if: github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Build Context
+        uses: XanaduAI/cloud-actions/download-github-workflow-artifact@main
+        with:
+          workflow_run_id: ${{ github.event.workflow_run.id }}
+          artifact_name_regex: '^pr_info$'
+          github_token: ${{ github.token }}
+
+      - name: Check if Build Context file exists
+        id: build_context
+        env:
+          context_artifact_file_name: pr_info.zip
+        run: |
+          if test -f "$context_artifact_file_name"; then
+            echo "result=$context_artifact_file_name" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Unpack Build Information
+        if: steps.build_context.outputs.result != ''
+        run: unzip ${{ steps.build_context.outputs.result }}
+
+      - name: Read Build Information
+        id: read_build_info
+        if: steps.build_context.outputs.result != ''
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const buildData = fs.readFileSync('pr_info.json', 'utf8');
+            return JSON.parse(buildData);
+
+      - name: Parse Pull Request Event Information
+        id: pr_info
+        if: github.event.workflow_run.event == 'pull_request' && steps.build_context.outputs.result != ''
+        run: |
+          echo '${{ steps.read_build_info.outputs.result }}' | jq -r '.id' > pr_id.txt
+          echo '${{ steps.read_build_info.outputs.result }}' | jq -r '.ref' > pr_ref.txt
+          echo '${{ steps.read_build_info.outputs.result }}' | jq -r '.ref_name' > pr_ref_name.txt
+          echo '${{ steps.read_build_info.outputs.result }}' | jq -c '.updated_demos' > updated_demos.json
+          echo '${{ steps.read_build_info.outputs.result }}' | jq -c '.deleted_demos' > deleted_demos.json
+
+          echo "pr_id=$(cat pr_id.txt)" >> $GITHUB_OUTPUT
+          echo "pr_ref=$(cat pr_ref.txt)" >> $GITHUB_OUTPUT
+          echo "pr_ref_name=$(cat pr_ref_name.txt)" >> $GITHUB_OUTPUT
+          echo "updated_demos=$(cat updated_demos.json)" >> $GITHUB_OUTPUT
+          echo "deleted_demos=$(cat deleted_demos.json)" >> $GITHUB_OUTPUT
+
+      - name: Set job outputs
+        if: github.event.workflow_run.event == 'pull_request' && steps.build_context.outputs.result != ''
+        id: set_job_outputs
+        run: |
+          echo "pr_id=${{ steps.pr_info.outputs.pr_id }}" >> $GITHUB_OUTPUT
+          echo "pr_ref=${{ steps.pr_info.outputs.pr_ref }}" >> $GITHUB_OUTPUT
+          echo "pr_ref_name=${{ steps.pr_info.outputs.pr_ref_name }}" >> $GITHUB_OUTPUT
+          echo "updated_demos=${{ steps.pr_info.outputs.updated_demos }}" >> $GITHUB_OUTPUT
+          echo "deleted_demos=${{ steps.pr_info.outputs.deleted_demos }}" >> $GITHUB_OUTPUT
+    outputs:
+      pr_id: ${{ steps.set_job_outputs.outputs.pr_id }}
+      pr_ref: ${{ steps.set_job_outputs.outputs.pr_ref }}
+      pr_ref_name: ${{ steps.set_job_outputs.outputs.pr_ref_name }}
+      updated_demos: ${{ steps.set_job_outputs.outputs.updated_demos }}
+      deleted_demos: ${{ steps.set_job_outputs.outputs.deleted_demos }}
+
+  # Step 2: Deploy the demos to SWC
+  deploy-preview-demos:
+    if: github.event.workflow_run.event == 'pull_request' && needs.prepare-build-context.result == 'success'
+    uses: ./.github/workflows/v2-deploy-demos.yml
+    needs: prepare-build-context
+    with:
+      # TODO: Update SWC environment to "swc-prod"
+      environment: 'swc-staging' 
+      artifact-name: demo-build-${{ needs.prepare-build-context.outputs.pr_ref }}
+      preview: true
+    secrets: inherit
+  
+  # Step 3: Create a comment on the PR with the demo links
+  generate-comment:
+    if: github.event.workflow_run.event == 'pull_request' && needs.prepare-build-context.outputs.pr_id != ''
+    runs-on: ubuntu-latest
+    needs: prepare-build-context
+    steps:
+      - name: Create markdown comment from demo names
+        id: generate-markdown
+        run: |
+          demos="${{ needs.prepare-build-context.outputs.updated_demos }}"
+          
+          comment="### Preview(s) are ready! :tada:\n"
+          comment+="<details>\n"
+          comment+="<summary>Toggle to view preview links</summary>\n"
+          comment+="\n"
+          # TODO: Switch to prod once testing is complete
+          for demo in $demos; do
+            comment+="- [$demo](https://staging.pennylane.ai/qml/demos/$demo?preview=true)\n"
+          done
+      
+          comment+="\n"
+          comment+="</details>"
+
+          echo "markdown=$comment" >> $GITHUB_OUTPUT
+
+      - name: Comment on PR
+        id: comment-on-pr
+        uses: XanaduAI/cloud-actions/create-and-update-pull-request-comment@main
+        with:
+          github_token: ${{ secrets.github_token }}
+          pull_request_number: ${{ needs.prepare-build-context.outputs.pr_id }}
+          comment_body: ${{ steps.generate-markdown.outputs.markdown }}

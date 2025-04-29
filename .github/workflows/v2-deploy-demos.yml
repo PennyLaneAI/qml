@@ -13,10 +13,6 @@ on:
         description: Whether to deploy demos as preview
         type: boolean
         required: true
-      branch:
-        description: Branch to checkout
-        type: string
-        default: sc-81925-qml-repository-ci-pushes-newly-built-demos
 
   workflow_dispatch:
     inputs:
@@ -31,10 +27,6 @@ on:
         description: Whether to deploy demos as preview
         type: boolean
         required: true
-      branch:
-        description: Branch to checkout
-        type: string
-        default: sc-81925-qml-repository-ci-pushes-newly-built-demos
 
 jobs:
   deploy-demos:
@@ -46,7 +38,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.branch }}
           fetch-depth: 1
       
       - name: Configure AWS credentials
@@ -75,4 +66,3 @@ jobs:
           python3 .github/workflows/qml_pipeline_v2/deploy.py \
             --preview ${{ inputs.preview }} \
             _build/pack/*.zip
-

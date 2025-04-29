@@ -8,7 +8,10 @@ on:
         type: string
       demo-names:
         description: |
-          Only build the demos specified in this list.
+          Only build the demos specified in a space-separated list.
+          e.g. demo1 demo2 demo3
+
+          If not specified, all demos will be built.
         required: false
         type: string
         default: ''
@@ -212,5 +215,3 @@ jobs:
         uses: geekyeggo/delete-artifact@v5
         with:
             name: ${{ needs.generate-build-variables.outputs.artifact-name }}-c*
-
-  
