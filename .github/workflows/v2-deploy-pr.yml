@@ -119,12 +119,12 @@ jobs:
           comment+="\n"
           comment+="</details>"
 
-          echo "::set-output name=markdown::$comment"
+          echo "markdown=$comment" >> $GITHUB_OUTPUT
 
       - name: Comment on PR
         id: comment-on-pr
         uses: XanaduAI/cloud-actions/create-and-update-pull-request-comment@main
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.github_token }}
           pull_request_number: ${{ needs.prepare-build-context.outputs.pr_id }}
           comment_body: ${{ steps.generate-markdown.outputs.markdown }}
