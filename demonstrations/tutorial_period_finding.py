@@ -85,7 +85,7 @@ However, group theory is a huge hurdle for even some of the more seasoned quantu
 # The state we measure, written as an integer, is a multiple of the number of periods
 # that "fit" into the x-domain. The number of periods is then the biggest number that divides all the measurement outcomes, 
 # and the period is the number of integers divided by the number of periods. 
-# In the example above, the quantum algorithm would return random bistrings that can be
+# In the example above, the quantum algorithm would return random bitstrings that can be
 # interpreted as integers {0, 3, 6, 9}. By sampling only two distinct values, say 6 and
 # 9, we can determine the largest common divisor as 3, which is the number of periods fitting
 # into 12. From there we can recover the number of periods 12/3 = 4.
@@ -165,7 +165,7 @@ def to_binary(integer, n):
 
 def Oracle(f):
     """
-    Defines the unitary that implements a function f:{0,..,15} -> {0,..,3}.
+    Defines the unitary that implements a function f:{0,..,15} -> {0,..,7}.
 
     Args:
       f (func): function to implement
@@ -337,14 +337,14 @@ plt.show()
 #
 # .. math::
 #
-#     \sum_k \left(e^{\frac{2 \pi i 2 k}{12}} + e^{\frac{2 \pi i 10 k}{12}} \right)  |k \rangle.
+#     \sum_k \left(e^{\frac{2 \pi i 2 k}{16}} + e^{\frac{2 \pi i 10 k}{16}} \right)  |k \rangle.
 #
-# In the exponent you find the values 2 and 10, as well as the size of the group, 12.
+# In the exponent you find the values 2 and 10, as well as the size of the group, 16.
 # Somewhat magically, for some :math:`|k \rangle`, all exponential functions in the sum evaluate to :math:`1`, 
 # while for all others, the functions cancel each other out and evaluate exactly to zero.
 
-for k in range(12):
-    res = np.exp(2 * np.pi * 1j * 2 * k / 16) + np.exp(2 * np.pi * 1j * 10 * k / 16)
+for k in range(16):
+    res = 0.5*(np.exp(2 * np.pi * 1j * 2 * k / 16) + np.exp(2 * np.pi * 1j * 10 * k / 16))
     print(f"k={k} --- {np.round(res, 13)}")
 
 #####################################################################
@@ -354,7 +354,7 @@ for k in range(12):
 # started with.
 #
 # The "magic" interference, of course, would not surprise a group theorist; it is inherent to the
-# structure of the group. The functions :math:`e^{\frac{2 \pi i x k}{12}}`, which we are so used to
+# structure of the group. The functions :math:`e^{\frac{2 \pi i x k}{16}}`, which we are so used to
 # see in quantum theory, are nothing but the *characters* of a group: functions that take group
 # elements :math:`x` to complex numbers, and -- a little like eigenvalues in linear algebra -- capture
 # the essentials of the group. The destructive interference we see in the quantum Fourier
