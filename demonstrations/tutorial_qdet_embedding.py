@@ -87,7 +87,7 @@ powerful method for affordable quantum simulation of materials.
 #
 # .. math::
 #
-#     L_n = \int_{V \in \ohm} d^3 r |\Psi_n^{KS}(r)|^
+#     L_n = \int_{V \in \ohm} d^3 r |\Psi_n^{KS}(r)|^2
 #
 # where $V$ is the identified volume including the impurity within the supercell volume $\ohm$.
 # We will use the WEST program to compute the localization factor. This requires creating another
