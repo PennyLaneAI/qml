@@ -54,10 +54,12 @@ DMET calculations to construct a Hamiltonian that can be used in a quantum algor
 #
 # .. math::
 #
-#      \hat{H}^{emb} = \hat{P}^{\dagger} \hat{H}^{sys}\hat{P}
+#      \hat{H}_{emb} = \hat{P}^{\dagger} \hat{H} \hat{P}
 #
 # where :math:`P = \sum_{\alpha \beta} | A_{\alpha} B_{\beta} \rangle \langle A_{\alpha} B_{\beta}|`
-# is a projection operator.
+# is a projection operator. A key point about this representation is that the wave function
+# :math:`\Psi \rangle` is the ground state of both the full system Hamiltonian :math:`\hat{H}` and
+# the smaller embedded Hamiltonian :math:`\hat{H}_{emb}` [arXiv:2108.08611].
 #
 # Note that the Schmidt decomposition requires apriori knowledge of the wavefunction. To alleviate
 # this, DMET operates through a systematic iterative approach, starting with a meanfield description
@@ -131,7 +133,9 @@ DMET calculations to construct a Hamiltonian that can be used in a quantum algor
 #
 #    from libdmet.basis_transform import make_basis
 #
-#    c_ao_iao, _, _, lo_labels = make_basis.get_C_ao_lo_iao(lat, kmf, minao="MINAO", full_return=True, return_labels=True)
+#    c_ao_iao, _, _, lo_labels = make_basis.get_C_ao_lo_iao(
+#    lat, kmf, minao="MINAO", full_return=True, return_labels=True
+#    )
 #    c_ao_lo = lat.symmetrize_lo(c_ao_iao)
 #    lat.set_Ham(kmf, gdf, c_ao_lo, eri_symmetry=4) # rotate integral tensors to IAO basis
 #
@@ -203,7 +207,7 @@ DMET calculations to construct a Hamiltonian that can be used in a quantum algor
 #        rho_full, energy_full, nelec_full = \
 #                dmet.transformResults(rho_emb, energy_emb, basis, imp_ham, \
 #                lattice=lat, last_dmu=last_dmu, int_bath=True, \
-#                                      solver=solver_info[0], solver_args=solver_info[1], labels=lo_labels)
+#                             solver=solver_info[0], solver_args=solver_info[1], labels=lo_labels)
 #        energy_full *= lat.nscsites
 #        return rho_full, energy_full
 #
@@ -256,11 +260,11 @@ DMET calculations to construct a Hamiltonian that can be used in a quantum algor
 #
 #    for i in range(max_iter):
 #        rho, mu, scf_result, imp_ham, basis = construct_impurity_hamiltonian(lat,
-#                                         v_cor, filling, mu, last_dmu) # construct impurity Hamiltonian
+#                           v_cor, filling, mu, last_dmu) # construct impurity Hamiltonian
 #        rho_emb, energy_emb, imp_ham, last_dmu, solver_info = solve_impurity_hamiltonian(lat, cell,
-#                                         basis, imp_ham, last_dmu, scf_result) # solve impurity Hamiltonian
+#                           basis, imp_ham, last_dmu, scf_result) # solve impurity Hamiltonian
 #        rho_full, energy_full = solve_full_system(lat, rho_emb, energy_emb, basis, imp_ham,
-#                                         last_dmu, solver_info, lo_labels) # include the environment interactions
+#                           last_dmu, solver_info, lo_labels) # include the environment interactions
 #        v_cor, dVcor_per_ele = fit_correlation_potential(rho_emb,
 #                                         lat, basis, v_cor) # fit correlation potential
 #
