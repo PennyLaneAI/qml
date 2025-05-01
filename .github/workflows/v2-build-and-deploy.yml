@@ -1,5 +1,10 @@
 name: V2 Build and Deploy Demos
 
+permissions:
+  contents: read
+  pull-requests: write
+  actions: read
+
 on:
   workflow_dispatch:
     inputs:
@@ -94,4 +99,3 @@ jobs:
       environment: ${{ github.event.inputs.environment }}
       artifact-name: build-and-deploy-${{ github.event.inputs.target }}
       preview: ${{ github.event.inputs.as-previews }}
-      branch: ${{ needs.validate-and-parse-inputs.outputs.branch }}
