@@ -22,8 +22,6 @@ DMET calculations to construct a Hamiltonian that can be used in a quantum algor
     :width: 70%
     :target: javascript:void(0)
 """
-
-######################################################################
 # Theory
 # ------
 # The wave function for the embedded system composed of the impurity and the environment can be
@@ -63,7 +61,6 @@ DMET calculations to construct a Hamiltonian that can be used in a quantum algor
 # this, DMET operates through a systematic iterative approach, starting with a meanfield description
 # of the wavefunction and refining it through feedback from solution of the impurity Hamiltonian.
 #
-######################################################################
 # Implementation
 # --------------
 # The DMET procedure starts by getting an approximate description of the system. This approximate
@@ -103,7 +100,6 @@ DMET calculations to construct a Hamiltonian that can be used in a quantum algor
 #    filling = cell.nelectron / (lat.nscsites * 2.0)
 #    kpts = lat.kpts
 #
-######################################################################
 # Performing mean-field calculations
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 # We can now perform a mean-field calculation on the whole system through Hartree-Fock with density
@@ -120,7 +116,6 @@ DMET calculations to construct a Hamiltonian that can be used in a quantum algor
 #    kmf.with_df._cderi = 'gdf_ints.h5' # input file for density fitted integrals
 #    kmf.kernel() # run Hartree-Fock
 #
-######################################################################
 # Partitioning the orbital space
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 # Now we have an approximate description of our system and can start obtaining the impurity and bath
@@ -138,7 +133,6 @@ DMET calculations to construct a Hamiltonian that can be used in a quantum algor
 #    c_ao_lo = lat.symmetrize_lo(c_ao_iao)
 #    lat.set_Ham(kmf, gdf, c_ao_lo, eri_symmetry=4) # rotate integral tensors to IAO basis
 #
-######################################################################
 # We now obtain the orbital labels for each atom in the unit cell and define the impurity and bath
 # by looking at the labels. In this example, we choose to keep the :math:`1s` orbitals in the unit
 # cell in the impurity, while the bath contains the :math:`2s` orbitals, and the orbitals belonging
@@ -157,7 +151,6 @@ DMET calculations to construct a Hamiltonian that can be used in a quantum algor
 #    print("Valence orbitals: ", val_labels)
 #    print("Virtual orbitals: ", virt_labels)
 #
-######################################################################
 # Self-Consistent DMET
 # ^^^^^^^^^^^^^^^^^^^^
 # Now that we have a description of our impurity and bath orbitals, we can implement the iterative
@@ -178,7 +171,6 @@ DMET calculations to construct a Hamiltonian that can be used in a quantum algor
 #
 #        return rho, mu, scf_result, imp_ham, basis
 #
-######################################################################
 # Next, we solve this impurity Hamiltonian with a high-level method. The following function defines
 # the electronic structure solver for the impurity, provides an initial point for the calculation
 # and passes the ``Lattice`` information to the solver. The solver then calculates the energy and
@@ -200,7 +192,6 @@ DMET calculations to construct a Hamiltonian that can be used in a quantum algor
 #        last_dmu += dmu
 #        return rho_emb, energy_emb, imp_ham, last_dmu, [solver, solver_args]
 #
-######################################################################
 # The final step is to include the effect of the environment in the expectation value. So we define
 # a function which returns the density matrix and energy for the whole system.
 #
@@ -213,8 +204,7 @@ DMET calculations to construct a Hamiltonian that can be used in a quantum algor
 #                                      solver=solver_info[0], solver_args=solver_info[1], labels=lo_labels)
 #        energy_full *= lat.nscsites
 #        return rho_full, energy_full
-
-######################################################################
+#
 # Note here that the effect of environment included in this step is at the meanfield level. So if we
 # stop the iteration here, the results will be that of the single-shot DMET.
 
@@ -240,7 +230,6 @@ DMET calculations to construct a Hamiltonian that can be used in a quantum algor
 #        v_cor.update(vcor_new.param)
 #        return v_cor, dVcor_per_ele
 #
-######################################################################
 # Now, we have defined all the ingredients of DMET. We can set up the self-consistency loop to get
 # the full execution. We set up this loop by defining the maximum number of iterations and a
 # convergence criteria. We use both energy and correlation potential as our convergence parameters,
@@ -259,7 +248,6 @@ DMET calculations to construct a Hamiltonian that can be used in a quantum algor
 #    mu = 0 # initial chemical potential
 #    last_dmu = 0.0 # change in chemical potential
 #
-######################################################################
 # Now we set up the iterations in a loop.
 #
 # .. code-block:: python
@@ -281,7 +269,6 @@ DMET calculations to construct a Hamiltonian that can be used in a quantum algor
 #            print("DMET Energy per cell: ", energy_full)
 #            break
 #
-######################################################################
 # This concludes the DMET procedure.
 #
 # At this point, we should note that we are still limited by the number of orbitals we can have in
@@ -302,7 +289,6 @@ DMET calculations to construct a Hamiltonian that can be used in a quantum algor
 #    h2 = imp_ham.H2["ccdd"][0]
 #    h2 = ao2mo.restore(1, h2, norb) # Get the correct shape based on permutation symmetry
 #
-######################################################################
 # These one-body and two-body integrals can then be used to generate the qubit Hamiltonian in
 # PennyLane. We then diagonaliz it to get the eigenvalues and show that the lowest eigenvalue
 # matches the energy we obtained for the embedded system above.
@@ -319,11 +305,9 @@ DMET calculations to construct a Hamiltonian that can be used in a quantum algor
 #    print("eigenvalue from PennyLane: ", eigval_qubit)
 #    print("embedding energy: ", energy_emb)
 #
-######################################################################
 # We can also get ground state energy for the system from this value by solving for the full system
 # as done above in the self-consistency loop using solve_full_system function.
 #
-######################################################################
 # Conclusion
 # ^^^^^^^^^^^^^^
 # The density matrix embedding theory is a robust method designed to tackle simulation of complex
