@@ -9,7 +9,7 @@ theory, which provide better accuracy but come at a significantly higher computa
 
 Embedding theories provide a balanced midpoint solution that enhances our ability to simulate
 materials accurately and efficiently. The core idea behind embedding is that the system is divided
- into two parts: an impurity which is a strongly correlated subsystem that requires exact
+into two parts: an impurity which is a strongly correlated subsystem that requires exact
 description and an environment which can be treated with approximate but computationally efficient
 method.
 
