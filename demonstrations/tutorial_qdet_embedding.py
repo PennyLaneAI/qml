@@ -61,10 +61,12 @@ powerful method for affordable quantum simulation of materials.
 # parameters needed for each atom type in the system from the QUANTUM ESPRESSO
 # `database <https://www.quantum-espresso.org/pseudopotentials/>`_. We have carbon and nitrogen in
 # our system which can be downloaded with
-
-wget -N -q http://www.quantum-simulation.org/potentials/sg15_oncv/upf/C_ONCV_PBE-1.2.upf
-wget -N -q http://www.quantum-simulation.org/potentials/sg15_oncv/upf/N_ONCV_PBE-1.2.upf
-
+#
+# .. code-block:: python
+#
+#    wget -N -q http://www.quantum-simulation.org/potentials/sg15_oncv/upf/C_ONCV_PBE-1.2.upf
+#    wget -N -q http://www.quantum-simulation.org/potentials/sg15_oncv/upf/N_ONCV_PBE-1.2.upf
+#
 ##############################################################################
 # Next, we need to create the input file for running QUANTUM ESPRESSO. The input file ``pw.in``
 # contains information about the system and details of the DFT calculations. More details on
@@ -72,9 +74,11 @@ wget -N -q http://www.quantum-simulation.org/potentials/sg15_oncv/upf/N_ONCV_PBE
 # `documentation <https://www.quantum-espresso.org/Doc/INPUT_PW.html>`_ page.
 #
 # We can now perform the DFT calculations by running the executable code ``pw.x`` on the input file:
-mpirun -n 2 pw.x -i pw.in > pw.out
-
-
+#
+# .. code-block:: python
+#
+#    mpirun -n 2 pw.x -i pw.in > pw.out
+#
 # Identify the impurity
 # ^^^^^^^^^^^^^^^^^^^^^
 # Once we have obtained the meanfield description, we can identify our impurity by finding
@@ -88,53 +92,61 @@ mpirun -n 2 pw.x -i pw.in > pw.out
 # where $V$ is the identified volume including the impurity within the supercell volume $\ohm$.
 # We will use the WEST program to compute the localization factor. This requires creating another
 # input file ``westpp.in`` as shown below.
-
-westpp_control:
-  westpp_calculation: L # triggers the calculation of the localization factor
-  westpp_range:         # defines the range of states toe compute the localization factor
-  - 1                   # start from the first state
-  - 176                 # use all the 176 state
-  westpp_box:           # specifies the parameter of the box in atomic units for integration
-  - 6.19                #
-  - 10.19
-  - 6.28
-  - 10.28
-  - 6.28
-  - 10.28
+#
+# .. code-block:: python
+#
+#    westpp_control:
+#      westpp_calculation: L # triggers the calculation of the localization factor
+#      westpp_range:         # defines the range of states toe compute the localization factor
+#      - 1                   # start from the first state
+#      - 176                 # use all the 176 state
+#      westpp_box:           # specifies the parameter of the box in atomic units for integration
+#      - 6.19                #
+#      - 10.19
+#      - 6.28
+#      - 10.28
+#      - 6.28
+#      - 10.28
 
 ##############################################################################
 # We can execute this calculation as
-
-mpirun -n 2 westpp.x -i westpp.in > westpp.out
-
+#
+# .. code-block:: python
+#
+#    mpirun -n 2 westpp.x -i westpp.in > westpp.out
+#
 ##############################################################################
 # This creates a file named ``west.westpp.save/westpp.json``. Since computational resources required
 # to run the calculation are large, the WEST output file needed for the next step can be
 # directly downloaded as:
-
-mkdir -p west.westpp.save
-wget -N -q https://west-code.org/doc/training/nv_diamond_63/box_westpp.json -O west.westpp.save/westpp.json
-
+#
+# .. code-block:: python
+#
+#    mkdir -p west.westpp.save
+#    wget -N -q https://west-code.org/doc/training/nv_diamond_63/box_westpp.json -O west.westpp.save/westpp.json
+#
 ##############################################################################
 # We can now plot the computed localization factor for each of the states:
-
-import json
-import numpy as np
-import matplotlib.pyplot as plt
-
-with open('west.westpp.save/westpp.json','r') as f:
-    data = json.load(f)
-
-y = np.array(data['output']['L']['K000001']['local_factor'],dtype='f8')
-x = np.array([i+1 for i in range(y.shape[0])])
-
-plt.plot(x,y,'o')
-plt.axhline(y=0.08,linestyle='--',color='red')
-
-plt.xlabel('KS index')
-plt.ylabel('Localization factor')
-
-plt.show()
+#
+# .. code-block:: python
+#
+#    import json
+#    import numpy as np
+#    import matplotlib.pyplot as plt
+#
+#    with open('west.westpp.save/westpp.json','r') as f:
+#        data = json.load(f)
+#
+#    y = np.array(data['output']['L']['K000001']['local_factor'],dtype='f8')
+#    x = np.array([i+1 for i in range(y.shape[0])])
+#
+#    plt.plot(x,y,'o')
+#    plt.axhline(y=0.08,linestyle='--',color='red')
+#
+#    plt.xlabel('KS index')
+#    plt.ylabel('Localization factor')
+#
+#    plt.show()
 
 ##############################################################################
 # From this plot, it is easy to see that Kohn-Sham orbitals can be catergorized as orbitals
@@ -164,52 +176,60 @@ plt.show()
 # executable. The program will: (i) compute the quasiparticle energies, (ii) compute the
 # partially screened Coulomb potential, and (iii) finally compute the parameters of the
 # effective Hamiltonian. The input file for such a calculation is shown below:
-
-wstat_control:
-  wstat_calculation: S
-  n_pdep_eigen: 512
-  trev_pdep: 0.00001
-
-wfreq_control:
-  wfreq_calculation: XWGQH
-  macropol_calculation: C
-  l_enable_off_diagonal: true
-  n_pdep_eigen_to_use: 512
-  qp_bands: [87, 122, 123, 126, 127, 128]
-  n_refreq: 300
-  ecut_refreq: 2.0
-
+#
+# .. code-block:: python
+#
+#    wstat_control:
+#      wstat_calculation: S
+#      n_pdep_eigen: 512
+#      trev_pdep: 0.00001
+#
+#    wfreq_control:
+#      wfreq_calculation: XWGQH
+#      macropol_calculation: C
+#      l_enable_off_diagonal: true
+#      n_pdep_eigen_to_use: 512
+#      qp_bands: [87, 122, 123, 126, 127, 128]
+#      n_refreq: 300
+#      ecut_refreq: 2.0
+#
 ##############################################################################
 # We now construct the effective Hamiltonian:
-
-from westpy.qdet import QDETResult
-
-mkdir -p west.wfreq.save
-wget -N -q https://west-code.org/doc/training/nv_diamond_63/wfreq.json -O west.wfreq.save/wfreq.json
-
-effective_hamiltonian = QDETResult(filename='west.wfreq.save/wfreq.json')
-
+#
+# .. code-block:: python
+#
+#    from westpy.qdet import QDETResult
+#
+#    mkdir -p west.wfreq.save
+#    wget -N -q https://west-code.org/doc/training/nv_diamond_63/wfreq.json -O west.wfreq.save/wfreq.json
+#
+#    effective_hamiltonian = QDETResult(filename='west.wfreq.save/wfreq.json')
+#
 ##############################################################################
 # The final step is to solve for this effective Hamiltonian using a high level method. We can
 # use the WESTpy package as:
-
-solution = effective_hamiltonian.solve()
-
+#
+# .. code-block:: python
+#
+#    solution = effective_hamiltonian.solve()
+#
 ##############################################################################
 # We can also use this effective Hamiltonian with a quantum algorithm through PennyLane. This
 # requires representing it in the qubit Hamiltonian format for PennyLane and can be done as follows:
-
-from pennylane.qchem import one_particle, two_particle, observable
-import numpy as np
-
-effective_hamiltonian = QDETResult(filename='west.wfreq.save/wfreq.json')
-
-one_e, two_e = effective_hamiltonian.h1e, effective_hamiltonian.eri
-
-t = one_particle(one_e[0])
-v = two_particle(np.swapaxes(two_e[0][0], 1, 3))
-qubit_op = observable([t, v], mapping="jordan_wigner")
-
+#
+# .. code-block:: python
+#
+#    from pennylane.qchem import one_particle, two_particle, observable
+#    import numpy as np
+#
+#    effective_hamiltonian = QDETResult(filename='west.wfreq.save/wfreq.json')
+#
+#    one_e, two_e = effective_hamiltonian.h1e, effective_hamiltonian.eri
+#
+#    t = one_particle(one_e[0])
+#    v = two_particle(np.swapaxes(two_e[0][0], 1, 3))
+#    qubit_op = observable([t, v], mapping="jordan_wigner")
+#
 ##############################################################################
 # The ground state energy of the Hamiltonian is identical to the one obtained before.
 #
