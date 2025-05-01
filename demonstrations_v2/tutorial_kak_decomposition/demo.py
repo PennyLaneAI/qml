@@ -355,7 +355,7 @@ def check_cartan_decomposition(g, k, space_name):
     """Given an algebra g and an operator subspace k, verify that k is a subalgebra
     and gives rise to a Cartan decomposition."""
     # Check Lie closure of k
-    k_lie_closure = qml.pauli.dla.lie_closure(k)
+    k_lie_closure = qml.lie_closure(k)
     k_is_closed = len(k_lie_closure) == len(k)
     print(f"The Lie closure of k is as big as k itself: {k_is_closed}.")
 
