@@ -209,7 +209,7 @@ DMET calculations to construct a Hamiltonian that can be used in a quantum algor
 #
 # Note here that the effect of environment included in this step is at the meanfield level. So if we
 # stop the iteration here, the results will be that of the single-shot DMET.
-
+#
 # In the self-consistent DMET, the interaction between the environment and the impurity is improved
 # iteratively. In this method, a correlation potential is introduced to account for the interactions
 # between the impurity and its environment. We start with an initial guess of zero for this
