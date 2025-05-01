@@ -9,7 +9,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build_dev:
+  build_master:
     uses: ./.github/workflows/v2-build-demos.yml
     with:
       ref: build-branch-master
