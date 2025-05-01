@@ -96,35 +96,37 @@ jobs:
       preview: true
     secrets: inherit
   
+
+  ## DISABLED UNTIL RELEASE ##
   # Step 3: Create a comment on the PR with the demo links
-  generate-comment:
-    if: github.event.workflow_run.event == 'pull_request' && needs.prepare-build-context.outputs.pr_id != ''
-    runs-on: ubuntu-latest
-    needs: prepare-build-context
-    steps:
-      - name: Create markdown comment from demo names
-        id: generate-markdown
-        run: |
-          demos="${{ needs.prepare-build-context.outputs.updated_demos }}"
+  # generate-comment:
+  #   if: github.event.workflow_run.event == 'pull_request' && needs.prepare-build-context.outputs.pr_id != ''
+  #   runs-on: ubuntu-latest
+  #   needs: prepare-build-context
+  #   steps:
+  #     - name: Create markdown comment from demo names
+  #       id: generate-markdown
+  #       run: |
+  #         demos="${{ needs.prepare-build-context.outputs.updated_demos }}"
           
-          comment="### Preview(s) are ready! :tada:\n"
-          comment+="<details>\n"
-          comment+="<summary>Toggle to view preview links</summary>\n"
-          comment+="\n"
-          # TODO: Switch to prod once testing is complete
-          for demo in $demos; do
-            comment+="- [$demo](https://staging.pennylane.ai/qml/demos/$demo?preview=true)\n"
-          done
+  #         comment="### Preview(s) are ready! :tada:\n"
+  #         comment+="<details>\n"
+  #         comment+="<summary>Toggle to view preview links</summary>\n"
+  #         comment+="\n"
+  #         # TODO: Switch to prod once testing is complete
+  #         for demo in $demos; do
+  #           comment+="- [$demo](https://staging.pennylane.ai/qml/demos/$demo?preview=true)\n"
+  #         done
       
-          comment+="\n"
-          comment+="</details>"
+  #         comment+="\n"
+  #         comment+="</details>"
 
-          echo "markdown=$comment" >> $GITHUB_OUTPUT
+  #         echo "markdown=$comment" >> $GITHUB_OUTPUT
 
-      - name: Comment on PR
-        id: comment-on-pr
-        uses: XanaduAI/cloud-actions/create-and-update-pull-request-comment@main
-        with:
-          github_token: ${{ secrets.github_token }}
-          pull_request_number: ${{ needs.prepare-build-context.outputs.pr_id }}
-          comment_body: ${{ steps.generate-markdown.outputs.markdown }}
+  #     - name: Comment on PR
+  #       id: comment-on-pr
+  #       uses: XanaduAI/cloud-actions/create-and-update-pull-request-comment@main
+  #       with:
+  #         github_token: ${{ secrets.github_token }}
+  #         pull_request_number: ${{ needs.prepare-build-context.outputs.pr_id }}
+  #         comment_body: ${{ steps.generate-markdown.outputs.markdown }}
