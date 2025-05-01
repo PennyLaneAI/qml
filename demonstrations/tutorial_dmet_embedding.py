@@ -22,6 +22,8 @@ DMET calculations to construct a Hamiltonian that can be used in a quantum algor
     :width: 70%
     :target: javascript:void(0)
 """
+
+#############################################
 # Theory
 # ------
 # The wave function for the embedded system composed of the impurity and the environment can be
