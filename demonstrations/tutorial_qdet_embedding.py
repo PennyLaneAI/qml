@@ -23,7 +23,10 @@ powerful method for affordable quantum simulation of materials.
     :align: center
     :width: 70%
     :target: javascript:void(0)
+
 """
+
+#############################################
 # Theory
 # ------
 # The core idea in QDET is to construct an effective Hamiltonian that describes the impurity
