@@ -97,7 +97,7 @@ jobs:
     secrets: inherit
   
 
-  ## DISABLED UNTIL RELEASE ##
+  ## DISABLED UNTIL RELEASED ##
   # Step 3: Create a comment on the PR with the demo links
   # generate-comment:
   #   if: github.event.workflow_run.event == 'pull_request' && needs.prepare-build-context.outputs.pr_id != ''
