@@ -24,8 +24,6 @@ powerful method for affordable quantum simulation of materials.
     :width: 70%
     :target: javascript:void(0)
 """
-
-######################################################################
 # Theory
 # ------
 # The core idea in QDET is to construct an effective Hamiltonian that describes the impurity
@@ -67,7 +65,6 @@ powerful method for affordable quantum simulation of materials.
 #    wget -N -q http://www.quantum-simulation.org/potentials/sg15_oncv/upf/C_ONCV_PBE-1.2.upf
 #    wget -N -q http://www.quantum-simulation.org/potentials/sg15_oncv/upf/N_ONCV_PBE-1.2.upf
 #
-##############################################################################
 # Next, we need to create the input file for running QUANTUM ESPRESSO. The input file ``pw.in``
 # contains information about the system and details of the DFT calculations. More details on
 # how to construct the input file can be found in QUANTUM ESPRESSO
@@ -107,15 +104,13 @@ powerful method for affordable quantum simulation of materials.
 #      - 10.28
 #      - 6.28
 #      - 10.28
-
-##############################################################################
+#
 # We can execute this calculation as
 #
 # .. code-block:: python
 #
 #    mpirun -n 2 westpp.x -i westpp.in > westpp.out
 #
-##############################################################################
 # This creates a file named ``west.westpp.save/westpp.json``. Since computational resources required
 # to run the calculation are large, the WEST output file needed for the next step can be
 # directly downloaded as:
@@ -125,7 +120,6 @@ powerful method for affordable quantum simulation of materials.
 #    mkdir -p west.westpp.save
 #    wget -N -q https://west-code.org/doc/training/nv_diamond_63/box_westpp.json -O west.westpp.save/westpp.json
 #
-##############################################################################
 # We can now plot the computed localization factor for each of the states:
 #
 # .. code-block:: python
@@ -147,8 +141,7 @@ powerful method for affordable quantum simulation of materials.
 #    plt.ylabel('Localization factor')
 #
 #    plt.show()
-
-##############################################################################
+#
 # From this plot, it is easy to see that Kohn-Sham orbitals can be catergorized as orbitals
 # with low and high localization factor. For the purpose of defining an impurity, we need
 # highly localized orbitals, so for this we set a cutoff of 0.06 and choose the orbitals
@@ -193,7 +186,6 @@ powerful method for affordable quantum simulation of materials.
 #      n_refreq: 300
 #      ecut_refreq: 2.0
 #
-##############################################################################
 # We now construct the effective Hamiltonian:
 #
 # .. code-block:: python
@@ -205,7 +197,6 @@ powerful method for affordable quantum simulation of materials.
 #
 #    effective_hamiltonian = QDETResult(filename='west.wfreq.save/wfreq.json')
 #
-##############################################################################
 # The final step is to solve for this effective Hamiltonian using a high level method. We can
 # use the WESTpy package as:
 #
@@ -213,7 +204,6 @@ powerful method for affordable quantum simulation of materials.
 #
 #    solution = effective_hamiltonian.solve()
 #
-##############################################################################
 # We can also use this effective Hamiltonian with a quantum algorithm through PennyLane. This
 # requires representing it in the qubit Hamiltonian format for PennyLane and can be done as follows:
 #
@@ -230,7 +220,6 @@ powerful method for affordable quantum simulation of materials.
 #    v = two_particle(np.swapaxes(two_e[0][0], 1, 3))
 #    qubit_op = observable([t, v], mapping="jordan_wigner")
 #
-##############################################################################
 # The ground state energy of the Hamiltonian is identical to the one obtained before.
 #
 # Conclusion
