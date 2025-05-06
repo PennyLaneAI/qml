@@ -119,12 +119,181 @@ def CNOT_ladder():
 # Next are phase rotations and shifts. 
 # In particular, there is a phase shift on the ancilla by :math:`-\pi/2^{(N+1)}` followed by a :math:`Z` rotation of :math:`-\pi(2^N - 1)/2^{N+1}`. 
 # The other other qubits are rotated in :math:`Z` by :math:`\pi/2^{(j+1)}`, where :math:`j` is the index of the qubit as labelled in the circuit diagram.
-# 
+
+import numpy as np
+pi = np.pi
+
+def rotate_phases():
+    """shift the ancilla's phase and rotate the jth qubit by 
+       pi/2^(j+1) in Z"""
+    qml.PhaseShift(-pi/2**(N+1), wires=0)
+    qml.RZ(-pi*(2**N-1)/2**(N+1), wires=0)
+    for wire in range(1, N+1):
+        qml.RZ(pi/2**(wire+1), wires=wire)
+
+#############################################
+# Now a permutation of the qubits is used to reorder them. 
+# This is built using a multicontrolled NOT gate applied to each qubit from the initial state, which is controlled on the ancilla and all qubits with larger index than the target. The multicontrolled NOT gate can be implimented using a multicontrolled Pauli X gate. 
+# Let's see what that looks like.
+
+def permute_elements():
+    """reorders amplitudes of the conditioned states"""
+    for wire in reversed(range(1, N+1)):
+        control_wires = [0] + list(range(wire+1,N+1))
+        qml.MultiControlledX(wires=(*control_wires, wire))
+
+#############################################
+# In the above code, we use \texttt{reversed} to loop over the qubits in reverse order, to apply the controlled gate to the last qubit first. 
+# After the permutation is another CNOT ladder, which we already have a function for.
+#   
+# The last part is a phase adjustment of the ancilla qubit: a phase shift of $-\pi/2$, followed by a rotation in $Y$ by $\pi/2$ and a multicontrolled $X$ rotation by $\pi/2$. 
+# All of the other qubits control the $X$ rotation, but the control is sandwiched by Pauli $X$ operators. We can impliment the multicontrolled $X$ rotation using \texttt{qml.ControlledQubitUnitary}.
+
+def adjust_phase():
+    """adjusts the phase of the ancilla qubit"""
+    qml.PhaseShift(-pi/2, wires=0)
+    qml.RY(-pi/2, wires=0)
+    # first Pauli Xs
+    for wire in range(1, N+1):
+        qml.PauliX(wires=wire)
+    # controlled RX gate
+    qml.ControlledQubitUnitary(qml.RX(pi/2, wires=0), range(1, N+1))
+    # second Pauli Xs
+    for wire in range(1, N+1):
+        qml.PauliX(wires=wire)
+
+#############################################
+# All together, we can construct the circuit. 
+# We have added :class:`qml.BasisState` to initialize the input in any computational basis state with the optional argument ``state``.
+
+def QChT():
+    qml.Hadamard(wires=0)
+    CNOT_ladder()
+    qml.QFT(wires=range(N+1))
+    rotate_phases()
+    permute_elements()
+    CNOT_ladder()
+    adjust_phases()
+
+dev = qml.device("default.qubit")
+@qml.qnode(dev)
+def circuit(state=None):
+    qml.BasisState(state=state, wires=range(1,N+1))
+    QChT()
+    return qml.state()
+
+#############################################
+# Testing the QChT
+# ----------------
+# With our QChT circuit, let's see if the orthonormality described earlier holds. 
+# To do this, we'll use the computational state :math:`\ket{7}`, which will transform into :math:`\ket{\tau(x_7^\mathrm{Ch})}`.
+# Then, we will compute the overlap at the nodes with all other :math:`\ket{\tau(x_j^\mathrm{Ch})}`.
 
 
+j = 7  # initial state in computational basis
+
+# compute state after transform
+total_state = circuit(state=j)#[:2**N]
+
+# reduce state size, effectively removing the ancilla
+state = total_state[:2**N]*np.sqrt(2)
+
+# compute nodes
+def ch_node(j, N):
+    return np.cos(pi*(2*j+1)/2**(N+1))
+
+js = list(range(int(len(state)/2)))
+nodes = [ch_node(i, N) for i in js]
+
+# compute overlap with other basis states using np.inner()
+overlaps = []
+for i in js:
+    state_i = circuit(state=i)[:2**N]*np.sqrt(2)
+    overlaps.append(np.inner(state, state_i))
+
+#############################################
+# Now we plot the squared overlaps at the nodes computed from the circuit transformation, and compare to the definition, plotting the squared overlaps at all values of :math:`x`.
+#
+
+import matplotlib.pyplot as plt
+
+def T_n(x, n):
+    """Chebyshev polynomial of order n"""
+    return np.cos(n * np.arccos(x))
+
+def overlap_sq(x, xp, N):
+    """computes the squared overlap"""
+    numerator = T_n(xp, 2**N+1) * T_n(x, 2**N) - \
+                        T_n(xp, 2**N) * T_n(x, 2**N+1)
+    return numerator**2/(2**(2*N))/(xp - x)**2
+    
+plt.style.use('pennylane.drawer.plot')
+fig, ax = plt.subplots(figsize=(6,4))
+ax.set(xlabel="x", ylabel="Squared Overlap")
+
+# plot squared overlaps computed in circuit
+ax.plot(nodes, np.abs(overlaps)**2, marker='o', label='circuit')
+
+# plot expected squared overlaps
+xs = np.linspace(-1, 1, 1000)
+ax.plot(xs, [overlap_sq(x, nodes[j], N) for x in xs], label='expectation')
+
+ax.legend()
+plt.show()
 
 
 #############################################
+# .. figure:: ../_static/demonstration_assets/quantum_chebyshev_transform/squared_overlap.png
+#   :align: center
+#   :width: 60%
+#   :target: javascript:void(0)
+#
+# Almost orthonormal. We note that the amplitude at the corresponding node approaches :math:`1` if the number of qubits is increased.
+# 
+# Let's also see if the amplitudes of the state in the computational basis agree with expectation. 
+# To do this, we just modify our ``circuit`` function to return the probabilities of each of the computational basis states (ignoring the ancilla).
+
+@qml.qnode(dev)
+def circuit(state=None):
+    qml.BasisState(state=state, wires=range(1,N+1))
+    QChT()
+    return qml.probs(wires=range(1,N+1))
+
+probs = circuit(state=j)
+
+# computational basis indeces
+x = range(2**N)
+
+def tau_amplitudes(x, k, N):
+    """computes the expected amplitudes of tau"""
+    if k == 0: 
+        prefactor = 1/2**(N/2)
+    else: 
+        prefactor = 1/2**((N-1)/2)
+    return prefactor * np.cos(k*np.arccos(x))
+
+fig, ax = plt.subplots(figsize=(6,4))
+ax.plot(x, probs, 'o', label='circuit')
+ax.plot(x, [tau_amplitudes(nodes[j], xs, N)**2 for xs in x], label='expectation')
+ax.set(xlabel="|k>", ylabel="Probability")
+ax.legend()
+plt.show()
+
+#############################################
+# .. figure:: ../_static/demonstration_assets/quantum_chebyshev_transform/amplitudes.png
+#   :align: center
+#   :width: 60%
+#   :target: javascript:void(0)
+#
+# The circuit output probabilities are exactly what we want.
+#
+#
+# Conclusion
+# ----------
+# In this tutorial, we've gone through how to implement the QChT from a recent paper by Williams *et al.*, and tested the circuit output by looking at the state amplitudes and the orthonormality. 
+# Further work could test the phase of the output to make sure it matches what we expect the QChT to output. One could also implement the quantum Chebyshev feature map from the same paper, which prepares a state in the Chevyshev space via a parameter :math:`x``.
+#
+#
 # References
 # ----------
 #
