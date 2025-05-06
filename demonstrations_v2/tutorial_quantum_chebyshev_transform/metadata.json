@@ -1,0 +1,28 @@
+{
+    "title": "Intro to Quantum Chebyshev Transform",
+    "authors": [
+        {
+            "username": "colinjdale"
+        }
+    ],
+    "dateOfPublication": "2025-05-09T00:00:00+00:00",
+    "dateOfLastModification": "2025-05-06T00:00:00+00:00",
+    "categories": [
+        "Algorithms",
+        "Quantum Computing"
+    ],
+    "tags": [],
+    "previewImages": [],
+    "seoDescription": "Implement the Quantum Chebyshev Transform in PennyLane.",
+    "doi": "",
+    "references": [],
+    "basedOnPapers": ["10.48550/arXiv.2306.17026"],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_qft",
+            "weight": 1.0
+        }
+    ]
+}
