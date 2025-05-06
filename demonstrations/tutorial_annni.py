@@ -50,7 +50,6 @@ import optax
 
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap, BoundaryNorm
-# from IPython.display import Image, display
 
 config.update("jax_enable_x64", True)
 
