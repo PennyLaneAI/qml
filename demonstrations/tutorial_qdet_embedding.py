@@ -4,7 +4,7 @@ Efficient simulation of complex quantum systems remains a significant challenge 
 physics. These simulations often require computationally intractable methods for a complete
 solution. However, many interesting problems in quantum chemistry and condensed matter physics
 feature a strongly correlated region, which requires accurate quantum treatment, embedded within a
-larger environment that could be properly treated with cheaper approximations.  Examples of such
+larger environment that could be properly treated with cheaper approximations.  For example,
 systems include point defects in materials [#Galli]_, active site of catalysts [#SJRLee]_, surface phenomenon such
 as adsorption [#Gagliardi]_ and many more. Embedding theories serve as powerful tools for effectively
 addressing such problems.
