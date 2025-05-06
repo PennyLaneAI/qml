@@ -18,7 +18,7 @@ What are Chebyshev polynomials?
 `Chebyshev polynomials <https://en.wikipedia.org/wiki/Chebyshev_polynomials#As_a_basis_set>` of the first kind :math:`T_n(x)` are a set of orthogonal polynomials that are complete on the interval :math:`[-1,1]`. They can be defined as 
 
 .. math::
-  T_n(x) \equiv \cos(n \arccos(x))\,,
+  T_n(x) \equiv \cos(n \arccos(x))
 
 where :math:`n` is the order of the polynomial. We can write out the first few orders explicitly.
 .. math::
@@ -28,7 +28,7 @@ where :math:`n` is the order of the polynomial. We can write out the first few o
   T_3(x) &= 4x^3 - 3x \\
   T_4(x) &= 8x^4 - 8x^2 + 1 \\
   &\ \,\vdots \\
-  T_{n+1}(x) &= 2xT_n(x) - T_{n-1}(x)\,.
+  T_{n+1}(x) &= 2xT_n(x) - T_{n-1}(x)
 
 The recursion relation in the last line can be used to compute the next orders. Observe that odd and even order :math:`T_n` are odd and even functions, respectively. 
 The roots of the :math:`T_n(x)` occur at the values 
@@ -41,6 +41,27 @@ These are known as the `Chebyshev nodes <https://en.wikipedia.org/wiki/Chebyshev
     :align: center
     :width: 60%
     :target: javascript:void(0)
+
+The nodes are plotted above along with the corresponding polynomials. Note that the polynomials are normalized such that $T_n(1)=1$, and they satisfy a discrete orthogonality condition on the nodes of $T_N(x)$ in the following way for $k$, $\ell<N$
+.. math::
+  \sum^{N-1}_{j=0}T_k(x_j^\mathrm{Ch})T_\ell(x_j^\mathrm{Ch}) =  
+    \begin{cases}
+      0 & k \neq \ell\,,\\
+      N & k = \ell = 0\,,\\
+      N/2 & k = \ell \neq 0
+    \end{cases}
+
+The Chebyshev polynomials have a lot of \textit{nice} properties. Because they are complete, any function :math:`f(x)` on the interval :math:`x\in [-1,1]` can be expanded in :math:`T_n(x)` up to order :math`N` as :math:`f(x) = \sum_{j=0}^N a_j T_j(x)`. \
+To do this process numerically for a discrete set of sampling points would take :math:`\mathcal{O}(N^2)` operations for a general set of complete functions \emoji{snail}. 
+However, because of the way the Chebyshev polynomials are defined in terms of cosine, the `discrete Chebyshev transformation (DChT) <https://en.wikipedia.org/wiki/Discrete_Chebyshev_transform>` can be related to the `discrete cosine transform (DCT) <https://en.wikipedia.org/wiki/Discrete_cosine_transform>` to leverage the efficiency of the `fast-Fourier-transform <https://en.wikipedia.org/wiki/Fast_Fourier_transform>`-style algorithms, which take :math:`\mathcal{O}(N \log N)` operations \emoji{rocket}.
+
+The DChT is sampled on the nodes of :math:`T_N(x)`, which are non-equidistant on the :math:`[-1,1]` interval. 
+This non-uniform sampling has more resolution at the boundary, but less in the middle. This can be a benefit if you are, for example, solving a differential equation and expect more interesting features at the boundary, so the extra resolution there is useful. 
+In general, working in the Chebyshev basis can have advantages over the Fourier basis for polynomial decomposition.
+
+Quantum Chebyshev basis
+---------------------------------------
+
 """
 
 #
