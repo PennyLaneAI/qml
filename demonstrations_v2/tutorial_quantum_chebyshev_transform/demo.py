@@ -1,7 +1,7 @@
 r"""Intro to the Quantum Chebyshev
 =============================================================
 
-This demo is inspired by the paper `"Quantum Chebyshev transform: mapping, embedding, learning and sampling distributions" <https://arxiv.org/abs/2306.17026>`_ wherein the authors describe a workflow for quantum Chebyshev-based model building. 
+This demo is inspired by the paper `"Quantum Chebyshev transform: mapping, embedding, learning and sampling distributions" <https://arxiv.org/abs/2306.17026>`__ wherein the authors describe a workflow for quantum Chebyshev-based model building. 
 They demonstrate the use of the Chebyshev basis space in generative modeling for probability distributions. Crucial to their implementation of learning models in Chebyshev space is the quantum Chebyshev transform (QChT), which is used to swap between the computational basis and the Chebyshev basis. 
 
 We will start by discussing Chebyshev polynomials and why you may want to work in Chebyshev space. Then we will show how the QChT can be implemented in PennyLane. 
@@ -16,7 +16,7 @@ We will start by discussing Chebyshev polynomials and why you may want to work i
 What are Chebyshev polynomials?
 ---------------------------------------
 
-`Chebyshev polynomials <https://en.wikipedia.org/wiki/Chebyshev_polynomials#As_a_basis_set>`_ of the first kind :math:`T_n(x)` are a set of orthogonal polynomials that are complete on the interval :math:`[-1,1]`. They can be defined as 
+`Chebyshev polynomials <https://en.wikipedia.org/wiki/Chebyshev_polynomials#As_a_basis_set>`__ of the first kind :math:`T_n(x)` are a set of orthogonal polynomials that are complete on the interval :math:`[-1,1]`. They can be defined as 
 
 .. math::
   T_n(x) \equiv \cos(n \arccos(x))
@@ -38,7 +38,7 @@ The roots of the :math:`T_n(x)` occur at the values
 .. math::
   x_n^\mathrm{Ch} = \cos\left(\frac{2k+1}{2n}\pi\right)\,, \quad k=0, ..., n-1\,. 
 
-These are known as the `Chebyshev nodes <https://en.wikipedia.org/wiki/Chebyshev_nodes>`_.
+These are known as the `Chebyshev nodes <https://en.wikipedia.org/wiki/Chebyshev_nodes>`__.
 
 .. figure:: ../_static/demonstration_assets/quantum_chebyshev_transform/chebyshev_polynomials.png
     :align: center
@@ -57,7 +57,7 @@ The nodes are plotted above along with the corresponding polynomials. Note that 
 
 The Chebyshev polynomials have a lot of *nice* properties. Because they are complete, any function :math:`f(x)` on the interval :math:`x\in [-1,1]` can be expanded in :math:`T_n(x)` up to order :math`N` as :math:`f(x) = \sum_{j=0}^N a_j T_j(x)`. \
 To do this process numerically for a discrete set of sampling points would take :math:`\mathcal{O}(N^2)` operations for a general set of complete functions \emoji{snail}. 
-However, because of the way the Chebyshev polynomials are defined in terms of cosine, the `discrete Chebyshev transformation (DChT) <https://en.wikipedia.org/wiki/Discrete_Chebyshev_transform>`_ can be related to the `discrete cosine transform (DCT) <https://en.wikipedia.org/wiki/Discrete_cosine_transform>`_ to leverage the efficiency of the `fast-Fourier-transform <https://en.wikipedia.org/wiki/Fast_Fourier_transform>`_-style algorithms, which take :math:`\mathcal{O}(N \log N)` operations \emoji{rocket}.
+However, because of the way the Chebyshev polynomials are defined in terms of cosine, the `discrete Chebyshev transformation (DChT) <https://en.wikipedia.org/wiki/Discrete_Chebyshev_transform>`__ can be related to the `discrete cosine transform (DCT) <https://en.wikipedia.org/wiki/Discrete_cosine_transform>`__ to leverage the efficiency of the `fast-Fourier-transform <https://en.wikipedia.org/wiki/Fast_Fourier_transform>`__-style algorithms, which take :math:`\mathcal{O}(N \log N)` operations \emoji{rocket}.
 
 The DChT is sampled on the nodes of :math:`T_N(x)`, which are non-equidistant on the :math:`[-1,1]` interval. 
 This non-uniform sampling has more resolution at the boundary, but less in the middle. This can be a benefit if you are, for example, solving a differential equation and expect more interesting features at the boundary, so the extra resolution there is useful. 
@@ -95,7 +95,7 @@ An ancilla qubit is required, which will be the :math:`0` indexed qubit, and the
     :target: javascript:void(0)
 
 The intuition for the structure of the above circuit comes from the link between the DChT and the DCT. 
-Notice the use of the `quantum Fourier transform (QFT) <https://pennylane.ai/qml/demos/tutorial_qft/>`_ applied on all qubits. 
+Notice the use of the `quantum Fourier transform (QFT) <https://pennylane.ai/qml/demos/tutorial_qft/>`__ applied on all qubits. 
 The QChT is an extended QFT circuit with some added interference and mixing of the elements.
 
 Let's break down the circuit above into pieces that we will use inside our circuit function. 
