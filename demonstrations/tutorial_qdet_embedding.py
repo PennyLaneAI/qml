@@ -45,7 +45,7 @@ powerful method for affordable quantum simulation of materials.
 # from first-principles calculations [].
 #
 # A QDET calculation typically starts by obtaining a meanfield approximation of the whole system
-# using efficient quantum chemistry methods such as density functional theory. These calculations
+# using efficient mean field methods such as density functional theory. These calculations
 # provide a set of orbitals which can be split into impurity and bath orbitals. These orbitals are
 # used to construct the effective Hamiltonian which is finally solved by using either a high level
 # classical method or a quantum algorithm. Let's implement these steps for an example!
