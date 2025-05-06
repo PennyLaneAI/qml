@@ -42,7 +42,7 @@ powerful method for affordable quantum simulation of materials.
 # This Hamiltonian describes a simplified representation of the complex quantum system that is
 # computationally tractable and properly captures the essential physics of the problem. The
 # effective integrals :math:`t, v` are obtained
-# derived from first-principles calculations [].
+# from first-principles calculations [].
 #
 # A QDET calculation typically starts by obtaining a meanfield approximation of the whole system
 # using efficient quantum chemistry methods such as density functional theory. These calculations
