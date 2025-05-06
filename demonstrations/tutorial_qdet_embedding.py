@@ -227,7 +227,7 @@ powerful method for affordable quantum simulation of materials.
 #
 # Conclusion
 # ----------
-# The quantum density embedding theory is a novel framework for simulating strongly correlated
+# The quantum defect embedding theory is a novel framework for simulating strongly correlated
 # quantum systems and has been successfully used for studying defects in solids. Applicability of
 # QDET however is not limited to defects, it can be used for other systems where a strongly
 # correlated subsystem is embedded in a weakly correlated environment. QDET is able to surpass the
