@@ -41,7 +41,7 @@ powerful method for affordable quantum simulation of materials.
 # two-body integrals, respectively, and :math:`ijkl` span over the orbitals inside the impurity.
 # This Hamiltonian describes a simplified representation of the complex quantum system that is
 # computationally tractable and properly captures the essential physics of the problem. The
-# effective integrals :math:`t, v` can be obtained by fitting experimental results or may be
+# effective integrals :math:`t, v` are obtained
 # derived from first-principles calculations [].
 #
 # A QDET calculation typically starts by obtaining a meanfield approximation of the whole system
