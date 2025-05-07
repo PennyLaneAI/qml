@@ -304,7 +304,7 @@ def tau_amplitudes(x, k, N):
 fig, ax = plt.subplots()
 ax.plot(x, probs, "o", label="circuit")
 ax.plot(x, [tau_amplitudes(nodes[j], xs, N) ** 2 for xs in x], label="expectation")
-ax.set(xlabel=r"|k$\rangle$", ylabel="Probability")
+ax.set(xlabel=r"$|k\rangle$", ylabel="Probability")
 ax.legend()
 plt.show()
 
@@ -314,7 +314,7 @@ plt.show()
 #
 # Conclusion
 # ----------
-# In this tutorial, we've gone through how to implement the QChT from a recent paper by Williams *et al.*, and tested the circuit output by looking at the state amplitudes and the orthonormality.
+# In this tutorial, we've gone through how to implement the QChT from the paper by Williams *et al.*, and tested the circuit output by looking at the state amplitudes and the orthonormality.
 # Further work could test the phase of the output to make sure it matches what we expect the QChT to output.
 # One could also implement the quantum Chebyshev feature map from the same paper, which prepares a state in the Chevyshev space via a parameter :math:`x``.
 #
