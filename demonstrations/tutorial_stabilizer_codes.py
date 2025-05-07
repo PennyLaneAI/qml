@@ -1,17 +1,17 @@
 r"""Stabilizer codes for Quantum Error correction
 =================================================
 
- State-of-the-art quantum devices, such as IBM's Condor and Atom Computing's optical lattices, contain more than 
- a thousand qubits. Does this qubit count suffice for valuable quantum algorithms with clear speedups?
- The reality is that there is more to the story than the sheer number of qubits. As we currently stand, quantum
- devices are still prone to errors that increase with device size. For this reason, **quantum error correction**--one of the most important domain in the universe of quantum computing-- 
+State-of-the-art quantum devices, such as IBM's Condor and Atom Computing's optical lattices, contain more than 
+a thousand qubits. Does this qubit count suffice for valuable quantum algorithms with clear speedups?
+The reality is that there is more to the story than the sheer number of qubits. As we currently stand, quantum
+devices are still prone to errors that increase with device size. For this reason, **quantum error correction**--one of the most important domain in the universe of quantum computing-- 
 has been gaining traction. 
 
 Quantum error correction is done via schemes known as **error correction codes.**
 These are quantum algorithms that come in many varieties and address different error types .
 Is there a unified way to understand these codes? Indeed, The **stabilizer formalism** provides such a framework for
 a large class of quantum error correction codes. The so-called
-**stabilizer **, such as the repetition, Shor, Steane, and surface codes, 
+**stabilizer codes**, such as the repetition, Shor, Steane, and surface codes, 
 fall under this formalism. Other codes, like GKP codes used by Xanadu, lie outside of it.
 
 In this demo, we will introduce the stabilizer formalism using bottom-up approach. We construct and
@@ -40,13 +40,13 @@ state qubits :math:`\vert \bar{0}\rangle` and :math:`\vert \bar{1}\rangle` are e
 
 .. math::
 
-    \vert \bar{0} \rangle \mapsto \vert 000 \rangle, \quad \vert \bar{1} \range \mapsto \vert 111 \rangle
+    \vert \bar{0} \rangle \mapsto \vert 000 \rangle, \quad \vert \bar{1} \rangle \mapsto \vert 111 \rangle
 
-A general qubit :math:` \vert \bar{\psi}\rangle = \alpha \vert \bar{0}\rangle` + \beta \vert \bar{1}\rangle` is then encoded as
+A general qubit :math:`\vert \bar{\psi}\rangle = \alpha \vert \bar{0}\rangle + \beta \vert \bar{1}\rangle` is then encoded as
 
 .. math::
 
-    \alpha \vert \bar{0}\rangle` + \beta \vert \bar{1}\rangle \mapsto \alpha \vert 000 \rangle + \beta \vert \bar{111}.
+    \alpha \vert \bar{0}\rangle + \beta \vert \bar{1}\rangle \mapsto \alpha \vert 000 \rangle + \beta \vert \bar{111}\rangle.
 
 This encoding can be done via the following quantum circuit.
 
@@ -81,7 +81,7 @@ print("|000> component: ", encode_qnode(alpha, beta)[0])
 print("|111> component: ", encode_qnode(alpha, beta)[7])
 
 ##########################################################################################
-
+#
 # Now, suppose that a **bit-flip** error occurs on the second qubit, meaning that the qubit is randomly flipped. This can be modelled as
 # an unwanted Pauli-$X$ operator being applied on :math:`\vert \bar{\psi}\rangle:`
 #
@@ -147,7 +147,7 @@ print("Syndrome if error on wire 2: ", syndrome_measurement(2))
 # (i.e., :math:`X^2 = \mathbb{I}`), applying the :mathbb:`X` operator to the erroneous qubit restores the original state, for example,
 # if the syndrome measurement shows the error occurred on the second qubit, we apply 
 #
-# ..math::
+# .. math::
 #    
 #     X_2 (X_2 \vert \bar{\psi}\rangle) = \vert \bar{\psi} \rangle.
 #
