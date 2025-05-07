@@ -133,7 +133,8 @@ def rotate_phases():
 
 #############################################
 # Now a permutation of the qubits is used to reorder them. 
-# This is built using a multicontrolled NOT gate applied to each qubit from the initial state, which is controlled on the ancilla and all qubits with larger index than the target. The multicontrolled NOT gate can be implimented using a multicontrolled Pauli X gate. 
+# This is built using a multicontrolled NOT gate applied to each qubit from the initial state, which is controlled on the ancilla and all qubits with larger index than the target. 
+# The multicontrolled NOT gate can be implimented using a multicontrolled Pauli X gate. 
 # Let's see what that looks like.
 
 def permute_elements():
@@ -147,7 +148,7 @@ def permute_elements():
 # After the permutation is another CNOT ladder, which we already have a function for.
 #   
 # The last part is a phase adjustment of the ancilla qubit: a phase shift of :math:`-\pi/2`, followed by a rotation in :math:`Y` by :math:`\pi/2` and a multicontrolled :math:`X` rotation by :math:`\pi/2`. 
-# All of the other qubits control the :math:`X` rotation, but the control is sandwiched by Pauli :math:`X` operators. We can impliment the multicontrolled :math:`X` rotation using :class:`qml.ControlledQubitUnitary`.
+# All of the other qubits control the :math:`X` rotation, but the control is sandwiched by Pauli :math:`X` operators. We can impliment the multicontrolled :math:`X` rotation using the function ``qml.ctrl`` on ``qml.RX``, specifying the target wire in ``qml.RX``, and the control wires as the second argument of ``qml.ctrl``.
 
 def adjust_phases():
     """adjusts the phase of the ancilla qubit"""
@@ -157,7 +158,7 @@ def adjust_phases():
     for wire in range(1, N+1):
         qml.PauliX(wires=wire)
     # controlled RX gate
-    qml.ControlledQubitUnitary(qml.RX(pi/2, wires=0), range(1, N+1))
+    qml.ctrl(qml.RX(pi/2, wires=0), range(1, N+1))
     # second Pauli Xs
     for wire in range(1, N+1):
         qml.PauliX(wires=wire)
@@ -202,7 +203,7 @@ state = total_state[:2**N]*np.sqrt(2)
 def ch_node(j, N):
     return np.cos(pi*(2*j+1)/2**(N+1))
 
-js = list(range(int(len(state)/2)))
+js = list(range(int(len(state))))
 nodes = [ch_node(i, N) for i in js]
 
 # compute overlap with other basis states using np.inner()
