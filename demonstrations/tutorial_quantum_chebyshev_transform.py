@@ -223,11 +223,11 @@ for i in js:
     overlaps.append(np.inner(state, state_i))
 
 #############################################
-# Now we plot the squared overlaps at the nodes computed from the circuit transformation, and compare to the definition, plotting the squared overlaps at all values of :math:`x`.
+# Now we plot the squared overlaps at the nodes computed from the circuit transformation and compare to the definition, plotting the squared overlaps at all values of :math:`x`.
 
 import matplotlib.pyplot as plt
 
-def T_n(x, n):
+def T_n(x, n):   
     """Chebyshev polynomial of order n"""
     return np.cos(n * np.arccos(x))
 
@@ -266,11 +266,11 @@ def circuit(state=None):
 
 probs = circuit(state=j)
 
-# computational basis indeces
+# computational basis indices
 x = range(2**N)
 
 def tau_amplitudes(x, k, N):
-    """computes the expected amplitudes of tau"""
+    """computes the expected amplitud es of tau"""
     if k == 0: 
         prefactor = 1/2**(N/2)
     else: 
