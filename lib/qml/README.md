@@ -1,3 +1,5 @@
+# EXPERIMENTAL QML V2 README
+
 <p align="center">
   <a href="https://pennylane.ai/qml">
     <img width=60% src="https://raw.githubusercontent.com/PennyLaneAI/qml/master/_static/readme_header.png">
@@ -175,50 +177,6 @@ on dependency specifications.
 
 Dependencies are automatically installed when executing demos. A `requirements.txt` file
 will be created in the `demo` directory after the build.
-
-The `master` branch of QML uses the latest stable release of PennyLane, whereas the `dev` branch uses the most 
-up-to-date version from the GitHub repository. If your demo relies on that, install the `dev` dependencies instead
-by upgrading all PennyLane and its various plugins to the latest commit from GitHub.
-```bash
-# Run this instead of running the command above
-make environment UPGRADE_PL=true
-```
-
-#### Installing only the dependencies to build the website without executing demos
-It is possible to build the website without executing any of the demo code using `make html-norun` (More details below).
-
-To install only the base dependencies without the executable dependencies, use:
-```bash
-make environment BASE_ONLY=true
-```
-(This is the equivalent to the previous method of `pip install -r requirements_norun.txt`).
-
-### Adding / Editing dependencies
-
-All dependencies need to be added to the pyproject.toml. It is recommended that unless necessary, 
-all dependencies be pinned to as tight of a version as possible.
-
-Add the new dependency in the `[tool.poetry.group.executable-dependencies.dependencies]` section of the toml file.
-
-Once pyproject.toml files have been updated, the poetry.lock file needs to be refreshed:
-```bash
-poetry lock
-```
-This command will ensure that there are no dependency conflicts with any other package, and everything works.
-
-If the dependency change is required in prod, open the PR against `master`, or if it's only required in dev, then open
-the PR against the `dev` branch, which will be synced to master on the next release of PennyLane.
-
-#### Adding / Editing PennyLane (or plugin) versions
-This process is slightly different from other packages. It is due to the fact that the `master` builds use the stable
-releases of PennyLane as stated in the pyproject.toml file. However, for dev builds, we use the latest commit from 
-GitHub.
-
-##### Adding a new PennyLane package (plugin)
-- Add the package to `pyproject.toml` file with the other pennylane packages and pin it to the latest stable release.
-- Add the GitHub installation link to the Makefile, so it is upgraded for dev builds with the other PennyLane packages.
-    - This should be under the format `$$PYTHON_VENV_PATH/bin/python -m pip install --upgrade git+https://github.com/PennyLaneAI/<repo>.git#egg=<repo>;\`
-- Refresh the poetry lock file by running `poetry lock`
 
 ## Building
 

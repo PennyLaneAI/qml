@@ -67,22 +67,12 @@ jobs:
           echo "pr_ref_name=$(cat pr_ref_name.txt)" >> $GITHUB_OUTPUT
           echo "updated_demos=$(cat updated_demos.json)" >> $GITHUB_OUTPUT
           echo "deleted_demos=$(cat deleted_demos.json)" >> $GITHUB_OUTPUT
-
-      - name: Set job outputs
-        if: github.event.workflow_run.event == 'pull_request' && steps.build_context.outputs.result != ''
-        id: set_job_outputs
-        run: |
-          echo "pr_id=${{ steps.pr_info.outputs.pr_id }}" >> $GITHUB_OUTPUT
-          echo "pr_ref=${{ steps.pr_info.outputs.pr_ref }}" >> $GITHUB_OUTPUT
-          echo "pr_ref_name=${{ steps.pr_info.outputs.pr_ref_name }}" >> $GITHUB_OUTPUT
-          echo "updated_demos=${{ steps.pr_info.outputs.updated_demos }}" >> $GITHUB_OUTPUT
-          echo "deleted_demos=${{ steps.pr_info.outputs.deleted_demos }}" >> $GITHUB_OUTPUT
     outputs:
-      pr_id: ${{ steps.set_job_outputs.outputs.pr_id }}
-      pr_ref: ${{ steps.set_job_outputs.outputs.pr_ref }}
-      pr_ref_name: ${{ steps.set_job_outputs.outputs.pr_ref_name }}
-      updated_demos: ${{ steps.set_job_outputs.outputs.updated_demos }}
-      deleted_demos: ${{ steps.set_job_outputs.outputs.deleted_demos }}
+      pr_id: ${{ steps.pr_info.outputs.pr_id }}
+      pr_ref: ${{ steps.pr_info.outputs.pr_ref }}
+      pr_ref_name: ${{ steps.pr_info.outputs.pr_ref_name }}
+      updated_demos: ${{ steps.pr_info.outputs.updated_demos }}
+      deleted_demos: ${{ steps.pr_info.outputs.deleted_demos }}
 
   # Step 2: Deploy the demos to SWC
   deploy-preview-demos:

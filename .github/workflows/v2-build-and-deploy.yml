@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: SWC environment to deploy to
+        description: SWC environment to deploy to.
         options:
           - swc-staging
           - swc-prod
@@ -98,4 +98,4 @@ jobs:
     with:
       environment: ${{ github.event.inputs.environment }}
       artifact-name: build-and-deploy-${{ github.event.inputs.target }}
-      preview: ${{ github.event.inputs.as-previews }}
+      preview: ${{ github.event.inputs.as-previews == 'true' }}
