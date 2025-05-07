@@ -59,26 +59,26 @@ import pennylane as qml
 from pennylane import numpy as np
 
 def encode(alpha, beta):
-  
-  #subcircuit
 
-  qml.StatePrep([alpha, beta], wires = 0)
-  qml.CNOT(wires = [0, 1])
-  qml.CNOT(wires = [0, 2])
+    qml.StatePrep([alpha, beta], wires = 0)
+    qml.CNOT(wires = [0, 1])
+    qml.CNOT(wires = [0, 2])
 
-@qml.qnode(qml.device("default.qubit"))
+
 def encoded_state(alpha, beta):
 
-  encode(alpha, beta)
-  return qml.state()
+    encode(alpha, beta)
+    return qml.state()
+
+encode_qnode = qml.QNode(encoded_state, qml.device("default.qubit"))
 
 alpha = 1 / np.sqrt(2)
 beta = 1 / np.sqrt(2)
 
+encode_qnode = qml.QNode(encoded_state, qml.device("default.qubit"))
 
-print("|000> component: ", encoded_state(alpha, beta)[0])
-print("|111> component: ", encoded_state(alpha, beta)[7])
-
+print("|000> component: ", encode_qnode(alpha, beta)[0])
+print("|111> component: ", encode_qnode(alpha, beta)[7])
 
 ##########################################################################################
 
@@ -114,32 +114,29 @@ print("|111> component: ", encoded_state(alpha, beta)[7])
 #
 # Let us verify this by implementing the syndrome measurement in PennyLane
 #
-def error_detection(error_wire):
+def error_detection():
 
-  # encode
+    qml.CNOT(wires = [0, 3])
+    qml.CNOT(wires = [1, 3])
+    qml.CNOT(wires = [1, 4])
+    qml.CNOT(wires = [2, 4])
 
-  qml.StatePrep([alpha, beta], wires = 0)
-  qml.CNOT(wires = [0, 1])
-  qml.CNOT(wires = [0, 2])
 
-  # error
+@qml.qnode(qml.device("default.qubit", wires = 5, shots = 1)) # A single sample flags error
+def syndrome_measurement(error_wire):
 
-  qml.PauliX(wires = error_wire)
+    encode(alpha, beta)
 
-  # CNOTs and syndrome measurement
+    qml.PauliX(wires = error_wire) # Unwanted Pauli Operator
 
-  qml.CNOT(wires = [0, 3])
-  qml.CNOT(wires = [1, 3])
-  qml.CNOT(wires = [1, 4])
-  qml.CNOT(wires = [2, 4])
+    error_detection()
 
-  return qml.sample(wires = [3,4])
+    return qml.sample(wires = [3,4])
 
-dev = qml.device("default.qubit", wires = 5, shots = 1) # A single sample will flag the error
-error_detection_qnode = qml.QNode(error_detection, dev)
-print("Measurement if error on wire 0: ", error_detection_qnode(0))
-print("Measurement if error on wire 1: ", error_detection_qnode(1))
-print("Measurement if error on wire 2: ", error_detection_qnode(2))
+
+print("Syndrome if error on wire 0: ", syndrome_measurement(0))
+print("Syndrome if error on wire 1: ", syndrome_measurement(1))
+print("Syndrome if error on wire 2: ", syndrome_measurement(2))
 
 ################################################################################################
 #
@@ -159,27 +156,27 @@ print("Measurement if error on wire 2: ", error_detection_qnode(2))
 #
 # We can use PennyLane's mid-circuit measurement features to implement the full three-qubit repetition code.
 
+@qml.qnode(qml.device("default.qubit", wires = 5))
 def error_correction(error_wire):
 
-  qml.StatePrep([alpha, beta], wires = 0)
-  qml.CNOT(wires = [0, 1])
-  qml.CNOT(wires = [0, 2])
+    encode(alpha, beta)
 
-  qml.PauliX(wires = error_wire)
+    qml.PauliX(wires = error_wire)
 
-  qml.CNOT(wires = [0, 3])
-  qml.CNOT(wires = [1, 3])
-  qml.CNOT(wires = [1, 4])
-  qml.CNOT(wires = [2, 4])
+    error_detection()
 
-  m3 = qml.measure(3)
-  m4 = qml.measure(4)
+    # Mid circuit measurements
 
-  qml.cond(m3 & ~m4 , qml.PauliX)(wires = 0)
-  qml.cond(m3 & m4, qml.PauliX)(wires = 1)
-  qml.cond(~m3 & m4, qml.PauliX)(wires = 2)
+    m3 = qml.measure(3)
+    m4 = qml.measure(4)
 
-  return qml.density_matrix(wires = [0, 1, 2])
+    # Operations conditional on measurements
+
+    qml.cond(m3 & ~m4 , qml.PauliX)(wires = 0)
+    qml.cond(m3 & m4, qml.PauliX)(wires = 1)
+    qml.cond(~m3 & m4, qml.PauliX)(wires = 2)
+
+    return qml.density_matrix(wires = [0, 1, 2]) # qml.state not supported, but density matrices are
 #############################################################################
 #
 # Unfortunately, circuits with mid-circuit measurements cannot return a quantum state, so return the density matrix instead.
