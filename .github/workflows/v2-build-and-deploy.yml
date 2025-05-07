@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: SWC environment to deploy to
+        description: SWC environment to deploy to.
         options:
           - swc-staging
           - swc-prod
