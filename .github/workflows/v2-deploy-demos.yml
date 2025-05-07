@@ -21,7 +21,7 @@ on:
         type: environment
         required: true
       artifact-name:
-        description: Name of artifact containing demo builds
+        description: Name of artifact containing demo zip files.
         type: string
       preview:
         description: Whether to deploy demos as preview
@@ -38,7 +38,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.branch }}
           fetch-depth: 1
       
       - name: Configure AWS credentials
@@ -67,4 +66,3 @@ jobs:
           python3 .github/workflows/qml_pipeline_v2/deploy.py \
             --preview ${{ inputs.preview }} \
             _build/pack/*.zip
-
