@@ -143,13 +143,13 @@ def permute_elements():
         qml.MultiControlledX(wires=(*control_wires, wire))
 
 #############################################
-# In the above code, we use \texttt{reversed} to loop over the qubits in reverse order, to apply the controlled gate to the last qubit first. 
+# In the above code, we use ``reversed`` to loop over the qubits in reverse order, to apply the controlled gate to the last qubit first. 
 # After the permutation is another CNOT ladder, which we already have a function for.
 #   
-# The last part is a phase adjustment of the ancilla qubit: a phase shift of $-\pi/2$, followed by a rotation in $Y$ by $\pi/2$ and a multicontrolled $X$ rotation by $\pi/2$. 
-# All of the other qubits control the $X$ rotation, but the control is sandwiched by Pauli $X$ operators. We can impliment the multicontrolled $X$ rotation using \texttt{qml.ControlledQubitUnitary}.
+# The last part is a phase adjustment of the ancilla qubit: a phase shift of :math:`-\pi/2`, followed by a rotation in :math:`Y` by :math:`\pi/2` and a multicontrolled :math:`X` rotation by :math:`\pi/2`. 
+# All of the other qubits control the :math:`X` rotation, but the control is sandwiched by Pauli :math:`X` operators. We can impliment the multicontrolled :math:`X` rotation using :class:`qml.ControlledQubitUnitary`.
 
-def adjust_phase():
+def adjust_phases():
     """adjusts the phase of the ancilla qubit"""
     qml.PhaseShift(-pi/2, wires=0)
     qml.RY(-pi/2, wires=0)
@@ -275,7 +275,7 @@ def tau_amplitudes(x, k, N):
 fig, ax = plt.subplots(figsize=(6,4))
 ax.plot(x, probs, 'o', label='circuit')
 ax.plot(x, [tau_amplitudes(nodes[j], xs, N)**2 for xs in x], label='expectation')
-ax.set(xlabel="|k>", ylabel="Probability")
+ax.set(xlabel=r"|k$\rangle$", ylabel="Probability")
 ax.legend()
 plt.show()
 
