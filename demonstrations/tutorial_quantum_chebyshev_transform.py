@@ -1,20 +1,13 @@
-r"""Intro to the Quantum Chebyshev
+r"""Intro to the Quantum Chebyshev Transform
 =============================================================
 
-This demo is inspired by the paper `"Quantum Chebyshev transform: mapping, embedding, learning and sampling distributions" <https://arxiv.org/abs/2306.17026>`__ wherein the authors describe a workflow for quantum Chebyshev-based model building. 
-They demonstrate the use of the Chebyshev basis space in generative modeling for probability distributions. 
-Crucial to their implementation of learning models in Chebyshev space is the quantum Chebyshev transform (QChT), which is used to swap between the computational basis and the Chebyshev basis. 
+This demo is inspired by the paper `"Quantum Chebyshev transform: mapping, embedding, learning and sampling distributions" <https://arxiv.org/abs/2306.17026>`__ [#williams2023]_ wherein the authors describe a workflow for quantum Chebyshev-based model building. 
+They demonstrate the use of the Chebyshev basis space in generative modeling for probability distributions. A proposed protocol for learning and sampling multivariate probability distributions that arise in high-energy physics also makes use of the Chebyshev basis [#delejarza2025]_.
+Crucial to the implementation of learning models in Chebyshev space is the quantum Chebyshev transform (QChT), which is used to swap between the computational basis and the Chebyshev basis. 
 
 We will start by discussing Chebyshev polynomials and why you may want to work in Chebyshev space. Then we will show how the QChT can be implemented in PennyLane. 
 
 
-.. figure:: ../_static/demonstration_assets/qft/socialthumbnail_large_QFT_2024-04-04.png
-    :align: center
-    :width: 60%
-    :target: javascript:void(0)
-
-
-    
 What are Chebyshev polynomials?
 ---------------------------------------
 
@@ -70,7 +63,7 @@ In general, working in the Chebyshev basis can have advantages over the Fourier 
 
 Quantum Chebyshev basis
 ---------------------------------------
-The quantum Chebyshev transform (QChT) circuit described in Ref. [#williams2023]_ maps :math:`2^N` computational states :math:`\{|x_j\rangle\}_{j=0}^{2^N-1}` to Chebyshev states :math:`\{|\tau\rangle(x_j^\mathrm{Ch})}\}_{j=0}^{2^N-1}` which have amplitudes given by the Chebyshev polynomials of the first kind. 
+The quantum Chebyshev transform (QChT) circuit described in Ref. [#williams2023]_ maps :math:`2^N` computational states :math:`\{|x_j\rangle\}_{j=0}^{2^N-1}` to Chebyshev states :math:`\{|\tau\rangle(x_j^\mathrm{Ch})\}_{j=0}^{2^N-1}` which have amplitudes given by the Chebyshev polynomials of the first kind. 
 
 .. math::
   |\tau(x)\rangle = \frac1{2^{N/2}}T_0(x)|0\rangle + \frac1{2^{(N-1)/2}}\sum_{k=1}^{2^N-1}T_k(x)|k\rangle
@@ -95,7 +88,7 @@ An ancilla qubit is required, which will be the :math:`0` indexed qubit, and the
 
 .. figure:: ../_static/demonstration_assets/quantum_chebyshev_transform/qcht_diagram_4qubits.png
     :align: center
-    :width: 60%
+    :width: 100%
     :target: javascript:void(0)
 
 The intuition for the structure of the above circuit comes from the link between the DChT and the DCT. 
@@ -138,7 +131,7 @@ def rotate_phases():
 #############################################
 # Now a permutation of the qubits is used to reorder them. 
 # This is built using a multicontrolled NOT gate applied to each qubit from the initial state, which is controlled on the ancilla and all qubits with larger index than the target. 
-# The multicontrolled NOT gate can be implimented using a multicontrolled Pauli X gate. 
+# The multicontrolled NOT gate can be implemented using a multicontrolled Pauli X gate. 
 # Let's see what that looks like.
 
 def permute_elements():
@@ -153,7 +146,7 @@ def permute_elements():
 #   
 # The last part is a phase adjustment of the ancilla qubit: a phase shift of :math:`-\pi/2`, followed by a rotation in :math:`Y` by :math:`\pi/2` and a multicontrolled :math:`X` rotation by :math:`\pi/2`. 
 # All of the other qubits control the :math:`X` rotation, but the control is sandwiched by Pauli :math:`X` operators. 
-# We can impliment the multicontrolled :math:`X` rotation using the function ``qml.ctrl`` on ``qml.RX``, specifying the target wire in ``qml.RX``, and the control wires as the second argument of ``qml.ctrl``.
+# We can implement the multicontrolled :math:`X` rotation by using the function ``qml.ctrl`` on ``qml.RX``, specifying the target wire in ``qml.RX`` and the control wires as the second argument of ``qml.ctrl``.
 
 def adjust_phases():
     """adjusts the phase of the ancilla qubit"""
@@ -183,23 +176,35 @@ def QChT():
 
 dev = qml.device("default.qubit")
 @qml.qnode(dev)
-def circuit(state=None):
+def circuit(state=0):
     qml.BasisState(state=state, wires=range(1,N+1))
     QChT()
     return qml.state()
 
 #############################################
+# Finally, we can reproduce the circuit diagram shown at the beginning of this section using ``qml.draw_mpl``.
+
+def circuit_to_draw():
+    qml.BasisState(state=0, wires=range(1,N+1))
+    QChT()
+
+fig, ax = qml.draw_mpl(circuit_to_draw, decimals=2, style='pennylane')()
+fig.show()
+
+#############################################
+# Note the new function is defined only to remove the returned ``qml.state``, simplifying the circuit drawn. 
+
+#############################################
 # Testing the QChT
 # ----------------
 # With our QChT circuit, let's see if the orthonormality described earlier holds. 
-# To do this, we'll use the computational state :math:`|7\rangle`, which will transform into :math:`|{\tau(x_7^\mathrm{Ch})\rangle`.
+# To do this, we'll use the computational state :math:`|7\rangle`, which will transform into :math:`|\tau(x_7^\mathrm{Ch})\rangle`.
 # Then, we will compute the overlap at the nodes with all other :math:`|\tau(x_j^\mathrm{Ch})\rangle`.
-
 
 j = 7  # initial state in computational basis
 
 # compute state after transform
-total_state = circuit(state=j)#[:2**N]
+total_state = circuit(state=j)
 
 # reduce state size, effectively removing the ancilla
 state = total_state[:2**N]*np.sqrt(2)
@@ -219,7 +224,6 @@ for i in js:
 
 #############################################
 # Now we plot the squared overlaps at the nodes computed from the circuit transformation, and compare to the definition, plotting the squared overlaps at all values of :math:`x`.
-#
 
 import matplotlib.pyplot as plt
 
@@ -261,8 +265,6 @@ def circuit(state=None):
     return qml.probs(wires=range(1,N+1))
 
 probs = circuit(state=j)
-fig = plt.figure(figsize=(8,4))
-qml.draw_mpl(circuit, decimals=2, style='pennylane', fontsize='x-small', fig=fig)(state=j)
 
 # computational basis indeces
 x = range(2**N)
@@ -298,9 +300,11 @@ plt.show()
 #
 # .. [#williams2023]
 #
-#     Chelsea A. Williams, Annie E. Paine, Hsin-Yu Wu, Vincent E. Elfving and Oleksandr Kyriienk. "Quantum Chebyshev 
-#     transform: mapping, embedding, learning and sampling distributions." `arxiv:2306.17026
-#     <https://arxiv.org/abs/2306.17026>`__ (2023).
+#   Chelsea A. Williams, Annie E. Paine, Hsin-Yu Wu, Vincent E. Elfving and Oleksandr Kyriienk. "Quantum Chebyshev transform: mapping, embedding, learning and sampling distributions." `arxiv:2306.17026 <https://arxiv.org/abs/2306.17026>`__ (2023).
+#
+# .. [#delejarza2025]
+#
+#   Jorge J. Martínez de Lejarza, Hsin-Yu Wu, Oleksandr Kyriienko, Germán Rodrigo, Michele Grossi. "Quantum Chebyshev probabilistic models for fragmentation functions." `arxiv:2503.16073 <https://arxiv.org/abs/2503.16073>`__ (2025).
 #
 # About the author
 # ----------------
