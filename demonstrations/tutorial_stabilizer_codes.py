@@ -55,6 +55,9 @@ This encoding can be done via the following quantum circuit.
 Let's code this below and verify the output
 """
 
+import pennylane as qml
+from pennylane import numpy as np
+
 def encode(alpha, beta):
   
   #subcircuit
