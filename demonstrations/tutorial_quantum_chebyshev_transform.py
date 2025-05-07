@@ -2,7 +2,8 @@ r"""Intro to the Quantum Chebyshev
 =============================================================
 
 This demo is inspired by the paper `"Quantum Chebyshev transform: mapping, embedding, learning and sampling distributions" <https://arxiv.org/abs/2306.17026>`__ wherein the authors describe a workflow for quantum Chebyshev-based model building. 
-They demonstrate the use of the Chebyshev basis space in generative modeling for probability distributions. Crucial to their implementation of learning models in Chebyshev space is the quantum Chebyshev transform (QChT), which is used to swap between the computational basis and the Chebyshev basis. 
+They demonstrate the use of the Chebyshev basis space in generative modeling for probability distributions. 
+Crucial to their implementation of learning models in Chebyshev space is the quantum Chebyshev transform (QChT), which is used to swap between the computational basis and the Chebyshev basis. 
 
 We will start by discussing Chebyshev polynomials and why you may want to work in Chebyshev space. Then we will show how the QChT can be implemented in PennyLane. 
 
@@ -13,6 +14,7 @@ We will start by discussing Chebyshev polynomials and why you may want to work i
     :target: javascript:void(0)
 
 
+    
 What are Chebyshev polynomials?
 ---------------------------------------
 
@@ -32,7 +34,8 @@ where :math:`n` is the order of the polynomial. We can write out the first few o
   &\ \,\vdots \\
   T_{n+1}(x) &= 2xT_n(x) - T_{n-1}(x)
 
-The recursion relation in the last line can be used to compute the next orders. Observe that odd and even order :math:`T_n` are odd and even functions, respectively. 
+The recursion relation in the last line can be used to compute the next orders. 
+Observe that odd and even order :math:`T_n` are odd and even functions, respectively. 
 The roots of the :math:`T_n(x)` occur at the values 
 
 .. math::
@@ -55,41 +58,42 @@ The nodes are plotted above along with the corresponding polynomials. Note that 
       N/2 & k = \ell \neq 0
     \end{cases}
 
-The Chebyshev polynomials have a lot of *nice* properties. Because they are complete, any function :math:`f(x)` on the interval :math:`x\in [-1,1]` can be expanded in :math:`T_n(x)` up to order :math`N` as :math:`f(x) = \sum_{j=0}^N a_j T_j(x)`. \
-To do this process numerically for a discrete set of sampling points would take :math:`\mathcal{O}(N^2)` operations for a general set of complete functions \emoji{snail}. 
-However, because of the way the Chebyshev polynomials are defined in terms of cosine, the `discrete Chebyshev transformation (DChT) <https://en.wikipedia.org/wiki/Discrete_Chebyshev_transform>`__ can be related to the `discrete cosine transform (DCT) <https://en.wikipedia.org/wiki/Discrete_cosine_transform>`__ to leverage the efficiency of the `fast-Fourier-transform <https://en.wikipedia.org/wiki/Fast_Fourier_transform>`__-style algorithms, which take :math:`\mathcal{O}(N \log N)` operations \emoji{rocket}.
+The Chebyshev polynomials have a lot of *nice* properties. Because they are complete, any function :math:`f(x)` on the interval :math:`x\in [-1,1]` can be expanded in :math:`T_n(x)` up to order :math:`N` as :math:`f(x) = \sum_{j=0}^N a_j T_j(x)`. \
+To do this process numerically for a discrete set of sampling points would take :math:`\mathcal{O}(N^2)` operations for a general set of complete functions 🐌. 
+However, because of the way the Chebyshev polynomials are defined in terms of cosine, the `discrete Chebyshev transformation (DChT) <https://en.wikipedia.org/wiki/Discrete_Chebyshev_transform>`__ can be related to the `discrete cosine transform (DCT) <https://en.wikipedia.org/wiki/Discrete_cosine_transform>`__ to leverage the efficiency of the `fast-Fourier-transform <https://en.wikipedia.org/wiki/Fast_Fourier_transform>`__-style algorithms, which take :math:`\mathcal{O}(N \log N)` operations 🚀.
 
 The DChT is sampled on the nodes of :math:`T_N(x)`, which are non-equidistant on the :math:`[-1,1]` interval. 
-This non-uniform sampling has more resolution at the boundary, but less in the middle. This can be a benefit if you are, for example, solving a differential equation and expect more interesting features at the boundary, so the extra resolution there is useful. 
+This non-uniform sampling has more resolution at the boundary, but less in the middle. 
+This can be a benefit if you are, for example, solving a differential equation and expect more interesting features at the boundary, so the extra resolution there is useful. 
 In general, working in the Chebyshev basis can have advantages over the Fourier basis for polynomial decomposition.
 
 
 Quantum Chebyshev basis
 ---------------------------------------
-The quantum Chebyshev transform (QChT) circuit described in Ref. [#williams2023]_ maps :math:`2^N` computational states :math:`\{\ket{x_j}\}_{j=0}^{2^N-1}` to Chebyshev states :math:`\{\ket{\tau(x_j^\mathrm{Ch})}\}_{j=0}^{2^N-1}` which have amplitudes given by the Chebyshev polynomials of the first kind. 
+The quantum Chebyshev transform (QChT) circuit described in Ref. [#williams2023]_ maps :math:`2^N` computational states :math:`\{|x_j\rangle\}_{j=0}^{2^N-1}` to Chebyshev states :math:`\{|\tau\rangle(x_j^\mathrm{Ch})}\}_{j=0}^{2^N-1}` which have amplitudes given by the Chebyshev polynomials of the first kind. 
 
 .. math::
-  \ket{\tau(x)} = \frac1{2^{N/2}}T_0(x)\ket{0} + \frac1{2^{(N-1)/2}}\sum_{k=1}^{2^N-1}T_k(x)\ket{k}
+  |\tau(x)\rangle = \frac1{2^{N/2}}T_0(x)|0\rangle + \frac1{2^{(N-1)/2}}\sum_{k=1}^{2^N-1}T_k(x)|k\rangle
 
-where :math:`\ket{k}` are the computational basis states and :math:`N` is the number of qubits. These states are orthonormal at the Chebyshev nodes due to the orthogonality condition, that is
+where :math:`|k\rangle` are the computational basis states and :math:`N` is the number of qubits. These states are orthonormal at the Chebyshev nodes due to the orthogonality condition, that is
 
 .. math::
-  \braket{\tau(x_j^\mathrm{Ch}}{\tau(x_{j'}^\mathrm{Ch})} = \delta_{j, j'}
+  \langle\tau(x_j^\mathrm{Ch})|\tau(x_{j'}^\mathrm{Ch})\rangle = \delta_{j, j'}
 
 The squared overlap if one of the variables is not at a node can be derived analytically as
 
 .. math:: 
-  \abs{\braket{\tau(x_j^\mathrm{Ch})}{\tau(x)}}^2 = \frac{\left(T_{2^N+1}(x_j^\mathrm{Ch})T_{2^N}(x)-T_{2^N}(x_j^\mathrm{Ch})T_{2^N+1}(x)\right)^2}{2^{2N}(x_j^\mathrm{Ch}-x)^2}
+  |\langle\tau(x_j^\mathrm{Ch})|\tau(x)\rangle|^2 = \frac{\left(T_{2^N+1}(x_j^\mathrm{Ch})T_{2^N}(x)-T_{2^N}(x_j^\mathrm{Ch})T_{2^N+1}(x)\right)^2}{2^{2N}(x_j^\mathrm{Ch}-x)^2}
 
-The goal is to design a circuit that applies the operation :math:`\mathcal{U}_\mathrm{QChT} = \sum_{j=0}^{2^N-1} \ket{\tau(x_j^\mathrm{Ch})}\bra{x_j}`.
+The goal is to design a circuit that applies the operation :math:`\mathcal{U}_\mathrm{QChT} = \sum_{j=0}^{2^N-1} |\tau(x_j^\mathrm{Ch})\rangle\langle x_j|`.
 
 
 Designing the transform circuit
 ---------------------------------------
 Let's start from the end and look at the circuit diagram generated from the code we want to write. 
-An ancilla qubit is required, which will be the :math:`0` indexed qubit, and the rest compose the state :math:`\ket{x}` which starts in the computational basis, shown below as :math:`\ket{\psi}`. We demonstrate for :math:`N=4` non-ancilla qubits.
+An ancilla qubit is required, which will be the :math:`0` indexed qubit, and the rest compose the state :math:`|x\rangle` which starts in the computational basis, shown below as :math:`|\psi\rangle`. We demonstrate for :math:`N=4` non-ancilla qubits.
 
-.. figure:: ../_static/demonstration_assets/quantum_chebyshev_transform/QChT_diagram_4qubits.png
+.. figure:: ../_static/demonstration_assets/quantum_chebyshev_transform/qcht_diagram_4qubits.png
     :align: center
     :width: 60%
     :target: javascript:void(0)
@@ -115,7 +119,7 @@ def CNOT_ladder():
 
 #############################################
 # After the initial CNOT ladder comes an :math:`N+1` QFT circuit, which can be implemented using ``qml.QFT``. 
-
+#
 # Next are phase rotations and shifts. 
 # In particular, there is a phase shift on the ancilla by :math:`-\pi/2^{(N+1)}` followed by a :math:`Z` rotation of :math:`-\pi(2^N - 1)/2^{N+1}`. 
 # The other other qubits are rotated in :math:`Z` by :math:`\pi/2^{(j+1)}`, where :math:`j` is the index of the qubit as labelled in the circuit diagram.
@@ -148,7 +152,8 @@ def permute_elements():
 # After the permutation is another CNOT ladder, which we already have a function for.
 #   
 # The last part is a phase adjustment of the ancilla qubit: a phase shift of :math:`-\pi/2`, followed by a rotation in :math:`Y` by :math:`\pi/2` and a multicontrolled :math:`X` rotation by :math:`\pi/2`. 
-# All of the other qubits control the :math:`X` rotation, but the control is sandwiched by Pauli :math:`X` operators. We can impliment the multicontrolled :math:`X` rotation using the function ``qml.ctrl`` on ``qml.RX``, specifying the target wire in ``qml.RX``, and the control wires as the second argument of ``qml.ctrl``.
+# All of the other qubits control the :math:`X` rotation, but the control is sandwiched by Pauli :math:`X` operators. 
+# We can impliment the multicontrolled :math:`X` rotation using the function ``qml.ctrl`` on ``qml.RX``, specifying the target wire in ``qml.RX``, and the control wires as the second argument of ``qml.ctrl``.
 
 def adjust_phases():
     """adjusts the phase of the ancilla qubit"""
@@ -187,8 +192,8 @@ def circuit(state=None):
 # Testing the QChT
 # ----------------
 # With our QChT circuit, let's see if the orthonormality described earlier holds. 
-# To do this, we'll use the computational state :math:`\ket{7}`, which will transform into :math:`\ket{\tau(x_7^\mathrm{Ch})}`.
-# Then, we will compute the overlap at the nodes with all other :math:`\ket{\tau(x_j^\mathrm{Ch})}`.
+# To do this, we'll use the computational state :math:`|7\rangle`, which will transform into :math:`|{\tau(x_7^\mathrm{Ch})\rangle`.
+# Then, we will compute the overlap at the nodes with all other :math:`|\tau(x_j^\mathrm{Ch})\rangle`.
 
 
 j = 7  # initial state in computational basis
@@ -244,11 +249,6 @@ plt.show()
 
 
 #############################################
-# .. figure:: ../_static/demonstration_assets/quantum_chebyshev_transform/squared_overlap.png
-#   :align: center
-#   :width: 60%
-#   :target: javascript:void(0)
-#
 # Almost orthonormal. We note that the amplitude at the corresponding node approaches :math:`1` if the number of qubits is increased.
 # 
 # Let's also see if the amplitudes of the state in the computational basis agree with expectation. 
@@ -261,6 +261,8 @@ def circuit(state=None):
     return qml.probs(wires=range(1,N+1))
 
 probs = circuit(state=j)
+fig = plt.figure(figsize=(8,4))
+qml.draw_mpl(circuit, decimals=2, style='pennylane', fontsize='x-small', fig=fig)(state=j)
 
 # computational basis indeces
 x = range(2**N)
@@ -281,18 +283,14 @@ ax.legend()
 plt.show()
 
 #############################################
-# .. figure:: ../_static/demonstration_assets/quantum_chebyshev_transform/amplitudes.png
-#   :align: center
-#   :width: 60%
-#   :target: javascript:void(0)
-#
 # The circuit output probabilities are exactly what we want.
 #
 #
 # Conclusion
 # ----------
 # In this tutorial, we've gone through how to implement the QChT from a recent paper by Williams *et al.*, and tested the circuit output by looking at the state amplitudes and the orthonormality. 
-# Further work could test the phase of the output to make sure it matches what we expect the QChT to output. One could also implement the quantum Chebyshev feature map from the same paper, which prepares a state in the Chevyshev space via a parameter :math:`x``.
+# Further work could test the phase of the output to make sure it matches what we expect the QChT to output. 
+# One could also implement the quantum Chebyshev feature map from the same paper, which prepares a state in the Chevyshev space via a parameter :math:`x``.
 #
 #
 # References
