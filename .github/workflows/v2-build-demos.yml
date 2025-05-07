@@ -16,7 +16,7 @@ on:
         type: string
         default: ''
       dev:
-        description: Use development dependencies
+        description: Use development dependencies.
         required: false
         type: boolean
         default: false
