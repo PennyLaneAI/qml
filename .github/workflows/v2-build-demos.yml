@@ -31,17 +31,17 @@ on:
         type: string
         default: ''
       keep-going:
-        description: Keep going if a demo fails to build
+        description: Keep going if a demo fails to build.
         required: false
         type: boolean
         default: false
       quiet:
-        description: Suppress output from the build process
+        description: Suppress output from the build process.
         required: false
         type: boolean
         default: false
       batch_size:
-        description: Number of demos to build per job
+        description: Number of demos to build per job.
         type: number
         default: 10
     outputs:
@@ -62,7 +62,7 @@ on:
         type: string
         default: ''
       dev:
-          description: Use development dependencies
+          description: Use development dependencies.
           required: false
           type: boolean
           default: false
@@ -72,17 +72,17 @@ on:
         type: boolean
         default: true
       artifact-name:
-        description: Name of the build artifact (defaults to demo-build-{ref})
+        description: Name of the build artifact (defaults to demo-build-{ref}).
         required: false
         type: string
         default: ''
       keep-going:
-        description: Keep going if a demo fails to build
+        description: Keep going if a demo fails to build.
         required: false
         type: boolean
         default: false
       quiet:
-        description: Suppress output from the build process
+        description: Suppress output from the build process.
         required: false
         type: boolean
         default: false

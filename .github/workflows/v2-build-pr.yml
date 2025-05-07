@@ -2,8 +2,7 @@ name: V2 Build PR
 
 on:
   pull_request:
-    # remove v2 after testing
-    branches: [master, dev, v2]
+    branches: [master, dev]
 
 permissions:
   contents: read
