@@ -258,7 +258,7 @@ def overlap_sq(x, xp, N):
 
 
 plt.style.use("pennylane.drawer.plot")
-fig, ax = plt.subplots(figsize=(6, 4))
+fig, ax = plt.subplots()
 ax.set(xlabel="x", ylabel="Squared Overlap")
 
 # plot squared overlaps computed in circuit
@@ -301,7 +301,7 @@ def tau_amplitudes(x, k, N):
     return prefactor * np.cos(k * np.arccos(x))
 
 
-fig, ax = plt.subplots(figsize=(6, 4))
+fig, ax = plt.subplots()
 ax.plot(x, probs, "o", label="circuit")
 ax.plot(x, [tau_amplitudes(nodes[j], xs, N) ** 2 for xs in x], label="expectation")
 ax.set(xlabel=r"|k$\rangle$", ylabel="Probability")
