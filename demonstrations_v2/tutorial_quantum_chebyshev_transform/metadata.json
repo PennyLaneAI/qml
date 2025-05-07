@@ -12,7 +12,12 @@
         "Quantum Machine Learning"
     ],
     "tags": [],
-    "previewImages": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_quantum_chebyshev_transform.png"
+        }
+    ],
     "seoDescription": "Implement the Quantum Chebyshev Transform in PennyLane.",
     "doi": "",
     "references": [
