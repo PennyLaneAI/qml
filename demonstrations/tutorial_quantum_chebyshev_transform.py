@@ -208,7 +208,7 @@ fig, ax = qml.draw_mpl(circuit_to_draw, decimals=2, style="pennylane")()
 fig.show()
 
 #############################################
-# Note the new function is defined only to remove the returned ``qml.state``, simplifying the circuit drawn.
+# Note the new function is defined only to remove the returned ``qml.state``, simplifying the drawn circuit.
 
 #############################################
 # Testing the QChT
