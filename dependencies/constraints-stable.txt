@@ -1,9 +1,13 @@
+# Specifies global constraints for the stable build
+--extra-index-url https://download.pytorch.org/whl/cpu
 pennylane==0.41.0
 pennylane-cirq==0.41.0
 pennylane-qiskit==0.41.0
 pennylane-qulacs==0.41.0
 pennylane-catalyst==0.11.0
 pennylane-qrack==0.11.1
+
+chex<1.0.0
 pyqrack==1.32.12
 numpy~=1.24
 matplotlib==3.7.2
@@ -26,12 +30,3 @@ tensorflow==2.14.1
 optax==0.2.3
 quimb==1.8.2
 kahypar==1.1.7
-
-# build dependencies must be compatible with demo dependencies
-sphinx>=5.0.2
-sphinx_gallery==0.17.1
-Jinja2==3.0.3
-markupsafe==2.1.1
-pyyaml~=6.0.1
-pypandoc==1.5
-pennylane-sphinx-theme @ git+https://github.com/PennyLaneAI/pennylane-sphinx-theme.git@sphinx-update
