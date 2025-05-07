@@ -1,0 +1,56 @@
+{
+    "title": "Intro to Quantum Chebyshev Transform",
+    "authors": [
+        {
+            "username": "colinjdale"
+        }
+    ],
+    "dateOfPublication": "2025-05-09T00:00:00+00:00",
+    "dateOfLastModification": "2025-05-07T00:00:00+00:00",
+    "categories": [
+        "Algorithms",
+        "Quantum Machine Learning"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_quantum_chebyshev_transform.png"
+        }
+    ],
+    "seoDescription": "Implement the Quantum Chebyshev Transform in PennyLane.",
+    "doi": "",
+    "references": [
+        {
+            "id": "williams2023",
+            "type": "article",
+            "title": "Quantum Chebyshev transform: mapping, embedding, learning and sampling distributions",
+            "authors": "Chelsea A. Williams, Annie E. Paine, Hsin-Yu Wu, Vincent E. Elfving, Oleksandr Kyriienk",
+            "year": "2023",
+            "journal": "",
+            "url": "https://arxiv.org/abs/2306.17026"
+        },
+        {
+            "id": "delejarza2025",
+            "type": "arcticle",
+            "title":"Quantum Chebyshev Probabilistic Models for Fragmentation Functions", 
+            "authors": "Jorge J. Martínez de Lejarza, Hsin-Yu Wu, Oleksandr Kyriienko, Germán Rodrigo, Michele Grossi",
+            "year": "2025",
+            "url": "https://arxiv.org/abs/2503.16073"
+        }
+    ],
+    "basedOnPapers": ["10.48550/arXiv.2306.17026"],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_qft",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_qcbm",
+            "weight": 1.0
+        }
+    ]
+}
