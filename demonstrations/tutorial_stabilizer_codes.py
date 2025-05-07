@@ -87,7 +87,7 @@ print("|111> component: ", encode_qnode(alpha, beta)[7])
 #
 # .. math::
 #
-#     X_2 \vert \bar{\psi}\rangle = \alpha \vert 010 \range + \beta \vert 101
+#     X_2 \vert \bar{\psi}\rangle = \alpha \vert 010 \rangle + \beta \vert 101
 #
 # If we are sure that **only one bit-flip error occurred**, and since only the superpositions of :math:`\alpha \vert 000 \rangle` and 
 # :math:`\alpha \vert 111 \rangle` are allowed, be can fix this error by flipping the qubit back. The problem here is that, to know that this happened,
@@ -144,7 +144,7 @@ print("Syndrome if error on wire 2: ", syndrome_measurement(2))
 # ~~~~~~~~~~~~~~~~
 #
 # Once a single bit-flip error is detected, correction is straightforward. Since the Pauli-X operator is its own inverse
-# (i.e., :math:`X^2 = \mathbb{I}`), applying the :mathbb:`X` operator to the erroneous qubit restores the original state, for example,
+# (i.e., :math:`X^2 = \mathbb{I}`), applying the :math:`X` operator to the erroneous qubit restores the original state, for example,
 # if the syndrome measurement shows the error occurred on the second qubit, we apply 
 #
 # .. math::
@@ -177,7 +177,8 @@ def error_correction(error_wire):
     qml.cond(~m3 & m4, qml.PauliX)(wires = 2)
 
     return qml.density_matrix(wires = [0, 1, 2]) # qml.state not supported, but density matrices are
-#############################################################################
+
+####################################################################################################
 #
 # Unfortunately, circuits with mid-circuit measurements cannot return a quantum state, so return the density matrix instead.
 # With this result, we can verify that the fidelity of the encoded state is the same as the final state after correction
@@ -193,7 +194,7 @@ print("Fidelity if error on wire 0: ", qml.math.fidelity(encoded_state, error_co
 print("Fidelity if error on wire 1: ", qml.math.fidelity(encoded_state, error_correction_qnode(1)).round(2))
 print("Fidelity if error on wire 2: ", qml.math.fidelity(encoded_state, error_correction_qnode(2)).round(2))
 
-################################################################################
+#############################################################################################################
 #
 # The error is corrected no matter which qubit was flipped!
 #
@@ -207,7 +208,6 @@ print("Fidelity if error on wire 2: ", qml.math.fidelity(encoded_state, error_co
 # complex! To deal with these situations, we resort to a different 
 # representation of error correction codes, known as the operator picture.
 #
-##############################################################################
 # References
 # ----------
 # 
@@ -265,9 +265,7 @@ print("Fidelity if error on wire 2: ", qml.math.fidelity(encoded_state, error_co
 #    U. Schollwöck.  
 #    "The density-matrix renormalization group in the age of matrix product states,"  
 #    `<https://doi.org/10.1016/j.aop.2010.09.012>`__, Annals of Physics, vol. 326, no. 1, pp. 96–192, Jan 2011.
-
-
-
+#
 ##############################################################################
 # About the author
 # ----------------
