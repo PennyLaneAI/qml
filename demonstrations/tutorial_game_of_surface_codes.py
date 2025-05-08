@@ -368,7 +368,7 @@ In this case we require 222 tiles, so :math:`222 \cdot 2 \cdot d^2 \approx 75k` 
 Conclusion
 ----------
 
-We've been introduced to a high-level description that allows us to reason about space-time trade-offs in FTQC architecture designs.
+We've been introduced to a high-level description of quantum computing that allows us to reason about space-time trade-offs in FTQC architecture designs.
 We have seen some basic prototypes that allow computations involving :math:`10^8` T gates in orders of hours using :math:`55k` or :math:`75k` physical qubits.
 With this knowledge, we should be able to follow the more involved tricks discussed in sections 4 and 5 in [#Litinski]_, that we have not covered in this demo yet.
 
