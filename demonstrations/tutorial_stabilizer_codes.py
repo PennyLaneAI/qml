@@ -19,8 +19,12 @@ In this demo, we will introduce the stabilizer formalism using bottom-up approac
 some well-known codes using the quantum circuit formalism and then derive their **stabilizer generators,** from which
 the code can be reconstructed. This enables the construction of a wide range of error correction codes 
 directly from their stabilizer generators. 
+
 """
 
+
+##############################################################################
+#
 # A toy example: the repetition code
 # ----------------------------------
 #
@@ -81,7 +85,7 @@ encode_qnode = qml.QNode(encoded_state, qml.device("default.qubit"))
 print("|000> component: ", encode_qnode(alpha, beta)[0])
 print("|111> component: ", encode_qnode(alpha, beta)[7])
 
-##########################################################################################
+##############################################################################
 #
 # Now, suppose that a **bit-flip** error occurs on the second qubit, meaning that the qubit is randomly flipped. This can be modelled as
 # an unwanted Pauli-$X$ operator being applied on :math:`\vert \bar{\psi}\rangle:`
@@ -139,7 +143,7 @@ print("Syndrome if error on wire 0: ", syndrome_measurement(0))
 print("Syndrome if error on wire 1: ", syndrome_measurement(1))
 print("Syndrome if error on wire 2: ", syndrome_measurement(2))
 
-################################################################################################
+##############################################################################
 #
 # Error Correction
 # ~~~~~~~~~~~~~~~~
@@ -179,7 +183,7 @@ def error_correction(error_wire):
 
     return qml.density_matrix(wires = [0, 1, 2]) # qml.state not supported, but density matrices are
 
-####################################################################################################
+##############################################################################
 #
 # Unfortunately, circuits with mid-circuit measurements cannot return a quantum state, so return the density matrix instead.
 # With this result, we can verify that the fidelity of the encoded state is the same as the final state after correction
@@ -195,7 +199,7 @@ print("Fidelity if error on wire 0: ", qml.math.fidelity(encoded_state, error_co
 print("Fidelity if error on wire 1: ", qml.math.fidelity(encoded_state, error_correction_qnode(1)).round(2))
 print("Fidelity if error on wire 2: ", qml.math.fidelity(encoded_state, error_correction_qnode(2)).round(2))
 
-#############################################################################################################
+##############################################################################
 #
 # The error is corrected no matter which qubit was flipped!
 #
