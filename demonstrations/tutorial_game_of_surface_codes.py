@@ -136,7 +136,11 @@ We are going to see in the next section that one of the biggest problems is perf
 Data blocks design
 ------------------
 
+Computation happens on logical data qubits that are arranged on a so-called data block.
 We now have all the necessary tools to understand different designs and their space-time tradeoffs.
+In particular, the speed of the quantum computer is determined by how fast a magic state can be distilled and consumed by a data block.
+In this section we focus on how the design affects how fast a magic state can be consumed by a block and do not focus on the distillation itself (this will be handled in the next section).
+
 
 Compact data blocks
 ^^^^^^^^^^^^^^^^^^^
