@@ -1,12 +1,14 @@
 import typer
 from qml.context import Context
-from qml.lib import demo, repo
+from qml.lib import demo, repo, cli, fs, template
 import shutil
 import logging
 from typing import Annotated, Optional
 import typing
-from pathlib import Path
-
+import inflection
+import re
+import json
+import rich
 
 logging.basicConfig(level=logging.INFO)
 
@@ -36,10 +38,7 @@ def build(
     keep_going: Annotated[
         bool, typer.Option(help="Continue if sphinx-build fails for a demo")
     ] = False,
-    overrides_file: Annotated[
-        Optional[str],
-        typer.Option(help="Requirements file containing dependency version overrides"),
-    ] = None,
+    dev: Annotated[bool, typer.Option(help="Whether to use dev dependencies")] = False,
 ) -> None:
     """Build the named demos."""
     ctx = Context()
@@ -57,7 +56,73 @@ def build(
         execute=execute,
         quiet=quiet,
         keep_going=keep_going,
-        overrides_file=Path(overrides_file) if overrides_file else None,
+        dev=dev,
+    )
+
+
+@app.command()
+def new():
+    """Create a new demo."""
+    ctx = Context()
+    title: str = typer.prompt("Title")
+    name_default = re.sub(r"\s+", "_", inflection.underscore(title))
+    if not name_default.startswith("tutorial_"):
+        name_default = "tutorial_" + name_default
+
+    while True:
+        name: str = typer.prompt("Name", name_default)
+        if demo.get(ctx.demos_dir, name):
+            print(f"Demo with name '{name}' already exists")
+        else:
+            break
+
+    description = typer.prompt("Description", "")
+
+    author_prompt = "Author's pennylane.ai username"
+    authors: list[str] = []
+    authors.append(typer.prompt(author_prompt))
+
+    while True:
+        if not typer.confirm("Add another author?"):
+            break
+
+        authors.append(typer.prompt(author_prompt))
+
+    small_thumbnail = cli.prompt_path("Thumbnail image")
+    large_thumbnail = cli.prompt_path("Large thumbnail image")
+
+    demo_dir = ctx.demos_dir / name
+    demo_dir.mkdir(exist_ok=True)
+
+    if small_thumbnail:
+        dest = (demo_dir / "thumbnail").with_suffix(small_thumbnail.suffix)
+        fs.copy_parents(small_thumbnail, dest)
+        small_thumbnail = str(dest.relative_to(demo_dir))
+
+    if large_thumbnail:
+        dest = (demo_dir / "large_thumbnail").with_suffix(large_thumbnail.suffix)
+        fs.copy_parents(large_thumbnail, dest)
+        large_thumbnail = str(dest.relative_to(demo_dir))
+
+    with open(demo_dir / "demo.py", "w") as f:
+        f.write(template.demo(title))
+
+    with open(demo_dir / "metadata.json", "w") as f:
+        json.dump(
+            template.metadata(
+                title=title,
+                description=description,
+                authors=authors,
+                thumbnail=small_thumbnail,
+                large_thumbnail=large_thumbnail,
+                categories=[],
+            ),
+            f,
+            indent=2,
+        )
+
+    rich.print(
+        f"Created new demo in [bold]{demo_dir.relative_to(ctx.repo_root)}[/bold]"
     )
 
 
