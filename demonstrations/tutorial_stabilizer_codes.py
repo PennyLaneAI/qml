@@ -37,7 +37,7 @@ directly from their stabilizer generators.
 # - Error correction
 #
 # Qubit encoding
-# ~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~
 #
 # The first step in an error correction code is **encoding** one abstract or **logical qubit** is into a set of many on-device **physical qubits.** 
 #The rationale for doing this is that, if some external factor changes the state of one of the qubits, we will still have an idea
@@ -104,7 +104,7 @@ print("|111> component: ", encode_qnode(alpha, beta)[7])
 #     theorem states it is impossible to make a copy of the state.
 #
 # Error detection
-# ~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~
 #
 # To detect whether a bit-flip error has occurred on one of the physical qubits, we perform a **syndrome measurement.** A syndrome measurement
 # acts on auxiliary qubits to avoid disturbing the encoded logical state. In the case of the three-qubit repetition code, we measure in the computational
@@ -146,7 +146,7 @@ print("Syndrome if error on wire 2: ", syndrome_measurement(2))
 ##############################################################################
 #
 # Error Correction
-# ~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~
 #
 # Once a single bit-flip error is detected, correction is straightforward. Since the Pauli-X operator is its own inverse
 # (i.e., :math:`X^2 = \mathbb{I}`), applying the :math:`X` operator to the erroneous qubit restores the original state, for example,
@@ -214,11 +214,9 @@ print("Fidelity if error on wire 2: ", qml.math.fidelity(encoded_state, error_co
 # representation of error correction codes, known as the operator picture.
 #
 # References
-# ----------
+# -----------
 #
-
-##############################################################################
 # About the author
-# ----------------
+# -----------------
 # 
 # 
