@@ -87,7 +87,7 @@ print("|111> component: ", encode_qnode(alpha, beta)[7])
 #
 # .. math::
 #
-#     X_2 \vert \bar{\psi}\rangle = \alpha \vert 010 \rangle + \beta \vert 101
+#     X_2 \vert \bar{\psi}\rangle = \alpha \vert 010 \rangle + \beta \vert 101 \rangle
 #
 # If we are sure that **only one bit-flip error occurred**, and since only the superpositions of :math:`\alpha \vert 000 \rangle` and 
 # :math:`\alpha \vert 111 \rangle` are allowed, be can fix this error by flipping the qubit back. The problem here is that, to know that this happened,
@@ -113,7 +113,7 @@ print("|111> component: ", encode_qnode(alpha, beta)[7])
 # **INSERT TABLE**
 #
 # Let us verify this by implementing the syndrome measurement in PennyLane
-#
+
 def error_detection():
 
     qml.CNOT(wires = [0, 3])
@@ -210,61 +210,6 @@ print("Fidelity if error on wire 2: ", qml.math.fidelity(encoded_state, error_co
 #
 # References
 # ----------
-# 
-# .. [#Selinger2010]
-#    P. Selinger.
-#    "A Survey of Graphical Languages for Monoidal Categories",
-#    `<http://dx.doi.org/10.1007/978-3-642-12821-9_4>`__, in *New Structures for Physics*, Springer Berlin Heidelberg, pp. 289–355, 2010.
-# 
-# .. [#Arad2010]
-#    I. Arad and Z. Landau.
-#    "Quantum computation and the evaluation of tensor networks",
-#    `<https://arxiv.org/abs/0805.0040>`__, 2010.
-# 
-# .. [#Bridgeman2017]
-#    J. C. Bridgeman and C. T. Chubb.
-#    "Hand-waving and interpretive dance: an introductory course on tensor networks,"
-#    `<http://dx.doi.org/10.1088/1751-8121/aa6dc3>`__, Journal of Physics A: Mathematical and Theoretical, vol. 50, no. 22, 2017.
-# 
-# .. [#Lam1997]
-#    C.-C. Lam, P. Sadayappan, and R. Wenger.
-#    "On Optimizing a Class of Multi-Dimensional Loops with Reduction for Parallel Execution",
-#    `<https://doi.org/10.1142/S0129626497000176>`__, Parallel Processing Letters, Vol. 7, No. 2, pp. 157-168, 1997.
-# 
-# .. [#Gray2021]
-#    J. Gray, S. Kourtis, and S. Choi.
-#    "Hyper-optimized tensor network contraction",
-#    `<https://quantum-journal.org/papers/q-2021-03-15-410/>`__, Quantum, Vol. 5, pp. 410, 2021.
-# 
-# .. [#Bienstock1990]
-#    D. Bienstock.
-#    "On embedding graphs in trees,"
-#    `<https://doi.org/10.1016/0095-8956(90)90066-9>`__, Journal of Combinatorial Theory, Series B, vol. 49, no. 1, pp. 103–136, 1990.
-# 
-# .. [#Pfeifer2014]
-#    R. N. C. Pfeifer, J. Haegeman, and F. Verstraete.
-#    "Faster identification of optimal contraction sequences for tensor networks",
-#    `<http://dx.doi.org/10.1103/PhysRevE.90.033315>`__, Physical Review
-# 
-# .. [#Pirvu2010]
-#    B. Pirvu, V. Murg, J. I. Cirac, and F. Verstraete.
-#    "Matrix product operator representations,"
-#    `<http://dx.doi.org/10.1088/1367-2630/12/2/025012>`__, New Journal of Physics, vol. 12, no. 2, p. 025012, 2010.
-# 
-# .. [#Ferris2012]
-#    A. J. Ferris and G. Vidal.
-#    "Perfect sampling with unitary tensor networks,"
-#    `<http://dx.doi.org/10.1103/PhysRevB.85.165146>`__, Physical Review B, vol. 85, no. 16, 2012.
-# 
-# .. [#Schuch2008]
-#    N. Schuch, M. M. Wolf, F. Verstraete, and J. I. Cirac.  
-#    "Simulation of Quantum Many-Body Systems with Strings of Operators and Monte Carlo Tensor Contractions,"  
-#    `<https://doi.org/10.1103/PhysRevLett.100.040501>`__, Physical Review Letters, vol. 100, no. 4, Jan 2008.
-# 
-# .. [#Schollwoeck2011]
-#    U. Schollwöck.  
-#    "The density-matrix renormalization group in the age of matrix product states,"  
-#    `<https://doi.org/10.1016/j.aop.2010.09.012>`__, Annals of Physics, vol. 326, no. 1, pp. 96–192, Jan 2011.
 #
 ##############################################################################
 # About the author
