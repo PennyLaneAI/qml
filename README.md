@@ -33,18 +33,10 @@ and can be downloaded as Jupyter notebooks and Python scripts.
 You can contribute by submitting a demo via a pull request implementing a recent
 quantum computing paper/result.
 
-
-### Installing the QML tool.
-
-The `qml` command line tool can be installed by running `pip install .` in the repo root.
-
 ### Adding demos
 
-- Run `qml new` to create a new demo interactively.
-
 - Demos are written in the form of an executable Python script.
-  - Packages listed in `dependencies/requirements-core.in` will be available to all demos by default.
-    Extra dependencies can be named using a `requirements.in` file in the demo directory.
+  - Packages listed in `pyproject.toml` will be available for import during execution.
     See section below on `Dependency Management` for more details.
   - Matplotlib plots will be automatically rendered and displayed on the QML website.
 
@@ -55,7 +47,7 @@ The `qml` command line tool can be installed by running `pip install .` in the r
   [these steps](https://github.com/PennyLaneAI/qml/tree/master/notebook_converter).
 
 - All demos should have a file name beginning with `tutorial_`.
-  The python files are saved in the `demonstrations_v2/{demo_name}` directory.
+  The python files are saved in the `demonstrations` directory.
 
 - The new demos will avoid using `autograd` or `TensorFlow`, `Jax` and `torch` are recommended instead. Also, if possible, the use of `lightning.qubit` is recommended. 
 - [Restructured Text](http://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html)
@@ -89,7 +81,10 @@ The `qml` command line tool can be installed by running `pip install .` in the r
     * To maintain quality and performance, every image should be twice (2X) its visible dimension size on the web page, and at a minimum of `150 ppi/dpi` (preferably `300 ppi/dpi`).
   </details><br>
 
-- Lastly, your demo will need an accompanying _metadata_ file in the demo directory.
+- Lastly, your demo will need an accompanying _metadata_ file. This file should be named
+  the same as your python file, but with the `.py` extension replaced with
+  `.metadata.json`. Check out the `demonstrations_metadata.md` file in this repo for
+  details on how to format that file and what to include.
 
 - Include the author's information in the `.metadata.json` file. This can be either the author's PennyLane profile `username` or their `name`. If you provide the PennyLane profile username, the author details will be sourced directly from that profile, and the demo will then appear as a contribution on the author's profile.
   
@@ -166,15 +161,23 @@ there are a couple of guidelines to keep in mind.
 - All submissions must pass code review before being merged into the repository.
 
 ## Dependency Management
+Due to the large scope of requirements in this repository, the traditional `requirements.txt` file is being phased out 
+and `pyproject.toml` is being introduced instead, the goal being easier management in regard to adding/updating packages.
 
-Demo dependencies are automatically installed by the `qml` tool during demo
-execution. See [dependencies/README.md](./dependencies/README.md) for details
-on dependency specifications.    
+To install all the dependencies locally, [poetry](https://python-poetry.org/) needs to be installed. Please follow the
+[official installation documentation](https://python-poetry.org/docs/#installation).
 
 ### Installing dependencies
 
-Dependencies are automatically installed when executing demos. A `requirements.txt` file
-will be created in the `demo` directory after the build.
+Once poetry has been installed, the dependencies can be installed as follows:
+```bash
+make environment
+```
+Note: This makefile target calls `poetry install` under the hood, you can pass any poetry arguments to this by passing
+the `POETRYOPTS` variable.
+```bash
+make environment POETRYOPTS='--sync --dry-run --verbose'
+```
 
 The `master` branch of QML uses the latest stable release of PennyLane, whereas the `dev` branch uses the most 
 up-to-date version from the GitHub repository. If your demo relies on that, install the `dev` dependencies instead
@@ -222,11 +225,72 @@ GitHub.
 
 ## Building
 
-To build and execute demos locally, use `qml build --execute {demo_name} ...`.
+To build the website locally, simply run `make html`. The rendered HTML files
+will now be available in `_build/html`. Open `_build/html/index.html` to browse
+the built site locally.
 
-To build demos using dev dependencies, use `qml build --execute --dev {demo_name}`.
+Note that the above command may take some time, as all demos
+will be executed and built! Once built, only _modified_ demos will
+be re-executed/re-built.
 
-Run `qml build --help` for more details.
+Alternatively, you may run `make html-norun` to build the website _without_ executing
+demos, or build only a single demo using the following command:
+
+```console
+sphinx-build -D sphinx_gallery_conf.filename_pattern=tutorial_QGAN\.py -b html . _build
+```
+
+where `tutorial_QGAN` should be replaced with the name of the demo to build.
+
+## Building and running locally on Mac (M1)
+
+To install dependencies on an M1 Mac and build the QML website, the following instructions may be useful.
+
+- If python3 is not currently installed, we recommend you install via [Homebrew](https://github.com/conda-forge/miniforge):
+
+  ```bash
+  brew install python
+  ```
+
+- Follow the steps from `Dependency Management` to setup poetry.
+
+- Install the base packages by running
+
+  ```bash
+  make environment BASE_ONLY=true
+  ```
+
+  Alternatively, you can do this in a new virtual environment using
+
+  ```bash
+  python -m venv [venv_name]
+  cd [venv_name] && source bin/activate
+  make environment BASE_ONLY=true
+  ```
+
+Once this is complete, you should be able to build the website using `make html-norun`. If this succeeds, the `build` folder should be populated with files. Open `index.html` in your browser to view the built site.
+
+If you are running into the error message
+
+```
+command not found: sphinx-build
+```
+
+you may need to make the following change:
+
+- In the `Makefile` change `SPHINXBUILD = sphinx-build` to `SPHINXBUILD = python3 -m sphinx.cmd.build`.
+
+If you are running into the error message
+
+```
+ModuleNotFoundError: No module named 'the-module-name'
+```
+
+you may need to install the module manually:
+
+```
+pip3 install the-module-name
+```
 
 ## Support
 
