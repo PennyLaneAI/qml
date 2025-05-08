@@ -232,6 +232,15 @@ measurements on opposite qubit patches by simply removing the second row and lay
 
 As such, this architecture occupies :math:`2n + 4` tiles. One can get additional savings by having the auxiliary qubit region be flexibly the lower or upper row.
 This way, one can save on the extra cost of rotating patches back to their original position.
+
+.. figure:: ../_static/demonstration_assets/game_of_surface_codes/intermediate_worst_case.png
+    :align: center
+    :width: 90%
+    :target: javascript:void(0)
+
+    Performing a :math:`ZXZZX` measurement by performing patch rotations for the appropriate :math:`X` measurements and moving all qubits down into the auxiliary region to save time.
+    **
+
 Overall we get a maximum of 2🕒 for the rotations. Adding the base cost of 1🕒 for the measurement
 and the maximum 2🕒 for the additional Clifford :math:`\pi/4` Z rotations as in the compact block design,
 we obtain a maximum cost of 5🕒.
