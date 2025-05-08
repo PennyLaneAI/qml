@@ -8,7 +8,7 @@ Introduction
 
 The game of surface codes [#Litinski]_ is a high-level framework for designing surface code quantum computing architectures.
 The game helps us understand space-time trade-offs, where e.g. designs with a higher qubit overhead allow for faster computations and vice versa.
-E.g., a space-efficient design might allow a computation with :math:`10^8` T gates to run in :math:`4` hours using :math:`55k` physical qubits, 
+For example, a space-efficient design might allow a computation with :math:`10^8` T gates to run in :math:`4` hours using :math:`55k` physical qubits, 
 whereas an intermediate design may run the same computation in :math:`22` minutes using :math:`120k` physical qubits, 
 or a time-optimized design in :math:`1` second using :math:`1500` interconnected quantum computers with :math:`220k` physical qubits, each.
 
@@ -26,7 +26,7 @@ Hence, we mainly care about performing measurements on qubits in arbitrary bases
 We also note that the patches that represent qubits correspond to surface code qubits.
 There is a detailed explanation in Appendix A in [#Litinski]_ that describes the surface code realizations of all operations that we are going to see.
 These are useful to know in order to grasp the full depth of the game, but are not essential to understanding its rules and concluding design principles that we cover in this demo.
-For further reading on these subjects, we recommend the `blog posts on the surface code and quantum error correction <https://arthurpesah.me/blog/>`__ by Arthur Pesah, our :doc:`demo on the toric code <tutorial_toric_code>`, as well as the three-part series on the `toric code <https://decodoku.blogspot.com/2016/03/6-toric-code.html>`__ by James Wooton
+For further reading on these subjects, we recommend the `blog posts on the surface code and quantum error correction <https://arthurpesah.me/blog/>`__ by Arthur Pesah, our :doc:`demo on the toric code <tutorial_toric_code>`, as well as the three-part series on the `toric code <https://decodoku.blogspot.com/2016/03/6-toric-code.html>`__ by James Wooton.
 
 Rules of the game
 -----------------
@@ -175,7 +175,7 @@ This can be remedied by making use of the identity
 
 .. math:: e^{i \frac{\pi}{8} Y} = e^{-i \frac{\pi}{4} Z} e^{i \frac{\pi}{8} X} e^{i \frac{\pi}{4} Z}.
 
-The second (first in the circuit) Clifford rotation :math:`e^{i \frac{\pi}{4} Z}` needs to be explicitly performed in this case. The first one can be merged again with the terminal measurements of the circuit.
+The Clifford rotation on the right :math:`e^{i \frac{\pi}{4} Z}`, which is applied first, needs to be explicitly performed in this case. The second one (on the left) can be merged again with the terminal measurements of the circuit.
 Such a rotation :math:`e^{i \frac{\pi}{4} P}` can be performed with a joint measurement of :math:`P \otimes Y`, similar to the magic state distillation circuit:
 
 .. figure:: ../_static/demonstration_assets/game_of_surface_codes/clifford_rotation.png
@@ -230,7 +230,7 @@ measurements on opposite qubit patches by simply removing the second row and lay
     Intermediate data block design.
     **
 
-As such, this architecture occupies :math:`2n + 4` tiles. One can get additional saving by having the auxiliary qubit region be flexibly the lower or upper row.
+As such, this architecture occupies :math:`2n + 4` tiles. One can get additional savings by having the auxiliary qubit region be flexibly the lower or upper row.
 This way, one can save on the extra cost of rotating patches back to their original position.
 Overall we get a maximum of 2🕒 for the rotations. Adding the base cost of 1🕒 for the measurement
 and the maximum 2🕒 for the additional Clifford :math:`\pi/4` Z rotations as in the compact block design,
@@ -240,8 +240,8 @@ we obtain a maximum cost of 5🕒.
 Fast data blocks
 ^^^^^^^^^^^^^^^^
 
-In order to be able to access Y operations directly, we need both Z and X edge exposed to the auxiliary qubit region, demanding 2 tiles for 1 qubit.
-We ommitted this in the rule description before as it is only relevant for the fast data block, but we can realize 2 qubits on a patch of 2 tiles:
+In order to be able to access Y operations directly, we need both Z and X edges exposed to the auxiliary qubit region, demanding 2 tiles for 1 qubit.
+We omitted this in the rule description before as it is only relevant for the fast data block, but we can also realize 2 qubits on a single patch using 2 tiles:
 
 .. figure:: ../_static/demonstration_assets/game_of_surface_codes/2q_patch.png
     :align: center
@@ -251,7 +251,7 @@ We ommitted this in the rule description before as it is only relevant for the f
     Two qubits can be realized by a patch on two tiles. The patch now has 6 distinct edges, corresponding to the operators as indicated in the figure.
     **
 
-With this extra trick up our sleeve, we can construct the fast data block consisting of two-qubit patches with all-encompassing auxiliary qubit region.
+With this extra trick up our sleeve, we can construct the fast data block consisting of two-qubit patches with an all-encompassing auxiliary qubit region.
 
 .. figure:: ../_static/demonstration_assets/game_of_surface_codes/fast_block.png
     :align: center
@@ -286,7 +286,7 @@ We are going to go through the simplest protocol in a 15-to-1 distillation block
 ^^^^^^^^^^^^^^^^^^^^
 
 This protocol uses 15 imperfect magic states with infidelity :math:`p` and outputs a single magic state with infidelity of :math:`35p^3`. 
-The distillation circuit is given by the following, with the details described in section 3.1 in [#Litinski]_:
+The distillation circuit is shown below, with the details described in section 3.1 in [#Litinski]_:
 
 .. figure:: ../_static/demonstration_assets/game_of_surface_codes/15-to-1.png
     :align: center
@@ -299,7 +299,7 @@ The distillation circuit is given by the following, with the details described i
     **
 
 Because all operations in the protocol are Z measurements, we can use the compact data block design to perform the distillation. 
-Another trick the author of [#Litinski]_ proposes is to use the auto-corrected magic state injection protocol below that avoids the additional Clifford :math:`\frac{\pi}{4}` Pauli rotation (and note that the other Clifford :math:`\frac{\pi}{2}` Pauli rotation is just a sign flip in classical processing).
+Another trick the author of [#Litinski]_ proposes is to use the auto-corrected magic state injection protocol below that avoids the additional Clifford :math:`\frac{\pi}{4}` Pauli rotation (and to note that the :math:`\frac{\pi}{2}` Pauli rotation is just a sign flip that can be tracked classically).
 
 .. figure:: ../_static/demonstration_assets/game_of_surface_codes/auto-corrected-non-clifford.png
     :align: center
@@ -327,10 +327,10 @@ The 15-to-1 distillation protocol produces a magic state in 11🕒 on 11 tiles.
 Quantum computer designs
 ------------------------
 
-The 15-to-1 distillation protocol is the simplest of a variety of protocols with each their different characteristics.
-The best choice for distillation protocol heavily depends on the error probabilities of the quantum computer in use,
+The 15-to-1 distillation protocol is the simplest of a variety of protocols each with different characteristics.
+The best choice of distillation protocol heavily depends on the error probabilities of the quantum computer in use,
 as well as the overall tolerance for errors we allow to still occur.
-For example, assume we tolerate T infidelity of :math:`10^{-10}` and have :math:`p=10^{-4}`, then
+For example, assume we tolerate a T infidelity of :math:`10^{-10}` and have :math:`p=10^{-4}`, then
 the 15-to-1 protocol would suffice as it yields an infidelity of :math:`35p^3 = 3.5 \times 10^{-11} < 10^{-10}`.
 
 Another consideration is to combine data and distillation blocks that match in their maximum time requirements.
