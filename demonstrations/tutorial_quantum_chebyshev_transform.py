@@ -238,7 +238,7 @@ nodes = [ch_node(i, N) for i in js]
 overlaps = []
 for i in js:
     state_i = circuit(state=i)[: 2**N] * np.sqrt(2)
-    overlaps.append(np.inner(state, state_i))
+    overlaps.append(np.vdot(state, state_i))
 
 #############################################
 # Now we plot the squared overlaps at the nodes computed from the circuit transformation and compare to the definition, plotting the squared overlaps at all values of :math:`x`.
