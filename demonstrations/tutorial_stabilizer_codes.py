@@ -20,45 +20,42 @@ some well-known codes using the quantum circuit formalism and then derive their 
 the code can be reconstructed. This enables the construction of a wide range of error correction codes 
 directly from their stabilizer generators. 
 
+A toy example: the repetition code
+-----------------------------------
+
+To start with, we will explore the general structure of error correction codes using a simple example: the **three-qubit repetition code.** 
+We will introduce this code as a quantum circuit with definite steps to gain some intuition on how it corrects errors on qubits. 
+The quantum circuit representation is known as the **state picture**. In this formalism, error correction codes follow a simple structure:
+
+- Qubit encoding
+- Error detection
+- Error correction
+
+Qubit encoding
+~~~~~~~~~~~~~~~
+
+The first step in an error correction code is **encoding** one abstract or **logical qubit** is into a set of many on-device **physical qubits.** 
+The rationale for doing this is that, if some external factor changes the state of one of the qubits, we will still have an idea
+of what the original logical qubit was by looking at the rest of the qubits. For example in the three-qubit repetition code, the logical basis
+state qubits :math:`\vert \bar{0}\rangle` and :math:`\vert \bar{1}\rangle` are encoded into three physical qubits as
+
+.. math::
+
+    \vert \bar{0} \rangle \mapsto \vert 000 \rangle, \quad \vert \bar{1} \rangle \mapsto \vert 111 \rangle
+
+A general qubit :math:`\vert \bar{\psi}\rangle = \alpha \vert \bar{0}\rangle + \beta \vert \bar{1}\rangle` is then encoded as
+
+.. math::
+
+    \alpha \vert \bar{0}\rangle + \beta \vert \bar{1}\rangle \mapsto \alpha \vert 000 \rangle + \beta \vert \bar{111}\rangle.
+
+This encoding can be done via the following quantum circuit.
+ 
+**INSERT PICTURE**
+
+Let's code this below and verify the output
+
 """
-
-
-##############################################################################
-#
-# A toy example: the repetition code
-# -----------------------------------
-#
-# To start with, we will explore the general structure of error correction codes using a simple example: the **three-qubit repetition code.** 
-# We will introduce this code as a quantum circuit with definite steps to gain some intuition on how it corrects errors on qubits. 
-# The quantum circuit representation is known as the **state picture**. In this formalism, error correction codes follow a simple structure:
-#
-# - Qubit encoding
-# - Error detection
-# - Error correction
-#
-# Qubit encoding
-# ~~~~~~~~~~~~~~~
-#
-# The first step in an error correction code is **encoding** one abstract or **logical qubit** is into a set of many on-device **physical qubits.** 
-#The rationale for doing this is that, if some external factor changes the state of one of the qubits, we will still have an idea
-# of what the original logical qubit was by looking at the rest of the qubits. For example in the three-qubit repetition code, the logical basis
-# state qubits :math:`\vert \bar{0}\rangle` and :math:`\vert \bar{1}\rangle` are encoded into three physical qubits as
-#
-# .. math::
-#
-#     \vert \bar{0} \rangle \mapsto \vert 000 \rangle, \quad \vert \bar{1} \rangle \mapsto \vert 111 \rangle
-#
-# A general qubit :math:`\vert \bar{\psi}\rangle = \alpha \vert \bar{0}\rangle + \beta \vert \bar{1}\rangle` is then encoded as
-#
-# .. math::
-#
-#     \alpha \vert \bar{0}\rangle + \beta \vert \bar{1}\rangle \mapsto \alpha \vert 000 \rangle + \beta \vert \bar{111}\rangle.
-#
-# This encoding can be done via the following quantum circuit.
-# 
-# **INSERT PICTURE**
-#
-# Let's code this below and verify the output
 
 import pennylane as qml
 from pennylane import numpy as np
