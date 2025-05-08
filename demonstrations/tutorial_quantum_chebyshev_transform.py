@@ -234,7 +234,7 @@ def ch_node(j, N):
 js = list(range(int(len(state))))
 nodes = [ch_node(i, N) for i in js]
 
-# compute overlap with other basis states using np.inner()
+# compute overlap with other basis states using np.vdot()
 overlaps = []
 for i in js:
     state_i = circuit(state=i)[: 2**N] * np.sqrt(2)
