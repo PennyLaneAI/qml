@@ -26,7 +26,7 @@ directly from their stabilizer generators.
 ##############################################################################
 #
 # A toy example: the repetition code
-# ----------------------------------
+# -----------------------------------
 #
 # To start with, we will explore the general structure of error correction codes using a simple example: the **three-qubit repetition code.** 
 # We will introduce this code as a quantum circuit with definite steps to gain some intuition on how it corrects errors on qubits. 
@@ -204,7 +204,7 @@ print("Fidelity if error on wire 2: ", qml.math.fidelity(encoded_state, error_co
 # The error is corrected no matter which qubit was flipped!
 #
 # The operator picture
-# --------------------
+# ---------------------
 #
 # We have worked with a simple example, but it is quite limited. The three-qubit code, for example, only works for
 # bit flip errors, but more powerful codes need more resources. For example, Shor's code, involving 9 qubits, 
@@ -216,6 +216,7 @@ print("Fidelity if error on wire 2: ", qml.math.fidelity(encoded_state, error_co
 # References
 # ----------
 #
+
 ##############################################################################
 # About the author
 # ----------------
