@@ -41,6 +41,8 @@ These are known as the `Chebyshev nodes <https://en.wikipedia.org/wiki/Chebyshev
     :width: 60%
     :target: javascript:void(0)
 
+    Figure 1. The first six Chebyshev polynomials, along with their corresponding nodes.
+
 The nodes are plotted above along with the corresponding polynomials. Note that the polynomials are normalized such that $T_n(1)=1$, and they satisfy a discrete orthogonality condition on the nodes of $T_N(x)$ in the following way for $k$, $\ell<N$
 
 .. math::
@@ -90,6 +92,8 @@ An ancilla qubit is required, which will be the :math:`0` indexed qubit, and the
     :align: center
     :width: 100%
     :target: javascript:void(0)
+
+    Figure 2. Quantum Chebyshev Transform circuit. 
 
 The intuition for the structure of the above circuit comes from the link between the DChT and the DCT. 
 Notice the use of the `quantum Fourier transform (QFT) <https://pennylane.ai/qml/demos/tutorial_qft/>`__ applied on all qubits. 
@@ -241,7 +245,8 @@ for i in js:
     overlaps.append(np.vdot(state, state_i))
 
 #############################################
-# Now we plot the squared overlaps at the nodes computed from the circuit transformation and compare to the definition, plotting the squared overlaps at all values of :math:`x`.
+# Now we plot the squared overlaps at the nodes of the chosen state, and all other basis states. 
+# We compare this to the definition, for which we plot the squared overlaps at all values of :math:`x`.
 
 import matplotlib.pyplot as plt
 
@@ -258,8 +263,10 @@ def overlap_sq(x, xp, N):
 
 
 plt.style.use("pennylane.drawer.plot")
-fig, ax = plt.subplots()
-ax.set(xlabel="x", ylabel="Squared Overlap")
+
+fig = plt.figure(figsize=(6.4, 2.4))
+ax = fig.add_axes((0.15, 0.3, 0.8, 0.65))
+ax.set(xlabel=r"x", ylabel="Square Overlap")
 
 # plot squared overlaps computed in circuit
 ax.plot(nodes, np.abs(overlaps) ** 2, marker="o", label="circuit")
@@ -269,12 +276,12 @@ xs = np.linspace(-1, 1, 1000)
 ax.plot(xs, [overlap_sq(x, nodes[j], N) for x in xs], label="expectation")
 
 ax.legend()
+fig.text(0.5, 0.05, "Figure 4. Squared overlap of Chebyshev basis states computed from the circuit compared to the definition.", 
+         horizontalalignment='center', size='x-small', weight='normal')
 plt.show()
 
 
 #############################################
-# Almost orthonormal. We note that the amplitude at the corresponding node approaches :math:`1` if the number of qubits is increased.
-#
 # Let's also see if the amplitudes of the state in the computational basis agree with expectation.
 # To do this, we just modify our ``circuit`` function to return the probabilities of each of the computational basis states (ignoring the ancilla).
 
@@ -301,11 +308,14 @@ def tau_amplitudes(x, k, N):
     return prefactor * np.cos(k * np.arccos(x))
 
 
-fig, ax = plt.subplots()
+fig = plt.figure(figsize=(6.4, 4.8))
+ax = fig.add_axes((0.15, 0.25, 0.8, 0.7))
 ax.plot(x, probs, "o", label="circuit")
 ax.plot(x, [tau_amplitudes(nodes[j], xs, N) ** 2 for xs in x], label="expectation")
 ax.set(xlabel=r"$|k\rangle$", ylabel="Probability")
 ax.legend()
+fig.text(0.5, 0.05, "Figure 5. Squared overlap of Chebyshev basis state with computational basis states.", 
+         horizontalalignment='center', size='x-small', weight='normal')
 plt.show()
 
 #############################################
