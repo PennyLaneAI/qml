@@ -278,9 +278,9 @@ xs = np.linspace(-1, 1, 1000)
 ax.plot(xs, [overlap_sq(x, nodes[j], N) for x in xs], label="expectation")
 
 ax.legend()
-fig.text(0.5, 0.05,
-    "Figure 4. Squared overlap of Chebyshev basis states computed from the circuit compared to the definition.",
-    horizontalalignment="center", size="x-small", weight="normal")
+fig.text(0.5, 0.05, 
+    "Figure 4. Squared overlap of Chebyshev basis states.",
+    horizontalalignment="center", size="small", weight="normal")
 plt.show()
 
 
@@ -312,14 +312,14 @@ def tau_amplitudes(x, k, N):
 
 
 fig = plt.figure(figsize=(6.4, 4.8))
-ax = fig.add_axes((0.15, 0.25, 0.8, 0.7))
+ax = fig.add_axes((0.15, 0.23, 0.80, 0.72))
 ax.plot(x, probs, "o", label="circuit")
 ax.plot(x, [tau_amplitudes(nodes[j], xs, N) ** 2 for xs in x], label="expectation")
 ax.set(xlabel=r"$|k\rangle$", ylabel="Probability")
 ax.legend()
-fig.text(0.5, 0.05,
+fig.text(0.5, 0.05, 
     "Figure 5. Squared overlap of Chebyshev basis state with computational basis states.",
-    horizontalalignment="center", size="x-small", weight="normal")
+    horizontalalignment="center", size="small", weight="normal")
 plt.show()
 
 #############################################
