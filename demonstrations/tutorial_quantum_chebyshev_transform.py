@@ -247,7 +247,7 @@ for i in js:
     overlaps.append(np.vdot(state, state_i))
 
 #############################################
-# Now we plot the squared overlaps at the nodes of the chosen state, and all other basis states. 
+# Now we plot the squared overlaps at the nodes of the chosen state, and all other basis states.
 # We compare this to the definition, for which we plot the squared overlaps at all values of :math:`x`.
 
 import matplotlib.pyplot as plt
@@ -278,8 +278,9 @@ xs = np.linspace(-1, 1, 1000)
 ax.plot(xs, [overlap_sq(x, nodes[j], N) for x in xs], label="expectation")
 
 ax.legend()
-fig.text(0.5, 0.05, "Figure 4. Squared overlap of Chebyshev basis states computed from the circuit compared to the definition.", 
-         horizontalalignment='center', size='x-small', weight='normal')
+fig.text(0.5, 0.05,
+    "Figure 4. Squared overlap of Chebyshev basis states computed from the circuit compared to the definition.",
+    horizontalalignment="center", size="x-small", weight="normal")
 plt.show()
 
 
@@ -316,8 +317,9 @@ ax.plot(x, probs, "o", label="circuit")
 ax.plot(x, [tau_amplitudes(nodes[j], xs, N) ** 2 for xs in x], label="expectation")
 ax.set(xlabel=r"$|k\rangle$", ylabel="Probability")
 ax.legend()
-fig.text(0.5, 0.05, "Figure 5. Squared overlap of Chebyshev basis state with computational basis states.", 
-         horizontalalignment='center', size='x-small', weight='normal')
+fig.text(0.5, 0.05,
+    "Figure 5. Squared overlap of Chebyshev basis state with computational basis states.",
+    horizontalalignment="center", size="x-small", weight="normal")
 plt.show()
 
 #############################################
