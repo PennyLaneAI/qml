@@ -704,7 +704,7 @@ files = [
 [package.dependencies]
 attrs = ">=21.3.0"
 duet = ">=0.2.8"
-matplotlib = ">=3.0,<4.0"
+matplotlib = ">=3.0,<3.10.3"
 networkx = ">=2.4"
 numpy = ">=1.22,<2.0"
 pandas = "*"
