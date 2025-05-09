@@ -1,0 +1,106 @@
+{
+    "title": "Supervised and Unsupervised Quantum Machine Learning Models for the Phase Detection of the ANNNI Spin Model",
+    "authors": [
+      {
+            "username": "SaverioMonaco"
+        }
+    ],
+    "dateOfPublication": "2025-04-28T00:00:00+00:00",
+    "dateOfLastModification": "2025-05-06T00:00:00+00:00",
+    "categories": [
+        "Quantum Machine Learning"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_CERN_ANNNI.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_CERN_ANNNI.png"
+        }
+    ],
+    "seoDescription": "Based on the paper Quantum phase detection generalization from marginal quantum neural network models, explore the phase diagram of the Axial Next-Nearest-Neighbor Ising (ANNNI) model using both supervised and unsupervised learning methods.",
+    "doi": "",
+    "references": [
+        {
+            "id": "Monaco2023",
+            "type": "article",
+            "title": "Quantum phase detection generalization from marginal quantum neural network models.",
+            "authors": "Monaco S., Kiss O., Mandarino A., Vallecorsa S., Michele G.",
+            "year": "2023",
+            "journal": "PhysRevB",
+            "url": "https://journals.aps.org/prb/abstract/10.1103/PhysRevB.107.L081105"
+        },
+        {
+            "id": "Cea2023",
+            "type": "preprint",
+            "title": "Exploring the Phase Diagram of the quantum one-dimensional ANNNI model",
+            "authors": "Maria Cea, Michele Grossi, Saverio Monaco, Enrique Rico, Luca Tagliacozzo, Sofia Vallecorsa",
+            "year": "2023",
+            "journal": "arXiv",
+            "url": "https://arxiv.org/abs/2402.11022"
+        },
+        {
+            "id": "Peruzzo2013",
+            "type": "article",
+            "title": "A variational eigenvalue solver on a quantum processor",
+            "authors": "Alberto Peruzzo, Jarrod McClean, Peter Shadbolt, Man-Hong Yung, Xiao-Qi Zhou, Peter J. Love, Alán Aspuru-Guzik, Jeremy L. O'Brien",
+            "year": "2013",
+            "journal": "Nat. Commun.",
+            "url": "https://www.nature.com/articles/ncomms5213"
+        },
+        {
+            "id": "Kottmann2022",
+            "type": "article",
+            "title": "Variational Quantum Anomaly Detection: Unsupervised mapping of phase diagrams on a physical quantum computer",
+            "authors": "Korbinian Kottmann, Friederike Metz, Joana Fraxanet, Niccolo Baldelli",
+            "year": "2022",
+            "journal": "PhysRevResearch",
+            "url": "https://journals.aps.org/prresearch/abstract/10.1103/PhysRevResearch.3.043184"
+        },
+        {
+            "id": "Cong2019",
+            "type": "article",
+            "title": "Quantum Convolutional Neural Networks",
+            "authors": "Iris Cong, Soonwon Choi, Mikhail D. Lukin",
+            "year": "2019",
+            "journal": "Nat. Phys.",
+            "url": "https://www.nature.com/articles/s41567-019-0648-8"
+        },
+        {
+            "id": "Caro2022",
+            "type": "article",
+            "title": "Generalization in quantum machine learning from few training data",
+            "authors": "Matthias C. Caro, Hsin-Yuan Huang, Marco Cerezo, Kunal Sharma, Andrew Sornborger, Lukasz Cincio, Patrick J. Coles",
+            "year": "2022",
+            "journal": "Nat. Commun.",
+            "url": "https://www.nature.com/articles/s41467-022-32550-3"
+        }
+    ],
+    "basedOnPapers": ["10.1103/PhysRevB.107.L081105"],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_how_to_build_spin_hamiltonians",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_constant_depth_mps_prep",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_vqe",
+            "weight": -1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_isingmodel_PyTorch",
+            "weight": 1.0
+        }
+    ]
+}

@@ -2,4 +2,3 @@ jax
 jaxlib
 optax
 torch
-pennylane==0.39.0
