@@ -40,6 +40,7 @@ These are known as the `Chebyshev nodes <https://en.wikipedia.org/wiki/Chebyshev
     :align: center
     :width: 60%
     :target: javascript:void(0)
+    :alt: Plot of first six Chebyshev polynomials, with nodes denser near the boundary.
 
     Figure 1. The first six Chebyshev polynomials, along with their corresponding nodes.
 
@@ -92,6 +93,7 @@ An ancilla qubit is required, which will be the :math:`0` indexed qubit, and the
     :align: center
     :width: 100%
     :target: javascript:void(0)
+    :alt: Quantum Chebyshev Transform circuit diagram drawn using PennyLane
 
     Figure 2. Quantum Chebyshev Transform circuit. 
 
