@@ -14,7 +14,7 @@ The core idea behind embedding methods is to partition the system and treat the 
 subsystem accurately, using high-level quantum mechanical methods, while approximating the effects
 of the surrounding environment in a way that retains computational efficiency. In this demo, we show
 how to implement the quantum defect embedding theory (QDET). The method has been successfully
-applied to study defects in CaO[#Galli] and to calculate excitations of the negatively charged NV center in diamond[#Galli2].
+applied to study defects in CaO [#Galli]_ and to calculate excitations of the negatively charged NV center in diamond [#Galli2]_.
 An important advantage of QDET is its compatibility with quantum
 algorithms as we explain in the following sections. The method can be implemented for calculating
 ground and excited states, as well as dynamic properties of materials. These make QDET a
@@ -43,7 +43,7 @@ powerful method for affordable quantum simulation of materials.
 # This Hamiltonian describes a simplified representation of the complex quantum system that is
 # computationally tractable and properly captures the essential physics of the problem. The
 # effective integrals :math:`t, v` are obtained
-# from first-principles calculations [#Galli2].
+# from first-principles calculations [#Galli2]_.
 #
 # A QDET calculation typically starts by obtaining a meanfield approximation of the whole system
 # using efficient mean field methods such as density functional theory. These calculations
@@ -60,7 +60,7 @@ powerful method for affordable quantum simulation of materials.
 # ^^^^^^^^^^^^^^^^^^^^^^^
 # We use density functional theory To obtain a mean-field description of the whole system. The DFT
 # calculations are performed with the QUANTUM ESPRESSO package. This requires downloading
-# the pseudopotentials [#Modji] for each atomic species
+# the pseudopotentials [#Modji]_ for each atomic species
 # in the system from the QUANTUM ESPRESSO
 # `database <https://www.quantum-espresso.org/pseudopotentials/>`_. We have carbon and nitrogen in
 # our system which can be downloaded with
@@ -85,13 +85,13 @@ powerful method for affordable quantum simulation of materials.
 # ^^^^^^^^^^^^^^^^^^^^^
 # Once we have obtained the meanfield description, we can identify our impurity by finding
 # the states that are localized in real space around the defect region. We can identify these localized states using the
-# localization factor defined as [#Galli2]:
+# localization factor defined as:
 #
 # .. math::
 #
 #     L_n = \int_{V \in \ohm} d^3 r |\Psi_n^{KS}(r)|^2
 #
-# where $V$ is the identified volume including the impurity within the supercell volume $\ohm$.
+# where :math:`V` is the identified volume including the impurity within the supercell volume :math:`\ohm` [#Galli2]_.
 # We will use the `WEST <https://pubs.acs.org/doi/10.1021/ct500958p>`_ program to compute the localization factor. This requires creating another
 # input file ``westpp.in`` as shown below.
 #
@@ -156,19 +156,25 @@ powerful method for affordable quantum simulation of materials.
 # Effective Hamiltonian
 # ^^^^^^^^^^^^^^^^^^^^^
 # The next and probably most important steps in QDET is to define the effective one-body and
-# two-body integrals for the impurity. The effective two-body integrals, $v^{eff}$ are computed
-# first as matrix elements of the partially screened static Coulomb potential $W_0^{R}$.
-# $$v_{ijkl}^{eff} = [W_0^{R}]_{ijkl}$$
-# $W_0^R$, results from screening the bare Coulomb potential, $v$, with the reduced polarizability,
-# $P_0^R = P - P_{imp}$, where $P$ is the system's polarizability and $P_{imp}$ is the impurity's
+# two-body integrals for the impurity. The effective two-body integrals, :math:`v^{eff}` are computed
+# first as matrix elements of the partially screened static Coulomb potential :math:`W_0^{R}`.
+#
+# .. math::
+#
+#     v_{ijkl}^{eff} = [W_0^{R}]_{ijkl},
+#
+# :math:`W_0^R`, results from screening the bare Coulomb potential, :math:`v`, with the reduced polarizability,
+# :math:`P_0^R = P - P_{imp}`, where :math:`P` is the system's polarizability and :math:`P_{imp}` is the impurity's
 # polarizability. Since this leads to the inclusion of electrostatic
 # and exchange-correlation effects for the active electrons, we remove these interactions from the
-# the Kohn-Sham Hamiltonian, $H^{KS}$, to avoid double counting them.
-# Therefore, once $v^{eff}$ is obtained, the one-body term $t^{eff}$ is then obtained by subtracting
+# the Kohn-Sham Hamiltonian, :math:`H^{KS}`, to avoid double counting them.
+# Therefore, once :math:`v^{eff}` is obtained, the one-body term :math:`t^{eff}` is then obtained by subtracting
 # from the Kohn-Sham Hamiltonian the term accounting for electrostatic and exchange
 # correlation interactions in the active space.
 #
-# $$t_{ij}^{eff} = H_{ij}^{KS} - t_{ij}^{dc}$$
+# .. math::
+#
+#     t_{ij}^{eff} = H_{ij}^{KS} - t_{ij}^{dc},
 #
 # In WEST, these parameters for the effective Hamiltonian are calculated by using the wfreq.x
 # executable. The program will: (i) compute the quasiparticle energies, (ii) compute the
@@ -238,7 +244,7 @@ powerful method for affordable quantum simulation of materials.
 # exact removal of double counting  corrections at GW level of theory, thus removing the
 # approximation present in the initial DFT based formulation. This  formulation also helps capture
 # the response properties and provides access to excited state properties. Another major advantage
-# of QDET is the ease with which it can be used with quantum computers in a hybrid framework[#Baker].
+# of QDET is the ease with which it can be used with quantum computers in a hybrid framework [#Baker]_.
 # Therefore, We can conclude here that QDET is a powerful embedding approach for simulating complex
 # quantum systems.
 #
