@@ -31,8 +31,6 @@
             "title": "Discovery of atomic clock-like spin defects in simple oxides from first principles",
             "authors": "Davidsson, Joel and Onizhuk, Mykyta and Vorwerk, Christian and Galli, Giulia",
             "journal": "",
-            "volume": "",
-            "pages": "",
             "year": "2024",
             "url": "https://arxiv.org/pdf/2302.07523"
         },
@@ -42,7 +40,6 @@
             "title": "Analytical gradients for projection-based wavefunction-in-DFT embedding",
             "authors": "Lee, Sebastian JR and Ding, Feizhi and Manby, Frederick R and Miller, Thomas F",
             "year": "2019",
-            "publisher": "",
             "journal": "",
             "url": "https://arxiv.org/pdf/1903.05830"
         },
@@ -52,7 +49,6 @@
             "title": "Periodic density matrix embedding for co adsorption on the mgo (001) surface",
             "authors": "Mitra, Abhishek and Hermes, Matthew R and Cho, Minsik and Agarawal, Valay and Gagliardi, Laura",
             "year": "2022",
-            "publisher": "",
             "journal": "",
             "url": "https://chemrxiv.org/engage/chemrxiv/article-details/62b0b0c40bba5d82606d2cae"
         },
@@ -62,7 +58,6 @@
             "title": "Green’s function formulation of quantum defect embedding theory",
             "authors": "Sheng, Nan and Vorwerk, Christian and Govoni, Marco and Galli, Giulia",
             "year": "2022",
-            "publisher": "",
             "journal": "",
             "url": "https://arxiv.org/pdf/2203.05493"
         },
@@ -72,7 +67,6 @@
             "title": "Quantum simulation of battery materials using ionic pseudopotentials",
             "authors": "Zini, Modjtaba Shokrian and Delgado, Alain and dos Reis, Roberto and Casares, Pablo Antonio Moreno and Mueller, Jonathan E and Voigt, Arne-Christian and Arrazola, Juan Miguel",
             "year": "2023",
-            "publisher": "",
             "journal": "",
             "url": "https://arxiv.org/pdf/2302.07981"
         },
@@ -82,7 +76,6 @@
             "title": "Simulating optically active spin defects with a quantum computer",
             "authors": "Baker, Jack S and Casares, Pablo AM and Zini, Modjtaba Shokrian and Thik, Jaydeep and Banerjee, Debasish and Ling, Chen and Delgado, Alain and Arrazola, Juan Miguel",
             "year": "2024",
-            "publisher": "",
             "journal": "",
             "url": "https://arxiv.org/pdf/2405.13115"
         }	
