@@ -10,7 +10,7 @@ been gaining traction.
 
 Quantum error correction is done via schemes known as **error correction codes.**
 These are quantum algorithms that come in many varieties that address different error types.
-Is there a unified way to understand these codes? Indeed, The **stabilizer formalism** provides such a framework for
+Is there a unified way to understand these codes? The **stabilizer formalism** provides such a framework for
 a large class of quantum error correction codes. The so-called
 **stabilizer codes**, such as the repetition, Shor, Steane, and surface codes, 
 all fall under this formalism. Other codes, like the GKP codes used by Xanadu, lie outside of it.
@@ -109,10 +109,18 @@ print("|111> component: ", encode_qnode(alpha, beta)[7])
 #
 # **NEEDS PICTURE**
 #
-# The results of the measurements will will tell us whether one of the qubits in :math:`\vert \bar{\psi} \rangle` was flipped and moreover,
+# The results of the measurements will tell us whether one of the qubits in :math:`\vert \bar{\psi} \rangle` was flipped and moreover,
 # they can tell us which qubit was flipped. The following table shows how to interpret the results of the syndrome measurements.
 #
-# **INSERT TABLE**
+# +------------+------------+------------+
+# | Error      | Syndrome 0 | Syndrome 1 |
+# +============+============+============+
+# | :math:`X_0`| :math:`1`  | :math:`0`  |
+# +------------+------------+------------+
+# | :math:`X_1`| :math:`1`  | :math:`1`  |
+# +------------+------------+------------+
+# | :math:`X_2`| :math:`0`  | :math:`1`  |
+# +------------+------------+------------+
 #
 # Let us verify this by implementing the syndrome measurement in PennyLane
 
@@ -200,15 +208,15 @@ print("Fidelity if error on wire 2: ", qml.math.fidelity(encoded_state, error_co
 #
 # The error is corrected no matter which qubit was flipped!
 #
-# Operator picture and stabilizers
-# ---------------------------------
+# Operator picture and stabilizer generators
+# ------------------------------------------
 #
 # We have worked with a simple example, but it is quite limited. Indeed, the three-qubit code only works for
 # bit flip errors, but more powerful codes need more resources. For example, Shor's code, involving 9 qubits, 
 # can correct more types of errors on a single logical qubit. Moreover, to avoid errors at an acceptable level,
 # the industry standard is 1000 physical qubits per logical qubit. Even with a few qubits, the encoded states and protocols can become increasingly
 # complex! To deal with these situations, we resort to a different 
-# representation of error correction codes, known as the operator picture.
+# representation of error correction codes, known as the **operator picture.**
 #
 # To gain some intuition about the operator picture, let us express the three-qubit repetition code in a different way. Using the 
 # identity
@@ -232,16 +240,30 @@ print("Fidelity if error on wire 2: ", qml.math.fidelity(encoded_state, error_co
 #     I_0 Z_1 Z_2 \vert 000 \rangle = \vert 000 \rangle, \quad I_0 Z_1 Z_2 \vert 111 \rangle = \vert 111 \rangle.
 #
 # This is great news. As long as no error has occurred, the logical qubits will be left alone. Otherwise, there will be
-# some operations done on the state, but we'll still be able to fix them via an error correction scheme. Notably, the invariance property 
-# **only holds true for the logical codewords.** For any other three-qubit basis states, at least one of these operators will have eigen
-# value :math:`-1`, as shown in the table below.
+# some operations applied on the state, but we will be able to fix them via an error correction scheme. Notably, the invariance property 
+# **only holds true for the logical codewords.** For any other three-qubit basis states, at least one of these operators will have eigenvalue 
+# :math:`-1`, as shown in the table below.
 #
 # **INSERT TABLE**
 #
+# This gives us a new option for characterizing error correction codes. What if instead of building codewords and trying to find
+# the syndrome measurement operators from them, we went the the other way round? Namely, we could start  by specifying a set of operators, find the states
+# that remain invariant under their action, and make these our codewords. These operators are known as **stabilizers generators.**
+#
+# The stabilizer formalism
+# -------------------------
+#
+# The stabilizer formalism takes the operator picture representation seriously and uses it to find error correction codes starting from a 
+# set of **Pauli words**--tensor products of Pauli operators. We start by specifying the stabilizer set. A stabilizer set on :math:`n`
+# qubits satisfies the following properties. 
+#
+# 1. It contains the identity operator :math:`-I_0\otimes I_1 \times \ldots I_{n-1},` but does not contain the negative identity.
+# 2. All elements of the set commute with each other. 
+# 3. The matrix product of two elements in the set yields an element that is also in the set.
 # 
-#
-#
-#
+# ..note ::
+#     Codes generated with this approach do have a limitation: they can only correct for Pauli errors. 
+# 
 # References
 # -----------
 #
