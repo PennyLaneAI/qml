@@ -1,19 +1,20 @@
 r"""Quantum Defect Embedding Theory (QDET)
 =========================================
-Efficient simulation of complex quantum systems remains a significant challenge in chemistry and
-physics. These simulations often require computationally intractable methods for a complete
-solution. However, many interesting problems in quantum chemistry and condensed matter physics
+Performing efficient simulations of advances materials and molecules remains a significant
+challenge in quantum chemistry and condensed matter physics due to the prohibitive costs of
+available methods. However, many interesting problems in quantum chemistry and condensed matter physics
 feature a strongly correlated region, which requires accurate quantum treatment, embedded within a
 larger environment that could be properly treated with cheaper approximations.  For example,
 this is the case for point defects in materials [#Galli]_, active site of catalysts [#SJRLee]_, surface phenomenon such
 as adsorption [#Gagliardi]_ and many more. Embedding theories serve as powerful tools for effectively
-addressing such problems.
+addressing such problems by capturing the strong electronic correlations in the active region with high accuracy
+while accounting for the environment in a more approximate manner.
 
 The core idea behind embedding methods is to partition the system and treat the strongly correlated
 subsystem accurately, using high-level quantum mechanical methods, while approximating the effects
 of the surrounding environment in a way that retains computational efficiency. In this demo, we show
 how to implement the quantum defect embedding theory (QDET). The method has been successfully
-applied to study defects in CaO and to calculate excitations of the negatively charged NV center in diamond. 
+applied to study defects in CaO and to calculate excitations of the negatively charged NV center in diamond.
 An important advantage of QDET is its compatibility with quantum
 algorithms as we explain in the following sections. The method can be implemented for calculating
 ground and excited states, as well as dynamic properties of materials. These make QDET a
@@ -29,7 +30,7 @@ powerful method for affordable quantum simulation of materials.
 #############################################
 # Theory
 # ------
-# The core idea in QDET is to construct an effective Hamiltonian that describes the impurity
+# QDET allows us to construct an effective Hamiltonian that describes the impurity
 # subsystem and also accounts for the interactions between the impurity subsystem and the
 # environment as
 #
@@ -42,7 +43,7 @@ powerful method for affordable quantum simulation of materials.
 # This Hamiltonian describes a simplified representation of the complex quantum system that is
 # computationally tractable and properly captures the essential physics of the problem. The
 # effective integrals :math:`t, v` are obtained
-# from first-principles calculations [].
+# from first-principles calculations [#Galli2].
 #
 # A QDET calculation typically starts by obtaining a meanfield approximation of the whole system
 # using efficient mean field methods such as density functional theory. These calculations
@@ -53,13 +54,14 @@ powerful method for affordable quantum simulation of materials.
 # Implementation
 # --------------
 # We implement QDET to compute the excitation energies of a negatively charged nitrogen-vacancy
-# defect in diamond [].
+# defect in diamond.
 #
 # Mean field calculations
 # ^^^^^^^^^^^^^^^^^^^^^^^
 # We use density functional theory To obtain a mean-field description of the whole system. The DFT
 # calculations are performed with the QUANTUM ESPRESSO package. This requires downloading
-# the pseudopotentials for each atomic species in the system from the QUANTUM ESPRESSO
+# the pseudopotentials [#Modji] for each atomic species
+# in the system from the QUANTUM ESPRESSO
 # `database <https://www.quantum-espresso.org/pseudopotentials/>`_. We have carbon and nitrogen in
 # our system which can be downloaded with
 #
@@ -83,14 +85,14 @@ powerful method for affordable quantum simulation of materials.
 # ^^^^^^^^^^^^^^^^^^^^^
 # Once we have obtained the meanfield description, we can identify our impurity by finding
 # the states that are localized in real space around the defect region. We can identify these localized states using the
-# localization factor defined as []:
+# localization factor defined as [#Galli2]:
 #
 # .. math::
 #
 #     L_n = \int_{V \in \ohm} d^3 r |\Psi_n^{KS}(r)|^2
 #
 # where $V$ is the identified volume including the impurity within the supercell volume $\ohm$.
-# We will use the WEST program to compute the localization factor. This requires creating another
+# We will use the `WEST <https://pubs.acs.org/doi/10.1021/ct500958p>`_ program to compute the localization factor. This requires creating another
 # input file ``westpp.in`` as shown below.
 #
 # .. code-block:: python
@@ -159,10 +161,10 @@ powerful method for affordable quantum simulation of materials.
 # $$v_{ijkl}^{eff} = [W_0^{R}]_{ijkl}$$
 # $W_0^R$, results from screening the bare Coulomb potential, $v$, with the reduced polarizability,
 # $P_0^R = P - P_{imp}$, where $P$ is the system's polarizability and $P_{imp}$ is the impurity's
-# polarizability. However, this definition of the effective interaction, $v_{eff}$, introduces
-# double counting of electrostatic and exchange-correlation effects for the impurity: once via
-# density functional theory (DFT) and again via the high-level method.
-# Therefore, once $v^{eff}$ is obtained, the one-body term $t^{eff}$ is then modified by subtracting
+# polarizability. Since this leads to the inclusion of electrostatic
+# and exchange-correlation effects for the active electrons, we remove these interactions from the
+# the Kohn-Sham Hamiltonian, $H^{KS}$, to avoid double counting them.
+# Therefore, once $v^{eff}$ is obtained, the one-body term $t^{eff}$ is then obtained by subtracting
 # from the Kohn-Sham Hamiltonian the term accounting for electrostatic and exchange
 # correlation interactions in the active space.
 #
@@ -236,20 +238,14 @@ powerful method for affordable quantum simulation of materials.
 # exact removal of double counting  corrections at GW level of theory, thus removing the
 # approximation present in the initial DFT based formulation. This  formulation also helps capture
 # the response properties and provides access to excited state properties. Another major advantage
-# of QDET is the ease with which it can be used with quantum computers in a hybrid framework.
+# of QDET is the ease with which it can be used with quantum computers in a hybrid framework[#Baker].
 # Therefore, We can conclude here that QDET is a powerful embedding approach for simulating complex
 # quantum systems.
-#  
+#
 # References
 # ----------
 #
-# .. [#ashcroft]
-#
-#     N. W. Ashcroft, D. N. Mermin,
-#     "Solid State Physics", Chapter 4, New York: Saunders College Publishing, 1976.
-#
 # .. [#Galli]
-#
 #    Joel Davidsson, Mykyta Onizhuk, *et al.*, "Discovery of atomic clock-like spin defects in simple oxides from first principles"
 #    `ArXiv <https://arxiv.org/pdf/2302.07523>`__.
 #
@@ -260,6 +256,18 @@ powerful method for affordable quantum simulation of materials.
 # .. [#Gagliardi]
 #    Abhishek Mitra, Matthew Hermes, *et al.*, "Periodic Density Matrix Embedding for CO Adsorption on the MgO(001)Surface."
 #    `ChemRxiv <https://chemrxiv.org/engage/chemrxiv/article-details/62b0b0c40bba5d82606d2cae>`__.
+#
+# .. [#Galli2]
+#    Nan Sheng, Christian Vorwerk, *et al.*, "Green's function formulation of quantum defect embedding theory"
+#    `Arxiv <https://arxiv.org/abs/2203.05493>`__.
+#
+# .. [#Modji]
+#    Modjtaba S. Zini, Alain Delgado, *et al.*, "Quantum simulation of battery materials using ionic pseudopotentials"
+#    `ArXiv <https://arxiv.org/abs/2302.07981>`__.
+#
+# .. [#Baker]
+#    Jack S. Baker, Pablo A. M. Casares, *et al.*, "Simulating optically-active spin defects with a quantum computer"
+#    `ArXiv <https://arxiv.org/abs/2405.13115>`__.
 #
 # About the authors
 # -----------------
