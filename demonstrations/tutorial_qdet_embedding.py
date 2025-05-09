@@ -265,15 +265,15 @@ powerful method for affordable quantum simulation of materials.
 #
 # .. [#Galli2]
 #    Nan Sheng, Christian Vorwerk, *et al.*, "Green's function formulation of quantum defect embedding theory"
-#    `Arxiv <https://arxiv.org/abs/2203.05493>`__.
+#    `Arxiv <https://arxiv.org/pdf/2203.05493>`__.
 #
 # .. [#Modji]
 #    Modjtaba S. Zini, Alain Delgado, *et al.*, "Quantum simulation of battery materials using ionic pseudopotentials"
-#    `ArXiv <https://arxiv.org/abs/2302.07981>`__.
+#    `ArXiv <https://arxiv.org/pdf/2302.07981>`__.
 #
 # .. [#Baker]
 #    Jack S. Baker, Pablo A. M. Casares, *et al.*, "Simulating optically-active spin defects with a quantum computer"
-#    `ArXiv <https://arxiv.org/abs/2405.13115>`__.
+#    `ArXiv <https://arxiv.org/pdf/2405.13115>`__.
 #
 # About the authors
 # -----------------
