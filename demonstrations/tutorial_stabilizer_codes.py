@@ -5,15 +5,15 @@ Stabilizer codes for Quantum Error correction
 State-of-the-art quantum devices, such as IBM's Condor and Atom Computing's optical lattices, contain more than 
 a thousand qubits. Does this qubit count suffice for valuable quantum algorithms with clear speedups?
 The reality is that there is more to the story than the sheer number of qubits. As we currently stand, quantum
-devices are still prone to errors that increase with device size. For this reason, **quantum error correction**--one of the most important domain in the universe of quantum computing-- 
-has been gaining traction. 
+devices are still prone to errors that increase with device size. For this reason, **quantum error correction**--one of the most important domain in the universe of quantum computing--has 
+been gaining traction. 
 
 Quantum error correction is done via schemes known as **error correction codes.**
-These are quantum algorithms that come in many varieties and address different error types .
+These are quantum algorithms that come in many varieties that address different error types.
 Is there a unified way to understand these codes? Indeed, The **stabilizer formalism** provides such a framework for
 a large class of quantum error correction codes. The so-called
 **stabilizer codes**, such as the repetition, Shor, Steane, and surface codes, 
-fall under this formalism. Other codes, like GKP codes used by Xanadu, lie outside of it.
+all fall under this formalism. Other codes, like the GKP codes used by Xanadu, lie outside of it.
 
 In this demo, we will introduce the stabilizer formalism using bottom-up approach. We construct and
 some well-known codes using the quantum circuit formalism and then derive their **stabilizer generators,** from which
@@ -34,14 +34,14 @@ The quantum circuit representation is known as the **state picture**. In this fo
 Qubit encoding
 ~~~~~~~~~~~~~~~
 
-The first step in an error correction code is **encoding** one abstract or **logical qubit** is into a set of many on-device **physical qubits.** 
-The rationale for doing this is that, if some external factor changes the state of one of the qubits, we will still have an idea
-of what the original logical qubit was by looking at the rest of the qubits. For example in the three-qubit repetition code, the logical basis
-state qubits :math:`\vert \bar{0}\rangle` and :math:`\vert \bar{1}\rangle` are encoded into three physical qubits as
+The first step in an error correction code is **encoding** one abstract or **logical qubit** into a set of many on-device **physical qubits.** 
+The rationale is that, if some external factor changes the state of one of the qubits, we will still have an idea
+of what the original logical qubit was by looking at the rest of the qubits. For example, in the three-qubit repetition code, the logical basis-state 
+qubits, or **logical codewords**, :math:`\vert \bar{0}\rangle` and :math:`\vert \bar{1}\rangle` are encoded into three physical qubits via
 
 .. math::
 
-    \vert \bar{0} \rangle \mapsto \vert 000 \rangle, \quad \vert \bar{1} \rangle \mapsto \vert 111 \rangle
+    \vert \bar{0} \rangle \mapsto \vert 000 \rangle, \quad \vert \bar{1} \rangle \mapsto \vert 111 \rangle.
 
 A general qubit :math:`\vert \bar{\psi}\rangle = \alpha \vert \bar{0}\rangle + \beta \vert \bar{1}\rangle` is then encoded as
 
@@ -97,7 +97,7 @@ print("|111> component: ", encode_qnode(alpha, beta)[7])
 #
 # .. note::
 #     Why do we encode qubits in this way, instead of preparing many copies of the state? If the quantum state is known, we could do this,
-#     but it is not resource efficient: errors compound too quickly on single qubits. If the quantum state is not known, the no-cloning
+#     but even state preparation is prone to errors! If the quantum state is not known, the no-cloning
 #     theorem states it is impossible to make a copy of the state.
 #
 # Error detection
@@ -200,15 +200,47 @@ print("Fidelity if error on wire 2: ", qml.math.fidelity(encoded_state, error_co
 #
 # The error is corrected no matter which qubit was flipped!
 #
-# The operator picture
-# ---------------------
+# Operator picture and stabilizers
+# ---------------------------------
 #
-# We have worked with a simple example, but it is quite limited. The three-qubit code, for example, only works for
+# We have worked with a simple example, but it is quite limited. Indeed, the three-qubit code only works for
 # bit flip errors, but more powerful codes need more resources. For example, Shor's code, involving 9 qubits, 
 # can correct more types of errors on a single logical qubit. Moreover, to avoid errors at an acceptable level,
 # the industry standard is 1000 physical qubits per logical qubit. Even with a few qubits, the encoded states and protocols can become increasingly
 # complex! To deal with these situations, we resort to a different 
 # representation of error correction codes, known as the operator picture.
+#
+# To gain some intuition about the operator picture, let us express the three-qubit repetition code in a different way. Using the 
+# identity
+#
+# **Hadamard and reversed CNOT identities**
+#
+# and the fact that :math:`HXH = Z,`, the error correction code can be expressed in the following way:
+#
+# **Three-qubit circuit in the Stabilizer formalism**
+#
+# This is the same circuit, but the controls are all now in the auxiliary qubits, while the physical qubits act as target qubits. 
+# This does not seem desirable--we do not want to change the state of the physical qubits! However, let us observe that the operators
+# that act on the logical qubits are :math:`Z_0 Z_1 I_2` and :math:`I_0 Z_1 Z_2,` which leave the logical codewords invariant:
+# 
+# .. math::
+#
+#     Z_0 Z_1 I_2 \vert 000 \rangle = \vert 000 \rangle, \quad Z_0 Z_1 I_2 \vert 111 \rangle = \vert 111 \rangle.
+#  
+# .. math::
+#
+#     I_0 Z_1 Z_2 \vert 000 \rangle = \vert 000 \rangle, \quad I_0 Z_1 Z_2 \vert 111 \rangle = \vert 111 \rangle.
+#
+# This is great news. As long as no error has occurred, the logical qubits will be left alone. Otherwise, there will be
+# some operations done on the state, but we'll still be able to fix them via an error correction scheme. Notably, the invariance property 
+# **only holds true for the logical codewords.** For any other three-qubit basis states, at least one of these operators will have eigen
+# value :math:`-1`, as shown in the table below.
+#
+# **INSERT TABLE**
+#
+# 
+#
+#
 #
 # References
 # -----------
