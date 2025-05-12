@@ -103,14 +103,14 @@ print("|111> component: ", encode_qnode(alpha, beta)[7])
 # Error detection
 # ~~~~~~~~~~~~~~~~
 #
-# To detect whether a bit-flip error has occurred on one of the physical qubits, we perform a **syndrome measurement.** A syndrome measurement
+# To detect whether a bit-flip error has occurred on one of the physical qubits, we perform a **parity measurement.** A parity measurement
 # acts on auxiliary qubits to avoid disturbing the encoded logical state. In the case of the three-qubit repetition code, we measure in the computational
 # on two auxiliary qubits after after applying some :math:`\textrm{CNOT}` gates, as shown below
 #
 # **NEEDS PICTURE**
 #
-# The results of the measurements will tell us whether one of the qubits in :math:`\vert \bar{\psi} \rangle` was flipped and moreover,
-# they can tell us which qubit was flipped. The following table shows how to interpret the results of the syndrome measurements.
+# The result of the measurements is known as the **syndrome**. It will tell us whether one of the qubits in :math:`\vert \bar{\psi} \rangle` was flipped and moreover,
+# it can tell us which qubit was flipped. The following table shows how to interpret the syndromes.
 #
 # +------------+------------+------------+
 # | Error      | Syndrome 0 | Syndrome 1 |
@@ -190,7 +190,7 @@ def error_correction(error_wire):
 
 ##############################################################################
 #
-# Unfortunately, circuits with mid-circuit measurements cannot return a quantum state, so return the density matrix instead.
+# Unfortunately, circuits with mid-circuit measurements cannot return a quantum state, so we return the density matrix instead.
 # With this result, we can verify that the fidelity of the encoded state is the same as the final state after correction
 # as follows
 
@@ -241,28 +241,79 @@ print("Fidelity if error on wire 2: ", qml.math.fidelity(encoded_state, error_co
 #
 # This is great news. As long as no error has occurred, the logical qubits will be left alone. Otherwise, there will be
 # some operations applied on the state, but we will be able to fix them via an error correction scheme. Notably, the invariance property 
-# **only holds true for the logical codewords.** For any other three-qubit basis states, at least one of these operators will have eigenvalue 
+# **holds true only for the logical codewords.** For any other three-qubit basis states, at least one of these operators will have eigenvalue 
 # :math:`-1`, as shown in the table below.
 #
 # **INSERT TABLE**
 #
 # This gives us a new option for characterizing error correction codes. What if instead of building codewords and trying to find
-# the syndrome measurement operators from them, we went the the other way round? Namely, we could start  by specifying a set of operators, find the states
-# that remain invariant under their action, and make these our codewords. These operators are known as **stabilizers generators.**
+# the syndrome measurement operators from them, we went the the other way round? Namely, we could start by specifying a set of operators, find the states
+# that remain invariant under their action, and make these our codewords. These operators are known as **stabilizer generators.**
 #
 # The stabilizer formalism
 # -------------------------
+#
+# Stabilizer generators
+# ~~~~~~~~~~~~~~~~~~~~~~
 #
 # The stabilizer formalism takes the operator picture representation seriously and uses it to find error correction codes starting from a 
 # set of **Pauli words**--tensor products of Pauli operators. We start by specifying the stabilizer set. A stabilizer set on :math:`n`
 # qubits satisfies the following properties. 
 #
-# 1. It contains the identity operator :math:`-I_0\otimes I_1 \times \ldots I_{n-1},` but does not contain the negative identity.
+# 1. It contains the identity operator :math:`I_0\otimes I_1 \times \ldots I_{n-1},` but does not contain the negative identity.
 # 2. All elements of the set commute with each other. 
 # 3. The matrix product of two elements in the set yields an element that is also in the set.
 # 
-# ..note ::
-#     Codes generated with this approach do have a limitation: they can only correct for Pauli errors. 
+# The set can be more succinctly specified set of generators: a minimal set of operators in the stabilizer set that can produce all 
+# the other elements through pairwise multiplication. As a simple example, consider the stabilizer set
+#
+# .. math::
+#
+#     S = \left\lbrace I_0 \otimes I_1 \otimes I_2, \ Z_0 \otimes Z_1 \otimes I_2, \ Z_0 \otimes I_1 \otimes Z_2, \ I_0 \otimes Z_1 \otimes Z_2 \right\rbrace.
+#
+# We can check that it satisfies the defining properties 1. to 3. The most cumbersome to check is property 3, where we have to take all
+# possible products of the elements and check whether the result is in :math:`S.` For example
+# 
+# .. math::
+# 
+#    (Z_0 \otimes Z_1 \otimes I_2)\cdot (I_0 \otimes Z_1 \otimes Z_2) = Z_0 \otimes I_1 \otimes Z_2, \\
+#    (Z_0 \otimes Z_1 \otimes I_2 )^2 = I_0 \otimes I_1 \otimes I_2,
+# 
+# and so on. Note that we can obtain all the elements in :math:`S` just from :math:`Z_0 \otimes Z_1 \otimes I_2` and :math:`I_0 \otimes Z_1 \otimes Z_2.` Because
+# of this property these elements are **stabilizer generators** for :math:`S`. We write this fact as
+#
+# .. math::
+#
+#     S = \left\langle Z_0 \otimes Z_1 \otimes I_2 \otimes I_0 \otimes Z_1 \otimes Z_2 \right\rangle.
+#
+# It turns out that specifying these generators is enough to completely define an error correcting code.
+#
+# Now that we know how stabilizer generators work, let us create a tool that creates the full stabilizer set from its generators. 
+#
+def generate_stabilizer_group(gens, num_wires):
+    group = []
+    init_op =I(0)
+    for i in range(1,num_wires):
+      init_op = init_op @ I(i)
+    for bits in itertools.product([0, 1], repeat=len(gens)):
+        op = init_op
+        for i, bit in enumerate(bits):
+            if bit:
+                op = qml.prod(op, gens[i]).simplify()
+        group.append(op)
+    return set(group)
+
+generators = [Z(0)@Z(1)@I(2), I(0)@Z(1)@Z(2)]
+generate_stabilizer_group(generators, 3)
+
+##############################################################################
+#
+# Stabilizer codes
+# ~~~~~~~~~~~~~~~~~
+#
+#
+#
+#
 # 
 # References
 # -----------
