@@ -38,7 +38,7 @@ These are known as the `Chebyshev nodes <https://en.wikipedia.org/wiki/Chebyshev
 
 .. figure:: ../_static/demonstration_assets/quantum_chebyshev_transform/chebyshev_polynomials.png
     :align: center
-    :width: 60%
+    :width: 100%
     :target: javascript:void(0)
     :alt: Plot of first six Chebyshev polynomials, with nodes denser near the boundary.
 
@@ -246,10 +246,10 @@ overlaps = [np.vdot(state, circuit(state=i)[: 2**N] * np.sqrt(2)) for i in js]
 # We compare these circuit calculated overlaps to the definition, for which we plot the squared overlaps at all values of :math:`x`.
 # This continuous overlap function can be derived analytically as
 #
-# .. math:: 
+# .. math::
 #  |\langle\tau(x_j^\mathrm{Ch})|\tau(x)\rangle|^2 = \frac{\left(T_{2^N+1}(x_j^\mathrm{Ch})T_{2^N}(x)-T_{2^N}(x_j^\mathrm{Ch})T_{2^N+1}(x)\right)^2}{2^{2N}(x_j^\mathrm{Ch}-x)^2}\,,
 #
-# where :math:`\tau(x)` is a generalization of one of Chebyshev basis states defined earlier, where :math:`x` can be any value in :math:`[-1,1] rather than just one of the nodes.
+# where :math:`\tau(x)` is a generalization of one of Chebyshev basis states defined earlier, where :math:`x` can be any value in :math:`[-1,1]` rather than just one of the nodes.
 
 import matplotlib.pyplot as plt
 
@@ -279,15 +279,18 @@ xs = np.linspace(-1, 1, 1000)
 ax.plot(xs, [overlap_sq(x, nodes[j], N) for x in xs], label="expectation")
 
 ax.legend()
-fig.text(0.5, 0.05, 
+fig.text(0.5, 0.05,
     "Figure 3. Squared overlap of Chebyshev basis states.",
-    horizontalalignment="center", size="small", weight="normal")
+    horizontalalignment="center",
+    size="small",
+    weight="normal",
+)
 plt.show()
 
 
 #############################################
 # We can see that the squared overlap between the basis states and the :math:`j=7` state :math:`|\tau(x_7^\mathrm{Ch})\rangle` is 0, unless :math:`x=x_7^\mathrm{Ch}\approx 0.1`, then the overlap is 1.
-# 
+#
 # Let's also see if the amplitudes of the state in the computational basis agree with expectation.
 # To do this, we just modify our ``circuit`` function to return the probabilities of each of the computational basis states (ignoring the ancilla).
 
@@ -320,9 +323,12 @@ ax.plot(x, probs, "o", label="circuit")
 ax.plot(x, [tau_amplitudes(nodes[j], xs, N) ** 2 for xs in x], label="expectation")
 ax.set(xlabel=r"$|k\rangle$", ylabel="Probability")
 ax.legend()
-fig.text(0.5, 0.05, 
+fig.text(0.5, 0.05,
     "Figure 4. Squared overlap of Chebyshev basis state with computational basis states.",
-    horizontalalignment="center", size="small", weight="normal")
+    horizontalalignment="center",
+    size="small",
+    weight="normal",
+)
 plt.show()
 
 #############################################
