@@ -69,7 +69,7 @@ Next, we will describe the quantum analogue of this transformation.
 Quantum Chebyshev basis
 ---------------------------------------
 The quantum Chebyshev transform (QChT) circuit described in Ref. [#williams2023]_ maps :math:`2^N` computational states :math:`\{|x_j\rangle\}_{j=0}^{2^N-1}` to Chebyshev states :math:`\{|\tau(x_j^\mathrm{Ch})\rangle\}_{j=0}^{2^N-1}` which have amplitudes given by the Chebyshev polynomials of the first kind. 
-The :math:`j`th Chebyshev basis state using :math:`N` qubits is then
+The jth Chebyshev basis state using :math:`N` qubits is
 
 .. math::
   |\tau(x_j^\mathrm{Ch})\rangle = \frac1{2^{N/2}}T_0(x_j^\mathrm{Ch})|0\rangle + \frac1{2^{(N-1)/2}}\sum_{k=1}^{2^N-1}T_k(x_j^\mathrm{Ch})|k\rangle\,,
@@ -213,7 +213,7 @@ fig, ax = qml.draw_mpl(circuit_to_draw, decimals=2, style="pennylane")()
 fig.show()
 
 #############################################
-# Note the new function is defined only to remove the returned ``qml.state``, simplifying the drawn circuit.
+# Note we define a new function for the circuit to simplify the drawing, removing the returned ``qml.state``.
 
 #############################################
 # Testing the QChT
@@ -238,23 +238,18 @@ def ch_node(j, N):
 
 js = list(range(int(len(state))))
 nodes = [ch_node(i, N) for i in js]
-print(nodes)
 
 # compute overlap with other basis states using np.vdot()
-overlaps = []
-for i in js:
-    state_i = circuit(state=i)[: 2**N] * np.sqrt(2)
-    overlaps.append(np.vdot(state, state_i))
+overlaps = [np.vdot(state, circuit(state=i)[: 2**N] * np.sqrt(2)) for i in js]
 
 #############################################
-# Now we plot the squared overlaps at the nodes of the chosen state, and all other basis states.
-# We compare this to the definition, for which we plot the squared overlaps at all values of :math:`x`.
-# This can be derived analytically as
+# We compare these circuit calculated overlaps to the definition, for which we plot the squared overlaps at all values of :math:`x`.
+# This continuous overlap function can be derived analytically as
 #
-#.. math:: 
+# .. math:: 
 #  |\langle\tau(x_j^\mathrm{Ch})|\tau(x)\rangle|^2 = \frac{\left(T_{2^N+1}(x_j^\mathrm{Ch})T_{2^N}(x)-T_{2^N}(x_j^\mathrm{Ch})T_{2^N+1}(x)\right)^2}{2^{2N}(x_j^\mathrm{Ch}-x)^2}\,,
 #
-# where :math:`\tau(x)` is like one of the Chebyshev basis states defined earlier, but generalized to all :math:`x` rather than just the nodes.
+# where :math:`\tau(x)` is a generalization of one of Chebyshev basis states defined earlier, where :math:`x` can be any value in :math:`[-1,1] rather than just one of the nodes.
 
 import matplotlib.pyplot as plt
 
@@ -273,7 +268,7 @@ def overlap_sq(x, xp, N):
 plt.style.use("pennylane.drawer.plot")
 
 fig = plt.figure(figsize=(6.4, 2.4))
-ax = fig.add_axes((0.15, 0.3, 0.8, 0.65))
+ax = fig.add_axes((0.15, 0.3, 0.8, 0.65))  # make room for caption
 ax.set(xlabel=r"x", ylabel="Square Overlap")
 
 # plot squared overlaps computed in circuit
@@ -291,7 +286,7 @@ plt.show()
 
 
 #############################################
-# We can see that the squared overlap of the chosen basis state :math:`|\tau(x_7^\mathrm{Ch})\rangle` with the other states is 0, unless :math:`x=x_7^\mathrm{Ch}\approx 0.1`, then the overlap is 1.
+# We can see that the squared overlap between the basis states and the :math:`j=7` state :math:`|\tau(x_7^\mathrm{Ch})\rangle` is 0, unless :math:`x=x_7^\mathrm{Ch}\approx 0.1`, then the overlap is 1.
 # 
 # Let's also see if the amplitudes of the state in the computational basis agree with expectation.
 # To do this, we just modify our ``circuit`` function to return the probabilities of each of the computational basis states (ignoring the ancilla).
@@ -320,7 +315,7 @@ def tau_amplitudes(x, k, N):
 
 
 fig = plt.figure(figsize=(6.4, 4.8))
-ax = fig.add_axes((0.15, 0.23, 0.80, 0.72))
+ax = fig.add_axes((0.15, 0.23, 0.80, 0.72))  # make room for caption
 ax.plot(x, probs, "o", label="circuit")
 ax.plot(x, [tau_amplitudes(nodes[j], xs, N) ** 2 for xs in x], label="expectation")
 ax.set(xlabel=r"$|k\rangle$", ylabel="Probability")
