@@ -290,6 +290,10 @@ print("Fidelity if error on wire 2: ", qml.math.fidelity(encoded_state, error_co
 #
 # Now that we know how stabilizer generators work, let us create a tool that creates the full stabilizer set from its generators. 
 #
+import itertools
+from pennylane import X, Y, Z
+from pennylane import Identity as I
+
 def generate_stabilizer_group(gens, num_wires):
     group = []
     init_op =I(0)
