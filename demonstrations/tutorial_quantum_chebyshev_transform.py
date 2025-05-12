@@ -11,10 +11,10 @@ We will start by discussing Chebyshev polynomials and why you may want to work i
 What are Chebyshev polynomials?
 ---------------------------------------
 
-`Chebyshev polynomials <https://en.wikipedia.org/wiki/Chebyshev_polynomials#As_a_basis_set>`__ of the first kind :math:`T_n(x)` are a set of orthogonal polynomials that are complete on the interval :math:`[-1,1]`. They can be defined as 
+`Chebyshev polynomials <https://en.wikipedia.org/wiki/Chebyshev_polynomials>`__ of the first kind :math:`T_n(x)` are a set of orthogonal polynomials that are complete on the interval :math:`[-1,1]`. They can be defined as 
 
 .. math::
-  T_n(x) \equiv \cos(n \arccos(x))
+  T_n(x) \equiv \cos(n \arccos(x))\,,
 
 where :math:`n` is the order of the polynomial. We can write out the first few orders explicitly.
 
@@ -25,7 +25,7 @@ where :math:`n` is the order of the polynomial. We can write out the first few o
   T_3(x) &= 4x^3 - 3x \\
   T_4(x) &= 8x^4 - 8x^2 + 1 \\
   &\ \,\vdots \\
-  T_{n+1}(x) &= 2xT_n(x) - T_{n-1}(x)
+  T_{n+1}(x) &= 2xT_n(x) - T_{n-1}(x)\,.
 
 The recursion relation in the last line can be used to compute the next orders. 
 Observe that odd and even order :math:`T_n` are odd and even functions, respectively. 
@@ -51,11 +51,11 @@ The nodes are plotted above along with the corresponding polynomials. Note that 
     \begin{cases}
       0 & k \neq \ell\,,\\
       N & k = \ell = 0\,,\\
-      N/2 & k = \ell \neq 0
+      N/2 & k = \ell \neq 0\,.
     \end{cases}
 
-The Chebyshev polynomials have a lot of *nice* properties. Because they are complete, any function :math:`f(x)` on the interval :math:`x\in [-1,1]` can be expanded in :math:`T_n(x)` up to order :math:`N` as :math:`f(x) = \sum_{j=0}^N a_j T_j(x)`. \
-To do this process numerically for a discrete set of sampling points would take :math:`\mathcal{O}(N^2)` operations for a general set of complete functions 🐌. 
+The Chebyshev polynomials have a lot of *nice* properties. Because they are complete, any function :math:`f(x)` on the interval :math:`x\in [-1,1]` can be expanded in :math:`T_n(x)` up to order :math:`N` as :math:`f(x) = \sum_{j=0}^N a_j T_j(x)`.
+To do this process numerically on a classical computer for a discrete set of sampling points would take :math:`\mathcal{O}(N^2)` operations for a general set of complete functions 🐌. 
 However, because of the way the Chebyshev polynomials are defined in terms of cosine, the `discrete Chebyshev transformation (DChT) <https://en.wikipedia.org/wiki/Discrete_Chebyshev_transform>`__ can be related to the `discrete cosine transform (DCT) <https://en.wikipedia.org/wiki/Discrete_cosine_transform>`__ to leverage the efficiency of the `fast-Fourier-transform <https://en.wikipedia.org/wiki/Fast_Fourier_transform>`__-style algorithms, which take :math:`\mathcal{O}(N \log N)` operations 🚀.
 
 The DChT is sampled on the nodes of :math:`T_N(x)`, which are non-equidistant on the :math:`[-1,1]` interval. 
@@ -63,23 +63,22 @@ This non-uniform sampling has more resolution at the boundary, but less in the m
 This can be a benefit if you are, for example, solving a differential equation and expect more interesting features at the boundary, so the extra resolution there is useful. 
 In general, working in the Chebyshev basis can have advantages over the Fourier basis for polynomial decomposition.
 
+Next, we will describe the quantum analogue of this transformation.
+
 
 Quantum Chebyshev basis
 ---------------------------------------
-The quantum Chebyshev transform (QChT) circuit described in Ref. [#williams2023]_ maps :math:`2^N` computational states :math:`\{|x_j\rangle\}_{j=0}^{2^N-1}` to Chebyshev states :math:`\{|\tau\rangle(x_j^\mathrm{Ch})\}_{j=0}^{2^N-1}` which have amplitudes given by the Chebyshev polynomials of the first kind. 
+The quantum Chebyshev transform (QChT) circuit described in Ref. [#williams2023]_ maps :math:`2^N` computational states :math:`\{|x_j\rangle\}_{j=0}^{2^N-1}` to Chebyshev states :math:`\{|\tau(x_j^\mathrm{Ch})\rangle\}_{j=0}^{2^N-1}` which have amplitudes given by the Chebyshev polynomials of the first kind. 
+The :math:`j`th Chebyshev basis state using :math:`N` qubits is then
 
 .. math::
-  |\tau(x)\rangle = \frac1{2^{N/2}}T_0(x)|0\rangle + \frac1{2^{(N-1)/2}}\sum_{k=1}^{2^N-1}T_k(x)|k\rangle
+  |\tau(x_j^\mathrm{Ch})\rangle = \frac1{2^{N/2}}T_0(x_j^\mathrm{Ch})|0\rangle + \frac1{2^{(N-1)/2}}\sum_{k=1}^{2^N-1}T_k(x_j^\mathrm{Ch})|k\rangle\,,
 
-where :math:`|k\rangle` are the computational basis states and :math:`N` is the number of qubits. These states are orthonormal at the Chebyshev nodes due to the orthogonality condition, that is
+where :math:`|k\rangle` are the computational basis states. 
+These states are orthonormal due to the orthgonality of the Chebyshev polynomials, that is
 
 .. math::
-  \langle\tau(x_j^\mathrm{Ch})|\tau(x_{j'}^\mathrm{Ch})\rangle = \delta_{j, j'}
-
-The squared overlap if one of the variables is not at a node can be derived analytically as
-
-.. math:: 
-  |\langle\tau(x_j^\mathrm{Ch})|\tau(x)\rangle|^2 = \frac{\left(T_{2^N+1}(x_j^\mathrm{Ch})T_{2^N}(x)-T_{2^N}(x_j^\mathrm{Ch})T_{2^N+1}(x)\right)^2}{2^{2N}(x_j^\mathrm{Ch}-x)^2}
+  \langle\tau(x_j^\mathrm{Ch})|\tau(x_{j'}^\mathrm{Ch})\rangle = \delta_{j, j'}\,.
 
 The goal is to design a circuit that applies the operation :math:`\mathcal{U}_\mathrm{QChT} = \sum_{j=0}^{2^N-1} |\tau(x_j^\mathrm{Ch})\rangle\langle x_j|`.
 
@@ -239,6 +238,7 @@ def ch_node(j, N):
 
 js = list(range(int(len(state))))
 nodes = [ch_node(i, N) for i in js]
+print(nodes)
 
 # compute overlap with other basis states using np.vdot()
 overlaps = []
@@ -249,6 +249,12 @@ for i in js:
 #############################################
 # Now we plot the squared overlaps at the nodes of the chosen state, and all other basis states.
 # We compare this to the definition, for which we plot the squared overlaps at all values of :math:`x`.
+# This can be derived analytically as
+#
+#.. math:: 
+#  |\langle\tau(x_j^\mathrm{Ch})|\tau(x)\rangle|^2 = \frac{\left(T_{2^N+1}(x_j^\mathrm{Ch})T_{2^N}(x)-T_{2^N}(x_j^\mathrm{Ch})T_{2^N+1}(x)\right)^2}{2^{2N}(x_j^\mathrm{Ch}-x)^2}\,,#
+#
+# where :math:`\tau(x)` is like one of the Chebyshev basis states defined earlier, but generalized to all :math:`x` rather than just the nodes.
 
 import matplotlib.pyplot as plt
 
@@ -279,12 +285,14 @@ ax.plot(xs, [overlap_sq(x, nodes[j], N) for x in xs], label="expectation")
 
 ax.legend()
 fig.text(0.5, 0.05, 
-    "Figure 4. Squared overlap of Chebyshev basis states.",
+    "Figure 3. Squared overlap of Chebyshev basis states.",
     horizontalalignment="center", size="small", weight="normal")
 plt.show()
 
 
 #############################################
+# We can see that the squared overlap of the chosen basis state :math:`|\tau(x_7^\mathrm{Ch})\rangle` with the other states is 0, unless :math:`x=x_7^\mathrm{Ch}\approx 0.1`, then the overlap is 1.
+# 
 # Let's also see if the amplitudes of the state in the computational basis agree with expectation.
 # To do this, we just modify our ``circuit`` function to return the probabilities of each of the computational basis states (ignoring the ancilla).
 
@@ -318,7 +326,7 @@ ax.plot(x, [tau_amplitudes(nodes[j], xs, N) ** 2 for xs in x], label="expectatio
 ax.set(xlabel=r"$|k\rangle$", ylabel="Probability")
 ax.legend()
 fig.text(0.5, 0.05, 
-    "Figure 5. Squared overlap of Chebyshev basis state with computational basis states.",
+    "Figure 4. Squared overlap of Chebyshev basis state with computational basis states.",
     horizontalalignment="center", size="small", weight="normal")
 plt.show()
 
