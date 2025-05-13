@@ -31,6 +31,8 @@ The quantum circuit representation is known as the **state picture**. In this fo
 - Error detection
 - Error correction
 
+Let us describe each of these steps in detail.
+
 Qubit encoding
 ~~~~~~~~~~~~~~~
 
@@ -92,8 +94,9 @@ print("|111> component: ", encode_qnode(alpha, beta)[7])
 #     X_2 \vert \bar{\psi}\rangle = \alpha \vert 010 \rangle + \beta \vert 101 \rangle
 #
 # If we are sure that **only one bit-flip error occurred**, and since only the superpositions of :math:`\alpha \vert 000 \rangle` and 
-# :math:`\alpha \vert 111 \rangle` are allowed, be can fix this error by flipping the qubit back. The problem here is that, to know that this happened,
-# we have to measure the state. This collapses the wave function, rendering it useless for future calculations. Let us see how to get around this.
+# :math:`\alpha \vert 111 \rangle` are allowed, we can deduce that error occured on the second qubit and we can fix this error by flipping it back. The problem here is that, 
+# in a quantum circuit, we do not have access to the state. To know that a flip did occur,
+# we have to measure the state. But this collapses the wave function, rendering it useless for future calculations. Let us see how to get around this.
 #
 # .. note::
 #     Why do we encode qubits in this way, instead of preparing many copies of the state? If the quantum state is known, we could do this,
@@ -280,11 +283,11 @@ print("Fidelity if error on wire 2: ", qml.math.fidelity(encoded_state, error_co
 #    (Z_0 \otimes Z_1 \otimes I_2 )^2 = I_0 \otimes I_1 \otimes I_2,
 # 
 # and so on. Note that we can obtain all the elements in :math:`S` just from :math:`Z_0 \otimes Z_1 \otimes I_2` and :math:`I_0 \otimes Z_1 \otimes Z_2.` Because
-# of this property these elements are **stabilizer generators** for :math:`S`. We write this fact as
+# of this property, these elements are **stabilizer generators** for :math:`S`. We write this fact as
 #
 # .. math::
 #
-#     S = \left\langle Z_0 \otimes Z_1 \otimes I_2 \otimes I_0 \otimes Z_1 \otimes Z_2 \right\rangle.
+#     S = \left\langle Z_0 \otimes Z_1 \otimes I_2, \ I_0 \otimes Z_1 \otimes Z_2 \right\rangle.
 #
 # It turns out that specifying these generators is enough to completely define an error correcting code.
 #
@@ -312,10 +315,48 @@ generate_stabilizer_group(generators, 3)
 
 ##############################################################################
 #
-# Stabilizer codes
-# ~~~~~~~~~~~~~~~~~
+# Defining the codespace
+# ~~~~~~~~~~~~~~~~~~~~~~~
 #
+# At this point, the pressing question is given a set of stabilizer operators, how do we recover the error correction circuit? That is, 
+# we need to find a way to go from the operator picture to the state picture. Let us recall that the property that inspired using stabilizer generators 
+# is that they must leave the codewords invariant. That is, for any stabilizer element :math:`S` and codeword :math:`\vert \psi \rangle`, we myst
+# have
+# 
+# .. math::
+# 
+#     S\vert \psi rangle = \vert \psi \rangle. 
 #
+# The **codespace** is defined as the set made up of all states such that :math`S_i\vert\psi\rangle = \vert \psi\rangle` for all stabilizer
+# generators :math:`S_i.` The **codewords** can then be recovered by choosing an orthogonal basis of the codespace.
+#
+# With this in mind, the error correcting code can be recovered for the set :math:`\left\lbrace S_i \right\rbrace`, as shown below
+#
+# **FIGURE: GENERAL ERROR CORRECTION CIRCUIT FROM STABILIZERS**
+#
+# The stabilizer generators act as the controlled operators in the codewords and yield unique syndromes for each Pauli Error. 
+#
+# Logical operators
+# ~~~~~~~~~~~~~~~~~~
+#
+# Thus far, we have defined the stabilizer generators, which correspond to the operators that implement syndrome measurements, and the 
+# codewords, which are states invariant under the stabilizers and hence usable as logical qubits. One missing ingredient are gates we can implement
+# on logical qubits without leaving the codespace. Such operators would act non-trivially on the codewords, so they cannot be in the
+# stabilizer set, but have to preserve the codespace, meaning they **must commute** with all the stabilizer generators. In particular
+# we are interested in the logical Pauli $\bar{X}$ and $\bar{Z}$ operators, defined by
+#
+# .. math::
+#    
+#     \bar{X}\vert \bar{0} \rangle = \vert {1} \rangle, \quad \bar{X}\vert \bar{1} \rangle = \vert {0} \rangle
+#     \bar{Z}\vert \bar{0} \rangle = \vert {0} \rangle, \quad \bar{Z}\vert \bar{1} \rangle = - \vert {1} \rangle
+#
+# For example, in the three qubit bit flip error correcting code, the logical operators are :math:`\bar{X} = X_0 X_1 X_2` and 
+# :math:`\bar{Z} = Z_0 Z_1 Z_2,` but they will not always be this simple.  In general, given a stabilizer set $S$, the logical
+# operators for the code satisfy the following properties:
+#
+# 1. They commute with all elements in :math:`S,` so they leave the codespace invariant,
+# 2. They are not in the stabilizer group,
+# 3. They anticommute with each other, which means they act in a non-trivial on the codewords.
 #
 #
 # 
