@@ -49,7 +49,7 @@ A general qubit :math:`\vert \bar{\psi}\rangle = \alpha \vert \bar{0}\rangle + \
 
 .. math::
 
-    \alpha \vert \bar{0}\rangle + \beta \vert \bar{1}\rangle \mapsto \alpha \vert 000 \rangle + \beta \vert \bar{111}\rangle.
+    \alpha \vert \bar{0}\rangle + \beta \vert \bar{1}\rangle \mapsto \alpha \vert 000 \rangle + \beta \vert 111\rangle.
 
 This encoding can be done via the following quantum circuit.
  
@@ -328,9 +328,9 @@ generate_stabilizer_group(generators, 3)
 # 
 # .. math::
 # 
-#     S\vert \psi rangle = \vert \psi \rangle. 
+#     S\vert \psi \rangle = \vert \psi \rangle. 
 #
-# The **codespace** is defined as the set made up of all states such that :math`S_i\vert\psi\rangle = \vert \psi\rangle` for all stabilizer
+# The **codespace** is defined as the set made up of all states such that :math:`S_i \vert\psi\rangle = \vert \psi\rangle` for all stabilizer
 # generators :math:`S_i.` The **codewords** can then be recovered by choosing an orthogonal basis of the codespace.
 #
 # With this in mind, the error correcting code can be recovered for the set :math:`\left\lbrace S_i \right\rbrace`, as shown below
@@ -346,7 +346,7 @@ generate_stabilizer_group(generators, 3)
 # codewords, which are states invariant under the stabilizers and hence usable as logical qubits. One missing ingredient are gates we can implement
 # on logical qubits without leaving the codespace. Such operators would act non-trivially on the codewords, so they cannot be in the
 # stabilizer set, but have to preserve the codespace, meaning they **must commute** with all the stabilizer generators. In particular
-# we are interested in the logical Pauli $\bar{X}$ and $\bar{Z}$ operators, defined by
+# we are interested in the logical Pauli :math:`\bar{X}` and :math:`\bar{Z}` operators, defined by
 #
 # .. math::
 #    
