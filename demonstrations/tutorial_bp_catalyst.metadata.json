@@ -10,14 +10,7 @@
   "categories": ["Quantum Computing"],
   "tags": ["quantum error correction", "css codes", "belief propagation"],
   "previewImages": [
-    {
-      "type": "thumbnail",
-      "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_magic-state-distillation.png"
-    },
-    {
-      "type": "large_thumbnail",
-      "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_magic-state-distillation.png"
-    }
+
   ],
   "seoDescription": "Learn how to decode CSS codes using belief propagation with JAX, Pennylane and Catalyst",
   "doi": "",
@@ -93,22 +86,17 @@
     {
       "type": "demonstration",
       "id": "tutorial_magic_state_distillation",
-      "weight": 0.75
-    },
-    {
-      "type": "demonstration",
-      "id": "tutorial_how_to_use_noise_models",
-      "weight": 0.25
+      "weight": 1
     },
     {
       "type": "demonstration",
       "id": "tutorial_mcm_introduction",
-      "weight": 0.75
+      "weight": 1
     },
     {
       "type": "demonstration",
       "id": "tutorial_qjit_compile_grovers_algorithm_with_catalyst",
-      "weight": 0.5
+      "weight": 1
     }
   ]
   ]
