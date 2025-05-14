@@ -1,0 +1,54 @@
+{
+    "title": "A Game of Surface Codes: Large-Scale Quantum Computing with Lattice Surgery",
+    "authors": [
+        {
+            "username": "Qottmann"
+        }
+    ],
+    "dateOfPublication": "2025-06-30T00:00:00+00:00",
+    "dateOfLastModification": "2025-06-30T00:00:00+00:00",
+    "categories": [
+        "Quantum Computing",
+        "Algorithms"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_fixed_depth_hamiltonian_simulation_via_cartan_decomposition.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_fixed_depth_hamiltonian_simulation_via_cartan_decomposition.png"
+        }
+    ],
+    "seoDescription": "A game of surface codes: Exploring space-time tradeoffs in surface code based quantum computation.",
+    "doi": "",
+    "references": [
+        {
+            "id": "Litinski",
+            "type": "preprint",
+            "title": "A Game of Surface Codes: Large-Scale Quantum Computing with Lattice Surgery",
+            "authors": "Daniel Litinski",
+            "year": "2021",
+            "publisher": "",
+            "journal": "",
+            "doi": "10.22331/q-2019-03-05-128",
+            "url": "https://arxiv.org/abs/1808.02892"
+        }
+    ],
+    "basedOnPapers": ["10.22331/q-2019-03-05-128"],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_toric_code",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_mbqc",
+            "weight": 1.0
+        }
+    ]
+}
