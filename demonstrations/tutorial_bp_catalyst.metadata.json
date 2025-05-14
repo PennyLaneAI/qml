@@ -5,11 +5,19 @@
       "username": "tomginsberg"
     }
   ],
-  "dateOfPublication": "2025-05-14T14:49:55.155960-04:00",
-  "dateOfLastModification": "2025-05-14T14:49:55.155960-04:00",
+  "dateOfPublication": "2025-05-14T00:00:00+00:00",
+  "dateOfLastModification": "2025-05-14T00:00:00+00:00",
   "categories": ["Quantum Computing"],
   "tags": ["quantum error correction", "css codes", "belief propagation"],
   "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/neutral_atoms/thumbnail_tutorial_neutral_atoms.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_neutral_atoms.png"
+        }
 
   ],
   "seoDescription": "Learn how to decode CSS codes using belief propagation with JAX, Pennylane and Catalyst",
@@ -21,16 +29,14 @@
       "title": "The stabilizer trilogy I — Stabilizer codes",
       "authors": "Arthur Pesah",
       "year": "2023",
-      "doi": "",
       "url": "https://arthurpesah.me/blog/2023-01-31-stabilizer-formalism-1/"
     },
     {
       "id": "Wiberg2001",
-      "type": "thesis",
+      "type": "phdthesis",
       "title": "Codes and Decoding on General Graphs",
       "authors": "Niclas Wiberg",
       "year": "2001",
-      "doi": "",
       "url": "https://www.essrl.wustl.edu/~jao/itrg/wiberg.pdf"
     },
     {
@@ -39,7 +45,6 @@
       "title": "Degenerate Quantum LDPC Codes With Good Finite Length Performance",
       "authors": "Pavel Panteleev",
       "year": "2019",
-      "doi": "",
       "url": "https://arxiv.org/abs/1904.02703v3"
     },
     {
@@ -48,7 +53,6 @@
       "title": "Localized statistics decoding: A parallel decoding algorithm for quantum low-density parity-check codes",
       "authors": "Timo Hillmann",
       "year": "2024",
-      "doi": "",
       "url": "https://arxiv.org/abs/2406.18655v1"
     },
     {
@@ -57,12 +61,11 @@
       "title": "Ambiguity Clustering: an accurate and efficient decoder for qLDPC codes",
       "authors": "Stasiu Wolanski",
       "year": "2024",
-      "doi": "",
       "url": "https://arxiv.org/abs/2406.14527v2"
     },
     {
       "id": "Loeliger2004",
-      "type": "article-journal",
+      "type": "article",
       "title": "An introduction to factor graphs",
       "authors": "Hans-Andrea Loeliger",
       "year": "2004",
@@ -75,12 +78,10 @@
       "title": "Bayesian Reasoning and Machine Learning",
       "authors": "David Barber",
       "year": "2012",
-      "doi": "",
       "url": "http://web4.cs.ucl.ac.uk/staff/D.Barber/textbook/180325.pdf#page=107.50"
     }
   ],
   "basedOnPapers": [],
-  "doi": "",
   "referencedByPapers": [],
   "relatedContent": [
     {
