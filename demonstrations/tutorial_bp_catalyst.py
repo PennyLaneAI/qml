@@ -239,9 +239,7 @@ def lookup_decoder(matrix: ArrayLike, max_weight: int = 1):
         for qs in combinations(range(n), w):
             err = jnp.zeros(n, dtype=jnp.int8).at[jnp.array(qs)].set(1)  # error mask
             syn = (matrix @ err) % 2  # syndrome for this error
-            idx = jnp.dot(
-                syn, 1 << jnp.arange(m, dtype=jnp.int8)
-            )  # syndrome bits to base 10 index
+            idx = jnp.dot(syn, 1 << jnp.arange(m, dtype=jnp.int8))  # syndrome bits to base 10 index
             lut = lut.at[idx].set(err)
 
     @jax.jit
@@ -454,9 +452,7 @@ for c in range(num_checks):
 pos = nx.bipartite_layout(G, nodes=[f"v{i}" for i in range(num_vars)])
 
 plt.figure(figsize=(10, 7))
-nx.draw(
-    G, pos, with_labels=True, node_color="skyblue", node_size=500, font_weight="bold"
-)
+nx.draw(G, pos, with_labels=True, node_color="skyblue", node_size=500, font_weight="bold")
 plt.title("Bipartite Graph for H_stean", fontsize=16)
 plt.show()
 
@@ -619,9 +615,7 @@ for i in range(total_syndromes):
     bp_pattern_str = "".join(map(str, bp_pattern.tolist()))
     lut_pattern_str = "".join(map(str, lut_pattern.tolist()))
 
-    table_data.append(
-        [syndrome_binary_string, bp_pattern_str, lut_pattern_str, str(match)]
-    )
+    table_data.append([syndrome_binary_string, bp_pattern_str, lut_pattern_str, str(match)])
 
     # Increment correct count if patterns match
     if match:
@@ -684,9 +678,7 @@ def ml_rep_decoder(syndrome: ArrayLike) -> ArrayLike:
     """
     # Candidate 1: assume e[0] = 0, then recover the rest via cumulative XOR.
     #   e[k+1] = e[k] ⊕ s[k]  ⇒  e = [0, cumsum(s) mod 2]
-    e0 = jnp.concatenate(
-        (jnp.array([0], dtype=jnp.int32), jnp.mod(jnp.cumsum(syndrome), 2))
-    )
+    e0 = jnp.concatenate((jnp.array([0], dtype=jnp.int32), jnp.mod(jnp.cumsum(syndrome), 2)))
 
     # Candidate 2: flip every bit (equivalent to choosing e[0] = 1).
     e1 = (e0 + 1) & 1  # fast “add‑one then mod 2”
@@ -854,20 +846,14 @@ def state_vector_to_dict(
                         f"Wire indices in {wires} are out of bounds for {n_qubits} qubits."
                     )
                 current_bits = "".join(
-                    [
-                        bit_char
-                        for idx, bit_char in enumerate(full_bits)
-                        if idx in processed_wires
-                    ]
+                    [bit_char for idx, bit_char in enumerate(full_bits) if idx in processed_wires]
                 )
             else:
                 current_bits = full_bits
 
             if probability:
                 prob_val = (jnp.abs(amplitude_val) ** 2).item()
-                d[current_bits] = (
-                    d.get(current_bits, 0.0) + prob_val
-                )  # Ensure float for sum
+                d[current_bits] = d.get(current_bits, 0.0) + prob_val  # Ensure float for sum
             else:
                 # Warning this may lead to errors when using wires != None and probability=False
                 amp_item = amplitude_val.item()
@@ -880,9 +866,7 @@ def state_vector_to_dict(
             # Sort by probability descending for better readability
             sorted_items = sorted(d.items(), key=lambda item: item[1], reverse=True)
             for k, v_prob in sorted_items:
-                if (
-                    v_prob > eps
-                ):  # Apply eps again for final display after potential summation
+                if v_prob > eps:  # Apply eps again for final display after potential summation
                     table_data.append([f"|{k}〉", f"{v_prob * 100:.3f}"])
             print("\nState Probabilities:")
             print(
@@ -903,20 +887,14 @@ def state_vector_to_dict(
             for k, v_amp in sorted_items:
                 amp = complex(v_amp)  # Ensure it's complex for consistent processing
                 if abs(amp) > eps:  # Apply eps again for final display
-                    table_data.append(
-                        [f"|{k}〉", f"{amp.real:.5f}", f"{amp.imag:+.5f}"]
-                    )
-                    if (
-                        abs(amp.imag) > eps
-                    ):  # Check if there's a significant imaginary part
+                    table_data.append([f"|{k}〉", f"{amp.real:.5f}", f"{amp.imag:+.5f}"])
+                    if abs(amp.imag) > eps:  # Check if there's a significant imaginary part
                         has_complex = True
                     if abs(amp.real) > eps:
                         has_real = True
 
             print("\nState Amplitudes:")
-            if (
-                not has_complex
-            ):  # Simplify table if all imaginary parts are zero (or very small)
+            if not has_complex:  # Simplify table if all imaginary parts are zero (or very small)
                 headers = ["State |k〉", "Amplitude"]
                 simple_table_data = [[row[0], row[1]] for row in table_data]
                 print(
@@ -927,9 +905,7 @@ def state_vector_to_dict(
                         stralign="center",
                     )
                 )
-            elif (
-                not has_real
-            ):  # Simplify table if all imaginary parts are zero (or very small)
+            elif not has_real:  # Simplify table if all imaginary parts are zero (or very small)
                 headers = ["State |k〉", "Amplitude"]
                 simple_table_data = [[row[0], row[2]] for row in table_data]
                 print(
@@ -1060,9 +1036,7 @@ def qec_round(H: ArrayLike, p_err=1e-3, key=random.PRNGKey(0)):
 p_err = 0.1
 key = random.PRNGKey(10)
 print(f"Running Stean Code QEC Round with error: {get_error(n, p_err=p_err, key=key)}")
-state_vector_to_dict(
-    qec_round(H_stean, p_err=p_err, key=key), pretty_print=True, wires=range(n)
-)
+state_vector_to_dict(qec_round(H_stean, p_err=p_err, key=key), pretty_print=True, wires=range(n))
 
 ######################################################################
 # If we increase the likelihood of errors we are more likely to end up with an error pattern that
@@ -1072,9 +1046,7 @@ state_vector_to_dict(
 p_err = 0.3
 key = random.PRNGKey(8)
 print(f"Running Stean Code QEC Round with error: {get_error(n, p_err=p_err, key=key)}")
-state_vector_to_dict(
-    qec_round(H_stean, p_err=p_err, key=key), pretty_print=True, wires=range(n)
-)
+state_vector_to_dict(qec_round(H_stean, p_err=p_err, key=key), pretty_print=True, wires=range(n))
 
 ######################################################################
 # Benchmarking logical vs. physical error rates
@@ -1166,9 +1138,7 @@ plt.xscale("log", base=2)
 plt.yscale("log", base=2)
 plt.title("Logical vs. Physical Error Rate", fontsize=18, pad=20)
 plt.legend(fontsize=14)
-plt.grid(
-    True, which="both", ls="--", c="lightgray", alpha=0.7
-)  # 'both' for major and minor ticks
+plt.grid(True, which="both", ls="--", c="lightgray", alpha=0.7)  # 'both' for major and minor ticks
 sns.despine()
 plt.tight_layout()
 plt.show()
@@ -1227,4 +1197,4 @@ plt.show()
 ######################################################################
 # About the author
 # ----------------
-# # .. include:: ../_static/authors/tom_ginsberg.txt
+#
