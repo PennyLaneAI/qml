@@ -1061,7 +1061,7 @@ state_vector_to_dict(qec_round(H_stean, p_err=p_err, key=key), pretty_print=True
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-from tqdm.notebook import tqdm
+from tqdm import tqdm
 
 clean_idx = jnp.where(sv_clean)[0]
 
