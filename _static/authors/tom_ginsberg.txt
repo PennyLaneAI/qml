@@ -1,0 +1,4 @@
+.. bio:: Tom Ginsberg
+   :photo: ../_static/authors/tom_ginsberg.jpg
+
+   Tom leads BEIT's efforts in quantum error correction & fault tolerant compilation.
