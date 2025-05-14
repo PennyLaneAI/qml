@@ -1049,7 +1049,7 @@ print(f"Running Stean Code QEC Round with error: {get_error(n, p_err=p_err, key=
 state_vector_to_dict(qec_round(H_stean, p_err=p_err, key=key), pretty_print=True, wires=range(n))
 
 ######################################################################
-# Benchmarking logical vs. physical error rates
+# Benchmarking logical vs. physical error rates
 # ---------------------------------------------
 #
 # In the final section of this demo we will compute the average performance of our Stean code error
@@ -1171,23 +1171,23 @@ plt.show()
 # ----------
 #
 # .. [#Pesah] Pesah, Arthur. “The stabilizer trilogy I — Stabilizer codes.” Arthur Pesah, 31
-# Jan. 2023, https://arthurpesah.me/blog/2023-01-31-stabilizer-formalism-1/.
+# Jan. 2023, https://arthurpesah.me/blog/2023-01-31-stabilizer-formalism-1/.
 #
 # .. [#Wiberg] Wiberg, Niclas. (2001). Codes and Decoding on General Graphs.
 # https://www.essrl.wustl.edu/~jao/itrg/wiberg.pdf
 #
 # .. [#Panteleev] Panteleev, Pavel. “Degenerate Quantum LDPC Codes With Good Finite Length
-# Performance.” arXiv.org, 04 Apr. 2019, https://arxiv.org/abs/1904.02703v3.
+# Performance.” arXiv.org, 04 Apr. 2019, https://arxiv.org/abs/1904.02703v3.
 #
 # .. [#Hillmann] Hillmann, Timo. “Localized statistics decoding: A parallel decoding algorithm for
-# quantum low-density parity-check codes.” arXiv.org, 26 Jun. 2024,
+# quantum low-density parity-check codes.” arXiv.org, 26 Jun. 2024,
 # https://arxiv.org/abs/2406.18655v1.
 #
 # .. [#Wolanski] Wolanski, Stasiu. “Ambiguity Clustering: an accurate and efficient decoder for qLDPC
-# codes.” arXiv.org, 20 Jun. 2024, https://arxiv.org/abs/2406.14527v2.
+# codes.” arXiv.org, 20 Jun. 2024, https://arxiv.org/abs/2406.14527v2.
 #
 # .. [#Loeliger] Loeliger, Hans-Andrea. “An introduction to factor graphs” in IEEE Signal Processing
-# Magazine, vol. 21, no. 1, pp. 28-41, Jan. 2004,
+# Magazine, vol. 21, no. 1, pp. 28-41, Jan. 2004,
 # https://www.isiweb.ee.ethz.ch/papers/arch/aloe-2004-spmagffg.pdf.
 #
 # .. [#Barber] Barber, David. “Bayesian Reasoning and Machine Learning”. Cambridge University Press,
