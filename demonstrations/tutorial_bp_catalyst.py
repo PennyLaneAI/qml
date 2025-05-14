@@ -17,7 +17,7 @@ are implemented in JAX and JIT-compiled by Catalyst, allowing everything to run 
 
 Why is this exciting? Quantum error correction (QEC) is essential for building reliable quantum
 computers, but it’s not enough to just run the quantum part. We need fast classical feedback too.
-Catalyst helps by fuseing the classical and quantum workflows, giving us one unified,
+Catalyst helps by fusing the classical and quantum workflows, giving us one unified,
 hardware-agnostic kernel that runs on CPUs, GPUs, and beyond.
 
 What We’ll Build
@@ -131,16 +131,15 @@ print(qml.draw(ancilla_assisted_syndrome_extraction, show_all_wires=True)(syndro
 # likely occurred. This is the job of the decoder. Formally, given the syndrome, you’re solving for
 # the most probable error (usually called maximum likelihood estimate, or MLE for the error).
 #
-# However, exact MLE decoding depends on the prcise information of your noise model and is generally
+# However, exact MLE decoding depends on the precise information of your noise model and is generally
 # computationally intractable (NP-Hard) because :math:`n` one bit syndrome measurements can take on
 # :math:`2^n` unique values–in practice we rely on approximate methods tuned to assumptions about the
 # noise model.
 #
 # .. figure:: ../_static/demonstration_assets/bp_catalyst/css.svg
-# ::
 #    :align: center
 #    :width: 70%
-#    :alt: A complete quantum error correction (QEC) cycle. A logical state $|\psi\rangle_L$, experiences an error before stabilizers $\mathcal{S}$ are measured. The resulting syndrome is decoded classically to produce a correction ($\mathcal{R}$), which is applied to restore the logical state
+#    :alt: A complete quantum error correction (QEC) cycle. A logical state (:math: `|\psi\rangle_L`), experiences an error before stabilizers (:math: `\mathcal{S}`) are measured. The resulting syndrome is decoded classically to produce a correction (:math: `\mathcal{R}`), which is applied to restore the logical state
 #
 # CSS Codes: Simplifying the Structure
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -172,8 +171,7 @@ print(qml.draw(ancilla_assisted_syndrome_extraction, show_all_wires=True)(syndro
 # introduce the Steane code, you’ll see these matrices explicitly and how they simplify syndrome
 # calculation and decoding. See a similar diagram below for the CSS code cycle structure.
 #
-# .. figure:: ../_static/demonstration_assets/bp_catalyst/css.svg
-# ::
+# .. figure ../_static/demonstration_assets/bp_catalyst/css.svg
 #    :align: center
 #    :width: 70%
 #    :alt: The Error Correction Cycle on a CSS Code
@@ -185,10 +183,10 @@ print(qml.draw(ancilla_assisted_syndrome_extraction, show_all_wires=True)(syndro
 #
 # The Steane code is one of the simplest quantum error correcting codes, a CSS code built from two
 # classical Hamming codes that encodes one logical qubit into seven physical qubits that can correct
-# any single-qubit error–traditionaly the error correcting ability of a code is referred as the
+# any single-qubit error–traditionally the error correcting ability of a code is referred as the
 # distance or :math:`d` and the number of errors a code can correct is
 # :math:`\lfloor (d-1)/2 \rfloor`. In this case where our code can correct a single error it is said
-# to have distance :math:`3`. The Stean code uses six stabilizer generators:
+# to have distance :math:`3`. The Steane code uses six stabilizer generators:
 #
 # .. math::
 #
@@ -251,15 +249,15 @@ def lookup_decoder(matrix: ArrayLike, max_weight: int = 1):
     return _decode
 
 
-H_stean = jnp.array(
+H_steane= jnp.array(
     [[0, 0, 0, 1, 1, 1, 1], [0, 1, 1, 0, 0, 1, 1], [1, 0, 1, 0, 1, 0, 1]], dtype=int
 )
-lut_stean = lookup_decoder(H_stean)
+lut_steane= lookup_decoder(H_steane)
 
-# we see that the stean code has a nice property where counting up in binary shifts the error to the right
+# we see that the steane code has a nice property where counting up in binary shifts the error to the right
 table_data = []
 for i in range(8):
-    decoded = lut_stean(jnp.array([int(x) for x in f"{i:03b}"]))
+    decoded = lut_steane(jnp.array([int(x) for x in f"{i:03b}"]))
     table_data.append([f"{i:03b}", "".join(map(str, decoded))])
 
 print(tabulate(table_data, headers=["Syndrome", "LUT Error"]))
@@ -435,7 +433,7 @@ def _build_graph(
 import matplotlib.pyplot as plt
 import networkx as nx
 
-vars, checks = _build_graph(H_stean)
+vars, checks = _build_graph(H_steane)
 G = nx.Graph()
 num_vars = len(vars)
 num_checks = len(checks)
@@ -453,7 +451,7 @@ pos = nx.bipartite_layout(G, nodes=[f"v{i}" for i in range(num_vars)])
 
 plt.figure(figsize=(10, 7))
 nx.draw(G, pos, with_labels=True, node_color="skyblue", node_size=500, font_weight="bold")
-plt.title("Bipartite Graph for H_stean", fontsize=16)
+plt.title("Bipartite Graph for H_steane", fontsize=16)
 plt.show()
 
 ######################################################################
@@ -591,12 +589,12 @@ def build_bp_decoder(
 
 
 ######################################################################
-# Let’s test the performance of the BP decoder on the Stean code compared to the LUT decoder.
+# Let’s test the performance of the BP decoder on the Steane code compared to the LUT decoder.
 #
 
-bp_stean = build_bp_decoder(H_stean, error_rate=0.05, max_iter=7)
+bp_steane = build_bp_decoder(H_steane, error_rate=0.05, max_iter=7)
 
-n_bits = H_stean.shape[0]
+n_bits = H_steane.shape[0]
 correct = 0
 total_syndromes = 2**n_bits
 
@@ -608,8 +606,8 @@ for i in range(total_syndromes):
     s_array = jnp.array([int(x) for x in syndrome_binary_string])
 
     # Get error patterns from BP decoder and LUT
-    bp_pattern = bp_stean(s_array)
-    lut_pattern = lut_stean(s_array)
+    bp_pattern = bp_steane(s_array)
+    lut_pattern = lut_steane(s_array)
     match = jnp.all(bp_pattern == lut_pattern)
 
     bp_pattern_str = "".join(map(str, bp_pattern.tolist()))
@@ -643,11 +641,11 @@ import jax.numpy as jnp
 from jax.typing import ArrayLike
 
 
-def rep_code(n: int) -> jnp.ndarray:
+def rep_code(n: int) -> ArrayLike:
     """
     Build the (n − 1) × n parity‑check matrix H for the [n, 1] repetition code.
 
-    Each row enforces equality between two neighbouring bits:
+    Each row enforces equality between two neighboring bits:
         H[i] has 1s in positions i and i+1, zeros elsewhere.
     """
     # First row: parity check on bits 0 and 1 → [1, 1, 0, 0, …, 0]
@@ -721,11 +719,11 @@ print(f"Decoding success rate: {success_rate * 100:.2f}%")
 # Catalyst lets us build hybrid quantum-classical workflows, compiling both quantum operations and
 # classical decoding logic into a single, efficient kernel. We’ll start with a quantum-classical
 # circuit to prepare the logical zero state :math:`|0\rangle_L` for our Steane code. This method is
-# also general for intializing logical zero states for any CSS codes.
+# also general for initializing logical zero states for any CSS codes.
 #
 # Start with a :math:`+1` eigen state (or stabilizer state) of all the :math:`Z` type stabilizers
 # (:math:`|0\ldots 0\rangle` is always stabilized by any :math:`Z` type Pauli operator so is a
-# suityable choice).
+# suitable choice).
 #
 # Then for each X-type generator: - Prepare an ancilla qubits in the :math:`|+\rangle` state. -
 # Measure X-type stabilizers using CNOT operations onto an ancilla. - Measure in the :math:`X` basis
@@ -736,7 +734,7 @@ print(f"Decoding success rate: {success_rate * 100:.2f}%")
 # This procedures uses projective measurements to force the data qubits to all be in the :math:`+1`
 # eigen state of our :math:`X` type generators. Since the state was already a :math:`+1` eigen state
 # of our :math:`Z` type generators and my virtue of the CSS code all :math:`X` and :math:`Z`
-# generators simulataneously commute we are left with a state in the :math:`+1` eigen space of all the
+# generators simultaneously commute we are left with a state in the :math:`+1` eigen space of all the
 # generators.
 #
 
@@ -744,7 +742,7 @@ import pennylane as qml
 from jax import random
 import catalyst
 
-r, n = H_stean.shape
+r, n = H_steane.shape
 n_wires = n + r
 
 dev = qml.device("lightning.qubit", wires=n_wires)
@@ -752,7 +750,7 @@ dev = qml.device("lightning.qubit", wires=n_wires)
 
 def measure_x_stabilizers(H: ArrayLike):
     """
-    Measure all X stype stabilizersbased on the parity check matrix X then apply Z type corrections from our decoder
+    Measure all X type stabilizers based on the parity check matrix X then apply Z type corrections from our decoder
     :param H: Parity check X matrix
     """
     r, n = H.shape
@@ -776,9 +774,9 @@ def measure_x_stabilizers(H: ArrayLike):
 
     # Z‑correction
     # Since the BP and LUT decoder
-    # we're both perfect on the Stean code
+    # we're both perfect on the Steane code
     # well use the LUT for simplicity
-    rec_z = lut_stean(sx)
+    rec_z = lut_steane(sx)
     for q, bit in enumerate(rec_z):
         if bit:
             qml.PauliZ(wires=q)
@@ -786,8 +784,8 @@ def measure_x_stabilizers(H: ArrayLike):
 
 @qml.qjit(autograph=True)
 @qml.qnode(dev)
-def encode_zero_stean():
-    measure_x_stabilizers(H_stean)
+def encode_zero_steane():
+    measure_x_stabilizers(H_steane)
     return qml.state()
 
 
@@ -936,7 +934,7 @@ def state_vector_to_dict(
 # .. math:: \begin{aligned}|\overline{0}\rangle= & \frac{1}{\sqrt{8}}(|0000000\rangle+|1010101\rangle+|0110011\rangle+|1100110\rangle \\ & +|0001111\rangle+|1011010\rangle+|0111100\rangle+|1101001\rangle)\end{aligned}
 #
 
-sv_clean = encode_zero_stean()
+sv_clean = encode_zero_steane()
 state_vector_to_dict(sv_clean, pretty_print=True, wires=range(n))
 
 ######################################################################
@@ -1007,7 +1005,7 @@ def measure_z_stabilizers(H):
         if bit:
             qml.PauliX(wires=n + a)
 
-    rec_x = lut_stean(sz)
+    rec_x = lut_steane(sz)
     for q, bit in enumerate(rec_x):
         if bit:
             qml.PauliX(wires=q)
@@ -1023,7 +1021,7 @@ def measure_z_stabilizers(H):
 @qml.qjit(autograph=True)
 @qml.qnode(dev, interface="jax")
 def qec_round(H: ArrayLike, p_err=1e-3, key=random.PRNGKey(0)):
-    """One round of Steane‑code QEC with LUT decoding."""
+    """One round of Steane code QEC with LUT decoding."""
 
     measure_x_stabilizers(H)  # prepare 0 state
     noise_channel(n, p_err, key)  # inject IID pauli noise
@@ -1035,8 +1033,8 @@ def qec_round(H: ArrayLike, p_err=1e-3, key=random.PRNGKey(0)):
 
 p_err = 0.1
 key = random.PRNGKey(10)
-print(f"Running Stean Code QEC Round with error: {get_error(n, p_err=p_err, key=key)}")
-state_vector_to_dict(qec_round(H_stean, p_err=p_err, key=key), pretty_print=True, wires=range(n))
+print(f"Running Steane Code QEC Round with error: {get_error(n, p_err=p_err, key=key)}")
+state_vector_to_dict(qec_round(H_steane, p_err=p_err, key=key), pretty_print=True, wires=range(n))
 
 ######################################################################
 # If we increase the likelihood of errors we are more likely to end up with an error pattern that
@@ -1045,17 +1043,17 @@ state_vector_to_dict(qec_round(H_stean, p_err=p_err, key=key), pretty_print=True
 
 p_err = 0.3
 key = random.PRNGKey(8)
-print(f"Running Stean Code QEC Round with error: {get_error(n, p_err=p_err, key=key)}")
-state_vector_to_dict(qec_round(H_stean, p_err=p_err, key=key), pretty_print=True, wires=range(n))
+print(f"Running Steane Code QEC Round with error: {get_error(n, p_err=p_err, key=key)}")
+state_vector_to_dict(qec_round(H_steane, p_err=p_err, key=key), pretty_print=True, wires=range(n))
 
 ######################################################################
 # Benchmarking logical vs. physical error rates
 # ---------------------------------------------
 #
-# In the final section of this demo we will compute the average performance of our Stean code error
+# In the final section of this demo we will compute the average performance of our Steane code error
 # correction circuit for a range of possible error rates. We’ll define logical error rates by
 # comparing the state vector from our noisy simulation to with the clean state vector ``sv_clean`` of
-# the Stean code logical zero state.
+# the Steane code logical zero state.
 #
 
 import pandas as pd
@@ -1072,15 +1070,15 @@ def logical_error(sv):
 
 
 ######################################################################
-# Simulate 1000x noisy shots for several noise levels, we’ll use ``jax.vmap`` to efficently map our
+# Simulate 1000x noisy shots for several noise levels, we’ll use ``jax.vmap`` to efficiently map our
 # catalyst kernel over a set of random keys.
 #
 
 
 @jax.jit
-def single_trial_error(key, p_err, H_stean_val):
+def single_trial_error(key, p_err, H_steane):
     """Performs one QEC round and checks for a logical error."""
-    round_output = qec_round(H_stean_val, p_err, key)
+    round_output = qec_round(H_steane, p_err, key)
     err = logical_error(round_output)
     return err
 
@@ -1096,7 +1094,7 @@ for p in tqdm(p_rng):
     keys_for_batch, master_key = random.split(master_key)
     all_keys = random.split(keys_for_batch, N)
 
-    errors_batch = batch_trial_errors(all_keys, p, H_stean)
+    errors_batch = batch_trial_errors(all_keys, p, H_steane)
 
     p_value = p.item()
     for idx, err in enumerate(errors_batch):
