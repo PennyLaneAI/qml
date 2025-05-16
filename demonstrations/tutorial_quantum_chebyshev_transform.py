@@ -1,4 +1,4 @@
-r"""Intro to the Quantum Chebyshev Transform
+r"""The Quantum Chebyshev Transform
 =============================================================
 
 This demo is inspired by the paper `"Quantum Chebyshev transform: mapping, embedding, learning and sampling distributions" <https://arxiv.org/abs/2306.17026>`__ [#williams2023]_ wherein the authors describe a workflow for quantum Chebyshev-based model building. 
