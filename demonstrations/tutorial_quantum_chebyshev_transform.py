@@ -132,8 +132,8 @@ pi = np.pi
 def rotate_phases():
     """shift the ancilla's phase and rotate the jth qubit by
     pi/2^(j+1) in Z"""
-    qml.PhaseShift(-pi / 2 ** (N + 1), wires=0)
     qml.RZ(-pi * (2**N - 1) / 2 ** (N + 1), wires=0)
+    qml.PhaseShift(-pi / 2 ** (N + 1), wires=0)
     for wire in range(1, N + 1):
         qml.RZ(pi / 2 ** (wire + 1), wires=wire)
 
@@ -163,8 +163,8 @@ def permute_elements():
 
 def adjust_phases():
     """adjusts the phase of the ancilla qubit"""
-    qml.PhaseShift(-pi / 2, wires=0)
     qml.RY(-pi / 2, wires=0)
+    qml.PhaseShift(-pi / 2, wires=0)
     # first Pauli Xs
     for wire in range(1, N + 1):
         qml.PauliX(wires=wire)
@@ -227,9 +227,12 @@ j = 7  # initial state in computational basis
 # compute state after transform
 total_state = circuit(state=j)
 
-# reduce state size, effectively removing the ancilla
-state = total_state[: 2**N] * np.sqrt(2)
+print(total_state)
 
+# reduce state size, effectively removing the ancilla
+state = total_state[: 2**N]
+
+print(state)
 
 # compute nodes
 def ch_node(j, N):
@@ -240,7 +243,7 @@ js = list(range(int(len(state))))
 nodes = [ch_node(i, N) for i in js]
 
 # compute overlap with other basis states using np.vdot()
-overlaps = [np.vdot(state, circuit(state=i)[: 2**N] * np.sqrt(2)) for i in js]
+overlaps = [np.vdot(state, circuit(state=i)[: 2**N]) for i in js]
 
 #############################################
 # We compare these circuit calculated overlaps to the definition, for which we plot the squared overlaps at all values of :math:`x`.
