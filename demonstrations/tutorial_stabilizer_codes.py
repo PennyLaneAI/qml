@@ -108,7 +108,7 @@ print("|111> component: ", encode_qnode(alpha, beta)[7])
 #
 # To detect whether a bit-flip error has occurred on one of the physical qubits, we perform a **parity measurement.** A parity measurement
 # acts on auxiliary qubits to avoid disturbing the encoded logical state. In the case of the three-qubit repetition code, we measure in the computational
-# on two auxiliary qubits after after applying some :math:`\textrm{CNOT}` gates, as shown below
+# on two auxiliary qubits after after applying some :math:`\textrm{CNOT}` gates, as shown below.
 #
 # **NEEDS PICTURE**
 #
@@ -117,7 +117,7 @@ print("|111> component: ", encode_qnode(alpha, beta)[7])
 #
 # .. figure:: ../_static/demonstration_assets/stabilizer_codes/syndrome_table3.png
 #    :align: center
-#    :width: 25%
+#    :width: 100%
 #
 #    ..
 #
