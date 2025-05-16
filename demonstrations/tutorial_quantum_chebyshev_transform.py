@@ -221,7 +221,7 @@ fig.show()
 # ----------------
 # With our QChT circuit, let's first check if the ancilla ends in the state :math:`|0\rangle`, and the output state amplitudes are real valued. 
 # To do this, we'll input the computational basis state :math:`|7\rangle`, which will transform into :math:`|\tau(x_7^\mathrm{Ch})\rangle`.
-# We expect the full output state to be :math:`|0\rangle|\tau(x_7^\mathrm{Ch})\rangle`, which means the second half of the amplitude vector should be zero (corresponding to states with ancilla in |1\rangle).
+# We expect the full output state to be :math:`|0\rangle|\tau(x_7^\mathrm{Ch})\rangle`, which means the second half of the amplitude vector should be zero (corresponding to states with ancilla in :math:`|1\rangle``).
 
 j = 7  # initial state in computational basis
 
