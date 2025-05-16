@@ -379,11 +379,11 @@ def classify_pauli(operator, logical_ops, generators, n_wires):
 
     stabilizer_group = generate_stabilizer_group(generators, n_wires)
 
-    if operator in stabilizer_group:
+    if operator.simplify() in stabilizer_group:
         return f"{operator} is a Stabilizer."
 
     if all(qml.is_commuting(operator, g) for g in generators):
-        if operator in logical_operators:
+        if operator in logical_ops:
             return f"{operator} is a Logical Operator."
         else:
             return f"{operator} commutes with all stabilizers — it's a Logical Operator (or a multiple of one)."
