@@ -115,15 +115,11 @@ print("|111> component: ", encode_qnode(alpha, beta)[7])
 # The result of the measurements is known as the **syndrome**. It will tell us whether one of the qubits in :math:`\vert \bar{\psi} \rangle` was flipped and moreover,
 # it can tell us which qubit was flipped. The following table shows how to interpret the syndromes.
 #
-# +------------+------------+------------+
-# | Error      | Syndrome 0 | Syndrome 1 |
-# +============+============+============+
-# | :math:`X_0`| :math:`1`  | :math:`0`  |
-# +------------+------------+------------+
-# | :math:`X_1`| :math:`1`  | :math:`1`  |
-# +------------+------------+------------+
-# | :math:`X_2`| :math:`0`  | :math:`1`  |
-# +------------+------------+------------+
+# .. figure:: ../_static/demonstration_assets/stabilizer_codes/syndrome_table3.png
+#    :align: center
+#    :width: 25%
+#
+#    ..
 #
 # Let us verify this by implementing the syndrome measurement in PennyLane
 
@@ -153,6 +149,8 @@ print("Syndrome if error on wire 2: ", syndrome_measurement(2))
 
 ##############################################################################
 #
+# The measurement outputs confirm the syndrome table.
+#
 # Error Correction
 # ~~~~~~~~~~~~~~~~~
 #
@@ -166,6 +164,8 @@ print("Syndrome if error on wire 2: ", syndrome_measurement(2))
 #
 # By applying the appropriate corrective operation, the repetition code effectively protects and repairs the encoded quantum information.
 # The full workflow is shown in the circuit below.
+#
+# **NEED FIGURE WITH FULL CIRCUIT**
 #
 # We can use PennyLane's mid-circuit measurement features to implement the full three-qubit repetition code.
 
@@ -193,7 +193,7 @@ def error_correction(error_wire):
 
 ##############################################################################
 #
-# Unfortunately, circuits with mid-circuit measurements cannot return a quantum state, so we return the density matrix instead.
+# At the time of writing, PennyLane circuits with mid-circuit measurements cannot return a quantum state, so we return the density matrix instead.
 # With this result, we can verify that the fidelity of the encoded state is the same as the final state after correction
 # as follows
 
@@ -337,7 +337,8 @@ generate_stabilizer_group(generators, 3)
 #
 # **FIGURE: GENERAL ERROR CORRECTION CIRCUIT FROM STABILIZERS**
 #
-# The stabilizer generators act as the controlled operators in the codewords and yield unique syndromes for each Pauli Error. 
+# The stabilizer generators act as the controlled operators in the codewords and the measurement in the auxiliary wires yield unique syndromes for the
+# Pauli error that the code deals with. 
 #
 # Logical operators
 # ~~~~~~~~~~~~~~~~~~
@@ -359,10 +360,43 @@ generate_stabilizer_group(generators, 3)
 #
 # 1. They commute with all elements in :math:`S,` so they leave the codespace invariant,
 # 2. They are not in the stabilizer group,
-# 3. They anticommute with each other, which means they act in a non-trivial on the codewords.
+# 3. They anticommute with each other, which means they act in a non-trivial way on the codewords.
 #
-# The codespace, the logical operators, and the syndrome measurements are all we need to define an error correcting code in the state
-# picture. We are now ready to look at a more advanced example, the famous...
+# The codespace, the logical operators, and the syndrome measurements are all we need to define an error correcting code. We can even write
+# a script to classify operators given a set of stabilizer generators. 
+#
+def classify_pauli(operator, logical_ops, generators, n_wires):
+
+    allowed_wires = set(range(n_wires))
+    operator_wires = set(operator.wires)
+
+    assert operator_wires.issubset(allowed_wires), "Operator has wires not allowed by the code"
+
+    operator_names = set([op.name for op in operator.decomposition()])
+    allowed_operators = set(['Identity', 'PauliX', 'PauliY', 'PauliZ', 'SProd'])
+
+    assert operator_names.issubset(allowed_operators), "Operator contains an illegal operation"
+
+    stabilizer_group = generate_stabilizer_group(generators, n_wires)
+
+    if operator in stabilizer_group:
+        return f"{operator} is a Stabilizer."
+
+    if all(qml.is_commuting(operator, g) for g in generators):
+        if operator in logical_operators:
+            return f"{operator} is a Logical Operator."
+        else:
+            return f"{operator} commutes with all stabilizers — it's a Logical Operator (or a multiple of one)."
+
+    return f"{operator} is an Error Operator (Destabilizer)."
+
+generators = [Z(0)@Z(1)@I(2), I(0)@Z(1)@Z(2)]
+logical_ops = [X(0)@X(1)@X(2), Z(0)@Z(1)@Z(2)]
+print(classify_pauli(Z(0)@I(1)@Z(2), logical_ops, generators, 3))
+print(classify_pauli(Y(0)@Y(1)@Y(2), logical_ops, generators, 3))
+print(classify_pauli(X(0)@Y(1)@Z(2), logical_ops, generators, 3))
+
+##############################################################################
 #
 # Five-qubit stabilizer code
 # ---------------------------
@@ -398,8 +432,83 @@ generate_stabilizer_group(generators, 3)
 #
 #     \vert \bar{1}\rangle = X\otimes X \otimes X \otimes X \otimes X \vert \bar{0}.
 #  
-# The logical operators bit-flip and phase-flip are for this code are :math:`\bar{X}= X^{\otimes 5}` and :math:`Z^{\otimes 5}.` 
-# 
+# The logical operators bit-flip and phase-flip are for this code are :math:`\bar{X}= X^{\otimes 5}` and :math:`Z^{\otimes 5}.` With these
+# defining features in mind, let us build the five-qubit stabilizer code. First, we need to prepare our logical qubit $\vert \bar{0} \rangle,$
+# which can be done using the circuit below. 
+#
+# **INSERT CIRCUIT IMAGE**
+#
+# This is straightforward to implement in PennyLane.
+#
+
+def five_qubit_encode(alpha, beta):
+
+  qml.StatePrep([alpha, beta], wires = 4)
+  qml.Hadamard(wires = 0)
+  qml.S(wires = 0)
+  qml.CZ(wires = [0,1])
+  qml.CZ(wires = [0,3])
+  qml.CY(wires = [0,4])
+  qml.Hadamard(wires = 1)
+  qml.CZ(wires = [1,2])
+  qml.CZ(wires = [1,3])
+  qml.CNOT(wires = [1,4])
+  qml.Hadamard(wires = 2)
+  qml.CZ(wires = [2,0])
+  qml.CZ(wires = [2,1])
+  qml.CNOT(wires = [2,4])
+  qml.Hadamard(wires = 3)
+  qml.S(wires = 3)
+  qml.CZ(wires = [3,0])
+  qml.CZ(wires = [3,2])
+  qml.CY(wires = [3,4])
+
+##############################################################################
+#
+# Having encoded the logical state, we can use the stabilizers to measure obtain the syndrome table like we did with the three-qubit code.
+
+dev = qml.device("default.qubit", wires = 9, shots = 1)
+
+stabilizers = [X(0)@Z(1)@Z(2)@X(3)@I(4), I(0)@X(1)@Z(2)@Z(3)@X(4),
+               X(0)@I(1)@X(2)@Z(3)@Z(4), Z(0)@X(1)@I(2)@X(3)@Z(4)]
+
+@qml.qnode(dev)
+def five_qubit_code(alpha, beta, error_type, error_wire):
+
+  five_qubit_encode(alpha, beta)
+
+  if error_type == 'X':
+    qml.PauliX(wires = error_wire)
+
+  elif error_type == 'Y':
+    qml.PauliY(wires = error_wire)
+
+  elif error_type == 'Z':
+    qml.PauliZ(wires = error_wire)
+
+  for wire in range(5,9):
+    qml.Hadamard(wires = wire)
+
+  for i in range(len(stabilizers)):
+
+    qml.ctrl(stabilizers[i], control = [i + 5])
+
+  for wire in range(5,9):
+    qml.Hadamard(wires = wire)
+
+  return qml.sample(wires = range(5,9))
+
+for wire in (0, 1, 2, 3, 4):
+
+  for error in ('X', 'Y', 'Z'):
+
+    print(f"{error} {wire}", five_qubit_code(1/2, np.sqrt(3)/2, error, wire))
+##############################################################################
+#
+# The syndrome table is printed, and with we can apply the necessary operators to fix the corresponding Pauli errors. The script above is straightforward
+# to generalize to any valid set of stabilizers. 
+#
+#
 # References
 # -----------
 #
