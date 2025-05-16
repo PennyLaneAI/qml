@@ -15,7 +15,7 @@ description and an environment which can be treated with more approximate but co
 
 Embedding approaches differ in how they capture the environment's effect on the embedded region,
 and can be broadly categorized as density in density, wavefunction in wavefunction and Green's function based embeddings.
-In this demo, we will focus on Density matrix embedding theory (DMET), a
+In this demo, we will focus on Density matrix embedding theory (DMET) [#SWouters]_, a
 wavefunction based embedding approach that embeds the ground state density matrix.
 We provide a brief introduction of the method and demonstrate how to run
 DMET calculations to construct a Hamiltonian that can be used for quantum algorithms.
