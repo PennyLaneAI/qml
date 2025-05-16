@@ -443,25 +443,25 @@ print(classify_pauli(X(0)@Y(1)@Z(2), logical_ops, generators, 3))
 
 def five_qubit_encode(alpha, beta):
 
-  qml.StatePrep([alpha, beta], wires = 4)
-  qml.Hadamard(wires = 0)
-  qml.S(wires = 0)
-  qml.CZ(wires = [0,1])
-  qml.CZ(wires = [0,3])
-  qml.CY(wires = [0,4])
-  qml.Hadamard(wires = 1)
-  qml.CZ(wires = [1,2])
-  qml.CZ(wires = [1,3])
-  qml.CNOT(wires = [1,4])
-  qml.Hadamard(wires = 2)
-  qml.CZ(wires = [2,0])
-  qml.CZ(wires = [2,1])
-  qml.CNOT(wires = [2,4])
-  qml.Hadamard(wires = 3)
-  qml.S(wires = 3)
-  qml.CZ(wires = [3,0])
-  qml.CZ(wires = [3,2])
-  qml.CY(wires = [3,4])
+    qml.StatePrep([alpha, beta], wires = 4)
+    qml.Hadamard(wires = 0)
+    qml.S(wires = 0)
+    qml.CZ(wires = [0,1])
+    qml.CZ(wires = [0,3])
+    qml.CY(wires = [0,4])
+    qml.Hadamard(wires = 1)
+    qml.CZ(wires = [1,2])
+    qml.CZ(wires = [1,3])
+    qml.CNOT(wires = [1,4])
+    qml.Hadamard(wires = 2)
+    qml.CZ(wires = [2,0])
+    qml.CZ(wires = [2,1])
+    qml.CNOT(wires = [2,4])
+    qml.Hadamard(wires = 3)
+    qml.S(wires = 3)
+    qml.CZ(wires = [3,0])
+    qml.CZ(wires = [3,2])
+    qml.CY(wires = [3,4])
 
 ##############################################################################
 #
@@ -475,34 +475,34 @@ stabilizers = [X(0)@Z(1)@Z(2)@X(3)@I(4), I(0)@X(1)@Z(2)@Z(3)@X(4),
 @qml.qnode(dev)
 def five_qubit_code(alpha, beta, error_type, error_wire):
 
-  five_qubit_encode(alpha, beta)
+    five_qubit_encode(alpha, beta)
 
-  if error_type == 'X':
-    qml.PauliX(wires = error_wire)
+    if error_type == 'X':
+        qml.PauliX(wires = error_wire)
 
-  elif error_type == 'Y':
-    qml.PauliY(wires = error_wire)
+    elif error_type == 'Y':
+        qml.PauliY(wires = error_wire)
 
-  elif error_type == 'Z':
-    qml.PauliZ(wires = error_wire)
+    elif error_type == 'Z':
+        qml.PauliZ(wires = error_wire)
 
-  for wire in range(5,9):
-    qml.Hadamard(wires = wire)
+    for wire in range(5,9):
+        qml.Hadamard(wires = wire)
 
-  for i in range(len(stabilizers)):
+    for i in range(len(stabilizers)):
 
-    qml.ctrl(stabilizers[i], control = [i + 5])
+        qml.ctrl(stabilizers[i], control = [i + 5])
 
-  for wire in range(5,9):
-    qml.Hadamard(wires = wire)
+    for wire in range(5,9):
+        qml.Hadamard(wires = wire)
 
-  return qml.sample(wires = range(5,9))
+    return qml.sample(wires = range(5,9))
 
 for wire in (0, 1, 2, 3, 4):
 
-  for error in ('X', 'Y', 'Z'):
+    for error in ('X', 'Y', 'Z'):
 
-    print(f"{error} {wire}", five_qubit_code(1/2, np.sqrt(3)/2, error, wire))
+        print(f"{error} {wire}", five_qubit_code(1/2, np.sqrt(3)/2, error, wire))
 ##############################################################################
 #
 # The syndrome table is printed, and with we can apply the necessary operators to fix the corresponding Pauli errors. The script above is straightforward
