@@ -51,6 +51,11 @@
             "type": "demonstration",
             "id": "tutorial_qcbm",
             "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_qubitization",
+            "weight": 1.0
         }
     ]
 }
