@@ -59,26 +59,27 @@ Also note that the KAK decomposition is a statement of *existence*, so it is sti
 actually find the matrices :math:`K_1`, :math:`A`, and :math:`K_2` for a given matrix :math:`G`.
 
 There is a full classification of KAK decompositions, based on the groups
-:math:`\mathcal{G}` and :math:`\mathcal{K}`. For unitary total groups, we have four types:
+:math:`\mathcal{G}` and :math:`\mathcal{K}`. For :math:`\mathcal{G}` being a classical real compact
+Lie group, we have ten types:
 
 .. rst-class:: docstable
 
-    +---------------------+-------------------------+---------------+---------------+--------------------------+
-    | .. centered::       | .. centered::           | .. centered:: | .. centered:: | .. centered::            |
-    | Type                | A                       | AI            | AII           | AIII :math:`{}_{p,q}`    |
-    +=====================+=========================+===============+===============+==========================+
-    | .. centered::       | .. centered::           | .. centered:: | .. centered:: | .. centered::            |
-    | :math:`\mathcal{G}` | :math:`U(d)\times U(d)` | :math:`U(d)`  | :math:`U(2d)` | :math:`U(p+q)`           |
-    +---------------------+-------------------------+---------------+---------------+--------------------------+
-    | .. centered::       | .. centered::           | .. centered:: | .. centered:: | .. centered::            |
-    | :math:`\mathcal{K}` | :math:`U(d)`            | :math:`SO(d)` | :math:`Sp(d)` | :math:`U(p)\times U(q)`  |
-    +---------------------+-------------------------+---------------+---------------+--------------------------+
-    | .. centered::       | .. centered::           | .. centered:: | .. centered:: | .. centered::            |
-    | rank                | :math:`d`               | :math:`d`     | :math:`d`     | :math:`\text{min}(p, q)` |
-    +---------------------+-------------------------+---------------+---------------+--------------------------+
+    +---------------------+-------------------------+---------------+---------------+--------------------------+-----------------------------+---------------------------+----------------+---------------------------+----------------+---------------------------+
+    | .. centered::       | .. centered::           | .. centered:: | .. centered:: | .. centered::            | .. centered::               | .. centered::             | .. centered::  | .. centered::             | .. centered::  | .. centered::             |
+    | Type                | A                       | AI            | AII           | AIII :math:`{}_{p,q}`    | BD                          | BDI :math:`{}_{p,q}`      | DIII           | C                         | CI             | CII :math:`{}_{p,q}`      |
+    +=====================+=========================+===============+===============+==========================+=============================+===========================+================+===========================+================+===========================+
+    | .. centered::       | .. centered::           | .. centered:: | .. centered:: | .. centered::            | .. centered::               | .. centered::             | .. centered::  | .. centered::             | .. centered::  | .. centered::             |
+    | :math:`\mathcal{G}` | :math:`U(d)\times U(d)` | :math:`U(d)`  | :math:`U(2d)` | :math:`U(p+q)`           | :math:`SO(d)\times SO(d)`   | :math:`SO(p+q)`           | :math:`SO(2d)` | :math:`Sp(d)\times Sp(d)` | :math:`Sp(d)`  | :math:`Sp(p+q)`           |
+    +---------------------+-------------------------+---------------+---------------+--------------------------+-----------------------------+---------------------------+----------------+---------------------------+----------------+---------------------------+
+    | .. centered::       | .. centered::           | .. centered:: | .. centered:: | .. centered::            | .. centered::               | .. centered::             | .. centered::  | .. centered::             | .. centered::  | .. centered::             |
+    | :math:`\mathcal{K}` | :math:`U(d)`            | :math:`SO(d)` | :math:`Sp(d)` | :math:`U(p)\times U(q)`  | :math:`SO(d)`               | :math:`SO(p)\times SO(q)` | :math:`U(d)`   | :math:`Sp(d)`             | :math:`U(d)`   | :math:`Sp(p)\times Sp(q)` |
+    +---------------------+-------------------------+---------------+---------------+--------------------------+-----------------------------+---------------------------+----------------+---------------------------+----------------+---------------------------+
+    | .. centered::       | .. centered::           | .. centered:: | .. centered:: | .. centered::            | .. centered::               | .. centered::             | .. centered::  | .. centered::             | .. centered::  | .. centered::             |
+    | rank                | :math:`d`               | :math:`d`     | :math:`d`     | :math:`\text{min}(p, q)` | :math:`\lfloor d/ 2\rfloor` | :math:`\text{min}(p, q)`  | :math:`d/2`    | :math:`d`                 | :math:`d`      | :math:`\text{min}(p, q)`  |
+    +---------------------+-------------------------+---------------+---------------+--------------------------+-----------------------------+---------------------------+----------------+---------------------------+----------------+---------------------------+
 
-    Classification of KAK decompositions of the unitary group. Traditionally, they are defined
-    on the special unitary group, which we have extended here by a global phase.
+    Classification of KAK decompositions of the classical real compact Lie groups. Traditionally, they are defined
+    on the special unitary group :math:`SU(d)`, which we have extended here by a global phase to :math:`U(d)`.
 
 In the following, we will only use Cartan decompositions of type AIII or of type A, with
 a small exception of type AI for the Khaneja-Glaser decomposition. We follow Sec. IID and App. B
