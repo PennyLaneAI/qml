@@ -2,15 +2,15 @@ r"""
 Unitary synthesis with recursive KAK decompositions
 ===================================================
     
-Unitary synthesis is an essential tool to break up a given matrix into quantum gates
-that can be implemented on hardware.
-Research efforts to obtain cheap decompositions for unitary synthesis have been going on
+Unitary synthesis is the process to decompose a given unitary matrix into quantum gates.
+Research efforts to obtain cheap decompositions have been going on
 for at least 25 years, successively reducing the gate counts and/or depth of the synthesized
 circuits.
 
 .. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_unitary_synthesis_kak.png
     :align: center
     :width: 70%
+    :alt: Established unitary synthesis techniques implement variants of the same decomposition, here visualized as sandwiches.
     :target: javascript:void(0)
 
 In this demo we will take a look at three unitary synthesis techniques:
@@ -446,7 +446,55 @@ import pennylane as qml
 ######################################################################
 #
 #
+# References
+# ----------
 #
+# .. [#Khaneja_Glaser]
+#
+#     Navin Khaneja, Steffen Glaser (2000) *Cartan Decomposition of SU(2^n), Constructive
+#     Controllability of Spin systems and Universal Quantum Computing.* arXiv preprint
+#     `quant-ph/0010100 <https://doi.org/10.48550/arXiv.quant-ph/0010100>`__.
+#
+# .. [#ShendeQSD]
+#
+#     Vivek V Shende, Stephen S Bullock, Igor L Markov (2006)
+#     *Synthesis of Quantum Logic Circuits.* IEEE Trans. on Computer-Aided Design, 
+#     `Vol. 25, No. 6 <https://doi.org/10.1109/TCAD.2005.855930>`__.
+#
+# .. [#Krol_BlockZXZ]
+#
+#     Anna M Krol, Zaid Al-Ars (2024) *Beyond Quantum Shannon: Circuit Construction for General
+#     n-Qubit Gates Based on Block ZXZ-Decomposition.* arXiv preprint
+#     `2403.13692 <https://doi.org/10.48550/arXiv.2403.13692>`__.
+#
+# .. [#Wierichs_CartanSynthesis]
+#
+#     David Wierichs, Maxwell West, Roy T. Forestano, M. Cerezo, Nathan Killoran (2025)
+#     *Recursive Cartan decompositions for unitary synthesis.* arXiv preprint
+#     `2503.19014 <https://doi.org/10.48550/arXiv.2503.19014>`__.
+#
+# .. [#Kökcü_FDHS]
+#
+#     Efekan Kökcü, Thomas Steckmann, Yan Wang, J K Freericks, Eugene F Dumitrescu, 
+#     Alexander F. Kemper (2021) *Fixed Depth Hamiltonian Simulation via Cartan Decomposition.*
+#     arXiv preprint `2104.00728 <https://doi.org/10.48550/arXiv.2104.00728>`__.
+#
+# .. [#Bullock_Note]
+#
+#     Stephen S Bullock (2004) *Note on the Khaneja Glaser Decomposition.*
+#     arXiv preprint `quant-ph/0403141 <https://doi.org/10.48550/arXiv.quant-ph/0403141>`__.
+#
+# .. [#Dagli_Framework]
+#
+#     Mehmet Dagli, Domenico D'Alessandro, Jonathan D H Smith (2007) *A General Framework
+#     for Recursive Decompositions of Unitary Quantum Evolutions.*
+#     arXiv preprint `quant-ph/0701193 <https://doi.org/10.48550/arXiv.quant-ph/0701193>`__.
+#
+# .. [#Shende_Minimal]
+#
+#     Vivek V Shende, Igor L Markov, Stephen S Bullock (2003) *Minimal Universal Two-qubit
+#     Quantum Circuits.*
+#     arXiv preprint `quant-ph/0308033 <https://doi.org/10.48550/arXiv.quant-ph/0308033>`__.
 #
 # About the author
 # ----------------
