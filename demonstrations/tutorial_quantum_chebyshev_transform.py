@@ -75,7 +75,7 @@ The :math:`j`th Chebyshev basis state using :math:`N` qubits is
   |\tau(x_j^\mathrm{Ch})\rangle = \frac1{2^{N/2}}T_0(x_j^\mathrm{Ch})|0\rangle + \frac1{2^{(N-1)/2}}\sum_{k=1}^{2^N-1}T_k(x_j^\mathrm{Ch})|k\rangle\,,
 
 where :math:`|k\rangle` are the computational basis states. 
-These states are orthonormal due to the orthgonality of the Chebyshev polynomials and the normalization convention defined above, that is
+These states are orthonormal due to the orthogonality of the Chebyshev polynomials and the normalization convention defined above, that is
 
 .. math::
   \langle\tau(x_j^\mathrm{Ch})|\tau(x_{j'}^\mathrm{Ch})\rangle = \delta_{j, j'}\,.
@@ -333,7 +333,7 @@ plt.show()
 # Conclusion
 # ----------
 # In this tutorial, we've gone through how to implement the QChT from the paper by Williams *et al.*, and tested the circuit output by looking at the state amplitudes and the orthonormality. 
-# The properties of Chebyshev polynomimals and the speed at which the QChT can be implemented make the Chebyshev basis an interesting choice of state space for quantum algorithms, such as generative modelling of probability distributions.
+# The properties of Chebyshev polynomials and the speed at which the QChT can be implemented make the Chebyshev basis an interesting choice of state space for quantum algorithms, such as generative modelling of probability distributions.
 # To build a generative model in the Chebyshev basis, one could implement the quantum Chebyshev feature map from the same paper [#williams2023]_, which prepares a state in the Chevyshev space via a parameter :math:`x``.
 #
 #
