@@ -53,6 +53,15 @@
             "url": "https://doi.org/10.48550/arXiv.2403.13692"
         },
         {
+            "id": "Wierichs_CartanSynthesis",
+            "type": "preprint",
+            "title": "Recursive Cartan decompositions for unitary synthesis",
+            "authors": "David Wierichs, Maxwell West, Roy T. Forestano, M. Cerezo, Nathan Killoran",
+            "year": "2025",
+            "doi": "10.48550/arXiv.2503.19014",
+            "url": "https://doi.org/10.48550/arXiv.2503.19014"
+        },
+        {
             "id": "Kökcü_FDHS",
             "type": "preprint",
             "title": "Fixed Depth Hamiltonian Simulation via Cartan Decomposition",
@@ -91,17 +100,7 @@
             "url": "https://doi.org/10.48550/arXiv.quant-ph/0308033"
         }
     ],
-    "basedOnPapers": [
-        {
-            "id": "Wierichs_CartanSynthesis",
-            "type": "preprint",
-            "title": "Recursive Cartan decompositions for unitary synthesis",
-            "authors": "David Wierichs, Maxwell West, Roy T. Forestano, M. Cerezo, Nathan Killoran",
-            "year": "2025",
-            "doi": "10.48550/arXiv.2503.19014",
-            "url": "https://doi.org/10.48550/arXiv.2503.19014"
-        }
-    ],
+    "basedOnPapers": ["10.48550/arXiv.2503.19014"],
     "referencedByPapers": [],
     "relatedContent": [
         {
