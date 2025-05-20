@@ -2,11 +2,19 @@ r"""Quantum Chebyshev Transform
 =============================================================
 
 This demo is inspired by the paper `"Quantum Chebyshev transform: mapping, embedding, learning and sampling distributions" <https://arxiv.org/abs/2306.17026>`__ [#williams2023]_ wherein the authors describe a workflow for quantum Chebyshev-based model building. 
-They demonstrate the use of the Chebyshev basis space in generative modelling of probability distributions. A proposed protocol for learning and sampling multivariate probability distributions that arise in high-energy physics also makes use of the Chebyshev basis [#delejarza2025]_.
+They demonstrate the use of the Chebyshev basis space in generative modelling of probability distributions. 
+A proposed protocol for learning and sampling multivariate probability distributions that arise in high-energy physics also makes use of the Chebyshev basis [#delejarza2025]_.
 Crucial to the implementation of learning models in Chebyshev space is the quantum Chebyshev transform (QChT), which is used to swap between the computational basis and the Chebyshev basis. 
 
 We will start by discussing Chebyshev polynomials and why you may want to work in Chebyshev space. Then we will show how the QChT can be implemented in PennyLane. 
 
+.. figure:: ../_static/demo_thumbnails/regular_demo_thumbnails/quantum_chebyshev_transform/thumbnail_quantum_chebyshev_transform.png
+   :align: center
+   :width: 60%
+   :target: javascript:void(0)
+   :alt: Quantum Chebyshev Transform mapping between the uniform computational basis and the non-uniform Chebyshev basis.
+
+   Figure 1: QChT -- a map between the uniform computational basis and the non-uniform Chebyshev basis.
 
 What are Chebyshev polynomials?
 ---------------------------------------
@@ -42,7 +50,7 @@ These are known as the `Chebyshev nodes <https://en.wikipedia.org/wiki/Chebyshev
     :target: javascript:void(0)
     :alt: Plot of first six Chebyshev polynomials, with nodes denser near the boundary.
 
-    Figure 1. The first six Chebyshev polynomials, along with their corresponding nodes.
+    Figure 2. The first six Chebyshev polynomials, along with their corresponding nodes.
 
 The nodes are plotted above along with the corresponding polynomials. Note that the polynomials are normalized such that $T_n(1)=1$, and they satisfy a discrete orthogonality condition on the nodes of :math:`T_N(x)` in the following way for :math:`k, \ell<N`
 
@@ -94,7 +102,7 @@ An ancilla qubit is required, which will be the :math:`0` indexed qubit, and the
     :target: javascript:void(0)
     :alt: Quantum Chebyshev Transform circuit diagram drawn using PennyLane
 
-    Figure 2. Quantum Chebyshev Transform circuit. 
+    Figure 3. Quantum Chebyshev Transform circuit. 
 
 The intuition for the structure of the above circuit comes from the link between the DChT and the DCT. 
 Notice the use of the `quantum Fourier transform (QFT) <https://pennylane.ai/qml/demos/tutorial_qft/>`__ applied on all qubits. 
@@ -267,7 +275,7 @@ ax.plot(x, [tau_amplitudes(ch_node(j), xs) for xs in x], label="expectation")
 ax.set(xlabel=r"$|k\rangle$", ylabel="Amplitude")
 ax.legend()
 fig.text(0.5, 0.05,
-    r"Figure 3. Amplitudes of $|\tau(x_7^\mathrm{Ch})\rangle$ in computational basis.",
+    r"Figure 4. Amplitudes of $|\tau(x_7^\mathrm{Ch})\rangle$ in computational basis.",
     horizontalalignment="center",
     size="small",
     weight="normal",
@@ -319,7 +327,7 @@ ax.plot(xs, [overlap_sq(x, nodes[j]) for x in xs], label="expectation")
 
 ax.legend()
 fig.text(0.5, 0.05,
-    "Figure 4. Squared overlap of Chebyshev states.",
+    "Figure 5. Squared overlap of Chebyshev states.",
     horizontalalignment="center",
     size="small",
     weight="normal",
