@@ -59,8 +59,9 @@ Also note that the KAK decomposition is a statement of *existence*, so it is sti
 actually find the matrices :math:`K_1`, :math:`A`, and :math:`K_2` for a given matrix :math:`G`.
 
 There is a full classification of KAK decompositions, based on the groups
-:math:`\mathcal{G}` and :math:`\mathcal{K}`. For :math:`\mathcal{G}` being a classical real compact
-Lie group, we have ten types:
+:math:`\mathcal{G}` and :math:`\mathcal{K}`. For :math:`\mathcal{G}` being a 
+`classical real compact Lie group <https://en.wikipedia.org/wiki/Classical_group>`__,
+we have ten types:
 
 .. rst-class:: docstable
 
