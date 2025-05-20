@@ -2,7 +2,7 @@ r"""Quantum Chebyshev Transform
 =============================================================
 
 This demo is inspired by the paper `"Quantum Chebyshev transform: mapping, embedding, learning and sampling distributions" <https://arxiv.org/abs/2306.17026>`__ [#williams2023]_ wherein the authors describe a workflow for quantum Chebyshev-based model building. 
-They demonstrate the use of the Chebyshev basis space in generative modeling for probability distributions. A proposed protocol for learning and sampling multivariate probability distributions that arise in high-energy physics also makes use of the Chebyshev basis [#delejarza2025]_.
+They demonstrate the use of the Chebyshev basis space in generative modelling of probability distributions. A proposed protocol for learning and sampling multivariate probability distributions that arise in high-energy physics also makes use of the Chebyshev basis [#delejarza2025]_.
 Crucial to the implementation of learning models in Chebyshev space is the quantum Chebyshev transform (QChT), which is used to swap between the computational basis and the Chebyshev basis. 
 
 We will start by discussing Chebyshev polynomials and why you may want to work in Chebyshev space. Then we will show how the QChT can be implemented in PennyLane. 
@@ -69,7 +69,7 @@ Next, we will describe the quantum analogue of this transformation.
 Quantum Chebyshev basis
 ---------------------------------------
 The quantum Chebyshev transform (QChT) circuit described in Ref. [#williams2023]_ maps computational basis states :math:`\{|x_j\rangle\}_{j=0}^{2^N-1}` to Chebyshev basis states :math:`\{|\tau(x_j^\mathrm{Ch})\rangle\}_{j=0}^{2^N-1}`. 
-The jth Chebyshev basis state using :math:`N` qubits is
+The :math:`j`th Chebyshev basis state using :math:`N` qubits is
 
 .. math::
   |\tau(x_j^\mathrm{Ch})\rangle = \frac1{2^{N/2}}T_0(x_j^\mathrm{Ch})|0\rangle + \frac1{2^{(N-1)/2}}\sum_{k=1}^{2^N-1}T_k(x_j^\mathrm{Ch})|k\rangle\,,
@@ -214,7 +214,7 @@ fig, ax = qml.draw_mpl(circuit_to_draw, decimals=2, style="pennylane")()
 fig.show()
 
 #############################################
-# Note we define a new function for the circuit to simplify the drawing, removing the returned ``qml.state``.
+# Note we defined a new function for the circuit to simplify the drawing, removing the returned ``qml.state``.
 
 #############################################
 # Testing the QChT
@@ -232,10 +232,11 @@ total_state = np.where(np.abs(total_state)<1e-12, 0, total_state)
 print(total_state)
 
 #############################################
-# Indeed, we see the second half of the amplitude vector is zero. Furthermore, the first :math:`2^N` entries are real valued, but let's check if the amplitudes of the state in the computational basis agree with our definition.
+# Indeed, we see the second half of the amplitude vector is zero. 
+# Furthermore, the first :math:`2^N` entries are real valued, but let's check if the amplitudes of the state components in the computational basis agree with our definition.
 
 # reduce state size, effectively removing the ancilla
-state = np.real(total_state[: 2**N])  # discard small imaginary components
+state = np.real(total_state[: 2**N])  # discard the small imaginary components
 
 # computational basis indices
 x = range(2**N)
@@ -331,7 +332,9 @@ plt.show()
 #
 # Conclusion
 # ----------
-# In this tutorial, we've gone through how to implement the QChT from the paper by Williams *et al.*, and tested the circuit output by looking at the state amplitudes and the orthonormality. To build a generative model in the Chebyshev basis, one could implement the quantum Chebyshev feature map from the same paper, which prepares a state in the Chevyshev space via a parameter :math:`x``.
+# In this tutorial, we've gone through how to implement the QChT from the paper by Williams *et al.*, and tested the circuit output by looking at the state amplitudes and the orthonormality. 
+# The properties of Chebyshev polynomimals and the speed at which the QChT can be implemented make the Chebyshev basis an interesting choice of state space for quantum algorithms, such as generative modelling of probability distributions.
+# To build a generative model in the Chebyshev basis, one could implement the quantum Chebyshev feature map from the same paper [#williams2023]_, which prepares a state in the Chevyshev space via a parameter :math:`x``.
 #
 #
 # References
