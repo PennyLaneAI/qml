@@ -8,7 +8,7 @@ Crucial to the implementation of learning models in Chebyshev space is the quant
 
 We will start by discussing Chebyshev polynomials and why you may want to work in Chebyshev space. Then we will show how the QChT can be implemented in PennyLane. 
 
-.. figure:: ../_static/demo_thumbnails/regular_demo_thumbnails/quantum_chebyshev_transform/thumbnail_quantum_chebyshev_transform.png
+.. figure:: ../_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_quantum_chebyshev_transform.png
    :align: center
    :width: 60%
    :target: javascript:void(0)
@@ -77,7 +77,7 @@ Next, we will describe the quantum analogue of this transformation.
 Quantum Chebyshev basis
 ---------------------------------------
 The quantum Chebyshev transform (QChT) circuit described in Ref. [#williams2023]_ maps computational basis states :math:`\{|x_j\rangle\}_{j=0}^{2^N-1}` to Chebyshev basis states :math:`\{|\tau(x_j^\mathrm{Ch})\rangle\}_{j=0}^{2^N-1}`. 
-The :math:`j`th Chebyshev basis state using :math:`N` qubits is
+The :math:`j` -th Chebyshev basis state using :math:`N` qubits is
 
 .. math::
   |\tau(x_j^\mathrm{Ch})\rangle = \frac1{2^{N/2}}T_0(x_j^\mathrm{Ch})|0\rangle + \frac1{2^{(N-1)/2}}\sum_{k=1}^{2^N-1}T_k(x_j^\mathrm{Ch})|k\rangle\,,
