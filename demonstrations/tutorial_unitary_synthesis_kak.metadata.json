@@ -74,7 +74,7 @@
         },
         {
             "id": "Dagli_Framework",
-            "type": "paper",
+            "type": "article",
             "title": "A General Framework for Recursive Decompositions of Unitary Quantum Evolutions",
             "authors": "Mehmet Dagli, Domenico D'Alessandro, Jonathan D H Smith",
             "year": "2007",
@@ -83,7 +83,7 @@
         },
         {
             "id": "Shende_Minimal",
-            "type": "paper",
+            "type": "article",
             "title": "Minimal Universal Two-qubit Quantum Circuits",
             "authors": "Vivek V Shende, Igor L Markov, Stephen S Bullock",
             "year": "2003",
