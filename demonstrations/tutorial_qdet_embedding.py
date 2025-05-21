@@ -58,7 +58,7 @@ powerful method for affordable quantum simulation of materials.
 #
 # Mean field calculations
 # ^^^^^^^^^^^^^^^^^^^^^^^
-# We use density functional theory To obtain a mean-field description of the whole system. The DFT
+# We use density functional theory (DFT) To obtain a mean-field description of the whole system. The DFT
 # calculations are performed with the QUANTUM ESPRESSO package. This requires downloading
 # the pseudopotentials [#Modji]_ for each atomic species
 # in the system from the QUANTUM ESPRESSO
