@@ -76,13 +76,18 @@ jobs:
 
   # Step 2: Deploy the demos to SWC
   deploy-preview-demos:
-    if: github.event.workflow_run.event == 'pull_request' && needs.prepare-build-context.result == 'success'
+    if: |
+      github.event.workflow_run.event == 'pull_request' && 
+      needs.prepare-build-context.result == 'success' &&
+      needs.prepare-build-context.outputs.pr_ref != ''
     uses: ./.github/workflows/v2-deploy-demos.yml
     needs: prepare-build-context
     with:
       # TODO: Update SWC environment to "swc-prod"
       environment: 'swc-staging' 
       artifact-name: demo-build-${{ needs.prepare-build-context.outputs.pr_ref }}
+      workflow-run-id: ${{ github.event.workflow_run.id }}
+      github-token: ${{ github.token }}
       preview: true
     secrets: inherit
   
