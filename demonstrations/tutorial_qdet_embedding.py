@@ -83,7 +83,7 @@ powerful method for affordable quantum simulation of materials.
 #
 # Identify the impurity
 # ^^^^^^^^^^^^^^^^^^^^^
-# Once we have obtained the meanfield description, we can identify our impurity by finding
+# Once we have obtained the mean field description, we can identify our impurity by finding
 # the states that are localized in real space around the defect region. We can identify these localized states using the
 # localization factor defined as:
 #
