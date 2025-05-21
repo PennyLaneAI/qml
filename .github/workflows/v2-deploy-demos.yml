@@ -42,7 +42,8 @@ on:
       github-token: 
         description: |
           GitHub token. Required for pulling artifacts from separate workflows.
-          Set this if using 'workflow-run-id'.        type: string
+          Set this if using 'workflow-run-id'.        
+        type: string
         required: false
       preview:
         description: Whether to deploy demos as preview.
