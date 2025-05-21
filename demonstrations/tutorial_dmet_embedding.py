@@ -432,7 +432,7 @@ DMET calculations to construct a Hamiltonian that can be used for quantum algori
 # Conclusion
 # ^^^^^^^^^^^^^^
 # The density matrix embedding theory is a robust method designed to tackle simulation of complex
-# systems by partitioning them into manageablesubsystems. It is particularly well suited for studying
+# systems by partitioning them into manageable subsystems. It is particularly well suited for studying
 # the ground state properties of strongly correlated materials and molecules. DMET offers a compelling
 # alternative to dynamic quantum embedding schemes such as dynamic meanfield theory(DMFT). By employing density
 # matrix for embedding instead of the Green's function and utilizing Schmidt decomposition to get limited number
