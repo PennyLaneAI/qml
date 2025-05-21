@@ -161,7 +161,7 @@ DMET calculations to construct a Hamiltonian that can be used for quantum algori
 # by looking at the labels. In this example, we choose to keep the :math:`1s` orbitals in the central
 # :math:`H_4` chain in the impurity, while the bath contains the :math:`2s` orbitals, and the orbitals belonging
 # to the terminal Hydrogen molecules form the unentangled environment. The indices for the valence and virtual orbitals
-# of the central Hydrogen chain, which correspond to our impurity and bath orbitals, respectively, can be obtained using
+# corresponding to the impurity and the bath, respectively, can be obtained using
 # the get_idx function.
 #
 # .. code-block:: python
