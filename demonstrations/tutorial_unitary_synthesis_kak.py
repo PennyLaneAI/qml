@@ -414,7 +414,10 @@ The key differences to the QSD lie in the transformations and optimizations appl
 each type-AIII Cartan decomposition. We showcase the transformation into the correct block
 structure in form of a circuit diagram:
 
-to do
+.. figure:: ../_static/demonstration_assets/unitary_synthesis_kak/block_zxz_transformations.png
+   :align: center
+   :width: 90%
+   :alt: Transformations from a type-AIII KAK decomposed circuit to a circuit in Block-ZXZ form.
 
 Afterwards, the block-diagonal matrices can be decomposed with the type-A decompositions, and
 optimizations from the QSD can be applied, complemented by the merger of two CZ gates into
