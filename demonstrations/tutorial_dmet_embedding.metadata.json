@@ -38,7 +38,7 @@
             "id": "pyscf",
             "type": "article",
             "title": "Recent developments in the PySCF program package",
-            "authors": "Sun, Qiming and Zhang, Xing and Banerjee, Samragni and Bao, Peng and Barbry, Marc and Blunt, Nick S and Bogdanov, Nikolay A and Booth, George H and Chen, Jia and Cui, Zhi-Hao and others",
+            "authors": "Sun, Qiming and Zhang, Xing and Banerjee, Samragni and Bao, Peng and Barbry, and others",
             "journal": "",
             "year": "2020",
             "url": "https://arxiv.org/pdf/2002.12531"
@@ -64,8 +64,7 @@
         {
             "id": "DMETQC",
             "type": "article",
-            "title": "Ab initio simulation of complex solids on a quantum computer
-with orbital-based multifragment density matrix embedding",
+            "title": "Ab initio simulation of complex solids on a quantum computer with orbital-based multifragment density matrix embedding",
             "authors": "Cao, Changsu and Sun, Jinzhao and Yuan, Xiao and Hu, Han-Shi and Pham, Hung Q and Lv, Dingshun",
             "journal": "",
             "year": "2023",
