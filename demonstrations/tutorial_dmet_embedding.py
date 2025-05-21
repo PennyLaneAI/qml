@@ -74,7 +74,7 @@ DMET calculations to construct a Hamiltonian that can be used for quantum algori
 # Subsequently, this approximate wavefunction is partitioned with Schmidt decomposition to get
 # the impurity and bath orbitals. These orbitals are then employed to define an approximate projector
 # :math:`P`, which in turn is used to construct the embedded Hamiltonian. High accuracy methods such as
-# post-Hartree-Fock methods, exact diagonalisation, or accurate quantum algorithms are employed to solve this
+# post-Hartree-Fock methods, exact diagonalisation, or accurate quantum algorithms are employed to find
 # embedded Hamiltonian for its energy spectrum and corresponding eigenfunctions. The results are used to
 # re-construct the projector and the process is repeated until the wave function converges. Let's now
 # take a look at the implementation of these steps for a toy system with 8 Hydrogen atoms.
