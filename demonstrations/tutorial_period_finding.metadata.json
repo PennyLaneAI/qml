@@ -1,0 +1,61 @@
+{
+    "title": "Period finding: A problem at the heart of quantum computing",
+    "authors": [
+        {
+            "username": "mariaschuld"
+        }
+    ],
+    "dateOfPublication": "2025-04-16T10:00:00+00:00",
+    "dateOfLastModification": "2025-04-29T10:00:00+00:00",
+    "categories": [
+        "Algorithms"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_period_finding.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_period_finding.png"
+        }
+    ],
+    "seoDescription": "Find out how quantum computers exploit group structure and the Fourier transform to uncover hidden patterns in functions.",
+    "doi": "",
+    "references": [
+        {
+            "id": "Aaronson2022",
+            "type": "preprint",
+            "title": "How Much Structure Is Needed for Huge Quantum Speedups?",
+            "authors": "Scott Aaronson",
+            "year": "2022",
+            "journal": "arXiv",
+            "url": "https://arxiv.org/pdf/2209.06930"
+        },
+        {
+            "id": "Childs2010",
+            "type": "article",
+            "title": "Quantum algorithms for algebraic problems",
+            "authors": "Andrew M. Childs, Wim van Dam",
+            "year": "1997",
+            "journal": "Reviews of Modern Physics 82, 1",
+            "doi": "10.1103/RevModPhys.82.1",
+            "url": "https://doi.org/10.1103/RevModPhys.82.1"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_qft",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_qft_arithmetics",
+            "weight": 1.0
+        }
+    ]
+}

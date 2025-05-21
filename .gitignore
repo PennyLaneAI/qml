@@ -11,6 +11,7 @@ backreferences
 .DS_Store
 demos_community.rst
 .venv/
+.venv-build/
 **/*.egg-info/
 
 # Generated after installation

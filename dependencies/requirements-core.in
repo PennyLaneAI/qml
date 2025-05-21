@@ -1,0 +1,13 @@
+# Core dependencies that are always available for every demo
+# Note that versions are specified in 'constraints-dev' or 'constraints-stable'
+aiohttp
+fsspec
+h5py
+jax
+jaxlib
+matplotlib
+numpy
+pennylane
+pennylane-lightning
+pennylane-catalyst
+optax

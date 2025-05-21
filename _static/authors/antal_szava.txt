@@ -1,4 +1,0 @@
-.. bio:: Antal Szava
-   :photo: ../_static/authors/antal_szava.jpg
-
-   Antal is a senior quantum software developer at Xanadu working on PennyLane. In his spare time he enjoys watching TV shows, being active outside with friends and learning about acting.

@@ -59,26 +59,36 @@ quantum computing paper/result.
 
   ```python
   ##############################################################################
-  #.. figure:: ../_static/demonstrations_assets/<demo name>/image.png
+  #.. figure:: ../_static/demonstration_assets/<demo name>/image.png
   #    :align: center
   #    :width: 90%
   ```
 
   where `<demo name>` is a sub-directory with the name of
   your demo.
+  <details>
+    <summary><b>Follow these standards when adding images</b></summary>
 
-- Add and select an author photo from the `_static/authors` folder. The image name should be as `<author name>_<author surname>.<format>`. If this is a new author and their image is not a headshot, store the original image as `<author name>_<author surname>_original.<format>` and create a cropped headshot with the aforementioned name.
-- In the same folder create a `<author name>.txt` file where to include the bio following this structure:
+    ### File Size
+    * Always aim to keep the image file size in kilobytes (KB’s) 
+    * Always compress the image to the best possible size where quality is acceptable.
+    
+    ### Formats
+    * Use `.png` for everything (decorative images, descriptive images, logos etc)
+    * Use `.gif` for animated images
 
-  ```txt
-  .. bio:: <author name> <author surname>
-   :photo: ../_static/authors/<author name>_<author surname>.<format>
+    ### Dimensions
+    * To maintain quality and performance, every image should be twice (2X) its visible dimension size on the web page, and at a minimum of `150 ppi/dpi` (preferably `300 ppi/dpi`).
+  </details><br>
 
-   <author's bio>
-  ```
-  Note that if you want to include a middle name, it must be included in both the first and second line and in the file name.
+- Lastly, your demo will need an accompanying _metadata_ file. This file should be named
+  the same as your python file, but with the `.py` extension replaced with
+  `.metadata.json`. Check out the `demonstrations_metadata.md` file in this repo for
+  details on how to format that file and what to include.
+
+- Include the author's information in the `.metadata.json` file. This can be either the author's PennyLane profile `username` or their `name`. If you provide the PennyLane profile username, the author details will be sourced directly from that profile, and the demo will then appear as a contribution on the author's profile.
   
-- Your bio will be added at the end of the demo automatically. Don't forget to end with the following line
+- Don't forget to end with the following line
 
   ```python
   ##############################################################################
@@ -86,11 +96,6 @@ quantum computing paper/result.
   # ----------------
   # 
   ```
-
-- Lastly, your demo will need an accompanying _metadata_ file. This file should be named
-  the same as your python file, but with the `.py` extension replaced with
-  `.metadata.json`. Check out the `demonstrations_metadata.md` file in this repo for
-  details on how to format that file and what to include.
 
 - At this point, run your script through the [Black Python formatter](https://github.com/psf/black),
 
@@ -104,7 +109,7 @@ quantum computing paper/result.
   - Make sure the file name is `<name of your tutorial>.metadata.json`.
   - The "id" of the author will be the same as the one you chose when creating the bio. 
   - The date of publication and modification. Leave them empty in case you don't know them.
-  - Choose the categories your demo fits into: `"Getting Started"`, `"Optimization"`, `"Quantum Machine Learning"`, `"Quantum Chemistry"`, `"Devices and Performance"`, `"Quantum Computing"`, `"Quantum Hardware"` or `"Algorithms"`. Feel free to add more than one.
+  - Choose the categories your demo fits into: `"Getting Started"`, `"Optimization"`, `"Quantum Machine Learning"`, `"Quantum Chemistry"`, `"Devices and Performance"`, `"Quantum Computing"`, `"Quantum Hardware"`, `"Algorithms"` or `"How-to"`. Feel free to add more than one.
   - In `previewImages` you should simply modify the final part of the file's name to fit the name of your demo. These two images will be sent to you once the review process begins. Once sent, you must upload them to the address indicated in the metadata.
   - `relatedContent` refers to the demos related to yours. You will have to put the corresponding id and set the `weight` to `1.0`. 
   - If there is any doubt with any field, do not hesitate to post a comment to the reviewer of your demo. 
@@ -200,11 +205,9 @@ Add the new dependency in the `[tool.poetry.group.executable-dependencies.depend
 
 Once pyproject.toml files have been updated, the poetry.lock file needs to be refreshed:
 ```bash
-poetry lock --no-update
+poetry lock
 ```
 This command will ensure that there are no dependency conflicts with any other package, and everything works.
-
-The `--no-update` ensures existing package versions are not bumped as part of the locking process.
 
 If the dependency change is required in prod, open the PR against `master`, or if it's only required in dev, then open
 the PR against the `dev` branch, which will be synced to master on the next release of PennyLane.
