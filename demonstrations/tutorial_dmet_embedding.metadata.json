@@ -5,10 +5,10 @@
             "username": "ddhawan"
         }
     ],
-    "dateOfPublication": "2025-05-01T00:00:00+00:00",
-    "dateOfLastModification": "2025-05-01T00:00:00+00:00",
+    "dateOfPublication": "2025-05-21T00:00:00+00:00",
+    "dateOfLastModification": "2025-05-21T00:00:00+00:00",
     "categories": [
-        "Getting Started",
+        "Quantum Chemistry",
         "How-to"
     ],
     "tags": [],
@@ -26,13 +26,50 @@
     "doi": "",
     "references": [
         {
-            "id": "ashcroft",
-            "type": "book",
-            "title": "Solid State Physics",
-            "authors": "N. W. Ashcroft, D. N. Mermin",
-            "year": "1976",
-            "publisher": "New York: Saunders College Publishing",
-            "url": "https://en.wikipedia.org/wiki/Ashcroft_and_Mermin"
+            "id": "SWouters",
+            "type": "article",
+            "title": "A practical guide to density matrix embedding theory in quantum chemistry",
+            "authors": "Wouters, Sebastian and Jim{\'e}nez-Hoyos, Carlos A and Sun, Qiming and Chan, Garnet K-L",
+            "journal": "",
+            "year": "2016",
+            "url": "https://arxiv.org/pdf/1603.08443"
+        },
+        {
+            "id": "pyscf",
+            "type": "article",
+            "title": "Recent developments in the PySCF program package",
+            "authors": "Sun, Qiming and Zhang, Xing and Banerjee, Samragni and Bao, Peng and Barbry, Marc and Blunt, Nick S and Bogdanov, Nikolay A and Booth, George H and Chen, Jia and Cui, Zhi-Hao and others",
+            "journal": "",
+            "year": "2020",
+            "url": "https://arxiv.org/pdf/2002.12531"
+        },
+        {
+            "id": "libdmet",
+            "type": "article",
+            "title": "Efficient Implementation of Ab Initio Quantum Embedding in Periodic Systems: Density Matrix Embedding Theory",
+            "authors": "Cui, Zhi-Hao and Zhu, Tianyu and Chan, Garnet Kin-Lic",
+            "journal": "",
+            "year": "2020",
+            "url": "https://arxiv.org/pdf/1909.08596"
+        },
+        {
+            "id": "libdmet2",
+            "type": "article",
+            "title": "Efficient formulation of ab initio quantum embedding in periodic systems: Dynamical mean-field theory",
+            "authors": "Zhu, Tianyu and Cui, Zhi-Hao and Chan, Garnet Kin-Lic",
+            "journal": "",
+            "year": "2019",
+            "url": "https://arxiv.org/pdf/1909.08592"
+        },
+        {
+            "id": "DMETQC",
+            "type": "article",
+            "title": "Ab initio simulation of complex solids on a quantum computer
+with orbital-based multifragment density matrix embedding",
+            "authors": "Cao, Changsu and Sun, Jinzhao and Yuan, Xiao and Hu, Han-Shi and Pham, Hung Q and Lv, Dingshun",
+            "journal": "",
+            "year": "2023",
+            "url": "https://arxiv.org/pdf/2209.03202"
         }
     ],
     "basedOnPapers": [],

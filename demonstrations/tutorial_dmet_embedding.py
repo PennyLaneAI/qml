@@ -3,7 +3,7 @@ r"""Density Matrix Embedding Theory (DMET)
 Materials simulation presents a crucial challenge in quantum chemistry. Density Functional Theory
 (DFT) is currently the workhorse for simulating materials due to its balance between accuracy and
 computational efficiency. However, it often falls short in accurately capturing the intricate
-electron correlation effects found in strongly correlated materials because of its meanfield nature.
+electron correlation effects found in strongly correlated materials because of its mean field nature.
 As a result, researchers often turn to wavefunction-based methods, such as configuration interaction
 or coupled cluster, which provide better accuracy but come at a
 significantly higher computational cost.
@@ -62,10 +62,10 @@ DMET calculations to construct a Hamiltonian that can be used for quantum algori
 # where :math:`P = \sum_{\alpha \beta} | A_{\alpha} B_{\beta} \rangle \langle A_{\alpha} B_{\beta}|`
 # is a projection operator. A key point about this representation is that the wave function,
 # :math:`|\Psi \rangle`, is the ground state of both the full system Hamiltonian :math:`\hat{H}` and
-# the smaller embedded Hamiltonian :math:`\hat{H}_{emb}` [arXiv:2108.08611].
+# the smaller embedded Hamiltonian :math:`\hat{H}_{\text{emb}}` [arXiv:2108.08611].
 #
 # Note that the Schmidt decomposition requires apriori knowledge of the wavefunction. To alleviate
-# this, DMET operates through a systematic iterative approach, starting with a meanfield description
+# this, DMET operates through a systematic iterative approach, starting with a mean field description
 # of the wavefunction and refining it through feedback from solution of the impurity Hamiltonian.
 #
 # Implementation
@@ -73,7 +73,7 @@ DMET calculations to construct a Hamiltonian that can be used for quantum algori
 # The DMET procedure starts by getting an approximate description of the system's wavefunction.
 # Subsequently, this approximate wavefunction is partitioned with Schmidt decomposition to get
 # the impurity and bath orbitals. These orbitals are then employed to define an approximate projector
-# :math:`P`, which in turn is used to construct the embedded Hamiltonian. High accuracy methods such as
+# :math:`P`, which is used to construct the embedded Hamiltonian. High accuracy methods such as
 # post-Hartree-Fock methods, exact diagonalisation, or accurate quantum algorithms are employed to find
 # the energy spectrum of the embedded Hamiltonian. The results are used to
 # re-construct the projector and the process is repeated until the wave function converges. Let's now
@@ -82,16 +82,16 @@ DMET calculations to construct a Hamiltonian that can be used for quantum algori
 #
 # .. code-block:: python
 #
-# pip install pyscf
-# pip install git+https://github.com/gkclab/libdmet_preview.git@main
+#    pip install pyscf
+#    pip install git+https://github.com/gkclab/libdmet_preview.git@main
 #
 # Constructing the system
 # ^^^^^^^^^^^^^^^^^^^^^^^
-# We begin by defining a hydrogen chain with 8 atoms using PySCF. This is done by creating
-# a ``Cell`` object containing 8 Hydrogen atoms. The system is arranged with a central H$_4$
-# chain featuring a uniform 0.75 Å H-H bond length, flanked by two H$_2$ molecules at its termini.
-# Then, we construct a ``Lattice`` object from the libDMET library, associating it with
-# the defined cell.
+# We begin by defining a finite system containing a hydrogen chain with 8 atoms using PySCF.
+# This is done by creating a ``Cell`` object containing 8 Hydrogen atoms. The system is arranged
+# with a central H$_4$ chain featuring a uniform 0.75 Å H-H bond length, flanked by two H$_2$
+# molecules at its termini. Then, we construct a ``Lattice`` object from the libDMET library,
+# associating it with the defined cell.
 #
 # .. code-block:: python
 #
@@ -100,9 +100,10 @@ DMET calculations to construct a Hamiltonian that can be used for quantum algori
 #    from libdmet.system import lattice
 #
 #    cell = gto.Cell()
-#    cell.a = ''' 10.0    0.0     0.0
-#                  0.0     10.0    0.0
-#                  0.0     0.0     12.0 ''' # lattice vectors for unit cell
+#    cell.unit = 'Angstrom'
+#    cell.a = ''' 12.0     0.0     0.0
+#                  0.0    12.0     0.0
+#                  0.0     0.0    12.0 ''' # lattice vectors for unit cell
 #
 #    cell.atom = ''' H 0.0      0.0      0.0
 #                    H 0.0      0.0      0.75
@@ -114,7 +115,7 @@ DMET calculations to construct a Hamiltonian that can be used for quantum algori
 #                    H 0.0      0.0      8.25''' # coordinates of atoms in unit cell
 #
 #    cell.basis = '321g'
-#    cell.build(unit='Angstrom')
+#    cell.build()
 #
 #    kmesh = [1, 1, 1] # number of k-points in xyz direction
 #
@@ -123,9 +124,9 @@ DMET calculations to construct a Hamiltonian that can be used for quantum algori
 #    kpts = lattice.kpts
 #
 #
-# Performing mean-field calculations
+# Performing mean field calculations
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-# We can now perform a mean-field calculation on the whole system through Hartree-Fock with density
+# We can now perform a mean field calculation on the whole system through Hartree-Fock with density
 # fitted integrals using PySCF.
 #
 # .. code-block:: python
@@ -198,9 +199,9 @@ DMET calculations to construct a Hamiltonian that can be used for quantum algori
 #            int_bath: Flag to determine whether we are using an interactive bath
 #
 #        Returns:
-#            rho: mean-field density matrix
+#            rho: mean field density matrix
 #            mu: chemical potential
-#            scf_result: object containing the results of meanfield calculation
+#            scf_result: object containing the results of mean field calculation
 #            imp_ham: impurity Hamiltonian
 #            basis: rotation matrix for embedding basis
 #        """
@@ -228,7 +229,7 @@ DMET calculations to construct a Hamiltonian that can be used for quantum algori
 #            basis: rotation matrix for embedding basis
 #            imp_ham: impurity Hamiltonian
 #            last_dmu: change in chemical potential from previous iterations
-#            scf_result: object containing the results of meanfield calculation
+#            scf_result: object containing the results of mean field calculation
 #
 #        Returns:
 #            rho_emb: density matrix for embedded system
@@ -297,7 +298,7 @@ DMET calculations to construct a Hamiltonian that can be used for quantum algori
 #
 # We start with an initial guess of zero for the :math:`u` here,
 # and optimize it by minimizing the difference between density matrices
-# obtained from the mean-field Hamiltonian and the impurity Hamiltonian. Let's initialize the
+# obtained from the mean field Hamiltonian and the impurity Hamiltonian. Let's initialize the
 # correlation potential and define a function to optimize it.
 #
 # .. code-block:: python
@@ -422,7 +423,7 @@ DMET calculations to construct a Hamiltonian that can be used for quantum algori
 #
 # We can also get ground state energy for the system from this value by solving for the full system
 # as done above in the self-consistency loop using solve_full_system function. This qubit Hamiltonian
-# is particularly relevant for hybrid flavor of DMET approach, where classical mean-field calculations
+# is particularly relevant for hybrid flavor of DMET approach, where classical mean field calculations
 # are coupled with a quantum algorithm for the self-consistent solver. However, directly employing a
 # quantum solver iteratively might not be the most efficient use of quantum resources. An alternative
 # strategy involves using a classical solver for the iterative self-consistency between the impurity and
@@ -434,14 +435,14 @@ DMET calculations to construct a Hamiltonian that can be used for quantum algori
 # The density matrix embedding theory is a robust method designed to tackle simulation of complex
 # systems by partitioning them into manageable subsystems. It is particularly well suited for studying
 # the ground state properties of strongly correlated materials and molecules. DMET offers a compelling
-# alternative to dynamic quantum embedding schemes such as dynamic meanfield theory(DMFT). By employing density
-# matrix for embedding instead of the Green's function and utilizing Schmidt decomposition to get limited number
-# of bath orbitals, DMET achieves significant computational advantage. Furthermore, a major strength lies
+# alternative to dynamic quantum embedding schemes such as dynamic mean field theory(DMFT). By employing the density
+# matrix for embedding instead of the Green's function and utilizing Schmidt decomposition to get a limited number
+# of bath orbitals, DMET achieves a significant reduction in computational resources. Furthermore, a major strength lies
 # in its compatibility with quantum algorithms, enabling the accurate study of smaller, strongly correlated
 # subsystems on quantum computers while the environment is studied classically.
 # Its successful application to a wide range of strongly correlated molecular and periodic systems underscores its
 # power and versatility in electronic structure theory, paving the way for hybrid quantum-classical simulations of
-# challenging materials.[#DMETQC]_
+# challenging materials. [#DMETQC]_
 
 #
 # References
