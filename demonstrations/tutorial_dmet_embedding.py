@@ -284,7 +284,7 @@ DMET calculations to construct a Hamiltonian that can be used for quantum algori
 #
 #        return energy_imp_fci, energy
 #
-# Note here that the effect of environment included in this step is at the meanfield level. So if we
+# Note here that the effect of environment included in this step is at the mean field level. So if we
 # stop the iteration here, the results will be that of the single-shot DMET.
 #
 # In the self-consistent DMET, the interaction between the environment and the impurity is improved
