@@ -45,7 +45,7 @@ powerful method for affordable quantum simulation of materials.
 # effective integrals :math:`t, v` are obtained
 # from first-principles calculations [#Galli2]_.
 #
-# A QDET calculation typically starts by obtaining a meanfield approximation of the whole system
+# A QDET calculation starts by obtaining a meanfield approximation of the whole system
 # using density functional theory. These calculations
 # provide a set of orbitals which can be split into impurity and bath orbitals. These orbitals are
 # used to construct the effective Hamiltonian which is finally solved by using either a high level
