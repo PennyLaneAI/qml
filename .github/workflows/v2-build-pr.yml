@@ -36,6 +36,7 @@ jobs:
         if: steps.get-changed-demos.outputs.updated == ''
         run: |
           echo "No changes found in demos. Exiting workflow."
+          exit 1
 
   # Step 2: Build demos
   build:
