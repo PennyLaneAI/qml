@@ -49,7 +49,7 @@ DMET calculations to construct a Hamiltonian that can be used for quantum algori
 # where :math:`A_{\alpha} = \sum_i U_{i \alpha} | I_i \rangle` are states obtained from rotations of
 # :math:`I_i` to a new basis and :math:`B_{\alpha} = \sum_j V_{j \alpha} | E_j \rangle` are bath
 # states representing the portion of the environment that interacts with the impurity. Note that the
-# number of bath states is identical by the number of fragment states, regardless of the size of the
+# number of bath states is equal to the number of fragment states, regardless of the size of the
 # environment. This new decomposition is the Schmidt decomposition of the system wave function.
 #
 # We are now able to project the full Hamiltonian to the space of impurity and bath states, known as
