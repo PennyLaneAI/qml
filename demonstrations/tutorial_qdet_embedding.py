@@ -169,7 +169,7 @@ powerful method for affordable quantum simulation of materials.
 #  accounts for the exchange and correlation interactions between the active electrons, we remove these interactions from the
 # the Kohn-Sham (KS) Hamiltonian, :math:`H^{KS}`, to avoid double counting them.
 # Therefore, the one-body term :math:`t^{eff}` is obtained by subtracting
-# from the Kohn-Sham Hamiltonian the term accounting for electrostatic and exchange
+# from the Kohn-Sham Hamiltonian the double-counting (dc) term accounting for electrostatic and exchange-
 # correlation interactions in the active space.
 #
 # .. math::
