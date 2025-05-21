@@ -116,7 +116,7 @@ powerful method for affordable quantum simulation of materials.
 #
 #    mpirun -n 2 westpp.x -i westpp.in > westpp.out
 #
-# This creates a file named ``west.westpp.save/westpp.json``. Since computational resources required
+# This creates the file ``west.westpp.save/westpp.json``. Since computational resources required
 # to run the calculation are large, the WEST output file needed for the next step can be
 # directly downloaded as:
 #
