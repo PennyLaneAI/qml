@@ -45,10 +45,10 @@ powerful method for affordable quantum simulation of materials.
 # effective integrals :math:`t, v` are obtained
 # from first-principles calculations [#Galli2]_.
 #
-# A QDET calculation starts by obtaining a meanfield approximation of the whole system
-# using density functional theory. These calculations
-# provide a set of orbitals which can be split into impurity and bath orbitals. These orbitals are
-# used to construct the effective Hamiltonian which is finally solved by using either a high level
+# A QDET calculation is initiated obtaining a mean field approximation of the whole system
+# using density functional theory (DFT). These calculations provide a set of orbitals
+# which can be split into impurity and bath. An effective Hamiltonian is constructed from
+# the impurity orbitals, which is subsequently solved by using either a high level
 # classical method or a quantum algorithm. Let's implement these steps for an example!
 #
 # Implementation
@@ -58,7 +58,7 @@ powerful method for affordable quantum simulation of materials.
 #
 # Mean field calculations
 # ^^^^^^^^^^^^^^^^^^^^^^^
-# We use density functional theory (DFT) To obtain a mean-field description of the whole system. The DFT
+# We use DFT To obtain a mean field description of the whole system. The DFT
 # calculations are performed with the QUANTUM ESPRESSO package. This requires downloading
 # the pseudopotentials [#Modji]_ for each atomic species
 # in the system from the QUANTUM ESPRESSO
@@ -215,8 +215,10 @@ powerful method for affordable quantum simulation of materials.
 #
 #    solution = effective_hamiltonian.solve()
 #
-# We can also use this effective Hamiltonian with a quantum algorithm through PennyLane. This
-# requires representing it in the qubit Hamiltonian format for PennyLane and can be done as follows:
+# This effective Hamiltonian can be directly used with quantum algorithms in PennyLane
+# once it is converted to a qubit Hamiltonian. Since WEST outputs two-electron integrals
+# in chemists' notation, a conversion to the physicists' notation is essential for
+# compatibility with PennyLane's framework. Here's how to construct the qubit Hamiltonian:
 #
 # .. code-block:: python
 #
