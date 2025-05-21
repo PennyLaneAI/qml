@@ -27,6 +27,7 @@ jobs:
         with:
           workflow_run_id: ${{ github.event.workflow_run.id }}
           artifact_name_regex: '^pr_info$'
+          artifact_download_dir: '/tmp/pr'
           github_token: ${{ github.token }}
 
       - name: Check if Build Context file exists
