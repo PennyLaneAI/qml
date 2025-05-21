@@ -167,7 +167,7 @@ powerful method for affordable quantum simulation of materials.
 # :math:`P_0^R = P - P_{imp}`, where :math:`P` is the system's polarizability and :math:`P_{imp}` is the impurity's
 # polarizability. Since solving the effective Hamiltonian
 #  accounts for the exchange and correlation interactions between the active electrons, we remove these interactions from the
-# the Kohn-Sham Hamiltonian, :math:`H^{KS}`, to avoid double counting them.
+# the Kohn-Sham (KS) Hamiltonian, :math:`H^{KS}`, to avoid double counting them.
 # Therefore, the one-body term :math:`t^{eff}` is obtained by subtracting
 # from the Kohn-Sham Hamiltonian the term accounting for electrostatic and exchange
 # correlation interactions in the active space.
