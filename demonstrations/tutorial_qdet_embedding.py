@@ -12,7 +12,7 @@ while accounting for the environment in a more approximate manner.
 
 The core idea behind embedding methods is to partition the system and treat the strongly correlated
 subsystem accurately, using high-level quantum mechanical methods, while approximating the effects
-of the surrounding environment in a way that retains computational efficiency. In this demo, we show
+of the environment in a way that retains computational efficiency. In this demo, we show
 how to implement the quantum defect embedding theory (QDET). The method has been successfully
 applied to study defects in CaO [#Galli]_ and to calculate excitations of the negatively charged NV center in diamond [#Galli2]_.
 An important advantage of QDET is its compatibility with quantum
