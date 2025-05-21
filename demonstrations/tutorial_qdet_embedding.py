@@ -31,7 +31,7 @@ powerful method for affordable quantum simulation of materials.
 # Theory
 # ------
 # QDET allows us to construct an effective Hamiltonian that describes the impurity
-# subsystem and also accounts for the interactions between the impurity subsystem and the
+# subsystem while also accounting for its interaction with the environment, as follows
 # environment as
 #
 # .. math::
