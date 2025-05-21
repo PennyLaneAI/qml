@@ -245,7 +245,7 @@ powerful method for affordable quantum simulation of materials.
 # approximation present in the initial DFT based formulation. This  formulation also helps capture
 # the response properties and provides access to excited state properties. Another major advantage
 # of QDET is the ease with which it can be used with quantum computers in a hybrid framework [#Baker]_.
-# Therefore, We can conclude here that QDET is a powerful embedding approach for simulating complex
+# Therefore, we can conclude here that QDET is a powerful embedding approach for simulating complex
 # quantum systems.
 #
 # References
