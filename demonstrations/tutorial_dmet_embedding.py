@@ -5,7 +5,7 @@ Materials simulation presents a crucial challenge in quantum chemistry. Density 
 computational efficiency. However, it often falls short in accurately capturing the intricate
 electron correlation effects found in strongly correlated materials because of its meanfield nature.
 As a result, researchers often turn to more sophisticated methods, such as configuration interaction
-or coupled cluster based wavefunction methods, which provide better accuracy but come at a
+or coupled cluster, which provide better accuracy but come at a
 significantly higher computational cost.
 
 Embedding theories provide a balanced midpoint solution that enhances our ability to simulate
