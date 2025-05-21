@@ -165,7 +165,7 @@ powerful method for affordable quantum simulation of materials.
 #
 # :math:`W_0^R`, results from screening the bare Coulomb potential, :math:`v`, with the reduced polarizability,
 # :math:`P_0^R = P - P_{imp}`, where :math:`P` is the system's polarizability and :math:`P_{imp}` is the impurity's
-# polarizability. Since this leads to the inclusion of electrostatic
+# polarizability. Since solving the effective Hamiltonian
 # and exchange-correlation effects for the active electrons, we remove these interactions from the
 # the Kohn-Sham Hamiltonian, :math:`H^{KS}`, to avoid double counting them.
 # Therefore, once :math:`v^{eff}` is obtained, the one-body term :math:`t^{eff}` is then obtained by subtracting
