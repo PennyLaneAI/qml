@@ -16,7 +16,7 @@ of the environment in a way that retains computational efficiency. In this demo,
 how to implement the quantum defect embedding theory (QDET). This method has been successfully
 applied to study defects in CaO [#Galli]_ and to calculate excitations of the negatively charged NV center in diamond [#Galli2]_.
 An important advantage of QDET is its compatibility with quantum
-algorithms as we explain in the following sections. The method can be implemented for calculating
+algorithms as we explain in the following sections. It can be implemented for calculating
 ground and excited states, as well as dynamic properties of materials. These make QDET a
 powerful method for affordable quantum simulation of materials.
 
