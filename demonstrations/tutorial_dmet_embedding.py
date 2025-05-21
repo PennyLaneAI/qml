@@ -4,7 +4,7 @@ Materials simulation presents a crucial challenge in quantum chemistry. Density 
 (DFT) is currently the workhorse for simulating materials due to its balance between accuracy and
 computational efficiency. However, it often falls short in accurately capturing the intricate
 electron correlation effects found in strongly correlated materials because of its meanfield nature.
-As a result, researchers often turn to more sophisticated methods, such as configuration interaction
+As a result, researchers often turn to wavefunction-based methods, such as configuration interaction
 or coupled cluster, which provide better accuracy but come at a
 significantly higher computational cost.
 
