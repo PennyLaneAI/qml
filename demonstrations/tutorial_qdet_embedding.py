@@ -1,6 +1,6 @@
 r"""Quantum Defect Embedding Theory (QDET)
 =========================================
-Performing efficient simulations of advances materials and molecules remains a significant
+Performing efficient simulations of advanced materials and molecules remains a significant
 challenge in quantum chemistry and condensed matter physics due to the prohibitive costs of
 available methods. However, many interesting problems in quantum chemistry and condensed matter physics
 feature a strongly correlated region, which requires accurate quantum treatment, embedded within a
