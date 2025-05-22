@@ -188,7 +188,7 @@ powerful method for affordable quantum simulation of materials.
 #      trev_pdep: 0.00001   #convergence threshold for PDEP eigenvalues
 #
 #    wfreq_control:
-#      wfreq_calculation: XWGQH                # compute the quasiparticle corrections and :math:H^{eff} parameters
+#      wfreq_calculation: XWGQH                # compute the quasiparticle corrections and $H^{eff}$ parameters
 #      macropol_calculation: C                 # include long-wavelength limit for condensed systems
 #      l_enable_off_diagonal: true             # calculate off-diagonal elements of G_0W_0 self-energy
 #      n_pdep_eigen_to_use: 512                # number of PDEP eigenvectors to be used
