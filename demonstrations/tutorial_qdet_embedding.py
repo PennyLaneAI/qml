@@ -1,6 +1,6 @@
 r"""Quantum Defect Embedding Theory (QDET)
 =========================================
-Performing efficient simulations of advanced materials and molecules remains a significant
+Performing efficient simulations of the electronic structure of advanced materials and molecules remains a significant
 challenge in quantum chemistry and condensed matter physics due to the prohibitive costs of
 available methods. However, many interesting problems in quantum chemistry and condensed matter physics
 feature a strongly correlated region, which requires accurate quantum treatment, embedded within a
@@ -13,7 +13,7 @@ while accounting for the environment in a more approximate manner.
 The core idea behind embedding methods is to partition the system and treat the strongly correlated
 subsystem accurately, using high-level quantum mechanical methods, while approximating the effects
 of the environment in a way that retains computational efficiency. In this demo, we show
-how to implement the quantum defect embedding theory (QDET). This method has been successfully
+how to implement quantum defect embedding theory (QDET). This method has been successfully
 applied to study defects in CaO [#Galli]_ and to calculate excitations of the negatively charged NV center in diamond [#Galli2]_.
 An important advantage of QDET is its compatibility with quantum
 algorithms as we explain in the following sections. It can be implemented for calculating
@@ -32,11 +32,10 @@ powerful method for affordable quantum simulation of materials.
 # ------
 # QDET allows us to construct an effective Hamiltonian that describes the impurity
 # subsystem while also accounting for its interaction with the environment, as follows
-# environment as
 #
 # .. math::
 #
-#     H^{eff} = \sum_{ij}^{A} t_{ij}^{eff}a_i^{\dagger}a_j + \frac{1}{2}\sum_{ijkl}^{A} v_{ijkl}^{eff}a_i^{\dagger}a_{j}^{\dagger}a_ka_l,
+#     H^{eff} = \sum_{ij} t_{ij}^{eff}a_i^{\dagger}a_j + \frac{1}{2}\sum_{ijkl} v_{ijkl}^{eff}a_i^{\dagger}a_{j}^{\dagger}a_ka_l,
 #
 # where :math:`t_{ij}^{eff}` and :math:`v_{ijkl}^{eff}` represent the effective one-body and
 # two-body integrals, respectively, and :math:`ijkl` span over the orbitals inside the impurity.
@@ -45,10 +44,10 @@ powerful method for affordable quantum simulation of materials.
 # effective integrals :math:`t, v` are obtained
 # from first-principles calculations [#Galli2]_.
 #
-# A QDET calculation is initiated obtaining a mean field approximation of the whole system
-# using density functional theory (DFT). These calculations provide a set of orbitals
-# which can be split into impurity and bath. An effective Hamiltonian is constructed from
-# the impurity orbitals, which is subsequently solved by using either a high level
+# A QDET calculation is initiated obtaining a mean field approximation of the whole system,
+# here we use density functional theory (DFT). These calculations provide a set of orbitals
+# which can be partitioned into an impurity and a bath. An effective Hamiltonian is constructed from
+# the impurity orbitals, which is subsequently solved by using either a high accuracy
 # classical method or a quantum algorithm. Let's implement these steps for an example!
 #
 # Implementation
@@ -89,9 +88,9 @@ powerful method for affordable quantum simulation of materials.
 #
 # .. math::
 #
-#     L_n = \int_{V \in \ohm} d^3 r |\Psi_n^{KS}(r)|^2
+#     L_n = \int_{V \in \Omega} d^3 r |\Psi_n^{KS}(r)|^2
 #
-# where :math:`V` is the identified volume including the impurity within the supercell volume :math:`\ohm` [#Galli2]_.
+# where :math:`V` is the identified volume including the impurity within the supercell volume :math:`\Omega` [#Galli2]_.
 # We will use the `WEST <https://pubs.acs.org/doi/10.1021/ct500958p>`_ program to compute the localization factor. This requires creating the
 # input file ``westpp.in`` as shown below.
 #
@@ -99,9 +98,9 @@ powerful method for affordable quantum simulation of materials.
 #
 #    westpp_control:
 #      westpp_calculation: L # triggers the calculation of the localization factor
-#      westpp_range:         # defines the range of states toe compute the localization factor
+#      westpp_range:         # defines the range of states to compute the localization factor
 #      - 1                   # start from the first state
-#      - 176                 # use all the 176 state
+#      - 176                 # use all 176 states
 #      westpp_box:           # specifies the parameter of the box in atomic units for integration
 #      - 6.19                #
 #      - 10.19
@@ -166,7 +165,7 @@ powerful method for affordable quantum simulation of materials.
 # :math:`W_0^R`, results from screening the bare Coulomb potential, :math:`v`, with the reduced polarizability,
 # :math:`P_0^R = P - P_{imp}`, where :math:`P` is the system's polarizability and :math:`P_{imp}` is the impurity's
 # polarizability. Since solving the effective Hamiltonian
-#  accounts for the exchange and correlation interactions between the active electrons, we remove these interactions from the
+# accounts for the exchange and correlation interactions between the active electrons, we remove these interactions from the
 # the Kohn-Sham (KS) Hamiltonian, :math:`H^{KS}`, to avoid double counting them.
 # Therefore, the one-body term :math:`t^{eff}` is obtained by subtracting
 # from the Kohn-Sham Hamiltonian the double-counting (dc) term accounting for electrostatic and exchange-
@@ -176,7 +175,7 @@ powerful method for affordable quantum simulation of materials.
 #
 #     t_{ij}^{eff} = H_{ij}^{KS} - t_{ij}^{dc},
 #
-# In WEST, these parameters for the effective Hamiltonian are calculated by using the wfreq.x
+# In WEST, these parameters for the effective Hamiltonian are calculated by using the ``wfreq.x``
 # executable. The program will: (i) compute the quasiparticle energies, (ii) compute the
 # partially screened Coulomb potential, and (iii) finally compute the parameters of the
 # effective Hamiltonian. The input file for such a calculation is shown below:
@@ -237,18 +236,17 @@ powerful method for affordable quantum simulation of materials.
 #
 # Conclusion
 # ----------
-# The quantum defect embedding theory is a novel framework for simulating strongly correlated
+# Quantum defect embedding theory is a novel framework for simulating strongly correlated
 # quantum systems and has been successfully used for studying defects in solids. Applicability of
 # QDET however is not limited to defects, it can be used for other systems where a strongly
-# correlated subsystem is embedded in a weakly correlated environment. QDET is able to surpass the
-# problem of correction of double counting of interactions within the active space faced by some
-# other embedding theories such as DFT+DMFT.  Green's function based formulation of QDET ensures
+# correlated subsystem is embedded in a weakly correlated environment. Additionally, QDET is able to 
+# correct the interaction double counting issue within the active space faced by a variety of 
+# other embedding theories such as DFT+DMFT. The Green's function based formulation of QDET ensures
 # exact removal of double counting  corrections at GW level of theory, thus removing the
 # approximation present in the initial DFT based formulation. This  formulation also helps capture
 # the response properties and provides access to excited state properties. Another major advantage
 # of QDET is the ease with which it can be used with quantum computers in a hybrid framework [#Baker]_.
-# Therefore, we can conclude here that QDET is a powerful embedding approach for simulating complex
-# quantum systems.
+# In conclusion, QDET is a powerful embedding approach for simulating complex quantum systems.
 #
 # References
 # ----------
