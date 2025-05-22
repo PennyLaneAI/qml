@@ -65,19 +65,41 @@ we have ten types:
 
 .. rst-class:: docstable
 
-    +---------------------+-------------------------+---------------+---------------+--------------------------+-----------------------------+---------------------------+----------------+---------------------------+----------------+---------------------------+
-    | .. centered::       | .. centered::           | .. centered:: | .. centered:: | .. centered::            | .. centered::               | .. centered::             | .. centered::  | .. centered::             | .. centered::  | .. centered::             |
-    | Type                | A                       | AI            | AII           | AIII :math:`{}_{p,q}`    | BD                          | BDI :math:`{}_{p,q}`      | DIII           | C                         | CI             | CII :math:`{}_{p,q}`      |
-    +=====================+=========================+===============+===============+==========================+=============================+===========================+================+===========================+================+===========================+
-    | .. centered::       | .. centered::           | .. centered:: | .. centered:: | .. centered::            | .. centered::               | .. centered::             | .. centered::  | .. centered::             | .. centered::  | .. centered::             |
-    | :math:`\mathcal{G}` | :math:`U(d)\times U(d)` | :math:`U(d)`  | :math:`U(2d)` | :math:`U(p+q)`           | :math:`SO(d)\times SO(d)`   | :math:`SO(p+q)`           | :math:`SO(2d)` | :math:`Sp(d)\times Sp(d)` | :math:`Sp(d)`  | :math:`Sp(p+q)`           |
-    +---------------------+-------------------------+---------------+---------------+--------------------------+-----------------------------+---------------------------+----------------+---------------------------+----------------+---------------------------+
-    | .. centered::       | .. centered::           | .. centered:: | .. centered:: | .. centered::            | .. centered::               | .. centered::             | .. centered::  | .. centered::             | .. centered::  | .. centered::             |
-    | :math:`\mathcal{K}` | :math:`U(d)`            | :math:`SO(d)` | :math:`Sp(d)` | :math:`U(p)\times U(q)`  | :math:`SO(d)`               | :math:`SO(p)\times SO(q)` | :math:`U(d)`   | :math:`Sp(d)`             | :math:`U(d)`   | :math:`Sp(p)\times Sp(q)` |
-    +---------------------+-------------------------+---------------+---------------+--------------------------+-----------------------------+---------------------------+----------------+---------------------------+----------------+---------------------------+
-    | .. centered::       | .. centered::           | .. centered:: | .. centered:: | .. centered::            | .. centered::               | .. centered::             | .. centered::  | .. centered::             | .. centered::  | .. centered::             |
-    | rank                | :math:`d`               | :math:`d`     | :math:`d`     | :math:`\text{min}(p, q)` | :math:`\lfloor d/ 2\rfloor` | :math:`\text{min}(p, q)`  | :math:`d/2`    | :math:`d`                 | :math:`d`      | :math:`\text{min}(p, q)`  |
-    +---------------------+-------------------------+---------------+---------------+--------------------------+-----------------------------+---------------------------+----------------+---------------------------+----------------+---------------------------+
+    +-----------------------+---------------------------+---------------------------+-----------------------------+
+    | .. centered::         | .. centered::             | .. centered::             | .. centered::               |
+    | Type                  | :math:`\mathcal{G}`       | :math:`\mathcal{K}`       | rank                        |
+    +=======================+===========================+===========================+=============================+
+    | .. centered::         | .. centered::             | .. centered::             | .. centered::               |
+    | A                     | :math:`U(d)\times U(d)`   | :math:`U(d)`              | :math:`d`                   |
+    +-----------------------+---------------------------+---------------------------+-----------------------------+
+    | .. centered::         | .. centered::             | .. centered::             | .. centered::               |
+    | AI                    | :math:`U(d)`              | :math:`SO(d)`             | :math:`d`                   |
+    +-----------------------+---------------------------+---------------------------+-----------------------------+
+    | .. centered::         | .. centered::             | .. centered::             | .. centered::               |
+    | AII                   | :math:`U(2d)`             | :math:`Sp(d)`             | :math:`d`                   |
+    +-----------------------+---------------------------+---------------------------+-----------------------------+
+    | .. centered::         | .. centered::             | .. centered::             | .. centered::               |
+    | AIII :math:`{}_{p,q}` | :math:`U(p+q)`            | :math:`U(p)\times U(q)`   | :math:`\text{min}(p, q)`    |
+    +-----------------------+---------------------------+---------------------------+-----------------------------+
+    | .. centered::         | .. centered::             | .. centered::             | .. centered::               |
+    | BD                    | :math:`SO(d)\times SO(d)` | :math:`SO(d)`             | :math:`\lfloor d/ 2\rfloor` |
+    +-----------------------+---------------------------+---------------------------+-----------------------------+
+    | .. centered::         | .. centered::             | .. centered::             | .. centered::               |
+    | BDI :math:`{}_{p,q}`  | :math:`SO(p+q)`           | :math:`SO(p)\times SO(q)` | :math:`\text{min}(p, q)`    |
+    +-----------------------+---------------------------+---------------------------+-----------------------------+
+    | .. centered::         | .. centered::             | .. centered::             | .. centered::               |
+    | DIII                  | :math:`SO(2d)`            | :math:`U(d)`              | :math:`d/2`                 |
+    +-----------------------+---------------------------+---------------------------+-----------------------------+
+    | .. centered::         | .. centered::             | .. centered::             | .. centered::               |
+    | C                     | :math:`Sp(d)\times Sp(d)` | :math:`Sp(d)`             | :math:`d`                   |
+    +-----------------------+---------------------------+---------------------------+-----------------------------+
+    | .. centered::         | .. centered::             | .. centered::             | .. centered::               |
+    | CI                    | :math:`Sp(d)`             | :math:`U(d)`              | :math:`d`                   |
+    +-----------------------+---------------------------+---------------------------+-----------------------------+
+    | .. centered::         | .. centered::             | .. centered::             | .. centered::               |
+    | CII :math:`{}_{p,q}`  | :math:`Sp(p+q)`           | :math:`Sp(p)\times Sp(q)` | :math:`\text{min}(p, q)`    |
+    +-----------------------+---------------------------+---------------------------+-----------------------------+
+
 
     Classification of KAK decompositions of the classical real compact Lie groups. Traditionally, they are defined
     on the special unitary group :math:`SU(d)`, which we have extended here by a global phase to :math:`U(d)`.
@@ -87,9 +109,8 @@ a small exception of type AI for the Khaneja-Glaser decomposition. We follow Sec
 of [#Wierichs_CartanSynthesis]_ and work with the unitary, rather than the special unitary group,
 throughout. While a Cartan decomposition of :math:`U(d)=SU(d)\times U(1)` technically is not
 classified, Observation 1 in [#Wierichs_CartanSynthesis]_ allows us to extend a decomposition
-of :math:`SU(d)` to :math:`U(d)`. It turns out that multiple technicalities become simpler when
-by this.
-Now let us look at those typed decompositions in detail.
+of :math:`SU(d)` to :math:`U(d)`. It turns out that multiple technicalities become simpler with
+this. Now, let us look at those typed decompositions in detail.
 
 Type-AIII decomposition
 -----------------------
@@ -133,7 +154,7 @@ For example, we may choose
 .. math::
 
     \mathfrak{a}_{\text{AIII}}
-    =\left\{\begin{pmatrix} 0 & d \\ -d & 0 \end{pmatrix}\bigg| d \in \mathfrak{u}_{\text{diag}}(2^{n-1})\right\},
+    =\left\{\begin{pmatrix} 0 & x \\ -x & 0 \end{pmatrix}\bigg| x \in \mathfrak{u}_{\text{diag}}(2^{n-1})\right\},
 
 which is spanned by the basis elements :math:`\{iY\otimes |j\rangle\!\langle j|\}`.
 Here we denoted by :math:`\mathfrak{u}_{\text{diag}}` the Abelian algebra of diagonal purely
@@ -167,7 +188,7 @@ We have not yet discussed how one can obtain the block-diagonal matrices :math:`
 and the Cartan subgroup element :math:`A` for a given matrix :math:`G\in U(2^n)`.
 Luckily, as has been observed repeatedly in the literature, the Cosine-Sine Decomposition (CSD)
 implements a generalized type-AIII Cartan decomposition that allows to use distinct subgroups
-:math:`U(p_1)\times U(n-p_1)` and :math:`U(p_2)\times U(n-p_2)` for :math:`K_1` and :math:`K_2`.
+:math:`U(p_1)\times U(d-p_1)` and :math:`U(p_2)\times U(d-p_2)` for :math:`K_1` and :math:`K_2`.
 Here we will not care for the generalization and fix :math:`p_1=p_2=2^{n-1}`.
 
 The CSD, as implemented for example in 
@@ -233,9 +254,15 @@ We thus may draw the complete type-A decomposition using :math:`\mathfrak{a}_{\t
 Implementation: Demultiplexing
 ++++++++++++++++++++++++++++++
 
-As for the type-AIII KAK decomposition above, we will need a numerical method that computes the
+Like for the type-AIII KAK decomposition above, we will need a numerical method that computes the
 matrices :math:`K_1, K_2\in\mathbb{I}\otimes U(2^{n-1})` and 
-:math:`A\in\exp(\mathfrak{a}_{\text{A}})` for the type-A decomposition. Luckily, this can be done
+:math:`A\in\exp(\mathfrak{a}_{\text{A}})` for the type-A decomposition such that
+
+.. math::
+
+    G = U \oplus V = (\mathbb{I} \otimes U_1) A (\mathbb{I} \otimes U_2).
+
+Luckily, this can be done
 with a standard eigenvalue decomposition and some additional matrix manipulations [#Shende_QSD]_.
 
 Consider the block-diagonal matrix :math:`G=U\oplus V` and compute :math:`\delta=UV^\dagger\in U(2^{n-1})`.
@@ -247,11 +274,14 @@ And with this, we already found our type-A Cartan decomposition:
 .. math::
 
     (\mathbb{I}\otimes U_1) (D\oplus D^\dagger) (\mathbb{I}\otimes U_2)
-    =(\underset{=\delta=UV^\dagger}{\underbrace{U_1 DD U_1^\dagger}} V) \oplus (U_1 D D^\dagger U_1^\dagger V)
-    =U\oplus V = G
+    &=(U_1\oplus U_1) (D\oplus D^\dagger) (U_2\oplus U_2)\\
+    &=(U_1 D U_2) \oplus (U_1 D^\dagger U_2)\\
+    &=(\underset{=\delta=UV^\dagger}{\underbrace{U_1 DD U_1^\dagger}} V) \oplus (U_1 D^\dagger D U_1^\dagger V)\\
+    &=U\oplus V\\
+    &=G
 
 Note that the central matrix :math:`D\oplus D^\dagger` is generated by some :math:`d\oplus (-d)`,
-which is an element of our choice :math:`\mathfrak{a}_{\text{A}}` above.
+which is an element of our choice for the Cartan subalgebra above, :math:`\mathfrak{a}_{\text{A}}`.
 
 As for the CSD, rotations into other Cartan subalgebras can usually be performed by multiplying
 :math:`K_1` and :math:`K_2` from one side, and reinterpreting the coefficients for :math:`A` in
