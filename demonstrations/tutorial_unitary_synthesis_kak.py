@@ -1,7 +1,7 @@
 r"""
 Unitary synthesis with recursive KAK decompositions
 ===================================================
-    
+
 Unitary synthesis is the process to decompose a given unitary matrix into quantum gates.
 Research efforts to obtain cheap decompositions have been going on
 for at least 25 years, successively reducing the gate counts and/or depth of the synthesized
@@ -19,7 +19,7 @@ unitaries [#Khaneja_Glaser]_, the probably most widely-known Quantum Shannon Dec
 [#Shende_QSD]_, and the Block-ZXZ decomposition [#Krol_BlockZXZ]_ that currently holds the record
 for lowest CNOT count for any number of qubits.
 Crucially, we will not just go through these three techniques separately, but we will explain
-how they are variants of the same underlying mathematical factorization, which is called 
+how they are variants of the same underlying mathematical factorization, which is called
 a recursive KAK, or Cartan, decomposition [#Wierichs_CartanSynthesis]_.
 One of the recursion steps will be implemented by a Cosine-Sine Decomposition (CSD), maybe the
 most well-known KAK decomposition.
@@ -34,7 +34,7 @@ following [#Kökcü_FDHS]_.
 KAK decompositions
 ------------------
 
-A KAK, or Cartan, decomposition of a matrix Lie group :math:`\mathcal{G}` with respect to a 
+A KAK, or Cartan, decomposition of a matrix Lie group :math:`\mathcal{G}` with respect to a
 Lie subgroup :math:`\mathcal{K}` allows us to factorize any group element :math:`G\in\mathcal{G}` into
 :math:`K_1 A K_2`, where :math:`K_1,K_2\in\mathcal{K}` and :math:`A` lies in a so-called
 Cartan subgroup :math:`\mathcal{A}`.
@@ -59,44 +59,45 @@ Also note that the KAK decomposition is a statement of *existence*, so it is sti
 actually find the matrices :math:`K_1`, :math:`A`, and :math:`K_2` for a given matrix :math:`G`.
 
 There is a full classification of KAK decompositions, based on the groups
-:math:`\mathcal{G}` and :math:`\mathcal{K}`. For :math:`\mathcal{G}` being a 
+:math:`\mathcal{G}` and :math:`\mathcal{K}`. For :math:`\mathcal{G}` being a
 `classical real compact Lie group <https://en.wikipedia.org/wiki/Classical_group>`__,
 we have ten types:
+
+.. raw:: html
+
+    <style>
+        .docstable tr.row-even th, .docstable tr.row-even td {
+            text-align: center;
+        }
+        .docstable tr.row-odd th, .docstable tr.row-odd td {
+            text-align: center;
+        }
+    </style>
+    <div class="d-flex justify-content-center">
 
 .. rst-class:: docstable
 
     +-----------------------+---------------------------+---------------------------+-----------------------------+
-    | .. centered::         | .. centered::             | .. centered::             | .. centered::               |
     | Type                  | :math:`\mathcal{G}`       | :math:`\mathcal{K}`       | rank                        |
     +=======================+===========================+===========================+=============================+
-    | .. centered::         | .. centered::             | .. centered::             | .. centered::               |
     | A                     | :math:`U(d)\times U(d)`   | :math:`U(d)`              | :math:`d`                   |
     +-----------------------+---------------------------+---------------------------+-----------------------------+
-    | .. centered::         | .. centered::             | .. centered::             | .. centered::               |
     | AI                    | :math:`U(d)`              | :math:`SO(d)`             | :math:`d`                   |
     +-----------------------+---------------------------+---------------------------+-----------------------------+
-    | .. centered::         | .. centered::             | .. centered::             | .. centered::               |
     | AII                   | :math:`U(2d)`             | :math:`Sp(d)`             | :math:`d`                   |
     +-----------------------+---------------------------+---------------------------+-----------------------------+
-    | .. centered::         | .. centered::             | .. centered::             | .. centered::               |
     | AIII :math:`{}_{p,q}` | :math:`U(p+q)`            | :math:`U(p)\times U(q)`   | :math:`\text{min}(p, q)`    |
     +-----------------------+---------------------------+---------------------------+-----------------------------+
-    | .. centered::         | .. centered::             | .. centered::             | .. centered::               |
     | BD                    | :math:`SO(d)\times SO(d)` | :math:`SO(d)`             | :math:`\lfloor d/ 2\rfloor` |
     +-----------------------+---------------------------+---------------------------+-----------------------------+
-    | .. centered::         | .. centered::             | .. centered::             | .. centered::               |
     | BDI :math:`{}_{p,q}`  | :math:`SO(p+q)`           | :math:`SO(p)\times SO(q)` | :math:`\text{min}(p, q)`    |
     +-----------------------+---------------------------+---------------------------+-----------------------------+
-    | .. centered::         | .. centered::             | .. centered::             | .. centered::               |
     | DIII                  | :math:`SO(2d)`            | :math:`U(d)`              | :math:`d/2`                 |
     +-----------------------+---------------------------+---------------------------+-----------------------------+
-    | .. centered::         | .. centered::             | .. centered::             | .. centered::               |
     | C                     | :math:`Sp(d)\times Sp(d)` | :math:`Sp(d)`             | :math:`d`                   |
     +-----------------------+---------------------------+---------------------------+-----------------------------+
-    | .. centered::         | .. centered::             | .. centered::             | .. centered::               |
     | CI                    | :math:`Sp(d)`             | :math:`U(d)`              | :math:`d`                   |
     +-----------------------+---------------------------+---------------------------+-----------------------------+
-    | .. centered::         | .. centered::             | .. centered::             | .. centered::               |
     | CII :math:`{}_{p,q}`  | :math:`Sp(p+q)`           | :math:`Sp(p)\times Sp(q)` | :math:`\text{min}(p, q)`    |
     +-----------------------+---------------------------+---------------------------+-----------------------------+
 
@@ -118,7 +119,7 @@ Type-AIII decomposition
 A type-AIII Cartan decomposition is defined for the unitary group :math:`U(d)` in any
 dimension :math:`d` and has a parameter :math:`p`, :math:`0\leq p\leq d`, that characterizes
 the subgroup :math:`\mathcal{K}`. Here we will only look at qubit systems (:math:`d=2^n` for :math:`n`
-qubits) and a particularly regular choice for :math:`p` (:math:`p=d/2=2^{n-1}`), corresponding to 
+qubits) and a particularly regular choice for :math:`p` (:math:`p=d/2=2^{n-1}`), corresponding to
 :math:`\mathcal{K}=U(2^{n-1})^{\times 2}`.
 In principle, there are many ways to embed this subgroup :math:`\mathcal{K}` in the standard
 representation of :math:`\mathcal{G}=U(d)` (i.e., in the representation as :math:`d\times d`
@@ -142,7 +143,7 @@ an element from :math:`\mathcal{K}` can be drawn like the following:
 
 The horizontal subspace for this decomposition is
 
-.. math:: 
+.. math::
 
     \mathfrak{p}_{\text{AIII}} = \mathfrak{k}^\perp
     =\left\{\begin{pmatrix} 0 & C \\ -C^\dagger & 0 \end{pmatrix}\bigg| C \in \mathbb{C}^{2^{n-1}\times 2^{n-1}}\right\},
@@ -191,298 +192,380 @@ implements a generalized type-AIII Cartan decomposition that allows to use disti
 :math:`U(p_1)\times U(d-p_1)` and :math:`U(p_2)\times U(d-p_2)` for :math:`K_1` and :math:`K_2`.
 Here we will not care for the generalization and fix :math:`p_1=p_2=2^{n-1}`.
 
-The CSD, as implemented for example in 
+The CSD, as implemented for example in
 `scipy.linalg.cossin <https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.cossin.html>`__
 with the setting ``separate=True``, then computes the blocks for the block-diagonal matrices as well
 as the coefficients, or rotation angles, for :math:`A\in\exp(\mathfrak{a}_{\text{AIII}})`.
 
-[CODE]: Could add an implementation, drawing from QSD implementation in PL and/or KAK tools repo.
-
-If a different Cartan subalgebra is chosen, a suitable rotation needs to be applied. This is
-usually a matter of right(left)-multiplying :math:`K_1` (:math:`K_2`) by the rotation and
-re-interpreting the obtained angles to parametrize the new Cartan subgroup element already.
-
-[EXAMPLE?]
-
-Type-A decomposition
---------------------
-
-A type-A Cartan decomposition is defined for the "doubled" unitary group 
-:math:`\mathcal{G}=U(d)^{\times 2}` and its subgroup :math:`\mathcal{K}=U(d)`.
-As you may anticipate, we still only care about qubit space dimensions, :math:`d=2^n`, for some 
-qubit count :math:`n`.
-Generically, we may use the representation of :math:`\mathcal{G}` as block-diagonal matrices
-from above, and we will use the representation
-
-.. math::
-
-    \mathcal{K}=U(2^n)
-    \cong\left\{\begin{pmatrix} A & 0 \\ 0 & A \end{pmatrix}\bigg| A\in U(2^n)\right\}
-    =\left\{\mathbb{I}_2 \otimes A | A\in U(2^n)\right\}
-
-for the subgroup.
-Note that in a quantum circuit, such an element :math:`\mathbb{I}_2\otimes A\in\mathcal{K}` 
-simply is the gate :math:`A` acting on all but the first qubit.
-
-As :math:`\mathcal{K}` is generated by matrices that do the same in the two diagonal blocks,
-the complementary horizontal space accordingly consists of elements that do the opposite
-in the two blocks,
-
-.. math:: 
-
-    \mathfrak{p} = \mathfrak{k}^\perp
-    =\left\{\begin{pmatrix} C & 0 \\ 0 & -C \end{pmatrix}\bigg| C \in \mathfrak{u}(2^n)\right\}.
-
-A valid Cartan subalgebra is then any Abelian subalgebra of :math:`\mathfrak{p}` with dimension
-:math:`2^n`.
-A particularly simple choice that will be important for us is
-
-.. math::
-
-    \mathfrak{a}_{\text{A}}
-    =\left\{\begin{pmatrix} d & 0 \\ 0 & -d \end{pmatrix}\bigg| d \in \mathfrak{u}_{\text{diag}}(2^n)\right\},
-
-which is exactly of the form of :math:`\mathfrak{a}_{\text{AIII}}` except for a basis
-change from Pauli :math:`Y` to Pauli :math:`Z`.
-We thus may draw the complete type-A decomposition using :math:`\mathfrak{a}_{\text{A}}` as
-
-.. figure:: ../_static/demonstration_assets/unitary_synthesis_kak/A_generic_complete.png
-   :align: center
-   :width: 70%
-   :alt: Generic type-A KAK decomposition of the doubled unitary group on n-1 qubits.
-
-Implementation: Demultiplexing
-++++++++++++++++++++++++++++++
-
-Like for the type-AIII KAK decomposition above, we will need a numerical method that computes the
-matrices :math:`K_1, K_2\in\mathbb{I}\otimes U(2^{n-1})` and 
-:math:`A\in\exp(\mathfrak{a}_{\text{A}})` for the type-A decomposition such that
-
-.. math::
-
-    G = U \oplus V = (\mathbb{I} \otimes U_1) A (\mathbb{I} \otimes U_2).
-
-Luckily, this can be done
-with a standard eigenvalue decomposition and some additional matrix manipulations [#Shende_QSD]_.
-
-Consider the block-diagonal matrix :math:`G=U\oplus V` and compute :math:`\delta=UV^\dagger\in U(2^{n-1})`.
-An eigenvalue decomposition of :math:`\delta` then yields :math:`\delta=U_1 D^2 U_1^\dagger`
-with :math:`U_1\in U(2^{n-1})` and :math:`D^2` a diagonal unitary. Then we may compute any
-square root of :math:`D` and define :math:`U_2=D U_1^\dagger V`, which again is unitary.
-And with this, we already found our type-A Cartan decomposition:
-
-.. math::
-
-    (\mathbb{I}\otimes U_1) (D\oplus D^\dagger) (\mathbb{I}\otimes U_2)
-    &=(U_1\oplus U_1) (D\oplus D^\dagger) (U_2\oplus U_2)\\
-    &=(U_1 D U_2) \oplus (U_1 D^\dagger U_2)\\
-    &=(\underset{=\delta=UV^\dagger}{\underbrace{U_1 DD U_1^\dagger}} V) \oplus (U_1 D^\dagger D U_1^\dagger V)\\
-    &=U\oplus V\\
-    &=G
-
-Note that the central matrix :math:`D\oplus D^\dagger` is generated by some :math:`d\oplus (-d)`,
-which is an element of our choice for the Cartan subalgebra above, :math:`\mathfrak{a}_{\text{A}}`.
-
-As for the CSD, rotations into other Cartan subalgebras can usually be performed by multiplying
-:math:`K_1` and :math:`K_2` from one side, and reinterpreting the coefficients for :math:`A` in
-the new Cartan subalgebra.
-
-Recursive KAK decompositions
-----------------------------
-
-A key observation to enable the use of KAK decompositions for unitary synthesis is that one
-may apply them repeatedly, or recursively.
-For this, a new KAK decomposition is applied to the subgroup elements :math:`K_1, K_2` obtained
-in a previous decomposition step while maintaining the Cartan subgroup element :math:`A`.
-Denoting elements obtained at the :math:`k`\ th decomposition step with a superscript 
-:math:`{\circ}^{(k)}`, we find for a group element :math:`G` at the third recursion level:
-
-.. math::
-
-    G 
-    &=\phantom{K^{(3)}_1 A^{(2)}_1K^{(3)}_1}K^{(1)}_1\phantom{K^{(3)}_1 A^{(2)}_1K^{(3)}_1} A^{(1)} \phantom{K^{(3)}_1 A^{(2)}_1K^{(3)}_1}K^{(1)}_2\phantom{K^{(3)}_1 A^{(2)}_1K^{(3)}_1}\\
-    &=\phantom{K^{(3)}_1}K^{(2)}_1\phantom{K^{(3)}_1} A^{(2)}_1 \phantom{K^{(3)}_1}K^{(2)}_2\phantom{K^{(3)}_1} A^{(1)} \phantom{K^{(3)}_1}K^{(2)}_3\phantom{K^{(3)}_1} A^{(2)}_2 \phantom{K^{(3)}_1}K^{(2)}_4\phantom{K^{(3)}_1}\\
-    &=K^{(3)}_1 A^{(3)}_1 K^{(3)}_2 A^{(2)}_1 K^{(3)}_3 A^{(3)}_2 K^{(3)}_4 A^{(1)} K^{(3)}_5 A^{(3)}_3 K^{(3)}_6 A^{(2)}_2 K^{(3)}_7 A^{(3)}_4 K^{(3)}_4
-
-You may already anticipate that the two decomposition types we considered above fit together
-particularly well in this context: The subgroup :math:`\mathcal{K}=U(2^{n-1})^{\times 2}` of a type-AIII
-decomposition is exactly the total group of a type-A decomposition, and 
-the subgroup :math:`\mathcal{K}=U(2^{n-1})` for a type-A decomposition is a valid total
-group for another type-AIII decomposition. This allows a recursion exclusively between these
-two types of decompositions:
-
-.. math:: 
-
-    U(2^n)
-    \overset{\text{AIII}}{\longrightarrow} [U(2^{n-1})\times U(2^{n-1})]
-    \overset{\text{A}}{\longrightarrow} U(2^{n-1})
-    \overset{\text{AIII}}{\longrightarrow} [U(2^{n-2})\times U(2^{n-2})]
-    \cdots
-    \overset{\text{AIII}}{\longrightarrow} [U(4)\times U(4)]
-    \overset{\text{A}}{\longrightarrow} U(4)
-
-This is exactly what the three unitary synthesis techniques below
-implement in the form of quantum circuits!
-
-In the following, we will make the choices of Cartan subalgebra explicit, demonstrating that
-all three works realize the above recursion of type-AIII and type-A KAK decompositions, combined
-with an irregular decomposition of :math:`U(4)` and/or some post-hoc optimization steps.
-
-Khaneja-Glaser decomposition (2000)
------------------------------------
-
-In 2000, Khaneja and Glaser [#Khaneja_Glaser]_ demonstrated that one-qubit and two-qubit operations
-are universal for quantum computation by proving that any unitary matrix can be broken down
-recursively, "decoupling" one qubit at a time. Bullock later identified one part of each
-recursion step to be a type-AIII KAK decomposition [#Bullock_Note]_, and Dağlı et al. added that
-the second part of each step is another KAK decomposition [#Dagli_Framework]_.
-Furthermore, this decomposition has inspired a series of related works, mostly searching for
-variations of the recursive KAK decomposition that achieve quantum circuits with reduced CNOT counts.
-
-The Khaneja-Glaser decomposition defines a two-qubit Cartan algebra
-
-.. math::
-
-    \mathfrak{a}_{\text{base}}=\{\mathbb{I}\otimes \mathbb{I}, X\otimes X, Y\otimes Y, Z\otimes Z\},
-
-which is the Abelian algebra of diagonal matrices, rotated by the "magic basis" rotation
-
-.. math::
-
-    E = \frac{1}{\sqrt{2}}\begin{pmatrix}
-        1 & i & 0 & 0 \\
-        0 & 0 & i & 1 \\
-        0 & 0 & i & -1 \\
-        1 & -i & 0 & 0
-    \end{pmatrix},\quad E^\dagger \mathfrak{a}_{\text{base}} E = \mathfrak{u}_{\text{diag}}(4)
-
-we will discuss in more detail below.
-For the type-AIII KAK decompositions of :math:`U(2^n)`, :math:`n\geq 3`, the Cartan subalgebra reads
-
-.. math::
-
-    \mathfrak{a}'_{\text{AIII}}(n)
-    =\operatorname{span}_{\mathbb{R}}
-    \{X\otimes \{\mathbb{I},X\}^{\otimes (n-3)}\otimes \mathfrak{a}_{\text{base}}\}.
-
-It can be obtained by rotating :math:`\mathfrak{a}_{\text{AIII}}` above from the Pauli :math:`Y`
-into the Pauli :math:`X` basis on the first qubit, from the Pauli :math:`Z` into the magic basis
-via :math:`E` on the last two qubits, and from the Pauli :math:`Z` into the Pauli :math:`X` basis
-on the :math:`n-3` remaining qubits.
-
-For the second part in each recursion step, the type-A Cartan decomposition, the Cartan subalgebra
-reads
-
-.. math::
-
-    \mathfrak{a}'_{\text{A}}(n)
-    =\operatorname{span}_{\mathbb{R}}
-    \{Z\otimes \{\mathbb{I},X\}^{\otimes (n-3)}\otimes \mathfrak{a}_{\text{base}}\}.
-
-That is, it is the same as for the type-AIII decomposition, except for a basis change from the
-Pauli :math:`X` to the Pauli :math:`Z` basis on the first qubit.
-
-To conclude the recursion, Khaneja and Glaser break down the remaining two-qubit unitaries from
-:math:`U(4)` into single-qubit gates and two-qubit gates generated by :math:`\mathfrak{a}_{\text{base}}`.
-It turns out that this is a Cartan decomposition again, specified by the subgroup :math:`SO(4)` and
-labeled as type AI. While :math:`SO(4)` usually is represented as real-valued :math:`4\times 4`
-matrices, there is an `accidental isomorphism <https://en.wikipedia.org/wiki/Exceptional_isomorphism>`__
-between :math:`SO(4)` and :math:`SU(2)\times SU(2)`, so that :math:`\mathcal{K}` can be represented
-as single-qubit gates instead (one copy of :math:`SU(2)` acting on each qubit). The base algebra
-:math:`\mathfrak{a}_{\text{base}}` is a valid Cartan subalgebra for this decomposition type and
-representation.
-
-Quantum Shannon decomposition (2004)
-------------------------------------
-
-The Quantum Shannon Decomposition (QSD) was introduced by Shende et al. [#Shende_QSD]_ in 2004, using
-the language of multiplexers, or Select operators. The individual statements provided in
-Theorems 1, 10 and 12 all are KAK decompositions, of types AIII (or AI), AIII, and A, respectively.
-The authors explicitly reference Theorem 10 as cosine-sine decomposition.
-As we covered those already above, we here just need to note down the Cartan subalgebras used
-by the QSD, which are simpler than those used by Khaneja and Glaser and match exactly the
-exemplary :math:`\mathfrak{a}_{\text{AIII}}` and :math:`\mathfrak{a}_{\text{A}}` given in the
-beginning. They are captured by multiplexed single-qubit rotations about the Pauli :math:`Y`
-axis and Pauli :math:`Z` axis, respectively, with the first of the qubits (on which the recursion
-currently acts) used as target, and all subsequent qubits used as controls.
-Concatenating these statements (Theorems 10 and 12) results in the widely used QSD (Theorem 13),
-which is most easily expressed as a circuit drawing:
-
-.. figure:: ../_static/demonstration_assets/unitary_synthesis_kak/QSD.png
-   :align: center
-   :width: 95%
-   :alt: Quantum Shannon decomposition of the unitary group on n qubits.
-
-You may notice that this is simply the combination of our circuit drawings for the generic
-KAK decompositions of types AIII and A from earlier. It is instructive to perform the recursion
-in a circuit diagram and to appreciate the circuit structure arising from the full QSD:
-
-.. figure:: ../_static/demonstration_assets/unitary_synthesis_kak/recursive_QSD.png
-   :align: center
-   :width: 100%
-   :alt: Recursively applied Quantum Shannon decomposition of the unitary group on n qubits.
-
-Here, each of the simple boxes represents an arbitrary :math:`U(2^{n-2})` gate.
-
-Before moving on, it is important to mention that the QSD achieves its CNOT counts as given in
-Tab. 1 of [#Shende_QSD]_ by ultimately decomposing :math:`U(4)` with a standard 3-CNOT circuit as
-used for `two-qubit synthesis <https://pennylane.ai/compilation/two-qubit-synthesis>`__, see
-[#Shende_Minimal]_ by the same authors, and by applying two optimization steps, see App. A
-in [#Shende_QSD]_.
-
-Block-ZXZ decomposition (2024)
-------------------------------
-
-The third decomposition using the recursive KAK decomposition with types AIII and A is the
-so-called Block-ZXZ decomposition by Krol and Al-Ars [#Krol_BlockZXZ]_.
-The first steps are virtually identical to a QSD, with the small difference that the Cartan
-subalgebra :math:`\mathfrak{a}_{\text{AIII}}` is rotated on the first qubit, from the Pauli
-:math:`Y` into the Pauli :math:`X` basis. The subalgebra for the type-A decomposition remains
-unchanged.
-
-The key differences to the QSD lie in the transformations and optimizations applied in addition to
-each type-AIII Cartan decomposition. We showcase the transformation into the correct block
-structure in form of a circuit diagram:
-
-.. figure:: ../_static/demonstration_assets/unitary_synthesis_kak/block_zxz_transformations.png
-   :align: center
-   :width: 90%
-   :alt: Transformations from a type-AIII KAK decomposed circuit to a circuit in Block-ZXZ form.
-
-Afterwards, the block-diagonal matrices can be decomposed with the type-A decompositions, and
-optimizations from the QSD can be applied, complemented by the merger of two CZ gates into
-the control structure of a multiplexer (see Sec. 5 of [#Krol_BlockZXZ]_).
-
-Gate counts
------------
-
-to do
+We may chack that this works with the following code.
+We apply ``cossin`` to some input ``U``, from which we create the block matrices :math:`K_1`
+and :math:`K_2` with ``numpy`` and the Cartan subgroup matrix :math:`A` via a Select-applied,
+or multiplexed, ``qml.RY`` rotation. Then we check that those matrices multiplied together
+yield the input ``U`` again.
 """
 import pennylane as qml
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.linalg import cossin, eig, qr
+from scipy.stats import unitary_group
+
+def aiii_decomposition(U):
+    """Compute an type-AIII KAK decomposition of ``U`` using a cosine-sine decomposition."""
+
+    # Hilbert space dimension d=2**n
+    d = len(U)
+    # Pick p_1 = p_2 = 2**(n-1)
+    return cossin(U, d//2, d//2, separate=True)
+
+# Qubit count
+n = 2
+# Get a random unitary on n qubits
+U = unitary_group.rvs(2**n, random_state=214)
+# Compute AIII decomposition
+(u_1, u_2), theta, (v_1, v_2) = aiii_decomposition(U)
+
+# Check that the decomposition is valid
+zero = np.zeros_like(u_1)
+K_1 = np.block([[u_1, zero], [zero, u_2]])
+A = qml.matrix(qml.Select([qml.RY(2 * th, 0) for th in theta], control=range(1, n)), wire_order=range(n))
+K_2 = np.block([[v_1, zero], [zero, v_2]])
+
+reconstructed_U = K_1 @ A @ K_2
+print(np.allclose(reconstructed_U, U))
+
+######################################################################
+# This worked!
+#
+# If a different Cartan subalgebra is chosen, a suitable rotation needs to be applied. This is
+# usually a matter of right(left)-multiplying :math:`K_1` (:math:`K_2`) by the rotation and
+# re-interpreting the obtained angles to parametrize the new Cartan subgroup element already.
+#
+# For example, for the Block-ZXZ decomposition below, we would need to perform a rotation on the
+# first qubit from the Pauli :math:`Y` to the Pauli :math:`X` basis. This rotation is given by
+# :math:`\tfrac{1}{\sqrt{2}}(X+Y)`.
+#
+
+def aiii_decomposition_rotated(U):
+    """Compute an type-AIII KAK decomposition of ``U`` using a cosine-sine decomposition
+    and rotate the outputs so that the Cartan subalgebra is in the X basis on the first qubit."""
+    d = len(U)
+    n = int(np.round(np.log2(d)))
+    (u_1, u_2), theta, (v_1, v_2) = cossin(U, d//2, d//2, separate=True)
+    zero = np.zeros_like(u_1)
+    K_1 = np.block([[u_1, zero], [zero, u_2]])
+    K_2 = np.block([[v_1, zero], [zero, v_2]])
+    rotation = (qml.X(0) + qml.Y(0)) / np.sqrt(2)
+    rotation_mat = qml.matrix(rotation, wire_order=range(n))
+    # Transform K_1 and K_2. No need to transform theta, it is just re-interpreted as RX angles
+    K_1 @= rotation_mat
+    K_2 = rotation_mat @ K_2
+    return K_1, theta, K_2
+
+new_K_1, theta, new_K_2 = aiii_decomposition_rotated(U)
+
+# note that the block structure has been rotated:
+fig, axs = plt.subplots(2, 2)
+titles = ["$\mathfrak{Re}(K_1)$", "$\mathfrak{Im}(K_1)$", "$\mathfrak{Re}(K_2)$", "$\mathfrak{Im}(K_2)$"]
+data = [new_K_1.real, new_K_1.imag, new_K_2.real, new_K_2.imag]
+
+for i, ax in enumerate(axs.flat):
+    ax.set_title(titles[i])
+    ax.imshow(data[i], cmap="bwr")
+    ax.set_xticks([])
+    ax.set_yticks([])
+plt.show()
+
+# The decomposition is still valid:
+
+new_A = qml.matrix(qml.Select([qml.RX(2 * th, 0) for th in theta], control=range(1, n)), wire_order=range(n))
+reconstructed_U = new_K_1 @ new_A @ new_K_2
+print(np.allclose(reconstructed_U, U))
+
+######################################################################
+# Type-A decomposition
+# --------------------
+#
+# A type-A Cartan decomposition is defined for the "doubled" unitary group
+# :math:`\mathcal{G}=U(d)^{\times 2}` and its subgroup :math:`\mathcal{K}=U(d)`.
+# As you may anticipate, we still only care about qubit space dimensions, :math:`d=2^n`, for some
+# qubit count :math:`n`.
+# Generically, we may use the representation of :math:`\mathcal{G}` as block-diagonal matrices
+# from above, and we will use the representation
+#
+# .. math::
+#
+#     \mathcal{K}=U(2^n)
+#     \cong\left\{\begin{pmatrix} A & 0 \\ 0 & A \end{pmatrix}\bigg| A\in U(2^n)\right\}
+#     =\left\{\mathbb{I}_2 \otimes A | A\in U(2^n)\right\}
+
+# for the subgroup.
+# Note that in a quantum circuit, such an element :math:`\mathbb{I}_2\otimes A\in\mathcal{K}`
+# simply is the gate :math:`A` acting on all but the first qubit.
+#
+# As :math:`\mathcal{K}` is generated by matrices that do the same in the two diagonal blocks,
+# the complementary horizontal space accordingly consists of elements that do the opposite
+# in the two blocks,
+#
+# .. math::
+#
+#     \mathfrak{p} = \mathfrak{k}^\perp
+#     =\left\{\begin{pmatrix} C & 0 \\ 0 & -C \end{pmatrix}\bigg| C \in \mathfrak{u}(2^n)\right\}.
+#
+# A valid Cartan subalgebra is then any Abelian subalgebra of :math:`\mathfrak{p}` with dimension
+# :math:`2^n`.
+# A particularly simple choice that will be important for us is
+#
+# .. math::
+#
+#     \mathfrak{a}_{\text{A}}
+#     =\left\{\begin{pmatrix} d & 0 \\ 0 & -d \end{pmatrix}\bigg| d \in \mathfrak{u}_{\text{diag}}(2^n)\right\},
+#
+# which is exactly of the form of :math:`\mathfrak{a}_{\text{AIII}}` except for a basis
+# change from Pauli :math:`Y` to Pauli :math:`Z`.
+# We thus may draw the complete type-A decomposition using :math:`\mathfrak{a}_{\text{A}}` as
+#
+# .. figure:: ../_static/demonstration_assets/unitary_synthesis_kak/A_generic_complete.png
+#    :align: center
+#    :width: 70%
+#    :alt: Generic type-A KAK decomposition of the doubled unitary group on n-1 qubits.
+#
+# Implementation: Demultiplexing
+# ++++++++++++++++++++++++++++++
+#
+# Like for the type-AIII KAK decomposition above, we will need a numerical method that computes the
+# matrices :math:`K_1, K_2\in\mathbb{I}\otimes U(2^{n-1})` and
+# :math:`A\in\exp(\mathfrak{a}_{\text{A}})` for the type-A decomposition such that
+#
+# .. math::
+#
+#     G = U \oplus V = (\mathbb{I} \otimes U_1) A (\mathbb{I} \otimes U_2).
+#
+# Luckily, this can be done
+# with a standard eigenvalue decomposition and some additional matrix manipulations [#Shende_QSD]_.
+#
+# Consider the block-diagonal matrix :math:`G=U\oplus V` and compute :math:`\delta=UV^\dagger\in U(2^{n-1})`.
+# An eigenvalue decomposition of :math:`\delta` then yields :math:`\delta=U_1 D^2 U_1^\dagger`
+# with :math:`U_1\in U(2^{n-1})` and :math:`D^2` a diagonal unitary. Then we may compute any
+# square root of :math:`D` and define :math:`U_2=D U_1^\dagger V`, which again is unitary.
+# And with this, we already found our type-A Cartan decomposition:
+#
+# .. math::
+#
+#     (\mathbb{I}\otimes U_1) (D\oplus D^\dagger) (\mathbb{I}\otimes U_2)
+#     &=(U_1\oplus U_1) (D\oplus D^\dagger) (U_2\oplus U_2)\\
+#     &=(U_1 D U_2) \oplus (U_1 D^\dagger U_2)\\
+#     &=(\underset{=\delta=UV^\dagger}{\underbrace{U_1 DD U_1^\dagger}} V) \oplus (U_1 D^\dagger D U_1^\dagger V)\\
+#     &=U\oplus V\\
+#     &=G
+#
+# Note that the central matrix :math:`D\oplus D^\dagger` is generated by some :math:`d\oplus (-d)`,
+# which is an element of our choice for the Cartan subalgebra above, :math:`\mathfrak{a}_{\text{A}}`.
+#
+# Let's implement the demultiplexing step in code as well.
+#
+
+def demultiplex(U, V):
+    """Compute the type-A KAK decomposition of the block-diagonal matrix U⊕V that
+    corresponds to demultiplexing."""
+    delta = U @ V.conj().T
+    # Compute eigenvalue decomposition
+    D_squared, U_1 = eig(delta)
+    # Compute the square root by extracting phases and halving them
+    phi = np.angle(D_squared) / 2
+    U_2 = np.diag(np.exp(1j * phi)) @ U_1.conj().T @ V
+    # Return the rotation angles for A, instead of the diagonal matrix D
+    return U_1, phi, U_2
+
+U_1, phi, U_2 = demultiplex(u_1, u_2)
+
+######################################################################
+# The demultiplexed matrices make up :math:`K_1=u_1\oplus u_2` from above:
+#
+
+demultiplex_A = qml.matrix(qml.Select([qml.RZ(-2 * p, 0) for p in phi], control=range(1, n)), wire_order=range(n))
+demultiplex_K_1 = np.block([[U_1, zero], [zero, U_1]])
+demultiplex_K_2 = np.block([[U_2, zero], [zero, U_2]])
+reconstructed_K_1 = demultiplex_K_1 @ demultiplex_A @ demultiplex_K_2  
+print(np.allclose(reconstructed_K_1, K_1))
 
 ######################################################################
 #
+# As for the CSD, rotations into other Cartan subalgebras can usually be performed by multiplying
+# :math:`K_1` and :math:`K_2` from one side, and reinterpreting the coefficients for :math:`A` 
+# (``phi`` in the function above) in the new Cartan subalgebra.
 #
+# Recursive KAK decompositions
+# ----------------------------
+#
+# A key observation to enable the use of KAK decompositions for unitary synthesis is that one
+# may apply them repeatedly, or recursively.
+# For this, a new KAK decomposition is applied to the subgroup elements :math:`K_1, K_2` obtained
+# in a previous decomposition step while maintaining the Cartan subgroup element :math:`A`.
+# Denoting elements obtained at the :math:`k`\ th decomposition step with a superscript
+# :math:`{\circ}^{(k)}`, we find for a group element :math:`G` at the third recursion level:
+#
+# .. math::
+#
+#     G
+#     &= & & & K^{(1)}_1 & & & & A^{(1)} & & & & K^{(1)}_2 & & & \\
+#     &= & K^{(2)}_1 & & A^{(2)}_1 & & K^{(2)}_2 & & A^{(1)} & & K^{(2)}_3 & & A^{(2)}_2 & & K^{(2)}_4 & \\
+#     &=K^{(3)}_1 & A^{(3)}_1 & K^{(3)}_2  & A^{(2)}_1  & K^{(3)}_3 & A^{(3)}_2 & K^{(3)}_4 & A^{(1)} & K^{(3)}_5 & A^{(3)}_3 & K^{(3)}_6 & A^{(2)}_2 & K^{(3)}_7 & A^{(3)}_4 & K^{(3)}_4
+#
+# You may already anticipate that the two decomposition types we considered above fit together
+# particularly well in this context: The subgroup :math:`\mathcal{K}=U(2^{n-1})^{\times 2}` of a type-AIII
+# decomposition is exactly the total group of a type-A decomposition, and
+# the subgroup :math:`\mathcal{K}=U(2^{n-1})` for a type-A decomposition is a valid total
+# group for another type-AIII decomposition. This allows a recursion exclusively between these
+# two types of decompositions:
+#
+# .. math::
+#
+#     U(2^n)
+#     \overset{\text{AIII}}{\longrightarrow} [U(2^{n-1})\times U(2^{n-1})]
+#     \overset{\text{A}}{\longrightarrow} U(2^{n-1})
+#     \overset{\text{AIII}}{\longrightarrow} [U(2^{n-2})\times U(2^{n-2})]
+#     \cdots
+#     \overset{\text{AIII}}{\longrightarrow} [U(4)\times U(4)]
+#     \overset{\text{A}}{\longrightarrow} U(4)
+#
+# This is exactly what the three unitary synthesis techniques below
+# implement in the form of quantum circuits!
+#
+# In the following, we will make the choices of Cartan subalgebra explicit, demonstrating that
+# all three works realize the above recursion of type-AIII and type-A KAK decompositions, combined
+# with an irregular decomposition of :math:`U(4)` and/or some post-hoc optimization steps.
+#
+# Khaneja-Glaser decomposition (2000)
+# -----------------------------------
+#
+# In 2000, Khaneja and Glaser [#Khaneja_Glaser]_ demonstrated that one-qubit and two-qubit operations
+# are universal for quantum computation by proving that any unitary matrix can be broken down
+# recursively, "decoupling" one qubit at a time. Bullock later identified one part of each
+# recursion step to be a type-AIII KAK decomposition [#Bullock_Note]_, and Dağlı et al. added that
+# the second part of each step is another KAK decomposition [#Dagli_Framework]_.
+# Furthermore, this decomposition has inspired a series of related works, mostly searching for
+# variations of the recursive KAK decomposition that achieve quantum circuits with reduced CNOT counts.
+#
+# The Khaneja-Glaser decomposition defines a two-qubit Cartan algebra
+#
+# .. math::
+#
+#     \mathfrak{a}_{\text{base}}=\{\mathbb{I}\otimes \mathbb{I}, X\otimes X, Y\otimes Y, Z\otimes Z\},
+#
+# which is the Abelian algebra of diagonal matrices, rotated by the "magic basis" rotation
+#
+# .. math::
+#
+#     E = \frac{1}{\sqrt{2}}\begin{pmatrix}
+#         1 & i & 0 & 0 \\
+#         0 & 0 & i & 1 \\
+#         0 & 0 & i & -1 \\
+#         1 & -i & 0 & 0
+#     \end{pmatrix},\quad E^\dagger \mathfrak{a}_{\text{base}} E = \mathfrak{u}_{\text{diag}}(4)
+#
+# we will discuss in more detail below.
+# For the type-AIII KAK decompositions of :math:`U(2^n)`, :math:`n\geq 3`, the Cartan subalgebra reads
+#
+# .. math::
+#
+#     \mathfrak{a}'_{\text{AIII}}(n)
+#     =\operatorname{span}_{\mathbb{R}}
+#     \{X\otimes \{\mathbb{I},X\}^{\otimes (n-3)}\otimes \mathfrak{a}_{\text{base}}\}.
+#
+# It can be obtained by rotating :math:`\mathfrak{a}_{\text{AIII}}` above from the Pauli :math:`Y`
+# into the Pauli :math:`X` basis on the first qubit, from the Pauli :math:`Z` into the magic basis
+# via :math:`E` on the last two qubits, and from the Pauli :math:`Z` into the Pauli :math:`X` basis
+# on the :math:`n-3` remaining qubits.
+#
+# For the second part in each recursion step, the type-A Cartan decomposition, the Cartan subalgebra
+# reads
+#
+# .. math::
+#
+#     \mathfrak{a}'_{\text{A}}(n)
+#     =\operatorname{span}_{\mathbb{R}}
+#     \{Z\otimes \{\mathbb{I},X\}^{\otimes (n-3)}\otimes \mathfrak{a}_{\text{base}}\}.
+#
+# That is, it is the same as for the type-AIII decomposition, except for a basis change from the
+# Pauli :math:`X` to the Pauli :math:`Z` basis on the first qubit.
+#
+# To conclude the recursion, Khaneja and Glaser break down the remaining two-qubit unitaries from
+# :math:`U(4)` into single-qubit gates and two-qubit gates generated by :math:`\mathfrak{a}_{\text{base}}`.
+# It turns out that this is a Cartan decomposition again, specified by the subgroup :math:`SO(4)` and
+# labeled as type AI. While :math:`SO(4)` usually is represented as real-valued :math:`4\times 4`
+# matrices, there is an `accidental isomorphism <https://en.wikipedia.org/wiki/Exceptional_isomorphism>`__
+# between :math:`SO(4)` and :math:`SU(2)\times SU(2)`, so that :math:`\mathcal{K}` can be represented
+# as single-qubit gates instead (one copy of :math:`SU(2)` acting on each qubit). The base algebra
+# :math:`\mathfrak{a}_{\text{base}}` is a valid Cartan subalgebra for this decomposition type and
+# representation.
+#
+# Quantum Shannon decomposition (2004)
+# ------------------------------------
+#
+# The Quantum Shannon Decomposition (QSD) was introduced by Shende et al. [#Shende_QSD]_ in 2004, using
+# the language of multiplexers, or Select operators. The individual statements provided in
+# Theorems 1, 10 and 12 all are KAK decompositions, of types AIII (or AI), AIII, and A, respectively.
+# The authors explicitly reference Theorem 10 as cosine-sine decomposition.
+# As we covered those already above, we here just need to note down the Cartan subalgebras used
+# by the QSD, which are simpler than those used by Khaneja and Glaser and match exactly the
+# exemplary :math:`\mathfrak{a}_{\text{AIII}}` and :math:`\mathfrak{a}_{\text{A}}` given in the
+# beginning. They are captured by multiplexed single-qubit rotations about the Pauli :math:`Y`
+# axis and Pauli :math:`Z` axis, respectively, with the first of the qubits (on which the recursion
+# currently acts) used as target, and all subsequent qubits used as controls.
+# Concatenating these statements (Theorems 10 and 12) results in the widely used QSD (Theorem 13),
+# which is most easily expressed as a circuit drawing:
+#
+# .. figure:: ../_static/demonstration_assets/unitary_synthesis_kak/QSD.png
+#    :align: center
+#    :width: 95%
+#    :alt: Quantum Shannon decomposition of the unitary group on n qubits.
+#
+# You may notice that this is simply the combination of our circuit drawings for the generic
+# KAK decompositions of types AIII and A from earlier. It is instructive to perform the recursion
+# in a circuit diagram and to appreciate the circuit structure arising from the full QSD:
+#
+# .. figure:: ../_static/demonstration_assets/unitary_synthesis_kak/recursive_QSD.png
+#    :align: center
+#    :width: 100%
+#    :alt: Recursively applied Quantum Shannon decomposition of the unitary group on n qubits.
+#
+# Here, each of the simple boxes represents an arbitrary :math:`U(2^{n-2})` gate.
+#
+# Before moving on, it is important to mention that the QSD achieves its CNOT counts as given in
+# Tab. 1 of [#Shende_QSD]_ by ultimately decomposing :math:`U(4)` with a standard 3-CNOT circuit as
+# used for `two-qubit synthesis <https://pennylane.ai/compilation/two-qubit-synthesis>`__, see
+# [#Shende_Minimal]_ by the same authors, and by applying two optimization steps, see App. A
+# in [#Shende_QSD]_.
+#
+# Block-ZXZ decomposition (2024)
+# ------------------------------
+#
+# The third decomposition using the recursive KAK decomposition with types AIII and A is the
+# so-called Block-ZXZ decomposition by Krol and Al-Ars [#Krol_BlockZXZ]_.
+# The first steps are virtually identical to a QSD, with the small difference that the Cartan
+# subalgebra :math:`\mathfrak{a}_{\text{AIII}}` is rotated on the first qubit, from the Pauli
+# :math:`Y` into the Pauli :math:`X` basis. The subalgebra for the type-A decomposition remains
+# unchanged.
+#
+# The key differences to the QSD lie in the transformations and optimizations applied in addition to
+# each type-AIII Cartan decomposition. We showcase the transformation into the correct block
+# structure in form of a circuit diagram:
+#
+# .. figure:: ../_static/demonstration_assets/unitary_synthesis_kak/block_zxz_transformations.png
+#    :align: center
+#    :width: 90%
+#    :alt: Transformations from a type-AIII KAK decomposed circuit to a circuit in Block-ZXZ form.
+#
+# Afterwards, the block-diagonal matrices can be decomposed with the type-A decompositions, and
+# optimizations from the QSD can be applied, complemented by the merger of two CZ gates into
+# the control structure of a multiplexer (see Sec. 5 of [#Krol_BlockZXZ]_).
+#
+# Gate counts
+# -----------
+#
+# to do
 
-######################################################################
-#
-#
-
-######################################################################
-#
-#
-
-######################################################################
-#
-#
-
-######################################################################
-#
-#
-
-######################################################################
-#
-#
+import pennylane as qml
 
 ######################################################################
 #
@@ -499,7 +582,7 @@ import pennylane as qml
 # .. [#Shende_QSD]
 #
 #     Vivek V Shende, Stephen S Bullock, Igor L Markov (2006)
-#     *Synthesis of Quantum Logic Circuits.* IEEE Trans. on Computer-Aided Design, 
+#     *Synthesis of Quantum Logic Circuits.* IEEE Trans. on Computer-Aided Design,
 #     `Vol. 25, No. 6 <https://doi.org/10.1109/TCAD.2005.855930>`__.
 #
 # .. [#Krol_BlockZXZ]
@@ -516,7 +599,7 @@ import pennylane as qml
 #
 # .. [#Kökcü_FDHS]
 #
-#     Efekan Kökcü, Thomas Steckmann, Yan Wang, J K Freericks, Eugene F Dumitrescu, 
+#     Efekan Kökcü, Thomas Steckmann, Yan Wang, J K Freericks, Eugene F Dumitrescu,
 #     Alexander F. Kemper (2021) *Fixed Depth Hamiltonian Simulation via Cartan Decomposition.*
 #     arXiv preprint `2104.00728 <https://doi.org/10.48550/arXiv.2104.00728>`__.
 #
