@@ -218,7 +218,7 @@ def aiii_decomposition(U):
     return cossin(U, d//2, d//2, separate=True)
 
 # Qubit count
-n = 2
+n = 5
 # Get a random unitary on n qubits
 U = unitary_group.rvs(2**n, random_state=214)
 # Compute AIII decomposition
