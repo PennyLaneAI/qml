@@ -385,13 +385,13 @@ U_1, phi, U_2 = demultiplex(u_1, u_2)
 demultiplex_A = qml.matrix(qml.Select([qml.RZ(-2 * p, 0) for p in phi], control=range(1, n)), wire_order=range(n))
 demultiplex_K_1 = np.block([[U_1, zero], [zero, U_1]])
 demultiplex_K_2 = np.block([[U_2, zero], [zero, U_2]])
-reconstructed_K_1 = demultiplex_K_1 @ demultiplex_A @ demultiplex_K_2  
+reconstructed_K_1 = demultiplex_K_1 @ demultiplex_A @ demultiplex_K_2
 print(np.allclose(reconstructed_K_1, K_1))
 
 ######################################################################
 #
 # As for the CSD, rotations into other Cartan subalgebras can usually be performed by multiplying
-# :math:`K_1` and :math:`K_2` from one side, and reinterpreting the coefficients for :math:`A` 
+# :math:`K_1` and :math:`K_2` from one side, and reinterpreting the coefficients for :math:`A`
 # (``phi`` in the function above) in the new Cartan subalgebra.
 #
 # Recursive KAK decompositions
