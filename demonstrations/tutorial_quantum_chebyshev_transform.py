@@ -1,9 +1,13 @@
 r"""Quantum Chebyshev Transform
 =============================================================
 
-Looking for ways to leverage the speed of the quantum Fourier transform is a common way to design quantum algorithms with exponential speed ups over classical algorithms. Working in the Fourier basis can be a better choice for some computations rather than the standard basis. In the paper `"Quantum Chebyshev transform: mapping, embedding, learning and sampling distributions" <https://arxiv.org/abs/2306.17026>`__ [#williams2023]_, the authors describe the Chebyshev basis and its associated transformation, the quantum Chebyshev transform. They demonstrate the use of the Chebyshev basis space in generative modelling of probability distributions and further work proposes a protocol for learning and sampling multivariate probability distributions that arise in high-energy physics [#delejarza2025]_. Crucial to their implementation of the learning models is the quantum Chebyshev transform which utilizes the quantum Fourier transform, allowing for fast transformations between the standard and the Chebyshev basis.
+Looking for ways to leverage the speed of the `quantum Fourier transform <https://pennylane.ai/qml/demos/tutorial_qft/>`__ is a common way to design quantum algorithms with exponential speed ups over classical algorithms. Working in the Fourier basis can be a better choice for some computations rather than the standard basis. 
+In the paper `"Quantum Chebyshev transform: mapping, embedding, learning and sampling distributions" <https://arxiv.org/abs/2306.17026>`__ [#williams2023]_, the authors describe the Chebyshev basis and its associated transformation, the quantum Chebyshev transform. 
+They demonstrate the use of the Chebyshev basis space in generative modelling of probability distributions and further work proposes a protocol for learning and sampling multivariate probability distributions that arise in high-energy physics [#delejarza2025]_. 
+Crucial to their implementation of the learning models is the quantum Chebyshev transform which utilizes the quantum Fourier transform, allowing for fast transformations between the standard and the Chebyshev basis.
 
-In this demo, we will show how the quantum Chebyshev transform can be implemented in Pennylane. We will start by describing what Chebyshev polynomials are, why you may want to work with Chebyshev states, and what the Chebyshev basis in a quantum algorithm looks like.
+In this demo, we will show how the quantum Chebyshev transform can be implemented in Pennylane. 
+We will start by describing what Chebyshev polynomials are, why you may want to use Chebyshev states, and what the Chebyshev basis in a quantum algorithm looks like.
 
 .. figure:: ../_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_quantum_chebyshev_transform.png
    :align: center
@@ -16,7 +20,8 @@ In this demo, we will show how the quantum Chebyshev transform can be implemente
 What are Chebyshev polynomials?
 ---------------------------------------
 
-`Chebyshev polynomials <https://en.wikipedia.org/wiki/Chebyshev_polynomials>`__ of the first kind :math:`T_n(x)` are a set of orthogonal polynomials that are complete on the interval :math:`[-1,1]`. The :math:`n` -th order Chebyshev polynomial is defined as 
+`Chebyshev polynomials <https://en.wikipedia.org/wiki/Chebyshev_polynomials>`__ of the first kind :math:`T_n(x)` are a set of orthogonal polynomials that are complete on the interval :math:`[-1,1]`. 
+The :math:`n` -th order Chebyshev polynomial is defined as 
 
 .. math::
   T_n(x) \equiv \cos(n \arccos(x))\,.
@@ -49,7 +54,8 @@ These are known as the `Chebyshev nodes <https://en.wikipedia.org/wiki/Chebyshev
 
     Figure 2. The first six Chebyshev polynomials, along with their corresponding nodes.
 
-The nodes are plotted above along with the corresponding polynomials. Note that the polynomials are normalized such that $T_n(1)=1$, and they satisfy a discrete orthogonality condition on the nodes of :math:`T_N(x)` in the following way for :math:`k, \ell<N`
+The nodes are plotted above along with the corresponding polynomials. 
+Note that the polynomials are normalized such that $T_n(1)=1$, and they satisfy a discrete orthogonality condition on the nodes of :math:`T_N(x)` in the following way for :math:`k, \ell<N`
 
 .. math::
   \sum^{N-1}_{j=0}T_k(x_j^\mathrm{Ch})T_\ell(x_j^\mathrm{Ch}) =  
@@ -59,16 +65,14 @@ The nodes are plotted above along with the corresponding polynomials. Note that 
       N/2 & k = \ell \neq 0\,.
     \end{cases}
 
-The Chebyshev polynomials have a lot of *nice* properties. They are complete on the interval :math:`[-1,1]`, meaning any function :math:`f(x)` on the interval :math:`x\in [-1,1]` can be expanded as a series in :math:`T_n(x)` up to order :math:`N` as :math:`f(x) = \sum_{j=0}^N a_j T_j(x)`.
-To compute the Chebyshev-polynomial expansion of a function on a classical computer for a discrete set of sampling points would take :math:`\mathcal{O}(N^2)` operations for a general set of complete functions 🐌. 
-However, because of the way the Chebyshev polynomials are defined in terms of cosine, the `discrete Chebyshev transformation <https://en.wikipedia.org/wiki/Discrete_Chebyshev_transform>`__ can be related to the `discrete cosine transform (DCT) <https://en.wikipedia.org/wiki/Discrete_cosine_transform>`__ to leverage the efficiency of the `fast-Fourier-transform <https://en.wikipedia.org/wiki/Fast_Fourier_transform>`__-style algorithms, which take :math:`\mathcal{O}(N \log N)` operations 🚀.
+The Chebyshev polynomials have a lot of *nice* properties. 
+They are complete on the interval :math:`[-1,1]`, meaning any function :math:`f(x)` on the interval :math:`x\in [-1,1]` can be expanded as a series in :math:`T_n(x)` up to order :math:`N` as :math:`f(x) = \sum_{j=0}^N a_j T_j(x)`.
+To compute the Chebyshev expansion of a function on a classical computer for a discrete set of sampling points would take :math:`\mathcal{O}(N^2)` operations for a general set of complete functions 🐌. 
+However, because of the way the Chebyshev polynomials are defined in terms of cosine, one can define a `discrete Chebyshev transformation <https://en.wikipedia.org/wiki/Discrete_Chebyshev_transform>`__ that is related to the `discrete cosine transform (DCT) <https://en.wikipedia.org/wiki/Discrete_cosine_transform>`__ to leverage the efficiency of the `fast-Fourier-transform <https://en.wikipedia.org/wiki/Fast_Fourier_transform>`__-style algorithms, which take :math:`\mathcal{O}(N \log N)` operations 🚀.
+This discrete Chebyshev transformation is sampled on the nodes of :math:`T_N(x)`, which are non-equidistant on the :math:`[-1,1]` interval. 
+This non-uniform sampling has more resolution at the boundary than in the middle, which can be a benefit if you are, for example, solving a differential equation and expect more interesting features at the boundary.
 
-The discrete Chebyshev transformation is sampled on the nodes of :math:`T_N(x)`, which are non-equidistant on the :math:`[-1,1]` interval. 
-This non-uniform sampling has more resolution at the boundary, but less in the middle. 
-This can be a benefit if you are, for example, solving a differential equation and expect more interesting features at the boundary, so the extra resolution there is useful. 
-In general, working in the Chebyshev basis can have advantages over the Fourier basis for polynomial decomposition.
-
-Next, we will describe the quantum analogue of this transformation.
+The quantum analogy of the discrete Chebyshev transform, the quantum Chebyshev transform, inherits the relation to the Fourier transform, allowing it to be designed effiency by utilizing the `quantum Fourier transform <https://pennylane.ai/qml/demos/tutorial_qft/>`__ . 
 
 
 Quantum Chebyshev basis
@@ -79,8 +83,7 @@ The :math:`j` -th Chebyshev basis state using :math:`N` qubits is
 .. math::
   |\tau(x_j^\mathrm{Ch})\rangle = \frac1{2^{N/2}}T_0(x_j^\mathrm{Ch})|0\rangle + \frac1{2^{(N-1)/2}}\sum_{k=1}^{2^N-1}T_k(x_j^\mathrm{Ch})|k\rangle\,,
 
-where :math:`|k\rangle` are the computational basis states. 
-These states are orthonormal due to the orthogonality of the Chebyshev polynomials and the normalization convention defined above, that is
+where :math:`|k\rangle` are the computational basis states and :math:`x_j^\mathrm{Ch}` is the :math:`j` -th node of the Chebyshev polynomial of order :math:`2^N-1`. Notice the amplitude of the :math:`k` -th basis state component is the :math:`k` -th order Chebyshev polynomial evaluated at the :math`j` -th Chebyshev node. This construction guarantees the states are orthonormal due to the orthogonality of the Chebyshev polynomials and the normalization factors used, that is
 
 .. math::
   \langle\tau(x_j^\mathrm{Ch})|\tau(x_{j'}^\mathrm{Ch})\rangle = 
