@@ -10,10 +10,9 @@ on:
         description: Name of artifact containing demo zip files.
         type: string
       workflow-run-id:
-        description: ID of the workflow run the artifact is from. Needed for PR previews.
+        description: ID of the workflow run the artifact is from.
         type: string
-        required: false
-        default: ''
+        required: true
       preview:
         description: Whether to deploy demos as preview.
         type: boolean
@@ -29,10 +28,9 @@ on:
         description: Name of artifact containing demo zip files.
         type: string
       workflow-run-id:
-        description: ID of the workflow run the artifact is from. Needed for PR previews.
+        description: ID of the workflow run the artifact is from.
         type: string
-        required: false
-        default: ''
+        required: true
       preview:
         description: Whether to deploy demos as preview.
         type: boolean
@@ -65,21 +63,13 @@ jobs:
       - name: Install python requirements
         run: pip install -r .github/workflows/qml_pipeline_v2/requirements.txt
       
-      - name: Fetch demo build artifact from another workflow
-        if: ${{ inputs.workflow-run-id }} != ''
-        uses: actions/download-artifact@v4
+      - name: Fetch demo build artifact
+        uses: XanaduAI/cloud-actions/download-github-workflow-artifact@main
         with:
-          name: ${{ inputs.artifact-name }}
-          run-id: ${{ inputs.workflow-run-id }}
-          github-token: ${{ github.token }}
-          path: _build/pack
-
-      - name: Fetch demo build artifact from this workflow
-        if: ${{ inputs.workflow-run-id }} == ''
-        uses: actions/download-artifact@v4
-        with:
-          name: ${{ inputs.artifact-name }}
-          path: _build/pack
+          artifact_name_regex: ${{ inputs.artifact-name }}
+          workflow_run_id: ${{ inputs.workflow-run-id }}
+          github_token: ${{ github.token }}
+          artifact_download_dir: _build/pack
 
       - name: Deploy demos
         run: |

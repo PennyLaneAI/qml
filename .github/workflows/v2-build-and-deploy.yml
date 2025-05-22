@@ -98,4 +98,5 @@ jobs:
     with:
       environment: ${{ github.event.inputs.environment }}
       artifact-name: build-and-deploy-${{ github.event.inputs.target }}
+      workflow-run-id: ${{ github.run_id }}
       preview: ${{ github.event.inputs.as-previews == 'true' }}
