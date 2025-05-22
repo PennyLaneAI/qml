@@ -64,7 +64,7 @@ powerful method for affordable quantum simulation of materials.
 # `database <https://www.quantum-espresso.org/pseudopotentials/>`_. We have carbon and nitrogen in
 # our system which can be downloaded with
 #
-# .. code-block:: python
+# .. code-block:: bash
 #
 #    wget -N -q http://www.quantum-simulation.org/potentials/sg15_oncv/upf/C_ONCV_PBE-1.2.upf
 #    wget -N -q http://www.quantum-simulation.org/potentials/sg15_oncv/upf/N_ONCV_PBE-1.2.upf
@@ -76,7 +76,7 @@ powerful method for affordable quantum simulation of materials.
 #
 # We can now perform the DFT calculations by running the executable code ``pw.x`` on the input file:
 #
-# .. code-block:: python
+# .. code-block:: bash
 #
 #    mpirun -n 2 pw.x -i pw.in > pw.out
 #
@@ -94,7 +94,7 @@ powerful method for affordable quantum simulation of materials.
 # We will use the `WEST <https://pubs.acs.org/doi/10.1021/ct500958p>`_ program to compute the localization factor. This requires creating the
 # input file ``westpp.in`` as shown below.
 #
-# .. code-block:: python
+# .. code-block:: text
 #
 #    westpp_control:
 #      westpp_calculation: L # triggers the calculation of the localization factor
@@ -111,7 +111,7 @@ powerful method for affordable quantum simulation of materials.
 #
 # We can execute this calculation as
 #
-# .. code-block:: python
+# .. code-block:: bash
 #
 #    mpirun -n 2 westpp.x -i westpp.in > westpp.out
 #
@@ -119,7 +119,7 @@ powerful method for affordable quantum simulation of materials.
 # to run the calculation are large, the WEST output file needed for the next step can be
 # directly downloaded as:
 #
-# .. code-block:: python
+# .. code-block:: bash
 #
 #    mkdir -p west.westpp.save
 #    wget -N -q https://west-code.org/doc/training/nv_diamond_63/box_westpp.json -O west.westpp.save/westpp.json
@@ -180,30 +180,32 @@ powerful method for affordable quantum simulation of materials.
 # partially screened Coulomb potential, and (iii) finally compute the parameters of the
 # effective Hamiltonian. The input file for such a calculation is shown below:
 #
-# .. code-block:: python
+# .. code-block:: text
 #
 #    wstat_control:
-#      wstat_calculation: S
-#      n_pdep_eigen: 512
-#      trev_pdep: 0.00001
+#      wstat_calculation: S #starts the calculation from scratch 
+#      n_pdep_eigen: 512    #number of PDEP eigenpotentials, set to match the number of electrons
+#      trev_pdep: 0.00001   #convergence threshold for PDEP eigenvalues
 #
 #    wfreq_control:
-#      wfreq_calculation: XWGQH
-#      macropol_calculation: C
-#      l_enable_off_diagonal: true
-#      n_pdep_eigen_to_use: 512
-#      qp_bands: [87, 122, 123, 126, 127, 128]
-#      n_refreq: 300
-#      ecut_refreq: 2.0
+#      wfreq_calculation: XWGQH                # compute the quasiparticle corrections and :math:H^{eff} parameters
+#      macropol_calculation: C                 # include long-wavelength limit for condensed systems
+#      l_enable_off_diagonal: true             # calculate off-diagonal elements of G_0W_0 self-energy
+#      n_pdep_eigen_to_use: 512                # number of PDEP eigenvectors to be used
+#      qp_bands: [87, 122, 123, 126, 127, 128] # impurity orbitals
+#      n_refreq: 300                           # number of frequencies on the real axis
+#      ecut_refreq: 2.0                        # cutoff for the real frequencies
 #
 # We now construct the effective Hamiltonian:
+#
+# .. code-block:: bash
+#
+#    mkdir -p west.wfreq.save
+#    wget -N -q https://west-code.org/doc/training/nv_diamond_63/wfreq.json -O west.wfreq.save/wfreq.json
 #
 # .. code-block:: python
 #
 #    from westpy.qdet import QDETResult
-#
-#    mkdir -p west.wfreq.save
-#    wget -N -q https://west-code.org/doc/training/nv_diamond_63/wfreq.json -O west.wfreq.save/wfreq.json
 #
 #    effective_hamiltonian = QDETResult(filename='west.wfreq.save/wfreq.json')
 #
