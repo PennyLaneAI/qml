@@ -14,12 +14,6 @@ on:
         type: string
         required: false
         default: ''
-      github-token: 
-        description: |
-          GitHub token. Required for pulling artifacts from separate workflows.
-          Set this if using 'workflow-run-id'.
-        type: string
-        required: false
       preview:
         description: Whether to deploy demos as preview.
         type: boolean
@@ -39,12 +33,6 @@ on:
         type: string
         required: false
         default: ''
-      github-token: 
-        description: |
-          GitHub token. Required for pulling artifacts from separate workflows.
-          Set this if using 'workflow-run-id'.        
-        type: string
-        required: false
       preview:
         description: Whether to deploy demos as preview.
         type: boolean
@@ -83,7 +71,7 @@ jobs:
         with:
           name: ${{ inputs.artifact-name }}
           run-id: ${{ inputs.workflow-run-id }}
-          github-token: ${{ inputs.github-token }}
+          github-token: ${{ github.token }}
           path: _build/pack
 
       - name: Fetch demo build artifact from this workflow
