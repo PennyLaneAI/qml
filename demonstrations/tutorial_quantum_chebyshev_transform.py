@@ -1,12 +1,9 @@
 r"""Quantum Chebyshev Transform
 =============================================================
 
-This demo is inspired by the paper `"Quantum Chebyshev transform: mapping, embedding, learning and sampling distributions" <https://arxiv.org/abs/2306.17026>`__ [#williams2023]_ wherein the authors describe a workflow for quantum Chebyshev-based model building. 
-They demonstrate the use of the Chebyshev basis space in generative modelling of probability distributions. 
-A proposed protocol for learning and sampling multivariate probability distributions that arise in high-energy physics also makes use of the Chebyshev basis [#delejarza2025]_.
-Crucial to the implementation of learning models in Chebyshev space is the quantum Chebyshev transform, which is used to swap between the computational basis and the Chebyshev basis. 
+Looking for ways to leverage the speed of the quantum Fourier transform is a common way to design quantum algorithms with exponential speed ups over classical algorithms. Working in the Fourier basis can be a better choice for some computations rather than the standard basis. In the paper `"Quantum Chebyshev transform: mapping, embedding, learning and sampling distributions" <https://arxiv.org/abs/2306.17026>`__ [#williams2023]_, the authors describe the Chebyshev basis and its associated transformation, the quantum Chebyshev transform. They demonstrate the use of the Chebyshev basis space in generative modelling of probability distributions and further work proposes a protocol for learning and sampling multivariate probability distributions that arise in high-energy physics [#delejarza2025]_. Crucial to their implementation of the learning models is the quantum Chebyshev transform which utilizes the quantum Fourier transform, allowing for fast transformations between the standard and the Chebyshev basis.
 
-We will start by discussing Chebyshev polynomials and why you may want to work in Chebyshev space. Then we will show how the quantum Chebyshev transform can be implemented in PennyLane. 
+In this demo, we will show how the quantum Chebyshev transform can be implemented in Pennylane. We will start by describing what Chebyshev polynomials are, why you may want to work with Chebyshev states, and what the Chebyshev basis in a quantum algorithm looks like.
 
 .. figure:: ../_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_quantum_chebyshev_transform.png
    :align: center
