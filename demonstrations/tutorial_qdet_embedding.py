@@ -72,7 +72,12 @@ powerful method for affordable quantum simulation of materials.
 # Next, we need to create the input file for running QUANTUM ESPRESSO. The input file ``pw.in``
 # contains information about the system and details of the DFT calculations. More details on
 # how to construct the input file can be found in QUANTUM ESPRESSO
-# `documentation <https://www.quantum-espresso.org/Doc/INPUT_PW.html>`_ page.
+# `documentation <https://www.quantum-espresso.org/Doc/INPUT_PW.html>`_ page. For the system taken here,
+# the input file can be downloaded with
+#
+# .. code-block:: bash
+#
+#    wget -N -q https://west-code.org/doc/training/nv_diamond_63/pw.in
 #
 # We can now perform the DFT calculations by running the executable code ``pw.x`` on the input file:
 #
@@ -84,7 +89,7 @@ powerful method for affordable quantum simulation of materials.
 # ^^^^^^^^^^^^^^^^^^^^^
 # Once we have obtained the mean field description, we can identify our impurity by finding
 # the states that are localized in real space around the defect region. To that end, we compute the
-# localization factor defined as:
+# localization factor for each state n, defined as:
 #
 # .. math::
 #
@@ -147,7 +152,7 @@ powerful method for affordable quantum simulation of materials.
 #    plt.show()
 #
 #
-# .. figure:: qdet_data/localization.jpeg
+# .. figure:: ../_static/demonstration_assets/qdet/localization.jpeg
 #    :align: center
 #    :width: 70%
 #    :target: javascript:void(0)
@@ -194,7 +199,7 @@ powerful method for affordable quantum simulation of materials.
 #      trev_pdep: 0.00001   #convergence threshold for PDEP eigenvalues
 #
 #    wfreq_control:
-#      wfreq_calculation: XWGQH           # compute the quasiparticle corrections and $H^{eff}$ parameters
+#      wfreq_calculation: XWGQH           # compute the quasiparticle corrections and :math:`H^{eff}` parameters
 #      macropol_calculation: C            # include long-wavelength limit for condensed systems
 #      l_enable_off_diagonal: true        # calculate off-diagonal elements of G_0W_0 self-energy
 #      n_pdep_eigen_to_use: 512           # number of PDEP eigenvectors to be used
@@ -229,6 +234,8 @@ powerful method for affordable quantum simulation of materials.
 #
 #    solution = effective_hamiltonian.solve()
 #
+# The solution object is a dictionary containing information about the FCI eigenstates of the system, which
+# includes the various excitation energies, spin multiplicities, eigenvectors etc.
 # This effective Hamiltonian can also be directly used with quantum algorithms in PennyLane
 # once it is converted to a qubit Hamiltonian. Since WEST outputs two-electron integrals
 # in chemists' notation, a conversion to the physicists' notation is essential for
@@ -247,7 +254,8 @@ powerful method for affordable quantum simulation of materials.
 #    v = two_particle(np.swapaxes(two_e[0][0], 1, 3))
 #    qubit_op = observable([t, v], mapping="jordan_wigner")
 #
-# The ground state energy of the Hamiltonian is identical to the one obtained before.
+# We can compare the energies obtained from the diagnolization of this qubit Hamiltonian to the
+# solution object above to see that they match.
 #
 # Conclusion
 # ----------
