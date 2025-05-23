@@ -257,7 +257,7 @@ def aiii_decomposition_rotated(U):
     rotation = (qml.X(0) + qml.Y(0)) / np.sqrt(2)
     rotation_mat = qml.matrix(rotation, wire_order=range(n))
     # Transform K_1 and K_2. No need to transform theta, it is just re-interpreted as RX angles
-    K_1 @= rotation_mat
+    K_1 = K_1 @ rotation_mat
     K_2 = rotation_mat @ K_2
     return K_1, theta, K_2
 
