@@ -126,25 +126,33 @@ powerful method for affordable quantum simulation of materials.
 #
 # We can now plot the computed localization factor for each of the states:
 #
-import json
-import numpy as np
-import matplotlib.pyplot as plt
-
-with open('qdet_data/west.westpp.save/westpp.json','r') as f:
-    data = json.load(f)
-
-y = np.array(data['output']['L']['K000001']['local_factor'],dtype='f8')
-x = np.array([i+1 for i in range(y.shape[0])])
-
-plt.plot(x,y,'o')
-plt.axhline(y=0.08,linestyle='--',color='red')
-
-plt.xlabel('KS index')
-plt.ylabel('Localization factor')
-
-plt.show()
+# .. code-block:: bash
 #
-# From this plot, it is easy to see that Kohn-Sham orbitals can be catergorized as orbitals
+#    import json
+#    import numpy as np
+#    import matplotlib.pyplot as plt
+
+#    with open('west.westpp.save/westpp.json','r') as f:
+#        data = json.load(f)
+
+#    y = np.array(data['output']['L']['K000001']['local_factor'],dtype='f8')
+#    x = np.array([i+1 for i in range(y.shape[0])])
+
+#    plt.plot(x,y,'o')
+#    plt.axhline(y=0.08,linestyle='--',color='red')
+
+#    plt.xlabel('KS index')
+#    plt.ylabel('Localization factor')
+
+#    plt.show()
+#
+#
+# .. figure:: qdet_data/localization.jpeg
+#    :align: center
+#    :width: 70%
+#    :target: javascript:void(0)
+#
+# From this plot, it is easy to see that Kohn-Sham orbitals can be categorized as orbitals
 # with low and high localization factor. For the purpose of defining an impurity, we need
 # highly localized orbitals, so for this we set a cutoff of 0.06 and choose the orbitals
 # that have a localization factor > 0.06 for our active space. We'll use these orbitals for
@@ -186,20 +194,27 @@ plt.show()
 #      trev_pdep: 0.00001   #convergence threshold for PDEP eigenvalues
 #
 #    wfreq_control:
-#      wfreq_calculation: XWGQH                # compute the quasiparticle corrections and $H^{eff}$ parameters
-#      macropol_calculation: C                 # include long-wavelength limit for condensed systems
-#      l_enable_off_diagonal: true             # calculate off-diagonal elements of G_0W_0 self-energy
-#      n_pdep_eigen_to_use: 512                # number of PDEP eigenvectors to be used
-#      qp_bands: [87, 122, 123, 126, 127, 128] # impurity orbitals
-#      n_refreq: 300                           # number of frequencies on the real axis
-#      ecut_refreq: 2.0                        # cutoff for the real frequencies
+#      wfreq_calculation: XWGQH           # compute the quasiparticle corrections and $H^{eff}$ parameters
+#      macropol_calculation: C            # include long-wavelength limit for condensed systems
+#      l_enable_off_diagonal: true        # calculate off-diagonal elements of G_0W_0 self-energy
+#      n_pdep_eigen_to_use: 512           # number of PDEP eigenvectors to be used
+#      qp_bands: [87,122,123,126,127,128] # impurity orbitals
+#      n_refreq: 300                      # number of frequencies on the real axis
+#      ecut_refreq: 2.0                   # cutoff for the real frequencies
 #
-# We now construct the effective Hamiltonian:
+# We can execute this calculation as follows:
+# .. code-block:: bash
+#
+#    mpirun -n 2 wfreq.x -i wfreq.in > wfreq.out
+#
+# This calculation takes some time and requires computational resources, therefore the output file can be downloaded as
 #
 # .. code-block:: bash
 #
 #    mkdir -p west.wfreq.save
 #    wget -N -q https://west-code.org/doc/training/nv_diamond_63/wfreq.json -O west.wfreq.save/wfreq.json
+#
+# We now construct the effective Hamiltonian by importing the results from above file:
 #
 # .. code-block:: python
 #
