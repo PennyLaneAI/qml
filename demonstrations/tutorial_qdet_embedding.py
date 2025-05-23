@@ -126,25 +126,23 @@ powerful method for affordable quantum simulation of materials.
 #
 # We can now plot the computed localization factor for each of the states:
 #
-# .. code-block:: python
-#
-#    import json
-#    import numpy as np
-#    import matplotlib.pyplot as plt
-#
-#    with open('west.westpp.save/westpp.json','r') as f:
-#        data = json.load(f)
-#
-#    y = np.array(data['output']['L']['K000001']['local_factor'],dtype='f8')
-#    x = np.array([i+1 for i in range(y.shape[0])])
-#
-#    plt.plot(x,y,'o')
-#    plt.axhline(y=0.08,linestyle='--',color='red')
-#
-#    plt.xlabel('KS index')
-#    plt.ylabel('Localization factor')
-#
-#    plt.show()
+import json
+import numpy as np
+import matplotlib.pyplot as plt
+
+with open('qdet_data/west.westpp.save/westpp.json','r') as f:
+    data = json.load(f)
+
+y = np.array(data['output']['L']['K000001']['local_factor'],dtype='f8')
+x = np.array([i+1 for i in range(y.shape[0])])
+
+plt.plot(x,y,'o')
+plt.axhline(y=0.08,linestyle='--',color='red')
+
+plt.xlabel('KS index')
+plt.ylabel('Localization factor')
+
+plt.show()
 #
 # From this plot, it is easy to see that Kohn-Sham orbitals can be catergorized as orbitals
 # with low and high localization factor. For the purpose of defining an impurity, we need
@@ -210,13 +208,13 @@ powerful method for affordable quantum simulation of materials.
 #    effective_hamiltonian = QDETResult(filename='west.wfreq.save/wfreq.json')
 #
 # The final step is to solve for this effective Hamiltonian using a high level method. We can
-# use the WESTpy package as:
+# use the FCI algorithm from WESTpy package as:
 #
 # .. code-block:: python
 #
 #    solution = effective_hamiltonian.solve()
 #
-# This effective Hamiltonian can be directly used with quantum algorithms in PennyLane
+# This effective Hamiltonian can also be directly used with quantum algorithms in PennyLane
 # once it is converted to a qubit Hamiltonian. Since WEST outputs two-electron integrals
 # in chemists' notation, a conversion to the physicists' notation is essential for
 # compatibility with PennyLane's framework. Here's how to construct the qubit Hamiltonian:
