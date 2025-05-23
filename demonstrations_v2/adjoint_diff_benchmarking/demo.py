@@ -13,11 +13,11 @@ Adjoint Differentiation
 *Author: Christina Lee — Posted: 23 November 2021. Last updated: 04 July 2024.*
 
 """
-# Changing this demo
 ##############################################################################
 # This page is supplementary material to the
 # `Adjoint Differentiation <https://pennylane.ai/qml/demos/tutorial_adjoint_diff.html>`__
 # demonstration.  The below script produces the benchmarking images used.
+# Adding a newline to test the new build pipeline.
 
 import timeit
 import matplotlib.pyplot as plt
