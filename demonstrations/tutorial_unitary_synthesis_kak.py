@@ -454,7 +454,7 @@ print(np.allclose(reconstructed_K_1, K_1))
 #
 # which span an Abelian four-dimensional algebra
 # :math:`\mathfrak{a}_{\text{base}}=\operatorname{span}_{i\mathbb{R}}\mathcal{S}`.
-# This algebra is related to the algebra of diagonal matrices via the 
+# This algebra is related to the algebra of diagonal matrices via the
 # so-called "magic basis" rotation:
 #
 # .. math::
@@ -468,7 +468,7 @@ print(np.allclose(reconstructed_K_1, K_1))
 #
 # To understand the choice of Cartan subalgebra for the type-AIII KAK decompositions
 # of :math:`U(2^n)`, :math:`n\geq 3`, recall the generic choice from above:
-# 
+#
 # .. math::
 #
 #     \mathfrak{a}_{\text{AIII}}
@@ -483,10 +483,10 @@ print(np.allclose(reconstructed_K_1, K_1))
 #
 #     \operatorname{span}_{i\mathbb{R}}\left\{X\otimes \{\mathbb{I},X\}^{\otimes (n-3)} \otimes |j\rangle\langle j| | 0\leq j \leq 4 \right\}.
 #
-# In a final step, we apply the magic basis transformation :math:`E` from above to the last two 
+# In a final step, we apply the magic basis transformation :math:`E` from above to the last two
 # qubits (qubits :math:`n-2` and :math:`n-1`), which rotates them from the computational into
 # the magic basis characterized by :math:`\mathcal{S}`.
-# 
+#
 # .. math::
 #
 #     \mathfrak{a}'_{\text{AIII}}(n)
@@ -556,7 +556,7 @@ print(np.allclose(reconstructed_K_1, K_1))
 #        :align: center
 #        :width: 75%
 #        :alt: Decomposition of a multiplexer on 3 qubits.
-# 
+#
 # Concatenating these statements (Theorems 10 and 12) results in the widely used QSD (Theorem 13),
 # which is most easily expressed as a circuit drawing:
 #
