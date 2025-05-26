@@ -246,7 +246,7 @@ print(np.allclose(reconstructed_U, U))
 #
 
 def aiii_decomposition_rotated(U):
-    """Compute an type-AIII KAK decomposition of ``U`` using a cosine-sine decomposition
+    """Compute a type-AIII KAK decomposition of ``U`` using a cosine-sine decomposition
     and rotate the outputs so that the Cartan subalgebra is in the X basis on the first qubit."""
     d = len(U)
     n = int(np.round(np.log2(d)))
@@ -297,7 +297,7 @@ print(np.allclose(reconstructed_U, U))
 #     \mathcal{K}=U(2^n)
 #     \cong\left\{\begin{pmatrix} A & 0 \\ 0 & A \end{pmatrix}\bigg| A\in U(2^n)\right\}
 #     =\left\{\mathbb{I}_2 \otimes A | A\in U(2^n)\right\}
-
+#
 # for the subgroup.
 # Note that in a quantum circuit, such an element :math:`\mathbb{I}_2\otimes A\in\mathcal{K}`
 # simply is the gate :math:`A` acting on all but the first qubit.
@@ -440,19 +440,22 @@ print(np.allclose(reconstructed_K_1, K_1))
 #
 # In 2000, Khaneja and Glaser [#Khaneja_Glaser]_ demonstrated that one-qubit and two-qubit operations
 # are universal for quantum computation by proving that any unitary matrix can be broken down
-# recursively, "decoupling" one qubit at a time. Bullock later identified one part of each
-# recursion step to be a type-AIII KAK decomposition [#Bullock_Note]_, and Dağlı et al. added that
-# the second part of each step is another KAK decomposition [#Dagli_Framework]_.
+# recursively, "decoupling" one qubit at a time. Bullock later identified one part of this recursion
+# to be a type-AIII KAK decomposition [#Bullock_Note]_, and Dağlı et al. added that
+# the remaining steps form KAK decompositions as well [#Dagli_Framework]_.
 # Furthermore, this decomposition has inspired a series of related works, mostly searching for
-# variations of the recursive KAK decomposition that achieve quantum circuits with reduced CNOT counts.
+# variations of the recursive KAK decomposition, that achieve quantum circuits with reduced CNOT counts.
 #
-# The Khaneja-Glaser decomposition defines a two-qubit Cartan algebra
+# The Khaneja-Glaser decomposition defines a set of commuting two-qubit operators
 #
 # .. math::
 #
-#     \mathfrak{a}_{\text{base}}=\{\mathbb{I}\otimes \mathbb{I}, X\otimes X, Y\otimes Y, Z\otimes Z\},
+#     \mathcal{S}=\{\mathbb{I}_4, X\otimes X, Y\otimes Y, Z\otimes Z\},
 #
-# which is the Abelian algebra of diagonal matrices, rotated by the "magic basis" rotation
+# which span an Abelian four-dimensional algebra
+# :math:`\mathfrak{a}_{\text{base}}=\operatorname{span}_{i\mathbb{R}}\mathcal{S}`.
+# This algebra is related to the algebra of diagonal matrices via the 
+# so-called "magic basis" rotation:
 #
 # .. math::
 #
@@ -461,43 +464,70 @@ print(np.allclose(reconstructed_K_1, K_1))
 #         0 & 0 & i & 1 \\
 #         0 & 0 & i & -1 \\
 #         1 & -i & 0 & 0
-#     \end{pmatrix},\quad E^\dagger \mathfrak{a}_{\text{base}} E = \mathfrak{u}_{\text{diag}}(4)
+#     \end{pmatrix},\quad E^\dagger \mathfrak{a}_{\text{base}} E = \mathfrak{u}_{\text{diag}}(4).
 #
-# we will discuss in more detail below.
-# For the type-AIII KAK decompositions of :math:`U(2^n)`, :math:`n\geq 3`, the Cartan subalgebra reads
+# To understand the choice of Cartan subalgebra for the type-AIII KAK decompositions
+# of :math:`U(2^n)`, :math:`n\geq 3`, recall the generic choice from above:
+# 
+# .. math::
+#
+#     \mathfrak{a}_{\text{AIII}}
+#     &=\left\{\begin{pmatrix} 0 & x \\ -x & 0 \end{pmatrix}\bigg| x \in \mathfrak{u}_{\text{diag}}(2^{n-1})\right\},\\
+#     &=\operatorname{span}_{i\mathbb{R}}\left\{Y\otimes |j\rangle\langle j| | 0\leq j \leq 2^{n-1} \right\}.
+#
+# We rotate qubit :math:`0` from the Pauli :math:`Y` into the Pauli :math:`X` basis,
+# and qubits :math:`1` to :math:`n-3` from the computational basis into the Pauli :math:`X` basis,
+# which we can write as
 #
 # .. math::
 #
+#     \operatorname{span}_{i\mathbb{R}}\left\{X\otimes \{\mathbb{I},X\}^{\otimes (n-3)} \otimes |j\rangle\langle j| | 0\leq j \leq 4 \right\}.
+#
+# In a final step, we apply the magic basis transformation :math:`E` from above to the last two 
+# qubits (qubits :math:`n-2` and :math:`n-1`), which rotates them from the computational into
+# the magic basis characterized by :math:`\mathcal{S}`.
+# 
+# .. math::
+#
 #     \mathfrak{a}'_{\text{AIII}}(n)
-#     =\operatorname{span}_{\mathbb{R}}
-#     \{X\otimes \{\mathbb{I},X\}^{\otimes (n-3)}\otimes \mathfrak{a}_{\text{base}}\}.
+#     =\operatorname{span}_{i\mathbb{R}}
+#     \{X\otimes \{\mathbb{I},X\}^{\otimes (n-3)}\otimes \mathcal{S}\}.
 #
-# It can be obtained by rotating :math:`\mathfrak{a}_{\text{AIII}}` above from the Pauli :math:`Y`
-# into the Pauli :math:`X` basis on the first qubit, from the Pauli :math:`Z` into the magic basis
-# via :math:`E` on the last two qubits, and from the Pauli :math:`Z` into the Pauli :math:`X` basis
-# on the :math:`n-3` remaining qubits.
-#
-# For the second part in each recursion step, the type-A Cartan decomposition, the Cartan subalgebra
-# reads
+# For the type-A decompositions, the Cartan subalgebra is similar, but the first qubit is
+# rotated into the Pauli :math:`Z` basis instead:
 #
 # .. math::
 #
 #     \mathfrak{a}'_{\text{A}}(n)
-#     =\operatorname{span}_{\mathbb{R}}
-#     \{Z\otimes \{\mathbb{I},X\}^{\otimes (n-3)}\otimes \mathfrak{a}_{\text{base}}\}.
-#
-# That is, it is the same as for the type-AIII decomposition, except for a basis change from the
-# Pauli :math:`X` to the Pauli :math:`Z` basis on the first qubit.
+#     =\operatorname{span}_{i\mathbb{R}}
+#     \{Z\otimes \{\mathbb{I},X\}^{\otimes (n-3)}\otimes \mathcal{S}\}.
 #
 # To conclude the recursion, Khaneja and Glaser break down the remaining two-qubit unitaries from
 # :math:`U(4)` into single-qubit gates and two-qubit gates generated by :math:`\mathfrak{a}_{\text{base}}`.
 # It turns out that this is a Cartan decomposition again, specified by the subgroup :math:`SO(4)` and
-# labeled as type AI. While :math:`SO(4)` usually is represented as real-valued :math:`4\times 4`
-# matrices, there is an `accidental isomorphism <https://en.wikipedia.org/wiki/Exceptional_isomorphism>`__
-# between :math:`SO(4)` and :math:`SU(2)\times SU(2)`, so that :math:`\mathcal{K}` can be represented
-# as single-qubit gates instead (one copy of :math:`SU(2)` acting on each qubit). The base algebra
-# :math:`\mathfrak{a}_{\text{base}}` is a valid Cartan subalgebra for this decomposition type and
-# representation.
+# labeled as type AI.
+# Generically, this decomposition would factorize a unitary matrix into two real-valued, orthogonal
+# matrices and a diagonal matrix (the Cartan subgroup element).
+#
+# However, the magic basis rotation :math:`E` from above transforms orthogonal matrices into
+# matrices of the form :math:`A\otimes B` for two single-qubit (special) unitaries :math:`A,B`,
+# and (as we mentioned above) it transforms diagonal matrices into matrices from
+# :math:`\mathfrak{a}_{\text{base}}`.
+# This means that the type-AI Cartan decomposition can be rotated by :math:`E` to obtain a
+# decomposition of the two-qubit unitaries into single-qubit unitaries and Cartan subgroup
+# elements.
+#
+# .. admonition:: Math detail: accidental/exceptional isomorphism
+#
+#    The fact that the Lie groups of special orthogonal matrices (:math:`SO(4)`) and
+#    single-qubit (special) unitaries on two qubits (:math:`SU(2)\times SU(2)`) are isomorphic
+#    is a so-called `accidental, or exceptional, isomorphism <https://en.wikipedia.org/wiki/Exceptional_isomorphism>`__.
+#    In general, :math:`SO(d)` is not isomorphic to two (or more) copies of some lower-dimensional
+#    unitary group(s).
+#
+# As the Cartan subalgebras for the Khaneja-Glaser decomposition are obtained by rotating the
+# canonical choices, they can be implemented in quantum circuits via the local rotations and
+# any implementation of the generic subalgebra operators, see the info box in the next section.
 #
 # Quantum Shannon decomposition (2004)
 # ------------------------------------
@@ -511,7 +541,22 @@ print(np.allclose(reconstructed_K_1, K_1))
 # exemplary :math:`\mathfrak{a}_{\text{AIII}}` and :math:`\mathfrak{a}_{\text{A}}` given in the
 # beginning. They are captured by multiplexed single-qubit rotations about the Pauli :math:`Y`
 # axis and Pauli :math:`Z` axis, respectively, with the first of the qubits (on which the recursion
-# currently acts) used as target, and all subsequent qubits used as controls.
+# currently acts) used as target, and all subsequent qubits used as controls. The alternating
+# basis of the multiplexers is a consequence of the two different Cartan subalgebras used for
+# the type-AIII and type-A decompositions.
+#
+# .. adminition:: Implementing a multiplexed rotation
+#
+#    As a subroutine, all decompositions require us to perform a multiplexed, also called
+#    uniformly controlled or Select-applied, single-qubit rotation, :math:`UCR_P(\vec{\theta})`
+#    about some Pauli word :math:`P`. A possible implementation of :math:`UCR_P` is given in
+#    the following circuit diagram:
+#
+#     .. figure:: ../_static/demonstration_assets/unitary_synthesis_kak/multiplexer_decomp.png
+#        :align: center
+#        :width: 75%
+#        :alt: Decomposition of a multiplexer on 3 qubits.
+# 
 # Concatenating these statements (Theorems 10 and 12) results in the widely used QSD (Theorem 13),
 # which is most easily expressed as a circuit drawing:
 #
@@ -564,8 +609,6 @@ print(np.allclose(reconstructed_K_1, K_1))
 # -----------
 #
 # to do
-
-import pennylane as qml
 
 ######################################################################
 #
