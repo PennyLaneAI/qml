@@ -15,11 +15,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_fixed_depth_hamiltonian_simulation_via_cartan_decomposition.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_game_of_surface_codes.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_fixed_depth_hamiltonian_simulation_via_cartan_decomposition.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_game_of_surface_codes.png"
         }
     ],
     "seoDescription": "A game of surface codes: Exploring space-time tradeoffs in surface code based quantum computation.",

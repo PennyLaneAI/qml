@@ -7,6 +7,12 @@ The layout and design of the architecture plays a crucial role in how fast a mag
 The game of surface codes [#Litinksi]_ allows us to reason about such space-time tradeoffs in architecture designs, without having to get into
 the nitty-gritty details of surface code physics. In this demo, we will see how different designs can lead to faster computations at the cost of involving more qubits and vice versa.
 
+.. figure:: ../_static/hero_illustrations/Hero_Game_of_Surface_Codes.png
+    :align: center
+    :width: 70%
+    :target: javascript:void(0)
+
+
 Introduction
 ------------
 
