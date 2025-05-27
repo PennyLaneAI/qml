@@ -98,31 +98,31 @@ We can see the relation to the cosine transform by plugging in the definition of
 .. math::
     f(x_k) = \sum_{j=0}^{N-1} a_j \cos\left(j \cos^{-1}(x_k)\right)\,,
 
-and using the definition of the nodes we obtain 
+then, using the definition of the nodes we obtain 
 
 .. math:: 
     f(x_k) = \sum_{j=0}^{N-1} a_j \cos\left(\frac{j\pi}{N}(N + k + 1/2)\right)\,.
 
-Finally, we can use the cyclical property of cosine to convert a :math:`j \pi` term in the argument to a :math:`(-1)^{j}` factor in the coefficient
+Finally, we can use the cyclical property of cosine to convert a :math:`j \pi` term in the argument to a :math:`(-1)^{j}` factor in the coefficient, resulting in
 
 .. math:: 
     f(x_k) = \sum_{j=0}^{N-1} a_j (-1)^{j}\cos\left(\frac{j\pi}{N}(k + 1/2)\right)\,,
 
-Which looks just like a discrete cosine transform.
+which looks just like a discrete cosine transform.
 
-The quantum analogy of the discrete Chebyshev transform, the quantum Chebyshev transform, inherits the relation to the Fourier transform, allowing the transform to be designed efficiently by utilizing the `quantum Fourier transform <https://pennylane.ai/qml/demos/tutorial_qft/>`__. Next we will show how Chebyshev polynomials can be embedded in the amplitudes of a quantum state, to construct the quantum Chebyshev basis, allowing us to define the quantum transform.
+The quantum analogue of the discrete Chebyshev transform, the quantum Chebyshev transform, inherits the relation to the Fourier transform, allowing the transform to be designed efficiently by utilizing the `quantum Fourier transform <https://pennylane.ai/qml/demos/tutorial_qft/>`__. Next we will discuss the quantum Chebyshev basis, where the Chebyshev polynomials appear in the state amplitudes.
 
 
 Quantum Chebyshev basis
 ---------------------------------------
-We can define the :math:`j` -th Chebyshev basis state using :math:`N` qubits is
+We can define the :math:`j` -th Chebyshev basis state using :math:`N` qubits as
 
 .. math::
   |\tau(x_j^\mathrm{Ch})\rangle = \frac1{2^{N/2}}T_0(x_j^\mathrm{Ch})|0\rangle + \frac1{2^{(N-1)/2}}\sum_{k=1}^{2^N-1}T_k(x_j^\mathrm{Ch})|k\rangle\,,
 
 where :math:`|k\rangle` are the computational basis states and :math:`x_j^\mathrm{Ch}` is the :math:`j` -th node of the Chebyshev polynomial of order :math:`2^N-1`. 
-Notice how the amplitudes of the basis state components are the Chebyshev polynomials evaluated at the :math:`j` -th Chebyshev node, and that the normalization of the components is different for the :math:`0` term, like in the classical transform.
-This construction guarantees the states are orthonormal due to the orthogonality of the Chebyshev polynomials and the normalization factors used, that is
+Notice how the amplitudes of the basis state components are the Chebyshev polynomials evaluated at the :math:`j` -th Chebyshev node, and that the normalization of the :math:`|0\rangle` component is different from the rest, like in the classical transform.
+Due to the orthogonality of the Chebyshev polynomials and the normalization factors used, this construction guarantees the states are orthonormal, that is
 
 .. math::
   \langle\tau(x_j^\mathrm{Ch})|\tau(x_{j'}^\mathrm{Ch})\rangle = 
