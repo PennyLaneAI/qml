@@ -230,7 +230,8 @@ U = unitary_group.rvs(2**n, random_state=214)
 # Check that the decomposition is valid
 zero = np.zeros_like(u_1)
 K_1 = np.block([[u_1, zero], [zero, u_2]])
-A = qml.matrix(qml.Select([qml.RY(2 * th, 0) for th in theta], control=range(1, n)), wire_order=range(n))
+ry_ops = [qml.RY(2 * th, 0) for th in theta]
+A = qml.matrix(qml.Select(ry_ops, control=range(1, n)), wire_order=range(n))
 K_2 = np.block([[v_1, zero], [zero, v_2]])
 
 reconstructed_U = K_1 @ A @ K_2
@@ -250,7 +251,8 @@ print(np.allclose(reconstructed_U, U))
 
 def aiii_decomposition_rotated(U):
     """Compute a type-AIII KAK decomposition of ``U`` using a cosine-sine decomposition
-    and rotate the outputs so that the Cartan subalgebra is in the X basis on the first qubit."""
+    and rotate the outputs so that the Cartan subalgebra is in the X basis on
+    the first qubit."""
     d = len(U)
     n = int(np.round(np.log2(d)))
     (u_1, u_2), theta, (v_1, v_2) = cossin(U, d//2, d//2, separate=True)
@@ -259,7 +261,7 @@ def aiii_decomposition_rotated(U):
     K_2 = np.block([[v_1, zero], [zero, v_2]])
     rotation = (qml.X(0) + qml.Y(0)) / np.sqrt(2)
     rotation_mat = qml.matrix(rotation, wire_order=range(n))
-    # Transform K_1 and K_2. No need to transform theta, it is just re-interpreted as RX angles
+    # Transform K_1 and K_2. No need to transform theta, just re-interpret as RX angles
     K_1 = K_1 @ rotation_mat
     K_2 = rotation_mat @ K_2
     return K_1, theta, K_2
@@ -268,7 +270,8 @@ new_K_1, theta, new_K_2 = aiii_decomposition_rotated(U)
 
 # note that the block structure has been rotated:
 fig, axs = plt.subplots(2, 2)
-titles = ["$\mathfrak{Re}(K_1)$", "$\mathfrak{Im}(K_1)$", "$\mathfrak{Re}(K_2)$", "$\mathfrak{Im}(K_2)$"]
+real, imag = "\mathfrak{Re}", "\mathfrak{Im}"
+titles = [f"${part}(K_{i})$" for i in [1, 2] for part in [real, imag]]
 data = [new_K_1.real, new_K_1.imag, new_K_2.real, new_K_2.imag]
 
 for i, ax in enumerate(axs.flat):
@@ -280,7 +283,8 @@ plt.show()
 
 # The decomposition is still valid:
 
-new_A = qml.matrix(qml.Select([qml.RX(2 * th, 0) for th in theta], control=range(1, n)), wire_order=range(n))
+rx_ops = [qml.RX(2 * th, 0) for th in theta]
+new_A = qml.matrix(qml.Select(rx_ops, control=range(1, n)), wire_order=range(n))
 reconstructed_U = new_K_1 @ new_A @ new_K_2
 print(np.allclose(reconstructed_U, U))
 
@@ -385,7 +389,8 @@ U_1, phi, U_2 = demultiplex(u_1, u_2)
 # The demultiplexed matrices make up :math:`K_1=u_1\oplus u_2` from above:
 #
 
-demultiplex_A = qml.matrix(qml.Select([qml.RZ(-2 * p, 0) for p in phi], control=range(1, n)), wire_order=range(n))
+rz_ops = [qml.RZ(-2 * p, 0) for p in phi]
+demultiplex_A = qml.matrix(qml.Select(rz_ops, control=range(1, n)), wire_order=range(n))
 demultiplex_K_1 = np.block([[U_1, zero], [zero, U_1]])
 demultiplex_K_2 = np.block([[U_2, zero], [zero, U_2]])
 reconstructed_K_1 = demultiplex_K_1 @ demultiplex_A @ demultiplex_K_2
@@ -524,12 +529,13 @@ print(np.allclose(reconstructed_K_1, K_1))
 # elements.
 #
 # .. admonition:: Math detail: accidental/exceptional isomorphism
+#     :class: note
 #
-#    The fact that the Lie groups of special orthogonal matrices (:math:`SO(4)`) and
-#    single-qubit (special) unitaries on two qubits (:math:`SU(2)\times SU(2)`) are isomorphic
-#    is a so-called `accidental, or exceptional, isomorphism <https://en.wikipedia.org/wiki/Exceptional_isomorphism>`__.
-#    In general, :math:`SO(d)` is not isomorphic to two (or more) copies of some lower-dimensional
-#    unitary group(s).
+#     The fact that the Lie groups of special orthogonal matrices (:math:`SO(4)`) and
+#     single-qubit (special) unitaries on two qubits (:math:`SU(2)\times SU(2)`) are isomorphic
+#     is a so-called `accidental, or exceptional, isomorphism <https://en.wikipedia.org/wiki/Exceptional_isomorphism>`__.
+#     In general, :math:`SO(d)` is not isomorphic to two (or more) copies of some lower-dimensional
+#     unitary group(s).
 #
 # As the Cartan subalgebras for the Khaneja-Glaser decomposition are obtained by rotating the
 # canonical choices, they can be implemented in quantum circuits via the local rotations and
@@ -782,7 +788,8 @@ print(np.allclose(reconstructed_K_1, K_1))
 # 
 # Second, Shende et al. consider the stage at the recursion just before decomposing the two-qubit
 # unitaries, and with all multiplexed rotations left intact. They then recite the following
-# alternative decomposition of two-qubit unitaries:
+# alternative decomposition of two-qubit unitaries, where :math:`\Delta` is a diagonal unitary
+# operator:
 # 
 # .. figure:: ../_static/demonstration_assets/unitary_synthesis_kak/two_qubit_with_diagonal.png
 #    :align: center
@@ -791,7 +798,7 @@ print(np.allclose(reconstructed_K_1, K_1))
 #
 # Note that all two-qubit blocks in the QSD are separated by multiplexer controls, which commute
 # with diagonal matrices. Therefore we can start at the right-most block, decompose it into the
-# above form, and pull the diagonal to the left to absorb it into the second two-qubit
+# above form, and pull the diagonal :math:`\Delta` to the left to absorb it into the second two-qubit
 # block from the right. This block can then be decomposed into the above form again, and the
 # diagonal contribution can be merged into the third block from the right. Continuing this,
 # we find that we can decompose all two-qubit blocks into 2 CNOTs and 14 rotation gates,
