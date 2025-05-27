@@ -10,7 +10,7 @@ Further work also proposes a protocol for learning and sampling multivariate pro
 Crucial to their implementation of the learning models is the quantum Chebyshev transform which utilizes the quantum Fourier transform to allow for fast transformations between the standard and the Chebyshev basis.
 
 In this demo we will show how the quantum Chebyshev transform can be implemented in Pennylane. 
-To start, we'll describe what Chebyshev polynomials are, why you may want to use Chebyshev states, and what the quantum Chebyshev basis looks like.
+To start, we'll describe what Chebyshev polynomials are, including the classical discrete Chebyshev transform. After that, we'll look at the quantum Chebyshev basis and its transform.
 
 .. figure:: ../_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_quantum_chebyshev_transform.png
    :align: center
@@ -23,13 +23,14 @@ To start, we'll describe what Chebyshev polynomials are, why you may want to use
 What are Chebyshev polynomials?
 ---------------------------------------
 
-`Chebyshev polynomials <https://en.wikipedia.org/wiki/Chebyshev_polynomials>`__ of the first kind :math:`T_n(x)` are a set of orthogonal polynomials that are complete on the interval :math:`[-1,1]`. 
-The :math:`n` -th order Chebyshev polynomial is defined as 
+`Chebyshev polynomials <https://en.wikipedia.org/wiki/Chebyshev_polynomials>`__ of the first kind :math:`T_n(x)` are a set of orthogonal polynomials that are complete on the interval :math:`[-1,1]`. *Completeness* here means any function :math:`f(x)` on that interval can be expanded as a series in :math:`T_n(x)` up to order :math:`N` as :math:`f(x) = \sum_{j=0}^N a_j T_j(x)`.
+
+The :math:`n` -th order Chebyshev polynomial of the first kind is defined as 
 
 .. math::
   T_n(x) \equiv \cos(n \arccos(x))\,.
 
-We can write out the first few orders explicitly.
+Note there are more types of Chebyshev polynomials, but in this demo, we will only discuss those of the first kind. We can write out the first few orders explicitly.
 
 .. math::
   T_0(x) &= 1 \\
@@ -68,14 +69,48 @@ Note that the polynomials are normalized such that $T_n(1)=1$, and they satisfy 
       N/2 & k = \ell \neq 0\,.
     \end{cases}
 
-The Chebyshev polynomials have a lot of *nice* properties. 
-They are complete on the interval :math:`[-1,1]`, meaning any function :math:`f(x)` on the interval :math:`x\in [-1,1]` can be expanded as a series in :math:`T_n(x)` up to order :math:`N` as :math:`f(x) = \sum_{j=0}^N a_j T_j(x)`.
-For a general set of complete functions, to compute the expansion of a function in that set on a classical computer for a discrete number of sampling points would take :math:`\mathcal{O}(N^2)` operations  🐌. 
-However, because of the way the Chebyshev polynomials are defined in terms of cosine, one can define a `discrete Chebyshev transformation <https://en.wikipedia.org/wiki/Discrete_Chebyshev_transform>`__ that is related to the `discrete cosine transform <https://en.wikipedia.org/wiki/Discrete_cosine_transform>`__ to leverage the efficiency of the `fast-Fourier-transform <https://en.wikipedia.org/wiki/Fast_Fourier_transform>`__-style algorithms for expansion, which take :math:`\mathcal{O}(N \log N)` operations 🚀.
-This discrete Chebyshev transformation is sampled on the nodes of :math:`T_N(x)`, which are non-equidistant on the :math:`[-1,1]` interval. 
-This non-uniform sampling has more resolution at the boundary than in the middle, which can be a benefit if you are, for example, solving a differential equation and expect more interesting features at the boundary.
+The Chebyshev polynomials have a lot of *nice* properties that make them well suited as a basis for series expansion of a function on a real interval. They are often utilized in numerical integration and interpolation methods, where the `discrete Chebyshev transformation <https://en.wikipedia.org/wiki/Discrete_Chebyshev_transform>`__  is needed to map between the function evaluated on a grid of points and the coefficients of the Chebyshev expansion of that function. Let's take a look at the discrete transform.
 
-The quantum analogy of the discrete Chebyshev transform, the quantum Chebyshev transform, inherits the relation to the Fourier transform, allowing it to be designed efficiently by utilizing the `quantum Fourier transform <https://pennylane.ai/qml/demos/tutorial_qft/>`__ . 
+Discrete Chebyshev transform
+---------------------------------------
+A common definition of the discrete Chebyshev transform uses the grid of Chebyshev nodes, also known as the roots grid, as the sampling points. For a given function :math:`f(x)` sampled at :math:`N` nodes on the interval :math:`[-1,1]`, the transform computes the coefficents of that function expanded in Chebyshev polynomials evaluated on the grid. That is, the :math:`j` -th coefficient is, for :math:`j>0`
+
+.. math::
+    a_j = \frac{2}{N}\sum_{k=0}^{N-1} f(x_k) T_j(x_k)\,,
+
+and for :math:`j=0`, there is a slightly different normalization factor
+
+.. math::
+    a_0 = \frac{1}{N}\sum_{k=0}^{N-1} f(x_k)\,.
+
+The inverse of the transform is then just the series expansion evaluated on the grid
+
+.. math::
+    f(x_k) = \sum_{j=0}^{N-1} a_j T_j(x_k)\,.
+
+Since a function expanded in Chebyshev polynomials in this way will be sampled on the non-uniformly spaced Chebyshev nodes, it will have more resolution at the boundary than in the middle. This can be a benefit if you are, for example, solving a differential equation and expect more interesting features at the boundary.
+
+For a general set of complete functions, computing the expansion of a function in that set on a classical computer for a discrete number of sampling points would take :math:`\mathcal{O}(N^2)` operations  🐌. 
+However, because of the way the Chebyshev polynomials are defined in terms of cosine, the discrete Chebyshev transformation is related to the `discrete cosine transform <https://en.wikipedia.org/wiki/Discrete_cosine_transform>`__. This allows the discrete Chebyshev transform to be implemented in a way that leverages the efficiency of the `fast-Fourier-transform <https://en.wikipedia.org/wiki/Fast_Fourier_transform>`__-style algorithms for expansion, which take :math:`\mathcal{O}(N \log N)` operations 🚀. 
+
+We can see this relation by plugging in the definition of the Chebyshev polynomials into the inverse transform
+
+.. math::
+    f(x_k) = \sum_{j=0}^{N-1} a_j \cos(j \cos^{-1}(x_k))\,,
+
+then if we also use the definition of the nodes we obtain 
+
+.. math:: 
+    f(x_k) = \sum_{j=0}^{N-1} a_j \cos(\frac{j\pi}{N}(N + k + 1/2))\,.
+
+Finally, we can use the cyclical property of cosine to convert an :math:`j \pi` term in the argument to a :math:`(-1)^{j}` factor in the coefficient
+
+.. math:: 
+    f(x_k) = \sum_{j=0}^{N-1} a_j (-1)^{j}\cos(\frac{j\pi}{N}(k + 1/2))\,,
+
+Which looks just like a discrete cosine transform.
+
+The quantum analogy of the discrete Chebyshev transform, the quantum Chebyshev transform, inherits the relation to the Fourier transform, allowing it to be designed efficiently by utilizing the `quantum Fourier transform <https://pennylane.ai/qml/demos/tutorial_qft/>`__ . Next we will show how Chebyshev polynomials could be represented in a quantum state, before we describe the transform.
 
 
 Quantum Chebyshev basis
