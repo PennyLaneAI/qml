@@ -184,7 +184,7 @@ jobs:
       - name: Build demos
         run: |
           qml build \
-            --format json \
+            --format ${{ inputs.format }} \
             --execute \
             ${{ inputs.keep-going && '--keep-going' || '--no-keep-going' }} \
             ${{ inputs.quiet && '--quiet' || '--no-quiet' }} \
