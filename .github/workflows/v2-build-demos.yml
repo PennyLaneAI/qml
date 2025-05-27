@@ -211,7 +211,7 @@ jobs:
       - name: Download All Artifacts
         uses: actions/download-artifact@v4
         with:
-          path: _build/pack
+          path: _build/**
           pattern: ${{ needs.generate-build-variables.outputs.artifact-name }}-c*
           merge-multiple: true
         
@@ -220,7 +220,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ needs.generate-build-variables.outputs.artifact-name }}
-          path: _build/pack/*.zip
+          path: _build/**/*.zip
           retention-days: 1
           overwrite: true
       
