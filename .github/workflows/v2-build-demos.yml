@@ -194,7 +194,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ needs.generate-build-variables.outputs.artifact-name }}-c${{ matrix.chunk-index }}
-          path: _build/pack/*.zip
+          path: _build/**/*.zip
           retention-days: 1
 
   consolidate-artifacts:
