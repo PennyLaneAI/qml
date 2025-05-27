@@ -690,14 +690,9 @@ print(np.allclose(reconstructed_K_1, K_1))
 # Appendix: Gate counts
 # ---------------------
 #
-# TODO: VERIFY ROTATION GATE COUNTS
-#
 # Before concluding, let us count the gates in the three decompositions we discussed above.
 # We will start with the decompositions as they are and then will comment on optimizations
 # that reduce the CNOT count further.
-# We will consider :math:`U(d)` even if the authors of the original decompositions worked with
-# :math:`SU(d)`, and we put the global phase into the very first Cartan subgroup of the
-# recursive decompositions.
 # We will denote the CNOT (rotation gate) cost for a special unitary on :math:`n` qubits as 
 # :math:`c_n` (:math:`r_n`).
 #
@@ -712,7 +707,7 @@ print(np.allclose(reconstructed_K_1, K_1))
 # part into three CNOTs and three rotation gates.
 # Overall, we thus have :math:`c_2^{\text{KG}}=3` and :math:`r_2^{\text{KG}}=15`.
 #
-# For an arbitrary number of qubits :math:`n`, they decompose one special unitary
+# For an arbitrary number of qubits :math:`n`, Khaneja and Glaser decompose one special unitary
 # :math:`U\in SU(2^{n})` into four special unitaries on :math:`n-1` qubits, three 
 # :math:`(n-1)`-multiplexed :math:`R_Z` or :math:`R_X` rotations and a number of basis change
 # rotation gates. The multiplexers take :math:`2^{n-1}` CNOT gates and equally many rotation gates
@@ -760,8 +755,7 @@ print(np.allclose(reconstructed_K_1, K_1))
 # Without any optimizations, the QSD decomposes a unitary on :math:`n` qubits into four unitaries
 # on :math:`n-1` qubits and three :math:`(n-1)`-multiplexed single-qubit :math:`R_Z`
 # and :math:`R_Y` rotations. That is, we find the same behaviour as for the Khaneja-Glaser
-# decomposition if we had merged the basis rotations into the unitary blocks that are decomposed
-# in the subsequent step.
+# decomposition if we had merged the basis rotations into the smaller unitary blocks.
 # Correspondingly, we get the recursion relation :math:`x_n=4 x_{n-1} +3\cdot 2^{n-1}` for both,
 # the CNOT count and the number of rotation gates. Using the optimal two-qubit decomposition then
 # leads to
@@ -781,7 +775,7 @@ print(np.allclose(reconstructed_K_1, K_1))
 #    :alt: Decomposition of a multiplexed RY rotation on 3 qubits using CZ gates.
 #
 # As the last ``CZ`` gate is (block) diagonal, it can be absorbed into the multiplexed
-# :math:`SU(2^{n-1})` operation on the right before decomposing it with the type-A decomposition.
+# :math:`SU(2^{n-1})` operation on the right, before decomposing it with the type-A decomposition.
 # This changes the recursion relation to :math:`c_n = 4 c_{n-1} + 3\cdot 2^{n-1} - 1` and
 # leaves the rotation count unchanged. The solution for the CNOT count is 
 # :math:`c_n = \tfrac{13}{24} 4^n -3\cdot 2^{n-1} + \tfrac{1}{3}`.
@@ -795,9 +789,9 @@ print(np.allclose(reconstructed_K_1, K_1))
 #    :width: 75%
 #    :alt: Decomposition of a two-qubit unitary with a diagonal and two CNOTs.
 #
-# Note that all two-qubit blocks are separated by multiplexer controls, which commute with
-# diagonal matrices. Therefore we can start at the right-most block, decompose it into the
-# above form, and pull the diagonal through to the left to absorb it into the second two-qubit
+# Note that all two-qubit blocks in the QSD are separated by multiplexer controls, which commute
+# with diagonal matrices. Therefore we can start at the right-most block, decompose it into the
+# above form, and pull the diagonal to the left to absorb it into the second two-qubit
 # block from the right. This block can then be decomposed into the above form again, and the
 # diagonal contribution can be merged into the third block from the right. Continuing this,
 # we find that we can decompose all two-qubit blocks into 2 CNOTs and 14 rotation gates,
@@ -845,6 +839,60 @@ print(np.allclose(reconstructed_K_1, K_1))
 #  
 #     c_n^{\text{ZXZ,opt}} &= \tfrac{22}{48} 4^n -3\cdot 2^{n-1} + \tfrac{5}{3},\\
 #     r_n^{\text{ZXZ,opt}} &= \tfrac{5}{4} 4^n - 3\cdot 2^{n-1} + 1.
+#
+# We note once more that the transformation into the special block form that is eponymous to
+# the Block-ZXZ decomposition does not yield any CNOT or rotation gate reductions. This is
+# because the controlled gates obtained through the transformation are decomposed like
+# multiplexers, leading to the same cost as before the transformation.
+#
+# To conclude, we plot the CNOT and rotation gate counts, comparing them to their respective
+# lower bounds
+#
+# .. math::
+#
+#     c_n^{\text{min}} &= \tfrac{1}{4} (4^n - 3n - 1),\\
+#     r_n^{\text{min}} &= 4^n - 1.
+#
+# The former is derived by counting the independent degrees of freedom one can add per CNOT
+# gate in a circuit and equating this with the dimension of the group, :math:`4^n-1`.
+# This dimension then also is the lower bound for the rotation count.
+#
+
+n = np.arange(2, 11)
+c_n_KG = 11/16 * 4 ** n - 3 * 2**(n-1) - 2
+r_n_KG = 21/16 * 4 ** n - 3 * 2**(n-1)
+
+c_n_QSD = 9/16 * 4 ** n - 3 * 2**(n-1)
+r_n_QSD = 21/16 * 4 ** n - 3 * 2**(n-1)
+
+c_n_QSD_opt = 23/48 * 4 ** n - 3 * 2**(n-1) + 4/3
+r_n_QSD_opt = 5 / 4 * 4 ** n - 3 * 2**(n-1) + 1
+
+c_n_ZXZ = 11/24 * 4 ** n - 3 * 2**(n-1) + 5/3
+r_n_ZXZ = 5 / 4 * 4 ** n - 3 * 2**(n-1) + 1
+
+c_n_min = 1/4 * (4**n - 3 * n - 1)
+r_n_min = 4**n - 1
+
+all_c_n = [c_n_KG, c_n_QSD, c_n_QSD_opt, c_n_ZXZ, c_n_min]
+all_r_n = [r_n_KG, r_n_QSD, r_n_QSD_opt, r_n_ZXZ, r_n_min]
+labels = ["KG", "QSD", "QSD, opt", "Block-ZXZ", "Lower bound"]
+colors = ["#DE8900", "#4D53C8", "#44ACE8", "#D7333B", "#007D33"]
+
+
+fig, axs = plt.subplots(1, 2, figsize=(12, 4))
+for c_n, r_n, label, color in zip(all_c_n, all_r_n, labels, colors):
+    axs[0].plot(n, c_n / 4**n, label=label, color=color, lw=2)
+    ls = ":" if label in ["QSD", "Block-ZXZ"] else "-"
+    axs[1].plot(n, r_n / 4**n, label=label, color=color, ls=ls, lw=2)
+
+ylabels = ["Number of CNOT gates ($/4^n$)", "Number of rotations ($/4^n$)"]
+for ax, ylabel in zip(axs, ylabels):
+    ax.legend()
+    ax.set_xlabel("Number of qubits $n$")
+    ax.set_ylabel(ylabel)
+
+######################################################################
 # 
 # About the author
 # ----------------
