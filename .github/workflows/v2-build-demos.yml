@@ -30,6 +30,14 @@ on:
         required: false
         type: string
         default: ''
+      format:
+        description: Whether to build HTML or JSON (default) output.
+        type: choice
+        options:
+          - json
+          - html
+        required: false
+        default: json
       keep-going:
         description: Keep going if a demo fails to build.
         required: false
@@ -76,6 +84,14 @@ on:
         required: false
         type: string
         default: ''
+      format:
+        description: Whether to build HTML or JSON (default) output.
+        type: choice
+        options:
+          - json
+          - html
+        required: false
+        default: json
       keep-going:
         description: Keep going if a demo fails to build.
         required: false
