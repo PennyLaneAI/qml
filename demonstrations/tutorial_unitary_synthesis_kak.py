@@ -690,6 +690,8 @@ print(np.allclose(reconstructed_K_1, K_1))
 # Appendix: Gate counts
 # ---------------------
 #
+# TODO: VERIFY ROTATION GATE COUNTS
+#
 # Before concluding, let us count the gates in the three decompositions we discussed above.
 # We will start with the decompositions as they are and then will comment on optimizations
 # that reduce the CNOT count further.
