@@ -552,8 +552,13 @@ plt.show()
 # machinery. We can then compare our trained and untrained samples with the ground truth through a
 # histogram of the bitstring weights and evaluate the distributions.
 #
-samples_untrained = circuit.sample(params_init, 1000)
-samples_trained = circuit.sample(trainer.final_params, 1000)
+samples_untrained = np.asarray(circuit.sample(params_init, 1000))
+samples_trained = np.asarray(circuit.sample(trainer.final_params, 1000))
+
+if samples_untrained.ndim == 1:
+    samples_untrained = samples_untrained[:, None]
+if samples_trained.ndim == 1:
+    samples_trained = samples_trained[:, None]
 
 plt.hist(np.sum(samples_untrained, axis=1), bins=20, range=[0,20], alpha=0.5, label = 'untrained circuit')
 plt.hist(np.sum(samples_trained, axis=1), bins=20, range=[0,20], alpha=0.5, label = 'trained circuit')
