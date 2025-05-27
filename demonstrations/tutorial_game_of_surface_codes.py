@@ -4,7 +4,7 @@ r"""A Game of Surface Codes: Large-Scale Quantum Computing with Lattice Surgery
 In surface-code based fault tolerant quantum computing architectures, 
 T gates are typically implemented via injected `magic states <https://pennylane.ai/qml/glossary/what-are-magic-states>`__.
 The layout and design of the architecture plays a crucial role in how fast a magic state can be reliably produced and consumed for computation.
-The game of surface codes [#Litinksi]_ allows us to reason about such space-time tradeoffs in architecture designs, without having to get into
+The game of surface codes [#Litinski]_ allows us to reason about such space-time tradeoffs in architecture designs, without having to get into
 the nitty-gritty details of surface code physics. In this demo, we will see how different designs can lead to faster computations at the cost of involving more qubits and vice versa.
 
 .. figure:: ../_static/hero_illustrations/Hero_Game_of_Surface_Codes.png
