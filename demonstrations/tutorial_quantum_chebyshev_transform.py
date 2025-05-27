@@ -54,7 +54,7 @@ These are known as the `Chebyshev nodes <https://en.wikipedia.org/wiki/Chebyshev
     :align: center
     :width: 100%
     :target: javascript:void(0)
-    :alt: Plot of first six Chebyshev polynomials, with nodes denser near the boundary.
+    :alt: Plot of first six Chebyshev polynomials, with nodes densely packed near the boundary.
 
     Figure 2. The first six Chebyshev polynomials, along with their corresponding nodes.
 
@@ -140,7 +140,7 @@ Designing the transform circuit
 Let's start from the end and look at the circuit diagram generated from the code we want to write. 
 An auxiliary qubit is required, which will be the :math:`0` indexed qubit, and the rest compose the state :math:`|x\rangle` which starts in the computational basis, shown below as :math:`|\psi\rangle`. We demonstrate for :math:`N=4` non-auxiliary qubits. 
 
-.. figure:: ../_static/demonstration_assets/quantum_chebyshev_transform/QChT_circuit_diagram.png
+.. figure:: ../_static/demonstration_assets/quantum_chebyshev_transform/qcht_circuit_diagram.png
     :align: center
     :width: 100%
     :target: javascript:void(0)
