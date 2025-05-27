@@ -610,14 +610,26 @@ print(np.allclose(reconstructed_K_1, K_1))
 #    :alt: Transformations from a type-AIII KAK decomposed circuit to a circuit in Block-ZXZ form.
 #
 # Afterwards, the block-diagonal matrices can be decomposed with the type-A decompositions, and
-# optimizations from the QSD can be applied, complemented by the merger of two CZ gates into
-# the control structure of a multiplexer (see gate counts appendix and Sec. 5 of [#Krol_BlockZXZ]_).
+# optimizations from the QSD can be applied, in a slightly enhanced manner
+# (see gate counts appendix and Sec. 5 of [#Krol_BlockZXZ]_).
+# 
+# Crucially, the transformation above appears to simplify the circuit structure by turning
+# some blocks into the identity, but this has no effect on the CNOT count. The enhanced
+# optimization performed by Krol and Al-Ars also applies to the more generic form after the
+# recursive Cartan decomposition.
 #
-# The decomposition of two-qubit unitaries is the same as for the QSD. TO BE VERIFIED
-#
-
-######################################################################
-#
+# Conclusion
+# ----------
+# 
+# In this demo we learned how to chain KAK, or Cartan, decompositions together in order to obtain recursive
+# decomposition techniques. In particular, we found that three important decompositions from
+# the literature take this form, and even use Cartan decompositions of the same type to recurse
+# on. Ultimately, the difference in structure only stems from basis rotations of the Cartan
+# subgroups and some manual optimization tricks, which are closely related for the Quantum Shannon
+# decomposition and the Block-ZXZ decomposition.
+# 
+# If you are interested, take a read through the appendix which discusses the gate counts of the
+# three decompositions and the mentioned optimization steps in detail.
 #
 # References
 # ----------
