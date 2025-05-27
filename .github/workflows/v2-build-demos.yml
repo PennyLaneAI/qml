@@ -31,13 +31,10 @@ on:
         type: string
         default: ''
       format:
-        description: Whether to build HTML or JSON (default) output.
-        type: choice
-        options:
-          - json
-          - html
+        description: Whether to build 'html' or 'json' (default) output.
+        type: string
         required: false
-        default: json
+        default: 'json'
       keep-going:
         description: Keep going if a demo fails to build.
         required: false
