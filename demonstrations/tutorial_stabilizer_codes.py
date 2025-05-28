@@ -117,15 +117,13 @@ print("|111> component: ", encode_qnode(alpha, beta)[7])
 #
 # .. math::
 #
-#     \begin{table}[]
-#       \begin{tabular}{|c|c|c|}
+#    \begin{tabular}{|c|c|c|}
 #       \hline
 #       \textbf{Error} & \textbf{Syndrome 0} & \textbf{Syndrome 1} \\ \hline
 #           $X_0$          & $1$                 & $0$                 \\ \hline
 #           $X_1$          & $1$                 & $1$                 \\ \hline
 #           $X_2$          & $0$                 & $1$                 \\ \hline
-#       \end{tabular}
-#       \end{table}
+#     \end{tabular}
 #
 # Let us verify this by implementing the syndrome measurement in PennyLane
 
