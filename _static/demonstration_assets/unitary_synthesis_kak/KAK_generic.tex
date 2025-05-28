@@ -1,0 +1,49 @@
+\documentclass[]{standalone}
+\usepackage{amsmath,quantikz,graphicx,xcolor}
+
+\begin{document}
+% \begin{align*}
+\begin{quantikz}
+    & \gate[2]{G} & \\
+    &&
+\end{quantikz}
+=
+\begin{quantikz}
+    & \gate[2]{K_2} & \gate[2]{A} & \gate[2]{K_1} & \\
+    &&&&
+\end{quantikz}
+% \end{align*}
+% Iterate the above:
+
+% \begin{align*}
+% \begin{quantikz}
+%     & \ctrl[open]{1} & \ctrl[open]{1} & \ctrl{1} & \ctrl{1} & \\
+%     & \ctrl[open]{1} & \ctrl{1} & \ctrl[open]{1} & \ctrl{1} & \\
+%     & \gate{A} & \gate{B} & \gate{C} & \gate{D} &
+% \end{quantikz}
+% &=
+% \begin{quantikz}
+%     & \ctrl[open]{1} & \ctrl{1} & \\
+%     & \gate[2]{A\oplus B} & \gate[2]{C\oplus D} & \\
+%     & & &
+% \end{quantikz}\\
+% &=
+% \begin{quantikz}
+%     & & \ctrl{1} & \\
+%     & \gate[2]{A\oplus B} & \gate[2]{A^\dagger C\oplus B^\dagger D} & \\
+%     & & &
+% \end{quantikz}\\
+% &=
+% \begin{quantikz}
+%     & & & \ctrl{1} & \ctrl{1} & \\
+%     & \ctrl[open]{1} & \ctrl{1} & \ctrl[open]{1} & \ctrl{1} & \\
+%     & \gate{A} & \gate{B} & \gate{A^\dagger C} & \gate{B^\dagger D} &
+% \end{quantikz}\\
+% &=
+% \begin{quantikz}
+%     & & & \ctrl{2} & \ctrl{1} & \\
+%     & & \ctrl{1} & & \ctrl{1} & \\
+%     & \gate{A} & \gate{A^\dagger B} & \gate{A^\dagger C} & \gate{C^\dagger A B^\dagger D} &
+% \end{quantikz}
+% \end{align*}
+\end{document}

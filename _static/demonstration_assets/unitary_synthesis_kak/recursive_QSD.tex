@@ -1,0 +1,58 @@
+\documentclass[]{standalone}
+\usepackage{amsmath,quantikz,graphicx,xcolor}
+
+
+\begin{document}
+\begin{quantikz}
+    & & \gate[3]{U(2^n)} &\\
+    & & & \\ 
+    & \qwbundle{n-2} & &
+\end{quantikz}
+=
+\scalebox{0.75}{
+\begin{quantikz}
+    & & & & & & & & & \gate{R_Z}\wire[d][2]{q} &
+    & & & & & & & \gate{R_Y}\wire[d][2]{q} & & & 
+    & & & & & \gate{R_Z}\wire[d][2]{q} & & & & &
+    & & & \\
+    & & & \gate{R_Z}\wire[d]{q} & & \gate{R_Y}\wire[d]{q} & & \gate{R_Z}\wire[d]{q} & & |[operator]| &
+    & \gate{R_Z}\wire[d]{q} & & \gate{R_Y}\wire[d]{q} & & \gate{R_Z}\wire[d]{q} & & |[operator]| & & \gate{R_Z}\wire[d]{q} &
+    & \gate{R_Y}\wire[d]{q} & & \gate{R_Z}\wire[d]{q} & & |[operator]| & & \gate{R_Z}\wire[d]{q} & & \gate{R_Y}\wire[d]{q} &
+    & \gate{R_Z}\wire[d]{q} & & \\ 
+    & \qwbundle{n-2} & \gate{} & |[operator]| & \gate{} & |[operator]| & \gate{} &|[operator]| & \gate{} & |[operator]| &
+    \gate{} & |[operator]| & \gate{} & |[operator]| & \gate{} & |[operator]| & \gate{} & |[operator]| & \gate{} & |[operator]| &
+    \gate{} & |[operator]| & \gate{} & |[operator]| & \gate{} & |[operator]| & \gate{} & |[operator]| & \gate{} & |[operator]| &
+    \gate{} &|[operator]| & \gate{} & 
+\end{quantikz}
+}
+
+% \begin{quantikz}
+%     & & \gate[4]{U(2^n)} &\\
+%     & & & \\ 
+%     & & & \\
+%     & \qwbundle{n-3} & &
+% \end{quantikz}
+% =
+% \scalebox{0.75}{
+% \begin{quantikz}
+%     & & & & & & & & & \gate{R_Z}\wire[d][3]{q} &
+%     & & & & & & & \gate{R_Y}\wire[d][3]{q} & & & 
+%     & & & & & \gate{R_Z}\wire[d][3]{q} & & & & &
+%     & & & \\
+%     & & & \gate{R_Z}\wire[d][2]{q} & & \gate{R_Y}\wire[d][2]{q} & & \gate{R_Z}\wire[d][2]{q} & & |[operator]| &
+%     & \gate{R_Z}\wire[d][2]{q} & & \gate{R_Y}\wire[d][2]{q} & & \gate{R_Z}\wire[d][2]{q} & & |[operator]| & & \gate{R_Z}\wire[d][2]{q} &
+%     & \gate{R_Y}\wire[d][2]{q} & & \gate{R_Z}\wire[d][2]{q} & & |[operator]| & & \gate{R_Z}\wire[d][2]{q} & & \gate{R_Y}\wire[d][2]{q} &
+%     & \gate{R_Z}\wire[d][2]{q} & & \\ 
+%     & & \gate[2]{} & |[operator]| & \gate[2]{} & |[operator]| & \gate[2]{} &|[operator]| & \gate[2]{} & |[operator]| &
+%     \gate[2]{} & |[operator]| & \gate[2]{} & |[operator]| & \gate[2]{} & |[operator]| & \gate[2]{} & |[operator]| & \gate[2]{} & |[operator]| &
+%     \gate[2]{} & |[operator]| & \gate[2]{} & |[operator]| & \gate[2]{} & |[operator]| & \gate[2]{} & |[operator]| & \gate[2]{} & |[operator]| &
+%     \gate[2]{} &|[operator]| & \gate[2]{} & \\
+%     & \qwbundle{n-3} & & |[operator]| & & |[operator]| & & |[operator]| & & |[operator]| &
+%     & |[operator]| & & |[operator]| & & |[operator]| & & |[operator]| & & |[operator]| &
+%     & |[operator]| & & |[operator]| & & |[operator]| & & |[operator]| & & |[operator]| &
+%     & |[operator]| & & 
+% \end{quantikz}
+% }
+
+
+\end{document}
