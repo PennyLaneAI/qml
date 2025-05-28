@@ -253,7 +253,20 @@ print("Fidelity if error on wire 2: ", qml.math.fidelity(encoded_state, error_co
 # **holds true only for the logical codewords.** For any other three-qubit basis states, at least one of these operators will have eigenvalue 
 # :math:`-1`, as shown in the table below.
 #
-# **INSERT TABLE**
+# .. math::
+#
+#     \begin{align*}
+#
+#      ZZI \vert 000 \rangle = + 1 \vert 000 \rangle \qquad IZZ \vert 000 \rangle + 1 \vert 000 \rangle \\
+#      ZZI \vert 001 \rangle = + 1 \vert 001 \rangle \qquad IZZ \vert 001 \rangle - 1 \vert 001 \rangle \\
+#      ZZI \vert 010 \rangle = - 1 \vert 010 \rangle \qquad IZZ \vert 010 \rangle - 1 \vert 010 \rangle \\
+#      ZZI \vert 011 \rangle = - 1 \vert 011 \rangle \qquad IZZ \vert 011 \rangle + 1 \vert 011 \rangle \\
+#      ZZI \vert 100 \rangle = - 1 \vert 100 \rangle \qquad IZZ \vert 100 \rangle + 1 \vert 100 \rangle \\
+#      ZZI \vert 101 \rangle = - 1 \vert 101 \rangle \qquad IZZ \vert 101 \rangle - 1 \vert 101 \rangle \\
+#      ZZI \vert 110 \rangle = + 1 \vert 110 \rangle \qquad IZZ \vert 110 \rangle - 1 \vert 110 \rangle \\
+#      ZZI \vert 111 \rangle = + 1 \vert 111 \rangle \qquad IZZ \vert 111 \rangle + 1 \vert 111 \rangle \\
+#
+#    \end{align*}
 #
 # This gives us a new option for characterizing error correction codes. What if instead of building codewords and trying to find
 # the syndrome measurement operators from them, we went the the other way round? Namely, we could start by specifying a set of operators, find the states
