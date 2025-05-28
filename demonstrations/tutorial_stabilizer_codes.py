@@ -94,7 +94,7 @@ print("|111> component: ", encode_qnode(alpha, beta)[7])
 #     X_2 \vert \bar{\psi}\rangle = \alpha \vert 010 \rangle + \beta \vert 101 \rangle
 #
 # If we are sure that **only one bit-flip error occurred**, and since only the superpositions of :math:`\alpha \vert 000 \rangle` and 
-# :math:`\alpha \vert 111 \rangle` are allowed, we can deduce that error occured on the second qubit and we can fix this error by flipping it back. But there is a problem with this reasoning: 
+# :math:`\alpha \vert 111 \rangle` are allowed, we can deduce that error occurred on the second qubit and we can fix this error by flipping it back. But there is a problem with this reasoning: 
 # in a quantum circuit, we do not have access to the state. To know that a flip did occur,
 # we have to measure the state. But this collapses the state of the qubit, rendering it useless for future calculations. Let us see how to get around this.
 #
@@ -115,11 +115,17 @@ print("|111> component: ", encode_qnode(alpha, beta)[7])
 # The result of the measurements is known as the **syndrome**. It will tell us whether one of the qubits in :math:`\vert \bar{\psi} \rangle` was flipped and moreover,
 # it can tell us which qubit was flipped. The following table shows how to interpret the syndromes.
 #
-# .. figure:: ../_static/demonstration_assets/stabilizer_codes/syndrome_table3.png
-#    :align: center
-#    :width: 100%
+# .. math::
 #
-#    ..
+#     \begin{table}[]
+#       \begin{tabular}{|c|c|c|}
+#       \hline
+#       \textbf{Error} & \textbf{Syndrome 0} & \textbf{Syndrome 1} \\ \hline
+#           $X_0$          & $1$                 & $0$                 \\ \hline
+#           $X_1$          & $1$                 & $1$                 \\ \hline
+#           $X_2$          & $0$                 & $1$                 \\ \hline
+#       \end{tabular}
+#       \end{table}
 #
 # Let us verify this by implementing the syndrome measurement in PennyLane
 
