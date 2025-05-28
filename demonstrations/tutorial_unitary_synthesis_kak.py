@@ -459,10 +459,10 @@ print(np.allclose(reconstructed_K_1, K_1))
 #
 # .. math::
 #
-#     \mathcal{S}=\{\mathbb{I}_4, X\otimes X, Y\otimes Y, Z\otimes Z\},
+#     \mathcal{S}=\{X\otimes X, Y\otimes Y, Z\otimes Z\},
 #
-# which span an Abelian four-dimensional algebra
-# :math:`\mathfrak{a}_{\text{base}}=\operatorname{span}_{i\mathbb{R}}\mathcal{S}`.
+# which together with :math:`\mathbb{I}_4`span an Abelian four-dimensional algebra
+# :math:`\mathfrak{a}_{\text{base}}=\operatorname{span}_{i\mathbb{R}}\mathcal{S}\cup\{\mathbb{I}\}`.
 # This algebra is related to the algebra of diagonal matrices via the
 # so-called "magic basis" rotation:
 #
@@ -510,6 +510,14 @@ print(np.allclose(reconstructed_K_1, K_1))
 #     \mathfrak{a}'_{\text{A}}(n)
 #     =\operatorname{span}_{i\mathbb{R}}
 #     \{Z\otimes \{\mathbb{I},X\}^{\otimes (n-3)}\otimes \mathcal{S}\}.
+#
+# Collecting the type-AIII and type-A decompositions into one, the Khaneja-Glaser decomposition
+# takes the following form:
+#
+# .. figure:: ../_static/demonstration_assets/unitary_synthesis_kak/KGD.png
+#    :align: center
+#    :width: 95%
+#    :alt: Khaneja-Glaser decomposition of the unitary group on n qubits.
 #
 # Terminating the recursion: two-qubit decomposition
 # ++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -591,7 +599,7 @@ print(np.allclose(reconstructed_K_1, K_1))
 #    :alt: Recursively applied Quantum Shannon decomposition of the unitary group on n qubits.
 #
 # Here, each of the simple boxes represents an arbitrary :math:`U(2^{n-2})` gate.
-# 
+#
 # Before moving on, it is important to mention that the QSD achieves its CNOT counts as given in
 # Tab. 1 of [#Shende_QSD]_ by ultimately decomposing :math:`U(4)` with a standard 3-CNOT circuit as
 # used for `two-qubit synthesis <https://pennylane.ai/compilation/two-qubit-synthesis>`__, see
@@ -627,14 +635,14 @@ print(np.allclose(reconstructed_K_1, K_1))
 #
 # Conclusion
 # ----------
-# 
+#
 # In this demo we learned how to chain KAK, or Cartan, decompositions together in order to obtain recursive
 # decomposition techniques. In particular, we found that three important decompositions from
 # the literature take this form, and even use Cartan decompositions of the same types.
 # Ultimately, the difference in structure only stems from basis rotations of the Cartan
 # subgroups and some manual optimization tricks, which are closely related for the Quantum Shannon
 # decomposition and the Block-ZXZ decomposition.
-# 
+#
 # If you are interested, take a read through the appendix which discusses the gate counts of the
 # three decompositions and the mentioned optimization steps in detail.
 #
@@ -660,7 +668,7 @@ print(np.allclose(reconstructed_K_1, K_1))
 #     `2403.13692 <https://doi.org/10.48550/arXiv.2403.13692>`__.
 #
 # .. [#Mansky_Linnhoff-Popien]
-# 
+#
 #     Maximilian Balthasar Mansky, Santiago Londoño Castillo, Victor Ramos Puigvert, Claudia Linnhoff-Popien (2023).
 #     *Near-optimal quantum circuit construction via Cartan decomposition.*
 #     arXiv preprint `2212.12934 <https://arxiv.org/abs/2212.12934>`__.
@@ -703,7 +711,7 @@ print(np.allclose(reconstructed_K_1, K_1))
 # Before concluding, let us count the gates in the three decompositions we discussed above.
 # We will start with the decompositions as they are and then will comment on optimizations
 # that reduce the CNOT count further.
-# We will denote the CNOT (rotation gate) cost for a special unitary on :math:`n` qubits as 
+# We will denote the CNOT (rotation gate) cost for a special unitary on :math:`n` qubits as
 # :math:`c_n` (:math:`r_n`).
 #
 # Khaneja-Glaser decomposition
@@ -718,12 +726,12 @@ print(np.allclose(reconstructed_K_1, K_1))
 # Overall, we thus have :math:`c_2^{\text{KG}}=3` and :math:`r_2^{\text{KG}}=15`.
 #
 # For an arbitrary number of qubits :math:`n`, Khaneja and Glaser decompose one special unitary
-# :math:`U\in SU(2^{n})` into four special unitaries on :math:`n-1` qubits, three 
+# :math:`U\in SU(2^{n})` into four special unitaries on :math:`n-1` qubits, three
 # :math:`(n-1)`-multiplexed :math:`R_Z` or :math:`R_X` rotations and a number of basis change
 # rotation gates. The multiplexers take :math:`2^{n-1}` CNOT gates and equally many rotation gates
 # each (see info box in QSD section). The basis change rotations are composed of six layers of
 # Hadamard gates on :math:`n-3` qubits and six applications of :math:`E` or :math:`E^\dagger`.
-# 
+#
 # At this point, we can either decide to merge those rotations into the :math:`SU(2^{n-1})` blocks,
 # or to keep them in the decomposition. For the former, we get the `unoptimized` gate counts of
 # the QSD below. For the latter, we note that a circuit to implement :math:`E` is given by
@@ -739,7 +747,7 @@ print(np.allclose(reconstructed_K_1, K_1))
 # Overall, we obtain the recursion relations
 #
 # .. math ::
-#     
+#
 #     c_n^{\text{KG}} &= 4 c_{n-1}^{\text{KG}} + 3\cdot 2^{n-1} + 6,\\
 #     r_n^{\text{KG}} &= 4 r_{n-1}^{\text{KG}} + 3\cdot 2^{n-1}.
 #
@@ -752,7 +760,7 @@ print(np.allclose(reconstructed_K_1, K_1))
 #
 #     c_n^{\text{KG}} &= \frac{11}{16} 4^n - 3\cdot 2^{n-1} - 2,\\
 #     r_n^{\text{KG}} &= \frac{21}{16} 4^n - 3\cdot 2^{n-1}.
-# 
+#
 # Note that some references give the CNOT count for the Khaneja-Glaser decomposition as
 # :math:`\tilde{c}_n^{\text{KG}}=\tfrac{21}{16} 4^n - 3(n 2^{n-2} + 2^n)`, based on a decomposition
 # in [#Mansky_Linnhoff-Popien]_.
@@ -787,14 +795,14 @@ print(np.allclose(reconstructed_K_1, K_1))
 # As the last ``CZ`` gate is (block) diagonal, it can be absorbed into the multiplexed
 # :math:`SU(2^{n-1})` operation on the right, before decomposing it with the type-A decomposition.
 # This changes the recursion relation to :math:`c_n = 4 c_{n-1} + 3\cdot 2^{n-1} - 1` and
-# leaves the rotation count unchanged. The solution for the CNOT count is 
+# leaves the rotation count unchanged. The solution for the CNOT count is
 # :math:`c_n = \tfrac{13}{24} 4^n -3\cdot 2^{n-1} + \tfrac{1}{3}`.
-# 
+#
 # Second, Shende et al. consider the stage at the recursion just before decomposing the two-qubit
 # unitaries, and with all multiplexed rotations left intact. They then recite the following
 # alternative decomposition of two-qubit unitaries, where :math:`\Delta` is a diagonal unitary
 # operator:
-# 
+#
 # .. figure:: ../_static/demonstration_assets/unitary_synthesis_kak/two_qubit_with_diagonal.png
 #    :align: center
 #    :width: 75%
@@ -811,7 +819,7 @@ print(np.allclose(reconstructed_K_1, K_1))
 # CNOTs and rotation gates, arriving at
 #
 # .. math::
-#  
+#
 #     c_n^{\text{QSD,opt}} &= \tfrac{23}{48} 4^n -3\cdot 2^{n-1} + \tfrac{4}{3},\\
 #     r_n^{\text{QSD,opt}} &= \tfrac{5}{4} 4^n - 3\cdot 2^{n-1} + 1.
 #
@@ -832,7 +840,7 @@ print(np.allclose(reconstructed_K_1, K_1))
 #    :align: center
 #    :width: 75%
 #    :alt: Optimization of the Block-ZXZ decomposition to remove two CNOT gates.
-# 
+#
 # We first pulled out Hadamards from the middle multiplexed :math:`R_X` rotation, making it an
 # :math:`R_Z` rotation instead, and recognized that the middle three gates form a multiplexed
 # :math:`SU(2^{n-1})` gate (green). Then we inserted two CNOTs to the left and right of the first
@@ -847,7 +855,7 @@ print(np.allclose(reconstructed_K_1, K_1))
 # savings from the second step (see QSD), we obtain
 #
 # .. math::
-#  
+#
 #     c_n^{\text{ZXZ,opt}} &= \tfrac{22}{48} 4^n -3\cdot 2^{n-1} + \tfrac{5}{3},\\
 #     r_n^{\text{ZXZ,opt}} &= \tfrac{5}{4} 4^n - 3\cdot 2^{n-1} + 1.
 #
@@ -904,7 +912,7 @@ for ax, ylabel in zip(axs, ylabels):
     ax.set_ylabel(ylabel)
 
 ######################################################################
-# 
+#
 # About the author
 # ----------------
 #
