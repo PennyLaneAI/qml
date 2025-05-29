@@ -12,7 +12,7 @@ jobs:
   build_master:
     uses: ./.github/workflows/v2-build-demos.yml
     with:
-      ref: build-branch-master
+      ref: master
       dev: false
       save-artifact: true
       artifact-name: build-branch-master
