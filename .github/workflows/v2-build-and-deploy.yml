@@ -25,7 +25,7 @@ on:
         required: true
         type: choice
       demos:
-        description: Demos to build and deploy, space-separated list of slugs (e.g. "demo1 demo2 demo3"), or leave empty for all demos.
+        description: Demos to build and deploy, space-separated list of slugs (e.g. demo1 demo2 demo3), or leave empty for all demos.
         required: false
         type: string
       as-previews:
@@ -98,4 +98,5 @@ jobs:
     with:
       environment: ${{ github.event.inputs.environment }}
       artifact-name: build-and-deploy-${{ github.event.inputs.target }}
+      workflow-run-id: ${{ github.run_id }}
       preview: ${{ github.event.inputs.as-previews == 'true' }}
