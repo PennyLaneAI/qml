@@ -426,6 +426,12 @@ print(classify_pauli(X(0)@Y(1)@Z(2), logical_ops, generators, 3))
 
 ##############################################################################
 #
+# .. note::
+#     In the literature, you may have come across an error correction code being called an ":math:`[n,k]`-stabilizer code." In this notation, the number :math:`n` represents
+#     the number of physical qubit used to encode the logical qubit, and :math:`k` is the number of logical qubits and it is 
+#     equal to :math:`1` for all the codes in this demo. It is possible to show that the number of stabilizer generators :math:`m`
+#     is related to :math:`n` and :math:`k` via :math: `m = n - k.`
+#
 # Five-qubit stabilizer code
 # ---------------------------
 #
@@ -544,7 +550,6 @@ for wire in (0, 1, 2, 3, 4):
 #
 # The syndrome table is printed, and with we can apply the necessary operators to fix the corresponding Pauli errors. The script above is straightforward
 # to generalize to any valid set of stabilizers. 
-#
 #
 # References
 # -----------
