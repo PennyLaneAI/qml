@@ -909,7 +909,7 @@ labels = ["KG", "QSD", "QSD, opt", "Block-ZXZ", "Lower bound"]
 colors = ["#DE8900", "#4D53C8", "#44ACE8", "#D7333B", "#007D33"]
 
 
-fig, axs = plt.subplots(1, 2)
+fig, axs = plt.subplots(1, 2, figsize=(12, 5))
 for c_n, r_n, label, color in zip(all_c_n, all_r_n, labels, colors):
     axs[0].plot(n, c_n / 4**n, label=label, color=color, lw=2)
     ls = ":" if label in ["QSD", "Block-ZXZ"] else "-"
