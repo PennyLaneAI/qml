@@ -41,33 +41,30 @@ sections.
 # computationally tractable and properly captures the essential physics of the problem. The
 # effective integrals :math:`t, v` are obtained from first-principles calculations [#Galli2]_.
 #
+# Implementation
+# --------------
 # A QDET simulation typically starts by obtaining a meanfield approximation of the whole system
 # using efficient quantum chemistry methods such as density functional theory (DFT). These
 # calculations provide a set of orbitals which can be partitioned into impurity and bath orbitals.
 # The effective Hamiltonian is constructed from the impurity orbitals, which is subsequently solved
 # by using either a high accuracy classical method or a quantum algorithm. Let's implement these
-# steps for an example!
-#
-# Implementation
-# --------------
-# We implement QDET to compute the excitation energies of a negatively charged nitrogen-vacancy
-# defect in diamond.
+# steps for an example! We implement QDET to compute the excitation energies of a negatively charged
+# nitrogen-vacancy defect in diamond [#Galli2]_.
 #
 # Mean field calculations
 # ^^^^^^^^^^^^^^^^^^^^^^^
-# We use DFT To obtain a mean field description of the whole system. The DFT
-# calculations are performed with the QUANTUM ESPRESSO package. This requires downloading
-# the pseudopotentials [#Modji]_ for each atomic species
-# in the system from the QUANTUM ESPRESSO
-# `database <https://www.quantum-espresso.org/pseudopotentials/>`_. We have carbon and nitrogen in
-# our system which can be downloaded with
+# We use DFT to obtain a mean field description of the whole system. The DFT
+# calculations are performed with the `QUANTUM ESPRESSO <https://www.quantum-espresso.org/>`_
+# package. This requires downloading pseudopotentials [#Modji]_ for each atomic species
+# in the system from the QUANTUM ESPRESSO `database <https://www.quantum-espresso.org/pseudopotentials/>`_.
+# We have carbon and nitrogen in our system for which we can download pseudopotentials with
 #
 # .. code-block:: bash
 #
 #    wget -N -q http://www.quantum-simulation.org/potentials/sg15_oncv/upf/C_ONCV_PBE-1.2.upf
 #    wget -N -q http://www.quantum-simulation.org/potentials/sg15_oncv/upf/N_ONCV_PBE-1.2.upf
 #
-# Next, we need to create the input file for running QUANTUM ESPRESSO. The input file ``pw.in``
+# Next, we need to create the input file for running QUANTUM ESPRESSO. The input file
 # contains information about the system and details of the DFT calculations. More details on
 # how to construct the input file can be found in QUANTUM ESPRESSO
 # `documentation <https://www.quantum-espresso.org/Doc/INPUT_PW.html>`_ page. For the system taken here,
@@ -77,7 +74,8 @@ sections.
 #
 #    wget -N -q https://west-code.org/doc/training/nv_diamond_63/pw.in
 #
-# We can now perform the DFT calculations by running the executable code ``pw.x`` on the input file:
+# We can now perform the DFT calculations by running the executable code ``pw.x`` on the input file
+# ``pw.in`` and save the results in ``pw.out``.
 #
 # .. code-block:: bash
 #
@@ -87,15 +85,15 @@ sections.
 # ^^^^^^^^^^^^^^^^^^^^^
 # Once we have obtained the mean field description, we can identify our impurity by finding
 # the states that are localized in real space around the defect region. To that end, we compute the
-# localization factor for each state n, defined as:
+# localization factor :math:`L_n` for each state ``n``, defined as:
 #
 # .. math::
 #
 #     L_n = \int_{V \in \Omega} d^3 r |\Psi_n^{KS}(r)|^2
 #
 # where :math:`V` is the identified volume including the impurity within the supercell volume :math:`\Omega` [#Galli2]_.
-# We will use the `WEST <https://pubs.acs.org/doi/10.1021/ct500958p>`_ program to compute the localization factor. This requires creating the
-# input file ``westpp.in`` as shown below.
+# We will use the `WEST <https://pubs.acs.org/doi/10.1021/ct500958p>`_ program to compute the
+# localization factor. This requires creating the input file ``westpp.in`` as shown below.
 #
 # .. code-block:: text
 #
@@ -105,22 +103,22 @@ sections.
 #      - 1                   # start from the first state
 #      - 176                 # use all 176 states
 #      westpp_box:           # specifies the parameter of the box in atomic units for integration
-#      - 6.19                #
+#      - 6.19
 #      - 10.19
 #      - 6.28
 #      - 10.28
 #      - 6.28
 #      - 10.28
 #
-# We can execute this calculation as
+# We can now perform the calculation with
 #
 # .. code-block:: bash
 #
 #    mpirun -n 2 westpp.x -i westpp.in > westpp.out
 #
-# This creates the file ``west.westpp.save/westpp.json``. Since computational resources required
-# to run the calculation are large, the WEST output file needed for the next step can be
-# directly downloaded as:
+# This creates the file ``westpp.json`` which contains the information we need here. Since
+# computational resources required to run the calculation are large, we just download a pre-computed
+# file with:
 #
 # .. code-block:: bash
 #
@@ -155,30 +153,31 @@ sections.
 #    :width: 70%
 #    :target: javascript:void(0)
 #
-# From this plot, it is easy to see that Kohn-Sham orbitals can be categorized as orbitals
-# with low and high localization factor. For the purpose of defining an impurity, we need
+# From this plot, it is easy to see that the Kohn-Sham orbitals can be categorized as orbitals
+# with low and high localization factors. For the purpose of defining an impurity, we need
 # highly localized orbitals, so for this we set a cutoff of 0.06 and choose the orbitals
-# that have a localization factor > 0.06 for our active space. We'll use these orbitals for
-# the calculation of the parameters for the effective Hamiltonian in the following section.
+# that have a localization factor > 0.06. We'll use these orbitals for the calculation of the
+# parameters for the effective Hamiltonian in the following section.
 #
 # Effective Hamiltonian
 # ^^^^^^^^^^^^^^^^^^^^^
-# The next and probably most important steps in QDET is to define the effective one-body and
-# two-body integrals for the impurity. The effective two-body integrals, :math:`v^{eff}` are computed
-# first as matrix elements of the partially screened static Coulomb potential :math:`W_0^{R}`.
+# The next step in QDET is to define the effective one-body and two-body integrals for the impurity.
+# The effective two-body integrals, :math:`v^{eff}` are computed first as matrix elements of the
+# partially screened static Coulomb potential :math:`W_0^{R}`.
 #
 # .. math::
 #
 #     v_{ijkl}^{eff} = [W_0^{R}]_{ijkl},
 #
-# :math:`W_0^R`, results from screening the bare Coulomb potential, :math:`v`, with the reduced polarizability,
-# :math:`P_0^R = P - P_{imp}`, where :math:`P` is the system's polarizability and :math:`P_{imp}` is the impurity's
-# polarizability. Since solving the effective Hamiltonian
-# accounts for the exchange and correlation interactions between the active electrons, we remove these interactions from the
-# the Kohn-Sham (KS) Hamiltonian, :math:`H^{KS}`, to avoid double counting them.
-# Therefore, the one-body term :math:`t^{eff}` is obtained by subtracting
-# from the Kohn-Sham Hamiltonian the double-counting (dc) term accounting for electrostatic and exchange-
-# correlation interactions in the active space.
+# where :math:`W_0^R` results from screening the bare Coulomb potential, :math:`v`, with the reduced
+# polarizability, :math:`P_0^R = P - P_{imp}`, where :math:`P` is the system's polarizability and
+# :math:`P_{imp}` is the impurity's polarizability. Since solving the effective Hamiltonian
+# accounts for the exchange and correlation interactions between the active electrons, we remove
+# these interactions from the Kohn-Sham Hamiltonian, :math:`H^{KS}`, to avoid double counting them.
+#
+# The one-body term :math:`t^{eff}` is obtained by subtracting from the Kohn-Sham Hamiltonian the
+# double-counting term accounting for electrostatic and exchange-correlation interactions in the
+# active space.
 #
 # .. math::
 #
@@ -210,14 +209,15 @@ sections.
 #
 #    mpirun -n 2 wfreq.x -i wfreq.in > wfreq.out
 #
-# This calculation takes some time and requires computational resources, therefore the output file can be downloaded as
+# This calculation takes some time and requires computational resources, therefore we download a
+# pre-computed output file with
 #
 # .. code-block:: bash
 #
 #    mkdir -p west.wfreq.save
 #    wget -N -q https://west-code.org/doc/training/nv_diamond_63/wfreq.json -O west.wfreq.save/wfreq.json
 #
-# We now construct the effective Hamiltonian by importing the results from above file:
+# We now construct the effective Hamiltonian by importing the results from this file:
 #
 # .. code-block:: python
 #
@@ -232,8 +232,9 @@ sections.
 #
 #    solution = effective_hamiltonian.solve()
 #
-# The solution object is a dictionary containing information about the FCI eigenstates of the system, which
-# includes the various excitation energies, spin multiplicities, eigenvectors etc.
+# The solution object is a dictionary containing information about the FCI eigenstates of the
+# system, which includes the various excitation energies, spin multiplicities, eigenvectors etc.
+#
 # This effective Hamiltonian can also be directly used with quantum algorithms in PennyLane
 # once it is converted to a qubit Hamiltonian. Since WEST outputs two-electron integrals
 # in chemists' notation, a conversion to the physicists' notation is essential for
@@ -241,7 +242,7 @@ sections.
 #
 # .. code-block:: python
 #
-#    #from pennylane.qchem import one_particle, two_particle, observable
+#    from pennylane.qchem import one_particle, two_particle, observable
 #    import numpy as np
 #
 #    effective_hamiltonian = QDETResult(filename='west.wfreq.save/wfreq.json')
@@ -250,7 +251,7 @@ sections.
 #
 #    t = one_particle(one_e[0])
 #    v = two_particle(np.swapaxes(two_e[0][0], 1, 3))
-#    #qubit_op = observable([t, v], mapping="jordan_wigner")
+#    qubit_op = observable([t, v], mapping="jordan_wigner")
 #
 # We can compare the energies obtained from the diagnolization of this qubit Hamiltonian to the
 # solution object above to see that they match.
@@ -262,9 +263,9 @@ sections.
 # QDET however is not limited to defects, it can be used for other systems where a strongly
 # correlated subsystem is embedded in a weakly correlated environment. Additionally, QDET is able to 
 # correct the interaction double counting issue within the active space faced by a variety of 
-# other embedding theories such as DFT+DMFT. The Green's function based formulation of QDET ensures
-# exact removal of double counting  corrections at GW level of theory, thus removing the
-# approximation present in the initial DFT based formulation. This  formulation also helps capture
+# other embedding theories. The Green's function based formulation of QDET ensures
+# exact removal of double counting corrections at GW level of theory, thus removing the
+# approximation present in the initial DFT based formulation. This formulation also helps to capture
 # the response properties and provides access to excited state properties. Another major advantage
 # of QDET is the ease with which it can be used with quantum computers in a hybrid framework [#Baker]_.
 # In conclusion, QDET is a powerful embedding approach for simulating complex quantum systems.
