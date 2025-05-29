@@ -80,6 +80,8 @@ environment:
 			$$PYTHON_VENV_PATH/bin/python -m pip install --extra-index-url https://test.pypi.org/simple/ PennyLane-Lightning --pre --upgrade;\
 			$$PYTHON_VENV_PATH/bin/python -m pip install --upgrade git+https://github.com/PennyLaneAI/pennylane.git#egg=pennylane;\
 			$$PYTHON_VENV_PATH/bin/python -m pip install --upgrade git+https://github.com/XanaduAI/iqpopt.git#egg=iqpopt;\
+			# TODO: Remove this on next release. Currently Catalyst 0.11 pins jaxlib to 0.4.8;\
+			$$PYTHON_VENV_PATH/bin/python -m pip install 'numpy<2';\
 		fi;\
 	fi
 
