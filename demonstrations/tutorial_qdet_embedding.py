@@ -18,7 +18,7 @@ QDET a powerful method for affordable quantum simulation of materials. Another i
 of QDET is the compatibility of the method with quantum algorithms as we explain in the following
 sections.
 
-.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_how_to_build_spin_hamiltonians.png
+.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_qdet_embedding.png
     :align: center
     :width: 70%
     :target: javascript:void(0)
@@ -26,8 +26,6 @@ sections.
 """
 
 #############################################
-# Theory
-# ------
 # The QDET method allows us to construct an effective Hamiltonian that describes the impurity
 # subsystem while also accounting for its interaction with the environment, as follows
 #
@@ -217,7 +215,9 @@ sections.
 #    mkdir -p west.wfreq.save
 #    wget -N -q https://west-code.org/doc/training/nv_diamond_63/wfreq.json -O west.wfreq.save/wfreq.json
 #
-# We now construct the effective Hamiltonian by importing the results from this file:
+# Effective Hamiltonian
+# ^^^^^^^^^^^^^^^^^^^^^
+# We now construct the effective Hamiltonian by importing the electron integral results:
 #
 # .. code-block:: python
 #
@@ -225,8 +225,8 @@ sections.
 #
 #    effective_hamiltonian = QDETResult(filename='west.wfreq.save/wfreq.json')
 #
-# The final step is to solve for this effective Hamiltonian using a high level method. We can
-# use the FCI algorithm from WESTpy package as:
+# We can solve for this effective Hamiltonian using a high level method such as the FCI algorithm
+# from WESTpy package as:
 #
 # .. code-block:: python
 #
@@ -235,8 +235,8 @@ sections.
 # The solution object is a dictionary containing information about the FCI eigenstates of the
 # system, which includes the various excitation energies, spin multiplicities, eigenvectors etc.
 #
-# This effective Hamiltonian can also be directly used with quantum algorithms in PennyLane
-# once it is converted to a qubit Hamiltonian. Since WEST outputs two-electron integrals
+# More importantly, this effective Hamiltonian can also be directly used with quantum algorithms in
+# PennyLane once it is converted to a qubit Hamiltonian. Since WEST outputs two-electron integrals
 # in chemists' notation, a conversion to the physicists' notation is essential for
 # compatibility with PennyLane's framework. Here's how to construct the qubit Hamiltonian:
 #
