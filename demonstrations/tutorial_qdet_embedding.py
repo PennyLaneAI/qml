@@ -1,24 +1,22 @@
 r"""Quantum Defect Embedding Theory (QDET)
 =========================================
-Performing efficient simulations of the electronic structure of advanced materials and molecules remains a significant
-challenge in quantum chemistry and condensed matter physics due to the prohibitive costs of
-available methods. However, many interesting problems in quantum chemistry and condensed matter physics
-feature a strongly correlated region, which requires accurate quantum treatment, embedded within a
-larger environment that could be properly treated with cheaper approximations.  For example,
-this is the case for point defects in materials [#Galli]_, active site of catalysts [#SJRLee]_, surface phenomenon such
-as adsorption [#Gagliardi]_ and many more. Embedding theories serve as powerful tools for effectively
-addressing such problems by capturing the strong electronic correlations in the active region with high accuracy
-while accounting for the environment in a more approximate manner.
+Performing efficient simulations of the electronic structure of materials and molecules remains a
+significant challenge due to the prohibitive costs of available classical methods. However, many
+interesting problems in quantum chemistry and condensed matter physics feature a strongly correlated
+region, which requires accurate quantum treatment, embedded within a larger environment that could
+be properly treated with cheaper approximations. For example, point defects in materials [#Galli]_,
+active site of catalysts [#SJRLee]_, surface phenomenon such as adsorption [#Gagliardi]_ and many
+more. Embedding theories serve as powerful tools for effectively addressing such problems by
+capturing the strong electronic correlations in the active region with high accuracy while
+accounting for the environment in a more approximate manner.
 
-The core idea behind embedding methods is to partition the system and treat the strongly correlated
-subsystem accurately, using high-level quantum mechanical methods, while approximating the effects
-of the environment in a way that retains computational efficiency. In this demo, we show
-how to implement quantum defect embedding theory (QDET). This method has been successfully
-applied to study defects in CaO [#Galli]_ and to calculate excitations of the negatively charged NV center in diamond [#Galli2]_.
-An important advantage of QDET is its compatibility with quantum
-algorithms as we explain in the following sections. It can be implemented for calculating
-ground and excited states, as well as dynamic properties of materials. These make QDET a
-powerful method for affordable quantum simulation of materials.
+In this demo, we show how to implement quantum defect embedding theory (QDET) [#Galli]_. This method
+has been successfully applied to study systems such as defects in CaO [#Galli]_ and to calculate
+excitations of the negatively charged nitrogen-vacancy defect in diamond [#Galli2]_. QDET can be implemented for
+calculating both ground and excited states as well as dynamic properties of materials. These make
+QDET a powerful method for affordable quantum simulation of materials. Another important advantage
+of QDET is the compatibility of the method with quantum algorithms as we explain in the following
+sections.
 
 .. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_how_to_build_spin_hamiltonians.png
     :align: center
@@ -30,7 +28,7 @@ powerful method for affordable quantum simulation of materials.
 #############################################
 # Theory
 # ------
-# QDET allows us to construct an effective Hamiltonian that describes the impurity
+# The QDET method allows us to construct an effective Hamiltonian that describes the impurity
 # subsystem while also accounting for its interaction with the environment, as follows
 #
 # .. math::
@@ -41,14 +39,14 @@ powerful method for affordable quantum simulation of materials.
 # two-body integrals, respectively, and :math:`ijkl` span over the orbitals inside the impurity.
 # This Hamiltonian describes a simplified representation of the complex quantum system that is
 # computationally tractable and properly captures the essential physics of the problem. The
-# effective integrals :math:`t, v` are obtained
-# from first-principles calculations [#Galli2]_.
+# effective integrals :math:`t, v` are obtained from first-principles calculations [#Galli2]_.
 #
-# A QDET calculation is initiated obtaining a mean field approximation of the whole system,
-# here we use density functional theory (DFT). These calculations provide a set of orbitals
-# which can be partitioned into an impurity and a bath. An effective Hamiltonian is constructed from
-# the impurity orbitals, which is subsequently solved by using either a high accuracy
-# classical method or a quantum algorithm. Let's implement these steps for an example!
+# A QDET simulation typically starts by obtaining a meanfield approximation of the whole system
+# using efficient quantum chemistry methods such as density functional theory (DFT). These
+# calculations provide a set of orbitals which can be partitioned into impurity and bath orbitals.
+# The effective Hamiltonian is constructed from the impurity orbitals, which is subsequently solved
+# by using either a high accuracy classical method or a quantum algorithm. Let's implement these
+# steps for an example!
 #
 # Implementation
 # --------------
@@ -136,19 +134,19 @@ powerful method for affordable quantum simulation of materials.
 #    import json
 #    import numpy as np
 #    import matplotlib.pyplot as plt
-
+#
 #    with open('west.westpp.save/westpp.json','r') as f:
 #        data = json.load(f)
-
+#
 #    y = np.array(data['output']['L']['K000001']['local_factor'],dtype='f8')
 #    x = np.array([i+1 for i in range(y.shape[0])])
-
+#
 #    plt.plot(x,y,'o')
 #    plt.axhline(y=0.08,linestyle='--',color='red')
-
+#
 #    plt.xlabel('KS index')
 #    plt.ylabel('Localization factor')
-
+#
 #    plt.show()
 #
 #
@@ -243,7 +241,7 @@ powerful method for affordable quantum simulation of materials.
 #
 # .. code-block:: python
 #
-#    from pennylane.qchem import one_particle, two_particle, observable
+#    #from pennylane.qchem import one_particle, two_particle, observable
 #    import numpy as np
 #
 #    effective_hamiltonian = QDETResult(filename='west.wfreq.save/wfreq.json')
@@ -252,7 +250,7 @@ powerful method for affordable quantum simulation of materials.
 #
 #    t = one_particle(one_e[0])
 #    v = two_particle(np.swapaxes(two_e[0][0], 1, 3))
-#    qubit_op = observable([t, v], mapping="jordan_wigner")
+#    #qubit_op = observable([t, v], mapping="jordan_wigner")
 #
 # We can compare the energies obtained from the diagnolization of this qubit Hamiltonian to the
 # solution object above to see that they match.
