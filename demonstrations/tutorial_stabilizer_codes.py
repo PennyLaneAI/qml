@@ -1,5 +1,5 @@
 r"""
-Stabilizer codes for Quantum Error correction
+Stabilizer codes for quantum error correction
 =================================================
 
 State-of-the-art quantum devices, such as IBM's Condor and Atom Computing's optical lattices, contain more than 
@@ -53,7 +53,11 @@ A general qubit :math:`\vert \bar{\psi}\rangle = \alpha \vert \bar{0}\rangle + \
 
 This encoding can be done via the following quantum circuit.
  
-**INSERT PICTURE**
+ .. figure:: ../_static/demonstration_assets/stabilizer_codes/three_qubit_encode.png
+    :align: center
+    :width: 100%
+
+    ..
 
 Let's code this below and verify the output
 
@@ -110,33 +114,20 @@ print("|111> component: ", encode_qnode(alpha, beta)[7])
 # acts on auxiliary qubits to avoid disturbing the encoded logical state. In the case of the three-qubit repetition code, we measure in the computational
 # on two auxiliary qubits after after applying some :math:`\textrm{CNOT}` gates, as shown below.
 #
-# **NEEDS PICTURE**
+# .. figure:: ../_static/demonstration_assets/stabilizer_codes/parity_measurements.png
+#    :align: center
+#    :width: 100%
+#
+#    ..
 #
 # The result of the measurements is known as the **syndrome**. It will tell us whether one of the qubits in :math:`\vert \bar{\psi} \rangle` was flipped and moreover,
 # it can tell us which qubit was flipped. The following table shows how to interpret the syndromes.
 #
-# .. list-table::
-#    :header-rows: 1
-#    :widths: auto 20 20
-#    * - Column 1
-#      - Column 2
-#      - Column 3
-#    * - Row 1
-#      - :math:`\sqrt{16}`
-#      - 9
-#    * - Row 2
-#      - :math:`x^2`
-#      - 16
+# .. figure:: ../_static/demonstration_assets/stabilizer_codes/syndrome_table3.png
+#    :align: center
+#    :width: 100%
 #
-# .. math::
-#
-#     \begin{tabular}{|c|c|c|}
-#     \hline
-#     \textbf{Error} & \textbf{Syndrome 0} & \textbf{Syndrome 1} \\ \hline
-#      X_0           & 1                   & 0                  \\ \hline
-#      X_1          & 1                 & 1                 \\ \hline
-#      X_2          & 0                 & 1                 \\ \hline
-#     \end{tabular}
+#    ..
 #
 # Let us verify this by implementing the syndrome measurement in PennyLane
 
@@ -182,7 +173,11 @@ print("Syndrome if error on wire 2: ", syndrome_measurement(2))
 # By applying the appropriate corrective operation, the repetition code effectively protects and repairs the encoded quantum information.
 # The full workflow is shown in the circuit below.
 #
-# **NEED FIGURE WITH FULL CIRCUIT**
+# .. figure:: ../_static/demonstration_assets/stabilizer_codes/3_qubit_code.png
+#    :align: center
+#    :width: 100%
+#
+#    ..
 #
 # We can use PennyLane's mid-circuit measurement features to implement the full three-qubit repetition code.
 
@@ -239,13 +234,21 @@ print("Fidelity if error on wire 2: ", qml.math.fidelity(encoded_state, error_co
 # representation of error correction codes, known as the **operator picture.**
 #
 # To gain some intuition about the operator picture, let us express the three-qubit repetition code in a different way. Using the 
-# identity
+# identity below,
 #
-# **Hadamard and reversed CNOT identities**
+# .. figure:: ../_static/demonstration_assets/stabilizer_codes/cnot_identity.png
+#    :align: center
+#    :width: 100%
 #
-# and the fact that :math:`HXH = Z,`, the error correction code can be expressed in the following way:
+#    ..
 #
-# **Three-qubit circuit in the Stabilizer formalism**
+# the error correction code can be expressed in the following way:
+#
+# .. figure:: ../_static/demonstration_assets/stabilizer_codes/3_qubit_stabilizer_circ.png
+#    :align: center
+#    :width: 100%
+#
+#    ..
 #
 # This is the same circuit, but the controls are all now in the auxiliary qubits, while the physical qubits act as target qubits. 
 # This does not seem desirable--we do not want to change the state of the physical qubits! However, let us observe that the operators
@@ -365,7 +368,11 @@ generate_stabilizer_group(generators, 3)
 #
 # With this in mind, the error correcting code can be recovered for the set :math:`\left\lbrace S_i \right\rbrace`, as shown below
 #
-# **FIGURE: GENERAL ERROR CORRECTION CIRCUIT FROM STABILIZERS**
+# .. figure:: ../_static/demonstration_assets/stabilizer_codes/general_stabilizer_circuit.png
+#    :align: center
+#    :width: 100%
+#
+#    ..
 #
 # The stabilizer generators act as the controlled operators in the codewords and the measurement in the auxiliary wires yield unique syndromes for the
 # Pauli error that the code deals with. 
@@ -466,7 +473,11 @@ print(classify_pauli(X(0)@Y(1)@Z(2), logical_ops, generators, 3))
 # defining features in mind, let us build the five-qubit stabilizer code. First, we need to prepare our logical qubit $\vert \bar{0} \rangle,$
 # which can be done using the circuit below. 
 #
-# **INSERT CIRCUIT IMAGE**
+# .. figure:: ../_static/demonstration_assets/stabilizer_codes/five_qubit_encode.png
+#    :align: center
+#    :width: 100%
+#
+#    ..
 #
 # This is straightforward to implement in PennyLane.
 #
