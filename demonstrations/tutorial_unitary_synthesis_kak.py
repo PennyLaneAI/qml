@@ -809,10 +809,20 @@ print(np.allclose(reconstructed_K_1, K_1))
 #    :alt: Decomposition of a two-qubit unitary with a diagonal and two CNOTs.
 #
 # Note that all two-qubit blocks in the QSD are separated by multiplexer controls, which commute
-# with diagonal matrices. Therefore we can start at the right-most block, decompose it into the
-# above form, and pull the diagonal :math:`\Delta` to the left to absorb it into the second two-qubit
-# block from the right. This block can then be decomposed into the above form again, and the
-# diagonal contribution can be merged into the third block from the right. Continuing this,
+# with diagonal matrices. Therefore we can perform the following optimization:
+#
+# .. figure:: ../_static/demonstration_assets/unitary_synthesis_kak/QSD_optimization.png
+#    :align: center
+#    :width: 95%
+#    :alt: CNOT optimization in the QSD using an alternative two-qubit decomposition.
+#
+# Here we represented :math:`SU(2)` gates with dotted lines and the remaining parts of the
+# multiplexers with dashed lines.
+# We start at the right-most two-qubit block, decompose it into the above form, and pull the
+# diagonal :math:`\Delta` to the left through the adjacent multiplexer (red).
+# Then we absorb the diagonal into the second two-qubit block from the right (blue).
+# This block can then be decomposed into the above form again, and the
+# diagonal term can be moved through the next multiplexer (red). Continuing this,
 # we find that we can decompose all two-qubit blocks into 2 CNOTs and 14 rotation gates,
 # except for the left-most block which is decomposed in the conventional manner into 3 CNOTs and
 # 15 rotations. As there are :math:`4^{n-2}` two-qubit blocks, we save :math:`4^{n-2}-1`
