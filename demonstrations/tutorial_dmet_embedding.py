@@ -13,24 +13,21 @@ materials accurately and efficiently. The core idea behind embedding is that the
 into two parts: an impurity which is a strongly correlated subsystem that requires a high accuracy
 description and an environment which can be treated with more approximate but computationally efficient level of theory.
 
-Embedding approaches differ in how they capture the environment's effect on the embedded region,
-and can be broadly categorized as density in density, wavefunction in wavefunction and Green's function based embeddings.
-In this demo, we will focus on Density matrix embedding theory (DMET) [#SWouters]_, a
-wavefunction based approach embedding the ground state density matrix.
-We provide a brief introduction of the method and demonstrate how to run
-DMET calculations to construct a Hamiltonian that can be used for quantum algorithms.
-
-.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_how_to_build_spin_hamiltonians.png
+.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_qdet_embedding.png
     :align: center
     :width: 70%
     :target: javascript:void(0)
 """
+# In this demo, we will focus on Density matrix embedding theory (DMET) [#SWouters]_, a wavefunction
+# based approach embedding the ground state density matrix. We provide a brief introduction of the
+# method and demonstrate how to run DMET calculations to construct a Hamiltonian that can be used in
+# quantum algorithms.
 
 #############################################
 # Theory
 # ------
-# The wave function for the embedded system composed of the impurity and the environment can be
-# simply represented as
+# The wave function for an embedded system composed of an impurity and an environment can be
+# represented as [#SWouters]_:
 #
 # .. math::
 #
@@ -40,7 +37,7 @@ DMET calculations to construct a Hamiltonian that can be used for quantum algori
 # :math:`E`, respectively, :math:`\psi_{ij}` is the matrix of coefficients and :math:`N` is the
 # number of sites, e.g., orbitals. The key idea in DMET is to perform a singular value decomposition
 # of the coefficient matrix :math:`\psi_{ij} = \sum_{\alpha} U_{i \alpha} \lambda_{\alpha} V_{\alpha j}`
-# and rearrange the wave functions such that
+# and rearrange the wave functions as:
 #
 # .. math::
 #
@@ -48,21 +45,22 @@ DMET calculations to construct a Hamiltonian that can be used for quantum algori
 #
 # where :math:`A_{\alpha} = \sum_i U_{i \alpha} | I_i \rangle` are states obtained from rotations of
 # :math:`I_i` to a new basis, and :math:`B_{\alpha} = \sum_j V_{j \alpha} | E_j \rangle` are bath
-# states representing the portion of the environment that interacts with the impurity. Note that the
-# number of bath states is equal to the number of fragment states, regardless of the size of the
-# environment. This new decomposition is the Schmidt decomposition of the system wave function.
+# states representing the portion of the environment that interacts with the impurity [#Mineh]_. Note
+# that the number of bath states is equal to the number of fragment states, regardless of the size
+# of the environment. This new decomposition is the Schmidt decomposition of the system wave
+# function.
 #
 # We are now able to project the full Hamiltonian to the space of impurity and bath states, known as
-# embedding space.
+# embedding space:
 #
 # .. math::
 #
-#      \hat{H}_{emb} = \hat{P}^{\dagger} \hat{H} \hat{P}
+#      \hat{H}_{emb} = \hat{P}^{\dagger} \hat{H} \hat{P},
 #
 # where :math:`P = \sum_{\alpha \beta} | A_{\alpha} B_{\beta} \rangle \langle A_{\alpha} B_{\beta}|`
 # is a projection operator. A key point about this representation is that the wave function,
 # :math:`|\Psi \rangle`, is the ground state of both the full system Hamiltonian :math:`\hat{H}` and
-# the smaller embedded Hamiltonian :math:`\hat{H}_{\text{emb}}` [arXiv:2108.08611].
+# the smaller embedded Hamiltonian :math:`\hat{H}_{\text{emb}}` [#Mineh]_.
 #
 # Note that the Schmidt decomposition requires apriori knowledge of the wavefunction. To alleviate
 # this, DMET operates through a systematic iterative approach, starting with a mean field description
@@ -73,12 +71,14 @@ DMET calculations to construct a Hamiltonian that can be used for quantum algori
 # The DMET procedure starts by getting an approximate description of the system's wavefunction.
 # Subsequently, this approximate wavefunction is partitioned with Schmidt decomposition to get
 # the impurity and bath orbitals. These orbitals are then employed to define an approximate projector
-# :math:`P`, which is used to construct the embedded Hamiltonian. High accuracy methods such as
-# post-Hartree-Fock methods, exact diagonalisation, or accurate quantum algorithms are employed to find
-# the energy spectrum of the embedded Hamiltonian. The results are used to
-# re-construct the projector and the process is repeated until the wave function converges. Let's now
-# take a look at the implementation of these steps for a toy system with 8 Hydrogen atoms.
-# We use the programs PySCF [#pyscf]_ and libDMET [#libdmet]_ [#libdmet2]_ which can be installed with
+# :math:`P`, which is used to construct the embedded Hamiltonian. Then, accurate methods such as
+# post-Hartree-Fock methods, exact diagonalisation, or accurate quantum algorithms are employed
+# to find the energy spectrum of the embedded Hamiltonian. The results are used to
+# re-construct the projector and the process is repeated until the wave function converges.
+#
+# Let's now take a look at the implementation of these steps for a toy system with 8 Hydrogen atoms.
+# We use the programs PySCF [#pyscf]_ and libDMET [#libdmet]_ [#libdmet2]_ which can be installed
+# with
 #
 # .. code-block:: python
 #
@@ -89,9 +89,9 @@ DMET calculations to construct a Hamiltonian that can be used for quantum algori
 # ^^^^^^^^^^^^^^^^^^^^^^^
 # We begin by defining a finite system containing a hydrogen chain with 8 atoms using PySCF.
 # This is done by creating a ``Cell`` object containing 8 Hydrogen atoms. The system is arranged
-# with a central H$_4$ chain featuring a uniform 0.75 Å H-H bond length, flanked by two H$_2$
-# molecules at its termini. Then, we construct a ``Lattice`` object from the libDMET library,
-# associating it with the defined cell.
+# with a central :math:`H_4` chain featuring a uniform 0.75 Å H-H bond length, flanked by two
+# :math:`H_2` molecules at its termini. Then, we construct a ``Lattice`` object from the libDMET
+# library, associating it with the defined cell.
 #
 # .. code-block:: python
 #
@@ -132,12 +132,12 @@ DMET calculations to construct a Hamiltonian that can be used for quantum algori
 # .. code-block:: python
 #
 #    gdf = df.GDF(cell, kpts)
-#    gdf._cderi_to_save = 'gdf_ints.h5' # output file for density fitted integral tensor
-#    gdf.build() # compute the density fitted integrals
+#    gdf._cderi_to_save = 'gdf_ints.h5' # output file for the integral tensor
+#    gdf.build() # compute the integrals
 #
 #    kmf = scf.KRHF(cell, kpts, exxdiv=None).density_fit()
 #    kmf.with_df = gdf # use density-fitted integrals
-#    kmf.with_df._cderi = 'gdf_ints.h5' # input file for density fitted integrals
+#    kmf.with_df._cderi = 'gdf_ints.h5' # input file for the integrals
 #    kmf.kernel() # run Hartree-Fock
 #
 # Partitioning the orbital space
@@ -156,7 +156,7 @@ DMET calculations to construct a Hamiltonian that can be used for quantum algori
 #    c_ao_iao, _, _ = make_basis.get_C_ao_lo_iao(
 #    lattice, kmf, minao="MINAO", full_return=True)
 #    c_ao_lo = lattice.symmetrize_lo(c_ao_iao)
-#    lattice.set_Ham(kmf, gdf, c_ao_lo, eri_symmetry=4) # rotate integral tensors to IAO basis
+#    lattice.set_Ham(kmf, gdf, c_ao_lo, eri_symmetry=4) # rotate to IAO basis
 #
 # Next, we identify the orbital labels for each atom in the unit cell and define the impurity and bath
 # by looking at the labels. In this example, we choose to keep the :math:`1s` orbitals in the central
@@ -451,6 +451,11 @@ DMET calculations to construct a Hamiltonian that can be used for quantum algori
 # .. [#SWouters]
 #    Sebastian Wouters, Carlos A. Jiménez-Hoyos, *et al.*, 
 #    "A practical guide to density matrix embedding theory in quantum chemistry."
+#    `ArXiv <https://arxiv.org/pdf/1603.08443>`__.
+#
+# .. [#Mineh]
+#    Lana Mineh, Ashley Montanaro,
+#    "Solving the Hubbard model using density matrix embedding theory and the variational quantum eigensolver."
 #    `ArXiv <https://arxiv.org/pdf/1603.08443>`__.
 #     
 # .. [#pyscf]

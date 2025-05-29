@@ -35,6 +35,15 @@
             "url": "https://arxiv.org/pdf/1603.08443"
         },
         {
+            "id": "Mineh",
+            "type": "article",
+            "title": "Solving the Hubbard model using density matrix embedding theory and the variational quantum eigensolver",
+            "authors": "Mineh, Lana and Montanaro, Ashley",
+            "journal": "",
+            "year": "2021",
+            "url": "https://arxiv.org/abs/2108.08611"
+        },
+        {
             "id": "pyscf",
             "type": "article",
             "title": "Recent developments in the PySCF program package",
