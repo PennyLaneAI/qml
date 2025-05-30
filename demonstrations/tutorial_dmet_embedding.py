@@ -473,29 +473,32 @@ efficient level of theory.
 # ----------
 #
 # .. [#SWouters]
-#    Sebastian Wouters, Carlos A. Jiménez-Hoyos, *et al.*, 
-#    "A practical guide to density matrix embedding theory in quantum chemistry."
-#    `ArXiv <https://arxiv.org/pdf/1603.08443>`__.
+#    S. Wouters, C. A. Jiménez-Hoyos, *et al.*,
+#    "A practical guide to density matrix embedding theory in quantum chemistry",
+#    `arXiv:1603.08443 <https://arxiv.org/abs/1603.08443>`__.
 #
 # .. [#Mineh]
 #    Lana Mineh, Ashley Montanaro,
-#    "Solving the Hubbard model using density matrix embedding theory and the variational quantum eigensolver."
-#    `ArXiv <https://arxiv.org/pdf/1603.08443>`__.
+#    "Solving the Hubbard model using density matrix embedding theory and the variational quantum eigensolver",
+#    `arXiv:2108.08611 <https://arxiv.org/abs/2108.08611>`__.
 #     
 # .. [#pyscf]
-#     Qiming Sun, Xing Zhang, *et al.*, "Recent developments in the PySCF program package."
-#     `ArXiv <https://arxiv.org/pdf/2002.12531>`__.
+#     Q. Sun, X. Zhang, *et al.*,
+#     "Recent developments in the PySCF program package",
+#     `arXiv:2002.12531 <https://arxiv.org/abs/2002.12531>`__.
 #
 # .. [#libdmet]
-#     Zhi-Hao Cui, Tianyu Zhu, *et al.*, "Efficient Implementation of Ab Initio Quantum Embedding in Periodic Systems: Density Matrix Embedding Theory."
-#     `ArXiv <https://arxiv.org/pdf/1909.08596>`__.
+#     Z. Cui, T. Zhu, *et al.*,
+#     "Efficient Implementation of Ab Initio Quantum Embedding in Periodic Systems: Density Matrix Embedding Theory",
+#     `arXiv:1909.08596 <https://arxiv.org/abs/1909.08596>`__.
 #
 # .. [#libdmet2]
-#    Tianyu Zhu, Zhi-Hao Cui, *et al.*, "Efficient Formulation of Ab Initio Quantum Embedding in Periodic Systems: Dynamical Mean-Field Theory."
-#    `ArXiv <https://arxiv.org/pdf/1909.08592>`__.
-#
+#    T. Zhu, Z. Cui, *et al.*,
+#    "Efficient Formulation of Ab Initio Quantum Embedding in Periodic Systems: Dynamical Mean-Field Theory",
+#    `arXiv:1909.08592 <https://arxiv.org/abs/1909.08592>`__.
 #
 # .. [#DMETQC]
-#    Changsu Cao,Jinzhao Sun, *et al.*, "Ab initio simulation of complex solids on a quantum computer with orbital-based multifragment density matrix embedding"
-#    `ArXiv <https://arxiv.org/pdf/2209.03202>`__.
+#    C. Cao, J. Sun, *et al.*,
+#    "Ab initio simulation of complex solids on a quantum computer with orbital-based multifragment density matrix embedding",
+#    `arXiv:2209.03202 <https://arxiv.org/abs/2209.03202>`__.
 #
