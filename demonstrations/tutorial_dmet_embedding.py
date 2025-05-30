@@ -1,27 +1,28 @@
 r"""Density Matrix Embedding Theory (DMET)
 =========================================
 Materials simulation presents a crucial challenge in quantum chemistry. Density Functional Theory
-(DFT) is currently the workhorse for simulating materials due to its balance between accuracy and
+is currently the workhorse for simulating materials due to its balance between accuracy and
 computational efficiency. However, it often falls short in accurately capturing the intricate
-electron correlation effects found in strongly correlated materials because of its mean field nature.
-As a result, researchers often turn to wavefunction-based methods, such as configuration interaction
-or coupled cluster, which provide better accuracy but come at a
-significantly higher computational cost.
+electron correlation effects found in strongly correlated materials because of its mean field
+nature. As a result, researchers often turn to wavefunction-based methods, such as configuration
+interaction or coupled cluster, which provide better accuracy but come at a significantly higher
+computational cost.
 
 Embedding theories provide a balanced midpoint solution that enhances our ability to simulate
-materials accurately and efficiently. The core idea behind embedding is that the system is divided
+materials accurately and efficiently. The core idea behind embedding methods is to divide the system
 into two parts: an impurity which is a strongly correlated subsystem that requires a high accuracy
-description and an environment which can be treated with more approximate but computationally efficient level of theory.
+description and an environment which can be treated with a more approximate but computationally
+efficient level of theory.
 
 .. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_qdet_embedding.png
     :align: center
     :width: 70%
     :target: javascript:void(0)
 """
-# In this demo, we will focus on Density matrix embedding theory (DMET) [#SWouters]_, a wavefunction
-# based approach embedding the ground state density matrix. We provide a brief introduction of the
+# In this demo, we will focus on density matrix embedding theory (DMET) [#SWouters]_, a wavefunction
+# based approach that embeds the ground state density matrix. We provide a brief introduction of the
 # method and demonstrate how to run DMET calculations to construct a Hamiltonian that can be used in
-# quantum algorithms.
+# quantum algorithms using PennyLane.
 
 #############################################
 # Theory
