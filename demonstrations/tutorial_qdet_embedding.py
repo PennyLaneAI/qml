@@ -307,12 +307,12 @@ sections.
 # .. [#Galli2]
 #    N. Sheng, C. Vorwerk, M. Govoni, G. Galli,
 #    "Green's function formulation of quantum defect embedding theory",
-#    `Arxiv <https://arxiv.org/pdf/2203.05493>`__.
+#    `arXiv:2203.05493 <https://arxiv.org/abs/2203.05493>`__.
 #
 # .. [#Modji]
-#    Modjtaba S. Zini, Alain Delgado, *et al.*,
+#    M. S. Zini, A. Delgado, *et al.*,
 #    "Quantum simulation of battery materials using ionic pseudopotentials"
-#    `arXiv:2203.05493 <https://arxiv.org/abs/2203.05493>`__.
+#    `arXiv:2302.07981 <https://arxiv.org/abs/2302.07981>`__.
 #
 # .. [#Baker]
 #    Jack S. Baker, Pablo A. M. Casares, *et al.*,
