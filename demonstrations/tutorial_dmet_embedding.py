@@ -441,7 +441,7 @@ description and an environment which can be treated with more approximate but co
 # converged impurity Hamiltonian with a quantum algorithm.
 #
 # Conclusion
-# ^^^^^^^^^^^^^^
+# ^^^^^^^^^^
 # The density matrix embedding theory is a robust method designed to tackle simulation of complex
 # systems by partitioning them into manageable subsystems. It is particularly well suited for
 # studying the ground state properties of strongly correlated materials and molecules. DMET offers a
@@ -454,7 +454,7 @@ description and an environment which can be treated with more approximate but co
 # application to a wide range of strongly correlated molecular and periodic systems underscores its
 # power and versatility in electronic structure theory, paving the way for hybrid quantum-classical
 # simulations of challenging materials. [#DMETQC]_
-
+#
 #
 # References
 # ----------
