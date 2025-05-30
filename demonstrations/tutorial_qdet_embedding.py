@@ -191,11 +191,11 @@ sections.
 #
 #    wstat_control:
 #      wstat_calculation: S           # starts the calculation from scratch
-#      n_pdep_eigen: 512              # number of eigenpotentials; matches the number of electrons
+#      n_pdep_eigen: 512              # number of eigenpotentials; matches number of electrons
 #      trev_pdep: 0.00001             # convergence threshold for eigenvalues
 #
 #    wfreq_control:
-#      wfreq_calculation: XWGQH       # compute quasiparticle corrections and Hamiltonian parameters
+#      wfreq_calculation: XWGQH       # compute quasiparticle corrections and Hamiltonian params
 #      macropol_calculation: C        # include long-wavelength limit for condensed systems
 #      l_enable_off_diagonal: true    # calculate off-diagonal elements of G_0-W_0 self-energy
 #      n_pdep_eigen_to_use: 512       # number of PDEP eigenvectors to be used
