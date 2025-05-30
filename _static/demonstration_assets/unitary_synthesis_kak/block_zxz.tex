@@ -1,0 +1,17 @@
+\documentclass[]{standalone}
+\usepackage{amsmath,quantikz,graphicx,xcolor}
+
+
+\begin{document}
+% \begin{align*}
+\begin{quantikz}
+    & & \gate[2]{U(2^n)} &\\
+    & \qwbundle{n-1} & &
+\end{quantikz}
+=
+\begin{quantikz}
+    & & & \gate{R_Z}\wire[d]{q} & & \gate{R_X}\wire[d]{q} & & \gate{R_Z}\wire[d]{q} & &\\
+    & \qwbundle{n-1} & \gate{U(2^{n-1})} & |[operator]| & \gate{U(2^{n-1})} & |[operator]| & \gate{U(2^{n-1})} & |[operator]| & \gate{U(2^{n-1})} & 
+\end{quantikz}
+
+\end{document}
