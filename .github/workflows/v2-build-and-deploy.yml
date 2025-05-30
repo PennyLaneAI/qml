@@ -1,0 +1,102 @@
+name: V2 Build and Deploy Demos
+
+permissions:
+  contents: read
+  pull-requests: write
+  actions: read
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: SWC environment to deploy to.
+        options:
+          - swc-staging
+          - swc-prod
+          - swc-dev
+        required: true
+        type: choice
+      target:
+        default: stable
+        description: PennyLane version to build the demos. Either 'latest' or the most recent 'stable' release.
+        options:
+          - latest
+          - stable
+        required: true
+        type: choice
+      demos:
+        description: Demos to build and deploy, space-separated list of slugs (e.g. demo1 demo2 demo3), or leave empty for all demos.
+        required: false
+        type: string
+      as-previews:
+        default: false
+        description: |
+          Whether to deploy the demos as previews.
+
+          **Please note** that demos built with the latest version cannot be published to swc-staging or swc-prod.
+          They can only be deployed as previews.
+        required: false
+        type: boolean
+
+jobs:
+  validate-and-parse-inputs:
+    runs-on: ubuntu-latest
+    outputs:
+      branch: ${{ steps.set-branch.outputs.branch }}
+    steps:
+      - name: Set branch
+        id: set-branch
+        run: |
+          if [[ "${{ github.event.inputs.target }}" == "stable" ]]; then
+            echo "branch=master" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.event.inputs.target }}" == "latest" ]]; then
+            echo "branch=dev" >> $GITHUB_OUTPUT
+          else 
+            echo "branch=" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Validate preview input
+        id: validate-preview
+        run: |
+          if [[ 
+            ("${{ github.event.inputs.environment }}" == "swc-staging" || 
+            "${{ github.event.inputs.environment }}" == "swc-prod") && 
+            "${{ github.event.inputs.target }}" == "latest" && 
+            "${{ github.event.inputs.as-previews }}" == "false" 
+          ]]; then
+            echo "========================="
+            echo "🚫 Invalid input detected:"
+            echo "Demos built with the latest version cannot be published to 'swc-staging' or 'swc-prod'."
+            echo "They can only be deployed as previews."
+            echo "Please set the 'as-previews' input to 'true' in your workflow configuration."
+            echo "========================="
+            exit 1
+          fi
+
+  build:
+    needs: validate-and-parse-inputs
+    if: >
+      (needs.validate-and-parse-inputs.outputs.branch == 'master') ||
+      (needs.validate-and-parse-inputs.outputs.branch == 'dev')
+    uses: ./.github/workflows/v2-build-demos.yml
+    with:
+      ref: ${{ needs.validate-and-parse-inputs.outputs.branch }}
+      demo-names: ${{ github.event.inputs.demos }}
+      dev: ${{ github.event.inputs.target == 'latest' }}
+      save-artifact: true
+      artifact-name: build-and-deploy-${{ github.event.inputs.target }}
+      keep-going: false
+      quiet: false
+      batch_size: 10
+
+  deploy:
+    uses: ./.github/workflows/v2-deploy-demos.yml
+    needs:
+      - validate-and-parse-inputs
+      - build
+    secrets: inherit
+    with:
+      environment: ${{ github.event.inputs.environment }}
+      artifact-name: build-and-deploy-${{ github.event.inputs.target }}
+      workflow-run-id: ${{ github.run_id }}
+      preview: ${{ github.event.inputs.as-previews == 'true' }}

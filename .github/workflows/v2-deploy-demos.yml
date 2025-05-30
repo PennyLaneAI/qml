@@ -3,28 +3,36 @@ on:
   workflow_call:
     inputs:
       environment:
-        description: Environment to deploy to
+        description: Environment to deploy to.
         type: string
         required: true
       artifact-name:
-        description: Name of artifact containing demo zip files
+        description: Name of artifact containing demo zip files.
         type: string
+      workflow-run-id:
+        description: ID of the workflow run the artifact is from.
+        type: string
+        required: true
       preview:
-        description: Whether to deploy demos as preview
+        description: Whether to deploy demos as preview.
         type: boolean
         required: true
 
   workflow_dispatch:
     inputs:
       environment:
-        description: Environment to deploy to
+        description: Environment to deploy to.
         type: environment
         required: true
       artifact-name:
-        description: Name of artifact containing demo builds
+        description: Name of artifact containing demo zip files.
         type: string
+      workflow-run-id:
+        description: ID of the workflow run the artifact is from.
+        type: string
+        required: true
       preview:
-        description: Whether to deploy demos as preview
+        description: Whether to deploy demos as preview.
         type: boolean
         required: true
 
@@ -38,7 +46,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.branch }}
           fetch-depth: 1
       
       - name: Configure AWS credentials
@@ -60,6 +67,8 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ${{ inputs.artifact-name }}
+          run-id: ${{ inputs.workflow-run-id }}
+          github-token: ${{ github.token }}
           path: _build/pack
 
       - name: Deploy demos
@@ -67,4 +76,3 @@ jobs:
           python3 .github/workflows/qml_pipeline_v2/deploy.py \
             --preview ${{ inputs.preview }} \
             _build/pack/*.zip
-

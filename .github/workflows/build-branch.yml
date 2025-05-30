@@ -254,11 +254,11 @@ jobs:
         id: poetry
         uses: XanaduAI/cloud-actions/install-python-poetry@main
         with:
-          poetry_version: 1.7.1
+          poetry_version: '2.1.3'
           add_poetry_to_path: false
 
       - name: Validate Poetry Lockfile
-        run: ${{ steps.poetry.outputs.poetry_bin }} lock --check
+        run: ${{ steps.poetry.outputs.poetry_bin }} check --lock
 
   build-branch:
     runs-on: ubuntu-latest
@@ -302,7 +302,7 @@ jobs:
         id: poetry
         uses: XanaduAI/cloud-actions/install-python-poetry@main
         with:
-          poetry_version: 1.7.1
+          poetry_version: '2.1.3'
           add_poetry_to_path: false
 
       - name: Configure Poetry

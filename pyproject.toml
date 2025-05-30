@@ -33,6 +33,7 @@ dulwich = "<0.22"
 requirements-parser = "^0.11.0"
 lxml = "^5.3.0"
 uv = "^0.5.25"
+inflection = "^0.5.1"
 
 [tool.poetry.group.base.dependencies]
 # Base dependencies needed to build the website without any code execution (*-norun)
