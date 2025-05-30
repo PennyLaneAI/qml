@@ -1,5 +1,0 @@
-dimod
-docplex
-dwave-ocean-sdk==7.1.0
-openqaoa-core
-pandas
