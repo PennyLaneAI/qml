@@ -41,14 +41,14 @@ A KAK, or Cartan, decomposition of a matrix Lie group :math:`\mathcal{G}` with r
 Lie subgroup :math:`\mathcal{K}` allows us to factorize any group element :math:`G\in\mathcal{G}` into
 :math:`K_1 A K_2`, where :math:`K_1,K_2\in\mathcal{K}` and :math:`A` lies in a so-called
 *Cartan subgroup* :math:`\mathcal{A}`.
-In a circuit, we would draw such a factorization as
+In a circuit, we would draw such a factorization:
 
 .. figure:: ../_static/demonstration_assets/unitary_synthesis_kak/KAK_generic.png
    :align: center
    :width: 70%
    :alt: Quantum circuit of a generic KAK decomposition.
 
-To understand the nature of the matrix :math:`\mathcal{A}`, consider the Lie algebra
+To understand the nature of the matrix :math:`A`, consider the Lie algebra
 :math:`\mathfrak{g}` of the group :math:`\mathcal{G}` together with the algebra :math:`\mathfrak{k}`
 of :math:`\mathcal{K}`, which is a subalgebra of :math:`\mathfrak{g}`. The orthogonal complement
 of :math:`\mathfrak{k}` within :math:`\mathfrak{g}` is the so-called *horizontal space*,
@@ -180,7 +180,7 @@ Later on, we will also consider other Cartan subalgebras for this decomposition,
 from :math:`\mathfrak{a}_{\text{AIII}}` by some simple basis rotations.
 
 The full KAK decomposition of type AIII with the choices and representations from above is given
-by the following circuit diagram:
+by the circuit diagram:
 
 .. figure:: ../_static/demonstration_assets/unitary_synthesis_kak/AIII_generic_complete.png
    :align: center
@@ -202,7 +202,7 @@ The CSD, as implemented for example in
 with the setting ``separate=True``, then computes the blocks for the block-diagonal matrices as well
 as the coefficients, or rotation angles, for :math:`A\in\exp(\mathfrak{a}_{\text{AIII}})`.
 
-We may chack that this works with the following code.
+We may check that this works with the following code.
 We apply ``cossin`` to some input ``U``, from which we create the block matrices :math:`K_1`
 and :math:`K_2` with ``numpy`` and the Cartan subgroup matrix :math:`A` via a Select-applied,
 or multiplexed, ``qml.RY`` rotation. Then we check that those matrices multiplied together
@@ -243,8 +243,8 @@ print(np.allclose(reconstructed_U, U))
 # This worked!
 #
 # If a different Cartan subalgebra is chosen, a suitable rotation needs to be applied. This is
-# usually a matter of right(left)-multiplying :math:`K_1` (:math:`K_2`) by the rotation and
-# re-interpreting the obtained angles to parametrize the new Cartan subgroup element already.
+# usually a matter of right-multiplying :math:`K_1` (or left-multiplying :math:`K_2`) by the rotation and
+# re-interpreting the obtained angles to parametrize the new Cartan subgroup element.
 #
 # For example, for the Block-ZXZ decomposition below, we would need to perform a rotation on the
 # first qubit from the Pauli :math:`Y` to the Pauli :math:`X` basis. This rotation is given by
@@ -487,7 +487,7 @@ print(np.allclose(reconstructed_K_1, K_1))
 #
 # We rotate qubit :math:`0` from the Pauli :math:`Y` into the Pauli :math:`X` basis,
 # and qubits :math:`1` to :math:`n-3` from the computational basis into the Pauli :math:`X` basis,
-# which we can write as
+# which we can write:
 #
 # .. math::
 #
