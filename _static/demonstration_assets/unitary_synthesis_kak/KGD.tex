@@ -1,0 +1,17 @@
+\documentclass[]{standalone}
+\usepackage{amsmath,quantikz,graphicx,xcolor}
+
+
+\begin{document}
+% \begin{align*}
+\begin{quantikz}
+    & & \gate[3]{U(2^n)} &
+    \midstick[3,brackets=none]{=}
+    & & & &[-0.5cm] \gate{R_Z}\wire[d][2]{q} &[-0.5cm] & & &[-0.5cm] \gate{R_X}\wire[d][2]{q} &[-0.5cm] & & &[-0.5cm] \gate{R_Z}\wire[d][2]{q} &[-0.5cm] & & \\
+    & \qwbundle{n-3} & &
+    & \qwbundle{n-3} & \gate[2]{U(2^{n-1})} & \gate{H} & |[operator]| & \gate{H} & \gate[2]{U(2^{n-1})} & \gate{H} & |[operator]| & \gate{H} & \gate[2]{U(2^{n-1})} & \gate{H} & |[operator]| & \gate{H} & \gate[2]{U(2^{n-1})} & \\
+    & \qwbundle{2} & &
+    & \qwbundle{2} & & \gate{E^\dagger} & |[operator]| & \gate{E} & & \gate{E^\dagger} & |[operator]| & \gate{E} & & \gate{E^\dagger} & |[operator]| & \gate{E} & & 
+\end{quantikz}
+
+\end{document}

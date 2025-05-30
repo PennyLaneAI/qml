@@ -1,0 +1,32 @@
+\documentclass[]{standalone}
+\usepackage{amsmath,quantikz,graphicx,xcolor}
+
+\begin{document}
+% \begin{quantikz} % Intermediate decompositions
+%     & |[operator]| & \midstick[3,brackets=none]{=} & & \ctrl{2} & & \ctrl{2} & \\
+%     & |[operator]| & & |[operator]| & & |[operator]| & & \\
+%     & \gate{R_P}\wire[u][2]{q} & & \gate{R_P}\wire[u][1]{q} & \targ{} & \gate{R_P}\wire[u][1]{q} & \targ{} &
+% \end{quantikz}
+
+% \begin{quantikz}
+%     & |[operator]| & \midstick[3,brackets=none]{=} 
+%     & & \ctrl{2} & & \ctrl{2} & \midstick[3,brackets=none]{=}
+%     & & & & \ctrl{2} & & & & \ctrl{2} & \\
+%     & |[operator]| &
+%     & |[operator]| & & |[operator]| & & 
+%     & & \ctrl{1} & & & & \ctrl{1} & & & \\
+%     & \gate{R_P}\wire[u][2]{q} &
+%     & \gate{R_P}\wire[u][1]{q} & \targ{} & \gate{R_P}\wire[u][1]{q} & \targ{} &
+%     & \gate{R_P} & \targ{} & \gate{R_P} & \targ{} & \gate{R_P} & \targ{} & \gate{R_P} & \targ{} &
+% \end{quantikz}
+
+\begin{quantikz}
+    & |[operator]| & \midstick[3,brackets=none]{=} 
+    & & & & \ctrl{2} & & & & \ctrl{2} & \\
+    & |[operator]| &
+    & & \ctrl{1} & & & & \ctrl{1} & & & \\
+    & \gate{R_Y}\wire[u][2]{q} &
+    & \gate{R_Y} & \ctrl{0} & \gate{R_Y} & \ctrl{0} & \gate{R_Y} & \ctrl{0} & \gate{R_Y} & \ctrl{0} &
+\end{quantikz}
+
+\end{document}

@@ -1,0 +1,42 @@
+\documentclass[]{article}
+\usepackage{amsmath,quantikz,graphicx,xcolor,amssymb,amsfonts}
+
+\begin{document}
+\begin{align*}
+\begin{quantikz}
+    & & \gate[2]{U(2^n)} &\\
+    & \qwbundle{n-1} & &
+\end{quantikz}
+&=
+\begin{quantikz}
+    & & |[operator]| & \gate{R_X(\vec{\theta})}\wire[d]{q} & |[operator]| &\\
+    & \qwbundle{n-1} & \gate{W_0,W_1}\wire[u]{q} & |[operator]| & \gate{V_0,V_1}\wire[u]{q} & 
+\end{quantikz}\\
+&=
+\begin{quantikz}
+    & & |[operator]| & \gate{H} & \gate{R_Z(\vec{\theta})}\wire[d]{q} & \gate{H} & |[operator]| &\\
+    & \qwbundle{n-1} & \gate{W_0,W_1}\wire[u]{q} & & |[operator]| & & \gate{V_0,V_1}\wire[u]{q} & 
+\end{quantikz}\\
+&=
+\begin{quantikz}
+    & & |[operator]| & \gate{H} & & \gate{R_Z(\vec{\theta})}\wire[d]{q} & \gate{H} & |[operator]| &\\
+    & \qwbundle{n-1} & \gate{W_0,W_1}\wire[u]{q} & \gate{W_0^\dagger} & \gate{W_0} & |[operator]| & & \gate{V_0,V_1}\wire[u]{q} & 
+\end{quantikz}\\
+&=
+\begin{quantikz}
+    & & |[operator]| & \gate{H} & \gate{R_Z(\vec{\theta})}\wire[d]{q} & & \gate{H} & |[operator]| &\\
+    & \qwbundle{n-1} & \gate{\mathbb{I},W_0^\dagger W_1}\wire[u]{q} & \gate{W_0} & |[operator]| & \gate{\Delta(-\vec{\theta})} & \gate{\Delta(\vec{\theta})} & \gate{V_0,V_1}\wire[u]{q} & 
+\end{quantikz}\\
+&=
+\begin{quantikz}
+    & & \ctrl{1} & \gate{H} & \ctrl{1} & & & \gate{H} & |[operator]| &\\
+    & \qwbundle{n-1} & \gate{W_0^\dagger W_1}\wire[u]{q} & \gate{W_0} & \gate{\Delta(-2\vec{\theta})} & \gate{W_0^\dagger} & \gate{W_0} & \gate{\Delta(\vec{\theta})} & \gate{V_0,V_1}\wire[u]{q} & 
+\end{quantikz}\\
+&=
+\begin{quantikz}
+    & & \ctrl{1} & \gate{H} & \ctrl{1} & \gate{H} & |[operator]| &\\
+    & \qwbundle{n-1} & \gate{W_0^\dagger W_1}\wire[u]{q} & & \gate{W_0^\dagger \Delta(-2\vec{\theta}) W_0} & & \gate{V_0 \Delta(\vec{\theta})W_0,V_1\Delta(\vec{\theta})W_0}\wire[u]{q} & 
+\end{quantikz}
+\end{align*}
+
+\end{document}
