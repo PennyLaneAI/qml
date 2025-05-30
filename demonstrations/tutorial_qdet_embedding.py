@@ -290,28 +290,34 @@ sections.
 # ----------
 #
 # .. [#Galli]
-#    Joel Davidsson, Mykyta Onizhuk, *et al.*, "Discovery of atomic clock-like spin defects in simple oxides from first principles"
-#    `ArXiv <https://arxiv.org/pdf/2302.07523>`__.
+#    J. Davidsson, M. Onizhuk, C. Vorwerk, G. Galli,
+#    "Discovery of atomic clock-like spin defects in simple oxides from first principles",
+#    `arXiv:2302.07523 <https://arxiv.org/abs/2302.07523>`__.
 #
 # .. [#SJRLee]
-#    Sebastian J. R. Lee, Feizhi Ding, *et al.*, "Analytical Gradients for Projection-Based Wavefunction-in-DFT Embedding."
-#    `ArXiv <https://arxiv.org/pdf/1903.05830>`__.
+#    S. J. R. Lee, F. Ding, F. R. Manby, T. F. Miller III,
+#    "Analytical Gradients for Projection-Based Wavefunction-in-DFT Embedding"
+#    `arXiv:1903.05830 <https://arxiv.org/abs/1903.05830>`__.
 #
 # .. [#Gagliardi]
-#    Abhishek Mitra, Matthew Hermes, *et al.*, "Periodic Density Matrix Embedding for CO Adsorption on the MgO(001)Surface."
-#    `ChemRxiv <https://chemrxiv.org/engage/chemrxiv/article-details/62b0b0c40bba5d82606d2cae>`__.
+#    A. Mitra, Matthew Hermes, M. Cho, V. Agarawal, L. Gagliardi,
+#    "Periodic Density Matrix Embedding for CO Adsorption on the MgO(001)Surface"
+#    `J. Phys. Chem. Lett. 2022, 13, 7483 <https://pubs.acs.org/doi/10.1021/acs.jpclett.2c01915>`__.
 #
 # .. [#Galli2]
-#    Nan Sheng, Christian Vorwerk, *et al.*, "Green's function formulation of quantum defect embedding theory"
+#    N. Sheng, C. Vorwerk, M. Govoni, G. Galli,
+#    "Green's function formulation of quantum defect embedding theory",
 #    `Arxiv <https://arxiv.org/pdf/2203.05493>`__.
 #
 # .. [#Modji]
-#    Modjtaba S. Zini, Alain Delgado, *et al.*, "Quantum simulation of battery materials using ionic pseudopotentials"
-#    `ArXiv <https://arxiv.org/pdf/2302.07981>`__.
+#    Modjtaba S. Zini, Alain Delgado, *et al.*,
+#    "Quantum simulation of battery materials using ionic pseudopotentials"
+#    `arXiv:2203.05493 <https://arxiv.org/abs/2203.05493>`__.
 #
 # .. [#Baker]
-#    Jack S. Baker, Pablo A. M. Casares, *et al.*, "Simulating optically-active spin defects with a quantum computer"
-#    `ArXiv <https://arxiv.org/pdf/2405.13115>`__.
+#    Jack S. Baker, Pablo A. M. Casares, *et al.*,
+#    "Simulating optically-active spin defects with a quantum computer"
+#    `arXiv:2405.13115 <https://arxiv.org/abs/2405.13115>`__.
 #
 # About the authors
 # -----------------
