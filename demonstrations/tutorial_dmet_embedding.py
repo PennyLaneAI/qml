@@ -435,23 +435,14 @@ efficient level of theory.
 #    v = two_particle(np.swapaxes(h2, 1, 3)) # swap to physicist's notation
 #    qubit_op = observable([t,v], mapping="jordan_wigner")
 #
-# This Hamiltonian can be used in a quantum algorithm such as Quantum Phase Estimation. For
-# simplicity, we just diagonalize the Hamiltonian to get the eigenvalues and show that the lowest
-# eigenvalue matches the energy we obtained for the embedded system above.
-#
-# .. code-block:: python
-#
-#    eigval_qubit = qml.eigvals(qml.SparseHamiltonian(qubit_op.sparse_matrix(), wires = qubit_op.wires))
-#    print("eigenvalue from PennyLane: ", eigval_qubit)
-#    print("embedding energy: ", energy_emb)
-#
-# We can also get ground state energy for the system from this value by solving for the full system
-# as done above in the self-consistency loop using the ``solve_full_system`` function. The qubit
-# Hamiltonian is particularly relevant for a hybrid version of DMET, where classical mean field
-# calculations are coupled with a quantum algorithm for the self-consistent solver. To further
-# reduce the quantum resources, an alternative strategy will be using a classical solver for the
-# iterative self-consistency between the impurity and the environment and treat the resulting
-# converged impurity Hamiltonian with a quantum algorithm.
+# This Hamiltonian can be used in a quantum algorithm such as quantum phase estimation. We can get
+# ground state energy for the system by solving for the full system as done above in the
+# self-consistency loop using the ``solve_full_system`` function. The qubit Hamiltonian is
+# particularly relevant for a hybrid version of DMET, where classical mean field calculations are
+# coupled with a quantum algorithm for the self-consistent solver. To further reduce the quantum
+# resources, an alternative strategy will be using a classical solver for the iterative
+# self-consistency between the impurity and the environment and treat the resulting converged
+# impurity Hamiltonian with a quantum algorithm.
 #
 # Conclusion
 # ^^^^^^^^^^
