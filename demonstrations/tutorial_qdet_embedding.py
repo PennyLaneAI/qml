@@ -190,18 +190,18 @@ sections.
 # .. code-block:: text
 #
 #    wstat_control:
-#      wstat_calculation: S # starts the calculation from scratch
-#      n_pdep_eigen: 512    # number of eigenpotentials, set to match the number of electrons
-#      trev_pdep: 0.00001   # convergence threshold for eigenvalues
+#      wstat_calculation: S           # starts the calculation from scratch
+#      n_pdep_eigen: 512              # number of eigenpotentials; matches the number of electrons
+#      trev_pdep: 0.00001             # convergence threshold for eigenvalues
 #
 #    wfreq_control:
-#      wfreq_calculation: XWGQH           # compute the quasiparticle corrections and :math:`H^{eff}` parameters
-#      macropol_calculation: C            # include long-wavelength limit for condensed systems
-#      l_enable_off_diagonal: true        # calculate off-diagonal elements of G_0W_0 self-energy
-#      n_pdep_eigen_to_use: 512           # number of PDEP eigenvectors to be used
+#      wfreq_calculation: XWGQH       # compute quasiparticle corrections and Hamiltonian parameters
+#      macropol_calculation: C        # include long-wavelength limit for condensed systems
+#      l_enable_off_diagonal: true    # calculate off-diagonal elements of G_0-W_0 self-energy
+#      n_pdep_eigen_to_use: 512       # number of PDEP eigenvectors to be used
 #      qp_bands: [87,122,123,126,127,128] # impurity orbitals
-#      n_refreq: 300                      # number of frequencies on the real axis
-#      ecut_refreq: 2.0                   # cutoff for the real frequencies
+#      n_refreq: 300                  # number of frequencies on the real axis
+#      ecut_refreq: 2.0               # cutoff for the real frequencies
 #
 # We can now execute the calculation with:
 #
@@ -267,7 +267,8 @@ sections.
 #
 # .. code-block:: python
 #
-#    eigval_qubit = qml.eigvals(qml.SparseHamiltonian(qubit_op.sparse_matrix(), wires = qubit_op.wires))
+#    h_sparse = qml.SparseHamiltonian(qubit_op.sparse_matrix(), wires = qubit_op.wires)
+#    eigval_qubit = qml.eigvals(h_sparse)
 #
 # You can compare the results and verify that the computed energies match those that we obtained
 # before.
