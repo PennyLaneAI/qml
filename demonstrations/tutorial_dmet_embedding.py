@@ -19,12 +19,13 @@ efficient level of theory.
     :width: 70%
     :target: javascript:void(0)
 """
-# In this demo, we will focus on density matrix embedding theory (DMET) [#SWouters]_, a wavefunction
-# based approach that embeds the ground state density matrix. We provide a brief introduction of the
-# method and demonstrate how to run DMET calculations to construct a Hamiltonian that can be used in
-# quantum algorithms using PennyLane.
 
 #############################################
+# In this demo, we will learn density matrix embedding theory (DMET) [#SWouters]_, a
+# wavefunction-based approach that embeds the ground state density matrix. We provide a brief
+# introduction of the method and demonstrate how to run DMET calculations to construct a Hamiltonian
+# that can be used in quantum algorithms using PennyLane.
+#
 # Theory
 # ------
 # The wave function for an embedded system composed of an impurity and an environment can be
@@ -78,7 +79,7 @@ efficient level of theory.
 # re-construct the projector and the process is repeated until the wave function converges.
 #
 # Let's now take a look at the implementation of these steps for a toy system with 8 Hydrogen atoms.
-# We use the programs PySCF [#pyscf]_ and libDMET [#libdmet]_ [#libdmet2]_ which can be installed
+# We use the programs PySCF [#pyscf]_ and libDMET [#libdmet, #libdmet2]_ which can be installed
 # with
 #
 # .. code-block:: python
@@ -104,21 +105,21 @@ efficient level of theory.
 #    cell.unit = 'Angstrom'
 #    cell.a = ''' 12.0     0.0     0.0
 #                  0.0    12.0     0.0
-#                  0.0     0.0    12.0 ''' # lattice vectors for unit cell
+#                  0.0     0.0    12.0 '''  # lattice vectors of the unit cell
 #
-#    cell.atom = ''' H 0.0      0.0      0.0
-#                    H 0.0      0.0      0.75
-#                    H 0.0      0.0      3.0
-#                    H 0.0      0.0      3.75
-#                    H 0.0      0.0      4.5
-#                    H 0.0      0.0      5.25
-#                    H 0.0      0.0      7.5
-#                    H 0.0      0.0      8.25''' # coordinates of atoms in unit cell
+#    cell.atom = ''' H 0.0  0.0   0.0
+#                    H 0.0  0.0   0.75
+#                    H 0.0  0.0   3.0
+#                    H 0.0  0.0   3.75
+#                    H 0.0  0.0   4.5
+#                    H 0.0  0.0   5.25
+#                    H 0.0  0.0   7.5
+#                    H 0.0  0.0   8.25'''  # coordinates of atoms in unit cell
 #
 #    cell.basis = '321g'
 #    cell.build()
 #
-#    kmesh = [1, 1, 1] # number of k-points in xyz direction
+#    kmesh = [1, 1, 1]  # number of k-points in xyz direction
 #
 #    lattice = lattice.Lattice(cell, kmesh)
 #    filling = cell.nelectron / (lattice.nscsites * 2.0)
@@ -133,13 +134,12 @@ efficient level of theory.
 # .. code-block:: python
 #
 #    gdf = df.GDF(cell, kpts)
-#    gdf._cderi_to_save = 'gdf_ints.h5' # output file for the integral tensor
-#    gdf.build() # compute the integrals
-#
+#    gdf._cderi_to_save = 'gdf_ints.h5' # output file for the integrals
+#    gdf.build()                        # compute the integrals
 #    kmf = scf.KRHF(cell, kpts, exxdiv=None).density_fit()
-#    kmf.with_df = gdf # use density-fitted integrals
+#    kmf.with_df = gdf                  # use density-fitted integrals
 #    kmf.with_df._cderi = 'gdf_ints.h5' # input file for the integrals
-#    kmf.kernel() # run Hartree-Fock
+#    kmf.kernel()                       # run Hartree-Fock
 #
 # This provides us with an approximate description of the whole system.
 #
@@ -248,10 +248,10 @@ efficient level of theory.
 #        basis_k = lattice.R2k_basis(basis) # basis in k-space
 #
 #        solver_args = {"nelec": min((lattice.ncore+lattice.nval)*2, lattice.nkpts*cell.nelectron), \
-#                   "dm0": dmet.foldRho_k(scf_result["rho_k"], basis_k)}
+#                       "dm0": dmet.foldRho_k(scf_result["rho_k"], basis_k)}
 #
 #        rho_emb, energy_emb, imp_ham, dmu = dmet.SolveImpHam_with_fitting(lattice, filling_imp,
-#            imp_ham, basis, solver, solver_args=solver_args)
+#                                            imp_ham, basis, solver, solver_args=solver_args)
 #
 #        last_dmu += dmu
 #        solver_info = [solver, solver_args]
@@ -284,7 +284,7 @@ efficient level of theory.
 #                dmet.transformResults(rho_emb, energy_emb, basis, imp_ham, \
 #                lattice=lattice, last_dmu=last_dmu, int_bath=True, \
 #                             solver=solver_info[0], solver_args=solver_info[1])
-#        energy_imp_fci = energy_imp * lattice.nscsites # Energy of impurity at FCI level
+#        energy_imp_fci = energy_imp * lattice.nscsites # energy of impurity at FCI level
 #        energy_imp_scf = get_E_dmet_HF(basis, lattice, imp_ham, last_dmu, solver_info[0])
 #        energy = kmf.e_tot - kmf.energy_nuc() - energy_imp_scf + energy_imp_fci
 #
@@ -317,7 +317,8 @@ efficient level of theory.
 #            Initial correlation potential
 #        """
 #
-#        v_cor = dmet.VcorLocal(restricted=True, bogoliubov=False, nscsites=lattice.nscsites, idx_range=lattice.imp_idx)
+#        v_cor = dmet.VcorLocal(restricted=True, bogoliubov=False,
+#                nscsites=lattice.nscsites, idx_range=lattice.imp_idx)
 #        v_cor.assign(np.zeros((2, lattice.nscsites, lattice.nscsites)))
 #        return v_cor
 #
@@ -355,14 +356,14 @@ efficient level of theory.
 #
 #    import libdmet.dmet.Hubbard as dmet
 #
-#    max_iter = 10 # maximum number of iterations
-#    e_old = 0.0 # initial value of energy
-#    v_cor = initialize_vcor(lattice) # initial value of correlation potential
-#    dVcor_per_ele = None # initial value of correlation potential per electron
-#    vcor_tol = 1.0e-5 # tolerance for correlation potential convergence
-#    energy_tol = 1.0e-5 # tolerance for energy convergence
-#    mu = 0 # initial chemical potential
-#    last_dmu = 0.0 # change in chemical potential
+#    max_iter = 10                     # maximum number of iterations
+#    e_old = 0.0                       # initial value of energy
+#    v_cor = initialize_vcor(lattice)  # initial value of correlation potential
+#    dVcor_per_ele = None              # initial value of correlation potential per electron
+#    vcor_tol = 1.0e-5                 # tolerance for correlation potential convergence
+#    energy_tol = 1.0e-5               # tolerance for energy convergence
+#    mu = 0                            # initial chemical potential
+#    last_dmu = 0.0                    # change in chemical potential
 #
 # Now we set up the iterations in a loop. We must note that defining an impurity which is a fragment
 # of the unit cell, necessitates readjusting of the filling value for solution of impurity
@@ -377,12 +378,15 @@ efficient level of theory.
 #        rho, mu, scf_result, imp_ham, basis = construct_impurity_hamiltonian(lattice,
 #                           v_cor, filling, mu, last_dmu) # construct impurity Hamiltonian
 #        filling_imp = filling * 0.5
-#        rho_emb, energy_emb, imp_ham, last_dmu, solver_info = solve_impurity_hamiltonian(lattice, cell,
-#                           basis, imp_ham, filling_imp, last_dmu, scf_result) # solve impurity Hamiltonian
+#        # solve impurity Hamiltonian
+#        rho_emb, energy_emb, imp_ham, last_dmu, solver_info = solve_impurity_hamiltonian(lattice,
+#                                      cell, basis, imp_ham, filling_imp, last_dmu, scf_result)
+#        # include the environment interactions
 #        energy_imp, energy = solve_full_system(lattice, rho_emb, energy_emb, basis, imp_ham,
-#                           last_dmu, solver_info) # include the environment interactions
+#                           last_dmu, solver_info)
+#        # fit correlation potential
 #        v_cor, dVcor_per_ele = fit_correlation_potential(rho_emb,
-#                                         lattice, basis, v_cor) # fit correlation potential
+#                                         lattice, basis, v_cor)
 #
 #        dE = energy_imp - e_old
 #        e_old = energy_imp
@@ -411,7 +415,7 @@ efficient level of theory.
 #    norb = imp_ham.norb
 #    h1 = imp_ham.H1["cd"]
 #    h2 = imp_ham.H2["ccdd"][0]
-#    h2 = ao2mo.restore(1, h2, norb) # Get the correct shape based on permutation symmetry
+#    h2 = ao2mo.restore(1, h2, norb) # get the correct shape based on permutation symmetry
 #
 # Now we generate the qubit Hamiltonian in PennyLane.
 #
@@ -421,13 +425,15 @@ efficient level of theory.
 #    from pennylane.qchem import one_particle, two_particle, observable
 #
 #    t = one_particle(h1[0])
-#    v = two_particle(np.swapaxes(h2, 1, 3)) # Swap to physicist's notation
+#    v = two_particle(np.swapaxes(h2, 1, 3)) # swap to physicist's notation
 #    qubit_op = observable([t,v], mapping="jordan_wigner")
 #
 # This Hamiltonian can be used in a proper quantum algorithm such as Quantum Phase Estimation (QPE).
 #
 # For simplicity, we just diagonalize the Hamiltonian to get the eigenvalues and show that the
 # lowest eigenvalue matches the energy we obtained for the embedded system above.
+#
+# .. code-block:: python
 #
 #    eigval_qubit = qml.eigvals(qml.SparseHamiltonian(qubit_op.sparse_matrix(), wires = qubit_op.wires))
 #    print("eigenvalue from PennyLane: ", eigval_qubit)
