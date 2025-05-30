@@ -463,7 +463,7 @@ print(np.allclose(reconstructed_K_1, K_1))
 #     \mathcal{S}=\{X\otimes X, Y\otimes Y, Z\otimes Z\},
 #
 # which together with :math:`\mathbb{I}_4` span an Abelian four-dimensional algebra
-# :math:`\mathfrak{a}_{\text{base}}=\operatorname{span}_{i\mathbb{R}}\mathcal{S}\cup\{\mathbb{I}\}`.
+# :math:`\mathfrak{a}_{\text{base}}=\operatorname{span}_{i\mathbb{R}}\mathcal{S}\cup\{\mathbb{I_4}\}`.
 # This algebra is related to the algebra of diagonal matrices via the
 # so-called "magic basis" rotation:
 #
