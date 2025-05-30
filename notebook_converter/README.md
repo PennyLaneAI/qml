@@ -1,5 +1,5 @@
 # QML Notebook to Demo Converter
-This converter aids the Jupyter Notebook to QML Demo conversion. Though this converter will not completely convert
+This converter aids the Jupyter Notebook to QML Demo conversion. Though this converter will not completely convert 
 a notebook to a demo, it will get it most of the way with minor tweaks that may still require manual updates.
 
 ## Setup
