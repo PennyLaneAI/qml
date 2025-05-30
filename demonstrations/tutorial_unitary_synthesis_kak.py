@@ -108,6 +108,7 @@ we have ten types:
 
     Classification of KAK decompositions of the classical real compact Lie groups. Traditionally, they are defined
     on the special unitary group :math:`SU(d)`, which we have extended here by a global phase to :math:`U(d)`.
+    The rank of the pair :math:`(\mathcal{G},\mathcal{K})` is the dimension of the Cartan subalgebra.
 
 In the following, we will only use Cartan decompositions of type AIII or of type A, with
 a small exception of type AI for the Khaneja-Glaser decomposition. We follow Sec. IID and App. B
