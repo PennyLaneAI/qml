@@ -140,14 +140,16 @@ description and an environment which can be treated with more approximate but co
 #    kmf.with_df._cderi = 'gdf_ints.h5' # input file for the integrals
 #    kmf.kernel() # run Hartree-Fock
 #
+# This provides us with an approximate description of the whole system.
+#
 # Partitioning the orbital space
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-# Now we have an approximate description of our system and can start obtaining the impurity and bath
-# orbitals. This requires the localization of the basis of orbitals. We can use any localized basis
-# such as molecular orbitals (MO) or intrinsic atomic orbitals (IAO) [#SWouters]_. The use of
-# localized basis provides a convenient way to understand the contribution of each atom to
-# properties of the full system. Here, we rotate the one-electron and two-electron integrals into
-# IAO basis.
+# Now that we have an approximate description of our system, we can start obtaining the impurity and
+# bath orbitals. This requires the localization of the basis of orbitals. The use of localized basis
+# provides a convenient way to understand the contribution of each atom to properties of the full
+# system. We can use any localized basis such as molecular orbitals (MO) or intrinsic atomic
+# orbitals (IAO) [#SWouters]_. Here, we rotate the one-electron and two-electron integrals into
+# the IAO basis.
 #
 # .. code-block:: python
 #
@@ -158,12 +160,10 @@ description and an environment which can be treated with more approximate but co
 #    c_ao_lo = lattice.symmetrize_lo(c_ao_iao)
 #    lattice.set_Ham(kmf, gdf, c_ao_lo, eri_symmetry=4) # rotate to IAO basis
 #
-# Next, we identify the orbital labels for each atom in the unit cell and define the impurity and bath
-# by looking at the labels. In this example, we choose to keep the :math:`1s` orbitals in the central
-# :math:`H_4` chain in the impurity, while the bath contains the :math:`2s` orbitals, and the orbitals belonging
-# to the terminal Hydrogen molecules form the unentangled environment. The indices for the valence and virtual orbitals
-# corresponding to the impurity and the bath, respectively, can be obtained using
-# the get_idx function.
+# Next, we identify the orbital labels for each atom in the unit cell and define the impurity and
+# bath by looking at the labels. In this example, we choose to keep the :math:`1s` orbitals in the
+# central :math:`H_4` chain in the impurity, while the bath contains the :math:`2s` orbitals, and
+# the orbitals belonging to the terminal Hydrogen molecules form the unentangled environment.
 #
 # .. code-block:: python
 #
@@ -176,12 +176,16 @@ description and an environment which can be treated with more approximate but co
 #    ncore = []
 #    lattice.set_val_virt_core(imp_idx, bath_idx, ncore)
 #
+# Now that we have a description of our impurity, bath and environment orbitals, we can implement
+# the iterative process of DMET.
+#
 # Self-Consistent DMET
 # ^^^^^^^^^^^^^^^^^^^^
-# Now that we have a description of our impurity and bath orbitals, we can implement the iterative
-# process of DMET. We implement each step of the process in a function and then call these functions
-# to perform the calculations. Note that if we only perform one step of the iteration the process is
-# referred to as single-shot DMET.
+# The DMET calculations are performed by repeating four steps iteratively: First construct an
+# impurity Hamiltonian, solve the impurity Hamiltonian, compute the full system energy and finally
+# update the interactions between the impurity and its environment. To simplify the calculations, we
+# create dedicated functions for each step and implement them in a self-consistent loop. Note that
+# if we only perform one step of the iteration the process is referred to as single-shot DMET.
 #
 # We first need to construct the impurity Hamiltonian.
 #
@@ -252,7 +256,7 @@ description and an environment which can be treated with more approximate but co
 #        solver_info = [solver, solver_args]
 #        return rho_emb, energy_emb, imp_ham, last_dmu, solver_info
 #
-# The final step is to include the effect of the environment in the expectation value. So we define
+# Now we include the effect of the environment in the expectation value. So we define
 # a function which returns the density matrix and energy for the whole system.
 #
 # .. code-block:: python
@@ -285,21 +289,20 @@ description and an environment which can be treated with more approximate but co
 #
 #        return energy_imp_fci, energy
 #
-# Note here that the effect of environment included in this step is at the mean field level. So if we
-# stop the iteration here, the results will be that of the single-shot DMET.
+# Note here that the effect of environment included in this step is at the mean field level. So if
+# we stop the iteration here, the results will be that of the single-shot DMET.
 #
 # In the self-consistent DMET, the interaction between the environment and the impurity is improved
-# iteratively. In this method, a correlation potential is introduced to account for the interactions
+# iteratively. To do that, a correlation potential is introduced to account for the interactions
 # between the impurity and its environment, which can be represented as
 #
 # .. math::
 #
-#      \hat{C}_x = \sum_{kl} u_{kl}^{x}a_k^{\dagger}a_l
+#      C_x = \sum_{kl} u_{kl}^{x}a_k^{\dagger}a_l
 #
-# We start with an initial guess of zero for the :math:`u` here,
-# and optimize it by minimizing the difference between density matrices
-# obtained from the mean field Hamiltonian and the impurity Hamiltonian. Let's initialize the
-# correlation potential and define a function to optimize it.
+# We start with an initial guess of zero for the :math:`u` here, and optimize it by minimizing the
+# difference between density matrices obtained from the mean field Hamiltonian and the impurity
+# Hamiltonian. Let's initialize the correlation potential and define a function to optimize it.
 #
 # .. code-block:: python
 #
@@ -339,11 +342,13 @@ description and an environment which can be treated with more approximate but co
 #        return v_cor, dVcor_per_ele
 #
 # Now, we have defined all the ingredients of DMET. We can set up the self-consistency loop to get
-# the full execution. We should note that dividing the system into multiple fragments might lead to wrong
-# number of electrons, we keep this in check through the use of chemical potential, :math:`\mu`.
-# We set up this loop by defining the maximum number of iterations and a
-# convergence criteria. We use both energy and correlation potential as our convergence parameters,
-# so we define the initial values and convergence tolerance for both.
+# the full execution.
+#
+# We set up the loop by defining the maximum number of iterations and a convergence criteria. We use
+# both energy and correlation potential as our convergence parameters, so we define the initial
+# values and convergence tolerance for both. Also, since dividing the system into multiple fragments
+# might lead to wrong number of electrons, we denfine and check a chemical potential :math:`\mu`
+# as well.
 #
 # .. code-block:: python
 #
@@ -358,11 +363,11 @@ description and an environment which can be treated with more approximate but co
 #    mu = 0 # initial chemical potential
 #    last_dmu = 0.0 # change in chemical potential
 #
-# Now we set up the iterations in a loop. We must note that defining an impurity which is a fragment of the unit cell,
-# necessitates readjusting of the filling value for solution of impurity Hamiltonian,
-# This filling value represents the average electron occupation, which scales proportional to the fraction
-# of the unit cell included, while taking into account the different electronic species.
-# For example, we are using half the number of Hydrogens inside the impurity,
+# Now we set up the iterations in a loop. We must note that defining an impurity which is a fragment
+# of the unit cell, necessitates readjusting of the filling value for solution of impurity
+# Hamiltonian. This filling value represents the average electron occupation, which scales
+# proportional to the fraction of the unit cell included, while taking into account the different
+# electronic species. For example, we are using half the number of Hydrogens inside the impurity,
 # therefore, the filling becomes half as well.
 #
 # .. code-block:: python
@@ -385,17 +390,19 @@ description and an environment which can be treated with more approximate but co
 #            print("DMET Energy per cell: ", energy)
 #            break
 #
-# This concludes the DMET procedure.
+# This concludes the DMET procedure!
 #
-# At this point, we should note that we are still limited by the number of orbitals we can have in
-# the impurity because the cost of using a high-level solver such as FCI increases exponentially
-# with increase in system size. One way to solve this problem could be through the use of
-# quantum computing algorithm as solver.
+# Quantum DMET
+# ^^^^^^^^^^^^
+# Our implementation of DMET used FCI to accurately treat the impurity subsystem. The cost of using
+# a high-level solver such as FCI increases exponentially with the system size which limits the
+# number of orbitals we can have in the impurity. One way to solve this problem is to use a quantum
+# algorithm as our accurate solver. We now convert our impurity Hamiltonian to a qubit Hamiltonian
+# that can be used in a quantum algorithm using PennyLane.
 #
-# Next, we see how we can convert this impurity Hamiltonian to a qubit Hamiltonian through PennyLane
-# to pave the path for using it with quantum algorithms. The hamiltonian object generated above
-# provides us with one-body and two-body integrals along with the nuclear repulsion energy which can
-# be accessed as follows:
+# The hamiltonian object we generated above contains one-body and two-body integrals along with the
+# nuclear repulsion energy which can be accessed and used to construct the qubit Hamiltonian. We
+# first extract the information we need.
 #
 # .. code-block:: python
 #
@@ -405,9 +412,7 @@ description and an environment which can be treated with more approximate but co
 #    h2 = imp_ham.H2["ccdd"][0]
 #    h2 = ao2mo.restore(1, h2, norb) # Get the correct shape based on permutation symmetry
 #
-# These one-body and two-body integrals can then be used to generate the qubit Hamiltonian in
-# PennyLane. We further diagonalize it to get the eigenvalues and show that the lowest eigenvalue
-# matches the energy we obtained for the embedded system above.
+# Now we generate the qubit Hamiltonian in PennyLane.
 #
 # .. code-block:: python
 #
@@ -417,32 +422,38 @@ description and an environment which can be treated with more approximate but co
 #    t = one_particle(h1[0])
 #    v = two_particle(np.swapaxes(h2, 1, 3)) # Swap to physicist's notation
 #    qubit_op = observable([t,v], mapping="jordan_wigner")
+#
+# This Hamiltonian can be used in a proper quantum algorithm such as Quantum Phase Estimation (QPE).
+#
+# For simplicity, we just diagonalize the Hamiltonian to get the eigenvalues and show that the
+# lowest eigenvalue matches the energy we obtained for the embedded system above.
+#
 #    eigval_qubit = qml.eigvals(qml.SparseHamiltonian(qubit_op.sparse_matrix(), wires = qubit_op.wires))
 #    print("eigenvalue from PennyLane: ", eigval_qubit)
 #    print("embedding energy: ", energy_emb)
 #
 # We can also get ground state energy for the system from this value by solving for the full system
-# as done above in the self-consistency loop using solve_full_system function. This qubit Hamiltonian
-# is particularly relevant for hybrid flavor of DMET approach, where classical mean field calculations
-# are coupled with a quantum algorithm for the self-consistent solver. However, directly employing a
-# quantum solver iteratively might not be the most efficient use of quantum resources. An alternative
-# strategy involves using a classical solver for the iterative self-consistency between the impurity and
-# the environment. The resulting converged impurity Hamiltonian can then be treated with a quantum algorithm
-# for a more accurate final energy calculation."
+# as done above in the self-consistency loop using the ``solve_full_system`` function. The qubit
+# Hamiltonian is particularly relevant for a hybrid version of DMET, where classical mean field
+# calculations are coupled with a quantum algorithm for the self-consistent solver. To further
+# reduce the quantum resources, an alternative strategy will be using a classical solver for the
+# iterative self-consistency between the impurity and the environment and treat the resulting
+# converged impurity Hamiltonian with a quantum algorithm.
 #
 # Conclusion
 # ^^^^^^^^^^^^^^
 # The density matrix embedding theory is a robust method designed to tackle simulation of complex
-# systems by partitioning them into manageable subsystems. It is particularly well suited for studying
-# the ground state properties of strongly correlated materials and molecules. DMET offers a compelling
-# alternative to dynamic quantum embedding schemes such as dynamic mean field theory(DMFT). By employing the density
-# matrix for embedding instead of the Green's function and utilizing Schmidt decomposition to get a limited number
-# of bath orbitals, DMET achieves a significant reduction in computational resources. Furthermore, a major strength lies
-# in its compatibility with quantum algorithms, enabling the accurate study of smaller, strongly correlated
-# subsystems on quantum computers while the environment is studied classically.
-# Its successful application to a wide range of strongly correlated molecular and periodic systems underscores its
-# power and versatility in electronic structure theory, paving the way for hybrid quantum-classical simulations of
-# challenging materials. [#DMETQC]_
+# systems by partitioning them into manageable subsystems. It is particularly well suited for
+# studying the ground state properties of strongly correlated materials and molecules. DMET offers a
+# compelling alternative to dynamic quantum embedding schemes such as dynamic mean field theory
+# (DMFT). By employing the density matrix for embedding instead of the Green's function and
+# utilizing Schmidt decomposition to get a limited number of bath orbitals, DMET achieves a
+# significant reduction in computational resources. Furthermore, a major strength lies in its
+# compatibility with quantum algorithms, enabling the accurate study of smaller, strongly correlated
+# subsystems on quantum computers while the environment is studied classically. Its successful
+# application to a wide range of strongly correlated molecular and periodic systems underscores its
+# power and versatility in electronic structure theory, paving the way for hybrid quantum-classical
+# simulations of challenging materials. [#DMETQC]_
 
 #
 # References
