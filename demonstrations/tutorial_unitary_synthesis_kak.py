@@ -67,62 +67,6 @@ There is a full classification of KAK decompositions, based on the groups
 `classical real compact Lie group <https://en.wikipedia.org/wiki/Classical_group>`__,
 we have ten types:
 
-.. list-table::
-   :header-rows: 1
-   :widths: 20 30 30 20
-
-   * - Type
-     - :math:`\mathcal{G}`
-     - :math:`\mathcal{K}`
-     - rank
-   * - A
-     - :math:`U(d)\times U(d)`
-     - :math:`U(d)`
-     - :math:`d`
-   * - AI
-     - :math:`U(d)`
-     - :math:`SO(d)`
-     - :math:`d`
-   * - AII
-     - :math:`U(2d)`
-     - :math:`Sp(d)`
-     - :math:`d`
-   * - AIII :math:`{}_{p,q}`
-     - :math:`U(p+q)`
-     - :math:`U(p)\times U(q)`
-     - :math:`\text{min}(p, q)`
-   * - BD
-     - :math:`SO(d)\times SO(d)`
-     - :math:`SO(d)`
-     - :math:`\lfloor d/ 2\rfloor`
-   * - BDI :math:`{}_{p,q}`
-     - :math:`SO(p+q)`
-     - :math:`SO(p)\times SO(q)`
-     - :math:`\text{min}(p, q)`
-   * - DIII
-     - :math:`SO(2d)`
-     - :math:`U(d)`
-     - :math:`d/2`
-   * - C
-     - :math:`Sp(d)\times Sp(d)`
-     - :math:`Sp(d)`
-     - :math:`d`
-   * - CI
-     - :math:`Sp(d)`
-     - :math:`U(d)`
-     - :math:`d`
-   * - CII :math:`{}_{p,q}`
-     - :math:`Sp(p+q)`
-     - :math:`Sp(p)\times Sp(q)`
-     - :math:`\text{min}(p, q)`
-
-.. admonition:: Table
-   :class: note
-
-   Classification of KAK decompositions of the classical real compact Lie groups. Traditionally, they are defined
-   on the special unitary group :math:`SU(d)`, which we have extended here by a global phase to :math:`U(d)`.
-   The rank of the pair :math:`(\mathcal{G},\mathcal{K})` is the dimension of the Cartan subalgebra.
-
 .. rst-class:: docstable
 
     +-----------------------+---------------------------+---------------------------+-----------------------------+
@@ -866,7 +810,7 @@ print(np.allclose(reconstructed_K_1, K_1))
 #
 # .. figure:: ../_static/demonstration_assets/unitary_synthesis_kak/QSD_optimization.png
 #    :align: center
-#    :width: 95%
+#    :width: 100%
 #    :alt: CNOT optimization in the QSD using an alternative two-qubit decomposition.
 #
 # Here we represented :math:`SU(2)` gates with dotted lines and the remaining parts of the
@@ -901,7 +845,7 @@ print(np.allclose(reconstructed_K_1, K_1))
 #
 # .. figure:: ../_static/demonstration_assets/unitary_synthesis_kak/block_zxz_optimization.png
 #    :align: center
-#    :width: 75%
+#    :width: 100%
 #    :alt: Optimization of the Block-ZXZ decomposition to remove two CNOT gates.
 #
 # We first pulled out Hadamards from the middle multiplexed :math:`R_X` rotation, making it an
