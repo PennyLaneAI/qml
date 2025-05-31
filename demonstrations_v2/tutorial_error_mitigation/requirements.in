@@ -1,9 +1,0 @@
-mitiq==0.32.0
-ply==3.11
-qiskit
-qiskit_aer
-qiskit_ibm_runtime
-pennylane-cirq
-pennylane-qiskit
-jax
-jaxlib

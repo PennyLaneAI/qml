@@ -12,10 +12,10 @@ jobs:
   build_master:
     uses: ./.github/workflows/v2-build-demos.yml
     with:
-      ref: master
+      ref: testing-qml-v2
       dev: false
       save-artifact: true
       artifact-name: build-branch-master
-      keep-going: false
+      keep-going: true
       quiet: false
       batch_size: 10
