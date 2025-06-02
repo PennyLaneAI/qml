@@ -22,7 +22,7 @@ X-ray Absorption Spectroscopy Simulation in the Time-Domain
 # group state, how determine the states that result from acting on the group state by the dipole
 # operator (representing the electromagnetic field from the X-ray) and how to code the time-domain
 # analysis circuit which can determine the spectrum.
-
+#
 # We will be using concepts that were introduced in other PennyLane demos, such as utilizing pyscf
 # with PennyLane, initial state preparation of molecules, and building compressed double-factorized
 # Hamiltonians. If you haven't checked out those demos yet, it might be best to do so and then come
@@ -67,6 +67,7 @@ X-ray Absorption Spectroscopy Simulation in the Time-Domain
 # Absorption cross-section
 # ~~~~~~~~~~~~~~~~~~~~~~~~
 
+
 ######################################################################
 # In XAS experiments, the spectrum observed is a measure of the absorption cross section as a function
 # of the frequency of the incident X-rays :math:`\sigma_A(\omega)`. For our situation, the electrons
@@ -83,9 +84,11 @@ X-ray Absorption Spectroscopy Simulation in the Time-Domain
 # line broadening which represents the experimental resolution of the spectroscopy, and is typically
 # around :math:`1` eV.
 
+
 ######################################################################
 # Core-valence separation approximation
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 
 ######################################################################
 # We can restrict the range of frequencies, and consequently the range of final states, by only
@@ -96,20 +99,23 @@ X-ray Absorption Spectroscopy Simulation in the Time-Domain
 # We will also neglect relativistic corrections, and focus on frequencies for which the dipole
 # approximation is valid, which is the assumption that the wavelength of the radiation is large
 # compared to the extent of the electronic wavefunction.
-
+#
 # Atomic species and oxidations states will determine the energy difference between states with
 # different principle quantum numbers, and this difference will show as a peak in spectroscopy, known
 # as the *absorption edge*. Focusing spctroscopy near this edge for :math:`1s` to :math:`2p` is called
 # the :math:`K`-edge, and in general X-ray absorption near-edge spectroscopy is known as XANES. We
 # will focus on simulating spectroscopy in this XANES regime.
 
+
 ######################################################################
 # **insert figure which is a single particle energy diagram** should show XANES excitation from core
 # to excited compared to UV/vis light excitations of valence electrons to excited
 
+
 ######################################################################
 # Time-domain determination of the cross section
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 
 ######################################################################
 # We will use a mathematical trick of a frequency-domain Green's function to link the absorption cross
@@ -124,6 +130,7 @@ X-ray Absorption Spectroscopy Simulation in the Time-Domain
 # **Insert derivation of relation between cross section and Green's function, i.e.'expectation value
 # of time evolution operator for various times**
 
+
 ######################################################################
 # Below is a step-by-step process of the algorithm: - determine our initial state :math:`|I\rangle` -
 # determine how the dipole operator acts on that state to obtain :math:`\hat m_\rho|I\rangle` -
@@ -132,14 +139,17 @@ X-ray Absorption Spectroscopy Simulation in the Time-Domain
 # function - Fourier transform (classically) the Green's function to obtain it in the freuency domain,
 # which gives us the absorption cross section as a function of frequency
 
+
 ######################################################################
 # **insert figure that is a block-diagram outline of this procedure** follows the steps above,
 # includes some loops showing repeated shots and various time selections, classical computer computing
 # the Fourier transform, final spectrum
 
+
 ######################################################################
 # Implementation
 # --------------
+
 
 ######################################################################
 # Let's look at how to implement these steps in PennyLane. We will make extensive use of the
@@ -147,9 +157,11 @@ X-ray Absorption Spectroscopy Simulation in the Time-Domain
 #
 # For this demo, we are going to use the very simple :math:`H_2` molecule.
 
+
 ######################################################################
 # Initial state preparation
 # ~~~~~~~~~~~~~~~~~~~~~~~~~
+
 
 ######################################################################
 # If you haven't, check out the demo 'Initial state preparation for quantum chemistry'.
@@ -158,15 +170,18 @@ X-ray Absorption Spectroscopy Simulation in the Time-Domain
 # and obtaining the reduced Hartree-Fock molecular orbitals with the self-consistent field methods
 # (``pyscf.scf``).
 
+
 ######################################################################
 # Next we will use the multiconfigurational self-consistent field methods (``pyscf.mcscf``) to solve
 # for the expansion of the intitial wavefunction as a linear combination of Slater determinants.
 # Running the configuration interaction (CI) method returns the wavefunction as as vector. We will
 # filter out small values in the wavefunction.
 
+
 ######################################################################
 # Dipole operator action
 # ~~~~~~~~~~~~~~~~~~~~~~
+
 
 ######################################################################
 # The dipole operator :math:`\hat m_\rho = -q \cdot \hat \rho` will only affect the spatial component
@@ -196,23 +211,29 @@ X-ray Absorption Spectroscopy Simulation in the Time-Domain
 # ``'int1e_r_cart'`` to specify a one-electron integral with a position :math:`r` factor. Keyword
 # argument ``comp=3`` will give us all three components.
 
+
 ######################################################################
 # We can then transform to the molecular orbital space using ``np.einsum`` and the ``mo_coeff`` method
 # of ``hf``.
 
+
 ######################################################################
 # What's left is to code the action of the ladder operators :math:`c_i^\dagger c_j`.
+
 
 ######################################################################
 # Finally, we can convert our vector into a PennyLane state vector using
 # ``qchem.convert._wfdict_to_statevector``, so that it is ready to be initialzed in a circuit.
 
+
 ######################################################################
 # Let's prepare the circuit that will initialize our qubit register with this state
+
 
 ######################################################################
 # Molecular Hamiltonian
 # ~~~~~~~~~~~~~~~~~~~~~
+
 
 ######################################################################
 # Go read the demo 'How to build compressed double-factorized Hamiltonians' if you haven't, because
@@ -235,15 +256,18 @@ X-ray Absorption Spectroscopy Simulation in the Time-Domain
 # Luckily, the one- and two- eletron integrals can be computed using modules in ``pyscf``. The core
 # constant can also be obtained using the method ``energy_nuc()`` of the ``mol`` object.
 
+
 ######################################################################
 # We can apply CDF to the two-electron integrals using ``qml``\ 's ``qchem.factorize`` function, with
 # ``compressed=True``.
+
 
 ######################################################################
 # **Explain one-body extra term as the one-qubit Pauli-Z terms.**
 #
 # Finally, we add the one-body correction to the one-electron integrals, and use ``np.linalg.eigh`` to
 # diagonalize them into the matrix :math:`Z^{(0)}` and obtain the rotation matrices :math:`U^{(0)}`.
+
 
 ######################################################################
 # **I think I need to explain the Jordan-Wigner mapping here explicitly, showing the one-body extra,
@@ -252,9 +276,11 @@ X-ray Absorption Spectroscopy Simulation in the Time-Domain
 # **Explain simplification using Thouless's theorem (here or in earlier section)** Specifically how to
 # go form what looks like two U rotations to just one when using the ``qml.BasisRotation``.
 
+
 ######################################################################
 # Time-propagation circuit
 # ~~~~~~~~~~~~~~~~~~~~~~~~
+
 
 ######################################################################
 # The main work of our algorithm will be to apply our Hamiltonian terms as a trotter product, and
@@ -270,9 +296,11 @@ X-ray Absorption Spectroscopy Simulation in the Time-Domain
 # ``qml.BasisRotation`` to apply the unitary transform we want. We apply this to both spin sections of
 # the register.
 
+
 ######################################################################
 # Next we write a function to perform the :math:`Z` rotations. To simplify the Trotter function, we
 # condition the action in the function on whether it's acting for a one-body or a two-body term.
+
 
 ######################################################################
 # Let's define our Trotter step. The function will implement :math:`U` rotations and :math:`Z`
@@ -284,50 +312,61 @@ X-ray Absorption Spectroscopy Simulation in the Time-Domain
 # terms in one order, but can also reverse the order. This can save another rotation step when we
 # implement two consecutive Trotter steps in the second-order Trotter scheme.
 
+
 ######################################################################
 # Finally, our function ``Strang`` implements the second-order Trotter step, and the function
 # ``trotter_circuit`` returns the Trotter step circuit, implementing ``Strang`` and a ``StatePrep`` to
 # prepare the register in the previous quantum state.
 
+
 ######################################################################
 # Measurement
 # -----------
 
+
 ######################################################################
 # To measure the expectation value of the time-propagated state, we use a Hadamard test.
+
 
 ######################################################################
 # Run Simulation
 # ~~~~~~~~~~~~~~
+
 
 ######################################################################
 # Let's discuss our choice of parameters when running this simulation. **Discuss :math:`\eta`,
 # :math:`j_\mathrm{max}`, the total number of shots :math:`S`, the Hamiltonian norm :math:`||H||`, the
 # grid of frequencies and the time step :math:`\tau`**.
 
+
 ######################################################################
 # Finally, we can run the simulation, and calculate the spectrum from the measurement results.
+
 
 ######################################################################
 # Plot Results
 # ~~~~~~~~~~~~
 
+
 ######################################################################
 # Plotting the frequency signal, and the spectrum, we see
+
 
 ######################################################################
 # Further Optimizations
 # ~~~~~~~~~~~~~~~~~~~~~
+
 
 ######################################################################
 # There are more optimizations mentioned in the paper that were not implemented here. Below is a list
 # of further optimizations: - Randomized Trotter steps - BLISS - Distribution sampling - Double
 # measurement
 
+
 ######################################################################
 # Conclusion
 # ----------
-
+#
 # In this tutorial, we have implemented a simplified version of the algorithm as presented in
 # [Fomichev:2025]. The algorithm represents a culmination of many optimizations for time-evolving an
 # eletronic Hamiltonian. We've also discussed how XAS is a promising candidate for early
