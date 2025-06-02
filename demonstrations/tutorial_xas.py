@@ -1,19 +1,18 @@
 r"""X-ray Absorption Spectroscopy Simulation in the Time-Domain
 ===========================================================
+X-ray absorption spectroscopy (XAS) is a technique for understanding unwanted structures in battery
+materials. This demo will show you how to implement an algorithm developed in the paper "Fast
+simulations of X-ray absorption spectroscopy for battery materials on a quantum computer"
+[Fomichev:2025]. XAS was identified as a potential application for early fault-tolerant quantum
+computers. X-rays are high energy, and so are short wavelength. Therefore, they probe a very
+localized grouping of atoms in a materials. We only need to simulate a small number of molecular
+orbitals to estimate the energy of the orbitals, and the ones accessible by X-rays. However, there
+is a large amount of correlations between these molecular states. This is the sweet spot between not
+having to require too many qubits, but having enough correlations that make the calculation
+intractible on a quantum computer. The ground state is computable, but the highly correlated
+high-energy states are very difficult to compute in a quantum chemistry classical computation
 """
-######################################################################
-# X-ray absorption spectroscopy (XAS) is a technique for understanding unwanted structures in battery
-# materials. This demo will show you how to implement an algorithm developed in the paper "Fast
-# simulations of X-ray absorption spectroscopy for battery materials on a quantum computer"
-# [Fomichev:2025]. XAS was identified as a potential application for early fault-tolerant quantum
-# computers. X-rays are high energy, and so are short wavelength. Therefore, they probe a very
-# localized grouping of atoms in a materials. We only need to simulate a small number of molecular
-# orbitals to estimate the energy of the orbitals, and the ones accessible by X-rays. However, there
-# is a large amount of correlations between these molecular states. This is the sweet spot between not
-# having to require too many qubits, but having enough correlations that make the calculation
-# intractible on a quantum computer. The ground state is computable, but the highly correlated
-# high-energy states are very difficult to compute in a quantum chemistry classical computation
-# 
+
 ######################################################################
 # In this demo we will implement a simplified version of the algorithm as it appears in the paper  we
 # will not be applying all of the optimizations present. We will show how to determine and prepare a
@@ -30,7 +29,6 @@ r"""X-ray Absorption Spectroscopy Simulation in the Time-Domain
 # Why simulate X-ray absorption spectroscopy?
 # -------------------------------------------
 # 
-######################################################################
 # - method for studying local electronic structure
 # - can directly probe local structure by exciting tightly bound core electrons
 # - determining battery degredation relevant mechanisms, such as oxidation states, from an observed
@@ -42,17 +40,16 @@ r"""X-ray Absorption Spectroscopy Simulation in the Time-Domain
 # - this *finger printing* method could allow one to determine the composition of oxidized states in
 #   the material
 # 
-######################################################################
 # **insert figure demonstrating fingerprinting** observed spectrum, decomposition into single cluster
 # spectra, which come from simulations from a quantum computer
 # 
-######################################################################
 # This method is particularly difficult for classical computers when strongly-correlated transition
 # metals are present, such as those typically in lithium-excess materials which are battery cathod
 # candidates.
 # 
-######################################################################
-# .. figure:: _static/demonstration_assets/xas/fingerprinting.png
+# .. figure:: ../_static/demonstration_assets/xas/fingerprinting.png
+#    :width: 100%
+#    :align: center
 #    :alt: alt text
 # 
 # 
@@ -97,12 +94,13 @@ r"""X-ray Absorption Spectroscopy Simulation in the Time-Domain
 # the :math:`K`-edge, and in general X-ray absorption near-edge spectroscopy is known as XANES. We
 # will focus on simulating spectroscopy in this XANES regime.
 # 
-######################################################################
 # **insert figure which is a single particle energy diagram** should show XANES excitation from core
 # to excited compared to UV/vis light excitations of valence electrons to excited
 # 
-# .. figure:: _static/demonstration_assets/xas/core-valence.png
-#    :alt: alt text
+# .. figure:: ../_static/demonstration_assets/xas/core-valence.png
+#     :width: 100%
+#     :align: center
+#     :alt: alt text
 # 
 # 
 ######################################################################
@@ -132,7 +130,9 @@ r"""X-ray Absorption Spectroscopy Simulation in the Time-Domain
 # includes some loops showing repeated shots and various time selections, classical computer computing
 # the Fourier transform, final spectrum
 # 
-# .. figure:: _static/demonstration_assets/xas/block_diagram_of_algorithm.png
+# .. figure:: ../_static/demonstration_assets/xas/block_diagram_of_algorithm.png
+#    :width: 100%
+#    :align: center
 #    :alt: alt text
 # 
 # 
