@@ -199,12 +199,12 @@ X-ray Absorption Spectroscopy Simulation in the Time-Domain
 # To calculate the matrix elements :math:`\langle i|\hat \rho |j\rangle`, we again insert sums over
 # basis states, this time in the position basis, to this as an integral of orbitals
 #
-# $$ :raw-latex:`\langle `i\|:raw-latex:`\hat `:raw-latex:`\rho `\|j:raw-latex:`\rangle `=
-# :raw-latex:`\int `d^3r d^3r'
-# :raw-latex:`\langle `i\|:raw-latex:`\rho`:raw-latex:`\rangle `:raw-latex:`\langle `:raw-latex:`\rho `\|:raw-latex:`\hat `:raw-latex:`\rho `\|
-# :raw-latex:`\rho `:raw-latex:`\rangle `:raw-latex:`\langle `:raw-latex:`\rho `\| j
-# :raw-latex:`\rangle `= :raw-latex:`\int `d^3r d^3r' :raw-latex:`\phi`\_i(:raw-latex:`\rho`)
-# :raw-latex:`\rho `:raw-latex:`\phi`\_j^*(:raw-latex:`\rho`),,
+# $$ `\langle `i\|:raw-latex:`\hat `:raw-latex:`\rho `\|j:raw-latex:`\rangle `=
+# `\int `d^3r d^3r'
+# `\langle `i\|:raw-latex:`\rho`:raw-latex:`\rangle `:raw-latex:`\langle `:raw-latex:`\rho `\|:raw-latex:`\hat `:raw-latex:`\rho `\|
+# `\rho `:raw-latex:`\rangle `:raw-latex:`\langle `:raw-latex:`\rho `\| j
+# `\rangle `= :raw-latex:`\int `d^3r d^3r' :raw-latex:`\phi`\_i(:raw-latex:`\rho`)
+# `\rho `:raw-latex:`\phi`\_j^*(:raw-latex:`\rho`) \,, $$
 #
 # where :math:`\phi_k(\rho)` are the atomic orbital spatial wavefunctions. These matrix elements can
 # be computed in ``pyscf`` using the the ``intor`` method of the ``mol`` object with argument
