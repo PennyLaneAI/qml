@@ -121,8 +121,10 @@ wires_j = [f"j{index}" for index in range(s)]
 code = gray_code(int(2 * np.log2(len(A))))
 n_selections = len(code)
 
-control_wires = [int(np.log2(int(code[i], 2) ^ int(code[(i + 1) %
-                 n_selections], 2))) for i in range(n_selections)]
+control_wires = [
+    int(np.log2(int(str(code[i]), 2) ^ int(str(code[(i + 1) % n_selections]), 2)))
+    for i in range(n_selections)
+]
 
 wire_map = {control_index : wire for control_index, wire in enumerate(wires_j + wires_i)}
 
