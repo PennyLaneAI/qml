@@ -140,7 +140,7 @@ np.random.seed(42)
 # import PennyLane
 import pennylane as qml
 
-######################################################################
+##############################################################################
 # We must define the unitary matrix we would like to embed in the circuit.
 # We will use SciPy to generate a Haar-random unitary:
 
@@ -188,7 +188,7 @@ def gbs_circuit():
     return qml.probs(wires=range(n_wires))
 
 
-######################################################################
+##############################################################################
 # A couple of things to note in this particular example:
 #
 # 1. To prepare the input single mode squeezed vacuum state :math:`|re^{i\phi}\rangle,`
@@ -253,7 +253,7 @@ for i in measure_states:
 #       |2000>: 0.02957384308320549
 #
 
-######################################################################
+##############################################################################
 # The GBS Distribution
 # --------------------
 #
@@ -317,13 +317,13 @@ for i in measure_states:
 
 from thewalrus import hafnian as haf
 
-######################################################################
+##############################################################################
 # Now, for the right-hand side numerator, we first calculate the submatrix
 # :math:`A = [(UU^T\mathrm{tanh}(r))]_{st}:`
 
 A = np.dot(U, U.T) * np.tanh(1)
 
-######################################################################
+##############################################################################
 # In GBS, we determine the submatrix by taking the
 # rows and columns corresponding to the measured Fock state. For example, to calculate the submatrix
 # in the case of the output measurement :math:`\left|{1,1,0,0}\right\rangle,`
@@ -341,11 +341,11 @@ print(A[:, [0, 1]][[0, 1]])
 #        [ 0.43418269-0.09169615j -0.27554025-0.46222197j]]
 #
 
-######################################################################
+##############################################################################
 # i.e., we consider only the rows and columns where a photon was detected, which gives us
 # the submatrix corresponding to indices :math:`0` and :math:`1.`
 
-######################################################################
+##############################################################################
 # Comparing to simulation
 # -----------------------
 #
@@ -369,7 +369,7 @@ print(probs[0, 0, 0, 0])
 #       0.17637844761413496
 #
 
-######################################################################
+##############################################################################
 # **Measuring** :math:`|1,1,0,0\rangle` **at the output**
 
 A = (np.dot(U, U.T) * np.tanh(1))[:, [0, 1]][[0, 1]]
@@ -386,7 +386,7 @@ print(probs[1, 1, 0, 0])
 #       0.03473293649420282
 #
 
-######################################################################
+##############################################################################
 # **Measuring** :math:`|0,1,0,1\rangle` **at the output**
 
 A = (np.dot(U, U.T) * np.tanh(1))[:, [1, 3]][[1, 3]]
@@ -403,7 +403,7 @@ print(probs[0, 1, 0, 1])
 #       0.011870900427255589
 #
 
-######################################################################
+##############################################################################
 # **Measuring** :math:`|1,1,1,1\rangle` **at the output**
 #
 # This corresponds to the hafnian of the full matrix :math:`A=UU^T\mathrm{tanh}(r):`
@@ -422,7 +422,7 @@ print(probs[1, 1, 1, 1])
 #       0.005957399165336106
 #
 
-######################################################################
+##############################################################################
 # **Measuring** :math:`|2,0,0,0\rangle` **at the output**
 #
 # Since we have two photons in mode ``q[0]``, we take two copies of the
