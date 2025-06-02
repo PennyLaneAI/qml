@@ -14,7 +14,8 @@ r"""X-ray Absorption Spectroscopy Simulation in the Time-Domain
 # intractible on a quantum computer. The ground state is computable, but the highly correlated
 # high-energy states are very difficult to compute in a quantum chemistry classical computation
 # 
-# In this demo we will implement a simplified version of the algorithm as it appears in the paper -- we
+######################################################################
+# In this demo we will implement a simplified version of the algorithm as it appears in the paper  we
 # will not be applying all of the optimizations present. We will show how to determine and prepare a
 # group state, how determine the states that result from acting on the group state by the dipole
 # operator (representing the electromagnetic field from the X-ray) and how to code the time-domain
@@ -22,13 +23,14 @@ r"""X-ray Absorption Spectroscopy Simulation in the Time-Domain
 # 
 # We will be using concepts that were introduced in other PennyLane demos, such as utilizing pyscf
 # with PennyLane, initial state preparation of molecules, and building compressed double-factorized
-# Hamiltonians. If you haven�t checked out those demos yet, it might be best to do so and then come
+# Hamiltonians. If you havent checked out those demos yet, it might be best to do so and then come
 # back here.
 # 
 ######################################################################
 # Why simulate X-ray absorption spectroscopy?
 # -------------------------------------------
 # 
+######################################################################
 # - method for studying local electronic structure
 # - can directly probe local structure by exciting tightly bound core electrons
 # - determining battery degredation relevant mechanisms, such as oxidation states, from an observed
@@ -37,25 +39,27 @@ r"""X-ray Absorption Spectroscopy Simulation in the Time-Domain
 # - each oxidized state would have some spectrum, that one would determine through simulation
 # - this could be repeated for all possible oxidized states
 # - the observed spectrum could then be matched to combinations of these single cluster spectra
-# - this *fingerprinting* method could allow one to determine the composition of oxidized states in
+# - this *finger printing* method could allow one to determine the composition of oxidized states in
 #   the material
 # 
+######################################################################
 # **insert figure demonstrating fingerprinting** observed spectrum, decomposition into single cluster
 # spectra, which come from simulations from a quantum computer
 # 
+######################################################################
 # This method is particularly difficult for classical computers when strongly-correlated transition
 # metals are present, such as those typically in lithium-excess materials which are battery cathod
 # candidates.
 # 
-# .. figure:: _static\demonstration_assets/xas/fingerprinting.png
+######################################################################
+# .. figure:: _static/demonstration_assets/xas/fingerprinting.png
 #    :alt: alt text
 # 
-
+# 
 ######################################################################
 # Algorithm
 # ---------
 # 
-######################################################################
 # Absorption cross-section
 # ~~~~~~~~~~~~~~~~~~~~~~~~
 # 
@@ -93,11 +97,13 @@ r"""X-ray Absorption Spectroscopy Simulation in the Time-Domain
 # the :math:`K`-edge, and in general X-ray absorption near-edge spectroscopy is known as XANES. We
 # will focus on simulating spectroscopy in this XANES regime.
 # 
+######################################################################
 # **insert figure which is a single particle energy diagram** should show XANES excitation from core
 # to excited compared to UV/vis light excitations of valence electrons to excited
 # 
-# .. figure:: _static\demonstration_assets/xas/core-valence.png
+# .. figure:: _static/demonstration_assets/xas/core-valence.png
 #    :alt: alt text
+# 
 # 
 ######################################################################
 # Time-domain determination of the cross section
@@ -118,16 +124,15 @@ r"""X-ray Absorption Spectroscopy Simulation in the Time-Domain
 # Below is a step-by-step process of the algorithm: - determine our initial state :math:`|I\rangle` -
 # determine how the dipole operator acts on that state to obtain :math:`\hat m_\rho|I\rangle` -
 # determine how best to efficiently time propagate that state with the molecular Hamiltonian - run the
-# time propagation for various times, and from the expectation value determine the time-domain Green�s
-# function - Fourier transform (classically) the Green�s function to obtain it in the freuency domain,
+# time propagation for various times, and from the expectation value determine the time-domain Green's
+# function - Fourier transform (classically) the Green's function to obtain it in the freuency domain,
 # which gives us the absorption cross section as a function of frequency
 # 
 # **insert figure that is a block-diagram outline of this procedure** follows the steps above,
 # includes some loops showing repeated shots and various time selections, classical computer computing
 # the Fourier transform, final spectrum
 # 
-######################################################################
-# .. figure:: _static\demonstration_assets/xas/block_diagram_of_algorithm.png
+# .. figure:: _static/demonstration_assets/xas/block_diagram_of_algorithm.png
 #    :alt: alt text
 # 
 # 
@@ -140,7 +145,6 @@ r"""X-ray Absorption Spectroscopy Simulation in the Time-Domain
 # 
 # For this demo, we are going to use the very simple :math:`H_2` molecule.
 # 
-######################################################################
 # Initial state preparation
 # ~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
@@ -153,7 +157,6 @@ r"""X-ray Absorption Spectroscopy Simulation in the Time-Domain
 
 from pyscf import gto, scf, mcscf
 import numpy as np
-
 # Create a mol object
 r = 0.71
 geom = [['H', (0, 0, -r/2)],
@@ -170,6 +173,7 @@ hf.run(verbose=0)
 # for the expansion of the intitial wavefunction as a linear combination of Slater determinants.
 # Running the configuration interaction (CI) method returns the wavefunction as as vector. We will
 # filter out small values in the wavefunction.
+# 
 
 ncas = hf.mol.nao
 nelecas = hf.mol.nelectron
@@ -209,14 +213,14 @@ print("cascivec", cascivec)
 # be computed in ``pyscf`` using the the ``intor`` method of the ``mol`` object with argument
 # ``'int1e_r_cart'`` to specify a one-electron integral with a position :math:`r` factor. Keyword
 # argument ``comp=3`` will give us all three components.
-
+# 
 
 dip_ints = hf.mol.intor('int1e_r_cart', comp=3)
 
 ######################################################################
 # We can then transform to the molecular orbital space using ``np.einsum`` and the ``mo_coeff`` method
 # of ``hf``.
-
+# 
 
 orbcas = hf.mo_coeff
 dip_ints = np.einsum('ik,xkl,lj->xij', orbcas.T, dip_ints, orbcas)
@@ -224,9 +228,10 @@ dip_ints = np.einsum('ik,xkl,lj->xij', orbcas.T, dip_ints, orbcas)
 ######################################################################
 # What's left is to code the action of the ladder operators :math:`c_i^\dagger c_j`.
 # 
-# **Explain the above, and insert code below to actually compute ``dipole_vec``. Right now I�m just
+# **Explain the above, and insert code below to actually compute ``dipole_rho``. Right now I'm just
 # inputting the result.**
 # 
+
 ## INSERT CODE ##
 dipole_rho = {(2, 1): -0.6902564137617815, (1, 2): -0.6902564137617815, 
                 (8, 1): -0.1327113674508237, (1, 8): -0.1327113674508237, 
@@ -238,22 +243,21 @@ dipole_norm = 1.3058
 # Finally, we can convert our vector into a PennyLane state vector using
 # ``qchem.convert._wfdict_to_statevector``, so that it is ready to be initialized in a circuit.
 # 
+
 from pennylane.qchem.convert import _wfdict_to_statevector
 
-wf_rho = _wfdict_to_statevector(dipole_rho, N)
+wf_dip = _wfdict_to_statevector(dipole_rho, ncas)
 
 ######################################################################
 # Let's prepare the circuit that will initialize our qubit register with this state
 # 
-######################################################################
 # Molecular Hamiltonian
 # ~~~~~~~~~~~~~~~~~~~~~
 # 
-######################################################################
-# Go read the demo �How to build compressed double-factorized Hamiltonians� if you haven�t, because
+# Go read the demo "How to build compressed double-factorized Hamiltonians" if you haven't, because
 # that is exactly what we are going to do!
 # 
-# Compressed double-factorized (CDF) molecular Hamiltonians will be perfect for our application � time
+# Compressed double-factorized (CDF) molecular Hamiltonians will be perfect for our application -- time
 # propagating our state with an electronic Hamiltonian. We will approximate the evolution operator
 # :math:`e^{-iHt}` with a Trotter product formula, where the factorized Hamiltonian will allow much
 # faster simulation.
@@ -270,6 +274,8 @@ wf_rho = _wfdict_to_statevector(dipole_rho, N)
 # Luckily, the one- and two- eletron integrals can be computed using modules in ``pyscf``. The core
 # constant can also be obtained using the method ``energy_nuc()`` of the ``mol`` object.
 # 
+
+from pyscf import ao2mo
 # create h1 -- one-body terms
 h_core = hf.get_hcore(mol)
 orbs = hf.mo_coeff
@@ -281,10 +287,12 @@ two = np.swapaxes(two, 1, 3)
 # to chemist notation
 eri = np.einsum('prsq->pqrs', two)
 h1e = one - np.einsum('pqrr->pq', two)/2.
+
 ######################################################################
-# We can apply CDF to the two-electron integrals using ``qml``\ �s ``qchem.factorize`` function, with
+# We can apply CDF to the two-electron integrals using ``qml``\ 's ``qchem.factorize`` function, with
 # ``compressed=True``.
-# 
+#
+
 import pennylane as qml
 # factorize hamiltonian, producing matrices
 _, Z, U = qml.qchem.factorize(eri, compressed=True)
@@ -294,34 +302,38 @@ print("U", U.shape)
 print("Z", Z.shape)
 approx_eri = qml.math.einsum("tpk,tqk,tkl,trl,tsl->pqrs", U, U, Z, U, U)
 assert qml.math.allclose(eri, approx_eri, atol=1.5e-3)
+
+
 ######################################################################
 # **Explain one-body extra term as the one-qubit Pauli-Z terms.**
 # 
 # Finally, we add the one-body correction to the one-electron integrals, and use ``np.linalg.eigh`` to
 # diagonalize them into the matrix :math:`Z^{(0)}` and obtain the rotation matrices :math:`U^{(0)}`.
-# 
+
+
 # add one-body correction
 Z_prime = np.stack([np.diag(np.sum(Z[i], axis = -1)) for i in range(Z.shape[0])], axis = 0)
 obc = np.einsum('tpk,tkk,tqk->pq', U, Z_prime, U)
 # Diagonalize the one-electron integral matrix
 eigenvals, U0 = np.linalg.eigh(h1e + obc)
 Z0 = np.diag(eigenvals)
+
+
 ######################################################################
 # **I think I need to explain the Jordan-Wigner mapping here explicitly, showing the one-body extra,
-# and the new rotation matrices and how they can be implemented with Thouless� theorem.**
+# and the new rotation matrices and how they can be implemented with Thouless' theorem.**
 # 
-# **Explain simplification using Thouless� theorem (here or in earlier section)** Specifically how to
+# **Explain simplification using Thouless' theorem (here or in earlier section)** Specifically how to
 # go form what looks like two U rotations to just one when using the ``qml.BasisRotation``.
 # 
 ######################################################################
 # Time-propagation circuit
 # ~~~~~~~~~~~~~~~~~~~~~~~~
 # 
-######################################################################
 # The main work of our algorithm will be to apply our Hamiltonian terms as a trotter product, and
 # measure the expectation value of that time evolution for various times.
 # 
-# Let�s start by writing functions that implement the time evolution for each Hamiltonian term, which
+# Let's start by writing functions that implement the time evolution for each Hamiltonian term, which
 # will be called by our trotter circuit.
 # 
 # One thing to track throughout this implementation is the global phase accrued throughout the time
@@ -331,15 +343,20 @@ Z0 = np.diag(eigenvals)
 # ``qml.BasisRotation`` to apply the unitary transform we want. We apply this to both spin sections of
 # the register.
 # 
+
+
 def U_rotations(U, control_wires):
     """Circuit implementing the basis rotations of the CDF decomposition."""
     norb = U.shape[-1]
     qml.BasisRotation(unitary_matrix=U, wires = [int(2*i+control_wires) for i in range(norb)])
     qml.BasisRotation(unitary_matrix=U, wires = [int(2*i+1+control_wires) for i in range(norb)])
+
+
 ######################################################################
 # Next we write a function to perform the :math:`Z` rotations. To simplify the Trotter function, we
-# condition the action in the function on whether it�s acting for a one-body or a two-body term.
+# condition the action in the function on whether it's acting for a one-body or a two-body term.
 # 
+
 from itertools import product
 def Z_rotations(Z, step, is_one_body_term, control_wires):
     """Circuit implementing the Z rotations of the CDF decomposition. 
@@ -367,8 +384,10 @@ def Z_rotations(Z, step, is_one_body_term, control_wires):
                             control = range(control_wires), control_values=0)
         globalphase = np.trace(Z)/4.*step - np.sum(Z)*step + np.sum(Z)*step/2.
     qml.PhaseShift(-globalphase, wires = 0)
+
+
 ######################################################################
-# Let�s define our Trotter step. The function will implement :math:`U` rotations and :math:`Z`
+# Let's define our Trotter step. The function will implement :math:`U` rotations and :math:`Z`
 # rotations. By tracking the last :math:`U` rotation used, we can implement two consequtive rotations
 # at once as :math:`V^{(\ell)} = U^{(\ell-1)}(U^{(\ell)})^T`, halving the number of rotations required
 # per Trotter step.
@@ -377,6 +396,7 @@ def Z_rotations(Z, step, is_one_body_term, control_wires):
 # terms in one order, but can also reverse the order. This can save another rotation step when we
 # implement two consecutive Trotter steps in the second-order Trotter scheme.
 # 
+
 def LieTrotter(step, prior_U, final_rotation, reverse=False):
     """Implements a first-order Trotterized circuit for the CDF."""
     _U0 = np.expand_dims(U0, axis = 0)
@@ -394,11 +414,14 @@ def LieTrotter(step, prior_U, final_rotation, reverse=False):
     if final_rotation: U_rotations(prior_U, 1)
     qml.PhaseShift(-core_const*step, wires=0)
     return prior_U
+
+
 ######################################################################
 # Our function ``trotter_circuit`` implements a second-order Trotter step, returning the Trotter step
 # ``circuit`` which applies ``StatePrep`` to prepare the register in the previous quantum state, and
 # two ``LieTrotter`` calls.
 # 
+
 def trotter_circuit(dev, state, step):
     """Implements a second-order Trotterized circuit for the CDF."""
     qubits = dev.wires.tolist()
@@ -413,15 +436,17 @@ def trotter_circuit(dev, state, step):
                     final_rotation=True, reverse=True)
         return qml.state()
     return qml.QNode(circuit, dev)
+
+
 ######################################################################
 # Simulation parameters
 # ~~~~~~~~~~~~~~~~~~~~~
 # 
-######################################################################
-# Let�s discuss our choice of parameters when running this simulation. **Discuss :math:`\eta`,
+# Let's discuss our choice of parameters when running this simulation. **Discuss :math:`\eta`,
 # :math:`j_\mathrm{max}`, the total number of shots :math:`S`, the Hamiltonian norm :math:`||H||`, the
 # grid of frequencies and the time step :math:`\tau`**.
-# 
+
+
 # simulation parameters
 eta = 0.05
 jmax = 40  # eyeballed
@@ -437,14 +462,16 @@ print("tau:", tau)
 print("jmax :", jmax)
 print("number of shots", shots)
 print("time int :", len(time_interval))
+
+
 ######################################################################
 # Measurement
 # ~~~~~~~~~~~
-# 
-######################################################################
 # To measure the expectation value of the time-propagated state, we use a Hadamard test.
 # 
 # measurement circuit
+
+device_type = "lightning.qubit"
 dev_est = qml.device(device_type, wires=int(2*ncas) + 1, shots=shots)
 @qml.qnode(dev_est)
 def meas_circuit(state):
@@ -452,10 +479,22 @@ def meas_circuit(state):
     # measure in PauliX or PauliY to get the real/imag parts
     return [qml.expval(op) for op in \
             [qml.PauliX(wires=0), qml.PauliY(wires=0)]]
+
 ######################################################################
 # Run Simulation
 # --------------
 # 
+# initialization circuit for w|I>
+# propagating device does not use shots -- it does not work with qml.state()
+
+dev_prop = qml.device(device_type, wires=int(2*ncas) + 1, shots=None)
+@qml.qnode(dev_prop)
+def initial_circuit(wf):
+    # dipole wavefunction preparation
+    qml.StatePrep(wf, wires=dev_prop.wires.tolist()[1:])
+    qml.Hadamard(wires=0)
+    return qml.state()
+
 ######################################################################
 # Finally, we can run the simulation, and calculate the spectrum from the measurement results.
 
@@ -470,7 +509,7 @@ for ii in range(0, len(time_interval), 1):
     state = circuit()
     measurement = meas_circuit(state=state)
     
-    results[:, ii] += norm_dip**2 * \
+    results[:, ii] += dipole_norm**2 * \
                     np.array(measurement).real
 results = np.array(results)
 L_j = np.exp(-eta * time_interval)
@@ -480,11 +519,15 @@ fsignal = np.array([fsignal_func(w) for w in wgrid])
 spectrum_func = lambda w: tau * ( (1/(2.*np.pi))*dipole_norm**2
                                 + np.real(fsignal[int((w-w_min)//w_step)]) )
 spectrum = np.array([spectrum_func(w) for w in wgrid]) 
+
+
 ######################################################################
 # Plotting the frequency signal, and the spectrum, we see
 # 
+
 import matplotlib.pyplot as plt
 plt.style.use("pennylane.drawer.plot")
+
 # plot the results
 plt.figure(figsize=(6,4))
 plt.plot(range(len(results[0, :])), results[0, :], label="Real")
@@ -492,6 +535,7 @@ plt.plot(range(len(results[1, :])), results[1, :], label="Imaginary", linestyle=
 plt.xlabel(r"$\mathrm{Time step}, j$")
 plt.legend()
 plt.show()
+
 # plot the spectrum
 fig, ax = plt.subplots(figsize=(6,4))
 ax.plot(wgrid, spectrum.real)
@@ -499,11 +543,11 @@ ax.set_xlabel(r"$\mathrm{Energy}, \omega\ (\mathrm{Ha})$")
 ax.set_ylabel(r"$\mathrm{Absorption\ (arb.)}$")
 fig.tight_layout()
 plt.show()
+
 ######################################################################
 # Further Optimizations
 # ~~~~~~~~~~~~~~~~~~~~~
 # 
-######################################################################
 # There are more optimizations mentioned in the paper that were not implemented here. Below is a list
 # of further optimizations: - Randomized Trotter steps - BLISS - Distribution sampling - Double
 # measurement
@@ -514,7 +558,7 @@ plt.show()
 # 
 # In this tutorial, we have implemented a simplified version of the algorithm as presented in
 # [Fomichev:2025]. The algorithm represents a culmination of many optimizations for time-evolving an
-# eletronic Hamiltonian. We�ve also discussed how XAS is a promising candidate for early
+# electronic Hamiltonian. We've also discussed how XAS is a promising candidate for early
 # fault-tolerant quantum computers due to its low qubit overhead but high amount of correlations in
 # the state space.
 # 
