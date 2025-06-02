@@ -550,7 +550,6 @@ plt.show()
 # of further optimizations: - Randomized Trotter steps - BLISS - Distribution sampling - Double
 # measurement
 # 
-######################################################################
 # Conclusion
 # ----------
 # 
