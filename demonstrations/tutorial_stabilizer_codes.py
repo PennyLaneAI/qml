@@ -97,10 +97,10 @@ print("|111> component: ", encode_qnode(alpha, beta)[7])
 #
 #     X_2 \vert \bar{\psi}\rangle = \alpha \vert 010 \rangle + \beta \vert 101 \rangle
 #
-# If we are sure that **only one bit-flip error occurred**, and since only the superpositions of :math:`\alpha \vert 000 \rangle` and 
-# :math:`\alpha \vert 111 \rangle` are allowed, we can deduce that error occurred on the second qubit and we can fix this error by flipping it back. But there is a problem with this reasoning: 
-# To know that a flip did occur,
-# we have to measure the state. But this collapses the state of the qubit, rendering it useless for future calculations. Let us see how to get around this.
+# If we assume that **only one bit-flip error occurred**, and considering that only the superpositions of :math:`\alpha \vert 000 \rangle` and 
+# :math:`\alpha \vert 111 \rangle` are allowed, we can deduce that error occurred on the second qubit and we can fix it by flipping the qubit back. But there is a problem with this reasoning: 
+# to know that a flip did occur,
+# we need to measure the state. But this collapses the state of the qubit, rendering it useless for future computations. Let us see how to get around this issue.
 #
 # .. note::
 #     Why do we encode qubits in this way, instead of preparing many copies of the state? If the quantum state is known, we could do this,
@@ -110,9 +110,9 @@ print("|111> component: ", encode_qnode(alpha, beta)[7])
 # Error detection
 # ~~~~~~~~~~~~~~~~
 #
-# To detect whether a bit-flip error has occurred on one of the physical qubits, we perform a **parity measurement.** A parity measurement
-# acts on auxiliary qubits to avoid disturbing the encoded logical state. In the case of the three-qubit repetition code, we measure the two auxiliary qubits
-# in the computational basis after applying some :math:`\textrm{CNOT}` gates, as shown below.
+# To detect a bit-flip error on one of the physical qubits without disturbing the encoded logical state, we perform a **parity measurement.** A parity measurement
+# acts on some auxiliary qubits to avoid disturbing the encoded logical state. IFor the three-qubit repetition code, this involves measuring two auxiliary qubits in the 
+# computational basis after applying a series of :math:`\textrm{CNOT}` gates, as illustrated in the circuit below.
 #
 # .. figure:: ../_static/demonstration_assets/stabilizer_codes/parity_measurements.png
 #    :align: center
@@ -129,7 +129,7 @@ print("|111> component: ", encode_qnode(alpha, beta)[7])
 #
 #    ..
 #
-# Let us verify this by implementing the syndrome measurement in PennyLane
+# Let us verify this by implementing the syndrome measurement in PennyLane.
 
 def error_detection():
 
@@ -201,13 +201,13 @@ def error_correction(error_wire):
     qml.cond(m3 & m4, qml.PauliX)(wires = 1)
     qml.cond(~m3 & m4, qml.PauliX)(wires = 2)
 
-    return qml.density_matrix(wires = [0, 1, 2]) # qml.state not supported, but density matrices are
+    return qml.density_matrix(wires = [0, 1, 2]) # qml.state not supported, but density matrices are.
 
 ##############################################################################
 #
 # At the time of writing, PennyLane circuits with mid-circuit measurements cannot return a quantum state vector, so we return the density matrix instead.
 # With this result, we can verify that the fidelity of the encoded state is the same as the final state after correction
-# as follows
+# as follows.
 
 dev = qml.device("default.qubit", wires = 5)
 error_correction_qnode = qml.QNode(error_correction, dev)
@@ -215,9 +215,12 @@ encoded_state = qml.math.dm_from_state_vector(encode_qnode(alpha, beta))
 
 # Compute fidelity of final corrected state with initial encoded state
 
-print("Fidelity if error on wire 0: ", qml.math.fidelity(encoded_state, error_correction_qnode(0)).round(2))
-print("Fidelity if error on wire 1: ", qml.math.fidelity(encoded_state, error_correction_qnode(1)).round(2))
-print("Fidelity if error on wire 2: ", qml.math.fidelity(encoded_state, error_correction_qnode(2)).round(2))
+print("Fidelity if error on wire 0: ", 
+      qml.math.fidelity(encoded_state, error_correction_qnode(0)).round(2))
+print("Fidelity if error on wire 1: ", 
+      qml.math.fidelity(encoded_state, error_correction_qnode(1)).round(2))
+print("Fidelity if error on wire 2: ", 
+      qml.math.fidelity(encoded_state, error_correction_qnode(2)).round(2))
 
 ##############################################################################
 #
@@ -242,7 +245,7 @@ print("Fidelity if error on wire 2: ", qml.math.fidelity(encoded_state, error_co
 #
 #    ..
 #
-# the three-qubit repetition code can be expressed in the following way:
+# the three-qubit repetition code can be expressed in the following way.
 #
 # .. figure:: ../_static/demonstration_assets/stabilizer_codes/3_qubit_stabilizer_circ.png
 #    :align: center
@@ -252,7 +255,7 @@ print("Fidelity if error on wire 2: ", qml.math.fidelity(encoded_state, error_co
 #
 # This is the same circuit, but the controls are all now in the auxiliary qubits, while the physical qubits act as target qubits. 
 # This does not seem desirable--we do not want to change the state of the physical qubits! However, let us observe that the operators
-# that act on the logical qubits are :math:`Z_0 Z_1 I_2` and :math:`I_0 Z_1 Z_2,` which leave the logical codewords invariant:
+# that act on the logical qubits are :math:`Z_0 Z_1 I_2` and :math:`I_0 Z_1 Z_2,` which leave the logical codewords invariant.
 # 
 # .. math::
 #
@@ -264,7 +267,7 @@ print("Fidelity if error on wire 2: ", qml.math.fidelity(encoded_state, error_co
 #
 # This is great news. As long as no error has occurred, the logical qubits will be left alone. Otherwise, there will be
 # some operations applied on the state, but we will be able to fix them via an error correction scheme. The invariance property 
-# **holds true  for and only for the logical codewords.** For any other three-qubit basis states, at least one of these operators will have eigenvalue 
+# **holds true for and only for the logical codewords.** For any other three-qubit basis states, at least one of these operators will have eigenvalue 
 # :math:`-1`, as shown in the table below.
 #
 # .. figure:: ../_static/demonstration_assets/stabilizer_codes/table_eigenvalues.png
@@ -428,9 +431,9 @@ print(classify_pauli(X(0)@Y(1)@Z(2), logical_ops, generators, 3))
 #
 # .. note::
 #     In the literature, you may have come across an error correction code being called an ":math:`[n,k]`-stabilizer code." In this notation, the number :math:`n` represents
-#     the number of physical qubit used to encode the logical qubit, and :math:`k` is the number of logical qubits and it is 
+#     the number of physical qubit used to encode the logical qubit. The integer :math:`k` is the number of logical qubits and it is 
 #     equal to :math:`1` for all the codes in this demo. It is possible to show that the number of stabilizer generators :math:`m`
-#     is related to :math:`n` and :math:`k` via :math: `m = n - k.`
+#     is related to :math:`n` and :math:`k` via :math:`m = n - k.`
 #
 # Five-qubit stabilizer code
 # ---------------------------
@@ -508,7 +511,7 @@ def five_qubit_encode(alpha, beta):
 
 ##############################################################################
 #
-# Having encoded the logical state, we can use the stabilizers to measure obtain the syndrome table like we did with the three-qubit code.
+# Having encoded the logical state, we can implement the general circuit built from the stabilizers to obtain the syndrome table like we did with the three-qubit code.
 
 dev = qml.device("default.qubit", wires = 9, shots = 1)
 
