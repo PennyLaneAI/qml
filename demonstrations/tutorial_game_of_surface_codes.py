@@ -17,7 +17,7 @@ Introduction
 ------------
 
 The game of surface codes [#Litinski]_ is a high-level framework for designing surface code quantum computing architectures.
-The game helps us understand space-time trade-offs, where e.g. designs with a higher qubit overhead allow for faster computations and vice versa.
+The game helps us understand space-time trade-offs, where designs with a higher qubit overhead allow for faster computations and vice versa.
 For example, a space-efficient design might allow a computation with :math:`10^8` T gates to run in :math:`4` hours using :math:`55k` physical qubits, 
 whereas an intermediate design may run the same computation in :math:`22` minutes using :math:`120k` physical qubits, 
 or a time-optimized design in :math:`1` second using :math:`1500` interconnected quantum computers with :math:`220k` physical qubits, each.
@@ -45,9 +45,8 @@ The game is played on a board of tiles, where patches correspond to logical qubi
 Underlying these tiles are physical qubits that are statically arranged (:math:`2d^2` physical qubits per tile for code distance :math:`d`).
 But we should view logical qubit patches as dynamic entities that can appear, move around, deform and disappear again.
 The goal of this demo will be to understand the design principles and space-time trade-offs for surface code architectures.
-We are going to introduce the necessary rules of the game in this section.
 
-Data qubits are realized by patches that at least occupy one tile, but potentially multiple.
+Data qubits are realized by patches that occupy at least one tile, but potentially multiple.
 They always have four distinct boundaries corresponding to X (dotted) and Z (solid) edges.
 This is shown in the figure below.
 
@@ -60,8 +59,8 @@ This is shown in the figure below.
     A single qubit can occupy one tile (a) or multiple tiles (b), where dotted lines correspond to X and solid lines to Z operators.
     Attribution see **
 
-Every operation in the game has an associated time cost that we measure in units of 🕒. These correspond more or less to surface code cycles.
-There are some discrepancies but the correspondance is close enough to weigh out space-time trade-offs in architecture designs.
+Every operation in the game has an associated time cost that we measure in units of code cycles 🕒.
+There are some discrepancies to actual surface code cycles, but the correspondance is close enough to weigh out space-time trade-offs in architecture designs.
 We are not going to give an exhaustive overview of all possible operations, but focus on a few important ones and fill the remaining gaps necessary for the architecture designs in the respective sections below.
 
 
@@ -180,12 +179,12 @@ we can perform a patch rotation at a cost of 3🕒:
 The worst thing that can happen is to have two opposite qubits require an X measurement, 
 e.g. qubits (3 and 4) or (5 and 6). If either or both occurs, it takes a total of 6🕒 to rotate the patches.
 
-An additional problem of this design is the fact that there is no tiles for qubits to expand to in order to perform Y measurements.
+An additional problem of this design is the fact that there are no tiles for qubits to expand to in order to perform Y measurements.
 This can be remedied by making use of the identity 
 
 .. math:: e^{i \frac{\pi}{8} Y} = e^{-i \frac{\pi}{4} Z} e^{i \frac{\pi}{8} X} e^{i \frac{\pi}{4} Z}.
 
-The Clifford rotation on the right :math:`e^{i \frac{\pi}{4} Z}`, which is applied first, needs to be explicitly performed in this case. The second one (on the left) can be merged again with the terminal measurements of the circuit.
+The Clifford rotation on the right :math:`e^{i \frac{\pi}{4} Z}`, which is applied first, needs to be explicitly performed in this case. The second Clifford rotation (:math:`e^{-i \frac{\pi}{4} Z}`) can be merged with the terminal measurements of the circuit.
 Such a rotation :math:`e^{i \frac{\pi}{4} P}` can be performed with a joint measurement of :math:`P \otimes Y`, similar to the magic state distillation circuit:
 
 .. figure:: ../_static/demonstration_assets/game_of_surface_codes/clifford_rotation.png
