@@ -9,8 +9,8 @@ They demonstrate the use of the Chebyshev basis space in generative modelling of
 Further work also proposes a protocol for learning and sampling multivariate probability distributions that arise in high-energy physics [#delejarza2025]_. 
 Crucial to their implementation of the learning models is the quantum Chebyshev transform which utilizes the quantum Fourier transform to allow for fast transformations between the standard and the Chebyshev basis.
 
-In this demo we will show how the quantum Chebyshev transform can be implemented in Pennylane. 
-To start, we'll describe what Chebyshev polynomials are, including the classical discrete Chebyshev transform. After that, we'll look at the quantum Chebyshev basis and its transform.
+In this demo we will show how the quantum Chebyshev transform can be implemented in PennyLane. 
+To start, we'll describe what Chebyshev polynomials are, and what the classical discrete Chebyshev transform is. After that, we'll look at the quantum Chebyshev basis and its transform.
 
 .. figure:: ../_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_quantum_chebyshev_transform.png
    :align: center
