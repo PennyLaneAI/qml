@@ -108,9 +108,9 @@ efficient level of theory.
 #
 #    cell = gto.Cell()
 #    cell.unit = 'Angstrom'
-#    cell.a = ''' 12.0     0.0     0.0
-#                  0.0    12.0     0.0
-#                  0.0     0.0    12.0 '''  # lattice vectors of the unit cell
+#    cell.a = ''' 15.0     0.0     0.0
+#                  0.0    15.0     0.0
+#                  0.0     0.0    15.0 '''  # lattice vectors of the unit cell
 #
 #    cell.atom = ''' H 0.0  0.0   0.0
 #                    H 0.0  0.0   0.75
@@ -128,7 +128,6 @@ efficient level of theory.
 #
 #    lattice = lattice.Lattice(cell, kmesh)
 #    filling = cell.nelectron / (lattice.nscsites * 2.0)
-#    kpts = lattice.kpts
 #
 #
 # Performing mean field calculations
@@ -138,10 +137,10 @@ efficient level of theory.
 #
 # .. code-block:: python
 #
-#    gdf = df.GDF(cell, kpts)
+#    gdf = df.GDF(cell, lattice.kpts)
 #    gdf._cderi_to_save = 'gdf_ints.h5' # output file for the integrals
 #    gdf.build()                        # compute the integrals
-#    kmf = scf.KRHF(cell, kpts, exxdiv=None).density_fit()
+#    kmf = scf.KRHF(cell, lattice.kpts, exxdiv=None).density_fit()
 #    kmf.with_df = gdf                  # use density-fitted integrals
 #    kmf.with_df._cderi = 'gdf_ints.h5' # input file for the integrals
 #    kmf.kernel()                       # run Hartree-Fock
@@ -160,10 +159,10 @@ efficient level of theory.
 #
 #    from libdmet.basis_transform import make_basis
 #
-#    c_ao_iao, _, _ = make_basis.get_C_ao_lo_iao(
+#    ao_to_iao_transform, _, _ = make_basis.get_C_ao_lo_iao(
 #    lattice, kmf, minao="MINAO", full_return=True)
-#    c_ao_lo = lattice.symmetrize_lo(c_ao_iao)
-#    lattice.set_Ham(kmf, gdf, c_ao_lo, eri_symmetry=4) # rotate to IAO basis
+#    ao_to_lo_transform = lattice.symmetrize_lo(ao_to_iao_transform)
+#    lattice.set_Ham(kmf, gdf, ao_to_lo_transform, eri_symmetry=4) # rotate to IAO basis
 #
 # Next, we identify the orbital labels for each atom in the unit cell and define the impurity and
 # bath by looking at the labels. In this example, we choose to keep the :math:`1s` orbitals in the
@@ -174,12 +173,11 @@ efficient level of theory.
 #
 #    from libdmet.lo.iao import get_labels, get_idx
 #
-#    aoind = cell.aoslice_by_atom()
-#    labels, val_labels, virt_labels = get_labels(cell, minao="MINAO")
+#    orb_labels, val_labels, virt_labels = get_labels(cell, minao="MINAO")
 #    imp_idx = get_idx(val_labels, atom_num=[2,3,4,5])
 #    bath_idx = get_idx(virt_labels, atom_num=[2,3,4,5], offset=len(val_labels))
-#    ncore = []
-#    lattice.set_val_virt_core(imp_idx, bath_idx, ncore)
+#    core_idx = []
+#    lattice.set_val_virt_core(imp_idx, bath_idx, core_idx)
 #
 # Now that we have a description of our impurity, bath and environment orbitals, we can implement
 # our DMET simulation.
@@ -215,9 +213,9 @@ efficient level of theory.
 #            basis: rotation matrix for embedding basis
 #        """
 #
-#        rho, mu, scf_result = dmet.HartreeFock(lattice, v_cor, filling, mu,
+#        rho, mu, scf_result = dmet.HartreeFock(lattice, v_corr, filling, mu,
 #                                        ires=True)
-#        imp_ham, _, basis = dmet.ConstructImpHam(lattice, rho, v_cor, int_bath=int_bath)
+#        imp_ham, _, basis = dmet.ConstructImpHam(lattice, rho, v_corr, int_bath=int_bath)
 #        imp_ham = dmet.apply_dmu(lattice, imp_ham, basis, last_dmu)
 #
 #        return rho, mu, scf_result, imp_ham, basis
@@ -314,7 +312,7 @@ efficient level of theory.
 #
 # .. code-block:: python
 #
-#    def initialize_vcor(lattice):
+#    def initialize_vcorr(lattice):
 #        r"""A function to initialize the correlation potential
 #
 #        Args:
@@ -324,31 +322,31 @@ efficient level of theory.
 #            Initial correlation potential
 #        """
 #
-#        v_cor = dmet.VcorLocal(restricted=True, bogoliubov=False,
+#        v_corr = dmet.VcorLocal(restricted=True, bogoliubov=False,
 #                nscsites=lattice.nscsites, idx_range=lattice.imp_idx)
-#        v_cor.assign(np.zeros((2, lattice.nscsites, lattice.nscsites)))
-#        return v_cor
+#        v_corr.assign(np.zeros((2, lattice.nscsites, lattice.nscsites)))
+#        return v_corr
 #
-#    def fit_correlation_potential(rho_emb, lattice, basis, v_cor):
+#    def fit_correlation_potential(rho_emb, lattice, basis, v_corr):
 #        r"""A function to solve impurity Hamiltonian
 #
 #        Args:
 #            rho_emb: density matrix for embedded system
 #            lattice: Lattice object containing information about the system
 #            basis: rotation matrix for embedding basis
-#            v_cor: correlation potential
+#            v_corr: correlation potential
 #
 #        Returns:
-#            v_cor: correlation potential
-#            dVcor_per_ele: change in correlation potential per electron
+#            v_corr: correlation potential
+#            dVcorr_per_ele: change in correlation potential per electron
 #        """
 #
-#        vcor_new, err = dmet.FitVcor(rho_emb, lattice, basis, \
-#                    v_cor, beta=np.inf, filling=filling, MaxIter1=300, MaxIter2=0)
+#        vcorr_new, _ = dmet.FitVcor(rho_emb, lattice, basis, \
+#                    v_corr, beta=np.inf, filling=filling, MaxIter1=300, MaxIter2=0)
 #
-#        dVcor_per_ele = np.max(np.abs(vcor_new.param - v_cor.param))
-#        v_cor.update(vcor_new.param)
-#        return v_cor, dVcor_per_ele
+#        dVcorr_per_ele = np.max(np.abs(vcorr_new.param - v_corr.param))
+#        v_corr.update(vcorr_new.param)
+#        return v_corr, dVcorr_per_ele
 #
 # Now, we have defined all the ingredients of DMET. We can set up the self-consistency loop to get
 # the final results.
@@ -363,11 +361,11 @@ efficient level of theory.
 #
 #    import libdmet.dmet.Hubbard as dmet
 #
-#    max_iter = 10                     # maximum number of iterations
+#    max_iter = 20                     # maximum number of iterations
 #    e_old = 0.0                       # initial value of energy
-#    v_cor = initialize_vcor(lattice)  # initial value of correlation potential
-#    dVcor_per_ele = None              # initial value of correlation potential per electron
-#    vcor_tol = 1.0e-5                 # tolerance for correlation potential convergence
+#    v_corr = initialize_vcorr(lattice)# initial value of correlation potential
+#    dVcorr_per_ele = None             # initial value of correlation potential per electron
+#    vcorr_tol = 1.0e-5                # tolerance for correlation potential convergence
 #    energy_tol = 1.0e-5               # tolerance for energy convergence
 #    mu = 0                            # initial chemical potential
 #    last_dmu = 0.0                    # change in chemical potential
@@ -383,7 +381,7 @@ efficient level of theory.
 #
 #    for i in range(max_iter):
 #        rho, mu, scf_result, imp_ham, basis = construct_impurity_hamiltonian(lattice,
-#                           v_cor, filling, mu, last_dmu) # construct impurity Hamiltonian
+#                           v_corr, filling, mu, last_dmu) # construct impurity Hamiltonian
 #        filling_imp = filling * 0.5
 #        # solve impurity Hamiltonian
 #        rho_emb, energy_emb, imp_ham, last_dmu, solver_info = solve_impurity_hamiltonian(lattice,
@@ -392,12 +390,12 @@ efficient level of theory.
 #        energy_imp, energy = solve_full_system(lattice, rho_emb, energy_emb, basis, imp_ham,
 #                           last_dmu, solver_info)
 #        # fit correlation potential
-#        v_cor, dVcor_per_ele = fit_correlation_potential(rho_emb,
-#                                         lattice, basis, v_cor)
+#        v_corr, dVcorr_per_ele = fit_correlation_potential(rho_emb,
+#                                         lattice, basis, v_corr)
 #
 #        dE = energy_imp - e_old
 #        e_old = energy_imp
-#        if dVcor_per_ele < vcor_tol and abs(dE) < energy_tol:
+#        if dVcorr_per_ele < vcorr_tol and abs(dE) < energy_tol:
 #            print("DMET Converged")
 #            print("DMET Energy per cell: ", energy)
 #            break
@@ -431,9 +429,9 @@ efficient level of theory.
 #    import pennylane as qml
 #    from pennylane.qchem import one_particle, two_particle, observable
 #
-#    t = one_particle(h1[0])
-#    v = two_particle(np.swapaxes(h2, 1, 3)) # swap to physicist's notation
-#    qubit_op = observable([t,v], mapping="jordan_wigner")
+#    one_elec = one_particle(h1[0])
+#    two_elec = two_particle(np.swapaxes(h2, 1, 3)) # swap to physicist's notation
+#    qubit_op = observable([one_elec,two_elec], mapping="jordan_wigner")
 #
 # This Hamiltonian can be used in a quantum algorithm such as quantum phase estimation. We can get
 # ground state energy for the system by solving for the full system as done above in the
