@@ -469,8 +469,9 @@ print("time int :", len(time_interval))
 # ~~~~~~~~~~~
 # To measure the expectation value of the time-propagated state, we use a Hadamard test.
 # 
-# measurement circuit
 
+
+# measurement circuit
 device_type = "lightning.qubit"
 dev_est = qml.device(device_type, wires=int(2*ncas) + 1, shots=shots)
 @qml.qnode(dev_est)
@@ -483,7 +484,6 @@ def meas_circuit(state):
 ######################################################################
 # Run Simulation
 # --------------
-# 
 # initialization circuit for w|I>
 # propagating device does not use shots -- it does not work with qml.state()
 
@@ -501,7 +501,9 @@ def initial_circuit(wf):
 
 # grab an initial state (including the auxillary)
 state = initial_circuit(wf_dip)
+
 results = np.zeros((2, len(time_interval)))
+
 # perform time steps
 for ii in range(0, len(time_interval), 1):
     circuit = trotter_circuit(dev=dev_prop, state=state, step=tau)
@@ -511,6 +513,7 @@ for ii in range(0, len(time_interval), 1):
     
     results[:, ii] += dipole_norm**2 * \
                     np.array(measurement).real
+    
 results = np.array(results)
 L_j = np.exp(-eta * time_interval)
 fsignal_func = lambda w: (1./np.pi) *np.sum(L_j * (results[0,:] * np.cos(time_interval*w) -\
