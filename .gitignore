@@ -11,7 +11,9 @@ backreferences
 .DS_Store
 demos_community.rst
 .venv/
+.venv_ubuntu/
 .venv-build/
+demo_requirements.txt
 **/*.egg-info/
 pandoc*
 
