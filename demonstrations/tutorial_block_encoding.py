@@ -119,12 +119,7 @@ wires_j = [f"j{index}" for index in range(s)]
 # translate the control wires into the wire registers we prepared.
 
 code = gray_code(int(2 * np.log2(len(A))))
-n_selections = len(code)
-
-control_wires = [
-    int(np.log2(int(bin(code[i])[2:]) ^ int(bin(code[(i + 1) % n_selections])[2:])))
-    for i in range(n_selections)
-]
+control_wires = np.log2(code ^ np.roll(code, -1)).astype(int)
 
 wire_map = {control_index : wire for control_index, wire in enumerate(wires_j + wires_i)}
 
