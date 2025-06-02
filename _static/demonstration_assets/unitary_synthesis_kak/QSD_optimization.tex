@@ -1,0 +1,85 @@
+\documentclass[preview]{standalone}
+\usepackage{amsmath,quantikz,graphicx,xcolor,amssymb,amsfonts}
+
+\definecolor{yellow}{HTML}{E2A300}
+\definecolor{blue}{HTML}{4D53C8}
+\definecolor{green}{HTML}{52BD7C}
+\definecolor{red}{HTML}{D7333B}
+
+\begin{document}
+\begin{align*}
+\begin{quantikz}
+    \ \ldots \  & &
+    \gate[style={dashed}]{\phantom{U}}\wire[d][2]{q} & &
+    \gate[style={dashed}]{\phantom{U}}\wire[d][2]{q} & & \\
+    \ \ldots \ & \gate[2]{SU(4)} &
+    |[operator]| & \gate[2]{SU(4)} &
+    |[operator]| & \gate[2]{SU(4)} & \\
+    \ \ldots \ & &
+    |[operator]| & &
+    |[operator]| & & 
+\end{quantikz}
+&=
+\begin{quantikz}
+    \ \ldots \  & &
+    \gate[style={dashed}]{\phantom{U}}\wire[d][2]{q} & &
+    \gate[style={dashed}]{\phantom{U}}\wire[d][2]{q} &[-0.9cm] & [0.2cm] & & & & & & \\
+    \ \ldots \ & \gate[2]{SU(4)} &
+    |[operator]| & \gate[2]{SU(4)} &
+    |[operator]| & \gategroup[2,steps=2,style={inner sep=0pt, rounded corners, color=red}]{} & \gate[2]{\Delta} & \gate[style={dotted}]{\phantom{U}} & \ctrl{1} & \gate{R_Y} & \ctrl{1} & \gate[style={dotted}]{\phantom{U}} & \\
+    \ \ldots \ & &
+    |[operator]| & &
+    |[operator]| & & & \gate[style={dotted}]{\phantom{U}} & \targ{} & \gate{R_Y} & \targ{} & \gate[style={dotted}]{\phantom{U}} & 
+\end{quantikz}\\
+&=
+\begin{quantikz}
+    \ \ldots \  & &
+    \gate[style={dashed}]{\phantom{U}}\wire[d][2]{q} & & & 
+    \gate[style={dashed}]{\phantom{U}}\wire[d][2]{q} & & & & & & \\
+    \ \ldots \ & \gate[2]{SU(4)} &
+    |[operator]| & \gate[2]{SU(4)}\gategroup[2,steps=2,style={inner sep=0pt, rounded corners, color=blue}]{} &
+    \gate[2]{\Delta} & |[operator]| & \gate[style={dotted}]{\phantom{U}} & \ctrl{1} & \gate{R_Y} & \ctrl{1} & \gate[style={dotted}]{\phantom{U}} & \\
+    \ \ldots \ & &
+    |[operator]| & &
+    & |[operator]| & \gate[style={dotted}]{\phantom{U}} & \targ{} & \gate{R_Y} & \targ{} & \gate[style={dotted}]{\phantom{U}} & 
+\end{quantikz}\\
+&=
+\begin{quantikz}
+    \ \ldots \  & &
+    \gate[style={dashed}]{\phantom{U}}\wire[d][2]{q} &[-0.9cm] & [0.2cm] & & & & & & 
+    \gate[style={dashed}]{\phantom{U}}\wire[d][2]{q} & & & & & & \\
+    \ \ldots \ & \gate[2]{SU(4)} &
+    |[operator]| &\gategroup[2,steps=2,style={inner sep=0pt, rounded corners, color=red}]{} & \gate[2]{\Delta} & \gate[style={dotted}]{\phantom{U}} & \ctrl{1} & \gate{R_Y} & \ctrl{1} & \gate[style={dotted}]{\phantom{U}}  & |[operator]| & \gate[style={dotted}]{\phantom{U}} & \ctrl{1} & \gate{R_Y} & \ctrl{1} & \gate[style={dotted}]{\phantom{U}} & \\
+    \ \ldots \ & &
+    |[operator]| & & & \gate[style={dotted}]{\phantom{U}} & \targ{} & \gate{R_Y} & \targ{} & \gate[style={dotted}]{\phantom{U}}
+    & |[operator]| & \gate[style={dotted}]{\phantom{U}} & \targ{} & \gate{R_Y} & \targ{} & \gate[style={dotted}]{\phantom{U}} & 
+\end{quantikz}\\
+% &=   
+% \begin{quantikz}
+%     & & & \gate{R_Z}\wire[d][2]{q} & & \gate{R_X}\wire[d][2]{q} & & \gate{R_Z}\wire[d][2]{q} & &\\
+%     & & \gate[2]{U(2^{n-1})} & |[operator]| & \gate[2]{U(2^{n-1})} & |[operator]| & \gate[2]{U(2^{n-1})} & |[operator]| & \gate[2]{U(2^{n-1})} & \\
+%     & \qwbundle{n-2} & & |[operator]| & & |[operator]| & & |[operator]| & & 
+% \end{quantikz}\\
+% &=\begin{quantikz}
+%     & & & \gate{R_Z}\wire[d][2]{q} & \gate{H} & \gategroup[3,steps=3,style={inner
+% sep=3pt, rounded corners,color=green}]{} & \gate{R_Z}\wire[d][2]{q} & & \gate{H} & \gate{R_Z}\wire[d][2]{q} & &\\
+%     & & \gate[2]{U(2^{n-1})} & |[operator]| & & \gate[2]{U(2^{n-1})} & |[operator]| & \gate[2]{U(2^{n-1})} & & |[operator]| & \gate[2]{U(2^{n-1})} & \\
+%     & \qwbundle{n-2} &  & |[operator]| & &  & |[operator]| &  & & |[operator]| &  & 
+% \end{quantikz}\\
+% &=\begin{quantikz}
+%     & & & \gate{R_Z}\wire[d][2]{q} & \targ{}\gategroup[2,steps=3,style={inner
+% sep=0pt, rounded corners,color=yellow}]{} & \gate{H} & \ctrl{0}\gategroup[3,steps=3,style={inner
+% sep=3pt, rounded corners,color=blue}]{} & |[operator]| & \ctrl{0}\gategroup[2,steps=3,style={inner
+% sep=0pt, rounded corners,color=yellow}]{} & \gate{H} & \targ{} & \gate{R_Z}\wire[d][2]{q} & &\\
+%     & & \gate[2]{U(2^{n-1})} & |[operator]| & \ctrl{-1} & &\ctrl{-1} & \gate[2]{U(2^{n-1})}\wire[u]{q} & \ctrl{-1} & & \ctrl{-1}& |[operator]| & \gate[2]{U(2^{n-1})} & \\
+%     & \qwbundle{n-2} &  & |[operator]| & & & & & & & & |[operator]| &  & 
+% \end{quantikz}\\
+% &=\begin{quantikz}
+%     & & & \gate{R_Z}\wire[d][2]{q}\gategroup[3,steps=2,style={inner
+% sep=0pt, rounded corners,color=red}]{} & \targ{} & & \gate{R_X}\wire[d][2]{q} & & \targ{}\gategroup[3,steps=2,style={inner
+% sep=0pt, rounded corners,color=red}]{} & \gate{R_Z}\wire[d][2]{q} & &\\
+%     & & \gate[2]{U(2^{n-1})} & |[operator]| & \ctrl{-1} & \gate[2]{U(2^{n-1})} & |[operator]| & \gate[2]{U(2^{n-1})} & \ctrl{-1} & |[operator]| & \gate[2]{U(2^{n-1})} & \\
+%     & \qwbundle{n-2} &  & |[operator]| & & & |[operator]| & & & |[operator]| &  & 
+% \end{quantikz}
+\end{align*}
+\end{document}
