@@ -22,15 +22,18 @@ To start, we'll describe what Chebyshev polynomials are, and what the classical 
 
 What are Chebyshev polynomials?
 ---------------------------------------
-
-`Chebyshev polynomials <https://en.wikipedia.org/wiki/Chebyshev_polynomials>`__ of the first kind :math:`T_n(x)` are a set of orthogonal polynomials that are complete on the interval :math:`[-1,1]`. *Completeness* here means any function :math:`f(x)` on that interval can be expanded as a series in :math:`T_n(x)` up to order :math:`N` as :math:`f(x) = \sum_{j=0}^N a_j T_j(x)`.
-
 The :math:`n` -th order Chebyshev polynomial of the first kind is defined as 
 
 .. math::
   T_n(x) \equiv \cos(n \arccos(x))\,.
 
-Note there are more types of Chebyshev polynomials, but in this demo, we will only discuss those of the first kind. We can write out the first few orders explicitly.
+`Chebyshev polynomials <https://en.wikipedia.org/wiki/Chebyshev_polynomials>`__ of the first kind are a set of orthogonal polynomials that are complete on the interval :math:`[-1,1]`. 
+*Completeness* here means any function :math:`f(x)` on that interval can be expanded as a series in :math:`T_n(x)` up to order :math:`N` as :math:`f(x) = \sum_{j=0}^N a_j T_j(x)`.
+
+.. note::
+    There are more types of Chebyshev polynomials, but in this demo, we will only discuss those of the first kind. 
+
+We can write out the first few orders explicitly.
 
 .. math::
   T_0(x) &= 1 \\
@@ -280,7 +283,7 @@ total_state = circuit(state=j)  # state with auxiliary qubit
 
 # round very small values to zero
 total_state = np.where(np.abs(total_state)<1e-12, 0, total_state)
-print(total_state)
+print(np.round(total_state, 3))
 
 #############################################
 # Indeed, we see the second half of the amplitude vector is zero. 

@@ -54,7 +54,7 @@
         },
         {
             "type": "demonstration",
-            "id": "tutorial_qubitization",
+            "id": "tutorial_period_finding",
             "weight": 1.0
         }
     ]
