@@ -656,7 +656,7 @@ print(np.allclose(reconstructed_K_1, K_1))
 #
 #     Vivek V Shende, Stephen S Bullock, Igor L Markov (2006)
 #     *Synthesis of Quantum Logic Circuits.*
-#     `arXiv:quant-ph/0406176 <https://doi.org/10.48550/arXiv.quant-ph/0406176>`__.
+#     `arXiv:quant-ph/0406176 <https://doi.org/10.48550/arXiv.quant-ph/0406176>`__,
 #     `IEEE Trans. on Computer-Aided Design, Vol. 25, No. 6 <https://doi.org/10.1109/TCAD.2005.855930>`__.
 #
 # .. [#Krol_BlockZXZ]
@@ -669,7 +669,7 @@ print(np.allclose(reconstructed_K_1, K_1))
 #
 #     Maximilian Balthasar Mansky, Santiago Londoño Castillo, Victor Ramos Puigvert, Claudia Linnhoff-Popien (2023).
 #     *Near-optimal quantum circuit construction via Cartan decomposition.*
-#     `arXiv:2212.12934 <https://arxiv.org/abs/2212.12934>`__.
+#     `arXiv:2212.12934 <https://arxiv.org/abs/2212.12934>`__,
 #     `Phys. Rev. A 108, 052607 <https://doi.org/10.1103/PhysRevA.108.052607>`__.
 #
 # .. [#Wierichs_CartanSynthesis]
@@ -682,27 +682,27 @@ print(np.allclose(reconstructed_K_1, K_1))
 #
 #     Efekan Kökcü, Thomas Steckmann, Yan Wang, J K Freericks, Eugene F Dumitrescu,
 #     Alexander F. Kemper (2021) *Fixed Depth Hamiltonian Simulation via Cartan Decomposition.*
-#     `arXiv:2104.00728 <https://doi.org/10.48550/arXiv.2104.00728>`__.
+#     `arXiv:2104.00728 <https://doi.org/10.48550/arXiv.2104.00728>`__,
 #     `Phys. Rev. Lett. 129, 070501 <https://doi.org/10.1103/PhysRevLett.129.070501>`__
 #
 # .. [#Bullock_Note]
 #
 #     Stephen S Bullock (2004) *Note on the Khaneja Glaser Decomposition.*
-#     `arXiv:quant-ph/0403141 <https://doi.org/10.48550/arXiv.quant-ph/0403141>`__.
+#     `arXiv:quant-ph/0403141 <https://doi.org/10.48550/arXiv.quant-ph/0403141>`__,
 #     `Quantum Inf. Comput., Vol. 4, No. 5, 396-400 <https://doi.org/10.26421/QIC4.5-5>`__.
 #
 # .. [#Dagli_Framework]
 #
 #     Mehmet Dagli, Domenico D'Alessandro, Jonathan D H Smith (2007) *A General Framework
 #     for Recursive Decompositions of Unitary Quantum Evolutions.*
-#     `arXiv:quant-ph/0701193 <https://doi.org/10.48550/arXiv.quant-ph/0701193>`__.
+#     `arXiv:quant-ph/0701193 <https://doi.org/10.48550/arXiv.quant-ph/0701193>`__,
 #     `J. Phys. A: Math. Theor. 41 155302 <https://iopscience.iop.org/article/10.1088/1751-8113/41/15/155302>`__.
 #
 # .. [#Shende_Minimal]
 #
 #     Vivek V Shende, Igor L Markov, Stephen S Bullock (2003) *Minimal Universal Two-qubit
 #     Quantum Circuits.*
-#     `arXiv:quant-ph/0308033 <https://doi.org/10.48550/arXiv.quant-ph/0308033>`__.
+#     `arXiv:quant-ph/0308033 <https://doi.org/10.48550/arXiv.quant-ph/0308033>`__,
 #     `Phys. Rev. A 69, 062321 <https://doi.org/10.1103/PhysRevA.69.062321>`__.
 #
 # Appendix: Gate counts
