@@ -59,7 +59,7 @@ These are known as the `Chebyshev nodes <https://en.wikipedia.org/wiki/Chebyshev
     Figure 2. The first six Chebyshev polynomials, along with their corresponding nodes.
 
 The nodes are plotted above along with the corresponding polynomials. 
-Note that the polynomials are normalized such that $T_n(1)=1$, and they satisfy a discrete orthogonality condition on the nodes of :math:`T_N(x)` in the following way for :math:`k, \ell<N`
+Note that the polynomials are normalized such that $T_n(1)=1$, and they satisfy the following discrete orthogonality condition on the nodes of :math:`T_N(x)` for :math:`k, \ell<N`
 
 .. math::
   \sum^{N-1}_{j=0}T_k(x_j^\mathrm{Ch})T_\ell(x_j^\mathrm{Ch}) =  
