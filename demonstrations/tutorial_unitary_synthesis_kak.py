@@ -681,7 +681,7 @@ print(np.allclose(reconstructed_K_1, K_1))
 #
 #     Efekan Kökcü, Thomas Steckmann, Yan Wang, J K Freericks, Eugene F Dumitrescu,
 #     Alexander F. Kemper (2021) *Fixed Depth Hamiltonian Simulation via Cartan Decomposition.*
-#     arXiv preprint `2104.00728 <https://doi.org/10.48550/arXiv.2104.00728>`__. Phys. Rev. Lett. 129, 070501
+#     arXiv preprint `2104.00728 <https://doi.org/10.48550/arXiv.2104.00728>`__. `Phys. Rev. Lett. 129, 070501 <https://doi.org/10.1103/PhysRevLett.129.070501>`__
 #
 # .. [#Bullock_Note]
 #
@@ -700,7 +700,8 @@ print(np.allclose(reconstructed_K_1, K_1))
 #     Vivek V Shende, Igor L Markov, Stephen S Bullock (2003) *Minimal Universal Two-qubit
 #     Quantum Circuits.*
 #     arXiv preprint `quant-ph/0308033 <https://doi.org/10.48550/arXiv.quant-ph/0308033>`__.
-#     Phys. Rev. A 69, 062321.
+#     `Phys. Rev. A 69, 062321 < 	
+https://doi.org/10.1103/PhysRevA.69.062321>`__.
 #
 # Appendix: Gate counts
 # ---------------------
