@@ -69,7 +69,7 @@ Note that the polynomials are normalized such that $T_n(1)=1$, and they satisfy 
       N/2 & k = \ell \neq 0\,.
     \end{cases}
 
-The Chebyshev polynomials have a lot of *nice* properties that make them a good choice to series expansion a function on a real interval. They are often utilized in numerical integration and interpolation methods, where the `discrete Chebyshev transformation <https://en.wikipedia.org/wiki/Discrete_Chebyshev_transform>`__  is needed to map between the function evaluated on a grid of points and the coefficients of the Chebyshev expansion of that function. Let's take a look at the discrete transform.
+The Chebyshev polynomials have a lot of *nice* properties that make them a good choice for expanding a function into a series on a real interval. They are often utilized in numerical integration and interpolation methods, where the `discrete Chebyshev transformation <https://en.wikipedia.org/wiki/Discrete_Chebyshev_transform>`__  is needed to map between the function evaluated on a grid of points and the coefficients of the Chebyshev expansion of that function. Let's take a look at the discrete transform.
 
 Discrete Chebyshev transform
 ---------------------------------------
