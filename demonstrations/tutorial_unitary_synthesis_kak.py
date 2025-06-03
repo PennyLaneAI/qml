@@ -21,7 +21,7 @@ for lowest CNOT count for any number of qubits.
 Crucially, we will not just go through these three techniques separately, but we will explain
 how they are variants of the same underlying mathematical factorization, which is called
 a recursive KAK, or Cartan, decomposition [#Wierichs_CartanSynthesis]_.
-One of the recursion steps will be implemented by a Cosine-Sine Decomposition (CSD), maybe the
+One of the recursion steps will be implemented by a Cosine-Sine Decomposition (CSD), which may be the
 most well-known KAK decomposition.
 
 In the appendix, we will derive the CNOT and rotation gate counts for all three decompositions,
@@ -31,7 +31,7 @@ We recommend that readers first familiarize themselves with KAK decompositions,
 for example using :doc:`our introductory demo </demos/tutorial_kak_decomposition>` or our
 :doc:`demo on compiling Hamiltonian simulation variationally
 </demos/tutorial_fixed_depth_hamiltonian_simulation_via_cartan_decomposition>`,
-which follows [#Kökcü_FDHS]_.
+which follows reference [#Kökcü_FDHS]_.
 
 
 KAK decompositions
@@ -649,58 +649,61 @@ print(np.allclose(reconstructed_K_1, K_1))
 # .. [#Khaneja_Glaser]
 #
 #     Navin Khaneja, Steffen Glaser (2000) *Cartan Decomposition of SU(2^n), Constructive
-#     Controllability of Spin systems and Universal Quantum Computing.* arXiv preprint
-#     `quant-ph/0010100 <https://doi.org/10.48550/arXiv.quant-ph/0010100>`__.
+#     Controllability of Spin systems and Universal Quantum Computing.*
+#     `arXiv:quant-ph/0010100 <https://doi.org/10.48550/arXiv.quant-ph/0010100>`__.
 #
 # .. [#Shende_QSD]
 #
 #     Vivek V Shende, Stephen S Bullock, Igor L Markov (2006)
-#     *Synthesis of Quantum Logic Circuits.* IEEE Trans. on Computer-Aided Design,
-#     `Vol. 25, No. 6 <https://doi.org/10.1109/TCAD.2005.855930>`__.
+#     *Synthesis of Quantum Logic Circuits.*
+#     `arXiv:quant-ph/0406176 <https://doi.org/10.48550/arXiv.quant-ph/0406176>`__,
+#     `IEEE Trans. on Computer-Aided Design, Vol. 25, No. 6 <https://doi.org/10.1109/TCAD.2005.855930>`__.
 #
 # .. [#Krol_BlockZXZ]
 #
 #     Anna M Krol, Zaid Al-Ars (2024) *Beyond Quantum Shannon: Circuit Construction for General
-#     n-Qubit Gates Based on Block ZXZ-Decomposition.* arXiv preprint
-#     `2403.13692 <https://doi.org/10.48550/arXiv.2403.13692>`__.
+#     n-Qubit Gates Based on Block ZXZ-Decomposition.*
+#     `arXiv:2403.13692 <https://doi.org/10.48550/arXiv.2403.13692>`__.
 #
 # .. [#Mansky_Linnhoff-Popien]
 #
 #     Maximilian Balthasar Mansky, Santiago Londoño Castillo, Victor Ramos Puigvert, Claudia Linnhoff-Popien (2023).
 #     *Near-optimal quantum circuit construction via Cartan decomposition.*
-#     arXiv preprint `2212.12934 <https://arxiv.org/abs/2212.12934>`__.
-#     `Phys. Rev. A **108**, 052607 <https://doi.org/10.1103/PhysRevA.108.052607>`__.
+#     `arXiv:2212.12934 <https://arxiv.org/abs/2212.12934>`__,
+#     `Phys. Rev. A 108, 052607 <https://doi.org/10.1103/PhysRevA.108.052607>`__.
 #
 # .. [#Wierichs_CartanSynthesis]
 #
 #     David Wierichs, Maxwell West, Roy T. Forestano, M. Cerezo, Nathan Killoran (2025)
-#     *Recursive Cartan decompositions for unitary synthesis.* arXiv preprint
-#     `2503.19014 <https://doi.org/10.48550/arXiv.2503.19014>`__.
+#     *Recursive Cartan decompositions for unitary synthesis.*
+#     `arXiv:2503.19014 <https://doi.org/10.48550/arXiv.2503.19014>`__.
 #
 # .. [#Kökcü_FDHS]
 #
 #     Efekan Kökcü, Thomas Steckmann, Yan Wang, J K Freericks, Eugene F Dumitrescu,
 #     Alexander F. Kemper (2021) *Fixed Depth Hamiltonian Simulation via Cartan Decomposition.*
-#     arXiv preprint `2104.00728 <https://doi.org/10.48550/arXiv.2104.00728>`__. Phys. Rev. Lett. **129**, 070501
+#     `arXiv:2104.00728 <https://doi.org/10.48550/arXiv.2104.00728>`__,
+#     `Phys. Rev. Lett. 129, 070501 <https://doi.org/10.1103/PhysRevLett.129.070501>`__
 #
 # .. [#Bullock_Note]
 #
 #     Stephen S Bullock (2004) *Note on the Khaneja Glaser Decomposition.*
-#     arXiv preprint `quant-ph/0403141 <https://doi.org/10.48550/arXiv.quant-ph/0403141>`__.
+#     `arXiv:quant-ph/0403141 <https://doi.org/10.48550/arXiv.quant-ph/0403141>`__,
+#     `Quantum Inf. Comput., Vol. 4, No. 5, 396-400 <https://doi.org/10.26421/QIC4.5-5>`__.
 #
 # .. [#Dagli_Framework]
 #
 #     Mehmet Dagli, Domenico D'Alessandro, Jonathan D H Smith (2007) *A General Framework
 #     for Recursive Decompositions of Unitary Quantum Evolutions.*
-#     arXiv preprint `quant-ph/0701193 <https://doi.org/10.48550/arXiv.quant-ph/0701193>`__.
-#     `J. Phys. A: Math. Theor. **41** 155302 <https://iopscience.iop.org/article/10.1088/1751-8113/41/15/155302>`__.
+#     `arXiv:quant-ph/0701193 <https://doi.org/10.48550/arXiv.quant-ph/0701193>`__,
+#     `J. Phys. A: Math. Theor. 41 155302 <https://iopscience.iop.org/article/10.1088/1751-8113/41/15/155302>`__.
 #
 # .. [#Shende_Minimal]
 #
 #     Vivek V Shende, Igor L Markov, Stephen S Bullock (2003) *Minimal Universal Two-qubit
 #     Quantum Circuits.*
-#     arXiv preprint `quant-ph/0308033 <https://doi.org/10.48550/arXiv.quant-ph/0308033>`__.
-#     Phys. Rev. A **69**, 062321.
+#     `arXiv:quant-ph/0308033 <https://doi.org/10.48550/arXiv.quant-ph/0308033>`__,
+#     `Phys. Rev. A 69, 062321 <https://doi.org/10.1103/PhysRevA.69.062321>`__.
 #
 # Appendix: Gate counts
 # ---------------------
