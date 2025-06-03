@@ -649,8 +649,8 @@ print(np.allclose(reconstructed_K_1, K_1))
 # .. [#Khaneja_Glaser]
 #
 #     Navin Khaneja, Steffen Glaser (2000) *Cartan Decomposition of SU(2^n), Constructive
-#     Controllability of Spin systems and Universal Quantum Computing.* arXiv preprint
-#     `quant-ph/0010100 <https://doi.org/10.48550/arXiv.quant-ph/0010100>`__.
+#     Controllability of Spin systems and Universal Quantum Computing.*
+#     `arXiv:quant-ph/0010100 <https://doi.org/10.48550/arXiv.quant-ph/0010100>`__.
 #
 # .. [#Shende_QSD]
 #
@@ -661,47 +661,47 @@ print(np.allclose(reconstructed_K_1, K_1))
 # .. [#Krol_BlockZXZ]
 #
 #     Anna M Krol, Zaid Al-Ars (2024) *Beyond Quantum Shannon: Circuit Construction for General
-#     n-Qubit Gates Based on Block ZXZ-Decomposition.* arXiv preprint
-#     `2403.13692 <https://doi.org/10.48550/arXiv.2403.13692>`__.
+#     n-Qubit Gates Based on Block ZXZ-Decomposition.*
+#     `arXiv:2403.13692 <https://doi.org/10.48550/arXiv.2403.13692>`__.
 #
 # .. [#Mansky_Linnhoff-Popien]
 #
 #     Maximilian Balthasar Mansky, Santiago Londoño Castillo, Victor Ramos Puigvert, Claudia Linnhoff-Popien (2023).
 #     *Near-optimal quantum circuit construction via Cartan decomposition.*
-#     arXiv preprint `2212.12934 <https://arxiv.org/abs/2212.12934>`__.
+#     `arXiv:2212.12934 <https://arxiv.org/abs/2212.12934>`__.
 #     `Phys. Rev. A 108, 052607 <https://doi.org/10.1103/PhysRevA.108.052607>`__.
 #
 # .. [#Wierichs_CartanSynthesis]
 #
 #     David Wierichs, Maxwell West, Roy T. Forestano, M. Cerezo, Nathan Killoran (2025)
-#     *Recursive Cartan decompositions for unitary synthesis.* arXiv preprint
-#     `2503.19014 <https://doi.org/10.48550/arXiv.2503.19014>`__.
+#     *Recursive Cartan decompositions for unitary synthesis.*
+#     `arXiv:2503.19014 <https://doi.org/10.48550/arXiv.2503.19014>`__.
 #
 # .. [#Kökcü_FDHS]
 #
 #     Efekan Kökcü, Thomas Steckmann, Yan Wang, J K Freericks, Eugene F Dumitrescu,
 #     Alexander F. Kemper (2021) *Fixed Depth Hamiltonian Simulation via Cartan Decomposition.*
-#     arXiv preprint `2104.00728 <https://doi.org/10.48550/arXiv.2104.00728>`__. `Phys. Rev. Lett. 129, 070501 <https://doi.org/10.1103/PhysRevLett.129.070501>`__
+#     `arXiv:2104.00728 <https://doi.org/10.48550/arXiv.2104.00728>`__.
+#     `Phys. Rev. Lett. 129, 070501 <https://doi.org/10.1103/PhysRevLett.129.070501>`__
 #
 # .. [#Bullock_Note]
 #
 #     Stephen S Bullock (2004) *Note on the Khaneja Glaser Decomposition.*
-#     arXiv preprint `quant-ph/0403141 <https://doi.org/10.48550/arXiv.quant-ph/0403141>`__.
+#     `arXiv:quant-ph/0403141 <https://doi.org/10.48550/arXiv.quant-ph/0403141>`__.
 #
 # .. [#Dagli_Framework]
 #
 #     Mehmet Dagli, Domenico D'Alessandro, Jonathan D H Smith (2007) *A General Framework
 #     for Recursive Decompositions of Unitary Quantum Evolutions.*
-#     arXiv preprint `quant-ph/0701193 <https://doi.org/10.48550/arXiv.quant-ph/0701193>`__.
+#     `arXiv:quant-ph/0701193 <https://doi.org/10.48550/arXiv.quant-ph/0701193>`__.
 #     `J. Phys. A: Math. Theor. 41 155302 <https://iopscience.iop.org/article/10.1088/1751-8113/41/15/155302>`__.
 #
 # .. [#Shende_Minimal]
 #
 #     Vivek V Shende, Igor L Markov, Stephen S Bullock (2003) *Minimal Universal Two-qubit
 #     Quantum Circuits.*
-#     arXiv preprint `quant-ph/0308033 <https://doi.org/10.48550/arXiv.quant-ph/0308033>`__.
-#     `Phys. Rev. A 69, 062321 < 	
-https://doi.org/10.1103/PhysRevA.69.062321>`__.
+#     `arXiv:quant-ph/0308033 <https://doi.org/10.48550/arXiv.quant-ph/0308033>`__.
+#     `Phys. Rev. A 69, 062321 <https://doi.org/10.1103/PhysRevA.69.062321>`__.
 #
 # Appendix: Gate counts
 # ---------------------
