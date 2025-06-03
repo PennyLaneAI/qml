@@ -655,8 +655,9 @@ print(np.allclose(reconstructed_K_1, K_1))
 # .. [#Shende_QSD]
 #
 #     Vivek V Shende, Stephen S Bullock, Igor L Markov (2006)
-#     *Synthesis of Quantum Logic Circuits.* IEEE Trans. on Computer-Aided Design,
-#     `Vol. 25, No. 6 <https://doi.org/10.1109/TCAD.2005.855930>`__.
+#     *Synthesis of Quantum Logic Circuits.*
+#     `arXiv:quant-ph/0406176 <https://doi.org/10.48550/arXiv.quant-ph/0406176>`__.
+#     `IEEE Trans. on Computer-Aided Design, Vol. 25, No. 6 <https://doi.org/10.1109/TCAD.2005.855930>`__.
 #
 # .. [#Krol_BlockZXZ]
 #
@@ -688,6 +689,7 @@ print(np.allclose(reconstructed_K_1, K_1))
 #
 #     Stephen S Bullock (2004) *Note on the Khaneja Glaser Decomposition.*
 #     `arXiv:quant-ph/0403141 <https://doi.org/10.48550/arXiv.quant-ph/0403141>`__.
+#     `Quantum Inf. Comput., Vol. 4, No. 5, 396-400 <https://doi.org/10.26421/QIC4.5-5>`__.
 #
 # .. [#Dagli_Framework]
 #
