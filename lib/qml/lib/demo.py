@@ -292,6 +292,10 @@ def _build_demo(
             out_dir,
         )
 
+    # Move the objects.inv file so we can merge them once all the demos are built
+    if target is BuildTarget.HTML:
+        fs.copy_any(ctx.build_dir / "html/objects.inv", out_dir)
+
 
 def _install_build_dependencies(venv: Virtualenv, build_dir: Path):
     """Install dependencies for running sphinx-build into `venv`."""
