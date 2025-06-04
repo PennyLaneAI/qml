@@ -1,0 +1,19 @@
+\documentclass[]{standalone}
+\usepackage{amsmath,quantikz,graphicx,xcolor}
+
+\begin{document}
+\begin{quantikz}
+    & & \gate[2]{A\oplus B} & \\
+    & \qwbundle{n-1} & &
+\end{quantikz}
+=
+\begin{quantikz}
+    \ghost[2]{A\oplus B}& & |[operator]| & \\
+    & \qwbundle{n-1} & \gate{A,B}\wire[u]{q} &
+\end{quantikz}
+=
+\begin{quantikz}
+    \ghost[2]{A\oplus B}& & \octrl{1} & \ctrl{1} & \\
+    & \qwbundle{n-1} & \gate{A} & \gate{B} &
+\end{quantikz}
+\end{document}

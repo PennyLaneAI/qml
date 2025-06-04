@@ -1,0 +1,18 @@
+\documentclass[]{standalone}
+\usepackage{amsmath,quantikz,graphicx,xcolor}
+
+\begin{document}
+\begin{quantikz}
+    & & \gate{R_Y}\wire[d][3]{q} & \\
+    & \qwbundle{n-3} & |[operator]| & \\
+    & & |[operator]| & \\
+    & & |[operator]| &
+\end{quantikz}
+=
+\begin{quantikz}
+    & & \gate{R_Y(\theta_0)} & \gate{R_Y(\theta_1)} & \gate{R_Y(\theta_2)} & \ \ldots \ & \gate{R_Y(\theta_{2^{n-1}-1})} & \\
+    & \qwbundle{n-3} & \octrl{-1} & \octrl{-1} & \octrl{-1} & \ \ldots \ & \ctrl{-1} & \\
+    & & \octrl{-1} & \octrl{-1} & \ctrl{-1} & \ \ldots \ & \ctrl{-1} & \\
+    & & \octrl{-1} & \ctrl{-1} & \octrl{-1} & \ \ldots \ & \ctrl{-1} &
+\end{quantikz}
+\end{document}
