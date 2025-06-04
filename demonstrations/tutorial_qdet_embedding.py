@@ -90,7 +90,7 @@ sections.
 #     L_n = \int_{V \in \Omega} d^3 r |\Psi_n(r)|^2
 #
 # where :math:`V` is the identified volume including the impurity within the supercell volume
-# :math:`\Omega` and :math:`Psi` is the wavefunction [#Galli2]_. We will use the
+# :math:`\Omega` and :math:`\Psi` is the wavefunction [#Galli2]_. We will use the
 # `WEST <https://pubs.acs.org/doi/10.1021/ct500958p>`_ program to compute the localization factor.
 # This requires creating the input file ``westpp.in`` as shown below.
 #
