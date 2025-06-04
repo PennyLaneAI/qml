@@ -14,6 +14,7 @@ import requirements
 import json
 import lxml.html
 from qml.context import Context
+import sphobjinv as soi
 
 
 logger = getLogger("qml")
@@ -202,6 +203,28 @@ def build(
 
     if failed:
         raise RuntimeError(f"Failed to build {len(failed)} demos", failed)
+    
+    # If we built the HTML output, gather and merge the objects.inv files
+    if target is BuildTarget.HTML:
+        logger.info("Building the master objects.inv file.")
+
+        inventory = soi.Inventory()
+        inventory.project = 'PennyLane'
+
+        for demo in demos:
+            logger.info("Loading objects.inv for '%s'", demo.name)
+            demo_inv = soi.Inventory(ctx.repo_root / "demos" / demo.name / "objects.inv")
+
+            # Only add entries that don't already exist in the merged inventory file
+            for entry in demo_inv.objects:
+                if entry not in inventory.objects:
+                    logger.info("Appending inventory object '%s'", entry.name)
+                    inventory.objects.append(entry)
+
+        logger.info("Writing the master objects.inv file to %s.", ctx.build_dir)
+        text = inventory.data_file(contract=True)
+        ztext = soi.compress(text)
+        soi.writebytes(ctx.build_dir / "objects.inv", ztext)
 
 
 def generate_requirements(
