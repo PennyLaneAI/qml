@@ -503,6 +503,8 @@ global_drive = qml.pulse.rydberg_drive(amplitude=gaussian_fn, phase=0, detuning=
 # the gaussian pulse envelope via trial-and-error to find settings that result in a pi-pulse:
 #
 
+from functools import partial
+
 max_amplitude = 2.0
 displacement = 1.0
 sigma = 0.3
@@ -512,9 +514,10 @@ amplitude_params = [max_amplitude, displacement, sigma]
 params = [amplitude_params]
 ts = [0.0, 1.75]
 
-default_qubit = qml.device("default.qubit", wires=3, shots=1000)
+default_qubit = qml.device("default.qubit", wires=3)
 
 
+@partial(qml.set_shots, shots=1000)
 @qml.qnode(default_qubit, interface="jax")
 def circuit(parameters):
     qml.evolve(global_drive)(parameters, ts)
