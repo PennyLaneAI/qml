@@ -320,10 +320,13 @@ def cost():
     output = (-circuit(weights, data) + 1) / 2
     return tf.abs(output - label) ** 2
 
-opt = tf.keras.optimizers.Adam(learning_rate=0.1)
+opt = tf.optimizers.Adam(learning_rate=0.1)
 
 for step in range(100):
-    opt.minimize(cost, [weights])
+    with tf.GradientTape() as tape:
+        loss_value = cost()
+    gradients = tape.gradient(loss_value, [weights])
+    opt.apply_gradients(zip(gradients, [weights]))
     if step % 5 == 0:
         print("Step {}: cost={}".format(step, cost()))
 
