@@ -82,7 +82,8 @@ environment:
 			$$PYTHON_VENV_PATH/bin/python -m pip install --upgrade git+https://github.com/XanaduAI/iqpopt.git#egg=iqpopt;\
 			# TODO: Remove this on next release. Currently Catalyst 0.11 pins jaxlib to 0.4.8;\
 			$$PYTHON_VENV_PATH/bin/python -m pip install 'numpy<2';\
-            $$PYTHON_VENV_PATH/bin/python -m pip install --upgrade flax;\
+            # Update flax, or certain tutorials e.g. tutorial_rl_pulse.py will fail due to implicit confliction between jax==0.6.0 and flax==0.9.0
+			$$PYTHON_VENV_PATH/bin/python -m pip install --upgrade flax;\
 		fi;\
 	fi
 
