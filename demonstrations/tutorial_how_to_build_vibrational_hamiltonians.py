@@ -32,10 +32,27 @@ molecule.
 #
 #     H = T + V.
 #
+# The kinetic energy operator can be written in terms of position and momentum operations or bosonic
+# creation and annihilation operations. The potential energy operator is usually obtained by
+# expanding the molecular potential energy surface over vibrational normal coordinates. The choice
+# of these operations result in several ways to represent a vibrational Hamiltonian which are
+# explained in the following. We also provide PennyLane codes for creating them.
 #
 # Christiansen representation
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-# The
+# The Christiansen representation of the vibrational Hamiltonian is a second-quantization form for
+# defining the Hamiltonian in term os bosonic creation :math:`b^{\dagger}` and annihilation
+# :math:`b` operations:
+#
+# .. math::
+#
+#     H = \sum_{i}^M \sum_{k_i, l_i}^{N_i} C_{k_i, l_i}^{(i)} b_{k_i}^{\dagger} b_{l_i} +
+#         \sum_{i<j}^{M} \sum_{k_i,l_i}^{N_i} \sum_{k_j,l_j}^{N_j} C_{k_i k_j, l_i l_j}^{(i,j)}
+#         b_{k_i}^{\dagger} b_{k_j}^{\dagger} b_{l_i} b_{l_j},
+#
+# where :math:`M` represents the number of normal modes and :math:`N` is the number of modals. The
+# coefficients :math:`C` represent the one-mode and two-mode integrals defined here.
+#
 #
 # Conclusion
 # ----------
