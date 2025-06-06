@@ -57,14 +57,14 @@ efficient level of theory.
 #
 # .. math::
 #
-#      \hat{H}_{emb} = \hat{P}^{\dagger} \hat{H} \hat{P},
+#      \hat{H}_{\text{emb}} = P^{\dagger} \hat{H} P,
 #
 # where :math:`P = \sum_{\alpha \beta} | A_{\alpha} B_{\beta} \rangle \langle A_{\alpha} B_{\beta}|`
 # is a projection operator. A key point about this representation is that the wavefunction,
 # :math:`|\Psi \rangle`, is the ground state of both the full system Hamiltonian :math:`\hat{H}` and
 # the smaller embedded Hamiltonian :math:`\hat{H}_{\text{emb}}` [#Mineh]_.
 #
-# Note that the Schmidt decomposition requires apriori knowledge of the wavefunction. To alleviate
+# Note that the Schmidt decomposition requires a priori knowledge of the wavefunction. To alleviate
 # this, DMET operates through a systematic iterative approach, starting with a mean field description
 # of the wavefunction and refining it through feedback from solution of the impurity Hamiltonian.
 #
@@ -244,7 +244,7 @@ efficient level of theory.
 #            imp_ham: impurity Hamiltonian
 #            last_dmu: change in chemical potential from last iterations
 #            solver_info: a list containing information about the solver
-#        """      
+#        """
 #
 #        solver = dmet.impurity_solver.FCI(restricted=True, tol=1e-8) # impurity solver
 #        basis_k = lattice.R2k_basis(basis) # basis in k-space
@@ -298,7 +298,7 @@ efficient level of theory.
 # In the self-consistent DMET, the interaction between the environment and the impurity is improved
 # iteratively. To do that, a correlation potential is introduced to account for the interactions
 # between the impurity and its environment, which can be represented in terms of creation,
-# :math:`a^{\dagger}`, and annihilation , :math:`a`, operators as
+# :math:`a^{\dagger}`, and annihilation, :math:`a`, operators as
 #
 # .. math::
 #
@@ -470,7 +470,7 @@ efficient level of theory.
 #    Lana Mineh, Ashley Montanaro,
 #    "Solving the Hubbard model using density matrix embedding theory and the variational quantum eigensolver",
 #    `arXiv:2108.08611 <https://arxiv.org/abs/2108.08611>`__.
-#     
+#
 # .. [#pyscf]
 #     Q. Sun, X. Zhang, *et al.*,
 #     "Recent developments in the PySCF program package",
