@@ -1,0 +1,68 @@
+{
+    "title": "X-ray Absorption Spectroscopy Simulation in the Time-Domain",
+    "authors": [
+        {
+            "username": "colinjdale"
+        }
+    ],
+    "dateOfPublication": "2025-06-01T09:00:00+00:00",
+    "dateOfLastModification": "2025-06-01T09:00:00+00:00",
+    "categories": [
+        "Quantum Chemistry",
+        "Algorithms"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_how_to_build_cdf_hamiltonians.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_how_to_build_cdf_hamiltonians.png"
+        }
+    ],
+    "seoDescription": "Learn how to simulate X-ray absorption spectroscopy in PennyLane.",
+    "doi": "",
+    "references": [
+        {
+            "id": "Fomichev:2025",
+            "type": "article",
+            "title": "Fast simulations of X-ray absorption spectroscopy for battery materials on a quantum computer",
+            "authors": "Stepan Fomichev, Pablo A. M. Casares, Alexander Kunitsa, Arne-Christian Voigt, Jonathan E. Mueller, Juan Miguel Arrazola",
+            "year": "2025",
+            "publisher": "arXiv",
+            "url": "https://arxiv.org/abs/2405.11015"
+        },
+        {
+            "id": "Fomichev:2024",
+            "type": "article",
+            "title": "Simulating X-ray absorption spectroscopy of battery materials on a quantum computer",
+            "authors": "Stepan Fomichev, Kasra Hejazi, Ignacio Loaiza, Modjtaba Shokrian Zini, Alain Delgado, Arne-Christian Voigt, Jonathan E. Mueller, Juan Miguel Arrazola",
+            "year": "2024",
+            "publisher": "arXiv",
+            "url": "https://arxiv.org/abs/2405.11015"
+        }
+    ],
+    "basedOnPapers": [
+        "10.48550/arXiv.2405.11015"
+    ],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_quantum_chemistry",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_fermionic_operators",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_how_to_build_compressed_double_factorized_hamiltonians",
+            "weight": 1.0
+        }
+    ]
+}
