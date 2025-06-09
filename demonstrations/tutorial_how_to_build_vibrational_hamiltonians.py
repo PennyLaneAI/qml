@@ -34,9 +34,19 @@ molecule.
 #
 # The kinetic energy operator can be written in terms of position and momentum operations or bosonic
 # creation and annihilation operations. The potential energy operator is usually obtained by
-# expanding the molecular potential energy surface over vibrational normal coordinates. The choice
-# of these operations result in several ways to represent a vibrational Hamiltonian which are
-# explained in the following. We also provide PennyLane codes for creating them.
+# expanding the molecular potential energy surface over vibrational normal coordinates :math:`Q`.
+#
+# .. math::
+#
+#     V({Q}) = \sum_i V_1(Q_i) + \sum_{ij} V_2(Q_i,Q_j) + ....
+#
+# This is typically done by performing single-point energy calculations at small distances along the
+# normal mode coordinates. Computing the energies for each mode separately provides the term
+# :math:`V_1` while displacing atoms along two different modes simultaneously gives the term
+# :math:`V_2` and so on.
+#
+# There are several ways to represent a vibrational Hamiltonian. Here we explain some of these
+# representations and provide PennyLane codes for constructing them.
 #
 # Christiansen representation
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -52,6 +62,23 @@ molecule.
 #
 # where :math:`M` represents the number of normal modes and :math:`N` is the number of modals. The
 # coefficients :math:`C` represent the one-mode and two-mode integrals defined here.
+#
+# PennyLane provides a set of functions to construct the Christiansen Hamiltonian, either directly
+# in one step or by building the Hamiltonian from its building blocks step by step. An important
+# step in both methods is to construct the potential energy operator which is done based on
+# single-point energy calculations along the normal modes of the molecule. The
+# :func:`~.pennylane.qchem.vibrational_pes` function in PennyLane provides an convenient way to
+# perform the potential energy scan by just providing minimal input.
+
+
+import numpy as np
+import pennylane as qml
+
+symbols  = ['H', 'F']                                    # define atomic symbols
+geometry = np.array([[0.0, 0.0, 0.0], [0.0, 0.0, 1.0]])  # define atom positions
+mol = qml.qchem.Molecule(symbols, geometry)              # construct the molecule
+pes = qml.qchem.vibrational_pes(mol)
+
 #
 #
 # Conclusion
