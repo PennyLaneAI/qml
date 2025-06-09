@@ -79,7 +79,7 @@ efficient level of theory.
 # re-construct the projector and the process is repeated until the wavefunction converges.
 #
 # Let's now take implement these steps for a linear chain of 8 Hydrogen atoms. We will use the
-# programs PySCF [#pyscf]_ and libDMET [#libdmet, #libdmet2]_ which can be installed with
+# programs PySCF [#pyscf]_ and libDMET [#libdmet]_ #libdmet2]_ which can be installed with
 #
 # .. code-block:: python
 #
