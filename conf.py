@@ -118,7 +118,7 @@ warnings.filterwarnings(
 )
 
 # Raise PennyLane deprecation warnings as errors
-# warnings.filterwarnings("error", category=PennyLaneDeprecationWarning)
+warnings.filterwarnings("error", category=PennyLaneDeprecationWarning)
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
