@@ -368,11 +368,11 @@ M.null_space()
 # Less speculatively, there definitely *is* one deep and generalizable lesson that we should take away
 # from this hidden cut demo, and that is the *power of looking for hidden symmetries*. This goes well
 # beyond quantum computing. In fact some of the most significant discoveries in physics are just
-# recognitions of a hidden symmetry! For example, recognizing the symmetries of fundamental particles
-# led to the development of the standard model of particle physics, recognizing the symmetry of
-# systems in different inertial reference frames led to discovery of special relativity, and
+# recognitions of a hidden symmetry! For example: recognizing the symmetries of fundamental particles
+# led to the development of the standard model of particle physics; recognizing the symmetry of
+# systems in different inertial reference frames led to discovery of special relativity; and
 # recognizing the symmetry between freefalling and accelerating objects led to the discovery of
-# general relativity. Indeed, looking for hidden symmetries is a very powerful approach, both in
+# general relativity. It's clear that looking for hidden symmetries is a very powerful approach, both in
 # quantum computing and beyond!
 # 
 
