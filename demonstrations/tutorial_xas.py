@@ -673,7 +673,7 @@ def trotter_circuit(dev, state, step):
 
 eta = 0.05  # In Hartree energy units (Ha).
 jmax = 40  # Max number of time steps.
-shots = 1000  # Number of shots for exp val statistics.
+shots = 1000  # Number of shots for expectation value statistics.
 H_norm = 1.5  # Used to rescale terms in transform.
 wgrid = np.linspace(-2, +5, 10000)
 w_min, w_step = wgrid[0], wgrid[1] - wgrid[0]
