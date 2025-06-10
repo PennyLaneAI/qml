@@ -5,12 +5,12 @@ on:
     - cron: '0 0 * * 0,2,4,6' # At 00:00 on Sunday, Tuesday, Thursday, and Saturday.
 
 concurrency:
-  group: build-qml-demo-branch-master
+  group: v2-build-qml-demo-branch-master
   cancel-in-progress: true
 
 jobs:
-  build_master:
-    uses: ./.github/workflows/v2-build-demos.yml
+  build_master: 
+    uses: PennyLaneAI/qml/.github/workflows/v2-build-demos.yml@master
     with:
       ref: master
       dev: false
