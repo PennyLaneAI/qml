@@ -54,7 +54,7 @@ The hidden cut problem for locating unentanglement
 #    \ket{\psi} = \ket{\psi_S}\ket{\psi_{\bar S}},
 # 
 # but we aren’t told what :math:`S` and :math:`\bar S` are. The hidden cut problem asks us, given
-# access to :math:`\ket\psi`, to determine :math:`S` and :math:`\bar S`. Following …, in this demo
+# access to :math:`\ket\psi`, to determine :math:`S` and :math:`\bar S`. Following `Bouland et al <https://arxiv.org/abs/2410.12706>`__, in this demo
 # we’ll develop a quantum algorithm that solves this problem!
 # 
 
@@ -158,7 +158,7 @@ print(f'Created {n} qubit state with qubits {partitions[0]} unentangled from {pa
 # :math:`\ket\psi=\ket{\psi_{01}}\ket{\psi_{234}}`. Now consider two copies :math:`\ket\psi\ket\psi`
 # of :math:`\ket\psi`. We can visualize this as
 # 
-# […picture…]
+# [FIGURE 1]
 # 
 # The top row corresponds to the first copy of :math:`\ket\psi`, and the bottom row to the second
 # copy. In each row, qubits 0 and 1 are disconnected from qubits 2, 3, and 4. This schematically
@@ -170,9 +170,17 @@ print(f'Created {n} qubit state with qubits {partitions[0]} unentangled from {pa
 # qubits 0, 2, and 4 in the bottom row. Because there are :math:`2^5=32` 5-bit strings, there are 32
 # possible swap operations we can perform. Interestingly, the set of all 32 5-bit strings forms a
 # mathematical *group* under bitwise addition.
-# 
-# BOX: Group (take from Maria’s demo)
-# 
+#
+# .. admonition:: Group
+#     :class: note
+#
+#     A group is a set of elements that has:
+#       1. an operation that maps two elements a and b of the set into a third element of the set, for example c = a + b,
+#       2. an "identity element" e such that e + a = a for any element a, and
+#       3. an inverse -a for every element a, such that a + (-a) = e.
+#
+#     A group is called "Abelian" if a + b = b + a for all a and b, otherwise it is called non-Abelian.
+#
 # We’ll call the group of 5-bit strings :math:`G`. We can now ask: which elements of :math:`G`
 # correspond to swap operations that leave the state :math:`\ket\psi\ket\psi` invariant? These
 # operations are the symmetries of :math:`\ket\psi\ket\psi` and the corresponding bitstrings form a
@@ -226,7 +234,7 @@ print(f'Created {n} qubit state with qubits {partitions[0]} unentangled from {pa
 # 
 # Finally we measure the group register. Here’s the circuit diagram:
 # 
-# […picture…]
+# [FIGURE 2]
 # 
 # We’ll implement this in Pennylane, and then we’ll show how the measurement results can be
 # postprocessed to find the hidden subgroup :math:`H` that encodes the hidden cut!
