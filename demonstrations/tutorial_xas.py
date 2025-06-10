@@ -8,8 +8,8 @@ possible to include:**
  - Monte Carlo sampling scheme with Lorentzian kernel awareness
  - Core-valence separation approximation: unnecessary for H2, currently explained at the end of the article. Could instead integrate it (since it’s quite simple) and explicitly mention that it doesn’t matter for this simple system.
 
-**TO DO: Add more circuit diagram figures, and fill in bolded stand-in test. Figure out PennyLane
-dipole_moment implementation.**
+**TO DO: Add more circuit diagram figures, such as the Trotter circuit. Fill in bolded stand-in test. Figure out PennyLane
+dipole_moment implementation. Change wgrid so that it is actaully the frequency and not the final energy.**
 
 X-ray absorption spectroscopy (XAS) is an experimental technique where the absorption of X-rays are
 measured as a function of incident photon energy to determine oxidation states and local atomic
@@ -123,11 +123,11 @@ of qubits.
 # state overlaps
 # 
 # .. math::
+#   \begin{align}
 #   \mathrm{Im}(\mathcal{G_\rho(\omega)}) &= \mathrm{Im}\left[\langle I|\hat m_\rho \frac{1}{\hat H -E_I -\omega +i\eta} \left(\sum_F|F\rangle\langle F|\right)\hat m_\rho |I\rangle \right] \\
-# 
 #   \mathrm{Im}(\mathcal{G_\rho(\omega)}) &= \mathrm{Im}\left(\sum_F \frac{|\langle F|\hat m_\rho|I\rangle|^2}{E_F- E_I -\omega +i\eta}\right) \\
-# 
 #   \mathrm{Im}(\mathcal{G_\rho(\omega)}) &= -\sum_{F\neq I} \frac{|\langle F|\hat m_\rho|I\rangle|^2\eta}{(E_F- E_I -\omega)^2 +\eta^2} + \frac{|\langle I|\hat m_\rho|I\rangle|^2\eta}{\omega^2 +\eta^2}\,.
+#   \end{align}
 # 
 # We can change the action of the dipole operator to
 # :math:`\hat m_\rho - \langle I| \hat m_\rho | I \rangle` to remove the second term. However, the
@@ -787,10 +787,10 @@ plt.show()
 # 
 # **There are more optimizations mentioned in the paper that were not implemented here. Below is a
 # list of further optimizations:** 
-# - Randomized Trotter steps **(perhaps just provide intuition for why it helps, or actually implement it)** 
-# - BLISS **(this is done in another dmeo, so maybe I’ll skip it)** 
-# - Distribution sampling **(again, maybe just describe)** 
-# - Core-valence separation approximation
+#  - Randomized Trotter steps **(perhaps just provide intuition for why it helps, or actually implement it)** 
+#  - BLISS **(this is done in another dmeo, so maybe I’ll skip it)** 
+#  - Distribution sampling **(again, maybe just describe)** 
+#  - Core-valence separation approximation
 # 
 # **Could implement some of these, show how they could be implemented, or just describe them.**
 # 
