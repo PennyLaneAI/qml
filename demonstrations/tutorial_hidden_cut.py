@@ -157,9 +157,13 @@ print(f'Created {n} qubit state with qubits {partitions[0]} unentangled from {pa
 # problem as one of finding a hidden symmetry of a state. To see this, remember our example state
 # :math:`\ket\psi=\ket{\psi_{01}}\ket{\psi_{234}}`. Now consider two copies :math:`\ket\psi\ket\psi`
 # of :math:`\ket\psi`. We can visualize this as
-# 
-# [FIGURE 1]
-# 
+#
+#.. figure:: ../_static/demonstration_assets/hidden_cut/qubits.png
+#    :align: center
+#    :width: 80%
+#
+#    Figure 2. A schematic of the quantum state :math:`\ket\psi\ket\psi`.
+#
 # The top row corresponds to the first copy of :math:`\ket\psi`, and the bottom row to the second
 # copy. In each row, qubits 0 and 1 are disconnected from qubits 2, 3, and 4. This schematically
 # indicates the fact that in each :math:`\ket\psi` qubits 0,1 are unentangled from qubits 2,3,4.
@@ -233,9 +237,13 @@ print(f'Created {n} qubit state with qubits {partitions[0]} unentangled from {pa
 # :math:`\ket\psi`. 3. Again apply a Hadamard to each qubit in the group register.
 # 
 # Finally we measure the group register. Here’s the circuit diagram:
-# 
-# [FIGURE 2]
-# 
+#
+#.. figure:: ../_static/demonstration_assets/hidden_cut/circuit.png
+#    :align: center
+#    :width: 80%
+#
+#    Figure 2. Hidden cut circuit
+#
 # We’ll implement this in Pennylane, and then we’ll show how the measurement results can be
 # postprocessed to find the hidden subgroup :math:`H` that encodes the hidden cut!
 # 
