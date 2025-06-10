@@ -1,0 +1,4 @@
+.. bio:: Petar Simidzija
+   :photo: ../_static/authors/headshot.png
+
+   Used to think about black holes and quantum gravity, now thinks about quantum computers and machine learning.
