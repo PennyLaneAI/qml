@@ -15,7 +15,8 @@ demos_community.rst
 .venv-build/
 demo_requirements.txt
 **/*.egg-info/
-pandoc*
+*.msi
+*.deb
 
 # Generated after installation
 .github/workflows/qml_pipeline_utils/build/
