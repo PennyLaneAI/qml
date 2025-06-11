@@ -629,9 +629,14 @@ def trotter_circuit(dev, state, step):
 # Simulation parameters
 # ~~~~~~~~~~~~~~~~~~~~~
 # 
-# Let’s discuss our choice of parameters when running this simulation. \**Discuss the choice of the
-# following:\* - :math:`\eta` - :math:`j_\mathrm{max}` - the total number of shots :math:`S` - the
-# Hamiltonian norm :math:`||H||` - the grid of frequencies - the time step :math:`\tau`
+# Let’s discuss our choice of parameters when running this simulation. **Discuss the choice of the
+# following:** 
+#  - :math:`\eta` 
+#  - :math:`j_\mathrm{max}` 
+#  - the total number of shots :math:`S` 
+#  - the Hamiltonian norm :math:`||H||` 
+#  - the grid of frequencies 
+#  - the time step :math:`\tau`
 # 
 
 eta = 0.05  # In Hartree energy units (Ha).
