@@ -57,7 +57,7 @@ jobs:
             ("${{ github.event.inputs.environment }}" == "swc-staging" || 
             "${{ github.event.inputs.environment }}" == "swc-prod") && 
             "${{ github.event.inputs.target }}" == "latest" && 
-            "${{ github.event.inputs.as-previews }}" == "false" 
+            "${{ github.event.inputs.pr_number }}" == "0" 
           ]]; then
             echo "========================="
             echo "🚫 Invalid input detected:"
