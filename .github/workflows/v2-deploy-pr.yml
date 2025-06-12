@@ -84,10 +84,10 @@ jobs:
     needs: prepare-build-context
     with:
       # TODO: Update SWC environment to "swc-prod"
-      environment: 'swc-staging' 
+      environment: 'swc-dev' 
       artifact-name: demo-build-${{ needs.prepare-build-context.outputs.pr_ref }}
       workflow-run-id: ${{ github.event.workflow_run.id }}
-      preview: true
+      pr_number: ${{ needs.prepare-build-context.outputs.pr_id }}
     secrets: inherit
   
 
@@ -109,7 +109,7 @@ jobs:
   #         comment+="\n"
   #         # TODO: Switch to prod once testing is complete
   #         for demo in $demos; do
-  #           comment+="- [$demo](https://staging.pennylane.ai/qml/demos/$demo?preview=true)\n"
+  #           comment+="- [$demo](https://staging.pennylane.ai/qml/demos/$demo?pr_number=${{ needs.prepare-build-context.outputs.pr_id }})\n"
   #         done
       
   #         comment+="\n"
