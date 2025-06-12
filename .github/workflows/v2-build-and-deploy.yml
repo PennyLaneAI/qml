@@ -28,15 +28,10 @@ on:
         description: Demos to build and deploy, space-separated list of slugs (e.g. demo1 demo2 demo3), or leave empty for all demos.
         required: false
         type: string
-      as-previews:
-        default: false
-        description: |
-          Whether to deploy the demos as previews.
-
-          **Please note** that demos built with the latest version cannot be published to swc-staging or swc-prod.
-          They can only be deployed as previews.
-        required: false
-        type: boolean
+      pr_number:
+        description: Pull request number for the deployment. Required if deploying to a staging or production environment.
+        required: true
+        type: number
 
 jobs:
   validate-and-parse-inputs:
@@ -99,4 +94,4 @@ jobs:
       environment: ${{ github.event.inputs.environment }}
       artifact-name: build-and-deploy-${{ github.event.inputs.target }}
       workflow-run-id: ${{ github.run_id }}
-      preview: ${{ github.event.inputs.as-previews == 'true' }}
+      pr_number: ${{ github.event.inputs.pr_number }}
