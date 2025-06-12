@@ -2,14 +2,13 @@ r"""X-ray Absorption Spectroscopy Simulation in the Time-Domain
 ===========================================================
 
 **The following optimizations are not applied in the code implementation here, but should be
-possible to include:**
- - Randomized Trotter steps
- - BLISS
- - Monte Carlo sampling scheme with Lorentzian kernel awareness
- - Core-valence separation approximation: unnecessary for H2, currently explained at the end of the article. Could instead integrate it (since it’s quite simple) and explicitly mention that it doesn’t matter for this simple system.
+possible to include:** 
+ - Randomized Trotter steps 
+ - BLISS 
+ - Monte Carlo sampling scheme with Lorentzian kernel awareness 
+ - Core-valence separation approximation: unnecessary for H2, but currently explained at the end of the article. Could implement it in principle and explicitly mention that it doesn’t matter for this simple system.
 
-**TO DO: Add more circuit diagram figures, such as the Trotter circuit. Fill in bolded stand-in test. Figure out PennyLane
-dipole_moment implementation. Change wgrid so that it is actaully the frequency and not the final energy.**
+**TO DO: Fill in bolded stand-in test. Figure out PennyLane dipole_moment implementation. **
 
 X-ray absorption spectroscopy (XAS) is an experimental technique where the absorption of X-rays are
 measured as a function of incident photon energy to determine oxidation states and local atomic
@@ -45,12 +44,10 @@ correlated excited states are difficult to compute classically, particularly for
 However, the relatively small set of eletronic orbitals needed to simulate these small clusters make
 this simulation task well suited for early quantum computers which will be limited in their number
 of qubits.
-
-**Draw cartoon figure loosely resembling the following figure snippet from Fomichev:2024**
 """
 
 ######################################################################
-# .. figure:: ../_static/demonstration_assets/xas/fingerprinting.png
+# .. figure:: ../_static/demonstration_assets/xas/fingerprinting_cartoon.png
 #    :alt: alt text
 # 
 
@@ -89,9 +86,13 @@ of qubits.
 # peak positions :math:`E_F-E_I` and absorption intensities
 # :math:`|\langle F|\hat m_\rho|I \rangle|^2`.
 # 
-# **Insert figure with dummy absorption spectrum, annotating the peak height is the overlap, the
-# position is the energy difference, and the widths are** :math:`\eta`.
+
+######################################################################
+# .. figure:: ../_static/demonstration_assets/xas/spectrum_sketch.png
+#    :alt: alt text
 # 
+
+######################################################################
 # To estimate :math:`\sigma_A(\omega)` we just need to determine the overlaps
 # :math:`|\langle F|\hat m_\rho|I \rangle|^2` and the energy differences :math:`E_F-E_I`. There are
 # known classical and quantum methods **(citations?)** for determining the ground state of a molecular
@@ -122,12 +123,13 @@ of qubits.
 # with inserting a resolution of identity of the final states, we can recover the sum over the excited
 # state overlaps
 # 
-# .. math::
-#   \begin{align}
-#   \mathrm{Im}(\mathcal{G_\rho(\omega)}) &= \mathrm{Im}\left[\langle I|\hat m_\rho \frac{1}{\hat H -E_I -\omega +i\eta} \left(\sum_F|F\rangle\langle F|\right)\hat m_\rho |I\rangle \right] \\
-#   \mathrm{Im}(\mathcal{G_\rho(\omega)}) &= \mathrm{Im}\left(\sum_F \frac{|\langle F|\hat m_\rho|I\rangle|^2}{E_F- E_I -\omega +i\eta}\right) \\
-#   \mathrm{Im}(\mathcal{G_\rho(\omega)}) &= -\sum_{F\neq I} \frac{|\langle F|\hat m_\rho|I\rangle|^2\eta}{(E_F- E_I -\omega)^2 +\eta^2} + \frac{|\langle I|\hat m_\rho|I\rangle|^2\eta}{\omega^2 +\eta^2}\,.
-#   \end{align}
+# $$ :raw-latex:`\begin{align}
+# \mathrm{Im}(\mathcal{G_\rho(\omega)}) &= \mathrm{Im}\left[\langle I|\hat m_\rho \frac{1}{\hat H -E_I -\omega +i\eta} \left(\sum_F|F\rangle\langle F|\right)\hat m_\rho |I\rangle \right] \\
+# 
+# \mathrm{Im}(\mathcal{G_\rho(\omega)}) &= \mathrm{Im}\left(\sum_F \frac{|\langle F|\hat m_\rho|I\rangle|^2}{E_F- E_I -\omega +i\eta}\right) \\
+# 
+# \mathrm{Im}(\mathcal{G_\rho(\omega)}) &= -\sum_{F\neq I} \frac{|\langle F|\hat m_\rho|I\rangle|^2\eta}{(E_F- E_I -\omega)^2 +\eta^2} + \frac{|\langle I|\hat m_\rho|I\rangle|^2\eta}{\omega^2 +\eta^2}\,.
+# \end{align}` $$
 # 
 # We can change the action of the dipole operator to
 # :math:`\hat m_\rho - \langle I| \hat m_\rho | I \rangle` to remove the second term. However, the
@@ -161,11 +163,6 @@ of qubits.
 # 
 
 ######################################################################
-# .. figure:: ../_static/demonstration_assets/xas/hadamard_test_circuit.png
-#    :alt: alt text
-# 
-
-######################################################################
 # To implement the time evolution operator of :math:`H`, we will use a trotter-formula of a compressed
 # double-factorized Hamiltonian, which we will explain in more detail later. This factorization will
 # be done classically in PennyLane.
@@ -187,7 +184,7 @@ of qubits.
 # 
 
 ######################################################################
-# .. figure:: ../_static/demonstration_assets/xas/block_diagram_of_algorithm.png
+# .. figure:: ../_static/demonstration_assets/xas/flowchart.png
 #    :alt: alt text
 # 
 
@@ -503,8 +500,13 @@ Z0 = np.diag(eigenvals)
 # throughout the time evolution. For a derivation of the global phase for the two-electron terms, see
 # Appendix A in [Fomichev:2025].
 # 
-# **Perhaps include circuit diagram figure for implementation of U rotations and Pauli Z.**
+
+######################################################################
+# .. figure:: ../_static/demonstration_assets/xas/UZU_circuits.png
+#    :alt: alt text
 # 
+
+######################################################################
 # Starting with the :math:`U` operator rotations, we can write a function that uses
 # ``qml.BasisRotation`` to apply the unitary transform we want. We apply this to both spin sections of
 # the register.
@@ -523,7 +525,7 @@ def U_rotations(U, control_wires):
 # 
 
 ######################################################################
-# .. figure:: ../_static/demonstration_assets/xas/double_phase_trick.png
+# .. figure:: ../_static/demonstration_assets/xas/double_phase_trick_circuit.png
 #    :alt: alt text
 # 
 
@@ -635,8 +637,7 @@ def trotter_circuit(dev, state, step):
 #  - :math:`j_\mathrm{max}` 
 #  - the total number of shots :math:`S` 
 #  - the Hamiltonian norm :math:`||H||` 
-#  - the grid of frequencies 
-#  - the time step :math:`\tau`
+#  - the grid of frequencies - the time step :math:`\tau`
 # 
 
 eta = 0.05  # In Hartree energy units (Ha).
@@ -659,9 +660,7 @@ print(f"frequency step, w_step: {w_step:.2} Ha")
 # ~~~~~~~~~~~
 # 
 # To measure the expectation value of the time-propagated state, we use a Hadamard test circuit.
-# **Describe briefly. Also describe double measurement scheme to obtain real and imaginary components
-# in an actual physical implementation. Perhaps also include the circuit diagram for that
-# implementation.**
+# **Describe briefly.**
 # 
 
 dev_est = qml.device(device_type, wires=int(2 * n_orb) + 1, shots=shots)
@@ -792,10 +791,10 @@ plt.show()
 # 
 # **There are more optimizations mentioned in the paper that were not implemented here. Below is a
 # list of further optimizations:** 
-#  - Randomized Trotter steps **(perhaps just provide intuition for why it helps, or actually implement it)** 
+#  - Randomized Trotter steps **(perhaps just provide intuition for why it works, or actually implement it)** 
 #  - BLISS **(this is done in another dmeo, so maybe I’ll skip it)** 
-#  - Distribution sampling **(again, maybe just describe)** 
-#  - Core-valence separation approximation
+#  - Distribution sampling **(again, maybe just describe)** - Core-valence separation approximation 
+#  - Double-measurement scheme. **Perhaps also include the circuit diagram for that implementation.**
 # 
 # **Could implement some of these, show how they could be implemented, or just describe them.**
 # 
@@ -821,7 +820,7 @@ plt.show()
 # 
 
 ######################################################################
-# .. figure:: ../_static/demonstration_assets/xas/core_valence.png
+# .. figure:: ../_static/demonstration_assets/xas/core_valence_separation.png
 #    :alt: alt text
 # 
 
@@ -836,5 +835,6 @@ plt.show()
 # the state space.
 # 
 # *Acknowledgements*: The author thanks Stepan Fomichev and Pablo A. M. Casares for providing the code
-# used in [Fomichev:2025], from which the simplified implementation demonstrated here was developed.
+# used in [Fomichev:2025], which was used as a basis for the simplified implementation demonstrated
+# here.
 # 
