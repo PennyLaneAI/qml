@@ -13,10 +13,6 @@ on:
         description: ID of the workflow run the artifact is from.
         type: string
         required: true
-      # preview:
-      #   description: Whether to deploy demos as preview.
-      #   type: boolean
-      #   required: true
       pr_number:
         description: Pull request number for the deployment.
         type: number
@@ -35,10 +31,6 @@ on:
         description: ID of the workflow run the artifact is from.
         type: string
         required: true
-      # preview:
-      #   description: Whether to deploy demos as preview.
-      #   type: boolean
-      #   required: true
       pr_number:
         description: Pull request number for the deployment.
         type: number
