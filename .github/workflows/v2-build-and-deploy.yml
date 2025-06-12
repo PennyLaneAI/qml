@@ -97,4 +97,4 @@ jobs:
       environment: ${{ github.event.inputs.environment }}
       artifact-name: build-and-deploy-${{ github.event.inputs.target }}
       workflow-run-id: ${{ github.run_id }}
-      pr_number: ${{ github.event.inputs.pr_number }}
+      pr_number: ${{ fromJson(github.event.inputs.pr_number) }}
