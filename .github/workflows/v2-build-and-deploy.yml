@@ -53,11 +53,14 @@ jobs:
       - name: Validate preview input
         id: validate-preview
         run: |
+          ENV="${{ github.event.inputs.environment }}"
+          TARGET="${{ github.event.inputs.target }}"
+          PR_NUMBER=${{ github.event.inputs.pr_number }}
+
           if [[ 
-            ("${{ github.event.inputs.environment }}" == "swc-staging" || 
-            "${{ github.event.inputs.environment }}" == "swc-prod") && 
-            "${{ github.event.inputs.target }}" == "latest" && 
-            "${{ github.event.inputs.pr_number }}" == "0" 
+            ("$ENV" == "swc-staging" || "$ENV" == "swc-prod") && 
+            "$TARGET" == "latest" && 
+            "$PR_NUMBER" -eq 0
           ]]; then
             echo "========================="
             echo "🚫 Invalid input detected:"
