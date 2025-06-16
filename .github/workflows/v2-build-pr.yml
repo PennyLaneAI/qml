@@ -34,7 +34,7 @@ jobs:
 
   # Step 2: Build demos
   build:
-    if: needs.identify-changed-demos.outputs.updated != ''
+    # if: needs.identify-changed-demos.outputs.updated != ''
     uses: ./.github/workflows/v2-build-demos.yml
     needs: 
       - identify-changed-demos
