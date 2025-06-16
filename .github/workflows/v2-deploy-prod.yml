@@ -1,0 +1,22 @@
+name: V2 Deploy to Production
+
+on:
+  push:
+    branches:
+      - fake-master
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2  # Needed to compare with HEAD^
+
+      - name: Get changed demo dirs
+        run: |
+          git diff --name-only HEAD^ HEAD \
+            | grep '^demonstrations_v2/' \
+            | awk -F/ 'NF>=2 {print $2}' \
+            | sort -u
