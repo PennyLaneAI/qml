@@ -13,6 +13,7 @@ on:
     branches:
       - master
       - test-v2-master # A master branch for testing purposes
+      - v2-deploy-on-push # A branch for testing purposes
 
 permissions:
   contents: read
