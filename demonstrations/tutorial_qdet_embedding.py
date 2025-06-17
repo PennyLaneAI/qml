@@ -157,7 +157,7 @@ sections.
 # Electronic Integrals
 # ^^^^^^^^^^^^^^^^^^^^
 # The next step in QDET is to define the effective one-body and two-body integrals for the impurity.
-# The effective two-body integrals, :math:`v^{eff}` are computed first as matrix elements of the
+# The effective two-body integrals :math:`v^{eff}` are computed first as matrix elements of the
 # partially screened static Coulomb potential :math:`W_0^{R}`.
 #
 # .. math::
