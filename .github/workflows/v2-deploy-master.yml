@@ -64,7 +64,7 @@ jobs:
           echo "updated_demos=$(cat updated_demos.json)" >> $GITHUB_OUTPUT
           echo "deleted_demos=$(cat deleted_demos.json)" >> $GITHUB_OUTPUT
     outputs:
-      merge_ref: ${{ steps.pr_info.outputs.pr_ref }}
+      merge_ref: ${{ steps.pr_info.outputs.merge_ref }}
       updated_demos: ${{ steps.pr_info.outputs.updated_demos }}
       deleted_demos: ${{ steps.pr_info.outputs.deleted_demos }}
 
