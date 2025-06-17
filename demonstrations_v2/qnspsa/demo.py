@@ -49,7 +49,7 @@ for noisy intermediate-scale quantum (NISQ) devices.
 #
 # .. math::
 #
-#    \mathbf{x}^{(t + 1)} = \mathbf{x}^{(t)} - \eta \nabla f(\mathbf{x}^{(t)}) \label{eq:vanilla}\tag{1},
+#    \mathbf{x}^{(t + 1)} = \mathbf{x}^{(t)} - \eta \nabla f(\mathbf{x}^{(t)}) \tag{1},
 #
 # where :math:`f(\mathbf{x})` is the loss function with input parameter
 # :math:`\mathbf{x},` while :math:`\eta` is the learning rate. The superscript
@@ -72,17 +72,17 @@ for noisy intermediate-scale quantum (NISQ) devices.
 # .. math::
 #
 #      |{\nabla}_{\mathbf{h}}f(\mathbf{x})| \equiv
-#    \mathbf{h}\cdot {\nabla}f(\mathbf{x}) \simeq \frac{1}{2\epsilon}\big(f(\mathbf{x} + \epsilon \mathbf{h}) - f(\mathbf{x} - \epsilon \mathbf{h})\big)\label{eq:finite_diff}\tag{2}.
+#    \mathbf{h}\cdot {\nabla}f(\mathbf{x}) \simeq \frac{1}{2\epsilon}\big(f(\mathbf{x} + \epsilon \mathbf{h}) - f(\mathbf{x} - \epsilon \mathbf{h})\big)\tag{2}.
 #
 # A stochastic gradient estimator
 # :math:`\widehat{\boldsymbol{\nabla}}f(\mathbf{x}, \mathbf{h})_{SPSA}` is
 # then constructed:
 #
-# .. math:: \widehat{\nabla f}(\mathbf{x}, \mathbf{h})_{SPSA} = | {\nabla}_{\mathbf{h}}f(\mathbf{x})|\mathbf{h}\label{eq:spsaGrad}\tag{3}.
+# .. math:: \widehat{\nabla f}(\mathbf{x}, \mathbf{h})_{SPSA} = | {\nabla}_{\mathbf{h}}f(\mathbf{x})|\mathbf{h}\tag{3}.
 #
 # With the estimator, SPSA gives the following update rule:
 #
-# .. math:: \mathbf{x}^{(t + 1)} = \mathbf{x}^{(t)} - \eta \widehat{\nabla f}(\mathbf{x}^{(t)}, \mathbf{h}^{(t)})_{SPSA} \label{eq:spsa}\tag{4},
+# .. math:: \mathbf{x}^{(t + 1)} = \mathbf{x}^{(t)} - \eta \widehat{\nabla f}(\mathbf{x}^{(t)}, \mathbf{h}^{(t)})_{SPSA} \tag{4},
 #
 # where :math:`\mathbf{h}^{(t)}` is sampled at each step. Although this
 # stochastic approach cannot provide a stepwise unbiased gradient
@@ -96,7 +96,7 @@ for noisy intermediate-scale quantum (NISQ) devices.
 # structure of the non-Euclidean parameter space [#FS]_. The
 # :math:`d \times d` metric tensor is defined as
 #
-# .. math:: \boldsymbol{g}_{ij}(\mathbf{x}) = -\frac{1}{2} \frac{\partial}{\partial \mathbf{x}_i} \frac{\partial}{\partial \mathbf{x}_j} F(\mathbf{x}', \mathbf{x})\biggr\rvert_{\mathbf{x}'=\mathbf{x}},\label{eq:fsTensor}\tag{5}
+# .. math:: \boldsymbol{g}_{ij}(\mathbf{x}) = -\frac{1}{2} \frac{\partial}{\partial \mathbf{x}_i} \frac{\partial}{\partial \mathbf{x}_j} F(\mathbf{x}', \mathbf{x})\biggr\rvert_{\mathbf{x}'=\mathbf{x}},tag{5}
 #
 # where
 # :math:`F(\mathbf{x}', \mathbf{x}) = \bigr\rvert\langle \phi(\mathbf{x}') | \phi(\mathbf{x}) \rangle \bigr\rvert ^ 2,`
@@ -104,7 +104,7 @@ for noisy intermediate-scale quantum (NISQ) devices.
 # :math:`\mathbf{x}.` With the metric tensor, the update rule is rewritten
 # as:
 #
-# .. math:: \mathbf{x}^{(t + 1)} = \mathbf{x}^{(t)} - \eta \boldsymbol{g}^{-1}(\mathbf{x}^{(t)}) \nabla f(\mathbf{x}^{(t)}) \label{eq:qn}\tag{6}.
+# .. math:: \mathbf{x}^{(t + 1)} = \mathbf{x}^{(t)} - \eta \boldsymbol{g}^{-1}(\mathbf{x}^{(t)}) \nabla f(\mathbf{x}^{(t)}) \tag{6}.
 #
 # While the introduction of the metric tensor helps to find better minima
 # and allows for faster convergence  [#Stokes2020]_ [#Yamamoto2019]_,
@@ -117,18 +117,18 @@ for noisy intermediate-scale quantum (NISQ) devices.
 # Fubini-Study metric is computed by a second-order process with another
 # two stochastic perturbations:
 #
-# .. math:: \widehat{\boldsymbol{g}}(\mathbf{x}, \mathbf{h}_1, \mathbf{h}_2)_{SPSA} = \frac{\delta F }{8 \epsilon^2}\Big(\mathbf{h}_1 \mathbf{h}_2^\intercal + \mathbf{h}_2 \mathbf{h}_1^\intercal\Big) \label{eq:fs_qnspsa}\tag{7},
+# .. math:: \widehat{\boldsymbol{g}}(\mathbf{x}, \mathbf{h}_1, \mathbf{h}_2)_{SPSA} = \frac{\delta F }{8 \epsilon^2}\Big(\mathbf{h}_1 \mathbf{h}_2^\intercal + \mathbf{h}_2 \mathbf{h}_1^\intercal\Big) \tag{7},
 #
 # where
 #
-# .. math:: \delta F = F(\mathbf{x, \mathbf{x} + \epsilon \mathbf{h}_1} + \epsilon \mathbf{h}_2) - F (\mathbf{x, \mathbf{x} + \epsilon \mathbf{h}_1}) - F(\mathbf{x, \mathbf{x} - \epsilon \mathbf{h}_1} + \epsilon \mathbf{h}_2) + F(\mathbf{x, \mathbf{x} - \epsilon \mathbf{h}_1})\label{eq:deltaf}\tag{8},
+# .. math:: \delta F = F(\mathbf{x, \mathbf{x} + \epsilon \mathbf{h}_1} + \epsilon \mathbf{h}_2) - F (\mathbf{x, \mathbf{x} + \epsilon \mathbf{h}_1}) - F(\mathbf{x, \mathbf{x} - \epsilon \mathbf{h}_1} + \epsilon \mathbf{h}_2) + F(\mathbf{x, \mathbf{x} - \epsilon \mathbf{h}_1})\tag{8},
 #
 # and :math:`\mathbf{h}_1, \mathbf{h}_2 \in \mathcal{U}(\{-1, 1\}^d)` are
 # two randomly sampled directions.
 #
 # With equation (7), QN-SPSA provides the update rule
 #
-# .. math:: \mathbf{x}^{(t + 1)} = \mathbf{x}^{(t)} - \eta \widehat{\boldsymbol{g}}^{-1}(\mathbf{x}^{(t)}, \mathbf{h}_1^{(t)}, \mathbf{h}_2^{(t)})_{SPSA} \widehat{\nabla f}(\mathbf{x}^{(t)}, \mathbf{h}^{(t)})_{SPSA} \label{eq:qnspsa}\tag{9}.
+# .. math:: \mathbf{x}^{(t + 1)} = \mathbf{x}^{(t)} - \eta \widehat{\boldsymbol{g}}^{-1}(\mathbf{x}^{(t)}, \mathbf{h}_1^{(t)}, \mathbf{h}_2^{(t)})_{SPSA} \widehat{\nabla f}(\mathbf{x}^{(t)}, \mathbf{h}^{(t)})_{SPSA} \tag{9}.
 #
 # In each optimization step :math:`t,` one will need to randomly sample 3
 # perturbation directions
@@ -148,7 +148,7 @@ for noisy intermediate-scale quantum (NISQ) devices.
 #   A running average is taken on the metric tensor estimated from equation (7)
 #   at each step :math:`t:`
 #
-#   .. math:: \bar{\boldsymbol{g}}^{(t)}(\mathbf{x}) = \frac{1}{t + 1} \Big(\sum_{i=1}^{t}\widehat{\boldsymbol{g}}(\mathbf{x}, \mathbf{h}_1^{(i)}, \mathbf{h}_2^{(i)})_{SPSA} + \boldsymbol{g}^{(0)}\Big)\label{eq:tensorRunningAvg}\tag{10} ,
+#   .. math:: \bar{\boldsymbol{g}}^{(t)}(\mathbf{x}) = \frac{1}{t + 1} \Big(\sum_{i=1}^{t}\widehat{\boldsymbol{g}}(\mathbf{x}, \mathbf{h}_1^{(i)}, \mathbf{h}_2^{(i)})_{SPSA} + \boldsymbol{g}^{(0)}\Big)\tag{10} ,
 #
 #   where the initial guess :math:`\boldsymbol{g}^{(0)}` is set to be the
 #   identity matrix.
@@ -157,7 +157,7 @@ for noisy intermediate-scale quantum (NISQ) devices.
 #   To ensure the positive semidefiniteness of the metric tensor near
 #   a minimum, the running average in equation (10) is regularized:
 #
-#   .. math:: \bar{\boldsymbol{g}}^{(t)}_{reg}(\mathbf{x}) = \sqrt{\bar{\boldsymbol{g}}^{(t)}(\mathbf{x}) \bar{\boldsymbol{g}}^{(t)}(\mathbf{x})} + \beta \mathbb{I}\label{eq:tensor_reg}\tag{11},
+#   .. math:: \bar{\boldsymbol{g}}^{(t)}_{reg}(\mathbf{x}) = \sqrt{\bar{\boldsymbol{g}}^{(t)}(\mathbf{x}) \bar{\boldsymbol{g}}^{(t)}(\mathbf{x})} + \beta \mathbb{I}\tag{11},
 #
 #   where :math:`\beta` is the regularization coefficient. We can consider :math:`\beta`
 #   as a hyperparameter and choose a suitable value by trial and error. If
@@ -168,7 +168,7 @@ for noisy intermediate-scale quantum (NISQ) devices.
 #
 #   With equation (11), the QN-SPSA update rule we implement in code reads
 #
-#   .. math:: \mathbf{x}^{(t + 1)} = \mathbf{x}^{(t)} - \eta (\bar{\boldsymbol{g}}^{(t)}_{reg})^{-1}(\mathbf{x}^{(t)}) \widehat{\nabla f}(\mathbf{x}^{(t)}, \mathbf{h}^{(t)})_{SPSA} \label{eq:qnspsa_reg}\tag{12}.
+#   .. math:: \mathbf{x}^{(t + 1)} = \mathbf{x}^{(t)} - \eta (\bar{\boldsymbol{g}}^{(t)}_{reg})^{-1}(\mathbf{x}^{(t)}) \widehat{\nabla f}(\mathbf{x}^{(t)}, \mathbf{h}^{(t)})_{SPSA} \tag{12}.
 #
 # Blocking condition on the parameter update
 #   A blocking condition is applied onto the parameter update. The optimizer
@@ -475,7 +475,7 @@ print("Updated metric tensor after the step:\n", metric_tensor)
 # numerically more stable approach is to solve the equivalent linear
 # equation for :math:`\mathbf{x}^{(t + 1)}:`
 #
-# .. math:: \bar{\boldsymbol{g}}^{(t)}_{reg}(\mathbf{x}^{(t)})\big( \mathbf{x}^{(t)} - \mathbf{x}^{(t + 1)}\big) =  \eta  \widehat{\nabla f}(\mathbf{x}^{(t)}, \mathbf{h}^{(t)})_{SPSA} \label{eq:lin_solver}\tag{13}.
+# .. math:: \bar{\boldsymbol{g}}^{(t)}_{reg}(\mathbf{x}^{(t)})\big( \mathbf{x}^{(t)} - \mathbf{x}^{(t + 1)}\big) =  \eta  \widehat{\nabla f}(\mathbf{x}^{(t)}, \mathbf{h}^{(t)})_{SPSA} \tag{13}.
 #
 
 
