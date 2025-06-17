@@ -3,29 +3,37 @@ on:
   workflow_call:
     inputs:
       environment:
-        description: Environment to deploy to
+        description: Environment to deploy to.
         type: string
         required: true
       artifact-name:
-        description: Name of artifact containing demo zip files
+        description: Name of artifact containing demo zip files.
         type: string
-      preview:
-        description: Whether to deploy demos as preview
-        type: boolean
+      workflow-run-id:
+        description: ID of the workflow run the artifact is from.
+        type: string
+        required: true
+      pr_number:
+        description: Pull request number for the deployment.
+        type: number
         required: true
 
   workflow_dispatch:
     inputs:
       environment:
-        description: Environment to deploy to
+        description: Environment to deploy to.
         type: environment
         required: true
       artifact-name:
         description: Name of artifact containing demo zip files.
         type: string
-      preview:
-        description: Whether to deploy demos as preview
-        type: boolean
+      workflow-run-id:
+        description: ID of the workflow run the artifact is from.
+        type: string
+        required: true
+      pr_number:
+        description: Pull request number for the deployment.
+        type: number
         required: true
 
 jobs:
@@ -59,10 +67,12 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ${{ inputs.artifact-name }}
+          run-id: ${{ inputs.workflow-run-id }}
+          github-token: ${{ github.token }}
           path: _build/pack
 
       - name: Deploy demos
         run: |
           python3 .github/workflows/qml_pipeline_v2/deploy.py \
-            --preview ${{ inputs.preview }} \
+            --pr-number ${{ inputs.pr_number }} \
             _build/pack/*.zip

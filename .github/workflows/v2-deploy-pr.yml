@@ -76,14 +76,18 @@ jobs:
 
   # Step 2: Deploy the demos to SWC
   deploy-preview-demos:
-    if: github.event.workflow_run.event == 'pull_request' && needs.prepare-build-context.result == 'success'
+    if: |
+      github.event.workflow_run.event == 'pull_request' && 
+      needs.prepare-build-context.result == 'success' &&
+      needs.prepare-build-context.outputs.pr_ref != ''
     uses: ./.github/workflows/v2-deploy-demos.yml
     needs: prepare-build-context
     with:
       # TODO: Update SWC environment to "swc-prod"
-      environment: 'swc-staging' 
+      environment: 'swc-dev' 
       artifact-name: demo-build-${{ needs.prepare-build-context.outputs.pr_ref }}
-      preview: true
+      workflow-run-id: ${{ github.event.workflow_run.id }}
+      pr_number: ${{ fromJson(needs.prepare-build-context.outputs.pr_id) }}
     secrets: inherit
   
 
@@ -105,7 +109,7 @@ jobs:
   #         comment+="\n"
   #         # TODO: Switch to prod once testing is complete
   #         for demo in $demos; do
-  #           comment+="- [$demo](https://staging.pennylane.ai/qml/demos/$demo?preview=true)\n"
+  #           comment+="- [$demo](https://staging.pennylane.ai/qml/demos/$demo?pr_number=${{ needs.prepare-build-context.outputs.pr_id }})\n"
   #         done
       
   #         comment+="\n"

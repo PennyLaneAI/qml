@@ -10,7 +10,7 @@ logging.basicConfig(level=logging.INFO)
 
 logger = logging.getLogger(__name__)
 
-DEPLOYMENT_URL_TEMPLATE = "{endpoint_url}/demo/{slug}?preview={preview}"
+DEPLOYMENT_URL_TEMPLATE = "{endpoint_url}/demo/{slug}?pr_number={pr_number}"
 
 parser = argparse.ArgumentParser(
     prog="deploy",
@@ -21,18 +21,17 @@ parser.add_argument(
     "paths", help="The pattern to search for demo zip files.", type=Path, nargs="+"
 )
 parser.add_argument(
-    "-p",
-    "--preview",
+    "-pr",
+    "--pr-number",
     type=str,
-    default="false",
-    choices=("true", "false"),
-    help="Whether to deploy to the preview site.",
+    default=None,
+    help="Whether to deploy the demo as a pull request preview or as a main branch deployment. Use '0' for the main version (prod), and a PR number greater than '0' for a preview version.",
 )
 
 
 def main():
     args = parser.parse_args()
-    preview: str = args.preview
+    pr_number: str = args.pr_number
     paths: list[Path] = args.paths
 
     session = requests.Session()
@@ -50,7 +49,7 @@ def main():
 
         slug = path.stem
         url = DEPLOYMENT_URL_TEMPLATE.format(
-            endpoint_url=endpoint_url, slug=slug, preview=preview
+            endpoint_url=endpoint_url, slug=slug, pr_number=pr_number
         )
         with open(path, "rb") as f:
             logger.info("Deploying '%s' to '%s'", path, url)

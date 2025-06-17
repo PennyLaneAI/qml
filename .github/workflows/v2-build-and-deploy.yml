@@ -25,18 +25,13 @@ on:
         required: true
         type: choice
       demos:
-        description: Demos to build and deploy, space-separated list of slugs (e.g. "demo1 demo2 demo3"), or leave empty for all demos.
+        description: Demos to build and deploy, space-separated list of slugs (e.g. demo1 demo2 demo3), or leave empty for all demos.
         required: false
         type: string
-      as-previews:
-        default: false
-        description: |
-          Whether to deploy the demos as previews.
-
-          **Please note** that demos built with the latest version cannot be published to swc-staging or swc-prod.
-          They can only be deployed as previews.
-        required: false
-        type: boolean
+      pr_number:
+        description: Pull request number for the deployment. Required if deploying to a staging or production environment.
+        required: true
+        type: number
 
 jobs:
   validate-and-parse-inputs:
@@ -58,11 +53,14 @@ jobs:
       - name: Validate preview input
         id: validate-preview
         run: |
+          ENV="${{ github.event.inputs.environment }}"
+          TARGET="${{ github.event.inputs.target }}"
+          PR_NUMBER=${{ github.event.inputs.pr_number }}
+
           if [[ 
-            ("${{ github.event.inputs.environment }}" == "swc-staging" || 
-            "${{ github.event.inputs.environment }}" == "swc-prod") && 
-            "${{ github.event.inputs.target }}" == "latest" && 
-            "${{ github.event.inputs.as-previews }}" == "false" 
+            ("$ENV" == "swc-staging" || "$ENV" == "swc-prod") && 
+            "$TARGET" == "latest" && 
+            "$PR_NUMBER" -eq 0
           ]]; then
             echo "========================="
             echo "🚫 Invalid input detected:"
@@ -98,4 +96,5 @@ jobs:
     with:
       environment: ${{ github.event.inputs.environment }}
       artifact-name: build-and-deploy-${{ github.event.inputs.target }}
-      preview: ${{ github.event.inputs.as-previews == 'true' }}
+      workflow-run-id: ${{ github.run_id }}
+      pr_number: ${{ fromJson(github.event.inputs.pr_number) }}
