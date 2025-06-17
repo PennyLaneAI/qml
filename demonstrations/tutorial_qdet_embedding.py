@@ -8,9 +8,8 @@ capture the strong electronic correlations in the active region with high accura
 for the environment in a more approximate manner.
 
 In this demo, we show how to implement quantum defect embedding theory (QDET) [#Galli]_. This method
-has been successfully applied to study systems such as defects in CaO [#Galli]_ and to calculate
-excitations of the negatively charged nitrogen-vacancy defect in diamond [#Galli2]_. QDET can be implemented for
-calculating both ground and excited states as well as dynamic properties of materials. These make
+has been successfully applied to study systems such as defects in calcium oxide [#Galli]_ and to calculate
+excitations of the negatively charged nitrogen-vacancy defect in diamond [#Galli2]_. QDET can be used to calculate ground states, excited states, and dynamic properties of materials. These make
 QDET a powerful method for affordable quantum simulation of materials. Another important advantage
 of QDET is the compatibility of the method with quantum algorithms as we explain in the following
 sections.
