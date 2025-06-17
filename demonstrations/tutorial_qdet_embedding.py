@@ -112,8 +112,8 @@ sections.
 #    mpirun -n 2 westpp.x -i westpp.in > westpp.out
 #
 # This creates the file ``westpp.json`` which contains the information we need here. Since
-# computational resources required to run the calculation are large, we just download a pre-computed
-# file with:
+# computational resources required to run the calculation are large, for the purpose of this tutorial we just 
+# download a pre-computed file with:
 #
 # .. code-block:: bash
 #
