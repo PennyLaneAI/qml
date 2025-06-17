@@ -59,7 +59,7 @@ sections.
 #    wget -N -q http://www.quantum-simulation.org/potentials/sg15_oncv/upf/C_ONCV_PBE-1.2.upf
 #    wget -N -q http://www.quantum-simulation.org/potentials/sg15_oncv/upf/N_ONCV_PBE-1.2.upf
 #
-# Next, we need to create the input file for running QUANTUM ESPRESSO. The input file contains
+# Next, we need to create the input file for running QUANTUM ESPRESSO. This contains
 # information about the system and the DFT calculations. More details on how to construct the input
 # file can be found in QUANTUM ESPRESSO `documentation <https://www.quantum-espresso.org/Doc/INPUT_PW.html>`_
 # page. For the system taken here, the input file can be downloaded with
