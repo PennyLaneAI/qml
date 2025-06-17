@@ -32,9 +32,9 @@ sections.
 #     H^{eff} = \sum_{ij} t_{ij}^{eff}a_i^{\dagger}a_j + \frac{1}{2}\sum_{ijkl} v_{ijkl}^{eff}a_i^{\dagger}a_{j}^{\dagger}a_ka_l,
 #
 # where :math:`t_{ij}^{eff}` and :math:`v_{ijkl}^{eff}` represent the effective one-body and
-# two-body integrals, respectively, and :math:`ijkl` span over the orbitals inside the impurity.
-# This Hamiltonian describes a simplified representation of the complex quantum system that is
-# computationally tractable while it properly captures the essential physics of the problem.
+# two-body integrals, respectively, and the indices :math:`ijkl` span over the orbitals inside the impurity.
+# This Hamiltonian describes a simplified representation of the quantum system that is more
+# computationally tractable, while properly capturing the essential physics of the problem.
 #
 # Implementation
 # --------------
