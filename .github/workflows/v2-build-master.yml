@@ -25,7 +25,7 @@ concurrency:
 
 jobs:
   # Step 1: Identify changed demos
-   identify-changed-demos:
+  identify-changed-demos:
     runs-on: ubuntu-latest
     outputs:
       updated: ${{ steps.get-changed-demos.outputs.updated }}
@@ -48,7 +48,7 @@ jobs:
   build:
     if: needs.identify-changed-demos.outputs.updated != ''
     uses: ./.github/workflows/v2-build-demos.yml
-    needs: 
+    needs:
       - identify-changed-demos
     with:
       ref: ${{ github.sha }}
@@ -68,14 +68,12 @@ jobs:
       - build
       - identify-changed-demos
     steps:
-      - name: Save Pull Request Event Context
+      - name: Save Merge Commit Information
         run: |
           mkdir -p /tmp/pr
           cat >/tmp/pr/pr_info.json <<EOL
           {
-            "id": "${{ github.event.pull_request.number }}",
-            "ref": "${{ github.event.pull_request.head.sha }}",
-            "ref_name": "${{ github.event.pull_request.head.ref }}",
+            "ref": "${{ github.sha }}",
             "updated_demos": "${{ needs.identify-changed-demos.outputs.updated }}",
             "deleted_demos": "${{ needs.identify-changed-demos.outputs.deleted }}"
           }
