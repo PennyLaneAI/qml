@@ -4,7 +4,7 @@ name: V2 Build Master for Production Environment
 # The following workflow is responsible for the following:
 # 1. Identifying changed demos in the master branch when a PR is merged.
 # 2. Building the demos that have changed.
-# 3. Save the build context in a articfact for later use in the V2 Deploy Production workflow.
+# 3. Save the build context in an artifact for later use in the V2 Deploy Production workflow.
 # 4. If successful, trigger the V2 Deploy Production workflow.
 # Notes: We want to ensure that the builds are queued and not cancelled if a new PR is merged while the build is in progress.
 
