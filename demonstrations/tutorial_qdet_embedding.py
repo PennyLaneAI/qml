@@ -40,7 +40,7 @@ sections.
 # --------------
 # A QDET simulation typically starts by obtaining a meanfield approximation of the whole system
 # using efficient quantum chemistry methods such as density functional theory (DFT). These
-# calculations provide a set of orbitals that are partitioned into impurity and bath orbitals.
+# calculations provide a set of orbitals that are partitioned into **impurity** and **bath** orbitals.
 # The effective Hamiltonian is constructed from the impurity orbitals and is subsequently solved
 # by using either a high accuracy classical method or a quantum algorithm. Let's implement these
 # steps for an example!
