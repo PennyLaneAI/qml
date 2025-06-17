@@ -52,7 +52,8 @@ sections.
 # The DFT calculations are performed with the `QUANTUM ESPRESSO <https://www.quantum-espresso.org/>`_
 # package. This requires downloading pseudopotentials [#Modji]_ for each atomic species
 # in the system from the QUANTUM ESPRESSO `database <https://www.quantum-espresso.org/pseudopotentials/>`_.
-# We have carbon and nitrogen in our system and download their pseudopotentials with
+# To prepare our system, the necessary carbon and nitrogen pseudopotentials can be downloaded by executing
+# the following commands through the terminal or command prompt:
 #
 # .. code-block:: bash
 #
@@ -68,8 +69,8 @@ sections.
 #
 #    wget -N -q https://west-code.org/doc/training/nv_diamond_63/pw.in
 #
-# We can now perform the DFT calculations by running ``pw.x`` on the input file ``pw.in`` and save
-# the results in ``pw.out``.
+# DFT calculations can now be initiated using the `pw.x` executable in `WEST`, taking `pw.in` as the input file
+# and directing the output to `pw.out`. This process is parallelized across 2 cores using mpirun.
 #
 # .. code-block:: bash
 #
@@ -88,7 +89,9 @@ sections.
 # where :math:`V` is the identified volume including the impurity within the supercell volume
 # :math:`\Omega` and :math:`\Psi` is the wavefunction [#Galli2]_. We will use the
 # `WEST <https://pubs.acs.org/doi/10.1021/ct500958p>`_ program to compute the localization factor.
-# This requires creating the input file ``westpp.in`` as shown below.
+# This requires the westpp.in input file, example for which is shown below. Here, we specify the
+# box parameters within which the localization factor is being computed; the vectors for this box are provided in
+# in atomic units as [x_start, x_end, y_start, y_end, z_start, z_end].
 #
 # .. code-block:: text
 #
@@ -105,14 +108,15 @@ sections.
 #      - 6.28
 #      - 10.28
 #
-# We can now perform the calculation with
+# The calculation can now be performed by running the westpp.x executable from WEST using mpirun to
+# parallelize it across two cores.
 #
 # .. code-block:: bash
 #
 #    mpirun -n 2 westpp.x -i westpp.in > westpp.out
 #
 # This creates the file ``westpp.json`` which contains the information we need here. Since
-# computational resources required to run the calculation are large, for the purpose of this tutorial we just 
+# computational resources required to run the calculation are large, for the purpose of this tutorial we just
 # download a pre-computed file with:
 #
 # .. code-block:: bash
@@ -137,7 +141,7 @@ sections.
 #    plt.plot(x,y,'o')
 #    plt.axhline(y=0.08,linestyle='--',color='red')
 #
-#    plt.xlabel('KS index')
+#    plt.xlabel('Kohn-Sham orbital index')
 #    plt.ylabel('Localization factor')
 #
 #    plt.show()
@@ -235,8 +239,10 @@ sections.
 #
 # The solution object is a dictionary that contains information about the FCI eigenstates of the
 # system, which includes various excitation energies, spin multiplicities, eigenvectors etc.
-# More importantly, this effective Hamiltonian can be implemented in a quantum algorithms using
-# PennyLane once it is converted to a qubit Hamiltonian.
+# More importantly, while FCI handles small embedded effective Hamiltonians with ease, it quickly
+# hits a wall with larger impurities. This is precisely where quantum computing steps in, offering
+# the scalability needed to tackle such complex systems. The first step to solving these effective
+# Hamiltonians via quantum algorithms in PennyLane, is to convert them to qubit Hamiltonians.
 #
 # Quantum Simulation
 # ^^^^^^^^^^^^^^^^^^
@@ -246,16 +252,17 @@ sections.
 #
 # .. code-block:: python
 #
-#    from pennylane.qchem import one_particle, two_particle, observable
-#    import numpy as np
-#
-#    effective_hamiltonian = QDETResult(filename='west.wfreq.save/wfreq.json')
-#
-#    one_e, two_e = effective_hamiltonian.h1e, effective_hamiltonian.eri
-#
-#    t = one_particle(one_e[0])
-#    v = two_particle(np.swapaxes(two_e[0][0], 1, 3))
-#    qubit_op = observable([t, v], mapping="jordan_wigner")
+from pennylane.qchem import one_particle, two_particle, observable
+import numpy as np
+
+effective_hamiltonian = QDETResult(filename="west.wfreq.save/wfreq.json")
+
+one_e, two_e = effective_hamiltonian.h1e, effective_hamiltonian.eri
+
+t = one_particle(one_e[0])
+v = two_particle(np.swapaxes(two_e[0][0], 1, 3))
+qubit_op = observable([t, v], mapping="jordan_wigner")
+print(qubit_op)
 #
 # We can implement this Hamiltonian in a quantum algorithm such as quantum phase estimation (QPE).
 # For simplicity, we just compute the energies obtained from the diagnolization of this qubit
@@ -274,8 +281,8 @@ sections.
 # Quantum defect embedding theory is a novel framework for simulating strongly correlated
 # quantum systems and has been successfully used for studying defects in solids. Applicability of
 # QDET however is not limited to defects, it can be used for other systems where a strongly
-# correlated subsystem is embedded in a weakly correlated environment. Additionally, QDET is able to 
-# correct the interaction double counting issue within the active space faced by a variety of 
+# correlated subsystem is embedded in a weakly correlated environment. Additionally, QDET is able to
+# correct the interaction double counting issue within the active space faced by a variety of
 # other embedding theories. The Green's function based formulation of QDET ensures
 # exact removal of double counting corrections at GW level of theory, thus removing the
 # approximation present in the initial DFT based formulation. This formulation also helps to capture
