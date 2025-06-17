@@ -178,9 +178,9 @@ sections.
 #
 #     t_{ij}^{eff} = H_{ij}^{KS} - t_{ij}^{dc},
 #
-# We use the WEST program to compute these parameters. The program will first compute the
-# quasiparticle energies, then computes the partially screened Coulomb potential and finally
-# computes the parameters of the effective Hamiltonian. The input file for such a calculations is
+# We use the WEST program to compute these parameters. WEST will first compute the
+# quasiparticle energies, then the partially screened Coulomb potential, and finally
+# the parameters of the effective Hamiltonian. The input file for such a calculations is
 # shown below:
 #
 # .. code-block:: text
