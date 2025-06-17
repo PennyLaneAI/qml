@@ -164,7 +164,7 @@ sections.
 #
 #     v_{ijkl}^{eff} = [W_0^{R}]_{ijkl},
 #
-# where :math:`W_0^R` results from screening the bare Coulomb potential, :math:`v`, with the reduced
+# where :math:`W_0^R` results from screening the bare Coulomb potential :math:`v` with the reduced
 # polarizability, :math:`P_0^R = P - P_{imp}`, where :math:`P` is the system's polarizability and
 # :math:`P_{imp}` is the impurity's polarizability. Since solving the effective Hamiltonian
 # accounts for the exchange and correlation interactions between the active electrons, we remove
