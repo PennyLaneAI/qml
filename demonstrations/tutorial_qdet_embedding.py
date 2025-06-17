@@ -83,7 +83,7 @@ sections.
 #
 # .. math::
 #
-#     L_n = \int_{V \in \Omega} d^3 r |\Psi_n(r)|^2
+#     L_n = \int_{V \in \Omega} d^3 r |\Psi_n(r)|^2,
 #
 # where :math:`V` is the identified volume including the impurity within the supercell volume
 # :math:`\Omega` and :math:`\Psi` is the wavefunction [#Galli2]_. We will use the
