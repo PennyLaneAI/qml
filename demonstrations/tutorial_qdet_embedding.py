@@ -176,7 +176,7 @@ sections.
 #
 # .. math::
 #
-#     t_{ij}^{eff} = H_{ij}^{KS} - t_{ij}^{dc},
+#     t_{ij}^{eff} = H_{ij}^{KS} - t_{ij}^{dc}.
 #
 # We use the WEST program to compute these parameters. WEST will first compute the
 # quasiparticle energies, then the partially screened Coulomb potential, and finally
