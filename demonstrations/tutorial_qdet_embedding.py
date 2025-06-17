@@ -1,13 +1,10 @@
 r"""Quantum Defect Embedding Theory (QDET)
 =========================================
-Efficient simulation of the electronic structure of materials and molecules remains a
-significant challenge due to the prohibitive costs of available classical methods. However, many
-interesting problems in quantum chemistry and condensed matter physics feature a strongly correlated
-region, which requires accurate quantum treatment, embedded within a larger environment that could
-be properly treated with cheaper approximations. Example of such systems include point defects in
+Many interesting problems in quantum chemistry and materials science feature a strongly correlated
+region embedded within a larger environment. Example of such systems include point defects in
 materials [#Galli]_, active site of catalysts [#SJRLee]_ and surface phenomenon such as adsorption
-[#Gagliardi]_. Such systems can be accurately simulated with embedding theories which effectively
-capture the strong electronic correlations in the active region with high accuracy while accounting
+[#Gagliardi]_. Such systems can be accurately simulated with **embedding theories**, which effectively
+capture the strong electronic correlations in the active region with high accuracy, while accounting
 for the environment in a more approximate manner.
 
 In this demo, we show how to implement quantum defect embedding theory (QDET) [#Galli]_. This method
