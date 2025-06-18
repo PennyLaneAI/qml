@@ -8,10 +8,10 @@ nature. As a result, researchers often turn to wavefunction-based methods, such 
 interaction or coupled cluster, which provide better accuracy but come at a significantly higher
 computational cost.
 
-Embedding theories provide a balanced midpoint solution that enhances our ability to simulate
-materials accurately and efficiently. The core idea behind embedding methods is to divide the system
-into two parts: an impurity which is a strongly correlated subsystem that requires a high accuracy
-description and an environment which can be treated with a more approximate but computationally
+Embedding theories provide a path to simulate materials with a balance of accuracy and efficiency.
+The core idea is to divide the system
+into two parts: an impurity, which is a strongly correlated subsystem that requires a high accuracy
+description, and an environment, which can be treated with a more approximate but computationally
 efficient level of theory.
 
 .. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_qdet_embedding.png
