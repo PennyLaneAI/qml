@@ -66,7 +66,7 @@ efficient level of theory.
 #
 # Note that the Schmidt decomposition requires a priori knowledge of the ground-state wavefunction. To alleviate
 # this, DMET operates through a systematic iterative approach, starting with a mean field description
-# of the wavefunction and refining it through feedback from solution of the impurity Hamiltonian.
+# of the wavefunction and refining it through feedback from solutions of the impurity Hamiltonian, as we describe below.
 #
 # Implementation
 # --------------
