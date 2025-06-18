@@ -74,7 +74,7 @@ efficient level of theory.
 # Subsequently, this approximate wavefunction is partitioned with Schmidt decomposition to get
 # the impurity and bath orbitals. These orbitals are then employed to define an approximate projector
 # :math:`P`, which is used to construct the embedded Hamiltonian. Then, accurate methods such as
-# post-Hartree-Fock methods, exact diagonalisation, or accurate quantum algorithms are employed
+# quantum algorithms are employed
 # to find the energy spectrum of the embedded Hamiltonian. The results are used to
 # re-construct the projector and the process is repeated until the wavefunction converges.
 #
