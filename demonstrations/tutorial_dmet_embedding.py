@@ -91,7 +91,7 @@ efficient level of theory.
 # We begin by defining a finite system containing a hydrogen chain with 8 atoms using PySCF. This is
 # done by creating a ``Cell`` object containing the Hydrogen atoms. We construct the system to have
 # a central :math:`H_4` chain with a uniform :math:`0.75` Å :math:`H-H` bond length, flanked by two
-# :math:`H_2` molecules at its termini.
+# :math:`H_2` molecules at its endpoints.
 #
 # .. figure:: ../_static/demonstration_assets/dmet/H8.png
 #    :align: center
