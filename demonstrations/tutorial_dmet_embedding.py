@@ -35,8 +35,8 @@ efficient level of theory.
 #
 #      | \Psi \rangle = \sum_i^{N_I} \sum_j^{N_E} \psi_{ij} | I_i \rangle | E_j \rangle,
 #
-# where :math:`I_i` and :math:`E_j` are basis states of the impurity :math:`I` and environment
-# :math:`E`, respectively, :math:`\psi_{ij}` is the matrix of coefficients and :math:`N` is the
+# where :math:`I_i` and :math:`E_j` are respectively the basis states of the impurity :math:`I` and environment
+# :math:`E`, :math:`\psi_{ij}` is the matrix of coefficients, and :math:`N` is the
 # number of sites, e.g., orbitals. The key idea in DMET is to perform a singular value decomposition
 # of the coefficient matrix :math:`\psi_{ij} = \sum_{\alpha} U_{i \alpha} \lambda_{\alpha} V_{\alpha j}`
 # and rearrange the wavefunctions as:
