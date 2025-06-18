@@ -11,7 +11,6 @@ authors = [
 keywords = ["demo", "qml", "tensorflow", "automatic-differentiation", "tutorials", "pytorch", "autograd", "quantum-computing", "neural-networks", "quantum-chemistry", "key-concepts", "quantum-machine-learning"]
 dependencies = [
     "typer>=0.15.1,<0.16.0",
-    "poetry>=1.8.5,<2.0.0",
     "poetry-plugin-export>=1.8.0,<2.0.0",
     "dulwich<0.22",
     "requirements-parser>=0.11.0,<0.12.0",
@@ -29,7 +28,7 @@ Repository = "https://github.com/PennyLaneAI/qml"
 qml = "qml.app:app"
 
 [tool.poetry]
-requires-poetry = ">=2.0"
+requires-poetry = ">=2.1"
 packages = [
     {include = "qml", from = "lib"}
 ]
