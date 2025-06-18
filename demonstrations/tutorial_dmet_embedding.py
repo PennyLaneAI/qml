@@ -410,7 +410,7 @@ efficient level of theory.
 # this problem is to use a quantum algorithm as our accurate solver. We now convert our impurity
 # Hamiltonian to a qubit Hamiltonian that can be used in a quantum algorithm using PennyLane.
 #
-# The hamiltonian object we generated above contains one-body and two-body integrals along with the
+# The Hamiltonian object we generated above contains one-body and two-body integrals along with the
 # nuclear repulsion energy which can be accessed and used to construct the qubit Hamiltonian. We
 # first extract the information we need.
 #
