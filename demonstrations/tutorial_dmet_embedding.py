@@ -354,7 +354,7 @@ efficient level of theory.
 # We set up the loop by defining the maximum number of iterations and a convergence criteria. We use
 # both energy and correlation potential as our convergence parameters, so we define the initial
 # values and convergence tolerance for both. Also, since dividing the system into multiple fragments
-# might lead to wrong number of electrons, we define and check a chemical potential :math:`\mu`
+# might lead to the wrong number of electrons, we define and check a chemical potential :math:`\mu`
 # as well.
 #
 # .. code-block:: python
