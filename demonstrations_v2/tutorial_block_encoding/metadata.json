@@ -1,5 +1,5 @@
 {
-    "title": "Block Encodings",
+    "title": "Block encoding with matrix access oracles",
     "authors": [
       {
             "username": "Jay"
@@ -12,7 +12,7 @@
         }
     ],
     "dateOfPublication": "2023-11-28T00:00:00+00:00",
-    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
+    "dateOfLastModification": "2025-05-27T00:00:00+00:00",
     "categories": [
         "Quantum Computing",
         "Algorithms"
