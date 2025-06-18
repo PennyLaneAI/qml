@@ -124,7 +124,7 @@ Loading the plugin device
 
 While PennyLane provides a basic qubit simulator (``'default.qubit'``) and a basic CV
 Gaussian simulator (``'default.gaussian'``), the true power of PennyLane comes from its
-`plugin ecosystem <https://pennylane.ai/plugins.html>`_, allowing quantum computations
+`device ecosystem <https://pennylane.ai/devices>`_, allowing quantum computations
 to be run on a variety of quantum simulator and hardware devices.
 
 For this circuit, we will be using the ``'strawberryfields.fock'`` device to construct
