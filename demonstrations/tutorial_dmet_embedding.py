@@ -64,7 +64,7 @@ efficient level of theory.
 # :math:`|\Psi \rangle`, is the ground state of both the full system Hamiltonian :math:`\hat{H}` and
 # the smaller embedded Hamiltonian :math:`\hat{H}_{\text{emb}}` [#Mineh]_.
 #
-# Note that the Schmidt decomposition requires a priori knowledge of the wavefunction. To alleviate
+# Note that the Schmidt decomposition requires a priori knowledge of the ground-state wavefunction. To alleviate
 # this, DMET operates through a systematic iterative approach, starting with a mean field description
 # of the wavefunction and refining it through feedback from solution of the impurity Hamiltonian.
 #
