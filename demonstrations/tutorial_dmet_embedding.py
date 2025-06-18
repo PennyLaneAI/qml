@@ -53,7 +53,7 @@ efficient level of theory.
 # function.
 #
 # We are now able to project the full Hamiltonian to the space of impurity and bath states, known as
-# embedding space:
+# the embedding space:
 #
 # .. math::
 #
