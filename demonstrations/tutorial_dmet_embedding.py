@@ -167,7 +167,7 @@ efficient level of theory.
 # Next, we identify the orbital labels for each atom in the unit cell and define the impurity and
 # bath by looking at the labels. In this example, we choose to keep the :math:`1s` orbitals in the
 # central :math:`H_4` chain in the impurity, while the bath contains the :math:`2s` orbitals, and
-# the orbitals belonging to the terminal Hydrogen molecules form the unentangled environment.
+# the orbitals belonging to the terminal Hydrogen molecules form the environment.
 #
 # .. code-block:: python
 #
