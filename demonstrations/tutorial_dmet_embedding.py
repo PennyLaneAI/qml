@@ -21,7 +21,7 @@ efficient level of theory.
 """
 
 #############################################
-# In this demo, we will learn density matrix embedding theory (DMET) [#SWouters]_, a
+# In this demo, we will describe density matrix embedding theory (DMET) [#SWouters]_, a
 # wavefunction-based approach that embeds the ground state density matrix. We provide a brief
 # introduction of the method and demonstrate how to run DMET calculations to construct a Hamiltonian
 # that can be used in quantum algorithms using PennyLane.
