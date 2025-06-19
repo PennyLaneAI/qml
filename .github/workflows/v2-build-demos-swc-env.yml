@@ -1,4 +1,4 @@
-name: V2 Build Demos for Deployment
+name: V2 Build Demos for SWC Environment
 
 on:
   push:
