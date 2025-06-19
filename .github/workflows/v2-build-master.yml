@@ -1,19 +1,12 @@
-name: V2 Build Master for Production Environment
-
-# WIP #
-# The following workflow is responsible for the following:
-# 1. Identifying changed demos in the master branch when a PR is merged.
-# 2. Building the demos that have changed.
-# 3. Save the build context in an artifact for later use in the V2 Deploy Production workflow.
-# 4. If successful, trigger the V2 Deploy Production workflow.
-# Notes: We want to ensure that the builds are queued and not cancelled if a new PR is merged while the build is in progress.
+name: V2 Build Demos for Deployment
 
 on:
   push:
     branches:
       - master
-      - test-v2-master # A master branch for testing purposes
-      - v2-deploy-on-push # A branch for testing purposes
+      - test-v2-master
+      - dev
+      - test-v2-dev
 
 permissions:
   contents: read
@@ -21,7 +14,7 @@ permissions:
   pull-requests: write
 
 concurrency:
-  group: build-v2-demos-master-${{ github.sha }}
+  group: demo-deployment-build-${{ github.sha }}
   cancel-in-progress: true
 
 jobs:
@@ -54,9 +47,9 @@ jobs:
     with:
       ref: ${{ github.sha }}
       demo-names: ${{ needs.identify-changed-demos.outputs.updated }}
-      dev: false
+      dev: ${{ github.ref_name == 'dev' || github.ref_name == 'test-v2-dev' }} # TODO remove test-v2-dev when stable
       save-artifact: true
-      artifact-name: demo-master-build-${{ github.sha }} # Specific name for master builds
+      artifact-name: demo-deployment-build-${{ github.sha }}
       keep-going: false
       quiet: false
       batch_size: 10
@@ -71,10 +64,11 @@ jobs:
     steps:
       - name: Save Merge Commit Information
         run: |
-          mkdir -p /tmp/pr
-          cat >/tmp/pr/master_build_context.json <<EOL
+          mkdir -p /tmp/merge
+          cat >/tmp/merge/deployment_build_context.json <<EOL
           {
             "ref": "${{ github.sha }}",
+            "ref_name": "${{ github.ref_name }}",
             "updated_demos": "${{ needs.identify-changed-demos.outputs.updated }}",
             "deleted_demos": "${{ needs.identify-changed-demos.outputs.deleted }}"
           }
@@ -83,6 +77,6 @@ jobs:
       - name: Upload Pull Request Event Context as Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: master_build_context
-          path: /tmp/pr
+          name: deployment_build_context
+          path: /tmp/merge
           retention-days: 30
