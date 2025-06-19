@@ -1,6 +1,6 @@
 r"""
-QJIT compilation with Qrack and Catalyst
-========================================
+QJIT compilation with Qrack and Catalyst TEST
+=============================================
 
 `Qrack <https://github.com/unitaryfund/qrack>`__ is a GPU-accelerated quantum
 computer simulator with many novel optimizations, and `PyQrack
