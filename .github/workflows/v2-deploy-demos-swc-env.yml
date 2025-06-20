@@ -69,16 +69,16 @@ jobs:
       - name: Determine SWC environment via merge_ref_name
         if: steps.pr_info.outputs.merge_ref_name != ''
         id: determine_env
+        ## Update to use correct environment based on merge_ref_name for
         run: |
-          if [[ -z "${{ steps.pr_info.outputs.merge_ref_name }}" ]]; then
-            echo "merge_ref_name is not set!"
-            exit 1
-          elif [[ "${{ steps.pr_info.outputs.merge_ref_name }}" == "master" || "${{ steps.pr_info.outputs.merge_ref_name }}" == "test-v2-master" ]]; then
+          if [[ "${{ steps.pr_info.outputs.merge_ref_name }}" == "master" || "${{ steps.pr_info.outputs.merge_ref_name }}" == "test-v2-master" ]]; then
             echo "swc-env=swc-staging" >> $GITHUB_OUTPUT
-          else
+          elif [[ "${{ steps.pr_info.outputs.merge_ref_name }}" == "dev" || "${{ steps.pr_info.outputs.merge_ref_name }}" == "test-v2-dev" ]]; then
             echo "swc-env=swc-dev" >> $GITHUB_OUTPUT
+          else
+            echo "Unknown branch: ${{ steps.pr_info.outputs.merge_ref_name }}"
+            exit 1
           fi
-
     outputs:
       merge_ref: ${{ steps.pr_info.outputs.merge_ref }}
       merge_ref_name: ${{ steps.pr_info.outputs.merge_ref_name }}
