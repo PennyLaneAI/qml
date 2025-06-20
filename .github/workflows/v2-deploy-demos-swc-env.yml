@@ -65,13 +65,28 @@ jobs:
           echo "merge_ref_name=$(cat merge_ref_name.txt)" >> $GITHUB_OUTPUT
           echo "updated_demos=$(cat updated_demos.json)" >> $GITHUB_OUTPUT
           echo "deleted_demos=$(cat deleted_demos.json)" >> $GITHUB_OUTPUT
+
+      - name: Determine SWC environment via merge_ref_name
+        if: steps.pr_info.outputs.merge_ref_name != ''
+        id: determine_env
+        run: |
+          if [[ -z "${{ steps.pr_info.outputs.merge_ref_name }}" ]]; then
+            echo "merge_ref_name is not set!"
+            exit 1
+          elif [[ "${{ steps.pr_info.outputs.merge_ref_name }}" == "master" || "${{ steps.pr_info.outputs.merge_ref_name }}" == "test-v2-master" ]]; then
+            echo "swc-env=swc-staging" >> $GITHUB_OUTPUT
+          else
+            echo "swc-env=swc-dev" >> $GITHUB_OUTPUT
+          fi
+
     outputs:
       merge_ref: ${{ steps.pr_info.outputs.merge_ref }}
       merge_ref_name: ${{ steps.pr_info.outputs.merge_ref_name }}
       updated_demos: ${{ steps.pr_info.outputs.updated_demos }}
       deleted_demos: ${{ steps.pr_info.outputs.deleted_demos }}
+      swc-env: ${{ steps.determine_env.outputs.swc-env }}
 
-  # Step 2: Deploy the demos to SWC production environment
+  # Step 2: Deploy the demos to SWC
   deploy-production-demos:
     if: |
       github.event.workflow_run.event == 'push' &&
@@ -81,8 +96,7 @@ jobs:
     uses: ./.github/workflows/v2-deploy-demos.yml
     needs: prepare-build-context
     with:
-      # Change to 'swc-prod' when ready for release
-      environment: 'swc-dev' 
+      environment: ${{ needs.prepare-build-context.outputs.swc-env }}
       artifact-name: demo-deployment-build-${{ needs.prepare-build-context.outputs.merge_ref }}
       workflow-run-id: ${{ github.event.workflow_run.id }}
       pr_number: 0
