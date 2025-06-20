@@ -79,7 +79,8 @@ jobs:
     if: |
       github.event.workflow_run.event == 'pull_request' && 
       needs.prepare-build-context.result == 'success' &&
-      needs.prepare-build-context.outputs.pr_ref != ''
+      needs.prepare-build-context.outputs.pr_ref != '' &&
+      needs.prepare-build-context.outputs.updated_demos != '[]'
     uses: ./.github/workflows/v2-deploy-demos.yml
     needs: prepare-build-context
     with:
