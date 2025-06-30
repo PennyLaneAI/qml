@@ -163,7 +163,7 @@ efficient level of theory.
 #    lattice.set_Ham(kmf, gdf, ao_to_lo_transform, eri_symmetry=4) # rotate to IAO basis
 #
 # Next, we identify the orbital labels for each atom in the unit cell and define the impurity and
-# bath by looking at the labels. We achieve this by utilizing a minimal basis 
+# bath by looking at the labels. We achieve this by utilizing a minimal basis
 # to categorize orbitals: those present in the minimal basis are identified as valence,
 # while the remaining orbitals are deemed virtual. In this example, we choose to keep the :math:`1s` orbitals in the
 # central :math:`H_4` chain in the impurity, while the bath contains the :math:`2s` orbitals, and
@@ -406,7 +406,7 @@ efficient level of theory.
 # This concludes the DMET procedure and returns the converged DMET energy.
 #
 # .. code-block:: text
-# 
+#
 #    DMET Converged
 #    DMET Energy per cell:  -8.203518641937336
 #
