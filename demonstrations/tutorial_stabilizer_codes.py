@@ -304,7 +304,6 @@ print(
 # For example, :math:`X_0 Z_1` denotes :math:`X \otimes Z` acting on qubits 0 and 1, respectively.
 # When identity operators are omitted, we use subscripts to indicate which qubits the non-identity Pauli operators act on.
 # If all positions are filled (e.g., :math:`XZI`), the position implicitly indicates the qubit index (qubit 0, 1, 2).
-
 #
 # The stabilizer formalism is a powerful framework for constructing quantum error-correcting codes using the algebraic structure of *Pauli operators*.
 # It focuses on subgroups of the *Pauli group* on :math:`n` qubits—denoted :math:`\mathcal{P}_n`—which consists of all tensor products of single-qubit Pauli operators :math:`\{I, X, Y, Z\}` (with overall phases :math:`\pm1, \pm i`).
@@ -344,7 +343,7 @@ print(
 # thereby the corresponding quantum error-correcting code.
 #
 # Now that we know how stabilizer generators work, let us create a tool for later use that creates the full stabilizer group from its generators.
-#
+
 import itertools
 from pennylane import X, Y, Z
 from pennylane import Identity as I
@@ -392,8 +391,7 @@ generate_stabilizer_group(generators, 3)
 # There is a one-to-one correspondence between stabilizer groups and the quantum error-correcting codes they define.
 # This means we can describe a code entirely by its stabilizer group, using operators rather than listing the codewords
 # directly as state vectors.
-
-
+#
 # Logical operators
 # ~~~~~~~~~~~~~~~~~~
 #
@@ -423,8 +421,8 @@ generate_stabilizer_group(generators, 3)
 # Remember that stabilizer group is a subgroup of the Pauli group with some properties. In the stabilizer formalism,
 # every Pauli operator acting on the qubits can be categorized based on how it interacts with the stabilizer group.
 # The **LSD theorem** states that Pauli operators on encoded qubits can be divided into three types:
-
-
+#
+#
 # * **L**: Logical operators – commute with all stabilizers but act non-trivially on the codewords.
 # * **S**: Stabilizers – leave all codewords unchanged.
 # * **D**: Destabilizers (errors) – do not commute with at least one stabilizer and take the state out of the codespace.
@@ -522,8 +520,6 @@ print(classify_pauli(X(0) @ Y(1) @ Z(2), logical_ops, generators, 3))
 #    ..
 #
 # Let us implement this encoding circuit in PennyLane.
-#
-
 
 def five_qubit_encode(alpha, beta):
     qml.StatePrep([alpha, beta], wires=4)
@@ -631,9 +627,6 @@ for wire in (0, 1, 2, 3, 4):
 # PennyLane code for error correction
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-#
-#
-#
 # Note that to build the encoding, syndrome measurement, and error correction circuits, we did only use the stabilizer generators.
 # This is a powerful feature of the stabilizer formalism. It allows us to construct the code from its stabilizer generators
 # and then use the code to correct errors. However, we can also find the codewords  and logical operatorsdirectly from the stabilizer generators by
@@ -658,7 +651,6 @@ for wire in (0, 1, 2, 3, 4):
 #
 # Conclusion
 # ~~~~~~~~~~~
-#
 #
 # In this tutorial, we introduced the stabilizer formalism and showed how it can be used to construct quantum error correction codes.
 # We applied it to a concrete example—the five-qubit code—using a PennyLane implementation.
