@@ -129,7 +129,6 @@ efficient level of theory.
 #
 # Performing mean field calculations
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
 # We can now perform a mean field calculation on the whole system through Hartree-Fock with density-fitted
 # integrals, following the procedures outlined in the `PySCF documentation <https://pyscf.org/user/pbc/df.html>`_.
 #
