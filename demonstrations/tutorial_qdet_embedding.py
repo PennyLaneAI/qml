@@ -15,7 +15,7 @@ of materials. Another important advantage
 of QDET is the compatibility of the method with quantum algorithms as we explain in the following
 sections.
 
-.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_qdet_embedding.png
+.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_how_to_build_qdet_hamiltonian.png
     :align: center
     :width: 70%
     :target: javascript:void(0)
