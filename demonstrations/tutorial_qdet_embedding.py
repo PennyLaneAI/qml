@@ -241,7 +241,7 @@ sections.
 # Using :code:`solve()` prints the excitation energies, spin multiplicity and relative occupation of
 # the active orbitals.
 #
-# .. code-block:: python
+# .. code-block:: text
 #
 #    ======================================================================
 #    Building effective Hamiltonian...
