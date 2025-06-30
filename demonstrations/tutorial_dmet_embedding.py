@@ -1,12 +1,9 @@
 r"""Density Matrix Embedding Theory (DMET)
 =========================================
-Materials simulation presents a crucial challenge in quantum chemistry. Density Functional Theory
-is currently the workhorse for simulating materials due to its balance between accuracy and
-computational efficiency. However, it often falls short in accurately capturing the intricate
-electron correlation effects found in strongly correlated materials because of its mean field
-nature. As a result, researchers often turn to wavefunction-based methods, such as configuration
-interaction or coupled cluster, which provide better accuracy but come at a significantly higher
-computational cost.
+Quantum chemistry's biggest hurdle lies in materials simulation. Mean-field methods, though
+efficient, consistently misrepresent electron correlation in strongly correlated systems due
+to inherent limitations. Consequently, accurate simulations demand computationally intensive
+wavefunction approaches such as configuration interaction or coupled cluster.
 
 Embedding theories provide a path to simulate materials with a balance of accuracy and efficiency.
 The core idea is to divide the system
@@ -14,7 +11,7 @@ into two parts: an impurity, which is a strongly correlated subsystem that requi
 description, and an environment, which can be treated with a more approximate but computationally
 efficient level of theory.
 
-.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_qdet_embedding.png
+.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_how_to_build_dmet_hamiltonian.png
     :align: center
     :width: 70%
     :target: javascript:void(0)
@@ -28,14 +25,14 @@ efficient level of theory.
 #
 # Theory
 # ------
-# The wavefunction for an embedded system composed of an impurity and an environment can be
+# The ground state wavefunction for an embedded system composed of an impurity and an environment can be
 # represented as [#SWouters]_:
 #
 # .. math::
 #
 #      | \Psi \rangle = \sum_i^{N_I} \sum_j^{N_E} \psi_{ij} | I_i \rangle | E_j \rangle,
 #
-# where :math:`I_i` and :math:`E_j` are respectively the basis states of the impurity :math:`I` and environment
+# where :math:`I_i` and :math:`E_j` are respectively the basis states of the **impurity** :math:`I` and **environment**
 # :math:`E`, :math:`\psi_{ij}` is the matrix of coefficients, and :math:`N` is the
 # number of sites, e.g., orbitals. The key idea in DMET is to perform a singular value decomposition
 # of the coefficient matrix :math:`\psi_{ij} = \sum_{\alpha} U_{i \alpha} \lambda_{\alpha} V_{\alpha j}`
@@ -46,11 +43,11 @@ efficient level of theory.
 #      | \Psi \rangle = \sum_{\alpha}^{N} \lambda_{\alpha} | A_{\alpha} \rangle | B_{\alpha} \rangle,
 #
 # where :math:`A_{\alpha} = \sum_i U_{i \alpha} | I_i \rangle` are states obtained from rotations of
-# :math:`I_i` to a new basis, and :math:`B_{\alpha} = \sum_j V_{j \alpha} | E_j \rangle` are bath
-# states representing the portion of the environment that interacts with the impurity [#Mineh]_. Note
-# that the number of bath states is equal to the number of fragment states, regardless of the size
-# of the environment. This representation is simply the Schmidt decomposition of the system wave
-# function.
+# :math:`I_i` to a new basis, and :math:`B_{\alpha} = \sum_j V_{j \alpha} | E_j \rangle` are **bath states**
+# representing the portion of the environment that interacts with the impurity [#Mineh]_. Note
+# that the number of bath states is equal to the number of impurity states, regardless of the size
+# of the environment. This representation is simply the `Schmidt decomposition <https://arxiv.org/html/2411.05703v1>`_
+# of the system wave function.
 #
 # We are now able to project the full Hamiltonian to the space of impurity and bath states, known as
 # the embedding space:
@@ -132,8 +129,9 @@ efficient level of theory.
 #
 # Performing mean field calculations
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-# We can now perform a mean field calculation on the whole system through Hartree-Fock with density
-# fitted integrals using PySCF.
+
+# We can now perform a mean field calculation on the whole system through Hartree-Fock with density-fitted
+# integrals, following the procedures outlined in the `PySCF documentation <https://pyscf.org/user/pbc/df.html>`_.
 #
 # .. code-block:: python
 #
@@ -160,12 +158,14 @@ efficient level of theory.
 #    from libdmet.basis_transform import make_basis
 #
 #    ao_to_iao_transform, _, _ = make_basis.get_C_ao_lo_iao(
-#    lattice, kmf, minao="MINAO", full_return=True)
+#    lattice, kmf, full_return=True)
 #    ao_to_lo_transform = lattice.symmetrize_lo(ao_to_iao_transform)
 #    lattice.set_Ham(kmf, gdf, ao_to_lo_transform, eri_symmetry=4) # rotate to IAO basis
 #
 # Next, we identify the orbital labels for each atom in the unit cell and define the impurity and
-# bath by looking at the labels. In this example, we choose to keep the :math:`1s` orbitals in the
+# bath by looking at the labels. We achieve this by utilizing a minimal basis 
+# to categorize orbitals: those present in the minimal basis are identified as valence,
+# while the remaining orbitals are deemed virtual. In this example, we choose to keep the :math:`1s` orbitals in the
 # central :math:`H_4` chain in the impurity, while the bath contains the :math:`2s` orbitals, and
 # the orbitals belonging to the terminal Hydrogen molecules form the environment.
 #
@@ -173,7 +173,7 @@ efficient level of theory.
 #
 #    from libdmet.lo.iao import get_labels, get_idx
 #
-#    orb_labels, val_labels, virt_labels = get_labels(cell, minao="MINAO")
+#    orb_labels, val_labels, virt_labels = get_labels(cell)
 #    imp_idx = get_idx(val_labels, atom_num=[2,3,4,5])
 #    bath_idx = get_idx(virt_labels, atom_num=[2,3,4,5], offset=len(val_labels))
 #    core_idx = []
@@ -184,11 +184,13 @@ efficient level of theory.
 #
 # Self-Consistent DMET
 # ^^^^^^^^^^^^^^^^^^^^
-# The DMET calculations are performed by repeating four steps iteratively: construct an
-# impurity Hamiltonian, solve the impurity Hamiltonian, compute the full system energy and finally
-# update the interactions between the impurity and its environment. To simplify the calculations, we
-# create dedicated functions for each step and implement them in a self-consistent loop. If we only
-# perform one iteration, the process is referred to as single-shot DMET.
+# The DMET calculations are performed by repeating four steps iteratively:
+# - Construct an impurity Hamiltonian
+# - Solve the impurity Hamiltonian
+# - Compute the full system energy
+# - Update the interactions between the impurity and its environment
+# To simplify the calculations, we create dedicated functions for each step and implement them in a
+# self-consistent loop. If we only perform one iteration, the process is referred to as single-shot DMET.
 #
 # We now construct the impurity Hamiltonian.
 #
@@ -209,16 +211,16 @@ efficient level of theory.
 #            rho: mean field density matrix
 #            mu: chemical potential
 #            scf_result: object containing the results of mean field calculation
-#            imp_ham: impurity Hamiltonian
+#            impHam: impurity Hamiltonian
 #            basis: rotation matrix for embedding basis
 #        """
 #
 #        rho, mu, scf_result = dmet.HartreeFock(lattice, v_corr, filling, mu,
 #                                        ires=True)
-#        imp_ham, _, basis = dmet.ConstructImpHam(lattice, rho, v_corr, int_bath=int_bath)
-#        imp_ham = dmet.apply_dmu(lattice, imp_ham, basis, last_dmu)
+#        impHam, _, basis = dmet.ConstructImpHam(lattice, rho, v_corr, int_bath=int_bath)
+#        impHam = dmet.apply_dmu(lattice, impHam, basis, last_dmu)
 #
-#        return rho, mu, scf_result, imp_ham, basis
+#        return rho, mu, scf_result, impHam, basis
 #
 # Next, we solve this impurity Hamiltonian with a high-level method. The following function defines
 # the electronic structure solver for the impurity, provides an initial point for the calculation
@@ -227,21 +229,21 @@ efficient level of theory.
 #
 # .. code-block:: python
 #
-#    def solve_impurity_hamiltonian(lattice, cell, basis, imp_ham, filling_imp, last_dmu, scf_result):
+#    def solve_impurity_hamiltonian(lattice, cell, basis, impHam, filling_imp, last_dmu, scf_result):
 #        r"""A function to solve impurity Hamiltonian
 #
 #        Args:
 #            lattice: Lattice object containing information about the system
 #            cell: Cell object containing information about the unit cell
 #            basis: rotation matrix for embedding basis
-#            imp_ham: impurity Hamiltonian
+#            impHam: impurity Hamiltonian
 #            last_dmu: change in chemical potential from previous iterations
 #            scf_result: object containing the results of mean field calculation
 #
 #        Returns:
 #            rho_emb: density matrix for embedded system
 #            energy_emb: energy for embedded system
-#            imp_ham: impurity Hamiltonian
+#            impHam: impurity Hamiltonian
 #            last_dmu: change in chemical potential from last iterations
 #            solver_info: a list containing information about the solver
 #        """
@@ -252,19 +254,19 @@ efficient level of theory.
 #        solver_args = {"nelec": min((lattice.ncore+lattice.nval)*2, lattice.nkpts*cell.nelectron), \
 #                       "dm0": dmet.foldRho_k(scf_result["rho_k"], basis_k)}
 #
-#        rho_emb, energy_emb, imp_ham, dmu = dmet.SolveImpHam_with_fitting(lattice, filling_imp,
-#                                            imp_ham, basis, solver, solver_args=solver_args)
+#        rho_emb, energy_emb, impHam, dmu = dmet.SolveImpHam_with_fitting(lattice, filling_imp,
+#                                            impHam, basis, solver, solver_args=solver_args)
 #
 #        last_dmu += dmu
 #        solver_info = [solver, solver_args]
-#        return rho_emb, energy_emb, imp_ham, last_dmu, solver_info
+#        return rho_emb, energy_emb, impHam, last_dmu, solver_info
 #
 # Now we include the effect of the environment in the expectation value. So we define
 # a function which returns the density matrix and energy for the whole system.
 #
 # .. code-block:: python
 #
-#    def solve_full_system(lattice, rho_emb, energy_emb, basis, imp_ham, last_dmu, solver_info):
+#    def solve_full_system(lattice, rho_emb, energy_emb, basis, impHam, last_dmu, solver_info):
 #        r"""A function to solve impurity Hamiltonian
 #
 #        Args:
@@ -272,22 +274,23 @@ efficient level of theory.
 #            rho_emb: density matrix for embedded system
 #            energy_emb: energy for embedded system
 #            basis: rotation matrix for embedding basis
-#            imp_ham: impurity Hamiltonian
+#            impHam: impurity Hamiltonian
 #            last_dmu: change in chemical potential from last iterations
 #            solver_info: a list containing information about the solver
 #
 #        Returns:
-#            energy: Ground state energy of the system
+#            energy_imp_fci: Ground state energy of the impurity
+#            energy: Ground state energy of the full system
 #        """
 #
 #        from libdmet.routine.slater import get_E_dmet_HF
 #
 #        rho_imp, energy_imp, nelec_imp = \
-#                dmet.transformResults(rho_emb, energy_emb, basis, imp_ham, \
+#                dmet.transformResults(rho_emb, energy_emb, basis, impHam, \
 #                lattice=lattice, last_dmu=last_dmu, int_bath=True, \
 #                             solver=solver_info[0], solver_args=solver_info[1])
 #        energy_imp_fci = energy_imp * lattice.nscsites # energy of impurity at FCI level
-#        energy_imp_scf = get_E_dmet_HF(basis, lattice, imp_ham, last_dmu, solver_info[0])
+#        energy_imp_scf = get_E_dmet_HF(basis, lattice, impHam, last_dmu, solver_info[0])
 #        energy = kmf.e_tot - kmf.energy_nuc() - energy_imp_scf + energy_imp_fci
 #
 #        return energy_imp_fci, energy
@@ -353,14 +356,14 @@ efficient level of theory.
 #
 # We set up the loop by defining the maximum number of iterations and a convergence criteria. We use
 # both energy and correlation potential as our convergence parameters, so we define the initial
-# values and convergence tolerance for both. Also, since dividing the system into multiple fragments
+# values and convergence tolerance for both. Also, since dividing the system into multiple impurities
 # might lead to the wrong number of electrons, we define and check a chemical potential :math:`\mu`
 # as well.
 #
 # .. code-block:: python
 #
 #    import libdmet.dmet.Hubbard as dmet
-#
+
 #    max_iter = 20                     # maximum number of iterations
 #    e_old = 0.0                       # initial value of energy
 #    v_corr = initialize_vcorr(lattice)# initial value of correlation potential
@@ -370,7 +373,7 @@ efficient level of theory.
 #    mu = 0                            # initial chemical potential
 #    last_dmu = 0.0                    # change in chemical potential
 #
-# Now we set up the iterations in a loop. Note that defining an impurity which is a fragment
+# Now we set up the iterations in a loop. Note that defining an impurity which is a part
 # of the unit cell, necessitates readjusting of the filling value for solution of impurity
 # Hamiltonian. This filling value represents the average electron occupation, which scales
 # proportional to the fraction of the unit cell included, while taking into account the different
@@ -380,14 +383,14 @@ efficient level of theory.
 # .. code-block:: python
 #
 #    for i in range(max_iter):
-#        rho, mu, scf_result, imp_ham, basis = construct_impurity_hamiltonian(lattice,
+#        rho, mu, scf_result, impHam, basis = construct_impurity_hamiltonian(lattice,
 #                           v_corr, filling, mu, last_dmu) # construct impurity Hamiltonian
 #        filling_imp = filling * 0.5
 #        # solve impurity Hamiltonian
-#        rho_emb, energy_emb, imp_ham, last_dmu, solver_info = solve_impurity_hamiltonian(lattice,
-#                                      cell, basis, imp_ham, filling_imp, last_dmu, scf_result)
+#        rho_emb, energy_emb, impHam, last_dmu, solver_info = solve_impurity_hamiltonian(lattice,
+#                                      cell, basis, impHam, filling_imp, last_dmu, scf_result)
 #        # include the environment interactions
-#        energy_imp, energy = solve_full_system(lattice, rho_emb, energy_emb, basis, imp_ham,
+#        energy_imp, energy = solve_full_system(lattice, rho_emb, energy_emb, basis, impHam,
 #                           last_dmu, solver_info)
 #        # fit correlation potential
 #        v_corr, dVcorr_per_ele = fit_correlation_potential(rho_emb,
@@ -400,7 +403,12 @@ efficient level of theory.
 #            print("DMET Energy per cell: ", energy)
 #            break
 #
-# This concludes the DMET procedure!
+# This concludes the DMET procedure and returns the converged DMET energy.
+#
+# .. code-block:: text
+# 
+#    DMET Converged
+#    DMET Energy per cell:  -8.203518641937336
 #
 # Quantum DMET
 # ^^^^^^^^^^^^
@@ -417,9 +425,9 @@ efficient level of theory.
 # .. code-block:: python
 #
 #    from pyscf import ao2mo
-#    norb = imp_ham.norb
-#    h1 = imp_ham.H1["cd"]
-#    h2 = imp_ham.H2["ccdd"][0]
+#    norb = impHam.norb
+#    h1 = impHam.H1["cd"]
+#    h2 = impHam.H2["ccdd"][0]
 #    h2 = ao2mo.restore(1, h2, norb) # get the correct shape based on permutation symmetry
 #
 # Now we generate the qubit Hamiltonian in PennyLane.
@@ -437,8 +445,7 @@ efficient level of theory.
 # ground state energy for the system by solving for the full system as done above in the
 # self-consistency loop using the ``solve_full_system`` function. The qubit Hamiltonian is
 # particularly relevant for a hybrid version of DMET, where classical mean field calculations are
-# coupled with a quantum algorithm for the self-consistent solver. To further reduce the quantum
-# resources, an alternative strategy will be using a classical solver for the iterative
+# coupled with a post-HF classical solver for the iterative
 # self-consistency between the impurity and the environment and treat the resulting converged
 # impurity Hamiltonian with a quantum algorithm.
 #
