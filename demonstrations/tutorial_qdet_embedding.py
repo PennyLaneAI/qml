@@ -9,8 +9,9 @@ for the environment in a more approximate manner.
 
 In this demo, we show how to implement quantum defect embedding theory (QDET) [#Galli]_. This method
 has been successfully applied to study systems such as defects in calcium oxide [#Galli]_ and to calculate
-excitations of the negatively charged nitrogen-vacancy defect in diamond [#Galli2]_. QDET can be used to calculate ground states, excited states, and dynamic properties of materials. These make
-QDET a powerful method for affordable quantum simulation of materials. Another important advantage
+excitations of the negatively charged nitrogen-vacancy defect in diamond [#Galli2]_. QDET can be used to calculate ground states,
+excited states, and dynamic properties of materials. These make QDET a powerful method for affordable quantum simulation
+of materials. Another important advantage
 of QDET is the compatibility of the method with quantum algorithms as we explain in the following
 sections.
 
@@ -237,6 +238,30 @@ sections.
 #
 #    solution = effective_hamiltonian.solve()
 #
+# Using :code:`solve()` prints the excitation energies, spin multiplicity and relative occupation of
+# the active orbitals.
+#
+# .. code-block:: python
+#
+#    ======================================================================
+#    Building effective Hamiltonian...
+#    nspin: 1
+#    occupations: [[2. 2. 2. 2. 1. 1.]]
+#    =====================================================================
+#                   diag[1RDM - 1RDM(GS)]
+#       E [eV] char                    87    122    123    126   127   128
+#    0  0.000   3-                 0.000  0.000  0.000  0.000 0.000 0.000
+#    1  0.436   1-                -0.001 -0.009 -0.018 -0.067 0.004 0.091
+#    2  0.436   1-                -0.001 -0.009 -0.018 -0.067 0.092 0.002
+#    3  1.251   1-                -0.002 -0.019 -0.023 -0.067 0.054 0.057
+#    4  1.939   3-                -0.003 -0.010 -0.127 -0.860 1.000 0.000
+#    5  1.940   3-                -0.003 -0.010 -0.127 -0.860 0.000 1.000
+#    6  2.935   1-                -0.000 -0.032 -0.043 -0.855 0.929 0.002
+#    7  2.936   1-                -0.000 -0.032 -0.043 -0.855 0.002 0.929
+#    8  4.661   1-                -0.006 -0.054 -0.188 -1.672 0.960 0.960
+#    9  5.080   3-                -0.014 -0.698 -0.213 -0.075 1.000 0.000
+#    ----------------------------------------------------------------------
+#
 # The solution object is a dictionary that contains information about the FCI eigenstates of the
 # system, which includes various excitation energies, spin multiplicities, eigenvectors etc.
 # More importantly, while FCI handles small embedded effective Hamiltonians with ease, it quickly
@@ -252,29 +277,20 @@ sections.
 #
 # .. code-block:: python
 #
-from pennylane.qchem import one_particle, two_particle, observable
-import numpy as np
-
-effective_hamiltonian = QDETResult(filename="west.wfreq.save/wfreq.json")
-
-one_e, two_e = effective_hamiltonian.h1e, effective_hamiltonian.eri
-
-t = one_particle(one_e[0])
-v = two_particle(np.swapaxes(two_e[0][0], 1, 3))
-qubit_op = observable([t, v], mapping="jordan_wigner")
-print(qubit_op)
+#    from pennylane.qchem import one_particle, two_particle, observable
+#    import numpy as np
 #
-# We can implement this Hamiltonian in a quantum algorithm such as quantum phase estimation (QPE).
-# For simplicity, we just compute the energies obtained from the diagnolization of this qubit
-# Hamiltonian:
+#    effective_hamiltonian = QDETResult(filename="west.wfreq.save/wfreq.json")
 #
-# .. code-block:: python
+#    one_e, two_e = effective_hamiltonian.h1e, effective_hamiltonian.eri
 #
-#    h_sparse = qml.SparseHamiltonian(qubit_op.sparse_matrix(), wires = qubit_op.wires)
-#    eigval_qubit = qml.eigvals(h_sparse)
+#    t = one_particle(one_e[0])
+#    v = two_particle(np.swapaxes(two_e[0][0], 1, 3))
+#    qubit_op = observable([t, v], mapping="jordan_wigner")
 #
-# You can compare the results and verify that the computed energies match those that we obtained
-# before.
+# We can use this Hamiltonian in a quantum algorithm such as quantum phase estimation (QPE).
+# As an exercise, you can compare the results and verify that the computed energies from quantum algorithm
+# match those that we obtained before.
 #
 # Conclusion
 # ----------
