@@ -362,7 +362,7 @@ efficient level of theory.
 # .. code-block:: python
 #
 #    import libdmet.dmet.Hubbard as dmet
-
+#
 #    max_iter = 20                     # maximum number of iterations
 #    e_old = 0.0                       # initial value of energy
 #    v_corr = initialize_vcorr(lattice)# initial value of correlation potential
