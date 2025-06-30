@@ -2,30 +2,31 @@ r"""
 Stabilizer codes for quantum error correction
 =================================================
 
-State-of-the-art quantum devices, such as IBM's Condor and Atom Computing's optical lattices, contain more than 
+State-of-the-art quantum devices, such as IBM's Condor and Atom Computing's optical lattices, contain more than
 a thousand qubits. Does this qubit count suffice for valuable quantum algorithms with clear speedups?
 The reality is that there is more to the story than the sheer number of qubits. As we currently stand, quantum
-devices are still prone to errors that increase with device size. For this reason, **quantum error correction**--one of the most important domain in the universe of quantum computing--has 
-been gaining traction. 
+devices are still prone to errors that increase with device size. For this reason, **quantum error correction**--one of the most important domain in the universe of quantum computing--has
+been gaining traction.
 
-Quantum error correction is done via schemes known as **error correction codes.**
+Quantum error correction is implemented through **error correction codes.**
 These are quantum algorithms that come in many varieties that address different error types.
-Is there a unified way to understand these codes? The **stabilizer formalism** provides such a framework for
+Is there a unified way to understand all these codes? The **stabilizer formalism** provides such a framework for
 a large class of quantum error correction codes. The so-called
-**stabilizer codes**, such as the repetition, Shor, Steane, and surface codes, 
+**stabilizer codes**, such as the repetition, Shor, Steane, and surface codes,
 all fall under this formalism. Other codes, like the GKP codes used by Xanadu, lie outside of it.
 
-In this demo, we will introduce the stabilizer formalism using bottom-up approach. We construct and
-some well-known codes using the quantum circuit formalism and then derive their **stabilizer generators,** from which
-the code can be reconstructed. This enables the construction of a wide range of error correction codes 
-directly from their stabilizer generators. 
+In this demo, we will introduce the stabilizer formalism using bottom-up approach. We construct
+some well-known codes using **stabilizer generators,** from which
+the other elements of the code (codewords, syndrome measurements, etc.) can be reconstructed. This enables the construction of a wide range of error correction codes
+directly from their stabilizer generators. We will use the quantum circuit formalism to construct the codes.
+
 
 A toy example: the repetition code
 -----------------------------------
 
-To start with, let us explore the general structure of error correction codes using a simple example: the **three-qubit repetition code.** 
-We will introduce this code as a quantum circuit with definite steps to gain some intuition on how it corrects errors on qubits. 
-The quantum circuit representation is known as the **state picture**. In this formalism, error correction codes follow a simple structure:
+To start with, let us explore the general structure of error correction codes using a simple example: the **three-qubit repetition code.**
+We will introduce this code as a quantum circuit with definite steps to gain some intuition on how it corrects errors on qubits.
+We represent the states of the qubits in the circuit using **state vectors** (the Schrödinger picture). In this formalism, error correction codes follow a simple structure:
 
 - Qubit encoding
 - Error detection
@@ -36,9 +37,9 @@ Let us describe each element in detail.
 Qubit encoding
 ~~~~~~~~~~~~~~~
 
-The first step in an error correction code is **encoding** one abstract or **logical qubit** into a set of many on-device **physical qubits.** 
-The rationale is that, if some external factor changes the state of one of the qubits, the remaining qubits still provide information about the original logical qubit. 
-For example, in the three-qubit repetition code, the logical basis-state 
+The first step in an error correction code is **encoding** one abstract or **logical qubit** into a set of many on-device **physical qubits.**
+The rationale is that, if some external factor changes the state of one of the qubits, the remaining qubits still provide information about the original logical qubit.
+For example, in the three-qubit repetition code, the logical basis-state
 qubits, or **logical codewords**, :math:`\vert \bar{0}\rangle` and :math:`\vert \bar{1}\rangle` are encoded into three physical qubits via
 
 .. math::
@@ -51,8 +52,8 @@ A general qubit :math:`\vert \bar{\psi}\rangle = \alpha \vert \bar{0}\rangle + \
 
     \alpha \vert \bar{0}\rangle + \beta \vert \bar{1}\rangle \mapsto \alpha \vert 000 \rangle + \beta \vert 111\rangle.
 
-This encoding can be done via the following quantum circuit.
- 
+This encoding can be done via the following quantum circuit. It should be explicitly stated that the 0 bar is logical 0 and 1 bar is logical 1.
+
 .. figure:: ../_static/demonstration_assets/stabilizer_codes/three_qubit_encode.png
     :align: center
     :width: 70%
@@ -66,17 +67,17 @@ Let's code this below and verify the output
 import pennylane as qml
 from pennylane import numpy as np
 
-def encode(alpha, beta):
 
-    qml.StatePrep([alpha, beta], wires = 0)
-    qml.CNOT(wires = [0, 1])
-    qml.CNOT(wires = [0, 2])
+def encode(alpha, beta):
+    qml.StatePrep([alpha, beta], wires=0)
+    qml.CNOT(wires=[0, 1])
+    qml.CNOT(wires=[0, 2])
 
 
 def encoded_state(alpha, beta):
-
     encode(alpha, beta)
     return qml.state()
+
 
 encode_qnode = qml.QNode(encoded_state, qml.device("default.qubit"))
 
@@ -90,18 +91,6 @@ print("|111> component: ", encode_qnode(alpha, beta)[7])
 
 ##############################################################################
 #
-# Now, suppose that a **bit-flip** error occurs on the second qubit, meaning that the qubit is randomly flipped. This can be modelled as
-# an unwanted Pauli-$X$ operator being applied on :math:`\vert \bar{\psi}\rangle:`
-#
-# .. math::
-#
-#     X_2 \vert \bar{\psi}\rangle = \alpha \vert 010 \rangle + \beta \vert 101 \rangle
-#
-# If we assume that **only one bit-flip error occurred**, and considering that only the superpositions of :math:`\alpha \vert 000 \rangle` and 
-# :math:`\alpha \vert 111 \rangle` are allowed, we can deduce that error occurred on the second qubit and we can fix it by flipping the qubit back. But there is a problem with this reasoning: 
-# to know that a flip did occur,
-# we need to measure the state. But this collapses the state of the qubit, rendering it useless for future computations. Let us see how to get around this issue.
-#
 # .. note::
 #     Why do we encode qubits in this way, instead of preparing many copies of the state? If the quantum state is known, we could do this,
 #     but this only increases the amount of quantum resources we need! If the quantum state is not known, the no-cloning
@@ -110,9 +99,22 @@ print("|111> component: ", encode_qnode(alpha, beta)[7])
 # Error detection
 # ~~~~~~~~~~~~~~~~
 #
-# To detect a bit-flip error on one of the physical qubits without disturbing the encoded logical state, we perform a **parity measurement.** A parity measurement
-# acts on some auxiliary qubits to avoid disturbing the encoded logical state. IFor the three-qubit repetition code, this involves measuring two auxiliary qubits in the 
-# computational basis after applying a series of :math:`\textrm{CNOT}` gates, as illustrated in the circuit below.
+# Now, suppose that a **bit-flip** error occurs on the second qubit, meaning that the qubit is randomly flipped. This can be modelled as
+# an unwanted Pauli-$X$ operator being applied on :math:`\vert \bar{\psi}\rangle:`
+#
+# .. math::
+#
+#     X_2 \vert \bar{\psi}\rangle = \alpha \vert 010 \rangle + \beta \vert 101 \rangle
+#
+# How do we detect this error?
+#
+# As you already know that measuring the state collapses it, we cannot measure the state to detect the error.
+#
+#
+# To detect a bit-flip error on one of the physical qubits without disturbing the encoded logical state, we perform a **parity measurement.**
+# This checks whether all physical qubits are in the same state by comparing them two at a time, without directly measuring them.
+# Instead, auxiliary qubits are used and measured. For the three-qubit repetition code, this involves measuring two auxiliary qubits
+# in the computational basis after applying a series of :math:\textrm{CNOT} gates, as illustrated in the circuit below.
 #
 # .. figure:: ../_static/demonstration_assets/stabilizer_codes/parity_measurements.png
 #    :align: center
@@ -131,24 +133,23 @@ print("|111> component: ", encode_qnode(alpha, beta)[7])
 #
 # Let us verify this by implementing the syndrome measurement in PennyLane.
 
+
 def error_detection():
+    qml.CNOT(wires=[0, 3])
+    qml.CNOT(wires=[1, 3])
+    qml.CNOT(wires=[1, 4])
+    qml.CNOT(wires=[2, 4])
 
-    qml.CNOT(wires = [0, 3])
-    qml.CNOT(wires = [1, 3])
-    qml.CNOT(wires = [1, 4])
-    qml.CNOT(wires = [2, 4])
 
-
-@qml.qnode(qml.device("default.qubit", wires = 5, shots = 1)) # A single sample flags error
+@qml.qnode(qml.device("default.qubit", wires=5, shots=1))  # A single sample flags error
 def syndrome_measurement(error_wire):
-
     encode(alpha, beta)
 
-    qml.PauliX(wires = error_wire) # Unwanted Pauli Operator
+    qml.PauliX(wires=error_wire)  # Unwanted Pauli Operator
 
     error_detection()
 
-    return qml.sample(wires = [3,4])
+    return qml.sample(wires=[3, 4])
 
 
 print("Syndrome if error on wire 0: ", syndrome_measurement(0))
@@ -163,11 +164,11 @@ print("Syndrome if error on wire 2: ", syndrome_measurement(2))
 # ~~~~~~~~~~~~~~~~~
 #
 # Once a single bit-flip error is detected, correction is straightforward. Since the Pauli-X operator is its own inverse
-# (i.e., :math:`X^2 = \mathbb{I}`), reapplying the :math:`X` operator to the erroneous qubit restores the original state. For example,
-# if the syndrome measurement shows the error occurred on the second qubit, we apply 
+# (i.e., :math:`X^2 = \mathbb{I}`), re-applying the :math:`X` operator to the erroneous qubit restores the original state. For example,
+# if the syndrome measurement shows the error occurred on the second qubit, we apply
 #
 # .. math::
-#    
+#
 #     X_2 (X_2 \vert \bar{\psi}\rangle) = \vert \bar{\psi} \rangle.
 #
 # By applying the appropriate corrective operation, the repetition code effectively protects and repairs the encoded quantum information.
@@ -181,12 +182,12 @@ print("Syndrome if error on wire 2: ", syndrome_measurement(2))
 #
 # We can use PennyLane's mid-circuit measurement features to implement the full three-qubit repetition code.
 
-@qml.qnode(qml.device("default.qubit", wires = 5))
-def error_correction(error_wire):
 
+@qml.qnode(qml.device("default.qubit", wires=5))
+def error_correction(error_wire):
     encode(alpha, beta)
 
-    qml.PauliX(wires = error_wire)
+    qml.PauliX(wires=error_wire)
 
     error_detection()
 
@@ -197,11 +198,14 @@ def error_correction(error_wire):
 
     # Operations conditional on measurements
 
-    qml.cond(m3 & ~m4 , qml.PauliX)(wires = 0)
-    qml.cond(m3 & m4, qml.PauliX)(wires = 1)
-    qml.cond(~m3 & m4, qml.PauliX)(wires = 2)
+    qml.cond(m3 & ~m4, qml.PauliX)(wires=0)
+    qml.cond(m3 & m4, qml.PauliX)(wires=1)
+    qml.cond(~m3 & m4, qml.PauliX)(wires=2)
 
-    return qml.density_matrix(wires = [0, 1, 2]) # qml.state not supported, but density matrices are.
+    return qml.density_matrix(
+        wires=[0, 1, 2]
+    )  # qml.state not supported, but density matrices are.
+
 
 ##############################################################################
 #
@@ -209,34 +213,42 @@ def error_correction(error_wire):
 # With this result, we can verify that the fidelity of the encoded state is the same as the final state after correction
 # as follows.
 
-dev = qml.device("default.qubit", wires = 5)
+dev = qml.device("default.qubit", wires=5)
 error_correction_qnode = qml.QNode(error_correction, dev)
 encoded_state = qml.math.dm_from_state_vector(encode_qnode(alpha, beta))
 
 # Compute fidelity of final corrected state with initial encoded state
 
-print("Fidelity if error on wire 0: ", 
-      qml.math.fidelity(encoded_state, error_correction_qnode(0)).round(2))
-print("Fidelity if error on wire 1: ", 
-      qml.math.fidelity(encoded_state, error_correction_qnode(1)).round(2))
-print("Fidelity if error on wire 2: ", 
-      qml.math.fidelity(encoded_state, error_correction_qnode(2)).round(2))
+print(
+    "Fidelity if error on wire 0: ",
+    qml.math.fidelity(encoded_state, error_correction_qnode(0)).round(2),
+)
+print(
+    "Fidelity if error on wire 1: ",
+    qml.math.fidelity(encoded_state, error_correction_qnode(1)).round(2),
+)
+print(
+    "Fidelity if error on wire 2: ",
+    qml.math.fidelity(encoded_state, error_correction_qnode(2)).round(2),
+)
 
 ##############################################################################
 #
 # The error is corrected no matter which qubit was flipped!
 #
-# Operator picture and stabilizer generators
-# ------------------------------------------
+# Revisiting the three-qubit repetition code with Pauli operators
+# ---------------------------------------------------------------
 #
-# We have worked with a simple example, but it is quite limited. Indeed, the three-qubit code only works for
-# bit flip errors, but more powerful codes need more resources. For example, Shor's code, involving 9 qubits, 
-# can correct more types of errors on a single logical qubit. To make matters worse, to avoid errors at an acceptable level,
+# We have worked with a simple example (repetition code), but it is quite limited. Indeed, the three-qubit code only works for
+# a single bit flip error. There are more powerful codes but they also need more resources. For example, Shor's code
+# can correct any error on a single logical qubit but it already needs 9 qubits. To make matters worse, to avoid errors at an acceptable level,
 # the industry standard is about 1000 physical qubits per logical qubit. Even with a few qubits, the encoded states and protocols can become increasingly
-# complex, so 1000 seems quite daunting! To deal with these situations, we resort to a different 
-# representation of error correction codes, known as the **operator picture.**
+# complex, so writing a 1000 qubit state vector seems quite daunting! To deal with these situations, we resort to a different
+# representation of error correction codes, using **Pauli operators** instead of state vectors.
 #
-# To gain some intuition about the operator picture, let us express the three-qubit repetition code in a different way. Using the 
+# It is great time to look at Pauli operators and their properties now, if you are not familiar with them.
+#
+# To gain some intuition about the operator picture, let us express the three-qubit repetition code in a different way. Using the
 # identity below,
 #
 # .. figure:: ../_static/demonstration_assets/stabilizer_codes/cnot_identity.png
@@ -253,22 +265,22 @@ print("Fidelity if error on wire 2: ",
 #
 #    ..
 #
-# This is the same circuit, but the controls are all now in the auxiliary qubits, while the physical qubits act as target qubits. 
+# This is the same circuit, but the controls are all now in the auxiliary qubits, while the physical qubits act as target qubits.
 # This does not seem desirable--we do not want to change the state of the physical qubits! However, let us observe that the operators
 # that act on the logical qubits are :math:`Z_0 Z_1 I_2` and :math:`I_0 Z_1 Z_2,` which leave the logical codewords invariant.
-# 
+#
 # .. math::
 #
 #     Z_0 Z_1 I_2 \vert 000 \rangle = \vert 000 \rangle, \quad Z_0 Z_1 I_2 \vert 111 \rangle = \vert 111 \rangle.
-#  
+#
 # .. math::
 #
 #     I_0 Z_1 Z_2 \vert 000 \rangle = \vert 000 \rangle, \quad I_0 Z_1 Z_2 \vert 111 \rangle = \vert 111 \rangle.
 #
 # This is great news. As long as no error has occurred, the logical qubits will be left alone. Otherwise, there will be
-# some operations applied on the state, but we will be able to fix them via an error correction scheme. The invariance property 
-# **holds true for and only for the logical codewords.** For any other three-qubit basis states, at least one of these operators will have eigenvalue 
-# :math:`-1`, as shown in the table below.
+# some operations applied on the state, but we will be able to fix them via an error correction scheme. The invariance property
+# **holds true for and only for the logical codewords.** For any other three-qubit basis states, at least one of these operators will have eigenvalue
+# :math:`-1`, as shown in the table below. Therefore measuring the eigenvalues of these operators will tell us if an error has occurred.
 #
 # .. figure:: ../_static/demonstration_assets/stabilizer_codes/table_eigenvalues.png
 #    :align: center
@@ -286,29 +298,39 @@ print("Fidelity if error on wire 2: ",
 # Stabilizer generators
 # ~~~~~~~~~~~~~~~~~~~~~~
 #
-# The stabilizer formalism takes the operator picture representation seriously and uses it to find error correction codes starting from a 
-# **stabilizer set** of **Pauli words**--tensor products of Pauli operators. A stabilizer set on :math:`n`
-# qubits satisfies the following properties. 
+# Note: It is important to have a minimal understanding of group theory to understand the stabilizer formalism.
 #
-# 1. It contains the identity operator :math:`I_0\otimes I_1 \times \ldots I_{n-1},` but does not contain the negative identity.
-# 2. All elements of the set commute with each other. 
-# 3. The matrix product of any two elements in the set yields an element that is also in the set.
-# 
-# The set can be more succinctly specified via a set of generators: a minimal set of operators in the stabilizer set that can produce all 
+# Notation: In the stabilizer formalism, we often omit explicit tensor product symbols (:math:`\otimes`) for brevity.
+# For example, :math:`X_0 Z_1` denotes :math:`X \otimes Z` acting on qubits 0 and 1, respectively.
+# When identity operators are omitted, we use subscripts to indicate which qubits the non-identity Pauli operators act on.
+# If all positions are filled (e.g., :math:`XZI`), the position implicitly indicates the qubit index (qubit 0, 1, 2).
+
+#
+# The stabilizer formalism is a powerful framework for constructing quantum error-correcting codes using the algebraic structure of *Pauli operators*.
+# It focuses on subgroups of the *Pauli group* on :math:`n` qubits—denoted :math:`\mathcal{P}_n`—which consists of all tensor products of single-qubit Pauli operators :math:`\{I, X, Y, Z\}` (with overall phases :math:`\pm1, \pm i`).
+# A **stabilizer group** :math:`S` is defined as a subgroup of :math:`\mathcal{P}_n` that does satisfies the following:
+#
+# 1. It contains the identity operator :math:`I_0 \otimes I_1 \otimes \cdots \otimes I_{n-1}`.
+# 2. All elements of :math:`S` commute with each other.
+# 3. The product of any two elements in :math:`S` is also in :math:`S` (i.e., it forms a group under matrix multiplication).
+# 4. It does not contain the negative identity operator :math:`-I^{\otimes n}`.
+#
+# Rather than listing all the elements of a stabilizer group explicitly, the group can be more succinctly specified via a
+# set of **generators**: a minimal set of operators in the stabilizer group that can produce all
 # the other elements through pairwise multiplication. As a simple example, consider the stabilizer set
 #
 # .. math::
 #
 #     S = \left\lbrace I_0 \otimes I_1 \otimes I_2, \ Z_0 \otimes Z_1 \otimes I_2, \ Z_0 \otimes I_1 \otimes Z_2, \ I_0 \otimes Z_1 \otimes Z_2 \right\rbrace.
 #
-# We can check that it satisfies the defining properties 1. to 3. The most cumbersome to check is property 3, where we have to take all
+# We can check that it satisfies the defining properties 1. to 4. The most cumbersome to check is property 3, where we have to take all
 # possible products of the elements and check whether the result is in :math:`S.` For example,
-# 
+#
 # .. math::
-# 
+#
 #    (Z_0 \otimes Z_1 \otimes I_2)\cdot (I_0 \otimes Z_1 \otimes Z_2) = Z_0 \otimes I_1 \otimes Z_2, \\
 #    (Z_0 \otimes Z_1 \otimes I_2 )^2 = I_0 \otimes I_1 \otimes I_2,
-# 
+#
 # and so on. Note that we can obtain all the elements in :math:`S` just from :math:`Z_0 \otimes Z_1 \otimes I_2` and :math:`I_0 \otimes Z_1 \otimes Z_2.` Because
 # of this property, these elements are **stabilizer generators** for :math:`S`. We write this fact as
 #
@@ -317,19 +339,22 @@ print("Fidelity if error on wire 2: ",
 #     S = \left\langle Z_0 \otimes Z_1 \otimes I_2, \ I_0 \otimes Z_1 \otimes Z_2 \right\rangle,
 #
 # which reads ":math:`S` *is the stabilizer set generated by the elements* :math:`Z_0 \otimes Z_1 \otimes I_2` *and* :math:`I_0 \otimes Z_1 \otimes Z_2.`"
-# It turns out that specifying these generators is enough to completely define an error correcting code.
 #
-# Now that we know how stabilizer generators work, let us create a tool for later use that creates the full stabilizer set from its generators. 
+# It turns out that specifying these generators is sufficient to completely define the stabilizer group, and
+# thereby the corresponding quantum error-correcting code.
+#
+# Now that we know how stabilizer generators work, let us create a tool for later use that creates the full stabilizer group from its generators.
 #
 import itertools
 from pennylane import X, Y, Z
 from pennylane import Identity as I
 
+
 def generate_stabilizer_group(gens, num_wires):
     group = []
-    init_op =I(0)
-    for i in range(1,num_wires):
-      init_op = init_op @ I(i)
+    init_op = I(0)
+    for i in range(1, num_wires):
+        init_op = init_op @ I(i)
     for bits in itertools.product([0, 1], repeat=len(gens)):
         op = init_op
         for i, bit in enumerate(bits):
@@ -338,54 +363,54 @@ def generate_stabilizer_group(gens, num_wires):
         group.append(op)
     return set(group)
 
-generators = [Z(0)@Z(1)@I(2), I(0)@Z(1)@Z(2)]
+
+generators = [Z(0) @ Z(1) @ I(2), I(0) @ Z(1) @ Z(2)]
 generate_stabilizer_group(generators, 3)
+
 
 ##############################################################################
 #
-# Indeed, obtain all the elements of the set by inputting the generators only. Feel free to try out this code with different generators!
+# Indeed, obtain all the elements of the group by inputting the generators only. Feel free to try out this code with different generators!
 #
 # Defining the codespace
 # ~~~~~~~~~~~~~~~~~~~~~~~
 #
-# At this point, the pressing question is, given a set of stabilizer operators, how do we recover the error correction circuit? That is, 
-# we need to find a way to go from the operator picture to the state picture. Let us recall that the property that inspired using stabilizer generators 
+# At this point, the pressing question is, how to define the error correction code given a set of stabilizer generators. As far as
+# we know stabilizer generators are only a bunch of Pauli strings satisfying some properties. Let us recall that the property that inspired using stabilizer generators
 # is that they must leave the codewords invariant. For any stabilizer element :math:`S` and codeword :math:`\vert \psi \rangle`, we must
 # have
-# 
+#
 # .. math::
-# 
-#     S\vert \psi \rangle = \vert \psi \rangle. 
+#
+#     S\vert \psi \rangle = \vert \psi \rangle.
 #
 # The **codespace** is defined as the set made up of all states such that :math:`S_i \vert\psi\rangle = \vert \psi\rangle` for all stabilizer
-# generators :math:`S_i.` The **codewords** can then be recovered by choosing an orthogonal basis of the codespace.
+# group :math:`S_i.` The **codewords** can then be recovered by choosing an orthogonal basis of the codespace.
+# For example, for the three-qubit repetition code, the codewords  (:math:`\vert 000 \rangle` and :math:`\vert 111 \rangle`)
+# can be recovered by from the stabilizer generators :math:`Z_0 \otimes Z_1 \otimes I_2` and :math:`I_0 \otimes Z_1 \otimes Z_2` from table above.
 #
-# With this in mind, the error correcting code can be recovered for the set :math:`\left\lbrace S_i \right\rbrace`, as shown below
-#
-# .. figure:: ../_static/demonstration_assets/stabilizer_codes/general_stabilizer_circuit.png
-#    :align: center
-#    :width: 100%
-#
-#    ..
-#
-# The stabilizer generators act as the controlled operators in the codewords and the measurements in the auxiliary wires yield unique syndromes for the
-# Pauli errors that the code deals with. 
-#
+# There is a one-to-one correspondence between stabilizer groups and the quantum error-correcting codes they define.
+# This means we can describe a code entirely by its stabilizer group, using operators rather than listing the codewords
+# directly as state vectors.
+
+
 # Logical operators
 # ~~~~~~~~~~~~~~~~~~
 #
-# Thus far, we have defined the stabilizer generators, which correspond to the operators that implement syndrome measurements, and the 
-# codewords, which are states invariant under the stabilizers and hence usable as logical qubits. One missing ingredient are gates we can implement
-# on logical qubits without leaving the codespace. Such operators would act non-trivially on the codewords, so they cannot be in the
-# stabilizer set, but have to preserve the codespace, meaning they **must commute** with all the stabilizer generators. In particular
-# we are interested in the logical Pauli :math:`\bar{X}` and :math:`\bar{Z}` operators, defined by
+#
+# So far, we have introduced the stabilizer generators, which define the syndrome measurements, and the codewords,
+# which are the states left unchanged by all stabilizers. What remains is to understand how to perform computation on the
+# encoded qubits, specifically, how to apply gates that act on logical qubits without leaving the codespace.
+# These operators must act non-trivially on the codewords, so they cannot be part of the stabilizer group.
+# However, to preserve the codespace, they **must commute** with all stabilizer generators.
+# In particular, we are interested in the logical Pauli operators \:math:`\bar{X}` and \:math:`\bar{Z}`, defined by:
 #
 # .. math::
-#    
-#     \bar{X}\vert \bar{0} \rangle = \vert {1} \rangle, \quad \bar{X}\vert \bar{1} \rangle = \vert {0} \rangle \\
-#     \ \bar{Z}\vert \bar{0} \rangle = \vert {0} \rangle, \quad \bar{Z}\vert \bar{1} \rangle = - \vert {1} \rangle
 #
-# For example, in the three qubit bit flip error correcting code, the logical operators are :math:`\bar{X} = X_0 X_1 X_2` and 
+#     \bar{X}\vert \bar{0} \rangle = \vert \bar{1} \rangle, \quad \bar{X}\vert \bar{1} \rangle = \vert \bar{0} \rangle \\
+#     \ \bar{Z}\vert \bar{0} \rangle = \vert \bar{0} \rangle, \quad \bar{Z}\vert \bar{1} \rangle = - \vert \bar{1} \rangle
+#
+# For example, in the three qubit bit flip error correcting code, the logical operators are :math:`\bar{X} = X_0 X_1 X_2` and
 # :math:`\bar{Z} = Z_0 Z_1 Z_2,` but they will not always be this simple.  In general, given a stabilizer set $S$, the logical
 # operators for the code satisfy the following properties:
 #
@@ -393,20 +418,36 @@ generate_stabilizer_group(generators, 3)
 # 2. They are not in the stabilizer group,
 # 3. They anticommute with each other, which means they act in a non-trivial way on the codewords.
 #
-# The codespace, the logical operators, and the syndrome measurements are all we need to define an error correcting code. We can even write
-# a script to classify operators given a set of stabilizer generators. 
-#
-def classify_pauli(operator, logical_ops, generators, n_wires):
+# L.S.D Theorem
+# ~~~~~~~~~~~~~~~~~~
+# Remember that stabilizer group is a subgroup of the Pauli group with some properties. In the stabilizer formalism,
+# every Pauli operator acting on the qubits can be categorized based on how it interacts with the stabilizer group.
+# The **LSD theorem** states that Pauli operators on encoded qubits can be divided into three types:
 
+
+# * **L**: Logical operators – commute with all stabilizers but act non-trivially on the codewords.
+# * **S**: Stabilizers – leave all codewords unchanged.
+# * **D**: Destabilizers (errors) – do not commute with at least one stabilizer and take the state out of the codespace.
+#
+# This classification helps distinguish between correctable errors, harmless stabilizer actions, and useful logical operations.
+#
+# So let us now write some code to classify Pauli operators based on the LSD theorem for a given stabilizer generators.
+
+
+def classify_pauli(operator, logical_ops, generators, n_wires):
     allowed_wires = set(range(n_wires))
     operator_wires = set(operator.wires)
 
-    assert operator_wires.issubset(allowed_wires), "Operator has wires not allowed by the code"
+    assert operator_wires.issubset(allowed_wires), (
+        "Operator has wires not allowed by the code"
+    )
 
     operator_names = set([op.name for op in operator.decomposition()])
-    allowed_operators = set(['Identity', 'PauliX', 'PauliY', 'PauliZ', 'SProd'])
+    allowed_operators = set(["Identity", "PauliX", "PauliY", "PauliZ", "SProd"])
 
-    assert operator_names.issubset(allowed_operators), "Operator contains an illegal operation"
+    assert operator_names.issubset(allowed_operators), (
+        "Operator contains an illegal operation"
+    )
 
     stabilizer_group = generate_stabilizer_group(generators, n_wires)
 
@@ -421,62 +462,58 @@ def classify_pauli(operator, logical_ops, generators, n_wires):
 
     return f"{operator} is an Error Operator (Destabilizer)."
 
-generators = [Z(0)@Z(1)@I(2), I(0)@Z(1)@Z(2)]
-logical_ops = [X(0)@X(1)@X(2), Z(0)@Z(1)@Z(2)]
-print(classify_pauli(Z(0)@I(1)@Z(2), logical_ops, generators, 3))
-print(classify_pauli(Y(0)@Y(1)@Y(2), logical_ops, generators, 3))
-print(classify_pauli(X(0)@Y(1)@Z(2), logical_ops, generators, 3))
+
+generators = [Z(0) @ Z(1) @ I(2), I(0) @ Z(1) @ Z(2)]
+logical_ops = [X(0) @ X(1) @ X(2), Z(0) @ Z(1) @ Z(2)]
+print(classify_pauli(Z(0) @ I(1) @ Z(2), logical_ops, generators, 3))
+print(classify_pauli(Y(0) @ Y(1) @ Y(2), logical_ops, generators, 3))
+print(classify_pauli(X(0) @ Y(1) @ Z(2), logical_ops, generators, 3))
 
 ##############################################################################
 #
 # .. note::
 #     In the literature, you may have come across an error correction code being called an ":math:`[n,k]`-stabilizer code." In this notation, the number :math:`n` represents
-#     the number of physical qubit used to encode the logical qubit. The integer :math:`k` is the number of logical qubits and it is 
+#     the number of physical qubit used to encode the logical qubit. The integer :math:`k` is the number of logical qubits and it is
 #     equal to :math:`1` for all the codes in this demo. It is possible to show that the number of stabilizer generators :math:`m`
 #     is related to :math:`n` and :math:`k` via :math:`m = n - k.`
 #
-# Five-qubit stabilizer code
-# ---------------------------
+# Example: Five-qubit stabilizer code
+# -----------------------------------
 #
 # Unlike other error correcting codes, the 5-qubit code does not have a special name, but it holds a special place as the smallest
-# error correcting protocol capable of correcting arbitrary Pauli Errors--unwanted applications of :math:`X,` :math:`Y,` or :math:`Z` gates.
-# In this section, we will build it starting from its stabilizer generators:
+# error correcting code capable of correcting arbitrary Pauli Errors--unwanted applications of :math:`X,` :math:`Y,` or :math:`Z`
+# gates on a single qubit. In this section, we will build and implement the complete error correction procedure
+# starting from its stabilizer generators:
 #
 # .. math::
 #
-#     S = \langle S_0, \ S_1, \ S_2, \ S_3 \rangle, 
+#     S = \langle S_0, \ S_1, \ S_2, \ S_3 \rangle,
 #
-# with 
+# with
 #
 # .. math::
-# 
+#
 #    S_0 = X_0 Z_1 Z_2 X_3 I_4,\\
 #    S_1 = I_0 X_1 Z_2 Z_3 X_4,\\
 #    S_2 = X_0 I_1 X_2 Z_3 Z_4,\\
 #    S_3 = Z_0 X_1 I_2 Z_3 X_4.
 #
-# The calculations are a bit cumbersome, but with some patience we can find the common :math:`+1`-eigenspace of the stabilizer generators,
-# spanned by the codewords
+# Note: People usally drop the subscript of 0,1,2 etc as the position of the qubit carries that information.
 #
-# .. math::
-#     
-#     \begin{align*}
-#     \vert \bar{0}\rangle = &\frac{1}{4}\left(\vert 00000 \rangle \vert 10010 \rangle + \vert 01001 \rangle + \vert 10100 \rangle + \vert 01010 \rangle - \vert 11011 \rangle - \vert 00110 \rangle \right.\\ 
-#                            &\left. - \vert 11101 \rangle - \vert 00011\rangle - \vert 11110 \rangle - \vert 01111 \rangle - \vert 10001 \rangle - \vert 01100 \rangle - \vert 10111 \rangle + \vert 00101 \rangle \right)
-#     \end{align*}
+# Encoding the data qubit
+# ~~~~~~~~~~~~~~~~~~~~~~~
 #
-# .. math::
+# First, we need to prepare a data qubit that we want to protect. For this tutorial, we will use the qubit
+# :math:`\vert \psi \rangle = \alpha \vert 0 \rangle + \beta \vert 1 \rangle, as our data qubit.
 #
-#     \vert \bar{1}\rangle = X\otimes X \otimes X \otimes X \otimes X \vert \bar{0} \rangle.
-#  
-# The logical operators bit-flip and phase-flip are for this code are :math:`\bar{X}= X^{\otimes 5}` and :math:`\bar{Z}=Z^{\otimes 5}.` With these
-# defining features in mind, let us build the five-qubit stabilizer code. First, we need to prepare an arbitrary logical qubit 
+# The next step is to encode this data qubit into a logical qubit. This is done by **encoding circuit** given below. Notice that we
+# do not need to know the logicals to implement the encoding circuit. The circuit is completely determined by the stabilizer generators.
+# It is beyond the scope of this tutorial to explain how the circuit is constructed from the stabilizer generators. The state after encoding
+# is given by:
 #
 # .. math::
 #
-#     \vert \bar{\psi}\rangle = \alpha \vert \bar{0} \rangle + \beta \vert \bar{1} \rangle 
-#
-# starting from the qubit :math:`\vert \psi \rangle = \alpha \vert 0 \rangle + \beta \vert 1 \rangle,` which can be done using the circuit below. 
+#     \vert \bar{\psi}\rangle = \alpha \vert \bar{0} \rangle + \beta \vert \bar{1} \rangle
 #
 # .. figure:: ../_static/demonstration_assets/stabilizer_codes/five_qubit_encode.png
 #    :align: center
@@ -484,80 +521,156 @@ print(classify_pauli(X(0)@Y(1)@Z(2), logical_ops, generators, 3))
 #
 #    ..
 #
-# This is straightforward to implement in PennyLane.
+# Let us implement this encoding circuit in PennyLane.
 #
 
-def five_qubit_encode(alpha, beta):
 
-    qml.StatePrep([alpha, beta], wires = 4)
-    qml.Hadamard(wires = 0)
-    qml.S(wires = 0)
-    qml.CZ(wires = [0,1])
-    qml.CZ(wires = [0,3])
-    qml.CY(wires = [0,4])
-    qml.Hadamard(wires = 1)
-    qml.CZ(wires = [1,2])
-    qml.CZ(wires = [1,3])
-    qml.CNOT(wires = [1,4])
-    qml.Hadamard(wires = 2)
-    qml.CZ(wires = [2,0])
-    qml.CZ(wires = [2,1])
-    qml.CNOT(wires = [2,4])
-    qml.Hadamard(wires = 3)
-    qml.S(wires = 3)
-    qml.CZ(wires = [3,0])
-    qml.CZ(wires = [3,2])
-    qml.CY(wires = [3,4])
+def five_qubit_encode(alpha, beta):
+    qml.StatePrep([alpha, beta], wires=4)
+    qml.Hadamard(wires=0)
+    qml.S(wires=0)
+    qml.CZ(wires=[0, 1])
+    qml.CZ(wires=[0, 3])
+    qml.CY(wires=[0, 4])
+    qml.Hadamard(wires=1)
+    qml.CZ(wires=[1, 2])
+    qml.CZ(wires=[1, 3])
+    qml.CNOT(wires=[1, 4])
+    qml.Hadamard(wires=2)
+    qml.CZ(wires=[2, 0])
+    qml.CZ(wires=[2, 1])
+    qml.CNOT(wires=[2, 4])
+    qml.Hadamard(wires=3)
+    qml.S(wires=3)
+    qml.CZ(wires=[3, 0])
+    qml.CZ(wires=[3, 2])
+    qml.CY(wires=[3, 4])
+
 
 ##############################################################################
 #
-# Having encoded the logical state, we can implement the general circuit built from the stabilizers to obtain the syndrome table like we did with the three-qubit code.
+#
+# Applying noise
+# ~~~~~~~~~~~~~~~~
+# After encoding, the qubit would normally be exposed to noise and decoherence in a real system.
+# To simulate this, we introduce an artificial error by randomly flipping one of the physical
+# qubits using a Pauli \:math:`X` operation.
+#
+# PennyLane code for applying noise
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+# Syndrome measurement
+# ~~~~~~~~~~~~~~~~~~~~
+#
+# The next step is to detect the error by measuring the syndrome. The syndrome circuit is given below.
+#
+# .. figure:: ../_static/demonstration_assets/stabilizer_codes/five_qubit_syndrome.png
+#    :align: center
+#    :width: 100%
+#
+#    ..
+#
+# Let us implement this syndrome measurement circuit in PennyLane.
+#
+#
+# PennyLane code for syndrome measurement
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+#
+# Now we need to build the syndrome table like we did with the three-qubit code. The syndrome table maps measurement outcomes to
+# specific errors, allowing us to detect and correct errors on the encoded qubits.
 
-dev = qml.device("default.qubit", wires = 9, shots = 1)
+dev = qml.device("default.qubit", wires=9, shots=1)
 
-stabilizers = [X(0)@Z(1)@Z(2)@X(3)@I(4), I(0)@X(1)@Z(2)@Z(3)@X(4),
-               X(0)@I(1)@X(2)@Z(3)@Z(4), Z(0)@X(1)@I(2)@X(3)@Z(4)]
+stabilizers = [
+    X(0) @ Z(1) @ Z(2) @ X(3) @ I(4),
+    I(0) @ X(1) @ Z(2) @ Z(3) @ X(4),
+    X(0) @ I(1) @ X(2) @ Z(3) @ Z(4),
+    Z(0) @ X(1) @ I(2) @ X(3) @ Z(4),
+]
+
 
 @qml.qnode(dev)
 def five_qubit_code(alpha, beta, error_type, error_wire):
-
     five_qubit_encode(alpha, beta)
 
-    if error_type == 'X':
-        qml.PauliX(wires = error_wire)
+    if error_type == "X":
+        qml.PauliX(wires=error_wire)
 
-    elif error_type == 'Y':
-        qml.PauliY(wires = error_wire)
+    elif error_type == "Y":
+        qml.PauliY(wires=error_wire)
 
-    elif error_type == 'Z':
-        qml.PauliZ(wires = error_wire)
+    elif error_type == "Z":
+        qml.PauliZ(wires=error_wire)
 
-    for wire in range(5,9):
-        qml.Hadamard(wires = wire)
+    for wire in range(5, 9):
+        qml.Hadamard(wires=wire)
 
     for i in range(len(stabilizers)):
+        qml.ctrl(stabilizers[i], control=[i + 5])
 
-        qml.ctrl(stabilizers[i], control = [i + 5])
+    for wire in range(5, 9):
+        qml.Hadamard(wires=wire)
 
-    for wire in range(5,9):
-        qml.Hadamard(wires = wire)
+    return qml.sample(wires=range(5, 9))
 
-    return qml.sample(wires = range(5,9))
 
 for wire in (0, 1, 2, 3, 4):
-
-    for error in ('X', 'Y', 'Z'):
-
-        print(f"{error} {wire}", five_qubit_code(1/2, np.sqrt(3)/2, error, wire))
+    for error in ("X", "Y", "Z"):
+        print(f"{error} {wire}", five_qubit_code(1 / 2, np.sqrt(3) / 2, error, wire))
 ##############################################################################
 #
 # The syndrome table is printed, and with we can apply the necessary operators to fix the corresponding Pauli errors. The script above is straightforward
-# to generalize to any valid set of stabilizers. 
+# to generalize to any valid set of stabilizers.
+#
+# Error correction
+# ~~~~~~~~~~~~~~~~
+#
+# The last step is to correct the error by applying the appropriate Pauli operators to the encoded qubits.
+#
+# PennyLane code for error correction
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+#
+#
+#
+# Note that to build the encoding, syndrome measurement, and error correction circuits, we did only use the stabilizer generators.
+# This is a powerful feature of the stabilizer formalism. It allows us to construct the code from its stabilizer generators
+# and then use the code to correct errors. However, we can also find the codewords  and logical operatorsdirectly from the stabilizer generators by
+# finding the common +1-eigenspace of the stabilizer generators.
+#
+# The calculations are a bit cumbersome, but with some patience we can find the common :math:`+1`-eigenspace of the stabilizer generators,
+# which are the codewords.
+#
+# .. math::
+#
+#     \begin{align*}
+#     \vert \bar{0}\rangle = &\frac{1}{4}\left(\vert 00000 \rangle \vert 10010 \rangle + \vert 01001 \rangle + \vert 10100 \rangle + \vert 01010 \rangle - \vert 11011 \rangle - \vert 00110 \rangle \right.\\
+#                            &\left. - \vert 11101 \rangle - \vert 00011\rangle - \vert 11110 \rangle - \vert 01111 \rangle - \vert 10001 \rangle - \vert 01100 \rangle - \vert 10111 \rangle + \vert 00101 \rangle \right)
+#     \end{align*}
+#
+# .. math::
+#
+#     \vert \bar{1}\rangle = X\otimes X \otimes X \otimes X \otimes X \vert \bar{0} \rangle.
+#
+# The logical operators bit-flip and phase-flip are for this code are :math:`\bar{X}= X^{\otimes 5}` and :math:`\bar{Z}=Z^{\otimes 5}.
+#
+#
+# Conclusion
+# ~~~~~~~~~~~
+#
+#
+# In this tutorial, we introduced the stabilizer formalism and showed how it can be used to construct quantum error correction codes.
+# We applied it to a concrete example—the five-qubit code—using a PennyLane implementation.
+# However, finding the codewords, logical operators, and the encoding circuit directly from the stabilizer generators
+# is not straightforward. Take a look at the types of gates used in the encoding circuit: you’ll notice they are all Clifford gates.
+# In fact, any standard stabilizer code can be encoded using only Clifford gates, which is a major advantage. Why?
+# Because clifford gates are easy to implement and measure.
 #
 # References
 # -----------
 #
 # About the author
 # -----------------
-# 
-# 
+#
+#
