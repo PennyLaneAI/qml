@@ -15,10 +15,10 @@ a large class of quantum error correction codes. The so-called
 **stabilizer codes**, such as the repetition, Shor, Steane, and surface codes,
 all fall under this formalism. Other codes, like the GKP codes used by Xanadu, lie outside of it.
 
-In this demo, we will introduce the stabilizer formalism using bottom-up approach. We construct
+In this demo, we will introduce the stabilizer formalism using bottom-up approach. We build
 some well-known codes using **stabilizer generators,** from which
-the other elements of the code (codewords, syndrome measurements, etc.) can be reconstructed. This enables the construction of a wide range of error correction codes
-directly from their stabilizer generators. We will use the quantum circuit formalism to construct the codes.
+the other elements of the code (codewords, syndrome measurements, etc.) can be reconstructed. Then, we
+represent these codes as quantum circuits and implement them in PennyLane.
 
 
 A toy example: the repetition code
@@ -26,7 +26,7 @@ A toy example: the repetition code
 
 To start with, let us explore the general structure of error correction codes using a simple example: the **three-qubit repetition code.**
 We will introduce this code as a quantum circuit with definite steps to gain some intuition on how it corrects errors on qubits.
-We represent the states of the qubits in the circuit using **state vectors** (the Schrödinger picture). In this formalism, error correction codes follow a simple structure:
+We represent the states of the qubits in the circuit using **state vectors**. In this formalism, error correction codes follow a simple structure:
 
 - Qubit encoding
 - Error detection
@@ -40,7 +40,7 @@ Qubit encoding
 The first step in an error correction code is **encoding** one abstract or **logical qubit** into a set of many on-device **physical qubits.**
 The rationale is that, if some external factor changes the state of one of the qubits, the remaining qubits still provide information about the original logical qubit.
 For example, in the three-qubit repetition code, the logical basis-state
-qubits, or **logical codewords**, :math:`\vert \bar{0}\rangle` and :math:`\vert \bar{1}\rangle` are encoded into three physical qubits via
+qubits, or **logical codewords**, :math:`\vert \bar{0}\rangle` ("logical 0") and :math:`\vert \bar{1}\rangle` ("logical 1") are encoded into three physical qubits via
 
 .. math::
 
@@ -52,7 +52,7 @@ A general qubit :math:`\vert \bar{\psi}\rangle = \alpha \vert \bar{0}\rangle + \
 
     \alpha \vert \bar{0}\rangle + \beta \vert \bar{1}\rangle \mapsto \alpha \vert 000 \rangle + \beta \vert 111\rangle.
 
-This encoding can be done via the following quantum circuit. It should be explicitly stated that the 0 bar is logical 0 and 1 bar is logical 1.
+This encoding can be done via the following quantum circuit.
 
 .. figure:: ../_static/demonstration_assets/stabilizer_codes/three_qubit_encode.png
     :align: center
@@ -106,15 +106,12 @@ print("|111> component: ", encode_qnode(alpha, beta)[7])
 #
 #     X_2 \vert \bar{\psi}\rangle = \alpha \vert 010 \rangle + \beta \vert 101 \rangle
 #
-# How do we detect this error?
-#
-# As you already know that measuring the state collapses it, we cannot measure the state to detect the error.
-#
+# How do we detect this error? As we already know, measuring the state collapses it, so we cannot measure the state to detect the error.
 #
 # To detect a bit-flip error on one of the physical qubits without disturbing the encoded logical state, we perform a **parity measurement.**
 # This checks whether all physical qubits are in the same state by comparing them two at a time, without directly measuring them.
 # Instead, auxiliary qubits are used and measured. For the three-qubit repetition code, this involves measuring two auxiliary qubits
-# in the computational basis after applying a series of :math:\textrm{CNOT} gates, as illustrated in the circuit below.
+# in the computational basis after applying a series of :math:`\textrm{CNOT}` gates, as illustrated in the circuit below.
 #
 # .. figure:: ../_static/demonstration_assets/stabilizer_codes/parity_measurements.png
 #    :align: center
@@ -240,13 +237,15 @@ print(
 # ---------------------------------------------------------------
 #
 # We have worked with a simple example (repetition code), but it is quite limited. Indeed, the three-qubit code only works for
-# a single bit flip error. There are more powerful codes but they also need more resources. For example, Shor's code
-# can correct any error on a single logical qubit but it already needs 9 qubits. To make matters worse, to avoid errors at an acceptable level,
+# a single bit flip error. There are more powerful codes, but they also need more resources. For example, Shor's code
+# can correct any error on a single logical qubit, but it needs 9 qubits. To make matters worse, to avoid errors at an acceptable level,
 # the industry standard is about 1000 physical qubits per logical qubit. Even with a few qubits, the encoded states and protocols can become increasingly
-# complex, so writing a 1000 qubit state vector seems quite daunting! To deal with these situations, we resort to a different
+# complex. Writing a 1000 qubit state vector seems quite daunting! To deal with these situations, we resort to a different
 # representation of error correction codes, using **Pauli operators** instead of state vectors.
 #
-# It is great time to look at Pauli operators and their properties now, if you are not familiar with them.
+# .. note::
+#     It is great time to look at `Pauli operators <https://pennylane.ai/codebook/single-qubit-gates>`_ and their properties now, 
+#     if you are not familiar with them.
 #
 # To gain some intuition about the operator picture, let us express the three-qubit repetition code in a different way. Using the
 # identity below,
@@ -278,7 +277,7 @@ print(
 #     I_0 Z_1 Z_2 \vert 000 \rangle = \vert 000 \rangle, \quad I_0 Z_1 Z_2 \vert 111 \rangle = \vert 111 \rangle.
 #
 # This is great news. As long as no error has occurred, the logical qubits will be left alone. Otherwise, there will be
-# some operations applied on the state, but we will be able to fix them via an error correction scheme. The invariance property
+# some operations applied on the state, but we will be able to fix them via an error correction scheme. This invariance property
 # **holds true for and only for the logical codewords.** For any other three-qubit basis states, at least one of these operators will have eigenvalue
 # :math:`-1`, as shown in the table below. Therefore measuring the eigenvalues of these operators will tell us if an error has occurred.
 #
@@ -298,12 +297,24 @@ print(
 # Stabilizer generators
 # ~~~~~~~~~~~~~~~~~~~~~~
 #
-# Note: It is important to have a minimal understanding of group theory to understand the stabilizer formalism.
+# .. admonition:: Groups
+#     :class: note
 #
-# Notation: In the stabilizer formalism, we often omit explicit tensor product symbols (:math:`\otimes`) for brevity.
-# For example, :math:`X_0 Z_1` denotes :math:`X \otimes Z` acting on qubits 0 and 1, respectively.
-# When identity operators are omitted, we use subscripts to indicate which qubits the non-identity Pauli operators act on.
-# If all positions are filled (e.g., :math:`XZI`), the position implicitly indicates the qubit index (qubit 0, 1, 2).
+#     It is important to have a minimal understanding of group theory to understand the stabilizer formalism. As a refresher, here is 
+#     the definition of a group.
+#     
+#     A group is a set of elements that has:
+#       1. an operation that maps two elements a and b of the set into a third element of the set, for example c = a + b,
+#       2. an "identity element" e such that e + a = a for any element a, and
+#       3. an inverse -a for every element a, such that a + (-a) = e.
+#
+# .. admonition:: Notation
+#     :class: note
+#
+#     In the stabilizer formalism, we often omit explicit tensor product symbols (:math:`\otimes`) for brevity.
+#     For example, :math:`X_0 Z_1` denotes :math:`X \otimes Z` acting on qubits 0 and 1, respectively.
+#     When identity operators are omitted, we use subscripts to indicate which qubits the non-identity Pauli operators act on.
+#     If all positions are filled (e.g., :math:`XZI`), the position implicitly indicates the qubit index (qubit 0, 1, 2).
 #
 # The stabilizer formalism is a powerful framework for constructing quantum error-correcting codes using the algebraic structure of *Pauli operators*.
 # It focuses on subgroups of the *Pauli group* on :math:`n` qubits—denoted :math:`\mathcal{P}_n`—which consists of all tensor products of single-qubit Pauli operators :math:`\{I, X, Y, Z\}` (with overall phases :math:`\pm1, \pm i`).
@@ -337,7 +348,7 @@ print(
 #
 #     S = \left\langle Z_0 \otimes Z_1 \otimes I_2, \ I_0 \otimes Z_1 \otimes Z_2 \right\rangle,
 #
-# which reads ":math:`S` *is the stabilizer set generated by the elements* :math:`Z_0 \otimes Z_1 \otimes I_2` *and* :math:`I_0 \otimes Z_1 \otimes Z_2.`"
+# which reads ":math:`S` *is the stabilizer group generated by the elements* :math:`Z_0 \otimes Z_1 \otimes I_2` *and* :math:`I_0 \otimes Z_1 \otimes Z_2.`"
 #
 # It turns out that specifying these generators is sufficient to completely define the stabilizer group, and
 # thereby the corresponding quantum error-correcting code.
@@ -374,8 +385,8 @@ generate_stabilizer_group(generators, 3)
 # Defining the codespace
 # ~~~~~~~~~~~~~~~~~~~~~~~
 #
-# At this point, the pressing question is, how to define the error correction code given a set of stabilizer generators. As far as
-# we know stabilizer generators are only a bunch of Pauli strings satisfying some properties. Let us recall that the property that inspired using stabilizer generators
+# At this point, the pressing question is how to define the error correction code given a set of stabilizer generators. As far as
+# we know, stabilizer generators are only a bunch of Pauli strings satisfying some properties. Let us recall that the property that inspired using stabilizer generators
 # is that they must leave the codewords invariant. For any stabilizer element :math:`S` and codeword :math:`\vert \psi \rangle`, we must
 # have
 #
@@ -384,7 +395,7 @@ generate_stabilizer_group(generators, 3)
 #     S\vert \psi \rangle = \vert \psi \rangle.
 #
 # The **codespace** is defined as the set made up of all states such that :math:`S_i \vert\psi\rangle = \vert \psi\rangle` for all stabilizer
-# group :math:`S_i.` The **codewords** can then be recovered by choosing an orthogonal basis of the codespace.
+# group elements :math:`S_i.` The **codewords** can then be recovered by choosing an orthogonal basis of the codespace.
 # For example, for the three-qubit repetition code, the codewords  (:math:`\vert 000 \rangle` and :math:`\vert 111 \rangle`)
 # can be recovered by from the stabilizer generators :math:`Z_0 \otimes Z_1 \otimes I_2` and :math:`I_0 \otimes Z_1 \otimes Z_2` from table above.
 #
@@ -401,12 +412,12 @@ generate_stabilizer_group(generators, 3)
 # encoded qubits, specifically, how to apply gates that act on logical qubits without leaving the codespace.
 # These operators must act non-trivially on the codewords, so they cannot be part of the stabilizer group.
 # However, to preserve the codespace, they **must commute** with all stabilizer generators.
-# In particular, we are interested in the logical Pauli operators \:math:`\bar{X}` and \:math:`\bar{Z}`, defined by:
+# In particular, we are interested in the logical Pauli operators :math:`\bar{X}` and :math:`\bar{Z}`, defined by:
 #
 # .. math::
 #
-#     \bar{X}\vert \bar{0} \rangle = \vert \bar{1} \rangle, \quad \bar{X}\vert \bar{1} \rangle = \vert \bar{0} \rangle \\
-#     \ \bar{Z}\vert \bar{0} \rangle = \vert \bar{0} \rangle, \quad \bar{Z}\vert \bar{1} \rangle = - \vert \bar{1} \rangle
+#     \bar{X}\vert \bar{0} \rangle = \vert \bar{1} \rangle, \quad \bar{X}\vert \bar{1} \rangle = \vert \bar{0} \rangle, \\
+#     \ \bar{Z}\vert \bar{0} \rangle = \vert \bar{0} \rangle, \quad \bar{Z}\vert \bar{1} \rangle = - \vert \bar{1} \rangle.
 #
 # For example, in the three qubit bit flip error correcting code, the logical operators are :math:`\bar{X} = X_0 X_1 X_2` and
 # :math:`\bar{Z} = Z_0 Z_1 Z_2,` but they will not always be this simple.  In general, given a stabilizer set $S$, the logical
@@ -416,8 +427,8 @@ generate_stabilizer_group(generators, 3)
 # 2. They are not in the stabilizer group,
 # 3. They anticommute with each other, which means they act in a non-trivial way on the codewords.
 #
-# L.S.D Theorem
-# ~~~~~~~~~~~~~~~~~~
+# Lloyd-Shor-Devetak (LSD) Theorem
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Remember that stabilizer group is a subgroup of the Pauli group with some properties. In the stabilizer formalism,
 # every Pauli operator acting on the qubits can be categorized based on how it interacts with the stabilizer group.
 # The **LSD theorem** states that Pauli operators on encoded qubits can be divided into three types:
