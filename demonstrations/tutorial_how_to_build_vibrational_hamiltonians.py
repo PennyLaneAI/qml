@@ -1,12 +1,10 @@
 r"""How to build vibrational Hamiltonians
 =========================================
-Vibrational motions are crucially important to describe the quantum properties of molecules and
+Vibrational motions are crucial for describing the quantum properties of molecules and
 materials. Molecular vibrations can significantly affect the outcome of chemical reactions. There
 are also several spectroscopy techniques that rely on the vibrational properties of molecules to
 provide valuable insight to understand chemical systems and design new materials. Classical quantum
-computations have been routinely implemented to describe vibrational motions of molecules. However,
-efficient classical methods typically have fundamental theoretical limitations that prevent their
-practical implementation for describing challenging vibrational systems. This makes quantum
+computations have been routinely implemented to describe vibrational motions of molecules. However, for challenging vibrational systems, classical methods typically have fundamental theoretical limitations that prevent their practical implementation. This makes quantum
 algorithms an ideal choice where classical methods are not efficient or accurate.
 
 Quantum algorithms require a precise description of the system Hamiltonian to compute vibrational
@@ -25,7 +23,7 @@ molecule.
 # Vibrational Hamiltonian
 # -----------------------
 # A molecular vibrational Hamiltonian can be defined in terms of the kinetic energy operator of the
-# nuclei, :math:`T`, and the potential energy operator, :math:`V`, that describes the interaction
+# nuclei, :math:`T`, and the potential energy operator, :math:`V`, that describes the interactions
 # between the nuclei as:
 #
 # .. math::
@@ -34,7 +32,7 @@ molecule.
 #
 # The kinetic and potential energy operators can be written in terms of momentum and position
 # operators, respectively. There are several ways to construct the potential energy operator which
-# lead to different representation of the vibrational Hamiltonian. Here we explain some of these
+# lead to different representations of the vibrational Hamiltonian. Here we explain some of these
 # representations and provide PennyLane codes for constructing them.
 #
 # Christiansen representation
@@ -47,10 +45,10 @@ molecule.
 #     V({Q}) = \sum_i V_1(Q_i) + \sum_{ij} V_2(Q_i,Q_j) + ....
 #
 # This provides a general representation of the potential energy surface where the terms :math:`V_n`
-# depend on :math:`n` vibrational mode at most.
+# depend on :math:`n` vibrational modes at most.
 #
 # The Christiansen Hamiltonian is then constructed in second-quantization based on this potential
-# energy surface and bosonic creation :math:`b^{\dagger}` and annihilation :math:`b` operations:
+# energy surface in terms of bosonic creation :math:`b^{\dagger}` and annihilation :math:`b` operations:
 #
 # .. math::
 #
@@ -63,7 +61,7 @@ molecule.
 # of the potential energy, :math:`V_n`, defined above.
 #
 # PennyLane provides a set of functions to construct the Christiansen Hamiltonian, either directly
-# in one step or by building the Hamiltonian from its building blocks step by step. An important
+# in one step or from its building blocks step by step. An important
 # step in both methods is to construct the potential energy operator which is done based on
 # single-point energy calculations along the normal modes of the molecule. The
 # :func:`~.pennylane.qchem.vibrational_pes` function in PennyLane provides a convenient way to
@@ -88,17 +86,16 @@ pes = qml.qchem.vibrational_pes(mol)
 # :class:`~.pennylane.qchem.VibrationalPES` object that stores the potential energy surface
 # and vibrational information. This object is the input for several functions that we learn about
 # here. For instance, the :func:`~.pennylane.qchem.christiansen_integrals` function accepts this
-# object to compute the integrals needed to construct the bosonic form of the Christiansen
+# object to compute the integrals needed to construct the Christiansen
 # Hamiltonian defined above.
 
-integrals = qml.qchem.vibrational.christiansen_integrals(pes,n_states=4)
+integrals = qml.qchem.vibrational.christiansen_integrals(pes, n_states=4)
 h_bosonic = qml.qchem.christiansen_bosonic(integrals[0])
 print(h_bosonic)
 
 ######################################################################
 # The bosonic Hamiltonian constructed with :func:`~.pennylane.qchem.christiansen_bosonic` can be
-# mapped to its qubit form by using the proper mapping equations defined in the
-# :func:`~.pennylane.qchem.christiansen_mapping` function.
+# mapped to its qubit form by using the :func:`~.pennylane.qchem.christiansen_mapping` function.
 
 h_qubit = qml.bose.christiansen_mapping(h_bosonic)
 h_qubit
@@ -108,10 +105,10 @@ h_qubit
 # algorithm in PennyLane.
 #
 # Note that PennyLane also provides the :func:`~.pennylane.qchem.christiansen_hamiltonian` function
-# that uses the :class:`~.pennylane.qchem.VibrationalPES` object directly and builds the qubit
-# Christiansen Hamiltonian.
+# that uses the :class:`~.pennylane.qchem.VibrationalPES` object directly and builds the 
+# Christiansen Hamiltonian in qubit representation.
 
-h_qubit2 = qml.qchem.vibrational.christiansen_hamiltonian(pes,n_states=4)
+h_qubit2 = qml.qchem.vibrational.christiansen_hamiltonian(pes, n_states=4)
 
 ######################################################################
 # You can verify that the two Hamiltonians are identical.
@@ -129,7 +126,7 @@ h_qubit2 = qml.qchem.vibrational.christiansen_hamiltonian(pes,n_states=4)
 # Note that the force constants :math:`F` are derivatives of the potential energy surface.
 #
 # The Taylor Hamiltonian can then be constructed by defining the kinetic and potential energy
-# components in terms of the momentum and coordinate operators.
+# components in terms of the momentum and position operators.
 #
 # .. math::
 #

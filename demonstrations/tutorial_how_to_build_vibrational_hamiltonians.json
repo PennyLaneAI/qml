@@ -1,5 +1,5 @@
 {
-    "title": "How to build spin Hamiltonians",
+    "title": "How to build vibrational Hamiltonians",
     "authors": [
         {
             "username": "ddhawan"
@@ -25,7 +25,7 @@
             "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_how_to_build_spin_hamiltonians.png"
         }
     ],
-    "seoDescription": "Learn how to build spin Hamiltonians with PennyLane.",
+    "seoDescription": "Learn how to build vibrational Hamiltonians with PennyLane.",
     "doi": "",
     "references": [
         {
