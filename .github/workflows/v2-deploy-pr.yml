@@ -85,7 +85,7 @@ jobs:
     needs: prepare-build-context
     with:
       # TODO: Update SWC environment to "swc-prod"
-      environment: 'swc-dev' 
+      environment: 'swc-staging'
       artifact-name: demo-build-${{ needs.prepare-build-context.outputs.pr_ref }}
       workflow-run-id: ${{ github.event.workflow_run.id }}
       pr_number: ${{ fromJson(needs.prepare-build-context.outputs.pr_id) }}
