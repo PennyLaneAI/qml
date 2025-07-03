@@ -123,8 +123,6 @@ A graphical representation of the full data processing pipeline is given in the 
 import time
 import os
 import copy
-import urllib.request
-import shutil
 
 # PyTorch
 import torch
@@ -213,13 +211,7 @@ data_transforms = {
     ),
 }
 
-data_dir = "hymenoptera_data"
-if not os.path.exists(data_dir):
-    urllib.request.urlretrieve(
-        "https://download.pytorch.org/tutorial/hymenoptera_data.zip", f"{data_dir}.zip"
-    )
-    shutil.unpack_archive(f"{data_dir}.zip")
-
+data_dir = "../_data/hymenoptera_data"
 image_datasets = {
     x if x == "train" else "validation": datasets.ImageFolder(
         os.path.join(data_dir, x), data_transforms[x]
