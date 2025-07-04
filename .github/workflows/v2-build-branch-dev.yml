@@ -10,9 +10,9 @@ concurrency:
 
 jobs:
   build_dev:
-    uses: PennyLaneAI/qml/.github/workflows/v2-build-demos.yml@dev
+    uses: PennyLaneAI/qml/.github/workflows/v2-build-demos.yml
     with:
-      ref: dev
+      ref: sync-demos
       dev: true
       save-artifact: true
       artifact-name: build-branch-dev
