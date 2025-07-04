@@ -100,8 +100,8 @@ def TFIM(n):
     generators = [op.pauli_rep for op in generators]
 
     dla = qml.lie_closure(generators, pauli=True)
-    dim_dla = len(dla)
-    return generators, dla, dim_dla
+    dim_g = len(dla)
+    return generators, dla, dim_g
 
 generators, dla, dim_g = TFIM(n=4)
 

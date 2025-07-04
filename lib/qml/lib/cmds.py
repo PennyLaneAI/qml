@@ -62,7 +62,7 @@ def pip_install(
         requirements: Path to a requirements file
         constraints: Path to a constriants file
         quiet: Whether to suppress output to stdout
-        pre: Include pre-release versions of pacakges
+        pre: Include pre-release versions of packages
 
 
     Raises:

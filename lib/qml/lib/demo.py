@@ -162,7 +162,7 @@ def build(
 
     build_venv = Virtualenv(ctx.build_venv_path)
     cmds.pip_install(
-        build_venv.python, requirements=ctx.build_requirements_file, use_uv=False
+        build_venv.python, requirements=ctx.build_requirements_file, use_uv=False, quiet=False
     )
 
     for demo in demos:
@@ -245,6 +245,7 @@ def generate_requirements(
         output_file,
         *requirements_in,
         constraints_files=constraints,
+        quiet=False,
         prerelease=dev,
     )
 
@@ -268,8 +269,24 @@ def _build_demo(
             build_venv.python,
             "--upgrade",
             requirements=out_dir / "requirements.txt",
-            quiet=True,
+            quiet=False,
             pre=dev,
+        )
+    
+    # We have compatibility issues in dev priori to the v0.42.0 release of
+    # PennyLane. Dealing with this in a one-off way for now.
+    if dev and execute:
+        cmds.pip_install(
+            build_venv.python,
+            "--upgrade",
+            "--extra-index-url",
+            "https://test.pypi.org/simple/",
+            "PennyLane-Catalyst",
+            "jax==0.6.0",
+            "jaxlib==0.6.0",
+            use_uv=False,
+            quiet=False,
+            pre=True,
         )
 
     stage_dir = ctx.build_dir / "demonstrations"

@@ -96,7 +96,7 @@ for noisy intermediate-scale quantum (NISQ) devices.
 # structure of the non-Euclidean parameter space [#FS]_. The
 # :math:`d \times d` metric tensor is defined as
 #
-# .. math:: \boldsymbol{g}_{ij}(\mathbf{x}) = -\frac{1}{2} \frac{\partial}{\partial \mathbf{x}_i} \frac{\partial}{\partial \mathbf{x}_j} F(\mathbf{x}', \mathbf{x})\biggr\rvert_{\mathbf{x}'=\mathbf{x}},tag{5}
+# .. math:: \boldsymbol{g}_{ij}(\mathbf{x}) = -\frac{1}{2} \frac{\partial}{\partial \mathbf{x}_i} \frac{\partial}{\partial \mathbf{x}_j} F(\mathbf{x}', \mathbf{x})\biggr\rvert_{\mathbf{x}'=\mathbf{x}},\tag{5}
 #
 # where
 # :math:`F(\mathbf{x}', \mathbf{x}) = \bigr\rvert\langle \phi(\mathbf{x}') | \phi(\mathbf{x}) \rangle \bigr\rvert ^ 2,`

@@ -4,6 +4,7 @@
 --extra-index-url https://download.pytorch.org/whl/cpu
 
 pennylane @ git+https://github.com/PennyLaneAI/pennylane.git#egg=pennylane
+pennylane-cirq @ git+https://github.com/PennyLaneAI/pennylane-cirq.git#egg=pennylane-cirq
 pennylane-qiskit @ git+https://github.com/PennyLaneAI/pennylane-qiskit.git#egg=pennylane-qiskit
 pennylane-qulacs @ git+https://github.com/PennyLaneAI/pennylane-qulacs.git#egg=pennylane-qulacs
 iqpot @ git+https://github.com/XanaduAI/iqpopt.git#egg=iqpopt
@@ -18,6 +19,8 @@ jax==0.4.28
 jaxlib==0.4.28
 jaxopt==0.8.3
 aiohttp==3.9.5
+fastapi<1.0.0
+flax==0.10.6
 fsspec==2024.6.1
 h5py==3.11.0
 openfermionpyscf==0.5
