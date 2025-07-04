@@ -272,6 +272,22 @@ def _build_demo(
             quiet=False,
             pre=dev,
         )
+    
+    # We have compatibility issues in dev priori to the v0.42.0 release of
+    # PennyLane. Dealing with this in a one-off way for now.
+    if dev and execute:
+        cmds.pip_install(
+            build_venv.python,
+            "--upgrade",
+            "--extra-index-url",
+            "https://test.pypi.org/simple/",
+            "PennyLane-Catalyst",
+            "jax==0.6.0",
+            "jaxlib==0.6.0",
+            use_uv=False,
+            quiet=False,
+            pre=True,
+        )
 
     stage_dir = ctx.build_dir / "demonstrations"
     fs.clean_dir(stage_dir)
