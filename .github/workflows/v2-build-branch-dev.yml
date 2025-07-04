@@ -10,7 +10,7 @@ concurrency:
 
 jobs:
   build_dev:
-    uses: PennyLaneAI/qml/.github/workflows/v2-build-demos.yml
+    uses: PennyLaneAI/qml/.github/workflows/v2-build-demos.yml@sync-demos
     with:
       ref: sync-demos
       dev: true
