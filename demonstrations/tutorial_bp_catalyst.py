@@ -1,4 +1,4 @@
-r"""Decoding Quantum Errors on the Steane code with Belief Propagation & Catalyst
+r"""Decoding Quantum Errors on the Steane code with Belief Propagation and Catalyst
 =============================================================================
 
 *Learn how to build, simulate, and decode the Steane code using JAX and Catalyst, blending quantum
