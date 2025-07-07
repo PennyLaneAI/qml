@@ -44,7 +44,7 @@ release = ""
 
 # If your documentation needs a minimal Sphinx version, state it here.
 #
-needs_sphinx = "5.0.2"
+needs_sphinx = "1.8.5"
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
@@ -85,10 +85,6 @@ sphinx_gallery_conf = {
     ),
     # thumbnail size
     "thumbnail_size": (400, 400),
-    "reference_url": {
-        # The module you locally document uses None
-        # "pennylane": None,  # Commented out to avoid conflict with intersphinx
-    },
     "backreferences_dir"  : "backreferences",
     "doc_module"          : ("pennylane"),
     "junit": "../test-results/sphinx-gallery/junit.xml",
