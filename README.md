@@ -168,6 +168,8 @@ To install all the dependencies locally, [poetry](https://python-poetry.org/) ne
 [official installation documentation](https://python-poetry.org/docs/#installation). To ensure that no issues arise, we
 recommend using the [official installer](https://python-poetry.org/docs/#installing-with-the-official-installer).
 
+**IMPORTANT NOTE:** It is important to install Poetry using the official instructions and NOT into the same virtual env as QML itself, this would cause poetry to manage itself and raise unexpected errors.
+
 ### Installing dependencies
 
 Once poetry has been installed, the dependencies can be installed as follows:
