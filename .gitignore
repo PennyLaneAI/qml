@@ -13,6 +13,7 @@ demos_community.rst
 .venv/
 .venv_ubuntu/
 .venv-build/
+.test_figures/
 demo_requirements.txt
 **/*.egg-info/
 *.msi

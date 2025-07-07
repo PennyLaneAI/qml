@@ -7,12 +7,17 @@ import numpy as np
 r = 0.71
 geom = [['H', (0, 0, 0)],
         ['H', (0, 0, r)]]
+symbols = ['H', 'H']
+goemetry = np.array([[0, 0, -r/2], [0, 0, r/2]])
 basis = '631g'
 mol = gto.Mole(atom=geom, basis=basis, symmetry=None)
 mol.build()
 
 # get MOs
 hf = scf.RHF(mol)
+def round_eig(f):
+    return lambda h, s: f(h.round(12), s)
+hf.eig = round_eig(hf.eig)
 hf.run()
 
 charges = hf.mol.atom_charges()
@@ -41,12 +46,18 @@ cascivec = mycasci.ci
 cascivec[abs(cascivec) < 1e-6] = 0
 print("cascivec", cascivec)
 
-# %%
-dip_ints = hf.mol.intor('int1e_r_cart', comp=3)
+# Create qml Molecule object.
+# mole = qml.qchem.Molecule(symbols, geometry, basis_name='6-31g', unit='angstrom')
 
-# %%
-orbcas = hf.mo_coeff
-dip_ints = np.einsum('ik,xkl,lj->xij', orbcas.T, dip_ints, orbcas)
+# rho = 2  # z direction
+# m_rho = qml.qchem.dipole_moment(mole)()[rho]
+# dipole_matrix_rho = qml.matrix(m_rho)
+
+# wf_ci = qml.qchem.import_state(myci, tol=1e-5)
+
+# wf_dip = dipole_matrix_rho.dot(wf_ci)
+# dipole_norm = np.linalg.norm(wf_dip)
+# wf_dip = wf_dip/dipole_norm
 
 # %%
 ## INSERT CODE ##
@@ -57,8 +68,10 @@ dipole_rho = {(2, 1): -0.6902564137617815, (1, 2): -0.6902564137617815,
 
 dipole_norm = 1.3058
 
-from pennylane.qchem.convert import _wfdict_to_statevector
+from pennylane.qchem.convert import _wfdict_to_statevector, _sign_chem_to_phys, \
+                    _statevector_to_wfdict
 
+# dipole_rho = _sign_chem_to_phys(dipole_rho, ncas)
 wf_dip = _wfdict_to_statevector(dipole_rho, ncas)
 
 import pennylane as qml
@@ -116,6 +129,8 @@ Z0 = np.diag(eigenvals)
 def U_rotations(U, control_wires):
     """Circuit implementing the basis rotations of the CDF decomposition."""
     norb = U.shape[-1]
+    # U_spin = qml.math.kron(U, qml.math.eye(2))
+    # qml.BasisRotation(unitary_matrix=U_spin, wires = [int(i+control_wires) for i in range(2*norb)])
     qml.BasisRotation(unitary_matrix=U, wires = [int(2*i+control_wires) for i in range(norb)])
     qml.BasisRotation(unitary_matrix=U, wires = [int(2*i+1+control_wires) for i in range(norb)])
 
@@ -290,4 +305,4 @@ fig.text(0.5, 0.05,
     weight="normal",
 )
 plt.show()
-# fig.savefig(datetime_string+"_spectrum.png")
+fig.savefig(datetime_string+"_spectrum.png")
