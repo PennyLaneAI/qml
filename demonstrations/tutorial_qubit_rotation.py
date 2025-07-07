@@ -176,15 +176,15 @@ def circuit(params):
 #   by passing the ``wires`` argument; this may be a list or an integer, depending
 #   on how many wires the operation acts on.
 #
-#   For a full list of quantum operations, see :external+pennylane:doc:`the documentation <introduction/operations>`.
+#   For a full list of quantum operations, see :doc:`the documentation <pennylane:introduction/operations>`.
 #
 # * **Quantum functions must return either a single or a tuple of measured observables**.
 #
 #   As a result, the quantum function always returns a classical quantity, allowing
 #   the QNode to interface with other classical functions (and also other QNodes).
 #
-#   For a full list of observables, see :external+pennylane:doc:`the documentation <introduction/operations>`.
-#   The documentation also provides details on supported :external+pennylane:doc:`measurement return types <introduction/measurements>`.
+#   For a full list of observables, see :doc:`the documentation <pennylane:introduction/operations>`.
+#   The documentation also provides details on supported :doc:`measurement return types <pennylane:introduction/measurements>`.
 #
 # .. note::
 #

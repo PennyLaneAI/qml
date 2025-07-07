@@ -44,7 +44,7 @@ release = ""
 
 # If your documentation needs a minimal Sphinx version, state it here.
 #
-needs_sphinx = "1.8.5"
+needs_sphinx = "5.0.2"
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
@@ -87,7 +87,7 @@ sphinx_gallery_conf = {
     "thumbnail_size": (400, 400),
     "reference_url": {
         # The module you locally document uses None
-        "pennylane": None,  # "https://docs.pennylane.ai/en/stable",
+        # "pennylane": None,  # Commented out to avoid conflict with intersphinx
     },
     "backreferences_dir"  : "backreferences",
     "doc_module"          : ("pennylane"),
@@ -213,3 +213,6 @@ intersphinx_mapping = {
     "pennylane": ("https://docs.pennylane.ai/en/stable/", None),
     "catalyst": ("https://docs.pennylane.ai/projects/catalyst/en/stable", None)
 }
+
+# Enable :doc: references for intersphinx (disabled by default in Sphinx 5.0+)
+intersphinx_disabled_reftypes = []
