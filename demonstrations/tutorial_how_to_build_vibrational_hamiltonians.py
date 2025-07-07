@@ -25,7 +25,7 @@ molecule.
 # Vibrational Hamiltonian
 # -----------------------
 # A molecular vibrational Hamiltonian can be defined in terms of the kinetic energy operator of the
-# nuclei, :math:`T`, and the potential energy operator, :math:`V`, that describes the interactions
+# nuclei, :math:`T`, and the potential energy operator, :math:`V`, which describes the interactions
 # between the nuclei as:
 #
 # .. math::
