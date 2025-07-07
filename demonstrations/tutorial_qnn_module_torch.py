@@ -75,8 +75,8 @@ plt.show()
 # <code/api/pennylane.qnn.TorchLayer>` including having an argument called ``inputs``. All other
 # arguments must be arrays or tensors and are treated as trainable weights in the model. We fix a
 # two-qubit QNode using the
-# :doc:`default.qubit <code/api/pennylane.devices.default_qubit.DefaultQubit>` simulator and
-# operations from the :doc:`templates <introduction/templates>` module.
+# :external+pennylane:doc:`default.qubit <code/api/pennylane.devices.default_qubit.DefaultQubit>` simulator and
+# operations from the :external+pennylane:doc:`templates <introduction/templates>` module.
 
 import pennylane as qml
 

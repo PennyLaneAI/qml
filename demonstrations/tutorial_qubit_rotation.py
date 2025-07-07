@@ -176,15 +176,15 @@ def circuit(params):
 #   by passing the ``wires`` argument; this may be a list or an integer, depending
 #   on how many wires the operation acts on.
 #
-#   For a full list of quantum operations, see :doc:`the documentation <introduction/operations>`.
+#   For a full list of quantum operations, see :external+pennylane:doc:`the documentation <introduction/operations>`.
 #
 # * **Quantum functions must return either a single or a tuple of measured observables**.
 #
 #   As a result, the quantum function always returns a classical quantity, allowing
 #   the QNode to interface with other classical functions (and also other QNodes).
 #
-#   For a full list of observables, see :doc:`the documentation <introduction/operations>`.
-#   The documentation also provides details on supported :doc:`measurement return types <introduction/measurements>`.
+#   For a full list of observables, see :external+pennylane:doc:`the documentation <introduction/operations>`.
+#   The documentation also provides details on supported :external+pennylane:doc:`measurement return types <introduction/measurements>`.
 #
 # .. note::
 #
@@ -290,7 +290,7 @@ print(dcircuit(phi1, phi2))
 #
 # .. tip::
 #
-#    *See* :doc:`introduction/interfaces` *for details and documentation of available optimizers*
+#    *See* :external+pennylane:doc:`introduction/interfaces` *for details and documentation of available optimizers*
 #
 # Next, let's make use of PennyLane's built-in optimizers to optimize the two circuit
 # parameters :math:`\phi_1` and :math:`\phi_2` such that the qubit, originally in state
@@ -362,7 +362,7 @@ print("Optimized rotation angles: {}".format(params))
 #
 #     Some optimizers, such as :class:`~.pennylane.AdagradOptimizer`, have
 #     internal hyperparameters that are stored in the optimizer instance. These can
-#     be reset using the :meth:`reset` method.
+#     be reset using the :meth:`~.pennylane.AdagradOptimizer.reset` method.
 #
 # Continue on to the next tutorial, :ref:`gaussian_transformation`, to see a similar example using
 # continuous-variable (CV) quantum nodes.

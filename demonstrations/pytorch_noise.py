@@ -20,7 +20,7 @@ PyTorch and noisy devices
     
 
 Let's revisit the original :ref:`qubit rotation <qubit_rotation>` tutorial, but instead of
-using the default NumPy/autograd QNode interface, we'll use the :doc:`introduction/interfaces/torch`.
+using the default NumPy/autograd QNode interface, we'll use the :external+pennylane:doc:`PyTorch interface <introduction/interfaces/torch>`.
 We'll also replace the ``default.qubit`` device with a noisy ``rigetti.qvm``
 device, to see how the optimization responds to noisy qubits. At the end of the
 demonstration, we will also show a way of how Rigetti's QPU can be used via

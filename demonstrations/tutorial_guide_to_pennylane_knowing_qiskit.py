@@ -192,7 +192,7 @@ print(pl_circuit())
 #
 #
 # As for measurements in PennyLane, they are quite different from Qiskit's V2 primitives. 
-# :doc:`PennyLane's measurement API <introduction/measurements>` comprises ergonomic functions that a QNode 
+# :external+pennylane:doc:`PennyLane's measurement API <introduction/measurements>` comprises ergonomic functions that a QNode 
 # can return, including
 # 
 # - :func:`~pennylane.state`: returns the quantum state vector,

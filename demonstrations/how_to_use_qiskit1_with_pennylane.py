@@ -34,7 +34,7 @@ aforementioned jump like it’s nothing 😌.
 # -----------------------------------------------------
 #
 # If you want to distill how a PennyLane plugin works down to one thing, it’s all in the provided devices! In
-# PennyLane, you just :doc:`create your circuit (a quantum function) </introduction/circuits>` and decorate it with
+# PennyLane, you just :external+pennylane:doc:`create your circuit (a quantum function) </introduction/circuits>` and decorate it with
 # the QNode decorator :func:`@qml.qnode(dev) <pennylane.qnode>`, where ``dev`` is (one of) the plugin’s device(s).
 #
 # In PennyLane and its plugins,
