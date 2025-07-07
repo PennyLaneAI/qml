@@ -213,3 +213,6 @@ intersphinx_mapping = {
     "pennylane": ("https://docs.pennylane.ai/en/stable/", None),
     "catalyst": ("https://docs.pennylane.ai/projects/catalyst/en/stable", None)
 }
+
+# Enable :doc: references for intersphinx (disabled by default in Sphinx 5.0+)
+intersphinx_disabled_reftypes = []
