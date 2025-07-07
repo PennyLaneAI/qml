@@ -80,7 +80,7 @@ environment:
 			$$PYTHON_VENV_PATH/bin/python -m pip install --upgrade git+https://github.com/PennyLaneAI/pennylane-qulacs.git#egg=pennylane-qulacs;\
 			$$PYTHON_VENV_PATH/bin/python -m pip install --extra-index-url https://test.pypi.org/simple/ PennyLane-Catalyst --pre --upgrade;\
 			$$PYTHON_VENV_PATH/bin/python -m pip install --extra-index-url https://test.pypi.org/simple/ PennyLane-Lightning --pre --upgrade;\
-			$$PYTHON_VENV_PATH/bin/python -m pip install --upgrade git+https://github.com/PennyLaneAI/pennylane.git#egg=pennylane;\
+			$$PYTHON_VENV_PATH/bin/python -m pip install --upgrade git+https://github.com/PennyLaneAI/pennylane.git@v0.42.0-rc0#egg=pennylane;\
 			$$PYTHON_VENV_PATH/bin/python -m pip install --upgrade git+https://github.com/XanaduAI/iqpopt.git#egg=iqpopt;\
 			$$PYTHON_VENV_PATH/bin/python -m pip install 'numpy<2';\
 			$$PYTHON_VENV_PATH/bin/python -m pip install jax==0.6.0 jaxlib==0.6.0 flax==0.10.6;\
