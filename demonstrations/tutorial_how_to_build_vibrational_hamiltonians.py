@@ -2,8 +2,8 @@ r"""How to build vibrational Hamiltonians
 =========================================
 Vibrational motions are crucial for describing the quantum properties of molecules and
 materials. Molecular vibrations can affect the outcome of chemical reactions and there are several
-spectroscopy techniques that rely on the vibrational properties of molecules to provide valuable
-insight into understanding chemical systems and processes [#loaiza]_ [#motlagh]_. Classical quantum
+vibrational spectroscopy techniques that provide valuable insight into understanding chemical
+systems and processes [#loaiza]_ [#motlagh]_. Classical quantum
 computations have been routinely implemented to describe vibrational motions of molecules. However,
 for challenging vibrational systems, classical methods typically have fundamental theoretical
 limitations that prevent their practical implementation. This makes quantum algorithms an ideal
