@@ -5,11 +5,14 @@
             "username": "ddhawan"
         },
         {
+            "username": "austingmhuang"
+        },
+        {
             "username": "soran"
         }
     ],
-    "dateOfPublication": "2024-12-05T00:00:00+00:00",
-    "dateOfLastModification": "2024-12-06T00:00:00+00:00",
+    "dateOfPublication": "2025-07-10T00:00:00+00:00",
+    "dateOfLastModification": "2025-07-10T00:00:00+00:00",
     "categories": [
         "Getting Started",
         "How-to"
@@ -25,28 +28,26 @@
             "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_how_to_build_spin_hamiltonians.png"
         }
     ],
-    "seoDescription": "Learn how to build spin Hamiltonians with PennyLane.",
+    "seoDescription": "Learn how to build vibrational Hamiltonians with PennyLane.",
     "doi": "",
     "references": [
         {
-            "id": "ashcroft",
-            "type": "book",
-            "title": "Solid State Physics",
-            "authors": "N. W. Ashcroft, D. N. Mermin",
-            "year": "1976",
-            "publisher": "New York: Saunders College Publishing",
-            "url": "https://en.wikipedia.org/wiki/Ashcroft_and_Mermin"
+            "id": "loaiza",
+            "type": "article",
+            "title": "Simulating near-infrared spectroscopy on a quantum computer for enhanced chemical detection",
+            "authors": "I. Loaiza *et al.*",
+            "journal": "arXiv:2504.10602",
+            "year": "2025",
+            "url": "https://arxiv.org/abs/2504.10602"
         },
         {
-            "id": "jovanovic",
+            "id": "motlagh",
             "type": "article",
-            "title": "Refraction and band isotropy in 2D square-like Archimedean photonic crystal lattices",
-            "authors": "D. Jovanovic, R. Gajic, K. Hingerl",
-            "journal": "Opt. Express",
-            "volume": "16",
-            "pages": "4048--4058",
-            "year": "2008",
-            "url": "https://opg.optica.org/oe/fulltext.cfm?uri=oe-16-6-4048&id=154856"
+            "title": "Quantum Algorithm for Vibronic Dynamics: Case Study on Singlet Fission Solar Cell Design",
+            "authors": "D. Motlagh *et al.*",
+            "journal": "arXiv:2411.13669",
+            "year": "2024",
+            "url": "https://arxiv.org/abs/2411.13669"
         }
     ],
     "basedOnPapers": [],
@@ -59,12 +60,7 @@
         },
         {
             "type": "demonstration",
-            "id": "tutorial_fermionic_operators",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "tutorial_isingmodel_PyTorch",
+            "id": "tutorial_how_to_build_spin_hamiltonians",
             "weight": 1.0
         }
     ]
