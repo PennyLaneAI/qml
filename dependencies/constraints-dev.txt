@@ -19,7 +19,7 @@ numpy~=1.24
 matplotlib==3.7.2
 jax==0.4.28
 jaxlib==0.4.28
-jaxopt==0.8.3
+jaxopt==0.8.4
 aiohttp==3.9.5
 fastapi<1.0.0
 flax==0.10.6
