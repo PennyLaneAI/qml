@@ -296,7 +296,7 @@ def run_opt(value_and_grad, theta, n_epochs=120, lr=0.1, b1=0.9, b2=0.999):
 
     return thetas, energy
 
-key = jax.random.PRNGKey(0)
+key = jax.random.PRNGKey(888)
 theta0 = jax.random.normal(key, shape=(n_param_batch, tbins * 2))
 
 thetaf_odegen, energy_odegen = run_opt(value_and_grad_jax, theta0)
