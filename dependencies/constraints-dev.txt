@@ -3,7 +3,7 @@
 --extra-index-url https://test.pypi.org/simple/
 --extra-index-url https://download.pytorch.org/whl/cpu
 
-pennylane @ git+https://github.com/PennyLaneAI/pennylane.git#egg=pennylane
+pennylane @ git+https://github.com/PennyLaneAI/pennylane.git@v0.42.0-rc0#egg=pennylane
 pennylane-cirq @ git+https://github.com/PennyLaneAI/pennylane-cirq.git#egg=pennylane-cirq
 pennylane-qiskit @ git+https://github.com/PennyLaneAI/pennylane-qiskit.git#egg=pennylane-qiskit
 pennylane-qulacs @ git+https://github.com/PennyLaneAI/pennylane-qulacs.git#egg=pennylane-qulacs
@@ -12,6 +12,8 @@ pennylane-catalyst
 pennylane-lightning
 
 chex<1.0.0
+cirq-core==1.4.1
+cirq-pasqal==1.4.1
 pyqrack==1.32.12
 numpy~=1.24
 matplotlib==3.7.2
@@ -33,6 +35,7 @@ torch==2.1.2 ; sys_platform == 'darwin'
 torchvision==0.16.2+cpu ; sys_platform != 'darwin'
 torchvision==0.16.2 ; sys_platform == 'darwin'
 tensorflow==2.16.2
+typing-extensions==4.14.0
 optax==0.2.3
 quimb==1.8.2
 kahypar==1.1.7
