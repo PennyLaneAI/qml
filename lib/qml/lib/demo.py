@@ -273,20 +273,70 @@ def _build_demo(
             pre=dev,
         )
     
-    # We have compatibility issues in dev priori to the v0.42.0 release of
-    # PennyLane. Dealing with this in a one-off way for now.
+    # For dev, follow the same install procedure as in the Makefile
+    # TODO: See if we can clean this up and streamline in the future... 
     if dev and execute:
+        # Cirq
+        cmds.pip_install(
+            build_venv.python,
+            "--upgrade",
+            "git+https://github.com/PennyLaneAI/pennylane-cirq.git#egg=pennylane-cirq",
+            use_uv=False,
+            quiet=False,
+        )
+        # Qiskit
+        cmds.pip_install(
+            build_venv.python,
+            "--upgrade",
+            "git+https://github.com/PennyLaneAI/pennylane-qiskit.git#egg=pennylane-qiskit",
+            use_uv=False,
+            quiet=False,
+        )
+        # Qulacs
+        cmds.pip_install(
+            build_venv.python,
+            "--upgrade",
+            "git+https://github.com/PennyLaneAI/pennylane-qulacs.git#egg=pennylane-qulacs",
+            use_uv=False,
+            quiet=False,
+        )
+        # Catalyst
         cmds.pip_install(
             build_venv.python,
             "--upgrade",
             "--extra-index-url",
             "https://test.pypi.org/simple/",
             "PennyLane-Catalyst",
-            "jax==0.6.0",
-            "jaxlib==0.6.0",
             use_uv=False,
             quiet=False,
             pre=True,
+        )
+        # Lightning
+        cmds.pip_install(
+            build_venv.python,
+            "--upgrade",
+            "--extra-index-url",
+            "https://test.pypi.org/simple/",
+            "PennyLane-Lightning",
+            use_uv=False,
+            quiet=False,
+            pre=True,
+        )
+        # PennyLane
+        cmds.pip_install(
+            build_venv.python,
+            "--upgrade",
+            "git+https://github.com/PennyLaneAI/pennylane.git#egg=pennylane",
+            use_uv=False,
+            quiet=False,
+        )
+        # Iqpopt
+        cmds.pip_install(
+            build_venv.python,
+            "--upgrade",
+            "git+https://github.com/XanaduAI/iqpopt.git#egg=iqpopt",
+            use_uv=False,
+            quiet=False,
         )
 
     stage_dir = ctx.build_dir / "demonstrations"
