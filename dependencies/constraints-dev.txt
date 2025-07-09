@@ -13,7 +13,7 @@ pennylane-lightning
 
 chex<1.0.0
 cirq-core==1.4.1
-cirq-pasqal==1.4.1
+ciq-pascal==1.4.1
 pyqrack==1.32.12
 numpy~=1.24
 matplotlib==3.7.2
