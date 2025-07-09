@@ -341,6 +341,14 @@ def _build_demo(
             use_uv=False,
             quiet=False,
         )
+        # We need to bump flax here, after Jax has been bumped by Catalyst
+        cmds.pip_install(
+            build_venv.python,
+            "--upgrade",
+            "flax==0.10.6",
+            use_uv=False,
+            quiet=False,
+        )
 
     stage_dir = ctx.build_dir / "demonstrations"
     fs.clean_dir(stage_dir)
