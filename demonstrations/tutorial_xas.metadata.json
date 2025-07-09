@@ -29,10 +29,10 @@
             "id": "Fomichev:2025",
             "type": "article",
             "title": "Fast simulations of X-ray absorption spectroscopy for battery materials on a quantum computer",
-            "authors": "Stepan Fomichev, Pablo A. M. Casares, Alexander Kunitsa, Arne-Christian Voigt, Jonathan E. Mueller, Juan Miguel Arrazola",
+            "authors": "Stepan Fomichev, Pablo A. M. Casares, Jay Soni, Utkarsh Azad, Alexander Kunitsa, Arne-Christian Voigt, Jonathan E. Mueller, Juan Miguel Arrazola",
             "year": "2025",
             "publisher": "arXiv",
-            "url": "https://arxiv.org/abs/2405.11015"
+            "url": "https://arxiv.org/abs/2506.15784"
         },
         {
             "id": "Fomichev:2024",
@@ -42,10 +42,19 @@
             "year": "2024",
             "publisher": "arXiv",
             "url": "https://arxiv.org/abs/2405.11015"
+        },
+        {
+            "id": "Childs:2019",
+            "type": "article",
+            "title": "Faster quantum simulation by randomization",
+            "authors": "Andrew M. Childs, Aaron Ostrander, Yuan Su",
+            "year": "2019",
+            "publisher": "Quantum",
+            "url": "https://quantum-journal.org/papers/q-2019-09-02-182/"
         }
     ],
     "basedOnPapers": [
-        "10.48550/arXiv.2405.11015"
+        "10.48550/arXiv.2506.15784"
     ],
     "referencedByPapers": [],
     "relatedContent": [
