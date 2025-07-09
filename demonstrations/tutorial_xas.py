@@ -374,12 +374,12 @@ from pyscf import ao2mo
 
 # Calculate electron integrals.
 _, _, _, h_core, repulsion_tensor = qml.qchem.hartree_fock.scf(mole)()
-one = qml.math.einsum("qr,rs,st->qt", orbs.T, h_core, orbs)
+one = qml.math.einsum("qr,rs,st->qt", coeffs.T, h_core, coeffs)
 two = qml.math.swapaxes(
     qml.math.einsum(
-        "ab,cd,bdeg,ef,gh->acfh", orbs.T, orbs.T, repulsion_tensor, orbs, orbs
+        "ab,cd,bdeg,ef,gh->acfh", coeffs.T, coeffs.T, repulsion_tensor, coeffs, coeffs
     ), 1, 3)
-core_const = qml.qchem.hartree_fock.nuclear_energy(mole.nuclear_charges, mole.coordinates)()[0]
+core_constant = qml.qchem.hartree_fock.nuclear_energy(mole.nuclear_charges, mole.coordinates)()[0]
 
 # Adjust core constant from integrals not in active space.
 for i in core:
@@ -598,7 +598,7 @@ def trotter_circuit(dev, state, step):
 # 
 
 def meas_circuit(state):
-    qml.StatePrep(state, wires=range(int(2*n_orb)+1))
+    qml.StatePrep(state, wires=range(int(2*ncas)+1))
     # Measure in PauliX/PauliY to get the real/imaginary parts.
     return [qml.expval(op) for op in [qml.PauliX(wires=0), qml.PauliY(wires=0)]]
 
