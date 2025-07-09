@@ -208,7 +208,7 @@ jobs:
         with:
           name: ${{ needs.generate-build-variables.outputs.artifact-name }}
           path: _build/pack/*.zip
-          retention-days: 1
+          retention-days: 3
           overwrite: true
       
       - name: Delete partial artifacts
