@@ -273,8 +273,11 @@ def _build_demo(
             pre=dev,
         )
     
-    # For dev, follow the same install procedure as in the Makefile
+    # For dev, follow the same install procedure and order as in the Makefile.
+    # This is critical to get the proper versions of PennyLane, Catalyst,
+    # and various plugins.
     # TODO: See if we can clean this up and streamline in the future... 
+    # TODO: Remove RC branch for PennyLane install post-release.
     if dev and execute:
         # Cirq
         cmds.pip_install(
