@@ -129,7 +129,7 @@ print(qml.draw(ancilla_assisted_syndrome_extraction, show_all_wires=True)(syndro
 #
 # Once you have syndrome bits from your stabilizer measurements, you need to figure out what error
 # likely occurred-this is the job of the decoder. Formally, given the syndrome, you’re solving for
-# the most probable error (usually called maximum likelihood estimate, or MLE for the error).
+# the most probable error, usually called the maximum likelihood estimate (MLE) for the error.
 #
 # However, exact MLE decoding depends on the precise information of your noise model and is generally
 # computationally intractable (NP-Hard) because :math:`n` one-bit syndrome measurements can take on
@@ -206,7 +206,7 @@ print(qml.draw(ancilla_assisted_syndrome_extraction, show_all_wires=True)(syndro
 #   (a bipartite graph representing the relationships between qubits and stabilizers). It approximates
 #   the marginal probabilities of errors on each qubit, offering greater scalability for larger, sparser codes.
 #
-# We’ll start with the LUT decoder for its simplicity and then explore BP, which is more flexible for
+# We’ll begin with the LUT decoder due to its simplicity and then explore BP, which is more flexible for
 # larger or sparser codes.
 #
 
@@ -455,10 +455,10 @@ plt.title("Bipartite Graph for H_steane", fontsize=16)
 plt.show()
 
 ######################################################################
-# This next helper ``_c2v_update`` performs one full sweep of check‑to‑variable updates (step 3 of the
+# The ``_c2v_update`` helper function performs one full sweep of check‑to‑variable updates (step 3 of the
 # sum‑product algorithm). It takes the previous messages, the syndrome, the neighbour tables, and two
 # scalars (``L_int`` for the intrinsic log‑likelihood ratio and ``eps`` for numerical safety). It
-# loops only over edges that exist, multiplies the relevant :math:`\operatorname{tanh}` terms, clips
+# loops only over existing edges, multiplies the relevant :math:`\operatorname{tanh}` terms, clips
 # the product, applies :math:`\operatorname{arctanh}`, and writes the new message into the next
 # matrix.
 #
@@ -527,7 +527,7 @@ def _posterior_llrs(
 
 
 ######################################################################
-# ``build_bp_decoder`` is the main entry point for compiling our decoder. It takes the parity‑check
+# ``build_bp_decoder`` serves as the main entry point for compiling our decoder. It takes the parity‑check
 # matrix and channel error rate, builds the parity graph, pre‑computes the intrinsic LLR, and returns
 # a JIT‑compiled function ``_decode``.
 #
@@ -991,8 +991,8 @@ def get_error(n: int, p_err: float, key: random.PRNGKey):
 
 
 ######################################################################
-# Similar to ``measure_x_stabilizers`` but instead now we apply CNOT from data to an ancilla prepared
-# in the :math:`|0\rangle` state and perform a :math:`Z` basis measurement.
+# Similar to ``measure_x_stabilizers``, however, we now apply CNOT from data to an ancilla prepared
+# in the :math:`|0\rangle` state and perform a :math:`Z`-basis measurement.
 #
 
 
@@ -1015,9 +1015,8 @@ def measure_z_stabilizers(H):
 
 
 ######################################################################
-# Now we run the ``qec_round`` using state preparation, one round of noise and one round of :math:`X`
-# and :math:`Z` correction. We’ll print the error was was using in our noisy channel and show that the
-# output state still looks like the noiseless state we saw above.
+# Now, let's run the ``qec_round`` using state preparation, followed by one round of noise injection and one round of :math:`X`
+# and :math:`Z` correction. We’ll print the error that occurred in our noisy channel and demonstrate that the output state closely resembles the noiseless state we observed previously.
 #
 
 
@@ -1040,7 +1039,7 @@ print(f"Running Steane Code QEC Round with error: {get_error(n, p_err=p_err, key
 state_vector_to_dict(qec_round(H_steane, p_err=p_err, key=key), pretty_print=True, wires=range(n))
 
 ######################################################################
-# If we increase the likelihood of errors we are more likely to end up with an error pattern that
+# If we increase the likelihood of errors, we are more likely to end up with an error pattern that
 # can’t be corrected.
 #
 
