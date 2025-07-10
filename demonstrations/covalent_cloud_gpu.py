@@ -33,6 +33,7 @@ import covalent as ct
 import covalent_cloud as cc
 import matplotlib.pyplot as plt
 import pennylane as qml
+from functools import partial
 from matplotlib.colors import ListedColormap
 from pennylane import numpy as np
 from sklearn.datasets import make_blobs
@@ -124,7 +125,8 @@ QML_DEVICE = "lightning.qubit"
 
 def get_kernel_circuit(n_wires):
 
-    @qml.qnode(qml.device(QML_DEVICE, wires=n_wires, shots=None))
+    @partial(qml.set_shots, shots=None)
+    @qml.qnode(qml.device(QML_DEVICE, wires=n_wires))
     def circuit(x1, x2):
         qml.IQPEmbedding(x1, wires=range(n_wires), n_repeats=4)
         qml.adjoint(qml.IQPEmbedding)(x2, wires=range(n_wires), n_repeats=4)
