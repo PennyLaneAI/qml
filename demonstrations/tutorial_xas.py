@@ -38,8 +38,10 @@ clusters.
 
 ######################################################################
 # .. figure:: ../_static/demonstration_assets/xas/fingerprinting.gif
-#    :alt: Figure X: How simulation of X-ray absorption spectra can enable identification of
-#    oxidation states in candidate battery materials.
+#    :alt: Figure X: *How simulation of X-ray absorption spectra can enable identification of
+#    oxidation states in candidate battery materials.* Spectral fingerprinting can be used to identify
+#    constituent structures of a material by decomposing experimental spectra into components
+#    calculated via simulation on a quantum computer.
 # 
 #    Figure X: *How simulation of X-ray absorption spectra can enable identification of oxidation
 #    states in candidate battery materials.* Spectral fingerprinting can be used to identify
@@ -83,7 +85,10 @@ clusters.
 
 ######################################################################
 # .. figure:: ../_static/demonstration_assets/xas/example_spectrum.png
-#    :alt: Figure X: Example X-ray absorption spectrum.
+#    :alt: Figure X: *Example X-ray absorption spectrum.* Illustration of how the peak positions
+#    :math:`E_F - E_i`, widths :math:`\eta` and amplitudes
+#    :math:`|\langle F | \hat m_\rho | I \rangle|^2` determine the spectrum.
+#    :width: 50.0%
 # 
 #    Figure X: *Example X-ray absorption spectrum.* Illustration of how the peak positions
 #    :math:`E_F - E_i`, widths :math:`\eta` and amplitudes
@@ -141,7 +146,8 @@ clusters.
 
 ######################################################################
 # .. figure:: ../_static/demonstration_assets/xas/global_circuit.png
-#    :alt: Figure X: Circuit for XAS simulation
+#    :alt: Figure X: *Circuit for XAS simulation*. The algorithm is ultimately a Hadamard test
+#    circuit, and we divide the steps of this into three components.
 # 
 #    Figure X: *Circuit for XAS simulation*. The algorithm is ultimately a Hadamard test circuit, and
 #    we divide the steps of this into three components.
@@ -601,7 +607,9 @@ def meas_circuit(state):
 
 ######################################################################
 # .. figure:: ../_static/demonstration_assets/xas/hadamard_test_circuit.png
-#    :alt: Figure X: Hadamard test circuit to measure expectation value of time-evolution operator.
+#    :alt: Figure X: *Hadamard test circuit to measure expectation value of time-evolution operator*.
+#    With the phase gate :math:`S^\dagger` present (absent), this gives the real (imaginary) part of
+#    the time-domain Green’s function :math:`\tilde G(\tau j)`.
 # 
 #    Figure X: *Hadamard test circuit to measure expectation value of time-evolution operator*. With
 #    the phase gate :math:`S^\dagger` present (absent), this gives the real (imaginary) part of the
@@ -795,7 +803,11 @@ plt.show()
 
 ######################################################################
 # .. figure:: ../_static/demonstration_assets/xas/core_valence.png
-#    :alt: Figure X: Core-valence separation.
+#    :alt: Figure X: *Core-valence separation.* A much larger amount of energy is required to excite
+#    core electrons into valence orbitals compared to electrons already in low-lying valence orbitals.
+#    Since XAS targets core electrons, we can ignore valence-excitation matrix elements in our
+#    calculations.
+#    :width: 50.0%
 # 
 #    Figure X: *Core-valence separation.* A much larger amount of energy is required to excite core
 #    electrons into valence orbitals compared to electrons already in low-lying valence orbitals.
@@ -837,4 +849,56 @@ plt.show()
 # *Acknowledgements*: The author thanks Stepan Fomichev and Pablo A. M. Casares for providing the code
 # used in [#Fomichev2025]_, which was used as a basis for the simplified implementation demonstrated
 # here.
+# 
+
+######################################################################
+# References
+# ----------
+# 
+# .. [#Fomichev2025]
+# 
+#    Stepan Fomichev, Pablo A. M. Casares, Jay Soni, Utkarsh Azad, Alexander Kunitsa, Arne-Christian
+#    Voigt, Jonathan E. Mueller, Juan Miguel Arrazola, “Fast simulations of X-ray absorption spectroscopy
+#    for battery materials on a quantum computer”. `arXiv preprint arXiv:2506.15784
+#    (2025) <https://arxiv.org/abs/2506.15784>`__.
+# 
+# .. [#Fomichev2024]
+# 
+#    Stepan Fomichev, Kasra Hejazi, Ignacio Loaiza, Modjtaba Shokrian Zini, Alain Delgado, Arne-Christian
+#    Voigt, Jonathan E. Mueller, Juan Miguel Arrazola, “Simulating X-ray absorption spectroscopy of
+#    battery materials on a quantum computer”. `arXiv preprint arXiv:2405.11015
+#    (2024) <https://arxiv.org/abs/2405.11015>`__.
+# 
+# .. [#Loaiza2023]
+# 
+#    Ignacio Loaiza, Artur F Izmaylov, “Block-invariant symmetry shift: Preprocessing technique for
+#    second-quantized Hamiltonians to improve their decompositions to linear combination of unitaries”.
+#    `J Chem Theory Comput. 19, 22, 8201–8209 (2023) <https://doi.org/10.1021/acs.jctc.3c00912>`__.
+# 
+# .. [#Yen2021]
+# 
+#    Tzu-Ching Yen and Artur F. Izmaylov, “Cartan subalgebra approach to efficient measurements of
+#    quantum observables”, `PRX Quantum 2, 040320
+#    (2021) <https://doi.org/10.1103/PRXQuantum.2.040320>`__.
+# 
+# .. [#Cohn2021]
+# 
+#    Jeffrey Cohn, Mario Motta, and Robert M. Parrish, “Quantum filter diagonalization with compressed
+#    double-factorized Hamiltonians”. `PRX Quantum 2, 040352
+#    (2021) <https://doi.org/10.1103/PRXQuantum.2.040352>`__.
+# 
+# .. [#Childs2019]
+# 
+#    Andrew M. Childs, Aaron Ostrander, Yuan Su, “Faster quantum simulation by randomization”. `Quantum
+#    3, 182 (2019) <https://doi.org/10.22331/q-2019-09-02-182>`__.
+# 
+# .. [#Sherrill2005]
+# 
+#    C. David Sherrill, `“Permutational symmetries of one- and two-electron integrals”
+#    (2005) <https://vergil.chemistry.gatech.edu/static/content/permsymm.pdf>`__.
+# 
+
+######################################################################
+# About the author
+# ----------------
 # 

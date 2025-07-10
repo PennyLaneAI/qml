@@ -59,7 +59,7 @@
             "authors": "Tzu-Ching Yen and Artur F. Izmaylov",
             "year": "2021",
             "journal": "PRX Quantum",
-            "url": "https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.2.040320"
+            "url": "https://doi.org/10.1103/PRXQuantum.2.040320"
         },
         {
             "id": "Cohn2021",
@@ -68,7 +68,7 @@
             "authors": "Jeffrey Cohn, Mario Motta, and Robert M. Parrish",
             "year": "2021",
             "journal": "PRX Quantum",
-            "url": "https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.2.040352"
+            "url": "https://doi.org/10.1103/PRXQuantum.2.040352"
         },
         {
             "id": "Childs2019",
@@ -77,7 +77,7 @@
             "authors": "Andrew M. Childs, Aaron Ostrander, Yuan Su",
             "year": "2019",
             "journal": "Quantum",
-            "url": "https://quantum-journal.org/papers/q-2019-09-02-182/"
+            "url": "https://doi.org/10.22331/q-2019-09-02-182"
         },
         {
             "id": "Sherrill2005",
