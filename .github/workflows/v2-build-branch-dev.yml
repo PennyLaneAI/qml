@@ -16,6 +16,7 @@ jobs:
       dev: true
       save-artifact: true
       artifact-name: build-branch-dev
+      artifact-retention: 3
       keep-going: false
       quiet: false
       batch_size: 10
