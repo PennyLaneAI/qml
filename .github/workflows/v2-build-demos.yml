@@ -26,10 +26,15 @@ on:
         type: boolean
         default: true
       artifact-name:
-        description: Name of the artifact containing the built demos (defaults to demo-build-{ref})
+        description: Name of the artifact containing the built demos (defaults to demo-build-{ref}).
         required: false
         type: string
         default: ''
+      artifact-retention:
+        description: The number of days to persist the consolidated artifacts.
+        required: false
+        type: number
+        default: 1
       keep-going:
         description: Keep going if a demo fails to build.
         required: false
@@ -76,6 +81,11 @@ on:
         required: false
         type: string
         default: ''
+      artifact-retention:
+        description: The number of days to persist the consolidated artifacts.
+        required: false
+        type: number
+        default: 1
       keep-going:
         description: Keep going if a demo fails to build.
         required: false
@@ -87,8 +97,7 @@ on:
         type: boolean
         default: false
       batch_size:
-        description: |
-          Number of demos to build per job
+        description: Number of demos to build per job.
         type: number
         default: 10
 
@@ -208,7 +217,7 @@ jobs:
         with:
           name: ${{ needs.generate-build-variables.outputs.artifact-name }}
           path: _build/pack/*.zip
-          retention-days: 1
+          retention-days: ${{ inputs.artifact-retention }}
           overwrite: true
       
       - name: Delete partial artifacts
