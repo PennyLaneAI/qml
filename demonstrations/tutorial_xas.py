@@ -38,12 +38,13 @@ clusters.
 
 ######################################################################
 # .. figure:: ../_static/demonstration_assets/xas/fingerprinting.gif
-#    :alt: alt text
+#    :alt: Figure X: How simulation of X-ray absorption spectra can enable identification of
+#    oxidation states in candidate battery materials.
 # 
-# Figure X: *How simulation of X-ray absorption spectra can enable identification of oxidation states
-# in candidate battery materials.* Spectral fingerprinting can be used to identify constituent
-# structures of a material by decomposing experimental spectra into components calculated via
-# simulation on a quantum computer.
+#    Figure X: *How simulation of X-ray absorption spectra can enable identification of oxidation
+#    states in candidate battery materials.* Spectral fingerprinting can be used to identify
+#    constituent structures of a material by decomposing experimental spectra into components
+#    calculated via simulation on a quantum computer.
 # 
 # Simulating these spectra is a difficult task for classical computers – the highly correlated excited
 # states are difficult to compute classically, particularly for transition metals. However, the
@@ -82,11 +83,11 @@ clusters.
 
 ######################################################################
 # .. figure:: ../_static/demonstration_assets/xas/example_spectrum.png
-#    :alt: alt text
+#    :alt: Figure X: Example X-ray absorption spectrum.
 # 
-# Figure X: *Example X-ray absorption spectrum.* Illustration of how the peak positions
-# :math:`E_F - E_i`, widths :math:`\eta` and amplitudes
-# :math:`|\langle F | \hat m_\rho | I \rangle|^2` determine the spectrum.
+#    Figure X: *Example X-ray absorption spectrum.* Illustration of how the peak positions
+#    :math:`E_F - E_i`, widths :math:`\eta` and amplitudes
+#    :math:`|\langle F | \hat m_\rho | I \rangle|^2` determine the spectrum.
 # 
 # The goal is to implement a quantum algorithm that can calculate this spectrum. Howevever, instead of
 # computing the energy differences and state overlaps directly, we will be simulating the system in
@@ -140,10 +141,10 @@ clusters.
 
 ######################################################################
 # .. figure:: ../_static/demonstration_assets/xas/global_circuit.png
-#    :alt: alt text
+#    :alt: Figure X: Circuit for XAS simulation
 # 
-# Figure X: *Circuit for XAS simulation*. The algorithm is ultimately a Hadamard test circuit, and we
-# divide the steps of this into three components.
+#    Figure X: *Circuit for XAS simulation*. The algorithm is ultimately a Hadamard test circuit, and
+#    we divide the steps of this into three components.
 # 
 # To obtain the absorption cross section, we repeat the above measurement for a number of shots
 # :math:`N` for each time :math:`t_j` for :math:`j \in [0, j_\mathrm{max}]` to obtain the time-domain
@@ -361,10 +362,10 @@ def initial_circuit(wf):
 # Time Evolution
 # --------------
 # 
-# Next we will discuss how to prepare the electronic Hamiltonian for use in the time-evolution of the
+# Next we will discuss how to prepare the eletronic Hamiltonian for use in the time-evolution of the
 # Hadamard-test circuit that constitutes the main body of our simulation circuit.
 # 
-# Electronic Hamiltonian
+# Eletronic Hamiltonian
 # ~~~~~~~~~~~~~~~~~~~~~
 # 
 # Our electronic Hamiltonian is
@@ -449,10 +450,12 @@ Z0 = np.diag(eigenvals)
 
 ######################################################################
 # .. figure:: ../_static/demonstration_assets/xas/UZU_circuits.png
-#    :alt: alt text
+#    :alt: Figure X: One- and two-electron term implementations in time-evolution circuit (ignoring
+#    global phases).
+#    :width: 70.0%
 # 
-# Figure X: One- and two-electron term implementations in time-evolution circuit (ignoring global
-# phases).
+#    Figure X: One- and two-electron term implementations in time-evolution circuit (ignoring global
+#    phases).
 # 
 # We can use ``qml.BasisRotation`` to generate a Givens decomposition for the single-body basis
 # rotation determined by :math:`U^{(\ell)}`.
@@ -472,10 +475,11 @@ def U_rotations(U, control_wires):
 
 ######################################################################
 # .. figure:: ../_static/demonstration_assets/xas/double_phase_trick.png
-#    :alt: alt text
+#    :alt: Figure X: Double-phase trick to decompose expensive controlled-Z rotations into an
+#    uncontrolled-Z rotation sandwiched by CNOT gates.
 # 
-# Figure X: Double-phase trick to decompose expensive controlled-Z rotations into an uncontrolled-Z
-# rotation sandwiched by CNOT gates.
+#    Figure X: Double-phase trick to decompose expensive controlled-Z rotations into an uncontrolled-Z
+#    rotation sandwiched by CNOT gates.
 # 
 # **Expand on the double-phase trick more, something about double the Trotter step size?**
 # 
@@ -597,11 +601,11 @@ def meas_circuit(state):
 
 ######################################################################
 # .. figure:: ../_static/demonstration_assets/xas/hadamard_test_circuit.png
-#    :alt: alt text
+#    :alt: Figure X: Hadamard test circuit to measure expectation value of time-evolution operator.
 # 
-# Figure X: *Hadamard test circuit to measure expectation value of time-evolution operator*. With the
-# phase gate :math:`S^\dagger` present (absent), this gives the real (imaginary) part of the
-# time-domain Green’s function :math:`\tilde G(\tau j)`.
+#    Figure X: *Hadamard test circuit to measure expectation value of time-evolution operator*. With
+#    the phase gate :math:`S^\dagger` present (absent), this gives the real (imaginary) part of the
+#    time-domain Green’s function :math:`\tilde G(\tau j)`.
 # 
 # However, in this real implementation, we can use a trick to obtain some information after the
 # Hadamard test, see later.
@@ -767,8 +771,6 @@ ax.legend()
 fig.text(0.5, 0.05, r"Figure X: $N_2$ XAS spectrum calculation.",
         horizontalalignment="center", size="small", weight="normal")
 
-fig.savefig('test_fig.pdf')
-
 plt.show()
 
 ######################################################################
@@ -793,11 +795,12 @@ plt.show()
 
 ######################################################################
 # .. figure:: ../_static/demonstration_assets/xas/core_valence.png
-#    :alt: alt text
+#    :alt: Figure X: Core-valence separation.
 # 
-# Figure X: *Core-valence separation.* A much larger amount of energy is required to excite core
-# electrons into valence orbitals compared to electrons already in low-lying valence orbitals. Since
-# XAS targets core electrons, we can ignore valence-excitation matrix elements in our calculations.
+#    Figure X: *Core-valence separation.* A much larger amount of energy is required to excite core
+#    electrons into valence orbitals compared to electrons already in low-lying valence orbitals.
+#    Since XAS targets core electrons, we can ignore valence-excitation matrix elements in our
+#    calculations.
 # 
 
 ######################################################################
