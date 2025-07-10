@@ -2,6 +2,7 @@ name: V2 Build Demos for SWC Environment
 
 on:
   push:
+    # TODO: Remove 'test-v2-master' and 'test-v2-dev' for release
     branches:
       - master
       - test-v2-master
