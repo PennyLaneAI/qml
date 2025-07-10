@@ -80,3 +80,34 @@ jobs:
           name: deployment_build_context
           path: /tmp/merge
           retention-days: 30
+
+  # Step 4: Build and upload the updated objects.inv file
+  build-objects-inv-file:
+    if: (needs.identify-changed-demos.outputs.updated != '') && ${{ github.ref_name == 'master' }}
+    runs-on: ubuntu-latest
+    needs:
+      - identify-changed-demos
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+
+      - name: Install pandoc and opencl
+        run: |
+          sudo apt-get install -y \
+            ocl-icd-opencl-dev \
+            pandoc 
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: pip install . && poetry config warnings.export false
+
+      - name: Build all demos in HTML format
+        run: |
+          qml build --format html --keep-going --no-quiet --no-dev
