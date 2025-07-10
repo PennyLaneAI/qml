@@ -80,12 +80,13 @@ jobs:
       github.event.workflow_run.event == 'pull_request' && 
       needs.prepare-build-context.result == 'success' &&
       needs.prepare-build-context.outputs.pr_ref != '' &&
+      needs.prepare-build-context.outputs.pr_id != '' &&
       needs.prepare-build-context.outputs.updated_demos != '[]'
     uses: ./.github/workflows/v2-deploy-demos.yml
     needs: prepare-build-context
     with:
       # TODO: Update SWC environment to "swc-prod"
-      environment: 'swc-dev' 
+      environment: 'swc-staging'
       artifact-name: demo-build-${{ needs.prepare-build-context.outputs.pr_ref }}
       workflow-run-id: ${{ github.event.workflow_run.id }}
       pr_number: ${{ fromJson(needs.prepare-build-context.outputs.pr_id) }}
