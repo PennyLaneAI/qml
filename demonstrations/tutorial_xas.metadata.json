@@ -26,7 +26,7 @@
     "doi": "",
     "references": [
         {
-            "id": "Fomichev:2025",
+            "id": "Fomichev2025",
             "type": "article",
             "title": "Fast simulations of X-ray absorption spectroscopy for battery materials on a quantum computer",
             "authors": "Stepan Fomichev, Pablo A. M. Casares, Jay Soni, Utkarsh Azad, Alexander Kunitsa, Arne-Christian Voigt, Jonathan E. Mueller, Juan Miguel Arrazola",
@@ -35,7 +35,7 @@
             "url": "https://arxiv.org/abs/2506.15784"
         },
         {
-            "id": "Fomichev:2024",
+            "id": "Fomichev2024",
             "type": "article",
             "title": "Simulating X-ray absorption spectroscopy of battery materials on a quantum computer",
             "authors": "Stepan Fomichev, Kasra Hejazi, Ignacio Loaiza, Modjtaba Shokrian Zini, Alain Delgado, Arne-Christian Voigt, Jonathan E. Mueller, Juan Miguel Arrazola",
@@ -44,13 +44,49 @@
             "url": "https://arxiv.org/abs/2405.11015"
         },
         {
-            "id": "Childs:2019",
+            "id": "Loaiza2023",
+            "type": "article",
+            "title": "Block-invariant symmetry shift: Preprocessing technique for second-quantized Hamiltonians to improve their decompositions to linear combination of unitaries",
+            "authors": "Ignacio Loaiza, Artur F Izmaylov",
+            "year": "2023",
+            "publisher": "J Chem Theory Comput.",
+            "url": "https://pubs.acs.org/doi/10.1021/acs.jctc.3c00912"
+        },
+        {
+            "id": "Yen2021",
+            "type": "article",
+            "title": "Cartan subalgebra approach to efficient measurements of quantum observables",
+            "authors": "Tzu-Ching Yen and Artur F. Izmaylov",
+            "year": "2021",
+            "publisher": "PRX Quantum",
+            "url": "https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.2.040320"
+        },
+        {
+            "id": "Cohn2021",
+            "type": "article",
+            "title": "Quantum filter diagonalization with compressed double-factorized Hamiltonians",
+            "authors": "Jeffrey Cohn, Mario Motta, and Robert M. Parrish",
+            "year": "2021",
+            "publisher": "PRX Quantum",
+            "url": "https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.2.040352"
+        },
+        {
+            "id": "Childs2019",
             "type": "article",
             "title": "Faster quantum simulation by randomization",
             "authors": "Andrew M. Childs, Aaron Ostrander, Yuan Su",
             "year": "2019",
             "publisher": "Quantum",
             "url": "https://quantum-journal.org/papers/q-2019-09-02-182/"
+        },
+        {
+            "id": "Sherrill2005",
+            "type": "article",
+            "title": "Permutational symmetries of one- and two-electron integrals",
+            "authors": "C. David Sherrill",
+            "year": "2005",
+            "publisher": "",
+            "url": "https://vergil.chemistry.gatech.edu/static/content/permsymm.pdf"
         }
     ],
     "basedOnPapers": [
