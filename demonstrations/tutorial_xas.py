@@ -7,7 +7,7 @@ potential answer to this question is simulating X-ray absorption spectroscopy, w
 workflows to identify structural degradation mechanisms in material candidates for battery designs
 🔋. This demo will show you how to implement an optimized version of a simulation algorithm
 developed in the paper “Fast simulations of X-ray absorption spectroscopy for battery materials on a
-quantum computer” [#Fomichev2025]\_ in PennyLane.
+quantum computer” [#Fomichev2025]_ in PennyLane.
 
 First, we will discuss why simulating X-ray absorption spectroscopy is a promising application for
 early quantum computers. Then we will explain the main steps in the simulation algorithm, and how to
@@ -24,13 +24,13 @@ If you haven’t checked out those demos yet, it might be best to do so and then
 Why simulate X-ray absorption spectroscopy?
 -------------------------------------------
 
-Lithium-excess materials are transition metal oxides that have been engineered to accomodate extra
+Lithium-excess materials are transition metal oxides that have been engineered to accommodate extra
 Lithium atoms in their structural composition, designed as a candidate for use in battery cathodes.
 However, repeated charge-discharge cycles can alter the structure and reduce performance. One can
 study these degraded materials using X-ray absorption spectroscopy, which directly probes local
 structure by exciting tightly bound core electrons. This can be used to identify oxidation states in
 materials, because different elements and their oxidation states will absorb photons of different
-energies. However, this requires reference spectra for each expected degredation outcome in order to
+energies. However, this requires reference spectra for each expected degradation outcome in order to
 determine the composition of structures present in the material. We call this “spectral
 fingerprinting”, where the observed spectrum can be matched to combinations of spectra from small
 clusters. A fast method of simulating reference spectra for use in fingerprinting would be a crucial
@@ -90,7 +90,7 @@ component of a workflow for identifying promising cathode materials.
 # :math:`E_F - E_i`, widths :math:`\eta` and amplitudes
 # :math:`|\langle F | \hat m_\rho | I \rangle|^2` determine the spectrum.
 # 
-# The goal is to implement a quantum algorithm that can calculate this spectrum. Howevever, instead of
+# The goal is to implement a quantum algorithm that can calculate this spectrum. However, instead of
 # computing the energy differences and state overlaps directly, we will be simulating the system in
 # the time domain, and then using a Fourier transform to obtain the frequency spectrum.
 # 
@@ -113,7 +113,7 @@ component of a workflow for identifying promising cathode materials.
 # zero if we centre the frame of reference for our molecular orbitals at the nuclear-charge weighted
 # centre for our molecular cluster of choice.
 # 
-# There are methods for determining this frequency-domain Green’s function directly [#Fomichev2024]\_,
+# There are methods for determining this frequency-domain Green’s function directly [#Fomichev2024]_,
 # however, our algorithm will aim to estimate the discrete-time *time-domain Green’s function*
 # :math:`\tilde G(t_j)` at times :math:`t_j=j\tau` where :math:`j` is the index and :math:`\tau` is
 # the time interval. :math:`G_\rho(\omega)` can then be calculated classically through the time-domain
@@ -136,7 +136,7 @@ component of a workflow for identifying promising cathode materials.
 # 
 # The circuit we will construct to determine the expectation values is shown below. It has three main
 # components: *state prep*, the state :math:`\hat m_\rho |I\rangle` is prepared in the quantum
-# register, and an auxilliary qubit is prepared for controlled time evolution; *time evolution*, the
+# register, and an auxiliary qubit is prepared for controlled time evolution; *time evolution*, the
 # state is evolved under the electronic Hamiltonian; *measurement*, the time-evolved state is measured
 # to obtain statistics for the expectation value.
 # 
@@ -163,7 +163,7 @@ component of a workflow for identifying promising cathode materials.
 # -----------------
 # 
 # For this demo, we are going to use the simple :math:`N_2` molecule. We will implement some, but not
-# all of the optimizations detailed in [#Fomichev2025]\_. The other optimizations will be discussed at
+# all of the optimizations detailed in [#Fomichev2025]_. The other optimizations will be discussed at
 # the end.
 # 
 # Ground state calculation
@@ -359,11 +359,11 @@ def initial_circuit(wf):
 # Time Evolution
 # --------------
 # 
-# Next we will discuss how to prepare the eletronic Hamiltonian for use in the time-evolution of the
+# Next we will discuss how to prepare the electronic Hamiltonian for use in the time-evolution of the
 # Hadamard-test circuit that constitutes the main body of our simulation circuit.
 # 
-# Eletronic Hamiltonian
-# ~~~~~~~~~~~~~~~~~~~~~
+# Electronic Hamiltonian
+# ~~~~~~~~~~~~~~~~~~~~~~
 # 
 # Our electronic Hamiltonian is
 # 
@@ -372,7 +372,7 @@ def initial_circuit(wf):
 # where :math:`a^{(\dagger)}_{p\gamma}` is the annihilation (creation) operator for a molecular
 # orbital :math:`p` and spin :math:`\gamma`, :math:`E` is the core constant, :math:`N` is the number
 # of spatial orbitals, and :math:`(p|\kappa|q)` and :math:`(pq|rs)` are the one- and two-electron
-# integrals, respectively [#Cohn2021]\_.
+# integrals, respectively [#Cohn2021]_.
 # 
 # The core constant and the one- and two-electron integrals can be computed in PennyLane using
 # functions from ``qml.qchem.hartree_fock``.
@@ -383,7 +383,7 @@ core_constant, one, two = qml.qchem.electron_integrals(mole, core=core, active=a
 core_constant = core_constant[0]
 
 ######################################################################
-# We will have to convert these to chemist’s notation [#Sherrill2005]\_.
+# We will have to convert these to chemist’s notation [#Sherrill2005]_.
 # 
 
 # To chemist notation.
@@ -394,7 +394,7 @@ one_chemist = one - np.einsum('pqrr->pq', two)/2.
 # If you haven’t yet, go read the demo `“How to build compressed double-factorized
 # Hamiltonians” <https://pennylane.ai/qml/demos/tutorial_how_to_build_compressed_double_factorized_hamiltonians>`__,
 # because that is exactly what we are going to do! A compressed double-factorized Hamiltonian takes on
-# the form [#Cohn2021]\_ [#Yen2021]\_
+# the form [#Cohn2021]_ [#Yen2021]_
 # 
 # .. math::  H_\mathrm{CDF} = E + \sum_{\gamma\in\{\uparrow,\downarrow\}} U_\gamma^{(0)} \left(\sum_p Z_p^{(0)} a_{\gamma,p}^\dagger a_{\gamma, p}\right) U_\mathrm{\gamma}^{(0)\,\dagger} + \sum_\ell^L \sum_{\gamma,\beta\in\{\uparrow,\downarrow\}} U_\mathrm{\gamma, \beta}^{(\ell)} \left( \sum_{pq} Z_{pq}^{(\ell)} a_{\gamma, p}^\dagger a_{\gamma, p} a_{\beta,q}^\dagger a_{\beta, q}\right) U_{\gamma, \beta}^{(\ell)\,\dagger} \,, 
 # 
@@ -419,7 +419,7 @@ print("two_chemist", two_chemist.shape)
 print("U", U.shape)
 print("Z", Z.shape)
 
-# Compare factorized two-electron term to original.
+# Compare factorized two-electron terms to the originals.
 approx_two_chemist = qml.math.einsum("tpk,tqk,tkl,trl,tsl->pqrs", U, U, Z, U, U)
 
 ######################################################################
@@ -446,7 +446,7 @@ Z0 = np.diag(eigenvals)
 # Let’s start by writing functions that implement the time evolution for each Hamiltonian term, which
 # will be called by our trotter circuit. One thing to track throughout this implementation is the
 # global phase accrued throughout the time evolution. For a derivation of the global phase for the
-# two-electron terms, see Appendix A in [#Fomichev2025]\_.
+# two-electron terms, see Appendix A in [#Fomichev2025]_.
 # 
 # The trick when implementing a double-factorized Hamiltonian is to use Thouless’s theorem to apply
 # the single-particle basis rotations :math:`U^{(\ell)}`, and then the Jordan-Wigner transform to
@@ -521,7 +521,7 @@ def Z_rotations(Z, step, is_one_electron_term, control_wires):
 
 ######################################################################
 # Let’s define our Trotter step. The function will implement :math:`U` rotations and :math:`Z`
-# rotations. By tracking the last :math:`U` rotation used, we can implement two consequtive rotations
+# rotations. By tracking the last :math:`U` rotation used, we can implement two consecutive rotations
 # at once as :math:`V^{(\ell)} = U^{(\ell-1)}(U^{(\ell)})^T`, halving the number of rotations required
 # per Trotter step.
 # 
@@ -574,7 +574,7 @@ def trotter_circuit(dev, state, step):
         qml.StatePrep(state, wires=qubits)
 
         # Main body of the circuit.
-        prior_U = np.eye(ncas)  # No inital prior U, so set as identity matrix.
+        prior_U = np.eye(ncas)  # No initial prior U, so set as identity matrix.
         prior_U = LieTrotter(step / 2, prior_U=prior_U, final_rotation=False, reverse=False)
         prior_U = LieTrotter(step / 2, prior_U=prior_U, final_rotation=True, reverse=True)
 
@@ -618,11 +618,11 @@ def meas_circuit(state):
 # Run Simulation
 # --------------
 # 
-# Let’s define the simulation parameters were are going to use. This includes: - The Lorentzian width
+# Let’s define the simulation parameters we’re are going to use. This includes: - The Lorentzian width
 # :math:`\eta` of the spectrum peaks, representing the experimental resolution. - The time step
 # :math:`tau`, which should be small enough to resolve the largest frequency components we want to
 # determine. - The maximum number of time steps :math:`j_\mathrm{max}`, which sets the largest
-# evolution time. This should be large enough so that we can distinguish between the small freqeuncy
+# evolution time. This should be large enough so that we can distinguish between the small frequency
 # components in our spectrum. - The total number of shots we will use to obtain statistics for the
 # expectation value after the time evolution.
 # 
@@ -640,7 +640,7 @@ time_interval = tau * jrange
 # Minimizing the number of shots we require to obtain the necessary expectation value statistics will
 # improve the efficiency of our algorithm. One way to do this is to employ a sampling distribution
 # that takes advantage of the decaying Lorentzian kernel, exponentially reducing the shot allocation
-# for longer evolution times [#Fomichev2025]\_. This is implemented below by creating ``shots_list``,
+# for longer evolution times [#Fomichev2025]_. This is implemented below by creating ``shots_list``,
 # which distributes the ``total_shots`` among the time steps, weighted by the Lorentzian kernel. The
 # parameter :math:`\alpha` can adjust this weighting, s.t. for :math:`\alpha > 1` there is more weight
 # at shorter times.
@@ -781,19 +781,19 @@ plt.show()
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # For larger molecular instances, it may be valuable to restrict the terms coupled by the dipole
-# operator to only includes those of relevance for XAS. We can restrict the range of frequencies, and
+# operator to only include those of relevance for XAS. We can restrict the range of frequencies, and
 # consequently the range of final states in our calculation, by only considering final states for
 # which *core* electrons are excited, i.e. there exists a hole in the core orbitals. These are known
-# as core-excited states, and lie significally above the valance-excited states in energy. Typically
+# as core-excited states, and lie significantly above the valence-excited states in energy. Typically
 # the frequency range is focused on a target atom in a molecular cluster, and also near a transition
-# energy, such as targetting core :math:`1s` electrons. We will also neglect relativistic corrections,
+# energy, such as targeting core :math:`1s` electrons. We will also neglect relativistic corrections,
 # and focus on frequencies for which the dipole approximation is valid, which is the assumption that
 # the wavelength of the radiation is large compared to the extent of the electronic wavefunction.
 # 
 # Atomic species and oxidations states will determine the energy difference between states with
 # different principle quantum numbers, and this difference will show as a peak in spectroscopy, known
-# as the *absorption edge*. Focusing spctroscopy near this edge for :math:`1s` to :math:`2p` is called
-# the :math:`K`-edge, and in general X-ray absorption near-edge spectroscopy is known as XANES.
+# as the *absorption edge*. Focusing spectroscopy near this edge for :math:`1s` to :math:`2p` is
+# called the :math:`K`-edge, and in general X-ray absorption near-edge spectroscopy is known as XANES.
 # 
 
 ######################################################################
@@ -810,17 +810,17 @@ plt.show()
 # Further Optimizations
 # ~~~~~~~~~~~~~~~~~~~~~
 # 
-# There are more optimizations for this algorithm introduced in the paper [#Fomichev2025]\_ that are
-# not implimented in the above code. One could further optimize the compressed double-factorized
-# Hamiltonian by applying a block-invarient symmetry shift (BLISS) [#Loaiza2023]\_ to the Hamiltonian
+# There are more optimizations for this algorithm introduced in the paper [#Fomichev2025]_ that are
+# not implemented in the above code. One could further optimize the compressed double-factorized
+# Hamiltonian by applying a block-invarient symmetry shift (BLISS) [#Loaiza2023]_ to the Hamiltonian
 # prior to compression. This is already detailed in the `demo on CDF
 # Hamiltonians <https://pennylane.ai/qml/demos/tutorial_how_to_build_compressed_double_factorized_hamiltonians>`__.
 # 
 # Another optimization is to use a randomized second-order Trotter formula for the time evolution. As
-# discussed in Ref. [#Childs2019]\_, deterministic product formulas have error that scales with the
-# communtators of the Hamiltonian terms. One could instead use all permutations of the Hamiltonian
+# discussed in Ref. [#Childs2019]_, deterministic product formulas have error that scales with the
+# commutators of the Hamiltonian terms. One could instead use all permutations of the Hamiltonian
 # terms, such that the commutator errors cancel. However, the average of all permutations is not
-# unitary in general. To circumvent this, one can randomly chooses a Hamiltonian term ordering, which
+# unitary in general. To circumvent this, one can randomly choose a Hamiltonian term ordering, which
 # can give a good approximation to the desired evolution.
 # 
 # More efficient methods of simulating XAS may be discovered in the near future, making this
@@ -832,13 +832,13 @@ plt.show()
 # ----------
 # 
 # In this tutorial, we have implemented a simplified version of the algorithm as presented in
-# [#Fomichev2025]\_. The algorithm represents a culmination of many optimizations for time-evolving an
+# [#Fomichev2025]_. The algorithm represents a culmination of many optimizations for time-evolving an
 # electronic Hamiltonian. We’ve also discussed how XAS is a promising candidate for early
 # fault-tolerant quantum computers due to its low qubit overhead but high amount of correlations in
 # the state space.
 # 
 # *Acknowledgements*: The author thanks Stepan Fomichev and Pablo A. M. Casares for providing the code
-# used in [#Fomichev2025]\_, which was used as a basis for the simplified implementation demonstrated
+# used in [#Fomichev2025]_, which was used as a basis for the simplified implementation demonstrated
 # here.
 # 
 
