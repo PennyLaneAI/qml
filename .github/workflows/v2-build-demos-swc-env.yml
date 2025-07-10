@@ -83,7 +83,15 @@ jobs:
 
   # Step 4: Build and upload the updated objects.inv file
   build-objects-inv-file:
-    if: (needs.identify-changed-demos.outputs.updated != '') && ${{ github.ref_name == 'master' }}
+    env:
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      # TODO: Change STAGING to PROD for the following secrets for release:
+      AWS_ACCESS_KEY_ID: ${{ secrets.PL_SITE_STAGING_NON_REACT_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.PL_SITE_STAGING_NON_REACT_SECRET_ACCESS_KEY }}
+      AWS_S3_HTML_BUCKET_ID: ${{ secrets.PL_SITE_STAGING_S3_BUCKET_NAME }}
+
+    # TODO: Change ref_name to 'master' for release
+    if: (needs.identify-changed-demos.outputs.updated != '') && ${{ github.ref_name == 'test-v2-master' }}
     runs-on: ubuntu-latest
     needs:
       - identify-changed-demos
@@ -111,3 +119,6 @@ jobs:
       - name: Build all demos in HTML format
         run: |
           qml build --format html --keep-going --no-quiet --no-dev
+
+      - name: Sync objects.inv to HTML Bucket
+        run: aws s3 cp ./_build/objects.inv s3://$AWS_S3_HTML_BUCKET_ID/qml/objects.inv
