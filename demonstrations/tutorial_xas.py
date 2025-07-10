@@ -188,6 +188,10 @@ clusters.
 
 from pyscf import gto, scf
 import numpy as np
+import random
+
+random.seed(42)
+np.random.seed(42)
 
 # Create a Mole object.
 r = 1.0  # Bond length in Angstrom.
@@ -202,9 +206,9 @@ hf = scf.RHF(mol)
 
 # This is essential -- prevents the PySCF 
 # flip-flopping from multithreading.
-def round_eig(f):
-    return lambda h, s: f(h.round(12), s)
-hf.eig = round_eig(hf.eig)
+# def round_eig(f):
+#     return lambda h, s: f(h.round(12), s)
+# hf.eig = round_eig(hf.eig)
 
 hf.run(verbose=0)
 
@@ -232,6 +236,8 @@ print("Shifted nuclear charge centre", nuc_charge_center)
 # 
 
 import pennylane as qml
+
+qml.numpy.random.seed(42)
 
 # Create qml Molecule object.
 mole = qml.qchem.Molecule(symbols, geometry, basis_name='sto-3g', unit='angstrom')
@@ -836,6 +842,12 @@ plt.show()
 # application even more viable as a use for early fault-tolerant quantum computers.
 # 
 
+import pyscf
+import pennylane
+
+print(pennylane.__version__)
+print(pyscf.__version__)
+
 ######################################################################
 # Conclusion
 # ----------
@@ -857,45 +869,45 @@ plt.show()
 # 
 # .. [#Fomichev2025]
 # 
-#    Stepan Fomichev, Pablo A. M. Casares, Jay Soni, Utkarsh Azad, Alexander Kunitsa, Arne-Christian
-#    Voigt, Jonathan E. Mueller, Juan Miguel Arrazola, “Fast simulations of X-ray absorption spectroscopy
-#    for battery materials on a quantum computer”. `arXiv preprint arXiv:2506.15784
-#    (2025) <https://arxiv.org/abs/2506.15784>`__.
+# Stepan Fomichev, Pablo A. M. Casares, Jay Soni, Utkarsh Azad, Alexander Kunitsa, Arne-Christian
+# Voigt, Jonathan E. Mueller, Juan Miguel Arrazola, “Fast simulations of X-ray absorption spectroscopy
+# for battery materials on a quantum computer”. `arXiv preprint arXiv:2506.15784
+# (2025) <https://arxiv.org/abs/2506.15784>`__.
 # 
 # .. [#Fomichev2024]
 # 
-#    Stepan Fomichev, Kasra Hejazi, Ignacio Loaiza, Modjtaba Shokrian Zini, Alain Delgado, Arne-Christian
-#    Voigt, Jonathan E. Mueller, Juan Miguel Arrazola, “Simulating X-ray absorption spectroscopy of
-#    battery materials on a quantum computer”. `arXiv preprint arXiv:2405.11015
-#    (2024) <https://arxiv.org/abs/2405.11015>`__.
+# Stepan Fomichev, Kasra Hejazi, Ignacio Loaiza, Modjtaba Shokrian Zini, Alain Delgado, Arne-Christian
+# Voigt, Jonathan E. Mueller, Juan Miguel Arrazola, “Simulating X-ray absorption spectroscopy of
+# battery materials on a quantum computer”. `arXiv preprint arXiv:2405.11015
+# (2024) <https://arxiv.org/abs/2405.11015>`__.
 # 
 # .. [#Loaiza2023]
 # 
-#    Ignacio Loaiza, Artur F Izmaylov, “Block-invariant symmetry shift: Preprocessing technique for
-#    second-quantized Hamiltonians to improve their decompositions to linear combination of unitaries”.
-#    `J Chem Theory Comput. 19, 22, 8201–8209 (2023) <https://doi.org/10.1021/acs.jctc.3c00912>`__.
+# Ignacio Loaiza, Artur F Izmaylov, “Block-invariant symmetry shift: Preprocessing technique for
+# second-quantized Hamiltonians to improve their decompositions to linear combination of unitaries”.
+# `J Chem Theory Comput. 19, 22, 8201–8209 (2023) <https://doi.org/10.1021/acs.jctc.3c00912>`__.
 # 
 # .. [#Yen2021]
 # 
-#    Tzu-Ching Yen and Artur F. Izmaylov, “Cartan subalgebra approach to efficient measurements of
-#    quantum observables”, `PRX Quantum 2, 040320
-#    (2021) <https://doi.org/10.1103/PRXQuantum.2.040320>`__.
+# Tzu-Ching Yen and Artur F. Izmaylov, “Cartan subalgebra approach to efficient measurements of
+# quantum observables”, `PRX Quantum 2, 040320
+# (2021) <https://doi.org/10.1103/PRXQuantum.2.040320>`__.
 # 
 # .. [#Cohn2021]
 # 
-#    Jeffrey Cohn, Mario Motta, and Robert M. Parrish, “Quantum filter diagonalization with compressed
-#    double-factorized Hamiltonians”. `PRX Quantum 2, 040352
-#    (2021) <https://doi.org/10.1103/PRXQuantum.2.040352>`__.
+# Jeffrey Cohn, Mario Motta, and Robert M. Parrish, “Quantum filter diagonalization with compressed
+# double-factorized Hamiltonians”. `PRX Quantum 2, 040352
+# (2021) <https://doi.org/10.1103/PRXQuantum.2.040352>`__.
 # 
 # .. [#Childs2019]
 # 
-#    Andrew M. Childs, Aaron Ostrander, Yuan Su, “Faster quantum simulation by randomization”. `Quantum
-#    3, 182 (2019) <https://doi.org/10.22331/q-2019-09-02-182>`__.
+# Andrew M. Childs, Aaron Ostrander, Yuan Su, “Faster quantum simulation by randomization”. `Quantum
+# 3, 182 (2019) <https://doi.org/10.22331/q-2019-09-02-182>`__.
 # 
 # .. [#Sherrill2005]
 # 
-#    C. David Sherrill, `“Permutational symmetries of one- and two-electron integrals”
-#    (2005) <https://vergil.chemistry.gatech.edu/static/content/permsymm.pdf>`__.
+# C. David Sherrill, `“Permutational symmetries of one- and two-electron integrals”
+# (2005) <https://vergil.chemistry.gatech.edu/static/content/permsymm.pdf>`__.
 # 
 
 ######################################################################
