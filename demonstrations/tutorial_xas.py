@@ -767,6 +767,8 @@ ax.legend()
 fig.text(0.5, 0.05, r"Figure X: $N_2$ XAS spectrum calculation.",
         horizontalalignment="center", size="small", weight="normal")
 
+fig.savefig('test_fig.pdf')
+
 plt.show()
 
 ######################################################################
