@@ -186,7 +186,7 @@ print(qml.draw(ancilla_assisted_syndrome_extraction, show_all_wires=True)(syndro
 # any single-qubit error. Traditionally, the error correcting ability of a code is referred as the
 # distance or :math:`d` and the number of errors a code can correct is
 # :math:`\lfloor (d-1)/2 \rfloor`. Since the Steane code can correct a single error, it is said
-# to have distance :math:`3`. The Steane code uses six stabilizer generators:
+# to have distance :math:`3`. This code uses six stabilizer generators:
 #
 # .. math::
 #
