@@ -3,11 +3,12 @@ r"""X-ray absorption spectroscopy simulation in the time domain
 
 What will be the first quantum algorithm that is industrially useful to run on a fault-tolerant
 quantum computer? This open question is one of the main focuses of the research team at Xanadu. A
-potential answer to this question is simulating X-ray absorption spectroscopy, which can be used in
+potential answer to this question is simulating `X-ray absorption
+spectroscopy <https://en.wikipedia.org/wiki/X-ray_absorption_spectroscopy>`__, which can be used in
 workflows to identify structural degradation mechanisms in material candidates for battery designs
 🔋. This demo will show you how to implement an optimized version of a simulation algorithm
-developed in the paper “Fast simulations of X-ray absorption spectroscopy for battery materials on a
-quantum computer” [#Fomichev2025]_ in PennyLane.
+developed in the paper `“Fast simulations of X-ray absorption spectroscopy for battery materials on
+a quantum computer” <https://arxiv.org/abs/2506.15784>`__ [#Fomichev2025]_ in PennyLane.
 
 First, we will discuss why simulating X-ray absorption spectroscopy is a promising application for
 early quantum computers. Then we will explain the main steps in the simulation algorithm, and how to
@@ -58,8 +59,9 @@ component of a workflow for identifying promising cathode materials.
 # ---------
 # 
 # Simulating reference spectra requires calculating the observable of the experiment, which in this
-# case is the *absorption cross-section*. We will describe this quantity below, and then explain how a
-# *time-domain* simulation algorithm can estimate it.
+# case is the `absorption cross section <https://en.wikipedia.org/wiki/Absorption_cross_section>`__.
+# We will describe this quantity below, and then explain how a *time-domain* simulation algorithm can
+# estimate it.
 # 
 # Absorption cross-section
 # ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -94,7 +96,8 @@ component of a workflow for identifying promising cathode materials.
 # 
 # The goal is to implement a quantum algorithm that can calculate this spectrum. However, instead of
 # computing the energy differences and state overlaps directly, we will be simulating the system in
-# the time domain, and then using a Fourier transform to obtain the frequency spectrum.
+# the time domain, and then using a `Fourier
+# transform <https://en.wikipedia.org/wiki/Fourier_transform>`__ to obtain the frequency spectrum.
 # 
 
 ######################################################################
@@ -103,9 +106,10 @@ component of a workflow for identifying promising cathode materials.
 # 
 # Both the initial state :math:`|I\rangle` and the dipole operator acting on the initial state
 # :math:`\hat m_\rho|I\rangle` can be determined classically, and we’ll demonstate how to do that
-# later. Given the initial state, we will use a mathematical trick called a *frequency-domain Green’s
-# function* to determine the absorption cross section. We can write the cross section as the imaginary
-# part of the following Green’s function
+# later. Given the initial state, we will use a mathematical trick called a *frequency-domain*
+# `Green’s function <https://en.wikipedia.org/wiki/Green%27s_function>`__ to determine the absorption
+# cross section. We can write the cross section as the imaginary part of the following Green’s
+# function
 # 
 # .. math:: \mathcal{G}_\rho(\omega) = \langle I|\hat m_\rho \frac{1}{\hat H -E_I -\omega +i\eta} \hat m_\rho |I\rangle\,.
 # 
@@ -122,7 +126,7 @@ component of a workflow for identifying promising cathode materials.
 # .. math::  G_\rho(\omega) = \eta \frac{\mathcal{G}_\rho(\omega)}{||\hat m_\rho | I \rangle ||^2} \,. 
 # 
 # There are methods for determining this frequency-domain Green’s function directly [#Fomichev2024]_,
-# however, our algorithm will aim to estimate the discrete-time *time-domain Green’s function*
+# however, our algorithm will aim to estimate the discrete-time *time-domain* Green’s function
 # :math:`\tilde G(t_j)` at times :math:`t_j` where :math:`j` is the time-step index.
 # :math:`G_\rho(\omega)` can then be calculated classically through the time-domain Fourier transform
 # 
@@ -138,10 +142,11 @@ component of a workflow for identifying promising cathode materials.
 # 
 # .. math::  \tilde G_\rho(t_j) = \frac{\langle I|\hat m _\rho e^{- i\hat H t_j} \hat m_\rho |I\rangle}{|| \hat m_\rho |I\rangle ||^2}\,, 
 # 
-# and this is something that can be easily done on a quantum computer! We can use a Hadamard test on
-# the time evolution unitary to measure the expectation value for each time :math:`t_j`. We will
-# repeat this test a number of times :math:`N` and take the mean of the results to get an estimate for
-# :math:`G_\rho(t_j)`, which we can Fourier transform to get the spectrum.
+# and this is something that can be easily done on a quantum computer! We can use a `Hadamard
+# test <https://en.wikipedia.org/wiki/Hadamard_test>`__ on the time evolution unitary to measure the
+# expectation value for each time :math:`t_j`. We will repeat this test a number of times :math:`N`
+# and take the mean of the results to get an estimate for :math:`G_\rho(t_j)`, which we can Fourier
+# transform to get the spectrum.
 # 
 # The circuit we will construct to determine the expectation values is shown below. It has three main
 # components: *state prep*, the state :math:`\hat m_\rho |I\rangle` is prepared in the quantum
@@ -158,9 +163,9 @@ component of a workflow for identifying promising cathode materials.
 # divide the steps of this into three components.
 # 
 # Let’s look at how to implement these steps in PennyLane. We will make extensive use of the
-# ``qml.qchem`` module, as well as modules from PySCF. For this demo, we are going to use the simple
-# :math:`H_2` molecule. We will implement some, but not all of the optimizations detailed in
-# [#Fomichev2025]_. The other optimizations will be discussed at the end.
+# ``qml.qchem`` module, as well as modules from `PySCF <https://pyscf.org/>`__. For this demo, we are
+# going to use the simple :math:`H_2` molecule. We will implement some, but not all of the
+# optimizations detailed in [#Fomichev2025]_. The other optimizations will be discussed at the end.
 # 
 
 ######################################################################
@@ -175,16 +180,18 @@ component of a workflow for identifying promising cathode materials.
 # 
 # If you haven’t, check out the demo `“Initial state preparation for quantum
 # chemistry” <https://pennylane.ai/qml/demos/tutorial_initial_state_preparation>`__. We will be
-# expanding on this demo by writing code to import a state from the multiconfigurational
-# self-consistent field (MCSCF) methods of PySCF, where we restrict the set of active orbitals used in
-# the calculation. Using only a subset of orbitals known as the “active space” reduces the cost of
-# performing calculations on complicated molecular instances, while hopefully still preserving the
-# interesting features of the molecule. The ``CASCI`` method in PySCF is equivalent to a
-# full-configuration interaction (FCI) procedure on a subset of molecular orbitals.
+# expanding on this demo by writing code to import a state from the `multiconfigurational
+# self-consistent field <https://pyscf.org/user/mcscf.html>`__ (MCSCF) methods of PySCF, where we
+# restrict the set of active orbitals used in the calculation. Using only a subset of orbitals known
+# as the “active space” reduces the cost of performing calculations on complicated molecular
+# instances, while hopefully still preserving the interesting features of the molecule. The ``CASCI``
+# method in PySCF is equivalent to a full-configuration interaction (FCI) procedure on a subset of
+# molecular orbitals.
 # 
-# We start by creating our molecule object using the Gaussian type orbitals module ``pyscf.gto``, and
-# obtaining the reduced Hartree-Fock molecular orbitals with the self-consistent field methods
-# ``pyscf.scf``.
+# We start by creating our molecule object using the `Gaussian type
+# orbitals <https://en.wikipedia.org/wiki/Gaussian_orbital>`__ module ``pyscf.gto``, and obtaining the
+# reduced Hartree-Fock molecular orbitals with the `self-consistent field
+# methods <https://pyscf.org/user/scf.html>`__ ``pyscf.scf``.
 # 
 
 from pyscf import gto, scf
@@ -299,10 +306,10 @@ wf_casci = _wfdict_to_statevector(wf_casci_dict, ncas) # This is |I>.
 # Dipole operator action
 # ~~~~~~~~~~~~~~~~~~~~~~
 # 
-# The electromagnetic field of the X-rays couples electronic states through the dipole operator. The
-# action of this operator is implemented in PennyLane as ``qml.qchem.dipole_moment``. We can calculate
-# that operator, convert it to a matrix, and apply it to our initial state :math:`|I\rangle` to obtain
-# :math:`m_\rho|I\rangle`.
+# The electromagnetic field of the X-rays couples electronic states through the `dipole
+# operator <https://en.wikipedia.org/wiki/Transition_dipole_moment>`__. The action of this operator is
+# implemented in PennyLane as ``qml.qchem.dipole_moment``. We can calculate that operator, convert it
+# to a matrix, and apply it to our initial state :math:`|I\rangle` to obtain :math:`m_\rho|I\rangle`.
 # 
 # To generate this operator, we have to specify which molecular orbitals are in our active space. We
 # can obtain the indices of the included and excluded orbitals using ``qml.qchem.active_space`` to
@@ -456,8 +463,9 @@ Z0 = np.diag(eigenvals)
 # global phase accrued throughout the time evolution. For a derivation of the global phase for the
 # two-electron terms, see Appendix A in [#Fomichev2025]_.
 # 
-# The trick when implementing a double-factorized Hamiltonian is to use Thouless’s theorem to apply
-# the single-particle basis rotations :math:`U^{(\ell)}`, and then the Jordan-Wigner transform to
+# The trick when implementing a double-factorized Hamiltonian is to use `Thouless’s
+# theorem <https://joshuagoings.com/assets/Thouless_theorem.pdf>`__ [#Thouless1960]_ to apply the
+# single-particle basis rotations :math:`U^{(\ell)}`, and then the Jordan-Wigner transform to
 # implement the number operators :math:`a^\dagger_p a_p` as Pauli-Z rotations. Below is an
 # illustration of the circuit we will use to implement the one- and two-eletron terms in our
 # factorized Hamiltonian.
@@ -471,8 +479,9 @@ Z0 = np.diag(eigenvals)
 # Figure X: One- and two-electron term implementations in time-evolution circuit (ignoring global
 # phases).
 # 
-# We can use ``qml.BasisRotation`` to generate a Givens decomposition for the single-body basis
-# rotation determined by :math:`U^{(\ell)}`. We will have to do this for both spin-halves of the
+# We can use ``qml.BasisRotation`` to generate a `Givens
+# decomposition <https://pennylane.ai/qml/demos/tutorial_givens_rotations>`__ for the single-body
+# basis rotation determined by :math:`U^{(\ell)}`. We will have to do this for both spin-halves of the
 # register.
 # 
 
@@ -721,7 +730,7 @@ plt.show()
 # .. math::  -\mathrm{Im}\,G_\rho(\omega) = \frac{\eta\tau}{2\pi}\left(1 + 2\sum_{j=1}^{j_\mathrm{max}}\left[ \mathbb{E}\left(\mathrm{Re}\,\tilde G(\tau j)\right)\mathrm{cos}(\tau j \omega) - \mathbb{E}\left(\mathrm{Im}\,\tilde G(\tau j)\right) \mathrm{sin}(\tau j \omega)\right]\right) \,,
 # 
 # where :math:`\mathbb{E}` is the expectation value. We do this below, but also multiply the
-# normalization factors over to the RHS.
+# normalization factors over to the right side.
 # 
 
 L_js = L_j(time_interval)
@@ -901,6 +910,11 @@ plt.show()
 # 
 #    C. David Sherrill, `“Permutational symmetries of one- and two-electron integrals”
 #    (2005) <https://vergil.chemistry.gatech.edu/static/content/permsymm.pdf>`__.
+# 
+# .. [#Thouless1960]
+# 
+#    David J. Thouless, “Stability conditions and nuclear rotations in the Hartree-Fock theory”. `Nuclear
+#    Physics, 21, 225-232 (1960) <https://doi.org/10.1016/0029-5582(60)90048-1>`__.
 # 
 
 ######################################################################
