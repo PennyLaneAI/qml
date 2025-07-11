@@ -93,7 +93,7 @@ By the end of this tutorial, you’ll have:
 # Below, we show the basic quantum circuit for extracting a syndrome value. The ancilla qubit is
 # initialized in the :math:`|+\rangle` state, and controlled operations are applied based on the
 # stabilizer generators. Finally, the ancilla is measured in the :math:`X`-basis to obtain the
-# syndrome value. Check out Arthur Pesah’s excellent blog post series [#Pesah]\_ on Stabilizer codes
+# syndrome value. Check out Arthur Pesah’s excellent blog post series [#Pesah]_ on Stabilizer codes
 # for a deeper introduction.
 #
 
@@ -274,7 +274,7 @@ print(tabulate(table_data, headers=["Syndrome", "LUT Error"]))
 # -------------------------------
 #
 # Belief propagation is an iterative message-passing algorithm used to decode errors by working on the
-# **Tanner graph** [#Wiberg]\_ of the code. This graph has two types of nodes:
+# **Tanner graph** [#Wiberg]_ of the code. This graph has two types of nodes:
 #
 # - **Variable nodes** represent the physical qubits, which may or may not have experienced an error.
 #   These correspond to the bits of the error vector :math:`e = (e_1, e_2, \dots, e_n)`.
@@ -380,10 +380,10 @@ print(tabulate(table_data, headers=["Syndrome", "LUT Error"]))
 # by using only local, iterative computations. Nevertheless, its performance can degrade when the Tanner
 # graph contains many short cycles—a common characteristic of many popular quantum codes, which can lead to poor
 # convergence. In practice, further extensions like BP-OSD [#Panteleev]_, BP-LSD [#Hillmann]_ or
-# Ambiguity Clustering [#Wolanski]\_ are used to fix these issues.
+# Ambiguity Clustering [#Wolanski]_ are used to fix these issues.
 #
-# See the following summary article [#Loeliger]\_ as well as Chapter 5 in Bayesian Reasoning and
-# Machine Learning [#Barber]\_ for a deeper dive into message passing algorithms on graphs.
+# See the following summary article [#Loeliger]_ as well as Chapter 5 in Bayesian Reasoning and
+# Machine Learning [#Barber]_ for a deeper dive into message passing algorithms on graphs.
 #
 # 4.2 BP in JAX
 # ~~~~~~~~~~~~~
