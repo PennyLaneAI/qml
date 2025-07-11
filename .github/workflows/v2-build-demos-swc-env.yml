@@ -86,7 +86,7 @@ jobs:
   build-objects-inv-file-dev:
     # TODO: Change ref_name to 'dev' for release
     if: (needs.identify-changed-demos.outputs.updated != '') && ${{ github.ref_name == 'test-v2-dev' }}
-    uses: ./.github/wokflows/v2-sync-objects-dot-inv.yml
+    uses: ./.github/workflows/v2-sync-objects-dot-inv.yml
     needs:
       - identify-changed-demos
     with:
