@@ -379,7 +379,7 @@ print(tabulate(table_data, headers=["Syndrome", "LUT Error"]))
 # graphs, which are never tree-like, it provides a good approximation to the maximum-likelihood decoder
 # by using only local, iterative computations. Nevertheless, its performance can degrade when the Tanner
 # graph contains many short cycles—a common characteristic of many popular quantum codes, which can lead to poor
-# convergence. In practice further extensions like BP-OSD [#Panteleev]\ *, BP-LSD [#Hillmann]* or
+# convergence. In practice, further extensions like BP-OSD [#Panteleev]_, BP-LSD [#Hillmann]_ or
 # Ambiguity Clustering [#Wolanski]\_ are used to fix these issues.
 #
 # See the following summary article [#Loeliger]\_ as well as Chapter 5 in Bayesian Reasoning and
