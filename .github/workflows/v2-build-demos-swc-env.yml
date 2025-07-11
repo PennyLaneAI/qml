@@ -82,44 +82,35 @@ jobs:
           path: /tmp/merge
           retention-days: 30
 
-  # Step 4: Build and upload the updated objects.inv file
-  build-objects-inv-file:
-    env:
-      AWS_REGION: ${{ secrets.AWS_REGION }}
-      # TODO: Change STAGING to PROD for the following secrets for release:
-      AWS_ACCESS_KEY_ID: ${{ secrets.PL_SITE_STAGING_NON_REACT_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.PL_SITE_STAGING_NON_REACT_SECRET_ACCESS_KEY }}
-      AWS_S3_HTML_BUCKET_ID: ${{ secrets.PL_SITE_STAGING_S3_BUCKET_NAME }}
-
-    # TODO: Change ref_name to 'master' for release
-    if: (needs.identify-changed-demos.outputs.updated != '') && ${{ github.ref_name == 'test-v2-master' }}
-    runs-on: ubuntu-latest
+  # Step 4: Build and upload the updated objects.inv files
+  build-objects-inv-file-dev:
+    # TODO: Change ref_name to 'dev' for release
+    if: (needs.identify-changed-demos.outputs.updated != '') && ${{ github.ref_name == 'test-v2-dev' }}
+    uses: ./.github/wokflows/v2-sync-objects-dot-inv.yml
     needs:
       - identify-changed-demos
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.sha }}
-          fetch-depth: 1
+    with:
+      branch: ${{ github.ref }}
+      dev: true
 
-      - name: Install pandoc and opencl
-        run: |
-          sudo apt-get install -y \
-            ocl-icd-opencl-dev \
-            pandoc 
+    secrets:
+      aws_region: ${{ secrets.AWS_REGION }}
+      aws_access_key_id: ${{ secrets.PL_SITE_DEV_NON_REACT_ACCESS_KEY_ID }}
+      aws_secret_access_key: ${{ secrets.PL_SITE_DEV_NON_REACT_SECRET_ACCESS_KEY }}
+      aws_html_s3_bucket_id: ${{ secrets.PL_SITE_DEV_S3_BUCKET_NAME }}
 
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
+  build-objects-inv-file-master:
+    # TODO: Change ref_name to 'master' for release
+    if: (needs.identify-changed-demos.outputs.updated != '') && ${{ github.ref_name == 'test-v2-master' }}
+    uses: ./.github/wokflows/v2-sync-objects-dot-inv.yml
+    needs:
+      - identify-changed-demos
+    with:
+      branch: ${{ github.ref }}
 
-      - name: Install dependencies
-        run: pip install . && poetry config warnings.export false
-
-      - name: Build all demos in HTML format
-        run: |
-          qml build --format html --keep-going --no-quiet --no-dev
-
-      - name: Sync objects.inv to HTML Bucket
-        run: aws s3 cp ./_build/objects.inv s3://$AWS_S3_HTML_BUCKET_ID/qml/objects.inv
+    secrets:
+      # TODO: Change STAGING to PROD for release
+      aws_region: ${{ secrets.AWS_REGION }}
+      aws_access_key_id: ${{ secrets.PL_SITE_STAGING_NON_REACT_ACCESS_KEY_ID }}
+      aws_secret_access_key: ${{ secrets.PL_SITE_STAGING_NON_REACT_SECRET_ACCESS_KEY }}
+      aws_html_s3_bucket_id: ${{ secrets.PL_SITE_STAGING_S3_BUCKET_NAME }}
