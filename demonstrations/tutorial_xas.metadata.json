@@ -87,6 +87,15 @@
             "year": "2005",
             "journal": "",
             "url": "https://vergil.chemistry.gatech.edu/static/content/permsymm.pdf"
+        },
+        {
+            "id": "Thouless1960",
+            "type": "article",
+            "title": "Stability conditions and nuclear rotations in the Hartree-Fock theory",
+            "authors": "David J. Thouless",
+            "year": "1960",
+            "journal": "Nuclear Physics",
+            "url": "https://doi.org/10.1016/0029-5582(60)90048-1"
         }
     ],
     "basedOnPapers": [
