@@ -15,8 +15,8 @@ The hidden cut problem for locating unentanglement
 # when it takes light itself 33 billion years to travel between the qubits is one of the most
 # philosophically loaded questions at the heart of quantum foundations.
 # 
-# Despite entanglement being so philosophically provocative, it’s somewhat surprising that in fact it
-# is ubiquitous: given a random state of a two-component quantum system, it’s almost certain that the
+# Despite entanglement being so philosophically provocative, it’s somewhat surprising that it is so
+# ubiquitous: given a random state of a two-component quantum system, it’s almost certain that the
 # two components will be entangled. For this reason, it’s sometimes more interesting when a state is
 # *not* entangled rather than when it is! For example, when `building a quantum computer at
 # Xanadu <https://www.xanadu.ai/photonics>`__, we spend a ton of effort to ensure that our qubits are
@@ -26,7 +26,7 @@ The hidden cut problem for locating unentanglement
 # problem related to unentanglement, called the *hidden cut problem*. In this problem we assume that
 # we’re given a state consisting of many components. As we discussed, it’ll generally be the case that
 # most of these components are entangled with one another. But in the hidden cut problem we are
-# guaranteed that it’s possible to split the components up into two groups, so that between the two
+# guaranteed that it’s possible to split the components into two groups, so that between the two
 # groups there is *no* entanglement. The problem asks us to find this “hidden cut” that splits the
 # state up into two *unentangled* pieces.
 # 
@@ -42,8 +42,7 @@ The hidden cut problem for locating unentanglement
 # , where :math:`\ket{\psi_A}` is a state of system :math:`A` and :math:`\ket{\psi_B}` is a state of
 # system :math:`B`. We also use the term *separable* or *factorizable* to describe an unentagled
 # state. We’ll usually not bother writing the tensor product sign and just write
-# :math:`\ket{\psi} = \ket{\psi_A}\ket{\psi_B}`. And if :math:`\ket{\psi}` isn’t unentangled we say
-# it’s *entangled*.
+# :math:`\ket{\psi} = \ket{\psi_A}\ket{\psi_B}`.
 # 
 # Now let’s suppose :math:`\ket\psi` is a state of :math:`n`-qubits. We’re told it’s possible to split
 # the qubits into two unentangled subsets, :math:`S` and :math:`\bar S`,
@@ -53,8 +52,8 @@ The hidden cut problem for locating unentanglement
 # 
 #    \ket{\psi} = \ket{\psi_S}\ket{\psi_{\bar S}},
 # 
-# but we aren’t told what :math:`S` and :math:`\bar S` are. The hidden cut problem asks us, given
-# access to :math:`\ket\psi`, to determine :math:`S` and :math:`\bar S`. Following `Bouland et al <https://arxiv.org/abs/2410.12706>`__, in this demo
+# but we aren’t told what :math:`S` and :math:`\bar S` are. The hidden cut problem asks us to determine :math:`S` and :math:`\bar S`, given access to :math:`\ket\psi`. 
+# Following Bouland *et al.* [#Bouland2024]_, in this demo
 # we’ll develop a quantum algorithm that solves this problem!
 # 
 
