@@ -932,7 +932,7 @@ def state_vector_to_dict(
 
 ######################################################################
 # We run the ``encode_zero`` function and see that we recover the `correct logical zero state for the
-# Stean code <https://errorcorrectionzoo.org/c/steane>`__:
+# Steane code <https://errorcorrectionzoo.org/c/steane>`__:
 #
 # .. math:: \begin{aligned}|\overline{0}\rangle= & \frac{1}{\sqrt{8}}(|0000000\rangle+|1010101\rangle+|0110011\rangle+|1100110\rangle \\ & +|0001111\rangle+|1011010\rangle+|0111100\rangle+|1101001\rangle)\end{aligned}
 #
