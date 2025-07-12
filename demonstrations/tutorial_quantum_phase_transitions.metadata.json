@@ -8,8 +8,8 @@
             "username": "Tirth_Shah"
         }
     ],
-    "dateOfPublication": "",
-    "dateOfLastModification": "",
+    "dateOfPublication": "2025-07-11T00:00:00+00:00",
+    "dateOfLastModification": "2025-07-11T00:00:00+00:00",
     "categories": ["Optimization","Quantum Machine Learning"],
     "tags": ["quantum phase transition", "Ising model"],
     "previewImages": [
@@ -27,101 +27,90 @@
     "references": [
         {
             "id": "Vojta2002",
-            "type": "chapter-book",
+            "type": "book",
             "title": "Computational Statistical Physics",
             "authors": "Thomas Vojta",
             "year": "2002",
-            "doi": "",
             "url": "https://link.springer.com/book/10.1007/978-3-662-04804-7"
         },
  	{
             "id": "Mazumdar2019",
-            "type": "article-journal",
+            "type": "article",
             "title": "Cosmic phase transitions: their applications and experimental signatures",
-            "authors": ["Anupam Mazumdar","Graham White"],
+            "authors": "Anupam Mazumdar, Graham White",
             "year": "2019",
-            "doi": "",
             "url": "https://iopscience.iop.org/article/10.1088/1361-6633/ab1f55"
         },
 	{
             "id": "Mueller2023",
-            "type": "article-journal",
+            "type": "article",
             "title": "Quantum Computation of Dynamical Quantum Phase Transitions and Entanglement Tomography in a Lattice Gauge Theory",
-            "authors": ["Niklas Mueller","Joseph A. Carolan","Andrew Connelly","Zohreh Davoudi","Eugene F. Dumitrescu","Kübra Yeter-Aydeniz"],
+            "authors": "Niklas Mueller, Joseph A. Carolan, Andrew Connelly, Zohreh Davoudi, Eugene F. Dumitrescu, Kübra Yeter-Aydeniz",
             "year": "2023",
-            "doi": "",
             "url": "https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.4.030323"
         },
 	{
             "id": "Smith2019",
             "type": "preprint",
             "title": "Quantum Computation of Dynamical Quantum Phase Transitions and Entanglement Tomography in a Lattice Gauge Theory",
-            "authors": ["Adam Smith","Bernhard Jobst","Andrew G. Green","Frank Pollmann"],
+            "authors": "Adam Smith, Bernhard Jobst, Andrew G. Green, Frank Pollmann",
             "year": "2019",
-            "doi": "",
             "url": "https://arxiv.org/abs/1910.05351"
         },
 	{
             "id": "Haghshenas2024",
             "type": "preprint",
             "title": "Probing critical states of matter on a digital quantum computer",
-            "authors": ["Reza Haghshenas","Eli Chertkov","Matthew DeCross","Thomas M. Gatterman","Justin A. Gerber","Kevin Gilmore","Dan Gresh","Nathan Hewitt","Chandler V. Horst","Mitchell Matheny","Tanner Mengle","Brian Neyenhuis","David Hayes","Michael Foss-Feig"],
+            "authors": "Reza Haghshenas, Eli Chertkov, Matthew DeCross, Thomas M. Gatterman, Justin A. Gerber, Kevin Gilmore, Dan Gresh, Nathan Hewitt, Chandler V. Horst, Mitchell Matheny, Tanner Mengle, Brian Neyenhuis, David Hayes, Michael Foss-Feig",
             "year": "2024",
-            "doi": "",
             "url": "https://arxiv.org/abs/2305.01650"
         },
 	{
             "id": "Chertkov2022",
             "type": "preprint",
             "title": "Characterizing a non-equilibrium phase transition on a quantum computer",
-            "authors": ["Eli Chertkov","Zihan Cheng","Andrew C. Potter","Sarang Gopalakrishnan","Thomas M. Gatterman", "Justin A. Gerber","Kevin Gilmore","Dan Gresh","Alex Hall","Aaron Hankin","Mitchell Matheny","Tanner Mengle","David Hayes","Brian Neyenhuis","Russell Stutz","Michael Foss-Feig"],
+            "authors": "Eli Chertkov, Zihan Cheng, Andrew C. Potter, Sarang Gopalakrishnan, Thomas M. Gatterman, Justin A. Gerber, Kevin Gilmore, Dan Gresh, Alex Hall, Aaron Hankin, Mitchell Matheny, Tanner Mengle, David Hayes, Brian Neyenhuis, Russell Stutz, Michael Foss-Feig",
             "year": "2022",
-            "doi": "",
             "url": "https://arxiv.org/abs/2305.01650"
         },
 	{
             "id": "Thompson2023",
             "type": "preprint",
             "title": "Quantum Computation of Phase Transition in Interacting Scalar Quantum Field Theory",
-            "authors": ["Shane Thompson","George Siopsis"],
+            "authors": "Shane Thompson, George Siopsis",
             "year": "2023",
-            "doi": "",
             "url": "https://arxiv.org/abs/2303.02425"
         },
 	{
             "id": "Vodeb2025",
-            "type": "article-journal",
+            "type": "article",
             "title": "Stirring the false vacuum via interacting quantized bubbles on a 5,564-qubit quantum annealer",
-            "authors": ["Jaka Vodeb","Jean-Yves Desaules","Andrew Hallam","Andrea Rava","Gregor Humar","Dennis Willsch","Fengping Jin","Madita Willsch","Kristel Michielsen","Zlatko Papić"],
+            "authors": "Jaka Vodeb, Jean-Yves Desaules, Andrew Hallam, Andrea Rava, Gregor Humar, Dennis Willsch, Fengping Jin, Madita Willsch, Kristel Michielsen, Zlatko Papić",
             "year": "2024",
-            "doi": "",
             "url": "https://www.nature.com/articles/s41567-024-02765-w"
         },
 	{
             "id": "Kandala2017",
             "type": "preprint",
             "title": "Hardware-efficient Variational Quantum Eigensolver for Small Molecules and Quantum Magnets",
-            "authors": ["Abhinav Kandala","Antonio Mezzacapo","Kristan Temme","Maika Takita","Markus Brink","Jerry M. Chow","Jay M. Gambetta"],
+            "authors": "Abhinav Kandala, Antonio Mezzacapo, Kristan Temme, Maika Takita, Markus Brink, Jerry M. Chow, Jay M. Gambetta",
             "year": "2017",
-            "doi": "",
             "url": "https://arxiv.org/abs/1704.05018"
         },
 	{
             "id": "Blote2002",
-            "type": "article-journal",
+            "type": "article",
             "title": "Cluster Monte Carlo simulation of the transverse Ising model",
-            "authors": ["Henk W. J. Blote","Youjin Deng"],
+            "authors": "Henk W. J. Blote, Youjin Deng",
             "year": "2002",
-            "doi": "",
             "url": "https://journals.aps.org/pre/abstract/10.1103/PhysRevE.66.066110"
         },
 	{
             "id": "Hashizume2022",
-            "type": "article-journal",
+            "type": "article",
             "title": "Dynamical phase transitions in the two-dimensional transverse-field Ising model",
-            "authors": ["Tomohiro Hashizume","Ian P. McCulloch","Jad C. Halimeh"],
+            "authors": "Tomohiro Hashizume, Ian P. McCulloch, Jad C. Halimeh",
             "year": "2022",
-            "doi": "",
             "url": "https://journals.aps.org/prresearch/abstract/10.1103/PhysRevResearch.4.013250"
         }
     ],
