@@ -66,7 +66,7 @@ component of a workflow for identifying promising cathode materials.
 # Absorption cross-section
 # ~~~~~~~~~~~~~~~~~~~~~~~~
 # 
-# In XAS experiments the absorption cross section as a function of the frequency of incident X-rays
+# In XAS experiments, the absorption cross section as a function of the frequency of incident X-rays
 # :math:`\sigma_A(\omega)` is measured for a given material. This is related to the rate of absorption
 # of X-ray photons of various energies. For our situation, the electrons in the molecular cluster
 # start in a ground molecular state :math:`|I\rangle` with energy :math:`E_I`, and will be coupled to
