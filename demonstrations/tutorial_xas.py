@@ -11,7 +11,7 @@ developed in the paper `“Fast simulations of X-ray absorption spectroscopy for
 a quantum computer” <https://arxiv.org/abs/2506.15784>`__ [#Fomichev2025]_ in PennyLane.
 
 First, we will discuss why simulating X-ray absorption spectroscopy is a promising application for
-early quantum computers. Then we will explain the main steps in the simulation algorithm, and how to
+early quantum computers. Then we will explain the main steps in the simulation algorithm and how to
 implement a simplified version in PennyLane.
 
 We will be using concepts that were introduced in other PennyLane demos, such as `Using PennyLane
