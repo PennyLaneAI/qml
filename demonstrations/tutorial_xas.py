@@ -459,7 +459,7 @@ Z0 = np.diag(eigenvals)
 # The main work of our algorithm will be to apply our Hamiltonian terms as a Trotter product in a
 # time-evolution operator, and measure the expectation value of that time evolution for various times.
 # Let’s start by writing functions that implement the time evolution for each Hamiltonian term, which
-# will be called by our trotter circuit. One thing to track throughout this implementation is the
+# will be called by our Trotter circuit. One thing to track throughout this implementation is the
 # global phase accrued throughout the time evolution. For a derivation of the global phase for the
 # two-electron terms, see Appendix A in [#Fomichev2025]_.
 # 
