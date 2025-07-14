@@ -1,7 +1,7 @@
 r"""X-ray absorption spectroscopy simulation in the time domain
 ===========================================================
 
-What will be the first quantum algorithm that is industrially useful to run on a fault-tolerant
+What will be the first industrially useful quantum algorithm to run on a fault-tolerant
 quantum computer? This open question is one of the main focuses of the research team at Xanadu. A
 potential answer to this question is simulating `X-ray absorption
 spectroscopy <https://en.wikipedia.org/wiki/X-ray_absorption_spectroscopy>`__, which can be used in
