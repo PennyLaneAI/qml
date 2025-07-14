@@ -78,7 +78,7 @@ component of a workflow for identifying promising cathode materials.
 # 
 # .. math::  \sigma_A(\omega) = \frac{4 \pi}{3 \hbar c} \omega \sum_{F \neq I}\sum_{\rho=x,y,z} \frac{|\langle F|\hat m_\rho|I \rangle|^2 \eta}{((E_F - E_I)-\omega)^2 + \eta^2}\,, 
 # 
-# where :math:`c` is the speed of light, :math:`\hbar` is Plank’s constant, and :math:`\eta` is the
+# where :math:`c` is the speed of light, :math:`\hbar` is Planck’s constant, and :math:`\eta` is the
 # line broadening which here is set by the experimental resolution of the spectroscopy, and is
 # typically around :math:`1` eV. Below is an illustration of an XAS spectra. In the illustration,
 # there appear to be five excited states coupled by the X-rays, each with varying amounts of overlap
