@@ -4,7 +4,7 @@ r"""X-ray absorption spectroscopy simulation in the time domain
 What will be the first industrially useful quantum algorithm to run on a fault-tolerant
 quantum computer? This open question is one of the main focuses of the research team at Xanadu. A
 potential answer to this question is simulating `X-ray absorption
-spectroscopy <https://en.wikipedia.org/wiki/X-ray_absorption_spectroscopy>`__, which can be used in
+spectroscopy <https://en.wikipedia.org/wiki/X-ray_absorption_spectroscopy>`__ (XAS), which can be used in
 workflows to identify structural degradation mechanisms in material candidates for battery designs
 🔋. This demo will show you how to implement an optimized simulation algorithm
 developed in the paper `“Fast simulations of X-ray absorption spectroscopy for battery materials on
@@ -53,10 +53,11 @@ promising cathode materials.
 # simulation on a quantum computer.
 #
 # Simulating these spectra is a difficult task for classical computers – the highly correlated excited
-# states are difficult to compute classically, particularly for transition metals. However, the
-# small number of electronic orbitals needed to simulate these small clusters make this
-# simulation task well suited for early quantum computers, which can naturally handle the high
-# correlation between orbitals, but may be limited in their number of qubits.
+# states are difficult to compute classically, particularly for clusters with transition metals. 
+# However, the small number of electronic orbitals needed to simulate these small clusters make this
+# calculation well suited for early quantum computers, which can naturally handle the large amount of
+# correlation in the electron state, but restrictions on the cluster size due to limited qubit number
+# is less of a concern.
 #
 
 ######################################################################
@@ -75,8 +76,8 @@ promising cathode materials.
 # :math:`\sigma_A(\omega)` is measured for a given material. This is related to the rate of absorption
 # of X-ray photons of various energies. For our situation, the electrons in the molecular cluster
 # start in a ground molecular state :math:`|I\rangle` with energy :math:`E_I`. This ground state will
-# be coupled to an excited state :math:`|F\rangle` with energy :math:`E_F` through the action of the
-# dipole operator :math:`\hat m_\rho`, which represents the effect of the radiative field, where
+# be coupled to excited states :math:`|F\rangle` with energies :math:`E_F` through the action of the
+# dipole operator :math:`\hat m_\rho,` which represents the effect of the radiative field, where
 # :math:`\rho` is any of the Cartesian directions :math:`\{x,y,z\}`.
 #
 # The absorption cross section is given by
@@ -84,9 +85,9 @@ promising cathode materials.
 # .. math::  \sigma_A(\omega) = \frac{4 \pi}{3 \hbar c} \omega \sum_{F \neq I}\sum_{\rho=x,y,z} \frac{|\langle F|\hat m_\rho|I \rangle|^2 \eta}{((E_F - E_I)-\omega)^2 + \eta^2}\,,
 #
 # where :math:`c` is the speed of light, :math:`\hbar` is Planck’s constant, and :math:`\eta` is the
-# line broadening--set by the experimental resolution of the spectroscopy--and is
-# typically around :math:`1` eV. Below is an illustration of an XAS spectrum. In the illustration,
-# there appear to be five excited states coupled by the X-rays, each with varying amounts of overlap
+# line broadening -- set by the experimental resolution of the spectroscopy -- which is
+# typically around :math:`1` eV. Below is an illustration of an X-ray absorption spectrum. In the illustration,
+# there appear to be many excited states coupled by the X-rays, each with varying amounts of overlap
 # with the initial state.
 #
 
@@ -103,7 +104,7 @@ promising cathode materials.
 # The goal is to implement a quantum algorithm that can calculate this spectrum. However, instead of
 # computing the energy differences and state overlaps directly, we will be simulating the system in
 # the time domain, and then using a `Fourier
-# transform <https://en.wikipedia.org/wiki/Fourier_transform>`__ to obtain the frequency spectrum.
+# transform <https://en.wikipedia.org/wiki/Fourier_transform>`__ to obtain the spectrum in frequency space.
 #
 
 ######################################################################
@@ -112,7 +113,7 @@ promising cathode materials.
 #
 # Both the initial state :math:`|I\rangle` and the dipole operator acting on the initial state
 # :math:`\hat m_\rho|I\rangle` can be determined classically, and we’ll demonstrate how to do that
-# later. Given the initial state, we will use a mathematical trick called a *frequency-domain*
+# later. With the initial state computed, we will use a mathematical trick called a *frequency-domain*
 # `Green’s function <https://en.wikipedia.org/wiki/Green%27s_function>`__ to determine the absorption
 # cross section. We can write the cross section as the imaginary part of the following Green’s
 # function
@@ -125,7 +126,7 @@ promising cathode materials.
 #
 # where the first term is clearly proportional to the absorption cross section. The second term is
 # zero if we centre the frame of reference for our molecular orbitals at the nuclear-charge weighted
-# centre for our molecular cluster of choice. Okay, so how to we determine
+# centre for our molecular cluster of choice. Okay, so how do we determine
 # :math:`\mathcal{G_\rho(\omega)}`? If we are going to evaluate this quantity in a quantum register,
 # it will need to be normalized, so instead we are looking for
 #
@@ -133,7 +134,7 @@ promising cathode materials.
 #
 # There are methods for determining this frequency-domain Green’s function directly [#Fomichev2024]_,
 # however, our algorithm will aim to estimate the discrete-time *time-domain* Green’s function
-# :math:`\tilde G(t_j)` at times :math:`t_j` where :math:`j` is the time-step index.
+# :math:`\tilde G(t_j)` at times :math:`t_j`, where :math:`j` is the time-step index.
 # :math:`G_\rho(\omega)` can then be calculated classically through the time-domain Fourier transform
 #
 # .. math::  -\mathrm{Im}\,G_\rho(\omega) = \frac{\eta\tau}{2\pi} \sum_{j=-\infty}^\infty e^{-\eta |t_j|} \tilde G(t_j) e^{i\omega t_j}\,,

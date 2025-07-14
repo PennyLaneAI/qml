@@ -106,14 +106,14 @@
     "relatedContent": [
         {
             "type": "demonstration",
-            "id": "tutorial_initial_state_preparation",
-            "weight": 1.0
-        },       
-        {
-            "type": "demonstration",
             "id": "tutorial_qchem_external",
             "weight": 1.0
         },
+        {
+            "type": "demonstration",
+            "id": "tutorial_initial_state_preparation",
+            "weight": 1.0
+        },       
         {
             "type": "demonstration",
             "id": "tutorial_how_to_build_compressed_double_factorized_hamiltonians",
