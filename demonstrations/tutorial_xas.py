@@ -30,7 +30,7 @@ Lithium atoms in their structural composition, designed as a candidate for use i
 However, repeated charge-discharge cycles can alter the structure and reduce performance. One can
 study these degraded materials using X-ray absorption spectroscopy, which directly probes local
 structure by exciting tightly bound core electrons. This can be used to identify oxidation states in
-materials, because different elements and their oxidation states will absorb photons of different
+materials because different elements and their oxidation states will absorb photons of different
 energies. However, identification requires reference spectra for each expected degradation outcome
 in order to determine the composition of structures present in the material. We call this “spectral
 fingerprinting”, where the observed spectrum can be matched to combinations of spectra from small
