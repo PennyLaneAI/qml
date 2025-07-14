@@ -106,6 +106,7 @@ sphinxcontrib-applehelp = "1.0.8"
 sphinx-gallery = "0.17.1"
 qrisp = ">=0.6.1"
 iqpopt = { git = "https://github.com/XanaduAI/iqpopt.git" }
+galois = "0.4.6"
 
 
 # Install a difference version of torch from PyPI as the one from PyTorch repo is not compatible with MacOS
