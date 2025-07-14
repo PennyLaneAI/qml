@@ -18,6 +18,7 @@ demo_requirements.txt
 **/*.egg-info/
 *.msi
 *.deb
+*.ipynb
 
 # Generated after installation
 .github/workflows/qml_pipeline_utils/build/
