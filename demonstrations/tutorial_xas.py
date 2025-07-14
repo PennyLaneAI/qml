@@ -174,7 +174,7 @@ promising cathode materials.
 # Let’s look at how to implement these steps in PennyLane. We will make extensive use of the
 # ``qml.qchem`` module, as well as modules from `PySCF <https://pyscf.org/>`__. For this demo, we are
 # going to use the simple :math:`\mathrm{H}_2` molecule. We will implement some, but not all of the
-# optimizations detailed in [#Fomichev2025]_. The other optimizations will be discussed at the end.
+# optimizations detailed in [#Fomichev2025]_. The omitted optimizations will be discussed at the end.
 #
 
 ######################################################################
@@ -182,14 +182,14 @@ promising cathode materials.
 # -----------------
 #
 # We need to classically determine the ground state :math:`|I\rangle`, and the dipole operator’s
-# action on that state.
+# action on that state $\hat m_\rho|I\rangle$.
 #
 # Ground state calculation
 # ~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # If you haven’t, check out the demo `“Initial state preparation for quantum
 # chemistry” <https://pennylane.ai/qml/demos/tutorial_initial_state_preparation>`__. We will be
-# expanding on this demo by writing code to import a state from the `multiconfigurational
+# expanding on that demo with code to import a state from the `multiconfigurational
 # self-consistent field <https://pyscf.org/user/mcscf.html>`__ (MCSCF) methods of PySCF, where we
 # restrict the set of active orbitals used in the calculation. Using only a subset of orbitals known
 # as the “active space” reduces the cost of performing calculations on complicated molecular
@@ -277,7 +277,7 @@ casci_state[abs(casci_state) < 1e-6] = 0
 # format that is easy to import into PennyLane. One way to do this is to use a sparse matrix
 # representation to turn ``casci_state`` into a dictionary, and then use
 # ``qml.qchem.convert.import_state`` to import into PennyLane. Here is how you can go about turning a
-# full-configuration interaction matrix into a dictionary.
+# full-configuration interaction matrix like ``casci_state`` into a dictionary.
 #
 
 from scipy.sparse import coo_matrix
@@ -302,6 +302,15 @@ wf_casci_dict = dict(zip(list(zip(strs_row, strs_col)), dat))
 # components to match what they should be for the PennyLane orbital occupation number ordering. Then,
 # we can import the state to PennyLane using ``_wf_dict_to_statevector``.
 #
+# .. admonition:: Spin orbital chemist and physicist's notation 
+#     :class: note
+#
+#     In general, states from computation chemistry workflows will have spin orbitals ordered
+#     in chemist's notations, such that all of one spin is on the left, and the other on the right. 
+#     PennyLane uses the physicist's notation, where the spatial orbitals are ordered, and the spins 
+#     alternate up and down. When changing a state from one convention to the next, the sign of some 
+#     state amplitudes needs to change to adhere to the Fermionic anticommutation rules. The helper 
+#     function ``_sign_chem_to_phys`` does this sign adjustment for us.
 
 from pennylane.qchem.convert import _sign_chem_to_phys, _wfdict_to_statevector
 
@@ -317,14 +326,14 @@ wf_casci = _wfdict_to_statevector(wf_casci_dict, n_orb_cas)  # This is |I>.
 # The electromagnetic field of the X-rays couples electronic states through the `dipole
 # operator <https://en.wikipedia.org/wiki/Transition_dipole_moment>`__. The action of this operator is
 # implemented in PennyLane as ``qml.qchem.dipole_moment``. We can calculate that operator, convert it
-# to a matrix, and apply it to our initial state :math:`|I\rangle` to obtain :math:`m_\rho|I\rangle`.
+# to a matrix, and apply it to our initial state :math:`|I\rangle` to obtain :math:`\hat m_\rho|I\rangle`.
 #
 # To generate this operator, we have to specify which molecular orbitals are in our active space. We
 # can obtain the indices of the included and excluded orbitals using ``qml.qchem.active_space`` to
-# obtain the lists active and core, respectively.
+# obtain the lists ``active`` and ``core``, respectively.
 #
 # The action of the dipole operator will be split into the three cartesian directions
-# :math:`\{x, y, z\}`, which we will loop over to obtain the states :math:`m_{\{x,y,z\}}|I\rangle`.
+# :math:`\{x, y, z\}`, which we will loop over to obtain the states :math:`\hat m_{\{x,y,z\}}|I\rangle`.
 #
 
 # Solve for active space.
