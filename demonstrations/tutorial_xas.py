@@ -6,7 +6,7 @@ quantum computer? This open question is one of the main focuses of the research 
 potential answer to this question is simulating `X-ray absorption
 spectroscopy <https://en.wikipedia.org/wiki/X-ray_absorption_spectroscopy>`__, which can be used in
 workflows to identify structural degradation mechanisms in material candidates for battery designs
-🔋. This demo will show you how to implement an optimized version of a simulation algorithm
+🔋. This demo will show you how to implement an optimized simulation algorithm
 developed in the paper `“Fast simulations of X-ray absorption spectroscopy for battery materials on
 a quantum computer” <https://arxiv.org/abs/2506.15784>`__ [#Fomichev2025]_ in PennyLane.
 
@@ -27,29 +27,31 @@ Why simulate X-ray absorption spectroscopy?
 
 Lithium-excess materials are transition metal oxides that have been engineered to accommodate extra
 Lithium atoms in their structural composition, designed as a candidate for use in battery cathodes.
-However, repeated charge-discharge cycles can alter the structure and reduce performance. One can
+However, repeated charge-discharge cycles can alter their structure and reduce performance. One can
 study these degraded materials using X-ray absorption spectroscopy, which directly probes local
 structure by exciting tightly bound core electrons. This can be used to identify oxidation states in
 materials because different elements and their oxidation states will absorb photons of different
-energies. However, identification requires reference spectra for each expected degradation outcome
-in order to determine the composition of structures present in the material. We call this “spectral
-fingerprinting”, where the observed spectrum can be matched to combinations of spectra from small
-clusters. A fast method of simulating reference spectra for use in fingerprinting would be a crucial
-component of a workflow for identifying promising cathode materials.
+energies. Characterizing the structures in the degraded cathode material can help in an iterative 
+development process, directing researchers towards better candidate materials.
+Identification of the structures present in the degraded material is done by a process known as 
+“spectral fingerprinting”, where reference spectra of small molecular clusters are matched 
+to the experimental spectrum. A fast method of simulating reference spectra for use in 
+fingerprinting would be a crucial component in this iterative workflow for identifying 
+promising cathode materials.
 """
 
 ######################################################################
 # .. figure:: ../_static/demonstration_assets/xas/fingerprinting.gif
-#    :alt: alt text
+#    :alt: The reference spectra of molecular clusters are calculated, and then matched to an experimental spectrum.
 # 
-# Figure X: *How simulation of X-ray absorption spectra can enable identification of oxidation states
+# Figure 1: *How simulation of X-ray absorption spectra can enable identification of oxidation states
 # in candidate battery materials.* Spectral fingerprinting can be used to identify constituent
 # structures of a material by decomposing experimental spectra into components calculated via
 # simulation on a quantum computer.
 # 
 # Simulating these spectra is a difficult task for classical computers – the highly correlated excited
 # states are difficult to compute classically, particularly for transition metals. However, the
-# relatively small set of electronic orbitals needed to simulate these small clusters make this
+# small number of electronic orbitals needed to simulate these small clusters make this
 # simulation task well suited for early quantum computers, which can naturally handle the high
 # correlation between orbitals, but may be limited in their number of qubits.
 # 
@@ -69,10 +71,10 @@ component of a workflow for identifying promising cathode materials.
 # In XAS experiments, the absorption cross section as a function of the frequency of incident X-rays
 # :math:`\sigma_A(\omega)` is measured for a given material. This is related to the rate of absorption
 # of X-ray photons of various energies. For our situation, the electrons in the molecular cluster
-# start in a ground molecular state :math:`|I\rangle` with energy :math:`E_I`, and will be coupled to
-# an excited state :math:`|F\rangle` with energy :math:`E_F` through the action of the dipole operator
-# :math:`\hat m_\rho`, which represents the effect of the radiative field, where :math:`\rho` is any
-# of the Cartesian directions :math:`\{x,y,z\}`.
+# start in a ground molecular state :math:`|I\rangle` with energy :math:`E_I`. This ground state will 
+# be coupled to an excited state :math:`|F\rangle` with energy :math:`E_F` through the action of the 
+# dipole operator :math:`\hat m_\rho`, which represents the effect of the radiative field, where 
+# :math:`\rho` is any of the Cartesian directions :math:`\{x,y,z\}`.
 # 
 # The absorption cross section is given by
 # 
@@ -87,10 +89,10 @@ component of a workflow for identifying promising cathode materials.
 
 ######################################################################
 # .. figure:: ../_static/demonstration_assets/xas/example_spectrum.png
-#    :alt: alt text
+#    :alt: Illustration of X-ray absorption spectrum with five peaks of varying positions and peak heights.
 #    :width: 50.0%
 # 
-# Figure X: *Example X-ray absorption spectrum.* Illustration of how the peak positions
+# Figure 2: *Example X-ray absorption spectrum.* Illustration of how the peak positions
 # :math:`E_F - E_i`, widths :math:`\eta` and amplitudes
 # :math:`|\langle F | \hat m_\rho | I \rangle|^2` determine the spectrum.
 # 
@@ -132,7 +134,7 @@ component of a workflow for identifying promising cathode materials.
 # 
 # .. math::  -\mathrm{Im}\,G_\rho(\omega) = \frac{\eta\tau}{2\pi} \sum_{j=-\infty}^\infty e^{-\eta |t_j|} \tilde G(t_j) e^{i\omega t_j}\,, 
 # 
-# where :math:`\tau \sim \mathcal{O}(||\hat H||^{-1})` is the size of the time step, which should be
+# where :math:`\tau \sim \mathcal{O}(||\hat H||^{-1})` is the size of the time step. This step should be
 # small enough to resolve the largest frequency components that we are interested in, which correspond
 # to the final states with the largest energy. In practice, this is not the largest eigenvalue of
 # :math:`\hat H`, but simply the largest energy we want to show in the spectrum.
@@ -149,17 +151,19 @@ component of a workflow for identifying promising cathode materials.
 # transform to get the spectrum.
 # 
 # The circuit we will construct to determine the expectation values is shown below. It has three main
-# components: *state prep*, the state :math:`\hat m_\rho |I\rangle` is prepared in the quantum
-# register, and an auxiliary qubit is prepared for controlled time evolution; *time evolution*, the
-# state is evolved under the electronic Hamiltonian; *measurement*, the time-evolved state is measured
-# to obtain statistics for the expectation value.
+# components: 
+# 
+# - *State prep*, the state :math:`\hat m_\rho |I\rangle` is prepared in the quantum register, 
+#   and an auxiliary qubit is prepared for controlled time evolution.
+# - *Time evolution*, the state is evolved under the electronic Hamiltonian. 
+# - *Measurement*, the time-evolved state is measured to obtain statistics for the expectation value.
 # 
 
 ######################################################################
 # .. figure:: ../_static/demonstration_assets/xas/global_circuit.png
-#    :alt: alt text
+#    :alt: Illustration of full Hadamard test circuit with state prep, time evolution and measurement.
 # 
-# Figure X: *Circuit for XAS simulation*. The algorithm is ultimately a Hadamard test circuit, and we
+# Figure 3: *Circuit for XAS simulation*. The algorithm is ultimately a Hadamard test circuit, and we
 # divide the steps of this into three components.
 # 
 # Let’s look at how to implement these steps in PennyLane. We will make extensive use of the
@@ -218,10 +222,10 @@ hf.run(verbose=0)
 
 # Guarantee nuclear charge centre is at the origin.
 charges, coords = (hf.mol.atom_charges(), hf.mol.atom_coords())
-nuc_charge_center = np.einsum("z,zx->x", charges, coords) / charges.sum()
-print("Initial nuclear charge centre", nuc_charge_center)
-hf.mol.set_common_orig_(nuc_charge_center)
-print("Shifted nuclear charge centre", nuc_charge_center)
+nuclear_charge_center = np.einsum("z,zx->x", charges, coords) / charges.sum()
+print("Initial nuclear charge centre", nuclear_charge_center)
+hf.mol.set_common_orig_(nuclear_charge_center)
+print("Shifted nuclear charge centre", nuclear_charge_center)
 
 ######################################################################
 # Great, the nuclear-weighted charge centre is at the origin.
@@ -243,29 +247,30 @@ _, coeffs, _, _, _ = qml.qchem.hartree_fock.scf(mole)()
 hf.mo_coeff = coeffs  # Change MO coefficients in hf object to PennyLane calculated values.
 
 ######################################################################
-# Next, let’s define the active space of orbitals we will use for our calculation. For :math:`H_2`, we
+# Next, let’s define the active space of orbitals we will use for our calculation. This will be the 
+# number of orbitals ``n_orb_cas``` and the number of electrons ``n_electron_cas```. For :math:`H_2`, we
 # can just use the full space of orbitals. We will use a ``CASCI`` instance to calculate the ground
 # state of our system with this selected active space.
 # 
 
 from pyscf import mcscf
 
-# Define active space.
-ncas, nelecas = (4, 2)
-ncore = (mol.nelectron - nelecas) // 2
+# Define active space of (orbitals, electrons).
+n_orb_cas, n_electron_cas = (4, 2)
+ncore = (mol.nelectron - n_electron_cas) // 2
 
-# Initialize CASCI instance of H2 molecule
-mycasci = mcscf.CASCI(hf, ncas=ncas, nelecas=nelecas)
+# Initialize CASCI instance of H2 molecule as mycasci.
+mycasci = mcscf.CASCI(hf, ncas=n_orb_cas, nelecas=n_electron_cas)
 mycasci.run(verbose=0)
 
 # Calculate ground state, and omit small state components.
-cascivec = mycasci.ci
-cascivec[abs(cascivec) < 1e-6] = 0
+casci_state = mycasci.ci
+casci_state[abs(casci_state) < 1e-6] = 0
 
 ######################################################################
-# To implement this state as a PennyLane state vector, we need to convert the ``cascivec`` into a
+# To implement this state as a PennyLane state vector, we need to convert the ``casci_state`` into a
 # format that is easy to import into PennyLane. One way to do this is to use a sparse matrix
-# representation to turn ``cascivec`` into a dictionary, and then use
+# representation to turn ``casci_state`` into a dictionary, and then use
 # ``qml.qchem.convert.import_state`` to import into PennyLane. Here is how you can go about turning a
 # full-configuration interaction matrix into a dictionary.
 # 
@@ -273,18 +278,18 @@ cascivec[abs(cascivec) < 1e-6] = 0
 from scipy.sparse import coo_matrix
 from pyscf.fci.cistring import addrs2str
 
-# Convert cascivec into a sparse matrix.
-sparse_cascimatr = coo_matrix(cascivec, shape=np.shape(mycasci.ci), \
+# Convert casci_state into a sparse matrix.
+sparse_cascimatr = coo_matrix(casci_state, shape=np.shape(mycasci.ci), \
                                                     dtype=float )
 row, col, dat = sparse_cascimatr.row, sparse_cascimatr.col, \
                                                 sparse_cascimatr.data
 
 # Turn indices into strings.
-ncas_a = mycasci.ncas
-ncas_b = ncas_a
-nelecas_a, nelecas_b = mycasci.nelecas
-strs_row = addrs2str(ncas_a, nelecas_a, row)
-strs_col = addrs2str(ncas_b, nelecas_b, col)
+n_orb_cas_a = mycasci.ncas
+n_orb_cas_b = n_orb_cas_a
+n_electron_cas_a, n_electron_cas_b = mycasci.nelecas
+strs_row = addrs2str(n_orb_cas_a, n_electron_cas_a, row)
+strs_col = addrs2str(n_orb_cas_b, n_electron_cas_b, col)
 
 # Create the FCI matrix as a dict.
 wf_casci_dict = dict(zip(list(zip(strs_row, strs_col)), dat))
@@ -298,9 +303,9 @@ wf_casci_dict = dict(zip(list(zip(strs_row, strs_col)), dat))
 from pennylane.qchem.convert import _sign_chem_to_phys, _wfdict_to_statevector
 
 # Convert to physicist's notation.
-wf_casci_dict = _sign_chem_to_phys(wf_casci_dict, ncas)
+wf_casci_dict = _sign_chem_to_phys(wf_casci_dict, n_orb_cas)
 
-wf_casci = _wfdict_to_statevector(wf_casci_dict, ncas) # This is |I>.
+wf_casci = _wfdict_to_statevector(wf_casci_dict, n_orb_cas) # This is |I>.
 
 ######################################################################
 # Dipole operator action
@@ -321,7 +326,7 @@ wf_casci = _wfdict_to_statevector(wf_casci_dict, ncas) # This is |I>.
 
 # Solve for active space.
 core, active = qml.qchem.active_space(mole.n_electrons, mole.n_orbitals,
-                        active_electrons=nelecas, active_orbitals=ncas)
+                        active_electrons=n_electron_cas, active_orbitals=n_orb_cas)
 
 m_rho = qml.qchem.dipole_moment(mole, cutoff=1e-8, core=core, active=active)()
 rhos = range(len(m_rho))  # [0, 1, 2] are [x, y, z].
@@ -331,7 +336,7 @@ dipole_norm = []
 
 # Loop over cartesian coordinates and calculate m_rho|I>.
 for rho in rhos:
-    dipole_matrix_rho = qml.matrix(m_rho[rho], wire_order=range(2*ncas))
+    dipole_matrix_rho = qml.matrix(m_rho[rho], wire_order=range(2*n_orb_cas))
     wf = dipole_matrix_rho.dot(wf_casci)
 
     if np.allclose(wf, np.zeros_like(wf)):
@@ -344,9 +349,13 @@ for rho in rhos:
         wf_dipole.append(wf/dipole_norm[rho])
 
 ######################################################################
-# Note when converting the operator to a matrix, the full set of wires need to be specified, otherwise
-# the matrix will not have the right dimension. Our full space is two times the number of orbitals,
-# since we need to account for spin.
+# .. admonition:: Implementing a multiplexed rotation
+#     :class: note
+# 
+#     When converting the operator ``m_rho`` to the matrix ``dipole_matrix_rho``, 
+#     the full set of wires need to be specified, otherwise the matrix will not have the 
+#     right dimension. Our full space is two times the number of orbitals, since we need 
+#     to account for spin.
 # 
 # Let’s prepare the circuit that will initialize our qubit register with this state. We will need
 # :math:`2 n_\mathrm{cas}` wires as mentioned above and one auxiliary wire for the measurement
@@ -358,7 +367,7 @@ import pennylane as qml
 device_type = "lightning.qubit"
 
 # Initialization circuit for m_rho|I>.
-dev_prop = qml.device(device_type, wires=int(2*ncas) + 1, shots=None)
+dev_prop = qml.device(device_type, wires=int(2*n_orb_cas) + 1, shots=None)
 
 @qml.qnode(dev_prop)
 def initial_circuit(wf):
@@ -425,7 +434,7 @@ one_chemist = one - np.einsum('pqrr->pq', two)/2.
 # 
 
 # Factorize hamiltonian, producing matrices.
-L = ncas  # Usually L is on the order of ncas.
+L = n_orb_cas  # Usually L is on the order of n_orb_cas.
 _, Z, U = qml.qchem.factorize(two_chemist, compressed=True, num_factors=L)
 
 print("Shape of the factors: ")
@@ -473,11 +482,11 @@ Z0 = np.diag(eigenvals)
 
 ######################################################################
 # .. figure:: ../_static/demonstration_assets/xas/UZU_circuits.png
-#    :alt: alt text
+#    :alt: One- and two-electron basis rotation and Pauli-Z rotation circuits.
 #    :width: 80.0%
 # 
-# Figure X: One- and two-electron term implementations in time-evolution circuit (ignoring global
-# phases).
+# Figure 4: One- and two-electron term implementations in time-evolution circuit (ignoring global
+# phases). Basis rotations are applied to both spin sections of the register.
 # 
 # We can use ``qml.BasisRotation`` to generate a `Givens
 # decomposition <https://pennylane.ai/qml/demos/tutorial_givens_rotations>`__ for the single-body
@@ -488,7 +497,7 @@ Z0 = np.diag(eigenvals)
 def U_rotations(U, control_wires):
     """Circuit implementing the basis rotations of the CDF decomposition."""
     U_spin = qml.math.kron(U, qml.math.eye(2))  # Apply to both spins.
-    qml.BasisRotation(unitary_matrix=U_spin, wires=[int(i + control_wires) for i in range(2*ncas)])
+    qml.BasisRotation(unitary_matrix=U_spin, wires=[int(i + control_wires) for i in range(2*n_orb_cas)])
 
 ######################################################################
 # Next we write a function to perform the :math:`Z` rotations. Controlled arbitrary-angle rotations
@@ -499,9 +508,9 @@ def U_rotations(U, control_wires):
 
 ######################################################################
 # .. figure:: ../_static/demonstration_assets/xas/double_phase_trick.png
-#    :alt: alt text
+#    :alt: Controlled-Z rotation of 2 theta equivalent to a Z rotation of theta sandwiched by CNOT gates.
 # 
-# Figure X: Double-phase trick to decompose expensive controlled-Z rotations into an uncontrolled-Z
+# Figure 5: Double-phase trick to decompose expensive controlled-Z rotations into an uncontrolled-Z
 # rotation sandwiched by CNOT gates.
 # 
 # For the one-electron terms, we loop over spin and orbital index, and apply the Z rotations using
@@ -515,7 +524,7 @@ def Z_rotations(Z, step, is_one_electron_term, control_wires):
     """Circuit implementing the Z rotations of the CDF decomposition."""
     if is_one_electron_term:
         for sigma in range(2):
-            for i in range(ncas):
+            for i in range(n_orb_cas):
                 qml.ctrl(qml.X(wires=int(2*i + sigma + control_wires)),
                                     control=range(control_wires), control_values=0)
                 qml.RZ(-Z[i, i] * step/2, wires=int(2*i + sigma + control_wires))
@@ -525,7 +534,7 @@ def Z_rotations(Z, step, is_one_electron_term, control_wires):
 
     else:  # It's a two-electron term.
         for sigma, tau in product(range(2), repeat=2):
-            for i, k in product(range(ncas), repeat=2):
+            for i, k in product(range(n_orb_cas), repeat=2):
                 if (i != k or sigma != tau):  # Skip the one-electron correction terms.
                     qml.ctrl(qml.X(wires=int(2*i + sigma + control_wires)), 
                             control = range(control_wires), control_values=0)
@@ -593,7 +602,7 @@ def trotter_circuit(dev, state, step):
         qml.StatePrep(state, wires=qubits)
 
         # Main body of the circuit.
-        prior_U = np.eye(ncas)  # No initial prior U, so set as identity matrix.
+        prior_U = np.eye(n_orb_cas)  # No initial prior U, so set as identity matrix.
         prior_U = LieTrotter(step / 2, prior_U=prior_U, final_rotation=False, reverse=False)
         prior_U = LieTrotter(step / 2, prior_U=prior_U, final_rotation=True, reverse=True)
 
@@ -611,22 +620,22 @@ def trotter_circuit(dev, state, step):
 # 
 
 def meas_circuit(state):
-    qml.StatePrep(state, wires=range(int(2*ncas)+1))
+    qml.StatePrep(state, wires=range(int(2*n_orb_cas)+1))
     # Measure in PauliX/PauliY to get the real/imaginary parts.
     return [qml.expval(op) for op in [qml.PauliX(wires=0), qml.PauliY(wires=0)]]
 
 ######################################################################
-# Note we can only obtain both real and imaginary expectation values in the simulated circuit. An
+# We can only obtain both real and imaginary expectation values in the simulated circuit. An
 # actual implementation would have to select real or imaginary by inserting a phase gate, like in the
 # circuit below.
 # 
 
 ######################################################################
 # .. figure:: ../_static/demonstration_assets/xas/hadamard_test_circuit.png
-#    :alt: alt text
+#    :alt: Hadamard test circuit with optional S-dagger gate on the auxilliary qubit.
 #    :width: 70.0%
 # 
-# Figure X: *Hadamard test circuit to measure expectation value of time-evolution operator*. With the
+# Figure 6: *Hadamard test circuit to measure expectation value of time-evolution operator*. With the
 # phase gate :math:`S^\dagger` present (absent), this gives the real (imaginary) part of the
 # time-domain Green’s function :math:`\tilde G(\tau j)`.
 # 
@@ -635,13 +644,15 @@ def meas_circuit(state):
 # Run Simulation
 # --------------
 # 
-# Let’s define the simulation parameters we’re are going to use. This includes: - The Lorentzian width
-# :math:`\eta` of the spectrum peaks, representing the experimental resolution. - The time step
-# :math:`\tau`, which should be small enough to resolve the largest frequency components we want to
-# determine. - The maximum number of time steps :math:`j_\mathrm{max}`, which sets the largest
-# evolution time. This should be large enough so that we can distinguish between the small frequency
-# components in our spectrum. - The total number of shots we will use to obtain statistics for the
-# expectation value after the time evolution.
+# Let’s define the simulation parameters we’re are going to use. This includes: 
+#  - The Lorentzian width :math:`\eta` of the spectrum peaks, representing the experimental resolution. 
+#  - The time step :math:`\tau`, which should be small enough to resolve the largest frequency components 
+#    we want to determine. 
+#  - The maximum number of time steps :math:`j_\mathrm{max}`, which sets the largest evolution time. 
+#    This should be large enough so that we can distinguish between the small frequency components in 
+#    our spectrum. 
+#  - The total number of shots we will use to obtain statistics for the expectation value after the time 
+#    evolution.
 # 
 
 eta = 0.05  # In Hartree energy units (Ha).
@@ -697,7 +708,7 @@ for rho in rhos:
 
         # Define measurement circuit device with shots.
         shots = shots_list[i]  # Kernel-aware number of shots.
-        dev_est = qml.device(device_type, wires=int(2 * ncas) + 1, shots=shots)
+        dev_est = qml.device(device_type, wires=int(2 * n_orb_cas) + 1, shots=shots)
 
         # Update state and then measure expectation values.
         state = circuit()
@@ -718,7 +729,7 @@ ax = fig.add_axes((0.15, 0.3, 0.8, 0.65))  # Leave space for caption.
 ax.plot(range(len(expvals[0, :])), expvals[0, :], label="Real")
 ax.plot(range(len(expvals[1, :])), expvals[1, :], label="Imaginary", linestyle="--")
 ax.set(xlabel=r"$\mathrm{Time step}, j$", ylabel=r"Expectation Value")
-fig.text(0.5, 0.05, "Figure X. Time-domain output of algorithm.",
+fig.text(0.5, 0.05, "Figure 7. Time-domain output of algorithm.",
     horizontalalignment="center", size="small", weight="normal")
 ax.legend()
 plt.show()
@@ -759,7 +770,7 @@ mycasci.e_tot = np.atleast_1d(mycasci.e_tot)
 
 # Determine the dipole integrals using atomic orbitals from RHF object.
 dip_ints_ao = hf.mol.intor('int1e_r_cart', comp=3) # In atomic orbital basis.
-mo_coeffs = coeffs[:,ncore:ncore+ncas]
+mo_coeffs = coeffs[:,ncore:ncore+n_orb_cas]
 
 # Convert to molecular orbital basis.
 dip_ints_mo = np.einsum('ik,xkl,lj->xij', mo_coeffs.T, dip_ints_ao, mo_coeffs)
@@ -768,7 +779,7 @@ dip_ints_mo = np.einsum('ik,xkl,lj->xij', mo_coeffs.T, dip_ints_ao, mo_coeffs)
 def makedip(ci_id):
     # Transition density matrix in molecular orbital basis.
     t_dm1 = mycasci.fcisolver.trans_rdm1(mycasci.ci[0], mycasci.ci[ci_id], 
-                                            ncas, nelecas)
+                                            n_orb_cas, n_electron_cas)
     # Transition dipole moments.
     return np.einsum('xij,ji->x', dip_ints_mo, t_dm1)
 
@@ -795,7 +806,7 @@ ax.plot(wgrid - E_i, spectrum_classical, '--', label='classical')
 ax.set_xlabel(r"$\mathrm{Energy}, \omega\ (\mathrm{Ha})$")
 ax.set_ylabel(r"$\mathrm{Absorption\ (arb.)}$")
 ax.legend()
-fig.text(0.5, 0.05, r"Figure X: $H_2$ XAS spectrum calculation.",
+fig.text(0.5, 0.05, r"Figure 8: $H_2$ XAS spectrum calculation.",
         horizontalalignment="center", size="small", weight="normal")
 
 plt.show()
@@ -821,10 +832,11 @@ plt.show()
 
 ######################################################################
 # .. figure:: ../_static/demonstration_assets/xas/core_valence.png
-#    :alt: alt text
+#    :alt: Energy diagram showing X-rays excite core electrons to high valence energies, 
+#    whereas UV and visible radiation excite electrons already in the valence. 
 #    :width: 50.0%
 # 
-# Figure X: *Core-valence separation.* A much larger amount of energy is required to excite core
+# Figure 9: *Core-valence separation.* A much larger amount of energy is required to excite core
 # electrons into valence orbitals compared to electrons already in low-lying valence orbitals. Since
 # XAS targets core electrons, we can ignore valence-excitation matrix elements in our calculations.
 # 
