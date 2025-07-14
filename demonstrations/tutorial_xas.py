@@ -14,13 +14,15 @@ First, we will discuss why simulating X-ray absorption spectroscopy is a promisi
 early quantum computers. Then we will explain the main steps in the simulation algorithm and how to
 implement a simplified version in PennyLane.
 
-We will be using concepts that were introduced in other PennyLane demos, such as `Using PennyLane
-with PySCF and OpenFermion <https://pennylane.ai/qml/demos/tutorial_qchem_external>`__, `Initial
-state preparation for quantum
-chemistry <https://pennylane.ai/qml/demos/tutorial_initial_state_preparation>`__, and `How to build
-compressed double-factorized
-Hamiltonians <https://pennylane.ai/qml/demos/tutorial_how_to_build_compressed_double_factorized_hamiltonians>`__.
-If you haven’t checked out those demos yet, it might be best to do so and then come back here 🔙.
+ .. admonition:: Prerequisite understanding
+    :class: note
+    We will be using concepts that were introduced in other PennyLane demos, such as `Using PennyLane
+    with PySCF and OpenFermion <https://pennylane.ai/qml/demos/tutorial_qchem_external>`__, `Initial
+    state preparation for quantum
+    chemistry <https://pennylane.ai/qml/demos/tutorial_initial_state_preparation>`__, and `How to build
+    compressed double-factorized
+    Hamiltonians <https://pennylane.ai/qml/demos/tutorial_how_to_build_compressed_double_factorized_hamiltonians>`__.
+    If you haven’t checked out those demos yet, it might be best to do so and then come back here 🔙.
 
 Why simulate X-ray absorption spectroscopy?
 -------------------------------------------
@@ -91,6 +93,7 @@ promising cathode materials.
 # .. figure:: ../_static/demonstration_assets/xas/example_spectrum.png
 #    :alt: Illustration of X-ray absorption spectrum with five peaks of varying positions and peak heights.
 #    :width: 50.0%
+#    :align: center
 # 
 # Figure 2: *Example X-ray absorption spectrum.* Illustration of how the peak positions
 # :math:`E_F - E_i`, widths :math:`\eta` and amplitudes
@@ -349,17 +352,17 @@ for rho in rhos:
         wf_dipole.append(wf/dipole_norm[rho])
 
 ######################################################################
-# .. admonition:: Implementing a multiplexed rotation
+# .. admonition:: Wire ordering when converting an operator to a matrix
 #     :class: note
 # 
 #     When converting the operator ``m_rho`` to the matrix ``dipole_matrix_rho``, 
-#     the full set of wires need to be specified, otherwise the matrix will not have the 
-#     right dimension. Our full space is two times the number of orbitals, since we need 
-#     to account for spin.
+#     the full set of wires need to be specified, otherwise the matrix may not have the 
+#     right dimension (if, for example, the operator is zero along any cartesian direction). 
 # 
-# Let’s prepare the circuit that will initialize our qubit register with this state. We will need
-# :math:`2 n_\mathrm{cas}` wires as mentioned above and one auxiliary wire for the measurement
-# circuit, which we will prepare as the 0 wire with an applied Hadamard gate.
+# Let’s prepare the circuit that will initialize our qubit register with this state. 
+# We will need :math:`2 n_\mathrm{cas}` wires, which is twice our full space since we need 
+# to account for spin. We will also add one auxiliary wire for the measurement circuit, 
+# which we will prepare as the 0 wire with an applied Hadamard gate.
 # 
 
 import pennylane as qml
@@ -484,6 +487,7 @@ Z0 = np.diag(eigenvals)
 # .. figure:: ../_static/demonstration_assets/xas/UZU_circuits.png
 #    :alt: One- and two-electron basis rotation and Pauli-Z rotation circuits.
 #    :width: 80.0%
+#    :align: center
 # 
 # Figure 4: One- and two-electron term implementations in time-evolution circuit (ignoring global
 # phases). Basis rotations are applied to both spin sections of the register.
@@ -634,6 +638,7 @@ def meas_circuit(state):
 # .. figure:: ../_static/demonstration_assets/xas/hadamard_test_circuit.png
 #    :alt: Hadamard test circuit with optional S-dagger gate on the auxilliary qubit.
 #    :width: 70.0%
+#    :align: center
 # 
 # Figure 6: *Hadamard test circuit to measure expectation value of time-evolution operator*. With the
 # phase gate :math:`S^\dagger` present (absent), this gives the real (imaginary) part of the
@@ -835,6 +840,7 @@ plt.show()
 #    :alt: Energy diagram showing X-rays excite core electrons to high valence energies, 
 #    whereas UV and visible radiation excite electrons already in the valence. 
 #    :width: 50.0%
+#    :align: center
 # 
 # Figure 9: *Core-valence separation.* A much larger amount of energy is required to excite core
 # electrons into valence orbitals compared to electrons already in low-lying valence orbitals. Since
