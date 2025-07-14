@@ -86,7 +86,7 @@ promising cathode materials.
 # line broadening--set by the experimental resolution of the spectroscopy--and is
 # typically around :math:`1` eV. Below is an illustration of an XAS spectrum. In the illustration,
 # there appear to be five excited states coupled by the X-rays, each with varying amounts of overlap
-# with the inital state.
+# with the initial state.
 # 
 
 ######################################################################
@@ -110,7 +110,7 @@ promising cathode materials.
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # Both the initial state :math:`|I\rangle` and the dipole operator acting on the initial state
-# :math:`\hat m_\rho|I\rangle` can be determined classically, and we’ll demonstate how to do that
+# :math:`\hat m_\rho|I\rangle` can be determined classically, and we’ll demonstrate how to do that
 # later. Given the initial state, we will use a mathematical trick called a *frequency-domain*
 # `Green’s function <https://en.wikipedia.org/wiki/Green%27s_function>`__ to determine the absorption
 # cross section. We can write the cross section as the imaginary part of the following Green’s
@@ -241,7 +241,7 @@ print("Shifted nuclear charge centre", nuclear_charge_center)
 
 import pennylane as qml
 
-# Create qml Molecule object.
+# Create a qml Molecule object.
 mole = qml.qchem.Molecule(symbols, geometry, basis_name='6-31g', unit='angstrom')
 
 # Run self-consistent fields method to get MO coefficients.
@@ -636,7 +636,7 @@ def meas_circuit(state):
 
 ######################################################################
 # .. figure:: ../_static/demonstration_assets/xas/hadamard_test_circuit.png
-#    :alt: Hadamard test circuit with optional S-dagger gate on the auxilliary qubit.
+#    :alt: Hadamard test circuit with optional S-dagger gate on the auxiliary qubit.
 #    :width: 70.0%
 #    :align: center
 # 
@@ -649,7 +649,7 @@ def meas_circuit(state):
 # Run Simulation
 # --------------
 # 
-# Let’s define the simulation parameters we’re are going to use. This includes: 
+# Let’s define the simulation parameters we are going to use. This includes: 
 #  - The Lorentzian width :math:`\eta` of the spectrum peaks, representing the experimental resolution. 
 #  - The time step :math:`\tau`, which should be small enough to resolve the largest frequency components 
 #    we want to determine. 
@@ -700,7 +700,7 @@ expvals = np.zeros((2, len(time_interval)))  # Results list initialization.
 # Loop over cartesian coordinate directions.
 for rho in rhos:
 
-    if dipole_norm[rho] == 0:  # Skip if no excited states coupled.
+    if dipole_norm[rho] == 0:  # Skip if no excited states are coupled.
         continue 
 
     # Initialize state m_rho|I> (including the auxiliary qubit).
@@ -741,7 +741,7 @@ plt.show()
 
 ######################################################################
 # Since the real and imaginary components of the time-domain Green’s function are determined
-# seperately, we can calculate the Fourier transform like
+# separately, we can calculate the Fourier transform like
 # 
 # .. math::  -\mathrm{Im}\,G_\rho(\omega) = \frac{\eta\tau}{2\pi}\left(1 + 2\sum_{j=1}^{j_\mathrm{max}}\left[ \mathbb{E}\left(\mathrm{Re}\,\tilde G(\tau j)\right)\mathrm{cos}(\tau j \omega) - \mathbb{E}\left(\mathrm{Im}\,\tilde G(\tau j)\right) \mathrm{sin}(\tau j \omega)\right]\right) \,,
 # 
@@ -837,8 +837,8 @@ plt.show()
 
 ######################################################################
 # .. figure:: ../_static/demonstration_assets/xas/core_valence.png
-#    :alt: Energy diagram showing X-rays excite core electrons to high valence energies, 
-#    whereas UV and visible radiation excite electrons already in the valence. 
+#    :alt: Energy diagram with X-rays exciting core electrons to high valence energies, 
+#    and UV and visible radiation only excite electrons already in valence orbitals. 
 #    :width: 50.0%
 #    :align: center
 # 
@@ -852,8 +852,8 @@ plt.show()
 # ~~~~~~~~~~~~~~~~~~~~~
 # 
 # There are more optimizations for this algorithm that are included in the paper [#Fomichev2025]_
-# that we did not implemented in the above code. One could further optimize the compressed
-# double-factorized Hamiltonian by applying a block-invarient symmetry shift (BLISS) [#Loaiza2023]_
+# that we did not implement in the above code. One could further optimize the compressed
+# double-factorized Hamiltonian by applying a block-invariant symmetry shift (BLISS) [#Loaiza2023]_
 # to the Hamiltonian prior to compression. This is already detailed in the `demo on CDF
 # Hamiltonians <https://pennylane.ai/qml/demos/tutorial_how_to_build_compressed_double_factorized_hamiltonians>`__.
 # 
@@ -890,22 +890,22 @@ plt.show()
 # .. [#Fomichev2025]
 # 
 #    Stepan Fomichev, Pablo A. M. Casares, Jay Soni, Utkarsh Azad, Alexander Kunitsa, Arne-Christian
-#    Voigt, Jonathan E. Mueller, Juan Miguel Arrazola, “Fast simulations of X-ray absorption spectroscopy
+#    Voigt, Jonathan E. Mueller, and Juan Miguel Arrazola, “Fast simulations of X-ray absorption spectroscopy
 #    for battery materials on a quantum computer”. `arXiv preprint arXiv:2506.15784
 #    (2025) <https://arxiv.org/abs/2506.15784>`__.
 # 
 # .. [#Fomichev2024]
 # 
 #    Stepan Fomichev, Kasra Hejazi, Ignacio Loaiza, Modjtaba Shokrian Zini, Alain Delgado, Arne-Christian
-#    Voigt, Jonathan E. Mueller, Juan Miguel Arrazola, “Simulating X-ray absorption spectroscopy of
+#    Voigt, Jonathan E. Mueller, and Juan Miguel Arrazola, “Simulating X-ray absorption spectroscopy of
 #    battery materials on a quantum computer”. `arXiv preprint arXiv:2405.11015
 #    (2024) <https://arxiv.org/abs/2405.11015>`__.
 # 
 # .. [#Loaiza2023]
 # 
-#    Ignacio Loaiza, Artur F Izmaylov, “Block-invariant symmetry shift: Preprocessing technique for
+#    Ignacio Loaiza and Artur F Izmaylov, “Block-invariant symmetry shift: Preprocessing technique for
 #    second-quantized Hamiltonians to improve their decompositions to linear combination of unitaries”.
-#    `J Chem Theory Comput. 19, 22, 8201–8209 (2023) <https://doi.org/10.1021/acs.jctc.3c00912>`__.
+#    `J. Chem. Theory Comput. 19, 22, 8201–8209 (2023) <https://doi.org/10.1021/acs.jctc.3c00912>`__.
 # 
 # .. [#Yen2021]
 # 
@@ -921,7 +921,7 @@ plt.show()
 # 
 # .. [#Childs2019]
 # 
-#    Andrew M. Childs, Aaron Ostrander, Yuan Su, “Faster quantum simulation by randomization”. `Quantum
+#    Andrew M. Childs, Aaron Ostrander, and Yuan Su, “Faster quantum simulation by randomization”. `Quantum
 #    3, 182 (2019) <https://doi.org/10.22331/q-2019-09-02-182>`__.
 # 
 # .. [#Sherrill2005]
