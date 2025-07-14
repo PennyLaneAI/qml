@@ -16,7 +16,7 @@ implement a simplified version in PennyLane.
 
  .. admonition:: Prerequisite understanding
     :class: note
-    
+
     We will be using concepts that were introduced in other PennyLane demos, such as `Using PennyLane
     with PySCF and OpenFermion <https://pennylane.ai/qml/demos/tutorial_qchem_external>`__, `Initial
     state preparation for quantum
@@ -353,7 +353,7 @@ for rho in rhos:
         wf_dipole.append(wf/dipole_norm[rho])
 
 ######################################################################
-# .. admonition:: Wire ordering when converting an operator to a matrix
+# .. admonition:: Caution! Wire ordering
 #     :class: note
 # 
 #     When converting the operator ``m_rho`` to the matrix ``dipole_matrix_rho``, 
@@ -838,8 +838,7 @@ plt.show()
 
 ######################################################################
 # .. figure:: ../_static/demonstration_assets/xas/core_valence.png
-#    :alt: Energy diagram with X-rays exciting core electrons to high valence energies, 
-#    and UV and visible radiation only excite electrons already in valence orbitals. 
+#    :alt: Energy diagram with X-rays exciting core electrons to high valence energies, and UV and visible radiation only excite electrons already in valence orbitals. 
 #    :width: 50.0%
 #    :align: center
 # 
