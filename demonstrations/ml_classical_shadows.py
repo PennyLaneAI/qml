@@ -27,8 +27,10 @@ how to use :doc:`kernel-based learning models <tutorial_kernels_module>` to pred
 properties from the learned classical shadows. So let's get started!
 
 .. note::
-    This demo is compatible with the latest version of PennyLane and ``neural-tangents==0.6.5``.
+    This demo is compatible with the latest version of PennyLane and ``neural-tangents``.
     The latter is required for building the kernel for the infinite network used in training.
+    As of July 10th, 2025, the latest version of ``neural-tangents`` (v0.6.5) is only compatible
+    with ``jax<0.6.0``.
 
 
 Building the 2D Heisenberg model
@@ -648,7 +650,7 @@ for i in range(len(kernel_NN)):
 # from the ``sklearn`` library.
 #
 
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import root_mean_squared_error
 
 def fit_predict_data(cij, kernel, opt="linear"):
 
@@ -685,8 +687,8 @@ def fit_predict_data(cij, kernel, opt="linear"):
                 best_model = model(hyperparam).fit(X_train, y_train)
                 best_pred = best_model.predict(X_test)
                 best_cv_score = cv_score
-                best_test_score = mean_squared_error(
-                    best_model.predict(X_test).ravel(), y_test_clean.ravel(), squared=False
+                best_test_score = root_mean_squared_error(
+                    best_model.predict(X_test).ravel(), y_test_clean.ravel()
                 )
 
     return (
