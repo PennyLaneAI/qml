@@ -16,6 +16,7 @@ implement a simplified version in PennyLane.
 
  .. admonition:: Prerequisite understanding
     :class: note
+    
     We will be using concepts that were introduced in other PennyLane demos, such as `Using PennyLane
     with PySCF and OpenFermion <https://pennylane.ai/qml/demos/tutorial_qchem_external>`__, `Initial
     state preparation for quantum
