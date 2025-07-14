@@ -60,7 +60,7 @@ component of a workflow for identifying promising cathode materials.
 # 
 # Simulating reference spectra requires calculating the observable of the experiment, which in this
 # case is the `absorption cross section <https://en.wikipedia.org/wiki/Absorption_cross_section>`__.
-# We will describe this quantity below, and then explain how a *time-domain* simulation algorithm can
+# We will describe this quantity below and then explain how a *time-domain* simulation algorithm can
 # estimate it.
 # 
 # Absorption cross-section
