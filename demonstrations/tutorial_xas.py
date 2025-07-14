@@ -166,7 +166,8 @@ promising cathode materials.
 
 ######################################################################
 # .. figure:: ../_static/demonstration_assets/xas/global_circuit.png
-#    :alt: Illustration of full Hadamard test circuit with state prep, time evolution and measurement.
+#    :alt: Illustration of full Hadamard test circuit with state prep, time evolution and measurement.\
+#    :width: 70.0%
 #
 # Figure 3: *Circuit for XAS simulation*. The algorithm is ultimately a Hadamard test circuit, and we
 # divide the steps of this into three components.
@@ -397,8 +398,8 @@ def initial_circuit(wf):
 # Time Evolution
 # --------------
 #
-# Next we will discuss how to prepare the electronic Hamiltonian for use in the time-evolution of the
-# Hadamard-test circuit. This constitutes the main body of our simulation circuit and includes most of
+# Next we will discuss how to prepare the electronic Hamiltonian for use in the time evolution of the
+# Hadamard-test. This constitutes the main body of our simulation circuit and includes most of
 # the optimizations in the algorithm.
 #
 # Electronic Hamiltonian
@@ -433,7 +434,7 @@ one_chemist = one - np.einsum("pqrr->pq", two) / 2.0
 # If you haven’t yet, go read the demo `“How to build compressed double-factorized
 # Hamiltonians” <https://pennylane.ai/qml/demos/tutorial_how_to_build_compressed_double_factorized_hamiltonians>`__,
 # because that is exactly what we are going to do! A compressed double-factorized Hamiltonian takes on
-# the form [#Cohn2021]_ [#Yen2021]_
+# the form [#Yen2021]_ [#Cohn2021]_ 
 #
 # .. math::  H_\mathrm{CDF} = E + \sum_{\gamma\in\{\uparrow,\downarrow\}} U_\gamma^{(0)} \left(\sum_p Z_p^{(0)} a_{\gamma,p}^\dagger a_{\gamma, p}\right) U_\mathrm{\gamma}^{(0)\,\dagger} + \sum_\ell^L \sum_{\gamma,\beta\in\{\uparrow,\downarrow\}} U_\mathrm{\gamma, \beta}^{(\ell)} \left( \sum_{pq} Z_{pq}^{(\ell)} a_{\gamma, p}^\dagger a_{\gamma, p} a_{\beta,q}^\dagger a_{\beta, q}\right) U_{\gamma, \beta}^{(\ell)\,\dagger} \,,
 #
@@ -443,7 +444,7 @@ one_chemist = one - np.einsum("pqrr->pq", two) / 2.0
 # terms, indexed as :math:`(\ell)`. The number of factors :math:`L` affects the accuracy of the
 # approximation.
 #
-# We can compress and double-factorize the two-electron integrals using ``qml``\ ’s
+# We can compress and double-factorize the two-electron integrals using PennyLane’s
 # ``qchem.factorize`` function, with ``compressed=True``. We will set :math:`L` as the number of
 # orbitals in our active space. The ``Z`` and ``U`` output here will have shapes with dimensions
 # :math:`(L, n_\mathrm{cas}, n_\mathrm{cas})`, i.e. they are arrays of :math:`L` fragment matrices
@@ -503,7 +504,7 @@ Z0 = np.diag(eigenvals)
 #    :width: 80.0%
 #    :align: center
 #
-# Figure 4: One- and two-electron term implementations in time-evolution circuit (ignoring global
+# Figure 4: One- and two-electron term implementations in the time-evolution circuit (ignoring global
 # phases). Basis rotations are applied to both spin sections of the register.
 #
 # We can use ``qml.BasisRotation`` to generate a `Givens
@@ -522,7 +523,7 @@ def U_rotations(U, control_wires):
 
 
 ######################################################################
-# Next we write a function to perform the :math:`Z` rotations. Controlled arbitrary-angle rotations
+# Next we write a function to perform the Z rotations. Controlled arbitrary-angle rotations
 # are expensive. To reduce the cost of having to implement many controlled Z rotations at angles
 # determined by the matrices :math:`Z^{(\ell)}`, we instead implement *uncontrolled* Z rotations
 # sandwiched by CNOT gates.
@@ -530,7 +531,7 @@ def U_rotations(U, control_wires):
 
 ######################################################################
 # .. figure:: ../_static/demonstration_assets/xas/double_phase_trick.png
-#    :alt: Controlled-Z rotation of 2 theta equivalent to a Z rotation of theta sandwiched by CNOT gates.
+#    :alt: Diagram showing that a controlled-Z rotation of 2 theta is equivalent to a Z rotation of theta sandwiched by CNOT gates.
 #
 # Figure 5: Double-phase trick to decompose expensive controlled-Z rotations into an uncontrolled-Z
 # rotation sandwiched by CNOT gates.
@@ -656,13 +657,13 @@ def trotter_circuit(dev, state, step):
 
 
 def meas_circuit(state):
-    qml.StatePrep(state, wires=range(int(2 * n_orb_cas) + 1))
+    qml.StatePrep(state, wires=range(int(2*n_orb_cas) + 1))
     # Measure in PauliX/PauliY to get the real/imaginary parts.
     return [qml.expval(op) for op in [qml.PauliX(wires=0), qml.PauliY(wires=0)]]
 
 
 ######################################################################
-# We can only obtain both real and imaginary expectation values in the simulated circuit. An
+# We can only obtain both real and imaginary expectation values in a *simulated* circuit. An
 # actual implementation would have to select real or imaginary by inserting a phase gate, like in the
 # circuit below.
 #
@@ -681,8 +682,8 @@ def meas_circuit(state):
 ######################################################################
 # Run Simulation
 # --------------
-#
 # Let’s define the simulation parameters we are going to use. This includes:
+#
 #  - The Lorentzian width :math:`\eta` of the spectrum peaks, representing the experimental resolution.
 #  - The time step :math:`\tau`, which should be small enough to resolve the largest frequency components
 #    we want to determine.
@@ -707,7 +708,7 @@ time_interval = tau * jrange
 # improve the efficiency of our algorithm. One way to do this is to employ a sampling distribution
 # that takes advantage of the decaying Lorentzian kernel, exponentially reducing the shot allocation
 # for longer evolution times [#Fomichev2025]_. This is implemented below by creating ``shots_list``,
-# which distributes the ``total_shots`` among the time steps, weighted by the Lorentzian kernel. The
+# which distributes the ``total_shots`` among the time steps, weighted exponentially by the Lorentzian width. The
 # parameter :math:`\alpha` can adjust this weighting, s.t. for :math:`\alpha > 1` there is more weight
 # at shorter times.
 #
@@ -770,7 +771,7 @@ fig = plt.figure(figsize=(6.4, 2.4))
 ax = fig.add_axes((0.15, 0.3, 0.8, 0.65))  # Leave space for caption.
 ax.plot(range(len(expvals[0, :])), expvals[0, :], label="Real")
 ax.plot(range(len(expvals[1, :])), expvals[1, :], label="Imaginary", linestyle="--")
-ax.set(xlabel=r"$\mathrm{Time step}, j$", ylabel=r"Expectation Value")
+ax.set(xlabel=r"$\mathrm{Time step}, j$", ylabel=r"$\mathrm{Expectation Value}")
 fig.text(0.5, 0.05,
     "Figure 7. Time-domain output of algorithm.",
     horizontalalignment="center",
@@ -803,15 +804,19 @@ spectrum = np.array([f_domain_Greens_func(w) for w in wgrid])
 ######################################################################
 # Since our active space for :math:`\mathrm{H}_2` is small, we can easily calculate a classical spectrum for
 # comparison. We do this using the ``mycasci`` instance that we used to determine the ground state,
-# but instead solve for more states by increasing the number of roots in the ``fcisolver``. We can
-# also calculate the transition density matrix in the molecular orbital basis,
-# :math:`\langle F| \hat m_\rho |I \rangle`.
-#
+# but instead solve for more states by increasing the number of roots in the ``fcisolver``. 
+# This will give us the energies of the coupled final staes. We can also calculate the 
+# transition density matrix in the molecular orbital basis between those states and the initial state,
+# :math:`\langle F| \hat m_\rho |I \rangle`. Finally, we can compute the absorption cross section directly.
+# 
 
 # Use CASCI to solve for excited states.
 mycasci.fcisolver.nroots = 100  # Compute the first 10 states.
 mycasci.run(verbose=0)
 mycasci.e_tot = np.atleast_1d(mycasci.e_tot)
+
+# Ground state energy.
+E_i = mycasci.e_tot[0]
 
 # Determine the dipole integrals using atomic orbitals from RHF object.
 dip_ints_ao = hf.mol.intor("int1e_r_cart", comp=3)  # In atomic orbital basis.
@@ -832,13 +837,12 @@ def makedip(ci_id):
 
 F_m_Is = np.array([makedip(i) for i in range(len(mycasci.e_tot))])
 
+# Absorption cross section.
 spectrum_classical_func = lambda E: (1 / np.pi) * np.sum(
                 [np.sum(np.abs(F_m_I)**2) * eta / ((E - e)**2 + eta**2)
                     for (F_m_I, e) in zip(F_m_Is, mycasci.e_tot)])
 
 spectrum_classical = np.array([spectrum_classical_func(w) for w in wgrid])
-
-E_i = mycasci.e_tot[0]
 
 ######################################################################
 # Let’s plot and compare the classical and quantum spectra.
@@ -864,8 +868,8 @@ plt.show()
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # For larger molecular instances, it may be valuable to restrict the terms coupled by the dipole
-# operator to only include those of relevance for XAS, which are final states for where the *core*
-# electrons are excited, i.e. there exists a hole in the core orbitals. These are known as
+# operator to only include those of relevance for XAS, which are final states where a *core*
+# electron is excited, i.e. there exists a hole in the core orbitals. These are known as
 # core-excited states, and lie significantly above the valence-excited states in energy. Typically the
 # frequency range is focused on a target atom in a molecular cluster, and also near a transition
 # energy, such as targeting core :math:`1s` electrons.
