@@ -14,6 +14,9 @@ demos_community.rst
 .venv_ubuntu/
 .venv-build/
 **/*.egg-info/
+*.ipynb
+*.deb
+.test_figures/*
 
 # Generated after installation
 .github/workflows/qml_pipeline_utils/build/
