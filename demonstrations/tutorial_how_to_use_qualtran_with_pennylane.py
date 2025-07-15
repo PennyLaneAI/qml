@@ -10,7 +10,7 @@ as if they were PennyLane operators. We go from abstract, high-level subroutines
 operators that can run directly in our quantum circuits.
 
 In the other direction, we can convert PennyLane circuits and operators to Qualtran Bloqs just as
-easily, allowing us to use Qualtran's tools and abstractions for expressing and reasoning about
+easily. This allows us to use Qualtran's tools and abstractions for expressing and reasoning about
 quantum algorithms, programs, and subroutines.
 """
 
