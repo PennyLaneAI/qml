@@ -25,7 +25,7 @@ print(bloq_as_op)
 # The output is a :class:`~.pennylane.io.FromBloq` instance. In this case, we wrapped Qualtran's
 # ``XGate``, which is equivalent to ``qml.X``.
 #
-# We can see that this is true by checking its matrix.
+# We can verify this by checking its matrix.
 
 print(bloq_as_op.matrix())
 
@@ -61,27 +61,33 @@ qml.bloq_register(textbook_qpe)
 op_as_bloq = qml.to_bloq(qml.X(0))
 print(op_as_bloq)
 
-# You can also pass in QFuncs. 
+# Unlike `qml.FromBloq`, notice that instead of being wrapped as a `ToBloq` Bloq, the PauliX 
+# operator was directly translated to its Qualtran equivalent, ``XGate()``. For `qml.to_bloq`,
+# PennyLane always tries its best to translate PennyLane objects to Qualtran-native objects. This
+# makes certain Qualtran functionalities, such as gate counting and generalizers, work more
+# seamlessly.
+# 
+# In the following example, we pass a quantum function to `qml.to_bloq`. Here, since the quantum
+# function does not have a direct Qualtran equivalent, the circuit is wrapped as a `ToBloq` Bloq.
+# We can check its decomposition to see that it follows the circuit description exactly.
+
+from qualtran.drawing import show_bloq
 
 def circ():
     qml.X(0)
     qml.X(1)
 
 qfunc_as_bloq = qml.to_bloq(circ)
-print(qfunc_as_bloq)
+print(type(qfunc_as_bloq))
+show_bloq(qfunc_as_bloq.decompose_bloq())
 
 ######################################################################
-# The Mappening
-# -------------
+# Advanced details: Mapping
+# -------------------------
 #
-# Here, the PauliX operator was directly translated to its Qualtran equivalent, ``XGate()``.
-# PennyLane always tries its best to translate operators to a Qualtran-native object. However,
-# implementations of the same abstract idea can differ between Qualtran and PennyLane. In ambiguous
-# cases, we provide a default mapping, but if that is unsatisfactory, we offer two solutions:
-# (1) explicitly map to the specific Qualtran Bloq desired and (2) maintain the original
-# PennyLane implementation by setting  ``map_ops`` to ``False``. For example, the implementations
-# of Quantum Phase Estimation (QPE) in PennyLane and Qualtran differ. By default,
-# we map the PennyLane QPE to its closest equivalent in Qualtran.
+# Not all PennyLane operators are as straightforward to map as the PauliX operator. For example, 
+# PennyLane's Quantum Phase Estimation could be mapped to a variety of Qualtran Bloqs. In cases
+# where the mapping is ambiguous, PennyLane provides what we call a smart default:
 
 from qualtran.drawing import draw_musical_score,  get_musical_score_data
 
@@ -91,9 +97,9 @@ fig, ax = draw_musical_score(get_musical_score_data(qpe_bloq.decompose_bloq()))
 fig.tight_layout()
 
 ######################################################################
-# We mapped it to Qualtran's ``TextbookQPE`` where ``ctrl_state_prep`` is Qualtran's 
-# ``RectangularWindowState``. If we wanted to use ``LPResourceState``,
-# rather than ``RectangularWindowState``, we can simply pass in a custom map to ``to_bloq``.
+# Here, the smart default is Qualtran's ``TextbookQPE`` where ``ctrl_state_prep`` is Qualtran's 
+# ``RectangularWindowState``. If we wanted to use ``LPResourceState``, rather than 
+# ``RectangularWindowState``, we can override the smart default and pass in a custom map.
 
 from qualtran.bloqs.phase_estimation import LPResourceState
 from qualtran.bloqs.phase_estimation.text_book_qpe import TextbookQPE
@@ -113,31 +119,35 @@ fig.tight_layout()
 # We see that ``RectangularWindowState`` has been switched out for the ``LPResourceState`` we
 # defined in the custom map. 
 #
-# The wrappening
-# --------------
+# Advanced details: Wrapping
+# --------------------------
 #
 # These two implementations, while similar on a high level, are not exactly the same as the
 # implementation in PennyLane. To make our ``qpe_bloq`` exactly the same as its PennyLane
 # original, set ``map_ops`` to ``False``. This wraps the ``qpe_bloq`` as a ``ToBloq`` Bloq,
 # whose information is based on that of the original PennyLane object.
 
-qpe_bloq = qml.to_bloq(op, map_ops=False)
-fig, ax = draw_musical_score(get_musical_score_data(qpe_bloq.decompose_bloq()))
+wrapped_qpe_bloq = qml.to_bloq(op, map_ops=False)
+fig, ax = draw_musical_score(get_musical_score_data(wrapped_qpe_bloq.decompose_bloq()))
 fig.tight_layout()
 
 ######################################################################
 # Here, we can clearly see the differences between the two methods. When we map, qubit allocation
 # is handled with the use of Qualtran's bookkeeping bloq `Allocate`. Since there is no PennyLane
 # equivalent, in the latter version, the 3 wires are explicitly drawn and handled, which leads to
-# a more PennyLane-like visualization. When ``to_bloq`` encounters a Bloq that doesn't have a
-# corresponding PennyLane equivalent, the Bloq is automatically wrapped as a ``ToBloq`` Bloq.
+# a more PennyLane-like visualization. The call graphs and resource counts will differ between
+# the two methods as well.
 
-block_encoding = qml.Hadamard(wires=0)
-phase_shifts = [qml.RZ(-2 * theta, wires=0) for theta in (1.23, -0.5, 4)]
-op_as_to_bloq = qml.to_bloq(qml.QSVT(block_encoding, phase_shifts))
+from qualtran.drawing import show_counts_sigma
+
+_, mapped_sigma = qpe_bloq.call_graph()
+_, wrapped_sigma = wrapped_qpe_bloq.call_graph()
+
+show_counts_sigma(mapped_sigma)
+show_counts_sigma(wrapped_sigma)
 
 # Note that while ``ToBloq``'s decomposition always maintains that of the wrapped PennyLane object,
-# its call graph does not always match the decomposition. When you use the resource counting
+# its call graph may not always match the decomposition. When you use the resource counting
 # methods on a ``ToBloq``, you may get resources more optimal than what the original PennyLane
 # decomposition might have prescribed.
 
