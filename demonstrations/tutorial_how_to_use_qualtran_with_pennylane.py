@@ -3,13 +3,11 @@ r"""How to use Qualtran with PennyLane
 
 As interest has grown in quantum computing, so have the number of tools available that help us 
 express and analyze quantum circuits. One such tool is Qualtran: a set of abstractions for
-representing quantum programs and a library of quantum algorithms expressed in that language. This
-expansive library of quantum subroutines, known as Bloqs, enable researchers to find detailed
-resource estimates of potential algorithms efficiently and accurately. 
+representing quantum programs and a library of quantum algorithms expressed in that language.
 
-With the PennyLane-Qualtran integration, we can leverage all of Qualtran's subroutines as if they
-were PennyLane operators. We go from abstract, high-level subroutines to well-defined operators
-that can run directly in our quantum circuits.
+With the PennyLane-Qualtran integration, we can leverage Qualtran's expansive library of algorithms
+as if they were PennyLane operators. We go from abstract, high-level subroutines to well-defined 
+operators that can run directly in our quantum circuits.
 
 In the other direction, we can convert PennyLane circuits and operators to Qualtran Bloqs just as
 easily, allowing us to use Qualtran's tools and abstractions for expressing and reasoning about
