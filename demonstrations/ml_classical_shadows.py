@@ -30,7 +30,8 @@ properties from the learned classical shadows. So let's get started!
     This demo is compatible with the latest version of PennyLane and ``neural-tangents``.
     The latter is required for building the kernel for the infinite network used in training.
     As of July 10th, 2025, the latest version of ``neural-tangents`` (v0.6.5) is only compatible
-    with ``jax<0.6.0``.
+    with ``jax<0.6.0``. This means that this demo is only compatible with PennyLane versions
+    <= 0.41.1 and Catalyst versions <= 0.11.0.
 
 
 Building the 2D Heisenberg model
