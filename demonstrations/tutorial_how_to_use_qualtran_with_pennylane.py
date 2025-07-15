@@ -1,16 +1,24 @@
 r"""How to use Qualtran with PennyLane
 ======================================
 
-The PennyLane-Qualtran integration allows you to easily convert Qualtran bloqs to PennyLane
-operators and vice-versa. Simply wrap any Qualtran bloq using ``qml.FromBloq``, and you can
-put it into a quantum function, enabling key PennyLane features such as simulatibility. 
-Alternatively, convert a PennyLane object using ``qml.to_bloq`` and access Qualtran features
-such as call graphs.
+As interest has grown in quantum computing, so have the number of tools available that help us 
+express and analyze quantum circuits. One such tool is Qualtran: a set of abstractions for
+representing quantum programs and a library of quantum algorithms expressed in that language. This
+expansive library of quantum subroutines, known as Bloqs, enable researchers to find detailed
+resource estimates of potential algorithms efficiently and accurately. 
+
+With the PennyLane-Qualtran integration, we can leverage all of Qualtran's subroutines as if they
+were PennyLane operators. We go from abstract, high-level subroutines to well-defined operators
+that can run directly in our quantum circuits.
+
+In the other direction, we can convert PennyLane circuits and operators to Qualtran Bloqs just as
+easily, allowing us to use Qualtran's tools and abstractions for expressing and reasoning about
+quantum algorithms, programs, and subroutines.
 """
 
 ######################################################################
-# How to use :class:`~.pennylane.io.FromBloq`
-# -----------------------------
+# From Qualtran to Pennylane
+# --------------------------
 #
 # Converting a Qualtran bloq to a PennyLane operator is easy! Just use ``qml.FromBloq``.
 # 
@@ -152,9 +160,9 @@ show_counts_sigma(wrapped_sigma)
 # decomposition might have prescribed.
 
 ######################################################################
-# Conclusion
-# ----------
-# In this demo, we showed how to convert between PennyLane objects and Qualtran bloqs.
+# Further resources
+# -----------------
+# 
 #
 # About the author
 # ----------------
