@@ -29,7 +29,7 @@ Why simulate X-ray absorption spectroscopy?
 -------------------------------------------
 
 Lithium-excess materials are transition metal oxides that have been engineered to accommodate extra
-Lithium atoms in their structural composition, designed as a candidate for use in battery cathodes.
+Lithium atoms in their structural composition, designed as candidate materials for battery cathodes.
 However, repeated charge-discharge cycles can alter their structure and reduce performance. One can
 study these degraded materials using X-ray absorption spectroscopy, which directly probes local
 structure by exciting tightly bound core electrons. This can be used to identify oxidation states in
@@ -41,161 +41,153 @@ Identification of the structures present in the degraded material is done by a p
 to the experimental spectrum. A fast method of simulating reference spectra for use in
 fingerprinting would be a crucial component in this iterative workflow for identifying
 promising cathode materials.
+
+.. figure:: ../_static/demonstration_assets/xas/fingerprinting.gif
+   :alt: The reference spectra of molecular clusters are calculated, and then matched to an experimental spectrum.
+
+Figure 1: *How simulation of X-ray absorption spectra can enable identification of oxidation states
+in candidate battery materials.* Spectral fingerprinting can be used to identify constituent
+structures of a material by decomposing experimental spectra into components calculated via
+simulation on a quantum computer.
+
+Simulating these spectra is a difficult task for classical computers – the highly correlated excited
+states are difficult to compute classically, particularly for clusters with transition metals. 
+However, the small number of electronic orbitals needed to simulate these small clusters make this
+calculation well suited for early quantum computers, which can naturally handle the large amount of
+correlation in the electron state.
+
+Algorithm
+---------
+
+Simulating reference spectra requires calculating the observable of the experiment, which in this
+case is the `absorption cross section <https://en.wikipedia.org/wiki/Absorption_cross_section>`__.
+We will describe this quantity below and then explain how a *time-domain* simulation algorithm can
+estimate it.
+
+Absorption cross-section
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+In XAS experiments, the absorption cross section as a function of the frequency of incident X-rays
+:math:`\sigma_A(\omega)` is measured for a given material. This is related to the rate of absorption
+of X-ray photons of various energies. For our situation, the electrons in the molecular cluster
+start in a ground molecular state :math:`|I\rangle` with energy :math:`E_I`. This ground state will
+be coupled to excited states :math:`|F\rangle` with energies :math:`E_F` through the action of the
+dipole operator :math:`\hat m_\rho,` which represents the effect of the radiative field, where
+:math:`\rho` is any of the Cartesian directions :math:`\{x,y,z\}`.
+
+The absorption cross section is given by
+
+.. math::  \sigma_A(\omega) = \frac{4 \pi}{3 \hbar c} \omega \sum_{F \neq I}\sum_{\rho=x,y,z} \frac{|\langle F|\hat m_\rho|I \rangle|^2 \eta}{((E_F - E_I)-\omega)^2 + \eta^2}\,,
+
+where :math:`c` is the speed of light, :math:`\hbar` is Planck’s constant, and :math:`\eta` is the
+line broadening -- set by the experimental resolution of the spectroscopy -- which is
+typically around :math:`1` eV. Below is an illustration of an X-ray absorption spectrum.
+
+.. figure:: ../_static/demonstration_assets/xas/example_spectrum.png
+   :alt: Illustration of X-ray absorption spectrum with five peaks of varying positions and peak heights.
+   :width: 50.0%
+   :align: center
+
+Figure 2: *Example X-ray absorption spectrum.* Illustration of how the peak positions
+:math:`E_F - E_i`, widths :math:`\eta` and amplitudes
+:math:`|\langle F | \hat m_\rho | I \rangle|^2` determine the spectrum.
+
+The goal is to implement a quantum algorithm that can calculate this spectrum. However, instead of
+computing the energy differences and state overlaps directly, we will be simulating the system in
+the time domain, and then using a `Fourier
+transform <https://en.wikipedia.org/wiki/Fourier_transform>`__ to obtain the spectrum in frequency space.
+
+Quantum algorithm in the time-domain
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Both the initial state :math:`|I\rangle` and the dipole operator acting on the initial state
+:math:`\hat m_\rho|I\rangle` can be determined classically, and we’ll demonstrate how to do that
+later. With the initial state computed, we will use a mathematical trick called a *frequency-domain*
+`Green’s function <https://en.wikipedia.org/wiki/Green%27s_function>`__ to determine the absorption
+cross section. We can write the cross section as the imaginary part of the following Green’s
+function
+
+.. math:: \mathcal{G}_\rho(\omega) = \langle I|\hat m_\rho \frac{1}{\hat H -E_I -\omega +i\eta} \hat m_\rho |I\rangle\,.
+
+Using a resolution of identity of the final states and simplifying, we end up with
+
+.. math::  \mathrm{Im}(\mathcal{G_\rho(\omega)}) = -\sum_{F\neq I} \frac{|\langle F|\hat m_\rho|I\rangle|^2\eta}{(E_F- E_I -\omega)^2 +\eta^2} - \frac{|\langle I|\hat m_\rho|I\rangle|^2\eta}{\omega^2 +\eta^2}\,,
+
+where the first term is clearly proportional to the absorption cross section. The second term is
+zero if we centre the frame of reference for our molecular orbitals at the nuclear-charge weighted
+centre for our molecular cluster of choice. Okay, so how do we determine
+:math:`\mathcal{G_\rho(\omega)}`? If we are going to evaluate this quantity in a quantum register,
+it will need to be normalized, so instead we are looking for
+
+.. math::  G_\rho(\omega) = \eta \frac{\mathcal{G}_\rho(\omega)}{||\hat m_\rho | I \rangle ||^2} \,.
+
+There are methods for determining this frequency-domain Green’s function directly [#Fomichev2024]_,
+however, our algorithm will aim to estimate the discrete-time *time-domain* Green’s function
+:math:`\tilde G(t_j)` at times :math:`t_j`, where :math:`j` is the time-step index.
+:math:`G_\rho(\omega)` can then be calculated classically through the time-domain Fourier transform
+
+.. math::  -\mathrm{Im}\,G_\rho(\omega) = \frac{\eta\tau}{2\pi} \sum_{j=-\infty}^\infty e^{-\eta |t_j|} \tilde G(t_j) e^{i\omega t_j}\,,
+
+where :math:`\tau \sim \mathcal{O}(||\hat H||^{-1})` is the size of the time step. This step should be
+small enough to resolve the largest frequency components that we are interested in, which correspond
+to the final states with the largest energy. In practice, this is not the largest eigenvalue of
+:math:`\hat H`, but simply the largest energy we want to show in the spectrum.
+
+Now, where this all comes together is that the time-domain Green’s function can be determined using
+the expectation value of the time-evolution operator (normalized)
+
+.. math::  \tilde G_\rho(t_j) = \frac{\langle I|\hat m _\rho e^{- i\hat H t_j} \hat m_\rho |I\rangle}{|| \hat m_\rho |I\rangle ||^2}\,,
+
+and this is something that can be easily done on a quantum computer! We can use a `Hadamard
+test <https://en.wikipedia.org/wiki/Hadamard_test>`__ on the time evolution unitary to measure the
+expectation value for each time :math:`t_j`. We will repeat this test a number of times :math:`N`
+and take the mean of the results to get an estimate for :math:`G_\rho(t_j)`, which we can Fourier
+transform to get the spectrum.
+
+.. figure:: ../_static/demonstration_assets/xas/global_circuit.png
+   :alt: Illustration of full Hadamard test circuit with state prep, time evolution and measurement.\
+   :width: 70.0%
+   :align: center
+
+Figure 3: *Circuit for XAS simulation*. The algorithm is ultimately a Hadamard test circuit, and we
+divide the steps of this into three components.
+
+The circuit we will construct to determine the expectation values is shown above. It has three main
+components:
+
+- *State prep*, the state :math:`\hat m_\rho |I\rangle` is prepared in the quantum register,
+  and an auxiliary qubit is prepared for controlled time evolution.
+- *Time evolution*, the state is evolved under the electronic Hamiltonian.
+- *Measurement*, the time-evolved state is measured to obtain statistics for the expectation value.
+
+Let’s look at how to implement these steps in PennyLane. We will make extensive use of the
+``qml.qchem`` module, as well as modules from `PySCF <https://pyscf.org/>`__. For this demo, we are
+going to use the simple :math:`\mathrm{H}_2` molecule. 
+
+State preparation
+-----------------
+
+We need to classically determine the ground state :math:`|I\rangle`, and the dipole operator’s
+action on that state :math:`\hat m_\rho |I\rangle`. 
+
+Ground state calculation
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you haven’t, check out the demo `“Initial state preparation for quantum
+chemistry” <https://pennylane.ai/qml/demos/tutorial_initial_state_preparation>`__. We will be
+expanding on that demo with code to import a state from the `multiconfigurational
+self-consistent field <https://pyscf.org/user/mcscf.html>`__ (MCSCF) methods of PySCF, where we
+restrict the set of active orbitals used in the calculation. Using only a subset of orbitals known
+as the “active space” reduces the cost of performing calculations on complicated molecular
+instances, while hopefully still preserving the interesting features of the molecule. The ``CASCI``
+method in PySCF is equivalent to a full-configuration interaction (FCI) procedure on a subset of
+molecular orbitals.
+
+We start by creating our molecule object using the `Gaussian type
+orbitals <https://en.wikipedia.org/wiki/Gaussian_orbital>`__ module ``pyscf.gto``, and obtaining the
+reduced Hartree-Fock molecular orbitals with the `self-consistent field
+methods <https://pyscf.org/user/scf.html>`__ ``pyscf.scf``.
 """
-
-######################################################################
-# .. figure:: ../_static/demonstration_assets/xas/fingerprinting.gif
-#    :alt: The reference spectra of molecular clusters are calculated, and then matched to an experimental spectrum.
-#
-# Figure 1: *How simulation of X-ray absorption spectra can enable identification of oxidation states
-# in candidate battery materials.* Spectral fingerprinting can be used to identify constituent
-# structures of a material by decomposing experimental spectra into components calculated via
-# simulation on a quantum computer.
-#
-# Simulating these spectra is a difficult task for classical computers – the highly correlated excited
-# states are difficult to compute classically, particularly for clusters with transition metals. 
-# However, the small number of electronic orbitals needed to simulate these small clusters make this
-# calculation well suited for early quantum computers, which can naturally handle the large amount of
-# correlation in the electron state, but restrictions on the cluster size due to limited qubit number
-# is less of a concern.
-#
-
-######################################################################
-# Algorithm
-# ---------
-#
-# Simulating reference spectra requires calculating the observable of the experiment, which in this
-# case is the `absorption cross section <https://en.wikipedia.org/wiki/Absorption_cross_section>`__.
-# We will describe this quantity below and then explain how a *time-domain* simulation algorithm can
-# estimate it.
-#
-# Absorption cross-section
-# ~~~~~~~~~~~~~~~~~~~~~~~~
-#
-# In XAS experiments, the absorption cross section as a function of the frequency of incident X-rays
-# :math:`\sigma_A(\omega)` is measured for a given material. This is related to the rate of absorption
-# of X-ray photons of various energies. For our situation, the electrons in the molecular cluster
-# start in a ground molecular state :math:`|I\rangle` with energy :math:`E_I`. This ground state will
-# be coupled to excited states :math:`|F\rangle` with energies :math:`E_F` through the action of the
-# dipole operator :math:`\hat m_\rho,` which represents the effect of the radiative field, where
-# :math:`\rho` is any of the Cartesian directions :math:`\{x,y,z\}`.
-#
-# The absorption cross section is given by
-#
-# .. math::  \sigma_A(\omega) = \frac{4 \pi}{3 \hbar c} \omega \sum_{F \neq I}\sum_{\rho=x,y,z} \frac{|\langle F|\hat m_\rho|I \rangle|^2 \eta}{((E_F - E_I)-\omega)^2 + \eta^2}\,,
-#
-# where :math:`c` is the speed of light, :math:`\hbar` is Planck’s constant, and :math:`\eta` is the
-# line broadening -- set by the experimental resolution of the spectroscopy -- which is
-# typically around :math:`1` eV. Below is an illustration of an X-ray absorption spectrum. In the illustration,
-# there appear to be many excited states coupled by the X-rays, each with varying amounts of overlap
-# with the initial state.
-#
-# .. figure:: ../_static/demonstration_assets/xas/example_spectrum.png
-#    :alt: Illustration of X-ray absorption spectrum with five peaks of varying positions and peak heights.
-#    :width: 50.0%
-#    :align: center
-#
-# Figure 2: *Example X-ray absorption spectrum.* Illustration of how the peak positions
-# :math:`E_F - E_i`, widths :math:`\eta` and amplitudes
-# :math:`|\langle F | \hat m_\rho | I \rangle|^2` determine the spectrum.
-#
-# The goal is to implement a quantum algorithm that can calculate this spectrum. However, instead of
-# computing the energy differences and state overlaps directly, we will be simulating the system in
-# the time domain, and then using a `Fourier
-# transform <https://en.wikipedia.org/wiki/Fourier_transform>`__ to obtain the spectrum in frequency space.
-#
-# Quantum algorithm in the time-domain
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#
-# Both the initial state :math:`|I\rangle` and the dipole operator acting on the initial state
-# :math:`\hat m_\rho|I\rangle` can be determined classically, and we’ll demonstrate how to do that
-# later. With the initial state computed, we will use a mathematical trick called a *frequency-domain*
-# `Green’s function <https://en.wikipedia.org/wiki/Green%27s_function>`__ to determine the absorption
-# cross section. We can write the cross section as the imaginary part of the following Green’s
-# function
-#
-# .. math:: \mathcal{G}_\rho(\omega) = \langle I|\hat m_\rho \frac{1}{\hat H -E_I -\omega +i\eta} \hat m_\rho |I\rangle\,.
-#
-# Using a resolution of identity of the final states and simplifying, we end up with
-#
-# .. math::  \mathrm{Im}(\mathcal{G_\rho(\omega)}) = -\sum_{F\neq I} \frac{|\langle F|\hat m_\rho|I\rangle|^2\eta}{(E_F- E_I -\omega)^2 +\eta^2} - \frac{|\langle I|\hat m_\rho|I\rangle|^2\eta}{\omega^2 +\eta^2}\,,
-#
-# where the first term is clearly proportional to the absorption cross section. The second term is
-# zero if we centre the frame of reference for our molecular orbitals at the nuclear-charge weighted
-# centre for our molecular cluster of choice. Okay, so how do we determine
-# :math:`\mathcal{G_\rho(\omega)}`? If we are going to evaluate this quantity in a quantum register,
-# it will need to be normalized, so instead we are looking for
-#
-# .. math::  G_\rho(\omega) = \eta \frac{\mathcal{G}_\rho(\omega)}{||\hat m_\rho | I \rangle ||^2} \,.
-#
-# There are methods for determining this frequency-domain Green’s function directly [#Fomichev2024]_,
-# however, our algorithm will aim to estimate the discrete-time *time-domain* Green’s function
-# :math:`\tilde G(t_j)` at times :math:`t_j`, where :math:`j` is the time-step index.
-# :math:`G_\rho(\omega)` can then be calculated classically through the time-domain Fourier transform
-#
-# .. math::  -\mathrm{Im}\,G_\rho(\omega) = \frac{\eta\tau}{2\pi} \sum_{j=-\infty}^\infty e^{-\eta |t_j|} \tilde G(t_j) e^{i\omega t_j}\,,
-#
-# where :math:`\tau \sim \mathcal{O}(||\hat H||^{-1})` is the size of the time step. This step should be
-# small enough to resolve the largest frequency components that we are interested in, which correspond
-# to the final states with the largest energy. In practice, this is not the largest eigenvalue of
-# :math:`\hat H`, but simply the largest energy we want to show in the spectrum.
-#
-# Now, where this all comes together is that the time-domain Green’s function can be determined using
-# the expectation value of the time-evolution operator (normalized)
-#
-# .. math::  \tilde G_\rho(t_j) = \frac{\langle I|\hat m _\rho e^{- i\hat H t_j} \hat m_\rho |I\rangle}{|| \hat m_\rho |I\rangle ||^2}\,,
-#
-# and this is something that can be easily done on a quantum computer! We can use a `Hadamard
-# test <https://en.wikipedia.org/wiki/Hadamard_test>`__ on the time evolution unitary to measure the
-# expectation value for each time :math:`t_j`. We will repeat this test a number of times :math:`N`
-# and take the mean of the results to get an estimate for :math:`G_\rho(t_j)`, which we can Fourier
-# transform to get the spectrum.
-#
-# The circuit we will construct to determine the expectation values is shown below. It has three main
-# components:
-#
-# - *State prep*, the state :math:`\hat m_\rho |I\rangle` is prepared in the quantum register,
-#   and an auxiliary qubit is prepared for controlled time evolution.
-# - *Time evolution*, the state is evolved under the electronic Hamiltonian.
-# - *Measurement*, the time-evolved state is measured to obtain statistics for the expectation value.
-#
-# .. figure:: ../_static/demonstration_assets/xas/global_circuit.png
-#    :alt: Illustration of full Hadamard test circuit with state prep, time evolution and measurement.\
-#    :width: 70.0%
-#    :align: center
-#
-# Figure 3: *Circuit for XAS simulation*. The algorithm is ultimately a Hadamard test circuit, and we
-# divide the steps of this into three components.
-#
-# Let’s look at how to implement these steps in PennyLane. We will make extensive use of the
-# ``qml.qchem`` module, as well as modules from `PySCF <https://pyscf.org/>`__. For this demo, we are
-# going to use the simple :math:`\mathrm{H}_2` molecule. We will implement some, but not all of the
-# optimizations detailed in [#Fomichev2025]_. The omitted optimizations will be discussed at the end.
-#
-# State preparation
-# -----------------
-#
-# We need to classically determine the ground state :math:`|I\rangle`, and the dipole operator’s
-# action on that state $\hat m_\rho|I\rangle$.
-#
-# Ground state calculation
-# ~~~~~~~~~~~~~~~~~~~~~~~~
-#
-# If you haven’t, check out the demo `“Initial state preparation for quantum
-# chemistry” <https://pennylane.ai/qml/demos/tutorial_initial_state_preparation>`__. We will be
-# expanding on that demo with code to import a state from the `multiconfigurational
-# self-consistent field <https://pyscf.org/user/mcscf.html>`__ (MCSCF) methods of PySCF, where we
-# restrict the set of active orbitals used in the calculation. Using only a subset of orbitals known
-# as the “active space” reduces the cost of performing calculations on complicated molecular
-# instances, while hopefully still preserving the interesting features of the molecule. The ``CASCI``
-# method in PySCF is equivalent to a full-configuration interaction (FCI) procedure on a subset of
-# molecular orbitals.
-#
-# We start by creating our molecule object using the `Gaussian type
-# orbitals <https://en.wikipedia.org/wiki/Gaussian_orbital>`__ module ``pyscf.gto``, and obtaining the
-# reduced Hartree-Fock molecular orbitals with the `self-consistent field
-# methods <https://pyscf.org/user/scf.html>`__ ``pyscf.scf``.
-#
 
 from pyscf import gto, scf
 import numpy as np
@@ -226,8 +218,6 @@ mole = qml.qchem.Molecule(symbols, geometry, basis_name="6-31g", unit="angstrom"
 
 # Run self-consistent fields method to get MO coefficients.
 _, coeffs, _, _, _ = qml.qchem.hartree_fock.scf(mole)()
-
-# coeffs = hf.mo_coeff
 
 hf.mo_coeff = coeffs  # Change MO coefficients in hf object to PennyLane calculated values.
 
@@ -291,6 +281,7 @@ wf_casci_dict = dict(zip(list(zip(strs_row, strs_col)), dat))
 #     alternate up and down. When changing a state from one convention to the next, the sign of some 
 #     state amplitudes needs to change to adhere to the Fermionic anticommutation rules. The helper 
 #     function ``_sign_chem_to_phys`` does this sign adjustment for us.
+#
 
 from pennylane.qchem.convert import _sign_chem_to_phys, _wfdict_to_statevector
 
@@ -334,12 +325,11 @@ for rho in rhos:
     dipole_matrix_rho = qml.matrix(m_rho[rho], wire_order=range(2 * n_orb_cas))
     wf = dipole_matrix_rho.dot(wf_casci)
 
-    if np.allclose(wf, np.zeros_like(wf)):
+    if np.allclose(wf, np.zeros_like(wf)):  # If wf is zero, then set norm as zero.
         wf_dipole.append(wf)
         dipole_norm.append(0)
 
-    else:
-        # Normalize the wavefunction.
+    else:  # Normalize the wavefunction.
         dipole_norm.append(np.linalg.norm(wf))
         wf_dipole.append(wf / dipole_norm[rho])
 
@@ -788,7 +778,7 @@ spectrum = np.array([f_domain_Greens_func(w) for w in wgrid])
 # 
 
 # Use CASCI to solve for excited states.
-mycasci.fcisolver.nroots = 100  # Compute the first 10 states.
+mycasci.fcisolver.nroots = 10  # Compute the first 10 states.
 mycasci.run(verbose=0)
 mycasci.e_tot = np.atleast_1d(mycasci.e_tot)
 
