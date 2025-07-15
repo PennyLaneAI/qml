@@ -51,7 +51,7 @@ markupsafe = "2.1.1"
 pyyaml = "^6.0.1"
 pennylane-sphinx-theme = { git = "https://github.com/PennyLaneAI/pennylane-sphinx-theme.git", branch = "sphinx-update" }
 pypandoc = "1.5"
-pennylane = "0.41.0"
+pennylane = "0.42.0"
 uv = "^0.5.25"
 
 
@@ -61,11 +61,11 @@ uv = "^0.5.25"
 # These pinned versions of PL are NOT used for Dev builds #
 #      The latest commit from GitHub is used instead      #
 ###########################################################
-pennylane = "0.41.0"
-pennylane-cirq = "0.41.0"
-pennylane-qiskit = "0.41.0"
-pennylane-qulacs = "0.41.0"
-pennylane-catalyst = "0.11.0"
+pennylane = "0.42.0"
+pennylane-cirq = "0.42.0"
+pennylane-qiskit = "0.42.0"
+pennylane-qulacs = "0.42.0"
+pennylane-catalyst = "0.12.0"
 ##########################################################
 
 scipy = ">=1.12"
