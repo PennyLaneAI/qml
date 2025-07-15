@@ -314,7 +314,7 @@ import matplotlib.pyplot as plt
 
 plt.style.use("pennylane.drawer.plot")
 
-fig = plt.figure(figsize=(6.4, 4.8))
+fig = plt.figure(figsize=(6.4, 3.2))
 ax = fig.add_axes((0.15, 0.23, 0.80, 0.72))  # make room for caption
 ax.plot(x, state, "o", label="circuit")
 ax.plot(x, [tau_amplitudes(ch_node(j), xs) for xs in x], label="expectation")
@@ -326,6 +326,7 @@ fig.text(0.5, 0.05,
     size="small",
     weight="normal",
 )
+fig.savefig("ch_test.pdf")
 plt.show()
 
 #############################################
