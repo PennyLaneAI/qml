@@ -371,7 +371,7 @@ def initial_circuit(wf):
 # .. note::
 # 
 #     To make guarantee that :math:`\langle I|\hat m_\rho|I\rangle` is zero, we require that the ``Mole`` object’s
-#     nuclear-charge-weighted centre is at the origin. Note this is true from our construction, since 
+#     nuclear-charge-weighted centre is at the origin. This is true from our construction, since 
 #     the geometry was defined to be symmetric about the origin, but I want to emphasize the importance of this condition.
 #
 # Time Evolution
@@ -555,7 +555,7 @@ def Z_rotations(Z, step, is_one_electron_term, control_wires):
 
 ######################################################################
 # .. note::
-#    For a derivation of the global phase for the two-electron terms, 
+#    For a derivation of the global phase accrued from the two-electron terms, 
 #    see Appendix A in [#Fomichev2025]_.
 #
 # Now that we have functions for the complicated terms of our Hamiltonian, we can define our Trotter
@@ -657,6 +657,7 @@ def meas_circuit(state):
 #
 # Run Simulation
 # --------------
+#
 # Let’s define the simulation parameters we are going to use. This includes:
 #
 #  - The Lorentzian width :math:`\eta` of the spectrum peaks, representing the experimental resolution.
@@ -667,6 +668,7 @@ def meas_circuit(state):
 #    our spectrum.
 #  - The total number of shots we will use to obtain statistics for the expectation value after the time
 #    evolution.
+#
 #
 
 eta = 0.05  # In Hartree energy units (Ha).
