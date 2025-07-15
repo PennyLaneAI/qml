@@ -161,14 +161,19 @@ components:
 - *Measurement*, the time-evolved state is measured to obtain statistics for the expectation value.
 
 Let’s look at how to implement these steps in PennyLane. We will make extensive use of the
-``qml.qchem`` module, as well as modules from `PySCF <https://pyscf.org/>`__. For this demo, we are
-going to use the simple :math:`\mathrm{H}_2` molecule. 
+``qml.qchem`` module, as well as modules from `PySCF <https://pyscf.org/>`__. 
 
 State preparation
 -----------------
 
 We need to classically determine the ground state :math:`|I\rangle`, and the dipole operator’s
-action on that state :math:`\hat m_\rho |I\rangle`. 
+action on that state :math:`\hat m_\rho |I\rangle`. For complicated molecular clusters, it's 
+common to choose and consider only a subset of molecular orbitals and electrons in a calculation. 
+This set of orbitals and electrons is known as the “active space” reduces the cost of performing 
+calculations on complicated molecular instances, while hopefully still preserving the interesting 
+features of the molecule. For this demo, we are going to use the simple :math:`\mathrm{H}_2` molecule,
+and we will be trivially selecting the full space of orbitals and electrons for the calculation,
+but the method demonstrated below will work for true subsets of more complicated molecules. 
 
 Ground state calculation
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -177,11 +182,7 @@ If you haven’t, check out the demo `“Initial state preparation for quantum
 chemistry” <https://pennylane.ai/qml/demos/tutorial_initial_state_preparation>`__. We will be
 expanding on that demo with code to import a state from the `multiconfigurational
 self-consistent field <https://pyscf.org/user/mcscf.html>`__ (MCSCF) methods of PySCF, where we
-restrict the set of active orbitals used in the calculation. Using only a subset of orbitals known
-as the “active space” reduces the cost of performing calculations on complicated molecular
-instances, while hopefully still preserving the interesting features of the molecule. The ``CASCI``
-method in PySCF is equivalent to a full-configuration interaction (FCI) procedure on a subset of
-molecular orbitals.
+restrict the set of active orbitals used in the calculation. 
 
 We start by creating our molecule object using the `Gaussian type
 orbitals <https://en.wikipedia.org/wiki/Gaussian_orbital>`__ module ``pyscf.gto``, and obtaining the
@@ -223,9 +224,11 @@ hf.mo_coeff = coeffs  # Change MO coefficients in hf object to PennyLane calcula
 
 ######################################################################
 # Next, let’s define the active space of orbitals we will use for our calculation. This will be the
-# number of orbitals ``n_orb_cas`` and the number of electrons ``n_electron_cas``. For :math:`\mathrm{H}_2`, we
-# can just use the full space of orbitals. We will use a ``CASCI`` instance to calculate the ground
-# state of our system with this selected active space.
+# number of orbitals ``n_orb_cas`` and the number of electrons ``n_electron_cas``. 
+# For :math:`\mathrm{H}_2`, we can just use the full space, which is four orbitals and two electrons. 
+# We will use a ``CASCI`` instance to calculate the ground state of our system with this 
+# selected active space. The ``CASCI`` method in PySCF is equivalent to a full-configuration 
+# interaction (FCI) procedure on a subset of molecular orbitals.
 #
 
 from pyscf import mcscf
@@ -285,10 +288,11 @@ wf_casci_dict = dict(zip(list(zip(strs_row, strs_col)), dat))
 
 from pennylane.qchem.convert import _sign_chem_to_phys, _wfdict_to_statevector
 
-# Convert to physicist's notation.
+# Adjust sign of state components to match physicist's notation.
 wf_casci_dict = _sign_chem_to_phys(wf_casci_dict, n_orb_cas)
 
-wf_casci = _wfdict_to_statevector(wf_casci_dict, n_orb_cas)  # This is |I>.
+# Convert dictionary to Pennylane state vector.
+wf_casci = _wfdict_to_statevector(wf_casci_dict, n_orb_cas)
 
 ######################################################################
 # Dipole operator action
@@ -374,8 +378,12 @@ def initial_circuit(wf):
 # --------------
 #
 # Next we will discuss how to prepare the electronic Hamiltonian for use in the time evolution of the
-# Hadamard-test. This constitutes the main body of our simulation circuit and includes most of
-# the optimizations in the algorithm.
+# Hadamard-test. We will double-factorize and compress the Hamiltonian to obtain an approximation of the 
+# Hamiltonian that can be easily fast-forwarded in a Trotter product formula.
+#
+# If you haven’t yet, go read the demo `“How to build compressed double-factorized
+# Hamiltonians” <https://pennylane.ai/qml/demos/tutorial_how_to_build_compressed_double_factorized_hamiltonians>`__,
+# because that is exactly what we are going to do!
 #
 # Electronic Hamiltonian
 # ~~~~~~~~~~~~~~~~~~~~~~
@@ -406,23 +414,19 @@ two_chemist = np.einsum("prsq->pqrs", two)
 one_chemist = one - np.einsum("pqrr->pq", two) / 2.0
 
 ######################################################################
-# If you haven’t yet, go read the demo `“How to build compressed double-factorized
-# Hamiltonians” <https://pennylane.ai/qml/demos/tutorial_how_to_build_compressed_double_factorized_hamiltonians>`__,
-# because that is exactly what we are going to do! A compressed double-factorized Hamiltonian takes on
-# the form [#Yen2021]_ [#Cohn2021]_ 
+# Next, we will double factorize and compress the Hamiltonian's one- and two-electron terms. 
+# This approximates the Hamiltonian as [#Yen2021]_ [#Cohn2021]_ 
 #
 # .. math::  H_\mathrm{CDF} = E + \sum_{\gamma\in\{\uparrow,\downarrow\}} U_\gamma^{(0)} \left(\sum_p Z_p^{(0)} a_{\gamma,p}^\dagger a_{\gamma, p}\right) U_\mathrm{\gamma}^{(0)\,\dagger} + \sum_\ell^L \sum_{\gamma,\beta\in\{\uparrow,\downarrow\}} U_\mathrm{\gamma, \beta}^{(\ell)} \left( \sum_{pq} Z_{pq}^{(\ell)} a_{\gamma, p}^\dagger a_{\gamma, p} a_{\beta,q}^\dagger a_{\beta, q}\right) U_{\gamma, \beta}^{(\ell)\,\dagger} \,,
 #
 # where each one-electron integral is approximated by a matrix :math:`Z^{(0)}` surrounded by
 # single-particle rotation matrices :math:`U^{(0)}` which diagonalize :math:`Z^{(0)}`. Each
 # two-electron integral is approximated by a sum of :math:`L` of these rotation and diagonal matrix
-# terms, indexed as :math:`(\ell)`. The number of factors :math:`L` affects the accuracy of the
-# approximation.
+# terms, indexed as :math:`(\ell)`. 
 #
 # We can compress and double-factorize the two-electron integrals using PennyLane’s
 # ``qchem.factorize`` function, with ``compressed=True``. We will set :math:`L` as the number of
-# orbitals in our active space. The ``Z`` and ``U`` output here will have shapes with dimensions
-# :math:`(L, n_\mathrm{cas}, n_\mathrm{cas})`, i.e. they are arrays of :math:`L` fragment matrices
+# orbitals in our active space. The ``Z`` and ``U`` output here are arrays of :math:`L` fragment matrices
 # with dimension :math:`n_\mathrm{cas} \times n_\mathrm{cas}`.
 #
 
@@ -461,16 +465,16 @@ Z0 = np.diag(eigenvals)
 # The main work of our algorithm will be to apply our Hamiltonian terms as a Trotter product in a
 # time-evolution operator, and measure the expectation value of that time evolution for various times.
 # Let’s start by writing functions that implement the time evolution for each Hamiltonian term, which
-# will be called by our Trotter circuit. One thing to track throughout this implementation is the
-# global phase accrued throughout the time evolution. For a derivation of the global phase for the
-# two-electron terms, see Appendix A in [#Fomichev2025]_.
+# will be called by our Trotter circuit. 
 #
 # The trick when implementing a double-factorized Hamiltonian is to use `Thouless’s
 # theorem <https://joshuagoings.com/assets/Thouless_theorem.pdf>`__ [#Thouless1960]_ to apply the
-# single-particle basis rotations :math:`U^{(\ell)}`, and then the Jordan-Wigner transform to
-# implement the number operators :math:`a^\dagger_p a_p` as Pauli-Z rotations. Below is an
-# illustration of the circuit we will use to implement the one- and two-eletron terms in our
-# factorized Hamiltonian.
+# single-particle basis rotations :math:`U^{(\ell)}`. The Jordan-Wigner transform can then
+# implement the number operators :math:`a^\dagger_p a_p = n_{p}` as Pauli-Z rotations, via 
+# :math:`n_p = (1-\sigma_{z,p})/2`. Note the :math:`1/2` term will change the global phase, 
+# and we will have to keep track of that carefully. 
+# Below is an illustration of the circuit we will use to implement the one- and two-eletron 
+# terms in our factorized Hamiltonian.
 #
 # .. figure:: ../_static/demonstration_assets/xas/UZU_circuits.png
 #    :alt: One- and two-electron basis rotation and Pauli-Z rotation circuits.
@@ -531,7 +535,7 @@ def Z_rotations(Z, step, is_one_electron_term, control_wires):
                     control=range(control_wires),
                     control_values=0,
                 )
-        globalphase = np.sum(Z) * step
+        globalphase = np.sum(Z) * step  # Phase from 1/2 term in Jordan-Wigner transform.
 
     else:  # It's a two-electron term.
         for sigma, tau in product(range(2), repeat=2):
@@ -550,9 +554,13 @@ def Z_rotations(Z, step, is_one_electron_term, control_wires):
 
 
 ######################################################################
+# .. note::
+#    For a derivation of the global phase for the two-electron terms, 
+#    see Appendix A in [#Fomichev2025]_.
+#
 # Now that we have functions for the complicated terms of our Hamiltonian, we can define our Trotter
 # step. The function will implement the :math:`U` rotations and :math:`Z` rotations, and adjust the
-# total phase from the core constant term. By tracking the last :math:`U` rotation used, we can
+# global phase from the core constant term. By tracking the last :math:`U` rotation used, we can
 # implement two consecutive rotations at once as :math:`V^{(\ell)} = U^{(\ell-1)}(U^{(\ell)})^T`,
 # halving the number of rotations required per Trotter step.
 #
