@@ -27,8 +27,7 @@ The :math:`n` -th order Chebyshev polynomial of the first kind is defined as
 .. math::
   T_n(x) \equiv \cos(n \arccos(x))\,.
 
-`Chebyshev polynomials <https://en.wikipedia.org/wiki/Chebyshev_polynomials>`__ of the first kind are a set of orthogonal polynomials that are complete on the interval :math:`[-1,1]`. 
-*Completeness* here means any function :math:`f(x)` on that interval can be expanded as a series in :math:`T_n(x)` up to order :math:`N` as :math:`f(x) = \sum_{j=0}^N a_j T_j(x)`.
+`Chebyshev polynomials <https://en.wikipedia.org/wiki/Chebyshev_polynomials>`__ of the first kind are a set of orthogonal polynomials. They are *complete*  on the interval :math:`[-1,1]`, meaning that any polynomial :math:`f(x)` of degree :math:`N` can be written exactly as a series in :math:`T_n(x)` up to order :math:`N` as :math:`f(x) = \sum_{j=0}^N a_j T_j(x)` on that interval.
 
 .. note::
     There are more types of Chebyshev polynomials, but in this demo, we will only discuss those of the first kind. 
@@ -49,7 +48,7 @@ Observe that odd and even order :math:`T_n` are odd and even functions, respecti
 The roots of the :math:`T_n(x)` occur at the values 
 
 .. math::
-  x_n^\mathrm{Ch} = \cos\left(\frac{2k+1}{2n}\pi\right)\,, \quad k=0, ..., n-1\,. 
+  x_k^\mathrm{Ch} = \cos\left(\frac{2k+1}{2n}\pi\right)\,, \quad k=0, ..., n-1\,. 
 
 These are known as the `Chebyshev nodes <https://en.wikipedia.org/wiki/Chebyshev_nodes>`__.
 
@@ -76,22 +75,22 @@ The Chebyshev polynomials have a lot of *nice* properties that make them a good 
 
 Discrete Chebyshev transform
 ---------------------------------------
-A common definition of the discrete Chebyshev transform uses the grid of Chebyshev nodes, also known as the roots grid, as the sampling points. For a given function :math:`f(x)` sampled at :math:`N` nodes on the interval :math:`[-1,1]`, the transform computes the coefficents of that function expanded in Chebyshev polynomials evaluated on the grid. That is, the :math:`j` -th coefficient, for :math:`j>0`, is
+A common definition of the discrete Chebyshev transform uses the grid of Chebyshev nodes, also known as the roots grid, as the sampling points. The transform computes the coefficients for the :math:`(N-1)` -degree expansion of a function :math:`f(x)` sampled at the :math:`N` nodes of :math:`T_N(x)`. That is, the :math:`j` -th coefficient, for :math:`0<j<N`, is
 
 .. math::
-    a_j = \frac{2}{N}\sum_{k=0}^{N-1} f(x_k) T_j(x_k)\,,
+    a_j = \frac{2}{N}\sum_{k=0}^{N-1} f(x_k^\mathrm{Ch}) T_j(x_k^\mathrm{Ch})\,,
 
 and for :math:`j=0`, there is a slightly different normalization factor
 
 .. math::
-    a_0 = \frac{1}{N}\sum_{k=0}^{N-1} f(x_k)\,.
+    a_0 = \frac{1}{N}\sum_{k=0}^{N-1} f(x_k^\mathrm{Ch})\,.
 
 The inverse of the transform is then just the series expansion evaluated on the grid
 
 .. math::
-    f(x_k) = \sum_{j=0}^{N-1} a_j T_j(x_k)\,.
+    f(x_k^\mathrm{Ch}) = \sum_{j=0}^{N-1} a_j T_j(x_k^\mathrm{Ch})\,.
 
-Since a function expanded in Chebyshev polynomials in this way will be sampled on the non-uniformly spaced Chebyshev nodes, it will have more resolution at the boundary than in the middle. This can be beneficial if you are, for example, solving a differential equation and expect more interesting features at the boundary.
+Since a function expanded in Chebyshev polynomials in this way will be sampled on the non-uniformly spaced Chebyshev nodes, it will have more resolution at the boundary than in the middle. In fact, the grid of Chebyshev nodes minimizes the problem of `Runge's phenomenon <https://en.wikipedia.org/wiki/Runge%27s_phenomenon>`. This can be beneficial if you are, for example, solving a differential equation and expect more interesting features at the boundary. Furthermore, the Chebyshev expansion gives close to the best polynomial approximation to a continuous function under the `maximum norm <https://en.wikipedia.org/wiki/Uniform_norm>`.
 
 In general, computing the expansion of a function in a complete set on a classical computer for a discrete number of sampling points would take :math:`\mathcal{O}(N^2)` operations 🐌. 
 However, because of the way the Chebyshev polynomials are defined in terms of cosine, the discrete Chebyshev transformation is related to the `discrete cosine transform <https://en.wikipedia.org/wiki/Discrete_cosine_transform>`__. This allows the discrete Chebyshev transform to be implemented in a way that leverages the efficiency of the `fast-Fourier-transform <https://en.wikipedia.org/wiki/Fast_Fourier_transform>`__-style algorithms for expansion, which take :math:`\mathcal{O}(N \log N)` operations 🚀. 
@@ -99,17 +98,17 @@ However, because of the way the Chebyshev polynomials are defined in terms of co
 We can see the relation to the cosine transform by plugging in the definition of the Chebyshev polynomials and the nodes into the inverse transform and simplifying. Starting with the polynomials
 
 .. math::
-    f(x_k) = \sum_{j=0}^{N-1} a_j \cos\left(j \cos^{-1}(x_k)\right)\,,
+    f(x_k^\mathrm{Ch}) = \sum_{j=0}^{N-1} a_j \cos\left(j \cos^{-1}(x_k^\mathrm{Ch})\right)\,,
 
 then, using the definition of the nodes we obtain 
 
 .. math:: 
-    f(x_k) = \sum_{j=0}^{N-1} a_j \cos\left(\frac{j\pi}{N}(N + k + 1/2)\right)\,.
+    f(x_k^\mathrm{Ch}) = \sum_{j=0}^{N-1} a_j \cos\left(\frac{j\pi}{N}(N + k + 1/2)\right)\,.
 
 Finally, we can use the cyclical property of cosine to convert a :math:`j \pi` term in the argument to a :math:`(-1)^{j}` factor in the coefficient, resulting in
 
 .. math:: 
-    f(x_k) = \sum_{j=0}^{N-1} a_j (-1)^{j}\cos\left(\frac{j\pi}{N}(k + 1/2)\right)\,,
+    f(x_k^\mathrm{Ch}) = \sum_{j=0}^{N-1} a_j (-1)^{j}\cos\left(\frac{j\pi}{N}(k + 1/2)\right)\,,
 
 which looks just like a discrete cosine transform.
 
@@ -163,7 +162,7 @@ To start, we will define a function for the CNOT ladder.
 
 import pennylane as qml
 
-# number of qubits (non-auxiliary qubit)
+# Number of qubits (non-auxiliary qubit).
 N = 4
 
 
@@ -220,12 +219,12 @@ def adjust_phases():
     """Adjusts the phase of the auxiliary qubit."""
     qml.RY(-pi / 2, wires=0)
     qml.PhaseShift(-pi / 2, wires=0)
-    # first Pauli Xs
+    # First Pauli X gates.
     for wire in range(1, N + 1):
         qml.PauliX(wires=wire)
-    # controlled RX gate
+    # Controlled RX gate.
     qml.ctrl(qml.RX(pi / 2, wires=0), range(1, N + 1))
-    # second Pauli Xs
+    # Second Pauli X gates.
     for wire in range(1, N + 1):
         qml.PauliX(wires=wire)
 
@@ -277,64 +276,91 @@ fig.show()
 # To do this, we'll input the computational basis state :math:`|7\rangle`, which will transform into :math:`|\tau(x_7^\mathrm{Ch})\rangle`.
 # We expect the full output state to be :math:`|0\rangle|\tau(x_7^\mathrm{Ch})\rangle`, which means the second half of the amplitude vector should be zero (corresponding to states with the auxiliary qubit in :math:`|1\rangle`).
 
-j = 7  # initial state in computational basis
+j = 7  # Initial state in computational basis.
 
-total_state = circuit(state=j)  # state with auxiliary qubit
+total_state = circuit(state=j)  # State with auxiliary qubit.
 
-# round very small values to zero
-total_state = np.where(np.abs(total_state)<1e-12, 0, total_state)
+# Round very small values to zero.
+total_state = np.where(np.abs(total_state) < 1e-12, 0, total_state)
 print(np.round(total_state, 3))
 
 #############################################
 # Indeed, we see the second half of the amplitude vector is zero. 
 # Furthermore, the first :math:`2^N` entries are real valued, but let's check if the amplitudes of the state components in the computational basis agree with our definition.
 
-# reduce state size, effectively removing the auxiliary qubit
-state = np.real(total_state[: 2**N])  # discard the small imaginary components
-
-# computational basis indices
-x = range(2**N)
+# Reduce state size, effectively removing the auxiliary qubit.
+state = np.real(total_state[: 2**N])  # Discard the small imaginary components.
 
 
-# compute nodes
 def ch_node(j):
+    """The jth node of Chebyshev polynomial 2^N - 1."""
     return np.cos(pi * (2 * j + 1) / 2 ** (N + 1))
 
 
-def tau_amplitudes(x, k):
-    """Computes the expected amplitudes of tau."""
-    if k == 0:
-        prefactor = 1 / 2 ** (N / 2)
-    else:
-        prefactor = 1 / 2 ** ((N - 1) / 2)
-    return prefactor * np.cos(k * np.arccos(x))
+def T_n(x, n):
+    """Chebyshev polynomial of order n."""
+    return np.cos(n * np.arccos(x))
 
+
+def tau_amplitudes(x, k):
+    """Computes the state amplitudes of tau in the computational basis."""
+    prefactor = np.where(k == 0, 1 / 2 ** (N / 2), 1 / 2 ** ((N - 1) / 2))
+    return prefactor * T_n(x, k)
+
+
+k = range(2**N)  # Computational basis indices.
+expected_state = tau_amplitudes(ch_node(j), np.array(k))
+
+assert np.allclose(expected_state, state, atol=1e-9)
+
+#############################################
+# The output state from the circuit is exactly what we want.
+#
+# Another way to look at this is to plot the overlap of :math:`|\tau(x_7^\mathrm{Ch})\rangle` with the computational basis states. 
 
 import matplotlib.pyplot as plt
 
 plt.style.use("pennylane.drawer.plot")
 
+ks = np.linspace(0, max(k), 100)  # Continuous list of points.
+
 fig = plt.figure(figsize=(6.4, 3.2))
-ax = fig.add_axes((0.15, 0.23, 0.80, 0.72))  # make room for caption
-ax.plot(x, state, "o", label="circuit")
-ax.plot(x, [tau_amplitudes(ch_node(j), xs) for xs in x], label="expectation")
-ax.set(xlabel=r"$|k\rangle$", ylabel="Amplitude")
+ax = fig.add_axes((0.15, 0.23, 0.80, 0.72))  # Make room for caption.
+ax.plot(k, state, "o", label="circuit")
+ax.plot(ks, [tau_amplitudes(ch_node(j), kk) for kk in ks], label="expectation")
+ax.set(xlabel=r"$|k\rangle$", ylabel=r"Overlap $\langle k|\tau(x_7^\mathrm{Ch})\rangle$")
 ax.legend()
 fig.text(0.5, 0.05,
-    r"Figure 4. Amplitudes of $|\tau(x_7^\mathrm{Ch})\rangle$ in computational basis.",
+    r"Figure 4. Overlaps of $|\tau(x_7^\mathrm{Ch})\rangle$ with computational basis states.",
     horizontalalignment="center",
-    size="small",
-    weight="normal",
+    size="small", weight="normal",
 )
-fig.savefig("ch_test.pdf")
+fig.savefig("ch_fig4.pdf")
 plt.show()
 
 #############################################
-# The output state from the circuit is exactly what we want.
-#
+# 
+
+ks = np.linspace(0, max(k), 100)  # Continuous list of points.
+
+fig = plt.figure(figsize=(6.4, 3.2))
+ax = fig.add_axes((0.15, 0.23, 0.80, 0.72))  # Make room for caption.
+ax.plot(k, state, "o", label="circuit")
+ax.plot(ks, [tau_amplitudes(ch_node(j), kk) for kk in ks], label="expectation")
+ax.set(xlabel=r"$|k\rangle$", ylabel=r"Overlap $\langle k|\tau(x_7^\mathrm{Ch})\rangle$")
+ax.legend()
+fig.text(0.5, 0.05,
+    r"Figure 4. Overlaps of $|\tau(x_7^\mathrm{Ch})\rangle$ with computational basis states.",
+    horizontalalignment="center",
+    size="small", weight="normal",
+)
+fig.savefig("ch_fig4.pdf")
+plt.show()
+
+#############################################
 # Next, let's see if the orthonormality described earlier holds by computing the overlap at the nodes with all other :math:`|\tau(x_j^\mathrm{Ch})\rangle`.
 
-# compute overlap with other basis states using np.vdot()
+# Compute overlap with other basis states using np.vdot().
 js = list(range(int(len(state))))
 overlaps = [np.vdot(state, circuit(state=i)[: 2**N]) for i in js]
 
@@ -348,37 +374,38 @@ overlaps = [np.vdot(state, circuit(state=i)[: 2**N]) for i in js]
 # where :math:`\tau(x)` is a generalization of one of Chebyshev basis states defined earlier and :math:`x` can be any value in :math:`[-1,1]` rather than just one of the nodes.
 
 
-def T_n(x, n):
-    """Chebyshev polynomial of order n."""
-    return np.cos(n * np.arccos(x))
-
-
 def overlap_sq(x, xp):
     """Computes the squared overlap between Chebyshev states."""
     numerator = T_n(xp, 2**N + 1) * T_n(x, 2**N) - T_n(xp, 2**N) * T_n(x, 2**N + 1)
     return numerator**2 / (2 ** (2 * N)) / (xp - x) ** 2
 
-
-nodes = [ch_node(i) for i in js]
-
-fig = plt.figure(figsize=(6.4, 2.4))
-ax = fig.add_axes((0.15, 0.3, 0.8, 0.65))  # make room for caption
+fig = plt.figure(figsize=(6.4, 3.2))
+ax = fig.add_axes((0.15, 0.25, 0.8, 0.6))  # Make room for the caption.
 ax.set(xlabel=r"x", ylabel="Squared Overlap")
+ax_top = ax.twiny()
 
-# plot squared overlaps computed in the circuit
+# Plot squared overlaps computed in the circuit.
+nodes = [ch_node(i) for i in js]
 ax.plot(nodes, np.abs(overlaps) ** 2, marker="o", label="circuit")
 
-# plot expected squared overlaps
+# Plot expected squared overlaps.
 xs = np.linspace(-1, 1, 1000)
 ax.plot(xs, [overlap_sq(x, nodes[j]) for x in xs], label="expectation")
 
+# Set second axis showing computational basis state indices.
+ax_top.set_xlim(ax.get_xlim())
+tick_labels = [str(i) for i in js]
+tick_labels[0::2] = [''] * len(tick_labels[0::2])  # Omit even-numbered labels.
+ax_top.set(xlabel=r"Chebyshev node $j$", 
+           xticks=nodes, xticklabels=tick_labels)
+
 ax.legend()
 fig.text(0.5, 0.05,
-    "Figure 5. Squared overlap of Chebyshev states.",
+    r"Figure 5. Squared overlap of Chebyshev states $|\langle \tau(x_k^\mathrm{Ch})|\tau(x_7^\mathrm{Ch})\rangle|^2$.",
     horizontalalignment="center",
-    size="small",
-    weight="normal",
+    size="small", weight="normal",
 )
+fig.savefig("ch_fig5.pdf")
 plt.show()
 
 
