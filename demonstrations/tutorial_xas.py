@@ -837,7 +837,6 @@ fig.text(0.5, 0.05,
     r"Figure 8: $\mathrm{H}_2$ XAS spectrum calculation.",
     horizontalalignment="center",
     size="small", weight="normal")
-fig.savefig("test_fig.pdf")
 plt.show()
 
 ######################################################################
