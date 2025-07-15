@@ -90,8 +90,6 @@ promising cathode materials.
 # there appear to be many excited states coupled by the X-rays, each with varying amounts of overlap
 # with the initial state.
 #
-
-######################################################################
 # .. figure:: ../_static/demonstration_assets/xas/example_spectrum.png
 #    :alt: Illustration of X-ray absorption spectrum with five peaks of varying positions and peak heights.
 #    :width: 50.0%
@@ -106,8 +104,6 @@ promising cathode materials.
 # the time domain, and then using a `Fourier
 # transform <https://en.wikipedia.org/wiki/Fourier_transform>`__ to obtain the spectrum in frequency space.
 #
-
-######################################################################
 # Quantum algorithm in the time-domain
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
@@ -163,11 +159,10 @@ promising cathode materials.
 # - *Time evolution*, the state is evolved under the electronic Hamiltonian.
 # - *Measurement*, the time-evolved state is measured to obtain statistics for the expectation value.
 #
-
-######################################################################
 # .. figure:: ../_static/demonstration_assets/xas/global_circuit.png
 #    :alt: Illustration of full Hadamard test circuit with state prep, time evolution and measurement.\
 #    :width: 70.0%
+#    :align: center
 #
 # Figure 3: *Circuit for XAS simulation*. The algorithm is ultimately a Hadamard test circuit, and we
 # divide the steps of this into three components.
@@ -177,8 +172,6 @@ promising cathode materials.
 # going to use the simple :math:`\mathrm{H}_2` molecule. We will implement some, but not all of the
 # optimizations detailed in [#Fomichev2025]_. The omitted optimizations will be discussed at the end.
 #
-
-######################################################################
 # State preparation
 # -----------------
 #
@@ -220,22 +213,6 @@ hf = scf.RHF(mol)
 hf.run(verbose=0)
 
 ######################################################################
-# To make sure that :math:`\langle I|\hat m_\rho|I\rangle` is zero, we can shift the ``Mole`` object’s
-# coordinates such that the nuclear-charge-weighted centre is at the origin. Note this is true from
-# our construction, since the geometry was defined to be symmetric about the origin, but I want to
-# emphasize the importance of this condition.
-#
-
-# Guarantee nuclear charge centre is at the origin.
-charges, coords = (hf.mol.atom_charges(), hf.mol.atom_coords())
-nuclear_charge_center = np.einsum("z,zx->x", charges, coords) / charges.sum()
-print("Initial nuclear charge centre", nuclear_charge_center)
-hf.mol.set_common_orig_(nuclear_charge_center)
-print("Shifted nuclear charge centre", nuclear_charge_center)
-
-######################################################################
-# Great, the nuclear-weighted charge centre is at the origin.
-#
 # Since we will be using PennyLane for other aspects of this calculation, we want to make sure the
 # molecular orbital coefficients are consistent between our PennyLane and PySCF calculations. To do
 # this, we can obtain the molecular orbital coefficients from PennyLane using the ``hartree_fock.scf``
@@ -249,6 +226,8 @@ mole = qml.qchem.Molecule(symbols, geometry, basis_name="6-31g", unit="angstrom"
 
 # Run self-consistent fields method to get MO coefficients.
 _, coeffs, _, _, _ = qml.qchem.hartree_fock.scf(mole)()
+
+# coeffs = hf.mo_coeff
 
 hf.mo_coeff = coeffs  # Change MO coefficients in hf object to PennyLane calculated values.
 
@@ -303,7 +282,7 @@ wf_casci_dict = dict(zip(list(zip(strs_row, strs_col)), dat))
 # components to match what they should be for the PennyLane orbital occupation number ordering. Then,
 # we can import the state to PennyLane using ``_wf_dict_to_statevector``.
 #
-# .. admonition:: Spin orbital chemist and physicist's notation 
+# .. admonition:: Chemist's and physicist's notation for spin orbitals
 #     :class: note
 #
 #     In general, states from computation chemistry workflows will have spin orbitals ordered
@@ -395,6 +374,12 @@ def initial_circuit(wf):
 
 
 ######################################################################
+# .. note::
+# 
+#     To make guarantee that :math:`\langle I|\hat m_\rho|I\rangle` is zero, we require that the ``Mole`` object’s
+#     nuclear-charge-weighted centre is at the origin. Note this is true from our construction, since 
+#     the geometry was defined to be symmetric about the origin, but I want to emphasize the importance of this condition.
+#
 # Time Evolution
 # --------------
 #
@@ -497,8 +482,6 @@ Z0 = np.diag(eigenvals)
 # illustration of the circuit we will use to implement the one- and two-eletron terms in our
 # factorized Hamiltonian.
 #
-
-######################################################################
 # .. figure:: ../_static/demonstration_assets/xas/UZU_circuits.png
 #    :alt: One- and two-electron basis rotation and Pauli-Z rotation circuits.
 #    :width: 80.0%
@@ -528,8 +511,6 @@ def U_rotations(U, control_wires):
 # determined by the matrices :math:`Z^{(\ell)}`, we instead implement *uncontrolled* Z rotations
 # sandwiched by CNOT gates.
 #
-
-######################################################################
 # .. figure:: ../_static/demonstration_assets/xas/double_phase_trick.png
 #    :alt: Diagram showing that a controlled-Z rotation of 2 theta is equivalent to a Z rotation of theta sandwiched by CNOT gates.
 #
@@ -667,8 +648,6 @@ def meas_circuit(state):
 # actual implementation would have to select real or imaginary by inserting a phase gate, like in the
 # circuit below.
 #
-
-######################################################################
 # .. figure:: ../_static/demonstration_assets/xas/hadamard_test_circuit.png
 #    :alt: Hadamard test circuit with optional S-dagger gate on the auxiliary qubit.
 #    :width: 70.0%
@@ -678,8 +657,6 @@ def meas_circuit(state):
 # phase gate :math:`S^\dagger` present (absent), this gives the real (imaginary) part of the
 # time-domain Green’s function :math:`\tilde G(\tau j)`.
 #
-
-######################################################################
 # Run Simulation
 # --------------
 # Let’s define the simulation parameters we are going to use. This includes:
@@ -860,7 +837,7 @@ fig.text(0.5, 0.05,
     r"Figure 8: $\mathrm{H}_2$ XAS spectrum calculation.",
     horizontalalignment="center",
     size="small", weight="normal")
-
+fig.savefig("test_fig.pdf")
 plt.show()
 
 ######################################################################
@@ -881,8 +858,6 @@ plt.show()
 # By applying the core-valence separation approximation, we can force our calculation to stay in the
 # XANES region.
 #
-
-######################################################################
 # .. figure:: ../_static/demonstration_assets/xas/core_valence.png
 #    :alt: Energy diagram with X-rays exciting core electrons to high valence energies, and UV and visible radiation only excite electrons already in valence orbitals.
 #    :width: 50.0%
@@ -892,8 +867,6 @@ plt.show()
 # electrons into valence orbitals compared to electrons already in low-lying valence orbitals. Since
 # XAS targets core electrons, we can ignore valence-excitation matrix elements in our calculations.
 #
-
-######################################################################
 # Further Optimizations
 # ~~~~~~~~~~~~~~~~~~~~~
 #
@@ -913,8 +886,6 @@ plt.show()
 # More efficient methods of simulating XAS may be discovered in the near future, which could make this
 # application even more viable as a use for early fault-tolerant quantum computers.
 #
-
-######################################################################
 # Conclusion
 # ----------
 #
@@ -927,8 +898,6 @@ plt.show()
 # *Acknowledgements*: The author thanks Stepan Fomichev and Pablo A. M. Casares for providing the code
 # used in [#Fomichev2025]_, which was a basis for the simplified implementation demonstrated here.
 #
-
-######################################################################
 # References
 # ----------
 #
