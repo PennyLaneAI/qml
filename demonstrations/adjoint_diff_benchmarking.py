@@ -22,10 +22,7 @@ Adjoint Differentiation
 import timeit
 import matplotlib.pyplot as plt
 import pennylane as qml
-import jax
-
-jax.config.update("jax_platform_name", "cpu")
-jax.config.update('jax_enable_x64', True)
+import pennylane.numpy as pnp
 
 plt.style.use("bmh")
 
@@ -33,12 +30,12 @@ n_samples = 5
 
 
 def get_time(qnode, params):
-    globals_dict = {'grad': jax.grad, 'circuit': qnode, 'params': params}
+    globals_dict = {"grad": qml.grad, "circuit": qnode, "params": params}
     return timeit.timeit("grad(circuit)(params)", globals=globals_dict, number=n_samples)
 
 
 def wires_scaling(n_wires, n_layers):
-    key = jax.random.PRNGKey(42)
+    rng = pnp.random.default_rng(12345)
 
     t_adjoint = []
     t_ps = []
@@ -58,7 +55,7 @@ def wires_scaling(n_wires, n_layers):
 
         # set up the parameters
         param_shape = qml.StronglyEntanglingLayers.shape(n_wires=i_wires, n_layers=n_layers)
-        params = jax.random.normal(key, param_shape)
+        params = rng.normal(size=pnp.prod(param_shape), requires_grad=True).reshape(param_shape)
 
         t_adjoint.append(get_time(circuit_adjoint, params))
         t_backprop.append(get_time(circuit_backprop, params))
@@ -68,10 +65,10 @@ def wires_scaling(n_wires, n_layers):
 
 
 def layers_scaling(n_wires, n_layers):
-    key = jax.random.PRNGKey(42)
+    rng = pnp.random.default_rng(12345)
 
     dev = qml.device("lightning.qubit", wires=n_wires)
-    dev_python = qml.device('default.qubit', wires=n_wires)
+    dev_python = qml.device("default.qubit", wires=n_wires)
 
     t_adjoint = []
     t_ps = []
@@ -88,7 +85,7 @@ def layers_scaling(n_wires, n_layers):
     for i_layers in n_layers:
         # set up the parameters
         param_shape = qml.StronglyEntanglingLayers.shape(n_wires=n_wires, n_layers=i_layers)
-        params = jax.random.normal(key, param_shape)
+        params = rng.normal(size=pnp.prod(param_shape), requires_grad=True).reshape(param_shape)
 
         t_adjoint.append(get_time(circuit_adjoint, params))
         t_backprop.append(get_time(circuit_backprop, params))
@@ -110,9 +107,9 @@ if __name__ == "__main__":
     # Generating the graphic
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 4))
 
-    ax1.plot(wires_list, adjoint_wires, '.-', label="adjoint")
-    ax1.plot(wires_list, ps_wires, '.-', label="parameter-shift")
-    ax1.plot(wires_list, backprop_wires, '.-', label="backprop")
+    ax1.plot(wires_list, adjoint_wires, ".-", label="adjoint")
+    ax1.plot(wires_list, ps_wires, ".-", label="parameter-shift")
+    ax1.plot(wires_list, backprop_wires, ".-", label="backprop")
 
     ax1.legend()
 
@@ -122,16 +119,17 @@ if __name__ == "__main__":
     ax1.set_yscale("log")
     ax1.set_title("Scaling with wires")
 
-    ax2.plot(layers_list, adjoint_layers, '.-', label="adjoint")
-    ax2.plot(layers_list, ps_layers, '.-', label="parameter-shift")
-    ax2.plot(layers_list, backprop_layers, '.-', label="backprop")
+    ax2.plot(layers_list, adjoint_layers, ".-", label="adjoint")
+    ax2.plot(layers_list, ps_layers, ".-", label="parameter-shift")
+    ax2.plot(layers_list, backprop_layers, ".-", label="backprop")
 
     ax2.legend()
 
     ax2.set_xlabel("Number of layers")
     ax2.set_xticks(layers_list)
-    ax2.set_ylabel("Time")
-    ax2.set_title("Scaling with Layers")
+    ax2.set_ylabel("Log Time")
+    ax2.set_yscale("log")
+    ax2.set_title("Scaling with layers")
 
     plt.savefig("scaling.png")
 

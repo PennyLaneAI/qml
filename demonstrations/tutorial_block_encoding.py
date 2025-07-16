@@ -104,8 +104,8 @@ thetas = compute_theta(alphas)
 # The next step is to identify and prepare the qubit registers used in the oracle access framework.
 # There are three registers :code:`"ancilla"`, :code:`"wires_i"`, :code:`"wires_j"`. The
 # :code:`"ancilla"` register will always contain a single qubit, this is the auxilary qubit where we
-# apply the rotation gates mentioned above. The :code:`"wires_i"` and :code:`"wires_j"` registers are 
-# the same size for this algorithm and need to be able to encode :math:`A` itself, so they will both 
+# apply the rotation gates mentioned above. The :code:`"wires_i"` and :code:`"wires_j"` registers are
+# the same size for this algorithm and need to be able to encode :math:`A` itself, so they will both
 # have :math:`2` qubits for our matrix.
 
 ancilla_wires = ["ancilla"]
@@ -118,11 +118,8 @@ wires_j = [f"j{index}" for index in range(s)]
 # Finally, we obtain the control wires for the C-NOT gates and a wire map that we later use to
 # translate the control wires into the wire registers we prepared.
 
-code = gray_code(2 * np.log2(len(A)))
-n_selections = len(code)
-
-control_wires = [int(np.log2(int(code[i], 2) ^ int(code[(i + 1) %
-                 n_selections], 2))) for i in range(n_selections)]
+code = gray_code(int(2 * np.log2(len(A))))
+control_wires = np.log2(code ^ np.roll(code, -1)).astype(int)
 
 wire_map = {control_index : wire for control_index, wire in enumerate(wires_j + wires_i)}
 
@@ -236,16 +233,16 @@ print(f"Block-encoded matrix:\n{M}", "\n")
 # The quantum circuit for the oracle :math:`U_A,` presented above, accesses every entry of
 # :math:`A` and thus requires :math:`~ O(N^2)` gates to implement the oracle [#fable]_. In the
 # special cases where :math:`A` is structured and sparse, we can generate a more efficient quantum
-# circuit representation for :math:`U_A` and :math:`U_B` [#sparse]_ by only keeping track of the 
-# non-zero entries of the matrix. 
+# circuit representation for :math:`U_A` and :math:`U_B` [#sparse]_ by only keeping track of the
+# non-zero entries of the matrix.
 #
 # Let :math:`b(i,j)` be a function such that it takes a column index :math:`j` and returns the
-# row index for the :math:`i^{th}` non-zero entry in that column of :math:`A.` Note, in this 
-# formulation, the :math:`|i\rangle` qubit register now refers to the number of non-zero entries 
+# row index for the :math:`i^{th}` non-zero entry in that column of :math:`A.` Note, in this
+# formulation, the :math:`|i\rangle` qubit register now refers to the number of non-zero entries
 # in :math:`A.` For sparse matrices, this can be much smaller than :math:`N,` thus saving us many
 # qubits. We use this to define :math:`U_A` and :math:`U_B.`
 #
-# Like in the structured approach, the :math:`U_A` oracle is responsible for encoding the matrix 
+# Like in the structured approach, the :math:`U_A` oracle is responsible for encoding the matrix
 # entries of :math:`A` into the amplitude of the ancilla qubit. However, we now use :math:`b(i,j)`
 # to access the row index of the non-zero entries:
 #
@@ -253,7 +250,7 @@ print(f"Block-encoded matrix:\n{M}", "\n")
 #
 #     U_A |0\rangle_{\text{anc}} |i\rangle |j\rangle = |A_{b(i,j),j}\rangle_{\text{anc}} |i\rangle |j\rangle,
 #
-# In this case the :math:`U_B` oracle is responsible for implementing the :math:`b(i,j)` function 
+# In this case the :math:`U_B` oracle is responsible for implementing the :math:`b(i,j)` function
 # and taking us from the column index to the row index in the qubit register:
 #
 # .. math:: U_B |i\rangle|j\rangle \ = \ |i\rangle |b(i,j)\rangle
@@ -286,7 +283,7 @@ print(f"Original A:\n{A}", "\n")
 
 ##############################################################################
 # Once again we identify and prepare the qubit registers used in the oracle access framework.
-# 
+#
 # The :code:`"ancilla"` register will still contain a single qubit, the target for the
 # controlled rotation gates. The :code:`"wires_i"` register needs to be large enough to binary
 # encode the maximum number of non-zero entries in any column or row. Given the structure of
