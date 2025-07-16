@@ -21,7 +21,7 @@ pennylane-lightning
 # jaxlib==0.4.28
 # jaxopt==0.8.4
 # aiohttp==3.9.5
-fastapi<1.0.0
+# fastapi<1.0.0
 # fsspec==2024.6.1
 # h5py==3.11.0
 # openfermionpyscf==0.5
@@ -47,6 +47,7 @@ jax==0.6.0
 jaxlib==0.6.0
 jaxopt==0.8.5
 aiohttp==3.9.5
+fastapi<1.0.0
 fsspec==2024.6.1
 h5py==3.11.0
 openfermionpyscf==0.5
