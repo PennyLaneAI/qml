@@ -162,7 +162,7 @@ def build(
 
     build_venv = Virtualenv(ctx.build_venv_path)
     cmds.pip_install(
-        build_venv.python, requirements=ctx.build_requirements_file, use_uv=False
+        build_venv.python, requirements=ctx.build_requirements_file, use_uv=False, quiet=False
     )
 
     for demo in demos:
@@ -245,6 +245,7 @@ def generate_requirements(
         output_file,
         *requirements_in,
         constraints_files=constraints,
+        quiet=False,
         prerelease=dev,
     )
 
@@ -268,8 +269,85 @@ def _build_demo(
             build_venv.python,
             "--upgrade",
             requirements=out_dir / "requirements.txt",
-            quiet=True,
+            quiet=False,
             pre=dev,
+        )
+    
+    # For dev, follow the same install procedure and order as in the Makefile.
+    # This is critical to get the proper versions of PennyLane, Catalyst,
+    # and various plugins.
+    # TODO: See if we can clean this up and streamline in the future... 
+    # TODO: Remove RC branch for PennyLane install post-release.
+    if dev and execute:
+        # Cirq
+        cmds.pip_install(
+            build_venv.python,
+            "--upgrade",
+            "git+https://github.com/PennyLaneAI/pennylane-cirq.git#egg=pennylane-cirq",
+            use_uv=False,
+            quiet=False,
+        )
+        # Qiskit
+        cmds.pip_install(
+            build_venv.python,
+            "--upgrade",
+            "git+https://github.com/PennyLaneAI/pennylane-qiskit.git#egg=pennylane-qiskit",
+            use_uv=False,
+            quiet=False,
+        )
+        # Qulacs
+        cmds.pip_install(
+            build_venv.python,
+            "--upgrade",
+            "git+https://github.com/PennyLaneAI/pennylane-qulacs.git#egg=pennylane-qulacs",
+            use_uv=False,
+            quiet=False,
+        )
+        # Catalyst
+        cmds.pip_install(
+            build_venv.python,
+            "--upgrade",
+            "--extra-index-url",
+            "https://test.pypi.org/simple/",
+            "PennyLane-Catalyst",
+            use_uv=False,
+            quiet=False,
+            pre=True,
+        )
+        # Lightning
+        cmds.pip_install(
+            build_venv.python,
+            "--upgrade",
+            "--extra-index-url",
+            "https://test.pypi.org/simple/",
+            "PennyLane-Lightning",
+            use_uv=False,
+            quiet=False,
+            pre=True,
+        )
+        # PennyLane
+        cmds.pip_install(
+            build_venv.python,
+            "--upgrade",
+            "git+https://github.com/PennyLaneAI/pennylane.git@v0.42.0-rc0#egg=pennylane",
+            use_uv=False,
+            quiet=False,
+        )
+        # Iqpopt
+        cmds.pip_install(
+            build_venv.python,
+            "--upgrade",
+            "git+https://github.com/XanaduAI/iqpopt.git#egg=iqpopt",
+            use_uv=False,
+            quiet=False,
+        )
+        # We need to bump flax here, after Jax has been bumped by Catalyst
+        cmds.pip_install(
+            build_venv.python,
+            "--upgrade",
+            "flax==0.10.6",
+            use_uv=False,
+            quiet=False,
         )
 
     stage_dir = ctx.build_dir / "demonstrations"
