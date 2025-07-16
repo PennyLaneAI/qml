@@ -268,8 +268,7 @@ fig.show()
 
 #############################################
 # Note we defined a new function for the circuit to simplify the drawing, removing the returned ``qml.state``.
-
-#############################################
+#
 # Testing the quantum Chebyshev transform
 # ----------------
 # With our quantum Chebyshev transform circuit, let's first check if the auxiliary qubit ends in the state :math:`|0\rangle` and the output state amplitudes are real valued. 
@@ -286,10 +285,11 @@ print(np.round(total_state, 3))
 
 #############################################
 # Indeed, we see the second half of the amplitude vector is zero. 
-# Furthermore, the first :math:`2^N` entries are real valued, but let's check if the amplitudes of the state components in the computational basis agree with our definition.
-
-# Reduce state size, effectively removing the auxiliary qubit.
-state = np.real(total_state[: 2**N])  # Discard the small imaginary components.
+# Furthermore, the first :math:`2^N` entries are real valued, but let's check if the amplitudes of the state components in the computational basis agree with our definition. 
+# Remember we expect 
+# .. math::
+#   |\tau(x_j^\mathrm{Ch})\rangle = \frac1{2^{N/2}}T_0(x_j^\mathrm{Ch})|0\rangle + \frac1{2^{(N-1)/2}}\sum_{k=1}^{2^N-1}T_k(x_j^\mathrm{Ch})|k\rangle\,,
+# so, we can just check the circuit output by computing each state component directly.
 
 
 def ch_node(j):
@@ -308,15 +308,20 @@ def tau_amplitudes(x, k):
     return prefactor * T_n(x, k)
 
 
+# Reduce state size, effectively removing the auxiliary qubit.
+state = np.real(total_state[: 2**N])  # Discard the small imaginary components.
+
 k = range(2**N)  # Computational basis indices.
 expected_state = tau_amplitudes(ch_node(j), np.array(k))
 
-assert np.allclose(expected_state, state, atol=1e-9)
+assert np.allclose(expected_state, state, atol=1e-9)  # Compare circuit output to calculated values.
 
 #############################################
 # The output state from the circuit is exactly what we want.
 #
-# Another way to look at this is to plot the overlap of :math:`|\tau(x_7^\mathrm{Ch})\rangle` with the computational basis states. 
+# To give some intuition for how the quantum Chebyshev transform is related to the quantum Fourier transform,
+# we can plot the overlap of :math:`|\tau(x_7^\mathrm{Ch})\rangle` with the computational basis states :math`|k\rangle`. 
+# This should look like a cosine plot, since Chebyshev polynomials are just the cosine of an argument which is proportional to :math:`k`.
 
 import matplotlib.pyplot as plt
 
@@ -327,7 +332,7 @@ ks = np.linspace(0, max(k), 100)  # Continuous list of points.
 fig = plt.figure(figsize=(6.4, 3.2))
 ax = fig.add_axes((0.15, 0.23, 0.80, 0.72))  # Make room for caption.
 ax.plot(k, state, "o", label="circuit")
-ax.plot(ks, [tau_amplitudes(ch_node(j), kk) for kk in ks], label="expectation")
+ax.plot(ks, [tau_amplitudes(ch_node(j), kk) for kk in ks], label="continuous interpolation")
 ax.set(xlabel=r"$|k\rangle$", ylabel=r"Overlap $\langle k|\tau(x_7^\mathrm{Ch})\rangle$")
 ax.legend()
 fig.text(0.5, 0.05,
@@ -335,30 +340,13 @@ fig.text(0.5, 0.05,
     horizontalalignment="center",
     size="small", weight="normal",
 )
-fig.savefig("ch_fig4.pdf")
 plt.show()
 
 #############################################
-# 
-
-ks = np.linspace(0, max(k), 100)  # Continuous list of points.
-
-fig = plt.figure(figsize=(6.4, 3.2))
-ax = fig.add_axes((0.15, 0.23, 0.80, 0.72))  # Make room for caption.
-ax.plot(k, state, "o", label="circuit")
-ax.plot(ks, [tau_amplitudes(ch_node(j), kk) for kk in ks], label="expectation")
-ax.set(xlabel=r"$|k\rangle$", ylabel=r"Overlap $\langle k|\tau(x_7^\mathrm{Ch})\rangle$")
-ax.legend()
-fig.text(0.5, 0.05,
-    r"Figure 4. Overlaps of $|\tau(x_7^\mathrm{Ch})\rangle$ with computational basis states.",
-    horizontalalignment="center",
-    size="small", weight="normal",
-)
-fig.savefig("ch_fig4.pdf")
-plt.show()
-
-#############################################
-# Next, let's see if the orthonormality described earlier holds by computing the overlap at the nodes with all other :math:`|\tau(x_j^\mathrm{Ch})\rangle`.
+# However, unlike the quantum Fourier transform, these amplitudes are all real instead of being complex valued, and the :math:`|0\rangle` amplitude is
+# adjusted to fix the orthonormality.
+#
+# Next, let's see if that orthonormality holds by computing the overlap at the nodes with all other :math:`|\tau(x_j^\mathrm{Ch})\rangle`.
 
 # Compute overlap with other basis states using np.vdot().
 js = list(range(int(len(state))))
@@ -405,7 +393,6 @@ fig.text(0.5, 0.05,
     horizontalalignment="center",
     size="small", weight="normal",
 )
-fig.savefig("ch_fig5.pdf")
 plt.show()
 
 
