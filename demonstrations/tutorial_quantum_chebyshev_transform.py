@@ -343,18 +343,18 @@ fig.text(0.5, 0.05,
 plt.show()
 
 #############################################
-# However, unlike the quantum Fourier transform, these amplitudes are all real instead of being complex valued, and the :math:`|0\rangle` amplitude is
+# However, unlike the quantum Fourier transform, these amplitudes are real instead of being complex valued, and the :math:`|0\rangle` amplitude is
 # adjusted to fix the orthonormality.
 #
-# Next, let's see if that orthonormality holds by computing the overlap at the nodes with all other :math:`|\tau(x_j^\mathrm{Ch})\rangle`.
+# Next, let's test that orthonormality by computing the overlap at the nodes with all other :math:`|\tau(x_j^\mathrm{Ch})\rangle`.
 
 # Compute overlap with other basis states using np.vdot().
 js = list(range(int(len(state))))
 overlaps = [np.vdot(state, circuit(state=i)[: 2**N]) for i in js]
 
 #############################################
-# We compare these circuit-calculated overlaps to the definition, for which we plot the squared overlaps at all values of :math:`x`.
-# This continuous overlap function can be derived analytically as
+# We can compare these circuit-calculated overlaps to the definition, plotting the squared overlaps at all values of :math:`x`.
+# This continuous overlap function can be derived analytically as [#williams2023]_
 #
 # .. math::
 #  |\langle\tau(x_j^\mathrm{Ch})|\tau(x)\rangle|^2 = \frac{\left(T_{2^N+1}(x_j^\mathrm{Ch})T_{2^N}(x)-T_{2^N}(x_j^\mathrm{Ch})T_{2^N+1}(x)\right)^2}{2^{2N}(x_j^\mathrm{Ch}-x)^2}\,,
