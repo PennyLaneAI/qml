@@ -13,7 +13,6 @@ a quantum computer” <https://arxiv.org/abs/2506.15784>`__ [#Fomichev2025]_ in 
 First, we will discuss why simulating X-ray absorption spectroscopy is a promising application for
 early quantum computers. Then we will explain the main steps in the simulation algorithm and how to
 implement a simplified version in PennyLane.
-
  .. admonition:: Prerequisite understanding
     :class: note
 
@@ -370,7 +369,7 @@ def initial_circuit(wf):
 ######################################################################
 # .. note::
 # 
-#     To make guarantee that :math:`\langle I|\hat m_\rho|I\rangle` is zero, we require that the ``Mole`` object’s
+#     To guarantee that :math:`\langle I|\hat m_\rho|I\rangle` is zero, we require that the ``Mole`` object’s
 #     nuclear-charge-weighted centre is at the origin. This is true from our construction, since 
 #     the geometry was defined to be symmetric about the origin, but I want to emphasize the importance of this condition.
 #
