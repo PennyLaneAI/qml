@@ -13,6 +13,7 @@ a quantum computer” <https://arxiv.org/abs/2506.15784>`__ [#Fomichev2025]_ in 
 First, we will discuss why simulating X-ray absorption spectroscopy is a promising application for
 early quantum computers. Then we will explain the main steps in the simulation algorithm and how to
 implement a simplified version in PennyLane.
+
  .. admonition:: Prerequisite understanding
     :class: note
 
@@ -659,13 +660,13 @@ def meas_circuit(state):
 #
 # Let’s define the simulation parameters we are going to use. This includes:
 #
-#  - The Lorentzian width :math:`\eta` of the spectrum peaks, representing the experimental resolution.
-#  - The time step :math:`\tau`, which should be small enough to resolve the largest frequency components
+# - The Lorentzian width :math:`\eta` of the spectrum peaks, representing the experimental resolution.
+# - The time step :math:`\tau`, which should be small enough to resolve the largest frequency components
 #    we want to determine.
-#  - The maximum number of time steps :math:`j_\mathrm{max}`, which sets the largest evolution time.
+# - The maximum number of time steps :math:`j_\mathrm{max}`, which sets the largest evolution time.
 #    This should be large enough so that we can distinguish between the small frequency components in
 #    our spectrum.
-#  - The total number of shots we will use to obtain statistics for the expectation value after the time
+# - The total number of shots we will use to obtain statistics for the expectation value after the time
 #    evolution.
 #
 #
