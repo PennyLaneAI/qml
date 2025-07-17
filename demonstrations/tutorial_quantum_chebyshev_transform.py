@@ -90,7 +90,7 @@ The inverse of the transform is then just the series expansion evaluated on the 
 .. math::
     f(x_k^\mathrm{Ch}) = \sum_{j=0}^{N-1} a_j T_j(x_k^\mathrm{Ch})\,.
 
-Since a function expanded in Chebyshev polynomials in this way will be sampled on the non-uniformly spaced Chebyshev nodes, it will have more resolution at the boundary than in the middle. In fact, the grid of Chebyshev nodes minimizes the problem of `Runge's phenomenon <https://en.wikipedia.org/wiki/Runge%27s_phenomenon>`__. This can be beneficial if you are, for example, solving a differential equation and expect more interesting features at the boundary. Furthermore, the Chebyshev expansion gives close to the best polynomial approximation to a continuous function under the `maximum norm <https://en.wikipedia.org/wiki/Uniform_norm>`__.
+Since a function expanded in Chebyshev polynomials in this way will be sampled on the non-uniformly spaced Chebyshev nodes, it will have more resolution at the boundary than in the middle. In fact, the grid of Chebyshev nodes minimizes the problem of `Runge's phenomenon <https://en.wikipedia.org/wiki/Runge%27s_phenomenon>`__. This can be beneficial if you are, for example, solving a differential equation and expect more interesting features at the boundary. Furthermore, the Chebyshev expansion gives the best polynomial approximation to a continuous function under the `maximum norm <https://en.wikipedia.org/wiki/Uniform_norm>`__.
 
 In general, computing the expansion of a function in a complete set on a classical computer for a discrete number of sampling points would take :math:`\mathcal{O}(N^2)` operations 🐌. 
 However, because of the way the Chebyshev polynomials are defined in terms of cosine, the discrete Chebyshev transformation is related to the `discrete cosine transform <https://en.wikipedia.org/wiki/Discrete_cosine_transform>`__. This allows the discrete Chebyshev transform to be implemented in a way that leverages the efficiency of the `fast-Fourier-transform <https://en.wikipedia.org/wiki/Fast_Fourier_transform>`__-style algorithms for expansion, which take :math:`\mathcal{O}(N \log N)` operations 🚀. 
@@ -326,7 +326,7 @@ assert np.allclose(expected_state, state, atol=1e-9)  # Compare circuit output t
 #
 # To give some intuition for how the quantum Chebyshev transform is related to the quantum Fourier transform,
 # we can plot the overlap of :math:`|\tau(x_7^\mathrm{Ch})\rangle` with the computational basis states :math:`|k\rangle`. 
-# This should look like a cosine plot, since Chebyshev polynomials are just the cosine of an argument which is proportional to :math:`k`.
+# This should look like a cosine plot, since Chebyshev polynomials are just the cosine of an argument which is proportional to :math:`k`. 
 
 import matplotlib.pyplot as plt
 
@@ -337,7 +337,7 @@ ks = np.linspace(0, max(k), 100)  # Continuous list of points.
 fig = plt.figure(figsize=(6.4, 3.2))
 ax = fig.add_axes((0.15, 0.23, 0.80, 0.72))  # Make room for caption.
 ax.plot(k, state, "o", label="circuit")
-ax.plot(ks, [tau_amplitudes(ch_node(j), kk) for kk in ks], label="continuous interpolation")
+ax.plot(ks, [tau_amplitudes(ch_node(j), kk) for kk in ks], label="interpolation")
 ax.set(xlabel=r"$|k\rangle$", ylabel=r"Overlap $\langle k|\tau(x_7^\mathrm{Ch})\rangle$")
 ax.legend()
 fig.text(0.5, 0.05,
@@ -348,8 +348,7 @@ fig.text(0.5, 0.05,
 plt.show()
 
 #############################################
-# Notice that, unlike the quantum Fourier transform, these amplitudes are real instead of being complex valued, and the :math:`|0\rangle` amplitude is
-# adjusted to fix the orthonormality.
+# Notice that, unlike the quantum Fourier transform, these amplitudes are real instead of being complex valued. Also note that the overlap at :math:`|0\rangle` is discontinuous because the :math:`|0\rangle` amplitude of the Chebyshev state was adjusted in the definition to guarantee orthonormality.
 #
 # Next, let's test that orthonormality by computing the overlap at the nodes with all other Chebyshev basis states :math:`|\tau(x_j^\mathrm{Ch})\rangle`.
 
@@ -395,8 +394,8 @@ ax_top.grid(False)
 
 ax.legend()
 fig.text(0.5, 0.05,
-    r"""Figure 5. Squared overlap of Chebyshev states 
-    $|\langle \tau(x_k^\mathrm{Ch})|\tau(x_7^\mathrm{Ch})\rangle|^2$.""",
+    "Figure 5. Squared overlap of Chebyshev states " 
+    + r"$|\langle \tau(x_k^\mathrm{Ch})|\tau(x_7^\mathrm{Ch})\rangle|^2$",
     horizontalalignment="center",
     size="small", weight="normal",
 )
