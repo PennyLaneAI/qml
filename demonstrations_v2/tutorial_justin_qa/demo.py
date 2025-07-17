@@ -1,7 +1,7 @@
 r"""The KAK decomposition
 =========================
 
-The KAK decomposition is a beautiful mathematical result from Lie theory, with
+TEST The KAK decomposition is a beautiful mathematical result from Lie theory, with
 particular relevance for quantum computing. It can be seen as a
 generalization of the singular value decomposition (SVD), as it decomposes a group
 element :math:`U` (think: unitary operator) into :math:`U=K_1AK_2,` where
@@ -44,7 +44,7 @@ Lie algebras and their groups
 We start with Lie algebras, their Lie groups,
 and a particular interaction between the two, the *adjoint action*.
 
-Lie algebras
+Lie algebras TEST
 ~~~~~~~~~~~~
 
 As mentioned above, we will assume a basic understanding of the mathematical objects
