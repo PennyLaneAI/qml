@@ -200,13 +200,12 @@ show_counts_sigma(wrapped_sigma)
 # decomposition might have prescribed.
 
 ######################################################################
-# Further resources
-# -----------------
-# Whether you want to simulate Qualtran Bloqs or analyze PennyLane circuits, the PennyLane-Qualtran
-# integration has got you covered. Expand the possibilities of PennyLane by leveraging the powerful
-# subroutines in Qualtran. Analyze and reason about PennyLane circuits using the language of
-# Qualtran. The possibilities are truly boundless. We can't wait to see how this collaboration
-# accelerates your research.
+# Conclusion
+# ----------
+# In this how to, we demonstrated how to use the features in the integration with Qualtran. Whether
+# that is to leverage Qualtran's powerful subroutines in  Pennylane circuits, or to analyze and 
+# reason about PennyLane objects using Qualtran, we are confident that this tool will help speed up
+# your research and make new advances in quantum computing.
 #
 # About the author
 # ----------------
