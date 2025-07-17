@@ -12,6 +12,8 @@ r"""Basic quantum circuit optimization with PennyLane
 *Author: Test Author — Posted: 01 January 2024.*
 
 This demonstration shows how to create and optimize basic quantum circuits using PennyLane.
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, urna eu tincidunt consectetur, nisi nisl aliquam nunc, eget aliquam massa nisl quis neque. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Integer ac sem nec urna cursus faucibus.
 We'll explore variational quantum circuits, parameter optimization, and measurement statistics.
 
 In this tutorial, you will learn:
