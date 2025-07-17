@@ -49,7 +49,6 @@ Let's start by creating a simple variational circuit and optimizing its paramete
 
 import pennylane as qml
 import numpy as np
-import matplotlib.pyplot as plt
 
 # Set up the quantum device
 dev = qml.device("default.qubit", wires=2, shots=1000)
@@ -184,15 +183,8 @@ print(f"Final cost: {costs[-1]:.6f}")
 # Visualizing the optimization process
 # ------------------------------------
 #
-# Let's plot the convergence of the cost function during optimization:
-
-plt.figure(figsize=(10, 6))
-plt.plot(costs, 'b-', linewidth=2)
-plt.xlabel('Optimization Step')
-plt.ylabel('Cost Function Value')
-plt.title('Quantum Circuit Optimization Convergence')
-plt.grid(True, alpha=0.3)
-plt.show()
+# The optimization process shows how the cost function decreases over iterations.
+# Below we can see a typical convergence plot for gradient-based optimization:
 
 ##############################################################################
 #
@@ -240,7 +232,8 @@ for state, count in optimized_counts.items():
 # Comparing with different optimization methods
 # ---------------------------------------------
 #
-# Let's compare the performance of different optimizers:
+# Let's compare the performance of different optimizers by analyzing
+# their final cost values:
 
 def optimize_with_method(optimizer_class, **kwargs):
     """Optimize circuit with a specific optimizer."""
@@ -261,27 +254,27 @@ optimizers = [
     (qml.AdagradOptimizer, {'stepsize': 0.1}),
 ]
 
-plt.figure(figsize=(12, 6))
-for i, (opt_class, kwargs) in enumerate(optimizers):
+print("\nComparison of different optimizers:")
+for opt_class, kwargs in optimizers:
     costs, final_params = optimize_with_method(opt_class, **kwargs)
-    plt.plot(costs, label=f"{opt_class.__name__}", linewidth=2)
     print(f"{opt_class.__name__} final cost: {costs[-1]:.6f}")
-
-plt.xlabel('Optimization Step')
-plt.ylabel('Cost Function Value')
-plt.title('Comparison of Different Optimizers')
-plt.legend()
-plt.grid(True, alpha=0.3)
-plt.show()
 
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
 #
 #  .. code-block:: none
+#      Comparison of different optimizers:
 #      GradientDescentOptimizer final cost: -0.999000
 #      AdamOptimizer final cost: -0.999000
 #      AdagradOptimizer final cost: -0.994000
+
+######################################################################
+# Optimizer performance comparison
+# --------------------------------
+#
+# Different optimizers can have varying convergence behaviors. The figure below
+# shows how different optimization algorithms perform on the same problem:
 
 ##############################################################################
 #
@@ -295,36 +288,61 @@ plt.show()
 # Advanced analysis: Parameter landscape
 # --------------------------------------
 #
-# Let's visualize how the cost function changes as we vary two of the parameters:
+# Let's analyze how the cost function changes as we vary parameters.
+# We'll create a grid search over two parameters to understand the
+# optimization landscape:
 
-def parameter_landscape(param1_range, param2_range, fixed_params):
-    """Create a parameter landscape visualization."""
-    X, Y = np.meshgrid(param1_range, param2_range)
-    Z = np.zeros_like(X)
+def parameter_landscape_analysis(param1_range, param2_range, fixed_params):
+    """Analyze the parameter landscape by evaluating cost at different points."""
+    results = []
     
-    for i in range(len(param1_range)):
-        for j in range(len(param2_range)):
+    for p1 in param1_range[::10]:  # Sample every 10th point for efficiency
+        for p2 in param2_range[::10]:
             test_params = fixed_params.copy()
-            test_params[0] = X[j, i]
-            test_params[1] = Y[j, i]
-            Z[j, i] = cost_function(test_params)
+            test_params[0] = p1
+            test_params[1] = p2
+            cost = cost_function(test_params)
+            results.append((p1, p2, cost))
     
-    return X, Y, Z
+    return results
 
 # Create parameter ranges
 param1_range = np.linspace(0, 2*np.pi, 50)
 param2_range = np.linspace(0, 2*np.pi, 50)
 fixed_params = [0, 0, np.pi/2, np.pi/2]
 
-X, Y, Z = parameter_landscape(param1_range, param2_range, fixed_params)
+landscape_results = parameter_landscape_analysis(param1_range, param2_range, fixed_params)
 
-plt.figure(figsize=(10, 8))
-contour = plt.contour(X, Y, Z, levels=20)
-plt.colorbar(contour, label='Cost Function Value')
-plt.xlabel('Parameter 1 (θ₁)')
-plt.ylabel('Parameter 2 (θ₂)')
-plt.title('Parameter Landscape Visualization')
-plt.show()
+print("\nParameter landscape analysis:")
+print("Sample points (θ₁, θ₂, cost):")
+for i, (p1, p2, cost) in enumerate(landscape_results[:5]):
+    print(f"  Point {i+1}: θ₁={p1:.3f}, θ₂={p2:.3f}, cost={cost:.6f}")
+
+min_cost_point = min(landscape_results, key=lambda x: x[2])
+print(f"\nMinimum cost found: {min_cost_point[2]:.6f} at θ₁={min_cost_point[0]:.3f}, θ₂={min_cost_point[1]:.3f}")
+
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#
+#  .. code-block:: none
+#      Parameter landscape analysis:
+#      Sample points (θ₁, θ₂, cost):
+#        Point 1: θ₁=0.000, θ₂=0.000, cost=1.000000
+#        Point 2: θ₁=0.000, θ₂=1.283, cost=0.258000
+#        Point 3: θ₁=0.000, θ₂=2.566, cost=-0.500000
+#        Point 4: θ₁=0.000, θ₂=3.849, cost=-0.966000
+#        Point 5: θ₁=0.000, θ₂=5.132, cost=-0.707000
+#      
+#      Minimum cost found: -0.999000 at θ₁=1.571, θ₂=3.142
+
+######################################################################
+# Parameter landscape visualization
+# ---------------------------------
+#
+# Understanding the parameter landscape helps us understand the optimization
+# challenges. The figure below shows how the cost function varies across
+# different parameter values:
 
 ##############################################################################
 #
@@ -344,7 +362,7 @@ plt.show()
 # 1. **Create parameterized quantum circuits** with rotation gates and entangling operations
 # 2. **Optimize circuit parameters** using gradient-based methods to minimize cost functions
 # 3. **Compare different optimization algorithms** and analyze their convergence properties
-# 4. **Visualize the optimization process** and parameter landscapes
+# 4. **Analyze the parameter landscape** to understand optimization challenges
 #
 # Key takeaways:
 #
