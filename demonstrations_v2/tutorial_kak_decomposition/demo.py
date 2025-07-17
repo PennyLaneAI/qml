@@ -348,12 +348,13 @@ def is_orthogonal(op, basis):
 #
 # Let us define it in code, and check whether it gives rise to a Cartan decomposition.
 # As we want to look at another example later, we wrap everything in a function.
+# A similar function is available in PennyLane as :func:`~.pennylane.liealg.check_cartan_decomp`.
 #
 
 
-def check_cartan_decomposition(g, k, space_name):
+def check_cartan_decomp(g, k, space_name):
     """Given an algebra g and an operator subspace k, verify that k is a subalgebra
-    and gives rise to a Cartan decomposition."""
+    and gives rise to a Cartan decomposition. Similar to qml.liealg.check_cartan_decomp"""
     # Check Lie closure of k
     k_lie_closure = qml.lie_closure(k)
     k_is_closed = len(k_lie_closure) == len(k)
@@ -387,7 +388,7 @@ def check_cartan_decomposition(g, k, space_name):
 
 u1 = [Z(0)]
 space_name = "SU(2)/U(1)"
-p = check_cartan_decomposition(su2, u1, space_name)
+p = check_cartan_decomp(su2, u1, space_name)
 
 ######################################################################
 # Cartan subalgebras
@@ -811,7 +812,7 @@ print(f"su(4) is {len(su4)}-dimensional")
 # Define subalgebra su(2) ⊕ su(2)
 su2_su2 = [X(0), Y(0), Z(0), X(1), Y(1), Z(1)]
 space_name = "SU(4)/(SU(2)xSU(2))"
-p = check_cartan_decomposition(su4, su2_su2, space_name)
+p = check_cartan_decomp(su4, su2_su2, space_name)
 
 ######################################################################
 # .. admonition:: Math detail: involution for two-qubit decomposition
