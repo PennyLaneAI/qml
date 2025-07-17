@@ -115,25 +115,6 @@ print(qml.FromBloq(textbook_qpe, wires=range(textbook_qpe.signature.n_qubits()))
 op_as_bloq = qml.to_bloq(qml.X(0), map_ops=True, custom_map=None) # `map_ops` is `True` by default
 print(op_as_bloq)
 
-######################################################################
-# .. note ::
-#
-#    When a quantum function or operator does not have a mapping - a direct Qualtran equivalent 
-#    or smart default - the circuit is wrapped as a `ToBloq` Bloq.
-#
-#   .. code-block:: python
-#        
-#       from qualtran.drawing import show_bloq
-#
-#       def circ():
-#           qml.X(0)
-#           qml.X(1)
-#
-#       qfunc_as_bloq = qml.to_bloq(circ)
-#       print(type(qfunc_as_bloq))
-#       show_bloq(qfunc_as_bloq.decompose_bloq())
-#
-#
 # Not all PennyLane operators are as straightforward to map as the PauliX operator. For example, 
 # PennyLane's Quantum Phase Estimation could be mapped to a variety of Qualtran Bloqs. In cases
 # where the mapping is ambiguous, we get the smart default:
@@ -167,6 +148,24 @@ fig.tight_layout()
 ######################################################################
 # We see that ``RectangularWindowState`` has been switched out for the ``LPResourceState`` we
 # defined in the custom map. 
+#
+#######################################################################
+# .. note ::
+#
+#    When a quantum function or operator does not have a mapping - a direct Qualtran equivalent 
+#    or smart default - the circuit is wrapped as a `ToBloq` Bloq.
+#
+#   .. code-block:: python
+#        
+#       from qualtran.drawing import show_bloq
+#
+#       def circ():
+#           qml.X(0)
+#           qml.X(1)
+#
+#       qfunc_as_bloq = qml.to_bloq(circ)
+#       print(type(qfunc_as_bloq))
+#       show_bloq(qfunc_as_bloq.decompose_bloq())
 #
 # Wrapping
 # --------
