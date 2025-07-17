@@ -16,11 +16,15 @@ This demonstration shows how to create and optimize basic quantum circuits using
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, urna eu tincidunt consectetur, nisi nisl aliquam nunc, eget aliquam massa nisl quis neque. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Integer ac sem nec urna cursus faucibus.
 We'll explore variational quantum circuits, parameter optimization, and measurement statistics.
 
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque euismod, urna eu tincidunt consectetur, nisi nisl aliquam nunc, eget aliquam massa nisl quis neque, vitae dictum massa erat nec enim. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Integer ac sem nec urna cursus faucibus.
+
 In this tutorial, you will learn:
 
 1. How to create parameterized quantum circuits
 2. How to optimize circuit parameters using gradient descent
 3. How to analyze measurement outcomes and convergence
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam euismod, urna eu tincidunt consectetur, nisi nisl aliquam nunc, eget aliquam massa nisl quis neque, vitae dictum massa erat nec enim.
 
 |
 
