@@ -2,11 +2,11 @@
     "title": "Basic quantum circuit optimization with PennyLane",
     "authors": [
         {
-            "username": "josh"
+            "username": "ashishks"
         }
     ],
     "dateOfPublication": "2024-01-01T00:00:00+00:00",
-    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-02T00:00:00+00:00",
     "categories": ["Optimization", "Quantum Machine Learning", "Getting Started"],
     "tags": ["variational circuits", "optimization", "gradient descent", "parameter estimation"],
     "previewImages": [
