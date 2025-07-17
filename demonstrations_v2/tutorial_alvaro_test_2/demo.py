@@ -1,4 +1,4 @@
-r"""Intro to Quantum Phase Estimation
+r"""Intro to Quantum Phase Estimation (QPE)
 =============================================================
 
 The Quantum Phase Estimation (QPE) algorithm [#qpe]_ is one of the lamest tools in quantum
