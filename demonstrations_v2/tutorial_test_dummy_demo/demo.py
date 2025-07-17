@@ -3,7 +3,7 @@ r"""Basic quantum circuit optimization with PennyLane
 
 .. meta::
     :property="og:description": Learn how to optimize quantum circuits using PennyLane's gradient-based optimization
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/test_dummy_demo/thumbnail_test_dummy_demo.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/tutorial_test_dummy_demo/thumbnail_test_dummy_demo.png
 
 .. related::
    tutorial_variational_classifier Variational quantum classifiers
@@ -24,7 +24,7 @@ In this tutorial, you will learn:
 
 |
 
-.. figure:: ../_static/demonstration_assets/test_dummy_demo/circuit_optimization.png
+.. figure:: ../_static/demonstration_assets/tutorial_test_dummy_demo/circuit_optimization.png
     :align: center
     :width: 70%
     :alt: Illustration of quantum circuit optimization process
@@ -190,7 +190,7 @@ print(f"Final cost: {costs[-1]:.6f}")
 
 ##############################################################################
 #
-# .. figure:: ../_static/demonstration_assets/test_dummy_demo/optimization_convergence.png
+# .. figure:: ../_static/demonstration_assets/tutorial_test_dummy_demo/optimization_convergence.png
 #     :align: center
 #     :width: 60%
 #     :alt: Plot showing the convergence of the cost function during optimization
@@ -280,7 +280,7 @@ for opt_class, kwargs in optimizers:
 
 ##############################################################################
 #
-# .. figure:: ../_static/demonstration_assets/test_dummy_demo/optimizer_comparison.png
+# .. figure:: ../_static/demonstration_assets/tutorial_test_dummy_demo/optimizer_comparison.png
 #     :align: center
 #     :width: 70%
 #     :alt: Comparison of different optimization methods
@@ -348,7 +348,7 @@ print(f"\nMinimum cost found: {min_cost_point[2]:.6f} at θ₁={min_cost_point[0
 
 ##############################################################################
 #
-# .. figure:: ../_static/demonstration_assets/test_dummy_demo/parameter_landscape.png
+# .. figure:: ../_static/demonstration_assets/tutorial_test_dummy_demo/parameter_landscape.png
 #     :align: center
 #     :width: 70%
 #     :alt: Visualization of the parameter landscape

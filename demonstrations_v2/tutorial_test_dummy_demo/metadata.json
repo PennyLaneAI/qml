@@ -12,7 +12,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/test_dummy_demo/thumbnail_test_dummy_demo.png"
+            "uri": "/_static/demonstration_assets/tutorial_test_dummy_demo/thumbnail_test_dummy_demo.png"
         }
     ],
     "seoDescription": "Learn how to optimize quantum circuits using PennyLane's gradient-based optimization",
