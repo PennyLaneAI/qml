@@ -293,8 +293,8 @@ print(np.round(total_state, 3))
 # Remember we expect 
 # 
 # .. math::
-#   |\tau(x_j^\mathrm{Ch})\rangle = \frac1{2^{N/2}}T_0(x_j^\mathrm{Ch})|0\rangle + \frac1{2^{(N-1)/2}}\sum_{k=1}^{2^N-1}T_k(x_j^\mathrm{Ch})|k\rangle\,,
-# so, we can just check the circuit output by computing each state component directly.
+#   |\tau(x_j^\mathrm{Ch})\rangle = \frac1{2^{N/2}}T_0(x_j^\mathrm{Ch})|0\rangle + \frac1{2^{(N-1)/2}}\sum_{k=1}^{2^N-1}T_k(x_j^\mathrm{Ch})|k\rangle\,.
+# We can just check the circuit output by computing each state component directly.
 
 
 def T_n(x, n):
@@ -348,11 +348,11 @@ fig.text(0.5, 0.05,
 plt.show()
 
 #############################################
-# Notice that, unlike the quantum Fourier transform, these amplitudes are real instead of being complex valued. Also note that the overlap at :math:`|0\rangle` is discontinuous because the :math:`|0\rangle` amplitude of the Chebyshev state was adjusted in the definition to guarantee orthonormality.
+# Notice that, unlike the quantum Fourier transform, these amplitudes are real instead of complex values. Also note that the overlap at :math:`|0\rangle` is discontinuous because the :math:`|0\rangle` amplitude of the Chebyshev state was adjusted in the definition to guarantee orthonormality of the Chebyshev basis.
 #
 # Next, let's test that orthonormality by computing the overlap at the nodes with all other Chebyshev basis states :math:`|\tau(x_j^\mathrm{Ch})\rangle`.
 
-# Compute overlap with other basis states using np.vdot().
+# Compute the overlap with the other basis states using np.vdot().
 js = list(range(int(len(state))))
 overlaps = [np.vdot(state, circuit(state=i)[: 2**N]) for i in js]
 
@@ -384,7 +384,7 @@ ax.plot(nodes, np.abs(overlaps) ** 2, marker="o", label="circuit")
 xs = np.linspace(-1, 1, 1000)
 ax.plot(xs, [overlap_sq(x, nodes[j]) for x in xs], label="expectation")
 
-# Set second axis showing computational basis state indices.
+# Set the second axis to show computational basis state indices.
 ax_top.set_xlim(ax.get_xlim())
 tick_labels = [str(i) for i in js]
 tick_labels[0::2] = [''] * len(tick_labels[0::2])  # Omit even-numbered labels.
