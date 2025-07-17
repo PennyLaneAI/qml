@@ -4,7 +4,7 @@ r"""Quantum Chebyshev Transform
 Looking for ways to leverage the speed of the `quantum Fourier transform <https://pennylane.ai/qml/demos/tutorial_qft/>`__ is a common way to design quantum algorithms with exponential speed ups over classical algorithms. 
 Working in the Fourier basis can be a more natural choice than the standard basis for some computations. 
 Swapping bases is feasible due to the efficiency of the quantum Fourier transform.
-In the paper `"Quantum Chebyshev transform: mapping, embedding, learning and sampling distributions" <https://arxiv.org/abs/2306.17026>`__ [#williams2023]_, the authors describe a different basis, the *Chebyshev* basis, and its associated transformation, the *quantum Chebyshev transform*. 
+In the paper `"Quantum Chebyshev transform: mapping, embedding, learning and sampling distributions" <https://arxiv.org/abs/2306.17026>`__ [#williams2023]_, the authors describe a different basis, the *Chebyshev basis*, and its associated transformation, the *quantum Chebyshev transform*. 
 They demonstrate the use of the Chebyshev basis space in generative modelling of probability distributions. 
 Further work also proposes a protocol for learning and sampling multivariate probability distributions that arise in high-energy physics [#delejarza2025]_. 
 Crucial to their implementation of the learning models is the quantum Chebyshev transform which utilizes the quantum Fourier transform to allow for fast transformations between the standard and the Chebyshev basis.
@@ -90,7 +90,7 @@ The inverse of the transform is then just the series expansion evaluated on the 
 .. math::
     f(x_k^\mathrm{Ch}) = \sum_{j=0}^{N-1} a_j T_j(x_k^\mathrm{Ch})\,.
 
-Since a function expanded in Chebyshev polynomials in this way will be sampled on the non-uniformly spaced Chebyshev nodes, it will have more resolution at the boundary than in the middle. In fact, the grid of Chebyshev nodes minimizes the problem of `Runge's phenomenon <https://en.wikipedia.org/wiki/Runge%27s_phenomenon>`. This can be beneficial if you are, for example, solving a differential equation and expect more interesting features at the boundary. Furthermore, the Chebyshev expansion gives close to the best polynomial approximation to a continuous function under the `maximum norm <https://en.wikipedia.org/wiki/Uniform_norm>`.
+Since a function expanded in Chebyshev polynomials in this way will be sampled on the non-uniformly spaced Chebyshev nodes, it will have more resolution at the boundary than in the middle. In fact, the grid of Chebyshev nodes minimizes the problem of `Runge's phenomenon <https://en.wikipedia.org/wiki/Runge%27s_phenomenon>`__. This can be beneficial if you are, for example, solving a differential equation and expect more interesting features at the boundary. Furthermore, the Chebyshev expansion gives close to the best polynomial approximation to a continuous function under the `maximum norm <https://en.wikipedia.org/wiki/Uniform_norm>`__.
 
 In general, computing the expansion of a function in a complete set on a classical computer for a discrete number of sampling points would take :math:`\mathcal{O}(N^2)` operations 🐌. 
 However, because of the way the Chebyshev polynomials are defined in terms of cosine, the discrete Chebyshev transformation is related to the `discrete cosine transform <https://en.wikipedia.org/wiki/Discrete_cosine_transform>`__. This allows the discrete Chebyshev transform to be implemented in a way that leverages the efficiency of the `fast-Fourier-transform <https://en.wikipedia.org/wiki/Fast_Fourier_transform>`__-style algorithms for expansion, which take :math:`\mathcal{O}(N \log N)` operations 🚀. 
@@ -98,7 +98,7 @@ However, because of the way the Chebyshev polynomials are defined in terms of co
 We can see the relation to the cosine transform by plugging in the definition of the Chebyshev polynomials and the nodes into the inverse transform and simplifying. Starting with the polynomials
 
 .. math::
-    f(x_k^\mathrm{Ch}) = \sum_{j=0}^{N-1} a_j \cos\left(j \cos^{-1}(x_k^\mathrm{Ch})\right)\,,
+    f(x_k^\mathrm{Ch}) = \sum_{j=0}^{N-1} a_j \cos\left(j \arccos(x_k^\mathrm{Ch})\right)\,,
 
 then, using the definition of the nodes we obtain 
 
@@ -175,7 +175,7 @@ def CNOT_ladder():
 # After the initial CNOT ladder comes an :math:`N+1` QFT circuit, which can be implemented using ``qml.QFT``.
 #
 # Next are phase rotations and shifts.
-# For the auxiliary qubit, there is a :math:`Z` rotation of :math:`-\pi(2^N - 1)/2^{N+1}` followed by a phase shift of :math:`-\pi/2^{(N+1)}` .
+# For the auxiliary qubit, there is a :math:`Z` rotation by and angle of :math:`-\pi(2^N - 1)/2^{N+1}` followed by a phase shift of :math:`-\pi/2^{(N+1)}` .
 # The other qubits are rotated in :math:`Z` by :math:`\pi/2^{(j+1)}`, where :math:`j` is the index of the qubit as labelled in the circuit diagram.
 
 import numpy as np
@@ -219,11 +219,14 @@ def adjust_phases():
     """Adjusts the phase of the auxiliary qubit."""
     qml.RY(-pi / 2, wires=0)
     qml.PhaseShift(-pi / 2, wires=0)
+
     # First Pauli X gates.
     for wire in range(1, N + 1):
         qml.PauliX(wires=wire)
+
     # Controlled RX gate.
     qml.ctrl(qml.RX(pi / 2, wires=0), range(1, N + 1))
+
     # Second Pauli X gates.
     for wire in range(1, N + 1):
         qml.PauliX(wires=wire)
@@ -235,6 +238,7 @@ def adjust_phases():
 
 
 def QChT():
+    """Performs the quantum Chebyshev transform."""
     qml.Hadamard(wires=0)
     CNOT_ladder()
     qml.QFT(wires=range(N + 1))
@@ -273,7 +277,7 @@ fig.show()
 # ----------------
 # With our quantum Chebyshev transform circuit, let's first check if the auxiliary qubit ends in the state :math:`|0\rangle` and the output state amplitudes are real valued. 
 # To do this, we'll input the computational basis state :math:`|7\rangle`, which will transform into :math:`|\tau(x_7^\mathrm{Ch})\rangle`.
-# We expect the full output state to be :math:`|0\rangle|\tau(x_7^\mathrm{Ch})\rangle`, which means the second half of the amplitude vector should be zero (corresponding to states with the auxiliary qubit in :math:`|1\rangle`).
+# We expect the full output state to be :math:`|0\rangle|\tau(x_7^\mathrm{Ch})\rangle`, which means the second half of the amplitude vector should be zero (since there should be no state components with the auxiliary qubit in :math:`|1\rangle`).
 
 j = 7  # Initial state in computational basis.
 
@@ -287,19 +291,20 @@ print(np.round(total_state, 3))
 # Indeed, we see the second half of the amplitude vector is zero. 
 # Furthermore, the first :math:`2^N` entries are real valued, but let's check if the amplitudes of the state components in the computational basis agree with our definition. 
 # Remember we expect 
+# 
 # .. math::
 #   |\tau(x_j^\mathrm{Ch})\rangle = \frac1{2^{N/2}}T_0(x_j^\mathrm{Ch})|0\rangle + \frac1{2^{(N-1)/2}}\sum_{k=1}^{2^N-1}T_k(x_j^\mathrm{Ch})|k\rangle\,,
 # so, we can just check the circuit output by computing each state component directly.
 
 
-def ch_node(j):
-    """The jth node of Chebyshev polynomial 2^N - 1."""
-    return np.cos(pi * (2 * j + 1) / 2 ** (N + 1))
-
-
 def T_n(x, n):
     """Chebyshev polynomial of order n."""
     return np.cos(n * np.arccos(x))
+
+
+def ch_node(j):
+    """The jth node of Chebyshev polynomial 2^N - 1."""
+    return np.cos(pi * (2 * j + 1) / 2 ** (N + 1))
 
 
 def tau_amplitudes(x, k):
@@ -320,7 +325,7 @@ assert np.allclose(expected_state, state, atol=1e-9)  # Compare circuit output t
 # The output state from the circuit is exactly what we want.
 #
 # To give some intuition for how the quantum Chebyshev transform is related to the quantum Fourier transform,
-# we can plot the overlap of :math:`|\tau(x_7^\mathrm{Ch})\rangle` with the computational basis states :math`|k\rangle`. 
+# we can plot the overlap of :math:`|\tau(x_7^\mathrm{Ch})\rangle` with the computational basis states :math:`|k\rangle`. 
 # This should look like a cosine plot, since Chebyshev polynomials are just the cosine of an argument which is proportional to :math:`k`.
 
 import matplotlib.pyplot as plt
@@ -343,10 +348,10 @@ fig.text(0.5, 0.05,
 plt.show()
 
 #############################################
-# However, unlike the quantum Fourier transform, these amplitudes are real instead of being complex valued, and the :math:`|0\rangle` amplitude is
+# Notice that, unlike the quantum Fourier transform, these amplitudes are real instead of being complex valued, and the :math:`|0\rangle` amplitude is
 # adjusted to fix the orthonormality.
 #
-# Next, let's test that orthonormality by computing the overlap at the nodes with all other :math:`|\tau(x_j^\mathrm{Ch})\rangle`.
+# Next, let's test that orthonormality by computing the overlap at the nodes with all other Chebyshev basis states :math:`|\tau(x_j^\mathrm{Ch})\rangle`.
 
 # Compute overlap with other basis states using np.vdot().
 js = list(range(int(len(state))))
@@ -386,10 +391,12 @@ tick_labels = [str(i) for i in js]
 tick_labels[0::2] = [''] * len(tick_labels[0::2])  # Omit even-numbered labels.
 ax_top.set(xlabel=r"Chebyshev node $j$", 
            xticks=nodes, xticklabels=tick_labels)
+ax_top.grid(False)
 
 ax.legend()
 fig.text(0.5, 0.05,
-    r"Figure 5. Squared overlap of Chebyshev states $|\langle \tau(x_k^\mathrm{Ch})|\tau(x_7^\mathrm{Ch})\rangle|^2$.",
+    r"""Figure 5. Squared overlap of Chebyshev states 
+    $|\langle \tau(x_k^\mathrm{Ch})|\tau(x_7^\mathrm{Ch})\rangle|^2$.""",
     horizontalalignment="center",
     size="small", weight="normal",
 )
