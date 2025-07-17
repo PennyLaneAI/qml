@@ -80,39 +80,62 @@ print(qml.FromBloq(textbook_qpe, wires=range(textbook_qpe.signature.n_qubits()))
 # From PennyLane to Qualtran
 # --------------------------
 #
-# In this section, we discuss how to convert PennyLane objects to Qualtran Bloqs. Similar to
-# ``qml.FromBloq``, we use ``qml.to_bloq`` to handle the conversion.
+# Now, we'll show you how to convert PennyLane objects to Qualtran Bloqs.
+#
+# Sometimes, there are so many Qualtran Bloqs to choose, it's hard to decide what PennyLane
+# operator translates to what Qualtran Bloq. You might not even necessarily want to translate a
+# PennyLane operator directly to a Qualtran Bloq. Don't worry, we've got you covered with 3
+# flexible options. We'll introduce them here but rest assured, we will cover each option in
+# great detail:
+#
+# - Wrapping: Think of this as the opposite of `FromBloq`. It faithfully converts any operator or
+#   Qfunc, decompositions and all, into a Bloq. The output will be a `ToBloq` instance.
+#
+# - Smart defaults: In this option, you let PennyLane choose what Qualtran Bloq to translate to.
+#   If an option exists, we'll give you a Qualtran Bloq that is highly similar to the PennyLane
+#   operator. In the case there isn't a smart default, we fallback to the wrapping option.
+#
+# - Custom mapping: What if you don't like the smart default we've provided? Don't worry, you can
+#   custom define what Bloq you want your operator to map to. This is great if you want to really
+#   refine the finer details of the Bloqs you want to analyze using Qualtran.
+#
+# Holding all these options together is our trusty function :func:`~pennylane.io.to_bloq`. In the
+# following sections, we'll explore how we can wield this powerful function to get all the
+# functionality introduced above.
+#
+######################################################################
+# Smart defaults and custom mapping
+# ---------------------------------
+# By default, `qml.to_bloq` tries its best to translate 
+# PennyLane objects to Qualtran-native objects. This is done through a combination of smart 
+# defaults and direct mappings. This makes certain Qualtran
+# functionalities, such as gate counting and generalizers, work more seamlessly.
 
-op_as_bloq = qml.to_bloq(qml.X(0))
+op_as_bloq = qml.to_bloq(qml.X(0), map_ops=True, custom_map=None) # `map_ops` is `True` by default
 print(op_as_bloq)
 
-# Unlike `qml.FromBloq`, notice that instead of being wrapped as a `ToBloq` Bloq, the PauliX 
-# operator was directly translated to its Qualtran equivalent, ``XGate()``. For `qml.to_bloq`,
-# PennyLane always tries its best to translate PennyLane objects to Qualtran-native objects. This
-# makes certain Qualtran functionalities, such as gate counting and generalizers, work more
-# seamlessly.
-# 
-# In the following example, we pass a quantum function to `qml.to_bloq`. Here, since the quantum
-# function does not have a direct Qualtran equivalent, the circuit is wrapped as a `ToBloq` Bloq.
-# We can check its decomposition to see that it follows the circuit description exactly.
-
-from qualtran.drawing import show_bloq
-
-def circ():
-    qml.X(0)
-    qml.X(1)
-
-qfunc_as_bloq = qml.to_bloq(circ)
-print(type(qfunc_as_bloq))
-show_bloq(qfunc_as_bloq.decompose_bloq())
-
 ######################################################################
-# Advanced details: Mapping
-# -------------------------
+# .. note ::
+#
+#    When a quantum function or operator does not have a mapping - a direct Qualtran equivalent 
+#    or smart default - the circuit is wrapped as a `ToBloq` Bloq.
+#
+#   .. code-block:: python
+#        
+#       from qualtran.drawing import show_bloq
+#
+#       def circ():
+#           qml.X(0)
+#           qml.X(1)
+#
+#       qfunc_as_bloq = qml.to_bloq(circ)
+#       print(type(qfunc_as_bloq))
+#       show_bloq(qfunc_as_bloq.decompose_bloq())
+#
 #
 # Not all PennyLane operators are as straightforward to map as the PauliX operator. For example, 
 # PennyLane's Quantum Phase Estimation could be mapped to a variety of Qualtran Bloqs. In cases
-# where the mapping is ambiguous, PennyLane provides what we call a smart default:
+# where the mapping is ambiguous, we get the smart default:
 
 from qualtran.drawing import draw_musical_score,  get_musical_score_data
 
