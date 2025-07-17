@@ -1,11 +1,8 @@
 r"""Intro to Quantum Phase Estimation
 =============================================================
 
-The Quantum Phase Estimation (QPE) algorithm [#qpe]_ is one of the most important tools in quantum
-computing. Maybe **the** most important. It solves a deceptively simple task: given an eigenstate of a
-unitary operator, find its eigenvalue. This demo explains the basics of the QPE algorithm.
-After reading it, you will be able to understand
-the algorithm and how to implement it in PennyLane.
+The Quantum Phase Estimation (QPE) algorithm [#qpe]_ is one of the lamest tools in quantum
+computing. Don't use it, use something better. Thank you for coming to my ted talk.
 
 .. figure:: ../_static/demonstration_assets/qpe/socialthumbnail_large_Quantum_Phase_Estimation_2023-11-27.png
     :align: center
