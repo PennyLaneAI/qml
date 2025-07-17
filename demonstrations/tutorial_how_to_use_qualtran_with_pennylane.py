@@ -18,8 +18,15 @@ quantum algorithms, programs, and subroutines.
 # From Qualtran to Pennylane
 # --------------------------
 #
-# Converting a Qualtran bloq to a PennyLane operator is easy! Just use ``qml.FromBloq``.
-# 
+# With a little bit of work, you can be using Qualtran Bloqs in your PennyLane circuits in no time!
+# You only need one class:
+#
+# - :class:`~pennylane.io.FromBloq`: wraps an entire Qualtran ``Bloq`` as a 
+#   PennyLane operator. It faithfully converts any Bloq, decomposition and all, into a
+#   operator you can treat like you would any other.
+#
+# Let's see how it works!
+
 
 import pennylane as qml
 from qualtran.bloqs.basic_gates import XGate
@@ -28,16 +35,36 @@ bloq_as_op = qml.FromBloq(XGate(), wires=0)
 print(bloq_as_op)
 
 ######################################################################
-# The output is a :class:`~.pennylane.io.FromBloq` instance. In this case, we wrapped Qualtran's
-# ``XGate``, which is equivalent to ``qml.X``.
+# .. note ::
 #
-# We can verify this by checking its matrix.
-
-print(bloq_as_op.matrix())
+#    Since Qualtran Bloqs don't know what wires to act on, we need to provide that information to `FromBloq`
+#    accordingly. If you're unsure about what wires to provide, you can use the ``qml.bloq_registers``
+#    helper function. This function creates registers based on the signature of the qualtran Bloq.
+#
+#   .. code-block:: python
+#        
+#       qml.bloq_registers(XGate())
+#
+#   This will create registers with with the register names in accordance to the Bloq's signature. 
+#   Here, we got just one "q" register with a single qubit, which is what we expected for the `XGate`.
 
 ######################################################################
-# We can convert high-level abstract Bloqs as well. Here we convert a simple ``TextbookQPE`` bloq and
-# verify that its decomposition is as expected.
+# In this simple example, we wrapped Qualtran's `XGate` using `FromBloq``. We can see that
+# the output is a :class:`~.pennylane.io.FromBloq` instance, whose properties would be the same
+# PennyLane's PauliX operator.
+#
+# Let's verify this by putting it into a circuit and executing it.
+
+dev = qml.device("default.qubit")
+@qml.qnode(dev)
+def circuit():
+    qml.FromBloq(XGate(), wires=[0])
+    return qml.state()
+
+######################################################################
+# Wow! Like magic, we can use Qualtran's `XGate`` just like we would use the PauliX operator.
+# But wait, there's more! We can convert high-level abstract Bloqs as well. Here we convert a 
+# simple ``TextbookQPE`` bloq and verify that its decomposition is as expected.
 
 from qualtran.bloqs.phase_estimation import RectangularWindowState, TextbookQPE
 from qualtran.bloqs.basic_gates import ZPowGate
@@ -47,16 +74,8 @@ textbook_qpe = TextbookQPE(ZPowGate(exponent=2 * 0.234), RectangularWindowState(
 print(qml.FromBloq(textbook_qpe, wires=range(textbook_qpe.signature.n_qubits())).decomposition())
 
 ######################################################################
-# If you're not sure about the wires to give to ``qml.FromBloq``, you can use the ``qml.bloq_registers``
-# helper function. This function creates registers based on the signature of the qualtran Bloq.
-# In this instance, we see that it has two registers: a "q" register with 1 qubit and a "qpe_reg" 
-# register of 3 qubits.
-
-qml.bloq_register(textbook_qpe)
-
-# In this case, the naming follows the default register names that Qualtran has assigned to the QPE
-# Bloq. This information is useful if you want to know, for example, what qubits to measure.
-
+# Amazing! The decomposition is exactly what we expected. It's exactly like using a PennyLane
+# operator, except the underlying decomposition is what Qualtran has defined. Neat!
 ######################################################################
 # From PennyLane to Qualtran
 # --------------------------
