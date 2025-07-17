@@ -167,8 +167,8 @@ fig.tight_layout()
 # We see that ``RectangularWindowState`` has been switched out for the ``LPResourceState`` we
 # defined in the custom map. 
 #
-# Advanced details: Wrapping
-# --------------------------
+# Wrapping
+# --------
 #
 # These two implementations, while similar on a high level, are not exactly the same as the
 # implementation in PennyLane. To make our ``qpe_bloq`` exactly the same as its PennyLane
@@ -202,7 +202,11 @@ show_counts_sigma(wrapped_sigma)
 ######################################################################
 # Further resources
 # -----------------
-# 
+# Whether you want to simulate Qualtran Bloqs or analyze PennyLane circuits, the PennyLane-Qualtran
+# integration has got you covered. Expand the possibilities of PennyLane by leveraging the powerful
+# subroutines in Qualtran. Analyze and reason about PennyLane circuits using the language of
+# Qualtran. The possibilities are truly boundless. We can't wait to see how this collaboration
+# accelerates your research.
 #
 # About the author
 # ----------------
