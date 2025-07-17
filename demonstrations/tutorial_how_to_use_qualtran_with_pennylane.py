@@ -88,9 +88,6 @@ print(qml.FromBloq(textbook_qpe, wires=range(textbook_qpe.signature.n_qubits()))
 # flexible options. We'll introduce them here but rest assured, we will cover each option in
 # great detail:
 #
-# - Wrapping: Think of this as the opposite of `FromBloq`. It faithfully converts any operator or
-#   Qfunc, decompositions and all, into a Bloq. The output will be a `ToBloq` instance.
-#
 # - Smart defaults: In this option, you let PennyLane choose what Qualtran Bloq to translate to.
 #   If an option exists, we'll give you a Qualtran Bloq that is highly similar to the PennyLane
 #   operator. In the case there isn't a smart default, we fallback to the wrapping option.
@@ -98,6 +95,10 @@ print(qml.FromBloq(textbook_qpe, wires=range(textbook_qpe.signature.n_qubits()))
 # - Custom mapping: What if you don't like the smart default we've provided? Don't worry, you can
 #   custom define what Bloq you want your operator to map to. This is great if you want to really
 #   refine the finer details of the Bloqs you want to analyze using Qualtran.
+#
+# - Wrapping: Think of this as the opposite of `FromBloq`. It faithfully converts any operator or
+#   Qfunc, decompositions and all, into a Bloq. The output is a :class:`~pennylane.io.ToBloq` instance.
+#
 #
 # Holding all these options together is our trusty function :func:`~pennylane.io.to_bloq`. In the
 # following sections, we'll explore how we can wield this powerful function to get all the
