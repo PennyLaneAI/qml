@@ -244,7 +244,7 @@ print(
 # representation of error correction codes, using **Pauli operators** instead of state vectors.
 #
 # .. note::
-#     It is great time to look at `Pauli operators <https://pennylane.ai/codebook/single-qubit-gates>`_ and their properties now, 
+#     It is a great time to look at `Pauli operators <https://pennylane.ai/codebook/single-qubit-gates>`_ and their properties now, 
 #     if you are not familiar with them.
 #
 # To gain some intuition about the operator picture, let us express the three-qubit repetition code in a different way. Using the
@@ -300,7 +300,7 @@ print(
 # .. admonition:: Groups
 #     :class: note
 #
-#     It is important to have a minimal understanding of group theory to understand the stabilizer formalism. As a refresher, here is 
+#     It is important to have some familiarity with group theory to understand the stabilizer formalism. As a refresher, here is 
 #     the definition of a group.
 #     
 #     A group is a set of elements that has:
@@ -380,7 +380,7 @@ generate_stabilizer_group(generators, 3)
 
 ##############################################################################
 #
-# Indeed, obtain all the elements of the group by inputting the generators only. Feel free to try out this code with different generators!
+# Indeed, we obtain all the elements of the group by inputting the generators only. Feel free to try out this code with different generators!
 #
 # Defining the codespace
 # ~~~~~~~~~~~~~~~~~~~~~~~
@@ -405,7 +405,6 @@ generate_stabilizer_group(generators, 3)
 #
 # Logical operators
 # ~~~~~~~~~~~~~~~~~~
-#
 #
 # So far, we have introduced the stabilizer generators, which define the syndrome measurements, and the codewords,
 # which are the states left unchanged by all stabilizers. What remains is to understand how to perform computation on the
@@ -507,16 +506,14 @@ print(classify_pauli(X(0) @ Y(1) @ Z(2), logical_ops, generators, 3))
 #    S_2 = X_0 I_1 X_2 Z_3 Z_4,\\
 #    S_3 = Z_0 X_1 I_2 Z_3 X_4.
 #
-# Note: People usally drop the subscript of 0,1,2 etc as the position of the qubit carries that information.
-#
-# Encoding the data qubit
-# ~~~~~~~~~~~~~~~~~~~~~~~
+# Encoding the logical qubit
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # First, we need to prepare a data qubit that we want to protect. For this tutorial, we will use the qubit
 # :math:`\vert \psi \rangle = \alpha \vert 0 \rangle + \beta \vert 1 \rangle, as our data qubit.
 #
 # The next step is to encode this data qubit into a logical qubit. This is done by **encoding circuit** given below. Notice that we
-# do not need to know the logicals to implement the encoding circuit. The circuit is completely determined by the stabilizer generators.
+# do not need to know the logical operators to implement the encoding circuit. The circuit is completely determined by the stabilizer generators.
 # It is beyond the scope of this tutorial to explain how the circuit is constructed from the stabilizer generators. The state after encoding
 # is given by:
 #
@@ -556,75 +553,70 @@ def five_qubit_encode(alpha, beta):
 
 ##############################################################################
 #
+# Pauli Errors and syndrome measurements
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# Applying noise
-# ~~~~~~~~~~~~~~~~
-# After encoding, the qubit would normally be exposed to noise and decoherence in a real system.
-# To simulate this, we introduce an artificial error by randomly flipping one of the physical
-# qubits using a Pauli \:math:`X` operation.
-#
-# PennyLane code for applying noise
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#
-# Syndrome measurement
-# ~~~~~~~~~~~~~~~~~~~~
-#
-# The next step is to detect the error by measuring the syndrome. The syndrome circuit is given below.
+# After encoding, the qubit is exposed to noise and decoherence in a real system.
+# To simulate this, we introduce an artificial error by randomly acting on one of the physical
+# qubits on wires 0, 1, 2, 3, or 4 with Pauli X, Y, or Z operations. Then, we proceed with the syndrome measurements, which
+# in this case, amounts to acting with the controlled stabilizer generators on the work wires, as follows
 #
 # .. figure:: ../_static/demonstration_assets/stabilizer_codes/five_qubit_syndrome.png
 #    :align: center
 #    :width: 100%
 #
-#    ..
+# THe implementation in PennyLane is shown below.
 #
-# Let us implement this syndrome measurement circuit in PennyLane.
+
+stabilizers = [X(0)@Z(1)@Z(2)@X(3)@I(4), I(0)@X(1)@Z(2)@Z(3)@X(4),
+               X(0)@I(1)@X(2)@Z(3)@Z(4), Z(0)@X(1)@I(2)@X(3)@Z(4)]
+
+def five_qubit_error_detection():
+
+  for wire in range(5,9):
+    qml.Hadamard(wires = wire)
+
+  for i in range(len(stabilizers)):
+
+    qml.ctrl(stabilizers[i], control = [i + 5])
+
+  for wire in range(5,9):
+    qml.Hadamard(wires = wire)
+
+#############################################################################
 #
+# We can now combine this with the encoding circuit and the application of the Pauli errors to obtain the circuit that
+# measures the syndrome, as we did in the three-qubit code. 
 #
-# PennyLane code for syndrome measurement
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#
+
+dev = qml.device("default.qubit", wires = 9, shots = 1)
+
+@qml.qnode(dev)
+def five_qubit_syndromes(alpha, beta, error_op, error_wire):
+
+  five_qubit_encode(alpha, beta)
+
+  error_op(wires = error_wire)
+
+  five_qubit_error_detection()
+
+  return qml.sample(wires = range(5,9))
+
+#############################################################################
 #
 # Now we need to build the syndrome table like we did with the three-qubit code. The syndrome table maps measurement outcomes to
 # specific errors, allowing us to detect and correct errors on the encoded qubits.
 
-dev = qml.device("default.qubit", wires=9, shots=1)
-
-stabilizers = [
-    X(0) @ Z(1) @ Z(2) @ X(3) @ I(4),
-    I(0) @ X(1) @ Z(2) @ Z(3) @ X(4),
-    X(0) @ I(1) @ X(2) @ Z(3) @ Z(4),
-    Z(0) @ X(1) @ I(2) @ X(3) @ Z(4),
-]
-
-
-@qml.qnode(dev)
-def five_qubit_code(alpha, beta, error_type, error_wire):
-    five_qubit_encode(alpha, beta)
-
-    if error_type == "X":
-        qml.PauliX(wires=error_wire)
-
-    elif error_type == "Y":
-        qml.PauliY(wires=error_wire)
-
-    elif error_type == "Z":
-        qml.PauliZ(wires=error_wire)
-
-    for wire in range(5, 9):
-        qml.Hadamard(wires=wire)
-
-    for i in range(len(stabilizers)):
-        qml.ctrl(stabilizers[i], control=[i + 5])
-
-    for wire in range(5, 9):
-        qml.Hadamard(wires=wire)
-
-    return qml.sample(wires=range(5, 9))
-
+ops_and_syndromes = []
 
 for wire in (0, 1, 2, 3, 4):
-    for error in ("X", "Y", "Z"):
-        print(f"{error} {wire}", five_qubit_code(1 / 2, np.sqrt(3) / 2, error, wire))
+
+  for error_op in (qml.PauliX, qml.PauliY, qml.PauliZ):
+
+    ops_and_syndromes.append((error_op, wire, five_qubit_syndromes(1/2, np.sqrt(3)/2, error_op, wire)))
+
+    print(f"{error_op(wire).name[-1]}{wire}", five_qubit_syndromes(1/2, np.sqrt(3)/2, error_op, wire))
+
 ##############################################################################
 #
 # The syndrome table is printed, and with we can apply the necessary operators to fix the corresponding Pauli errors. The script above is straightforward
@@ -633,14 +625,76 @@ for wire in (0, 1, 2, 3, 4):
 # Error correction
 # ~~~~~~~~~~~~~~~~
 #
-# The last step is to correct the error by applying the appropriate Pauli operators to the encoded qubits.
+# The last step is to correct the error by applying the appropriate Pauli operators to the encoded qubits. This time, we have many 
+# possible syndrome measurement outcomes. Let us write a helper function to encode the possible syndromes in a way amiable to 
+# PennyLane's mid-circuit measurement capabilities, which only allows for Boolean operators.
 #
-# PennyLane code for error correction
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+def syndrome_booleans(syndrome, measurements):
+
+  if syndrome[0] == 0:
+    m = ~measurements[0]
+  else:
+    m = measurements[0]
+
+  for i, elem in enumerate(syndrome[1:]):
+    if elem == 0:
+      m = m & ~measurements[i + 1]
+    else:
+      m = m & measurements[i + 1]
+
+  return m
+
+#############################################################################
+#
+# Combining all these pieces, we can write the full error correcting code.
+#
+dev = qml.device("default.qubit", wires = 9)
+
+@qml.qnode(dev)
+def five_qubit_code(alpha, beta, error_op, error_wire):
+
+  five_qubit_encode(alpha, beta)
+
+  error_op(wires = error_wire)
+
+  five_qubit_error_detection()
+
+  m5 = qml.measure(5)
+  m6 = qml.measure(6)
+  m7 = qml.measure(7)
+  m8 = qml.measure(8)
+  
+  measurements = [m5, m6, m7, m8]
+
+  for op, wire, synd in ops_and_syndromes:
+
+    qml.cond(syndrome_booleans(synd, measurements), op)(wires = wire)
+
+  return qml.density_matrix(wires = [0, 1, 2, 3, 4])
+
+#############################################################################
+#
+# Let us check that the fidelity between the output state and the initial encoded state is equal to 1 for arbitrary Pauli errors on one
+# qubit. Indeed:
+#
+
+@qml.qnode(qml.device("default.qubit", wires = 5))
+def five_qubit_encoded_state(alpha, beta):
+
+  five_qubit_encode(alpha, beta)
+  return qml.state()
+
+encoded_state = qml.math.dm_from_state_vector(five_qubit_encoded_state(alpha, beta))
+for wire in range(5):
+  for error_op in (qml.PauliX, qml.PauliY, qml.PauliZ):
+    print(f"Fidelity if error {error_op(wire).name[-1]}{wire}:", 
+          qml.math.fidelity(encoded_state, five_qubit_code(alpha, beta, error_op, wire)).round(2))
+
+#############################################################################
 #
 # Note that to build the encoding, syndrome measurement, and error correction circuits, we did only use the stabilizer generators.
 # This is a powerful feature of the stabilizer formalism. It allows us to construct the code from its stabilizer generators
-# and then use the code to correct errors. However, we can also find the codewords  and logical operatorsdirectly from the stabilizer generators by
+# and then use the code to correct errors. However, we can also find the codewords  and logical operators directly from the stabilizer generators by
 # finding the common +1-eigenspace of the stabilizer generators.
 #
 # The calculations are a bit cumbersome, but with some patience we can find the common :math:`+1`-eigenspace of the stabilizer generators,
