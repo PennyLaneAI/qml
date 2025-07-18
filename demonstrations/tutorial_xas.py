@@ -656,7 +656,7 @@ spectrum = np.array([f_domain_Greens_func(w) for w in wgrid])
 ######################################################################
 # Since our active space for :math:`\mathrm{H}_2` is small, we can easily calculate a classical spectrum for comparison. 
 # We do this using the ``mycasci`` instance that we used to determine the ground state, but instead solve for more states by increasing the number of roots in the ``fcisolver``. 
-# This will give us the energies of the coupled final staes. 
+# This will give us the energies of the coupled final states. 
 # We can also calculate the transition density matrix in the molecular orbital basis between those states and the initial state, :math:`\langle F| \hat m_\rho |I \rangle`. 
 # With the energies and the overlaps, we can compute the absorption cross section directly.
 
@@ -741,7 +741,7 @@ plt.show()
 # This is already detailed in the `demo on CDF Hamiltonians <https://pennylane.ai/qml/demos/tutorial_how_to_build_compressed_double_factorized_hamiltonians>`__.
 #
 # Another optimization is to use a randomized second-order Trotter formula for the time evolution. 
-# As discussed in Ref. [#Childs2019]_, deterministic product formulas have error that scales with the commutators of the Hamiltonian terms. 
+# As discussed in Ref. [#Childs2019]_, the error in deterministic product formulas scales with the commutators of the Hamiltonian terms. 
 # One could instead use all permutations of the Hamiltonian terms, such that the commutator errors cancel. 
 # However, the average of all permutations is not unitary in general. 
 # To circumvent this, one can randomly choose a Hamiltonian term ordering, which can give a good approximation to the desired evolution.
