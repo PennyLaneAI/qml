@@ -104,7 +104,9 @@ print(qml.FromBloq(qubitization_qpe, wires=range(n_qubits)).decomposition())
 # From PennyLane to Qualtran
 # --------------------------
 #
-# Now, we'll show you how to convert PennyLane objects to Qualtran Bloqs.
+# Now, we'll show you how to convert PennyLane objects to Qualtran Bloqs. For brevity, we'll 
+# mainly cover how operators get converted to Bloqs in our examples, but quantum functions 
+# work just as well.
 #
 # Sometimes, there are so many Qualtran Bloqs to choose, it's hard to decide what PennyLane
 # operator translates to what Qualtran Bloq. You might not even necessarily want to translate a
@@ -120,7 +122,7 @@ print(qml.FromBloq(qubitization_qpe, wires=range(n_qubits)).decomposition())
 #   custom define what Bloq you want your operator to map to. This is great if you want to really
 #   refine the finer details of the Bloqs you want to analyze using Qualtran.
 #
-# - Wrapping: Think of this as the opposite of `FromBloq`. It faithfully converts any operator or
+# - Wrapping: Think of this as an analogue of `FromBloq`. It faithfully converts any operator or
 #   Qfunc, decompositions and all, into a Bloq. The output is a :class:`~pennylane.io.ToBloq` instance.
 #
 #
