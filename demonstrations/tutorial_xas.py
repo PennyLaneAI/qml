@@ -625,7 +625,7 @@ fig = plt.figure(figsize=(6.4, 2.4))
 ax = fig.add_axes((0.15, 0.3, 0.8, 0.65))  # Leave space for caption.
 ax.plot(range(len(expvals[0, :])), expvals[0, :], label="Real")
 ax.plot(range(len(expvals[1, :])), expvals[1, :], label="Imaginary", linestyle="--")
-ax.set(xlabel=r"$\mathrm{Time step}, j$", ylabel=r"$\mathrm{Expectation Value}")
+ax.set(xlabel=r"$\mathrm{Time step}, j$", ylabel=r"$\mathrm{Expectation Value}$")
 fig.text(0.5, 0.05,
     "Figure 7. Time-domain output of algorithm.",
     horizontalalignment="center",
