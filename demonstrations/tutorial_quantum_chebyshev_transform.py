@@ -157,7 +157,6 @@ Let's break down the circuit above into pieces that we will use inside our circu
 
 First, a Hadamard gate is applied to the auxiliary qubit, and then a CNOT ladder is applied, controlled on the auxiliary qubit. 
 To start, we will define a function for the CNOT ladder.
-
 """
 
 import pennylane as qml
