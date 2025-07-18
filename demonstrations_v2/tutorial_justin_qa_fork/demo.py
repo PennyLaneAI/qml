@@ -14,7 +14,7 @@ Using JAX with PennyLane
 
 *Author: Chase Roberts — Posted: 12 April 2021. Last updated: 12 April 2021.*
 
-JAX is an incredibly powerful scientific computing library that has been gaining traction in
+TEST omputing library that has been gaining traction in
 both the physics and deep learning communities. While JAX was originally designed for 
 classical machine learning (ML), many of its transformations are also useful 
 for quantum machine learning (QML), and can be used directly with PennyLane.
