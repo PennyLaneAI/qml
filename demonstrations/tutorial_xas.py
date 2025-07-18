@@ -34,7 +34,7 @@ A fast method of simulating reference spectra for use in fingerprinting would be
 
 Simulating these spectra is a difficult task for classical computers -- the highly correlated excited states are hard to compute classically, particularly for clusters with transition metals. 
 However, the low number of electronic orbitals needed to simulate these small clusters make this calculation well suited for early fault-tolerant quantum computers, which can naturally handle the large amount of correlations in the electronic state. 
-Tasks like this are promising candidates for early quantum advantage: simulations of *small* but *highly correlated* systems*. 
+Tasks like this are promising candidates for early quantum advantage -- simulations of *small* but *highly correlated* systems. 
 
 Algorithm
 ---------
