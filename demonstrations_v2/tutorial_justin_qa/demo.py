@@ -10,7 +10,7 @@ This means the KAK decomposition falls under the large umbrella of matrix factor
 and it allows us to break down arbitrary quantum circuits into smaller building blocks,
 i.e., we can use it for quantum circuit decompositions.
 
-In this demo, we will dive into Lie algebras and their groups. Then, we will discuss
+In this demodemodemodemo, we will dive into Lie algebras and their groups. Then, we will discuss
 so-called symmetric spaces, which arise from certain subgroups of those Lie groups.
 With these tools in our hands, we will then learn about the KAK decomposition itself,
 breaking up the Lie group into the subgroup and the symmetric space.
