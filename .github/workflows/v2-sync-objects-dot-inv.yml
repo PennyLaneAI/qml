@@ -1,0 +1,69 @@
+name: V2 Sync objects.inv
+on:
+  workflow_call:
+    inputs:
+      branch:
+        description: The QML branch that is being built.
+        type: string
+        required: true
+      dev:
+        description: Use development dependencies.
+        required: false
+        type: boolean
+        default: false
+    
+    secrets:
+      aws_region:
+        description: The AWS Region the infrastructure resides in
+        required: true
+      aws_access_key_id:
+        description: AWS Access Key to use when accessing the S3 bucket
+        required: true
+      aws_secret_access_key:
+        description: AWS Secret Access Key to use when accessing the S3 bucket
+        required: true
+      aws_html_s3_bucket_id:
+        description: The S3 bucket ID where the objects.inv file will be pushed
+        required: true
+
+
+jobs:
+  build-and-upload:
+    runs-on: ubuntu-latest
+    env:
+      AWS_REGION: ${{ secrets.aws_region }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.aws_access_key_id }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_access_key }}
+      AWS_S3_HTML_BUCKET_ID: ${{ secrets.aws_html_s3_bucket_id }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.branch }}
+          fetch-depth: 1
+
+      - name: Install pandoc and opencl
+        run: |
+          sudo apt-get install -y \
+            ocl-icd-opencl-dev \
+            pandoc 
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: pip install . && poetry config warnings.export false
+
+      - name: Build all demos in HTML format
+        run: |
+          qml build \
+          --format html \
+          --keep-going \
+          --no-quiet \
+          ${{ inputs.dev && '--dev' || '--no-dev' }}
+
+      - name: Sync objects.inv to HTML Bucket
+        run: aws s3 cp ./_build/objects.inv s3://$AWS_S3_HTML_BUCKET_ID/qml/objects.inv
