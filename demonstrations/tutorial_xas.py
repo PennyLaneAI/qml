@@ -712,7 +712,8 @@ fig.text(0.5, 0.05,
 plt.show()
 
 ######################################################################
-# There is one strong peak, as expected looking at the expectation values versus time.
+# Looking at the spectrum, we can see there is one strong peak. 
+# This is expected because of the dominant frequency we can see in Figure 7.
 # There also appears to be two small peaks at slightly higher energy.
 # 
 # Core-valence separation approximation
