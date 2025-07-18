@@ -10,13 +10,13 @@ concurrency:
 
 jobs:
   build_master: 
-    uses: PennyLaneAI/qml/.github/workflows/v2-build-demos.yml@sync-constraints-post-release
+    uses: PennyLaneAI/qml/.github/workflows/v2-build-demos.yml@master
     with:
-      ref: sync-constraints-post-release
+      ref: master
       dev: false
-      save-artifact: false
+      save-artifact: true
       artifact-name: build-branch-master
       artifact-retention: 3
-      keep-going: true
+      keep-going: false
       quiet: false
       batch_size: 10

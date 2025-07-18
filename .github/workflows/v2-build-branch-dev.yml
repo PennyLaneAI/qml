@@ -10,11 +10,11 @@ concurrency:
 
 jobs:
   build_dev:
-    uses: PennyLaneAI/qml/.github/workflows/v2-build-demos.yml@sync-constraints-post-release
+    uses: PennyLaneAI/qml/.github/workflows/v2-build-demos.yml@dev
     with:
-      ref: sync-constraints-post-release
+      ref: dev
       dev: true
-      save-artifact: false
+      save-artifact: true
       artifact-name: build-branch-dev
       artifact-retention: 3
       keep-going: false
