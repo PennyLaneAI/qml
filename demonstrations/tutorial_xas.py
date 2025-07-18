@@ -216,17 +216,17 @@ wf_casci_dict = dict(zip(list(zip(strs_row, strs_col)), dat))
 # Lastly, we will use the helper function ``_sign_chem_to_phys`` to adjust the sign of state components to match what they should be for the PennyLane orbital occupation number ordering. 
 # Then, we can import the state to PennyLane using ``_wf_dict_to_statevector``.
 #
-# .. admonition:: Chemist's and physicist's notation for spin orbitals
+# .. admonition:: Chemists' and physicists' notation for spin orbitals
 #     :class: note
 #
-#     In general, states from computation chemistry workflows will have spin orbitals ordered in chemist's notations, such that all of one spin is on the left, and the other on the right. 
-#     PennyLane uses the physicist's notation, where the spatial orbitals are ordered, and the spins alternate up and down. 
+#     In general, states from computation chemistry workflows will have spin orbitals ordered in chemists' notations, such that all of one spin is on the left, and the other on the right. 
+#     PennyLane uses the physicists' notation, where the spatial orbitals are ordered, and the spins alternate up and down. 
 #     When changing a state from one convention to the next, the sign of some state amplitudes needs to change to adhere to the Fermionic anticommutation rules. 
 #     The helper function ``_sign_chem_to_phys`` does this sign adjustment for us.
 
 from pennylane.qchem.convert import _sign_chem_to_phys, _wfdict_to_statevector
 
-# Adjust sign of state components to match physicist's notation.
+# Adjust sign of state components to match the physicists' notation.
 wf_casci_dict = _sign_chem_to_phys(wf_casci_dict, n_orb_cas)
 
 # Convert dictionary to Pennylane state vector.
