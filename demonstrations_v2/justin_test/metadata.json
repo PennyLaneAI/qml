@@ -1,0 +1,99 @@
+{
+    "title": "Solving systems of linear equations via HHL using Qrisp and Catalyst",
+    "authors": [
+        {
+            "username": "renezander"
+        },
+        {
+            "username": "positr0nium"
+        },
+        {
+            "username": "matic_p"
+        }
+    ],
+    "dateOfPublication": "2025-02-26T09:00:00+00:00",
+    "dateOfLastModification": "2025-07-15T09:00:00+00:00",
+    "categories": [
+        "Algorithms",
+        "Quantum Computing"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_linear_equations_hhl_qrisp_catalyst.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_linear_equations_hhl_qrisp_catalyst.png"
+        }
+    ],
+    "seoDescription": "Learn how to implement the HHL quantum algorithm for solving linear systems using Qrisp and Catalyst.",
+    "doi": "",
+    "references": [
+        {
+            "id": "Bausch_2022",
+            "type": "article",
+            "title": "Fast Black-Box Quantum State Preparation",
+            "authors": "J. Bausch",
+            "year": "2022",
+            "doi": "10.22331/q-2022-08-04-773",
+            "url": "https://quantum-journal.org/papers/q-2022-08-04-773/"
+        },
+        {
+            "id": "HHL_2009",
+            "type": "article",
+            "title": "Quantum Algorithm for Linear Systems of Equations",
+            "authors": "A. W. Harrow, A. Hassidim, S. Lloyd",
+            "year": "2009",
+            "doi": "10.1103/PhysRevLett.103.150502",
+            "url": "https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.103.150502"
+        },
+        {
+            "id": "Sanders_2019",
+            "type": "article",
+            "title": "Black-Box Quantum State Preparation without Arithmetic",
+            "authors": "Y. R. Sanders, G. H. Low, A. Scherer, D. W. Berry",
+            "year": "2019",
+            "doi": "10.1103/PhysRevLett.122.020502",
+            "url": "https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.122.020502"
+        },
+        {
+            "id": "qrisp_2024",
+            "type": "preprint",
+            "title": "Qrisp: A Framework for Compilable High-Level Programming of Gate-Based Quantum Computers",
+            "authors": "R. Seidel, S. Bock, R. Zander, M. Petrič, N. Steinmann, N. Tcholtchev, M. Hauswirth",
+            "year": "2024",
+            "doi": "10.48550/arXiv.2406.14792",
+            "url": "https://arxiv.org/abs/2406.14792"
+        },
+        {
+            "id": "HHL_step-by-step_2023",
+            "type": "article",
+            "title": "A Step-by-Step HHL Algorithm Walkthrough to Enhance Understanding of Critical Quantum Computing Concepts",
+            "authors": "A. Zaman, H. J. Morrell, H. Y. Wong",
+            "year": "2023",
+            "doi": "10.1109/ACCESS.2023.3297658",
+            "url": "https://ieeexplore.ieee.org/document/10189828"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_qjit_compile_grovers_algorithm_with_catalyst",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_how_to_quantum_just_in_time_compile_vqe_catalyst",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_qpe",
+            "weight": 1.0
+        }
+    ]
+}
