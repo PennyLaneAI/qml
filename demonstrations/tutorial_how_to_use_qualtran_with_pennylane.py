@@ -63,16 +63,40 @@ def circuit():
 
 ######################################################################
 # Wow! Like magic, we can use Qualtran's `XGate`` just like we would use the PauliX operator.
-# But wait, there's more! We can convert high-level abstract Bloqs as well. Here we convert a 
-# simple ``TextbookQPE`` bloq and verify that its decomposition is as expected.
+# But wait, there's more! We can convert high-level abstract Bloqs as well. Here, we
+# defined some `QubitizationQPE` Bloq in Qualtran. We first do some analysis in Qualtran
+# and subsequently hand it off to PennyLane.
 
-from qualtran.bloqs.phase_estimation import RectangularWindowState, TextbookQPE
-from qualtran.bloqs.basic_gates import ZPowGate
+import numpy as np
+from qualtran.bloqs.chemistry.hubbard_model.qubitization import (
+    get_walk_operator_for_hubbard_model,
+)
+from qualtran.bloqs.phase_estimation import LPResourceState, QubitizationQPE
 
-textbook_qpe = TextbookQPE(ZPowGate(exponent=2 * 0.234), RectangularWindowState(3))
+x_dim, y_dim, t = 2, 2, 2
+u = 4 * t
+walk = get_walk_operator_for_hubbard_model(x_dim, y_dim, t, u)
 
-print(qml.FromBloq(textbook_qpe, wires=range(textbook_qpe.signature.n_qubits())).decomposition())
+algo_eps = t / 100
+N = x_dim * y_dim * 2
+qlambda = 2 * N * t + (N * u) // 2
+qpe_eps = algo_eps / (qlambda * np.sqrt(2))
+qubitization_qpe = QubitizationQPE(
+    walk, LPResourceState.from_standard_deviation_eps(qpe_eps)
+)
 
+# For drawing & analyis
+from qualtran.drawing import show_bloqs, show_call_graph, show_counts_sigma
+from qualtran.resource_counting.generalizers import ignore_split_join
+
+show_bloqs(qubitization_qpe)
+q_qpe_g, q_qpe_sigma = qubitization_qpe.call_graph(max_depth=1, generalizer=ignore_split_join)
+show_call_graph(q_qpe_g)
+show_counts_sigma(q_qpe_sigma)
+
+n_qubits = qubitization_qpe.signature.n_qubits()
+print(n_qubits) # Since the # of qubits is a bit high, we won't run it on a simulator
+print(qml.FromBloq(qubitization_qpe, wires=range(n_qubits)).decomposition())
 ######################################################################
 # Amazing! The decomposition is exactly what we expected. It's exactly like using a PennyLane
 # operator, except the underlying decomposition is what Qualtran has defined. Neat!
@@ -167,6 +191,7 @@ fig.tight_layout()
 #       print(type(qfunc_as_bloq))
 #       show_bloq(qfunc_as_bloq.decompose_bloq())
 #
+######################################################################
 # Wrapping
 # --------
 #
