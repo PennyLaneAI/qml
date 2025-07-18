@@ -32,8 +32,9 @@ A fast method of simulating reference spectra for use in fingerprinting would be
    Figure 1: *How simulation of X-ray absorption spectra can enable identification of oxidation states in candidate battery materials.* 
    Spectral fingerprinting can be used to identify constituent structures of a material by decomposing experimental spectra into components calculated via simulation on a quantum computer.
 
-Simulating these spectra is a difficult task for classical computers – the highly correlated excited states are difficult to compute classically, particularly for clusters with transition metals. 
-However, the low number of electronic orbitals needed to simulate these small clusters make this calculation well suited for early fault-tolerant quantum computers, which can naturally handle the large amount of correlations in the electronic state.
+Simulating these spectra is a difficult task for classical computers -- the highly correlated excited states are hard to compute classically, particularly for clusters with transition metals. 
+However, the low number of electronic orbitals needed to simulate these small clusters make this calculation well suited for early fault-tolerant quantum computers, which can naturally handle the large amount of correlations in the electronic state. 
+Tasks like this are promising candidates for early quantum advantage: simulations of *small* but *highly correlated* systems*. 
 
 Algorithm
 ---------
@@ -321,7 +322,7 @@ def initial_circuit(wf):
 #
 # where :math:`a^{(\dagger)}_{p\gamma}` is the annihilation (creation) operator for a molecular orbital :math:`p` and spin :math:`\gamma`, :math:`E` is the core constant, :math:`N` is the number of spatial orbitals, and :math:`(p|\kappa|q)` and :math:`(pq|rs)` are the one- and two-electron integrals, respectively [#Cohn2021]_.
 #
-# The core constant and the one- and two-electron integrals can be computed in PennyLane using functions from ``qml.qchem.hartree_fock``.
+# The core constant and the one- and two-electron integrals can be computed in PennyLane using `qml.qchem.electron_integrals`.
 
 # Calculate electron integrals.
 core_constant, one, two = qml.qchem.electron_integrals(mole, core=core, active=active)()
