@@ -584,7 +584,7 @@ shot_counts = np.logspace(1, 4, num=20, dtype=int, requires_grad=False)
 pauli_cost_values = np.zeros_like(shot_counts, dtype=float)
 
 for i, shots in enumerate(shot_counts):
-    pauli_cost_values[i] = qaoa(optimal_params, shots=shots)
+    pauli_cost_values[i] = qml.set_shots(qaoa, int(shots))(optimal_params)
 
 
 ######################################################################

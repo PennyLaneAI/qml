@@ -296,7 +296,7 @@ def run_opt(value_and_grad, theta, n_epochs=120, lr=0.1, b1=0.9, b2=0.999):
 
     return thetas, energy
 
-key = jax.random.PRNGKey(0)
+key = jax.random.PRNGKey(888)
 theta0 = jax.random.normal(key, shape=(n_param_batch, tbins * 2))
 
 thetaf_odegen, energy_odegen = run_opt(value_and_grad_jax, theta0)
@@ -313,8 +313,9 @@ plt.show()
 
 ##############################################################################
 # We see that with analytic gradients (ODEgen), we can reach the ground state energy within 100 epochs, whereas with SPS gradients we cannot find the path
-# towards the minimum due to the stochasticity of the gradient estimates. Note that both optimizations start from the same (random) initial point.
-# This picture solidifies when repeating this procedure for multiple runs from different random initializations, as was demonstrated in [#Kottmann]_.
+# towards the minimum due to the stochasticity of the gradient estimates. Note that the convergence of the optimization is sensitive to the initial guess.
+# In this demonstration, both optimizations start from the same (random) initial point. This picture solidifies when repeating this procedure for multiple
+# runs from different random initializations, as was demonstrated in [#Kottmann]_.
 #
 # We also want to make sure that this is a fair comparison in terms of quantum resources. In the case of ODEgen, we maximally have :math:`\mathcal{R}_\text{ODEgen} = 2 (4^n - 1) = 30` expectation values.
 # For SPS we have :math:`2 N_g N_s = 32` (due to :math:`N_g = 2` and :math:`N_s=8` time samples per gradient that we chose in ``num_split_times`` above). Thus, overall, we require fewer

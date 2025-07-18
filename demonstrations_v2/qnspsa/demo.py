@@ -357,8 +357,8 @@ print("Estimated SPSA gradient:\n", grad)
 #
 
 def get_overlap_tape(qnode, params1, params2):
-    tape_forward = qml.workflow.construct_tape(qnode)(*params1)
-    tape_inv = qml.workflow.construct_tape(qnode)(*params2)
+    tape_forward = qml.workflow.construct_tape(qnode)(params1)
+    tape_inv = qml.workflow.construct_tape(qnode)(params2)
 
     ops = tape_forward.operations + list(qml.adjoint(op) for op in reversed(tape_inv.operations))
     return qml.tape.QuantumTape(ops, [qml.probs(wires=tape_forward.wires)])
@@ -819,8 +819,8 @@ class QNSPSA:
         # used to estimate the gradient per optimization step. The sampled
         # direction is of the shape of the input parameter.
         direction = self.__get_perturbation_direction(params)
-        tape_forward = qml.workflow.construct_tape(cost)(*[params + self.finite_diff_step * direction])
-        tape_backward = qml.workflow.construct_tape(cost)(*[params - self.finite_diff_step * direction])
+        tape_forward = qml.workflow.construct_tape(cost)(params + self.finite_diff_step * direction)
+        tape_backward = qml.workflow.construct_tape(cost)(params - self.finite_diff_step * direction)
         return [tape_forward, tape_backward], direction
 
     def __update_tensor(self, tensor_raw):
@@ -863,8 +863,8 @@ class QNSPSA:
 
     def __apply_blocking(self, cost, params_curr, params_next):
         # For numerical stability: apply the blocking condition on the parameter update.
-        tape_loss_curr = qml.workflow.construct_tape(cost)(*[params_curr])
-        tape_loss_next = qml.workflow.construct_tape(cost)(*[params_next])
+        tape_loss_curr = qml.workflow.construct_tape(cost)(params_curr)
+        tape_loss_next = qml.workflow.construct_tape(cost)(params_next)
 
         loss_curr, loss_next = qml.execute([tape_loss_curr, tape_loss_next], cost.device, None)
         # self.k has been updated earlier.
@@ -913,9 +913,9 @@ for i in range(300):
 # The optimizer performs reasonably well: the loss drops over optimization
 # steps and converges finally. We then reproduce the benchmarking test
 # between the gradient descent, quantum natural gradient descent, SPSA and
-# QN-SPSA in Fig. 1(b) of reference [#Gacon2021]_ with the following job. 
+# QN-SPSA in Fig. 1(b) of reference [#Gacon2021]_ with the following job.
 #
-# .. warning:: 
+# .. warning::
 #   The code required to plot the results of the example below is not provided, but a similar
 #   example can be found in this
 #   `notebook <https://github.com/aws/amazon-braket-examples/blob/main/examples/hybrid_jobs/6_QNSPSA_optimizer_with_embedded_simulator/qnspsa_with_embedded_simulator.ipynb>`__,

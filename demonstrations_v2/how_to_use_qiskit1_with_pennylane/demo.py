@@ -113,7 +113,7 @@ print(circuit())
 #
 #   .. code-block:: none
 #
-#     {'0': tensor(474, requires_grad=True), '1': tensor(550, requires_grad=True)}
+#     {'0': 474, '1': 550}
 #
 
 ######################################################################
@@ -403,7 +403,7 @@ print(f"Optimized cost function value: {new_loss}")
 #   .. code-block:: none
 #
 #     Optimized parameters: phis = [3.12829384 3.12823583], theta = [3.1310224]
-#     Optimized cost function val: -2.999796472821245
+#     Optimized cost function value: -2.999796472821245
 #
 
 ######################################################################

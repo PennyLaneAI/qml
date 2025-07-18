@@ -132,7 +132,7 @@ atoms into closer proximity, we see a rapidly increasing energy cost to drive to
 
 The modification of the energy levels when atoms are in proximity gives rise to Rydberg blockade,
 where atoms that have been driven by a pulse that would, in isolation, leave them in the excited state
-instead remain in the ground state due to neighboring atoms being excited. The distance within which two 
+instead remain in the ground state due to neighboring atoms being excited. The distance within which two
 neighboring atoms are effectively prevented from both being excited is referred to as the *blockade radius* :math:`R_b.`
 
 This brings us to our discussion of the second part of the Hamiltonian: the drive term.
@@ -220,6 +220,16 @@ aquila = qml.device(
     device_arn="arn:aws:braket:us-east-1::device/qpu/quera/Aquila",
     wires=3,
 )
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#
+#  .. code-block:: none
+#
+#      pennylane/pennylane/__init__.py:201: PennyLaneDeprecationWarning: pennylane.QuantumFunctionError is no longer accessible at top-level
+#      and must be imported as pennylane.exceptions.QuantumFunctionError. Support for top-level access will be removed in v0.43.
+#        warnings.warn(
+#
 
 rydberg_simulator = qml.device("braket.local.ahs", wires=3)
 

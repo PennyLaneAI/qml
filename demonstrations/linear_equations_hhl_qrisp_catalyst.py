@@ -40,7 +40,8 @@ Qrisp also supports a modular architecture, allowing you to use, replace, and op
 components easily. We'll demonstrate this later in this demo.
 
 You can install Qrisp to experiment with this implementation yourself, at your own pace, by calling
-``pip install qrisp``.
+``pip install qrisp``. Please note that `qrisp` is only compatible with PennyLane versions
+<= 0.41.1 and Catalyst versions <= 0.11.0.
 
 QuantumVariable
 ~~~~~~~~~~~~~~~

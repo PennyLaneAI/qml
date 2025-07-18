@@ -62,7 +62,6 @@ download:
 	wget --no-verbose -N https://download.pytorch.org/tutorial/hymenoptera_data.zip -P $(DATADIR)
 	unzip -q -o $(DATADIR)/hymenoptera_data.zip -d $(DATADIR)/
 
-# TODO: Remove numpy installation command on next release. Currently Catalyst 0.11 pins jaxlib to 0.4.8
 # TODO: Update flax, or certain tutorials e.g. tutorial_rl_pulse.py will fail due to implicit confliction between jax==0.6.0 and flax==0.9.0
 environment:
 	@command -v $(POETRY_BIN) --version >/dev/null 2>&1 || { echo >&2 "Setting up the environment requires a valid installation of python-poetry. Please install and add poetry to PATH or pass the executable using POETRY_BIN. Aborting."; exit 1; }

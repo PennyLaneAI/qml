@@ -10,7 +10,7 @@ scalable classical compute, enabling you to push the boundaries of your algorith
 
 In this tutorial, we'll walk through how to create your first hybrid quantum-classical algorithms on AWS.
 With a single-line-of-code, we'll see how to scale from PennyLane simulators on your laptop to running full-scale experiments on AWS that leverage both powerful classical compute and quantum devices.
-You'll gain understanding of the hybrid jobs queue, including QPU priority queuing, and learn how to scale classical resources for resource-intensive tasks. 
+You'll gain understanding of the hybrid jobs queue, including QPU priority queuing, and learn how to scale classical resources for resource-intensive tasks.
 We hope these tools will empower you to start experimenting today with hybrid quantum algorithms!
 
 .. figure:: /_static/demonstration_assets/getting_started_with_hybrid_jobs/socialthumbnail_large_getting_started_with_hybrid_jobs.png
@@ -40,8 +40,8 @@ Eigensolver (VQE), or Quantum Machine Learning (QML). You can also monitor your 
 time, enabling you to keep track of costs, budget, or custom metrics such as training loss or
 expectation values.
 
-Importantly, on specific QPUs, running your algorithm in Hybrid Jobs benefits from `parametric compilation <https://docs.aws.amazon.com/braket/latest/developerguide/braket-jobs-parametric-compilation.html>`__. 
-This reduces the overhead associated with the computationally expensive compilation step by compiling a circuit only once and not for every iteration in your hybrid algorithm. 
+Importantly, on specific QPUs, running your algorithm in Hybrid Jobs benefits from `parametric compilation <https://docs.aws.amazon.com/braket/latest/developerguide/braket-jobs-parametric-compilation.html>`__.
+This reduces the overhead associated with the computationally expensive compilation step by compiling a circuit only once and not for every iteration in your hybrid algorithm.
 This dramatically reduces the total runtime for many variational algorithms.
 For long-running hybrid jobs, Braket automatically uses the updated calibration data from the hardware provider when compiling your circuit to ensure the highest quality results.
 
@@ -66,6 +66,15 @@ from pennylane import numpy as np
 
 
 device = qml.device("braket.local.qubit", wires=1)
+
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  .. code-block:: none
+#
+#       pennylane/__init__.py:200: PennyLaneDeprecationWarning: pennylane.QuantumFunctionError is no longer accessible at top-level
+#       and must be imported as pennylane.exceptions.QuantumFunctionError. Support for top-level access will be removed in v0.43.
+#         warnings.warn(
 
 ######################################################################
 # Now we define a circuit with two rotation gates and measure the expectation value in the
@@ -246,6 +255,22 @@ job.result()
 # Additionally, we can plot the metrics recorded during the algorithm. Below we show the expectation
 # value decreases with each iteration as expected.
 #
+# .. note::
+#
+#     ``job.metrics()`` will be an empty dictionary while the job is running, and likely also for
+#     a few minutes afterwards. To make sure that the below plot generates correctly, it is recommended
+#     to block execution until the metrics are correctly reported. This can be done by:
+#
+#     * using a ``while`` loop to manually block execution until the metrics are available.
+#     * using a Python debugger and setting a breakpoint before the line that uses ``job.metrics()``
+#       and blocking as needed.
+#
+#     We will use a ``while`` loop as shown below.
+#
+
+while len(job.metrics()) == 0:
+    pass
+
 
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -304,8 +329,8 @@ plt.show()
 # .. note::
 #   AWS devices must be declared within the body of the decorated function.
 #
-# .. warning:: 
-#   The Rigetti device used in this demo, AspenM3, has been retired. For an updated list of available hardware through 
+# .. warning::
+#   The Rigetti device used in this demo, AspenM3, has been retired. For an updated list of available hardware through
 #   Amazon Braket, please consult the `supported regions and devices documentation <https://docs.aws.amazon.com/braket/latest/developerguide/braket-devices.html>`__. The general steps outlined below still hold regardless of the choice of device, though.
 #
 
