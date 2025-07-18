@@ -1,7 +1,7 @@
 r"""The KAK decomposition!
 =========================
 
-The KAK!!!!! decomposition is a beautiful mathematical result from Lie theory, with
+The KAK!!!!!TEST123 decomposition is a beautiful mathematical result from Lie theory, with
 particular relevance for quantum computing. It can be seen as a
 generalization of the singular value decomposition (SVD), as it decomposes a group
 element :math:`U` (think: unitary operator) into :math:`U=K_1AK_2,` where
@@ -38,7 +38,7 @@ as well as a few gotchas regarding the nomenclature into boxes such as this one:
 
 Without further ado, let's get started!
 
-Lie algebras and their groups TEST
+Lie algebras and their groups TEST123123
 -----------------------------
 
 We start with Lie algebras, their Lie groups,
@@ -891,7 +891,7 @@ fig, ax = qml.draw_mpl(su4_gate, wire_order=[0, 1])(params)
 # :math:`y_{1,2}` and :math:`a` for a given gate :math:`U.` For this,
 # some additional work is required, as explained in [#kokcu_fdhs]_, for example.
 #
-# Conclusion
+# ConclusionZ
 # ----------
 #
 # In this demo we learned about the KAK decomposition and how it breaks up a
