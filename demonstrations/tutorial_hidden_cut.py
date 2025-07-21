@@ -31,28 +31,28 @@ The hidden cut problem for locating unentanglement
 # state up into two *unentangled* pieces.
 # 
 # Let’s define the hidden cut problem a bit more precisely. First we need to define *unentanglement*.
-# We say that a quantum state :math:`\ket\psi` describing a system with two parts, :math:`A` and
+# We say that a quantum state :math:`|\psi\rangle` describing a system with two parts, :math:`A` and
 # :math:`B`, is *unentangled*, if it can be written as a tensor product
 # 
 # .. math::
 # 
 # 
-#    \ket{\psi} = \ket{\psi_A}\otimes \ket{\psi_B}
+#    |\psi\rangle = |\psi_A\rangle\otimes |\psi_B\rangle
 # 
-# , where :math:`\ket{\psi_A}` is a state of system :math:`A` and :math:`\ket{\psi_B}` is a state of
+# , where :math:`|\psi_A\rangle` is a state of system :math:`A` and :math:`|\psi_B\rangle` is a state of
 # system :math:`B`. We also use the term *separable* or *factorizable* to describe an unentagled
 # state. We’ll usually not bother writing the tensor product sign and just write
-# :math:`\ket{\psi} = \ket{\psi_A}\ket{\psi_B}`.
+# :math:`|\psi\rangle = |\psi_A\rangle |\psi_B\rangle`.
 # 
-# Now let’s suppose :math:`\ket\psi` is a state of :math:`n`-qubits. We’re told it’s possible to split
+# Now let’s suppose :math:`|\psi\rangle` is a state of :math:`n`-qubits. We’re told it’s possible to split
 # the qubits into two unentangled subsets, :math:`S` and :math:`\bar S`,
 # 
 # .. math::
 # 
 # 
-#    \ket{\psi} = \ket{\psi_S}\ket{\psi_{\bar S}},
+#    |\psi\rangle = |\psi_S\rangle |\psi_{\bar S}\rangle,
 # 
-# but we aren’t told what :math:`S` and :math:`\bar S` are. The hidden cut problem asks us to determine :math:`S` and :math:`\bar S`, given access to :math:`\ket\psi`. 
+# but we aren’t told what :math:`S` and :math:`\bar S` are. The hidden cut problem asks us to determine :math:`S` and :math:`\bar S`, given access to :math:`|\psi\rangle`. 
 # Following Bouland *et al.* [#Bouland2024]_, in this demo
 # we’ll develop a quantum algorithm that solves this problem!
 # 
@@ -72,7 +72,7 @@ from scipy.stats import unitary_group
 np.random.seed(123)
 
 ######################################################################
-# Before we can solve the hidden cut problem, we first need a state :math:`\ket\psi` to solve it on!
+# Before we can solve the hidden cut problem, we first need a state :math:`|\psi\rangle` to solve it on!
 # First we define a function ``random_state()`` that creates a random state with a specified number of
 # qubits. We do this by creating a :math:`2^n` by :math:`2^n` random unitary and taking the first row.
 # Because all the rows (and columns) in a unitary matrix have norm equal to 1, this defines a valid
@@ -84,7 +84,7 @@ def random_state(n_qubits):
     return unitary_group.rvs(dim)[0]
 
 ######################################################################
-# However we can’t just use this function to construct our state :math:`\ket\psi`, because the random
+# However we can’t just use this function to construct our state :math:`|\psi\rangle`, because the random
 # state created by the function will almost certainly *not* be unentagled. So we’ll define a function
 # ``separable_state()`` that takes as input a list of qubit partitions, creates a random state for
 # each partition, and tensors them together into a separable state.
@@ -121,7 +121,7 @@ def separable_state(partitions):
     return full_state
 
 ######################################################################
-# We’ll use this to create a 5-qubit state :math:`\ket\psi` in which qubits :math:`S=\{0,1\}` are
+# We’ll use this to create a 5-qubit state :math:`|\psi\rangle` in which qubits :math:`S=\{0,1\}` are
 # unentangled with qubits :math:`\bar S=\{2,3,4\}`.
 # 
 
@@ -131,7 +131,7 @@ n = int(np.log2(len(state)))
 print(f'Created {n} qubit state with qubits {partitions[0]} unentangled from {partitions[1]}.')
 
 ######################################################################
-# Now imagine we’re given :math:`\ket \psi` but aren’t told that qubits 0,1 are unentangled from
+# Now imagine we’re given :math:`|\psi\rangle` but aren’t told that qubits 0,1 are unentangled from
 # qubits 2,3,4. How could we figure this out? This is the hidden cut problem: given a many-qubit
 # quantum state, figure out which qubits are unentangled with which other qubits. Now we’ll develop a
 # quantum algorithm that solves this problem, and then we’ll implement it in Pennylane and see that it
@@ -148,24 +148,24 @@ print(f'Created {n} qubit state with qubits {partitions[0]} unentangled from {pa
 # mathematical language a *hidden subgroup problem* (HSP). Then we can use a famous quantum algorithm
 # for solving HSPs to solve the hidden cut problem. The traditional HSP algorithm is useful for
 # finding symmetries of functions :math:`f(x)`, i.e. figuring out for what values of :math:`a` we have
-# :math:`f(x+a) = f(x)` for all :math:`x`. However we’re interested in a *state* :math:`\ket\psi` and
+# :math:`f(x+a) = f(x)` for all :math:`x`. However we’re interested in a *state* :math:`|\psi\rangle` and
 # not a *function* :math:`f(x)`, so we’ll instead use a modified version of the HSP algorithm, called
 # StateHSP, which finds *symmetries of states*.
 # 
 # We’ll explain the StateHSP algorithm below, but first let’s see how we can recast the hidden cut
 # problem as one of finding a hidden symmetry of a state. To see this, remember our example state
-# :math:`\ket\psi=\ket{\psi_{01}}\ket{\psi_{234}}`. Now consider two copies :math:`\ket\psi\ket\psi`
-# of :math:`\ket\psi`. We can visualize this as
+# :math:`|\psi\rangle=|\psi_{01}\rangle |\psi_{234}\rangle}`. Now consider two copies :math:`|\psi\rangle |\psi\rangle`
+# of :math:`|\psi\rangle`. We can visualize this as
 #
 #.. figure:: ../_static/demonstration_assets/hidden_cut/qubits.png
 #    :align: center
 #    :width: 80%
 #
-#    Figure 2. A schematic of the quantum state :math:`\ket\psi\ket\psi`.
+#    Figure 2. A schematic of the quantum state :math:`|\psi\rangle |\psi\rangle`.
 #
-# The top row corresponds to the first copy of :math:`\ket\psi`, and the bottom row to the second
+# The top row corresponds to the first copy of :math:`|\psi\rangle`, and the bottom row to the second
 # copy. In each row, qubits 0 and 1 are disconnected from qubits 2, 3, and 4. This schematically
-# indicates the fact that in each :math:`\ket\psi` qubits 0,1 are unentangled from qubits 2,3,4.
+# indicates the fact that in each :math:`|\psi\rangle` qubits 0,1 are unentangled from qubits 2,3,4.
 # 
 # Now consider what happens when we swap some qubits in the top row with the corresponding qubits in
 # the bottom row. We can denote which pairs of qubits we’re swapping with a 5-bit string. For example,
@@ -185,21 +185,21 @@ print(f'Created {n} qubit state with qubits {partitions[0]} unentangled from {pa
 #     A group is called "Abelian" if a + b = b + a for all a and b, otherwise it is called non-Abelian.
 #
 # We’ll call the group of 5-bit strings :math:`G`. We can now ask: which elements of :math:`G`
-# correspond to swap operations that leave the state :math:`\ket\psi\ket\psi` invariant? These
-# operations are the symmetries of :math:`\ket\psi\ket\psi` and the corresponding bitstrings form a
+# correspond to swap operations that leave the state :math:`|\psi\rangle|\psi\rangle` invariant? These
+# operations are the symmetries of :math:`|\psi\rangle|\psi\rangle` and the corresponding bitstrings form a
 # subgroup :math:`H` of :math:`G`. For example the identity element 00000 corresponds to performing no
 # swaps at all. This is clearly a symmetry, so 00000 is in :math:`H`. On the other hand 11111 swaps
 # *all* the qubits in the top row with the corresponding qubits in the bottom row, so in effect it
-# just swaps the entire first copy of :math:`\ket\psi` with the entire second copy of
-# :math:`\ket\psi`. This is clearly also a symmetry, so 11111 is also in :math:`H`. Are there any
+# just swaps the entire first copy of :math:`|\psi\rangle` with the entire second copy of
+# :math:`|\psi\rangle`. This is clearly also a symmetry, so 11111 is also in :math:`H`. Are there any
 # other elements in :math:`H`? Stop and think about it!
 # 
 # In fact, there are two more elements in :math:`H`: 11000 and 00111. 11000 corresponds to swapping
-# the :math:`\ket{\psi_{01}}` component of the first copy of :math:`\ket\psi` with the same component
-# of the second copy of :math:`\ket\psi`, and 00111 corresponds to swapping the
-# :math:`\ket{\psi_{234}}` components between the two copies. Because in each copy of :math:`\ket\psi`
-# the :math:`\ket{\psi_{01}}` and :math:`\ket{\psi_{234}}` components are completely unentangled,
-# after either of these swaps the full state remains the same, namely :math:`\ket\psi\ket\psi`. So the
+# the :math:`|\psi_{01}\rangle` component of the first copy of :math:`|\psi\rangle` with the same component
+# of the second copy of :math:`|\psi\rangle`, and 00111 corresponds to swapping the
+# :math:`|\psi_{234}\rangle` components between the two copies. Because in each copy of :math:`|\psi\rangle`
+# the :math:`|\psi_{01}\rangle` and :math:`|\psi_{234}\rangle` components are completely unentangled,
+# after either of these swaps the full state remains the same, namely :math:`|\psi\rangle|\psi\rangle`. So the
 # symmetry subgroup is :math:`H = {00000, 11111, 11000, 00111}`. We’ll call this a *hidden* symmetry
 # subgroup because it wasn’t given to us - we had to find it!
 # 
@@ -208,10 +208,10 @@ print(f'Created {n} qubit state with qubits {partitions[0]} unentangled from {pa
 # and 00111: we can add either generator to itself to get the identity 00000, and we can add the
 # generators to each other to get 11111. Here’s the important point: notice that the generators of
 # :math:`H` *directly* tell us the unentangled components of
-# :math:`\ket\psi=\ket{\psi_{01}}\ket{\psi_{234}}`! The first generator 11000 has 1s in bits 0 and 1:
-# this corresponds to the first unentangled component :math:`\ket{\psi_{01}}`. And the second
+# :math:`|\psi\rangle=|\psi_{01}\rangle|\psi_{234}\rangle`! The first generator 11000 has 1s in bits 0 and 1:
+# this corresponds to the first unentangled component :math:`|\psi_{01}\rangle`. And the second
 # generator 00111 has 1s in bits 2, 3, 4: this corresponds to the second unentangled component
-# :math:`\ket{\psi_{234}}`. So finding the hidden subgroup :math:`H` gives us the unentangled
+# :math:`|\psi_{234}\rangle`. So finding the hidden subgroup :math:`H` gives us the unentangled
 # components - it solves the hidden cut problem!
 # 
 # So now that we recast the hidden cut problem as a problem of finding a hidden subgroup :math:`H`,
@@ -221,19 +221,19 @@ print(f'Created {n} qubit state with qubits {partitions[0]} unentangled from {pa
 # 
 # The algorithm involves running a quantum circuit, taking measurements, and postprocessing the
 # measurements. The circuit involves three :math:`n`-qubit registers. Registers 2 and 3 are each
-# initialized to :math:`\ket\psi`, and register 1 is initialized to the all :math:`\ket 0` state. We
+# initialized to :math:`|\psi\rangle`, and register 1 is initialized to the all :math:`|0\rangle` state. We
 # call register 1 the *group register* because we’ll use it to encode elements of the group :math:`G`.
 # For example if :math:`n=5` the group element 10101 of :math:`G` would be encoded as
-# :math:`\ket{10101}`.
+# :math:`|10101\rangle`.
 # 
 # After this register initialization, the StateHSP circuit involves three steps: 1. Apply a Hadamard
 # to each qubit in the group register; this puts the group register in a uniform superposition of all
-# group elements, which up to normalization we can write as :math:`\sum_{g\in G} \ket g`. 2. Apply a
-# controlled SWAP operator, which acts on all 3 registers by mapping :math:`\ket{g}\ket\psi\ket\psi`
-# to :math:`\ket{g}\text{SWAP}_g(\ket\psi\ket\psi)`. Here :math:`\text{SWAP}_g` performs swaps at the
+# group elements, which up to normalization we can write as :math:`\sum_{g\in G} |g\rangle`. 2. Apply a
+# controlled SWAP operator, which acts on all 3 registers by mapping :math:`|g\rangle|\psi\rangle|\psi\rangle`
+# to :math:`|g\rangle\text{SWAP}_g(|\psi\rangle|\psi\rangle)`. Here :math:`\text{SWAP}_g` performs swaps at the
 # positions indicated by :math:`g`; for example if :math:`g=10101` then qubits 0, 2 and 4 in the first
-# copy of :math:`\ket\psi` will get swapped with the corresponding qubits in the second copy of
-# :math:`\ket\psi`. 3. Again apply a Hadamard to each qubit in the group register.
+# copy of :math:`|\psi\rangle` will get swapped with the corresponding qubits in the second copy of
+# :math:`|\psi\rangle`. 3. Again apply a Hadamard to each qubit in the group register.
 # 
 # Finally we measure the group register. Here’s the circuit diagram:
 #
@@ -341,9 +341,9 @@ M.null_space()
 
 ######################################################################
 # Because the nullspace of :math:`M` equals :math:`H`, we conclude that the generators of :math:`H`
-# are 11000 and 00111. If we didn’t know that :math:`\ket\psi` could be factored as
-# :math:`\ket\psi=\ket{\psi_{01}}\ket{\psi_{234}}`, the generators would directly tell us the factors!
-# So we have solved the hidden cut problem for our state :math:`\ket\psi`!
+# are 11000 and 00111. If we didn’t know that :math:`|\psi\rangle` could be factored as
+# :math:`|\psi\rangle=|\psi_{01}\rangle|\psi_{234}\rangle`, the generators would directly tell us the factors!
+# So we have solved the hidden cut problem for our state :math:`|\psi\rangle`!
 # 
 
 ######################################################################
