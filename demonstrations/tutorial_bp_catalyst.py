@@ -788,8 +788,6 @@ def encode_zero_steane():
 ######################################################################
 # A simple utility function to display the state
 #
-# @TODO can we move this to a utility file (or better yet make it part of pennylane 😁)
-#
 
 from pprint import pprint
 
