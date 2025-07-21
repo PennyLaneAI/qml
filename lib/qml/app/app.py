@@ -144,7 +144,7 @@ def sync_v2():
             shutil.copy2(v1_metadata, v2_metadata)
 
             print(
-                f"Copied new demo {v1_demo} to {v2_demo_dir}. Please updated the requirements.in file."
+                f"Copied new demo {v1_demo} to {v2_demo_dir}. Please update the requirements.in file."
             )
         else:
             for src, dest in [(v1_demo, v2_demo), (v1_metadata, v2_metadata)]:
