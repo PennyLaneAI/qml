@@ -220,7 +220,8 @@ show_counts_sigma(wrapped_sigma)
 # Note that while ``ToBloq``'s decomposition always maintains that of the wrapped PennyLane object,
 # its call graph may not always match the decomposition. When you use the resource counting
 # methods on a ``ToBloq``, you may get resources more optimal than what the original PennyLane
-# decomposition might have prescribed.
+# decomposition might have prescribed. As we continue to develop both the PennyLane-Qualtran
+# integration and PennyLane itself, these call graphs will evolve as well.
 
 ######################################################################
 # Conclusion
