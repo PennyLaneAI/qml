@@ -97,7 +97,7 @@ By the end of this tutorial, you’ll have:
 # for a deeper introduction.
 #
 
-from typing import Callable
+from typing import Callable, Optional, Dict, Union, Sequence
 
 import pennylane as qml
 
@@ -406,7 +406,7 @@ def _build_graph(
     pcm: ArrayLike,
 ) -> tuple[tuple[tuple[int, ...], ...], tuple[tuple[int, ...], ...]]:
     """
-    Pre‑compute variable‑node and check‑node neighbours.
+    Pre‑compute variable‑node and check‑node neighbors.
 
     Returns
     -------
@@ -456,7 +456,7 @@ plt.show()
 
 ######################################################################
 # The ``_c2v_update`` helper function performs one full sweep of check‑to‑variable updates (step 3 of the
-# sum‑product algorithm). It takes the previous messages, the syndrome, the neighbour tables, and two
+# sum‑product algorithm). It takes the previous messages, the syndrome, the neighbor tables, and two
 # scalars (``L_int`` for the intrinsic log‑likelihood ratio and ``eps`` for numerical safety). It
 # loops only over existing edges, multiplies the relevant :math:`\operatorname{tanh}` terms, clips
 # the product, applies :math:`\operatorname{arctanh}`, and writes the new message into the next
@@ -508,9 +508,6 @@ def _c2v_update(
 # check‑to‑variable message for bit ``v`` into its intrinsic LLR, yielding the posterior belief for
 # that bit. A negative value means “error likely,” a positive value means “no error.”
 #
-
-from typing import Callable
-
 
 def _posterior_llrs(
     m_c2v_final: ArrayLike, var_nei: tuple[tuple[int, ...], ...], L_int: float
@@ -635,10 +632,6 @@ print(f"\nBP Accuracy: {accuracy:.2f}%")
 # (ML) decoder, which simply picks the lower‑weight error pattern consistent with the observed
 # syndrome.
 #
-
-import jax
-import jax.numpy as jnp
-from jax.typing import ArrayLike
 
 
 def rep_code(n: int) -> ArrayLike:
@@ -798,136 +791,40 @@ def encode_zero_steane():
 # @TODO can we move this to a utility file (or better yet make it part of pennylane 😁)
 #
 
-from typing import Optional
-
+from pprint import pprint
 
 def state_vector_to_dict(
     sv: ArrayLike,
+    wires: Optional[Sequence[int]],
     eps: float = 1e-8,
-    wires: Optional[list[int]] = None,
     probability: bool = False,
-    pretty_print: bool = False,
-) -> dict[str, float | complex]:
+    display: bool = True,
+) -> Dict[str, Union[float, complex]]:
     """
-    Converts a state vector to a dictionary representation, optionally
-    filtering by wires and displaying probabilities or amplitudes.
-
-    Args:
-        sv: The input state vector.
-        eps: Values with absolute square less than eps are ignored.
-        wires: An optional list of wire indices to include.
-               If None, all wires are included.
-        probability: If True, the dictionary values are probabilities (amplitude squared).
-                     If False, the dictionary values are amplitudes.
-        pretty_print: If True, prints the state in a table format using tabulate.
-
-    Returns:
-        A dictionary where keys are computational basis states (strings)
-        and values are either probabilities (float) or amplitudes (complex or float).
+    Convert a state vector into {bitstring: amplitude | probability}.
     """
+    n_qubits = int(jnp.log2(len(sv)))
 
-    n_qubits = int(jnp.log2(sv.shape[0]))
-    d: dict[str, float | complex] = {}
 
-    processed_wires: Optional[set[int]] = set(wires) if wires is not None else None
+    out: Dict[str, Union[float, complex]] = {}
 
-    for i, amplitude_val in enumerate(sv):
+    for idx, amp in enumerate(sv):
+        mag = jnp.abs(amp) ** 2 if probability else jnp.abs(amp)
+        if mag <= eps:
+            continue
+
+        bitstring = f"{idx:0{n_qubits}b}"
+        key = "".join(b for i, b in enumerate(bitstring) if wires is None or i in wires)
+
         if probability:
-            val_to_check = jnp.abs(amplitude_val) ** 2
+            out[key] = out.get(key, 0.0) + float(mag)
         else:
-            val_to_check = jnp.abs(amplitude_val)
+            out[key] = amp.item()
 
-        if val_to_check > eps:
-            full_bits = f"{i:0{n_qubits}b}"
+    if display:
+        pprint(out)
 
-            if processed_wires is not None:
-                # Ensure wires are within valid range [0, n_qubits-1]
-                if not all(0 <= w < n_qubits for w in processed_wires):
-                    raise ValueError(
-                        f"Wire indices in {wires} are out of bounds for {n_qubits} qubits."
-                    )
-                current_bits = "".join(
-                    [bit_char for idx, bit_char in enumerate(full_bits) if idx in processed_wires]
-                )
-            else:
-                current_bits = full_bits
-
-            if probability:
-                prob_val = (jnp.abs(amplitude_val) ** 2).item()
-                d[current_bits] = d.get(current_bits, 0.0) + prob_val  # Ensure float for sum
-            else:
-                # Warning this may lead to errors when using wires != None and probability=False
-                amp_item = amplitude_val.item()
-                d[current_bits] = amp_item
-
-    if pretty_print:
-        table_data = []
-        if probability:
-            headers = ["State |k〉", "Probability (%)"]
-            # Sort by probability descending for better readability
-            sorted_items = sorted(d.items(), key=lambda item: item[1], reverse=True)
-            for k, v_prob in sorted_items:
-                if v_prob > eps:  # Apply eps again for final display after potential summation
-                    table_data.append([f"|{k}〉", f"{v_prob * 100:.3f}"])
-            print("\nState Probabilities:")
-            print(
-                tabulate(
-                    table_data,
-                    headers=headers,
-                    tablefmt="grid",
-                    numalign="decimal",
-                    stralign="center",
-                )
-            )
-        else:
-            headers = ["State |k〉", "Amplitude (real)", "Amplitude (imag)"]
-            # Sort by bitstring for consistent output
-            sorted_items = sorted(d.items(), key=lambda item: item[0])
-            has_complex = False
-            has_real = False
-            for k, v_amp in sorted_items:
-                amp = complex(v_amp)  # Ensure it's complex for consistent processing
-                if abs(amp) > eps:  # Apply eps again for final display
-                    table_data.append([f"|{k}〉", f"{amp.real:.5f}", f"{amp.imag:+.5f}"])
-                    if abs(amp.imag) > eps:  # Check if there's a significant imaginary part
-                        has_complex = True
-                    if abs(amp.real) > eps:
-                        has_real = True
-
-            print("\nState Amplitudes:")
-            if not has_complex:  # Simplify table if all imaginary parts are zero (or very small)
-                headers = ["State |k〉", "Amplitude"]
-                simple_table_data = [[row[0], row[1]] for row in table_data]
-                print(
-                    tabulate(
-                        simple_table_data,
-                        headers=headers,
-                        numalign="decimal",
-                        stralign="center",
-                    )
-                )
-            elif not has_real:  # Simplify table if all imaginary parts are zero (or very small)
-                headers = ["State |k〉", "Amplitude"]
-                simple_table_data = [[row[0], row[2]] for row in table_data]
-                print(
-                    tabulate(
-                        simple_table_data,
-                        headers=headers,
-                        numalign="decimal",
-                        stralign="center",
-                    )
-                )
-            else:
-                print(
-                    tabulate(
-                        table_data,
-                        headers=headers,
-                        numalign="decimal",
-                        stralign="center",
-                    )
-                )
-
-    return d
+    return out
 
 
 ######################################################################
@@ -938,7 +835,7 @@ def state_vector_to_dict(
 #
 
 sv_clean = encode_zero_steane()
-state_vector_to_dict(sv_clean, pretty_print=True, wires=range(n))
+state_vector_to_dict(sv_clean, display=True, wires=range(n))
 
 ######################################################################
 # Simulating Errors and Full Correction
@@ -1036,7 +933,7 @@ def qec_round(H: ArrayLike, p_err=1e-3, key=random.PRNGKey(0)):
 p_err = 0.1
 key = random.PRNGKey(10)
 print(f"Running Steane Code QEC Round with error: {get_error(n, p_err=p_err, key=key)}")
-state_vector_to_dict(qec_round(H_steane, p_err=p_err, key=key), pretty_print=True, wires=range(n))
+state_vector_to_dict(qec_round(H_steane, p_err=p_err, key=key), display=True, wires=range(n))
 
 ######################################################################
 # If we increase the likelihood of errors, we are more likely to end up with an error pattern that
@@ -1046,7 +943,7 @@ state_vector_to_dict(qec_round(H_steane, p_err=p_err, key=key), pretty_print=Tru
 p_err = 0.3
 key = random.PRNGKey(8)
 print(f"Running Steane Code QEC Round with error: {get_error(n, p_err=p_err, key=key)}")
-state_vector_to_dict(qec_round(H_steane, p_err=p_err, key=key), pretty_print=True, wires=range(n))
+state_vector_to_dict(qec_round(H_steane, p_err=p_err, key=key), display=True, wires=range(n))
 
 ######################################################################
 # Benchmarking logical vs. physical error rates
