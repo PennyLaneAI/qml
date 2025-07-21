@@ -157,7 +157,7 @@ print(f'Created {n} qubit state with qubits {partitions[0]} unentangled from {pa
 # :math:`|\psi\rangle=|\psi_{01}\rangle |\psi_{234}\rangle}`. Now consider two copies :math:`|\psi\rangle |\psi\rangle`
 # of :math:`|\psi\rangle`. We can visualize this as
 #
-#.. figure:: ../_static/demonstration_assets/hidden_cut/qubits.png
+# .. figure:: ../_static/demonstration_assets/hidden_cut/qubits.png
 #    :align: center
 #    :width: 80%
 #
@@ -237,7 +237,7 @@ print(f'Created {n} qubit state with qubits {partitions[0]} unentangled from {pa
 # 
 # Finally we measure the group register. Here’s the circuit diagram:
 #
-#.. figure:: ../_static/demonstration_assets/hidden_cut/circuit.png
+# .. figure:: ../_static/demonstration_assets/hidden_cut/circuit.png
 #    :align: center
 #    :width: 80%
 #
