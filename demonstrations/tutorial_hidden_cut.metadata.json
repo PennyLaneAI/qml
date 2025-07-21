@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2025-07-11T10:00:00+00:00",
-    "dateOfLastModification": "2025-07-11T10:00:00+00:00",
+    "dateOfLastModification": "2025-07-21T10:00:00+00:00",
     "categories": [
         "Algorithms"
     ],
@@ -14,11 +14,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_period_finding.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_hidden_cut.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_period_finding.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_hidden_cut.png"
         }
     ],
     "seoDescription": "Learn about a quantum algorithm that determines how to cut a many-body quantum state into unentangled components.",
