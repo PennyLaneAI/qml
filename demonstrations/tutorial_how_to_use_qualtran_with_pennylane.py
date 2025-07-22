@@ -87,10 +87,9 @@ qubitization_qpe = QubitizationQPE(
 )
 
 # For drawing & analyis
-from qualtran.drawing import show_bloq, show_call_graph, show_counts_sigma
+from qualtran.drawing import show_call_graph, show_counts_sigma
 from qualtran.resource_counting.generalizers import ignore_split_join
 
-show_bloq(qubitization_qpe)
 q_qpe_g, q_qpe_sigma = qubitization_qpe.call_graph(max_depth=1, generalizer=ignore_split_join)
 show_call_graph(q_qpe_g)
 show_counts_sigma(q_qpe_sigma)
