@@ -385,20 +385,20 @@ print(tabulate(table_data, headers=["Syndrome", "LUT Error"]))
 # See the following summary article [#Loeliger]_ as well as Chapter 5 in Bayesian Reasoning and
 # Machine Learning [#Barber]_ for a deeper dive into message passing algorithms on graphs.
 #
-# 4.2 BP in JAX
+# BP in JAX
 # ~~~~~~~~~~~~~
 #
 # Below, we implement a BP decoder using Jax broken down into it’s core components.
 #
 
 ######################################################################
-# Before we can pass messages, we need to know who talks to whom. ``_build_graph`` scans the
+# Before we can pass messages, we need to establish the connectivity between nodes. The ``_build_graph`` function scans the
 # parity‑check matrix once and records, for every variable node, which checks touch it and vice‑versa.
 # We convert the neighbour lists to tuples so they become immutable, hashable static data. JAX can
 # then embed their values as compile‑time constants in the XLA program and reliably reuse the compiled
-# kernel multiple times. A cool thing about JAX/XLA is when using simple static paramters like our
+# kernel multiple times. A cool thing about JAX/XLA is that when using simple static parameters like the ones
 # below, the individual integers it contains are baked into the XLA program as compile‑time constants,
-# so we can truely compile a high performance decoder for our specific parity check matrix.
+# so we can truly compile a high performance decoder for our specific parity check matrix.
 #
 
 
@@ -703,7 +703,7 @@ success_rate = jnp.mean(
 print(f"Decoding success rate: {success_rate * 100:.2f}%")
 
 ######################################################################
-# 4 Catalyst hybrid kernel
+# Catalyst hybrid kernel
 # ------------------------
 #
 # Now that we understand a good chunk of theory behind CSS codes, the Steane code and decoding
@@ -967,7 +967,7 @@ def logical_error(sv):
 
 
 ######################################################################
-# Simulate 1000x noisy shots for several noise levels, we’ll use ``jax.vmap`` to efficiently map our
+# Simulate 1000 noisy shots for several noise levels, we’ll use ``jax.vmap`` to efficiently map our
 # catalyst kernel over a set of random keys.
 #
 
