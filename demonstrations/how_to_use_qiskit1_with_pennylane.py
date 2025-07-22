@@ -263,7 +263,8 @@ measurements = [qml.classical_shadow(wires=range(n))]
 pl_qfunc = qml.from_qiskit(qc, measurements=measurements)
 
 pl_circuit = qml.QNode(pl_qfunc, device=qml.device("default.qubit", wires=n))
-print(pl_circuit(shots=5))
+pl_circuit = qml.set_shots(pl_circuit, shots=5)
+print(pl_circuit())
 
 ######################################################################
 # .. rst-class:: sphx-glr-script-out

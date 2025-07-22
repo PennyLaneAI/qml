@@ -247,7 +247,7 @@ def qaoa_maxcut(n_layers=1):
             print(f"Objective after step {i+1:3d}: {-objective(params): .7f}")
 
     # sample 100 bitstrings by setting return_samples=True and the QNode shot count to 100
-    bitstrings = circuit(*params, return_samples=True, shots=100)
+    bitstrings = qml.set_shots(circuit, shots=100)(*params, return_samples=True)
     # convert the samples bitstrings to integers
     sampled_ints = [bitstring_to_int(string) for string in bitstrings]
 
