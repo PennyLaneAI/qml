@@ -61,6 +61,7 @@ def circuit():
     qml.FromBloq(XGate(), wires=[0])
     return qml.state()
 
+print(circuit())
 ######################################################################
 # Wow! Like magic, we can use Qualtran's `XGate`` just like we would use the PauliX operator.
 # But wait, there's more! We can convert high-level abstract Bloqs as well. Here, we
@@ -187,7 +188,6 @@ fig.tight_layout()
 #
 #       qfunc_as_bloq = qml.to_bloq(circ)
 #       print(type(qfunc_as_bloq))
-#       show_bloq(qfunc_as_bloq.decompose_bloq())
 #
 ######################################################################
 # Wrapping
