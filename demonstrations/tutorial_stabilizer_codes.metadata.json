@@ -19,7 +19,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demo_thumbnails/pennylane-demo-stabilizer-codes-thumbnail.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/pennylane-demo-stabilizer-codes-thumbnail.png"
         },
         {
             "type": "large_thumbnail",
