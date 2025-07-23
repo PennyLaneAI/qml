@@ -561,11 +561,11 @@ def five_qubit_encode(alpha, beta):
 # qubits on wires 0, 1, 2, 3, or 4 with Pauli X, Y, or Z operations. Then, we proceed with the syndrome measurements, which
 # in this case, amounts to acting with the controlled stabilizer generators on the work wires, as follows
 #
-# .. figure:: ../_static/demonstration_assets/stabilizer_codes/five_qubit_syndrome.png
+# .. figure:: ../_static/demonstration_assets/stabilizer_codes/general_stabilizer_circuit.png
 #    :align: center
 #    :width: 100%
 #
-# THe implementation in PennyLane is shown below.
+# with the corresponding stabilizer operators, as follows:
 #
 
 stabilizers = [X(0)@Z(1)@Z(2)@X(3)@I(4), I(0)@X(1)@Z(2)@Z(3)@X(4),
@@ -692,6 +692,8 @@ for wire in range(5):
 
 #############################################################################
 #
+# The fidelity is 1.0 after error correction, which means the output state is the same!
+#
 # Note that to build the encoding, syndrome measurement, and error correction circuits, we did only use the stabilizer generators.
 # This is a powerful feature of the stabilizer formalism. It allows us to construct the code from its stabilizer generators
 # and then use the code to correct errors. However, we can also find the codewords  and logical operators directly from the stabilizer generators by
@@ -711,7 +713,7 @@ for wire in range(5):
 #
 #     \vert \bar{1}\rangle = X\otimes X \otimes X \otimes X \otimes X \vert \bar{0} \rangle.
 #
-# The logical operators bit-flip and phase-flip are for this code are :math:`\bar{X}= X^{\otimes 5}` and :math:`\bar{Z}=Z^{\otimes 5}.
+# The logical operators bit-flip and phase-flip are for this code are :math:`\bar{X}= X^{\otimes 5}` and :math:`\bar{Z}=Z^{\otimes 5}.``
 #
 #
 # Conclusion
