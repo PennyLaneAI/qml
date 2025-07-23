@@ -200,7 +200,7 @@ def cost(params):
     for o, c, s in zip(obs, coeffs, shots_per_term):
         # evaluate the QNode corresponding to
         # the Hamiltonian term, and add it on to our running sum
-        result += c * qnode(params, o, shots=int(s))
+        result += c * qml.set_shots(qnode, shots=int(s))(params, o)
 
     return result
 
@@ -249,7 +249,7 @@ def cost(params):
 
         # evaluate the QNode corresponding to
         # the Hamiltonian term, and add it on to our running sum
-        result += c * qnode(params, o, shots=shots_per_term)
+        result += c * qml.set_shots(qnode, shots=shots_per_term)(params, o)
 
     return result
 
@@ -462,7 +462,7 @@ class Rosalin:
 
             # evaluate the QNode corresponding to
             # the Hamiltonian term
-            res = qnode(params, o, shots=int(s))
+            res = qml.set_shots(qnode, shots=int(s))(params, o)
 
             if s == 1:
                 res = np.array([res])
