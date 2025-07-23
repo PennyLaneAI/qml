@@ -186,13 +186,13 @@ def f(x):
 # .. math::
 #           \hat{f}(k_2, k_1) = \sum_{x_2=0}^2 e^{\frac{2 \pi i}{6} (2k_2+k_1) x_2} \sum_{x_1=0}^1 e^{\frac{2 \pi i}{2} x_1 k_1 } f(x_1, x_2)
 #
-# Besides some reordering, there is one non-trivial identity we used above:
+# Besides some reordering, there is one slightly non-trivial identity we used above:
 #
 # .. math::
-#           e^{\frac{2 \pi i}{6} x_1 3(2k_2+k_1) } = e^{\frac{2 \pi i}{2} x_1k_1 } e^{2 \pi i x_1 k_2 }  = e^{\frac{2 \pi i}{2} x_1 k_1 }
+#           e^{\frac{2 \pi i}{6} x_1 3(2k_2+k_1) } = e^{\frac{2 \pi i}{2} x_1k_1 } \underbrace{e^{2 \pi i x_1 k_2 }}{1}  = e^{\frac{2 \pi i}{2} x_1 k_1 }
 #
-# The periodicity of the Fourier basis function makes the dependency on :math:`k_2` disappear, and turns the Fourier transform
-# into a sum over "smaller" Fourier transforms.
+# Essentially, the change in variables turns the Fourier basis function over period 6 into a Fourier basis function with period 2,
+# which makes the dependency on :math:`k_2` disappear. This effectively turns the Fourier transform into a sum over "smaller" Fourier transforms.
 #
 #######################################################################
 # Quantifying the runtime gains
@@ -230,7 +230,7 @@ def f(x):
 # related to the original group into characters of the subgroup, :math:`e^{\frac{2 \pi i}{2} x_1 k_1 }`. CHECK FACTORS.
 # Such a trick generalises to much more complicated groups, including those where there is no "cyclic" notion of
 # ordered integers.
-# 
+#
 #######################################################################
 # From FFTs to QFTs
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -250,6 +250,15 @@ def f(x):
 #    
 #     Andrew Childs, Vim van Dam, "Quantum algorithms for algebraic problems", 
 #     `Reviews of Modern Physics 82.1: 1-52. <https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.82.1>`__, 2010
+#
+# .. [#Maslen]
+#
+#    https://library2.msri.org/books/Book46/files/11maslen.pdf
+#
+# .. [#Rockmore]
+#
+#    https://www.cs.dartmouth.edu/~rockmore/nato-1.pdf
+#
 #
 # About the author
 # ----------------
