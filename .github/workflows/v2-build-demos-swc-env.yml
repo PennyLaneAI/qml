@@ -85,7 +85,7 @@ jobs:
   # Step 4: Build and upload the updated objects.inv files
   build-objects-inv-file-dev:
     # TODO: Change ref_name to 'dev' for release
-    if: (needs.identify-changed-demos.outputs.updated != '') && ${{ github.ref_name == 'test-v2-dev' }}
+    if: ${{ needs.identify-changed-demos.outputs.updated != '' && github.ref_name == 'test-v2-dev' }}
     uses: ./.github/workflows/v2-sync-objects-dot-inv.yml
     needs:
       - identify-changed-demos
@@ -101,7 +101,7 @@ jobs:
 
   build-objects-inv-file-master:
     # TODO: Change ref_name to 'master' for release
-    if: (needs.identify-changed-demos.outputs.updated != '') && ${{ github.ref_name == 'test-v2-master' }}
+    if: ${{ needs.identify-changed-demos.outputs.updated != '' && github.ref_name == 'test-v2-master' }}
     uses: ./.github/workflows/v2-sync-objects-dot-inv.yml
     needs:
       - identify-changed-demos
