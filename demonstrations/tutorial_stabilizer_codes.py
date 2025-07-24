@@ -20,6 +20,10 @@ some well-known codes using **stabilizer generators,** from which
 the other elements of the code (codewords, syndrome measurements, etc.) can be reconstructed. Then, we
 represent these codes as quantum circuits and implement them in PennyLane.
 
+.. figure:: ../_static/demonstration_assets/stabilizer_codes/pennylane-demo-stabilizer-codes-large-thumbnail.png
+    :align: center
+    :width: 50%
+
 
 A toy example: the repetition code
 -----------------------------------
@@ -318,7 +322,7 @@ print(
 #
 # The stabilizer formalism is a powerful framework for constructing quantum error-correcting codes using the algebraic structure of *Pauli operators*.
 # It focuses on subgroups of the *Pauli group* on :math:`n` qubits—denoted :math:`\mathcal{P}_n`—which consists of all tensor products of single-qubit Pauli operators :math:`\{I, X, Y, Z\}` (with overall phases :math:`\pm1, \pm i`).
-# A **stabilizer group** :math:`S` is defined as a subgroup of :math:`\mathcal{P}_n` that does satisfies the following:
+# A **stabilizer group** :math:`S` is defined as a subgroup of :math:`\mathcal{P}_n` that satisfies the following:
 #
 # 1. It contains the identity operator :math:`I_0 \otimes I_1 \otimes \cdots \otimes I_{n-1}`.
 # 2. All elements of :math:`S` commute with each other.
@@ -509,8 +513,8 @@ print(classify_pauli(X(0) @ Y(1) @ Z(2), logical_ops, generators, 3))
 # Encoding the logical qubit
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# First, we need to prepare a data qubit that we want to protect. For this tutorial, we will use the qubit
-# :math:`\vert \psi \rangle = \alpha \vert 0 \rangle + \beta \vert 1 \rangle, as our data qubit.
+# First, we need to prepare a data qubit that we want to protect. In this tutorial, we will use the qubit
+# :math:`\vert \psi \rangle = \alpha \vert 0 \rangle + \beta \vert 1 \rangle,` as our data qubit.
 #
 # The next step is to encode this data qubit into a logical qubit. This is done by **encoding circuit** given below. Notice that we
 # do not need to know the logical operators to implement the encoding circuit. The circuit is completely determined by the stabilizer generators.
@@ -526,6 +530,22 @@ print(classify_pauli(X(0) @ Y(1) @ Z(2), logical_ops, generators, 3))
 #    :width: 100%
 #
 #    ..
+#
+# The calculations are a bit cumbersome, but with some patience we can find the common :math:`+1`-eigenspace of the stabilizer generators,
+# which are the codewords.
+#
+# .. math::
+#
+#     \begin{align*}
+#     \vert \bar{0}\rangle = &\frac{1}{4}\left(\vert 00000 \rangle \vert 10010 \rangle + \vert 01001 \rangle + \vert 10100 \rangle + \vert 01010 \rangle - \vert 11011 \rangle - \vert 00110 \rangle \right.\\
+#                            &\left. - \vert 11101 \rangle - \vert 00011\rangle - \vert 11110 \rangle - \vert 01111 \rangle - \vert 10001 \rangle - \vert 01100 \rangle - \vert 10111 \rangle + \vert 00101 \rangle \right)
+#     \end{align*}
+#
+# .. math::
+#
+#     \vert \bar{1}\rangle = X\otimes X \otimes X \otimes X \otimes X \vert \bar{0} \rangle.
+#
+# The logical operators bit-flip and phase-flip are for this code are :math:`\bar{X}= X^{\otimes 5}` and :math:`\bar{Z}=Z^{\otimes 5}.``
 #
 # Let us implement this encoding circuit in PennyLane.
 
@@ -565,7 +585,7 @@ def five_qubit_encode(alpha, beta):
 #    :align: center
 #    :width: 100%
 #
-# with the corresponding stabilizer operators, as follows:
+# with the corresponding stabilizer operators.
 #
 
 stabilizers = [X(0)@Z(1)@Z(2)@X(3)@I(4), I(0)@X(1)@Z(2)@Z(3)@X(4),
@@ -604,7 +624,7 @@ def five_qubit_syndromes(alpha, beta, error_op, error_wire):
 
 #############################################################################
 #
-# Now we need to build the syndrome table like we did with the three-qubit code. The syndrome table maps measurement outcomes to
+# Now we need to build the syndrome table, which maps measurement outcomes to
 # specific errors, allowing us to detect and correct errors on the encoded qubits.
 
 ops_and_syndromes = []
@@ -698,23 +718,6 @@ for wire in range(5):
 # This is a powerful feature of the stabilizer formalism. It allows us to construct the code from its stabilizer generators
 # and then use the code to correct errors. However, we can also find the codewords  and logical operators directly from the stabilizer generators by
 # finding the common +1-eigenspace of the stabilizer generators.
-#
-# The calculations are a bit cumbersome, but with some patience we can find the common :math:`+1`-eigenspace of the stabilizer generators,
-# which are the codewords.
-#
-# .. math::
-#
-#     \begin{align*}
-#     \vert \bar{0}\rangle = &\frac{1}{4}\left(\vert 00000 \rangle \vert 10010 \rangle + \vert 01001 \rangle + \vert 10100 \rangle + \vert 01010 \rangle - \vert 11011 \rangle - \vert 00110 \rangle \right.\\
-#                            &\left. - \vert 11101 \rangle - \vert 00011\rangle - \vert 11110 \rangle - \vert 01111 \rangle - \vert 10001 \rangle - \vert 01100 \rangle - \vert 10111 \rangle + \vert 00101 \rangle \right)
-#     \end{align*}
-#
-# .. math::
-#
-#     \vert \bar{1}\rangle = X\otimes X \otimes X \otimes X \otimes X \vert \bar{0} \rangle.
-#
-# The logical operators bit-flip and phase-flip are for this code are :math:`\bar{X}= X^{\otimes 5}` and :math:`\bar{Z}=Z^{\otimes 5}.``
-#
 #
 # Conclusion
 # ~~~~~~~~~~~
