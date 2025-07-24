@@ -22,10 +22,10 @@ The hidden cut problem for locating unentanglement
 # Xanadu <https://www.xanadu.ai/photonics>`__, we spend a ton of effort to ensure that our qubits are
 # as *unentangled* as possible with their environment!
 # 
-# In this demo we’ll investigate *unentanglement* more closely. More specifically we’ll consider a
+# In this demo we’ll investigate *unentanglement* more closely. More specifically, we’ll consider a
 # problem related to unentanglement, called the *hidden cut problem*. In this problem we assume that
 # we’re given a state consisting of many components. As we discussed, it’ll generally be the case that
-# most of these components are entangled with one another. But in the hidden cut problem we are
+# most of these components are entangled with one another. However, in the hidden cut problem we are
 # guaranteed that it’s possible to split the components into two groups, so that between the two
 # groups there is *no* entanglement. The problem asks us to find this “hidden cut” that splits the
 # state up into two *unentangled* pieces.
@@ -37,9 +37,9 @@ The hidden cut problem for locating unentanglement
 # .. math::
 # 
 # 
-#    |\psi\rangle = |\psi_A\rangle\otimes |\psi_B\rangle
+#    |\psi\rangle = |\psi_A\rangle\otimes |\psi_B\rangle,
 # 
-# , where :math:`|\psi_A\rangle` is a state of system :math:`A` and :math:`|\psi_B\rangle` is a state of
+# where :math:`|\psi_A\rangle` is a state of system :math:`A` and :math:`|\psi_B\rangle` is a state of
 # system :math:`B`. We also use the term *separable* or *factorizable* to describe an unentagled
 # state. We’ll usually not bother writing the tensor product sign and just write
 # :math:`|\psi\rangle = |\psi_A\rangle |\psi_B\rangle`.
@@ -52,7 +52,7 @@ The hidden cut problem for locating unentanglement
 # 
 #    |\psi\rangle = |\psi_S\rangle |\psi_{\bar S}\rangle,
 # 
-# but we aren’t told what :math:`S` and :math:`\bar S` are. The hidden cut problem asks us to determine :math:`S` and :math:`\bar S`, given access to :math:`|\psi\rangle`. 
+# but we aren’t told what :math:`S` and :math:`\bar S` are. The hidden cut problem asks us to determine :math:`S` and :math:`\bar S`, given access to :math:`|\psi\rangle`.
 # Following Bouland *et al.* [#Bouland2024]_, in this demo
 # we’ll develop a quantum algorithm that solves this problem!
 # 
@@ -61,7 +61,14 @@ The hidden cut problem for locating unentanglement
 # Creating an unentangled state
 # -----------------------------
 # 
+# Before we can solve the hidden cut problem, we first need a state :math:`|\psi\rangle` to solve it on!
+# First we define a function ``random_state()`` that creates a random state with a specified number of
+# qubits. We do this by creating a :math:`2^n` by :math:`2^n` random unitary and taking the first row.
+# Because all the rows (and columns) in a unitary matrix have norm equal to 1, this defines a valid
+# quantum state.
+# 
 
+# imports
 import galois
 import matplotlib.pyplot as plt
 import numpy as np
@@ -71,22 +78,15 @@ from scipy.stats import unitary_group
 # set random seed
 np.random.seed(123)
 
-######################################################################
-# Before we can solve the hidden cut problem, we first need a state :math:`|\psi\rangle` to solve it on!
-# First we define a function ``random_state()`` that creates a random state with a specified number of
-# qubits. We do this by creating a :math:`2^n` by :math:`2^n` random unitary and taking the first row.
-# Because all the rows (and columns) in a unitary matrix have norm equal to 1, this defines a valid
-# quantum state.
-# 
-
+# function to create random state
 def random_state(n_qubits):
     dim = 2**n_qubits
     return unitary_group.rvs(dim)[0]
 
 ######################################################################
 # However we can’t just use this function to construct our state :math:`|\psi\rangle`, because the random
-# state created by the function will almost certainly *not* be unentagled. So we’ll define a function
-# ``separable_state()`` that takes as input a list of qubit partitions, creates a random state for
+# state created by the function will almost certainly *not* be unentagled. Instead, we’ll define a function
+# ``separable_state()`` that takes a list of qubit partitions as input, creates a random state for
 # each partition, and tensors them together into a separable state.
 # 
 
@@ -133,7 +133,7 @@ print(f'Created {n} qubit state with qubits {partitions[0]} unentangled from {pa
 ######################################################################
 # Now imagine we’re given :math:`|\psi\rangle` but aren’t told that qubits 0,1 are unentangled from
 # qubits 2,3,4. How could we figure this out? This is the hidden cut problem: given a many-qubit
-# quantum state, figure out which qubits are unentangled with which other qubits. Now we’ll develop a
+# quantum state, identify which qubits are unentangled with which other qubits. Now we’ll develop a
 # quantum algorithm that solves this problem, and then we’ll implement it in Pennylane and see that it
 # works!
 # 
@@ -148,29 +148,29 @@ print(f'Created {n} qubit state with qubits {partitions[0]} unentangled from {pa
 # mathematical language a *hidden subgroup problem* (HSP). Then we can use a famous quantum algorithm
 # for solving HSPs to solve the hidden cut problem. The traditional HSP algorithm is useful for
 # finding symmetries of functions :math:`f(x)`, i.e. figuring out for what values of :math:`a` we have
-# :math:`f(x+a) = f(x)` for all :math:`x`. However we’re interested in a *state* :math:`|\psi\rangle` and
+# :math:`f(x+a) = f(x)` for all :math:`x`. However, we’re interested in a *state* :math:`|\psi\rangle` and
 # not a *function* :math:`f(x)`, so we’ll instead use a modified version of the HSP algorithm, called
 # StateHSP, which finds *symmetries of states*.
 # 
 # We’ll explain the StateHSP algorithm below, but first let’s see how we can recast the hidden cut
 # problem as one of finding a hidden symmetry of a state. To see this, remember our example state
-# :math:`|\psi\rangle=|\psi_{01}\rangle |\psi_{234}\rangle}`. Now consider two copies :math:`|\psi\rangle |\psi\rangle`
-# of :math:`|\psi\rangle`. We can visualize this as
+# :math:`|\psi\rangle=|\psi_{01}\rangle |\psi_{234}\rangle`. Now consider two copies :math:`|\psi\rangle |\psi\rangle`
+# of this state. We can visualize this as
 #
 # .. figure:: ../_static/demonstration_assets/hidden_cut/qubits.png
 #    :align: center
 #    :width: 80%
 #
-#    Figure 2. A schematic of the quantum state :math:`|\psi\rangle |\psi\rangle`.
+#    Figure 2. A schematic of the quantum state :math:`|\psi\rangle |\psi\rangle`, where :math:`|\psi\rangle=|\psi_{01}\rangle |\psi_{234}\rangle`.
 #
 # The top row corresponds to the first copy of :math:`|\psi\rangle`, and the bottom row to the second
 # copy. In each row, qubits 0 and 1 are disconnected from qubits 2, 3, and 4. This schematically
-# indicates the fact that in each :math:`|\psi\rangle` qubits 0,1 are unentangled from qubits 2,3,4.
+# indicates the fact that in each :math:`|\psi\rangle` qubits 0, 1 are unentangled from qubits 2, 3, 4.
 # 
 # Now consider what happens when we swap some qubits in the top row with the corresponding qubits in
 # the bottom row. We can denote which pairs of qubits we’re swapping with a 5-bit string. For example,
 # the bitstring 10101 corresponds to swapping the qubits in positions 0, 2, and 4 in the top row with
-# qubits 0, 2, and 4 in the bottom row. Because there are :math:`2^5=32` 5-bit strings, there are 32
+# qubits 0, 2, and 4 in the bottom row. Because there are :math:`2^5=32` possible 5-bit strings, there are 32
 # possible swap operations we can perform. Interestingly, the set of all 32 5-bit strings forms a
 # mathematical *group* under bitwise addition.
 #
@@ -199,11 +199,11 @@ print(f'Created {n} qubit state with qubits {partitions[0]} unentangled from {pa
 # of the second copy of :math:`|\psi\rangle`, and 00111 corresponds to swapping the
 # :math:`|\psi_{234}\rangle` components between the two copies. Because in each copy of :math:`|\psi\rangle`
 # the :math:`|\psi_{01}\rangle` and :math:`|\psi_{234}\rangle` components are completely unentangled,
-# after either of these swaps the full state remains the same, namely :math:`|\psi\rangle|\psi\rangle`. So the
+# after either of these swaps the full state remains unchanged, namely :math:`|\psi\rangle|\psi\rangle`. So the
 # symmetry subgroup is :math:`H = {00000, 11111, 11000, 00111}`. We’ll call this a *hidden* symmetry
 # subgroup because it wasn’t given to us - we had to find it!
 # 
-# Now, a shorthand way to write any group is to specify a set of *generators*, group elements that can
+# Now, a shorthand way to write any group is to specify a set of *generators* - group elements that can
 # be added together to generate any other element of the group. For :math:`H` the generators are 11000
 # and 00111: we can add either generator to itself to get the identity 00000, and we can add the
 # generators to each other to get 11111. Here’s the important point: notice that the generators of
@@ -214,26 +214,30 @@ print(f'Created {n} qubit state with qubits {partitions[0]} unentangled from {pa
 # :math:`|\psi_{234}\rangle`. So finding the hidden subgroup :math:`H` gives us the unentangled
 # components - it solves the hidden cut problem!
 # 
-# So now that we recast the hidden cut problem as a problem of finding a hidden subgroup :math:`H`,
-# lets see how the StateHSP algorithm can be used to find :math:`H`. The general algorithm works for
+# Now that we've recast the hidden cut problem as a problem of finding a hidden subgroup :math:`H`,
+# let's see how the StateHSP algorithm can be used to find :math:`H`. The general algorithm works for
 # any abelian group :math:`G`, but here we’ll just focus on the case where :math:`G` is the group of
 # :math:`n`-bit strings, since this is the case that’s relevant to solving the hidden cut problem.
 # 
 # The algorithm involves running a quantum circuit, taking measurements, and postprocessing the
 # measurements. The circuit involves three :math:`n`-qubit registers. Registers 2 and 3 are each
-# initialized to :math:`|\psi\rangle`, and register 1 is initialized to the all :math:`|0\rangle` state. We
+# initialized to :math:`|\psi\rangle`, and register 1 is initialized to the all-:math:`|0\rangle` state. We
 # call register 1 the *group register* because we’ll use it to encode elements of the group :math:`G`.
 # For example if :math:`n=5` the group element 10101 of :math:`G` would be encoded as
 # :math:`|10101\rangle`.
 # 
-# After this register initialization, the StateHSP circuit involves three steps: 1. Apply a Hadamard
-# to each qubit in the group register; this puts the group register in a uniform superposition of all
-# group elements, which up to normalization we can write as :math:`\sum_{g\in G} |g\rangle`. 2. Apply a
-# controlled SWAP operator, which acts on all 3 registers by mapping :math:`|g\rangle|\psi\rangle|\psi\rangle`
-# to :math:`|g\rangle\text{SWAP}_g(|\psi\rangle|\psi\rangle)`. Here :math:`\text{SWAP}_g` performs swaps at the
+# After this register initialization, the StateHSP circuit involves three steps:
+#
+# 1. Apply a **Hadamard** to each qubit in the group register. This puts the group register in a uniform superposition of all
+# group elements, which up to normalization we can write as :math:`\sum_{g\in G} |g\rangle`.
+#
+# 2. Apply a **controlled SWAP** operator. This acts on all 3 registers by mapping :math:`|g\rangle|\psi\rangle|\psi\rangle`
+# to :math:`|g\rangle\text{SWAP}_g(|\psi\rangle|\psi\rangle)`. Here, :math:`\text{SWAP}_g` performs swaps at the
 # positions indicated by :math:`g`; for example if :math:`g=10101` then qubits 0, 2 and 4 in the first
 # copy of :math:`|\psi\rangle` will get swapped with the corresponding qubits in the second copy of
-# :math:`|\psi\rangle`. 3. Again apply a Hadamard to each qubit in the group register.
+# :math:`|\psi\rangle`.
+#
+# 3. Apply a **Hadamard** to each qubit in the group register.
 # 
 # Finally we measure the group register. Here’s the circuit diagram:
 #
@@ -301,12 +305,12 @@ print(f'The first 3 rows of M are:\n{M[:3]}')
 # So to get :math:`H` we just have to find the binary vectors :math:`\vec b` orthogonal to every row
 # of :math:`M`. Mathematically we write this as :math:`M\vec b = 0`, where all operations are assumed
 # to be performed mod 2. In linear algebra lingo we say that the solutions :math:`\vec b` to this
-# equation form the *nullspace* of :math:`M`. We can straightforwardly find the nullspace using basic
+# equation form the *nullspace* of :math:`M`. We can find this nullspace using basic
 # linear algebra techniques.
 # 
 # Instead of doing the algebra by hand though, here we’ll use the ``galois`` python library, which can
 # perform linear algebra mod 2. To ensure that operations on :math:`M` are performed mod 2, we first
-# convert it to a ``galois.GF2`` array. The GF2 stands for `“Galois field of order
+# convert it to a ``galois.GF2`` array. The “GF2” stands for `“Galois field of order
 # 2” <https://en.wikipedia.org/wiki/Finite_field>`__, which is a fancy way of saying that all
 # operations are performed mod 2.
 # 
@@ -352,29 +356,28 @@ M.null_space()
 # 
 
 ######################################################################
-# We solved the hidden cut problem—finding the factors of a multi-qubit quantum state—by thinking
-# about it from the perspective of symmetries. The key insight was to recognize that the question
-# “*What are the unentangled factors of the state?*” can be rephrased as the question “*What is the
-# hidden symmetry of the state?*”. With this rephrasing the hidden cut problem became a hidden
-# subgroup problem, and we could solve it using a modification of the standard algorithm for HSPs that
+# We solved the hidden cut problem—finding the factors of a multi-qubit quantum state—by approaching
+# it from the perspective of symmetries. The key insight was to recognize that the question
+# *What are the unentangled factors of the state?* can be rephrased as *What is the hidden symmetry of the state?*.
+# This rephrasing transformed the hidden cut problem into a *hidden subgroup problem*, which we could solve using a modification of the standard algorithm for HSPs that
 # allows for finding symmetries of *states* rather than functions.
 # 
 # In fact, many of the most well-known problems that benefit from access to a quantum computer are
-# also instances of an HSP! In some cases, like with the hidden cut problem, it isn’t obvious by
-# looking at it that the problem involves finding a hidden symmetry. The most famous example of this
+# also instances of an HSP! In some cases, like with the hidden cut problem, it isn’t obvious at first glance
+# that the problem involves finding a hidden symmetry. The most famous example of this
 # is the problem of factoring large integers, a problem with fundamental importance in cryptography.
 # It’s not at all obvious that this problem is related to finding the symmetry of a function, but with
 # some clever algebra it can be phrased in this way, and hence solved efficiently using the HSP
-# algorithm. As a speculative side comment, it’s interesting that problem of *factoring* states and
-# the problem of *factoring* integers can both be phrased as HSPs! Is there something about
+# algorithm. As a speculative side comment, it’s interesting that the problem of *factoring states* and
+# the problem of *factoring integers* can both be phrased as HSPs! Is there something about
 # *factoring* problems that enables them to be expressed as HSPs? Are there other important factoring
 # problems that can also be recast as HSPs and solved on a quantum computer? Or is this just a
-# complete coincidence? I invite you to think about this if you’re interested - maybe you find a deep
+# complete coincidence? I invite you to think about this - maybe you'll discover a deep
 # connection!
 # 
 # Less speculatively, there definitely *is* one deep and generalizable lesson that we should take away
-# from this hidden cut demo, and that is the *power of looking for hidden symmetries*. This goes well
-# beyond quantum computing. In fact some of the most significant discoveries in physics are just
+# from this hidden cut demo: the *power of looking for hidden symmetries*. This goes well
+# beyond quantum computing. In fact, some of the most significant discoveries in physics are just
 # recognitions of a hidden symmetry! For example: recognizing the symmetries of fundamental particles
 # led to the development of the standard model of particle physics; recognizing the symmetry of
 # systems in different inertial reference frames led to discovery of special relativity; and
@@ -382,6 +385,14 @@ M.null_space()
 # general relativity. It's clear that looking for hidden symmetries is a very powerful approach, both in
 # quantum computing and beyond!
 # 
+#
+# References
+# ------------
+#
+# .. [#Bouland2024] 
+#    
+#     Adam Bouland, Tudor Giurgică-Tiron, John Wright, "The State Hidden Subgroup Problem and an Efficient Algorithm for Locating Unentanglement",  
+#     `STOC '25 p.463-470. <https://doi.org/10.1145/3717823.3718118>`__, 2025
 
 ######################################################################
 # About the author
