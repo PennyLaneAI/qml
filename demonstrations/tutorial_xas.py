@@ -20,12 +20,12 @@ implement a simplified version in PennyLane.
 Why simulate X-ray absorption spectroscopy?
 -------------------------------------------
 
-Lithium-excess materials are transition metal oxides that are designed as candidate materials for battery cathodes. By engineering the cathode material to accommodate extra Lithium atoms in their structural composition, the energy density of the battery can be increased.
+Lithium-excess materials are transition metal oxides that are designed as candidate materials for battery cathodes. 
+Engineered to accommodate extra Lithium atoms in their structural composition, these materials enable larger energy densities in battery designs.
 However, repeated charge-discharge cycles can alter their structure and reduce performance. 
-One can study these degraded materials using X-ray absorption spectroscopy, which directly probes local structure by exciting tightly bound core electrons. 
-This can be used to identify oxidation states in materials because different elements and their oxidation states will absorb photons of different energies. Characterizing the structures in the degraded cathode material can help in an iterative development process, directing researchers towards better candidate materials.
-Identification of the structures present in the degraded material is done by a process known as “spectral fingerprinting”, where reference spectra of small molecular clusters are matched to the experimental spectrum. 
-A fast method of simulating reference spectra for use in fingerprinting would be a crucial component in this iterative workflow for identifying promising cathode materials [#Fomichev2024]_.
+The oxidation states present in the degraded cathode materials can be identified using X-ray absorption spectroscopy, which directly probes local structure by exciting tightly bound core electrons. 
+Identification of the degraded structures is done by a process known as “spectral fingerprinting”, where reference spectra of small molecular clusters are matched to the experimental spectrum. 
+A fast method of simulating reference spectra for use in fingerprinting would be a crucial component in an iterative workflow for identifying promising cathode materials [#Fomichev2024]_.
 
 .. figure:: ../_static/demonstration_assets/xas/fingerprinting.gif
    :alt: The reference spectra of molecular clusters are calculated, and then matched to an experimental spectrum.
@@ -67,13 +67,14 @@ Below is an illustration of an X-ray absorption spectrum.
 
 The goal is to implement a quantum algorithm that can calculate this spectrum. However, instead of computing the energy differences and state overlaps directly, we will be simulating the system in the time domain, and then using a `Fourier transform <https://en.wikipedia.org/wiki/Fourier_transform>`__ to obtain the spectrum in frequency space.
 
+
+
 Quantum algorithm in the time-domain
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Both the initial state :math:`|I\rangle` and the dipole operator acting on the initial state :math:`\hat m_\rho|I\rangle` can be determined classically, and we’ll demonstrate how to do that later. 
 With the initial state computed, we will use a mathematical trick called a *frequency-domain* `Green’s function <https://en.wikipedia.org/wiki/Green%27s_function>`__ to determine the absorption cross section. 
-We can write the cross section as the imaginary part of the following Green’s
-function
+We can write the cross section as the imaginary part of the following Green’s function
 
 .. math:: \mathcal{G}_\rho(\omega) = \langle I|\hat m_\rho \frac{1}{\hat H -E_I -\omega +i\eta} \hat m_\rho |I\rangle\,.
 
