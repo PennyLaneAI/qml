@@ -2,11 +2,12 @@ r"""X-ray absorption spectroscopy simulation in the time domain
 ===========================================================
 
 What will be the first industrially useful quantum algorithm to run on fault-tolerant quantum computers? 
-This open question is one of the main focuses of the research team at Xanadu. 
-A potential answer to this question is simulating `X-ray absorption spectroscopy <https://en.wikipedia.org/wiki/X-ray_absorption_spectroscopy>`__ (XAS), which can be used in workflows to identify structural degradation mechanisms in material candidates for battery designs🔋 [#Fomichev2024]_. 
+This open question is being tackled head-on by the research team at Xanadu, as it aligns with our goal of making quantum computers that are useful.
+In particular, we believe promising candidates for early quantum advantage are simulations of *small* but *highly correlated* systems. 
+One such application is simulating `X-ray absorption spectroscopy <https://en.wikipedia.org/wiki/X-ray_absorption_spectroscopy>`__ (XAS), which can be useful in workflows for identifying structural degradation mechanisms in material candidates for battery designs🔋 [#Fomichev2024]_. 
 This demo will show you how to implement an optimized simulation algorithm developed in the paper `“Fast simulations of X-ray absorption spectroscopy for battery materials on a quantum computer” <https://arxiv.org/abs/2506.15784>`__ [#Fomichev2025]_ in PennyLane.
 
-First, we will discuss why simulating X-ray absorption spectroscopy is a promising application for early quantum computers. 
+First, we will discuss why simulating X-ray absorption spectroscopy was identified as a promising application for early quantum computers. 
 Then we will explain the main steps in the simulation algorithm and how to
 implement a simplified version in PennyLane.
 
@@ -19,7 +20,7 @@ implement a simplified version in PennyLane.
 Why simulate X-ray absorption spectroscopy?
 -------------------------------------------
 
-Lithium-excess materials are transition metal oxides that have been engineered to accommodate extra Lithium atoms in their structural composition, designed as candidate materials for battery cathodes.
+Lithium-excess materials are transition metal oxides that are designed as candidate materials for battery cathodes. By engineering the cathode material to accommodate extra Lithium atoms in their structural composition, the energy density of the battery can be increased.
 However, repeated charge-discharge cycles can alter their structure and reduce performance. 
 One can study these degraded materials using X-ray absorption spectroscopy, which directly probes local structure by exciting tightly bound core electrons. 
 This can be used to identify oxidation states in materials because different elements and their oxidation states will absorb photons of different energies. Characterizing the structures in the degraded cathode material can help in an iterative development process, directing researchers towards better candidate materials.
@@ -500,7 +501,7 @@ def first_order_trotter(step, prior_U, final_rotation, reverse=False):
 
 
 ######################################################################
-# Our function ``trotter_circuit`` implements a second-order Trotter step, returning a ``QNode``. 
+# Our function ``second_order_trotter`` implements a second-order Trotter step, returning a ``QNode``. 
 # The returned circuit applies ``StatePrep`` to prepare the register in the previous quantum state, and then two ``lie_trotter`` evolutions for time ``step/2`` so that the total step size is ``step``.
 
 
@@ -604,7 +605,7 @@ for rho in rhos:
     # Perform time steps.
     for i in range(0, len(time_interval)):
 
-        circuit = trotter_circuit(dev=dev_prop, state=state, step=tau)
+        circuit = second_order_trotter(dev=dev_prop, state=state, step=tau)
 
         # Define measurement circuit device with shots.
         shots = shots_list[i]  # Kernel-aware number of shots.
