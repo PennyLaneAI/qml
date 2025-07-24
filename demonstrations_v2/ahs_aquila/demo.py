@@ -34,6 +34,7 @@ the effect of Rydberg blockade on a hardware device!
 
 Pulse programming basics in PennyLane
 -------------------------------------
+Making a change...
 
 Pulse programming in PennyLane is a paradigm based on low-level control of electromagnetic driving
 pulses. Pulse programs are written directly on the hardware level, skipping the abstraction of
