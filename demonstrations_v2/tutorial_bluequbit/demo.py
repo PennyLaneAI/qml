@@ -30,6 +30,7 @@ The first is a very simple example building a Bell pair, and the second one is a
 
 Build your PennyLane circuit
 ----------------------------
+Making a change...
 
 Here we will build a simple :doc:`Bell pair </glossary/what-are-bell-states>` and simulate it on the BlueQubit backend.
 Later in this tutorial we will show a larger example — a 26-qubit circuit that demonstrates the central limit theorem using a `Draper QFT adder <https://pennylane.ai/qml/demos/tutorial_qft_arithmetics>`__.
