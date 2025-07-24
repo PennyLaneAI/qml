@@ -2,7 +2,7 @@ r"""
 It's all about groups: how quantum computers implement Fourier transforms
 =========================================================================
 
-Quantum Fourier Transforms (QFTs) are unitary operations that turn a quantum state of amplitudes :math:`f(x)` into
+Quantum Fourier Transforms (QFTs) are unitary operations that turn a quantum state :math:`\sum_x f(x) |x \rangle` of amplitudes :math:`f(x)` into
 another quantum state whose amplitudes are the Fourier coefficients :math:`\hat{f}(x)` of :math:`f(x)`. They appear
 literally everywhere in quantum computing: even if you're not interested in `Shor's algorithm
 <https://pennylane.ai/codebook/shors-algorithm/shors-algorithm>`__, `hidden subgroup problems <https://pennylane.ai/qml/demos/tutorial_period_finding>`__,
@@ -24,15 +24,18 @@ Fourier basis nevertheless -- only of a different _group_.
 
 Sometimes, knowing about the Fourier-theoretic interpretation of a quantum algorithm helps to understand what is
 going on under the hood. But group theory comes with a lot of jargon that can be overwhelming at first. This demo
-illuminates the fascinating link between Fourier Transforms, Quantum Fourier Transforms and groups for those who have
-not taken a course in group theory. We will see that a group can be used to _define_ what a Fourier transform is, a fact
-that explains a lot of seemingly arbitrary assumptions in the standard (discrete and continuous) Fourier transform. Groups
-are also implicitly used in one of the world's most important scientific subroutines, the _Fast Fourier Transform_, which is
-an implementation of a Fourier transform that is polynomially faster than the naive one. Finally, in a fascinating twist laid
-out in Moore, ... [#Moore]_, the recipe of a Fast Fourier Transform can be implemented in ``quantum parallel'', which is
-the basic idea behind the exponentially faster _Quantum Fourier Transforms_ applied to amplitudes of quantum states.
+illuminates the fascinating link between Fourier Transforms, Quantum Fourier Transforms and groups, for those who have
+not taken a course in group theory (yet). We will see that a group can be used to _define_ what a Fourier transform is, a fact
+that explains a lot of seemingly arbitrary assumptions in the standard (discrete and continuous) Fourier transforms.
+
+But that's not all. Groups are implicitly used to design one of the world's most important scientific subroutines, the _Fast Fourier Transform_ (FFT).
+The FFT is an algorithmic implementation of a Fourier transform that is polynomially faster than the naive one. This does not
+sound like much, but when transforming, say, :math:`N=10,000` numbers, the difference between of the order of :math:`N^2 = 100` Mio and
+:math:`N \log N = 40,000` operation can be game changing.  It turns out that the recipe of a Fast Fourier Transform
+can be implemented in ``quantum parallel'', which is the basic idea behind exponentially faster QFTs!
+
 In short, groups are the fundamental structure behind quantum and classical Fourier transforms, and exploiting this
-structure is one of the main reasons we believe that quantum computers could change how humans process information!
+structure is one of the main reasons one might believe that quantum computers could change how humans process information!
 
 But let us start with the basics...
 """
@@ -54,9 +57,8 @@ But let us start with the basics...
 # 
 # The expressions :math:`e^{-2 \pi i  \frac{k x}{N}}` correspond to Fourier basis functions with integer-valued
 # frequencies, and the Fourier coefficient :math:`\hat{f}(x_i)`
-# can be seen as the projection of :math:`f(x)` onto the :math:`i`'th basis function. The function outside of
-# the N x-values is thought to be "periodically continued",
-# which means that we assume that :math:`f(x_i) = f(x_i + N)`.
+# can be seen as the projection of :math:`f(x)` onto the :math:`i`'th basis function. The function beyond
+# the interval :math:`0,..,N-1` is thought to be "periodically continued", which means that :math:`f(x_i) = f(x_i + N)`.
 #
 # Let's code this up:
 #
