@@ -3,7 +3,7 @@ r"""X-ray absorption spectroscopy simulation in the time domain
 
 What will be the first industrially useful quantum algorithm to run on fault-tolerant quantum computers? 
 This open question is one of the main focuses of the research team at Xanadu. 
-A potential answer to this question is simulating `X-ray absorption spectroscopy <https://en.wikipedia.org/wiki/X-ray_absorption_spectroscopy>`__ (XAS), which can be used in workflows to identify structural degradation mechanisms in material candidates for battery designs🔋. 
+A potential answer to this question is simulating `X-ray absorption spectroscopy <https://en.wikipedia.org/wiki/X-ray_absorption_spectroscopy>`__ (XAS), which can be used in workflows to identify structural degradation mechanisms in material candidates for battery designs🔋 [#Fomichev2024]_. 
 This demo will show you how to implement an optimized simulation algorithm developed in the paper `“Fast simulations of X-ray absorption spectroscopy for battery materials on a quantum computer” <https://arxiv.org/abs/2506.15784>`__ [#Fomichev2025]_ in PennyLane.
 
 First, we will discuss why simulating X-ray absorption spectroscopy is a promising application for early quantum computers. 
@@ -24,7 +24,7 @@ However, repeated charge-discharge cycles can alter their structure and reduce p
 One can study these degraded materials using X-ray absorption spectroscopy, which directly probes local structure by exciting tightly bound core electrons. 
 This can be used to identify oxidation states in materials because different elements and their oxidation states will absorb photons of different energies. Characterizing the structures in the degraded cathode material can help in an iterative development process, directing researchers towards better candidate materials.
 Identification of the structures present in the degraded material is done by a process known as “spectral fingerprinting”, where reference spectra of small molecular clusters are matched to the experimental spectrum. 
-A fast method of simulating reference spectra for use in fingerprinting would be a crucial component in this iterative workflow for identifying promising cathode materials.
+A fast method of simulating reference spectra for use in fingerprinting would be a crucial component in this iterative workflow for identifying promising cathode materials [#Fomichev2024]_.
 
 .. figure:: ../_static/demonstration_assets/xas/fingerprinting.gif
    :alt: The reference spectra of molecular clusters are calculated, and then matched to an experimental spectrum.
@@ -42,19 +42,19 @@ Algorithm
 Simulating reference spectra requires calculating the observable of the experiment, which in this case is the `absorption cross section <https://en.wikipedia.org/wiki/Absorption_cross_section>`__.
 We will describe this quantity below and then explain how a *time-domain* simulation algorithm can estimate it.
 
-Absorption cross-section
+Observable: absorption cross-section
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 In XAS experiments, the absorption cross section as a function of the frequency of incident X-rays :math:`\sigma_A(\omega)` is measured for a given material. 
 This is related to the rate of absorption of X-ray photons of various energies. 
 For our situation, the electrons in the molecular cluster start in a ground molecular state :math:`|I\rangle` with energy :math:`E_I`. 
-This ground state will be coupled to excited states :math:`|F\rangle` with energies :math:`E_F` through the action of the dipole operator :math:`\hat m_\rho,` which represents the effect of the radiative field, where :math:`\rho` is any of the Cartesian directions :math:`\{x,y,z\}`.
+This ground state will be excited to states :math:`|F\rangle` with energies :math:`E_F` by the radiative field through the action of the dipole operator :math:`\hat m_\rho,` where :math:`\rho` is any of the Cartesian directions :math:`\{x,y,z\}`.
 
 The absorption cross section is given by
 
 .. math::  \sigma_A(\omega) = \frac{4 \pi}{3 \hbar c} \omega \sum_{F \neq I}\sum_{\rho=x,y,z} \frac{|\langle F|\hat m_\rho|I \rangle|^2 \eta}{((E_F - E_I)-\omega)^2 + \eta^2}\,,
 
-where :math:`c` is the speed of light, :math:`\hbar` is Planck’s constant, and :math:`\eta` is the line broadening -- set by the experimental resolution of the spectroscopy -- which is typically around :math:`1` eV. 
+where :math:`c` is the speed of light, :math:`\hbar` is Planck’s constant, and :math:`\eta` is the line broadening, set to match the experimental resolution of the spectroscopy. 
 Below is an illustration of an X-ray absorption spectrum.
 
 .. figure:: ../_static/demonstration_assets/xas/example_spectrum.png
@@ -82,6 +82,7 @@ Using a resolution of identity of the final states and simplifying, we end up wi
 
 where the first term is clearly proportional to the absorption cross section. 
 The second term is zero if we centre the frame of reference for our molecular orbitals at the nuclear-charge weighted centre for our molecular cluster of choice. 
+
 Okay, so how do we determine :math:`\mathcal{G_\rho(\omega)}`? 
 If we are going to evaluate this quantity in a quantum register, it will need to be normalized, so instead we are looking for
 
@@ -136,9 +137,9 @@ Ground state calculation
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you haven’t, check out the demo `“Initial state preparation for quantum
-chemistry” <https://pennylane.ai/qml/demos/tutorial_initial_state_preparation>`__. We will be expanding on that demo with code to import a state from the `multiconfigurational self-consistent field <https://pyscf.org/user/mcscf.html>`__ (MCSCF) methods of PySCF, where we restrict the set of active orbitals used in the calculation. 
+chemistry” <https://pennylane.ai/qml/demos/tutorial_initial_state_preparation>`__. We will be expanding on that demo with code to import a state from the `complete active space configuration interaction <https://pyscf.org/user/mcscf.html>`__ (CASCI) methods of PySCF, where we restrict the set of active orbitals used in the calculation. 
 
-We start by creating our molecule object using the `Gaussian type orbitals <https://en.wikipedia.org/wiki/Gaussian_orbital>`__ module ``pyscf.gto``, and obtaining the reduced Hartree-Fock molecular orbitals with the `self-consistent field methods <https://pyscf.org/user/scf.html>`__ ``pyscf.scf``.
+We start by creating our molecule object using the `Gaussian type orbitals <https://en.wikipedia.org/wiki/Gaussian_orbital>`__ module ``pyscf.gto``, and obtaining the Hartree-Fock molecular orbitals with the `self-consistent field methods <https://pyscf.org/user/scf.html>`__ ``pyscf.scf``.
 """
 
 from pyscf import gto, scf
@@ -217,7 +218,7 @@ wf_casci_dict = dict(zip(list(zip(strs_row, strs_col)), dat))
 # Lastly, we will use the helper function ``_sign_chem_to_phys`` to adjust the sign of state components to match what they should be for the PennyLane orbital occupation number ordering. 
 # Then, we can import the state to PennyLane using ``_wf_dict_to_statevector``.
 #
-# .. admonition:: Chemists' and physicists' notation for spin orbitals
+# .. admonition:: Chemists' and physicists' notation for ordering spin orbitals
 #     :class: note
 #
 #     In general, states from computation chemistry workflows will have spin orbitals ordered in chemists' notations, such that all of one spin is on the left, and the other on the right. 
@@ -237,7 +238,7 @@ wf_casci = _wfdict_to_statevector(wf_casci_dict, n_orb_cas)
 # Dipole operator action
 # ~~~~~~~~~~~~~~~~~~~~~~
 #
-# The electromagnetic field of the incident X-rays couples electronic states through the `dipole operator <https://en.wikipedia.org/wiki/Transition_dipole_moment>`__. 
+# The electromagnetic field of the incident X-rays can excite the electronic state through the `dipole operator <https://en.wikipedia.org/wiki/Transition_dipole_moment>`__. 
 # The action of this operator is implemented in PennyLane as ``qml.qchem.dipole_moment``. 
 # We can calculate that operator, convert it to a matrix, and apply it to our initial state :math:`|I\rangle` to obtain :math:`\hat m_\rho|I\rangle`.
 #
@@ -303,13 +304,13 @@ def initial_circuit(wf):
 # .. note::
 # 
 #     To guarantee that :math:`\langle I|\hat m_\rho|I\rangle` is zero, we require that the ``Mole`` object’s nuclear-charge-weighted centre is at the origin. 
-#     This is true from our construction, since the geometry was defined to be symmetric about the origin, but I want to emphasize the importance of this condition.
+#     This is true from our construction, since the geometry was defined to be symmetric about the origin, but we want to emphasize the importance of this condition.
 #
 # Time Evolution
 # --------------
 #
 # Next we will discuss how to prepare the electronic Hamiltonian for use in the time evolution of the Hadamard-test. 
-# We will double-factorize and compress the Hamiltonian to obtain an approximation of the Hamiltonian that can be easily fast-forwarded in a Trotter product formula.
+# We will double-factorize and compress the Hamiltonian to approximate it as a series of fragments, each of which can be fast-forwarded in a Trotter product formula.
 #
 # If you haven’t yet, go read the demo `“How to build compressed double-factorized Hamiltonians” <https://pennylane.ai/qml/demos/tutorial_how_to_build_compressed_double_factorized_hamiltonians>`__, because that is exactly what we are going to do!
 #
@@ -336,13 +337,13 @@ two_chemist = np.einsum("prsq->pqrs", two)
 one_chemist = one - np.einsum("pqrr->pq", two) / 2.0
 
 ######################################################################
-# Next, we will double factorize and compress the Hamiltonian's one- and two-electron terms. 
-# This approximates the Hamiltonian as [#Yen2021]_ [#Cohn2021]_ 
+# Next, we will perform compressed double factorization of the Hamiltonian's one- and two-electron terms. 
+# This approximates the Hamiltonian as
 #
 # .. math::  H_\mathrm{CDF} = E + \sum_{\gamma\in\{\uparrow,\downarrow\}} U_\gamma^{(0)} \left(\sum_p Z_p^{(0)} a_{\gamma,p}^\dagger a_{\gamma, p}\right) U_\mathrm{\gamma}^{(0)\,\dagger} + \sum_\ell^L \sum_{\gamma,\beta\in\{\uparrow,\downarrow\}} U_\mathrm{\gamma, \beta}^{(\ell)} \left( \sum_{pq} Z_{pq}^{(\ell)} a_{\gamma, p}^\dagger a_{\gamma, p} a_{\beta,q}^\dagger a_{\beta, q}\right) U_{\gamma, \beta}^{(\ell)\,\dagger} \,,
 #
-# where each one-electron integral is approximated by a matrix :math:`Z^{(0)}` surrounded by single-particle rotation matrices :math:`U^{(0)}` which diagonalize :math:`Z^{(0)}`. 
-# Each two-electron integral is approximated by a sum of :math:`L` of these rotation and diagonal matrix terms, indexed as :math:`(\ell)`. 
+# where each one-electron integral is approximated by a matrix :math:`Z^{(0)}` surrounded by single-particle rotation matrices :math:`U^{(0)}` which diagonalize :math:`Z^{(0)}` (see Appendix A of [#Fomichev2025]_).
+# Each two-electron integral is approximated by a sum of :math:`L` of these rotation and diagonal matrix fragments, indexed as :math:`(\ell)`. 
 #
 # We can compress and double-factorize the two-electron integrals using PennyLane’s
 # ``qchem.factorize`` function, with ``compressed=True``. 
@@ -379,23 +380,23 @@ Z0 = np.diag(eigenvals)
 # Constructing the time-propagation circuit
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# The main work of our algorithm will be to apply our Hamiltonian terms as a Trotter product in a time-evolution operator, and measure the expectation value of that time evolution for various times.
-# Let’s start by writing functions that implement the time evolution for each Hamiltonian term, which will be called by our Trotter circuit function. 
+# The main work of our algorithm will be to implement time evolution with respect to our Hamiltonian fragments by using Trotter product formulas, and measure the expectation value of that time evolution operator for various times.
+# Let’s start by writing functions that implement the time evolution for each Hamiltonian fragment, which will be called by our Trotter circuit function. 
 #
-# The trick when implementing a double-factorized Hamiltonian is to use `Thouless’s theorem <https://joshuagoings.com/assets/Thouless_theorem.pdf>`__ [#Thouless1960]_ to apply the single-particle basis rotations :math:`U^{(\ell)}`. 
-# The Jordan-Wigner transform can then implement the number operators :math:`a^\dagger_p a_p = n_{p}` as Pauli-Z rotations, via :math:`n_p = (1-\sigma_{z,p})/2`. 
+# The trick when implementing a double-factorized Hamiltonian is to use `Thouless’s theorem <https://joshuagoings.com/assets/Thouless_theorem.pdf>`__ [#Thouless1960]_ to construct a size :math:`2^{\text{n_orb_cas}} \times 2^{\text{n_orb_cas}}` unitary :math:`\mathbm{U}^{(\ell)}` that is induced by a the single-particle basis transformation :math:`U^{(\ell)}` (of size ``n_orb_cas`` :math:`\times` ``n_orb_cas``). 
+# The Jordan-Wigner transform can then turn the number operators :math:`a^\dagger_p a_p = n_{p}` into Pauli :math:`Z` rotations, via :math:`n_p = (1-\sigma_{z,p})/2`. 
 # Note the :math:`1/2` term will affect the global phase, and we will have to keep track of that carefully. 
-# Below is an illustration of the circuit we will use to implement the one- and two-eletron terms in our factorized Hamiltonian.
+# Below is an illustration of the circuit we will use to implement the one- and two-electron fragments in our factorized Hamiltonian.
 #
 # .. figure:: ../_static/demonstration_assets/xas/UZU_circuits.png
-#    :alt: One- and two-electron basis rotation and Pauli-Z rotation circuits.
+#    :alt: One- and two-electron basis rotation and Pauli :math:`Z` rotation circuits.
 #    :width: 80.0%
 #    :align: center
 #
-#    Figure 4: One- and two-electron term implementations in the time-evolution circuit (ignoring global phases). 
+#    Figure 4: One- and two-electron fragment implementations in the time-evolution circuit (ignoring global phases). 
 #    Basis rotations are applied to both spin sections of the register.
 #
-# We can use ``qml.BasisRotation`` to generate a `Givens decomposition <https://pennylane.ai/qml/demos/tutorial_givens_rotations>`__ for the single-body basis rotation determined by :math:`U^{(\ell)}`. 
+# We can use ``qml.BasisRotation`` to generate a `Givens decomposition <https://pennylane.ai/qml/demos/tutorial_givens_rotations>`__ for the single-particle basis rotation determined by :math:`U^{(\ell)}`. 
 # We will have to do this for both spin-halves of the register.
 
 def U_rotations(U, control_wires):
@@ -417,7 +418,7 @@ def U_rotations(U, control_wires):
 #    Figure 5: Double-phase trick to decompose expensive controlled-Z rotations into an uncontrolled-Z rotation sandwiched by CNOT gates.
 #
 # For the one-electron terms, we loop over spin and orbital index, and apply the Z rotations using this double-phase trick. 
-# The two-electron terms are implemented the same way, except the two-qubit rotations use ``qml.MultiRZ``.
+# The two-electron fragments are implemented the same way, except the two-qubit rotations use ``qml.MultiRZ``.
 
 from itertools import product
 
@@ -440,7 +441,7 @@ def Z_rotations(Z, step, is_one_electron_term, control_wires):
                 )
         globalphase = np.sum(Z) * step  # Phase from 1/2 term in Jordan-Wigner transform.
 
-    else:  # It's a two-electron term.
+    else:  # It's a two-electron fragment.
         for sigma, tau in product(range(2), repeat=2):
             for i, k in product(range(n_orb_cas), repeat=2):
                 if i != k or sigma != tau:  # Skip the one-electron correction terms.
@@ -458,18 +459,18 @@ def Z_rotations(Z, step, is_one_electron_term, control_wires):
 
 ######################################################################
 # .. note::
-#    For a derivation of the global phase accrued from the two-electron terms, see Appendix A in [#Fomichev2025]_.
+#    For a derivation of the global phase accrued from the two-electron fragments, see Appendix A in [#Fomichev2025]_.
 #
 # Now that we have functions for all the terms of our Hamiltonian, we can define our Trotter step. 
 # The function will implement the :math:`U` rotations and :math:`Z` rotations, and adjust the global phase from the core constant term. 
 # By tracking the last :math:`U` rotation used, we can implement two consecutive rotations at once as :math:`V^{(\ell)} = U^{(\ell-1)}(U^{(\ell)})^T`, halving the number of rotations required per Trotter step.
 #
-# Below, we define a function ``lie_trotter`` which applies the rotations for the one- and two-electron terms in one order, but can also reverse the order. 
+# Below, we define a function ``lie_trotter`` which applies the rotations for the one- and two-electron fragments in one order, but can also reverse the order. 
 # This can save another rotation step when we implement consecutive Trotter steps in higher-order Trotter schemes. 
 # At the end of the step, the core constant adjusts a global phase.
 
 
-def lie_trotter(step, prior_U, final_rotation, reverse=False):
+def first_order_trotter(step, prior_U, final_rotation, reverse=False):
     """Implements a Trotter step for the CDF Hamiltonian."""
     # Combine the one- and two-electron matrices.
     _U0 = np.expand_dims(U0, axis=0)
@@ -477,17 +478,17 @@ def lie_trotter(step, prior_U, final_rotation, reverse=False):
     _U = np.concatenate((_U0, U), axis=0)
     _Z = np.concatenate((_Z0, Z), axis=0)
 
-    num_two_electron_terms = U.shape[0]  # Number of fragments \ell.
-    is_one_body = np.array([True] + [False] * num_two_electron_terms)
+    num_two_electron_fragments = U.shape[0]  # Number of fragments \ell.
+    is_one_body = np.array([True] + [False] * num_two_electron_fragments)
     order = list(range(len(_Z)))
 
     if reverse:
         order = order[::-1]
 
-    for term in order:
-        U_rotations(prior_U @ _U[term], 1)
-        Z_rotations(_Z[term], step, is_one_body[term], 1)
-        prior_U = _U[term].T
+    for fragment in order:
+        U_rotations(prior_U @ _U[fragment], 1)
+        Z_rotations(_Z[fragment], step, is_one_body[fragment], 1)
+        prior_U = _U[fragment].T
 
     if final_rotation:
         U_rotations(prior_U, 1)
@@ -503,7 +504,7 @@ def lie_trotter(step, prior_U, final_rotation, reverse=False):
 # The returned circuit applies ``StatePrep`` to prepare the register in the previous quantum state, and then two ``lie_trotter`` evolutions for time ``step/2`` so that the total step size is ``step``.
 
 
-def trotter_circuit(dev, state, step):
+def second_order_trotter(dev, state, step):
     """Returns a second-order Trotter product circuit."""
     qubits = dev.wires.tolist()
 
@@ -513,8 +514,8 @@ def trotter_circuit(dev, state, step):
 
         # Main body of the circuit.
         prior_U = np.eye(n_orb_cas)  # No initial prior U, so set as identity matrix.
-        prior_U = lie_trotter(step / 2, prior_U=prior_U, final_rotation=False, reverse=False)
-        prior_U = lie_trotter(step / 2, prior_U=prior_U, final_rotation=True, reverse=True)
+        prior_U = first_order_trotter(step / 2, prior_U=prior_U, final_rotation=False, reverse=False)
+        prior_U = first_order_trotter(step / 2, prior_U=prior_U, final_rotation=True, reverse=True)
 
         return qml.state()
 
@@ -536,7 +537,7 @@ def meas_circuit(state):
 
 
 ######################################################################
-# We can only obtain both real and imaginary expectation values in a *simulated* circuit. 
+# We can only obtain both real and imaginary expectation values at once in a *simulated* circuit. 
 # An actual implementation would have to select real or imaginary by inserting a phase gate, like in the circuit below.
 #
 # .. figure:: ../_static/demonstration_assets/xas/hadamard_test_circuit.png
@@ -587,14 +588,14 @@ A = np.sum([L_j(alpha * t_j) for t_j in time_interval])
 shots_list = [int(round(total_shots * L_j(alpha * t_j) / A)) for t_j in time_interval]
 
 ######################################################################
-# Finally, we can run the simulation to determine the expectation values at each time step, which are related to the time-domain Green’s function.
+# Finally, we can run the simulation to determine the expectation values at each time step, which allow us to construct the time-domain Green’s function.
 
 expvals = np.zeros((2, len(time_interval)))  # Results list initialization.
 
 # Loop over cartesian coordinate directions.
 for rho in rhos:
 
-    if dipole_norm[rho] == 0:  # Skip if no excited states are coupled.
+    if dipole_norm[rho] == 0:  # Skip if no excited states.
         continue
 
     # Initialize state m_rho|I> (including the auxiliary qubit).
@@ -657,7 +658,7 @@ spectrum = np.array([f_domain_Greens_func(w) for w in wgrid])
 ######################################################################
 # Since our active space for :math:`\mathrm{H}_2` is small, we can easily calculate a classical spectrum for comparison. 
 # We do this using the ``mycasci`` instance that we used to determine the ground state, but instead solve for more states by increasing the number of roots in the ``fcisolver``. 
-# This will give us the energies of the coupled final states. 
+# This will give us the energies of the excited final states. 
 # We can also calculate the transition density matrix in the molecular orbital basis between those states and the initial state, :math:`\langle F| \hat m_\rho |I \rangle`. 
 # With the energies and the overlaps, we can compute the absorption cross section directly.
 
@@ -720,7 +721,7 @@ plt.show()
 # Core-valence separation approximation
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# For larger molecular instances, it may be valuable to restrict the terms coupled by the dipole operator to only include those of relevance for XAS, which are final states where a *core* electron is excited, i.e. there exists a hole in the core orbitals. 
+# For larger molecular instances, it may be valuable to restrict the excited states used to only include those of relevance for XAS, which are states where a *core* electron is excited, i.e. there exists a hole in the core orbitals. 
 # These are known as core-excited states, and lie significantly above the valence-excited states in energy. 
 # Typically the frequency range is focused on a target atom in a molecular cluster, and also near a transition energy, such as targeting core :math:`1s` electrons.
 #
