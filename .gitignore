@@ -16,10 +16,10 @@ demos_community.rst
 .test_figures/
 demo_requirements.txt
 **/*.egg-info/
-*.msi
-*.deb
+sg_execution_times.rst
 *.ipynb
-pandoc*.msi
+*.deb
+.test_figures/*
 *.pdf
 
 # Generated after installation
