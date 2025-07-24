@@ -22,12 +22,12 @@ is not a function over :mathbb:`R` or :mathbb:`Z`, but a quantum state. "General
 standard Fourier transform, but its group-theoretic generalisations [LINK TO RELATED DEMOS]. This is important, because
 [#Bermejo_Braccia]_ link a resource to a group -- essentially, by defining the set of unitaries that maps resource-free
 states to resource-free states as a "representation" of a group, which gets block-diagonalised to find a generalised Fourier basis.
-The intuition, however, is exactly the same as in the standard Fourier transform, where large higher-order Fourier
-coefficients indicate a less "smooth" function.
+The intuition, however, is exactly the same as in the standard Fourier transform: large higher-order Fourier
+coefficients indicate a less "smooth" or "resourceful" function.
 
 In this tutorial we will illustrate the idea of generalised Fourier analysis for resource theories with two simple examples.
-First we will look at a standard Fourier decomposition of a function from the perspective of resources, to introduce the
-basic idea. Secondly, we will use these concepts to analyse the entanglement
+First we will look at a standard Fourier decomposition of a function, but from the perspective of resources,in order to
+introduce the basic idea in a familiar setting. Secondly, we will use the same concepts to analyse the entanglement
  resource of quantum states, reproducing Figure 2 in [#Bermejo_Braccia]_.
 
 .. figure:: ../_static/demonstration_assets/resourcefulness/figure2_paper.png
@@ -38,16 +38,11 @@ basic idea. Secondly, we will use these concepts to analyse the entanglement
          a tensor product state with little entanglement has contributions in lower-order Fourier coefficients. The interpolation
          between the two extremes, exemplified by a Haar random state, has a Fourier spectrum in between.
 
-Luckily, in the case of entanglement as a resource, the bases for the subspaces are associated with Pauli operators,
-and generalised Fourier analysis can be done by computing Pauli expectations.
+Luckily, in the case of entanglement as a resource, the generalised Fourier coefficients can be computed using Pauli expectations.
 This saves us from diving too deep into representation theory. In fact, the tutorial should be informative without knowing much
-about groups at all!
-
-.. note::
-    Note that all methods discussed here are classical methods to analyse properties of quantum states,
-    and of course, they will scale only as much as the mathematical objects involved can be efficiently described classically.
-    It is a fascinating question in which situations the Fourier coefficients of a physical states could be read out on a quantum computer, which can
-    sometimes perform the block-diagonalisation efficiently.
+about groups at all! But of course, even in this simple case the numerical analysis scales exponentially with the number of qubits
+in general. It is a fascinating question in which situations the Fourier coefficients of a physical state could be read out
+on a quantum computer, which is known to sometimes perform the block-diagonalisation efficiently.
 
 
 Standard Fourier analysis through the lense of resources
@@ -61,9 +56,11 @@ computes the Fourier coefficients
 .. math::
         \hat{f}(k) = \frac{1}{\sqrt{N}\sum_{x=0}^{N-1} f(x) e^{\frac{2 \pi i}{N} k x}, k = 0,...,N-1
 
-Here, :math:`e^{\frac{2 \pi i}{N} k x}` is a basis for the space of functions over the integers, the so-called *Fourier basis*.
+In words, the Fourier coefficients are projections of the function :math:`f` onto the "Fourier" basis functions
+:math:`e^{\frac{2 \pi i}{N} k x}`. Note that we use a normalisation here that is consistent with a unitary transform that
+we construct as a matrix below.
 
-For example:
+Let's see this equation in action.
 """
 
 import matplotlib.pyplot as plt
@@ -72,21 +69,24 @@ import numpy as np
 N = 12
 
 def f(x):
-    """Some function"""
+    """Some function."""
     return 0.5*(x-4)**3
 
 def f_hat(k):
-    """Fourier coefficients of f"""
-    projections = [f(x)*np.exp(2 * np.pi * 1j * k * x / N) for x in range(N)]
-    return (1/np.sqrt(N)) * np.sum(projections)
+    """Fourier coefficients of f."""
+    projection = [ f(x) * np.exp(-2 * np.pi * 1j * k * x / N)/np.sqrt(N) for x in range(N)]
+    return  np.sum(projection)
 
 def plot(f, f_hat):
 
     fig, (ax1, ax2) = plt.subplots(2, 1)
-    ax1.bar(range(N), [f(x) for x in range(N)], color='dimgray')
+    ax1.bar(range(N), [np.real(f(x)) for x in range(N)], color='dimgray') # casting to real is needed in case we perform an inverse FT
     ax1.set_title(f"function f")
-    ax2.bar(range(N), [f_hat(k) for k in range(N)], color='dimgray')
+
+    ax2.bar(np.array(range(N))+0.05, [np.imag(f_hat(x)) for x in range(N)], color='lightpink', label="imaginary part")
+    ax2.bar(range(N), [np.real(f_hat(k)) for k in range(N)], color='dimgray', label="real part")
     ax2.set_title("Fourier coefficients")
+    plt.legend()
     plt.tight_layout()
     plt.show()
 
@@ -98,29 +98,29 @@ plot(f, f_hat)
 #
 # Well, let us look for the function with the least resource or complexity! For this we can just
 # work backwards: define a Fourier spectrum that only has a contribution in the lowest order coefficient,
-# and inverse Fourier transform to look at the function!
+# and apply the inverse Fourier transform to look at the function it corresponds to!
 #
 #
 
 def g_hat(k):
-    """The least complex Fourier spectrum possible"""
+    """The least complex Fourier spectrum possible."""
     if k==0:
         return 1
     else:
         return 0
 
 def g(x):
-    """Function whose Fourier spectrum is `g_hat`"""
-    projections = [g_hat(k)*np.exp(-2 * np.pi * 1j * k * x / N) for k in range(N)]
-    return (1/np.sqrt(N)) * np.sum(projections)
+    """Function whose Fourier spectrum is `g_hat`."""
+    projection = [g_hat(k) * np.exp(2 * np.pi * 1j * k * x / N)/np.sqrt(N) for k in range(N)]
+    return np.sum(projection)
 
 plot(g, g_hat)
 
 ######################################################################
 # Well, the function is constant. This makes sense, because we know that the decay of the Fourier coefficient
-# is related to the smoothness of a function (by defining how often it is differentiablle), and a
+# is related to the number of times a function is differentiable, which in turn is the technical definition of smoothness. A
 # constant function is maximally smooth -- it does not wiggle at all. In other words,
-# the resource of the standard Fourier transform is smoothness!
+# the resource of the standard Fourier transform is smoothness, and a resource-free function is constant!
 #
 
 ######################################################################
@@ -128,33 +128,52 @@ plot(g, g_hat)
 # ------------------------------------------
 #
 # Fourier transforms are intimately linked to groups (in fact, the x-domain :math:`0,...,N-1` is strictly speaking a group,
-# which you can learn more about [here]. Without expecting you to know group jargon, we have to establish a few concepts
+# which you can learn more about [here]). Without expecting you to know group jargon, we have to establish a few concepts
 # that generalise the above example to quantum states and more generic resources. The crucial idea is to
 # define a resource by fixing a set of vectors (later, quantum states) that are considered resource-free.
-# We also need to define unitary matrices that map free vectors to free vectors, and these matrices need to form a "unitary representation" of a group :math:`G`,
-# which is a matrix valued function :math:`R(g), g \in G` on the group.
+# We also need to define unitary matrices that map resource-free vectors to resource-free vectors,
+# and these matrices need to form a *unitary representation* of a group :math:`G`,
+# which is a matrix-valued function :math:`R(g), g \in G` on the group.
 # This is all we need to guarantee that the matrices can be simultaneously block-diagonalised, or written as a
-# direct sum of smaller matrix-valued functions over the group, :math:`r(g)`. Some of the blocks may be identical.
+# direct sum of smaller matrix-valued functions over the group, :math:`r^{\alpha}(g)`. Note that some of the blocks may be identical.
+# If you know group theory, then you will recognise that the :math:`r^{\alpha}(g)` are the *irreducible representations* of the group.
 #
-# These blocks are so-called irreducible representations of the group :math:`G`, which are fundamental concepts in
-# group theory [Refer to book]. What is important for us is that these smaller matrix valued functions define a
-# subspace [TODO: clarify how this works, it always confused me].
+# [TODO: image]
 #
-# A Fourier coefficient is nothing but a projection of a vector in :math:`V` onto one of these subspaces. In our standard
-# exmaple above, the subspaces are one-dimensional and spanned by the Fourier basis functions :math:`\chi_k(x) = e^{\frac{2 \pi i}{N} k x}`.
-# The projection is executed by the sum :math:`\sum_x f(x) \chi_k(x)`. The concept of these functions as irreducible
+#
+# What is important for us is that these smaller matrix-valued functions :math:`r^{\alpha}(g)` define a
+# subspace :math:`V_{\alpha, j}`, where the index :math:`j` accounts for the fact that there may be several copies of
+# an :math:`r^{\alpha}(g)` on the diagonal of :math:`R(g)`, each of which corresponds to one subspace.
+# [TODO: BASIS :math:`w^{(i)}_{\alpha, j}`].
+#
+# The Generalised Fourier Decomposition (GFD) purity is the length of a projection of a vector :math:`v \in V` onto one of these subspaces :math:`V_{\alpha, j}`,
+#
+# .. math::
+#           \mathcal{P}(v) = \sum_i  | \langle w^{(i)}_{\alpha, j}, v \rangle |^2.
+#
+# In our standard
+# example above, the subspaces are one-dimensional spaces spanned by the Fourier basis functions :math:`\chi_k(x) = e^{\frac{2 \pi i}{N} k x}`.
+# The vector space is the space of functions (if this is confusing, think of the function values as arranged in
+# N-dimensional vectors :math:`\vec{f}` and :math:`\vec{\chi}_k`).
+# The projection is executed by the sum :math:`\sum_x f(x) \chi_k(x) = \langle f, \chi_k`. In other words, the GFD purity
+# is the absolute square of the Fourier coefficient,
+#
+#.. math::
+#           \mathcal{P}(\vec{f}) =  | \vec{\chi}_k, \vec{f} \rangle |^2 = |\hat{f}|^2.
+#
+# Generalising from the standard Fourier basis functions to irreducible
 # representations allows us to generalise the Fourier transform to lots of other groups, and hence, resources.
 #
-# But what is the representation :math:`R(g)` for the standard Fourier transform? Let's follow the recipe:
+# So far so good, but what is the representation :math:`R(g)` for the standard Fourier transform? Let's follow the recipe:
 #
 # 1. We first need to consider our function :math:`f(0), ..., f(N-1)` as a vector :math:`[f(0), ..., f(N-1)]^T \in V = \mathbb{R}^N`.
-# 2. As argued above, the set of smoothness-free vectors correspond to constant functions, :math:`f(0) = ... = f(N-1)`.
-# 3. We need a set of unitary matrices that does not change the constantness of the vector. This set is given by permutation matrices,
+# 2. As argued above, the set of resource-free vectors correspond to constant functions, :math:`f(0) = ... = f(N-1)`.
+# 3. We need a set of unitary matrices that does not change the "constantness" of the vector. This set is given by permutation matrices,
 #    which swap the entries of the vector but do not change any of them.
-# 4. These matrices actually form a representation :math:`R(g)` for :math:`g \in G = Z_N`, the *regular representation*.
+# 4. The *circulant* permutation matrices can be shown to form a unitary representation :math:`R(g)` for :math:`g \in G = Z_N`, called the *regular representation*.
 # 5. We are now guaranteed that there is a basis change that diagonalises all matrices :math:`R(g)` together.
 #    (Note that the Fourier transform is sometimes defined as the basis change that block-diagonalises the regular representation!) As mentioned, this is
-#    a block-diagonalisation where the blocks happen to be 1-dimensional, as is the rule for all "Abelian" groups.
+#    a block-diagonalisation where the blocks happen to be 1-dimensional, as is the rule for so-called "Abelian" groups.
 # 6. The values on the diagonal of :math:`R(g)` under this basis change are exactly the Fourier basis functions `:math:`e^{\frac{2 \pi i}{N} k x}`.
 #
 # Let's verify this!
@@ -163,7 +182,7 @@ plot(g, g_hat)
 #
 
 f_vec = np.array([f(x) for x in range(N)])
-f_hat_vec = np.array([f(k) for k in range(N)])
+f_hat_vec = np.array([f_hat(k) for k in range(N)])
 
 ######################################################################
 # The Fourier transform then becomes a matrix multiplication with the matrix:
@@ -184,31 +203,44 @@ f_hat_vec = np.array([f(k) for k in range(N)])
 from scipy.linalg import dft
 F = dft(N)/np.sqrt(N)
 
-# TODO: NOT YET THE SAME
-print(F.dot(f_vec), f_hat_vec)
+# compare to what we previously computed
+print(np.allclose(F @ f_vec, f_hat_vec))
 
 
 ######################################################################
-# This matrix F is supposed to be the basis transform that diagonalises
-# a permutation matrix (which was a unitary representation evaluated at some group element).
+# Above we claimed that this matrix F is the basis transform that diagonalises
+# a permutation matrix (in other words, the unitary representation evaluated at some group element).
 #
 
-# create a permutation matrix
-P = np.eye(N)
-np.random.shuffle(P)
+# create a circulant permutation matrix
+i = np.random.randint(0, N)
+first_row = np.zeros(N)
+first_row[i] = 1
+
+# initialize the matrix with the first row
+P = np.zeros((N, N))
+P[0, :] = first_row
+
+# generate subsequent rows by cyclically shifting the previous row
+for i in range(1, N):
+    P[i, :] = np.roll(P[i-1, :], 1)
+
 
 # change into the Fourier basis using F
 np.set_printoptions(precision=2, suppress=True)
-# TODO: Not yet working
-print(F @ P @ F.conj().T)
+P_F =  F @ P @ np.linalg.inv(F)
+
+# check if the resulting matrix is diagonal
+# trick: remove diagonal and make sure the remainder is zero
+print(np.allclose(P_F - np.diag(np.diagonal(P_F)), np.zeros((N,N)) ))
 
 
 ######################################################################
 # To recap, we saw that the standard Fourier analysis can be generalised by
 # interpreting "smoothness" or "constantness" as a resource, linking it to a vector space and a group
 # representation and (block-)diagonalising the representation. The blocks, here one-dimensional,
-# form a basis for subspaces, and Fourier coefficients are just projections of some vector (here,
-# a function) into these subspaces.
+# form a basis for subspaces. The GFD purities suggested in [#Bermejo_Braccia]_ as a resource fingerprint
+# are just projections of some vector (here, a function) onto the basis vectors and taking the absolute square.
 #
 # Armed with this recipe, we can now try to analyse entanglement as a resource,
 # and density matrices describing quantum states as vectors in a vector space :math:`L(H)`.
