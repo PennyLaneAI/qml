@@ -228,14 +228,9 @@ print(f'Created {n} qubit state with qubits {partitions[0]} unentangled from {pa
 # 
 # After this register initialization, the StateHSP circuit involves three steps:
 #
-# 1. Apply a **Hadamard** to each qubit in the group register. This puts the group register in a uniform superposition of all
-# group elements, which up to normalization we can write as :math:`\sum_{g\in G} |g\rangle`.
+# 1. Apply a **Hadamard** to each qubit in the group register. This puts the group register in a uniform superposition of all group elements, which up to normalization we can write as :math:`\sum_{g\in G} |g\rangle`.
 #
-# 2. Apply a **controlled SWAP** operator. This acts on all 3 registers by mapping :math:`|g\rangle|\psi\rangle|\psi\rangle`
-# to :math:`|g\rangle\text{SWAP}_g(|\psi\rangle|\psi\rangle)`. Here, :math:`\text{SWAP}_g` performs swaps at the
-# positions indicated by :math:`g`; for example if :math:`g=10101` then qubits 0, 2 and 4 in the first
-# copy of :math:`|\psi\rangle` will get swapped with the corresponding qubits in the second copy of
-# :math:`|\psi\rangle`.
+# 2. Apply a **controlled SWAP** operator. This acts on all 3 registers by mapping :math:`|g\rangle|\psi\rangle|\psi\rangle` to :math:`|g\rangle\text{SWAP}_g(|\psi\rangle|\psi\rangle)`. Here, :math:`\text{SWAP}_g` performs swaps at the positions indicated by :math:`g`; for example if :math:`g=10101` then qubits 0, 2 and 4 in the first copy of :math:`|\psi\rangle` will get swapped with the corresponding qubits in the second copy of :math:`|\psi\rangle`.
 #
 # 3. Apply a **Hadamard** to each qubit in the group register.
 # 
