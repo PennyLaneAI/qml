@@ -83,7 +83,9 @@ class Demo:
     @property
     def executable(self) -> bool:
         """Whether this demo can be executed."""
-        return self.name.startswith("tutorial_")
+        with open(self.metadata_file, "r") as f:
+            metadata = json.load(f)
+        return metadata.get("executable", self.name.startswith("tutorial_"))
 
     @functools.cached_property
     def requirements(self) -> frozenset[str]:

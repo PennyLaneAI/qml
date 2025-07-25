@@ -81,6 +81,8 @@ sphinx_gallery_conf = {
     # and skip those that don't. If the following option is not provided,
     # all example scripts in the 'examples_dirs' folder will be skiped.
     "filename_pattern": r"tutorial",
+    # Use the following filter once the V2 pipeline is live
+    # "filename_pattern": r"\.py$",
     "pypandoc": True,
     # first notebook cell in generated Jupyter notebooks
     "first_notebook_cell": (
