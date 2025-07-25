@@ -392,4 +392,4 @@ M.null_space()
 ######################################################################
 # About the author
 # ----------------
-# # .. include:: ../_static/authors/petar_simidzija.txt
+# 
