@@ -1,8 +1,8 @@
 r"""How to use Qualtran with PennyLane
 ======================================
 
-The PennyLane-Qualtran integration combines the best features of both platforms, creating a more
-powerful and flexible workflow.
+PennyLane can now combine the best features of both PennyLane and Qualtran, using our latest
+PennyLane-Qualtran integration.
 
 This integration allows you to:
 
