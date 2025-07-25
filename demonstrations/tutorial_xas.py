@@ -74,7 +74,7 @@ Quantum algorithm in the time-domain
 
 Both the initial state :math:`|I\rangle` and the dipole operator acting on the initial state :math:`\hat m_\rho|I\rangle` can be determined classically, and we’ll demonstrate how to do that later. 
 With the initial state computed, we will use a mathematical trick called a *frequency-domain* `Green’s function <https://en.wikipedia.org/wiki/Green%27s_function>`__ to determine the absorption cross section. 
-We can write the cross section as the imaginary part of the following Green’s function (see Section IIB in [#Fomichev2025_])
+We can write the cross section as the imaginary part of the following Green’s function (see Section IIB in [#Fomichev2025]_)
 
 .. math:: \mathcal{G}_\rho(\omega) = \langle I|\hat m_\rho \frac{1}{\hat H -E_I -\omega +i\eta} \hat m_\rho |I\rangle\,.
 
@@ -315,7 +315,7 @@ def initial_circuit(wf):
 # We will double-factorize and compress the Hamiltonian to approximate it as a series of fragments, each of which can be fast-forwarded in a Trotter product formula.
 #
 # If you haven’t yet, go read the demo `“How to build compressed double-factorized Hamiltonians” <https://pennylane.ai/qml/demos/tutorial_how_to_build_compressed_double_factorized_hamiltonians>`__, because that is exactly what we are going to do! 
-# You could also look at section III in[#Fomichev2025_].
+# You could also look at section III in [#Fomichev2025]_.
 #
 # Electronic Hamiltonian
 # ~~~~~~~~~~~~~~~~~~~~~~
@@ -386,7 +386,7 @@ Z0 = np.diag(eigenvals)
 # The main work of our algorithm will be to implement time evolution with respect to our Hamiltonian fragments by using Trotter product formulas, and measure the expectation value of that time evolution operator for various times.
 # Let’s start by writing functions that implement the time evolution for each Hamiltonian fragment, which will be called by our Trotter circuit function. 
 #
-# The trick when implementing a double-factorized Hamiltonian is to use `Thouless’s theorem <https://joshuagoings.com/assets/Thouless_theorem.pdf>`__ [#Thouless1960]_ to construct a size :math:`2^{n_\mathrm{cas}} \times 2^{n_\mathrm{cas}}` unitary :math:`\bm{U}^{(\ell)}` that is induced by a the single-particle basis transformation :math:`U^{(\ell)}` (of size :math:`n_\mathrm{cas} \times n_\mathrm{cas}`). 
+# The trick when implementing a double-factorized Hamiltonian is to use `Thouless’s theorem <https://joshuagoings.com/assets/Thouless_theorem.pdf>`__ [#Thouless1960]_ to construct a size :math:`2^{n_\mathrm{cas}} \times 2^{n_\mathrm{cas}}` unitary :math:`\bf{U}^{(\ell)}` that is induced by a the single-particle basis transformation :math:`U^{(\ell)}` (of size :math:`n_\mathrm{cas} \times n_\mathrm{cas}`). 
 # The Jordan-Wigner transform can then turn the number operators :math:`a^\dagger_p a_p = n_{p}` into Pauli :math:`Z` rotations, via :math:`n_p = (1-\sigma_{z,p})/2`. 
 # Note the :math:`1/2` term will affect the global phase, and we will have to keep track of that carefully. 
 # Below is an illustration of the circuit we will use to implement the one- and two-electron fragments in our factorized Hamiltonian.
@@ -789,28 +789,11 @@ plt.show()
 #    battery materials on a quantum computer”. `arXiv preprint arXiv:2405.11015
 #    (2024) <https://arxiv.org/abs/2405.11015>`__.
 #
-# .. [#Loaiza2023]
-#
-#    Ignacio Loaiza and Artur F Izmaylov, “Block-invariant symmetry shift: Preprocessing technique for
-#    second-quantized Hamiltonians to improve their decompositions to linear combination of unitaries”.
-#    `J. Chem. Theory Comput. 19, 22, 8201–8209 (2023) <https://doi.org/10.1021/acs.jctc.3c00912>`__.
-#
-# .. [#Yen2021]
-#
-#    Tzu-Ching Yen and Artur F. Izmaylov, “Cartan subalgebra approach to efficient measurements of
-#    quantum observables”, `PRX Quantum 2, 040320
-#    (2021) <https://doi.org/10.1103/PRXQuantum.2.040320>`__.
-#
 # .. [#Cohn2021]
 #
 #    Jeffrey Cohn, Mario Motta, and Robert M. Parrish, “Quantum filter diagonalization with compressed
 #    double-factorized Hamiltonians”. `PRX Quantum 2, 040352
 #    (2021) <https://doi.org/10.1103/PRXQuantum.2.040352>`__.
-#
-# .. [#Childs2019]
-#
-#    Andrew M. Childs, Aaron Ostrander, and Yuan Su, “Faster quantum simulation by randomization”. `Quantum
-#    3, 182 (2019) <https://doi.org/10.22331/q-2019-09-02-182>`__.
 #
 # .. [#Sherrill2005]
 #
@@ -822,6 +805,18 @@ plt.show()
 #    David J. Thouless, “Stability conditions and nuclear rotations in the Hartree-Fock theory”. `Nuclear
 #    Physics, 21, 225-232 (1960) <https://doi.org/10.1016/0029-5582(60)90048-1>`__.
 #
+# .. [#Loaiza2023]
+#
+#    Ignacio Loaiza and Artur F Izmaylov, “Block-invariant symmetry shift: Preprocessing technique for
+#    second-quantized Hamiltonians to improve their decompositions to linear combination of unitaries”.
+#    `J. Chem. Theory Comput. 19, 22, 8201–8209 (2023) <https://doi.org/10.1021/acs.jctc.3c00912>`__.
+#
+# .. [#Childs2019]
+#
+#    Andrew M. Childs, Aaron Ostrander, and Yuan Su, “Faster quantum simulation by randomization”. `Quantum
+#    3, 182 (2019) <https://doi.org/10.22331/q-2019-09-02-182>`__.
+#
+
 
 ######################################################################
 # About the author
