@@ -15,7 +15,7 @@ quantum algorithms, programs, and subroutines.
 """
 
 ######################################################################
-# From Qualtran to Pennylane
+# From Qualtran to PennyLane
 # --------------------------
 #
 # With a little bit of work, you can be using Qualtran Bloqs in your PennyLane circuits in no time!
@@ -39,17 +39,17 @@ print(bloq_as_op)
 #
 #    Since Qualtran Bloqs don't know what wires to act on, we need to provide that information to `FromBloq`
 #    accordingly. If you're unsure about what wires to provide, you can use the ``qml.bloq_registers``
-#    helper function. This function creates registers based on the signature of the qualtran Bloq.
+#    helper function. This function creates registers based on the signature of the Qualtran Bloq.
 #
 #   .. code-block:: python
 #        
 #       qml.bloq_registers(XGate())
 #
-#   This will create registers with with the register names in accordance to the Bloq's signature. 
+#   This will create registers with the register names in accordance to the Bloq's signature. 
 #   Here, we got just one "q" register with a single qubit, which is what we expected for the `XGate`.
 
 ######################################################################
-# In this simple example, we wrapped Qualtran's `XGate` using `FromBloq``. We can see that
+# In this simple example, we wrapped Qualtran's `XGate` using `FromBloq`. We can see that
 # the output is a :class:`~.pennylane.io.FromBloq` instance, whose properties would be the same
 # PennyLane's PauliX operator.
 #
@@ -86,7 +86,7 @@ qubitization_qpe = QubitizationQPE(
     walk, LPResourceState.from_standard_deviation_eps(qpe_eps)
 )
 
-# For drawing & analyis
+# For drawing & analysis
 from qualtran.drawing import show_call_graph, show_counts_sigma
 from qualtran.resource_counting.generalizers import ignore_split_join
 
@@ -226,7 +226,7 @@ show_counts_sigma(wrapped_sigma)
 # Conclusion
 # ----------
 # In this how to, we demonstrated how to use the features in the integration with Qualtran. Whether
-# that is to leverage Qualtran's powerful subroutines in  Pennylane circuits, or to analyze and 
+# that is to leverage Qualtran's powerful subroutines in  PennyLane circuits, or to analyze and 
 # reason about PennyLane objects using Qualtran, we are confident that this tool will help speed up
 # your research and make new advances in quantum computing.
 #
