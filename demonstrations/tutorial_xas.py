@@ -47,7 +47,7 @@ Observable: absorption cross-section
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 In XAS experiments, the absorption cross section as a function of the frequency of incident X-rays :math:`\sigma_A(\omega)` is measured for a given material. 
-This is related to the rate of absorption of X-ray photons of various energies. 
+This is proportional to the rate of absorption of X-ray photons of various energies. 
 For our situation, the electrons in the molecular cluster start in a ground molecular state :math:`|I\rangle` with energy :math:`E_I`. 
 This ground state will be excited to states :math:`|F\rangle` with energies :math:`E_F` by the radiative field through the action of the dipole operator :math:`\hat m_\rho,` where :math:`\rho` is any of the Cartesian directions :math:`\{x,y,z\}`.
 
@@ -571,7 +571,9 @@ time_interval = tau * jrange
 
 ######################################################################
 # Minimizing the number of shots we require to obtain the necessary expectation value statistics will improve the efficiency of our algorithm. 
-# One way to do this is to employ a sampling distribution that takes advantage of the decaying Lorentzian kernel, exponentially reducing the shot allocation for longer evolution times [#Fomichev2025]_. 
+# One way to do this is to employ a sampling distribution that takes advantage of the decaying Lorentzian kernel [#Fomichev2025]_. 
+# The contribution of longer evolution times to the overall :math:`G(\omega)` are exponentially suppressed by the :math:`e^{-\eta t}` factor. 
+# Reducing the number of shots allocated to long times by this factor can save the total number of shots needed.
 # This is implemented below by creating ``shots_list``, which distributes the ``total_shots`` among the time steps, weighted exponentially by the Lorentzian width. 
 # The parameter :math:`\alpha` can adjust this weighting, s.t. for :math:`\alpha > 1` there is more weight at shorter times.
 
@@ -719,6 +721,8 @@ plt.show()
 # Looking at the spectrum, we can see there is one strong peak. 
 # This is expected because of the dominant frequency we can see in Figure 7.
 # There also appears to be two small peaks at slightly higher energy.
+#
+# 
 # 
 # Core-valence separation approximation
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
