@@ -44,7 +44,7 @@ Simulating reference spectra requires calculating the observable of the experime
 We will describe this quantity below and then explain how a *time-domain* simulation algorithm can estimate it.
 
 Observable: absorption cross-section
-~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In XAS experiments, the absorption cross section as a function of the frequency of incident X-rays :math:`\sigma_A(\omega)` is measured for a given material. 
 This is proportional to the rate of absorption of X-ray photons of various energies. 
@@ -622,6 +622,10 @@ for rho in rhos:
         expvals[:, i] += dipole_norm[rho]**2 * np.array(measurement).real
 
 ######################################################################
+# To save simulation time when simulating this algorithm on a classical computer, we are starting with the propagated state we measured in the previous time step.
+# This way, we only have to compute *one step* every new time step.
+# This is not possible on a real quantum computer -- you would have to start from scratch every time you measure the state.
+#  
 # Plotting the time-domain output, we see there is one clear frequency, so we will expect one peak in our spectrum.
 
 import matplotlib.pyplot as plt
