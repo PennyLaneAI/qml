@@ -45,16 +45,16 @@ print(bloq_as_op)
 #
 # Since Qualtran Bloqs don't know what wires to act on, we need to provide that information to 
 # `FromBloq` accordingly. If you're unsure about what wires to provide, you can use the 
-# ``qml.bloq_registers`` helper function. This function creates registers based on the signature 
+# :func:`~.pennylane.bloq_registers` helper function. This function creates registers based on the signature 
 # of the qualtran Bloq.
 
 print(qml.bloq_registers(XGate()))
 
 ######################################################################
 # This will create registers with with the register names in accordance to the Bloq's signature. 
-# Here, we got just one "q" register with a single qubit, which is what we expected for the `XGate`.
+# Here, we got just one "q" register with a single qubit, which is what we expected for the ``XGate``.
 #
-# Now, let's verify that `XGate` performs as expected in a PennyLane circuit.
+# Now, let's verify that ``XGate``` performs as expected in a PennyLane circuit.
 
 dev = qml.device("default.qubit")
 @qml.qnode(dev)
@@ -64,9 +64,9 @@ def circuit():
 
 print(circuit())
 ######################################################################
-# Wow! Like magic, we can use Qualtran's `XGate`` just like we would use the PauliX operator.
+# Wow! Like magic, we can use Qualtran's ``XGate`` just like we would use the ``PauliX`` operator.
 # But wait, there's more! We can convert high-level abstract Bloqs as well. Here, we
-# defined some `QubitizationQPE` Bloq in Qualtran. We first do some analysis in Qualtran
+# defined some ``QubitizationQPE`` Bloq in Qualtran. We first do some analysis in Qualtran
 # and subsequently hand it off to PennyLane.
 
 import numpy as np
@@ -130,17 +130,17 @@ print(qml.FromBloq(qubitization_qpe, wires=range(n_qubits)).decomposition())
 ######################################################################
 # Smart defaults
 # --------------
-# By default, `qml.to_bloq` tries its best to translate 
+# By default, ``qml.to_bloq``` tries its best to translate 
 # PennyLane objects to Qualtran-native objects. This is done through a combination of smart 
 # defaults and direct mappings. This makes certain Qualtran
 # functionalities, such as gate counting and generalizers, work more seamlessly.
-# Here, PennyLane's `PauliX` operator is mapped directly to Qualtran's `XGate`.
+# Here, PennyLane's ``PauliX`` operator is mapped directly to Qualtran's ``XGate``.
 
 op_as_bloq = qml.to_bloq(qml.X(0))
 print(op_as_bloq)
 
-# Not all PennyLane operators are as straightforward to map as the PauliX operator. For example, 
-# PennyLane's Quantum Phase Estimation could be mapped to a variety of Qualtran Bloqs. In cases
+# Not all PennyLane operators are as straightforward to map as the ``PauliX`` operator. For example, 
+# PennyLane's ``Quantum Phase Estimation`` could be mapped to a variety of Qualtran Bloqs. In cases
 # where the mapping is ambiguous, we get the smart default:
 
 from qualtran.drawing import draw_musical_score,  get_musical_score_data
@@ -153,7 +153,7 @@ fig.tight_layout()
 ######################################################################
 # Here, the smart default is Qualtran's ``TextbookQPE`` where ``ctrl_state_prep`` is Qualtran's 
 # ``RectangularWindowState``. But what if we wanted to use a different Bloq for our 
-# `ctrl_state_prep`? In this case, we turn to custom mappings.
+# ``ctrl_state_prep``? In this case, we turn to custom mappings.
 #  
 # Custom mapping
 # --------------
@@ -192,8 +192,8 @@ print(type(qfunc_as_bloq))
 # Wrapping
 # --------
 #
-# Functionally, wrapping a quantum function or operator as a `ToBloq` is similar to wrapping a Bloq
-# as a `FromBloq`. A wrapped operator or Qfunc now acts like a Bloq, which means it can be analyzed
+# Functionally, wrapping a quantum function or operator as a ``ToBloq`` is similar to wrapping a Bloq
+# as a ``FromBloq``. A wrapped operator or Qfunc now acts like a Bloq, which means it can be analyzed
 # using the language of Qualtran to simulate algorithms, estimate resource requirements, draw
 # diagrams, and more. 
 #
@@ -206,8 +206,8 @@ fig.tight_layout()
 
 ######################################################################
 # Notice the differences between mapping and wrapping. When we map, the drawn musical score is in
-# terms of native Qualtran Bloqs such as `Allocate`. When we wrap, the musical score has the 3 
-# wires explicitly drawn and handled, because there is no PennyLane `Allocate` operator.
+# terms of native Qualtran Bloqs such as ``Allocate``. When we wrap, the musical score has the 3 
+# wires explicitly drawn and handled, because there is no PennyLane ``Allocate`` operator.
 #
 # Let's see how mapping and wrapping affects our resource count estimates.
 
@@ -222,13 +222,13 @@ show_counts_sigma(wrapped_sigma)
 # Here, we can clearly see that the resource counts for the two methods are distinctly different.
 # This is because the underlying implementations for the two QPE operators differ.
 #
-# When Qualtran computes the resource counts for a `Bloq`, it first checks if there is a call graph
+# When Qualtran computes the resource counts for a ``Bloq``, it first checks if there is a call graph
 # defined. If it is, Qualtran uses that call graph to compute the resource count estimates. If it
 # is not, Qualtran uses the decomposition to compute the resource count estimates.
 #
-# For wrapped `ToBloq`s, call graphs are generally not defined. This means the decompositions are
+# For wrapped ``ToBloq``s, call graphs are generally not defined. This means the decompositions are
 # used to compute the counts. However, since computing decompositions is computationally expensive,
-# many PennyLane templates, such as QPE, have call graphs defined even when wrapped as a `ToBloq`.
+# many PennyLane templates, such as QPE, have call graphs defined even when wrapped as a ``ToBloq``.
 # By defining these call graphs, you can now efficiently compute resource count estimates for 
 # circuits that may require thousands of qubits and trillions of gates. 
 #
