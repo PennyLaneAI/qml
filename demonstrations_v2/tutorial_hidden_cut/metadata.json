@@ -1,0 +1,57 @@
+{
+    "title": "The hidden cut problem for locating unentanglement",
+    "authors": [
+        {
+            "username": "simidzija"
+        }
+    ],
+    "dateOfPublication": "2025-07-25T10:00:00+00:00",
+    "dateOfLastModification": "2025-07-25T10:00:00+00:01",
+    "categories": [
+        "Algorithms"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_hidden_cut.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_hidden_cut.png"
+        }
+    ],
+    "seoDescription": "Learn about a quantum algorithm that determines how to cut a many-body quantum state into unentangled components.",
+    "doi": "",
+    "references": [
+        {
+            "id": "Bouland2024",
+            "type": "article",
+            "title": "The State Hidden Subgroup Problem and an Efficient Algorithm for Locating Unentanglement",
+            "authors": "Adam Bouland, Tudor Giurgică-Tiron, John Wright",
+            "year": "2024",
+            "journal": "STOC '25",
+            "doi": "10.1145/3717823.3718118",
+            "url": "https://doi.org/10.1145/3717823.3718118"
+        }
+    ],
+    "basedOnPapers": ["10.1145/3717823.3718118"],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_qft",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_qft_arithmetics",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_period_finding",
+            "weight": 1.0
+        }
+    ]
+}
