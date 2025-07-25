@@ -1,29 +1,33 @@
 r"""How to use Qualtran with PennyLane
 ======================================
 
-As interest has grown in quantum computing, so have the number of tools available that help us 
-express and analyze quantum circuits. One such tool is Qualtran: a set of abstractions for
-representing quantum programs and a library of quantum algorithms expressed in that language.
+The PennyLane-Qualtran integration combines the best features of both platforms, creating a more
+powerful and flexible workflow.
 
-With the PennyLane-Qualtran integration, we can leverage Qualtran's expansive library of algorithms
-as if they were PennyLane operators. We go from abstract, high-level subroutines to well-defined 
-operators that can run directly in our quantum circuits.
+This integration allows you to:
 
-In the other direction, we can convert PennyLane circuits and operators to Qualtran Bloqs just as
-easily. This allows us to use Qualtran's tools and abstractions for expressing and reasoning about
-quantum algorithms, programs, and subroutines.
+* **Use Qualtran's subroutines in PennyLane:** Seamlessly incorporate Qualtran's quantum
+subroutines, known as ``bloqs``, directly in your PennyLane simulations and workflows.
+* **Analyze PennyLane circuits with Qualtran:** Leverage Qualtran's advanced analysis tools to
+estimate the computational resource costs of your PennyLane circuits.
+
+In this demo, we want to show you how easy it is to use PennyLane and Qualtran together.
+We'll start by focusing on the first key capability: embedding a Qualtran ``Bloq`` in a
+PennyLane ``QNode``.
 """
 
 ######################################################################
 # From Qualtran to PennyLane
 # --------------------------
 #
-# With a little bit of work, you can be using Qualtran Bloqs in your PennyLane circuits in no time!
-# You only need one class:
+# For those unfamiliar, Qualtran (quantum algorithms translator) is a set of abstractions for 
+# representing quantum programs and a library of quantum algorithms (Bloqs) expressed in that 
+# language.
 #
-# - :class:`~pennylane.io.FromBloq`: wraps an entire Qualtran ``Bloq`` as a 
-#   PennyLane operator. It faithfully converts any Bloq, decomposition and all, into a
-#   operator you can treat like you would any other.
+# With a little bit of work, you can be using Qualtran Bloqs in your PennyLane circuits in no time!
+# You only need one class: :class:`~pennylane.FromBloq`. It wraps an entire Qualtran ``Bloq`` as a 
+# PennyLane operator. It faithfully converts any Bloq, including its decomposition, into a operator
+# you can treat like you would any other.
 #
 # Let's see how it works!
 
@@ -35,25 +39,22 @@ bloq_as_op = qml.FromBloq(XGate(), wires=0)
 print(bloq_as_op)
 
 ######################################################################
-# .. note ::
-#
-#    Since Qualtran Bloqs don't know what wires to act on, we need to provide that information to `FromBloq`
-#    accordingly. If you're unsure about what wires to provide, you can use the ``qml.bloq_registers``
-#    helper function. This function creates registers based on the signature of the Qualtran Bloq.
-#
-#   .. code-block:: python
-#        
-#       qml.bloq_registers(XGate())
-#
-#   This will create registers with the register names in accordance to the Bloq's signature. 
-#   Here, we got just one "q" register with a single qubit, which is what we expected for the `XGate`.
-
-######################################################################
-# In this simple example, we wrapped Qualtran's `XGate` using `FromBloq`. We can see that
+# In this simple example, we wrapped Qualtran's `XGate` using `FromBloq``. We can see that
 # the output is a :class:`~.pennylane.io.FromBloq` instance, whose properties would be the same
 # PennyLane's PauliX operator.
 #
-# Let's verify this by putting it into a circuit and executing it.
+# Since Qualtran Bloqs don't know what wires to act on, we need to provide that information to 
+# `FromBloq` accordingly. If you're unsure about what wires to provide, you can use the 
+# ``qml.bloq_registers`` helper function. This function creates registers based on the signature 
+# of the qualtran Bloq.
+
+print(qml.bloq_registers(XGate()))
+
+######################################################################
+# This will create registers with with the register names in accordance to the Bloq's signature. 
+# Here, we got just one "q" register with a single qubit, which is what we expected for the `XGate`.
+#
+# Now, let's verify that `XGate` performs as expected in a PennyLane circuit.
 
 dev = qml.device("default.qubit")
 @qml.qnode(dev)
@@ -100,7 +101,7 @@ print(qml.FromBloq(qubitization_qpe, wires=range(n_qubits)).decomposition())
 ######################################################################
 # Amazing! The decomposition is exactly what we expected. It's exactly like using a PennyLane
 # operator, except the underlying decomposition is what Qualtran has defined. Neat!
-######################################################################
+#
 # From PennyLane to Qualtran
 # --------------------------
 #
@@ -122,19 +123,20 @@ print(qml.FromBloq(qubitization_qpe, wires=range(n_qubits)).decomposition())
 # - Wrapping: Think of this as an analogue of `FromBloq`. It faithfully converts any operator or
 #   Qfunc, decompositions and all, into a Bloq. The output is a :class:`~pennylane.io.ToBloq` instance.
 #
-# Holding all these options together is our trusty function :func:`~pennylane.io.to_bloq`. In the
+# Holding all these options together is our trusty function :func:`~pennylane.to_bloq`. In the
 # following sections, we'll explore how we can wield this powerful function to get all the
 # functionality introduced above.
 #
 ######################################################################
-# Smart defaults and custom mapping
-# ---------------------------------
+# Smart defaults
+# --------------
 # By default, `qml.to_bloq` tries its best to translate 
 # PennyLane objects to Qualtran-native objects. This is done through a combination of smart 
 # defaults and direct mappings. This makes certain Qualtran
 # functionalities, such as gate counting and generalizers, work more seamlessly.
+# Here, PennyLane's `PauliX` operator is mapped directly to Qualtran's `XGate`.
 
-op_as_bloq = qml.to_bloq(qml.X(0), map_ops=True, custom_map=None) # `map_ops` is `True` by default
+op_as_bloq = qml.to_bloq(qml.X(0))
 print(op_as_bloq)
 
 # Not all PennyLane operators are as straightforward to map as the PauliX operator. For example, 
@@ -150,8 +152,13 @@ fig.tight_layout()
 
 ######################################################################
 # Here, the smart default is Qualtran's ``TextbookQPE`` where ``ctrl_state_prep`` is Qualtran's 
-# ``RectangularWindowState``. If we wanted to use ``LPResourceState``, rather than 
-# ``RectangularWindowState``, we can override the smart default and pass in a custom map.
+# ``RectangularWindowState``. But what if we wanted to use a different Bloq for our 
+# `ctrl_state_prep`? In this case, we turn to custom mappings.
+#  
+# Custom mapping
+# --------------
+# To use ``LPResourceState``, rather than  ``RectangularWindowState``, we can override the smart
+# default by passing in a custom map.
 
 from qualtran.bloqs.phase_estimation import LPResourceState
 from qualtran.bloqs.phase_estimation.text_book_qpe import TextbookQPE
@@ -171,42 +178,38 @@ fig.tight_layout()
 # We see that ``RectangularWindowState`` has been switched out for the ``LPResourceState`` we
 # defined in the custom map. 
 #
-#######################################################################
-# .. note ::
-#
-#    When a quantum function or operator does not have a mapping - a direct Qualtran equivalent 
-#    or smart default - the circuit is wrapped as a `ToBloq` Bloq.
-#
-#   .. code-block:: python
-#        
-#       from qualtran.drawing import show_bloq
-#
-#       def circ():
-#           qml.X(0)
-#           qml.X(1)
-#
-#       qfunc_as_bloq = qml.to_bloq(circ)
-#       print(type(qfunc_as_bloq))
-#
+# When a quantum function or operator does not have a mapping - a direct Qualtran equivalent 
+# or smart default - the circuit is wrapped as a `ToBloq` Bloq
+
+def circ():
+    qml.X(0)
+    qml.X(1)
+
+qfunc_as_bloq = qml.to_bloq(circ)
+print(type(qfunc_as_bloq))
+
 ######################################################################
 # Wrapping
 # --------
 #
-# These two implementations, while similar on a high level, are not exactly the same as the
-# implementation in PennyLane. To make our ``qpe_bloq`` exactly the same as its PennyLane
-# original, set ``map_ops`` to ``False``. This wraps the ``qpe_bloq`` as a ``ToBloq`` Bloq,
-# whose information is based on that of the original PennyLane object.
+# Functionally, wrapping a quantum function or operator as a `ToBloq` is similar to wrapping a Bloq
+# as a `FromBloq`. A wrapped operator or Qfunc now acts like a Bloq, which means it can be analyzed
+# using the language of Qualtran to simulate algorithms, estimate resource requirements, draw
+# diagrams, and more. 
+#
+# We can choose to wrap our ``qpe_bloq`` simply by setting ``map_ops`` to ``False``. This wraps the 
+# ``qpe_bloq`` as a ``ToBloq`` Bloq, whose information is based on that of the original PennyLane object.
 
 wrapped_qpe_bloq = qml.to_bloq(op, map_ops=False)
 fig, ax = draw_musical_score(get_musical_score_data(wrapped_qpe_bloq.decompose_bloq()))
 fig.tight_layout()
 
 ######################################################################
-# Here, we can clearly see the differences between the two methods. When we map, qubit allocation
-# is handled with the use of Qualtran's bookkeeping bloq `Allocate`. Since there is no PennyLane
-# equivalent, in the latter version, the 3 wires are explicitly drawn and handled, which leads to
-# a more PennyLane-like visualization. The call graphs and resource counts will differ between
-# the two methods as well.
+# Notice the differences between mapping and wrapping. When we map, the drawn musical score is in
+# terms of native Qualtran Bloqs such as `Allocate`. When we wrap, the musical score has the 3 
+# wires explicitly drawn and handled, because there is no PennyLane `Allocate` operator.
+#
+# Let's see how mapping and wrapping affects our resource count estimates.
 
 from qualtran.drawing import show_counts_sigma
 
@@ -216,17 +219,29 @@ _, wrapped_sigma = wrapped_qpe_bloq.call_graph()
 show_counts_sigma(mapped_sigma)
 show_counts_sigma(wrapped_sigma)
 
-# Note that while ``ToBloq``'s decomposition always maintains that of the wrapped PennyLane object,
-# its call graph may not always match the decomposition. When you use the resource counting
-# methods on a ``ToBloq``, you may get resources more optimal than what the original PennyLane
-# decomposition might have prescribed. As we continue to develop both the PennyLane-Qualtran
-# integration and PennyLane itself, these call graphs will evolve as well.
+# Here, we can clearly see that the resource counts for the two methods are distinctly different.
+# This is because the underlying implementations for the two QPE operators differ.
+#
+# When Qualtran computes the resource counts for a `Bloq`, it first checks if there is a call graph
+# defined. If it is, Qualtran uses that call graph to compute the resource count estimates. If it
+# is not, Qualtran uses the decomposition to compute the resource count estimates.
+#
+# For wrapped `ToBloq`s, call graphs are generally not defined. This means the decompositions are
+# used to compute the counts. However, since computing decompositions is computationally expensive,
+# many PennyLane templates, such as QPE, have call graphs defined even when wrapped as a `ToBloq`.
+# By defining these call graphs, you can now efficiently compute resource count estimates for 
+# circuits that may require thousands of qubits and trillions of gates. 
+#
+# There is one caveat to note: for performance reasons, the call graphs sometimes differ from the
+# actual decomposition. This means you may get counts more optimal (but still accurate) than what 
+# the original PennyLane decomposition might have prescribed. As we continue to develop both the 
+# PennyLane-Qualtran integration and PennyLane itself, these call graphs will evolve as well.
 
 ######################################################################
 # Conclusion
 # ----------
 # In this how to, we demonstrated how to use the features in the integration with Qualtran. Whether
-# that is to leverage Qualtran's powerful subroutines in  PennyLane circuits, or to analyze and 
+# that is to leverage Qualtran's powerful subroutines in Pennylane circuits, or to analyze and 
 # reason about PennyLane objects using Qualtran, we are confident that this tool will help speed up
 # your research and make new advances in quantum computing.
 #
