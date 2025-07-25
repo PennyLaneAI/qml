@@ -216,7 +216,8 @@ htmlhelp_basename = "QMLdoc"
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
     "pennylane": ("https://docs.pennylane.ai/en/stable/", None),
-    "catalyst": ("https://docs.pennylane.ai/projects/catalyst/en/stable", None)
+    "catalyst": ("https://docs.pennylane.ai/projects/catalyst/en/stable", None),
+    "demo": ("https://pennylane.ai/qml", None),
 }
 
 # Enable :doc: references for intersphinx (disabled by default in Sphinx 5.0+)
