@@ -74,7 +74,7 @@ Quantum algorithm in the time-domain
 
 Both the initial state :math:`|I\rangle` and the dipole operator acting on the initial state :math:`\hat m_\rho|I\rangle` can be determined classically, and we’ll demonstrate how to do that later. 
 With the initial state computed, we will use a mathematical trick called a *frequency-domain* `Green’s function <https://en.wikipedia.org/wiki/Green%27s_function>`__ to determine the absorption cross section. 
-We can write the cross section as the imaginary part of the following Green’s function
+We can write the cross section as the imaginary part of the following Green’s function (see Section IIB in [#Fomichev2025_])
 
 .. math:: \mathcal{G}_\rho(\omega) = \langle I|\hat m_\rho \frac{1}{\hat H -E_I -\omega +i\eta} \hat m_\rho |I\rangle\,.
 
@@ -174,7 +174,7 @@ hf.mo_coeff = coeffs  # Change MO coefficients in hf object to PennyLane calcula
 
 ######################################################################
 # Next, let’s define the active space of orbitals we will use for our calculation. 
-# This will be the number of orbitals ``n_orb_cas`` and the number of electrons ``n_electron_cas``. 
+# This will be the number of orbitals :math:`n_\mathrm{cas}` and the number of electrons ``n_electron_cas``. 
 # For :math:`\mathrm{H}_2`, we can just use the full space, which is four orbitals and two electrons. 
 # We will use a ``CASCI`` instance to calculate the ground state of our system with this selected active space. 
 # The ``CASCI`` method in PySCF is equivalent to a full-configuration interaction (FCI) procedure on a subset of molecular orbitals.
@@ -182,11 +182,11 @@ hf.mo_coeff = coeffs  # Change MO coefficients in hf object to PennyLane calcula
 from pyscf import mcscf
 
 # Define active space of (orbitals, electrons).
-n_orb_cas, n_electron_cas = (4, 2)
+n_cas, n_electron_cas = (4, 2)
 ncore = (mol.nelectron - n_electron_cas) // 2
 
 # Initialize CASCI instance of H2 molecule as mycasci.
-mycasci = mcscf.CASCI(hf, ncas=n_orb_cas, nelecas=n_electron_cas)
+mycasci = mcscf.CASCI(hf, ncas=n_cas, nelecas=n_electron_cas)
 mycasci.run(verbose=0)
 
 # Calculate ground state, and omit small state components.
@@ -206,12 +206,12 @@ sparse_cascimatr = coo_matrix(casci_state, shape=np.shape(mycasci.ci), dtype=flo
 row, col, dat = sparse_cascimatr.row, sparse_cascimatr.col, sparse_cascimatr.data
 
 # Turn indices into strings.
-n_orb_cas_a = mycasci.ncas  # Number of alpha spin orbitals.
-n_orb_cas_b = n_orb_cas_a  # Number of beta spin orbitals.
+n_cas_a = mycasci.ncas  # Number of alpha spin orbitals.
+n_cas_b = n_cas_a  # Number of beta spin orbitals.
 n_electron_cas_a, n_electron_cas_b = mycasci.nelecas
 
-strs_row = addrs2str(n_orb_cas_a, n_electron_cas_a, row)
-strs_col = addrs2str(n_orb_cas_b, n_electron_cas_b, col)
+strs_row = addrs2str(n_cas_a, n_electron_cas_a, row)
+strs_col = addrs2str(n_cas_b, n_electron_cas_b, col)
 
 # Create the FCI matrix as a dict.
 wf_casci_dict = dict(zip(list(zip(strs_row, strs_col)), dat))
@@ -231,10 +231,10 @@ wf_casci_dict = dict(zip(list(zip(strs_row, strs_col)), dat))
 from pennylane.qchem.convert import _sign_chem_to_phys, _wfdict_to_statevector
 
 # Adjust sign of state components to match the physicists' notation.
-wf_casci_dict = _sign_chem_to_phys(wf_casci_dict, n_orb_cas)
+wf_casci_dict = _sign_chem_to_phys(wf_casci_dict, n_cas)
 
 # Convert dictionary to Pennylane state vector.
-wf_casci = _wfdict_to_statevector(wf_casci_dict, n_orb_cas)
+wf_casci = _wfdict_to_statevector(wf_casci_dict, n_cas)
 
 ######################################################################
 # Dipole operator action
@@ -254,7 +254,7 @@ wf_casci = _wfdict_to_statevector(wf_casci_dict, n_orb_cas)
 core, active = qml.qchem.active_space(
     mole.n_electrons, mole.n_orbitals, 
     active_electrons=n_electron_cas, 
-    active_orbitals=n_orb_cas
+    active_orbitals=n_cas
 )
 
 m_rho = qml.qchem.dipole_moment(mole, cutoff=1e-8, core=core, active=active)()
@@ -265,7 +265,7 @@ dipole_norm = []
 
 # Loop over cartesian coordinates and calculate m_rho|I>.
 for rho in rhos:
-    dipole_matrix_rho = qml.matrix(m_rho[rho], wire_order=range(2 * n_orb_cas))
+    dipole_matrix_rho = qml.matrix(m_rho[rho], wire_order=range(2 * n_cas))
     wf = dipole_matrix_rho.dot(wf_casci)
 
     if np.allclose(wf, np.zeros_like(wf)):  # If wf is zero, then set norm as zero.
@@ -291,7 +291,7 @@ import pennylane as qml
 device_type = "lightning.qubit"
 
 # Initialization circuit for m_rho|I>.
-dev_prop = qml.device(device_type, wires=int(2*n_orb_cas) + 1, shots=None)
+dev_prop = qml.device(device_type, wires=int(2*n_cas) + 1, shots=None)
 
 
 @qml.qnode(dev_prop)
@@ -314,7 +314,8 @@ def initial_circuit(wf):
 # Next we will discuss how to prepare the electronic Hamiltonian for use in the time evolution of the Hadamard-test. 
 # We will double-factorize and compress the Hamiltonian to approximate it as a series of fragments, each of which can be fast-forwarded in a Trotter product formula.
 #
-# If you haven’t yet, go read the demo `“How to build compressed double-factorized Hamiltonians” <https://pennylane.ai/qml/demos/tutorial_how_to_build_compressed_double_factorized_hamiltonians>`__, because that is exactly what we are going to do!
+# If you haven’t yet, go read the demo `“How to build compressed double-factorized Hamiltonians” <https://pennylane.ai/qml/demos/tutorial_how_to_build_compressed_double_factorized_hamiltonians>`__, because that is exactly what we are going to do! 
+# You could also look at section III in[#Fomichev2025_].
 #
 # Electronic Hamiltonian
 # ~~~~~~~~~~~~~~~~~~~~~~
@@ -353,7 +354,7 @@ one_chemist = one - np.einsum("pqrr->pq", two) / 2.0
 # The ``Z`` and ``U`` output here are arrays of :math:`L` fragment matrices with dimension :math:`n_\mathrm{cas} \times n_\mathrm{cas}`.
 
 # Factorize Hamiltonian, producing matrices Z and U for each fragment.
-L = n_orb_cas  # Usually L is on the order of n_orb_cas.
+L = n_cas  # Usually L is on the order of n_cas.
 _, Z, U = qml.qchem.factorize(two_chemist, compressed=True, num_factors=L)
 
 print("Shape of the factors: ")
@@ -385,7 +386,7 @@ Z0 = np.diag(eigenvals)
 # The main work of our algorithm will be to implement time evolution with respect to our Hamiltonian fragments by using Trotter product formulas, and measure the expectation value of that time evolution operator for various times.
 # Let’s start by writing functions that implement the time evolution for each Hamiltonian fragment, which will be called by our Trotter circuit function. 
 #
-# The trick when implementing a double-factorized Hamiltonian is to use `Thouless’s theorem <https://joshuagoings.com/assets/Thouless_theorem.pdf>`__ [#Thouless1960]_ to construct a size :math:`2^{\text{n_orb_cas}} \times 2^{\text{n_orb_cas}}` unitary :math:`\mathbm{U}^{(\ell)}` that is induced by a the single-particle basis transformation :math:`U^{(\ell)}` (of size ``n_orb_cas`` :math:`\times` ``n_orb_cas``). 
+# The trick when implementing a double-factorized Hamiltonian is to use `Thouless’s theorem <https://joshuagoings.com/assets/Thouless_theorem.pdf>`__ [#Thouless1960]_ to construct a size :math:`2^{n_\mathrm{cas}} \times 2^{n_\mathrm{cas}}` unitary :math:`\bm{U}^{(\ell)}` that is induced by a the single-particle basis transformation :math:`U^{(\ell)}` (of size :math:`n_\mathrm{cas} \times n_\mathrm{cas}`). 
 # The Jordan-Wigner transform can then turn the number operators :math:`a^\dagger_p a_p = n_{p}` into Pauli :math:`Z` rotations, via :math:`n_p = (1-\sigma_{z,p})/2`. 
 # Note the :math:`1/2` term will affect the global phase, and we will have to keep track of that carefully. 
 # Below is an illustration of the circuit we will use to implement the one- and two-electron fragments in our factorized Hamiltonian.
@@ -405,7 +406,7 @@ def U_rotations(U, control_wires):
     """Circuit implementing the basis rotations of the CDF decomposition."""
     U_spin = qml.math.kron(U, qml.math.eye(2))  # Apply to both spins.
     qml.BasisRotation(
-        unitary_matrix=U_spin, wires=[int(i + control_wires) for i in range(2 * n_orb_cas)]
+        unitary_matrix=U_spin, wires=[int(i + control_wires) for i in range(2 * n_cas)]
     )
 
 
@@ -429,7 +430,7 @@ def Z_rotations(Z, step, is_one_electron_term, control_wires):
     """Circuit implementing the Z rotations of the CDF decomposition."""
     if is_one_electron_term:
         for sigma in range(2):
-            for i in range(n_orb_cas):
+            for i in range(n_cas):
                 qml.ctrl(
                     qml.X(wires=int(2*i + sigma + control_wires)),
                     control=range(control_wires),
@@ -445,7 +446,7 @@ def Z_rotations(Z, step, is_one_electron_term, control_wires):
 
     else:  # It's a two-electron fragment.
         for sigma, tau in product(range(2), repeat=2):
-            for i, k in product(range(n_orb_cas), repeat=2):
+            for i, k in product(range(n_cas), repeat=2):
                 if i != k or sigma != tau:  # Skip the one-electron correction terms.
                     qml.ctrl(qml.X(wires=int(2*i + sigma + control_wires)),
                             control=range(control_wires), control_values=0)
@@ -454,7 +455,7 @@ def Z_rotations(Z, step, is_one_electron_term, control_wires):
                                int(2*k + tau + control_wires)])
                     qml.ctrl(qml.X(wires=int(2 * i + sigma + control_wires)),
                         control=range(control_wires), control_values=0)
-        globalphase = np.trace(Z)/4.0*step - np.sum(Z)*step + np.sum(Z)*step/2.0
+        globalphase = np.trace(Z)/4.0*step - np.sum(Z)*step/2.0
 
     qml.PhaseShift(-globalphase, wires=0)
 
@@ -467,7 +468,7 @@ def Z_rotations(Z, step, is_one_electron_term, control_wires):
 # The function will implement the :math:`U` rotations and :math:`Z` rotations, and adjust the global phase from the core constant term. 
 # By tracking the last :math:`U` rotation used, we can implement two consecutive rotations at once as :math:`V^{(\ell)} = U^{(\ell-1)}(U^{(\ell)})^T`, halving the number of rotations required per Trotter step.
 #
-# Below, we define a function ``lie_trotter`` which applies the rotations for the one- and two-electron fragments in one order, but can also reverse the order. 
+# Below, we define a function ``first_order_trotter`` which applies the rotations for the one- and two-electron fragments in one order, but can also reverse the order. 
 # This can save another rotation step when we implement consecutive Trotter steps in higher-order Trotter schemes. 
 # At the end of the step, the core constant adjusts a global phase.
 
@@ -503,7 +504,7 @@ def first_order_trotter(step, prior_U, final_rotation, reverse=False):
 
 ######################################################################
 # Our function ``second_order_trotter`` implements a second-order Trotter step, returning a ``QNode``. 
-# The returned circuit applies ``StatePrep`` to prepare the register in the previous quantum state, and then two ``lie_trotter`` evolutions for time ``step/2`` so that the total step size is ``step``.
+# The returned circuit applies ``StatePrep`` to prepare the register in the previous quantum state, and then two ``first_order_trotter`` evolutions for time ``step/2`` so that the total step size is ``step``.
 
 
 def second_order_trotter(dev, state, step):
@@ -515,7 +516,7 @@ def second_order_trotter(dev, state, step):
         qml.StatePrep(state, wires=qubits)
 
         # Main body of the circuit.
-        prior_U = np.eye(n_orb_cas)  # No initial prior U, so set as identity matrix.
+        prior_U = np.eye(n_cas)  # No initial prior U, so set as identity matrix.
         prior_U = first_order_trotter(step / 2, prior_U=prior_U, final_rotation=False, reverse=False)
         prior_U = first_order_trotter(step / 2, prior_U=prior_U, final_rotation=True, reverse=True)
 
@@ -533,7 +534,7 @@ def second_order_trotter(dev, state, step):
 
 
 def meas_circuit(state):
-    qml.StatePrep(state, wires=range(int(2*n_orb_cas) + 1))
+    qml.StatePrep(state, wires=range(int(2*n_cas) + 1))
     # Measure in PauliX/PauliY to get the real/imaginary parts.
     return [qml.expval(op) for op in [qml.PauliX(wires=0), qml.PauliY(wires=0)]]
 
@@ -572,7 +573,7 @@ time_interval = tau * jrange
 ######################################################################
 # Minimizing the number of shots we require to obtain the necessary expectation value statistics will improve the efficiency of our algorithm. 
 # One way to do this is to employ a sampling distribution that takes advantage of the decaying Lorentzian kernel [#Fomichev2025]_. 
-# The contribution of longer evolution times to the overall :math:`G(\omega)` are exponentially suppressed by the :math:`e^{-\eta t}` factor. 
+# The contribution of longer evolution times to the overall :math:`G_\rho(\omega)` are exponentially suppressed by the :math:`e^{-\eta t}` factor. 
 # Reducing the number of shots allocated to long times by this factor can save the total number of shots needed.
 # This is implemented below by creating ``shots_list``, which distributes the ``total_shots`` among the time steps, weighted exponentially by the Lorentzian width. 
 # The parameter :math:`\alpha` can adjust this weighting, s.t. for :math:`\alpha > 1` there is more weight at shorter times.
@@ -612,7 +613,7 @@ for rho in rhos:
 
         # Define measurement circuit device with shots.
         shots = shots_list[i]  # Kernel-aware number of shots.
-        dev_est = qml.device(device_type, wires=int(2*n_orb_cas) + 1, shots=shots)
+        dev_est = qml.device(device_type, wires=int(2*n_cas) + 1, shots=shots)
 
         # Update state and then measure expectation values.
         state = circuit()
@@ -676,7 +677,7 @@ E_i = mycasci.e_tot[0]
 
 # Determine the dipole integrals using atomic orbitals from hf object.
 dip_ints_ao = hf.mol.intor("int1e_r_cart", comp=3)  # In atomic orbital basis.
-mo_coeffs = coeffs[:, ncore : ncore + n_orb_cas]
+mo_coeffs = coeffs[:, ncore : ncore + n_cas]
 
 # Convert to molecular orbital basis.
 dip_ints_mo = np.einsum("ik,xkl,lj->xij", mo_coeffs.T, dip_ints_ao, mo_coeffs)
@@ -685,7 +686,7 @@ dip_ints_mo = np.einsum("ik,xkl,lj->xij", mo_coeffs.T, dip_ints_ao, mo_coeffs)
 def makedip(ci_id):
     # Transition density matrix in molecular orbital basis.
     t_dm1 = mycasci.fcisolver.trans_rdm1(
-        mycasci.ci[0], mycasci.ci[ci_id], n_orb_cas, n_electron_cas
+        mycasci.ci[0], mycasci.ci[ci_id], n_cas, n_electron_cas
     )
     # Transition dipole moments.
     return np.einsum("xij,ji->x", dip_ints_mo, t_dm1)
