@@ -67,7 +67,7 @@ Below is an illustration of an X-ray absorption spectrum.
 
 The goal is to implement a quantum algorithm that can calculate this spectrum. However, instead of computing the energy differences and state overlaps directly, we will be simulating the system in the time domain, and then using a `Fourier transform <https://en.wikipedia.org/wiki/Fourier_transform>`__ to obtain the spectrum in frequency space.
 
-
+**[Insert some motivation for time-domain choice.]**
 
 Quantum algorithm in the time-domain
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -769,8 +769,6 @@ plt.show()
 # The algorithm represents a culmination of many optimizations for time-evolving an electronic Hamiltonian. 
 # We’ve also discussed how XAS is a promising candidate for early fault-tolerant quantum computers due to its low qubit overhead but high amount of correlations in
 # the state space.
-#
-# *Acknowledgements*: The author thanks Stepan Fomichev and Pablo A. M. Casares for providing the code used in [#Fomichev2025]_, which was a basis for the simplified implementation demonstrated here.
 #
 # References
 # ----------
