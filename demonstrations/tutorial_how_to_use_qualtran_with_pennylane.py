@@ -6,10 +6,10 @@ PennyLane-Qualtran integration.
 
 This integration allows you to:
 
-* **Use Qualtran's subroutines in PennyLane:** Seamlessly incorporate Qualtran's quantum
-subroutines, known as ``bloqs``, directly in your PennyLane simulations and workflows.
+* **Use Qualtran's subroutines in PennyLane:** Seamlessly incorporate Qualtran's quantum 
+    subroutines, known as ``bloqs``, directly in your PennyLane simulations and workflows.
 * **Analyze PennyLane circuits with Qualtran:** Leverage Qualtran's advanced analysis tools to
-estimate the computational resource costs of your PennyLane circuits.
+    estimate the computational resource costs of your PennyLane circuits.
 
 In this demo, we want to show you how easy it is to use PennyLane and Qualtran together.
 We'll start by focusing on the first key capability: embedding a Qualtran ``Bloq`` in a
