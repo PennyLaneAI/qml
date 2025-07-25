@@ -2638,7 +2638,6 @@ files = [
 numpy = "*"
 
 [[package]]
-
 name = "galois"
 version = "0.4.6"
 description = "A performant NumPy extension for Galois fields and their applications"
@@ -10714,4 +10713,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = "~3.10.0"
-content-hash = "d40f8cffef1ce6ede13fa038e4639139b0422e1682298a0514337aa43d3d0757"
+content-hash = "fc8b8722e3b4c02d5df4c5df972324d3dfadbb2ead2e8c6624672050cd756f3e"
