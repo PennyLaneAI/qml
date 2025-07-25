@@ -19,7 +19,7 @@
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_quantum_chebyshev_transform.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_quantum_chebyshev_transform.png"
         }
     ],
     "seoDescription": "Implement the Quantum Chebyshev Transform in PennyLane.",
