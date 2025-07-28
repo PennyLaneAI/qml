@@ -134,11 +134,12 @@ def penn_iqp_gates(params: np.ndarray, gates: list, n_qubits: int):
     for i in range(n_qubits):
         qml.Hadamard(i)
 
+
 ######################################################################
 # Now we have our circuit, we can evaluate expectation values of tensor products of Pauli Z operators
 # specified by lists of the form ``op`` above.
 #
-def penn_obs(op: np.ndarray) -> qml.operation.Observable:
+def penn_obs(op: np.ndarray) -> qml.operation.Operator:
     """Returns a PennyLane observable from a bitstring representation.
 
     Args:
@@ -157,6 +158,7 @@ def penn_obs(op: np.ndarray) -> qml.operation.Observable:
             if z:
                 obs @= qml.Z(i)
     return obs
+
 
 def penn_iqp_circuit(params: np.ndarray, gates: list, op: np.ndarray, n_qubits: int) -> qml.measurements.ExpectationMP:
     """Defines the circuit that calculates the expectation value of the operator with the IQP circuit with PennyLane tools.
@@ -594,22 +596,22 @@ plt.show()
 #
 # .. [#nest]
 #
-#    M. Van den Nest.   
+#    M. Van den Nest.
 #    "Simulating quantum computers with probabilistic methods"
 #    `arXiv:0911.1624 <https://arxiv.org/abs/0911.1624>`__, 2010.
 #
 # .. [#gretton]
 #
-#    Arthur Gretton, Karsten M. Borgwardt, Malte J. Rasch, Bernhard Schölkopf, Alexander Smola. 
+#    Arthur Gretton, Karsten M. Borgwardt, Malte J. Rasch, Bernhard Schölkopf, Alexander Smola.
 #    "A Kernel Two-Sample Test"
 #    `http://jmlr.org/papers/v13/gretton12a.html <http://jmlr.org/papers/v13/gretton12a.html>`__, in Journal of Machine Learning Research 13.25, pp. 723-773, 2012.
 #
 # .. [#ravuri]
 #
-#    Suman Ravuri, Mélanie Rey, Shakir Mohamed, Marc Peter Deisenroth. 
+#    Suman Ravuri, Mélanie Rey, Shakir Mohamed, Marc Peter Deisenroth.
 #    "Understanding Deep Generative Models with Generalized Empirical Likelihoods"
 #    `arXiv:2306.09780 <https://arxiv.org/abs/2306.09780>`__, 2023.
-# 
+#
 # About the authors
 # ----------------
-# 
+#
