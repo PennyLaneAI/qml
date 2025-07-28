@@ -728,40 +728,7 @@ plt.show()
 # This is expected because of the dominant frequency we can see in Figure 7.
 # There also appears to be two small peaks at slightly higher energy.
 #
-# 
-# 
-# Core-valence separation approximation
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#
-# For larger molecular instances, it may be valuable to restrict the excited states used to only include those of relevance for XAS, which are states where a *core* electron is excited, i.e. there exists a hole in the core orbitals. 
-# These are known as core-excited states, and lie significantly above the valence-excited states in energy. 
-# Typically the frequency range is focused on a target atom in a molecular cluster, and also near a transition energy, such as targeting core :math:`1s` electrons.
-#
-# Atomic species and oxidation state will determine the energy difference between states with different principle quantum numbers, and this difference will show as a peak in spectroscopy, known as the *absorption edge*. 
-# Focusing spectroscopy near this edge for :math:`1s` to :math:`2p` orbitals is called the :math:`K`-edge, and in general X-ray absorption near-edge spectroscopy is known as XANES.
-# By applying the core-valence separation approximation, we can force our calculation to stay in the XANES region, ignoring lower energy couplings.
-#
-# .. figure:: ../_static/demonstration_assets/xas/core_valence.png
-#    :alt: Energy diagram with X-rays exciting core electrons to high valence energies, and UV and visible radiation only excite electrons already in valence orbitals.
-#    :width: 50.0%
-#    :align: center
-#
-#    Figure 9: *Core-valence separation.* A much larger amount of energy is required to excite core electrons into valence orbitals compared to electrons already in low-lying valence orbitals. 
-# Since XAS targets core electrons, we can ignore valence-excitation matrix elements in our calculations.
-#
-# Further Optimizations
-# ~~~~~~~~~~~~~~~~~~~~~
-#
-# There are more optimizations for this algorithm that are included in the paper [#Fomichev2025]_ that we did not implement in the above code. One could further optimize the compressed double-factorized Hamiltonian by applying a block-invariant symmetry shift (BLISS) [#Loaiza2023]_ to the Hamiltonian prior to compression. 
-# This is already detailed in the `demo on CDF Hamiltonians <https://pennylane.ai/qml/demos/tutorial_how_to_build_compressed_double_factorized_hamiltonians>`__.
-#
-# Another optimization is to use a randomized second-order Trotter formula for the time evolution. 
-# As discussed in Ref. [#Childs2019]_, the error in deterministic product formulas scales with the commutators of the Hamiltonian terms. 
-# One could instead use all permutations of the Hamiltonian terms, such that the commutator errors cancel. 
-# However, the average of all permutations is not unitary in general. 
-# To circumvent this, one can randomly choose a Hamiltonian term ordering, which can give a good approximation to the desired evolution.
-#
-# More efficient methods of simulating XAS may be discovered in the near future, which could make this application even more viable as a use for early fault-tolerant quantum computers.
+# **[Exciting conclusion here]**
 #
 # Conclusion
 # ----------
@@ -815,7 +782,39 @@ plt.show()
 #    Andrew M. Childs, Aaron Ostrander, and Yuan Su, “Faster quantum simulation by randomization”. `Quantum
 #    3, 182 (2019) <https://doi.org/10.22331/q-2019-09-02-182>`__.
 #
-
+# Appendix: Further optimizations
+# ---------------------
+# 
+# There are more optimizations for this algorithm that are included in the paper [#Fomichev2025]_ that we did not implement in the above code. 
+# One could further optimize the compressed double-factorized Hamiltonian by applying a block-invariant symmetry shift (BLISS) [#Loaiza2023]_ to the Hamiltonian prior to compression. 
+# This is already detailed in the `demo on CDF Hamiltonians <https://pennylane.ai/qml/demos/tutorial_how_to_build_compressed_double_factorized_hamiltonians>`__.
+#
+# Another optimization is to use a randomized second-order Trotter formula for the time evolution. 
+# As discussed in Ref. [#Childs2019]_, the error in deterministic product formulas scales with the commutators of the Hamiltonian terms. 
+# One could instead use all permutations of the Hamiltonian terms, such that the commutator errors cancel. 
+# However, the average of all permutations is not unitary in general. 
+# To circumvent this, one can randomly choose a Hamiltonian term ordering, which can give a good approximation to the desired evolution.
+#
+# Core-valence separation approximation
+# +++++++++++++++++++++++++++++++++++++
+#
+# For larger molecular instances, it may be valuable to restrict the excited states used to only include those of relevance for XAS, which are states where a *core* electron is excited, i.e. there exists a hole in the core orbitals. 
+# These are known as core-excited states, and lie significantly above the valence-excited states in energy. 
+# Typically the frequency range is focused on a target atom in a molecular cluster, and also near a transition energy, such as targeting core :math:`1s` electrons.
+#
+# Atomic species and oxidation state will determine the energy difference between states with different principle quantum numbers, and this difference will show as a peak in spectroscopy, known as the *absorption edge*. 
+# Focusing spectroscopy near this edge for :math:`1s` to :math:`2p` orbitals is called the :math:`K`-edge, and in general X-ray absorption near-edge spectroscopy is known as XANES.
+# By applying the core-valence separation approximation, we can force our calculation to stay in the XANES region, ignoring lower energy couplings.
+#
+# .. figure:: ../_static/demonstration_assets/xas/core_valence.png
+#    :alt: Energy diagram with X-rays exciting core electrons to high valence energies, and UV and visible radiation only excite electrons already in valence orbitals.
+#    :width: 50.0%
+#    :align: center
+#
+#    Figure 9: *Core-valence separation.* A much larger amount of energy is required to excite core electrons into valence orbitals compared to electrons already in low-lying valence orbitals. 
+# Since XAS targets core electrons, we can ignore valence-excitation matrix elements in our calculations.
+#
+# More efficient methods of simulating XAS may be discovered in the near future, which could make this application even more viable as a use for early fault-tolerant quantum computers.
 
 ######################################################################
 # About the author
