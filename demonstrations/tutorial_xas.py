@@ -65,9 +65,7 @@ Below is an illustration of an X-ray absorption spectrum.
 
    Figure 2: *Example X-ray absorption spectrum.* Illustration of how the peak positions :math:`E_F - E_i`, widths :math:`\eta` and amplitudes :math:`|\langle F | \hat m_\rho | I \rangle|^2` determine the spectrum.
 
-The goal is to implement a quantum algorithm that can calculate this spectrum. However, instead of computing the energy differences and state overlaps directly, we will be simulating the system in the time domain, and then using a `Fourier transform <https://en.wikipedia.org/wiki/Fourier_transform>`__ to obtain the spectrum in frequency space.
-
-**[Insert some motivation for time-domain choice.]**
+The goal of this demo is to implement a quantum algorithm that can calculate this spectrum. Three algorithm designs are discussed in Ref. [#Fomichev2025]_, but we will focus on a time-domain method, since quantum computers are naturally suited to calculating the time evolution from a Hamiltonian operator. Instead of computing the energy differences and state overlaps directly, this method simulates the system in the time domain, and then uses a `Fourier transform <https://en.wikipedia.org/wiki/Fourier_transform>`__ to obtain the spectrum in frequency space. 
 
 Quantum algorithm in the time-domain
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
