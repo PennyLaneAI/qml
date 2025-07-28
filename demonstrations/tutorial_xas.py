@@ -809,11 +809,12 @@ plt.show()
 #
 #    Figure 9: *Core-valence separation.* A much larger amount of energy is required to excite core electrons into valence orbitals compared to electrons already in low-lying valence orbitals. 
 # 
-# We can also turn off the two-electron terms that would couple core-excited and valence-excited states. 
-# The terms are in general small, but we could set them to zero to remove that coupling entirely from the time evolution. 
+# We can also turn off the two-electron terms that couple core-excited and valence-excited states. 
+# The terms are in general small, but by setting them to zero that coupling is removed entirely from the time evolution. 
 # To implement the core-valence seperation approximation in an XAS simulation algorithm, there are two steps:
-# 1. Before performing compressed double factorization on the two-electron integrals, remove the terms that include at least one core orbital.
-# 2. Remove all the matrix elements from the dipole operator that do *not* include at least one core orbital.
+# - Before performing compressed double factorization on the two-electron integrals, remove the terms that include at least one core orbital.
+# - Remove all the matrix elements from the dipole operator that do *not* include at least one core orbital.
+# This approximation would be useful when simulated a complex molecular instance, such as a cluster in a lithium-excess material. 
 #
 
 ######################################################################
