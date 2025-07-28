@@ -383,8 +383,8 @@ Z0 = np.diag(eigenvals)
 # Constructing the time-propagation circuit
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# The main work of our algorithm will be to implement time evolution with respect to our Hamiltonian fragments by using Trotter product formulas, and measure the expectation value of that time evolution operator for various times.
-# Let’s start by writing functions that implement the time evolution for each Hamiltonian fragment, which will be called by our Trotter circuit function. 
+# The main work of our algorithm will be to implement time evolution with respect to our Hamiltonian fragments by using a Trotter product formula, and measure the expectation value of that time evolution operator for various times.
+# Let’s start by writing functions that implement the time evolution for each Hamiltonian fragment, which will be called by a Trotter circuit function. 
 #
 # The trick when implementing a double-factorized Hamiltonian is to use `Thouless’s theorem <https://joshuagoings.com/assets/Thouless_theorem.pdf>`__ [#Thouless1960]_ to construct a size :math:`2^{n_\mathrm{cas}} \times 2^{n_\mathrm{cas}}` unitary :math:`\bf{U}^{(\ell)}` that is induced by a the single-particle basis transformation :math:`U^{(\ell)}` (of size :math:`n_\mathrm{cas} \times n_\mathrm{cas}`). 
 # The Jordan-Wigner transform can then turn the number operators :math:`a^\dagger_p a_p = n_{p}` into Pauli :math:`Z` rotations, via :math:`n_p = (1-\sigma_{z,p})/2`. 
@@ -465,11 +465,12 @@ def Z_rotations(Z, step, is_one_electron_term, control_wires):
 #    For a derivation of the global phase accrued from the two-electron fragments, see Appendix A in [#Fomichev2025]_.
 #
 # Now that we have functions for all the terms of our Hamiltonian, we can define our Trotter step. 
-# The function will implement the :math:`U` rotations and :math:`Z` rotations, and adjust the global phase from the core constant term. 
+# For our factorized Hamiltonian :math:`H_\mathrm{CDF} = \sum_j^N H_j`, with non-commuting fragments $H_j$, a second-order product formula approximates the time evolution for a time step $\Delta t$ as
+# .. math::  e^{-i\sum_j H_j \Delta t} \approx \prod_{j=1}^N e^{-i \frac{\Delta t}{2}H_j} \prod_{j=N}^1 e^{-i \frac{\Delta t}{2}H_j}\,.
+# Note in the formula above, the second product of time-evolution operators is reversed in order.
+# The function ``first_order_trotter`` will implement the :math:`U` rotations and :math:`Z` rotations, and adjust the global phase from the core constant term. 
+# It will also be able to reverse the order of applied fragments.
 # By tracking the last :math:`U` rotation used, we can implement two consecutive rotations at once as :math:`V^{(\ell)} = U^{(\ell-1)}(U^{(\ell)})^T`, halving the number of rotations required per Trotter step.
-#
-# Below, we define a function ``first_order_trotter`` which applies the rotations for the one- and two-electron fragments in one order, but can also reverse the order. 
-# This can save another rotation step when we implement consecutive Trotter steps in higher-order Trotter schemes. 
 # At the end of the step, the core constant adjusts a global phase.
 
 
@@ -502,7 +503,7 @@ def first_order_trotter(step, prior_U, final_rotation, reverse=False):
     return prior_U
 
 
-######################################################################
+###################################################################### 
 # Our function ``second_order_trotter`` implements a second-order Trotter step, returning a ``QNode``. 
 # The returned circuit applies ``StatePrep`` to prepare the register in the previous quantum state, and then two ``first_order_trotter`` evolutions for time ``step/2`` so that the total step size is ``step``.
 
@@ -622,9 +623,9 @@ for rho in rhos:
         expvals[:, i] += dipole_norm[rho]**2 * np.array(measurement).real
 
 ######################################################################
-# To save simulation time when simulating this algorithm on a classical computer, we are starting with the propagated state we measured in the previous time step.
-# This way, we only have to compute *one step* every new time step.
-# This is not possible on a real quantum computer -- you would have to start from scratch every time you measure the state.
+# To save cost when using a simulated quantum device to run this algorithm (``lightning.qubit``), we can store the state before every measurement, and then start from that state when we move on to the next time step.
+# This way, we only have to compute *one step* at a time.
+# This is not possible on a real quantum device -- you would have to start from scratch every time you measure the state.
 #  
 # Plotting the time-domain output, we see there is one clear frequency, so we will expect one peak in our spectrum.
 
