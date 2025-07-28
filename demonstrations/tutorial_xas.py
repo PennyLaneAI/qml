@@ -796,15 +796,11 @@ plt.show()
 # To circumvent this, one can randomly choose a Hamiltonian term ordering, which can give a good approximation to the desired evolution.
 #
 # Core-valence separation approximation
-# +++++++++++++++++++++++++++++++++++++
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # For larger molecular instances, it may be valuable to restrict the excited states used to only include those of relevance for XAS, which are states where a *core* electron is excited, i.e. there exists a hole in the core orbitals. 
 # These are known as core-excited states, and lie significantly above the valence-excited states in energy. 
 # Typically the frequency range is focused on a target atom in a molecular cluster, and also near a transition energy, such as targeting core :math:`1s` electrons.
-#
-# Atomic species and oxidation state will determine the energy difference between states with different principle quantum numbers, and this difference will show as a peak in spectroscopy, known as the *absorption edge*. 
-# Focusing spectroscopy near this edge for :math:`1s` to :math:`2p` orbitals is called the :math:`K`-edge, and in general X-ray absorption near-edge spectroscopy is known as XANES.
-# By applying the core-valence separation approximation, we can force our calculation to stay in the XANES region, ignoring lower energy couplings.
 #
 # .. figure:: ../_static/demonstration_assets/xas/core_valence.png
 #    :alt: Energy diagram with X-rays exciting core electrons to high valence energies, and UV and visible radiation only excite electrons already in valence orbitals.
@@ -812,9 +808,13 @@ plt.show()
 #    :align: center
 #
 #    Figure 9: *Core-valence separation.* A much larger amount of energy is required to excite core electrons into valence orbitals compared to electrons already in low-lying valence orbitals. 
-# Since XAS targets core electrons, we can ignore valence-excitation matrix elements in our calculations.
+# 
+# We can also turn off the two-electron terms that would couple core-excited and valence-excited states. 
+# The terms are in general small, but we could set them to zero to remove that coupling entirely from the time evolution. 
+# To implement the core-valence seperation approximation in an XAS simulation algorithm, there are two steps:
+# 1. Before performing compressed double factorization on the two-electron integrals, remove the terms that include at least one core orbital.
+# 2. Remove all the matrix elements from the dipole operator that do *not* include at least one core orbital.
 #
-# More efficient methods of simulating XAS may be discovered in the near future, which could make this application even more viable as a use for early fault-tolerant quantum computers.
 
 ######################################################################
 # About the author
