@@ -1,5 +1,5 @@
 r"""
-It's all about groups: how quantum computers implement Fourier transforms
+It's all about groups: Fourier Transforms, QFTs and FFTs
 =========================================================================
 
 Quantum Fourier Transforms (QFTs) are unitary operations that turn a quantum state :math:`\sum_x f(x) |x \rangle` of amplitudes :math:`f(x)` into
@@ -270,10 +270,10 @@ print(np.allclose(h_hat_state, h_hat_state2))
 # set that, under the group operation, fulfills all group axioms.)
 # These subgroups can sometimes be decomposed into even smaller subgroups, leading to a recursive "divide-and-conquer"
 # algorithm. This technique is always possible for Abelian groups, but also for some non-Abelian groups such as the symmetric
-# group. Even more
-# important for us, an FFT generically gives rise to an efficient QFT [#Moore]_!
+# group of permutations. Even more
+# important for us, an FFT generically gives rise to an efficient QFT [#Moore]_ (but more about that later).
 #
-# We will illustrate the basic idea using the cyclic group :math:`Z_{6}`.
+# We will illustrate the basic idea of the FFT using the cyclic group :math:`Z_{6}`.
 #
 
 #######################################################################
@@ -310,7 +310,7 @@ print(np.allclose(h_hat_state, h_hat_state2))
 #
 # Essentially, the change in variables turns the Fourier basis function over period 6 into a Fourier basis function with period 2,
 # which makes the dependency on :math:`k_2` disappear. This effectively turns the Fourier transform into a sum of "smaller" Fourier transforms
-# over the subgroup :math:`{0, 3}` and its "cosets", the subgroup shifted by 1, :math:`{1, 4}` and by 2,  :math:`\{2, 5\}`. These are combined with
+# over :math:`3x_1`, namely  :math:`{0, 3}`, :math:`{1, 4}`, and :math:`{2, 5}`. These are combined with
 # an appropriate "twiddle factor" :math:`e^{\frac{2 \pi i}{6} (2k_2+k_1) x_2}` that weighs the building blocks.
 #
 # We explicitly implement this with the function from above:
@@ -383,28 +383,26 @@ print(np.allclose(f_hat_vec, f_hat_vec_fft))
 # A group-theoretic interpretation
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++
 #
-# As hinted at before, the change of variables that was the core idea behind the Cooley-Tukey implementatino of the Fast Fourier Transform is
-# in fact a decomposition of the original group -- here :math:`Z_{6}` -- into a subgroup :math:`Z_{2}` with the
-# elements :math:`\{0,1\}` and its "cosets" :math:`\{3,4\}`, :math:`\{5,6\}`. The new variable :math:`x_2` selected between the three.
-# The new variable :math:`x_1` picked an element within the subgroup or coset. For example, :math:`x_1=1`
-# creates a shift of 3*1 = 3 selecting the coset, and :math:`x_1=1` picks the second element in this coset FIX THIS. While in
-# our small example, there was only one coset, a subgroup usually gives rise to many cosets that are "shifted copies"
-# of the subgroup. Together they tile the entire group, which is why the new coordinates can always be used to express any
-# element :math:`x`.
+# As hinted at before, the change of variables that was the core idea behind the Cooley-Tukey implementation of the Fast Fourier Transform is
+# in fact a decomposition of the original group -- here :math:`Z_{6}` -- into a subgroup isomorphic to :math:`Z_{2}` with the
+# elements :math:`\{0,3\}`, and its "cosets" or shifted copies :math:`\{2,4\}` and :math:`\{3,5\}` [#Maslen, #Rockmore]_.
+# The new variable :math:`x_2` selects between the copy. For example, if :math:`5=3*x_1 + x_2` then :math:`x_2=2` selects the third copy of the subgroup,
+# while :math:`x_1=1` selects the second element within the copy. It is a fundamental result in group theory that
+# "shifted" copies of a subgroup tile the entire group, which is why the new coordinates can always be used to express any
+# element :math:`x \in G`.
 #
-# The change of the :math:`k` variable is related to the concept of "restricting a character" to the subgroup, in our case
-# :math:`\{0,1\}`. Essentially, it allows us turn the characters, or Fourier basis functions :math:`e^{\frac{2 \pi i}{6} x k }`,
-# related to the original group into characters of the subgroup, :math:`e^{\frac{2 \pi i}{2} x_1 k_1 }`.
+# The change of the :math:`k` variable is related to the concept of "restricting a character" to the subgroup.
+# Essentially, it allows us turn the characters, or Fourier basis functions :math:`e^{\frac{2 \pi i}{6} x k }`
+# related to the original group, into characters of the subgroup, :math:`e^{\frac{2 \pi i}{2} x_1 k_1 }`.
 # Such a trick generalises to much more complicated groups, including those where there is no "cyclic" notion of
 # ordered integers.
 #
-# The divide-and-conquer structure enables quantum algorithms to implement
-#
+
 #######################################################################
 # From FFTs to QFTs
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++
 #
-# So, Fourier transforms are all about groups, including the construction of fast algorithms. But we also claimed [#Moore]_ that
+# Well then, Fourier transforms are all about groups, and sometimes allow the construction of fast algorithms. But we also claimed [#Moore]_ that
 # the FFT suggests a QFT which transforms the amplitudes of a quantum state in time that is logarithmic in the group size.
 # The generic algorithm is not trivial, but it basically works upwards in the "tower" of subgroups, and combines the
 # results. The computational basis state first holds information on the group element expressed as "coordinates" :math:`x_1, x_2` that tells us in
@@ -423,7 +421,7 @@ def qft():
     qml.QFT(wires=range(4))
     return qml.state
 
-fig, ax = qml.draw_mpl(qft)()
+fig, ax = qml.draw_mpl(qft, level=1)()
 fig.show()
 
 
@@ -472,22 +470,21 @@ fig.show()
 # ------------
 #
 # .. [#Moore]
-#    
-#     Scott Aaronson, "How Much Structure Is Needed for Huge Quantum Speedups?", 
-#     `arXiv:2209.06930 <https://arxiv.org/pdf/2209.06930>`__, 2022
+#    Moore, C., Rockmore, D. and Russell, A., 2006.
+#    Generic quantum Fourier transforms. ACM Transactions on Algorithms (TALG), 2(4), pp.707-723.
 # 
 # .. [#Diaconis]
-#    
-#     Andrew Childs, Vim van Dam, "Quantum algorithms for algebraic problems", 
-#     `Reviews of Modern Physics 82.1: 1-52. <https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.82.1>`__, 2010
+#    Diaconis, P., 1988. Group representations in probability and statistics.
+#    Lecture notes-monograph series, 11, pp.i-192.
 #
 # .. [#Maslen]
-#
-#    https://library2.msri.org/books/Book46/files/11maslen.pdf
+#    Maslen, D.K. and Rockmore, D.N., 2001. The Cooley-Tukey FFT and group theory.
+#    Notices of the AMS, 48(10), pp.1151-1160. `<https://library2.msri.org/books/Book46/files/11maslen.pdf>`__
 #
 # .. [#Rockmore]
-#
-#    https://www.cs.dartmouth.edu/~rockmore/nato-1.pdf
+#    Rockmore, D.N., 2002, November. Recent progress and applications in group FFTs.
+#    In Conference Record of the Thirty-Sixth Asilomar Conference on Signals, Systems and Computers, 2002.
+#    (Vol. 1, pp. 773-777). IEEE. `<https://www.cs.dartmouth.edu/~rockmore/nato-1.pdf>`__.
 #
 #
 # About the author
