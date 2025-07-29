@@ -163,7 +163,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Get the results with 10000 shots and assert them
-shot_result = circuit(return_state=False, shots=10000)
+shot_result = qml.set_shots(circuit, shots=10000)(return_state=False)
 shot_exp, shot_var, shot_probs = shot_result
 assert qml.math.allclose([shot_exp, shot_var], [expval, var], atol=1e-3)
 

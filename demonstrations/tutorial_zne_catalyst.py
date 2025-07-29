@@ -162,11 +162,11 @@ scale_factors = [1, 3, 5]
 
 ##############################################################################
 # Finally, we'll choose the extrapolation technique. Both exponential and polynomial extrapolation
-# is available in the :mod:`qml.transforms <pennylane.transforms>` module, and both of these functions can be passed directly
+# is available in the :mod:`qml.noise <pennylane.noise>` module, and both of these functions can be passed directly
 # into Catalyst's :func:`catalyst.mitigate_with_zne` function. In this tutorial we use polynomial extrapolation,
 # which we hypothesize best models the behavior of the noise scenario we are considering.
 
-from pennylane.transforms import poly_extrapolate
+from pennylane.noise import poly_extrapolate
 from functools import partial
 
 extrapolation_method = partial(poly_extrapolate, order=2)
@@ -205,11 +205,11 @@ print(f"Error with ZNE in Catalyst: {abs(ideal_value - zne_value):.3f}")
 
 
 def mitigated_circuit(w1, w2):
-    return qml.transforms.mitigate_with_zne(
+    return qml.noise.mitigate_with_zne(
         noisy_qnode,
         scale_factors=scale_factors,
         extrapolate=extrapolation_method,
-        folding=qml.transforms.fold_global,
+        folding=qml.noise.fold_global,
     )(w1, w2)
 
 
