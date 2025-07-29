@@ -144,9 +144,10 @@ plot(g, g_hat)
 # What is important for us is that these smaller matrix-valued functions :math:`r^{\alpha}(g)` define a
 # subspace :math:`V_{\alpha, j}`, where the index :math:`j` accounts for the fact that there may be several copies of
 # an :math:`r^{\alpha}(g)` on the diagonal of :math:`R(g)`, each of which corresponds to one subspace.
-# [TODO: BASIS :math:`w^{(i)}_{\alpha, j}`].
+# Every subspace is spanned by a basis :math:`\{w^{(i)}_{\alpha, j}\}_{i=1}^{\mathrm{dim(V_{\alpha, j})}}`.
 #
 # The Generalised Fourier Decomposition (GFD) purity is the length of a projection of a vector :math:`v \in V` onto one of these subspaces :math:`V_{\alpha, j}`,
+# computed via the inner product with all basis vectors:
 #
 # .. math::
 #           \mathcal{P}(v) = \sum_i  | \langle w^{(i)}_{\alpha, j}, v \rangle |^2.
@@ -250,10 +251,115 @@ print(np.allclose(P_F - np.diag(np.diagonal(P_F)), np.zeros((N,N)) ))
 # Fourier analysis of entanglement
 # --------------------------------
 #
-# [TODO]
+# We now move to another resource, the entanglement between 2 qubits. We could simply use the Hilbert space :math:`H` of
+# the two-qubit states as our vector space :math:`V`. However, the Fourier analysis is richer if we choose the space of
+# density matrices :math:`\rho \in L(H)`, which is the space of bounded operators acting on quantum states in a Hilbert space :math:`H`,
+# as :math:`V`. The density matrices get transformed by the adjoint action :math:`U \rho U^{\dagger}`.
 #
+# Performing numerics like block-diagonalisation on such a vector space is a little more complicated, and best done by moving from
+# matrices :math:`\rho` to "flattened" vectors in :math:`\mathbb{C}^{2n}`, and from adjoint unitary evolution to a superoperator
+# which is a :math:`2n x 2n`-dimensional matrix that can be applied to the flattened density matrices.
 #
 
+import functools
+
+def haar_unitary(N):
+    """
+    Generates a Haar random NxN unitary matrix
+    """
+    X = (np.random.randn(N, N) + 1j*np.random.randn(N, N)) / np.sqrt(2)
+    Q, R = np.linalg.qr(X)
+    phases = np.exp(-1j * np.angle(np.diag(R)))
+    return Q @ np.diag(phases)
+
+n = 2
+U = haar_unitary(2**n)
+U_vec = np.kron(U.conj(), U)
+
+psi = np.random.rand(shape=(2**2,))
+rho = np.outer(psi, psi.conj())
+rho_vec = rho.flatten(order='F')
+rho_out_vec = U_vec @ rho_vec
+rho_out = np.reshape(rho_out_vec, shape=(2**2, 2**2))
+
+# show that flattening works
+print(np.allclose(rho_out, U @ rho @ U.conj().T ))
+
+
+######################################################################
+# With the vector space fixed, we can now ask what unitaries keep entanglement free density matrices
+# entanglement free? Of course, all unitaries that can be written as a tensor product of single-qubit unitaries!
+# Such unitaries form a group called :math:`SU(2) x SU(2)`. We claim that they also form a representation of this group
+# (the "defining" representation that just consists of the group elements themselves). If this claim is true,
+# there must be a basis change into the "Fourier basis" that block-diagonalises all non-entangling unitaries into
+# the same block structure. This can be easily checked using the superoperators constructed above!
+#
+
+import itertools
+
+# single‑qubit Paulis
+_pauli_map = {
+    'I': np.array([[1,0],[0,1]],   dtype=complex),
+    'X': np.array([[0,1],[1,0]],   dtype=complex),
+    'Y': np.array([[0,-1j],[1j,0]],dtype=complex),
+    'Z': np.array([[1,0],[0,-1]],  dtype=complex),
+}
+
+def pauli_basis(n):
+    """
+    generates the basis of Pauli operators, and orders it by appearence in the isotypical decomp of Times_i SU(2)
+    """
+    all_strs    = [''.join(s) for s in itertools.product('IXYZ', repeat=n)]
+    sorted_strs = sorted(all_strs, key=lambda s: (n-s.count('I'), s))
+    norm        = np.sqrt(2**n)
+    mats        = []
+    for s in sorted_strs:
+        factors = [_pauli_map[ch] for ch in s]
+        M       = functools.reduce(lambda A,B: np.kron(A,B), factors)
+        mats.append(M.reshape(-1)/norm)
+    B = np.column_stack(mats)
+    return sorted_strs, B
+
+def rotate_superoperator(U):
+    """
+    Rotates the superop of the adj of a unitary U to the irrep-sorted Pauli basis
+    """
+    S        = np.kron(U.conj(), U)
+    n        = int(np.log2(U.shape[0]))
+    basis,B  = pauli_basis(n)
+    S_rot    = B.conj().T @ S @ B
+    return basis, S_rot
+
+n = 2
+Us = [haar_unitary(2) for _ in range(n)]
+# U is a tensor product of single-qubit unitaries
+U = functools.reduce(lambda A, B: np.kron(A, B), Us)
+
+basis, S_rot = rotate_superoperator(U)
+np.set_printoptions(
+    formatter={'float': lambda x: f"{x:5.2g}"},
+    linewidth=200,    # default is 75;
+    threshold=10000   # so it doesn’t summarize large arrays
+)
+
+# now round and print
+## NOTICE THAT IN PAULI BASIS THE UNITARY ADJOINT ACTION IS ORTHOGONAL
+print("Adjoint Superoperator of U in the Irrep basis")
+S_real = S_rot.real
+Sr_round = np.round(S_real, 2)
+print("Rounded real part (the operator is real):")
+print(Sr_round)
+
+######################################################################
+# Given a new state :math:`rho`, we can compute the GDF purity by transforming it with the same basis transform.
+# [TODO: compute result for a few different rhos without knowing the basis]
+#
+
+######################################################################
+# With a bit of knowledge on representation theory, one might recognise that the subspaces
+# are spanned by a basis of Pauli words.
+#
+# [TODO: compute same result with Pauli basis]
 
 #
 # References
