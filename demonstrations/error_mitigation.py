@@ -38,6 +38,10 @@ of Mitiq, which can be installed using
 
     pip install "mitiq>=0.11"
 
+.. warning::
+
+    Mitiq currently requires ``pennylane~=0.36.0``. Please ensure you have ``pennylane==0.36.0``
+    installed in your environment. 
 We'll begin the demo by jumping straight into the deep end and seeing how to mitigate a simple noisy
 circuit in PennyLane with Mitiq as a backend. After, we'll take a step back and discuss the theory
 behind the error mitigation approach we used, known as zero-noise extrapolation. Using this
