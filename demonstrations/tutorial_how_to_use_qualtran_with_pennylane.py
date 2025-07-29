@@ -45,13 +45,12 @@ print(bloq_as_op)
 #
 # Since Qualtran Bloqs don't know what wires to act on, we need to provide that information to 
 # `FromBloq` accordingly. If you're unsure about what wires to provide, you can use the 
-# :func:`~.pennylane.bloq_registers` helper function. This function creates registers based on the signature 
-# of the qualtran Bloq.
+# :func:`~.pennylane.bloq_registers` helper function.
 
 print(qml.bloq_registers(XGate()))
 
 ######################################################################
-# This will create registers with with the register names in accordance to the Bloq's signature. 
+# This will create :func:`~.pennylane.registers` with with the register names in accordance to the Bloq's signature. 
 # Here, we got just one "q" register with a single qubit, which is what we expected for the ``XGate``.
 #
 # Now, let's verify that ``XGate``` performs as expected in a PennyLane circuit.
@@ -75,19 +74,18 @@ from qualtran.bloqs.chemistry.hubbard_model.qubitization import (
 )
 from qualtran.bloqs.phase_estimation import LPResourceState, QubitizationQPE
 
-x_dim, y_dim, t = 2, 2, 2
-u = 4 * t
-walk = get_walk_operator_for_hubbard_model(x_dim, y_dim, t, u)
+walk = get_walk_operator_for_hubbard_model(x_dim=2, y_dim=2, t=2, u=8)
 
-algo_eps = t / 100
-N = x_dim * y_dim * 2
-qlambda = 2 * N * t + (N * u) // 2
+algo_eps = 1/50
+N = 8
+qlambda = 2 * N * 2 + (N * 8) // 2
 qpe_eps = algo_eps / (qlambda * np.sqrt(2))
 qubitization_qpe = QubitizationQPE(
     walk, LPResourceState.from_standard_deviation_eps(qpe_eps)
 )
+######################################################################
+# For drawing & analysis:
 
-# For drawing & analysis
 from qualtran.drawing import show_counts_sigma
 from qualtran.resource_counting.generalizers import ignore_split_join
 
@@ -131,8 +129,7 @@ print(qml.FromBloq(qubitization_qpe, wires=range(n_qubits)).decomposition())
 # Smart defaults
 # --------------
 # By default, ``qml.to_bloq``` tries its best to translate 
-# PennyLane objects to Qualtran-native objects. This is done through a combination of smart 
-# defaults and direct mappings. This makes certain Qualtran
+# PennyLane objects to Qualtran-native objects. This makes certain Qualtran
 # functionalities, such as gate counting and generalizers, work more seamlessly.
 # Here, PennyLane's ``PauliX`` operator is mapped directly to Qualtran's ``XGate``.
 
@@ -179,7 +176,7 @@ fig.tight_layout()
 # defined in the custom map. 
 #
 # When a quantum function or operator does not have a mapping - a direct Qualtran equivalent 
-# or smart default - the circuit is wrapped as a `ToBloq` Bloq
+# or smart default - the circuit is wrapped as a ``ToBloq`` Bloq.
 
 def circ():
     qml.X(0)
