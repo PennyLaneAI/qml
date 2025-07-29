@@ -160,7 +160,8 @@ jobs:
         run: |
           sudo apt-get install -y \
             ocl-icd-opencl-dev \
-            pandoc 
+            pandoc \
+            graphviz
 
       - name: Setup Python
         uses: actions/setup-python@v4
