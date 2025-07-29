@@ -239,7 +239,7 @@ show_counts_sigma(wrapped_sigma)
 # ----------
 # In this how to, we took a look at how to use Pennylane with Qualtran. There's so much more that's
 # possible that we couldn't cover here. We encourage you to play around with the
-# integration: try swapping out PennyLane operators with Qualtran Bloqs, and running it on a real
+# integration: try swapping out PennyLane operators with Qualtran Bloqs and running it on a real
 # quantum device! Or convert an existing PennyLane workflow into Qualtran and see how Qualtran
 # estimates the number of T gates. If you'd like to see more examples of Qualtran and PennyLane
 # or would like to know further technical details, be sure to check out the docs for :func:`~.pennylane.to_bloq`
