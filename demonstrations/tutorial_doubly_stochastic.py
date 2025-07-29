@@ -176,7 +176,7 @@ opt = qml.GradientDescentOptimizer(eta)
 
 for _ in range(steps):
     cost_SGD1.append(qml.set_shots(qnode_stochastic, shots=1)(params_SGD1))
-    params_SGD1 = opt.step(qnode_stochastic, params_SGD1, shots=1)
+    params_SGD1 = opt.step(qml.set_shots(qnode_stochastic, shots=1), params_SGD1)
 
 # Optimizing using stochastic gradient descent with shots=100
 
@@ -186,7 +186,7 @@ opt = qml.GradientDescentOptimizer(eta)
 
 for _ in range(steps):
     cost_SGD100.append(qml.set_shots(qnode_stochastic, shots=100)(params_SGD100))
-    params_SGD100 = opt.step(qnode_stochastic, params_SGD100, shots=100)
+    params_SGD100 = opt.step(qml.set_shots(qnode_stochastic, shots=100), params_SGD100)
 
 ##############################################################################
 # Note that in the latter two cases we are sampling from an unbiased
