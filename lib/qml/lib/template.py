@@ -42,7 +42,8 @@ def metadata(
 
 
 def demo(title: str) -> str:
-    return inspect.cleandoc(f'''
+    return inspect.cleandoc(
+        f'''
     r"""
     {title}
     {"="}
@@ -59,16 +60,20 @@ def demo(title: str) -> str:
 
     print("World")
 
-    ''')
+    '''
+    )
+
 
 def requirements() -> str:
     """Creates a empty requirements.in file.
-    
-    The file is populated with a comment block explaining its purpose. 
+
+    The file is populated with a comment block explaining its purpose.
     """
 
-    return inspect.cleandoc('''
+    return inspect.cleandoc(
+        """
     ### Please add any additional requirements that are needed for your demo here ###
     ### If you are curious about global dependencies, check the `/dependencies` directory ###
 
-    ''')
+    """
+    )

@@ -1,4 +1,3 @@
-from qml.app.utils import slugify
 import typer
 from qml.context import Context
 from qml.lib import demo, repo, cli, fs, template
@@ -104,6 +103,25 @@ def build(
         logger.error(f"Build failed: {e}")
         raise typer.Exit(1)
 
+def _slugify_title(title: str) -> str:
+    """Convert a string to a slug-friendly format. This function handles CamelCase, removes special characters,
+    replaces spaces and hyphens with underscores, and converts the string to lowercase.
+
+    Examples:
+    slugify("Hello World") -> "hello_world"
+    slugify("CamelCaseExample") -> "camel_case_example"
+    slugify("Special!@#Characters") -> "special_characters"
+    slugify("Multiple   Spaces") -> "multiple_spaces"
+    slugify("Hyphen-ated-Text") -> "hyphen_ated_text"
+    """
+    # Handle CamelCase by inserting spaces before uppercase letters
+    title = re.sub(r"([a-z])([A-Z])", r"\1 \2", title)
+    # Remove special characters except spaces and hyphens
+    title = re.sub(r"[^\w\s-]", "", title)
+    # Replace multiple spaces/hyphens with single underscore
+    title = re.sub(r"[\s-]+", "_", title)
+    # Convert to lowercase and strip
+    return title.strip().lower()
 
 def _validate_title(title: str) -> str:
     """Validate and clean the demo title."""
@@ -201,7 +219,7 @@ def new():
         title = _validate_title(title)
 
         # Get directory name with validation
-        name_default = slugify(title)
+        name_default = _slugify_title(title)
         while True:
             name = typer.prompt("Custom directory name", name_default)
 
