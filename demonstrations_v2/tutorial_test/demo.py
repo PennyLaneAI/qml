@@ -13,7 +13,7 @@ Testing for symmetry with quantum computers
 
 *Author: David Wakeham. Posted: 24 January 2023.*
 
-Symmetries are transformations that leave something looking the same.
+ are transformations that leave something looking the same.
 They are not only pretty — think of geometric patterns and shapes — but
 a great labour-saving device for the lazy physicist!
 You can do something once, and by applying transformations, find your
