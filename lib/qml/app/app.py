@@ -14,14 +14,14 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Constants
-DEFAULT_BUILD_FORMAT = "html"
+DEFAULT_BUILD_FORMAT = "json"
 DEMO_FILENAME = "demo.py"
 METADATA_FILENAME = "metadata.json"
 REQUIREMENTS_FILENAME = "requirements.in"
 THUMBNAIL_FILENAME = "thumbnail"
 LARGE_THUMBNAIL_FILENAME = "large_thumbnail"
 
-app = typer.Typer(name="qml")
+app = typer.Typer(name="qml", no_args_is_help=True, help="QML Demo build tool - Create, build, and manage quantum machine learning demos.")
 
 
 @app.command()
