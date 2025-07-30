@@ -1,3 +1,4 @@
+from lib.qml.app.utils import slugify
 import typer
 from qml.context import Context
 from qml.lib import demo, repo, cli, fs, template
@@ -65,14 +66,12 @@ def new():
     """Create a new demo."""
     ctx = Context()
     title: str = typer.prompt("Title")
-    name_default = re.sub(r"\s+", "_", inflection.underscore(title))
-    if not name_default.startswith("tutorial_"):
-        name_default = "tutorial_" + name_default
+    name_default = slugify(title)
 
     while True:
-        name: str = typer.prompt("Name", name_default)
+        name: str = typer.prompt("Custom directory name", name_default)
         if demo.get(ctx.demos_dir, name):
-            print(f"Demo with name '{name}' already exists")
+            print(f"A demo with the directory name '{name}' already exists, please choose a different name.")
         else:
             break
 
@@ -83,7 +82,7 @@ def new():
     authors.append(typer.prompt(author_prompt))
 
     while True:
-        if not typer.confirm("Add another author?"):
+        if not typer.confirm("Would you like to add another author?"):
             break
 
         authors.append(typer.prompt(author_prompt))
