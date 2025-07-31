@@ -308,11 +308,11 @@ def initial_circuit(wf):
 # Time Evolution
 # --------------
 #
-# Next we will discuss how to prepare the electronic Hamiltonian for use in the time evolution of the Hadamard-test. 
-# We will double-factorize and compress the Hamiltonian to approximate it as a series of fragments, each of which can be fast-forwarded in a Trotter product formula.
+# Next we will discuss how to prepare the electronic Hamiltonian for use in the time evolution of the Hadamard-test circuit. 
+# We will perform compressed double factorization on the Hamiltonian to approximate it as a series of fragments, each of which can be fast-forwarded in a Trotter product formula.
 #
 # If you haven’t yet, go read the demo `“How to build compressed double-factorized Hamiltonians” <https://pennylane.ai/qml/demos/tutorial_how_to_build_compressed_double_factorized_hamiltonians>`__, because that is exactly what we are going to do! 
-# You could also look at section III in [#Fomichev2025]_.
+# You could also look at section III in Ref. [#Fomichev2025]_.
 #
 # Electronic Hamiltonian
 # ~~~~~~~~~~~~~~~~~~~~~~
@@ -321,11 +321,11 @@ def initial_circuit(wf):
 #
 # .. math::  H = E + \sum_{p,q=1}^N \sum_{\gamma\in\{\uparrow,\downarrow\}} (p|\kappa|q) a^\dagger_{p\gamma}a_{q\gamma} + \frac12 \sum_{p,q,r,s=1}^N\sum_{\gamma,\beta\in\{\uparrow,\downarrow\}} (pq|rs) a^\dagger_{p\gamma}a_{q\gamma} a^\dagger_{r\beta}a_{s\beta} \,,
 #
-# where :math:`a^{(\dagger)}_{p\gamma}` is the annihilation (creation) operator for a molecular orbital :math:`p` and spin :math:`\gamma`, :math:`E` is the core constant, :math:`N` is the number of spatial orbitals, and :math:`(p|\kappa|q)` and :math:`(pq|rs)` are the one- and two-electron integrals, respectively [#Cohn2021]_.
+# where :math:`a^{(\dagger)}_{p\gamma}` is the annihilation (creation) operator for a molecular orbital :math:`p` and spin :math:`\gamma`, :math:`E` is the nuclear core constant, :math:`N` is the number of spatial orbitals, and :math:`(p|\kappa|q)` and :math:`(pq|rs)` are the one- and two-electron integrals, respectively [#Cohn2021]_.
 #
-# The core constant and the one- and two-electron integrals can be computed in PennyLane using `qml.qchem.electron_integrals`.
+# The core constant and the one- and two-electron integrals can be computed in PennyLane using ``qml.qchem.electron_integrals``.
 
-# Calculate electron integrals.
+# Calculate one- and two-electron integrals.
 core_constant, one, two = qml.qchem.electron_integrals(mole, core=core, active=active)()
 core_constant = core_constant[0]
 
@@ -337,17 +337,13 @@ two_chemist = np.einsum("prsq->pqrs", two)
 one_chemist = one - np.einsum("pqrr->pq", two) / 2.0
 
 ######################################################################
-# Next, we will perform compressed double factorization of the Hamiltonian's one- and two-electron terms. 
-# This approximates the Hamiltonian as
+# Next, we will perform compressed double factorization of the Hamiltonian's two-electron integrals to approximate them as a sum of :math:`L` fragments
 #
-# .. math::  H_\mathrm{CDF} = E + \sum_{\gamma\in\{\uparrow,\downarrow\}} U_\gamma^{(0)} \left(\sum_p Z_p^{(0)} a_{\gamma,p}^\dagger a_{\gamma, p}\right) U_\mathrm{\gamma}^{(0)\,\dagger} + \sum_\ell^L \sum_{\gamma,\beta\in\{\uparrow,\downarrow\}} U_\mathrm{\gamma, \beta}^{(\ell)} \left( \sum_{pq} Z_{pq}^{(\ell)} a_{\gamma, p}^\dagger a_{\gamma, p} a_{\beta,q}^\dagger a_{\beta, q}\right) U_{\gamma, \beta}^{(\ell)\,\dagger} \,,
-#
-# where each one-electron integral is approximated by a matrix :math:`Z^{(0)}` surrounded by single-particle rotation matrices :math:`U^{(0)}` which diagonalize :math:`Z^{(0)}` (see Appendix A of [#Fomichev2025]_).
-# Each two-electron integral is approximated by a sum of :math:`L` of these rotation and diagonal matrix fragments, indexed as :math:`(\ell)`. 
-#
-# We can compress and double-factorize the two-electron integrals using PennyLane’s
-# ``qchem.factorize`` function, with ``compressed=True``. 
-# We will set :math:`L` as the number of orbitals in our active space. 
+# .. math:: (pq|rs) \approx \sum_{\ell=1}^L \sum_{k, m=1}^N U_{pk}^{(\ell)}U_{qk}^{(\ell)}Z_{km}^{(\ell)}U_{rm}^{(\ell)}U_{sm}^{(\ell)}\,,
+# 
+# where :math:`Z^{(\ell)}` is symmetric and :math:`U^{(\ell)}` is orthogonal. 
+# These matrices can be calculated using PennyLane’s ``qchem.factorize`` function, with ``compressed=True``. 
+# By default, :math:`L` is set as twice the number of orbtials in our active space. 
 # The ``Z`` and ``U`` output here are arrays of :math:`L` fragment matrices with dimension :math:`n_\mathrm{cas} \times n_\mathrm{cas}`.
 
 from jax import config
@@ -367,9 +363,10 @@ approx_two_chemist = qml.math.einsum("tpk,tqk,tkl,trl,tsl->pqrs", U, U, Z, U, U)
 assert qml.math.allclose(approx_two_chemist, two_chemist, atol=0.1)
 
 ######################################################################
-# Note there are some terms in this decomposition that are exactly diagonalizable, and can be added to the one-electron terms to simplify the simulation. 
-# We call these the “one-electron extra” terms and add them to the one-electron integrals, using ``np.linalg.eigh`` to diagonalize them into the matrix :math:`Z^{(0)}` with the rotation matrix :math:`U^{(0)}`.
-#
+# Note there are some terms in this decomposition that are exactly diagonalizable, and can be added to the one-electron terms to simplify how the Hamiltonian time evolution is implemented. 
+# We call these the “one-electron extra” terms and add them to the one-electron integrals.
+# The one-electron integrals can be diagnonalized into the matrix :math:`Z^{(0)}` with basis rotation matrix :math:`U^{(0)}` using ``np.linalg.eigh``. 
+# This simplifies their implementation in the simulation circuit.
 
 # Calculate the one-electron extra terms.
 Z_prime = np.stack([np.diag(np.sum(Z[i], axis=-1)) for i in range(Z.shape[0])], axis=0)
@@ -384,11 +381,17 @@ Z0 = np.diag(eigenvals)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # The main work of our algorithm will be to implement time evolution with respect to our Hamiltonian fragments by using a Trotter product formula, and measure the expectation value of that time evolution operator for various times.
-# Let’s start by writing functions that implement the time evolution for each Hamiltonian fragment, which will be called by a Trotter circuit function. 
 #
-# The trick when implementing a double-factorized Hamiltonian is to use `Thouless’s theorem <https://joshuagoings.com/assets/Thouless_theorem.pdf>`__ [#Thouless1960]_ to construct a size :math:`2^{n_\mathrm{cas}} \times 2^{n_\mathrm{cas}}` unitary :math:`\bf{U}^{(\ell)}` that is induced by a the single-particle basis transformation :math:`U^{(\ell)}` (of size :math:`n_\mathrm{cas} \times n_\mathrm{cas}`). 
+# The trick when implementing a compressed double-factorized Hamiltonian is to use `Thouless’s theorem <https://joshuagoings.com/assets/Thouless_theorem.pdf>`__ [#Thouless1960]_ to construct a size :math:`2^{n_\mathrm{cas}} \times 2^{n_\mathrm{cas}}` unitary :math:`\bf{U}^{(\ell)}` that is induced by a the single-particle basis transformation :math:`U^{(\ell)}` (of size :math:`n_\mathrm{cas} \times n_\mathrm{cas}`). 
 # The Jordan-Wigner transform can then turn the number operators :math:`a^\dagger_p a_p = n_{p}` into Pauli :math:`Z` rotations, via :math:`n_p = (1-\sigma_{z,p})/2`. 
 # Note the :math:`1/2` term will affect the global phase, and we will have to keep track of that carefully. 
+# The resulting Hamiltonian looks like the following (for a derivation see Appendix A of [#Fomichev2025]_)
+#
+# ..math::  \begin{align} H &= \left(E + \sum_k Z_k^{(0)} - \frac12 \sum_{\ell, km}Z_{km}^{(\ell)} + \frac14 \sum_{\ell,k}Z_{kk}^{(\ell)}\right) \bg{1} \\
+# &- \frac12 \bf{U}^{(0)} \left[ \sum_k Z_k^{(0)} \sum_\gamma \sigma_{z, k\gamma} \right] (\bf{U}^{(0)})^{T} \\
+# &+ \frac18 \sum_\ell \bf{U}^{(\ell)} \left[\sum_{(k, \gamma)\neq(m, \beta)} \left(Z_{km}^{(\ell)}\sigma_{z, k\gamma}\sigma_{z, m\beta}\right)\right](\bf{U}^{(\ell)})^T \,.
+#
+# The first term is a sum of the core constant and the phase factors that come from the Jordan-Wigner transform. The second and third terms and the one- and two-electron terms, respectively. 
 # Below is an illustration of the circuit we will use to implement the one- and two-electron fragments in our factorized Hamiltonian.
 #
 # .. figure:: ../_static/demonstration_assets/xas/UZU_circuits.png
