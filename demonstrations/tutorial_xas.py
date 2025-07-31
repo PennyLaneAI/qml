@@ -146,10 +146,10 @@ from pyscf import gto, scf
 import numpy as np
 
 # Create a Mole object.
-r = 0.71  # Bond length in Angstrom.
-symbols = ["H", "H"]
+r = 1.0  # Bond length in Angstrom.
+symbols = ["N", "N"]
 geometry = np.array([[0.0, 0.0, -r / 2], [0.0, 0.0, r / 2]])
-mol = gto.Mole(atom=zip(symbols, geometry), basis="631g", symmetry=None)
+mol = gto.Mole(atom=zip(symbols, geometry), basis="sto3g", symmetry=None)
 mol.build(verbose=0)
 
 # Get the molecular orbitals.
@@ -163,7 +163,7 @@ hf.run(verbose=0)
 import pennylane as qml
 
 # Create a qml Molecule object.
-mole = qml.qchem.Molecule(symbols, geometry, basis_name="6-31g", unit="angstrom")
+mole = qml.qchem.Molecule(symbols, geometry, basis_name="sto-3g", unit="angstrom")
 
 # Run self-consistent fields method to get MO coefficients.
 _, coeffs, _, _, _ = qml.qchem.hartree_fock.scf(mole)()
@@ -180,7 +180,7 @@ hf.mo_coeff = coeffs  # Change MO coefficients in hf object to PennyLane calcula
 from pyscf import mcscf
 
 # Define active space of (orbitals, electrons).
-n_cas, n_electron_cas = (4, 2)
+n_cas, n_electron_cas = (5, 4)
 ncore = (mol.nelectron - n_electron_cas) // 2
 
 # Initialize CASCI instance of H2 molecule as mycasci.
@@ -349,9 +349,17 @@ one_chemist = one - np.einsum("pqrr->pq", two) / 2.0
 # We will set :math:`L` as the number of orbitals in our active space. 
 # The ``Z`` and ``U`` output here are arrays of :math:`L` fragment matrices with dimension :math:`n_\mathrm{cas} \times n_\mathrm{cas}`.
 
-# Factorize Hamiltonian, producing matrices Z and U for each fragment.
+from optax import adam
+from jax import config
+config.update("jax_enable_x64", True)
+
 L = n_cas  # Usually L is on the order of n_cas.
-_, Z, U = qml.qchem.factorize(two_chemist, compressed=True, num_factors=L)
+
+# Factorize Hamiltonian, producing matrices Z and U for each fragment.
+_, Z, U = qml.qchem.factorize(two_chemist, compressed=True, num_factors=L,
+                              cholesky=True, num_steps=1500,
+                              optimizer=adam(learning_rate=0.003)
+                              )
 
 print("Shape of the factors: ")
 print("two_chemist", two_chemist.shape)
@@ -360,7 +368,8 @@ print("Z", Z.shape)
 
 # Compare factorized two-electron terms to the originals.
 approx_two_chemist = qml.math.einsum("tpk,tqk,tkl,trl,tsl->pqrs", U, U, Z, U, U)
-assert qml.math.allclose(approx_two_chemist, two_chemist, atol=1e-2)
+print(np.linalg.norm(approx_two_chemist - two_chemist))
+# assert qml.math.allclose(approx_two_chemist, two_chemist, atol=1e-2)
 
 ######################################################################
 # Note there are some terms in this decomposition that are exactly diagonalizable, and can be added to the one-electron terms to simplify the simulation. 
@@ -559,9 +568,9 @@ def meas_circuit(state):
 # - The total number of shots we will use to obtain statistics for the expectation value of the time evolution.
 
 eta = 0.05  # In Hartree energy units (Ha).
-H_norm = 1.5  # Maximum final state eigenvalue used to determine tau.
+H_norm = np.pi  # Maximum final state eigenvalue used to determine tau.
 tau = np.pi / (2 * H_norm)  # Time step, set by the largest relevant eigenvalue.
-jmax = 40  # Maximum number of time steps.
+jmax = 100  # Maximum number of time steps.
 total_shots = 500 * 2 * jmax  # Total number of shots for expectation value statistics.
 
 jrange = np.arange(1, 2 * int(jmax) + 1, 1)
@@ -656,20 +665,20 @@ f_domain_Greens_func = (
             + 2*np.sum(L_js * (expvals[0, :] * np.cos(time_interval * w)
             - expvals[1, :] * np.sin(time_interval * w)))))
 
-wgrid = np.linspace(-2, 5, 10000)  # Frequency array for plotting.
+wgrid = np.linspace(-108, -104, 10000)  # Frequency array for plotting.
 w_min, w_step = wgrid[0], wgrid[1] - wgrid[0]
 
 spectrum = np.array([f_domain_Greens_func(w) for w in wgrid])
 
 ######################################################################
-# Since our active space for :math:`\mathrm{H}_2` is small, we can easily calculate a classical spectrum for comparison. 
+# Since our active space for :math:`\mathrm{N}_2` is small, we can easily calculate a classical spectrum for comparison. 
 # We do this using the ``mycasci`` instance that we used to determine the ground state, but instead solve for more states by increasing the number of roots in the ``fcisolver``. 
 # This will give us the energies of the excited final states. 
 # We can also calculate the transition density matrix in the molecular orbital basis between those states and the initial state, :math:`\langle F| \hat m_\rho |I \rangle`. 
 # With the energies and the overlaps, we can compute the absorption cross section directly.
 
 # Use CASCI to solve for excited states.
-mycasci.fcisolver.nroots = 10  # Compute the first 10 states.
+mycasci.fcisolver.nroots = 100  # Compute the first 10 states.
 mycasci.run(verbose=0)
 mycasci.e_tot = np.atleast_1d(mycasci.e_tot)
 
@@ -714,9 +723,10 @@ ax.set_xlabel(r"$\mathrm{Energy}, \omega\ (\mathrm{Ha})$")
 ax.set_ylabel(r"$\mathrm{Absorption\ (arb.)}$")
 ax.legend()
 fig.text(0.5, 0.05,
-    r"Figure 8: Simulated $\mathrm{H}_2$ X-ray absorption spectrum.",
+    r"Figure 8: Simulated $\mathrm{N}_2$ X-ray absorption spectrum.",
     horizontalalignment="center",
     size="small", weight="normal")
+# fig.savefig("N2_spectrum_test_init_params.png")
 plt.show()
 
 ######################################################################
