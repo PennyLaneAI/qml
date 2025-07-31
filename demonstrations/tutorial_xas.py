@@ -308,7 +308,7 @@ def initial_circuit(wf):
 # Time Evolution
 # --------------
 #
-# Next we will discuss how to prepare the electronic Hamiltonian for use in the time evolution of the Hadamard-test circuit. 
+# Next we will discuss how to prepare the electronic Hamiltonian for use in the time evolution of the Hadamard test circuit. 
 # We will perform compressed double factorization on the Hamiltonian to approximate it as a series of fragments, each of which can be fast-forwarded in a Trotter product formula.
 #
 # If you haven’t yet, go read the demo `“How to build compressed double-factorized Hamiltonians” <https://pennylane.ai/qml/demos/tutorial_how_to_build_compressed_double_factorized_hamiltonians>`__, because that is exactly what we are going to do! 
@@ -387,11 +387,11 @@ Z0 = np.diag(eigenvals)
 # Note the :math:`1/2` term will affect the global phase, and we will have to keep track of that carefully. 
 # The resulting Hamiltonian looks like the following (for a derivation see Appendix A of [#Fomichev2025]_)
 #
-# ..math::  \begin{align} H &= \left(E + \sum_k Z_k^{(0)} - \frac12 \sum_{\ell, km}Z_{km}^{(\ell)} + \frac14 \sum_{\ell,k}Z_{kk}^{(\ell)}\right) \bg{1} \\
+# ..math::  \begin{align} H_\mathrm{CDF} &= \left(E + \sum_k Z_k^{(0)} - \frac12 \sum_{\ell, km}Z_{km}^{(\ell)} + \frac14 \sum_{\ell,k}Z_{kk}^{(\ell)}\right) \bg{1} \\
 # &- \frac12 \bf{U}^{(0)} \left[ \sum_k Z_k^{(0)} \sum_\gamma \sigma_{z, k\gamma} \right] (\bf{U}^{(0)})^{T} \\
 # &+ \frac18 \sum_\ell \bf{U}^{(\ell)} \left[\sum_{(k, \gamma)\neq(m, \beta)} \left(Z_{km}^{(\ell)}\sigma_{z, k\gamma}\sigma_{z, m\beta}\right)\right](\bf{U}^{(\ell)})^T \,.
 #
-# The first term is a sum of the core constant and the phase factors that come from the Jordan-Wigner transform. The second and third terms and the one- and two-electron terms, respectively. 
+# The first term is a sum of the core constant and contant factors that arise from the Jordan-Wigner transform. The second and third terms are the one- and two-electron fragments, respectively. 
 # Below is an illustration of the circuit we will use to implement the one- and two-electron fragments in our factorized Hamiltonian.
 #
 # .. figure:: ../_static/demonstration_assets/xas/UZU_circuits.png
@@ -464,9 +464,6 @@ def Z_rotations(Z, step, is_one_electron_term, control_wires):
 
 
 ######################################################################
-# .. note::
-#    For a derivation of the global phase accrued from the two-electron fragments, see Appendix A in [#Fomichev2025]_.
-#
 # Now that we have functions for all the terms of our Hamiltonian, we can define our Trotter step. 
 # For our factorized Hamiltonian :math:`H_\mathrm{CDF} = \sum_j^N H_j`, with non-commuting fragments :math:`H_j`, a second-order product formula approximates the time evolution for a time step :math:`\Delta t`` as
 # 
@@ -476,7 +473,6 @@ def Z_rotations(Z, step, is_one_electron_term, control_wires):
 # The function ``first_order_trotter`` will implement the :math:`U` rotations and :math:`Z` rotations, and adjust the global phase from the core constant term. 
 # It will also be able to reverse the order of applied fragments.
 # By tracking the last :math:`U` rotation used, we can implement two consecutive rotations at once as :math:`V^{(\ell)} = U^{(\ell-1)}(U^{(\ell)})^T`, halving the number of rotations required per Trotter step.
-# At the end of the step, the core constant adjusts a global phase.
 
 
 def first_order_trotter(step, prior_U, final_rotation, reverse=False):
@@ -634,8 +630,7 @@ for rho in rhos:
 # This is not possible on a real quantum device -- every time you measure the state you have to start from scratch and compute all previous time steps again.
 # However, we can use this trick with a simulated quantum device, like ``lightning.qubit``, to save computation time.
 #  
-# Plotting the time-domain output, we see what appears to be a `beat note <https://en.wikipedia.org/wiki/Beat_(acoustics)>`__.
-# Therefore, we should see two peaks in our spectrum.
+# Plotting the time-domain output, we see a `beat note <https://en.wikipedia.org/wiki/Beat_(acoustics)>`__, indicating there are two strong frequencies in our spectrum. 
 
 import matplotlib.pyplot as plt
 
@@ -735,7 +730,7 @@ plt.show()
 # Nice! Our time-domain simulation method reproduces the classical spectrum.
 # Looking closely, we can see there are two strong peaks, as predicted from the beat note in the expectation values in Figure 7. 
 # If we worked with a larger active space, we would obtain more features in the spectrum. 
-# The spectrum calculated from the full orbital space is shown in Section V in Ref. [#Fomichev:2025].
+# The spectrum calculated from the full orbital space is shown in Section V in Ref. [#Fomichev2025].
 # 
 #
 # Conclusion
@@ -819,8 +814,10 @@ plt.show()
 # We can also turn off the two-electron terms that couple core-excited and valence-excited states. 
 # The terms are in general small, but by setting them to zero that coupling is removed entirely from the time evolution. 
 # To implement the core-valence seperation approximation in an XAS simulation algorithm, there are two steps:
-#  - Before performing compressed double factorization on the two-electron integrals, remove the terms that include at least one core orbital.
-#  - Remove all the matrix elements from the dipole operator that do *not* include at least one core orbital.
+# 
+# - Before performing compressed double factorization on the two-electron integrals, remove the terms that include at least one core orbital.
+# - Remove all the matrix elements from the dipole operator that do *not* include at least one core orbital.
+# 
 # This approximation would be useful when simulated a complex molecular instance, such as a cluster in a lithium-excess material. 
 #
 
