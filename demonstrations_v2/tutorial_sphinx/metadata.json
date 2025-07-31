@@ -1,8 +1,8 @@
 {
   "title": "I like sphinx cats",
   "authors": [
-    "alan",
-    "justin"
+    {"username": "alan"},
+    {"username": "justin"}
   ],
   "executable": true,
   "dateOfPublication": "2025-07-31T00:00:00+00:00",
