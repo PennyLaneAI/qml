@@ -4,7 +4,7 @@ r"""X-ray absorption spectroscopy simulation in the time domain
 What will be the first industrially useful quantum algorithm to run on fault-tolerant quantum computers? 
 This open question is being tackled head-on by the research team at Xanadu, as it aligns with our goal of making quantum computers that are useful.
 In particular, we believe promising candidates for early quantum advantage are simulations of *small* but *highly correlated* systems. 
-One such application is simulating `X-ray absorption spectroscopy <https://en.wikipedia.org/wiki/X-ray_absorption_spectroscopy>`__ (XAS), which can be useful in workflows for identifying structural degradation mechanisms in material candidates for battery designs🔋 [#Fomichev2024]_. 
+One such application is simulating `X-ray absorption spectroscopy <https://en.wikipedia.org/wiki/X-ray_absorption_spectroscopy>`__ (XAS), which can be useful in workflows for identifying structural degradation mechanisms in material candidates for battery designs 🔋 [#Fomichev2024]_. 
 This demo will show you how to implement an optimized simulation algorithm developed in the paper `“Fast simulations of X-ray absorption spectroscopy for battery materials on a quantum computer” <https://arxiv.org/abs/2506.15784>`__ [#Fomichev2025]_ in PennyLane.
 
 First, we will discuss why simulating X-ray absorption spectroscopy was identified as a promising application for early quantum computers. 
@@ -725,17 +725,18 @@ fig.text(0.5, 0.05,
 plt.show()
 
 ######################################################################
-# Looking at the spectrum, we can see there are two strong peaks, as predicted from the beat note in the time response in Figure 7. 
-#
-# **[Exciting conclusion here]**
+# Nice! Our time-domain simulation method reproduces the classical spectrum.
+# Looking closely, we can see there are two strong peaks, as predicted from the beat note in the expectation values in Figure 7. 
+# If we worked with a larger active space, we would obtain more features in the spectrum. 
+# The spectrum calculated from the full orbital space is shown in Section V in Ref. [#Fomichev:2025].
+# 
 #
 # Conclusion
 # ----------
 #
 # In this tutorial, we have implemented a simplified version of the algorithm as presented in [#Fomichev2025]_. 
-# The algorithm represents a culmination of many optimizations for time-evolving an electronic Hamiltonian. 
-# We’ve also discussed how XAS is a promising candidate for early fault-tolerant quantum computers due to its low qubit overhead but high amount of correlations in
-# the state space.
+# The algorithm represents a culmination of many optimizations for time evolving an electronic Hamiltonian. 
+# We’ve also discussed how XAS simulation is a promising candidate applicaiton for early fault-tolerant quantum computers due to its low qubit overhead but high amount of correlations in the state space.
 #
 # References
 # ----------
@@ -789,7 +790,7 @@ plt.show()
 # This is already detailed in the `demo on CDF Hamiltonians <https://pennylane.ai/qml/demos/tutorial_how_to_build_compressed_double_factorized_hamiltonians>`__.
 #
 # Another optimization is to use a randomized second-order Trotter formula for the time evolution. 
-# As discussed in Ref. [#Childs2019]_, the error in deterministic product formulas scales with the commutators of the Hamiltonian terms. 
+# As discussed in Ref. [#Childs2019]_, the errors in deterministic product formulas scale with the commutators of the Hamiltonian terms. 
 # One could instead use all permutations of the Hamiltonian terms, such that the commutator errors cancel. 
 # However, the average of all permutations is not unitary in general. 
 # To circumvent this, one can randomly choose a Hamiltonian term ordering, which can give a good approximation to the desired evolution.
