@@ -623,9 +623,11 @@ for rho in rhos:
         expvals[:, i] += dipole_norm[rho]**2 * np.array(measurement).real
 
 ######################################################################
-# To save cost when using a simulated quantum device to run this algorithm (``lightning.qubit``), we can store the state before every measurement, and then start from that state when we move on to the next time step.
-# This way, we only have to compute *one step* at a time.
-# This is not possible on a real quantum device -- you would have to start from scratch every time you measure the state.
+# In the simulation above we are cheating! 
+# We store the state before every measurement, and then start the time evolution from that state when we move on to the next time step.
+# This way, we only have to compute *one step* to get to the next time increment.
+# This is not possible on a real quantum device -- every time you measure the state you have to start from scratch and compute all previous time steps again.
+# However, we can use this trick with a simulated quantum device, like ``lightning.qubit``, to save computation time.
 #  
 # Plotting the time-domain output, we see what appears to be a `beat note <https://en.wikipedia.org/wiki/Beat_(acoustics)>`__.
 # Therefore, we should see two peaks in our spectrum.
