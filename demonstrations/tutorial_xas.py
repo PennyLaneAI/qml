@@ -131,7 +131,8 @@ We need to classically determine the ground state :math:`|I\rangle`, and the dip
 For complicated molecular clusters, it's common to choose and consider only a subset of molecular orbitals and electrons in a calculation. 
 This set of orbitals and electrons is known as the “active space”. 
 Utilizing an active space reduces the cost of performing calculations on complicated molecular instances, while hopefully still preserving the interesting features of the molecule. 
-For this demo, we are going to use the simple :math:`\mathrm{H}_2` molecule, and we will be trivially selecting the full space of orbitals and electrons for the calculation, but the method demonstrated below will work for true subsets of more complicated molecules. 
+For this demo, we are going to use the :math:`\mathrm{N}_2` molecule, and we will be selecting an active space of orbitals and electrons for the calculation. 
+While the molecule used here is quite simple, the method demonstrated below will work for more complicated molecules. 
 
 Ground state calculation
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -173,7 +174,7 @@ hf.mo_coeff = coeffs  # Change MO coefficients in hf object to PennyLane calcula
 ######################################################################
 # Next, let’s define the active space of orbitals we will use for our calculation. 
 # This will be the number of orbitals :math:`n_\mathrm{cas}` and the number of electrons ``n_electron_cas``. 
-# For :math:`\mathrm{H}_2`, we can just use the full space, which is four orbitals and two electrons. 
+# For :math:`\mathrm{N}_2`, we will use an active space of five orbitals and four electrons. 
 # We will use a ``CASCI`` instance to calculate the ground state of our system with this selected active space. 
 # The ``CASCI`` method in PySCF is equivalent to a full-configuration interaction (FCI) procedure on a subset of molecular orbitals.
 
@@ -349,17 +350,12 @@ one_chemist = one - np.einsum("pqrr->pq", two) / 2.0
 # We will set :math:`L` as the number of orbitals in our active space. 
 # The ``Z`` and ``U`` output here are arrays of :math:`L` fragment matrices with dimension :math:`n_\mathrm{cas} \times n_\mathrm{cas}`.
 
-from optax import adam
 from jax import config
-config.update("jax_enable_x64", True)
 
-L = n_cas  # Usually L is on the order of n_cas.
+config.update("jax_enable_x64", True)  # Required for factorize consistency.
 
 # Factorize Hamiltonian, producing matrices Z and U for each fragment.
-_, Z, U = qml.qchem.factorize(two_chemist, compressed=True, num_factors=L,
-                              cholesky=True, num_steps=1500,
-                              optimizer=adam(learning_rate=0.003)
-                              )
+_, Z, U = qml.qchem.factorize(two_chemist, compressed=True)
 
 print("Shape of the factors: ")
 print("two_chemist", two_chemist.shape)
@@ -368,8 +364,7 @@ print("Z", Z.shape)
 
 # Compare factorized two-electron terms to the originals.
 approx_two_chemist = qml.math.einsum("tpk,tqk,tkl,trl,tsl->pqrs", U, U, Z, U, U)
-print(np.linalg.norm(approx_two_chemist - two_chemist))
-# assert qml.math.allclose(approx_two_chemist, two_chemist, atol=1e-2)
+assert qml.math.allclose(approx_two_chemist, two_chemist, atol=0.1)
 
 ######################################################################
 # Note there are some terms in this decomposition that are exactly diagonalizable, and can be added to the one-electron terms to simplify the simulation. 
@@ -632,7 +627,8 @@ for rho in rhos:
 # This way, we only have to compute *one step* at a time.
 # This is not possible on a real quantum device -- you would have to start from scratch every time you measure the state.
 #  
-# Plotting the time-domain output, we see there is one clear frequency, so we will expect one peak in our spectrum.
+# Plotting the time-domain output, we see what appears to be a `beat note <https://en.wikipedia.org/wiki/Beat_(acoustics)>`__.
+# Therefore, we should see two peaks in our spectrum.
 
 import matplotlib.pyplot as plt
 
@@ -726,13 +722,10 @@ fig.text(0.5, 0.05,
     r"Figure 8: Simulated $\mathrm{N}_2$ X-ray absorption spectrum.",
     horizontalalignment="center",
     size="small", weight="normal")
-# fig.savefig("N2_spectrum_test_init_params.png")
 plt.show()
 
 ######################################################################
-# Looking at the spectrum, we can see there is one strong peak. 
-# This is expected because of the dominant frequency we can see in Figure 7.
-# There also appears to be two small peaks at slightly higher energy.
+# Looking at the spectrum, we can see there are two strong peaks, as predicted from the beat note in the time response in Figure 7. 
 #
 # **[Exciting conclusion here]**
 #
