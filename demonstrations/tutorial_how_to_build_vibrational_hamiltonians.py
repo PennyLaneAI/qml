@@ -81,9 +81,9 @@ import numpy as np
 import pennylane as qml
 
 symbols  = ['H', 'F']
-geometry = np.array([[0.0, 0.0, 0.0], [0.0, 0.0, 1.0]])
+geometry = np.array([[0.0, 0.0, 0.0], [0.0, 0.0, 1.79]])
 mol = qml.qchem.Molecule(symbols, geometry)
-pes = qml.qchem.vibrational_pes(mol)
+pes = qml.qchem.vibrational_pes(mol, optimize=False)
 
 ######################################################################
 # The :func:`~.pennylane.qchem.vibrational_pes` function creates a
