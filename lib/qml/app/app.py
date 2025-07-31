@@ -14,6 +14,9 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Constants
+PLACEHOLDER_THUMBNAIL = (
+    "_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_placeholder.png"
+)
 DEFAULT_BUILD_FORMAT = "json"
 DEMO_FILENAME = "demo.py"
 METADATA_FILENAME = "metadata.json"
@@ -21,7 +24,11 @@ REQUIREMENTS_FILENAME = "requirements.in"
 THUMBNAIL_FILENAME = "thumbnail"
 LARGE_THUMBNAIL_FILENAME = "large_thumbnail"
 
-app = typer.Typer(name="qml", no_args_is_help=True, help="QML Demo build tool - Create, build, and manage quantum machine learning demos.")
+app = typer.Typer(
+    name="qml",
+    no_args_is_help=True,
+    help="QML Demo build tool - Create, build, and manage quantum machine learning demos.",
+)
 
 
 @app.command()
@@ -103,6 +110,7 @@ def build(
         logger.error(f"Build failed: {e}")
         raise typer.Exit(1)
 
+
 def _slugify_title(title: str) -> str:
     """Convert a string to a slug-friendly format. This function handles CamelCase, removes special characters,
     replaces spaces and hyphens with underscores, and converts the string to lowercase.
@@ -123,6 +131,7 @@ def _slugify_title(title: str) -> str:
     # Convert to lowercase and strip
     return title.strip().lower()
 
+
 def _validate_title(title: str) -> str:
     """Validate and clean the demo title."""
     title = title.strip()
@@ -137,13 +146,20 @@ def _validate_directory_name(name: str) -> bool:
     return bool(re.match(r"^[a-zA-Z0-9_-]+$", name))
 
 
-def _collect_authors() -> list[str]:
+def _author_format(author: str) -> dict:
+    """Format author information as a dictionary."""
+    return {"username": author.strip()}
+
+
+def _collect_authors() -> list[dict]:
     """Collect author information from user input."""
+    prompt_message = "Author's pennylane.ai username"
     authors = []
-    authors.append(typer.prompt("Author's pennylane.ai username"))
+
+    authors.append(_author_format(typer.prompt(prompt_message)))
 
     while typer.confirm("Would you like to add another author?"):
-        authors.append(typer.prompt("Author's pennylane.ai username"))
+        authors.append(_author_format(typer.prompt(prompt_message)))
 
     return authors
 
@@ -202,7 +218,9 @@ def _create_demo_files(
         demo_file.write_text(demo_content)
         metadata_file.write_text(json.dumps(metadata_content, indent=2))
         requirements_file.write_text(demo_requirements)
-        logger.info(f"Created demo files in {demo_dir.relative_to(Context().repo_root)}")
+        logger.info(
+            f"Created demo files in {demo_dir.relative_to(Context().repo_root)}"
+        )
     except (OSError, json.JSONEncodeError) as e:
         logger.error(f"Failed to create demo files: {e}")
         raise typer.Exit(1)
@@ -241,7 +259,7 @@ def new():
         authors = _collect_authors()
 
         # Get thumbnails
-        small_thumbnail = cli.prompt_path("Thumbnail image")
+        small_thumbnail = cli.prompt_path("Thumbnail image", PLACEHOLDER_THUMBNAIL)
         large_thumbnail = cli.prompt_path("Large thumbnail image")
 
         # Create demo directory
