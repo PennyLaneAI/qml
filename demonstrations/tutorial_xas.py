@@ -465,8 +465,10 @@ def Z_rotations(Z, step, is_one_electron_term, control_wires):
 #    For a derivation of the global phase accrued from the two-electron fragments, see Appendix A in [#Fomichev2025]_.
 #
 # Now that we have functions for all the terms of our Hamiltonian, we can define our Trotter step. 
-# For our factorized Hamiltonian :math:`H_\mathrm{CDF} = \sum_j^N H_j`, with non-commuting fragments $H_j$, a second-order product formula approximates the time evolution for a time step $\Delta t$ as
+# For our factorized Hamiltonian :math:`H_\mathrm{CDF} = \sum_j^N H_j`, with non-commuting fragments :math:`H_j`, a second-order product formula approximates the time evolution for a time step :math:`\Delta t`` as
+# 
 # .. math::  e^{-i\sum_j H_j \Delta t} \approx \prod_{j=1}^N e^{-i \frac{\Delta t}{2}H_j} \prod_{j=N}^1 e^{-i \frac{\Delta t}{2}H_j}\,.
+# 
 # Note in the formula above, the second product of time-evolution operators is reversed in order.
 # The function ``first_order_trotter`` will implement the :math:`U` rotations and :math:`Z` rotations, and adjust the global phase from the core constant term. 
 # It will also be able to reverse the order of applied fragments.
