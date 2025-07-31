@@ -15,7 +15,7 @@ different representations of vibrational Hamiltonians. We also briefly discuss t
 the Hamiltonian in an interesting quantum algorithm for computing the vibrational dynamics of a
 molecule.
 
-.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_how_to_build_spin_hamiltonians.png
+.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_vibrational_hamiltonian.png
     :align: center
     :width: 70%
     :target: javascript:void(0)
