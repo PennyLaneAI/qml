@@ -65,7 +65,7 @@ Below is an illustration of an X-ray absorption spectrum.
 
    Figure 2: *Example X-ray absorption spectrum.* Illustration of how the peak positions :math:`E_F - E_i`, widths :math:`\eta` and amplitudes :math:`|\langle F | \hat m_\rho | I \rangle|^2` determine the spectrum.
 
-The goal of this demo is to implement a quantum algorithm that can calculate this spectrum. Three algorithm designs are discussed in Ref. [#Fomichev2025]_, but we will focus on a time-domain method, since quantum computers are naturally suited to calculating the time evolution from a Hamiltonian operator. Instead of computing the energy differences and state overlaps directly, this method simulates the system in the time domain, and then uses a `Fourier transform <https://en.wikipedia.org/wiki/Fourier_transform>`__ to obtain the spectrum in frequency space. 
+The goal of this demo is to implement a quantum algorithm that can calculate this spectrum. Three algorithm designs are discussed in Ref. [#Fomichev2024]_, but we will focus on the time-domain method, since quantum computers are naturally suited to calculating the time evolution of a Hamiltonian operator. Instead of computing the energy differences and state overlaps directly, this method simulates the system in the time domain, and then uses a `Fourier transform <https://en.wikipedia.org/wiki/Fourier_transform>`__ to obtain the spectrum in frequency space. 
 
 Quantum algorithm in the time-domain
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -182,7 +182,7 @@ from pyscf import mcscf
 
 # Define active space of (orbitals, electrons).
 n_cas, n_electron_cas = (5, 4)
-ncore = (mol.nelectron - n_electron_cas) // 2
+n_core = (mol.nelectron - n_electron_cas) // 2
 
 # Initialize CASCI instance of H2 molecule as mycasci.
 mycasci = mcscf.CASCI(hf, ncas=n_cas, nelecas=n_electron_cas)
@@ -676,7 +676,7 @@ spectrum = np.array([f_domain_Greens_func(w) for w in wgrid])
 # With the energies and the overlaps, we can compute the absorption cross section directly.
 
 # Use CASCI to solve for excited states.
-mycasci.fcisolver.nroots = 100  # Compute the first 10 states.
+mycasci.fcisolver.nroots = 100  # Compute the first 100 states (or less).
 mycasci.run(verbose=0)
 mycasci.e_tot = np.atleast_1d(mycasci.e_tot)
 
@@ -685,7 +685,7 @@ E_i = mycasci.e_tot[0]
 
 # Determine the dipole integrals using atomic orbitals from hf object.
 dip_ints_ao = hf.mol.intor("int1e_r_cart", comp=3)  # In atomic orbital basis.
-mo_coeffs = coeffs[:, ncore : ncore + n_cas]
+mo_coeffs = coeffs[:, n_core : n_core + n_cas]
 
 # Convert to molecular orbital basis.
 dip_ints_mo = np.einsum("ik,xkl,lj->xij", mo_coeffs.T, dip_ints_ao, mo_coeffs)
@@ -814,8 +814,8 @@ plt.show()
 # We can also turn off the two-electron terms that couple core-excited and valence-excited states. 
 # The terms are in general small, but by setting them to zero that coupling is removed entirely from the time evolution. 
 # To implement the core-valence seperation approximation in an XAS simulation algorithm, there are two steps:
-# - Before performing compressed double factorization on the two-electron integrals, remove the terms that include at least one core orbital.
-# - Remove all the matrix elements from the dipole operator that do *not* include at least one core orbital.
+#  - Before performing compressed double factorization on the two-electron integrals, remove the terms that include at least one core orbital.
+#  - Remove all the matrix elements from the dipole operator that do *not* include at least one core orbital.
 # This approximation would be useful when simulated a complex molecular instance, such as a cluster in a lithium-excess material. 
 #
 
