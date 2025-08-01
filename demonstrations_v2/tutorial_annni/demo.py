@@ -41,8 +41,6 @@ Without loss of generality, we set :math:`J = 1` and consider open boundary cond
 
 We start by importing the necessary libraries for simulation, optimization, and plotting our results, 
 as well as setting some important constants:
-
-test
 """
 import pennylane as qml
 import numpy as np
