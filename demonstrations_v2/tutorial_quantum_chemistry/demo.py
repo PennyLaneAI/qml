@@ -285,7 +285,7 @@ print(H)
 # You have completed the tutorial! Now, select your favorite molecule and build its electronic
 # Hamiltonian.
 # To see how simple it is to implement the VQE algorithm to compute the ground-state energy of
-# your molecule using PennyLane, take a look at the tutorial :doc:`tutorial_vqe`.
+# your molecule using PennyLane, take a look at the tutorial :doc:`demos/tutorial_vqe`.
 #
 # References
 # ----------
