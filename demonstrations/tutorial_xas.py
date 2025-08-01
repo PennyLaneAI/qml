@@ -65,7 +65,9 @@ Below is an illustration of an X-ray absorption spectrum.
 
    Figure 2: *Example X-ray absorption spectrum.* Illustration of how the peak positions :math:`E_F - E_i`, widths :math:`\eta` and amplitudes :math:`|\langle F | \hat m_\rho | I \rangle|^2` determine the spectrum.
 
-The goal of this demo is to implement a quantum algorithm that can calculate this spectrum. Three algorithm designs are discussed in Ref. [#Fomichev2024]_, but we will focus on the time-domain method, since quantum computers are naturally suited to calculating the time evolution of a Hamiltonian operator. Instead of computing the energy differences and state overlaps directly, this method simulates the system in the time domain, and then uses a `Fourier transform <https://en.wikipedia.org/wiki/Fourier_transform>`__ to obtain the spectrum in frequency space *all at once*.
+The goal of this demo is to implement a quantum algorithm that can calculate this spectrum. 
+Three algorithm designs are discussed in Ref. [#Fomichev2024]_, but we will focus on the time-domain method, since quantum computers are naturally suited to calculating the time evolution of a Hamiltonian operator. 
+Instead of computing the energy differences and state overlaps directly, this method simulates the system in the time domain, and then uses a `Fourier transform <https://en.wikipedia.org/wiki/Fourier_transform>`__ to obtain the spectrum in frequency space *all at once*.
 
 Quantum algorithm in the time-domain
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -137,8 +139,8 @@ While the molecule used here is quite simple, the method demonstrated below will
 Ground state calculation
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-If you haven’t, check out the demo `“Initial state preparation for quantum
-chemistry” <https://pennylane.ai/qml/demos/tutorial_initial_state_preparation>`__. We will be expanding on that demo with code to import a state from the `complete active space configuration interaction <https://pyscf.org/user/mcscf.html>`__ (CASCI) methods of PySCF, where we restrict the set of active orbitals used in the calculation. 
+If you haven’t, check out the demo `“Initial state preparation for quantum chemistry” <https://pennylane.ai/qml/demos/tutorial_initial_state_preparation>`__. 
+We will be expanding on that demo with code to import a state from the `complete active space configuration interaction <https://pyscf.org/user/mcscf.html>`__ (CASCI) methods of PySCF, where we restrict the set of active orbitals used in the calculation. 
 
 We start by creating our molecule object using the `Gaussian type orbitals <https://en.wikipedia.org/wiki/Gaussian_orbital>`__ module ``pyscf.gto``, and obtaining the Hartree-Fock molecular orbitals with the `self-consistent field methods <https://pyscf.org/user/scf.html>`__ ``pyscf.scf``.
 """
