@@ -54,7 +54,7 @@ in which the electrons occupy the molecular orbitals with the lowest energy.
 We will restrict ourselves to the :math:`H_2` molecule for
 the sake of simplicity. First, we will give a short introduction to how
 to perform standard VQE for the molecule of interest. For more details,
-we recommend the tutorial :doc:`tutorial_vqe` to learn
+we recommend the tutorial :doc:`demos/tutorial_vqe` to learn
 how to implement VQE for molecules step by step. Then, we will implement
 the CB-VQE algorithm for the specific case in which we rely only on one
 classical state⁠—that being the Hartree-Fock state. Finally, we will
