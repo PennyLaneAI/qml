@@ -104,7 +104,7 @@ jobs:
           demos="${{ needs.prepare-build-context.outputs.updated_demos }}"
           
           comment="### Preview(s) are ready! :tada:\n"
-          comment+="You can view the landing page preview [here](https://pennylane.ai/qml/demos/?pr=${{ needs.prepare-build-context.outputs.pr_id }})\n\n"
+          comment+="You can view the landing page preview [here](https://pennylane.ai/qml/demonstrations?pr=${{ needs.prepare-build-context.outputs.pr_id }})\n\n"
           comment+="Or the individual demos below:\n\n"
           comment+="<details>\n"
           comment+="<summary>Toggle to view preview links</summary>\n"
