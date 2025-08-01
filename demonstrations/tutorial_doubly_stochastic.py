@@ -133,8 +133,8 @@ num_wires = 2
 eta = 0.01
 steps = 200
 
-dev_analytic = qml.device("lightning.qubit", wires=num_wires, shots=None)
-dev_stochastic = qml.device("lightning.qubit", wires=num_wires, shots=1000)
+dev_analytic = qml.device("lightning.qubit", wires=num_wires)
+dev_stochastic = qml.device("lightning.qubit", wires=num_wires)
 
 ##############################################################################
 # We can use ``qml.Hermitian`` to directly specify that we want to measure
@@ -152,8 +152,8 @@ def circuit(params):
 # Now, we create three QNodes, each corresponding to a device above,
 # and optimize them using gradient descent via the parameter-shift rule.
 
-qnode_analytic = qml.QNode(circuit, dev_analytic, interface="autograd", diff_method="parameter-shift")
-qnode_stochastic = qml.QNode(circuit, dev_stochastic, interface="autograd", diff_method="parameter-shift")
+qnode_analytic = qml.set_shots(qml.QNode(circuit, dev_analytic, interface="autograd", diff_method="parameter-shift"), shots = None)
+qnode_stochastic = qml.set_shots(qml.QNode(circuit, dev_stochastic, interface="autograd", diff_method="parameter-shift"), shots = 1000)
 
 param_shape = StronglyEntanglingLayers.shape(n_layers=num_layers, n_wires=num_wires)
 init_params = pnp.random.uniform(low=0, high=2 * np.pi, size=param_shape, requires_grad=True)
@@ -291,6 +291,7 @@ terms = np.array(
 )
 
 
+@qml.set_shots(1000)
 @qml.qnode(dev_stochastic, interface="autograd")
 def circuit(params, n=None):
     StronglyEntanglingLayers(weights=params, wires=[0, 1])
