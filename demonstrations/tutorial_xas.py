@@ -23,15 +23,15 @@ Why simulate X-ray absorption spectroscopy?
 Lithium-excess materials are transition metal oxides that are designed as candidate materials for battery cathodes. 
 Engineered to accommodate extra Lithium atoms in their structural composition, these materials enable larger energy densities in battery designs.
 However, repeated charge-discharge cycles can alter their structure and reduce performance. 
-The oxidation states present in the degraded cathode materials can be identified using X-ray absorption spectroscopy, which directly probes local structure by exciting tightly bound core electrons. 
-Identification of the degraded structures is done by a process known as “spectral fingerprinting”, where reference spectra of small molecular clusters are matched to the experimental spectrum. 
+The oxidation states in the degraded cathode materials can be examined using X-ray absorption spectroscopy, which directly probes local structure by exciting tightly bound core electrons. 
+The degraded structures are identified by a process known as “spectral fingerprinting”, where reference spectra of small molecular clusters are matched to the experimental spectrum. 
 A fast method of simulating reference spectra for use in fingerprinting would be a crucial component in an iterative workflow for identifying promising cathode materials [#Fomichev2024]_.
 
 .. figure:: ../_static/demonstration_assets/xas/fingerprinting.gif
    :alt: The reference spectra of molecular clusters are calculated, and then matched to an experimental spectrum.
 
    Figure 1: *How simulation of X-ray absorption spectra can enable identification of oxidation states in candidate battery materials.* 
-   Spectral fingerprinting can be used to identify constituent structures of a material by decomposing experimental spectra into components calculated via simulation on a quantum computer.
+   Spectral fingerprinting can be used to identify constituent structures of a material by matching experimental spectra with simulated spectra.
 
 Simulating these spectra is a difficult task for classical computers -- the highly correlated excited states are hard to compute classically, particularly for clusters with transition metals. 
 However, the low number of electronic orbitals needed to simulate these small clusters make this calculation well suited for early fault-tolerant quantum computers, which can naturally handle the large amount of correlations in the electronic state. 
@@ -65,7 +65,7 @@ Below is an illustration of an X-ray absorption spectrum.
 
    Figure 2: *Example X-ray absorption spectrum.* Illustration of how the peak positions :math:`E_F - E_i`, widths :math:`\eta` and amplitudes :math:`|\langle F | \hat m_\rho | I \rangle|^2` determine the spectrum.
 
-The goal of this demo is to implement a quantum algorithm that can calculate this spectrum. Three algorithm designs are discussed in Ref. [#Fomichev2024]_, but we will focus on the time-domain method, since quantum computers are naturally suited to calculating the time evolution of a Hamiltonian operator. Instead of computing the energy differences and state overlaps directly, this method simulates the system in the time domain, and then uses a `Fourier transform <https://en.wikipedia.org/wiki/Fourier_transform>`__ to obtain the spectrum in frequency space. 
+The goal of this demo is to implement a quantum algorithm that can calculate this spectrum. Three algorithm designs are discussed in Ref. [#Fomichev2024]_, but we will focus on the time-domain method, since quantum computers are naturally suited to calculating the time evolution of a Hamiltonian operator. Instead of computing the energy differences and state overlaps directly, this method simulates the system in the time domain, and then uses a `Fourier transform <https://en.wikipedia.org/wiki/Fourier_transform>`__ to obtain the spectrum in frequency space *all at once*.
 
 Quantum algorithm in the time-domain
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -103,8 +103,8 @@ Now, this all comes together because the time-domain Green’s function can be d
 .. math::  \tilde G_\rho(t_j) = \frac{\langle I|\hat m _\rho e^{- i\hat H t_j} \hat m_\rho |I\rangle}{|| \hat m_\rho |I\rangle ||^2}\,,
 
 and this is something that can be easily done on a quantum computer! 
-We can use a `Hadamard test <https://en.wikipedia.org/wiki/Hadamard_test>`__ on the time evolution unitary to measure the expectation value for each time :math:`t_j`. 
-We will repeat this test a number of times :math:`N` and take the mean of the results to get an estimate for :math:`G_\rho(t_j)`, which we can Fourier
+We can use a `Hadamard test <https://en.wikipedia.org/wiki/Hadamard_test>`__ circuit with the time evolution unitary to measure the expectation value for each time :math:`t_j`. 
+Repeating this test a number of times :math:`N` and take the mean of the results gives an estimate for :math:`G_\rho(t_j)`, which we can Fourier
 transform to get the spectrum.
 
 .. figure:: ../_static/demonstration_assets/xas/global_circuit.png
@@ -173,7 +173,7 @@ hf.mo_coeff = coeffs  # Change MO coefficients in hf object to PennyLane calcula
 
 ######################################################################
 # Next, let’s define the active space of orbitals we will use for our calculation. 
-# This will be the number of orbitals :math:`n_\mathrm{cas}` and the number of electrons ``n_electron_cas``. 
+# This will be the number of orbitals :math:`n_\mathrm{cas}` and the number of electrons. 
 # For :math:`\mathrm{N}_2`, we will use an active space of five orbitals and four electrons. 
 # We will use a ``CASCI`` instance to calculate the ground state of our system with this selected active space. 
 # The ``CASCI`` method in PySCF is equivalent to a full-configuration interaction (FCI) procedure on a subset of molecular orbitals.
@@ -182,9 +182,11 @@ from pyscf import mcscf
 
 # Define active space of (orbitals, electrons).
 n_cas, n_electron_cas = (5, 4)
-n_core = (mol.nelectron - n_electron_cas) // 2
 
-# Initialize CASCI instance of H2 molecule as mycasci.
+# Number of core (non-active) orbitals.
+n_core = (mol.nelectron - n_electron_cas) // 2  
+
+# Initialize CASCI instance of N2 molecule as mycasci.
 mycasci = mcscf.CASCI(hf, ncas=n_cas, nelecas=n_electron_cas)
 mycasci.run(verbose=0)
 
@@ -217,14 +219,14 @@ wf_casci_dict = dict(zip(list(zip(strs_row, strs_col)), dat))
 
 ######################################################################
 # Lastly, we will use the helper function ``_sign_chem_to_phys`` to adjust the sign of state components to match what they should be for the PennyLane orbital occupation number ordering. 
-# Then, we can import the state to PennyLane using ``_wf_dict_to_statevector``.
+# Then, we can import the state into PennyLane using ``_wf_dict_to_statevector``.
 #
 # .. admonition:: Chemists' and physicists' notation for ordering spin orbitals
 #     :class: note
 #
-#     In general, states from computation chemistry workflows will have spin orbitals ordered in chemists' notations, such that all of one spin is on the left, and the other on the right. 
+#     In general, states from computation chemistry workflows will have spin orbitals ordered in chemists' notation, such that all of one spin is on the left, and the other on the right. 
 #     PennyLane uses the physicists' notation, where the spatial orbitals are ordered, and the spins alternate up and down. 
-#     When changing a state from one convention to the next, the sign of some state amplitudes needs to change to adhere to the Fermionic anticommutation rules. 
+#     When changing a state from one convention to the next, the sign of some state amplitudes need to change to adhere to the Fermionic anticommutation rules. 
 #     The helper function ``_sign_chem_to_phys`` does this sign adjustment for us.
 
 from pennylane.qchem.convert import _sign_chem_to_phys, _wfdict_to_statevector
@@ -265,7 +267,7 @@ dipole_norm = []
 # Loop over cartesian coordinates and calculate m_rho|I>.
 for rho in rhos:
     dipole_matrix_rho = qml.matrix(m_rho[rho], wire_order=range(2 * n_cas))
-    wf = dipole_matrix_rho.dot(wf_casci)
+    wf = dipole_matrix_rho.dot(wf_casci)  # Multiply state into dipole matrix.
 
     if np.allclose(wf, np.zeros_like(wf)):  # If wf is zero, then set norm as zero.
         wf_dipole.append(wf)
@@ -312,7 +314,7 @@ def initial_circuit(wf):
 # We will perform compressed double factorization on the Hamiltonian to approximate it as a series of fragments, each of which can be fast-forwarded in a Trotter product formula.
 #
 # If you haven’t yet, go read the demo `“How to build compressed double-factorized Hamiltonians” <https://pennylane.ai/qml/demos/tutorial_how_to_build_compressed_double_factorized_hamiltonians>`__, because that is exactly what we are going to do! 
-# You could also look at section III in Ref. [#Fomichev2025]_.
+# You could also look at Section III in Ref. [#Fomichev2025]_.
 #
 # Electronic Hamiltonian
 # ~~~~~~~~~~~~~~~~~~~~~~
@@ -321,7 +323,7 @@ def initial_circuit(wf):
 #
 # .. math::  H = E + \sum_{p,q=1}^N \sum_{\gamma\in\{\uparrow,\downarrow\}} (p|\kappa|q) a^\dagger_{p\gamma}a_{q\gamma} + \frac12 \sum_{p,q,r,s=1}^N\sum_{\gamma,\beta\in\{\uparrow,\downarrow\}} (pq|rs) a^\dagger_{p\gamma}a_{q\gamma} a^\dagger_{r\beta}a_{s\beta} \,,
 #
-# where :math:`a^{(\dagger)}_{p\gamma}` is the annihilation (creation) operator for a molecular orbital :math:`p` and spin :math:`\gamma`, :math:`E` is the nuclear core constant, :math:`N` is the number of spatial orbitals, and :math:`(p|\kappa|q)` and :math:`(pq|rs)` are the one- and two-electron integrals, respectively [#Cohn2021]_.
+# where :math:`a^{(\dagger)}_{p\gamma}` is the annihilation (creation) operator for a molecular orbital :math:`p` with spin :math:`\gamma`, :math:`E` is the nuclear core constant, :math:`N` is the number of spatial orbitals, and :math:`(p|\kappa|q)` and :math:`(pq|rs)` are the one- and two-electron integrals, respectively [#Cohn2021]_.
 #
 # The core constant and the one- and two-electron integrals can be computed in PennyLane using ``qml.qchem.electron_integrals``.
 
@@ -358,15 +360,14 @@ print("two_chemist", two_chemist.shape)
 print("U", U.shape)
 print("Z", Z.shape)
 
-# Compare factorized two-electron terms to the originals.
+# Compare factorized two-electron fragement sum to the original.
 approx_two_chemist = qml.math.einsum("tpk,tqk,tkl,trl,tsl->pqrs", U, U, Z, U, U)
 assert qml.math.allclose(approx_two_chemist, two_chemist, atol=0.1)
 
 ######################################################################
 # Note there are some terms in this decomposition that are exactly diagonalizable, and can be added to the one-electron terms to simplify how the Hamiltonian time evolution is implemented. 
 # We call these the “one-electron extra” terms and add them to the one-electron integrals.
-# The one-electron integrals can be diagnonalized into the matrix :math:`Z^{(0)}` with basis rotation matrix :math:`U^{(0)}` using ``np.linalg.eigh``. 
-# This simplifies their implementation in the simulation circuit.
+# We can then diagnonalize this sum into the matrix :math:`Z^{(0)}` with basis rotation matrix :math:`U^{(0)}` using ``np.linalg.eigh``, for easy implementation in the simulation circuit.
 
 # Calculate the one-electron extra terms.
 Z_prime = np.stack([np.diag(np.sum(Z[i], axis=-1)) for i in range(Z.shape[0])], axis=0)
@@ -388,9 +389,9 @@ Z0 = np.diag(eigenvals)
 # The resulting Hamiltonian looks like the following (for a derivation see Appendix A of [#Fomichev2025]_)
 #
 # ..math::  \begin{align*} 
-# H_\mathrm{CDF} &= \left(E + \sum_k Z_k^{(0)} - \frac12 \sum_{\ell, km} Z_{km}^{(\ell)} + \frac14 \sum_{\ell,k} Z_{kk}^{(\ell)} \right) \mathbf{1} \\
+# H_\mathrm{CDF} &= \left(E + \sum_k Z_k^{(0)} - \frac12 \sum_{\ell, kj} Z_{kj}^{(\ell)} + \frac14 \sum_{\ell,k} Z_{kk}^{(\ell)} \right) \mathbf{1} \\
 # &- \frac12 \mathbf{U}^{(0)} \left[ \sum_k Z_k^{(0)} \sum_\gamma \sigma_{z, k\gamma} \right] (\mathbf{U}^{(0)})^{T} \\ 
-# &+ \frac18 \sum_\ell \mathbf{U}^{(\ell)} \left[\sum_{(k, \gamma)\neq(m, \beta)} \left(Z_{km}^{(\ell)}\sigma_{z, k\gamma}\sigma_{z, m\beta}\right)\right](\mathbf{U}^{(\ell)})^T\,.
+# &+ \frac18 \sum_\ell \mathbf{U}^{(\ell)} \left[\sum_{(k, \gamma)\neq(j, \beta)} \left(Z_{kj}^{(\ell)}\sigma_{z, k\gamma}\sigma_{z, j\beta}\right)\right](\mathbf{U}^{(\ell)})^T\,.
 # \end{align*} 
 #
 # The first term is a sum of the core constant and contant factors that arise from the Jordan-Wigner transform. The second and third terms are the one- and two-electron fragments, respectively. 
