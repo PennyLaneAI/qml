@@ -5,10 +5,12 @@
             "username": "KetPuntoG"
         }
     ],
+    "executable": true,
     "dateOfPublication": "2023-05-09T00:00:00+00:00",
     "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
-        "Algorithms", "Quantum Computing"
+        "Algorithms",
+        "Quantum Computing"
     ],
     "tags": [],
     "previewImages": [
@@ -43,6 +45,5 @@
     ],
     "basedOnPapers": [],
     "referencedByPapers": [],
-    "relatedContent": [
-    ]
+    "relatedContent": []
 }

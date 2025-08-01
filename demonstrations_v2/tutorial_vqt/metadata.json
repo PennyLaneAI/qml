@@ -5,6 +5,7 @@
             "username": "jceroni"
         }
     ],
+    "executable": true,
     "dateOfPublication": "2020-07-07T00:00:00+00:00",
     "dateOfLastModification": "2024-11-06T00:00:00+00:00",
     "categories": [
@@ -30,7 +31,9 @@
             "url": "https://arxiv.org/abs/1910.02071"
         }
     ],
-    "basedOnPapers": ["10.48550/arXiv.1910.02071"],
+    "basedOnPapers": [
+        "10.48550/arXiv.1910.02071"
+    ],
     "referencedByPapers": [],
     "relatedContent": [
         {

@@ -5,6 +5,7 @@
             "username": "whatsis"
         }
     ],
+    "executable": true,
     "dateOfPublication": "2024-10-01T00:00:00+00:00",
     "dateOfLastModification": "2024-11-22T00:00:00+00:00",
     "categories": [
@@ -24,8 +25,7 @@
     ],
     "seoDescription": "Learn how noise models can be built and inserted into a quantum circuit in PennyLane.",
     "doi": "",
-    "references": [
-    ],
+    "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],
     "relatedContent": [

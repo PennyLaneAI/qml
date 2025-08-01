@@ -5,10 +5,12 @@
             "username": "mariaschuld"
         }
     ],
+    "executable": true,
     "dateOfPublication": "2019-10-11T00:00:00+00:00",
     "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
-        "Quantum Machine Learning", "Getting Started"
+        "Quantum Machine Learning",
+        "Getting Started"
     ],
     "tags": [],
     "previewImages": [

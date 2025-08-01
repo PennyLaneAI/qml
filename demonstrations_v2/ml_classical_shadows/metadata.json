@@ -5,6 +5,7 @@
             "username": "whatsis"
         }
     ],
+    "executable": false,
     "dateOfPublication": "2022-05-02T00:00:00+00:00",
     "dateOfLastModification": "2025-07-15T00:00:00+00:00",
     "categories": [
@@ -43,7 +44,9 @@
             "url": "https://proceedings.neurips.cc/paper/2018/file/5a4be1fa34e62bb8a6ec6b91d2462f5a-Paper.pdf"
         }
     ],
-    "basedOnPapers": ["10.48550/arXiv.2106.12627"],
+    "basedOnPapers": [
+        "10.48550/arXiv.2106.12627"
+    ],
     "referencedByPapers": [],
     "relatedContent": [
         {

@@ -5,6 +5,7 @@
             "username": "hapax"
         }
     ],
+    "executable": true,
     "dateOfPublication": "2023-01-24T00:00:00+00:00",
     "dateOfLastModification": "2025-01-23T00:00:00+00:00",
     "categories": [
@@ -35,7 +36,9 @@
             "url": "https://arxiv.org/pdf/2203.10017.pdf"
         }
     ],
-    "basedOnPapers": ["10.48550/arXiv.2203.10017"],
+    "basedOnPapers": [
+        "10.48550/arXiv.2203.10017"
+    ],
     "referencedByPapers": [],
     "relatedContent": [
         {
