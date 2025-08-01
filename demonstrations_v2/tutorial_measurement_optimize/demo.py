@@ -93,7 +93,7 @@ the Hamiltonian as its summation, resulting in separate expectation values that 
     and then performing a fermionic-to-qubit mapping such as the Jordan-Wigner or Bravyi-Kitaev
     transformations.
 
-    For more details on this process, check out the :doc:`/demos/tutorial_quantum_chemistry`
+    For more details on this process, check out the :doc:`demos/tutorial_quantum_chemistry`
     tutorial.
 
 The measurement problem
