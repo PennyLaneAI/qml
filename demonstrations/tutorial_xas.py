@@ -388,11 +388,10 @@ Z0 = np.diag(eigenvals)
 # Note the :math:`1/2` term will affect the global phase, and we will have to keep track of that carefully. 
 # The resulting Hamiltonian looks like the following (for a derivation see Appendix A of [#Fomichev2025]_)
 #
-# ..math::  \begin{align*} 
+# ..math::
 # H_\mathrm{CDF} &= \left(E + \sum_k Z_k^{(0)} - \frac12 \sum_{\ell, kj} Z_{kj}^{(\ell)} + \frac14 \sum_{\ell,k} Z_{kk}^{(\ell)} \right) \mathbf{1} \\
 # &- \frac12 \mathbf{U}^{(0)} \left[ \sum_k Z_k^{(0)} \sum_\gamma \sigma_{z, k\gamma} \right] (\mathbf{U}^{(0)})^{T} \\ 
 # &+ \frac18 \sum_\ell \mathbf{U}^{(\ell)} \left[\sum_{(k, \gamma)\neq(j, \beta)} \left(Z_{kj}^{(\ell)}\sigma_{z, k\gamma}\sigma_{z, j\beta}\right)\right](\mathbf{U}^{(\ell)})^T\,.
-# \end{align*} 
 #
 # The first term is a sum of the core constant and contant factors that arise from the Jordan-Wigner transform. The second and third terms are the one- and two-electron fragments, respectively. 
 # Below is an illustration of the circuit we will use to implement the one- and two-electron fragments in our factorized Hamiltonian.
