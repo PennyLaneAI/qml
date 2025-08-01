@@ -2,8 +2,8 @@ r"""
 .. role:: html(raw)
    :format: html
 
-Quantum advantage with Gaussian Boson Sampling
-==============================================
+Quantum advantage with Gaussian Boson Sampling WOW
+==================================================
 
 .. meta::
     :property="og:description": Using light to perform tasks beyond the reach of classical computers.
