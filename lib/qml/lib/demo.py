@@ -81,11 +81,18 @@ class Demo:
         )
 
     @property
-    def executable(self) -> bool:
-        """Whether this demo can be executed."""
+    def executable_stable(self) -> bool:
+        """Whether this demo can be executed for stable builds."""
         with open(self.metadata_file, "r") as f:
             metadata = json.load(f)
-        return metadata.get("executable", self.name.startswith("tutorial_"))
+        return metadata.get("executable_stable", self.name.startswith("tutorial_"))
+
+    @property
+    def executable_latest(self) -> bool:
+        """Whether this demo can be executed for dev builds."""
+        with open(self.metadata_file, "r") as f:
+            metadata = json.load(f)
+        return metadata.get("executable_latest", self.name.startswith("tutorial_"))
 
     @functools.cached_property
     def requirements(self) -> frozenset[str]:
@@ -171,7 +178,7 @@ def build(
     )
 
     for demo in demos:
-        execute_demo = execute and demo.executable
+        execute_demo = execute and (demo.executable_latest if dev else demo.executable_stable)
         done += 1
         logger.info(
             "Building '%s' (%d/%d), execute=%s",

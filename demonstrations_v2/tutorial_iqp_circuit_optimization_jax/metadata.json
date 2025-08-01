@@ -8,7 +8,8 @@
             "username": "josephbowles"
         }
     ],
-    "executable": true,
+    "executable_stable": true,
+    "executable_latest": true,
     "dateOfPublication": "2025-02-14T09:00:00+00:00",
     "dateOfLastModification": "2025-06-02T09:00:00+00:00",
     "categories": [

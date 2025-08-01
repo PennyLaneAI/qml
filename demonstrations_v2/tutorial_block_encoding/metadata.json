@@ -11,7 +11,8 @@
             "username": "soran"
         }
     ],
-    "executable": true,
+    "executable_stable": true,
+    "executable_latest": true,
     "dateOfPublication": "2023-11-28T00:00:00+00:00",
     "dateOfLastModification": "2025-06-02T00:00:00+00:00",
     "categories": [
