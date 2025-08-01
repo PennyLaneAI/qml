@@ -426,7 +426,7 @@ def U_rotations(U, control_wires):
 #
 #    Figure 5: Double-phase trick to decompose expensive controlled-Z rotations into an uncontrolled-Z rotation sandwiched by CNOT gates.
 #
-# For the one-electron terms, we loop over spin and orbital index, and apply the Z rotations using this double-phase trick. 
+# For the one-electron terms, we loop over both the spin and orbital indeces, and apply the Z rotations using this double-phase trick. 
 # The two-electron fragments are implemented the same way, except the two-qubit rotations use ``qml.MultiRZ``.
 
 from itertools import product
@@ -467,26 +467,25 @@ def Z_rotations(Z, step, is_one_electron_term, control_wires):
 
 
 ######################################################################
-# Now that we have functions for all the terms of our Hamiltonian, we can define our Trotter step. 
-# For our factorized Hamiltonian :math:`H_\mathrm{CDF} = \sum_j^N H_j`, with non-commuting fragments :math:`H_j`, a second-order product formula approximates the time evolution for a time step :math:`\Delta t`` as
+# For the factorized Hamiltonian :math:`H_\mathrm{CDF} = \sum_j^N H_j`, with non-commuting fragments :math:`H_j`, a second-order product formula approximates the time evolution for a time step :math:`\Delta t`` as
 # 
 # .. math::  e^{-i\sum_j H_j \Delta t} \approx \prod_{j=1}^N e^{-i \frac{\Delta t}{2}H_j} \prod_{j=N}^1 e^{-i \frac{\Delta t}{2}H_j}\,.
 # 
-# Note in the formula above, the second product of time-evolution operators is reversed in order.
+# Note in the formula above, the second product of time-evolution fragments is reversed in order.
 # The function ``first_order_trotter`` will implement the :math:`U` rotations and :math:`Z` rotations, and adjust the global phase from the core constant term. 
-# It will also be able to reverse the order of applied fragments.
+# It will also be able to reverse the order of applied fragments so we can later construct the second-order trotter step.
 # By tracking the last :math:`U` rotation used, we can implement two consecutive rotations at once as :math:`V^{(\ell)} = U^{(\ell-1)}(U^{(\ell)})^T`, halving the number of rotations required per Trotter step.
 
 
 def first_order_trotter(step, prior_U, final_rotation, reverse=False):
     """Implements a Trotter step for the CDF Hamiltonian."""
-    # Combine the one- and two-electron matrices.
+    # Prepend the one-electron fragment to the two-electron fragment array.
     _U0 = np.expand_dims(U0, axis=0)
     _Z0 = np.expand_dims(Z0, axis=0)
     _U = np.concatenate((_U0, U), axis=0)
     _Z = np.concatenate((_Z0, Z), axis=0)
 
-    num_two_electron_fragments = U.shape[0]  # Number of fragments \ell.
+    num_two_electron_fragments = U.shape[0]  # Number of fragments L.
     is_one_body = np.array([True] + [False] * num_two_electron_fragments)
     order = list(range(len(_Z)))
 
@@ -517,7 +516,7 @@ def second_order_trotter(dev, state, step):
     qubits = dev.wires.tolist()
 
     def circuit():
-        # State preparation -- set as previous iteration final state.
+        # State preparation -- set as the final state from the previous iteration.
         qml.StatePrep(state, wires=qubits)
 
         # Main body of the circuit.
@@ -535,7 +534,7 @@ def second_order_trotter(dev, state, step):
 # -----------
 #
 # To measure the expectation value of the time evolution, we use a Hadamard test circuit. 
-# This uses ``qml.StatePrep`` to set the state as it was returned by the time evolution, and then measures both the real and imaginary expectation values using ``PauliX`` and ``PauliY``, respectively.
+# This uses ``qml.StatePrep`` to set the state as it was returned by the time evolution, and then measures both the real and imaginary expectation values using ``qml.expval`` for operators ``PauliX`` and ``PauliY``, respectively.
 
 
 def meas_circuit(state):
@@ -546,7 +545,7 @@ def meas_circuit(state):
 
 ######################################################################
 # We can only obtain both real and imaginary expectation values at once in a *simulated* circuit. 
-# An actual implementation would have to select real or imaginary by inserting a phase gate, like in the circuit below.
+# An actual implementation would have to select real or imaginary by inserting a phase gate, shown in the circuit diagram below.
 #
 # .. figure:: ../_static/demonstration_assets/xas/hadamard_test_circuit.png
 #    :alt: Hadamard test circuit with optional S-dagger gate on the auxiliary qubit.
@@ -605,7 +604,7 @@ expvals = np.zeros((2, len(time_interval)))  # Results list initialization.
 # Loop over cartesian coordinate directions.
 for rho in rhos:
 
-    if dipole_norm[rho] == 0:  # Skip if no excited states.
+    if dipole_norm[rho] == 0:  # Skip if state is zero.
         continue
 
     # Initialize state m_rho|I> (including the auxiliary qubit).
@@ -631,7 +630,7 @@ for rho in rhos:
 # We store the state before every measurement, and then start the time evolution from that state when we move on to the next time step.
 # This way, we only have to compute *one step* to get to the next time increment.
 # This is not possible on a real quantum device -- every time you measure the state you have to start from scratch and compute all previous time steps again.
-# However, we can use this trick with a simulated quantum device, like ``lightning.qubit``, to save computation time.
+# However, when using a simulated quantum device, like ``lightning.qubit``,  this trick can save computation time.
 #  
 # Plotting the time-domain output, we see a `beat note <https://en.wikipedia.org/wiki/Beat_(acoustics)>`__, indicating there are two strong frequencies in our spectrum. 
 
@@ -654,7 +653,7 @@ plt.show()
 ######################################################################
 # Since the real and imaginary components of the time-domain Green’s function are determined separately, we can calculate the Fourier transform like
 #
-# .. math::  -\mathrm{Im}\,G_\rho(\omega) = \frac{\eta\tau}{2\pi}\left(1 + 2\sum_{j=1}^{j_\mathrm{max}}\left[ \mathbb{E}\left(\mathrm{Re}\,\tilde G(\tau j)\right)\mathrm{cos}(\tau j \omega) - \mathbb{E}\left(\mathrm{Im}\,\tilde G(\tau j)\right) \mathrm{sin}(\tau j \omega)\right]\right) \,,
+# .. math::  -\mathrm{Im}\,G_\rho(\omega) = \frac{\eta\tau}{2\pi}\left(1 + 2\sum_{j=1}^{j_\mathrm{max}}e^{-\eta \tau j}\left[ \mathbb{E}\left(\mathrm{Re}\,\tilde G(\tau j)\right)\mathrm{cos}(\tau j \omega) - \mathbb{E}\left(\mathrm{Im}\,\tilde G(\tau j)\right) \mathrm{sin}(\tau j \omega)\right]\right) \,,
 #
 # where :math:`\mathbb{E}` is the expectation value. 
 # We do this below, but also multiply the normalization factors over to the right side.
@@ -673,15 +672,16 @@ spectrum = np.array([f_domain_Greens_func(w) for w in wgrid])
 
 ######################################################################
 # Since our active space for :math:`\mathrm{N}_2` is small, we can easily calculate a classical spectrum for comparison. 
-# We do this using the ``mycasci`` instance that we used to determine the ground state, but instead solve for more states by increasing the number of roots in the ``fcisolver``. 
-# This will give us the energies of the excited final states. 
+# We will need the final state energies and the overlaps. 
+# These can be computed with PySCF, by reusing the ``mycasci`` instance we created earlier.
+# By increasing the number of roots in the ``fcisolver`` and rerunning the calculations, we can obtain the energies of the excited final states. 
 # We can also calculate the transition density matrix in the molecular orbital basis between those states and the initial state, :math:`\langle F| \hat m_\rho |I \rangle`. 
 # With the energies and the overlaps, we can compute the absorption cross section directly.
 
 # Use CASCI to solve for excited states.
 mycasci.fcisolver.nroots = 100  # Compute the first 100 states (or less).
 mycasci.run(verbose=0)
-mycasci.e_tot = np.atleast_1d(mycasci.e_tot)
+energies = mycasci.e_tot
 
 # Ground state energy.
 E_i = mycasci.e_tot[0]
@@ -694,7 +694,7 @@ mo_coeffs = coeffs[:, n_core : n_core + n_cas]
 dip_ints_mo = np.einsum("ik,xkl,lj->xij", mo_coeffs.T, dip_ints_ao, mo_coeffs)
 
 
-def makedip(ci_id):
+def final_state_overlap(ci_id):
     # Transition density matrix in molecular orbital basis.
     t_dm1 = mycasci.fcisolver.trans_rdm1(
         mycasci.ci[0], mycasci.ci[ci_id], n_cas, n_electron_cas
@@ -703,12 +703,16 @@ def makedip(ci_id):
     return np.einsum("xij,ji->x", dip_ints_mo, t_dm1)
 
 
-F_m_Is = np.array([makedip(i) for i in range(len(mycasci.e_tot))])
+# Compute overlaps.
+F_m_Is = np.array([final_state_overlap(i) for i in range(len(energies))])
+
+######################################################################
+# With the energies and the overlaps, we can compute the absorption cross section directly.
 
 # Absorption cross section.
 spectrum_classical_func = lambda E: (1 / np.pi) * np.sum(
                 [np.sum(np.abs(F_m_I)**2) * eta / ((E - e)**2 + eta**2)
-                    for (F_m_I, e) in zip(F_m_Is, mycasci.e_tot)])
+                    for (F_m_I, e) in zip(F_m_Is, energies)])
 
 spectrum_classical = np.array([spectrum_classical_func(w) for w in wgrid])
 
