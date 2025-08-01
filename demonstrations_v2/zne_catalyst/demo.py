@@ -2,7 +2,7 @@ r"""
 Digital zero-noise extrapolation (ZNE) with Catalyst
 ====================================================
 
-In this tutorial, you will learn how to use :doc:`error mitigation <tutorial_error_mitigation>`, and in particular 
+In this tutorial, you will learn how to use :doc:`error mitigation <demos/tutorial_error_mitigation>`, and in particular 
 the zero-noise extrapolation (ZNE) technique, in combination with 
 `Catalyst <https://docs.pennylane.ai/projects/catalyst>`_, a framework for quantum 
 just-in-time (JIT) compilation with PennyLane. 
@@ -14,14 +14,14 @@ leveraging JIT compilation through Catalyst.
     :width: 70%
     :align: center
 
-The demo :doc:`Error mitigation with Mitiq and PennyLane <tutorial_error_mitigation>`
+The demo :doc:`Error mitigation with Mitiq and PennyLane <demos/tutorial_error_mitigation>`
 shows how ZNE, along with other error mitigation techniques, can be carried out in PennyLane
 by using `Mitiq <https://github.com/unitaryfund/mitiq>`__, a Python library developed 
 by `Unitary Fund <https://unitary.fund/>`__.
 
 ZNE in particular is also offered out of the box in PennyLane as a *differentiable* error mitigation technique,
 for usage in combination with variational workflows. More on this in the tutorial
-:doc:`Differentiating quantum error mitigation transforms <tutorial_diffable-mitigation>`.
+:doc:`Differentiating quantum error mitigation transforms <demos/tutorial_diffable-mitigation>`.
 
 On top of the error mitigation routines offered in PennyLane, ZNE is also available for just-in-time
 (JIT) compilation. In this tutorial we see how an error mitigation routine can be

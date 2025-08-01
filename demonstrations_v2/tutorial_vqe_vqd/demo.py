@@ -94,7 +94,7 @@ print(f"Ground state energy: {circuit()}")
 #
 # To obtain the excited state we must define our ansatz that generates the state :math:`|\Psi(\theta)\rangle.`
 #
-# We use an ansatz constructed with :doc:`Givens rotations <tutorial_givens_rotations>`, and we define the circuit for finding the excited state.
+# We use an ansatz constructed with :doc:`Givens rotations <demos/tutorial_givens_rotations>`, and we define the circuit for finding the excited state.
 #
 
 from functools import partial

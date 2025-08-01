@@ -40,7 +40,7 @@ quantum resource dependence—is not as frequently considered. Instead, common
 'out-of-the-box' classical optimization techniques, such as gradient-free
 methods (COBLYA, Nelder-Mead), gradient-descent, and Hessian-free methods (L-BFGS) tend to be used.
 
-However, for variational algorithms such as :doc:`VQE </demos/tutorial_vqe>`, which involve evaluating
+However, for variational algorithms such as :doc:`VQE <demos/tutorial_vqe>`, which involve evaluating
 a large number of non-commuting operators in the cost function, decreasing the number of
 quantum evaluations required for convergence, while still minimizing statistical noise, can
 be a delicate balance.
@@ -83,7 +83,7 @@ can be expressed as the weighted sum of each individual term:
 
 .. math:: \langle H\rangle = \sum_{i=1}^N c_i \langle h_i\rangle.
 
-In the :doc:`doubly stochastic gradient descent demonstration </demos/tutorial_doubly_stochastic>`,
+In the :doc:`doubly stochastic gradient descent demonstration <demos/tutorial_doubly_stochastic>`,
 we estimated this expectation value by **uniformly sampling** a subset of the terms
 at each optimization step, and evaluating each term by using the same finite number of shots
 :math:`N.`
@@ -308,7 +308,7 @@ plt.show()
 # will always have a minimum shot value required per expectation value, as below
 # this threshold they become biased estimators. This is not the case with random
 # sampling; as we saw in the
-# :doc:`doubly stochastic gradient descent demonstration </demos/tutorial_doubly_stochastic>`,
+# :doc:`doubly stochastic gradient descent demonstration <demos/tutorial_doubly_stochastic>`,
 # the introduction of randomness allows for as little
 # as a single shot per expectation term, while still remaining an unbiased estimator.
 #

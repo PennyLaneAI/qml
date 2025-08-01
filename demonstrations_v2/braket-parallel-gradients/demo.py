@@ -273,7 +273,7 @@ print(
 # The quantum approximate optimization algorithm (QAOA) is a candidate algorithm for near-term
 # quantum hardware that can find approximate solutions to combinatorial optimization
 # problems such as graph-based problems. We have seen in the main
-# :doc:`QAOA tutorial<tutorial_qaoa_intro>` how QAOA successfully solves the minimum vertex
+# :doc:`QAOA tutorial<demos/tutorial_qaoa_intro>` how QAOA successfully solves the minimum vertex
 # cover problem on a four-node graph.
 #
 # Here, let's be ambitious and try to solve the maximum cut problem on a twenty-node graph! In
@@ -329,7 +329,7 @@ dev = qml.device(
 #     `quota <https://docs.aws.amazon.com/braket/latest/developerguide/braket-quotas.html>`__.
 #
 # The QAOA problem can then be set up following the standard pattern, as discussed in detail in
-# the :doc:`QAOA tutorial<tutorial_qaoa_intro>`.
+# the :doc:`QAOA tutorial<demos/tutorial_qaoa_intro>`.
 
 cost_h, mixer_h = qml.qaoa.maxcut(g)
 n_layers = 2
@@ -434,7 +434,7 @@ print("Parameters saved to params.npy")
 # The results of this optimization can be investigated by saving the parameters
 # :download:`here </_static/demonstration_assets/braket/params.npy>` to your working directory. See if you can
 # analyze the performance of this optimized circuit following a similar strategy to the
-# :doc:`QAOA tutorial<tutorial_qaoa_intro>`. Did we find a large graph cut?
+# :doc:`QAOA tutorial<demos/tutorial_qaoa_intro>`. Did we find a large graph cut?
 #
 # Large-scale experiments with Hybrid Jobs
 # ----------------------------------

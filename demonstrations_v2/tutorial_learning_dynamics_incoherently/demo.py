@@ -22,7 +22,7 @@ first measuring it.
 
 In simple terms, learning dynamics incoherently consists of two steps. First, we measure the output
 of the unknown process for many different inputs. In this tutorial, we do this by measuring
-:doc:`classical shadows <tutorial_classical_shadows>` of the target process output.
+:doc:`classical shadows <demos/tutorial_classical_shadows>` of the target process output.
 
 Then, we adjust a variational quantum circuit
 until it produces the same input-output combinations as the unknown process.
@@ -86,7 +86,7 @@ hamiltonian = qml.sum(
 # behavior for states that are very different from our training set.
 #
 # For quantum systems, this means we want to sample
-# :doc:`Haar-random states <tutorial_haar_measure>`, as done below.
+# :doc:`Haar-random states <demos/tutorial_haar_measure>`, as done below.
 #
 
 from scipy.stats import unitary_group
@@ -155,7 +155,7 @@ for random_state in random_states:
 # As done in [#Jerbi]_, we create a model circuit with the same gate structure as the target
 # circuit. If the target quantum process were truly unknown, then we would choose a general
 # variational quantum circuit like in the
-# :doc:`Variational classifier demo </demos/tutorial_variational_classifier>`.
+# :doc:`Variational classifier demo <demos/tutorial_variational_classifier>`.
 #
 # .. note ::
 #
@@ -407,7 +407,7 @@ print("Target output state\n", target_matrices_shadow[0])
 # short-time evolution of a first order single Trotter step, it requires a large number of
 # shadow measurements and training states to faithfully reproduce the underlying quantum process.
 # The results can be improved by increasing the number of training states and
-# :doc:`classical shadow measurements <tutorial_classical_shadows>`.
+# :doc:`classical shadow measurements <demos/tutorial_classical_shadows>`.
 #
 
 

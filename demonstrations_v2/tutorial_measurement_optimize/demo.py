@@ -19,7 +19,7 @@ near-term quantum hardware to solve for the electronic structure of molecules, V
 algorithm that sparked the variational circuit craze of the last 5 years, and holds great
 promise for showcasing a quantum advantage on near-term quantum hardware. It has also inspired
 other quantum algorithms such as the :doc:`Quantum Approximate Optimization Algorithm (QAOA)
-</demos/tutorial_qaoa_intro>`.
+<demos/tutorial_qaoa_intro>`.
 
 To scale VQE beyond the regime of classical computation, however, we need to solve for the
 ground state of increasingly larger molecules. A consequence is that the number of
@@ -46,13 +46,13 @@ Revisiting VQE
 --------------
 
 The study of :doc:`variational quantum algorithms </glossary/variational_circuit>` was spearheaded
-by the introduction of the :doc:`variational quantum eigensolver <tutorial_vqe>` (VQE) algorithm in
+by the introduction of the :doc:`variational quantum eigensolver <demos/tutorial_vqe>` (VQE) algorithm in
 2014 [#peruzzo2014]_. While classical variational techniques have been known for decades to estimate
 the ground state energy of a molecule, VQE allowed this variational technique to be applied using
 quantum computers. Since then, the field of variational quantum algorithms has evolved
 significantly, with larger and more complex models being proposed (such as
-:doc:`quantum neural networks </demos/quantum_neural_net>`, :doc:`QGANs </demos/tutorial_QGAN>`, and
-:doc:`variational classifiers </demos/tutorial_variational_classifier>`). However, quantum chemistry
+:doc:`quantum neural networks <demos/quantum_neural_net>`, :doc:`QGANs <demos/tutorial_QGAN>`, and
+:doc:`variational classifiers <demos/tutorial_variational_classifier>`). However, quantum chemistry
 remains one of the flagship use-cases for variational quantum algorithms, and VQE the standard-bearer.
 
 Part of the appeal of VQE lies within its simplicity. A circuit ansatz :math:`U(\theta)` is chosen

@@ -239,7 +239,7 @@ def pl_circuit():
 # Another great thing about the PennyLane ecosystem is that we have an `emporium of up-to-date
 # demos <https://pennylane.ai/search/?contentType=DEMO&sort=publication_date>`__ maintained by the
 # same people that develop PennyLane. If you’re just starting out, I recommend reading our :doc:`qubit
-# rotation tutorial <tutorial_qubit_rotation>`.
+# rotation tutorial <demos/tutorial_qubit_rotation>`.
 #
 # Now that you’ve used PennyLane, every road in the wonderful world of quantum programming SDKs is
 # open with no set speed limits 🏎️. If you have any questions about the PennyLane-Qiskit plugin,

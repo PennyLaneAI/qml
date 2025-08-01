@@ -419,7 +419,7 @@ execute_with_zne(circuit, executor, factory=factory, scale_noise=fold_global)
 # We're now ready to apply our knowledge to a more practical problem in quantum chemistry:
 # calculating the potential energy surface of molecular hydrogen. This is achieved by finding the
 # ground state energy of :math:`H_{2}` as we increase the bond length between the hydrogen atoms. As
-# shown in :doc:`this <tutorial_chemical_reactions>` tutorial, one approach to finding the ground
+# shown in :doc:`this <demos/tutorial_chemical_reactions>` tutorial, one approach to finding the ground
 # state energy is to calculate the corresponding qubit Hamiltonian and to fix an ansatz variational
 # quantum circuit that returns its expectation value. We can then vary the parameters of the
 # circuit to minimize the energy.

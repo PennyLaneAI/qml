@@ -1,10 +1,10 @@
 r"""How to implement QSVT on hardware
 =======================================
 
-The :doc:`quantum singular value transform (QSVT) </demos/tutorial_intro_qsvt>`
+The :doc:`quantum singular value transform (QSVT) <demos/tutorial_intro_qsvt>`
 is a quantum algorithm that allows us to perform polynomial
 transformations on matrices or operators, and it is rapidly becoming
-a go-to algorithm for :doc:`quantum application research </demos/tutorial_apply_qsvt>`
+a go-to algorithm for :doc:`quantum application research <demos/tutorial_apply_qsvt>`
 in the `ISQ era <https://pennylane.ai/blog/2023/06/from-nisq-to-isq/>`__.
 
 In this how-to guide, we will show how we can implement the QSVT
@@ -141,7 +141,7 @@ print(np.round(matrix[: 2 ** len(H.wires), : 2 ** len(H.wires)], 4))
 # Please also note that QSVT encodes the desired polynomial :math:`p(\mathcal{H})` as well as
 # a polynomial :math:`i q(\mathcal{H}).` To isolate :math:`p(\mathcal{H}),` we have used an auxiliary qubit and considered that
 # the sum of a complex number and its conjugate gives us twice its real part. We
-# recommend :doc:`this demo </demos/tutorial_apply_qsvt>` to learn more about the structure
+# recommend :doc:`this demo <demos/tutorial_apply_qsvt>` to learn more about the structure
 # of the circuit.
 #
 # Conclusion
