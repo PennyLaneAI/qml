@@ -783,8 +783,9 @@ def shors_algorithm(N, key, a, n_bits, n_trials):
     target_wires = jnp.arange(n_bits) + 1
     aux_wires = jnp.arange(n_bits + 2) + n_bits + 1
 
-    dev = qml.device("lightning.qubit", wires=2 * n_bits + 3, shots=1)
+    dev = qml.device("lightning.qubit", wires=2 * n_bits + 3)
 
+    @qml.set_shots(1)
     @qml.qnode(dev)
     def run_qpe():
         meas_results = jnp.zeros((n_bits,), dtype=jnp.int32)
@@ -973,8 +974,9 @@ def shors_algorithm_no_qjit(N, key, a, n_bits, n_trials):
     target_wires = list(range(1, n_bits + 1))
     aux_wires = list(range(n_bits + 1, 2 * n_bits + 3))
 
-    dev = qml.device("lightning.qubit", wires=2 * n_bits + 3, shots=1)
+    dev = qml.device("lightning.qubit", wires=2 * n_bits + 3)
 
+    @qml.set_shots(1)
     @qml.qnode(dev)
     def run_qpe():
         a_mask = jnp.zeros(n_bits, dtype=jnp.int64)

@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2020-11-30T00:00:00+00:00",
-    "dateOfLastModification": "2024-11-06T00:00:00+00:00",
+    "dateOfLastModification": "2025-08-01T00:00:00+00:00",
     "categories": [
         "Quantum Hardware",
         "Quantum Computing"
@@ -70,7 +70,9 @@
             "url": "https://medium.com/@sohaib.alam/unpacking-the-quantum-supremacy-benchmark-with-python-67a46709d"
         }
     ],
-    "basedOnPapers": ["10.1038/s41586-019-1666-5"],
+    "basedOnPapers": [
+        "10.1038/s41586-019-1666-5"
+    ],
     "referencedByPapers": [],
     "relatedContent": [
         {

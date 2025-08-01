@@ -411,11 +411,12 @@ n_wires = 5
 ###############################################################################
 # We initialize the quantum simulator:
 
-dev = qml.device("lightning.qubit", wires = n_wires, shots = None)
+dev = qml.device("lightning.qubit", wires = n_wires)
 
 ###############################################################################
 # Next, we construct the quantum node:
 
+@qml.set_shots(None)
 @qml.qnode(dev)
 def QK_circuit(x1, x2, thetas, amplitudes):
     ansatz(x1, x2, thetas, amplitudes, wires = range(n_wires))
