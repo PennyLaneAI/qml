@@ -5,7 +5,8 @@
             "username": "SaverioMonaco"
         }
     ],
-    "executable": true,
+    "executable_stable": true,
+    "executable_latest": true,
     "dateOfPublication": "2025-04-28T00:00:00+00:00",
     "dateOfLastModification": "2025-05-28T00:00:00+00:00",
     "categories": [

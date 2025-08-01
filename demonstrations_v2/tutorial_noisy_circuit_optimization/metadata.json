@@ -5,7 +5,8 @@
             "username": "co9olguy"
         }
     ],
-    "executable": true,
+    "executable_stable": true,
+    "executable_latest": true,
     "dateOfPublication": "2020-06-01T00:00:00+00:00",
     "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [

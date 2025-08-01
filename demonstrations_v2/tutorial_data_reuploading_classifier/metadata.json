@@ -5,7 +5,8 @@
             "username": "quantshah"
         }
     ],
-    "executable": true,
+    "executable_stable": true,
+    "executable_latest": true,
     "dateOfPublication": "2019-10-11T00:00:00+00:00",
     "dateOfLastModification": "2024-10-15T00:00:00+00:00",
     "categories": [

@@ -5,7 +5,8 @@
             "username": "glassnotes"
         }
     ],
-    "executable": true,
+    "executable_stable": true,
+    "executable_latest": true,
     "dateOfPublication": "2025-04-04T09:00:00+00:00",
     "dateOfLastModification": "2025-04-04T09:00:00+00:00",
     "categories": [

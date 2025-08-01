@@ -5,7 +5,8 @@
             "username": "emiliano"
         }
     ],
-    "executable": true,
+    "executable_stable": true,
+    "executable_latest": true,
     "dateOfPublication": "2025-01-23T09:00:00+00:00",
     "dateOfLastModification": "2025-01-23T09:00:00+00:00",
     "categories": [
