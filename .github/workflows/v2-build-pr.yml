@@ -34,41 +34,13 @@ jobs:
 
   # Step 1.5: Validate the metadata
   validate-metadata:
-    runs-on: ubuntu-latest
     if: needs.identify-changed-demos.outputs.updated != ''
     needs: 
       - identify-changed-demos
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        
-      - name: Detect Metadata Files that need to be changed
-        id: metadata-files-to-check
-        env:
-          DEMOS_TO_BUILD: ${{ needs.identify-changed-demos.outputs.updated }}
-        run: |
-          metadata_files=()
-          input_demos_to_build="$DEMOS_TO_BUILD"
-
-          for demo_file in $input_demos_to_build
-          do
-            metadata_files+=("demonstrations_v2/${demo_file}/metadata.json")
-          done
-
-
-          metadata_files_str="${metadata_files[@]}"
-
-          echo 'The following metadata files will be validated =>'
-          echo "$metadata_files_str"
-
-          echo "file_names=$metadata_files_str" >> $GITHUB_OUTPUT
-
-      - name: Validate metadata files
-        id: validate-metadata-files
-        uses: ./.github/workflows/v2-validate-demo-metadata.yml
-        with:
-          branch: ${{ github.ref }}
-          metadata_files: ${{ steps.metadata-files-to-check.outputs.metadata_file_names }}
+    uses: ./.github/workflows/v2-validate-demo-metadata.yml
+    with:
+      branch: ${{ github.ref }}
+      demo-names: ${{ needs.identify-changed-demos.outputs.updated }}
 
   # Step 2: Build demos
   build:
