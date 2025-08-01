@@ -21,7 +21,7 @@ Turning quantum nodes into Keras Layers
     Tensorflow should also be version 2.15 for this demo to run. The package scikit-learn is
     also required (do not install sklearn as it is deprecated).
     For usage with a later version of PennyLane, please consider using
-    :doc:`PyTorch </demos/tutorial_qnn_module_torch>` or :doc:`JAX </demos/tutorial_How_to_optimize_QML_model_using_JAX_and_Optax>`.
+    :doc:`PyTorch <demos/tutorial_qnn_module_torch>` or :doc:`JAX <demos/tutorial_How_to_optimize_QML_model_using_JAX_and_Optax>`.
 
 Creating neural networks in `Keras <https://keras.io/>`__ is easy. Models are constructed from
 elementary *layers* and can be trained using a high-level API. For example, the following code
@@ -51,7 +51,7 @@ model.compile(loss="mae")
 # .. note::
 #
 #     A similar demo explaining how to
-#     :doc:`turn quantum nodes into Torch layers <tutorial_qnn_module_torch>`
+#     :doc:`turn quantum nodes into Torch layers <demos/tutorial_qnn_module_torch>`
 #     is also available.
 #
 # Fixing the dataset and problem

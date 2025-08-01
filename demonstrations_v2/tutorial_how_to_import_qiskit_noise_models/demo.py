@@ -72,7 +72,7 @@ print(model_qk)
 # or measurement process based on user-provided metadata. This allows
 # for a more functional construction, as we can see by recreating the
 # above noise model as shown below. For more information on this, check out our
-# :doc:`how-to for noise models in PennyLane <tutorial_how_to_use_noise_models>`. 🧑‍🏫
+# :doc:`how-to for noise models in PennyLane <demos/tutorial_how_to_use_noise_models>`. 🧑‍🏫
 #
 
 import pennylane as qml

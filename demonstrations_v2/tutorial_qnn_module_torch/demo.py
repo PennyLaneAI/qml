@@ -37,7 +37,7 @@ model = torch.nn.Sequential(*layers)
 # .. note::
 #
 #     A similar demo explaining how to
-#     :doc:`turn quantum nodes into Keras layers <qnn_module_tf>`
+#     :doc:`turn quantum nodes into Keras layers <demos/qnn_module_tf>`
 #     is also available.
 #
 # Fixing the dataset and problem
