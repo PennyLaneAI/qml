@@ -449,7 +449,7 @@ print("Parameters saved to params.npy")
 # With a single line of code, we'll see how to scale from PennyLane simulators on your laptop to
 # run full-scale experiments on AWS that leverage both powerful classical compute and quantum
 # devices. For more details on hybrid jobs see
-# :doc:`getting started with hybrid jobs <getting_started_with_hybrid_jobs>`.
+# :doc:`getting started with hybrid jobs <demos/getting_started_with_hybrid_jobs>`.
 #
 # .. warning::
 #     The following demo is only compatible with Python version 3.10.
