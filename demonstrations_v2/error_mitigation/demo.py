@@ -38,6 +38,10 @@ of Mitiq, which can be installed using
 
     pip install "mitiq>=0.11"
 
+.. warning::
+
+    Mitiq currently requires ``pennylane~=0.36.0``. Please ensure you have ``pennylane==0.36.0``
+    installed in your environment. 
 We'll begin the demo by jumping straight into the deep end and seeing how to mitigate a simple noisy
 circuit in PennyLane with Mitiq as a backend. After, we'll take a step back and discuss the theory
 behind the error mitigation approach we used, known as zero-noise extrapolation. Using this
@@ -70,7 +74,7 @@ dev_noisy = qml.add_noise(dev_ideal, noise_model=noise_model)
 
 ###############################################################################
 # In the above, we load a noise-free device ``dev_ideal`` and a noisy device ``dev_noisy``,
-# which is constructed from the :func:`qml.add_noise <pennylane.transforms.add_noise>`
+# which is constructed from the :func:`qml.add_noise <pennylane.noise.add_noise>`
 # transform. This transform works by intercepting each circuit executed on the device and
 # adding the noise to it based on the ``noise_model``. For example, in this case, it will
 # add :class:`PhaseDamping <pennylane.PhaseDamping>` noise channel after every gate in the
@@ -153,7 +157,7 @@ noisy_qnode(w1, w2)
 
 from mitiq.zne.scaling import fold_global
 from mitiq.zne.inference import RichardsonFactory
-from pennylane.transforms import mitigate_with_zne
+from pennylane.noise import mitigate_with_zne
 
 extrapolate = RichardsonFactory.extrapolate
 scale_factors = [1, 2, 3]
@@ -164,7 +168,7 @@ mitigated_qnode = mitigate_with_zne(
 mitigated_qnode(w1, w2)
 
 ##############################################################################
-# Amazing! Using PennyLane's :func:`mitigate_with_zne <pennylane.transforms.mitigate_with_zne>`
+# Amazing! Using PennyLane's :func:`mitigate_with_zne <pennylane.noise.mitigate_with_zne>`
 # transform, we can create a new ``mitigated_qnode`` whose result is closer to the ideal noise-free
 # value of ``1``. How does this work?
 #
@@ -279,7 +283,7 @@ def executor(circuits, dev=dev_noisy):
 ##############################################################################
 # We need to do this step as part of the Mitiq integration with the low-level PennyLane
 # :class:`QuantumTape <pennylane.tape.QuantumTape>`. You will not have to worry about these details
-# when using the main :func:`mitigate_with_zne <pennylane.transforms.mitigate_with_zne>` function we
+# when using the main :func:`mitigate_with_zne <pennylane.noise.mitigate_with_zne>` function we
 # encountered earlier.
 #
 # Now, let's execute these circuits:
@@ -341,7 +345,7 @@ _ = fac.plot_fit()
 #
 # Now that we understand the ZNE method for error mitigation, we can provide a few more details on
 # how it can be performed using PennyLane. As we have seen, the
-# :func:`mitigate_with_zne <pennylane.transforms.mitigate_with_zne>` function provides the main
+# :func:`mitigate_with_zne <pennylane.noise.mitigate_with_zne>` function provides the main
 # entry point. This function is an example of a :doc:`circuit transform, </code/qml_transforms>` and
 # it can be applied to pre-constructed QNodes as well as being used as a decorator when constructing
 # new QNodes. For example, suppose we have a ``qnode`` already defined. A mitigated QNode can be

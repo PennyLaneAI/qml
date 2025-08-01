@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2024-02-29T00:00:00+00:00",
-    "dateOfLastModification": "2024-11-06T00:00:00+00:00",
+    "dateOfLastModification": "2025-08-01T00:00:00+00:00",
     "categories": [
         "Optimization"
     ],
@@ -26,7 +26,6 @@
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],
-    "relatedContent": [
-    ],
+    "relatedContent": [],
     "discussionForumUrl": "https://discuss.pennylane.ai/t/quadratic-unconstrained-binary-optimization-qubo-demo/7339"
 }

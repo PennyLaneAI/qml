@@ -438,10 +438,11 @@ variational_ansatz = qml.SimplifiedTwoDesign
 n_layers = 5
 weights_shape = variational_ansatz.shape(n_layers, N)
 
-dev = qml.device("default.qubit", wires=N, shots=None)
+dev = qml.device("default.qubit", wires=N)
 
 
 @jax.jit
+@qml.set_shots(None)
 @qml.qnode(dev, interface="jax")
 def energy(z, a):
     """Computes the energy for a Hamiltonian H(a) using a measurement on the
@@ -544,6 +545,7 @@ z_star_variational = ground_state_solution_map_variational(a, z_init)
 
 
 @jax.jit
+@qml.set_shots(None)
 @qml.qnode(dev, interface="jax")
 def expval_A_variational(z: float) -> float:
     """Expectation value of $A$ as a function of $a$ where we use the

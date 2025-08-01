@@ -140,7 +140,7 @@ n_measurements = 10000
 
 shadows = []
 for random_state in random_states:
-    bits, recipes = target_circuit(random_state, shots=n_measurements)
+    bits, recipes = qml.set_shots(target_circuit, shots=n_measurements)(random_state)
     shadow = qml.ClassicalShadow(bits, recipes)
     shadows.append(shadow)
 

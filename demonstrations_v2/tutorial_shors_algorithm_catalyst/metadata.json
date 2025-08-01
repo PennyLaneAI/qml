@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2025-04-04T09:00:00+00:00",
-    "dateOfLastModification": "2025-04-04T09:00:00+00:00",
+    "dateOfLastModification": "2025-08-01T00:00:00+00:00",
     "categories": [
         "Algorithms",
         "Quantum Computing",
@@ -75,15 +75,14 @@
             "url": "https://doi.org/10.48550/arXiv.quant-ph/0008033"
         }
     ],
-    "basedOnPapers": [
-    ],
+    "basedOnPapers": [],
     "referencedByPapers": [],
     "relatedContent": [
         {
             "type": "demonstration",
             "id": "tutorial_jax_transformations",
             "weight": 1.0
-        }, 
+        },
         {
             "type": "demonstration",
             "id": "tutorial_qjit_compile_grovers_algorithm_with_catalyst",

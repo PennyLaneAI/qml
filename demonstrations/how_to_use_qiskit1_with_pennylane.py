@@ -98,8 +98,9 @@ print(counts)
 
 import pennylane as qml
 
-dev = qml.device("qiskit.basicsim", wires=2, shots=1024)
+dev = qml.device("qiskit.basicsim", wires=2)
 
+@qml.set_shots(1024)
 @qml.qnode(dev)
 def circuit():
     qml.Hadamard(0)
@@ -343,6 +344,7 @@ pl_qfunc = qml.from_qiskit(qc)
 
 dev = qml.device("lightning.qubit", wires=n)
 
+@qml.set_shots(1024)
 @qml.qnode(dev)
 def differentiable_circuit(phis, theta):
     pl_qfunc(phis, theta)

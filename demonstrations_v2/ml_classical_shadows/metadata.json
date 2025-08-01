@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2022-05-02T00:00:00+00:00",
-    "dateOfLastModification": "2025-07-15T00:00:00+00:00",
+    "dateOfLastModification": "2025-08-01T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
@@ -14,11 +14,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_machine_learning_quantum_manybody_problems.png"
+            "uri": "_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_machine_learning_quantum_manybody_problems.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_machine_learning_quantum_manybody_problems.png"
+            "uri": "_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_machine_learning_quantum_manybody_problems.png"
         }
     ],
     "seoDescription": "Learn how to apply machine learning to quantum many-body problems by using classical shadow formalism and ML to predict the ground-state properties of the 2D antiferromagnetic Heisenberg model.",
@@ -43,7 +43,9 @@
             "url": "https://proceedings.neurips.cc/paper/2018/file/5a4be1fa34e62bb8a6ec6b91d2462f5a-Paper.pdf"
         }
     ],
-    "basedOnPapers": ["10.48550/arXiv.2106.12627"],
+    "basedOnPapers": [
+        "10.48550/arXiv.2106.12627"
+    ],
     "referencedByPapers": [],
     "relatedContent": [
         {

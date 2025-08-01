@@ -284,7 +284,7 @@ def random_params(num_wires, num_layers):
 # For the purpose of this tutorial we will use PennyLane's ``default.qubit``
 # device with 5 wires in analytic mode.
 
-dev = qml.device("default.qubit", wires=5, shots=None)
+dev = qml.device("default.qubit", wires=5)
 wires = dev.wires.tolist()
 
 ##############################################################################
@@ -294,6 +294,7 @@ wires = dev.wires.tolist()
 # finally extract the probabilities of observing each basis state.
 
 
+@qml.set_shots(None)
 @qml.qnode(dev)
 def kernel_circuit(x1, x2, params):
     ansatz(x1, params, wires=wires)

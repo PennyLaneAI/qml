@@ -180,7 +180,7 @@ def bitstring_to_int(bit_string_sample):
 # ~~~~~~~
 # Next, we create a quantum device with 4 qubits.
 
-dev = qml.device("lightning.qubit", wires=n_wires, shots=20)
+dev = qml.device("lightning.qubit", wires=n_wires)
 
 ##############################################################################
 # We also require a quantum node which will apply the operators according to the angle parameters,
@@ -194,6 +194,7 @@ dev = qml.device("lightning.qubit", wires=n_wires, shots=20)
 # by setting ``return_samples=True``.
 
 
+@qml.set_shots(20)
 @qml.qnode(dev)
 def circuit(gammas, betas, return_samples=False):
     # apply Hadamards to get the n qubit |+> state
@@ -247,7 +248,7 @@ def qaoa_maxcut(n_layers=1):
             print(f"Objective after step {i+1:3d}: {-objective(params): .7f}")
 
     # sample 100 bitstrings by setting return_samples=True and the QNode shot count to 100
-    bitstrings = circuit(*params, return_samples=True, shots=100)
+    bitstrings = qml.set_shots(circuit, shots=100)(*params, return_samples=True)
     # convert the samples bitstrings to integers
     sampled_ints = [bitstring_to_int(string) for string in bitstrings]
 

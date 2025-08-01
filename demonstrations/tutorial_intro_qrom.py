@@ -71,11 +71,12 @@ target_wires = [3, 4]
 
 Ui = [qml.BasisState(int(bitstring, 2), target_wires) for bitstring in bitstrings]
 
-dev = qml.device("default.qubit", shots=1)
+dev = qml.device("default.qubit")
 
 
 # This line is included for drawing purposes only.
 @partial(qml.transforms.decompose, max_expansion=1)
+@qml.set_shots(1)
 
 @qml.qnode(dev)
 def circuit(index):
@@ -111,6 +112,7 @@ target_wires = [3, 4]
 
 
 @partial(qml.compile, basis_set="CNOT")  # Line added for resource estimation purposes only.
+@qml.set_shots(1)
 @qml.qnode(dev)
 def circuit(index):
     qml.BasisState(index, wires=control_wires)
@@ -152,6 +154,7 @@ work_wires = [5, 6]
 
 
 @partial(qml.compile, basis_set="CNOT") 
+@qml.set_shots(1)
 @qml.qnode(dev)
 def circuit(index):
     qml.BasisState(index, wires=control_wires)
@@ -255,6 +258,7 @@ target_wires = [3, 4]
 work_wires = [5, 6]
 
 
+@qml.set_shots(1)
 @qml.qnode(dev)
 def circuit(index):
     qml.BasisState(index, wires=control_wires)
