@@ -132,7 +132,7 @@ hf = qchem.hf_state(electrons, qubits)
 # state. Single and double excitation gates, denoted :math:`G^{(1)}(\Theta)` and :math:`G^{(2)}(\Theta)` respectively, are
 # conveniently implemented in PennyLane with :class:`~.pennylane.SingleExcitation`
 # and :class:`~.pennylane.DoubleExcitation` classes. You can find more information
-# about how these gates work in this `video <https://youtu.be/4Xnxa6tzPeA>`__ and in the demo :doc:`tutorial_givens_rotations`.
+# about how these gates work in this `video <https://youtu.be/4Xnxa6tzPeA>`__ and in the demo :doc:`demos/tutorial_givens_rotations`.
 #
 
 singles, doubles = qchem.excitations(electrons=electrons, orbitals=qubits)
