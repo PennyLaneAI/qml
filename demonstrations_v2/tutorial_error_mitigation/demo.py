@@ -76,7 +76,7 @@ dev_noisy = qml.add_noise(dev_ideal, noise_model=noise_model)
 # add :class:`PhaseDamping <pennylane.PhaseDamping>` noise channel after every gate in the
 # circuit acting on wires :math:`[0, 1, 2, 3]`. To get a better understanding of noise
 # channels like :class:`PhaseDamping <pennylane.PhaseDamping>` and using noise models,
-# check out the :doc:`tutorial_noisy_circuits` and :doc:`tutorial_how_to_use_noise_models`
+# check out the :doc:`demos/tutorial_noisy_circuits` and :doc:`demos/tutorial_how_to_use_noise_models`
 # tutorials, respectively.
 #
 # The next step is to define our circuit. Inspired by the mirror circuits concept introduced by
