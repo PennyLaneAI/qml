@@ -345,7 +345,7 @@ one_chemist = one - np.einsum("pqrr->pq", two) / 2.0
 # 
 # where :math:`Z^{(\ell)}` is symmetric and :math:`U^{(\ell)}` is orthogonal. 
 # These matrices can be calculated using PennyLane’s ``qchem.factorize`` function, with ``compressed=True``. 
-# By default, :math:`L` is set as twice the number of orbtials in our active space. 
+# By default, :math:`L` is set as twice the number of orbitals in our active space. 
 # The ``Z`` and ``U`` output here are arrays of :math:`L` fragment matrices with dimension :math:`n_\mathrm{cas} \times n_\mathrm{cas}`.
 
 from jax import config
@@ -360,14 +360,14 @@ print("two_chemist", two_chemist.shape)
 print("U", U.shape)
 print("Z", Z.shape)
 
-# Compare factorized two-electron fragement sum to the original.
+# Compare factorized two-electron fragment sum to the original.
 approx_two_chemist = qml.math.einsum("tpk,tqk,tkl,trl,tsl->pqrs", U, U, Z, U, U)
 assert qml.math.allclose(approx_two_chemist, two_chemist, atol=0.1)
 
 ######################################################################
 # Note there are some terms in this decomposition that are exactly diagonalizable, and can be added to the one-electron terms to simplify how the Hamiltonian time evolution is implemented. 
 # We call these the “one-electron extra” terms and add them to the one-electron integrals.
-# We can then diagnonalize this sum into the matrix :math:`Z^{(0)}` with basis rotation matrix :math:`U^{(0)}` using ``np.linalg.eigh``, for easy implementation in the simulation circuit.
+# We can then diagonalize this sum into the matrix :math:`Z^{(0)}` with basis rotation matrix :math:`U^{(0)}` using ``np.linalg.eigh``, for easy implementation in the simulation circuit.
 
 # Calculate the one-electron extra terms.
 Z_prime = np.stack([np.diag(np.sum(Z[i], axis=-1)) for i in range(Z.shape[0])], axis=0)
@@ -393,7 +393,7 @@ Z0 = np.diag(eigenvals)
 # &- \frac12 \mathbf{U}^{(0)} \left[ \sum_k Z_k^{(0)} \sum_\gamma \sigma_{z, k\gamma} \right] (\mathbf{U}^{(0)})^{T} \\ 
 # &+ \frac18 \sum_\ell \mathbf{U}^{(\ell)} \left[\sum_{(k, \gamma)\neq(j, \beta)} \left(Z_{kj}^{(\ell)}\sigma_{z, k\gamma}\sigma_{z, j\beta}\right)\right](\mathbf{U}^{(\ell)})^T\,.
 #
-# The first term is a sum of the core constant and contant factors that arise from the Jordan-Wigner transform. The second and third terms are the one- and two-electron fragments, respectively. 
+# The first term is a sum of the core constant and constant factors that arise from the Jordan-Wigner transform. The second and third terms are the one- and two-electron fragments, respectively. 
 # Below is an illustration of the circuit we will use to implement the one- and two-electron fragments in our factorized Hamiltonian.
 #
 # .. figure:: ../_static/demonstration_assets/xas/UZU_circuits.png
@@ -425,7 +425,7 @@ def U_rotations(U, control_wires):
 #
 #    Figure 5: Double-phase trick to decompose expensive controlled-Z rotations into an uncontrolled-Z rotation sandwiched by CNOT gates.
 #
-# For the one-electron terms, we loop over both the spin and orbital indeces, and apply the Z rotations using this double-phase trick. 
+# For the one-electron terms, we loop over both the spin and orbital indices, and apply the Z rotations using this double-phase trick. 
 # The two-electron fragments are implemented the same way, except the two-qubit rotations use ``qml.MultiRZ``.
 
 from itertools import product
@@ -596,7 +596,7 @@ A = np.sum([L_j(alpha * t_j) for t_j in time_interval])
 shots_list = [int(round(total_shots * L_j(alpha * t_j) / A)) for t_j in time_interval]
 
 ######################################################################
-# Finally, we can run the simulation to determine the expectation values at each time step, which allow us to construct the time-domain Green’s function.
+# Finally, we can run the simulation to determine the expectation values at each time step, which allows us to construct the time-domain Green’s function.
 
 expvals = np.zeros((2, len(time_interval)))  # Results list initialization.
 
@@ -744,7 +744,7 @@ plt.show()
 #
 # In this tutorial, we have implemented a simplified version of the algorithm as presented in [#Fomichev2025]_. 
 # The algorithm represents a culmination of many optimizations for time evolving an electronic Hamiltonian. 
-# We’ve also discussed how XAS simulation is a promising candidate applicaiton for early fault-tolerant quantum computers due to its low qubit overhead but high amount of correlations in the state space.
+# We’ve also discussed how XAS simulation is a promising candidate application for early fault-tolerant quantum computers due to its low qubit overhead but high amount of correlations in the state space.
 #
 # References
 # ----------
@@ -819,7 +819,7 @@ plt.show()
 # 
 # We can also turn off the two-electron terms that couple core-excited and valence-excited states. 
 # The terms are in general small, but by setting them to zero that coupling is removed entirely from the time evolution. 
-# To implement the core-valence seperation approximation in an XAS simulation algorithm, there are two steps:
+# To implement the core-valence separation approximation in an XAS simulation algorithm, there are two steps:
 # 
 # - Before performing compressed double factorization on the two-electron integrals, remove the terms that include at least one core orbital.
 # - Remove all the matrix elements from the dipole operator that do *not* include at least one core orbital.
