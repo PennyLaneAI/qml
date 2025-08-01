@@ -283,10 +283,10 @@ for rho in rhos:
 # .. admonition:: Caution! Wire ordering
 #     :class: note
 #
-#     When converting the operator ``m_rho`` to the matrix ``dipole_matrix_rho``, the full set of wires need to be specified, otherwise the matrix may not have the right dimension (if, for example, the operator is zero along any cartesian direction).
+#     When converting the operator ``m_rho`` to the matrix ``dipole_matrix_rho``, the full set of wires needs to be specified, otherwise the matrix may not have the right dimension (if, for example, the operator is zero along any cartesian direction).
 #
 # Let’s prepare the circuit that will initialize our qubit register with this state.
-# We will need :math:`2 n_\mathrm{cas}` wires, which is twice our full active space, since we need to account for spin. 
+# We will need :math:`2 n_\mathrm{cas}` wires, which is twice the number of orbitals in our active space, since we need to account for spin. 
 # We will also add one auxiliary wire for the measurement circuit, which we will prepare as the 0 wire with an applied Hadamard gate.
 
 device_type = "lightning.qubit"
@@ -312,7 +312,7 @@ def initial_circuit(wf):
 # Time Evolution
 # --------------
 #
-# Next we will discuss how to prepare the electronic Hamiltonian for use in the time evolution of the Hadamard test circuit. 
+# Next we will discuss how to prepare the electronic Hamiltonian for efficient time evolution in the Hadamard test circuit. 
 # We will perform compressed double factorization (CDF) on the Hamiltonian to approximate it as a series of fragments, each of which can be fast-forwarded in a Trotter product formula.
 #
 # If you haven’t yet, go read the demo `“How to build compressed double-factorized Hamiltonians” <https://pennylane.ai/qml/demos/tutorial_how_to_build_compressed_double_factorized_hamiltonians>`__, because that is exactly what we are going to do! 
@@ -334,9 +334,9 @@ core_constant, one, two = qml.qchem.electron_integrals(mole, core=core, active=a
 core_constant = core_constant[0]
 
 ######################################################################
-# We will have to convert these to chemist’s notation [#Sherrill2005]_.
+# We will have to convert these to chemists’ notation [#Sherrill2005]_.
 
-# To chemist notation.
+# Convert to chemists' notation.
 two_chemist = np.einsum("prsq->pqrs", two)
 one_chemist = one - np.einsum("pqrr->pq", two) / 2.0
 
@@ -346,7 +346,7 @@ one_chemist = one - np.einsum("pqrr->pq", two) / 2.0
 # .. math:: (pq|rs) \approx \sum_{\ell=1}^L \sum_{k, m=1}^N U_{pk}^{(\ell)}U_{qk}^{(\ell)}Z_{km}^{(\ell)}U_{rm}^{(\ell)}U_{sm}^{(\ell)}\,,
 # 
 # where :math:`Z^{(\ell)}` is symmetric and :math:`U^{(\ell)}` is orthogonal. 
-# These matrices can be calculated using PennyLane’s ``qchem.factorize`` function, with ``compressed=True``. 
+# These matrices can be calculated using PennyLane’s ``qml.qchem.factorize`` function, with ``compressed=True``. 
 # By default, :math:`L` is set as twice the number of orbitals in our active space. 
 # The ``Z`` and ``U`` output here are arrays of :math:`L` fragment matrices with dimension :math:`n_\mathrm{cas} \times n_\mathrm{cas}`.
 
@@ -383,9 +383,9 @@ Z0 = np.diag(eigenvals)
 # Constructing the time-propagation circuit
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# The main work of our algorithm will be to implement time evolution with respect to our Hamiltonian fragments by using a Trotter product formula, and measure the expectation value of that time evolution operator for various times.
+# The main work of our algorithm will be to implement the time evolution of the Hamiltonian fragments by using a Trotter product formula.
 #
-# The trick when implementing a compressed double-factorized Hamiltonian is to use `Thouless’s theorem <https://joshuagoings.com/assets/Thouless_theorem.pdf>`__ [#Thouless1960]_ to construct a size :math:`2^{n_\mathrm{cas}} \times 2^{n_\mathrm{cas}}` unitary :math:`{\bf U}^{(\ell)}` that is induced by a the single-particle basis transformation :math:`U^{(\ell)}` (of size :math:`n_\mathrm{cas} \times n_\mathrm{cas}`). 
+# The trick when time evolving a compressed double-factorized Hamiltonian is to use `Thouless’s theorem <https://joshuagoings.com/assets/Thouless_theorem.pdf>`__ [#Thouless1960]_ to construct a size :math:`2^{n_\mathrm{cas}} \times 2^{n_\mathrm{cas}}` unitary :math:`{\bf U}^{(\ell)}` that is induced by a the single-particle basis transformation :math:`U^{(\ell)}` (of size :math:`n_\mathrm{cas} \times n_\mathrm{cas}`). 
 # The Jordan-Wigner transform can then turn the number operators :math:`a^\dagger_p a_p = n_{p}` into Pauli :math:`Z` rotations, via :math:`n_p = (1-\sigma_{z,p})/2`. 
 # Note the :math:`1/2` term will affect the global phase, and we will have to keep track of that carefully. 
 # The resulting Hamiltonian looks like the following (for a derivation see Appendix A of [#Fomichev2025]_)
@@ -396,7 +396,7 @@ Z0 = np.diag(eigenvals)
 #   &+ \frac18 \sum_\ell {\bf U}^{(\ell)} \left[\sum_{(k, \gamma)\neq(j, \beta)} \left(Z_{kj}^{(\ell)}\sigma_{z, k\gamma}\sigma_{z, j\beta}\right)\right]({\bf U}^{(\ell)})^T\,.
 #
 # The first term is a sum of the core constant and constant factors that arise from the Jordan-Wigner transform. The second and third terms are the one- and two-electron fragments, respectively. 
-# Below is an illustration of the circuit we will use to implement the one- and two-electron fragments in our factorized Hamiltonian.
+# Below is an illustration of the circuit we will use to implement the one- and two-electron fragments in a time-evolution of the factorized Hamiltonian.
 #
 # .. figure:: ../_static/demonstration_assets/xas/UZU_circuits.png
 #    :alt: One- and two-electron basis rotation and Pauli :math:`Z` rotation circuits.
