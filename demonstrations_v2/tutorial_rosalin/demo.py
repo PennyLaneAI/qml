@@ -48,14 +48,14 @@ be a delicate balance.
 Recent work has highlighted that 'quantum-aware' optimization techniques
 can lead to marked improvements when training variational quantum algorithms:
 
-* :doc:`/demos/tutorial_quantum_natural_gradient` descent by Stokes et al. [#stokes2019]_, which
+* :doc:`demos/tutorial_quantum_natural_gradient` descent by Stokes et al. [#stokes2019]_, which
   takes into account the quantum geometry during the gradient-descent update step.
 
 * The work of Sweke et al. [#sweke2019]_, which shows
   that quantum gradient descent with a finite number of shots is equivalent to
   `stochastic gradient descent <https://en.wikipedia.org/wiki/Stochastic_gradient_descent>`_,
   and has guaranteed convergence. Furthermore, combining a finite number of shots with
-  weighted sampling of the cost function terms leads to :doc:`/demos/tutorial_doubly_stochastic`.
+  weighted sampling of the cost function terms leads to :doc:`demos/tutorial_doubly_stochastic`.
 
 * The iCANS (individual Coupled Adaptive Number of Shots) optimization technique by
   Jonas Kuebler et al. [#kubler2020]_ adapts the number
