@@ -5,7 +5,8 @@
             "username": "hapax"
         }
     ],
-    "executable": true,
+    "executable_stable": true,
+    "executable_latest": true,
     "dateOfPublication": "2023-01-24T00:00:00+00:00",
     "dateOfLastModification": "2025-01-23T00:00:00+00:00",
     "categories": [

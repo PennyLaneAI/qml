@@ -11,7 +11,8 @@
             "username": "mnjones"
         }
     ],
-    "executable": false,
+    "executable_stable": false,
+    "executable_latest": false,
     "dateOfPublication": "2023-06-20T00:00:00+00:00",
     "dateOfLastModification": "2025-01-10T00:00:00+00:00",
     "categories": [

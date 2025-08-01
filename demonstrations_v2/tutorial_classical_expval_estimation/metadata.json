@@ -5,7 +5,8 @@
             "username": "dwierichs"
         }
     ],
-    "executable": true,
+    "executable_stable": true,
+    "executable_latest": true,
     "dateOfPublication": "2024-09-10T00:00:00+00:00",
     "dateOfLastModification": "2025-04-03T00:00:00+00:00",
     "categories": [

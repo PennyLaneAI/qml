@@ -8,7 +8,8 @@
             "username": "jfcalvarez"
         }
     ],
-    "executable": true,
+    "executable_stable": true,
+    "executable_latest": true,
     "dateOfPublication": "2022-11-28T00:00:00+00:00",
     "dateOfLastModification": "2024-11-06T00:00:00+00:00",
     "categories": [
