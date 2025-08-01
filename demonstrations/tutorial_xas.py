@@ -66,7 +66,7 @@ Below is an illustration of an X-ray absorption spectrum.
    Figure 2: *Example X-ray absorption spectrum.* Illustration of how the peak positions :math:`E_F - E_i`, widths :math:`\eta` and amplitudes :math:`|\langle F | \hat m_\rho | I \rangle|^2` determine the spectrum.
 
 The goal of this demo is to implement a quantum algorithm that can calculate this spectrum. 
-Three algorithm designs are discussed in Ref. [#Fomichev2024]_, but we will focus on the time-domain method, since quantum computers are naturally suited to calculating the time evolution of a Hamiltonian operator. 
+Three algorithm designs are discussed in [#Fomichev2024]_, but we will focus on the time-domain method, since quantum computers are naturally suited to calculating the time evolution of a Hamiltonian operator. 
 Instead of computing the energy differences and state overlaps directly, this method simulates the system in the time domain, and then uses a `Fourier transform <https://en.wikipedia.org/wiki/Fourier_transform>`__ to obtain the spectrum in frequency space *all at once*.
 
 Quantum algorithm in the time-domain
@@ -313,10 +313,10 @@ def initial_circuit(wf):
 # --------------
 #
 # Next we will discuss how to prepare the electronic Hamiltonian for use in the time evolution of the Hadamard test circuit. 
-# We will perform compressed double factorization on the Hamiltonian to approximate it as a series of fragments, each of which can be fast-forwarded in a Trotter product formula.
+# We will perform compressed double factorization (CDF) on the Hamiltonian to approximate it as a series of fragments, each of which can be fast-forwarded in a Trotter product formula.
 #
 # If you haven’t yet, go read the demo `“How to build compressed double-factorized Hamiltonians” <https://pennylane.ai/qml/demos/tutorial_how_to_build_compressed_double_factorized_hamiltonians>`__, because that is exactly what we are going to do! 
-# You could also look at Section III in Ref. [#Fomichev2025]_.
+# You could also look at Section III in [#Fomichev2025]_.
 #
 # Electronic Hamiltonian
 # ~~~~~~~~~~~~~~~~~~~~~~
@@ -390,10 +390,10 @@ Z0 = np.diag(eigenvals)
 # Note the :math:`1/2` term will affect the global phase, and we will have to keep track of that carefully. 
 # The resulting Hamiltonian looks like the following (for a derivation see Appendix A of [#Fomichev2025]_)
 #
-# ..math::
-# H_\mathrm{CDF} &= \left(E + \sum_k Z_k^{(0)} - \frac12 \sum_{\ell, kj} Z_{kj}^{(\ell)} + \frac14 \sum_{\ell,k} Z_{kk}^{(\ell)} \right) {\bf 1} \\
-# &- \frac12 {\bf U}^{(0)} \left[ \sum_k Z_k^{(0)} \sum_\gamma \sigma_{z, k\gamma} \right] ({\bf U}^{(0)})^{T} \\ 
-# &+ \frac18 \sum_\ell {\bf U}^{(\ell)} \left[\sum_{(k, \gamma)\neq(j, \beta)} \left(Z_{kj}^{(\ell)}\sigma_{z, k\gamma}\sigma_{z, j\beta}\right)\right]({\bf U}^{(\ell)})^T\,.
+# .. math::
+#   H_\mathrm{CDF} &= \left(E + \sum_k Z_k^{(0)} - \frac12 \sum_{\ell, kj} Z_{kj}^{(\ell)} + \frac14 \sum_{\ell,k} Z_{kk}^{(\ell)} \right) {\bf 1} \\
+#   &- \frac12 {\bf U}^{(0)} \left[ \sum_k Z_k^{(0)} \sum_\gamma \sigma_{z, k\gamma} \right] ({\bf U}^{(0)})^{T} \\ 
+#   &+ \frac18 \sum_\ell {\bf U}^{(\ell)} \left[\sum_{(k, \gamma)\neq(j, \beta)} \left(Z_{kj}^{(\ell)}\sigma_{z, k\gamma}\sigma_{z, j\beta}\right)\right]({\bf U}^{(\ell)})^T\,.
 #
 # The first term is a sum of the core constant and constant factors that arise from the Jordan-Wigner transform. The second and third terms are the one- and two-electron fragments, respectively. 
 # Below is an illustration of the circuit we will use to implement the one- and two-electron fragments in our factorized Hamiltonian.
@@ -410,7 +410,7 @@ Z0 = np.diag(eigenvals)
 # We will have to do this for both spin-halves of the register.
 
 def U_rotations(U, control_wires):
-    """Circuit implementing the basis rotations of the CDF decomposition."""
+    """Circuit implementing the basis rotations of the Hamiltonian fragments."""
     U_spin = qml.math.kron(U, qml.math.eye(2))  # Apply to both spins.
     qml.BasisRotation(
         unitary_matrix=U_spin, wires=[int(i + control_wires) for i in range(2 * n_cas)]
@@ -434,7 +434,7 @@ from itertools import product
 
 
 def Z_rotations(Z, step, is_one_electron_term, control_wires):
-    """Circuit implementing the Z rotations of the CDF decomposition."""
+    """Circuit implementing the Z rotations of the Hamiltonian fragments."""
     if is_one_electron_term:
         for sigma in range(2):
             for i in range(n_cas):
@@ -534,8 +534,8 @@ def second_order_trotter(dev, state, step):
 # Measurement
 # -----------
 #
-# To measure the expectation value of the time evolution, we use a Hadamard test circuit. 
-# This uses ``qml.StatePrep`` to set the state as it was returned by the time evolution, and then measures both the real and imaginary expectation values using ``qml.expval`` for operators ``PauliX`` and ``PauliY``, respectively.
+# To measure the expectation value of the time evolution operator, we use a Hadamard test circuit. 
+# Using ``qml.StatePrep`` to set the state as it was returned by the time evolution, we can then measure both the real and imaginary expectation values using ``qml.expval`` for operators ``PauliX`` and ``PauliY``, respectively.
 
 
 def meas_circuit(state):
@@ -546,7 +546,7 @@ def meas_circuit(state):
 
 ######################################################################
 # We can only obtain both real and imaginary expectation values at once in a *simulated* circuit. 
-# An actual implementation would have to select real or imaginary by inserting a phase gate, shown in the circuit diagram below.
+# An actual implementation would have to switch between the real and imaginary components by inserting a phase gate, shown in the circuit diagram below.
 #
 # .. figure:: ../_static/demonstration_assets/xas/hadamard_test_circuit.png
 #    :alt: Hadamard test circuit with optional S-dagger gate on the auxiliary qubit.
@@ -554,7 +554,7 @@ def meas_circuit(state):
 #    :align: center
 #
 #    Figure 6: *Hadamard test circuit to measure the expectation value of the time-evolution operator*. 
-#    With the phase gate :math:`S^\dagger` present (absent), this gives the real (imaginary) part of the time-domain Green’s function :math:`\tilde G(\tau j)`.
+#    With the phase gate :math:`S^\dagger` present (absent), this gives the real (imaginary) part of the time-domain Green’s function.
 #
 # Run Simulation
 # --------------
@@ -564,7 +564,7 @@ def meas_circuit(state):
 # - The Lorentzian width :math:`\eta` of the spectrum peaks, representing the experimental resolution.
 # - The time step :math:`\tau`, which should be small enough to resolve the largest frequency components we want to determine.
 # - The maximum number of time steps :math:`j_\mathrm{max}`, which sets the largest evolution time. This should be large enough so that we can distinguish between the small frequency components in our spectrum.
-# - The total number of shots we will use to obtain statistics for the expectation value of the time evolution.
+# - The total number of shots we will use to obtain statistics for the expectation value of the time evolution operator.
 
 eta = 0.05  # In Hartree energy units (Ha).
 H_norm = np.pi  # Maximum final state eigenvalue used to determine tau.
@@ -576,10 +576,9 @@ jrange = np.arange(1, 2 * int(jmax) + 1, 1)
 time_interval = tau * jrange
 
 ######################################################################
-# Minimizing the number of shots we require to obtain the necessary expectation value statistics will improve the efficiency of our algorithm. 
-# One way to do this is to employ a sampling distribution that takes advantage of the decaying Lorentzian kernel [#Fomichev2025]_. 
+# To improve the efficiency of our algorithm we can employ a sampling distribution that takes advantage of the decaying Lorentzian kernel [#Fomichev2025]_. 
 # The contribution of longer evolution times to the overall :math:`G_\rho(\omega)` are exponentially suppressed by the :math:`e^{-\eta t}` factor. 
-# Reducing the number of shots allocated to long times by this factor can save the total number of shots needed.
+# Reducing the number of shots allocated to long times by this factor can save the total number of shots needed to obtain the required precision for :math:`G_\rho(\omega).
 # This is implemented below by creating ``shots_list``, which distributes the ``total_shots`` among the time steps, weighted exponentially by the Lorentzian width. 
 # The parameter :math:`\alpha` can adjust this weighting, s.t. for :math:`\alpha > 1` there is more weight at shorter times.
 
@@ -598,7 +597,7 @@ A = np.sum([L_j(alpha * t_j) for t_j in time_interval])
 shots_list = [int(round(total_shots * L_j(alpha * t_j) / A)) for t_j in time_interval]
 
 ######################################################################
-# Finally, we can run the simulation to determine the expectation values at each time step, which allows us to construct the time-domain Green’s function.
+# Finally, we can run the simulation to determine the expectation values at each time step, which allows us to construct the time-domain Green’s function. We also sum the expectation values from each cartesian direction :math:`\rho`.
 
 expvals = np.zeros((2, len(time_interval)))  # Results list initialization.
 
@@ -654,7 +653,7 @@ plt.show()
 ######################################################################
 # Since the real and imaginary components of the time-domain Green’s function are determined separately, we can calculate the Fourier transform like
 #
-# .. math::  -\mathrm{Im}\,G_\rho(\omega) = \frac{\eta\tau}{2\pi}\left(1 + 2\sum_{j=1}^{j_\mathrm{max}}e^{-\eta \tau j}\left[ \mathbb{E}\left(\mathrm{Re}\,\tilde G(\tau j)\right)\mathrm{cos}(\tau j \omega) - \mathbb{E}\left(\mathrm{Im}\,\tilde G(\tau j)\right) \mathrm{sin}(\tau j \omega)\right]\right) \,,
+# .. math::  -\mathrm{Im}\,G(\omega) = \frac{\eta\tau}{2\pi}\left(1 + 2\sum_{j=1}^{j_\mathrm{max}}e^{-\eta \tau j}\left[ \mathbb{E}\left(\mathrm{Re}\,\tilde G(\tau j)\right)\mathrm{cos}(\tau j \omega) - \mathbb{E}\left(\mathrm{Im}\,\tilde G(\tau j)\right) \mathrm{sin}(\tau j \omega)\right]\right) \,,
 #
 # where :math:`\mathbb{E}` is the expectation value. 
 # We do this below, but also multiply the normalization factors over to the right side.
@@ -676,8 +675,7 @@ spectrum = np.array([f_domain_Greens_func(w) for w in wgrid])
 # We will need the final state energies and the overlaps. 
 # These can be computed with PySCF, by reusing the ``mycasci`` instance we created earlier.
 # By increasing the number of roots in the ``fcisolver`` and rerunning the calculations, we can obtain the energies of the excited final states. 
-# We can also calculate the transition density matrix in the molecular orbital basis between those states and the initial state, :math:`\langle F| \hat m_\rho |I \rangle`. 
-# With the energies and the overlaps, we can compute the absorption cross section directly.
+# We can also calculate the transition density matrix in the molecular orbital basis between the final states and the initial state, :math:`\langle F| \hat m_\rho |I \rangle`. 
 
 # Use CASCI to solve for excited states.
 mycasci.fcisolver.nroots = 100  # Compute the first 100 states (or less).
@@ -738,7 +736,7 @@ plt.show()
 # Nice! Our time-domain simulation method reproduces the classical spectrum.
 # Looking closely, we can see there are two strong peaks, as predicted from the beat note in the expectation values in Figure 7. 
 # If we worked with a larger active space, we would obtain more features in the spectrum. 
-# The spectrum calculated from the full orbital space is shown in Section V in Ref. [#Fomichev2025]_.
+# The spectrum calculated from the full orbital space is shown in Section V in [#Fomichev2025]_.
 # 
 #
 # Conclusion
@@ -796,19 +794,19 @@ plt.show()
 # ---------------------
 # 
 # There are more optimizations for this algorithm that are included in the paper [#Fomichev2025]_ that we did not implement in the above code. 
-# One could further optimize the compressed double-factorized Hamiltonian by applying a block-invariant symmetry shift (BLISS) [#Loaiza2023]_ to the Hamiltonian prior to compression. 
+# One could further optimize the compressed double-factorized Hamiltonian by applying a block-invariant symmetry shift (BLISS) [#Loaiza2023]_ to the Hamiltonian prior to the factorization. 
 # This is already detailed in the `demo on CDF Hamiltonians <https://pennylane.ai/qml/demos/tutorial_how_to_build_compressed_double_factorized_hamiltonians>`__.
 #
 # Another optimization is to use a randomized second-order Trotter formula for the time evolution. 
-# As discussed in Ref. [#Childs2019]_, the errors in deterministic product formulas scale with the commutators of the Hamiltonian terms. 
-# One could instead use all permutations of the Hamiltonian terms, such that the commutator errors cancel. 
+# As discussed in [#Childs2019]_, the errors in deterministic product formulas scale with the commutators of the Hamiltonian terms. 
+# One could instead use all permutations of the Hamiltonian terms, such that all of the commutator errors cancel. 
 # However, the average of all permutations is not unitary in general. 
-# To circumvent this, one can randomly choose a Hamiltonian term ordering, which can give a good approximation to the desired evolution.
+# To circumvent this, one can randomly choose an ordering of Hamiltonian terms in the Trotter product, which can give a good approximation to the desired evolution.
 #
 # Core-valence separation approximation
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# For larger molecular instances, it may be valuable to restrict the excited states used to only include those of relevance for XAS, which are states where a *core* electron is excited, i.e. there exists a hole in the core orbitals. 
+# For larger molecular instances, a simplifying approximation is to restrict the excited states in the calculation to only include those of relevance for XAS, which are states where a *core* electron is excited, i.e. there exists a hole in the core orbitals. 
 # These are known as core-excited states, and lie significantly above the valence-excited states in energy. 
 # Typically the frequency range is focused on a target atom in a molecular cluster, and also near a transition energy, such as targeting core :math:`1s` electrons.
 #
@@ -826,7 +824,7 @@ plt.show()
 # - Before performing compressed double factorization on the two-electron integrals, remove the terms that include at least one core orbital.
 # - Remove all the matrix elements from the dipole operator that do *not* include at least one core orbital.
 # 
-# This approximation would be useful when simulated a complex molecular instance, such as a cluster in a lithium-excess material. 
+# This approximation would be useful when simulating a complex molecular instance, such as a cluster in a lithium-excess material. 
 #
 
 ######################################################################
