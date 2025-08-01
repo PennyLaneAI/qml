@@ -1,10 +1,11 @@
 {
     "title": "Supervised and unsupervised quantum machine learning models for the phase detection of the ANNNI spin model",
     "authors": [
-      {
+        {
             "username": "SaverioMonaco"
         }
     ],
+    "executable": true,
     "dateOfPublication": "2025-04-28T00:00:00+00:00",
     "dateOfLastModification": "2025-05-28T00:00:00+00:00",
     "categories": [
@@ -79,7 +80,9 @@
             "url": "https://www.nature.com/articles/s41467-022-32550-3"
         }
     ],
-    "basedOnPapers": ["10.1103/PhysRevB.107.L081105"],
+    "basedOnPapers": [
+        "10.1103/PhysRevB.107.L081105"
+    ],
     "referencedByPapers": [],
     "relatedContent": [
         {

@@ -5,6 +5,7 @@
             "username": "alowe"
         }
     ],
+    "executable": true,
     "dateOfPublication": "2019-10-16T00:00:00+00:00",
     "dateOfLastModification": "2024-11-06T00:00:00+00:00",
     "categories": [
@@ -30,7 +31,9 @@
             "url": "https://arxiv.org/abs/1905.09692"
         }
     ],
-    "basedOnPapers": ["10.48550/arXiv.1905.09692"],
+    "basedOnPapers": [
+        "10.48550/arXiv.1905.09692"
+    ],
     "referencedByPapers": [],
     "relatedContent": [
         {

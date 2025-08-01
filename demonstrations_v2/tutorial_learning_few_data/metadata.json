@@ -11,6 +11,7 @@
             "username": "mauriceweber"
         }
     ],
+    "executable": true,
     "dateOfPublication": "2022-08-29T00:00:00+00:00",
     "dateOfLastModification": "2024-11-06T00:00:00+00:00",
     "categories": [
@@ -73,7 +74,9 @@
             "url": ""
         }
     ],
-    "basedOnPapers": ["10.48550/arXiv.2111.05292"],
+    "basedOnPapers": [
+        "10.48550/arXiv.2111.05292"
+    ],
     "referencedByPapers": [],
     "relatedContent": [
         {

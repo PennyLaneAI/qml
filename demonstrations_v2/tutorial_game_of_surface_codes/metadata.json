@@ -5,6 +5,7 @@
             "username": "Qottmann"
         }
     ],
+    "executable": true,
     "dateOfPublication": "2025-06-02T00:00:00+00:00",
     "dateOfLastModification": "2025-06-03T00:00:00+00:00",
     "categories": [
@@ -37,7 +38,9 @@
             "url": "https://arxiv.org/abs/1808.02892"
         }
     ],
-    "basedOnPapers": ["10.22331/q-2019-03-05-128"],
+    "basedOnPapers": [
+        "10.22331/q-2019-03-05-128"
+    ],
     "referencedByPapers": [],
     "relatedContent": [
         {

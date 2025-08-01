@@ -5,6 +5,7 @@
             "username": "quantshah"
         }
     ],
+    "executable": true,
     "dateOfPublication": "2019-10-11T00:00:00+00:00",
     "dateOfLastModification": "2024-10-15T00:00:00+00:00",
     "categories": [
@@ -48,7 +49,9 @@
             "url": ""
         }
     ],
-    "basedOnPapers": ["10.48550/arXiv.1803.11173"],
+    "basedOnPapers": [
+        "10.48550/arXiv.1803.11173"
+    ],
     "referencedByPapers": [],
     "relatedContent": [
         {

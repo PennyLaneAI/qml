@@ -5,6 +5,7 @@
             "username": "simidzija"
         }
     ],
+    "executable": true,
     "dateOfPublication": "2025-07-25T10:00:00+00:00",
     "dateOfLastModification": "2025-07-25T10:00:00+00:01",
     "categories": [
@@ -35,7 +36,9 @@
             "url": "https://doi.org/10.1145/3717823.3718118"
         }
     ],
-    "basedOnPapers": ["10.1145/3717823.3718118"],
+    "basedOnPapers": [
+        "10.1145/3717823.3718118"
+    ],
     "referencedByPapers": [],
     "relatedContent": [
         {
