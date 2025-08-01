@@ -234,7 +234,7 @@ def pl_circuit():
 # you’re in good hands. The PennyLane-Qiskit plugin is your personal chaperone to the PennyLane
 # ecosystem. You can dive deeper into what’s possible with the PennyLane-Qiskit plugin by visiting the
 # `plugin homepage <https://docs.pennylane.ai/projects/qiskit/en/stable/>`__ or by checking out our
-# :doc:`how-to guide for using Qiskit 1.0 with PennyLane <how_to_use_qiskit1_with_pennylane>`.
+# :doc:`how-to guide for using Qiskit 1.0 with PennyLane <demos/how_to_use_qiskit1_with_pennylane>`.
 #
 # Another great thing about the PennyLane ecosystem is that we have an `emporium of up-to-date
 # demos <https://pennylane.ai/search/?contentType=DEMO&sort=publication_date>`__ maintained by the
