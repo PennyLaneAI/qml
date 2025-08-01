@@ -17,7 +17,8 @@ def metadata(
     metadata = {
         "title": title,
         "authors": authors,
-        "executable": True,
+        "executable_stable": True,
+        "executable_latest": True,
         "dateOfPublication": today.isoformat(),
         "dateOfLastModification": today.isoformat(),
         "categories": categories,
