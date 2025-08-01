@@ -36,6 +36,8 @@ jobs:
   validate-metadata:
     runs-on: ubuntu-latest
     if: needs.identify-changed-demos.outputs.updated != ''
+    needs: 
+      - identify-changed-demos
     steps:
       - name: Detect Metadata Files that need to be changed
         id: metadata-files-to-check
