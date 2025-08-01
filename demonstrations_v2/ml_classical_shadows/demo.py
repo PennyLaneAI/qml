@@ -284,8 +284,8 @@ plt.show()
 # a ``QNode`` utilizing a device that performs single-shot measurements.
 #
 
-dev_oshot = qml.device("default.qubit", wires=num_qubits, shots=1)
-circuit_oshot = qml.QNode(circuit, dev_oshot)
+dev_oshot = qml.device("default.qubit", wires=num_qubits)
+circuit_oshot = qml.set_shots(qml.QNode(circuit, dev_oshot), shots = 1)
 
 
 ######################################################################

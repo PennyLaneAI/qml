@@ -199,7 +199,7 @@ g = nx.gnm_random_graph(nodes, edges, seed=seed)
 cost_h, mixer_h = qaoa.maxcut(g)
 depth = 2
 # define device to be the PennyLane lightning local simulator
-dev = qml.device("lightning.qubit", wires=n_qubits, shots=1000)
+dev = qml.device("lightning.qubit", wires=n_qubits)
 
 
 def qaoa_layer(gamma, alpha):
@@ -218,6 +218,7 @@ def qaoa_circuit(params, n_qubits, depth):
 
 
 # define ansatz and loss function
+@qml.set_shots(1000)
 @qml.qnode(dev)
 def cost_function(params):
     qaoa_circuit(params, n_qubits, depth)

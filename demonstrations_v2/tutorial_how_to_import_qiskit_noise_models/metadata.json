@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2024-11-25T00:00:00+00:00",
-    "dateOfLastModification": "2024-11-25T00:00:00+00:00",
+    "dateOfLastModification": "2025-08-01T00:00:00+00:00",
     "categories": [
         "Quantum Computing",
         "How-to"
@@ -24,8 +24,7 @@
     ],
     "seoDescription": "Learn how noise models can be imported into PennyLane from Qiskit.",
     "doi": "",
-    "references": [
-    ],
+    "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],
     "relatedContent": [

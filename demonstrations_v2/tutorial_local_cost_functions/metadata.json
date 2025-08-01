@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2020-09-09T00:00:00+00:00",
-    "dateOfLastModification": "2024-11-06T00:00:00+00:00",
+    "dateOfLastModification": "2025-08-01T00:00:00+00:00",
     "categories": [
         "Optimization"
     ],
@@ -30,7 +30,9 @@
             "url": "https://arxiv.org/abs/2001.00550"
         }
     ],
-    "basedOnPapers": ["10.48550/arXiv.2001.00550"],
+    "basedOnPapers": [
+        "10.48550/arXiv.2001.00550"
+    ],
     "referencedByPapers": [],
     "relatedContent": [
         {
