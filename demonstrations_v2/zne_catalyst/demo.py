@@ -59,7 +59,7 @@ Once noise-scaled circuits are created, they need to be run! These can be execut
 quantum hardware or a noisy quantum simulator. In this tutorial, we'll use the
 `Qrack quantum simulator <https://qrack.readthedocs.io/>`_, which is both compatible with Catalyst,
 and implements a noise model. For more about the integration of Qrack and Catalyst, see
-the demo :doc:`QJIT compilation with Qrack and Catalyst <qrack>`.
+the demo :doc:`QJIT compilation with Qrack and Catalyst <demos/qrack>`.
 
 Stage 3: Combining the results
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
