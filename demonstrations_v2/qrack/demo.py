@@ -21,10 +21,10 @@ with Qrack with significant performance boosts.
 You'll learn certain suggested cases of use where Qrack might particularly excel
 at delivering lightning-fast performance or minimizing required memory resources
 — for example, special cases of the quantum or discrete :doc:`Fourier transform
-</demos/tutorial_qft/>`, circuits with predominantly :doc:`Clifford
-</demos/tutorial_clifford_circuit_simulations/>` or classical preambles,
+<demos/tutorial_qft/>`, circuits with predominantly :doc:`Clifford
+<demos/tutorial_clifford_circuit_simulations/>` or classical preambles,
 circuits with :doc:`mid-circuit measurement
-</demos/tutorial_mcm_introduction/>`, and high-width circuits with
+<demos/tutorial_mcm_introduction/>`, and high-width circuits with
 low-complexity representations in terms of a QBDD (quantum binary decision
 diagram). However, Qrack is a general-purpose simulator, so you might
 employ it for all their applications and still see parity with or improvement
@@ -82,7 +82,7 @@ state vectors in a manner similar to matrix product state (MPS) simulation.
 Demonstrating Qrack with the quantum Fourier transform
 ------------------------------------------------------
 
-The :doc:`quantum Fourier transform (QFT) <tutorial_qft>` is a building-block
+The :doc:`quantum Fourier transform (QFT) <demos/tutorial_qft>` is a building-block
 subroutine of many other quantum algorithms. Qrack exhibits unique capability
 for many cases of the QFT algorithm, and its worst-case performance is
 competitive with other popular quantum computer simulators [#QCEReport]_. In this

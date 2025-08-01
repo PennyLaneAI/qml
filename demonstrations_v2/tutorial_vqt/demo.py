@@ -14,7 +14,7 @@ Variational Quantum Thermalizer
 
 This demonstration discusses theory and experiments relating to a recently proposed quantum algorithm called the
 `Variational Quantum Thermalizer <https://arxiv.org/abs/1910.02071>`__ (VQT): a generalization of the well-know
-:doc:`Variational Quantum Eigensolver </demos/tutorial_vqe>` (VQE) to systems with non-zero temperatures.
+:doc:`Variational Quantum Eigensolver <demos/tutorial_vqe>` (VQE) to systems with non-zero temperatures.
 
 """
 

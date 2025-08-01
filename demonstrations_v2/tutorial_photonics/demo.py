@@ -690,7 +690,7 @@ print(
 #    A Gaussian Boson Sampling circuit. The beamsplitters here may include phase shifts.
 #
 # Gaussian boson sampling (GBS) is interesting on its own
-# (see :doc:`this tutorial </demos/gbs>` for an in-depth discussion).
+# (see :doc:`this tutorial <demos/gbs>` for an in-depth discussion).
 # So far, two quantum devices have used large-scale versions of this circuit
 # to achieve quantum advantage on a particular computation, which involves sampling from
 # a probability distribution that classical computers take too long to simulate. In 2019, USTC's Jiuzhang device took 200 seconds
@@ -836,7 +836,7 @@ print(
 # small chips, which we can stack and connect together using optical fibers. Moreover, compared to other implementations where
 # low temperatures are needed everywhere, in photonic quantum computers we only need them for the PNRs to work.
 # Since cryogenics are a bulky part of quantum computing architectures, photonic technology promises to be more scalable than, for example,
-# :doc:`trapped ion </demos/tutorial_trapped_ions>` or :doc:`superconducting </demos/tutorial_sc_qubits>` devices.
+# :doc:`trapped ion <demos/tutorial_trapped_ions>` or :doc:`superconducting <demos/tutorial_sc_qubits>` devices.
 #
 # The second criterion, the ability to prepare a qubit, is clearly a challenge. We need GKP states,
 # but these cannot be prepared deterministically; we need to get a bit lucky.
