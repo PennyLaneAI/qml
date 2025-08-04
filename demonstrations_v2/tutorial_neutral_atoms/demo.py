@@ -66,7 +66,7 @@ the work that still needs to be done to scale this technology even further.
 # Trapping individual atoms
 # -------------------------
 #
-# In our :doc:`cousin demo </demos/tutorial_trapped_ions>` about trapped-ion technologies, we learn that we can trap individual charged
+# In our :doc:`cousin demo <demos/tutorial_trapped_ions>` about trapped-ion technologies, we learn that we can trap individual charged
 # atoms by carefully controlled electric fields. But neutral atoms, by definition, have no charge,
 # so they can't be affected by electric fields. How can we even hope to manipulate them individually?
 # It turns out that the technology to do this has been around for decades [#Tweezers1985]_.
@@ -99,7 +99,7 @@ the work that still needs to be done to scale this technology even further.
 # electric fields is also necessary to implemenent some quantum gates.
 #
 # In the last decade, optical tweezer technology has evolved to the point where we can move atoms around
-# into customizable arrays (check out :doc:`this tutorial </demos/tutorial_pasqal>` and have some fun doing this!).
+# into customizable arrays (check out :doc:`this tutorial <demos/tutorial_pasqal>` and have some fun doing this!).
 # This means that we have a lot of freedom in how and when our atom-encoded qubits interact with each other. Sounds
 # like a dream come true! However, there *are* some big challenges to address—we'll learn about these later.
 # To get started, let's understand how neutral atoms can be used as qubits.
@@ -287,7 +287,7 @@ the work that still needs to be done to scale this technology even further.
 # on other parameters that describe the pulse. PennyLane's
 # :class:`pennylane.pulse.ParametrizedHamiltonian` class will help us deal with such a mathematical object.
 # You can learn more about Parametrized Hamiltonians in our `documentation <https://docs.pennylane.ai/en/latest/code/api/pennylane.pulse.ParametrizedHamiltonian.html>`_
-# and in this :doc:`pulse Programming demo </demos/tutorial_pulse_programming101>`.
+# and in this :doc:`pulse Programming demo <demos/tutorial_pulse_programming101>`.
 #
 # Driving excitations with pulses
 # -------------------------------
@@ -587,7 +587,7 @@ plt.show()
 #
 #    We are not using any realistic values for either the amplitude or the coupling strength. These have been chosen in arbitrary
 #    units for visualization purposes. If you would like to know more about the specifications for real quantum hardware, check out
-#    :doc:`this demo </demos/ahs_aquila>`.
+#    :doc:`this demo <demos/ahs_aquila>`.
 #
 # This phenomenon is called the **Rydberg blockade.** When the distance between two atoms is below a certain distance known as
 # the **blockade radius,** one atom being in the Rydberg state "blocks" the other one from reaching its Rydberg state. Let's see
@@ -768,8 +768,8 @@ print(
 # easily create custom qubit topologies and the coherence time of the atoms are its main strong points, and its weaknesses are
 # actually no too different from other qubit-based architectures. We can easily program neutral-atom devices using pulses,
 # for which PennyLane is of great help. If you want to
-# learn more, check out our tutorials on the :doc:`Aquila device, </demos/ahs_aquila>` :doc:`neutral atom configurations, </demos/tutorial_pasqal>` and
-# :doc:`pulse programming </demos/tutorial_pulse_programming101>`. And do take a look
+# learn more, check out our tutorials on the :doc:`Aquila device, <demos/ahs_aquila>` :doc:`neutral atom configurations, <demos/tutorial_pasqal>` and
+# :doc:`pulse programming <demos/tutorial_pulse_programming101>`. And do take a look
 # at the references below to dive into much more detail about the topics introduced here.
 #
 # References

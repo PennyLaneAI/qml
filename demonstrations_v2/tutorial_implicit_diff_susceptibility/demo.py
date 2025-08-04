@@ -417,7 +417,7 @@ plt.show()
 #
 # In PennyLane, we can implement a variational state in different ways, by
 # defining a quantum circuit. There are also useful template circuits available, such as
-# :class:`~pennylane.SimplifiedTwoDesign`, which implements the :doc:`two-design ansatz <tutorial_unitary_designs>`.
+# :class:`~pennylane.SimplifiedTwoDesign`, which implements the :doc:`two-design ansatz <demos/tutorial_unitary_designs>`.
 # The ansatz consists of layers of Pauli-Y rotations with
 # controlled-Z gates. In each layer there are ``N - 1`` parameters for the Pauli-Y gates.
 # Therefore, the ansatz is efficient as long as we have enough layers for it
@@ -476,7 +476,7 @@ print("Energy", energy(z_init, a))
 # modular implicit differentiation for various cases; e.g., for fixed-point
 # functions or optimization. We can directly use ``jaxopt`` to optimize our loss
 # function and then compute implicit gradients through it.
-# It all works due to :doc:`PennyLane's integration with JAX <tutorial_jax_transformations>`.
+# It all works due to :doc:`PennyLane's integration with JAX <demos/tutorial_jax_transformations>`.
 #
 # The implicit differentiation formulas can even be `implemented manually with JAX <https://jax.readthedocs.io/en/latest/notebooks/Custom_derivative_rules_for_Python_code.html#implicit-function-differentiation-of-iterative-implementations>`__.
 # These formulas are implemented in a modular way, using the

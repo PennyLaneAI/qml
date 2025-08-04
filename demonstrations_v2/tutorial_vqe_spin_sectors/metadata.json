@@ -5,6 +5,8 @@
             "username": "adgran"
         }
     ],
+    "executable_stable": true,
+    "executable_latest": true,
     "dateOfPublication": "2020-10-13T00:00:00+00:00",
     "dateOfLastModification": "2024-12-13T00:00:00+00:00",
     "categories": [

@@ -5,6 +5,8 @@
             "username": "soran"
         }
     ],
+    "executable_stable": true,
+    "executable_latest": true,
     "dateOfPublication": "2021-09-13T00:00:00+00:00",
     "dateOfLastModification": "2024-12-13T00:00:00+00:00",
     "categories": [
@@ -72,7 +74,9 @@
             "url": "https://www.nature.com/articles/s41467-019-10988-2"
         }
     ],
-    "basedOnPapers": ["10.1038/s41467-019-10988-2"],
+    "basedOnPapers": [
+        "10.1038/s41467-019-10988-2"
+    ],
     "referencedByPapers": [],
     "relatedContent": [
         {
