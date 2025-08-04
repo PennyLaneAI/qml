@@ -578,7 +578,7 @@ time_interval = tau * jrange
 ######################################################################
 # To improve the efficiency of our algorithm we can employ a sampling distribution that takes advantage of the decaying Lorentzian kernel [#Fomichev2025]_. 
 # The contribution of longer evolution times to the overall :math:`G_\rho(\omega)` are exponentially suppressed by the :math:`e^{-\eta t}` factor. 
-# Reducing the number of shots allocated to long times by this factor can save the total number of shots needed to obtain the required precision for :math:`G_\rho(\omega).
+# Reducing the number of shots allocated to long times by this factor can save the total number of shots needed to obtain the required precision for :math:`G_\rho(\omega)`.
 # This is implemented below by creating ``shots_list``, which distributes the ``total_shots`` among the time steps, weighted exponentially by the Lorentzian width. 
 # The parameter :math:`\alpha` can adjust this weighting, s.t. for :math:`\alpha > 1` there is more weight at shorter times.
 
