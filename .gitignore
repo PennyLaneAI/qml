@@ -13,6 +13,8 @@ demos_community.rst
 .venv/
 .venv_ubuntu/
 .venv-build/
+.venv_v2/
+.venv_v2_py3p10/
 .test_figures/
 demo_requirements.txt
 **/*.egg-info/
