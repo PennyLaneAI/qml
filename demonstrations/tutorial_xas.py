@@ -46,7 +46,7 @@ We will describe this quantity below and then explain how a *time-domain* simula
 Observable: absorption cross-section
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In XAS experiments, the absorption cross section as a function of the frequency of incident X-rays :math:`\sigma_A(\omega)` is measured for a given material. 
+In XAS experiments, the absorption cross section :math:`\sigma_A` as a function of the incident X-ray frequency :math:`\omega` is measured for a given material. 
 This is proportional to the rate of absorption of X-ray photons of various energies. 
 For our situation, the electrons in the molecular cluster start in a ground molecular state :math:`|I\rangle` with energy :math:`E_I`. 
 This ground state will be excited to states :math:`|F\rangle` with energies :math:`E_F` by the radiative field through the action of the dipole operator :math:`\hat m_\rho,` where :math:`\rho` is any of the Cartesian directions :math:`\{x,y,z\}`.
@@ -92,7 +92,7 @@ If we are going to evaluate this quantity in a quantum register, it will need to
 
 There are methods for determining this frequency-domain Green’s function directly [#Fomichev2024]_. 
 However, our algorithm will aim to estimate the discrete-time *time-domain* Green’s function :math:`\tilde G(t_j)` at times :math:`t_j`, where :math:`j` is the time-step index.
-:math:`G_\rho(\omega)` can then be calculated classically through the time-domain Fourier transform
+:math:`G_\rho(\omega)` can then be calculated classically through the discrete time-domain Fourier transform
 
 .. math::  -\mathrm{Im}\,G_\rho(\omega) = \frac{\eta\tau}{2\pi} \sum_{j=-\infty}^\infty e^{-\eta |t_j|} \tilde G(t_j) e^{i\omega t_j}\,,
 
@@ -105,8 +105,8 @@ Now, this all comes together because the time-domain Green’s function can be d
 .. math::  \tilde G_\rho(t_j) = \frac{\langle I|\hat m _\rho e^{- i\hat H t_j} \hat m_\rho |I\rangle}{|| \hat m_\rho |I\rangle ||^2}\,,
 
 and this is something that can be easily done on a quantum computer! 
-We can use a `Hadamard test <https://en.wikipedia.org/wiki/Hadamard_test>`__ circuit with the time evolution unitary to measure the expectation value for each time :math:`t_j`. 
-Repeating this test a number of times :math:`N` and take the mean of the results gives an estimate for :math:`G_\rho(t_j)`, which we can Fourier
+We can use a `Hadamard test <https://en.wikipedia.org/wiki/Hadamard_test>`__ circuit with the unitary of time evolution to measure the expectation value for each time :math:`t_j`. 
+Repeating this test a number of times :math:`N` and taking the mean of the results gives an estimate for :math:`G_\rho(t_j)`, which we can Fourier
 transform to get the spectrum.
 
 .. figure:: ../_static/demonstration_assets/xas/global_circuit.png
@@ -124,7 +124,7 @@ The circuit we will construct to determine the expectation values is shown above
 - *Measurement*, the time-evolved state is measured to obtain statistics for the expectation value.
 
 Let’s look at how to implement these steps in PennyLane. 
-We will make extensive use of the ``qml.qchem`` module, as well as modules from `PySCF <https://pyscf.org/>`__. 
+We will make extensive use of the ``qml.qchem`` module, as well as initial state preparation methods from `PySCF <https://pyscf.org/>`__. 
 
 State preparation
 -----------------
@@ -133,7 +133,7 @@ We need to classically determine the ground state :math:`|I\rangle`, and the dip
 For complicated molecular clusters, it's common to choose and consider only a subset of molecular orbitals and electrons in a calculation. 
 This set of orbitals and electrons is known as the “active space”. 
 Utilizing an active space reduces the cost of performing calculations on complicated molecular instances, while hopefully still preserving the interesting features of the molecule. 
-For this demo, we are going to use the :math:`\mathrm{N}_2` molecule, and we will be selecting an active space of orbitals and electrons for the calculation. 
+For this demo, our calculation will use the :math:`\mathrm{N}_2` molecule with a small active space. 
 While the molecule used here is quite simple, the method demonstrated below will work for more complicated molecules. 
 
 Ground state calculation
@@ -168,7 +168,7 @@ import pennylane as qml
 # Create a qml Molecule object.
 mole = qml.qchem.Molecule(symbols, geometry, basis_name="sto-3g", unit="angstrom")
 
-# Run self-consistent fields method to get MO coefficients.
+# Run self-consistent fields method to get molecular orbital coefficients.
 _, coeffs, _, _, _ = qml.qchem.hartree_fock.scf(mole)()
 
 hf.mo_coeff = coeffs  # Change MO coefficients in hf object to PennyLane calculated values.
@@ -177,8 +177,8 @@ hf.mo_coeff = coeffs  # Change MO coefficients in hf object to PennyLane calcula
 # Next, let’s define the active space of orbitals we will use for our calculation. 
 # This will be the number of orbitals :math:`n_\mathrm{cas}` and the number of electrons. 
 # For :math:`\mathrm{N}_2`, we will use an active space of five orbitals and four electrons. 
-# We will use a ``CASCI`` instance to calculate the ground state of our system with this selected active space. 
-# The ``CASCI`` method in PySCF is equivalent to a full-configuration interaction (FCI) procedure on a subset of molecular orbitals.
+# Running a ``CASCI`` instance allows us to calculate the ground state of our system with this selected active space. 
+# The ``CASCI`` method in PySCF is equivalent to a `full-configuration interaction <https://en.wikipedia.org/wiki/Full_configuration_interaction>`__ (FCI) procedure on a subset of molecular orbitals.
 
 from pyscf import mcscf
 
@@ -199,7 +199,7 @@ casci_state[abs(casci_state) < 1e-6] = 0
 ######################################################################
 # To implement this state as a PennyLane state vector, we need to convert the ``casci_state`` into a format that is easy to import into PennyLane. 
 # One way to do this is to use a sparse matrix representation to turn ``casci_state`` into a dictionary, and then use ``qml.qchem.convert.import_state`` to import into PennyLane. 
-# Here is how you can go about turning a full-configuration interaction matrix like ``casci_state`` into a dictionary.
+# Here is how you can turn a full-configuration interaction matrix like ``casci_state`` into a dictionary.
 
 from scipy.sparse import coo_matrix
 from pyscf.fci.cistring import addrs2str
@@ -283,7 +283,7 @@ for rho in rhos:
 # .. admonition:: Caution! Wire ordering
 #     :class: note
 #
-#     When converting the operator ``m_rho`` to the matrix ``dipole_matrix_rho``, the full set of wires needs to be specified, otherwise the matrix may not have the right dimension (if, for example, the operator is zero along any cartesian direction).
+#     When converting the operator ``m_rho`` to the matrix ``dipole_matrix_rho``, the full set of wires needs to be specified, otherwise the matrix may not have the right dimension (if for example, the operator is zero along any cartesian direction).
 #
 # Let’s prepare the circuit that will initialize our qubit register with this state.
 # We will need :math:`2 n_\mathrm{cas}` wires, which is twice the number of orbitals in our active space, since we need to account for spin. 
