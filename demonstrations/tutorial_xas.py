@@ -80,7 +80,7 @@ We can write the cross section as the imaginary part of the following Green’s 
 
 Using a resolution of identity of the final states and simplifying, we end up with
 
-.. math::  \mathrm{Im}(\mathcal{G_\rho(\omega)}) = -\sum_{F\neq I} \frac{|\langle F|\hat m_\rho|I\rangle|^2\eta}{(E_F- E_I -\omega)^2 +\eta^2} - \frac{|\langle I|\hat m_\rho|I\rangle|^2\eta}{\omega^2 +\eta^2}\,,
+.. math::  \mathrm{Im}\mathcal{G_\rho(\omega)} = -\sum_{F\neq I} \frac{|\langle F|\hat m_\rho|I\rangle|^2\eta}{(E_F- E_I -\omega)^2 +\eta^2} - \frac{|\langle I|\hat m_\rho|I\rangle|^2\eta}{\omega^2 +\eta^2}\,,
 
 where the first term is clearly proportional to the absorption cross section. 
 The second term is zero if we centre the frame of reference for our molecular orbitals at the nuclear-charge weighted centre for our molecular cluster of choice. 
