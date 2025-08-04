@@ -5,6 +5,8 @@
             "username": "glassnotes"
         }
     ],
+    "executable_stable": true,
+    "executable_latest": true,
     "dateOfPublication": "2021-03-22T00:00:00+00:00",
     "dateOfLastModification": "2024-10-11T00:00:00+00:00",
     "categories": [

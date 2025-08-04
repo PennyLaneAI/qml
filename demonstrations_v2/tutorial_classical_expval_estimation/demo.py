@@ -9,7 +9,7 @@ Probably the most widely-known result of this type is the Gottesman–Knill
 theorem [#gottesman]_. It states that quantum circuits consisting of Clifford
 gates alone can be simulated classically, provided that the initial state
 of the circuit is "nice enough" (also see the :doc:`PennyLane Demo on Clifford simulation
-</demos/tutorial_clifford_circuit_simulations>`).
+<demos/tutorial_clifford_circuit_simulations>`).
 
 In this demo we will showcase a new result on classical simulation of quantum
 circuits at a glance! For this, we will learn about *Pauli propagation*, how to
@@ -46,8 +46,8 @@ many variational quantum algorithms is to compute the expectation value
 for various parameter settings :math:`\theta.`
 Being able to estimate such an expectation value efficiently is required
 to train the parametrized quantum circuit in applications such as
-:doc:`QAOA </demos/tutorial_qaoa_intro>`,
-the :doc:`variational quantum eigensolver </demos/tutorial_vqe>` and a wide
+:doc:`QAOA <demos/tutorial_qaoa_intro>`,
+the :doc:`variational quantum eigensolver <demos/tutorial_vqe>` and a wide
 range of `quantum machine learning <https://pennylane.ai/qml/whatisqml/>`__ tasks.
 
 For simplicity, we will assume the initial state to be
@@ -441,7 +441,7 @@ print(f"Numerically exact expectation value:                        {exact_expva
 # This may sound complicated, but is easy to understand for a
 # small example: Consider an arbitrary rotation :class:`~.pennylane.Rot` on a single qubit,
 # together with a distribution for its three angles that leads to Haar random rotations
-# (see the :doc:`PennyLane Demo on the Haar measure </demos/tutorial_haar_measure>` for details).
+# (see the :doc:`PennyLane Demo on the Haar measure <demos/tutorial_haar_measure>` for details).
 # This parametrized rotation then is unchanged if we apply another Haar random rotation!
 # That is, even though an individual rotation does get modified, the *distribution* of rotations
 # remains the same (an important property of the Haar measure!).
@@ -515,7 +515,7 @@ print(f"Numerically exact expectation value:                        {exact_expva
 # for which this estimation task is easy, but sampling from the quantum state prepared by
 # the circuit is hard.
 # One prominent example are so-called instantaneous quantum polynomial-time (IQP) circuits
-# [#bremner]_, [#bremner2]_, which arise in the context of :doc:`Boson sampling </demos/gbs>`.
+# [#bremner]_, [#bremner2]_, which arise in the context of :doc:`Boson sampling <demos/gbs>`.
 #
 # Finally, it is important to note that while truncated Pauli propagation scales
 # polynomially with the qubit count, the exponent of this scaling contains :math:`k,`

@@ -58,7 +58,7 @@ from pennylane import qchem
 # Each inter-atomic distance results in a different qubit Hamiltonian. Further
 # details on the mapping from the electronic Hamiltonian of a molecule to a
 # qubit Hamiltonian can be found in the
-# :doc:`tutorial_quantum_chemistry` and :doc:`tutorial_vqe`
+# :doc:`demos/tutorial_quantum_chemistry` and :doc:`demos/tutorial_vqe`
 # tutorials.
 #
 # We begin by downloading a selection of datasets of :math:`H_2` molecule for
@@ -179,7 +179,7 @@ def circuit(param, H):
 ##############################################################################
 # The ground state for each inter-atomic distance is characterized by a different Y-rotation angle.
 # The values of these Y-rotations can be found by minimizing the ground state energy as outlined in
-# :doc:`tutorial_vqe`. In this tutorial, we load pre-optimized rotations and focus on
+# :doc:`demos/tutorial_vqe`. In this tutorial, we load pre-optimized rotations and focus on
 # comparing the speed of evaluating the potential energy surface with sequential and parallel
 # evaluation. These parameters can be downloaded by clicking :download:`here
 # <../_static/demonstration_assets/vqe_parallel/RY_params.npy>`.

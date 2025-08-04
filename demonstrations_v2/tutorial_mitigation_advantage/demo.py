@@ -17,7 +17,7 @@ Is quantum computing useful before fault tolerance?
 
 Can we use contemporary quantum computers for tasks that are both useful *and* hard to classically simulate?
 A recent `Nature paper <https://www.nature.com/articles/s41586-023-06096-3>`__ from the team at IBM claims that we can! See how they managed to faithfully estimate expectation
-values of reasonably large and reasonably deep quantum circuits using an exciting new :doc:`zero noise extrapolation <tutorial_diffable-mitigation>`
+values of reasonably large and reasonably deep quantum circuits using an exciting new :doc:`zero noise extrapolation <demos/tutorial_diffable-mitigation>`
 technique for error mitigation in this demo.
 
 Introduction
@@ -79,7 +79,7 @@ We start by setting up the circuits for the time evolution and a noise model con
 :class:`~pennylane.DepolarizingChannel` applied to each gate the circuit executes. Physically, this corresponds to applying either of the 
 single qubit Pauli gates :math:`\{X, Y, Z\}` with probability :math:`p/3` after each gate in the circuit. In simulation, we can simply look
 at the classical mixtures introduced by the Kraus operators of the noise channel. That is why we need to use the mixed state simulator.
-For more information see e.g. our :doc:`demo on simulating noisy circuits <tutorial_noisy_circuits>`.
+For more information see e.g. our :doc:`demo on simulating noisy circuits <demos/tutorial_noisy_circuits>`.
 """
 import pennylane as qml
 import jax
@@ -144,7 +144,7 @@ plt.show()
 # Error mitigation via zero noise extrapolation
 # ---------------------------------------------
 # 
-# :doc:`Error mitigation <tutorial_error_mitigation>` is the process of retrieving more accurate information via classical post-processing
+# :doc:`Error mitigation <demos/tutorial_error_mitigation>` is the process of retrieving more accurate information via classical post-processing
 # of noisy quantum executions. The authors in [#ibm]_ employ zero noise extrapolation (ZNE), which serves as
 # a biased estimator of expectation values. The idea of ZNE is fairly straightforward: Imagine we want to
 # obtain the exact quantum function :math:`f` that estimates an expectation value under noiseless evolution.
@@ -155,7 +155,7 @@ plt.show()
 # 
 # In order to perform ZNE, we need a control knob that increases the noise of our circuit execution.
 # One such method is described in our
-# :doc:`demo on differentiable error mitigation <tutorial_diffable-mitigation>` using circuit folding.
+# :doc:`demo on differentiable error mitigation <demos/tutorial_diffable-mitigation>` using circuit folding.
 # 
 # Noise-aware ZNE
 # ~~~~~~~~~~~~~~~
