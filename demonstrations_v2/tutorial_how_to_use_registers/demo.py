@@ -1,6 +1,6 @@
 r"""How to use wire registers
 ====================================
-A register of wires represents a collection of wires that serve a purpose (e.g., an "estimation" register in :doc:`quantum phase estimation </demos/tutorial_qpe>`) and abstract away the finer details of running quantum
+A register of wires represents a collection of wires that serve a purpose (e.g., an "estimation" register in :doc:`quantum phase estimation <demos/tutorial_qpe>`) and abstract away the finer details of running quantum
 algorithms. In this tutorial, we will explore how you can construct and use wire registers
 in PennyLane.
 """
@@ -103,7 +103,7 @@ print(swap_test())
 # -------------------
 #
 # Using registers can greatly streamline the process of modifying a workflow
-# by simplifying wire management. In this example, we use :doc:`quantum phase estimation (QPE) </demos/tutorial_qpe>` to
+# by simplifying wire management. In this example, we use :doc:`quantum phase estimation (QPE) <demos/tutorial_qpe>` to
 # calculate the eigenvalues of a Hamiltonian.
 # Generally, QPE is described with two sets of registers. One register is known as the
 # "estimation" or "measurement" register, and the other is the state register where we apply our

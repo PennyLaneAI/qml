@@ -24,15 +24,15 @@ Throughout, we closely follow the similarly titled article by Smith et al. [#smi
     If you are new to dynamic circuit tools (mid-circuit measurements and classically
     controlled operations) used in this algorithm, we recommend to check out
     our :doc:`introduction to mid-circuit measurements
-    </demos/tutorial_mcm_introduction>` and learn
+    <demos/tutorial_mcm_introduction>` and learn
     :doc:`how to create dynamic circuits with mid-circuit measurements
-    </demos/tutorial_how_to_create_dynamic_mcm_circuits>`.
+    <demos/tutorial_how_to_create_dynamic_mcm_circuits>`.
 
     Optionally, you may want to familiarize yourself with tensor network states
     and MPS in particular. For this, take a look at our demos on
-    :doc:`tensor-network quantum circuits </demos/tutorial_tn_circuits>` and
+    :doc:`tensor-network quantum circuits <demos/tutorial_tn_circuits>` and
     :doc:`initial state preparation for quantum chemistry
-    </demos/tutorial_initial_state_preparation>`, which uses a prepared MPS in
+    <demos/tutorial_initial_state_preparation>`, which uses a prepared MPS in
     an application.
 
 Outline
@@ -75,7 +75,7 @@ are able to approximate relevant states in quantum many-body systems.
 In particular, MPS can efficiently describe ground states of (gapped local)
 one-dimensional Hamiltonians, which in addition can be found efficiently using
 density matrix renormalization group (DMRG) algorithms.
-Also check out our :doc:`introduction to matrix product states </demos/tutorial_mps>`,
+Also check out our :doc:`introduction to matrix product states <demos/tutorial_mps>`,
 and see [#schollwoeck]_ for a review of MPS.
 
 Following [#smith]_, we will look at translation-invariant MPS

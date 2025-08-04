@@ -11,7 +11,7 @@ serving as fundamental building blocks in their design and execution. For exampl
 
 1. In `Shor's algorithm <https://pennylane.ai/codebook/10-shors-algorithm/>`__ quantum arithmetic is crucial for performing modular exponentiation [#shor_exp]_. 
 
-2. :doc:`Grover's algorithm <tutorial_grovers_algorithm>` might need to use quantum arithmetic to construct oracles, as shown in `this related demo <https://pennylane.ai/qml/demos/tutorial_qft_arithmetics/>`_.
+2. :doc:`Grover's algorithm <demos/tutorial_grovers_algorithm>` might need to use quantum arithmetic to construct oracles, as shown in `this related demo <https://pennylane.ai/qml/demos/tutorial_qft_arithmetics/>`_.
 
 3. Loading data or preparing initial states on a quantum computer often requires several quantum arithmetic operations [#sanders]_.
 
