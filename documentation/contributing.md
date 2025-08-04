@@ -153,7 +153,7 @@ You can view the built demo in your browser by navigating to the URL: `_build/ht
 
 If you encounter any issues, please report them on our GitHub issue tracker.
 
-We are committed to providing a friendly, safe, and welcoming environment for all contributors. Please read and respect the [Code of Conduct](.github/CODE_OF_CONDUCT.md).
+We are committed to providing a friendly, safe, and welcoming environment for all contributors. Please read and respect the [Code of Conduct](/.github/CODE_OF_CONDUCT.md).
 
 ## License
 

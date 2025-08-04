@@ -36,7 +36,7 @@ Explore the full collection of [PennyLane demos](https://pennylane.ai/qml/demons
 
 If you encounter any issues, have questions, or wish to suggest improvements, please report them on our GitHub issue tracker.
 
-We are dedicated to fostering a friendly, safe, and welcoming environment for all contributors. Please review and adhere to our [Code of Conduct](.github/CODE_OF_CONDUCT.md).
+We are dedicated to fostering a friendly, safe, and welcoming environment for all contributors. Please review and adhere to our [Code of Conduct](/.github/CODE_OF_CONDUCT.md).
 
 ---
 

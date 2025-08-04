@@ -194,7 +194,7 @@ Run `qml build --help` for more details.
 If you are having issues, please let us know by posting the issue on our GitHub issue tracker.
 
 We are committed to providing a friendly, safe, and welcoming environment for all.
-Please read and respect the [Code of Conduct](.github/CODE_OF_CONDUCT.md).
+Please read and respect the [Code of Conduct](/.github/CODE_OF_CONDUCT.md).
 
 ## License
 
