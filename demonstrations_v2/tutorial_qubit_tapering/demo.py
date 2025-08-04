@@ -19,7 +19,7 @@ Qubit tapering
 The performance of variational quantum algorithms is considerably limited by the number of qubits
 required to represent wave functions. In the context of quantum chemistry, this
 limitation hinders the treatment of large molecules with algorithms such as the :doc:`variational quantum
-eigensolver (VQE) <tutorial_vqe>`. Several approaches have been developed to reduce the qubit requirements for
+eigensolver (VQE) <demos/tutorial_vqe>`. Several approaches have been developed to reduce the qubit requirements for
 quantum chemistry calculations. In this tutorial, we demonstrate the symmetry-based qubit
 tapering approach which allows reducing the number of qubits required to perform molecular quantum
 simulations based on the :math:`\mathbb{Z}_2` symmetries present in molecular Hamiltonians
@@ -118,7 +118,7 @@ cation <https://en.wikipedia.org/wiki/Helium_hydride_ion>`__ :math:`\textrm{HeH}
 Tapering the molecular Hamiltonian
 ----------------------------------
 
-In PennyLane, a :doc:`molecular Hamiltonian <tutorial_quantum_chemistry>` can be created by specifying the atomic symbols and
+In PennyLane, a :doc:`molecular Hamiltonian <demos/tutorial_quantum_chemistry>` can be created by specifying the atomic symbols and
 coordinates.
 """
 import pennylane as qml
