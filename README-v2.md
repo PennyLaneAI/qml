@@ -44,4 +44,4 @@ We are dedicated to fostering a friendly, safe, and welcoming environment for al
 
 The materials and demonstrations contained within this repository are **free** and **open-source**, released under the Apache License, Version 2.0.
 
-Please note that the file `custom_directives.py` is specifically available under the BSD 3-Clause License, with Copyright (c) 2017, Pytorch contributors.
+Please note, the file `custom_directives.py` is available under the BSD 3-Clause License, with copyright © 2017, PyTorch contributors.
