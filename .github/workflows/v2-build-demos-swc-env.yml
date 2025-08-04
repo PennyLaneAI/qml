@@ -2,12 +2,9 @@ name: V2 Build Demos for SWC Environment
 
 on:
   push:
-    # TODO: Remove 'test-v2-master' and 'test-v2-dev' for release
     branches:
       - master
-      - test-v2-master
       - dev
-      - test-v2-dev
 
 permissions:
   contents: read
@@ -48,7 +45,7 @@ jobs:
     with:
       ref: ${{ github.sha }}
       demo-names: ${{ needs.identify-changed-demos.outputs.updated }}
-      dev: ${{ github.ref_name == 'dev' || github.ref_name == 'test-v2-dev' }} # TODO remove test-v2-dev when stable
+      dev: ${{ github.ref_name == 'dev' }}
       save-artifact: true
       artifact-name: demo-deployment-build-${{ github.sha }}
       keep-going: false
@@ -84,8 +81,7 @@ jobs:
 
   # Step 4: Build and upload the updated objects.inv files
   build-objects-inv-file-dev:
-    # TODO: Change ref_name to 'dev' for release
-    if: ${{ needs.identify-changed-demos.outputs.updated != '' && github.ref_name == 'test-v2-dev' }}
+    if: ${{ needs.identify-changed-demos.outputs.updated != '' && github.ref_name == 'dev' }}
     uses: ./.github/workflows/v2-sync-objects-dot-inv.yml
     needs:
       - identify-changed-demos
@@ -100,8 +96,7 @@ jobs:
       aws_html_s3_bucket_id: ${{ secrets.PL_SITE_DEV_S3_BUCKET_NAME }}
 
   build-objects-inv-file-master:
-    # TODO: Change ref_name to 'master' for release
-    if: ${{ needs.identify-changed-demos.outputs.updated != '' && github.ref_name == 'test-v2-master' }}
+    if: ${{ needs.identify-changed-demos.outputs.updated != '' && github.ref_name == 'master' }}
     uses: ./.github/workflows/v2-sync-objects-dot-inv.yml
     needs:
       - identify-changed-demos
@@ -109,8 +104,7 @@ jobs:
       branch: ${{ github.ref }}
 
     secrets:
-      # TODO: Change STAGING to PROD for release
       aws_region: ${{ secrets.AWS_REGION }}
-      aws_access_key_id: ${{ secrets.PL_SITE_STAGING_NON_REACT_ACCESS_KEY_ID }}
-      aws_secret_access_key: ${{ secrets.PL_SITE_STAGING_NON_REACT_SECRET_ACCESS_KEY }}
-      aws_html_s3_bucket_id: ${{ secrets.PL_SITE_STAGING_S3_BUCKET_NAME }}
+      aws_access_key_id: ${{ secrets.PL_SITE_PROD_NON_REACT_ACCESS_KEY_ID }}
+      aws_secret_access_key: ${{ secrets.PL_SITE_PROD_NON_REACT_SECRET_ACCESS_KEY }}
+      aws_html_s3_bucket_id: ${{ secrets.PL_SITE_PROD_S3_BUCKET_NAME }}

@@ -5,6 +5,8 @@
             "username": "colinjdale"
         }
     ],
+    "executable_stable": true,
+    "executable_latest": true,
     "dateOfPublication": "2025-07-22T00:00:00+00:00",
     "dateOfLastModification": "2025-07-26T00:00:00+00:00",
     "categories": [
@@ -37,13 +39,15 @@
         {
             "id": "delejarza2025",
             "type": "article",
-            "title":"Quantum Chebyshev Probabilistic Models for Fragmentation Functions", 
+            "title": "Quantum Chebyshev Probabilistic Models for Fragmentation Functions",
             "authors": "Jorge J. Martínez de Lejarza, Hsin-Yu Wu, Oleksandr Kyriienko, Germán Rodrigo, Michele Grossi",
             "year": "2025",
             "url": "https://arxiv.org/abs/2503.16073"
         }
     ],
-    "basedOnPapers": ["10.48550/arXiv.2306.17026"],
+    "basedOnPapers": [
+        "10.48550/arXiv.2306.17026"
+    ],
     "referencedByPapers": [],
     "relatedContent": [
         {
