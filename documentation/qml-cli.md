@@ -188,4 +188,4 @@ For any issues or questions, please utilize our GitHub issue tracker.
 
 The materials and demonstrations provided in this repository are **free** and **open source**, distributed under the Apache License, Version 2.0.
 
-The file `custom_directives.py` is available under the BSD 3-Clause License, with Copyright (c) 2017, Pytorch contributors.
+Please note, the file `custom_directives.py` is available under the BSD 3-Clause License, with copyright © 2017, PyTorch contributors.
