@@ -18,6 +18,7 @@
 
 This repository hosts a collection of Quantum Machine Learning (QML) demonstrations built with [PennyLane](https://pennylane.ai/), a cross-platform Python library for [differentiable programming](https://pennylane.ai/qml/glossary/quantum_differentiable_programming) on quantum hardware. These demos showcase various applications and techniques in QML and quantum computing, ranging from introductory concepts to advanced algorithms.
 
+Explore the full collection of [PennyLane demos](https://pennylane.ai/qml/demonstrations), each available for download as a Jupyter notebook or Python script.
 ## Table of Contents
 
 *   [Contributing to Demos](/documentation/contributing.md)
