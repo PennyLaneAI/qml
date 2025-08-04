@@ -11,7 +11,7 @@ or `quantum arithmetics <https://pennylane.ai/qml/demos/tutorial_qft_arithmetics
 you probably have worked with a circuit that starts by applying a Hadamard gate to each qubit.
 Well, this is a Quantum Fourier Transform as well!
 
-.. figure:: ../_static/demonstration_assets/qft_fft/FIG.png
+.. figure:: ../_static/demonstration_assets/qft_groups/hadamards.png
     :align: center
     :width: 75%
     :target: javascript:void(0);
@@ -25,9 +25,10 @@ Fourier basis nevertheless -- only of a different *group*.
 Sometimes, knowing about the Fourier-theoretic interpretation of a quantum algorithm helps to understand what is
 going on under the hood. But group theory comes with a lot of jargon that can be overwhelming at first. This demo
 illuminates the fascinating link between Fourier Transforms, Quantum Fourier Transforms and groups, for those who have
-not taken a course in group theory (yet). We will see that a group can be used to *define* what a Fourier transform is, a fact
-that explains a lot of seemingly arbitrary assumptions in the standard (discrete and continuous) Fourier transforms.
+not taken a course in group theory (yet).
 
+We will see that a group can be used to *define* what a Fourier transform is, a fact
+that explains a lot of seemingly arbitrary assumptions in the standard (discrete and continuous) Fourier transforms.
 But that's not all. Groups are implicitly used to design one of the world's most important scientific subroutines, the *Fast Fourier Transform* (FFT).
 The FFT is an algorithmic implementation of a Fourier transform that is polynomially faster than the naive one. This does not
 sound like much, but when transforming, say, :math:`N=10,000` numbers, the difference between of the order of :math:`N^2 = 100` Mio and
@@ -133,14 +134,14 @@ plot(f, f_hat, integers)
 # What happens if we exchange the cyclic group :math:`Z_N` by another one? First of all, if we change to the infinite group :math:`\mathbb{R}`,
 # which are just the real numbers under addition, we get the continuous Fourier transform, whose characters or
 # basis functions look similar to the discrete ones.
-# We could also change to a direct product of groups, such as :math:`Z_N x Z_N x ...` or :math:`\mathbb{R} x \mathbb{R} x ...` and get the
+# We could also change to a direct product of groups, such as :math:`Z_N \times Z_N \times ...` or :math:`\mathbb{R} \times \mathbb{R} \times ...` and get the
 # multi-dimensional Fourier transform whose basis functions are products of characters, one for each dimension.
 # Choosing :math:`N=2` we get the group :math:`Z_2^n` mentioned above, where we consider N "copies" of the binary set :math:`\{0,1\}`.
 # This captures boolean logic ubiquitous in quantum algorithms. The characters for :math:`Z_2^n` are :math:`e^{i k_0 x_0} \dots e^{i k_{N-1} x_{N-1}}`,
-# where the product is the XOR of the two bits :math:`x_i k_i`, and evaluate either to -1 or 1. The Fourier transform with these characters is also known as the
+# where the product is the XOR of the two bits :math:`x_i k_i`, and evaluates either to -1 or 1. The Fourier transform with these characters is also known as the
 # "Walsh transform", and reads
 #
-# .. math:
+# .. math::
 #           \hat{f}(k) = \sum_{x_0=0}^1 \dots \sum_{x_{N-1}=0}^1 f(x_0 \dots x_{N-1}) e^{i k_0 x_0} \dots e^{i k_{N-1} x_{N-1}},
 #
 # The Fourier transform over one component group :math:`Z_2` can be written as a Hadamard matrix, and the full N-dimensional
