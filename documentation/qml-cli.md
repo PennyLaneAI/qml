@@ -11,7 +11,6 @@ The **QML CLI tool** streamlines the creation, testing, and building of QML demo
 *   [Commands](#commands)
     *   [`help`](#help)
     *   [`new`](#new)
-    *   [`sync-v2`](#sync-v2)
     *   [`build`](#build)
         *   [Build Flags](#build-flags)
 *   [Viewing Build Outputs](#viewing-build-outputs)
@@ -78,16 +77,6 @@ Once all required inputs are provided, a new subdirectory will be created under 
 *   `demo.py`: The main Python script containing the demonstration's code.
 *   `metadata.json`: A JSON file storing descriptive metadata about the demonstration.
 *   `requirements.in`: A file listing Python dependencies specifically required by this demonstration.
-
----
-
-### `sync-v2`
-
-Synchronizes the demonstration project with the latest version specifications and dependencies, ensuring compatibility and up-to-date requirements.
-
-```bash
-qml sync-v2
-```
 
 ---
 
