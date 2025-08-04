@@ -1,5 +1,5 @@
 {
-  "title": "a",
+  "title": "a demo for the ages",
   "authors": [
     {
       "username": "alan"
@@ -9,7 +9,7 @@
   "executable_latest": true,
   "dateOfPublication": "2025-08-04T00:00:00+00:00",
   "dateOfLastModification": "2025-08-04T00:00:00+00:00",
-  "categories": [],
+  "categories": ["Quantum Computing", "Quantum Hardware"],
   "tags": [],
   "previewImages": [
     {
@@ -17,7 +17,7 @@
       "uri": "thumbnail.png"
     }
   ],
-  "seoDescription": "a",
+  "seoDescription": "a demo for the ages, that will blow your mind",
   "doi": "",
   "references": [],
   "basedOnPapers": [],
