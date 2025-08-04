@@ -33,7 +33,7 @@ To create a new demonstration, use the QML CLI tool's [`new` command](/documenta
     *   Packages listed in `dependencies/requirements-core.in` are available to all demos by default. Additional dependencies can be specified in a `requirements.in` file within the demo's directory. See [Dependency Management](#dependency-management) for more details.
     *   Matplotlib plots will be automatically rendered and displayed on the QML website.
     *   **Execution Time:** Aim to keep the execution time of your script under 10 minutes.
-*   **Jupyter Notebook Conversion:** If you prefer writing your demo in a Jupyter notebook, you can convert it to the required executable Python format by following [these steps](https://github.com/PennyLaneAI/qml/tree/master/notebook_converter).
+*   **Jupyter Notebook Conversion:** If you prefer writing your demo in a Jupyter notebook, you can convert it to the required executable Python format by following the [QML Notebook to Demo Converter](https://github.com/PennyLaneAI/qml/tree/master/notebook_converter).
 *   **Naming Convention:** All demo directories must begin with `tutorial_`. They are saved in the `demonstrations_v2` directory. For example: `demonstrations_v2/tutorial_my_demo`.
 *   **Frameworks:** New demos should avoid using `autograd` or `TensorFlow`. `Jax` and `torch` are recommended instead. Whenever possible, the use of `lightning.qubit` is also encouraged.
 *   **Restructured Text (ReST):** Restructured Text sections can be included anywhere within the script by beginning the comment with 79 hash characters (`#`). These are useful for breaking up large code blocks and providing extensive explanations.
