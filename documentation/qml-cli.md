@@ -110,7 +110,7 @@ qml build --execute
 
 ##### `--format <html|json>`
 
-Specifies the desired output format for the built demonstration. Options include `html` for web output or `json` for structured data.
+Specifies the desired output format for the built demonstration. Options include `html` for web output or `json` (default) for structured data.
 
 ```bash
 # Output as HTML
