@@ -57,7 +57,7 @@ qml help
 
 ### `new`
 
-Creates a new QML demonstration project within the `demonstrations-v2` directory. To ensure a demonstration is executable via Sphinx Gallery, its name must be prefixed with `tutorial__` (e.g., `tutorial__my_demo`).
+Creates a new PennyLane demonstration project within the `demonstrations-v2` directory. To ensure a demonstration is executable via Sphinx Gallery, its name must be prefixed with `tutorial__` (e.g., `tutorial__my_demo`).
 
 ```bash
 qml new
