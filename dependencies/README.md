@@ -37,7 +37,7 @@ This file specifies the exact dependency versions used for building and running 
 
 ### `requirements-build.txt`
 
-This file lists the dependencies specifically required for the build process of the demo notebooks using Sphinx. These packages are essential for converting and rendering the Python scripts into web-viewable formats (HTML/JSON).
+This file lists the dependencies specifically required for the build process of the demo notebooks using Sphinx. These packages are essential for converting and rendering the Python scripts into web-viewable formats (HTML/JSON). If you are simply creating or updating a demo, it is very unlikely that you will need to modify this file.
 
 *   **Location:** `./requirements-build.txt`
 *   **Purpose:** Specifies tools needed for the Sphinx-based build system.
