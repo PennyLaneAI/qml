@@ -2,7 +2,7 @@
 
 ## Overview
 
-The **QML CLI tool** streamlines the creation, testing, and building of QML demonstrations. It provides an intuitive command-line interface to simplify the authoring process and maintain consistency across demonstration projects.
+The **QML CLI tool** streamlines the creation, testing, and building of PennyLane demonstrations. It provides an intuitive command-line interface to simplify the authoring process and maintain consistency across demonstration projects.
 
 ## Table of Contents
 
