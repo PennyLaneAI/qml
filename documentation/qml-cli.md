@@ -130,7 +130,7 @@ qml build --no-dev demo_name
 
 ##### `--dev`
 
-Instructs the build process to use the latest development (unreleased) versions of PennyLane, Catalyst, official plugins, and other core dependencies.
+Instructs the build process to use the latest development (unreleased) versions of [PennyLane](https://github.com/pennylaneai/pennylane), [Catalyst](https://docs.pennylane.ai/projects/catalyst/en/latest/), [official plugins](https://pennylane.ai/devices), and other core dependencies.
 
 ```bash
 qml build --dev demo_name
