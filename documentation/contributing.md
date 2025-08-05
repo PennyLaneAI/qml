@@ -38,6 +38,7 @@ To create a new demonstration, use the QML CLI tool's [`new` command](/documenta
 *   **Frameworks:** New demos should avoid using `autograd` or `TensorFlow`. `JAX` and `PyTorch` are recommended instead. Whenever possible, the use of `lightning.qubit` is also encouraged.
 *   **Restructured Text (ReST):** Restructured Text sections can be included anywhere within the script by beginning the comment with 79 hash characters (`#`). These are useful for breaking up large code blocks and providing extensive explanations.
 *   **LaTeX Macros:** Avoid using LaTeX macros within your comments. Even if they appear to work in development, they will not be displayed correctly once the demo is published.
+*   **Author Information:** Include the author's information in the metadata.json file. See the metadata guidelines below.
 *   **End Marker:** Always conclude your demo script with the following line:
 
 
