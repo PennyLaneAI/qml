@@ -44,7 +44,7 @@ This file lists the dependencies specifically required for the build process of 
 
 ### `requirements-core.in`
 
-This file specifies the fundamental execution dependencies that are automatically installed and available to **all** QML demonstrations by default. Demos can then specify additional, unique dependencies in their individual `requirements.in` files within their respective demo directories.
+This file specifies the fundamental execution dependencies that are automatically installed and available to **all** PennyLane demonstrations by default. Demos can then specify additional, unique dependencies in their individual `requirements.in` files within their respective demo directories.
 
 *   **Location:** `./requirements-core.in`
 *   **Purpose:** Defines baseline dependencies for all demos.
