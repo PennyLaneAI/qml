@@ -1,4 +1,4 @@
-<h1 align="center">Quantum Machine Learning (QML) Demonstrations</h1>
+<h1 align="center">PennyLane Demonstrations</h1>
 
 <p align="center">
   <a href="https://github.com/PennyLaneAI/qml/actions?query=workflow%3Abuild-master" title="Master Branch Build Status">
