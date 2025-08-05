@@ -165,13 +165,13 @@ hf.run(verbose=0)
 
 import pennylane as qml
 
-# Create a qml Molecule object.
 mole = qml.qchem.Molecule(symbols, geometry, basis_name="sto-3g", unit="angstrom")
 
 # Run self-consistent fields method to get molecular orbital coefficients.
 _, coeffs, _, _, _ = qml.qchem.hartree_fock.scf(mole)()
 
-hf.mo_coeff = coeffs  # Change MO coefficients in hf object to PennyLane calculated values.
+# Change MO coefficients in hf object to PennyLane calculated values.
+hf.mo_coeff = coeffs  
 
 ######################################################################
 # Next, let’s define the active space of orbitals we will use for our calculation. 
@@ -233,7 +233,6 @@ wf_casci_dict = dict(zip(list(zip(strs_row, strs_col)), dat))
 
 from pennylane.qchem.convert import _sign_chem_to_phys, _wfdict_to_statevector
 
-# Adjust sign of state components to match the physicists' notation.
 wf_casci_dict = _sign_chem_to_phys(wf_casci_dict, n_cas)
 
 # Convert dictionary to Pennylane state vector.
@@ -251,7 +250,6 @@ wf_casci = _wfdict_to_statevector(wf_casci_dict, n_cas)
 # We can obtain the indices of the included and excluded orbitals using ``qml.qchem.active_space`` to obtain the lists ``active`` and ``core``, respectively.
 #
 # The action of the dipole operator will be split into the three cartesian directions :math:`\{x, y, z\}`, which we will loop over to obtain the states :math:`\hat m_{\{x,y,z\}}|I\rangle`.
-#
 
 # Get core and active orbital indices.
 core, active = qml.qchem.active_space(
@@ -290,14 +288,12 @@ for rho in rhos:
 # We will also add one auxiliary wire for the measurement circuit, which we will prepare as the 0 wire with an applied Hadamard gate.
 
 device_type = "lightning.qubit"
-
-# Initialization circuit for m_rho|I>.
 dev_prop = qml.device(device_type, wires=int(2*n_cas) + 1, shots=None)
 
 
 @qml.qnode(dev_prop)
 def initial_circuit(wf):
-    # Dipole wavefunction preparation.
+    """Circuit to load initial state and prepare auxiliary qubit."""
     qml.StatePrep(wf, wires=dev_prop.wires.tolist()[1:])
     qml.Hadamard(wires=0)
     return qml.state()
@@ -329,14 +325,12 @@ def initial_circuit(wf):
 #
 # The core constant and the one- and two-electron integrals can be computed in PennyLane using ``qml.qchem.electron_integrals``.
 
-# Calculate one- and two-electron integrals.
 core_constant, one, two = qml.qchem.electron_integrals(mole, core=core, active=active)()
 core_constant = core_constant[0]
 
 ######################################################################
 # We will have to convert these to chemists’ notation [#Sherrill2005]_.
 
-# Convert to chemists' notation.
 two_chemist = np.einsum("prsq->pqrs", two)
 one_chemist = one - np.einsum("pqrr->pq", two) / 2.0
 
@@ -520,7 +514,6 @@ def second_order_trotter(dev, state, step):
         # State preparation -- set as the final state from the previous iteration.
         qml.StatePrep(state, wires=qubits)
 
-        # Main body of the circuit.
         prior_U = np.eye(n_cas)  # No initial prior U, so set as identity matrix.
         prior_U = first_order_trotter(step / 2, prior_U=prior_U, final_rotation=False, reverse=False)
         prior_U = first_order_trotter(step / 2, prior_U=prior_U, final_rotation=True, reverse=True)
@@ -568,9 +561,9 @@ def meas_circuit(state):
 
 eta = 0.05  # In Hartree energy units (Ha).
 H_norm = np.pi  # Maximum final state eigenvalue used to determine tau.
-tau = np.pi / (2 * H_norm)  # Time step, set by the largest relevant eigenvalue.
-jmax = 100  # Maximum number of time steps.
-total_shots = 500 * 2 * jmax  # Total number of shots for expectation value statistics.
+tau = np.pi / (2 * H_norm)
+jmax = 100
+total_shots = 500 * 2 * jmax
 
 jrange = np.arange(1, 2 * int(jmax) + 1, 1)
 time_interval = tau * jrange
@@ -708,7 +701,6 @@ F_m_Is = np.array([final_state_overlap(i) for i in range(len(energies))])
 ######################################################################
 # With the energies and the overlaps, we can compute the absorption cross section directly.
 
-# Absorption cross section.
 spectrum_classical_func = lambda E: (1 / np.pi) * np.sum(
                 [np.sum(np.abs(F_m_I)**2) * eta / ((E - e)**2 + eta**2)
                     for (F_m_I, e) in zip(F_m_Is, energies)])
