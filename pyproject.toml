@@ -102,7 +102,6 @@ fsspec = "2024.6.1"
 h5py = "3.11.0"
 qiskit = ">=1.0.0"
 qiskit-aer = ">=0.14.0,<0.16.0"
-qualtran = "0.6.1"
 sphinxcontrib-applehelp = "1.0.8"
 sphinx-gallery = "0.17.1"
 iqpopt = { git = "https://github.com/XanaduAI/iqpopt.git" }
