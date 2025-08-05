@@ -136,7 +136,7 @@ visualize_data(x_vis, y_vis)
 # Building the QML circuit for classification
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# We will make use of a :doc:`data-reuploading <tutorial_data_reuploading_classifier>` scheme to encode the 256 input pixels into the latent space
+# We will make use of a :doc:`data-reuploading <demos/tutorial_data_reuploading_classifier>` scheme to encode the 256 input pixels into the latent space
 # of the quantum classifier. To this end, the :class:`~pennylane.StronglyEntanglingLayers` template provides an
 # easy-to-use structure for the circuit design. The output of our classifier is a four-dimensional
 # vector resulting from Pauli Z oberservables along the first four qubits. These outputs (unnormalized

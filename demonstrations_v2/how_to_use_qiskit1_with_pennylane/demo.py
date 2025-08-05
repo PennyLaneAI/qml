@@ -4,7 +4,7 @@ r"""How to use Qiskit 1.0 with PennyLane
 The PennyLane-Qiskit plugin enables you to integrate your existing Qiskit code and run circuits on IBM 
 devices with PennyLane, encompassing two real-world scenarios: (1) working in PennyLane from the start 
 and executing your work on an IBM device and (2) converting your existing Qiskit code to PennyLane and 
-executing that on *any* device, including IBM devices, :doc:`Amazon Braket </demos/getting_started_with_hybrid_jobs>` 
+executing that on *any* device, including IBM devices, :doc:`Amazon Braket <demos/getting_started_with_hybrid_jobs>` 
 — you name it!
 
 With the `first stable release of Qiskit <https://www.ibm.com/quantum/blog/qiskit-1-0-release-summary>`__ in February 2024, we subsequently shipped some
@@ -255,7 +255,7 @@ print(pl_circuit())
 ######################################################################
 # What’s really useful about being able to append measurements to the end of a circuit with
 # :func:`~pennylane.from_qiskit` is being able to measure something that isn’t available in Qiskit 1.0 but is
-# available in PennyLane, like the :doc:`classical shadow </demos/tutorial_classical_shadows/>` measurement protocol, for example. In PennyLane,
+# available in PennyLane, like the :doc:`classical shadow <demos/tutorial_classical_shadows/>` measurement protocol, for example. In PennyLane,
 # you can measure this with :func:`~pennylane.classical_shadow`.
 #
 

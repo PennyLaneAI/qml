@@ -8,6 +8,8 @@
             "username": "georgepwhuang"
         }
     ],
+    "executable_stable": true,
+    "executable_latest": true,
     "dateOfPublication": "2024-10-07T00:00:00+00:00",
     "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
@@ -92,7 +94,9 @@
             "url": "https://doi.org/10.1038/s41567-020-0932-7"
         }
     ],
-    "basedOnPapers": ["https://arxiv.org/abs/2307.10560"],
+    "basedOnPapers": [
+        "https://arxiv.org/abs/2307.10560"
+    ],
     "referencedByPapers": [],
     "relatedContent": [
         {

@@ -250,7 +250,7 @@ plt.show()
 # variational circuit?
 #
 # Let's consider an analog of the basic
-# :doc:`qubit rotation tutorial </demos/tutorial_qubit_rotation>`,
+# :doc:`qubit rotation tutorial <demos/tutorial_qubit_rotation>`,
 # but where we add an extra noise channel after the gates.
 #
 # .. note:: We model the noise process as the application of ideal noise-free
@@ -298,7 +298,7 @@ plt.show()
 ##############################################################################
 # Let's fix the noise parameter and see how the noise affects the
 # optimization of our circuit. The goal is the same as the
-# :doc:`qubit rotation tutorial </demos/tutorial_qubit_rotation>`,
+# :doc:`qubit rotation tutorial <demos/tutorial_qubit_rotation>`,
 # i.e., to tune the qubit state until it has a ``PauliZ`` expectation value
 # of :math:`-1` (the lowest possible).
 
@@ -515,7 +515,7 @@ plt.show()
 # interpretation for the variational circuit.
 #
 # For example, in the
-# :doc:`variational quantum eigensolver </demos/tutorial_vqe>`, we
+# :doc:`variational quantum eigensolver <demos/tutorial_vqe>`, we
 # want to find the ground-state energy of a physical system.
 # If there is an appreciable amount of noise present,
 # the state we are optimizing will necessarily become mixed, and

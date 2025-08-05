@@ -48,7 +48,7 @@ For long-running hybrid jobs, Braket automatically uses the updated calibration 
 Getting started with PennyLane
 ------------------------------
 
-Let’s setup an algorithm that makes use of both classical and quantum resources. We adapt the :doc:`PennyLane qubit rotation tutorial<tutorial_qubit_rotation>`.
+Let’s setup an algorithm that makes use of both classical and quantum resources. We adapt the :doc:`PennyLane qubit rotation tutorial<demos/tutorial_qubit_rotation>`.
 
 .. warning::
 

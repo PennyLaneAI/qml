@@ -35,7 +35,7 @@ for quantum machine learning (QML), and can be used directly with PennyLane.
 # neural networks.
 #
 # If this is your first time reading PennyLane code, we recommend going through
-# the :doc:`basic tutorial </demos/tutorial_qubit_rotation>`
+# the :doc:`basic tutorial <demos/tutorial_qubit_rotation>`
 # first. It's all in vanilla NumPy, so you should be able to
 # easily transfer what you learn to JAX when you come back.
 #
@@ -110,8 +110,8 @@ print(f"Tuned cost: {circuit(param):0.3f}")
 # parameters and minimizing some cost function, just like classical ML.
 # While classical ML focuses on learning classical systems like language or vision,
 # QML is most useful for learning about quantum systems. For example,
-# :doc:`finding chemical ground states </demos/tutorial_vqe>`
-# or learning to :doc:`sample thermal energy states </demos/tutorial_vqt>`.
+# :doc:`finding chemical ground states <demos/tutorial_vqe>`
+# or learning to :doc:`sample thermal energy states <demos/tutorial_vqt>`.
 
 
 ##############################################################################
