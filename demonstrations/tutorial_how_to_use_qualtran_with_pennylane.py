@@ -1,32 +1,44 @@
 r"""How to use Qualtran with PennyLane
 ======================================
 
-PennyLane can now combine the best features of both PennyLane and Qualtran, using our latest
-PennyLane-Qualtran integration.
+Get ready to expand your quantum programming toolkit!
+PennyLane and [Qualtran](https://qualtran.readthedocs.io/en/latest/) integrate their best features,
+enabling you to to visualize circuits,
+count qubits and gates, and simulate outputs for programs built with
+[Qualtran bloqs](https://qualtran.readthedocs.io/en/latest/bloqs/index.html#bloqs-library),
+PennyLane operations, or even a mix of both.
 
 This integration allows you to:
 
-* **Use Qualtran's subroutines in PennyLane:** Seamlessly incorporate Qualtran's quantum 
-    subroutines, known as ``bloqs``, directly in your PennyLane simulations and workflows.
-* **Analyze PennyLane circuits with Qualtran:** Leverage Qualtran's advanced analysis tools to
-    estimate the computational resource costs of your PennyLane circuits.
+* **Simulate Qualtran circuits:** Verify the correctness of your Qualtran programs by simulating
+    whole Qualtran circuits and checking their outputs in PennyLane.
+* **Expand PennyLane circuits with Qualtran subroutines:** Seamlessly incorporate Qualtran's quantum 
+    subroutines, known as [``bloqs``](https://qualtran.readthedocs.io/en/latest/bloqs/index.html#bloqs-library),
+    directly in your PennyLane simulations.
+* **Analyze the resources of PennyLane circuits with Qualtran:** Leverage Qualtran's advanced analysis tools like
+    [drawing call graphs](https://qualtran.readthedocs.io/en/latest/reference/qualtran/drawing/show_call_graph.html),
+    [counting qubits](https://qualtran.readthedocs.io/en/latest/resource_counting/qubit_counts.html),
+    and [counting gates](https://qualtran.readthedocs.io/en/latest/reference/qualtran/drawing/show_counts_sigma.html). 
+* **Expand Qualtran circuits with PennyLane gates and subroutines:** Add any PennyLane 
+    [operation](https://docs.pennylane.ai/en/stable/introduction/operations.html) or
+    [template](https://docs.pennylane.ai/en/stable/introduction/templates.html) to a Qualtran circuit.
 
 In this demo, we want to show you how easy it is to use PennyLane and Qualtran together.
-We'll start by focusing on the first key capability: embedding a Qualtran ``Bloq`` in a
-PennyLane ``QNode``.
+We'll start by focusing on the first key capability: simulating Qualtran ``Bloqs`` using
+PennyLane ``QNodes``.
 """
 
 ######################################################################
-# From Qualtran to PennyLane
-# --------------------------
+# Simulating Qualtran Bloqs and Larger Algorithms
+# -----------------------------------------------
 #
 # For those unfamiliar, Qualtran (quantum algorithms translator) is a set of abstractions for 
 # representing quantum programs and a library of quantum algorithms (Bloqs) expressed in that 
 # language.
 #
-# With a little bit of work, you can be using Qualtran Bloqs in your PennyLane circuits in no time!
+# With barely any work, you can drop Qualtran Bloqs into your PennyLane circuits!
 # You only need one class: :class:`~pennylane.FromBloq`. It wraps an entire Qualtran ``Bloq`` as a 
-# PennyLane operator. It faithfully converts any Bloq, including its decomposition, into a operator
+# PennyLane operator. It faithfully converts any Bloq, including its decomposition, into an operator
 # you can treat like you would any other.
 #
 # Let's see how it works!
@@ -39,21 +51,22 @@ bloq_as_op = qml.FromBloq(XGate(), wires=0)
 print(bloq_as_op)
 
 ######################################################################
-# In this simple example, we wrapped Qualtran's `XGate` using `FromBloq``. We can see that
-# the output is a :class:`~.pennylane.io.FromBloq` instance, whose properties would be the same
+# In this simple example, we wrapped a Qualtran `XGate` instance using `FromBloq``. We can see that
+# the output is a :class:`~.pennylane.io.FromBloq` instance, whose properties are the same as
 # PennyLane's PauliX operator.
 #
 # Since Qualtran Bloqs don't know what wires to act on, we need to provide that information to 
-# `FromBloq` accordingly. If you're unsure about what wires to provide, you can use the 
+# `FromBloq` via the `wires` argument. Wire requirements will vary depending on the Bloq, if you're
+# unsure about what value to provide for `wires`, you can use the 
 # :func:`~.pennylane.bloq_registers` helper function.
 
 print(qml.bloq_registers(XGate()))
 
 ######################################################################
-# This will create :func:`~.pennylane.registers` with with the register names in accordance to the Bloq's signature. 
-# Here, we got just one "q" register with a single qubit, which is what we expected for the ``XGate``.
+# This will create :func:`~.pennylane.registers` with register names in accordance to the Bloq's signature. 
+# Here, the function created one "q" register with a single qubit, as required by the ``XGate``.
 #
-# Now, let's verify that ``XGate``` performs as expected in a PennyLane circuit.
+# Let's verify that the ``XGate``` performs as expected in a PennyLane circuit.
 
 dev = qml.device("default.qubit")
 @qml.qnode(dev)
@@ -63,9 +76,9 @@ def circuit():
 
 print(circuit())
 ######################################################################
-# Wow! Like magic, we can use Qualtran's ``XGate`` just like we would use the ``PauliX`` operator.
-# But wait, there's more! We can convert high-level abstract Bloqs as well. Here, we
-# defined some ``QubitizationQPE`` Bloq in Qualtran. We first do some analysis in Qualtran
+# Seamlessly, we can use Qualtran's ``XGate`` just as if it were a PennyLane ``PauliX`` operator.
+# But wait, there's more! We can convert algorithm-level Bloqs as well. Next, we
+# define a ``QubitizationQPE`` Bloq in Qualtran. We first do some analysis in Qualtran
 # and subsequently hand it off to PennyLane.
 
 import numpy as np
