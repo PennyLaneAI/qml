@@ -35,7 +35,7 @@ To create a new demonstration, use the QML CLI tool's [`new` command](/documenta
     *   **Execution Time:** Aim to keep the execution time of your script under 10 minutes.
 *   **Jupyter Notebook Conversion:** If you prefer writing your demo in a Jupyter notebook, you can convert it to the required executable Python format by following the [QML Notebook to Demo Converter](https://github.com/PennyLaneAI/qml/tree/master/notebook_converter).
 *   **Naming Convention:** All demo directories must begin with `tutorial_`. They are saved in the `demonstrations_v2` directory. For example: `demonstrations_v2/tutorial_my_demo`.
-*   **Frameworks:** New demos should avoid using `autograd` or `TensorFlow`. `Jax` and `torch` are recommended instead. Whenever possible, the use of `lightning.qubit` is also encouraged.
+*   **Frameworks:** New demos should avoid using `autograd` or `TensorFlow`. `JAX` and `PyTorch` are recommended instead. Whenever possible, the use of `lightning.qubit` is also encouraged.
 *   **Restructured Text (ReST):** Restructured Text sections can be included anywhere within the script by beginning the comment with 79 hash characters (`#`). These are useful for breaking up large code blocks and providing extensive explanations.
 *   **LaTeX Macros:** Avoid using LaTeX macros within your comments. Even if they appear to work in development, they will not be displayed correctly once the demo is published.
 *   **End Marker:** Always conclude your demo script with the following line:
