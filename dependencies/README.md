@@ -1,6 +1,6 @@
 # Dependency Specification
 
-This directory houses the files that specify and constrain the dependencies required for QML demonstrations. These specifications ensure consistent and reproducible build and execution environments for all demos.
+This directory houses the files that specify and constrain the dependencies required for PennyLane demonstrations. These specifications ensure consistent and reproducible build and execution environments for all demos.
 
 ## Table of Contents
 
