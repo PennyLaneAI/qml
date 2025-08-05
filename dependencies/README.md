@@ -30,7 +30,7 @@ This file specifies the exact dependency versions used for building and running 
 
 ### `constraints-stable.txt`
 
-This file specifies the exact dependency versions used for building and running demonstrations against the most recent **stable release** of PennyLane and its associated plugins. This ensures compatibility and stability for production-ready demonstrations.
+This file specifies the exact dependency versions used for building and running demonstrations against the most recent **stable release** of PennyLane and its associated plugins. This ensures compatibility and stability for production-ready demonstrations. If your pull request is targeting the `master` branch, then these are the dependency constraints that will be used. 
 
 *   **Location:** `./constraints-stable.txt`
 *   **Purpose:** Defines dependencies for the `qml build --no-dev` (default) command.
