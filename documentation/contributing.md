@@ -92,8 +92,8 @@ Here, `<demo name>` refers to a subdirectory within `_static/demonstration_asset
 
 Every demo requires an accompanying `metadata.json` file located in its directory. This JSON file stores crucial information about the demo. Refer to [this example](https://github.com/PennyLaneAI/qml/blob/master/demonstrations/tutorial_here_comes_the_sun.metadata.json) for the required fields:
 
-*   **Filename:** Ensure the file is named `<name_of_your_tutorial>.metadata.json`.
-*   **Author ID:** The "id" of the author should match the one chosen when creating the bio.
+*   **Filename:** Ensure the file is named `metadata.json`.
+*   **Author ID:** The "username" of the author should match the one chosen when creating the bio.
 *   **Dates:** Leave publication and modification dates empty if you do not know them.
 *   **Categories:** Choose relevant categories for your demo, such as: `"Getting Started"`, `"Optimization"`, `"Quantum Machine Learning"`, `"Quantum Chemistry"`, `"Devices and Performance"`, `"Quantum Computing"`, `"Quantum Hardware"`, `"Algorithms"`, or `"How-to"`. You may select multiple categories.
 *   **`previewImages`:** Simply modify the final part of the image file names to match your demo's name. These two images will be provided to you once the review process begins. After receiving them, you must upload them to the address indicated in the metadata.
