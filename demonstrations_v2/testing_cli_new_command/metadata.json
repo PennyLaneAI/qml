@@ -1,0 +1,26 @@
+{
+  "title": "testing cli new command",
+  "authors": [
+    {
+      "username": "alan"
+    }
+  ],
+  "executable_stable": false,
+  "executable_latest": false,
+  "dateOfPublication": "2025-08-05T00:00:00+00:00",
+  "dateOfLastModification": "2025-08-05T00:00:00+00:00",
+  "categories": ["Quantum Computing"],
+  "tags": [],
+  "previewImages": [
+    {
+      "type": "thumbnail",
+      "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_placeholder.png"
+    }
+  ],
+  "seoDescription": "this is a test to test the cli ",
+  "doi": "",
+  "references": [],
+  "basedOnPapers": [],
+  "referencedByPapers": [],
+  "relatedContent": []
+}
