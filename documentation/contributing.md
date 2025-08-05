@@ -1,6 +1,6 @@
-# Contributing to Demos in QML
+# Contributing to PennyLane Demos
 
-This document provides comprehensive guidelines for contributing to the QML demonstrations repository. It covers the entire process, from setting up your environment and creating new demos to managing dependencies and building your contributions for review.
+This document provides comprehensive guidelines for contributing to the PennyLane demonstrations repository. It covers the entire process, from setting up your environment and creating new demos to managing dependencies and building your contributions for review.
 
 ## Table of Contents
 
@@ -31,7 +31,7 @@ To create a new demonstration, use the QML CLI tool's [`new` command](/documenta
 
 *   **Format:** Demos are written as executable Python scripts.
     *   Packages listed in `dependencies/requirements-core.in` are available to all demos by default. Additional dependencies can be specified in a `requirements.in` file within the demo's directory. See [Dependency Management](#dependency-management) for more details.
-    *   Matplotlib plots will be automatically rendered and displayed on the QML website.
+    *   Matplotlib plots will be automatically rendered and displayed on the [PennyLane website](https://pennylane.ai/qml/demonstrations).      
     *   **Execution Time:** Aim to keep the execution time of your script under 10 minutes.
 *   **Jupyter Notebook Conversion:** If you prefer writing your demo in a Jupyter notebook, you can convert it to the required executable Python format by following the [QML Notebook to Demo Converter](https://github.com/PennyLaneAI/qml/tree/master/notebook_converter).
 *   **Naming Convention:** All demo directories must begin with `tutorial_`. They are saved in the `demonstrations_v2` directory. For example: `demonstrations_v2/tutorial_my_demo`.
@@ -39,6 +39,7 @@ To create a new demonstration, use the QML CLI tool's [`new` command](/documenta
 *   **Restructured Text (ReST):** Restructured Text sections can be included anywhere within the script by beginning the comment with 79 hash characters (`#`). These are useful for breaking up large code blocks and providing extensive explanations.
 *   **LaTeX Macros:** Avoid using LaTeX macros within your comments. Even if they appear to work in development, they will not be displayed correctly once the demo is published.
 *   **End Marker:** Always conclude your demo script with the following line:
+
 
     ```python
     ##############################################################################
