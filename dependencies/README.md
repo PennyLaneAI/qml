@@ -15,7 +15,7 @@ This directory houses the files that specify and constrain the dependencies requ
 
 ## Overview
 
-Managing dependencies is crucial for the reliability and reproducibility of our QML demonstrations. This directory contains dedicated files that define the precise versions of packages used in different contexts—ranging from development builds to stable releases and core execution requirements.
+Managing dependencies is crucial for the reliability and reproducibility of our PennyLane demonstrations. This directory contains dedicated files that define the precise versions of packages used in different contexts—ranging from development builds to stable releases and core execution requirements.
 
 ## Dependency Files
 
