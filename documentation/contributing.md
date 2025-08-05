@@ -53,7 +53,7 @@ To create a new demonstration, use the QML CLI tool's [`new` command](/documenta
 
     ```bash
     pip install black
-    black -l 100 demo_new.py
+    black -l 100 /path/to/your/demo.py
     ```
 
 ### Image Guidelines
