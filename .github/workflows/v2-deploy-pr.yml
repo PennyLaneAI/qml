@@ -103,18 +103,8 @@ jobs:
         run: |
           demos="${{ needs.prepare-build-context.outputs.updated_demos }}"
           
-          comment="### Preview(s) are ready! :tada:\n"
-          comment+="You can view the landing page preview [here](https://pennylane.ai/qml/demonstrations?pr=${{ needs.prepare-build-context.outputs.pr_id }})\n\n"
-          comment+="Or the individual demos below:\n\n"
-          comment+="<details>\n"
-          comment+="<summary>Toggle to view preview links</summary>\n"
-          comment+="\n"
-          for demo in $demos; do
-            comment+="- [$demo](https://pennylane.ai/qml/demos/$demo?pr=${{ needs.prepare-build-context.outputs.pr_id }})\n"
-          done
-      
-          comment+="\n"
-          comment+="</details>"
+          comment="### Your preview is ready :tada:!\n\n"
+          comment+="You can view your changes [here](https://pennylane.ai/qml/demonstrations?pr=${{ needs.prepare-build-context.outputs.pr_id }})\n\n"
 
           echo "markdown=$comment" >> $GITHUB_OUTPUT
 
