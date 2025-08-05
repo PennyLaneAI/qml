@@ -45,23 +45,15 @@ def metadata(
 def demo(title: str) -> str:
     return inspect.cleandoc(
         f'''
-    r"""
-    {title}
-    {"="}
+        r"""
+        {title}
+        {"#" * (len(title))}
 
-    Introduce your demo here!
-    """
-    
-    print("Hello")
-
-    ###############################################################################
-    #
-    # Add comment blocks to separate code blocks
-    #
-
-    print("World")
-
-    '''
+        .. note::
+            This is a template demo file for your new demo titled "{title}".
+            You can edit this file to add your demo content.
+        """
+        '''
     )
 
 
