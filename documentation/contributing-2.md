@@ -2,7 +2,6 @@
 
 This document provides comprehensive guidelines for contributing to the PennyLane demonstrations repository. It covers the entire process, from setting up your environment and creating new demos to managing dependencies and building your contributions for review.
 
----
 
 ## Table of Contents
 
@@ -23,7 +22,6 @@ This document provides comprehensive guidelines for contributing to the PennyLan
 - [Support](#support)
 - [License](#license)
 
----
 
 ## Getting Started
 
@@ -161,7 +159,6 @@ check-jsonschema \
 
 Once your script and metadata are ready, you can submit a pull request!
 
----
 
 ## Dependency Management
 
@@ -169,7 +166,7 @@ Demo dependencies are automatically installed by the `qml` tool during demo exec
 
 ## Building and Testing Locally
 
-### To build and execute demos locally, use the following `qml` command:
+To build and execute demos locally, use the following `qml` command:
 
 ```bash
 qml build --execute <demo_name(s)>
@@ -185,8 +182,6 @@ For more details on building options, run `qml build --help`.
 
 You can view the built demo in your browser by navigating to the URL: `_build/html/demos/<name of your tutorial>.html`. This requires you to first build the HTML output.
 
----
-
 ## Support
 
 - **Source Code:** https://github.com/PennyLaneAI/QML
@@ -195,8 +190,6 @@ You can view the built demo in your browser by navigating to the URL: `_build/ht
 If you encounter any issues, please report them on our GitHub issue tracker.
 
 We are committed to providing a friendly, safe, and welcoming environment for all contributors. Please read and respect the [Code of Conduct](/.github/CODE_OF_CONDUCT.md).
-
----
 
 ## License
 
