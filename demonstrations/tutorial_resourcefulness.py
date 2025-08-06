@@ -167,15 +167,17 @@ plot(g, g_hat)
 #
 # So far so good, but what is the representation :math:`R(g)` for the standard Fourier transform? Let's follow the recipe:
 #
-# 1. We first need to consider our function :math:`f(0), ..., f(N-1)` as a vector :math:`[f(0), ..., f(N-1)]^T \in V = \mathbb{R}^N`.
-# 2. As argued above, the set of resource-free vectors correspond to constant functions, :math:`f(0) = ... = f(N-1)`.
-# 3. We need a set of unitary matrices that does not change the "constantness" of the vector. This set is given by permutation matrices,
+# 1. **Vectorise**. We first need to consider our function :math:`f(0), ..., f(N-1)` as a vector :math:`[f(0), ..., f(N-1)]^T \in V = \mathbb{R}^N`.
+# 2. **Identify free vectors**. As argued above, the set of resource-free vectors correspond to constant functions, :math:`f(0) = ... = f(N-1)`.
+# 3. **Identify free linear transformations**. We need a set of unitary matrices that does not change the "constantness" of the vector. This set is given by permutation matrices,
 #    which swap the entries of the vector but do not change any of them.
-# 4. The *circulant* permutation matrices can be shown to form a unitary representation :math:`R(g)` for :math:`g \in G = Z_N`, called the *regular representation*.
-# 5. We are now guaranteed that there is a basis change that diagonalises all matrices :math:`R(g)` together.
+# 4. **Ensure they form a group representation**. The *circulant* permutation matrices can be shown to form a unitary representation :math:`R(g)` for :math:`g \in G = Z_N`, called the *regular representation*.
+#    We are now guaranteed that there is a basis change that diagonalises all matrices :math:`R(g)` together.
 #    (Note that the Fourier transform is sometimes defined as the basis change that block-diagonalises the regular representation!) As mentioned, this is
 #    a block-diagonalisation where the blocks happen to be 1-dimensional, as is the rule for so-called "Abelian" groups.
-# 6. The values on the diagonal of :math:`R(g)` under this basis change are exactly the Fourier basis functions `:math:`e^{\frac{2 \pi i}{N} k x}`.
+# 5. **Identify basis for invariant subspaces**. The values on the diagonal of :math:`R(g)` under this basis
+#    change are exactly the Fourier basis functions `:math:`e^{\frac{2 \pi i}{N} k x}`.
+# 6. **GFD purities**. Compute the projections into subspaces, which are the GFD purities.
 #
 # Let's verify this!
 #
@@ -251,50 +253,215 @@ print(np.allclose(P_F - np.diag(np.diagonal(P_F)), np.zeros((N,N)) ))
 # Fourier analysis of entanglement
 # --------------------------------
 #
-# We now move to another resource, the entanglement between 2 qubits. We could simply use the Hilbert space :math:`H` of
-# the two-qubit states as our vector space :math:`V`. However, the Fourier analysis is richer if we choose the space of
-# density matrices :math:`\rho \in L(H)`, which is the space of bounded operators acting on quantum states in a Hilbert space :math:`H`,
-# as :math:`V`. The density matrices get transformed by the adjoint action :math:`U \rho U^{\dagger}`.
+# Now that we have a grasp of how standard Fourier transforms can measure the resource of "smoothness" of a classical function,
+# let's apply the same kind of reasoning to the most popular resource of quantum states: multipartite entanglement.
+# We can think of multipartite entanglement as a resource of the state of a quantum system that measures how "wiggly"
+# the correlations between its constituents are.
+# While this is a general statement, we will restrict our attention to systems made of our favourite quantum objects: qubits.
+# Just like smoother functions have simpler Fourier spectra (mostly low-momentum components),
+# quantum states with simpler entanglement structures, or no entanglement at all like in the case of product states,
+# have simpler generalized Fourier spectra, where most of their purity resides in the lower-order "irreps"
+# (that we recall is short for irreducible representations, but you can think of them as generalized frequencies).
+# On the flip side, highly entangled states spread their purity across more and higher-order (i.e., larger dimensional) irreps,
+# similar to how more complex ("wiggly") functions have larger Fourier coefficients at higher frequencies.
+# This means that analyzing a state's Fourier spectrum can tell us how "resourceful" or entangled it is.
 #
-# Performing numerics like block-diagonalisation on such a vector space is a little more complicated, and best done by moving from
-# matrices :math:`\rho` to "flattened" vectors in :math:`\mathbb{C}^{2n}`, and from adjoint unitary evolution to a superoperator
-# which is a :math:`2n x 2n`-dimensional matrix that can be applied to the flattened density matrices.
+# Let us walk the same steps we took when studying the resource of "smoothness".
+# 1. **Vectorise**. Lucklily for us, our objects of interest, the quantum states :math:`\psi \in \mathbb{C}^{2n}`, are already in the form of vectors.
+# 2. **Identify free vectors**. It's easy to define the set of free states for multipartite entanglement: they are just product states.
+# 3. **Identify free linear transformations**. Now, what unitary transformation of a quantum state does not generate
+#    entanglement? You guessed it right, local evolutions :math:`U=\Bigotimes U_j` for  :math:`U_j \in SU(2)`.
+# 4. **Ensure they form a representation**. The set of free operations corresponds to the group :math:`G = SU(2) x SU(2) ... x SU(2)`.
+#    Unitary matrices :math:`U=\Bigotimes U_j` define the standard representation of :math:`G` over :math:`H`, transforming a
+#    quantum state :math:`\psi` as per usual: :math:`\psi' = U psi`.
+#    Again, this implies that we can find a basis of the Hilbert space, where any :math:`U` is simulatenously block-diagonal.
+#
+# Let's try to block-diagonalise one of the non-entangling unitaries!
+#
+
+#[Show failed attempt to block diagonalise one of them]
+
+######################################################################
+# What is happening here? It turns out that the non-entangling unitary matrices only have a single block of size :math:`2^n \times 2^n`.
+# Technically speaking, the representation :math:`R(g) = U(g)` is irreducible over :math:`H`.
+# As a consequence, the invariant subspace is :math:`H` itself, and the GFD purity is simply the purity of the state :math:`psi`, which is :math:`1`.
+# This, of course, is not a very informative measure!
+#
+#
+# However, rather than a bug, this is a feature of the GFD framework. Indeed, nobody forces us to restrict our attention to :math:`H` and to
+# the (standard) representation of non-entangling unitary matrices.
+# Afterall, what's the first symptom of entanglement in a quantum state? You guessed right again, the reduced density matrix of some subsystem is mixed!
+# Wouldn't it make more sense then to study the multipartite entanglement form the point of view of density matrices?
+# It turns out that moving into the space :math:`B(H)` of bounded linear operators in which the density matrices live leads to
+# a much more nuanced Fourier spectrum.
+#
+# Let us walk the steps above again
+# 1. **Vectorise**. :math:`L(H)` is a vector space in the technical sense, but one of matrices. We can make this more
+#    explicit and "vectorize" density matrices :math:`rho=\sum_i,j c_i,j |i\rangle \langle j|`
+#    as :math:`|rho\rangle \rangle = \sum_i,j c_i,j |i\rangle |j\rangle \in H \otimes H^*`.
+#    For example:
+#
+
+n = 2
+
+# create a random quantum state
+psi = np.random.rand(2**n)
+# construct the corresponding density matrix
+rho = np.outer(psi, psi.conj())
+# vectorise it
+rho_vec = rho.flatten(order='F')
+
+######################################################################
+# 2. **Identify free vectors**. The set of free states is again that of product states :math:`\rho = \bigotimes \rho_j`
+#    where each :math:`\rho_j` is a single-qubit state.
+# 3. **Identify free linear transformations**. The free operations are still given by non-entangling unitaries, but
+#    of course, they act differently on density matrices :math:`\rho' = U \rho U^{\dagger}`.
+#    We can also vectorise this by defining the matrix :math:`\tilde{U}(g) = U \otimes U^*`. We then have that
+#    :math:`|\rho'\rangle \rangle = \tilde{U} \rho`.
+#    To demonstrate:
+#
+
+from scipy.stats import unitary_group
+from functools import reduce
+
+# create n haar random single-qubit unitaries
+Us = [unitary_group.rvs(dim=2) for _ in range(n)]
+# compose them into a non-entangling n-qubit unitary
+U = reduce(lambda A, B: np.kron(A, B), Us)
+# Vectorise U
+U_vec = np.kron(U.conj(), U)
+
+# evolve the state above by U, using the vectorised objects
+rho_out_vec = U_vec @ rho_vec
+# reshape the result back into a density matrix
+rho_out = np.reshape(rho_out_vec, newshape=(2**2, 2**2))
+# this is the same as the usual adjoint application of U
+print(np.allclose(rho_out, U @ rho @ U.conj().T ))
+
+######################################################################
+# 4. **Ensure they form a representation**. This "adjoint action" is indeed a valid representation :math:`\tilde{R}(g)` of
+# :math:`G = SU(2) x SU(2) ... x SU(2)`, called the *defining representation*. However, it is a different one from before,
+# and this time there is a basis transformation that block-diagonalises all matrices in the representation.
+# This can be done by computing the eigendecomposition of an arbitrary linear combination of a set of matrices in the representation.
+#
+
+matrices = []
+for i in range(10):
+    # create n haar random single-qubit unitaries
+    Us = [unitary_group.rvs(dim=2) for _ in range(n)]
+    # compose them into a non-entangling n-qubit unitary
+    U = reduce(lambda A, B: np.kron(A, B), Us)
+    # Vectorise U
+    U_vec = np.kron(U.conj(), U)
+    matrices.append(U_vec)
+
+# Create a random linear combination of the matrices
+alphas = np.random.randn(len(matrices)) + 1j * np.random.randn(len(matrices))
+M_combo = sum(a * M for a, M in zip(alphas, matrices))
+
+# Eigendecompose the linear combination
+vals, Q = np.linalg.eig(M_combo)
+
+######################################################################
+# Let's test this basis change
+#
+
+Qinv = np.linalg.inv(Q)
+B = Qinv @ matrices[0] @ Q
+print(B)
+
+######################################################################
+# B does not look block diagonal. What happened here?
+# Well, it is block-diagonal, but we have to reorder the columns and rows of the final matrix.
+# This takes a bit of pain, encapsulated in the following function:
+#
+
+from collections import OrderedDict
+
+def group_rows_cols_by_sparsity(B, tol=0):
+    """
+    Given a binary or general matrix C, this function:
+      1. Groups identical rows and columns.
+      2. Orders these groups by sparsity (most zeros first).
+      3. Returns the permuted matrix C2, and the row & column permutation
+         matrices P_row, P_col such that C2 = P_row @ C @ P_col.
+
+    Parameters
+    ----------
+    B : ndarray, shape (n, m)
+        Input matrix.
+
+    Returns
+    -------
+    P_row : ndarray, shape (n, n)
+        Row permutation matrix.
+    P_col : ndarray, shape (m, m)
+        Column permutation matrix.
+    """
+    # Compute boolean mask where |B| >= tol
+    mask = np.abs(B) >= 1e-8
+    # Convert boolean mask to integer (False→0, True→1)
+    C = mask.astype(int)
+    # order by sparsity
+
+    n, m = C.shape
+
+    # Helper to get a key tuple and zero count for a vector
+    def key_and_zeros(vec):
+        if tol > 0:
+            bin_vec = (np.abs(vec) < tol).astype(int)
+            key = tuple(bin_vec)
+            zero_count = int(np.sum(bin_vec))
+        else:
+            key = tuple(vec.tolist())
+            zero_count = int(np.sum(np.array(vec) == 0))
+        return key, zero_count
+
+    # Group rows by key
+    row_groups = OrderedDict()
+    row_zero_counts = {}
+    for i in range(n):
+        key, zc = key_and_zeros(C[i, :])
+        row_groups.setdefault(key, []).append(i)
+        row_zero_counts[key] = zc
+
+    # Sort row groups by zero_count descending
+    sorted_row_keys = sorted(row_groups.keys(),
+                             key=lambda k: row_zero_counts[k],
+                             reverse=True)
+    # Flatten row permutation
+    row_perm = [i for key in sorted_row_keys for i in row_groups[key]]
+
+    # Group columns by key
+    col_groups = OrderedDict()
+    col_zero_counts = {}
+    for j in range(m):
+        key, zc = key_and_zeros(C[:, j])
+        col_groups.setdefault(key, []).append(j)
+        col_zero_counts[key] = zc
+
+    # Sort column groups by zero_count descending
+    sorted_col_keys = sorted(col_groups.keys(),
+                             key=lambda k: col_zero_counts[k],
+                             reverse=True)
+    col_perm = [j for key in sorted_col_keys for j in col_groups[key]]
+
+    # Build permutation matrices
+    P_row = np.eye(n)[row_perm, :]
+    P_col = np.eye(m)[:, col_perm]
+
+    return P_row, P_col
+
+P_row, P_col = group_rows_cols_by_sparsity(B)
+Q = Q @ P_col
+
+
+
+# We cheat here a little: we already know the basis in which :math:`\tilde{U}` is block-diagonal: the Pauli basis.
+# This allows us to construct the matrix implementing the basis change directly.
 #
 
 import functools
-
-def haar_unitary(N):
-    """
-    Generates a Haar random NxN unitary matrix
-    """
-    X = (np.random.randn(N, N) + 1j*np.random.randn(N, N)) / np.sqrt(2)
-    Q, R = np.linalg.qr(X)
-    phases = np.exp(-1j * np.angle(np.diag(R)))
-    return Q @ np.diag(phases)
-
-n = 2
-U = haar_unitary(2**n)
-U_vec = np.kron(U.conj(), U)
-
-psi = np.random.rand(shape=(2**2,))
-rho = np.outer(psi, psi.conj())
-rho_vec = rho.flatten(order='F')
-rho_out_vec = U_vec @ rho_vec
-rho_out = np.reshape(rho_out_vec, shape=(2**2, 2**2))
-
-# show that flattening works
-print(np.allclose(rho_out, U @ rho @ U.conj().T ))
-
-
-######################################################################
-# With the vector space fixed, we can now ask what unitaries keep entanglement free density matrices
-# entanglement free? Of course, all unitaries that can be written as a tensor product of single-qubit unitaries!
-# Such unitaries form a group called :math:`SU(2) x SU(2)`. We claim that they also form a representation of this group
-# (the "defining" representation that just consists of the group elements themselves). If this claim is true,
-# there must be a basis change into the "Fourier basis" that block-diagonalises all non-entangling unitaries into
-# the same block structure. This can be easily checked using the superoperators constructed above!
-#
-
 import itertools
 
 # single‑qubit Paulis
@@ -307,7 +474,7 @@ _pauli_map = {
 
 def pauli_basis(n):
     """
-    generates the basis of Pauli operators, and orders it by appearence in the isotypical decomp of Times_i SU(2)
+    Generates the basis of Pauli operators, and orders it by appearence in the isotypical decomp of Times_i SU(2).
     """
     all_strs    = [''.join(s) for s in itertools.product('IXYZ', repeat=n)]
     sorted_strs = sorted(all_strs, key=lambda s: (n-s.count('I'), s))
@@ -320,36 +487,24 @@ def pauli_basis(n):
     B = np.column_stack(mats)
     return sorted_strs, B
 
-def rotate_superoperator(U):
-    """
-    Rotates the superop of the adj of a unitary U to the irrep-sorted Pauli basis
-    """
-    S        = np.kron(U.conj(), U)
-    n        = int(np.log2(U.shape[0]))
-    basis,B  = pauli_basis(n)
-    S_rot    = B.conj().T @ S @ B
-    return basis, S_rot
 
-n = 2
-Us = [haar_unitary(2) for _ in range(n)]
-# U is a tensor product of single-qubit unitaries
-U = functools.reduce(lambda A, B: np.kron(A, B), Us)
 
-basis, S_rot = rotate_superoperator(U)
-np.set_printoptions(
-    formatter={'float': lambda x: f"{x:5.2g}"},
-    linewidth=200,    # default is 75;
-    threshold=10000   # so it doesn’t summarize large arrays
-)
 
-# now round and print
-## NOTICE THAT IN PAULI BASIS THE UNITARY ADJOINT ACTION IS ORTHOGONAL
-print("Adjoint Superoperator of U in the Irrep basis")
-S_real = S_rot.real
-Sr_round = np.round(S_real, 2)
-print("Rounded real part (the operator is real):")
-print(Sr_round)
+# compute the basis change matrix
+basis, B = pauli_basis(n)
+# apply basis change
+U_vec_rot = B.conj().T @ U_vec @ B
 
+# make sure the imaginary part is zero, so we don't have to print it
+# (this is a property of the Pauli basis)
+assert np.isclose(np.sum(U_vec_rot.imag), 0)
+
+# print the real part
+print(np.round(U_vec_rot.real, 2))
+
+
+# 5. **Identify basis for invariant subspaces**. Will we now find interesting subspaces by simultaneously block-diagonalizing :math:`\tilde{R}`?
+#
 ######################################################################
 # Given a new state :math:`rho`, we can compute the GDF purity by transforming it with the same basis transform.
 # [TODO: compute result for a few different rhos without knowing the basis]
