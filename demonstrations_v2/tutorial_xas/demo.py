@@ -66,7 +66,7 @@ Below is an illustration of an X-ray absorption spectrum.
    Figure 2: *Example X-ray absorption spectrum.* Illustration of how the peak positions :math:`E_F - E_i`, widths :math:`\eta` and amplitudes :math:`|\langle F | \hat m_\rho | I \rangle|^2` determine the spectrum.
 
 The goal of this demo is to implement a quantum algorithm that can calculate this spectrum. 
-Three algorithm designs are discussed in [#Fomichev2024]_, but we will focus on the time-domain method, since quantum computers are naturally suited to calculating the time evolution of a Hamiltonian operator. 
+Three algorithm designs are discussed in Ref. [#Fomichev2024]_, but we will focus on the time-domain method, since quantum computers are naturally suited to calculating the time evolution of a Hamiltonian operator. 
 Instead of computing the energy differences and state overlaps directly, this method simulates the system in the time domain, and then uses a `Fourier transform <https://en.wikipedia.org/wiki/Fourier_transform>`__ to obtain the spectrum in frequency space *all at once*.
 
 Quantum algorithm in the time-domain
@@ -74,7 +74,7 @@ Quantum algorithm in the time-domain
 
 Both the initial state :math:`|I\rangle` and the dipole operator acting on the initial state :math:`\hat m_\rho|I\rangle` can be determined classically, and we’ll demonstrate how to do that later. 
 With the initial state computed, we will use a mathematical trick called a *frequency-domain* `Green’s function <https://en.wikipedia.org/wiki/Green%27s_function>`__ to determine the absorption cross section. 
-We can write the cross section as the imaginary part of the following Green’s function (see Section IIB in [#Fomichev2025]_)
+We can write the cross section as the imaginary part of the following Green’s function (see Section IIB in Ref. [#Fomichev2025]_)
 
 .. math:: \mathcal{G}_\rho(\omega) = \langle I|\hat m_\rho \frac{1}{\hat H -E_I -\omega +i\eta} \hat m_\rho |I\rangle\,.
 
@@ -146,7 +146,7 @@ We start by creating our molecule object using the `Gaussian type orbitals <http
 """
 
 from pyscf import gto, scf
-import numpy as np
+from pennylane import numpy as np
 
 # Create a Mole object.
 r = 1.0  # Bond length in Angstrom.
@@ -312,7 +312,7 @@ def initial_circuit(wf):
 # We will perform compressed double factorization (CDF) on the Hamiltonian to approximate it as a series of fragments, each of which can be fast-forwarded in a Trotter product formula.
 #
 # If you haven’t yet, go read the demo `“How to build compressed double-factorized Hamiltonians” <https://pennylane.ai/qml/demos/tutorial_how_to_build_compressed_double_factorized_hamiltonians>`__, because that is exactly what we are going to do! 
-# You could also look at Section III in [#Fomichev2025]_.
+# You could also look at Section III in Ref. [#Fomichev2025]_.
 #
 # Electronic Hamiltonian
 # ~~~~~~~~~~~~~~~~~~~~~~
@@ -331,8 +331,8 @@ core_constant = core_constant[0]
 ######################################################################
 # We will have to convert these to chemists’ notation [#Sherrill2005]_.
 
-two_chemist = np.einsum("prsq->pqrs", two)
-one_chemist = one - np.einsum("pqrr->pq", two) / 2.0
+two_chemist = qml.math.einsum("prsq->pqrs", two)
+one_chemist = one - qml.math.einsum("pqrr->pq", two) / 2.0
 
 ######################################################################
 # Next, we will perform compressed double factorization of the Hamiltonian's two-electron integrals to approximate them as a sum of :math:`L` fragments
@@ -367,7 +367,7 @@ assert qml.math.allclose(approx_two_chemist, two_chemist, atol=0.1)
 
 # Calculate the one-electron extra terms.
 Z_prime = np.stack([np.diag(np.sum(Z[i], axis=-1)) for i in range(Z.shape[0])], axis=0)
-one_electron_extra = np.einsum("tpk,tkk,tqk->pq", U, Z_prime, U)
+one_electron_extra = qml.math.einsum("tpk,tkk,tqk->pq", U, Z_prime, U)
 
 # Diagonalize the one-electron integral matrix while adding the one-electron extra.
 eigenvals, U0 = np.linalg.eigh(one_chemist + one_electron_extra)
@@ -382,7 +382,7 @@ Z0 = np.diag(eigenvals)
 # The trick when time evolving a compressed double-factorized Hamiltonian is to use `Thouless’s theorem <https://joshuagoings.com/assets/Thouless_theorem.pdf>`__ [#Thouless1960]_ to construct a size :math:`2^{n_\mathrm{cas}} \times 2^{n_\mathrm{cas}}` unitary :math:`{\bf U}^{(\ell)}` that is induced by a the single-particle basis transformation :math:`U^{(\ell)}` (of size :math:`n_\mathrm{cas} \times n_\mathrm{cas}`). 
 # The Jordan-Wigner transform can then turn the number operators :math:`a^\dagger_p a_p = n_{p}` into Pauli :math:`Z` rotations, via :math:`n_p = (1-\sigma_{z,p})/2`. 
 # Note the :math:`1/2` term will affect the global phase, and we will have to keep track of that carefully. 
-# The resulting Hamiltonian looks like the following (for a derivation see Appendix A of [#Fomichev2025]_)
+# The resulting Hamiltonian looks like the following (for a derivation see Appendix A of Ref. [#Fomichev2025]_)
 #
 # .. math::
 #   H_\mathrm{CDF} &= \left(E + \sum_k Z_k^{(0)} - \frac12 \sum_{\ell, kj} Z_{kj}^{(\ell)} + \frac14 \sum_{\ell,k} Z_{kk}^{(\ell)} \right) {\bf 1} \\
@@ -683,7 +683,7 @@ dip_ints_ao = hf.mol.intor("int1e_r_cart", comp=3)  # In atomic orbital basis.
 mo_coeffs = coeffs[:, n_core : n_core + n_cas]
 
 # Convert to molecular orbital basis.
-dip_ints_mo = np.einsum("ik,xkl,lj->xij", mo_coeffs.T, dip_ints_ao, mo_coeffs)
+dip_ints_mo = qml.math.einsum("ik,xkl,lj->xij", mo_coeffs.T, dip_ints_ao, mo_coeffs)
 
 
 def final_state_overlap(ci_id):
@@ -692,7 +692,7 @@ def final_state_overlap(ci_id):
         mycasci.ci[0], mycasci.ci[ci_id], n_cas, n_electron_cas
     )
     # Transition dipole moments.
-    return np.einsum("xij,ji->x", dip_ints_mo, t_dm1)
+    return qml.math.einsum("xij,ji->x", dip_ints_mo, t_dm1)
 
 
 # Compute overlaps.
@@ -728,13 +728,13 @@ plt.show()
 # Nice! Our time-domain simulation method reproduces the classical spectrum.
 # Looking closely, we can see there are two strong peaks, as predicted from the beat note in the expectation values in Figure 7. 
 # If we worked with a larger active space, we would obtain more features in the spectrum. 
-# The spectrum calculated from the full orbital space is shown in Section V in [#Fomichev2025]_.
+# The spectrum calculated from the full orbital space is shown in Section V in Ref. [#Fomichev2025]_.
 # 
 #
 # Conclusion
 # ----------
 #
-# In this tutorial, we have implemented a simplified version of the algorithm as presented in [#Fomichev2025]_. 
+# In this tutorial, we have implemented a simplified version of the algorithm as presented in Ref. [#Fomichev2025]_. 
 # The algorithm represents a culmination of many optimizations for time evolving an electronic Hamiltonian. 
 # We’ve also discussed how XAS simulation is a promising candidate application for early fault-tolerant quantum computers due to its low qubit overhead but high amount of correlations in the state space.
 #
@@ -785,12 +785,12 @@ plt.show()
 # Appendix: Further optimizations
 # ---------------------
 # 
-# There are more optimizations for this algorithm that are included in the paper [#Fomichev2025]_ that we did not implement in the above code. 
+# There are more optimizations for this algorithm that are included in Ref. [#Fomichev2025]_ that we did not implement in the above code. 
 # One could further optimize the compressed double-factorized Hamiltonian by applying a block-invariant symmetry shift (BLISS) [#Loaiza2023]_ to the Hamiltonian prior to the factorization. 
 # This is already detailed in the `demo on CDF Hamiltonians <https://pennylane.ai/qml/demos/tutorial_how_to_build_compressed_double_factorized_hamiltonians>`__.
 #
 # Another optimization is to use a randomized second-order Trotter formula for the time evolution. 
-# As discussed in [#Childs2019]_, the errors in deterministic product formulas scale with the commutators of the Hamiltonian terms. 
+# As discussed in Ref. [#Childs2019]_, the errors in deterministic product formulas scale with the commutators of the Hamiltonian terms. 
 # One could instead use all permutations of the Hamiltonian terms, such that all of the commutator errors cancel. 
 # However, the average of all permutations is not unitary in general. 
 # To circumvent this, one can randomly choose an ordering of Hamiltonian terms in the Trotter product, which can give a good approximation to the desired evolution.
