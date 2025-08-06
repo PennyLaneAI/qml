@@ -178,7 +178,7 @@ Once your script and metadata are ready, you can submit a pull request!
 
 ## Dependency Management
 
-Demo dependencies are automatically installed by the `qml` tool during demo execution. For detailed information on dependency specifications, refer to [dependencies/README.md](./dependencies/README.md). A `requirements.txt` file will be created in the demo directory after a successful build.
+Demo dependencies are automatically installed by the `qml` tool during demo execution. For detailed information on dependency specifications, refer to [dependencies/README.md](/dependencies/README.md). A `requirements.txt` file will be created in the demo directory after a successful build.
 
 ## Building and Testing Locally
 

@@ -170,7 +170,7 @@ there are a couple of guidelines to keep in mind.
 ## Dependency Management
 
 Demo dependencies are automatically installed by the `qml` tool during demo
-execution. See [dependencies/README.md](./dependencies/README.md) for details
+execution. See [dependencies/README.md](/dependencies/README.md) for details
 on dependency specifications.    
 
 ### Installing dependencies

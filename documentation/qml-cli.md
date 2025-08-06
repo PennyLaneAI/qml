@@ -17,11 +17,12 @@ The **QML CLI tool** streamlines the creation, testing, and building of PennyLan
 *   [Support](#support)
 *   [License](#license)
 
----
 
 ## Installation
 
 To install the QML CLI, you will need Python version `3.10`. We highly recommend using a virtual environment to install the CLI tool to manage dependencies effectively.
+
+### MacOS/Linux Installation Steps
 
 ```bash
 # Step 1. Create a virtual environment (optional but highly recommended)
@@ -35,13 +36,54 @@ source .venv/bin/activate
 pip install .
 
 # Step 4. Verify the installation
-qml help
+qml
 
-# Step 5. If successful, you should see output similar to this:
-## > QML Demo build tool
+ QML Demo build tool - Create, build, and manage quantum machine learning demos.                               
+
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --install-completion          Install completion for the current shell.                                     │
+│ --show-completion             Show completion for the current shell, to copy it or customize the            │
+│                               installation.                                                                 │
+│ --help                        Show this message and exit.                                                   │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ──────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ help                                                                                                        │
+│ build     Build the named demos.                                                                            │
+│ new       Create a new demo.                                                                                │                        │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+
 ```
 
----
+### Windows Installation Steps
+
+```bash
+# Step 1. Create a virtual environment (optional but highly recommended)
+python -m venv .venv
+
+# Step 2. Activate the virtual environment
+.\.venv\Scripts\activate
+
+# Step 3. Install the QML CLI tool
+# This command assumes you are in the root directory of the QML repository.
+pip install .
+
+# Step 4. Verify the installation
+qml
+
+QML Demo build tool - Create, build, and manage quantum machine learning demos.                                                                                                               
+
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --install-completion          Install completion for the current shell.                                     │
+│ --show-completion             Show completion for the current shell, to copy it or customize the            │
+│                               installation.                                                                 │
+│ --help                        Show this message and exit.                                                   │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ──────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ help                                                                                                        │
+│ build     Build the named demos.                                                                            │
+│ new       Create a new demo.                                                                                │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+```
 
 ## Commands
 
@@ -53,7 +95,6 @@ Displays comprehensive help information for the QML CLI tool, including a list o
 qml help
 ```
 
----
 
 ### `new`
 
@@ -78,7 +119,6 @@ Once all required inputs are provided, a new subdirectory will be created under 
 *   `metadata.json`: A JSON file storing descriptive metadata about the demonstration.
 *   `requirements.in`: A file listing Python dependencies specifically required by this demonstration.
 
----
 
 ### `build`
 
@@ -136,7 +176,6 @@ Instructs the build process to use the latest development (unreleased) versions 
 qml build --dev demo_name
 ```
 
----
 
 ## Viewing Build Outputs
 
@@ -162,7 +201,6 @@ Example:
 open _build/json/demos/my_demo/
 ```
 
----
 
 ## Support
 
@@ -171,7 +209,6 @@ open _build/json/demos/my_demo/
 
 For any issues or questions, please utilize our GitHub issue tracker.
 
----
 
 ## License
 
