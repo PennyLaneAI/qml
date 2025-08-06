@@ -5,6 +5,8 @@
             "username": "chiffa"
         }
     ],
+    "executable_stable": true,
+    "executable_latest": true,
     "dateOfPublication": "2023-10-20T00:00:00+00:00",
     "dateOfLastModification": "2024-12-13T00:00:00+00:00",
     "categories": [
@@ -23,8 +25,7 @@
     ],
     "seoDescription": "Prepare initial states for quantum algorithms from output of traditional quantum chemistry methods.",
     "doi": "",
-    "references": [
-    ],
+    "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],
     "relatedContent": [

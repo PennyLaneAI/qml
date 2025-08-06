@@ -5,6 +5,8 @@
             "username": "Qottmann"
         }
     ],
+    "executable_stable": true,
+    "executable_latest": true,
     "dateOfPublication": "2024-09-29T00:00:00+00:00",
     "dateOfLastModification": "2024-11-20T00:00:00+00:00",
     "categories": [
@@ -82,7 +84,9 @@
             "url": "https://arxiv.org/abs/1008.3477"
         }
     ],
-    "basedOnPapers": ["10.48550/arXiv.1008.3477"],
+    "basedOnPapers": [
+        "10.48550/arXiv.1008.3477"
+    ],
     "referencedByPapers": [],
     "relatedContent": [
         {

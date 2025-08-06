@@ -81,9 +81,18 @@ class Demo:
         )
 
     @property
-    def executable(self) -> bool:
-        """Whether this demo can be executed."""
-        return self.name.startswith("tutorial_")
+    def executable_stable(self) -> bool:
+        """Whether this demo can be executed for stable builds."""
+        with open(self.metadata_file, "r") as f:
+            metadata = json.load(f)
+        return metadata.get("executable_stable", self.name.startswith("tutorial_"))
+
+    @property
+    def executable_latest(self) -> bool:
+        """Whether this demo can be executed for dev builds."""
+        with open(self.metadata_file, "r") as f:
+            metadata = json.load(f)
+        return metadata.get("executable_latest", self.name.startswith("tutorial_"))
 
     @functools.cached_property
     def requirements(self) -> frozenset[str]:
@@ -162,11 +171,14 @@ def build(
 
     build_venv = Virtualenv(ctx.build_venv_path)
     cmds.pip_install(
-        build_venv.python, requirements=ctx.build_requirements_file, use_uv=False, quiet=False
+        build_venv.python,
+        requirements=ctx.build_requirements_file,
+        use_uv=False,
+        quiet=False,
     )
 
     for demo in demos:
-        execute_demo = execute and demo.executable
+        execute_demo = execute and (demo.executable_latest if dev else demo.executable_stable)
         done += 1
         logger.info(
             "Building '%s' (%d/%d), execute=%s",
@@ -203,17 +215,19 @@ def build(
 
     if failed:
         raise RuntimeError(f"Failed to build {len(failed)} demos", failed)
-    
+
     # If we built the HTML output, gather and merge the objects.inv files
     if target is BuildTarget.HTML:
         logger.info("Building the master objects.inv file.")
 
         inventory = soi.Inventory()
-        inventory.project = 'PennyLane'
+        inventory.project = "PennyLane"
 
         for demo in demos:
             logger.info("Loading objects.inv for '%s'", demo.name)
-            demo_inv = soi.Inventory(ctx.repo_root / "demos" / demo.name / "objects.inv")
+            demo_inv = soi.Inventory(
+                ctx.repo_root / "demos" / demo.name / "objects.inv"
+            )
 
             # Only add entries that don't already exist in the merged inventory file
             for entry in demo_inv.objects:
@@ -272,11 +286,11 @@ def _build_demo(
             quiet=False,
             pre=dev,
         )
-    
+
     # For dev, follow the same install procedure and order as in the Makefile.
     # This is critical to get the proper versions of PennyLane, Catalyst,
     # and various plugins.
-    # TODO: See if we can clean this up and streamline in the future... 
+    # TODO: See if we can clean this up and streamline in the future...
     # TODO: Remove RC branch for PennyLane install post-release.
     # if dev and execute:
     #     # Cirq
