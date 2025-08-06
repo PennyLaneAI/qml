@@ -146,7 +146,7 @@ We start by creating our molecule object using the `Gaussian type orbitals <http
 """
 
 from pyscf import gto, scf
-from pennylane import numpy as np
+import numpy as np
 
 # Create a Mole object.
 r = 1.0  # Bond length in Angstrom.
@@ -198,7 +198,7 @@ casci_state[abs(casci_state) < 1e-6] = 0
 
 ######################################################################
 # To implement this state as a PennyLane state vector, we need to convert the ``casci_state`` into a format that is easy to import into PennyLane. 
-# One way to do this is to use a sparse matrix representation to turn ``casci_state`` into a dictionary, and then use :funf:`~pennylane.qchem.convert.import_state` to import into PennyLane. 
+# One way to do this is to use a sparse matrix representation to turn ``casci_state`` into a dictionary, and then use :func:`~pennylane.qchem.convert.import_state` to import into PennyLane. 
 # Here is how you can turn a full-configuration interaction matrix like ``casci_state`` into a dictionary.
 
 from scipy.sparse import coo_matrix
