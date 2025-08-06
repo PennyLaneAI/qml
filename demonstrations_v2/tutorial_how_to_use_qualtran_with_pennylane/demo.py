@@ -8,6 +8,11 @@ count qubits and gates, and simulate outputs for programs built with
 [Qualtran bloqs](https://qualtran.readthedocs.io/en/latest/bloqs/index.html#bloqs-library),
 PennyLane operations, or even a mix of both.
 
+.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/pennylane-demo-qualtran-integration-open-graph.png
+    :align: center
+    :width: 70%
+    :target: javascript:void(0)
+
 This integration allows you to:
 
 * **Simulate Qualtran circuits:** Verify the correctness of your Qualtran programs by simulating
@@ -118,7 +123,7 @@ print(qml.FromBloq(qubitization_qpe, wires=range(n_qubits)).decomposition())
 # ----------------------------------------
 #
 # Now, we'll show you how to convert PennyLane objects to Qualtran Bloqs. For brevity, we'll 
-# mainly cover how operators get converted to Bloqs in our examples, but functions of operators and
+# mainly cover how operators get converted to Bloqs in our examples, but functions with operators and
 # ``QNodes`` work just the same.
 #
 # There are three main options for the conversion. We'll briefly introduce them here but go into
