@@ -167,28 +167,17 @@ def _collect_authors() -> list[dict]:
 def _setup_thumbnails(
     demo_dir: Path, small_thumb: Optional[Path], large_thumb: Optional[Path]
 ) -> tuple[Optional[str], Optional[str]]:
-    """Copy and setup thumbnail files."""
+    """Verify thumbnail files exist and return their paths."""
     small_thumbnail_path = None
     large_thumbnail_path = None
 
     if small_thumb:
-        try:
-            dest = (demo_dir / THUMBNAIL_FILENAME).with_suffix(small_thumb.suffix)
-            fs.copy_parents(small_thumb, dest)
-            small_thumbnail_path = str(dest.relative_to(demo_dir))
-        except (OSError, shutil.Error) as e:
-            logger.warning(f"Failed to copy small thumbnail: {e}")
+        small_thumbnail_path = str(f"/{small_thumb}")
 
     if large_thumb:
-        try:
-            dest = (demo_dir / LARGE_THUMBNAIL_FILENAME).with_suffix(large_thumb.suffix)
-            fs.copy_parents(large_thumb, dest)
-            large_thumbnail_path = str(dest.relative_to(demo_dir))
-        except (OSError, shutil.Error) as e:
-            logger.warning(f"Failed to copy large thumbnail: {e}")
+        large_thumbnail_path = str(f"/{large_thumb}")
 
     return small_thumbnail_path, large_thumbnail_path
-
 
 def _create_demo_files(
     demo_dir: Path,
@@ -289,59 +278,4 @@ def new():
         raise typer.Exit(0)
     except Exception as e:
         logger.error(f"Failed to create demo: {e}")
-        raise typer.Exit(1)
-
-
-@app.command()
-def sync_v2():
-    """Copy new and changed demos from /demonstrations to /demonstrations_v2."""
-    try:
-        ctx = Context()
-        demonstrations_dir = ctx.repo_root / "demonstrations"
-
-        if not demonstrations_dir.exists():
-            logger.error(f"Source directory {demonstrations_dir} does not exist")
-            raise typer.Exit(1)
-
-        copied_count = 0
-        updated_count = 0
-
-        for v1_demo in demonstrations_dir.glob("*.py"):
-            demo_name = v1_demo.stem
-            v1_metadata = v1_demo.with_suffix(".metadata.json")
-
-            if not v1_metadata.exists():
-                logger.warning(f"Metadata file missing for {v1_demo}, skipping")
-                continue
-
-            v2_demo_dir = ctx.demos_dir / demo_name
-            v2_demo = v2_demo_dir / DEMO_FILENAME
-            v2_metadata = v2_demo_dir / METADATA_FILENAME
-
-            try:
-                if not v2_demo_dir.exists():
-                    v2_demo_dir.mkdir(parents=True)
-                    shutil.copy2(v1_demo, v2_demo)
-                    shutil.copy2(v1_metadata, v2_metadata)
-                    copied_count += 1
-                    logger.info(
-                        f"Copied new demo {demo_name}. Please update the requirements.in file."
-                    )
-                else:
-                    for src, dest in [(v1_demo, v2_demo), (v1_metadata, v2_metadata)]:
-                        if repo.file_should_update(ctx.repo, src, dest):
-                            shutil.copy2(src, dest)
-                            updated_count += 1
-                            logger.info(f"Updated {dest.name} in {demo_name}")
-
-            except (OSError, shutil.Error) as e:
-                logger.error(f"Failed to process demo {demo_name}: {e}")
-                continue
-
-        logger.info(
-            f"Sync complete: {copied_count} demos copied, {updated_count} files updated"
-        )
-
-    except Exception as e:
-        logger.error(f"Sync failed: {e}")
         raise typer.Exit(1)
