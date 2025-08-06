@@ -162,7 +162,7 @@ qml build --format json demo_name
 
 ##### `--no-dev`
 
-Instructs the build process to use stable (release) versions of [PennyLane](https://docs.pennylane.ai/), [Catalyst](https://docs.pennylane.ai/projects/catalyst), [official plugins](https://pennylane.ai/devices), and other core dependencies.
+Instructs the build process to use stable (release) versions of [PennyLane](https://docs.pennylane.ai/), [Catalyst](https://docs.pennylane.ai/projects/catalyst), [official plugins](https://pennylane.ai/devices), and other core dependencies. This is the default build behaviour.
 
 ```bash
 qml build --no-dev demo_name
