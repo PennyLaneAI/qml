@@ -71,7 +71,6 @@ def compute_me_purities(op):
     return purities / (2**n)
 
 
-
 #####################################################################
 # functions to generate relevant quantum states
 
@@ -133,6 +132,7 @@ def plot_purities(states, labels):
     ax2.legend(loc='upper left')
     
     plt.tight_layout()
+    plt.savefig("/home/maria/Desktop/purities_truth.png")
     plt.show()
 
 
@@ -145,6 +145,9 @@ states = [
     w_state(n),
     haar_state(n)
 ]
+print(states[0])
+states = [np.outer(state.conj(), state) for state in states]
+print(states[0])
 
 labels = [
     "Product",

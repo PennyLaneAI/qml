@@ -259,6 +259,53 @@ print(np.allclose(P_F - np.diag(np.diagonal(P_F)), np.zeros((N,N)) ))
 # quantum states with simpler entanglement structures, or no entanglement at all like in the case of product states,
 # have simpler generalized Fourier spectra, where most of their purity resides in the lower-order "irreps"
 # (that we recall is short for irreducible representations, but you can think of them as generalized frequencies).
+# Here are a few examples that we will use below.
+#
+
+import math
+import functools
+
+def ghz_state(n: int):
+    """The |GHZ_n⟩ state vector for *n* qubits is famous for having maximal entanglement."""
+    psi = np.zeros(2 ** n)
+    psi[0] = 1 / math.sqrt(2)
+    psi[-1] = 1 / math.sqrt(2)
+    return psi
+
+
+def w_state(n: int):
+    """The |W_n⟩ state vector for *n* qubits ...."""
+    psi = np.zeros(2 ** n)
+    for q in range(n):
+        psi[2 ** q] = 1 / math.sqrt(n)
+    return psi
+
+
+def haar_state(n: int):
+    """A Haar random state vector for *n* qubits is likely to have an intermediate amount of entanglement."""
+    N = 2 ** n
+    # i.i.d. complex Gaussians
+    X = (np.random.randn(N, 1) + 1j * np.random.randn(N, 1)) / np.sqrt(2)
+    # QR on the N×1 “matrix” is just Gram–Schmidt → returns Q (N×1) and R (1×1)
+    Q, R = np.linalg.qr(X, mode='reduced')
+    # fix the overall phase so it’s uniformly distributed
+    phase = np.exp(-1j * np.angle(R[0, 0]))
+    return (Q[:, 0] * phase)
+
+
+def haar_product_state(n: int):
+    """A Haar random tensor product state of *n* qubits is maximally unentangled."""
+    states = [haar_state(1) for _ in range(n)]
+    return functools.reduce(lambda A, B: np.kron(A, B), states)
+
+
+n = 2
+states = [ghz_state(n), w_state(n), haar_state(n), haar_product_state(n)]
+# move to density matrices
+states = [np.outer(state.conj(), state) for state in states]
+labels = [ "Product", "GHZ", "W", "Haar"]
+
+#####################################################################
 # On the flip side, highly entangled states spread their purity across more and higher-order (i.e., larger dimensional) irreps,
 # similar to how more complex ("wiggly") functions have larger Fourier coefficients at higher frequencies.
 # This means that analyzing a state's Fourier spectrum can tell us how "resourceful" or entangled it is.
@@ -279,7 +326,6 @@ print(np.allclose(P_F - np.diag(np.diagonal(P_F)), np.zeros((N,N)) ))
 from scipy.stats import unitary_group
 from functools import reduce
 
-n = 2
 
 # create n haar random single-qubit unitaries
 Us = [unitary_group.rvs(dim=2) for _ in range(n)]
@@ -312,8 +358,6 @@ print(U_bdiag)
 #    into vectors :math:`|rho\rangle \rangle = \sum_i,j c_i,j |i\rangle |j\rangle \in H \otimes H^*`.
 #    For example:
 #
-
-n = 2
 
 # create a random quantum state
 psi = np.random.rand(2**n)
@@ -392,7 +436,7 @@ print(U_vec_diag)
 
 from collections import OrderedDict
 
-def group_rows_cols_by_sparsity(B, tol=0):
+def group_rows_cols_by_sparsity(mat, tol=0):
     """
     Given a matrix B, this function:
       1. Groups identical rows and columns.
@@ -402,7 +446,7 @@ def group_rows_cols_by_sparsity(B, tol=0):
 
     Parameters
     ----------
-    B : ndarray, shape (n, m)
+    mat : ndarray, shape (n, m)
         Input matrix.
 
     Returns
@@ -413,7 +457,7 @@ def group_rows_cols_by_sparsity(B, tol=0):
         Column permutation matrix.
     """
     # Compute boolean mask where |B| >= tol
-    mask = np.abs(B) >= 1e-8
+    mask = np.abs(mat) >= tol
     # Convert boolean mask to integer (False→0, True→1)
     C = mask.astype(int)
     n, m = C.shape
@@ -477,14 +521,71 @@ print(U_vec_diag)
 # The reordering made the block structure visible. You can check that any vectorised non-entangling matrix `U_vec`
 # has the same block structure if we change the basis via `Qinv @ U_vec @ Q`.
 #
-# But what basis have we actually changed into? It turns out that `Q` changes into the Pauli basis!
+# The next step is to
+# 5. **Identify basis for invariant subspaces**.
+#
+# [TRY: Rotate a vector into this basis and only summarise the entries]
+#
+_pauli_map = {
+    'I': np.array([[1,0],[0,1]],   dtype=complex),
+    'X': np.array([[0,1],[1,0]],   dtype=complex),
+    'Y': np.array([[0,-1j],[1j,0]],dtype=complex),
+    'Z': np.array([[1,0],[0,-1]],  dtype=complex),
+}
+factors = [_pauli_map[ch] for ch in 'IX']
+rho_P = functools.reduce(lambda A, B: np.kron(A, B), factors)
+rho_P = rho_P.flatten(order="F")
+rho_P = Q @ rho_P
+print("HERE", rho_P)
+
+
+# vectorise the states we defined earlier
+states_vec = [state.flatten(order='F') for state in states]
+
+
+
+# change into the block-diagonal basis
+states_vec = [Q @ state_vec for state_vec in states_vec]
+purities = [[np.vdot(state_vec[0], state_vec[0]),
+             np.vdot(state_vec[1:4], state_vec[1:4]),
+             np.vdot(state_vec[4:8], state_vec[4:8]),
+             np.vdot(state_vec[8:16], state_vec[8:16]),
+             ] for state_vec in states_vec ]
+
+
+
+# Grab default color cycle
+colors = plt.rcParams['axes.prop_cycle'].by_key()['color']
+
+# Create two vertically aligned subplots sharing the x-axis
+fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True, figsize=(8, 6))
+
+for i, data in enumerate(purities):
+    color = colors[i % len(colors)]
+    ax1.plot(data, label=f'{i}', color=color)
+    ax2.plot(np.cumsum(data), label=f'{i}', color=color)
+
+ax1.set_ylabel('Purity')
+ax2.set_ylabel('Cumulative Purity')
+ax2.set_xlabel('Module weight')
+
+ax1.legend(loc='upper left')
+ax2.legend(loc='upper left')
+
+plt.tight_layout()
+plt.savefig("/home/maria/Desktop/purities1.png")
+
+plt.show()
+
+
+###########################################################################
+# Bonus section
+# --------------
+#
+# But what basis have we actually changed into? It turns out that `Q` changes into the Pauli basis. We could have constructed
+# `Q` from first principles:
 #
 
-Qinv @ U_vec @ Q
-
-# We cheat here a little: we already know the basis in which :math:`\tilde{U}` is block-diagonal: the Pauli basis.
-# This allows us to construct the matrix implementing the basis change directly.
-#
 
 import functools
 import itertools
@@ -528,8 +629,118 @@ assert np.isclose(np.sum(U_vec_rot.imag), 0)
 print(np.round(U_vec_rot.real, 2))
 
 
-# 5. **Identify basis for invariant subspaces**. Will we now find interesting subspaces by simultaneously block-diagonalizing :math:`\tilde{R}`?
+
+######################################################################
+# The different blocks correspond to subspaces spanned by Pauli words with different structures:
 #
+# * The first block of size 1x1 corresponds to a subspace spanned by the Pauli word operator :math:`\mathbm{1} \otimes \mathbm{1}`.
+# * The second two blocks of size 4x4 corresponds to a subspace spanned by to Pauli word operators :math:`\mathbm{1} \otimes P_2` and :math:`P_1 \otimes \mathbm{1}`, where
+#   :math:`P_1, P_2 \in \{X, Y, Z\}`.
+# * The third block of size XxX corresponds to a subspace spanned by Pauli word operators of the form :math:`P_1 \otimes P_2`.
+#
+# In other words, we didn't need to vectorise everything and use linear algebra tools to compute the GFD purities. We could have
+# simply computed the inner product with the rigth set of Pauli operators in :math:`B(H)`:
+#
+
+def generate_pauli_strings(n: int):
+    """
+    Generate all length‑n strings over the Pauli alphabet ['I','X','Y','Z'].
+    Returns a list of 4**n strings, e.g. ['IIX', 'IXZ', …].
+    """
+    return [''.join(p) for p in itertools.product('IXYZ', repeat=n)]
+
+
+def pauli_string_to_matrix(pauli_str: str):
+    """
+    Convert a Pauli string (e.g. 'XIY') to its full 2^n × 2^n matrix.
+    """
+    mats = [_pauli_map[s] for s in pauli_str]
+    return functools.reduce(lambda A, B: np.kron(A, B), mats)
+
+
+# function to project into the modules
+def compute_me_purities(op):
+    """
+    Computes GFD purities of op (assumed to be np.matrix)
+    by explicitly computing overlaps with Paulis
+    """
+
+    if op.ndim == 1:
+        # state vector
+        is_vector = True
+    elif op.ndim == 2 and op.shape[0] == op.shape[1]:
+        # density/operator
+        is_vector = False
+    else:
+        raise ValueError("`op` must be either a 1D state vector or a square matrix")
+
+    d = op.shape[0]
+    n = int(np.log2(d))
+
+    basis = generate_pauli_strings(n)
+    purities = np.zeros(n + 1)
+    for belem in basis:
+        k = n - belem.count('I')
+        P = pauli_string_to_matrix(belem)
+
+        if is_vector:
+            ovp = op.conj() @ (P @ op)
+        else:
+            ovp = np.trace(op @ P)
+
+        #assert ovp.imag < 1e-10
+        purities[k] += (ovp.real) ** 2
+
+    return purities / (2 ** n)
+
+
+purities = [compute_me_purities(op) for op in states]
+
+# Grab default color cycle
+colors = plt.rcParams['axes.prop_cycle'].by_key()['color']
+
+# Create two vertically aligned subplots sharing the x-axis
+fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True, figsize=(8, 6))
+
+for i, data in enumerate(purities):
+    color = colors[i % len(colors)]
+    ax1.plot(data, label=f'{labels[i]}', color=color)
+    ax2.plot(np.cumsum(data), label=f'{labels[i]}', color=color)
+
+ax1.set_ylabel('Purity')
+ax2.set_ylabel('Cumulative Purity')
+ax2.set_xlabel('Module weight')
+
+ax1.legend(loc='upper left')
+ax2.legend(loc='upper left')
+
+plt.tight_layout()
+plt.savefig("/home/maria/Desktop/purities2.png")
+plt.show()
+
+"""
+# To illustrate this, we'll consider a few key examples:
+# * **Product state**: A "smooth" state with no entanglement. It shows high purity only in the lowest-order irreps, similar to a constant function in classical Fourier analysis.
+# * **GHZ state**: A highly structured, maximally entangled state. It behaves like a quantum analog of a high-frequency oscillation, having purity concentrated mostly in the highest-order irreps, creating a clear quantum fingerprint.
+# * **W state**: Moderately entangled, somewhat between the GHZ and product states, with a broader yet smoother distribution across the irreps.
+# * **Random (Haar) state**: Highly complex but without structured entanglement patterns, its purity is distributed more evenly across the spectrum.# In the code examples we'll show shortly, you'll see precisely these patterns emerge.
+# For each state, we compute the purity distribution across generalized Fourier modes (irreps), illustrating exactly how entanglement complexity relates to spectral structure.
+
+# # Here, show purity plots for these states as computed by the provided code
+
+# The fascinating aspect here is that while multipartite entanglement can get complex very quickly as we add qubits (due to the exponential increase in possible correlations),
+# our generalized Fourier analysis still provides a clear, intuitive fingerprint of a state's entanglement structure.
+# Even more intriguingly, just as smoothness guides how we compress classical signals (by discarding higher-order frequencies), the entanglement fingerprint suggests ways we might compress quantum states,
+# discarding information in higher-order irreps to simplify quantum simulations and measurements.
+# In short, generalized Fourier transforms allow us to understand quantum complexity, much like classical Fourier transforms give insight into smoothness.
+# By reading a state's quantum Fourier fingerprint, we gain a clear window into the subtle quantum world of multipartite entanglement.
+
+
+"""
+
+
+
+
 
 
 #
