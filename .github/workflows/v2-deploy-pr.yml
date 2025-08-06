@@ -93,28 +93,29 @@ jobs:
   
 
   # Step 3: Create a comment on the PR with the demo links
+  # If build is successful, generate a comment with the demo link.
+  # If build fails, generate a comment indicating the failure.
   generate-comment:
     if: github.event.workflow_run.event == 'pull_request' && needs.prepare-build-context.outputs.pr_id != ''
     runs-on: ubuntu-latest
-    needs: prepare-build-context
+    needs: [prepare-build-context, deploy-preview-demos]
     steps:
-      - name: Create markdown comment from demo names
+      - name: Generate Markdown Comment for Successful Deployment
+        if: needs.deploy-preview-demos.result == 'success'
         id: generate-markdown
         run: |
-          demos="${{ needs.prepare-build-context.outputs.updated_demos }}"
-          
-          comment="### Preview(s) are ready! :tada:\n"
-          comment+="You can view the landing page preview [here](https://pennylane.ai/qml/demonstrations?pr=${{ needs.prepare-build-context.outputs.pr_id }})\n\n"
-          comment+="Or the individual demos below:\n\n"
-          comment+="<details>\n"
-          comment+="<summary>Toggle to view preview links</summary>\n"
-          comment+="\n"
-          for demo in $demos; do
-            comment+="- [$demo](https://pennylane.ai/qml/demos/$demo?pr=${{ needs.prepare-build-context.outputs.pr_id }})\n"
-          done
-      
-          comment+="\n"
-          comment+="</details>"
+          comment="### Your preview is ready :tada:!\n\n"
+          comment+="You can view your changes [here](https://pennylane.ai/qml/demonstrations?pr=${{ needs.prepare-build-context.outputs.pr_id }})\n\n"
+
+          echo "markdown=$comment" >> $GITHUB_OUTPUT
+
+      - name: Generate Markdown Comment for Failed Deployment
+        if: needs.deploy-preview-demos.result != 'success'
+        id: generate-failure-markdown
+        run: |
+          comment="### Deployment failed :x:\n\n"
+          comment+="There was an issue deploying your changes. Please check the related `v2-deploy-pr` logs for more details.\n\n"
+          comment+="If you need assistance, please reach out to the team.\n\n"
 
           echo "markdown=$comment" >> $GITHUB_OUTPUT
 

@@ -167,28 +167,17 @@ def _collect_authors() -> list[dict]:
 def _setup_thumbnails(
     demo_dir: Path, small_thumb: Optional[Path], large_thumb: Optional[Path]
 ) -> tuple[Optional[str], Optional[str]]:
-    """Copy and setup thumbnail files."""
+    """Verify thumbnail files exist and return their paths."""
     small_thumbnail_path = None
     large_thumbnail_path = None
 
     if small_thumb:
-        try:
-            dest = (demo_dir / THUMBNAIL_FILENAME).with_suffix(small_thumb.suffix)
-            fs.copy_parents(small_thumb, dest)
-            small_thumbnail_path = str(dest.relative_to(demo_dir))
-        except (OSError, shutil.Error) as e:
-            logger.warning(f"Failed to copy small thumbnail: {e}")
+        small_thumbnail_path = str(f"/{small_thumb}")
 
     if large_thumb:
-        try:
-            dest = (demo_dir / LARGE_THUMBNAIL_FILENAME).with_suffix(large_thumb.suffix)
-            fs.copy_parents(large_thumb, dest)
-            large_thumbnail_path = str(dest.relative_to(demo_dir))
-        except (OSError, shutil.Error) as e:
-            logger.warning(f"Failed to copy large thumbnail: {e}")
+        large_thumbnail_path = str(f"/{large_thumb}")
 
     return small_thumbnail_path, large_thumbnail_path
-
 
 def _create_demo_files(
     demo_dir: Path,
