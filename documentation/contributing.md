@@ -4,126 +4,177 @@ This document provides comprehensive guidelines for contributing to the PennyLan
 
 ## Table of Contents
 
-*   [Getting Started](#getting-started)
-*   [Creating and Adding a New Demo](#creating-and-adding-a-new-demo)
-    *   [General Guidelines](#general-guidelines)
-    *   [Image Guidelines](#image-guidelines)
-    *   [Metadata Guidelines](#metadata-guidelines)
-    *   [Tutorial Content Guidelines](#tutorial-content-guidelines)
-*   [Dependency Management](#dependency-management)
-*   [Building and Testing Locally](#building-and-testing-locally)
-*   [Support](#support)
-*   [License](#license)
-
----
+- [Getting Started](#getting-started)
+  - [Cloning or Forking the Repository](#cloning-or-forking-the-repository)
+  - [Creating a New Demo](#creating-a-new-demo)
+    - [Using the QML CLI Tool](#using-the-qml-cli-tool)
+    - [Manually Creating a Demo](#manually-creating-a-demo)
+- [Tutorial Content Guidelines](#tutorial-content-guidelines)
+- [General Guidelines](#general-guidelines)
+- [Image Guidelines](#image-guidelines)
+  - [File Size and Format](#file-size-and-format)
+  - [Dimensions](#dimensions)
+- [Metadata Guidelines](#metadata-guidelines)
+  - [Example `metadata.json` Structure](#example-metadatajson-structure)
+  - [Validate Your Metadata File](#validate-your-metadata-file)
+- [Dependency Management](#dependency-management)
+- [Building and Testing Locally](#building-and-testing-locally)
+  - [Building a Demo in HTML Format](#building-a-demo-in-html-format)
+  - [Building a Demo in JSON Format](#building-a-demo-in-json-format)
+- [Support](#support)
+- [License](#license)
 
 ## Getting Started
 
-To contribute to the QML demonstrations, begin by forking and cloning the QML repository. All contributions should be made by opening a pull request against the `master` branch.
+### Cloning or Forking the Repository
 
-Ensure you have the necessary tools installed, including Python and the QML CLI tool. Refer to the [QML CLI README for installation instructions](/documentation/qml-cli.md#installation). Once installed, you can create a new demo using the [`qml new` command](#creating-and-adding-a-new-demo).
+To contribute to PennyLane demonstrations, begin by forking and cloning the QML repository. All contributions should be made by opening a pull request against the `master` branch (for stable versions) or the `dev` branch (for the latest features from PennyLane, Catalyst, and other plugins).
 
-## Creating and Adding a New Demo
+### Creating a New Demo
 
-To create a new demonstration, use the QML CLI tool's [`new` command](/documentation/qml-cli.md#new). This command will guide you through the initial setup.
+There are multiple ways to create a new demo. The recommended method is to use the QML CLI tool, which provides a structured way to set up your demo environment and ensures that all necessary files are created.
 
-### General Guidelines
+#### Using the QML CLI Tool
 
-*   **Format:** Demos are written as executable Python scripts.
-    *   Packages listed in `dependencies/requirements-core.in` are available to all demos by default. Additional dependencies can be specified in a `requirements.in` file within the demo's directory. See [Dependency Management](#dependency-management) for more details.
-    *   Matplotlib plots will be automatically rendered and displayed on the [PennyLane website](https://pennylane.ai/qml/demonstrations).      
-    *   **Execution Time:** Aim to keep the execution time of your script under 10 minutes.
-*   **Jupyter Notebook Conversion:** If you prefer writing your demo in a Jupyter notebook, you can convert it to the required executable Python format by following the [QML Notebook to Demo Converter](https://github.com/PennyLaneAI/qml/tree/master/notebook_converter).
-*   **Naming Convention:** All demo directories must begin with `tutorial_`. They are saved in the `demonstrations_v2` directory. For example: `demonstrations_v2/tutorial_my_demo`.
-*   **Frameworks:** New demos should avoid using `autograd` or `TensorFlow`. `JAX` and `PyTorch` are recommended instead. Whenever possible, the use of `lightning.qubit` is also encouraged.
-*   **Restructured Text (ReST):** Restructured Text sections can be included anywhere within the script by beginning the comment with 79 hash characters (`#`). These are useful for breaking up large code blocks and providing extensive explanations.
-*   **LaTeX Macros:** Avoid using LaTeX macros within your comments. Even if they appear to work in development, they will not be displayed correctly once the demo is published.
-*   **Author Information:** Include the author's information in the metadata.json file. See the metadata guidelines below.
-*   **End Marker:** Always conclude your demo script with the following line:
+To create a new demonstration, use the QML CLI tool's [`new` command](/documentation/qml-cli.md#new). This command will guide you through the initial setup. You will be prompted to provide a title, a custom directory name, a description, and the author's username. Optionally, you can add thumbnail images for the demo.
+
+To make a demo executable, ensure that the directory name starts with `tutorial_` (legacy), or set the `executable_stable` or `executable_latest` flag to `true` in the metadata.json file.
+
+```bash
+❯ qml new
+Title: Your demo title
+Custom directory name [your_demo_title]: your_demo_directory_name
+Description []: A description of the demo you are creating
+Author's pennylane.ai username: author_username
+Would you like to add another author? [y/N]: n
+Thumbnail image [_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_placeholder.png]: 
+Large thumbnail image []: 
+```
+
+#### Manually Creating a Demo
+
+If you prefer to set up your demo manually, follow these steps:
+
+1. **Create a New Directory:** Create a new directory within the `demonstrations_v2` folder. The directory name must start with `tutorial_` unless the metadata includes either the `executable_stable` or `executable_latest` flag set to `true`. All demos are saved in the `demonstrations_v2` directory. For example: `demonstrations_v2/tutorial_my_demo`.
+
+2. **Add Required Files:** At a minimum, your demo directory should contain:
+   - `demo.py`: The main executable Python script for your demo.
+   - `metadata.json`: A JSON file containing metadata about your demo (see [Metadata Guidelines](#metadata-guidelines) for details).
+   - `requirements.in` (optional): A file listing any additional dependencies required by your demo (see [Dependency Management](#dependency-management) for details).
 
 
-    ```python
-    ##############################################################################
-    # About the author
-    # ----------------
-    #
-    ```
+## Tutorial Content Guidelines
 
-*   **Code Formatting:** Before submitting, run your script through the [Black Python formatter](https://github.com/psf/black):
+While you are encouraged to be creative with your demo, please keep the following guidelines in mind:
+
+- **License:** All contributions must be made under the Apache 2.0 license.
+- **Title:** The title should be clear and concise. If based on a research paper, the title should be similar to the paper being implemented.
+- **Summary:** All demos should include a 1-3 sentence summary below the title. This summary should clearly state the goal and outcome of the demo and link to any relevant papers or resources used.
+- **Code Clarity:** Code should be clearly commented and explained, either through ReST-formatted comments or standard Python comments.
+- **Reproducibility:** If your content involves random variables or outputs, a fixed seed should be set for reproducibility.
+- **Originality:** All content must be original or free to reuse subject to license compatibility. For example, if you are implementing someone else's research, obtain permission before reproducing exact figures. Otherwise, avoid direct screenshots from papers and instead refer to figures in the paper within the text.
+- **Code Review:** All submissions must pass code review before being merged into the repository.
+- **Branching:** If your demo uses the latest stable release of PennyLane, submit your PR against the `master` branch. If it requires cutting-edge development versions of PennyLane or relevant plugins, submit your PR against the `dev` branch instead.
+- **Privacy:** By submitting your demo, you consent to our [Privacy Policy](https://pennylane.ai/privacy/).
+
+
+## General Guidelines
+
+- **Format:** Demos are written as executable Python scripts.
+- **Jupyter Notebook Conversion:** If you prefer writing your demo in a Jupyter notebook, you can convert it to the required executable Python format by following the [QML Notebook to Demo Converter](https://github.com/PennyLaneAI/qml/tree/master/notebook_converter).
+- **Naming Convention:** All demo directories must begin with `tutorial_` and are saved in the `demonstrations_v2` directory. For example: `demonstrations_v2/tutorial_my_demo`.
+- **Frameworks:** New demos should avoid using `autograd` or `TensorFlow`. `JAX` and `PyTorch` are recommended instead. Whenever possible, the use of `lightning.qubit` is also encouraged.
+- **Restructured Text (ReST):** ReST sections can be included anywhere within the script by beginning the comment with 79 hash characters (`#`). These are useful for breaking up large code blocks and providing extensive explanations.
+- **LaTeX Macros:** Avoid using LaTeX macros within your comments. Even if they appear to work in development, they will not be displayed correctly once the demo is published.
+- **Author Information:** Include the author's information in the metadata.json file. See the metadata guidelines below.
+- **Code Formatting:** Before submitting, run your script through the [Black Python formatter](https://github.com/psf/black):
 
     ```bash
     pip install black
-    black -l 100 /path/to/your/demo.py
+    black -l 100 /demonstrations_v2/tutorial_your_demo/demo.py
     ```
 
-### Image Guidelines
+## Image Guidelines
 
-You may add figures within ReST comments using the following syntax:
+### File Size and Format
 
-```python
-##############################################################################
-#.. figure:: ../_static/demonstration_assets/<demo name>/image.png
-#    :align: center
-#    :width: 90%
+- Always optimize images for web use. Aim for a file in kilobytes (KB) rather than megabytes (MB).
+- Use `.png` for all static images (decorative, descriptive, logos, etc.).
+- Use `.gif` for animated images.
+
+### Dimensions
+
+- To maintain quality and performance, every image should be twice (2X) its visible dimension size on the web page, and at a minimum of `150 ppi/dpi` (preferably `300 ppi/dpi`).
+
+## Metadata Guidelines
+
+Every demo requires an accompanying `metadata.json` file located in its directory. This JSON file stores crucial information about the demo. Refer to [this example](https://github.com/PennyLaneAI/qml/blob/master/demonstrations_v2/tutorial_here_comes_the_sun/metadata.json) for the required fields:
+
+- **Filename:** Ensure the file is named `metadata.json`.
+- **Authors:** Ensure that the `"authors"` field is populated with the `"username"` of the author(s) as registered on pennylane.ai. This should match the username provided when creating the bio.
+- **`executable_stable` and `executable_latest`:** Set either of these fields to `true` if your demo is executable with the stable or latest versions of PennyLane, respectively. If neither field is set to `true`, the demo directory name must start with `tutorial_` to be executable.
+- **Dates:** Leave publication and modification dates empty if you do not know them or use UTC format (e.g., `"2023-10-01T12:00:00Z"`).
+- **Categories:** Choose relevant categories for your demo, such as `"Getting Started"`.
+- **`previewImages`:** Modify the final part of the image file names to match your demo's name. These two images will be provided to you once the review process begins. After receiving them, you must upload them to the address indicated in the metadata.
+- **`relatedContent`:** This field refers to demos related to yours. You will need to include the corresponding `id` and set the `weight` to `1.0`.
+- **Questions:** If you have any doubts about a specific field, do not hesitate to post a comment for your demo's reviewer.
+
+### Example `metadata.json` Structure
+
+```json
+{
+    "title": "Your Demo Title",
+    "description": "A brief description of your demo.",
+    "authors": [
+        {
+            "username": "author_username"
+        }
+    ],
+    "executable_stable": true,
+    "executable_latest": true,
+    "dateOfPublication": "",
+    "dateOfLastModification": "",
+    "categories": [
+        "Quantum Computing"
+    ],
+    "tags": [],
+    "previewImages": [
+        "_static/demonstration_assets/your_demo_name/your_demo_name_thumbnail.png",
+        "_static/demonstration_assets/your_demo_name/your_demo_name_large_thumbnail.png"
+    ],
+    "relatedContent": [
+        {
+            "id": "related_demo_id",
+            "weight": 1.0
+        }
+    ],
+    "basedOnPapers": [
+        "10.48550/arXiv.XXXX.XXXXX"
+    ],
+    "basedOnPapersDetailed": [
+        {
+            "doi": "10.48550/arXiv.XXXX.XXXXX",
+            "title": "Title of the paper",
+            "authors": "Author One, Author Two, Author Three",
+            "year": "2023",
+            "url": "https://arxiv.org/pdf/XXXX.XXXXX"
+        }
+    ],
+    "referencedByPapers": [],
+    "referencesAndFurtherReading": []
+}
 ```
 
-Here, `<demo name>` refers to a subdirectory within `_static/demonstration_assets/` named after your demo.
-
-<details>
-  <summary><b>Follow these standards when adding images:</b></summary>
-
-  ### File Size
-
-  *   Always aim to keep image file sizes in kilobytes (KB).
-  *   Always compress images to the best possible size where quality remains acceptable.
-
-  ### Formats
-
-  *   Use `.png` for all static images (decorative, descriptive, logos, etc.).
-  *   Use `.gif` for animated images.
-
-  ### Dimensions
-
-  *   To maintain quality and performance, every image should be twice (2X) its visible dimension size on the web page, and at a minimum of `150 ppi/dpi` (preferably `300 ppi/dpi`).
-</details>
-<br>
-
-### Metadata Guidelines
-
-Every demo requires an accompanying `metadata.json` file located in its directory. This JSON file stores crucial information about the demo. Refer to [this example](https://github.com/PennyLaneAI/qml/blob/master/demonstrations/tutorial_here_comes_the_sun.metadata.json) for the required fields:
-
-*   **Filename:** Ensure the file is named `metadata.json`.
-*   **Author ID:** The "username" of the author should match the one chosen when creating the bio.
-*   **Dates:** Leave publication and modification dates empty if you do not know them.
-*   **Categories:** Choose relevant categories for your demo, such as: `"Getting Started"`, `"Optimization"`, `"Quantum Machine Learning"`, `"Quantum Chemistry"`, `"Devices and Performance"`, `"Quantum Computing"`, `"Quantum Hardware"`, `"Algorithms"`, or `"How-to"`. You may select multiple categories.
-*   **`previewImages`:** Simply modify the final part of the image file names to match your demo's name. These two images will be provided to you once the review process begins. After receiving them, you must upload them to the address indicated in the metadata.
-*   **`relatedContent`:** This field refers to demos related to yours. You will need to include the corresponding `id` and set the `weight` to `1.0`.
-*   **Questions:** If you have any doubts about a specific field, do not hesitate to post a comment for your demo's reviewer.
-
-**Validate your metadata file:**
+### Validate Your Metadata File
 
 ```bash
 pip install check-jsonschema 'jsonschema[format]'
 check-jsonschema \
   --schemafile metadata_schemas/demo.metadata.schema.<largest_number>.json \
-  demonstrations/<your_demo_name>.metadata.json
+  demonstrations_v2/<your_demo_name>/metadata.json
 ```
 
 Once your script and metadata are ready, you can submit a pull request!
-
-### Tutorial Content Guidelines
-
-While you are encouraged to be creative with your demo, please keep the following guidelines in mind:
-
-*   **License:** All contributions must be made under the Apache 2.0 license.
-*   **Title:** The title should be clear and concise. If based on a research paper, the title should be similar to the paper being implemented.
-*   **Summary:** All demos should include a 1-3 sentence summary below the title. This summary should clearly state the goal and outcome of the demo and link to any relevant papers or resources used.
-*   **Code Clarity:** Code should be clearly commented and explained, either through ReST-formatted comments or standard Python comments.
-*   **Reproducibility:** If your content involves random variables or outputs, a fixed seed should be set for reproducibility.
-*   **Originality:** All content must be original or free to reuse subject to license compatibility. For example, if you are implementing someone else's research, obtain permission before reproducing exact figures. Otherwise, avoid direct screenshots from papers and instead refer to figures in the paper within the text.
-*   **Code Review:** All submissions must pass code review before being merged into the repository.
-*   **Branching:** If your demo uses the latest stable release of PennyLane, submit your PR against the `master` branch. If it requires cutting-edge development versions of PennyLane or relevant plugins, submit your PR against the `dev` branch instead.
-*   **Privacy:** By submitting your demo, you consent to our [Privacy Policy](https://pennylane.ai/privacy/).
 
 ## Dependency Management
 
@@ -131,26 +182,47 @@ Demo dependencies are automatically installed by the `qml` tool during demo exec
 
 ## Building and Testing Locally
 
-To build and execute demos locally, use the following `qml` command:
+You can build and test PennyLane demos locally using the QML CLI tool, allowing you to preview your demo before submitting it for review.
+
+> **Note:** Local HTML builds will differ visually from the production site or PR previews. These differences are expected; local builds are intended for functional testing rather than visual accuracy.
+
+If you do not specify a `--format` option, the demo will be built in JSON format by default.
+
+### Building a Demo in HTML Format
+
+To build your demo in HTML format, navigate to the root directory of your demo and run:
 
 ```bash
-qml build --execute <demo_name(s)>
+qml build --format html
 ```
 
-To build demos using development dependencies:
+The generated HTML file will be located at:
+
+```
+_build/html/demos/<name_of_your_tutorial>.html
+```
+
+Open this file in your web browser to view the demo content.
+
+### Building a Demo in JSON Format
+
+To build your demo in JSON format, use:
 
 ```bash
-qml build --execute --dev <demo_name>
+qml build --format json <demo_name>
 ```
 
-For more details on building options, run `qml build --help`.
+The output will be generated in the following directories:
 
-You can view the built demo in your browser by navigating to the URL: `_build/html/demos/<name of your tutorial>.html`. This requires you to first build the HTML output.
+- `_build/json/demos/<name_of_your_tutorial>/json` (contains various JSON and FJSON files)
+- `_build/json/demos/<name_of_your_tutorial>/pack` (contains a Jupyter notebook `.ipynb`, a Python script `.py`, and other related files)
+
+> **Note:** You may also add the `--execute` option to execute the demo during the build process.
 
 ## Support
 
-*   **Source Code:** https://github.com/PennyLaneAI/QML
-*   **Issue Tracker:** https://github.com/PennyLaneAI/QML/issues
+- **Source Code:** https://github.com/PennyLaneAI/QML
+- **Issue Tracker:** https://github.com/PennyLaneAI/QML/issues
 
 If you encounter any issues, please report them on our GitHub issue tracker.
 
