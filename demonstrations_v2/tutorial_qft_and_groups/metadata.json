@@ -5,6 +5,8 @@
             "username": "mariaschuld"
         }
     ],
+    "executable_stable": true,
+    "executable_latest": true,
     "dateOfPublication": "2025-07-30T10:00:00+00:00",
     "dateOfLastModification": "2025-07-30T10:00:00+00:01",
     "categories": [
