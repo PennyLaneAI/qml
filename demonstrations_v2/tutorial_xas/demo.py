@@ -124,7 +124,7 @@ The circuit we will construct to determine the expectation values is shown above
 - *Measurement*, the time-evolved state is measured to obtain statistics for the expectation value.
 
 Let’s look at how to implement these steps in PennyLane. 
-We will make extensive use of the ``qml.qchem`` module, as well as initial state preparation methods from `PySCF <https://pyscf.org/>`__. 
+We will make extensive use of the :mod:`pennylane.qchem` module, as well as initial state preparation methods from `PySCF <https://pyscf.org/>`__. 
 
 State preparation
 -----------------
@@ -161,7 +161,7 @@ hf.run(verbose=0)
 
 ######################################################################
 # Since we will be using PennyLane for other aspects of this calculation, we want to make sure the molecular orbital coefficients are consistent between our PennyLane and PySCF calculations. 
-# To do this, we can obtain the molecular orbital coefficients from PennyLane using the ``hartree_fock.scf`` method of ``qchem``, and change the coefficients in the ``hf`` instance to match.
+# To do this, we can obtain the molecular orbital coefficients from PennyLane using :func:`~.pennylane.qchem.scf`, and change the coefficients in the ``hf`` instance to match.
 
 import pennylane as qml
 
@@ -198,7 +198,7 @@ casci_state[abs(casci_state) < 1e-6] = 0
 
 ######################################################################
 # To implement this state as a PennyLane state vector, we need to convert the ``casci_state`` into a format that is easy to import into PennyLane. 
-# One way to do this is to use a sparse matrix representation to turn ``casci_state`` into a dictionary, and then use ``qml.qchem.convert.import_state`` to import into PennyLane. 
+# One way to do this is to use a sparse matrix representation to turn ``casci_state`` into a dictionary, and then use :funf:`~pennylane.qchem.convert.import_state` to import into PennyLane. 
 # Here is how you can turn a full-configuration interaction matrix like ``casci_state`` into a dictionary.
 
 from scipy.sparse import coo_matrix
@@ -220,8 +220,8 @@ strs_col = addrs2str(n_cas_b, n_electron_cas_b, col)
 wf_casci_dict = dict(zip(list(zip(strs_row, strs_col)), dat))
 
 ######################################################################
-# Lastly, we will use the helper function ``_sign_chem_to_phys`` to adjust the sign of state components to match what they should be for the PennyLane orbital occupation number ordering. 
-# Then, we can import the state into PennyLane using ``_wf_dict_to_statevector``.
+# Lastly, we will use the helper function :func:`~.pennylane.qchem.convert._sign_chem_to_phys` to adjust the sign of state components to match what they should be for the PennyLane orbital occupation number ordering. 
+# Then, we can import the state into PennyLane using :func:`~.pennylane.qchem.convert._wfdict_to_statevector`.
 #
 # .. admonition:: Chemists' and physicists' notation for ordering spin orbitals
 #     :class: note
@@ -229,7 +229,7 @@ wf_casci_dict = dict(zip(list(zip(strs_row, strs_col)), dat))
 #     In general, states from computation chemistry workflows will have spin orbitals ordered in chemists' notation, such that all of one spin is on the left, and the other on the right. 
 #     PennyLane uses the physicists' notation, where the spatial orbitals are ordered, and the spins alternate up and down. 
 #     When changing a state from one convention to the next, the sign of some state amplitudes need to change to adhere to the Fermionic anticommutation rules. 
-#     The helper function ``_sign_chem_to_phys`` does this sign adjustment for us.
+#     The helper function :func:`~.pennylane.qchem.convert._sign_chem_to_phys` does this sign adjustment for us.
 
 from pennylane.qchem.convert import _sign_chem_to_phys, _wfdict_to_statevector
 
@@ -243,11 +243,11 @@ wf_casci = _wfdict_to_statevector(wf_casci_dict, n_cas)
 # ~~~~~~~~~~~~~~~~~~~~~~
 #
 # The electromagnetic field of the incident X-rays can excite the electronic state through the `dipole operator <https://en.wikipedia.org/wiki/Transition_dipole_moment>`__. 
-# The action of this operator is implemented in PennyLane as ``qml.qchem.dipole_moment``. 
+# The action of this operator is implemented in PennyLane as :func:`~pennylane.qchem.dipole_moment`. 
 # We can calculate that operator, convert it to a matrix, and apply it to our initial state :math:`|I\rangle` to obtain :math:`\hat m_\rho|I\rangle`.
 #
 # To generate this operator, we have to specify which molecular orbitals are in our active space. 
-# We can obtain the indices of the included and excluded orbitals using ``qml.qchem.active_space`` to obtain the lists ``active`` and ``core``, respectively.
+# We can obtain the indices of the included and excluded orbitals using :func:`~pennylane.qchem.active_space` to obtain the lists ``active`` and ``core``, respectively.
 #
 # The action of the dipole operator will be split into the three cartesian directions :math:`\{x, y, z\}`, which we will loop over to obtain the states :math:`\hat m_{\{x,y,z\}}|I\rangle`.
 
@@ -323,7 +323,7 @@ def initial_circuit(wf):
 #
 # where :math:`a^{(\dagger)}_{p\gamma}` is the annihilation (creation) operator for a molecular orbital :math:`p` with spin :math:`\gamma`, :math:`E` is the nuclear core constant, :math:`N` is the number of spatial orbitals, and :math:`(p|\kappa|q)` and :math:`(pq|rs)` are the one- and two-electron integrals, respectively [#Cohn2021]_.
 #
-# The core constant and the one- and two-electron integrals can be computed in PennyLane using ``qml.qchem.electron_integrals``.
+# The core constant and the one- and two-electron integrals can be computed in PennyLane using :func:`~pennylane.qchem.electron_integrals`.
 
 core_constant, one, two = qml.qchem.electron_integrals(mole, core=core, active=active)()
 core_constant = core_constant[0]
@@ -340,7 +340,7 @@ one_chemist = one - np.einsum("pqrr->pq", two) / 2.0
 # .. math:: (pq|rs) \approx \sum_{\ell=1}^L \sum_{k, m=1}^N U_{pk}^{(\ell)}U_{qk}^{(\ell)}Z_{km}^{(\ell)}U_{rm}^{(\ell)}U_{sm}^{(\ell)}\,,
 # 
 # where :math:`Z^{(\ell)}` is symmetric and :math:`U^{(\ell)}` is orthogonal. 
-# These matrices can be calculated using PennyLane’s ``qml.qchem.factorize`` function, with ``compressed=True``. 
+# These matrices can be calculated using PennyLane’s :func:`~pennylane.qchem.factorize` function, with ``compressed=True``. 
 # By default, :math:`L` is set as twice the number of orbitals in our active space. 
 # The ``Z`` and ``U`` output here are arrays of :math:`L` fragment matrices with dimension :math:`n_\mathrm{cas} \times n_\mathrm{cas}`.
 
@@ -400,7 +400,7 @@ Z0 = np.diag(eigenvals)
 #    Figure 4: One- and two-electron fragment implementations in the time-evolution circuit (ignoring global phases). 
 #    Basis rotations are applied to both spin sections of the register.
 #
-# We can use ``qml.BasisRotation`` to generate a `Givens decomposition <https://pennylane.ai/qml/demos/tutorial_givens_rotations>`__ for the single-particle basis rotation determined by :math:`U^{(\ell)}`. 
+# We can use :class:`~pennylane.BasisRotation` to generate a `Givens decomposition <https://pennylane.ai/qml/demos/tutorial_givens_rotations>`__ for the single-particle basis rotation determined by :math:`U^{(\ell)}`. 
 # We will have to do this for both spin-halves of the register.
 
 def U_rotations(U, control_wires):
@@ -422,7 +422,7 @@ def U_rotations(U, control_wires):
 #    Figure 5: Double-phase trick to decompose expensive controlled-Z rotations into an uncontrolled-Z rotation sandwiched by CNOT gates.
 #
 # For the one-electron terms, we loop over both the spin and orbital indices, and apply the Z rotations using this double-phase trick. 
-# The two-electron fragments are implemented the same way, except the two-qubit rotations use ``qml.MultiRZ``.
+# The two-electron fragments are implemented the same way, except the two-qubit rotations use :class:`~pennylane.MultiRZ`.
 
 from itertools import product
 
@@ -502,8 +502,8 @@ def first_order_trotter(step, prior_U, final_rotation, reverse=False):
 
 
 ###################################################################### 
-# Our function ``second_order_trotter`` implements a second-order Trotter step, returning a ``QNode``. 
-# The returned circuit applies ``StatePrep`` to prepare the register in the previous quantum state, and then two ``first_order_trotter`` evolutions for time ``step/2`` so that the total step size is ``step``.
+# Our function ``second_order_trotter`` implements a second-order Trotter step, returning a :class:`~pennylane.QNode`. 
+# The returned circuit applies :class:`~pennylane.StatePrep` to prepare the register in the previous quantum state, and then two ``first_order_trotter`` evolutions for time ``step/2`` so that the total step size is ``step``.
 
 
 def second_order_trotter(dev, state, step):
@@ -528,7 +528,7 @@ def second_order_trotter(dev, state, step):
 # -----------
 #
 # To measure the expectation value of the time evolution operator, we use a Hadamard test circuit. 
-# Using ``qml.StatePrep`` to set the state as it was returned by the time evolution, we can then measure both the real and imaginary expectation values using ``qml.expval`` for operators ``PauliX`` and ``PauliY``, respectively.
+# Using :class:`~pennylane.StatePrep` to set the state as it was returned by the time evolution, we can then measure both the real and imaginary expectation values using :func:`~pennylane.expval` for operators :class:`~pennylane.PauliX` and :class:`~pennylane.PauliY`, respectively.
 
 
 def meas_circuit(state):
