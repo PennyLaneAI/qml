@@ -12,7 +12,7 @@ The **QML CLI tool** streamlines the creation, testing, and building of PennyLan
     *   [`help`](#help)
     *   [`new`](#new)
     *   [`build`](#build)
-        *   [Build Flags](#build-flags)
+    *   [Build Flags](#build-flags)
 *   [Viewing Build Outputs](#viewing-build-outputs)
 *   [Support](#support)
 *   [License](#license)
