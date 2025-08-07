@@ -20,13 +20,13 @@ The **QML CLI tool** streamlines the creation, testing, and building of PennyLan
 
 ## Installation
 
-To install the QML CLI, you will need Python version `3.10`. We highly recommend using a virtual environment to install the CLI tool to manage dependencies effectively.
+To install the QML CLI, you will need Python version `3.11` or later. We highly recommend using a virtual environment to install the CLI tool to manage dependencies effectively.
 
 ### MacOS/Linux Installation Steps
 
 ```bash
 # Step 1. Create a virtual environment (optional but highly recommended)
-python3.10 -m venv .venv
+python3.11 -m venv .venv
 
 # Step 2. Activate the virtual environment
 source .venv/bin/activate
@@ -179,28 +179,7 @@ qml build --dev demo_name
 
 ## Viewing Build Outputs
 
-### Viewing Built Demonstrations (HTML Output)
-
-If you have built the HTML output, you can view the demonstration in any web browser. The generated files will be located in the `_build/html/demos/<demo_name>/` directory upon successful completion of the build. Note that any changes made to the source files will require a rebuild to be reflected in the HTML output.
-
-Example:
-
-```bash
-# Open the built demonstration in your default web browser (replace `my_demo` with your demo name)
-open _build/html/demos/my_demo/my_demo.html
-```
-
-### Viewing Built Demonstrations (JSON Output)
-
-If you have built the JSON output, you can inspect the demonstration's structured data using a JSON viewer or editor. The JSON files will be found in the `_build/json/demos/<demo_name>/` directory after the build is complete. Similar to HTML, any source changes necessitate a rebuild.
-
-Example:
-
-```bash
-# Open the directory containing all JSON files for the demonstration.
-open _build/json/demos/my_demo/
-```
-
+You can view the demonstration in any web browser. Upon successful completion of the build, the generated files will be located in the `_build/html/demos/<demo_name>/` directory if you built html, or in `_build/pack/<demo_name>/` if you built json. Note that any changes made to the source files will require a rebuild to be reflected in the output. Also note that the majority of the styling, including rendering of any math, will not be included in the local build.
 
 ## Support
 

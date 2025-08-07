@@ -23,7 +23,7 @@ The following files define the various dependency sets:
 
 ### `constraints-dev.txt`
 
-This file specifies the exact dependency versions used for building and running demonstrations when targeting the most recent **development builds** of PennyLane and its associated plugins. This ensures compatibility with cutting-edge features and ongoing development.
+This file specifies the allowed versions of dependencies for building and running demonstrations when targeting the most recent **development builds** of PennyLane and its associated plugins. The actual dependencies are defined in the requirements files; the constraints file only restricts which versions can be installed. This ensures compatibility with cutting-edge features and ongoing development.
 
 *   **Location:** `./constraints-dev.txt`
 *   **Purpose:** Defines dependencies for the `qml build --dev` command.
@@ -44,7 +44,7 @@ This file lists the dependencies specifically required for the build process of 
 
 ### `requirements-core.in`
 
-This file specifies the fundamental execution dependencies that are automatically installed and available to **all** PennyLane demonstrations by default. Demos can then specify additional, unique dependencies in their individual `requirements.in` files within their respective demo directories.
+This file specifies the fundamental execution dependencies that are automatically installed and available to **all** QML demonstrations by default. If you are contributing a new demo, it is unlikely that you will need to modify this file. Additional dependencies, unique to a specific demo, can be specified in the individual `requirements.in` files within the respective demo directories.
 
 *   **Location:** `./requirements-core.in`
 *   **Purpose:** Defines baseline dependencies for all demos.
