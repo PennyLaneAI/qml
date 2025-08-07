@@ -5,6 +5,8 @@
             "username": "Diego"
         }
     ],
+    "executable_stable": true,
+    "executable_latest": true,
     "dateOfPublication": "2024-08-15T00:00:00+00:00",
     "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
@@ -43,7 +45,9 @@
             "url": "http://dx.doi.org/10.1126/science.abn7293"
         }
     ],
-    "basedOnPapers": ["10.48550/arXiv.2303.12834"],
+    "basedOnPapers": [
+        "10.48550/arXiv.2303.12834"
+    ],
     "referencedByPapers": [],
     "relatedContent": [
         {

@@ -40,7 +40,7 @@ state. And lastly, we discuss the results, potential ways optimizing the code, a
 # 
 # The main difference between the two approaches is where the tunable parameters are embedded.
 # That is, it is the classical GQE model that is being optimized as opposed to the variable
-# quantum circuit of VQE. Potentially then, the :doc:`barren plateau </demos/tutorial_barren_plateaus/>` landscape of 
+# quantum circuit of VQE. Potentially then, the :doc:`barren plateau <demos/tutorial_barren_plateaus/>` landscape of 
 # VQE and the quantum gradient evaluation of large circuits will be sidestepped by GQE, thus becoming more amenable 
 # for larger problems.
 # 

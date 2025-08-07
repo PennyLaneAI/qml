@@ -33,7 +33,7 @@ and the experiment from the team led by Chao-Yang Lu and Jian-Wei as can be seen
 `Quantum computational advantage using photons <https://science.sciencemag.org/content/early/2020/12/02/science.abe8770?rss=1>`__
 [#Zhong2020]_.
 
-While Google's experiment performed the task of :doc:`random circuit sampling </demos/qsim_beyond_classical>`
+While Google's experiment performed the task of :doc:`random circuit sampling <demos/qsim_beyond_classical>`
 using a superconducting processor, both Chao-Yang Lu and Jian-Wei's team and Xanadu leveraged the
 quantum properties of light to tackle a task called
 `Gaussian Boson Sampling <https://strawberryfields.ai/photonics/concepts/gbs.html>`__ (GBS).
