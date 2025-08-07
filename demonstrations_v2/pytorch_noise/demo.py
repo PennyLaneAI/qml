@@ -16,8 +16,11 @@ PyTorch and noisy devices
 *Author: Josh Izaac — Posted: 11 October 2019. Last updated: 9 November 2022.*
 
 .. warning::
-    This demo is only compatible with PennyLane v0.40 or below and Braket v1.31.0. To use Rigetti hardware with newer versions of PennyLane please use the `PennyLane-Braket plugin <https://amazon-braket-pennylane-plugin-python.readthedocs.io/en/stable/index.html>`__ instead.
-    
+    This demo uses TensorFlow, which is a deprecated interface with PennyLane v0.42.
+    Interfacing with TensorFlow will no longer be supported with PennyLane v0.43 and higher.
+    Consider switching to a different machine learning interface with PennyLane, like
+    :doc:`PyTorch </demos/tutorial_qnn_module_torch>` or
+    :doc:`JAX </demos/tutorial_How_to_optimize_QML_model_using_JAX_and_Optax>`.
 
 Let's revisit the original :ref:`qubit rotation <qubit_rotation>` tutorial, but instead of
 using the default NumPy/autograd QNode interface, we'll use the :doc:`introduction/interfaces/torch`.
