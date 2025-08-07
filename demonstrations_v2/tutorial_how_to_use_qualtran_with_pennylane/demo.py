@@ -56,13 +56,13 @@ bloq_as_op = qml.FromBloq(XGate(), wires=0)
 print(bloq_as_op)
 
 ######################################################################
-# In this simple example, we wrapped a Qualtran `XGate` instance using `FromBloq``. We can see that
+# In this simple example, we wrapped a Qualtran ``XGate``` instance using ``FromBloq``. We can see that
 # the output is a :class:`~.pennylane.io.FromBloq` instance, whose properties are the same as
 # PennyLane's PauliX operator.
 #
 # Since Qualtran Bloqs don't know what wires to act on, we need to provide that information to 
-# `FromBloq` via the `wires` argument. Wire requirements will vary depending on the Bloq, if you
-# don't know what value to provide for `wires`, you can use the 
+# ``FromBloq`` via the ``wires`` argument. Wire requirements will vary depending on the Bloq, if you
+# don't know what value to provide for ``wires``, you can use the 
 # :func:`~.pennylane.bloq_registers` helper function.
 
 print(qml.bloq_registers(XGate()))
@@ -71,7 +71,7 @@ print(qml.bloq_registers(XGate()))
 # This will create :func:`~.pennylane.registers` with register names in accordance to the Bloq's signature. 
 # Here, the function created one "q" register with a single qubit, as required by the ``XGate``.
 #
-# Let's verify that the ``XGate``` performs as expected in a PennyLane circuit.
+# Let's verify that the ``XGate`` performs as expected in a PennyLane circuit.
 
 dev = qml.device("default.qubit")
 @qml.qnode(dev)
@@ -137,7 +137,7 @@ print(qml.FromBloq(qubitization_qpe, wires=range(n_qubits)).decomposition())
 #   customize what Bloq you want your operator to map to. This makes it easy to
 #   refine the finer details of your algorithm.
 #
-# - Wrapping: Think of this as an analogue of `FromBloq`. It faithfully converts any operator or
+# - Wrapping: Think of this as an analogue of ``FromBloq``. It faithfully converts any operator or
 #   Qfunc, decompositions and all, into a Bloq. The output is a :class:`~pennylane.io.ToBloq` instance.
 #
 # Holding all these options together is our trusty function :func:`~pennylane.to_bloq`. In the
@@ -147,7 +147,7 @@ print(qml.FromBloq(qubitization_qpe, wires=range(n_qubits)).decomposition())
 ######################################################################
 # Smart defaults
 # --------------
-# By default, ``qml.to_bloq``` tries its best to translate 
+# By default, ``qml.to_bloq`` tries its best to translate 
 # PennyLane objects to Qualtran-native objects. This makes certain Qualtran
 # functionalities, such as gate counting and generalizers, work more seamlessly.
 # Here, PennyLane's ``PauliX`` operator is mapped directly to Qualtran's ``XGate``.
