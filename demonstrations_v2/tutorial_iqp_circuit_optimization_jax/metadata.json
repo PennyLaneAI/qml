@@ -8,6 +8,8 @@
             "username": "josephbowles"
         }
     ],
+    "executable_stable": true,
+    "executable_latest": true,
     "dateOfPublication": "2025-02-14T09:00:00+00:00",
     "dateOfLastModification": "2025-06-02T09:00:00+00:00",
     "categories": [
@@ -104,9 +106,11 @@
             "journal": "",
             "doi": "10.48550/arXiv.2410.20935",
             "url": "https://arxiv.org/abs/2410.20935"
-        }      
+        }
     ],
-    "basedOnPapers": ["10.48550/arXiv.2501.04776"],
+    "basedOnPapers": [
+        "10.48550/arXiv.2501.04776"
+    ],
     "referencedByPapers": [],
     "relatedContent": [
         {

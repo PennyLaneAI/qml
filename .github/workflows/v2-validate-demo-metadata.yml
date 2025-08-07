@@ -1,0 +1,75 @@
+name: V2 Validate Demo Metadata
+on:
+  workflow_call:
+    inputs:
+      branch:
+        description: The GitHub branch to checkout and validate metadata for
+        required: true
+        type: string
+      demo-names:
+        description: |
+          List of demos whose metadata files need to be validated, separated by space.
+        required: true
+        type: string
+
+jobs:
+  generate-metadata-file-list:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          ref: ${{ inputs.branch }}
+
+      - name: Format metadata file names
+        id: format_metadata_files
+        run: |
+          input_demo_file_names="${{ inputs.demo-names }}"
+          formatted_metadata_file_names=()
+
+          for demo_file_name in $input_demo_file_names
+          do
+            formatted_metadata_file_names+=("../demonstrations_v2/$demo_file_name/metadata.json")
+          done
+
+          echo "formatted_file_names=${formatted_metadata_file_names[@]}" >> $GITHUB_OUTPUT
+
+    outputs:
+      metadata_files: ${{ steps.format_metadata_files.outputs.formatted_file_names }}
+
+  validate-metadata-schema:
+    runs-on: ubuntu-latest
+
+    needs:
+      - generate-metadata-file-list
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          ref: ${{ inputs.branch }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install Poetry
+        id: poetry
+        uses: XanaduAI/cloud-actions/install-python-poetry@main
+        with:
+          poetry_version: '2.1.3'
+          add_poetry_to_path: false
+
+      - name: Install Metadata Schema Validation Dependencies
+        run: ${{ steps.poetry.outputs.poetry_bin }} install --only metadata-validation
+
+      - name: Validate Metadata Schema
+        env:
+          METADATA_FILE_LIST: ${{ needs.generate-metadata-file-list.outputs.metadata_files }}
+        run: |
+          cd metadata_schemas
+          ${{ steps.poetry.outputs.poetry_bin }} run check-jsonschema -v --traceback-mode full --schemafile demo.metadata.schema.0.1.7.json $METADATA_FILE_LIST

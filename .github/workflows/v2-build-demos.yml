@@ -156,16 +156,17 @@ jobs:
           ref: ${{ inputs.ref }}
           fetch-depth: 1
 
-      - name: Install pandoc and opencl
+      - name: Install pandoc, opencl, and graphviz
         run: |
           sudo apt-get install -y \
             ocl-icd-opencl-dev \
-            pandoc 
+            pandoc \
+            graphviz
 
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: '3.11'
 
       - name: Install dependencies
         run: pip install . && poetry config warnings.export false

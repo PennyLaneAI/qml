@@ -26,7 +26,7 @@ for some Ansatz unitary :math:`U` with variational parameters :math:`\theta` and
 These algorithms arose due to the constraints of noisy near-term quantum hardware.
 This means that naturally in that scenario we do not have direct access to :math:`f,` but rather a noisy version :math:`f^{⚡}` where the variational state
 :math:`|\psi(\theta)\rangle = U^\dagger(\theta)|0\rangle` is distorted via a noise channel :math:`\Phi(|\psi(\theta)\rangle \langle \psi(\theta)|).` Since noisy channels generally
-yield mixed states (see e.g. :doc:`tutorial_noisy_circuits`), we can formally write 
+yield mixed states (see e.g. :doc:`demos/tutorial_noisy_circuits`), we can formally write 
 
 .. math:: f^{⚡}(\theta) := \text{tr}\left[H \Phi(|\psi(\theta)\rangle \langle \psi(\theta)|) \right].
 
@@ -179,7 +179,7 @@ plt.show()
 # ------------------------------------------------------------
 #
 # We will now use mitigation while we optimize the parameters of our variational circuit to obtain the ground state of the Hamiltonian 
-# — this is the variational quantum eigensolving (VQE), see :doc:`tutorial_vqe`.
+# — this is the variational quantum eigensolving (VQE), see :doc:`demos/tutorial_vqe`.
 # Then, we will compare VQE optimization runs for  the ideal, noisy, and mitigated QNodes and see that the mitigated one comes close to the ideal (zero noise) results,
 # whereas the noisy execution is further off.
 

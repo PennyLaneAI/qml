@@ -20,8 +20,8 @@ We will implement two small examples: estimating the ground state energy of a si
 problem, which we can visualize using the Bloch sphere, and the hydrogen molecule.
 
 Before going through this tutorial, we recommend that readers refer to the
-:doc:`QNG tutorial </demos/tutorial_quantum_natural_gradient>` and
-:doc:`VQE tutorial </demos/tutorial_vqe>` for overviews
+:doc:`QNG tutorial <demos/tutorial_quantum_natural_gradient>` and
+:doc:`VQE tutorial <demos/tutorial_vqe>` for overviews
 of quantum natural gradient and the variational quantum eigensolver algorithm, respectively.
 Let's get started!
 
@@ -46,7 +46,7 @@ dev = qml.device("default.qubit", wires=1)
 
 ##############################################################################
 # For the variational ansatz, we use two single-qubit rotations, which the user may recognize
-# from a previous :doc:`tutorial </demos/tutorial_qubit_rotation>` on qubit rotations.
+# from a previous :doc:`tutorial <demos/tutorial_qubit_rotation>` on qubit rotations.
 
 
 def circuit(params, wires=0):

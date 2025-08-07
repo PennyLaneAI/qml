@@ -61,7 +61,7 @@ and one focusing on special gates and spectral decompositions, namely
 .. note ::
 
     Before going through this tutorial, we recommend that readers refer to the
-    :doc:`Fourier series expressiveness tutorial </demos/tutorial_expressivity_fourier_series>`.
+    :doc:`Fourier series expressiveness tutorial <demos/tutorial_expressivity_fourier_series>`.
     Additionally, having a basic understanding of the
     :doc:`parameter-shift rule </glossary/parameter_shift>` might make this tutorial easier
     to dive into.
@@ -178,7 +178,7 @@ pink = "xkcd:bright pink"
 # Here, :math:`a_{\ell}` and :math:`b_{\ell}` are the *Fourier coefficients*.
 # If you would like to understand this a bit better still, have a read of
 # :mod:`~.pennylane.fourier` and remember to check out the
-# :doc:`Fourier module tutorial </demos/tutorial_expressivity_fourier_series>`.
+# :doc:`Fourier module tutorial <demos/tutorial_expressivity_fourier_series>`.
 #
 # Due to :math:`B` being Hermitian, :math:`E(x)` is a real-valued function, so 
 # only positive frequencies and real coefficients appear in the Fourier series for :math:`E(x).`
@@ -255,7 +255,7 @@ for N, cost_function in zip(Ns, cost_functions):
 # the positive frequencies because :math:`E(x)` is real-valued, and that we accounted for
 # the zero-frequency contribution in the coefficient :math:`a_0.`
 # If you are interested why the number of gates coincides with the number of frequencies,
-# check out the :doc:`Fourier module tutorial </demos/tutorial_expressivity_fourier_series>`.
+# check out the :doc:`Fourier module tutorial <demos/tutorial_expressivity_fourier_series>`.
 #
 # Before moving on, let's also have a look at the Fourier coefficients in the functions
 # we created:
