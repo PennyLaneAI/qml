@@ -47,7 +47,7 @@ We start by initializing a noisy device using a noise model with :class:`~.penny
 
 import pennylane as qml
 import pennylane.numpy as np
-from pennylane.transforms import mitigate_with_zne
+from pennylane.noise import mitigate_with_zne
 
 from matplotlib import pyplot as plt
 
@@ -91,15 +91,15 @@ qnode_noisy = qml.QNode(qfunc, dev_noisy)
 qnode_noisy = qml.transforms.decompose(qnode_noisy, gate_set = ["RY", "CZ"])
 
 ##############################################################################
-# We can then simply transform the noisy QNode :math:`f^{⚡}` with :func:`~.pennylane.transforms.mitigate_with_zne` to generate :math:`\tilde{f}.`
+# We can then simply transform the noisy QNode :math:`f^{⚡}` with :func:`~.pennylane.noise.mitigate_with_zne` to generate :math:`\tilde{f}.`
 # If everything goes as planned, executing the mitigated QNode is then closer to the ideal result:
 
 scale_factors = [1, 2, 3]
 
 qnode_mitigated = mitigate_with_zne(qnode_noisy, 
     scale_factors=scale_factors,
-    folding=qml.transforms.fold_global,
-    extrapolate=qml.transforms.richardson_extrapolate,
+    folding=qml.noise.fold_global,
+    extrapolate=qml.noise.richardson_extrapolate,
 )
 
 print("Ideal QNode: ", qnode_ideal(w1, w2))
@@ -125,7 +125,7 @@ print(grad[1])
 #
 # Consider two circuits: :math:`U` and :math:`U U^\dagger U.` They are logically equivalent, but we can expect the latter to have more noise due its larger gate count.
 # This is the underlying concept of unitary folding, which is used to artificially increase the noise of a quantum function. Given a unitary circuit :math:`U = L_d .. L_1,`
-# where :math:`L_i` can be either a gate or layer, we use :func:`~.pennylane.transforms.fold_global` to construct
+# where :math:`L_i` can be either a gate or layer, we use :func:`~.pennylane.noise.fold_global` to construct
 #
 # .. math:: \texttt{fold_global}(U) = U (U^\dagger U)^n (L^\dagger_d L^\dagger_{d-1} .. L^\dagger_s) (L_s .. L_d),
 #
@@ -138,7 +138,7 @@ print(grad[1])
 
 scale_factors = [1, 2, 3]
 folded_res = [
-    qml.transforms.fold_global(qnode_noisy, lambda_)(w1, w2) for lambda_ in scale_factors
+    qml.noise.fold_global(qnode_noisy, lambda_)(w1, w2) for lambda_ in scale_factors
 ]
 
 ideal_res = qnode_ideal(w1, w2)
@@ -169,11 +169,11 @@ plt.show()
 # limited from above by the noise as the noisy quantum function quickly decoheres under this folding. I.e., for :math:`\lambda\geq 4` the results are typically already decohered.
 # Therefore, one typically only uses ``scale_factors = [1, 2, 3]``.
 # In principle, one can think of more fine grained folding schemes and test them by providing custom folding operations. How this can be done in PennyLane with the given 
-# API is described in :func:`~.pennylane.transforms.mitigate_with_zne`.
+# API is described in :func:`~.pennylane.noise.mitigate_with_zne`.
 #
 # Note that Richardson extrapolation, which we used to define the ``mitigated_qnode``, is just a fancy
 # way to describe a polynomial fit of ``order = len(x) - 1``.
-# Alternatively, you can use :func:`~.pennylane.transforms.poly_extrapolate` and manually pass the order via a keyword argument ``extrapolate_kwargs={'order': 2}``.
+# Alternatively, you can use :func:`~.pennylane.noise.poly_extrapolate` and manually pass the order via a keyword argument ``extrapolate_kwargs={'order': 2}``.
 #
 # Differentiable mitigation in a variational quantum algorithm
 # ------------------------------------------------------------
