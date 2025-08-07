@@ -119,6 +119,8 @@ jobs:
           comment+="There was an issue deploying your changes. Please check the related `v2-deploy-pr` logs for more details.\n\n"
           comment+="If you need assistance, please reach out to the team.\n\n"
 
+          comment+="> Attempted deployment at: $(date +'%Y-%m-%d %H:%M:%S') UTC\n\n"
+
           echo "markdown=$comment" >> $GITHUB_OUTPUT
 
       - name: Comment on PR
