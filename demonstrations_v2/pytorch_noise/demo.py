@@ -76,7 +76,7 @@ from torch.autograd import Variable
 ##############################################################################
 # Note that we do not need to import the wrapped version of NumPy provided by PennyLane,
 # as we are not using the default QNode NumPy interface. If NumPy is needed, it is fine to
-# import vanilla NumPy for use with PyTorch and TensorFlow.
+# import vanilla NumPy for use with PyTorch.
 #
 # Next, we will create our device:
 
