@@ -13,9 +13,9 @@ on:
         description: ID of the workflow run the artifact is from.
         type: string
         required: true
-      preview:
-        description: Whether to deploy demos as preview.
-        type: boolean
+      pr_number:
+        description: Pull request number for the deployment.
+        type: number
         required: true
 
   workflow_dispatch:
@@ -31,9 +31,9 @@ on:
         description: ID of the workflow run the artifact is from.
         type: string
         required: true
-      preview:
-        description: Whether to deploy demos as preview.
-        type: boolean
+      pr_number:
+        description: Pull request number for the deployment.
+        type: number
         required: true
 
 jobs:
@@ -74,5 +74,5 @@ jobs:
       - name: Deploy demos
         run: |
           python3 .github/workflows/qml_pipeline_v2/deploy.py \
-            --preview ${{ inputs.preview }} \
+            --pr-number ${{ inputs.pr_number }} \
             _build/pack/*.zip

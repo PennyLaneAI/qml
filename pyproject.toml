@@ -1,13 +1,34 @@
-[tool.poetry]
+[project]
 name = "qml"
 version = "0.0.0"
 description = "Introductions to key concepts in quantum machine learning, as well as tutorials and implementations from cutting-edge QML research."
-authors = ["PennyLaneAI <info@pennylane.ai>"]
-license = "Apache-2.0"
 readme = "README.md"
-homepage = "https://pennylane.ai/qml/"
-repository = "https://github.com/PennyLaneAI/qml"
+license = "Apache-2.0"
+requires-python = "~3.10.0"
+authors = [
+    { name = "PennyLaneAI", email = "info@pennylane.ai" }
+]
 keywords = ["demo", "qml", "tensorflow", "automatic-differentiation", "tutorials", "pytorch", "autograd", "quantum-computing", "neural-networks", "quantum-chemistry", "key-concepts", "quantum-machine-learning"]
+dependencies = [
+    "typer>=0.15.1,<0.16.0",
+    "poetry-plugin-export>=1.8.0,<2.0.0",
+    "dulwich<0.22",
+    "requirements-parser>=0.11.0,<0.12.0",
+    "lxml>=5.3.0,<6.0.0",
+    "uv>=0.5.25,<0.6.0",
+    "inflection>=0.5.1,<0.6.0",
+    "sphobjinv>=2.3.1.3,<3.0.0"
+]
+
+[project.urls]
+Homepage = "https://pennylane.ai/qml/"
+Repository = "https://github.com/PennyLaneAI/qml"
+
+[project.scripts]
+qml = "qml.app:app"
+
+[tool.poetry]
+requires-poetry = ">=2.1"
 packages = [
     {include = "qml", from = "lib"}
 ]
@@ -21,31 +42,16 @@ name = "pytorch-cpu"
 url = "https://download.pytorch.org/whl/cpu"
 priority = "explicit"
 
-[tool.poetry.scripts]
-qml = 'qml.app:app'
-
-[tool.poetry.dependencies]
-python = "~3.10.0"
-typer = "^0.15.1"
-poetry = "^1.8.5"
-poetry-plugin-export = "^1.8.0"
-dulwich = "<0.22"
-requirements-parser = "^0.11.0"
-lxml = "^5.3.0"
-uv = "^0.5.25"
-inflection = "^0.5.1"
-
 [tool.poetry.group.base.dependencies]
 # Base dependencies needed to build the website without any code execution (*-norun)
 sphinx = ">=5.0.2"
 sphinx_gallery = "0.17.1"
 Jinja2 = "3.0.3"
 markupsafe = "2.1.1"
-numpy = "~1.24"
 pyyaml = "^6.0.1"
 pennylane-sphinx-theme = { git = "https://github.com/PennyLaneAI/pennylane-sphinx-theme.git", branch = "sphinx-update" }
 pypandoc = "1.5"
-pennylane = "0.41.0"
+pennylane = "0.42.0"
 uv = "^0.5.25"
 
 
@@ -55,19 +61,20 @@ uv = "^0.5.25"
 # These pinned versions of PL are NOT used for Dev builds #
 #      The latest commit from GitHub is used instead      #
 ###########################################################
-pennylane = "0.41.0"
-pennylane-cirq = "0.41.0"
-pennylane-qiskit = "0.41.0"
-pennylane-qulacs = "0.41.0"
-pennylane-catalyst = "0.11.0"
+pennylane = "0.42.0"
+pennylane-cirq = "0.42.0"
+pennylane-qiskit = "0.42.0"
+pennylane-qulacs = "0.42.0"
+pennylane-catalyst = "0.12.0"
 ##########################################################
 
 scipy = ">=1.12"
-numpy = "~1.24"
+numpy = "~1.26.4"
+numpyro = "~0.17.0"
 matplotlib = "3.7.2"
-jax = "0.4.28"
-jaxlib = "0.4.28"
-jaxopt = "0.8.3"
+jax = "0.6.0"
+jaxlib = "0.6.0"
+jaxopt = "0.8.5"
 seaborn = "0.13.2"
 kahypar = "1.1.7"
 openfermionpyscf = "0.5"
@@ -75,12 +82,11 @@ covalent = "0.227.0rc0"
 openqaoa-core = "0.2.5"
 dwave-ocean-sdk = "7.0.0"
 pyzx = "0.7.0"
-neural-tangents = "0.6.2"
 plotly = ">=4.5.0"
 pydantic = "^2.8.2"
 ply = "3.11"
-optax = "0.2.3"
-flax = "0.9.0"
+optax = "0.2.4"
+flax = "0.10.6"
 qutip = "5.1.0"
 mitiq = "0.43.0"
 pennylane-qrack = "0.11.1"
@@ -89,7 +95,8 @@ zstd = "*"
 dill = "*"
 stim = "*"
 bluequbit = "0.9.3b1"
-quimb = "1.8.2"
+quimb = "1.11.0"
+cotengra = "0.7.5"
 aiohttp = "3.9.5"
 fsspec = "2024.6.1"
 h5py = "3.11.0"
@@ -97,8 +104,9 @@ qiskit = ">=1.0.0"
 qiskit-aer = ">=0.14.0,<0.16.0"
 sphinxcontrib-applehelp = "1.0.8"
 sphinx-gallery = "0.17.1"
-qrisp = ">=0.6.1"
 iqpopt = { git = "https://github.com/XanaduAI/iqpopt.git" }
+tensorflow = "2.19"
+galois = "0.4.6"
 
 
 # Install a difference version of torch from PyPI as the one from PyTorch repo is not compatible with MacOS
@@ -113,12 +121,8 @@ torchvision = [
 
 # The following packages are platform locked to not install on MacOS as the installation breaks
 scikit-learn = { version = "1.3.0", markers = "platform_machine == 'x86_64'" }
-tensorflow = { version = "2.14.1", markers = "platform_machine == 'x86_64'" }
 flamingpy = { version = ">=0.10.1b1", markers = "platform_machine == 'x86_64'" }
 qulacs = { version = "0.6.1", markers = "platform_machine == 'x86_64'" }
-
-# The following packages are only installed on MacOS for compatibility
-tensorflow-macos = { version = "2.14.1", markers = "sys_platform == 'darwin' and platform_machine == 'arm64'" }
 
 [tool.poetry.group.metadata-validation]
 optional = true

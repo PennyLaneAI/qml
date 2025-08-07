@@ -58,7 +58,7 @@ basis function (RBF) kernel for this purpose, which is defined as:
 
 Here, :math:`\sigma_i` is the bandwidth parameter controlling the Gaussian kernel's width.
 :math:`\mathcal{L}` approaches to zero if and only if :math:`p_\boldsymbol{\theta}` approaches :math:`\pi` [#Gret]_.
-To learn more about kernel methods, check out this :doc:`demo <tutorial_kernels_module>`.
+To learn more about kernel methods, check out this :doc:`demo <demos/tutorial_kernels_module>`.
 
 We can now write the loss function in terms of :math:`K(x,y)` as
 
