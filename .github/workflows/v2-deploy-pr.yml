@@ -107,6 +107,8 @@ jobs:
           comment="### Your preview is ready :tada:!\n\n"
           comment+="You can view your changes [here](https://pennylane.ai/qml/demonstrations?pr=${{ needs.prepare-build-context.outputs.pr_id }})\n\n"
 
+          comment+="> Deployed at: $(date +'%Y-%m-%d %H:%M:%S') UTC\n\n"
+
           echo "markdown=$comment" >> $GITHUB_OUTPUT
 
       - name: Generate Markdown Comment for Failed Deployment
