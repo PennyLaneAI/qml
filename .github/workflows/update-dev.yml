@@ -2,7 +2,7 @@ name: update-dev
 on:
   workflow_run:
     workflows:
-      - V2 Build Demos for SWC Environment
+      - Build Website - JSON
     types:
       - completed
     branches:

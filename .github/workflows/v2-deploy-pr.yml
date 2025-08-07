@@ -85,44 +85,44 @@ jobs:
     uses: ./.github/workflows/v2-deploy-demos.yml
     needs: prepare-build-context
     with:
-      environment: 'swc-prod'
+      # TODO: Update SWC environment to "swc-prod"
+      environment: 'swc-staging'
       artifact-name: demo-build-${{ needs.prepare-build-context.outputs.pr_ref }}
       workflow-run-id: ${{ github.event.workflow_run.id }}
       pr_number: ${{ fromJson(needs.prepare-build-context.outputs.pr_id) }}
     secrets: inherit
   
 
+  ## DISABLED UNTIL RELEASED ##
   # Step 3: Create a comment on the PR with the demo links
-  # If build is successful, generate a comment with the demo link.
-  # If build fails, generate a comment indicating the failure.
-  generate-comment:
-    if: github.event.workflow_run.event == 'pull_request' && needs.prepare-build-context.outputs.pr_id != ''
-    runs-on: ubuntu-latest
-    needs: [prepare-build-context, deploy-preview-demos]
-    steps:
-      - name: Generate Markdown Comment for Successful Deployment
-        if: needs.deploy-preview-demos.result == 'success'
-        id: generate-markdown
-        run: |
-          comment="### Your preview is ready :tada:!\n\n"
-          comment+="You can view your changes [here](https://pennylane.ai/qml/demonstrations?pr=${{ needs.prepare-build-context.outputs.pr_id }})\n\n"
+  # generate-comment:
+  #   if: github.event.workflow_run.event == 'pull_request' && needs.prepare-build-context.outputs.pr_id != ''
+  #   runs-on: ubuntu-latest
+  #   needs: prepare-build-context
+  #   steps:
+  #     - name: Create markdown comment from demo names
+  #       id: generate-markdown
+  #       run: |
+  #         demos="${{ needs.prepare-build-context.outputs.updated_demos }}"
+          
+  #         comment="### Preview(s) are ready! :tada:\n"
+  #         comment+="<details>\n"
+  #         comment+="<summary>Toggle to view preview links</summary>\n"
+  #         comment+="\n"
+  #         # TODO: Switch to prod once testing is complete
+  #         for demo in $demos; do
+  #           comment+="- [$demo](https://staging.pennylane.ai/qml/demos/$demo?pr_number=${{ needs.prepare-build-context.outputs.pr_id }})\n"
+  #         done
+      
+  #         comment+="\n"
+  #         comment+="</details>"
 
-          echo "markdown=$comment" >> $GITHUB_OUTPUT
+  #         echo "markdown=$comment" >> $GITHUB_OUTPUT
 
-      - name: Generate Markdown Comment for Failed Deployment
-        if: needs.deploy-preview-demos.result != 'success'
-        id: generate-failure-markdown
-        run: |
-          comment="### Deployment failed :x:\n\n"
-          comment+="There was an issue deploying your changes. Please check the related `v2-deploy-pr` logs for more details.\n\n"
-          comment+="If you need assistance, please reach out to the team.\n\n"
-
-          echo "markdown=$comment" >> $GITHUB_OUTPUT
-
-      - name: Comment on PR
-        id: comment-on-pr
-        uses: XanaduAI/cloud-actions/create-and-update-pull-request-comment@main
-        with:
-          github_token: ${{ secrets.github_token }}
-          pull_request_number: ${{ needs.prepare-build-context.outputs.pr_id }}
-          comment_body: ${{ steps.generate-markdown.outputs.markdown }}
+  #     - name: Comment on PR
+  #       id: comment-on-pr
+  #       uses: XanaduAI/cloud-actions/create-and-update-pull-request-comment@main
+  #       with:
+  #         github_token: ${{ secrets.github_token }}
+  #         pull_request_number: ${{ needs.prepare-build-context.outputs.pr_id }}
+  #         comment_body: ${{ steps.generate-markdown.outputs.markdown }}

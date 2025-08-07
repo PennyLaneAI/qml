@@ -80,7 +80,7 @@ sphinx_gallery_conf = {
     # execute files that match the following filename pattern,
     # and skip those that don't. If the following option is not provided,
     # all example scripts in the 'examples_dirs' folder will be skiped.
-    "filename_pattern": r"\.py$",
+    "filename_pattern": r"tutorial",
     "pypandoc": True,
     # first notebook cell in generated Jupyter notebooks
     "first_notebook_cell": (
@@ -216,8 +216,7 @@ htmlhelp_basename = "QMLdoc"
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
     "pennylane": ("https://docs.pennylane.ai/en/stable/", None),
-    "catalyst": ("https://docs.pennylane.ai/projects/catalyst/en/stable", None),
-    "demo": ("https://pennylane.ai/qml", None),
+    "catalyst": ("https://docs.pennylane.ai/projects/catalyst/en/stable", None)
 }
 
 # Enable :doc: references for intersphinx (disabled by default in Sphinx 5.0+)

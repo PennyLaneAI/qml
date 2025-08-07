@@ -3,7 +3,7 @@ on:
   pull_request:
     types: [opened, reopened]
     paths:
-      - demonstrations_v2/**
+      - demonstrations/**
 
 jobs:
   reminder:

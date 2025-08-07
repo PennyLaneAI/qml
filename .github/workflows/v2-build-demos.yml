@@ -156,12 +156,11 @@ jobs:
           ref: ${{ inputs.ref }}
           fetch-depth: 1
 
-      - name: Install pandoc, opencl, and graphviz
+      - name: Install pandoc and opencl
         run: |
           sudo apt-get install -y \
             ocl-icd-opencl-dev \
-            pandoc \
-            graphviz
+            pandoc 
 
       - name: Setup Python
         uses: actions/setup-python@v4

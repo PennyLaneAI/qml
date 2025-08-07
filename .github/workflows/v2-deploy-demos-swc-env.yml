@@ -69,10 +69,12 @@ jobs:
       - name: Determine SWC environment via merge_ref_name
         if: steps.pr_info.outputs.merge_ref_name != ''
         id: determine_env
+        ## Todo: Remove test-v2-master and test-v2-dev once the new branches are fully adopted
+        ## Todo: Update master to deploy into swc-prod environment instead of swc-staging
         run: |
-          if [[ "${{ steps.pr_info.outputs.merge_ref_name }}" == "master" ]]; then
-            echo "swc-env=swc-prod" >> $GITHUB_OUTPUT
-          elif [[ "${{ steps.pr_info.outputs.merge_ref_name }}" == "dev" ]]; then
+          if [[ "${{ steps.pr_info.outputs.merge_ref_name }}" == "master" || "${{ steps.pr_info.outputs.merge_ref_name }}" == "test-v2-master" ]]; then
+            echo "swc-env=swc-staging" >> $GITHUB_OUTPUT
+          elif [[ "${{ steps.pr_info.outputs.merge_ref_name }}" == "dev" || "${{ steps.pr_info.outputs.merge_ref_name }}" == "test-v2-dev" ]]; then
             echo "swc-env=swc-dev" >> $GITHUB_OUTPUT
           else
             echo "Unknown branch: ${{ steps.pr_info.outputs.merge_ref_name }}"
