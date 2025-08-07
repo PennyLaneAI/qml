@@ -266,7 +266,8 @@ print(2 * forward_time * params.size)
 # designed to support backpropagation.
 #
 # One such device is :class:`default.qubit <pennylane.devices.DefaultQubit>`. It
-# can be interfaced with Autograd, JAX, and Pytorch, supporting backpropagation in each case.
+# has backends written using TensorFlow, JAX, and Autograd, so when used with the
+# TensorFlow, JAX, and Autograd interfaces respectively, supports backpropagation.
 # In this demo, we will use the JAX interface.
 
 dev = qml.device("default.qubit", wires=4)

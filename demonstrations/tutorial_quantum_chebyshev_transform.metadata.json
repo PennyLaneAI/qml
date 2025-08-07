@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2025-07-22T00:00:00+00:00",
-    "dateOfLastModification": "2025-07-26T00:00:00+00:00",
+    "dateOfLastModification": "2025-07-22T00:00:00+00:00",
     "categories": [
         "Algorithms",
         "Quantum Machine Learning"
@@ -16,10 +16,6 @@
         {
             "type": "thumbnail",
             "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_quantum_chebyshev_transform.png"
-        },
-        {
-            "type": "large_thumbnail",
-            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_quantum_chebyshev_transform.png"
         }
     ],
     "seoDescription": "Implement the Quantum Chebyshev Transform in PennyLane.",
