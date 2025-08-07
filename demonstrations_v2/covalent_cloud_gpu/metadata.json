@@ -8,6 +8,8 @@
             "username": "aghukasyan"
         }
     ],
+    "executable_stable": false,
+    "executable_latest": false,
     "dateOfPublication": "2024-05-24T00:00:00+00:00",
     "dateOfLastModification": "2024-11-06T00:00:00+00:00",
     "categories": [

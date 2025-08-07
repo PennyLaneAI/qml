@@ -8,8 +8,10 @@
             "username": "sshu"
         }
     ],
+    "executable_stable": false,
+    "executable_latest": false,
     "dateOfPublication": "2025-02-21T10:00:00+00:00",
-    "dateOfLastModification": "2025-02-21T10:00:00+00:00",
+    "dateOfLastModification": "2025-07-11T10:00:00+00:00",
     "categories": [
         "Getting Started",
         "Quantum Chemistry",

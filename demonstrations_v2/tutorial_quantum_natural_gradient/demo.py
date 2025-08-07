@@ -31,7 +31,7 @@ a low-depth parametrized quantum circuit ansatz is chosen, and a problem-specifi
 observable measured. A classical optimization loop is then used to find
 the set of quantum parameters that *minimize* a particular measurement expectation value
 of the quantum device. Examples of such algorithms include the :doc:`variational quantum
-eigensolver (VQE) <tutorial_vqe>`, the
+eigensolver (VQE) <demos/tutorial_vqe>`, the
 `quantum approximate optimization algorithm (QAOA) <https://arxiv.org/abs/1411.4028>`__,
 and :ref:`quantum neural networks (QNN) <quantum_neural_net>`.
 

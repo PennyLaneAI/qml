@@ -15,7 +15,7 @@ Alleviating barren plateaus with local cost functions
 Barren Plateaus
 ---------------
 
-:doc:`Barren plateaus </demos/tutorial_barren_plateaus>` are large regions of the cost function's parameter space
+:doc:`Barren plateaus <demos/tutorial_barren_plateaus>` are large regions of the cost function's parameter space
 where the variance of the gradient is almost 0; or, put another way, the
 cost function landscape is flat. This means that a variational circuit
 initialized in one of these areas will be untrainable using any gradient-based

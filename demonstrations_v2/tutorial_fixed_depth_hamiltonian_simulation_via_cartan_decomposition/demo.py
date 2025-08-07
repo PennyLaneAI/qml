@@ -7,7 +7,7 @@ In particular, we follow the approach in [#Kökcü]_ that directly provides us w
 decomposition of the unitaries :math:`K` and :math:`e^{-i t h_0}.`
 
 Sounds too good to be true? There are of course caveats as this fast-forwards the Hamiltonian.
-In this algebraic setting, the crucial property is the size of the relevant :doc:`dynamical Lie algebra </demos/tutorial_liealgebra>` (DLA).
+In this algebraic setting, the crucial property is the size of the relevant :doc:`dynamical Lie algebra <demos/tutorial_liealgebra>` (DLA).
 Most systems yield an exponentially large DLA, making them hard to manage in practice (i.e., fast-forwarding is not possible).
 Yet, this is still an extremely powerful mathematical result integral for quantum compilation,
 circuit optimization, and Hamiltonian simulation.
@@ -20,7 +20,7 @@ circuit optimization, and Hamiltonian simulation.
 Introduction
 ------------
 
-The :doc:`KAK decomposition </demos/tutorial_kak_decomposition>` is an important result from Lie theory that states that any Lie group element :math:`U` can be decomposed
+The :doc:`KAK decomposition <demos/tutorial_kak_decomposition>` is an important result from Lie theory that states that any Lie group element :math:`U` can be decomposed
 as :math:`U = K_1 A K_2,` where :math:`K_{1, 2}` and :math:`A` are elements of two special sub-groups
 :math:`\mathcal{K}` and :math:`\mathcal{A},` respectively. In special cases, the decomposition simplifies to :math:`U = K A K^\dagger.`
 
@@ -35,8 +35,8 @@ just as is the case for diagonal matrices.
 
 We can use this general result from Lie theory as a powerful circuit decomposition technique.
 
-.. note:: We recommend a basic understanding of Lie algebras, see e.g. our :doc:`introduction to (dynamical) Lie algebras for quantum practitioners </demos/tutorial_liealgebra>`.
-    Otherwise, this demo should be self-contained, though for the mathematically inclined, we further recommend our :doc:`demo on the KAK decomposition </demos/tutorial_kak_decomposition>`
+.. note:: We recommend a basic understanding of Lie algebras, see e.g. our :doc:`introduction to (dynamical) Lie algebras for quantum practitioners <demos/tutorial_liealgebra>`.
+    Otherwise, this demo should be self-contained, though for the mathematically inclined, we further recommend our :doc:`demo on the KAK decomposition <demos/tutorial_kak_decomposition>`
     that dives into the mathematical depths of the decomposition and provides more background info.
 
 Goal: Fast-forwarding time evolutions using the KAK decomposition
@@ -215,8 +215,8 @@ v_m = jnp.array(v_m)
 #
 # .. note::
 #     You can check our demos on parameter optimization in JAX with
-#     :doc:`Optax </demos/tutorial_How_to_optimize_QML_model_using_JAX_and_Optax>` or
-#     :doc:`JAXOpt </demos/tutorial_How_to_optimize_QML_model_using_JAX_and_JAXopt>`.
+#     :doc:`Optax <demos/tutorial_How_to_optimize_QML_model_using_JAX_and_Optax>` or
+#     :doc:`JAXOpt <demos/tutorial_How_to_optimize_QML_model_using_JAX_and_JAXopt>`.
 #
 
 def run_opt(
@@ -362,7 +362,7 @@ trace_distance(U_exact_m, U_kak_m)
 #     (as is done in [#Kökcü]_).
 #     Here, we have chosen the full :math:`2^n` Hilbert space representation of the involved operators as this is actually faster for the chosen size :math:`n=4`.
 #
-#     More generally, we can use the adjoint identity introdcued in our :doc:`g-sim demo </demos/tutorial_liesim>` and perform all computations in the
+#     More generally, we can use the adjoint identity introdcued in our :doc:`g-sim demo <demos/tutorial_liesim>` and perform all computations in the
 #     adjoint representation of the algebra. In that case, the dimension of the algebra is the determining factor. This is useful when a low-dimensional Lie algebra
 #     is embedded in a high dimensional Hilbert space. For example, the operators :math:`S^x_\text{total} = \sum_{j=1}^n X_j,`
 #     :math:`S^y_\text{total} = \sum_{j=1}^n Y_j` and :math:`S^z_\text{total} = \sum_{j=1}^n Z_j` make up :math:`\mathfrak{su}(2)` of dimension :math:`3`, but are embedded
@@ -429,7 +429,7 @@ plt.show()
 # This approach has the advantage that the resulting decomposition is itself already decomposed in terms of rotation gates in the original Lie algebra,
 # as opposed to other methods such as [#Chu]_ that find :math:`K` as a whole.
 # We provided a flexible pipeline that lets users find KAK decompositions in PennyLane for systems with small
-# DLA (:doc:`Dynamical Lie Algebras <tutorial_liealgebra>`) and specifically decomposed the Heisenberg model Hamiltonian with :math:`n=4` qubits that has a DLA of dimension :math:`60` (:math:`\left(\mathfrak{s u}(2^{n-2})\right)^{\oplus 4}`).
+# DLA (:doc:`Dynamical Lie Algebras <demos/tutorial_liealgebra>`) and specifically decomposed the Heisenberg model Hamiltonian with :math:`n=4` qubits that has a DLA of dimension :math:`60` (:math:`\left(\mathfrak{s u}(2^{n-2})\right)^{\oplus 4}`).
 #
 # As most DLAs scale exponentially in the number of qubits, KAK decompositions are limited to small system sizes
 # or special cases of systems with small DLAs.

@@ -30,7 +30,7 @@ by solving a linear system of equations (LSE) as a guiding example.
 
 Preliminaries
 -------------
-For a refresher on the basics of QSVT check out our :doc:`Intro to QSVT </demos/tutorial_intro_qsvt>`
+For a refresher on the basics of QSVT check out our :doc:`Intro to QSVT <demos/tutorial_intro_qsvt>`
 tutorial. Let's recall how to apply QSVT in a circuit. This requires two pieces of information
 as input: the block encoding of the matrix to be transformed and a set of projectors which determine the polynomial
 transformation. For now, we use placeholder values for the phase angles; we'll later describe

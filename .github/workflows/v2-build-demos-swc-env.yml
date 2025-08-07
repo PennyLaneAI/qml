@@ -1,0 +1,110 @@
+name: V2 Build Demos for SWC Environment
+
+on:
+  push:
+    branches:
+      - master
+      - dev
+
+permissions:
+  contents: read
+  actions: read
+  pull-requests: write
+
+concurrency:
+  group: demo-deployment-build-${{ github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  # Step 1: Identify changed demos
+  identify-changed-demos:
+    runs-on: ubuntu-latest
+    outputs:
+      updated: ${{ steps.get-changed-demos.outputs.updated }}
+      deleted: ${{ steps.get-changed-demos.outputs.deleted }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get changed demos
+        id: get-changed-demos
+        uses: ./.github/actions/get-changed-demos
+
+      - name: Output changed demos
+        run: |
+          echo "Updated Demos: ${{ steps.get-changed-demos.outputs.updated }}"
+          echo "Deleted Demos: ${{ steps.get-changed-demos.outputs.deleted }}"
+
+  # Step 2: Build demos
+  build:
+    if: needs.identify-changed-demos.outputs.updated != ''
+    uses: ./.github/workflows/v2-build-demos.yml
+    needs:
+      - identify-changed-demos
+    with:
+      ref: ${{ github.sha }}
+      demo-names: ${{ needs.identify-changed-demos.outputs.updated }}
+      dev: ${{ github.ref_name == 'dev' }}
+      save-artifact: true
+      artifact-name: demo-deployment-build-${{ github.sha }}
+      keep-going: false
+      quiet: false
+      batch_size: 10
+
+  # Step 3: Save build context
+  save-build-context:
+    if: needs.identify-changed-demos.outputs.updated != ''
+    runs-on: ubuntu-latest
+    needs:
+      - build
+      - identify-changed-demos
+    steps:
+      - name: Save Merge Commit Information
+        run: |
+          mkdir -p /tmp/merge
+          cat >/tmp/merge/deployment_build_context.json <<EOL
+          {
+            "ref": "${{ github.sha }}",
+            "ref_name": "${{ github.ref_name }}",
+            "updated_demos": "${{ needs.identify-changed-demos.outputs.updated }}",
+            "deleted_demos": "${{ needs.identify-changed-demos.outputs.deleted }}"
+          }
+          EOL
+
+      - name: Upload Pull Request Event Context as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: deployment_build_context
+          path: /tmp/merge
+          retention-days: 30
+
+  # Step 4: Build and upload the updated objects.inv files
+  build-objects-inv-file-dev:
+    if: ${{ needs.identify-changed-demos.outputs.updated != '' && github.ref_name == 'dev' }}
+    uses: ./.github/workflows/v2-sync-objects-dot-inv.yml
+    needs:
+      - identify-changed-demos
+    with:
+      branch: ${{ github.ref }}
+      dev: true
+
+    secrets:
+      aws_region: ${{ secrets.AWS_REGION }}
+      aws_access_key_id: ${{ secrets.PL_SITE_DEV_NON_REACT_ACCESS_KEY_ID }}
+      aws_secret_access_key: ${{ secrets.PL_SITE_DEV_NON_REACT_SECRET_ACCESS_KEY }}
+      aws_html_s3_bucket_id: ${{ secrets.PL_SITE_DEV_S3_BUCKET_NAME }}
+
+  build-objects-inv-file-master:
+    if: ${{ needs.identify-changed-demos.outputs.updated != '' && github.ref_name == 'master' }}
+    uses: ./.github/workflows/v2-sync-objects-dot-inv.yml
+    needs:
+      - identify-changed-demos
+    with:
+      branch: ${{ github.ref }}
+
+    secrets:
+      aws_region: ${{ secrets.AWS_REGION }}
+      aws_access_key_id: ${{ secrets.PL_SITE_PROD_NON_REACT_ACCESS_KEY_ID }}
+      aws_secret_access_key: ${{ secrets.PL_SITE_PROD_NON_REACT_SECRET_ACCESS_KEY }}
+      aws_html_s3_bucket_id: ${{ secrets.PL_SITE_PROD_S3_BUCKET_NAME }}

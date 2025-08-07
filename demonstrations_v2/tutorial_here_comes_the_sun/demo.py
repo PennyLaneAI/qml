@@ -205,7 +205,7 @@ for multi-parameter gates like the :math:`\mathrm{SU}(N)` gates [#banchi]_. It i
 approximate evaluation of an integral by sampling *splitting times* :math:`\tau` and
 evaluating an expression close to the non-stochastic parameter-shift rule for each sample.
 For more details, also consider the
-:doc:`demo on the stochastic parameter-shift rule </demos/tutorial_stochastic_parameter_shift>`.
+:doc:`demo on the stochastic parameter-shift rule <demos/tutorial_stochastic_parameter_shift>`.
 
 So, let's dive into a toy example and explore the three gradient methods!
 We start by defining a simple one-qubit circuit that contains a single :math:`\mathrm{SU}(2)`

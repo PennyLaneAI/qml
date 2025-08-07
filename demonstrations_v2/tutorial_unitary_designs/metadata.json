@@ -5,10 +5,13 @@
             "username": "glassnotes"
         }
     ],
+    "executable_stable": true,
+    "executable_latest": true,
     "dateOfPublication": "2021-09-07T00:00:00+00:00",
     "dateOfLastModification": "2024-10-11T00:00:00+00:00",
     "categories": [
-        "Quantum Machine Learning", "Quantum Computing"
+        "Quantum Machine Learning",
+        "Quantum Computing"
     ],
     "tags": [],
     "previewImages": [

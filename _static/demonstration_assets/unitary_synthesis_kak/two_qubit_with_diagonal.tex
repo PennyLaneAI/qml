@@ -1,0 +1,15 @@
+\documentclass[]{standalone}
+\usepackage{amsmath,quantikz,graphicx,xcolor}
+
+\begin{document}
+\begin{quantikz}
+    & \gate[2]{SU(4)} &\\
+    & &
+\end{quantikz}
+=
+\begin{quantikz}
+    & \gate[2]{\Delta} & \gate{SU(2)} & \ctrl{1} & \gate{R_Y} & \ctrl{1} & \gate{SU(2)} & \\
+    & & \gate{SU(2)} & \targ{} & \gate{R_Y} & \targ{} & \gate{SU(2)} &
+\end{quantikz}
+
+\end{document}
