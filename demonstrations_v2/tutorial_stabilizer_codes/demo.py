@@ -768,6 +768,6 @@ for wire in range(5):
 #
 # .. [#Chandak2018]
 #    S.Chandak, J. Mardia, M. Tolunay.
-#    Implementation and Analysis of stabilizer codes in PyQuil.
-#    <https://shubhamchandak94.github.io/reports/stabilizer_code_report.pdf>__, 
+#    "Implementation and Analysis of stabilizer codes in PyQuil."
+#    `<https://shubhamchandak94.github.io/reports/stabilizer_code_report.pdf>`__, 
 #
