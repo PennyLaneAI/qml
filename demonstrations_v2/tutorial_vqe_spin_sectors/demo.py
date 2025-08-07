@@ -78,7 +78,7 @@ print("The Hamiltonian is ", H)
 #
 # The :func:`~.pennylane.qchem.molecular_hamiltonian` function allows us to define
 # additional keyword arguments to simulate more complicated molecules. For more details
-# take a look at the tutorial :doc:`tutorial_quantum_chemistry`.
+# take a look at the tutorial :doc:`demos/tutorial_quantum_chemistry`.
 #
 # We also want to build the total spin operator :math:`\hat{S}^2,`
 #
@@ -114,7 +114,7 @@ print(S2)
 # all possible single and double excitations of the Hartree-Fock reference state. The indices
 # of the qubits they act on correspond to the spin-orbitals involved in each excitation.
 # For more details on how to use the excitation operations see the
-# tutorial :doc:`tutorial_givens_rotations`.
+# tutorial :doc:`demos/tutorial_givens_rotations`.
 #
 # First, we use the :func:`~.pennylane.qchem.hf_state`
 # function to generate the vector representing the Hartree-Fock state

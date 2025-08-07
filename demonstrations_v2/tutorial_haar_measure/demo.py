@@ -683,7 +683,7 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # Suppose you are venturing out to solve a new problem using an algorithm such
-# as the :doc:`variational quantum eigensolver </demos/tutorial_vqe>`. A
+# as the :doc:`variational quantum eigensolver <demos/tutorial_vqe>`. A
 # critical component of such methods is the choice of :doc:`variational ansatz
 # </glossary/circuit_ansatz>`. Having now learned a bit about the properties of
 # the Haar measure, you may think it would make sense to use this for the
@@ -698,7 +698,7 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 # Unfortunately, while such an ansatz is extremely *expressive* (i.e., it is
 # capable of representing any possible state), these ansaetze actually suffer
 # the most from the barren plateau problem [#McClean2018]_, [#Holmes2021]_.
-# :doc:`Barren plateaus </demos/tutorial_barren_plateaus>` are regions in the
+# :doc:`Barren plateaus <demos/tutorial_barren_plateaus>` are regions in the
 # cost landscape of a parametrized circuit where both the gradient and its
 # variance approach 0, leading the optimizer to get stuck in a local minimum.
 # This was explored recently in the work of [#Holmes2021]_, wherein closeness to

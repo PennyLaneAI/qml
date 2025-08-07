@@ -411,7 +411,7 @@ for n in range(10):
 #
 # .. [#givenstutorial]
 #
-#     :doc:`tutorial_givens_rotations`
+#     :doc:`demos/tutorial_givens_rotations`
 #
 # .. [#grimsley2019]
 #

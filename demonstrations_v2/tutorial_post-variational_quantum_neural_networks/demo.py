@@ -53,7 +53,7 @@ Post-variational quantum neural networks
 #
 
 ######################################################################
-# We compare the post-variational strategies to the conventional variational :doc:`quantum neural network </demos/tutorial_variational_classifier/>` in the
+# We compare the post-variational strategies to the conventional variational :doc:`quantum neural network <demos/tutorial_variational_classifier/>` in the
 # table below.
 #
 

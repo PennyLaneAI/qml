@@ -571,7 +571,7 @@ plt.show()
 # the resultant ensemble performs better.
 #
 # This tutorial shows how QPUs can work in parallel to realize a performance advantage. Check out
-# our :doc:`vqe_parallel` tutorial to see how multiple QPUs can be
+# our :doc:`demos/vqe_parallel` tutorial to see how multiple QPUs can be
 # evaluated asynchronously to speed up calculating the potential energy surface of molecular
 # hydrogen!
 
