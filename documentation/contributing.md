@@ -116,52 +116,72 @@ Every demo requires an accompanying `metadata.json` file located in its director
 - **Dates:** Leave publication and modification dates empty if you do not know them or use UTC format (e.g., `"2023-10-01T12:00:00Z"`).
 - **Categories:** Choose relevant categories for your demo, such as `"Getting Started"`.
 - **`previewImages`:** Modify the final part of the image file names to match your demo's name. These two images will be provided to you once the review process begins. After receiving them, you must upload them to the address indicated in the metadata.
-- **`relatedContent`:** This field refers to demos related to yours. You will need to include the corresponding `id` and set the `weight` to `1.0`.
+- **`relatedContent`:** This field refers to demos related to yours. You will need to provide the demo ID (e.g., `tutorial_qft`), weight (default is `1.0`) and the type as `demonstration`. This helps users find similar demos and enhances the discoverability of your content.
 - **Questions:** If you have any doubts about a specific field, do not hesitate to post a comment for your demo's reviewer.
 
 ### Example `metadata.json` Structure
 
 ```json
 {
-    "title": "Your Demo Title",
-    "description": "A brief description of your demo.",
+    "title": "The hidden cut problem for locating unentanglement",
     "authors": [
         {
-            "username": "author_username"
+            "username": "simidzija"
         }
     ],
     "executable_stable": true,
     "executable_latest": true,
-    "dateOfPublication": "",
-    "dateOfLastModification": "",
+    "dateOfPublication": "2025-07-25T10:00:00+00:00",
+    "dateOfLastModification": "2025-07-25T10:00:00+00:01",
     "categories": [
-        "Quantum Computing"
+        "Algorithms"
     ],
     "tags": [],
     "previewImages": [
-        "_static/demonstration_assets/your_demo_name/your_demo_name_thumbnail.png",
-        "_static/demonstration_assets/your_demo_name/your_demo_name_large_thumbnail.png"
-    ],
-    "relatedContent": [
         {
-            "id": "related_demo_id",
-            "weight": 1.0
+            "type": "thumbnail",
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_hidden_cut.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_hidden_cut.png"
+        }
+    ],
+    "seoDescription": "Learn about a quantum algorithm that determines how to cut a many-body quantum state into unentangled components.",
+    "doi": "",
+    "references": [
+        {
+            "id": "Bouland2024",
+            "type": "article",
+            "title": "The State Hidden Subgroup Problem and an Efficient Algorithm for Locating Unentanglement",
+            "authors": "Adam Bouland, Tudor Giurgică-Tiron, John Wright",
+            "year": "2024",
+            "journal": "STOC '25",
+            "doi": "10.1145/3717823.3718118",
+            "url": "https://doi.org/10.1145/3717823.3718118"
         }
     ],
     "basedOnPapers": [
-        "10.48550/arXiv.XXXX.XXXXX"
-    ],
-    "basedOnPapersDetailed": [
-        {
-            "doi": "10.48550/arXiv.XXXX.XXXXX",
-            "title": "Title of the paper",
-            "authors": "Author One, Author Two, Author Three",
-            "year": "2023",
-            "url": "https://arxiv.org/pdf/XXXX.XXXXX"
-        }
+        "10.1145/3717823.3718118"
     ],
     "referencedByPapers": [],
-    "referencesAndFurtherReading": []
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_qft",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_qft_arithmetics",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_period_finding",
+            "weight": 1.0
+        }
+    ]
 }
 ```
 
