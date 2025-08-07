@@ -109,7 +109,7 @@ from qualtran.drawing import show_counts_sigma
 from qualtran.resource_counting.generalizers import ignore_split_join
 
 q_qpe_g, q_qpe_sigma = qubitization_qpe.call_graph(max_depth=1, generalizer=ignore_split_join)
-#show_call_graph(q_qpe_g)
+show_call_graph(q_qpe_g)
 show_counts_sigma(q_qpe_sigma)
 
 n_qubits = qubitization_qpe.signature.n_qubits()
@@ -235,6 +235,7 @@ _, wrapped_sigma = wrapped_qpe_bloq.call_graph()
 show_counts_sigma(mapped_sigma)
 show_counts_sigma(wrapped_sigma)
 
+######################################################################
 # Here, we can clearly see that the resource counts for the two methods are distinctly different.
 # This is because the underlying implementations for the two QPE operators differ.
 #
