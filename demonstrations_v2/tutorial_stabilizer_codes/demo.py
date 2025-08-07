@@ -771,11 +771,3 @@ for wire in range(5):
 #    Implementation and Analysis of stabilizer codes in PyQuil.
 #    <https://shubhamchandak94.github.io/reports/stabilizer_code_report.pdf>__, 
 #
-#
-
-
-
-# About the author
-# -----------------
-#
-#
