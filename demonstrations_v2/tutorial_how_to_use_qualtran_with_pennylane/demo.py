@@ -206,13 +206,16 @@ fig.tight_layout()
 #
 # Let's see how mapping and wrapping affects our resource count estimates.
 
-from qualtran.drawing import show_counts_sigma
-
-_, mapped_sigma = qpe_bloq.call_graph()
-_, wrapped_sigma = wrapped_qpe_bloq.call_graph()
-
-show_counts_sigma(mapped_sigma)
-show_counts_sigma(wrapped_sigma)
+##############################################################################
+# .. ipython:: python
+#
+#    from qualtran.drawing import show_counts_sigma
+#
+#    _, mapped_sigma = qpe_bloq.call_graph()
+#    _, wrapped_sigma = wrapped_qpe_bloq.call_graph()
+#
+#    show_counts_sigma(mapped_sigma)
+#    show_counts_sigma(wrapped_sigma)
 
 ######################################################################
 # Here, we can clearly see that the resource counts for the two methods are distinctly different.
