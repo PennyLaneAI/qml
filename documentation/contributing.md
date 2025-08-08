@@ -88,7 +88,7 @@ While you are encouraged to be creative with your demo, please keep the followin
 - **LaTeX Macros:** Avoid using LaTeX macros within your comments. Even if they appear to work in development, they will not be displayed correctly once the demo is published.
 - **Author Information:** Include the author's information in the metadata.json file. See the metadata guidelines below.
 - **Code Formatting:** Before submitting, run your script through the [Black Python formatter](https://github.com/psf/black):
-- **Referencing Other Demos in `demo.py`:** You can reference other demos in your `demo.py` file using `:doc:`demos/<demo_name>` syntax. This will create a link to the specified demo in the documentation. For example, to reference the `tutorial_qft` demo, use `:doc:`demos/tutorial_qft``.
+- **Referencing Other Demos in `demo.py`:** You can reference other demos in your `demo.py` file using ``:doc:\`demos/<demo_name>\``` syntax. This will create a link to the specified demo in the documentation. For example, to reference the `tutorial_qft` demo, use ``:doc:\`demos/tutorial_qft\``` .
 
     ```bash
     pip install black
