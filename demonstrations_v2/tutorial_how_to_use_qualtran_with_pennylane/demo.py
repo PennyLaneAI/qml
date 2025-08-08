@@ -188,7 +188,7 @@ print(type(qfunc_as_bloq))
 # --------
 #
 # Functionally, wrapping a quantum function or operator as a ``ToBloq`` is similar to wrapping a Bloq
-# as a ``FromBloq``. A wrapped operator or Qfunc now acts like a Bloq, which means it can be analyzed
+# as a ``FromBloq``. A wrapped PennyLane object acts like a Bloq: it can be analyzed
 # using the language of Qualtran to simulate algorithms, estimate resource requirements, draw
 # diagrams, and more. 
 #
