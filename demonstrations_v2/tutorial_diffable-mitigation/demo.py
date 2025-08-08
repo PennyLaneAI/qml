@@ -228,7 +228,7 @@ plt.show()
 # end up with a better energy compared to executing the noisy device without ZNE.
 #
 # So far we have been using PennyLane gradient methods that use ``autograd`` for simulation and ``parameter-shift`` rules for real device
-# executions. We can also use the other interfaces that are supported by PennyLane, ``jax``, ``torch`` and ``tensorflow``, in the usual way
+# executions. We can also use the other interfaces that are supported by PennyLane, ``jax`` and ``torch``, in the usual way
 # as described in the interfaces section of the documentation :doc:`introduction/interfaces`.
 #
 # Differentiating the mitigation transform itself
