@@ -71,53 +71,28 @@ print(qml.bloq_registers(XGate()))
 # This will create :func:`~.pennylane.registers` with register names in accordance to the Bloq's signature. 
 # Here, the function created one "q" register with a single qubit, as required by the ``XGate``.
 #
-# Let's verify that the ``XGate`` performs as expected in a PennyLane circuit.
+# Let's look at a more complicated example! Qualtran has a special type of addition, known as
+# Galois Field addition (``GF2Addition``) that is not implemented in PennyLane. You can think of it
+# as binary addition that doesn't allow carrying. While we could implement this manually in
+# PennyLane, let's just use the ``GF2Addition`` Bloq like a PennyLane template!
 
-dev = qml.device("default.qubit")
-@qml.qnode(dev)
+from qualtran.bloqs.gf_arithmetic import GF2Addition
+arithmetic_bloq = GF2Addition(2)
+wires = qml.bloq_registers(arithmetic_bloq)
+
+@qml.qnode(qml.device('default.qubit', shots=1))
 def circuit():
-    qml.FromBloq(XGate(), wires=[0])
-    qml.CNOT(wires=[0,1])
-    return qml.state()
+    qml.BasisState([0,1,0,1], wires=wires['x']+wires['y'])
+    qml.FromBloq(arithmetic_bloq, wires=wires['x']+wires['y'])
+    a = [qml.measure(i) for i in range(len(wires['x']+wires['y']))]
+    return qml.sample(a)
 
-print(circuit())
+binary_string = "".join([str(bit) for bit in circuit()])
+print("GF Addition of 1 + 1 =", int(binary_string[len(wires['x']):],2))
+
 ######################################################################
-# We can use Qualtran's ``XGate`` just as if it were a PennyLane ``PauliX`` operator.
-# But wait, there's more! We can convert algorithm-level Bloqs as well. Next, we
-# define a ``QubitizationQPE`` Bloq in Qualtran. We first do some analysis in Qualtran
-# and subsequently hand it off to PennyLane.
-
-import numpy as np
-from qualtran.bloqs.chemistry.hubbard_model.qubitization import (
-    get_walk_operator_for_hubbard_model,
-)
-from qualtran.bloqs.phase_estimation import LPResourceState, QubitizationQPE
-
-walk = get_walk_operator_for_hubbard_model(x_dim=2, y_dim=2, t=2, u=8)
-
-algo_eps = 1/50
-N = 8
-qlambda = 2 * N * 2 + (N * 8) // 2
-qpe_eps = algo_eps / (qlambda * np.sqrt(2))
-qubitization_qpe = QubitizationQPE(
-    walk, LPResourceState.from_standard_deviation_eps(qpe_eps)
-)
-######################################################################
-# For drawing & analysis:
-
-from qualtran.drawing import show_counts_sigma, show_call_graph
-from qualtran.resource_counting.generalizers import ignore_split_join
-
-q_qpe_g, q_qpe_sigma = qubitization_qpe.call_graph(max_depth=1, generalizer=ignore_split_join)
-show_call_graph(q_qpe_g)
-show_counts_sigma(q_qpe_sigma)
-
-n_qubits = qubitization_qpe.signature.n_qubits()
-print(n_qubits) # Since the # of qubits is a bit high, we won't run it on a simulator
-print(qml.FromBloq(qubitization_qpe, wires=range(n_qubits)).decomposition())
-######################################################################
-# The decomposition is exactly what we expected. It's like using a PennyLane
-# operator, except the underlying decomposition is defined in Qualtran. Neat!
+# As expected, since GF2Addition does not allow carrying, 1 + 1 gave us 0. Wow!
+# Just like magic, we were able to use a Qualtran Bloq as a PennyLane template! 
 #
 # Analyzing PennyLane Circuits in Qualtran
 # ----------------------------------------
