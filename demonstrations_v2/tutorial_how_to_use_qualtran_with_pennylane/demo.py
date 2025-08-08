@@ -61,9 +61,9 @@ print(bloq_as_op)
 # PennyLane's PauliX operator.
 #
 # Since Qualtran Bloqs don't know what wires to act on, we need to provide that information to 
-# ``FromBloq`` via the ``wires`` argument. Wire requirements will vary depending on the Bloq, if you
-# don't know what value to provide for ``wires``, you can use the 
-# :func:`~.pennylane.bloq_registers` helper function.
+# ``FromBloq`` via the ``wires`` argument. Wire requirements will vary depending on the Bloq. You
+# can use the :func:`~.pennylane.bloq_registers` helper function to determine what values to 
+# provide for ``wires``.
 
 print(qml.bloq_registers(XGate()))
 
