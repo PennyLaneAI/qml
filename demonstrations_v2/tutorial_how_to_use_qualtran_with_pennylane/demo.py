@@ -73,26 +73,29 @@ print(qml.bloq_registers(XGate()))
 #
 # Let's look at a more complicated example! Qualtran has a special type of addition, known as
 # Galois Field addition (``GF2Addition``) that is not implemented in PennyLane. You can think of it
-# as binary addition that doesn't allow carrying. While we could implement this manually in
-# PennyLane, let's just use the ``GF2Addition`` Bloq like a PennyLane template!
+# as binary addition that doesn't allow carrying. Let's use the combined force of PennyLane and
+# Qualtran to bring ``GF2Addition`` to life!
 
 from qualtran.bloqs.gf_arithmetic import GF2Addition
-arithmetic_bloq = GF2Addition(2)
+arithmetic_bloq = GF2Addition(4)
 wires = qml.bloq_registers(arithmetic_bloq)
+five = [0, 1, 0, 1] # 5 in binary
+ten = [1, 0, 1, 0] # 10 in binary
 
 @qml.qnode(qml.device('default.qubit', shots=1))
 def circuit():
-    qml.BasisState([0,1,0,1], wires=wires['x']+wires['y'])
+    qml.BasisState(five + ten, wires=wires['x']+wires['y'])
     qml.FromBloq(arithmetic_bloq, wires=wires['x']+wires['y'])
     a = [qml.measure(i) for i in range(len(wires['x']+wires['y']))]
     return qml.sample(a)
 
 binary_string = "".join([str(bit) for bit in circuit()])
-print("GF Addition of 1 + 1 =", int(binary_string[len(wires['x']):],2))
+print("GF Addition of 5 + 10 =", int(binary_string[len(wires['x']):],2))
 
 ######################################################################
-# As expected, since GF2Addition does not allow carrying, 1 + 1 gave us 0. Wow!
-# Just like magic, we were able to use a Qualtran Bloq as a PennyLane template! 
+# Wow! Just like magic, we used a Qualtran Bloq like a PennyLane template without any additional
+# work. With Qualtran's expansive library of quantum algorithms, you can now build a greater
+# variety of circuits using a combination of PennyLane templates and Qualtran Bloqs.
 #
 # Analyzing PennyLane Circuits in Qualtran
 # ----------------------------------------
