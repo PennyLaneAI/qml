@@ -56,7 +56,7 @@ bloq_as_op = qml.FromBloq(XGate(), wires=0)
 print(bloq_as_op)
 
 ######################################################################
-# In this simple example, we wrapped a Qualtran ``XGate``` instance using ``FromBloq``. We can see that
+# In this simple example, we wrapped a Qualtran ``XGate`` instance using ``FromBloq``. We can see that
 # the output is a :class:`~.pennylane.io.FromBloq` instance, whose properties are the same as
 # PennyLane's PauliX operator.
 #
@@ -125,6 +125,7 @@ print("GF Addition of 5 + 10 =", int(binary_string[len(wires['x']):],2))
 ######################################################################
 # Smart defaults
 # --------------
+#
 # By default, ``qml.to_bloq`` tries its best to translate 
 # PennyLane objects to Qualtran-native objects. This makes certain Qualtran
 # functionalities, such as gate counting and generalizers, work more seamlessly.
