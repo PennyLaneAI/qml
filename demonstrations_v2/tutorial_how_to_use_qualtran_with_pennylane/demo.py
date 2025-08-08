@@ -2,10 +2,10 @@ r"""How to use Qualtran with PennyLane
 ======================================
 
 Get ready to expand your quantum programming toolkit!
-PennyLane and `Qualtran <https://qualtran.readthedocs.io/en/latest/>` integrate their best features,
+PennyLane and `Qualtran <https://qualtran.readthedocs.io/en/latest/>`_ integrate their best features,
 enabling you to to visualize circuits,
 count qubits and gates, and simulate outputs for programs built with
-`Qualtran bloqs <https://qualtran.readthedocs.io/en/latest/bloqs/index.html#bloqs-library>`,
+`Qualtran bloqs <https://qualtran.readthedocs.io/en/latest/bloqs/index.html#bloqs-library>`_,
 PennyLane operations, or even a mix of both.
 
 .. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/pennylane-demo-qualtran-integration-open-graph.png
@@ -18,12 +18,12 @@ This integration allows you to:
 * **Simulate Qualtran circuits:** Verify the correctness of your Qualtran programs by simulating
     whole Qualtran circuits and checking their outputs in PennyLane.
 * **Expand PennyLane circuits with Qualtran subroutines:** Seamlessly incorporate Qualtran's quantum 
-    subroutines, known as `bloqs <https://qualtran.readthedocs.io/en/latest/bloqs/index.html#bloqs-library>`,
+    subroutines, known as `bloqs <https://qualtran.readthedocs.io/en/latest/bloqs/index.html#bloqs-library>`_,
     directly in your PennyLane simulations.
 * **Analyze the resources of PennyLane circuits with Qualtran:** Leverage Qualtran's advanced analysis tools like
-    `drawing call graphs <https://qualtran.readthedocs.io/en/latest/reference/qualtran/drawing/show_call_graph.html>`,
-    `counting qubits <https://qualtran.readthedocs.io/en/latest/resource_counting/qubit_counts.html>`,
-    and `counting gates <https://qualtran.readthedocs.io/en/latest/reference/qualtran/drawing/show_counts_sigma.html>`. 
+    `drawing call graphs <https://qualtran.readthedocs.io/en/latest/reference/qualtran/drawing/show_call_graph.html>`_,
+    `counting qubits <https://qualtran.readthedocs.io/en/latest/resource_counting/qubit_counts.html>`_,
+    and `counting gates <https://qualtran.readthedocs.io/en/latest/reference/qualtran/drawing/show_counts_sigma.html>`_. 
 * **Expand Qualtran circuits with PennyLane gates and subroutines:** Add any PennyLane 
     :doc:`introduction/operations` or
     :doc:`introduction/templates` to a Qualtran circuit.
