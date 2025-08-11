@@ -134,6 +134,7 @@ print("GF Addition of 5 + 10 =", int(binary_string[len(wires['x']):],2))
 op_as_bloq = qml.to_bloq(qml.X(0))
 print(op_as_bloq)
 
+######################################################################
 # Not all PennyLane operators are as straightforward to map as the ``PauliX`` operator. For example, 
 # PennyLane's ``Quantum Phase Estimation`` could be mapped to a variety of Qualtran Bloqs. In cases
 # where the mapping is ambiguous, we get the smart default:
