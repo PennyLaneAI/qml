@@ -122,7 +122,7 @@ print("GF Addition of 5 + 10 =", int(binary_string[len(wires['x']):],2))
 # following sections, we'll explore how we can wield this powerful function to get all the
 # functionality introduced above.
 #
-######################################################################
+#
 # Smart defaults
 # --------------
 #
