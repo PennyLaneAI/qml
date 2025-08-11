@@ -4,9 +4,9 @@ r"""How to use Qualtran with PennyLane
 Get ready to expand your quantum programming toolkit!
 PennyLane and `Qualtran <https://qualtran.readthedocs.io/en/latest/>`_ integrate their best features,
 enabling you to to visualize circuits,
-count qubits and gates, and simulate outputs for programs built with
+count qubits and gates, and simulate outputs for programs built with a mix of
 `Qualtran bloqs <https://qualtran.readthedocs.io/en/latest/bloqs/index.html#bloqs-library>`_,
-PennyLane operations, or even a mix of both.
+and PennyLane operations.
 
 .. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/pennylane-demo-qualtran-integration-open-graph.png
     :align: center
