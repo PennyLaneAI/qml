@@ -3,11 +3,11 @@ r"""X-ray absorption spectroscopy simulation in the time domain
 
 What will be the first industrially useful quantum algorithm to run on fault-tolerant quantum computers? 
 This open question is being tackled head-on by the research team at Xanadu, as it aligns with our goal of making quantum computers that are useful.
-In particular, we believe promising candidates for early quantum advantage are simulations of *small* but *highly correlated* systems. 
+In particular, we believe promising candidates for quantum advantage are simulations of *small* but *highly correlated* systems. 
 One such application is simulating `X-ray absorption spectroscopy <https://en.wikipedia.org/wiki/X-ray_absorption_spectroscopy>`__ (XAS), which can be useful in workflows for identifying structural degradation mechanisms in material candidates for battery designs 🔋 [#Fomichev2024]_. 
 This demo will show you how to implement an optimized simulation algorithm developed in the paper `“Fast simulations of X-ray absorption spectroscopy for battery materials on a quantum computer” <https://arxiv.org/abs/2506.15784>`__ [#Fomichev2025]_ in PennyLane.
 
-First, we will discuss why simulating X-ray absorption spectroscopy was identified as a promising application for early quantum computers. 
+First, we will discuss why simulating X-ray absorption spectroscopy was identified as a promising application for quantum computers. 
 Then we will explain the main steps in the simulation algorithm and how to
 implement a simplified version in PennyLane.
 
@@ -34,8 +34,8 @@ A fast method of simulating reference spectra for use in fingerprinting would be
    Spectral fingerprinting can be used to identify constituent structures of a material by matching experimental spectra with simulated spectra.
 
 Simulating these spectra is a difficult task for classical computers -- the highly correlated excited states are hard to compute classically, particularly for clusters with transition metals. 
-However, the low number of electronic orbitals needed to simulate these small clusters make this calculation well suited for early fault-tolerant quantum computers, which can naturally handle the large amount of correlations in the electronic state. 
-Tasks like this are promising candidates for early quantum advantage -- simulations of *small* but *highly correlated* systems. 
+However, the low number of electronic orbitals needed to simulate these small clusters make this calculation well suited for fault-tolerant quantum computers, which can naturally handle the large amount of correlations in the electronic state. 
+Tasks like this are promising candidates for quantum advantage -- simulations of *small* but *highly correlated* systems. 
 
 Algorithm
 ---------
@@ -736,7 +736,7 @@ plt.show()
 #
 # In this tutorial, we have implemented a simplified version of the algorithm as presented in Ref. [#Fomichev2025]_. 
 # The algorithm represents a culmination of many optimizations for time evolving an electronic Hamiltonian. 
-# We’ve also discussed how XAS simulation is a promising candidate application for early fault-tolerant quantum computers due to its low qubit overhead but high amount of correlations in the state space.
+# We’ve also discussed how XAS simulation is a promising candidate application for fault-tolerant quantum computers due to its low qubit overhead but high amount of correlations in the state space.
 #
 # References
 # ----------
