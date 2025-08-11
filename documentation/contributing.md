@@ -94,7 +94,7 @@ While you are encouraged to be creative with your demo, please keep the followin
     pip install black
     black -l 100 /demonstrations_v2/tutorial_your_demo/demo.py
     ```
-- **Referencing Other Demos in `demo.py`:** You can reference other demos in your `demo.py` file using ``:doc:`demos/<demo_name>``` syntax. This will create a link to the specified demo in the documentation. For example, to reference the `tutorial_qft` demo, use ``:doc:`demos/tutorial_qft``` .
+- **Referencing Other Demos in `demo.py`:** You can reference other demos in your `demo.py` file using ``:doc:\`demos/<demo_name>\``` syntax. This will create a link to the specified demo in the documentation. For example, to reference the `tutorial_qft` demo, use ``:doc:\`demos/tutorial_qft\``` .
 
 
 
