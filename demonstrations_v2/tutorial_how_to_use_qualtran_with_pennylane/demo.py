@@ -209,8 +209,13 @@ fig.tight_layout()
 
 _, mapped_sigma = qpe_bloq.call_graph()
 _, wrapped_sigma = wrapped_qpe_bloq.call_graph()
-print(mapped_sigma)
-print(wrapped_sigma)
+print("--- Mapped counts ---")
+for gate, count in mapped_sigma.items():
+    print(f"{gate}: {count}")
+
+print("\n--- Wrapped counts ---")
+for gate, count in wrapped_sigma.items():
+    print(f"{gate}: {count}")
 
 ######################################################################
 # Here, we can clearly see that the resource counts for the two methods are distinctly different.
