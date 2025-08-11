@@ -15,8 +15,8 @@ and PennyLane operations.
 
 This integration allows you to:
 
-* **Simulate Qualtran circuits:** Verify the correctness of your Qualtran programs by simulating
-    whole Qualtran circuits and checking their outputs in PennyLane.
+* **Simulate Qualtran circuits:** Validate Qualtran programs by simulating
+    them in PennyLane and confirming their outputs.
 * **Expand PennyLane circuits with Qualtran subroutines:** Seamlessly incorporate Qualtran's quantum 
     subroutines, known as `bloqs <https://qualtran.readthedocs.io/en/latest/bloqs/index.html#bloqs-library>`_,
     directly in your PennyLane simulations.
