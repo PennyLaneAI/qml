@@ -60,10 +60,9 @@ print(bloq_as_op)
 # the output is a :class:`~.pennylane.io.FromBloq` instance, whose properties are the same as
 # PennyLane's PauliX operator.
 #
-# Since Qualtran Bloqs don't know what wires to act on, we need to provide that information to 
-# ``FromBloq`` via the ``wires`` argument. Wire requirements will vary depending on the Bloq. You
-# can use the :func:`~.pennylane.bloq_registers` helper function to determine what values to 
-# provide for ``wires``.
+# Unlike PennyLane operators, Qualtran Bloqs don't need ``wires``. We need to provide that 
+# information to ``FromBloq`` via the ``wires`` argument. You can use the :func:`~.pennylane.bloq_registers` 
+# helper function to determine what values to provide for ``wires``.
 
 print(qml.bloq_registers(XGate()))
 
@@ -78,7 +77,7 @@ print(qml.bloq_registers(XGate()))
 
 from qualtran.bloqs.gf_arithmetic import GF2Addition
 arithmetic_bloq = GF2Addition(4)
-wires = qml.bloq_registers(arithmetic_bloq)
+wires = qml.bloq_registers(arithmetic_bloq) # This gives us 2 registers, 'x' and 'y'
 five = [0, 1, 0, 1] # 5 in binary
 ten = [1, 0, 1, 0] # 10 in binary
 
