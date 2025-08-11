@@ -220,7 +220,7 @@ print(wrapped_sigma)
 # defined. If it is, Qualtran uses that call graph to compute the resource count estimates. If it
 # is not, Qualtran uses the decomposition to compute the resource count estimates.
 #
-# For wrapped ``ToBloq``s, call graphs are generally not defined. This means the decompositions are
+# For wrapped ``ToBloq``\s, call graphs are generally not defined. This means the decompositions are
 # used to compute the counts. However, since computing decompositions is computationally expensive,
 # many PennyLane templates, such as QPE, have call graphs defined even when wrapped as a ``ToBloq``.
 # By defining these call graphs, you can now efficiently compute resource count estimates for 
