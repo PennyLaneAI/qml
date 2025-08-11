@@ -425,7 +425,7 @@ for it in range(steps):
 # since it also represents a bound for the error between the generated state
 # and the exact solution of the problem.
 
-plt.style.use("seaborn-v0_8-darkgrid")
+plt.style.use("seaborn-v0_8")
 plt.plot(cost_history, "g")
 plt.ylabel("Cost function")
 plt.xlabel("Optimization steps")

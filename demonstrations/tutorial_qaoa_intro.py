@@ -389,7 +389,7 @@ probs = probability_circuit(params[0], params[1])
 # Finally, we can display a bar graph showing the probability of
 # measuring each bitstring:
 
-plt.style.use("seaborn-v0_8-darkgrid")
+plt.style.use("seaborn-v0_8")
 plt.bar(range(2 ** len(wires)), probs)
 plt.show()
 
@@ -484,7 +484,7 @@ def probability_circuit(gamma, alpha):
 
 probs = probability_circuit(params[0], params[1])
 
-plt.style.use("seaborn-v0_8-darkgrid")
+plt.style.use("seaborn-v0_8")
 plt.bar(range(2 ** len(wires)), probs)
 plt.show()
 
