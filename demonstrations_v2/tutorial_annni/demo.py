@@ -3,6 +3,8 @@ r"""Supervised and Unsupervised Quantum Machine Learning Models for the Phase De
 
 Make a change...
 
+Make another...
+
 Quantum Machine Learning (QML) models provide a natural framework for analyzing quantum many-body systems due to the direct mapping between spins and qubits.
 
 A key property of these systems is their phase diagram, which characterizes different physical phases based on parameters such as magnetization or the strength of interactions. 
