@@ -15,7 +15,7 @@ and PennyLane operations.
 
 This integration allows you to:
 
-* **Simulate Qualtran circuits:** Validate Qualtran programs by simulating
+* **Simulate Qualtran Bloqs:** Validate Qualtran programs by simulating
     them in PennyLane and confirming their outputs.
 * **Expand PennyLane circuits with Qualtran subroutines:** Seamlessly incorporate Qualtran's quantum 
     subroutines, known as `bloqs <https://qualtran.readthedocs.io/en/latest/bloqs/index.html#bloqs-library>`_,
@@ -34,8 +34,8 @@ PennyLane ``QNodes``.
 """
 
 ######################################################################
-# Simulating Qualtran Bloqs and Larger Algorithms
-# -----------------------------------------------
+# Simulating Qualtran Bloqs
+# -------------------------
 #
 # For those unfamiliar, Qualtran (quantum algorithms translator) is a set of abstractions for 
 # representing quantum programs and a library of quantum algorithms (Bloqs) expressed in that 
@@ -69,6 +69,9 @@ print(qml.bloq_registers(XGate()))
 ######################################################################
 # This will create :func:`~.pennylane.registers` with register names in accordance to the Bloq's signature. 
 # Here, the function created one "q" register with a single qubit, as required by the ``XGate``.
+#
+# Expand PennyLane circuits with Qualtran subroutines
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # Let's look at a more complicated example! Qualtran has a special type of addition, known as
 # Galois Field addition (``GF2Addition``) that is not implemented in PennyLane. You can think of it
