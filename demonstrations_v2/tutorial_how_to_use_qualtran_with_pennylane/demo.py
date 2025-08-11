@@ -123,7 +123,7 @@ print("GF Addition of 5 + 10 =", int(binary_string[len(wires['x']):],2))
 #
 #
 # Smart defaults
-# --------------
+# ~~~~~~~~~~~~~~
 #
 # By default, ``qml.to_bloq`` tries its best to translate 
 # PennyLane objects to Qualtran-native objects. This makes certain Qualtran
@@ -151,7 +151,7 @@ fig.tight_layout()
 # ``ctrl_state_prep``? In this case, we turn to custom mappings.
 #  
 # Custom mapping
-# --------------
+# ~~~~~~~~~~~~~~
 # To use ``LPResourceState``, rather than  ``RectangularWindowState``, we can override the smart
 # default by passing in a custom map.
 
@@ -185,7 +185,7 @@ print(type(qfunc_as_bloq))
 
 ######################################################################
 # Wrapping
-# --------
+# ~~~~~~~~
 #
 # Functionally, wrapping a quantum function or operator as a ``ToBloq`` is similar to wrapping a Bloq
 # as a ``FromBloq``. A wrapped PennyLane object acts like a Bloq: it can be analyzed
