@@ -621,23 +621,31 @@ for rho in rhos:
         expvals[:, i] += dipole_norm[rho]**2 * np.array(measurement).real
 
 ######################################################################
-# In the simulation above we are cheating! 
-# We store the state before every measurement, and then start the time evolution from that state when we move on to the next time step.
-# This way, we only have to compute *one step* to get to the next time increment.
-# This is not possible on a real quantum device -- every time you measure the state you have to start from scratch and compute all previous time steps again.
-# However, when using a simulated quantum device, like ``lightning.qubit``,  this trick can save computation time.
+# .. note::
+# 
+#   In the simulation above we are cheating! 
+#   We store the state before every measurement, and then start the time evolution from that state when we move on to the next time step.
+#   This way, we only have to compute *one step* to get to the next time increment.
+#   This is not possible on a real quantum device -- every time you measure the state you have to start from scratch and compute all previous time steps again.
+#   However, when using a simulated quantum device, like ``lightning.qubit``,  this trick can save computation time.
 #  
 # Plotting the time-domain output, we see a `beat note <https://en.wikipedia.org/wiki/Beat_(acoustics)>`__, indicating there are two strong frequencies in our spectrum. 
 
 import matplotlib.pyplot as plt
 
 plt.style.use("pennylane.drawer.plot")
+colors = plt.rcParams['axes.prop_cycle'].by_key()['color']
 
 fig = plt.figure(figsize=(6.4, 2.4))
 ax = fig.add_axes((0.15, 0.3, 0.8, 0.65))  # Leave space for caption.
-ax.plot(range(len(expvals[0, :])), expvals[0, :], label="Real")
-ax.plot(range(len(expvals[1, :])), expvals[1, :], label="Imaginary", linestyle="--")
-ax.set(xlabel=r"$\mathrm{Time\ step}, j$", ylabel=r"$\mathrm{Expectation\ value}$")
+ax.plot(range(len(expvals[0, :])), expvals[0, :], 
+        label="Real", color=colors[0])
+ax.plot(range(len(expvals[1, :])), expvals[1, :], 
+        label="Imaginary", linestyle="--", color=colors[3])
+ax.set(xlabel=r"$\mathrm{Time\ step}, j$", 
+       ylabel=r"$\mathrm{Expectation\ value}$",
+       xlim=[-5, 105],
+      )
 fig.text(0.5, 0.05,
     "Figure 7. Time-domain output of algorithm.",
     horizontalalignment="center",
