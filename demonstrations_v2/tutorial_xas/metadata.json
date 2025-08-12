@@ -47,6 +47,15 @@
             "url": "https://arxiv.org/abs/2405.11015"
         },
         {
+            "id": "Harrow2009",
+            "type": "article",
+            "title": "Quantum algorithm for linear systems of equations",
+            "authors": "Aram W. Harrow, Avinatan Hassidim, Seth Lloyd",
+            "year": "2009",
+            "journal": "PRL",
+            "url": "https://doi.org/10.1103/PhysRevLett.103.150502"
+        },
+        {
             "id": "Loaiza2023",
             "type": "article",
             "title": "Block-invariant symmetry shift: Preprocessing technique for second-quantized Hamiltonians to improve their decompositions to linear combination of unitaries",

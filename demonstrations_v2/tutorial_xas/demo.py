@@ -762,6 +762,10 @@ plt.show()
 #    for battery materials on a quantum computer”. `arXiv preprint arXiv:2506.15784
 #    (2025) <https://arxiv.org/abs/2506.15784>`__.
 #
+# .. [#Harrow2009]
+#
+#    Aram W. Harrow, Avinatan Hassidim, and Seth Lloyd, "Quantum algorithm for linear systems of equations". `PRL 103, 150502 (2009) <https://doi.org/10.1103/PhysRevLett.103.150502>`__.
+#
 # .. [#Fomichev2024]
 #
 #    Stepan Fomichev, Kasra Hejazi, Ignacio Loaiza, Modjtaba Shokrian Zini, Alain Delgado, Arne-Christian
