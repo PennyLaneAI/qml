@@ -172,7 +172,7 @@ print(qml.defer_measurements(interesting_qnode)(x))
 #
 
 num_shots = 10000
-counts = qml.defer_measurements(interesting_qnode)(x, shots=num_shots)
+counts = qml.set_shots(qml.defer_measurements(interesting_qnode), shots=num_shots)(x)
 p_yes = counts[True] / num_shots
 p_no = counts[False] / num_shots
 print(f'The probability to answer with "yes" / "no" is {p_yes:.5f} / {p_no:.5f}')
@@ -180,8 +180,8 @@ print(f'The probability to answer with "yes" / "no" is {p_yes:.5f} / {p_no:.5f}'
 ######################################################################
 # This concludes our how-to on statistics and post-processing of mid-circuit measurements.
 # If you would like to explore mid-circuit measurement applications, be sure to check out
-# our :doc:`MBQC demo <demos/tutorial_mbqc>` and the
-# :doc:`demo on quantum teleportation <demos/tutorial_teleportation>`. Or, see all available functionality in our
+# our :doc:`MBQC demo </demos/tutorial_mbqc>` and the
+# :doc:`demo on quantum teleportation </demos/tutorial_teleportation>`. Or, see all available functionality in our
 # `measurements quickstart page <https://docs.pennylane.ai/en/stable/introduction/measurements.html#mid-circuit-measurements-and-conditional-operations>`_.
 #
 # For performance considerations, take a look at
@@ -193,7 +193,7 @@ print(f'The probability to answer with "yes" / "no" is {p_yes:.5f} / {p_no:.5f}'
 # never see bit strings with differing second and third bits.
 # Sampling more shots eventually reveals this, even though they remain rare:
 
-probs, counts = qml.defer_measurements(simple_node)(x, shots=10000)
+probs, counts = qml.set_shots(qml.defer_measurements(simple_node), shots=10000)(x)
 print(f"Bit string counts on last three qubits: {counts}")
 
 ######################################################################
