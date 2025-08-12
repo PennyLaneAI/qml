@@ -249,7 +249,9 @@ wf_casci = _wfdict_to_statevector(wf_casci_dict, n_cas)
 # To generate this operator, we have to specify which molecular orbitals are in our active space. 
 # We can obtain the indices of the included and excluded orbitals using :func:`~pennylane.qchem.active_space` to obtain the lists ``active`` and ``core``, respectively.
 #
-# The action of the dipole operator will be split into the three cartesian directions :math:`\{x, y, z\}`, which we will loop over to obtain the states :math:`\hat m_{\{x,y,z\}}|I\rangle`.
+# The action of the dipole operator will be split into the three cartesian directions :math:`\{x, y, z\}`, which we will loop over to obtain the states :math:`\hat m_{\{x,y,z\}}|I\rangle`. 
+# This will give us an operator that describes general absorption of electro-magnetic radiation for our molecule, including at energies outside of the XAS regime. 
+# This is fine for our simple example, but for more complex instances you may want to modify the dipole operator to restrict the final states (see the Appendix for more details).
 
 # Get core and active orbital indices.
 core, active = qml.qchem.active_space(
@@ -754,6 +756,10 @@ plt.show()
 #    Voigt, Jonathan E. Mueller, and Juan Miguel Arrazola, “Simulating X-ray absorption spectroscopy of
 #    battery materials on a quantum computer”. `arXiv preprint arXiv:2405.11015
 #    (2024) <https://arxiv.org/abs/2405.11015>`__.
+#
+# .. [#DipoleApprox]
+#
+#    This is not fully general. By setting the dipole operator as the action of the incident radiation, we are using the dipole approximation, which is the assumption that the wavelength of radiation is much larger than the size of the molecule.
 #
 # .. [#Cohn2021]
 #
