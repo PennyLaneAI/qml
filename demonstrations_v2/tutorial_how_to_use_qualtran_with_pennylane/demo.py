@@ -152,15 +152,18 @@ print("GF Addition of 5 + 10 =", int(binary_string[len(wires['x']):],2))
 # functionalities, such as gate counting and
 # `generalizers <https://qualtran.readthedocs.io/en/latest/reference/qualtran/resource_counting/generalizers.html>`_,
 # work more seamlessly.
-# Here, PennyLane's ``PauliX`` operator is mapped directly to Qualtran's ``XGate``.
+# Here, PennyLane's :class:`~pennylane.PauliX` operator is mapped directly to Qualtran's ``XGate``.
 
 op_as_bloq = qml.to_bloq(qml.X(0))
 print(op_as_bloq)
 
 ######################################################################
-# Not all PennyLane operators are as straightforward to map as the ``PauliX`` operator. For example, 
-# PennyLane's ``Quantum Phase Estimation`` could be mapped to a variety of Qualtran Bloqs. In cases
-# where the mapping is ambiguous, we get the smart default:
+# Not all PennyLane operators are as straightforward to map as the :class:`~pennylane.PauliX` operator. For example, 
+# PennyLane's :class:`~pennylane.QuantumPhaseEstimation` could be mapped to a variety of Qualtran 
+# quantum phase estimation (QPE) Bloqs, like
+# `TextbookQPE <https://qualtran.readthedocs.io/en/latest/bloqs/phase_estimation/text_book_qpe.html>`_ or
+# `QubitizationQPE <https://qualtran.readthedocs.io/en/latest/bloqs/phase_estimation/qubitization_qpe.html>`_. 
+# In cases where the mapping is ambiguous, we get the smart default:
 
 from qualtran.drawing import draw_musical_score,  get_musical_score_data
 
@@ -170,14 +173,19 @@ fig, ax = draw_musical_score(get_musical_score_data(qpe_bloq.decompose_bloq()))
 fig.tight_layout()
 
 ######################################################################
-# Here, the smart default is Qualtran's ``TextbookQPE`` where ``ctrl_state_prep`` is Qualtran's 
-# ``RectangularWindowState``. But what if we wanted to use a different Bloq for our 
-# ``ctrl_state_prep``? In this case, we turn to custom mappings.
+# Here, the smart default is to call a Qualtran
+# `TextbookQPE <https://qualtran.readthedocs.io/en/latest/bloqs/phase_estimation/text_book_qpe.html>`_
+# that uses
+# `RectangularWindowState <https://qualtran.readthedocs.io/en/latest/bloqs/phase_estimation/text_book_qpe.html#rectangularwindowstate>`_ 
+# to prepare a state. But what if we wanted to use a different Bloq for our 
+# state preparation? In this case, we turn to custom mappings.
 #  
 # Custom mapping
 # ~~~~~~~~~~~~~~
-# To use ``LPResourceState``, rather than  ``RectangularWindowState``, we can override the smart
-# default by passing in a custom map.
+# To use another state preparation routine, like `LPResourceState <https://qualtran.readthedocs.io/en/latest/bloqs/phase_estimation/lp_resource_state.html#lpresourcestate>`_,
+# rather than  ``RectangularWindowState``, we can override the smart
+# default with a custom map. As shown below, custom maps are defined with a dictionary, where keys
+# are the original operations and values are the new operations we want to map those to.
 
 from qualtran.bloqs.phase_estimation import LPResourceState
 from qualtran.bloqs.phase_estimation.text_book_qpe import TextbookQPE
@@ -228,7 +236,7 @@ fig.tight_layout()
 # terms of native Qualtran Bloqs such as ``Allocate``. When we wrap, the musical score has the 3 
 # wires explicitly drawn and handled, because there is no PennyLane ``Allocate`` operator.
 #
-# Let's see how mapping and wrapping affects our resource count estimates.
+# Let's see how mapping and wrapping affect our resource count estimates.
 
 _, mapped_sigma = qpe_bloq.call_graph()
 _, wrapped_sigma = wrapped_qpe_bloq.call_graph()
@@ -243,7 +251,22 @@ for gate, count in wrapped_sigma.items():
 ######################################################################
 # Here, we can clearly see that the resource counts for the two methods are distinctly different.
 # This is because the underlying implementations for the two QPE operators differ.
-#
+# Another way to analyze quantum algorithms shows this difference clearly. Qualtran's 
+# `show_call_graph <https://qualtran.readthedocs.io/en/latest/reference/qualtran/drawing/show_call_graph.html>`_
+# lets you visualize the full stack of a quantum circuit and analyze what causes specific algorithms
+# and gates to be called and how often. The mapped circuit translates directly to high-level
+# Qualtran bloqs:
+
+from qualtran.drawing import show_call_graph
+
+show_call_graph(qpe_bloq, max_depth=1)
+
+######################################################################
+# And the wrapped circuit uses a series of PennyLane decompositions/definitions:
+ 
+show_call_graph(wrapped_qpe_bloq, max_depth=1)
+
+######################################################################
 # When Qualtran computes the resource counts for a ``Bloq``, it first checks if there is a call graph
 # defined. If it is, Qualtran uses that call graph to compute the resource count estimates. If it
 # is not, Qualtran uses the decomposition to compute the resource count estimates.
