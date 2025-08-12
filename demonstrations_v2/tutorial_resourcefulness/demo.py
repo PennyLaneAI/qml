@@ -88,6 +88,9 @@ def f_hat(k):
     projection = [ f(x) * np.exp(-2 * np.pi * 1j * k * x / N)/np.sqrt(N) for x in range(N)]
     return  np.sum(projection)
 
+
+
+
 f_vals = [f(x) for x in range(N)]
 f_hat_vals = [f_hat(k) for k in range(N)]
 
