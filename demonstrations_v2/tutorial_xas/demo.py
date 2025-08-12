@@ -85,7 +85,7 @@ We can recover the previous form of the absorption cross-section if we rewrite t
 where the first term is clearly proportional to the absorption cross section. 
 The second term is zero if we centre the frame of reference for our molecular orbitals at the nuclear-charge weighted centre for our molecular cluster of choice. 
 
-Okay, so how do we determine :math:`\mathcal{G_}\rho(\omega)`? 
+Okay, so how do we determine :math:`\mathcal{G}_\rho(\omega)`? 
 If we are going to evaluate this quantity in a quantum register, it will need to be normalized, so instead we are looking for
 
 .. math::  G_\rho(\omega) = \eta \frac{\mathcal{G}_\rho(\omega)}{||\hat m_\rho | I \rangle ||^2} \,.
@@ -517,8 +517,10 @@ def second_order_trotter(dev, state, step):
         qml.StatePrep(state, wires=qubits)
 
         prior_U = np.eye(n_cas)  # No initial prior U, so set as identity matrix.
-        prior_U = first_order_trotter(step / 2, prior_U=prior_U, final_rotation=False, reverse=False)
-        prior_U = first_order_trotter(step / 2, prior_U=prior_U, final_rotation=True, reverse=True)
+        prior_U = first_order_trotter(step / 2, prior_U=prior_U, 
+                                      final_rotation=False, reverse=False)
+        prior_U = first_order_trotter(step / 2, prior_U=prior_U, 
+                                      final_rotation=True, reverse=True)
 
         return qml.state()
 
@@ -593,8 +595,9 @@ shots_list = [int(round(total_shots * L_j(alpha * t_j) / A)) for t_j in time_int
 # Run Simulation
 # --------------
 #
-# Finally, we can run the simulation to determine the expectation values at each time step, which allows us to construct the time-domain Green’s function. 
+# Finally, we can run the simulation to determine the expectation values at each time step, alloing us to construct the time-domain Green’s function. 
 # We also sum the expectation values from each cartesian direction :math:`\rho.`
+# 
 # .. note::
 # 
 #   In the simulation below, we are cheating! 
@@ -631,7 +634,8 @@ for rho in rhos:
         expvals[:, i] += dipole_norm[rho]**2 * np.array(measurement).real
 
 ######################################################################
-# Plotting the time-domain output, which is the real and imaginary components of the time-domain Green's function. We restrict the plot to the first 100 time steps to see the output more clearly.
+# Next we plot the time-domain output, which is both the real and imaginary components of the time-domain Green's function. 
+# We restrict the plot to the first 100 time steps.
 
 import matplotlib.pyplot as plt
 
@@ -658,7 +662,7 @@ plt.show()
 ######################################################################
 # From the plot above, we can see a `beat note <https://en.wikipedia.org/wiki/Beat_(acoustics)>`__, indicating there are two strong frequencies in our spectrum. 
 #
-# To calculate the Fourier transform of the time-domain Green’s function, we can use an expression that explicitly separates the real and imaginary components, since we have them stored in separate arrays.
+# To calculate the Fourier transform of the time-domain Green’s function, we can use an expression where the real and imaginary components of the expectation values are separate, since we have them stored in different arrays.
 #
 # .. math::  -\mathrm{Im}\,G(\omega) = \frac{\eta\tau}{2\pi}\left(1 + 2\sum_{j=1}^{j_\mathrm{max}}e^{-\eta \tau j}\left[ \mathbb{E}\left(\mathrm{Re}\,\tilde G(\tau j)\right)\mathrm{cos}(\tau j \omega) - \mathbb{E}\left(\mathrm{Im}\,\tilde G(\tau j)\right) \mathrm{sin}(\tau j \omega)\right]\right) \,,
 #
@@ -762,10 +766,6 @@ plt.show()
 #    for battery materials on a quantum computer”. `arXiv preprint arXiv:2506.15784
 #    (2025) <https://arxiv.org/abs/2506.15784>`__.
 #
-# .. [#Harrow2009]
-#
-#    Aram W. Harrow, Avinatan Hassidim, and Seth Lloyd, "Quantum algorithm for linear systems of equations". `PRL 103, 150502 (2009) <https://doi.org/10.1103/PhysRevLett.103.150502>`__.
-#
 # .. [#Fomichev2024]
 #
 #    Stepan Fomichev, Kasra Hejazi, Ignacio Loaiza, Modjtaba Shokrian Zini, Alain Delgado, Arne-Christian
@@ -773,9 +773,13 @@ plt.show()
 #    battery materials on a quantum computer”. `arXiv preprint arXiv:2405.11015
 #    (2024) <https://arxiv.org/abs/2405.11015>`__.
 #
+# .. [#Harrow2009]
+#
+#    Aram W. Harrow, Avinatan Hassidim, and Seth Lloyd, "Quantum algorithm for linear systems of equations". `PRL 103, 150502 (2009) <https://doi.org/10.1103/PhysRevLett.103.150502>`__.
+# 
 # .. [#DipoleApprox]
 #
-#    This is not fully general. By setting the dipole operator as the action of the incident radiation, we are using the dipole approximation, which is the assumption that the wavelength of radiation is much larger than the size of the molecule.
+#    This is only general within the dipole approximation, which is the assumption that the wavelength of radiation is much larger than the size of the molecule. 
 #
 # .. [#Cohn2021]
 #
