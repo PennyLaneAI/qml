@@ -3278,30 +3278,32 @@ files = [
 
 [[package]]
 name = "kahypar"
-version = "1.1.7"
+version = "1.3.5"
 description = "Python Inferface for the Karlsruhe Hypergraph Partitioning Framework (KaHyPar)"
 optional = false
 python-versions = "*"
 groups = ["executable-dependencies"]
 files = [
-    {file = "kahypar-1.1.7-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:e72e1be11b0791076106502d17bdddd82973853356bbb5d472c874d55fd75327"},
-    {file = "kahypar-1.1.7-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:da2c95d9d6bd201e91c9293119b4e7bce32c7b4ac681b7638bf6498d4fa40b74"},
-    {file = "kahypar-1.1.7-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:72bb1b26da232ef05e5d74d81a5e0929b6d5065c3f38403e3b673f054f1cdd6f"},
-    {file = "kahypar-1.1.7-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:92be5fb71f89b467333f1e542d6fa64a4071593679e72cae20d1f8349b216667"},
-    {file = "kahypar-1.1.7-cp36-cp36m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:16b5519e1c8e4dbe000e85367c97a18b3280103c5bbc652ad8651f569802e507"},
-    {file = "kahypar-1.1.7-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:01dbf5c627aa23307d57ded6d243bbca08d160a05f50e03f7a5aae0fd5a00dd1"},
-    {file = "kahypar-1.1.7-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:01c218d6bc4b973a7e4ebbd2b751fa9a3b7ca416bd6340af48a564467b83717e"},
-    {file = "kahypar-1.1.7-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:7e5f8a6a2cbb795ee58f92d6f20daf42d0842d243ae471685281ca9f0583bf07"},
-    {file = "kahypar-1.1.7-cp38-cp38-macosx_11_0_arm64.whl", hash = "sha256:75632c7b14337bd2d596ef647943c37b507ff3a4eaa5e5154a4f83a977f8320d"},
-    {file = "kahypar-1.1.7-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:150380777aa453e719246ff1058d19499c0b307ab4a3dce5008b9e74b1cfb653"},
-    {file = "kahypar-1.1.7-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:bc0896d88c9ef2a8ab6cd6fc2c174c8023ed2ecee35bc74779e33df572fde71c"},
-    {file = "kahypar-1.1.7-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:1528d388ce991561e1b2e7cd32995d61585dac996f4c172d93006e31891004e1"},
-    {file = "kahypar-1.1.7-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:2be5e86adb3722937edc262c55e4be031d04efe06e668b4e5f089ddc64e3dbe8"},
-    {file = "kahypar-1.1.7-pp37-pypy37_pp73-macosx_10_9_x86_64.whl", hash = "sha256:36f6f0629db5479ca339292910890f1c8d02945305a22806c0f331254630483e"},
-    {file = "kahypar-1.1.7-pp37-pypy37_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:6fa7464f200c115653661f0d9b3a52ef34d2f0d9c42f88df36fb179f77a01c9e"},
-    {file = "kahypar-1.1.7-pp38-pypy38_pp73-macosx_10_9_x86_64.whl", hash = "sha256:0bcf1a6f9a5928b9d24c4af2341d63a39331f05c30e6b18e54b3943ce9156672"},
-    {file = "kahypar-1.1.7-pp38-pypy38_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:05d2b3442c37f31b2f4abe5ace63f7dd0ab7a415b4b3fe09875aea83e2d97af0"},
-    {file = "kahypar-1.1.7-pp39-pypy39_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:4a3a57081118713d82f54615cd35bd3e1f49cb5c1d18e717622370a1aea74f53"},
+    {file = "kahypar-1.3.5-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:9ee3520d83c7e808134041e13218f0507882203063e18cc72d8d82531561bc56"},
+    {file = "kahypar-1.3.5-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:2218296b4197e1ee9b7be386e6d681cf6bf8f0b2d4d36971bb7c8c5561108b46"},
+    {file = "kahypar-1.3.5-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:da02aca5d72c91cf270af15c7990922170c400996cfab77d13a1003cf0638de8"},
+    {file = "kahypar-1.3.5-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:2afc0c30462d63be436d3c4275dcd8a12224b6e121411fe4eecb5306c1160185"},
+    {file = "kahypar-1.3.5-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:544e2ef9151d31754e03d3ee1e4219b9abd8415b06144c47ddd4f4ffd529640d"},
+    {file = "kahypar-1.3.5-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:075fb85c8964627e56900cc8dd121d2ba060d5496748484ef6d869df09ccfe0a"},
+    {file = "kahypar-1.3.5-cp313-cp313-macosx_11_0_arm64.whl", hash = "sha256:565a0f11bbd566296875f9259448e97e7cf95e3b9a06ffb0d95ee0914b1f2e54"},
+    {file = "kahypar-1.3.5-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:8744fa4b7aed6792f833d015af7da84031cc366d6675cb90a7398bb01dcc9a1b"},
+    {file = "kahypar-1.3.5-cp313-cp313t-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:597adfb11d0e776374086ad762bc799aaea2e4e393b4bc5dc9e3eb0010636c6c"},
+    {file = "kahypar-1.3.5-cp36-cp36m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:6a12e4b1471b7ca66626d79ad9369efd33cfe1b45d7354854066a926737364f1"},
+    {file = "kahypar-1.3.5-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:6753893082338c93df8361a61b74b47c51805ec08d7ba816877f00aea7d046f0"},
+    {file = "kahypar-1.3.5-cp38-cp38-macosx_11_0_arm64.whl", hash = "sha256:d9e39aca3e90e20b83ba7926089377cf4cbebe085ccf380b398a322a8ff20250"},
+    {file = "kahypar-1.3.5-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:7d9ceb463e5aaa676bea3eec661fa6ebe371513ef1050018bedb4bc1f1e08708"},
+    {file = "kahypar-1.3.5-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:90c1719ca7b5599bb6f2dc933806f9cc3eb05a5ec61d8c47b39a41a235ac1799"},
+    {file = "kahypar-1.3.5-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:aea9d7633c1a5e94a62d5c9f6df1567164eff053fde8dc25432008dec222ae4c"},
+    {file = "kahypar-1.3.5-pp310-pypy310_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:9b738632ad7b4257469213738280d70c453f708e54e6a058358e53a594cebf72"},
+    {file = "kahypar-1.3.5-pp37-pypy37_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:cef4997a480d4e25e155755ed1f56db217b0733b884541af58dd15daa9eefd78"},
+    {file = "kahypar-1.3.5-pp38-pypy38_pp73-macosx_11_0_arm64.whl", hash = "sha256:928b52bb69d171a11cf547eaf6d72a36fdef192e02897c16a0cd36cf500fe895"},
+    {file = "kahypar-1.3.5-pp38-pypy38_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:24ac274107e71b4da883fcd8bff4d734a8d663b9e7961b697573bed12ad50d33"},
+    {file = "kahypar-1.3.5-pp39-pypy39_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:8a361871d8427cb2512eab647ff40066ea2f848920af5d4408bda8aaf3edab7a"},
 ]
 
 [[package]]
@@ -9613,4 +9615,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10.0,<3.13.0"
-content-hash = "bccc5f93fee72c29b51ae50104d87baa08cd4beebcbc9e1dff9d22e98bd381db"
+content-hash = "3201493f93687202d6a777c0b2c618cce1e14ea3632eb5b03fd891efd3573c11"
