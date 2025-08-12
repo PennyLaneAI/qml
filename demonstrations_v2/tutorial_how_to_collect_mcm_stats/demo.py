@@ -180,8 +180,8 @@ print(f'The probability to answer with "yes" / "no" is {p_yes:.5f} / {p_no:.5f}'
 ######################################################################
 # This concludes our how-to on statistics and post-processing of mid-circuit measurements.
 # If you would like to explore mid-circuit measurement applications, be sure to check out
-# our :doc:`MBQC demo </demos/tutorial_mbqc>` and the
-# :doc:`demo on quantum teleportation </demos/tutorial_teleportation>`. Or, see all available functionality in our
+# our :doc:`MBQC demo <demos/tutorial_mbqc>` and the
+# :doc:`demo on quantum teleportation <demos/tutorial_teleportation>`. Or, see all available functionality in our
 # `measurements quickstart page <https://docs.pennylane.ai/en/stable/introduction/measurements.html#mid-circuit-measurements-and-conditional-operations>`_.
 #
 # For performance considerations, take a look at

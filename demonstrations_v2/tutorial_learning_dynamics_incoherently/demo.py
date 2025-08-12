@@ -155,7 +155,7 @@ for random_state in random_states:
 # As done in [#Jerbi]_, we create a model circuit with the same gate structure as the target
 # circuit. If the target quantum process were truly unknown, then we would choose a general
 # variational quantum circuit like in the
-# :doc:`Variational classifier demo </demos/tutorial_variational_classifier>`.
+# :doc:`Variational classifier demo <demos/tutorial_variational_classifier>`.
 #
 # .. note ::
 #

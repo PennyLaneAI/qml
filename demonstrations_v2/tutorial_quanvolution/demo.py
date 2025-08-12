@@ -15,8 +15,8 @@ Quanvolutional Neural Networks
     This demo uses TensorFlow, which is a deprecated interface with PennyLane v0.42.
     Interfacing with TensorFlow will no longer be supported with PennyLane v0.43 and higher.
     Consider switching to a different machine learning interface with PennyLane, like
-    :doc:`PyTorch </demos/tutorial_qnn_module_torch>` or
-    :doc:`JAX </demos/tutorial_How_to_optimize_QML_model_using_JAX_and_Optax>`.
+    :doc:`PyTorch <demos/tutorial_qnn_module_torch>` or
+    :doc:`JAX <demos/tutorial_How_to_optimize_QML_model_using_JAX_and_Optax>`.
 
 In this demo we implement the *Quanvolutional Neural Network*, a quantum
 machine learning model originally introduced in
