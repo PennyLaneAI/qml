@@ -49,7 +49,7 @@ Observable: absorption cross section
 In XAS experiments, the absorption cross section :math:`\sigma_A` as a function of the incident X-ray frequency :math:`\omega` is measured for a given material. 
 This is proportional to the rate of absorption of X-ray photons of various energies. 
 For our situation, the electrons in the molecular cluster start in a ground molecular state :math:`|I\rangle` with energy :math:`E_I`. 
-This ground state will be excited to states :math:`|F\rangle` with energies :math:`E_F` by the radiative field through the action of the dipole operator :math:`\hat m_\rho,` where :math:`\rho` is any of the Cartesian directions :math:`x,\ y,\,` or :math`z`.
+This ground state will be excited to states :math:`|F\rangle` with energies :math:`E_F` by the radiative field through the action of the dipole operator :math:`\hat m_\rho,` where :math:`\rho` is any of the Cartesian directions :math:`x,\ y,\,` or :math:`z`.
 
 The absorption cross section is given by the equation
 
