@@ -35,4 +35,4 @@ torchvision==0.16.2 ; sys_platform == 'darwin'
 tensorflow==2.19
 optax==0.2.4
 quimb==1.11.0
-kahypar==1.1.7
+kahypar==1.3.5

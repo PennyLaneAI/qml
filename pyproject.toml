@@ -76,7 +76,7 @@ jax = "0.6.0"
 jaxlib = "0.6.0"
 jaxopt = "0.8.5"
 seaborn = "0.13.2"
-kahypar = "1.1.7"
+kahypar = "1.3.5"
 openfermionpyscf = "0.5"
 covalent = "0.227.0rc0"
 
