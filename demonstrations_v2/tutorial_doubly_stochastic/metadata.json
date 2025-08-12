@@ -5,10 +5,8 @@
             "username": "josh"
         }
     ],
-    "executable_stable": true,
-    "executable_latest": true,
     "dateOfPublication": "2019-10-16T00:00:00+00:00",
-    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
+    "dateOfLastModification": "2025-07-29T00:00:00+00:00",
     "categories": [
         "Optimization"
     ],
