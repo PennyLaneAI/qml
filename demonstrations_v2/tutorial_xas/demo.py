@@ -78,36 +78,28 @@ We can write the cross section as the imaginary part of the following Green’s 
 
 .. math:: \mathcal{G}_\rho(\omega) = \langle I|\hat m_\rho \frac{1}{\hat H -E_I -\omega +i\eta} \hat m_\rho |I\rangle\,.
 
-Using a resolution of identity of the final states and simplifying, we end up with
+We can recover the previous form of the absorption cross-section if we rewrite this in the Lehmann representation (inserting a resolution of identity of final states)
 
-.. math::  \mathrm{Im}\mathcal{G_\rho(\omega)} = -\sum_{F\neq I} \frac{|\langle F|\hat m_\rho|I\rangle|^2\eta}{(E_F- E_I -\omega)^2 +\eta^2} - \frac{|\langle I|\hat m_\rho|I\rangle|^2\eta}{\omega^2 +\eta^2}\,,
+.. math::  \mathrm{Im}\,\mathcal{G}_\rho(\omega) = -\sum_{F\neq I} \frac{|\langle F|\hat m_\rho|I\rangle|^2\eta}{(E_F- E_I -\omega)^2 +\eta^2} - \frac{|\langle I|\hat m_\rho|I\rangle|^2\eta}{\omega^2 +\eta^2}\,,
 
 where the first term is clearly proportional to the absorption cross section. 
 The second term is zero if we centre the frame of reference for our molecular orbitals at the nuclear-charge weighted centre for our molecular cluster of choice. 
 
-Okay, so how do we determine :math:`\mathcal{G_\rho(\omega)}`? 
+Okay, so how do we determine :math:`\mathcal{G_}\rho(\omega)`? 
 If we are going to evaluate this quantity in a quantum register, it will need to be normalized, so instead we are looking for
 
 .. math::  G_\rho(\omega) = \eta \frac{\mathcal{G}_\rho(\omega)}{||\hat m_\rho | I \rangle ||^2} \,.
 
-There are methods for determining this frequency-domain Green’s function directly [#Fomichev2024]_. 
-However, our algorithm will aim to estimate the discrete-time *time-domain* Green’s function :math:`\tilde G(t_j)` at times :math:`t_j`, where :math:`j` is the time-step index.
-:math:`G_\rho(\omega)` can then be calculated classically through the discrete time-domain Fourier transform
+Calculating this directly is expensive [#Fomichev2024]_. We need to invert :math:`H`, which is hard even when using an algorithm like HHL [#Harrow2009]_. We would also need to compute this quantity at every frequency, which can quickly run up the cost.
 
-.. math::  -\mathrm{Im}\,G_\rho(\omega) = \frac{\eta\tau}{2\pi} \sum_{j=-\infty}^\infty e^{-\eta |t_j|} \tilde G(t_j) e^{i\omega t_j}\,,
+Instead, our algorithm will aim to simulate in the *time domain*, and Fourier transform the results classically! This allows us to construct the entire spectrum *at once*, rather than measure at specific frequencies. 
 
-where :math:`\tau \sim \mathcal{O}(||\hat H||^{-1})` is the size of the time step. 
-This step should be small enough to resolve the largest frequency components that we are interested in, which correspond to the final states with the largest energy. 
-In practice, this is not the largest eigenvalue of :math:`\hat H`, but simply the largest energy we want to show in the spectrum.
+The time-domain Green’s function :math:`\tilde G(t_j)` can be determined using the expectation value of the time-evolution operator (normalized)  at times :math:`t_j`, where :math:`j` is the time-step index
 
-Now, this all comes together because the time-domain Green’s function can be determined using the expectation value of the time-evolution operator (normalized)
+.. math::  \tilde G_\rho(t_j) = \frac{\langle I|\hat m _\rho e^{- i\hat H t_j} \hat m_\rho |I\rangle}{|| \hat m_\rho |I\rangle ||^2}\,.
 
-.. math::  \tilde G_\rho(t_j) = \frac{\langle I|\hat m _\rho e^{- i\hat H t_j} \hat m_\rho |I\rangle}{|| \hat m_\rho |I\rangle ||^2}\,,
-
-and this is something that can be easily done on a quantum computer! 
+This quantity can easily be calculated on a quantum computer! 
 We can use a `Hadamard test <https://en.wikipedia.org/wiki/Hadamard_test>`__ circuit with the unitary of time evolution to measure the expectation value for each time :math:`t_j`. 
-Repeating this test a number of times :math:`N` and taking the mean of the results gives an estimate for :math:`G_\rho(t_j)`, which we can Fourier
-transform to get the spectrum.
 
 .. figure:: ../_static/demonstration_assets/xas/global_circuit.png
    :alt: Illustration of full Hadamard test circuit with state prep, time evolution and measurement.
@@ -116,6 +108,14 @@ transform to get the spectrum.
 
    Figure 3: *Circuit for XAS simulation*. 
    The algorithm is ultimately a Hadamard test circuit, and we divide it into three components.
+
+Repeating this test a number of times :math:`N` and taking the mean of the results gives an estimate for :math:`G_\rho(t_j)`, from which we can obtain the spectrum with a discrete time-domain Fourier transform
+
+.. math::  -\mathrm{Im}\,G_\rho(\omega) = \frac{\eta\tau}{2\pi} \sum_{j=-\infty}^\infty e^{-\eta |t_j|} \tilde G(t_j) e^{i\omega t_j}\,,
+
+where :math:`\tau \sim \mathcal{O}(||\hat H||^{-1})` is the size of the time step. 
+This step should be small enough to resolve the largest frequency components that we are interested in, which correspond to the final states with the largest energy. 
+In practice, this is not the largest eigenvalue of :math:`\hat H`, but simply the largest energy we want to show in the spectrum.
 
 The circuit we will construct to determine the expectation values is shown above. It has three main components:
 
@@ -550,11 +550,9 @@ def meas_circuit(state):
 #
 #    Figure 6: *Hadamard test circuit to measure the expectation value of the time-evolution operator*. 
 #    With the phase gate :math:`S^\dagger` present (absent), this gives the real (imaginary) part of the time-domain Green’s function.
-#
-# Run Simulation
-# --------------
-#
-# Let’s define the simulation parameters we are going to use. This includes:
+# 
+# With our measurement circuit defined, let's discuss how many shots we want to average to obtain accurate expectation values at each time step. 
+# To start, we define the simulation parameters we are going to use, which are:
 #
 # - The Lorentzian width :math:`\eta` of the spectrum peaks, representing the experimental resolution.
 # - The time step :math:`\tau`, which should be small enough to resolve the largest frequency components we want to determine.
@@ -573,7 +571,7 @@ time_interval = tau * jrange
 ######################################################################
 # To improve the efficiency of our algorithm we can employ a sampling distribution that takes advantage of the decaying Lorentzian kernel [#Fomichev2025]_. 
 # The contribution of longer evolution times to the overall :math:`G_\rho(\omega)` are exponentially suppressed by the :math:`e^{-\eta t}` factor. 
-# Reducing the number of shots allocated to long times by this factor can save the total number of shots needed to obtain the required precision for :math:`G_\rho(\omega)`.
+# By reducing the number of shots allocated to long times by this factor, we can save the total number of shots needed to obtain the required precision for :math:`G_\rho(\omega)`.
 # This is implemented below by creating ``shots_list``, which distributes the ``total_shots`` among the time steps, weighted exponentially by the Lorentzian width. 
 # The parameter :math:`\alpha` can adjust this weighting, s.t. for :math:`\alpha > 1` there is more weight at shorter times.
 
@@ -592,7 +590,19 @@ A = np.sum([L_j(alpha * t_j) for t_j in time_interval])
 shots_list = [int(round(total_shots * L_j(alpha * t_j) / A)) for t_j in time_interval]
 
 ######################################################################
-# Finally, we can run the simulation to determine the expectation values at each time step, which allows us to construct the time-domain Green’s function. We also sum the expectation values from each cartesian direction :math:`\rho`.
+# Run Simulation
+# --------------
+#
+# Finally, we can run the simulation to determine the expectation values at each time step, which allows us to construct the time-domain Green’s function. 
+# We also sum the expectation values from each cartesian direction :math:`\rho.`
+# .. note::
+# 
+#   In the simulation below, we are cheating! 
+#   We store the state before every measurement, and then start the time evolution from that state when we move on to the next time step.
+#   This way, we only have to compute *one step* to get to the next time increment.
+#   This is not possible on a real quantum device -- every time you measure the state you have to start from scratch and compute all previous time steps again.
+#   However, when using a simulated quantum device, like ``lightning.qubit``,  this trick can save computation time.
+# See this trick in action below.
 
 expvals = np.zeros((2, len(time_interval)))  # Results list initialization.
 
@@ -621,15 +631,7 @@ for rho in rhos:
         expvals[:, i] += dipole_norm[rho]**2 * np.array(measurement).real
 
 ######################################################################
-# .. note::
-# 
-#   In the simulation above we are cheating! 
-#   We store the state before every measurement, and then start the time evolution from that state when we move on to the next time step.
-#   This way, we only have to compute *one step* to get to the next time increment.
-#   This is not possible on a real quantum device -- every time you measure the state you have to start from scratch and compute all previous time steps again.
-#   However, when using a simulated quantum device, like ``lightning.qubit``,  this trick can save computation time.
-#  
-# Plotting the time-domain output, we see a `beat note <https://en.wikipedia.org/wiki/Beat_(acoustics)>`__, indicating there are two strong frequencies in our spectrum. 
+# Plotting the time-domain output, which is the real and imaginary components of the time-domain Green's function. We restrict the plot to the first 100 time steps to see the output more clearly.
 
 import matplotlib.pyplot as plt
 
@@ -654,7 +656,9 @@ ax.legend()
 plt.show()
 
 ######################################################################
-# Since the real and imaginary components of the time-domain Green’s function are determined separately, we can calculate the Fourier transform like
+# From the plot above, we can see a `beat note <https://en.wikipedia.org/wiki/Beat_(acoustics)>`__, indicating there are two strong frequencies in our spectrum. 
+#
+# To calculate the Fourier transform of the time-domain Green’s function, we can use an expression that explicitly separates the real and imaginary components, since we have them stored in separate arrays.
 #
 # .. math::  -\mathrm{Im}\,G(\omega) = \frac{\eta\tau}{2\pi}\left(1 + 2\sum_{j=1}^{j_\mathrm{max}}e^{-\eta \tau j}\left[ \mathbb{E}\left(\mathrm{Re}\,\tilde G(\tau j)\right)\mathrm{cos}(\tau j \omega) - \mathbb{E}\left(\mathrm{Im}\,\tilde G(\tau j)\right) \mathrm{sin}(\tau j \omega)\right]\right) \,,
 #
