@@ -38,6 +38,10 @@ of Mitiq, which can be installed using
 
     pip install "mitiq>=0.11"
 
+.. warning::
+
+    Mitiq currently requires ``pennylane~=0.36.0``. Please ensure you have ``pennylane==0.36.0``
+    installed in your environment. 
 We'll begin the demo by jumping straight into the deep end and seeing how to mitigate a simple noisy
 circuit in PennyLane with Mitiq as a backend. After, we'll take a step back and discuss the theory
 behind the error mitigation approach we used, known as zero-noise extrapolation. Using this
@@ -70,7 +74,7 @@ dev_noisy = qml.add_noise(dev_ideal, noise_model=noise_model)
 
 ###############################################################################
 # In the above, we load a noise-free device ``dev_ideal`` and a noisy device ``dev_noisy``,
-# which is constructed from the :func:`qml.add_noise <pennylane.transforms.add_noise>`
+# which is constructed from the :func:`qml.add_noise <pennylane.noise.add_noise>`
 # transform. This transform works by intercepting each circuit executed on the device and
 # adding the noise to it based on the ``noise_model``. For example, in this case, it will
 # add :class:`PhaseDamping <pennylane.PhaseDamping>` noise channel after every gate in the
