@@ -22,7 +22,7 @@ first measuring it.
 
 In simple terms, learning dynamics incoherently consists of two steps. First, we measure the output
 of the unknown process for many different inputs. In this tutorial, we do this by measuring
-:doc:`classical shadows <tutorial_classical_shadows>` of the target process output.
+:doc:`classical shadows <demos/tutorial_classical_shadows>` of the target process output.
 
 Then, we adjust a variational quantum circuit
 until it produces the same input-output combinations as the unknown process.
