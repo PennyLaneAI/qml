@@ -4,25 +4,27 @@ This document provides comprehensive guidelines for contributing to the PennyLan
 
 ## Table of Contents
 
-- [Getting Started](#getting-started)
-  - [Cloning or Forking the Repository](#cloning-or-forking-the-repository)
-  - [Creating a New Demo](#creating-a-new-demo)
-    - [Using the QML CLI Tool](#using-the-qml-cli-tool)
-    - [Manually Creating a Demo](#manually-creating-a-demo)
-- [Tutorial Content Guidelines](#tutorial-content-guidelines)
-- [General Guidelines](#general-guidelines)
-- [Image Guidelines](#image-guidelines)
-  - [File Size and Format](#file-size-and-format)
-  - [Dimensions](#dimensions)
-- [Metadata Guidelines](#metadata-guidelines)
-  - [Example `metadata.json` Structure](#example-metadatajson-structure)
-  - [Validate Your Metadata File](#validate-your-metadata-file)
-- [Dependency Management](#dependency-management)
-- [Building and Testing Locally](#building-and-testing-locally)
-  - [Building a Demo in HTML Format](#building-a-demo-in-html-format)
-  - [Building a Demo in JSON Format](#building-a-demo-in-json-format)
-- [Support](#support)
-- [License](#license)
+- [Contributing to PennyLane Demos](#contributing-to-pennylane-demos)
+  - [Table of Contents](#table-of-contents)
+  - [Getting Started](#getting-started)
+    - [Cloning or Forking the Repository](#cloning-or-forking-the-repository)
+    - [Creating a New Demo](#creating-a-new-demo)
+      - [Using the QML CLI Tool](#using-the-qml-cli-tool)
+      - [Manually Creating a Demo](#manually-creating-a-demo)
+  - [Tutorial Content Guidelines](#tutorial-content-guidelines)
+  - [General Guidelines](#general-guidelines)
+  - [Image Guidelines](#image-guidelines)
+    - [File Size and Format](#file-size-and-format)
+    - [Dimensions](#dimensions)
+  - [Metadata Guidelines](#metadata-guidelines)
+    - [Example `metadata.json` Structure](#example-metadatajson-structure)
+    - [Validate Your Metadata File](#validate-your-metadata-file)
+  - [Dependency Management](#dependency-management)
+  - [Building and Testing Locally](#building-and-testing-locally)
+    - [Building a Demo in HTML Format](#building-a-demo-in-html-format)
+    - [Building a Demo in JSON Format](#building-a-demo-in-json-format)
+  - [Support](#support)
+  - [License](#license)
 
 ## Getting Started
 
@@ -88,11 +90,13 @@ While you are encouraged to be creative with your demo, please keep the followin
 - **LaTeX Macros:** Avoid using LaTeX macros within your comments. Even if they appear to work in development, they will not be displayed correctly once the demo is published.
 - **Author Information:** Include the author's information in the metadata.json file. See the metadata guidelines below.
 - **Code Formatting:** Before submitting, run your script through the [Black Python formatter](https://github.com/psf/black):
-
     ```bash
     pip install black
     black -l 100 /demonstrations_v2/tutorial_your_demo/demo.py
     ```
+- **Referencing Other Demos in `demo.py`:** You can reference other demos in your `demo.py` file using ``:doc:\`demos/<demo_name>\``` syntax. This will create a link to the specified demo in the documentation. For example, to reference the `tutorial_qft` demo, use ``:doc:\`demos/tutorial_qft\``` .
+
+
 
 ## Image Guidelines
 
