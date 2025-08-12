@@ -7,7 +7,7 @@ In particular, we believe promising candidates for quantum advantage are simulat
 One such application is simulating `X-ray absorption spectroscopy <https://en.wikipedia.org/wiki/X-ray_absorption_spectroscopy>`__ (XAS), which can be useful in workflows for identifying structural degradation mechanisms in material candidates for battery designs 🔋 [#Fomichev2024]_. 
 This demo will show you how to implement an optimized simulation algorithm developed in the paper `“Fast simulations of X-ray absorption spectroscopy for battery materials on a quantum computer” <https://arxiv.org/abs/2506.15784>`__ [#Fomichev2025]_ in PennyLane.
 
-First, we will discuss why simulating X-ray absorption spectroscopy was identified as a promising application for quantum computers. 
+First, we will discuss why simulating X-ray absorption spectroscopy is a promising application for quantum computers. 
 Then we will explain the main steps in the simulation algorithm and how to
 implement a simplified version in PennyLane.
 
@@ -33,8 +33,8 @@ A fast method of simulating reference spectra for use in fingerprinting would be
    Figure 1: *How simulation of X-ray absorption spectra can enable identification of oxidation states in candidate battery materials.* 
    Spectral fingerprinting can be used to identify constituent structures of a material by matching experimental spectra with simulated spectra.
 
-Simulating these spectra is a difficult task for classical computers -- the highly correlated excited states are hard to compute classically, particularly for clusters with transition metals. 
-However, the low number of electronic orbitals needed to simulate these small clusters make this calculation well suited for fault-tolerant quantum computers, which can naturally handle the large amount of correlations in the electronic state. 
+Simulating these spectra is a difficult task for classical computers -- the highly correlated excited states are hard to compute classically, particularly for clusters containing transition metals. 
+However, the low number of qubits needed to simulate the electronic orbitals in these small clusters make this calculation well suited for quantum computers, which can naturally handle the large amount of correlations in the electronic state. 
 Tasks like this are promising candidates for quantum advantage -- simulations of *small* but *highly correlated* systems. 
 
 Algorithm
@@ -49,9 +49,9 @@ Observable: absorption cross section
 In XAS experiments, the absorption cross section :math:`\sigma_A` as a function of the incident X-ray frequency :math:`\omega` is measured for a given material. 
 This is proportional to the rate of absorption of X-ray photons of various energies. 
 For our situation, the electrons in the molecular cluster start in a ground molecular state :math:`|I\rangle` with energy :math:`E_I`. 
-This ground state will be excited to states :math:`|F\rangle` with energies :math:`E_F` by the radiative field through the action of the dipole operator :math:`\hat m_\rho,` where :math:`\rho` is any of the Cartesian directions :math:`\{x,y,z\}`.
+This ground state will be excited to states :math:`|F\rangle` with energies :math:`E_F` by the radiative field through the action of the dipole operator :math:`\hat m_\rho,` where :math:`\rho` is any of the Cartesian directions :math:`x,\ y,\,` or :math`z`.
 
-The absorption cross section is given by
+The absorption cross section is given by the equation
 
 .. math::  \sigma_A(\omega) = \frac{4 \pi}{3 \hbar c} \omega \sum_{F \neq I}\sum_{\rho=x,y,z} \frac{|\langle F|\hat m_\rho|I \rangle|^2 \eta}{((E_F - E_I)-\omega)^2 + \eta^2}\,,
 
@@ -63,7 +63,7 @@ Below is an illustration of an X-ray absorption spectrum.
    :width: 50.0%
    :align: center
 
-   Figure 2: *Example X-ray absorption spectrum.* Illustration of how the peak positions :math:`E_F - E_i`, widths :math:`\eta` and amplitudes :math:`|\langle F | \hat m_\rho | I \rangle|^2` determine the spectrum.
+   Figure 2: *Example X-ray absorption spectrum.* Illustration of how the peak positions :math:`E_F - E_i`, amplitudes :math:`|\langle F | \hat m_\rho | I \rangle|^2` and width :math:`\eta` determine the spectrum.
 
 The goal of this demo is to implement a quantum algorithm that can calculate this spectrum. 
 
@@ -80,7 +80,7 @@ We can recover the previous form of the absorption cross section if we rewrite t
 
 .. math::  \mathrm{Im}\,\mathcal{G}_\rho(\omega) = -\sum_{F\neq I} \frac{|\langle F|\hat m_\rho|I\rangle|^2\eta}{(E_F- E_I -\omega)^2 +\eta^2} - \frac{|\langle I|\hat m_\rho|I\rangle|^2\eta}{\omega^2 +\eta^2}\,,
 
-where the first term is clearly proportional to the absorption cross section. 
+where the first term is proportional to the absorption cross section. 
 The second term is zero if we centre the frame of reference for our molecular orbitals at the nuclear-charge weighted centre for our molecular cluster of choice. 
 
 Okay, so how do we determine :math:`\mathcal{G}_\rho(\omega)`? 
@@ -106,7 +106,7 @@ We can use a `Hadamard test <https://en.wikipedia.org/wiki/Hadamard_test>`__ cir
    Figure 3: *Circuit for XAS simulation*. 
    The algorithm is ultimately a Hadamard test circuit, and we divide it into three components.
 
-Repeating this test a number of times :math:`N` and taking the mean of the results gives an estimate for :math:`G_\rho(t_j)`. The spectrum can be obtained with a discrete time-domain Fourier transform
+Repeating this test a number of times :math:`N` and taking the mean of the results gives an estimate for :math:`G_\rho(t_j)`. The spectrum can then be obtained with a discrete time-domain Fourier transform
 
 .. math::  -\mathrm{Im}\,G_\rho(\omega) = \frac{\eta\tau}{2\pi} \sum_{j=-\infty}^\infty e^{-\eta |t_j|} \tilde G(t_j) e^{i\omega t_j}\,.
 
@@ -115,12 +115,12 @@ In practice, this is not the largest eigenvalue of :math:`\hat H`, but simply th
 
 The circuit we will construct to determine the expectation values is shown above. It has three main components:
 
-- *State prep*, the state :math:`\hat m_\rho |I\rangle` is prepared in the quantum register, and an auxiliary qubit is prepared to control the time evolution.
-- *Time evolution*, the state is evolved under the electronic Hamiltonian.
-- *Measurement*, the time-evolved state is measured to obtain statistics for the expectation value.
+- **State prep**, the state :math:`\hat m_\rho |I\rangle` is prepared in the quantum register, and an auxiliary qubit is prepared to control the time evolution.
+- **Time evolution**, the state is evolved under the electronic Hamiltonian.
+- **Measurement**, the time-evolved state is measured to obtain statistics for the expectation value.
 
 Let’s look at how to implement these steps in PennyLane. 
-We will make extensive use of the :mod:`pennylane.qchem` module, as well as initial state preparation methods from `PySCF <https://pyscf.org/>`__. 
+We will make use of the :mod:`pennylane.qchem` module, as well as initial state preparation methods from `PySCF <https://pyscf.org/>`__. 
 
 State preparation
 -----------------
@@ -164,13 +164,13 @@ import pennylane as qml
 mole = qml.qchem.Molecule(symbols, geometry, basis_name="sto-3g", unit="angstrom")
 
 # Run self-consistent fields method to get molecular orbital coefficients.
-_, coeffs, _, _, _ = qml.qchem.hartree_fock.scf(mole)()
+_, coeffs, _, _, _ = qml.qchem.scf(mole)()
 
 # Change MO coefficients in hf object to PennyLane calculated values.
 hf.mo_coeff = coeffs  
 
 ######################################################################
-# Next, let’s define the active space of orbitals we will use for our calculation. 
+# Next, let’s define the active space we will use for our calculation. 
 # This will be the number of orbitals :math:`n_\mathrm{cas}` and the number of electrons. 
 # For :math:`\mathrm{N}_2`, we will use an active space of five orbitals and four electrons. 
 # Running a ``CASCI`` instance allows us to calculate the ground state of our system with this selected active space. 
@@ -245,8 +245,8 @@ wf_casci = _wfdict_to_statevector(wf_casci_dict, n_cas)
 # To generate this operator, we have to specify which molecular orbitals are in our active space. 
 # We can obtain the indices of the included and excluded orbitals using :func:`~pennylane.qchem.active_space` to obtain the lists ``active`` and ``core``, respectively.
 #
-# The action of the dipole operator will be split into the three cartesian directions :math:`\{x, y, z\}`, which we will loop over to obtain the states :math:`\hat m_{\{x,y,z\}}|I\rangle`. 
-# This will give us an operator that describes general absorption of electro-magnetic radiation for our molecule, including at energies outside of the XAS regime. 
+# The action of the dipole operator will be split into the three cartesian directions :math:`x,\ y` and :math:`z`, which we will loop over to obtain the states :math:`\hat m_{\{x,y,z\}}|I\rangle`. 
+# This will give us an operator that describes general absorption of electro-magnetic radiation for our molecule, including for energies outside of the XAS regime [#DipoleApprox]_. 
 # This is fine for our simple example, but for more complex instances you may want to modify the dipole operator to restrict the final states (see the Appendix for more details).
 
 # Get core and active orbital indices.
@@ -279,7 +279,7 @@ for rho in rhos:
 # .. admonition:: Caution! Wire ordering
 #     :class: note
 #
-#     When converting the operator ``m_rho`` to the matrix ``dipole_matrix_rho``, the full set of wires needs to be specified, otherwise the matrix may not have the right dimension (if for example, the operator is zero along any cartesian direction).
+#     When converting the operator ``m_rho`` to the matrix ``dipole_matrix_rho``, the full set of wires needs to be specified, otherwise the matrix may not have the right dimension (if, for example, the operator is zero along any cartesian direction).
 #
 # Let’s prepare the circuit that will initialize our qubit register with this state.
 # We will need :math:`2 n_\mathrm{cas}` wires, which is twice the number of orbitals in our active space, since we need to account for spin. 
@@ -327,7 +327,7 @@ core_constant, one, two = qml.qchem.electron_integrals(mole, core=core, active=a
 core_constant = core_constant[0]
 
 ######################################################################
-# We will have to convert these to chemists’ notation [#Sherrill2005]_.
+# We will have to convert these to chemists' notation [#Sherrill2005]_.
 
 two_chemist = qml.math.einsum("prsq->pqrs", two)
 one_chemist = one - qml.math.einsum("pqrr->pq", two) / 2.0
@@ -460,9 +460,9 @@ def Z_rotations(Z, step, is_one_electron_term, control_wires):
 
 
 ######################################################################
-# For the factorized Hamiltonian :math:`H_\mathrm{CDF} = \sum_j^N H_j`, with non-commuting fragments :math:`H_j`, a second-order product formula approximates the time evolution for a time step :math:`\Delta t`` as
+# For the factorized Hamiltonian :math:`H_\mathrm{CDF} = \sum_j^N H_j`, with non-commuting fragments :math:`H_j`, a second-order product formula approximates the time evolution for a time step :math:`\tau` as
 # 
-# .. math::  e^{-i\sum_j H_j \Delta t} \approx \prod_{j=1}^N e^{-i \frac{\Delta t}{2}H_j} \prod_{j=N}^1 e^{-i \frac{\Delta t}{2}H_j}\,.
+# .. math::  e^{-i\sum_j H_j \tau} \approx \prod_{j=1}^N e^{-i \frac{\tau}{2}H_j} \prod_{j=N}^1 e^{-i \frac{\tau}{2}H_j}\,.
 # 
 # Note in the formula above, the second product of time-evolution fragments is reversed in order.
 # The function ``first_order_trotter`` will implement the :math:`U` rotations and :math:`Z` rotations, and adjust the global phase from the core constant term. 
@@ -501,7 +501,7 @@ def first_order_trotter(step, prior_U, final_rotation, reverse=False):
 
 ###################################################################### 
 # Our function ``second_order_trotter`` implements a second-order Trotter step, returning a :class:`~pennylane.QNode`. 
-# The returned circuit applies :class:`~pennylane.StatePrep` to prepare the register in the previous quantum state, and then two ``first_order_trotter`` evolutions for time ``step/2`` so that the total step size is ``step``.
+# The returned circuit applies :class:`~pennylane.StatePrep` to prepare the register in the previous quantum state, and then two ``first_order_trotter`` evolutions for time ``step/2``, first in the nominal order and then reversed. The total step size is ``step``.
 
 
 def second_order_trotter(dev, state, step):
@@ -549,13 +549,13 @@ def meas_circuit(state):
 #    Figure 6: *Hadamard test circuit to measure the expectation value of the time-evolution operator*. 
 #    With the phase gate :math:`S^\dagger` present (absent), this gives the real (imaginary) part of the time-domain Green’s function.
 # 
-# With our measurement circuit defined, let's discuss how many shots we want to average to obtain accurate expectation values at each time step. 
+# With our measurement circuit defined, let's discuss the number of shots we will use at each time step to obtain accurate expectation values. 
 # To start, we define the simulation parameters we are going to use, which are:
 #
 # - The Lorentzian width :math:`\eta` of the spectrum peaks, representing the experimental resolution.
 # - The time step :math:`\tau`, which should be small enough to resolve the largest frequency components we want to determine.
 # - The maximum number of time steps :math:`j_\mathrm{max}`, which sets the largest evolution time. This should be large enough so that we can distinguish between the small frequency components in our spectrum.
-# - The total number of shots we will use to obtain statistics for the expectation value of the time evolution operator.
+# - The total number of shots we will use for all time steps.
 
 eta = 0.05  # In Hartree energy units (Ha).
 H_norm = np.pi  # Maximum final state eigenvalue used to determine tau.
@@ -591,8 +591,8 @@ shots_list = [int(round(total_shots * L_j(alpha * t_j) / A)) for t_j in time_int
 # Run Simulation
 # --------------
 #
-# Finally, we can run the simulation to determine the expectation values at each time step, alloing us to construct the time-domain Green’s function. 
-# We also sum the expectation values from each cartesian direction :math:`\rho.`
+# Finally, we can run the simulation to determine the expectation values at each time step, allowing us to construct the time-domain Green’s function. 
+# We also sum the expectation values for each cartesian direction :math:`\rho.`
 # 
 # .. note::
 # 
@@ -663,7 +663,7 @@ plt.show()
 # .. math::  -\mathrm{Im}\,G(\omega) = \frac{\eta\tau}{2\pi}\left(1 + 2\sum_{j=1}^{j_\mathrm{max}}e^{-\eta \tau j}\left[ \mathbb{E}\left(\mathrm{Re}\,\tilde G(\tau j)\right)\mathrm{cos}(\tau j \omega) - \mathbb{E}\left(\mathrm{Im}\,\tilde G(\tau j)\right) \mathrm{sin}(\tau j \omega)\right]\right) \,,
 #
 # where :math:`\mathbb{E}` is the expectation value. 
-# We do this below, but also multiply the normalization factors over to the right side.
+# We calculate this below, but also multiply the normalization factors over to the right side.
 
 L_js = L_j(time_interval)
 
@@ -681,7 +681,7 @@ spectrum = np.array([f_domain_Greens_func(w) for w in wgrid])
 # Since our chosen active space for :math:`\mathrm{N}_2` is small, we can easily calculate a classical spectrum for comparison. 
 # We will need the final state energies and the overlaps. 
 # These can be computed with PySCF, by reusing the ``mycasci`` instance we created earlier.
-# By increasing the number of roots in the ``fcisolver`` and rerunning the calculations, we can obtain the energies of the excited final states. 
+# By increasing the number of roots in the ``fcisolver`` and rerunning the instance, we can obtain the energies of the excited final states. 
 # We can also calculate the transition density matrix in the molecular orbital basis between the final states and the initial state, :math:`\langle F| \hat m_\rho |I \rangle`. 
 
 # Use CASCI to solve for excited states.
@@ -692,8 +692,8 @@ energies = mycasci.e_tot
 # Ground state energy.
 E_i = mycasci.e_tot[0]
 
-# Determine the dipole integrals using atomic orbitals from hf object.
-dip_ints_ao = hf.mol.intor("int1e_r_cart", comp=3)  # In atomic orbital basis.
+# Determine the dipole integrals using atomic orbitals.
+dip_ints_ao = hf.mol.intor("int1e_r_cart", comp=3)
 mo_coeffs = coeffs[:, n_core : n_core + n_cas]
 
 # Convert to molecular orbital basis.
@@ -750,7 +750,7 @@ plt.show()
 #
 # In this tutorial, we have implemented a simplified version of the algorithm as presented in Ref. [#Fomichev2025]_. 
 # The algorithm represents a culmination of many optimizations for time evolving an electronic Hamiltonian. 
-# We’ve also discussed how XAS simulation is a promising candidate application for fault-tolerant quantum computers due to its low qubit overhead but high amount of correlations in the state space.
+# We’ve also discussed how XAS simulation is a promising candidate application for fault-tolerant quantum computers due to the low qubit overhead but high amount of correlations in the state space.
 #
 # References
 # ----------
@@ -832,7 +832,7 @@ plt.show()
 #    Figure 9: *Core-valence separation.* A much larger amount of energy is required to excite core electrons into valence orbitals compared to electrons already in low-lying valence orbitals. 
 # 
 # We can also turn off the two-electron terms that couple core-excited and valence-excited states. 
-# The terms are in general small, but by setting them to zero that coupling is removed entirely from the time evolution. 
+# These terms are in general small, but by setting them to zero the coupling is removed entirely from the time evolution. 
 # To implement the core-valence separation approximation in an XAS simulation algorithm, there are two steps:
 # 
 # - Before performing compressed double factorization on the two-electron integrals, remove the terms that include at least one core orbital.
