@@ -15,7 +15,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_learning_dynamics_incoherently.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_learning_dynamics_incoherently.png"
         },
         {
             "type": "large_thumbnail",
