@@ -43,7 +43,7 @@ Algorithm
 Simulating reference spectra requires calculating the observable of the experiment, which in this case is the `absorption cross section <https://en.wikipedia.org/wiki/Absorption_cross_section>`__.
 We will describe this quantity below and then explain how a *time-domain* simulation algorithm can estimate it.
 
-Observable: absorption cross-section
+Observable: absorption cross section
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In XAS experiments, the absorption cross section :math:`\sigma_A` as a function of the incident X-ray frequency :math:`\omega` is measured for a given material. 
@@ -66,10 +66,8 @@ Below is an illustration of an X-ray absorption spectrum.
    Figure 2: *Example X-ray absorption spectrum.* Illustration of how the peak positions :math:`E_F - E_i`, widths :math:`\eta` and amplitudes :math:`|\langle F | \hat m_\rho | I \rangle|^2` determine the spectrum.
 
 The goal of this demo is to implement a quantum algorithm that can calculate this spectrum. 
-Three algorithm designs are discussed in Ref. [#Fomichev2024]_, but we will focus on the time-domain method, since quantum computers are naturally suited to calculating the time evolution of a Hamiltonian operator. 
-Instead of computing the energy differences and state overlaps directly, this method simulates the system in the time domain, and then uses a `Fourier transform <https://en.wikipedia.org/wiki/Fourier_transform>`__ to obtain the spectrum in frequency space *all at once*.
 
-Quantum algorithm in the time-domain
+Time-domain simulation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Both the initial state :math:`|I\rangle` and the dipole operator acting on the initial state :math:`\hat m_\rho|I\rangle` can be determined classically, and we’ll demonstrate how to do that later. 
@@ -78,7 +76,7 @@ We can write the cross section as the imaginary part of the following Green’s 
 
 .. math:: \mathcal{G}_\rho(\omega) = \langle I|\hat m_\rho \frac{1}{\hat H -E_I -\omega +i\eta} \hat m_\rho |I\rangle\,.
 
-We can recover the previous form of the absorption cross-section if we rewrite this in the Lehmann representation (inserting a resolution of identity of final states)
+We can recover the previous form of the absorption cross section if we rewrite this in the Lehmann representation (inserting a resolution of identity of final states)
 
 .. math::  \mathrm{Im}\,\mathcal{G}_\rho(\omega) = -\sum_{F\neq I} \frac{|\langle F|\hat m_\rho|I\rangle|^2\eta}{(E_F- E_I -\omega)^2 +\eta^2} - \frac{|\langle I|\hat m_\rho|I\rangle|^2\eta}{\omega^2 +\eta^2}\,,
 
@@ -90,11 +88,10 @@ If we are going to evaluate this quantity in a quantum register, it will need to
 
 .. math::  G_\rho(\omega) = \eta \frac{\mathcal{G}_\rho(\omega)}{||\hat m_\rho | I \rangle ||^2} \,.
 
-Calculating this directly is expensive [#Fomichev2024]_. We need to invert :math:`H`, which is hard even when using an algorithm like HHL [#Harrow2009]_. We would also need to compute this quantity at every frequency, which can quickly run up the cost.
+Calculating this quantity directly is expensive [#Fomichev2024]_. We need to invert the Hamiltonian matrix, which is hard even when using an algorithm like HHL [#Harrow2009]_. We would also need to calculate the cross section at every frequency, which can quickly run up the cost. 
+Instead, our algorithm will aim to simulate in the *time domain*, and then `Fourier transform <https://en.wikipedia.org/wiki/Fourier_transform>`__ the results classically to obtain the frequency spectrum! This allows us to construct the entire spectrum *at once*, rather than measure at specific frequencies. 
 
-Instead, our algorithm will aim to simulate in the *time domain*, and Fourier transform the results classically! This allows us to construct the entire spectrum *at once*, rather than measure at specific frequencies. 
-
-The time-domain Green’s function :math:`\tilde G(t_j)` can be determined using the expectation value of the time-evolution operator (normalized)  at times :math:`t_j`, where :math:`j` is the time-step index
+The time-domain Green’s function :math:`\tilde G(t_j)` can be determined using the expectation value of the time-evolution operator (normalized) at times :math:`t_j = \tau j`, where :math:`\tau` is the time step and :math:`j` is the time-step index
 
 .. math::  \tilde G_\rho(t_j) = \frac{\langle I|\hat m _\rho e^{- i\hat H t_j} \hat m_\rho |I\rangle}{|| \hat m_\rho |I\rangle ||^2}\,.
 
@@ -109,17 +106,16 @@ We can use a `Hadamard test <https://en.wikipedia.org/wiki/Hadamard_test>`__ cir
    Figure 3: *Circuit for XAS simulation*. 
    The algorithm is ultimately a Hadamard test circuit, and we divide it into three components.
 
-Repeating this test a number of times :math:`N` and taking the mean of the results gives an estimate for :math:`G_\rho(t_j)`, from which we can obtain the spectrum with a discrete time-domain Fourier transform
+Repeating this test a number of times :math:`N` and taking the mean of the results gives an estimate for :math:`G_\rho(t_j)`. The spectrum can be obtained with a discrete time-domain Fourier transform
 
-.. math::  -\mathrm{Im}\,G_\rho(\omega) = \frac{\eta\tau}{2\pi} \sum_{j=-\infty}^\infty e^{-\eta |t_j|} \tilde G(t_j) e^{i\omega t_j}\,,
+.. math::  -\mathrm{Im}\,G_\rho(\omega) = \frac{\eta\tau}{2\pi} \sum_{j=-\infty}^\infty e^{-\eta |t_j|} \tilde G(t_j) e^{i\omega t_j}\,.
 
-where :math:`\tau \sim \mathcal{O}(||\hat H||^{-1})` is the size of the time step. 
-This step should be small enough to resolve the largest frequency components that we are interested in, which correspond to the final states with the largest energy. 
+The time step :math:`\tau \sim \mathcal{O}(||\hat H||^{-1})` should be small enough to resolve the largest frequency components that we are interested in, which correspond to the final states with the largest energy. 
 In practice, this is not the largest eigenvalue of :math:`\hat H`, but simply the largest energy we want to show in the spectrum.
 
 The circuit we will construct to determine the expectation values is shown above. It has three main components:
 
-- *State prep*, the state :math:`\hat m_\rho |I\rangle` is prepared in the quantum register, and an auxiliary qubit is prepared for controlled time evolution.
+- *State prep*, the state :math:`\hat m_\rho |I\rangle` is prepared in the quantum register, and an auxiliary qubit is prepared to control the time evolution.
 - *Time evolution*, the state is evolved under the electronic Hamiltonian.
 - *Measurement*, the time-evolved state is measured to obtain statistics for the expectation value.
 
@@ -682,7 +678,7 @@ w_min, w_step = wgrid[0], wgrid[1] - wgrid[0]
 spectrum = np.array([f_domain_Greens_func(w) for w in wgrid])
 
 ######################################################################
-# Since our active space for :math:`\mathrm{N}_2` is small, we can easily calculate a classical spectrum for comparison. 
+# Since our chosen active space for :math:`\mathrm{N}_2` is small, we can easily calculate a classical spectrum for comparison. 
 # We will need the final state energies and the overlaps. 
 # These can be computed with PySCF, by reusing the ``mycasci`` instance we created earlier.
 # By increasing the number of roots in the ``fcisolver`` and rerunning the calculations, we can obtain the energies of the excited final states. 
@@ -759,19 +755,19 @@ plt.show()
 # References
 # ----------
 #
-# .. [#Fomichev2025]
-#
-#    Stepan Fomichev, Pablo A. M. Casares, Jay Soni, Utkarsh Azad, Alexander Kunitsa, Arne-Christian
-#    Voigt, Jonathan E. Mueller, and Juan Miguel Arrazola, “Fast simulations of X-ray absorption spectroscopy
-#    for battery materials on a quantum computer”. `arXiv preprint arXiv:2506.15784
-#    (2025) <https://arxiv.org/abs/2506.15784>`__.
-#
 # .. [#Fomichev2024]
 #
 #    Stepan Fomichev, Kasra Hejazi, Ignacio Loaiza, Modjtaba Shokrian Zini, Alain Delgado, Arne-Christian
 #    Voigt, Jonathan E. Mueller, and Juan Miguel Arrazola, “Simulating X-ray absorption spectroscopy of
 #    battery materials on a quantum computer”. `arXiv preprint arXiv:2405.11015
 #    (2024) <https://arxiv.org/abs/2405.11015>`__.
+#
+# .. [#Fomichev2025]
+#
+#    Stepan Fomichev, Pablo A. M. Casares, Jay Soni, Utkarsh Azad, Alexander Kunitsa, Arne-Christian
+#    Voigt, Jonathan E. Mueller, and Juan Miguel Arrazola, “Fast simulations of X-ray absorption spectroscopy
+#    for battery materials on a quantum computer”. `arXiv preprint arXiv:2506.15784
+#    (2025) <https://arxiv.org/abs/2506.15784>`__.
 #
 # .. [#Harrow2009]
 #
