@@ -351,11 +351,12 @@ print(np.allclose(rho_out, U @ rho @ U.conj().T ))
 # and this time there is a basis transformation that block-diagonalises all matrices in the representation.
 # This can be done by computing the eigendecomposition of an arbitrary linear combination of a set of matrices in the representation.
 #
+rng = np.random.default_rng(42)
 
 matrices = []
 for i in range(10):
     # create n haar random single-qubit unitaries
-    Us = [unitary_group.rvs(dim=2) for _ in range(n)]
+    Us = [unitary_group.rvs(dim=2, random_state=rng) for _ in range(n)]
     # compose them into a non-entangling n-qubit unitary
     U = reduce(lambda A, B: np.kron(A, B), Us)
     # Vectorise U
@@ -363,7 +364,7 @@ for i in range(10):
     matrices.append(U_vec)
 
 # Create a random linear combination of the matrices
-alphas = np.random.randn(len(matrices)) + 1j * np.random.randn(len(matrices))
+alphas = rng.random(len(matrices)) + 1j * rng.random(len(matrices))
 M_combo = sum(a * M for a, M in zip(alphas, matrices))
 
 # Eigendecompose the linear combination
@@ -379,7 +380,7 @@ print(B)
 
 ######################################################################
 # B does not look block diagonal. What happened here?
-# Well, it is block-diagonal, but we have to reorder the columns and rows of the final matrix.
+# Well, it *is* block-diagonal, but we have to reorder the columns and rows of the final matrix.
 # This takes a bit of pain, encapsulated in the following function:
 #
 
@@ -461,6 +462,15 @@ def group_rows_cols_by_sparsity(B, tol=0):
 
 P_row, P_col = group_rows_cols_by_sparsity(B)
 Q = Q @ P_col
+np.set_printoptions(
+    formatter={'float': lambda x: f"{x:5.2g}"},
+    linewidth=200,    # default is 75; increase to fit your array
+    threshold=10000   # so it doesn’t summarize large arrays
+)
+
+Qinv = np.linalg.inv(Q)
+B = Qinv @ matrices[0] @ Q
+print("blockdiag", B)
 
 
 

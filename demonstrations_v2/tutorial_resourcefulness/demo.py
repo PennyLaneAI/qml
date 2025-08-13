@@ -437,13 +437,16 @@ print(np.allclose(rho_out, U @ rho @ U.conj().T ))
 # 3. **Identify a group representation**. This "adjoint action" is indeed a valid representation of
 # :math:`G = SU(2) x SU(2) ... x SU(2)`, called the *defining representation*. However, it is a different one from before,
 # and this time there is a basis transformation that properly block-diagonalises all matrices in the representation.
+#
+# 4. **Find the basis that block-diagonalises the representation**.
 # To find this transformation we compute the eigendecomposition of an arbitrary linear combination of a set of matrices in the representation.
 #
+rng = np.random.default_rng(42)
 
 Uvecs = []
 for i in range(10):
     # create n haar random single-qubit unitaries
-    Ujs = [unitary_group.rvs(dim=2) for _ in range(n)]
+    Ujs = [unitary_group.rvs(dim=2, random_state=rng) for _ in range(n)]
     # compose them into a non-entangling n-qubit unitary
     U = reduce(lambda A, B: np.kron(A, B), Ujs)
     # Vectorise U
@@ -451,7 +454,7 @@ for i in range(10):
     Uvecs.append(Uvec)
 
 # Create a random linear combination of the matrices
-alphas = np.random.randn(len(Uvecs)) + 1j * np.random.randn(len(Uvecs))
+alphas = rng.random(len(Uvecs)) + 1j * rng.random(len(Uvecs))
 M_combo = sum(a * M for a, M in zip(alphas, Uvecs))
 
 # Eigendecompose the linear combination
@@ -475,16 +478,16 @@ np.set_printoptions(
 print(Uvec_diag)
 
 ######################################################################
-# But `Uvec_diag` does not look block diagonal. What happened here?
-# Well, it is block-diagonal, but we have to reorder the columns and rows of the final matrix to make this visible.
+# But ``Uvec_diag`` does not look block diagonal. What happened here?
+# Well, it *is* block-diagonal, but we have to reorder the columns and rows of the final matrix to make this visible.
 # This takes a bit of pain, encapsulated in the following function:
 #
 
 from collections import OrderedDict
 
-def group_rows_cols_by_sparsity(mat, tol=0):
+def group_rows_cols_by_sparsity(B, tol=0):
     """
-    Given a matrix B, this function:
+    Given a binary or general matrix C, this function:
       1. Groups identical rows and columns.
       2. Orders these groups by sparsity (most zeros first).
       3. Returns the permuted matrix C2, and the row & column permutation
@@ -492,7 +495,7 @@ def group_rows_cols_by_sparsity(mat, tol=0):
 
     Parameters
     ----------
-    mat : ndarray, shape (n, m)
+    B : ndarray, shape (n, m)
         Input matrix.
 
     Returns
@@ -503,9 +506,11 @@ def group_rows_cols_by_sparsity(mat, tol=0):
         Column permutation matrix.
     """
     # Compute boolean mask where |B| >= tol
-    mask = np.abs(mat) >= tol
+    mask = np.abs(B) >= 1e-8
     # Convert boolean mask to integer (False→0, True→1)
     C = mask.astype(int)
+    # order by sparsity
+
     n, m = C.shape
 
     # Helper to get a key tuple and zero count for a vector
@@ -556,68 +561,46 @@ def group_rows_cols_by_sparsity(mat, tol=0):
 
 P_row, P_col = group_rows_cols_by_sparsity(Uvec_diag)
 
-Uvec_diag = P_row @ Uvec_diag @ P_col
+# reorder the block-diagonalising matrices
+Q = Q @ P_col
+Qinv = P_row @ Qinv
+
+Uvec_diag = Qinv @ Uvec @ Q
 
 print("\n\n ---------------")
 print(Uvec_diag)
 
 ######################################################################
-# The reordering made the block structure visible. You can check that any vectorised non-entangling matrix `Uvec`
-# has the same block structure if we change the basis and reorder via `P_row @ Qinv @ Uvec @ Q @ P_col`.
+# The reordering made the block structure visible. You can check that now any vectorised non-entangling matrix ``Uvec``
+# has the same block structure if we change the basis and reorder via ``Qinv @ Uvec @ Q``.
 #
 # The next step is to
-# 5. **Find the basis that block-diagonalises the representation**.
+# 5. **Find a basis for each subspace**.
+# We have everything ready to do this: the basis of a subspace are just the rows of ``Q`` that correspond to the row/column
+# indices of a given block. To compute the inner product of a given vectorised state ``v`` with
+# these basis vectors, we can just compute ``v_diag = Q v``, and hence move into the basis that exposes the subspaces.
+# The subsystem purities are just the sums of absolute squares of ...
 #
-# [TRY: Rotate a vector into this basis and only summarise the entries]
 #
-_pauli_map = {
-    'I': np.array([[1,0],[0,1]],   dtype=complex),
-    'X': np.array([[0,1],[1,0]],   dtype=complex),
-    'Y': np.array([[0,-1j],[1j,0]],dtype=complex),
-    'Z': np.array([[1,0],[0,-1]],  dtype=complex),
-}
-factors = [_pauli_map[ch] for ch in 'IX']
-rho_P = functools.reduce(lambda A, B: np.kron(A, B), factors)
-rho_P = rho_P.flatten(order="F")
-rho_P = Q @ rho_P
-print("HERE", rho_P)
-
 
 # vectorise the states we defined earlier
 states_vec = [state.flatten(order='F') for state in states]
 
-
-
 # change into the block-diagonal basis
-states_vec = [Q @ state_vec for state_vec in states_vec]
-purities = [[np.vdot(state_vec[0], state_vec[0]),
-             np.vdot(state_vec[1:4], state_vec[1:4]),
-             np.vdot(state_vec[4:8], state_vec[4:8]),
-             np.vdot(state_vec[8:16], state_vec[8:16]),
-             ] for state_vec in states_vec ]
+states_vec_diag = [Q @ state_vec for state_vec in states_vec]
+purities = []
+for v in states_vec_diag:
+    purity = [np.vdot(v[0], v[0].conj()), np.vdot(v[1:4], v[1:4].conj()), np.vdot(v[4:7], v[4:7].conj()), np.vdot(v[7:16], v[7:16].conj())]
+    purities.append(purity)
 
-
-
-# Grab default color cycle
-colors = plt.rcParams['axes.prop_cycle'].by_key()['color']
-
-# Create two vertically aligned subplots sharing the x-axis
-fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True, figsize=(8, 6))
-
+print(purities)
 for i, data in enumerate(purities):
-    color = colors[i % len(colors)]
-    ax1.plot(data, label=f'{i}', color=color)
-    ax2.plot(np.cumsum(data), label=f'{i}', color=color)
+    plt.plot(data, label=f'{labels[i]}')
 
-ax1.set_ylabel('Purity')
-ax2.set_ylabel('Cumulative Purity')
-ax2.set_xlabel('Module weight')
-
-ax1.legend(loc='upper left')
-ax2.legend(loc='upper left')
-
+plt.ylabel('Purity')
+plt.xlabel('Module weight')
+plt.legend(loc='upper left')
 plt.tight_layout()
-
 plt.show()
 
 
@@ -738,6 +721,7 @@ def compute_me_purities(op):
 
 
 purities = [compute_me_purities(op) for op in states]
+print(purities)
 
 # Grab default color cycle
 colors = plt.rcParams['axes.prop_cycle'].by_key()['color']
