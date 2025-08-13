@@ -255,17 +255,17 @@ for gate, count in wrapped_sigma.items():
 # and how often. The mapped circuit translates directly to high-level Qualtran bloqs:
 
 # .. ipython:: python
-#
-#     from qualtran.drawing import show_call_graph
-#     show_call_graph(qpe_bloq, max_depth=1)
+
+    from qualtran.drawing import show_call_graph
+    show_call_graph(qpe_bloq, max_depth=1)
 
 
 ######################################################################
 # The wrapped circuit uses a series of PennyLane decompositions/definitions:
  
 # .. ipython:: python
-#
-#     show_call_graph(wrapped_qpe_bloq, max_depth=1)
+    
+    show_call_graph(wrapped_qpe_bloq, max_depth=1)
 
 ######################################################################
 # When Qualtran computes the resource counts for a ``Bloq``, it first checks if there is a call
