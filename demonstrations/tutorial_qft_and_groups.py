@@ -27,12 +27,12 @@ going on under the hood. But group theory comes with a lot of jargon that can be
 illuminates the fascinating link between (Fast) Fourier Transforms, Quantum Fourier Transforms and groups, for those who have
 not taken a course in group theory (yet).
 
-We will see that a group can be used to *define* what a Fourier transform is, a fact
-that explains a lot of seemingly arbitrary assumptions in the standard (discrete and continuous) Fourier transforms.
+We will see that a group can be used to *define* what a Fourier transform (and hence a quantum Fourier transform) is, a fact
+that explains a lot of seemingly arbitrary assumptions in the standard Fourier transform.
 Groups are also implicitly used to design one of the world's most important scientific subroutines, the *Fast Fourier Transform* (FFT).
 The FFT is an algorithmic implementation of a Fourier transform that is polynomially faster than the naive one. (This may not
 sound like much to a quantum computing researcher, but the difference between quadratic and near-linear runtime is a game changer
-when it comes to data analysis.)  It turns out that the group-based recipe of a Fast Fourier Transform
+when it comes to data analysis.)  Lastly, it turns out [#Moore]_ that the group-based recipe of a Fast Fourier Transform
 can be implemented in "quantum parallel", which is a way to understand why QFTs are exponentially faster!
 
 In short, groups are the fundamental structure behind quantum and classical Fourier transforms, and exploiting this
