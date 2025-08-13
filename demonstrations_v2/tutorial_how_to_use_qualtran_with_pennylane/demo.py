@@ -254,14 +254,18 @@ for gate, count in wrapped_sigma.items():
 # full stack of a quantum circuit and analyze what causes specific algorithms and gates to be called
 # and how often. The mapped circuit translates directly to high-level Qualtran bloqs:
 
-from qualtran.drawing import show_call_graph
+# .. ipython:: python
+#
+#     from qualtran.drawing import show_call_graph
+#     show_call_graph(qpe_bloq, max_depth=1)
 
-show_call_graph(qpe_bloq, max_depth=1)
 
 ######################################################################
 # The wrapped circuit uses a series of PennyLane decompositions/definitions:
  
-show_call_graph(wrapped_qpe_bloq, max_depth=1)
+# .. ipython:: python
+#
+#     show_call_graph(qpe_bloq, max_depth=1)
 
 ######################################################################
 # When Qualtran computes the resource counts for a ``Bloq``, it first checks if there is a call
