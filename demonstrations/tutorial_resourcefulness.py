@@ -77,20 +77,18 @@ def f_hat(k):
     projection = [ f(x) * np.exp(-2 * np.pi * 1j * k * x / N)/np.sqrt(N) for x in range(N)]
     return  np.sum(projection)
 
-def plot(f, f_hat):
 
-    fig, (ax1, ax2) = plt.subplots(2, 1)
-    ax1.bar(range(N), [np.real(f(x)) for x in range(N)], color='dimgray') # casting to real is needed in case we perform an inverse FT
-    ax1.set_title(f"function f")
+fig, (ax1, ax2) = plt.subplots(2, 1)
+ax1.bar(range(N), [np.real(f(x)) for x in range(N)], color='dimgray') # casting to real is needed in case we perform an inverse FT
+ax1.set_title(f"function f")
 
-    ax2.bar(np.array(range(N))+0.05, [np.imag(f_hat(x)) for x in range(N)], color='lightpink', label="imaginary part")
-    ax2.bar(range(N), [np.real(f_hat(k)) for k in range(N)], color='dimgray', label="real part")
-    ax2.set_title("Fourier coefficients")
-    plt.legend()
-    plt.tight_layout()
-    plt.show()
+ax2.bar(np.array(range(N))+0.05, [np.imag(f_hat(x)) for x in range(N)], color='lightpink', label="imaginary part")
+ax2.bar(range(N), [np.real(f_hat(k)) for k in range(N)], color='dimgray', label="real part")
+ax2.set_title("Fourier coefficients")
+plt.legend()
+plt.tight_layout()
+plt.show()
 
-plot(f, f_hat)
 
 ######################################################################
 # Now, what kind of resource are we dealing with here? In other words, what
@@ -114,7 +112,16 @@ def g(x):
     projection = [g_hat(k) * np.exp(2 * np.pi * 1j * k * x / N)/np.sqrt(N) for k in range(N)]
     return np.sum(projection)
 
-plot(g, g_hat)
+fig, (ax1, ax2) = plt.subplots(2, 1)
+ax1.bar(range(N), [np.real(g(x)) for x in range(N)], color='dimgray')
+ax1.set_title(f"function g")
+
+ax2.bar(range(N), [g_hat(k) for k in range(N)], color='dimgray', label="real part")
+ax2.set_title("Fourier coefficients")
+
+plt.legend()
+plt.tight_layout()
+plt.show()
 
 ######################################################################
 # Well, the function is constant. This makes sense, because we know that the decay of the Fourier coefficient
