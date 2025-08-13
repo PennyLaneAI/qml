@@ -48,7 +48,8 @@ be a delicate balance.
 Recent work has highlighted that 'quantum-aware' optimization techniques
 can lead to marked improvements when training variational quantum algorithms:
 
-* :doc:`/demos/tutorial_quantum_natural_gradient` descent by Stokes et al. [#stokes2019]_, which
+* :doc:`demos/tutorial_quantum_natural_gradient` descent by Stokes et al. [#stokes2019]_, which
+
   takes into account the quantum geometry during the gradient-descent update step.
 
 * The work of Sweke et al. [#sweke2019]_, which shows
