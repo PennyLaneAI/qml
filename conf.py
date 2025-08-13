@@ -60,6 +60,8 @@ extensions = [
     "sphinx.ext.ifconfig",
     "sphinx_gallery.gen_gallery",
     "extension",
+    'IPython.sphinxext.ipython_directive',
+    'IPython.sphinxext.ipython_console_highlighting',
 ]
 
 html_baseurl = "https://pennylane.ai/qml/"
