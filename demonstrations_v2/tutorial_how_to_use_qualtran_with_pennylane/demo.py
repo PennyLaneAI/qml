@@ -4,7 +4,7 @@ r"""How to use Qualtran with PennyLane
 Get ready to expand your quantum programming toolkit! PennyLane and
 `Qualtran <https://qualtran.readthedocs.io/en/latest/>`_ integrate their best features, enabling you
 to build quantum circuits with a mix of
-`Qualtran Bloqs <https://qualtran.readthedocs.io/en/latest/bloqs/index.html#bloqs-library>`_,
+`Qualtran Bloqs <https://qualtran.readthedocs.io/en/latest/bloqs/index.html#bloqs-library>`_
 and PennyLane operations. You can then analyze or simulate the circuits with tools
 from both libraries. For those unfamiliar, Qualtran provides a set of abstractions for
 representing quantum programs, a library of quantum algorithms called Bloqs, and a set of tools for
@@ -21,7 +21,7 @@ allows you to:
 * Simulate Qualtran Bloqs: Validate Qualtran programs by simulating them in PennyLane and
     confirming their outputs.
 * Expand PennyLane circuits with Qualtran Bloqs: Seamlessly incorporate Qualtran's quantum
-    `Bloqs <https://qualtran.readthedocs.io/en/latest/bloqs/index.html#bloqs-library>`_,
+    `Bloqs <https://qualtran.readthedocs.io/en/latest/bloqs/index.html#bloqs-library>`_
     in your PennyLane simulations.
 * Analyze PennyLane circuits with Qualtran: Leverage Qualtran's advanced analysis tools like
     `drawing call graphs <https://qualtran.readthedocs.io/en/latest/reference/qualtran/drawing/show_call_graph.html>`_,
@@ -48,7 +48,7 @@ PennyLane ``QNodes``.
 #
 # Let's see how it works! In the following example, we wrap a Qualtran ``XGate`` instance using
 # :class:`~pennylane.FromBloq`. Qualtran Bloqs don't always apply to specific wires and
-# may not have wires defined. But PennyLane operations do apply to specific wires and we need to
+# may not have wires defined. But PennyLane operations do apply to specific wires, so we need to
 # provide qubit information to :class:`~pennylane.FromBloq` via the ``wires`` argument.
 
 import pennylane as qml
@@ -281,7 +281,7 @@ for gate, count in wrapped_sigma.items():
 # estimates. If it is not defined, Qualtran uses the PennyLane decomposition to compute the resource
 # count estimates.
 #
-# Since computing the PennyLane decompositions is expensive, many PennyLane templates such as QPE,
+# Since computing the PennyLane decompositions is expensive, many PennyLane templates, such as QPE,
 # have call graphs defined even when wrapped as a ``ToBloq`` object. By defining these call graphs,
 # you can now efficiently compute resource count estimates for circuits that may require thousands
 # of qubits and trillions of gates.

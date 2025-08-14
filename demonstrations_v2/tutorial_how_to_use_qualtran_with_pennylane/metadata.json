@@ -1,5 +1,5 @@
 {
-    "title": "How to use qualtran with pennylane",
+    "title": "How to use Qualtran with PennyLane",
     "authors": [
         {
             "username": "austingmhuang"
@@ -11,7 +11,6 @@
     "dateOfLastModification": "2025-08-15T00:00:00+00:00",
     "categories": [
         "Quantum Computing",
-        "Algorithms",
         "How-to"
     ],
     "tags": [],
