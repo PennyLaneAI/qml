@@ -19,8 +19,6 @@ import numpy as np
 from jinja2 import FileSystemLoader, Environment
 import yaml
 from pathlib import Path
-from sphinx_gallery.scrapers import figure_rst
-from IPython.display import SVG
 
 sys.path.insert(0, os.path.abspath("."))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
@@ -74,43 +72,6 @@ else:
     gallery_output_dir = "demos"
     include_patterns = ["**"]
 
-
-def svg_scraper(block, block_vars, gallery_conf):
-    """
-    A custom scraper for IPython.display.SVG objects.
-    """
-    # Find all SVG objects in the namespace
-    svg_objects = [
-        (var_name, var_value)
-        for var_name, var_value in block_vars["example_globals"].items()
-        if isinstance(var_value, SVG)
-    ]
-
-    # Get the image path from the gallery configuration
-    image_path_iterator = block_vars["image_path_iterator"]
-    image_rsts = ""
-
-    # Save each SVG object to a file
-    for name, svg_obj in svg_objects:
-        image_path = next(image_path_iterator)
-        try:
-            # SVG data can be a string, bytes, or a filename
-            if isinstance(svg_obj.data, str):
-                data = svg_obj.data.encode("utf-8")
-            else:
-                data = svg_obj.data
-
-            with open(image_path, "wb") as f:
-                f.write(data)
-        except Exception as e:
-            print(f"Failed to save SVG: {e}")
-            continue
-
-        image_rsts += figure_rst([image_path], gallery_conf["src_dir"])
-
-    return image_rsts
-
-
 sphinx_gallery_conf = {
     # path to your example scripts
     "examples_dirs": [demo_staging_dir],
@@ -138,7 +99,6 @@ sphinx_gallery_conf = {
     "junit": "../test-results/sphinx-gallery/junit.xml",
     "reset_modules": ("module_resets.reset_jax", "matplotlib", "seaborn"),
     "show_signature": False,
-    "image_scrapers": ("matplotlib", svg_scraper),
 }
 
 
