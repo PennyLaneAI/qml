@@ -56,7 +56,7 @@ can lead to marked improvements when training variational quantum algorithms:
   that quantum gradient descent with a finite number of shots is equivalent to
   `stochastic gradient descent <https://en.wikipedia.org/wiki/Stochastic_gradient_descent>`_,
   and has guaranteed convergence. Furthermore, combining a finite number of shots with
-  weighted sampling of the cost function terms leads to :doc:`/demos/tutorial_doubly_stochastic`.
+  weighted sampling of the cost function terms leads to :doc:`demos/tutorial_doubly_stochastic`.
 
 * The iCANS (individual Coupled Adaptive Number of Shots) optimization technique by
   Jonas Kuebler et al. [#kubler2020]_ adapts the number
