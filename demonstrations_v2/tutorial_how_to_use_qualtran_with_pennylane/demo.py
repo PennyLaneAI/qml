@@ -18,18 +18,13 @@ visualizing and analyzing these programs.
 In this demo, we show you how easy it is to use PennyLane and Qualtran together. This integration
 allows you to:
 
-* Simulate Qualtran Bloqs: Validate Qualtran programs by simulating them in PennyLane and
-    confirming their outputs.
-* Expand PennyLane circuits with Qualtran Bloqs: Seamlessly incorporate Qualtran's quantum
-    `Bloqs <https://qualtran.readthedocs.io/en/latest/bloqs/index.html#bloqs-library>`_
-    in your PennyLane simulations.
+* Simulate Qualtran Bloqs: Convert Qualtran programs to PennyLane operations and simulate to confirm
+    their outputs or try new algorithms in PennyLane circuits with the many components in the
+    `Qualtran Bloqs library <https://qualtran.readthedocs.io/en/latest/bloqs/index.html#bloqs-library>`_.
 * Analyze PennyLane circuits with Qualtran: Leverage Qualtran's advanced analysis tools like
     `drawing call graphs <https://qualtran.readthedocs.io/en/latest/reference/qualtran/drawing/show_call_graph.html>`_,
     `counting qubits <https://qualtran.readthedocs.io/en/latest/resource_counting/qubit_counts.html>`_,
-    and `counting gates <https://qualtran.readthedocs.io/en/latest/reference/qualtran/drawing/show_counts_sigma.html>`_. 
-* Expand Qualtran circuits with PennyLane gates and subroutines: Add any PennyLane
-    :doc:`introduction/operations` or
-    :doc:`introduction/templates` to a Qualtran circuit.
+    and `counting gates <https://qualtran.readthedocs.io/en/latest/reference/qualtran/drawing/show_counts_sigma.html>`_.
 
 We'll start by focusing on the first key capability: simulating Qualtran ``Bloqs`` using
 PennyLane ``QNodes``.
