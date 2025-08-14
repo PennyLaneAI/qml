@@ -86,7 +86,7 @@ hamiltonian = qml.sum(
 # behavior for states that are very different from our training set.
 #
 # For quantum systems, this means we want to sample
-# :doc:`Haar-random states <tutorial_haar_measure>`, as done below.
+# :doc:`Haar-random states <demos/tutorial_haar_measure>`, as done below.
 #
 
 from scipy.stats import unitary_group
@@ -407,7 +407,7 @@ print("Target output state\n", target_matrices_shadow[0])
 # short-time evolution of a first order single Trotter step, it requires a large number of
 # shadow measurements and training states to faithfully reproduce the underlying quantum process.
 # The results can be improved by increasing the number of training states and
-# :doc:`classical shadow measurements <tutorial_classical_shadows>`.
+# :doc:`classical shadow measurements <demos/tutorial_classical_shadows>`.
 #
 
 
