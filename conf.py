@@ -65,7 +65,7 @@ extensions = [
 html_baseurl = "https://pennylane.ai/qml/"
 demo_staging_dir = os.getenv("DEMO_STAGING_DIR", "demonstrations")
 
-if output_dir := os.getenv("GALLERY_OUTPUT_DIR"):
+if (output_dir := os.getenv("GALLERY_OUTPUT_DIR")):
     gallery_output_dir = output_dir
     include_patterns = ["index.rst", f"{output_dir}/*.rst"]
 else:
@@ -94,30 +94,32 @@ sphinx_gallery_conf = {
         # The module you locally document uses None
         "pennylane": None,  # "https://docs.pennylane.ai/en/stable",
     },
-    "backreferences_dir": "backreferences",
-    "doc_module": ("pennylane"),
+    "backreferences_dir"  : "backreferences",
+    "doc_module"          : ("pennylane"),
     "junit": "../test-results/sphinx-gallery/junit.xml",
     "reset_modules": ("module_resets.reset_jax", "matplotlib", "seaborn"),
     "show_signature": False,
 }
 
 
-mathjax_path = (
-    "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
-)
+mathjax_path = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
 
 # Remove warnings that occur when generating the the tutorials
 warnings.filterwarnings(
     "ignore", category=UserWarning, message=r"Matplotlib is currently using agg"
 )
-warnings.filterwarnings("ignore", category=UserWarning, message=r"Timestamps in IBMQ backend")
+warnings.filterwarnings(
+    "ignore", category=UserWarning, message=r"Timestamps in IBMQ backend"
+)
 warnings.filterwarnings(
     "ignore",
     category=FutureWarning,
-    message=r"Passing \(type, 1\) or '1type' as a synonym of type is deprecated.+",
+    message=r"Passing \(type, 1\) or '1type' as a synonym of type is deprecated.+"
 )
 warnings.filterwarnings(
-    "ignore", category=np.VisibleDeprecationWarning, message=r"Creating an ndarray from ragged"
+    "ignore",
+    category=np.VisibleDeprecationWarning,
+    message=r"Creating an ndarray from ragged"
 )
 
 # Raise PennyLane deprecation warnings as errors
@@ -178,7 +180,7 @@ html_theme_options = {
     "toc_subset": False,
     "toc_hover": False,
     "relations": False,
-    "github_repo": "PennyLaneAI/qml",
+    "github_repo": "PennyLaneAI/qml"
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
