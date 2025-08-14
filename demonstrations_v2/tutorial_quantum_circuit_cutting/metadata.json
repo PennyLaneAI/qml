@@ -11,10 +11,13 @@
             "username": "aapte"
         }
     ],
+    "executable_stable": true,
+    "executable_latest": true,
     "dateOfPublication": "2022-09-02T00:00:00+00:00",
     "dateOfLastModification": "2024-11-12T00:00:00+00:00",
     "categories": [
-        "Algorithms", "Quantum Computing"
+        "Algorithms",
+        "Quantum Computing"
     ],
     "tags": [],
     "previewImages": [

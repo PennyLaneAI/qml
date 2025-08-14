@@ -25,8 +25,8 @@ Background
 One of the main ideas encountered in near-term quantum machine learning is the
 :doc:`variational circuit </glossary/variational_circuit>`.
 Evolving from earlier concepts pioneered by domain-specific algorithms like the
-:doc:`variational quantum eigensolver </demos/tutorial_vqe>` and the
-:doc:`quantum approximate optimization algorithm </demos/tutorial_qaoa_maxcut>`,
+:doc:`variational quantum eigensolver <demos/tutorial_vqe>` and the
+:doc:`quantum approximate optimization algorithm <demos/tutorial_qaoa_maxcut>`,
 this class of quantum algorithms makes heavy use of two distinguishing ingredients:
 
 i) The circuit's gates have free parameters

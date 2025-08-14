@@ -8,7 +8,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: build-v2-demos-${{ github.event.pull_request.head.sha }}
+  group: build-v2-demos-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -31,6 +31,16 @@ jobs:
         run: |
           echo "Updated Demos: ${{ steps.get-changed-demos.outputs.updated }}"
           echo "Deleted Demos: ${{ steps.get-changed-demos.outputs.deleted }}"
+
+  # Step 1.5: Validate the metadata
+  validate-metadata:
+    if: needs.identify-changed-demos.outputs.updated != ''
+    needs: 
+      - identify-changed-demos
+    uses: ./.github/workflows/v2-validate-demo-metadata.yml
+    with:
+      branch: ${{ github.ref }}
+      demo-names: ${{ needs.identify-changed-demos.outputs.updated }}
 
   # Step 2: Build demos
   build:

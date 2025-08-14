@@ -5,7 +5,7 @@ Machine learning for quantum many-body problems
 Storing and processing a complete description of an :math:`n`-qubit quantum mechanical
 system is challenging because the amount of memory required generally scales exponentially
 with the number of qubits. The quantum community has recently addressed this challenge by using
-the :doc:`classical shadow <tutorial_classical_shadows>` formalism, which allows us to build more
+the :doc:`classical shadow <demos/tutorial_classical_shadows>` formalism, which allows us to build more
 concise classical descriptions of quantum states using randomized single-qubit measurements.
 It was argued in Ref. [#preskill]_ that combining classical shadows with classical machine learning
 enables using learning models that efficiently predict properties of the quantum systems, such as
@@ -23,12 +23,15 @@ In this demo, we describe one of the ideas presented in Ref. [#preskill]_ for us
 shadow formalism and machine learning to predict the ground-state properties of the
 2D antiferromagnetic Heisenberg model. We begin by learning how to build the Heisenberg model,
 calculate its ground-state properties, and compute its classical shadow. Finally, we demonstrate
-how to use :doc:`kernel-based learning models <tutorial_kernels_module>` to predict ground-state
+how to use :doc:`kernel-based learning models <demos/tutorial_kernels_module>` to predict ground-state
 properties from the learned classical shadows. So let's get started!
 
 .. note::
-    This demo is compatible with the latest version of PennyLane and ``neural-tangents==0.6.5``.
+    This demo is compatible with the latest version of PennyLane and ``neural-tangents``.
     The latter is required for building the kernel for the infinite network used in training.
+    As of July 10th, 2025, the latest version of ``neural-tangents`` (v0.6.5) is only compatible
+    with ``jax<0.6.0``. This means that this demo is only compatible with PennyLane versions
+    <= 0.41.1 and Catalyst versions <= 0.11.0.
 
 
 Building the 2D Heisenberg model
@@ -249,7 +252,7 @@ plt.show()
 
 ######################################################################
 # Now that we have built the Heisenberg model, the next step is to construct
-# a :doc:`classical shadow <tutorial_classical_shadows>` representation for its ground state. To construct an
+# a :doc:`classical shadow <demos/tutorial_classical_shadows>` representation for its ground state. To construct an
 # approximate classical representation of an :math:`n`-qubit quantum state :math:`\rho,`
 # we perform randomized single-qubit measurements on :math:`T`-copies of
 # :math:`\rho.` Each measurement is chosen randomly among the Pauli bases
@@ -264,7 +267,7 @@ plt.show()
 # state :math:`\rho,` and the :math:`nT` measurements yield the complete
 # set :math:`S_{T},` which requires just :math:`3nT` bits to be stored
 # in classical memory. This is discussed in further detail in our previous
-# demo about :doc:`classical shadows <tutorial_classical_shadows>`.
+# demo about :doc:`classical shadows <demos/tutorial_classical_shadows>`.
 #
 
 ######################################################################
@@ -497,7 +500,7 @@ plt.show()
 # the classical representation of quantum systems based on some system
 # parameter, estimating a property from such learned classical representations,
 # or a combination of both. In our case, we consider the problem of using
-# :doc:`kernel-based models <tutorial_kernel_based_training>` to learn the ground-state representation of the
+# :doc:`kernel-based models <demos/tutorial_kernel_based_training>` to learn the ground-state representation of the
 # Heisenberg model Hamiltonian :math:`H(x_l)` from the coupling vector :math:`x_l,`
 # where :math:`x_l = [J_{i,j} \text{ for } i < j].` The goal is to predict the
 # correlation functions :math:`C_{ij}:`
@@ -648,7 +651,7 @@ for i in range(len(kernel_NN)):
 # from the ``sklearn`` library.
 #
 
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import root_mean_squared_error
 
 def fit_predict_data(cij, kernel, opt="linear"):
 
@@ -685,8 +688,8 @@ def fit_predict_data(cij, kernel, opt="linear"):
                 best_model = model(hyperparam).fit(X_train, y_train)
                 best_pred = best_model.predict(X_test)
                 best_cv_score = cv_score
-                best_test_score = mean_squared_error(
-                    best_model.predict(X_test).ravel(), y_test_clean.ravel(), squared=False
+                best_test_score = root_mean_squared_error(
+                    best_model.predict(X_test).ravel(), y_test_clean.ravel()
                 )
 
     return (

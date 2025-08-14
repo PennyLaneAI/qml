@@ -206,7 +206,7 @@ print(D.shape)
 # 
 # .. note::
 # 
-#   More generally, we can find decompositions of multi-qubit gates into local tensors employing the ubiquitous singular value decomposition (`SVD <https://docs.pennylane.ai/en/stable/code/api/pennylane.math.svd.html>`__). This method is explained in detail in our :doc:`introduction to matrix product states for quantum practitioners demo </demos/tutorial_mps>`. This decomposition is helpful when contracting non-local tensors, as is often required in quantum circuits.
+#   More generally, we can find decompositions of multi-qubit gates into local tensors employing the ubiquitous singular value decomposition (`SVD <https://docs.pennylane.ai/en/stable/code/api/pennylane.math.svd.html>`__). This method is explained in detail in our :doc:`introduction to matrix product states for quantum practitioners demo <demos/tutorial_mps>`. This decomposition is helpful when contracting non-local tensors, as is often required in quantum circuits.
 
 ##############################################################################
 # The cost of contracting a network

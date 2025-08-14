@@ -5,6 +5,8 @@
             "username": "amari"
         }
     ],
+    "executable_stable": true,
+    "executable_latest": true,
     "dateOfPublication": "2020-03-24T00:00:00+00:00",
     "dateOfLastModification": "2024-11-06T00:00:00+00:00",
     "categories": [
@@ -30,7 +32,9 @@
             "url": "https://arxiv.org/abs/1904.04767"
         }
     ],
-    "basedOnPapers": ["10.48550/arXiv.1904.04767"],
+    "basedOnPapers": [
+        "10.48550/arXiv.1904.04767"
+    ],
     "referencedByPapers": [],
     "relatedContent": [],
     "discussionForumUrl": "https://discuss.pennylane.ai/t/quanvolutional-neural-networks/7296"

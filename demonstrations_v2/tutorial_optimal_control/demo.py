@@ -44,13 +44,13 @@ evolution is a standard task in the field of *quantum optimal control*.
 |
 
 For an introduction, see
-:doc:`the demo on differentiable pulse programming </demos/tutorial_pulse_programming101>`
+:doc:`the demo on differentiable pulse programming <demos/tutorial_pulse_programming101>`
 in PennyLane.
 Instead of optimizing pulses to yield digital quantum gates,
 we may use them directly to solve optimization problems, as is also showcased in this
 introductory demo. If you are interested in specific hardware pulses, take a look at
-:doc:`an introduction to neutral-atom quantum computing </demos/tutorial_neutral_atoms>`
-or :doc:`the tutorial on the QuEra Aquila device </demos/ahs_aquila>`, which treat pulse
+:doc:`an introduction to neutral-atom quantum computing <demos/tutorial_neutral_atoms>`
+or :doc:`the tutorial on the QuEra Aquila device <demos/ahs_aquila>`, which treat pulse
 programming with Rydberg atoms.
 
 Quantum optimal control

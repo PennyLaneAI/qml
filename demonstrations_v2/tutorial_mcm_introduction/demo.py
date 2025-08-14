@@ -3,7 +3,7 @@ r"""Introduction to mid-circuit measurements
 
 Mid-circuit measurements are an important building block in quantum algorithms
 and quantum error correction, and with :doc:`measurement-based quantum computing
-</demos/tutorial_mbqc>`, they even power a complete quantum computing paradigm.
+<demos/tutorial_mbqc>`, they even power a complete quantum computing paradigm.
 In this tutorial, we will dive into the basics of mid-circuit measurements with
 PennyLane. You will learn about
 
@@ -20,9 +20,9 @@ PennyLane. You will learn about
     :width: 50%
 
 We also have dedicated learning material if you want to know :doc:`how to collect
-statistics of mid-circuit measurements </demos/tutorial_how_to_collect_mcm_stats>` or
+statistics of mid-circuit measurements <demos/tutorial_how_to_collect_mcm_stats>` or
 :doc:`how to create dynamic circuits with mid-circuit measurements
-</demos/tutorial_how_to_create_dynamic_mcm_circuits>`.
+<demos/tutorial_how_to_create_dynamic_mcm_circuits>`.
 """
 
 ######################################################################
@@ -118,7 +118,7 @@ statistics of mid-circuit measurements </demos/tutorial_how_to_collect_mcm_stats
 # - Run the quantum node and show the computed expectation values!
 #
 # If you'd like more guidance on any of these steps, also have a look at
-# :doc:`our tutorial on qubit rotation </demos/tutorial_qubit_rotation>` explaining
+# :doc:`our tutorial on qubit rotation <demos/tutorial_qubit_rotation>` explaining
 # them in detail.
 #
 
@@ -327,7 +327,7 @@ print(f"With reset    |  {reset[0]:.1f} |  {reset[1]:.1f} |   {reset[2]:.1f}")
 # error correction, as the corrections need to happen while the circuit is running.
 #
 # Here we look at a simple yet instructive example subroutine called a *T-gadget*,
-# a technique related to :doc:`quantum teleportation </demos/tutorial_teleportation>`.
+# a technique related to :doc:`quantum teleportation <demos/tutorial_teleportation>`.
 #
 # T-gadget in PennyLane
 # ~~~~~~~~~~~~~~~~~~~~~
@@ -345,7 +345,7 @@ print(f"With reset    |  {reset[0]:.1f} |  {reset[1]:.1f} |   {reset[2]:.1f}")
 #
 # - Prepare an auxiliary qubit in a magic state
 #   :math:`(|0\rangle + e^{i\pi/4} |1\rangle)/\sqrt{2},` for example using :doc:`magic
-#   state distillation </demos/tutorial_magic_state_distillation>`;
+#   state distillation <demos/tutorial_magic_state_distillation>`;
 #
 # - Entangle the auxiliary and target qubit with a ``CNOT``;
 #
@@ -420,8 +420,8 @@ print(f"<X₀> with initial state |->: {test_t_gadget('-'):4.1f}")
 # by operations conditioned on mid-circuit measurements.
 #
 # For more detailed material also check out the dedicated how-tos
-# on :doc:`mid-circuit measurement statistics </demos/tutorial_how_to_collect_mcm_stats>`
-# and :doc:`dynamic circuits </demos/tutorial_how_to_create_dynamic_mcm_circuits>`,
+# on :doc:`mid-circuit measurement statistics <demos/tutorial_how_to_collect_mcm_stats>`
+# and :doc:`dynamic circuits <demos/tutorial_how_to_create_dynamic_mcm_circuits>`,
 # as well as the `measurements quickstart page
 # <https://docs.pennylane.ai/en/stable/introduction/measurements.html#mid-circuit-measurements-and-conditional-operations>`_
 # and the documentation of :func:`~.pennylane.measure`.

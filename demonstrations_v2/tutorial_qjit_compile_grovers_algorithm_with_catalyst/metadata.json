@@ -5,6 +5,8 @@
             "username": "joeycarter"
         }
     ],
+    "executable_stable": true,
+    "executable_latest": true,
     "dateOfPublication": "2024-11-07T00:00:00+00:00",
     "dateOfLastModification": "2024-11-08T00:00:00+00:00",
     "categories": [

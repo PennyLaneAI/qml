@@ -18,12 +18,17 @@ import warnings
 import numpy as np
 from jinja2 import FileSystemLoader, Environment
 import yaml
-from pennylane import PennyLaneDeprecationWarning
 from pathlib import Path
 
 sys.path.insert(0, os.path.abspath("."))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
 
+# This module has been refactored from pennylane v0.41.0 to v0.42.0
+# This can be removed after the release of v0.42.0
+try:
+    from pennylane.exceptions import PennyLaneDeprecationWarning
+except ModuleNotFoundError:
+    from pennylane import PennyLaneDeprecationWarning
 
 # -- Project information -----------------------------------------------------
 # General information about the project.
@@ -75,7 +80,7 @@ sphinx_gallery_conf = {
     # execute files that match the following filename pattern,
     # and skip those that don't. If the following option is not provided,
     # all example scripts in the 'examples_dirs' folder will be skiped.
-    "filename_pattern": r"tutorial",
+    "filename_pattern": r"\.py$",
     "pypandoc": True,
     # first notebook cell in generated Jupyter notebooks
     "first_notebook_cell": (
@@ -211,5 +216,9 @@ htmlhelp_basename = "QMLdoc"
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
     "pennylane": ("https://docs.pennylane.ai/en/stable/", None),
-    "catalyst": ("https://docs.pennylane.ai/projects/catalyst/en/stable", None)
+    "catalyst": ("https://docs.pennylane.ai/projects/catalyst/en/stable", None),
+    "demo": ("https://pennylane.ai/qml", None),
 }
+
+# Enable :doc: references for intersphinx (disabled by default in Sphinx 5.0+)
+intersphinx_disabled_reftypes = []

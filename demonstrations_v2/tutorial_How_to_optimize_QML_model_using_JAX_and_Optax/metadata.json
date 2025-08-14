@@ -8,6 +8,8 @@
             "username": "mariaschuld"
         }
     ],
+    "executable_stable": true,
+    "executable_latest": true,
     "dateOfPublication": "2024-01-18T00:00:00+00:00",
     "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
@@ -15,7 +17,9 @@
         "Optimization",
         "How-to"
     ],
-    "tags": ["how to"],
+    "tags": [
+        "how to"
+    ],
     "previewImages": [
         {
             "type": "thumbnail",
