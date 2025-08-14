@@ -4,7 +4,10 @@ r"""Decoding Quantum Errors on the Steane code with Belief Propagation and Catal
 *Learn how to build, simulate, and decode the Steane code using JAX and Catalyst, blending quantum
 circuits with fast classical decoders in a seamless workflow.*
 
---------------
+.. figure:: ../_static/demonstration_assets/bp_catalyst/bp_catalyst_hero.png
+    :align: center
+    :width: 70%
+    :alt: Hero image
 
 Introduction
 ------------
@@ -171,7 +174,7 @@ print(qml.draw(ancilla_assisted_syndrome_extraction, show_all_wires=True)(syndro
 # introduce the Steane code later, you’ll see these matrices explicitly and how they simplify syndrome
 # calculation and decoding. See a similar diagram below for the CSS code cycle structure.
 #
-# .. figure ../_static/demonstration_assets/bp_catalyst/css.png
+# .. figure:: ../_static/demonstration_assets/bp_catalyst/css.png
 #    :align: center
 #    :width: 70%
 #    :alt: The Error Correction Cycle on a CSS Code
