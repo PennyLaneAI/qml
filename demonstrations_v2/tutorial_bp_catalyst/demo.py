@@ -136,7 +136,7 @@ print(qml.draw(ancilla_assisted_syndrome_extraction, show_all_wires=True)(syndro
 # :math:`2^n` unique values. In practice, we rely on approximate methods tuned to assumptions about the
 # noise model.
 #
-# .. figure:: ../_static/demonstration_assets/bp_catalyst/css.svg
+# .. figure:: ../_static/demonstration_assets/bp_catalyst/css.png
 #    :align: center
 #    :width: 70%
 #    :alt: A complete quantum error correction (QEC) cycle. A logical state (:math: `|\psi\rangle_L`), experiences an error before stabilizers (:math: `\mathcal{S}`) are measured. The resulting syndrome is decoded classically to produce a correction (:math: `\mathcal{R}`), which is applied to restore the logical state
@@ -171,7 +171,7 @@ print(qml.draw(ancilla_assisted_syndrome_extraction, show_all_wires=True)(syndro
 # introduce the Steane code later, you’ll see these matrices explicitly and how they simplify syndrome
 # calculation and decoding. See a similar diagram below for the CSS code cycle structure.
 #
-# .. figure ../_static/demonstration_assets/bp_catalyst/css.svg
+# .. figure ../_static/demonstration_assets/bp_catalyst/css.png
 #    :align: center
 #    :width: 70%
 #    :alt: The Error Correction Cycle on a CSS Code
