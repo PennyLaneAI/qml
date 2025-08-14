@@ -256,7 +256,7 @@ wrapped_qpe_bloq = qml.to_bloq(op, map_ops=False)
 # .. figure:: ../_static/demonstration_assets/how_to_use_qualtran_with_pennylane/wrapped_qpe_bloq.svg
 #     :align: center
 #     :width: 50%
-#
+
 ######################################################################
 #
 # Let's see how mapping and wrapping affect our resource count estimates.
