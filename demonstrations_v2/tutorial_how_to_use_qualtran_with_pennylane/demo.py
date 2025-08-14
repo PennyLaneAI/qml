@@ -161,21 +161,19 @@ print(op_as_bloq)
 # `TextbookQPE <https://qualtran.readthedocs.io/en/latest/bloqs/phase_estimation/text_book_qpe.html>`_ or
 # `QubitizationQPE <https://qualtran.readthedocs.io/en/latest/bloqs/phase_estimation/qubitization_qpe.html>`_. 
 # In cases where the mapping is ambiguous, we get the smart default:
-#
+
+op = qml.QuantumPhaseEstimation(unitary=qml.RY(phi=0.3, wires=[0]), estimation_wires=[1, 2, 3])
+qpe_bloq = qml.to_bloq(op)
+
 # .. code-block:: python
 #     
 #     from qualtran.drawing import show_call_graph
-#
-#     op = qml.QuantumPhaseEstimation(unitary=qml.RY(phi=0.3, wires=[0]), estimation_wires=[1, 2, 3])
-#     qpe_bloq = qml.to_bloq(op)
 #     show_call_graph(qpe_bloq, max_depth=1)
-#
+
 # .. figure:: ../_static/demonstration_assets/how_to_use_qualtran_with_pennylane/smart_default.svg
 #     :align: center
 #     :width: 50%
-# 
-#     ..
-#
+
 ######################################################################
 # We can use Qualtran's
 # `show_call_graph <https://qualtran.readthedocs.io/en/latest/reference/qualtran/drawing/show_call_graph.html>`_
@@ -200,28 +198,25 @@ print(op_as_bloq)
 from qualtran.bloqs.phase_estimation import LPResourceState
 from qualtran.bloqs.phase_estimation.text_book_qpe import TextbookQPE
 
+custom_map = {
+    op: TextbookQPE(
+        unitary=qml.to_bloq(qml.RY(phi=0.3, wires=[0])), 
+        ctrl_state_prep=LPResourceState(3)
+    )
+}
 
+qpe_bloq = qml.to_bloq(op, custom_mapping=custom_map)
 
 ######################################################################
 # .. code-block:: python
 #
 #     show_call_graph(qpe_bloq, max_depth=1)
-#     custom_map = {
-#         op: TextbookQPE(
-#             unitary=qml.to_bloq(qml.RY(phi=0.3, wires=[0])), 
-#             ctrl_state_prep=LPResourceState(3)
-#         )
-#     }
-#     
-#     qpe_bloq = qml.to_bloq(op, custom_mapping=custom_map)
+
 #
 # .. figure:: ../_static/demonstration_assets/how_to_use_qualtran_with_pennylane/lpresource.svg
 #     :align: center
 #     :width: 50%
-# 
-#     ..
-#
-#
+
 ######################################################################
 # We see that ``RectangularWindowState`` has been switched out for the ``LPResourceState`` we
 # defined in the custom map. 
@@ -246,32 +241,32 @@ print(type(qfunc_as_bloq))
 # We can choose to wrap our PennyLane :class:`~pennylane.QuantumPhaseEstimation` simply by setting
 # ``map_ops`` to ``False``. This wraps the operators as a ``ToBloq`` object, keeping the original
 # PennyLane object information.
-#
+
+op = qml.QuantumPhaseEstimation(unitary=qml.RY(phi=0.3, wires=[0]), estimation_wires=[1, 2, 3])
+wrapped_qpe_bloq = qml.to_bloq(op, map_ops=False)
+
 ######################################################################
 # .. code-block:: python
 #
 #     show_call_graph(wrapped_qpe_bloq, max_depth=1)
-#     op = qml.QuantumPhaseEstimation(unitary=qml.RY(phi=0.3, wires=[0]), estimation_wires=[1, 2, 3])
-#     wrapped_qpe_bloq = qml.to_bloq(op, map_ops=False)
+
 #
 # .. figure:: ../_static/demonstration_assets/how_to_use_qualtran_with_pennylane/wrapped_qpe_bloq.svg
 #     :align: center
 #     :width: 50%
-# 
-#     ..
-#
+
 ######################################################################
 #
 # Let's see how mapping and wrapping affect our resource count estimates.
-# _, mapped_sigma = qpe_bloq.call_graph()
-# _, wrapped_sigma = wrapped_qpe_bloq.call_graph()
-# print("--- Mapped counts ---")
-# for gate, count in mapped_sigma.items():
-#     print(f"{gate}: {count}")
 
-# print("\n--- Wrapped counts ---")
-# for gate, count in wrapped_sigma.items():
-#     print(f"{gate}: {count}")
+_, mapped_sigma = qpe_bloq.call_graph()
+_, wrapped_sigma = wrapped_qpe_bloq.call_graph()
+print("--- Mapped counts ---")
+for gate, count in mapped_sigma.items():
+    print(f"{gate}: {count}") 
+print("\n--- Wrapped counts ---")
+for gate, count in wrapped_sigma.items():
+    print(f"{gate}: {count}")
 
 ######################################################################
 # Here, we can clearly see that the resource counts for the two methods are distinctly different.
