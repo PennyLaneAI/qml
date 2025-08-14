@@ -165,11 +165,12 @@ print(op_as_bloq)
 op = qml.QuantumPhaseEstimation(unitary=qml.RY(phi=0.3, wires=[0]), estimation_wires=[1, 2, 3])
 qpe_bloq = qml.to_bloq(op)
 
+######################################################################
 # .. code-block:: python
 #     
 #     from qualtran.drawing import show_call_graph
 #     show_call_graph(qpe_bloq, max_depth=1)
-
+#
 # .. figure:: ../_static/demonstration_assets/how_to_use_qualtran_with_pennylane/smart_default.svg
 #     :align: center
 #     :width: 50%
@@ -211,7 +212,7 @@ qpe_bloq = qml.to_bloq(op, custom_mapping=custom_map)
 # .. code-block:: python
 #
 #     show_call_graph(qpe_bloq, max_depth=1)
-
+#
 #
 # .. figure:: ../_static/demonstration_assets/how_to_use_qualtran_with_pennylane/lpresource.svg
 #     :align: center
@@ -249,7 +250,6 @@ wrapped_qpe_bloq = qml.to_bloq(op, map_ops=False)
 # .. code-block:: python
 #
 #     show_call_graph(wrapped_qpe_bloq, max_depth=1)
-
 #
 # .. figure:: ../_static/demonstration_assets/how_to_use_qualtran_with_pennylane/wrapped_qpe_bloq.svg
 #     :align: center
