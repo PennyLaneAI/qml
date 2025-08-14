@@ -254,13 +254,33 @@ for gate, count in wrapped_sigma.items():
 # full stack of a quantum circuit and analyze what causes specific algorithms and gates to be called
 # and how often. The mapped circuit translates directly to high-level Qualtran bloqs:
 
-from qualtran.drawing import show_call_graph
-show_call_graph(qpe_bloq, max_depth=1)
+from qualtran.drawing import GraphvizCallGraph
+import matplotlib.pyplot as plt
+import cairosvg
+import io
+from PIL import Image
+
+# 1. Create the call graph object.
+gvcg = GraphvizCallGraph(qpe_bloq, max_depth=1)
+
+# 2. Get the SVG data as bytes.
+svg_bytes = gvcg.get_svg_bytes()
+
+# 3. Convert the SVG bytestring to PNG bytes using cairosvg.
+png_bytes = cairosvg.svg2png(bytestring=svg_bytes)
+
+# 4. Display the PNG data in a Matplotlib figure.
+with io.BytesIO(png_bytes) as png_io:
+    img = Image.open(png_io)
+    
+    fig, ax = plt.subplots()
+    ax.imshow(img)
+    ax.axis('off')
 
 ######################################################################
 # The wrapped circuit uses a series of PennyLane decompositions/definitions:
 
-show_call_graph(wrapped_qpe_bloq, max_depth=1)
+# show_call_graph(wrapped_qpe_bloq, max_depth=1)
 
 ######################################################################
 # When Qualtran computes the resource counts for a ``Bloq``, it first checks if there is a call
