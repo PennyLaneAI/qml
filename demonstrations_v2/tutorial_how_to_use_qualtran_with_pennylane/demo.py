@@ -137,7 +137,7 @@ print("GF Addition of 5 + 10 =", int(binary_string[len(wires['x']):],2))
 # * Wrapping: Think of this as an analogue of ``FromBloq``. It faithfully converts any operator or
 #   Qfunc, or decompositions, into a Bloq. The output is a :class:`~pennylane.io.ToBloq` instance.
 #
-# Holding all these options together is our trusty function :func:`~pennylane.to_bloq`. In the
+# These options are all accessible through the :func:`~pennylane.to_bloq` function. In the
 # following sections, we'll explore how we can wield this powerful function to get all the
 # functionality introduced above.
 #
