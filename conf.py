@@ -67,12 +67,13 @@ extensions = [
 html_baseurl = "https://pennylane.ai/qml/"
 demo_staging_dir = os.getenv("DEMO_STAGING_DIR", "demonstrations")
 
-if (output_dir := os.getenv("GALLERY_OUTPUT_DIR")):
+if output_dir := os.getenv("GALLERY_OUTPUT_DIR"):
     gallery_output_dir = output_dir
     include_patterns = ["index.rst", f"{output_dir}/*.rst"]
 else:
     gallery_output_dir = "demos"
     include_patterns = ["**"]
+
 
 def svg_scraper(block, block_vars, gallery_conf):
     """
@@ -81,13 +82,13 @@ def svg_scraper(block, block_vars, gallery_conf):
     # Find all SVG objects in the namespace
     svg_objects = [
         (var_name, var_value)
-        for var_name, var_value in block_vars['example_globals'].items()
+        for var_name, var_value in block_vars["example_globals"].items()
         if isinstance(var_value, SVG)
     ]
 
     # Get the image path from the gallery configuration
-    image_path_iterator = block_vars['image_path_iterator']
-    image_rsts = ''
+    image_path_iterator = block_vars["image_path_iterator"]
+    image_rsts = ""
 
     # Save each SVG object to a file
     for name, svg_obj in svg_objects:
@@ -95,19 +96,20 @@ def svg_scraper(block, block_vars, gallery_conf):
         try:
             # SVG data can be a string, bytes, or a filename
             if isinstance(svg_obj.data, str):
-                data = svg_obj.data.encode('utf-8')
+                data = svg_obj.data.encode("utf-8")
             else:
                 data = svg_obj.data
-            
-            with open(image_path, 'wb') as f:
+
+            with open(image_path, "wb") as f:
                 f.write(data)
         except Exception as e:
             print(f"Failed to save SVG: {e}")
             continue
-        
-        image_rsts += figure_rst([image_path], gallery_conf['src_dir'])
+
+        image_rsts += figure_rst([image_path], gallery_conf["src_dir"])
 
     return image_rsts
+
 
 sphinx_gallery_conf = {
     # path to your example scripts
@@ -131,33 +133,31 @@ sphinx_gallery_conf = {
         # The module you locally document uses None
         "pennylane": None,  # "https://docs.pennylane.ai/en/stable",
     },
-    "backreferences_dir"  : "backreferences",
-    "doc_module"          : ("pennylane"),
+    "backreferences_dir": "backreferences",
+    "doc_module": ("pennylane"),
     "junit": "../test-results/sphinx-gallery/junit.xml",
     "reset_modules": ("module_resets.reset_jax", "matplotlib", "seaborn"),
     "show_signature": False,
-    'image_scrapers': ('matplotlib', svg_scraper),
+    "image_scrapers": ("matplotlib", svg_scraper),
 }
 
 
-mathjax_path = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
+mathjax_path = (
+    "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
+)
 
 # Remove warnings that occur when generating the the tutorials
 warnings.filterwarnings(
     "ignore", category=UserWarning, message=r"Matplotlib is currently using agg"
 )
-warnings.filterwarnings(
-    "ignore", category=UserWarning, message=r"Timestamps in IBMQ backend"
-)
+warnings.filterwarnings("ignore", category=UserWarning, message=r"Timestamps in IBMQ backend")
 warnings.filterwarnings(
     "ignore",
     category=FutureWarning,
-    message=r"Passing \(type, 1\) or '1type' as a synonym of type is deprecated.+"
+    message=r"Passing \(type, 1\) or '1type' as a synonym of type is deprecated.+",
 )
 warnings.filterwarnings(
-    "ignore",
-    category=np.VisibleDeprecationWarning,
-    message=r"Creating an ndarray from ragged"
+    "ignore", category=np.VisibleDeprecationWarning, message=r"Creating an ndarray from ragged"
 )
 
 # Raise PennyLane deprecation warnings as errors
@@ -218,7 +218,7 @@ html_theme_options = {
     "toc_subset": False,
     "toc_hover": False,
     "relations": False,
-    "github_repo": "PennyLaneAI/qml"
+    "github_repo": "PennyLaneAI/qml",
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
@@ -260,5 +260,3 @@ intersphinx_mapping = {
 
 # Enable :doc: references for intersphinx (disabled by default in Sphinx 5.0+)
 intersphinx_disabled_reftypes = []
-
-
