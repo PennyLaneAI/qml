@@ -67,7 +67,7 @@ print(qml.bloq_registers(XGate()))
 # examples in the next section.
 #
 # Expanding PennyLane circuits with Qualtran Bloqs
-# ------------------------------------------------
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # Let's look at a more complicated example! Qualtran has a special type of addition operation, known
 # as Galois Field Addition or `GF2Addition <https://qualtran.readthedocs.io/en/latest/bloqs/gf_arithmetic/gf2_addition.html#gf2addition>`_,
