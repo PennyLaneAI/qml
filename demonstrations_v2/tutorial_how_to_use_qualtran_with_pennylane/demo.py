@@ -260,23 +260,25 @@ import cairosvg
 import io
 from PIL import Image
 
-# 1. Create the call graph object.
 call_graph, _ = qpe_bloq.call_graph()
 gvcg = GraphvizCallGraph(call_graph)
 
-# 2. Get the SVG data as bytes.
 svg_bytes = gvcg.get_svg_bytes()
 
-# 3. Convert the SVG bytestring to PNG bytes using cairosvg.
 png_bytes = cairosvg.svg2png(bytestring=svg_bytes)
 
-# 4. Display the PNG data in a Matplotlib figure.
 with io.BytesIO(png_bytes) as png_io:
     img = Image.open(png_io)
+    width_px, height_px = img.size
     
-    fig, ax = plt.subplots()
+    dpi = 100
+    
+    figsize = (width_px / dpi, height_px / dpi)
+
+    fig, ax = plt.subplots(figsize=figsize, dpi=dpi)
     ax.imshow(img)
     ax.axis('off')
+    fig.tight_layout(pad=0)
 
 ######################################################################
 # The wrapped circuit uses a series of PennyLane decompositions/definitions:
