@@ -105,7 +105,6 @@ qiskit-aer = ">=0.14.0,<0.16.0"
 sphinxcontrib-applehelp = "1.0.8"
 sphinx-gallery = "0.17.1"
 iqpopt = { git = "https://github.com/XanaduAI/iqpopt.git" }
-tensorflow = "2.19"
 galois = "0.4.6"
 
 
