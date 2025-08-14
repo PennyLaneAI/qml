@@ -12,11 +12,11 @@
   "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/neutral_atoms/thumbnail_tutorial_neutral_atoms.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_bp_catalyst.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_neutral_atoms.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_bp_catalyst.png"
         }
 
   ],
