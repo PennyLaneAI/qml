@@ -255,14 +255,30 @@ for gate, count in wrapped_sigma.items():
 # and how often. The mapped circuit translates directly to high-level Qualtran bloqs:
 
 from qualtran.drawing import GraphvizCallGraph
-import IPython
+import matplotlib.pyplot as plt
+import cairosvg
+import io
+from PIL import Image
 
 call_graph, _ = qpe_bloq.call_graph(max_depth=1)
 gvcg = GraphvizCallGraph(call_graph)
 
 svg_bytes = gvcg.get_svg_bytes()
 
-IPython.display.SVG(data=svg_bytes)
+png_bytes = cairosvg.svg2png(bytestring=svg_bytes)
+
+with io.BytesIO(png_bytes) as png_io:
+    img = Image.open(png_io)
+    width_px, height_px = img.size
+    
+    dpi = 100
+    
+    figsize = (width_px / dpi, height_px / dpi)
+
+    fig, ax = plt.subplots(figsize=figsize, dpi=dpi)
+    ax.imshow(img)
+    ax.axis('off')
+    fig.tight_layout(pad=0)
 
 ######################################################################
 # The wrapped circuit uses a series of PennyLane decompositions/definitions:
