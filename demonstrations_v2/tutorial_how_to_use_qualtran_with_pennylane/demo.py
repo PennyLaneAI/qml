@@ -168,9 +168,9 @@ qpe_bloq = qml.to_bloq(op)
 ######################################################################
 # We can use Qualtran's
 # `show_call_graph <https://qualtran.readthedocs.io/en/latest/reference/qualtran/drawing/show_call_graph.html>`_
-# to analyze the algorithms and visualize the differences clearly. This tool lets you visualize the
+# to investigate how :class:`~pennylane.QuantumPhaseEstimation` is mapped. This tool lets you visualize the
 # full stack of a quantum circuit and analyze what causes specific algorithms and gates to be called
-# and how often. 
+# and how often.
 #
 # .. code-block:: python
 #     
@@ -209,8 +209,8 @@ custom_map = {
 qpe_bloq = qml.to_bloq(op, custom_mapping=custom_map)
 
 ######################################################################
-# We see that ``RectangularWindowState`` has been switched out for the ``LPResourceState`` we
-# defined in the custom map. 
+# Below, we see that ``LPResourceState`` has replaced ``RectangularWindowState``, as defined in the
+# custom map:
 #
 # .. code-block:: python
 #
@@ -233,6 +233,7 @@ def circ():
 
 qfunc_as_bloq = qml.to_bloq(circ)
 print(type(qfunc_as_bloq))
+
 ######################################################################
 # Wrapping a PennyLane quantum function or operator as a ``ToBloq`` is similar to wrapping a
 # Qualtran Bloq as a ``FromBloq``. A wrapped PennyLane object acts like a Bloq: it can be analyzed
@@ -247,7 +248,8 @@ op = qml.QuantumPhaseEstimation(unitary=qml.RY(phi=0.3, wires=[0]), estimation_w
 wrapped_qpe_bloq = qml.to_bloq(op, map_ops=False)
 
 ######################################################################
-# Let's take a look at its call graph.
+# The call graph below shows how the wrapped version of :class:`~pennylane.QuantumPhaseEstimation`
+# preserves the PennyLane (PL) definition of the operator, using a slightly different decomposition:
 #
 # .. code-block:: python
 #
@@ -256,7 +258,7 @@ wrapped_qpe_bloq = qml.to_bloq(op, map_ops=False)
 # .. figure:: ../_static/demonstration_assets/how_to_use_qualtran_with_pennylane/wrapped_qpe_bloq.svg
 #     :align: center
 #     :width: 50%
-#
+
 ######################################################################
 #
 # Let's see how mapping and wrapping affect our resource count estimates.
