@@ -260,7 +260,7 @@ import cairosvg
 import io
 from PIL import Image
 
-call_graph, _ = qpe_bloq.call_graph()
+call_graph, _ = qpe_bloq.call_graph(max_depth=1)
 gvcg = GraphvizCallGraph(call_graph)
 
 svg_bytes = gvcg.get_svg_bytes()
