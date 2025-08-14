@@ -162,14 +162,28 @@ print(op_as_bloq)
 # `QubitizationQPE <https://qualtran.readthedocs.io/en/latest/bloqs/phase_estimation/qubitization_qpe.html>`_. 
 # In cases where the mapping is ambiguous, we get the smart default:
 
-from qualtran.drawing import draw_musical_score,  get_musical_score_data
-
 op = qml.QuantumPhaseEstimation(unitary=qml.RY(phi=0.3, wires=[0]), estimation_wires=[1, 2, 3])
 qpe_bloq = qml.to_bloq(op)
-fig, ax = draw_musical_score(get_musical_score_data(qpe_bloq.decompose_bloq()))
-fig.tight_layout()
 
+# .. code-block:: python
+#     
+#     from qualtran.drawing import show_call_graph
+#
+#     show_call_graph(qpe_bloq, max_depth=1)
+#
+# .. figure:: ../_static/demonstration_assets/how_to_use_qualtran_with_pennylane/smart_default.svg
+#     :align: center
+#     :width: 50%
+# 
+#     ..
+#
 ######################################################################
+# # We can use Qualtran's
+# `show_call_graph <https://qualtran.readthedocs.io/en/latest/reference/qualtran/drawing/show_call_graph.html>`_
+# to analyze the algorithms and visualize the differences clearly. This tool lets you visualize the
+# full stack of a quantum circuit and analyze what causes specific algorithms and gates to be called
+# and how often. 
+#
 # Here, the smart default is to call a Qualtran
 # `TextbookQPE <https://qualtran.readthedocs.io/en/latest/bloqs/phase_estimation/text_book_qpe.html>`_
 # that uses
@@ -195,9 +209,18 @@ custom_map = {
 }
 
 qpe_bloq = qml.to_bloq(op, custom_mapping=custom_map)
-fig, ax = draw_musical_score(get_musical_score_data(qpe_bloq.decompose_bloq()))
-fig.tight_layout()
 
+# .. code-block:: python
+#
+#     show_call_graph(qpe_bloq, max_depth=1)
+#
+# .. figure:: ../_static/demonstration_assets/how_to_use_qualtran_with_pennylane/lpresource.svg
+#     :align: center
+#     :width: 50%
+# 
+#     ..
+#
+#
 ######################################################################
 # We see that ``RectangularWindowState`` has been switched out for the ``LPResourceState`` we
 # defined in the custom map. 
@@ -225,13 +248,18 @@ print(type(qfunc_as_bloq))
 
 op = qml.QuantumPhaseEstimation(unitary=qml.RY(phi=0.3, wires=[0]), estimation_wires=[1, 2, 3])
 wrapped_qpe_bloq = qml.to_bloq(op, map_ops=False)
-fig, ax = draw_musical_score(get_musical_score_data(wrapped_qpe_bloq.decompose_bloq()))
-fig.tight_layout()
 
+# .. code-block:: python
+#
+#     show_call_graph(wrapped_qpe_bloq, max_depth=1)
+#
+# .. figure:: ../_static/demonstration_assets/how_to_use_qualtran_with_pennylane/wrapped_qpe_bloq.svg
+#     :align: center
+#     :width: 50%
+# 
+#     ..
+#
 ######################################################################
-# Notice the differences between mapping and wrapping. When we map, the musical score is in
-# terms of native Qualtran Bloqs such as ``Allocate``. When we wrap, the musical score has the three
-# wires explicitly drawn and handled, because there is no PennyLane ``Allocate`` operator.
 #
 # Let's see how mapping and wrapping affect our resource count estimates.
 
@@ -248,44 +276,7 @@ for gate, count in wrapped_sigma.items():
 ######################################################################
 # Here, we can clearly see that the resource counts for the two methods are distinctly different.
 # This is because the underlying implementations for the two QPE operators differ.
-# We can also use Qualtran's
-# `show_call_graph <https://qualtran.readthedocs.io/en/latest/reference/qualtran/drawing/show_call_graph.html>`_
-# to analyze the algorithms and visualize the differences clearly. This tool lets you visualize the
-# full stack of a quantum circuit and analyze what causes specific algorithms and gates to be called
-# and how often. The mapped circuit translates directly to high-level Qualtran bloqs:
-
-from qualtran.drawing import GraphvizCallGraph
-import matplotlib.pyplot as plt
-import cairosvg
-import io
-from PIL import Image
-
-call_graph, _ = qpe_bloq.call_graph(max_depth=1)
-gvcg = GraphvizCallGraph(call_graph)
-
-svg_bytes = gvcg.get_svg_bytes()
-
-png_bytes = cairosvg.svg2png(bytestring=svg_bytes)
-
-with io.BytesIO(png_bytes) as png_io:
-    img = Image.open(png_io)
-    width_px, height_px = img.size
-    
-    dpi = 100
-    
-    figsize = (width_px / dpi, height_px / dpi)
-
-    fig, ax = plt.subplots(figsize=figsize, dpi=dpi)
-    ax.imshow(img)
-    ax.axis('off')
-    fig.tight_layout(pad=0)
-
-######################################################################
-# The wrapped circuit uses a series of PennyLane decompositions/definitions:
-
-# show_call_graph(wrapped_qpe_bloq, max_depth=1)
-
-######################################################################
+#
 # When Qualtran computes the resource counts for a ``Bloq``, it first checks if there is a call
 # graph defined. If it is defined, Qualtran uses that call graph to compute the resource count
 # estimates. If it is not defined, Qualtran uses the PennyLane decomposition to compute the resource
