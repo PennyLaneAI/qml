@@ -261,7 +261,8 @@ import io
 from PIL import Image
 
 # 1. Create the call graph object.
-gvcg = GraphvizCallGraph(qpe_bloq, max_depth=1)
+call_graph, _ = qpe_bloq.call_graph()
+gvcg = GraphvizCallGraph(call_graph)
 
 # 2. Get the SVG data as bytes.
 svg_bytes = gvcg.get_svg_bytes()
