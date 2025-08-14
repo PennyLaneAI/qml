@@ -166,6 +166,12 @@ op = qml.QuantumPhaseEstimation(unitary=qml.RY(phi=0.3, wires=[0]), estimation_w
 qpe_bloq = qml.to_bloq(op)
 
 ######################################################################
+# We can use Qualtran's
+# `show_call_graph <https://qualtran.readthedocs.io/en/latest/reference/qualtran/drawing/show_call_graph.html>`_
+# to analyze the algorithms and visualize the differences clearly. This tool lets you visualize the
+# full stack of a quantum circuit and analyze what causes specific algorithms and gates to be called
+# and how often. 
+#
 # .. code-block:: python
 #     
 #     from qualtran.drawing import show_call_graph
@@ -176,12 +182,6 @@ qpe_bloq = qml.to_bloq(op)
 #     :width: 50%
 
 ######################################################################
-# We can use Qualtran's
-# `show_call_graph <https://qualtran.readthedocs.io/en/latest/reference/qualtran/drawing/show_call_graph.html>`_
-# to analyze the algorithms and visualize the differences clearly. This tool lets you visualize the
-# full stack of a quantum circuit and analyze what causes specific algorithms and gates to be called
-# and how often. 
-#
 # Here, the smart default is to call a Qualtran
 # `TextbookQPE <https://qualtran.readthedocs.io/en/latest/bloqs/phase_estimation/text_book_qpe.html>`_
 # that uses
@@ -209,18 +209,18 @@ custom_map = {
 qpe_bloq = qml.to_bloq(op, custom_mapping=custom_map)
 
 ######################################################################
+# We see that ``RectangularWindowState`` has been switched out for the ``LPResourceState`` we
+# defined in the custom map. 
+#
 # .. code-block:: python
 #
 #     show_call_graph(qpe_bloq, max_depth=1)
-#
 #
 # .. figure:: ../_static/demonstration_assets/how_to_use_qualtran_with_pennylane/lpresource.svg
 #     :align: center
 #     :width: 50%
 
 ######################################################################
-# We see that ``RectangularWindowState`` has been switched out for the ``LPResourceState`` we
-# defined in the custom map. 
 #
 # Wrapping
 # ~~~~~~~~
@@ -247,6 +247,8 @@ op = qml.QuantumPhaseEstimation(unitary=qml.RY(phi=0.3, wires=[0]), estimation_w
 wrapped_qpe_bloq = qml.to_bloq(op, map_ops=False)
 
 ######################################################################
+# Let's take a look at its call graph.
+#
 # .. code-block:: python
 #
 #     show_call_graph(wrapped_qpe_bloq, max_depth=1)
@@ -254,7 +256,7 @@ wrapped_qpe_bloq = qml.to_bloq(op, map_ops=False)
 # .. figure:: ../_static/demonstration_assets/how_to_use_qualtran_with_pennylane/wrapped_qpe_bloq.svg
 #     :align: center
 #     :width: 50%
-
+#
 ######################################################################
 #
 # Let's see how mapping and wrapping affect our resource count estimates.
