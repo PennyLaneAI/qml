@@ -137,10 +137,10 @@ num_layers = 2
 num_wires = 2
 
 # create a device that estimates expectation values using a finite number of shots
-non_analytic_dev = qml.device("default.qubit", wires=num_wires, shots=100, seed=432423)
+non_analytic_dev = qml.device("default.qubit", wires=num_wires, seed=432423)
 
 # create a device that calculates exact expectation values
-analytic_dev = qml.device("default.qubit", wires=num_wires, shots=None)
+analytic_dev = qml.device("default.qubit", wires=num_wires)
 
 ##############################################################################
 # Now, let's set the total number of shots, and determine the probability
@@ -187,6 +187,7 @@ print(sum(samples))
 from pennylane.templates.layers import StronglyEntanglingLayers
 
 
+@qml.set_shots(100)
 @qml.qnode(non_analytic_dev, diff_method="parameter-shift", interface="autograd")
 def qnode(weights, observable):
     StronglyEntanglingLayers(weights, wires=non_analytic_dev.wires)
@@ -236,6 +237,7 @@ for i in range(100):
 # Here, we will split the 8000 total shots evenly across all Hamiltonian terms,
 # also known as *uniform deterministic sampling*.
 
+@qml.set_shots(100)
 @qml.qnode(non_analytic_dev, diff_method="parameter-shift", interface="autograd")
 def qnode(weights, obs):
     StronglyEntanglingLayers(weights, wires=non_analytic_dev.wires)
@@ -438,7 +440,7 @@ class Rosalin:
         set to 'sample' mode.
         """
         # note that convergence depends on seed for random number generation
-        rosalin_device = qml.device("default.qubit", wires=num_wires, shots=100, seed=93754352)
+        rosalin_device = qml.device("default.qubit", wires=num_wires, seed=93754352)
 
         # determine the shot probability per term
         prob_shots = np.abs(coeffs) / np.sum(np.abs(coeffs))
@@ -450,6 +452,7 @@ class Rosalin:
 
         results = []
 
+        @qml.set_shots(100)
         @qml.qnode(rosalin_device, diff_method="parameter-shift", interface="autograd")
         def qnode(weights, observable):
             StronglyEntanglingLayers(weights, wires=rosalin_device.wires)
@@ -557,6 +560,7 @@ class Rosalin:
 # also create a separate cost function using an 'exact' quantum device, so that we can keep track of the
 # *exact* cost function value at each iteration.
 
+@qml.set_shots(None)
 @qml.qnode(analytic_dev, interface="autograd")
 def cost_analytic(weights):
     StronglyEntanglingLayers(weights, wires=analytic_dev.wires)
@@ -593,8 +597,9 @@ print(adam_shots_per_step)
 params = init_params
 opt = qml.AdamOptimizer(0.07)
 
-adam_dev = qml.device('default.qubit', shots=adam_shots_per_eval, seed=595905)
+adam_dev = qml.device('default.qubit', seed=595905)
 
+@qml.set_shots(adam_shots_per_eval)
 @qml.qnode(adam_dev, diff_method="parameter-shift", interface="autograd")
 def cost(weights):
     StronglyEntanglingLayers(weights, wires=non_analytic_dev.wires)
