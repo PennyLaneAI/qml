@@ -104,7 +104,8 @@ np.random.seed(666)
 
 H = qml.Hamiltonian([1., 1.], [qml.PauliZ(0) @ qml.PauliZ(1), qml.PauliX(0) @ qml.PauliX(1)])
 
-dev = qml.device("default.qubit", wires=range(2), shots=10000)
+dev = qml.device("default.qubit", wires=range(2))
+@qml.set_shots(10000)
 @qml.qnode(dev, interface="autograd")
 def qnode(x, H):
     qml.Hadamard(0)
@@ -131,7 +132,8 @@ print(qml.jacobian(qnode)(x, Hs))
 # Alternatively, you can compute expectation values by first performing the shadow measurement and then perform classical post-processing using the :class:`~.pennylane.ClassicalShadow`
 # class methods.
 
-dev = qml.device("default.qubit", wires=range(2), shots=1000)
+dev = qml.device("default.qubit", wires=range(2))
+@qml.set_shots(1000)
 @qml.qnode(dev, interface="autograd")
 def qnode(x):
     qml.Hadamard(0)
@@ -195,7 +197,7 @@ def circuit():
 
 obs = qml.PauliX(0) @ qml.PauliZ(3) @ qml.PauliX(6) @ qml.PauliZ(7)
 
-dev_ideal = qml.device("default.qubit", wires=range(n_wires), shots=None)
+dev_ideal = qml.device("default.qubit", wires=range(n_wires))
 @qml.qnode(dev_ideal, interface="autograd")
 def qnode_ideal():
     circuit()
@@ -212,13 +214,15 @@ shotss = range(100, 1000, 100)
 for shots in shotss:
     for _ in range(10):
         # repeating experiment 10 times to obtain averages and standard deviations
-        dev = qml.device("default.qubit", wires=range(10), shots=shots)
+        dev = qml.device("default.qubit", wires=range(10))
 
+        @qml.set_shots(shots)
         @qml.qnode(dev, interface="autograd")
         def qnode_finite():
             circuit()
             return qml.expval(obs)
 
+        @qml.set_shots(shots)
         @qml.qnode(dev, interface="autograd")
         def qnode_shadow():
             circuit()
@@ -281,7 +285,7 @@ for observable in all_observables[:10]:
 
 n_groups = len(qml.pauli.group_observables(all_observables))
 
-dev_ideal = qml.device("default.qubit", wires=range(n), shots=None)
+dev_ideal = qml.device("default.qubit", wires=range(n))
 
 x = np.random.rand(n*2)
 def circuit():
@@ -319,14 +323,16 @@ for shots in shotss:
     exact = qnode_ideal()
 
     for _ in range(10):
-        dev = qml.device("default.qubit", wires=range(5), shots=shots)
+        dev = qml.device("default.qubit", wires=range(5))
 
+        @qml.set_shots(shots)
         @qml.qnode(dev, interface="autograd")
         def qnode_finite():
             circuit()
             return qml.expval(H)
 
-        dev = qml.device("default.qubit", wires=range(5), shots=shots*n_groups)
+        dev = qml.device("default.qubit", wires=range(5))
+        @qml.set_shots(shots*n_groups)
         @qml.qnode(dev, interface="autograd")
         def qnode_shadow():
             circuit()
@@ -418,8 +424,9 @@ for shots in shotss:
     for _ in range(10):
 
         # execute qwc measurements
-        dev_finite = qml.device("default.qubit", wires=range(n_wires), shots=int(shots))
+        dev_finite = qml.device("default.qubit", wires=range(n_wires))
 
+        @qml.set_shots(int(shots))
         @qml.qnode(dev_finite, interface="autograd")
         def qnode_finite(H):
             circuit()
@@ -429,7 +436,8 @@ for shots in shotss:
             res_finite = qnode_finite(H_qwc)
 
         # execute shadows measurements
-        dev_shadow = qml.device("default.qubit", wires=range(n_wires), shots=int(shots)*n_groups)
+        dev_shadow = qml.device("default.qubit", wires=range(n_wires))
+        @qml.set_shots(int(shots)*n_groups)
         @qml.qnode(dev_shadow, interface="autograd")
         def qnode():
             circuit()

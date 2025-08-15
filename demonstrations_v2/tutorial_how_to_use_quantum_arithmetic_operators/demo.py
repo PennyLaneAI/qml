@@ -80,7 +80,8 @@ def product_basis_state(x=0,y=0):
     qml.BasisState(x, wires=wires["x"])
     qml.BasisState(y, wires=wires["y"])
 
-dev = qml.device("default.qubit", shots=1)
+dev = qml.device("default.qubit")
+@qml.set_shots(1)
 @qml.qnode(dev)
 def circuit(x,y):
     product_basis_state(x, y)
@@ -108,6 +109,7 @@ print("output register: ", output[2]," (binary) ---> ", state_to_decimal(output[
 # Now we can implement an example for the :class:`~.pennylane.Adder` operator. We will add the integer :math:`5` to the ``wires["x"]`` register
 # that stores the state :math:`|x \rangle=|1 \rangle`.
 
+@qml.set_shots(1)
 @qml.qnode(dev)
 def circuit(x):
 
@@ -134,6 +136,7 @@ fig.show()
 # Now, let's see an example for the :class:`~.pennylane.OutAdder` operator to add the states 
 # :math:`|x \rangle` and :math:`|y \rangle` to the output register.
 
+@qml.set_shots(1)
 @qml.qnode(dev)
 def circuit(x,y):
 
@@ -169,6 +172,7 @@ print(circuit(x=2,y=3), " (binary) ---> ", state_to_decimal(circuit(x=2,y=3)), "
 # :class:`~.pennylane.Multiplier` operator. We will multiply the state  :math:`|x \rangle=|2 \rangle` by 
 # the integer :math:`k=3`:
 
+@qml.set_shots(1)
 @qml.qnode(dev)
 def circuit(x):
 
@@ -185,6 +189,7 @@ print(circuit(x=2), " (binary) ---> ", state_to_decimal(circuit(x=2))," (decimal
 # Now, let's look at an example using the :class:`~.pennylane.OutMultiplier` operator to multiply the states :math:`|x \rangle` and
 # :math:`|y \rangle`, storing the result in the output register.
 
+@qml.set_shots(1)
 @qml.qnode(dev)
 def circuit(x,y):
 
@@ -200,6 +205,7 @@ print(circuit(x=4,y=2), " (binary) ---> ", state_to_decimal(circuit(x=4,y=2))," 
 # multiplication, respectively. The inverse of a quantum circuit can be implemented with the 
 # :func:`~.pennylane.adjoint` operator. Let's see an example of modular subtraction.
 
+@qml.set_shots(1)
 @qml.qnode(dev)
 def circuit(x):
 
@@ -268,6 +274,7 @@ def adding_5x_3y():
 ######################################################################
 # Now we can combine all these circuits to implement the transformation by the polynomial  :math:`f(x,y)= 4 + 3xy + 5 x+ 3 y`.
 
+@qml.set_shots(1)
 @qml.qnode(dev)
 def circuit(x,y):
 
@@ -312,6 +319,7 @@ def f(x, y):
 ######################################################################
 
 wires = qml.registers({"x": 4, "y":4, "output":6})
+@qml.set_shots(1)
 @qml.qnode(dev)
 def circuit_with_Poly(x,y):
 

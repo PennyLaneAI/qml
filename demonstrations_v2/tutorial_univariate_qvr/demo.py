@@ -472,7 +472,7 @@ def D(gamma: torch.Tensor, n_qubits: int, k: int = None, get_probs: bool = False
 # qubit in this tutorial, the resulting circuit is merely a single :math:`R_z(\theta)` gate.
 
 n_qubits = 1
-dev = qml.device("default.qubit", wires=n_qubits, shots=None)
+dev = qml.device("default.qubit", wires=n_qubits)
 D_one_qubit = qml.qnode(dev)(D)
 _ = qml.draw_mpl(D_one_qubit, decimals=2)(torch.tensor([1, 0]), 1, 1, True)
 

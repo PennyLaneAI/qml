@@ -49,7 +49,7 @@ import pennylane as qml
 import numpy as np
 
 num_wires = 5
-dev = qml.device("default.qubit", wires=num_wires, shots=1)
+dev = qml.device("default.qubit", wires=num_wires)
 
 ######################################################################
 # Building the quantum lock
@@ -101,6 +101,7 @@ def build_key(key):
 #
 
 
+@qml.set_shots(1)
 @qml.qnode(dev)
 def quantum_locking_mechanism(lock, key):
     build_key(key)

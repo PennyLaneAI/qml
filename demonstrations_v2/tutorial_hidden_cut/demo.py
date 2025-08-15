@@ -257,8 +257,9 @@ print(f'Created {n} qubit state with qubits {partitions[0]} unentangled from {pa
 # array ``M``:
 # 
 
-dev = qml.device('default.qubit', shots=100)
+dev = qml.device('default.qubit')
 
+@qml.set_shots(100)
 @qml.qnode(dev)
 def circuit():
     # Initialize psi x psi in registers 2 and 3

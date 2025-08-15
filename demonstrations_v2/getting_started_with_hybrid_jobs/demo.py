@@ -345,10 +345,9 @@ def qpu_qubit_rotation_hybrid_job(num_steps=10, stepsize=0.5):
     device = qml.device(
         "braket.aws.qubit",
         device_arn=device_arn.value,  # Make sure the device ARN matches the hybrid job device ARN
-        wires=2,
-        shots=1_000,
-    )
+        wires=2)
 
+    @qml.set_shots(1_000)
     @qml.qnode(device)
     def circuit(params):
         qml.RX(params[0], wires=0)

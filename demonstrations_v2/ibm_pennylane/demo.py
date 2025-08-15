@@ -247,7 +247,7 @@ with qiskit_session(dev) as session:
 
 dev1 = qml.device("default.qubit", wires=4)
 shots = 8000
-dev2 = qml.device("qiskit.aer", wires=4, shots=shots)
+dev2 = qml.device("qiskit.aer", wires=4)
 
 
 @qml.qnode(dev1)
@@ -256,6 +256,7 @@ def cost_fn_1(theta):
     return qml.expval(H)
 
 
+@qml.set_shots(shots)
 @qml.qnode(dev2)
 def cost_fn_2(theta):
     four_qubit_ansatz(theta)

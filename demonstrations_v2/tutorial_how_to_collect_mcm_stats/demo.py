@@ -76,9 +76,10 @@ def ansatz(x):
 # To implement the ``QNode``, we also define a shot-based qubit device.
 #
 
-dev = qml.device("default.qubit", shots=100)
+dev = qml.device("default.qubit")
 
 
+@qml.set_shots(100)
 @qml.qnode(dev)
 def simple_node(x):
     # apply the ansatz, and collect mid-circuit measurements. mcm1 is the measurement
@@ -118,6 +119,7 @@ print(f"Bit string counts on other qubits: {counts}")
 #
 
 
+@qml.set_shots(100)
 @qml.qnode(dev)
 def interesting_qnode(x):
     first_mcms = ansatz(x)

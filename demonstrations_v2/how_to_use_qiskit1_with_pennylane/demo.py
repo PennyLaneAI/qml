@@ -98,8 +98,9 @@ print(counts)
 
 import pennylane as qml
 
-dev = qml.device("qiskit.basicsim", wires=2, shots=1024)
+dev = qml.device("qiskit.basicsim", wires=2)
 
+@qml.set_shots(1024)
 @qml.qnode(dev)
 def circuit():
     qml.Hadamard(0)

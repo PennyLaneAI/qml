@@ -411,7 +411,7 @@ n_wires = 5
 ###############################################################################
 # We initialize the quantum simulator:
 
-dev = qml.device("lightning.qubit", wires = n_wires, shots = None)
+dev = qml.device("lightning.qubit", wires = n_wires)
 
 ###############################################################################
 # Next, we construct the quantum node:
