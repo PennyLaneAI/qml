@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="341pt" height="379pt" viewBox="0.00 0.00 341.38 378.75">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 374.75)">
+<title>counts</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-374.75 337.38,-374.75 337.38,4 -4,4"/>
+<!-- b0 -->
+<g id="node1" class="node">
+<title>b0</title>
+<polygon fill="none" stroke="black" points="123,-343.5 123,-366.75 216,-366.75 216,-343.5 123,-343.5"/>
+<text text-anchor="start" x="140.62" y="-351.25" font-family="Times,serif" font-size="10.00">TextbookQPE</text>
+<polygon fill="none" stroke="black" points="123,-320.25 123,-343.5 193.5,-343.5 193.5,-320.25 123,-320.25"/>
+<text text-anchor="start" x="144.38" y="-328" font-family="Times,serif" font-size="10.00">Qubits</text>
+<polygon fill="none" stroke="black" points="193.5,-320.25 193.5,-343.5 216,-343.5 216,-320.25 193.5,-320.25"/>
+<text text-anchor="start" x="199.5" y="-328" font-family="Times,serif" font-size="10.00">10</text>
+<polygon fill="none" stroke="black" points="123,-297 123,-320.25 193.5,-320.25 193.5,-297 123,-297"/>
+<text text-anchor="start" x="153.38" y="-304.75" font-family="Times,serif" font-size="10.00">Ts</text>
+<polygon fill="none" stroke="black" points="193.5,-297 193.5,-320.25 216,-320.25 216,-297 193.5,-297"/>
+<text text-anchor="start" x="202.12" y="-304.75" font-family="Times,serif" font-size="10.00">1</text>
+<polygon fill="none" stroke="black" points="123,-273.75 123,-297 193.5,-297 193.5,-273.75 123,-273.75"/>
+<text text-anchor="start" x="147.38" y="-281.5" font-family="Times,serif" font-size="10.00">Ands</text>
+<polygon fill="none" stroke="black" points="193.5,-273.75 193.5,-297 216,-297 216,-273.75 193.5,-273.75"/>
+<text text-anchor="start" x="202.12" y="-281.5" font-family="Times,serif" font-size="10.00">7</text>
+<polygon fill="none" stroke="black" points="123,-250.5 123,-273.75 193.5,-273.75 193.5,-250.5 123,-250.5"/>
+<text text-anchor="start" x="140.25" y="-258.25" font-family="Times,serif" font-size="10.00">Cliffords</text>
+<polygon fill="none" stroke="black" points="193.5,-250.5 193.5,-273.75 216,-273.75 216,-250.5 193.5,-250.5"/>
+<text text-anchor="start" x="199.5" y="-258.25" font-family="Times,serif" font-size="10.00">72</text>
+<polygon fill="none" stroke="black" points="123,-227.25 123,-250.5 193.5,-250.5 193.5,-227.25 123,-227.25"/>
+<text text-anchor="start" x="138.38" y="-235" font-family="Times,serif" font-size="10.00">Rotations</text>
+<polygon fill="none" stroke="black" points="193.5,-227.25 193.5,-250.5 216,-250.5 216,-227.25 193.5,-227.25"/>
+<text text-anchor="start" x="199.5" y="-235" font-family="Times,serif" font-size="10.00">31</text>
+<polygon fill="none" stroke="black" points="123,-204 123,-227.25 193.5,-227.25 193.5,-204 123,-204"/>
+<text text-anchor="start" x="129" y="-211.75" font-family="Times,serif" font-size="10.00">Measurements</text>
+<polygon fill="none" stroke="black" points="193.5,-204 193.5,-227.25 216,-227.25 216,-204 193.5,-204"/>
+<text text-anchor="start" x="202.12" y="-211.75" font-family="Times,serif" font-size="10.00">7</text>
+</g>
+<!-- b1 -->
+<g id="node2" class="node">
+<title>b1</title>
+<polygon fill="none" stroke="black" points="8,-120.25 8,-143.5 101,-143.5 101,-120.25 8,-120.25"/>
+<text text-anchor="start" x="20" y="-128" font-family="Times,serif" font-size="10.00">LPResourceState</text>
+<polygon fill="none" stroke="black" points="8,-97 8,-120.25 78.5,-120.25 78.5,-97 8,-97"/>
+<text text-anchor="start" x="29.38" y="-104.75" font-family="Times,serif" font-size="10.00">Qubits</text>
+<polygon fill="none" stroke="black" points="78.5,-97 78.5,-120.25 101,-120.25 101,-97 78.5,-97"/>
+<text text-anchor="start" x="84.5" y="-104.75" font-family="Times,serif" font-size="10.00">10</text>
+<polygon fill="none" stroke="black" points="8,-73.75 8,-97 78.5,-97 78.5,-73.75 8,-73.75"/>
+<text text-anchor="start" x="32.38" y="-81.5" font-family="Times,serif" font-size="10.00">Ands</text>
+<polygon fill="none" stroke="black" points="78.5,-73.75 78.5,-97 101,-97 101,-73.75 78.5,-73.75"/>
+<text text-anchor="start" x="87.12" y="-81.5" font-family="Times,serif" font-size="10.00">4</text>
+<polygon fill="none" stroke="black" points="8,-50.5 8,-73.75 78.5,-73.75 78.5,-50.5 8,-50.5"/>
+<text text-anchor="start" x="25.25" y="-58.25" font-family="Times,serif" font-size="10.00">Cliffords</text>
+<polygon fill="none" stroke="black" points="78.5,-50.5 78.5,-73.75 101,-73.75 101,-50.5 78.5,-50.5"/>
+<text text-anchor="start" x="84.5" y="-58.25" font-family="Times,serif" font-size="10.00">63</text>
+<polygon fill="none" stroke="black" points="8,-27.25 8,-50.5 78.5,-50.5 78.5,-27.25 8,-27.25"/>
+<text text-anchor="start" x="23.38" y="-35" font-family="Times,serif" font-size="10.00">Rotations</text>
+<polygon fill="none" stroke="black" points="78.5,-27.25 78.5,-50.5 101,-50.5 101,-27.25 78.5,-27.25"/>
+<text text-anchor="start" x="84.5" y="-35" font-family="Times,serif" font-size="10.00">24</text>
+<polygon fill="none" stroke="black" points="8,-4 8,-27.25 78.5,-27.25 78.5,-4 8,-4"/>
+<text text-anchor="start" x="14" y="-11.75" font-family="Times,serif" font-size="10.00">Measurements</text>
+<polygon fill="none" stroke="black" points="78.5,-4 78.5,-27.25 101,-27.25 101,-4 78.5,-4"/>
+<text text-anchor="start" x="87.12" y="-11.75" font-family="Times,serif" font-size="10.00">4</text>
+</g>
+<!-- b0&#45;&gt;b1 -->
+<g id="edge1" class="edge">
+<title>b0-&gt;b1</title>
+<path fill="none" stroke="black" d="M123.22,-200.02C115.54,-186.01 107.58,-171.5 99.91,-157.53"/>
+<polygon fill="black" stroke="black" points="103,-155.88 95.12,-148.8 96.86,-159.25 103,-155.88"/>
+<text text-anchor="middle" x="115.38" y="-168.7" font-family="Times,serif" font-size="14.00">1</text>
+</g>
+<!-- b2 -->
+<g id="node3" class="node">
+<title>b2</title>
+<polygon fill="none" stroke="black" points="135,-85.38 135,-108.62 204,-108.62 204,-85.38 135,-85.38"/>
+<text text-anchor="start" x="148.12" y="-93.12" font-family="Times,serif" font-size="10.00">C[Ry(0.3)]</text>
+<polygon fill="none" stroke="black" points="135,-62.12 135,-85.38 186.75,-85.38 186.75,-62.12 135,-62.12"/>
+<text text-anchor="start" x="147" y="-69.88" font-family="Times,serif" font-size="10.00">Qubits</text>
+<polygon fill="none" stroke="black" points="186.75,-62.12 186.75,-85.38 204,-85.38 204,-62.12 186.75,-62.12"/>
+<text text-anchor="start" x="192.75" y="-69.88" font-family="Times,serif" font-size="10.00">2</text>
+<polygon fill="none" stroke="black" points="135,-38.88 135,-62.12 186.75,-62.12 186.75,-38.88 135,-38.88"/>
+<text text-anchor="start" x="141" y="-46.62" font-family="Times,serif" font-size="10.00">Rotations</text>
+<polygon fill="none" stroke="black" points="186.75,-38.88 186.75,-62.12 204,-62.12 204,-38.88 186.75,-38.88"/>
+<text text-anchor="start" x="192.75" y="-46.62" font-family="Times,serif" font-size="10.00">1</text>
+</g>
+<!-- b0&#45;&gt;b2 -->
+<g id="edge2" class="edge">
+<title>b0-&gt;b2</title>
+<path fill="none" stroke="black" d="M169.5,-200.02C169.5,-174.15 169.5,-146.55 169.5,-123.87"/>
+<polygon fill="black" stroke="black" points="173,-124 169.5,-114 166,-124 173,-124"/>
+<text text-anchor="middle" x="172.88" y="-168.7" font-family="Times,serif" font-size="14.00">7</text>
+</g>
+<!-- b3 -->
+<g id="node4" class="node">
+<title>b3</title>
+<polygon fill="none" stroke="black" points="237.62,-120.25 237.62,-143.5 325.38,-143.5 325.38,-120.25 237.62,-120.25"/>
+<text text-anchor="start" x="249.25" y="-128" font-family="Times,serif" font-size="10.00">QFTTextBook†</text>
+<polygon fill="none" stroke="black" points="237.62,-97 237.62,-120.25 308.12,-120.25 308.12,-97 237.62,-97"/>
+<text text-anchor="start" x="259" y="-104.75" font-family="Times,serif" font-size="10.00">Qubits</text>
+<polygon fill="none" stroke="black" points="308.12,-97 308.12,-120.25 325.38,-120.25 325.38,-97 308.12,-97"/>
+<text text-anchor="start" x="314.12" y="-104.75" font-family="Times,serif" font-size="10.00">4</text>
+<polygon fill="none" stroke="black" points="237.62,-73.75 237.62,-97 308.12,-97 308.12,-73.75 237.62,-73.75"/>
+<text text-anchor="start" x="268" y="-81.5" font-family="Times,serif" font-size="10.00">Ts</text>
+<polygon fill="none" stroke="black" points="308.12,-73.75 308.12,-97 325.38,-97 325.38,-73.75 308.12,-73.75"/>
+<text text-anchor="start" x="314.12" y="-81.5" font-family="Times,serif" font-size="10.00">1</text>
+<polygon fill="none" stroke="black" points="237.62,-50.5 237.62,-73.75 308.12,-73.75 308.12,-50.5 237.62,-50.5"/>
+<text text-anchor="start" x="262" y="-58.25" font-family="Times,serif" font-size="10.00">Ands</text>
+<polygon fill="none" stroke="black" points="308.12,-50.5 308.12,-73.75 325.38,-73.75 325.38,-50.5 308.12,-50.5"/>
+<text text-anchor="start" x="314.12" y="-58.25" font-family="Times,serif" font-size="10.00">3</text>
+<polygon fill="none" stroke="black" points="237.62,-27.25 237.62,-50.5 308.12,-50.5 308.12,-27.25 237.62,-27.25"/>
+<text text-anchor="start" x="254.88" y="-35" font-family="Times,serif" font-size="10.00">Cliffords</text>
+<polygon fill="none" stroke="black" points="308.12,-27.25 308.12,-50.5 325.38,-50.5 325.38,-27.25 308.12,-27.25"/>
+<text text-anchor="start" x="314.12" y="-35" font-family="Times,serif" font-size="10.00">9</text>
+<polygon fill="none" stroke="black" points="237.62,-4 237.62,-27.25 308.12,-27.25 308.12,-4 237.62,-4"/>
+<text text-anchor="start" x="243.62" y="-11.75" font-family="Times,serif" font-size="10.00">Measurements</text>
+<polygon fill="none" stroke="black" points="308.12,-4 308.12,-27.25 325.38,-27.25 325.38,-4 308.12,-4"/>
+<text text-anchor="start" x="314.12" y="-11.75" font-family="Times,serif" font-size="10.00">3</text>
+</g>
+<!-- b0&#45;&gt;b3 -->
+<g id="edge3" class="edge">
+<title>b0-&gt;b3</title>
+<path fill="none" stroke="black" d="M214.57,-200.02C222.05,-186.01 229.81,-171.5 237.27,-157.53"/>
+<polygon fill="black" stroke="black" points="240.31,-159.28 241.93,-148.81 234.13,-155.98 240.31,-159.28"/>
+<text text-anchor="middle" x="235.58" y="-168.7" font-family="Times,serif" font-size="14.00">1</text>
+</g>
+</g>
+</svg>

@@ -336,7 +336,7 @@ for it in range(max_iter):
     costs_lists["monitoring"].append(monitoring_cost(weights))
 
 
-plt.style.use("seaborn")
+plt.style.use("seaborn-v0_8")
 
 plt.figure()
 plt.plot(costs_lists["training"])

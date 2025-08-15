@@ -340,7 +340,7 @@ c_history = c_model.fit(
 
 import matplotlib.pyplot as plt
 
-plt.style.use("seaborn")
+plt.style.use("seaborn-v0_8")
 fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(6, 9))
 
 ax1.plot(q_history.history["val_accuracy"], "-ob", label="With quantum layer")

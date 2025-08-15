@@ -203,7 +203,7 @@ for _ in range(steps):
 
 from matplotlib import pyplot as plt
 
-plt.style.use("seaborn")
+plt.style.use("seaborn-v0_8")
 plt.plot(cost_GD[:100], label="Vanilla gradient descent")
 plt.plot(cost_SGD100[:100], "--", label="QSGD (100 shots)")
 plt.plot(cost_SGD1[:100], ".", label="QSGD (1 shot)")

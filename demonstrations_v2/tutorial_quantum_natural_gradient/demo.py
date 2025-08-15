@@ -467,7 +467,7 @@ for _ in range(steps):
 # Plotting the cost vs optimization step for both optimization strategies:
 from matplotlib import pyplot as plt
 
-plt.style.use("seaborn")
+plt.style.use("seaborn-v0_8")
 plt.plot(gd_cost, "b", label="Vanilla gradient descent")
 plt.plot(qng_cost, "g", label="Quantum natural gradient descent")
 
