@@ -1,11 +1,4 @@
-#
-# This workflow checks for file modifications in the 'demonstrations/' directory.
-# If files are found, it provides a warning message.
-#
-
-name: Check Demo Directory
-
-# Trigger the workflow on pull requests targeting the main branch and pushes to any branch.
+name: V1 Deprecation Warning Check
 on:
   pull_request:
     types: [opened, synchronize, reopened]
