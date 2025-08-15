@@ -1,0 +1,42 @@
+#
+# This workflow checks for file modifications in the 'demonstrations/' directory.
+# If files are found, it provides a warning message.
+#
+
+name: Check Demo Directory
+
+# Trigger the workflow on pull requests targeting the main branch and pushes to any branch.
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches:
+      - '**'
+
+jobs:
+  check-directory:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check for deprecated directory changes
+        id: check
+        run: |
+          changed_files=$(git diff --name-only --diff-filter=AMR ${{ github.event.before }}..${{ github.event.after }} | grep '^demonstrations/' || true)
+
+          if [ -n "$changed_files" ]; then
+            # If files are found, print a warning message to the GitHub Actions console.
+            echo "::warning title=Deprecated Directory Found::You are modifying files in the 'demonstrations/' directory. This directory is no longer in use."
+            echo "Please move the demo to 'demonstrations_v2/' and use the following format:"
+            echo ""
+            echo "your_demo_name/"
+            echo "    - demo.py"
+            echo "    - metadata.json"
+            echo "    - requirements.in"
+          else
+            echo "No changes detected in the deprecated 'demonstrations/' directory. All good to go!"
+          fi
