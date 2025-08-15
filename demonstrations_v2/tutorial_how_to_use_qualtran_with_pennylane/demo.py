@@ -129,8 +129,8 @@ print("GF Addition of 5 + 10 =", int(binary_string[len(wires['x']):],2))
 #   customize what Bloq you want your operator to map to. This makes it easy to
 #   refine the finer details of your algorithm.
 #
-# * Wrapping: Think of this as an analogue of ``FromBloq``. It faithfully converts any operator or
-#   Qfunc, or decompositions, into a Bloq. The output is a :class:`~pennylane.io.ToBloq` instance.
+# * Wrapping: Think of this as an analogue of ``FromBloq``. It faithfully converts any operator,
+#   ``QNode``, or Qfunc, into a Bloq. The output is a :class:`~pennylane.io.ToBloq` instance.
 #
 # These options are all accessible through the :func:`~pennylane.to_bloq` function. In the
 # following sections, we'll explore how we can wield this powerful function to get all the
@@ -219,7 +219,7 @@ qpe_bloq = qml.to_bloq(op, custom_mapping=custom_map)
 #
 # Wrapping
 # ~~~~~~~~
-# When a quantum function or operator does not have a mapping -- a direct Qualtran equivalent
+# When a PennyLane object does not have a mapping -- a direct Qualtran equivalent
 # or smart default -- the circuit is wrapped as a ``ToBloq`` object.
 
 def circ():
@@ -271,13 +271,13 @@ for gate, count in wrapped_sigma.items():
 # Here, we can clearly see that the resource counts for the two methods are distinctly different.
 # This is because the underlying implementations for the two QPE operators differ.
 #
-# When Qualtran computes the resource counts for a ``Bloq``, it first checks if there is a call
+# When Qualtran computes the resource counts for a ``ToBloq``, it first checks if there is a call
 # graph defined. If it is defined, Qualtran uses that call graph to compute the resource count
 # estimates. If it is not defined, Qualtran uses the PennyLane decomposition to compute the resource
 # count estimates.
 #
 # Since computing the PennyLane decompositions is expensive, many PennyLane templates, such as QPE,
-# have call graphs defined even when wrapped as a ``ToBloq`` object. By defining these call graphs,
+# have call graphs defined when wrapped as a ``ToBloq`` object. By defining these call graphs,
 # you can now efficiently compute resource count estimates for circuits that may require thousands
 # of qubits and trillions of gates.
 #
