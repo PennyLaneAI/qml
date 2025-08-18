@@ -437,7 +437,7 @@ generate_stabilizer_group(generators, 3)
 #
 # Lloyd-Shor-Devetak (LSD) Theorem
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Remember that stabilizer group is a subgroup of the Pauli group with some properties. In the stabilizer formalism,
+# Remember that the stabilizer group is a subgroup of the Pauli group with some properties. In the stabilizer formalism,
 # every Pauli operator acting on the qubits can be categorized based on how it interacts with the stabilizer group.
 # The **LSD theorem** states that Pauli operators on encoded qubits can be divided into three types:
 #
