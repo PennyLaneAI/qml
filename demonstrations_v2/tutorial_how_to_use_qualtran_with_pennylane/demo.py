@@ -35,7 +35,7 @@ PennyLane ``QNodes``.
 # -------------------------
 #
 # With barely any work, you can drop Qualtran Bloqs into executable PennyLane circuits!
-# You only need one class: :class:`~pennylane.FromBloq`, which wraps a Qualtran ``Bloq`` as a
+# You only need one class: :class:`~pennylane.FromBloq` which wraps a Qualtran ``Bloq`` as a
 # PennyLane operation. It faithfully converts any Bloq into an
 # :class:`~pennylane.operation.Operation` containing the usual methods and attributes such as
 # :func:`~pennylane.operation.Operation.decomposition` and
@@ -63,7 +63,7 @@ print(qml.bloq_registers(XGate()))
 
 ######################################################################
 # This will create register names in accordance to the Bloq's signature. Here, the function created
-# one ``'q'`` register with a single qubit, as required by ``XGate``. You will see an additional
+# one ``'q'`` register with a single qubit as required by ``XGate``. You will see an additional
 # example in the next section.
 #
 # Expanding PennyLane circuits with Qualtran Bloqs
@@ -129,9 +129,8 @@ print("GF Addition of 5 + 10 =", int(binary_string[len(wires['x']):],2))
 #     customize what Bloq you want your operator to map to. This makes it easy to
 #     refine the finer details of your algorithm.
 #
-# * Wrapping: Think of this as an analogue of :class:`~pennylane.FromBloq`. It faithfully converts
-#     any operator, ``QNode``, or Qfunc into a Bloq. The output is a :class:`~pennylane.io.ToBloq`
-#     instance.
+# * Wrapping: Think of this as an analogue of :class:`~pennylane.FromBloq`. It faithfully converts any operator,
+#     ``QNode``, or Qfunc into a Bloq. The output is a :class:`~pennylane.io.ToBloq` instance.
 #
 # These options are all accessible through the :func:`~pennylane.to_bloq` function. In the
 # following sections, we'll explore how we can wield this powerful function to get all the
@@ -162,6 +161,7 @@ unitary = qml.RY(phi=0.3, wires=[0])
 estimation_wires = [1, 2, 3]
 op = qml.QuantumPhaseEstimation(unitary=unitary, estimation_wires=estimation_wires)
 qpe_bloq = qml.to_bloq(op)
+print(qpe_bloq)
 
 ######################################################################
 # We can use Qualtran's
@@ -206,6 +206,7 @@ custom_map = {
 }
 
 qpe_bloq = qml.to_bloq(op, custom_mapping=custom_map)
+print(qpe_bloq)
 
 ######################################################################
 # Below, we see that ``LPResourceState`` has replaced ``RectangularWindowState`` as defined in the
@@ -247,6 +248,7 @@ unitary = qml.RY(phi=0.3, wires=[0])
 estimation_wires = [1, 2, 3]
 op = qml.QuantumPhaseEstimation(unitary=unitary, estimation_wires=estimation_wires)
 wrapped_qpe_bloq = qml.to_bloq(op, map_ops=False)
+print(wrapped_qpe_bloq)
 
 ######################################################################
 # The call graph below shows how the wrapped version of :class:`~pennylane.QuantumPhaseEstimation`
