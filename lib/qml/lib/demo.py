@@ -335,20 +335,6 @@ def _build_demo(
         fs.copy_any(ctx.build_dir / "html/objects.inv", out_dir)
 
 
-def _install_build_dependencies(venv: Virtualenv, build_dir: Path):
-    """Install dependencies for running sphinx-build into `venv`."""
-    logger.info("Installing sphinx-build dependencies")
-
-    build_requirements_file = build_dir / "requirements-build.txt"
-    cmds.poetry_export(
-        sys.executable,
-        build_requirements_file,
-        groups=("base",),
-        format="requirements.txt",
-    )
-    cmds.pip_install(venv.python, "-r", build_requirements_file, use_uv=False)
-
-
 def _package_demo(
     demo: Demo,
     pack_dir: Path,
