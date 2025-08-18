@@ -131,7 +131,7 @@ print(qml.draw(ancilla_assisted_syndrome_extraction, show_all_wires=True)(syndro
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # Once you have syndrome bits from your stabilizer measurements, you need to figure out what error
-# likely occurred-this is the job of the decoder. Formally, given the syndrome, you’re solving for
+# likely occurred--this is the job of the decoder. Formally, given the syndrome, you’re solving for
 # the most probable error, usually called the maximum likelihood estimate (MLE) for the error.
 #
 # However, exact MLE decoding depends on the precise information of your noise model and is generally
