@@ -431,9 +431,7 @@ generate_stabilizer_group(generators, 3)
 #
 # 1. They commute with all elements in :math:`S,` so they leave the codespace invariant,
 # 2. They are not in the stabilizer group,
-# 3. Logical operators corresponding to the same logical qubit (e.g., $\bar{X}_1$ and $\bar{Z}_1$) \emph{anticommute},
-# meaning they act non-trivially on the codewords.
-#
+# 3. Logical operators corresponding to the same logical qubit (e.g., :math:`\bar{X}_1` and :math:`\bar{Z}_1`) *anticommute, meaning they act non-trivially on the codewords.
 #
 # Lloyd-Shor-Devetak (LSD) Theorem
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
