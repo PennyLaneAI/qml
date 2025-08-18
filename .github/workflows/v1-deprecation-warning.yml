@@ -39,15 +39,16 @@ jobs:
           pull_request_number: ${{ github.event.pull_request.number }}
           comment_body: |
             ### Deprecation Warning
-            You are modifying files in the `demonstrations/` directory. This directory is no longer in use.
+            You are modifying files in the \`demonstrations/\` directory. This directory is no longer in use.
 
-            Please move the demo to `demonstrations_v2/` and use the following [format](./CONTRIBUTING.md#manually-creating-a-demo):
+            Please move the demo to \`demonstrations_v2/\` and use the following [format](./CONTRIBUTING.md#manually-creating-a-demo):
 
-            ```
+            \`\`\`
             your_demo_name/
                 - demo.py
                 - metadata.json
                 - requirements.in (optional)
-            ```
+                
+            \`\`\`
 
             For additional information, please refer to the [contributing guidelines](./CONTRIBUTING.md)
