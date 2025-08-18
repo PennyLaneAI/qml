@@ -64,7 +64,7 @@ print(qml.bloq_registers(XGate()))
 ######################################################################
 # This will create register names in accordance to the Bloq's signature. Here, the function created
 # one ``'q'`` register with a single qubit, as required by ``XGate``. You will see an additional
-# examples in the next section.
+# example in the next section.
 #
 # Expanding PennyLane circuits with Qualtran Bloqs
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
