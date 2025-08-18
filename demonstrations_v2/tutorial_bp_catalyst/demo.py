@@ -391,7 +391,7 @@ print(tabulate(table_data, headers=["Syndrome", "LUT Error"]))
 # BP in JAX
 # ~~~~~~~~~~~~~
 #
-# Below, we implement a BP decoder using Jax broken down into it’s core components.
+# Below, we implement a BP decoder using JAX broken down into it’s core components.
 #
 
 ######################################################################
@@ -727,13 +727,14 @@ print(f"Decoding success rate: {success_rate * 100:.2f}%")
 # - Measure X-type stabilizers using CNOT operations onto an ancilla. 
 # - Measure in the :math:`X` basis.
 #
-# Next: 
+# Next:
+# 
 # - Use measurement outcomes (syndromes) to determine necessary corrections using our decoder.
 # - Apply Z-type corrections based on decoding results.
 #
 # This procedure uses projective measurements to force the data qubits to be in the :math:`+1`
-# eigenstate of our :math:`X` type generators. Since the state was already a :math:`+1` eigenstate
-# of our :math:`Z` type generators, and by virtue of the CSS code all :math:`X` and :math:`Z`
+# eigenstate of our :math:`X`-type generators. Since the state was already a :math:`+1` eigenstate
+# of our :math:`Z`-type generators, and by virtue of the CSS code all :math:`X` and :math:`Z`
 # generators simultaneously commute, we are left with a state in the :math:`+1` eigenspace of all the
 # generators.
 #
@@ -971,7 +972,7 @@ def logical_error(sv):
 
 
 ######################################################################
-# Simulate 1000 noisy shots for several noise levels, we’ll use ``jax.vmap`` to efficiently map our
+# Simulate 1000 noisy shots for several noise levels. We’ll use ``jax.vmap`` to efficiently map our
 # catalyst kernel over a set of random keys.
 #
 
