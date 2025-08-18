@@ -14,7 +14,7 @@ a large class of quantum error correction codes [#Gottesman1997]_. The so-called
 **stabilizer codes**, such as the repetition, Shor, Steane, and surface codes,
 all fall under this formalism.
 
-In this demo, we will introduce the stabilizer formalism using bottom-up approach. We build
+In this demo, we will introduce the stabilizer formalism using a bottom-up approach. We build
 some well-known codes using **stabilizer generators,** from which
 the other elements of the code (codewords, syndrome measurements, etc.) can be reconstructed. Then, we
 represent these codes as quantum circuits and implement them in PennyLane.
