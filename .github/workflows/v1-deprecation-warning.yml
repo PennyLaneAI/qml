@@ -2,9 +2,6 @@ name: V1 Deprecation Warning Check
 on:
   pull_request:
     types: [opened, synchronize, reopened]
-  push:
-    branches:
-      - '**'
 
 jobs:
   check-directory:
@@ -48,7 +45,6 @@ jobs:
                 - demo.py
                 - metadata.json
                 - requirements.in (optional)
-                
             \`\`\`
 
             For additional information, please refer to the [contributing guidelines](./CONTRIBUTING.md)
