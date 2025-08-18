@@ -5,7 +5,7 @@ Stabilizer codes for quantum error correction
 State-of-the-art quantum devices, such as IBM's Condor and Atom Computing's optical lattices, contain more than
 a thousand qubits. Does this qubit count suffice for valuable quantum algorithms with clear speedups?
 The reality is that there is more to the story than the sheer number of qubits. As we currently stand, quantum
-devices are still prone to errors that increase with device size. For this reason, **quantum error correction**--one of the most important domain in the universe of quantum computing--has
+devices are still prone to errors that increase with device size. For this reason, **quantum error correction**--one of the most important domains in the universe of quantum computing--has
 been gaining traction.
 
 Quantum error correction is implemented through **error correction codes,** which come in many varieties that address different error types.
