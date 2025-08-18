@@ -751,7 +751,12 @@ for wire in range(5):
 # However, finding the codewords, logical operators, and the encoding circuit directly from the stabilizer generators
 # is not straightforward. Take a look at the types of gates used in the encoding circuit: you’ll notice they are all Clifford gates.
 # In fact, any standard stabilizer code can be encoded using only Clifford gates, which is a major advantage. Why?
-# Because Clifford gates are easy to implement and measure.
+# Because Clifford gates are easy to implement and measure! This means that, while the qubit cost of error correction may be high,
+# the gates needed for stabilizer codes can be robustly implemented on quantum hardware.  Quantum error correction
+# is not out of reach as soon as the scalability challenges are addressed!
+#
+# The authors of this demo would like to thank Austin Daniel for the insightful discussions and Priya Nadkarni for her helpful
+# technical feedback. 
 #
 # References
 # -----------
