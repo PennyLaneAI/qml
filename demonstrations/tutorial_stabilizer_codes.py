@@ -536,7 +536,7 @@ print(classify_pauli(X(0) @ Y(1) @ Z(2), logical_ops, generators, 3))
 #
 #    ..
 #
-# The calculations are a bit cumbersome, but with some patience we can find the common :math:`+1`-eigenspace of the stabilizer generators,
+# The calculations are a bit cumbersome, but with patience, we can determine the common :math:`+1`-eigenspace of the stabilizer generators
 # which are the codewords.
 #
 # .. math::
