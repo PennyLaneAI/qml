@@ -289,7 +289,7 @@ for gate, count in wrapped_sigma.items():
 ######################################################################
 # Conclusion
 # ----------
-# In this demo, we took a look at how to use Pennylane with Qualtran. We encourage you to play
+# In this demo, we took a look at how to use PennyLane with Qualtran. We encourage you to play
 # around with the integration and try swapping out PennyLane operators with Qualtran Bloqs and
 # running it on a real quantum device! Or convert an existing PennyLane workflow into Qualtran and
 # use Qualtran tools to analyze the circuit. If you'd like to see more examples of Qualtran and
