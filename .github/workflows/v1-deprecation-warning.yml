@@ -9,7 +9,8 @@ on:
 jobs:
   check-directory:
     runs-on: ubuntu-latest
-    
+    outputs:
+      success: ${{ steps.check.outputs.success }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -22,14 +23,31 @@ jobs:
           changed_files=$(git diff --name-only --diff-filter=AMR ${{ github.event.before }}..${{ github.event.after }} | grep '^demonstrations/' || true)
 
           if [ -n "$changed_files" ]; then
-            # If files are found, print a warning message to the GitHub Actions console.
-            echo "::warning title=Deprecated Directory Found::You are modifying files in the 'demonstrations/' directory. This directory is no longer in use."
-            echo "Please move the demo to 'demonstrations_v2/' and use the following format:"
-            echo ""
-            echo "your_demo_name/"
-            echo "    - demo.py"
-            echo "    - metadata.json"
-            echo "    - requirements.in"
+            # output success = false if changes are found
+            echo "success=false" >> $GITHUB_OUTPUT
           else
-            echo "No changes detected in the deprecated 'demonstrations/' directory. All good to go!"
+            #output success = false if no changes are found
+            echo "success=true" >> $GITHUB_OUTPUT
           fi
+
+      - name: Comment on PR
+        if: github.event_name == 'pull_request' && steps.check.outputs.success == 'false'
+        uses: XanaduAI/cloud-actions/create-and-update-pull-request-comment@main
+        with:
+          github_token: ${{ secrets.github_token }}
+          comment_uid: v1-deprecation-warning
+          pull_request_number: ${{ github.event.pull_request.number }}
+          comment_body: |
+            ### Deprecation Warning
+            You are modifying files in the `demonstrations/` directory. This directory is no longer in use.
+
+            Please move the demo to `demonstrations_v2/` and use the following [format](./CONTRIBUTING.md#manually-creating-a-demo):
+
+            ```
+            your_demo_name/
+                - demo.py
+                - metadata.json
+                - requirements.in (optional)
+            ```
+
+            For additional information, please refer to the [contributing guidelines](./CONTRIBUTING.md)
