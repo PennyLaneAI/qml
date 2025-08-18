@@ -4,7 +4,7 @@ import json
 import os
 import re
 from base64 import b64decode
-from pathlib import Path, PurePosixPath
+from pathlib import Path
 from typing import Dict, List, Optional, Union
 
 import pypandoc
@@ -12,9 +12,10 @@ import pypandoc
 CWD = Path(os.path.dirname(os.path.realpath(__file__)))
 REPO_ROOT = CWD.parent
 
-DEMO = {
-    "link-dir": PurePosixPath("../demonstrations"),
-    "save-dir": REPO_ROOT / "demonstrations"
+
+DIRS = {
+    "demo_images": REPO_ROOT / "_static" / "demonstration_assets",
+    "demo": REPO_ROOT / "demonstrations_v2"
 }
 
 def str_to_bool(s: str) -> Optional[bool]:
@@ -94,6 +95,7 @@ def fix_image_alt_tag_as_text(rst: str) -> str:
 def convert_notebook_to_python(
     notebook: Dict,
     notebook_name: str,
+    assets_folder_name: str,
     is_executable: bool
 ) -> str:
     # Initial validations
@@ -151,11 +153,11 @@ def convert_notebook_to_python(
                                 ret_python_str += f"\n\n{'#' * 70}"
                             num_images += 1
                             image_filename = f"{notebook_name}_{cell_id}_{num_images}.png"
-                            image_file_dir = DEMO["save-dir"] / notebook_assets_folder_name
+                            image_file_dir = DIRS["demo_images"] / assets_folder_name
                             image_file_path = (
                                 image_file_dir / image_filename
                             )
-                            image_file_link_path = DEMO["link-dir"] / notebook_assets_folder_name / image_filename
+                            image_file_link_path = Path("../_static/demonstration_assets") / assets_folder_name / image_filename
                             role_text = generate_sphinx_role_comment(
                                 "figure", image_file_link_path.as_posix(), align="center", width="80%"
                             )
@@ -194,14 +196,6 @@ if __name__ == "__main__":
         default=None
     )
 
-    parser.add_argument("--author",
-                        help="Information about Demo Author, must be in format \"Name\" \"Bio\" \"/path/to/profile_picture.png\"",
-                        action="append",
-                        nargs=3)
-    parser.add_argument("--author-file",
-                        help="Path to an existing author file that is formatted with sphinx roles",
-                        action="append")
-
     results = parser.parse_args()
 
     notebook_file = Path(results.notebook)
@@ -219,9 +213,14 @@ if __name__ == "__main__":
     nb_py = convert_notebook_to_python(
         nb,
         notebook_file_name,
+        notebook_assets_folder_name,
         notebook_is_executable
     )
+    
+    demo_dir = DIRS["demo"] / notebook_file_name
+    if not demo_dir.exists():
+        demo_dir.mkdir(parents=True)
 
-    with (DEMO["save-dir"] / f"{notebook_file_name}.py").open("w") as fh:
+    with (demo_dir / "demo.py").open("w") as fh:
         fh.write(nb_py)
 
