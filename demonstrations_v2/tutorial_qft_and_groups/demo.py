@@ -269,7 +269,7 @@ def qft2(state):
 
 
 h_hat_state2 = qft2(h_state)
-print(np.allclose("QFTs over different groups coincide:", h_hat_state, h_hat_state2))
+print("QFTs over different groups coincide:", np.allclose(h_hat_state, h_hat_state2))
 
 #####################################################################
 # The FFT: divide-and-conquer the group structure
