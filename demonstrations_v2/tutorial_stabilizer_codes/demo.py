@@ -282,7 +282,7 @@ print(
 # This is great news. As long as no error has occurred, the logical qubits will be left alone. Otherwise, there will be
 # some operations applied on the state, but we will be able to fix them via an error correction scheme. This invariance property
 # **holds true for and only for the logical codewords.** For any other three-qubit basis states, at least one of these operators will have eigenvalue
-# :math:`-1`, as shown in the table below. Therefore measuring the eigenvalues of these operators will tell us if an error has occurred.
+# :math:`-1`, as shown in the table below. Therefore, measuring the eigenvalues of these operators will tell us if an error has occurred.
 #
 # .. figure:: ../_static/demonstration_assets/stabilizer_codes/table_eigenvalues.png
 #    :align: center
