@@ -19,7 +19,7 @@ some well-known codes using **stabilizer generators,** from which
 the other elements of the code (codewords, syndrome measurements, etc.) can be reconstructed. Then, we
 represent these codes as quantum circuits and implement them in PennyLane.
 
-.. figure:: ../_static/demonstration_assets/stabilizer_codes/pennylane-demo-stabilizer-codes-large-thumbnail.png
+.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/pennylane-demo-stabilizer-codes-open-graph.png
     :align: center
     :width: 50%
 
