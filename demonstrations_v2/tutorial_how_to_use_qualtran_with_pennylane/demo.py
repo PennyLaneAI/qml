@@ -122,15 +122,16 @@ print("GF Addition of 5 + 10 =", int(binary_string[len(wires['x']):],2))
 # greater detail in subsequent sections:
 #
 # * Smart defaults: In this option, PennyLane chooses what Qualtran Bloq to translate to.
-#   If an option exists, we'll give you a Qualtran Bloq that is highly similar to the PennyLane
-#   operator.
+#     If an option exists, we'll give you a Qualtran Bloq that is highly similar to the PennyLane
+#     operator.
 #
 # * Custom mapping: Want something different from the smart default? Don't worry, you can
-#   customize what Bloq you want your operator to map to. This makes it easy to
-#   refine the finer details of your algorithm.
+#     customize what Bloq you want your operator to map to. This makes it easy to
+#     refine the finer details of your algorithm.
 #
-# * Wrapping: Think of this as an analogue of ``FromBloq``. It faithfully converts any operator,
-#   ``QNode``, or Qfunc into a Bloq. The output is a :class:`~pennylane.io.ToBloq` instance.
+# * Wrapping: Think of this as an analogue of :class:`~pennylane.FromBloq`. It faithfully converts
+#     any operator, ``QNode``, or Qfunc into a Bloq. The output is a :class:`~pennylane.io.ToBloq`
+#     instance.
 #
 # These options are all accessible through the :func:`~pennylane.to_bloq` function. In the
 # following sections, we'll explore how we can wield this powerful function to get all the
@@ -157,7 +158,9 @@ print(op_as_bloq)
 # `QubitizationQPE <https://qualtran.readthedocs.io/en/latest/bloqs/phase_estimation/qubitization_qpe.html>`_. 
 # In cases where the mapping is ambiguous, we get the smart default:
 
-op = qml.QuantumPhaseEstimation(unitary=qml.RY(phi=0.3, wires=[0]), estimation_wires=[1, 2, 3])
+unitary = qml.RY(phi=0.3, wires=[0])
+estimation_wires = [1, 2, 3]
+op = qml.QuantumPhaseEstimation(unitary=unitary, estimation_wires=estimation_wires)
 qpe_bloq = qml.to_bloq(op)
 
 ######################################################################
@@ -187,9 +190,10 @@ qpe_bloq = qml.to_bloq(op)
 # Custom mapping
 # ~~~~~~~~~~~~~~
 # To use another state preparation routine in our QPE workflow, e.g., `LPResourceState <https://qualtran.readthedocs.io/en/latest/bloqs/phase_estimation/lp_resource_state.html#lpresourcestate>`_
-# rather than ``RectangularWindowState``, we can override the smart
-# default with a custom map. As shown below, custom maps are defined with a dictionary, where keys
-# are the original operations and values are the new operations we want to map those to.
+# rather than `RectangularWindowState <https://qualtran.readthedocs.io/en/latest/bloqs/phase_estimation/text_book_qpe.html#rectangularwindowstate>`_,
+# we can override the smart default with a custom map. As shown below, custom maps are defined with
+# a dictionary where keys are the original operations and values are the new operations we want to
+# map those to.
 
 from qualtran.bloqs.phase_estimation import LPResourceState
 from qualtran.bloqs.phase_estimation.text_book_qpe import TextbookQPE
@@ -204,7 +208,7 @@ custom_map = {
 qpe_bloq = qml.to_bloq(op, custom_mapping=custom_map)
 
 ######################################################################
-# Below, we see that ``LPResourceState`` has replaced ``RectangularWindowState``, as defined in the
+# Below, we see that ``LPResourceState`` has replaced ``RectangularWindowState`` as defined in the
 # custom map:
 #
 # .. code-block:: python
@@ -220,7 +224,7 @@ qpe_bloq = qml.to_bloq(op, custom_mapping=custom_map)
 # Wrapping
 # ~~~~~~~~
 # When a PennyLane object does not have a mapping -- a direct Qualtran equivalent
-# or smart default -- the circuit is wrapped as a ``ToBloq`` object.
+# or smart default -- the circuit is wrapped as a :class:`~pennylane.io.ToBloq` object.
 
 def circ():
     qml.X(0)
@@ -236,15 +240,17 @@ print(type(qfunc_as_bloq))
 # diagrams, and more. 
 #
 # We can choose to wrap our PennyLane :class:`~pennylane.QuantumPhaseEstimation` simply by setting
-# ``map_ops`` to ``False``. This wraps the operators as a ``ToBloq`` object, keeping the original
+# ``map_ops`` to ``False``. This wraps the operators as a ``ToBloq`` object and keeps the original
 # PennyLane object information.
 
-op = qml.QuantumPhaseEstimation(unitary=qml.RY(phi=0.3, wires=[0]), estimation_wires=[1, 2, 3])
+unitary = qml.RY(phi=0.3, wires=[0])
+estimation_wires = [1, 2, 3]
+op = qml.QuantumPhaseEstimation(unitary=unitary, estimation_wires=estimation_wires)
 wrapped_qpe_bloq = qml.to_bloq(op, map_ops=False)
 
 ######################################################################
 # The call graph below shows how the wrapped version of :class:`~pennylane.QuantumPhaseEstimation`
-# preserves the PennyLane (PL) definition of the operator, using a slightly different decomposition:
+# preserves the PennyLane definition of the operator:
 #
 # .. code-block:: python
 #
@@ -276,7 +282,7 @@ for gate, count in wrapped_sigma.items():
 # estimates. If it is not defined, Qualtran uses the PennyLane decomposition to compute the resource
 # count estimates.
 #
-# Since computing the PennyLane decompositions is expensive, many PennyLane templates, such as QPE,
+# Since computing the PennyLane decompositions is expensive, many PennyLane templates such as QPE
 # have call graphs defined when wrapped as a ``ToBloq`` object. By defining these call graphs,
 # you can now efficiently compute resource count estimates for circuits that may require thousands
 # of qubits and trillions of gates.
