@@ -425,7 +425,7 @@ generate_stabilizer_group(generators, 3)
 #     \bar{X}\vert \bar{0} \rangle = \vert \bar{1} \rangle, \quad \bar{X}\vert \bar{1} \rangle = \vert \bar{0} \rangle, \\
 #     \ \bar{Z}\vert \bar{0} \rangle = \vert \bar{0} \rangle, \quad \bar{Z}\vert \bar{1} \rangle = - \vert \bar{1} \rangle.
 #
-# For example, in the three qubit bit flip error correcting code, the logical operators are :math:`\bar{X} = X_0 X_1 X_2` and
+# For example, in the three-qubit bit-flip error correcting code, the logical operators are :math:`\bar{X} = X_0 X_1 X_2` and
 # :math:`\bar{Z} = Z_0 Z_1 Z_2,` but they will not always be this simple.  In general, given a stabilizer set $S$, the logical
 # operators for the code satisfy the following properties:
 #
