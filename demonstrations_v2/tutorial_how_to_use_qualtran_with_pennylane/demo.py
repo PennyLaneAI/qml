@@ -98,7 +98,7 @@ def circuit():
 
 # Simulate the circuit and process binary output to integer
 binary_string = "".join([str(bit) for bit in circuit()])
-print("GF Addition of 5 + 10 =", int(binary_string[len(wires['x']):],2))
+print("GF2Addition of 5 + 10 =", int(binary_string[len(wires['x']):],2))
 
 ######################################################################
 # Wow! We used a Qualtran Bloq as a PennyLane template without any additional
