@@ -658,7 +658,7 @@ for wire in (0, 1, 2, 3, 4):
 
 ##############################################################################
 #
-# The syndrome table is printed, and with we can apply the necessary operators to fix the corresponding Pauli errors. The script above is straightforward
+# The syndrome table is printed, and with it we can apply the necessary operators to fix the corresponding Pauli errors. The script above is straightforward
 # to generalize to any valid set of stabilizers.
 #
 # Error correction
