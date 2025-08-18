@@ -63,7 +63,7 @@ This encoding can be done via the following quantum circuit.
 
     ..
 
-Let's code this below and verify the output
+Let's code this below and verify the output.
 
 """
 
