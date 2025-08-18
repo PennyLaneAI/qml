@@ -20,7 +20,7 @@ jobs:
       - name: Check for deprecated directory changes
         id: check
         run: |
-          changed_files=$(git diff --name-only --diff-filter=AMR ${{ github.event.before }}..${{ github.event.after }} | grep '^demonstrations/' || true)
+          changed_files=$(git diff --name-only --diff-filter=AMR ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }} | grep '^demonstrations/' || true)
 
           if [ -n "$changed_files" ]; then
             # output success = false if changes are found
