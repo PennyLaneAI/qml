@@ -5,8 +5,10 @@
             "username": "dwierichs"
         }
     ],
+    "executable_stable": true,
+    "executable_latest": true,
     "dateOfPublication": "2024-11-25T00:00:00+00:00",
-    "dateOfLastModification": "2025-03-17T09:00:00+00:00",
+    "dateOfLastModification": "2025-03-26T09:00:00+00:00",
     "categories": [
         "Quantum Computing",
         "Algorithms"

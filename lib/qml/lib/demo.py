@@ -4,7 +4,6 @@ from collections.abc import Sequence, Iterator
 import shutil
 from qml.lib import fs, cmds
 from qml.lib.virtual_env import Virtualenv
-from qml.lib.pip_tools import RequirementsGenerator
 import os
 import sys
 from logging import getLogger
@@ -15,6 +14,7 @@ import requirements
 import json
 import lxml.html
 from qml.context import Context
+import sphobjinv as soi
 
 
 logger = getLogger("qml")
@@ -81,9 +81,18 @@ class Demo:
         )
 
     @property
-    def executable(self) -> bool:
-        """Whether this demo can be executed."""
-        return self.name.startswith("tutorial_")
+    def executable_stable(self) -> bool:
+        """Whether this demo can be executed for stable builds."""
+        with open(self.metadata_file, "r") as f:
+            metadata = json.load(f)
+        return metadata.get("executable_stable", self.name.startswith("tutorial_"))
+
+    @property
+    def executable_latest(self) -> bool:
+        """Whether this demo can be executed for dev builds."""
+        with open(self.metadata_file, "r") as f:
+            metadata = json.load(f)
+        return metadata.get("executable_latest", self.name.startswith("tutorial_"))
 
     @functools.cached_property
     def requirements(self) -> frozenset[str]:
@@ -97,6 +106,16 @@ class Demo:
                 reqs.add(req.line)
 
         return frozenset(reqs)
+
+
+def get(search_dir: Path, name: str) -> Demo | None:
+    """Get demo with `name`, if it exists."""
+    demo = Demo(name=name, path=search_dir / name)
+
+    if not demo.py_file.exists():
+        return None
+
+    return demo
 
 
 def find(search_dir: Path, *names: str) -> Iterator[Demo]:
@@ -132,7 +151,7 @@ def build(
     execute: bool,
     quiet: bool = False,
     keep_going: bool = False,
-    overrides_file: Path | None = None,
+    dev: bool = False,
 ) -> None:
     """Build the provided demos using 'sphinx-build', optionally
     executing them to generate plots and cell outputs.
@@ -151,16 +170,15 @@ def build(
     logger.info("Building %d demos", len(demos))
 
     build_venv = Virtualenv(ctx.build_venv_path)
-    _install_build_dependencies(build_venv, ctx.build_dir)
-
-    requirements_generator = RequirementsGenerator(
-        Path(sys.executable),
-        global_constraints_file=ctx.constraints_file,
-        overrides_file=overrides_file,
+    cmds.pip_install(
+        build_venv.python,
+        requirements=ctx.build_requirements_file,
+        use_uv=False,
+        quiet=False,
     )
 
     for demo in demos:
-        execute_demo = execute and demo.executable
+        execute_demo = execute and (demo.executable_latest if dev else demo.executable_stable)
         done += 1
         logger.info(
             "Building '%s' (%d/%d), execute=%s",
@@ -172,15 +190,14 @@ def build(
 
         try:
             _build_demo(
-                sphinx_dir=ctx.repo_root,
-                build_dir=ctx.build_dir,
+                ctx,
                 build_venv=build_venv,
-                requirements_generator=requirements_generator,
                 target=target,
                 execute=execute_demo,
                 demo=demo,
                 package=target is BuildTarget.JSON,
                 quiet=quiet,
+                dev=dev,
             )
         except subprocess.CalledProcessError as exc:
             if not keep_going:
@@ -199,30 +216,155 @@ def build(
     if failed:
         raise RuntimeError(f"Failed to build {len(failed)} demos", failed)
 
+    # If we built the HTML output, gather and merge the objects.inv files
+    if target is BuildTarget.HTML:
+        logger.info("Building the master objects.inv file.")
+
+        inventory = soi.Inventory()
+        inventory.project = "PennyLane"
+
+        for demo in demos:
+            logger.info("Loading objects.inv for '%s'", demo.name)
+            demo_inv = soi.Inventory(
+                ctx.repo_root / "demos" / demo.name / "objects.inv"
+            )
+
+            # Only add entries that don't already exist in the merged inventory file
+            for entry in demo_inv.objects:
+                if entry not in inventory.objects:
+                    logger.info("Appending inventory object '%s'", entry.name)
+                    inventory.objects.append(entry)
+
+        logger.info("Writing the master objects.inv file to %s.", ctx.build_dir)
+        text = inventory.data_file(contract=True)
+        ztext = soi.compress(text)
+        soi.writebytes(ctx.build_dir / "objects.inv", ztext)
+
+
+def generate_requirements(
+    ctx: Context, demo: Demo, dev: bool, output_file: Path
+) -> None:
+    constraints = [ctx.build_requirements_file]
+    if dev:
+        constraints.append(ctx.dev_constraints_file)
+    else:
+        constraints.append(ctx.stable_constraints_file)
+
+    requirements_in = [ctx.core_requirements_file]
+    if demo.requirements_file:
+        requirements_in.append(demo.requirements_file)
+
+    cmds.pip_compile(
+        sys.executable,
+        output_file,
+        *requirements_in,
+        constraints_files=constraints,
+        quiet=False,
+        prerelease=dev,
+    )
+
 
 def _build_demo(
-    sphinx_dir: Path,
-    build_dir: Path,
+    ctx: Context,
     build_venv: Virtualenv,
     demo: Demo,
     target: BuildTarget,
-    requirements_generator: "RequirementsGenerator",
     execute: bool,
     package: bool,
     quiet: bool,
+    dev: bool,
 ):
-    out_dir = sphinx_dir / "demos" / demo.name
+    out_dir = ctx.repo_root / "demos" / demo.name
     fs.clean_dir(out_dir)
 
-    with open(out_dir / "requirements.txt", "w") as f:
-        f.write(requirements_generator.generate_requirements(demo.requirements))
-
+    generate_requirements(ctx, demo, dev, out_dir / "requirements.txt")
     if execute:
         cmds.pip_install(
-            build_venv.python, requirements=out_dir / "requirements.txt", quiet=True
+            build_venv.python,
+            "--upgrade",
+            requirements=out_dir / "requirements.txt",
+            quiet=False,
+            pre=dev,
         )
 
-    stage_dir = build_dir / "demonstrations"
+    # For dev, follow the same install procedure and order as in the Makefile.
+    # This is critical to get the proper versions of PennyLane, Catalyst,
+    # and various plugins.
+    # TODO: See if we can clean this up and streamline in the future...
+    # TODO: Remove RC branch for PennyLane install post-release.
+    # if dev and execute:
+    #     # Cirq
+    #     cmds.pip_install(
+    #         build_venv.python,
+    #         "--upgrade",
+    #         "git+https://github.com/PennyLaneAI/pennylane-cirq.git#egg=pennylane-cirq",
+    #         use_uv=False,
+    #         quiet=False,
+    #     )
+    #     # Qiskit
+    #     cmds.pip_install(
+    #         build_venv.python,
+    #         "--upgrade",
+    #         "git+https://github.com/PennyLaneAI/pennylane-qiskit.git#egg=pennylane-qiskit",
+    #         use_uv=False,
+    #         quiet=False,
+    #     )
+    #     # Qulacs
+    #     cmds.pip_install(
+    #         build_venv.python,
+    #         "--upgrade",
+    #         "git+https://github.com/PennyLaneAI/pennylane-qulacs.git#egg=pennylane-qulacs",
+    #         use_uv=False,
+    #         quiet=False,
+    #     )
+    #     # Catalyst
+    #     cmds.pip_install(
+    #         build_venv.python,
+    #         "--upgrade",
+    #         "--extra-index-url",
+    #         "https://test.pypi.org/simple/",
+    #         "PennyLane-Catalyst",
+    #         use_uv=False,
+    #         quiet=False,
+    #         pre=True,
+    #     )
+    #     # Lightning
+    #     cmds.pip_install(
+    #         build_venv.python,
+    #         "--upgrade",
+    #         "--extra-index-url",
+    #         "https://test.pypi.org/simple/",
+    #         "PennyLane-Lightning",
+    #         use_uv=False,
+    #         quiet=False,
+    #         pre=True,
+    #     )
+    #     # PennyLane
+    #     cmds.pip_install(
+    #         build_venv.python,
+    #         "--upgrade",
+    #         "git+https://github.com/PennyLaneAI/pennylane.git@v0.42.0-rc0#egg=pennylane",
+    #         use_uv=False,
+    #         quiet=False,
+    #     )
+    #     # Iqpopt
+    #     cmds.pip_install(
+    #         build_venv.python,
+    #         "--upgrade",
+    #         "git+https://github.com/XanaduAI/iqpopt.git#egg=iqpopt",
+    #         use_uv=False,
+    #         quiet=False,
+    #     )
+    #     # We need to bump flax here, after Jax has been bumped by Catalyst
+    #     cmds.pip_install(
+    #         build_venv.python,
+    #         "--upgrade",
+    #         "flax==0.10.6",
+    #         use_uv=False,
+    #         quiet=False,
+    #     )
+
+    stage_dir = ctx.build_dir / "demonstrations"
     fs.clean_dir(stage_dir)
     # Need a 'GALLERY_HEADER' file for sphinx-gallery
     with open(stage_dir / "GALLERY_HEADER.rst", "w"):
@@ -240,10 +382,10 @@ def _build_demo(
     if not execute:
         cmd.extend(("-D", "plot_gallery=0"))
 
-    cmd.extend((str(sphinx_dir), str(build_dir / target.value)))
+    cmd.extend((str(ctx.repo_root), str(ctx.build_dir / target.value)))
     sphinx_env = os.environ | {
         "DEMO_STAGING_DIR": str(stage_dir.resolve()),
-        "GALLERY_OUTPUT_DIR": str(out_dir.resolve().relative_to(sphinx_dir)),
+        "GALLERY_OUTPUT_DIR": str(out_dir.resolve().relative_to(ctx.repo_root)),
         # Make sure demos can find scripts installed in the build venv
         "PATH": f"{os.environ['PATH']}:{build_venv.path / 'bin'}",
     }
@@ -259,11 +401,15 @@ def _build_demo(
     if package:
         _package_demo(
             demo,
-            build_dir / "pack",
-            sphinx_dir / "_static",
-            build_dir / target.value,
+            ctx.build_dir / "pack",
+            ctx.repo_root / "_static",
+            ctx.build_dir / target.value,
             out_dir,
         )
+
+    # Move the objects.inv file so we can merge them once all the demos are built
+    if target is BuildTarget.HTML:
+        fs.copy_any(ctx.build_dir / "html/objects.inv", out_dir)
 
 
 def _install_build_dependencies(venv: Virtualenv, build_dir: Path):

@@ -1,0 +1,121 @@
+{
+    "title": "Unitary synthesis with recursive KAK decompositions",
+    "authors": [
+        {
+            "username": "dwierichs"
+        }
+    ],
+    "executable_stable": true,
+    "executable_latest": true,
+    "dateOfPublication": "2025-05-30T09:00:00+00:00",
+    "dateOfLastModification": "2025-06-03T09:00:00+00:00",
+    "categories": [
+        "Quantum Computing"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_unitary_synthesis_kak.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_unitary_synthesis_kak.png"
+        }
+    ],
+    "seoDescription": "Learn leading techniques for unitary synthesis, and how they all use KAK decompositions.",
+    "doi": "",
+    "references": [
+        {
+            "id": "Khaneja_Glaser",
+            "type": "preprint",
+            "title": "Cartan Decomposition of SU(2^n), Constructive Controllability of Spin systems and Universal Quantum Computing",
+            "authors": "Navin Khaneja, Steffen Glaser",
+            "year": "2000",
+            "doi": "10.48550/arXiv.quant-ph/0010100",
+            "url": "https://doi.org/10.48550/arXiv.quant-ph/0010100"
+        },
+        {
+            "id": "Shende_QSD",
+            "type": "article",
+            "title": "Synthesis of Quantum Logic Circuits",
+            "authors": "Vivek V Shende, Stephen S Bullock, Igor L Markov",
+            "year": "2006",
+            "journal": "IEEE Trans. on Computer-Aided Design, Vol. 25, No. 6",
+            "doi": "10.1109/TCAD.2005.855930",
+            "url": "https://doi.org/10.1109/TCAD.2005.855930"
+        },
+        {
+            "id": "Krol_BlockZXZ",
+            "type": "preprint",
+            "title": "Beyond Quantum Shannon: Circuit Construction for General n-Qubit Gates Based on Block ZXZ-Decomposition",
+            "authors": "Anna M Krol, Zaid Al-Ars",
+            "year": "2024",
+            "doi": "10.48550/arXiv.2403.13692",
+            "url": "https://doi.org/10.48550/arXiv.2403.13692"
+        },
+        {
+            "id": "Wierichs_CartanSynthesis",
+            "type": "preprint",
+            "title": "Recursive Cartan decompositions for unitary synthesis",
+            "authors": "David Wierichs, Maxwell West, Roy T. Forestano, M. Cerezo, Nathan Killoran",
+            "year": "2025",
+            "doi": "10.48550/arXiv.2503.19014",
+            "url": "https://doi.org/10.48550/arXiv.2503.19014"
+        },
+        {
+            "id": "Kökcü_FDHS",
+            "type": "preprint",
+            "title": "Fixed Depth Hamiltonian Simulation via Cartan Decomposition",
+            "authors": "Efekan Kökcü, Thomas Steckmann, Yan Wang, J. K. Freericks, Eugene F. Dumitrescu, Alexander F. Kemper",
+            "year": "2021",
+            "publisher": "",
+            "journal": "",
+            "doi": "10.48550/arXiv.2104.00728",
+            "url": "https://arxiv.org/abs/2104.00728"
+        },
+        {
+            "id": "Bullock_Note",
+            "type": "preprint",
+            "title": "Note on the Khaneja Glaser Decomposition",
+            "authors": "Stephen Bullock",
+            "year": "2004",
+            "doi": "10.48550/arXiv.quant-ph/0403141",
+            "url": "https://doi.org/10.48550/arXiv.quant-ph/0403141"
+        },
+        {
+            "id": "Dagli_Framework",
+            "type": "article",
+            "title": "A General Framework for Recursive Decompositions of Unitary Quantum Evolutions",
+            "authors": "Mehmet Dagli, Domenico D'Alessandro, Jonathan D H Smith",
+            "year": "2007",
+            "doi": "10.48550/arXiv.quant-ph/0701193",
+            "url": "https://doi.org/10.48550/arXiv.quant-ph/0701193"
+        },
+        {
+            "id": "Shende_Minimal",
+            "type": "article",
+            "title": "Minimal Universal Two-qubit Quantum Circuits",
+            "authors": "Vivek V Shende, Igor L Markov, Stephen S Bullock",
+            "year": "2003",
+            "doi": "10.48550/arXiv.quant-ph/0308033",
+            "url": "https://doi.org/10.48550/arXiv.quant-ph/0308033"
+        }
+    ],
+    "basedOnPapers": [
+        "10.48550/arXiv.2503.19014"
+    ],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_kak_decomposition",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_fixed_depth_hamiltonian_simulation_via_cartan_decomposition",
+            "weight": 1.0
+        }
+    ]
+}

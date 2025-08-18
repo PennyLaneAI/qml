@@ -5,6 +5,8 @@
             "username": "jceroni"
         }
     ],
+    "executable_stable": true,
+    "executable_latest": true,
     "dateOfPublication": "2020-11-18T00:00:00+00:00",
     "dateOfLastModification": "2025-01-10T00:00:00+00:00",
     "categories": [
@@ -27,6 +29,13 @@
             "type": "demonstration",
             "id": "tutorial_qaoa_maxcut",
             "weight": 1.0
+        }
+    ],
+    "hardware": [
+        {
+            "id": "qbraid",
+            "link": "https://account.qbraid.com?gitHubUrl=https://github.com/PennyLaneAI/pennylane-demo-notebooks.git",
+            "logo": "/_static/hardware_logos/qbraid.png"
         }
     ],
     "discussionForumUrl": "https://discuss.pennylane.ai/t/qaoa-and-optimization/5188"

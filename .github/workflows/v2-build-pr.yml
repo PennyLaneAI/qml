@@ -1,0 +1,87 @@
+name: V2 Build PR
+
+on:
+  pull_request:
+    branches: [master, dev]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-v2-demos-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Step 1: Identify changed demos
+  identify-changed-demos:
+    runs-on: ubuntu-latest
+    outputs:
+      updated: ${{ steps.get-changed-demos.outputs.updated }}
+      deleted: ${{ steps.get-changed-demos.outputs.deleted }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get changed demos
+        id: get-changed-demos
+        uses: ./.github/actions/get-changed-demos
+
+      - name: Output changed demos
+        run: |
+          echo "Updated Demos: ${{ steps.get-changed-demos.outputs.updated }}"
+          echo "Deleted Demos: ${{ steps.get-changed-demos.outputs.deleted }}"
+
+  # Step 1.5: Validate the metadata
+  validate-metadata:
+    if: needs.identify-changed-demos.outputs.updated != ''
+    needs: 
+      - identify-changed-demos
+    uses: ./.github/workflows/v2-validate-demo-metadata.yml
+    with:
+      branch: ${{ github.ref }}
+      demo-names: ${{ needs.identify-changed-demos.outputs.updated }}
+
+  # Step 2: Build demos
+  build:
+    if: needs.identify-changed-demos.outputs.updated != ''
+    uses: ./.github/workflows/v2-build-demos.yml
+    needs: 
+      - identify-changed-demos
+    with:
+      ref: ${{ github.event.pull_request.head.sha }}
+      demo-names: ${{ needs.identify-changed-demos.outputs.updated }}
+      dev: ${{ github.event.pull_request.base.ref == 'dev' }}
+      save-artifact: true
+      artifact-name: demo-build-${{ github.event.pull_request.head.sha }}
+      keep-going: false
+      quiet: false
+      batch_size: 10
+
+  # Step 3: Save build context
+  save-build-context:
+    if: needs.identify-changed-demos.outputs.updated != ''
+    runs-on: ubuntu-latest
+    needs:
+      - build
+      - identify-changed-demos
+    steps:
+      - name: Save Pull Request Event Context
+        run: |
+          mkdir -p /tmp/pr
+          cat >/tmp/pr/pr_info.json <<EOL
+          {
+            "id": "${{ github.event.pull_request.number }}",
+            "ref": "${{ github.event.pull_request.head.sha }}",
+            "ref_name": "${{ github.event.pull_request.head.ref }}",
+            "updated_demos": "${{ needs.identify-changed-demos.outputs.updated }}",
+            "deleted_demos": "${{ needs.identify-changed-demos.outputs.deleted }}"
+          }
+          EOL
+
+      - name: Upload Pull Request Event Context as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr_info
+          path: /tmp/pr
+          retention-days: 30

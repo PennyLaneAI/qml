@@ -343,9 +343,9 @@ print(qml.commutator(H, SZ))
 # Now that we know that the Heisenberg model Hamiltonian commutes with any :math:`S_\text{tot}^{\alpha}` for :math:`\alpha \in \{x, y, z\},` we also know that any observable
 # composed of the total spin components
 #
-# .. math:: \hat{O} = c_x S^x_\text{tot} + c_x S^y_\text{tot} + c_x S^z_\text{tot}
+# .. math:: \hat{O} = c_x S^x_\text{tot} + c_y S^y_\text{tot} + c_z S^z_\text{tot}
 #
-# commutes with the Hamiltonian,
+# with arbitrary real coefficients :math:`c_x, c_y, c_z \in \mathbb{R}` commutes with the Hamiltonian,
 #
 # .. math:: [\hat{O}, H_\text{Heis}] = 0.
 #
@@ -400,7 +400,7 @@ print(qml.commutator(SY, SZ) == (2j*SX).simplify())
 # With this introduction, we hope to clarify some terminology, introduce the basic concepts of Lie theory and motivate their relevance in quantum physics by touching on universality and symmetries.
 # While Lie theory and symmetries are playing a central role in established fields such as quantum phase transitions (see note above) and `high energy physics <https://en.wikipedia.org/wiki/Standard_Model>`_,
 # they have recently also emerged in quantum machine learning with the onset of geometric quantum machine learning [#Meyer]_ [#Nguyen]_
-# (see our recent :doc:`introduction to geometric quantum machine learning <tutorial_geometric_qml>`).
+# (see our recent :doc:`introduction to geometric quantum machine learning <demos/tutorial_geometric_qml>`).
 # Further, DLAs have recently become instrumental in classifying criteria for barren plateaus [#Fontana]_ [#Ragone]_ and designing simulators based on them [#Goh]_.
 #
 

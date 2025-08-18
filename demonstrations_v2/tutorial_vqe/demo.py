@@ -77,7 +77,7 @@ print("The Hamiltonian is ", H)
 # the Hamiltonian.
 #
 # For a more comprehensive discussion on how to build the Hamiltonian of more
-# complicated molecules, see the tutorial :doc:`tutorial_quantum_chemistry`.
+# complicated molecules, see the tutorial :doc:`demos/tutorial_quantum_chemistry`.
 #
 # .. note::
 #
@@ -108,7 +108,7 @@ dev = qml.device("lightning.qubit", wires=qubits)
 # where :math:`\theta` is the variational parameter to be optimized in order to find
 # the best approximation to the true ground state. In the Jordan-Wigner [#seeley2012]_ encoding,
 # the first term :math:`|1100\rangle` represents the `Hartree-Fock (HF) state
-# <https://en.wikipedia.org/wiki/Hartree%E2%80%93Fock_method>`_ where the two electrons in
+# <https://pennylane.ai/blog/2022/09/how-to-use-the-hartree-fock-method-in-pennylane>`_ where the two electrons in
 # the molecule occupy the lowest-energy orbitals. The second term :math:`|0011\rangle`
 # encodes a double excitation of the HF state where the two particles are excited from
 # qubits 0, 1 to 2, 3.
@@ -130,7 +130,7 @@ dev = qml.device("lightning.qubit", wires=qubits)
 # the four-qubit states :math:`\vert 1100 \rangle` and :math:`\vert 0011 \rangle.`
 # For more details on how to use the excitation operations to build
 # quantum circuits for quantum chemistry applications see the
-# tutorial :doc:`tutorial_givens_rotations`.
+# tutorial :doc:`demos/tutorial_givens_rotations`.
 #
 # Implementing the circuit above using PennyLane is straightforward. First, we use the
 # :func:`hf_state` function to generate the vector representing the Hartree-Fock state.
@@ -265,13 +265,13 @@ plt.show()
 # molecular Hamiltonian in the trial state.
 #
 # The VQE algorithm can be used to simulate other chemical phenomena.
-# In the tutorial :doc:`tutorial_vqe_bond_dissociation`, we use VQE to explore the
+# In the tutorial :doc:`demos/tutorial_vqe_bond_dissociation`, we use VQE to explore the
 # potential energy surface of molecules to simulate chemical reactions.
 # Another interesting application is to probe the lowest-lying states of molecules
 # in specific sectors of the Hilbert space. For example, see the tutorial
-# :doc:`tutorial_vqe_spin_sectors`. Furthermore, the algorithm presented here can be
+# :doc:`demos/tutorial_vqe_spin_sectors`. Furthermore, the algorithm presented here can be
 # generalized to find the equilibrium geometry of a molecule as it is demonstrated in the
-# tutorial :doc:`tutorial_mol_geo_opt`.
+# tutorial :doc:`demos/tutorial_mol_geo_opt`.
 #
 # .. _vqe_references:
 #

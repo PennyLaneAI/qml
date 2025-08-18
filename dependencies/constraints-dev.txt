@@ -1,0 +1,65 @@
+# Specifies global constraints for the dev build
+
+--extra-index-url https://test.pypi.org/simple/
+--extra-index-url https://download.pytorch.org/whl/cpu
+
+pennylane @ git+https://github.com/PennyLaneAI/pennylane.git#egg=pennylane
+pennylane-cirq @ git+https://github.com/PennyLaneAI/pennylane-cirq.git#egg=pennylane-cirq
+pennylane-qiskit @ git+https://github.com/PennyLaneAI/pennylane-qiskit.git#egg=pennylane-qiskit
+pennylane-qulacs @ git+https://github.com/PennyLaneAI/pennylane-qulacs.git#egg=pennylane-qulacs
+iqpot @ git+https://github.com/XanaduAI/iqpopt.git#egg=iqpopt
+pennylane-catalyst
+pennylane-lightning
+
+# TODO: Remove these and keep the ones below after testing QML pipeline v2
+# chex<1.0.0
+# cirq-core==1.4.1
+# pyqrack==1.32.12
+# numpy~=1.24
+# matplotlib==3.7.2
+# jax==0.4.28
+# jaxlib==0.4.28
+# jaxopt==0.8.4
+# aiohttp==3.9.5
+# fastapi<1.0.0
+# fsspec==2024.6.1
+# h5py==3.11.0
+# openfermionpyscf==0.5
+# openqaoa-core==0.2.5
+# qiskit>=1.0.0
+# qiskit-aer>=0.14.0,<0.16.0
+# qiskit_ibm_runtime==0.29.0
+# torch==2.1.2+cpu ; sys_platform != 'darwin'
+# torch==2.1.2 ; sys_platform == 'darwin'
+# torchvision==0.16.2+cpu ; sys_platform != 'darwin'
+# torchvision==0.16.2 ; sys_platform == 'darwin'
+# tensorflow==2.16.2
+# typing-extensions==4.14.0
+# optax==0.2.3
+# quimb==1.8.2
+# kahypar==1.1.7
+
+chex<1.0.0
+pyqrack==1.32.12
+numpy~=1.24
+matplotlib==3.7.2
+jax==0.6.0
+jaxlib==0.6.0
+jaxopt==0.8.5
+aiohttp==3.9.5
+fastapi<1.0.0
+fsspec==2024.6.1
+h5py==3.11.0
+openfermionpyscf==0.5
+openqaoa-core==0.2.5
+qiskit>=1.0.0
+qiskit-aer>=0.14.0,<0.16.0
+qiskit_ibm_runtime==0.29.0
+torch==2.1.2+cpu ; sys_platform != 'darwin'
+torch==2.1.2 ; sys_platform == 'darwin'
+torchvision==0.16.2+cpu ; sys_platform != 'darwin'
+torchvision==0.16.2 ; sys_platform == 'darwin'
+tensorflow==2.19
+optax==0.2.4
+quimb==1.11.0
+kahypar==1.1.7

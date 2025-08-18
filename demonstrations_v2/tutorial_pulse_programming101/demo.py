@@ -220,10 +220,10 @@ print(H(theta, 0.5))
 # Variational quantum eigensolver with pulse programming
 # ------------------------------------------------------
 # We can now use the ability to access gradients to perform the variational quantum eigensolver on the pulse level (ctrl-VQE) as is done in [#Mitei]_.
-# For a more general introduction to VQE, see :doc:`tutorial_vqe`.
+# For a more general introduction to VQE, see :doc:`demos/tutorial_vqe`.
 # First, we define the molecular Hamiltonian whose energy expectation value we want to minimize. This serves as our objective Hamiltonian.
 # We are using :math:`\text{HeH}^+` as a simple example and load it from the `PennyLane quantum datasets <https://pennylane.ai/qml/datasets.html>`_ website.
-# We are going to use the tapered Hamiltonian, which makes use of symmetries to reduce the number of qubits, see :doc:`tutorial_qubit_tapering` for details.
+# We are going to use the tapered Hamiltonian, which makes use of symmetries to reduce the number of qubits, see :doc:`demos/tutorial_qubit_tapering` for details.
 
 data = qml.data.load("qchem", molname="HeH+", basis="STO-3G", bondlength=1.5)[0]
 H_obj = data.tapered_hamiltonian
@@ -322,15 +322,21 @@ H_pulse = H_D + H_C
 
 ##############################################################################
 # Now we define the ``qnode`` that computes the expectation value of the molecular Hamiltonian.
+# We need to wrap the ``qnode`` in a function so that we can convert the expectation value to a real number.
+# This will enable use to make use of gradient descent methods that require real-valued loss functions.
 
 dev = qml.device("default.qubit", wires=range(n_wires))
 
-@qml.qnode(dev, interface="jax")
 def qnode(theta, t=duration):
-    qml.BasisState(jnp.array(data.tapered_hf_state), wires=H_obj.wires)
-    qml.evolve(H_pulse)(params=(*theta, *theta), t=t)
-    return qml.expval(H_obj)
 
+    @qml.qnode(dev)
+    def _qnode_inner(theta, t=duration):
+        qml.BasisState(jnp.array(data.tapered_hf_state), wires=H_obj.wires)
+        qml.evolve(H_pulse)(params=(*theta, *theta), t=t)
+        return qml.expval(H_obj)
+
+    expectation_value = _qnode_inner(theta, t)  # Execute the qnode
+    return jnp.real(expectation_value)  # Typecast to real number
 
 value_and_grad = jax.jit(jax.value_and_grad(qnode))
 

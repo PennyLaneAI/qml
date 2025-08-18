@@ -5,8 +5,10 @@
             "username": "josh"
         }
     ],
+    "executable_stable": false,
+    "executable_latest": false,
     "dateOfPublication": "2019-10-11T00:00:00+00:00",
-    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
+    "dateOfLastModification": "2025-05-29T00:00:00+00:00",
     "categories": [
         "Devices and Performance"
     ],

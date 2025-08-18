@@ -5,10 +5,13 @@
             "username": "mariaschuld"
         }
     ],
+    "executable_stable": true,
+    "executable_latest": true,
     "dateOfPublication": "2019-10-11T00:00:00+00:00",
     "dateOfLastModification": "2024-10-07T00:00:00+00:00",
     "categories": [
-        "Quantum Machine Learning", "Getting Started"
+        "Quantum Machine Learning",
+        "Getting Started"
     ],
     "tags": [],
     "previewImages": [
@@ -37,6 +40,13 @@
             "type": "demonstration",
             "id": "ensemble_multi_qpu",
             "weight": 1.0
+        }
+    ],
+    "hardware": [
+        {
+            "id": "qbraid",
+            "link": "https://account.qbraid.com?gitHubUrl=https://github.com/PennyLaneAI/pennylane-demo-notebooks.git",
+            "logo": "/_static/hardware_logos/qbraid.png"
         }
     ],
     "discussionForumUrl": "https://discuss.pennylane.ai/t/variational-classifier-demo-question-on-padding/3367"

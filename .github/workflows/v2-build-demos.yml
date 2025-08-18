@@ -8,38 +8,47 @@ on:
         type: string
       demo-names:
         description: |
-          Instead of building all demos, only build the demos specified in this list.
+          Only build the demos specified in a space-separated list,
+          e.g. demo1 demo2 demo3.
+
+          If not specified, all demos will be built.
         required: false
         type: string
         default: ''
+      dev:
+        description: Use development dependencies.
+        required: false
+        type: boolean
+        default: false
       save-artifact:
-        description: |
-          Whether to save the built demos as an artifact.
+        description: Save the built demos as an artifact.
         required: false
         type: boolean
         default: true
       artifact-name:
-        description: Name of the artifact containing the built demos (defaults to demo-build-{ref})
+        description: Name of the artifact containing the built demos (defaults to demo-build-{ref}).
         required: false
         type: string
         default: ''
+      artifact-retention:
+        description: The number of days to persist the consolidated artifacts.
+        required: false
+        type: number
+        default: 1
       keep-going:
-        description: Whether to keep going if a demo fails to build
+        description: Keep going if a demo fails to build.
         required: false
         type: boolean
         default: false
       quiet:
-        description: |
-          Whether to suppress output from the build process
+        description: Suppress output from the build process.
         required: false
         type: boolean
         default: false
       batch_size:
-        description: |
-          Number of demos to build per job
+        description: Number of demos to build per job.
         type: number
         default: 10
-
     outputs:
       artifact-name:
         description: "Name of the artifact containing the built demos"
@@ -57,31 +66,38 @@ on:
         required: false
         type: string
         default: ''
+      dev:
+          description: Use development dependencies.
+          required: false
+          type: boolean
+          default: false
       save-artifact:
-        description: |
-          Whether to save the built demos as an artifact.
+        description: Save the built demos as an artifact.
         required: false
         type: boolean
         default: true
       artifact-name:
-        description: Name of the artifact containing the built demos (defaults to demo-build-{ref})
-        required: true
+        description: Name of the build artifact (defaults to demo-build-{ref}).
+        required: false
         type: string
         default: ''
+      artifact-retention:
+        description: The number of days to persist the consolidated artifacts.
+        required: false
+        type: number
+        default: 1
       keep-going:
-        description: Whether to keep going if a demo fails to build
+        description: Keep going if a demo fails to build.
         required: false
         type: boolean
         default: false
       quiet:
-        description: |
-          Whether to suppress output from the build process
+        description: Suppress output from the build process.
         required: false
         type: boolean
         default: false
       batch_size:
-        description: |
-          Number of demos to build per job
+        description: Number of demos to build per job.
         type: number
         default: 10
 
@@ -140,11 +156,12 @@ jobs:
           ref: ${{ inputs.ref }}
           fetch-depth: 1
 
-      - name: Install pandoc and opencl
+      - name: Install pandoc, opencl, and graphviz
         run: |
           sudo apt-get install -y \
             ocl-icd-opencl-dev \
-            pandoc 
+            pandoc \
+            graphviz
 
       - name: Setup Python
         uses: actions/setup-python@v4
@@ -165,7 +182,8 @@ jobs:
             --execute \
             ${{ inputs.keep-going && '--keep-going' || '--no-keep-going' }} \
             ${{ inputs.quiet && '--quiet' || '--no-quiet' }} \
-            ${{ steps.demo-name-list.outputs.demo-names }}
+            ${{ steps.demo-name-list.outputs.demo-names }} \
+            ${{ inputs.dev && '--dev' || '--no-dev' }}
       
       - name: Upload artifacts
         id: upload-artifacts
@@ -200,12 +218,10 @@ jobs:
         with:
           name: ${{ needs.generate-build-variables.outputs.artifact-name }}
           path: _build/pack/*.zip
-          retention-days: 1
+          retention-days: ${{ inputs.artifact-retention }}
           overwrite: true
       
       - name: Delete partial artifacts
         uses: geekyeggo/delete-artifact@v5
         with:
             name: ${{ needs.generate-build-variables.outputs.artifact-name }}-c*
-
-  
