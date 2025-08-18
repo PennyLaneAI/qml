@@ -121,16 +121,15 @@ print("GF Addition of 5 + 10 =", int(binary_string[len(wires['x']):],2))
 # There are three main options for the conversion. We'll briefly introduce them here but go into
 # greater detail in subsequent sections:
 #
-# * Smart defaults: In this option, PennyLane chooses what Qualtran Bloq to translate to.
-#     If an option exists, we'll give you a Qualtran Bloq that is highly similar to the PennyLane
-#     operator.
+# * Smart defaults: In this option, PennyLane chooses what Qualtran Bloq to translate to. If an
+#     option exists, we'll give you a Qualtran Bloq that is highly similar to the PennyLane operator.
 #
-# * Custom mapping: Want something different from the smart default? Don't worry, you can
-#     customize what Bloq you want your operator to map to. This makes it easy to
-#     refine the finer details of your algorithm.
+# * Custom mapping: Want something different from the smart default? Don't worry, you can customize
+#     what Bloq you want your operator to map to. This makes it easy to refine the finer details of
+#     your algorithm.
 #
-# * Wrapping: Think of this as an analogue of :class:`~pennylane.FromBloq`. It faithfully converts any operator,
-#     ``QNode``, or Qfunc into a Bloq. The output is a :class:`~pennylane.io.ToBloq` instance.
+# * Wrapping: Think of this as an analogue of :class:`~pennylane.FromBloq`. It faithfully converts any operator, ``QNode``,
+#     or Qfunc into a Bloq. The output is a :class:`~pennylane.io.ToBloq` instance.
 #
 # These options are all accessible through the :func:`~pennylane.to_bloq` function. In the
 # following sections, we'll explore how we can wield this powerful function to get all the
