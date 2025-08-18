@@ -396,7 +396,7 @@ print(tabulate(table_data, headers=["Syndrome", "LUT Error"]))
 
 ######################################################################
 # Before we can pass messages, we need to establish the connectivity between nodes. The ``_build_graph`` function scans the
-# parity‑check matrix once and records, for every variable node, which checks touch it and vice‑versa.
+# parity‑check matrix once and records, for every variable node, which checks touch it and vice versa.
 # We convert the neighbour lists to tuples so they become immutable, hashable static data. JAX can
 # then embed their values as compile‑time constants in the XLA program and reliably reuse the compiled
 # kernel multiple times. A cool thing about JAX/XLA is that when using simple static parameters like the ones
@@ -717,11 +717,12 @@ print(f"Decoding success rate: {success_rate * 100:.2f}%")
 # circuit to prepare the logical zero state :math:`|0\rangle_L` for our Steane code. This method is
 # also general for initializing logical zero states for any CSS codes.
 #
-# Start with a :math:`+1` eigenstate (or stabilizer state) of all the :math:`Z` type stabilizers.
-# The :math:`|0\ldots 0\rangle` is always stabilized by any :math:`Z` type Pauli operator, making it a
+# Start with a :math:`+1` eigenstate (or stabilizer state) of all the :math:`Z`-type stabilizers.
+# The :math:`|0\ldots 0\rangle` is always stabilized by any :math:`Z`-type Pauli operator, making it a
 # suitable choice.
 #
 # Then, for each X-type generator: 
+#
 # - Prepare an ancilla qubit in the :math:`|+\rangle` state.
 # - Measure X-type stabilizers using CNOT operations onto an ancilla. 
 # - Measure in the :math:`X` basis.
