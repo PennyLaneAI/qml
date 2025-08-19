@@ -461,18 +461,20 @@ print("FFT and DFT coincide:", np.allclose(f_hat_vec, f_hat_vec_fft))
 # The generic blueprint is explained in a paper from 2003 (when QFTs were all the rage in quantum computing) [#Moore]_.
 # Essentially, and following the example from before, we start with a quantum state of the form
 #
-# .. math:: \sum_{x_1=0}^1 \sum_{x_2=0}^2 f(x_1, x_2) | x_1 x_2 \rangle
+# .. math:: \sum_{x_1=0}^1 \sum_{x_2=0}^2 f(x_1, x_2) | x_1 x_2 \rangle | 0 0 \rangle
 #
 # where :math:`| x_1 x_2 \rangle` encodes the two variables :math:`3x_1 + x_2 = x` in binary representation into
 # two different computational basis registers of sufficient size. From here, we first prepare a state that encodes
 # the intermediate functions :math:`\tilde{f}(k_1, x_2)`,
 #
-# .. math:: \sum_{k_1=0}^2 \sum_{x_2=0}^2 \tilde{f}(k_1, x_2) | k_1 x_2 \rangle
+# .. math:: \sum_{k_1=0}^2 \sum_{x_2=0}^2 \tilde{f}(k_1, x_2) | 0 x_2 \rangle | k_1 0 \rangle
 #
 # and then move from there to the final state
 #
-# .. math:: \sum_{k_1=0}^2 \sum_{k_2=0}^1 \hat{f}(k_1, k_2) | k_1 k_2 \rangle.
+# .. math:: \sum_{k_1=0}^2 \sum_{k_2=0}^1 \hat{f}(k_1, k_2) | 0 0 \rangle | k_1 k_2 \rangle.
 #
+# (Of course, this is just a didactic sketch, and we can be much more frugal with the number of qubits by
+# sharing the registers in a clever way.)
 # The crucial point is that the "smaller Fourier transforms", :math:`\tilde{f}(k_1, x_2)`, can be computed
 # and combined in quantum parallel!
 #
