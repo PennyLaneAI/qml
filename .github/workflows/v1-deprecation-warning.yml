@@ -2,14 +2,13 @@ name: V1 Deprecation Warning Check
 permissions:
   contents: read
   pull-requests: write
-on:
-  pull_request:
+on: pull_request
 
 jobs:
   check-directory:
     runs-on: ubuntu-latest
     outputs:
-      success: ${{ steps.check.outputs.success }}
+      demonstrations-v1-changes-detected: ${{ steps.determine-changes.outputs.demonstrations-v1-changes-detected }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -18,19 +17,30 @@ jobs:
 
       - name: Check for deprecated directory changes
         id: check
-        run: |
-          changed_files=$(git diff --name-only --diff-filter=AMR ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }} | grep '^demonstrations/' || true)
+        uses: tj-actions/changed-files@v46
+        with:
+          files: 'demonstrations/**'
+          token: ${{ secrets.github_token }}
 
-          if [ -n "$changed_files" ]; then
-            # output success = false if changes are found
-            echo "success=false" >> $GITHUB_OUTPUT
-          else
-            #output success = false if no changes are found
-            echo "success=true" >> $GITHUB_OUTPUT
-          fi
+      - name: Determine if changes were made
+        id: determine-changes
+        run: |
+            any_modified="${{ steps.check.outputs.any_modified }}"
+            added_files="${{ steps.check.outputs.added_files }}"
+            any_changed="${{ steps.check.outputs.any_changed }}"
+
+            if [[ "$any_modified" == "true" || "$added_files" == "true" || "$any_changed" == "true" ]]; then
+            echo "Changes detected in the demonstrations directory."
+            echo "demonstrations-v1-changes-detected=true" >> $GITHUB_OUTPUT
+
+            else
+            echo "No changes detected in the demonstrations directory."
+            echo "demonstrations-v1-changes-detected=false" >> $GITHUB_OUTPUT
+            fi
+
 
       - name: Comment on PR
-        if: steps.check.outputs.success == 'false'
+        if: steps.determine-changes.outputs.demonstrations-v1-changes-detected == 'true'
         uses: XanaduAI/cloud-actions/create-and-update-pull-request-comment@main
         with:
           github_token: ${{ secrets.github_token }}
