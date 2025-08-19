@@ -8,6 +8,8 @@
             "username": "alvaro"
         }
     ],
+    "executable_stable": true,
+    "executable_latest": true,
     "dateOfPublication": "2025-08-19T09:00:00+00:00",
     "dateOfLastModification": "2025-08-19T09:00:00+00:00",
     "categories": [
