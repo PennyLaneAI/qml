@@ -8,15 +8,13 @@ pennylane-cirq @ git+https://github.com/PennyLaneAI/pennylane-cirq.git#egg=penny
 pennylane-qiskit @ git+https://github.com/PennyLaneAI/pennylane-qiskit.git#egg=pennylane-qiskit
 pennylane-qulacs @ git+https://github.com/PennyLaneAI/pennylane-qulacs.git#egg=pennylane-qulacs
 iqpot @ git+https://github.com/XanaduAI/iqpopt.git#egg=iqpopt
-# Install specific lightning version that catalyst expects, then catalyst
-pennylane-lightning==0.43.0.dev12
-pennylane-catalyst==0.13.0.dev33
-
+pennylane-catalyst
+pennylane-lightning
 
 chex<1.0.0
 pyqrack==1.32.12
 numpy~=1.24
-matplotlib==3.7.2
+matplotlib==3.8.0
 jax==0.6.2
 jaxlib==0.6.2
 jaxopt==0.8.5
