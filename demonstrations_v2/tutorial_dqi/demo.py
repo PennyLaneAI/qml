@@ -14,7 +14,7 @@ decoding one.
 In this demo, we will use DQI to solve the max-XORSAT problem implemented in PennyLane. While this
 problem is simple and has not yet demonstrated quantum advantage, it clearly illustrates the
 operational principles and underlying intuition of DQI. We will begin by introducing the problem and
-the core principles of the algorithm, followed by an explanation of each algorithmic step and its
+the core principles of the algorithm, followed by a description of each algorithmic step and its
 corresponding implementation.
 
 The max-XORSAT problem
@@ -104,7 +104,7 @@ plt.show()
 # possible in :math:`f(\mathbf{x})`. Consequently, preparing the state
 # :math:`\sum_{\mathbf{x}} f(\mathbf{x})|\mathbf{x}\rangle` can be seen as a simple task by creating
 # an appropriate superposition of the :math:`m` amplitudes and apply a Hadamard transform. The same
-# principle holds for preparing :math:`|P(f)\rangle`, even though it is not as simple. We first
+# principle holds for preparing :math:`|P(f)\rangle`, even though it is not as simple, we will still first
 # prepare the Hadamard transform of the state, taking advantage of its sparse spectrum, and then
 # transform back. The Hadamard transform of :math:`P(f(\mathbf{x}))` is:
 # 
@@ -116,7 +116,7 @@ plt.show()
 # error, and a syndrome register, with dimensions :math:`\left \lceil \log_{2} l\right \rceil`,
 # :math:`m`, and :math:`n`, respectively. The algorithm’s steps are outlined below:
 # 
-# 1. **Embed :math:`w_k` coefficients:** prepare the state :math:`\sum_{k=0}^{l} w_k|k\rangle` in the
+# 1. **Embed weight coefficients:** prepare the state :math:`\sum_{k=0}^{l} w_k|k\rangle` in the
 #    weight register to encode the degree :math:`l` of the polynomial.
 # 2. **Prepare Dicke states:** generate Dicke states on the error register, conditioned on the value
 #    :math:`k`,
@@ -238,7 +238,7 @@ print("the optimal values for w are", w_k)
 # 
 # The explicit form of :math:`\mathrm{SCS}_{m,k}`, which is implemented in code by the function
 # ``SCS``, is not discussed here. However, it’s worth noting that it is composed of a two-qubit gate
-# followed by :math:`k-1` three-qubit gates (further details can be found in the original paper).
+# followed by :math:`k-1` three-qubit gates (further details can be found in [#Bartschi2019]_).
 # Let’s now implement this algorithm in the ``prepare_dicke_state`` function. We will use it twice in
 # a controlled way via ``qml.ctrl()`` in our main function ``DQI`` where all the parts of the DQI
 # algorithm are going to be placed.
