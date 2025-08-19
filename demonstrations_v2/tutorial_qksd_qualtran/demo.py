@@ -1,21 +1,33 @@
-r"""Title TBD (something about QKSD)
+r"""demonstrations_v2/tutorial_qksd_qualtran/metadata.json
 ======================================
 
-A catchy hook sentence and basic explanation.
+Want to shrink large molecules down to a more manageable size? Quantum Krylov subspace
+diagonalization techniques do just that, by mapping the molecular Hamiltonian down to a smaller
+Krylov subspace. This mapping can then be used to obtain molecular properties such as the system's
+reduced density matrices and nuclear gradients of the energy. [are these two properties and their usefulness
+clear enough to researchers or do we need to rephrase?]
 
 .. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/pennylane-demo-qualtran-qksd.png
     :align: center
     :width: 70%
     :target: javascript:void(0)
 
-What we'll do in this demo, maybe some bullet points.
+In this demo we'll follow [Molecular Properties from Quantum Krylov Subspace Diagonalization](https://arxiv.org/abs/2501.05286)
+to explain how to:
+
+* Estimate the reduced density matrices of a polynomial of the Hamiltonian applied to a given state
+    [not immediately clear what a polynomial of the Hamiltonian applied to a given state is useful for]
+* Use the PennyLane-Qualtran integration to count the number of qubits and gates required by these
+    circuits.
+
 """
 
 ######################################################################
-# Heading 1
-# -------------------------
+# Estimating reduced density matrices
+# -----------------------------------
 #
 # Introduction to the method and initial steps to set it up
+# Based on [Molecular Properties from Quantum Krylov Subspace Diagonalization](https://arxiv.org/abs/2501.05286)
 
 import pennylane as qml
 
