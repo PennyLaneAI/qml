@@ -751,7 +751,7 @@ for wire in range(5):
 # finding the common +1-eigenspace of the stabilizer generators.
 #
 # Conclusion
-# ~~~~~~~~~~~
+# -----------
 #
 # In this tutorial, we introduced the stabilizer formalism and showed how it can be used to construct quantum error correction codes.
 # We applied it to a concrete example—the five-qubit code—using a PennyLane implementation.
