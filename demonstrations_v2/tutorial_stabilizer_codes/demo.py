@@ -765,8 +765,10 @@ for wire in range(5):
 # The authors of this demo would like to thank Austin Daniel for the insightful discussions and Priya Nadkarni for her helpful
 # technical feedback.
 #
+
+#######################################################################
 # References
-# -----------
+# ------------
 #
 # .. [#Gottesman1997]
 #    D. Gottesman.
@@ -782,4 +784,8 @@ for wire in range(5):
 #    S.Chandak, J. Mardia, M. Tolunay.
 #    "Implementation and Analysis of stabilizer codes in PyQuil."
 #    `<https://shubhamchandak94.github.io/reports/stabilizer_code_report.pdf>`__,
+#
+#
+# About the authors
+# -----------------
 #
