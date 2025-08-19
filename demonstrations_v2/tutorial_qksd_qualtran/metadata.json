@@ -1,8 +1,11 @@
 {
-    "title": "How to use Qualtran with PennyLane",
+    "title": "How to obtain molecular properties from quantum krylov subspace diagonalization",
     "authors": [
         {
-            "username": "Diego",
+            "username": "Diego"
+        },
+        {
+
             "username": "oumarou"
         }
     ],
