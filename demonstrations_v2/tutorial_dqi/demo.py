@@ -206,7 +206,7 @@ print("the optimal values for w are", w_k)
 # 
 # For this step, we need a conditional operation that prepares Dicke states
 # :math:`|D^{m}_{k}\rangle`--where the superscript is the number of qubits and the subscript is the
-# number of excitations-for each index :math:`k` in the weight register. For our particular example,
+# number of excitations--for each index :math:`k` in the weight register. For our particular example,
 # we will prepare Dicke states with one and two excitations.
 # 
 # Before implementing the conditional operation, let’s briefly review a method for preparing such
