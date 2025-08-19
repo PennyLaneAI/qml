@@ -432,7 +432,7 @@ Uvec = np.kron(U.conj(), U)
 # evolve the state above by U, using the vectorised objects
 rho_out_vec = Uvec @ rho_vec
 # reshape the result back into a density matrix
-rho_out = np.reshape(rho_out_vec, shape=(2**n, 2**n), order='F')
+rho_out = np.reshape(rho_out_vec, (2**n, 2**n), order='F')
 # this is the same as the usual adjoint application of U
 print(np.allclose(rho_out, U @ rho @ U.conj().T ))
 
