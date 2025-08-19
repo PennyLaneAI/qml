@@ -441,7 +441,7 @@ print(DQI(m, n, l))
 #
 #     The kernel of :math:`B^T` defines an error-correcting code. The distance :math:`d` of this code determines the number of errors
 #     it can correct, given by :math:`\left \lfloor (d-1)/2 \right \rfloor`. This condition ensures that the decoding problem has a unique solution.
-#     For this demo, we choose :math:`l` such that it is less than half the distance of the code and this condition is met.
+#     For this demo, we choose :math:`l=2` such that it is less than half the distance of the code :math:`d=5` and this condition is met.
 #     For a detailed discussion of the restrictions on :math:`l`, please refer to the original paper [#Jordan2024]_. 
 # 
 # To keep things simple, we will use a brute-force approach for decoding by building a Lookup Table
@@ -531,7 +531,7 @@ print(DQI(m, n, l))
 # After the previous step, we obtained the Hadamard transform of the state were looking for. The final
 # step is to apply the Hadamard transform to this state to obtain
 # :math:`|P(f)\rangle=\sum_{\mathbf{x}} P(f(\mathbf{x}))|\mathbf{x}\rangle`. Finally, we will collect
-# samples from such state, calculate their objective functions and build a histogram to compare with
+# samples from such state, calculate their objective functions, and build a histogram to compare with
 # the random sampling done af first.
 # 
 
