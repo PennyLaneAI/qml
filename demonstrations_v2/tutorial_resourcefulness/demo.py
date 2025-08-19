@@ -396,7 +396,7 @@ print(U_bdiag)
 # the (standard) representation of non-entangling unitary matrices.
 # After all, what's the first symptom of entanglement in a quantum state?
 # You guessed right again, the reduced density matrix of some subsystem is mixed!
-# Wouldn't it make more sense to study the multipartite entanglement from the point of view of density matrices?
+# Wouldn't it make more sense to study multipartite entanglement from the point of view of density matrices?
 # It turns out that moving into the space :math:`B(H)` of bounded linear operators in which the density matrices live leads to
 # a much more nuanced Fourier spectrum.
 #
@@ -573,6 +573,7 @@ Uvec_diag = Qinv @ Uvec @ Q
 
 print(np.round(np.abs(Uvec_diag), 4))
 
+
 ######################################################################
 # The reordering made the block structure visible. You can check that now any vectorised non-entangling matrix ``Uvec``
 # has the same block structure if we change the basis and reorder via ``Qinv @ Uvec @ Q``.
@@ -584,12 +585,14 @@ print(np.round(np.abs(Uvec_diag), 4))
 # basis we just identified by applying ``v_diag = Q v``, and taking the sum of absolute squares of those entries in ``v_diag``
 # that correspond to one block or subspace.
 #
-
-
 # Notice that the similarity transform 'Qinv @ Uvec @ Q' needs not be implemented by a unitary change of basis! 
 # Indeed in genear Q will not be unitary, as we can quickly check by checking if any two of its columns are orthogonal
+#
+
 print("The inner product between the second and third column of Q is: ", np.dot(Q[:1],Q[:2]).item())
-# This is just becuase the eigenvecotrs of the random linear combiniation that we implemented before are only guaranteed to 
+
+######################################################################
+# This is just becuase the eigenvecotrs of the random linear combiniation that we implemented before are only guaranteed to
 # 'span' the blocks, not to be an orthonormal basis of them.
 # However, rep-theory actually guarantees that we can indeed find such an orthonormal basis, or, in other words, that we can
 # unitarize Q. One way is to polar decompose it
@@ -624,14 +627,18 @@ for data, label in zip(purities, labels):
     for k, val in enumerate(data):
         print(f" - Block {k+1}: ", val)
 
+######################################################################
 # Notice that, as it should given the normalization of the states considered, the purities are a probability distribution.
 # Indeed they are positive and we can check that they add up to 1, reconstructing the states' total purity.
+#
+
 for data, label in zip(purities, labels):
     print(f"{label} state has total purity: ", np.sum(data).item())
 
-
-## We can further visualize the purities as done in [#Bermejo_Braccia]_, by aggregating them
+######################################################################
+# We can further visualize the purities as done in [#Bermejo_Braccia]_, by aggregating them
 # by the corresponding block's size
+#
 
 agg_purities = [[p[0], p[1]+p[2], p[3]] for p in purities]
 
@@ -728,6 +735,7 @@ v_pauli_coeffs = np.zeros(len(B))
 for idx in range(4, 7):
     v = W[:, idx]
     v_pauli_coeffs += [np.abs(np.dot(v, pv)) for pv in B.T]
+
 
 print("The basis corresponding to the second 3x3 block has nonzero overlap with the following Pauli basis elements:")
 
