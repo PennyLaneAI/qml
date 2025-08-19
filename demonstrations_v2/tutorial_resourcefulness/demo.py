@@ -1,34 +1,32 @@
 r"""
-Analysing quantum resourcefulness with the generalized Fourier transform
-========================================================================
-
-.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_resourcefulness.png
-    :align: center
-    :width: 70%
-    :alt: DESCRIPTION.
-    :target: javascript:void(0)
+Resourcefulness of quantum states with Fourier analysis
+=======================================================
 
 Resource theories in quantum information ask how "complex" a given quantum state is with respect to a certain
 measure of complexity. For example, using the resource of *entanglement*, we can ask how entangled a quantum state is. Other well-known
 resources are *Clifford stabilizerness*, which measures how close a state is from being preparable by a
-classically simulatable "Clifford circuit", or *Gaussianity*, which measures how far away a state is from "Gaussian states"
+classically simulatable *Clifford circuit*, or *Gaussianity*, which measures how far away a state is from *Gaussian states*
 considered simple in quantum optics. As the name "resourceful" suggests,
 these measures of complexity often relate to how much "effort" states are, for example with respect to classical simulation or
 preparation in the lab.
 
-It turns out [#Bermejo_Braccia]_ that the resourcefulness of quantum states can be investigated with tools from *generalised Fourier analysis*.
-"Fourier analysis" here refers to the well-known technique of computing Fourier coefficients of a mathematical object, which in our case
-is not a function over :mathbb:`R` or :mathbb:`Z`, but a quantum state. "Generalised" indicates that we don't use the
+It turns out that the resourcefulness of quantum states can be investigated with tools from *generalised Fourier analysis*.
+*Fourier analysis* here refers to the well-known technique of computing Fourier coefficients of a mathematical object, which in our case
+is not a function over :math:`\mathbb{R}` or :math:`\mathbb{Z}`, but a quantum state. *Generalised* indicates that we don't use the
 standard Fourier transform, but a generalisation of its group theoretic definition.
-[#Bermejo_Braccia]_ suggest to compute a quantity that they call the **Generalised Fourier Decomposition (GFD) Purity**,
-and use it as a "footprint" of a state's resource profile. When using the standard Fourier transform,
-the GFD purities are just the absolute squares of the normal Fourier coefficients, which is also known as the *power spectrum*.
+Bermejo, Braccia et al. (20025) [#Bermejo_Braccia]_ suggest to compute a quantity that they call the **Generalised Fourier Decomposition (GFD) Purity**,
+and use it as a "footprint" of a state's resource profile.
 
-The basic idea is to identify the set of unitaries that maps resource-free
+The basic idea is to identify the set of unitary transformations that maps resource-free
 states to resource-free states with a *linear representation* of a group.
 The basis in which this representation, and hence the free unitaries, are (block-)diagonal, reveals so-called *irreducible subspaces*.
-The GFD Purities are then the "weight" a state has in these subspaces. As in standard Fourier analysis,
-higher-order Purities indicate a less resourceful function.
+The GFD Purities are then the "weight" a state has when being projected into these subspaces.
+
+When using the standard Fourier transform,
+the GFD purities are just the absolute squares of the normal Fourier coefficients, which is also known as the *power spectrum*.
+
+As in standard Fourier analysis,
+higher-order GFD Purities indicate a less resourceful function.
 This intuition carries over to the generalised case, where more resourceful states have higher weights in higher-order subspaces.
 
 In this tutorial we will illustrate with two simple examples how to compute the GFD Purities to analyse resource.
