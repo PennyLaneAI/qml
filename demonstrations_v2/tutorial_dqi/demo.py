@@ -53,7 +53,7 @@ import matplotlib.pyplot as plt
 import itertools
 
 plt.style.use("pennylane.drawer.plot")
-plt.rcParams.update({"font.size": 15, "font.family": "STIXGeneral", "mathtext.fontset": "cm"})
+plt.rcParams.update({"font.size": 14, "font.family": "STIXGeneral", "mathtext.fontset": "cm"})
 
 # Define parameters of max-XORSAT problem Bx=(mod2)v
 B = pnp.array([[1, 0, 0, 0], [1, 1, 0, 0], [0, 1, 1, 0], [0, 0, 1, 1], [0, 0, 0, 1]])  # Matrix B
