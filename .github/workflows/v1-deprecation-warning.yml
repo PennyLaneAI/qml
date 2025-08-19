@@ -29,9 +29,9 @@ jobs:
         id: determine-changes
         run: |
             any_changed="${{ steps.check.outputs.any_changed }}"
-            any_added="${{ steps.check.outputs.any_added }}" 
+            any_added="${{ steps.check.outputs.added_files_count }}"
 
-            if [[ "$any_changed" == "true" || "$any_added" == "true" ]]; then
+            if [[ "$any_changed" == "true" || "$any_added" -ne 0 ]]; then
             echo "Changes detected in the demonstrations directory."
             echo "demonstrations-v1-changes-detected=true" >> $GITHUB_OUTPUT
 
