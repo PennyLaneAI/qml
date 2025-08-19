@@ -508,15 +508,15 @@ print("FFT and DFT coincide:", np.allclose(f_hat_vec, f_hat_vec_fft))
 # 2,3 and finally to qubit 3 implements an operation on smaller and smaller subgroups, working the divide-and-conquer
 # strategy backwards!
 #
-# Finally, it is also suspicious that the controlled operations introduce a phase that looks somewhat like a "twiddle factor" used
+# Furthermore, you should find it suspicious that the controlled operations introduce a phase that looks somewhat like a "twiddle factor" used
 # to combine the smaller Fourier transforms.
 # For example, the controlled operations in the blue box apply a phase
-# :math:`e^{\frac{2 \pi i 2^0}{2^3} (2^1 x_2 + 2^0 x_3)}` to the first qubit, where :math:`x_2, x_3\in \{0,1\}` are
+# :math:`e^{\frac{2 \pi i 2^0}{2^3} (2^1 q_2 + 2^0 q_3)}` to the first qubit, where :math:`q_2, q_3\in \{0,1\}` are
 # the respective states of the second and third qubit queried by the control.
 #
 # And lastly, the Hadamard gate, which sums amplitudes,
 # combines the "smaller" Fourier transforms performed on the :math:`q_1 = 0` and :math:`q_1=1`
-# branches together (with a phase that is taken into account by the twiddle factor).
+# branches together (with a phase that is taken into account by the previously tuned twiddle factor).
 #
 # In short, and while the details are more complex than we can cover here, our favourite quantum subroutine, the
 # QFT, is nothing but a Fast Fourier Transform in parallel -- enabled by groups!
