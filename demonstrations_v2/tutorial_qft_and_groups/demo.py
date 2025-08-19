@@ -8,19 +8,17 @@ literally everywhere in quantum computing: even if you're not interested in `Sho
 <https://pennylane.ai/codebook/shors-algorithm/shors-algorithm>`__, `hidden subgroup problems <https://pennylane.ai/qml/demos/tutorial_period_finding>`__,
 `quantum phase estimation <https://pennylane.ai/qml/demos/tutorial_qpe>`__
 or `quantum arithmetics <https://pennylane.ai/qml/demos/tutorial_qft_arithmetics>`__,
-you probably have worked with a circuit that starts by applying a Hadamard gate to each qubit.
-Well, this is a Quantum Fourier Transform as well!
+you probably have worked with a circuit that applies Hadamard gates to each qubit.
+Well, this is a Quantum Fourier Transform as well! The reason why you might not have appreciated this fact is that Hadamards do not form the
+`famous QFT <https://pennylane.ai/qml/demos/tutorial_qft>`__ we know from Nielsen \& Chuang's standard textbook. They move into a
+Fourier basis nevertheless -- only of a different *group*.
 
 .. figure:: ../_static/demonstration_assets/qft_groups/hadamards.png
     :align: center
-    :width: 25%
+    :width: 15%
     :target: javascript:void(0);
 
-    Figure 1. Applying Hadamards to each qubit is a Quantum Fourier Transform, but with respect to the "bitstring" group :math:`Z_2^n`.
-
-The reason why you might not have appreciated this fact is that Hadamards do not form the
-`famous QFT <https://pennylane.ai/qml/demos/tutorial_qft>`__ we know from Nielsen \& Chuang's standard textbook. They move into a
-Fourier basis nevertheless -- only of a different *group*.
+    Figure 1. Applying Hadamards to each qubit is a Quantum Fourier Transform, but with respect to the "boolean" group :math:`Z_2^n`.
 
 Sometimes, knowing about the Fourier-theoretic interpretation of a quantum algorithm helps to understand what is
 going on under the hood. But group theory comes with a lot of jargon that can be overwhelming at first. This demo
@@ -29,11 +27,11 @@ not taken a course in group theory (yet).
 
 We will see that a group can be used to *define* what a Fourier transform (and hence a quantum Fourier transform) is, a fact
 that explains a lot of seemingly arbitrary assumptions in the standard Fourier transform.
-Groups are also implicitly used to design one of the world's most important scientific subroutines, the *Fast Fourier Transform* (FFT).
-The FFT is an algorithmic implementation of a Fourier transform that is polynomially faster than the naive one. (This may not
+Groups are also implicitly used to design one of the world's most important scientific subroutines, the *Fast Fourier Transform* (FFT),
+which is an algorithmic implementation of a Fourier transform that is polynomially faster than the naive one. (This may not
 sound like much to a quantum computing researcher, but the difference between quadratic and near-linear runtime is a game changer
 when it comes to data analysis.)  Lastly, it turns out [#Moore]_ that the group-based recipe of a Fast Fourier Transform
-can be implemented in "quantum parallel", which is a way to understand why QFTs are exponentially faster!
+can be implemented in "quantum parallel", which offers a way to understand why QFTs are exponentially faster!
 
 In short, groups are the fundamental structure behind quantum and classical Fourier transforms, and exploiting this
 structure is one of the reasons we believe that quantum computers could change how humans process information!
@@ -45,10 +43,10 @@ But let us start with the basics...
 # Fourier transforms through a group-theoretic lense
 # ---------------------------------------------------
 #
-# The standard Fourier transform
-# ++++++++++++++++++++++++++++++
+# The standard, discrete Fourier transform
+# ++++++++++++++++++++++++++++++++++++++++
 #
-# Let's focus on the `discrete Fourier transform <https://en.wikipedia.org/wiki/Discrete_Fourier_transform>`__
+# Let's focus on the common `discrete Fourier transform <https://en.wikipedia.org/wiki/Discrete_Fourier_transform>`__
 # for now. As a reminder, this mathematical operation
 # transforms a sequence :math:`f_1,...,f_N` of complex numbers into another sequence of complex numbers.
 # Sometimes the complex values are written as a
@@ -57,9 +55,9 @@ But let us start with the basics...
 #
 # .. math:: \hat{f}(k) = \frac{1}{\sqrt{N}}\sum_{i=1}^N f(x_i) e^{2 \pi i  \frac{k x}{N}}
 #
-# The expressions :math:`e^{2 \pi i  \frac{k x}{N}}` (and sometimes, following a different convention, :math:`e^{-2 \pi i  \frac{k x}{N}}`)
+# The expressions :math:`e^{2 \pi i  \frac{k x}{N}}`
 # correspond to Fourier basis functions with integer-valued
-# frequencies. A Fourier coefficient :math:`\hat{f}(x_i)`
+# frequencies :math:`k`, and a Fourier coefficient :math:`\hat{f}(x_i)`
 # can be seen as the projection of :math:`f(x)` onto the :math:`i`'th basis function. The function beyond
 # the interval :math:`0,..,N-1` is thought to be "periodically continued", which means that :math:`f(x_i) = f(x_i + N)`.
 #
@@ -78,9 +76,10 @@ def f(x):
 
 def f_hat(k):
     """Fourier coefficients of f."""
-    projection = [ f(x) * np.exp(2 * np.pi * 1j * k * x / N)/np.sqrt(N) for x in range(N)]
+    projection = [f(x) * np.exp(2 * np.pi * 1j * k * x / N)/np.sqrt(N) for x in range(N)]
     return  np.sum(projection)
 
+# plot this
 integers = np.array(range(N))
 f_vec = np.array([f(x) for x in integers])
 f_hat_vec = np.array([f_hat(k) for k in integers])
@@ -88,14 +87,10 @@ f_hat_vec = np.array([f_hat(k) for k in integers])
 fig, (ax1, ax2) = plt.subplots(2, 1)
 
 ax1.bar(integers, np.real(f_vec), color='dimgray')  # casting to real is needed in case we perform an inverse FT
-ax1.set_xticks(integers)
-ax1.set_xticklabels(integers, rotation=45, ha='right')
 ax1.set_title(f"function f")
 
 ax2.bar(integers + 0.05, np.imag(f_hat_vec), color='lightpink', label="imaginary part")
 ax2.bar(integers, np.real(f_hat_vec), color='dimgray', label="real part")
-ax2.set_xticks(integers)
-ax2.set_xticklabels(integers, rotation=45, ha='right')
 ax2.set_title("Fourier coefficients")
 plt.legend()
 plt.tight_layout()
@@ -107,23 +102,25 @@ plt.show()
 # why are the :math:`k` also integers? It turns out that all of these questions have an elegant answer if we
 # interpret the function values as a group!
 #
-# More precisely, we cano consider the :math:`x_i` as elements from the set of integers :math:`\{0,...,N-1\}`,
+# More precisely, we can consider the :math:`x_i` as elements from the set of integers :math:`\{0,...,N-1\}`,
 # together with a prescription of how to combine two integers to a third from this set. Choosing "addition modulo N" for
 # this operation (which means that :math:`(N-1)+1 = 0`), we get the *cyclic group* :math:`Z_N`.
 #
 # This choice explains the equidistant property: integers are by nature equally spaced in :math:`\mathbb{R}`. It also explains the
-# periodic continuation, as :math:`x_i = x_i + N` implies :math:`f(x_i) = f(x_i +N)`. The :math:`e^{2 \pi i  \frac{k x}{N}}` are
-# central group-theoretic objects called the *characters* of the group; they are functions :math:`\chi_k(x) = e^{2 \pi i  \frac{k x}{N}}`
-# that capture the structure of the group. Furthermore, the :math:`k` turn out to be elements
+# periodic continuation, as :math:`x_i = x_i + N` implies :math:`f(x_i) = f(x_i +N)`. The Fourier basis functions are
+# central group-theoretic objects called the *characters* of the group. Furthermore, the integer-valued frequencies :math:`k` turn out to be elements
 # from the *dual group* :math:`\hat{G}`, which in this case looks exactly like the original one. We can therefore think of the :math:`k`
 # also as integers in :math:`\{0,...,N-1\}` and treat Fourier space as a "mirror image" of the original space -- a convenient
-# fact that does not hold for every group. Lastly,
-# while the details exceed our scope here, the group perspective singles out the Fourier basis as the basis that decomposes the
-# space of functions into "invariant subspaces": if we shift a function
-# :math:`f(x) = a e^{2 \pi i  \frac{k x}{N}}` by any :math:`g \in G`,
-# then :math:`f(g+x) = a e^{2 \pi i  \frac{k g+x}{N}} = a e^{2 \pi i  \frac{k g}{N}} e^{2 \pi i  \frac{k x}{N}} = b e^{2 \pi i  \frac{k x}{N}}`
-# is the same basis function with another pre-factor; the function stays in the same "subspace".
-# In other words, the Fourier basis somehow makes visible the symmetries related to the group.
+# fact that we take for granted, but which does not hold for every group.
+#
+# .. note::  From a group-theoretic perspective, the Fourier basis has a special property that can be used to *define* what
+#            a Fourier transform is: In this basis, the so-called *regular representation* of the group is (block-)diagonal.
+#            The blocks reveal "invariant subspaces" which capture symmetries modeled by the group. In our case this
+#            means that if we shift a function
+#            :math:`f(x) = a e^{2 \pi i  \frac{k x}{N}}` that lives in the subspace spanned by
+#            a Fourier basis function by any :math:`h \in Z_N`,
+#            then :math:`f(x+h) = a e^{2 \pi i  \frac{k x+h}{N}} = a e^{2 \pi i  \frac{k g}{N}} e^{2 \pi i  \frac{k x}{N}} = b e^{2 \pi i  \frac{k x}{N}}`
+#            stays in the same subspace.
 #
 # Changing the group
 # ++++++++++++++++++
@@ -134,7 +131,10 @@ plt.show()
 # We could also change to a direct product of groups, such as :math:`Z_N \times Z_N \times ...` or :math:`\mathbb{R} \times \mathbb{R} \times ...` and get the
 # multi-dimensional Fourier transform whose basis functions are products of characters, one for each dimension.
 # Choosing :math:`N=2` we get the group :math:`Z_2^n` mentioned above, where we consider N "copies" of the binary set :math:`\{0,1\}`.
-# This captures boolean logic ubiquitous in quantum algorithms. The characters for :math:`Z_2^n` are :math:`e^{i k_0 x_0} \dots e^{i k_{N-1} x_{N-1}}`,
+# This captures boolean logic ubiquitous in quantum algorithms. The characters for :math:`Z_2^n` are of the form
+#
+# .. math:: e^{i k_0 x_0} \dots e^{i k_{N-1} x_{N-1}}, \;\; k_0,...,k_{N-1} \in \{0,1\}, \; x_0,...,x_{N-1} \in \{0,1\}
+#
 # where the product is the XOR of the two bits :math:`x_i k_i`. Each character evaluates to either -1 or 1.
 # The Fourier transform with these characters is also known as the
 # "Walsh transform", and reads
@@ -163,10 +163,11 @@ def chi(x, k):
 
 def g_hat(k):
     """Fourier coefficients of f."""
-    projection = [ g(x) * chi(x, k) for x in bitstrings]
+    projection = [g(x) * chi(x, k) for x in bitstrings]
     return  np.sum(projection)
 
 
+# plot this
 g_vec = np.array([g(x) for x in bitstrings])
 g_hat_vec = np.array([g_hat(k) for k in bitstrings])
 x_ticks = np.array(range(len(bitstrings)))
@@ -189,10 +190,10 @@ plt.show()
 
 #####################################################################
 # But we can also move to any other compact group.
-# This even includes non-Abelian groups, which are those where the composition of group elements does not commute, or
+# This even includes *non-Abelian* groups, which are those where the composition of group elements does not commute, or
 # :math:`g_1 g_2 \neq g_2 g_1`. Here, Fourier coefficients become matrix-valued objects, as the characters are replaced
 # by matrix-valued functions called *irreducible representations*. (If this interests you, Parsi Diaconis' book [#Diaconis]_ on
-# data analysis with group Fourier transforms is a great resource for Fourier transforms over the group of permutations...)
+# data analysis with group Fourier transforms is a great resource...)
 #
 
 #####################################################################
@@ -207,32 +208,28 @@ plt.show()
 #
 # .. math:: \sum_{x=1}^N f(x) |x \rangle \rightarrow \sum_{k=1}^N \hat{f}(k) |k \rangle.
 #
-# Let us verify this, but now with a function that, written as a vector, can be interpreted as a normalised quantum state!
+# This works because the Fourier transform, if normalised appropriately, is a unitary transform!
+#
+# Let us verify this by comparing the DFT of a function, as coded up above, with the result of a quantum circuit
+# that calls ``qml.QFT``. However, now we need a function that, written as a vector, can be interpreted
+# as a normalised quantum state. We therefore apply a slight modification to our function ``f`` from before.
 #
 
-norm = np.linalg.norm(np.array([f(x_) for x_ in range(N)]))
+norm_f = np.linalg.norm(np.array([f(x_) for x_ in range(N)]))
 
 def h(x):
     """Normalised version of f above, such that \sum_x |h(x)|^2 = 1."""
     x = x % N
-    return f(x) / norm
-
-
-
-# this function can be represented as a quantum state
-h_state = np.array([h(x) for x in range(N)])
-print("is normalised:", np.isclose(np.vdot(h_state, h_state), 1))
+    return f(x) / norm_f
 
 # compute the Fourier coefficients
 def h_hat(k):
     """Fourier coefficients of h."""
-    projection = [ h(x) * np.exp(2 * np.pi * 1j * k * x / N)/np.sqrt(N) for x in range(N)]
+    projection = [h(x) * np.exp(2 * np.pi * 1j * k * x / N)/np.sqrt(N) for x in range(N)]
     return  np.sum(projection)
 
-h_hat_vec = np.array([h_hat(x) for x in range(N)])
-
 #####################################################################
-# The QFT produces a state that is equivalent to the "classical" discrete Fourier transform.
+# Here is the quantum circuit, where we extract the output state from the simulator.
 #
 
 import pennylane as qml
@@ -246,8 +243,16 @@ def qft(state):
     qml.QFT(wires=range(4))
     return qml.state()
 
+
+#####################################################################
+# Now we can check that the QFT produces a state that is equivalent to the "classical" discrete Fourier transform.
+#
+
+h_vec = np.array([h(x) for x in range(N)])
+h_hat_vec = np.array([h_hat(x) for x in range(N)])
+
 # state after the quantum Fourier transform
-h_hat_state = qft(h_state)
+h_hat_state = qft(h_vec)
 
 print("QFT and DFT coincide:", np.allclose(h_hat_state, h_hat_vec))
 
@@ -268,7 +273,7 @@ def qft2(state):
     return qml.state()
 
 
-h_hat_state2 = qft2(h_state)
+h_hat_state2 = qft2(h_vec)
 print("QFTs over different groups coincide:", np.allclose(h_hat_state, h_hat_state2))
 
 #####################################################################
@@ -282,8 +287,13 @@ print("QFTs over different groups coincide:", np.allclose(h_hat_state, h_hat_sta
 # And how do FFTs give rise to Quantum Fourier Transforms with *poly-logarithmic* runtimes?
 #
 # As it turns out, the famous Cooley-Tukey implementation of a Fast Fourier transform can be interpreted as
-# a decomposition into Fourier transforms on *subgroups* of the original group. (A subgroup is a subset of the original
-# set that, under the group operation, fulfills all group axioms.)
+# a decomposition into Fourier transforms on *subgroups* of the original group.
+#
+# .. admonition:: Subgroup
+#    :class: note
+#
+#    A subgroup is a subset of the original set that, under the group operation, fulfills all group axioms.
+#
 # These subgroups can sometimes be decomposed into even smaller subgroups, leading to a recursive "divide-and-conquer"
 # algorithm. This technique is always possible for Abelian groups, but also for some non-Abelian groups such as the symmetric
 # group of permutations. Even more
@@ -291,7 +301,7 @@ print("QFTs over different groups coincide:", np.allclose(h_hat_state, h_hat_sta
 # FFT gives rise to an efficient QFT [#Moore]_ -- but more on that later.
 #
 # We will illustrate the basic idea of the FFT using the cyclic group :math:`Z_{6}`. It will get a little dense, but
-# the maths is not complicated: all we do is a change of variables.
+# the maths is not complicated: all we do is change the variables and apply cosmetic rearrangements to the DFT equation.
 #
 
 #######################################################################
@@ -304,12 +314,12 @@ print("QFTs over different groups coincide:", np.allclose(h_hat_state, h_hat_sta
 # .. math::
 #           \hat{f}(k) = \sum_{x=0}^5 f(x) e^{\frac{2 \pi i}{6} x k }
 #
-# The entire trick of the Cooley-Tukey algorithm is a change of variables,
+# The trick of the Cooley-Tukey algorithm is a change of variables such as this:
 #
 # .. math::
 #         \begin{align}
-#          x &\rightarrow 3 x_1 + x_2, \;\; x_1 = 0,1, \; x_2 = 0,1,2 \\
-#          k &\rightarrow 2k_2 + k_1 , \;\; k_1 = 0,1,2 \; k_2 = 0,1
+#          x &\rightarrow 3 x_1 + x_2, \;\; x_1 &= 0,1, \;\; x_2 &= 0,1,2 \\
+#          k &\rightarrow 2k_2 + k_1 , \;\; k_1 &= 0,1,2 \;\; k_2 &= 0,1
 #         \end{align}
 #
 # Implicitly, we are representing the set of integers :math:`\{0,1,2,3,4,5\}` first as:
@@ -340,7 +350,7 @@ print("QFTs over different groups coincide:", np.allclose(h_hat_state, h_hat_sta
 # over :math:`3x_1`, namely  :math:`\{0, 3\}`, :math:`\{1, 4\}`, and :math:`\{2, 5\}`. These are combined with
 # an appropriate "twiddle factor" :math:`e^{\frac{2 \pi i}{6} (2k_2+k_1) x_2}` that weighs the building blocks.
 #
-# We explicitly implement this with the function from above:
+# We explicitly implement this with the function used at the very beginning:
 #
 
 N = 6
@@ -354,7 +364,7 @@ def f2(x1, x2):
 
 def f_subgroup(x2, k1):
     """Fourier transform over a smaller group or coset."""
-    projection = [f2(x1, x2) * np.exp(2 * np.pi * 1j * k1 * x1 / 2)/np.sqrt(2) for x1 in range(2)]
+    projection = [f2(x1, x2) * np.exp(2*np.pi*1j * k1*x1/2)/np.sqrt(2) for x1 in range(2)]
     return  np.sum(projection)
 
 def f_hat_fft(k1, k2):
@@ -378,22 +388,20 @@ def f(x):
 
 def f_hat(k):
     """Fourier coefficients of f."""
-    projection = [ f(x) * np.exp(2 * np.pi * 1j * k * x / N)/np.sqrt(N) for x in range(N)]
+    projection = [f(x) * np.exp(2 * np.pi * 1j * k * x / N)/np.sqrt(N) for x in range(N)]
     return  np.sum(projection)
 
 f_hat_vec = np.array([f_hat_fft(k1, k2) for k1 in range(2) for k2 in range(3)])
 print("FFT and DFT coincide:", np.allclose(f_hat_vec, f_hat_vec_fft))
 
-
-
 #######################################################################
 # Quantifying the runtime gains
 # +++++++++++++++++++++++++++++
 #
-# The FFT algorithm devises to compute :math:`\hat{f}(2k_2+k_1)` in two steps:
+# The FFT algorithm devises to compute :math:`\hat{f}(k) = \hat{f}(2k_2+k_1)` in two steps:
 #
 # 1. First, compute the terms in the inner sum, :math:`\tilde{f}(x_2, k_1) = \sum_{x_1=0}^1 e^{\frac{2 \pi i}{2} x_1 k_1 } f(3 x_1 + x_2)`
-#    or ``f_subgroup``.
+#    as done in ``f_subgroup``.
 #    There are 9 such terms (as we have 3 options to pick :math:`k_1` and 3 options to pick :math:`x_2`). Each term requires
 #    summing over 2 expressions (as :math:`x_1` runs over 2 values). Overall, there are 18 terms involved.
 #
@@ -402,7 +410,9 @@ print("FFT and DFT coincide:", np.allclose(f_hat_vec, f_hat_vec_fft))
 #    Overall, there are 12 terms involved.
 #
 # Together, the FFT algorithm includes 12 + 18 = 30 terms. The naive sum, instead, would compute the 6 Fourier coefficients
-# with a sum over 6 terms each, using 6*6=36 terms altogether. Of course, in this "mini" example the savings are not very
+# with a sum over 6 terms each, using 6*6=36 terms altogether.
+#
+# Of course, in this "mini" example the savings are not very
 # impressive. The overall scaling however reduces from :math:`O(N^2)` to :math:`O(N \mathrm{log}N)`, which is a quadratic
 # speedup, and made it possible for the FFT to become one of the most important algorithms in science and engineering.
 #
@@ -413,11 +423,11 @@ print("FFT and DFT coincide:", np.allclose(f_hat_vec, f_hat_vec_fft))
 #
 # As hinted at before, the change of variables that was the core idea behind the Cooley-Tukey implementation of the Fast Fourier Transform is
 # in fact a decomposition of the original group -- here :math:`Z_{6}` -- into a subgroup with the
-# elements :math:`\{0,3\}`, and its "cosets" or shifted copies :math:`\{1,4\}` and :math:`\{2,5\}` [#Maslen, #Rockmore]_.
-# The subgroup is "isomorphic to" :math:`Z_{2}`, which means that it behaves like :math:`Z_{2}`.
-# The new variable :math:`x_2` selects between the copy.
+# elements :math:`\{0,3\}`, and its "cosets" or shifted copies :math:`\{1,4\}` and :math:`\{2,5\}` (see [#Maslen]_, [#Rockmore]_).
+# The subgroup is "isomorphic to" :math:`Z_{2}`, which loosely speaking means that it ``behaves like'' :math:`Z_{2}`.
+# The new variable :math:`x_2` selects between the copies.
 #
-# For example, for :math:`5=3*x_1 + x_2` we have that :math:`x_2=2` selects the third copy of the subgroup,
+# For example, for :math:`5=3 \cdot 1 + 2` we have that :math:`x_2=2` selects the third copy of the subgroup,
 # while :math:`x_1=1` selects the second element within the copy. It is a fundamental result in group theory that
 # "shifted" copies of a subgroup tile the entire group, which is why the new coordinates can always be used to express any
 # element :math:`x \in G`.
@@ -427,8 +437,8 @@ print("FFT and DFT coincide:", np.allclose(f_hat_vec, f_hat_vec_fft))
 #     :width: 75%
 #     :target: javascript:void(0);
 #
-#     Figure 2. The FFT algorithm divides the group of integers :math:`\{0,...,5\}` into copies of the subgroup :math:`\{0,3\}`, :math:`\{2,4\}` and :math:`\{3,5\}`,
-#     and then divides these copies into subgroups of a single element.
+#     Figure 2. The FFT algorithm divides the group of integers :math:`\{0,...,5\}` into the subgroup :math:`\{0,3\}`
+#     and its copies :math:`\{2,4\}` and :math:`\{3,5\}`.
 #
 # The splitting of the variable :math:`k` is related to the concept of "restricting a character" to the subgroup.
 # Essentially, it allows us turn the characters, or Fourier basis functions :math:`e^{\frac{2 \pi i}{6} x k }`
@@ -441,23 +451,34 @@ print("FFT and DFT coincide:", np.allclose(f_hat_vec, f_hat_vec_fft))
 # From FFTs to QFTs
 # -----------------
 #
-# Well then, Fourier transforms are all about groups, and sometimes allow the construction of fast algorithms.
-# But we also claimed (following [#Moore]_) that
-# any FFT can be turned into a QFT. In other words, there are efficient quantum algorithms that transform the amplitudes
+# Well then, Fourier transforms are all about groups, and sometimes allow the construction of classical algorithms that
+# scale almost-linearly with the group size.
+# But we also claimed that
+# any FFT can be turned into a QFT which scales logarithmically in the group size.
+# In other words, there are efficient quantum algorithms that transform the amplitudes
 # of a quantum state according to any FFT.
 #
-# The generic algorithm is not trivial, but it basically works upwards in the "tower" of subgroups, and combines the
-# results. The computational basis state first holds information on the group element expressed as
-# "coordinates" :math:`x_1, x_2` that tells us in
-# which subgroup (copy) it is in for each level of the subgroup tower. The coordinates then successively get replaced by frequencies,
-# as intermediate results like :math:`\tilde{f}(x_2, k_1)` above get computed. Finally, the computational basis state refers
-# to the frequency components :math:`k_1, k_2`, and the amplitudes correspond to the Fourier coefficients. The
-# crucial point is that the Fourier transforms over the subgroup copies are implemented in quantum parallel - this is
-# the magic of the quantum speedup!
+# The generic blueprint is explained in a paper from 2003 (when QFTs were all the rage in quantum computing) [#Moore]_.
+# Essentially, and following the example from before, we start with a quantum state of the form
 #
-# If this was confusing, you can also look closely at the standard textbook circuit for the QFT to recognise
+# .. math:: \sum_{x_1=0}^1 \sum{x_2=0}^2 f(x_1, x_2) | x_1 x_2 \rangle
+#
+# where :math:`| x_1 x_2 \rangle` encodes the two variables :math:`3x_1 + x_2 = x` in binary representation into
+# two different computational basis registers. From here, we first prepare a state that encodes
+# the intermediate functions :math:`\tilde{f}(k_1, x_2)`,
+#
+# .. math:: \sum_{k_1=0}^2 \sum{x_2=0}^2 \tilde{f}(k_1, x_2) | k_1 x_2 \rangle
+#
+# and then move from there to the final state
+#
+# .. math:: \sum_{k_1=0}^2 \sum{k_2=0}^1 \hat{f}(k_1, k_2) | k_1 k_2 \rangle.
+#
+# The crucial point is that the "smaller Fourier transforms", :math:`\tilde{f}(k_1, x_2)`, can be computed
+# and combined in quantum parallel!
+#
+# You can also look closely at the standard textbook circuit for the QFT to recognise
 # the divide-and-conquer strategy
-# of the FFT.
+# of the FFT: the algorithm acts recursively on subgroups and their cosets.
 #
 # .. figure:: ../_static/demonstration_assets/qft_groups/qft3.jpeg
 #     :align: center
@@ -467,45 +488,58 @@ print("FFT and DFT coincide:", np.allclose(f_hat_vec, f_hat_vec_fft))
 #     Figure 3. Circuit of the standard QFT for 3 qubits.
 #
 #
-# Firstly, note that the algorithm has a recursive structure on subgroups.
-# The most significant bit in a binary representations of the cyclic group, say :math:`Z_{2^4}` of elements
+# To see this, consider that the most significant bit in a binary representations of the cyclic group,
+# say :math:`Z_{2^3}` of elements
 #
-# .. math::  0 \; \hat{=} \; 0000,\; ...\; ,2^n-1 \; \hat{=} \;1111,
+# .. math::  \{0,...,7 \}, \text{ (or } \{000,...,111\}\text{ in binary notation)}
 #
 # "cuts" the integers into a
-# subgroup :math:`Z_{2^3}` with elements
+# subgroup :math:`Z_{2^2}` with elements
 #
-# .. math:: 0 \; \hat{=} \; 0000,\; ...\; ,7 \;\hat{=} \;0111
+# .. math:: \{0,...,3\}, \text{ (or } \{000,...,011\}\text{)},
 #
 # and its coset
 #
-# .. math:: 8 \hat{=} 1000,...,15 \hat{=} 1111.
+# .. math:: \{4,...,7\}, \text{ (or } \{100,...,111\}\text{)}.
 #
-# Hence, by applying a gate pattern to qubits 1,...,n, and then to
-# 2,...,n etc implements an operation to smaller and smaller subgroups!
-# Secondly, note that the controlled operations somehow control for the "twiddle factor" above, as they introduce a phase.
+# Hence, by applying gates to qubits 1,2,3, and then to
+# 2,3 and finally to qubit 3 implements an operation on smaller and smaller subgroups, working the divide-and-conquer
+# strategy backwards!
+#
+# Finally, it is also suspicious that the controlled operations introduce a phase that looks somewhat like a "twiddle factor" used
+# to combine the smaller Fourier transforms.
+# For example, the controlled operations in the blue box apply a phase
+# :math:`e^{\frac{2 \pi i 2^0}{2^3} (2^1 x_2 + 2^0 x_3)}` to the first qubit, where :math:`x_2, x_3\in \{0,1\}` are
+# the respective states of the second and third qubit queried by the control.
+#
 # And lastly, the Hadamard gate, which sums amplitudes,
 # combines the "smaller" Fourier transforms performed on the :math:`q_1 = 0` and :math:`q_1=1`
 # branches together (with a phase that is taken into account by the twiddle factor).
+#
+# In short, and while the details are more complex than we can cover here, our favourite quantum subroutine, the
+# QFT, is nothing but a Fast Fourier Transform in parallel -- enabled by groups!
 #
 
 #######################################################################
 # Conclusion
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++
-# The take-away from this tutorial are three important insights:
+# Congratulations if you made it to the end, this was a lot of material to cover!
+# Let's summarise everything we learned as three important insights:
 #
-# 1. The Fourier transform is defined with respect to functions over groups. The usual discrete Fourier transform, for
+# 1. The *Fourier transform* can be defined with respect to functions over groups. The usual discrete Fourier transform, for
 #    example, uses the cyclic group of integers.
-# 2. The Fast Fourier Transform exploits that for some groups, a Fourier transform can be decomposed into smaller blocks on copies of subgroups.
+# 2. The *Fast Fourier Transform* exploits that for some groups, a Fourier transform can be decomposed into "smaller" Fourier transforms
+#    that consider subgroups (and their copies).
 #    This provides a speedup to nearly-linear runtime in the size of the group.
-# 3. The Quantum Fourier Transform implements the smaller blocks of the FFT in "quantum parallel", thereby realising a runtime
+# 3. The *Quantum Fourier Transform* calculates these smaller blocks in "quantum parallel", thereby realising a runtime
 #    that is logarithmic in the size of the group.
 #
 # Group structure and Fourier transforms are important building blocks of quantum algorithms, and a fascinating
 # reason for why quantum computers might offer unique ways of information processing. Of course, the caveat is
-# that quantum implementations of Fourier transforms cannot compute Fourier coefficients directly, as they are
-# amplitudes of a quantum state. All we can do is sample from the final state, or manipulate it in interesting ways --
-# creating a wonderful playground for quantum algorithms design.
+# that quantum implementations of Fourier transforms cannot compute Fourier coefficients directly. After a QFT, the
+# Fourier coefficients are the amplitudes of a quantum state.
+# All we can do is sample from the final state, or manipulate it in interesting ways --
+# creating a wonderful playground for quantum algorithm design.
 #
 
 #######################################################################
