@@ -15,7 +15,7 @@ Fourier basis nevertheless -- only of a different *group*.
 
 .. figure:: ../_static/demonstration_assets/qft_groups/hadamards.png
     :align: center
-    :width: 15%
+    :width: 10%
     :target: javascript:void(0);
 
     Figure 1. Applying Hadamards to each qubit is a Quantum Fourier Transform, but with respect to the "boolean" group :math:`Z_2^n`.
@@ -434,16 +434,16 @@ print("FFT and DFT coincide:", np.allclose(f_hat_vec, f_hat_vec_fft))
 #
 # .. figure:: ../_static/demonstration_assets/qft_groups/divide.png
 #     :align: center
-#     :width: 75%
+#     :width: 50%
 #     :target: javascript:void(0);
 #
-#     Figure 2. The FFT algorithm divides the group of integers :math:`\{0,...,5\}` into the subgroup :math:`\{0,3\}`
-#     and its copies :math:`\{2,4\}` and :math:`\{3,5\}`.
+#     Figure 2. The FFT algorithm divides the group of integers :math:`\{0,...,5\}` into the subgroup :math:`\{0,3\}` isomorphic
+#     to :math:`Z_2`, and its copies or "cosets" :math:`\{2,4\}` and :math:`\{3,5\}`.
 #
 # The splitting of the variable :math:`k` is related to the concept of "restricting a character" to the subgroup.
 # Essentially, it allows us turn the characters, or Fourier basis functions :math:`e^{\frac{2 \pi i}{6} x k }`
 # related to the original group, into characters of the subgroup, :math:`e^{\frac{2 \pi i}{2} x_1 k_1 }` by changing the period.
-# Such a trick generalises to much more complicated groups, including those where there is no "cyclic" notion of
+# Surprisingly, such a trick generalises to much more complicated groups, including those where there is no "cyclic" notion of
 # ordered integers.
 #
 
@@ -491,7 +491,7 @@ print("FFT and DFT coincide:", np.allclose(f_hat_vec, f_hat_vec_fft))
 # To see this, consider that the most significant bit in a binary representations of the cyclic group,
 # say :math:`Z_{2^3}` of elements
 #
-# .. math::  \{0,...,7 \}, \text{ (or } \{000,...,111\}\text{ in binary notation)}
+# .. math::  \{0,...,7\}, \text{ (or } \{000,...,111\}\text{ in binary notation)}
 #
 # "cuts" the integers into a
 # subgroup :math:`Z_{2^2}` with elements
