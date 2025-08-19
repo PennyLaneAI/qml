@@ -53,7 +53,7 @@ import matplotlib.pyplot as plt
 import itertools
 
 plt.style.use("pennylane.drawer.plot")
-plt.rcParams.update({"font.size": 10, "font.family": "STIXGeneral", "mathtext.fontset": "cm"})
+plt.rcParams.update({"font.size": 14, "font.family": "STIXGeneral", "mathtext.fontset": "cm"})
 
 # Define parameters of max-XORSAT problem Bx=(mod2)v
 B = pnp.array([[1, 0, 0, 0], [1, 1, 0, 0], [0, 1, 1, 0], [0, 0, 1, 1], [0, 0, 0, 1]])  # Matrix B
@@ -139,7 +139,7 @@ plt.show()
 # PennyLane implementation of DQI
 # -------------------------------
 # 
-# Encode the polynomial degree  :math:`l`
+# Encode the polynomial degree  l
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # We are going to prepare the superposition :math:`\sum_{k=0}^{l} w_k|k\rangle`. As previously stated,
@@ -201,11 +201,11 @@ print("the optimal values for w are", w_k)
 # Let’s just keep in mind that the :math:`k` values we are encoding are :math:`1` and :math:`2` for
 # subsequent steps.
 # 
-# Prepare Dicke states with  :math:`k`  excitations
+# Prepare Dicke states with  k  excitations
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # For this step, we need a conditional operation that prepares Dicke states
-# :math:`|D^{m}_{k}\rangle`-where the superscript is the number of qubits and the subscript is the
+# :math:`|D^{m}_{k}\rangle`--where the superscript is the number of qubits and the subscript is the
 # number of excitations-for each index :math:`k` in the weight register. For our particular example,
 # we will prepare Dicke states with one and two excitations.
 # 
