@@ -318,8 +318,8 @@ print("QFTs over different groups coincide:", np.allclose(h_hat_state, h_hat_sta
 #
 # .. math::
 #         \begin{align}
-#          x &\rightarrow 3 x_1 + x_2, \;\; x_1 &= 0,1, \;\; x_2 &= 0,1,2 \\
-#          k &\rightarrow 2k_2 + k_1 , \;\; k_1 &= 0,1,2 \;\; k_2 &= 0,1
+#          x &\rightarrow 3 x_1 + x_2, \quad x_1 = 0,1, \;\; x_2 &= 0,1,2 \\
+#          k &\rightarrow 2k_2 + k_1, \quad k_1 = 0,1,2 \;\; k_2 &= 0,1
 #         \end{align}
 #
 # Implicitly, we are representing the set of integers :math:`\{0,1,2,3,4,5\}` first as:
@@ -461,17 +461,17 @@ print("FFT and DFT coincide:", np.allclose(f_hat_vec, f_hat_vec_fft))
 # The generic blueprint is explained in a paper from 2003 (when QFTs were all the rage in quantum computing) [#Moore]_.
 # Essentially, and following the example from before, we start with a quantum state of the form
 #
-# .. math:: \sum_{x_1=0}^1 \sum{x_2=0}^2 f(x_1, x_2) | x_1 x_2 \rangle
+# .. math:: \sum_{x_1=0}^1 \sum_{x_2=0}^2 f(x_1, x_2) | x_1 x_2 \rangle
 #
 # where :math:`| x_1 x_2 \rangle` encodes the two variables :math:`3x_1 + x_2 = x` in binary representation into
-# two different computational basis registers. From here, we first prepare a state that encodes
+# two different computational basis registers of sufficient size. From here, we first prepare a state that encodes
 # the intermediate functions :math:`\tilde{f}(k_1, x_2)`,
 #
-# .. math:: \sum_{k_1=0}^2 \sum{x_2=0}^2 \tilde{f}(k_1, x_2) | k_1 x_2 \rangle
+# .. math:: \sum_{k_1=0}^2 \sum_{x_2=0}^2 \tilde{f}(k_1, x_2) | k_1 x_2 \rangle
 #
 # and then move from there to the final state
 #
-# .. math:: \sum_{k_1=0}^2 \sum{k_2=0}^1 \hat{f}(k_1, k_2) | k_1 k_2 \rangle.
+# .. math:: \sum_{k_1=0}^2 \sum_{k_2=0}^1 \hat{f}(k_1, k_2) | k_1 k_2 \rangle.
 #
 # The crucial point is that the "smaller Fourier transforms", :math:`\tilde{f}(k_1, x_2)`, can be computed
 # and combined in quantum parallel!
