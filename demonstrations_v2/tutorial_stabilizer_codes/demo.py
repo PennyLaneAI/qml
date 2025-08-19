@@ -53,7 +53,7 @@ A general qubit :math:`\vert \psi\rangle = \alpha \vert 0\rangle + \beta \vert 1
 
 .. math::
 
-    \alpha \vert 000 \rangle + \beta \vert 111\rangle \mapsto  \alpha \vert \bar{0}\rangle + \beta \vert \bar{1}\rangle = \bar{\psi}
+    \alpha \vert 000 \rangle + \beta \vert 111\rangle \mapsto  \alpha \vert \bar{0}\rangle + \beta \vert \bar{1}\rangle = \vert \bar{\psi} \rangle.
 
 This encoding can be done via the following quantum circuit.
 
@@ -133,7 +133,7 @@ print("|111> component: ", encode_qnode(alpha, beta)[7])
 #
 #    ..
 #
-# When there is no error, the syndrome measurement will yield 0 on both auxiliary qubits
+# When there is no error, the syndrome measurement will yield 0 on both auxiliary qubits.
 # Let us verify the full table by implementing the syndrome measurement in PennyLane.
 
 
@@ -292,8 +292,6 @@ print(
 # Measuring the two operators therefore reveals whether an error occurred and, as shown in the syndrome table below,
 # identifies the qubit on which it happened. In this sense, detecting and correcting errors requires only two Pauli operators
 # and the outcomes of their eigenvalue measurements.
-
-#
 #
 # .. figure:: ../_static/demonstration_assets/stabilizer_codes/table_eigenvalues.png
 #    :align: center
