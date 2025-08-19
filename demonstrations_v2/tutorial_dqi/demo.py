@@ -76,7 +76,6 @@ def objective_function(x):
 f_x_array = []
 f_x_array_random = [objective_function(pnp.random.randint(0, 2, size=n)) for i in range(n_samples)]
 
-# plt.figure(figsize=(3, 2))
 plt.hist(f_x_array_random, bins=30, density=True)
 plt.xlabel(r"$f(x)$")
 plt.ylabel("density")
@@ -140,7 +139,7 @@ plt.show()
 # PennyLane implementation of DQI
 # -------------------------------
 # 
-# Encode the polynomial degree :math:`l`
+# Encode the polynomial degree  :math:`l`
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # We are going to prepare the superposition :math:`\sum_{k=0}^{l} w_k|k\rangle`. As previously stated,
@@ -202,7 +201,7 @@ print("the optimal values for w are", w_k)
 # Let’s just keep in mind that the :math:`k` values we are encoding are :math:`1` and :math:`2` for
 # subsequent steps.
 # 
-# Prepare Dicke states with :math:`k` excitations
+# Prepare Dicke states with  :math:`k`  excitations
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # For this step, we need a conditional operation that prepares Dicke states
@@ -587,7 +586,6 @@ DQI_array = pnp.array(all_bit_lists)  # DQI sample array
 f_x_array_DQI = [objective_function(DQI_array[i]) for i in range(n_samples)]
 
 print(results)
-plt.figure(figsize=(3, 2))
 plt.hist(f_x_array_random, bins=30, alpha=0.7, density=True, label="random sampling")
 plt.hist(f_x_array_DQI, bins=30, alpha=0.5, density=True, label="DQI sampling")
 plt.xlabel(r"$f(x)$")
