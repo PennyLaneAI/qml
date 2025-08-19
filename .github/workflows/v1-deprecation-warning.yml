@@ -31,7 +31,7 @@ jobs:
           fi
 
       - name: Comment on PR
-        if: github.event_name == 'pull_request' && steps.check.outputs.success == 'false'
+        if: steps.check.outputs.success == 'false'
         uses: XanaduAI/cloud-actions/create-and-update-pull-request-comment@main
         with:
           github_token: ${{ secrets.github_token }}
