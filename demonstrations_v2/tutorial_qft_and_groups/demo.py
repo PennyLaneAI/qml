@@ -15,7 +15,7 @@ Fourier basis nevertheless -- only of a different *group*.
 
 .. figure:: ../_static/demonstration_assets/qft_groups/hadamards.png
     :align: center
-    :width: 10%
+    :width: 15%
     :target: javascript:void(0);
 
     Figure 1. Applying Hadamards to each qubit is a Quantum Fourier Transform, but with respect to the "boolean" group :math:`Z_2^n`.
