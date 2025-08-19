@@ -93,9 +93,19 @@ PennyLane. We aim to perform a transformation by the Legendre polynomial
 :math:`(5 x^3 - 3x)/2`.
 As you will soon learn, QSP can be viewed as a special case of QSVT. We thus use the :func:`~.pennylane.qsvt`
 operation to construct the output matrix and compare the resulting transformation to
-the target polynomial.
+the target polynomial. This function implements alternate products of :math:`U(a)` and :math:`S(\phi)`
+as described above:
 
 """
+
+target_poly = [0, -3 * 0.5, 0, 5 * 0.5]
+a = 0.5
+qml.draw_mpl(qml.qsvt(a,  target_poly, encoding_wires=[0], block_encoding="embedding").decomposition)()
+
+##############################################################################
+# In this figure :math:`\Pi_\phi` are phase angle rotations (:math:`S(\phi)`) and `BlockEncode` calls
+# are implementations of a block encoding of the scalar :math:`a`. (this needs to be rewritten because
+# block encoding is not explaine yet in the demo)
 
 import pennylane as qml
 import numpy as np
@@ -115,8 +125,8 @@ a_vals = np.linspace(-1, 1, 50)
 qsvt = [np.real(qsvt_output(a)) for a in a_vals]  # neglect small imaginary part
 target = [np.polyval(target_poly[::-1], a) for a in a_vals]  # evaluate polynomial
 
-plt.plot(a_vals, target, label="target")
-plt.plot(a_vals, qsvt, "*", label="qsvt")
+plt.plot(a_vals, target, label="target polynomial: (5x^3 - 3x)/2")
+plt.plot(a_vals, qsvt, "*", label="qsvt circuit matrix top left entry")
 
 plt.legend()
 plt.show()
