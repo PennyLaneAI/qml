@@ -10,7 +10,7 @@ pennylane-qulacs @ git+https://github.com/PennyLaneAI/pennylane-qulacs.git#egg=p
 iqpot @ git+https://github.com/XanaduAI/iqpopt.git#egg=iqpopt
 # Install specific lightning version that catalyst expects, then catalyst
 pennylane-lightning==0.43.0.dev12
-pennylane-catalyst @ git+https://github.com/PennyLaneAI/catalyst.git#egg=pennylane-catalyst
+pennylane-catalyst==0.13.0.dev33
 
 
 chex<1.0.0
