@@ -444,9 +444,9 @@ print(DQI(m, n, l))
 #     For this demo, we choose :math:`l=2` such that it is less than half the distance of the code :math:`d=5` and this condition is met.
 #     For a detailed discussion of the restrictions on :math:`l`, please refer to the original paper [#Jordan2024]_. 
 # 
-# To keep things simple, we will use a brute-force approach for decoding by building a Lookup Table
+# To keep things simple, we will use a straightforward approach for decoding by building a Lookup Table
 # (LUT) in which we compute the syndrome for each possible error using the classical function
-# ``syndrome_LUT``. Then, for each syndrome in the syndrome register, the corresponding error is
+# ``syndrome_LUT`` [Classiq]_. Then, for each syndrome in the syndrome register, the corresponding error is
 # uncomputed in the error register using controlled bit-flip operations. We will now integrate this
 # into our\ ``DQI`` function and see in the output how the syndrome register is uncomputed.
 # 
@@ -627,3 +627,8 @@ plt.show()
 #    Natchapol Patamawisut, Naphan Benchasattabuse, Michal Hajdušek, and Rodney Van Meter.
 #    "Quantum Circuit Design for Decoded Quantum Interferometry."
 #    `<https://arxiv.org/abs/2504.18334>`__, 2025.
+#
+# .. [#Classiq] 
+#    Classiq. 
+#    “Decoded Quantum Interferometry Algorithm.”
+#    `<https://docs.classiq.io/latest/explore/algorithms/dqi/dqi_max_xorsat/>`__, 2025.
