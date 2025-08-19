@@ -4,7 +4,6 @@ permissions:
   pull-requests: write
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
 
 jobs:
   check-directory:
