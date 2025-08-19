@@ -287,83 +287,6 @@ def _build_demo(
             pre=dev,
         )
 
-    # For dev, follow the same install procedure and order as in the Makefile.
-    # This is critical to get the proper versions of PennyLane, Catalyst,
-    # and various plugins.
-    # TODO: See if we can clean this up and streamline in the future...
-    # TODO: Remove RC branch for PennyLane install post-release.
-    # if dev and execute:
-    #     # Cirq
-    #     cmds.pip_install(
-    #         build_venv.python,
-    #         "--upgrade",
-    #         "git+https://github.com/PennyLaneAI/pennylane-cirq.git#egg=pennylane-cirq",
-    #         use_uv=False,
-    #         quiet=False,
-    #     )
-    #     # Qiskit
-    #     cmds.pip_install(
-    #         build_venv.python,
-    #         "--upgrade",
-    #         "git+https://github.com/PennyLaneAI/pennylane-qiskit.git#egg=pennylane-qiskit",
-    #         use_uv=False,
-    #         quiet=False,
-    #     )
-    #     # Qulacs
-    #     cmds.pip_install(
-    #         build_venv.python,
-    #         "--upgrade",
-    #         "git+https://github.com/PennyLaneAI/pennylane-qulacs.git#egg=pennylane-qulacs",
-    #         use_uv=False,
-    #         quiet=False,
-    #     )
-    #     # Catalyst
-    #     cmds.pip_install(
-    #         build_venv.python,
-    #         "--upgrade",
-    #         "--extra-index-url",
-    #         "https://test.pypi.org/simple/",
-    #         "PennyLane-Catalyst",
-    #         use_uv=False,
-    #         quiet=False,
-    #         pre=True,
-    #     )
-    #     # Lightning
-    #     cmds.pip_install(
-    #         build_venv.python,
-    #         "--upgrade",
-    #         "--extra-index-url",
-    #         "https://test.pypi.org/simple/",
-    #         "PennyLane-Lightning",
-    #         use_uv=False,
-    #         quiet=False,
-    #         pre=True,
-    #     )
-    #     # PennyLane
-    #     cmds.pip_install(
-    #         build_venv.python,
-    #         "--upgrade",
-    #         "git+https://github.com/PennyLaneAI/pennylane.git@v0.42.0-rc0#egg=pennylane",
-    #         use_uv=False,
-    #         quiet=False,
-    #     )
-    #     # Iqpopt
-    #     cmds.pip_install(
-    #         build_venv.python,
-    #         "--upgrade",
-    #         "git+https://github.com/XanaduAI/iqpopt.git#egg=iqpopt",
-    #         use_uv=False,
-    #         quiet=False,
-    #     )
-    #     # We need to bump flax here, after Jax has been bumped by Catalyst
-    #     cmds.pip_install(
-    #         build_venv.python,
-    #         "--upgrade",
-    #         "flax==0.10.6",
-    #         use_uv=False,
-    #         quiet=False,
-    #     )
-
     stage_dir = ctx.build_dir / "demonstrations"
     fs.clean_dir(stage_dir)
     # Need a 'GALLERY_HEADER' file for sphinx-gallery
@@ -410,20 +333,6 @@ def _build_demo(
     # Move the objects.inv file so we can merge them once all the demos are built
     if target is BuildTarget.HTML:
         fs.copy_any(ctx.build_dir / "html/objects.inv", out_dir)
-
-
-def _install_build_dependencies(venv: Virtualenv, build_dir: Path):
-    """Install dependencies for running sphinx-build into `venv`."""
-    logger.info("Installing sphinx-build dependencies")
-
-    build_requirements_file = build_dir / "requirements-build.txt"
-    cmds.poetry_export(
-        sys.executable,
-        build_requirements_file,
-        groups=("base",),
-        format="requirements.txt",
-    )
-    cmds.pip_install(venv.python, "-r", build_requirements_file, use_uv=False)
 
 
 def _package_demo(
