@@ -38,7 +38,7 @@ jobs:
           comment_uid: v1-deprecation-warning
           pull_request_number: ${{ github.event.pull_request.number }}
           comment_body: |
-            ### Deprecation Warning
+            ### ⚠️ Deprecation Warning ⚠️ 
             You are modifying files in the \`demonstrations/\` directory. This directory is no longer in use.
 
             Please add or move your files to \`demonstrations_v2/\`, and use the following [format](./CONTRIBUTING.md#manually-creating-a-demo):
