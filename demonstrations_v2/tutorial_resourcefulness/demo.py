@@ -589,7 +589,7 @@ print(np.round(np.abs(Uvec_diag), 4))
 # Indeed in genear Q will not be unitary, as we can quickly check by checking if any two of its columns are orthogonal
 #
 
-print("The inner product between the second and third column of Q is: ", np.dot(Q[:1],Q[:2]).item())
+print("The inner product between the second and third column of Q is: ", np.dot(Q[:,1],Q[:,2]).item())
 
 ######################################################################
 # This is just becuase the eigenvecotrs of the random linear combiniation that we implemented before are only guaranteed to
