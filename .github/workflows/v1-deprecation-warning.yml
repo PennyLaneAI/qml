@@ -41,7 +41,7 @@ jobs:
             ### Deprecation Warning
             You are modifying files in the \`demonstrations/\` directory. This directory is no longer in use.
 
-            Please move the demo to \`demonstrations_v2/\` and use the following [format](./CONTRIBUTING.md#manually-creating-a-demo):
+            Please add or move your files to \`demonstrations_v2/\`, and use the following [format](./CONTRIBUTING.md#manually-creating-a-demo):
 
             \`\`\`
             your_demo_name/
