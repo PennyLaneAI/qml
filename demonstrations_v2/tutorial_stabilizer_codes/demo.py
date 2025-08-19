@@ -49,11 +49,11 @@ qubits, or **logical codewords**, :math:`\vert \bar{0}\rangle` ("logical 0") and
 
     \vert \bar{0} \rangle \mapsto \vert 000 \rangle, \quad \vert \bar{1} \rangle \mapsto \vert 111 \rangle.
 
-A general qubit :math:`\vert \bar{\psi}\rangle = \alpha \vert \bar{0}\rangle + \beta \vert \bar{1}\rangle` is then encoded as
+A general qubit :math:`\vert \psi\rangle = \alpha \vert 0\rangle + \beta \vert 1\rangle` is then encoded as
 
 .. math::
 
-    \alpha \vert \bar{0}\rangle + \beta \vert \bar{1}\rangle \mapsto \alpha \vert 000 \rangle + \beta \vert 111\rangle.
+    \alpha \vert 000 \rangle + \beta \vert 111\rangle \mapsto  \alpha \vert \bar{0}\rangle + \beta \vert \bar{1}\rangle = \bar{\psi}
 
 This encoding can be done via the following quantum circuit.
 
@@ -115,15 +115,17 @@ print("|111> component: ", encode_qnode(alpha, beta)[7])
 # This checks whether all physical qubits are in the same state by comparing them two at a time, without directly measuring them.
 # Instead, auxiliary qubits are used and measured. For the three-qubit repetition code, this involves measuring two auxiliary qubits
 # in the computational basis after applying a series of :math:`\textrm{CNOT}` gates, as illustrated in the circuit below.
+# The auxiliary qubits record whether each pair of data qubits are the same or different: if they are the same, the auxiliary stays at 0,
+# and if they differ, the auxiliary flips to 1. Thus, if all physical qubits are identical, the auxiliary qubits remain at 0. This is the parity measurement.
 #
 # .. figure:: ../_static/demonstration_assets/stabilizer_codes/parity_measurements.png
 #    :align: center
 #    :width: 100%
 #
 #    ..
-#
-# The result of the measurements is known as the **syndrome**. It tells us whether one of the qubits in :math:`\vert \bar{\psi} \rangle` was flipped and moreover,
-# it has information on which qubit was flipped. The following table shows how to interpret the syndromes.
+# The result of these parity measurements is known as the **syndrome**. Since we use two auxiliary qubits, there are four possible measurement outcomes (00, 01, 10, 11).
+# Each outcome tells us whether a bit-flip error occurred in the encoded state :math:`\vert \bar{\psi} \rangle` and, if so, which qubit was flipped.
+# The following table shows how to interpret the error and the syndromes.
 #
 # .. figure:: ../_static/demonstration_assets/stabilizer_codes/syndrome_table3.png
 #    :align: center
@@ -131,7 +133,8 @@ print("|111> component: ", encode_qnode(alpha, beta)[7])
 #
 #    ..
 #
-# Let us verify this by implementing the syndrome measurement in PennyLane.
+# When there is no error, the syndrome measurement will yield 0 on both auxiliary qubits
+# Let us verify the full table by implementing the syndrome measurement in PennyLane.
 
 
 def error_detection():
@@ -159,6 +162,9 @@ print("Syndrome if error on wire 2: ", syndrome_measurement(2))
 ##############################################################################
 #
 # The measurement outputs confirm the syndrome table.
+#
+# .. note::
+#     How many auxiliary qubits are needed for a repetition code of n qubits? Try it out for yourself!
 #
 # Error Correction
 # ~~~~~~~~~~~~~~~~~
@@ -267,8 +273,8 @@ print(
 #
 #    ..
 #
-# This is the same circuit, but the controls are all now in the auxiliary qubits, while the physical qubits act as target qubits.
-# This does not seem desirable--we do not want to change the state of the physical qubits! However, let us observe that the operators
+# This is the same circuit, but the controls are all now in the auxiliary qubits, while the logical qubits act as target qubits.
+# This does not seem desirable--we do not want to change the state of the logical qubits! However, let us observe that the operators
 # that act on the logical qubits are :math:`Z_0 Z_1 I_2` and :math:`I_0 Z_1 Z_2,` which leave the logical codewords invariant.
 #
 # .. math::
@@ -279,10 +285,15 @@ print(
 #
 #     I_0 Z_1 Z_2 \vert 000 \rangle = \vert 000 \rangle, \quad I_0 Z_1 Z_2 \vert 111 \rangle = \vert 111 \rangle.
 #
-# This is great news. As long as no error has occurred, the logical qubits will be left alone. Otherwise, there will be
-# some operations applied on the state, but we will be able to fix them via an error correction scheme. This invariance property
-# **holds true for and only for the logical codewords.** For any other three-qubit basis states, at least one of these operators will have eigenvalue
-# :math:`-1`, as shown in the table below. Therefore, measuring the eigenvalues of these operators will tell us if an error has occurred.
+# This is great news as the operators :math:`Z_0 Z_1 I_2` and :math:`I_0 Z_1 Z_2` leave the logical states unchanged.
+# Any state of the form :math:`\alpha \lvert 000 \rangle + \beta \lvert 111 \rangle` is a +1 eigenstate of both, which means
+# the entire logical code space is invariant under their action.
+# A single bit-flip error breaks this invariance: at least one operator will then return eigenvalue -1.
+# Measuring the two operators therefore reveals whether an error occurred and, as shown in the syndrome table below,
+# identifies the qubit on which it happened. In this sense, detecting and correcting errors requires only two Pauli operators
+# and the outcomes of their eigenvalue measurements.
+
+#
 #
 # .. figure:: ../_static/demonstration_assets/stabilizer_codes/table_eigenvalues.png
 #    :align: center
@@ -290,7 +301,7 @@ print(
 #
 #    ..
 #
-# This table is related to the previous syndrome table. If we know that the initial state was :math:`\lvert 000\rangle` and assume that only one flip occurred (states with two zeros and a one), 
+# This table is related to the previous syndrome table. If we know that the initial state was :math:`\lvert 000\rangle` and assume that only one flip occurred (states with two zeros and a one),
 # then the pairs of eigenvalues uniquely determine the erroneous state. Therefore, we can determine which qubit was flipped.
 #
 # This gives us a new option for characterizing error correction codes. What if instead of building codewords and trying to find
@@ -337,24 +348,24 @@ print(
 #
 # .. math::
 #
-#     S = \left\lbrace I_0 \otimes I_1 \otimes I_2, \ Z_0 \otimes Z_1 \otimes I_2, \ Z_0 \otimes I_1 \otimes Z_2, \ I_0 \otimes Z_1 \otimes Z_2 \right\rbrace.
+#     S = \left\lbrace I_0  I_1  I_2, \ Z_0 Z_1  I_2, \ Z_0  I_1  Z_2, \ I_0  Z_1  Z_2 \right\rbrace.
 #
 # We can check that it satisfies the defining properties 1 to 4. The most cumbersome to check is property 3, where we have to take all
 # possible products of the elements and check whether the result is in :math:`S.` For example,
 #
 # .. math::
 #
-#    (Z_0 \otimes Z_1 \otimes I_2)\cdot (I_0 \otimes Z_1 \otimes Z_2) = Z_0 \otimes I_1 \otimes Z_2, \\
-#    (Z_0 \otimes Z_1 \otimes I_2 )^2 = I_0 \otimes I_1 \otimes I_2,
+#    (Z_0  Z_1  I_2)\cdot (I_0  Z_1  Z_2) = Z_0  I_1  Z_2, \\
+#    (Z_0 Z_1 I_2 )^2 = I_0  I_1  I_2,
 #
-# and so on. Note that we can obtain all the elements in :math:`S` just from :math:`Z_0 \otimes Z_1 \otimes I_2` and :math:`I_0 \otimes Z_1 \otimes Z_2.` Because
+# and so on. Note that we can obtain all the elements in :math:`S` just from :math:`Z_0  Z_1  I_2` and :math:`I_0  Z_1  Z_2.` Because
 # of this property, these elements are **stabilizer generators** for :math:`S`. We write this fact as
 #
 # .. math::
 #
-#     S = \left\langle Z_0 \otimes Z_1 \otimes I_2, \ I_0 \otimes Z_1 \otimes Z_2 \right\rangle,
+#     S = \left\langle Z_0  Z_1  I_2, \ I_0  Z_1  Z_2 \right\rangle,
 #
-# which reads ":math:`S` *is the stabilizer group generated by the elements* :math:`Z_0 \otimes Z_1 \otimes I_2` *and* :math:`I_0 \otimes Z_1 \otimes Z_2.`"
+# which reads ":math:`S` *is the stabilizer group generated by the elements* :math:`Z_0  Z_1  I_2` *and* :math:`I_0  Z_1  Z_2.`"
 #
 # It turns out that specifying these generators is sufficient to completely define the stabilizer group, and
 # thereby the corresponding quantum error-correcting code.
@@ -400,12 +411,12 @@ generate_stabilizer_group(generators, 3)
 #
 #     S\vert \psi \rangle = \vert \psi \rangle.
 #
-# The **codespace** is defined as the set made up of all states such that :math:`S_i \vert\psi\rangle = \vert \psi\rangle` for all stabilizer
+# The **codespace** is defined **uniquely** as the set made up of all states such that :math:`S_i \vert\psi\rangle = \vert \psi\rangle` for all stabilizer
 # group elements :math:`S_i.` The **codewords** can then be recovered by choosing an orthogonal basis of the codespace.
 # For example, for the three-qubit repetition code, the codewords  (:math:`\vert 000 \rangle` and :math:`\vert 111 \rangle`)
-# can be recovered from the stabilizer generators :math:`Z_0 \otimes Z_1 \otimes I_2` and :math:`I_0 \otimes Z_1 \otimes Z_2` from table above.
+# can be recovered from the stabilizer generators :math:`Z_0  Z_1  I_2` and :math:`I_0  Z_1  Z_2` from table above.
 #
-# There is a one-to-one correspondence between stabilizer groups and the quantum error-correcting codes they define.
+# There is a **one-to-one correspondence** between stabilizer groups and the quantum error-correcting codes they define.
 # This means we can describe a code entirely by its stabilizer group, using operators rather than listing the codewords
 # directly as state vectors.
 #
@@ -431,10 +442,10 @@ generate_stabilizer_group(generators, 3)
 #
 # 1. They commute with all elements in :math:`S,` so they leave the codespace invariant,
 # 2. They are not in the stabilizer group,
-# 3. Logical operators corresponding to the same logical qubit (e.g., :math:`\bar{X}_1` and :math:`\bar{Z}_1`) **anticommute,** meaning they act non-trivially on the codewords.
+# 3. Logical operators corresponding to the same logical qubit (e.g., :math:`\bar{X}_1` and :math:`\bar{Z}_1`) *anticommute, meaning they act non-trivially on the codewords.
 #
-# Lloyd-Shor-Devetak (LSD) Theorem
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# LSD Theorem
+# ~~~~~~~~~~~
 # Remember that the stabilizer group is a subgroup of the Pauli group with some properties. In the stabilizer formalism,
 # every Pauli operator acting on the qubits can be categorized based on how it interacts with the stabilizer group.
 # The **LSD theorem** states that Pauli operators on encoded qubits can be divided into three types:
@@ -546,7 +557,7 @@ print(classify_pauli(X(0) @ Y(1) @ Z(2), logical_ops, generators, 3))
 #
 # .. math::
 #
-#     \vert \bar{1}\rangle = X\otimes X \otimes X \otimes X \otimes X \vert \bar{0} \rangle.
+#     \vert \bar{1}\rangle = X_1 X_2 X_3 X_4 X_5 \vert \bar{0} \rangle.
 #
 # The logical operators bit-flip and phase-flip are for this code are :math:`\bar{X}= X^{\otimes 5}` and :math:`\bar{Z}=Z^{\otimes 5}.``
 #
@@ -754,7 +765,7 @@ for wire in range(5):
 # is not out of reach as soon as the scalability challenges are addressed!
 #
 # The authors of this demo would like to thank Austin Daniel for the insightful discussions and Priya Nadkarni for her helpful
-# technical feedback. 
+# technical feedback.
 #
 # References
 # -----------
@@ -772,5 +783,5 @@ for wire in range(5):
 # .. [#Chandak2018]
 #    S.Chandak, J. Mardia, M. Tolunay.
 #    "Implementation and Analysis of stabilizer codes in PyQuil."
-#    `<https://shubhamchandak94.github.io/reports/stabilizer_code_report.pdf>`__, 
+#    `<https://shubhamchandak94.github.io/reports/stabilizer_code_report.pdf>`__,
 #
