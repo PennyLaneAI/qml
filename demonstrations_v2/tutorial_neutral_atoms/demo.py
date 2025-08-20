@@ -29,7 +29,7 @@ discuss their strengths and weaknesses in terms of DiVincenzo's criteria, introd
 By the end of this tutorial, you will have obtained a high-level understanding of neutral atom technologies
 and be able to follow the new exciting developments that are bound to come.
 
-.. note::
+.. tip::
     
     **DiVincenzo's criteria**: In the year 2000, David DiVincenzo proposed a
     wishlist for the experimental characteristics of a quantum computer [#DiVincenzo2000]_.
