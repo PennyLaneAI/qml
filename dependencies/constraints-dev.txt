@@ -3,13 +3,15 @@
 --extra-index-url https://test.pypi.org/simple/
 --extra-index-url https://download.pytorch.org/whl/cpu
 
-pennylane @ git+https://github.com/PennyLaneAI/pennylane.git#egg=pennylane
+pennylane==0.43.0.dev30
 pennylane-cirq @ git+https://github.com/PennyLaneAI/pennylane-cirq.git#egg=pennylane-cirq
 pennylane-qiskit @ git+https://github.com/PennyLaneAI/pennylane-qiskit.git#egg=pennylane-qiskit
 pennylane-qulacs @ git+https://github.com/PennyLaneAI/pennylane-qulacs.git#egg=pennylane-qulacs
 iqpot @ git+https://github.com/XanaduAI/iqpopt.git#egg=iqpopt
-pennylane-lightning @ git+https://github.com/PennyLaneAI/pennylane-lightning.git#egg=pennylane-lightning
-pennylane-catalyst --pre
+# Install specific lightning version that catalyst expects, then catalyst
+pennylane-lightning==0.43.0.dev15
+pennylane-catalyst==0.13.0.dev33
+
 
 chex<1.0.0
 pyqrack==1.32.12
