@@ -52,6 +52,14 @@
             "year": "2025",
             "journal": "arXiv",
             "url": "https://arxiv.org/abs/2504.18334"
+        },
+        {
+            "id": "Classiq",
+            "type": "webpage",
+            "title": "Decoded Quantum Interferometry Algorithm",
+            "authors": "Classiq",
+            "year": "2025",
+            "url": "https://docs.classiq.io/latest/explore/algorithms/dqi/dqi_max_xorsat/"
         }
     ],
     "basedOnPapers": [
