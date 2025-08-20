@@ -375,7 +375,7 @@ print(results[nonzero_index])
 # Encode matrix B in the syndrome register
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
-# We are almost there, hang on! Now, we need to compute :math:`B^T \mathbf{y}` in the syndrom
+# We are almost there, hang on! Now, we need to compute :math:`B^T \mathbf{y}` in the syndrome
 # register. While it may not be immediately obvious how to implement this as a unitary operation, the
 # binary nature of the matrix and vector allows for a smooth translation. This operation can be
 # realized using CNOT gates, with controls on the error register and targets on the syndrome register
@@ -414,7 +414,7 @@ def DQI(m, n, l):
     # Impart phase
     phase_Z(v)
 
-    # Compute s = B^T y in to the syndrome register
+    # Compute s = B^T y into the syndrome register
     B_T_multiplication(B_T, n_register)
 
     return qml.counts(wires=range(1, m + n + 1))
@@ -508,7 +508,7 @@ def DQI(m, n, l):
     # Impart phase
     phase_Z(v)
 
-    # Compute s = B^T y in to the syndrome register
+    # Compute s = B^T y into the syndrome register
     B_T_multiplication(B_T, n_register)
 
     # Uncompute syndrome register using a Lookup table
@@ -557,7 +557,7 @@ def DQI(m, n, l):
     # Impart phase
     phase_Z(v)
 
-    # Compute s = B^T y in to the syndrome register
+    # Compute s = B^T y into the syndrome register
     B_T_multiplication(B_T, n_register)
 
     # Uncompute syndrome register using a Lookup table
