@@ -218,19 +218,19 @@ print("the optimal values for w are", w_k)
 # .. math::  |D_l^m\rangle = \sqrt{\frac{l}{m}} |D_{l-1}^{m-1}\rangle \otimes |1\rangle + \sqrt{\frac{m-l}{m}} |D_{l}^{m-1}\rangle \otimes |0\rangle.
 # 
 # Given that decomposition, one can generate the two Dicke states on the right-hand side of the
-# equation by applying a smaller unitary :math:`U_{m-1,k}` provided a superposition of the inputs
+# equation by applying a smaller unitary :math:`U_{m-1,k}` provided a suitable superposition of the inputs
 # :math:`|0\rangle^{\otimes m-l}|1\rangle^{\otimes l-1}` and
 # :math:`|0\rangle^{\otimes m-l}|1\rangle^{\otimes l}` is prepared first. Following the paper’s
 # convention, we define a *Split and Cyclic shift* unitary :math:`\mathrm{SCS}_{m,k}` to prepare the
-# superposition of inputs.
+# following superposition:
 # 
 # .. math::  |0\rangle^{\otimes m-l}|1\rangle^{\otimes l} \rightarrow \sqrt{\frac{l}{m}} |0\rangle^{\otimes m-l}|1\rangle^{\otimes l} +  \sqrt{\frac{m-l}{m}} |0\rangle^{\otimes m-1-l}|1\rangle^{\otimes l}|0\rangle.
 # 
-# This recursive decomposition implies that :math:`U_{m,k}` can be implemented by applying
+# This inductive decomposition implies that :math:`U_{m,k}` can be implemented by applying
 # :math:`\mathrm{SCS}_{m,k}` followed by the smaller unitary :math:`U_{m-1,k}`. This process
 # continues; we keep decomposing the unitaries into a split and cycle operation followed by smaller
 # unitary until we reach the base case :math:`U_{1,1}=\mathrm{Id}`. Ultimately, :math:`U_{m,k}` is
-# composed of a series of subsequently smaller :math:`\mathrm{SCS}_{m,k}` opertions, as summarized by
+# composed of a series of subsequently smaller :math:`\mathrm{SCS}_{m,k}` operations, as summarized by
 # the following equation:
 # 
 # .. math:: U_{m,k} = \prod_{\ell=2}^{k} (\mathrm{SCS}_{\ell,\ell-1} \otimes \mathrm{Id}^{\otimes m-\ell})  \prod_{\ell=k+1}^{m} (\mathrm{Id}^{\otimes \ell-k-1} \otimes \mathrm{SCS}_{\ell,k} \otimes \mathrm{Id}^{\otimes m-\ell}).
