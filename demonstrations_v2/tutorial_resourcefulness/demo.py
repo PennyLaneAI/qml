@@ -641,14 +641,14 @@ for data, label in zip(purities, labels):
 agg_purities = [[p[0], p[1]+p[2], p[3]] for p in purities]
 
 
-fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True, figsize=(8, 6))
+fig, ax = plt.subplots(1, 1, figsize=(8, 6))
 for i, data in enumerate(agg_purities):
-    ax1.plot(data, label=f'{labels[i]}')
+    plt.plot(data, label=f'{labels[i]}')
 
-ax1.set_ylabel('Purity')
-ax1.set_xlabel('Module weight')
-ax1.set_xticks(list(range(n+1)))
-ax1.legend(loc='upper left')
+ax.set_ylabel('Purity')
+ax.set_xlabel('Module weight')
+ax.set_xticks(list(range(n+1)))
+ax.legend(loc='upper left')
 plt.tight_layout()
 plt.show()
 
