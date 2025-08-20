@@ -446,7 +446,7 @@ print(DQI(m, n, l))
 # 
 # To keep things simple, we will use a straightforward approach for decoding by building a Lookup Table
 # (LUT) in which we compute the syndrome for each possible error using the classical function
-# ``syndrome_LUT`` [Classiq2025]_. Then, for each syndrome in the syndrome register, the corresponding error is
+# ``syndrome_LUT`` [#Classiq2025]_. Then, for each syndrome in the syndrome register, the corresponding error is
 # uncomputed in the error register using controlled bit-flip operations. We will now integrate this
 # into our\ ``DQI`` function and see in the output how the syndrome register is uncomputed.
 # 
