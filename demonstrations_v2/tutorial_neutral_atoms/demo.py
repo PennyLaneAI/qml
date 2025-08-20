@@ -127,7 +127,7 @@ the work that still needs to be done to scale this technology even further.
 # energy state using lasers. If you need a refresher on how we change the electronic energy levels of atoms, do take
 # a look at the blue box below!
 #
-# .. container:: alert alert-block alert-info
+# .. tip::
 #
 #    **Atomic Physics Primer:** Atoms consist of a positively charged nucleus
 #    and negative electrons around it. The electrons inhabit energy
