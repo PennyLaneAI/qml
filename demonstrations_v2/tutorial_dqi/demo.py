@@ -71,7 +71,7 @@ def objective_function(x):
     return f
 
 
-# Random samplingxs
+# Random sampling
 f_x_array_random = [objective_function(pnp.random.randint(0, 2, size=n)) for i in range(n_samples)]
 
 plt.hist(f_x_array_random, bins=30, density=True)
