@@ -90,59 +90,18 @@ class QubitizedWalkOperator:
         return lcu_coeffs, lcu_paulis
 
     def __init__(
-        self, lcu_coeffs, lcu_paulis, lambda_lcu, prep_wires, reflection_wires
+        self, lcu_coeffs, lcu_paulis, lambda_lcu, prep_wires
     ) -> None:
         self._lcu_coeffs, self._lcu_paulis = QubitizedWalkOperator.preprocess_lcu(
             lcu_coeffs, lcu_paulis
         )
         self._lambda_lcu = lambda_lcu
         self.prep_wires = prep_wires
-        self.reflection_wires = reflection_wires
 
     def block_encode_circuit(self):
         qml.StatePrep(self._lcu_coeffs, wires=self.prep_wires)
         qml.Select(self._lcu_paulis, control=self.prep_wires)
         qml.adjoint(qml.StatePrep(self._lcu_coeffs, wires=self.prep_wires))
-
-    def reflection_circuit(self):
-        # qml.PauliX(self.reflection_wires[0])
-        qml.ctrl(
-            qml.PauliX(self.reflection_wires[0]),
-            self.reflection_wires[1:],
-            (0,) * len(self.reflection_wires[1:]),
-        )
-        qml.PauliZ(self.reflection_wires[0])
-        qml.ctrl(
-            qml.PauliX(self.reflection_wires[0]),
-            self.reflection_wires[1:],
-            (0,) * len(self.reflection_wires[1:]),
-        )
-        # qml.PauliX(self.reflection_wires[0])
-
-    def qubitized_walk_operator(self):
-        qml.PauliX(self.reflection_wires[0])
-        self.block_encode_circuit()
-        self.reflection_circuit()
-        qml.PauliX(self.reflection_wires[0])
-
-
-def lcu_decomp(A, wire_order):
-    lcu = qml.pauli_decompose(A, wire_order=wire_order)
-    coeffs, pls = lcu.terms()
-
-    for i, v in enumerate(coeffs):
-        if v < 0:
-            coeffs[i] = np.abs(v)
-            pls[i] = -pls[i]
-
-    n = int(np.log(len(coeffs)) / np.log(2)) + 1
-    print(n)
-    coeffs = np.array(list(coeffs) + [0] * (2**n - len(coeffs)))
-    print(len(coeffs))
-    print(pls)
-    lambda_lcu = np.sum(coeffs)
-    normalized_coeffs = np.sqrt(coeffs / lambda_lcu)
-    return normalized_coeffs, pls, lambda_lcu
 
 
 def transform_into_proper_lcu(coeffs, pls):
@@ -219,7 +178,6 @@ class QSPKrylovState(QubitizedWalkOperator):
         lcu_paulis,
         lambda_lcu,
         prep_wires,
-        reflection_wires,
         rot_wires,
         control_wires,
         angles_odd,
@@ -228,7 +186,7 @@ class QSPKrylovState(QubitizedWalkOperator):
         angles_conj_even,
     ) -> None:
         super().__init__(
-            lcu_coeffs, lcu_paulis, lambda_lcu, prep_wires, reflection_wires
+            lcu_coeffs, lcu_paulis, lambda_lcu, prep_wires
         )
 
         self.angles_odd = angles_odd
@@ -314,7 +272,6 @@ def build_circuit(
         lcu_paulis=pls,
         lambda_lcu=lambda_value,
         prep_wires=range(3, ancilla_shift),
-        reflection_wires=range(2, ancilla_shift),
         rot_wires=range(2, ancilla_shift),
         control_wires=range(2),
         angles_conj_even=angles_conj_even,
@@ -361,7 +318,7 @@ import numpy as np
 #
 # Subsection explanation and preparation for code
 
-from qualtran.bloqs import something
+# from qualtran.bloqs import something
 
 ######################################################################
 
