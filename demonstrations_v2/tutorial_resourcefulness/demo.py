@@ -279,7 +279,7 @@ print("is diagonal:", np.allclose(P_F - np.diag(np.diagonal(P_F)), np.zeros((N,N
 
 basis3 = F[3:4]
 
-#
+#######################################################################
 # 6. Compute the GFD Purities
 # ***************************
 # We can now compute the GFD Purities according to Eq. (5) in [#Bermejo_Braccia]_.
