@@ -14,14 +14,13 @@ decoding one.
 In this demo, we will implement DQI in PennyLane to solve the max-XORSAT problem. While this
 problem is simple and has not yet demonstrated quantum advantage, it clearly illustrates the
 operational principles and underlying intuition of DQI. We will begin by introducing the problem and
-the core principles of the algorithm, followed by a description of each algorithmic step and its
-corresponding implementation.
+the core principles of the algorithm, followed by a description of each algorithmic step and its implementation.
 
 The max-XORSAT problem
 ----------------------
 
-The task of finding the best solution(s) from a large, finite set of possible candidates is known as
-a combinatorial optimization problem, such as the traveling salesman problem. Mathematically, this
+Finding the best solution(s) from a large, finite set of possible candidates is known as combinatorial optimization.
+A well-known problem from this field is the traveling salesman problem. Mathematically, this
 can be phrased as trying to maximize an objective function whose domain is large and discrete.
 
 The max-XORSAT problem is a simple example of this, where we are given an :math:`m\times n` matrix
