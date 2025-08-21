@@ -35,7 +35,7 @@ The objective function we are aiming to maximize is
 
 .. math:: f(\mathbf{x})=\sum_{i=1}^{m}(-1)^{v_i+\mathbf{b_i}\cdot\mathbf{x}}.
 
-Here, :math:`\mathbf{b_i}` is the :math:`i` row of matrix :math:`B`. You can verify that this
+Here, :math:`\mathbf{b_i}` is the :math:`i`-th row of matrix :math:`B`. You can verify that this
 function represents the number of satisfied equations minus the number of unsatisfied ones by
 considering that when the equation is satisfied, the exponent
 :math:`v_i+\mathbf{b_i}\cdot\mathbf{x}` is always even, and that it is odd in the opposite case.
@@ -60,7 +60,7 @@ B = pnp.array([[1, 0, 0, 0], [1, 1, 0, 0], [0, 1, 1, 0], [0, 0, 1, 1], [0, 0, 0,
 v = pnp.array([1, 0, 1, 0, 1])  # vector of constraints
 m, n = B.shape
 B_T = B.T
-n_samples = 2000
+n_samples = 10
 
 
 def objective_function(x):
