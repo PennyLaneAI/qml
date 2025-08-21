@@ -24,7 +24,8 @@ A well-known problem from this field is the traveling salesman problem. Mathemat
 can be phrased as trying to maximize an objective function whose domain is large and discrete.
 
 The max-XORSAT problem is a simple example of this, where we are given an :math:`m\times n` matrix
-:math:`B` (with :math:`m>n`) and are required to find the :math:`n`-bit string :math:`\mathbf{x}`
+:math:`B` (with :math:`m>n`) and a vector :math:`\mathbf{v}` of length :math:`m`, and are required
+to find the :math:`n`-bit string :math:`\mathbf{x}`
 that satifies the maximum number of constraints imposed by the :math:`m` linear mod-2 equations,
 over :math:`\mathbb{F}_2`, :math:`B\mathbf{x}=\mathbf{v}`. Here, :math:`\mathbf{v}` is a vector of
 dimension :math:`m` specified by the problem. Since this system of equations is over
@@ -57,8 +58,7 @@ plt.rcParams.update({"font.size": 14, "font.family": "STIXGeneral", "mathtext.fo
 # Define parameters of max-XORSAT problem Bx=(mod2)v
 B = pnp.array([[1, 0, 0, 0], [1, 1, 0, 0], [0, 1, 1, 0], [0, 0, 1, 1], [0, 0, 0, 1]])  # Matrix B
 v = pnp.array([1, 0, 1, 0, 1])  # vector of constraints
-m = B.shape[0]
-n = B.shape[1]
+m, n = B.shape
 B_T = B.T
 n_samples = 2000
 
@@ -89,8 +89,8 @@ plt.show()
 # :math:`\sum_{\mathbf{x}} f(\mathbf{x})|\mathbf{x}\rangle`. This would increase the probability of
 # sampling :math:`\mathbf{x}` strings with high values of :math:`f(\mathbf{x})`. While this would
 # work, DQI proposes a much more effective strategy to bias the sampling distribution and greatly
-# enhance the probability of success. It proposes a smarter choice for the state by encoding a
-# polynomial :math:`P(f(\mathbf{x}))` in the amplitudes:
+# enhance the probability of success. It proposes to encode a polynomial :math:`P(f(\mathbf{x}))`
+# of the function values in the amplitudes:
 # 
 # .. math:: |P(f)\rangle=\sum_{\mathbf{x}} P(f(\mathbf{x}))|\mathbf{x}\rangle,
 # 
@@ -179,7 +179,7 @@ n_register = range(m + 1, n + m + 1)
 
 
 def w_k_optimal(m, l):
-    """Calculates optimal weights for superposition: principal vector tridiagonal matrix."""
+    """Calculates optimal weights for superposition: principal vector of tridiagonal matrix."""
     diag_main = pnp.diag(pnp.arange(l + 1) * d)
     diag_sup = pnp.diag([pnp.sqrt(i * (m - i + 1)) for i in range(l)], 1)
     A = diag_main + diag_sup + pnp.transpose(diag_sup)
@@ -227,7 +227,7 @@ print("the optimal values for w are", w_k)
 # 
 # This inductive decomposition implies that :math:`U_{m,k}` can be implemented by applying
 # :math:`\mathrm{SCS}_{m,k}` followed by the smaller unitary :math:`U_{m-1,k}`. This process
-# continues; we keep decomposing the unitaries into a split and cycle operation followed by smaller
+# continues; we keep decomposing the unitaries into a split and cycle operation followed by a smaller
 # unitary until we reach the base case :math:`U_{1,1}=\mathrm{Id}`. Ultimately, :math:`U_{m,k}` is
 # composed of a series of subsequently smaller :math:`\mathrm{SCS}_{m,k}` operations, as summarized by
 # the following equation:
@@ -300,8 +300,8 @@ def DQI(m, n, l):
     qml.Hadamard(wires=0)
 
     # Prepare Dicke states conditioned on k values
-    qml.ctrl(prepare_dicke_state, (0), control_values=0)(m, 1)
-    qml.ctrl(prepare_dicke_state, (0), control_values=1)(m, 2)
+    qml.ctrl(prepare_dicke_state, (0,), control_values=0)(m, k=1)
+    qml.ctrl(prepare_dicke_state, (0,), control_values=1)(m, k=2)
 
     # Uncompute weight register
     bit_strings = generate_bit_strings(m, l)
@@ -324,8 +324,8 @@ print(DQI(m, n, l))
 # this step demonstrates, the Dicke states were prepared, and the weight register was successfully
 # uncomputed. From now on, we will discard it and not include it in our outputs.
 # 
-# Encode constrains vector
-# ~~~~~~~~~~~~~~~~~~~~~~~~
+# Encode constraints vector
+# ~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # To impart a phase :math:`(-1)^{\mathbf{v}\cdot\mathbf{y}}`, we perform a Pauli-Z on each qubit for
 # which :math:`v_i=1`, as instructed by the DQI paper. This is simply a conditional operation within a
@@ -429,7 +429,7 @@ print(DQI(m, n, l))
 # This step is the main challenge of the algorithm: uncomputing the error register :math:`\mathbf{y}`
 # using the information from the syndrome register :math:`\mathbf{s}=B^T \mathbf{y}` in an efficient
 # way. This would be an easy task if :math:`B` were always a square matrix; however, since it is not,
-# we need to solve an undetermined linear system of equations :math:`\mathbf{s}=B^T \mathbf{y}`
+# we need to solve an underdetermined linear system of equations :math:`\mathbf{s}=B^T \mathbf{y}`
 # subject to the constraint :math:`|\mathbf{y}|\leq l` given by the known Hamming weights of
 # :math:`\mathbf{y}`. The problem we have just described is precisely the **syndrome decoding
 # problem**, where :math:`B^T` is the parity-check matrix, :math:`\mathbf{s}` is the syndrome, and
@@ -530,8 +530,8 @@ print(DQI(m, n, l))
 # After the previous step, we obtained the Hadamard transform of the state were looking for. The final
 # step is to apply the Hadamard transform to this state to obtain
 # :math:`|P(f)\rangle=\sum_{\mathbf{x}} P(f(\mathbf{x}))|\mathbf{x}\rangle`. Finally, we will collect
-# samples from such state, calculate their objective functions, and build a histogram to compare with
-# the random sampling done af first.
+# samples from this state, calculate their objective values, and build a histogram to compare with
+# the random sampling done at first.
 # 
 
 dev = qml.device("default.qubit", wires=range(0, 1 + m + n), shots=n_samples)
