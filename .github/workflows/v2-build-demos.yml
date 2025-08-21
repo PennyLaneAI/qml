@@ -169,15 +169,13 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
+        run: pip install . && poetry config warnings.export false
+      
+      - name: Reinstall pennylane from master
+        if: ${{ inputs.dev }}
         run: |
-          if [ "${{ inputs.dev }}" = "true" ]; then
-            # For dev builds, only install build tools, let qml build handle dev dependencies
-            pip install poetry uv
-            poetry config warnings.export false
-          else
-            # For stable builds, install the package normally
-            pip install . && poetry config warnings.export false
-          fi
+          pip install --force-reinstall git+https://github.com/PennyLaneAI/pennylane.git
+          pip install --force-reinstall git+https://github.com/PennyLaneAI/pennylane-lightning.git
       
       - name: Make demo name list
         id: demo-name-list
