@@ -175,13 +175,12 @@ import pennylane as qml
 import numpy as np
 
 n_wires = 4
-dev = qml.device("default.qubit", wires=n_wires)
+dev = qml.device("default.qubit", wires=n_wires, shots=1)
 
 def add_k_fourier(k, wires):
     for j in range(len(wires)):
         qml.RZ(k * np.pi / (2**j), wires=wires[j])
 
-@qml.set_shots(1)
 @qml.qnode(dev)
 def sum(m, k):
     qml.BasisEmbedding(m, wires=range(n_wires))  # m encoding
@@ -236,7 +235,7 @@ wires_m = [0, 1, 2]             # qubits needed to encode m
 wires_k = [3, 4, 5]             # qubits needed to encode k
 wires_solution = [6, 7, 8, 9]   # qubits needed to encode the solution
 
-dev = qml.device("default.qubit", wires=wires_m + wires_k + wires_solution)
+dev = qml.device("default.qubit", wires=wires_m + wires_k + wires_solution, shots=1)
 
 n_wires = len(dev.wires) # total number of qubits used
 
@@ -255,7 +254,6 @@ def addition(wires_m, wires_k, wires_solution):
     # return to computational basis
     qml.adjoint(qml.QFT)(wires=wires_solution)
 
-@qml.set_shots(1)
 @qml.qnode(dev)
 def sum2(m, k, wires_m, wires_k, wires_solution):
     # m and k codification
@@ -303,7 +301,7 @@ wires_m = [0, 1, 2]           # qubits needed to encode m
 wires_k = [3, 4, 5]           # qubits needed to encode k
 wires_solution = [6, 7, 8, 9, 10]  # qubits needed to encode the solution
 
-dev = qml.device("default.qubit", wires=wires_m + wires_k + wires_solution)
+dev = qml.device("default.qubit", wires=wires_m + wires_k + wires_solution, shots=1)
 
 n_wires = len(dev.wires)
 
@@ -320,7 +318,6 @@ def multiplication(wires_m, wires_k, wires_solution):
     # return to computational basis
     qml.adjoint(qml.QFT)(wires=wires_solution)
 
-@qml.set_shots(1)
 @qml.qnode(dev)
 def mul(m, k):
     # m and k codification
@@ -382,7 +379,6 @@ dev = qml.device("default.qubit", wires=wires_m + wires_k + wires_solution)
 
 n_wires = len(dev.wires)
 
-@qml.set_shots(1)
 @qml.qnode(dev)
 def factorization(n, wires_m, wires_k, wires_solution):
     # Superposition of the input

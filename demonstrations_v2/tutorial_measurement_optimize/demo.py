@@ -127,7 +127,7 @@ print(H)
 # on hardware. Let's generate the cost function to check this.
 
 # Create a 4 qubit simulator
-dev = qml.device("default.qubit", seed=904932)
+dev = qml.device("default.qubit", shots=1000, seed=904932)
 
 # number of electrons
 electrons = 2
@@ -143,7 +143,6 @@ ansatz = functools.partial(
 )
 
 # generate the cost function
-@qml.set_shots(1000)
 @qml.qnode(dev, interface="jax")
 def cost_circuit(params):
     ansatz(params, wires=range(num_qubits))
@@ -392,14 +391,12 @@ obs = [
 
 dev = qml.device("default.qubit", wires=3)
 
-@qml.set_shots(1000)
 @qml.qnode(dev, interface="jax")
 def circuit1(weights):
     qml.StronglyEntanglingLayers(weights, wires=range(3))
     return qml.expval(obs[0])
 
 
-@qml.set_shots(1000)
 @qml.qnode(dev, interface="jax")
 def circuit2(weights):
     qml.StronglyEntanglingLayers(weights, wires=range(3))
@@ -416,7 +413,6 @@ print("Expectation value of XIZ = ", circuit2(weights))
 # Now, let's use our QWC approach to reduce this down to a *single* measurement
 # of the probabilities in the shared eigenbasis of both QWC observables:
 
-@qml.set_shots(1000)
 @qml.qnode(dev, interface="jax")
 def circuit_qwc(weights):
     qml.StronglyEntanglingLayers(weights, wires=range(3))
@@ -462,7 +458,6 @@ print("Expectation value of XIZ = ", jnp.dot(eigenvalues_XIZ, rotated_probs))
 # Luckily, PennyLane automatically performs this QWC grouping under the hood. We simply
 # return the two QWC Pauli terms from the QNode:
 
-@qml.set_shots(1000)
 @qml.qnode(dev, interface="jax")
 def circuit(weights):
     qml.StronglyEntanglingLayers(weights, wires=range(3))
@@ -722,7 +717,6 @@ rotations, measurements = qml.pauli.diagonalize_qwc_groupings(obs_groupings)
 
 dev = qml.device("lightning.qubit", wires=4)
 
-@qml.set_shots(1000)
 @qml.qnode(dev, interface="jax")
 def circuit(weights, group=None, **kwargs):
     qml.StronglyEntanglingLayers(weights, wires=range(4))
@@ -750,7 +744,6 @@ print("<H> = ", jnp.sum(jnp.hstack(result)))
 
 H = qml.Hamiltonian(coeffs=jnp.ones(len(terms)), observables=terms, grouping_type="qwc")
 _, H_ops = H.terms()
-@qml.set_shots(1000)
 @qml.qnode(dev, interface="jax")
 def cost_fn(weights):
     qml.StronglyEntanglingLayers(weights, wires=range(4))
