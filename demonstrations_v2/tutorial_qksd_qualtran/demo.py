@@ -68,14 +68,14 @@ print(H)
 # 
 # We provide the pre-calculated values for an :math:`H_2O` molecule with Krylov dimension 15:
 
-
-import numpy as np
 import pennylane as qml
+from pennylane.qchem import observable
+import qualtran as qt
+import numpy as np
+
 from scipy.stats import ortho_group
 from openfermion.ops import InteractionOperator
 from openfermion.transforms import get_fermion_operator, jordan_wigner
-from pennylane.qchem import observable
-
 
 class QubitizedWalkOperator:
     @classmethod
@@ -242,11 +242,9 @@ def build_circuit(
     lcu_coeffs, _ = hamiltonian.terms()
 
     ancilla_shift = int(np.log(len(lcu_coeffs)) / np.log(2)) + 1
-    ancilla_shift += 1  # add one for the reflection
-    ancilla_shift += 1  # ancilla for P,P^{*} control
-    ancilla_shift += 1  # ancilla for odd/even partiy control
+    ancilla_shift += 3  # add one for the reflection, one for P,P^{*} control, one for odd/even partiy control
 
-    # shift the Hamiltonina operator by the ancillae value
+    # shift the Hamiltonian operator by the ancillae value
     shifted_qubit_operator = {}
     qubit_op = jordan_wigner(fermion_hamiltonian).terms
     s = sum(map(abs, qubit_op.values()))
