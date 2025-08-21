@@ -72,6 +72,9 @@ print(H)
 import numpy as np
 import pennylane as qml
 from scipy.stats import ortho_group
+from openfermion.ops import InteractionOperator
+from openfermion.transforms import get_fermion_operator, jordan_wigner
+from pennylane.qchem.openfermion_obs import observable
 
 
 class QubitizedWalkOperator:
