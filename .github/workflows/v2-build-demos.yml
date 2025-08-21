@@ -170,13 +170,7 @@ jobs:
 
       - name: Install dependencies
         run: pip install . && poetry config warnings.export false
-      
-      - name: Reinstall pennylane from master
-        if: ${{ inputs.dev }}
-        run: |
-          pip install --force-reinstall git+https://github.com/PennyLaneAI/pennylane.git
-          pip install --force-reinstall git+https://github.com/PennyLaneAI/pennylane-lightning.git
-      
+
       - name: Make demo name list
         id: demo-name-list
         run: printf "demo-names=%s" "$(jq -nc '${{ needs.generate-build-variables.outputs.chunk-array }}[${{ matrix.chunk-index }}][]' | tr -s '\n"' ' ')" >> $GITHUB_OUTPUT
