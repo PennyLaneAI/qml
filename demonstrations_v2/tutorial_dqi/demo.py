@@ -1,17 +1,17 @@
 r"""Decoded Quantum Interferometry
-==============================
+==================================
 
 Demonstrating quantum advantage is a long-sought goal by the quantum computing community. Clearly
 demonstrating that a quantum algorithm can solve a practical computational task with an advantage
-over classical algorithms remains an active area of research. Recently, a paper introduced an
+over classical algorithms remains an active area of research. Recently, Jordan et al. introduced an
 algorithm called **Decoded quantum interferometry (DQI)** to tackle combinatorial optimization
-problems [#Jordan2024]_. For a specific application involving approximating optimal polynomial fits, it
+problems [#Jordan2024]_. For a specific task of approximating optimal polynomial fits, it
 showed superior performance over existing classical counterparts. DQI takes a new approach; unlike
-QAOA and adiabatic optimization, it doesn’t use Hamiltonians to connect the optimization to quantum
+QAOA and adiabatic optimization, it doesn’t use Hamiltonians to connect the optimization problem to quantum
 mechanics. Instead, it leverages quantum interference and transforms the optimization problem into a
 decoding one.
 
-In this demo, we will use DQI to solve the max-XORSAT problem implemented in PennyLane. While this
+In this demo, we will implement DQI in PennyLane to solve the max-XORSAT problem. While this
 problem is simple and has not yet demonstrated quantum advantage, it clearly illustrates the
 operational principles and underlying intuition of DQI. We will begin by introducing the problem and
 the core principles of the algorithm, followed by a description of each algorithmic step and its
