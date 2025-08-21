@@ -72,7 +72,8 @@ def objective_function(x):
 
 
 # Random sampling
-f_x_array_random = [objective_function(pnp.random.randint(0, 2, size=n)) for i in range(n_samples)]
+samples = pnp.random.randint(0, 2, size=(n_samples, n))
+f_x_array_random = [objective_function(sample) for sample in samples]
 
 plt.hist(f_x_array_random, bins=30, density=True)
 plt.xlabel(r"$f(x)$")
@@ -121,7 +122,7 @@ plt.show()
 #    .. math:: \sum_{k=0}^l w_k|k\rangle \frac{1}{\sqrt{\binom{m}{k}}}\sum_{\substack{\mathbf{y}\\|\mathbf{y}|=k}} |\mathbf{y}\rangle.
 # 
 #    And subsequently, uncompute the weight register.
-# 3. **Encode the vector of constrains:** encode :math:`\mathbf{v}` by imparting a phase
+# 3. **Encode the vector of constraints:** encode :math:`\mathbf{v}` by imparting a phase
 #    :math:`(-1)^{\mathbf{v}\cdot\mathbf{y}}`,
 # 
 #    .. math:: \sum_{k=0}^l w_k \frac{1}{\sqrt{\binom{m}{k}}}\sum_{\substack{\mathbf{y}\\|\mathbf{y}|=k}} (-1)^{\mathbf{v}\cdot\mathbf{y}} |\mathbf{y}\rangle.
@@ -180,12 +181,10 @@ n_register = range(m + 1, n + m + 1)
 def w_k_optimal(m, l):
     """Calculates optimal weights for superposition: principal vector of tridiagonal matrix."""
     diag_main = pnp.diag(pnp.arange(l + 1) * d)
-    diag_sup = pnp.diag([pnp.sqrt(i * (m - i + 1)) for i in range(l)], 1)
+    diag_sup = pnp.diag(pnp.sqrt(pnp.arange(l) * (m - pnp.arange(l) + 1)), 1)
     A = diag_main + diag_sup + pnp.transpose(diag_sup)
-    eigenvalues, eigenvectors = pnp.linalg.eig(A)
-    principal_index = pnp.argmax(eigenvalues)
-    principal_vector = eigenvectors[:, principal_index]
-    return principal_vector / pnp.linalg.norm(principal_vector)
+    _, eigenvectors = pnp.linalg.eigh(A)
+    return eigenvectors[:, -1]
 
 
 w_k = w_k_optimal(m, l)
@@ -248,12 +247,9 @@ def generate_bit_strings(length, hamming_weight):
     results = []
     for positions in one_positions:
         # Create a new list of zeros
-        bit_string = [0] * length
-
+        bit_string = pnp.zeros(length, dtype=int)
         # Place 1s at the specified positions
-        for pos in positions:
-            bit_string[pos] = 1
-
+        bit_string[pnp.array(positions)] = 1
         results.append(bit_string)
 
     return results
@@ -510,8 +506,7 @@ def DQI(m, n, l):
     B_T_multiplication(B_T, n_register)
 
     # Uncompute syndrome register using a Lookup table
-    for row in decoding_table:
-        syndrome, error = row
+    for syndrome, error in decoding_table:
         for i in range(len(error)):
             if error[i] == 1:
                 qml.ctrl(qml.X, n_register, control_values=syndrome)(m_register[i])
