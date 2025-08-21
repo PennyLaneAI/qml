@@ -98,7 +98,7 @@ def circuit():
     return qml.sample(a)
 
 # Simulate the circuit and process binary output to integer
-binary_string = "".join([str(bit) for bit in circuit()])
+binary_string = "".join([str(bit) for bit in circuit()[0]])
 print("GF2Addition of 5 + 10 =", int(binary_string[len(wires['x']):],2))
 
 ######################################################################
