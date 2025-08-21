@@ -67,11 +67,11 @@ def objective_function(x):
     """Calculates objective function."""
     f = 0
     for i in range(m):
-        f += (-1) ** (v[i] + pnp.dot(B[i, :], x))
+        f += (-1) ** (v[i] + pnp.dot(B[i], x))
     return f
 
 
-# Random sampling
+# Random samplingxs
 f_x_array_random = [objective_function(pnp.random.randint(0, 2, size=n)) for i in range(n_samples)]
 
 plt.hist(f_x_array_random, bins=30, density=True)
@@ -93,7 +93,7 @@ plt.show()
 # 
 # .. math:: |P(f)\rangle=\sum_{\mathbf{x}} P(f(\mathbf{x}))|\mathbf{x}\rangle,
 # 
-# where :math:`P` is of degree :math:`l`. The challenge then becomes: how do we prepare such a state?
+# where :math:`P` is of some degree :math:`\ell`. The challenge then becomes: how do we prepare such a state?
 # DQI provides a concrete recipe.
 # 
 # The objective function :math:`f(\mathbf{x})` has a very sparse Hadamard spectrum. This means that
