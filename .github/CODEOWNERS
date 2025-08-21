@@ -13,6 +13,7 @@
 /pyproject.toml @software-cloud
 /poetry.lock @software-cloud
 /demonstrations_v2/*/requirements.in @software-cloud
+/.github/CODEOWNERS @core-release-managers
 /.github/** @software-cloud
 
 # ------------------------------------------------------
