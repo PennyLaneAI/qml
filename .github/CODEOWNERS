@@ -21,7 +21,6 @@
 # Documentation, demonstrations and static assets/images
 # ------------------------------------------------------
 /demonstrations_v2/** @content-team
-/demonstrations_v2/*/requirements.in @software-cloud
 /documentation/** @content-team
 /README.md @content-team
 /CONTRIBUTING.md @content-team
