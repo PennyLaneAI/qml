@@ -99,6 +99,10 @@ import numpy as np
 import pennylane as qml
 from catalyst import mitigate_with_zne
 
+import warnings
+from pennylane.exceptions import PennyLaneDeprecationWarning
+warnings.filterwarnings("ignore", category=PennyLaneDeprecationWarning)
+
 n_wires = 3
 
 np.random.seed(42)
@@ -132,9 +136,9 @@ print(f"Ideal value: {ideal_value}")
 # The probability of error is specified by the value of the ``noise`` constructor argument.
 
 NOISE_LEVEL = 0.01
-noisy_device = qml.device("qrack.simulator", n_wires, noise=NOISE_LEVEL)
+noisy_device = qml.device("qrack.simulator", n_wires, shots=1000, noise=NOISE_LEVEL)
 
-noisy_qnode = qml.set_shots(qml.QNode(circuit, device=noisy_device, mcm_method="one-shot"), shots = 1000)
+noisy_qnode = qml.QNode(circuit, device=noisy_device, mcm_method="one-shot")
 noisy_value = noisy_qnode(w1, w2)
 print(f"Error without mitigation: {abs(ideal_value - noisy_value):.3f}")
 
@@ -226,8 +230,8 @@ print(f"Error with ZNE in PennyLane: {abs(ideal_value - zne_value):.3f}")
 # reduce the running time of this tutorial, while still showcasing the performance differences.  
 import timeit
 
-noisy_device = qml.device("qrack.simulator", n_wires, noise=NOISE_LEVEL)
-noisy_qnode = qml.set_shots(qml.QNode(circuit, device=noisy_device, mcm_method="one-shot"), shots = 100)
+noisy_device = qml.device("qrack.simulator", n_wires, shots=100, noise=NOISE_LEVEL)
+noisy_qnode = qml.QNode(circuit, device=noisy_device, mcm_method="one-shot")
 
 @qml.qjit
 def mitigated_circuit_qjit(w1, w2):
