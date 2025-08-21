@@ -10,3 +10,5 @@
 /README.md @content-team @core-release-managers
 /CONTRIBUTING.md @content-team @core-release-managers
 /_static/** @content-team @core-release-managers
+/metadata_schemas/** @content-team @sofware-cloud
+/notebook_converter/** @software-cloud @core-release-managers
