@@ -1,14 +1,12 @@
-/.github/CODEOWNERS @core-release-managers
-# requirements.in files in demonstrations_v2 are owned by both teams
-/demonstrations_v2/*/requirements.in @software-cloud @content-team
-/pyproject.toml @software-cloud
-/poetry.lock @software-cloud
-/lib/qml/** @software-cloud
-/dependencies/** @software-cloud
-/.github/** @software-cloud
-/demonstrations_v2/** @content-team
-/documentation/** @content-team
-/README.md @content-team
-/CONTRIBUTING.md @content-team
-/_static/** @content-team
-* @core-release-managers
+/.github/CODEOWNERS @core-release-managers @software-cloud @content-team
+/demonstrations_v2/*/requirements.in @software-cloud @content-team @core-release-managers
+/pyproject.toml @software-cloud @core-release-managers
+/poetry.lock @software-cloud @core-release-managers
+/lib/qml/** @software-cloud @core-release-managers
+/dependencies/** @software-cloud @core-release-managers
+/.github/** @software-cloud @core-release-managers
+/demonstrations_v2/** @content-team @core-release-managers
+/documentation/** @content-team @core-release-managers
+/README.md @content-team @core-release-managers
+/CONTRIBUTING.md @content-team @core-release-managers
+/_static/** @content-team @core-release-managers
