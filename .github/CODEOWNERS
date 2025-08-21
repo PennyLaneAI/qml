@@ -1,0 +1,26 @@
+# ------------------------------------------------------
+# PL Release Managers: 
+# All directories
+# ------------------------------------------------------
+* @core-release-managers
+
+# ------------------------------------------------------
+# Software Cloud: 
+# Core software and dependencies
+# ------------------------------------------------------
+/lib/qml/** @software-cloud
+/dependencies/** @software-cloud
+/pyproject.toml @software-cloud
+/poetry.lock @software-cloud
+/demonstrations_v2/*/requirements.in @software-cloud
+/.github/** @software-cloud
+
+# ------------------------------------------------------
+# Content Team: 
+# Documentation, demonstrations and static assets/images
+# ------------------------------------------------------
+/demonstrations_v2/** @content-team
+/documentation/** @content-team
+/README.md @content-team
+/CONTRIBUTING.md @content-team
+/_static/** @content-team
