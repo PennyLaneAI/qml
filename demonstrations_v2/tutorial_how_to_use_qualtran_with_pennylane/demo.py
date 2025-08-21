@@ -86,7 +86,8 @@ print(wires)
 five = [0, 1, 0, 1] # 5 in binary
 ten = [1, 0, 1, 0] # 10 in binary
 
-@qml.qnode(qml.device('default.qubit', shots=1))
+@qml.set_shots(1)
+@qml.qnode(qml.device('default.qubit'))
 def circuit():
     # Prepare the input registers for 5 and 10
     qml.BasisState(five + ten, wires=wires['x']+wires['y'])
