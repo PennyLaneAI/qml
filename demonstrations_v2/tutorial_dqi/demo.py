@@ -65,14 +65,13 @@ n_samples = 10
 
 def objective_function(x):
     """Calculates objective function."""
-    sum = 0
+    f = 0
     for i in range(m):
-        sum += (-1) ** (v[i] + pnp.dot(B[i, :], x))
-    return sum
+        f += (-1) ** (v[i] + pnp.dot(B[i, :], x))
+    return f
 
 
 # Random sampling
-f_x_array = []
 f_x_array_random = [objective_function(pnp.random.randint(0, 2, size=n)) for i in range(n_samples)]
 
 plt.hist(f_x_array_random, bins=30, density=True)
