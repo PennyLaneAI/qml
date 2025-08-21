@@ -468,9 +468,6 @@ class Rosalin:
             # the Hamiltonian term
             res = qml.set_shots(qnode, shots=int(s))(params, o)
 
-            if s == 1:
-                res = np.array([res])
-
             # Note that, unlike above, we divide each term by the
             # probability per shot. This is because we are sampling one at a time.
             results.append(c * res / p)
