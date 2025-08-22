@@ -127,7 +127,7 @@ print(H)
 # on hardware. Let's generate the cost function to check this.
 
 # Create a 4 qubit simulator
-dev = qml.device("default.qubit", shots=1000, seed=904932)
+dev = qml.device("default.qubit", seed=904932)
 
 # number of electrons
 electrons = 2
@@ -143,6 +143,7 @@ ansatz = functools.partial(
 )
 
 # generate the cost function
+@qml.set_shots(1000)
 @qml.qnode(dev, interface="jax")
 def cost_circuit(params):
     ansatz(params, wires=range(num_qubits))

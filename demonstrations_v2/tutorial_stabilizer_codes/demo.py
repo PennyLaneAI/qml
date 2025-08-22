@@ -144,7 +144,8 @@ def error_detection():
     qml.CNOT(wires=[2, 4])
 
 
-@qml.qnode(qml.device("default.qubit", wires=5, shots=1))  # A single sample flags error
+@qml.set_shots(1)
+@qml.qnode(qml.device("default.qubit", wires=5))  # A single sample flags error
 def syndrome_measurement(error_wire):
     encode(alpha, beta)
 
@@ -626,9 +627,10 @@ def five_qubit_error_detection():
 # measures the syndrome, as we did in the three-qubit code.
 #
 
-dev = qml.device("default.qubit", wires=9, shots=1)
+dev = qml.device("default.qubit", wires=9)
 
 
+@qml.set_shots(1)
 @qml.qnode(dev)
 def five_qubit_syndromes(alpha, beta, error_op, error_wire):
     five_qubit_encode(alpha, beta)
@@ -676,6 +678,7 @@ for wire in (0, 1, 2, 3, 4):
 # PennyLane's mid-circuit measurement capabilities, which only allows for Boolean operators.
 #
 def syndrome_booleans(syndrome, measurements):
+    syndrome = qml.math.squeeze(syndrome)
     if syndrome[0] == 0:
         m = ~measurements[0]
     else:

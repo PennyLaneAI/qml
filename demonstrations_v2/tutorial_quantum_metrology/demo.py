@@ -134,7 +134,7 @@ from pennylane import numpy as np
 # We will choose the ``cirq.mixedsimulator`` device from the
 # `Pennylane-Cirq <https://pennylane-cirq.readthedocs.io/en/latest/>`_
 # plugin for this tutorial.
-dev = qml.device("cirq.mixedsimulator", wires=3, shots=1000)
+dev = qml.device("cirq.mixedsimulator", wires=3)
 
 ##############################################################################
 # Next, we model the parameter encoding. The phase shifts are recreated using
@@ -176,6 +176,7 @@ NUM_MEASUREMENT_PARAMETERS = 6
 # We now have everything at hand to model the quantum part of our experiment
 # as a QNode. We will return the output probabilities necessary to compute the
 # Classical Fisher Information Matrix.
+@qml.set_shots(1000)
 @qml.qnode(dev)
 def experiment(weights, phi, gamma=0.0):
     ansatz(weights[:NUM_ANSATZ_PARAMETERS])

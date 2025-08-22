@@ -99,6 +99,10 @@ import numpy as np
 import pennylane as qml
 from catalyst import mitigate_with_zne
 
+import warnings
+from pennylane.exceptions import PennyLaneDeprecationWarning
+warnings.filterwarnings("ignore", category=PennyLaneDeprecationWarning)
+
 n_wires = 3
 
 np.random.seed(42)

@@ -386,8 +386,8 @@ def circuit(weights):
 
 
 for N in [2000, 20000]:
-    dev = qml.device("default.qubit", wires=n_qubits, shots=N)
-    circ = qml.QNode(circuit, device=dev)
+    dev = qml.device("default.qubit", wires=n_qubits)
+    circ = qml.set_shots(qml.QNode(circuit, device=dev), shots = N)
     preds = circ(weights)
     mask = np.any(np.all(preds[:, None] == data, axis=2), axis=1)  # Check for row-wise equality
     chi = np.sum(mask) / N
@@ -466,6 +466,7 @@ wshape = qml.StronglyEntanglingLayers.shape(n_layers=n_layers, n_wires=n_qubits)
 weights = np.random.random(size=wshape)
 
 
+@qml.set_shots(N)
 @qml.qnode(dev)
 def circuit(weights):
     qml.StronglyEntanglingLayers(

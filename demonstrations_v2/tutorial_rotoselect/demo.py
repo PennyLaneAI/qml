@@ -131,7 +131,7 @@ np.random.seed(9432092)
 
 n_wires = 2
 
-dev = qml.device("lightning.qubit", shots=1000, wires=2)
+dev = qml.device("lightning.qubit", wires=2)
 
 ##############################################################################
 # Creating a fixed quantum circuit
@@ -154,12 +154,14 @@ def ansatz(params):
     qml.CNOT(wires=[0, 1])
 
 
+@qml.set_shots(1000)
 @qml.qnode(dev)
 def circuit(params):
     ansatz(params)
     return qml.expval(qml.PauliZ(0)), qml.expval(qml.PauliY(1))
 
 
+@qml.set_shots(1000)
 @qml.qnode(dev)
 def circuit2(params):
     ansatz(params)
@@ -329,12 +331,14 @@ def ansatz_rsel(params, generators):
     qml.CNOT(wires=[0, 1])
 
 
+@qml.set_shots(1000)
 @qml.qnode(dev)
 def circuit_rsel(params, generators):
     ansatz_rsel(params, generators)
     return qml.expval(qml.PauliZ(0)), qml.expval(qml.PauliY(1))
 
 
+@qml.set_shots(1000)
 @qml.qnode(dev)
 def circuit_rsel2(params, generators):
     ansatz_rsel(params, generators)
