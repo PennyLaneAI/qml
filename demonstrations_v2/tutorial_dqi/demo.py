@@ -250,7 +250,7 @@ def generate_bit_strings(length, hamming_weight):
         bit_string = pnp.zeros(length, dtype=int)
         # Place 1s at the specified positions
         bit_string[pnp.array(positions)] = 1
-        results.append(bit_string)
+        results.append(bit_string.tolist())
 
     return results
 
