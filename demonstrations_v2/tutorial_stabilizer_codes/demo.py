@@ -678,7 +678,7 @@ for wire in (0, 1, 2, 3, 4):
 # PennyLane's mid-circuit measurement capabilities, which only allows for Boolean operators.
 #
 def syndrome_booleans(syndrome, measurements):
-    syndrome = syndrome[0]  # after not squeezing one-shot sampling, we need to extract the first element
+    syndrome = qml.math.squeeze(syndrome)
     if syndrome[0] == 0:
         m = ~measurements[0]
     else:
