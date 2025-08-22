@@ -105,29 +105,29 @@ plt.show()
 # prepare the Hadamard transform of the state, taking advantage of its sparse spectrum, and then
 # transform back. The Hadamard transform of :math:`P(f(\mathbf{x}))` is:
 # 
-# .. math:: \sum_{k=0}^{l} \frac{w_k}{\sqrt{\binom{m}{k}}} \sum_{\substack{\mathbf{y}\\|\mathbf{y}|=k}} (-1)^{\mathbf{v}\cdot\mathbf{y}} |B^T \mathbf{y}\rangle,
+# .. math:: \sum_{k=0}^{\ell} \frac{w_k}{\sqrt{\binom{m}{k}}} \sum_{\substack{\mathbf{y}\\|\mathbf{y}|=k}} (-1)^{\mathbf{v}\cdot\mathbf{y}} |B^T \mathbf{y}\rangle,
 # 
 # where the coefficients :math:`w_k` are carefully chosen.
 # 
 # The DQI algorithm for solving the max-XORSAT problem involves three qubit registers: a weight, an
-# error, and a syndrome register, with dimensions :math:`\left \lceil \log_{2} l\right \rceil`,
+# error, and a syndrome register, with dimensions :math:`\left \lceil \log_{2} \ell \right \rceil`,
 # :math:`m`, and :math:`n`, respectively. The algorithm’s steps are outlined below:
 # 
-# 1. **Embed weight coefficients:** prepare the state :math:`\sum_{k=0}^{l} w_k|k\rangle` in the
-#    weight register to encode the degree :math:`l` of the polynomial.
+# 1. **Embed weight coefficients:** prepare the state :math:`\sum_{k=0}^{\ell} w_k|k\rangle` in the
+#    weight register to encode the degree :math:`\ell` of the polynomial.
 # 2. **Prepare Dicke states:** generate Dicke states on the error register, conditioned on the value
 #    :math:`k`,
 # 
-#    .. math:: \sum_{k=0}^l w_k|k\rangle \frac{1}{\sqrt{\binom{m}{k}}}\sum_{\substack{\mathbf{y}\\|\mathbf{y}|=k}} |\mathbf{y}\rangle.
+#    .. math:: \sum_{k=0}^{\ell} w_k|k\rangle \frac{1}{\sqrt{\binom{m}{k}}}\sum_{\substack{\mathbf{y}\\|\mathbf{y}|=k}} |\mathbf{y}\rangle.
 # 
 #    And subsequently, uncompute the weight register.
 # 3. **Encode the vector of constraints:** encode :math:`\mathbf{v}` by imparting a phase
 #    :math:`(-1)^{\mathbf{v}\cdot\mathbf{y}}`,
 # 
-#    .. math:: \sum_{k=0}^l w_k \frac{1}{\sqrt{\binom{m}{k}}}\sum_{\substack{\mathbf{y}\\|\mathbf{y}|=k}} (-1)^{\mathbf{v}\cdot\mathbf{y}} |\mathbf{y}\rangle.
+#    .. math:: \sum_{k=0}^{\ell} w_k \frac{1}{\sqrt{\binom{m}{k}}}\sum_{\substack{\mathbf{y}\\|\mathbf{y}|=k}} (-1)^{\mathbf{v}\cdot\mathbf{y}} |\mathbf{y}\rangle.
 # 4. **Compute syndrome:** reversibly compute :math:`B^T \mathbf{y}` into the syndrome register,
 # 
-#    .. math:: \sum_{k=0}^l w_k \frac{1}{\sqrt{\binom{m}{k}}}\sum_{\substack{\mathbf{y}\\|\mathbf{y}|=k}} (-1)^{\mathbf{v}\cdot\mathbf{y}} |\mathbf{y}\rangle|B^T \mathbf{y}\rangle.
+#    .. math:: \sum_{k=0}^{\ell} w_k \frac{1}{\sqrt{\binom{m}{k}}}\sum_{\substack{\mathbf{y}\\|\mathbf{y}|=k}} (-1)^{\mathbf{v}\cdot\mathbf{y}} |\mathbf{y}\rangle|B^T \mathbf{y}\rangle.
 # 5. **Decode and uncompute:** use the computed value of :math:`B^T \mathbf{y}` to find
 #    :math:`\mathbf{y}` and uncompute the error register. This results in the Hadamard transform of
 #    the desired state.
@@ -137,14 +137,14 @@ plt.show()
 # PennyLane implementation of DQI
 # -------------------------------
 # 
-# Encode the polynomial degree  l
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Amplitude encoding: weight coefficients
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
-# We are going to prepare the superposition :math:`\sum_{k=0}^{l} w_k|k\rangle`. As previously stated,
-# the weight register is made up of :math:`\left \lceil \log_{2} l\right \rceil` qubits, which means
+# We are going to prepare the superposition :math:`\sum_{k=0}^{\ell} w_k|k\rangle`. As previously stated,
+# the weight register is made up of :math:`\left \lceil \log_{2} \ell \right \rceil` qubits, which means
 # that the index :math:`k` is being binary encoded. The coefficients :math:`w_k` are chosen such that
 # they maximize the number of satisfied linear equations. The paper specifies that these optimal
-# weights are the components of the principal eigenvector of an :math:`(l+1)\times(l+1)` symmetric
+# weights are the components of the principal eigenvector of an :math:`(\ell+1)\times(\ell+1)` symmetric
 # tridiagonal matrix:
 # 
 # .. math::
@@ -425,18 +425,18 @@ print(DQI(m, n, l))
 # using the information from the syndrome register :math:`\mathbf{s}=B^T \mathbf{y}` in an efficient
 # way. This would be an easy task if :math:`B` were always a square matrix; however, since it is not,
 # we need to solve an underdetermined linear system of equations :math:`\mathbf{s}=B^T \mathbf{y}`
-# subject to the constraint :math:`|\mathbf{y}|\leq l` given by the known Hamming weights of
+# subject to the constraint :math:`|\mathbf{y}|\leq \ell` given by the known Hamming weights of
 # :math:`\mathbf{y}`. The problem we have just described is precisely the **syndrome decoding
 # problem**, where :math:`B^T` is the parity-check matrix, :math:`\mathbf{s}` is the syndrome, and
 # :math:`\mathbf{y}` is the error.
 #
-# .. admonition:: Polynomial degree :math:`l`
+# .. admonition:: Polynomial degree :math:`\ell`
 #     :class: note
 #
 #     The kernel of :math:`B^T` defines an error-correcting code. The distance :math:`d` of this code determines the number of errors
 #     it can correct, given by :math:`\left \lfloor (d-1)/2 \right \rfloor`. This condition ensures that the decoding problem has a unique solution.
-#     For this demo, we choose :math:`l=2` such that it is less than half the distance of the code :math:`d=5` and this condition is met.
-#     For a detailed discussion of the restrictions on :math:`l`, please refer to the original paper [#Jordan2024]_. 
+#     For this demo, we choose :math:`\ell=2` such that it is less than half the distance of the code :math:`d=5` and this condition is met.
+#     For a detailed discussion of the restrictions on :math:`\ell`, please refer to the original paper [#Jordan2024]_. 
 # 
 # To keep things simple, we will use a straightforward approach for decoding by building a Lookup Table
 # (LUT) in which we compute the syndrome for each possible error using the classical function
