@@ -331,8 +331,7 @@ print(DQI(m, n, l))
 def phase_Z(v):
     """Imparts a phase (-1)^{vy}."""
     for i in range(len(v)):
-        if v[i] == 1:
-            qml.Z(wires=i + 1)
+        qml.cond(v[i],qml.Z)(wires=i + 1)
 
 
 dev = qml.device("default.qubit", wires=range(0, 1 + m + n))
@@ -369,7 +368,7 @@ print(results[nonzero_index])
 # Encode matrix B in the syndrome register
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
-# We are almost there, hang on! Now, we need to compute :math:`B^T \mathbf{y}` in the syndrome
+# We are almost there, hang in there! Now, we need to compute :math:`B^T \mathbf{y}` in the syndrome
 # register. While it may not be immediately obvious how to implement this as a unitary operation, the
 # binary nature of the matrix and vector allows for a smooth translation. This operation can be
 # realized using CNOT gates, with controls on the error register and targets on the syndrome register
