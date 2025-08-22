@@ -641,7 +641,7 @@ for m in range(min_m, max_m + 1):
         device_heavy_outputs = np.sum(
             [counts[x] if x[:m] in heavy_outputs else 0 for x in counts.keys()]
         )
-        fraction_device_heavy_output = device_heavy_outputs / tape_count.shots.total_shots
+        fraction_device_heavy_output = device_heavy_outputs / tape_counts.shots.total_shots
 
         probs_ideal[m - min_m, trial] = prob_heavy_output
         probs_noisy[m - min_m, trial] = fraction_device_heavy_output
