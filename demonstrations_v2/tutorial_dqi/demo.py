@@ -172,9 +172,10 @@ r = 1
 d = (p - 2 * r) / pnp.sqrt(r * (p - r))
 l = 2
 # Define registers
-weight_register = range(int(pnp.log2(l)))
-m_register = range(1, m + 1)
-n_register = range(m + 1, n + m + 1)
+num_weight_qubits = int(pnp.ceil(pnp.log2(l)))
+weight_register = range(num_weight_qubits)
+m_register = range(num_weight_qubits, m + num_weight_qubits)
+n_register = range(m + num_weight_qubits, n + m + num_weight_qubits)
 
 
 def w_k_optimal(m, l):
