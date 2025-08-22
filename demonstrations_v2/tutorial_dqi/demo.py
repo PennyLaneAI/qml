@@ -212,16 +212,16 @@ print("the optimal values for w are", w_k)
 # :math:`|0\rangle^{\otimes m-k}|1\rangle^{\otimes k}` as input. The method is based on the fact that
 # Dicke states can be expressed in an inductive form as
 # 
-# .. math::  |D_l^m\rangle = \sqrt{\frac{l}{m}} |D_{l-1}^{m-1}\rangle \otimes |1\rangle + \sqrt{\frac{m-l}{m}} |D_{l}^{m-1}\rangle \otimes |0\rangle.
+# .. math::  |D_q^m\rangle = \sqrt{\frac{q}{m}} |D_{q-1}^{m-1}\rangle \otimes |1\rangle + \sqrt{\frac{m-q}{m}} |D_{q}^{m-1}\rangle \otimes |0\rangle.
 # 
 # Given that decomposition, one can generate the two Dicke states on the right-hand side of the
 # equation by applying a smaller unitary :math:`U_{m-1,k}` provided a suitable superposition of the inputs
-# :math:`|0\rangle^{\otimes m-l}|1\rangle^{\otimes l-1}` and
-# :math:`|0\rangle^{\otimes m-l}|1\rangle^{\otimes l}` is prepared first. Following the paper’s
+# :math:`|0\rangle^{\otimes m-q}|1\rangle^{\otimes q-1}` and
+# :math:`|0\rangle^{\otimes m-q}|1\rangle^{\otimes q}` is prepared first. Following the paper’s
 # convention, we define a *Split and Cyclic shift* unitary :math:`\mathrm{SCS}_{m,k}` to prepare the
 # following superposition:
 # 
-# .. math::  |0\rangle^{\otimes m-l}|1\rangle^{\otimes l} \rightarrow \sqrt{\frac{l}{m}} |0\rangle^{\otimes m-l}|1\rangle^{\otimes l} +  \sqrt{\frac{m-l}{m}} |0\rangle^{\otimes m-1-l}|1\rangle^{\otimes l}|0\rangle.
+# .. math::  |0\rangle^{\otimes m-q}|1\rangle^{\otimes q} \rightarrow \sqrt{\frac{q}{m}} |0\rangle^{\otimes m-q}|1\rangle^{\otimes q} +  \sqrt{\frac{m-q}{m}} |0\rangle^{\otimes m-1-q}|1\rangle^{\otimes q}|0\rangle.
 # 
 # This inductive decomposition implies that :math:`U_{m,k}` can be implemented by applying
 # :math:`\mathrm{SCS}_{m,k}` followed by the smaller unitary :math:`U_{m-1,k}`. This process
@@ -230,7 +230,7 @@ print("the optimal values for w are", w_k)
 # composed of a series of subsequently smaller :math:`\mathrm{SCS}_{m,k}` operations, as summarized by
 # the following equation:
 # 
-# .. math:: U_{m,k} = \prod_{\ell=2}^{k} (\mathrm{SCS}_{\ell,\ell-1} \otimes \mathrm{Id}^{\otimes m-\ell})  \prod_{\ell=k+1}^{m} (\mathrm{Id}^{\otimes \ell-k-1} \otimes \mathrm{SCS}_{\ell,k} \otimes \mathrm{Id}^{\otimes m-\ell}).
+# .. math:: U_{m,k} = \prod_{q=2}^{k} (\mathrm{SCS}_{q,q-1} \otimes \mathrm{Id}^{\otimes m-q})  \prod_{q=k+1}^{m} (\mathrm{Id}^{\otimes q-k-1} \otimes \mathrm{SCS}_{q,k} \otimes \mathrm{Id}^{\otimes m-q}).
 # 
 # The explicit form of :math:`\mathrm{SCS}_{m,k}`, which is implemented in code by the function
 # ``SCS``, is not discussed here. However, it’s worth noting that it is composed of a two-qubit gate
