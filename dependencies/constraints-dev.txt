@@ -3,16 +3,18 @@
 --extra-index-url https://test.pypi.org/simple/
 --extra-index-url https://download.pytorch.org/whl/cpu
 
-pennylane==0.43.0.dev34
+# Install Catalyst, then Lightning then PennyLane to get proper environment.
+pennylane-catalyst @ git+https://github.com/PennyLaneAI/catalyst.git#egg=pennylane-catalyst
+pennylane-lightning @ git+https://github.com/PennyLaneAI/pennylane-lightning.git#egg=pennylane-lightning
+pennylane @ git+https://github.com/PennyLaneAI/pennylane.git#egg=pennylane
+
+# Install plug-ins required for demos
 pennylane-cirq @ git+https://github.com/PennyLaneAI/pennylane-cirq.git#egg=pennylane-cirq
 pennylane-qiskit @ git+https://github.com/PennyLaneAI/pennylane-qiskit.git#egg=pennylane-qiskit
 pennylane-qulacs @ git+https://github.com/PennyLaneAI/pennylane-qulacs.git#egg=pennylane-qulacs
+
+# Install external packages
 iqpot @ git+https://github.com/XanaduAI/iqpopt.git#egg=iqpopt
-# Install specific lightning version that catalyst expects, then catalyst
-pennylane-lightning==0.43.0.dev15
-pennylane-catalyst==0.13.0.dev36
-
-
 chex<1.0.0
 pyqrack==1.32.12
 numpy~=1.24
