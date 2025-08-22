@@ -4,9 +4,9 @@
 --extra-index-url https://download.pytorch.org/whl/cpu
 
 # Install Catalyst, then Lightning then PennyLane to get proper environment.
-pennylane-catalyst @ git+https://github.com/PennyLaneAI/catalyst.git#egg=pennylane-catalyst
-pennylane-lightning @ git+https://github.com/PennyLaneAI/pennylane-lightning.git#egg=pennylane-lightning
-pennylane @ git+https://github.com/PennyLaneAI/pennylane.git#egg=pennylane
+# pennylane-catalyst @ git+https://github.com/PennyLaneAI/catalyst.git#egg=pennylane-catalyst
+# pennylane-lightning @ git+https://github.com/PennyLaneAI/pennylane-lightning.git#egg=pennylane-lightning
+# pennylane @ git+https://github.com/PennyLaneAI/pennylane.git#egg=pennylane
 
 # Install plug-ins required for demos
 pennylane-cirq @ git+https://github.com/PennyLaneAI/pennylane-cirq.git#egg=pennylane-cirq
