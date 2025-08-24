@@ -160,7 +160,7 @@ plt.show()
 # 
 # with :math:`a_k=\sqrt{k(m-k+1)}` and :math:`d=\frac{p-2r}{\sqrt{r(p-r)}}`. Here, :math:`p` is the
 # number of elements of the finite field where our problem lives (in this case, :math:`p=2`), and
-# :math:`r` is the number of inputs that will yield :math:`f=+1` (for this problem, :math:`r=1`). In
+# :math:`r` is the number of inputs that will yield :math:`f=+1` (for this problem, :math:`r=1)`. In
 # this demo, we will use a polynomial of degree :math:`2` for a reason that will become clear during
 # the decoding step. For now, you might be wondering if :math:`\left \lceil \log_{2} 2\right \rceil=1`
 # qubit will be enough to encode :math:`k=0,1,2`. Well, let’s examine what we obtain for the
@@ -198,8 +198,8 @@ print("the optimal values for w are", w_k)
 # Let’s just keep in mind that the :math:`k` values we are encoding are :math:`1` and :math:`2` for
 # subsequent steps.
 # 
-# Prepare Dicke states with  k  excitations
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Prepare Dicke states with k excitations
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # For this step, we need a conditional operation that prepares Dicke states
 # :math:`|D^{m}_{k}\rangle`--where the superscript is the number of qubits and the subscript is the
@@ -284,7 +284,7 @@ def prepare_dicke_state(m, k):
         SCS(i, i - 1)
 
 
-dev = qml.device("default.qubit", wires=range(0, 1 + m + n), shots=n_samples)
+dev = qml.device("default.qubit", shots=n_samples)
 
 
 @qml.qnode(dev)
@@ -334,7 +334,7 @@ def phase_Z(v):
         qml.cond(v[i],qml.Z)(wires=i + 1)
 
 
-dev = qml.device("default.qubit", wires=range(0, 1 + m + n))
+dev = qml.device("default.qubit")
 
 
 @qml.qnode(dev)
@@ -385,7 +385,7 @@ def B_T_multiplication(B_T, n_register):
                 qml.CNOT(wires=[m_register[col_index], n_register[row_index]])
 
 
-dev = qml.device("default.qubit", wires=range(0, 1 + m + n), shots=n_samples)
+dev = qml.device("default.qubit", shots=n_samples)
 
 
 @qml.qnode(dev)
@@ -479,7 +479,7 @@ def syndrome_LUT(parity_check_matrix_T):
 # Generate the lookup table
 decoding_table = syndrome_LUT(B_T)
 
-dev = qml.device("default.qubit", wires=range(0, 1 + m + n), shots=1000)
+dev = qml.device("default.qubit", shots=1000)
 
 
 @qml.qnode(dev)
@@ -527,7 +527,7 @@ print(DQI(m, n, l))
 # the random sampling done at first.
 # 
 
-dev = qml.device("default.qubit", wires=range(0, 1 + m + n), shots=n_samples)
+dev = qml.device("default.qubit", shots=n_samples)
 
 
 @qml.qnode(dev)
