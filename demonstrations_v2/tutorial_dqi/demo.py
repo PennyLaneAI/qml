@@ -196,7 +196,7 @@ print("the optimal values for w are", w_k)
 # Since :math:`w_0=0`, a single qubit is sufficient to encode the remaining non-zero coefficients. The
 # explicit form of this state will be the uniform superposition
 # :math:`\frac{1}{\sqrt{2}}(|0\rangle+|1\rangle)`, which can be readily prepared by a Hadamard gate. However,
-# for generality purposes, we will use the ``qml.StatePrep`` in our ``embed_weights`` function shown below.
+# to make our code more versatile, we will use ``qml.StatePrep`` in our ``embed_weights`` function shown below.
 # Let’s just keep in mind that the :math:`k` values we are encoding are :math:`1` and :math:`2` for
 # subsequent steps.
 #
@@ -258,7 +258,7 @@ def format_state_vector(state_vector, tol: float = 1e-6):
         if pnp.abs(amplitude) > tol:
             # Format the index 'i' as a binary string with leading zeros
             bit_string = format(i, f'0{num_qubits}b')
-            state_dict[bit_string] = amplitude
+            state_dict[bit_string] = complex(amplitude)
 
     return state_dict
     
@@ -318,13 +318,13 @@ pprint(formatted_state)
 # Uncompute the weight register
 # ~~~~~~~~~~~~~~~~~~~~~~~~~
 # After preparing the Dicke states, we uncompute and discard the state of the weight register. In
-# general, this is a straightforward process, as the Hamming weights encoded are known. In our
-# approach, we accomplished this by generating bit strings of length :math:`m` with Hamming weight of
+# general, this is a straightforward process, as the Hamming weights encoded are known.
+# We accomplished this by generating bit strings of length :math:`m` with Hamming weight of
 # :math:`2` using the ``generate_bit_strings`` function. We then applied a controlled bit flip to the
 # weight register for these specific cases. We did not need to perform any action for bit strings with
 # a Hamming weight of :math:`1`, as the qubit state was already :math:`|0\rangle`. As the output in
 # this step demonstrates, the Dicke states were prepared, and the weight register was successfully
-# uncomputed. From now on, we will discard it and not include it in our outputs.
+# uncomputed. From now on, we can choose to discard it and not include it in our outputs.
 # 
 
 def generate_bit_strings(length, hamming_weight):
