@@ -51,6 +51,7 @@ import math
 from pennylane import numpy as pnp
 import matplotlib.pyplot as plt
 import itertools
+from pprint import pprint
 
 plt.style.use("pennylane.drawer.plot")
 
@@ -59,7 +60,7 @@ B = pnp.array([[1, 0, 0, 0], [1, 1, 0, 0], [0, 1, 1, 0], [0, 0, 1, 1], [0, 0, 0,
 v = pnp.array([1, 0, 1, 0, 1])
 m, n = B.shape
 B_T = B.T
-n_samples = 10
+n_samples = 100
 
 
 def objective_function(x):
@@ -120,18 +121,18 @@ plt.show()
 # 
 #    .. math:: \sum_{k=0}^{\ell} w_k|k\rangle \frac{1}{\sqrt{\binom{m}{k}}}\sum_{\substack{\mathbf{y}\\|\mathbf{y}|=k}} |\mathbf{y}\rangle.
 # 
-#    And subsequently, uncompute the weight register.
-# 3. **Encode the vector of constraints:** encode :math:`\mathbf{v}` by imparting a phase
+# 4. **Uncompute** the weight register.
+# 5. **Encode the vector of constraints:** encode :math:`\mathbf{v}` by imparting a phase
 #    :math:`(-1)^{\mathbf{v}\cdot\mathbf{y}}`,
 # 
 #    .. math:: \sum_{k=0}^{\ell} w_k \frac{1}{\sqrt{\binom{m}{k}}}\sum_{\substack{\mathbf{y}\\|\mathbf{y}|=k}} (-1)^{\mathbf{v}\cdot\mathbf{y}} |\mathbf{y}\rangle.
-# 4. **Compute syndrome:** reversibly compute :math:`B^T \mathbf{y}` into the syndrome register,
+# 6. **Compute syndrome:** reversibly compute :math:`B^T \mathbf{y}` into the syndrome register,
 # 
 #    .. math:: \sum_{k=0}^{\ell} w_k \frac{1}{\sqrt{\binom{m}{k}}}\sum_{\substack{\mathbf{y}\\|\mathbf{y}|=k}} (-1)^{\mathbf{v}\cdot\mathbf{y}} |\mathbf{y}\rangle|B^T \mathbf{y}\rangle.
-# 5. **Decode and uncompute:** use the computed value of :math:`B^T \mathbf{y}` to find
+# 7. **Decode and uncompute:** use the computed value of :math:`B^T \mathbf{y}` to find
 #    :math:`\mathbf{y}` and uncompute the error register. This results in the Hadamard transform of
 #    the desired state.
-# 6. **Hadamard transform and sample:** apply the Hadamard transform to obtain :math:`|P(f)\rangle`
+# 8. **Hadamard transform and sample:** apply the Hadamard transform to obtain :math:`|P(f)\rangle`
 #    and sample from it to get solutions.
 # 
 # PennyLane implementation of DQI
@@ -160,7 +161,7 @@ plt.show()
 # 
 # with :math:`a_k=\sqrt{k(m-k+1)}` and :math:`d=\frac{p-2r}{\sqrt{r(p-r)}}`. Here, :math:`p` is the
 # number of elements of the finite field where our problem lives (in this case, :math:`p=2`), and
-# :math:`r` is the number of inputs that will yield :math:`f=+1` (for this problem, :math:`r=1)`. In
+# :math:`r` is the number of inputs that will yield :math:`f=+1` (for this problem, :math:`r=1).` In
 # this demo, we will use a polynomial of degree :math:`2` for a reason that will become clear during
 # the decoding step. For now, you might be wondering if :math:`\left \lceil \log_{2} 2\right \rceil=1`
 # qubit will be enough to encode :math:`k=0,1,2`. Well, let’s examine what we obtain for the
@@ -194,10 +195,18 @@ print("the optimal values for w are", w_k)
 ######################################################################
 # Since :math:`w_0=0`, a single qubit is sufficient to encode the remaining non-zero coefficients. The
 # explicit form of this state will be the uniform superposition
-# :math:`\frac{1}{\sqrt{2}}(|0\rangle+|1\rangle)`, which can be readily prepared by a Hadamard gate.
+# :math:`\frac{1}{\sqrt{2}}(|0\rangle+|1\rangle)`, which can be readily prepared by a Hadamard gate. However,
+# for generality purposes, we will use the ``qml.StatePrep`` in our ``embed_weights`` function shown below.
 # Let’s just keep in mind that the :math:`k` values we are encoding are :math:`1` and :math:`2` for
 # subsequent steps.
-# 
+#
+
+def embed_weights(w_k, weight_register):
+    """Prepares the weight register to be in superposition given coefficients."""
+    qml.StatePrep(w_k[1:], wires=weight_register, pad_with=0)
+
+
+######################################################################
 # Prepare Dicke states with k excitations
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
@@ -240,21 +249,6 @@ print("the optimal values for w are", w_k)
 # algorithm are going to be placed.
 # 
 
-def generate_bit_strings(length, hamming_weight):
-    """Generates all bit strings of a given length and Hamming weight."""
-    one_positions = itertools.combinations(range(length), hamming_weight)
-
-    results = []
-    for positions in one_positions:
-        # Create a new list of zeros
-        bit_string = pnp.zeros(length, dtype=int)
-        # Place 1s at the specified positions
-        bit_string[pnp.array(positions)] = 1
-        results.append(bit_string.tolist())
-
-    return results
-
-
 def SCS(m, k):
     """Implements the Split & Cycle shift unitary."""
 
@@ -284,7 +278,7 @@ def prepare_dicke_state(m, k):
         SCS(i, i - 1)
 
 
-dev = qml.device("default.qubit", shots=n_samples)
+dev = qml.device("default.qubit")
 
 
 @qml.qnode(dev)
@@ -292,24 +286,23 @@ def DQI(m, n, l):
     """Quantum circuit implementing DQI algorithm to solve max-XORSAT."""
 
     # Prepare weight register
-    qml.Hadamard(wires=0)
+    embed_weights(w_k, weight_register)
 
     # Prepare Dicke states conditioned on k values
     qml.ctrl(prepare_dicke_state, (0,), control_values=0)(m, k=1)
     qml.ctrl(prepare_dicke_state, (0,), control_values=1)(m, k=2)
 
-    # Uncompute weight register
-    bit_strings = generate_bit_strings(m, l)
-    for i in range(math.comb(m, l)):
-        qml.ctrl(qml.X, m_register, control_values=bit_strings[i])(0)
-
-    return qml.counts(wires=range(0, m + 1))
+    return qml.state()
 
 
-print(DQI(m, n, l))
+raw_state_vector = DQI(m, n, l)
+formatted_state = format_state_vector(raw_state_vector)
+pprint(formatted_state)
 
 
 ######################################################################
+# Uncompute the weight register
+# ~~~~~~~~~~~~~~~~~~~~~~~~~
 # After preparing the Dicke states, we uncompute and discard the state of the weight register. In
 # general, this is a straightforward process, as the Hamming weights encoded are known. In our
 # approach, we accomplished this by generating bit strings of length :math:`m` with Hamming weight of
@@ -319,6 +312,52 @@ print(DQI(m, n, l))
 # this step demonstrates, the Dicke states were prepared, and the weight register was successfully
 # uncomputed. From now on, we will discard it and not include it in our outputs.
 # 
+
+def generate_bit_strings(length, hamming_weight):
+    """Generates all bit strings of a given length and Hamming weight."""
+    one_positions = itertools.combinations(range(length), hamming_weight)
+
+    results = []
+    for positions in one_positions:
+        # Create a new list of zeros
+        bit_string = pnp.zeros(length, dtype=int)
+        # Place 1s at the specified positions
+        bit_string[pnp.array(positions)] = 1
+        results.append(bit_string.tolist())
+
+    return results
+
+
+def uncompute_weight(m, k):
+    """Uncomputes weight register when l=2"""
+    bit_strings = list(generate_bit_strings(m, k))
+    for i in range(math.comb(m, k)):
+        qml.ctrl(qml.X, m_register, control_values=bit_strings[i])(0)
+
+
+dev = qml.device("default.qubit", shots=n_samples)
+
+
+@qml.qnode(dev)
+def DQI(m, n, l):
+    """Quantum circuit implementing DQI algorithm to solve max-XORSAT."""
+
+    # Prepare weight register
+    embed_weights(w_k, weight_register)
+
+    # Prepare Dicke states conditioned on k values
+    qml.ctrl(prepare_dicke_state, (0,), control_values=0)(m, k=1)
+    qml.ctrl(prepare_dicke_state, (0,), control_values=1)(m, k=2)
+
+    # Uncompute weight register
+    uncompute_weight(m, k=2)
+
+    return qml.counts(wires=range(0, m + 1))
+
+
+pprint(DQI(m, n, l))
+
+######################################################################
 # Encode constraints vector
 # ~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
