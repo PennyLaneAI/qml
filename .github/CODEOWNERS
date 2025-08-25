@@ -1,14 +1,14 @@
-/.github/CODEOWNERS @core-release-managers @software-cloud @content-team
-/demonstrations_v2/*/requirements.in @software-cloud @content-team @core-release-managers
-/pyproject.toml @software-cloud @core-release-managers
-/poetry.lock @software-cloud @core-release-managers
-/lib/qml/** @software-cloud @core-release-managers
-/dependencies/** @software-cloud @core-release-managers
-/.github/** @software-cloud @core-release-managers
-/demonstrations_v2/** @content-team @core-release-managers
-/documentation/** @content-team @core-release-managers
-/README.md @content-team @core-release-managers
-/CONTRIBUTING.md @content-team @core-release-managers
-/_static/** @content-team @core-release-managers
-/metadata_schemas/** @content-team @sofware-cloud
-/notebook_converter/** @software-cloud @core-release-managers
+/.github/CODEOWNERS @PennyLaneAI/core-release-managers @PennyLaneAI/cloud-software @PennyLaneAI/content
+/demonstrations_v2/*/requirements.in @PennyLaneAI/cloud-software @PennyLaneAI/content @PennyLaneAI/core-release-managers
+/pyproject.toml @PennyLaneAI/cloud-software @PennyLaneAI/core-release-managers
+/poetry.lock @PennyLaneAI/cloud-software @PennyLaneAI/core-release-managers
+/lib/qml/** @PennyLaneAI/cloud-software @PennyLaneAI/core-release-managers
+/dependencies/** @PennyLaneAI/cloud-software @PennyLaneAI/core-release-managers
+/.github/** @PennyLaneAI/cloud-software @PennyLaneAI/core-release-managers
+/demonstrations_v2/** @PennyLaneAI/content @PennyLaneAI/core-release-managers
+/documentation/** @PennyLaneAI/content @PennyLaneAI/core-release-managers
+/README.md @PennyLaneAI/content @PennyLaneAI/core-release-managers
+/CONTRIBUTING.md @PennyLaneAI/content @PennyLaneAI/core-release-managers
+/_static/** @PennyLaneAI/content @PennyLaneAI/core-release-managers
+/metadata_schemas/** @PennyLaneAI/content @PennyLaneAI/cloud-software
+/notebook_converter/** @PennyLaneAI/cloud-software @PennyLaneAI/core-release-managers
