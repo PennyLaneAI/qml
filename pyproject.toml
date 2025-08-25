@@ -55,14 +55,6 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 # ---------------------------
-# Extra Package Sources
-# ---------------------------
-[[tool.poetry.source]]
-name = "pytorch-cpu"
-url = "https://download.pytorch.org/whl/cpu"
-priority = "explicit"
-
-# ---------------------------
 # Dependency Groups
 # ---------------------------
 

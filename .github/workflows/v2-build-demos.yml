@@ -15,6 +15,11 @@ on:
         required: false
         type: string
         default: ''
+      execute:
+        description: Execute, as well as build, the specified demos.
+        required: false
+        type: boolean
+        default: true
       dev:
         description: Use development dependencies.
         required: false
@@ -66,6 +71,11 @@ on:
         required: false
         type: string
         default: ''
+      execute:
+        description: Execute, as well as build, the specified demos.
+        required: false
+        type: boolean
+        default: true
       dev:
           description: Use development dependencies.
           required: false
@@ -179,7 +189,7 @@ jobs:
         run: |
           qml build \
             --format json \
-            --execute \
+            ${{ inputs.execute && '--execute' || '--no-execute' }} \
             ${{ inputs.keep-going && '--keep-going' || '--no-keep-going' }} \
             ${{ inputs.quiet && '--quiet' || '--no-quiet' }} \
             ${{ steps.demo-name-list.outputs.demo-names }} \
