@@ -249,6 +249,20 @@ def embed_weights(w_k, weight_register):
 # algorithm are going to be placed.
 # 
 
+def format_state_vector(state_vector, tol: float = 1e-6):
+    """Formats a state vector as a dictionary of bit-strings and amplitudes."""
+    num_qubits = int(pnp.log2(len(state_vector)))
+    state_dict = {}
+
+    for i, amplitude in enumerate(state_vector):
+        if pnp.abs(amplitude) > tol:
+            # Format the index 'i' as a binary string with leading zeros
+            bit_string = format(i, f'0{num_qubits}b')
+            state_dict[bit_string] = amplitude
+
+    return state_dict
+    
+
 def SCS(m, k):
     """Implements the Split & Cycle shift unitary."""
 
