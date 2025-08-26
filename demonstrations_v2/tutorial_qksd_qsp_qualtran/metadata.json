@@ -7,7 +7,11 @@
         {
 
             "username": "oumarou"
+        },
+        {
+            "username": "ANT0N"
         }
+
     ],
     "executable_stable": true,
     "executable_latest": true,
