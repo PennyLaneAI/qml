@@ -177,8 +177,8 @@ def krylov_qsp(lcu, angles_even_real, angles_even_imag, angles_odd_real, angles_
 
 
 ######################################################################
-# We can use these to build 1- and 2- particle reduced density matrices
-# Based on `Molecular Properties from Quantum Krylov Subspace Diagonalization <https://arxiv.org/abs/2501.05286>`_
+# We can now use this circuit to build 1- and 2- particle reduced density matrices.
+# Based on the paper `Molecular Properties from Quantum Krylov Subspace Diagonalization <https://arxiv.org/abs/2501.05286>`_
 # [TODO: repeat measurements for different Pauli Words and build reduced density matrices]
 # [TODO: demonstrate reduced density matrices are correct]
 
@@ -273,7 +273,14 @@ cnots = [count_cnots(D) for D in Ds]
 plt.plot(Ds, cnots)
 
 ######################################################################
-# We can show the call graph: yay
+# We can also show the call graph of the circuit, a diagrammatic representation of how each operation
+# in the circuit calls other operations. This can be useful to understand how a circuit works or 
+# which sections are resource-intensive.
+#
+# The first layer of this circuit, before decomposing the operations, contains many
+# RZ gates controlled on two qubits with different angles. As we saw above, we can group operations
+# together and simplify the view. To this end, we first write a custom Qualtran generalizer
+# that will combine controlled-RZ gates: 
 
 import attrs
 import sympy
@@ -283,17 +290,22 @@ from qualtran.resource_counting.generalizers import _ignore_wrapper
 PHI = sympy.Symbol(r'\phi')
 
 def generalize_ccrz(b):
-    from qualtran import CtrlSpec
     from qualtran.bloqs.basic_gates import Rz
     from qualtran.bloqs.mcmt.controlled_via_and import ControlledViaAnd
-    
 
-    spec = CtrlSpec(cvs=[1,1])
     if isinstance(b, ControlledViaAnd):
         return attrs.evolve(b, subbloq = Rz(angle=PHI))
     
     return _ignore_wrapper(generalize_ccrz, b)
-    
+
+######################################################################
+# We can then use this generalizer to draw our call graph using Qualtran's ``show_call_graph``
+# [TODO: replace this code block with a non-executable one and manually add the static image output]
+
+from qualtran.drawing import show_call_graph
+
+graph, sigma = bloq.call_graph(generalizer=generalize_ccrz)
+show_call_graph(graph)
 
 ######################################################################
 # Conclusion

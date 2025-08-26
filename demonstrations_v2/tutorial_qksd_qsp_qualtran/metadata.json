@@ -1,5 +1,5 @@
 {
-    "title": "How to obtain molecular properties from quantum krylov subspace diagonalization",
+    "title": "Using PennyLane and Qualtran to analyze how QSP can improve measurements of molecular properties",
     "authors": [
         {
             "username": "Diego"
