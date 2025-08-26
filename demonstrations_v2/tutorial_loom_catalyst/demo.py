@@ -1,5 +1,5 @@
 r"""Loom x Catalyst
-===============
+===================
 
 Running computations on physical systems inevitably means confronting imperfections–what we commonly
 refer to as noise. Noise, by definition, is any deviation from the ideal behaviour of a system as it
