@@ -121,7 +121,7 @@ def qsp(lcu, angles, rot_wires, prep_wires):
 
 ######################################################################
 # We also add a template to combine real and imaginary parts of the Chebyshev polynomials as QSP
-# can only implement one at a time:
+# can only implement one at a time [TODO: reference]:
 
 def qsp_poly_complex(lcu, angles_real, angles_imag, ctrl_wire, rot_wires, prep_wires):
     qml.H(ctrl_wire)
@@ -159,6 +159,7 @@ def krylov_qsp(lcu, angles_even_real, angles_even_imag, angles_odd_real, angles_
     if measure==2: # preprocessing for reflection measurement
         qml.X(rdm_ctrl_wire)
 
+    #[TODO: explain why we are combining two QSP calls again here]
     qml.H(ctrl_wires[0])
     qml.ctrl(qsp_poly_complex, ctrl_wires[0], 0)(lcu, angles_even_real, angles_even_imag, ctrl_wires[1], rot_wires, prep_wires)
     qml.ctrl(qsp_poly_complex, ctrl_wires[0], 1)(lcu, angles_odd_real, angles_odd_imag, ctrl_wires[1], rot_wires, prep_wires)
@@ -178,11 +179,26 @@ def krylov_qsp(lcu, angles_even_real, angles_even_imag, angles_odd_real, angles_
 
 ######################################################################
 # We can now use this circuit to build 1- and 2- particle reduced density matrices.
-# Based on the paper `Molecular Properties from Quantum Krylov Subspace Diagonalization <https://arxiv.org/abs/2501.05286>`_
-# [TODO: repeat measurements for different Pauli Words and build reduced density matrices]
-# [TODO: demonstrate reduced density matrices are correct]
+# Based on the paper `Molecular Properties from Quantum Krylov Subspace Diagonalization <https://arxiv.org/abs/2501.05286>`_,
+# the elements of the one-particle reduced density matrix are obtained by measuring the expectation
+# value of the fermionic one-particle excitation operators acting on the Krylov lowest energy state:
+#
+# .. math:: \langle\Psi_0 | \hat{E}_{pq} | \Psi_0\rangle
+#
+# We use the Jordan-Wigner mapping of the fermionic one-particle excitation operators and measure
+# the resulting observables instead.
+# [TODO: demonstrate what the output value of the coherent result is, put it into context]
+# We can obtain the Jordan-Wigner mapping of the fermionic operators via PennyLane using the
+# :func:`~pennylane.fermi.from_string` and :func:`~pennylane.jordan_wigner` functions as follows:
 
-obs = qml.H(hamiltonian.wires[-1]) @ qml.H(hamiltonian.wires[-2])
+Epq = qml.fermi.from_string('0+ 0-')
+obs = qml.jordan_wigner(Epq)
+
+######################################################################
+# We then measure these and post-process according to
+# 
+# .. math:: 2\langle \Psi_0 |_s\hat{P}_{\nu}|\Psi_0\rangle_s = \eta^2(o_1 + o_2).
+#
 
 measurement_1 = krylov_qsp(hamiltonian, angles_even_real, angles_even_imag, angles_odd_real, angles_odd_imag, measure=1, obs=obs)
 measurement_2 = krylov_qsp(hamiltonian, angles_even_real, angles_even_imag, angles_odd_real, angles_odd_imag, measure=2, obs=obs)
