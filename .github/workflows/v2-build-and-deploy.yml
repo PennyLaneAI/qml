@@ -78,7 +78,7 @@ jobs:
       (needs.validate-and-parse-inputs.outputs.branch == 'dev')
     uses: ./.github/workflows/v2-build-demos.yml
     with:
-      ref: ${{ needs.validate-and-parse-inputs.outputs.branch }}
+      ref: 'testing-demo-links' # temporary branch for testing demo links
       demo-names: ${{ github.event.inputs.demos }}
       dev: ${{ github.event.inputs.target == 'latest' }}
       save-artifact: true
