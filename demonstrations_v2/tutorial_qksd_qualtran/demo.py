@@ -16,8 +16,7 @@ In this demo we'll follow
 to:
 
 * Briefly introduce QKSD.
-* Estimate the reduced density matrices, :math:`\gamma_{pq}` and :math:`\Gamma_{pqrs}` of a polynomial
-    of the Hamiltonian applied to the QKSD lowest-energy state.
+* Estimate the reduced density matrices, :math:`\gamma_{pq}` and :math:`\Gamma_{pqrs}` of a polynomial of the Hamiltonian applied to the QKSD lowest-energy state.
 * Use the PennyLane-Qualtran integration to count the number of qubits and gates required by these
     circuits and demonstrate the scaling with respect to Krylov dimension, :math:`D`.
 
@@ -34,7 +33,7 @@ to:
 # * Define a Krylov subspace for the desired molecule.
 # * Calculate the projection of the Hamiltonian into the subspace (:math:`\tilde{H}`) 
 #       and the overlap matrix (:math:`\tilde{S}`)
-# * Solve the generalized eigenvalue problem: :math:`\tiled{H}c^m = E_m \tilde{S}c^m`
+# * Solve the generalized eigenvalue problem: :math:`\tilde{H}c^m = E_m \tilde{S}c^m`
 #
 # Solving this generalized eigenvalue problem gives approximations of the possible energies of
 # the molecule, like the lowest Krylov energy :math:`|\Psi_0\rangle`
@@ -77,13 +76,13 @@ coeffs, paulis = hamiltonian.terms()
 # via QSP.
 # In this case, we pre-computed the required values for the
 # :math:`H_2O` molecule using a Krylov subspace of dimension :math:`D=15`.
-# These values can be obtained using e.g. the [lanczos method](https://quantum-journal.org/papers/q-2023-05-23-1018/pdf/)
-# or using [Quantum Krylov Subspace diagonalization](https://arxiv.org/pdf/2407.14431) to find the 
+# These values can be obtained using e.g. the `lanczos method <https://quantum-journal.org/papers/q-2023-05-23-1018/pdf/>`_
+# or using `Quantum Krylov Subspace diagonalization <https://arxiv.org/pdf/2407.14431>`_ to find the 
 # QKSD ground-state, :math:`|\Psi_0\rangle`, in the Chebyshev basis defined by:
 # 
-# .. math:: \ket{\psi_k} \coloneqq \sum_{i=0}^{D-1}c^k_iT_i(H)\ket{\psi_0},
+# .. math:: \ket{\psi_k} = \sum_{i=0}^{D-1}c^k_iT_i(H)\ket{\psi_0},
 # 
-# .. math:: \mathcal{K}& \coloneqq \lspan(\{\ket{\psi_k}\}_{k=0}^{D-1}),
+# .. math:: \mathcal{K} = span(\{\ket{\psi_k}\}_{k=0}^{D-1}),
 # 
 # The angles below will be used to produce the QKSD ground-state :math:`|\Psi_0\rangle` via QSP, as
 # defined by:
@@ -101,7 +100,7 @@ angles_odd_imag = np.array([3.01380289, 2.84660247, 3.11277234, 3.18159601, 3.06
 # We can now create operations to implement the QSP circuit that will prepare the QKSD ground-state.
 # For this we need to create a rotation operator or signal processing operator, and a QSP template
 # to alternate between this and a block-encoding operator. For more details, see
-# [Function Fitting using Quantum Signal Processing](https://pennylane.ai/qml/demos/function_fitting_qsp)
+# `[`Function Fitting using Quantum Signal Processing <https://pennylane.ai/qml/demos/function_fitting_qsp>`_
 
 def rotation_about_reflection_axis(angle, wires):
     qml.ctrl(qml.PauliX(wires[0]), wires[1:], (0,) * len(wires[1:]))
@@ -173,7 +172,7 @@ def krylov_qsp(lcu, angles_even_real, angles_even_imag, angles_odd_real, angles_
 
 ######################################################################
 # We can use these to build 1- and 2- particle reduced density matrices
-# Based on [Molecular Properties from Quantum Krylov Subspace Diagonalization](https://arxiv.org/abs/2501.05286)
+# Based on `Molecular Properties from Quantum Krylov Subspace Diagonalization <https://arxiv.org/abs/2501.05286>`_
 # [TODO: repeat measurements for different Pauli Words and build reduced density matrices]
 # [TODO: demonstrate reduced density matrices are correct]
 
@@ -225,7 +224,7 @@ for gate, count in sigma.items():
 
 ######################################################################
 # As explained in
-# [Molecular Properties from Quantum Krylov Subspace Diagonalization](https://arxiv.org/abs/2501.05286),
+# `Molecular Properties from Quantum Krylov Subspace Diagonalization <https://arxiv.org/abs/2501.05286>`_,
 # increasing the dimension of the Krylov subspace improves the accuracy of the Krylov minimal energy
 # compared to the true ground state energy. This extra accuracy is paid by requiring additional gates.
 # Let's see how the number of gates increases with increasing Krylov susbspace dimension. We can
