@@ -244,9 +244,10 @@ def embed_weights(w_k, weight_register):
 # The explicit form of :math:`\mathrm{SCS}_{m,k}`, which is implemented in code by the function
 # ``SCS``, is not discussed here. However, it’s worth noting that it is composed of a two-qubit gate
 # followed by :math:`k-1` three-qubit gates (further details can be found in [#Bartschi2019]_).
-# Let’s now implement this algorithm in the ``prepare_dicke_state`` function. We will use it twice in
+# Let’s now implement this algorithm in the ``prepare_dicke_state`` function and then use it twice in
 # a controlled way via ``qml.ctrl()`` in our main function ``DQI`` where all the parts of the DQI
-# algorithm are going to be placed.
+# algorithm are going to be placed. To verify that this step was implemented correctly, we will output 
+# the state in this step and print it in a nice form using the auxiliary ``format_state_vector`` function. 
 # 
 
 def format_state_vector(state_vector, tol: float = 1e-6):
@@ -322,9 +323,8 @@ pprint(formatted_state)
 # We accomplished this by generating bit strings of length :math:`m` with Hamming weight of
 # :math:`2` using the ``generate_bit_strings`` function. We then applied a controlled bit flip to the
 # weight register for these specific cases. We did not need to perform any action for bit strings with
-# a Hamming weight of :math:`1`, as the qubit state was already :math:`|0\rangle`. As the output in
-# this step demonstrates, the Dicke states were prepared, and the weight register was successfully
-# uncomputed. From now on, we can choose to discard it and not include it in our outputs.
+# a Hamming weight of :math:`1`, as the qubit state was already :math:`|0\rangle`. From now on, we can 
+# choose to discard it and not include it in our outputs.
 # 
 
 def generate_bit_strings(length, hamming_weight):
@@ -368,8 +368,6 @@ def DQI(m, n, l):
 
     return qml.counts(wires=range(0, m + 1))
 
-
-pprint(DQI(m, n, l))
 
 ######################################################################
 # Encode constraints vector
@@ -566,7 +564,7 @@ def DQI(m, n, l):
     return qml.counts(wires=range(1, m + n + 1))
 
 
-print(DQI(m, n, l))
+pprint(DQI(m, n, l))
 
 
 ######################################################################
@@ -630,7 +628,7 @@ DQI_array = pnp.array(all_bit_lists)  # DQI sample array
 
 f_x_array_DQI = [objective_function(DQI_array[i]) for i in range(n_samples)]
 
-print(results)
+pprint(results)
 plt.hist(f_x_array_random, bins=30, alpha=0.7, density=True, label="random sampling")
 plt.hist(f_x_array_DQI, bins=30, alpha=0.5, density=True, label="DQI sampling")
 plt.xlabel(r"$f(x)$")
