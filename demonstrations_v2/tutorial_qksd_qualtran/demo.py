@@ -29,17 +29,18 @@ to:
 # The exact details of Quantum Krylov Subspace Diagonalization (QKSD) are beyond the scope of
 # this demo. However, the general outline of the technique is as follows:
 #
-# * Choose a molecule and obtain its Hamiltonian (:math:`\hat{H}`)
-# * Define a Krylov subspace for the desired molecule.
-# * Calculate the projection of the Hamiltonian into the subspace (:math:`\tilde{H}`)
+# * Obtain your Hamiltonian (:math:`\hat{H}`), for example the one describing a molecule of interest.
+# * Define a Krylov subspace spanned by quantum states that can be efficiently prepared on a quantum computer.
+# * Obtain from the quantum computer the projection of the Hamiltonian into the subspace (:math:`\tilde{H}`)
 #       and the overlap matrix (:math:`\tilde{S}`)
-# * Solve the generalized eigenvalue problem: :math:`\tilde{H}c^m = E_m \tilde{S}c^m`
+# * On a classical computer solve the generalized eigenvalue problem: :math:`\tilde{H}c^m = E_m \tilde{S}c^m`
 #
-# Solving this generalized eigenvalue problem gives approximations of the possible energies of
-# the molecule, like the lowest Krylov energy :math:`|\Psi_0\rangle`
+# Solving this generalized eigenvalue problem gives approximations of the eigen energies of
+# the Hamiltonian, as well as corresponding eigenstate such as :math:`|\Psi_0\rangle` for the lowest Krylov energy.
 #
+# Sich eingestate, which is a linear combination of the states spanning the Krylov space, can then be prepared with QSP.
 # For the purposes of this demo, we will use a set of pre-calculated QSP angles that implement the
-# lowest-energy Krylov eigenstate in the Chebyshev basis.
+# lowest-energy Krylov eigenstate of a simple molecule in the Chebyshev basis.
 #
 # Let's begin with the :math:`H_2O` molecule. We can obtain the details of
 # this molecule using PennyLane's datasets as follows:
