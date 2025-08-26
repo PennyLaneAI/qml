@@ -32,6 +32,11 @@ on:
         description: Pull request number for the deployment. Required if deploying to a staging or production environment.
         required: true
         type: number
+      ref:
+        description: Branch, tag or commit SHA to checkout. If empty, inferred from the target input.
+        required: false
+        type: string
+        default: ''
 
 jobs:
   validate-and-parse-inputs:
@@ -78,7 +83,7 @@ jobs:
       (needs.validate-and-parse-inputs.outputs.branch == 'dev')
     uses: ./.github/workflows/v2-build-demos.yml
     with:
-      ref: 'testing-demo-links' # temporary branch for testing demo links
+      ref: ${{ github.event.inputs.ref != '' && github.event.inputs.ref || needs.validate-and-parse-inputs.outputs.branch }}
       demo-names: ${{ github.event.inputs.demos }}
       dev: ${{ github.event.inputs.target == 'latest' }}
       save-artifact: true
