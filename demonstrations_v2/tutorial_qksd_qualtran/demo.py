@@ -1,23 +1,23 @@
 r"""Using PennyLane and Qualtran to analyze how QSP can improve measurements of molecular properties
 ======================================
 
-Want to efficiently measure molecular properties using quantum computers? After simplifying a 
+Want to efficiently measure molecular properties using quantum computers? After simulating a
 molecule using Quantum Krylov Subspace Diagonalization (QKSD) techniques, Quantum Signal Processing (QSP)
 can be used to efficiently measure the one- and two-particle reduced density matrices of molecular
-systems. 
+systems.
 
 .. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/pennylane-demo-qualtran-qksd.png
     :align: center
     :width: 70%
     :target: javascript:void(0)
 
-In this demo we'll follow
+In this demo we'll follow the paper
 [Molecular Properties from Quantum Krylov Subspace Diagonalization](https://arxiv.org/abs/2501.05286)
 to:
 
 * Briefly introduce QKSD.
 * Estimate the reduced density matrices, :math:`\gamma_{pq}` and :math:`\Gamma_{pqrs}` of a polynomial of the Hamiltonian applied to the QKSD lowest-energy state.
-* Use the PennyLane-Qualtran integration to count the number of qubits and gates required by these
+* Use the PennyLane-Qualtran integration to count the number of qubits and gates required by the relevant
     circuits and demonstrate the scaling with respect to Krylov dimension, :math:`D`.
 
 """
@@ -31,16 +31,16 @@ to:
 #
 # * Choose a molecule and obtain its Hamiltonian (:math:`\hat{H}`)
 # * Define a Krylov subspace for the desired molecule.
-# * Calculate the projection of the Hamiltonian into the subspace (:math:`\tilde{H}`) 
+# * Calculate the projection of the Hamiltonian into the subspace (:math:`\tilde{H}`)
 #       and the overlap matrix (:math:`\tilde{S}`)
 # * Solve the generalized eigenvalue problem: :math:`\tilde{H}c^m = E_m \tilde{S}c^m`
 #
 # Solving this generalized eigenvalue problem gives approximations of the possible energies of
 # the molecule, like the lowest Krylov energy :math:`|\Psi_0\rangle`
-# 
+#
 # For the purposes of this demo, we will use a set of pre-calculated QSP angles that implement the
 # lowest-energy Krylov eigenstate in the Chebyshev basis.
-#  
+#
 # Let's begin with the :math:`H_2O` molecule. We can obtain the details of
 # this molecule using PennyLane's datasets as follows:
 
@@ -52,7 +52,7 @@ molecule = ds.molecule
 
 ######################################################################
 # We can then calculate the one-electron and two-electron terms of the hamiltonian using the ``qchem``
-# module: 
+# module:
 
 const, h1, h2 = qml.qchem.electron_integrals(molecule, core=[0, 1, 2], active=[3, 4, 5, 6])()
 hpq, hpqrs = np.array(h1), np.array(h2)
@@ -77,16 +77,16 @@ coeffs, paulis = hamiltonian.terms()
 # In this case, we pre-computed the required values for the
 # :math:`H_2O` molecule using a Krylov subspace of dimension :math:`D=15`.
 # These values can be obtained using e.g. the `lanczos method <https://quantum-journal.org/papers/q-2023-05-23-1018/pdf/>`_
-# or using `Quantum Krylov Subspace diagonalization <https://arxiv.org/pdf/2407.14431>`_ to find the 
+# or using `Quantum Krylov Subspace diagonalization <https://arxiv.org/pdf/2407.14431>`_ to find the
 # QKSD ground-state, :math:`|\Psi_0\rangle`, in the Chebyshev basis defined by:
-# 
+#
 # .. math:: \ket{\psi_k} = \sum_{i=0}^{D-1}c^k_iT_i(H)\ket{\psi_0},
-# 
+#
 # .. math:: \mathcal{K} = span(\{\ket{\psi_k}\}_{k=0}^{D-1}),
-# 
+#
 # The angles below will be used to produce the QKSD ground-state :math:`|\Psi_0\rangle` via QSP, as
 # defined by:
-# 
+#
 # .. math:: \ket{\Psi_0}=\sum_{i=0}^{D-1} c^0_i T_i(\hat{H})\ket{\psi_0}
 
 angles_even_real = np.array([3.11277458, 2.99152757, 3.15307452, 3.40611024, 3.00166196, 3.03597059, 3.25931224, 3.04073693, 3.25931224, 3.03597059, 3.00166196, 3.40611024, 3.15307452, 2.99152757, -40.86952257])
@@ -149,10 +149,10 @@ def krylov_qsp(lcu, angles_even_real, angles_even_imag, angles_odd_real, angles_
     prep_wires = rot_wires[1:]
     ctrl_wires = [prep_wires[-1] + 1, prep_wires[-1] + 2]
     rdm_ctrl_wire = ctrl_wires[-1] + 1
-    
+
     if measure==2: # preprocessing for reflection measurement
         qml.X(rdm_ctrl_wire)
-    
+
     qml.H(ctrl_wires[0])
     qml.ctrl(qsp_poly_complex, ctrl_wires[0], 0)(lcu, angles_even_real, angles_even_imag, ctrl_wires[1], rot_wires, prep_wires)
     qml.ctrl(qsp_poly_complex, ctrl_wires[0], 1)(lcu, angles_odd_real, angles_odd_imag, ctrl_wires[1], rot_wires, prep_wires)
