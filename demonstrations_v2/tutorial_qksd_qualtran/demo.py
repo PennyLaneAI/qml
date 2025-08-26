@@ -174,21 +174,22 @@ def krylov_qsp(lcu, angles_even_real, angles_even_imag, angles_odd_real, angles_
 ######################################################################
 # We can use these to build 1- and 2- particle reduced density matrices
 # Based on [Molecular Properties from Quantum Krylov Subspace Diagonalization](https://arxiv.org/abs/2501.05286)
+# [TODO: repeat measurements for different Pauli Words and build reduced density matrices]
+# [TODO: demonstrate reduced density matrices are correct]
 
 obs = qml.H(hamiltonian.wires[-1]) @ qml.H(hamiltonian.wires[-2])
 
-# measurement_1 = krylov_qsp(hamiltonian, angles_even_real, angles_even_imag, angles_odd_real, angles_odd_imag, measure=1, obs=obs)
-# measurement_2 = krylov_qsp(hamiltonian, angles_even_real, angles_even_imag, angles_odd_real, angles_odd_imag, measure=2, obs=obs)
+measurement_1 = krylov_qsp(hamiltonian, angles_even_real, angles_even_imag, angles_odd_real, angles_odd_imag, measure=1, obs=obs)
+measurement_2 = krylov_qsp(hamiltonian, angles_even_real, angles_even_imag, angles_odd_real, angles_odd_imag, measure=2, obs=obs)
 
-# print("meas 1:", measurement_1)
-# print("meas 2:", measurement_2)
+print("meas 1:", measurement_1)
+print("meas 2:", measurement_2)
 
-# lambda_lcu = np.sum(np.abs(coeffs))
-# coherent_result = 2*lambda_lcu*(measurement_1+measurement_2)
-# print("coherent result:",coherent_result)
+lambda_lcu = np.sum(np.abs(coeffs))
+coherent_result = 2*lambda_lcu*(measurement_1+measurement_2)
+print("coherent result:",coherent_result)
 
 ######################################################################
-# [Explanation about the results]
 #
 # We can analyze the resources and flow of this program by using the qualtran call graph.
 # We first convert the PennyLane circuit to a Qualtran bloq and then use the call graph to count
