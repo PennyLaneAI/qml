@@ -1,23 +1,23 @@
 r"""Using PennyLane and Qualtran to analyze how QSP can improve measurements of molecular properties
-======================================
+====================================================================================================
 
-Want to efficiently measure molecular properties using quantum computers? After simplifying a 
+Want to efficiently measure molecular properties using quantum computers? After simulating a 
 molecule using Quantum Krylov Subspace Diagonalization (QKSD) techniques, Quantum Signal Processing (QSP)
 can be used to efficiently measure the one- and two-particle reduced density matrices of molecular
-systems. 
+systems.
 
 .. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/pennylane-demo-qualtran-qksd.png
     :align: center
     :width: 70%
     :target: javascript:void(0)
 
-In this demo we'll follow
+In this demo we'll follow the paper
 [Molecular Properties from Quantum Krylov Subspace Diagonalization](https://arxiv.org/abs/2501.05286)
 to:
 
 * Briefly introduce QKSD.
 * Estimate the reduced density matrices, :math:`\gamma_{pq}` and :math:`\Gamma_{pqrs}` of a polynomial of the Hamiltonian applied to the QKSD lowest-energy state.
-* Use the PennyLane-Qualtran integration to count the number of qubits and gates required by these
+* Use the PennyLane-Qualtran integration to count the number of qubits and gates required by the relevant
     circuits and demonstrate the scaling with respect to Krylov dimension, :math:`D`.
 
 """
@@ -29,17 +29,19 @@ to:
 # The exact details of Quantum Krylov Subspace Diagonalization (QKSD) are beyond the scope of
 # this demo. However, the general outline of the technique is as follows:
 #
-# * Choose a molecule and obtain its Hamiltonian (:math:`\hat{H}`)
-# * Define a Krylov subspace for the desired molecule.
+# * Obtain your Hamiltonian (:math:`\hat{H}`), for example the one describing a molecule of interest.
+# * Define a Krylov subspace spanned by quantum states that can be efficiently prepared on a quantum computer.
+# * Obtain from the quantum computer the projection of the Hamiltonian into the subspace (:math:`\tilde{H}`)
 # * Calculate the projection of the Hamiltonian into the subspace (:math:`\tilde{H}`) 
 #       and the overlap matrix (:math:`\tilde{S}`)
-# * Solve the generalized eigenvalue problem: :math:`\tilde{H}c^m = E_m \tilde{S}c^m`
+# * On a classical computer, solve the generalized eigenvalue problem: :math:`\tilde{H}c^m = E_m \tilde{S}c^m`
 #
-# Solving this generalized eigenvalue problem gives approximations of the possible energies of
-# the molecule, like the lowest Krylov energy :math:`|\Psi_0\rangle`
-# 
+# Solving this generalized eigenvalue problem gives approximations of the eigen energies of
+# the Hamiltonian, as well as corresponding eigenstates such as :math:`|\Psi_0\rangle` for the lowest Krylov energy.
+#
+# Such an eingestate, which is a linear combination of the states spanning the Krylov space, can then be prepared with QSP.
 # For the purposes of this demo, we will use a set of pre-calculated QSP angles that implement the
-# lowest-energy Krylov eigenstate in the Chebyshev basis.
+# lowest-energy Krylov eigenstate of a simple molecule in the Chebyshev basis.
 #  
 # Let's begin with the :math:`H_2O` molecule. We can obtain the details of
 # this molecule using PennyLane's datasets as follows:
@@ -52,7 +54,7 @@ molecule = ds.molecule
 
 ######################################################################
 # We can then calculate the one-electron and two-electron terms of the hamiltonian using the ``qchem``
-# module: 
+# module:
 
 const, h1, h2 = qml.qchem.electron_integrals(molecule, core=[0, 1, 2], active=[3, 4, 5, 6])()
 hpq, hpqrs = np.array(h1), np.array(h2)
@@ -60,13 +62,17 @@ hpq, hpqrs = np.array(h1), np.array(h2)
 ######################################################################
 # Based on these values we can generate the Hamiltonian of the system:
 
-from openfermion.ops import InteractionOperator
-from openfermion.transforms import get_fermion_operator
+# from openfermion.ops import InteractionOperator
+# from openfermion.transforms import get_fermion_operator
 
-interaction_op = InteractionOperator(constant=0.0, one_body_tensor=hpq, two_body_tensor=hpqrs)
-fermion_hamiltonian = get_fermion_operator(interaction_op)
-hamiltonian = qml.qchem.observable(fermion_hamiltonian)
-coeffs, paulis = hamiltonian.terms()
+# interaction_op = InteractionOperator(constant=0.0, one_body_tensor=hpq, two_body_tensor=hpqrs)
+# fermion_hamiltonian = get_fermion_operator(interaction_op)
+# hamiltonian = qml.qchem.observable(fermion_hamiltonian)
+# coeffs, paulis = hamiltonian.terms()
+
+coeffs = [-2.6055398817649027, 0.4725512342017669, 0.06908378485045799, 0.06908378485045799, 0.42465877221739423, 0.040785962774025165, 0.02016371425557293, 0.33650704944175736, 0.059002396986463035, 0.059002396986463035, 0.2401948108687125, 0.2696430914655511, 0.04971997220167805, 0.04971997220167805, 0.2751875205710399, 0.30033122257656397, 0.22551650339251875]
+paulis = [qml.GlobalPhase(0, 0), qml.Z(0), qml.Y(0) @ qml.Z(1) @ qml.Y(2), qml.X(0) @ qml.Z(1) @ qml.X(2), qml.Z(1), qml.Z(2), qml.Z(3), qml.Z(0) @ qml.Z(1), qml.Y(0) @ qml.Y(2), qml.X(0) @ qml.X(2), qml.Z(0) @ qml.Z(2), qml.Z(0) @ qml.Z(3), qml.Y(0) @ qml.Z(1) @ qml.Y(2) @ qml.Z(3), qml.X(0) @ qml.Z(1) @ qml.X(2) @ qml.Z(3), qml.Z(1) @ qml.Z(2), qml.Z(1) @ qml.Z(3), qml.Z(2) @ qml.Z(3)]
+hamiltonian = qml.Hamiltonian(coeffs, paulis)
 
 ######################################################################
 # Using QSP to directly create the QKSD ground-state
@@ -77,16 +83,16 @@ coeffs, paulis = hamiltonian.terms()
 # In this case, we pre-computed the required values for the
 # :math:`H_2O` molecule using a Krylov subspace of dimension :math:`D=15`.
 # These values can be obtained using e.g. the `lanczos method <https://quantum-journal.org/papers/q-2023-05-23-1018/pdf/>`_
-# or using `Quantum Krylov Subspace diagonalization <https://arxiv.org/pdf/2407.14431>`_ to find the 
+# or using `Quantum Krylov Subspace diagonalization <https://arxiv.org/pdf/2407.14431>`_ to find the
 # QKSD ground-state, :math:`|\Psi_0\rangle`, in the Chebyshev basis defined by:
-# 
+#
 # .. math:: \ket{\psi_k} = \sum_{i=0}^{D-1}c^k_iT_i(H)\ket{\psi_0},
-# 
+#
 # .. math:: \mathcal{K} = span(\{\ket{\psi_k}\}_{k=0}^{D-1}),
-# 
+#
 # The angles below will be used to produce the QKSD ground-state :math:`|\Psi_0\rangle` via QSP, as
 # defined by:
-# 
+#
 # .. math:: \ket{\Psi_0}=\sum_{i=0}^{D-1} c^0_i T_i(\hat{H})\ket{\psi_0}
 
 angles_even_real = np.array([3.11277458, 2.99152757, 3.15307452, 3.40611024, 3.00166196, 3.03597059, 3.25931224, 3.04073693, 3.25931224, 3.03597059, 3.00166196, 3.40611024, 3.15307452, 2.99152757, -40.86952257])
@@ -149,10 +155,10 @@ def krylov_qsp(lcu, angles_even_real, angles_even_imag, angles_odd_real, angles_
     prep_wires = rot_wires[1:]
     ctrl_wires = [prep_wires[-1] + 1, prep_wires[-1] + 2]
     rdm_ctrl_wire = ctrl_wires[-1] + 1
-    
+
     if measure==2: # preprocessing for reflection measurement
         qml.X(rdm_ctrl_wire)
-    
+
     qml.H(ctrl_wires[0])
     qml.ctrl(qsp_poly_complex, ctrl_wires[0], 0)(lcu, angles_even_real, angles_even_imag, ctrl_wires[1], rot_wires, prep_wires)
     qml.ctrl(qsp_poly_complex, ctrl_wires[0], 1)(lcu, angles_odd_real, angles_odd_imag, ctrl_wires[1], rot_wires, prep_wires)
@@ -265,6 +271,29 @@ def count_cnots(krylov_dimension):
 Ds = [10, 20, 30, 40, 50]
 cnots = [count_cnots(D) for D in Ds]
 plt.plot(Ds, cnots)
+
+######################################################################
+# We can show the call graph: yay
+
+import attrs
+import sympy
+
+from qualtran.resource_counting.generalizers import _ignore_wrapper
+
+PHI = sympy.Symbol(r'\phi')
+
+def generalize_ccrz(b):
+    from qualtran import CtrlSpec
+    from qualtran.bloqs.basic_gates import Rz
+    from qualtran.bloqs.mcmt.controlled_via_and import ControlledViaAnd
+    
+
+    spec = CtrlSpec(cvs=[1,1])
+    if isinstance(b, ControlledViaAnd):
+        return attrs.evolve(b, subbloq = Rz(angle=PHI))
+    
+    return _ignore_wrapper(generalize_ccrz, b)
+    
 
 ######################################################################
 # Conclusion
