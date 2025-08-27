@@ -224,8 +224,6 @@ print("coherent result:",coherent_result)
 # We first convert the PennyLane circuit to a Qualtran bloq and then use the call graph to count
 # the required gates:
 
-hamiltonian = qml.Hamiltonian(hamiltonian.terms()[0], [qml.GlobalPhase(0,wires=hamiltonian.wires[0]) if i.name=="Identity" else i for i in hamiltonian.terms()[1]])
-# ^ redefining Identity as Global Phase in hamiltonian as a temprorary work-around
 bloq = qml.to_bloq(krylov_qsp, map_ops=False,
                    angles_even_real=angles_even_real, angles_even_imag=angles_even_imag,
                     angles_odd_real=angles_odd_real, angles_odd_imag=angles_odd_imag,
