@@ -143,19 +143,19 @@ circuit. We obtain four cases illustrated below.
 
 .. figure:: ../_static/demonstration_assets/loom_catalyst/syndrome00.png
     :align: center
-    :width: 70%
+    :width: 75%
 
 .. figure:: ../_static/demonstration_assets/loom_catalyst/syndrome01.png
     :align: center
-    :width: 70%
+    :width: 75%
 
 .. figure:: ../_static/demonstration_assets/loom_catalyst/syndrome10.png
     :align: center
-    :width: 70%
+    :width: 75%
 
 .. figure:: ../_static/demonstration_assets/loom_catalyst/syndrome11.png
     :align: center
-    :width: 70%
+    :width: 75%
 
 As it is easy to verify, the three locations where the error may arise give rise to an independent
 signature over the measurement outcomes. Explicitly writing the match between syndromes and
@@ -279,7 +279,8 @@ logical_measumrent, syndrome = circuit(0)
 # For instance, if you want to run multiple QEC cycles and stack them together, the number of possible
 # syndrome combinations you’d need to precompute increases **exponentially** with the number of
 # measurements. To address this challenge, we can turn to Loom, Entropica Labs’ solution for
-# designing, automating, and orchestrating quantum error correction experiments.
+# designing, automating, and orchestrating quantum error correction experiments 
+# (if interested in knowing more and how to access, email <info@entropicalabs.com>).
 # 
 
 distance = 3
@@ -336,7 +337,7 @@ circuit_rc, reg_rc = convert_circuit_to_pennylane(
 # 
 # .. figure:: ../_static/demonstration_assets/loom_catalyst/circuit_3QEC.png
 #    :align: center
-#    :width: 70%
+#    :width: 90%
 # 
 # We generate a PennyLane device, as we always do:
 # 
