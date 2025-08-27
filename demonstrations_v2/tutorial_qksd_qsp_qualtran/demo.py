@@ -194,7 +194,7 @@ def krylov_qsp(lcu, angles_even_real, angles_even_imag, angles_odd_real, angles_
 # .. math:: \langle\Psi_0 | \hat{E}_{pq} | \Psi_0\rangle
 #
 # We use the Jordan-Wigner mapping of the fermionic one-particle excitation operators and measure
-# the resulting observables instead.
+# the resulting Pauli word observables.
 # [TODO: demonstrate what the output value of the coherent result is, put it into context]
 # We can obtain the Jordan-Wigner mapping of the fermionic operators via PennyLane using the
 # :func:`~pennylane.fermi.from_string` and :func:`~pennylane.jordan_wigner` functions as follows:
@@ -203,7 +203,7 @@ Epq = qml.fermi.from_string('0+ 0-')
 obs = qml.jordan_wigner(Epq)
 
 ######################################################################
-# We then measure these and post-process according to
+# We then measure these and post-process according to Equation 32 of the paper:
 # 
 # .. math:: 2\langle \Psi_0 |_s\hat{P}_{\nu}|\Psi_0\rangle_s = \eta^2(o_1 + o_2).
 #
@@ -333,6 +333,14 @@ show_call_graph(graph)
 # Conclusion
 # ----------
 # [TODO]
+#
+# References
+# -----------
+# .. [#Oumarou]
+#
+#     Oumarou Oumarou, Pauline J. Ollitrault, Cristian L. Cortes, Maximilian Scheurer, Robert M. Parrish, Christian Gogolin
+#     "Molecular Properties from Quantum Krylov Subspace Diagonalization",
+#     `arXiv:2501.05286 <https://arxiv.org/abs/2501.05286>`__, 2025.
 #
 # About the author
 # ----------------
