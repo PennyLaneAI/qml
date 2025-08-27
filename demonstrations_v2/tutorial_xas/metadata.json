@@ -8,8 +8,8 @@
             "username": "chiffa"
         }
     ],
-    "dateOfPublication": "2025-08-30T09:00:00+00:00",
-    "dateOfLastModification": "2025-08-30T09:00:00+00:00",
+    "dateOfPublication": "2025-08-29T09:00:00+00:00",
+    "dateOfLastModification": "2025-08-29T09:00:00+00:00",
     "categories": [
         "Quantum Chemistry",
         "Algorithms"
@@ -18,11 +18,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_how_to_build_cdf_hamiltonians.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_xas.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_how_to_build_cdf_hamiltonians.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_xas.png"
         }
     ],
     "seoDescription": "Learn how to simulate X-ray absorption spectroscopy in PennyLane.",

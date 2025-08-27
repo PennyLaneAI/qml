@@ -17,6 +17,9 @@ implement a simplified version in PennyLane.
     We will be using concepts that were introduced in other PennyLane demos, such as `Using PennyLane with PySCF and OpenFermion <https://pennylane.ai/qml/demos/tutorial_qchem_external>`__, `Initial state preparation for quantum chemistry <https://pennylane.ai/qml/demos/tutorial_initial_state_preparation>`__, and `How to build compressed double-factorized Hamiltonians <https://pennylane.ai/qml/demos/tutorial_how_to_build_compressed_double_factorized_hamiltonians>`__.
     If you haven’t checked out those demos yet, it might be best to do so and then come back here 🔙.
 
+.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_xas.png
+   :alt: An X-ray image of a battery shows a depleted charge.
+
 Why simulate X-ray absorption spectroscopy?
 -------------------------------------------
 
