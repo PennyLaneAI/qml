@@ -10,6 +10,10 @@ building increasingly large and complex multi-qubit systems, a significant chall
 managing the errors caused by noise in quantum information processing and devising ways to correct
 them.
 
+.. figure:: ../_static/demonstration_assets/loom_catalyst/entropica-QEC-hero-image.png
+    :align: center
+    :width: 70% 
+
 **Quantum Error Correction (QEC)** is a method to protect quantum information using redundant
 encoding. In QEC, a “code” is used to store a single qubit of information in the state of multiple
 physical qubits, so that it is possible to determine and recover errors on the individual qubits
