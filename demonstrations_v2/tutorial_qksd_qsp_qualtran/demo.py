@@ -26,21 +26,21 @@ to:
 # Quantum Krylov Subspace Diagonalization
 # ---------------------------------------
 #
-# The exact details of Quantum Krylov Subspace Diagonalization (QKSD) are beyond the scope of
-# this demo. However, the general outline of the technique is as follows:
+# While the exact details of Quantum Krylov Subspace Diagonalization (QKSD) are beyond the scope of
+# this demo we provide a general outline of the technique. For more details, please see
+# reference [#QKSD]_. The general steps to perform QKSD are:
 #
-# * Obtain your Hamiltonian (:math:`\hat{H}`), for example the one describing a molecule of interest.
+# * Obtain the Hamiltonian (:math:`\hat{H}`) for your system of interest, for example the one describing a molecule.
 # * Define a Krylov subspace spanned by quantum states that can be efficiently prepared on a quantum computer.
 # * Obtain from the quantum computer the projection of the Hamiltonian into the subspace (:math:`\tilde{H}`)
 # * Calculate the projection of the Hamiltonian into the subspace (:math:`\tilde{H}`) and the overlap matrix (:math:`\tilde{S}`)
 # * On a classical computer, solve the generalized eigenvalue problem: :math:`\tilde{H}c^m = E_m \tilde{S}c^m`
 #
-# Solving this generalized eigenvalue problem gives approximations of the eigen energies of
-# the Hamiltonian, as well as corresponding eigenstates such as :math:`|\Psi_0\rangle` for the lowest Krylov energy.
+# The output of solving this generalized eigenvalue problem gives approximations of the eigen energies of
+# the Hamiltonian, as well as corresponding eigenstates. Of particular interest for obtaining molecular
+# properties is the lowest-energy Krylov state, :math:`|\Psi_0\rangle`_.
 #
 # Such an eingestate, which is a linear combination of the states spanning the Krylov space, can then be prepared with QSP.
-# For the purposes of this demo, we will use a set of pre-calculated QSP angles that implement the
-# lowest-energy Krylov eigenstate of a simple molecule in the Chebyshev basis.
 #  
 # Let's begin with the :math:`H_2O` molecule. We can obtain the details of
 # this molecule using PennyLane's datasets as follows:
@@ -48,30 +48,17 @@ to:
 import pennylane as qml
 import numpy as np
 
+coeffs = [-2.6055398817649027, 0.4725512342017669, 0.06908378485045799, 0.06908378485045799, 0.42465877221739423, 0.040785962774025165, 0.02016371425557293, 0.33650704944175736, 0.059002396986463035, 0.059002396986463035, 0.2401948108687125, 0.2696430914655511, 0.04971997220167805, 0.04971997220167805, 0.2751875205710399, 0.30033122257656397, 0.22551650339251875]
+paulis = [qml.GlobalPhase(0, 0), qml.Z(0), qml.Y(0) @ qml.Z(1) @ qml.Y(2), qml.X(0) @ qml.Z(1) @ qml.X(2), qml.Z(1), qml.Z(2), qml.Z(3), qml.Z(0) @ qml.Z(1), qml.Y(0) @ qml.Y(2), qml.X(0) @ qml.X(2), qml.Z(0) @ qml.Z(2), qml.Z(0) @ qml.Z(3), qml.Y(0) @ qml.Z(1) @ qml.Y(2) @ qml.Z(3), qml.X(0) @ qml.Z(1) @ qml.X(2) @ qml.Z(3), qml.Z(1) @ qml.Z(2), qml.Z(1) @ qml.Z(3), qml.Z(2) @ qml.Z(3)]
+hamiltonian = qml.Hamiltonian(coeffs, paulis)
+
 [ds] = qml.data.load("qchem", molname="H2O", bondlength=0.958, basis="STO-3G", attributes=["molecule"])
 molecule = ds.molecule
 
 ######################################################################
-# We can then calculate the one-electron and two-electron terms of the hamiltonian using the ``qchem``
-# module:
-
-const, h1, h2 = qml.qchem.electron_integrals(molecule, core=[0, 1, 2], active=[3, 4, 5, 6])()
-hpq, hpqrs = np.array(h1), np.array(h2)
-
-######################################################################
 # Based on these values we can generate the Hamiltonian of the system:
 
-# from openfermion.ops import InteractionOperator
-# from openfermion.transforms import get_fermion_operator
 
-# interaction_op = InteractionOperator(constant=0.0, one_body_tensor=hpq, two_body_tensor=hpqrs)
-# fermion_hamiltonian = get_fermion_operator(interaction_op)
-# hamiltonian = qml.qchem.observable(fermion_hamiltonian)
-# coeffs, paulis = hamiltonian.terms()
-
-coeffs = [-2.6055398817649027, 0.4725512342017669, 0.06908378485045799, 0.06908378485045799, 0.42465877221739423, 0.040785962774025165, 0.02016371425557293, 0.33650704944175736, 0.059002396986463035, 0.059002396986463035, 0.2401948108687125, 0.2696430914655511, 0.04971997220167805, 0.04971997220167805, 0.2751875205710399, 0.30033122257656397, 0.22551650339251875]
-paulis = [qml.GlobalPhase(0, 0), qml.Z(0), qml.Y(0) @ qml.Z(1) @ qml.Y(2), qml.X(0) @ qml.Z(1) @ qml.X(2), qml.Z(1), qml.Z(2), qml.Z(3), qml.Z(0) @ qml.Z(1), qml.Y(0) @ qml.Y(2), qml.X(0) @ qml.X(2), qml.Z(0) @ qml.Z(2), qml.Z(0) @ qml.Z(3), qml.Y(0) @ qml.Z(1) @ qml.Y(2) @ qml.Z(3), qml.X(0) @ qml.Z(1) @ qml.X(2) @ qml.Z(3), qml.Z(1) @ qml.Z(2), qml.Z(1) @ qml.Z(3), qml.Z(2) @ qml.Z(3)]
-hamiltonian = qml.Hamiltonian(coeffs, paulis)
 
 ######################################################################
 # Using QSP to directly create the QKSD ground-state
@@ -79,8 +66,9 @@ hamiltonian = qml.Hamiltonian(coeffs, paulis)
 #
 # With the Hamiltonian defined, we proceed to implement the QKSD ground-state :math:`|\Psi_0\rangle`
 # via QSP.
-# In this case, we pre-computed the required values for the
-# :math:`H_2O` molecule using a Krylov subspace of dimension :math:`D=15`.
+# In this case, we pre-computed the QSP angles that implement the
+# lowest-energy Krylov eigenstate of the :math:`H_2O` molecule in the Chebyshev basis,
+# using a Krylov subspace of dimension :math:`D=15`.
 # These values can be obtained using e.g. the `lanczos method <https://quantum-journal.org/papers/q-2023-05-23-1018/pdf/>`_
 # or using `Quantum Krylov Subspace diagonalization <https://arxiv.org/pdf/2407.14431>`_ to find the
 # QKSD ground-state, :math:`|\Psi_0\rangle`, in the Chebyshev basis defined by:
@@ -309,8 +297,8 @@ plt.legend()
 # which sections are resource-intensive.
 #
 # The first layer of this circuit, before decomposing the operations, contains many
-# RZ gates controlled on two qubits with different angles. As we saw above, we can group operations
-# together and simplify the view. To this end, we first write a custom Qualtran generalizer
+# RZ gates controlled on two qubits with different angles. As we saw above, we can group similar
+# operations together and simplify the view. To this end, we first write a custom Qualtran generalizer
 # that will combine controlled-RZ gates: 
 
 import attrs
@@ -350,6 +338,13 @@ show_call_graph(graph)
 #     Oumarou Oumarou, Pauline J. Ollitrault, Cristian L. Cortes, Maximilian Scheurer, Robert M. Parrish, Christian Gogolin
 #     "Molecular Properties from Quantum Krylov Subspace Diagonalization",
 #     `arXiv:2501.05286 <https://arxiv.org/abs/2501.05286>`__, 2025.
+#
+# .. [#QKSD]
+#     Nobuyuki Yoshioka, Mirko Amico, William Kirby, Petar Jurcevic, Arkopal Dutt, Bryce Fuller, Shelly Garion,
+#     Holger Haas, Ikko Hamamura, Alexander Ivrii, Ritajit Majumdar, Zlatko Minev, Mario Motta, Bibek Pokharel,
+#     Pedro Rivero, Kunal Sharma, Christopher J. Wood, Ali Javadi-Abhari, and Antonio Mezzacapo
+#     "Diagonalization of large many-body Hamiltonians on a quantum processor",
+#     `arXiv:2407.14431 <https://arxiv.org/abs/2407.14431>`__, 2024.
 #
 # About the author
 # ----------------
