@@ -448,12 +448,10 @@ print(
 print(
     f"Probability of logical error with decoding: {n_log_errors_w_decoding_rc / n_repeats:.4f}"
 )
-
-Probability of logical error without decoding: 0.0903
-Probability of logical error with decoding: 0.0360
-
-
 ######################################################################
+# ``Probability of logical error without decoding: 0.0903``
+# ``Probability of logical error with decoding: 0.0360``
+# 
 # Indeed, the probability of getting a logical error without decoding is much higher. Interestingly
 # enough, though, even with the QEC scheme, the probability of error did not go to zero! Wonder why?
 # 
