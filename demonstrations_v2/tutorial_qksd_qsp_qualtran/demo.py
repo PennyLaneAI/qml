@@ -6,13 +6,13 @@ molecule using Quantum Krylov Subspace Diagonalization (QKSD) techniques, Quantu
 can be used to efficiently measure the one- and two-particle reduced density matrices of molecular
 systems.
 
-.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/pennylane-demo-qualtran-qksd.png
+.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/pennylane-demo-qualtran-covestro-krylov-subspace-paper-open-graph.png
     :align: center
     :width: 70%
     :target: javascript:void(0)
 
 In this demo we'll follow the paper
-[Molecular Properties from Quantum Krylov Subspace Diagonalization](https://arxiv.org/abs/2501.05286)
+`Molecular Properties from Quantum Krylov Subspace Diagonalization <https://arxiv.org/abs/2501.05286)>`_
 to:
 
 * Briefly introduce QKSD.
@@ -147,7 +147,18 @@ dev = qml.device("lightning.qubit")
 
 @qml.qnode(dev)
 def krylov_qsp(lcu, angles_even_real, angles_even_imag, angles_odd_real, angles_odd_imag, measure=0, obs=None):
+    """Prepares the Krylov lowest-energy state by applying QSP with the input angles.
+    Then measures the expectation value of the desired observable. 
 
+    Args:
+        angles_even_real: QSP rotation angles that implement the real part of the even-parity terms of the desired Chebyshev polynomial
+        angles_even_imag: QSP rotation angles that implement the imaginary part of the even-parity terms of the desired Chebyshev polynomial
+        angles_odd_real: QSP rotation angles that implement the real part of the odd-parity terms of the desired Chebyshev polynomial
+        angles_odd_imag: QSP rotation angles that implement the imaginary part of the odd-parity terms of the desired Chebyshev polynomial
+        measure: Whether to measure 
+        obs: Observable to measure. This should be a Jordan-Wigner mapping of a fermionic excitation operator 
+
+    """
     num_ancillae = int(np.log(len(lcu.operands)) / np.log(2)) + 1
 
     start_wire = hamiltonian.wires[-1] + 1

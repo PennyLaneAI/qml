@@ -10,6 +10,9 @@
         },
         {
             "username": "ANT0N"
+        },
+        {
+            "username": "austingmhuang"
         }
 
     ],
@@ -24,11 +27,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/pennylane-demo-qualtran-integration-thumbnail.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/pennylane-demo-qualtran-covestro-krylov-subspace-paper-thumbnail.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/pennylane-demo-qualtran-integration-large-thumbnail.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/pennylane-demo-qualtran-covestro-krylov-subspace-paper-large-thumbnail.png"
         }
     ],
     "seoDescription": "Learn how to obtain reduced density matrices with QSP",
