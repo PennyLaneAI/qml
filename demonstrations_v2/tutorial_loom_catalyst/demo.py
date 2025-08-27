@@ -492,6 +492,6 @@ dev = qml.device(
 # unified program—exactly what’s needed to keep this error-correcting engine in motion.
 # 
 # What next? Well, one can start exploring how to perform actual computations on these logical
-# qubits—-and, step by step, transition from simple repetition codes to more sophisticated quantum
+# qubits--and, step by step, transition from simple repetition codes to more sophisticated quantum
 # error correction engines. I mean, codes!
 # 
