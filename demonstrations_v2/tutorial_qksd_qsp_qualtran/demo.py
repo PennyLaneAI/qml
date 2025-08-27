@@ -146,7 +146,7 @@ def reflection(wire, ctrl_wires):
 dev = qml.device("lightning.qubit")
 
 @qml.qnode(dev)
-def krylov_qsp(lcu, angles_even_real, angles_even_imag, angles_odd_real, angles_odd_imag, measure=0, obs=None):
+def krylov_qsp(lcu, angles_even_real, angles_even_imag, angles_odd_real, angles_odd_imag, obs, measure_reflection=False):
     """Prepares the Krylov lowest-energy state by applying QSP with the input angles.
     Then measures the expectation value of the desired observable. 
 
@@ -155,9 +155,8 @@ def krylov_qsp(lcu, angles_even_real, angles_even_imag, angles_odd_real, angles_
         angles_even_imag: QSP rotation angles that implement the imaginary part of the even-parity terms of the desired Chebyshev polynomial
         angles_odd_real: QSP rotation angles that implement the real part of the odd-parity terms of the desired Chebyshev polynomial
         angles_odd_imag: QSP rotation angles that implement the imaginary part of the odd-parity terms of the desired Chebyshev polynomial
-        measure: Whether to measure 
-        obs: Observable to measure. This should be a Jordan-Wigner mapping of a fermionic excitation operator 
-
+        obs: Observable to measure. This should be a Jordan-Wigner mapping of a fermionic excitation operator.
+        measure_reflection: Whether to measure the reflection or just the observable. When True, we reflect the observable. 
     """
     num_ancillae = int(np.log(len(lcu.operands)) / np.log(2)) + 1
 
@@ -167,7 +166,7 @@ def krylov_qsp(lcu, angles_even_real, angles_even_imag, angles_odd_real, angles_
     ctrl_wires = [prep_wires[-1] + 1, prep_wires[-1] + 2]
     rdm_ctrl_wire = ctrl_wires[-1] + 1
 
-    if measure==2: # preprocessing for reflection measurement
+    if measure_reflection: # preprocessing for reflection measurement
         qml.X(rdm_ctrl_wire)
 
     #[TODO: explain why we are combining two QSP calls again here]
@@ -177,15 +176,13 @@ def krylov_qsp(lcu, angles_even_real, angles_even_imag, angles_odd_real, angles_
     qml.H(ctrl_wires[0])
 
     # measurements
-    if measure==1:
-        return qml.expval(obs)
-    if measure==2:
+    if measure_reflection:
         return qml.expval(
             qml.prod(reflection)(rdm_ctrl_wire, set(ctrl_wires+prep_wires))
             @
             obs
         )
-    return qml.state()
+    return qml.expval(obs)
 
 
 ######################################################################
@@ -211,8 +208,8 @@ obs = qml.jordan_wigner(Epq)
 # .. math:: 2\langle \Psi_0 |_s\hat{P}_{\nu}|\Psi_0\rangle_s = \eta^2(o_1 + o_2).
 #
 
-measurement_1 = krylov_qsp(hamiltonian, angles_even_real, angles_even_imag, angles_odd_real, angles_odd_imag, measure=1, obs=obs)
-measurement_2 = krylov_qsp(hamiltonian, angles_even_real, angles_even_imag, angles_odd_real, angles_odd_imag, measure=2, obs=obs)
+measurement_1 = krylov_qsp(hamiltonian, angles_even_real, angles_even_imag, angles_odd_real, angles_odd_imag, obs=obs)
+measurement_2 = krylov_qsp(hamiltonian, angles_even_real, angles_even_imag, angles_odd_real, angles_odd_imag, obs=obs, measure_reflection=True)
 
 print("meas 1:", measurement_1)
 print("meas 2:", measurement_2)
@@ -232,7 +229,7 @@ hamiltonian = qml.Hamiltonian(hamiltonian.terms()[0], [qml.GlobalPhase(0,wires=h
 bloq = qml.to_bloq(krylov_qsp, map_ops=False,
                    angles_even_real=angles_even_real, angles_even_imag=angles_even_imag,
                     angles_odd_real=angles_odd_real, angles_odd_imag=angles_odd_imag,
-                     lcu=hamiltonian, measure=1, obs=obs)
+                     lcu=hamiltonian, obs=obs)
 
 ######################################################################
 # We can then use Qualtran tools to analyze and process the gate counts of the circuit. For example,
@@ -274,7 +271,7 @@ angles_even_real = angles_even_imag = angles_odd_real = angles_odd_imag = np.ran
 bloq = qml.to_bloq(krylov_qsp, map_ops=False,
                    angles_even_real=angles_even_real, angles_even_imag=angles_even_imag,
                     angles_odd_real=angles_odd_real, angles_odd_imag=angles_odd_imag,
-                     lcu=hamiltonian, measure=1, obs=obs)
+                     lcu=hamiltonian, obs=obs)
 graph, sigma = bloq.call_graph(generalizer=generalize_rotation_angle)
 print("--- Gate counts ---")
 for gate, count in sigma.items():
@@ -291,7 +288,7 @@ def count_cnots(krylov_dimension):
     bloq = qml.to_bloq(krylov_qsp, map_ops=False,
                    angles_even_real=angles_even_real, angles_even_imag=angles_even_imag,
                     angles_odd_real=angles_odd_real, angles_odd_imag=angles_odd_imag,
-                     lcu=hamiltonian, measure=1, obs=obs)
+                     lcu=hamiltonian, obs=obs)
     _, sigma = bloq.call_graph(generalizer=generalize_rotation_angle)
     return sigma[CNOT()]
 
