@@ -32,8 +32,7 @@ to:
 # * Obtain your Hamiltonian (:math:`\hat{H}`), for example the one describing a molecule of interest.
 # * Define a Krylov subspace spanned by quantum states that can be efficiently prepared on a quantum computer.
 # * Obtain from the quantum computer the projection of the Hamiltonian into the subspace (:math:`\tilde{H}`)
-# * Calculate the projection of the Hamiltonian into the subspace (:math:`\tilde{H}`) 
-#       and the overlap matrix (:math:`\tilde{S}`)
+# * Calculate the projection of the Hamiltonian into the subspace (:math:`\tilde{H}`) and the overlap matrix (:math:`\tilde{S}`)
 # * On a classical computer, solve the generalized eigenvalue problem: :math:`\tilde{H}c^m = E_m \tilde{S}c^m`
 #
 # Solving this generalized eigenvalue problem gives approximations of the eigen energies of
@@ -276,10 +275,11 @@ for gate, count in sigma.items():
     print(f"{gate}: {count}")
 
 ######################################################################
-# We can plot how e.g. the number of CNOT gates increases with the Krylov dimension as follows:
+# We can plot how the number of gates increases with the Krylov dimension to see if it is linear
+# as expected. Below we plot how the Toffoli, CNOT, and X gate count increase with the Krylov dimension:
 
 import matplotlib.pyplot as plt
-from qualtran.bloqs.basic_gates import CNOT
+from qualtran.bloqs.basic_gates import Toffoli, CNOT, XGate
 
 def count_cnots(krylov_dimension):
     angles_even_real = angles_even_imag = angles_odd_real = angles_odd_imag = np.random.random(krylov_dimension)
@@ -288,13 +288,22 @@ def count_cnots(krylov_dimension):
                     angles_odd_real=angles_odd_real, angles_odd_imag=angles_odd_imag,
                      lcu=hamiltonian, obs=obs)
     _, sigma = bloq.call_graph(generalizer=generalize_rotation_angle)
-    return sigma[CNOT()]
+    return sigma
 
 Ds = [10, 20, 30, 40, 50]
-cnots = [count_cnots(D) for D in Ds]
-plt.plot(Ds, cnots)
+sigmas = [count_cnots(D) for D in Ds]
+
+plt.style.use("pennylane.drawer.plot")
+plt.scatter(Ds, [sigma[CNOT()] for sigma in sigmas], label='CNOTs')
+plt.scatter(Ds, [sigma[Toffoli()] for sigma in sigmas], label = 'Toffolis')
+plt.scatter(Ds, [sigma[XGate()] for sigma in sigmas], label = 'X Gates')
+plt.xlabel('Krylov Subspace Dimension, D')
+plt.ylabel('Number of Gates')
+plt.legend()
 
 ######################################################################
+# As expected, the gate counts increase linearly with the Krylov subspace dimension.
+# 
 # We can also show the call graph of the circuit, a diagrammatic representation of how each operation
 # in the circuit calls other operations. This can be useful to understand how a circuit works or 
 # which sections are resource-intensive.
