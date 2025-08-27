@@ -260,7 +260,7 @@ def circuit(seed : int):
 # If we then run the script (with a fixed seed, for reproducibility),
 # 
 
-logical_measumrent, syndrome = circuit(0)
+logical_measurement, syndrome = circuit(0)
 
 ######################################################################
 # we obtain:
@@ -280,7 +280,7 @@ logical_measumrent, syndrome = circuit(0)
 # syndrome combinations you’d need to precompute increases **exponentially** with the number of
 # measurements. To address this challenge, we can turn to Loom, Entropica Labs’ solution for
 # designing, automating, and orchestrating quantum error correction experiments 
-# (if interested in knowing more and how to access, email <info@entropicalabs.com>).
+# (if interested in knowing more and how to access, email `info@entropicalabs.com <info@entropicalabs.com>`__).
 # 
 
 distance = 3
