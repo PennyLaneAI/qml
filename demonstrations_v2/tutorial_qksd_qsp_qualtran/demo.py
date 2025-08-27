@@ -19,7 +19,6 @@ to:
 * Estimate the reduced density matrices, :math:`\gamma_{pq}` and :math:`\Gamma_{pqrs}` of a polynomial of the Hamiltonian applied to the QKSD lowest-energy state.
 * Use the PennyLane-Qualtran integration to count the number of qubits and gates required by the relevant
     circuits and demonstrate the scaling with respect to Krylov dimension, :math:`D`.
-
 """
 
 ######################################################################
@@ -36,14 +35,17 @@ to:
 # * Calculate the projection of the Hamiltonian into the subspace (:math:`\tilde{H}`) and the overlap matrix (:math:`\tilde{S}`)
 # * On a classical computer, solve the generalized eigenvalue problem: :math:`\tilde{H}c^m = E_m \tilde{S}c^m`
 #
-# The output of solving this generalized eigenvalue problem gives approximations of the eigen energies of
-# the Hamiltonian, as well as corresponding eigenstates. Of particular interest for obtaining molecular
+# The output of solving this generalized eigenvalue problem gives approximations of the eigenenergies of
+# the Hamiltonian, as well as corresponding eigenstates. 
+# Of particular interest for obtaining molecular
 # properties is the lowest-energy Krylov state, :math:`|\Psi_0\rangle`_.
 #
 # Such an eingestate, which is a linear combination of the states spanning the Krylov space, can then be prepared with QSP.
-#  
-# Let's begin with the :math:`H_2O` molecule. We can obtain the details of
-# this molecule using PennyLane's datasets as follows:
+#
+# Let's begin with the :math:`H_2O` molecule. We have pre-calculated the Jordan-Wigner mapping of the
+# :math:`H_2O` molecule, using an active space of 4 electrons in 4
+# molecular orbitals in the cc-pVDZ basis. We use the precalculated results below to create a
+# :class:`~pennylane.Hamiltonian` object.
 
 import pennylane as qml
 import numpy as np
@@ -52,35 +54,37 @@ coeffs = [-2.6055398817649027, 0.4725512342017669, 0.06908378485045799, 0.069083
 paulis = [qml.GlobalPhase(0, 0), qml.Z(0), qml.Y(0) @ qml.Z(1) @ qml.Y(2), qml.X(0) @ qml.Z(1) @ qml.X(2), qml.Z(1), qml.Z(2), qml.Z(3), qml.Z(0) @ qml.Z(1), qml.Y(0) @ qml.Y(2), qml.X(0) @ qml.X(2), qml.Z(0) @ qml.Z(2), qml.Z(0) @ qml.Z(3), qml.Y(0) @ qml.Z(1) @ qml.Y(2) @ qml.Z(3), qml.X(0) @ qml.Z(1) @ qml.X(2) @ qml.Z(3), qml.Z(1) @ qml.Z(2), qml.Z(1) @ qml.Z(3), qml.Z(2) @ qml.Z(3)]
 hamiltonian = qml.Hamiltonian(coeffs, paulis)
 
-[ds] = qml.data.load("qchem", molname="H2O", bondlength=0.958, basis="STO-3G", attributes=["molecule"])
-molecule = ds.molecule
-
 ######################################################################
-# Based on these values we can generate the Hamiltonian of the system:
-
-
+# To define the Krylov subspace, we will use Chebyshev polynomials of the Hamiltonian applied
+# to the Hartree-Fock state of the Hamiltonian, :math:`|\psi_0\rangle`. In other words, we define
+# states: 
+#
+# .. math:: \ket{\psi_k} = T_i(H)\ket{\psi_0},
+#
+# where :math:`T_i` is the i-th Chebyshev polynomial. Then we define a Krylov subspace of dimension
+# :math:`D` as 
+#
+# .. math:: \mathcal{K} = span(\{\ket{\psi_k}\}_{k=0}^{D-1}).
+#
+# With the Hamiltonian and Krylov space defined, we can use
+# the `lanczos method <https://quantum-journal.org/papers/q-2023-05-23-1018/pdf/>`_ classically
+# or `Quantum Krylov Subspace diagonalization <https://arxiv.org/pdf/2407.14431>`_ to find :math:`\tilde{H}`
+# and :math:`\tilde{S}`, then solve for the QKSD ground-state,
+# 
+# .. math::`|\Psi_0\rangle` = \sum_{i=0}^{D-1}c_iT_i(H)\ket{\psi_0},
+#
+# where :math:`c_i` are the cofficients of the :math:`i`-th Chebyshev polynomial.
 
 ######################################################################
 # Using QSP to directly create the QKSD ground-state
 # --------------------------------------------------
+# 
+# For this demo, we used a Krylov subspace dimension of :math:`D=15` and pre-computed QSP angles
+# that implement the corresponding sum of Chebyshev polynomials :math:`\sum_{i=0}^{D-1}c_iT_i`.
 #
-# With the Hamiltonian defined, we proceed to implement the QKSD ground-state :math:`|\Psi_0\rangle`
-# via QSP.
-# In this case, we pre-computed the QSP angles that implement the
-# lowest-energy Krylov eigenstate of the :math:`H_2O` molecule in the Chebyshev basis,
-# using a Krylov subspace of dimension :math:`D=15`.
-# These values can be obtained using e.g. the `lanczos method <https://quantum-journal.org/papers/q-2023-05-23-1018/pdf/>`_
-# or using `Quantum Krylov Subspace diagonalization <https://arxiv.org/pdf/2407.14431>`_ to find the
-# QKSD ground-state, :math:`|\Psi_0\rangle`, in the Chebyshev basis defined by:
-#
-# .. math:: \ket{\psi_k} = \sum_{i=0}^{D-1}c^k_iT_i(H)\ket{\psi_0},
-#
-# .. math:: \mathcal{K} = span(\{\ket{\psi_k}\}_{k=0}^{D-1}),
-#
-# The angles below will be used to produce the QKSD ground-state :math:`|\Psi_0\rangle` via QSP, as
-# defined by:
-#
-# .. math:: \ket{\Psi_0}=\sum_{i=0}^{D-1} c^0_i T_i(\hat{H})\ket{\psi_0}
+# The angles below will produce the QKSD ground-state :math:`|\Psi_0\rangle` via QSP. Since QSP
+# can only produce fixed-parity real Chebyshev polynomials [#QSP] and our ground-state QKSD has
+# mixed-parity complex polynomials, we split them and apply separately.
 
 angles_even_real = np.array([3.11277458, 2.99152757, 3.15307452, 3.40611024, 3.00166196, 3.03597059, 3.25931224, 3.04073693, 3.25931224, 3.03597059, 3.00166196, 3.40611024, 3.15307452, 2.99152757, -40.86952257])
 angles_even_imag = np.array([3.17041073, 3.29165774, 3.13011078, 2.87707507, 3.28152334, 3.24721472, 3.02387307, 3.24244837, 3.02387307, 3.24721472, 3.28152334, 2.87707507, 3.13011078, 3.29165774, -47.09507173])
@@ -90,6 +94,7 @@ angles_odd_imag = np.array([3.01380289, 2.84660247, 3.11277234, 3.18159601, 3.06
 ######################################################################
 # Defining the QSP circuit
 # ~~~~~~~~~~~~~~~~~~~~~~~~
+#
 # We can now create operations to implement the QSP circuit that will prepare the QKSD ground-state.
 # For this we need to create a rotation operator or signal processing operator, and a QSP template
 # to alternate between this and a block-encoding operator. For more details, see
@@ -333,6 +338,13 @@ show_call_graph(graph)
 #
 # References
 # -----------
+#
+# .. [#QSP]
+#
+#     Guang Hao Low, Isaac L. Chuang
+#     "Hamiltonian Simulation by Qubitization",
+#     `arXiv:1610.06546 <https://arxiv.org/abs/1610.06546v3>`__, 2019.
+# 
 # .. [#Oumarou]
 #
 #     Oumarou Oumarou, Pauline J. Ollitrault, Cristian L. Cortes, Maximilian Scheurer, Robert M. Parrish, Christian Gogolin
@@ -340,6 +352,7 @@ show_call_graph(graph)
 #     `arXiv:2501.05286 <https://arxiv.org/abs/2501.05286>`__, 2025.
 #
 # .. [#QKSD]
+#
 #     Nobuyuki Yoshioka, Mirko Amico, William Kirby, Petar Jurcevic, Arkopal Dutt, Bryce Fuller, Shelly Garion,
 #     Holger Haas, Ikko Hamamura, Alexander Ivrii, Ritajit Majumdar, Zlatko Minev, Mario Motta, Bibek Pokharel,
 #     Pedro Rivero, Kunal Sharma, Christopher J. Wood, Ali Javadi-Abhari, and Antonio Mezzacapo
