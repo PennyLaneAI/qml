@@ -1,7 +1,7 @@
 r"""Loom x Catalyst
 ===================
 
-Running computations on physical systems inevitably means confronting imperfections–what we commonly
+Running computations on physical systems inevitably means confronting imperfections-what we commonly
 refer to as noise. Noise, by definition, is any deviation from the ideal behaviour of a system as it
 evolves, and it’s a constant feature of our physical world. This reality becomes even more
 pronounced in quantum computing. Quantum states are intrinsically fragile, which impedes the
@@ -22,7 +22,7 @@ effective in time throughout the execution of a quantum algorithm.
 
 Quantum error correction stands as one of the great frontiers in quantum computing. It gives the
 ability to take noisy and imperfect physical qubits, and create perfect and ideal logical
-qubits–paving the way for truly useful quantum computations. This promise hinges on three key
+qubits-paving the way for truly useful quantum computations. This promise hinges on three key
 technical components:
 
 - Low-noise physical qubits
@@ -31,7 +31,7 @@ technical components:
 
 In this demo, we’ll delve into foundational concepts in QEC theory, with a particular focus on the
 software layer. We’ll start here by implementing a simple, naive QEC protocol directly in Catalyst,
-leveraging one of its greatest strengths—-seamlessly integrating classical and quantum routines
+leveraging one of its greatest strengths--seamlessly integrating classical and quantum routines
 within a single program through its connection with JAX. From there, we’ll explore the limitations
 of this naive approach and then move to Loom, Entropica Labs’ platform for designing, orchestrating,
 and automating quantum error correction experiments, to refine the protocol and scale it up.
@@ -41,7 +41,7 @@ Classical error correction
 
 At the heart of quantum error correction (QEC) lies a powerful concept: using many imperfect
 physical systems to simulate a single qubit that is far more resilient to noise than any one system
-on its own. In doing so, QEC distinguishes between two layers of abstraction—noisy physical qubits
+on its own. In doing so, QEC distinguishes between two layers of abstraction-noisy physical qubits
 and ideal logical qubits protected from noise through error correction. To ground this idea, we can
 borrow intuition from classical error correction. One of the simplest schemes is the repetition
 code. The concept is straightforward: replicate the information multiple times. For instance, you
@@ -116,11 +116,11 @@ circuit**, which operates in three phases:
 1. **Introduce auxiliary qubits**: These auxiliary qubits don’t carry any logical information.
    Instead, they’re used solely to probe for errors.
 2. **Entangle data and auxiliary qubits**: This step allows the auxiliary register to “pick up”
-   error information—called the syndrome—without directly measuring the data qubits.
+   error information-called the syndrome-without directly measuring the data qubits.
 3. **Measure the auxiliary qubits**: The measurement reveals a pattern (the syndrome) that tells us
    where and what kind of error has likely occurred.
 
-Based on the syndrome measurements, we infer the specific error—say, a bit-flip on qubit 2—and apply
+Based on the syndrome measurements, we infer the specific error-say, a bit-flip on qubit 2-and apply
 the corresponding recovery operation to restore the logical state.
 
 After encoding the logical qubit, we add another two qubits, the auxiliary qubits. 
