@@ -29,33 +29,6 @@
     "seoDescription": "Learn how to implement decoded quantum interferometry on Pennylane by solving the max-XORSAT problem",
     "doi": "",
     "references": [
-        {
-            "id": "Jordan2024",
-            "type": "article",
-            "title": "Optimization by Decoded Quantum Interferometry",
-            "authors": "Stephen P. Jordan, Noah Shutty, Mary Wootters, Adam Zalcman, Alexander Schmidhuber, Robbie King, Sergei V. Isakov, Tanuj Khattar, Ryan Babbush",
-            "year": "2024",
-            "journal": "arXiv",
-            "url": "https://arxiv.org/abs/2408.08292"
-        },
-        {
-            "id": "Bartschi2019",
-            "type": "article",
-            "title": "Deterministic Preparation of Dicke States",
-            "authors": "Andreas Bärtschi, Stephan Eidenbenz",
-            "year": "2019",
-            "journal": "arXiv",
-            "url": "https://arxiv.org/abs/1904.07358"
-        },
-        {
-            "id": "Patamawisut2025",
-            "type": "article",
-            "title": "Quantum Circuit Design for Decoded Quantum Interferometry",
-            "authors": "Natchapol Patamawisut, Naphan Benchasattabuse, Michal Hajdušek, Rodney Van Meter",
-            "year": "2025",
-            "journal": "arXiv",
-            "url": "https://arxiv.org/abs/2504.18334"
-        }
     ],
     "basedOnPapers": [
         "10.48550/arXiv.2408.08292"
