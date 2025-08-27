@@ -35,8 +35,8 @@ technical components:
 
 In this demo, we’ll delve into foundational concepts in QEC theory, with a particular focus on the
 software layer. We’ll start here by implementing a simple, naive QEC protocol directly in Catalyst,
-leveraging one of its greatest strengths--seamlessly integrating classical and quantum routines
-within a single program through its connection with JAX. From there, we’ll explore the limitations
+leveraging one of its greatest strengths--seamlessly integrating and compiling classical and quantum 
+routines within a single program through its connection with JAX. From there, we’ll explore the limitations
 of this naive approach and then move to Loom, Entropica Labs’ platform for designing, orchestrating,
 and automating quantum error correction experiments, to refine the protocol and scale it up.
 
@@ -163,7 +163,7 @@ circuit. We obtain four cases illustrated below.
 
 As it is easy to verify, the three locations where the error may arise give rise to an independent
 signature over the measurement outcomes. Explicitly writing the match between syndromes and
-corrections is called generating the “look up table”.
+corrections is called generating the “look-up table”.
 
 Catalyst implementation
 -----------------------
@@ -181,7 +181,7 @@ build such an experiment, we need three key components:
    corrective actions.
 
 Let’s implement this natively using the PennyLane and Catalyst frameworks, relying on the hard-coded
-solution known as “look-up table”.
+solution or look-up table.
 """
 
 from catalyst import qjit, cond, measure, debug
