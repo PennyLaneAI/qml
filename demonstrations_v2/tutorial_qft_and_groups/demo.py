@@ -63,7 +63,7 @@ But let us start with the basics...
 # can be seen as the projection of :math:`f(x)` onto the :math:`i`'th basis function. The function beyond
 # the interval :math:`0,..,N-1` is thought to be "periodically continued", which means that :math:`f(x_i) = f(x_i + N)`.
 #
-# Let's code this up:
+# Let's look at an example of such a Fourier transform:
 #
 
 import matplotlib.pyplot as plt
@@ -109,7 +109,8 @@ plt.show()
 # This choice explains the equidistant property: integers are by nature equally spaced in :math:`\mathbb{R}`. It also explains the
 # periodic continuation, as :math:`x = x + N` implies :math:`f(x) = f(x +N)`. The Fourier basis functions are
 # central group-theoretic objects called the *characters* of the group. Furthermore, the integer-valued frequencies :math:`k` turn out to be elements
-# from the *dual group* :math:`\hat{G}`, which in this case looks exactly like the original one. We can therefore think of the :math:`k`
+# from the so-called "dual group" :math:`\hat{G}`, which in this case looks exactly like the original one.
+# We can therefore think of the :math:`k`
 # also as integers in :math:`\{0,...,N-1\}` and treat Fourier space as a "mirror image" of the original space -- a convenient
 # fact that we tend to take for granted, but which does not hold for every group.
 #
@@ -153,7 +154,8 @@ plt.show()
 # version is therefore a tensor product of N Hadamards. This is exactly the reason why a quantum
 # circuit that contains a layer of Hadamards moves into a Fourier basis as claimed above.
 #
-# Let's code up an example of a Fourier transform over the group :math:`Z^4_2`, which transforms a function on bitstrings.
+# Let's code up an example of a Fourier transform of a function ``g(x)`` over the group :math:`Z^4_2`,
+# which transforms a function on bitstrings.
 #
 
 n = 4
@@ -164,13 +166,13 @@ def g(x):
     count_ones = sum(x[i] for i in range(n))
     return count_ones/n
 
-def chi(x, k):
-    """Character for Z_2^n"""
+def character(x, k):
+    """Fourier basis function for Z_2^n"""
     return np.prod([np.exp(1j * k[i] * x[i]) for i in range(n)])
 
 def g_hat(k):
     """Fourier coefficients of f."""
-    projection = [g(x) * chi(x, k) for x in bitstrings]
+    projection = [g(x) * character(x, k) for x in bitstrings]
     return  np.sum(projection)
 
 
@@ -411,11 +413,11 @@ print("FFT and DFT coincide:", np.allclose(f_hat_vec, f_hat_vec_fft))
 #    summing over 2 expressions (as :math:`x_1` runs over 2 values). Overall, there are 18 terms involved.
 #
 # 2. Second, combine the 9 terms using the outer sum :math:`\hat{f}(k_2, k_1) = \sum_{x_2=0}^2 e^{\frac{2 \pi i}{6} (2k_2+k_1) x_2}  \tilde{f}(k_1, x_2)`.
-#    This computes 2*3=6 Fourier coefficients, and each has to sum over 3 terms (as :math:`x_2` runs over 3 values).
+#    This computes :math:`2 \cdot 3=6` Fourier coefficients, and each has to sum over 3 terms (as :math:`x_2` runs over 3 values).
 #    Overall, there are 12 terms involved.
 #
 # Together, the FFT algorithm includes 12 + 18 = 30 terms. The naive sum, instead, would compute the 6 Fourier coefficients
-# with a sum over 6 terms each, using 6*6=36 terms altogether.
+# with a sum over 6 terms each, using :math:`6 \cdot 6=36` terms altogether.
 #
 # Of course, in this "mini" example the savings are not very
 # impressive. The overall scaling however reduces from :math:`O(N^2)` to :math:`O(N \mathrm{log}N)`, which is a quadratic
