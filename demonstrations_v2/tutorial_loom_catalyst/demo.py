@@ -1,7 +1,7 @@
-r"""Loom x Catalyst
-===================
+r"""Loom x Catalyst: designing, orchestrating, and automating quantum error correction experiments
+==================================================
 
-Running computations on physical systems inevitably means confronting imperfections -- what we commonly
+Running computations on physical systems inevitably means confronting imperfections---what we commonly
 refer to as noise. Noise, by definition, is any deviation from the ideal behaviour of a system as it
 evolves, and it’s a constant feature of our physical world. This reality becomes even more
 pronounced in quantum computing. Quantum states are intrinsically fragile, which impedes the
@@ -35,7 +35,7 @@ technical components:
 
 In this demo, we’ll delve into foundational concepts in QEC theory, with a particular focus on the
 software layer. We’ll start here by implementing a simple, naive QEC protocol directly in Catalyst,
-leveraging one of its greatest strengths--seamlessly integrating and compiling classical and quantum 
+leveraging one of its greatest strengths---seamlessly integrating and compiling classical and quantum 
 routines within a single program through its connection with JAX. From there, we’ll explore the limitations
 of this naive approach and then move to Loom, Entropica Labs’ platform for designing, orchestrating,
 and automating quantum error correction experiments, to refine the protocol and scale it up.
@@ -45,12 +45,12 @@ Classical error correction
 
 At the heart of quantum error correction (QEC) lies a powerful concept: using many imperfect
 physical systems to simulate a single qubit that is far more resilient to noise than any one system
-on its own. In doing so, QEC distinguishes between two layers of abstraction-noisy physical qubits
-and ideal logical qubits protected from noise through error correction. 
+on its own. In doing so, QEC distinguishes between two layers of abstraction: **noisy physical qubits**
+and **ideal logical qubits** protected from noise through error correction. 
 
-To ground this idea, we can borrow intuition from classical error correction. One of the simplest schemes is the repetition
-code. The concept is straightforward: replicate the information multiple times. For instance, you
-could use three bits to represent a single logical bit by encoding:
+To ground this idea, we can borrow intuition from classical error correction. One of the simplest schemes 
+is the **repetition code**. The concept is straightforward: replicate the information multiple times. For instance, 
+you could use three bits to represent a single logical bit by encoding:
 
 .. math::  0 \rightarrow 000, \quad 1 \rightarrow 111, 
 
@@ -108,7 +108,7 @@ qubits:
 This entangled state now represents a single logical qubit across three physical ones.
 
 The circuit below shows how to generate the logical qubit. As discussed, this is done by creating an
-entangled state across three physical qubits—laying the groundwork for robust error correction
+entangled state across three physical qubits---laying the groundwork for robust error correction
 through QEC.
 
 .. figure:: ../_static/demonstration_assets/loom_catalyst/encode_qubits.png
@@ -121,11 +121,11 @@ circuit**, which operates in three phases:
 1. **Introduce auxiliary qubits**: These auxiliary qubits don’t carry any logical information.
    Instead, they’re used solely to probe for errors.
 2. **Entangle data and auxiliary qubits**: This step allows the auxiliary register to “pick up”
-   error information -- called the syndrome -- without directly measuring the data qubits.
+   error information---called the syndrome---without directly measuring the data qubits.
 3. **Measure the auxiliary qubits**: The measurement reveals a pattern (the syndrome) that tells us
    where and what kind of error has likely occurred.
 
-Based on the syndrome measurements, we infer the specific error-say, a bit-flip on qubit 2-and apply
+Based on the syndrome measurements, we infer the specific error---say, a bit-flip on qubit 2---and apply
 the corresponding recovery operation to restore the logical state.
 
 After encoding the logical qubit, we add another two qubits, the auxiliary qubits. 
@@ -137,7 +137,7 @@ After encoding the logical qubit, we add another two qubits, the auxiliary qubit
 At this point, we’re working with **five qubits** in total: three data qubits that define the
 logical qubit, and two auxiliary qubits used for extracting the error syndrome (we have gone a long
 way to get a single, ideal logical qubit!). The circuit in the previous image concludes with
-measurements on the two auxiliary qubits, yielding two classical bits of information–the **syndrome
+measurements on the two auxiliary qubits, yielding two classical bits of information---the **syndrome
 signature**.
 
 For this simple enough case, we can go through all the possible errors and see what happens to the
@@ -255,7 +255,7 @@ def circuit(seed : int):
     return data_qubit_measurements, syndrome
 
 ######################################################################
-# Let’s break it down. We start by applying a random :math:`X` gate to one of the data qubits—this
+# Let’s break it down. We start by applying a random :math:`X` gate to one of the data qubits---this
 # serves as our (deliberately introduced) noise for the experiment. Next, we run the syndrome
 # extraction routine, implemented by applying CNOT gates between the data and auxiliary qubits,
 # followed by measurements on the auxiliary qubits. Finally, we use a conditional statement:
@@ -314,12 +314,12 @@ interpreted_eka_rc = interpret_lscrd(eka_rc)
 
 
 ######################################################################
-# Let’s break this down. We begin by initialising the logical state of the repetition code in the
+# Breaking it down, we begin by initialising the logical state of the repetition code in the
 # logical “0” state—i.e., :math:`000`. From there, we run the repetition code circuit for three QEC
 # cycles, during which we repeatedly measure the syndrome to monitor for potential errors.
-# 
-# At the end of the experiment, we measure the logical state of the encoded qubit. If the name of
-# variables left you wondering, EKA is loom’s qec-centric internal representation. From Sanskrit एक
+# At the end of the experiment, we measure the logical state of the encoded qubit. 
+#
+# If the name of variables left you wondering, EKA is loom’s qec-centric internal representation. From Sanskrit एक
 # (eka, “one, first”), EKA provides a data structure that serves as a single source of truth
 # throughout the entire execution of a quantum error correction code. If no errors have occurred
 # throughout the process, we expect the final state to remain :math:`0_L`, that is, the encoded
@@ -456,12 +456,13 @@ print(
 )
 ######################################################################
 # ``Probability of logical error without decoding: 0.0903``
+# 
 # ``Probability of logical error with decoding: 0.0360``
 # 
 # Indeed, the probability of getting a logical error without decoding is much higher. Interestingly
 # enough, though, even with the QEC scheme, the probability of error did not go to zero! Wonder why?
 # 
-# When we defined the qml.device, we set the noise level at at 0.05:
+# When we defined the ``qml.device``, we set the noise level at at 0.05:
 # 
 
 # Define device
@@ -477,7 +478,7 @@ dev = qml.device(
 
 ######################################################################
 # So, we can correct some of the errors, but not all. The main limitation is that our current QEC
-# scheme can only handle bit-flip errors—and only those that occur after the syndrome extraction
+# scheme can only handle bit-flip errors---and only those that occur after the syndrome extraction
 # circuit and before measurement. The Qrack noise model, however, can introduce errors anywhere in the
 # circuit, and some of these will inevitably propagate to the logical qubit. To achieve greater
 # resilience, we’ll need to explore more advanced codes and introduce the concept of fault tolerance.
@@ -485,7 +486,7 @@ dev = qml.device(
 # Conclusions
 # -----------
 # 
-# We like to think of quantum error correction as a classic steam engine—steadily chugging through
+# We like to think of quantum error correction as a classic steam engine, steadily chugging through
 # three essential steps: entangling the data and auxiliary qubits, extracting the syndrome by
 # measuring the auxiliaries, and then decoding and correcting any detected errors. Once this engine is
 # up and running, it keeps going until the computation is complete, tirelessly counteracting the
@@ -494,10 +495,10 @@ dev = qml.device(
 # In this demo, we explored some of the core concepts behind QEC theory. More importantly, we
 # demonstrated how to integrate these components into a single hybrid workflow. We used Loom to design
 # the experiment at a high level, and Catalyst to compile both quantum and classical routines into a
-# unified program—exactly what’s needed to keep this error-correcting engine in motion.
+# unified program---exactly what’s needed to keep this error-correcting engine in motion.
 # 
 # What next? Well, one can start exploring how to perform actual computations on these logical
-# qubits--and, step by step, transition from simple repetition codes to more sophisticated quantum
+# qubits---and, step by step, transition from simple repetition codes to more sophisticated quantum
 # error correction engines. I mean, codes!
 # 
 # References
