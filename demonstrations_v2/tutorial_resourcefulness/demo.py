@@ -13,45 +13,46 @@ preparation in the lab.
 It turns out that the resourcefulness of quantum states can be investigated with tools from *generalised Fourier analysis*.
 *Fourier analysis* here refers to the well-known technique of computing Fourier coefficients of a mathematical object, which in our case
 is not a function over :math:`\mathbb{R}` or :math:`\mathbb{Z}`, but a quantum state. *Generalised* indicates that we don't use the
-standard Fourier transform, but a generalisation of its group theoretic definition.
-Bermejo, Braccia et al. (2025) [#Bermejo_Braccia]_ suggest to use generalised Fourier analysis to
+standard Fourier transform, but a generalisation of its group-theoretic definition.
+`Bermejo, Braccia et al. (2025) <https://arxiv.org/abs/2506.19696>`__ [#Bermejo_Braccia]_ suggest to use generalised Fourier analysis to
 compute a quantity that they call the **Generalised Fourier Decomposition (GFD) Purity**,
 and use it as a "footprint" of a state's resource profile.
 
-The basic idea is to identify the set of unitary transformations that maps resource-free
+The basic idea is to identify the circuits that map resource-free
 states to resource-free states with a *unitary representation of a group*.
 The basis in which this representation, and hence the free unitaries, are (block-)diagonal, reveals so-called *irreducible subspaces*
 of different "order".
 The GFD Purities are then a measure for how much of a state "lives" in each of these subspaces.
-More resourceful states have large projections into higher-order subspaces and vice versa.
+More resourceful states have large projections in higher-order subspaces and vice versa.
 
 We will see that the standard Fourier transform is a special case of this framework, and here
 the GFD purities are just the absolute squares of the Fourier coefficients,
 which is also known as the *power spectrum*. This will be our first example to develop the more general framework.
-We will then use the same concepts to analyse the *entanglement*
+We will then use the same concepts to analyse the entanglement
 of quantum states as a resource, reproducing Figure 2 in [#Bermejo_Braccia]_.
 
 .. figure:: ../_static/demonstration_assets/resourcefulness/figure2_paper.png
    :align: center
    :width: 70%
-   :alt: GFD Purities of different states using 2-qubit entanglement as a resource.
-         A GHZ state, which is maximally entangled, has high contributions in higher-order Purities, while
-         a product state with no entanglement has contributions in lower-order Purities. The interpolation
-         between the two extremes, exemplified by a Haar random state, has a spectrum in between.
+
+   GFD Purities of different states using 2-qubit entanglement as a resource.
+   A GHZ state, which is maximally entangled, has high contributions in higher-order Purities, while
+   a product state with no entanglement has contributions in lower-order Purities. The interpolation
+   between the two extremes, exemplified by a Haar random state, has a spectrum in between.
 
 While the theory rests in group theory, the tutorial is aimed at readers who don't know much about groups at all.
 Instead, we will make heavy use of linear algebra!
 
 
-Standard Fourier analysis through the lense of resources
---------------------------------------------------------
+Standard Fourier analysis through the lens of resources
+-------------------------------------------------------
 
 The power spectrum as GFD Purities
 ++++++++++++++++++++++++++++++++++
 
-Let's start recalling the standard discrete Fourier transform.
-Given N real values :math:`x_0,...,x_{N-1}`, that we can interpret [LINK TO OTHER DEMO] as the values
-of a function :math:`f(0), ..., f(N-1)` over the integers :math:`x \in {0,...,N-1}`, the Fourier transform
+Let's start by recalling the `standard discrete Fourier transform<https://en.wikipedia.org/wiki/Discrete_Fourier_transform>`__.
+Given N real values :math:`x_0,...,x_{N-1}`, that we can interpret as the values
+of a function :math:`f(0), ..., f(N-1)` over the integers :math:`x \in {0,...,N-1}`, the discrete Fourier transform
 computes the Fourier coefficients
 
 .. math:: \hat{f}(k) = \frac{1}{\sqrt{N}} \sum_{x=0}^{N-1} f(x) e^{\frac{2 \pi i}{N} k x}, \;\; k = 0,...,N-1
@@ -69,7 +70,7 @@ N = 12
 
 def f(x):
     """Some function."""
-    return 0.5*(x-4)**3
+    return 0.5*(x-4)**3/100
 
 def f_hat(k):
     """Fourier coefficients of f."""
@@ -85,7 +86,6 @@ f_hat_vals = [f_hat(k) for k in range(N)]
 fig, (ax1, ax2) = plt.subplots(2, 1)
 ax1.bar(range(N), f_vals, color='dimgray')
 ax1.set_title(f"function f")
-
 ax2.bar(np.array(range(N))+0.05, np.imag(f_hat_vals), color='lightpink', label="imaginary part")
 ax2.bar(range(N), np.real(f_hat_vals), color='dimgray', label="real part")
 ax2.set_title("Fourier coefficients")
@@ -137,11 +137,9 @@ g_vals = [g(k) for k in range(N)]
 fig, (ax1, ax2) = plt.subplots(2, 1)
 ax1.bar(range(N), g_hat_vals, color='dimgray')
 ax1.set_title("Fourier coefficients")
-
 ax2.bar(np.array(range(N))+0.05, np.imag(g_vals), color='lightpink', label="imaginary part")
 ax2.bar(range(N), np.real(g_vals), color='dimgray', label="real part")
 ax2.set_title(f"function g")
-
 plt.legend()
 plt.tight_layout()
 plt.show()
@@ -158,7 +156,7 @@ plt.show()
 # ++++++++++++++++++
 #
 # Computing the GFD Purities for the resource of smoothness was very simple. We will now view it from a much more complicated
-# perspective, but one whose machinery will in the second part allow us to calculate the Purities for
+# perspective, but one whose machinery will in the second part allow us to calculate the GFD Purities for
 # of concepts like quantum entanglement.
 #
 # 1. Identify free vectors
@@ -168,19 +166,17 @@ plt.show()
 # So far we only had a discrete *function* :math:`f(x)`,
 # but we can easily write it as a vector :math:`[f(0), ..., f(N-1)]^T \in V = \mathbb{R}^N`.
 #
-######################################################################
+
 
 f_vec = np.array([f(x) for x in range(N)])
 
+######################################################################
 # As argued above,
 # the set of resource-free vectors corresponds to constant functions, :math:`f(0) = ... = f(N-1)`.
 #
-
-
-######################################################################
 # 2. Identify free unitary transformations
 # ****************************************
-# Next, we need to identify a set of unitary matrices that, when multiplied by the resource-free or constant vectors
+# Next, we need to identify a set of unitary matrices (think: quantum circuits) that, when multiplied by the resource-free or constant vectors
 # maps to another resource-free or constant vector. In the case above this is given by the permutation matrices, which
 # swap the entries of the vector but do not change their magnitude.
 #
@@ -192,23 +188,29 @@ f_vec = np.array([f(x) for x in range(N)])
 # .. admonition:: Unitary representation
 #     :class: note
 #
-#     A representation is a matrix-valued function :math:`R(g), g \in G` on a group with the
-#     property that :math:`R(g) R(g') = R(gg')`, where :math:`gg'` is the composition of elements according
+#     A representation is a matrix-valued function :math:`R(g), g \in G` on a group :math:`G` with the
+#     property that :math:`R(g) R(g') = R(gg')`, where :math:`gg'` denotes the composition of elements according
 #     to the group.
 #
 # Without dwelling further, we simply recognise that the *circulant* permutation matrices -- those that shift vector
 # entries by :math:`s` positions -- can be shown to
-# form a unitary representation for the group :math:`g \in G = Z_N`, called the *regular representation*. The group :math:`Z_N`
-# are the integers from 0 to N-1 under addition modulo N, which can be seen as the x-domain of our function.
+# form a unitary representation for the group :math:`g \in G = Z_N`, called the *regular representation*.
 # Every circulant matrix hence gets associated with one x-value.
 #
-# Here is the circulant matrix associated with the x-value 2:
+# .. admonition:: The group :math:`Z_N`
+#     :class: note
+#
+#     The "cyclic" group :math:`Z_N`
+#     are the integers from 0 to N-1 under addition modulo N.
+#
+# Here is the circulant permutation matrix associated with the x-value 2, which defines the stride in the
+# shift of vector entries implemented by the matrix:
 #
 
-s = 2
+shift = 2
 
 first_row = np.zeros(N)
-first_row[s] = 1
+first_row[shift] = 1
 
 # initialize the matrix with the first row
 P = np.zeros((N, N))
@@ -231,7 +233,7 @@ print(P)
 # In more general linear algebra language, the blocks form different *irreducible subspaces* which we need to compute
 # the GFD Purities in the next step.
 #
-# In our toy case, and for all *Abelian* groups, the blocks are 1-dimensional, and the basis
+# In our toy case, and as for all *Abelian* groups, the blocks are 1-dimensional, and the basis
 # change *diagonalises* every matrix of the representation. And the basis change is nothing other than the Fourier transform.
 # In matrix notation, the Fourier transform looks as follows:
 #
@@ -244,7 +246,7 @@ print(P)
 #            1&\omega^{N-1}&\omega^{2(N-1)}&\omega^{3(N-1)}&\cdots&\omega^{(N-1)(N-1)}
 #           \end{bmatrix}
 #
-# Let's check that this is indeed the same as what we did above.
+# Let's quickly check that multiplying ``f_vec`` with this matrix is indeed the same as the Fourier transform implemented above.
 #
 
 # get the Fourier matrix from scipy
@@ -252,10 +254,14 @@ from scipy.linalg import dft
 F = dft(N)/np.sqrt(N)
 f_hat_vals2 = F @ f_vec
 
-# make sure this is what we previously computed
 assert np.allclose(f_hat_vals2, f_hat_vals)
 
-# change the circulant matrix into the Fourier basis using F
+######################################################################
+# If our claim is true, multiplying a circulant permutation matrix like ``P`` with ``F`` -- in other words,
+# expressing it in the Fourier basis -- should
+# diagonalise it.
+#
+
 np.set_printoptions(precision=2, suppress=True)
 P_F =  np.linalg.inv(F) @ P @ F
 
@@ -270,16 +276,18 @@ print("is diagonal:", np.allclose(P_F - np.diag(np.diagonal(P_F)), np.zeros((N,N
 # 5. Find a basis for each subspace
 # *********************************
 # What we actually wanted to accomplish with the (block-)diagonalisation is to find the subspaces associated with each block.
-# According to standard linear algebra, a basis for such a subspace can be found by selecting the rows of ``F`` whose indices
-# correspond to the indices of a block in ``P_F``. In [#Bermejo_Braccia]_ these basis vectors where
+# According to standard linear algebra, a basis for such a subspace can be found by selecting the rows of the basis change matrix
+# ``F`` whose indices correspond to the indices of a block in ``P_F``.
+#
+# In [#Bermejo_Braccia]_ these basis vectors where
 # called :math:`w^{(i)}_{\alpha, j}`, where :math:`\alpha` marks the subspace and :math:`j` the copy or multiplicity
 # of a block on the diagonal (a technical detail we will not worry about any further here).
-# For example, the basis for our third 1-dimensional block would be
+# For example, the basis for our third 1-dimensional block would be:
 #
 
 basis3 = F[3:4]
 
-#######################################################################
+######################################################################
 # 6. Compute the GFD Purities
 # ***************************
 # We can now compute the GFD Purities according to Eq. (5) in [#Bermejo_Braccia]_.
@@ -293,10 +301,10 @@ basis3 = F[3:4]
 purity3 = np.abs(np.vdot(basis3, f_vec))**2
 
 # confirm that this is the third entry in the power spectrum
-print("purity and power spectrum entry coincide", np.isclose(power_spectrum[3], purity3))
+print("Third GFD Purity and power spectrum entry coincide:", np.isclose(power_spectrum[3], purity3))
 
 ######################################################################
-# We now have a very different perspective on the power spectrum :math:`|\hat{f}|^2`: It is a projection of the function
+# We now have a very different perspective on the power spectrum :math:`|\hat{f}(k)|^2`: It is a projection of the function
 # :math:`f` into irreducible subspaces revealed by moving into the Fourier basis.
 #
 # The power spectrum, as
@@ -317,20 +325,20 @@ print("purity and power spectrum entry coincide", np.isclose(power_spectrum[3], 
 # quantum states with simpler entanglement structures, or no entanglement at all like in the case of product states,
 # have generalized Fourier spectra where most of their purity resides in the lower-order invariant subspaces.
 #
-# Here are a few examples that we will use below:
+# Here are a few states with different entanglement properties that we will use below:
 #
-# * **Product state**: A resource-free state with no entanglement. The Purity is concentrated in the lower-order
-#   subspaces
+# * **Product state**: A resource-free state with no entanglement.
 # * **GHZ state**: A highly structured, maximally entangled state. It behaves like a quantum analog of a
-#   high-frequency oscillation, having Purity concentrated mostly in the highest-order subspaces.
-# * **W state**: Moderately entangled, somewhat between the GHZ and product states, with a broader
-#   yet smoother distribution across the subspaces.
-# * **Random (Haar) state**: Highly complex but without structured
-#   entanglement patterns, its Purity is distributed more evenly across the spectrum.
+#   high-frequency oscillation.
+# * **Random (Haar) state**: Highly complex state, but without structured
+#   entanglement patterns.
 #
-# In the code examples we'll show shortly, you'll see precisely these patterns emerge. But for now, let us create
+# In the code examples we'll show shortly, you'll see how the different entanglement properties reflect in the GFD Purity spectrum.
+# But for now, let us create
 # example states for these categories:
 #
+
+# TODO: TURN INTO PENNYLANE CODE
 
 import math
 import functools
@@ -354,15 +362,6 @@ def haar_state(n: int):
     return (Q[:, 0] * phase)
 
 
-def w_state(n: int):
-    """Moderately entangled, somewhat between the GHZ and product states,
-    with a broader yet smoother distribution across the irreps"""
-    psi = np.zeros(2 ** n)
-    for q in range(n):
-        psi[2 ** q] = 1 / math.sqrt(n)
-    return psi
-
-
 def ghz_state(n: int):
     """A highly structured, maximally entangled state. It behaves like a quantum analog of a
        high-frequency oscillation, having purity concentrated mostly in the highest-order coefficients."""
@@ -372,10 +371,10 @@ def ghz_state(n: int):
     return psi
 
 n = 2
-states = [haar_product_state(n),  haar_state(n), w_state(n), ghz_state(n)]
+states = [haar_product_state(n),  haar_state(n), ghz_state(n)]
 # move to density matrices
 states = [np.outer(state, state.conj()) for state in states]
-labels = [ "Product", "Haar", "W", "GHZ"]
+labels = [ "Product", "Haar", "GHZ"]
 
 #####################################################################
 # To compute the GFD Purities, we can walk the same steps we took when studying the resource of "smoothness".
@@ -385,9 +384,9 @@ labels = [ "Product", "Haar", "W", "GHZ"]
 #    product states, or tensor products of single-qubit quantum states.
 # 2. **Identify free unitary transformations**. Now, what unitary transformation of a quantum state does not generate
 #    entanglement? You guessed it right, "non-entangling" circuits that consist only of single-qubit
-#    gates :math:`U=\bigotimes U_j` for  :math:`U_j \in SU(2)`.
+#    gates :math:`U=\bigotimes_j U_j` for  :math:`U_j \in SU(2)`.
 # 3. **Identify a group representation**. It turns out that non-entangling unitaries are the standard representation
-#    of the group :math:`G = SU(2) \times SU(2) \times \dots \times SU(2)` for the vector space :math:`H`,
+#    of the group :math:`G = SU(2) \times \dots \times SU(2)` for the vector space :math:`H`,
 #    the Hilbert space of the state vectors.
 #    Again, this implies that we can find a basis of the Hilbert space where any :math:`U` is simultaneously block-diagonal.
 # 4. **Find the basis that block-diagonalises the representation**.
@@ -411,9 +410,10 @@ print(U_bdiag)
 
 ######################################################################
 # Wait, this is not a block-diagonal matrix, even if we'd shuffle the rows and columns. What is happening here?
-# It turns out that the non-entangling unitary matrices only have a single block of size :math:`2^n \times 2^n`.
-# Technically speaking, the representation is *irreducible* over :math:`H`.
-# As a consequence, the invariant subspace is :math:`H` itself, and the single GFD purity is simply the purity of
+#
+# It turns out that the non-entangling unitary matrices only have a *single* block of size :math:`2^n \times 2^n`.
+# Technically speaking, the representation is *irreducible* over the Hilbert space :math:`H`.
+# As a consequence, the invariant subspace is :math:`H` itself, and the single GFD Purity is simply the purity of
 # the state :math:`|\psi\rangle`, which is 1.
 # This, of course, is not a very informative footprint -- one that is much too coarse!
 #
@@ -422,17 +422,20 @@ print(U_bdiag)
 # After all, what's the first symptom of entanglement in a quantum state?
 # The reduced density matrix of some subsystem is mixed!
 # Wouldn't it make more sense to study multipartite entanglement from the point of view of density matrices?
-# It turns out that moving into the space :math:`B(H)` of bounded linear operators in which the density matrices live leads to
-# a much more nuanced Fourier spectrum. Although this space contains matrices, it is a vector space.
 #
-# Let us walk the steps above once more:
+# It turns out that considering the space :math:`B(H)` of bounded linear operators in which density matrices live leads to
+# a much more nuanced Fourier spectrum. Note that although this space contains matrices, it fulfils our conditions, as it
+# is a vector space. This is a fact that requires some mental gymnastics, but we will just flatten all density matrices below
+# and work with "actual" vectors in the sense of 1-dimensional arrays.
+#
+# So, let us walk the steps from above once more:
 #
 # 1. **Identify free vectors**.
-#    Our free vectors are still product states, only that now we represent them as density matrices :math:`\rho = \bigotimes \rho_j`.
+#    Our free vectors are still product states, only that now we represent them as density matrices :math:`\rho = \bigotimes_j \rho_j`.
 #    But to use the linear algebra tricks from before we have
 #    to "vectorize" density matrices :math:`\rho=\sum_{i,j} c_{i,j} |i\rangle \langle j|`
 #    to have the form :math:`|\rho\rangle \rangle = \sum_{i,j} c_{i,j} |i\rangle |j\rangle \in H \otimes H^*` (something
-#    you might have encountered before in the *Choi* formalism).
+#    you might have encountered before in the *Choi formalism*, where the "double bracket notation" stems from).
 #    For example:
 #
 
@@ -472,7 +475,7 @@ print(np.allclose(rho_out, U @ rho @ U.conj().T ))
 #
 # 4. **Find the basis that block-diagonalises the representation**.
 #    To find this basis we compute the eigendecomposition of an arbitrary linear combination
-#    of a set of matrices in the representation. Using a such a linear combination makes it more likely that we didn't
+#    of a set of matrices in the representation. Using such a linear combination makes it more likely that we didn't
 #    find a subblock-structure that is only present in one of the matrices.
 #
 rng = np.random.default_rng(42)
@@ -518,6 +521,8 @@ print(np.round(np.abs(Uvec_diag), 4))
 #
 
 from collections import OrderedDict
+
+# TODO: how to best hide this?
 
 def group_rows_cols_by_sparsity(B, tol=0):
     """
@@ -638,6 +643,8 @@ for data, label in zip(purities, labels):
 # by the corresponding block's size
 #
 
+#TODO: check what is happening to GHZ
+
 agg_purities = [[p[0], p[1]+p[2], p[3]] for p in purities]
 
 
@@ -686,6 +693,8 @@ plt.show()
 # To see this, we take the Pauli basis matrices, vectorise them and compare each one with the
 # subspace basis vectors in ``Q``.
 #
+
+# TODO: use PL
 
 import itertools
 
