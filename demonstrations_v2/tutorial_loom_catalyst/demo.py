@@ -499,3 +499,10 @@ dev = qml.device(
 # qubits--and, step by step, transition from simple repetition codes to more sophisticated quantum
 # error correction engines. I mean, codes!
 # 
+# References
+# -----------
+#
+# .. [#Munro2013]
+#    Simon J. Devitt, Kae Nemoto, William J. Munro.
+#    "Quantum Error Correction for Beginners.",
+#    `<https://arxiv.org/abs/0905.2794>`__, 2013.
