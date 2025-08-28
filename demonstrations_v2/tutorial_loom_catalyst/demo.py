@@ -1,7 +1,7 @@
 r"""Loom x Catalyst
 ===================
 
-Running computations on physical systems inevitably means confronting imperfections-what we commonly
+Running computations on physical systems inevitably means confronting imperfections -- what we commonly
 refer to as noise. Noise, by definition, is any deviation from the ideal behaviour of a system as it
 evolves, and it’s a constant feature of our physical world. This reality becomes even more
 pronounced in quantum computing. Quantum states are intrinsically fragile, which impedes the
@@ -26,7 +26,7 @@ effective in time throughout the execution of a quantum algorithm.
 
 Quantum error correction stands as one of the great frontiers in quantum computing. It gives the
 ability to take noisy and imperfect physical qubits, and create perfect and ideal logical
-qubits-paving the way for truly useful quantum computations. This promise hinges on three key
+qubits, paving the way for truly useful quantum computations. This promise hinges on three key
 technical components:
 
 - Low-noise physical qubits
@@ -46,8 +46,9 @@ Classical error correction
 At the heart of quantum error correction (QEC) lies a powerful concept: using many imperfect
 physical systems to simulate a single qubit that is far more resilient to noise than any one system
 on its own. In doing so, QEC distinguishes between two layers of abstraction-noisy physical qubits
-and ideal logical qubits protected from noise through error correction. To ground this idea, we can
-borrow intuition from classical error correction. One of the simplest schemes is the repetition
+and ideal logical qubits protected from noise through error correction. 
+
+To ground this idea, we can borrow intuition from classical error correction. One of the simplest schemes is the repetition
 code. The concept is straightforward: replicate the information multiple times. For instance, you
 could use three bits to represent a single logical bit by encoding:
 
@@ -58,7 +59,7 @@ you simply flip all the bits:
 
 .. math::  000 \rightarrow 111, \quad 111 \rightarrow 000. 
 
-Now, consider a noisy environment, where each physical bit has a probability :math:`p` of flipping.
+Now consider a noisy environment, where each physical bit has a probability :math:`p` of flipping.
 When reading a logical bit, you check all three physical bits and take a **majority vote**. If
 :math:`p` is small, then seeing something like :math:`010` likely means the middle bit was corrupted
 by noise. You can confidently correct it by flipping it back, restoring the original :math:`000`
@@ -95,9 +96,9 @@ computing, the no-cloning theorem prevents copying arbitrary quantum states. Ins
 introduced *indirectly*, using **entanglement** and **syndrome extraction**. Setting up a QEC scheme
 involves three main steps:
 
-1. **Define how logical qubits are encoded** within the physical system
-2. **Extract information about possible errors**, without disturbing the logical state
-3. **Infer the error from that information** and apply the appropriate correction
+1. **Define how logical qubits are encoded** within the physical system.
+2. **Extract information about possible errors**, without disturbing the logical state.
+3. **Infer the error from that information** and apply the appropriate correction.
 
 Drawing from the classical repetition code, we can encode one logical qubit across three physical
 qubits:
@@ -120,7 +121,7 @@ circuit**, which operates in three phases:
 1. **Introduce auxiliary qubits**: These auxiliary qubits don’t carry any logical information.
    Instead, they’re used solely to probe for errors.
 2. **Entangle data and auxiliary qubits**: This step allows the auxiliary register to “pick up”
-   error information-called the syndrome-without directly measuring the data qubits.
+   error information -- called the syndrome -- without directly measuring the data qubits.
 3. **Measure the auxiliary qubits**: The measurement reveals a pattern (the syndrome) that tells us
    where and what kind of error has likely occurred.
 
