@@ -1,11 +1,12 @@
 r"""Using PennyLane and Qualtran to analyze how QSP can improve measurements of molecular properties
 ====================================================================================================
 
-Want to efficiently measure molecular properties using quantum computers? One way to do this is to
-use Quantum Krylov Subspace Diagonalization (QKSD) techniques to "shrink" down a complicated 
-molecular Hamiltonian, find its ground-state classicaly, and then use Quantum Signal Processing (QSP)
-to efficiently measure its one- and two-particle reduced density matrices. The number of gates required
-by this technique scales linearly with the Krylov dimension D.
+Want to efficiently measure molecular properties using quantum computers? This demo shows how to
+use QSP to efficiently measure one- and two-particle reduced density matrices with a linearly-scaling
+number of operations. This is done by using Quantum Krylov Subspace Diagonalization (QKSD)
+techniques to "shrink" down a complicated molecular Hamiltonian, find its ground-state classicaly,
+and then use Quantum Signal Processing (QSP) to efficiently measure its one- and two-particle
+reduced density matrices. 
 
 .. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/pennylane-demo-qualtran-covestro-krylov-subspace-paper-open-graph.png
     :align: center
