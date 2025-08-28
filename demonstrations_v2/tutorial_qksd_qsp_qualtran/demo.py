@@ -2,26 +2,27 @@ r"""Using PennyLane and Qualtran to analyze how QSP can improve measurements of 
 ====================================================================================================
 
 Want to efficiently measure molecular properties using quantum computers? This demo shows how to
-use QSP to efficiently measure one- and two-particle reduced density matrices with a linearly-scaling
-number of operations. This is done by using Quantum Krylov Subspace Diagonalization (QKSD)
-techniques to "shrink" down a complicated molecular Hamiltonian, find its ground-state classicaly,
-and then use Quantum Signal Processing (QSP) to efficiently measure its one- and two-particle
-reduced density matrices. 
+use PennyLane to measure one- and two-particle reduced density matrices with a linearly-scaling
+number of operations and how to integrate with Qualtran to demonstrate these resource requirements.
+This is done by using Quantum Krylov Subspace Diagonalization (QKSD) techniques to "shrink" down a
+complicated molecular Hamiltonian, find its ground-state classicaly, and then use Quantum Signal
+Processing (QSP) to efficiently measure its one- and two-particle reduced density matrices. 
 
 .. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/pennylane-demo-qualtran-covestro-krylov-subspace-paper-open-graph.png
     :align: center
     :width: 70%
     :target: javascript:void(0)
 
-In this demo we'll demonstrate some of the techniques and results of the paper
-`Molecular Properties from Quantum Krylov Subspace Diagonalization <https://arxiv.org/abs/2501.05286)>`_
+In this demo we will demonstrate some of the techniques and results of the paper titled
+`Molecular Properties from Quantum Krylov Subspace Diagonalization <https://arxiv.org/abs/2501.05286>`_
 [#Oumarou]. Specifically, we will:
 
 * Briefly introduce QKSD.
-* Show how to use QSP to prepare the QKSD ground-state.
-* Show how to measure the reduced density matrices of the system from the prepared QKSD lowest-energy state.
-* Show how to use the PennyLane-Qualtran integration to count the number of gates required by these
-    circuits and demonstrate the scaling with respect to Krylov dimension, :math:`D`.
+* Show how to build a PennyLane circuit that uses QSP to prepare the QKSD ground-state.
+* Show how to simulate PennyLane circuits that estimate the one- and two-particle reduced density
+    matrices of a molecular system from the QKSD ground-state.
+* Show how to use the PennyLane-Qualtran integration to count relevant circuit resources
+    and demonstrate linear resource scaling with respect to Krylov dimension, :math:`D`.
 """
 
 ######################################################################
