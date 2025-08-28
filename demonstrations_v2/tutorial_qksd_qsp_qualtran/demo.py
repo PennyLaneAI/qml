@@ -1,23 +1,25 @@
 r"""Using PennyLane and Qualtran to analyze how QSP can improve measurements of molecular properties
 ====================================================================================================
 
-Want to efficiently measure molecular properties using quantum computers? After simulating a 
-molecule using Quantum Krylov Subspace Diagonalization (QKSD) techniques, Quantum Signal Processing (QSP)
-can be used to efficiently measure the one- and two-particle reduced density matrices of molecular
-systems.
+Want to efficiently measure molecular properties using quantum computers? One way to do this is to
+use Quantum Krylov Subspace Diagonalization (QKSD) techniques to "shrink" down a complicated 
+molecular Hamiltonian, find its ground-state classicaly, and then use Quantum Signal Processing (QSP)
+to efficiently measure its one- and two-particle reduced density matrices. The number of gates required
+by this technique scales linearly with the Krylov dimension D.
 
 .. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/pennylane-demo-qualtran-covestro-krylov-subspace-paper-open-graph.png
     :align: center
     :width: 70%
     :target: javascript:void(0)
 
-In this demo we'll follow the paper
+In this demo we'll demonstrate some of the techniques and results of the paper
 `Molecular Properties from Quantum Krylov Subspace Diagonalization <https://arxiv.org/abs/2501.05286)>`_
-to:
+[#Oumarou]. Specifically, we will:
 
 * Briefly introduce QKSD.
-* Estimate the reduced density matrices, :math:`\gamma_{pq}` and :math:`\Gamma_{pqrs}` of a polynomial of the Hamiltonian applied to the QKSD lowest-energy state.
-* Use the PennyLane-Qualtran integration to count the number of qubits and gates required by the relevant
+* Show how to use QSP to prepare the QKSD ground-state.
+* Show how to measure the reduced density matrices of the system from the prepared QKSD lowest-energy state.
+* Show how to use the PennyLane-Qualtran integration to count the number of gates required by these
     circuits and demonstrate the scaling with respect to Krylov dimension, :math:`D`.
 """
 
@@ -25,22 +27,26 @@ to:
 # Quantum Krylov Subspace Diagonalization
 # ---------------------------------------
 #
+# The overall goal of QKSD is to estimate the eigenvalues and eigenstate of a large matrix by solving
+# the eigenvalue problem for a smaller matrix.
 # While the exact details of Quantum Krylov Subspace Diagonalization (QKSD) are beyond the scope of
-# this demo we provide a general outline of the technique. For more details, please see
+# this demo, we provide a general outline of the technique. For more details, please see
 # reference [#QKSD]_. The general steps to perform QKSD are:
 #
 # * Obtain the Hamiltonian (:math:`\hat{H}`) for your system of interest, for example the one describing a molecule.
 # * Define a Krylov subspace spanned by quantum states that can be efficiently prepared on a quantum computer.
-# * Obtain from the quantum computer the projection of the Hamiltonian into the subspace (:math:`\tilde{H}`)
+# * Use a quantum computer to obtain the projection of the Hamiltonian into the subspace (:math:`\tilde{H}`).
+#   This is the "smaller matrix". 
 # * Calculate the projection of the Hamiltonian into the subspace (:math:`\tilde{H}`) and the overlap matrix (:math:`\tilde{S}`)
 # * On a classical computer, solve the generalized eigenvalue problem: :math:`\tilde{H}c^m = E_m \tilde{S}c^m`
 #
-# The output of solving this generalized eigenvalue problem gives approximations of the eigenenergies of
-# the Hamiltonian, as well as corresponding eigenstates. 
+# The result of this generalized eigenvalue problem gives approximations of the eigenenergies of
+# the Hamiltonian, as well as corresponding eigenstates.
 # Of particular interest for obtaining molecular
 # properties is the lowest-energy Krylov state, :math:`|\Psi_0\rangle`_.
 #
-# Such an eingestate, which is a linear combination of the states spanning the Krylov space, can then be prepared with QSP.
+# Such an eingestate is a linear combination of the states spanning the Krylov space and can
+# be prepared with QSP.
 #
 # Let's begin with the :math:`H_2O` molecule. We have pre-calculated the Jordan-Wigner mapping of the
 # :math:`H_2O` molecule, using an active space of 4 electrons in 4
@@ -71,34 +77,28 @@ hamiltonian = qml.Hamiltonian(coeffs, paulis)
 # or `Quantum Krylov Subspace diagonalization <https://arxiv.org/pdf/2407.14431>`_ to find :math:`\tilde{H}`
 # and :math:`\tilde{S}`, then solve for the QKSD ground-state,
 # 
-# .. math::`|\Psi_0\rangle` = \sum_{i=0}^{D-1}c_iT_i(H)\ket{\psi_0},
+# .. math:: |\Psi_0\rangle = \sum_{i=0}^{D-1}c_iT_i(H)\ket{\psi_0},
 #
 # where :math:`c_i` are the cofficients of the :math:`i`-th Chebyshev polynomial.
-
-######################################################################
+#
 # Using QSP to directly create the QKSD ground-state
 # --------------------------------------------------
-# 
-# For this demo, we used a Krylov subspace dimension of :math:`D=15` and pre-computed QSP angles
-# that implement the corresponding sum of Chebyshev polynomials :math:`\sum_{i=0}^{D-1}c_iT_i`.
 #
-# The angles below will produce the QKSD ground-state :math:`|\Psi_0\rangle` via QSP. Since QSP
-# can only produce fixed-parity real Chebyshev polynomials [#QSP] and our ground-state QKSD has
-# mixed-parity complex polynomials, we split them and apply separately.
-
-angles_even_real = np.array([3.11277458, 2.99152757, 3.15307452, 3.40611024, 3.00166196, 3.03597059, 3.25931224, 3.04073693, 3.25931224, 3.03597059, 3.00166196, 3.40611024, 3.15307452, 2.99152757, -40.86952257])
-angles_even_imag = np.array([3.17041073, 3.29165774, 3.13011078, 2.87707507, 3.28152334, 3.24721472, 3.02387307, 3.24244837, 3.02387307, 3.24721472, 3.28152334, 2.87707507, 3.13011078, 3.29165774, -47.09507173])
-angles_odd_real = np.array([3.26938242, 3.43658284, 3.17041296, 3.10158929, 3.22189574, 2.93731798, 3.25959312, 3.25959312, 2.93731798, 3.22189574, 3.10158929, 3.17041296, 3.43658284, -37.57132208])
-angles_odd_imag = np.array([3.01380289, 2.84660247, 3.11277234, 3.18159601, 3.06128956, 3.34586733, 3.02359219, 3.02359219, 3.34586733, 3.06128956, 3.18159601, 3.11277234, 2.84660247, -44.11008691])
-
-######################################################################
+# Only using QKSD to calculate one- and two-particle reduced density matrices
+# results in a quadratic scaling of the number of expectation
+# values that need to be measured with respect to the Krylov dimension, :math:`D`_ [#Oumarou].
+# Instead, reference [#Oumarou] shows that it is possible to reduce this to a constant scaling by preparing
+# the QKSD ground-state via QSP and measuring individual terms of the Hamiltonian. Let's see how
+# to do this in PennyLane.
+#
 # Defining the QSP circuit
 # ~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# We can now create operations to implement the QSP circuit that will prepare the QKSD ground-state.
+# We begin by implement the QSP circuit that will prepare the QKSD ground-state.
 # For this we need to create a rotation operator or signal processing operator, and a QSP template
-# to alternate between this and a block-encoding operator. For more details, see
-# `[`Function Fitting using Quantum Signal Processing <https://pennylane.ai/qml/demos/function_fitting_qsp>`_
+# to alternate between this and a block-encoding operator. Alternating between these operations
+# will prepare a Chebyshev polynomial of the input block-encoded matrix. For more details, see
+# `Function Fitting using Quantum Signal Processing <https://pennylane.ai/qml/demos/function_fitting_qsp>`_
 
 def rotation_about_reflection_axis(angle, wires):
     qml.ctrl(qml.PauliX(wires[0]), wires[1:], (0,) * len(wires[1:]))
@@ -112,8 +112,9 @@ def qsp(lcu, angles, rot_wires, prep_wires):
     rotation_about_reflection_axis(angles[0], rot_wires)
 
 ######################################################################
-# We also add a template to combine real and imaginary parts of the Chebyshev polynomials as QSP
-# can only implement one at a time [TODO: reference]:
+# Since QSP can only produce fixed-parity real Chebyshev polynomials [#QSP] and our QKSD ground-state has
+# complex polynomials, we also create a template that combines the real an imaginary parts of the
+# polynomial.
 
 def qsp_poly_complex(lcu, angles_real, angles_imag, ctrl_wire, rot_wires, prep_wires):
     qml.H(ctrl_wire)
@@ -194,6 +195,19 @@ def krylov_qsp(lcu, angles_even_real, angles_even_imag, angles_odd_real, angles_
 Epq = qml.fermi.from_string('0+ 0-')
 obs = qml.jordan_wigner(Epq)
 
+######################################################################
+# For this demo, we used a Krylov subspace dimension of :math:`D=15` and pre-computed QSP angles
+# that implement the corresponding sum of Chebyshev polynomials :math:`\sum_{i=0}^{D-1}c_iT_i`.
+# For a given polynomial it is possible to obtain the QSP angles using :func:`~pennylane.poly_to_angles`.
+#
+# The angles below will produce the QKSD ground-state :math:`|\Psi_0\rangle` via QSP. Since QSP
+# can only produce fixed-parity real Chebyshev polynomials [#QSP] and our ground-state QKSD has
+# mixed-parity complex polynomials, we split them and apply separately.
+
+angles_even_real = np.array([3.11277458, 2.99152757, 3.15307452, 3.40611024, 3.00166196, 3.03597059, 3.25931224, 3.04073693, 3.25931224, 3.03597059, 3.00166196, 3.40611024, 3.15307452, 2.99152757, -40.86952257])
+angles_even_imag = np.array([3.17041073, 3.29165774, 3.13011078, 2.87707507, 3.28152334, 3.24721472, 3.02387307, 3.24244837, 3.02387307, 3.24721472, 3.28152334, 2.87707507, 3.13011078, 3.29165774, -47.09507173])
+angles_odd_real = np.array([3.26938242, 3.43658284, 3.17041296, 3.10158929, 3.22189574, 2.93731798, 3.25959312, 3.25959312, 2.93731798, 3.22189574, 3.10158929, 3.17041296, 3.43658284, -37.57132208])
+angles_odd_imag = np.array([3.01380289, 2.84660247, 3.11277234, 3.18159601, 3.06128956, 3.34586733, 3.02359219, 3.02359219, 3.34586733, 3.06128956, 3.18159601, 3.11277234, 2.84660247, -44.11008691])
 ######################################################################
 # We then measure these and post-process according to Equation 32 of the paper:
 # 
