@@ -20,11 +20,11 @@
 
 This repository hosts a collection of demonstrations built with [PennyLane](https://pennylane.ai/), a cross-platform Python library for quantum computing, quantum machine learning, and quantum chemistry. Built by researchers, for research. These demos showcase various applications and techniques in quantum machine learning (QML), quantum chemistry, and quantum computing, ranging from introductory concepts to advanced algorithms.
 
-Explore the full collection of [PennyLane demos](https://pennylane.ai/qml/demonstrations_v2), each available for download as a Jupyter notebook or Python script.
+Explore the full collection of [PennyLane demos](https://pennylane.ai/qml/demonstrations), each available for download as a Jupyter notebook or Python script.
 
 ## Table of Contents
 
-- [Contributing to Demos](/documentation/contributing.md)
+- [Contributing to Demos](contributing.md)
 - [QML CLI Tool](/documentation/qml-cli.md)
 - [Dependency Management](/dependencies/README.md)
 - [Support](#support)
