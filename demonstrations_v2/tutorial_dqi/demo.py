@@ -60,7 +60,7 @@ B = pnp.array([[1, 0, 0, 0], [1, 1, 0, 0], [0, 1, 1, 0], [0, 0, 1, 1], [0, 0, 0,
 v = pnp.array([1, 0, 1, 0, 1])
 m, n = B.shape
 B_T = B.T
-n_samples = 100
+n_samples = 500
 
 
 def objective_function(x):
@@ -567,7 +567,7 @@ def DQI(m, n, l):
 
     # Uncompute weight register
     uncompute_weight(m, k=2)
-    
+
     # Impart phase
     phase_Z(v)
 
