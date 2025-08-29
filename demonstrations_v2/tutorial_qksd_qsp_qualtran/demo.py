@@ -18,9 +18,9 @@ In this demo we will demonstrate some of the techniques and results of the paper
 [#Oumarou]_. Specifically, we will:
 
 * Introduce QKSD briefly.
-* Show how to build a PennyLane circuit that uses QSP to prepare the QKSD ground-state.
-* Show how to use PennyLane to simulate circuits that estimate the one- and two-particle reduced density matrices of a molecular system from the QKSD ground-state.
-* Show how to use the PennyLane-Qualtran integration to count relevant circuit resources and demonstrate linear resource scaling with respect to the Krylov dimension, :math:`D`.
+* Build a circuit that uses QSP to prepare the QKSD ground-state.
+* Simulate circuits that estimate the one- and two-particle reduced density matrices of a molecular system from the QKSD ground-state.
+* Use the PennyLane-Qualtran integration to count relevant circuit resources and demonstrate linear resource scaling with respect to the Krylov dimension, :math:`D`.
 """
 
 ######################################################################
@@ -55,9 +55,9 @@ In this demo we will demonstrate some of the techniques and results of the paper
 # :math:`H_2O` Hamiltonian with an active space of 4 electrons in 4
 # molecular orbitals in the cc-pVDZ basis. To save time on this computationally-expensive basis, we
 # provide pre-calculated coefficients and Pauli words for this Hamiltonian below. It is also possible
-# to obtain these values using either `PennyLane Datasets <https://pennylane.ai/datasets/h2o-molecule>`_
-# or the :mod:`pennylane.qchem` module. We use the pre-calculated results below to create a
-# :class:`~pennylane.Hamiltonian` object.
+# to obtain these values for other molecules an bases using either
+# `PennyLane Datasets <https://pennylane.ai/datasets/h2o-molecule>`_ or the :mod:`pennylane.qchem`
+# module. We use the pre-calculated results below to create a :class:`~pennylane.ops.Hamiltonian` object.
 
 import pennylane as qml
 import numpy as np
@@ -67,27 +67,32 @@ paulis = [qml.GlobalPhase(0, 0), qml.Z(0), qml.Y(0) @ qml.Z(1) @ qml.Y(2), qml.X
 hamiltonian = qml.Hamiltonian(coeffs, paulis)
 
 ######################################################################
-# To define the Krylov subspace, we will use
-# `Chebyshev polynomials <https://en.wikipedia.org/wiki/Chebyshev_polynomials>`_ of the Hamiltonian
-# applied to the Hartree-Fock state of the Hamiltonian, which we denote by the reference state :math:`|\psi_0\rangle`. In other words, we
-# define states: 
+# Next, we will define the Krylov subspace, :math:`\mathcal{K}`.
+# We first define the states that span :math:`\mathcal{K}`: 
 #
 # .. math:: \ket{\psi_k} = T_k(H)\ket{\psi_0},
 #
-# where :math:`T_k` is the :math:`k`-th Chebyshev polynomial. Then we define a Krylov subspace of dimension
-# :math:`D` as 
+# where :math:`T_k` is the :math:`k`-th Chebyshev polynomial and :math:`|\psi_0\rangle` is the
+# Hartree-Fock state of the Hamiltonian.
+# Other subspace definitions are possible [#QKSD]_, but we choose
+# `Chebyshev polynomials <https://en.wikipedia.org/wiki/Chebyshev_polynomials>`_
+# for convenience. The reason for this is that we plan to
+# prepare the Krylov ground-state using QSP, which directly implements Chebyshev polynomials.
+# Other types of functions or polynomials would first need to be converted into
+# Chebyshev polynomials, adding more complexity to our program.
+# 
+# With the states defined, the Krylov subspace of dimension :math:`D` is then: 
 #
 # .. math:: \mathcal{K} = \text{span}(\{\ket{\psi_k}\}_{k=0}^{D-1}).
 #
-# With the Hamiltonian and Krylov space defined, we can use
-# the `Lanczos method <https://quantum-journal.org/papers/q-2023-05-23-1018/pdf/>`_ classically
-# or `QKSD <https://arxiv.org/pdf/2407.14431>`_ to solve for the QKSD ground-state,
+# After projecting :math:`\hat{H}` into :math:`\mathcal{K}` and solving the generalized eigenvalue
+# problem described above, we obtain the Krylov ground-state [#QKSD]_,
 # 
-# .. math:: |\Psi_0\rangle = \sum_k c^0_k | \psi_k \rangle = \sum_{l=0}^{D-1}c_k^0 T_k(H)\ket{\psi_0},
+# .. math:: |\Psi_0\rangle = \sum{k=0}^{D-1} c^0_k | \psi_k \rangle = \sum_{k=0}^{D-1}c_k^0 T_k(H)\ket{\psi_0},
 #
-# where :math:`c_i` are the cofficients of the :math:`i`-th Chebyshev polynomial.
-# Here we use the Chebyshev basis because QSP directly implements Chebyshev polynomials.
-# Other types of functions need to be converted into Chebyshev polynomials to implement via QSP.
+# where :math:`c_k^m` are the cofficients of the :math:`k`-th Chebyshev polynomial for the
+# :math:`m`-th eigenvalue. We pre-calculate the these coefficients and use them to obtain the
+# QSP rotation angles that prepare the QKSD ground-state in the section below.
 #
 # Using QSP to directly create the QKSD ground-state
 # --------------------------------------------------
@@ -98,10 +103,10 @@ hamiltonian = qml.Hamiltonian(coeffs, paulis)
 # Instead, reference [#Oumarou]_ shows that it is possible to reduce this to constant scaling by preparing
 # :math:`|\Psi_0\rangle` via QSP and measuring individual terms of the Hamiltonian.
 # [TODO: clarify QSP explanation below. Too many unclear variables and not obvious how qsp implements a polynomial+no block encodings mentioned]
-# The QSP circuit, :math:`U_\text{QSP}`, is defined as a series of alternating iterates,
-# :math:`W`, and rotations, :math:`S`, such that:
+# The QSP circuit, :math:`U_\text{QSP}`, is defined as a series of alternating block-encoding,
+# :math:`U_\text{BE}`, and rotations, :math:`S`, such that [#QSP]_ [#Oumarou]_ :
 # 
-# .. math:: U_\text{QSP} = S(\phi_0)\prod_k^{d-1}{W(a)S(\phi_k)}
+# .. math:: U_\text{QSP} = S(\phi_0)\prod_k^{d-1}{U_\text{BE}(a)S(\phi_k)}.
 # 
 # Choosing the right rotation angles, :math:`\phi`, causes :math:`U_\text{QSP}` to implement a 
 # Chebyshev polynomial such that:
@@ -117,8 +122,9 @@ hamiltonian = qml.Hamiltonian(coeffs, paulis)
 # ~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # To define the QSP circuit, we first create a function to implement the rotations, :math:`S`. The
-# iterate, :math:`W`, will be implemented via the :class:`~pennylane.PrepSelPrep` class. We then
-# create a QSP template to alternate between :math:`W` and :math:`S`. Alternating between these operations
+# block-encoding, :math:`U_\text{BE}`, will be implemented via the :class:`~pennylane.PrepSelPrep`
+# class. We then create a QSP template to alternate between :math:`U_\text{BE}` and :math:`S`.
+# Alternating between these operations
 # will prepare a Chebyshev polynomial of the input block-encoded matrix.
 
 def rotation_about_reflection_axis(angle, wires):
@@ -370,7 +376,21 @@ show_call_graph(graph)
 ######################################################################
 # Conclusion
 # ----------
-# [TODO]
+# In this demo, we've outlined a powerful workflow for measuring molecular properties on future 
+# fault-tolerant quantum computers. We demonstrated how to construct the QKSD ground state of the 
+# water molecule, represented as a sum of Chebyshev polynomials, using a QSP circuit in PennyLane.
+# This direct state preparation approach is highly efficient, enabling the measurement of 
+# properties like reduced density matrices with a constant number of circuit executions and 
+# thereby avoiding the quadratic scaling costs of other methods.
+#
+# We then used the integration between PennyLane and Qualtran to perform a detailed resource analysis.
+# By converting our PennyLane ``QNode`` into a Qualtran ``Bloq``, we precisely 
+# counted the required quantum gates and confirmed a crucial result from the source paper [#Oumarou]_:.
+# This analysis confirmed a crucial result from the source paper: the number of gates scales 
+# linearly with the Krylov subspace dimension. This favorable scaling 
+# highlights the potential of QSP-based techniques for tackling meaningful quantum chemistry 
+# problems and provides a practical framework for bridging the gap between theoretical algorithms 
+# and their implementation on future quantum hardware.
 #
 # References
 # -----------
