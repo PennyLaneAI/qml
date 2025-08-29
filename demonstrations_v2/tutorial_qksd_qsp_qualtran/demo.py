@@ -234,7 +234,14 @@ def krylov_qsp(lcu, even_real, even_imag, odd_real, odd_imag, obs, measure_refle
 # .. math:: \langle\Psi_0 | a^{\dagger}_p a_q | \Psi_0\rangle.
 #
 # We use the Jordan-Wigner mapping of the fermionic one-particle excitation operators and measure
-# the resulting Pauli word observables.
+# the resulting Pauli word observables. Since QSP implements a block-encoded Chebyshev polynomial
+# of the Hamiltonian, we must be careful to measure the right observables and post-process the result
+# to obtain the reduced density matrices. 
+#
+# .. math:: o_1 \coloneqq \bra{\psi_0} _s\bra{0}_a\hat{\mathcal{U}}_{\Phi}^{*}\hat{P}_{\nu}\hat{\mathcal{U}}_{\Phi}\ket{0}_a\ket{\psi_0}_s
+# 
+# .. math:: 2\langle \Psi_0 |_s\hat{P}_{\nu}|\Psi_0\rangle_s = \eta^2(o_1 + o_2).
+
 # We can obtain the Jordan-Wigner mapping of the fermionic operators via PennyLane using the
 # :func:`~pennylane.fermi.from_string` and :func:`~pennylane.jordan_wigner` functions as follows:
 
@@ -255,19 +262,16 @@ even_imag = np.array([3.17041073, 3.29165774, 3.13011078, 2.87707507, 3.28152334
 odd_real = np.array([3.26938242, 3.43658284, 3.17041296, 3.10158929, 3.22189574, 2.93731798, 3.25959312, 3.25959312, 2.93731798, 3.22189574, 3.10158929, 3.17041296, 3.43658284, -37.57132208])
 odd_imag = np.array([3.01380289, 2.84660247, 3.11277234, 3.18159601, 3.06128956, 3.34586733, 3.02359219, 3.02359219, 3.34586733, 3.06128956, 3.18159601, 3.11277234, 2.84660247, -44.11008691])
 ######################################################################
-# # We then measure the QSP circuit using these angles and post-process according to Equation 32 of the paper:
-# 
-# .. math:: 2\langle \Psi_0 |_s\hat{P}_{\nu}|\Psi_0\rangle_s = \eta^2(o_1 + o_2).
-#
+# We then measure the QSP circuit using these angles and post-process according to Equation 32:
 
-measurement_1 = krylov_qsp(hamiltonian, even_real, even_imag, odd_real, odd_imag, obs=obs)
-measurement_2 = krylov_qsp(hamiltonian, even_real, even_imag, odd_real, odd_imag, obs=obs, measure_reflection=True)
+P = krylov_qsp(hamiltonian, even_real, even_imag, odd_real, odd_imag, obs=obs)
+RP = krylov_qsp(hamiltonian, even_real, even_imag, odd_real, odd_imag, obs=obs, measure_reflection=True)
 
-print("meas 1:", measurement_1)
-print("meas 2:", measurement_2)
+print("P:", P)
+print("RP:", RP)
 
 lambda_lcu = np.sum(np.abs(coeffs))
-coherent_result = 2*lambda_lcu*(measurement_1+measurement_2)
+coherent_result = 2*lambda_lcu*(P+RP)
 print("coherent result:",coherent_result)
 
 ######################################################################
