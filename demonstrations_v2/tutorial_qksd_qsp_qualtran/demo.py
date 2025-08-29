@@ -396,7 +396,8 @@ def generalize_ccrz(b):
 # highlights the potential of QSP-based techniques for tackling meaningful quantum chemistry 
 # problems and provides a practical framework for bridging the gap between theoretical algorithms 
 # and their implementation on future quantum hardware.
-#
+
+######################################################################
 # References
 # -----------
 #
