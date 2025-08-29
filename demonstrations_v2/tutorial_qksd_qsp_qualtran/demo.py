@@ -160,8 +160,7 @@ def qsp_poly_complex(lcu, angles_real, angles_imag, ctrl_wire, rot_wires, prep_w
 
 ######################################################################
 # Additionally, we require a template to perform a reflection for our measurements.
-# [TODO: explain measurements and restructure this section]
-#
+
 def reflection(wire, ctrl_wires):
     qml.ctrl(qml.X(wire), ctrl_wires, [0] * len(ctrl_wires))
     qml.Z(wire)
@@ -178,10 +177,12 @@ def reflection(wire, ctrl_wires):
 # measure the reflection of the observable, ``measure_reflection``. 
 #
 # With these building blocks in place, we can now define the overarching QNode
-# that will implement the QSP circuit and return measurements of the elements of the one-
-# and two-particle reduced density matrices:
+# that will apply the QSP circuit to the reference state :math:`|\psi_0\rangle`
+# and return measurements of the elements of
+# the one-particle and two-particle reduced density matrices:
 
 dev = qml.device("lightning.qubit")
+ref_state = qml.qchem.hf_state(electrons=4, orbitals=4) 
 
 @qml.qnode(dev)
 def krylov_qsp(lcu, even_real, even_imag, odd_real, odd_imag, obs, measure_reflection=False):
@@ -196,13 +197,16 @@ def krylov_qsp(lcu, even_real, even_imag, odd_real, odd_imag, obs, measure_refle
     ctrl_wires = [prep_wires[-1] + 1, prep_wires[-1] + 2]
     rdm_ctrl_wire = ctrl_wires[-1] + 1
 
+    qml.BasisState(ref_state, wires=hamiltonian.wires)
+
     if measure_reflection: # preprocessing for reflection measurement
         qml.X(rdm_ctrl_wire)
 
-    #[TODO: explain why we are combining two QSP calls again here]
     qml.H(ctrl_wires[0])
-    qml.ctrl(qsp_poly_complex, ctrl_wires[0], 0)(lcu, even_real, even_imag, ctrl_wires[1], rot_wires, prep_wires)
-    qml.ctrl(qsp_poly_complex, ctrl_wires[0], 1)(lcu, odd_real, odd_imag, ctrl_wires[1], rot_wires, prep_wires)
+    qml.ctrl(qsp_poly_complex, ctrl_wires[0], 0)(lcu, even_real, even_imag, ctrl_wires[1],
+                                                 rot_wires, prep_wires)
+    qml.ctrl(qsp_poly_complex, ctrl_wires[0], 1)(lcu, odd_real, odd_imag, ctrl_wires[1],
+                                                 rot_wires, prep_wires)
     qml.H(ctrl_wires[0])
 
     # measurements
@@ -261,8 +265,8 @@ print("coherent result:",coherent_result)
 # -----------------------
 # 
 # We can analyze the resources and flow of this program by using the Qualtran call graph.
-# We first convert the PennyLane circuit to a Qualtran bloq and then use the call graph to count
-# the required gates:
+# We first convert the PennyLane circuit to a Qualtran bloq using :func:`~pennylane.to_bloq` and
+# then use the call graph to count the required gates:
 
 bloq = qml.to_bloq(krylov_qsp, map_ops=False,
     even_real=even_real, even_imag=even_imag,
@@ -273,7 +277,6 @@ bloq = qml.to_bloq(krylov_qsp, map_ops=False,
 ######################################################################
 # We can then use Qualtran tools to analyze and process the gate counts of the circuit. For example,
 # we can use the ``call_graph`` to obtain a breakdown of the gates used:
-
 
 graph, sigma = bloq.call_graph()
 print("--- Gate counts ---")
@@ -306,11 +309,10 @@ even_real = even_imag = odd_real = odd_imag = np.random.random(20)
 ######################################################################
 # We then repeat the gate counts and see they have increased:
 
-bloq = qml.to_bloq(krylov_qsp, map_ops=False,
-    even_real=even_real, even_imag=even_imag,
-    odd_real=odd_real, odd_imag=odd_imag,
-    lcu=hamiltonian, obs=obs
-    )
+bloq = qml.to_bloq(krylov_qsp, map_ops=False, even_real=even_real,
+                   even_imag=even_imag, odd_real=odd_real,
+                   odd_imag=odd_imag, lcu=hamiltonian, obs=obs)
+
 graph, sigma = bloq.call_graph(generalizer=generalize_rotation_angle)
 print("--- Gate counts ---")
 for gate, count in sigma.items():
@@ -325,10 +327,9 @@ from qualtran.bloqs.basic_gates import Toffoli, CNOT, XGate
 
 def count_cnots(krylov_dimension):
     even_real = even_imag = odd_real = odd_imag = np.random.random(krylov_dimension)
-    bloq = qml.to_bloq(krylov_qsp, map_ops=False,
-                   even_real=even_real, even_imag=even_imag,
-                    odd_real=odd_real, odd_imag=odd_imag,
-                     lcu=hamiltonian, obs=obs)
+    bloq = qml.to_bloq(krylov_qsp, map_ops=False, even_real=even_real,
+                       even_imag=even_imag, odd_real=odd_real,
+                       odd_imag=odd_imag, lcu=hamiltonian, obs=obs)
     _, sigma = bloq.call_graph(generalizer=generalize_rotation_angle)
     return sigma
 
