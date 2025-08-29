@@ -2,9 +2,10 @@ r"""X-ray absorption spectroscopy simulation in the time domain
 ===========================================================
 
 What will be the first industrially useful quantum algorithm to run on fault-tolerant quantum computers? 
-This open question is being tackled head-on by the research team at Xanadu, as it aligns with our goal of making quantum computers that are useful.
-In particular, we believe promising candidates for quantum advantage are simulations of *small* but *highly correlated* systems. 
+Answering this question is the main mission of the Xanadu algorithms team, as the company races to "build quantum computers that are useful and available to people everywhere".
+As logical qubits will likely be a scarce resource for a while, we expect that our best chance at finding quantum advantage lies in simulating dynamics of *small* but *highly correlated* quantum systems. 
 One such application is simulating `X-ray absorption spectroscopy <https://en.wikipedia.org/wiki/X-ray_absorption_spectroscopy>`__ (XAS), which can be useful in workflows for identifying structural degradation mechanisms in material candidates for battery designs 🔋 [#Fomichev2024]_. 
+Here, the ultralocal nature of X-ray absorption naturally leads to only needing to simulate small clusters, while the strong correlations inherent in excited states probed by XAS make the simulation challenging for classical computers.
 This demo will show you how to implement an optimized simulation algorithm developed in the paper `“Fast simulations of X-ray absorption spectroscopy for battery materials on a quantum computer” <https://arxiv.org/abs/2506.15784>`__ [#Fomichev2025]_ in PennyLane.
 
 First, we will discuss why simulating X-ray absorption spectroscopy is a promising application for quantum computers. 
@@ -23,11 +24,13 @@ implement a simplified version in PennyLane.
 Why simulate X-ray absorption spectroscopy?
 -------------------------------------------
 
-Lithium-excess materials are transition metal oxides that are designed as candidate materials for battery cathodes. 
-Engineered to accommodate extra Lithium atoms in their structural composition, these materials enable larger energy densities in battery designs.
-However, repeated charge-discharge cycles can alter their structure and reduce performance. 
-The oxidation states in the degraded cathode materials can be examined using X-ray absorption spectroscopy, which directly probes local structure by exciting tightly bound core electrons. 
-The degraded structures are identified by a process known as “spectral fingerprinting”, where reference spectra of small molecular clusters are matched to the experimental spectrum. 
+Lithium-excess materials are transition metal oxides that are promising candidates for next-generation battery cathodes. 
+Engineered to accommodate extra lithium atoms in their lattice structure, these materials could potentially double the energy densities in battery designs.
+However, prototype Li-excess cathodes rapidly degrade after only a handful charge-discharge cycles. 
+The mechanism of this degradation is still poorly understood, making it challenging for researchers to resolve it.
+Knowledge of the internal electronic bonding and oxidation states of degraded cathodes is crucial to solving this mystery.
+This bonding can be examined using X-ray absorption spectroscopy, which directly probes local structure by exciting tightly bound core electrons. 
+The actual degraded structures that arise during cycling can then be identified by a process known as “spectral fingerprinting”, where reference spectra of small molecular clusters are matched to the experimental spectrum. 
 A fast method of simulating reference spectra for use in fingerprinting would be a crucial component in an iterative workflow for identifying promising cathode materials [#Fomichev2024]_.
 
 .. figure:: ../_static/demonstration_assets/xas/fingerprinting.gif
