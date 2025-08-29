@@ -205,7 +205,9 @@ def krylov_qsp(lcu, even_real, even_imag, odd_real, odd_imag, obs, measure_refle
     ctrl_wires = [prep_wires[-1] + 1, prep_wires[-1] + 2]
     rdm_ctrl_wire = ctrl_wires[-1] + 1
 
-    qml.BasisState(ref_state, wires=hamiltonian.wires)
+    #prepare the reference state
+    for i in range(hamiltonian.wires):
+        qml.X(i)
 
     if measure_reflection: # preprocessing for reflection measurement
         qml.X(rdm_ctrl_wire)
