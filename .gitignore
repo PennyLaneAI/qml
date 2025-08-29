@@ -13,8 +13,6 @@ demos_community.rst
 .venv/
 .venv_ubuntu/
 .venv-build/
-.test_figures/
-demo_requirements.txt
 **/*.egg-info/
 sg_execution_times.rst
 *.ipynb
