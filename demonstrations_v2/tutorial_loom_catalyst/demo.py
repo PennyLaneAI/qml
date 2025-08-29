@@ -164,7 +164,7 @@ circuit. We obtain four cases illustrated below.
 
 As it is easy to verify, the three locations where the error may arise give rise to an independent
 signature over the measurement outcomes. Explicitly writing the match between syndromes and
-corrections is called generating the “look-up table”.
+corrections is called generating the “lookup table”.
 
 Catalyst implementation
 -----------------------
@@ -182,7 +182,7 @@ build such an experiment, we need three key components:
    corrective actions.
 
 Let’s implement this natively using the PennyLane and Catalyst frameworks, relying on the hard-coded
-solution or look-up table.
+solution or lookup table.
 """
 
 from catalyst import qjit, cond, measure, debug
@@ -280,7 +280,7 @@ logical_measurement, syndrome = circuit(0)
 # Extending it all with Loom
 # --------------------------
 # 
-# Look-up tables can be useful, but their scalability quickly becomes a problem as the system grows.
+# Lookup tables can be useful, but their scalability quickly becomes a problem as the system grows.
 # For instance, if you want to run multiple QEC cycles and stack them together, the number of possible
 # syndrome combinations you’d need to precompute increases **exponentially** with the number of
 # measurements. To address this challenge, we can turn to Loom, Entropica Labs’ solution for
