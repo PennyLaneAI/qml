@@ -175,10 +175,10 @@ def krylov_qsp(lcu, even_real, even_imag, odd_real, odd_imag, obs, measure_refle
     """Prepares the Krylov lowest-energy state by applying QSP with the input angles.
     Then measures the expectation value of the desired observable. 
     """
-    num_ancillae = int(np.log(len(lcu.operands)) / np.log(2)) + 1
+    num_aux = int(np.log(len(lcu.operands)) / np.log(2)) + 1
 
     start_wire = hamiltonian.wires[-1] + 1
-    rot_wires = list(range(start_wire, start_wire + num_ancillae + 1))
+    rot_wires = list(range(start_wire, start_wire + num_aux + 1))
     prep_wires = rot_wires[1:]
     ctrl_wires = [prep_wires[-1] + 1, prep_wires[-1] + 2]
     rdm_ctrl_wire = ctrl_wires[-1] + 1
@@ -194,21 +194,17 @@ def krylov_qsp(lcu, even_real, even_imag, odd_real, odd_imag, obs, measure_refle
 
     # measurements
     if measure_reflection:
-        return qml.expval(
-            qml.prod(reflection)(rdm_ctrl_wire, set(ctrl_wires+prep_wires))
-            @
-            obs
-        )
+        return qml.expval(qml.prod(reflection)(rdm_ctrl_wire, set(ctrl_wires+prep_wires))@obs)
     return qml.expval(obs)
 
 
 ######################################################################
-# We can now use this circuit to build 1- and 2- particle reduced density matrices.
-# Based on the paper `Molecular Properties from Quantum Krylov Subspace Diagonalization <https://arxiv.org/abs/2501.05286>`_,
+# We can now use this circuit to build one- and two- particle reduced density matrices.
+# Based on reference [#Oumarou],
 # the elements of the one-particle reduced density matrix are obtained by measuring the expectation
 # value of the fermionic one-particle excitation operators acting on the Krylov lowest energy state:
 #
-# .. math:: \langle\Psi_0 | \hat{E}_{pq} | \Psi_0\rangle
+# .. math:: \langle\Psi_0 | \hat{E}_{pq} | \Psi_0\rangle.
 #
 # We use the Jordan-Wigner mapping of the fermionic one-particle excitation operators and measure
 # the resulting Pauli word observables.
@@ -249,15 +245,18 @@ coherent_result = 2*lambda_lcu*(measurement_1+measurement_2)
 print("coherent result:",coherent_result)
 
 ######################################################################
-#
-# We can analyze the resources and flow of this program by using the qualtran call graph.
+# Analyzing with Qualtran
+# -----------------------
+# 
+# We can analyze the resources and flow of this program by using the Qualtran call graph.
 # We first convert the PennyLane circuit to a Qualtran bloq and then use the call graph to count
 # the required gates:
 
 bloq = qml.to_bloq(krylov_qsp, map_ops=False,
-                   even_real=even_real, even_imag=even_imag,
-                    odd_real=odd_real, odd_imag=odd_imag,
-                     lcu=hamiltonian, obs=obs)
+    even_real=even_real, even_imag=even_imag,
+    odd_real=odd_real, odd_imag=odd_imag,
+    lcu=hamiltonian, obs=obs
+    )
 
 ######################################################################
 # We can then use Qualtran tools to analyze and process the gate counts of the circuit. For example,
@@ -281,15 +280,14 @@ for gate, count in sigma.items():
     print(f"{gate}: {count}")
 
 ######################################################################
-# As explained in
-# `Molecular Properties from Quantum Krylov Subspace Diagonalization <https://arxiv.org/abs/2501.05286>`_,
-# increasing the dimension of the Krylov subspace improves the accuracy of the Krylov minimal energy
-# compared to the true ground state energy. This extra accuracy is paid by requiring additional gates.
+# As explained in [#Oumarou],
+# increasing the dimension, :math:`D`, of the Krylov subspace improves the accuracy of the Krylov minimal energy
+# compared to the true ground state energy. This extra accuracy is paid for by requiring additional gates.
 # Let's see how the number of gates increases with increasing Krylov susbspace dimension. We can
 # increase the Krylov subspace dimension by increasing the number of terms in our Chebyshev polynomial,
-# captured in this demo via the angles variables. Let's try increasing the Krylov dimension to 20
-# by setting the number of terms in these angles to 20. We can choose random angles as the resource
-# estimation is independent of the exact angle values:
+# captured in this demo via the angles variables. Let's try :math:`D=20`
+# by setting the number of terms in these angles to 20. As the resource estimation is independent of
+# the exact angle values, we are able to set them randomly instead of recomputing the formally:
 
 even_real = even_imag = odd_real = odd_imag = np.random.random(20)
 
@@ -297,9 +295,10 @@ even_real = even_imag = odd_real = odd_imag = np.random.random(20)
 # We then repeat the gate counts and see they have increased:
 
 bloq = qml.to_bloq(krylov_qsp, map_ops=False,
-                   even_real=even_real, even_imag=even_imag,
-                    odd_real=odd_real, odd_imag=odd_imag,
-                     lcu=hamiltonian, obs=obs)
+    even_real=even_real, even_imag=even_imag,
+    odd_real=odd_real, odd_imag=odd_imag,
+    lcu=hamiltonian, obs=obs
+    )
 graph, sigma = bloq.call_graph(generalizer=generalize_rotation_angle)
 print("--- Gate counts ---")
 for gate, count in sigma.items():
@@ -307,7 +306,7 @@ for gate, count in sigma.items():
 
 ######################################################################
 # We can plot how the number of gates increases with the Krylov dimension to see if it is linear
-# as expected. Below we plot how the Toffoli, CNOT, and X gate count increase with the Krylov dimension:
+# as described in [#Oumarou]. Below we plot how the Toffoli, CNOT, and X gate count increase with the Krylov dimension:
 
 import matplotlib.pyplot as plt
 from qualtran.bloqs.basic_gates import Toffoli, CNOT, XGate
@@ -340,9 +339,9 @@ plt.legend()
 # which sections are resource-intensive.
 #
 # The first layer of this circuit, before decomposing the operations, contains many
-# RZ gates controlled on two qubits with different angles. As we saw above, we can group similar
+# ``RZ`` gates controlled on two qubits with different angles. As we saw above, we can group similar
 # operations together and simplify the view. To this end, we first write a custom Qualtran generalizer
-# that will combine controlled-RZ gates: 
+# that will combine controlled-``RZ`` gates: 
 
 import attrs
 import sympy
