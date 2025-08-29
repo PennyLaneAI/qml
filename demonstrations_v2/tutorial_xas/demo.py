@@ -77,12 +77,12 @@ Time-domain simulation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Both the initial state :math:`|I\rangle` and the dipole operator acting on the initial state :math:`\hat m_\rho|I\rangle` can be determined classically, and we’ll demonstrate how to do that later. 
-With the initial state computed, we will use a mathematical trick called a *frequency-domain* `Green’s function <https://en.wikipedia.org/wiki/Green%27s_function>`__ to determine the absorption cross section. 
+With the initial state computed, we will use a mathematical trick called a *frequency-domain* `Green’s function <https://en.wikipedia.org/wiki/Green%27s_function>`__ to re-write the absorption cross section as an expectation value of a specific operator. 
 We can write the cross section as the imaginary part of the following Green’s function (see Section IIB in Ref. [#Fomichev2025]_)
 
 .. math:: \mathcal{G}_\rho(\omega) = \langle I|\hat m_\rho \frac{1}{\hat H -E_I -\omega +i\eta} \hat m_\rho |I\rangle\,.
 
-We can recover the previous form of the absorption cross section if we rewrite this in the Lehmann representation (inserting a resolution of identity of final states)
+With a bit of algebra, we can confirm that this works: inserting a resolution of identity of final states :math:`\sum_F |F\rangle \langleF|` and simplifying gives
 
 .. math::  \mathrm{Im}\,\mathcal{G}_\rho(\omega) = -\sum_{F\neq I} \frac{|\langle F|\hat m_\rho|I\rangle|^2\eta}{(E_F- E_I -\omega)^2 +\eta^2} - \frac{|\langle I|\hat m_\rho|I\rangle|^2\eta}{\omega^2 +\eta^2}\,,
 
@@ -95,7 +95,8 @@ If we are going to evaluate this quantity in a quantum register, it will need to
 .. math::  G_\rho(\omega) = \eta \frac{\mathcal{G}_\rho(\omega)}{||\hat m_\rho | I \rangle ||^2} \,.
 
 Calculating this quantity directly is expensive [#Fomichev2024]_. We need to invert the Hamiltonian matrix, which is hard even when using an algorithm like HHL [#Harrow2009]_. We would also need to calculate the cross section at every frequency, which can quickly run up the cost. 
-Instead, our algorithm will aim to simulate in the *time domain*, and then `Fourier transform <https://en.wikipedia.org/wiki/Fourier_transform>`__ the results classically to obtain the frequency spectrum! This allows us to construct the entire spectrum *at once*, rather than measure at specific frequencies. 
+Instead, our algorithm will aim to simulate the dynamics of our initial state in the *time domain*, and then `Fourier transform <https://en.wikipedia.org/wiki/Fourier_transform>`__ the results classically to obtain the frequency spectrum! This allows us to construct the entire spectrum *at once*, rather than tediously measure each individual frequency we are interested in. 
+This is especially important if the number of excited states underlying the absorption spectrum is very large, which we expect to be the case for moderately sized clusters.
 
 The time-domain Green’s function :math:`\tilde G(t_j)` can be determined using the expectation value of the time-evolution operator (normalized) at times :math:`t_j = \tau j`, where :math:`\tau` is the time step and :math:`j` is the time-step index
 
@@ -134,8 +135,8 @@ State preparation
 We need to classically determine the ground state :math:`|I\rangle`, and the dipole operator’s action on that state :math:`\hat m_\rho |I\rangle`. 
 For complicated molecular clusters, it's common to choose and consider only a subset of molecular orbitals and electrons in a calculation. 
 This set of orbitals and electrons is known as the “active space”. 
-Utilizing an active space reduces the cost of performing calculations on complicated molecular instances, while hopefully still preserving the interesting features of the molecule. 
-For this demo, our calculation will use the :math:`\mathrm{N}_2` molecule with a small active space. 
+Utilizing an active space reduces the cost of performing calculations on complicated molecular instances, while still preserving the interesting features of the molecule's behaviour. 
+For this demo, our calculation will obtain the spectrum of the :math:`\mathrm{N}_2` molecule with a small active space. 
 While the molecule used here is quite simple, the method demonstrated below will work for more complicated molecules. 
 
 Ground state calculation
