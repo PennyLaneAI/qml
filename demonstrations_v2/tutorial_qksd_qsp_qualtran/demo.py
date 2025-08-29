@@ -73,7 +73,12 @@ hamiltonian = qml.Hamiltonian(coeffs, paulis)
 # .. math:: \ket{\psi_k} = T_k(H)\ket{\psi_0},
 #
 # where :math:`T_k` is the :math:`k`-th Chebyshev polynomial and :math:`|\psi_0\rangle` is the
-# Hartree-Fock state of the Hamiltonian.
+# Hartree-Fock state of the Hamiltonian. The Chebyshev polynomials are defined by:
+#
+# .. math:: T_0(\hat{H}) = \mathbb{1}
+# .. math:: T_1(\hat{H}) = \hat{H}
+# .. math:: T_{n+1}(\hat{H}) = 2 \hat{H} T_n(\hat{H}) - T_{n-1}(\hat{H})
+#
 # Other subspace definitions are possible [#QKSD]_, but we choose
 # `Chebyshev polynomials <https://en.wikipedia.org/wiki/Chebyshev_polynomials>`_
 # for convenience. The reason for this is that we plan to
