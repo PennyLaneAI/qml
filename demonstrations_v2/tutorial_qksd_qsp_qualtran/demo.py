@@ -150,7 +150,7 @@ hamiltonian = qml.Hamiltonian(coeffs, paulis)
 #
 # These measurements can then be combined according to [#Oumarou]_
 #
-# .. math:: \langle \Psi_0 |P|\Psi_0\rangle = \eta^2(o_1 + o_2)/2,
+# .. math:: 2\langle \Psi_0 |P|\Psi_0\rangle = \eta^2(o_1 + o_2),
 #
 # giving the value of :math:`\gamma_{pq}` for the Hamiltonian in the Jordan-Wigner mapping.
 #
@@ -230,7 +230,7 @@ def krylov_qsp(lcu, even_real, even_imag, odd_real, odd_imag, obs, measure_refle
     rdm_ctrl_wire = ctrl_wires[-1] + 1
 
     #prepare the reference state
-    for i in range(hamiltonian.wires):
+    for i in hamiltonian.wires:
         qml.X(i)
 
     if measure_reflection: # preprocessing for reflection measurement
@@ -271,7 +271,8 @@ even_imag = np.array([3.17041073, 3.29165774, 3.13011078, 2.87707507, 3.28152334
 odd_real = np.array([3.26938242, 3.43658284, 3.17041296, 3.10158929, 3.22189574, 2.93731798, 3.25959312, 3.25959312, 2.93731798, 3.22189574, 3.10158929, 3.17041296, 3.43658284, -37.57132208])
 odd_imag = np.array([3.01380289, 2.84660247, 3.11277234, 3.18159601, 3.06128956, 3.34586733, 3.02359219, 3.02359219, 3.34586733, 3.06128956, 3.18159601, 3.11277234, 2.84660247, -44.11008691])
 ######################################################################
-# We then measure the QSP circuit using these angles and post-process according to Equation 32 of the paper [#Oumarou]_:
+# We then measure the QSP circuit using these angles and post-process according to
+# the equations above:
 
 P = krylov_qsp(hamiltonian, even_real, even_imag, odd_real, odd_imag, obs=obs)
 RP = krylov_qsp(hamiltonian, even_real, even_imag, odd_real, odd_imag, obs=obs, measure_reflection=True)
@@ -281,7 +282,7 @@ print("RP:", RP)
 
 lambda_lcu = np.sum(np.abs(coeffs))
 coherent_result = 2*lambda_lcu*(P+RP)
-print("coherent result:",coherent_result)
+print("Coherent result:", coherent_result)
 
 ######################################################################
 # Analyzing with Qualtran
@@ -358,6 +359,7 @@ plt.scatter(Ds, [sigma[XGate()] for sigma in sigmas], label = 'X Gates')
 plt.xlabel('Krylov Subspace Dimension, D')
 plt.ylabel('Number of Gates')
 plt.legend()
+plt.show()
 
 ######################################################################
 # As expected, the gate counts increase linearly with the Krylov subspace dimension.
