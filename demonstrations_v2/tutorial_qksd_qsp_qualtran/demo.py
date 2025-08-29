@@ -275,17 +275,9 @@ bloq = qml.to_bloq(krylov_qsp, map_ops=False,
     )
 
 ######################################################################
-# We can then use Qualtran tools to analyze and process the gate counts of the circuit. For example,
-# we can use the ``call_graph`` to obtain a breakdown of the gates used:
-
-graph, sigma = bloq.call_graph()
-print("--- Gate counts ---")
-for gate, count in sigma.items():
-    print(f"{gate}: {count}")
-
-######################################################################
-# We can also apply the ``generalize_rotation_angle`` generalizer to neatly group all rotations for
-# clearer viewing:
+# We can then use Qualtran tools to analyze and process the gate counts of the circuit. Below,
+# we use the ``call_graph`` to obtain a breakdown of the gates used, applying the
+# ``generalize_rotation_angle`` generalizer to neatly group all rotations for clearer viewing:
 
 from qualtran.resource_counting.generalizers import generalize_rotation_angle
 
