@@ -1,12 +1,15 @@
 r"""Using PennyLane and Qualtran to analyze how QSP can improve measurements of molecular properties
 ====================================================================================================
 
-Want to efficiently measure molecular properties using quantum computers? This demo demonstrates how to
-use PennyLane to measure one-particle and two-particle reduced density matrices of the water molecule with a linearly-scaling
-number of operations and how to integrate with Qualtran to demonstrate these resource requirements.
-This is done by using Quantum Krylov Subspace Diagonalization (QKSD) techniques to compress a
-complicated molecular Hamiltonian, finding its ground-state classically, and then using Quantum Signal
-Processing (QSP) to efficiently measure its one-particle and two-particle reduced density matrices. 
+Want to efficiently measure molecular properties using quantum computers? In this demo, we
+outline a powerful workflow for measuring molecular properties on future 
+fault-tolerant quantum computers. We demonstrate how to construct the
+Quantum Krylov Subspace Diagonalization (QKSD) ground state of the 
+water molecule, represented as a sum of Chebyshev polynomials, using a QSP circuit in PennyLane.
+This direct state preparation approach is highly efficient, enabling the measurement of 
+properties like reduced density matrices with a constant number of circuit executions and 
+thereby avoiding the quadratic scaling costs of other methods.
+We then use the integration between PennyLane and Qualtran to perform a detailed resource analysis.
 
 .. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/pennylane-demo-qualtran-covestro-krylov-subspace-paper-open-graph.png
     :align: center
@@ -250,7 +253,7 @@ even_imag = np.array([3.17041073, 3.29165774, 3.13011078, 2.87707507, 3.28152334
 odd_real = np.array([3.26938242, 3.43658284, 3.17041296, 3.10158929, 3.22189574, 2.93731798, 3.25959312, 3.25959312, 2.93731798, 3.22189574, 3.10158929, 3.17041296, 3.43658284, -37.57132208])
 odd_imag = np.array([3.01380289, 2.84660247, 3.11277234, 3.18159601, 3.06128956, 3.34586733, 3.02359219, 3.02359219, 3.34586733, 3.06128956, 3.18159601, 3.11277234, 2.84660247, -44.11008691])
 ######################################################################
-# We then measure these and post-process according to Equation 32 of the paper:
+# # We then measure the QSP circuit using these angles and post-process according to Equation 32 of the paper:
 # 
 # .. math:: 2\langle \Psi_0 |_s\hat{P}_{\nu}|\Psi_0\rangle_s = \eta^2(o_1 + o_2).
 #
@@ -386,12 +389,12 @@ def generalize_ccrz(b):
 ######################################################################
 # Conclusion
 # ----------
-# In this demo, we've outlined a powerful workflow for measuring molecular properties on future 
-# fault-tolerant quantum computers. We demonstrated how to construct the QKSD ground state of the 
-# water molecule, represented as a sum of Chebyshev polynomials, using a QSP circuit in PennyLane.
-# This direct state preparation approach is highly efficient, enabling the measurement of 
-# properties like reduced density matrices with a constant number of circuit executions and 
-# thereby avoiding the quadratic scaling costs of other methods.
+# This demo demonstrated how to
+# use PennyLane to measure one-particle and two-particle reduced density matrices of the water molecule with a linearly-scaling
+# number of operations and how to integrate with Qualtran to demonstrate these resource requirements.
+# This is done by using Quantum Krylov Subspace Diagonalization (QKSD) techniques to compress a
+# complicated molecular Hamiltonian, finding its ground-state classically, and then using Quantum Signal
+# Processing (QSP) to efficiently measure its one-particle and two-particle reduced density matrices. 
 #
 # We then used the integration between PennyLane and Qualtran to perform a detailed resource analysis.
 # By converting our PennyLane ``QNode`` into a Qualtran ``Bloq``, we precisely 
