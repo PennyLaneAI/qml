@@ -49,7 +49,6 @@ In this demo we will demonstrate some of the techniques and results of the paper
 # The result of this generalized eigenvalue problem gives approximations of the low-lying
 # eigenenergies and eigenstates of the Hamiltonian [#QKSD]_, including the Krylov ground-state,
 # :math:`|\Psi_0\rangle = \sum_k c^0_k | \psi_k \rangle`.
-#
 # Such an eigenstate is a linear combination of the states spanning the Krylov subspace and can
 # be prepared with `QSP <https://pennylane.ai/qml/demos/function_fitting_qsp>`_.
 #
@@ -58,7 +57,7 @@ In this demo we will demonstrate some of the techniques and results of the paper
 # :math:`H_2O` Hamiltonian with an active space of 4 electrons in 4
 # molecular orbitals in the cc-pVDZ basis. To save time on this computationally-expensive basis, we
 # provide pre-calculated coefficients and Pauli words for this Hamiltonian below. It is also possible
-# to obtain these values for other molecules an bases using either
+# to obtain these values for other molecules and basis sets using either
 # `PennyLane Datasets <https://pennylane.ai/datasets/h2o-molecule>`_ or the :mod:`pennylane.qchem`
 # module. We use the pre-calculated results below to create a :class:`~pennylane.ops.Hamiltonian` object.
 
@@ -96,7 +95,7 @@ hamiltonian = qml.Hamiltonian(coeffs, paulis)
 # After projecting :math:`\hat{H}` into :math:`\mathcal{K}` and solving the generalized eigenvalue
 # problem described above, we obtain the Krylov ground-state [#QKSD]_,
 # 
-# .. math:: |\Psi_0\rangle = \sum{k=0}^{D-1} c^0_k | \psi_k \rangle = \sum_{k=0}^{D-1}c_k^0 T_k(H)\ket{\psi_0},
+# .. math:: \ket{\Psi_0} = \sum_{k=0}^{D-1} c^0_k \ket{\psi_k} = \sum_{k=0}^{D-1} c_k^0 T_k(H) \ket{\psi_0},
 #
 # where :math:`c_k^m` are the coefficients of the :math:`k`-th Chebyshev polynomial for the
 # :math:`m`-th eigenvalue. We pre-calculate the these coefficients and use them to obtain the
@@ -118,7 +117,7 @@ hamiltonian = qml.Hamiltonian(coeffs, paulis)
 # 
 # This QSP circuit prepares a Chebyshev polynomial of the block-encoded Hamiltonian:
 #
-# .. math:: U_\text{QSP}|\psi_0\rangle\psi_a\rangle = \sum_{i=0}^{D-1}c_iT_i(H)\ket{\psi_0}|\psi_a'\rangle
+# .. math:: U_\text{QSP} \ket{\psi_0} \ket{\psi_a} = \sum_{i=0}^{D-1} c_i T_i(H) \ket{\psi_0} \ket{\psi_a'}
 #
 # Choosing the right rotation angles, :math:`\phi`, causes :math:`U_\text{QSP}` to implement a 
 # Chebyshev polynomial of the block-encoded Hamiltonian:
@@ -130,8 +129,8 @@ hamiltonian = qml.Hamiltonian(coeffs, paulis)
 # `Intro to QSVT demo <https://pennylane.ai/qml/demos/tutorial_intro_qsvt>`_.
 #
 # The :math:`U_\text{QSP}` circuit will prepare the QKSD ground-state by implementing the
-# corresponding Chebyshev polynomial of the block-encoded Hamiltonian. For more details, see
-# `Function Fitting using Quantum Signal Processing <https://pennylane.ai/qml/demos/function_fitting_qsp>`_.
+# corresponding Chebyshev polynomial of the block-encoded Hamiltonian. For more details, see the 
+# `Function Fitting using Quantum Signal Processing demo <https://pennylane.ai/qml/demos/function_fitting_qsp>`_.
 # Let's see how to do this in PennyLane.
 #
 # Defining the QSP circuit
@@ -262,7 +261,8 @@ even_imag = np.array([3.17041073, 3.29165774, 3.13011078, 2.87707507, 3.28152334
 odd_real = np.array([3.26938242, 3.43658284, 3.17041296, 3.10158929, 3.22189574, 2.93731798, 3.25959312, 3.25959312, 2.93731798, 3.22189574, 3.10158929, 3.17041296, 3.43658284, -37.57132208])
 odd_imag = np.array([3.01380289, 2.84660247, 3.11277234, 3.18159601, 3.06128956, 3.34586733, 3.02359219, 3.02359219, 3.34586733, 3.06128956, 3.18159601, 3.11277234, 2.84660247, -44.11008691])
 ######################################################################
-# We then measure the QSP circuit using these angles and post-process according to Equation 32:
+# We then measure the QSP circuit using these angles and post-process according to Equation 32 of the paper [#Oumarou]_:
+#
 
 P = krylov_qsp(hamiltonian, even_real, even_imag, odd_real, odd_imag, obs=obs)
 RP = krylov_qsp(hamiltonian, even_real, even_imag, odd_real, odd_imag, obs=obs, measure_reflection=True)
