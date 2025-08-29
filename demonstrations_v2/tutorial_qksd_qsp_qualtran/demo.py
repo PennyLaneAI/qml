@@ -2,7 +2,7 @@ r"""Using PennyLane and Qualtran to analyze how QSP can improve measurements of 
 ====================================================================================================
 
 Want to efficiently measure molecular properties using quantum computers? This demo demonstrates how to
-use PennyLane to measure one- and two-particle reduced density matrices of the water molecule with a linearly-scaling
+use PennyLane to measure one-particle and two-particle reduced density matrices of the water molecule with a linearly-scaling
 number of operations and how to integrate with Qualtran to demonstrate these resource requirements.
 This is done by using Quantum Krylov Subspace Diagonalization (QKSD) techniques to compress a
 complicated molecular Hamiltonian, finding its ground-state classically, and then using Quantum Signal
@@ -19,7 +19,7 @@ In this demo we will demonstrate some of the techniques and results of the paper
 
 * Introduce QKSD briefly.
 * Build a circuit that uses QSP to prepare the QKSD ground-state.
-* Simulate circuits that estimate the one- and two-particle reduced density matrices of a molecular system from the QKSD ground-state.
+* Simulate circuits that estimate the one-particle and two-particle reduced density matrices of a molecular system from the QKSD ground-state.
 * Use the PennyLane-Qualtran integration to count relevant circuit resources and demonstrate linear resource scaling with respect to the Krylov dimension, :math:`D`.
 """
 
@@ -97,24 +97,32 @@ hamiltonian = qml.Hamiltonian(coeffs, paulis)
 # Using QSP to directly create the QKSD ground-state
 # --------------------------------------------------
 #
-# Only using QKSD to calculate one- and two-particle reduced density matrices
+# Only using QKSD to calculate one-particle and two-particle reduced density matrices
 # results in a quadratic scaling of the number of expectation
 # values that need to be measured with respect to the Krylov dimension, :math:`D` [#Oumarou]_.
 # Instead, reference [#Oumarou]_ shows that it is possible to reduce this to constant scaling by preparing
 # :math:`|\Psi_0\rangle` via QSP and measuring individual terms of the Hamiltonian.
-# [TODO: clarify QSP explanation below. Too many unclear variables and not obvious how qsp implements a polynomial+no block encodings mentioned]
-# The QSP circuit, :math:`U_\text{QSP}`, is defined as a series of alternating block-encoding,
-# :math:`U_\text{BE}`, and rotations, :math:`S`, such that [#QSP]_ [#Oumarou]_ :
+# The QSP circuit we will use, :math:`U_\text{QSP}`, is defined as a series of alternating
+# block-encoding, :math:`U_\text{BE}`, and rotation operators, :math:`S`, such that
+# [#QSP]_ [#Oumarou]_ :
 # 
-# .. math:: U_\text{QSP} = S(\phi_0)\prod_k^{d-1}{U_\text{BE}(a)S(\phi_k)}.
+# .. math:: U_\text{QSP} = S(\phi_0)\prod_k^{d-1}{U_\text{BE}(\hat{H})S(\phi_k)}.
 # 
+# This QSP circuit prepares a Chebyshev polynomial of the block-ecoded Hamiltonian:
+#
+# .. math:: U_\text{QSP}|\psi_0\rangle\psi_a\rangle = \sum_{i=0}^{D-1}c_iT_i(H)\ket{\psi_0}|\psi_a'\rangle
+#
 # Choosing the right rotation angles, :math:`\phi`, causes :math:`U_\text{QSP}` to implement a 
-# Chebyshev polynomial such that:
+# Chebyshev polynomial of the block-encoded Hamiltonian:
 #
-# .. math:: U_\text{QSP}|\psi_0\rangle|\psi_a\rangle = \sum_{i=0}^{D-1}c_iT_i(H)\ket{\psi_0} = \vert \Psi_0\rangle|\psi_a'\rangle
+# .. math:: U_\text{QSP}|\psi_0\rangle|\psi_a\rangle = \sum_{i=0}^{D-1}c_iT_i(H)\ket{\psi_0}|\psi_a'\rangle = | \Psi_0\rangle|\psi_a'\rangle
 #
-# This will prepare the QKSD ground-state by implementing the corresponding Chebyshev polynomial of
-# the block-encoded Hamiltonian. For more details, see
+# For more details about implementing polynomials of block-encoded Hamiltonians, block-encoding
+# operators, and rotation operators, see the
+# `Intro to QSVT demo <https://pennylane.ai/qml/demos/tutorial_intro_qsvt>`_.
+#
+# The :math:`U_\text{QSP}` circuit will prepare the QKSD ground-state by implementing the
+# corresponding Chebyshev polynomial of the block-encoded Hamiltonian. For more details, see
 # `Function Fitting using Quantum Signal Processing <https://pennylane.ai/qml/demos/function_fitting_qsp>`_.
 # Let's see how to do this in PennyLane.
 #
@@ -204,16 +212,15 @@ def krylov_qsp(lcu, even_real, even_imag, odd_real, odd_imag, obs, measure_refle
 
 
 ######################################################################
-# We can now use this circuit to build one- and two- particle reduced density matrices.
+# We can now use this circuit to build one-particle and two- particle reduced density matrices.
 # Based on reference [#Oumarou]_,
 # the elements of the one-particle reduced density matrix are obtained by measuring the expectation
 # value of the fermionic one-particle excitation operators acting on the Krylov lowest energy state:
 #
-# .. math:: \langle\Psi_0 | \hat{E}_{pq} | \Psi_0\rangle.
+# .. math:: \langle\Psi_0 | a^{\dagger}_p a_q | \Psi_0\rangle.
 #
 # We use the Jordan-Wigner mapping of the fermionic one-particle excitation operators and measure
 # the resulting Pauli word observables.
-# [TODO: demonstrate what the output value of the coherent result is, put it into context]
 # We can obtain the Jordan-Wigner mapping of the fermionic operators via PennyLane using the
 # :func:`~pennylane.fermi.from_string` and :func:`~pennylane.jordan_wigner` functions as follows:
 
