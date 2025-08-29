@@ -1,8 +1,8 @@
 r"""Using PennyLane and Qualtran to analyze how QSP can improve measurements of molecular properties
 ====================================================================================================
 
-Want to efficiently measure molecular properties using quantum computers? This demo shows how to
-use PennyLane to measure one- and two-particle reduced density matrices with a linearly-scaling
+Want to efficiently measure molecular properties using quantum computers? This demo demonstrates how to
+use PennyLane to measure one- and two-particle reduced density matrices of the water molecule with a linearly-scaling
 number of operations and how to integrate with Qualtran to demonstrate these resource requirements.
 This is done by using Quantum Krylov Subspace Diagonalization (QKSD) techniques to "shrink" down a
 complicated molecular Hamiltonian, find its ground-state classicaly, and then use Quantum Signal
@@ -15,49 +15,48 @@ Processing (QSP) to efficiently measure its one- and two-particle reduced densit
 
 In this demo we will demonstrate some of the techniques and results of the paper titled
 `Molecular Properties from Quantum Krylov Subspace Diagonalization <https://arxiv.org/abs/2501.05286>`_
-[#Oumarou]. Specifically, we will:
+[#Oumarou]_. Specifically, we will:
 
 * Introduce QKSD briefly.
 * Show how to build a PennyLane circuit that uses QSP to prepare the QKSD ground-state.
-* Show how to simulate PennyLane circuits that estimate the one- and two-particle reduced density
-    matrices of a molecular system from the QKSD ground-state.
-* Show how to use the PennyLane-Qualtran integration to count relevant circuit resources
-    and demonstrate linear resource scaling with respect to Krylov dimension, :math:`D`.
+* Show how to use PennyLane to simulate circuits that estimate the one- and two-particle reduced density matrices of a molecular system from the QKSD ground-state.
+* Show how to use the PennyLane-Qualtran integration to count relevant circuit resources and demonstrate linear resource scaling with respect to the Krylov dimension, :math:`D`.
 """
 
 ######################################################################
 # Quantum Krylov Subspace Diagonalization
 # ---------------------------------------
 #
-# QKSD is a notable candidate algorithm for fault-tolerant quantum computing that estimates the
-# eigenvalues and eigenstates of a large matrix by solving the eigenvalue problem for a smaller
-# matrix [#QKSD]_. The general steps to perform QKSD are:
+# QKSD is a notable candidate algorithm for fault-tolerant quantum computing that approximates the
+# low-lying eigenvalues and eigenstates of a large Hamiltonian by focusing on a smaller subspace of the same
+# Hamiltonian [#QKSD]_. The general steps to perform QKSD are:
 #
 # * Obtain the Hamiltonian, :math:`\hat{H}`, describing a system of interest (e.g. a molecule).
 # * Define a `Krylov subspace <https://en.wikipedia.org/wiki/Krylov_subspace>`_ :math:`\mathcal{K}`
-#   of dimension :math:`D`, spanned by quantum states, :math:`| \psi_k \rangle`, that can be
-#   efficiently prepared on a quantum computer.
+#   defined by the span of quantum states :math:`| \psi_{k = 0, \dots, D-1} \rangle`, where :math:`D` is the Krylov 
+#   dimension and :math:`| \psi_k \rangle` can be efficiently prepared on a quantum computer.
 # * Project :math:`\hat{H}` into the Krylov subspace with a quantum computer, resulting in a new,
-#   "smaller" Hamiltonian :math:`\tilde{H}`. 
+#   "smaller" Hamiltonian :math:`\tilde{H}` whose eigenvalues and eigenstates approximate those of
+#   :math:`\hat{H}`.
 # * Calculate the overlap matrix, :math:`\tilde{S}`, defined by the inner-products of each element
 #   of the Krylov subspace.
 # * Solve the generalized eigenvalue problem:
 #   :math:`\tilde{H}c^m = E_m \tilde{S}c^m` on a classical computer.
 #
 # The result of this generalized eigenvalue problem gives approximations of the low-lying
-# eigenenergies and eigenstates of the Hamiltonian [#QKSD], including the Krylov ground-state,
+# eigenenergies and eigenstates of the Hamiltonian [#QKSD]_, including the Krylov ground-state,
 # :math:`|\Psi_0\rangle = \sum_k c^0_k | \psi_k \rangle`.
 #
 # Such an eigenstate is a linear combination of the states spanning the Krylov subspace and can
 # be prepared with `QSP <https://pennylane.ai/qml/demos/function_fitting_qsp>`_.
 #
-# Let's begin with the :math:`H_2O` molecule.
+# Let's now apply the above formalism to a familiar example: the :math:`H_2O` molecule.
 # We will use the Jordan-Wigner mapping of the
 # :math:`H_2O` Hamiltonian with an active space of 4 electrons in 4
 # molecular orbitals in the cc-pVDZ basis. To save time on this computationally-expensive basis, we
 # provide pre-calculated coefficients and Pauli words for this Hamiltonian below. It is also possible
 # to obtain these values using either `PennyLane Datasets <https://pennylane.ai/datasets/h2o-molecule>`_
-# or the :mod:`pennylane.qchem` module. We use the precalculated results below to create a
+# or the :mod:`pennylane.qchem` module. We use the pre-calculated results below to create a
 # :class:`~pennylane.Hamiltonian` object.
 
 import pennylane as qml
@@ -70,12 +69,12 @@ hamiltonian = qml.Hamiltonian(coeffs, paulis)
 ######################################################################
 # To define the Krylov subspace, we will use
 # `Chebyshev polynomials <https://en.wikipedia.org/wiki/Chebyshev_polynomials>`_ of the Hamiltonian
-# applied to the Hartree-Fock state of the Hamiltonian, :math:`|\psi_0\rangle`. In other words, we
+# applied to the Hartree-Fock state of the Hamiltonian, which we denote by the reference state :math:`|\psi_0\rangle`. In other words, we
 # define states: 
 #
 # .. math:: \ket{\psi_k} = T_i(H)\ket{\psi_0},
 #
-# where :math:`T_i` is the i-th Chebyshev polynomial. Then we define a Krylov subspace of dimension
+# where :math:`T_k` is the :math:`k`-th Chebyshev polynomial. Then we define a Krylov subspace of dimension
 # :math:`D` as 
 #
 # .. math:: \mathcal{K} = \text{span}(\{\ket{\psi_k}\}_{k=0}^{D-1}).
@@ -85,7 +84,7 @@ hamiltonian = qml.Hamiltonian(coeffs, paulis)
 # or `QKSD <https://arxiv.org/pdf/2407.14431>`_ to find :math:`\tilde{H}`
 # and :math:`\tilde{S}`, then solve for the QKSD ground-state,
 # 
-# .. math:: |\Psi_0\rangle = \sum_k c^0_k | \psi_k \rangle = \sum_{i=0}^{D-1}c_iT_i(H)\ket{\psi_0},
+# .. math:: |\Psi_0\rangle = \sum_k c^0_k | \psi_k \rangle = \sum_{l=0}^{D-1}c_k^0 T_k(H)\ket{\psi_0},
 #
 # where :math:`c_i` are the cofficients of the :math:`i`-th Chebyshev polynomial.
 # Here we use the Chebyshev basis because QSP directly implements Chebyshev polynomials.
@@ -96,19 +95,19 @@ hamiltonian = qml.Hamiltonian(coeffs, paulis)
 #
 # Only using QKSD to calculate one- and two-particle reduced density matrices
 # results in a quadratic scaling of the number of expectation
-# values that need to be measured with respect to the Krylov dimension, :math:`D` [#Oumarou].
-# Instead, reference [#Oumarou] shows that it is possible to reduce this to a constant scaling by preparing
-# the QKSD ground-state, :math:`|\Psi_0\rangle`, via QSP and measuring individual terms of the Hamiltonian.
+# values that need to be measured with respect to the Krylov dimension, :math:`D` [#Oumarou]_.
+# Instead, reference [#Oumarou]_ shows that it is possible to reduce this to constant scaling by preparing
+# :math:`|\Psi_0\rangle` via QSP and measuring individual terms of the Hamiltonian.
 # [TODO: clarify QSP explanation below. Too many unclear variables and not obvious how qsp implements a polynomial+no block encodings mentioned]
-# The QSP circuit, :math:`U_{qsp}`, is defined as a series of alternating iterates,
+# The QSP circuit, :math:`U_\text{QSP}`, is defined as a series of alternating iterates,
 # :math:`W`, and rotations, :math:`S`, such that:
 # 
-# .. math:: U_\text{qsp} = S(\phi_0)\prod_k^{d-1}{W(a)S(\phi_k)}
+# .. math:: U_\text{QSP} = S(\phi_0)\prod_k^{d-1}{W(a)S(\phi_k)}
 # 
-# Choosing the right rotation angles, :math:`\phi`, causes :math:`U_\text{qsp}` to implement a 
+# Choosing the right rotation angles, :math:`\phi`, causes :math:`U_\text{QSP}` to implement a 
 # Chebyshev polynomial such that:
 #
-# .. math:: U_{qsp}|\psi_0\rangle|\psi_a\rangle = \sum_{i=0}^{D-1}c_iT_i(H)\ket{\psi_0} = \Psi_0\rangle|\psi_a'\rangle
+# .. math:: U_\text{QSP}|\psi_0\rangle|\psi_a\rangle = \sum_{i=0}^{D-1}c_iT_i(H)\ket{\psi_0} = \vert \Psi_0\rangle|\psi_a'\rangle
 #
 # This will prepare the QKSD ground-state by implementing the corresponding Chebyshev polynomial of
 # the block-encoded Hamiltonian. For more details, see
@@ -135,7 +134,7 @@ def qsp(lcu, angles, rot_wires, prep_wires):
     rotation_about_reflection_axis(angles[0], rot_wires)
 
 ######################################################################
-# Since QSP can only produce fixed-parity real Chebyshev polynomials [#QSP] and our QKSD ground-state has
+# Since QSP can only produce fixed-parity real Chebyshev polynomials [#QSP]_ and our QKSD ground-state has
 # complex polynomials, we also create a template that combines the real an imaginary parts of the
 # polynomial.
 
@@ -155,11 +154,11 @@ def reflection(wire, ctrl_wires):
     qml.ctrl(qml.X(wire), ctrl_wires, [0] * len(ctrl_wires))
 
 ######################################################################
-# We will also need to split even- and odd-parity polynomial terms. But this is captured in the
-# final circuit below. Since we have split the polynomial and implement each part via a separate QSP
+# We will also need to split even- and odd-parity polynomial terms, which is captured in the
+# final circuit below. Since we have split the polynomial and implemented each part via a separate QSP
 # circuit, we will also need to split the rotation angles that implement each of these polynomials.
-# The final circuit below accepts a separate argument for odd/even and real/imaginary angles, these
-# are names ``even_real``, ``even_imag``, ``odd_real``, and ``odd_imag``.
+# The final circuit below accepts a separate argument for odd/even and real/imaginary angles:
+# ``odd_real``, ``odd_imag``, ``even_real``, and ``even_imag``.
 #
 # We also define an argument for an input observable, ``obs``, and an argument defining whether to
 # measure the reflection of the observable, ``measure_reflection``. 
@@ -200,7 +199,7 @@ def krylov_qsp(lcu, even_real, even_imag, odd_real, odd_imag, obs, measure_refle
 
 ######################################################################
 # We can now use this circuit to build one- and two- particle reduced density matrices.
-# Based on reference [#Oumarou],
+# Based on reference [#Oumarou]_,
 # the elements of the one-particle reduced density matrix are obtained by measuring the expectation
 # value of the fermionic one-particle excitation operators acting on the Krylov lowest energy state:
 #
@@ -221,7 +220,7 @@ obs = qml.jordan_wigner(Epq)
 # For a given polynomial it is possible to obtain the QSP angles using :func:`~pennylane.poly_to_angles`.
 #
 # The angles below will produce the QKSD ground-state :math:`|\Psi_0\rangle` via QSP. Since QSP
-# can only produce fixed-parity real Chebyshev polynomials [#QSP] and our ground-state QKSD has
+# can only produce fixed-parity real Chebyshev polynomials [#QSP]_ and our QKSD ground-state has
 # mixed-parity complex polynomials, we split them and apply separately.
 
 even_real = np.array([3.11277458, 2.99152757, 3.15307452, 3.40611024, 3.00166196, 3.03597059, 3.25931224, 3.04073693, 3.25931224, 3.03597059, 3.00166196, 3.40611024, 3.15307452, 2.99152757, -40.86952257])
@@ -280,8 +279,8 @@ for gate, count in sigma.items():
     print(f"{gate}: {count}")
 
 ######################################################################
-# As explained in [#Oumarou],
-# increasing the dimension, :math:`D`, of the Krylov subspace improves the accuracy of the Krylov minimal energy
+# As explained in [#Oumarou]_,
+# increasing :math:`D` improves the accuracy of the Krylov minimal energy
 # compared to the true ground state energy. This extra accuracy is paid for by requiring additional gates.
 # Let's see how the number of gates increases with increasing Krylov susbspace dimension. We can
 # increase the Krylov subspace dimension by increasing the number of terms in our Chebyshev polynomial,
@@ -306,7 +305,7 @@ for gate, count in sigma.items():
 
 ######################################################################
 # We can plot how the number of gates increases with the Krylov dimension to see if it is linear
-# as described in [#Oumarou]. Below we plot how the Toffoli, CNOT, and X gate count increase with the Krylov dimension:
+# as described in [#Oumarou]_. Below we plot how the ``Toffoli``, ``CNOT``, and ``X`` gate count increase with the Krylov dimension:
 
 import matplotlib.pyplot as plt
 from qualtran.bloqs.basic_gates import Toffoli, CNOT, XGate
@@ -385,7 +384,7 @@ show_call_graph(graph)
 # .. [#Oumarou]
 #
 #     Oumarou Oumarou, Pauline J. Ollitrault, Cristian L. Cortes, Maximilian Scheurer, Robert M. Parrish, Christian Gogolin
-#     "Molecular Properties from Quantum Krylov Subspace Diagonalization",
+#     "Molecular Properties from Quantum Krylov Subspace Diagonalization"
 #     `arXiv:2501.05286 <https://arxiv.org/abs/2501.05286>`__, 2025.
 #
 # .. [#QKSD]
