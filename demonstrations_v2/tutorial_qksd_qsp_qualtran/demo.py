@@ -359,19 +359,24 @@ def generalize_ccrz(b):
     from qualtran.bloqs.basic_gates import Rz
     from qualtran.bloqs.mcmt.controlled_via_and import ControlledViaAnd
 
-    if isinstance(b, ControlledViaAnd):
+    if isinstance(b, ControlledViaAnd) and isinstance(b.subbloq, Rz):
         return attrs.evolve(b, subbloq = Rz(angle=PHI))
     
     return _ignore_wrapper(generalize_ccrz, b)
 
 ######################################################################
 # We can then use this generalizer to draw our call graph using Qualtran's ``show_call_graph``
-# [TODO: replace this code block with a non-executable one and manually add the static image output]
-
-from qualtran.drawing import show_call_graph
-
-graph, sigma = bloq.call_graph(generalizer=generalize_ccrz)
-show_call_graph(graph)
+#
+# .. code-block:: python
+#
+#     from qualtran.drawing import show_call_graph
+#
+#     graph, sigma = bloq.call_graph(generalizer=generalize_ccrz)
+#     show_call_graph(qpe_bloq, max_depth=1)
+#
+# .. figure:: ../_static/demonstration_assets/qksd_qsp_qualtran/generalize_ccrz_call_graph.svg
+#     :align: center
+#     :width: 50%
 
 ######################################################################
 # Conclusion
