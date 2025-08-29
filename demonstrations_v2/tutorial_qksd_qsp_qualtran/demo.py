@@ -31,7 +31,7 @@ In this demo we will demonstrate some of the techniques and results of the paper
 # low-lying eigenvalues and eigenstates of a large Hamiltonian by focusing on a smaller subspace of the same
 # Hamiltonian [#QKSD]_. The general steps to perform QKSD are:
 #
-# * Obtain the Hamiltonian, :math:`\hat{H}`, describing a system of interest (e.g. a molecule).
+# * Obtain the Hamiltonian, :math:`\hat{H}`, describing a system of interest, e.g., a molecule.
 # * Define a `Krylov subspace <https://en.wikipedia.org/wiki/Krylov_subspace>`_ :math:`\mathcal{K}`
 #   defined by the span of quantum states :math:`| \psi_{k = 0, \dots, D-1} \rangle`, where :math:`D` is the Krylov 
 #   dimension and :math:`| \psi_k \rangle` can be efficiently prepared on a quantum computer.
@@ -95,7 +95,7 @@ hamiltonian = qml.Hamiltonian(coeffs, paulis)
 # 
 # .. math:: |\Psi_0\rangle = \sum{k=0}^{D-1} c^0_k | \psi_k \rangle = \sum_{k=0}^{D-1}c_k^0 T_k(H)\ket{\psi_0},
 #
-# where :math:`c_k^m` are the cofficients of the :math:`k`-th Chebyshev polynomial for the
+# where :math:`c_k^m` are the coefficients of the :math:`k`-th Chebyshev polynomial for the
 # :math:`m`-th eigenvalue. We pre-calculate the these coefficients and use them to obtain the
 # QSP rotation angles that prepare the QKSD ground-state in the section below.
 #
@@ -113,7 +113,7 @@ hamiltonian = qml.Hamiltonian(coeffs, paulis)
 # 
 # .. math:: U_\text{QSP} = S(\phi_0)\prod_k^{d-1}{U_\text{BE}(\hat{H})S(\phi_k)}.
 # 
-# This QSP circuit prepares a Chebyshev polynomial of the block-ecoded Hamiltonian:
+# This QSP circuit prepares a Chebyshev polynomial of the block-encoded Hamiltonian:
 #
 # .. math:: U_\text{QSP}|\psi_0\rangle\psi_a\rangle = \sum_{i=0}^{D-1}c_iT_i(H)\ket{\psi_0}|\psi_a'\rangle
 #
@@ -295,7 +295,7 @@ for gate, count in sigma.items():
 # As explained in [#Oumarou]_,
 # increasing :math:`D` improves the accuracy of the Krylov minimal energy
 # compared to the true ground state energy. This extra accuracy is paid for by requiring additional gates.
-# Let's see how the number of gates increases with increasing Krylov susbspace dimension. We can
+# Let's see how the number of gates increases with increasing Krylov subspace dimension. We can
 # increase the Krylov subspace dimension by increasing the number of terms in our Chebyshev polynomial,
 # captured in this demo via the angles variables. Let's try :math:`D=20`
 # by setting the number of terms in these angles to 20. As the resource estimation is independent of
