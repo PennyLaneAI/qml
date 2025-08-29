@@ -17,7 +17,7 @@ In this demo we will demonstrate some of the techniques and results of the paper
 `Molecular Properties from Quantum Krylov Subspace Diagonalization <https://arxiv.org/abs/2501.05286>`_
 [#Oumarou]. Specifically, we will:
 
-* Briefly introduce QKSD.
+* Introduce QKSD briefly.
 * Show how to build a PennyLane circuit that uses QSP to prepare the QKSD ground-state.
 * Show how to simulate PennyLane circuits that estimate the one- and two-particle reduced density
     matrices of a molecular system from the QKSD ground-state.
@@ -41,22 +41,22 @@ In this demo we will demonstrate some of the techniques and results of the paper
 #   "smaller" Hamiltonian :math:`\tilde{H}`. 
 # * Calculate the overlap matrix, :math:`\tilde{S}`, defined by the inner-products of each element
 #   of the Krylov subspace.
-# * On a classical computer, solve the generalized eigenvalue problem:
-#   :math:`\tilde{H}c^m = E_m \tilde{S}c^m`.
+# * Solve the generalized eigenvalue problem:
+#   :math:`\tilde{H}c^m = E_m \tilde{S}c^m` on a classical computer.
 #
 # The result of this generalized eigenvalue problem gives approximations of the low-lying
 # eigenenergies and eigenstates of the Hamiltonian [#QKSD], including the Krylov ground-state,
 # :math:`|\Psi_0\rangle = \sum_k c^0_k | \psi_k \rangle`.
 #
-# Such an eignestate is a linear combination of the states spanning the Krylov subspace and can
-# be prepared with `QSP <https://pennylane.ai/qml/demos/function_fitting_qsp>`.
+# Such an eigenstate is a linear combination of the states spanning the Krylov subspace and can
+# be prepared with `QSP <https://pennylane.ai/qml/demos/function_fitting_qsp>`_.
 #
 # Let's begin with the :math:`H_2O` molecule.
 # We will use the Jordan-Wigner mapping of the
-# :math:`H_2O` molecule with an active space of 4 electrons in 4
-# molecular orbitals in the cc-pVDZ basis. To save time on this computationall-expensive basis, we
+# :math:`H_2O` Hamiltonian with an active space of 4 electrons in 4
+# molecular orbitals in the cc-pVDZ basis. To save time on this computationally-expensive basis, we
 # provide pre-calculated coefficients and Pauli words for this Hamiltonian below. It is also possible
-# to obtain these values using either `PennyLane Datasets <<https://pennylane.ai/datasets/h2o-molecule>`_
+# to obtain these values using either `PennyLane Datasets <https://pennylane.ai/datasets/h2o-molecule>`_
 # or the :mod:`pennylane.qchem` module. We use the precalculated results below to create a
 # :class:`~pennylane.Hamiltonian` object.
 
@@ -87,9 +87,9 @@ hamiltonian = qml.Hamiltonian(coeffs, paulis)
 # 
 # .. math:: |\Psi_0\rangle = \sum_k c^0_k | \psi_k \rangle = \sum_{i=0}^{D-1}c_iT_i(H)\ket{\psi_0},
 #
-# where :math:`c_i` are the cofficients of the :math:`i`-th Chebyshev polynomial. We choose the
-# Chebyshev basis here because QSP directly implements Chebyshev polynomials. Other types of
-# functions need to be converted into Chebyshev polynomials to implement via QSP.
+# where :math:`c_i` are the cofficients of the :math:`i`-th Chebyshev polynomial.
+# Here we use the Chebyshev basis because QSP directly implements Chebyshev polynomials.
+# Other types of functions need to be converted into Chebyshev polynomials to implement via QSP.
 #
 # Using QSP to directly create the QKSD ground-state
 # --------------------------------------------------
