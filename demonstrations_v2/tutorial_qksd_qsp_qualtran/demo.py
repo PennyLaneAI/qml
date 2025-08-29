@@ -104,7 +104,7 @@ hamiltonian = qml.Hamiltonian(coeffs, paulis)
 # :math:`|\Psi_0\rangle` via QSP and measuring individual terms of the Hamiltonian.
 # The QSP circuit we will use, :math:`U_\text{QSP}`, is defined as a series of alternating
 # block-encoding, :math:`U_\text{BE}`, and rotation operators, :math:`S`, such that
-# [#QSP]_ [#Oumarou]_ :
+# [#qspref]_ [#Oumarou]_ :
 # 
 # .. math:: U_\text{QSP} = S(\phi_0)\prod_k^{d-1}{U_\text{BE}(\hat{H})S(\phi_k)}.
 # 
@@ -148,7 +148,7 @@ def qsp(lcu, angles, rot_wires, prep_wires):
     rotation_about_reflection_axis(angles[0], rot_wires)
 
 ######################################################################
-# Since QSP can only produce fixed-parity real Chebyshev polynomials [#QSP]_ and our QKSD ground-state has
+# Since QSP can only produce fixed-parity real Chebyshev polynomials [#qspref]_ and our QKSD ground-state has
 # complex polynomials, we also create a template that combines the real an imaginary parts of the
 # polynomial.
 
@@ -233,7 +233,7 @@ obs = qml.jordan_wigner(Epq)
 # For a given polynomial it is possible to obtain the QSP angles using :func:`~pennylane.poly_to_angles`.
 #
 # The angles below will produce the QKSD ground-state :math:`|\Psi_0\rangle` via QSP. Since QSP
-# can only produce fixed-parity real Chebyshev polynomials [#QSP]_ and our QKSD ground-state has
+# can only produce fixed-parity real Chebyshev polynomials [#qspref]_ and our QKSD ground-state has
 # mixed-parity complex polynomials, we split them and apply separately.
 
 even_real = np.array([3.11277458, 2.99152757, 3.15307452, 3.40611024, 3.00166196, 3.03597059, 3.25931224, 3.04073693, 3.25931224, 3.03597059, 3.00166196, 3.40611024, 3.15307452, 2.99152757, -40.86952257])
@@ -408,7 +408,7 @@ def generalize_ccrz(b):
 # References
 # -----------
 #
-# .. [#QSP]
+# .. [#qspref]
 #
 #     Guang Hao Low, Isaac L. Chuang
 #     "Hamiltonian Simulation by Qubitization",
