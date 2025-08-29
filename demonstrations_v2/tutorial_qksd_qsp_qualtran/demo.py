@@ -46,7 +46,7 @@ In this demo we will demonstrate some of the techniques and results of the paper
 #
 # The result of this generalized eigenvalue problem gives approximations of the low-lying
 # eigenenergies and eigenstates of the Hamiltonian [#QKSD], including the Krylov ground-state,
-# :math:`|\Psi_0\rangle = \sum_k c^0_k | \psi_k \rangle`_.
+# :math:`|\Psi_0\rangle = \sum_k c^0_k | \psi_k \rangle`.
 #
 # Such an eignestate is a linear combination of the states spanning the Krylov subspace and can
 # be prepared with `QSP <https://pennylane.ai/qml/demos/function_fitting_qsp>`.
@@ -68,44 +68,60 @@ paulis = [qml.GlobalPhase(0, 0), qml.Z(0), qml.Y(0) @ qml.Z(1) @ qml.Y(2), qml.X
 hamiltonian = qml.Hamiltonian(coeffs, paulis)
 
 ######################################################################
-# To define the Krylov subspace, we will use Chebyshev polynomials of the Hamiltonian applied
-# to the Hartree-Fock state of the Hamiltonian, :math:`|\psi_0\rangle`. In other words, we define
-# states: 
+# To define the Krylov subspace, we will use
+# `Chebyshev polynomials <https://en.wikipedia.org/wiki/Chebyshev_polynomials>`_ of the Hamiltonian
+# applied to the Hartree-Fock state of the Hamiltonian, :math:`|\psi_0\rangle`. In other words, we
+# define states: 
 #
 # .. math:: \ket{\psi_k} = T_i(H)\ket{\psi_0},
 #
 # where :math:`T_i` is the i-th Chebyshev polynomial. Then we define a Krylov subspace of dimension
 # :math:`D` as 
 #
-# .. math:: \mathcal{K} = span(\{\ket{\psi_k}\}_{k=0}^{D-1}).
+# .. math:: \mathcal{K} = \text{span}(\{\ket{\psi_k}\}_{k=0}^{D-1}).
 #
 # With the Hamiltonian and Krylov space defined, we can use
 # the `Lanczos method <https://quantum-journal.org/papers/q-2023-05-23-1018/pdf/>`_ classically
 # or `QKSD <https://arxiv.org/pdf/2407.14431>`_ to find :math:`\tilde{H}`
 # and :math:`\tilde{S}`, then solve for the QKSD ground-state,
 # 
-# .. math:: |\Psi_0\rangle = \sum_{i=0}^{D-1}c_iT_i(H)\ket{\psi_0},
+# .. math:: |\Psi_0\rangle = \sum_k c^0_k | \psi_k \rangle = \sum_{i=0}^{D-1}c_iT_i(H)\ket{\psi_0},
 #
-# where :math:`c_i` are the cofficients of the :math:`i`-th Chebyshev polynomial.
+# where :math:`c_i` are the cofficients of the :math:`i`-th Chebyshev polynomial. We choose the
+# Chebyshev basis here because QSP directly implements Chebyshev polynomials. Other types of
+# functions need to be converted into Chebyshev polynomials to implement via QSP.
 #
 # Using QSP to directly create the QKSD ground-state
 # --------------------------------------------------
 #
 # Only using QKSD to calculate one- and two-particle reduced density matrices
 # results in a quadratic scaling of the number of expectation
-# values that need to be measured with respect to the Krylov dimension, :math:`D`_ [#Oumarou].
+# values that need to be measured with respect to the Krylov dimension, :math:`D` [#Oumarou].
 # Instead, reference [#Oumarou] shows that it is possible to reduce this to a constant scaling by preparing
-# the QKSD ground-state via QSP and measuring individual terms of the Hamiltonian. Let's see how
-# to do this in PennyLane.
+# the QKSD ground-state, :math:`|\Psi_0\rangle`, via QSP and measuring individual terms of the Hamiltonian.
+# [TODO: clarify QSP explanation below. Too many unclear variables and not obvious how qsp implements a polynomial+no block encodings mentioned]
+# The QSP circuit, :math:`U_{qsp}`, is defined as a series of alternating iterates,
+# :math:`W`, and rotations, :math:`S`, such that:
+# 
+# .. math:: U_\text{qsp} = S(\phi_0)\prod_k^{d-1}{W(a)S(\phi_k)}
+# 
+# Choosing the right rotation angles, :math:`\phi`, causes :math:`U_\text{qsp}` to implement a 
+# Chebyshev polynomial such that:
+#
+# .. math:: U_{qsp}|\psi_0\rangle|\psi_a\rangle = \sum_{i=0}^{D-1}c_iT_i(H)\ket{\psi_0} = \Psi_0\rangle|\psi_a'\rangle
+#
+# This will prepare the QKSD ground-state by implementing the corresponding Chebyshev polynomial of
+# the block-encoded Hamiltonian. For more details, see
+# `Function Fitting using Quantum Signal Processing <https://pennylane.ai/qml/demos/function_fitting_qsp>`_.
+# Let's see how to do this in PennyLane.
 #
 # Defining the QSP circuit
 # ~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# We begin by implement the QSP circuit that will prepare the QKSD ground-state.
-# For this we need to create a rotation operator or signal processing operator, and a QSP template
-# to alternate between this and a block-encoding operator. Alternating between these operations
-# will prepare a Chebyshev polynomial of the input block-encoded matrix. For more details, see
-# `Function Fitting using Quantum Signal Processing <https://pennylane.ai/qml/demos/function_fitting_qsp>`_
+# To define the QSP circuit, we first create a function to implement the rotations, :math:`S`. The
+# iterate, :math:`W`, will be implemented via the :class:`~pennylane.PrepSelPrep` class. We then
+# create a QSP template to alternate between :math:`W` and :math:`S`. Alternating between these operations
+# will prepare a Chebyshev polynomial of the input block-encoded matrix.
 
 def rotation_about_reflection_axis(angle, wires):
     qml.ctrl(qml.PauliX(wires[0]), wires[1:], (0,) * len(wires[1:]))
@@ -130,7 +146,7 @@ def qsp_poly_complex(lcu, angles_real, angles_imag, ctrl_wire, rot_wires, prep_w
     qml.H(ctrl_wire)
 
 ######################################################################
-# And a template to perform a reflection for our measurements.
+# Additionally, we require a template to perform a reflection for our measurements.
 # [TODO: explain measurements and restructure this section]
 #
 def reflection(wire, ctrl_wires):
@@ -139,24 +155,25 @@ def reflection(wire, ctrl_wires):
     qml.ctrl(qml.X(wire), ctrl_wires, [0] * len(ctrl_wires))
 
 ######################################################################
+# We will also need to split even- and odd-parity polynomial terms. But this is captured in the
+# final circuit below. Since we have split the polynomial and implement each part via a separate QSP
+# circuit, we will also need to split the rotation angles that implement each of these polynomials.
+# The final circuit below accepts a separate argument for odd/even and real/imaginary angles, these
+# are names ``even_real``, ``even_imag``, ``odd_real``, and ``odd_imag``.
 #
-# With these building blocks in place, we can then define the overarching QNode
-# that will implement this circuit:
+# We also define an argument for an input observable, ``obs``, and an argument defining whether to
+# measure the reflection of the observable, ``measure_reflection``. 
+#
+# With these building blocks in place, we can now define the overarching QNode
+# that will implement the QSP circuit and return measurements of the elements of the one-particle
+# and two-particle reduced density matrices:
 
 dev = qml.device("lightning.qubit")
 
 @qml.qnode(dev)
-def krylov_qsp(lcu, angles_even_real, angles_even_imag, angles_odd_real, angles_odd_imag, obs, measure_reflection=False):
+def krylov_qsp(lcu, even_real, even_imag, odd_real, odd_imag, obs, measure_reflection=False):
     """Prepares the Krylov lowest-energy state by applying QSP with the input angles.
     Then measures the expectation value of the desired observable. 
-
-    Args:
-        angles_even_real: QSP rotation angles that implement the real part of the even-parity terms of the desired Chebyshev polynomial
-        angles_even_imag: QSP rotation angles that implement the imaginary part of the even-parity terms of the desired Chebyshev polynomial
-        angles_odd_real: QSP rotation angles that implement the real part of the odd-parity terms of the desired Chebyshev polynomial
-        angles_odd_imag: QSP rotation angles that implement the imaginary part of the odd-parity terms of the desired Chebyshev polynomial
-        obs: Observable to measure. This should be a Jordan-Wigner mapping of a fermionic excitation operator.
-        measure_reflection: Whether to measure the reflection or just the observable. When True, we reflect the observable. 
     """
     num_ancillae = int(np.log(len(lcu.operands)) / np.log(2)) + 1
 
@@ -171,8 +188,8 @@ def krylov_qsp(lcu, angles_even_real, angles_even_imag, angles_odd_real, angles_
 
     #[TODO: explain why we are combining two QSP calls again here]
     qml.H(ctrl_wires[0])
-    qml.ctrl(qsp_poly_complex, ctrl_wires[0], 0)(lcu, angles_even_real, angles_even_imag, ctrl_wires[1], rot_wires, prep_wires)
-    qml.ctrl(qsp_poly_complex, ctrl_wires[0], 1)(lcu, angles_odd_real, angles_odd_imag, ctrl_wires[1], rot_wires, prep_wires)
+    qml.ctrl(qsp_poly_complex, ctrl_wires[0], 0)(lcu, even_real, even_imag, ctrl_wires[1], rot_wires, prep_wires)
+    qml.ctrl(qsp_poly_complex, ctrl_wires[0], 1)(lcu, odd_real, odd_imag, ctrl_wires[1], rot_wires, prep_wires)
     qml.H(ctrl_wires[0])
 
     # measurements
@@ -211,18 +228,18 @@ obs = qml.jordan_wigner(Epq)
 # can only produce fixed-parity real Chebyshev polynomials [#QSP] and our ground-state QKSD has
 # mixed-parity complex polynomials, we split them and apply separately.
 
-angles_even_real = np.array([3.11277458, 2.99152757, 3.15307452, 3.40611024, 3.00166196, 3.03597059, 3.25931224, 3.04073693, 3.25931224, 3.03597059, 3.00166196, 3.40611024, 3.15307452, 2.99152757, -40.86952257])
-angles_even_imag = np.array([3.17041073, 3.29165774, 3.13011078, 2.87707507, 3.28152334, 3.24721472, 3.02387307, 3.24244837, 3.02387307, 3.24721472, 3.28152334, 2.87707507, 3.13011078, 3.29165774, -47.09507173])
-angles_odd_real = np.array([3.26938242, 3.43658284, 3.17041296, 3.10158929, 3.22189574, 2.93731798, 3.25959312, 3.25959312, 2.93731798, 3.22189574, 3.10158929, 3.17041296, 3.43658284, -37.57132208])
-angles_odd_imag = np.array([3.01380289, 2.84660247, 3.11277234, 3.18159601, 3.06128956, 3.34586733, 3.02359219, 3.02359219, 3.34586733, 3.06128956, 3.18159601, 3.11277234, 2.84660247, -44.11008691])
+even_real = np.array([3.11277458, 2.99152757, 3.15307452, 3.40611024, 3.00166196, 3.03597059, 3.25931224, 3.04073693, 3.25931224, 3.03597059, 3.00166196, 3.40611024, 3.15307452, 2.99152757, -40.86952257])
+even_imag = np.array([3.17041073, 3.29165774, 3.13011078, 2.87707507, 3.28152334, 3.24721472, 3.02387307, 3.24244837, 3.02387307, 3.24721472, 3.28152334, 2.87707507, 3.13011078, 3.29165774, -47.09507173])
+odd_real = np.array([3.26938242, 3.43658284, 3.17041296, 3.10158929, 3.22189574, 2.93731798, 3.25959312, 3.25959312, 2.93731798, 3.22189574, 3.10158929, 3.17041296, 3.43658284, -37.57132208])
+odd_imag = np.array([3.01380289, 2.84660247, 3.11277234, 3.18159601, 3.06128956, 3.34586733, 3.02359219, 3.02359219, 3.34586733, 3.06128956, 3.18159601, 3.11277234, 2.84660247, -44.11008691])
 ######################################################################
 # We then measure these and post-process according to Equation 32 of the paper:
 # 
 # .. math:: 2\langle \Psi_0 |_s\hat{P}_{\nu}|\Psi_0\rangle_s = \eta^2(o_1 + o_2).
 #
 
-measurement_1 = krylov_qsp(hamiltonian, angles_even_real, angles_even_imag, angles_odd_real, angles_odd_imag, obs=obs)
-measurement_2 = krylov_qsp(hamiltonian, angles_even_real, angles_even_imag, angles_odd_real, angles_odd_imag, obs=obs, measure_reflection=True)
+measurement_1 = krylov_qsp(hamiltonian, even_real, even_imag, odd_real, odd_imag, obs=obs)
+measurement_2 = krylov_qsp(hamiltonian, even_real, even_imag, odd_real, odd_imag, obs=obs, measure_reflection=True)
 
 print("meas 1:", measurement_1)
 print("meas 2:", measurement_2)
@@ -238,8 +255,8 @@ print("coherent result:",coherent_result)
 # the required gates:
 
 bloq = qml.to_bloq(krylov_qsp, map_ops=False,
-                   angles_even_real=angles_even_real, angles_even_imag=angles_even_imag,
-                    angles_odd_real=angles_odd_real, angles_odd_imag=angles_odd_imag,
+                   even_real=even_real, even_imag=even_imag,
+                    odd_real=odd_real, odd_imag=odd_imag,
                      lcu=hamiltonian, obs=obs)
 
 ######################################################################
@@ -274,14 +291,14 @@ for gate, count in sigma.items():
 # by setting the number of terms in these angles to 20. We can choose random angles as the resource
 # estimation is independent of the exact angle values:
 
-angles_even_real = angles_even_imag = angles_odd_real = angles_odd_imag = np.random.random(20)
+even_real = even_imag = odd_real = odd_imag = np.random.random(20)
 
 ######################################################################
 # We then repeat the gate counts and see they have increased:
 
 bloq = qml.to_bloq(krylov_qsp, map_ops=False,
-                   angles_even_real=angles_even_real, angles_even_imag=angles_even_imag,
-                    angles_odd_real=angles_odd_real, angles_odd_imag=angles_odd_imag,
+                   even_real=even_real, even_imag=even_imag,
+                    odd_real=odd_real, odd_imag=odd_imag,
                      lcu=hamiltonian, obs=obs)
 graph, sigma = bloq.call_graph(generalizer=generalize_rotation_angle)
 print("--- Gate counts ---")
@@ -296,10 +313,10 @@ import matplotlib.pyplot as plt
 from qualtran.bloqs.basic_gates import Toffoli, CNOT, XGate
 
 def count_cnots(krylov_dimension):
-    angles_even_real = angles_even_imag = angles_odd_real = angles_odd_imag = np.random.random(krylov_dimension)
+    even_real = even_imag = odd_real = odd_imag = np.random.random(krylov_dimension)
     bloq = qml.to_bloq(krylov_qsp, map_ops=False,
-                   angles_even_real=angles_even_real, angles_even_imag=angles_even_imag,
-                    angles_odd_real=angles_odd_real, angles_odd_imag=angles_odd_imag,
+                   even_real=even_real, even_imag=even_imag,
+                    odd_real=odd_real, odd_imag=odd_imag,
                      lcu=hamiltonian, obs=obs)
     _, sigma = bloq.call_graph(generalizer=generalize_rotation_angle)
     return sigma
