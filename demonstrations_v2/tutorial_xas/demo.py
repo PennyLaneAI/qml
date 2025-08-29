@@ -94,7 +94,7 @@ If we are going to evaluate this quantity in a quantum register, it will need to
 
 .. math::  G_\rho(\omega) = \eta \frac{\mathcal{G}_\rho(\omega)}{||\hat m_\rho | I \rangle ||^2} \,.
 
-Calculating this quantity directly is expensive [#Fomichev2024]_. We need to invert the Hamiltonian matrix, which is hard even when using an algorithm like HHL [#Harrow2009]_. We would also need to calculate the cross section at every frequency, which can quickly run up the cost. 
+Calculating this quantity directly is expensive [#Fomichev2024]_. We need to invert the Hamiltonian matrix, which is hard as it typically requires using linear-solve algorithms like HHL [#Harrow2009]_. We would also need to calculate the cross section at every frequency, which can quickly run up the cost. 
 Instead, our algorithm will aim to simulate the dynamics of our initial state in the *time domain*, and then `Fourier transform <https://en.wikipedia.org/wiki/Fourier_transform>`__ the results classically to obtain the frequency spectrum! This allows us to construct the entire spectrum *at once*, rather than tediously measure each individual frequency we are interested in. 
 This is especially important if the number of excited states underlying the absorption spectrum is very large, which we expect to be the case for moderately sized clusters.
 
@@ -138,6 +138,7 @@ This set of orbitals and electrons is known as the “active space”.
 Utilizing an active space reduces the cost of performing calculations on complicated molecular instances, while still preserving the interesting features of the molecule's behaviour. 
 For this demo, our calculation will obtain the spectrum of the :math:`\mathrm{N}_2` molecule with a small active space. 
 While the molecule used here is quite simple, the method demonstrated below will work for more complicated molecules. 
+For simplicity, in this demo we target the low-lying excited state spectrum rather than the X-ray portion of it, but the algorithm works exactly the same for the XAS signal -- we just need to implement the core-valence separation approximation (see the Appendix).
 
 Ground state calculation
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -231,7 +232,7 @@ wf_casci_dict = dict(zip(list(zip(strs_row, strs_col)), dat))
 #
 #     In general, states from computation chemistry workflows will have spin orbitals ordered in chemists' notation, such that all of one spin is on the left, and the other on the right. 
 #     PennyLane uses the physicists' notation, where the spatial orbitals are ordered, and the spins alternate up and down. 
-#     When changing a state from one convention to the next, the sign of some state amplitudes need to change to adhere to the Fermionic anticommutation rules. 
+#     When changing a state from one convention to the next, the sign of some state amplitudes need to change to adhere to the fermionic anticommutation rules. 
 #     The helper function :func:`~.pennylane.qchem.convert._sign_chem_to_phys` does this sign adjustment for us.
 
 from pennylane.qchem.convert import _sign_chem_to_phys, _wfdict_to_statevector
@@ -366,9 +367,9 @@ approx_two_chemist = qml.math.einsum("tpk,tqk,tkl,trl,tsl->pqrs", U, U, Z, U, U)
 assert qml.math.allclose(approx_two_chemist, two_chemist, atol=0.1)
 
 ######################################################################
-# Note there are some terms in this decomposition that are exactly diagonalizable, and can be added to the one-electron terms to simplify how the Hamiltonian time evolution is implemented. 
+# Note there are some terms in this decomposition of the two-electron integrals that are exactly diagonalizable, and can be combined with the one-electron integrals to simplify how the Hamiltonian time evolution is implemented. 
 # We call these the “one-electron extra” terms and add them to the one-electron integrals.
-# We can then diagonalize this sum into the matrix :math:`Z^{(0)}` with basis rotation matrix :math:`U^{(0)}` using ``np.linalg.eigh``, for easy implementation in the simulation circuit.
+# We can then diagonalize their sum into the matrix :math:`Z^{(0)}` with basis rotation matrix :math:`U^{(0)}` using ``np.linalg.eigh``, for easy implementation in the simulation circuit.
 
 # Calculate the one-electron extra terms.
 Z_prime = np.stack([np.diag(np.sum(Z[i], axis=-1)) for i in range(Z.shape[0])], axis=0)
@@ -394,7 +395,7 @@ Z0 = np.diag(eigenvals)
 #   &- \frac12 {\bf U}^{(0)} \left[ \sum_k Z_k^{(0)} \sum_\gamma \sigma_{z, k\gamma} \right] ({\bf U}^{(0)})^{T} \\ 
 #   &+ \frac18 \sum_\ell {\bf U}^{(\ell)} \left[\sum_{(k, \gamma)\neq(j, \beta)} \left(Z_{kj}^{(\ell)}\sigma_{z, k\gamma}\sigma_{z, j\beta}\right)\right]({\bf U}^{(\ell)})^T\,.
 #
-# The first term is a sum of the core constant and constant factors that arise from the Jordan-Wigner transform. The second and third terms are the one- and two-electron fragments, respectively. 
+# The first term is a sum of the core constant and constant factors that arise from the Jordan-Wigner transform and is just a global phase. The second and third terms are the one- and two-electron fragments, respectively. 
 # Below is an illustration of the circuit we will use to implement the one- and two-electron fragments in a time-evolution of the factorized Hamiltonian.
 #
 # .. figure:: ../_static/demonstration_assets/xas/UZU_circuits.png
@@ -405,8 +406,8 @@ Z0 = np.diag(eigenvals)
 #    Figure 4: One- and two-electron fragment implementations in the time-evolution circuit (ignoring global phases). 
 #    Basis rotations are applied to both spin sections of the register.
 #
-# We can use :class:`~pennylane.BasisRotation` to generate a `Givens decomposition <https://pennylane.ai/qml/demos/tutorial_givens_rotations>`__ for the single-particle basis rotation determined by :math:`U^{(\ell)}`. 
-# We will have to do this for both spin-halves of the register.
+# We can use :class:`~pennylane.BasisRotation` to generate a `Givens decomposition <https://pennylane.ai/qml/demos/tutorial_givens_rotations>`__ for the large unitary :math:`{\bf U}^{(\ell)}` that is generated by the single-particle basis rotation :math:`U^{(\ell)}` via Thouless' theorem. 
+# Note that we can do this separately for both spin-halves of the register, since our Hamiltonian does not mix spin sectors: this is cheaper than having one large unitary for the entire register.
 
 def U_rotations(U, control_wires):
     """Circuit implementing the basis rotations of the Hamiltonian fragments."""
@@ -428,6 +429,7 @@ def U_rotations(U, control_wires):
 #
 # For the one-electron terms, we loop over both the spin and orbital indices, and apply the Z rotations using this double-phase trick. 
 # The two-electron fragments are implemented the same way, except the two-qubit rotations use :class:`~pennylane.MultiRZ`.
+# Notice that this is also where we keep track of part of the global phase from the constant term in the Hamiltonian.
 
 from itertools import product
 
@@ -473,8 +475,8 @@ def Z_rotations(Z, step, is_one_electron_term, control_wires):
 # 
 # Note in the formula above, the second product of time-evolution fragments is reversed in order.
 # The function ``first_order_trotter`` will implement the :math:`U` rotations and :math:`Z` rotations, and adjust the global phase from the core constant term. 
-# It will also be able to reverse the order of applied fragments so we can later construct the second-order trotter step.
-# By tracking the last :math:`U` rotation used, we can implement two consecutive rotations at once as :math:`V^{(\ell)} = U^{(\ell-1)}(U^{(\ell)})^T`, halving the number of rotations required per Trotter step.
+# It will also be able to reverse the order of applied fragments so we can later construct the second-order Trotter step.
+# Finally, we can further reduce cost by tracking the last :math:`U` rotation used: that way we can implement two consecutive rotations at once as :math:`V^{(\ell)} = U^{(\ell-1)}(U^{(\ell)})^T`, halving the number of rotations required per Trotter step.
 
 
 def first_order_trotter(step, prior_U, final_rotation, reverse=False):
@@ -561,7 +563,7 @@ def meas_circuit(state):
 #
 # - The Lorentzian width :math:`\eta` of the spectrum peaks, representing the experimental resolution.
 # - The time step :math:`\tau`, which should be small enough to resolve the largest frequency components we want to determine.
-# - The maximum number of time steps :math:`j_\mathrm{max}`, which sets the largest evolution time. This should be large enough so that we can distinguish between the small frequency components in our spectrum.
+# - The maximum number of time steps :math:`j_\mathrm{max}`, which sets the largest evolution time. This determines how finely we can resolve the features in our spectrum.
 # - The total number of shots we will use for all time steps.
 
 eta = 0.05  # In Hartree energy units (Ha).
@@ -575,9 +577,9 @@ time_interval = tau * jrange
 
 ######################################################################
 # To improve the efficiency of our algorithm we can employ a sampling distribution that takes advantage of the decaying Lorentzian kernel [#Fomichev2025]_. 
-# The contribution of longer evolution times to the overall :math:`G_\rho(\omega)` are exponentially suppressed by the :math:`e^{-\eta t}` factor. 
-# By reducing the number of shots allocated to long times by this factor, we can save the total number of shots needed to obtain the required precision for :math:`G_\rho(\omega)`.
-# This is implemented below by creating ``shots_list``, which distributes the ``total_shots`` among the time steps, weighted exponentially by the Lorentzian width. 
+# As we can see from the equation at the end of the "Time-domain evolution" section, the contribution of longer evolution times to the overall :math:`G_\rho(\omega)` are exponentially suppressed by the :math:`e^{-\eta t}` factor. 
+# By reducing the number of shots allocated to long times by this same exponential factor, we can reduce the total number of shots needed to obtain the required precision for :math:`G_\rho(\omega)` relative to uniform sampling.
+# This is implemented below by creating ``shots_list``, which distributes the ``total_shots`` among the time steps, weighted exponentially by the Lorentzian kernel. 
 # The parameter :math:`\alpha` can adjust this weighting, s.t. for :math:`\alpha > 1` there is more weight at shorter times.
 
 
@@ -599,7 +601,7 @@ shots_list = [int(round(total_shots * L_j(alpha * t_j) / A)) for t_j in time_int
 # --------------
 #
 # Finally, we can run the simulation to determine the expectation values at each time step, allowing us to construct the time-domain Green’s function. 
-# We also sum the expectation values for each cartesian direction :math:`\rho.`
+# We also sum the expectation values for each Cartesian direction :math:`\rho.`
 # 
 # .. note::
 # 
@@ -612,7 +614,7 @@ shots_list = [int(round(total_shots * L_j(alpha * t_j) / A)) for t_j in time_int
 
 expvals = np.zeros((2, len(time_interval)))  # Results list initialization.
 
-# Loop over cartesian coordinate directions.
+# Loop over Cartesian coordinate directions.
 for rho in rhos:
 
     if dipole_norm[rho] == 0:  # Skip if state is zero.
@@ -720,7 +722,7 @@ def final_state_overlap(ci_id):
 F_m_Is = np.array([final_state_overlap(i) for i in range(len(energies))])
 
 ######################################################################
-# With the energies and the overlaps, we can compute the absorption cross section directly.
+# With the energies and the overlaps, we can compute the absorption cross section directly from the formula in the introduction.
 
 spectrum_classical_func = lambda E: (1 / np.pi) * np.sum(
                 [np.sum(np.abs(F_m_I)**2) * eta / ((E - e)**2 + eta**2)
@@ -746,7 +748,7 @@ fig.text(0.5, 0.05,
 plt.show()
 
 ######################################################################
-# Nice! Our time-domain simulation method reproduces the classical spectrum.
+# Nice! We find our time-domain simulation method exactly reproduces the classical spectrum -- all that hard work paid off!
 # Looking closely, we can see there are two strong peaks, as predicted from the beat note in the expectation values in Figure 7. 
 # If we worked with a larger active space, we would obtain more features in the spectrum. 
 # The spectrum calculated from the full orbital space is shown in Section V in Ref. [#Fomichev2025]_.
@@ -755,9 +757,14 @@ plt.show()
 # Conclusion
 # ----------
 #
+# The XAS spectroscopy algorithm for studying battery materials is some of the closest we've been able to get to an industrially meaningful application of fault-tolerant quantum computers. 
+# The ultralocal physics of X-ray absorption allow us to focus on simulating relatively small clusters and active spaces, significantly reducing qubit and gate requirements relative to ground-state energy estimation. 
+# At the same time, the observable we target -- the absorption spectrum -- remains classically hard.
 # In this tutorial, we have implemented a simplified version of the algorithm as presented in Ref. [#Fomichev2025]_. 
-# The algorithm represents a culmination of many optimizations for time evolving an electronic Hamiltonian. 
-# We’ve also discussed how XAS simulation is a promising candidate application for fault-tolerant quantum computers due to the low qubit overhead but high amount of correlations in the state space.
+# The algorithm represents a culmination of many optimizations for time-evolving an electronic Hamiltonian, leveraging product formulas to achieve a very small qubit footprint. 
+# Thanks to this, we're even able to simulate it classically! 
+# We hope that when fault tolerant hardware reaches maturity, this implementation might even form the basis for the quantum program we will write to simulate advanced battery cathodes. 
+# 
 #
 # References
 # ----------
@@ -819,10 +826,8 @@ plt.show()
 # This is already detailed in the `demo on CDF Hamiltonians <https://pennylane.ai/qml/demos/tutorial_how_to_build_compressed_double_factorized_hamiltonians>`__.
 #
 # Another optimization is to use a randomized second-order Trotter formula for the time evolution. 
-# As discussed in Ref. [#Childs2019]_, the errors in deterministic product formulas scale with the commutators of the Hamiltonian terms. 
-# One could instead use all permutations of the Hamiltonian terms, such that all of the commutator errors cancel. 
-# However, the average of all permutations is not unitary in general. 
-# To circumvent this, one can randomly choose an ordering of Hamiltonian terms in the Trotter product, which can give a good approximation to the desired evolution.
+# As discussed in Ref. [#Childs2019]_, the errors in deterministic product formulas scale with the number of commutators of the Hamiltonian terms. 
+# One could instead randomly permute the Hamiltonian term orderings between different Trotter steps, such that many of the commutator error terms cancel. 
 #
 # Core-valence separation approximation
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -838,12 +843,12 @@ plt.show()
 #
 #    Figure 9: *Core-valence separation.* A much larger amount of energy is required to excite core electrons into valence orbitals compared to electrons already in low-lying valence orbitals. 
 # 
-# We can also turn off the two-electron terms that couple core-excited and valence-excited states. 
+# To make the restriction to core-excited states in practice, we need to turn off the two-electron terms that couple core-excited and valence-excited states. 
 # These terms are in general small, but by setting them to zero the coupling is removed entirely from the time evolution. 
 # To implement the core-valence separation approximation in an XAS simulation algorithm, there are two steps:
 # 
-# - Before performing compressed double factorization on the two-electron integrals, remove the terms that include at least one core orbital.
-# - Remove all the matrix elements from the dipole operator that do *not* include at least one core orbital.
+# - Before performing compressed double factorization on the two-electron integrals, remove from the two-electron integrals the terms that include at least one core orbital and at least one valence orbital. This decouples the core-excited and valence-excited state manifolds.
+# - Remove all the matrix elements from the dipole operator that do *not* include exactly one core orbital. This allows the quantum algorithm to start directly in the core-excited state manifold.
 # 
 # This approximation would be useful when simulating a complex molecular instance, such as a cluster in a lithium-excess material. 
 #
