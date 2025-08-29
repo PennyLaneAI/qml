@@ -27,7 +27,7 @@
             "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_loom_catalyst.png"
         }
     ],
-    "seoDescription": "Learn how to implement decoded quantum interferometry on Pennylane by solving the max-XORSAT problem",
+    "seoDescription": "Learn how to implement a quantum error correction protocol using Catalyst and Loom",
     "doi": "",
     "references": [        {
             "id": "Munro2013",
