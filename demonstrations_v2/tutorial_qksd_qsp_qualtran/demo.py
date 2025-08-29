@@ -29,30 +29,35 @@ In this demo we will demonstrate some of the techniques and results of the paper
 # Quantum Krylov Subspace Diagonalization
 # ---------------------------------------
 #
-# The overall goal of QKSD is to estimate the eigenvalues and eigenstate of a large matrix by solving
-# the eigenvalue problem for a smaller matrix.
-# While the exact details of Quantum Krylov Subspace Diagonalization (QKSD) are beyond the scope of
-# this demo, we provide a general outline of the technique. For more details, please see
-# reference [#QKSD]_. The general steps to perform QKSD are:
+# QKSD is a notable candidate algorithm for fault-tolerant quantum computing that estimates the
+# eigenvalues and eigenstates of a large matrix by solving the eigenvalue problem for a smaller
+# matrix [#QKSD]_. The general steps to perform QKSD are:
 #
-# * Obtain the Hamiltonian (:math:`\hat{H}`) for your system of interest, for example the one describing a molecule.
-# * Define a Krylov subspace spanned by quantum states that can be efficiently prepared on a quantum computer.
-# * Use a quantum computer to obtain the projection of the Hamiltonian into the subspace (:math:`\tilde{H}`).
-#   This is the "smaller matrix". 
-# * Calculate the projection of the Hamiltonian into the subspace (:math:`\tilde{H}`) and the overlap matrix (:math:`\tilde{S}`)
-# * On a classical computer, solve the generalized eigenvalue problem: :math:`\tilde{H}c^m = E_m \tilde{S}c^m`
+# * Obtain the Hamiltonian, :math:`\hat{H}`, describing a system of interest (e.g. a molecule).
+# * Define a `Krylov subspace <https://en.wikipedia.org/wiki/Krylov_subspace>`_ :math:`\mathcal{K}`
+#   of dimension :math:`D`, spanned by quantum states, :math:`| \psi_k \rangle`, that can be
+#   efficiently prepared on a quantum computer.
+# * Project :math:`\hat{H}` into the Krylov subspace with a quantum computer, resulting in a new,
+#   "smaller" Hamiltonian :math:`\tilde{H}`. 
+# * Calculate the overlap matrix, :math:`\tilde{S}`, defined by the inner-products of each element
+#   of the Krylov subspace.
+# * On a classical computer, solve the generalized eigenvalue problem:
+#   :math:`\tilde{H}c^m = E_m \tilde{S}c^m`.
 #
-# The result of this generalized eigenvalue problem gives approximations of the eigenenergies of
-# the Hamiltonian, as well as corresponding eigenstates.
-# Of particular interest for obtaining molecular
-# properties is the lowest-energy Krylov state, :math:`|\Psi_0\rangle`_.
+# The result of this generalized eigenvalue problem gives approximations of the low-lying
+# eigenenergies and eigenstates of the Hamiltonian [#QKSD], including the Krylov ground-state,
+# :math:`|\Psi_0\rangle = \sum_k c^0_k | \psi_k \rangle`_.
 #
-# Such an eingestate is a linear combination of the states spanning the Krylov space and can
-# be prepared with QSP.
+# Such an eignestate is a linear combination of the states spanning the Krylov subspace and can
+# be prepared with `QSP <https://pennylane.ai/qml/demos/function_fitting_qsp>`.
 #
-# Let's begin with the :math:`H_2O` molecule. We have pre-calculated the Jordan-Wigner mapping of the
-# :math:`H_2O` molecule, using an active space of 4 electrons in 4
-# molecular orbitals in the cc-pVDZ basis. We use the precalculated results below to create a
+# Let's begin with the :math:`H_2O` molecule.
+# We will use the Jordan-Wigner mapping of the
+# :math:`H_2O` molecule with an active space of 4 electrons in 4
+# molecular orbitals in the cc-pVDZ basis. To save time on this computationall-expensive basis, we
+# provide pre-calculated coefficients and Pauli words for this Hamiltonian below. It is also possible
+# to obtain these values using either `PennyLane Datasets <<https://pennylane.ai/datasets/h2o-molecule>`_
+# or the :mod:`pennylane.qchem` module. We use the precalculated results below to create a
 # :class:`~pennylane.Hamiltonian` object.
 
 import pennylane as qml
@@ -75,8 +80,8 @@ hamiltonian = qml.Hamiltonian(coeffs, paulis)
 # .. math:: \mathcal{K} = span(\{\ket{\psi_k}\}_{k=0}^{D-1}).
 #
 # With the Hamiltonian and Krylov space defined, we can use
-# the `lanczos method <https://quantum-journal.org/papers/q-2023-05-23-1018/pdf/>`_ classically
-# or `Quantum Krylov Subspace diagonalization <https://arxiv.org/pdf/2407.14431>`_ to find :math:`\tilde{H}`
+# the `Lanczos method <https://quantum-journal.org/papers/q-2023-05-23-1018/pdf/>`_ classically
+# or `QKSD <https://arxiv.org/pdf/2407.14431>`_ to find :math:`\tilde{H}`
 # and :math:`\tilde{S}`, then solve for the QKSD ground-state,
 # 
 # .. math:: |\Psi_0\rangle = \sum_{i=0}^{D-1}c_iT_i(H)\ket{\psi_0},
