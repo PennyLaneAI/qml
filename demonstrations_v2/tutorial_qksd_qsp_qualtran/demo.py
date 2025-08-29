@@ -98,7 +98,7 @@ hamiltonian = qml.Hamiltonian(coeffs, paulis)
 # .. math:: \ket{\Psi_0} = \sum_{k=0}^{D-1} c^0_k \ket{\psi_k} = \sum_{k=0}^{D-1} c_k^0 T_k(H) \ket{\psi_0},
 #
 # where :math:`c_k^m` are the coefficients of the :math:`k`-th Chebyshev polynomial for the
-# :math:`m`-th eigenvalue. We pre-calculate the these coefficients and use them to obtain the
+# :math:`m`-th eigenvalue. We pre-calculate these coefficients and use them to obtain the
 # QSP rotation angles that prepare the QKSD ground-state in the section below.
 #
 # Using QSP to directly create the QKSD ground-state
@@ -180,7 +180,7 @@ def qsp(lcu, angles, rot_wires, prep_wires):
 
 ######################################################################
 # Since QSP can only produce fixed-parity real Chebyshev polynomials [#qspref]_ and our QKSD ground-state has
-# complex polynomials, we also create a template that combines the real an imaginary parts of the
+# complex polynomials, we also create a template that combines the real and imaginary parts of the
 # polynomial.
 
 def qsp_poly_complex(lcu, angles_real, angles_imag, ctrl_wire, rot_wires, prep_wires):
