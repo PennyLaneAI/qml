@@ -390,7 +390,7 @@ def generalize_ccrz(b):
 #
 # We then used the integration between PennyLane and Qualtran to perform a detailed resource analysis.
 # By converting our PennyLane ``QNode`` into a Qualtran ``Bloq``, we precisely 
-# counted the required quantum gates and confirmed that he number of gates scales linearly with the 
+# counted the required quantum gates and confirmed that the number of gates scales linearly with the 
 # Krylov subspace dimension, a crucial result from the source paper [#Oumarou]_. This favorable scaling 
 # highlights the potential of QSP-based techniques for tackling meaningful quantum chemistry 
 # problems and provides a practical framework for bridging the gap between theoretical algorithms 
