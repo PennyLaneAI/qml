@@ -148,7 +148,7 @@ hamiltonian = qml.Hamiltonian(coeffs, paulis)
 # 
 # .. math:: o_2 = \bra{\psi_0}\bra{0}_aU_\text{QSP}^{*}R_0 PU_\text{QSP}\ket{0}_a\ket{\psi_0}
 #
-# These measurements can then be combined according to [#Oumarou]_:
+# These measurements can then be combined according to [#Oumarou]_
 #
 # .. math:: \langle \Psi_0 |P|\Psi_0\rangle = \eta^2(o_1 + o_2)/2,
 #
@@ -172,6 +172,7 @@ def rotation_about_reflection_axis(angle, wires):
     qml.ctrl(qml.PauliX(wires[0]), wires[1:], (0,) * len(wires[1:]))
 
 def qsp(lcu, angles, rot_wires, prep_wires):
+    """Applies QSP by alternating between S(phi_k) and U_{QSP}"""
     for angle in angles[::-1][:-1]:
         rotation_about_reflection_axis(angle, rot_wires)
         qml.PrepSelPrep(lcu, control=prep_wires)
@@ -189,9 +190,10 @@ def qsp_poly_complex(lcu, angles_real, angles_imag, ctrl_wire, rot_wires, prep_w
     qml.H(ctrl_wire)
 
 ######################################################################
-# Additionally, we require a template to perform a reflection for our measurements.
+# Additionally, we require a template to perform the :math:`R_0` reflection for our measurements.
 
 def reflection(wire, ctrl_wires):
+    """Reflection operator, R_0"""
     qml.ctrl(qml.X(wire), ctrl_wires, [0] * len(ctrl_wires))
     qml.Z(wire)
     qml.ctrl(qml.X(wire), ctrl_wires, [0] * len(ctrl_wires))
