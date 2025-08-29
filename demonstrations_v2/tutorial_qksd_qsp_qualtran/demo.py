@@ -117,21 +117,44 @@ hamiltonian = qml.Hamiltonian(coeffs, paulis)
 # 
 # This QSP circuit prepares a Chebyshev polynomial of the block-encoded Hamiltonian:
 #
-# .. math:: U_\text{QSP} \ket{\psi_0} \ket{\psi_a} = \sum_{i=0}^{D-1} c_i T_i(H) \ket{\psi_0} \ket{\psi_a'}
+# .. math:: U_\text{QSP} \ket{\psi_0} \ket{0}_a = \sum_{i=0}^{D-1} c_i T_i(H) \ket{\psi_0} \ket{0}_a + \beta\ket{\perp}.
 #
-# Choosing the right rotation angles, :math:`\phi`, causes :math:`U_\text{QSP}` to implement a 
-# Chebyshev polynomial of the block-encoded Hamiltonian:
+# Choosing the right rotation angles, :math:`\phi`, causes :math:`U_\text{QSP}` to implement the 
+# Chebyshev polynomial corresponding to the Krylov ground-state:
 #
-# .. math:: U_\text{QSP}|\psi_0\rangle|\psi_a\rangle = \sum_{i=0}^{D-1}c_iT_i(H)\ket{\psi_0}|\psi_a'\rangle = | \Psi_0\rangle|\psi_a'\rangle
+# .. math:: U_\text{QSP}|\psi_0\rangle|0\rangle = \ket{\Psi_0}\ket{0}_a + \beta\ket{\perp}
 #
 # For more details about implementing polynomials of block-encoded Hamiltonians, block-encoding
 # operators, and rotation operators, see the
 # `Intro to QSVT demo <https://pennylane.ai/qml/demos/tutorial_intro_qsvt>`_.
 #
-# The :math:`U_\text{QSP}` circuit will prepare the QKSD ground-state by implementing the
-# corresponding Chebyshev polynomial of the block-encoded Hamiltonian. For more details, see the 
-# `Function Fitting using Quantum Signal Processing demo <https://pennylane.ai/qml/demos/function_fitting_qsp>`_.
-# Let's see how to do this in PennyLane.
+#
+# Measuring the reduced density matrices
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+# The elements of the one-particle reduced density matrix, :math:`\gamma_{pq}`, are obtained by
+# measuring the expectation value of the fermionic one-particle excitation operators acting on
+# the Krylov ground-state [#Oumarou]_. That is,
+#
+# .. math:: \gamma_{pq} = \langle\Psi_0 | a^{\dagger}_p a_q | \Psi_0\rangle.
+#
+# We can obtain these expectation values by measuring the right observables and post-processing
+# the result according to reference [#Oumarou]_. Specifically, we use the Jordan-Wigner mapping of
+# the fermionic one-particle excitation operators and measure the resulting Pauli word observables.
+# By measuring each Pauli word, :math:`P` and a product of the Pauli word and a reflection around 0,
+# :math:`R_0P`, we obtain:  
+#
+# .. math:: o_1 = \bra{\psi_0}\bra{0}_aU_\text{QSP}^{*}P U_\text{QSP}\ket{0}_a\ket{\psi_0}
+# 
+# .. math:: o_2 = \bra{\psi_0}\bra{0}_aU_\text{QSP}^{*}R_0 PU_\text{QSP}\ket{0}_a\ket{\psi_0}
+#
+# These measurements can then be combined according to [#Oumarou]_:
+#
+# .. math:: \langle \Psi_0 |P|\Psi_0\rangle = \eta^2(o_1 + o_2)/2,
+#
+# giving the value of :math:`\gamma_{pq}` for the Hamiltonian in the Jordan-Wigner mapping.
+#
+# Now let's see how to build the QSP circuit and measurements in PennyLane.
 #
 # Defining the QSP circuit
 # ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -193,7 +216,7 @@ ref_state = qml.qchem.hf_state(electrons=4, orbitals=4)
 
 @qml.qnode(dev)
 def krylov_qsp(lcu, even_real, even_imag, odd_real, odd_imag, obs, measure_reflection=False):
-    """Prepares the Krylov lowest-energy state by applying QSP with the input angles.
+    """Prepares the Krylov ground-state by applying QSP with the input angles.
     Then measures the expectation value of the desired observable. 
     """
     num_aux = int(np.log(len(lcu.operands)) / np.log(2)) + 1
@@ -226,21 +249,6 @@ def krylov_qsp(lcu, even_real, even_imag, odd_real, odd_imag, obs, measure_refle
 
 ######################################################################
 # We can now use this circuit to build one-particle and two- particle reduced density matrices.
-# Based on reference [#Oumarou]_,
-# the elements of the one-particle reduced density matrix are obtained by measuring the expectation
-# value of the fermionic one-particle excitation operators acting on the Krylov lowest energy state:
-#
-# .. math:: \langle\Psi_0 | a^{\dagger}_p a_q | \Psi_0\rangle.
-#
-# We use the Jordan-Wigner mapping of the fermionic one-particle excitation operators and measure
-# the resulting Pauli word observables. Since QSP implements a block-encoded Chebyshev polynomial
-# of the Hamiltonian, we must be careful to measure the right observables and post-process the result
-# to obtain the reduced density matrices. 
-#
-# .. math:: o_1 \coloneqq \bra{\psi_0} _s\bra{0}_a\hat{\mathcal{U}}_{\Phi}^{*}\hat{P}_{\nu}\hat{\mathcal{U}}_{\Phi}\ket{0}_a\ket{\psi_0}_s
-# 
-# .. math:: 2\langle \Psi_0 |_s\hat{P}_{\nu}|\Psi_0\rangle_s = \eta^2(o_1 + o_2).
-
 # We can obtain the Jordan-Wigner mapping of the fermionic operators via PennyLane using the
 # :func:`~pennylane.fermi.from_string` and :func:`~pennylane.jordan_wigner` functions as follows:
 
@@ -262,7 +270,6 @@ odd_real = np.array([3.26938242, 3.43658284, 3.17041296, 3.10158929, 3.22189574,
 odd_imag = np.array([3.01380289, 2.84660247, 3.11277234, 3.18159601, 3.06128956, 3.34586733, 3.02359219, 3.02359219, 3.34586733, 3.06128956, 3.18159601, 3.11277234, 2.84660247, -44.11008691])
 ######################################################################
 # We then measure the QSP circuit using these angles and post-process according to Equation 32 of the paper [#Oumarou]_:
-#
 
 P = krylov_qsp(hamiltonian, even_real, even_imag, odd_real, odd_imag, obs=obs)
 RP = krylov_qsp(hamiltonian, even_real, even_imag, odd_real, odd_imag, obs=obs, measure_reflection=True)
