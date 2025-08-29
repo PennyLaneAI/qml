@@ -4,9 +4,9 @@ r"""Using PennyLane and Qualtran to analyze how QSP can improve measurements of 
 Want to efficiently measure molecular properties using quantum computers? This demo demonstrates how to
 use PennyLane to measure one- and two-particle reduced density matrices of the water molecule with a linearly-scaling
 number of operations and how to integrate with Qualtran to demonstrate these resource requirements.
-This is done by using Quantum Krylov Subspace Diagonalization (QKSD) techniques to "shrink" down a
-complicated molecular Hamiltonian, find its ground-state classicaly, and then use Quantum Signal
-Processing (QSP) to efficiently measure its one- and two-particle reduced density matrices. 
+This is done by using Quantum Krylov Subspace Diagonalization (QKSD) techniques to compress a
+complicated molecular Hamiltonian, finding its ground-state classically, and then using Quantum Signal
+Processing (QSP) to efficiently measure its one-particle and two-particle reduced density matrices. 
 
 .. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/pennylane-demo-qualtran-covestro-krylov-subspace-paper-open-graph.png
     :align: center
@@ -72,7 +72,7 @@ hamiltonian = qml.Hamiltonian(coeffs, paulis)
 # applied to the Hartree-Fock state of the Hamiltonian, which we denote by the reference state :math:`|\psi_0\rangle`. In other words, we
 # define states: 
 #
-# .. math:: \ket{\psi_k} = T_i(H)\ket{\psi_0},
+# .. math:: \ket{\psi_k} = T_k(H)\ket{\psi_0},
 #
 # where :math:`T_k` is the :math:`k`-th Chebyshev polynomial. Then we define a Krylov subspace of dimension
 # :math:`D` as 
@@ -81,8 +81,7 @@ hamiltonian = qml.Hamiltonian(coeffs, paulis)
 #
 # With the Hamiltonian and Krylov space defined, we can use
 # the `Lanczos method <https://quantum-journal.org/papers/q-2023-05-23-1018/pdf/>`_ classically
-# or `QKSD <https://arxiv.org/pdf/2407.14431>`_ to find :math:`\tilde{H}`
-# and :math:`\tilde{S}`, then solve for the QKSD ground-state,
+# or `QKSD <https://arxiv.org/pdf/2407.14431>`_ to solve for the QKSD ground-state,
 # 
 # .. math:: |\Psi_0\rangle = \sum_k c^0_k | \psi_k \rangle = \sum_{l=0}^{D-1}c_k^0 T_k(H)\ket{\psi_0},
 #
@@ -123,6 +122,7 @@ hamiltonian = qml.Hamiltonian(coeffs, paulis)
 # will prepare a Chebyshev polynomial of the input block-encoded matrix.
 
 def rotation_about_reflection_axis(angle, wires):
+    """Rotation operation, S(phi_k)"""
     qml.ctrl(qml.PauliX(wires[0]), wires[1:], (0,) * len(wires[1:]))
     qml.RZ(angle, wires[0])
     qml.ctrl(qml.PauliX(wires[0]), wires[1:], (0,) * len(wires[1:]))
@@ -164,7 +164,7 @@ def reflection(wire, ctrl_wires):
 # measure the reflection of the observable, ``measure_reflection``. 
 #
 # With these building blocks in place, we can now define the overarching QNode
-# that will implement the QSP circuit and return measurements of the elements of the one-particle
+# that will implement the QSP circuit and return measurements of the elements of the one-
 # and two-particle reduced density matrices:
 
 dev = qml.device("lightning.qubit")
@@ -216,7 +216,7 @@ obs = qml.jordan_wigner(Epq)
 
 ######################################################################
 # For this demo, we used a Krylov subspace dimension of :math:`D=15` and pre-computed QSP angles
-# that implement the corresponding sum of Chebyshev polynomials :math:`\sum_{i=0}^{D-1}c_iT_i`.
+# that implement the corresponding sum of Chebyshev polynomials :math:`\sum_{k=0}^{D-1}c_k^0 T_k(\hat{H})`.
 # For a given polynomial it is possible to obtain the QSP angles using :func:`~pennylane.poly_to_angles`.
 #
 # The angles below will produce the QKSD ground-state :math:`|\Psi_0\rangle` via QSP. Since QSP
