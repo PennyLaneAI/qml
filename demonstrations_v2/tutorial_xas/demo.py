@@ -26,7 +26,7 @@ Why simulate X-ray absorption spectroscopy?
 
 Lithium-excess materials are transition metal oxides that are promising candidates for next-generation battery cathodes. 
 Engineered to accommodate extra lithium atoms in their lattice structure, these materials could potentially double the energy densities in battery designs.
-However, prototype Li-excess cathodes rapidly degrade after only a handful charge-discharge cycles. 
+However, prototype Li-excess cathodes rapidly degrade after only a handful of charge-discharge cycles. 
 The mechanism of this degradation is still poorly understood, making it challenging for researchers to resolve it.
 Knowledge of the internal electronic bonding and oxidation states of degraded cathodes is crucial to solving this mystery.
 This bonding can be examined using X-ray absorption spectroscopy, which directly probes local structure by exciting tightly bound core electrons. 
@@ -82,7 +82,7 @@ We can write the cross section as the imaginary part of the following Green’s 
 
 .. math:: \mathcal{G}_\rho(\omega) = \langle I|\hat m_\rho \frac{1}{\hat H -E_I -\omega +i\eta} \hat m_\rho |I\rangle\,.
 
-With a bit of algebra, we can confirm that this works: inserting a resolution of identity of final states :math:`\sum_F |F\rangle \langleF|` and simplifying gives
+With a bit of algebra, we can confirm that this works: inserting a resolution of identity of final states :math:`\sum_F |F\rangle \langle F|` and simplifying gives
 
 .. math::  \mathrm{Im}\,\mathcal{G}_\rho(\omega) = -\sum_{F\neq I} \frac{|\langle F|\hat m_\rho|I\rangle|^2\eta}{(E_F- E_I -\omega)^2 +\eta^2} - \frac{|\langle I|\hat m_\rho|I\rangle|^2\eta}{\omega^2 +\eta^2}\,,
 
