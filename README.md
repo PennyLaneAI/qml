@@ -24,7 +24,7 @@ Explore the full collection of [PennyLane demos](https://pennylane.ai/qml/demons
 
 ## Table of Contents
 
-- [Contributing to Demos](contributing.md)
+- [Contributing to Demos](CONTRIBUTING.md)
 - [QML CLI Tool](/documentation/qml-cli.md)
 - [Dependency Management](/dependencies/README.md)
 - [Support](#support)
