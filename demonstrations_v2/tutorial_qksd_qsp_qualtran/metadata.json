@@ -34,7 +34,7 @@
             "uri": "/_static/demo_thumbnails/large_demo_thumbnails/pennylane-demo-qualtran-covestro-krylov-subspace-paper-large-thumbnail.png"
         }
     ],
-    "seoDescription": "Learn how to obtain reduced density matrices with QSP",
+    "seoDescription": "Learn how to obtain reduced density matrices with QKSD and QSP",
     "doi": "",
     "references": [
     ],

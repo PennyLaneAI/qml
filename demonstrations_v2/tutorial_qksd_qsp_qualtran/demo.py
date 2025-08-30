@@ -304,8 +304,7 @@ print("Coherent result:", coherent_result)
 bloq = qml.to_bloq(krylov_qsp, map_ops=False,
     even_real=even_real, even_imag=even_imag,
     odd_real=odd_real, odd_imag=odd_imag,
-    lcu=hamiltonian, obs=obs
-    )
+    lcu=hamiltonian, obs=obs)
 
 ######################################################################
 # We can then use Qualtran tools to analyze and process the gate counts of the circuit. Below,
