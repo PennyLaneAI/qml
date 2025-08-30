@@ -5,7 +5,8 @@ Want to efficiently measure molecular properties using quantum computers? In thi
 outline a powerful workflow for measuring molecular properties on future 
 fault-tolerant quantum computers. We demonstrate how to construct the
 Quantum Krylov Subspace Diagonalization (QKSD) ground state of the 
-water molecule, represented as a sum of Chebyshev polynomials, using a QSP circuit in PennyLane.
+water molecule, represented as a sum of Chebyshev polynomials, using a Quantum Signal Processing
+(QSP) circuit in PennyLane.
 This direct state preparation approach is highly efficient, enabling the measurement of 
 properties like reduced density matrices with a constant number of circuit executions and 
 thereby avoiding the quadratic scaling costs of other methods.
@@ -16,14 +17,14 @@ We then use the integration between PennyLane and Qualtran to perform a detailed
     :width: 70%
     :target: javascript:void(0)
 
-In this demo we will demonstrate some of the techniques and results of the paper titled
+This demo is based on some of the techniques and results of the paper titled
 `Molecular Properties from Quantum Krylov Subspace Diagonalization <https://arxiv.org/abs/2501.05286>`_
-[#Oumarou]_. Specifically, we will:
+[#Oumarou]_. In the following sections we will follow this paper and:
 
 * Introduce QKSD briefly.
 * Build a circuit that uses QSP to prepare the QKSD ground-state.
 * Simulate circuits that estimate the one-particle and two-particle reduced density matrices of a molecular system from the QKSD ground-state.
-* Use the PennyLane-Qualtran integration to count relevant circuit resources and demonstrate linear resource scaling with respect to the Krylov dimension, :math:`D`.
+* Use the `PennyLane-Qualtran integration <https://pennylane.ai/qml/demos/tutorial_how_to_use_qualtran_with_pennylane>`_ to count relevant circuit resources and demonstrate linear resource scaling with respect to the Krylov dimension, :math:`D`.
 """
 
 ######################################################################
@@ -44,17 +45,18 @@ In this demo we will demonstrate some of the techniques and results of the paper
 # * Calculate the overlap matrix, :math:`\tilde{S}`, defined by the inner-products of each element
 #   of the Krylov subspace.
 # * Solve the generalized eigenvalue problem:
-#   :math:`\tilde{H}c^m = E_m \tilde{S}c^m` on a classical computer.
+#   :math:`\tilde{H}c^m = E_m \tilde{S}c^m` on a classical computer,
+#   where :math:`c^m` are the eigenstates of :math:`\tilde{H}`.
 #
 # The result of this generalized eigenvalue problem gives approximations of the low-lying
 # eigenenergies and eigenstates of the Hamiltonian [#QKSD]_, including the Krylov ground-state,
 # :math:`|\Psi_0\rangle = \sum_k c^0_k | \psi_k \rangle`.
 # Such an eigenstate is a linear combination of the states spanning the Krylov subspace and can
-# be prepared with `QSP <https://pennylane.ai/qml/demos/function_fitting_qsp>`_.
+# be prepared with `QSP <https://pennylane.ai/qml/demos/function_fitting_qsp>`_, as we will see
+# shortly.
 #
-# Let's now apply the above formalism to a familiar example: the :math:`H_2O` molecule.
-# We will use the Jordan-Wigner mapping of the
-# :math:`H_2O` Hamiltonian with an active space of 4 electrons in 4
+# Let's now apply the above formalism to a familiar example: the :math:`H_2O` molecule. We will use
+# the Jordan-Wigner mapping of the :math:`H_2O` Hamiltonian with an active space of 4 electrons in 4
 # molecular orbitals in the cc-pVDZ basis. To save time on this computationally-expensive basis, we
 # provide pre-calculated coefficients and Pauli words for this Hamiltonian below. It is also possible
 # to obtain these values for other molecules and basis sets using either
@@ -75,7 +77,7 @@ hamiltonian = qml.Hamiltonian(coeffs, paulis)
 # .. math:: \ket{\psi_k} = T_k(H)\ket{\psi_0},
 #
 # where :math:`T_k` is the :math:`k`-th Chebyshev polynomial and :math:`|\psi_0\rangle` is the
-# Hartree-Fock state of the Hamiltonian. The Chebyshev polynomials are defined by:
+# Hartree-Fock state. The Chebyshev polynomials are defined by:
 #
 # .. math:: T_0(\hat{H}) = \mathbb{1}
 # .. math:: T_1(\hat{H}) = \hat{H}
@@ -97,8 +99,8 @@ hamiltonian = qml.Hamiltonian(coeffs, paulis)
 # 
 # .. math:: \ket{\Psi_0} = \sum_{k=0}^{D-1} c^0_k \ket{\psi_k} = \sum_{k=0}^{D-1} c_k^0 T_k(H) \ket{\psi_0},
 #
-# where :math:`c_k^m` are the coefficients of the :math:`k`-th Chebyshev polynomial for the
-# :math:`m`-th eigenvalue. We pre-calculate these coefficients and use them to obtain the
+# where :math:`c_k^m` is the :math:`k`-th coefficient of the :math:`m`-th eigenstate of
+# :math:`\tilde{H}`. We pre-calculate these coefficients and use them to obtain the
 # QSP rotation angles that prepare the QKSD ground-state in the section below.
 #
 # Using QSP to directly create the QKSD ground-state
@@ -119,7 +121,7 @@ hamiltonian = qml.Hamiltonian(coeffs, paulis)
 #
 # .. math:: U_\text{QSP} \ket{\psi_0} \ket{0}_a = \sum_{i=0}^{D-1} c_i T_i(H) \ket{\psi_0} \ket{0}_a + \beta\ket{\perp}.
 #
-# Choosing the right rotation angles, :math:`\phi`, causes :math:`U_\text{QSP}` to implement the 
+# With specific rotation angles, :math:`\phi`, :math:`U_\text{QSP}` implements the 
 # Chebyshev polynomial corresponding to the Krylov ground-state:
 #
 # .. math:: U_\text{QSP}|\psi_0\rangle|0\rangle = \ket{\Psi_0}\ket{0}_a + \beta\ket{\perp}
@@ -136,7 +138,10 @@ hamiltonian = qml.Hamiltonian(coeffs, paulis)
 # measuring the expectation value of the fermionic one-particle excitation operators acting on
 # the Krylov ground-state [#Oumarou]_. That is,
 #
-# .. math:: \gamma_{pq} = \langle\Psi_0 | a^{\dagger}_p a_q | \Psi_0\rangle.
+# .. math:: \gamma_{pq} = \langle\Psi_0 | a^{\dagger}_p a_q | \Psi_0\rangle,
+#
+# where :math:`a^{\dagger}` and :math:`a` are the creation and annihilation operators, respectively.
+# The indices :math:`p` and :math:`q` determine in which orbital particles are added or removed. 
 #
 # We can obtain these expectation values by measuring the right observables and post-processing
 # the result according to reference [#Oumarou]_. Specifically, we use the Jordan-Wigner mapping of
@@ -275,7 +280,8 @@ odd_imag = np.array([3.01380289, 2.84660247, 3.11277234, 3.18159601, 3.06128956,
 # the equations above:
 
 P = krylov_qsp(hamiltonian, even_real, even_imag, odd_real, odd_imag, obs=obs)
-RP = krylov_qsp(hamiltonian, even_real, even_imag, odd_real, odd_imag, obs=obs, measure_reflection=True)
+RP = krylov_qsp(hamiltonian, even_real, even_imag, odd_real, odd_imag, obs=obs,
+                measure_reflection=True)
 
 print("P:", P)
 print("RP:", RP)
@@ -336,7 +342,8 @@ for gate, count in sigma.items():
 
 ######################################################################
 # We can plot how the number of gates increases with the Krylov dimension to see if it is linear
-# as described in [#Oumarou]_. Below we plot how the ``Toffoli``, ``CNOT``, and ``X`` gate count increase with the Krylov dimension:
+# as described in reference [#Oumarou]_. Below we plot how the ``Toffoli``, ``CNOT``, and ``X`` 
+# gate count increase with the Krylov dimension:
 
 import matplotlib.pyplot as plt
 from qualtran.bloqs.basic_gates import Toffoli, CNOT, XGate
@@ -406,8 +413,8 @@ def generalize_ccrz(b):
 ######################################################################
 # Conclusion
 # ----------
-# This demo demonstrated how to
-# use PennyLane to measure one-particle and two-particle reduced density matrices of the water molecule with a linearly-scaling
+# This demo demonstrated how to use PennyLane to measure one-particle and two-particle
+# reduced density matrices of the water molecule with a linearly-scaling
 # number of operations and how to integrate with Qualtran to demonstrate these resource requirements.
 # This is done by using Quantum Krylov Subspace Diagonalization (QKSD) techniques to compress a
 # complicated molecular Hamiltonian, finding its ground-state classically, and then using Quantum Signal
