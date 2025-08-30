@@ -23,7 +23,7 @@ This demo is based on some of the techniques and results of the paper titled
 
 * Introduce QKSD briefly.
 * Build a circuit that uses QSP to prepare the QKSD ground-state.
-* Simulate circuits that estimate the one-particle and two-particle reduced density matrices of a molecular system from the QKSD ground-state.
+* Simulate circuits that estimate the one-particle reduced density matrix of a molecular system from the QKSD ground-state.
 * Use the `PennyLane-Qualtran integration <https://pennylane.ai/qml/demos/tutorial_how_to_use_qualtran_with_pennylane>`_ to count relevant circuit resources and demonstrate linear resource scaling with respect to the Krylov dimension, :math:`D`.
 """
 
@@ -106,7 +106,7 @@ hamiltonian = qml.Hamiltonian(coeffs, paulis)
 # Using QSP to directly create the QKSD ground-state
 # --------------------------------------------------
 #
-# Only using QKSD to calculate one-particle and two-particle reduced density matrices
+# Only using QKSD to calculate one-particle or two-particle reduced density matrices
 # results in a quadratic scaling of the number of expectation
 # values that need to be measured with respect to the Krylov dimension, :math:`D` [#Oumarou]_.
 # Instead, reference [#Oumarou]_ shows that it is possible to reduce this to constant scaling by preparing
@@ -157,7 +157,10 @@ hamiltonian = qml.Hamiltonian(coeffs, paulis)
 #
 # .. math:: 2\langle \Psi_0 |P|\Psi_0\rangle = \eta^2(o_1 + o_2),
 #
-# giving the value of :math:`\gamma_{pq}` for the Hamiltonian in the Jordan-Wigner mapping.
+# giving the value of :math:`\gamma_{pq}` for the Hamiltonian in the Jordan-Wigner mapping. Note 
+# that it is also possible to obtain the two-particle reduced density matrix,
+# :math:`\Gamma_{pqrs}`, by following the same protocol for fermionic two-particle excitation
+# operators, :math:`a^{\dagger}_p a^{\dagger}_q a_r a_s`.
 #
 # Now let's see how to build the QSP circuit and measurements in PennyLane.
 #
@@ -216,7 +219,7 @@ def reflection(wire, ctrl_wires):
 # With these building blocks in place, we can now define the overarching QNode
 # that will apply the QSP circuit to the reference state :math:`|\psi_0\rangle`
 # and return measurements of the elements of
-# the one-particle and two-particle reduced density matrices:
+# the one-particle reduced density matrix:
 
 dev = qml.device("lightning.qubit")
 ref_state = qml.qchem.hf_state(electrons=4, orbitals=4) 
@@ -413,12 +416,12 @@ def generalize_ccrz(b):
 ######################################################################
 # Conclusion
 # ----------
-# This demo demonstrated how to use PennyLane to measure one-particle and two-particle
-# reduced density matrices of the water molecule with a linearly-scaling
+# This demo demonstrated how to use PennyLane to measure the one-particle
+# reduced density matrix of the water molecule with a linearly-scaling
 # number of operations and how to integrate with Qualtran to demonstrate these resource requirements.
-# This is done by using Quantum Krylov Subspace Diagonalization (QKSD) techniques to compress a
+# This was done by using Quantum Krylov Subspace Diagonalization techniques to compress a
 # complicated molecular Hamiltonian, finding its ground-state classically, and then using Quantum Signal
-# Processing (QSP) to efficiently measure its one-particle and two-particle reduced density matrices. 
+# Processing to efficiently measure its one-particle reduced density matrix. 
 #
 # We then used the integration between PennyLane and Qualtran to perform a detailed resource analysis.
 # By converting our PennyLane ``QNode`` into a Qualtran ``Bloq``, we precisely 
