@@ -1,0 +1,62 @@
+{
+    "title": "Loom x Catalyst: designing, orchestrating, and automating quantum error correction experiments",
+    "authors": [
+        {
+            "username": "Disi"
+        },
+        {
+            "username": "yorgossot"
+        }
+    ],
+    "executable_stable": false,
+    "executable_latest": false,
+    "dateOfPublication": "2025-08-29T14:00:00+00:00",
+    "dateOfLastModification": "2025-08-29T14:00:00+00:01",
+    "categories": [
+        "Quantum Computing",
+        "Quantum Hardware"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_loom_catalyst.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_loom_catalyst.png"
+        }
+    ],
+    "seoDescription": "Learn how to implement a quantum error correction protocol using Catalyst and Loom",
+    "doi": "",
+    "references": [        {
+            "id": "Munro2013",
+            "type": "article",
+            "title": "Quantum Error Correction for Beginners",
+            "authors": "Simon J. Devitt, Kae Nemoto, William J. Munro",
+            "year": "2013",
+            "journal": "arXiv",
+            "url": "https://arxiv.org/abs/0905.2794"
+        }
+    ],
+    "basedOnPapers": [
+    ],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_bp_catalyst",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_stabilizer_codes",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_game_of_surface_codes",
+            "weight": 1.0
+        }
+    ]
+}
