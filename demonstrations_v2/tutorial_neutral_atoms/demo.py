@@ -29,7 +29,7 @@ discuss their strengths and weaknesses in terms of DiVincenzo's criteria, introd
 By the end of this tutorial, you will have obtained a high-level understanding of neutral atom technologies
 and be able to follow the new exciting developments that are bound to come.
 
-.. container:: alert alert-block alert-info
+.. tip::
     
     **DiVincenzo's criteria**: In the year 2000, David DiVincenzo proposed a
     wishlist for the experimental characteristics of a quantum computer [#DiVincenzo2000]_.
@@ -127,7 +127,7 @@ the work that still needs to be done to scale this technology even further.
 # energy state using lasers. If you need a refresher on how we change the electronic energy levels of atoms, do take
 # a look at the blue box below!
 #
-# .. container:: alert alert-block alert-info
+# .. tip::
 #
 #    **Atomic Physics Primer:** Atoms consist of a positively charged nucleus
 #    and negative electrons around it. The electrons inhabit energy
