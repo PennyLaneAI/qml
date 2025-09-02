@@ -1,0 +1,34 @@
+{
+    "title": "Catalyst Benchmarks",
+    "authors": [
+        {
+            "username": "josh"
+        }
+    ],
+    "executable_stable": true,
+    "executable_latest": true,
+    "dateOfPublication": "2020-02-14T00:00:00+00:00",
+    "dateOfLastModification": "2025-01-14T00:00:00+00:00",
+    "categories": [
+        "Quantum Machine Learning"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_ensemble_classification_rigetti_qiskit.png"
+        }
+    ],
+    "seoDescription": "We demonstrate how two QPUs can be combined in parallel to help solve a machine learning classification problem, using PyTorch and PennyLane.",
+    "doi": "",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_variational_classifier",
+            "weight": 1.0
+        }
+    ]
+}
