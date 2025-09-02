@@ -150,7 +150,7 @@ def H(x):
 # single excitation from qubit 0 to 2. This can be done using the single-excitation and
 # double-excitation gates :math:`G` and :math:`G^{(2)}` [#qchemcircuits]_ implemented
 # in the form of Givens rotations in PennyLane. For more details see the tutorial
-# :doc:`tutorial_givens_rotations`.
+# :doc:`demos/tutorial_givens_rotations`.
 #
 # In addition, we use an adaptive algorithm [#geo_opt_paper]_ to select the excitation
 # operations included in the variational quantum circuit. The algorithm proceeds as follows:

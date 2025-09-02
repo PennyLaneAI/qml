@@ -5,6 +5,8 @@
             "username": "dwierichs"
         }
     ],
+    "executable_stable": true,
+    "executable_latest": true,
     "dateOfPublication": "2024-09-10T00:00:00+00:00",
     "dateOfLastModification": "2025-04-03T00:00:00+00:00",
     "categories": [
@@ -70,7 +72,9 @@
             "url": "https://arxiv.org/abs/2308.05077"
         }
     ],
-    "basedOnPapers": ["10.48550/arXiv.2409.01706"],
+    "basedOnPapers": [
+        "10.48550/arXiv.2409.01706"
+    ],
     "referencedByPapers": [],
     "relatedContent": [
         {

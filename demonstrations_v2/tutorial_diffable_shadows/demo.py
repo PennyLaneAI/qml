@@ -22,7 +22,7 @@ Classical shadow theory
 -----------------------
 
 A `classical shadow` is a classical description of a quantum state that is capable of reproducing expectation values of local Pauli observables, see [#Huang2020]_.
-We briefly go through their theory here, and note the two additional demos in :doc:`tutorial_classical_shadows` and :doc:`ml_classical_shadows`.
+We briefly go through their theory here, and note the two additional demos in :doc:`demos/tutorial_classical_shadows` and :doc:`demos/ml_classical_shadows`.
 
 We are here focussing on the case where measurements are performed in the Pauli basis.
 The idea of classical shadows is to measure each qubit in a random Pauli basis.
@@ -165,7 +165,7 @@ print(shadow.expval(H))
 # -----------------------------------------------------------------
 # 
 # The goal of the following section is to compare estimation accuracy for a given number of quantum executions with more conventional methods
-# like simultaneously measuring qubit-wise-commuting (qwc) groups, see :doc:`tutorial_measurement_optimize`. We are going to look at three different cases: The two extreme scenarios of measuring one single
+# like simultaneously measuring qubit-wise-commuting (qwc) groups, see :doc:`demos/tutorial_measurement_optimize`. We are going to look at three different cases: The two extreme scenarios of measuring one single
 # and `all` q-local Pauli strings, as well as the more realistic scenario of measuring a molecular Hamiltonian. We find that for a fix budget of measurements, one is
 # almost never advised to use classical shadows for estimating expectation values.
 # 
@@ -357,7 +357,7 @@ plt.show()
 # Molecular Hamiltonians
 # ~~~~~~~~~~~~~~~~~~~~~~
 # We now look at the more realistic case of measuring a molecular Hamiltonian. We tak :math:`\text{H}_2\text{O}` as an example. 
-# You can find more details on this Hamiltonian in :doc:`tutorial_quantum_chemistry`.
+# You can find more details on this Hamiltonian in :doc:`demos/tutorial_quantum_chemistry`.
 # We start by building the Hamiltonian and enforcing qwc groups by setting ``grouping_type='qwc'``.
 
 symbols = ["H", "O", "H"]
@@ -383,7 +383,7 @@ print(f"number of ops in H: {len(obs)}, number of qwc groups: {n_groups}")
 print(f"Each group has sizes {[len(_) for _ in groups]}")
 
 ##############################################################################
-# We use a pre-prepared Ansatz that approximates the :math:`\text{H}_2\text{O}` ground state for the given geometry. You can construct this Ansatz by running VQE, see :doc:`tutorial_vqe.`
+# We use a pre-prepared Ansatz that approximates the :math:`\text{H}_2\text{O}` ground state for the given geometry. You can construct this Ansatz by running VQE, see :doc:`demos/tutorial_vqe.`
 # We ran this once on an ideal simulator to get the exact result of the energy for the given Ansatz.
 
 singles, doubles = qml.qchem.excitations(electrons=4, orbitals=n_wires)

@@ -338,7 +338,7 @@ low_energy_state = [
 
 ######################################################################
 # This state can be obtained by using a decoupled version of the
-# :doc:`Variational Quantum Eigensolver </demos/tutorial_vqe>` algorithm (VQE).
+# :doc:`Variational Quantum Eigensolver <demos/tutorial_vqe>` algorithm (VQE).
 # Essentially, we choose a
 # VQE ansatz such that the circuit cannot learn the exact ground state,
 # but it can get fairly close. Another way to arrive at the same result is

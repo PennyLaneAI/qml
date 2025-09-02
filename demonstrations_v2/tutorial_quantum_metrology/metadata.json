@@ -5,6 +5,8 @@
             "username": "jjmeyer"
         }
     ],
+    "executable_stable": true,
+    "executable_latest": true,
     "dateOfPublication": "2020-06-18T00:00:00+00:00",
     "dateOfLastModification": "2024-11-06T00:00:00+00:00",
     "categories": [
@@ -30,7 +32,9 @@
             "url": "https://arxiv.org/abs/2006.06303"
         }
     ],
-    "basedOnPapers": ["10.48550/arXiv.2006.06303"],
+    "basedOnPapers": [
+        "10.48550/arXiv.2006.06303"
+    ],
     "referencedByPapers": [],
     "relatedContent": [
         {

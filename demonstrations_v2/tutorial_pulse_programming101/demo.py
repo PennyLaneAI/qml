@@ -220,10 +220,10 @@ print(H(theta, 0.5))
 # Variational quantum eigensolver with pulse programming
 # ------------------------------------------------------
 # We can now use the ability to access gradients to perform the variational quantum eigensolver on the pulse level (ctrl-VQE) as is done in [#Mitei]_.
-# For a more general introduction to VQE, see :doc:`tutorial_vqe`.
+# For a more general introduction to VQE, see :doc:`demos/tutorial_vqe`.
 # First, we define the molecular Hamiltonian whose energy expectation value we want to minimize. This serves as our objective Hamiltonian.
 # We are using :math:`\text{HeH}^+` as a simple example and load it from the `PennyLane quantum datasets <https://pennylane.ai/qml/datasets.html>`_ website.
-# We are going to use the tapered Hamiltonian, which makes use of symmetries to reduce the number of qubits, see :doc:`tutorial_qubit_tapering` for details.
+# We are going to use the tapered Hamiltonian, which makes use of symmetries to reduce the number of qubits, see :doc:`demos/tutorial_qubit_tapering` for details.
 
 data = qml.data.load("qchem", molname="HeH+", basis="STO-3G", bondlength=1.5)[0]
 H_obj = data.tapered_hamiltonian

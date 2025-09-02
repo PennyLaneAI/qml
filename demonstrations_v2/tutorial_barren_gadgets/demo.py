@@ -33,8 +33,8 @@ That is a problem because increasing the precision of the cost
 function requires more measurements from the quantum device due to shot noise, 
 and an exponential number of measurements would render the algorithm impractical.
 If you are not familiar yet with the concept of barren plateaus, I recommend you
-first check out the demonstrations on :doc:`barren plateaus </demos/tutorial_barren_plateaus>`
-and :doc:`avoiding barren plateaus with local cost functions </demos/tutorial_local_cost_functions>`.
+first check out the demonstrations on :doc:`barren plateaus <demos/tutorial_barren_plateaus>`
+and :doc:`avoiding barren plateaus with local cost functions <demos/tutorial_local_cost_functions>`.
 
 As presented in the second aforementioned demo, barren plateaus are more severe when using global
 cost functions compared to local ones. 
@@ -336,7 +336,7 @@ for it in range(max_iter):
     costs_lists["monitoring"].append(monitoring_cost(weights))
 
 
-plt.style.use("seaborn")
+plt.style.use("seaborn-v0_8")
 
 plt.figure()
 plt.plot(costs_lists["training"])
