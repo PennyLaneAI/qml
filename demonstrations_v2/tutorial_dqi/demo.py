@@ -405,6 +405,8 @@ pprint(formatted_state)
 # the target.
 # 
 
+from functools import partial
+
 def B_T_multiplication(B_T, n_register):
     """Computes B^T y into the syndrome register."""
     for row_index, row in enumerate(B_T):
@@ -413,9 +415,9 @@ def B_T_multiplication(B_T, n_register):
                 qml.CNOT(wires=[m_register[col_index], n_register[row_index]])
 
 
-dev = qml.device("default.qubit", shots=n_samples)
+dev = qml.device("default.qubit")
 
-
+@partial(qml.set_shots, shots=n_samples)
 @qml.qnode(dev)
 def DQI(m, n, l):
     """Quantum circuit implementing DQI algorithm to solve max-XORSAT."""
@@ -505,9 +507,9 @@ def syndrome_LUT(parity_check_matrix_T):
 # Generate the lookup table
 decoding_table = syndrome_LUT(B_T)
 
-dev = qml.device("default.qubit", shots=n_samples)
+dev = qml.device("default.qubit")
 
-
+@partial(qml.set_shots, shots=n_samples)
 @qml.qnode(dev)
 def DQI(m, n, l):
     """Quantum circuit implementing DQI algorithm to solve max-XORSAT."""
@@ -551,9 +553,9 @@ pprint(DQI(m, n, l))
 # the random sampling done at first.
 # 
 
-dev = qml.device("default.qubit", shots=n_samples)
+dev = qml.device("default.qubit")
 
-
+@partial(qml.set_shots, shots=n_samples)
 @qml.qnode(dev)
 def DQI(m, n, l):
     """Quantum circuit implementing DQI algorithm to solve max-XORSAT."""
