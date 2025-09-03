@@ -47,11 +47,8 @@ initial plot to see how well DQI performs.
 """
 
 import pennylane as qml
-import math
 from pennylane import numpy as pnp
 import matplotlib.pyplot as plt
-import itertools
-from pprint import pprint
 
 plt.style.use("pennylane.drawer.plot")
 
@@ -249,6 +246,9 @@ def embed_weights(w_k, weight_register):
 # the quantum state of the weight and error registers printed in a nice form using the auxiliary ``format_state_vector`` function. 
 # 
 
+from pprint import pprint
+
+
 def format_state_vector(state_vector, tol: float = 1e-6):
     """Formats a state vector as a dictionary of bit-strings and amplitudes."""
     num_qubits = int(pnp.log2(len(state_vector)))
@@ -325,6 +325,10 @@ pprint(formatted_state)
 # a Hamming weight of :math:`1`, as the qubit state was already :math:`|0\rangle`. From now on, we can 
 # choose to discard it and not include it in our outputs.
 # 
+
+from itertools import combinations
+from math import comb
+
 
 def generate_bit_strings(length, hamming_weight):
     """Generates all bit strings of a given length and Hamming weight."""
@@ -406,6 +410,7 @@ pprint(formatted_state)
 # 
 
 from functools import partial
+
 
 def B_T_multiplication(B_T, n_register):
     """Computes B^T y into the syndrome register."""
