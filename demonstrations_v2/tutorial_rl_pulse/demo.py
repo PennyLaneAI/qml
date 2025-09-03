@@ -15,7 +15,7 @@ experimentally-friendly protocol based on the direct interaction with the hardwa
 the main ideas in [#BaumPRXQ21]_, which we illustrate using superconducting qubits as
 an example.
 
-.. figure:: ../demonstrations/rl_pulse/DemoOG_RLpulse.png
+.. figure:: ../_static/demonstration_assets/rl_pulse/DemoOG_RLpulse.png
    :align: center
    :width: 60%
 
@@ -79,7 +79,7 @@ board configuration after the agent's move and the opponent's response. The rewa
 how well the agent is performing the task given the last interaction. We will see more about the
 reward in the following section.
 
-.. figure:: ../demonstrations/rl_pulse/sketch_rl.png
+.. figure:: ../_static/demonstration_assets/rl_pulse/sketch_rl.png
    :align: center
    :width: 75%
 
@@ -127,7 +127,7 @@ parameters of the fourth pulse segment, reaching the end of the pulse. Given tha
 segments are now fixed, we proceed with the evaluation of the pulse with respect to the target gate
 that we wish to execute.
 
-.. figure:: ../demonstrations/rl_pulse/sketch_protocol.png
+.. figure:: ../_static/demonstration_assets/rl_pulse/sketch_protocol.png
    :align: center
    :width: 90%
 

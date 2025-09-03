@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="612pt" height="133pt" viewBox="0.00 0.00 612.00 133.00">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 128.5)">
+<title>counts</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-128.5 607.5,-128.5 607.5,4 -4,4"/>
+<!-- b0 -->
+<g id="node1" class="node">
+<title>b0</title>
+<polygon fill="none" stroke="black" points="330.88,-94.88 330.88,-118.12 384.12,-118.12 384.12,-94.88 330.88,-94.88"/>
+<text xml:space="preserve" text-anchor="start" x="336.88" y="-102.62" font-family="Times,serif" font-size="10.00">PLQNode</text>
+</g>
+<!-- b1 -->
+<g id="node2" class="node">
+<title>b1</title>
+<polygon fill="none" stroke="black" points="8,-6.38 8,-29.62 71,-29.62 71,-6.38 8,-6.38"/>
+<text xml:space="preserve" text-anchor="start" x="14" y="-14.12" font-family="Times,serif" font-size="10.00">C[7][XGate]</text>
+</g>
+<!-- b0&#45;&gt;b1 -->
+<g id="edge1" class="edge">
+<title>b0-&gt;b1</title>
+<path fill="none" stroke="black" d="M322.96,-98.26C291.8,-91.58 244.78,-81.1 204.25,-70.5 155.18,-57.66 140.74,-53.25 89.71,-36.66"/>
+<polygon fill="black" stroke="black" points="91.03,-33.41 80.44,-33.64 88.86,-40.07 91.03,-33.41"/>
+<text xml:space="preserve" text-anchor="middle" x="214.38" y="-57.2" font-family="Times,serif" font-size="14.00">160</text>
+</g>
+<!-- b2 -->
+<g id="node3" class="node">
+<title>b2</title>
+<polygon fill="none" stroke="black" points="104.62,-6.38 104.62,-29.62 174.38,-29.62 174.38,-6.38 104.62,-6.38"/>
+<text xml:space="preserve" text-anchor="start" x="110.62" y="-14.12" font-family="Times,serif" font-size="10.00">C[2][Rz(\phi)]</text>
+</g>
+<!-- b0&#45;&gt;b2 -->
+<g id="edge2" class="edge">
+<title>b0-&gt;b2</title>
+<path fill="none" stroke="black" d="M322.96,-91.79C287.91,-77.89 233.19,-56.18 192.63,-40.08"/>
+<polygon fill="black" stroke="black" points="194.11,-36.9 183.52,-36.47 191.52,-43.41 194.11,-36.9"/>
+<text xml:space="preserve" text-anchor="middle" x="274.78" y="-57.2" font-family="Times,serif" font-size="14.00">80</text>
+</g>
+<!-- b3 -->
+<g id="node4" class="node">
+<title>b3</title>
+<polygon fill="none" stroke="black" points="208.5,-6.38 208.5,-29.62 304.5,-29.62 304.5,-6.38 208.5,-6.38"/>
+<text xml:space="preserve" text-anchor="start" x="214.5" y="-14.12" font-family="Times,serif" font-size="10.00">C[2][PLPrepSelPrep]</text>
+</g>
+<!-- b0&#45;&gt;b3 -->
+<g id="edge3" class="edge">
+<title>b0-&gt;b3</title>
+<path fill="none" stroke="black" d="M338.03,-88.82C322.89,-75.86 301.69,-57.7 284.7,-43.16"/>
+<polygon fill="black" stroke="black" points="287.28,-40.75 277.41,-36.91 282.73,-46.07 287.28,-40.75"/>
+<text xml:space="preserve" text-anchor="middle" x="322.8" y="-57.2" font-family="Times,serif" font-size="14.00">76</text>
+</g>
+<!-- b4 -->
+<g id="node5" class="node">
+<title>b4</title>
+<polygon fill="none" stroke="black" points="341.38,-6.38 341.38,-29.62 373.62,-29.62 373.62,-6.38 341.38,-6.38"/>
+<text xml:space="preserve" text-anchor="start" x="347.38" y="-14.12" font-family="Times,serif" font-size="10.00">C[H]</text>
+</g>
+<!-- b0&#45;&gt;b4 -->
+<g id="edge4" class="edge">
+<title>b0-&gt;b4</title>
+<path fill="none" stroke="black" d="M357.5,-88.82C357.5,-77.05 357.5,-60.99 357.5,-47.24"/>
+<polygon fill="black" stroke="black" points="361,-47.44 357.5,-37.44 354,-47.44 361,-47.44"/>
+<text xml:space="preserve" text-anchor="middle" x="360.88" y="-57.2" font-family="Times,serif" font-size="14.00">4</text>
+</g>
+<!-- b5 -->
+<g id="node6" class="node">
+<title>b5</title>
+<polygon fill="none" stroke="black" points="410.62,-6.38 410.62,-29.62 450.38,-29.62 450.38,-6.38 410.62,-6.38"/>
+<text xml:space="preserve" text-anchor="start" x="416.62" y="-14.12" font-family="Times,serif" font-size="10.00">CNOT</text>
+</g>
+<!-- b0&#45;&gt;b5 -->
+<g id="edge5" class="edge">
+<title>b0-&gt;b5</title>
+<path fill="none" stroke="black" d="M371.58,-88.82C382.21,-76.22 397,-58.7 409.09,-44.36"/>
+<polygon fill="black" stroke="black" points="411.47,-46.98 415.24,-37.08 406.12,-42.46 411.47,-46.98"/>
+<text xml:space="preserve" text-anchor="middle" x="403.91" y="-57.2" font-family="Times,serif" font-size="14.00">4</text>
+</g>
+<!-- b6 -->
+<g id="node7" class="node">
+<title>b6</title>
+<polygon fill="none" stroke="black" points="484,-6.38 484,-29.62 523,-29.62 523,-6.38 484,-6.38"/>
+<text xml:space="preserve" text-anchor="start" x="490" y="-14.12" font-family="Times,serif" font-size="10.00">XGate</text>
+</g>
+<!-- b0&#45;&gt;b6 -->
+<g id="edge6" class="edge">
+<title>b0-&gt;b6</title>
+<path fill="none" stroke="black" d="M386,-88.62C408.9,-75.05 441.25,-55.88 466.21,-41.09"/>
+<polygon fill="black" stroke="black" points="467.94,-44.13 474.76,-36.03 464.37,-38.11 467.94,-44.13"/>
+<text xml:space="preserve" text-anchor="middle" x="446.95" y="-57.2" font-family="Times,serif" font-size="14.00">2</text>
+</g>
+<!-- b7 -->
+<g id="node8" class="node">
+<title>b7</title>
+<polygon fill="none" stroke="black" points="566.75,-6.38 566.75,-29.62 586.25,-29.62 586.25,-6.38 566.75,-6.38"/>
+<text xml:space="preserve" text-anchor="start" x="572.75" y="-14.12" font-family="Times,serif" font-size="10.00">H</text>
+</g>
+<!-- b0&#45;&gt;b7 -->
+<g id="edge7" class="edge">
+<title>b0-&gt;b7</title>
+<path fill="none" stroke="black" d="M391.96,-93.54C426.95,-81.15 482.79,-60.7 539.6,-36.25"/>
+<polygon fill="black" stroke="black" points="540.68,-39.6 548.46,-32.41 537.89,-33.18 540.68,-39.6"/>
+<text xml:space="preserve" text-anchor="middle" x="499.27" y="-57.2" font-family="Times,serif" font-size="14.00">2</text>
+</g>
+</g>
+</svg>
