@@ -113,7 +113,7 @@ plt.show()
 # 
 # 1. **Embed weight coefficients:** prepare the state :math:`\sum_{k=0}^{\ell} w_k|k\rangle` in the
 #    weight register to encode the degree :math:`\ell` of the polynomial.
-# 2. **Prepare Dicke states:** generate Dicke states on the error register, conditioned on the value
+# 2. **Prepare Dicke states:** generate `Dicke states <https://en.wikipedia.org/wiki/Dicke_state>`__ on the error register, conditioned on the value
 #    :math:`k`,
 # 
 #    .. math:: \sum_{k=0}^{\ell} w_k|k\rangle \frac{1}{\sqrt{\binom{m}{k}}}\sum_{\substack{\mathbf{y}\\|\mathbf{y}|=k}} |\mathbf{y}\rangle.
@@ -141,9 +141,8 @@ plt.show()
 # We are going to prepare the superposition :math:`\sum_{k=0}^{\ell} w_k|k\rangle`. As previously stated,
 # the weight register is made up of :math:`\left \lceil \log_{2} \ell \right \rceil` qubits, which means
 # that the index :math:`k` is being binary encoded. The coefficients :math:`w_k` are chosen such that
-# they maximize the number of satisfied linear equations. The paper specifies that these optimal
-# weights are the components of the principal eigenvector of an :math:`(\ell+1)\times(\ell+1)` symmetric
-# tridiagonal matrix:
+# they maximize the number of satisfied linear equations. These optimal weights are the components 
+# of the principal eigenvector of an :math:`(\ell+1)\times(\ell+1)` symmetric tridiagonal matrix [#Jordan2024]_:
 # 
 # .. math::
 # 
@@ -222,8 +221,8 @@ def embed_weights(w_k, weight_register):
 # Given that decomposition, one can generate the two Dicke states on the right-hand side of the
 # equation by applying a smaller unitary :math:`U_{m-1,k}` provided a suitable superposition of the inputs
 # :math:`|0\rangle^{\otimes m-q}|1\rangle^{\otimes q-1}` and
-# :math:`|0\rangle^{\otimes m-q}|1\rangle^{\otimes q}` is prepared first. Following the paper’s
-# convention, we define a *Split and Cyclic shift* unitary :math:`\mathrm{SCS}_{m,k}` to prepare such
+# :math:`|0\rangle^{\otimes m-q}|1\rangle^{\otimes q}` is prepared first. Following the convention from [#Bartschi2019]_, 
+# we define a *Split and Cyclic shift* unitary :math:`\mathrm{SCS}_{m,k}` to prepare such
 # suitable superposition:
 # 
 # .. math::  |0\rangle^{\otimes m-q}|1\rangle^{\otimes q} \rightarrow \sqrt{\frac{q}{m}} |0\rangle^{\otimes m-q}|1\rangle^{\otimes q} +  \sqrt{\frac{m-q}{m}} |0\rangle^{\otimes m-1-q}|1\rangle^{\otimes q}|0\rangle.
@@ -357,7 +356,7 @@ def uncompute_weight(m, k):
 # ~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # To impart a phase :math:`(-1)^{\mathbf{v}\cdot\mathbf{y}}`, we perform a Pauli-Z on each qubit for
-# which :math:`v_i=1`, as instructed by the DQI paper. This is simply a conditional operation within a
+# which :math:`v_i=1`. This is simply a conditional operation within a
 # ``for`` loop in the ``phase_Z`` function. Let’s now include this step in the ``DQI`` function and
 # output the resulting quantum state.
 # 
