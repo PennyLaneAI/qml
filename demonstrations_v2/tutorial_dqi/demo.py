@@ -507,7 +507,7 @@ def syndrome_LUT(parity_check_matrix_T):
 # Generate the lookup table
 decoding_table = syndrome_LUT(B_T)
 
-
+@partial(qml.set_shots, shots=n_samples)
 @qml.qnode(dev)
 def DQI(m, n, l):
     """Quantum circuit implementing DQI algorithm to solve max-XORSAT."""
