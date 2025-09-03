@@ -57,7 +57,7 @@ B = pnp.array([[1, 0, 0, 0], [1, 1, 0, 0], [0, 1, 1, 0], [0, 0, 1, 1], [0, 0, 0,
 v = pnp.array([1, 0, 1, 0, 1])
 m, n = B.shape
 B_T = B.T
-n_samples = 500
+n_samples = 30
 
 
 def objective_function(x):
@@ -79,13 +79,17 @@ plt.show()
 
 
 ######################################################################
+# This histogram shows that most samples from a uniform distribution do not maximize the objective function.
+# It is also worth appreciating that the maximum number of constraints that a bit string satisfies in this case
+# is four (out of five).    
+#
 # The DQI Algorithm
 # -----------------
 # 
 # Given the objective function presented earlier, a first approach to maximize it might be to prepare the state
-# :math:`\sum_{\mathbf{x}} f(\mathbf{x})|\mathbf{x}\rangle`. This would increase the probability of
-# sampling :math:`\mathbf{x}` strings with high values of :math:`f(\mathbf{x})`. While this would
-# work, DQI proposes a much more effective strategy to bias the sampling distribution and greatly
+# :math:`\sum_{\mathbf{x}} f(\mathbf{x})|\mathbf{x}\rangle`. Measuring this state in the computational basis would 
+# result in obtaining :math:`\mathbf{x}` strings with high values of :math:`f(\mathbf{x})` with higher probability.
+# While this would work, DQI proposes a much more effective strategy to bias the sampling distribution and greatly
 # enhance the probability of success. It proposes to encode a polynomial :math:`P(f(\mathbf{x}))`
 # of the function values in the amplitudes:
 # 
