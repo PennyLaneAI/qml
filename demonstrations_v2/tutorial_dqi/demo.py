@@ -551,6 +551,7 @@ pprint(DQI(m, n, l))
 # the random sampling done at first.
 # 
 
+@partial(qml.set_shots, shots=n_samples)
 @qml.qnode(dev)
 def DQI(m, n, l):
     """Quantum circuit implementing DQI algorithm to solve max-XORSAT."""
