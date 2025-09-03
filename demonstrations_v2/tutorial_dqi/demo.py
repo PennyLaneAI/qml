@@ -332,7 +332,7 @@ from math import comb
 
 def generate_bit_strings(length, hamming_weight):
     """Generates all bit strings of a given length and Hamming weight."""
-    one_positions = itertools.combinations(range(length), hamming_weight)
+    one_positions = combinations(range(length), hamming_weight)
 
     results = []
     for positions in one_positions:
@@ -348,7 +348,7 @@ def generate_bit_strings(length, hamming_weight):
 def uncompute_weight(m, k):
     """Uncomputes weight register when l=2"""
     bit_strings = list(generate_bit_strings(m, k))
-    for i in range(math.comb(m, k)):
+    for i in range(comb(m, k)):
         qml.ctrl(qml.X, m_register, control_values=bit_strings[i])(0)
 
 
