@@ -15,6 +15,8 @@ In this demo, we will implement DQI in PennyLane to solve the max-XORSAT problem
 problem is simple and has not yet demonstrated quantum advantage, it clearly illustrates the
 operational principles and underlying intuition of DQI. We will begin by introducing the problem and
 the core principles of the algorithm, followed by a description of each algorithmic step and its implementation.
+The DQI algorithm is technically rich, and explaining all of its details would be extensive. 
+Therefore, we will omit some of them to keep things within scope. 
 
 The max-XORSAT problem
 ----------------------
@@ -57,7 +59,7 @@ B = pnp.array([[1, 0, 0, 0], [1, 1, 0, 0], [0, 1, 1, 0], [0, 0, 1, 1], [0, 0, 0,
 v = pnp.array([1, 0, 1, 0, 1])
 m, n = B.shape
 B_T = B.T
-n_samples = 30
+n_samples = 100
 
 
 def objective_function(x):
@@ -79,6 +81,8 @@ plt.show()
 
 
 ######################################################################
+# Notice that we are sampling many times relative to the size of the solution space, :math:`2^4=16,`
+# to clearly showcase the distribution's performance.  
 # This histogram shows that most samples from a uniform distribution do not maximize the objective function.
 # It is also worth appreciating that the maximum number of constraints that a bit string satisfies in this case
 # is four (out of five).
@@ -101,15 +105,14 @@ plt.show()
 # .. admonition:: Hadamard transform
 #     :class: note
 #
-#     We can think of the Hadamard transform as a version of the discrete Fourier transform. You have probably used it  
-#     several times when applying a Hadamard gate (yes, I am referring to the same). For :math:`n` qubits and a basis state :math:`|\mathbf{x}\rangle`, we can write the  
-#     transformation as :math:`H^{\otimes n}|\mathbf{x}\rangle = \frac{1}{\sqrt{2^n}}\sum_{\mathbf{y}\in \{0,1\}^n}(-1)^{\mathbf{x}\cdot\mathbf{y}}|\mathbf{y}\rangle.` 
-#     This transformation  
+#     The `Hadamard transform <https://lucatrevisan.github.io/teaching/cs259q-12/lecture07b.pdf>`__ can be thought of as a version of the discrete Fourier transform. You have likely used it  
+#     several times when applying a Hadamard gate at the begining of a cirtuit to prepare an equal superposition of all basis states. 
+#     For :math:`n` qubits and a basis state :math:`|\mathbf{x}\rangle`, we can write the  
+#     transformation as :math:`H^{\otimes n}|\mathbf{x}\rangle = \frac{1}{\sqrt{2^n}}\sum_{\mathbf{y}\in \{0,1\}^n}(-1)^{\mathbf{x}\cdot\mathbf{y}}|\mathbf{y}\rangle.`  
 # 
-# The objective function :math:`f(\mathbf{x})` has a very sparse Hadamard spectrum. This means that
-# there are only :math:`m` non-zero “frequency” components :math:`\mathbf{b_i}` out of :math:`2^n`
-# possible in :math:`f(\mathbf{x})`. Consequently, preparing the state
-# :math:`\sum_{\mathbf{x}} f(\mathbf{x})|\mathbf{x}\rangle` can be seen as a simple task by creating
+# The objective function :math:`f(\mathbf{x})` has a very sparse Hadamard spectrum. This means that only :math:`m` of 
+# the possible :math:`2^n` “frequency” components, :math:`\mathbf{b_i}`, have non-zero amplitudes in :math:`f(\mathbf{x})`.
+# Consequently, preparing the state :math:`\sum_{\mathbf{x}} f(\mathbf{x})|\mathbf{x}\rangle` can be seen as a simple task by creating
 # an appropriate superposition of the :math:`m` amplitudes and apply a Hadamard transform. The same
 # principle holds for preparing :math:`|P(f)\rangle`, even though it is not as simple, we will still first
 # prepare the Hadamard transform of the state, taking advantage of its sparse spectrum, and then
