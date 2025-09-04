@@ -116,7 +116,7 @@ plt.show()
 # an appropriate superposition of the :math:`m` amplitudes and apply a Hadamard transform. The same
 # principle holds for preparing :math:`|P(f)\rangle`, even though it is not as simple, we will still first
 # prepare the Hadamard transform of the state, taking advantage of its sparse spectrum, and then
-# transform back. The Hadamard transform of :math:`P(f(\mathbf{x}))` is:
+# transform back. Let's then take a look at the Hadamard transform of :math:`P(f(\mathbf{x}))`, which we aim to prepare:
 # 
 # .. math:: \sum_{k=0}^{\ell} \frac{w_k}{\sqrt{\binom{m}{k}}} \sum_{\substack{\mathbf{y}\\|\mathbf{y}|=k}} (-1)^{\mathbf{v}\cdot\mathbf{y}} |B^T \mathbf{y}\rangle,
 # 
@@ -337,7 +337,7 @@ pprint(formatted_state)
 # :math:`2` using the ``generate_bit_strings`` function. We then applied a controlled bit flip to the
 # weight register for these specific cases. We did not need to perform any action for bit strings with
 # a Hamming weight of :math:`1`, as the qubit state was already :math:`|0\rangle`. From now on, we can 
-# choose to discard it and not include it in our outputs.
+# choose to disregard it.
 # 
 
 from itertools import combinations
