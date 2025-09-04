@@ -171,8 +171,9 @@ plt.show()
 #    \end{pmatrix}
 # 
 # with :math:`a_k=\sqrt{k(m-k+1)}` and :math:`d=\frac{p-2r}{\sqrt{r(p-r)}}`. Here, :math:`p` is the
-# number of elements of the finite field where our problem lives (in this case, :math:`p=2`), and
-# :math:`r` is the number of inputs that will yield :math:`f=+1` (for this problem, :math:`r=1).` In
+# number of elements of the finite field where our problem lives (in this case, :math:`p=2`), and 
+# given :math:`f(\mathbf{x})=\sum_{i=1}^{m}f_i(\mathbf{x})`, :math:`r` is the number of inputs that 
+# will yield :math:`f_i=+1` (for this problem, :math:`r=1).` In
 # this demo, we will use a polynomial of degree :math:`2` for a reason that will become clear during
 # the decoding step. For now, you might be wondering if :math:`\left \lceil \log_{2} 2\right \rceil=1`
 # qubit will be enough to encode :math:`k=0,1,2`. Well, let’s examine what we obtain for the
@@ -471,7 +472,7 @@ pprint(DQI(m, n, l))
 # problem**, where :math:`B^T` is the parity-check matrix, :math:`\mathbf{s}` is the syndrome, and
 # :math:`\mathbf{y}` is the error.
 #
-# .. admonition:: Polynomial degree :math:`\ell`
+# .. admonition:: Polynomial degree :math:`\ell` and code distance
 #     :class: note
 #
 #     The kernel of :math:`B^T` defines an error-correcting code. The distance :math:`d` of this code determines the number of errors
