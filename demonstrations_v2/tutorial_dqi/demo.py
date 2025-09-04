@@ -81,7 +81,7 @@ plt.show()
 ######################################################################
 # This histogram shows that most samples from a uniform distribution do not maximize the objective function.
 # It is also worth appreciating that the maximum number of constraints that a bit string satisfies in this case
-# is four (out of five).    
+# is four (out of five).
 #
 # The DQI Algorithm
 # -----------------
@@ -97,6 +97,14 @@ plt.show()
 # 
 # where :math:`P` is of some degree :math:`\ell`. The challenge then becomes: how do we prepare such a state?
 # DQI provides a concrete recipe.
+#
+# .. admonition:: Hadamard transform
+#     :class: note
+#
+#     We can think of the Hadamard transform as a version of the discrete Fourier transform. You have probably used it  
+#     several times when applying a Hadamard gate (yes, I am referring to the same). For :math:`n` qubits and a basis state :math:`|\mathbf{x}\rangle`, we can write the  
+#     transformation as :math:`H^{\otimes n}|\mathbf{x}\rangle = \frac{1}{\sqrt{2^n}}\sum_{\mathbf{y}\in \{0,1\}^n}(-1)^{\mathbf{x}\cdot\mathbf{y}}|\mathbf{y}\rangle.` 
+#     This transformation  
 # 
 # The objective function :math:`f(\mathbf{x})` has a very sparse Hadamard spectrum. This means that
 # there are only :math:`m` non-zero “frequency” components :math:`\mathbf{b_i}` out of :math:`2^n`
