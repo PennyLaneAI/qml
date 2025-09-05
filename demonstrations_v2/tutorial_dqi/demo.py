@@ -389,7 +389,7 @@ def encode_v(m, n, l):
     """Quantum circuit uncomputing weight register and encoding vector of constraints."""
 
     # Load the previous state
-    qml.StatePrep(raw_state_vector,wires=range(0, m + 1))
+    qml.StatePrep(raw_state_vector, wires=range(0, m + 1))
 
     # Uncompute weight register
     uncompute_weight(m, k=2)
@@ -415,7 +415,7 @@ pprint(formatted_state)
 # realized using CNOT gates, with controls on the error register and targets on the syndrome register
 # [#Patamawisut2025]_. Specifically, a CNOT is applied for every entry :math:`B_{ij}^T=1`, controlled on the
 # :math:`j`-th qubit of the error register and with the :math:`i`-th qubit of the syndrome register as
-# the target.
+# the target. Let's implement this in the quantum function ``syndrome_prep``.
 # 
 
 from functools import partial
@@ -430,21 +430,11 @@ def B_T_multiplication(B_T, n_register):
 
 
 @qml.qnode(dev)
-def DQI(m, n, l):
+def syndrome_prep(m, n, l):
     """Quantum circuit implementing DQI algorithm to solve max-XORSAT."""
 
-    # Prepare weight register
-    qml.Hadamard(wires=0)
-
-    # Prepare Dicke states conditioned on k values
-    qml.ctrl(prepare_dicke_state, (0), control_values=0)(m, 1)
-    qml.ctrl(prepare_dicke_state, (0), control_values=1)(m, 2)
-
-    # Uncompute weight register
-    uncompute_weight(m, k=2)
-
-    # Impart phase
-    phase_Z(v)
+    # Load the previous state
+    qml.StatePrep(raw_state_vector, wires=range(0, m + 1))
 
     # Compute s = B^T y into the syndrome register
     B_T_multiplication(B_T, n_register)
@@ -452,7 +442,7 @@ def DQI(m, n, l):
     return qml.state()
 
 
-raw_state_vector = DQI(m, n, l)
+raw_state_vector = syndrome_prep(m, n, l)
 formatted_state = format_state_vector(raw_state_vector)
 pprint(formatted_state)
 
