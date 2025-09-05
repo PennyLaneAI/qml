@@ -453,7 +453,7 @@ def DQI(m, n, l):
     # Compute s = B^T y into the syndrome register
     B_T_multiplication(B_T, n_register)
 
-    return qml.state
+    return qml.state()
 
 
 raw_state_vector = DQI(m, n, l)
