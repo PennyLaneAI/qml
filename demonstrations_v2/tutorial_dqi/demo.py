@@ -28,8 +28,8 @@ can be phrased as trying to maximize an objective function whose domain is large
 The max-XORSAT problem is a simple example of this, where we are given an :math:`m\times n` matrix
 :math:`B` (with :math:`m>n`) and a vector :math:`\mathbf{v}` of length :math:`m`, and are required
 to find the :math:`n`-bit string :math:`\mathbf{x}`
-that satifies the maximum number of constraints imposed by the :math:`m` linear mod-2 equations,
-over :math:`\mathbb{F}_2`, :math:`B\mathbf{x}=\mathbf{v}`. Here, :math:`\mathbf{v}` is a vector of
+that satifies the maximum number of constraints imposed by the :math:`m` linear mod-2 equations, 
+:math:`B\mathbf{x}=\mathbf{v}`. Here, :math:`\mathbf{v}` is a vector of
 dimension :math:`m` specified by the problem. Since this system of equations is over
 :math:`\mathbb{F}_2`, the matrix and vectors only contain zeros and ones.
 
@@ -433,7 +433,6 @@ def B_T_multiplication(B_T, n_register):
                 qml.CNOT(wires=[m_register[col_index], n_register[row_index]])
 
 
-@partial(qml.set_shots, shots=n_samples)
 @qml.qnode(dev)
 def DQI(m, n, l):
     """Quantum circuit implementing DQI algorithm to solve max-XORSAT."""
@@ -454,10 +453,12 @@ def DQI(m, n, l):
     # Compute s = B^T y into the syndrome register
     B_T_multiplication(B_T, n_register)
 
-    return qml.counts(wires=range(1, m + n + 1))
+    return qml.state
 
 
-pprint(DQI(m, n, l))
+raw_state_vector = DQI(m, n, l)
+formatted_state = format_state_vector(raw_state_vector)
+pprint(formatted_state)
 
 
 ######################################################################
