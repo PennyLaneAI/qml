@@ -35,7 +35,7 @@ dimension :math:`m` specified by the problem. Since this system of equations is 
 
 The objective function we are aiming to maximize is
 
-.. math:: f(\mathbf{x})=\sum_{i=1}^{m}(-1)^{v_i+\mathbf{b_i}\cdot\mathbf{x}},
+.. math:: f(\mathbf{x})=\sum_{i=1}^{m}(-1)^{v_i+\mathbf{b_i}\cdot\mathbf{x}}=\sum_{i=1}^{m}f_i(\mathbf{x}),
 
 where :math:`\mathbf{b_i}` is the :math:`i`-th row of matrix :math:`B`. You can verify that this
 function represents the number of satisfied equations minus the number of unsatisfied ones by
@@ -120,7 +120,7 @@ plt.show()
 # 
 # .. math:: \sum_{k=0}^{\ell} \frac{w_k}{\sqrt{\binom{m}{k}}} \sum_{\substack{\mathbf{y}\\|\mathbf{y}|=k}} (-1)^{\mathbf{v}\cdot\mathbf{y}} |B^T \mathbf{y}\rangle,
 # 
-# where the coefficients :math:`w_k` are carefully chosen.
+# where the coefficients :math:`w_k` are carefully chosen (see Section 8.1 of [#Jordan2024]_ for more about this result).
 # 
 # The DQI algorithm for solving the max-XORSAT problem involves three qubit registers: a weight, an
 # error, and a syndrome register, with dimensions :math:`\left \lceil \log_{2} \ell \right \rceil`,
@@ -171,10 +171,10 @@ plt.show()
 #    \end{pmatrix}
 # 
 # with :math:`a_k=\sqrt{k(m-k+1)}` and :math:`d=\frac{p-2r}{\sqrt{r(p-r)}}`. Here, :math:`p` is the
-# number of elements of the finite field where our problem lives (in this case, :math:`p=2`), and 
-# given :math:`f(\mathbf{x})=\sum_{i=1}^{m}f_i(\mathbf{x})`, :math:`r` is the number of inputs that 
-# will yield :math:`f_i=+1` (for this problem, :math:`r=1).` In
-# this demo, we will use a polynomial of degree :math:`2` for a reason that will become clear during
+# number of elements of the finite field where our problem is defined (in this case, :math:`p=2`), and 
+# :math:`r` is defined as the number of inputs that will yield :math:`f_i=+1`, and it is set to :math:`r=1` 
+# as an assumption in this step.
+# In this demo, we will use a polynomial of degree :math:`2` for a reason that will become clear during
 # the decoding step. For now, you might be wondering if :math:`\left \lceil \log_{2} 2\right \rceil=1`
 # qubit will be enough to encode :math:`k=0,1,2`. Well, let’s examine what we obtain for the
 # coefficients vector :math:`\mathbf{w}`.
