@@ -313,7 +313,7 @@ dev = qml.device("default.qubit")
 
 @qml.qnode(dev)
 def weight_error_prep(m, n, l):
-    """Prepares weight and error registers."""
+    """Quantum circuit preparing weight and error registers."""
 
     # Prepare weight register
     embed_weights(w_k, weight_register)
@@ -431,7 +431,7 @@ def B_T_multiplication(B_T, n_register):
 
 @qml.qnode(dev)
 def syndrome_prep(m, n, l):
-    """Quantum circuit implementing DQI algorithm to solve max-XORSAT."""
+    """Quantum circuit preparing syndrome register"""
 
     # Load the previous state
     qml.StatePrep(raw_state_vector, wires=range(0, m + 1))
@@ -475,7 +475,7 @@ pprint(formatted_state)
 #
 # Then, for each syndrome in the syndrome register, the corresponding error is
 # uncomputed in the error register using controlled bit-flip operations. We will now integrate this
-# into our ``DQI`` function and see in the output how the syndrome register is uncomputed.
+# into our ``decoding`` quantum function and see how the syndrome register is uncomputed.
 # 
 
 def syndrome_LUT(parity_check_matrix_T):
@@ -515,24 +515,11 @@ decoding_table = syndrome_LUT(B_T)
 
 @partial(qml.set_shots, shots=n_samples)
 @qml.qnode(dev)
-def DQI(m, n, l):
-    """Quantum circuit implementing DQI algorithm to solve max-XORSAT."""
+def decoding(m, n, l):
+    """Quantum circuit decoding and uncomputing error register"""
 
-    # Prepare weight register
-    qml.Hadamard(wires=0)
-
-    # Prepare Dicke states conditioned on k values
-    qml.ctrl(prepare_dicke_state, (0), control_values=0)(m, 1)
-    qml.ctrl(prepare_dicke_state, (0), control_values=1)(m, 2)
-
-    # Uncompute weight register
-    uncompute_weight(m, k=2)
-
-    # Impart phase
-    phase_Z(v)
-
-    # Compute s = B^T y into the syndrome register
-    B_T_multiplication(B_T, n_register)
+    # Load the previous state
+    qml.StatePrep(raw_state_vector, wires=range(0, m + n + 1))
 
     # Uncompute syndrome register using a Lookup table
     for syndrome, error in decoding_table:
@@ -540,10 +527,10 @@ def DQI(m, n, l):
             if error[i] == 1:
                 qml.ctrl(qml.X, n_register, control_values=syndrome)(m_register[i])
 
-    return qml.counts(wires=range(1, m + n + 1))
+    return qml.counts()
 
 
-pprint(DQI(m, n, l))
+pprint(decoding(m, n, l))
 
 
 ######################################################################
@@ -552,9 +539,10 @@ pprint(DQI(m, n, l))
 # 
 # After the previous step, we obtained the Hadamard transform of the state were looking for. The final
 # step is to apply the Hadamard transform to this state to obtain
-# :math:`|P(f)\rangle=\sum_{\mathbf{x}} P(f(\mathbf{x}))|\mathbf{x}\rangle`. Finally, we will collect
-# samples from this state, calculate their objective values, and build a histogram to compare with
-# the random sampling done at first.
+# :math:`|P(f)\rangle=\sum_{\mathbf{x}} P(f(\mathbf{x}))|\mathbf{x}\rangle`. Finally, let's write a 
+# ``DQI`` quantum function containing all the steps of the algorithm previously described. 
+# We will collect samples, calculate their objective values, and build a histogram to compare with
+# the random sampling done at first. 
 # 
 
 @partial(qml.set_shots, shots=n_samples)
