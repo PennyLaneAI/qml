@@ -174,6 +174,7 @@ plt.show()
 # number of elements of the finite field where our problem is defined (in this case, :math:`p=2`), and 
 # :math:`r` is defined as the number of inputs that will yield :math:`f_i=+1` and it is assumed as :math:`r=1` 
 # in this step.
+# 
 # In this demo, we will use a polynomial of degree :math:`2` for a reason that will become clear during
 # the decoding step. For now, you might be wondering if :math:`\left \lceil \log_{2} 2\right \rceil=1`
 # qubit will be enough to encode :math:`k=0,1,2`. Well, let’s examine what we obtain for the
@@ -481,10 +482,13 @@ pprint(DQI(m, n, l))
 #     For a detailed discussion of the restrictions on :math:`\ell`, please refer to the original paper [#Jordan2024]_. 
 # 
 # To keep things simple, we will use a straightforward approach for decoding by building a Lookup Table
-# (LUT) in which we compute the syndrome for each possible error using the classical function
-# ``syndrome_LUT`` [#Classiq2025]_. Then, for each syndrome in the syndrome register, the corresponding error is
+# (LUT) where we compute the syndrome for each possible error using the classical function
+# ``syndrome_LUT`` [#Classiq2025]_. While this function might look daunting, it is simply calculating
+# a product between a matrix and a vector and stores the results in a usable format. 
+#
+# Then, for each syndrome in the syndrome register, the corresponding error is
 # uncomputed in the error register using controlled bit-flip operations. We will now integrate this
-# into our\ ``DQI`` function and see in the output how the syndrome register is uncomputed.
+# into our ``DQI`` function and see in the output how the syndrome register is uncomputed.
 # 
 
 def syndrome_LUT(parity_check_matrix_T):
