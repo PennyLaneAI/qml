@@ -257,9 +257,9 @@ def embed_weights(w_k, weight_register):
 # ``SCS``, is not discussed here. However, it’s worth noting that it is composed of a two-qubit gate
 # followed by :math:`k-1` three-qubit gates (further details can be found in [#Bartschi2019]_).
 # Let’s now implement this algorithm in the ``prepare_dicke_state`` function and then use it twice in
-# a controlled way via ``qml.ctrl()`` in our main function ``DQI`` where all the parts of the DQI
-# algorithm are going to be placed. To verify that this step was implemented correctly, we will output 
-# the quantum state of the weight and error registers printed in a nice form using the auxiliary ``format_state_vector`` function. 
+# a controlled way via ``qml.ctrl()`` in the quantum function ``weight_error_prep``, after preparing 
+# the weight register. To verify that this step was implemented correctly, 
+# we will output the resultant quantum state printed in a nice form using the auxiliary ``format_state_vector`` function. 
 # 
 
 from pprint import pprint
@@ -312,8 +312,8 @@ dev = qml.device("default.qubit")
 
 
 @qml.qnode(dev)
-def DQI(m, n, l):
-    """Quantum circuit implementing DQI algorithm to solve max-XORSAT."""
+def weight_error_prep(m, n, l):
+    """Prepares weight and error registers."""
 
     # Prepare weight register
     embed_weights(w_k, weight_register)
@@ -325,7 +325,7 @@ def DQI(m, n, l):
     return qml.state()
 
 
-raw_state_vector = DQI(m, n, l)
+raw_state_vector = weight_error_prep(m, n, l)
 formatted_state = format_state_vector(raw_state_vector)
 pprint(formatted_state)
 
@@ -374,8 +374,8 @@ def uncompute_weight(m, k):
 # 
 # To impart a phase :math:`(-1)^{\mathbf{v}\cdot\mathbf{y}}`, we perform a Pauli-Z on each qubit for
 # which :math:`v_i=1`. This is simply a conditional operation within a
-# ``for`` loop in the ``phase_Z`` function. Let’s now include this step in the ``DQI`` function and
-# output the resulting quantum state.
+# ``for`` loop in the ``phase_Z`` function. Let’s now implement this step, after with uncomputing the weight register,
+# in the ``encode_v`` function and output the resulting quantum state.
 # 
 
 def phase_Z(v):
@@ -385,15 +385,11 @@ def phase_Z(v):
 
 
 @qml.qnode(dev)
-def DQI(m, n, l):
-    """Quantum circuit implementing DQI algorithm to solve max-XORSAT."""
+def encode_v(m, n, l):
+    """Quantum circuit uncomputing weight register and encoding vector of constraints."""
 
-    # Prepare weight register
-    qml.Hadamard(wires=0)
-
-    # Prepare Dicke states conditioned on k values
-    qml.ctrl(prepare_dicke_state, (0), control_values=0)(m, 1)
-    qml.ctrl(prepare_dicke_state, (0), control_values=1)(m, 2)
+    # Load the previous state
+    qml.StatePrep(raw_state_vector,wires=range(0, m + 1))
 
     # Uncompute weight register
     uncompute_weight(m, k=2)
@@ -404,7 +400,7 @@ def DQI(m, n, l):
     return qml.state()
 
 
-raw_state_vector = DQI(m, n, l)
+raw_state_vector = encode_v(m, n, l)
 formatted_state = format_state_vector(raw_state_vector)
 pprint(formatted_state)
 
