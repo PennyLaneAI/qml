@@ -172,8 +172,8 @@ plt.show()
 # 
 # with :math:`a_k=\sqrt{k(m-k+1)}` and :math:`d=\frac{p-2r}{\sqrt{r(p-r)}}`. Here, :math:`p` is the
 # number of elements of the finite field where our problem is defined (in this case, :math:`p=2`), and 
-# :math:`r` is defined as the number of inputs that will yield :math:`f_i=+1`, and it is set to :math:`r=1` 
-# as an assumption in this step.
+# :math:`r` is defined as the number of inputs that will yield :math:`f_i=+1` and it is assumed as :math:`r=1` 
+# in this step.
 # In this demo, we will use a polynomial of degree :math:`2` for a reason that will become clear during
 # the decoding step. For now, you might be wondering if :math:`\left \lceil \log_{2} 2\right \rceil=1`
 # qubit will be enough to encode :math:`k=0,1,2`. Well, let’s examine what we obtain for the
