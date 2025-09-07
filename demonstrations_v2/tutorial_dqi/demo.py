@@ -238,11 +238,11 @@ def embed_weights(w_k, weight_register):
 # Given that decomposition, one can generate the two Dicke states on the right-hand side of the
 # equation by applying a smaller unitary :math:`U_{m-1,k}` provided a suitable superposition of the inputs
 # :math:`|0\rangle^{\otimes m-q}|1\rangle^{\otimes q-1}` and
-# :math:`|0\rangle^{\otimes m-q}|1\rangle^{\otimes q}` is prepared first. Following the convention from [#Bartschi2019]_, 
+# :math:`|0\rangle^{\otimes m-1-q}|1\rangle^{\otimes q}` is prepared first. Following the convention from [#Bartschi2019]_, 
 # we define a *Split and Cyclic shift* unitary :math:`\mathrm{SCS}_{m,k}` to prepare such
 # suitable superposition:
 # 
-# .. math::  |0\rangle^{\otimes m-q}|1\rangle^{\otimes q} \rightarrow \sqrt{\frac{q}{m}} |0\rangle^{\otimes m-q}|1\rangle^{\otimes q} +  \sqrt{\frac{m-q}{m}} |0\rangle^{\otimes m-1-q}|1\rangle^{\otimes q}|0\rangle.
+# .. math::  |0\rangle^{\otimes m-q}|1\rangle^{\otimes q} \rightarrow \sqrt{\frac{q}{m}} |0\rangle^{\otimes m-q}|1\rangle^{\otimes q} +  \sqrt{\frac{m-q}{m}} |0\rangle^{\otimes m-q-1}|1\rangle^{\otimes q}|0\rangle.
 # 
 # This inductive decomposition implies that :math:`U_{m,k}` can be implemented by applying
 # :math:`\mathrm{SCS}_{m,k}` followed by the smaller unitary :math:`U_{m-1,k}`. This process
