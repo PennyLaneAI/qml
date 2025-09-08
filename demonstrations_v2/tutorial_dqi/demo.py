@@ -247,14 +247,15 @@ def embed_weights(w_k, weight_register):
 # 
 # .. math::  |0\rangle^{\otimes m-k}|1\rangle^{\otimes k} \rightarrow \sqrt{\frac{k}{m}} |0\rangle^{\otimes m-k}|1\rangle^{\otimes k} +  \sqrt{\frac{m-k}{m}} |0\rangle^{\otimes m-k-1}|1\rangle^{\otimes k}|0\rangle.
 #
+# This inductive decomposition implies that :math:`U_{m,k}` can be implemented by applying
+# :math:`\mathrm{SCS}_{m,k}` followed by the smaller unitary :math:`U_{m-1,k}`. 
+#
 # .. figure:: ../_static/demonstration_assets/DQI/Dicke_inductive.png
 #    :alt: First step
 #    :width: 70.0%
 #    :align: center 
 #
-# This inductive decomposition implies that :math:`U_{m,k}` can be implemented by applying
-# :math:`\mathrm{SCS}_{m,k}` followed by the smaller unitary :math:`U_{m-1,k}`. This process
-# continues; we keep decomposing the unitaries into a split and cycle operation followed by a smaller
+# We keep decomposing the unitaries into a split and cycle operation followed by a smaller
 # unitary until we reach the base case :math:`U_{1,1}=\mathrm{Id}`. Ultimately, :math:`U_{m,k}` is
 # composed of a series of subsequently smaller :math:`\mathrm{SCS}_{m,k}` operations, as summarized by
 # the following equation:
