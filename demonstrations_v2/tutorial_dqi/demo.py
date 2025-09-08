@@ -233,18 +233,19 @@ def embed_weights(w_k, weight_register):
 # :math:`|0\rangle^{\otimes m-k}|1\rangle^{\otimes k}` as input. In general, :math:`U_{m,k}` can also
 # prepare Dicke states :math:`|D_k^q\rangle` for :math:`q<k`, when given the appropriate input.
 # For the sake of brevity, we will restrict this explanation to the :math:`q=k` case.
-# The method is based on the fact that Dicke states can be expressed in an inductive form as
+#
+# The preparation method is based on the fact that Dicke states can be expressed in an inductive form as
 # 
-# .. math::  |D_q^m\rangle = \sqrt{\frac{q}{m}} |D_{q-1}^{m-1}\rangle \otimes |1\rangle + \sqrt{\frac{m-q}{m}} |D_{q}^{m-1}\rangle \otimes |0\rangle.
+# .. math::  |D_k^m\rangle = \sqrt{\frac{k}{m}} |D_{k-1}^{m-1}\rangle \otimes |1\rangle + \sqrt{\frac{m-k}{m}} |D_{k}^{m-1}\rangle \otimes |0\rangle.
 # 
 # Given that decomposition, one can generate the two Dicke states on the right-hand side of the
 # equation by applying a smaller unitary :math:`U_{m-1,k}` provided a suitable superposition of the inputs
-# :math:`|0\rangle^{\otimes m-1-(q-1)}|1\rangle^{\otimes q-1}` and
-# :math:`|0\rangle^{\otimes m-1-q}|1\rangle^{\otimes q}` is prepared first. Following the convention from [#Bartschi2019]_, 
+# :math:`|0\rangle^{\otimes m-1-(k-1)}|1\rangle^{\otimes k-1}` and
+# :math:`|0\rangle^{\otimes m-1-k}|1\rangle^{\otimes k}` is prepared first. Following the convention from [#Bartschi2019]_, 
 # we define a *Split and Cyclic shift* unitary :math:`\mathrm{SCS}_{m,k}` to prepare such
 # suitable superposition:
 # 
-# .. math::  |0\rangle^{\otimes m-q}|1\rangle^{\otimes q} \rightarrow \sqrt{\frac{q}{m}} |0\rangle^{\otimes m-q}|1\rangle^{\otimes q} +  \sqrt{\frac{m-q}{m}} |0\rangle^{\otimes m-q-1}|1\rangle^{\otimes q}|0\rangle.
+# .. math::  |0\rangle^{\otimes m-k}|1\rangle^{\otimes k} \rightarrow \sqrt{\frac{k}{m}} |0\rangle^{\otimes m-k}|1\rangle^{\otimes k} +  \sqrt{\frac{m-k}{m}} |0\rangle^{\otimes m-k-1}|1\rangle^{\otimes k}|0\rangle.
 # 
 # This inductive decomposition implies that :math:`U_{m,k}` can be implemented by applying
 # :math:`\mathrm{SCS}_{m,k}` followed by the smaller unitary :math:`U_{m-1,k}`. This process
