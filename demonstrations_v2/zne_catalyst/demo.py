@@ -100,7 +100,7 @@ import pennylane as qml
 from catalyst import mitigate_with_zne
 
 import warnings
-from pennylane.exceptions import PennyLaneDeprecationWarning
+from qml.exceptions import PennyLaneDeprecationWarning
 warnings.filterwarnings("ignore", category=PennyLaneDeprecationWarning)
 
 n_wires = 3
