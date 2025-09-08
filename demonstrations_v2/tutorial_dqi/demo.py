@@ -251,9 +251,11 @@ def embed_weights(w_k, weight_register):
 # :math:`\mathrm{SCS}_{m,k}` followed by the smaller unitary :math:`U_{m-1,k}`. 
 #
 # .. figure:: ../_static/demonstration_assets/DQI/Dicke_inductive.png
-#    :alt: First step
+#    :alt: Circuit diagram for Dicke state preparation.
 #    :width: 70.0%
-#    :align: center 
+#    :align: center
+# 
+#    Figure 2: Circuit diagram for the first step in the decomposition of :math:`U_{m,k}`
 #
 # We keep decomposing the unitaries into a split and cycle operation followed by a smaller
 # unitary until we reach the base case :math:`U_{1,1}=\mathrm{Id}`. Ultimately, :math:`U_{m,k}` is
