@@ -700,8 +700,4 @@ df_compare_Es
 # 
 #     Ashish Vaswani *et al.*, "Attention is All you Need". 
 #     Advances in Neural Information Processing Systems, 30 (2017)
-# 
-
-######################################################################
-# About the authors
-# -----------------
+#

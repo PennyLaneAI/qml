@@ -13,8 +13,6 @@ Barren plateaus in quantum neural networks
 
    tutorial_local_cost_functions Alleviating barren plateaus with local cost functions
 
-*Author: Shahnawaz Ahmed — Posted: 11 October 2019. Last updated: 26 October 2020.*
-
 In classical optimization, it is suggested that saddle
 points, not local minima, provide a fundamental impediment
 to rapid high-dimensional non-convex optimization
@@ -207,8 +205,4 @@ plt.show()
 # 3. Grant, Edward, et al.
 #    An initialization strategy for addressing barren plateaus in
 #    parametrized quantum circuits. arXiv preprint arXiv:1903.05076 (2019).
-#
-#
-# About the author
-# ----------------
 #

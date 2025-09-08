@@ -17,8 +17,6 @@ Function fitting with a photonic quantum neural network
    pytorch_noise PyTorch and noisy devices
    tutorial_noisy_circuit_optimization Optimizing noisy circuits with Cirq
 
-*Author: Maria Schuld — Posted: 11 October 2019. Last updated: 20 March 2025.*
-
 .. warning::
     This demo is only compatible with PennyLane version ``0.29`` or below.
 
@@ -737,8 +735,4 @@ plt.show()
 
 ##############################################################################
 # .. image:: ../_static/demonstration_assets/quantum_neural_net/qnn_output_30_0.png
-
-##############################################################################
-# About the author
-# ----------------
 #

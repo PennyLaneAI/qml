@@ -969,10 +969,4 @@ print(samples)
 #     Y. R. Sanders, G. H. Low, A. Scherer, D. W. Berry,
 #     "Black-Box Quantum State Preparation without Arithmetic",
 #     `Physical review letters 122(2), 020502 <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.122.020502>`__, 2019.
-
-
-##############################################################################
-# About the authors
-# ----------------
-#
 #

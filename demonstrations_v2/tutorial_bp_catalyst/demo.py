@@ -1098,8 +1098,3 @@ plt.show()
 #    Barber, David. “Bayesian Reasoning and Machine Learning”. Cambridge University Press,
 #    USA. 2012, http://web4.cs.ucl.ac.uk/staff/D.Barber/textbook/180325.pdf#page=107.50
 #
-
-######################################################################
-# About the author
-# ----------------
-#
