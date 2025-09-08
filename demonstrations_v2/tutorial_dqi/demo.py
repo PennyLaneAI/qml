@@ -152,7 +152,7 @@ plt.show()
 #    :width: 80.0%
 #    :align: center
 # 
-#    Figure 1: Algorith schematics
+#    Figure 1: Schematic of DQI algorithm to solve the max-XORSAT problem
 # 
 # PennyLane implementation of DQI
 # -------------------------------
@@ -231,8 +231,9 @@ def embed_weights(w_k, weight_register):
 # 
 # For this step, we need a conditional operation that prepares Dicke states
 # :math:`|D^{m}_{k}\rangle`---where the superscript is the number of qubits and the subscript is the
-# number of excitations---for each index :math:`k` in the weight register. For our particular example,
-# we will prepare Dicke states with one and two excitations.
+# number of excitations---for each index :math:`k` in the weight register. Dicke states 
+# are another way of referring to a uniform superposition of all bit strings of a determined 
+# Hamming weight. For our particular example, we will prepare Dicke states with one and two excitations.
 # 
 # Before implementing the conditional operation, let’s briefly review a method for preparing such
 # states as presented in [#Bartschi2019]_. This deterministic algorithm provides a unitary
@@ -278,7 +279,8 @@ def embed_weights(w_k, weight_register):
 # a controlled way via ``qml.ctrl()`` in the quantum function ``weight_error_prep``, after preparing 
 # the weight register. To verify that this step was implemented correctly, 
 # we will output the resultant quantum state printed in a nice form using the auxiliary ``format_state_vector`` function. 
-# 
+# We should expect :math:`\binom{5}{2}` and :math:`\binom{5}{1}` states with Hamming weights of 2 and 1, respectively.
+#
 
 from pprint import pprint
 
