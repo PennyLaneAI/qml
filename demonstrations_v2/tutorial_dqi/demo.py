@@ -245,7 +245,7 @@ def embed_weights(w_k, weight_register):
 # we define a *Split and Cyclic shift* unitary :math:`\mathrm{SCS}_{m,k}` to prepare such
 # suitable superposition:
 # 
-# .. math::  |0\rangle^{\otimes m-k}|1\rangle^{\otimes k} \rightarrow \sqrt{\frac{k}{m}} |0\rangle^{\otimes m-k}|1\rangle^{\otimes k} +  \sqrt{\frac{m-k}{m}} |0\rangle^{\otimes m-k-1}|1\rangle^{\otimes k}|0\rangle.
+# .. math::  |0\rangle^{\otimes m-k-1}|0\rangle|1\rangle^{\otimes k} \rightarrow \sqrt{\frac{k}{m}} |0\rangle^{\otimes m-k}|1\rangle^{\otimes k} +  \sqrt{\frac{m-k}{m}} |0\rangle^{\otimes m-k-1}|1\rangle^{\otimes k}|0\rangle.
 #
 # This inductive decomposition implies that :math:`U_{m,k}` can be implemented by applying
 # :math:`\mathrm{SCS}_{m,k}` followed by the smaller unitary :math:`U_{m-1,k}`. 
@@ -553,7 +553,7 @@ pprint(decoding(m, n, l))
 # :math:`|P(f)\rangle=\sum_{\mathbf{x}} P(f(\mathbf{x}))|\mathbf{x}\rangle`. Finally, let's write a 
 # ``DQI`` quantum function containing all the steps of the algorithm previously described. 
 # We will collect samples, calculate their objective values, and build a histogram to compare with
-# the random sampling done at first. 
+# the random sampling done at the beginning of the demo. 
 # 
 
 @partial(qml.set_shots, shots=n_samples)
