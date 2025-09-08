@@ -149,7 +149,7 @@ plt.show()
 #
 # .. figure:: ../_static/demonstration_assets/DQI/algo_DQI.png
 #    :alt: DQI algorithm
-#    :width: 80.0%
+#    :width: 90.0%
 #    :align: center
 # 
 #    Figure 1: Schematic of DQI algorithm to solve the max-XORSAT problem
@@ -260,7 +260,7 @@ def embed_weights(w_k, weight_register):
 #
 # .. figure:: ../_static/demonstration_assets/DQI/Dicke_inductive.png
 #    :alt: Circuit diagram for Dicke state preparation.
-#    :width: 70.0%
+#    :width: 60.0%
 #    :align: center
 # 
 #    Figure 2: Circuit diagram for the first step in the decomposition of :math:`U_{m,k}`
