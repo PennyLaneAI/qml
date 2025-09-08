@@ -124,7 +124,7 @@ plt.show()
 # 
 # The DQI algorithm for solving the max-XORSAT problem involves three qubit registers: a weight, an
 # error, and a syndrome register, with dimensions :math:`\left \lceil \log_{2} \ell \right \rceil`,
-# :math:`m`, and :math:`n`, respectively. The algorithm’s steps are outlined below:
+# :math:`m`, and :math:`n`, respectively. The algorithm’s steps are outlined below and summarized in Figure 1.
 # 
 # 1. **Embed weight coefficients:** prepare the state :math:`\sum_{k=0}^{\ell} w_k|k\rangle` in the
 #    weight register to encode the degree :math:`\ell` of the polynomial.
@@ -256,14 +256,14 @@ def embed_weights(w_k, weight_register):
 # .. math::  |0\rangle^{\otimes m-k}|1\rangle^{\otimes k} \rightarrow \sqrt{\frac{k}{m}} |0\rangle^{\otimes m-k-1}|0\rangle|1\rangle^{\otimes k} +  \sqrt{\frac{m-k}{m}} |0\rangle^{\otimes m-k-1}|1\rangle^{\otimes k}|0\rangle.
 #
 # This inductive decomposition implies that :math:`U_{m,k}` can be implemented by applying
-# :math:`\mathrm{SCS}_{m,k}` followed by the smaller unitary :math:`U_{m-1,k}`. 
+# :math:`\mathrm{SCS}_{m,k}` followed by the smaller unitary :math:`U_{m-1,k}` as illustrated in Figure 2. 
 #
 # .. figure:: ../_static/demonstration_assets/DQI/Dicke_inductive.png
 #    :alt: Circuit diagram for Dicke state preparation.
 #    :width: 60.0%
 #    :align: center
 # 
-#    Figure 2: Circuit diagram for the first step in the decomposition of :math:`U_{m,k}`
+#    Figure 2: Circuit diagram for the first step in the inductive decomposition of :math:`U_{m,k}`
 #
 # We keep decomposing the unitaries into a split and cycle operation followed by a smaller
 # unitary until we reach the base case :math:`U_{1,1}=\mathrm{Id}`. Ultimately, :math:`U_{m,k}` is
