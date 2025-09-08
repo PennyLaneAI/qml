@@ -133,7 +133,7 @@ plt.show()
 # 
 #    .. math:: \sum_{k=0}^{\ell} w_k|k\rangle \frac{1}{\sqrt{\binom{m}{k}}}\sum_{\substack{\mathbf{y}\\|\mathbf{y}|=k}} |\mathbf{y}\rangle.
 # 
-# 4. **Uncompute** the weight register.
+# 4. **Uncompute** and discard the weight register.
 # 5. **Encode the vector of constraints:** encode :math:`\mathbf{v}` by imparting a phase
 #    :math:`(-1)^{\mathbf{v}\cdot\mathbf{y}}`,
 # 
@@ -245,7 +245,7 @@ def embed_weights(w_k, weight_register):
 # we define a *Split and Cyclic shift* unitary :math:`\mathrm{SCS}_{m,k}` to prepare such
 # suitable superposition:
 # 
-# .. math::  |0\rangle^{\otimes m-k-1}|0\rangle|1\rangle^{\otimes k} \rightarrow \sqrt{\frac{k}{m}} |0\rangle^{\otimes m-k}|1\rangle^{\otimes k} +  \sqrt{\frac{m-k}{m}} |0\rangle^{\otimes m-k-1}|1\rangle^{\otimes k}|0\rangle.
+# .. math::  |0\rangle^{\otimes m-k}|1\rangle^{\otimes k} \rightarrow \sqrt{\frac{k}{m}} |0\rangle^{\otimes m-k-1}|0\rangle|1\rangle^{\otimes k} +  \sqrt{\frac{m-k}{m}} |0\rangle^{\otimes m-k-1}|1\rangle^{\otimes k}|0\rangle.
 #
 # This inductive decomposition implies that :math:`U_{m,k}` can be implemented by applying
 # :math:`\mathrm{SCS}_{m,k}` followed by the smaller unitary :math:`U_{m-1,k}`. 
@@ -612,7 +612,7 @@ plt.show()
 
 
 ######################################################################
-# The histogram shows a significantly higher probability of obtaining a bit string with a high
+# The histogram shows a significantly greater probability of obtaining a bit string with a high
 # objective value when sampling from the DQI algorithm compared to uniform sampling. It is also worth
 # noting that the samples produced by DQI are unbiased, meaning that the probability is uniform for
 # all solutions within a given objective value.
