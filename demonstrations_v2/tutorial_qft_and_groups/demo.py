@@ -13,7 +13,7 @@ Well, this is a Quantum Fourier Transform as well! The reason why you might not 
 `famous QFT <https://pennylane.ai/qml/demos/tutorial_qft>`__ we know from Nielsen \& Chuang's standard textbook. They move into a
 Fourier basis nevertheless -- only of a different *group*.
 
-.. figure:: ../_static/demonstration_assets/qft_groups/hadamards.png
+.. figure:: ../_static/demonstration_assets/qft_groups/pennylane-demo-fft-to-qft-hadamard-image.png
     :align: center
     :width: 15%
     :target: javascript:void(0);
@@ -439,7 +439,7 @@ print("FFT and DFT coincide:", np.allclose(f_hat_vec, f_hat_vec_fft))
 # "shifted" copies of a subgroup tile the entire group, which is why the new coordinates can always be used to express any
 # element :math:`x \in G`.
 #
-# .. figure:: ../_static/demonstration_assets/qft_groups/divide.png
+# .. figure:: ../_static/demonstration_assets/qft_groups/pennylane-demo-fft-to-qft-divide-image.png
 #     :align: center
 #     :width: 50%
 #     :target: javascript:void(0);
