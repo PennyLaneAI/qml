@@ -380,7 +380,7 @@ def ansatz(param, wires):
 # IBMProvider().backends()  # List all available backends
 # dev = qml.device("qiskit.ibmq", wires=num_qubits, backend="ibmq_lima")
 
-from qiskit_ibm_runtime.fake_provider import FakeLima
+from qiskit_ibm_runtime.fake_provider import FakeLimaV2 as FakeLima
 from qiskit_aer import noise
 
 # Load a fake backed to create a noise model, and create a device using that model
