@@ -146,6 +146,13 @@ plt.show()
 #    the desired state.
 # 8. **Hadamard transform and sample:** apply the Hadamard transform to obtain :math:`|P(f)\rangle`
 #    and sample from it to get solutions.
+#
+# .. figure:: ../_static/demonstration_assets/DQI/algo_DQI.png
+#    :alt: DQI algorithm
+#    :width: 80.0%
+#    :align: center
+# 
+#    Figure 1: Algorith schematics
 # 
 # PennyLane implementation of DQI
 # -------------------------------
