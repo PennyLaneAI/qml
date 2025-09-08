@@ -249,7 +249,7 @@ def embed_weights(w_k, weight_register):
 #
 # .. figure:: ../_static/demonstration_assets/DQI/Dicke_inductive.png
 #    :alt: First step
-#    :width: 80.0%
+#    :width: 70.0%
 #    :align: center 
 #
 # This inductive decomposition implies that :math:`U_{m,k}` can be implemented by applying
