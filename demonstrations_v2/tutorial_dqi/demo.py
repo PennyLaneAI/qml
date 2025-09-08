@@ -230,14 +230,16 @@ def embed_weights(w_k, weight_register):
 # Before implementing the conditional operation, let’s briefly review a method for preparing such
 # states as presented in [#Bartschi2019]_. This deterministic algorithm provides a unitary
 # :math:`U_{m,k}` to generate a Dicke state :math:`|D_k^m\rangle` from
-# :math:`|0\rangle^{\otimes m-k}|1\rangle^{\otimes k}` as input. The method is based on the fact that
-# Dicke states can be expressed in an inductive form as
+# :math:`|0\rangle^{\otimes m-k}|1\rangle^{\otimes k}` as input. In general, :math:`U_{m,k}` can also
+# prepare Dicke states :math:`|D_k^q\rangle` for :math:`q<k`, when given the appropriate input.
+# For the sake of brevity, we will restrict this explanation to the :math:`q=k` case.
+# The method is based on the fact that Dicke states can be expressed in an inductive form as
 # 
 # .. math::  |D_q^m\rangle = \sqrt{\frac{q}{m}} |D_{q-1}^{m-1}\rangle \otimes |1\rangle + \sqrt{\frac{m-q}{m}} |D_{q}^{m-1}\rangle \otimes |0\rangle.
 # 
 # Given that decomposition, one can generate the two Dicke states on the right-hand side of the
 # equation by applying a smaller unitary :math:`U_{m-1,k}` provided a suitable superposition of the inputs
-# :math:`|0\rangle^{\otimes m-q}|1\rangle^{\otimes q-1}` and
+# :math:`|0\rangle^{\otimes m-1-(q-1)}|1\rangle^{\otimes q-1}` and
 # :math:`|0\rangle^{\otimes m-1-q}|1\rangle^{\otimes q}` is prepared first. Following the convention from [#Bartschi2019]_, 
 # we define a *Split and Cyclic shift* unitary :math:`\mathrm{SCS}_{m,k}` to prepare such
 # suitable superposition:
