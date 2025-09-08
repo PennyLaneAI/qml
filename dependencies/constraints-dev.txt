@@ -25,9 +25,9 @@ fsspec==2024.6.1
 h5py==3.11.0
 openfermionpyscf==0.5
 openqaoa-core==0.2.5
-qiskit>=1.0.0
-qiskit-aer>=0.14.0,<0.16.0
-qiskit_ibm_runtime==0.29.0
+qiskit>=2.0
+qiskit-aer>=0.17
+qiskit_ibm_runtime==0.41.1
 torch==2.1.2+cpu ; sys_platform != 'darwin'
 torch==2.1.2 ; sys_platform == 'darwin'
 torchvision==0.16.2+cpu ; sys_platform != 'darwin'
