@@ -15,7 +15,7 @@ Fourier basis nevertheless -- only of a different *group*.
 
 .. figure:: ../_static/demonstration_assets/qft_groups/pennylane-demo-fft-to-qft-hadamard-image.png
     :align: center
-    :width: 15%
+    :width: 100%
     :target: javascript:void(0);
 
     Figure 1. Applying Hadamards to each qubit is a Quantum Fourier Transform, but with respect to the "boolean" group :math:`Z_2^n`.
@@ -123,7 +123,7 @@ plt.show()
 #            means that if we shift a function
 #            :math:`g(x) = a e^{2 \pi i  \frac{k x}{N}}` that lives in the subspace spanned by
 #            a Fourier basis function by any :math:`h \in Z_N`,
-#            then :math:`g(x+h) = a e^{2 \pi i  \frac{k x+h}{N}} = \underbracket{a e^{2 \pi i  \frac{k h}{N}}}_{b} e^{2 \pi i  \frac{k x}{N}} = b e^{2 \pi i  \frac{k x}{N}}`
+#            then :math:`g(x+h) = a e^{2 \pi i  \frac{k x+h}{N}} = \underbrace{a e^{2 \pi i  \frac{k h}{N}}}_{b} e^{2 \pi i  \frac{k x}{N}} = b e^{2 \pi i  \frac{k x}{N}}`
 #            stays in the same subspace.
 #
 # Changing the group
