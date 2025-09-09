@@ -920,9 +920,3 @@ for ax, ylabel in zip(axs, ylabels):
     ax.legend()
     ax.set_xlabel("Number of qubits $n$")
     ax.set_ylabel(ylabel)
-
-######################################################################
-#
-# About the author
-# ----------------
-#

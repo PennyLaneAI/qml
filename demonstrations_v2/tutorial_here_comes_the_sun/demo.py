@@ -571,6 +571,3 @@ plt.show()
 #     General Quantum Evolution with the Stochastic Parameter Shift Rule."
 #     `Quantum 5, 386 <https://quantum-journal.org/papers/q-2021-01-25-386/>`__ (2021).
 #
-# About the author
-# ----------------
-#

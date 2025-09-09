@@ -9,8 +9,6 @@ Contextuality and inductive bias in QML
 .. related::
     tutorial_geometric_qml
 
-*Author: Joseph Bowles — Posted: 21 March 2023*
-
 """
 
 
@@ -800,8 +798,4 @@ plt.show()
 #     F. J. Schreiber, J. Eiser, J. J. Meyer
 #     "Classical surrogates for quantum learning models."
 #     `arXiv:2206.11740 <https://arxiv.org/abs/2206.11740>`__, 2022.
-#
-#
-# About the author
-# ----------------
 #

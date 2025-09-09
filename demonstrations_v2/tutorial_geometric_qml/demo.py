@@ -10,8 +10,6 @@ Introduction to Geometric Quantum Machine Learning
 .. related::
    tutorial_equivariant_graph_embedding A permutation equivariant graph embedding
    
-*Author: Richard East — Posted: 18 October 2022.*
-
 
 Introduction
 ------------
@@ -893,9 +891,4 @@ plt.show()
 # ---------------
 #
 # The author would also like to acknowledge the helpful input of C.-Y. Park.
-#
-
-##############################################################################
-# About the author
-# ----------------
 #

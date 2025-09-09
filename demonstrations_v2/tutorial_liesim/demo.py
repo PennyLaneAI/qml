@@ -479,8 +479,3 @@ plt.show()
 #     "Hardware-efficient ansatz without barren plateaus in any depth"
 #     `arXiv:2403.04844 <https://arxiv.org/abs/2403.04844>`__, 2024.
 #
-
-##############################################################################
-# About the author
-# ----------------
-#

@@ -566,5 +566,3 @@ print(f"Numerically exact expectation value:                        {exact_expva
 #     "Achieving quantum supremacy with sparse and noisy commuting quantum computations."
 #     `arXiv:1610.01808 <https://arxiv.org/abs/1610.01808>`__, 2016.
 #
-# About the author
-# ----------------
