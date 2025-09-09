@@ -3,25 +3,24 @@ r""" Reference Demo - a.k.a. the kitchen sink
 
 All the restructured text directives we support appear in this demo. If you find a new one, please add it here.
 
-
-
-Complete list of reStructuredText directive types:  
+Complete list of reStructuredText directive types covered in this demo:  
 
 5. math
 3. figure
-4. image
-
-1. admonition
-2. container
 6. meta
-7. note
-8. raw
 9. related
-10. role
+7. note
 11. tip
-12. topic
 13. warning
+8. raw
+1. admonition
 
+Unsupported directives:  
+
+4. image(7) -> change to figure  
+12. topic (1) -> change to admonition with class note(?)  
+2. container (3) -> Doesn't work. Remove?  
+10. role (5) -> Remove?  
 
 Comprehensive Mathematical Notation Reference
 ---------------------------------------------
@@ -417,8 +416,8 @@ Asymptotic notation
 
     f(n) = O(g(n)), \quad f(n) = \Omega(g(n)), \quad f(n) = \Theta(g(n))
 
-Figures and Images
-------------------
+Figures
+-------
 
 .. figure:: ../_static/demonstration_assets/period_finding/periodic_function.png
     :align: center
@@ -432,11 +431,6 @@ Figures and Images
     The function only takes the same value when moving exactly 4 integers on the x-axis. Note:
     not sure what to do for this one. Should we make a fake image for this demo?
 
-.. image:: ../_static/demonstration_assets/period_finding/periodic_function.png
-    :align: center
-    :width: 90%
-    :target: javascript:void(0);
-
 Metadata and Related Content
 ----------------------------
 
@@ -447,5 +441,35 @@ Metadata and Related Content
 .. related::
     tutorial_qft Quantum Fourier Transform
     tutorial_qft_arithmetics Quantum Fourier Transform Arithmetic
+
+Raw (usually for HTML)
+----------------------
+
+.. raw:: html
+
+    <center>
+        <div class="alert alert-warning">
+            Example of a raw directive.
+        </div>
+    </center>
+
+
+Notes, Tips, Warnings, and Admonitions
+--------------------------------------
+
+.. note::
+    Example of a note directive.
+
+.. tip::
+    Example of a tip directive.
+
+.. warning::
+    Example of a warning directive.
+
+.. admonition:: This is an admonition.
+    :class: note
+
+    Example of an admonition directive.
+
 
 """
