@@ -15,7 +15,7 @@ class Context:
     def demos_dir(self) -> Path:
         """Path to the content dir, relative to the current
         working directory."""
-        return self.repo_root / "demonstrations_v2"
+        return self.repo_root / "documentation"
 
     @property
     def build_dir(self) -> Path:
