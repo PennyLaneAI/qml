@@ -312,14 +312,15 @@ def _build_demo(
                 quiet=False,
                 pre=True,
             )
-            # PennyLane
-            cmds.pip_install(
-                build_venv.python,
-                "--upgrade",
-                "git+https://github.com/PennyLaneAI/pennylane.git#egg=pennylane",
-                use_uv=False,
-                quiet=False,
-            )
+    if dev:
+        # Need dev version of PennyLane to build, whether or not we're executing
+        cmds.pip_install(
+            build_venv.python,
+            "--upgrade",
+            "git+https://github.com/PennyLaneAI/pennylane.git#egg=pennylane",
+            use_uv=False,
+            quiet=False,
+        )
 
     stage_dir = ctx.build_dir / "demonstrations"
     fs.clean_dir(stage_dir)
