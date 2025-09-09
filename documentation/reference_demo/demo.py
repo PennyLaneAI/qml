@@ -7,11 +7,12 @@ All the restructured text directives we support appear in this demo. If you find
 
 Complete list of reStructuredText directive types:  
 
-1. admonition
-2. container
+5. math
 3. figure
 4. image
-5. math
+
+1. admonition
+2. container
 6. meta
 7. note
 8. raw
@@ -415,5 +416,36 @@ Asymptotic notation
 .. math::
 
     f(n) = O(g(n)), \quad f(n) = \Omega(g(n)), \quad f(n) = \Theta(g(n))
+
+Figures and Images
+------------------
+
+.. figure:: ../_static/demonstration_assets/period_finding/periodic_function.png
+    :align: center
+    :width: 90%
+    :scale: 100%
+    :alt: Example of a figure directive. 
+    :target: javascript:void(0);
+    :figwidth: 80%
+    
+    Figure 2. Example of a discrete periodic function f(x) over the integers x = 0,...,11. 
+    The function only takes the same value when moving exactly 4 integers on the x-axis. Note:
+    not sure what to do for this one. Should we make a fake image for this demo?
+
+.. image:: ../_static/demonstration_assets/period_finding/periodic_function.png
+    :align: center
+    :width: 90%
+    :target: javascript:void(0);
+
+Metadata and Related Content
+----------------------------
+
+.. meta::
+    :property="og:description": Example of a meta directive.
+    :property="og:image": ../_static/demonstration_assets/period_finding/periodic_function.png
+
+.. related::
+    tutorial_qft Quantum Fourier Transform
+    tutorial_qft_arithmetics Quantum Fourier Transform Arithmetic
 
 """
