@@ -117,7 +117,7 @@ import numpy as np
 
 # Suppress the warning caused by iqpopt
 import warnings
-from qml.exceptions import PennyLaneDeprecationWarning
+from pennylane.exceptions import PennyLaneDeprecationWarning
 warnings.filterwarnings("ignore", category=PennyLaneDeprecationWarning)
 
 
