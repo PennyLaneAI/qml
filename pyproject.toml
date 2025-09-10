@@ -68,6 +68,7 @@ markupsafe = "2.1.1"
 pyyaml = "^6.0.1"
 pennylane-sphinx-theme = { git = "https://github.com/PennyLaneAI/pennylane-sphinx-theme.git", branch = "sphinx-update" }
 pypandoc = "1.5"
+pandocfilters = ">=1.4.0"
 pennylane = "0.42.0"
 uv = "^0.7.18"
 
