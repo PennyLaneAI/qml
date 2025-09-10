@@ -81,7 +81,7 @@ sphinx_gallery_conf = {
     # and skip those that don't. If the following option is not provided,
     # all example scripts in the 'examples_dirs' folder will be skiped.
     "filename_pattern": r"\.py$",
-    "pypandoc": True,
+    "pypandoc": {"filters": ["./lib/filter_directives.py"]},
     # first notebook cell in generated Jupyter notebooks
     "first_notebook_cell": (
         "# This cell is added by sphinx-gallery\n"

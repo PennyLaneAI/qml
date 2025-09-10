@@ -545,7 +545,7 @@ Unsupported directives:
 # NOTES, TIPS, WARNINGS, AND ADMONITIONS
 # --------------------------------------
 #
-# All of these are not supported by pandoc. We will need a custom filter to handle these. Consider converting these to epigraphs (BlockQutoes in markdown).
+# All of these are unsupported by pandoc. A custom filter is used to convert these to epigraphs (BlockQutoes in markdown).
 
 # %%
 # .. note::
@@ -564,8 +564,3 @@ Unsupported directives:
 #     :class: note
 #
 #     Example of an admonition directive.
-
-# %%
-# .. epigraph::
-#
-#     Example of an epigraph directive. Maybe we can replace all these unsupported directives with this one.
