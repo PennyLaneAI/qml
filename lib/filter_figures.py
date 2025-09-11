@@ -3,6 +3,7 @@
 """
 Pandoc filter to convert figure directives to images.
 """
+
 import os
 from pandocfilters import toJSONFilter, Image
 
