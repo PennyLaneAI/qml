@@ -559,8 +559,8 @@ pprint(decoding(m, n, l))
 # 
 # After the previous step, we obtained the Hadamard transform of the state were looking for. The final
 # step is to apply the Hadamard transform to this state to obtain
-# :math:`|P(f)\rangle=\sum_{\mathbf{x}} P(f(\mathbf{x}))|\mathbf{x}\rangle`. Finally, let's write a 
-# ``DQI`` quantum function containing all the steps of the algorithm previously described. 
+# :math:`|P(f)\rangle=\sum_{\mathbf{x}} P(f(\mathbf{x}))|\mathbf{x}\rangle`. 
+# Let's write a ``DQI`` quantum function containing all the steps of the algorithm previously described. 
 # We will collect samples, calculate their objective values, and build a histogram to compare with
 # the random sampling done at the beginning of the demo. 
 # 
