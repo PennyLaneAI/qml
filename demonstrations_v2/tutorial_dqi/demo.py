@@ -359,7 +359,7 @@ pprint(formatted_state)
 # :math:`2` using the ``generate_bit_strings`` function. We then applied a controlled bit flip to the
 # weight register for these specific cases. We did not need to perform any action for bit strings with
 # a Hamming weight of :math:`1`, as the qubit state was already :math:`|0\rangle`. From now on, we can 
-# choose to disregard it.
+# choose to disregard the weight register.
 # 
 
 from itertools import combinations
