@@ -78,6 +78,12 @@ print(qml.draw(my_circuit)())
 # This ultimately requires computing :math:`\vec{x} = A^{-1} \cdot \vec{b},` where for simplicity we
 # assume that :math:`A` is invertible.
 #
+# .. note::
+#     Be careful to follow the notation in this section carefully. 
+#     :math:`x` is a scalar and :math:`\vec{x}` is a vector. Sometimes we are talking about the scalar
+#     function :math:`P(x) = s \cdot \frac{1}{x}` and sometimes we are talking about the matrix-vector
+#     function :math:`A \cdot \vec{x} = \vec{b}.` 
+#
 # :math:`A^{-1}` can be constructed directly by inverting the singular values of :math:`A^{T}.` We can
 # leverage QSVT to accomplish this by finding the phase angles which apply a polynomial approximation
 # to the transformation :math:`\frac{1}{x}.` This may seem simple in theory, but in practice there are
