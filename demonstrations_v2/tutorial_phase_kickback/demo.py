@@ -180,7 +180,4 @@ check_key(lock, incorrect_key)
 # “quantum lock”. Now you can impress your friends with your newfound quantum knowledge and your
 # incredible quantum lock-picking skills! 
 #
-#
-# About the author
-# ----------------
-#
+

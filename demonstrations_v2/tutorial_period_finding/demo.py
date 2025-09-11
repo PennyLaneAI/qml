@@ -382,6 +382,3 @@ for k in range(16):
 #     Andrew Childs, Vim van Dam, "Quantum algorithms for algebraic problems", 
 #     `Reviews of Modern Physics 82.1: 1-52. <https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.82.1>`__, 2010
 #
-# About the author
-# ----------------
-#

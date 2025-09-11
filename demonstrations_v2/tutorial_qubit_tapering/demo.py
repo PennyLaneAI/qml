@@ -14,8 +14,6 @@ Qubit tapering
     tutorial_adaptive_circuits Adaptive circuits for quantum chemistry
     tutorial_differentiable_HF Differentiable Hartree-Fock
 
-*Authors: Utkarsh Azad and Soran Jahangiri. Posted: 16 May 2022. Last updated: 08 Nov 2022*
-
 The performance of variational quantum algorithms is considerably limited by the number of qubits
 required to represent wave functions. In the context of quantum chemistry, this
 limitation hinders the treatment of large molecules with algorithms such as the :doc:`variational quantum
@@ -322,9 +320,4 @@ for i in range(1, 41):
 #     Kanav Setia, Richard Chen, Julia E. Rice, Antonio Mezzacapo, Marco Pistoia, James Whitfield,
 #     "Reducing qubit requirements for quantum simulation using molecular point group symmetries".
 #     `arXiv:1910.14644 <https://arxiv.org/abs/1910.14644>`__
-#
-#
-#
-# About the author
-# ----------------
 #

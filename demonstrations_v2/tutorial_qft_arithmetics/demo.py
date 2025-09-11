@@ -11,9 +11,6 @@ Basic arithmetic with the quantum Fourier transform (QFT)
     tutorial_qubit_rotation Basis tutorial: qubit rotation 
 
 
-
-*Author: Guillermo Alonso-Linaje — Posted: 07 November 2022.*
-
 Arithmetic is a fundamental branch of mathematics that consists of the study of the main operations with numbers such as
 addition, multiplication, subtraction and division. Using arithmetic operations we can understand the world around us
 and solve many of our daily tasks.
@@ -426,8 +423,4 @@ plt.show()
 # .. [#Draper2000]
 #
 #     Thomas G. Draper, "Addition on a Quantum Computer". `arXiv:quant-ph/0008033 <https://arxiv.org/abs/quant-ph/0008033>`__.
-#
-#
-# About the author
-# ----------------
 #

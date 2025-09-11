@@ -10,8 +10,6 @@ Optimizing noisy circuits with Cirq
 
    pytorch_noise PyTorch and noisy devices
 
-*Author: Nathan Killoran — Posted: 01 June 2020.  Last updated: 16 June 2021.*
-
 .. figure:: ../_static/demonstration_assets/noisy_circuit_optimization/noisy_qubit.png
     :align: center
     :width: 90%
@@ -539,8 +537,4 @@ plt.show()
 #    "A variational toolbox for quantum multi-parameter estimation."
 #    `arXiv:2006.06303
 #    <https://arxiv.org/abs/2006.06303>`__, 2020.
-#
-#
-# About the author
-# ----------------
 #

@@ -242,6 +242,3 @@ print(error)
 #     `Phys. Rev. X 11, 011020 (2021)
 #     <https://journals.aps.org/prx/abstract/10.1103/PhysRevX.11.011020>`__
 #
-#
-# About the author
-# ----------------

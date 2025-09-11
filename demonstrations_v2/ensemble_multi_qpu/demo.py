@@ -12,7 +12,6 @@ Ensemble classification with Rigetti and Qiskit devices
 
    tutorial_variational_classifier Variational classifier
 
-*Author: Tom Bromley — Posted: 14 February 2020. Last updated: 13 December 2021.*
 
 This tutorial outlines how two QPUs can be combined in parallel to help solve a machine learning
 classification problem.
@@ -574,8 +573,4 @@ plt.show()
 # our :doc:`demos/vqe_parallel` tutorial to see how multiple QPUs can be
 # evaluated asynchronously to speed up calculating the potential energy surface of molecular
 # hydrogen!
-
-##############################################################################
-# About the author
-# ----------------
 #

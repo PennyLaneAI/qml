@@ -9,8 +9,6 @@ Quanvolutional Neural Networks
         to classify MNIST images.
     :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/circuit.png
 
-*Author: Andrea Mari — Posted: 24 March 2020. Last updated: 15 January 2021.*
-
 In this demo we implement the *Quanvolutional Neural Network*, a quantum
 machine learning model originally introduced in
 `Henderson et al. (2019) <https://arxiv.org/abs/1904.04767>`_.
@@ -367,8 +365,4 @@ plt.show()
 # 1. Maxwell Henderson, Samriddhi Shakya, Shashindra Pradhan, Tristan Cook.
 #    "Quanvolutional Neural Networks: Powering Image Recognition with Quantum Circuits."
 #    `arXiv:1904.04767 <https://arxiv.org/abs/1904.04767>`__, 2019.
-#
-#
-# About the author
-# ----------------
 #

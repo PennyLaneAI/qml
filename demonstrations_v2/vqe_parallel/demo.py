@@ -386,8 +386,4 @@ plt.grid(True)
 # These surfaces overlap, with any variation due to the limited number of shots used to evaluate the
 # expectation values in the ``rigetti.qvm`` device (we are using the default value of
 # ``shots=1024``).
-
-##############################################################################
-# About the author
-# ----------------
 #
