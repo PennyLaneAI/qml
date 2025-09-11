@@ -11,7 +11,7 @@ or `quantum arithmetics <https://pennylane.ai/qml/demos/tutorial_qft_arithmetics
 you probably have worked with a circuit that applies Hadamard gates to each qubit.
 Well, this is a Quantum Fourier Transform as well! The reason why you might not have appreciated this fact is that Hadamards do not form the
 `famous QFT <https://pennylane.ai/qml/demos/tutorial_qft>`__ we know from Nielsen \& Chuang's standard textbook. They move into a
-Fourier basis nevertheless -- only of a different *group*.
+Fourier basis nevertheless---only of a different *group*.
 
 .. figure:: ../_static/demonstration_assets/qft_groups/pennylane-demo-fft-to-qft-hadamard-image.png
     :align: center
