@@ -13,8 +13,6 @@ Doubly stochastic gradient descent
    tutorial_quantum_natural_gradient Quantum natural gradient
    tutorial_rosalin Frugal shot optimization with Rosalin
 
-*Author: Josh Izaac — Posted: 16 October 2019. Last updated: 20 January 2021.*
-
 In this tutorial we investigate and implement the doubly stochastic gradient descent
 paper from `Ryan Sweke et al. (2019) <https://arxiv.org/abs/1910.01155>`__. In this paper,
 it is shown that quantum gradient descent, where a finite number of measurement samples
@@ -401,8 +399,4 @@ print("Adaptive QSGD min energy = ", qnode_analytic(params))
 #    Barthélémy Meynard-Piganeau, Jens Eisert. "Stochastic gradient descent for
 #    hybrid quantum-classical optimization." `arXiv:1910.01155
 #    <https://arxiv.org/abs/1910.01155>`__, 2019.
-#
-#
-# About the author
-# ----------------
 #

@@ -9,7 +9,6 @@ Quantum generative adversarial networks with Cirq + TensorFlow
         Generative Adversarial Network (QGAN) using PennyLane, Cirq, and TensorFlow.
     :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/qgan3.png
 
-*Author: Nathan Killoran — Posted: 11 October 2019. Last updated: 30 January 2023.*
 
 .. warning::
     This demo uses TensorFlow, which is a deprecated interface with PennyLane v0.42.
@@ -298,8 +297,3 @@ def bloch_vector_generator(angles):
 
 print(f"Real Bloch vector: {bloch_vector_real([phi, theta, omega])}")
 print(f"Generator Bloch vector: {bloch_vector_generator(gen_weights)}")
-
-##############################################################################
-# About the author
-# ----------------
-#

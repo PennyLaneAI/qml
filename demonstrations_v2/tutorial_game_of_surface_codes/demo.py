@@ -412,7 +412,3 @@ With this knowledge, we should be able to follow the more involved tricks discus
 #
 # Images from `Game of Surface Codes <https://quantum-journal.org/papers/q-2019-03-05-128/>`__ by Daniel Litinski [#Litinski]_, `CC BY 4.0 <https://creativecommons.org/licenses/by/4.0/>`__
 #
-
-##############################################################################
-# About the author
-# ----------------

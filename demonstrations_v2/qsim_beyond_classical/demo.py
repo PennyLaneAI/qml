@@ -15,7 +15,6 @@ Beyond classical computing with qsim
     tutorial_noisy_circuit_optimization Optimizing noisy circuits with Cirq
     quantum_volume Quantum volume
 
-*Author: Theodor Isacsson — Posted: 30 November 2020. Last updated: 10 September 2021.*
 
 .. figure:: ../_static/demonstration_assets/qsim_beyond_classical/qc.png
     :align: right
@@ -580,8 +579,4 @@ print("\rObserved:", f"{np.mean(f_circuit):.7f}".rjust(27))
 #
 #     Sohaib, Alam M. and Zeng, W., `Unpacking the Quantum Supremacy Benchmark with Python
 #     <https://medium.com/@sohaib.alam/unpacking-the-quantum-supremacy-benchmark-with-python-67a46709d>`__
-#
-#
-# About the author
-# ----------------
 #

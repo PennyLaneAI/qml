@@ -460,8 +460,3 @@ visualize_data(perturbed_x.reshape(-1, 16, 16), y_vis, adversarial_class_output)
 #     "Quantum Adversarial Machine Learning"
 #     `arXiv:2001.00030 <https://arxiv.org/abs/2001.00030>`__, 2019
 #
-#
-
-######################################################################
-# About the authors
-# -----------------

@@ -10,8 +10,6 @@ Quantum natural SPSA optimizer
 
    tutorial_spsa Simultaneous perturbation stochastic approximation (SPSA) optimizer
 
-*Author: Yiheng Duan — Posted: 18 July 2022. Last updated: 05 September 2022.*
-
 In this tutorial, we show how we can implement the
 `quantum natural simultaneous perturbation stochastic approximation (QN-SPSA) optimizer
 <https://quantum-journal.org/papers/q-2021-10-20-567/>`__
@@ -1009,7 +1007,4 @@ job = AwsQuantumJob.create(
 #    optimization using only function measurements*. `In Proceedings of the
 #    36th IEEE Conference on Decision and Control (Vol. 2, pp. 1417-1424).
 #    IEEE <https://ieeexplore.ieee.org/document/657661>`__.
-#
-# About the author
-# ----------------
 #

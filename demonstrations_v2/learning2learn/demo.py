@@ -11,7 +11,6 @@ Learning to learn with quantum neural networks
    tutorial_qaoa_intro Intro to QAOA
    tutorial_qaoa_maxcut QAOA for MaxCut problem
 
-*Author: Stefano Mangini — Posted: 02 March 2021. Last updated: 15 September 2021.*
 
 .. warning::
     This demo uses TensorFlow, which is a deprecated interface with PennyLane v0.42.
@@ -1183,8 +1182,4 @@ for t, s in zip(pred, ["out0", "out1", "out2", "Loss"]):
 #     TensorFlow deals with tensors, and is not able to directly manage
 #     other data structures, like graphs or functions taking graphs as
 #     input, like ``qaoa_from_graph``.
-#
-#
-# About the author
-# ----------------
 #

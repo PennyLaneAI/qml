@@ -13,8 +13,6 @@ Is quantum computing useful before fault tolerance?
     tutorial_noisy_circuits Noisy circuits
     gbs Quantum advantage with Gaussian Boson Sampling
 
-*Author: Korbinian Kottmann — Posted: 16  June 2023.*
-
 Can we use contemporary quantum computers for tasks that are both useful *and* hard to classically simulate?
 A recent `Nature paper <https://www.nature.com/articles/s41586-023-06096-3>`__ from the team at IBM claims that we can! See how they managed to faithfully estimate expectation
 values of reasonably large and reasonably deep quantum circuits using an exciting new :doc:`zero noise extrapolation <demos/tutorial_diffable-mitigation>`
@@ -271,8 +269,4 @@ plt.show()
 #     Ewout van den Berg, Zlatko K. Minev, Abhinav Kandala, Kristan Temme
 #     "Probabilistic error cancellation with sparse Pauli-Lindblad models on noisy quantum processors"
 #     `arXiv:2201.09866 <https://arxiv.org/abs/2201.09866>`__, 2022.
-#
-#
-# About the author
-# ----------------
 #

@@ -10,8 +10,6 @@ Qutrits and quantum algorithms
 .. related::
 
 
-*Author: Guillermo Alonso-Linaje — Posted: 9 May 2023. Last updated: 9 May 2023.*
-
 A qutrit is a basic quantum unit that can exist in a superposition of three possible quantum states, represented as :math:`|0\rangle`, :math:`|1\rangle`, and :math:`|2\rangle,` which functions as a generalization of the qubit.
 There are many problems to which we can apply these units, among which we can highlight an improved decomposition of the Toffoli gate.
 Using only qubits, it would take at least 6 CNOTs to decompose the gate, whereas with qutrits it would be enough to use 3 [#toffoli_qutrits]_.
@@ -411,7 +409,4 @@ print(f"The value of a is {a}")
 # .. [#toffoli_qutrits]
 #     Alexey Galda, Michael Cubeddu, Naoki Kanazawa, Prineha Narang, Nathan Earnest-Noble, `"Implementing a Ternary Decomposition of the Toffoli Gate on Fixed-FrequencyTransmon Qutrits".
 #     <https://arxiv.org/pdf/2109.00558.pdf>`__
-# About the author
-# ----------------
 #
-

@@ -534,8 +534,3 @@ plt.show()
 #     "Classification of dynamical Lie algebras for translation-invariant 2-local spin systems in one dimension"
 #     `arXiv:2309.05690 <https://arxiv.org/abs/2309.05690>`__, 2023.
 #
-
-##############################################################################
-# About the author
-# ----------------
-#

@@ -304,6 +304,3 @@ for gate, count in wrapped_sigma.items():
 # PennyLane or would like to know further technical details, be sure to check out the docs for
 # :func:`~.pennylane.to_bloq` and :class:`~.pennylane.FromBloq`!
 #
-# About the author
-# ----------------
-#

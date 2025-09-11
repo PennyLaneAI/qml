@@ -213,8 +213,3 @@ times = repeat("optimization(params, data, targets)", globals=globals(), number=
 result = min(times) / num
 
 print(f"Quantum jitting the entire optimization (best of {reps}): {result} sec per loop")
-
-######################################################################
-# About the author
-# ----------------
-#

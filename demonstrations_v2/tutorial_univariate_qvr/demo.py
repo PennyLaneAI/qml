@@ -7,9 +7,7 @@ Quantum detection of time series anomalies
     :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/thumbnail_tutorial_univariate_qvr.jpg
 
 .. related::
-   tutorial_qaoa_intro Intro to QAOA
-
-*Authors: Jack Stephen Baker, Santosh Kumar Radha — Posted: 7 February 2023.*
+    tutorial_qaoa_intro Intro to QAOA
 
 Systems producing observable characteristics which evolve with time are 
 almost everywhere we look. The temperature changes as day turns to night, 
@@ -1263,7 +1261,4 @@ stop = os.system("covalent stop")
 #   `doi:10.1038/s41534-020-00302-0 <https://doi.org/10.1038/s41534-020-00302-0>`__,
 #   (2020)
 #
-#
-# About the author
-# ----------------
-#
+

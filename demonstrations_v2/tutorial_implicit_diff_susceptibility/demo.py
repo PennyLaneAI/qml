@@ -12,8 +12,6 @@ Implicit differentiation of variational quantum algorithms
     tutorial_backprop Quantum gradients with backpropagation
     tutorial_jax_transformations Using JAX with PennyLane
 
-*Authors: Shahnawaz Ahmed and Juan Felipe Carrasquilla Álvarez — Posted: 28 November 2022. Last updated: 28 November 2022.*
-
 
 In 1638, René Descartes, intrigued by (then amateur) Pierre de Fermat's method
 of computing tangents, challenged Fermat to find the tangent to
@@ -651,7 +649,4 @@ print(qml.about())
 #    Chang, Hung-Chieh, Wei He, and Nagabhushana Prabhu.
 #    "The analytic domain in the implicit function theorem."
 #    `JIPAM. J. Inequal. Pure Appl. Math 4.1 <http://emis.icm.edu.pl/journals/JIPAM/v4n1/061_02_www.pdf>`__,  (2003).
-#
-# About the author
-# ----------------
 #

@@ -294,7 +294,3 @@ for i, samples in enumerate([int_samples1, int_samples2], start=1):
 plt.tight_layout()
 plt.show()
 
-##############################################################################
-# About the author
-# ----------------
-#

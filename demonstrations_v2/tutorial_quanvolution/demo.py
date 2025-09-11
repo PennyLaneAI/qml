@@ -9,8 +9,6 @@ Quanvolutional Neural Networks
         to classify MNIST images.
     :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/circuit.png
 
-*Author: Andrea Mari — Posted: 24 March 2020. Last updated: 15 January 2021.*
-
 .. warning::
     This demo uses TensorFlow, which is a deprecated interface with PennyLane v0.42.
     Interfacing with TensorFlow will no longer be supported with PennyLane v0.43 and higher.
@@ -374,8 +372,4 @@ plt.show()
 # 1. Maxwell Henderson, Samriddhi Shakya, Shashindra Pradhan, Tristan Cook.
 #    "Quanvolutional Neural Networks: Powering Image Recognition with Quantum Circuits."
 #    `arXiv:1904.04767 <https://arxiv.org/abs/1904.04767>`__, 2019.
-#
-#
-# About the author
-# ----------------
 #

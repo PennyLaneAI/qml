@@ -6,8 +6,6 @@ Quantum advantage in learning from experiments
     :property="og:description": Learn how quantum memory can boost quantum machine learning algorithms
     :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/learning_from_exp_thumbnail.png
 
-*Author: Joseph Bowles — Posted: 18 April 2022. Last updated: 30 June 2022.*
-
 This demo is based on the article `Quantum advantage in learning from
 experiments <https://arxiv.org/abs/2112.00778>`__ `[1] <#ref1>`__ by
 Hsin-Yuan Huang and co-authors. The article investigates the following
@@ -538,8 +536,4 @@ plt.show()
 # [2] *Exponential separations between learning with and without quantum
 # memory*, Sitan Chen, Jordan Cotler, Hsin-Yuan Huang, Jerry Li,
 # `arxiv:2111.05881 <https://arxiv.org/abs/2111.05881>`__ (2021)
-#
-#
-# About the author
-# ----------------
 #

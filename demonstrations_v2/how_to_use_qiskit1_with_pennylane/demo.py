@@ -431,8 +431,3 @@ print(f"Optimized cost function value: {new_loss}")
 # `LinkedIn <https://www.linkedin.com/company/pennylaneai/>`__ or `X (formerly
 # Twitter) <https://twitter.com/PennyLaneAI>`__ to stay updated!
 #
-
-######################################################################
-# About the author
-# ----------------
-#

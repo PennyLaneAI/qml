@@ -10,8 +10,6 @@ Quantum computation with neutral atoms
 .. related::
    ahs_aquila Pulse programming on neutral atom hardware
 
-*Author: Nathan Killoran — Posted: 13 October 2020. Last updated: 21 January 2021.*
-
 .. warning::
     This demo uses TensorFlow, which is a deprecated interface with PennyLane v0.42.
     Interfacing with TensorFlow will no longer be supported with PennyLane v0.43 and higher.

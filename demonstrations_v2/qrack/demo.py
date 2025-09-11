@@ -464,8 +464,4 @@ print("Qrack cross entropy with Lightning:", validate(12), "out of 1.0")
 #     Robert Wille, Stefan Hillmich, Lukas Burgholzer
 #     "Decision Diagrams for Quantum Computing"
 #     `arXiv:2302.04687 <https://arxiv.org/abs/2302.04687>`__, 2023.
-
-##############################################################################
-# About the author
-# ----------------
 #

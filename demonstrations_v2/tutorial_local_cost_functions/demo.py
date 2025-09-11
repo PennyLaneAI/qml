@@ -10,8 +10,6 @@ Alleviating barren plateaus with local cost functions
 
    tutorial_barren_plateaus Barren plateaus in quantum neural networks
 
-*Author: Thomas Storwick — Posted: 09 September 2020. Last updated: 28 January 2021.*
-
 Barren Plateaus
 ---------------
 
@@ -530,8 +528,4 @@ for runs in range(samples):
 #   Cerezo, M., Sone, A., Volkoff, T., Cincio, L., and Coles, P. (2020).
 #   Cost-Function-Dependent Barren Plateaus in Shallow Quantum Neural Networks.
 #   `arXiv:2001.00550 <https://arxiv.org/abs/2001.00550>`__
-#
-#
-# About the author
-# ----------------
 #

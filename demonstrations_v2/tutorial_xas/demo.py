@@ -852,8 +852,3 @@ plt.show()
 # 
 # This approximation would be useful when simulating a complex molecular instance, such as a cluster in a lithium-excess material. 
 #
-
-######################################################################
-# About the authors
-# ----------------
-#

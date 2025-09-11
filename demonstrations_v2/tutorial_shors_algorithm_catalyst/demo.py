@@ -1433,6 +1433,3 @@ plt.show()
 #    :align: center
 #    :alt: QPE circuit with one estimation qubit.
 #
-# About the author
-# ----------------
-#

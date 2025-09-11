@@ -253,6 +253,3 @@ for key, val in counts.items():
 #
 # And this is how to create dynamic circuits in PennyLane with mid-circuit measurements!
 #
-# About the author
-# ----------------
-#

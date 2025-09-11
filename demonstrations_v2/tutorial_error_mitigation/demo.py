@@ -12,7 +12,6 @@ Error mitigation with Mitiq and PennyLane
    tutorial_chemical_reactions Modelling chemical reactions on a quantum computer
    tutorial_noisy_circuits Noisy circuits
 
-*Authors: Tom Bromley (PennyLane) and Andrea Mari (Mitiq) — Posted: 29 November 2021. Last updated: 29 November 2021.*
 
 Have you ever run a circuit on quantum hardware and not quite got the result you were expecting?
 If so, welcome to the world of noisy intermediate-scale quantum (NISQ) devices! These devices must
@@ -596,7 +595,4 @@ plt.show()
 #             `"Digital zero noise extrapolation for quantum error mitigation" <https://ieeexplore.ieee.org/document/9259940>`_,
 #             IEEE International Conference on Quantum Computing and Engineering (2020).
 #
-#
-# About the author
-# ----------------
 #

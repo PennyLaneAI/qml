@@ -12,8 +12,6 @@ Measurement optimization
    tutorial_quantum_chemistry Building molecular Hamiltonians
    tutorial_qaoa_intro Intro to QAOA
 
-*Author: Josh Izaac — Posted: 18 January 2021. Last updated: 29 August 2023.*
-
 The variational quantum eigensolver (VQE) is the OG variational quantum algorithm. Harnessing
 near-term quantum hardware to solve for the electronic structure of molecules, VQE is *the*
 algorithm that sparked the variational circuit craze of the last 5 years, and holds great
@@ -838,8 +836,4 @@ print("Number of required measurements after optimization:", len(groups))
 #     Vladyslav Verteletskyi, Tzu-Ching Yen, and Artur F. Izmaylov. "Measurement optimization in the
 #     variational quantum eigensolver using a minimum clique cover." `The Journal of Chemical Physics
 #     152.12 (2020): 124114. <https://aip.scitation.org/doi/10.1063/1.5141458>`__
-#
-#
-# About the author
-# ----------------
 #
