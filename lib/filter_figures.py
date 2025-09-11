@@ -16,15 +16,12 @@ def parse_img_source(src: str) -> str:
 
 def filter_images(key, value, format, _):
     if key == 'Image':
-        specs, [alt], [url, _] = value
+        _, _, [url, _] = value
         cleaned_url = parse_img_source(url)
 
-        try:
-            alt["c"] = cleaned_url
-        except KeyError:
-            alt = { "t": "Str", "c": cleaned_url }
+        alt = { "t": "Str", "c": cleaned_url }
         
-        return Image(specs, [alt], [cleaned_url, ""])
+        return Image(["", [], []], [alt], [cleaned_url, ""])
 
 if __name__ == '__main__':
     toJSONFilter(filter_images)

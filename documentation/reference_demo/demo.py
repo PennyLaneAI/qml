@@ -497,7 +497,7 @@ Unsupported directives:
 # -------
 
 # %%
-# Figure
+# Full figure directive
 #
 # .. figure:: ../_static/demonstration_assets/period_finding/periodic_function.png
 #     :align: center
@@ -510,6 +510,13 @@ Unsupported directives:
 #     Figure 2. Example of a discrete periodic function f(x) over the integers x = 0,...,11. 
 #     The function only takes the same value when moving exactly 4 integers on the x-axis. Note:
 #     not sure what to do for this one. Should we make a fake image for this demo?
+
+# %%
+# Minimal figure directive
+#
+# .. figure:: ../_static/demonstration_assets/loom_catalyst/circuit_3QEC.png
+#     :align: center
+#     :width: 90%
 
 # %%
 # METADATA AND RELATED CONTENT
