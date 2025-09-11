@@ -580,8 +580,18 @@ Unsupported directives:
 #
 # Example of an :doc:`InterSphinx demo link <demos/tutorial_liealgebra>`.
 #
+# Same as above, but without a custom label: :doc:`demos/tutorial_liealgebra`.
+#
 # Example of an :doc:`Intersphinx doc link <introduction/operations>`.
+#
+# Same as above, but without a custom label: :doc:`introduction/operations`.
 #
 # Example of a PennyLane function link: :func:`~.pennylane.ops.one_qubit_decomposition`.
 #
 # Example of a PennyLane class link: :class:`~.pennylane.ops.RX`.
+#
+# Example of a PennyLane module link: :mod:`QNN module <pennylane.qnn>`.
+#
+# Same as above, but without a custom label: :mod:`~pennylane.qnn`.
+#
+# Example of a :ref:`reference_link` link. These aren't supported in the demo, so replace with text.
