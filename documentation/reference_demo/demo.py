@@ -564,3 +564,17 @@ Unsupported directives:
 #     :class: note
 #
 #     Example of an admonition directive.
+
+# %%
+# Links
+# -----
+#
+# Example of an `external link <https://pennylane.ai/qml>`_.
+#
+# Example of an :doc:`InterSphinx demo link <demos/tutorial_liealgebra>`.
+#
+# Example of an :doc:`Intersphinx doc link <introduction/operations>`.
+#
+# Example of a PennyLane function link: :func:`~.pennylane.ops.one_qubit_decomposition`.
+#
+# Example of a PennyLane class link: :class:`~.pennylane.ops.RX`.
