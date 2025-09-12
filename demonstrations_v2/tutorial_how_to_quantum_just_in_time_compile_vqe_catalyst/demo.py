@@ -190,8 +190,3 @@ print(f"Final angle parameters: {final_params}")
 # Note that here we use the QJIT-compatible :func:`~pennylane.for_loop` function, which allows
 # classical control flow in hybrid quantum-classical workflows to be compiled.
 #
-
-######################################################################
-# About the author
-# ----------------
-#

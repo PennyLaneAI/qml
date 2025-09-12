@@ -454,8 +454,3 @@ print(qml.commutator(SY, SZ) == (2j*SX).simplify())
 #     `arXiv:quant-ph/0512209 <https://arxiv.org/abs/quant-ph/0512209>`__, 2005.
 #
 #
-
-##############################################################################
-# About the author
-# ----------------
-#

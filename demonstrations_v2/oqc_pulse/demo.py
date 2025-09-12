@@ -9,7 +9,6 @@ r"""Pulse programming on OQC Lucy in PennyLane
    ahs_aquila Pulse programming on Rydberg atom hardware
    tutorial_pulse_programming101 Differentiable pulse programming with qubits in PennyLane
 
-*Author: Korbinian Kottmann — Posted: 30 October 2023.*
 
 .. warning::
     The OQC Lucy device is no longer available on Amazon Braket. As there is no alternative at this time, this
@@ -545,8 +544,4 @@ ax.set_ylim((-1.05, 1.05))
 #     Korbinian Kottmann, Nathan Killoran
 #     "Evaluating analytic gradients of pulse programs on quantum computers"
 #     `arXiv:2309.16756 <https://arxiv.org/abs/2309.16756>`__, 2023.
-#
-#
-# About the author
-# ----------------
 #

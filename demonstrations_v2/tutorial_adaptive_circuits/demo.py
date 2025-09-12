@@ -13,8 +13,6 @@ Adaptive circuits for quantum chemistry
     tutorial_givens_rotations Givens rotations for quantum chemistry
 
 
-*Author: Soran Jahangiri — Posted: 13 September 2021. Last updated: 10 April 2023*
-
 The key component of variational quantum algorithms for quantum chemistry is the circuit used to
 prepare electronic ground states of a molecule. The variational quantum eigensolver (VQE)
 [#peruzzo2014]_, [#yudong2019]_ is the method of choice for performing such quantum chemistry
@@ -419,8 +417,4 @@ for n in range(10):
 #     variational algorithm for exact molecular simulations on a quantum computer".
 #     `Nat. Commun. 2019, 10, 3007.
 #     <https://www.nature.com/articles/s41467-019-10988-2>`__
-#
-#
-# About the author
-# ----------------
 #

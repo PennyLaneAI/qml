@@ -15,8 +15,6 @@ A brief overview of VQE
    tutorial_vqe_spin_sectors VQE in different spin sectors
    tutorial_vqt Variational quantum thermalizer
 
-*Author: Alain Delgado — Posted: 08 February 2020. Last updated: 29 August 2023.*
-
 The Variational Quantum Eigensolver (VQE) is a flagship algorithm for quantum chemistry
 using near-term quantum computers [#peruzzo2014]_. It is an application of the
 `Ritz variational principle <https://en.wikipedia.org/wiki/Ritz_method>`_, where a quantum
@@ -289,7 +287,4 @@ plt.show()
 #     Jacob T. Seeley, Martin J. Richard, Peter J. Love. "The Bravyi-Kitaev transformation for
 #     quantum computation of electronic structure". `Journal of Chemical Physics 137, 224109 (2012).
 #     <https://aip.scitation.org/doi/abs/10.1063/1.4768229>`__
-#
-# About the author
-# ----------------
 #

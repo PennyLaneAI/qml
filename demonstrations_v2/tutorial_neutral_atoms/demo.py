@@ -15,8 +15,6 @@ Neutral-atom quantum computers
    tutorial_sc_qubits Quantum computing with superconducting qubits
    tutorial_photonics Photonic quantum computing
 
-*Author: Alvaro Ballon — Posted: 30 May 2023.*
-
 In the last few years, a new quantum technology has gained the attention of the quantum computing
 community. Thanks to recent developments in optical-tweezer technology,
 neutral atoms can be used as robust and versatile qubits. In 2022, a collaboration between QuEra and
@@ -817,7 +815,4 @@ print(
 #
 #    K. Wintersperger et al. (2023) "Neutral Atom Quantum Computing Hardware: Performance and End-User Perspective",
 #    (`arXiv <https://arxiv.org/abs/2304.14360>`__)
-#
-# About the author
-# ----------------
 #

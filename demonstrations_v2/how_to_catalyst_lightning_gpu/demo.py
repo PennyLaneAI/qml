@@ -215,8 +215,4 @@ to highlight Catalyst with Lightning-GPU features.
 #
 # To learn more about all the integrated devices,
 # check out the :doc:`Catalyst Devices <catalyst:dev/devices>` guide.
-
-##############################################################################
-# About the authors
-# ----------------
-# 
+#

@@ -573,11 +573,4 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 #    U. Schollwöck.  
 #    "The density-matrix renormalization group in the age of matrix product states,"  
 #    `<https://doi.org/10.1016/j.aop.2010.09.012>`__, Annals of Physics, vol. 326, no. 1, pp. 96–192, Jan 2011.
-
-
-
-##############################################################################
-# About the author
-# ----------------
-# 
-# 
+#

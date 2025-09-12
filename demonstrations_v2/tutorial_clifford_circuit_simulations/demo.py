@@ -511,7 +511,3 @@ print(resources_lst[0])
 #    "Stim: a fast stabilizer circuit simulator"
 #    `Quantum 5, 497 <https://doi.org/10.22331/q-2021-07-06-497>`__, 2021.
 #
-
-######################################################################
-# About the author
-# ----------------

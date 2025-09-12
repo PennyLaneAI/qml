@@ -9,8 +9,6 @@ r"""Intro to QSVT
 
     function_fitting_qsp Function Fitting using Quantum Signal Processing
 
-*Author: Juan Miguel Arrazola — Posted: May 23, 2023.*
-
 Few quantum algorithms deserve to be placed in a hall of fame: Shor's algorithm, Grover's algorithm, quantum phase estimation;
 maybe even HHL and VQE. There is now a new technique with prospects of achieving such celebrity status:
 the quantum singular value transformation (QSVT). Since you're reading this, chances are you have at least heard of QSVT and its broad
@@ -303,10 +301,4 @@ plt.show()
 #    John M. Martyn, Zane M. Rossi, Andrew K. Tan, and Isaac L. Chuang,
 #    "Grand Unification of Quantum Algorithms",
 #    `PRX Quantum 2, 040203 <https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.2.040203>`__, 2021
-#
-#
-
-##############################################################################
-# About the author
-# ----------------
 #

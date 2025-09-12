@@ -12,8 +12,6 @@ Quantum Circuit Cutting
    tutorial_unitary_designs Unitary designs
 
 
-*Authors: Gideon Uchehara, Matija Medvidović, Anuj Apte — Posted: 02 September 2022. Last updated: 02 September 2022.*
-
 Introduction
 -------------------------------------
 
@@ -885,8 +883,4 @@ _ = ax.legend(frameon=True, loc="lower right", fontsize=20)
 #
 #     A. Lowe et. al. (2022) "Fast quantum circuit cutting with randomized measurements".
 #     (`arXiv <https://arxiv.org/abs/2207.14734>`__)
-#
-#
-# About the author
-# ----------------
 #

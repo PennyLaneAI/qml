@@ -388,8 +388,4 @@ M.null_space()
 #    
 #     Adam Bouland, Tudor Giurgică-Tiron, John Wright, "The State Hidden Subgroup Problem and an Efficient Algorithm for Locating Unentanglement",  
 #     `STOC '25 p.463-470. <https://doi.org/10.1145/3717823.3718118>`__, 2025
-
-######################################################################
-# About the author
-# ----------------
-# 
+#

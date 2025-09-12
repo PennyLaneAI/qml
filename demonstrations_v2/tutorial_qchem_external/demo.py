@@ -14,7 +14,6 @@ Using PennyLane with PySCF and OpenFermion
     tutorial_givens_rotations Givens rotations for quantum chemistry
     tutorial_adaptive_circuits Adaptive circuits for quantum chemistry
 
-*Author: Soran Jahangiri — Posted: 3 January 2023.*
 
 The quantum chemistry module in PennyLane, :mod:`qchem  <pennylane.qchem>`, provides built-in
 methods to compute molecular integrals, solve Hartree-Fock equations, and construct
@@ -224,7 +223,4 @@ print(openfermion_op)
 #    :func:`~.pennylane.from_openfermion` and :func:`~.pennylane.to_openfermion` functions.
 # 4. Finally, we can convert PySCF wave functions to PennyLane state vectors using the
 #    :func:`~.pennylane.qchem.import_state` function.
-#
-# About the author
-# ----------------
 #
