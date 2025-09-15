@@ -563,8 +563,6 @@ pprint(decoding(m, n, l))
 # step is to apply the Hadamard transform to this state to obtain
 # :math:`|P(f)\rangle=\sum_{\mathbf{x}} P(f(\mathbf{x}))|\mathbf{x}\rangle`. 
 # Let's write a ``DQI`` quantum function containing all the steps of the algorithm previously described. 
-# We will collect samples, calculate their objective values, and build a histogram to compare with
-# the random sampling done at the beginning of the demo. 
 # 
 
 @partial(qml.set_shots, shots=n_samples)
@@ -601,6 +599,10 @@ def DQI(m, n, l):
 
     return qml.counts(wires=n_register)
 
+######################################################################
+# We will collect samples, calculate their objective values, and build a histogram to compare with
+# the random sampling done at the beginning of the demo. 
+# 
 
 results = DQI(m, n, l)
 all_bit_lists = []
