@@ -29,8 +29,7 @@ The max-XORSAT problem is a simple example of this, where we are given an :math:
 :math:`B` (with :math:`m>n`) and a vector :math:`\mathbf{v}` of length :math:`m`, and are required
 to find the :math:`n`-bit string :math:`\mathbf{x}`
 that satisfies the maximum number of constraints imposed by the :math:`m` linear mod-2 equations, 
-:math:`B\mathbf{x}=\mathbf{v}`. Here, :math:`\mathbf{v}` is a vector of
-dimension :math:`m` specified by the problem. Since this system of equations is over
+:math:`B\mathbf{x}=\mathbf{v}`. Since this system of equations is over
 :math:`\mathbb{F}_2`, the matrix and vectors only contain zeros and ones.
 
 The objective function we are aiming to maximize is
@@ -76,7 +75,7 @@ f_x_array_random = [objective_function(sample) for sample in samples]
 
 plt.hist(f_x_array_random, bins=30, density=True)
 plt.xlabel(r"$f(x)$")
-plt.ylabel(r"$\text{density}$")
+plt.ylabel("density")
 plt.show()
 
 
@@ -108,7 +107,8 @@ plt.show()
 #     The `Hadamard transform <https://lucatrevisan.github.io/teaching/cs259q-12/lecture07b.pdf>`__ can be thought of as a version of the discrete Fourier transform. You have likely used it  
 #     several times when applying a Hadamard gate at the beginning of a circuit to prepare an equal superposition of all basis states. 
 #     For :math:`n` qubits and a basis state :math:`|\mathbf{x}\rangle`, we can write the  
-#     transformation as :math:`H^{\otimes n}|\mathbf{x}\rangle = \frac{1}{\sqrt{2^n}}\sum_{\mathbf{y}\in \{0,1\}^n}(-1)^{\mathbf{x}\cdot\mathbf{y}}|\mathbf{y}\rangle.`  
+#     transformation as 
+#     .. math:: `H^{\otimes n}|\mathbf{x}\rangle = \frac{1}{\sqrt{2^n}}\sum_{\mathbf{y}\in \{0,1\}^n}(-1)^{\mathbf{x}\cdot\mathbf{y}}|\mathbf{y}\rangle.`  
 # 
 # The objective function :math:`f(\mathbf{x})` has a very sparse Hadamard spectrum. This means that only :math:`m` of 
 # the possible :math:`2^n` “frequency” components, :math:`\mathbf{b_i}`, have non-zero amplitudes in :math:`f(\mathbf{x})`.
@@ -149,7 +149,7 @@ plt.show()
 #
 # .. figure:: ../_static/demonstration_assets/DQI/algo_DQI.png
 #    :alt: DQI algorithm
-#    :width: 90.0%
+#    :width: 100.0%
 #    :align: center
 # 
 #    Figure 1: Schematic of the DQI algorithm to solve the max-XORSAT problem
@@ -251,7 +251,7 @@ def embed_weights(w_k, weight_register):
 # :math:`|0\rangle^{\otimes m-1-(k-1)}|1\rangle^{\otimes k-1}` and
 # :math:`|0\rangle^{\otimes m-1-k}|1\rangle^{\otimes k}` is prepared first. Following the convention from [#Bartschi2019]_, 
 # we define a *Split and Cyclic shift* unitary :math:`\mathrm{SCS}_{m,k}` to prepare such
-# suitable superposition:
+# a suitable superposition:
 # 
 # .. math::  |0\rangle^{\otimes m-k}|1\rangle^{\otimes k} \rightarrow \sqrt{\frac{k}{m}} |0\rangle^{\otimes m-k-1}|0\rangle|1\rangle^{\otimes k} +  \sqrt{\frac{m-k}{m}} |0\rangle^{\otimes m-k-1}|1\rangle^{\otimes k}|0\rangle.
 #
@@ -279,7 +279,8 @@ def embed_weights(w_k, weight_register):
 # a controlled way via ``qml.ctrl()`` in the quantum function ``weight_error_prep``, after preparing 
 # the weight register. To verify that this step was implemented correctly, 
 # we will output the resultant quantum state printed in a nice form using the auxiliary ``format_state_vector`` function. 
-# We should expect :math:`\binom{5}{2}` and :math:`\binom{5}{1}` states with Hamming weights of 2 and 1, respectively.
+# We should expect :math:`\binom{5}{2}` and :math:`\binom{5}{1}` states in the error register
+# with Hamming weights of 2 and 1, respectively.
 #
 
 from pprint import pprint
