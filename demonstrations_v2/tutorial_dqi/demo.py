@@ -107,7 +107,8 @@ plt.show()
 #     The `Hadamard transform <https://lucatrevisan.github.io/teaching/cs259q-12/lecture07b.pdf>`__ can be thought of as a version of the discrete Fourier transform. You have likely used it  
 #     several times when applying a Hadamard gate at the beginning of a circuit to prepare an equal superposition of all basis states. 
 #     For :math:`n` qubits and a basis state :math:`|\mathbf{x}\rangle`, we can write the  
-#     transformation as 
+#     transformation as
+# 
 #     .. math:: `H^{\otimes n}|\mathbf{x}\rangle = \frac{1}{\sqrt{2^n}}\sum_{\mathbf{y}\in \{0,1\}^n}(-1)^{\mathbf{x}\cdot\mathbf{y}}|\mathbf{y}\rangle.`  
 # 
 # The objective function :math:`f(\mathbf{x})` has a very sparse Hadamard spectrum. This means that only :math:`m` of 
