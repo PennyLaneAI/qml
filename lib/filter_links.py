@@ -13,11 +13,11 @@ CAT_OBJ_INV_URL = "https://docs.pennylane.ai/projects/catalyst/en/stable/"
 def process_link(text: str, key: str) -> tuple[str, str]:
     for item in pl_obj_inv.objects:
         if item.name == key:
-            return text if text else item.dispname, PL_OBJ_INV_URL + item.url
+            return text if text else item.dispname, PL_OBJ_INV_URL + item.uri
 
     for item in cat_obj_inv.objects:
         if item.name == key:
-            return text, CAT_OBJ_INV_URL + item.url
+            return text, CAT_OBJ_INV_URL + item.uri
     return text, key
 
 def process_doc_link(text: str, key: str) -> tuple[str, str]:
