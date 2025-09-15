@@ -128,7 +128,7 @@ plt.show()
 # :math:`m`, and :math:`n`, respectively. The algorithm’s steps are outlined below and summarized in Figure 1.
 # 
 # 1. **Embed weight coefficients:** prepare the state :math:`\sum_{k=0}^{\ell} w_k|k\rangle` in the
-#    weight register to encode the degree :math:`\ell` of the polynomial.
+#    weight register to encode the degree-:math:`\ell` polynomial.
 # 2. **Prepare Dicke states:** generate `Dicke states <https://en.wikipedia.org/wiki/Dicke_state>`__ on the error register, conditioned on the value
 #    :math:`k` in the weight register,
 # 
