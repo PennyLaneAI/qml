@@ -23,7 +23,7 @@
             "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_hidden_cut.png"
         }
     ],
-    "seoDescription": "Learn how to implement decoded quantum interferometry on Pennylane by solving the max-XORSAT problem",
+    "seoDescription": "Learn how to implement decoded quantum interferometry in Pennylane to solve the max-XORSAT problem",
     "doi": "",
     "references": [
         {
