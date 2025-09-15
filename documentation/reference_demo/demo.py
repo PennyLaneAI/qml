@@ -598,7 +598,7 @@ Unsupported directives:
 #
 # Same as above, but without a custom label: :mod:`~pennylane.qnn`.
 #
-# Example of a :ref:`reference_link` link. These aren't supported in the demo, so replace with text.
+# Example of a reference link: :ref:`reference_link`. These aren't supported in the demos.
 
 # %% Code block
 #
