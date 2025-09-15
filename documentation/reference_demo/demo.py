@@ -499,7 +499,7 @@ Unsupported directives:
 # %%
 # Full figure directive
 #
-# .. figure:: ../_static/demonstration_assets/period_finding/periodic_function.png
+# .. figure:: ../_static/demonstration_assets/reference_demo/xanadu_x.png
 #     :align: center
 #     :width: 90%
 #     :scale: 100%
@@ -507,14 +507,12 @@ Unsupported directives:
 #     :target: javascript:void(0);
 #     :figwidth: 80%
 #    
-#     Figure 2. Example of a discrete periodic function f(x) over the integers x = 0,...,11. 
-#     The function only takes the same value when moving exactly 4 integers on the x-axis. Note:
-#     not sure what to do for this one. Should we make a fake image for this demo?
+#     Figure 1. The Xanadu logo.
 
 # %%
 # Minimal figure directive
 #
-# .. figure:: ../_static/demonstration_assets/loom_catalyst/circuit_3QEC.png
+# .. figure:: ../_static/demonstration_assets/reference_demo/xanadu_x.png
 #     :align: center
 #     :width: 90%
 
@@ -527,7 +525,7 @@ Unsupported directives:
 # %%
 # .. meta::
 #     :property="og:description": Example of a meta directive.
-#     :property="og:image": ../_static/demonstration_assets/period_finding/periodic_function.png
+#     :property="og:image": ../_static/demonstration_assets/reference_demo/xanadu_x.png
 #
 # .. related::
 #     tutorial_qft Quantum Fourier Transform
