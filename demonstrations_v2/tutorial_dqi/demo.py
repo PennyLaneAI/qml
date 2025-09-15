@@ -109,7 +109,7 @@ plt.show()
 #     For :math:`n` qubits and a basis state :math:`|\mathbf{x}\rangle`, we can write the  
 #     transformation as
 # 
-#     .. math:: `H^{\otimes n}|\mathbf{x}\rangle = \frac{1}{\sqrt{2^n}}\sum_{\mathbf{y}\in \{0,1\}^n}(-1)^{\mathbf{x}\cdot\mathbf{y}}|\mathbf{y}\rangle.`  
+#     .. math:: H^{\otimes n}|\mathbf{x}\rangle = \frac{1}{\sqrt{2^n}}\sum_{\mathbf{y}\in \{0,1\}^n}(-1)^{\mathbf{x}\cdot\mathbf{y}}|\mathbf{y}\rangle.  
 # 
 # The objective function :math:`f(\mathbf{x})` has a very sparse Hadamard spectrum. This means that only :math:`m` of 
 # the possible :math:`2^n` “frequency” components, :math:`\mathbf{b_i}`, have non-zero amplitudes in :math:`f(\mathbf{x})`.
