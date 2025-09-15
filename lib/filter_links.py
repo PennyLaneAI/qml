@@ -13,8 +13,8 @@ CAT_OBJ_INV_URL = "https://docs.pennylane.ai/projects/catalyst/en/stable/"
 def process_link(text: str, key: str) -> tuple[str, str]:
     for item in pl_obj_inv.objects:
         if item.name == key:
-            return text, PL_OBJ_INV_URL + item.url
-            
+            return text if text else item.dispname, PL_OBJ_INV_URL + item.url
+
     for item in cat_obj_inv.objects:
         if item.name == key:
             return text, CAT_OBJ_INV_URL + item.url
@@ -32,12 +32,15 @@ def process_doc_link(text: str, key: str) -> tuple[str, str]:
     return process_link(text, key)
 
 def parse_body(link: str) -> tuple[str, str]:
-    # Intersphinx links have two formats:
+    # Intersphinx links have three formats:
     # 1. Some text followed by <sphinx/link>
-    # 2. sphinx/link
+    # 2. ~.pennylane.some.function.name
+    # 3. sphinx/link
     if "<" in link:
         text, key = link.split("<")
-        return text.strip(), key.strip(">")
+        return text.strip(), key.strip(">").lstrip(".")
+    elif "~." in link:
+        return link.split(".")[-1], link.lstrip("~.")
     else:
         return "", link
 
@@ -60,7 +63,7 @@ def filter_links(key, value, format, _):
             else:
                 name, link = process_link(text, key)
 
-            return Link(text, key, "")
+            return Link(name, link, "")
 
 if __name__ == '__main__':
     pl_obj_inv = soi.Inventory(url=PL_OBJ_INV_URL+"objects.inv")
