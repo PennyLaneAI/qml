@@ -588,6 +588,10 @@ Unsupported directives:
 #
 # Example of a PennyLane function link: :func:`~.pennylane.ops.one_qubit_decomposition`.
 #
+# Same as above, but without the leading dot: :func:`~pennylane.ops.one_qubit_decomposition`.
+#
+# Example of a Catalyst function link: :func:`~.catalyst.value_and_grad`.
+#
 # Example of a PennyLane class link: :class:`~.pennylane.ops.RX`.
 #
 # Example of a PennyLane module link: :mod:`QNN module <pennylane.qnn>`.
@@ -595,3 +599,19 @@ Unsupported directives:
 # Same as above, but without a custom label: :mod:`~pennylane.qnn`.
 #
 # Example of a :ref:`reference_link` link. These aren't supported in the demo, so replace with text.
+
+# %% Code block
+#
+# We need to make sure code is not affected by the filters.
+
+import pennylane as qml
+
+dev = qml.device("default.qubit", wires=2)
+
+@qml.qnode(dev)
+def circuit():
+    qml.RX(0.5, wires=0)
+    qml.RY(0.3, wires=1)
+    return qml.state()
+
+print(circuit())

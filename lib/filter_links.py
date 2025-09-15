@@ -5,7 +5,7 @@ Pandoc filter to process intersphinx links.
 """
 import json
 import sphobjinv as soi
-from pandocfilters import toJSONFilter, Link, get_value
+from pandocfilters import toJSONFilter, Link
 
 DEMOS_URL = "https://pennylane.ai/qml/demos/"
 PL_OBJ_INV_URL = "https://docs.pennylane.ai/en/stable/"
@@ -20,7 +20,7 @@ def process_link(text: str, key: str) -> tuple[str, str]:
 
     for item in cat_obj_inv.objects:
         if item.name == key:
-            return text, CAT_OBJ_INV_URL + item.uri
+            return text if text else item.dispname, CAT_OBJ_INV_URL + item.uri
     return text, key
 
 def process_doc_link(text: str, key: str) -> tuple[str, str]:
@@ -44,7 +44,7 @@ def parse_body(link: str) -> tuple[str, str]:
     if "<" in link:
         text, key = link.split("<")
         return text.strip(), key.strip(">").lstrip(".")
-    elif "~." in link:
+    elif "~" == link[0]:
         return link.split(".")[-1], link.lstrip("~.")
     else:
         return "", link
