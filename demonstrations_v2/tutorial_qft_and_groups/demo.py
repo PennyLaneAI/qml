@@ -106,11 +106,11 @@ plt.show()
 #     :class: note
 #
 #     A group is a set of elements that has:
-
+#
 #       1. an operation that maps two elements a and b of the set into a third element of the set, for example :math:`c = a + b`,
-
+#
 #       2. an "identity element" e such that :math:`e + a = a` for any element :math:`a`, and
-
+#
 #       3. an inverse :math:`-a` for every element :math:`a`, such that :math:`a + (-a) = e`.
 #
 # More precisely, we can consider the :math:`x` as elements from the set of integers :math:`\{0,...,N-1\}`,
