@@ -264,7 +264,7 @@ def embed_weights(w_k, weight_register):
 #    :width: 60.0%
 #    :align: center
 # 
-#    Figure 2: Circuit diagram for the first step in the inductive decomposition of :math:`U_{m,k}`
+#    Figure 2: Circuit diagram for the first step in the inductive decomposition of :math:`U_{m,k}`.
 #
 # We keep decomposing the unitaries into a split and cycle operation followed by a smaller
 # unitary until we reach the base case :math:`U_{1,1}=\mathrm{Id}`. Ultimately, :math:`U_{m,k}` is
@@ -272,6 +272,13 @@ def embed_weights(w_k, weight_register):
 # the following equation:
 # 
 # .. math:: U_{m,k} = \prod_{q=2}^{k} (\mathrm{SCS}_{q,q-1} \otimes \mathrm{Id}^{\otimes m-q})  \prod_{q=k+1}^{m} (\mathrm{Id}^{\otimes q-k-1} \otimes \mathrm{SCS}_{q,k} \otimes \mathrm{Id}^{\otimes m-q}).
+#
+# .. figure:: ../_static/demonstration_assets/DQI/D_5_2.png
+#    :alt: Circuit diagram for Dicke state with five qubits and two excitations.
+#    :width: 60.0%
+#    :align: center
+# 
+#    Figure 3: Circuit diagram of :math:`U_{5,2}` for preparing |D_2^5\rangle. 
 # 
 # The explicit form of :math:`\mathrm{SCS}_{m,k}`, which is implemented in code by the function
 # ``SCS``, is not discussed here. However, it’s worth noting that it is composed of a two-qubit gate
