@@ -22,7 +22,7 @@ In classical computation, one can define a universal set of logic gate operation
 ``{AND, NOT, OR}`` that can be used to perform any boolean function. A similar analogue
 in quantum computation is to have a set of quantum gates that can approximate any unitary
 transformation up to the desired accuracy. One such universal quantum gate set is the
-:math:`\textrm{Clifford + T}` set, ``{H, S, CNOT, T}``, where the gates ``H``, ``S`,` and
+:math:`\textrm{Clifford + T}` set, ``{H, S, CNOT, T}``, where the gates ``H``, ``S``, and
 ``CNOT`` are the generators of the *Clifford group*. The elements of this group are
 called *Clifford gates*, which transform *Pauli* words to *Pauli* words under
 `conjugation <https://mathworld.wolfram.com/Conjugation.html>`__. This means an
