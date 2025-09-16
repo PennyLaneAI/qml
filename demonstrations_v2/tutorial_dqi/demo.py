@@ -1,8 +1,7 @@
 r"""Decoded Quantum Interferometry
 ==================================
 
-Showing quantum advantage is a long-sought goal by the quantum computing community. Clearly
-demonstrating that a quantum algorithm can solve a practical computational task with an advantage
+Achieving a clear demonstration that a quantum algorithm can solve a practical computational task with an advantage
 over classical algorithms remains an active area of research. Recently, Jordan et al. introduced an
 algorithm called **Decoded quantum interferometry (DQI)** to tackle combinatorial optimization
 problems [#Jordan2024]_. For a specific task of approximating optimal polynomial fits, it
