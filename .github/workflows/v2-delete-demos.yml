@@ -1,5 +1,9 @@
 name: Delete V2 Demos
 on:
+  push:
+    branches:
+      - sc-99419-demo-deletion-on-pr-merge
+
   workflow_call:
     inputs:
       environment:

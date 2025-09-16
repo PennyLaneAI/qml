@@ -31,7 +31,12 @@ parser.add_argument(
 
 def main():
     print("Deletion script is currently disabled.")
-    sys.exit(0)
+    # Print the args to actions log for debugging purposes
+    args = parser.parse_args()
+    print(f"Arguments received: slugs={args.slugs}, pr_number={args.pr_number}")
+    # Uncomment the following lines to enable deletion functionality
+    # exit(0)
+    exit(0)
 
 # def main():
 #     args = parser.parse_args()
