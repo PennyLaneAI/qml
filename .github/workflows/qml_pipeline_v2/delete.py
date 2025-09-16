@@ -30,31 +30,35 @@ parser.add_argument(
 )
 
 def main():
-    args = parser.parse_args()
-    slugs = args.slugs
-    pr_number = args.pr_number
+    print("Deletion script is currently disabled.")
+    sys.exit(0)
 
-    session = requests.Session()
-    session.auth = AWSSigV4("execute-api", region="us-east-1")
+# def main():
+#     args = parser.parse_args()
+#     slugs = args.slugs
+#     pr_number = args.pr_number
 
-    endpoint_url = os.environ["DEPLOYMENT_ENDPOINT_URL"]
+#     session = requests.Session()
+#     session.auth = AWSSigV4("execute-api", region="us-east-1")
 
-    failed = False
-    for slug in slugs:
-        url = DELETE_URL_TEMPLATE.format(
-            endpoint_url=endpoint_url, slug=slug, pr_number=pr_number
-        )
-        logger.info("Deleting demo '%s' (PR: %s) at '%s'", slug, pr_number, url)
-        try:
-            response = session.delete(url)
-            response.raise_for_status()
-            logger.info("Successfully deleted demo '%s' (PR: %s)", slug, pr_number)
-        except requests.HTTPError:
-            logger.error("Failed to delete demo '%s' (PR: %s) at '%s'", slug, pr_number, url, exc_info=True)
-            failed = True
+#     endpoint_url = os.environ["DEPLOYMENT_ENDPOINT_URL"]
 
-    if failed:
-        sys.exit(1)
+#     failed = False
+#     for slug in slugs:
+#         url = DELETE_URL_TEMPLATE.format(
+#             endpoint_url=endpoint_url, slug=slug, pr_number=pr_number
+#         )
+#         logger.info("Deleting demo '%s' (PR: %s) at '%s'", slug, pr_number, url)
+#         try:
+#             response = session.delete(url)
+#             response.raise_for_status()
+#             logger.info("Successfully deleted demo '%s' (PR: %s)", slug, pr_number)
+#         except requests.HTTPError:
+#             logger.error("Failed to delete demo '%s' (PR: %s) at '%s'", slug, pr_number, url, exc_info=True)
+#             failed = True
+
+#     if failed:
+#         sys.exit(1)
 
 if __name__ == "__main__":
     main()

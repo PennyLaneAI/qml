@@ -1,0 +1,64 @@
+name: Delete V2 Demos
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: Environment to deploy to.
+        type: string
+        required: true
+      demo-names:
+        description: Names of demos to delete.
+        type: string
+        required: true
+      pr_number:
+        description: Pull request number for the deployment.
+        type: number
+        required: true
+
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Environment to deploy to.
+        type: environment
+        required: true
+      demo-names:
+        description: Names of demos to delete.
+        type: string
+        required: true
+      pr_number:
+        description: Pull request number for the deployment.
+        type: number
+        required: true
+
+jobs:
+  deploy-demos:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    env:
+      DEPLOYMENT_ENDPOINT_URL: ${{ secrets.DEPLOYMENT_ENDPOINT_URL }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: "us-east-1"
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      
+      - name: Install python requirements
+        run: pip install -r .github/workflows/qml_pipeline_v2/requirements.txt
+
+      - name: Delete demos
+        run: |
+          python3 .github/workflows/qml_pipeline_v2/delete.py \
+            --pr-number ${{ inputs.pr_number }} \
+            --slugs ${{ inputs.demo-names }}
