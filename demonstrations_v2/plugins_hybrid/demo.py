@@ -15,8 +15,6 @@ Plugins and hybrid computation
    tutorial_qubit_rotation Basic tutorial: qubit rotation
    tutorial_gaussian_transformation Gaussian transformation
 
-*Author: Josh Izaac — Posted: 11 October 2019. Last updated: 01 February 2021.*
-
 This tutorial introduces the notion of hybrid computation by combining several PennyLane
 plugins. We first introduce PennyLane's `Strawberry Fields plugin <https://pennylane-sf.readthedocs.io>`_
 and use it to explore a non-Gaussian photonic circuit. We then combine this photonic circuit with a
@@ -445,8 +443,4 @@ print(qubit_rotation(0.5, 0.1))
 # This is just a simple example of the kind of hybrid computation that can be carried
 # out in PennyLane. Quantum nodes (bound to different devices) and classical
 # functions can be combined in many different and interesting ways.
-#
-#
-# About the author
-# ----------------
 #

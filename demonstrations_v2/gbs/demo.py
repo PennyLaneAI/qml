@@ -17,8 +17,6 @@ Quantum advantage with Gaussian Boson Sampling
     qonn Optimizing a quantum optical neural network
     tutorial_photonics Photonic quantum computers
 
-*Authors: Josh Izaac and Nathan Killoran — Posted: 04 December 2020. Last updated: 04 December 2020.*
-
 .. warning::
     This demo is only compatible with PennyLane version ``0.29`` or below.
 
@@ -481,8 +479,4 @@ print(probs[2, 0, 0, 0])
 #
 #     Bourassa, J. E., Alexander, R. N., Vasmer, et al. (2020). Blueprint for a scalable
 #     photonic fault-tolerant quantum computer. arXiv preprint arXiv:2010.02905.
-#
-#
-# About the author
-# ----------------
 #

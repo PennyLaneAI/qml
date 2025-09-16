@@ -344,5 +344,3 @@ print('Energy =', circuit(params))
 #      `Physical Review A 102.6 (2020).
 #      <https://journals.aps.org/pra/abstract/10.1103/PhysRevA.102.062612>`__
 #
-# About the author
-# ----------------

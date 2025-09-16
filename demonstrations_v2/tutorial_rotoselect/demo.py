@@ -16,8 +16,6 @@ Quantum circuit structure learning
    tutorial_vqe_qng Accelerating VQEs with quantum natural gradient
    tutorial_rosalin Frugal shot optimization with Rosalin
 
-*Author: Angus Lowe — Posted: 16 October 2019. Last updated: 20 January 2021.*
-
 """
 ##############################################################################
 # This example shows how to learn a good selection of rotation
@@ -463,8 +461,4 @@ plt.show()
 #
 # 1. Mateusz Ostaszewski, Edward Grant, Marcello Bendetti. "Quantum circuit structure learning."
 #    `arxiv:1905.09692 <https://arxiv.org/abs/1905.09692>`__, 2019.
-
-##############################################################################
-# About the author
-# ----------------
 #

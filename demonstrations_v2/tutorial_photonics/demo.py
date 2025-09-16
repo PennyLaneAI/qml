@@ -13,8 +13,6 @@ Photonic quantum computers
    tutorial_sc_qubits Quantum computing with superconducting qubits
    gbs Quantum advantage with Gaussian Boson Sampling
 
-*Author: Alvaro Ballon — Posted: 31 May 2022. Last updated: 16 June 2022.*
-
 To create a functional quantum computer, we need to produce and control a 
 large number of qubits. This feat has proven difficult, although significant 
 progress has been made using trapped ions, superconducting circuits, 
@@ -960,7 +958,4 @@ print(
 #     `Quantum 5, 392
 #     <https://quantum-journal.org/papers/q-2021-02-04-392/>`__.
 #     (`arXiv <https://arxiv.org/abs/2010.02905>`__)
-#
-# About the author
-# ----------------
 #

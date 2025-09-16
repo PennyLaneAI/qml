@@ -9,9 +9,6 @@ Adjoint Differentiation
     :property="og:description": Benchmarking file for adjoint diff demonstration.
     :property="og:image": https://pennylane.ai/qml/_static/demo_thumbnails/opengraph_demo_thumbnails/code.png
 
-
-*Author: Christina Lee — Posted: 23 November 2021. Last updated: 04 July 2024.*
-
 """
 
 ##############################################################################
@@ -138,8 +135,4 @@ if __name__ == "__main__":
 # .. figure:: ../_static/demonstration_assets/adjoint_diff/scaling.png
 #     :width: 80%
 #     :align: center
-#
-#
-# About the author
-# ----------------
 #

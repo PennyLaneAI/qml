@@ -8,8 +8,6 @@ r"""Differentiable pulse programming with qubits in PennyLane
 .. related::
    ahs_aquila Pulse programming on neutral atom hardware
 
-Author: Korbinian Kottmann — Posted: 8 March 2023.
-
 Quantum computers perform gates via electromagnetic pulses on the hardware level. In differentiable pulse programming, we
 can write quantum algorithms directly on the hardware level and variationally optimize the shape, phase and amplitude of the interactions
 for our desired goals.
@@ -483,11 +481,4 @@ plt.show()
 #     Benjamin Russell, Herschel Rabitz, Rebing Wu
 #     "Quantum Control Landscapes Are Almost Always Trap Free"
 #     `arXiv:1608.06198 <https://arxiv.org/abs/1608.06198>`__, 2016.
-#
-#
-#
-
-##############################################################################
-# About the author
-# ----------------
 #

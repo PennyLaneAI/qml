@@ -11,8 +11,6 @@ Introduction to the ZX-calculus
     tutorial_backprop Quantum gradients with backpropagation
     tutorial_mbqc Measurement-based quantum computation
 
-*Author: Romain Moyard. Posted: 6 June, 2023.*
-
 
 The ZX-calculus is a graphical language for reasoning about quantum computations and circuits. Introduced by Coecke
 and Duncan [#Coecke]_, it can represent any linear map, and can be considered a diagrammatically complete
@@ -875,8 +873,4 @@ print("Circuit gates:", specs["resources"].gate_types)
 #
 #    Niel de Beaudrap, Aleks Kissinger and John van de Wetering. "Circuit Extraction for ZX-diagrams can be #P-hard."
 #    `ArXiv <https://arxiv.org/pdf/2202.09194.pdf>`__.
-#
-#
-# About the author
-# ----------------
 #

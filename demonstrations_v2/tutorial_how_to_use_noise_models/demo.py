@@ -230,7 +230,3 @@ print(f"Ideal v/s Noisy: {ideal_res} and {noisy_res}")
 # or `LinkedIn <https://www.linkedin.com/company/pennylaneai/>`__ to stay up-to-date with
 # the latest and greatest from PennyLane!
 #
-
-######################################################################
-# About the author
-# ----------------

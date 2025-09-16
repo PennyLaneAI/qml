@@ -213,7 +213,3 @@ print(pl_noise_model.meas_map)
 # <https://pennylane.ai/codebook/#06-noisy-quantum-theory>`_,
 # or create a post on the `PennyLane Discussion Forum <https://discuss.pennylane.ai>`_.
 #
-
-######################################################################
-# About the author
-# ----------------

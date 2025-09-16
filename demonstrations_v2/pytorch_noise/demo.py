@@ -13,8 +13,6 @@ PyTorch and noisy devices
 
    tutorial_noisy_circuit_optimization Optimizing noisy circuits with Cirq
 
-*Author: Josh Izaac — Posted: 11 October 2019. Last updated: 9 November 2022.*
-
 .. warning::
     This demo is only compatible with PennyLane v0.40 or below and Braket v1.31.0. To use Rigetti hardware with newer versions of PennyLane please use the `PennyLane-Braket plugin <https://amazon-braket-pennylane-plugin-python.readthedocs.io/en/stable/index.html>`__ instead.
     
@@ -251,8 +249,4 @@ for i in range(400):
 # automatically copy it back to the GPU for any further classical processing.
 #
 # .. note:: For more details on the PyTorch interface, see :doc:`introduction/interfaces/torch`.
-#
-#
-# About the author
-# ----------------
 #
