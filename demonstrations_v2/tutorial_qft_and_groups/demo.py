@@ -9,7 +9,7 @@ literally everywhere in quantum computing: even if you're not interested in `Sho
 `quantum phase estimation <https://pennylane.ai/qml/demos/tutorial_qpe>`__
 or `quantum arithmetics <https://pennylane.ai/qml/demos/tutorial_qft_arithmetics>`__,
 you probably have worked with a circuit that applies Hadamard gates to each qubit.
-Well, this is a Quantum Fourier Transform as well! The reason why you might not have appreciated this fact is that Hadamards do not form the
+Well, a layer of Hadamards is a Quantum Fourier Transform as well! The reason why you might not have appreciated this fact is that Hadamards do not form the
 `famous QFT <https://pennylane.ai/qml/demos/tutorial_qft>`__ we know from Nielsen \& Chuang's standard textbook. They move into a
 Fourier basis nevertheless -- only of a different *group*.
 
@@ -294,7 +294,7 @@ print("QFTs over different groups coincide:", np.allclose(h_hat_state, h_hat_sta
 # And how do FFTs give rise to Quantum Fourier Transforms with *poly-logarithmic* runtimes?
 #
 # As it turns out, the famous Cooley-Tukey implementation of a Fast Fourier transform can be interpreted as
-# a decomposition into Fourier transforms on *subgroups* of the original group.
+# performing Fourier transforms on *subgroups* of the original group and stitching them together.
 #
 # .. admonition:: Subgroup
 #    :class: note
@@ -352,7 +352,7 @@ print("QFTs over different groups coincide:", np.allclose(h_hat_state, h_hat_sta
 # .. math::
 #           e^{\frac{2 \pi i}{6} x_1 3(2k_2+k_1) } = e^{\frac{2 \pi i}{2} x_1k_1 } \underbrace{e^{2 \pi i x_1 k_2 }}_{1}  = e^{\frac{2 \pi i}{2} x_1 k_1 }
 #
-# Essentially, the change in variables turns the Fourier basis function over period 6 into a Fourier basis function with period 2,
+# Essentially, the change in variables turns the Fourier basis function of period 6 into a Fourier basis function of period 2,
 # which makes the dependency on :math:`k_2` disappear. This effectively turns the Fourier transform into a sum of "smaller" Fourier transforms
 # over :math:`3x_1`, namely  :math:`\{0, 3\}`, :math:`\{1, 4\}`, and :math:`\{2, 5\}`. These are combined with
 # an appropriate "twiddle factor" :math:`e^{\frac{2 \pi i}{6} (2k_2+k_1) x_2}` that weighs the building blocks.
