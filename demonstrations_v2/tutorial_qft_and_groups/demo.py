@@ -85,7 +85,7 @@ f_vec = np.array([f(x) for x in integers])
 f_hat_vec = np.array([f_hat(k) for k in integers])
 
 # plot this
-fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(5, 4))
+fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(4, 3))
 ax1.bar(integers, np.real(f_vec), color='dimgray')  # casting to real is needed in case we perform an inverse FT
 ax1.set_title(f"function f")
 ax2.bar(integers + 0.05, np.imag(f_hat_vec), color='lightpink', label="imaginary part")
@@ -188,7 +188,7 @@ g_vec = np.array([g(x) for x in bitstrings])
 g_hat_vec = np.array([g_hat(k) for k in bitstrings])
 
 # plot this
-fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(5, 4))
+fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(4, 3))
 x_labels = ["".join([str(x_) for x_ in x]) for x in bitstrings]
 ax1.bar(range(len(bitstrings)), np.real(g_vec), color='dimgray')  # casting to real is needed in case we perform an inverse FT
 ax1.set_xticks(range(len(bitstrings)))
