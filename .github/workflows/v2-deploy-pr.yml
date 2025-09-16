@@ -90,6 +90,21 @@ jobs:
       workflow-run-id: ${{ github.event.workflow_run.id }}
       pr_number: ${{ fromJson(needs.prepare-build-context.outputs.pr_id) }}
     secrets: inherit
+
+  delete-preview-demos:
+    if: |
+      github.event.workflow_run.event == 'pull_request' && 
+      needs.prepare-build-context.result == 'success' &&
+      needs.prepare-build-context.outputs.pr_ref != '' &&
+      needs.prepare-build-context.outputs.pr_id != '' &&
+      needs.prepare-build-context.outputs.deleted_demos != '[]'
+    uses: ./.github/workflows/v2-delete-demos.yml
+    needs: prepare-build-context
+    with:
+      environment: 'swc-prod'
+      demo-names: ${{ join(fromJson(needs.prepare-build-context.outputs.deleted_demos), ' ') }}
+      pr_number: ${{ fromJson(needs.prepare-build-context.outputs.pr_id) }}
+    secrets: inherit
   
 
   # Step 3: Create a comment on the PR with the demo links
