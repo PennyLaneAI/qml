@@ -134,18 +134,18 @@ plt.show()
 # 
 #    .. math:: \sum_{k=0}^{\ell} w_k|k\rangle \frac{1}{\sqrt{\binom{m}{k}}}\sum_{\substack{\mathbf{y}\\|\mathbf{y}|=k}} |\mathbf{y}\rangle.
 # 
-# 4. **Uncompute** and discard the weight register.
-# 5. **Encode the vector of constraints:** encode :math:`\mathbf{v}` by imparting a phase
+# 3. **Uncompute** and discard the weight register.
+# 4. **Encode the vector of constraints:** encode :math:`\mathbf{v}` by imparting a phase
 #    :math:`(-1)^{\mathbf{v}\cdot\mathbf{y}}`,
 # 
 #    .. math:: \sum_{k=0}^{\ell} w_k \frac{1}{\sqrt{\binom{m}{k}}}\sum_{\substack{\mathbf{y}\\|\mathbf{y}|=k}} (-1)^{\mathbf{v}\cdot\mathbf{y}} |\mathbf{y}\rangle.
-# 6. **Compute syndrome:** reversibly compute :math:`B^T \mathbf{y}` into the syndrome register,
+# 5. **Compute syndrome:** reversibly compute :math:`B^T \mathbf{y}` into the syndrome register,
 # 
 #    .. math:: \sum_{k=0}^{\ell} w_k \frac{1}{\sqrt{\binom{m}{k}}}\sum_{\substack{\mathbf{y}\\|\mathbf{y}|=k}} (-1)^{\mathbf{v}\cdot\mathbf{y}} |\mathbf{y}\rangle|B^T \mathbf{y}\rangle.
-# 7. **Decode and uncompute:** use the computed value of :math:`B^T \mathbf{y}` to find
+# 6. **Decode and uncompute:** use the computed value of :math:`B^T \mathbf{y}` to find
 #    :math:`\mathbf{y}` and uncompute the error register. This results in the Hadamard transform of
 #    the desired state.
-# 8. **Hadamard transform and sample:** apply the Hadamard transform to obtain :math:`|P(f)\rangle`
+# 7. **Hadamard transform and sample:** apply the Hadamard transform to obtain :math:`|P(f)\rangle`
 #    and sample from it to get solutions.
 #
 # .. figure:: ../_static/demonstration_assets/DQI/algo_DQI.png
