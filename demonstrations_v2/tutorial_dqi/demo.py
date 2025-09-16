@@ -273,12 +273,15 @@ def embed_weights(w_k, weight_register):
 # 
 # .. math:: U_{m,k} = \prod_{q=2}^{k} (\mathrm{SCS}_{q,q-1} \otimes \mathrm{Id}^{\otimes m-q})  \prod_{q=k+1}^{m} (\mathrm{Id}^{\otimes q-k-1} \otimes \mathrm{SCS}_{q,k} \otimes \mathrm{Id}^{\otimes m-q}).
 #
+# Let's visualize a full decomposition of this unitary to prepare one of the states of interest 
+# in our particular example :math:`|D_2^5\rangle.`
+#
 # .. figure:: ../_static/demonstration_assets/DQI/D_5_2.png
 #    :alt: Circuit diagram for Dicke state with five qubits and two excitations.
 #    :width: 60.0%
 #    :align: center
 # 
-#    Figure 3: Circuit diagram of :math:`U_{5,2}` for preparing |D_2^5\rangle. 
+#    Figure 3: Circuit diagram of :math:`U_{5,2}` for preparing :math:`|D_2^5\rangle.` 
 # 
 # The explicit form of :math:`\mathrm{SCS}_{m,k}`, which is implemented in code by the function
 # ``SCS``, is not discussed here. However, it’s worth noting that it is composed of a two-qubit gate
