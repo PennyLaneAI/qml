@@ -21,7 +21,7 @@ conda install -c conda-forge pandoc
 
 ## Running the Converter
 ```bash
-python3 notebook_converter/notebook_to_demo.py \
+python3 notebook_converter/notebook_to_demo.py path/to/my/notebook.ipynb
    path/to/my/notebook.ipynb
 ```
 
