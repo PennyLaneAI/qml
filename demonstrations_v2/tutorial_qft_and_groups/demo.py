@@ -23,7 +23,7 @@ Fourier basis nevertheless---only of a different *group*.
 Sometimes, knowing about the Fourier-theoretic interpretation of a quantum algorithm helps to understand what is
 going on under the hood. But group theory comes with a lot of jargon that can be overwhelming at first. This demo
 illuminates the fascinating link between (Quantum) Fourier Transforms and groups, for those who have
-not taken a course in group theory (yet).
+not taken a course in group theory yet.
 
 We will see that a group can be used to *define* what a Fourier transform (and hence a Quantum Fourier Transform) is, a fact
 that explains a lot of seemingly arbitrary assumptions in the standard Fourier transform.
@@ -55,9 +55,8 @@ But let us start with the basics...
 #
 # .. math:: \hat{f}(k) = \frac{1}{\sqrt{N}}\sum_{x} f(x) e^{2 \pi i  \frac{k x}{N}},
 #
-# where the frequencies :math:`k` are the same integers as the :math:`x` values. (Note that the normalisation factor is a
-# matter of convention.)
-# The expressions :math:`e^{2 \pi i  \frac{k x}{N}}`
+# where the frequencies :math:`k` are the same integers as the :math:`x` values. Note that the normalisation factor is a
+# matter of convention. The expressions :math:`e^{2 \pi i  \frac{k x}{N}}`
 # correspond to Fourier basis functions with integer-valued
 # frequencies :math:`k`, and a Fourier coefficient :math:`\hat{f}(x_i)`
 # can be seen as the projection of :math:`f(x)` onto the :math:`i`'th basis function. The function beyond
@@ -72,7 +71,7 @@ import numpy as np
 N = 16
 
 def f(x):
-    """Some function on the integers 0,...,N-1."""
+    """Some function over the integers 0,...,N-1."""
     x = x % N
     return 0.5*(x-4)**3
 
@@ -86,7 +85,7 @@ f_vec = np.array([f(x) for x in integers])
 f_hat_vec = np.array([f_hat(k) for k in integers])
 
 # plot this
-fig, (ax1, ax2) = plt.subplots(2, 1)
+fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(5, 4))
 ax1.bar(integers, np.real(f_vec), color='dimgray')  # casting to real is needed in case we perform an inverse FT
 ax1.set_title(f"function f")
 ax2.bar(integers + 0.05, np.imag(f_hat_vec), color='lightpink', label="imaginary part")
@@ -98,9 +97,18 @@ plt.show()
 
 #####################################################################
 # But why do---at least if we don't want to incur additional headaches---the :math:`x` values have to be equidistant?
-# Why this notion of "periodic continuation"? Why are the basis functions of exponential form? And
-# why are the :math:`k` also integers? It turns out that all of these questions have an elegant answer if we
+# Why this notion of "periodic continuation"? Why are the basis functions of exponential form? Why
+# are the :math:`k` also integers? And what makes the Fourier basis special?
+# It turns out that all of these questions have an elegant answer if we
 # interpret the function values as a group!
+#
+# .. admonition:: Group
+#     :class: note
+#
+#     A group is a set of elements that has:
+#       1. an operation that maps two elements a and b of the set into a third element of the set, for example c = a + b,
+#       2. an "identity element" e such that e + a = a for any element a, and
+#       3. an inverse -a for every element a, such that a + (-a) = e.
 #
 # More precisely, we can consider the :math:`x` as elements from the set of integers :math:`\{0,...,N-1\}`,
 # together with a prescription of how to combine two integers to a third from this set. Choosing "addition modulo N" for
@@ -120,9 +128,9 @@ plt.show()
 #
 #            The blocks in those matrices, when written in the Fourier basis,
 #            reveal "invariant subspaces" which capture symmetries modeled by the group. In our case this
-#            means that if we shift a function
+#            means that if we take a function
 #            :math:`g(x) = a e^{2 \pi i  \frac{k x}{N}}` that lives in the subspace spanned by
-#            a Fourier basis function by any :math:`h \in Z_N`,
+#            a Fourier basis function, and shift it by any :math:`h \in Z_N`,
 #            then :math:`g(x+h) = a e^{2 \pi i  \frac{k x+h}{N}} = \underbrace{a e^{2 \pi i  \frac{k h}{N}}}_{b} e^{2 \pi i  \frac{k x}{N}} = b e^{2 \pi i  \frac{k x}{N}}`
 #            stays in the same subspace.
 #
@@ -131,7 +139,7 @@ plt.show()
 #
 # What happens if we exchange the cyclic group :math:`Z_N` by another one? First of all, if we change to the infinite group :math:`\mathbb{R}`,
 # which are just the real numbers under addition, we get the `continuous Fourier transform <https://en.wikipedia.org/wiki/Fourier_transform>`__,
-# whose *characters* or basis functions look similar to the discrete ones.
+# whose characters or basis functions look similar to the discrete ones.
 # We could also change to a direct product of groups, such as :math:`Z_N \times Z_N \times ...` or :math:`\mathbb{R} \times \mathbb{R} \times ...` and get the
 # multi-dimensional Fourier transform whose basis functions are products of characters, one for each dimension.
 # Choosing :math:`N=2` we get the group :math:`Z_2^n` mentioned above, where we consider :math:`N` "copies" of the binary set :math:`\{0,1\}`.
@@ -150,12 +158,12 @@ plt.show()
 # .. math::
 #           \hat{f}(k) = \sum_{x_0=0}^1 \dots \sum_{x_{N-1}=0}^1 f(x_0 \dots x_{N-1}) e^{i k_0 x_0} \dots e^{i k_{N-1} x_{N-1}}.
 #
-# The Fourier transform over one component group :math:`Z_2` can be written as a Hadamard matrix, and the full :math:`N`-dimensional
+# The Fourier transform over a single component group :math:`Z_2` can be written as a Hadamard matrix, and the full :math:`N`-dimensional
 # version is therefore a tensor product of N Hadamards. This is exactly the reason why a quantum
 # circuit that contains a layer of Hadamards moves into a Fourier basis as claimed above.
 #
-# Let's code up an example of a Fourier transform of a function ``g(x)`` over the group :math:`Z^4_2`,
-# which transforms a function into bit strings.
+# Let's code up an example of a Fourier transform of a function ``g(x)`` over the group :math:`Z^4_2`. Such a function
+# takes bit strings, which means that the Fourier frequencies are bitstrings as well.
 #
 
 n = 4
@@ -180,7 +188,7 @@ g_vec = np.array([g(x) for x in bitstrings])
 g_hat_vec = np.array([g_hat(k) for k in bitstrings])
 
 # plot this
-fig, (ax1, ax2) = plt.subplots(2, 1)
+fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(5, 4))
 x_labels = ["".join([str(x_) for x_ in x]) for x in bitstrings]
 ax1.bar(range(len(bitstrings)), np.real(g_vec), color='dimgray')  # casting to real is needed in case we perform an inverse FT
 ax1.set_xticks(range(len(bitstrings)))
@@ -219,7 +227,7 @@ plt.show()
 # This works because the Fourier transform, if normalised appropriately, is a unitary transform!
 #
 # Let us verify this by comparing the DFT of a function, as coded up above, with the result of a quantum circuit
-# that calls ``qml.QFT``. However, now we need a function that, written as a vector, can be interpreted
+# that implements ``qml.QFT``. However, now we need a function that, written as a vector, can be interpreted
 # as a normalised quantum state. We therefore apply a slight modification to our function ``f`` from before.
 #
 
@@ -237,7 +245,7 @@ def h_hat(k):
     return  np.sum(projection)
 
 #####################################################################
-# We can easily code up a quantum circuit that prepares a state :math:`\sum_x f(x) |x>`, applies the QFT and extracts
+# We can easily code up a quantum circuit that prepares a state :math:`\sum_x f(x) |x\rangle`, applies the QFT and extracts
 # the output state vector from the simulator.
 #
 
@@ -385,7 +393,7 @@ def f_hat_fft(k1, k2):
 f_hat_vec_fft = np.array([f_hat(2*k2+k1) for k1 in range(2) for k2 in range(3)])
 
 #######################################################################
-# Let's compare the result to the DFT from before.
+# Let's compare the result of this implementation to how we implemented the DFT before.
 #
 
 def f(x):
@@ -399,7 +407,7 @@ def f_hat(k):
     return  np.sum(projection)
 
 f_hat_vec = np.array([f_hat_fft(k1, k2) for k1 in range(2) for k2 in range(3)])
-print("FFT and DFT coincide:", np.allclose(f_hat_vec, f_hat_vec_fft))
+print("FFT and previous DFT implementation coincide:", np.allclose(f_hat_vec, f_hat_vec_fft))
 
 #######################################################################
 # Quantifying the runtime gains
@@ -540,7 +548,8 @@ print("FFT and DFT coincide:", np.allclose(f_hat_vec, f_hat_vec_fft))
 # 2. The *Fast Fourier Transform* exploits that for some groups, a Fourier transform can be decomposed into "smaller" Fourier transforms
 #    that consider subgroups (and their copies).
 #    This provides a speedup to nearly-linear runtime in the size of the group.
-# 3. The *Quantum Fourier Transform* calculates these smaller blocks in "quantum parallel", thereby realising a runtime
+# 3. The *Quantum Fourier Transform*, which transforms amplitudes of a quantum state,
+#    calculates these smaller blocks in "quantum parallel", thereby realising a runtime
 #    that is logarithmic in the size of the group.
 #
 # Group structure and Fourier transforms are important building blocks of quantum algorithms, and a fascinating
