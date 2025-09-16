@@ -522,8 +522,8 @@ print("FFT and previous DFT implementation coincide:", np.allclose(f_hat_vec, f_
 #
 # .. math:: \{4,5,6,7\}, \text{ (or } \{100, 101, 110,111\}\text{)}.
 #
-# Hence, applying gates to qubits 1,2,3, and then to
-# 2,3 and finally to qubit 3 implements an operation on smaller and smaller subgroups, working the divide-and-conquer
+# Hence, applying gates to qubits 1, 2, 3, and then to
+# 2, 3 and finally to qubit 3 implements an operation on smaller and smaller subgroups, working the divide-and-conquer
 # strategy backwards!
 #
 # Furthermore, you should find it suspicious that the controlled operations introduce a phase that looks somewhat like a "twiddle factor" used
@@ -537,7 +537,7 @@ print("FFT and previous DFT implementation coincide:", np.allclose(f_hat_vec, f_
 # branches together (with a phase that is taken into account by the previously tuned twiddle factor).
 #
 # In short, and while the details are more complex than we can cover here, our favourite quantum subroutine, the
-# QFT, is nothing but a Fast Fourier Transform in parallel -- enabled by groups!
+# QFT, is nothing but a Fast Fourier Transform in parallel---enabled by groups!
 #
 
 #######################################################################
