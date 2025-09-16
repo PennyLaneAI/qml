@@ -22,7 +22,6 @@ conda install -c conda-forge pandoc
 ## Running the Converter
 ```bash
 python3 notebook_converter/notebook_to_demo.py path/to/my/notebook.ipynb
-   path/to/my/notebook.ipynb
 ```
 
 ### If the notebook is not going to be executable by sphinx-build
