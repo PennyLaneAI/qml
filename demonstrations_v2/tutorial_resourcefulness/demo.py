@@ -50,7 +50,7 @@ Standard Fourier analysis through the lens of resources
 The power spectrum as GFD Purities
 ++++++++++++++++++++++++++++++++++
 
-Let's start by recalling the `standard discrete Fourier transform<https://en.wikipedia.org/wiki/Discrete_Fourier_transform>`__.
+Let's start by recalling the `standard discrete Fourier transform <https://en.wikipedia.org/wiki/Discrete_Fourier_transform>`_.
 Given N real values :math:`x_0,...,x_{N-1}`, that we can interpret as the values
 of a function :math:`f(0), ..., f(N-1)` over the integers :math:`x \in {0,...,N-1}`, the discrete Fourier transform
 computes the Fourier coefficients
@@ -301,7 +301,7 @@ basis3 = F[3:4]
 purity3 = np.abs(np.vdot(basis3, f_vec))**2
 
 # confirm that this is the third entry in the power spectrum
-print("Third GFD Purity and power spectrum entry coincide:", np.isclose(power_spectrum[3], purity3))
+print("GFD Purity and power spectrum coincide:", np.isclose(power_spectrum[3], purity3))
 
 ######################################################################
 # We now have a very different perspective on the power spectrum :math:`|\hat{f}(k)|^2`: It is a projection of the function
