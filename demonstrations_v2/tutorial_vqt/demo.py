@@ -569,7 +569,3 @@ print("Trace Distance: " + str(trace_distance(target_density_matrix, prep_densit
 #    Thermalizer Algorithm. arXiv preprint
 #    `arXiv:1910.02071 <https://arxiv.org/abs/1910.02071>`__.
 #
-#
-# About the author
-# ----------------
-#

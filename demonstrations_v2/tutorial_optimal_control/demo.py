@@ -840,7 +840,3 @@ plot_optimal_pulses(hist, S_k, ops_param, T, target_name)
 #     `Phys. Rev. Lett. 106, 190501 <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.106.190501>`__,
 #     `arxiv:1003.3750 <https://arxiv.org/abs/1003.3750>`__, 2011
 #
-#
-# About the author
-# ----------------
-#

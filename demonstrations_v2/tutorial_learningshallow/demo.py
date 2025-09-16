@@ -461,8 +461,3 @@ print(np.allclose(sewing_test(), np.outer(psi0, psi0), atol=1e-1))
 #     "Synthesis of Quantum Logic Circuits"
 #     `arXiv:quant-ph/0406176 <https://arxiv.org/abs/quant-ph/0406176>`__, 2004.
 #
-
-##############################################################################
-# About the author
-# ----------------
-#

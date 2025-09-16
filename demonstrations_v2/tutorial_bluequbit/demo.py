@@ -174,8 +174,4 @@ plt.tick_params(axis='y', labelsize=30)
 # .. [#Draper2000]
 #
 #     Thomas G. Draper, "Addition on a Quantum Computer". `arXiv:quant-ph/0008033 <https://arxiv.org/abs/quant-ph/0008033>`__.
-
-##############################################################################
-# About the author
-# ----------------
 #

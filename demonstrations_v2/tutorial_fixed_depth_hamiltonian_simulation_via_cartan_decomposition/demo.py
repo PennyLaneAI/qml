@@ -455,7 +455,3 @@ plt.show()
 #     `doi:10.1093/imanum/drad018 <https://doi.org/10.1093/imanum/drad018>`__, `preprint PDF <https://mtchu.math.ncsu.edu/Research/Papers/Cartan_02.pdf>`__ 2024.
 #
 #
-
-##############################################################################
-# About the author
-# ----------------

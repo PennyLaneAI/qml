@@ -12,8 +12,6 @@ Classical shadows
     quantum_volume Quantum volume
     tutorial_quantum_metrology Variationally optimizing measurement protocols
 
-*Authors: Roeland Wiersema and Brian Doolittle (Xanadu Residents) — Posted: 14 June 2021. Last updated: 14 June 2021.*
-
 .. figure:: ../_static/demonstration_assets/classical_shadows/atom_shadow.png
     :align: center
     :width: 75%
@@ -712,7 +710,4 @@ plt.show()
 #             `"Stabilizer Codes and Quantum Error Correction", <https://arxiv.org/abs/quant-ph/9705052>`_
 #             Ph.D. thesis, Caltech, eprint quantph/9705052.
 #
-#
-# About the author
-# ----------------
 #

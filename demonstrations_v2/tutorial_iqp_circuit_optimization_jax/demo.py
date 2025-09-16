@@ -612,6 +612,3 @@ plt.show()
 #    "Understanding Deep Generative Models with Generalized Empirical Likelihoods"
 #    `arXiv:2306.09780 <https://arxiv.org/abs/2306.09780>`__, 2023.
 #
-# About the authors
-# ----------------
-#

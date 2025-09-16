@@ -13,8 +13,6 @@ Resource estimation for quantum chemistry
     tutorial_vqe A brief overview of VQE
 
 
-*Author: Soran Jahangiri — Posted: 21 November 2022.*
-
 Quantum algorithms such as
 `quantum phase estimation <https://docs.pennylane.ai/en/stable/code/api/pennylane.QuantumPhaseEstimation.html>`_
 (QPE) and the `variational quantum eigensolver <https://pennylane.ai/qml/demos/tutorial_vqe.html>`_ (VQE)
@@ -316,6 +314,4 @@ fig.tight_layout()
 #     "Simulating key properties of lithium-ion batteries with a fault-tolerant quantum computer".
 #     `Phys. Rev. A 106, 032428 (2022)
 #     <https://journals.aps.org/pra/abstract/10.1103/PhysRevA.106.032428>`__
-# About the author
-# ----------------
 #

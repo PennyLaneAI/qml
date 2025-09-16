@@ -223,6 +223,3 @@ print(np.sort(np.linalg.eigvals(H.matrix())))
 #     "Variational Quantum Computation of Excited States"
 #     `Quantum 3, 156 (2019) <https://dx.doi.org/10.22331/q-2019-07-01-156>`__.
 #
-# About the authors
-# -----------------
-#

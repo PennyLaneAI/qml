@@ -14,8 +14,6 @@ Optimization using SPSA
    tutorial_vqe_qng Accelerating VQEs with quantum natural gradient
    qnspsa Quantum natural SPSA optimizer
 
-*Authors: Antal Szava & David Wierichs — Posted: 19 March 2021. Last updated: 23 February 2023.*
-
 In this tutorial, we investigate using a stochastic optimizer called
 the Simultaneous Perturbation Stochastic Approximation (SPSA) algorithm to optimize quantum
 circuits. This optimizer is built into PennyLane as :class:`~pennylane.SPSAOptimizer`.
@@ -550,8 +548,4 @@ plt.show()
 #    J. Gacon, C. Zoufal, G. Carleo, and S. Woerner "Simultaneous Perturbation
 #    Stochastic Approximation of the Quantum Fisher Information",
 #    `Quantum, 5, 567 <https://quantum-journal.org/papers/q-2021-10-20-567/>`__, Oct 2021
-
-##############################################################################
-# About the author
-# ----------------
 #

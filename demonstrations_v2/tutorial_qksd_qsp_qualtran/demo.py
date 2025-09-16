@@ -454,6 +454,3 @@ def generalize_ccrz(b):
 #     "Diagonalization of large many-body Hamiltonians on a quantum processor",
 #     `arXiv:2407.14431 <https://arxiv.org/abs/2407.14431>`__, 2024.
 #
-# About the author
-# ----------------
-#

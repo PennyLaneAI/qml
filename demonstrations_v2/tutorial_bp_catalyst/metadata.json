@@ -1,15 +1,21 @@
 {
-  "title": "Decoding Quantum Errors on the Steane code with Belief Propagation & Catalyst",
-  "authors": [
-    {
-      "username": "tomginsberg"
-    }
-  ],
-  "dateOfPublication": "2025-08-25T14:30:00+00:00",
-  "dateOfLastModification": "2025-08-25T14:30:00+00:00",
-  "categories": ["Quantum Computing"],
-  "tags": ["quantum error correction", "css codes", "belief propagation"],
-  "previewImages": [
+    "title": "Decoding Quantum Errors on the Steane code with Belief Propagation & Catalyst",
+    "authors": [
+        {
+            "username": "tomginsberg"
+        }
+    ],
+    "dateOfPublication": "2025-08-25T14:30:00+00:00",
+    "dateOfLastModification": "2025-09-09T17:41:50+00:00",
+    "categories": [
+        "Quantum Computing"
+    ],
+    "tags": [
+        "quantum error correction",
+        "css codes",
+        "belief propagation"
+    ],
+    "previewImages": [
         {
             "type": "thumbnail",
             "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_bp_catalyst.png"
@@ -18,85 +24,84 @@
             "type": "large_thumbnail",
             "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_bp_catalyst.png"
         }
-
-  ],
-  "seoDescription": "Learn how to decode CSS codes using belief propagation with JAX, Pennylane and Catalyst",
-  "doi": "",
-  "references": [
-    {
-      "id": "Pesah2023",
-      "type": "webpage",
-      "title": "The stabilizer trilogy I — Stabilizer codes",
-      "authors": "Arthur Pesah",
-      "year": "2023",
-      "url": "https://arthurpesah.me/blog/2023-01-31-stabilizer-formalism-1/"
-    },
-    {
-      "id": "Wiberg2001",
-      "type": "phdthesis",
-      "title": "Codes and Decoding on General Graphs",
-      "authors": "Niclas Wiberg",
-      "year": "2001",
-      "url": "https://www.essrl.wustl.edu/~jao/itrg/wiberg.pdf"
-    },
-    {
-      "id": "Panteleev2019",
-      "type": "preprint",
-      "title": "Degenerate Quantum LDPC Codes With Good Finite Length Performance",
-      "authors": "Pavel Panteleev",
-      "year": "2019",
-      "url": "https://arxiv.org/abs/1904.02703v3"
-    },
-    {
-      "id": "Hillmann2024",
-      "type": "preprint",
-      "title": "Localized statistics decoding: A parallel decoding algorithm for quantum low-density parity-check codes",
-      "authors": "Timo Hillmann",
-      "year": "2024",
-      "url": "https://arxiv.org/abs/2406.18655v1"
-    },
-    {
-      "id": "Wolanski2024",
-      "type": "preprint",
-      "title": "Ambiguity Clustering: an accurate and efficient decoder for qLDPC codes",
-      "authors": "Stasiu Wolanski",
-      "year": "2024",
-      "url": "https://arxiv.org/abs/2406.14527v2"
-    },
-    {
-      "id": "Loeliger2004",
-      "type": "article",
-      "title": "An introduction to factor graphs",
-      "authors": "Hans-Andrea Loeliger",
-      "year": "2004",
-      "url": "https://www.isiweb.ee.ethz.ch/papers/arch/aloe-2004-spmagffg.pdf"
-    },
-    {
-      "id": "Barber2012",
-      "type": "book",
-      "title": "Bayesian Reasoning and Machine Learning",
-      "authors": "David Barber",
-      "year": "2012",
-      "url": "http://web4.cs.ucl.ac.uk/staff/D.Barber/textbook/180325.pdf#page=107.50"
-    }
-  ],
-  "basedOnPapers": [],
-  "referencedByPapers": [],
-  "relatedContent": [
-    {
-      "type": "demonstration",
-      "id": "tutorial_magic_state_distillation",
-      "weight": 1
-    },
-    {
-      "type": "demonstration",
-      "id": "tutorial_mcm_introduction",
-      "weight": 1
-    },
-    {
-      "type": "demonstration",
-      "id": "tutorial_qjit_compile_grovers_algorithm_with_catalyst",
-      "weight": 1
-    }
-  ]
+    ],
+    "seoDescription": "Learn how to decode CSS codes using belief propagation with JAX, Pennylane and Catalyst",
+    "doi": "",
+    "references": [
+        {
+            "id": "Pesah2023",
+            "type": "webpage",
+            "title": "The stabilizer trilogy I — Stabilizer codes",
+            "authors": "Arthur Pesah",
+            "year": "2023",
+            "url": "https://arthurpesah.me/blog/2023-01-31-stabilizer-formalism-1/"
+        },
+        {
+            "id": "Wiberg2001",
+            "type": "phdthesis",
+            "title": "Codes and Decoding on General Graphs",
+            "authors": "Niclas Wiberg",
+            "year": "2001",
+            "url": "https://www.essrl.wustl.edu/~jao/itrg/wiberg.pdf"
+        },
+        {
+            "id": "Panteleev2019",
+            "type": "preprint",
+            "title": "Degenerate Quantum LDPC Codes With Good Finite Length Performance",
+            "authors": "Pavel Panteleev",
+            "year": "2019",
+            "url": "https://arxiv.org/abs/1904.02703v3"
+        },
+        {
+            "id": "Hillmann2024",
+            "type": "preprint",
+            "title": "Localized statistics decoding: A parallel decoding algorithm for quantum low-density parity-check codes",
+            "authors": "Timo Hillmann",
+            "year": "2024",
+            "url": "https://arxiv.org/abs/2406.18655v1"
+        },
+        {
+            "id": "Wolanski2024",
+            "type": "preprint",
+            "title": "Ambiguity Clustering: an accurate and efficient decoder for qLDPC codes",
+            "authors": "Stasiu Wolanski",
+            "year": "2024",
+            "url": "https://arxiv.org/abs/2406.14527v2"
+        },
+        {
+            "id": "Loeliger2004",
+            "type": "article",
+            "title": "An introduction to factor graphs",
+            "authors": "Hans-Andrea Loeliger",
+            "year": "2004",
+            "url": "https://www.isiweb.ee.ethz.ch/papers/arch/aloe-2004-spmagffg.pdf"
+        },
+        {
+            "id": "Barber2012",
+            "type": "book",
+            "title": "Bayesian Reasoning and Machine Learning",
+            "authors": "David Barber",
+            "year": "2012",
+            "url": "http://web4.cs.ucl.ac.uk/staff/D.Barber/textbook/180325.pdf#page=107.50"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_magic_state_distillation",
+            "weight": 1
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_mcm_introduction",
+            "weight": 1
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_qjit_compile_grovers_algorithm_with_catalyst",
+            "weight": 1
+        }
+    ]
 }
