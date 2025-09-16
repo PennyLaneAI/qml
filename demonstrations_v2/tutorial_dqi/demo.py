@@ -15,8 +15,7 @@ In this demo, we will implement DQI in PennyLane to solve the max-XORSAT problem
 problem is simple and has not yet demonstrated quantum advantage, it clearly illustrates the
 operational principles and underlying intuition of DQI. We will begin by introducing the problem and
 the core principles of the algorithm, followed by a description of each algorithmic step and its implementation.
-The DQI algorithm is technically rich, and explaining all of its details would be extensive. 
-Therefore, we will omit some of them to keep things within scope. 
+Note that the DQI algorithm is technically rich, and explaining all of its details would be extensive — therefore, we will omit some of them to keep things within scope. 
 
 The max-XORSAT problem
 ----------------------
