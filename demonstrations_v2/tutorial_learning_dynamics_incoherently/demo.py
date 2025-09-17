@@ -428,8 +428,4 @@ print("Target output state\n", target_matrices_shadow[0])
 #     "Quantum advantage in learning from experiments"
 #     `Science <http://dx.doi.org/10.1126/science.abn7293>`__, 2022
 #
-
-##############################################################################
-# About the author
-# ------------------
 #

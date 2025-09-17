@@ -15,8 +15,6 @@ Kernel-based training of quantum models with scikit-learn
 
     tutorial_variational_classifier Variational classifier
 
-*Author: Maria Schuld — Posted: 03 February 2021. Last updated: 3 February 2021.*
-
 Over the last few years, quantum machine learning research has provided a lot of insights on
 how we can understand and train quantum circuits as machine learning models.
 While many connections to neural networks have been made, it becomes increasingly clear that
@@ -682,9 +680,4 @@ plt.show()
 # larger quantum computers will most likely enable us to reduce
 # the quadratic scaling of kernel methods to linear scaling, which may make classical as well as quantum kernel methods a
 # strong alternative to neural networks for big data processing one day.
-#
-
-##############################################################################
-# About the author
-# ----------------
 #

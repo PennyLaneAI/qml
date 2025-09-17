@@ -17,8 +17,6 @@ Quantum analytic descent
    tutorial_stochastic_parameter_shift The stochastic parameter-shift rule
 
 
-*Authors: Elies Gil-Fuster, David Wierichs (Xanadu Residents) — Posted: 30 June 2021. Last updated: 18 November 2021*
-
 One of the main problems of many-body physics is that of finding the ground
 state and ground state energy of a given Hamiltonian.
 `The Variational Quantum Eigensolver (VQE) <https://pennylane.ai/qml/demos/tutorial_vqe.html>`_ combines smart circuit
@@ -705,8 +703,4 @@ leg = ax.legend()
 #     "Estimating the gradient and higher-order derivatives on quantum hardware".
 #     `Phys. Rev. A 103, 012405 <https://journals.aps.org/pra/abstract/10.1103/PhysRevA.103.012405>`__, 2021.
 #     `arXiv preprint arXiv:2008.06517 <https://arxiv.org/abs/2008.06517>`__.
-#
-#
-# About the author
-# ----------------
 #

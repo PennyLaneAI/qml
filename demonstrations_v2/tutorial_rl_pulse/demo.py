@@ -1045,8 +1045,3 @@ def evolve_states(state, params, t):
 #     "A quantum engineer's guide to superconducting qubits."
 #     `Applied physics reviews 6(2) <https://pubs.aip.org/aip/apr/article/6/2/021318/570326/A-quantum-engineer-s-guide-to-superconducting>`__.
 #
-
-######################################################################
-# About the author
-# ----------------
-#

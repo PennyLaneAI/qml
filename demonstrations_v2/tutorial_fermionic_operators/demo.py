@@ -11,8 +11,6 @@ Fermionic operators
     tutorial_quantum_chemistry Building molecular Hamiltonians
     tutorial_vqe A brief overview of VQE
 
-*Author: Soran Jahangiri — Posted: 27 June 2023. Last updated: 27 June 2023.*
-
 Fermionic creation and annihilation operators are commonly used to construct
 `Hamiltonians <https://codebook.xanadu.ai/H.3>`_ and other observables of molecules and spin
 systems [#surjan]_. In this demo, you will learn how to use PennyLane to create fermionic operators
@@ -225,7 +223,4 @@ np.linalg.eigh(h.sparse_matrix().toarray())[0].min()
 #
 #     Peter R. Surjan, "Second Quantized Approach to Quantum Chemistry". Springer-Verlag, 1989.
 #
-#
-# About the author
-# ----------------
-#
+
