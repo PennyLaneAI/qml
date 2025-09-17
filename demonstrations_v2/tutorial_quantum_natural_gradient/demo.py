@@ -15,8 +15,6 @@ Quantum natural gradient
    tutorial_backprop Quantum gradients with backpropagation
    tutorial_vqe_qng Accelerating VQE with quantum natural gradient
 
-*Author: Josh Izaac — Posted: 11 October 2019. Last updated: 25 January 2021.*
-
 This example demonstrates the quantum natural gradient optimization technique
 for variational quantum circuits, originally proposed in
 `Stokes et al. (2019) <https://arxiv.org/abs/1909.02108>`__.
@@ -492,8 +490,4 @@ plt.show()
 #
 # 4. Naoki Yamamoto. "On the natural gradient for variational quantum eigensolver."
 #    `arXiv:1909.05074 <https://arxiv.org/abs/1909.05074>`__, 2019.
-#
-#
-# About the author
-# ----------------
 #

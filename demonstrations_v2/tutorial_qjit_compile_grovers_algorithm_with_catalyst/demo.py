@@ -397,7 +397,4 @@ plt.show()
 #
 #     The performance improvements that can be achieved with QJIT compilation will depend on the
 #     specific size and topology of your PennyLane circuit.
-
-######################################################################
-# About the author
-# ----------------
+#

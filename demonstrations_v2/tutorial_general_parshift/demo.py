@@ -17,8 +17,6 @@ Generalized parameter-shift rules
    tutorial_quantum_analytic_descent Quantum analytic descent
 
 
-*Author: David Wierichs (Xanadu Resident) — Posted: 23 August 2021. Last updated: 27 August 2021*
-
 In this demo we will look at univariate quantum functions, i.e., those that
 depend on a single parameter. We will investigate the form such functions usually take
 and demonstrate how we can *reconstruct* them as classical functions, capturing the full
@@ -884,8 +882,4 @@ print(f"Second-order finite difference:    {np.round(np.array(fd_der2), 6)}")
 #
 # .. |Rotosolve_code| replace:: ``qml.RotosolveOptimizer``
 # .. _Rotosolve_code: https://pennylane.readthedocs.io/en/stable/code/api/pennylane.RotosolveOptimizer.html
-
-##############################################################################
-# About the author
-# ----------------
 #

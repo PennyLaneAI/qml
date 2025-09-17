@@ -10,8 +10,6 @@ r"""Compilation of quantum circuits
    tutorial_quantum_circuit_cutting Introduction to circuit cutting
 
 
-*Author: Borja Requena — Posted: 14 June 2023.*
-
 Quantum circuits take many different forms from the moment we design them to the point where they
 are ready to run on a quantum device. These changes happen during the compilation process of the
 quantum circuits, which relies on the fact that there are many equivalent representations of quantum
@@ -238,7 +236,4 @@ plt.show()
 # To continue learning, you can explore other circuit transformations present in the PennyLane
 # :mod:`~pennylane.transforms` module. Furthermore, you can even learn how to create your own in
 # `this blogpost <https://pennylane.ai/blog/2021/08/how-to-write-quantum-function-transforms-in-pennylane/>`__.
-#
-# About the author
-# ----------------
 #

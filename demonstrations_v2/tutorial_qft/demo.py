@@ -177,6 +177,3 @@ plt.show()
 # formulation, its implementation with basic quantum gates, and its application demonstrating its usefulness in algorithms like quantum phase estimation.
 # It is a technique that deserves to be mastered!
 #
-# About the authors
-# -----------------
-#

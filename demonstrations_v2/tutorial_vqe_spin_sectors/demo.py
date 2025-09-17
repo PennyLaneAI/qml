@@ -10,8 +10,6 @@ VQE in different spin sectors
    tutorial_vqe A brief overview of VQE
    vqe_parallel VQE with parallel QPUs with Rigetti
 
-*Author: Alain Delgado — Posted: 13 October 2020. Last updated: 25 June 2022.*
-
 The Variational Quantum Eigensolver (VQE) algorithm is an approach for finding the
 lowest-energy state of a molecule using a quantum computer [#peruzzo2014]_.
 
@@ -379,7 +377,4 @@ print("\n" f"Optimal value of the circuit parameters = {params}")
 #     J.M. Arrazola, O. Di Matteo, N. Quesada, S. Jahangiri, A. Delgado, N. Killoran.
 #     "Universal quantum circuits for quantum chemistry". `arXiv:2106.13839, (2021)
 #     <https://arxiv.org/abs/2106.13839>`__
-#
-# About the author
-# ----------------
 #

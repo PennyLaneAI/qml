@@ -6,8 +6,6 @@ The Quantum Graph Recurrent Neural Network
     :property="og:description": Using a quantum graph recurrent neural network to learn quantum dynamics.
     :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/qgrnn_thumbnail.png
 
-*Author: Jack Ceroni — Posted: 27 July 2020. Last updated: 25 March 2021.*
-
 """
 
 ######################################################################
@@ -668,8 +666,4 @@ print(f"\nNon-Existing Edge Parameters: {[val.unwrap() for val in weights_noedge
 # 1. Verdon, G., McCourt, T., Luzhnica, E., Singh, V., Leichenauer, S., &
 #    Hidary, J. (2019). Quantum Graph Neural Networks. arXiv preprint
 #    `arXiv:1909.12264 <https://arxiv.org/abs/1909.12264>`__.
-#
-#
-# About the author
-# ----------------
 #

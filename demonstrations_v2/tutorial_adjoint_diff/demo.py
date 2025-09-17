@@ -20,7 +20,6 @@ Adjoint Differentiation
 """
 
 ##############################################################################
-# *Author: Christina Lee. Posted: 23 Nov 2021. Last updated: 20 Jun 2023.*
 #
 # `Classical automatic differentiation <https://en.wikipedia.org/wiki/Automatic_differentiation#The_chain_rule,_forward_and_reverse_accumulation>`__
 # has two methods of calculation: forward and reverse.
@@ -449,7 +448,4 @@ print(qml.grad(circuit_adjoint)(x))
 #
 # Xiu-Zhe Luo, Jin-Guo Liu, Pan Zhang, and Lei Wang. Yao.jl: `Extensible, efficient framework for quantum
 # algorithm design <https://quantum-journal.org/papers/q-2020-10-11-341/>`__ , 2019
-#
-# About the author
-# ----------------
 #
