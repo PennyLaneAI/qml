@@ -1,3 +1,7 @@
+"""
+Utility function that sorts a block-diagonal matrix for visualisation purposes.
+"""
+
 import numpy as np
 from collections import OrderedDict
 
