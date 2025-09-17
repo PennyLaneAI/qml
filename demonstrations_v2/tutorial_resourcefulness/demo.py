@@ -14,7 +14,7 @@ It turns out that the resourcefulness of quantum states can be investigated with
 *Fourier analysis* here refers to the well-known technique of computing Fourier coefficients of a function, or in our case,
 the amplitudes of a quantum state. *Generalised* indicates that we don't use the
 standard Fourier transform, but a generalisation of its group-theoretic definition (more about this in our demo on `quantum Fourier transforms
-and groups <https://pennylane.ai/qml/demos/tutorial_qft_and_groups>__).
+and groups <https://pennylane.ai/qml/demos/tutorial_qft_and_groups>`__).
 `Bermejo, Braccia et al. (2025) <https://arxiv.org/abs/2506.19696>`__ [#Bermejo_Braccia]_ suggest to use generalised Fourier analysis to
 compute a quantity that they call the **Generalised Fourier Decomposition (GFD) Purity**,
 and use it as a "fingerprint" of a state's resource profile.
@@ -82,7 +82,7 @@ def f_hat(k):
 f_vals = [f(x) for x in range(N)]
 f_fourier_coeffs = [f_hat(k) for k in range(N)]
 
-fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(8, 3))
+fig, (ax1, ax2) = plt.subplots(2, 1)
 ax1.bar(range(N), f_vals, color='dimgray')
 ax1.set_title(f"function f")
 ax2.bar(np.array(range(N)) + 0.05, np.imag(f_fourier_coeffs), color='lightpink', label="imaginary part")
@@ -133,7 +133,7 @@ def g(x):
 g_hat_vals = [g_hat(x) for x in range(N)]
 g_vals = [g(k) for k in range(N)]
 
-fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(8, 3))
+fig, (ax1, ax2) = plt.subplots(2, 1)
 ax1.bar(range(N), g_hat_vals, color='dimgray')
 ax1.set_title("Fourier coefficients")
 ax2.bar(np.array(range(N))+0.05, np.imag(g_vals), color='lightpink', label="imaginary part")
@@ -609,7 +609,7 @@ for data, label in zip(purities, labels):
 agg_purities = [[p[0], p[1]+p[2], p[3]] for p in purities]
 
 
-fig, ax = plt.subplots(1, 1, figsize=(8, 6))
+fig, ax = plt.subplots(1, 1)
 for i, data in enumerate(agg_purities):
     plt.plot(data, label=f'{labels[i]}')
 
