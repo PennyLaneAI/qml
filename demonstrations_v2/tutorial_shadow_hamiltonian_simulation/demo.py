@@ -358,9 +358,3 @@ print(O_t_shadow)
 #     "Gate-based quantum simulation of Gaussian bosonic circuits on exponentially many modes"
 #     `arXiv:2407.06290 <https://arxiv.org/abs/2407.06290>`__, 2024.
 #
-
-
-##############################################################################
-# About the author
-# ----------------
-#

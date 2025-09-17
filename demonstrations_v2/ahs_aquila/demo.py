@@ -9,8 +9,6 @@ r"""Pulse programming on Rydberg atom hardware
    tutorial_pasqal Quantum computation with neutral atoms
    tutorial_pulse_programming101 Differentiable pulse programming with qubits in PennyLane
 
-*Author: Lillian M.A. Frederiksen — Posted: 16 May 2023.*
-
 Neutral atom hardware is a new innovation in quantum technology that has been gaining traction in
 recent years thanks to new developments in optical tweezer technology. One such device,
 `QuEra's Aquila <https://www.quera.com/aquila>`__, is capable of running circuits with up to 256
@@ -824,8 +822,4 @@ circuit(params)
 #     Alexander Keesling, Eric Kessler, and Peter Komar
 #     "AWS Quantum Technologies Blog: Realizing quantum spin liquid phase on an analog Hamiltonian Rydberg simulator"
 #     `Amazon Quantum Computing Blog <https://aws.amazon.com/blogs/quantum-computing/realizing-quantum-spin-liquid-phase-on-an-analog-hamiltonian-rydberg-simulator/>`__, 2021.
-
-##############################################################################
-# About the author
-# ----------------
 #

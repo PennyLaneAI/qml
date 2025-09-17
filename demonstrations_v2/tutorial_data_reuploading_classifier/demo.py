@@ -14,7 +14,6 @@ Data-reuploading classifier
    tutorial_multiclass_classification Multiclass margin classifier
    tutorial_expressivity_fourier_series Quantum models as Fourier series
 
-*Author: Shahnawaz Ahmed — Posted: 11 October 2019. Last updated: 19 January 2021.*
 
 A single-qubit quantum circuit which can implement arbitrary unitary
 operations can be used as a universal classifier much like a single
@@ -467,7 +466,4 @@ plt.show()
 # method for large scale optimization." Mathematical programming
 # 45.1-3 (1989): 503-528.
 #
-#
-# About the author
-# ----------------
 #

@@ -249,8 +249,3 @@ def pl_circuit():
 # and blogs, receive the `monthly Xanadu newsletter <https://xanadu.us17.list-manage.com/subscribe?u=725f07a1d1a4337416c3129fd&id=294b062630>`__, or follow us on `LinkedIn <https://www.linkedin.com/company/pennylaneai/>`__ or `X
 # (formerly Twitter) <https://twitter.com/PennyLaneAI>`__ to stay updated!
 #
-
-######################################################################
-# About the author
-# ----------------
-#

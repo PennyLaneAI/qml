@@ -627,8 +627,4 @@ plt.show()
 #    "Symmetric derivatives of parametrized quantum circuits",
 #    `arXiv:2312.06752 <https://arxiv.org/abs/2312.06752>`__, 2023.
 #
-
-######################################################################
-# About the author
-# ----------------
 #

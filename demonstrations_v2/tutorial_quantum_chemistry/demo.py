@@ -11,8 +11,6 @@ Building molecular Hamiltonians
 .. related::
    tutorial_vqe A brief overview of VQE
 
-*Author: Alain Delgado — Posted: 02 August 2020. Last updated: 29 August 2023.*
-
 .. note::
 
     A wide variety of molecular data, including Hamiltonians, is
@@ -325,7 +323,4 @@ print(H)
 #     Active Space for Calculating Electronic Excitation Spectra by MS-CASPT2 or MC-PDFT".
 #     `Journal of Chemical Theory and Computation 14, 2017 (2018).
 #     <https://pubs.acs.org/doi/abs/10.1021/acs.jctc.8b00032>`_
-#
-# About the author
-# ----------------
 #

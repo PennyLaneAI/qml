@@ -11,8 +11,6 @@ Classically-boosted variational quantum eigensolver
     tutorial_quantum_chemistry Building molecular Hamiltonians
     tutorial_vqe Variational Quantum Eigensolver
 
-*Authors: Joana Fraxanet & Isidor Schoch (Xanadu Residents).
-Posted: 31 October 2022. Last updated: 31 October 2022.*
 
 One of the most important applications of quantum computers is expected
 to be the computation of ground-state energies of complicated molecules
@@ -582,7 +580,4 @@ print("CB-VQE energy %.4f" % (energy_CBVQE))
 #
 #     M. D. Radin. (2021) "Classically-Boosted Variational Quantum Eigensolver",
 #     `arXiv:2106.04755 [quant-ph] <https://arxiv.org/abs/2106.04755>`__ (2021)
-#
-# About the author
-# ----------------
 #

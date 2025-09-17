@@ -511,7 +511,3 @@ plt.show()
 #     :align: center
 #     :width: 90%
 #
-#
-# About the author
-# ----------------
-#

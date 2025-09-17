@@ -11,8 +11,6 @@ Measurement-based quantum computation
 
     tutorial_toric_code Toric code 
 
-*Authors: Joost Bus and Radoica Draškić — Posted: 05 December 2022. Last updated: 05 December 2022.*
-
 """
 
 ##############################################################################
@@ -803,9 +801,4 @@ plt.show()
 #
 #   Benjamin J. Brown, Sam Roberts. (2018) *Universal fault-tolerant measurement-based quantum computation*, `arXiv
 #   <https://arxiv.org/abs/1811.11780>`_.
-#
-
-##############################################################################
-# About the author
-# ----------------
 #

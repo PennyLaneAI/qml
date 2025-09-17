@@ -10,10 +10,8 @@ Tensor-network quantum circuits
 
 .. related::
 
-   tutorial_variational_classifier Variational classifier
+    tutorial_variational_classifier Variational classifier
 
-*Authors: Diego Guala*:superscript:`1` *, Esther Cruz-Rico*:superscript:`2` *,
-Shaoming Zhang*:superscript:`2` *, Juan Miguel Arrazola*:superscript:`1` *— Posted: 29 March 2022. Last updated: 27 June 2022.*
 
 This demonstration, written in collaboration between Xanadu and the BMW group, explains how to use PennyLane templates to design and implement tensor-network quantum circuits
 as in Ref. [#Huggins]_. Tensor-network quantum circuits emulate the shape and connectivity of tensor networks such as matrix product states 
@@ -414,8 +412,4 @@ for image in BAS:
 #
 #    R. Orús, Annals of Physics 349, 117 (2014), ISSN 0003-
 #    4916, URL https://www.sciencedirect.com/science/article/pii/S0003491614001596.
-#
-#
-# About the author
-# ----------------
 #

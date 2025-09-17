@@ -12,8 +12,6 @@ Generalization in QML from few training data
 
     tutorial_local_cost_functions Alleviating barren plateaus with local cost functions
 
-*Authors: Korbinian Kottmann, Luis Mantilla Calderon, Maurice Weber — Posted: 29 August 2022*
-
 In this tutorial, we dive into the generalization capabilities of quantum machine learning models.
 For the example of a `Quantum Convolutional Neural Network (QCNN) <https://pennylane.ai/qml/glossary/qcnn.html>`_, we show how its generalization error behaves as a
 function of the number of training samples. This demo is based on the paper
@@ -594,8 +592,4 @@ plt.show()
 #     Alexander LeNail.
 #     "NN-SVG: Publication-Ready Neural Network Architecture Schematics"
 #     `Journal of Open Source Software <https://doi.org/10.21105/joss.00747>`__, 2019.
-#
-#
-# About the author
-# ----------------
 #

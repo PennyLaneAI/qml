@@ -12,8 +12,6 @@ Quantum computing with superconducting qubits
    tutorial_trapped_ions Trapped ion quantum computers
    tutorial_photonics Photonic quantum computers
 
-*Author: Alvaro Ballon — Posted: 22 March 2022. Last updated: 26 August 2022.*
-
 **Superconducting qubits** are among the most promising approaches to building quantum computers.
 It is no surprise that this technology is being used by well-known tech companies in their quest
 to pioneer the quantum era. Google's Sycamore claimed quantum advantage back in 2019 [#Google2019]_ and, in 2021,
@@ -873,7 +871,4 @@ def H_evolve(state, phi, time):
 #     `"The IBM Quantum heavy hex lattice"
 #     <https://research.ibm.com/blog/heavy-hex-lattice>`__.
 #     IBM Research Blog. Retrieved 2022-03-15
-#
-# About the author
-# ----------------
 #

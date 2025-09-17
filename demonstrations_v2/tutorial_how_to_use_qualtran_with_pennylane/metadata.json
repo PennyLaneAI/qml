@@ -8,7 +8,7 @@
     "executable_stable": true,
     "executable_latest": true,
     "dateOfPublication": "2025-08-18T00:00:00+00:00",
-    "dateOfLastModification": "2025-08-18T00:00:00+00:00",
+    "dateOfLastModification": "2025-09-09T17:41:50+00:00",
     "categories": [
         "Quantum Computing",
         "How-to"
@@ -26,8 +26,7 @@
     ],
     "seoDescription": "Learn how to use Qualtran with PennyLane.",
     "doi": "",
-    "references": [
-    ],
+    "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],
     "relatedContent": [
