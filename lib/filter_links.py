@@ -45,7 +45,7 @@ def parse_body(link: str) -> tuple[str, str]:
     if "<" in link:
         text, key = link.split("<")
         return text.strip(), key.strip(">").lstrip(".")
-    elif "~" == link[0]:
+    elif link.startswith("~"):
         return link.split(".")[-1], link.lstrip("~.")
     else:
         return "", link
