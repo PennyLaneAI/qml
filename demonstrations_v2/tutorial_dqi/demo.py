@@ -502,7 +502,8 @@ pprint(formatted_state)
 # To keep things simple, we will use a straightforward approach for decoding by building a Lookup Table
 # (LUT) where we compute the syndrome for each possible error using the classical function
 # ``syndrome_LUT`` [#Classiq2025]_. While this function might look daunting, it is simply calculating
-# a product between a matrix and a vector, and storing the results in a usable format. 
+# a product between a matrix and a vector, and storing the results in a usable format. (Feel free to explore
+# other decoders such as belief propagation.)
 #
 # Then, for each syndrome in the syndrome register, the corresponding error is
 # uncomputed in the error register using controlled bit-flip operations. We will now integrate this
@@ -647,7 +648,9 @@ plt.show()
 # decoding problem by leveraging quantum interference and encoding a polynomial of the objective
 # function in the amplitudes of a quantum state. While we used a simplified problem here, the
 # principles we’ve explored are applicable to more complex optimization tasks. This algorithm marks
-# the beginning of an exploration of a different approach for achieving quantum speedups.
+# the beginning of an exploration of a different approach for achieving quantum speedups. 
+# Are there any more challenging optimization problems that DQI can be used for? What decoders will
+# be most suitable to harness a potential advantage over classical algorithms? 
 # 
 # References
 # -----------
