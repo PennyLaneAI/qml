@@ -16,11 +16,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_hidden_cut.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/pennylane-demo-decoded-quantum-interferometry-thumbnail.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_hidden_cut.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/pennylane-demo-decoded-quantum-interferometry-large-thumbnail.png"
         }
     ],
     "seoDescription": "Learn how to implement decoded quantum interferometry in Pennylane to solve the max-XORSAT problem",
