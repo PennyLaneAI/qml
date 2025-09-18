@@ -11,8 +11,6 @@ Optimization of molecular geometries
    tutorial_vqe A brief overview of VQE
    tutorial_givens_rotations Givens rotations for quantum chemistry
    
-*Author: Alain Delgado — Posted: 30 June 2021. Last updated: 25 June 2022.*
-
 Predicting the most stable arrangement of atoms in a molecule is one of the most important tasks
 in quantum chemistry. Essentially, this is an optimization problem where the total energy of the
 molecule is minimized with respect to the positions of the atomic nuclei. The molecular
@@ -457,7 +455,4 @@ plt.show()
 #     "Analytical derivative methods in quantum chemistry".
 #     `Advances in Chemical Sciences (1987)
 #     <https://onlinelibrary.wiley.com/doi/10.1002/9780470142943.ch4>`__
-#
-# About the author
-# ----------------
 #

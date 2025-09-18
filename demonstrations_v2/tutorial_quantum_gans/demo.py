@@ -15,7 +15,6 @@ Quantum GANs
 
 
 ######################################################################
-# *Author: James Ellis — Posted: 01 February 2022. Last updated: 27 January 2022.*
 #
 # In this tutorial, we will explore quantum GANs to generate hand-written
 # digits of zero. We will first cover the theory of the classical case,
@@ -595,8 +594,4 @@ plt.show()
 # 
 #    He-Liang Huang et al. *Experimental Quantum Generative Adversarial Networks for Image Generation*. 
 #    `arXiv:2010.06201 <https://arxiv.org/abs/2010.06201>`__ (2020).
-#
-#
-# About the author
-# ----------------
 #

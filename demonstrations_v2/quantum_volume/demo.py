@@ -12,8 +12,6 @@ Quantum volume
 
     qsim_beyond_classical Beyond classical computing with qsim
 
-*Author: Olivia Di Matteo — Posted: 15 December 2020. Last updated: 15 April 2021.*
-
 .. warning::
     The data in this demo was originally generated using system calibration data from the ``ibmq_lima`` device,
     which has since been retired. While the code now uses a fake version of the Lima device, the noise and calibration

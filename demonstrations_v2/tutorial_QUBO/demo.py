@@ -737,8 +737,3 @@ fig.show()
 # Performance in Combinatorial Optimization Problems with Inequality Constraints: An Evaluation of the
 # Unbalanced Penalization Method on D-Wave Advantage. https://doi.org/10.1109/QCE57702.2023.00067
 #
-
-######################################################################
-# About the author
-# ----------------
-#

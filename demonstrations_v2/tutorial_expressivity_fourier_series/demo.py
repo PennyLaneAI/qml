@@ -10,7 +10,6 @@ Quantum models as Fourier series
 
    tutorial_data_reuploading_classifier Data-reuploading classifier
 
-*Authors: Maria Schuld and Johannes Jakob Meyer — Posted: 24 August 2020. Last updated: 15 January 2021.*
 
 """
 
@@ -854,8 +853,4 @@ def random_weights():
 #     Maria Schuld, Ryan Sweke, and Johannes Jakob Meyer. "The effect of data encoding on
 #     the expressive power of variational quantum machine learning models."
 #     `arXiv:2008.08605 <https://arxiv.org/abs/2008.08605>`__ (2020).
-#
-#
-# About the author
-# ----------------
 #

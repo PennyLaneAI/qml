@@ -10,8 +10,6 @@ Modelling chemical reactions on a quantum computer
    tutorial_quantum_chemistry Building molecular Hamiltonians
    tutorial_vqe A brief overview of VQE
 
-*Authors: Varun Rishi and Juan Miguel Arrazola — Posted: 23 July 2021. Last updated: 21 February 2023.*
-
 The term "chemical reaction" is another name for the transformation of molecules – the breaking and 
 forming of bonds. They are characterized by an energy barrier that determines
 the likelihood that a reaction takes place. The energy landscapes formed by these barriers are the
@@ -463,8 +461,4 @@ print(f"Ratio of reaction rates is {ratio:.0f}")
 #    Accuracy of Chemical Simulations on Quantum Computers" (2020).
 #    <https://medium.com/qiskit/a-tale-of-colliding-electrons-boosting-the-accuracy-of-chemical
 #    -simulations-on-quantum-computers-50a4b4ee5c64>`__
-#
-#
-# About the author
-# ----------------
 #
