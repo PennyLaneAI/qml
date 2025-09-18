@@ -34,7 +34,7 @@ of the overall algorithm—is computed by a quantum device. In many situations t
 guarantees that we get better or at least equally good results.
 
 This demonstration explores how kernel-based training compares with
-`variational training <https://pennylane.ai/qml/demos/tutorial_variational_classifier>`__ in terms of the number of quantum
+:doc:`variational training <demos/tutorial_variational_classifier>` in terms of the number of quantum
 circuits that have to be evaluated. For this we train a quantum machine
 learning model with a kernel-based approach using a combination of PennyLane
 and the `scikit-learn <https://scikit-learn.org/>`__ machine

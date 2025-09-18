@@ -46,7 +46,7 @@ An equivariant graph embedding
 # .. note::
 #    The tutorial is meant for beginners and does not contain the mathematical details of the
 #    rich theory of equivariance. Have a look
-#    `at this demo <https://pennylane.ai/qml/demos/tutorial_geometric_qml>`_ if you want to know more.
+#    :doc:`at this demo <demos/tutorial_geometric_qml>` if you want to know more.
 #
 #
 # Permuted adjacency matrices describe the same graph

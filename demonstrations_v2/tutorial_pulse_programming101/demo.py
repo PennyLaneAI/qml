@@ -26,8 +26,8 @@ ctrl-VQE algorithm [#Mitei]_ on a two-qubit Hamiltonian for the :math:`\text{HeH
 Pulses in quantum computers
 ---------------------------
 
-In many quantum computing architectures such as `superconducting <https://pennylane.ai/qml/demos/tutorial_sc_qubits>`_, `ion trap <https://pennylane.ai/qml/demos/tutorial_trapped_ions>`_ 
-and `neutral atom Rydberg <https://pennylane.ai/qml/demos/tutorial_pasqal>`_ systems,
+In many quantum computing architectures such as :doc:`superconducting <demos/tutorial_sc_qubits>`, :doc:`ion trap <demos/tutorial_trapped_ions>` 
+and :doc:`neutral atom Rydberg <demos/tutorial_pasqal>` systems,
 qubits are realized through physical systems with a discrete set of energy levels.
 For example, transmon qubits realize an anharmonic oscillator whose ground and first excited states can serve as the two energy
 levels of a qubit. Such a qubit can be controlled via an electromagnetic field tuned to its energy gap. In general, this
@@ -40,7 +40,7 @@ During a pulse sequence, the state evolves according to the time-dependent Schr√
 from an initial state :math:`|\psi(t_0)\rangle` to a final state :math:`|\psi(t_1)\rangle.` This process corresponds to a unitary evolution :math:`U(t_0, t_1)`
 of the input state from time :math:`t_0` to :math:`t_1,` i.e. :math:`|\psi(t_1)\rangle = U(t_0, t_1) |\psi(t_0)\rangle.`
 
-In most digital quantum computers (with the exception of `measurement-based <https://pennylane.ai/qml/demos/tutorial_mbqc>`_ architectures), the amplitude and frequencies of predefined pulse sequences are
+In most digital quantum computers (with the exception of :doc:`measurement-based <demos/tutorial_mbqc>` architectures), the amplitude and frequencies of predefined pulse sequences are
 fine tuned to realize the native gates of the quantum computer. More specifically, the Hamiltonian interaction :math:`H(t)`
 is tuned such that the respective evolution :math:`U(t_0, t_1)` realizes for example a Pauli or CNOT gate (see e.g. *cross-resonance* gates for superconducting qubits in [#Sheldon2016]_).
 

@@ -64,7 +64,7 @@ computer code, using resources comparable to those required to evaluate the func
 
 Efficient optimization of the molecular Hamiltonian parameters in a variational quantum algorithm
 is essential for tackling problems such as
-`geometry optimization <https://pennylane.ai/qml/demos/tutorial_mol_geo_opt>`_ and vibrational
+:doc:`geometry optimization <demos/tutorial_mol_geo_opt>` and vibrational
 frequency
 calculations. These problems require computing the first- and second-order derivatives of the
 molecular energy with respect to nuclear coordinates which can be efficiently obtained if the
