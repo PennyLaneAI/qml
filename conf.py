@@ -63,7 +63,7 @@ extensions = [
 ]
 
 html_baseurl = "https://pennylane.ai/qml/"
-demo_staging_dir = os.getenv("DEMO_STAGING_DIR", "demonstrations")
+demo_staging_dir = os.getenv("DEMO_STAGING_DIR", "demonstrations_v2")
 
 if (output_dir := os.getenv("GALLERY_OUTPUT_DIR")):
     gallery_output_dir = output_dir
