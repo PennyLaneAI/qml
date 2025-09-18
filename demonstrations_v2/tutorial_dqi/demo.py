@@ -149,7 +149,7 @@ plt.show()
 #
 # .. figure:: ../_static/demonstration_assets/DQI/algo_DQI.png
 #    :alt: DQI algorithm
-#    :width: 120.0%
+#    :width: 150.0%
 #    :align: center
 # 
 #    Figure 1: Schematic of the DQI algorithm to solve the max-XORSAT problem
