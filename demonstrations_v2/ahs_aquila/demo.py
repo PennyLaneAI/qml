@@ -57,7 +57,7 @@ is implemented via the functionality provided in the Pennylane :mod:`~pennylane.
 more information on pulse programming in PennyLane, see the
 `PennyLane docs <https://docs.pennylane.ai/en/stable/code/qml_pulse.html>`__, or check out the demo
 about
-`running a ctrl-VQE algorithm with pulse control <https://pennylane.ai/qml/demos/tutorial_pulse_programming101.html>`__ on the PennyLane `default.qubit` simulator.
+`running a ctrl-VQE algorithm with pulse control <https://pennylane.ai/qml/demos/tutorial_pulse_programming101>`__ on the PennyLane `default.qubit` simulator.
 
 
 
@@ -66,7 +66,7 @@ The QuEra Aquila device
 
 The Aquila QPU works with programmable arrays of up to 256 Rubidium-87 atoms (Rb-87), trapped in vacuum by tightly
 focused laser beams. These atoms can be arranged in (almost)
-`arbitrary user-specified geometries <https://pennylane.ai/qml/demos/tutorial_pasqal.html>`_ to determine
+`arbitrary user-specified geometries <https://pennylane.ai/qml/demos/tutorial_pasqal>`_ to determine
 inter-qubit interactions. On the Aquila device, it is possible to specify 1D and 2D atom arrangements. Atom
 positions may be slightly shifted to accommodate hardware limitations, and must obey lattice constraints
 for spacing. This will be explored in more detail below.

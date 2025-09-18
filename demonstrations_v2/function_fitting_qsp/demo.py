@@ -553,7 +553,7 @@ qsp_model_runner.plot_result()
 # explicitly computing the optimal values for :math:`\vec{\phi}`
 # known as "Remez-type exchange algorithms" for analytic function fitting. If
 # you want to explore other approaches to function fitting, checkout this
-# `demo <https://pennylane.ai/qml/demos/quantum_neural_net.html>`__
+# `demo <https://pennylane.ai/qml/demos/quantum_neural_net>`__
 # where we use a photonic neural network for function fitting.
 #
 #

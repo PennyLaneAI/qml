@@ -119,7 +119,7 @@ the shape of the variational circuit is the one dictated by the QAOA
 ansatz, and such a quantum circuit is used to evaluate the cost
 Hamiltonian :math:`H` of the MaxCut problem.
 You can check out a great tutorial on
-[how to use QAOA for solving graph problems](https://pennylane.ai/qml/demos/tutorial_qaoa_intro.html).
+[how to use QAOA for solving graph problems](https://pennylane.ai/qml/demos/tutorial_qaoa_intro).
 
 .. note::
    Running the tutorial (excluding the Appendix) requires approx. ~13m.

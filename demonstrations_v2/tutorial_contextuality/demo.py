@@ -435,7 +435,7 @@ def input_prep(alpha):
 #
 # This kind of reasoning is an example of geometric quantum machine
 # learning (check out [#reptheory]_ and [#equivariant]_ or our own
-# `demo <https://pennylane.ai/qml/demos/tutorial_geometric_qml.html>`__ for an awesome introduction to the subject).
+# `demo <https://pennylane.ai/qml/demos/tutorial_geometric_qml>`__ for an awesome introduction to the subject).
 # Below we construct the
 # bias invariant layer: note that all the generators commute with
 # :math:`Z_0+Z_1+Z_2.` The variables ``blocks`` and ``layers`` are model

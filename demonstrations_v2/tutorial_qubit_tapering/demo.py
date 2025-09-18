@@ -241,7 +241,7 @@ print(f"HF energy (tapered): {jnp.real(HF_energy):.8f} Ha")
 # --------------
 # Finally, we can use the tapered Hamiltonian and the tapered reference state to perform a VQE
 # simulation and compute the ground-state energy of the :math:`\textrm{HeH}^+` cation. We build a
-# tapered variational ansatz `[3] <https://pennylane.ai/qml/demos/tutorial_givens_rotations.html>`__
+# tapered variational ansatz `[3] <https://pennylane.ai/qml/demos/tutorial_givens_rotations>`__
 # that prepares an entangled state by evolving the tapered Hartree-Fock state using the tapered
 # particle-conserving gates, i.e., the :func:`~.pennylane.SingleExcitation` and
 # :func:`~.pennylane.DoubleExcitation` operations tapered using 

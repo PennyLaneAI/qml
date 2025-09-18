@@ -26,8 +26,8 @@ ctrl-VQE algorithm [#Mitei]_ on a two-qubit Hamiltonian for the :math:`\text{HeH
 Pulses in quantum computers
 ---------------------------
 
-In many quantum computing architectures such as `superconducting <https://pennylane.ai/qml/demos/tutorial_sc_qubits.html>`_, `ion trap <https://pennylane.ai/qml/demos/tutorial_trapped_ions.html>`_ 
-and `neutral atom Rydberg <https://pennylane.ai/qml/demos/tutorial_pasqal.html>`_ systems,
+In many quantum computing architectures such as `superconducting <https://pennylane.ai/qml/demos/tutorial_sc_qubits>`_, `ion trap <https://pennylane.ai/qml/demos/tutorial_trapped_ions>`_ 
+and `neutral atom Rydberg <https://pennylane.ai/qml/demos/tutorial_pasqal>`_ systems,
 qubits are realized through physical systems with a discrete set of energy levels.
 For example, transmon qubits realize an anharmonic oscillator whose ground and first excited states can serve as the two energy
 levels of a qubit. Such a qubit can be controlled via an electromagnetic field tuned to its energy gap. In general, this
@@ -40,7 +40,7 @@ During a pulse sequence, the state evolves according to the time-dependent Schr√
 from an initial state :math:`|\psi(t_0)\rangle` to a final state :math:`|\psi(t_1)\rangle.` This process corresponds to a unitary evolution :math:`U(t_0, t_1)`
 of the input state from time :math:`t_0` to :math:`t_1,` i.e. :math:`|\psi(t_1)\rangle = U(t_0, t_1) |\psi(t_0)\rangle.`
 
-In most digital quantum computers (with the exception of `measurement-based <https://pennylane.ai/qml/demos/tutorial_mbqc.html>`_ architectures), the amplitude and frequencies of predefined pulse sequences are
+In most digital quantum computers (with the exception of `measurement-based <https://pennylane.ai/qml/demos/tutorial_mbqc>`_ architectures), the amplitude and frequencies of predefined pulse sequences are
 fine tuned to realize the native gates of the quantum computer. More specifically, the Hamiltonian interaction :math:`H(t)`
 is tuned such that the respective evolution :math:`U(t_0, t_1)` realizes for example a Pauli or CNOT gate (see e.g. *cross-resonance* gates for superconducting qubits in [#Sheldon2016]_).
 
@@ -220,7 +220,7 @@ print(H(theta, 0.5))
 # We can now use the ability to access gradients to perform the variational quantum eigensolver on the pulse level (ctrl-VQE) as is done in [#Mitei]_.
 # For a more general introduction to VQE, see :doc:`demos/tutorial_vqe`.
 # First, we define the molecular Hamiltonian whose energy expectation value we want to minimize. This serves as our objective Hamiltonian.
-# We are using :math:`\text{HeH}^+` as a simple example and load it from the `PennyLane quantum datasets <https://pennylane.ai/qml/datasets.html>`_ website.
+# We are using :math:`\text{HeH}^+` as a simple example and load it from the `PennyLane quantum datasets <https://pennylane.ai/datasets>`_ website.
 # We are going to use the tapered Hamiltonian, which makes use of symmetries to reduce the number of qubits, see :doc:`demos/tutorial_qubit_tapering` for details.
 
 data = qml.data.load("qchem", molname="HeH+", basis="STO-3G", bondlength=1.5)[0]

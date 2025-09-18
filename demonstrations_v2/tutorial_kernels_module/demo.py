@@ -316,7 +316,7 @@ def kernel(x1, x2, params):
 #     to use the observable type
 #     `Projector <https://pennylane.readthedocs.io/en/latest/code/api/pennylane.Projector.html>`__.
 #     This is shown in the
-#     `demo on kernel-based training of quantum models <https://pennylane.ai/qml/demos/tutorial_kernel_based_training.html>`__, where you will also find more
+#     `demo on kernel-based training of quantum models <https://pennylane.ai/qml/demos/tutorial_kernel_based_training>`__, where you will also find more
 #     background information on the kernel circuit structure itself.
 #
 # Before focusing on the kernel values we have to provide values for the
