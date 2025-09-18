@@ -63,7 +63,7 @@ extensions = [
 ]
 
 html_baseurl = "https://pennylane.ai/qml/"
-demo_staging_dir = os.getenv("DEMO_STAGING_DIR", "demonstrations_v2")
+demo_staging_dir = os.getenv("DEMO_STAGING_DIR", "demonstrations")
 
 if (output_dir := os.getenv("GALLERY_OUTPUT_DIR")):
     gallery_output_dir = output_dir
@@ -223,7 +223,7 @@ htmlhelp_basename = "QMLdoc"
 intersphinx_mapping = {
     "pennylane": ("https://docs.pennylane.ai/en/stable/", None),
     "catalyst": ("https://docs.pennylane.ai/projects/catalyst/en/stable", None),
-    "demo": ("https://pennylane.ai/qml", None),
+    "demo": ("https://pennylane.ai/qml/", None),
 }
 
 # Enable :doc: references for intersphinx (disabled by default in Sphinx 5.0+)
