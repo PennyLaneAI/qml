@@ -14,7 +14,7 @@ In this demo, we will implement DQI in PennyLane to solve the max-XORSAT problem
 problem is simple and has not yet demonstrated quantum advantage, it clearly illustrates the
 operational principles and underlying intuition of DQI. We will begin by introducing the problem and
 the core principles of the algorithm, followed by a description of each algorithmic step and its implementation.
-Note that the DQI algorithm is technically rich, and explaining all of its details would be extensive---therefore, 
+Note that the DQI algorithm is technically rich and explaining all of its details would be extensive---therefore, 
 we will omit some of them to keep things within scope. 
 
 The max-XORSAT problem
@@ -113,7 +113,7 @@ plt.show()
 # The objective function :math:`f(\mathbf{x})` has a very sparse Hadamard spectrum. This means that only :math:`m` of 
 # the possible :math:`2^n` “frequency” components, :math:`\mathbf{b_i}`, have non-zero amplitudes in :math:`f(\mathbf{x})`.
 # Consequently, preparing the state :math:`\sum_{\mathbf{x}} f(\mathbf{x})|\mathbf{x}\rangle` can be seen as a simple task by creating
-# an appropriate superposition of the :math:`m` amplitudes and apply a Hadamard transform. The same
+# an appropriate superposition of the :math:`m` amplitudes and applying a Hadamard transform. The same
 # principle holds for preparing :math:`|P(f)\rangle`. Even though it is not as simple as preparing :math:`|f\rangle`, we can still
 # prepare the Hadamard transform of the state to take advantage of its sparse spectrum, and then
 # transform back. Let's then take a look at the Hadamard transform of :math:`P(f(\mathbf{x}))`, which we aim to prepare:
@@ -209,7 +209,7 @@ def w_k_optimal(m, l):
 
 
 w_k = w_k_optimal(m, l)
-print("the optimal values for w are", w_k)
+print("The optimal values for w are", w_k)
 
 
 ######################################################################
