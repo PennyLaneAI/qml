@@ -131,7 +131,7 @@ dev = qml.device("lightning.qubit", wires=qubits)
 # tutorial :doc:`demos/tutorial_givens_rotations`.
 #
 # Implementing the circuit above using PennyLane is straightforward. First, we use the
-# :func:`hf_state` function to generate the vector representing the Hartree-Fock state.
+# :func:`~.pennylane.qchem.hf_state` function to generate the vector representing the Hartree-Fock state.
 
 electrons = 2
 hf = qml.qchem.hf_state(electrons, qubits)
@@ -142,7 +142,7 @@ print(hf)
 # the qubit register. Then, we just act with the :class:`~.pennylane.DoubleExcitation` operation
 # on the four qubits. The next step is to compute the expectation value
 # of the molecular Hamiltonian in the trial state prepared by the circuit.
-# We do this using the :func:`~.expval` function. The decorator syntax allows us to
+# We do this using the :func:`~.pennylane.expval` function. The decorator syntax allows us to
 # run the cost function as an executable QNode with the gate parameter :math:`\theta:`
 
 @qml.qnode(dev, interface="jax")
@@ -263,7 +263,7 @@ plt.show()
 # molecular Hamiltonian in the trial state.
 #
 # The VQE algorithm can be used to simulate other chemical phenomena.
-# In the tutorial :doc:`demos/tutorial_vqe_bond_dissociation`, we use VQE to explore the
+# In the tutorial :doc:`demos/tutorial_chemical_reactions`, we use VQE to explore the
 # potential energy surface of molecules to simulate chemical reactions.
 # Another interesting application is to probe the lowest-lying states of molecules
 # in specific sectors of the Hilbert space. For example, see the tutorial
