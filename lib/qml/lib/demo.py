@@ -274,7 +274,7 @@ def _build_demo(
     quiet: bool,
     dev: bool,
 ):
-    out_dir = ctx.repo_root / "demos" / demo.name
+    out_dir = ctx.repo_root / "demos"
     fs.clean_dir(out_dir)
 
     generate_requirements(ctx, demo, dev, out_dir / "requirements.txt")
@@ -357,7 +357,7 @@ def _package_demo(
     fs.clean_dir(dest)
 
     with open(
-        (sphinx_output / "demos" / demo.name / demo.name).with_suffix(".fjson"), "r"
+        (sphinx_output / "demos" / demo.name).with_suffix(".fjson"), "r"
     ) as f:
         html_body = json.load(f)["body"]
 
