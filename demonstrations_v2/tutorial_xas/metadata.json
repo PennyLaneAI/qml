@@ -1,0 +1,147 @@
+{
+    "title": "X-ray Absorption Spectroscopy Simulation in the Time-Domain",
+    "authors": [
+        {
+            "username": "colinjdale"
+        },
+        {
+            "username": "chiffa"
+        }
+    ],
+    "executable_stable": true,
+    "executable_latest": true,
+    "dateOfPublication": "2025-08-29T09:00:00+00:00",
+    "dateOfLastModification": "2025-09-09T17:41:50+00:00",
+    "categories": [
+        "Quantum Chemistry",
+        "Algorithms"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_xas.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_xas.png"
+        }
+    ],
+    "seoDescription": "Learn how to simulate X-ray absorption spectroscopy in PennyLane.",
+    "doi": "",
+    "references": [
+        {
+            "id": "Fomichev2025",
+            "type": "article",
+            "title": "Fast simulations of X-ray absorption spectroscopy for battery materials on a quantum computer",
+            "authors": "Stepan Fomichev, Pablo A. M. Casares, Jay Soni, Utkarsh Azad, Alexander Kunitsa, Arne-Christian Voigt, Jonathan E. Mueller, Juan Miguel Arrazola",
+            "year": "2025",
+            "journal": "arXiv",
+            "url": "https://arxiv.org/abs/2506.15784"
+        },
+        {
+            "id": "Fomichev2024",
+            "type": "article",
+            "title": "Simulating X-ray absorption spectroscopy of battery materials on a quantum computer",
+            "authors": "Stepan Fomichev, Kasra Hejazi, Ignacio Loaiza, Modjtaba Shokrian Zini, Alain Delgado, Arne-Christian Voigt, Jonathan E. Mueller, Juan Miguel Arrazola",
+            "year": "2024",
+            "journal": "arXiv",
+            "url": "https://arxiv.org/abs/2405.11015"
+        },
+        {
+            "id": "Harrow2009",
+            "type": "article",
+            "title": "Quantum algorithm for linear systems of equations",
+            "authors": "Aram W. Harrow, Avinatan Hassidim, Seth Lloyd",
+            "year": "2009",
+            "journal": "PRL",
+            "url": "https://doi.org/10.1103/PhysRevLett.103.150502"
+        },
+        {
+            "id": "Loaiza2023",
+            "type": "article",
+            "title": "Block-invariant symmetry shift: Preprocessing technique for second-quantized Hamiltonians to improve their decompositions to linear combination of unitaries",
+            "authors": "Ignacio Loaiza, Artur F Izmaylov",
+            "year": "2023",
+            "journal": "J Chem Theory Comput.",
+            "url": "https://pubs.acs.org/doi/10.1021/acs.jctc.3c00912"
+        },
+        {
+            "id": "Yen2021",
+            "type": "article",
+            "title": "Cartan subalgebra approach to efficient measurements of quantum observables",
+            "authors": "Tzu-Ching Yen and Artur F. Izmaylov",
+            "year": "2021",
+            "journal": "PRX Quantum",
+            "url": "https://doi.org/10.1103/PRXQuantum.2.040320"
+        },
+        {
+            "id": "Cohn2021",
+            "type": "article",
+            "title": "Quantum filter diagonalization with compressed double-factorized Hamiltonians",
+            "authors": "Jeffrey Cohn, Mario Motta, and Robert M. Parrish",
+            "year": "2021",
+            "journal": "PRX Quantum",
+            "url": "https://doi.org/10.1103/PRXQuantum.2.040352"
+        },
+        {
+            "id": "Childs2019",
+            "type": "article",
+            "title": "Faster quantum simulation by randomization",
+            "authors": "Andrew M. Childs, Aaron Ostrander, Yuan Su",
+            "year": "2019",
+            "journal": "Quantum",
+            "url": "https://doi.org/10.22331/q-2019-09-02-182"
+        },
+        {
+            "id": "Sherrill2005",
+            "type": "article",
+            "title": "Permutational symmetries of one- and two-electron integrals",
+            "authors": "C. David Sherrill",
+            "year": "2005",
+            "journal": "",
+            "url": "https://vergil.chemistry.gatech.edu/static/content/permsymm.pdf"
+        },
+        {
+            "id": "Thouless1960",
+            "type": "article",
+            "title": "Stability conditions and nuclear rotations in the Hartree-Fock theory",
+            "authors": "David J. Thouless",
+            "year": "1960",
+            "journal": "Nuclear Physics",
+            "url": "https://doi.org/10.1016/0029-5582(60)90048-1"
+        }
+    ],
+    "basedOnPapers": [
+        "10.48550/arXiv.2506.15784",
+        "10.48550/arXiv.2405.11015"
+    ],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_qchem_external",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_initial_state_preparation",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_how_to_build_compressed_double_factorized_hamiltonians",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_quantum_chemistry",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_fermionic_operators",
+            "weight": 1.0
+        }
+    ]
+}

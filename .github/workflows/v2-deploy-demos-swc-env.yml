@@ -1,0 +1,102 @@
+name: V2 Deploy Demos to SWC Environment
+
+on:
+  workflow_run:
+    workflows:
+      - "V2 Build Demos for SWC Environment"
+    types:
+      - completed
+
+permissions:
+  actions: read
+  pull-requests: write
+  contents: read
+
+concurrency:
+  group: v2-deploy-demos-swc-${{ github.event.workflow_run.head_branch }}
+  cancel-in-progress: true
+
+jobs:
+  # Step 1: Prepare the build context
+  prepare-build-context:
+    if: github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Build Context
+        uses: XanaduAI/cloud-actions/download-github-workflow-artifact@main
+        with:
+          workflow_run_id: ${{ github.event.workflow_run.id }}
+          artifact_name_regex: '^deployment_build_context$'
+          github_token: ${{ github.token }}
+
+      - name: Check if Build Context file exists
+        id: build_context
+        env:
+          context_artifact_file_name: deployment_build_context.zip
+        run: |
+          if test -f "$context_artifact_file_name"; then
+            echo "result=$context_artifact_file_name" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Unpack Build Information
+        if: steps.build_context.outputs.result != ''
+        run: unzip ${{ steps.build_context.outputs.result }}
+
+      - name: Read Build Information
+        id: read_build_info
+        if: steps.build_context.outputs.result != ''
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const buildData = fs.readFileSync('deployment_build_context.json', 'utf8');
+            return JSON.parse(buildData);
+
+      - name: Parse Push Event Information
+        id: pr_info
+        if: github.event.workflow_run.event == 'push' && steps.build_context.outputs.result != ''
+        run: |
+          echo '${{ steps.read_build_info.outputs.result }}' | jq -r '.ref' > merge_ref.txt
+          echo '${{ steps.read_build_info.outputs.result }}' | jq -r '.ref_name' > merge_ref_name.txt
+          echo '${{ steps.read_build_info.outputs.result }}' | jq -c '.updated_demos' > updated_demos.json
+          echo '${{ steps.read_build_info.outputs.result }}' | jq -c '.deleted_demos' > deleted_demos.json
+
+          echo "merge_ref=$(cat merge_ref.txt)" >> $GITHUB_OUTPUT
+          echo "merge_ref_name=$(cat merge_ref_name.txt)" >> $GITHUB_OUTPUT
+          echo "updated_demos=$(cat updated_demos.json)" >> $GITHUB_OUTPUT
+          echo "deleted_demos=$(cat deleted_demos.json)" >> $GITHUB_OUTPUT
+
+      - name: Determine SWC environment via merge_ref_name
+        if: steps.pr_info.outputs.merge_ref_name != ''
+        id: determine_env
+        run: |
+          if [[ "${{ steps.pr_info.outputs.merge_ref_name }}" == "master" ]]; then
+            echo "swc-env=swc-prod" >> $GITHUB_OUTPUT
+          elif [[ "${{ steps.pr_info.outputs.merge_ref_name }}" == "dev" ]]; then
+            echo "swc-env=swc-dev" >> $GITHUB_OUTPUT
+          else
+            echo "Unknown branch: ${{ steps.pr_info.outputs.merge_ref_name }}"
+            exit 1
+          fi
+    outputs:
+      merge_ref: ${{ steps.pr_info.outputs.merge_ref }}
+      merge_ref_name: ${{ steps.pr_info.outputs.merge_ref_name }}
+      updated_demos: ${{ steps.pr_info.outputs.updated_demos }}
+      deleted_demos: ${{ steps.pr_info.outputs.deleted_demos }}
+      swc-env: ${{ steps.determine_env.outputs.swc-env }}
+
+  # Step 2: Deploy the demos to SWC
+  deploy-production-demos:
+    if: |
+      github.event.workflow_run.event == 'push' &&
+      needs.prepare-build-context.result == 'success' &&
+      needs.prepare-build-context.outputs.merge_ref != '' &&
+      needs.prepare-build-context.outputs.updated_demos != '[]'
+    uses: ./.github/workflows/v2-deploy-demos.yml
+    needs: prepare-build-context
+    with:
+      environment: ${{ needs.prepare-build-context.outputs.swc-env }}
+      artifact-name: demo-deployment-build-${{ needs.prepare-build-context.outputs.merge_ref }}
+      workflow-run-id: ${{ github.event.workflow_run.id }}
+      pr_number: 0
+    secrets: inherit

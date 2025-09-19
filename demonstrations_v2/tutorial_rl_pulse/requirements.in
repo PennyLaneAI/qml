@@ -1,0 +1,4 @@
+flax==0.10.6
+optax
+qutip==4.7.3
+scipy<1.12 # required by qutip

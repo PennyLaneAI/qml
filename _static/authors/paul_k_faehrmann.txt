@@ -1,4 +1,0 @@
-.. bio:: Paul K. Faehrmann
-   :photo: ../_static/authors/paul_k_faehrmann.jpg
-
-   Paul is a Ph.D. student in the group of Jens Eisert at the Freie Universität Berlin. His research revolves around quantum algorithms both for noisy, near-term devices and larger, fault-tolerant quantum computers

@@ -1,0 +1,237 @@
+name: Build V2 Demos
+on:
+  workflow_call:
+    inputs:
+      ref:
+        description: Branch, tag or commit SHA to checkout
+        required: true
+        type: string
+      demo-names:
+        description: |
+          Only build the demos specified in a space-separated list,
+          e.g. demo1 demo2 demo3.
+
+          If not specified, all demos will be built.
+        required: false
+        type: string
+        default: ''
+      execute:
+        description: Execute, as well as build, the specified demos.
+        required: false
+        type: boolean
+        default: true
+      dev:
+        description: Use development dependencies.
+        required: false
+        type: boolean
+        default: false
+      save-artifact:
+        description: Save the built demos as an artifact.
+        required: false
+        type: boolean
+        default: true
+      artifact-name:
+        description: Name of the artifact containing the built demos (defaults to demo-build-{ref}).
+        required: false
+        type: string
+        default: ''
+      artifact-retention:
+        description: The number of days to persist the consolidated artifacts.
+        required: false
+        type: number
+        default: 1
+      keep-going:
+        description: Keep going if a demo fails to build.
+        required: false
+        type: boolean
+        default: false
+      quiet:
+        description: Suppress output from the build process.
+        required: false
+        type: boolean
+        default: false
+      batch_size:
+        description: Number of demos to build per job.
+        type: number
+        default: 10
+    outputs:
+      artifact-name:
+        description: "Name of the artifact containing the built demos"
+        value: ${{ inputs.artifact-name }}
+
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Branch, tag or commit SHA to checkout
+        required: true
+        type: string
+      demo-names:
+        description: |
+          Instead of building all demos, only build the demos specified in this list.
+        required: false
+        type: string
+        default: ''
+      execute:
+        description: Execute, as well as build, the specified demos.
+        required: false
+        type: boolean
+        default: true
+      dev:
+          description: Use development dependencies.
+          required: false
+          type: boolean
+          default: false
+      save-artifact:
+        description: Save the built demos as an artifact.
+        required: false
+        type: boolean
+        default: true
+      artifact-name:
+        description: Name of the build artifact (defaults to demo-build-{ref}).
+        required: false
+        type: string
+        default: ''
+      artifact-retention:
+        description: The number of days to persist the consolidated artifacts.
+        required: false
+        type: number
+        default: 1
+      keep-going:
+        description: Keep going if a demo fails to build.
+        required: false
+        type: boolean
+        default: false
+      quiet:
+        description: Suppress output from the build process.
+        required: false
+        type: boolean
+        default: false
+      batch_size:
+        description: Number of demos to build per job.
+        type: number
+        default: 10
+
+jobs:
+  generate-build-variables:
+    runs-on: ubuntu-latest
+    outputs:
+      artifact-name: ${{ steps.get-artifact-name.outputs.artifact-name }}
+      chunk-array: ${{ steps.get-chunk-array.outputs.chunk-array }}
+      chunk-indexes: ${{ steps.get-chunk-indexes.outputs.chunk-indexes }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+          fetch-depth: 1
+      
+      - name: Get artifact name
+        id: get-artifact-name
+        run: |
+          if [ -z ${{ inputs.artifact-name }} ]
+          then
+            printf "artifact-name=%s" "demo-build-${{ inputs.ref }}" >> $GITHUB_OUTPUT
+          else
+            printf "artifact-name=%s" "${{ inputs.artifact-name }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Get demo names
+        id: get-demo-names
+        run: |
+          if [ -z "${{ inputs.demo-names }}" ];
+          then
+            printf "demo-names=%s" "$(cd demonstrations_v2 && ls | tr '\n' ' ')" >> $GITHUB_OUTPUT
+          else
+            printf "demo-names=%s" "${{ inputs.demo-names }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create job chunk array
+        id: get-chunk-array
+        run: printf "chunk-array=%s" "$(jq -nc '[$ARGS.positional | _nwise(${{ inputs.batch_size }})]' --args ${{ steps.get-demo-names.outputs.demo-names }})" >> $GITHUB_OUTPUT
+
+      - name: Get chunk indexes
+        id: get-chunk-indexes
+        run: printf "chunk-indexes=%s" "$(jq -nc '${{ steps.get-chunk-array.outputs.chunk-array }} | [range(0, length)]')" >> $GITHUB_OUTPUT
+
+  build-demos:
+    runs-on: ubuntu-latest
+    needs: [generate-build-variables]
+    strategy:
+      matrix:
+        chunk-index: ${{ fromJson(needs.generate-build-variables.outputs.chunk-indexes) }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+          fetch-depth: 1
+
+      - name: Install pandoc, opencl, and graphviz
+        run: |
+          sudo apt-get install -y \
+            ocl-icd-opencl-dev \
+            pandoc \
+            graphviz
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: pip install . && poetry config warnings.export false
+      
+      - name: Make demo name list
+        id: demo-name-list
+        run: printf "demo-names=%s" "$(jq -nc '${{ needs.generate-build-variables.outputs.chunk-array }}[${{ matrix.chunk-index }}][]' | tr -s '\n"' ' ')" >> $GITHUB_OUTPUT
+
+      - name: Build demos
+        run: |
+          qml build \
+            --format json \
+            ${{ inputs.execute && '--execute' || '--no-execute' }} \
+            ${{ inputs.keep-going && '--keep-going' || '--no-keep-going' }} \
+            ${{ inputs.quiet && '--quiet' || '--no-quiet' }} \
+            ${{ steps.demo-name-list.outputs.demo-names }} \
+            ${{ inputs.dev && '--dev' || '--no-dev' }}
+      
+      - name: Upload artifacts
+        id: upload-artifacts
+        if: ${{ inputs.save-artifact }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ needs.generate-build-variables.outputs.artifact-name }}-c${{ matrix.chunk-index }}
+          path: _build/pack/*.zip
+          retention-days: 1
+
+  consolidate-artifacts:
+    runs-on: ubuntu-latest
+    if: ${{ inputs.save-artifact }}
+    needs: [generate-build-variables, build-demos]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+          fetch-depth: 1
+
+      - name: Download All Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: _build/pack
+          pattern: ${{ needs.generate-build-variables.outputs.artifact-name }}-c*
+          merge-multiple: true
+        
+      - name: Upload consolidated artifact
+        id: upload-artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ needs.generate-build-variables.outputs.artifact-name }}
+          path: _build/pack/*.zip
+          retention-days: ${{ inputs.artifact-retention }}
+          overwrite: true
+      
+      - name: Delete partial artifacts
+        uses: geekyeggo/delete-artifact@v5
+        with:
+            name: ${{ needs.generate-build-variables.outputs.artifact-name }}-c*

@@ -1,0 +1,34 @@
+{
+    "title": "Optimizing a quantum optical neural network",
+    "authors": [
+        {
+            "username": "tisacsson"
+        }
+    ],
+    "executable_stable": false,
+    "executable_latest": false,
+    "dateOfPublication": "2020-08-05T00:00:00+00:00",
+    "dateOfLastModification": "2025-09-09T17:41:50+00:00",
+    "categories": [
+        "Optimization"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_optimizing_quantum_optical_neural_network.png"
+        }
+    ],
+    "seoDescription": "Optimizing a quantum optical neural network using PennyLane.",
+    "doi": "",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "quantum_neural_net",
+            "weight": 1.0
+        }
+    ]
+}

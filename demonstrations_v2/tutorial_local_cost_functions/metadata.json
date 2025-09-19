@@ -1,0 +1,46 @@
+{
+    "title": "Alleviating barren plateaus with local cost functions",
+    "authors": [
+        {
+            "username": "tstorwick"
+        }
+    ],
+    "executable_stable": true,
+    "executable_latest": true,
+    "dateOfPublication": "2020-09-09T00:00:00+00:00",
+    "dateOfLastModification": "2025-09-09T17:41:50+00:00",
+    "categories": [
+        "Optimization"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_alleviating_barren_plateaus.png"
+        }
+    ],
+    "seoDescription": "Local cost functions are cost formulations for variational quantum circuits that are more robust to barren plateaus.",
+    "doi": "",
+    "references": [
+        {
+            "id": "Cerezo2020",
+            "type": "article",
+            "title": "Cost-Function-Dependent Barren Plateaus in Shallow Quantum Neural Networks",
+            "authors": "Cerezo, M., Sone, A., Volkoff, T., Cincio, L., and Coles, P.",
+            "year": "2020",
+            "journal": "",
+            "url": "https://arxiv.org/abs/2001.00550"
+        }
+    ],
+    "basedOnPapers": [
+        "10.48550/arXiv.2001.00550"
+    ],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_barren_plateaus",
+            "weight": 1.0
+        }
+    ]
+}

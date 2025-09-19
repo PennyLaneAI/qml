@@ -1,4 +1,0 @@
-.. bio:: Maria Schuld
-   :photo: ../_static/authors/maria_schuld.jpg
-
-   Maria leads Xanadu's quantum machine learning team and is a seasoned PennyLane developer.
