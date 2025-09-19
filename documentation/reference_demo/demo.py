@@ -571,8 +571,8 @@ Unsupported directives:
 #     Example of an admonition directive.
 
 # %%
-# Links
-# -----
+# Links and Inlines
+# -----------------
 #
 # Example of an `external link <https://pennylane.ai/qml>`_.
 #
@@ -597,6 +597,8 @@ Unsupported directives:
 # Same as above, but without a custom label: :mod:`~pennylane.qnn`.
 #
 # Example of a reference link: :ref:`reference_link`. These aren't supported in the demos.
+#
+# Example of an inline html directive: :html:`<a href="https://pennylane.ai" target="_blank">An inline HTML link to pennylane.ai</a>`.
 
 # %%
 # Make some reference like this [#Jordan2024]_ and this [#Bartschi2019]_ in the demo and they 
