@@ -5,7 +5,7 @@ Pandoc filter to process intersphinx links.
 """
 from typing import Any, Dict
 import sphobjinv as soi
-from pandocfilters import toJSONFilter, Link
+from pandocfilters import toJSONFilter, Link, RawInline
 
 DEMOS_URL = "https://pennylane.ai/qml/demos/"
 PL_OBJ_INV_URL = "https://docs.pennylane.ai/en/stable/"
@@ -67,15 +67,17 @@ def filter_links(key, value, format, _):
         [[_, classes, role], body] = value
 
         if "interpreted-text" in classes:
-            text, key = parse_body(body)
-            
-            # The doc type could be a demo, so needs special treatment
-            if "doc" in role[0]:
-                name, link = process_doc_link(text, key)
+            if "html" in role[0]:
+                return RawInline("markdown", body)
             else:
-                name, link = process_link(text, key)
+                text, key = parse_body(body)
+                # The doc type could be a demo, so needs special treatment
+                if "doc" in role[0]:
+                    name, link = process_doc_link(text, key)
+                else:
+                    name, link = process_link(text, key)
 
-            return Link(["",[],[]], pandocify_string(name), [link,""])
+                return Link(["",[],[]], pandocify_string(name), [link,""])
 
 if __name__ == '__main__':
     pl_obj_inv = make_named_inventory(soi.Inventory(url=PL_OBJ_INV_URL+"objects.inv"))
