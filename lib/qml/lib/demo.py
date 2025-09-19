@@ -226,7 +226,7 @@ def build(
         for demo in demos:
             logger.info("Loading objects.inv for '%s'", demo.name)
             demo_inv = soi.Inventory(
-                ctx.repo_root / "demos" / demo.name / "objects.inv"
+                ctx.build_dir / f"{demo.name}_objects.inv"
             )
 
             # Only add entries that don't already exist in the merged inventory file
@@ -333,7 +333,7 @@ def _build_demo(
 
     # Move the objects.inv file so we can merge them once all the demos are built
     if target is BuildTarget.HTML:
-        fs.copy_any(ctx.build_dir / "html/objects.inv", out_dir)
+        fs.copy_any(ctx.build_dir / "html/objects.inv", ctx.build_dir / f"{demo.name}_objects.inv")
 
 
 def _package_demo(
