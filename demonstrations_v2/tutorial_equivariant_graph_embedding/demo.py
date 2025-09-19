@@ -46,7 +46,7 @@ An equivariant graph embedding
 # .. note::
 #    The tutorial is meant for beginners and does not contain the mathematical details of the
 #    rich theory of equivariance. Have a look
-#    `at this demo <https://pennylane.ai/qml/demos/tutorial_geometric_qml.html>`_ if you want to know more.
+#    :doc:`at this demo <demos/tutorial_geometric_qml>` if you want to know more.
 #
 #
 # Permuted adjacency matrices describe the same graph
@@ -148,7 +148,7 @@ plt.show()
 #
 # When we design a machine learning model that takes graph data, the first step is to encode
 # the adjacency matrix into a quantum state using an embedding or
-# `quantum feature map <https://pennylane.ai/qml/glossary/quantum_feature_map.html>`_
+# `quantum feature map <https://pennylane.ai/qml/glossary/quantum_feature_map>`_
 # :math:`\phi:`
 #
 # .. math::

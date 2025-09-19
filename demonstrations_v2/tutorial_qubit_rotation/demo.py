@@ -362,6 +362,6 @@ print("Optimized rotation angles: {}".format(params))
 #     internal hyperparameters that are stored in the optimizer instance. These can
 #     be reset using the :meth:`reset` method.
 #
-# Continue on to the next tutorial, :ref:`gaussian_transformation`, to see a similar example using
+# Continue on to the next tutorial, :doc:`gaussian transformation <demos/tutorial_gaussian_transformation>`, to see a similar example using
 # continuous-variable (CV) quantum nodes.
 #

@@ -5,7 +5,7 @@ Finding the eigenvalues of a Hamiltonian is a key task in quantum computing. Alg
 eigenvalue, but sometimes we are interested in other eigenvalues. Here we will show you how to implement the variational
 quantum deflation (VQD) algorithm in PennyLane
 and find the first excited state energy of the `hydrogen molecule <https://pennylane.ai/datasets/qchem/h2-molecule>`__. To benefit the most from this tutorial, we recommend
-a familiarization with the `variational quantum eigensolver (VQE) algorithm <https://pennylane.ai/qml/demos/tutorial_vqe/>`__ first.
+a familiarization with the `variational quantum eigensolver (VQE) algorithm <demos/tutorial_vqe/>`__ first.
 
 .. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_how_to_vqd_pennylane.png
     :align: center
@@ -20,7 +20,7 @@ a familiarization with the `variational quantum eigensolver (VQE) algorithm <htt
 # ------------------------------
 #
 # The VQD algorithm [#Vqd]_ is a method used to find the excited states of a quantum system.
-# It is related to the `VQE algorithm <https://pennylane.ai/qml/demos/tutorial_vqe/>`__, which is often used to find the ground state energy of a quantum system.
+# It is related to the `VQE algorithm <demos/tutorial_vqe/>`__, which is often used to find the ground state energy of a quantum system.
 # The main idea of the VQE algorithm is to define a quantum state ansatz that depends on adjustable parameters :math:`\theta` and minimize the energy of the system, computed as:
 #
 # .. math:: C_0(\theta) = \left\langle\Psi_0 (\theta)|\hat H |\Psi_0 (\theta) \right\rangle,
