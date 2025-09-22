@@ -1,0 +1,11 @@
+pennylane==0.42.1
+autoray==0.6.12
+jax==0.4.33
+jaxlib==0.4.33
+optax==0.2.5
+matplotlib==3.10.5
+tqdm==4.67.1
+aiohttp==3.12.15
+h5py==3.14.0
+fsspec==2025.7.0
+ipykernel==6.30.0

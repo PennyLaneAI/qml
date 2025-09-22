@@ -1,0 +1,32 @@
+{
+  "title": "Loading classical data with low-depth circuits",
+  "authors": [
+    {
+      "username": "flokiwit"
+    },
+    {
+      "username": "bernhard"
+    },
+    {
+      "username": "criofrio"
+    }
+  ],
+  "executable_stable": true,
+  "executable_latest": true,
+  "dateOfPublication": "2025-09-21T00:00:00+00:00",
+  "dateOfLastModification": "2025-09-21T00:00:00+00:00",
+  "categories": [],
+  "tags": [],
+  "previewImages": [
+    {
+      "type": "thumbnail",
+      "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_placeholder.png"
+    }
+  ],
+  "seoDescription": "This demo shows how to efficiently encode classical image data into quantum states using low-depth circuits, and train a variational quantum classifier on a low-depth MNIST dataset.",
+  "doi": "",
+  "references": [],
+  "basedOnPapers": [],
+  "referencedByPapers": [],
+  "relatedContent": []
+}
