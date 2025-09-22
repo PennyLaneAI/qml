@@ -46,7 +46,7 @@ from matplotlib.patches import Patch
 
 ##############################################################################
 # This tutorial requires the ``pennylane-rigetti`` and ``pennylane-qiskit`` packages, which can be
-# installed by following the instructions `here <https://pennylane.ai/install.html>`__. We also
+# installed by following the instructions `here <https://pennylane.ai/install>`__. We also
 # make use of the `PyTorch interface <https://pennylane.readthedocs.io/en/stable/introduction
 # /interfaces.html>`_, which can be installed from `here
 # <https://pytorch.org/get-started/locally/>`__.
