@@ -15,7 +15,9 @@
   "executable_latest": true,
   "dateOfPublication": "2025-09-21T00:00:00+00:00",
   "dateOfLastModification": "2025-09-21T00:00:00+00:00",
-  "categories": [],
+  "categories": [
+    "Quantum Machine Learning"
+  ],
   "tags": [],
   "previewImages": [
     {
@@ -25,8 +27,76 @@
   ],
   "seoDescription": "This demo shows how to efficiently encode classical image data into quantum states using low-depth circuits, and train a variational quantum classifier on a low-depth MNIST dataset.",
   "doi": "",
-  "references": [],
-  "basedOnPapers": [],
+  "references": [
+      {
+          "id": "kiwit2025",
+          "type": "article",
+          "title": "Typical Machine Learning Datasets as Low-Depth Quantum Circuits",
+          "authors": "Kiwit, F.J., Jobst, B., Luckow, A., Pollmann, F., Riofrío, C.A.",
+          "year": "2025",
+          "journal": "Quantum Sci. Technol.",
+          "doi": "10.1088/2058-9565/ae0123",
+          "url": "https://doi.org/10.1088/2058-9565/ae0123"
+      },
+      {
+          "id": "le2011a",
+          "type": "article",
+          "title": "A flexible representation of quantum images for polynomial preparation, image compression, and processing operations",
+          "authors": "Le, P.Q., Dong, F., Hirota, K.",
+          "year": "2011",
+          "journal": "Quantum Inf. Process",
+          "doi": "10.1007/s11128-010-0177-y",
+          "url": "https://doi.org/10.1007/s11128-010-0177-y"
+      },
+      {
+          "id": "le2011b",
+          "type": "incollection",
+          "title": "A Flexible Representation and Invertible Transformations for Images on Quantum Computers",
+          "authors": "Le, P.Q., Iliyasu, A.M., Dong, F., Hirota, K.",
+          "year": "2011",
+          "booktitle": "New Advances in Intelligent Signal Processing. Studies in Computational Intelligence, vol 372",
+          "publisher": "Springer, Berlin, Heidelberg",
+          "doi": "10.1007/978-3-642-11739-8_9",
+          "url": "https://doi.org/10.1007/978-3-642-11739-8_9"
+      },
+      {
+          "id": "sun2011",
+          "type": "inproceedings",
+          "title": "A Multi-Channel Representation for Images on Quantum Computers Using the RGBα Color Space",
+          "authors": "Sun, B. et al.",
+          "year": "2011",
+          "booktitle": "2011 IEEE 7th International Symposium on Intelligent Signal Processing, Floriana, Malta",
+          "pages": "1–6",
+          "doi": "10.1109/WISP.2011.6051718",
+          "url": "https://doi.org/10.1109/WISP.2011.6051718"
+      },
+      {
+          "id": "sun2013",
+          "type": "article",
+          "title": "An RGB Multi-Channel Representation for Images on Quantum Computers",
+          "authors": "Sun, B., Iliyasu, A., Yan, F., Dong, F., Hirota, K.",
+          "year": "2013",
+          "journal": "J. Adv. Comput. Intell. Intell. Inform.",
+          "volume": "17",
+          "number": "3",
+          "pages": "404–417",
+          "doi": "10.20965/jaciii.2013.p0404",
+          "url": "https://doi.org/10.20965/jaciii.2013.p0404"
+      },
+      {
+          "id": "jobst2024",
+          "type": "article",
+          "title": "Efficient MPS representations and quantum circuits from the Fourier modes of classical image data",
+          "authors": "Jobst, B., Shen, K., Riofrío, C.A., Shishenina, E., Pollmann, F.",
+          "year": "2024",
+          "journal": "Quantum",
+          "volume": "8",
+          "pages": "1544",
+          "doi": "10.22331/q-2024-12-03-1544",
+          "url": "https://doi.org/10.22331/q-2024-12-03-1544"
+      }
+  ],
+  "basedOnPapers": ["10.1088/2058-9565/ae0123"],
   "referencedByPapers": [],
   "relatedContent": []
 }

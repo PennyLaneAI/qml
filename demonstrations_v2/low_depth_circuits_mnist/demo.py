@@ -53,9 +53,7 @@ def FRQI_encoding(images):
     n = 2 * int(np.log2(N))
     # reorder pixels hierarchically
     states = np.reshape(images, (batchsize, *(2,) * n))
-    states = np.transpose(
-        states, [0] + [ax + 1 for q in range(n // 2) for ax in (q, q + n // 2)]
-    )
+    states = np.transpose(states, [0] + [ax + 1 for q in range(n // 2) for ax in (q, q + n // 2)])
     # FRQI encoding by stacking cos and sin components
     states = np.stack([np.cos(np.pi / 2 * states), np.sin(np.pi / 2 * states)], axis=1)
     # normalize and reshape
@@ -210,9 +208,7 @@ exact_state = np.asarray(dataset_params.exact_state)[selection]
 circuit_layout = dataset_params.circuit_layout_d4
 circuit = get_circuit(circuit_layout)
 params_01 = np.asarray(dataset_params.params_d4)[selection]
-states_01 = np.asarray(
-    [circuit(params) for params in tqdm(params_01, desc="States for depth 4")]
-)
+states_01 = np.asarray([circuit(params) for params in tqdm(params_01, desc="States for depth 4")])
 fidelities_01 = np.asarray(dataset_params.fidelities_d4)[selection]
 
 ######################################################################
@@ -368,9 +364,9 @@ def loss_acc(params, batch_x, batch_y):
 # training step
 @jax.jit
 def train_step(params, opt_state, batch_x, batch_y):
-    (loss, acc), grads = jax.value_and_grad(
-        lambda p: loss_acc(p, batch_x, batch_y), has_aux=True
-    )(params)
+    (loss, acc), grads = jax.value_and_grad(lambda p: loss_acc(p, batch_x, batch_y), has_aux=True)(
+        params
+    )
     updates, opt_state = opt.update(grads, opt_state, params)
     return optax.apply_updates(params, updates), opt_state, loss, acc
 
@@ -599,9 +595,7 @@ def MCRQI_decoding(states):
     N = int(np.sqrt(N2))
     n = int(np.log2(N2))
     # invert MCRQI encoding to get pixel values
-    images = (
-        np.arccos(states[:, :3] ** 2 * 4 * N2 - states[:, 4:7] ** 2 * 4 * N2) / np.pi
-    )
+    images = np.arccos(states[:, :3] ** 2 * 4 * N2 - states[:, 4:7] ** 2 * 4 * N2) / np.pi
     # undo hierarchical ordering
     images = np.reshape(images, (batchsize, 3, *(2,) * n))
     images = np.transpose(images, [0, *range(2, n + 1, 2), *range(3, n + 2, 2), 1])
