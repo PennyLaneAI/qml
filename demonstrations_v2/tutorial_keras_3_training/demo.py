@@ -5,7 +5,7 @@ r"""Training Pennylane Circuits with the Keras 3 Multi-Backend
 ######################################################################
 # While pennylane does not support the ``qml.KerasLayer`` api since the transition from Keras 2 to
 # Keras 3, we can still define a custom keras layer with certain modifications to allow for
-# integration into keras models. Additionally, due to the multibackend support in Keras 3, these
+# integration into keras models. Additionally, due to the multi-backend support in Keras 3, these
 # models can we trained using jax, pytorch or tensorflow. This demo will create a Keras 3
 # implementation of the ``Data-ReUploading`` models from the `‘Quantum models as Fourier
 # series’ <https://pennylane.ai/qml/demos/tutorial_expressivity_fourier_series>`__ demo.
@@ -30,7 +30,7 @@ os.environ["KERAS_BACKEND"] = (
 
 ######################################################################
 # We can now import keras alongside its key modules ``ops``. We then print the current backend to
-# verify if everthing loaded correctly.
+# verify if everything loaded correctly.
 #
 
 import keras
@@ -39,7 +39,7 @@ from keras import ops
 print(f"Keras backend: {keras.backend.backend()}")
 
 ######################################################################
-# \**In order to ensure numerical stability with quantum circuits set the backend to use ``float64``
+# **In order to ensure numerical stability with quantum circuits set the backend to use ``float64``**
 #
 
 keras.backend.set_floatx("float64")
@@ -61,7 +61,7 @@ import matplotlib.pyplot as plt
 # The main goal of this demo is to allow people to integrate pennylane circuits into their existing
 # code bases. The Keras Layer created here will fully support models saving/loading, training and
 # everything else you normally expect from a Keras Layer. Additionally, they will be entirely self
-# contained, not requiring Qnodes to be defined externally.
+# contained, not requiring QNodes to be defined externally.
 #
 # In order to get better background on the concepts employed in this demo, here are some helpful
 # additional resources: \* `Keras custom layer
@@ -75,7 +75,7 @@ import matplotlib.pyplot as plt
 # Setting up the target dataset
 # -----------------------------
 #
-# Similiar to the [fourier series
+# Similar to the [fourier series
 # demo]((https://pennylane.ai/qml/demos/tutorial_expressivity_fourier_series) mentioned in the
 # introduction, we first define a (classical) target function which will be used as a “ground truth”
 # that the quantum model has to fit. The target function is constructed as a Fourier series of a
@@ -232,7 +232,7 @@ from keras.saving import serialize_keras_object, deserialize_keras_object
 #
 # This method is required in order to support model.summary() and model.save() functionality. This can
 # be trivially implemented by passing an output_shape parameter in the ``__init__`` method similar to
-# the depricated ``qml.KerasLayer``, or we can implement circuit specific logic. In this example, our
+# the deprecated ``qml.KerasLayer``, or we can implement circuit specific logic. In this example, our
 # circuit outputs a single expectation value per input variable, therefore the output shape is
 # ‘**(batch,num_of_wires)**’
 #
@@ -251,7 +251,7 @@ from keras.saving import serialize_keras_object, deserialize_keras_object
 #
 # **5.** ``call()`` **method:**
 #
-# The ``call()`` methods needs to call the Qnode with the weight variable. Additional pre-processing
+# The ``call()`` methods needs to call the QNode with the weight variable. Additional pre-processing
 # can be applied before calling the circuit as well, for example we apply input variable scaling
 # outside the circuit to take advantage of efficient vectorized execution for batched input. Depending
 # on your specific model, we can also include pre-processing steps such as input scaling. Due to being
@@ -293,7 +293,7 @@ class QKerasLayer(keras.layers.Layer):
             layers (int): Number of layers in the DR Model.
             circ_backend (str): Backend for the quantum circuit. Defaults to 'lightning.qubit'
             circ_grad_method (str): Gradient method for the quantum circuit. Defaults to 'adjoint'
-            num_wires (int): Number of wires to iniatize the qml.device. Defaults to 1.
+            num_wires (int): Number of wires to initialize the qml.device. Defaults to 1.
             scaling (float): Scaling factor for the input data. Defaults to 1.0
             **kwargs: Additional keyword arguments for the keras Layer class such as 'name'.
         """
@@ -343,7 +343,7 @@ class QKerasLayer(keras.layers.Layer):
         # For this model we return an expectation value per qubit. The '0' index of the input_shape is always the batch, so we return an output shape of (batch, num_wires)
         return (input_shape[0], self.num_wires)
 
-    ## We define the subcircuit functions for the circuit.
+    ## We define the sub-circuit functions for the circuit.
     def S(self, x):
         """Data-encoding circuit block."""
         # Use the [:,0] syntax for batch support
@@ -574,6 +574,9 @@ plt.scatter(x, target_y, facecolor="white", edgecolor="black")
 plt.plot(x, predictions2, c="blue")
 plt.ylim(-1, 1)
 plt.show()
+
+######################################################################
+# image:: Icon-pictures.png
 
 ######################################################################
 # Final Notes
