@@ -1,6 +1,6 @@
-### Please add any additional requirements that are needed for your demo here ###
-### If you are curious about global dependencies, check the `/dependencies` directory ###
 keras==3.11.3
 matplotlib==3.10.6
 numpy==2.3.3
 pennylane==0.42.3
+tensorflow==2.20.0
+torch==2.8.0+cu126
