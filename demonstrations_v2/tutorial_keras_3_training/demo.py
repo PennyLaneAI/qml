@@ -111,6 +111,13 @@ plt.ylim(-1, 1)
 plt.show()
 
 ######################################################################
+# .. figure:: ../_static/demonstration_assets/keras_3_training/original_data.png
+#   :width: 50%
+#   :align: center
+#
+# |
+
+######################################################################
 # Defining the Quantum Model
 # --------------------------
 #
@@ -170,6 +177,13 @@ weights = 2 * np.pi * np.random.random(size=(layers + 1, 3))  # some random init
 qml.draw_mpl(serial_quantum_model)(weights, 1)
 
 ######################################################################
+# .. figure:: ../_static/demonstration_assets/keras_3_training/circuit_plot.png
+#   :width: 50%
+#   :align: center
+#
+# |
+
+######################################################################
 # Plotting the output of this random circuit, we get
 #
 
@@ -179,6 +193,13 @@ random_quantum_model_y = [serial_quantum_model(weights, x_) for x_ in x]
 plt.plot(x, random_quantum_model_y, c="blue")
 plt.ylim(-1, 1)
 plt.show()
+
+######################################################################
+# .. figure:: ../_static/demonstration_assets/keras_3_training/random_init_numpy.png
+#   :width: 50%
+#   :align: center
+#
+# |
 
 ######################################################################
 # Wrapping the QNode in a Keras Layer
@@ -473,6 +494,14 @@ model.summary()
 keras_layer.draw_qnode()
 
 ######################################################################
+# .. figure:: ../_static/demonstration_assets/keras_3_training/circuit_plot_keras.png
+#   :width: 50%
+#   :align: center
+#
+# |
+#
+
+######################################################################
 # Test forward pass
 # ~~~~~~~~~~~~~~~~~
 #
@@ -491,6 +520,14 @@ random_quantum_model_y = model(x)
 plt.plot(x, random_quantum_model_y, c="blue")
 plt.ylim(-1, 1)
 plt.show()
+
+######################################################################
+# .. figure:: ../_static/demonstration_assets/keras_3_training/random_init_keras.png
+#   :width: 50%
+#   :align: center
+#
+# |
+#
 
 ######################################################################
 # Model Training
@@ -532,6 +569,14 @@ plt.scatter(x, target_y, facecolor="white", edgecolor="black")
 plt.plot(x, predictions, c="blue")
 plt.ylim(-1, 1)
 plt.show()
+
+######################################################################
+# .. figure:: ../_static/demonstration_assets/keras_3_training/trained_model_fit.png
+#   :width: 50%
+#   :align: center
+#
+# |
+#
 
 ######################################################################
 # Model Saving and Loading
@@ -576,7 +621,12 @@ plt.ylim(-1, 1)
 plt.show()
 
 ######################################################################
-# image:: Icon-pictures.png
+# .. figure:: ../_static/demonstration_assets/keras_3_training/loaded_model_fit.png
+#   :width: 50%
+#   :align: center
+#
+# |
+#
 
 ######################################################################
 # Final Notes
