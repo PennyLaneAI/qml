@@ -19,7 +19,7 @@
   "previewImages": [
     {
       "type": "thumbnail",
-      "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_placeholder.png"
+      "uri": "/_static/demonstration_assets/qnn_module/Keras_logo.png"
     }
   ],
   "seoDescription": "A demo showing how to integrate a pennylane circuit into keras 3 and train it using both pytorch and tensorflow",
@@ -29,3 +29,4 @@
   "referencedByPapers": [],
   "relatedContent": []
 }
+
