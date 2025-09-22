@@ -4,7 +4,7 @@
 [project]
 name = "qml"
 version = "0.0.0"
-description = "Introductions to key concepts in quantum machine learning, as well as tutorials and implementations from cutting-edge QML research."
+description = "The definitive open-source Python framework for quantum programming. Built by researchers, for research."
 readme = "README.md"
 license = "Apache-2.0"
 requires-python = ">=3.10.0,<3.13.0"
