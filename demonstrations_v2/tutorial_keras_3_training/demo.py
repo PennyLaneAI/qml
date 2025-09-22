@@ -16,7 +16,7 @@ r"""Training Pennylane Circuits with the Keras 3 Multi-Backend
 # you want GPU support.
 # 
 
-! pip install keras tensorflow
+# ! pip install keras tensorflow
 
 ######################################################################
 # We start by selecting our Keras 3 backend using the ‘*KERAS_BACKEND*’ environment variable.
