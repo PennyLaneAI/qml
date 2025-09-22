@@ -1,0 +1,26 @@
+{
+  "title": "Keras 3 Training",
+  "authors": [
+    {
+      "username": "vinayak19th"
+    }
+  ],
+  "executable_stable": true,
+  "executable_latest": true,
+  "dateOfPublication": "2025-09-22T00:00:00+00:00",
+  "dateOfLastModification": "2025-09-22T00:00:00+00:00",
+  "categories": [],
+  "tags": [],
+  "previewImages": [
+    {
+      "type": "thumbnail",
+      "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_placeholder.png"
+    }
+  ],
+  "seoDescription": "A demo showing how to integrate a pennylane circuit into keras 3 and train it using both pytorch and tensorflow",
+  "doi": "",
+  "references": [],
+  "basedOnPapers": [],
+  "referencedByPapers": [],
+  "relatedContent": []
+}
