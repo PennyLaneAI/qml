@@ -187,11 +187,11 @@ plt.show()
 # You can refer to the full tutorial on creating custom keras layer
 # `here <https://keras.io/guides/making_new_layers_and_models_via_subclassing/>`__. We will now create
 # a custom keras layer can wrap the quantum circuit and its trainable weights. When doing this we have
-# to keep in mind the following Keras 3 specifics: 1. Do not use any ``tf.xx`` functions, and only use
-# the native ``ops.xxx`` package. For example use ``ops.sum()`` rather than ``tf.reduce_sum`` or
-# ``torch.sum``. 2. Do not create ``tf.constant`` or ``tf.variables``, rather use the
-# ``self.add_weight`` method. 3. You need to pass the weights as arguments to the QNode and not use
-# ``self.weight`` inside the QNode.
+# to keep in mind the following Keras 3 specifics: 
+# 
+# 1. Do not use any ``tf.xx`` functions, and only use the native ``ops.xxx`` package. For example use ``ops.sum()`` rather than ``tf.reduce_sum`` or ``torch.sum``. 
+# 2. Do not create ``tf.constant`` or ``tf.variables``, rather use the``self.add_weight`` method. 
+# 3. You need to pass the weights as arguments to the QNode and not use ``self.weight`` inside the QNode.
 #
 
 ######################################################################
@@ -209,8 +209,7 @@ from keras.saving import serialize_keras_object, deserialize_keras_object
 #
 # To create a fully functional keras layer, the following methods **need to be implemented**
 #
-# 1. ``__init__`` method:
-# ^^^^^^^^^^^^^^^^^^^^^^^
+# **1.** ``__init__`` **method:**
 #
 # The ``__init__`` method is used to accomplish the following: \* Create the instance variables that
 # define the QNode such as number of wires, circuit backend, etc. \* Create the instance variables
@@ -218,8 +217,7 @@ from keras.saving import serialize_keras_object, deserialize_keras_object
 # backend to be [“tf”,“torch” or “Jax”] \* Call the ``super().__init__(**kwargs)`` to pass generic
 # layer properties such as ‘*name*’ to the parent class ``__init__`` function.
 #
-# 2. ``build()`` method:
-# ^^^^^^^^^^^^^^^^^^^^^^
+# **2.** ``build()`` **method:**
 #
 # The ``build()`` method is used to instantiate the model weights at runtime based on input_shape.
 # This can be used to create dynamic circuits with qubits equal to the number of input variables.
@@ -230,8 +228,7 @@ from keras.saving import serialize_keras_object, deserialize_keras_object
 # **Note: DO NOT** *apply any operations on the created weight here as it will cause issues with
 # gradients*
 #
-# 3. ``compute_output_shape()`` method:
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# **3.** ``compute_output_shape()`` **method:**
 #
 # This method is required in order to support model.summary() and model.save() functionality. This can
 # be trivially implemented by passing an output_shape parameter in the ``__init__`` method similar to
@@ -239,8 +236,8 @@ from keras.saving import serialize_keras_object, deserialize_keras_object
 # circuit outputs a single expectation value per input variable, therefore the output shape is
 # ‘**(batch,num_of_wires)**’
 #
-# 4. ``QNode`` methods:
-# ^^^^^^^^^^^^^^^^^^^^^
+# **4.** ``QNode`` **methods:**
+# 
 #
 # The ‘QNode’ methods consist of 2 sets of methods - 1. **Circuit Definition Methods** : These methods
 # create the QNode circuit structure and can be implemented as a single method or a set of methods
@@ -252,8 +249,7 @@ from keras.saving import serialize_keras_object, deserialize_keras_object
 # **Note**\ *: Pennylane requires the input to be the last argument to properly work with batched
 # inputs*
 #
-# 5. ``call()`` method:
-# ^^^^^^^^^^^^^^^^^^^^^
+# **5.** ``call()`` **method:**
 #
 # The ``call()`` methods needs to call the Qnode with the weight variable. Additional pre-processing
 # can be applied before calling the circuit as well, for example we apply input variable scaling
@@ -261,13 +257,11 @@ from keras.saving import serialize_keras_object, deserialize_keras_object
 # on your specific model, we can also include pre-processing steps such as input scaling. Due to being
 # wrapped by the autodiff of the various backends, we will still get valid gradients for these steps.
 #
-# 6. ``draw_qnode`` method:
-# ^^^^^^^^^^^^^^^^^^^^^^^^^
+# **6.** ``draw_qnode`` **method:**
 #
 # A Utility methods to plot the QNode circuits
 #
-# 7. ``get_config`` method:
-# ^^^^^^^^^^^^^^^^^^^^^^^^^
+# **7.** ``get_config`` **method:**
 #
 # This method needs to be implemented to support ``model.save`` functionality. It creates a
 # config(dict) which defines the configuration of the current layer.
@@ -276,8 +270,7 @@ from keras.saving import serialize_keras_object, deserialize_keras_object
 # ``serialize_keras_object`` function, it is typically good practice to wrap all the parameters using
 # this method.
 #
-# 8. ``from_config`` method:
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^
+# **8.** ``from_config`` **method:**
 #
 # This method needs to be implemented to support ``model.save`` functionality. It defines how to
 # create an instance of the layer from a configuration.
