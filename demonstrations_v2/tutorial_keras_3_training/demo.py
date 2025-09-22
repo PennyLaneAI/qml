@@ -64,11 +64,11 @@ import matplotlib.pyplot as plt
 # contained, not requiring QNodes to be defined externally.
 #
 # In order to get better background on the concepts employed in this demo, here are some helpful
-# additional resources: \* `Keras custom layer
-# documentation <https://keras.io/guides/making_new_layers_and_models_via_subclassing/>`__ \*
-# `Pennylane QNode
-# documentation <https://docs.pennylane.ai/en/stable/code/api/pennylane.qnode.html>`__ \* `Keras 3
-# Pytorch Example <https://keras.io/guides/writing_a_custom_training_loop_in_torch/>`__
+# additional resources: 
+# * `Keras custom layer
+# documentation <https://keras.io/guides/making_new_layers_and_models_via_subclassing/>`__ 
+# *`Pennylane QNode documentation <https://docs.pennylane.ai/en/stable/code/api/pennylane.qnode.html>`__ 
+#* `Keras 3 Pytorch Example <https://keras.io/guides/writing_a_custom_training_loop_in_torch/>`__
 #
 
 ######################################################################
