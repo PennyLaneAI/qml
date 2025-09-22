@@ -50,7 +50,7 @@
       },
       {
           "id": "le2011b",
-          "type": "incollection",
+          "type": "other",
           "title": "A Flexible Representation and Invertible Transformations for Images on Quantum Computers",
           "authors": "Le, P.Q., Iliyasu, A.M., Dong, F., Hirota, K.",
           "year": "2011",
@@ -61,7 +61,7 @@
       },
       {
           "id": "sun2011",
-          "type": "inproceedings",
+          "type": "other",
           "title": "A Multi-Channel Representation for Images on Quantum Computers Using the RGBα Color Space",
           "authors": "Sun, B. et al.",
           "year": "2011",
