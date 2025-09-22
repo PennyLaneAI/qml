@@ -9,7 +9,12 @@
   "executable_latest": true,
   "dateOfPublication": "2025-09-22T00:00:00+00:00",
   "dateOfLastModification": "2025-09-22T00:00:00+00:00",
-  "categories": [],
+  "categories": [
+    "Getting Started",
+    "Quantum Machine Learning",
+    "How-to",
+    "Devices and Performance"
+  ],
   "tags": [],
   "previewImages": [
     {
