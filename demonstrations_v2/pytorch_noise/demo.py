@@ -17,7 +17,7 @@ PyTorch and noisy devices
     This demo is only compatible with PennyLane v0.40 or below and Braket v1.31.0. To use Rigetti hardware with newer versions of PennyLane please use the `PennyLane-Braket plugin <https://amazon-braket-pennylane-plugin-python.readthedocs.io/en/stable/index.html>`__ instead.
     
 
-Let's revisit the original :ref:`qubit rotation <qubit_rotation>` tutorial, but instead of
+Let's revisit the original :doc:`qubit rotation <demos/tutorial_qubit_rotation>` tutorial, but instead of
 using the default NumPy/autograd QNode interface, we'll use the :doc:`introduction/interfaces/torch`.
 We'll also replace the ``default.qubit`` device with a noisy ``rigetti.qvm``
 device, to see how the optimization responds to noisy qubits. At the end of the
@@ -197,7 +197,7 @@ print(cost(phi, theta, 400))
 # Note that to run the following script, you will need access to Rigetti's QPU.
 # To connect to a QPU, we can use Amazon Braket. For a dedicated demonstration
 # on using Amazon Braket, see our tutorial on
-# `Computing gradients in parallel with Amazon Braket <https://pennylane.ai/qml/demos/braket-parallel-gradients.html>`_.
+# :doc:`Computing gradients in parallel with Amazon Braket <demos/braket-parallel-gradients>`.
 
 import pennylane as qml
 import torch
