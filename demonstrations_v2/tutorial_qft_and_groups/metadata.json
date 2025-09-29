@@ -8,7 +8,7 @@
     "executable_stable": true,
     "executable_latest": true,
     "dateOfPublication": "2025-09-18T10:00:00+00:00",
-    "dateOfLastModification": "2025-09-18T10:00:00+00:01",
+    "dateOfLastModification": "2025-09-22T15:48:14+00:00",
     "categories": [
         "Algorithms"
     ],
@@ -78,7 +78,7 @@
             "id": "tutorial_period_finding",
             "weight": 1.0
         },
-                {
+        {
             "type": "demonstration",
             "id": "tutorial_hidden_cut",
             "weight": 1.0
