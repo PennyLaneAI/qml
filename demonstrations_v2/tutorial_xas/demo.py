@@ -143,7 +143,7 @@ For simplicity, in this demo we target the low-lying excited state spectrum rath
 Ground state calculation
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-If you haven’t, check out the demo `“Initial state preparation for quantum chemistry” <demos/tutorial_initial_state_preparation>`__. 
+If you haven’t, check out the demo :doc:`Initial state preparation for quantum chemistry <demos/tutorial_initial_state_preparation>`. 
 We will be expanding on that demo with code to import a state from the `complete active space configuration interaction <https://pyscf.org/user/mcscf.html>`__ (CASCI) methods of PySCF, where we restrict the set of active orbitals used in the calculation. 
 
 We start by creating our molecule object using the `Gaussian type orbitals <https://en.wikipedia.org/wiki/Gaussian_orbital>`__ module ``pyscf.gto``, and obtaining the Hartree-Fock molecular orbitals with the `self-consistent field methods <https://pyscf.org/user/scf.html>`__ ``pyscf.scf``.
