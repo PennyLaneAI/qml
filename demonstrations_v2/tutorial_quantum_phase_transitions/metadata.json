@@ -2,10 +2,10 @@
     "title": "Seeing Quantum Phase Transitions with Quantum Computers",
     "authors": [
         {
-            "username": "Damian_Pope"
+            "username": "damian_pope"
         },
 	{
-            "username": "Tirth_Shah"
+            "username": "tirthshah2806"
         }
     ],
     "dateOfPublication": "2025-07-11T00:00:00+00:00",
@@ -120,6 +120,16 @@
         {
             "type": "demonstration",
             "id": "tutorial_isingmodel_PyTorch",
+            "weight": 1.0
+        },
+		{
+            "type": "demonstration",
+            "id": "tutorial_annni",
+            "weight": 1.0
+        },
+		{
+            "type": "demonstration",
+            "id": "tutorial_mitigation_advantage",
             "weight": 1.0
         }
     ],

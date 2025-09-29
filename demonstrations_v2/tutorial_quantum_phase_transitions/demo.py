@@ -3,434 +3,56 @@ Seeing Phase Transitions with Quantum Computers
 ===============================================
 
 
-By Damian Pope and Tirth Shah
-
 
 
 Introduction
 ------------
 
 
-This tutorial introduces three quantum phase transitions related to condensed matter physics. It walks through how to simulate them on a quantum computer. The phase transitions it covers involve:
+This tutorial introduces three quantum phase transitions related to condensed matter physics. It walks through how to simulate them on a quantum computer. The phase transitions it covers involve
+the 1D quantum Ising model, the 2D quantum Ising model, and dynamical quantum phase transitions (i.e., phase transitions in time evolution).
 
+A phase transition happens when there's an abrupt change in some property of a system. For example, when liquid water freezes and turns into ice. 
+Phase transitions are important to many areas of physics including condensed matter physics, e.g., [#Vojta2002]_, cosmology, e.g., [#Mazumdar2019]_, and high-energy physics, e.g., [#Mueller2023]_.
 
+They're important as they can 1) help us find new quantum states of matter, 2) help to shed light on entanglement and long-range correlations in quantum systems, and 
+3) help us understand the behaviour of many different quantum systems at the same time 
+(due to the property of universality).
 
-.. raw:: html
 
 
-
-   <ul>
-
-
-
-.. raw:: html
-
-
-
-   <li>
-
-
-
-the 1D quantum Ising model
-
-
-
-.. raw:: html
-
-
-
-   </li>
-
-
-
-.. raw:: html
-
-
-
-   <li>
-
-
-
-the 2D quantum Ising model
-
-
-
-.. raw:: html
-
-
-
-   </li>
-
-
-
-.. raw:: html
-
-
-
-   <li>
-
-
-
-`dynamical quantum phase transitions`_   (i.e., phase transitions in time evolution)
-
-
-
-.. raw:: html
-
-
-
-   </li>
-
-
-
-.. raw:: html
-
-
-
-   </ul>
-
-
-
-
-A phase transition happens when there's an abrupt change in some property of a system. For example, when liquid water freezes and turns into ice. Phase transitions are important to many areas of physics including:
-
-
-
-.. raw:: html
-
-
-
-   <ul>
-
-
-
-.. raw:: html
-
-
-
-   <li>
-
-
-
-condensed matter physics, e.g., [#Vojta2002]_
-
-
-
-.. raw:: html
-
-
-
-   </li>
-
-
-
-.. raw:: html
-
-
-
-   <li>
-
-
-
-cosmology, e.g., [#Mazumdar2019]_
-
-
-
-.. raw:: html
-
-
-
-   </li>
-
-
-
-.. raw:: html
-
-
-
-   <li>
-
-
-
-high-energy physics, e.g., [#Mueller2023]_
-
-
-
-.. raw:: html
-
-
-
-   </li>
-
-
-
-.. raw:: html
-
-
-
-   </ul>
-
-
-
-They're important as they can:
-
-
-
-.. raw:: html
-
-
-
-   <ul>
-
-
-
-.. raw:: html
-
-
-
-   <li>
-
-
-
-help us find new quantum states of matter
-
-
-
-.. raw:: html
-
-
-
-   </li>
-
-
-
-.. raw:: html
-
-
-
-   <li>
-
-
-
-help to shed light on entanglement and long-range correlations in quantum systems
-
-
-
-.. raw:: html
-
-
-
-   </li>
-
-
-
-.. raw:: html
-
-
-
-   <li>
-
-
-
-help us understand the behaviour of many different quantum systems at the same time (due to the
-
-property of universality)
-
-
-
-.. raw:: html
-
-
-
-   </li>
-
-
-
-.. raw:: html
-
-
-
-   </ul>
-
-
-
-Note: *Quantum* phase transitions are different from *classical* phase transitions. Classical phase
-
-transitions are caused by thermal fluctuations. Quantum phase transitions can occur at zero
-
-temperature and are caused by quantum fluctuations (i.e., Heisenberg's uncertainty principle). 
+.. admonition:: Note
+   :class: note
+   
+   *Quantum* phase transitions are different from *classical* phase transitions. Classical phase
+   transitions are caused by thermal fluctuations. Quantum phase transitions can occur at zero
+   temperature and are caused by quantum fluctuations (i.e., Heisenberg's uncertainty principle). 
 
 .. raw:: html
 
    <br>
 
 Phase transitions can be hard to study analytically. Due to discontinuities, mathematical models can break
-
 down. Phase transitions have been widely studied numerically with classical computers. However, in
-
 some cases, the amount of computational resources needed is prohibitive. But there's another way
-
 to study phase transitions: using a quantum computer. Potentially, they can compute aspects of phase
-
 transitions more efficiently than any conventional technique.
 
 
 
-To date, quantum computers have been used to study quantum phase transitions related to:
+To date, quantum computers have been used to study quantum phase transitions related to 1) the early universe and high-energy particle colliders [#Mueller2023]_, 2) a topological transition in an Ising-like model [#Smith2019]_, 
+3) the transverse Ising model [#Haghshenas2024]_, 4) noisy quantum systems [#Chertkov2022]_, 5) scalar quantum field theory [#Thompson2023]_, and 6) the evolution of the universe [#Vodeb2025]_.
 
 
 
-.. raw:: html
 
-
-
-   <ul>
-
-
-
-.. raw:: html
-
-
-
-   <li>
-
-
-
-the early universe and high-energy particle colliders [#Mueller2023]_
-
-
-
-.. raw:: html
-
-
-
-   </li>
-
-
-
-.. raw:: html
-
-
-
-   <li>
-
-
-
-a topological transition in an Ising-like model [#Smith2019]_
-
-
-
-.. raw:: html
-
-
-
-   </li>
-
-
-
-.. raw:: html
-
-
-
-   <li>
-
-
-
-the transverse Ising model [#Haghshenas2024]_
-
-
-
-.. raw:: html
-
-
-
-   </li>
-
-
-
-.. raw:: html
-
-
-
-   <li>
-
-
-
-noisy quantum systems [#Chertkov2022]_
-
-
-
-.. raw:: html
-
-
-
-   </li>
-
-
-
-.. raw:: html
-
-
-
-   <li>
-
-
-
-scalar quantum field theory [#Thompson2023]_
-
-
-
-.. raw:: html
-
-
-
-   </li>
-
-
-
-.. raw:: html
-
-
-
-   <li>
-
-
-
-the evolution of the universe [#Vodeb2025]_
-
-
-
-.. raw:: html
-
-
-
-   </li>
-
-
-
-.. raw:: html
-
-
-
-   </ul>
 
 
 
 Note: This tutorial focuses on the *quantum* Ising model. It complements existing content on this
+model: `3-qubit Ising model in PyTorch <https://pennylane.ai/qml/demos/tutorial_isingmodel_PyTorch>`_, `Transverse-field Ising model <https://pennylane.ai/datasets/transverse-field-ising-model>`_, and `Quadratic Unconstrained Binary Optimization (QUBO) <https://pennylane.ai/qml/demos/tutorial_QUBO>`_
 
-model:
 
-`3-qubit Ising model in PyTorch <https://pennylane.ai/qml/demos/tutorial_isingmodel_PyTorch>`_
-
-`Transverse-field Ising model <https://pennylane.ai/datasets/transverse-field-ising-model>`_
-
-`Ising Uprising Challenge <https://pennylane.ai/challenges/ising_uprising/>`_
-
-`How to Solve a QUBO problem <https://youtu.be/LhbDMv3iA9s?si=YBGWWGNT3vwWeRVU>`_
-
-`Quadratic Unconstrained Binary Optimization (QUBO) <https://pennylane.ai/qml/demos/tutorial_QUBO>`_
-
-`Quantum Dataset How to build spin Hamiltonians <https://pennylane.ai/qml/demos/tutorial_how_to_build_spin_hamiltonians>`_
 
 
 
@@ -456,18 +78,10 @@ The simplest Ising model consists of :math:`N` qubits arranged along a line.
 #
 # .. math::
 #    \begin{equation}
-#    H = -J \,\, \Sigma_{i=1}^{N-1} \sigma_{z}^{(i)} \sigma^{(i+1)}_{z}
+#    H = -J \,\, \Sigma_{i=1}^{N-1} \sigma_{z}^{(i)} \sigma^{(i+1)}_{z},
 #    \end{equation}
 #
-# where 
-#
-# .. math::
-#    \sigma_{z}^{(i)} = \left[ {\begin{array}{cc}
-#    1 & 0 \\
-#    0 & -1 \\
-#    \end{array} } \right]
-#
-# is the Pauli Z operator for the :math:`i^{th}` qubit and :math:`J` is the interaction strength
+# where :math:`\sigma_{z}^{(i)}` is the Pauli Z operator for the :math:`i^{th}` qubit and :math:`J` is the interaction strength
 # between neighbouring qubits.
 #
 # The code below creates this Hamiltonian:
@@ -515,7 +129,7 @@ print(f"H={H}")
 #
 # Let's start by finding the ground state of the Ising model for a fixed value of :math:`J`.
 # We'll use the well-known Hardware Efficient Ansatz (HEA) [#Kandala2017]_ to do this. It's a
-# general-purpose ansatz that efficiently represents a wide range of quantum states. It consists of:
+# general-purpose ansatz that efficiently represents a wide range of quantum states, it consists of:
 # 
 # 1. Applying three single-qubit rotations to each qubit. Each one is parameterized by a different rotation angle. 
 # 
@@ -585,10 +199,10 @@ plt.show()
 
 ######################################################################
 # The graph above shows that the energy :math:`E` gradually decreases until it reaches :math:`E = - 4`.
-# To check that this result makes sense, let's think about the Hamiltonian. Consider the first term, :math:`-2 * Z(0) @ Z(1)`. 
+# To check that this result makes sense, let's think about the Hamiltonian. Consider the first term, :math:`-2 \sigma_{z}^{(1)} \sigma_{z}^{(2)}`.
 # When the first and second qubits are in the computational basis state
-# :math:`| 0 \rangle` , the product :math:`Z(0) @ Z(1)` is :math:`(+1)(+1) = +1`. Multiplying this by :math:`J = -2`
-# gives an energy of -2. The second term :math:`-2 * Z(1) @ Z(2)` also gives :math:`E = -2`. Combining
+# :math:`| 0 \rangle` , the product :math:`\langle \sigma_{z}^{(1)} \sigma_{z}^{(2} \rangle` is :math:`(+1)(+1) = +1`. Multiplying this by :math:`J = -2`
+# gives an energy of -2. The second term :math:`-2 \langle \sigma_{z}^{(2)} \sigma_{z}^{(3)} \rangle` is also :math:`E = -2`. Combining
 # these results gives :math:`E = -2 -2 = -4`. When all the qubits are in the other basis state
 # (:math:`| 1 \rangle`), we also get :math:`E = -4`. These two calculations agree with the numerical result from VQE. So far, so good.
 # 
@@ -600,8 +214,8 @@ plt.show()
 #    - h_{x}\Sigma_{i=1}^{N} \sigma_{x}^{(i)}
 #
 # If our qubits are actually spin-1/2 particles (e.g., electrons), :math:`h_{x}` is a horizontal
-# magnetic field. Often, it's called a :math:`{\it transverse}` :math:`{\it field}`.
-# 
+# magnetic field. Often, it's called a *transverse field*.
+# We introduce the extra term to increase the system's complexity and to see if it leads to any interesting phase transitions. As you'll see, it does. 
 
 ##############################################################################
 # .. figure:: ../_static/demonstration_assets/quantum_phase_transitions/Fig_2_transverse_Ising.png
@@ -615,8 +229,8 @@ plt.show()
 # .. math::
 #    H = -J \,\, \Sigma_{i=1}^{N-1} \sigma_{z}^{(i)} \sigma^{(i+1)}_{z} - h_{x}\Sigma_{i=1}^{N} \sigma_{x}^{(i)}
 #
-# A quantum phase transitions happens when we change the ratio :math:`J/h_x`. Physically, this
-# corresponds to changing the relative strengths of the coupling interaction and the horizontal
+# A quantum phase transition happens when we change the ratio :math:`J/h_x`. Physically, this
+# corresponds to changing the relative strength of the coupling interaction and the horizontal
 # magnetic field. When :math:`J` is much larger than :math:`h_{x}`, the ground state corresponds to
 # all the spins (i.e., the qubits) being aligned vertically (parallel to the :math:`z` axis).
 # 
@@ -646,24 +260,24 @@ plt.show()
 # to align them horizontally, in the Pauli X basis. Depending on value of :math:`J/h_{x}`, one of the two constants
 # will dominate.
 # 
-# To see the phase transition, let's introduce the total magnetization observable :math:`M` of all
+# To see the phase transition, let's introduce the total magnetization operator :math:`M` of all
 # the qubits:
 #
 # .. math::
 #    M =\frac{1}{N} \Sigma_{i} \sigma_{Z}^{(i)}
 #
-# It's just the sum of all the Pauli :math:`Z` operators, scaled by the number of qubits. For example,
+# It's just the sum of all the Pauli :math:`Z` operators scaled by the number of qubits. For example,
 # for the state :math:`| \psi \rangle = |0 \rangle |0\rangle`,
-# :math:`M = \frac{1}{2} \left( 1 + 1 \right) = 1`. The total magnetization tracks the phase change as
+# :math:`\langle M \rangle = \frac{1}{2} \left( 1 + 1 \right) = 1`. The total magnetization tracks the phase change as
 # follows: 
 # 
-# - When :math:`h_{x} \gg  J`, :math:`M = 0` as each qubit is in an equal superposition of :math:`|0 \rangle` and :math:`|1 \rangle`. 
+# - When :math:`h_{x} \gg  J`, :math:`\langle M \rangle = 0` as each qubit is in an equal superposition of :math:`|0 \rangle` and :math:`|1 \rangle`. 
 # 
-# - When :math:`J \gg h_{x}`, :math:`| M | = 1` as the qubits are either all in :math:`|0 \rangle` or all in :math:`|1 \rangle`.
+# - When :math:`J \gg h_{x}`, :math:`|  \langle M \rangle | = 1` as the qubits are either all in :math:`|0 \rangle` or all in :math:`|1 \rangle`.
 #
 
 ##############################################################################
-# Let's now calculate :math:`M` for a range of :math:`J/h_{x}` values.
+# Let's now calculate :math:`\langle M \rangle` for a range of :math:`J/h_{x}` values.
 #
 N = 5
 wires = range(N)
@@ -674,7 +288,7 @@ h_x = 1
 # Vary the value of the coupling constant J in order to see a phase transition as we change J/h_x
 J_list = [0.0, 0.25, 0.75, 0.9, 1.0, 1.1, 2.0, 5.0, 7.5]
 
-# This variable stores the values of the magnetization observable M for different values of J/h_x
+# This variable stores the expectation values of the magnetization operator M for different values of J/h_x
 magnetization_list = []
 
 dev_2 = qml.device("lightning.qubit", wires=N)
@@ -743,19 +357,19 @@ for i in range(len(J_list)):
     magnetization_list.append(calculate_magnetization(params))
 
 ##############################################################################
-# Now that we've calculated :math:`M`, let's plot the results.
+# Now that we've calculated :math:`\langle M \rangle`, let's plot the results.
 #
 
-# Plot |magnetization| versus J
+# Plot |<magnetization>| versus J
 plt.plot(J_list, np.abs(magnetization_list), marker="x")
 plt.xlabel("J")
-plt.ylabel("|Magnetization|")
-plt.title("|Magnetization| vs. J for N=" + str(N))
+plt.ylabel(r"$|\langle M \rangle|$")
+plt.title(r"$| \langle M \rangle |$ vs. $J$ for $N$=" + str(N))
 plt.show()
 
 ######################################################################
 #Notice how the magnetization increases sharply around :math:`J/h_{x} = 1`. This suggests that a phase transition is happening. 
-#(It's also well known that a phase transition does happen at this value.) Why the graph doesn't have a sharp and discontinuous increase at
+#(It's also well known that a phase transition does happen at this value [#Subir2011]_.) Why the graph doesn't have a sharp and discontinuous increase at
 #exactly :math:`J/h_x=1`? There are two reasons: 
 # 
 #- Like all other numerical results, this result is just approximate. 
@@ -786,19 +400,19 @@ magnetization_6 = [
 ]
 J_list_6 = J_list_4[:]
 
-# Plot |M| for multiple N values versus J
+# Plot |<M>| for multiple N values versus J
 plt.plot(J_list_4, np.abs(magnetization_4), "xk-", label="N=4")
 plt.plot(J_list[0:8], np.abs(magnetization_list[0:8]), "xb--", label="N=5")
 plt.plot(J_list_6, np.abs(magnetization_6), "sg:", label="N=6")
 
 plt.xlabel("J")
-plt.ylabel("|Magnetization|")
-plt.title("|Magnetization| vs. J for N=4, 5, 6")
+plt.ylabel(r"$|\langle M \rangle|$")
+plt.title(r"$| \langle M \rangle |$ vs. $J$ for $N$=4, 5, 6")
 plt.legend(loc="lower right")
 plt.show()
 
 ######################################################################
-# Notice how the increase in :math:`|M|` gets steeper as we increase :math:`N`. You can
+# Notice how the increase in :math:`|\langle M \rangle |` gets steeper as we increase :math:`N`. You can
 # think of this as showing that we're getting closer and closer to the asymptotic behaviour of a truly
 # discontinuous phase transition.
 #
@@ -815,7 +429,7 @@ plt.show()
 #    :width: 25%
 
 ##############################################################################
-# Compared to the 1D model, it's richer, harder to solve mathematically, and harder to simulate on
+# Compared to the 1D model, the 2D model is richer, harder to solve mathematically, and harder to simulate on
 # classical computers. It's also more realistic and is used by physicists to study
 # low-dimensional quantum systems. In this section, we'll explore phase transitions
 # in the 2D quantum Ising model. The Hamiltonian for the model is
@@ -877,7 +491,7 @@ plt.show()
 ##############################################################################
 # The energy in the graph approaches -4.5, which makes sense. The Hamiltonian has four two-qubit interaction terms and the
 # smallest that each one can be is -1. So, the ground-state energy must be less than -4. Let's vary the ratio :math:`J/h_{x}` again and calculate the
-# magnetization :math:`M` each time. Finally, let's plot the results and see if there's a quantum
+# average value of the magnetization :math:`\langle M \rangle` each time. Finally, let's plot the results and see if there's a quantum
 # phase transition.
 #
 
@@ -937,11 +551,11 @@ for i in range(len(J_list)):
 ######################################################################
 # Let's plot the results.
 
-# Plot |magnetization| versus J
+# Plot |<magnetization>| versus J
 plt.plot(J_list, np.abs(magnetization_list), marker="x")
 plt.xlabel("J")
-plt.ylabel("|Magnetization|")
-plt.title("|Magnetization| vs. J for N=" + str(N))
+plt.ylabel(r"$| \langle M \rangle |$")
+plt.title(r"$| \langle M \rangle |$ vs. $J$ for $N$=" + str(N))
 plt.show()
 
 ######################################################################
@@ -952,8 +566,8 @@ plt.show()
 
 plt.plot(J_list[0:8], np.abs(magnetization_list[0:8]), marker="x")
 plt.xlabel("J")
-plt.ylabel("|Magnetization|")
-plt.title("|Magnetization| vs. J for N=" + str(N))
+plt.ylabel(r"$| \langle M \rangle |$")
+plt.title(r"$| \langle M \rangle |$ vs. $J$ for $N$=" + str(N))
 plt.show()
 
 ######################################################################
@@ -986,6 +600,7 @@ wires = range(N)
 obs = []
 for j in range(N - 1):
     obs.append(qml.Z(j) @ qml.Z(j + 1))
+obs.append(qml.Z(N-1) @ qml.Z(0))
 
 # add Pauli X terms to Hamiltonian (transverse field)
 for j in range(N):
@@ -1005,7 +620,7 @@ h_x = 1
 # strength of longitudinal field interaction
 h_z = -0.15
 
-J_coeffs = [-J] * (N - 1)
+J_coeffs = [-J] * N
 
 X_coeffs = [h_x] * N
 
@@ -1027,14 +642,13 @@ def time_evolution_circuit(H, T):
 
 
 ##############################################################################
-#To see if a dynamical phase transition happens, let's consider a observable called the :math:`\it{rate \; function}`
+#To see if a dynamical phase transition happens, let's consider an observable called the *rate function*
 #:math:`\gamma`. It depends on the overlap between the quantum state that we start with and the final state at
 #some time :math:`t`. More specifically, 
 #
-# .. math::
-#    \gamma = -\frac{1}{N} \log_{e} (|G|^{2})
+# .. math:: \gamma = -\frac{1}{N} \log_{e} (|G|^{2}),
 #
-#where :math:`G = \langle \psi_{i} | \psi_{f}\rangle`, where :math:`| \psi_{i}\rangle` and :math:`| \psi_{f} \rangle` are the initial and final states
+#where :math:`G = \langle \psi_{i} | \psi_{f}\rangle`, and :math:`| \psi_{i}\rangle` and :math:`| \psi_{f} \rangle` are the initial and final states,
 #respectively. As the system evolves, we'll keep calculating :math:`\gamma`. If it changes discontinuously,
 #then a dynamical phase transition has happened.
 #
@@ -1061,18 +675,18 @@ for i in range(num_time_steps):
 
 plt.plot(np.linspace(0, deltaT * (num_time_steps-1), num_time_steps), rate_function_list)
 plt.xlabel("time")
-plt.ylabel(r"Rate function, $\lambda$")
+plt.ylabel(r"Rate function, $\gamma$")
 plt.title("Rate Function versus time")
 plt.legend(["N=" + str(N)])
 plt.show()
 
-##############################################################################
-# The sharp change in :math:`\Gamma` at :math:`t = 1.5` suggests that a dynamical phase transition has happened. This
-# conclusion is supported by classical numerical simulations that show a phase
-# transition at the same time [#Nicola2021]_.
+######################################################################
+#Notice the discontinuous change at :math:`t = 1.5`. There, the derivative :math:`\frac{d \gamma}{d t}` is undefined. 
+#Phase transitions are characterized by discontinuous changes. So, the discontinuity suggests that a phase change is happening. 
+#This conclusion is supported by classical numerical simulations that show a phase
+#transition at :math:`t = 1.5` [#Nicola2021]_.
 #
-
-##############################################################################
+#
 #Summary 
 #-------
 # In this demo, we have shown how you can use quantum computers to simulate quantum phase
@@ -1082,13 +696,13 @@ plt.show()
 #---------------
 #Damian Pope would like to thank Associate Professor Matthew Johnson (Perimeter Institute for Theoretical Physics and
 #York University) for insightful discussions on quantum phase transitions in cosmology and quantum computing.
-
-######################################################################
+# 
+# 
 #References 
 #------------
 #
 # .. [#Vojta2002]
-#     T. Vojta, in K.H. Hoffmann and M. Schreiber (Eds): Computational Statistical Physics, Springer, Berlin (2002) 
+#     T. Vojta, in K.H. Hoffmann and M. Schreiber (Eds): Computational Statistical Physics, Springer, Berlin 2002 
 #
 # .. [#Mazumdar2019]
 #
@@ -1132,6 +746,11 @@ plt.show()
 #     Abhinav Kandala et al., "Hardware-efficient Variational Quantum Eigensolver for Small Molecules and Quantum Magnets", `arXiv:1704.05018 [quant-ph] <https://arxiv.org/abs/1704.05018>`__ 2017 
 #
 #
+# .. [#Subir2011]
+#
+#     Sachdev Subir, "Quantum Phase Transitions", Cambridge University Press, Cambridge 2011 
+#
+#
 # .. [#Blote2002]
 #
 #     Henk W. J. Blöte and Youjin Deng. "Cluster Monte Carlo simulation of the transverse Ising model", Phys. Rev. E 66, 066110, 2002. (See Table II, row labelled 'square lattice'); 
@@ -1150,7 +769,18 @@ plt.show()
 #     S. De Nicola , A. A. Michailidis , M. Serbyn. "Entanglement View of Dynamical Quantum Phase Transitions", Phys. Rev. Lett. 126 040602 (2021), Figure 1 (d) 
 #
 ##############################################################################
-# About the author
-# ----------------
-#
  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
