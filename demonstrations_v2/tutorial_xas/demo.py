@@ -317,7 +317,7 @@ def initial_circuit(wf):
 # Next we will discuss how to prepare the electronic Hamiltonian for efficient time evolution in the Hadamard test circuit. 
 # We will perform compressed double factorization (CDF) on the Hamiltonian to approximate it as a series of fragments, each of which can be fast-forwarded in a Trotter product formula.
 #
-# If you haven’t yet, go read the demo `“How to build compressed double-factorized Hamiltonians” <demos/tutorial_how_to_build_compressed_double_factorized_hamiltonians>`__, because that is exactly what we are going to do! 
+# If you haven’t yet, go read the demo :doc:`How to build compressed double-factorized Hamiltonians <demos/tutorial_how_to_build_compressed_double_factorized_hamiltonians>`, because that is exactly what we are going to do!
 # You could also look at Section III in Ref. [#Fomichev2025]_.
 #
 # Electronic Hamiltonian
