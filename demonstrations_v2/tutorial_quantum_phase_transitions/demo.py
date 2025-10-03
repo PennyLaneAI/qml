@@ -567,7 +567,6 @@ plt.show()
 # but it's not conclusive as the increase is somewhat gradual. This is because :math:`N` is so small.
 # Note that the result is consistent with where the phase change is known to occur [#Blote2002]_, [#Hashizume2022]_.
 #
-#.. _dynamical quantum phase transitions:
 # Time Evolution & Dynamical Phase Transitions
 # --------------------------------------------
 #
@@ -756,5 +755,3 @@ plt.show()
 # .. [#Nicola2021]
 #
 #     S. De Nicola , A. A. Michailidis , M. Serbyn. "Entanglement View of Dynamical Quantum Phase Transitions", Phys. Rev. Lett. 126 040602 (2021), Figure 1 (d) 
-#
-##############################################################################
