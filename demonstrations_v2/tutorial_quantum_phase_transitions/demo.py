@@ -277,10 +277,10 @@ wires = range(N)
 # h_x is the strength of the transverse magnetic field
 h_x = 1
 
-# Vary the value of the coupling constant J in order to see a phase transition as we change J/h_x
+# Vary the value of the coupling constant J (change J/h_x)
 J_list = [0.0, 0.25, 0.75, 0.9, 1.0, 1.1, 2.0, 5.0, 7.5]
 
-# This variable stores the expectation values of the magnetization operator M for different values of J/h_x
+# Store the expectation values of the magnetization operator M for different values of J/h_x
 magnetization_list = []
 
 dev_2 = qml.device("lightning.qubit", wires=N)
@@ -515,7 +515,7 @@ for i in range(len(J_list)):
         lattice="square", coupling=J_list[i], n_cells=[N, N], boundary_condition=True
     )
     #Set the initial values of the rotation angle parameters.
-    #The values below were chosen as, through trial and error, we discovered that they worked well.
+    #The values below were chosen through trial and error.
     params = np.zeros(6 * N, requires_grad=True)
     for i in range(N):
         params[i] = 0
@@ -584,8 +584,8 @@ import math
 N = 5
 wires = range(N)
 
-# create the Hamiltonian for a 1D Ising model with transverse & longitudinal magnetic fields
-# we do this to copy what was done in Reference 13: https://arxiv.org/abs/2008.04894
+# Create H for a 1D Ising model with transverse & longitudinal magnetic fields
+# We do this to copy what was done in Reference 13: https://arxiv.org/abs/2008.04894
 obs = []
 for j in range(N - 1):
     obs.append(qml.Z(j) @ qml.Z(j + 1))
