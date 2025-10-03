@@ -1,4 +1,0 @@
-.. bio:: Tirth Shah
-   :photo: ../_static/authors/Tirth_Shah.jpg
-
-   Tirth is an undergraduate student at the University of Alberta studying Physics and Math. His interests include quantum computing, black hole physics, and the application of machine learning to space science.  

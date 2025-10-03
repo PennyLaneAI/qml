@@ -1,4 +1,0 @@
-.. bio:: Damian Pope
-   :photo: ../_static/authors/Damian_Pope.png
-
-   Damian has a PhD in theoretical quantum information. He works at Perimeter Institute for Theoretical Physics, Canada in Educational Outreach. He’s interested in quantum computing education, quantum error correction, and using quantum computers in condensed matter physics, high-energy physics and cosmology.

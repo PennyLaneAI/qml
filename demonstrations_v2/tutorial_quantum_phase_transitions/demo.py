@@ -9,56 +9,48 @@ Introduction
 ------------
 
 
-This tutorial introduces three quantum phase transitions related to condensed matter physics. It walks through how to simulate them on a quantum computer. The phase transitions it covers involve
-the 1D quantum Ising model, the 2D quantum Ising model, and dynamical quantum phase transitions (i.e., phase transitions in time evolution).
+A phase transition occurs when a system undergoes an abrupt, qualitative change in one or more of its properties---for 
+instance, liquid water freezing to form ice. Phase transitions are of significant importance across many areas
+of physics, including condensed matter physics [#Vojta2002]_, cosmology [#Mazumdar2019]_, and high-energy physics [#Mueller2023]_.
 
-A phase transition happens when there's an abrupt change in some property of a system. For example, when liquid water freezes and turns into ice. 
-Phase transitions are important to many areas of physics including condensed matter physics, e.g., [#Vojta2002]_, cosmology, e.g., [#Mazumdar2019]_, and high-energy physics, e.g., [#Mueller2023]_.
+They are important for several reasons: they facilitate the discovery of new quantum states of matter, 
+help illuminate entanglement and long-range correlations within quantum systems, and help us understand the behaviour of 
+many different quantum systems at the same time (due to the property of universality).
 
-They're important as they can 1) help us find new quantum states of matter, 2) help to shed light on entanglement and long-range correlations in quantum systems, and 
-3) help us understand the behaviour of many different quantum systems at the same time 
-(due to the property of universality).
-
-
+This tutorial introduces three quantum phase transitions relevant to condensed matter physics 
+and demonstrates how to simulate them on a quantum computer. The transitions covered here include the one-dimensional (1D) 
+and two-dimensional (2D) quantum Ising model and dynamical quantum phase transitions (i.e., phase transitions occurring in time evolution).
 
 .. admonition:: Note
    :class: note
    
-   *Quantum* phase transitions are different from *classical* phase transitions. Classical phase
-   transitions are caused by thermal fluctuations. Quantum phase transitions can occur at zero
-   temperature and are caused by quantum fluctuations (i.e., Heisenberg's uncertainty principle). 
+   *Quantum* phase transitions are fundamentally different from *classical* phase transitions. While classical transitions 
+   are driven by thermal fluctuations, quantum phase transitions can occur at zero
+   temperature and are induced by quantum fluctuations (i.e., Heisenberg's uncertainty principle). 
 
 .. raw:: html
 
    <br>
 
-Phase transitions can be hard to study analytically. Due to discontinuities, mathematical models can break
-down. Phase transitions have been widely studied numerically with classical computers. However, in
-some cases, the amount of computational resources needed is prohibitive. But there's another way
-to study phase transitions: using a quantum computer. Potentially, they can compute aspects of phase
+Studying these transitions analytically is challenging; the associated discontinuities can cause mathematical models to break down. 
+Although classical numerical simulations have been widely used, the required computational resources for certain cases can be prohibitive. 
+But there's another way to study phase transitions: using a quantum computer. Potentially, they can compute aspects of phase
 transitions more efficiently than any conventional technique.
 
 
 
-To date, quantum computers have been used to study quantum phase transitions related to 1) the early universe and high-energy particle colliders [#Mueller2023]_, 2) a topological transition in an Ising-like model [#Smith2019]_, 
-3) the transverse Ising model [#Haghshenas2024]_, 4) noisy quantum systems [#Chertkov2022]_, 5) scalar quantum field theory [#Thompson2023]_, and 6) the evolution of the universe [#Vodeb2025]_.
-
-
-
-
-
+To date, quantum computers have been employed to investigate quantum phase transitions in diverse areas, including those related to the early 
+universe and high-energy particle colliders [#Mueller2023]_, a  topological transition in an Ising-like model [#Smith2019]_, 
+the transverse Ising model [#Haghshenas2024]_, and noisy quantum systems [#Chertkov2022]_.
+Furthermore, these systems have been applied to studying scalar quantum field theory [#Thompson2023]_ and the evolution of the universe [#Vodeb2025]_.
 
 
 Note: This tutorial focuses on the *quantum* Ising model. It complements existing content on this
 model: `3-qubit Ising model in PyTorch <https://pennylane.ai/qml/demos/tutorial_isingmodel_PyTorch>`_, `Transverse-field Ising model <https://pennylane.ai/datasets/transverse-field-ising-model>`_, and `Quadratic Unconstrained Binary Optimization (QUBO) <https://pennylane.ai/qml/demos/tutorial_QUBO>`_
 
 
-
-
-
 What is the Ising model?
 ------------------------
-
 
 
 The simplest Ising model consists of :math:`N` qubits arranged along a line.
