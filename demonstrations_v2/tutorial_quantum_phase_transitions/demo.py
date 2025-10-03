@@ -73,7 +73,7 @@ The simplest Ising model consists of :math:`N` qubits arranged along a line.
 #    H = -J \,\, \Sigma_{i=1}^{N-1} \sigma_{z}^{(i)} \sigma^{(i+1)}_{z},
 #    \end{equation}
 #
-# where :math:`\sigma_{z}^{(i)}` is the Pauli Z operator for the :math:`i^{th}` qubit and :math:`J` is the interaction strength
+# where :math:`\sigma_{z}^{(i)}` is the Pauli-Z operator for the :math:`i^{th}` qubit and :math:`J` is the interaction strength
 # between neighbouring qubits.
 #
 # The code below creates this Hamiltonian:
@@ -570,17 +570,17 @@ plt.show()
 
 ##############################################################################
 #.. _dynamical quantum phase transitions:
-#Time Evolution & Dynamical Phase Transitions
-#--------------------------------------------
+# Time Evolution & Dynamical Phase Transitions
+# --------------------------------------------
 #
-#Another important aspect of quantum systems is how they evolve over time.
-#Sometimes, this evolution is hard to simulate on classical computers. So, researchers are
-#interested in modelling it on quantum computers. Occasionally,
-#some property of a quantum system changes abruptly. This is called a *dynamical quantum
-#phase transition*: a phase transition that happens during the time evolution
-#of a quantum system [#Heyl2013]_.
+# Another important aspect of quantum systems is how they evolve over time.
+# Sometimes, this evolution is hard to simulate on classical computers. So, researchers are
+# interested in modelling it on quantum computers. Occasionally,
+# some property of a quantum system changes abruptly. This is called a *dynamical quantum
+# phase transition*: a phase transition that happens during the time evolution
+# of a quantum system [#Heyl2013]_.
 #
-#To evolve the Ising model in time, we'll use the well-known Suzuki-Trotter product approximation. The code below does this.
+# To evolve the Ising model in time, we'll use the well-known Suzuki-Trotter product approximation. The code below does this.
 
 import math
 
@@ -634,25 +634,25 @@ def time_evolution_circuit(H, T):
 
 
 ##############################################################################
-#To see if a dynamical phase transition happens, let's consider an observable called the *rate function*
-#:math:`\gamma`. It depends on the overlap between the quantum state that we start with and the final state at
-#some time :math:`t`. More specifically, 
+# To see if a dynamical phase transition happens, let's consider an observable called the *rate function*
+# :math:`\gamma`. It depends on the overlap between the quantum state that we start with and the final state at
+# some time :math:`t`. More specifically, 
 #
 # .. math:: \gamma = -\frac{1}{N} \log_{e} (|G|^{2}),
 #
-#where :math:`G = \langle \psi_{i} | \psi_{f}\rangle`, and :math:`| \psi_{i}\rangle` and :math:`| \psi_{f} \rangle` are the initial and final states,
-#respectively. As the system evolves, we'll keep calculating :math:`\gamma`. If it changes discontinuously,
-#then a dynamical phase transition has happened.
+# where :math:`G = \langle \psi_{i} | \psi_{f}\rangle`, and :math:`| \psi_{i}\rangle` and :math:`| \psi_{f} \rangle` are the initial and final states,
+# respectively. As the system evolves, we'll keep calculating :math:`\gamma`. If it changes discontinuously,
+# then a dynamical phase transition has happened.
 #
 #
-#The function below calculates :math:`\gamma` at time :math:`T`.
+# The function below calculates :math:`\gamma` at time :math:`T`.
 def rate_function(H, T, N):
     probability_list = time_evolution_circuit(H, T)
     mag_G_squared = probability_list[0]
     return -1 / N * np.log(mag_G_squared)
 
 ######################################################################
-#Let's now calculate :math:`\gamma` at different times to see how it evolves. Finally, let's graph the value of :math:`\gamma` versus time to see if a dynamical phase transition happens.
+# Let's now calculate :math:`\gamma` at different times to see how it evolves. Finally, let's graph the value of :math:`\gamma` versus time to see if a dynamical phase transition happens.
 #
 
 rate_function_list = []
@@ -673,25 +673,25 @@ plt.legend(["N=" + str(N)])
 plt.show()
 
 ######################################################################
-#Notice the discontinuous change at :math:`t = 1.5`. There, the derivative :math:`\frac{d \gamma}{d t}` is undefined. 
-#Phase transitions are characterized by discontinuous changes. So, the discontinuity suggests that a phase change is happening. 
-#This conclusion is supported by classical numerical simulations that show a phase
-#transition at :math:`t = 1.5` [#Nicola2021]_.
+# Notice the discontinuous change at :math:`t = 1.5`. There, the derivative :math:`\frac{d \gamma}{d t}` is undefined. 
+# Phase transitions are characterized by discontinuous changes. So, the discontinuity suggests that a phase change is happening. 
+# This conclusion is supported by classical numerical simulations that show a phase
+# transition at :math:`t = 1.5` [#Nicola2021]_.
 #
 #
-#Summary 
-#-------
+# Summary 
+# -------
 # In this demo, we have shown how you can use quantum computers to simulate quantum phase
 # transitions in the 1D and 2D quantum Ising models. We've also shown how to use quantum computers to see dynamical quantum phase transitions.
 #
-#Acknowledgement 
-#---------------
-#Damian Pope would like to thank Associate Professor Matthew Johnson (Perimeter Institute for Theoretical Physics and
-#York University) for insightful discussions on quantum phase transitions in cosmology and quantum computing.
+# Acknowledgement 
+# ---------------
+# Damian Pope would like to thank Associate Professor Matthew Johnson (Perimeter Institute for Theoretical Physics and
+# York University) for insightful discussions on quantum phase transitions in cosmology and quantum computing.
 # 
 # 
-#References 
-#------------
+# References 
+# ------------
 #
 # .. [#Vojta2002]
 #     T. Vojta, in K.H. Hoffmann and M. Schreiber (Eds): Computational Statistical Physics, Springer, Berlin 2002 
@@ -761,18 +761,3 @@ plt.show()
 #     S. De Nicola , A. A. Michailidis , M. Serbyn. "Entanglement View of Dynamical Quantum Phase Transitions", Phys. Rev. Lett. 126 040602 (2021), Figure 1 (d) 
 #
 ##############################################################################
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
