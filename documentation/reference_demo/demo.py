@@ -28,7 +28,7 @@ Unsupported directives:
 # ---------------------------------------------
 #
 # This document contains a comprehensive collection of all mathematical symbols and notations
-# used across the PennyLane quantum machine learning demonstrations.
+# used across the PennyLane demonstrations and tutorials.
 
 # %%
 # QUANTUM MECHANICS NOTATION
