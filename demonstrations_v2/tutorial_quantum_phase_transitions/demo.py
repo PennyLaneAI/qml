@@ -695,42 +695,32 @@ plt.show()
 # .. [#Mazumdar2019]
 #    Anupam Mazumdar and Graham White. "Cosmic phase transitions: their applications and experimental signatures" Rep. Prog. Phys. 82, 076901, 2019 
 #
-#
 # .. [#Mueller2023]
 #    Niklas Mueller et al. "Quantum Computation of Dynamical Quantum Phase Transitions and Entanglement Tomography in a Lattice Gauge Theory" PRX Quantum 4, 030323, 2023 
-#
 #
 # .. [#Smith2019]
 #    Adam Smith, Bernhard Jobst, Andrew G. Green, and Frank Pollmann. "Crossing a topological phase transition with a quantum computer" `arXiv:1910.05351 [cond-mat.str-el] <https://arxiv.org/abs/1910.05351>`__, 2019 
 #
-#
 # .. [#Haghshenas2024]
 #    Reza Haghshenas et al. "Probing critical states of matter on a digital quantum computer" `arXiv:2305.01650 [quant-ph] <https://arxiv.org/pdf/2305.01650>`__, 2024 
-#
 #
 # .. [#Chertkov2022]
 #    Eli Chertkov, et al., "Characterizing a non-equilibrium phase transition on a quantum computer", `arXiv:2209.12889 [quant-ph] <https://arxiv.org/abs/2209.12889>`__, 2022 
 #
-#
 # .. [#Thompson2023]
 #    Shane Thompson and George Siopsis. "Quantum Computation of Phase Transition in Interacting Scalar Quantum Field Theory" `arXiv:2303.02425 [quant-ph] <https://arxiv.org/abs/2303.02425>`__, 2023 
-#
 #
 # .. [#Vodeb2025]
 #    Jaka Vodeb et al., "Stirring the false vacuum via interacting quantized bubbles on a 5,564-qubit quantum annealer", Nature Physics, 21, 386, 2025 `https://www.nature.com/articles/s41567-024-02765-w <https://www.nature.com/articles/s41567-024-02765-w>`__ 
 #
-#
 # .. [#Kandala2017]
 #    Abhinav Kandala et al., "Hardware-efficient Variational Quantum Eigensolver for Small Molecules and Quantum Magnets", `arXiv:1704.05018 [quant-ph] <https://arxiv.org/abs/1704.05018>`__ 2017 
-#
 #
 # .. [#Subir2011]
 #    Sachdev Subir, "Quantum Phase Transitions", Cambridge University Press, Cambridge 2011 
 #
-#
 # .. [#Blote2002]
 #    Henk W. J. Blöte and Youjin Deng. "Cluster Monte Carlo simulation of the transverse Ising model", Phys. Rev. E 66, 066110, 2002. (See Table II, row labelled 'square lattice'); 
-#
 #
 # .. [#Hashizume2022]
 #    Tomohiro Hashizume, Ian P. McCulloch, and Jad C. Halimeh. "Dynamical phase transitions in the two-dimensional transverse-field Ising model", Phys. Rev. Research 4, 013250, 2022 (See Figure 1 and Section II) 
