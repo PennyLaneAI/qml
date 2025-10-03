@@ -428,9 +428,3 @@ plt.show()
 # We adapted the simple example of rotating a qubit using gradient descent, running this on both a local simulator and a real QPU.
 # Using Amazon Braket Hybrid Jobs allowed us to run algorithms asynchronously, scale classical compute using AWS, and obtain priority access to the selected QPU for the duration of our algorithm.
 #
-
-
-##############################################################################
-# About the author
-# ----------------
-#

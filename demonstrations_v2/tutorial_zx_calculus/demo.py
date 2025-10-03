@@ -11,8 +11,6 @@ Introduction to the ZX-calculus
     tutorial_backprop Quantum gradients with backpropagation
     tutorial_mbqc Measurement-based quantum computation
 
-*Author: Romain Moyard. Posted: 6 June, 2023.*
-
 
 The ZX-calculus is a graphical language for reasoning about quantum computations and circuits. Introduced by Coecke
 and Duncan [#Coecke]_, it can represent any linear map, and can be considered a diagrammatically complete
@@ -285,7 +283,7 @@ Teleportation
 Now that we have all the necessary tools, let's see how to describe teleportation as a ZX-diagram and simplify it
 with our rewriting rules. The results are surprisingly elegant! We follow the explanation from [#JvdW2020]_. You can
 find an introduction to teleportation in
-`the MBQC demo <https://pennylane.ai/qml/demos/tutorial_mbqc.html>`__.
+`the MBQC demo <https://pennylane.ai/qml/demos/tutorial_mbqc>`__.
 
 Teleportation is a protocol for transferring quantum information (a state) from Alice (the sender) to Bob (the
 receiver). To perform this, Alice and Bob first need to share a maximally entangled state. The protocol for Alice to send
@@ -875,8 +873,4 @@ print("Circuit gates:", specs["resources"].gate_types)
 #
 #    Niel de Beaudrap, Aleks Kissinger and John van de Wetering. "Circuit Extraction for ZX-diagrams can be #P-hard."
 #    `ArXiv <https://arxiv.org/pdf/2202.09194.pdf>`__.
-#
-#
-# About the author
-# ----------------
 #

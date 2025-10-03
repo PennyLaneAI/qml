@@ -76,7 +76,7 @@ which is a unitary defined as:"""
 #     :align: center
 #     :width: 70%
 #
-# In PennyLane, this is implemented using the :func:`~.pennylane.templates.ApproxTimeEvolution`
+# In PennyLane, this is implemented using the :func:`~.pennylane.ApproxTimeEvolution`
 # template. For example, let's say we have the following Hamiltonian:
 
 import pennylane as qml
@@ -284,9 +284,9 @@ print("Mixer Hamiltonian", mixer_h)
 #     :align: center
 #     :width: 90%
 #
-# While it is possible to use :func:`~.pennylane.templates.ApproxTimeEvolution`, the QAOA module allows you to
-# build the cost and mixer layers directly using the functions :func:`~.pennylane.qaoa.cost_layer` and
-# :func:`~.pennylane.qaoa.mixer_layer`, which take as input the respective Hamiltonian and variational parameters:
+# While it is possible to use :func:`~.pennylane.ApproxTimeEvolution`, the QAOA module allows you to
+# build the cost and mixer layers directly using the functions :func:`~.pennylane.qaoa.layers.cost_layer` and
+# :func:`~.pennylane.qaoa.layers.mixer_layer`, which take as input the respective Hamiltonian and variational parameters:
 
 
 def qaoa_layer(gamma, alpha):
@@ -424,7 +424,7 @@ plt.show()
 # favour :math:`|10\rangle,` making it the only true ground state.
 #
 # It is easy to introduce constraints of this form in PennyLane.
-# We can use the :func:`~.pennylane.qaoa.edge_driver` cost
+# We can use the :func:`~.pennylane.qaoa.cost.edge_driver` cost
 # Hamiltonian to "reward" cases in which the first and last vertices of the graph
 # are :math:`0:`
 
@@ -510,8 +510,4 @@ plt.show()
 # .. figure:: ../_static/demonstration_assets/qaoa_module/qaoa_circuit.png
 #     :align: center
 #     :width: 90%
-#
-#
-# About the author
-# ----------------
 #

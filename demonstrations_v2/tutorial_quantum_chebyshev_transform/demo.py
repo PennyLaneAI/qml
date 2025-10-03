@@ -422,6 +422,3 @@ plt.show()
 #
 #   Jorge J. Martínez de Lejarza, Hsin-Yu Wu, Oleksandr Kyriienko, Germán Rodrigo, Michele Grossi. "Quantum Chebyshev probabilistic models for fragmentation functions." `arxiv:2503.16073 <https://arxiv.org/abs/2503.16073>`__ (2025).
 #
-# About the author
-# ----------------
-#

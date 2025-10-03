@@ -9,8 +9,6 @@ Contextuality and inductive bias in QML
 .. related::
     tutorial_geometric_qml
 
-*Author: Joseph Bowles — Posted: 21 March 2023*
-
 """
 
 
@@ -437,7 +435,7 @@ def input_prep(alpha):
 #
 # This kind of reasoning is an example of geometric quantum machine
 # learning (check out [#reptheory]_ and [#equivariant]_ or our own
-# `demo <https://pennylane.ai/qml/demos/tutorial_geometric_qml.html>`__ for an awesome introduction to the subject).
+# :doc:`demo <demos/tutorial_geometric_qml>` for an awesome introduction to the subject).
 # Below we construct the
 # bias invariant layer: note that all the generators commute with
 # :math:`Z_0+Z_1+Z_2.` The variables ``blocks`` and ``layers`` are model
@@ -800,8 +798,4 @@ plt.show()
 #     F. J. Schreiber, J. Eiser, J. J. Meyer
 #     "Classical surrogates for quantum learning models."
 #     `arXiv:2206.11740 <https://arxiv.org/abs/2206.11740>`__, 2022.
-#
-#
-# About the author
-# ----------------
 #

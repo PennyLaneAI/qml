@@ -11,7 +11,6 @@ Learning to learn with quantum neural networks
    tutorial_qaoa_intro Intro to QAOA
    tutorial_qaoa_maxcut QAOA for MaxCut problem
 
-*Author: Stefano Mangini — Posted: 02 March 2021. Last updated: 15 September 2021.*
 
 .. warning::
     This demo is only compatible with TensorFlow version ``2.9`` or below.
@@ -120,7 +119,7 @@ the shape of the variational circuit is the one dictated by the QAOA
 ansatz, and such a quantum circuit is used to evaluate the cost
 Hamiltonian :math:`H` of the MaxCut problem.
 You can check out a great tutorial on
-[how to use QAOA for solving graph problems](https://pennylane.ai/qml/demos/tutorial_qaoa_intro.html).
+:doc:`how to use QAOA for solving graph problems <demos/tutorial_qaoa_intro>`.
 
 .. note::
    Running the tutorial (excluding the Appendix) requires approx. ~13m.
@@ -784,7 +783,7 @@ plt.show()
 #
 # .. [#maxcut]
 #
-#       MaxCut problem: `https://pennylane.ai/qml/demos/tutorial_qaoa_maxcut/ <PennyLane Demo — QAOA for MaxCut>`__.
+#       MaxCut problem: :doc:`demos/tutorial_qaoa_maxcut`.
 #
 #
 #
@@ -1180,8 +1179,4 @@ for t, s in zip(pred, ["out0", "out1", "out2", "Loss"]):
 #     TensorFlow deals with tensors, and is not able to directly manage
 #     other data structures, like graphs or functions taking graphs as
 #     input, like ``qaoa_from_graph``.
-#
-#
-# About the author
-# ----------------
 #

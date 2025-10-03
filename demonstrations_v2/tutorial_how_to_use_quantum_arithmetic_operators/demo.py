@@ -354,7 +354,3 @@ print(circuit_with_Poly(x=1,y=4), " (binary) ---> ", state_to_decimal(circuit_wi
 #     "Black-box quantum state preparation without arithmetic.",
 #     `arXiv:1807.03206 <https://arxiv.org/abs/1807.03206/>`__, 2018.
 #
-
-######################################################################
-# About the authors
-# -----------------

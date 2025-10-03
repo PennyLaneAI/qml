@@ -14,8 +14,6 @@ Givens rotations for quantum chemistry
     tutorial_vqe A brief overview of VQE
 
 
-*Author: Juan Miguel Arrazola — Posted: 30 June 2021. Last updated: 30 June 2021.*
-
 In the book `"Sophie's world" <https://en.wikipedia.org/wiki/Sophie%27s_World>`_, the young
 protagonist receives a white envelope containing a letter
 with an intriguing question: "Why is Lego the most ingenious toy in the world?" At first baffled by
@@ -499,8 +497,4 @@ print("Output state =", output)
 #
 #   J. M. Arrazola, O. Di Matteo, N. Quesada, S. Jahangiri, A. Delgado, N. Killoran, "Universal
 #   quantum circuits for quantum chemistry", arXiv:2106.13839, (2021)
-#
-#
-# About the author
-# ----------------
 #

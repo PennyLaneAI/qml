@@ -3,7 +3,7 @@
     "authors": [
         {
             "username": "colinjdale"
-        },        
+        },
         {
             "username": "chiffa"
         }
@@ -11,7 +11,7 @@
     "executable_stable": true,
     "executable_latest": true,
     "dateOfPublication": "2025-08-29T09:00:00+00:00",
-    "dateOfLastModification": "2025-08-29T09:00:00+00:00",
+    "dateOfLastModification": "2025-09-30T15:48:14+00:00",
     "categories": [
         "Quantum Chemistry",
         "Algorithms"
@@ -127,12 +127,12 @@
             "type": "demonstration",
             "id": "tutorial_initial_state_preparation",
             "weight": 1.0
-        },       
+        },
         {
             "type": "demonstration",
             "id": "tutorial_how_to_build_compressed_double_factorized_hamiltonians",
             "weight": 1.0
-        },        
+        },
         {
             "type": "demonstration",
             "id": "tutorial_quantum_chemistry",

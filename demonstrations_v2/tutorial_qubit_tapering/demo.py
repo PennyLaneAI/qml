@@ -14,8 +14,6 @@ Qubit tapering
     tutorial_adaptive_circuits Adaptive circuits for quantum chemistry
     tutorial_differentiable_HF Differentiable Hartree-Fock
 
-*Authors: Utkarsh Azad and Soran Jahangiri. Posted: 16 May 2022. Last updated: 08 Nov 2022*
-
 The performance of variational quantum algorithms is considerably limited by the number of qubits
 required to represent wave functions. In the context of quantum chemistry, this
 limitation hinders the treatment of large molecules with algorithms such as the :doc:`variational quantum
@@ -243,7 +241,7 @@ print(f"HF energy (tapered): {jnp.real(HF_energy):.8f} Ha")
 # --------------
 # Finally, we can use the tapered Hamiltonian and the tapered reference state to perform a VQE
 # simulation and compute the ground-state energy of the :math:`\textrm{HeH}^+` cation. We build a
-# tapered variational ansatz `[3] <https://pennylane.ai/qml/demos/tutorial_givens_rotations.html>`__
+# tapered variational ansatz :doc:`[3] <demos/tutorial_givens_rotations>`
 # that prepares an entangled state by evolving the tapered Hartree-Fock state using the tapered
 # particle-conserving gates, i.e., the :func:`~.pennylane.SingleExcitation` and
 # :func:`~.pennylane.DoubleExcitation` operations tapered using 
@@ -322,9 +320,4 @@ for i in range(1, 41):
 #     Kanav Setia, Richard Chen, Julia E. Rice, Antonio Mezzacapo, Marco Pistoia, James Whitfield,
 #     "Reducing qubit requirements for quantum simulation using molecular point group symmetries".
 #     `arXiv:1910.14644 <https://arxiv.org/abs/1910.14644>`__
-#
-#
-#
-# About the author
-# ----------------
 #

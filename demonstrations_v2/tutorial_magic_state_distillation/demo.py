@@ -331,8 +331,4 @@ plt.show()
 #    Tomas Jochym-O'Connor, et al. "The robustness of magic state
 #    distillation against errors in Clifford gates."
 #    `arXiv preprint arXiv:1205.6715 (2012) <https://arxiv.org/abs/1205.6715>`__.
-
-######################################################################
-# About the author
-# ----------------
 #

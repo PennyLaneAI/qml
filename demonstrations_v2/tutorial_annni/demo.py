@@ -658,6 +658,3 @@ plt.show()
 #     "Generalization in quantum machine learning from few training data",
 #     `Nat. Commun. 13, 4919 <https://www.nature.com/articles/s41467-022-32550-3>`__, 2022.
 #
-# About the author
-# ----------------
-#

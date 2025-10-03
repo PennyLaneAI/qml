@@ -14,11 +14,10 @@ Using PennyLane with PySCF and OpenFermion
     tutorial_givens_rotations Givens rotations for quantum chemistry
     tutorial_adaptive_circuits Adaptive circuits for quantum chemistry
 
-*Author: Soran Jahangiri — Posted: 3 January 2023.*
 
 The quantum chemistry module in PennyLane, :mod:`qchem  <pennylane.qchem>`, provides built-in
 methods to compute molecular integrals, solve Hartree-Fock equations, and construct
-`fully-differentiable <https://pennylane.ai/qml/demos/tutorial_differentiable_HF.html>`_ molecular
+:doc:`fully-differentiable <demos/tutorial_differentiable_HF>` molecular
 Hamiltonians. PennyLane also lets you take advantage of various
 external resources and libraries to build upon existing tools. In this demo we will show you how
 to integrate PennyLane with `PySCF <https://github.com/sunqm/pyscf>`_ and
@@ -62,7 +61,7 @@ print(H)
 ##############################################################################
 # This generates a PennyLane :class:`~.pennylane.Hamiltonian` that can be used in a VQE workflow or
 # converted to a
-# `sparse matrix <https://pennylane.ai/qml/demos/tutorial_adaptive_circuits.html#sparse-hamiltonians>`_
+# :doc:`sparse matrix <demos/tutorial_adaptive_circuits#sparse-hamiltonians>`
 # in the computational basis.
 #
 # Additionally, if you have built your electronic Hamiltonian independently using
@@ -82,15 +81,15 @@ print(f'Hamiltonian: \n {H}')
 # Computing molecular integrals
 # -----------------------------
 # In order to build a
-# `molecular Hamiltonian <https://pennylane.ai/qml/demos/tutorial_quantum_chemistry.html>`_, we need
+# :doc:`molecular Hamiltonian <demos/tutorial_quantum_chemistry>`, we need
 # one- and two-electron integrals in the molecular orbital basis. These integrals are used to
 # construct a fermionic Hamiltonian which is then mapped onto the qubit basis. These molecular
 # integrals can be computed with the
 # :func:`~.pennylane.qchem.electron_integrals` function of PennyLane. Alternatively, the integrals
 # can be computed with the `PySCF <https://github.com/sunqm/pyscf>`_ package and used in PennyLane
 # workflows such as building a
-# `fermionic Hamiltonian <https://pennylane.ai/qml/demos/tutorial_fermionic_operators/>`_ or
-# quantum `resource estimation <https://pennylane.ai/qml/demos/tutorial_resource_estimation/>`_.
+# :doc:`fermionic Hamiltonian <demos/tutorial_fermionic_operators>` or
+# quantum :doc:`resource estimation <demos/tutorial_resource_estimation>`.
 # Let's use water as an example.
 #
 # First, we define the PySCF molecule object and run a restricted Hartree-Fock
@@ -134,7 +133,7 @@ core_constant = np.array([rhf.energy_nuc()])
 ##############################################################################
 # We now use the integrals to construct a fermionic Hamiltonian with PennyLane's powerful tools
 # for creating and manipulating
-# `fermionic operators <https://pennylane.ai/qml/demos/tutorial_fermionic_operators/>`_:
+# :doc:`fermionic operators <demos/tutorial_fermionic_operators>`:
 
 H_fermionic = qml.qchem.fermionic_observable(core_constant, one_mo, two_mo)
 
@@ -224,7 +223,4 @@ print(openfermion_op)
 #    :func:`~.pennylane.from_openfermion` and :func:`~.pennylane.to_openfermion` functions.
 # 4. Finally, we can convert PySCF wave functions to PennyLane state vectors using the
 #    :func:`~.pennylane.qchem.import_state` function.
-#
-# About the author
-# ----------------
 #

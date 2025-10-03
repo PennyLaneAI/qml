@@ -5,7 +5,6 @@
             "username": "Diego"
         },
         {
-
             "username": "oumarou"
         },
         {
@@ -14,12 +13,11 @@
         {
             "username": "austingmhuang"
         }
-
     ],
     "executable_stable": true,
     "executable_latest": true,
     "dateOfPublication": "2025-08-29T00:00:00+00:00",
-    "dateOfLastModification": "2025-08-29T00:00:00+00:00",
+    "dateOfLastModification": "2025-09-22T15:48:14+00:00",
     "categories": [
         "Quantum Computing"
     ],
@@ -36,9 +34,10 @@
     ],
     "seoDescription": "Learn how to obtain reduced density matrices with QKSD and QSP",
     "doi": "",
-    "references": [
+    "references": [],
+    "basedOnPapers": [
+        "10.48550/arXiv.2501.05286"
     ],
-    "basedOnPapers": ["10.48550/arXiv.2501.05286"],
     "referencedByPapers": [],
     "relatedContent": [
         {

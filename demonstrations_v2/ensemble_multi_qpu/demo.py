@@ -12,7 +12,6 @@ Ensemble classification with Rigetti and Qiskit devices
 
    tutorial_variational_classifier Variational classifier
 
-*Author: Tom Bromley — Posted: 14 February 2020. Last updated: 13 December 2021.*
 
 This tutorial outlines how two QPUs can be combined in parallel to help solve a machine learning
 classification problem.
@@ -47,7 +46,7 @@ from matplotlib.patches import Patch
 
 ##############################################################################
 # This tutorial requires the ``pennylane-rigetti`` and ``pennylane-qiskit`` packages, which can be
-# installed by following the instructions `here <https://pennylane.ai/install.html>`__. We also
+# installed by following the instructions `here <https://pennylane.ai/install>`__. We also
 # make use of the `PyTorch interface <https://pennylane.readthedocs.io/en/stable/introduction
 # /interfaces.html>`_, which can be installed from `here
 # <https://pytorch.org/get-started/locally/>`__.
@@ -574,8 +573,4 @@ plt.show()
 # our :doc:`demos/vqe_parallel` tutorial to see how multiple QPUs can be
 # evaluated asynchronously to speed up calculating the potential energy surface of molecular
 # hydrogen!
-
-##############################################################################
-# About the author
-# ----------------
 #

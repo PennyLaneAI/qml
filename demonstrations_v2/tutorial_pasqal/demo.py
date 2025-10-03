@@ -10,8 +10,6 @@ Quantum computation with neutral atoms
 .. related::
    ahs_aquila Pulse programming on neutral atom hardware
 
-*Author: Nathan Killoran — Posted: 13 October 2020. Last updated: 21 January 2021.*
-
 Quantum computing architectures come in many flavours: superconducting qubits, ion traps,
 photonics, silicon, and more. One very interesting physical substrate is *neutral atoms*. These
 quantum devices have some basic similarities to ion traps. Ion-trap devices make use of atoms
@@ -358,8 +356,4 @@ print("Final cost value: {}".format(cost()))
 #    "Synthetic three-dimensional atomic structures assembled atom by atom."
 #    `arXiv:1712.02727
 #    <https://arxiv.org/abs/1712.02727>`__, 2017.
-#
-#
-# About the author
-# ----------------
 #
