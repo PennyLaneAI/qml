@@ -567,8 +567,6 @@ plt.show()
 # but it's not conclusive as the increase is somewhat gradual. This is because :math:`N` is so small.
 # Note that the result is consistent with where the phase change is known to occur [#Blote2002]_, [#Hashizume2022]_.
 #
-
-##############################################################################
 #.. _dynamical quantum phase transitions:
 # Time Evolution & Dynamical Phase Transitions
 # --------------------------------------------
@@ -677,7 +675,6 @@ plt.show()
 # Phase transitions are characterized by discontinuous changes. So, the discontinuity suggests that a phase change is happening. 
 # This conclusion is supported by classical numerical simulations that show a phase
 # transition at :math:`t = 1.5` [#Nicola2021]_.
-#
 #
 # Summary 
 # -------
