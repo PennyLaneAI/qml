@@ -23,7 +23,7 @@ classifier on the dataset.
 # where the **address register** :math:`\left| j\right>` holds the pixel position (:math:`n` qubits),
 # and additional **color qubits** :math:`\left| c(x_j)\right>` encode the pixel intensities. For
 # grayscale images, we use the *flexible representation of quantum images (FRQI)*
-# [`2 <#References>`__,\ `3 <#References>`__] as an encoding. In this case, the data value
+# [#LeFlexible]_ [#LeAdvances]_ as an encoding. In this case, the data value
 # :math:`{x}_j` of each pixel is just a single number corresponding to the grayscale value of that
 # pixel. We can encode this information in the :math:`z`-polarization of an additional color qubit as
 # :math:`\left|c({x}_j)\right> = \cos({\textstyle\frac{\pi}{2}} {x}_j) \left| 0 \right> + \sin({\textstyle\frac{\pi}{2}} {x}_j) \left| 1 \right>`,
