@@ -6,7 +6,7 @@ cost, either in terms of qubits or gate count. However, real-world data typicall
 inherent structure (such as image data) which can be leveraged to load them with a much smaller cost
 on a quantum computer. The paper **“Typical Machine Learning Datasets as Low‑Depth Quantum
 Circuits”** (2025) [`1 <#References>`__] develops an efficient algorithm for finding low-depth
-quantum circuits to load classical image data as quantum states.
+quantum circuits to load classical image data into quantum states.
 
 This demo gives an introduction to the paper **“Typical Machine Learning Datasets as
 Low‑Depth Quantum Circuits”** (2025). We will discuss the following three steps: 1) Quantum image
