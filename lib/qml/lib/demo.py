@@ -282,7 +282,6 @@ def _build_demo(
     generate_requirements(ctx, demo, dev, out_dir / "requirements.txt")
 
     if execute:
-        # First, install all base dependencies from the generated requirements file.
         cmds.pip_install(
             build_venv.python,
             "--upgrade",
