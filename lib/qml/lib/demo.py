@@ -317,7 +317,7 @@ def _build_demo(
         cmds.pip_install(
             build_venv.python,
             "--upgrade",
-            "git+https://github.com/PennyLaneAI/pennylane.git#egg=pennylane",
+            "git+https://github.com/PennyLaneAI/pennylane.git@v0.43.0-rc0##egg=pennylane",
             use_uv=False,
             quiet=False,
         )
