@@ -1,0 +1,48 @@
+{
+    "title": "Generative quantum advantage for classical and quantum problems",
+    "authors": [
+        {
+            "username": "josephbowles"
+        }
+    ],
+    "executable_stable": true,
+    "executable_latest": true,
+    "dateOfPublication": "2023-09-06T00:00:00+00:00",
+    "dateOfLastModification": "2025-09-22T15:48:14+00:00",
+    "categories": [
+        "Quantum Machine Learning"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/contextuality/thumbnail_tutorial_Contextuality.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_Contextuality.png"
+        }
+    ],
+    "seoDescription": "Learn the parameters of a hard-to-sample circuit",
+    "doi": "",
+    "references": [
+        {
+            "id": "paper",
+            "type": "article",
+            "title": "Generative quantum advantage for classical and quantum problems.",
+            "authors": "H. Huang, M. Broughton, N. Eassa, H. Neven, R. Babbush, J. R. McClean",
+            "year": "2025",
+            "journal": "",
+            "url": "https://arxiv.org/abs/2509.09033"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_learning_from_experiments",
+            "weight": 1.0
+        }
+    ]
+}
