@@ -88,7 +88,7 @@ def FRQI_decoding(states):
 #
 # In general, the complexity of preparing the resulting state *exactly* scales exponentially with the
 # number of qubits. Known constructions (without auxiliary qubits) use :math:`\mathcal{O}(4^n)` gates
-# [`2 <#References>`__,\ `3 <#References>`__]. However, encoding typical images this way leads to
+# [#LeFlexible]_ [#LeAdvances]_. However, encoding typical images this way leads to
 # lowly entangled quantum states that are well approximated by tensor-network states such as
 # matrix-product states (MPSs) [`6 <#References>`__] whose bond dimension :math:`\chi` does not need
 # to scale with the image resolution. Thus, preparing the state *approximately* with a small error is
