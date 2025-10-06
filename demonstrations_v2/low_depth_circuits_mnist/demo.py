@@ -293,7 +293,7 @@ for ax in [ax00, ax01, ax10, ax11]:
 # - **Quantum‑kernel SVMs** — replacing inner products by quantum state overlaps.
 # - **Tensor‑network (MPS/MPO) classifiers** for large qubit counts.
 #
-# In this demo we use a small linear VQC. The circuit consisits of two qubit gates correspdonding to
+# In this demo we use a small linear VQC. The circuit consists of two qubit gates corresponding to
 # the ``SO(4)`` gates
 #
 # .. figure:: /_static/demonstration_assets/low_depth_circuits_mnist/so4.png
