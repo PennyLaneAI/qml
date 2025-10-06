@@ -15,14 +15,12 @@ Plugins and hybrid computation
    tutorial_qubit_rotation Basic tutorial: qubit rotation
    tutorial_gaussian_transformation Gaussian transformation
 
-*Author: Josh Izaac — Posted: 11 October 2019. Last updated: 01 February 2021.*
-
 This tutorial introduces the notion of hybrid computation by combining several PennyLane
 plugins. We first introduce PennyLane's `Strawberry Fields plugin <https://pennylane-sf.readthedocs.io>`_
 and use it to explore a non-Gaussian photonic circuit. We then combine this photonic circuit with a
 qubit circuit — along with some classical processing — to create and optimize a fully hybrid computation.
-Be sure to read through the introductory :ref:`qubit rotation <qubit_rotation>` and
-:ref:`Gaussian transformation <gaussian_transformation>` tutorials before attempting this tutorial.
+Be sure to read through the introductory :doc:`qubit rotation <demos/tutorial_qubit_rotation>` and
+:doc:`Gaussian transformation <demos/tutorial_gaussian_transformation>` tutorials before attempting this tutorial.
 
 .. warning::
     This demo is only compatible with PennyLane version ``0.29`` or below.
@@ -44,7 +42,7 @@ A non-Gaussian circuit
 ----------------------
 
 We first consider a photonic circuit which is similar in spirit to the
-:ref:`qubit rotation <qubit_rotation>` circuit:
+:doc:`qubit rotation <demos/tutorial_qubit_rotation>` circuit:
 
 .. figure:: ../_static/demonstration_assets/plugins_hybrid/photon_redirection.png
     :align: center
@@ -296,7 +294,7 @@ print("Optimized rotation angles: {}".format(params))
 # ------------------
 #
 # To really highlight the capabilities of PennyLane, let's now combine the qubit-rotation QNode
-# from the :ref:`qubit rotation tutorial <qubit_rotation>` with the CV photon-redirection
+# from the :doc:`qubit rotation tutorial <demos/tutorial_qubit_rotation>` with the CV photon-redirection
 # QNode from above, as well as some classical processing, to produce a truly hybrid
 # computational model.
 #
@@ -445,8 +443,4 @@ print(qubit_rotation(0.5, 0.1))
 # This is just a simple example of the kind of hybrid computation that can be carried
 # out in PennyLane. Quantum nodes (bound to different devices) and classical
 # functions can be combined in many different and interesting ways.
-#
-#
-# About the author
-# ----------------
 #

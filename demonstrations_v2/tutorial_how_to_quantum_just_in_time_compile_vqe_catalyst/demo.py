@@ -1,7 +1,7 @@
 r"""How to quantum just-in-time compile VQE with Catalyst
 =====================================================
 
-The `Variational Quantum Eigensolver <https://pennylane.ai/qml/demos/tutorial_vqe.html>`__ (VQE) is
+The :doc:`Variational Quantum Eigensolver <demos/tutorial_vqe>` (VQE) is
 a widely used quantum algorithm with applications in quantum chemistry and portfolio optimization
 problems. It is an application of the `Ritz variational
 principle <https://en.wikipedia.org/wiki/Ritz_method>`__, where a quantum computer is trained to
@@ -189,9 +189,4 @@ print(f"Final angle parameters: {final_params}")
 ######################################################################
 # Note that here we use the QJIT-compatible :func:`~pennylane.for_loop` function, which allows
 # classical control flow in hybrid quantum-classical workflows to be compiled.
-#
-
-######################################################################
-# About the author
-# ----------------
 #

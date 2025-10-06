@@ -846,6 +846,3 @@ plt.show()
 #     "Preparation of Matrix Product States with Log-Depth Quantum Circuits", Physical Review Letters, **132**, 040404,
 #     `open access <https://link.aps.org/doi/10.1103/PhysRevLett.132.040404>`__, 2024.
 #
-# About the author
-# ----------------
-#

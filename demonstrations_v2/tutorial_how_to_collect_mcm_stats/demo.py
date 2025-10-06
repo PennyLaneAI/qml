@@ -225,6 +225,3 @@ print(f"Bit string counts on last three qubits: {counts}")
 # `measurements quickstart page <https://docs.pennylane.ai/en/stable/introduction/measurements.html#mid-circuit-measurements-and-conditional-operations>`_
 # and the documentation of :func:`~.pennylane.measure`.
 #
-# About the author
-# ----------------
-#

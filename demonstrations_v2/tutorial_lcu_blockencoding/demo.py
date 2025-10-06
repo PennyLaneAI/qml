@@ -272,9 +272,4 @@ print(np.real(np.round(output_matrix,2)))
 # broad applicability that can be useful for all kinds of hardware and simulators. If you're working
 # on quantum algorithms and applications in any capacity, these are techniques that you should
 # master, and PennyLane is equipped with the tools to help you get there.
-
-
-##############################################################################
-# About the author
-# ----------------
 #

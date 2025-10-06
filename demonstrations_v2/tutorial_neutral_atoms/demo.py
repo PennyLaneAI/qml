@@ -15,8 +15,6 @@ Neutral-atom quantum computers
    tutorial_sc_qubits Quantum computing with superconducting qubits
    tutorial_photonics Photonic quantum computing
 
-*Author: Alvaro Ballon — Posted: 30 May 2023.*
-
 In the last few years, a new quantum technology has gained the attention of the quantum computing
 community. Thanks to recent developments in optical-tweezer technology,
 neutral atoms can be used as robust and versatile qubits. In 2022, a collaboration between QuEra and
@@ -29,7 +27,7 @@ discuss their strengths and weaknesses in terms of DiVincenzo's criteria, introd
 By the end of this tutorial, you will have obtained a high-level understanding of neutral atom technologies
 and be able to follow the new exciting developments that are bound to come.
 
-.. container:: alert alert-block alert-info
+.. tip::
     
     **DiVincenzo's criteria**: In the year 2000, David DiVincenzo proposed a
     wishlist for the experimental characteristics of a quantum computer [#DiVincenzo2000]_.
@@ -127,7 +125,7 @@ the work that still needs to be done to scale this technology even further.
 # energy state using lasers. If you need a refresher on how we change the electronic energy levels of atoms, do take
 # a look at the blue box below!
 #
-# .. container:: alert alert-block alert-info
+# .. tip::
 #
 #    **Atomic Physics Primer:** Atoms consist of a positively charged nucleus
 #    and negative electrons around it. The electrons inhabit energy
@@ -817,7 +815,4 @@ print(
 #
 #    K. Wintersperger et al. (2023) "Neutral Atom Quantum Computing Hardware: Performance and End-User Perspective",
 #    (`arXiv <https://arxiv.org/abs/2304.14360>`__)
-#
-# About the author
-# ----------------
 #

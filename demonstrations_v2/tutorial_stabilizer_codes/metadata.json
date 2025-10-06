@@ -1,0 +1,62 @@
+{
+    "title": "Stabilizer codes for quantum error correction",
+    "authors": [
+        {
+            "username": "chsid"
+        },
+        {
+            "username": "alvaro"
+        }
+    ],
+    "executable_stable": true,
+    "executable_latest": true,
+    "dateOfPublication": "2025-08-19T09:00:00+00:00",
+    "dateOfLastModification": "2025-09-22T15:48:14+00:00",
+    "categories": [
+        "Algorithms",
+        "Quantum Computing",
+        "Quantum Hardware"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/pennylane-demo-stabilizer-codes-thumbnail.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/pennylane-demo-stabilizer-codes-large-thumbnail.png"
+        }
+    ],
+    "seoDescription": "Learn all about the stabilizer formalism for quantum error correction with concrete coding examples.",
+    "doi": "",
+    "references": [
+        {
+            "id": "gottesman1997stabilizercodesquantumerror",
+            "type": "phdthesis",
+            "title": "Stabilizer Codes and Quantum Error Correction",
+            "authors": "Daniel Gottesman",
+            "year": "1997",
+            "url": "https://arxiv.org/abs/quant-ph/9705052"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_game_of_surface_codes",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_toric_code",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_mbqc",
+            "weight": 1.0
+        }
+    ]
+}
