@@ -305,23 +305,20 @@ def _build_demo(
 
         if dev:
             # Catalyst
+            additional_args = ["--pre", "--upgrade", "--extra-index-url", "https://test.pypi.org/simple/"] if use_latest_rc and catalyst_latest_rc_version else ["--upgrade", "--extra-index-url", "https://test.pypi.org/simple/"]
             cmds.pip_install(
                 build_venv.python,
-                "--upgrade",
-                "--extra-index-url",
-                "https://test.pypi.org/simple/",
+                *additional_args,
                 f"pennylane-catalyst=={catalyst_latest_rc_version}" if use_latest_rc and catalyst_latest_rc_version else "pennylane-catalyst",
                 use_uv=False,
                 quiet=False,
                 pre=True,
             )
             # Lightning
-
+            additional_args = ["--pre", "--upgrade", "--extra-index-url", "https://test.pypi.org/simple/"] if use_latest_rc and lightning_latest_rc_version else ["--upgrade", "--extra-index-url", "https://test.pypi.org/simple/"]
             cmds.pip_install(
                 build_venv.python,
-                "--upgrade",
-                "--extra-index-url",
-                "https://test.pypi.org/simple/",
+                *additional_args,
                 f"pennylane-lightning=={lightning_latest_rc_version}" if use_latest_rc and lightning_latest_rc_version else "pennylane-lightning",
                 use_uv=False,
                 quiet=False,
@@ -329,11 +326,10 @@ def _build_demo(
             )
     if dev:
         # Need dev version of PennyLane to build, whether or not we're executing
+        additional_args = ["--pre", "--upgrade", "--extra-index-url", "https://test.pypi.org/simple/"] if use_latest_rc and pennylane_latest_rc_version else ["--upgrade"]
         cmds.pip_install(
             build_venv.python,
-            "--upgrade",
-            "--extra-index-url",
-            "https://test.pypi.org/simple/",
+            *additional_args,
             f"pennylane=={pennylane_latest_rc_version}" if use_latest_rc and pennylane_latest_rc_version else "pennylane",
             use_uv=False,
             quiet=False,
