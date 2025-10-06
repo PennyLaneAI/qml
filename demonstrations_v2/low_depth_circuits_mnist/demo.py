@@ -286,7 +286,7 @@ for ax in [ax00, ax01, ax10, ax11]:
 # :math:`\rho(x)=\lvert\psi(x)\rangle\langle\psi(x)\rvert`, a generic **quantum classifier** evaluates
 # :math:`f_{\ell}(x) = \operatorname{Tr}\bigl[ O_{\ell}(\theta)\,\rho(x) \bigr]`, with trainable
 # circuit parameters :math:`\theta` that rotate a measurement operator :math:`O_\ell`. Variants
-# explored in the paper [`1 <#References>`__] include
+# explored in the paper [#Kiwit]_ include
 #
 # - **Linear VQC** — sequential two‑qubit SU(4) layers (15 parameters per gate).
 # - **Non‑linear VQC** — gate parameters depend on input data *x* via auxiliary retrieval circuits.
