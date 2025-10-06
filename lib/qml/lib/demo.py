@@ -289,6 +289,20 @@ def _build_demo(
 
         # If dev, we need to re-install the latest Catalyst, then Lightning, then PennyLane
         # in that order, regardless of conflicts/warnings. 
+
+        # TODO: Make this optional via a flag
+        
+        use_latest_rc = True
+        if use_latest_rc:
+            catalyst_latest_rc_version = cmds._find_latest_rc_version(build_venv.python, "pennylane-catalyst")
+            lightning_latest_rc_version = cmds._find_latest_rc_version(build_venv.python, "pennylane-lightning")
+            pennylane_latest_rc_version = cmds._find_latest_rc_version(build_venv.python, "PennyLane")
+            assert catalyst_latest_rc_version or lightning_latest_rc_version or pennylane_latest_rc_version, "Could not find any RC versions for PennyLane, PennyLane-Catalyst or PennyLane-Lightning"
+        else:   
+            catalyst_latest_rc_version = None
+            lightning_latest_rc_version = None
+            pennylane_latest_rc_version = None
+
         if dev:
             # Catalyst
             cmds.pip_install(
@@ -296,18 +310,19 @@ def _build_demo(
                 "--upgrade",
                 "--extra-index-url",
                 "https://test.pypi.org/simple/",
-                "pennylane-catalyst>=0.13.0-rc0",
+                f"pennylane-catalyst=={catalyst_latest_rc_version}" if use_latest_rc and catalyst_latest_rc_version else "pennylane-catalyst",
                 use_uv=False,
                 quiet=False,
                 pre=True,
             )
             # Lightning
+
             cmds.pip_install(
                 build_venv.python,
                 "--upgrade",
                 "--extra-index-url",
                 "https://test.pypi.org/simple/",
-                "pennylane-lightning>=0.43.0rc0",
+                f"pennylane-lightning=={lightning_latest_rc_version}" if use_latest_rc and lightning_latest_rc_version else "pennylane-lightning",
                 use_uv=False,
                 quiet=False,
                 pre=True,
@@ -319,7 +334,7 @@ def _build_demo(
             "--upgrade",
             "--extra-index-url",
             "https://test.pypi.org/simple/",
-            "pennylane>=0.43.0-rc0",
+            f"pennylane=={pennylane_latest_rc_version}" if use_latest_rc and pennylane_latest_rc_version else "pennylane",
             use_uv=False,
             quiet=False,
             pre=True,
