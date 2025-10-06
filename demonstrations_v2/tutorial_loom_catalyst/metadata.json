@@ -11,7 +11,7 @@
     "executable_stable": false,
     "executable_latest": false,
     "dateOfPublication": "2025-08-29T14:00:00+00:00",
-    "dateOfLastModification": "2025-08-29T14:00:00+00:01",
+    "dateOfLastModification": "2025-09-22T15:48:14+00:00",
     "categories": [
         "Quantum Computing",
         "Quantum Hardware"
@@ -29,7 +29,8 @@
     ],
     "seoDescription": "Learn how to implement a quantum error correction protocol using Catalyst and Loom",
     "doi": "",
-    "references": [        {
+    "references": [
+        {
             "id": "Munro2013",
             "type": "article",
             "title": "Quantum Error Correction for Beginners",
@@ -39,8 +40,7 @@
             "url": "https://arxiv.org/abs/0905.2794"
         }
     ],
-    "basedOnPapers": [
-    ],
+    "basedOnPapers": [],
     "referencedByPapers": [],
     "relatedContent": [
         {

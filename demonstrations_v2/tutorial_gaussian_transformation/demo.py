@@ -99,7 +99,7 @@ def mean_photon_gaussian(mag_alpha, phase_alpha, phi):
 # Optimization
 # ------------
 #
-# As in the :ref:`qubit rotation <qubit_rotation>` tutorial, let's now use one
+# As in the :doc:`qubit rotation <demos/tutorial_qubit_rotation>` tutorial, let's now use one
 # of the ``jaxopt`` optimizers in order to optimize the quantum circuit
 # towards the desired output. We want the mean photon number to be exactly one,
 # so we will use a squared-difference cost function:
@@ -159,7 +159,7 @@ print("Optimized phi:{:8f}".format(params[2]))
 # do not change during the optimization. Only the magnitude of the complex
 # displacement :math:`|\alpha|` affects the mean photon number of the circuit.
 #
-# Continue on to the next tutorial, :ref:`plugins_hybrid`, to learn how to
+# Continue on to the next tutorial, :doc:`plugins hybrid <demos/plugins_hybrid>`, to learn how to
 # utilize the extensive plugin ecosystem of PennyLane,
 # build continuous-variable (CV) quantum nodes, and to see an example of a
 # hybrid qubit-CV-classical computation using PennyLane.
