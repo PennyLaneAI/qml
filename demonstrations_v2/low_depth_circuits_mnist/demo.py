@@ -31,7 +31,7 @@ classifier on the dataset.
 # pixels is encoded into a quantum state with :math:`n+1` qubits.
 #
 # For color images, the *multi-channel representation of quantum images (MCRQI)*
-# [`4 <#References>`__,\ `5 <#References>`__] can be used. Python implementations of the MCRQI
+# [#SunMulti]_ [#SunRGB]_ can be used. Python implementations of the MCRQI
 # encoding and decoding are provided at the end of this demo and are discussed in Ref.
 # [#Kiwit]_.
 #
