@@ -281,7 +281,7 @@ for ax in [ax00, ax01, ax10, ax11]:
 # 3. Quantum classifiers
 # ----------------------
 #
-# In this demo, we train a **variational quantum circuit** as classifier. Our datasets require
+# In this demo, we train a **variational quantum circuit** as a classifier. Our datasets require
 # ``N_QUBITS = 11``, therefore we use the same number of qubits for the classifier. Given a data state
 # :math:`\rho(x)=\lvert\psi(x)\rangle\langle\psi(x)\rvert`, a generic **quantum classifier** evaluates
 # :math:`f_{\ell}(x) = \operatorname{Tr}\bigl[ O_{\ell}(\theta)\,\rho(x) \bigr]`, with trainable
