@@ -385,7 +385,7 @@ def loader(X, y, batch_size, rng_key):
 #
 # We start by **casting** the FRQI amplitude vectors and their digit labels into JAX arrays. Next, the
 # states and labels are shuffled from a pseudorandom key derived from the global ``SEED``. Then, the
-# data is split into training and validation. Finally, we gather the tensors corresponding in the
+# data is split into training and validation. Finally, we gather the tensors corresponding to the
 # training ``(X_train, y_train)`` and validation sets ``(X_val, y_val)``.
 #
 
