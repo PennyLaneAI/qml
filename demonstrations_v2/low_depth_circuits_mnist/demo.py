@@ -9,9 +9,11 @@ Circuits”** (2025) [#Kiwit]_ develops an efficient algorithm for finding low-d
 quantum circuits to load classical image data into quantum states.
 
 This demo gives an introduction to the paper **“Typical Machine Learning Datasets as
-Low‑Depth Quantum Circuits”** (2025). We will discuss the following three steps: 1) Quantum image
-states, 2) Low-depth image circuits, 3) Training a small variational‑quantum‑circuit (VQC)
-classifier on the dataset.
+Low‑Depth Quantum Circuits”** (2025). We will discuss the following three steps:
+
+1. **Define** how classical images can be encoded as quantum states.
+2. **Construct** low-depth quantum circuits that efficiently generate these image states.
+3. **Train and evaluate** a small variational quantum circuit (VQC) classifier on the dataset.
 """
 
 ######################################################################
@@ -121,24 +123,10 @@ def FRQI_decoding(states):
 # is loaded using ``qml.data.Dataset.open``. Otherwise, the dataset is downloaded from the PennyLane
 # data repository via ``qml.data.load``, note that the dataset size is approximately 1 GB.
 #
-# ===================== =============================================================
-# Attribute             Description
-# ===================== =============================================================
-# ``exact_state``       The exact state that the corresponding circuit should prepare
-# ``labels``            The correct labels classifying the corresponding images
-# ``circuit_layout_d4`` The layout of the depth 4 circuit
-# ``circuit_layout_d8`` The layout of the depth 8 circuit
-# ``params_d4``         Parameters for the depth 4 circuit
-# ``params_d8``         Parameters for the depth 8 circuit
-# ``fidelities_d4``     Fidelities between the depth 4 state and the exact state
-# ``fidelities_d8``     Fidelities between the depth 8 state and the exact state
-# ===================== =============================================================
-#
 
 import os
 import jax
 import pennylane as qml
-from tqdm import tqdm
 
 # JAX supports the single-precision numbers by default. The following line enables double-precision.
 jax.config.update("jax_enable_x64", True)
@@ -164,7 +152,8 @@ else:
 # depth. After defining the circuit function, we extract the relevant data for binary classification
 # (digits 0 and 1 only) and compute the quantum states by executing the circuits with their
 # corresponding parameters. These generated states will be used later for training the quantum
-# classifier.
+# classifier. You can find more information and download the datasets at
+# `PennyLane Datasets: Low-Depth Image Circuits <https://pennylane.ai/datasets/collection/low-depth-image-circuits>`_.
 #
 
 TARGET_LABELS = [0, 1]
@@ -208,7 +197,18 @@ exact_state = np.asarray(dataset_params.exact_state)[selection]
 circuit_layout = dataset_params.circuit_layout_d4
 circuit = get_circuit(circuit_layout)
 params_01 = np.asarray(dataset_params.params_d4)[selection]
-states_01 = np.asarray([circuit(params) for params in tqdm(params_01, desc="States for depth 4")])
+
+states_01 = []
+n = len(params_01)
+
+for i, params in enumerate(params_01):
+    states_01.append(circuit(params))
+    # Print every 10%
+    if (i + 1) % (n // 10) == 0:
+        print(f"{(i + 1) / n * 100:.0f}% of the states computed")
+
+states_01 = np.asarray(states_01)
+
 fidelities_01 = np.asarray(dataset_params.fidelities_d4)[selection]
 
 ######################################################################
@@ -414,8 +414,7 @@ X_val, y_val = X_all[val_idx], y_all[val_idx]
 #
 # We begin by **initializing** the network weights ``params`` with values drawn uniformly from
 # :math:`[0, 2\pi]` and initialize the **Adam optimizer** with a learning rate of
-# :math:`1 \times 10^{-2}`. The **training loop** then iterates for ``EPOCHS`` and displays the
-# progress via ``tqdm``:
+# :math:`1 \times 10^{-2}`. The **training loop** then iterates for ``EPOCHS``:
 #
 # 1. For each mini-batch, ``train_step`` performs a forward pass, computes the cross-entropy loss and
 #    accuracy, back-propagates gradients, and updates ``params`` through the optimizer state
@@ -428,8 +427,6 @@ X_val, y_val = X_all[val_idx], y_all[val_idx]
 # The first epoch will take longer than following epochs because of the just-in-time compilation.
 #
 
-from tqdm.auto import trange
-
 # Define the training setup and start the training loop
 
 # optimizer
@@ -441,9 +438,7 @@ opt_state = opt.init(params)
 rng = key_split
 train_loss_curve, val_loss_curve = [], []
 train_acc_curve, val_acc_curve = [], []
-# for epoch in range(1, EPOCHS + 1):
-bar = trange(1, EPOCHS + 1, desc="Epochs", unit="ep")
-for epoch in bar:
+for epoch in range(1, EPOCHS + 1):
     # train
     rng, sub = jax.random.split(rng)
     train_losses, train_accs = [], []
@@ -468,12 +463,9 @@ for epoch in bar:
     val_loss_curve.append(vl)
     train_acc_curve.append(ta)
     val_acc_curve.append(va)
-    bar.set_postfix(
-        train_loss=f"{tl:.4f}",
-        val_loss=f"{vl:.4f}",
-        train_acc=f"{ta:.4f}",
-        val_acc=f"{va:.4f}",
-    )
+    print(f"Epoch {epoch:03d}/{EPOCHS} | "
+          f"train_loss={tl:.4f}, val_loss={vl:.4f}, "
+          f"train_acc={ta:.4f}, val_acc={va:.4f}")
 
 # Plot the training curves
 (
