@@ -277,10 +277,7 @@ def _build_demo(
     out_dir = ctx.repo_root / "demos"
     fs.clean_dir(out_dir)
 
-    use_latest_rc = True
-
     generate_requirements(ctx, demo, dev, out_dir / "requirements.txt")
-
     if execute:
         cmds.pip_install(
             build_venv.python,
@@ -293,50 +290,37 @@ def _build_demo(
         # If dev, we need to re-install the latest Catalyst, then Lightning, then PennyLane
         # in that order, regardless of conflicts/warnings. 
         if dev:
-            if use_latest_rc:
-                # Find and install the specific latest RC for Catalyst and Lightning.
-                for pkg_name in ["pennylane-catalyst", "pennylane-lightning"]:
-                    latest_rc = cmds._find_latest_rc_version(build_venv.python, pkg_name)
-                    if not latest_rc:
-                        raise RuntimeError(f"Could not find an RC version for {pkg_name} on TestPyPI.")
-                    
-                    cmds.pip_install(
-                        build_venv.python,
-                        "--upgrade", "--extra-index-url", "https://test.pypi.org/simple/",
-                        f"{pkg_name}=={latest_rc}",
-                        use_uv=False, quiet=False, pre=True
-                    )
-            else:
-                # Install the latest dev pre-release from TestPyPI.
-                for pkg_name in ["pennylane-catalyst", "pennylane-lightning"]:
-                    cmds.pip_install(
-                        build_venv.python,
-                        "--upgrade", "--extra-index-url", "https://test.pypi.org/simple/",
-                        pkg_name,
-                        use_uv=False, quiet=False, pre=True
-                    )
-    if dev:
-        if use_latest_rc:
-            # Find and install the specific latest RC for PennyLane.
-            pennylane_rc = cmds._find_latest_rc_version(build_venv.python, "pennylane")
-            if not pennylane_rc:
-                raise RuntimeError("Could not find an RC version for PennyLane on TestPyPI.")
-
-            cmds.pip_install(
-                build_venv.python,
-                "--upgrade", "--extra-index-url", "https://test.pypi.org/simple/",
-                f"pennylane=={pennylane_rc}",
-                use_uv=False, quiet=False, pre=True
-            )
-        else:
-            # Install PennyLane from the main branch on GitHub.
+            # Catalyst
             cmds.pip_install(
                 build_venv.python,
                 "--upgrade",
-                "git+https://github.com/PennyLaneAI/pennylane.git#egg=pennylane",
+                "--extra-index-url",
+                "https://test.pypi.org/simple/",
+                "PennyLane-Catalyst",
                 use_uv=False,
                 quiet=False,
+                pre=True,
             )
+            # Lightning
+            cmds.pip_install(
+                build_venv.python,
+                "--upgrade",
+                "--extra-index-url",
+                "https://test.pypi.org/simple/",
+                "PennyLane-Lightning",
+                use_uv=False,
+                quiet=False,
+                pre=True,
+            )
+    if dev:
+        # Need dev version of PennyLane to build, whether or not we're executing
+        cmds.pip_install(
+            build_venv.python,
+            "--upgrade",
+            "git+https://github.com/PennyLaneAI/pennylane.git#egg=pennylane",
+            use_uv=False,
+            quiet=False,
+        )
 
     stage_dir = ctx.build_dir / "demonstrations"
     fs.clean_dir(stage_dir)

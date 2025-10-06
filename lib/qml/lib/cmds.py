@@ -2,7 +2,6 @@ import subprocess
 from pathlib import Path
 from collections.abc import Iterable
 from typing import Literal
-from packaging.version import parse
 
 
 def poetry_export(
@@ -142,41 +141,3 @@ def pip_compile(
     cmd.extend((str(arg) for arg in args))
 
     subprocess.run(cmd).check_returncode()
-
-def _find_latest_rc_version(
-    python: str | Path,
-    package_name: str,
-) -> str | None:
-    """Finds the latest release candidate version of a package on PyPI.
-
-    Args:
-        python: Path to Python interpreter.
-        package_name: Name of the package to check.
-
-    Returns:
-        The latest RC version string if found, otherwise None.
-    """
-    cmd = [
-        str(python), "-m", "pip", "index", "versions",
-        "--extra-index-url", "https://test.pypi.org/simple/",
-        "--pre", package_name,
-    ]
-    
-    result = subprocess.run(cmd, capture_output=True, text=True, check=True)
-
-    # Find the line containing all available versions
-    for line in result.stdout.splitlines():
-        if line.strip().startswith("Available versions:"):
-            versions_str = line.split(":", 1)[1]
-            all_versions = [v.strip() for v in versions_str.split(",")]
-            
-            # Find the first version that is a release candidate
-            for version_str in all_versions:
-                # This should catch all variants of version strings
-                # like '0.13.0rc1', '0.13.0-rc1', '0.13.0.rc1', etc.
-                v = parse(version_str)
-                # Check if it's a pre-release and the pre-release tag is 'rc'
-                if v.is_prerelease and v.pre and v.pre[0] == 'rc':
-                    return version_str  # Return the first one found
-
-    return None # No matching RC version was found
