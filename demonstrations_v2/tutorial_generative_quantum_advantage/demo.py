@@ -5,7 +5,7 @@ Generative machine learning is all about inferring and sampling from probability
 sampling output distributions of quantum computers is known to be classically hard. So proving
 quantum advantages for generative quantum machine learning is easy, right? Unfortunately, things are
 not so simple. As H. Huang and colleagues point out in their recent preprint “Generative quantum
-advantage for classical and quantum problems” [#genquantumadv]\_, claiming an advantage for
+advantage for classical and quantum problems” [#genquantumadv]_, claiming an advantage for
 generative machine learning should not only require the ability to sample from a hard distribution,
 but also to be able to learn it efficiently from data, and they investigate a specific scenario in
 which this is possible.
@@ -16,8 +16,6 @@ performing single qubit tomography, and we will debate the scope of this techniq
 practical AI. In particular, we will focus on the first theorem (Theorem 1) of the paper, since it
 aligns closest with the notion of generative machine learning in the classical literature. It is
 informally stated as:
-
-::
 
     *Theorem 1 (Informal: Classically hard, quantumly easy generative models). Under standard
     complexity-theoretic conjectures, there exist distributions p(y|x) mapping classical n-bit strings
@@ -84,10 +82,9 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # Recipe for sampling from the deep circuit
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# 1. Generate all bits :math:`y_{ij}` for :math:`i<4`
-# uniformly at random.
+# 1. Generate all bits :math:`y_{ij}` for :math:`i<4` uniformly at random.
 # 2. Run the above circuit, controlling the Z gates on these bits. 3. Measure the
-# output of the circuit to obtain the final three bits :math:`y_{41}`, :math:`y_{42}`, :math:`y_{43}`
+#    output of the circuit to obtain the final three bits :math:`y_{41}`, :math:`y_{42}`, :math:`y_{43}`
 # 
 # One can show that the distribution :math:`p(\boldsymbol{y})` obtained with the above recipe is
 # identical to the one we described for the IDQNN, and so the two methods are indistinguishable if
@@ -137,7 +134,7 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # 
 # Recipe for sampling from an IDQNN with inputs
 # 
-# 1. Prepare each qubit in either the :raw-latex:`\ket{+}` or :raw-latex:`\ket{0}` state, depending on
+# 1. Prepare each qubit in either the :raw-latex:`\vert + \rangle ` or :raw-latex:`\vert - \rangle` state, depending on
 #    :math:`x`.
 # 2. Perform steps 2-4 as before
 # 
@@ -146,10 +143,10 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # particularly simple choice that will work for our 2D IDQNN is the following choice of three inputs,
 # :math:`x=0,1,2` (in the paper a different choice is used, but the result will be the same)
 # 
-# If :math:`x=0` all input qubits are prepared in the :raw-latex:`\ket{+}` state If :math:`x=1` all
-# qubits on the ‘even diagonals’ of the lattice are prepared in :raw-latex:`\ket{+}`, the remaining
-# are prepared in :raw-latex:`\ket{0}` If :math:`x=2` all qubits on the ‘odd diagonals’ of the lattice
-# are prepared in :raw-latex:`\ket{+}`, the remaining are prepared in :raw-latex:`\ket{0}`
+# If :math:`x=0` all input qubits are prepared in the :raw-latex:`\vert + \rangle` state If :math:`x=1` all
+# qubits on the ‘even diagonals’ of the lattice are prepared in :raw-latex:`\vert + \rangle`, the remaining
+# are prepared in :raw-latex:`\vert 0 \rangle` If :math:`x=2` all qubits on the ‘odd diagonals’ of the lattice
+# are prepared in :raw-latex:`\vert + \rangle`, the remaining are prepared in :raw-latex:`\vert 0 \rangle`
 # 
 # Pictorially, the choice looks like this.
 # 
@@ -157,20 +154,17 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # section. If the input is 1 or 2, things get very simple. Note that the CZ gate is symmetric, and can
 # be written
 # 
-# $ CZ = :raw-latex:`\ket{0}`:raw-latex:`\bra{0}` :raw-latex:`\otimes `:raw-latex:`\mathbb{I}` +
-# :raw-latex:`\ket{1}`:raw-latex:`\bra{1}` :raw-latex:`\otimes `Z = :raw-latex:`\mathbb{I}`
-# :raw-latex:`\otimes `:raw-latex:`\ket{0}`:raw-latex:`\bra{0}` + Z
-# :raw-latex:`\otimes `:raw-latex:`\ket{1}`:raw-latex:`\ket{1}` $
+# .. math:: CZ = \vert 0 \rangle\langle 0 \vert \otimes \mathbb{I} +  \vert 1 \rangle\langle 1 \vert \otimes Z =  \mathbb{I} \otimes  \vert 0 \rangle\langle 0 \vert + Z \otimes  \vert 1 \rangle\langle 1 \vert
 # 
-# Thus, if a CZ gate acts on the state :math:`\ket{0}` on either side, the effect is that it becomes
-# the identity. Since every CZ gate hits a qubit in the :math:`\ket{0}` state for these inputs, we can
+# Thus, if a CZ gate acts on the state :math:`\vert 0 \rangle` on either side, the effect is that it becomes
+# the identity. Since every CZ gate hits a qubit in the :math:`\vert 0 \rangle` state for these inputs, we can
 # actually remove them all. For example, the input :math:`x=1` actually just corresponds to an
 # unentangled product state:
 # 
 #
 # By performing mid-circuit measurements and resetting qubits, we can easily reproduce the statistics
 # for the inputs :math:`x=1,2`. For example, for :math:`x=1`, the circuit looks as follows (we have
-# removed the rotation gates for the qubits prepared in :math:`\ket{0}` since this results in a global
+# removed the rotation gates for the qubits prepared in :math:`\vert 0 \rangle` since this results in a global
 # phase only).
 # 
 # The authors argue that the conditional distribution :math:`p(\boldsymbol{y}|x)` should also be
@@ -195,37 +189,37 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # 
 # The precise definition of learning is given by definition 13 in the Appendix:
 # 
-# *Definition 13 (The task of learning to generate classical bitstrings). We are given a dataset of
+# Definition 13 (The task of learning to generate classical bitstrings). We are given a dataset of
 # input-output bitstring pairs :math:`(x,\boldsymbol{y})`. Each output bitstring
 # :math:`\boldsymbol{y}` is sampled according to an unknown conditional distribution
 # :math:`p(\boldsymbol{y}|x)`. The goal is to learn a model from the dataset that can generate new
 # output bitstrings :math:`\boldsymbol{y}` according to the unknown distribution
-# :math:`p(\boldsymbol{y}|x)` for any given new input bitstring 𝑥.*
+# :math:`p(\boldsymbol{y}|x)` for any given new input bitstring :math:`x`.
 # 
 # Although the above suggests the conditional distribution is unknown, we actually know a lot about
 # it. In particular, we need to work under the assumption that we know the exact structure of the
 # quantum circuits that produce the data, except for the rotation angles :math:`\theta_{ij}`
 # (i.e. this is included in the \`prior knowledge’ of the problem). To learn, we therefore just need
-# to infer the parameters :math:`\theta_ij` from the data, which will allow us to generate new data by
+# to infer the parameters :math:`\theta_{ij}` from the data, which will allow us to generate new data by
 # simply implementing the resulting circuits. This is very different from real world problems the
 # typical situation in classical generative machine learning, where a precise parametric form of the
 # ground truth distribution is not known.
 # 
-# So how do we infer the parameters :math:`\theta_ij` from data? Consider for example the data for
-# input :math:`x=1`, and the outcome :math:`y_12`. From the above circuit we see that in this case the
+# So how do we infer the parameters :math:`\theta_{ij}` from data? Consider for example the data for
+# input :math:`x=1`, and the outcome :math:`y_{12}`. From the above circuit we see that in this case the
 # outcome is produced by this single qubit circuit
 # 
 # This is a measurement on a rotated single qubit state, for which the expectation value for
-# :math:`y_12` is
+# :math:`y_{12}` is
 # 
-# :math:`<y_12> = (1-\cos(\theta_{12}))/2`.
+# :math:`<y_{12}> = (1-\cos(\theta_{12}))/2`.
 # 
 # Rearranging this equation we have
 # 
-# :math:`\theta_{12} = \frac{1}{2} \arccos(1 - 2<y_12>)`.
+# :math:`\theta_{12} = \frac{1}{2} \arccos(1 - 2<y_{12}>)`.
 # 
 # All we have to do to infer :math:`\theta_{12}` is to look at the data for :math:`x=1`, estimate the
-# expectation :math:`<y_12>` from the corresponding :math:`y_12` values, and use the above formula; no
+# expectation :math:`<y_{12}>` from the corresponding :math:`y_12` values, and use the above formula; no
 # gradients or training required (so clearly no barren plateaus either)! Note that all we are doing
 # here is a form of single qubit tomography, which you might encounter in a first course of quantum
 # information.
