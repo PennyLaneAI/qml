@@ -91,7 +91,7 @@ plt.show()
 # Now we can check that all the outputs are as expected:
 
 for i in range(8):
-    print(f"The bitstring stored in index {i} is: {circuit(i)}")
+    print(f"The bitstring stored in index {i} is: {circuit(i)[0]}")
 
 
 ##############################################################################
@@ -99,10 +99,6 @@ for i in range(8):
 #
 # The :class:`~.pennylane.QROM` template can be used to implement the previous circuit using directly the bitstring
 # without having to calculate the :math:`U_i` gates:
-
-import warnings
-# This line will suppress ComplexWarnings for output visibility
-warnings.filterwarnings(action="ignore", category=np.ComplexWarning)
 
 bitstrings = ["01", "11", "11", "00", "01", "11", "11", "00"]
 
@@ -120,7 +116,7 @@ def circuit(index):
 
 
 for i in range(8):
-    print(f"The bitstring stored in index {i} is: {circuit(i)}")
+    print(f"The bitstring stored in index {i} is: {circuit(i)[0]}")
 
 ##############################################################################
 # Although this approach works correctly, the number of multicontrol gates is high — gates with a costly decomposition.
@@ -200,7 +196,7 @@ print("Two-qubit gates: ", qml.specs(circuit)(0)["resources"].gate_sizes[2])
 # Now we run the circuit with our initial data list: :math:`[01, 11, 11, 00, 01, 11, 11, 00].`
 
 index = 5
-output = circuit(index)
+output = circuit(index)[0]
 print(f"control wires: {output[:3]}")
 print(f"target wires: {output[3:5]}")
 print(f"work wires: {output[5:7]}")
@@ -267,8 +263,8 @@ def circuit(index):
 
 
 for i in range(8):
-    print(f"The bitstring stored in index {i} is: {circuit(i)[:2]}")
-    print(f"The work wires for that index are in the state: {circuit(i)[2:4]}\n")
+    print(f"The bitstring stored in index {i} is: {circuit(i)[0, :2]}")
+    print(f"The work wires for that index are in the state: {circuit(i)[0, 2:4]}\n")
 
 
 ##############################################################################

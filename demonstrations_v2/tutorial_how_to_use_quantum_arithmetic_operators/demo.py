@@ -85,7 +85,7 @@ dev = qml.device("default.qubit")
 @qml.qnode(dev)
 def circuit(x,y):
     product_basis_state(x, y)
-    return [qml.sample(wires=wires[name]) for name in ["x", "y", "output"]]
+    return {name: qml.sample(wires=wires[name]) for name in ["x", "y", "output"]}
 
 ######################################################################
 # Since the arithmetic operations are deterministic, a single shot is enough to sample 
@@ -101,9 +101,9 @@ def state_to_decimal(binary_array):
 # In this example we are setting :math:`x=1` and :math:`y=4` and checking that the results are as expected.
 
 output = circuit(x=1,y=4)
-print("x register: ", output[0]," (binary) ---> ", state_to_decimal(output[0]), " (decimal)")
-print("y register: ", output[1]," (binary) ---> ", state_to_decimal(output[1]), " (decimal)")
-print("output register: ", output[2]," (binary) ---> ", state_to_decimal(output[2]), " (decimal)")
+print("x register: ", output["x"][0]," (binary) ---> ", state_to_decimal(output["x"][0]), " (decimal)")
+print("y register: ", output["y"][0]," (binary) ---> ", state_to_decimal(output["y"][0]), " (decimal)")
+print("output register: ", output["output"][0]," (binary) ---> ", state_to_decimal(output["output"][0]), " (decimal)")
 
 ######################################################################
 # Now we can implement an example for the :class:`~.pennylane.Adder` operator. We will add the integer :math:`5` to the ``wires["x"]`` register
@@ -118,7 +118,7 @@ def circuit(x):
 
     return qml.sample(wires=wires["x"])
 
-print(circuit(x=1), " (binary) ---> ", state_to_decimal(circuit(x=1))," (decimal)")
+print(circuit(x=1), " (binary) ---> ", state_to_decimal(circuit(x=1)[0])," (decimal)")
 
 ######################################################################
 # We obtained the result :math:`5+1=6`, as expected. At this point, it's worth taking a moment to look
@@ -145,7 +145,7 @@ def circuit(x,y):
 
     return qml.sample(wires=wires["output"])
 
-print(circuit(x=2,y=3), " (binary) ---> ", state_to_decimal(circuit(x=2,y=3)), " (decimal)")
+print(circuit(x=2,y=3), " (binary) ---> ", state_to_decimal(circuit(x=2,y=3)[0]), " (decimal)")
 
 ######################################################################
 # We obtained the result :math:`2+3=5`, as expected.
@@ -181,7 +181,7 @@ def circuit(x):
 
     return qml.sample(wires=wires["x"])
 
-print(circuit(x=2), " (binary) ---> ", state_to_decimal(circuit(x=2))," (decimal)")
+print(circuit(x=2), " (binary) ---> ", state_to_decimal(circuit(x=2)[0])," (decimal)")
 
 ######################################################################
 # We got the expected result of :math:`3 \cdot 2 = 6`.
@@ -198,7 +198,7 @@ def circuit(x,y):
 
     return qml.sample(wires=wires["output"])
 
-print(circuit(x=4,y=2), " (binary) ---> ", state_to_decimal(circuit(x=4,y=2))," (decimal)")
+print(circuit(x=4,y=2), " (binary) ---> ", state_to_decimal(circuit(x=4,y=2)[0])," (decimal)")
 
 ######################################################################
 # Nice! Modular subtraction and division can also be implemented as the inverses of addition and 
@@ -214,7 +214,7 @@ def circuit(x):
 
     return qml.sample(wires=wires["x"])
 
-print(circuit(x=6), " (binary) ---> ", state_to_decimal(circuit(x=6)), " (decimal)")
+print(circuit(x=6), " (binary) ---> ", state_to_decimal(circuit(x=6)[0]), " (decimal)")
 
 ######################################################################
 # As predicted, this gives us :math:`6-3=3`.
@@ -285,7 +285,7 @@ def circuit(x,y):
 
     return qml.sample(wires=wires["output"])
 
-print(circuit(x=1,y=4), " (binary) ---> ", state_to_decimal(circuit(x=1,y=4)), " (decimal)")
+print(circuit(x=1,y=4), " (binary) ---> ", state_to_decimal(circuit(x=1,y=4)[0]), " (decimal)")
 
 ######################################################################
 # Cool, we get the correct result, :math:`f(1,4)=33`.
@@ -295,7 +295,7 @@ print(circuit(x=1,y=4), " (binary) ---> ", state_to_decimal(circuit(x=1,y=4)), "
 
 wires = qml.registers({"x": 4, "y": 4, "output": 5,"work_wires": 4})
 
-print(circuit(x=1,y=4), " (binary) ---> ", state_to_decimal(circuit(x=1,y=4)), " (decimal)")
+print(circuit(x=1,y=4), " (binary) ---> ", state_to_decimal(circuit(x=1,y=4)[0]), " (decimal)")
 
 ######################################################################
 # With one fewer wire, we get :math:`1`, just like we predicted. Remember, we are working with modular arithmetic!
@@ -331,7 +331,7 @@ def circuit_with_Poly(x,y):
    
    return qml.sample(wires = wires["output"])
 
-print(circuit_with_Poly(x=1,y=4), " (binary) ---> ", state_to_decimal(circuit_with_Poly(x=1,y=4)), " (decimal)")
+print(circuit_with_Poly(x=1,y=4), " (binary) ---> ", state_to_decimal(circuit_with_Poly(x=1,y=4)[0]), " (decimal)")
 
 ######################################################################
 # You can decide, depending on the problem you are tackling, whether to go for the versatility 
