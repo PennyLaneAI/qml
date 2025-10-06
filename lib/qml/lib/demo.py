@@ -290,6 +290,8 @@ def _build_demo(
             pre=dev,
         )
 
+        # If dev, we need to re-install the latest Catalyst, then Lightning, then PennyLane
+        # in that order, regardless of conflicts/warnings. 
         if dev:
             if use_latest_rc:
                 # Find and install the specific latest RC for Catalyst and Lightning.
