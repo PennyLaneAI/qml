@@ -1,0 +1,40 @@
+{
+  "title": "Before You Train: Pre-screening Quantum Kernels with Geometric Difference",
+  "authors": [
+    {
+      "username": "andynader"
+    }
+  ],
+  "executable_stable": true,
+  "executable_latest": true,
+  "dateOfPublication": "",
+  "dateOfLastModification": "",
+  "categories": [
+    "Quantum Machine Learning"
+  ],
+  "tags": [],
+  "previewImages": [
+    {
+      "type": "thumbnail",
+      "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_placeholder.png"
+    }
+  ],
+  "seoDescription": "Learn how to pre-screen quantum kernels using the geometric difference metric (g) before training. This tutorial implements the approach from Huang et al. (2021) to assess whether a quantum kernel offers any geometric advantage over classical kernels. Using synthetic data and multiple quantum embeddings, we demonstrate how to calculate g values and interpret them to identify promising quantum kernels worth pursuing. This saves valuable research time by ruling out fundamentally limited approaches early.",
+  "doi": "",
+  "references": [
+    {
+      "id": "Huang2021",
+      "type": "preprint",
+      "title": "Power of data in quantum machine learning",
+      "authors": "Hsin-Yuan Huang, Michael Broughton, Masoud Mohseni, Ryan Babbush, Sergio Boixo, Hartmut Neven, Jarrod R. McClean",
+      "year": "2021",
+      "journal": "arXiv",
+      "url": "https://arxiv.org/abs/2011.01938"
+    }
+  ],
+  "basedOnPapers": [
+    "2011.01938"
+  ],
+  "referencedByPapers": [],
+  "relatedContent": []
+}
