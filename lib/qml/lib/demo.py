@@ -296,7 +296,7 @@ def _build_demo(
         if use_latest_rc:
             catalyst_latest_rc_version = cmds._find_latest_rc_version(build_venv.python, "pennylane-catalyst")
             lightning_latest_rc_version = cmds._find_latest_rc_version(build_venv.python, "pennylane-lightning")
-            pennylane_latest_rc_version = cmds._find_latest_rc_version(build_venv.python, "PennyLane")
+            pennylane_latest_rc_version = cmds._find_latest_rc_version(build_venv.python, "pennylane")
             assert catalyst_latest_rc_version or lightning_latest_rc_version or pennylane_latest_rc_version, "Could not find any RC versions for PennyLane, PennyLane-Catalyst or PennyLane-Lightning"
         else:   
             catalyst_latest_rc_version = None
