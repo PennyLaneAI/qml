@@ -301,18 +301,18 @@ def _build_demo(
                     
                     cmds.pip_install(
                         build_venv.python,
-                        "--upgrade", "--pre", "--extra-index-url", "https://test.pypi.org/simple/",
+                        "--upgrade", "--extra-index-url", "https://test.pypi.org/simple/",
                         f"{pkg_name}=={latest_rc}",
-                        use_uv=False, quiet=False
+                        use_uv=False, quiet=False, pre=True
                     )
             else:
                 # Install the latest dev pre-release from TestPyPI.
                 for pkg_name in ["pennylane-catalyst", "pennylane-lightning"]:
                     cmds.pip_install(
                         build_venv.python,
-                        "--upgrade", "--pre", "--extra-index-url", "https://test.pypi.org/simple/",
+                        "--upgrade", "--extra-index-url", "https://test.pypi.org/simple/",
                         pkg_name,
-                        use_uv=False, quiet=False
+                        use_uv=False, quiet=False, pre=True
                     )
     if dev:
         if use_latest_rc:
@@ -323,9 +323,9 @@ def _build_demo(
 
             cmds.pip_install(
                 build_venv.python,
-                "--upgrade", "--pre", "--extra-index-url", "https://test.pypi.org/simple/",
+                "--upgrade", "--extra-index-url", "https://test.pypi.org/simple/",
                 f"pennylane=={pennylane_rc}",
-                use_uv=False, quiet=False
+                use_uv=False, quiet=False, pre=True
             )
         else:
             # Install PennyLane from the main branch on GitHub.
