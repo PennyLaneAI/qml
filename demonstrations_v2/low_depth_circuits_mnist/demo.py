@@ -512,30 +512,42 @@ ax[1].set_ylabel("Accuracy")
 # References
 # ----------
 #
-# [1] F.J. Kiwit, B. Jobst, A. Luckow, F. Pollmann and C.A. Riofrío. Typical Machine Learning Datasets
-# as Low-Depth Quantum Circuits. *Quantum Sci. Technol.* in press (2025). DOI:
-# https://doi.org/10.1088/2058-9565/ae0123.
+# .. [#Kiwit] 
+# 
+#     F.J. Kiwit, B. Jobst, A. Luckow, F. Pollmann and C.A. Riofrío. Typical Machine Learning Datasets
+#     as Low-Depth Quantum Circuits. *Quantum Sci. Technol.* in press (2025). DOI:
+#     https://doi.org/10.1088/2058-9565/ae0123.
 #
-# [2] P.Q. Le, F. Dong and K. Hirota. A flexible representation of quantum images for polynomial
-# preparation, image compression, and processing operations. *Quantum Inf. Process* 10, 63–84 (2011).
-# DOI: https://doi.org/10.1007/s11128-010-0177-y.
+# .. [#LeFlexible]
 #
-# [3] P.Q. Le, A.M. Iliyasu, F. Dong, and K. Hirota. A Flexible Representation and Invertible
-# Transformations for Images on Quantum Computers. In: Ruano, A.E., Várkonyi-Kóczy, A.R. (eds) *New
-# Advances in Intelligent Signal Processing. Studies in Computational Intelligence*, vol 372.
-# Springer, Berlin, Heidelberg (2011). DOI: https://doi.org/10.1007/978-3-642-11739-8_9.
+#     P.Q. Le, F. Dong and K. Hirota. A flexible representation of quantum images for polynomial
+#     preparation, image compression, and processing operations. *Quantum Inf. Process* 10, 63–84 (2011).
+#     DOI: https://doi.org/10.1007/s11128-010-0177-y.
 #
-# [4] B. Sun *et al.* A Multi-Channel Representation for images on quantum computers using the RGBα
-# color space, 2011 *IEEE 7th International Symposium on Intelligent Signal Processing*, Floriana,
-# Malta, pp. 1-6 (2011). DOI: https://doi.org/10.1109/WISP.2011.6051718.
+# .. [#LeAdvances]
+# 
+#     P.Q. Le, A.M. Iliyasu, F. Dong, and K. Hirota. A Flexible Representation and Invertible
+#     Transformations for Images on Quantum Computers. In: Ruano, A.E., Várkonyi-Kóczy, A.R. (eds) *New
+#     Advances in Intelligent Signal Processing. Studies in Computational Intelligence*, vol 372.
+#     Springer, Berlin, Heidelberg (2011). DOI: https://doi.org/10.1007/978-3-642-11739-8_9.
 #
-# [5] B. Sun, A. Iliyasu, F. Yan, F. Dong, and K. Hirota. An RGB Multi-Channel Representation for
-# Images on Quantum Computers, *J. Adv. Comput. Intell. Intell. Inform.*, Vol. 17 No. 3, pp. 404–417
-# (2013). DOI: https://doi.org/10.20965/jaciii.2013.p0404.
+# .. [#SunMulti]
+# 
+#     B. Sun *et al.* A Multi-Channel Representation for images on quantum computers using the RGBα
+#     color space, 2011 *IEEE 7th International Symposium on Intelligent Signal Processing*, Floriana,
+#     Malta, pp. 1-6 (2011). DOI: https://doi.org/10.1109/WISP.2011.6051718.
 #
-# [6] B. Jobst, K. Shen, C.A. Riofrío, E. Shishenina and F. Pollmann. Efficient MPS representations
-# and quantum circuits from the Fourier modes of classical image data. *Quantum* 8, 1544 (2024). DOI:
-# https://doi.org/10.22331/q-2024-12-03-1544.
+# .. [#SunRGB]
+# 
+#     B. Sun, A. Iliyasu, F. Yan, F. Dong, and K. Hirota. An RGB Multi-Channel Representation for
+#     Images on Quantum Computers, *J. Adv. Comput. Intell. Intell. Inform.*, Vol. 17 No. 3, pp. 404–417
+#     (2013). DOI: https://doi.org/10.20965/jaciii.2013.p0404.
+#
+# .. [#Jobst]
+# 
+#     B. Jobst, K. Shen, C.A. Riofrío, E. Shishenina and F. Pollmann. Efficient MPS representations
+#     and quantum circuits from the Fourier modes of classical image data. *Quantum* 8, 1544 (2024). DOI:
+#     https://doi.org/10.22331/q-2024-12-03-1544.
 #
 
 ######################################################################
