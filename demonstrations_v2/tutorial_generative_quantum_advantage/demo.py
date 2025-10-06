@@ -51,6 +51,12 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # 3. Perform a single qubit Z rotation :math:`U_{z}(\theta_{ij})=\exp(-\frac{i}{2}\theta_{ij}Z)` with
 #    parameter :math:`\theta_{ij}` on each of the qubits
 # 4. Measure all qubits in the X basis to produce outcomes :math:`y_{ij}`
+#
+# .. figure:: ../_static/demonstration_assets/generative_quantum_advantage/IDQNN.png
+#    :alt: Depiction of a IDQNN circuit.
+#    :width: 60.0%
+#    :align: center
+#
 # 
 # Note that this is not a circuit diagram, but a graphical representation of the circuit description
 # above: qubits are denoted by black dots, CZ gates are lines between dots, the angles specify the
@@ -71,6 +77,11 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # tricky (see Appendix H2 of the paper), so we won’t bore you with the details here.
 # 
 # If you apply the mapping to our example IDQNN, you find the following circuit:
+#
+# .. figure:: ../_static/demonstration_assets/generative_quantum_advantage/deepcircuit1.png
+#    :alt: Equivalent deep circuit that reproduces the IDQNN statistics
+#    :width: 60.0%
+#    :align: center
 # 
 # The circuit structure for layers 2 and 3 is the same as for layer 1, where the CZ structure is
 # determined by the vertically acting CZ gates that appear in the second and third vertical axis of
@@ -134,7 +145,7 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # 
 # Recipe for sampling from an IDQNN with inputs
 # 
-# 1. Prepare each qubit in either the :raw-latex:`\vert + \rangle ` or :raw-latex:`\vert - \rangle` state, depending on
+# 1. Prepare each qubit in either the :math:`\vert + \rangle ` or :math:`\vert - \rangle` state, depending on
 #    :math:`x`.
 # 2. Perform steps 2-4 as before
 # 
@@ -143,13 +154,18 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # particularly simple choice that will work for our 2D IDQNN is the following choice of three inputs,
 # :math:`x=0,1,2` (in the paper a different choice is used, but the result will be the same)
 # 
-# If :math:`x=0` all input qubits are prepared in the :raw-latex:`\vert + \rangle` state If :math:`x=1` all
-# qubits on the ‘even diagonals’ of the lattice are prepared in :raw-latex:`\vert + \rangle`, the remaining
-# are prepared in :raw-latex:`\vert 0 \rangle` If :math:`x=2` all qubits on the ‘odd diagonals’ of the lattice
-# are prepared in :raw-latex:`\vert + \rangle`, the remaining are prepared in :raw-latex:`\vert 0 \rangle`
+# If :math:`x=0` all input qubits are prepared in the :math:`\vert + \rangle` state If :math:`x=1` all
+# qubits on the ‘even diagonals’ of the lattice are prepared in :math:`\vert + \rangle`, the remaining
+# are prepared in :math:`\vert 0 \rangle` If :math:`x=2` all qubits on the ‘odd diagonals’ of the lattice
+# are prepared in :math:`\vert + \rangle`, the remaining are prepared in :math:`\vert 0 \rangle`
 # 
 # Pictorially, the choice looks like this.
-# 
+#
+# .. figure:: ../_static/demonstration_assets/generative_quantum_advantage/inputs.png
+#    :alt: Input choices for out example
+#    :width: 60.0%
+#    :align: center
+#
 # If the input is 0, we already know what happens; this is just the IDQNN described in the previous
 # section. If the input is 1 or 2, things get very simple. Note that the CZ gate is symmetric, and can
 # be written
@@ -160,13 +176,22 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # the identity. Since every CZ gate hits a qubit in the :math:`\vert 0 \rangle` state for these inputs, we can
 # actually remove them all. For example, the input :math:`x=1` actually just corresponds to an
 # unentangled product state:
-# 
+#
+# .. figure:: ../_static/demonstration_assets/generative_quantum_advantage/IDQNN2.png
+#    :alt: Resulting IDQNN when the input is x=1
+#    :width: 60.0%
+#    :align: center
 #
 # By performing mid-circuit measurements and resetting qubits, we can easily reproduce the statistics
 # for the inputs :math:`x=1,2`. For example, for :math:`x=1`, the circuit looks as follows (we have
 # removed the rotation gates for the qubits prepared in :math:`\vert 0 \rangle` since this results in a global
 # phase only).
-# 
+#
+# .. figure:: ../_static/demonstration_assets/generative_quantum_advantage/deepcircuit2.png
+#    :alt: The deep circuit with mid-circuit measurements that reproduces the IDQNN for x=1
+#    :width: 60.0%
+#    :align: center
+#
 # The authors argue that the conditional distribution :math:`p(\boldsymbol{y}|x)` should also be
 # considered hard to sample from classically, since for the input :math:`x=0` we can use the argument
 # of the previous section. For the inputs :math:`x=1` and :math:`x=2` however the resulting
@@ -189,12 +214,12 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # 
 # The precise definition of learning is given by definition 13 in the Appendix:
 # 
-# Definition 13 (The task of learning to generate classical bitstrings). We are given a dataset of
-# input-output bitstring pairs :math:`(x,\boldsymbol{y})`. Each output bitstring
-# :math:`\boldsymbol{y}` is sampled according to an unknown conditional distribution
-# :math:`p(\boldsymbol{y}|x)`. The goal is to learn a model from the dataset that can generate new
-# output bitstrings :math:`\boldsymbol{y}` according to the unknown distribution
-# :math:`p(\boldsymbol{y}|x)` for any given new input bitstring :math:`x`.
+#   *Definition 13 (The task of learning to generate classical bitstrings). We are given a dataset of
+#   input-output bitstring pairs :math:`(x,\boldsymbol{y})`. Each output bitstring
+#   :math:`\boldsymbol{y}` is sampled according to an unknown conditional distribution
+#   :math:`p(\boldsymbol{y}|x)`. The goal is to learn a model from the dataset that can generate new
+#   output bitstrings :math:`\boldsymbol{y}` according to the unknown distribution
+#   :math:`p(\boldsymbol{y}|x)` for any given new input bitstring :math:`x`.*
 # 
 # Although the above suggests the conditional distribution is unknown, we actually know a lot about
 # it. In particular, we need to work under the assumption that we know the exact structure of the
@@ -208,18 +233,23 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # So how do we infer the parameters :math:`\theta_{ij}` from data? Consider for example the data for
 # input :math:`x=1`, and the outcome :math:`y_{12}`. From the above circuit we see that in this case the
 # outcome is produced by this single qubit circuit
-# 
+#
+# .. figure:: ../_static/demonstration_assets/generative_quantum_advantage/tomography.png
+#    :alt: The single qubit circuit that is used to infer the parameter \theta_{12}
+#    :width: 60.0%
+#    :align: center
+#
 # This is a measurement on a rotated single qubit state, for which the expectation value for
 # :math:`y_{12}` is
 # 
-# :math:`<y_{12}> = (1-\cos(\theta_{12}))/2`.
+# :math:`\langle y_{12} \rangle = (1-\cos(\theta_{12}))/2`.
 # 
 # Rearranging this equation we have
 # 
-# :math:`\theta_{12} = \frac{1}{2} \arccos(1 - 2<y_{12}>)`.
+# :math:`\theta_{12} = \frac{1}{2} \arccos(1 - 2\langle y_{12} \rangle)`.
 # 
 # All we have to do to infer :math:`\theta_{12}` is to look at the data for :math:`x=1`, estimate the
-# expectation :math:`<y_{12}>` from the corresponding :math:`y_12` values, and use the above formula; no
+# expectation :math:`\langle y_{12} \rangle` from the corresponding :math:`y_12` values, and use the above formula; no
 # gradients or training required (so clearly no barren plateaus either)! Note that all we are doing
 # here is a form of single qubit tomography, which you might encounter in a first course of quantum
 # information.
