@@ -17,10 +17,12 @@ practical AI. In particular, we will focus on the first theorem (Theorem 1) of t
 aligns closest with the notion of generative machine learning in the classical literature. It is
 informally stated as:
 
-*Theorem 1 (Informal: Classically hard, quantumly easy generative models). Under standard
-complexity-theoretic conjectures, there exist distributions p(y|x) mapping classical n-bit strings
-to m-bit strings that a quantum computer can efficiently learn to generate using classical data
-samples, but are hard to generate with classical computers.*
+::
+
+    *Theorem 1 (Informal: Classically hard, quantumly easy generative models). Under standard
+    complexity-theoretic conjectures, there exist distributions p(y|x) mapping classical n-bit strings
+    to m-bit strings that a quantum computer can efficiently learn to generate using classical data
+    samples, but are hard to generate with classical computers.*
 
 To show the above, we need to do a couple of things
 
@@ -306,4 +308,13 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # machine learning [qft], and construct genuniely scalable algorithms that can be applied to real
 # world learning problems [iqp]. Although we might have to wave goodbye to the possibility of proving
 # formal complexity theoretic separations,
-# 
+#
+#
+# References
+# ----------
+#
+# .. [#genquantumadv]
+#
+#     H. Huang, M. Broughton, N. Eassa, H. Neven, R. Babbush, J. R. McClean
+#     "Generative quantum advantage for classical and quantum problems."
+#     `arXiv:2509.09033 <https://arxiv.org/abs/2509.09033>`__, 2025.
