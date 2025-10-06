@@ -103,7 +103,7 @@ def FRQI_decoding(states):
 # effectively shifting the gates with the dashed outlines to the right, the gates are applied
 # sequentially outward starting from the center. This reduces the circuit depth while maintaining its
 # expressivity.
-
+#
 # .. figure:: /_static/demonstration_assets/low_depth_circuits_mnist/circuit.png
 #    :align: center
 #    :width: 80 %
