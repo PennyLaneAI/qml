@@ -1,7 +1,7 @@
 r"""Loading classical data with low-depth circuits
 ==============================================
 
-The encoding of arbitrary classical data into quantum states usually comes at a high computational
+Encoding arbitrary classical data into quantum states usually comes at a high computational
 cost, either in terms of qubits or gate count. However, real-world data typically exhibits some
 inherent structure (such as image data) which can be leveraged to load them with a much smaller cost
 on a quantum computer. The paper **“Typical Machine Learning Datasets as Low‑Depth Quantum
