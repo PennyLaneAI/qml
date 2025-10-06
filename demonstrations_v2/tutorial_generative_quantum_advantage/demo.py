@@ -37,13 +37,12 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 
 ######################################################################
 # Instantaneously deep quantum neural networks
-# ============================================
-# 
+# --------------------------------------------
 # Instantaneously deep quantum neural networks, or IDQNNs, are a particular type of shallow
 # parameterized quantum circuit. The qubits of the circuit live on a lattice, which we’ll take to be a
 # 2D lattice, and index the qubits by their lattice positions :math:`(i,j)`. To sample from the
 # circuit one does the following, which we also depict below
-# 
+#
 # Recipe for sampling from an IDQNN
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
@@ -81,9 +80,13 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # :math:`y_{ij}=1`.
 # 
 # To generate samples from this deep circuit we do the following:
-# 
-# ### Recipe for sampling from the deep circuit 1. Generate all bits :math:`y_{ij}` for :math:`i<4`
-# uniformly at random. 2. Run the above circuit, controlling the Z gates on these bits. 3. Measure the
+#
+# Recipe for sampling from the deep circuit
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+# 1. Generate all bits :math:`y_{ij}` for :math:`i<4`
+# uniformly at random.
+# 2. Run the above circuit, controlling the Z gates on these bits. 3. Measure the
 # output of the circuit to obtain the final three bits :math:`y_{41}`, :math:`y_{42}`, :math:`y_{43}`
 # 
 # One can show that the distribution :math:`p(\boldsymbol{y})` obtained with the above recipe is
@@ -99,10 +102,9 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # a lot harder!) so we will stick to the 2D vs 1D example above; in the end, it will contain
 # everything we need to understand the result for higher dimensional lattices.
 # 
-
-######################################################################
+#
 # Proving hardness for sampling
-# =============================
+# -----------------------------
 # 
 # It turns out that—if we remove the classically controlled Z gates for now—the circuit structure of
 # the deep circuit above is universal. That is, any :math:`n` qubit circuit with two qubit gates can
@@ -117,10 +119,9 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # of the distribution. Moreover, since the distribution of the IDQNN is identical, it follows that the
 # corresponding IDQNN is also hard to sample from.
 # 
-
-######################################################################
+#
 # Adding inputs states
-# ====================
+# --------------------
 # 
 # At this point we have a shallow circuit called an IDQNN, a way to map it to a deep circuit
 # structure, and an argument that the distributions :math:`p(\boldsymbol{y})` resulting from these
@@ -166,8 +167,7 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # actually remove them all. For example, the input :math:`x=1` actually just corresponds to an
 # unentangled product state:
 # 
-
-######################################################################
+#
 # By performing mid-circuit measurements and resetting qubits, we can easily reproduce the statistics
 # for the inputs :math:`x=1,2`. For example, for :math:`x=1`, the circuit looks as follows (we have
 # removed the rotation gates for the qubits prepared in :math:`\ket{0}` since this results in a global
@@ -179,10 +179,9 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # distribution has an efficient classical simulation since it corresponds to measurements made on
 # unentangled single qubits.
 # 
-
-######################################################################
+#
 # The learning problem
-# ====================
+# --------------------
 # 
 # We now have a classically hard conditional distribution :math:`p(\boldsymbol{y}|x)`, where each
 # input :math:`x` corresponds to a IDQNN with inputs that we know how to simulate with a deeper
@@ -238,10 +237,9 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # sample data for the :math:`x=0` input and this is known to be classically hard, and in this sense we
 # have learned the distribution.
 # 
-
-######################################################################
+#
 # Does this bring us closer to useful quantum AI?
-# ===============================================
+# -----------------------------------------------
 # 
 # Now that the technicalities are out of the way, we can ask the really important question: does this
 # bring us closer to genuinely useful QML algorithms? This question is speculated on briefly in the
@@ -251,7 +249,7 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # significantly different to that of real-world generative machine learning problems.
 # 
 # The necessity of prior knowledge
-# --------------------------------
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # The first of these differences concerns the ‘prior knowledge’ that needs to be assumed in order to
 # prove the result. Notice that, if we were given the data :math:`{(x, \boldsymbol{y})}` but told
@@ -266,7 +264,7 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # related to quantum circuit tomography, where such knowledge is part of the problem description.
 # 
 # Learning from simple statistics
-# ===============================
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # The second difference concerns how the parameters were learned. The parameters of modern classical
 # generative models must be learned by an iterative process (often gradient descent) that extracts
@@ -298,7 +296,7 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # from the rest, and single qubit statistics reveals the desired value.
 # 
 # What can lead us to genuine usefulness?
-# ---------------------------------------
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # In order to uncover genunine usefulness in quantum we therefore need to move to scenarios that
 # mirror the assumptions of realistic learning problems. If the flipside of this is that proving
