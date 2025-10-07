@@ -520,6 +520,7 @@ plt.show()
 # :math:`g` than PQK‑E1.
 #
 # This highlights a key message from the paper:
+#
 # - The role of :math:`g` is *not* to predict which kernel will perform best on a given task, but
 #   rather to obtain a collection of kernels that have the *potential* to offer an advantage.
 #
@@ -555,7 +556,7 @@ plt.show()
 #   with a higher :math:`g`, obtained a lower accuracy on the original task. This confirms that
 #   :math:`g` measures *potential*, not realized performance.
 #
-# - :math:`g` **value is in ruling out unpromising kernels.**
+# - :math:`g`\ ’s **value is in ruling out unpromising kernels.**
 #   Kernels with very small :math:`g` are unlikely to offer any meaningful advantage over classical
 #   methods—meaning the quantum kernel introduces no genuinely new distinctions beyond what a
 #   classical RBF can produce. By contrast, a high :math:`g` only tells us that *some advantage may
