@@ -542,8 +542,6 @@ plt.show()
 # Huang et al. that quantifies how *differently* a quantum kernel organizes the data compared to a
 # classical kernel.
 #
-# --------------
-#
 # 🔑 Key takeaways:
 # ~~~~~~~~~~~~~~~~~
 #
