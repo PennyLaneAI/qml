@@ -125,10 +125,6 @@ plt.show()
 
 ######################################################################
 #
-# .. figure:: ../_static/demonstration_assets/Quantum_Kernel_Geometric_Difference_Post_Feedback/Quantum_Kernel_Geometric_Difference_Post_Feedback_c_1_1.png
-#    :align: center
-#    :width: 80%
-#
 # Quantum kernels: fidelity-based and projected variants
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
@@ -217,18 +213,6 @@ fig, ax = qml.draw_mpl(embedding_E2)(np.zeros(n_qubits))
 plt.show()
 
 ######################################################################
-#
-#    E1 Embedding Circuit:
-#
-# .. figure:: ../_static/demonstration_assets/Quantum_Kernel_Geometric_Difference_Post_Feedback/Quantum_Kernel_Geometric_Difference_Post_Feedback_c_3_1.png
-#    :align: center
-#    :width: 80%
-#
-#    E2 Embedding Circuit:
-#
-# .. figure:: ../_static/demonstration_assets/Quantum_Kernel_Geometric_Difference_Post_Feedback/Quantum_Kernel_Geometric_Difference_Post_Feedback_c_3_2.png
-#    :align: center
-#    :width: 80%
 #
 # Gram Matrix Computation
 # ~~~~~~~~~~~~~~~~~~~~~~~
@@ -387,12 +371,6 @@ print("- Brighter colors = higher similarity")
 print("- Different patterns indicate different geometries")
 
 ######################################################################
-#
-# .. figure:: ../_static/demonstration_assets/Quantum_Kernel_Geometric_Difference_Post_Feedback/Quantum_Kernel_Geometric_Difference_Post_Feedback_c_6_1.png
-#    :align: center
-#    :width: 80%
-
-######################################################################
 # 
 # We then compute the practitioner’s metric :math:`g` for each quantum kernel, according to the formula used in the paper by Huang et al.
 
@@ -535,10 +513,6 @@ plt.show()
 
 ######################################################################
 #
-# .. figure:: ../_static/demonstration_assets/Quantum_Kernel_Geometric_Difference_Post_Feedback/Quantum_Kernel_Geometric_Difference_Post_Feedback_c_10_1.png
-#    :align: center
-#    :width: 80%
-#
 # Our test results reveal an important subtlety:
 # **A higher geometric difference** :math:`g` **does not guarantee better classification accuracy.**
 #
@@ -667,17 +641,9 @@ y_train_eng = y_engineered[: len(y_train)]
 y_test_eng = y_engineered[len(y_train) :]
 
 ######################################################################
-# .. rst-class:: sphx-glr-script-out
 #
-# .. code-block:: none
-#
-#    Recomputing QK‑E1 and classical kernel on full dataset...
-#    Generating engineered labels to favor QK‑E1...
-#    ✅ Engineered labels generated successfully.
-#    Class 0: 150
-#    Class 1: 150
-
 # We plot the newly re-engineered dataset for PQK-E1
+#
 
 plt.figure(figsize=(4, 4))
 plt.scatter(
@@ -701,11 +667,9 @@ plt.show()
 
 ######################################################################
 #
-# .. figure:: ../_static/demonstration_assets/Quantum_Kernel_Geometric_Difference_Post_Feedback/Quantum_Kernel_Geometric_Difference_Post_Feedback_c_15_1.png
-#    :align: center
-#    :width: 80%
-
 # We train SVMs using each kernel and compare test accuracy on the new engineered labels.
+#
+
 from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score
 from sklearn.metrics.pairwise import rbf_kernel
@@ -756,29 +720,9 @@ for model, acc in results_engineered.items():
     print(f"{model:>15}: {acc:.4f}")
 
 ######################################################################
-# .. rst-class:: sphx-glr-script-out
 #
-# .. code-block:: none
-#
-#    Training SVM with Classical RBF kernel...
-#      Test accuracy: 0.6111
-#    Training SVM with Quantum E1 kernel...
-#      Test accuracy: 0.8667
-#    Training SVM with Quantum E2 kernel...
-#      Test accuracy: 0.6222
-#    Training SVM with PQK E1 kernel...
-#      Test accuracy: 0.8667
-#    Training SVM with PQK E2 kernel...
-#      Test accuracy: 0.7444
-#
-#    --- Accuracy Comparison (Engineered Labels) ---
-#      Classical RBF: 0.6111
-#              QK-E1: 0.8667
-#              QK-E2: 0.6222
-#             PQK-E1: 0.8667
-#             PQK-E2: 0.7444
-
 # Accuracy Comparison — Side-by-Side Bars (Original vs Engineered) for PQK-E1
+#
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -815,10 +759,3 @@ for bar in bars2:
 
 plt.tight_layout()
 plt.show()
-
-
-######################################################################
-#
-# .. figure:: ../_static/demonstration_assets/Quantum_Kernel_Geometric_Difference_Post_Feedback/Quantum_Kernel_Geometric_Difference_Post_Feedback_c_17_1.png
-#    :align: center
-#    :width: 80%
