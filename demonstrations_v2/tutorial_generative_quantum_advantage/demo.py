@@ -144,8 +144,9 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # our recipe for the IDQNN:
 # 
 # Recipe for sampling from an IDQNN with inputs
-# 
-# 1. Prepare each qubit in either the :math:`\vert + \rangle ` or :math:`\vert - \rangle` state, depending on
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+# 1. Prepare each qubit in either the :math:`\vert + \rangle` or :math:`\vert - \rangle` state, depending on
 #    :math:`x`.
 # 2. Perform steps 2-4 as before
 # 
@@ -314,7 +315,7 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # known beforehand rather than being learned from the data. In effect, we have set up the problem so
 # that inferring parameters is straightforward for some inputs, whilst sampling is hard for others,
 # and this process of learning is very different from the complex process that occurs in modern
-# neural networks. We note that the specific example in the paper is more involved that this, and uses
+# neural networks. We note that the specific example in the paper is more involved than this, and uses
 # a higher dimensional lattice and a different set of inputs, but the strategy is the same: for each
 # parameter, there is a reasonable fraction of the inputs that leaves the relevant qubit unentangled
 # from the rest, and single qubit statistics reveals the desired value.
@@ -322,9 +323,9 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # What can lead us to genuine usefulness?
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
-# In order to uncover genunine usefulness in quantum machine learning we therefore need to move to scenarios that
+# In order to uncover genuine usefulness in quantum machine learning we therefore need to move to scenarios that
 # mirror the assumptions of realistic learning problems. If the flipside of this is that proving
-# complexity theoreic separations becomes seemingly impossible, then perhaps they are not the right
+# complexity theoretic separations becomes seemingly impossible, then perhaps they are not the right
 # goals to be pursuing [#goal]_? At Xanadu, we are taking a different method of attack:
 # understand what properties of quantum theory can be potential game-changers for
 # machine learning [#qft]_, and use them to construct powerful and genuinely scalable algorithms that can be applied to real
