@@ -540,13 +540,13 @@ plt.show()
 #    :width: 80%
 #
 # Our test results reveal an important subtlety:
-# **A higher geometric difference :math:`g` does not guarantee better classification accuracy.**
+# **A higher geometric difference** :math:`g` **does not guarantee better classification accuracy.**
 #
-# For instance: - **PQK‑E2** achieved perfect test accuracy (:math:`100\%`), despite having a lower
+# For instance, **PQK‑E2** achieved perfect test accuracy (:math:`100\%`), despite having a lower
 # :math:`g` than PQK‑E1.
 #
 # This highlights a key message from the paper:
-# > The role of :math:`g` is *not* to predict which kernel will perform best on a given task, but
+# - The role of :math:`g` is *not* to predict which kernel will perform best on a given task, but
 #   rather to obtain a collection of kernels that have the *potential* to offer an advantage.
 #
 # Here, PQK-E1 and PQK-E2 both had the potential for an advantage over classical, but PQK-E2 is the
@@ -560,11 +560,11 @@ plt.show()
 #
 # In this notebook, we explored a fundamental question in quantum machine learning:
 #
-#    **Can we anticipate, before training, whether a quantum kernel might outperform a classical
-#    one?**
+# **Can we anticipate, before training, whether a quantum kernel might outperform a classical
+# one?**
 #
 # To address this, we used the **geometric difference :math:`g`**, a pre-training metric introduced by
-# Huang et al. that quantifies how *differently* a quantum kernel organizes the data compared to a
+# Huang et al. that quantifies how *differently* a quantum kernel organizes the data compared to a
 # classical kernel.
 #
 # --------------
@@ -581,7 +581,7 @@ plt.show()
 #   with a higher :math:`g`, obtained a lower accuracy on the original task. This confirms that
 #   :math:`g` measures *potential*, not realized performance.
 #
-# - :math:`g`**'s value is in ruling out unpromising kernels.**
+# - :math:`g` **value is in ruling out unpromising kernels.**
 #   Kernels with very small :math:`g` are unlikely to offer any meaningful advantage over classical
 #   methods—meaning the quantum kernel introduces no genuinely new distinctions beyond what a
 #   classical RBF can produce. By contrast, a high :math:`g` only tells us that *some advantage may
