@@ -1,17 +1,17 @@
 r"""Is a Quantum Kernel Worth Exploring? A ‘:math:`g`-first’ Reality Check
 ======================================================================
 
-Can we predict—*before* investing a ton of research hours- whether a quantum kernel has the
+Can we predict---*before* investing a ton of research hours---whether a quantum kernel has the
 potential to beat a classical one across all kernel methods?
 
 From a practitioner’s perspective, such a **pre-screening test** is invaluable: it lets us rule out
 quantum kernels that don’t offer any potential quantum advantage right from the start.
 
 Huang *et al.* (https://arxiv.org/abs/2011.01938) introduced exactly this test. Their proposed
-**geometric difference :math:`g`** metric is a single scalar that quantifies how differently the
+**geometric difference** :math:`g` metric is a single scalar that quantifies how differently the
 geometries defined by two kernels represent your data. The formula for :math:`g` is:
 
-:math:`g = \sqrt{\|\sqrt{K_q} K_c^{-1} \sqrt{K_q}\|_\infty}`
+.. math:: g = \sqrt{\|\sqrt{K_q} K_c^{-1} \sqrt{K_q}\|_\infty},
 
 where :math:`K_q` and :math:`K_c` are quantum and classical Gram matrices, respectively.
 
@@ -47,12 +47,12 @@ all pairwise similarities between data points.
 What :math:`g` tells us:
 ------------------------
 
-- **If :math:`g` ≈ 1**: The quantum kernel’s geometry is essentially the same as a good classical
+- **If** :math:`g \approx 1:` The quantum kernel’s geometry is essentially the same as a good classical
   kernel’s → the quantum kernel offers no geometric advantage, making it unlikely to outperform the
   classical kernel **in any kernel-based learning algorithm** (e.g., SVM, Gaussian Processes). Huang
-  et al. proved this concept in a rigorous mathematical way in their paper.
+  et al. proved this concept in a rigorous mathematical way in their paper.
 
-- **If :math:`g` ≫ 1**: The quantum geometry is genuinely different → **a kernel method using the
+- **If** :math:`g >> 1:` The quantum geometry is genuinely different → **a kernel method using the
   quantum kernel** *might* offer an advantage.
 
 Why this matters:
@@ -66,7 +66,7 @@ practical perspective, the real savings come from avoiding wasted researcher eff
 
 When a quantum kernel performs poorly, researchers often spend days exploring different algorithm
 hyperparameters, cross-validation strategies, and implementation debugging. If :math:`g \approx 1`,
-you immediately know the quantum kernel’s geometry offers no advantage—it’s not your implementation,
+you immediately know the quantum kernel’s geometry offers no advantage---it’s not your implementation,
 not your algorithm choice, and not a hyperparameter issue. The kernel is fundamentally limited
 compared to classical kernels on this specific dataset.
 
@@ -133,26 +133,22 @@ plt.show()
 # .. figure:: ../_static/demonstration_assets/Quantum_Kernel_Geometric_Difference_Post_Feedback/Quantum_Kernel_Geometric_Difference_Post_Feedback_c_1_1.png
 #    :align: center
 #    :width: 80%
-
-######################################################################
+#
 # Quantum kernels: fidelity-based and projected variants
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# | We consider **five different kernels**, derived from three sources: a classical RBF kernel and two
-#   quantum embedding circuits — **E1** and **E2**.
-# | Each kernel defines a different geometry for measuring similarity between data points.
+# We consider **five different kernels**, derived from three sources: a classical RBF kernel and two
+# quantum embedding circuits — **E1** and **E2**.
+# Each kernel defines a different geometry for measuring similarity between data points.
 #
 # - | **RBF – Classical radial basis function kernel**
 #   | A classical baseline defined as:
 #   |
 #
-#     .. math::
+#     .. math:: k_{\text{RBF}}(x, x') = \exp(-\gamma \|x - x'\|^2)
 #
-#
-#        k_{\text{RBF}}(x, x') = \exp(-\gamma \|x - x'\|^2)
-#
-#     This maps data into an infinite-dimensional space where closer inputs remain close, and distant
-#     ones become nearly orthogonal.
+#   | This maps data into an infinite-dimensional space where closer inputs remain close, and distant
+#   | ones become nearly orthogonal.
 #   | It captures a **geometric**, distance-based notion of similarity in input space.
 #
 # - | **E1 – Separable RX rotations**
