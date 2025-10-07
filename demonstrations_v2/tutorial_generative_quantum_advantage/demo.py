@@ -4,8 +4,8 @@ r"""Demo: generative quantum advantage for classical and quantum problems
 Generative machine learning is all about inferring and sampling from probability distributions, and
 sampling output distributions of quantum computers is known to be classically hard. So proving
 quantum advantages for generative quantum machine learning is easy, right? Unfortunately, things are
-not so simple. As H. Huang and colleagues point out in their recent preprint “Generative quantum
-advantage for classical and quantum problems” [#genquantumadv]_, claiming an advantage for
+not so simple. As H. Huang and colleagues point out in their recent preprint *“Generative quantum
+advantage for classical and quantum problems”* [#genquantumadv]_, claiming an advantage for
 generative machine learning should not only require the ability to sample from a hard distribution,
 but also to be able to learn it efficiently from data, and they investigate a specific scenario in
 which this is possible.
@@ -119,7 +119,7 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # be efficiently approximated by sequential layers of Hadamards, Z rotations and controlled Z gates on
 # an :math:`n` qubit computational basis input. We can therefore use this fact to define a circuit
 # that is hard to sample from classically; simply take your favourite pre-existing hardness results
-# for sampling [add refs] and compile the circuit to the H, RZ, CZ gateset. We can then embed this
+# for sampling (for example, [#sample]_) and compile the circuit to the H, RZ, CZ gateset. We can then embed this
 # into the precise structure we had above by inserting the classically controlled Z gates at every
 # layer. If we happen to sample the all zero bitstring for :math:`y_{ij}` values that control these
 # gates, then we will sample from this hard distribution. In this sense the distribution
@@ -139,8 +139,8 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # work with a conditional probability distribution :math:`p(\boldsymbol{y}|x)`.
 # 
 # For each :math:`x`, the probability distribution :math:`p(\boldsymbol{y}|x)` corresponds to a IDQNN
-# where—rather than all qubits being in the \|+> state—each input qubit can be prepared in either the
-# \|0> or \|+> state, which is determined by the input :math:`x`. We therefore adapt the first step of
+# where—rather than all qubits being in the :math:`\vert + \rangle` state—each input qubit can be prepared in either the
+# :math:`\vert 0 \rangle` or :math:`\vert + \rangle` state, which is determined by the input :math:`x`. We therefore adapt the first step of
 # our recipe for the IDQNN:
 # 
 # Recipe for sampling from an IDQNN with inputs
@@ -215,11 +215,11 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # The precise definition of learning is given by definition 13 in the Appendix:
 # 
 #   *Definition 13 (The task of learning to generate classical bitstrings). We are given a dataset of
-#   input-output bitstring pairs :math:`(x,\boldsymbol{y})`. Each output bitstring
-#   :math:`\boldsymbol{y}` is sampled according to an unknown conditional distribution
-#   :math:`p(\boldsymbol{y}|x)`. The goal is to learn a model from the dataset that can generate new
-#   output bitstrings :math:`\boldsymbol{y}` according to the unknown distribution
-#   :math:`p(\boldsymbol{y}|x)` for any given new input bitstring :math:`x`.*
+#   input-output bitstring pairs (x,y). Each output bitstring
+#   y is sampled according to an unknown conditional distribution
+#   p(\boldsymbol{y}|x). The goal is to learn a model from the dataset that can generate new
+#   output bitstrings y according to the unknown distribution
+#   p(\boldsymbol{y}|x) for any given new input bitstring x.*
 # 
 # Although the above suggests the conditional distribution is unknown, we actually know a lot about
 # it. In particular, we need to work under the assumption that we know the exact structure of the
@@ -267,8 +267,8 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # 
 # Now that the technicalities are out of the way, we can ask the really important question: does this
 # bring us closer to genuinely useful QML algorithms? This question is speculated on briefly in the
-# conclusion of the paper where it is admitted that \`the precise remaining steps towards useful
-# generative quantum advantage remain an open question’. But why is usefulness so enigmatic? As we
+# conclusion of the paper where it is admitted that *\`the precise remaining steps towards useful
+# generative quantum advantage remain an open question’*. But why is usefulness so enigmatic? As we
 # explain below, a large part of the reason is due to the fact that the setup we considered is
 # significantly different to that of real-world generative machine learning problems.
 # 
@@ -277,10 +277,10 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # 
 # The first of these differences concerns the ‘prior knowledge’ that needs to be assumed in order to
 # prove the result. Notice that, if we were given the data :math:`{(x, \boldsymbol{y})}` but told
-# nothing about the underlying circuit that produced it, we would not have known how to infer the
-# parameters, nor how to produce new samples once these parameters were known (since these both
-# required knowledge of the circuit). That is, precise knowledge of the circuit structures that
-# produced the data was necessary in order to learn. In reality, such a precise parametric form of the
+# nothing else, we would not have known how to infer the
+# parameters, nor how to produce new samples once these parameters were known, since these both
+# required knowledge of the circuit. That is, precise knowledge of the circuit structures that
+# produced the data was necessary in order to learn. In reality, such a precise form of the
 # ground truth distribution is not known and models have to be learnt with vastly less prior
 # knowledge. To evoke the eternal cat picture analogy, it is like we are provided with a model that
 # generates near perfect pictures of cats, and all we need to do is find the right parameters for the
@@ -313,7 +313,7 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # method to read off the parameters from the statistics (single qubit tomography), and this method is
 # known beforehand rather than being learned from the data. In effect, we have set up the problem so
 # that inferring parameters is straightforward for some inputs, whilst sampling is hard for others,
-# and process of learning is therefore very different from the complex process that occurs in modern
+# and this process of learning is very different from the complex process that occurs in modern
 # neural networks. We note that the specific example in the paper is more involved that this, and uses
 # a higher dimensional lattice and a different set of inputs, but the strategy is the same: for each
 # parameter, there is a reasonable fraction of the inputs that leaves the relevant qubit unentangled
@@ -322,14 +322,15 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # What can lead us to genuine usefulness?
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
-# In order to uncover genunine usefulness in quantum we therefore need to move to scenarios that
+# In order to uncover genunine usefulness in quantum machine learning we therefore need to move to scenarios that
 # mirror the assumptions of realistic learning problems. If the flipside of this is that proving
-# complexity theoreic separations becomes seemingly impossible, then perhaps this is not the right
-# goal to be persuing? At Xanadu, we are taking a realted but different method of attack: first
-# understand what *qualitative* properties of quantum theory can be potential game-changers for
-# machine learning [qft], and construct genuniely scalable algorithms that can be applied to real
-# world learning problems [iqp]. Although we might have to wave goodbye to the possibility of proving
-# formal complexity theoretic separations,
+# complexity theoreic separations becomes seemingly impossible, then perhaps they are not the right
+# goals to be pursuing [#goal]_? At Xanadu, we are taking a different method of attack:
+# understand what properties of quantum theory can be potential game-changers for
+# machine learning [#qft]_, and use them to construct powerful and genuinely scalable algorithms that can be applied to real
+# world learning problems [#iqp]_. Although we might have to wave goodbye to the possibility of proving
+# formal complexity theoretic separations, this freedom might just lead us to useful quantum machine learning
+# algorithms.
 #
 #
 # References
@@ -340,3 +341,30 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 #     H. Huang, M. Broughton, N. Eassa, H. Neven, R. Babbush, J. R. McClean
 #     "Generative quantum advantage for classical and quantum problems."
 #     `arXiv:2509.09033 <https://arxiv.org/abs/2509.09033>`__, 2025.
+#
+# .. [#sample]
+#
+#     T. Bergamaschi; C. Chen; Y. Liu
+#     "Quantum Computational Advantage with Constant-Temperature Gibbs Sampling."
+#     `2024 IEEE 65th Annual Symposium on Foundations of Computer Science (FOCS) <https://ieeexplore.ieee.org/document/10756075>`__, 2024.
+#
+# .. [#goal]
+#
+#     M. Schuld, N. Killoran
+#     "Is Quantum Advantage the Right Goal for Quantum Machine Learning?."
+#     `PRX Quantum 3, 030101 <https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.3.030101>`__, 2022.
+#
+# .. [#qft]
+#
+#     D. Wakeham, M Schuld
+#     "Inference, interference and invariance: How the Quantum Fourier Transform can help to learn from data."
+#     `arXiv:2409.00172 <https://arxiv.org/abs/2409.00172>`__, 2024.
+#
+# .. [#iqp]
+#
+#     E. Recio-Armengol, S. Ahmed, J. Bowles
+#     "Train on classical, deploy on quantum: scaling generative quantum machine learning to a thousand qubits."
+#     `arXiv:2503.02934 <https://arxiv.org/abs/2503.02934>`__, 2025.
+#
+
+

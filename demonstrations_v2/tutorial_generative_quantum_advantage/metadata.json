@@ -34,6 +34,42 @@
             "year": "2025",
             "journal": "",
             "url": "https://arxiv.org/abs/2509.09033"
+        },
+        {
+            "id": "paper",
+            "type": "article",
+            "title": "Quantum Computational Advantage with Constant-Temperature Gibbs Sampling.",
+            "authors": "T. Bergamaschi; C. Chen; Y. Liu",
+            "year": "2024",
+            "journal": "",
+            "url": "https://ieeexplore.ieee.org/document/10756075"
+        },
+        {
+            "id": "paper",
+            "type": "article",
+            "title": "Is Quantum Advantage the Right Goal for Quantum Machine Learning?",
+            "authors": "M. Schuld, N. Killoran",
+            "year": "2022",
+            "journal": "",
+            "url": "https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.3.030101"
+        },
+        {
+            "id": "paper",
+            "type": "article",
+            "title": "Inference, interference and invariance: How the Quantum Fourier Transform can help to learn from data.",
+            "authors": "D. Wakeham, M Schuld",
+            "year": "2024",
+            "journal": "",
+            "url": "https://arxiv.org/abs/2409.00172"
+        },
+        {
+            "id": "paper",
+            "type": "article",
+            "title": "Train on classical, deploy on quantum: scaling generative quantum machine learning to a thousand qubits.",
+            "authors": "E. Recio-Armengol, S. Ahmed, J. Bowles",
+            "year": "2025",
+            "journal": "",
+            "url": "https://arxiv.org/abs/2503.0293"
         }
     ],
     "basedOnPapers": [],
