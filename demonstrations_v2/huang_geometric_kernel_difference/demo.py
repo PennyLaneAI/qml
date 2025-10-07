@@ -139,7 +139,7 @@ plt.show()
 # - **RBF – Classical radial basis function kernel**
 #   A classical baseline defined as:
 #
-#     .. math:: k_{\text{RBF}}(x, x') = \exp(-\gamma \|x - x'\|^2)
+#   .. math:: k_{\text{RBF}}(x, x') = \exp(-\gamma \|x - x'\|^2)
 #
 #   This maps data into an infinite-dimensional space where closer inputs remain close, and distant
 #   ones become nearly orthogonal.
@@ -172,7 +172,7 @@ plt.show()
 #   :math:`|\psi(x)\rangle`
 #   is **measured** to extract the expectation values of Pauli operators:
 #
-#     .. math:: v(x) = \left[ \langle X_0 \rangle, \langle Y_0 \rangle, \langle Z_0 \rangle, \dots, \langle Z_{n-1} \rangle \right]
+#   .. math:: v(x) = \left[ \langle X_0 \rangle, \langle Y_0 \rangle, \langle Z_0 \rangle, \dots, \langle Z_{n-1} \rangle \right]
 #
 #   A classical **RBF kernel** is then applied to these real-valued vectors:
 #
@@ -252,31 +252,19 @@ plt.show()
 #
 # :math:`K_{\text{QK-E1}}` obtained from:
 #
-# .. math::
-#
-#
-#    k_{\text{QK-E1}}(x, x') = |\langle \psi_{\text{E1}}(x) \mid \psi_{\text{E1}}(x') \rangle|^2
+# .. math:: k_{\text{QK-E1}}(x, x') = |\langle \psi_{\text{E1}}(x) \mid \psi_{\text{E1}}(x') \rangle|^2
 #
 # :math:`K_{\text{QK-E2}}` obtained from:
 #
-# .. math::
-#
-#
-#    k_{\text{QK-E2}}(x, x') = |\langle \psi_{\text{E2}}(x) \mid \psi_{\text{E2}}(x') \rangle|^2
+# .. math:: k_{\text{QK-E2}}(x, x') = |\langle \psi_{\text{E2}}(x) \mid \psi_{\text{E2}}(x') \rangle|^2
 #
 # :math:`K_{\text{PQK-E1}}` obtained from:
 #
-# .. math::
-#
-#
-#    k_{\text{PQK-E1}}(x, x') = \exp\left( -\gamma \|v_{\text{E1}}(x) - v_{\text{E1}}(x')\|^2 \right)
+# .. math:: k_{\text{PQK-E1}}(x, x') = \exp\left( -\gamma \|v_{\text{E1}}(x) - v_{\text{E1}}(x')\|^2 \right)
 #
 # :math:`K_{\text{PQK-E2}}` obtained from:
 #
-# .. math::
-#
-#
-#    k_{\text{PQK-E2}}(x, x') = \exp\left( -\gamma \|v_{\text{E2}}(x) - v_{\text{E2}}(x')\|^2 \right)
+# .. math:: k_{\text{PQK-E2}}(x, x') = \exp\left( -\gamma \|v_{\text{E2}}(x) - v_{\text{E2}}(x')\|^2 \right)
 #
 # The gram matrices will be used in downstream evaluations to compare kernel geometries and analyze
 # expressivity and generalization metrics like :math:`g`.
@@ -370,19 +358,7 @@ print(f"K_PQK_E1 shape: {K_pqk_E1.shape}")
 print(f"K_PQK_E2 shape: {K_pqk_E2.shape}")
 
 ######################################################################
-# .. rst-class:: sphx-glr-script-out
 #
-# .. code-block:: none
-#
-#    K_RBF shape: (210, 210)
-#    Computing QK-E1 (fidelity)...
-#    Computing QK-E2 (fidelity)...
-#    K_QK_E1 shape: (210, 210)
-#    K_QK_E2 shape: (210, 210)
-#    Computing PQK-E1 (Pauli + RBF)...
-#    Computing PQK-E2 (Pauli + RBF)...
-#    K_PQK_E1 shape: (210, 210)
-#    K_PQK_E2 shape: (210, 210)
 
 # Visualizing the Gram Matrices
 import matplotlib.pyplot as plt
@@ -417,15 +393,9 @@ print("- Different patterns indicate different geometries")
 #    :width: 80%
 
 ######################################################################
-# .. rst-class:: sphx-glr-script-out
-#
-# .. code-block:: none
-#
-#    Each matrix shows how similar data points are to each other:
-#    - Brighter colors = higher similarity
-#    - Different patterns indicate different geometries
+# 
+# We then compute the practitioner’s metric :math:`g` for each quantum kernel, according to the formula used in the paper by Huang et al.
 
-# We then compute the practitioner’s metric g for each quantum kernel, according to the formula used in the paper by Huang et al.
 from scipy.linalg import sqrtm
 
 
@@ -464,19 +434,7 @@ print(f"g (RBF vs PQK‑E1):   {g_PQK_E1:.4f}")
 print(f"g (RBF vs PQK‑E2):   {g_PQK_E2:.4f}")
 
 ######################################################################
-# .. rst-class:: sphx-glr-script-out
-#
-# .. code-block:: none
-#
-#
-#    --- Geometric Difference (g) ---
-#    g (RBF vs QK‑E1):    8.3359
-#    g (RBF vs QK‑E2):    2.1493
-#    g (RBF vs PQK‑E1):   894.0699
-#    g (RBF vs PQK‑E2):   194.6228
-
-######################################################################
-# What does a high :math:`g` really tell us?
+# What does a high g really tell us?
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # We can see that in terms of :math:`g`:
@@ -487,10 +445,10 @@ print(f"g (RBF vs PQK‑E2):   {g_PQK_E2:.4f}")
 # classification performance, which might lead us to believe, for example, that in terms of final
 # accuracy, the ranking will also be PQK-E1 > PQK-E2 > QK-E1 > QK-E2.
 #
-# | This intuition is understandable — after all, a larger :math:`g` suggests that the quantum kernel
-#   perceives the data very differently from a classical one.
-# | But as we’ll see, **a higher :math:`g` doesn’t always translate into better accuracy, it just
-#   means there’s higher potential for an improvement over the classical model**.
+# This intuition is understandable — after all, a larger :math:`g` suggests that the quantum kernel
+# perceives the data very differently from a classical one.
+# But as we’ll see, **a higher :math:`g` doesn’t always translate into better accuracy, it just
+# means there’s higher potential for an improvement over the classical model**.
 #
 # In fact, a higher :math:`g` can sometimes correspond to worse performance on the original task.
 #
@@ -549,29 +507,6 @@ print("\n--- Accuracy Comparison ---")
 for model, acc in results.items():
     print(f"{model:>15}: {acc:.4f}")
 
-######################################################################
-# .. rst-class:: sphx-glr-script-out
-#
-# .. code-block:: none
-#
-#    Training SVM with Classical RBF kernel...
-#      Test accuracy: 0.9111
-#    Training SVM with Quantum E1 kernel...
-#      Test accuracy: 0.8333
-#    Training SVM with Quantum E2 kernel...
-#      Test accuracy: 0.8444
-#    Training SVM with PQK E1 kernel...
-#      Test accuracy: 0.8333
-#    Training SVM with PQK E2 kernel...
-#      Test accuracy: 1.0000
-#
-#    --- Accuracy Comparison ---
-#      Classical RBF: 0.9111
-#              QK-E1: 0.8333
-#              QK-E2: 0.8444
-#             PQK-E1: 0.8333
-#             PQK-E2: 1.0000
-
 # Accuracy Comparison
 
 import matplotlib.pyplot as plt
@@ -605,13 +540,13 @@ plt.show()
 #    :width: 80%
 
 ######################################################################
-# | Our test results reveal an important subtlety:
-# | **A higher geometric difference :math:`g` does not guarantee better classification accuracy.**
+# Our test results reveal an important subtlety:
+# **A higher geometric difference :math:`g` does not guarantee better classification accuracy.**
 #
 # For instance: - **PQK‑E2** achieved perfect test accuracy (:math:`100\%`), despite having a lower
 # :math:`g` than PQK‑E1.
 #
-# | This highlights a key message from the paper:
+# This highlights a key message from the paper:
 # | > The role of :math:`g` is *not* to predict which kernel will perform best on a given task — but
 #   rather to obtain a collection of kernels that have the *potential* to offer an advantage.
 #
@@ -621,8 +556,6 @@ plt.show()
 # potential solution because it offers a potential for an improvement on our classification problem.
 # This way, we have an important diagnostic tool to filter out bad quantum kernels for our data.
 #
-
-######################################################################
 # 🧠 Conclusion: A Practical Perspective on the Geometric Difference :math:`g`
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
@@ -640,23 +573,21 @@ plt.show()
 # 🔑 Key takeaways:
 # ~~~~~~~~~~~~~~~~~
 #
-# - | **:math:`g` is a diagnostic, not a performance predictor.**
-#   | A large :math:`g` indicates that the quantum kernel induces a very different geometry from the
-#     classical one — a *necessary*, but not *sufficient*, condition for quantum advantage.
+# - :math:`g` **is a diagnostic, not a performance predictor.**
+#   A large :math:`g` indicates that the quantum kernel induces a very different geometry from the
+#   classical one — a *necessary*, but not *sufficient*, condition for quantum advantage.
 #
-# - | **Higher :math:`g` does not imply higher accuracy.**
-#   | In our results, **PQK‑E2** had a high :math:`g` and achieved perfect accuracy — but **PQK‑E1**,
-#     with a higher :math:`g`, obtained a lower accuracy on the original task. This confirms that
-#     :math:`g` measures *potential*, not realized performance.
+# - **Higher** :math:`g` **does not imply higher accuracy.**
+#   In our results, **PQK‑E2** had a high :math:`g` and achieved perfect accuracy — but **PQK‑E1**,
+#   with a higher :math:`g`, obtained a lower accuracy on the original task. This confirms that
+#   :math:`g` measures *potential*, not realized performance.
 #
-# - | **:math:`g`\ ’s value is in ruling out unpromising kernels.**
-#   | Kernels with very small :math:`g` are unlikely to offer any meaningful advantage over classical
-#     methods—meaning the quantum kernel introduces no genuinely new distinctions beyond what a
-#     classical RBF can produce. By contrast, a high :math:`g` only tells us that *some advantage may
-#     be possible* — not that it will be realized.
+# - :math:`g`**’s value is in ruling out unpromising kernels.**
+#   Kernels with very small :math:`g` are unlikely to offer any meaningful advantage over classical
+#   methods—meaning the quantum kernel introduces no genuinely new distinctions beyond what a
+#   classical RBF can produce. By contrast, a high :math:`g` only tells us that *some advantage may
+#   be possible* — not that it will be realized.
 #
-
-######################################################################
 # Appendix: What if We Take the Labels Into Account?
 # --------------------------------------------------
 #
