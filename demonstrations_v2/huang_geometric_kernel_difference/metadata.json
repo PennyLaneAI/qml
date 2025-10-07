@@ -5,8 +5,8 @@
       "username": "andynader"
     }
   ],
-  "executable_stable": true,
-  "executable_latest": true,
+  "executable_stable": false,
+  "executable_latest": false,
   "dateOfPublication": "2025-10-06T10:00:00+00:00",
   "dateOfLastModification": "2025-10-06T10:00:00+00:01",
   "categories": [

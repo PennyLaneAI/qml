@@ -44,7 +44,7 @@ Key Concepts
 The **kernel matrix** (Gram matrix) :math:`K` has entries :math:`K_{ij} = k(x_i, x_j)` that store
 all pairwise similarities between data points.
 
-What :math:`g` tells us:
+What g tells us:
 ------------------------
 
 - **If** :math:`g \approx 1:` The quantum kernel’s geometry is essentially the same as a good classical
@@ -119,16 +119,11 @@ plt.figure(figsize=(4, 4))
 plt.scatter(X_train[y_train == 0, 0], X_train[y_train == 0, 1], s=15, alpha=0.8, label="class 0")
 plt.scatter(X_train[y_train == 1, 0], X_train[y_train == 1, 1], s=15, alpha=0.8, label="class 1")
 plt.axis("equal")
-plt.title("Two‑moons — training split (standardised)")
+plt.title("Two‑moons— training split (standardised)")
 plt.legend(frameon=False)
 plt.show()
 
 ######################################################################
-# .. rst-class:: sphx-glr-script-out
-#
-# .. code-block:: none
-#
-#    Train size: 210    Test size: 90
 #
 # .. figure:: ../_static/demonstration_assets/Quantum_Kernel_Geometric_Difference_Post_Feedback/Quantum_Kernel_Geometric_Difference_Post_Feedback_c_1_1.png
 #    :align: center
@@ -141,74 +136,53 @@ plt.show()
 # quantum embedding circuits — **E1** and **E2**.
 # Each kernel defines a different geometry for measuring similarity between data points.
 #
-# - | **RBF – Classical radial basis function kernel**
-#   | A classical baseline defined as:
-#   |
+# - **RBF – Classical radial basis function kernel**
+#   A classical baseline defined as:
 #
 #     .. math:: k_{\text{RBF}}(x, x') = \exp(-\gamma \|x - x'\|^2)
 #
-#   | This maps data into an infinite-dimensional space where closer inputs remain close, and distant
-#   | ones become nearly orthogonal.
-#   | It captures a **geometric**, distance-based notion of similarity in input space.
+#   This maps data into an infinite-dimensional space where closer inputs remain close, and distant
+#   ones become nearly orthogonal.
+#   It captures a **geometric**, distance-based notion of similarity in input space.
 #
-# - | **E1 – Separable RX rotations**
-#   | Each input feature :math:`x_j` is encoded into a single qubit using an :math:`RX(x_j)` gate.
-#   | The circuit is fully separable (no entanglement), producing the quantum state
-#     :math:`\lvert \psi_{\text{E1}}(x) \rangle`.
+# - **E1 – Separable RX rotations**
+#   Each input feature :math:`x_j` is encoded into a single qubit using an :math:`RX(x_j)` gate.
+#   The circuit is fully separable (no entanglement), producing the quantum state
+#   :math:`\lvert \psi_{\text{E1}}(x) \rangle`.
 #
-# - | **E2 – IQP embedding**
-#   | PennyLane’s ``qml.IQPEmbedding`` applies Hadamards, parameterized :math:`RZ(x_j)` rotations, and
-#     entangling ZZ gates.
-#   | This creates an entangled quantum state :math:`\lvert \psi_{\text{E2}}(x) \rangle`, inspired by
-#     Instantaneous Quantum Polynomial (IQP) circuits.
+# - **E2 – IQP embedding**
+#   PennyLane’s ``qml.IQPEmbedding`` applies Hadamards, parameterized :math:`RZ(x_j)` rotations, and
+#   entangling ZZ gates.
+#   This creates an entangled quantum state :math:`\lvert \psi_{\text{E2}}(x) \rangle`, inspired by
+#   Instantaneous Quantum Polynomial (IQP) circuits.
 #
-# - | **QK – Standard quantum kernels**
-#   | For both E1 and E2, the kernel is defined by the **fidelity** between quantum states:
+# - **QK – Standard quantum kernels**
+#   For both E1 and E2, the kernel is defined by the **fidelity** between quantum states:
 #
-#     .. math::
+#   .. math:: k_{\text{QK-E1}}(x, x') = |\langle \psi_{\text{E1}}(x) \mid \psi_{\text{E1}}(x') \rangle|^2
 #
-#
-#        k_{\text{QK-E1}}(x, x') = |\langle \psi_{\text{E1}}(x) \mid \psi_{\text{E1}}(x') \rangle|^2
-#
-#     .. math::
-#
-#
-#        k_{\text{QK-E2}}(x, x') = |\langle \psi_{\text{E2}}(x) \mid \psi_{\text{E2}}(x') \rangle|^2
+#   .. math:: k_{\text{QK-E2}}(x, x') = |\langle \psi_{\text{E2}}(x) \mid \psi_{\text{E2}}(x') \rangle|^2
 #
 #   where :math:`\psi_{\text{E1}}(x)` and :math:`\psi_{\text{E2}}(x)` are the quantum states generated
 #   by E1 and E2 respectively. These kernels reflect how aligned two quantum feature states are in
 #   Hilbert space.
 #
-# - | **PQK – Projected quantum kernels (PQK-E1 / PQK-E2)**
-#   | For a projected quantum kernel, instead of computing fidelity, the output quantum state
-#     :math:`|\psi(x)\rangle`
-#   | is **measured** to extract the expectation values of Pauli operators:
-#   |
+# - **PQK – Projected quantum kernels (PQK-E1 / PQK-E2)**
+#   For a projected quantum kernel, instead of computing fidelity, the output quantum state
+#   :math:`|\psi(x)\rangle`
+#   is **measured** to extract the expectation values of Pauli operators:
 #
-#     .. math::
+#     .. math:: v(x) = \left[ \langle X_0 \rangle, \langle Y_0 \rangle, \langle Z_0 \rangle, \dots, \langle Z_{n-1} \rangle \right]
 #
+#   A classical **RBF kernel** is then applied to these real-valued vectors:
 #
-#        v(x) = \left[ \langle X_0 \rangle, \langle Y_0 \rangle, \langle Z_0 \rangle, \dots, \langle Z_{n-1} \rangle \right]
+#   .. math:: k_{\text{PQK}}(x, x') = \exp\left( -\gamma \| v(x) - v(x') \|^2 \right)
 #
-#     A classical **RBF kernel** is then applied to these real-valued vectors:
-#   |
+#   We obtain two different projected quantum kernels from E1 and E1:
 #
-#     .. math::
+#   .. math:: k_{\text{PQK-E1}}(x, x') = \exp\left( -\gamma \|v_{\text{E1}}(x) - v_{\text{E1}}(x')\|^2 \right)
 #
-#
-#        k_{\text{PQK}}(x, x') = \exp\left( -\gamma \| v(x) - v(x') \|^2 \right)
-#
-#     We obtain two different projected quantum kernels from E1 and E1:
-#
-#   .. math::
-#
-#
-#      k_{\text{PQK-E1}}(x, x') = \exp\left( -\gamma \|v_{\text{E1}}(x) - v_{\text{E1}}(x')\|^2 \right)
-#
-#   .. math::
-#
-#
-#      k_{\text{PQK-E2}}(x, x') = \exp\left( -\gamma \|v_{\text{E2}}(x) - v_{\text{E2}}(x')\|^2 \right)
+#   .. math:: k_{\text{PQK-E2}}(x, x') = \exp\left( -\gamma \|v_{\text{E2}}(x) - v_{\text{E2}}(x')\|^2 \right)
 #
 #   where :math:`v_{\text{E1 }}(x)` and :math:`v_{\text{E2}}(x)` are the Pauli expectation vector from
 #   E1 and E2 respectively.
@@ -243,29 +217,19 @@ fig, ax = qml.draw_mpl(embedding_E2)(np.zeros(n_qubits))
 plt.show()
 
 ######################################################################
-# .. rst-class:: sphx-glr-script-out
-#
-# .. code-block:: none
 #
 #    E1 Embedding Circuit:
 #
 # .. figure:: ../_static/demonstration_assets/Quantum_Kernel_Geometric_Difference_Post_Feedback/Quantum_Kernel_Geometric_Difference_Post_Feedback_c_3_1.png
 #    :align: center
 #    :width: 80%
-
-######################################################################
-# .. rst-class:: sphx-glr-script-out
-#
-# .. code-block:: none
-#
 #
 #    E2 Embedding Circuit:
 #
 # .. figure:: ../_static/demonstration_assets/Quantum_Kernel_Geometric_Difference_Post_Feedback/Quantum_Kernel_Geometric_Difference_Post_Feedback_c_3_2.png
 #    :align: center
 #    :width: 80%
-
-######################################################################
+#
 # Gram Matrix Computation
 # ~~~~~~~~~~~~~~~~~~~~~~~
 #
@@ -275,10 +239,7 @@ plt.show()
 # For a dataset of :math:`N` samples and a kernel function :math:`k(\cdot, \cdot)`, the Gram matrix
 # :math:`K \in \mathbb{R}^{N \times N}` is defined entrywise as:
 #
-# .. math::
-#
-#
-#    K_{ij} = k(x_i, x_j)
+# .. math:: K_{ij} = k(x_i, x_j)
 #
 # Each entry :math:`K_{ij}` measures how similar two data points are, and the full matrix :math:`K`
 # provides a **global view** of the data in the kernel’s feature space.
@@ -287,10 +248,7 @@ plt.show()
 #
 # :math:`K_{\text{RBF}}` obtained from:
 #
-# .. math::
-#
-#
-#    k_{\text{RBF}}(x, x') = \exp(-\gamma \|x - x'\|^2)
+# .. math:: k_{\text{RBF}}(x, x') = \exp(-\gamma \|x - x'\|^2)
 #
 # :math:`K_{\text{QK-E1}}` obtained from:
 #
