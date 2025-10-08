@@ -296,7 +296,7 @@ def _build_demo(
                 "--upgrade",
                 "--extra-index-url",
                 "https://test.pypi.org/simple/",
-                "PennyLane-Catalyst",
+                "pennylane-catalyst<=0.13.0",
                 use_uv=False,
                 quiet=False,
                 pre=True,
@@ -307,19 +307,29 @@ def _build_demo(
                 "--upgrade",
                 "--extra-index-url",
                 "https://test.pypi.org/simple/",
-                "PennyLane-Lightning",
+                "pennylane-lightning<=0.43.0",
                 use_uv=False,
                 quiet=False,
                 pre=True,
             )
     if dev:
         # Need dev version of PennyLane to build, whether or not we're executing
+        # cmds.pip_install(
+        #     build_venv.python,
+        #     "--upgrade",
+        #     "git+https://github.com/PennyLaneAI/pennylane.git@v0.43.0-rc0##egg=pennylane",
+        #     use_uv=False,
+        #     quiet=False,
+        # )
         cmds.pip_install(
             build_venv.python,
             "--upgrade",
-            "git+https://github.com/PennyLaneAI/pennylane.git@v0.43.0-rc0##egg=pennylane",
+            "--extra-index-url",
+            "https://test.pypi.org/simple/",
+            "pennylane<=0.43.0",
             use_uv=False,
             quiet=False,
+            pre=True,
         )
 
     stage_dir = ctx.build_dir / "demonstrations"
