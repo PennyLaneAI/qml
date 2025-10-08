@@ -263,7 +263,7 @@ import torch
 # Seed Torch for reproducibility and set default tensor type
 GLOBAL_SEED = 1989
 torch.manual_seed(GLOBAL_SEED)
-torch.set_default_tensor_type(torch.DoubleTensor)
+torch.set_default_dtype(torch.float64)
 
 
 @ct.electron

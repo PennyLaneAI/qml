@@ -304,7 +304,10 @@ def update_step(params, opt_state):
     (loss_val, qcbm_probs), grads = jax.value_and_grad(qcbm.mmd_loss, has_aux=True)(params)
     updates, opt_state = opt.update(grads, opt_state)
     params = optax.apply_updates(params, updates)
-    kl_div = -jnp.sum(qcbm.py * jnp.nan_to_num(jnp.log(qcbm_probs / qcbm.py)))
+
+    log_ratio = jnp.where(qcbm.py == 0, 0, jnp.log(qcbm_probs / qcbm.py))
+
+    kl_div = -jnp.sum(qcbm.py *  log_ratio)
     return params, opt_state, loss_val, kl_div
 
 
