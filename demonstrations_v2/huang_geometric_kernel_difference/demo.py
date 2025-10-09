@@ -204,13 +204,17 @@ def embedding_E2(features):
     qml.IQPEmbedding(features, wires=range(n_features))
 
 
-print("E1 Embedding Circuit:")
+# E1 circuit with a visible title
 fig, ax = qml.draw_mpl(embedding_E1)(np.zeros(n_qubits))
+fig.suptitle("E1 Embedding Circuit", fontsize=12, y=0.98)
 plt.show()
 
-print("\nE2 Embedding Circuit:")
+# E2 circuit with a visible title
 fig, ax = qml.draw_mpl(embedding_E2)(np.zeros(n_qubits))
+fig.suptitle("E2 Embedding Circuit", fontsize=12, y=0.98)
 plt.show()
+
+
 
 ######################################################################
 #
@@ -349,22 +353,31 @@ import matplotlib.pyplot as plt
 
 # Visualize first 20x20 subset of each Gram matrix for clarity
 subset_size = 20
-fig, axes = plt.subplots(1, 5, figsize=(20, 4))
-
 matrices = [K_classical, K_quantum_E1, K_quantum_E2, K_pqk_E1, K_pqk_E2]
 titles = ["Classical RBF", "QK-E1", "QK-E2", "PQK-E1", "PQK-E2"]
+
+rows, cols = 2, 3
+fig, axes = plt.subplots(rows, cols, figsize=(14, 8))
+
+# Flatten axes array to loop over
+axes = axes.flatten()
 
 for i, (K, title) in enumerate(zip(matrices, titles)):
     im = axes[i].imshow(K[:subset_size, :subset_size], cmap="viridis", aspect="equal")
     axes[i].set_title(title)
     axes[i].set_xlabel("Sample index")
-    if i == 0:
+    if i % cols == 0:  # only first column gets a y-label
         axes[i].set_ylabel("Sample index")
     plt.colorbar(im, ax=axes[i], fraction=0.046)
+
+# Hide any unused subplots (since we have 5 matrices, but a 2x3 grid = 6 spots)
+for j in range(len(matrices), len(axes)):
+    axes[j].axis("off")
 
 plt.tight_layout()
 plt.suptitle(f"Gram Matrix Visualizations (first {subset_size}×{subset_size} entries)", y=1.02)
 plt.show()
+
 
 print("Each matrix shows how similar data points are to each other:")
 print("- Brighter colors = higher similarity")
