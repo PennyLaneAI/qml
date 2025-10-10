@@ -15,11 +15,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_3qubit_Ising_model_PyTorch.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/pennylane-demo-quantum-phase-transitions-thumbnail.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_3qubit_Ising_model_PyTorch.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/pennylane-demo-quantum-phase-transitions-large-thumbnail.png"
         }
     ],
     "seoDescription": "Learn how to simulate and observe quantum phase transitions on a quantum computer",
