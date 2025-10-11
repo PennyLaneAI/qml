@@ -682,7 +682,7 @@ plt.show()
 #
 # Acknowledgement 
 # ---------------
-# Damian Pope would like to thank Associate Professor Matthew Johnson (Perimeter Institute for Theoretical Physics and
+# Damian Pope would like to thank Professor Matthew Johnson (Perimeter Institute for Theoretical Physics and
 # York University) for insightful discussions on quantum phase transitions in cosmology and quantum computing.
 # 
 # 
