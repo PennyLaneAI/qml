@@ -690,7 +690,7 @@ plt.show()
 # ------------
 #
 # .. [#Vojta2002]
-#    T. Vojta, in K.H. Hoffmann and M. Schreiber (Eds): Computational Statistical Physics, Springer, Berlin 2002 
+#    Thomas Vojta, in K.H. Hoffmann and M. Schreiber (Eds): Computational Statistical Physics, Springer, Berlin 2002 
 #
 # .. [#Mazumdar2019]
 #    Anupam Mazumdar and Graham White. "Cosmic phase transitions: their applications and experimental signatures" Rep. Prog. Phys. 82, 076901, 2019 
@@ -726,7 +726,7 @@ plt.show()
 #    Tomohiro Hashizume, Ian P. McCulloch, and Jad C. Halimeh. "Dynamical phase transitions in the two-dimensional transverse-field Ising model", Phys. Rev. Research 4, 013250, 2022 (See Figure 1 and Section II) 
 #
 # .. [#Heyl2013]
-#    M. Heyl, A. Polkovnikov, S. Kehrein. "Dynamical Quantum Phase Transitions in the Transverse-Field Ising Model", Phys. Rev. Lett. 110 135704 (2013) 
+#    Markus Heyl, Anatoli Polkovnikov, and Stefan Kehrein. "Dynamical Quantum Phase Transitions in the Transverse-Field Ising Model", Phys. Rev. Lett. 110 135704 (2013) 
 #
 # .. [#Nicola2021]
-#    S. De Nicola , A. A. Michailidis , M. Serbyn. "Entanglement View of Dynamical Quantum Phase Transitions", Phys. Rev. Lett. 126 040602 (2021), Figure 1 (d) 
+#    Stefano De Nicola, Alexios A. Michailidis, and Maksym Serbyn. "Entanglement View of Dynamical Quantum Phase Transitions", Phys. Rev. Lett. 126 040602 (2021), Figure 1 (d) 
