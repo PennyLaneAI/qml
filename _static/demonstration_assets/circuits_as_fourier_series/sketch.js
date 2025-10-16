@@ -1,4 +1,5 @@
-const url_prefix = '/_static/demonstration_assets/circuits_as_fourier_series/src/';
+/* This demo requires special image handling, we will move all images to an internal asset lib */
+const url_prefix = 'https://assets.cloud.pennylane.ai/demos/circuits_as_fourier_series/';
 
 ///// Sketch 0
 
