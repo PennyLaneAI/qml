@@ -1,14 +1,10 @@
 {
     "title": "Learning dynamics incoherently: Variational learning using classical shadows",
-    "authors": [
-        {
-            "username": "Diego"
-        }
-    ],
+    "authors": [{ "username": "Diego" }],
     "executable_stable": true,
     "executable_latest": true,
     "dateOfPublication": "2024-08-15T00:00:00+00:00",
-    "dateOfLastModification": "2025-09-22T15:48:14+00:00",
+    "dateOfLastModification": "2025-10-15T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning",
         "How-to"
@@ -17,7 +13,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_learning_dynamics_incoherently.png"
+            "uri": "_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_learning_dynamics_incoherently.png"
         },
         {
             "type": "large_thumbnail",
@@ -45,9 +41,7 @@
             "url": "http://dx.doi.org/10.1126/science.abn7293"
         }
     ],
-    "basedOnPapers": [
-        "10.48550/arXiv.2303.12834"
-    ],
+    "basedOnPapers": ["10.48550/arXiv.2303.12834"],
     "referencedByPapers": [],
     "relatedContent": [
         {

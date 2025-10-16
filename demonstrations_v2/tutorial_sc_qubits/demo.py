@@ -406,7 +406,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Call the default.gaussian device with 50 shots
-dev = qml.device("default.gaussian", wires=1, shots=50)
+dev = qml.device("default.gaussian", wires=1)
 
 # Fix parameters
 epsilon, chi = 1.0, 0.1
@@ -414,6 +414,7 @@ epsilon, chi = 1.0, 0.1
 # Implement displacement and rotation and measure both X and P observables
 
 
+@qml.set_shots(50)
 @qml.qnode(dev)
 def measure_P_shots(time, state):
     qml.Displacement(epsilon * time, 0, wires=0)
@@ -421,6 +422,7 @@ def measure_P_shots(time, state):
     return qml.sample(qml.QuadP(0))
 
 
+@qml.set_shots(50)
 @qml.qnode(dev)
 def measure_X_shots(time, state):
     qml.Displacement(epsilon * time, 0, wires=0)

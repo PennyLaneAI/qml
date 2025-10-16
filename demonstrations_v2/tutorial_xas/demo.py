@@ -294,7 +294,7 @@ for rho in rhos:
 # We will also add one auxiliary wire for the measurement circuit, which we will prepare as the 0 wire with an applied Hadamard gate.
 
 device_type = "lightning.qubit"
-dev_prop = qml.device(device_type, wires=int(2*n_cas) + 1, shots=None)
+dev_prop = qml.device(device_type, wires=int(2*n_cas) + 1)
 
 
 @qml.qnode(dev_prop)
@@ -630,11 +630,11 @@ for rho in rhos:
 
         # Define measurement circuit device with shots.
         shots = shots_list[i]  # Kernel-aware number of shots.
-        dev_est = qml.device(device_type, wires=int(2*n_cas) + 1, shots=shots)
+        dev_est = qml.device(device_type, wires=int(2*n_cas) + 1)
 
         # Update state and then measure expectation values.
         state = circuit()
-        measurement = qml.QNode(meas_circuit, dev_est)(state)
+        measurement = qml.QNode(meas_circuit, dev_est, shots=shots)(state)
 
         expvals[:, i] += dipole_norm[rho]**2 * np.array(measurement).real
 

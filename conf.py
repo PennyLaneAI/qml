@@ -23,12 +23,7 @@ from pathlib import Path
 sys.path.insert(0, os.path.abspath("."))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
 
-# This module has been refactored from pennylane v0.41.0 to v0.42.0
-# This can be removed after the release of v0.42.0
-try:
-    from pennylane.exceptions import PennyLaneDeprecationWarning
-except ModuleNotFoundError:
-    from pennylane import PennyLaneDeprecationWarning
+from pennylane.exceptions import PennyLaneDeprecationWarning
 
 # -- Project information -----------------------------------------------------
 # General information about the project.

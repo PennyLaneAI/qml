@@ -221,9 +221,7 @@ dev_sim = qml.device("default.qubit", wires=[wire])
 dev_lucy = qml.device(
     "braket.aws.qubit",
     device_arn="arn:aws:braket:eu-west-2::device/qpu/oqc/Lucy",
-    wires=range(8),
-    shots=1000,
-)
+    wires=range(8))
 
 qubit_freq = dev_lucy.pulse_settings["qubit_freq"][wire]
 
@@ -257,7 +255,7 @@ def circuit(params, duration):
 # We create two qunodes, one that executes on the remote device
 # and one in simulation for comparison.
 qnode_sim = jax.jit(qml.QNode(circuit, dev_sim, interface="jax"))
-qnode_lucy = qml.QNode(circuit, dev_lucy, interface="jax")
+qnode_lucy = qml.set_shots(qml.QNode(circuit, dev_lucy, interface="jax"), shots = 1000)
 
 ##############################################################################
 # We are going to fit the resulting Rabi oscillations to a sinusoid. For this we use
@@ -443,6 +441,7 @@ def qnode_sim(params, duration=15.0):
     ]
 
 
+@qml.set_shots(1000)
 @qml.qnode(dev_lucy, interface="jax")
 def qnode_lucy(params, duration=15.0):
     qml.evolve(H0 + Hd0)(params, t=duration)
