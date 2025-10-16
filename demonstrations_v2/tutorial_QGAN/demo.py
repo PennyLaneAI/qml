@@ -10,6 +10,13 @@ Quantum generative adversarial networks with Cirq + TensorFlow
     :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/qgan3.png
 
 
+.. warning::
+    This demo uses TensorFlow, which is a deprecated interface with PennyLane v0.42.
+    Interfacing with TensorFlow will no longer be supported with PennyLane v0.43 and higher.
+    Consider switching to a different machine learning interface with PennyLane, like
+    :doc:`PyTorch <demos/tutorial_qnn_module_torch>` or
+    :doc:`JAX <demos/tutorial_How_to_optimize_QML_model_using_JAX_and_Optax>`.
+
 This demo constructs a Quantum Generative Adversarial Network (QGAN)
 (`Lloyd and Weedbrook
 (2018) <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.121.040502>`__,

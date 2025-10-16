@@ -47,6 +47,7 @@ Recent work has highlighted that 'quantum-aware' optimization techniques
 can lead to marked improvements when training variational quantum algorithms:
 
 * :doc:`demos/tutorial_quantum_natural_gradient` descent by Stokes et al. [#stokes2019]_, which
+
   takes into account the quantum geometry during the gradient-descent update step.
 
 * The work of Sweke et al. [#sweke2019]_, which shows
@@ -134,10 +135,10 @@ num_layers = 2
 num_wires = 2
 
 # create a device that estimates expectation values using a finite number of shots
-non_analytic_dev = qml.device("default.qubit", wires=num_wires, shots=100, seed=432423)
+non_analytic_dev = qml.device("default.qubit", wires=num_wires, seed=432423)
 
 # create a device that calculates exact expectation values
-analytic_dev = qml.device("default.qubit", wires=num_wires, shots=None)
+analytic_dev = qml.device("default.qubit", wires=num_wires)
 
 ##############################################################################
 # Now, let's set the total number of shots, and determine the probability
@@ -184,6 +185,7 @@ print(sum(samples))
 from pennylane.templates.layers import StronglyEntanglingLayers
 
 
+@qml.set_shots(100)
 @qml.qnode(non_analytic_dev, diff_method="parameter-shift", interface="autograd")
 def qnode(weights, observable):
     StronglyEntanglingLayers(weights, wires=non_analytic_dev.wires)
@@ -198,7 +200,7 @@ def cost(params):
     for o, c, s in zip(obs, coeffs, shots_per_term):
         # evaluate the QNode corresponding to
         # the Hamiltonian term, and add it on to our running sum
-        result += c * qnode(params, o, shots=int(s))
+        result += c * qml.set_shots(qnode, shots=int(s))(params, o)
 
     return result
 
@@ -233,6 +235,7 @@ for i in range(100):
 # Here, we will split the 8000 total shots evenly across all Hamiltonian terms,
 # also known as *uniform deterministic sampling*.
 
+@qml.set_shots(100)
 @qml.qnode(non_analytic_dev, diff_method="parameter-shift", interface="autograd")
 def qnode(weights, obs):
     StronglyEntanglingLayers(weights, wires=non_analytic_dev.wires)
@@ -247,7 +250,7 @@ def cost(params):
 
         # evaluate the QNode corresponding to
         # the Hamiltonian term, and add it on to our running sum
-        result += c * qnode(params, o, shots=shots_per_term)
+        result += c * qml.set_shots(qnode, shots=shots_per_term)(params, o)
 
     return result
 
@@ -435,7 +438,7 @@ class Rosalin:
         set to 'sample' mode.
         """
         # note that convergence depends on seed for random number generation
-        rosalin_device = qml.device("default.qubit", wires=num_wires, shots=100, seed=93754352)
+        rosalin_device = qml.device("default.qubit", wires=num_wires, seed=93754352)
 
         # determine the shot probability per term
         prob_shots = np.abs(coeffs) / np.sum(np.abs(coeffs))
@@ -447,6 +450,7 @@ class Rosalin:
 
         results = []
 
+        @qml.set_shots(100)
         @qml.qnode(rosalin_device, diff_method="parameter-shift", interface="autograd")
         def qnode(weights, observable):
             StronglyEntanglingLayers(weights, wires=rosalin_device.wires)
@@ -460,10 +464,7 @@ class Rosalin:
 
             # evaluate the QNode corresponding to
             # the Hamiltonian term
-            res = qnode(params, o, shots=int(s))
-
-            if s == 1:
-                res = np.array([res])
+            res = qml.set_shots(qnode, shots=int(s))(params, o)
 
             # Note that, unlike above, we divide each term by the
             # probability per shot. This is because we are sampling one at a time.
@@ -590,8 +591,9 @@ print(adam_shots_per_step)
 params = init_params
 opt = qml.AdamOptimizer(0.07)
 
-adam_dev = qml.device('default.qubit', shots=adam_shots_per_eval, seed=595905)
+adam_dev = qml.device('default.qubit', seed=595905)
 
+@qml.set_shots(adam_shots_per_eval)
 @qml.qnode(adam_dev, diff_method="parameter-shift", interface="autograd")
 def cost(weights):
     StronglyEntanglingLayers(weights, wires=non_analytic_dev.wires)

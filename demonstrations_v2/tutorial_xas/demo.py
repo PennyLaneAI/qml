@@ -143,7 +143,7 @@ For simplicity, in this demo we target the low-lying excited state spectrum rath
 Ground state calculation
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-If you haven’t, check out the demo `“Initial state preparation for quantum chemistry” <demos/tutorial_initial_state_preparation>`__. 
+If you haven’t, check out the demo :doc:`Initial state preparation for quantum chemistry <demos/tutorial_initial_state_preparation>`. 
 We will be expanding on that demo with code to import a state from the `complete active space configuration interaction <https://pyscf.org/user/mcscf.html>`__ (CASCI) methods of PySCF, where we restrict the set of active orbitals used in the calculation. 
 
 We start by creating our molecule object using the `Gaussian type orbitals <https://en.wikipedia.org/wiki/Gaussian_orbital>`__ module ``pyscf.gto``, and obtaining the Hartree-Fock molecular orbitals with the `self-consistent field methods <https://pyscf.org/user/scf.html>`__ ``pyscf.scf``.
@@ -294,7 +294,7 @@ for rho in rhos:
 # We will also add one auxiliary wire for the measurement circuit, which we will prepare as the 0 wire with an applied Hadamard gate.
 
 device_type = "lightning.qubit"
-dev_prop = qml.device(device_type, wires=int(2*n_cas) + 1, shots=None)
+dev_prop = qml.device(device_type, wires=int(2*n_cas) + 1)
 
 
 @qml.qnode(dev_prop)
@@ -317,7 +317,7 @@ def initial_circuit(wf):
 # Next we will discuss how to prepare the electronic Hamiltonian for efficient time evolution in the Hadamard test circuit. 
 # We will perform compressed double factorization (CDF) on the Hamiltonian to approximate it as a series of fragments, each of which can be fast-forwarded in a Trotter product formula.
 #
-# If you haven’t yet, go read the demo `“How to build compressed double-factorized Hamiltonians” <demos/tutorial_how_to_build_compressed_double_factorized_hamiltonians>`__, because that is exactly what we are going to do! 
+# If you haven’t yet, go read the demo :doc:`How to build compressed double-factorized Hamiltonians <demos/tutorial_how_to_build_compressed_double_factorized_hamiltonians>`, because that is exactly what we are going to do!
 # You could also look at Section III in Ref. [#Fomichev2025]_.
 #
 # Electronic Hamiltonian
@@ -630,11 +630,11 @@ for rho in rhos:
 
         # Define measurement circuit device with shots.
         shots = shots_list[i]  # Kernel-aware number of shots.
-        dev_est = qml.device(device_type, wires=int(2*n_cas) + 1, shots=shots)
+        dev_est = qml.device(device_type, wires=int(2*n_cas) + 1)
 
         # Update state and then measure expectation values.
         state = circuit()
-        measurement = qml.QNode(meas_circuit, dev_est)(state)
+        measurement = qml.QNode(meas_circuit, dev_est, shots=shots)(state)
 
         expvals[:, i] += dipole_norm[rho]**2 * np.array(measurement).real
 

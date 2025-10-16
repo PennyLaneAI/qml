@@ -131,8 +131,8 @@ num_wires = 2
 eta = 0.01
 steps = 200
 
-dev_analytic = qml.device("lightning.qubit", wires=num_wires, shots=None)
-dev_stochastic = qml.device("lightning.qubit", wires=num_wires, shots=1000)
+dev_analytic = qml.device("lightning.qubit", wires=num_wires)
+dev_stochastic = qml.device("lightning.qubit", wires=num_wires)
 
 ##############################################################################
 # We can use ``qml.Hermitian`` to directly specify that we want to measure
@@ -152,6 +152,7 @@ def circuit(params):
 
 qnode_analytic = qml.QNode(circuit, dev_analytic, interface="autograd", diff_method="parameter-shift")
 qnode_stochastic = qml.QNode(circuit, dev_stochastic, interface="autograd", diff_method="parameter-shift")
+qnode_stochastic = qml.set_shots(1000)(qnode_stochastic)
 
 param_shape = StronglyEntanglingLayers.shape(n_layers=num_layers, n_wires=num_wires)
 init_params = pnp.random.uniform(low=0, high=2 * np.pi, size=param_shape, requires_grad=True)
@@ -173,8 +174,8 @@ params_SGD1 = init_params
 opt = qml.GradientDescentOptimizer(eta)
 
 for _ in range(steps):
-    cost_SGD1.append(qnode_stochastic(params_SGD1, shots=1))
-    params_SGD1 = opt.step(qnode_stochastic, params_SGD1, shots=1)
+    cost_SGD1.append(qml.set_shots(qnode_stochastic, shots=1)(params_SGD1))
+    params_SGD1 = opt.step(qml.set_shots(qnode_stochastic, shots=1), params_SGD1)
 
 # Optimizing using stochastic gradient descent with shots=100
 
@@ -183,8 +184,8 @@ params_SGD100 = init_params
 opt = qml.GradientDescentOptimizer(eta)
 
 for _ in range(steps):
-    cost_SGD100.append(qnode_stochastic(params_SGD100, shots=100))
-    params_SGD100 = opt.step(qnode_stochastic, params_SGD100, shots=100)
+    cost_SGD100.append(qml.set_shots(qnode_stochastic, shots=100)(params_SGD100))
+    params_SGD100 = opt.step(qml.set_shots(qnode_stochastic, shots=100), params_SGD100)
 
 ##############################################################################
 # Note that in the latter two cases we are sampling from an unbiased
@@ -298,7 +299,7 @@ def circuit(params, n=None):
 
 
 def loss(params, shots=None):
-    return 4 + (5 / 1) * circuit(params, shots=shots, n=1)
+    return 4 + (5 / 1) * qml.set_shots(circuit, shots=shots)(params, n=1)
 
 
 ##############################################################################
@@ -370,7 +371,7 @@ for i in range(250):
     n = min(i // 25 + 1, 5)
 
     def loss(params, shots=None):
-        return 4 + (5 / n) * circuit(params, shots=shots, n=n)
+        return 4 + (5 / n) * qml.set_shots(circuit, shots=shots)(params, n=n)
 
     cost.append(loss(params, shots=int(1 + (n - 1) ** 2)))
     params = opt.step(loss, params, shots=int(1 + (n - 1) ** 2))

@@ -1,6 +1,6 @@
 r"""
 .. role:: html(raw)
-    format: html
+    :format: html
 
 .. _variational_classifier:
 

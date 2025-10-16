@@ -287,6 +287,41 @@ def _build_demo(
             pre=dev,
         )
 
+        # If dev, we need to re-install the latest Catalyst, then Lightning, then PennyLane
+        # in that order, regardless of conflicts/warnings. 
+        if dev:
+            # Catalyst
+            cmds.pip_install(
+                build_venv.python,
+                "--upgrade",
+                "--extra-index-url",
+                "https://test.pypi.org/simple/",
+                "PennyLane-Catalyst",
+                use_uv=False,
+                quiet=False,
+                pre=True,
+            )
+            # Lightning
+            cmds.pip_install(
+                build_venv.python,
+                "--upgrade",
+                "--extra-index-url",
+                "https://test.pypi.org/simple/",
+                "PennyLane-Lightning",
+                use_uv=False,
+                quiet=False,
+                pre=True,
+            )
+    if dev:
+        # Need dev version of PennyLane to build, whether or not we're executing
+        cmds.pip_install(
+            build_venv.python,
+            "--upgrade",
+            "git+https://github.com/PennyLaneAI/pennylane.git#egg=pennylane",
+            use_uv=False,
+            quiet=False,
+        )
+
     stage_dir = ctx.build_dir / "demonstrations"
     fs.clean_dir(stage_dir)
     # Need a 'GALLERY_HEADER' file for sphinx-gallery

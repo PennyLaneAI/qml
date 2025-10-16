@@ -436,7 +436,7 @@ variational_ansatz = qml.SimplifiedTwoDesign
 n_layers = 5
 weights_shape = variational_ansatz.shape(n_layers, N)
 
-dev = qml.device("default.qubit", wires=N, shots=None)
+dev = qml.device("default.qubit", wires=N)
 
 
 @jax.jit
