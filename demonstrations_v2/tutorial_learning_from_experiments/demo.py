@@ -173,8 +173,9 @@ def generate_circuit(shots):
     generate a random circuit that returns a number of measuement samples
     given by shots
     """
-    dev = qml.device("lightning.qubit", wires=qubits, shots=shots)
+    dev = qml.device("lightning.qubit", wires=qubits)
 
+    @qml.set_shots(shots)
     @qml.qnode(dev)
     def circuit(ts=False):
 
@@ -341,7 +342,7 @@ plt.show()
 n_shots = 50
 qubits = 8
 
-dev = qml.device("lightning.qubit", wires=qubits * 2, shots=n_shots)
+dev = qml.device("lightning.qubit", wires=qubits * 2)
 
 
 def CNOT_sequence(control_wires, target_wires):
@@ -350,6 +351,7 @@ def CNOT_sequence(control_wires, target_wires):
         qml.CNOT([c_wire, t_wire])
 
 
+@qml.set_shots(n_shots)
 @qml.qnode(dev)
 def enhanced_circuit(ts=False):
     "implement the enhanced circuit, using a random unitary"
@@ -464,6 +466,7 @@ def noise_layer(epsilon):
 #
 
 
+@qml.set_shots(n_shots)
 @qml.qnode(dev)
 def enhanced_circuit(ts=False):
     "implement the enhanced circuit, using a random unitary with a noise layer"
