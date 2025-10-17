@@ -169,7 +169,7 @@ from pennylane import numpy as np
 num_wires = 4
 num_layers = 5
 
-device = qml.device("qiskit.aer", wires=num_wires, shots=1000)
+device = qml.device("qiskit.aer", wires=num_wires)
 
 ansatz = qml.StronglyEntanglingLayers
 
@@ -181,7 +181,7 @@ def circuit(param):
     return qml.expval(all_pauliz_tensor_prod)
 
 
-cost_function = qml.QNode(circuit, device)
+cost_function = qml.set_shots(qml.QNode(circuit, device), shots = 1000)
 
 np.random.seed(50)
 
@@ -378,13 +378,13 @@ def ansatz(param, wires):
 # IBMProvider().backends()  # List all available backends
 # dev = qml.device("qiskit.ibmq", wires=num_qubits, backend="ibmq_lima")
 
-from qiskit_ibm_runtime.fake_provider import FakeLima
+from qiskit_ibm_runtime.fake_provider import FakeLimaV2 as FakeLima
 from qiskit_aer import noise
 
 # Load a fake backed to create a noise model, and create a device using that model
 noise_model = noise.NoiseModel.from_backend(FakeLima())
 noisy_device = qml.device(
-    "qiskit.aer", wires=num_qubits, shots=1000, noise_model=noise_model
+    "qiskit.aer", wires=num_qubits, noise_model=noise_model
 )
 
 
@@ -393,7 +393,7 @@ def circuit(param):
     return qml.expval(h2_ham)
 
 
-cost_function = qml.QNode(circuit, noisy_device)
+cost_function = qml.set_shots(qml.QNode(circuit, noisy_device), shots = 1000)
 
 # This random seed was used in the original VQE demo and is known to allow the
 # gradient descent algorithm to converge to the global minimum.

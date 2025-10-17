@@ -76,7 +76,7 @@ np.random.seed(42)
 # how many qubits we train on will effect our results.
 
 wires = 6
-dev = qml.device("lightning.qubit", wires=wires, shots=10000)
+dev = qml.device("lightning.qubit", wires=wires)
 
 
 ######################################################################
@@ -121,9 +121,9 @@ def local_cost_simple(rotations):
         qml.RY(rotations[1][i], wires=i)
     return [qml.probs(wires=i) for i in range(wires)]
 
-global_circuit = qml.QNode(global_cost_simple, dev, interface="autograd")
+global_circuit = qml.set_shots(qml.QNode(global_cost_simple, dev, interface="autograd"), shots = 10000)
 
-local_circuit = qml.QNode(local_cost_simple, dev, interface="autograd")
+local_circuit = qml.set_shots(qml.QNode(local_cost_simple, dev, interface="autograd"), shots = 10000)
 
 def cost_local(rotations):
     return 1 - np.sum([i for (i, _) in local_circuit(rotations)]) / wires
@@ -251,9 +251,9 @@ def local_cost_simple(rotations):
         qml.CNOT([i, i + 1])
     return qml.probs(wires=[0])
 
-global_circuit = qml.QNode(global_cost_simple, dev, interface="autograd")
+global_circuit = qml.set_shots(qml.QNode(global_cost_simple, dev, interface="autograd"), shots = 10000)
 
-local_circuit = qml.QNode(local_cost_simple, dev, interface="autograd")
+local_circuit = qml.set_shots(qml.QNode(local_cost_simple, dev, interface="autograd"), shots = 10000)
 
 def cost_local(rotations):
     return 1 - local_circuit(rotations)[0]
@@ -343,7 +343,7 @@ cost_global(params_local)
 # us the exact representation.
 #
 
-_dev = qml.device("lightning.qubit", wires=wires, shots=None)
+_dev = qml.device("lightning.qubit", wires=wires)
 global_circuit = qml.QNode(global_cost_simple, _dev, interface="autograd")
 print(
     "Current cost: "
@@ -378,7 +378,7 @@ def tunable_cost_simple(rotations):
 def cost_tunable(rotations):
     return 1 - tunable_circuit(rotations)[0]
 
-tunable_circuit = qml.QNode(tunable_cost_simple, dev, interface="autograd")
+tunable_circuit = qml.set_shots(qml.QNode(tunable_cost_simple, dev, interface="autograd"), shots = 10000)
 locality = 2
 params_tunable = params_local
 fig, ax = qml.draw_mpl(tunable_circuit, decimals=2)(params_tunable)
@@ -440,8 +440,8 @@ opt = qml.GradientDescentOptimizer(stepsize=0.2)
 steps = 400
 wires = 8
 
-dev = qml.device("lightning.qubit", wires=wires, shots=10000)
-global_circuit = qml.QNode(global_cost_simple, dev, interface="autograd")
+dev = qml.device("lightning.qubit", wires=wires)
+global_circuit = qml.set_shots(qml.QNode(global_cost_simple, dev, interface="autograd"), shots = 10000)
 
 for runs in range(samples):
     print("--- New run! ---")
@@ -473,8 +473,8 @@ opt = qml.GradientDescentOptimizer(stepsize=0.2)
 steps = 400
 wires = 8
 
-dev = qml.device("lightning.qubit", wires=wires, shots=10000)
-tunable_circuit = qml.QNode(tunable_cost_simple, dev, interface="autograd")
+dev = qml.device("lightning.qubit", wires=wires)
+tunable_circuit = qml.set_shots(qml.QNode(tunable_cost_simple, dev, interface="autograd"), shots = 10000)
 
 for runs in range(samples):
     locality = 1

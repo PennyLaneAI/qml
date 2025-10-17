@@ -86,7 +86,8 @@ print(wires)
 five = [0, 1, 0, 1] # 5 in binary
 ten = [1, 0, 1, 0] # 10 in binary
 
-@qml.qnode(qml.device('default.qubit', shots=1))
+@qml.set_shots(1)
+@qml.qnode(qml.device('default.qubit'))
 def circuit():
     # Prepare the input registers for 5 and 10
     qml.BasisState(five + ten, wires=wires['x']+wires['y'])
@@ -97,7 +98,7 @@ def circuit():
     return qml.sample(a)
 
 # Simulate the circuit and process binary output to integer
-binary_string = "".join([str(bit) for bit in circuit()])
+binary_string = "".join([str(bit) for bit in circuit()[0]])
 print("GF2Addition of 5 + 10 =", int(binary_string[len(wires['x']):],2))
 
 ######################################################################
