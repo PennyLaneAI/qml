@@ -1,5 +1,5 @@
 {
-    "title": "Seeing Quantum Phase Transitions with Quantum Computers",
+    "title": "Seeing quantum phase transitions with quantum computers",
     "authors": [
         {
             "username": "damian_pope"
@@ -8,8 +8,8 @@
             "username": "tirthshah2806"
         }
     ],
-    "dateOfPublication": "2025-07-11T00:00:00+00:00",
-    "dateOfLastModification": "2025-07-11T00:00:00+00:00",
+    "dateOfPublication": "2025-07-17T00:00:00+00:00",
+    "dateOfLastModification": "2025-07-17T00:00:00+00:00",
     "categories": ["Optimization","Quantum Machine Learning"],
     "tags": ["quantum phase transition", "Ising model"],
     "previewImages": [
