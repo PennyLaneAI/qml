@@ -25,7 +25,7 @@ and two-dimensional (2D) quantum Ising model and dynamical quantum phase transit
    :class: note
    
    *Quantum* phase transitions are fundamentally different from *classical* phase transitions. While classical transitions 
-   are driven by thermal fluctuations, quantum phase transitions can occur at zero
+   are driven by thermal fluctuations, quantum phase transitions always occur at zero
    temperature and are induced by quantum fluctuations (i.e., Heisenberg's uncertainty principle). 
 
 .. raw:: html
