@@ -15,14 +15,14 @@ geometries defined by two kernels represent your data. The formula for :math:`g`
 
 where :math:`K_q` and :math:`K_c` are quantum and classical Gram matrices, respectively.
 
-Kernel Refresher
+Kernel refresher
 ----------------
 
 A **kernel** is a function :math:`k(x, x')` that measures similarity between data points without
 explicitly computing their feature representations in high-dimensional spaces, thus lowering the
 computational cost.
 
-Classical Kernels
+Classical kernels
 ~~~~~~~~~~~~~~~~~
 
 - Example: RBF (Radial Basis Function) kernel
@@ -30,7 +30,7 @@ Classical Kernels
 - Implicitly computes: :math:`k(x, x') = \langle\phi(x), \phi(x')\rangle`
 - The feature map :math:`\phi(x)` projects to infinite dimensions but is never calculated directly
 
-Quantum Kernels
+Quantum kernels
 ~~~~~~~~~~~~~~~
 
 - Formula: :math:`k(x, x') = |\langle\psi(x)|\psi(x')\rangle|^2`
@@ -38,7 +38,7 @@ Quantum Kernels
 - For :math:`n` qubits, the quantum state lives in a :math:`2^n`-dimensional Hilbert space that is
   implicitly manipulated
 
-Key Concepts
+Key concepts
 ~~~~~~~~~~~~
 
 The **kernel matrix** (Gram matrix) :math:`K` has entries :math:`K_{ij} = k(x_i, x_j)` that store
@@ -218,7 +218,7 @@ plt.show()
 
 ######################################################################
 #
-# Gram Matrix Computation
+# Gram matrix computation
 # ~~~~~~~~~~~~~~~~~~~~~~~
 #
 # Using the kernels defined above, we now build the **Gram (kernel) matrices** required to compute the
@@ -543,7 +543,7 @@ plt.show()
 # potential solution because it offers a potential for an improvement on our classification problem.
 # This way, we have an important diagnostic tool to filter out bad quantum kernels for our data.
 #
-# 🧠 Conclusion: A Practical Perspective on the Geometric Difference :math:`g`
+# 🧠 Conclusion: A practical perspective on the Geometric difference :math:`g`
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # In this notebook, we explored a fundamental question in quantum machine learning:
@@ -573,7 +573,7 @@ plt.show()
 #   classical RBF can produce. By contrast, a high :math:`g` only tells us that *some advantage may
 #   be possible* — not that it will be realized.
 #
-# Appendix: What if We Take the Labels Into Account?
+# Appendix: What if we take the labels into account?
 # --------------------------------------------------
 #
 # The cells above explore the importance of :math:`g` in a practical setting. However, as an appendix,
@@ -589,7 +589,7 @@ plt.show()
 # labels, but it’s good for getting more intuition about the role of :math:`g` and why it sometimes
 # fails in predicting performance.
 #
-# How Label Re-engineering Works:
+# How label re-engineering works:
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # Given :math:`K_Q` and :math:`K_C`, the process generates new labels that maximize quantum kernel
@@ -733,7 +733,7 @@ for model, acc in results_engineered.items():
 
 ######################################################################
 #
-# Accuracy Comparison — Side-by-Side Bars (Original vs Engineered) for PQK-E1
+# Accuracy comparison — side-by-side bars (Original vs Engineered) for PQK-E1
 #
 
 import matplotlib.pyplot as plt
