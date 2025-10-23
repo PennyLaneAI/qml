@@ -19,7 +19,7 @@ many different quantum systems at the same time (due to the property of universa
 
 This tutorial introduces three quantum phase transitions relevant to condensed matter physics 
 and demonstrates how to simulate them on a quantum computer. The transitions covered here include the one-dimensional (1D) 
-and two-dimensional (2D) quantum Ising model and dynamical quantum phase transitions (i.e., phase transitions occurring in time evolution).
+and two-dimensional (2D) quantum Ising model and a dynamical quantum phase transition (i.e., phase transitions occurring in time evolution).
 
 .. admonition:: Note
    :class: note
@@ -111,16 +111,14 @@ print(f"H={H}")
 # transition happens.
 #
 # Let's look at an example.
-
-
-######################################################################
+#
 # Seeing Phase Transitions with Quantum Computers
 # -----------------------------------------------
 # To do this, we'll use the well-known variational quantum eigensolver (VQE) algorithm to find the
 # ground state. You can find an introduction to it `here <https://pennylane.ai/qml/demos/tutorial_vqe>`_.
 #
 # Let's start by finding the ground state of the Ising model for a fixed value of :math:`J`.
-# We'll use the well-known Hardware Efficient Ansatz (HEA) [#Kandala2017]_ to do this. It's a
+# We'll use the Hardware Efficient Ansatz (HEA) [#Kandala2017]_ to do this. It's a
 # general-purpose ansatz that efficiently represents a wide range of quantum states, it consists of:
 # 
 # 1. Applying three single-qubit rotations to each qubit. Each one is parameterized by a different rotation angle. 
@@ -193,17 +191,15 @@ plt.show()
 # The graph above shows that the energy :math:`E` gradually decreases until it reaches :math:`E = - 4`.
 # To check that this result makes sense, let's think about the Hamiltonian. Consider the first term, :math:`-2 \sigma_{z}^{(1)} \sigma_{z}^{(2)}`.
 # When the first and second qubits are in the computational basis state
-# :math:`| 0 \rangle` , the product :math:`\langle \sigma_{z}^{(1)} \sigma_{z}^{(2} \rangle` is :math:`(+1)(+1) = +1`. Multiplying this by :math:`J = -2`
+# :math:`| 0 \rangle` , the product :math:`\langle \sigma_{z}^{(1)} \sigma_{z}^{(2)} \rangle` is :math:`(+1)(+1) = +1`. Multiplying this by :math:`J = -2`
 # gives an energy of -2. The second term :math:`-2 \langle \sigma_{z}^{(2)} \sigma_{z}^{(3)} \rangle` is also :math:`E = -2`. Combining
 # these results gives :math:`E = -2 -2 = -4`. When all the qubits are in the other basis state
 # (:math:`| 1 \rangle`), we also get :math:`E = -4`. These two calculations agree with the numerical result from VQE. So far, so good.
 # 
-# 
-# 
 # Let's now introduce an extra energy term that's proportional to the sum of all the Pauli X operators:
 #
 # .. math::
-#    - h_{x}\Sigma_{i=1}^{N} \sigma_{x}^{(i)}
+#    - h_{x}\Sigma_{i=1}^{N} \sigma_{x}^{(i)}.
 #
 # If our qubits are actually spin-1/2 particles (e.g., electrons), :math:`h_{x}` is a horizontal
 # magnetic field. Often, it's called a *transverse field*.
@@ -219,7 +215,7 @@ plt.show()
 # The system's Hamiltonian becomes
 #
 # .. math::
-#    H = -J \,\, \Sigma_{i=1}^{N-1} \sigma_{z}^{(i)} \sigma^{(i+1)}_{z} - h_{x}\Sigma_{i=1}^{N} \sigma_{x}^{(i)}
+#    H = -J \,\, \Sigma_{i=1}^{N-1} \sigma_{z}^{(i)} \sigma^{(i+1)}_{z} - h_{x}\Sigma_{i=1}^{N} \sigma_{x}^{(i)}.
 #
 # A quantum phase transition happens when we change the ratio :math:`J/h_x`. Physically, this
 # corresponds to changing the relative strength of the coupling interaction and the horizontal
@@ -256,7 +252,7 @@ plt.show()
 # the qubits:
 #
 # .. math::
-#    M =\frac{1}{N} \Sigma_{i} \sigma_{Z}^{(i)}
+#    M =\frac{1}{N} \Sigma_{i} \sigma_{Z}^{(i)}.
 #
 # It's just the sum of all the Pauli :math:`Z` operators scaled by the number of qubits. For example,
 # for the state :math:`| \psi \rangle = |0 \rangle |0\rangle`,
@@ -361,11 +357,11 @@ plt.show()
 
 ######################################################################
 #Notice how the magnetization increases sharply around :math:`J/h_{x} = 1`. This suggests that a phase transition is happening. 
-#(It's also well known that a phase transition does happen at this value [#Subir2011]_.) Why the graph doesn't have a sharp and discontinuous increase at
+#(It's also well known that a phase transition does happen at this value [#Subir2011]_.) Why doesn't the graph have a sharp and discontinuous increase at
 #exactly :math:`J/h_x=1`? There are two reasons: 
 # 
 #- Like all other numerical results, this result is just approximate. 
-#- The phase transition happens at :math:`J/h_x=1` in the asymptotic limit of large :math:`N`, i.e., as the number of qubits goes to infinity. You can see this by plotting how :math:`M` changes for three different values of :math:`N`, :math:`N = 4, 5, 6`.
+#- The phase transition happens at :math:`J/h_x=1` in the asymptotic limit of large :math:`N`, i.e., as the number of qubits goes to infinity. You can see this by plotting how :math:`M` changes for three different values of :math:`N = 4, 5, 6`.
 #
 
 # magnetization values for N = 4
