@@ -1,0 +1,110 @@
+name: Build Daily RC Demos
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Runs daily at midnight UTC
+  workflow_dispatch:
+  push:
+jobs:
+  check-for-rc-branches:
+    runs-on: ubuntu-latest
+    outputs:
+      branch_exists: ${{ steps.check-rc-branches.outputs.branch_exists }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          repository: PennyLaneAI/pennylane
+
+      - name: Install latest setuptools 
+        run: |
+          python -m pip install --upgrade pip
+          pip install --upgrade setuptools packaging
+
+      - name: Check for RC branches
+        id: check-rc-branches
+        run: |
+          VERSION=$(python setup.py --version)
+          echo "Current version: $VERSION"
+          IFS=. read MAJ MIN PAT <<< "${VERSION%-dev[0-9]*}"
+          RC_BRANCH="v${MAJ}.$((MIN-2)).${PAT}-rc0"
+          if git ls-remote --exit-code origin "refs/heads/$RC_BRANCH"; then
+            echo "branch_exists=true" >> $GITHUB_OUTPUT
+            echo "rc_branch=$RC_BRANCH" >> $GITHUB_OUTPUT
+          else
+            echo "branch_exists=true" >> $GITHUB_OUTPUT
+            echo "no RC branch found."
+          fi
+
+
+  # Check for RC branch in pennylane
+
+  # Get latest release versions for catalyst, lightning, and pennylane
+  build-demos-with-rc-branches:
+    runs-on: ubuntu-latest
+    needs: check-for-rc-branches
+    if: needs.check-for-rc-branches.outputs.branch_exists == 'true'
+    outputs:
+      pennylane-version: ${{ steps.setup-rc-versions.outputs.matrix }}
+      lightning-version: ${{ steps.setup-rc-versions.outputs.lightning-version }}
+      catalyst-version: ${{ steps.setup-rc-versions.outputs.catalyst-version }}
+      rc-build-branch: ${{ steps.setup-rc-versions.outputs.rc-build-branch }}
+    steps:
+      - name: Checkout QML repository
+        uses: actions/checkout@v4
+
+      - name: Set up rc versions
+        id: setup-rc-versions
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"        
+          rc_build_branch=rc-daily-build-$(date +'%Y-%m-%d')
+          git checkout -b $rc_build_branch
+          pennylane_version=$(python -m pip index versions pennylane 2>/dev/null | head -1 | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' || true)
+          lightning_version=$(python -m pip index versions pennylane-lightning 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1 )
+          catalyst_version=$(python -m pip index versions pennylane-catalyst 2>/dev/null | head -1 | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' || true)
+          echo "lightning-version=$lightning-version" >> $GITHUB_OUTPUT
+          echo "catalyst-version=$catalyst_version" >> $GITHUB_OUTPUT
+          echo "pennylane-version=$pennylane_version" >> $GITHUB_OUTPUT
+          echo "rc-build-branch=$rc_build_branch" >> $GITHUB_OUTPUT
+          echo "PennyLane version: $pennylane_version, PennyLane-Lightning version: $lightning_version, PennyLane-Catalyst version: $catalyst_version"
+
+          git commit -am "Set up RC versions for demo builds"
+
+      - name: Update demo versions
+        run: |
+          sed -i.bak -E "s#git\+https://github.com/PennyLaneAI/pennylane.git\#egg=pennylane\",#pennylane<=${{ steps.setup-rc-versions.pennylane-version }}\",\\n\\t\\t\\t\"—extra-index-url\",\\n\\t\\t\\t\"https://test.pypi.org/simple/\",\\n\\t\\t\\tpre=True,#" lib/qml/lib/demo.py
+          sed -i "s/PennyLane-Lightning/pennylane-lightning<=${{ steps.setup-rc-versions.lightning-version }}/" lib/qml/lib/demo.py
+          sed -i "s/PennyLane-Catalyst/pennylane-catalyst<=${{ steps.setup-variables.outputs.catalyst-version }}/" lib/qml/lib/demo.py
+          cat lib/qml/lib/demo.py | grep pennylane-catalyst
+          cat lib/qml/lib/demo.py | grep pennylane-lightning
+          awk 'NR>=315 && NR<=326' lib/qml/lib/demo.py
+          echo "All good ${{ steps.setup-rc-versions.outputs.rc-build-branch }}"
+  # Build demos using rc branches
+          
+  build-demos:
+    needs: build-demos-with-rc-branches
+    uses: ./.github/workflows/v2-build-demos.yml
+    with:
+      ref: '${{ needs.build-demos-with-rc-branches.outputs.rc-build-branch }}'
+      demo-names: ''
+      execute: true
+      dev: false
+      save-artifact: true
+      artifact-name: 'demo-build-use-rc'
+      artifact-retention: 10
+      keep-going: false
+      quiet: false
+      batch_size: 5
+  # Upload artifacts with longer retention
+
+  cleanup:
+    runs-on: ubuntu-latest
+    needs: build-demos-with-rc-branches
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cleanup branch
+        run: |
+          echo "Cleaning up branch '${{ needs.build-demos-with-rc-branches.outputs.rc-build-branch }}'"
+          # git push origin --delete '${{ needs.build-demos-with-rc-branches.outputs.rc-build-branch }}'|| true

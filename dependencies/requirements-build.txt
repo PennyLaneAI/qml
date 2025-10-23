@@ -1,11 +1,11 @@
 # Build dependencies
-sphinx>=5.0.2
+sphinx~=8.1
 sphinx_gallery==0.17.1
-Jinja2==3.0.3
+Jinja2==3.1.6
 markupsafe==2.1.1
 pyyaml~=6.0.1
 pypandoc==1.5
-pennylane-sphinx-theme @ git+https://github.com/PennyLaneAI/pennylane-sphinx-theme.git@sphinx-update
+pennylane-sphinx-theme #@ git+https://github.com/PennyLaneAI/pennylane-sphinx-theme.git@sphinx-update
 uv~=0.7.18
 numpy~=1.24
 pennylane
