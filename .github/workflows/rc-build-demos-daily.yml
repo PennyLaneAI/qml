@@ -52,6 +52,11 @@ jobs:
       - name: Checkout QML repository
         uses: actions/checkout@v4
 
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          
       - name: Set up rc versions
         id: setup-rc-versions
         run: |
@@ -59,10 +64,11 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"        
           rc_build_branch=rc-daily-build-$(date +'%Y-%m-%d-%H%M%S')
           git checkout -b $rc_build_branch
-          pennylane_version=$(python -m pip index versions pennylane 2>/dev/null | head -1 | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' || true)
-          lightning_version=$(python -m pip index versions pennylane-lightning 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1 )
-          catalyst_version=$(python -m pip index versions pennylane-catalyst 2>/dev/null | head -1 | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' || true)
-          echo "lightning-version=$lightning-version" >> $GITHUB_OUTPUT
+          python -m pip index versions pennylane 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1 || true
+          pennylane_version=$(python -m pip index versions pennylane 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1 || true)
+          lightning_version=$(python -m pip index versions pennylane-lightning 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1 ||true )
+          catalyst_version=$(python -m pip index versions pennylane-catalyst 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1 || true)
+          echo "lightning-version=$lightning_version" >> $GITHUB_OUTPUT
           echo "catalyst-version=$catalyst_version" >> $GITHUB_OUTPUT
           echo "pennylane-version=$pennylane_version" >> $GITHUB_OUTPUT
           echo "rc-build-branch=$rc_build_branch" >> $GITHUB_OUTPUT
@@ -74,7 +80,7 @@ jobs:
         run: |
           sed -i.bak -E "s#git\+https://github.com/PennyLaneAI/pennylane.git\#egg=pennylane\",#pennylane<=${{ steps.setup-rc-versions.outputs.pennylane-version }}\",\\n\\t\\t\\t\"—extra-index-url\",\\n\\t\\t\\t\"https://test.pypi.org/simple/\",\\n\\t\\t\\tpre=True,#" lib/qml/lib/demo.py
           sed -i "s/PennyLane-Lightning/pennylane-lightning<=${{ steps.setup-rc-versions.outputs.lightning-version }}/" lib/qml/lib/demo.py
-          sed -i "s/PennyLane-Catalyst/pennylane-catalyst<=${{ steps.setup-variables.outputs.catalyst-version }}/" lib/qml/lib/demo.py
+          sed -i "s/PennyLane-Catalyst/pennylane-catalyst<=${{ steps.setup-rc-versions.outputs.catalyst-version }}/" lib/qml/lib/demo.py
           cat lib/qml/lib/demo.py | grep pennylane-catalyst
           cat lib/qml/lib/demo.py | grep pennylane-lightning
           awk 'NR>=315 && NR<=326' lib/qml/lib/demo.py
@@ -101,7 +107,9 @@ jobs:
 
   cleanup:
     runs-on: ubuntu-latest
-    needs: build-demos
+    needs: 
+      - build-demos
+      - build-demos-with-rc-branches
     steps:
       - name: Checkout
         uses: actions/checkout@v4
