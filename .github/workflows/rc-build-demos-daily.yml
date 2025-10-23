@@ -72,15 +72,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          sed -i.bak -E "s#git\+https://github.com/PennyLaneAI/pennylane.git\#egg=pennylane\",#pennylane<=${{ steps.setup-rc-versions.pennylane-version }}\",\\n\\t\\t\\t\"—extra-index-url\",\\n\\t\\t\\t\"https://test.pypi.org/simple/\",\\n\\t\\t\\tpre=True,#" lib/qml/lib/demo.py
-          sed -i "s/PennyLane-Lightning/pennylane-lightning<=${{ steps.setup-rc-versions.lightning-version }}/" lib/qml/lib/demo.py
+          sed -i.bak -E "s#git\+https://github.com/PennyLaneAI/pennylane.git\#egg=pennylane\",#pennylane<=${{ steps.setup-rc-versions.outputs.pennylane-version }}\",\\n\\t\\t\\t\"—extra-index-url\",\\n\\t\\t\\t\"https://test.pypi.org/simple/\",\\n\\t\\t\\tpre=True,#" lib/qml/lib/demo.py
+          sed -i "s/PennyLane-Lightning/pennylane-lightning<=${{ steps.setup-rc-versions.outputs.lightning-version }}/" lib/qml/lib/demo.py
           sed -i "s/PennyLane-Catalyst/pennylane-catalyst<=${{ steps.setup-variables.outputs.catalyst-version }}/" lib/qml/lib/demo.py
           cat lib/qml/lib/demo.py | grep pennylane-catalyst
           cat lib/qml/lib/demo.py | grep pennylane-lightning
           awk 'NR>=315 && NR<=326' lib/qml/lib/demo.py
           git status
           git commit -am "Set up RC versions for demo builds"
-          git push --set-upstream origin $rc_build_branch
+          git push --set-upstream origin ${{ steps.setup-rc-versions.outputs.rc-build-branch }}
   # Build demos using rc branches
           
   build-demos:
