@@ -80,7 +80,7 @@ jobs:
           awk 'NR>=315 && NR<=326' lib/qml/lib/demo.py
           git status
           git commit -am "Set up RC versions for demo builds"
-          git push origin $rc_build_branch
+          git push --set-upstream origin $rc_build_branch
   # Build demos using rc branches
           
   build-demos:
