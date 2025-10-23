@@ -96,7 +96,7 @@ jobs:
       artifact-retention: 10
       keep-going: false
       quiet: false
-      batch_size: 5
+      batch_size: 10
   # Upload artifacts with longer retention
 
   cleanup:
