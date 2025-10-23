@@ -57,7 +57,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"        
-          rc_build_branch=rc-daily-build-$(date +'%Y-%m-%d')
+          rc_build_branch=rc-daily-build-$(date +'%Y-%m-%d-%H%M%S')
           git checkout -b $rc_build_branch
           pennylane_version=$(python -m pip index versions pennylane 2>/dev/null | head -1 | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' || true)
           lightning_version=$(python -m pip index versions pennylane-lightning 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1 )
@@ -78,8 +78,9 @@ jobs:
           cat lib/qml/lib/demo.py | grep pennylane-catalyst
           cat lib/qml/lib/demo.py | grep pennylane-lightning
           awk 'NR>=315 && NR<=326' lib/qml/lib/demo.py
-          git branch
+          git status
           git commit -am "Set up RC versions for demo builds"
+          git push origin $rc_build_branch
   # Build demos using rc branches
           
   build-demos:
