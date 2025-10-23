@@ -68,8 +68,6 @@ jobs:
           echo "rc-build-branch=$rc_build_branch" >> $GITHUB_OUTPUT
           echo "PennyLane version: $pennylane_version, PennyLane-Lightning version: $lightning_version, PennyLane-Catalyst version: $catalyst_version"
 
-          git commit -am "Set up RC versions for demo builds"
-
       - name: Update demo versions
         run: |
           sed -i.bak -E "s#git\+https://github.com/PennyLaneAI/pennylane.git\#egg=pennylane\",#pennylane<=${{ steps.setup-rc-versions.pennylane-version }}\",\\n\\t\\t\\t\"—extra-index-url\",\\n\\t\\t\\t\"https://test.pypi.org/simple/\",\\n\\t\\t\\tpre=True,#" lib/qml/lib/demo.py
@@ -78,7 +76,7 @@ jobs:
           cat lib/qml/lib/demo.py | grep pennylane-catalyst
           cat lib/qml/lib/demo.py | grep pennylane-lightning
           awk 'NR>=315 && NR<=326' lib/qml/lib/demo.py
-          echo "All good ${{ steps.setup-rc-versions.outputs.rc-build-branch }}"
+          git commit -am "Set up RC versions for demo builds"
   # Build demos using rc branches
           
   build-demos:
