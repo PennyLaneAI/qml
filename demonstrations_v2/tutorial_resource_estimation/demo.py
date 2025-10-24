@@ -81,7 +81,7 @@ mol = qml.qchem.Molecule(symbols, geometry, basis_name='6-31g')
 core, one, two = qml.qchem.electron_integrals(mol)()
 
 ##############################################################################
-# We now create an instance of the :class:`~.pennylane.estimator.DoubleFactorization` class
+# We now create an instance of the :class:`~.pennylane.estimator.qpe_resources.DoubleFactorization` class
 
 algo = qml.estimator.DoubleFactorization(one, two)
 
@@ -142,7 +142,7 @@ vectors = np.array([[9.49,  0.00,  0.00],
                     [0.00,  0.00, 11.83]])
 
 ##############################################################################
-# We now create an instance of the :class:`~.pennylane.estimator.FirstQuantization` class
+# We now create an instance of the :class:`~.pennylane.estimator.qpe_resources.FirstQuantization` class
 algo = qml.estimator.FirstQuantization(planewaves, electrons, vectors=vectors)
 
 ##############################################################################
@@ -200,8 +200,8 @@ print(f'1-norm of the Hamiltonian: {algo.lamb}')
 
 ##############################################################################
 # PennyLane allows you to get more detailed information about the cost of the algorithms as
-# explained in the documentation of :class:`~.pennylane.estimator.FirstQuantization`
-# and :class:`~.pennylane.estimator.DoubleFactorization` classes.
+# explained in the documentation of :class:`~.pennylane.estimator.qpe_resources.FirstQuantization`
+# and :class:`~.pennylane.estimator.qpe_resources.DoubleFactorization` classes.
 #
 # Variational quantum eigensolver
 # ------------------------------------------
@@ -225,7 +225,7 @@ H_coeffs, H_ops = H.terms()
 
 ##############################################################################
 # The number of measurements needed to compute :math:`\left \langle H \right \rangle` can be
-# obtained with the :func:`~.pennylane.resource.estimate_shots` function, which requires the
+# obtained with the :func:`~.pennylane.estimator.estimate_shots` function, which requires the
 # Hamiltonian coefficients as input. The number of measurements required to compute
 # :math:`\left \langle H \right \rangle` with a target error set to the chemical accuracy, 0.0016
 # :math:`\text{Ha},` is obtained as follows.
