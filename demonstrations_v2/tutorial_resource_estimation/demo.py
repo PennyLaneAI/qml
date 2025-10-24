@@ -81,9 +81,9 @@ mol = qml.qchem.Molecule(symbols, geometry, basis_name='6-31g')
 core, one, two = qml.qchem.electron_integrals(mol)()
 
 ##############################################################################
-# We now create an instance of the :class:`~.pennylane.resource.DoubleFactorization` class
+# We now create an instance of the :class:`~.pennylane.estimator.DoubleFactorization` class
 
-algo = qml.resource.DoubleFactorization(one, two)
+algo = qml.estimator.DoubleFactorization(one, two)
 
 ##############################################################################
 # and obtain the estimated number of non-Clifford gates and logical qubits.
@@ -97,7 +97,7 @@ print(f'Estimated gates : {algo.gates:.2e} \nEstimated qubits: {algo.qubits}')
 
 chemical_accuracy = 0.0016
 error = chemical_accuracy * 10
-algo = qml.resource.DoubleFactorization(one, two, error=error)
+algo = qml.estimator.DoubleFactorization(one, two, error=error)
 print(f'Estimated gates : {algo.gates:.2e} \nEstimated qubits: {algo.qubits}')
 
 ##############################################################################
@@ -110,7 +110,7 @@ n_gates = []
 n_qubits = []
 
 for tol in threshold:
-    algo_ = qml.resource.DoubleFactorization(one, two, tol_factor=tol, tol_eigval=tol)
+    algo_ = qml.estimator.DoubleFactorization(one, two, tol_factor=tol, tol_eigval=tol)
     n_gates.append(algo_.gates)
     n_qubits.append(algo_.qubits)
 
@@ -142,8 +142,8 @@ vectors = np.array([[9.49,  0.00,  0.00],
                     [0.00,  0.00, 11.83]])
 
 ##############################################################################
-# We now create an instance of the :class:`~.pennylane.resource.FirstQuantization` class
-algo = qml.resource.FirstQuantization(planewaves, electrons, vectors=vectors)
+# We now create an instance of the :class:`~.pennylane.estimator.FirstQuantization` class
+algo = qml.estimator.FirstQuantization(planewaves, electrons, vectors=vectors)
 
 ##############################################################################
 # and obtain the estimated number of non-Clifford gates and logical qubits.
@@ -163,7 +163,7 @@ for er in error:
     n_qubits_ = []
 
     for pw in planewaves:
-        algo_ = qml.resource.FirstQuantization(pw, electrons, vectors=vectors, error=er)
+        algo_ = qml.estimator.FirstQuantization(pw, electrons, vectors=vectors, error=er)
         n_gates_.append(algo_.gates)
         n_qubits_.append(algo_.qubits)
     n_gates.append(n_gates_)
@@ -200,8 +200,8 @@ print(f'1-norm of the Hamiltonian: {algo.lamb}')
 
 ##############################################################################
 # PennyLane allows you to get more detailed information about the cost of the algorithms as
-# explained in the documentation of :class:`~.pennylane.resource.FirstQuantization`
-# and :class:`~.pennylane.resource.DoubleFactorization` classes.
+# explained in the documentation of :class:`~.pennylane.estimator.FirstQuantization`
+# and :class:`~.pennylane.estimator.DoubleFactorization` classes.
 #
 # Variational quantum eigensolver
 # ------------------------------------------
