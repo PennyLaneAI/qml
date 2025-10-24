@@ -3,7 +3,6 @@ on:
   schedule:
     - cron: '0 11 * * 1-5'  # Runs weekdays 6 am ET
   workflow_dispatch:
-  push:
 jobs:
   check-for-rc-branches:
     runs-on: ubuntu-latest
