@@ -194,7 +194,7 @@ plt.show()
 # :math:`| 0 \rangle` , the product :math:`\langle \sigma_{z}^{(0)} \sigma_{z}^{(1)} \rangle` is :math:`(+1)(+1) = +1`. Multiplying this by :math:`J = -2`
 # gives an energy of -2. When the last two qubits are in the state :math:`| 0 \rangle`, the second term :math:`-2 \langle \sigma_{z}^{(1)} \sigma_{z}^{(2)} \rangle` is also :math:`E = -2`. Combining
 # these results gives :math:`E = -2 -2 = -4`. When all the qubits are in the other basis state
-# (:math:`| 1 \rangle`), we also get :math:`E = -4`. These two calculations agree with the numerical result from VQE. So far, so good.
+# :math:`(| 1 \rangle)`, we also get :math:`E = -4`. These two calculations agree with the numerical result from VQE. So far, so good.
 # 
 # Let's now introduce an extra energy term that's proportional to the sum of all the Pauli X operators:
 #
