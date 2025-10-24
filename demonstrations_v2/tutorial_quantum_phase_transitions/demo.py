@@ -70,13 +70,13 @@ The simplest Ising model consists of :math:`N` qubits arranged along a line.
 #
 # .. math::
 #    \begin{equation}
-#    H = -J \,\, \Sigma_{i=1}^{N-1} \sigma_{z}^{(i)} \sigma^{(i+1)}_{z},
+#    H = -J \,\, \Sigma_{i=0}^{N-2} \sigma_{z}^{(i)} \sigma^{(i+1)}_{z},
 #    \end{equation}
 #
 # where :math:`\sigma_{z}^{(i)}` is the Pauli-Z operator for the :math:`i^{th}` qubit and :math:`J` is the interaction strength
 # between neighbouring qubits.
 #
-# The code below creates this Hamiltonian:
+# The code below creates this Hamiltonian for three qubits:
 #
 import pennylane as qml
 
@@ -189,17 +189,17 @@ plt.show()
 
 ######################################################################
 # The graph above shows that the energy :math:`E` gradually decreases until it reaches :math:`E = - 4`.
-# To check that this result makes sense, let's think about the Hamiltonian. Consider the first term, :math:`-2 \sigma_{z}^{(1)} \sigma_{z}^{(2)}`.
-# When the first and second qubits are in the computational basis state
-# :math:`| 0 \rangle` , the product :math:`\langle \sigma_{z}^{(1)} \sigma_{z}^{(2)} \rangle` is :math:`(+1)(+1) = +1`. Multiplying this by :math:`J = -2`
-# gives an energy of -2. The second term :math:`-2 \langle \sigma_{z}^{(2)} \sigma_{z}^{(3)} \rangle` is also :math:`E = -2`. Combining
+# To check that this result makes sense, let's think about the Hamiltonian. Consider the first term, :math:`-2 \sigma_{z}^{(0)} \sigma_{z}^{(1)}`.
+# When the first two qubits are in the computational basis state
+# :math:`| 0 \rangle` , the product :math:`\langle \sigma_{z}^{(0)} \sigma_{z}^{(1)} \rangle` is :math:`(+1)(+1) = +1`. Multiplying this by :math:`J = -2`
+# gives an energy of -2. When the last two qubits are in the state :math:`| 0 \rangle`, the second term :math:`-2 \langle \sigma_{z}^{(1)} \sigma_{z}^{(2)} \rangle` is also :math:`E = -2`. Combining
 # these results gives :math:`E = -2 -2 = -4`. When all the qubits are in the other basis state
 # (:math:`| 1 \rangle`), we also get :math:`E = -4`. These two calculations agree with the numerical result from VQE. So far, so good.
 # 
 # Let's now introduce an extra energy term that's proportional to the sum of all the Pauli X operators:
 #
 # .. math::
-#    - h_{x}\Sigma_{i=1}^{N} \sigma_{x}^{(i)}.
+#    - h_{x}\Sigma_{i=0}^{N-1} \sigma_{x}^{(i)}.
 #
 # If our qubits are actually spin-1/2 particles (e.g., electrons), :math:`h_{x}` is a horizontal
 # magnetic field. Often, it's called a *transverse field*.
@@ -215,7 +215,7 @@ plt.show()
 # The system's Hamiltonian becomes
 #
 # .. math::
-#    H = -J \,\, \Sigma_{i=1}^{N-1} \sigma_{z}^{(i)} \sigma^{(i+1)}_{z} - h_{x}\Sigma_{i=1}^{N} \sigma_{x}^{(i)}.
+#    H = -J \,\, \Sigma_{i=0}^{N-2} \sigma_{z}^{(i)} \sigma^{(i+1)}_{z} - h_{x}\Sigma_{i=0}^{N-1} \sigma_{x}^{(i)}.
 #
 # A quantum phase transition happens when we change the ratio :math:`J/h_x`. Physically, this
 # corresponds to changing the relative strength of the coupling interaction and the horizontal
