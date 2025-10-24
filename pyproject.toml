@@ -64,10 +64,10 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry.group.base.dependencies]
 sphinx = "8.1"
 sphinx_gallery = "0.17.1"
-Jinja2 = "3.0.3"
+Jinja2 = "3.1.6"
 markupsafe = "2.1.1"
 pyyaml = "^6.0.1"
-pennylane-sphinx-theme = { git = "https://github.com/PennyLaneAI/pennylane-sphinx-theme.git", branch = "sphinx-update" }
+pennylane-sphinx-theme = "0.25.0"
 pypandoc = "1.5"
 pennylane = "0.43.0"
 uv = "^0.7.18"
