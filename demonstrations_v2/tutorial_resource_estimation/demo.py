@@ -46,7 +46,7 @@ corresponding eigenvalue of the Hamiltonian. A conceptual QPE circuit diagram is
 
 For most cases of interest, this algorithm requires more qubits and longer circuit depths than what
 can be implemented on existing hardware. The PennyLane functionality in the
-:mod:`qml.resource <pennylane.resource>` module allows us to estimate the number of logical qubits
+:mod:`qml.estimator <pennylane.estimator>` module allows us to estimate the number of logical qubits
 and the number of non-Clifford gates that are needed to implement the algorithm. We can estimate
 these resources by simply defining system specifications and a target error for estimation. Let's
 see how!
@@ -230,7 +230,7 @@ H_coeffs, H_ops = H.terms()
 # :math:`\left \langle H \right \rangle` with a target error set to the chemical accuracy, 0.0016
 # :math:`\text{Ha},` is obtained as follows.
 
-m = qml.resource.estimate_shots(H_coeffs)
+m = qml.estimator.estimate_shots(H_coeffs)
 print(f'Shots : {m:.2e}')
 
 ##############################################################################
@@ -242,14 +242,14 @@ print(f'Shots : {m:.2e}')
 ops, coeffs = qml.pauli.group_observables(H_ops, H_coeffs)
 coeffs = [np.array(c) for c in coeffs] # cast as numpy array
 
-m = qml.resource.estimate_shots(coeffs)
+m = qml.estimator.estimate_shots(coeffs)
 print(f'Shots : {m:.2e}')
 
 ##############################################################################
 # It is also interesting to illustrate how the number of shots depends on the target error.
 
 error = np.array([0.02, 0.015, 0.01, 0.005, 0.001])
-m = [qml.resource.estimate_shots(H_coeffs, error=er) for er in error]
+m = [qml.estimator.estimate_shots(H_coeffs, error=er) for er in error]
 
 e_ = np.linspace(error[0], error[-1], num=50)
 m_ = 1.4e4 / np.linspace(error[0], error[-1], num=50)**2
