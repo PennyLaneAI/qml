@@ -210,20 +210,18 @@ You can build and test PennyLane demos locally using the QML CLI tool, allowing 
 
 > **Note:** Local HTML builds will differ visually from the production site or PR previews. These differences are expected; local builds are intended for functional testing rather than visual accuracy.
 
-If you do not specify a `--format` option, the demo will be built in JSON format by default.
-
 ### Building a Demo in HTML Format
 
-To build your demo in HTML format, navigate to the root directory of your demo and run:
+To build your demo in HTML format, navigate to the root directory of the repository and run:
 
 ```bash
-qml build --format html
+qml build --format html <name_of_your_demo>
 ```
 
 The generated HTML file will be located at:
 
 ```
-_build/html/demos/<name_of_your_tutorial>.html
+_build/html/demos/<name_of_your_demo>.html
 ```
 
 Open this file in your web browser to view the demo content.
@@ -233,7 +231,7 @@ Open this file in your web browser to view the demo content.
 To build your demo in JSON format, use:
 
 ```bash
-qml build --format json <demo_name>
+qml build --format json <name_of_your_demo>
 ```
 
 The output will be generated in the following directories:
@@ -242,6 +240,8 @@ The output will be generated in the following directories:
 - `_build/json/demos/<name_of_your_tutorial>/pack` (contains a Jupyter notebook `.ipynb`, a Python script `.py`, and other related files)
 
 > **Note:** You may also add the `--execute` option to execute the demo during the build process.
+
+If you do not specify a `--format` option, the demo will be built in JSON format by default.
 
 ## Support
 
