@@ -117,11 +117,6 @@ warnings.filterwarnings(
     category=FutureWarning,
     message=r"Passing \(type, 1\) or '1type' as a synonym of type is deprecated.+"
 )
-warnings.filterwarnings(
-    "ignore",
-    category=np.VisibleDeprecationWarning,
-    message=r"Creating an ndarray from ragged"
-)
 
 # Raise PennyLane deprecation warnings as errors
 warnings.filterwarnings("error", category=PennyLaneDeprecationWarning)

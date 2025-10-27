@@ -14,8 +14,8 @@ pennylane-qulacs @ git+https://github.com/PennyLaneAI/pennylane-qulacs.git#egg=p
 iqpot @ git+https://github.com/XanaduAI/iqpopt.git#egg=iqpopt
 chex<1.0.0
 pyqrack==1.32.12
-numpy~=1.24
-matplotlib==3.8.0
+numpy~=2.3.4
+matplotlib==3.10.0
 jax==0.6.2
 jaxlib==0.6.2
 jaxopt==0.8.5

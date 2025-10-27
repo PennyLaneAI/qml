@@ -7,5 +7,5 @@ pyyaml~=6.0.1
 pypandoc==1.5
 pennylane-sphinx-theme @ git+https://github.com/PennyLaneAI/pennylane-sphinx-theme.git@sphinx-update
 uv~=0.7.18
-numpy~=1.24
+numpy>=2.0
 pennylane
