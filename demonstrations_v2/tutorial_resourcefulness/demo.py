@@ -19,14 +19,23 @@ and groups <https://pennylane.ai/qml/demos/tutorial_qft_and_groups>`__).
 compute a quantity that they call the **Generalised Fourier Decomposition (GFD) Purity**,
 and use it as a "fingerprint" of a state's resource profile.
 
+<<<<<<< HEAD
 The basic idea is to identify the circuits that map resource-free
+=======
+To give a sneak peek of the technical details, the idea is to identify the circuits that map resource-free
+>>>>>>> resourcefulness_demo
 states to resource-free states with a mathematical object called a *unitary representation of a group*.
 The basis in which these "free" unitaries, and hence the representation, are block-diagonal, reveals so-called *irreducible subspaces*
 of different "order".
 The GFD Purities are then a measure for how much of a state "lives" in each of these subspaces.
 More resourceful states have large projections in higher-order subspaces and vice versa.
 
+<<<<<<< HEAD
 We will see that the standard Fourier transform is a special case of this framework: here
+=======
+To make this jargon clearer, we will start with a didactic example, and see that the standard Fourier
+transform can be seen as a special case of this framework: here
+>>>>>>> resourcefulness_demo
 the GFD purities are the absolute squares of the standard Fourier coefficients,
 which is also known as the *power spectrum* (and GFD Purities can therefore be seen as a "generalised power spectrum") .
 We will then use the same concepts to analyse the entanglement fingerprint
@@ -36,10 +45,17 @@ of quantum states as a resource, reproducing Figure 2 in [#Bermejo_Braccia]_.
    :align: center
    :width: 70%
 
+<<<<<<< HEAD
    Figure 1: GFD Purities of different states using 2-qubit entanglement as a resource.
    A Bell state, which is maximally entangled, has high contributions in second-order GFD Purities, while
    a tensor product state with no entanglement has contributions in the first-order Purities. The interpolation
    between the two extremes, exemplified by a Haar random state, has a spectrum in between.
+=======
+   Figure 1: The three GFD Purities of different states using 2-qubit entanglement as a resource.
+   A Bell state, which is maximally entangled, has high contributions in second-order GFD Purities, while
+   a tensor product state with no entanglement has contributions in the first-order Purities. The interpolation
+   between the two extremes, exemplified by an ensemble of Haar random states, lies in between.
+>>>>>>> resourcefulness_demo
 
 While the theory rests in group theory, the tutorial is aimed at readers who don't know much about groups at all.
 Instead, we will make heavy use of linear algebra!
@@ -113,7 +129,11 @@ plt.show()
 # But what kind of resource are we dealing with here? In other words, what
 # measure of complexity gets higher when a function has large higher-order Fourier coefficients?
 #
+<<<<<<< HEAD
 # Well, let us look for the function with the *least* resource or complexity! For this we can just
+=======
+# Well, let us look for the function with the *least* resource! For this we can just
+>>>>>>> resourcefulness_demo
 # work backwards: define a Fourier spectrum that only has a contribution in the lowest order coefficient,
 # and apply the inverse Fourier transform to look at the function it corresponds to.
 #
@@ -145,9 +165,15 @@ plt.show()
 
 ######################################################################
 # The function with the least resource is constant! This makes sense: We know that the decay of the Fourier coefficients
+<<<<<<< HEAD
 # is related to the number of times a function is differentiable, which in turn is the technical definition of "smoothness".
 # A constant function is maximally smooth -- it does not wiggle at all. In other words,
 # the resource of the standard Fourier transform is smoothness, and a resource-free function is constant.
+=======
+# is related to the number of continuous derivatives it has, which in turn is the technical definition of "smoothness".
+# A constant function is maximally smooth -- it does not wiggle at all. In other words,
+# the resource of the standard Fourier transform is non-smoothness, and a resource-free function is constant.
+>>>>>>> resourcefulness_demo
 #
 
 ######################################################################
@@ -194,7 +220,11 @@ f_vec = np.array([f(x) for x in range(N)])
 #
 # Without dwelling further, we simply recognise that the *circulant* permutation matrices -- those that shift vector
 # entries by :math:`s` positions -- can be shown to
+<<<<<<< HEAD
 # form a unitary representation for the group :math:`g \in G = Z_N`, called the *regular representation*.
+=======
+# form a unitary representation for the group :math:`g \in G = Z_N`. This representation is called the *regular representation*.
+>>>>>>> resourcefulness_demo
 # Every circulant matrix hence gets associated with one x-value.
 #
 # .. admonition:: The group :math:`Z_N`
@@ -280,10 +310,17 @@ print("is diagonal:", np.allclose(P_F - np.diag(np.diagonal(P_F)), np.zeros((N,N
 # According to standard linear algebra, a basis for such a subspace can be found by selecting the rows of the basis change matrix
 # ``F`` whose indices correspond to the indices of a block in ``P_F``.
 #
+<<<<<<< HEAD
 # In [#Bermejo_Braccia]_ these basis vectors where
 # called :math:`w^{(i)}_{\alpha, j}`, where :math:`\alpha, j` the copy or multiplicity
 # of a block on the diagonal. The double index captures the fact that blocks can be repeated,
 # and :math:`j` is the multiplicity, a technical detail we will not worry about any further here.
+=======
+# In [#Bermejo_Braccia]_ these basis vectors were
+# called :math:`w^{(i)}_{\alpha, j}`, where :math:`\alpha` indicates the block, :math:`j` refers to the multiplicity
+# of that block (which can potentially be repeated, a technical detail we will not worry about any further here), and
+# :math:`i` indexes the basis vectors.
+>>>>>>> resourcefulness_demo
 # For example, the single basis vector spanning the 1-dimensional subspace that corresponds to the third 1-dimensional block
 # in ``P_F`` would be:
 #
@@ -309,7 +346,11 @@ purity3 = np.abs(np.vdot(basis3, f_vec))**2
 
 ######################################################################
 # What did we just do? We wrote a discrete function as a vector and computed the magnitude of its projection onto
+<<<<<<< HEAD
 # a subspace spanned by rows of ``F``, the matrix that moves into the Fourier basis. This is exactly what we
+=======
+# a subspace spanned by a row of ``F``, the matrix that moves into the Fourier basis. This is exactly what we
+>>>>>>> resourcefulness_demo
 # did when computing the power spectrum. We have indeed just made the recipe for computing the power
 # spectrum more complicated. To confirm this, let's verify that the third entry of the power spectrum
 # is the third GFD Purity.
@@ -319,7 +360,11 @@ print("GFD Purity and power spectrum coincide:", np.isclose(power_spectrum[3], p
 
 ######################################################################
 # We now have a very different perspective on the power spectrum :math:`|\hat{f}(k)|^2`: It is a projection of the function
+<<<<<<< HEAD
 # :math:`f` into irreducible subspaces revealed by moving into the basis that block-diagonalises circular matrices.
+=======
+# :math:`f` into irreducible subspaces revealed by moving into the basis that block-diagonalises circulant matrices.
+>>>>>>> resourcefulness_demo
 # The advantage of this perspective is that it easily generalises to other resources, groups and vector spaces,
 # as long as we can follow Steps 1-6.
 #
@@ -327,10 +372,17 @@ print("GFD Purity and power spectrum coincide:", np.isclose(power_spectrum[3], p
 #
 # .. note:: 
 #
+<<<<<<< HEAD
 #    Before moving on, we want to remark that the example of "smoothness" as a resource should be read as a pedagogical, and not rigorous, introduction to the idea of the GFD framework. 
 #    For example, a subtlety arises when we speak of "high" and "low-order" frequencies. Commonly, GFD purities are ordered by taking into account the size of their associated blocks in the block-diagonalisation of representations.  
 #    However, in our Fourier transform example, we were working with *Abelian groups*, where all blocks are of dimension 1. 
 #    To derive the order of frequencies, a more complicated theoretical construction is required, which exceeds the scope of this demo.
+=======
+#     Before moving on, we want to remark that the example of "smoothness" as a resource should be read as a pedagogical, and not rigorous, introduction to the idea of the GFD framework. 
+#     For example, a subtlety arises when we speak of "high" and "low-order" frequencies. Commonly, GFD purities are ordered by taking into account the size of their associated blocks in the block-diagonalisation of representations.  
+#    However, in our Fourier transform example, we were working with *Abelian groups*, where all blocks are of dimension 1. 
+#    To derive the order of frequencies a more complicated theoretical construction is required, which exceeds the scope of this demo.
+>>>>>>> resourcefulness_demo
 #
 
 ######################################################################
@@ -389,7 +441,11 @@ states = [product_state(n),  haar_state(n), ghz_state(n)]
 labels = [ "Product", "Haar", "GHZ"]
 
 #####################################################################
+<<<<<<< HEAD
 # To compute the GFD Purities, we can walk the same steps we took when studying the resource of "smoothness".
+=======
+# To compute the GFD Purities, we can walk the same steps we took when studying the resource of "non-smoothness".
+>>>>>>> resourcefulness_demo
 #
 # 1. **Identify free vectors**. Luckily for us, our objects of interest, the quantum states :math:`|\psi\rangle \in \mathbb{C}^{2n}`,
 #    are already in the form of vectors. It's easy to define the set of free states for multipartite entanglement:
@@ -540,7 +596,11 @@ print(np.round(np.abs(Uvec_diag), 4))
 # But ``Uvec_diag`` does not look block diagonal. What happened here?
 # Well, it *is* block-diagonal, but we have to reorder the columns and rows of the final matrix to make this visible.
 # This takes a bit of pain, which we outsource to a utility function that can be found
+<<<<<<< HEAD
 # `here <https://github.com/PennyLaneAI/qml/blob/master/demonstrations_v2/tutorial_resourcefulness/utils.py>`__:
+=======
+# `here <https://github.com/PennyLaneAI/qml/demonstrations_v2/tutorial_resourcefulness/utils.py>`__:
+>>>>>>> resourcefulness_demo
 #
 
 from utils import group_rows_cols_by_sparsity
