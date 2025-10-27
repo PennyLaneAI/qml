@@ -328,8 +328,8 @@ print("GFD Purity and power spectrum coincide:", np.isclose(power_spectrum[3], p
 #
 # .. note:: 
 #
-#     Before moving on, we want to remark that the example of "non-smoothness" as a resource should be read as a pedagogical, and not rigorous, introduction to the idea of the GFD framework.
-#     For example, a subtlety arises when we speak of "high" and "low-order" frequencies. Commonly, GFD purities are ordered by taking into account the size of their associated blocks in the block-diagonalisation of representations.  
+#    Before moving on, we want to remark that the example of "non-smoothness" as a resource should be read as a pedagogical, and not rigorous, introduction to the idea of the GFD framework.
+#    For example, a subtlety arises when we speak of "high" and "low-order" frequencies. Commonly, GFD purities are ordered by taking into account the size of their associated blocks in the block-diagonalisation of representations.
 #    However, in our Fourier transform example, we were working with *Abelian groups*, where all blocks are of dimension 1. 
 #    To derive the order of frequencies a more complicated theoretical construction is required, which exceeds the scope of this demo.
 #
