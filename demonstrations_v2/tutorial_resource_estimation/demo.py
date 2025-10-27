@@ -81,7 +81,7 @@ mol = qml.qchem.Molecule(symbols, geometry, basis_name='6-31g')
 core, one, two = qml.qchem.electron_integrals(mol)()
 
 ##############################################################################
-# We now create an instance of the :class:`~.pennylane.estimator.qpe_resources.DoubleFactorization` class
+# We now create an instance of the :class:`~.pennylane.resource.DoubleFactorization` class
 
 algo = qml.estimator.DoubleFactorization(one, two)
 
@@ -142,7 +142,7 @@ vectors = np.array([[9.49,  0.00,  0.00],
                     [0.00,  0.00, 11.83]])
 
 ##############################################################################
-# We now create an instance of the :class:`~.pennylane.estimator.qpe_resources.FirstQuantization` class
+# We now create an instance of the :class:`~.pennylane.resource.FirstQuantization` class
 algo = qml.estimator.FirstQuantization(planewaves, electrons, vectors=vectors)
 
 ##############################################################################
@@ -200,8 +200,8 @@ print(f'1-norm of the Hamiltonian: {algo.lamb}')
 
 ##############################################################################
 # PennyLane allows you to get more detailed information about the cost of the algorithms as
-# explained in the documentation of :class:`~.pennylane.estimator.qpe_resources.FirstQuantization`
-# and :class:`~.pennylane.estimator.qpe_resources.DoubleFactorization` classes.
+# explained in the documentation of :class:`~.pennylane.resource.FirstQuantization`
+# and :class:`~.pennylane.resource.DoubleFactorization` classes.
 #
 # Variational quantum eigensolver
 # ------------------------------------------
