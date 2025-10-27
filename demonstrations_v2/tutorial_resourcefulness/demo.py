@@ -4,29 +4,28 @@ Resourcefulness of quantum states with Fourier analysis
 
 Resource theories in quantum information ask how "complex" a given quantum state is with respect to a certain
 measure of complexity. For example, using the resource of *entanglement*, we can ask how entangled a quantum state is. Other well-known
-resources are *Clifford stabilizerness*, which measures how close a state is from being preparable by a
-classically simulatable *Clifford circuit*, or *Gaussianity*, which measures how far away a state is from simple *Gaussian states*.
+resources are: *Clifford stabilizerness*, which measures how close a state is from being preparable by a
+classically simulatable *Clifford circuit*, and *Gaussianity*, which quantifies the distance of a state from simple *Gaussian states*.
 As the name "resourceful" suggests,
-these measures of complexity often relate to how much "effort" states cost, for example with respect to classical simulation or
-preparation in the lab.
+these measures of complexity often relate to the "effort" or cost associated with states, wether that be the complexity of classical simulation or the difficulty of preparation in the lab.
 
 It turns out that the resourcefulness of quantum states can be investigated with tools from *generalised Fourier analysis*.
 *Fourier analysis* here refers to the well-known technique of computing Fourier coefficients of a function, or in our case,
 the amplitudes of a quantum state. *Generalised* indicates that we don't use the
 standard Fourier transform, but a generalisation of its group-theoretic definition (more about this in our demo on `quantum Fourier transforms
 and groups <https://pennylane.ai/qml/demos/tutorial_qft_and_groups>`__).
-`Bermejo, Braccia et al. (2025) <https://arxiv.org/abs/2506.19696>`__ [#Bermejo_Braccia]_ suggest to use generalised Fourier analysis to
+`Bermejo, Braccia et al. (2025) <https://arxiv.org/abs/2506.19696>`__ [#Bermejo_Braccia]_ suggest using generalised Fourier analysis to
 compute a quantity that they call the **Generalised Fourier Decomposition (GFD) Purity**,
 and use it as a "fingerprint" of a state's resource profile.
 
 To give a sneak peek of the technical details, the idea is to identify the circuits that map resource-free
-states to resource-free states with a mathematical object called a *unitary representation of a group*.
-The basis in which these "free" unitaries, and hence the representation, are block-diagonal, reveals so-called *irreducible subspaces*
+states to other resource-free states with a mathematical object called a *unitary representation of a group*.
+The basis in which these "free" unitaries, and hence the representation, are block-diagonal reveals so-called *irreducible subspaces*
 of different "order".
-The GFD Purities are then a measure for how much of a state "lives" in each of these subspaces.
+The GFD Purities then serve as a measure of how much of a state "lives" in each of these subspaces.
 More resourceful states have large projections in higher-order subspaces and vice versa.
 
-To make this jargon clearer, we will start with a didactic example, and see that the standard Fourier
+To clarify this terminology, we will begin with a didactic example, and see that the standard Fourier
 transform can be seen as a special case of this framework: here
 the GFD purities are the absolute squares of the standard Fourier coefficients,
 which is also known as the *power spectrum* (and GFD Purities can therefore be seen as a "generalised power spectrum") .
@@ -42,7 +41,7 @@ of quantum states as a resource, reproducing Figure 2 in [#Bermejo_Braccia]_.
    a tensor product state with no entanglement has contributions in the first-order Purities. The interpolation
    between the two extremes, exemplified by an ensemble of Haar random states, lies in between.
 
-While the theory rests in group theory, the tutorial is aimed at readers who don't know much about groups at all.
+While the underlying theory is rooted in group theory, this tutorial is aimed at readers who don't know much about groups. 
 Instead, we will make heavy use of linear algebra!
 
 
@@ -57,7 +56,7 @@ Given N real values :math:`x_0,...,x_{N-1}`, that we can interpret as the values
 of a function :math:`f(x)` over the integers :math:`x \in {0,...,N-1}`, the discrete Fourier transform
 computes the Fourier coefficients
 
-.. math:: \hat{f}(k) = \frac{1}{\sqrt{N}} \sum_{x=0}^{N-1} f(x) e^{\frac{2 \pi i}{N} k x}, \;\; k = 0,...,N-1
+.. math:: \hat{f}(k) = \frac{1}{\sqrt{N}} \sum_{x=0}^{N-1} f(x) e^{\frac{2 \pi i}{N} k x}, \;\; k = 0,...,N-1.
 
 In words, the Fourier coefficients are projections of :math:`f(x)` onto the *Fourier basis functions*
 :math:`e^{\frac{2 \pi i}{N} k x}`. Note that we use a normalisation here that is consistent with a unitary transform.
@@ -95,8 +94,8 @@ plt.show()
 
 
 ######################################################################
-# Now, we mentioned that the absolute square of the standard Fourier coefficients---the power spectrum---is the simplest example of
-# GFD Purities, so for this case, we can easily compute our quantity of interest!
+# We mentioned that the absolute square of the standard Fourier coefficients---the power spectrum---is the simplest example of
+# GFD Purities, and for this case, we can easily compute our quantity of interest!
 #
 
 power_spectrum = [np.abs(f_hat(k))**2 for k in range(N)]
@@ -147,7 +146,7 @@ plt.show()
 ######################################################################
 # The function with the least resource is constant! This makes sense: We know that the decay of the Fourier coefficients
 # is related to the number of continuous derivatives it has, which in turn is the technical definition of "smoothness".
-# A constant function is maximally smooth -- it does not wiggle at all. In other words,
+# A constant function is maximally smooth---it does not wiggle at all. In other words,
 # the resource of the standard Fourier transform is non-smoothness, and a resource-free function is constant.
 #
 
@@ -163,8 +162,8 @@ plt.show()
 # ************************
 # The first step to compute GFD Purities is to define the resource by identifying a set of "resource-free vectors".
 # (We need vectors because representation theory deals with vector spaces.)
-# So far we only had a discrete *function* :math:`f(x)`,
-# but we can easily write it as a vector :math:`[f(0), ..., f(N-1)]^T \in V` that lives in the vector space :math:`\mathbb{R}^N`.
+# So far we have only had a discrete *function* :math:`f(x)`,
+# but we can easily write it as a vector :math:`[f(0), ..., f(N-1)]^T \in V` living in the vector space :math:`\mathbb{R}^N`.
 #
 
 f_vec = np.array([f(x) for x in range(N)])
@@ -176,8 +175,8 @@ f_vec = np.array([f(x) for x in range(N)])
 #
 # 2. Identify free unitary transformations
 # ****************************************
-# Next, we need to identify a set of unitary matrices (think: quantum circuits) that, when multiplied by the resource-free vectors
-# maps to another resource-free vector. Which matrix maps uniform vectors to uniform vectors?
+# Next, we need to identify a set of unitary matrices (think: quantum circuits) that, when multiplied by the resource-free vectors,
+# map to another resource-free vector. Which matrices map uniform vectors to uniform vectors?
 # The permutation matrices! These are matrices that, by definition,
 # swap the entries of the vector, but do not change their magnitude.
 #
@@ -193,8 +192,8 @@ f_vec = np.array([f(x) for x in range(N)])
 #     property that :math:`R(g) R(g') = R(gg')`, where :math:`gg'` denotes the composition of elements according
 #     to the group.
 #
-# Without dwelling further, we simply recognise that the *circulant* permutation matrices -- those that shift vector
-# entries by :math:`s` positions -- can be shown to
+# Without dwelling further, we simply recognise that the *circulant* permutation matrices---those that shift vector
+# entries by :math:`s` positions---can be shown to
 # form a unitary representation for the group :math:`g \in G = Z_N`. This representation is called the *regular representation*.
 # Every circulant matrix hence gets associated with one x-value.
 #
@@ -260,7 +259,7 @@ print("Fourier coefficients coincide:", np.allclose(f_fourier_coeffs, f_fourier_
 
 ######################################################################
 # Now, where are we? We wanted to show that our group-theoretic claim is true:
-# expressing any circulant matrix ``P`` in the Fourier basis---or multiplying it with the basis change matrix ``F``---
+# Expressing any circulant matrix ``P`` in the Fourier basis---or multiplying it with the basis change matrix ``F``---
 # diagonalises it.
 #
 
@@ -277,11 +276,11 @@ print("is diagonal:", np.allclose(P_F - np.diag(np.diagonal(P_F)), np.zeros((N,N
 #
 # 5. Find a basis for each subspace
 # *********************************
-# What we actually wanted to accomplish with the (block-)diagonalisation is to find the subspaces associated with each block.
+# What we actually wanted to accomplish with the (block-)diagonalisation was to find the subspaces associated with each block.
 # According to standard linear algebra, a basis for such a subspace can be found by selecting the rows of the basis change matrix
 # ``F`` whose indices correspond to the indices of a block in ``P_F``.
 #
-# In [#Bermejo_Braccia]_ these basis vectors were
+# In [#Bermejo_Braccia]_, these basis vectors were
 # called :math:`w^{(i)}_{\alpha, j}`, where :math:`\alpha` indicates the block, :math:`j` refers to the multiplicity
 # of that block (which can potentially be repeated, a technical detail we will not worry about any further here), and
 # :math:`i` indexes the basis vectors.
@@ -326,12 +325,13 @@ print("GFD Purity and power spectrum coincide:", np.isclose(power_spectrum[3], p
 #
 # Let's now try to compute entanglement fingerprints, or "generalised power spectra" of quantum states.
 #
-# .. note:: 
+# .. admonition:: Note
+#     :class: note
 #
-#    Before moving on, we want to remark that the example of "non-smoothness" as a resource should be read as a pedagogical, and not rigorous, introduction to the idea of the GFD framework.
-#    For example, a subtlety arises when we speak of "high" and "low-order" frequencies. Commonly, GFD purities are ordered by taking into account the size of their associated blocks in the block-diagonalisation of representations.
-#    However, in our Fourier transform example, we were working with *Abelian groups*, where all blocks are of dimension 1. 
-#    To derive the order of frequencies a more complicated theoretical construction is required, which exceeds the scope of this demo.
+#     Before moving on, we want to remark that the example of "non-smoothness" as a resource should be read as a pedagogical, and not rigorous, introduction to the idea of the GFD framework.
+#     For example, a subtlety arises when we speak of "high" and "low-order" frequencies. Commonly, GFD purities are ordered by taking into account the size of their associated blocks in the block-diagonalisation of representations.
+#     However, in our Fourier transform example, we were working with *Abelian groups*, where all blocks are of dimension 1. 
+#     To derive the order of frequencies a more complicated theoretical construction is required, which exceeds the scope of this demo.
 #
 
 ######################################################################
