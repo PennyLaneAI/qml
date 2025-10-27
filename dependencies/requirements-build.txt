@@ -7,5 +7,5 @@ pyyaml~=6.0.1
 pypandoc==1.5
 pennylane-sphinx-theme 
 uv~=0.7.18
-numpy>=2.0
+numpy~=2.3.4
 pennylane
