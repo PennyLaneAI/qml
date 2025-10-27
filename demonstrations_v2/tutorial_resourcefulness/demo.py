@@ -19,14 +19,15 @@ and groups <https://pennylane.ai/qml/demos/tutorial_qft_and_groups>`__).
 compute a quantity that they call the **Generalised Fourier Decomposition (GFD) Purity**,
 and use it as a "fingerprint" of a state's resource profile.
 
-The basic idea is to identify the circuits that map resource-free
+To give a sneak peek of the technical details, the idea is to identify the circuits that map resource-free
 states to resource-free states with a mathematical object called a *unitary representation of a group*.
 The basis in which these "free" unitaries, and hence the representation, are block-diagonal, reveals so-called *irreducible subspaces*
 of different "order".
 The GFD Purities are then a measure for how much of a state "lives" in each of these subspaces.
 More resourceful states have large projections in higher-order subspaces and vice versa.
 
-We will see that the standard Fourier transform is a special case of this framework: here
+To make this jargon clearer, we will start with a didactic example, and see that the standard Fourier
+transform can be seen as a special case of this framework: here
 the GFD purities are the absolute squares of the standard Fourier coefficients,
 which is also known as the *power spectrum* (and GFD Purities can therefore be seen as a "generalised power spectrum") .
 We will then use the same concepts to analyse the entanglement fingerprint
@@ -36,10 +37,10 @@ of quantum states as a resource, reproducing Figure 2 in [#Bermejo_Braccia]_.
    :align: center
    :width: 70%
 
-   Figure 1: GFD Purities of different states using 2-qubit entanglement as a resource.
+   Figure 1: The three GFD Purities of different states using 2-qubit entanglement as a resource.
    A Bell state, which is maximally entangled, has high contributions in second-order GFD Purities, while
    a tensor product state with no entanglement has contributions in the first-order Purities. The interpolation
-   between the two extremes, exemplified by a Haar random state, has a spectrum in between.
+   between the two extremes, exemplified by a Haar random state, lies in between.
 
 While the theory rests in group theory, the tutorial is aimed at readers who don't know much about groups at all.
 Instead, we will make heavy use of linear algebra!
@@ -113,7 +114,7 @@ plt.show()
 # But what kind of resource are we dealing with here? In other words, what
 # measure of complexity gets higher when a function has large higher-order Fourier coefficients?
 #
-# Well, let us look for the function with the *least* resource or complexity! For this we can just
+# Well, let us look for the function with the *least* resource! For this we can just
 # work backwards: define a Fourier spectrum that only has a contribution in the lowest order coefficient,
 # and apply the inverse Fourier transform to look at the function it corresponds to.
 #
@@ -145,9 +146,9 @@ plt.show()
 
 ######################################################################
 # The function with the least resource is constant! This makes sense: We know that the decay of the Fourier coefficients
-# is related to the number of times a function is differentiable, which in turn is the technical definition of "smoothness".
+# is related to the number of continuous derivatives it has, which in turn is the technical definition of "smoothness".
 # A constant function is maximally smooth -- it does not wiggle at all. In other words,
-# the resource of the standard Fourier transform is smoothness, and a resource-free function is constant.
+# the resource of the standard Fourier transform is non-smoothness, and a resource-free function is constant.
 #
 
 ######################################################################
@@ -194,7 +195,7 @@ f_vec = np.array([f(x) for x in range(N)])
 #
 # Without dwelling further, we simply recognise that the *circulant* permutation matrices -- those that shift vector
 # entries by :math:`s` positions -- can be shown to
-# form a unitary representation for the group :math:`g \in G = Z_N`, called the *regular representation*.
+# form a unitary representation for the group :math:`g \in G = Z_N`. This representation is called the *regular representation*.
 # Every circulant matrix hence gets associated with one x-value.
 #
 # .. admonition:: The group :math:`Z_N`
@@ -280,10 +281,10 @@ print("is diagonal:", np.allclose(P_F - np.diag(np.diagonal(P_F)), np.zeros((N,N
 # According to standard linear algebra, a basis for such a subspace can be found by selecting the rows of the basis change matrix
 # ``F`` whose indices correspond to the indices of a block in ``P_F``.
 #
-# In [#Bermejo_Braccia]_ these basis vectors where
-# called :math:`w^{(i)}_{\alpha, j}`, where :math:`\alpha, j` the copy or multiplicity
-# of a block on the diagonal. The double index captures the fact that blocks can be repeated,
-# and :math:`j` is the multiplicity, a technical detail we will not worry about any further here.
+# In [#Bermejo_Braccia]_ these basis vectors were
+# called :math:`w^{(i)}_{\alpha, j}`, where :math:`\alpha` indicates the block, :math:`j` refers to the multiplicity
+# of that block (which can potentially be repeated, a technical detail we will not worry about any further here), and
+# :math:`i` indexes the basis vectors.
 # For example, the single basis vector spanning the 1-dimensional subspace that corresponds to the third 1-dimensional block
 # in ``P_F`` would be:
 #
@@ -309,7 +310,7 @@ purity3 = np.abs(np.vdot(basis3, f_vec))**2
 
 ######################################################################
 # What did we just do? We wrote a discrete function as a vector and computed the magnitude of its projection onto
-# a subspace spanned by rows of ``F``, the matrix that moves into the Fourier basis. This is exactly what we
+# a subspace spanned by a row of ``F``, the matrix that moves into the Fourier basis. This is exactly what we
 # did when computing the power spectrum. We have indeed just made the recipe for computing the power
 # spectrum more complicated. To confirm this, let's verify that the third entry of the power spectrum
 # is the third GFD Purity.
@@ -319,7 +320,7 @@ print("GFD Purity and power spectrum coincide:", np.isclose(power_spectrum[3], p
 
 ######################################################################
 # We now have a very different perspective on the power spectrum :math:`|\hat{f}(k)|^2`: It is a projection of the function
-# :math:`f` into irreducible subspaces revealed by moving into the basis that block-diagonalises circular matrices.
+# :math:`f` into irreducible subspaces revealed by moving into the basis that block-diagonalises circulant matrices.
 # The advantage of this perspective is that it easily generalises to other resources, groups and vector spaces,
 # as long as we can follow Steps 1-6.
 #
@@ -382,7 +383,7 @@ states = [product_state(n),  haar_state(n), ghz_state(n)]
 labels = [ "Product", "Haar", "GHZ"]
 
 #####################################################################
-# To compute the GFD Purities, we can walk the same steps we took when studying the resource of "smoothness".
+# To compute the GFD Purities, we can walk the same steps we took when studying the resource of "non-smoothness".
 #
 # 1. **Identify free vectors**. Luckily for us, our objects of interest, the quantum states :math:`|\psi\rangle \in \mathbb{C}^{2n}`,
 #    are already in the form of vectors. It's easy to define the set of free states for multipartite entanglement:
