@@ -300,7 +300,7 @@ print(basis3)
 # .. math::
 #           \mathcal{P}_{\alpha, j}(v) = \sum_i  | \langle w^{(i)}_{\alpha, j}, v \rangle |^2,
 #
-# where :math:`w^{(i)}_{\alpha, j}` are the basis vectors of the :math:`\alpha, j` subspace, and :math:`v` is the vector whose
+# where :math:`v` is the vector whose
 # resource fingerprint we want to determine.
 #
 # For example, the GFD Purity for the third block (or "frequency") for the vector ``f_vec`` would be calculated as follows:
