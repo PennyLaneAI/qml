@@ -40,7 +40,7 @@ of quantum states as a resource, reproducing Figure 2 in [#Bermejo_Braccia]_.
    Figure 1: The three GFD Purities of different states using 2-qubit entanglement as a resource.
    A Bell state, which is maximally entangled, has high contributions in second-order GFD Purities, while
    a tensor product state with no entanglement has contributions in the first-order Purities. The interpolation
-   between the two extremes, exemplified by a Haar random state, lies in between.
+   between the two extremes, exemplified by an ensemble of Haar random states, lies in between.
 
 While the theory rests in group theory, the tutorial is aimed at readers who don't know much about groups at all.
 Instead, we will make heavy use of linear algebra!
