@@ -16,9 +16,6 @@ import os
 import sys
 import warnings
 import numpy as np
-from jinja2 import FileSystemLoader, Environment
-import yaml
-from pathlib import Path
 
 sys.path.insert(0, os.path.abspath("."))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
@@ -30,7 +27,7 @@ from pennylane.exceptions import PennyLaneDeprecationWarning
 
 project = "PennyLane"
 
-copyright = "2022, Xanadu Quantum Technologies, Inc."
+copyright = "2025, Xanadu Quantum Technologies, Inc."
 
 author = "Xanadu Inc."
 
