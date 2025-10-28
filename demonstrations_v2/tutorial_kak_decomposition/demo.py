@@ -34,7 +34,7 @@ as well as a few gotchas regarding the nomenclature into boxes such as this one:
     In the following we will assume a basic understanding of vector spaces,
     linear maps, and Lie algebras. To review those topics, we recommend a look
     at your favourite linear algebra material. For the latter, also see our
-    :doc:`introduction to (dynamical) Lie algebras </demos/tutorial_liealgebra/>`.
+    :doc:`introduction to (dynamical) Lie algebras <demos/tutorial_liealgebra/>`.
 
 Without further ado, let's get started!
 
@@ -49,7 +49,7 @@ Lie algebras
 
 As mentioned above, we will assume a basic understanding of the mathematical objects
 we will use. To warm up, however, let us briefly talk about Lie algebras (for details
-see our :doc:`intro to (dynamical) Lie algebras </demos/tutorial_liealgebra/>`).
+see our :doc:`intro to (dynamical) Lie algebras <demos/tutorial_liealgebra/>`).
 
 A *Lie algebra* :math:`\mathfrak{g}` is a vector space with an additional operation
 that takes two vectors to a new vector, the *Lie bracket*. To form an algebra, :math:`\mathfrak{g}` must be
@@ -183,7 +183,7 @@ print(f"All operators are traceless: {np.allclose(traces, 0.)}")
 # to itself, via its series representation.
 # We will refer to this relationship as the *adjoint identity*.
 # We talk about :math:`\text{Ad}` and :math:`\text{ad}` in more detail in the box below, and refer to our demo
-# :doc:`g-sim: Lie algebraic classical simulations </demos/tutorial_liesim/>` for
+# :doc:`g-sim: Lie algebraic classical simulations <demos/tutorial_liesim/>` for
 # further discussion.
 #
 # .. admonition:: Derivation: adjoint representations
@@ -348,12 +348,13 @@ def is_orthogonal(op, basis):
 #
 # Let us define it in code, and check whether it gives rise to a Cartan decomposition.
 # As we want to look at another example later, we wrap everything in a function.
+# A similar function is available in PennyLane as :func:`~.pennylane.liealg.check_cartan_decomp`.
 #
 
 
-def check_cartan_decomposition(g, k, space_name):
+def check_cartan_decomp(g, k, space_name):
     """Given an algebra g and an operator subspace k, verify that k is a subalgebra
-    and gives rise to a Cartan decomposition."""
+    and gives rise to a Cartan decomposition. Similar to qml.liealg.check_cartan_decomp"""
     # Check Lie closure of k
     k_lie_closure = qml.lie_closure(k)
     k_is_closed = len(k_lie_closure) == len(k)
@@ -387,7 +388,7 @@ def check_cartan_decomposition(g, k, space_name):
 
 u1 = [Z(0)]
 space_name = "SU(2)/U(1)"
-p = check_cartan_decomposition(su2, u1, space_name)
+p = check_cartan_decomp(su2, u1, space_name)
 
 ######################################################################
 # Cartan subalgebras
@@ -811,7 +812,7 @@ print(f"su(4) is {len(su4)}-dimensional")
 # Define subalgebra su(2) ⊕ su(2)
 su2_su2 = [X(0), Y(0), Z(0), X(1), Y(1), Z(1)]
 space_name = "SU(4)/(SU(2)xSU(2))"
-p = check_cartan_decomposition(su4, su2_su2, space_name)
+p = check_cartan_decomp(su4, su2_su2, space_name)
 
 ######################################################################
 # .. admonition:: Math detail: involution for two-qubit decomposition
@@ -904,8 +905,8 @@ fig, ax = qml.draw_mpl(su4_gate, wire_order=[0, 1])(params)
 # decades, e.g., for the simulation of quantum circuits [#somma]_ [#goh]_ and their
 # compression [#kokcu_comp]_ [#gu]_, in quantum optimal control [#dirr]_, and for trainability
 # analyses [#fontana]_ [#ragone]_. For Lie algebraic classical simulation of quantum circuits,
-# also take a look at the :doc:`g-sim </demos/tutorial_liesim/>` and
-# :doc:`(g+P)-sim </demos/tutorial_liesim_extension/>` demos.
+# also take a look at the :doc:`g-sim <demos/tutorial_liesim/>` and
+# :doc:`(g+P)-sim <demos/tutorial_liesim_extension/>` demos.
 #
 # References
 # ----------
@@ -984,5 +985,3 @@ fig, ax = qml.draw_mpl(su4_gate, wire_order=[0, 1])(params)
 #     "A Unified Theory of Barren Plateaus for Deep Parametrized Quantum Circuits"
 #     `Nat. Commun. **15** <https://www.nature.com/articles/s41467-024-49909-3>`__, 2024.
 #
-# About the author
-# ----------------

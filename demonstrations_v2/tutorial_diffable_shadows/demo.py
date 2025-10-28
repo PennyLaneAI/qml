@@ -11,8 +11,6 @@ r"""Estimating observables with classical shadows in the Pauli basis
     tutorial_classical_shadows Introduction to classic shadows
     ml_classical_shadows Classic shadows in machine learning
 
-*Author: Korbinian Kottmann — Posted: 07 October 2022. Last updated: 11 October 2022.*
-
 We briefly introduce the classical shadow formalism in the Pauli basis and showcase PennyLane's new implementation of it.
 Classical shadows are sometimes believed to provide advantages in quantum resources to simultaneously estimate multiple observables.
 We demystify this misconception and perform fair comparisons between classical shadow measurements and simultaneously measuring
@@ -22,7 +20,7 @@ Classical shadow theory
 -----------------------
 
 A `classical shadow` is a classical description of a quantum state that is capable of reproducing expectation values of local Pauli observables, see [#Huang2020]_.
-We briefly go through their theory here, and note the two additional demos in :doc:`tutorial_classical_shadows` and :doc:`ml_classical_shadows`.
+We briefly go through their theory here, and note the two additional demos in :doc:`demos/tutorial_classical_shadows` and :doc:`demos/ml_classical_shadows`.
 
 We are here focussing on the case where measurements are performed in the Pauli basis.
 The idea of classical shadows is to measure each qubit in a random Pauli basis.
@@ -104,7 +102,8 @@ np.random.seed(666)
 
 H = qml.Hamiltonian([1., 1.], [qml.PauliZ(0) @ qml.PauliZ(1), qml.PauliX(0) @ qml.PauliX(1)])
 
-dev = qml.device("default.qubit", wires=range(2), shots=10000)
+dev = qml.device("default.qubit", wires=range(2))
+@qml.set_shots(10000)
 @qml.qnode(dev, interface="autograd")
 def qnode(x, H):
     qml.Hadamard(0)
@@ -131,7 +130,8 @@ print(qml.jacobian(qnode)(x, Hs))
 # Alternatively, you can compute expectation values by first performing the shadow measurement and then perform classical post-processing using the :class:`~.pennylane.ClassicalShadow`
 # class methods.
 
-dev = qml.device("default.qubit", wires=range(2), shots=1000)
+dev = qml.device("default.qubit", wires=range(2))
+@qml.set_shots(1000)
 @qml.qnode(dev, interface="autograd")
 def qnode(x):
     qml.Hadamard(0)
@@ -165,7 +165,7 @@ print(shadow.expval(H))
 # -----------------------------------------------------------------
 # 
 # The goal of the following section is to compare estimation accuracy for a given number of quantum executions with more conventional methods
-# like simultaneously measuring qubit-wise-commuting (qwc) groups, see :doc:`tutorial_measurement_optimize`. We are going to look at three different cases: The two extreme scenarios of measuring one single
+# like simultaneously measuring qubit-wise-commuting (qwc) groups, see :doc:`demos/tutorial_measurement_optimize`. We are going to look at three different cases: The two extreme scenarios of measuring one single
 # and `all` q-local Pauli strings, as well as the more realistic scenario of measuring a molecular Hamiltonian. We find that for a fix budget of measurements, one is
 # almost never advised to use classical shadows for estimating expectation values.
 # 
@@ -195,7 +195,7 @@ def circuit():
 
 obs = qml.PauliX(0) @ qml.PauliZ(3) @ qml.PauliX(6) @ qml.PauliZ(7)
 
-dev_ideal = qml.device("default.qubit", wires=range(n_wires), shots=None)
+dev_ideal = qml.device("default.qubit", wires=range(n_wires))
 @qml.qnode(dev_ideal, interface="autograd")
 def qnode_ideal():
     circuit()
@@ -212,13 +212,15 @@ shotss = range(100, 1000, 100)
 for shots in shotss:
     for _ in range(10):
         # repeating experiment 10 times to obtain averages and standard deviations
-        dev = qml.device("default.qubit", wires=range(10), shots=shots)
+        dev = qml.device("default.qubit", wires=range(10))
 
+        @qml.set_shots(shots)
         @qml.qnode(dev, interface="autograd")
         def qnode_finite():
             circuit()
             return qml.expval(obs)
 
+        @qml.set_shots(shots)
         @qml.qnode(dev, interface="autograd")
         def qnode_shadow():
             circuit()
@@ -281,7 +283,7 @@ for observable in all_observables[:10]:
 
 n_groups = len(qml.pauli.group_observables(all_observables))
 
-dev_ideal = qml.device("default.qubit", wires=range(n), shots=None)
+dev_ideal = qml.device("default.qubit", wires=range(n))
 
 x = np.random.rand(n*2)
 def circuit():
@@ -319,14 +321,16 @@ for shots in shotss:
     exact = qnode_ideal()
 
     for _ in range(10):
-        dev = qml.device("default.qubit", wires=range(5), shots=shots)
+        dev = qml.device("default.qubit", wires=range(5))
 
+        @qml.set_shots(shots)
         @qml.qnode(dev, interface="autograd")
         def qnode_finite():
             circuit()
             return qml.expval(H)
 
-        dev = qml.device("default.qubit", wires=range(5), shots=shots*n_groups)
+        dev = qml.device("default.qubit", wires=range(5))
+        @qml.set_shots(shots*n_groups)
         @qml.qnode(dev, interface="autograd")
         def qnode_shadow():
             circuit()
@@ -357,7 +361,7 @@ plt.show()
 # Molecular Hamiltonians
 # ~~~~~~~~~~~~~~~~~~~~~~
 # We now look at the more realistic case of measuring a molecular Hamiltonian. We tak :math:`\text{H}_2\text{O}` as an example. 
-# You can find more details on this Hamiltonian in :doc:`tutorial_quantum_chemistry`.
+# You can find more details on this Hamiltonian in :doc:`demos/tutorial_quantum_chemistry`.
 # We start by building the Hamiltonian and enforcing qwc groups by setting ``grouping_type='qwc'``.
 
 symbols = ["H", "O", "H"]
@@ -383,7 +387,7 @@ print(f"number of ops in H: {len(obs)}, number of qwc groups: {n_groups}")
 print(f"Each group has sizes {[len(_) for _ in groups]}")
 
 ##############################################################################
-# We use a pre-prepared Ansatz that approximates the :math:`\text{H}_2\text{O}` ground state for the given geometry. You can construct this Ansatz by running VQE, see :doc:`tutorial_vqe.`
+# We use a pre-prepared Ansatz that approximates the :math:`\text{H}_2\text{O}` ground state for the given geometry. You can construct this Ansatz by running VQE, see :doc:`demos/tutorial_vqe.`
 # We ran this once on an ideal simulator to get the exact result of the energy for the given Ansatz.
 
 singles, doubles = qml.qchem.excitations(electrons=4, orbitals=n_wires)
@@ -418,8 +422,9 @@ for shots in shotss:
     for _ in range(10):
 
         # execute qwc measurements
-        dev_finite = qml.device("default.qubit", wires=range(n_wires), shots=int(shots))
+        dev_finite = qml.device("default.qubit", wires=range(n_wires))
 
+        @qml.set_shots(int(shots))
         @qml.qnode(dev_finite, interface="autograd")
         def qnode_finite(H):
             circuit()
@@ -429,7 +434,8 @@ for shots in shotss:
             res_finite = qnode_finite(H_qwc)
 
         # execute shadows measurements
-        dev_shadow = qml.device("default.qubit", wires=range(n_wires), shots=int(shots)*n_groups)
+        dev_shadow = qml.device("default.qubit", wires=range(n_wires))
+        @qml.set_shots(int(shots)*n_groups)
         @qml.qnode(dev_shadow, interface="autograd")
         def qnode():
             circuit()
@@ -501,8 +507,4 @@ plt.show()
 #     Tzu-Ching Yen, Aadithya Ganeshram, Artur F. Izmaylov
 #     "Deterministic improvements of quantum measurements with grouping of compatible operators, non-local transformations, and covariance estimates."
 #     `arXiv:2201.01471 <https://arxiv.org/abs/2201.01471>`__, 2022.
-
-##############################################################################
-# About the author
-# ----------------
 #

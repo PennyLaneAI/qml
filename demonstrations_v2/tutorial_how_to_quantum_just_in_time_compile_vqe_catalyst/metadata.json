@@ -8,15 +8,19 @@
             "username": "josh"
         }
     ],
+    "executable_stable": true,
+    "executable_latest": true,
     "dateOfPublication": "2024-04-26T00:00:00+00:00",
-    "dateOfLastModification": "2024-11-12T00:00:00+00:00",
+    "dateOfLastModification": "2025-10-16T04:00:00+00:00",
     "categories": [
         "Quantum Machine Learning",
         "Optimization",
         "Quantum Chemistry",
         "How-to"
     ],
-    "tags": ["how to"],
+    "tags": [
+        "how to"
+    ],
     "previewImages": [
         {
             "type": "thumbnail",

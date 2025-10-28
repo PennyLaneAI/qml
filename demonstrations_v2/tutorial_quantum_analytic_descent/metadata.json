@@ -8,8 +8,10 @@
             "username": "dwierichs"
         }
     ],
+    "executable_stable": true,
+    "executable_latest": true,
     "dateOfPublication": "2021-06-30T00:00:00+00:00",
-    "dateOfLastModification": "2024-11-06T00:00:00+00:00",
+    "dateOfLastModification": "2025-09-22T15:48:14+00:00",
     "categories": [
         "Optimization"
     ],
@@ -51,7 +53,9 @@
             "url": "https://journals.aps.org/pra/abstract/10.1103/PhysRevA.103.012405"
         }
     ],
-    "basedOnPapers": ["10.48550/arXiv.2008.13774"],
+    "basedOnPapers": [
+        "10.48550/arXiv.2008.13774"
+    ],
     "referencedByPapers": [],
     "relatedContent": [
         {

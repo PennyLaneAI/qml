@@ -12,8 +12,6 @@ The stochastic parameter-shift rule
    tutorial_backprop Quantum gradients with backpropagation
    tutorial_general_parshift Generalized parameter-shift rules
 
-*Author: Nathan Killoran — Posted: 25 May 2020. Last updated: 15 January 2021.*
-
 We demonstrate how the stochastic parameter-shift rule, discovered by Banchi and Crooks [#banchi2020]_,
 can be used to differentiate arbitrary qubit gates, generalizing the original
 :doc:`parameter-shift rule </glossary/parameter_shift>`, which applies only for gates of a particular
@@ -25,8 +23,8 @@ Background
 One of the main ideas encountered in near-term quantum machine learning is the
 :doc:`variational circuit </glossary/variational_circuit>`.
 Evolving from earlier concepts pioneered by domain-specific algorithms like the
-:doc:`variational quantum eigensolver </demos/tutorial_vqe>` and the
-:doc:`quantum approximate optimization algorithm </demos/tutorial_qaoa_maxcut>`,
+:doc:`variational quantum eigensolver <demos/tutorial_vqe>` and the
+:doc:`quantum approximate optimization algorithm <demos/tutorial_qaoa_maxcut>`,
 this class of quantum algorithms makes heavy use of two distinguishing ingredients:
 
 i) The circuit's gates have free parameters
@@ -412,8 +410,4 @@ plt.show()
 #     Maria Schuld, Ville Bergholm, Christian Gogolin, Josh Izaac, and
 #     Nathan Killoran. "Evaluating analytic gradients on quantum hardware."
 #     `arXiv:1811.11184 <https://arxiv.org/abs/1811.11184>`__ (2019).
-#
-#
-# About the author
-# ----------------
 #

@@ -12,8 +12,6 @@ Using JAX with PennyLane
     tutorial_vqe A brief overview of VQE
     tutorial_vqt Variational Quantum Thermalizer
 
-*Author: Chase Roberts — Posted: 12 April 2021. Last updated: 12 April 2021.*
-
 JAX is an incredibly powerful scientific computing library that has been gaining traction in
 both the physics and deep learning communities. While JAX was originally designed for 
 classical machine learning (ML), many of its transformations are also useful 
@@ -35,7 +33,7 @@ for quantum machine learning (QML), and can be used directly with PennyLane.
 # neural networks.
 #
 # If this is your first time reading PennyLane code, we recommend going through
-# the :doc:`basic tutorial </demos/tutorial_qubit_rotation>`
+# the :doc:`basic tutorial <demos/tutorial_qubit_rotation>`
 # first. It's all in vanilla NumPy, so you should be able to
 # easily transfer what you learn to JAX when you come back.
 #
@@ -110,8 +108,8 @@ print(f"Tuned cost: {circuit(param):0.3f}")
 # parameters and minimizing some cost function, just like classical ML.
 # While classical ML focuses on learning classical systems like language or vision,
 # QML is most useful for learning about quantum systems. For example,
-# :doc:`finding chemical ground states </demos/tutorial_vqe>`
-# or learning to :doc:`sample thermal energy states </demos/tutorial_vqt>`.
+# :doc:`finding chemical ground states <demos/tutorial_vqe>`
+# or learning to :doc:`sample thermal energy states <demos/tutorial_vqt>`.
 
 
 ##############################################################################
@@ -273,9 +271,10 @@ print("----------")
 @jax.jit
 def circuit(key, param):
     # Notice how the device construction now happens within the jitted method.
-    dev = qml.device("default.qubit", wires=2, shots=10, seed=key)
+    dev = qml.device("default.qubit", wires=2, seed=key)
 
     # Now we can create our qnode within the circuit function.
+    @qml.set_shots(10)
     @qml.qnode(dev, interface="jax", diff_method=None)
     def my_circuit():
         qml.RX(param, wires=0)
@@ -304,8 +303,4 @@ print(f"key2: {circuit(key2, jnp.pi/2)}")
 # development, but we hope to continue to grow our ecosystem around JAX,
 # and by extension, grow JAX into quantum computing and quantum machine learning.
 # The future looks bright for this field, and we're excited to see what you build!
-#
-#
-# About the author
-# ----------------
 #

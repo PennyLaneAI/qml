@@ -5,8 +5,10 @@
             "username": "mariaschuld"
         }
     ],
+    "executable_stable": true,
+    "executable_latest": true,
     "dateOfPublication": "2023-07-13T00:00:00+00:00",
-    "dateOfLastModification": "2025-01-10T00:00:00+00:00",
+    "dateOfLastModification": "2025-09-22T15:48:14+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
@@ -43,7 +45,9 @@
             "url": "https://arxiv.org/abs/2210.08566"
         }
     ],
-    "basedOnPapers": ["10.48550/arXiv.2205.06109"],
+    "basedOnPapers": [
+        "10.48550/arXiv.2205.06109"
+    ],
     "referencedByPapers": [],
     "relatedContent": [
         {

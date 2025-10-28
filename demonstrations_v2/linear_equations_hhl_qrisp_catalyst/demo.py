@@ -40,7 +40,8 @@ Qrisp also supports a modular architecture, allowing you to use, replace, and op
 components easily. We'll demonstrate this later in this demo.
 
 You can install Qrisp to experiment with this implementation yourself, at your own pace, by calling
-``pip install qrisp``.
+``pip install qrisp``. Please note that `qrisp` is only compatible with PennyLane versions
+<= 0.41.1 and Catalyst versions <= 0.11.0.
 
 QuantumVariable
 ~~~~~~~~~~~~~~~
@@ -968,10 +969,4 @@ print(samples)
 #     Y. R. Sanders, G. H. Low, A. Scherer, D. W. Berry,
 #     "Black-Box Quantum State Preparation without Arithmetic",
 #     `Physical review letters 122(2), 020502 <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.122.020502>`__, 2019.
-
-
-##############################################################################
-# About the authors
-# ----------------
-#
 #

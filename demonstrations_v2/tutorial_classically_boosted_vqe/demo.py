@@ -11,8 +11,6 @@ Classically-boosted variational quantum eigensolver
     tutorial_quantum_chemistry Building molecular Hamiltonians
     tutorial_vqe Variational Quantum Eigensolver
 
-*Authors: Joana Fraxanet & Isidor Schoch (Xanadu Residents).
-Posted: 31 October 2022. Last updated: 31 October 2022.*
 
 One of the most important applications of quantum computers is expected
 to be the computation of ground-state energies of complicated molecules
@@ -54,7 +52,7 @@ in which the electrons occupy the molecular orbitals with the lowest energy.
 We will restrict ourselves to the :math:`H_2` molecule for
 the sake of simplicity. First, we will give a short introduction to how
 to perform standard VQE for the molecule of interest. For more details,
-we recommend the tutorial :doc:`tutorial_vqe` to learn
+we recommend the tutorial :doc:`demos/tutorial_vqe` to learn
 how to implement VQE for molecules step by step. Then, we will implement
 the CB-VQE algorithm for the specific case in which we rely only on one
 classical state⁠—that being the Hartree-Fock state. Finally, we will
@@ -132,7 +130,7 @@ hf = qchem.hf_state(electrons, qubits)
 # state. Single and double excitation gates, denoted :math:`G^{(1)}(\Theta)` and :math:`G^{(2)}(\Theta)` respectively, are
 # conveniently implemented in PennyLane with :class:`~.pennylane.SingleExcitation`
 # and :class:`~.pennylane.DoubleExcitation` classes. You can find more information
-# about how these gates work in this `video <https://youtu.be/4Xnxa6tzPeA>`__ and in the demo :doc:`tutorial_givens_rotations`.
+# about how these gates work in this `video <https://youtu.be/4Xnxa6tzPeA>`__ and in the demo :doc:`demos/tutorial_givens_rotations`.
 #
 
 singles, doubles = qchem.excitations(electrons=electrons, orbitals=qubits)
@@ -582,7 +580,4 @@ print("CB-VQE energy %.4f" % (energy_CBVQE))
 #
 #     M. D. Radin. (2021) "Classically-Boosted Variational Quantum Eigensolver",
 #     `arXiv:2106.04755 [quant-ph] <https://arxiv.org/abs/2106.04755>`__ (2021)
-#
-# About the author
-# ----------------
 #

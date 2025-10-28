@@ -81,9 +81,18 @@ class Demo:
         )
 
     @property
-    def executable(self) -> bool:
-        """Whether this demo can be executed."""
-        return self.name.startswith("tutorial_")
+    def executable_stable(self) -> bool:
+        """Whether this demo can be executed for stable builds."""
+        with open(self.metadata_file, "r") as f:
+            metadata = json.load(f)
+        return metadata.get("executable_stable", self.name.startswith("tutorial_"))
+
+    @property
+    def executable_latest(self) -> bool:
+        """Whether this demo can be executed for dev builds."""
+        with open(self.metadata_file, "r") as f:
+            metadata = json.load(f)
+        return metadata.get("executable_latest", self.name.startswith("tutorial_"))
 
     @functools.cached_property
     def requirements(self) -> frozenset[str]:
@@ -162,11 +171,14 @@ def build(
 
     build_venv = Virtualenv(ctx.build_venv_path)
     cmds.pip_install(
-        build_venv.python, requirements=ctx.build_requirements_file, use_uv=False
+        build_venv.python,
+        requirements=ctx.build_requirements_file,
+        use_uv=False,
+        quiet=False,
     )
 
     for demo in demos:
-        execute_demo = execute and demo.executable
+        execute_demo = execute and (demo.executable_latest if dev else demo.executable_stable)
         done += 1
         logger.info(
             "Building '%s' (%d/%d), execute=%s",
@@ -203,17 +215,19 @@ def build(
 
     if failed:
         raise RuntimeError(f"Failed to build {len(failed)} demos", failed)
-    
+
     # If we built the HTML output, gather and merge the objects.inv files
     if target is BuildTarget.HTML:
         logger.info("Building the master objects.inv file.")
 
         inventory = soi.Inventory()
-        inventory.project = 'PennyLane'
+        inventory.project = "PennyLane"
 
         for demo in demos:
             logger.info("Loading objects.inv for '%s'", demo.name)
-            demo_inv = soi.Inventory(ctx.repo_root / "demos" / demo.name / "objects.inv")
+            demo_inv = soi.Inventory(
+                ctx.build_dir / f"{demo.name}_objects.inv"
+            )
 
             # Only add entries that don't already exist in the merged inventory file
             for entry in demo_inv.objects:
@@ -245,6 +259,7 @@ def generate_requirements(
         output_file,
         *requirements_in,
         constraints_files=constraints,
+        quiet=False,
         prerelease=dev,
     )
 
@@ -259,7 +274,7 @@ def _build_demo(
     quiet: bool,
     dev: bool,
 ):
-    out_dir = ctx.repo_root / "demos" / demo.name
+    out_dir = ctx.repo_root / "demos"
     fs.clean_dir(out_dir)
 
     generate_requirements(ctx, demo, dev, out_dir / "requirements.txt")
@@ -268,8 +283,43 @@ def _build_demo(
             build_venv.python,
             "--upgrade",
             requirements=out_dir / "requirements.txt",
-            quiet=True,
+            quiet=False,
             pre=dev,
+        )
+
+        # If dev, we need to re-install the latest Catalyst, then Lightning, then PennyLane
+        # in that order, regardless of conflicts/warnings. 
+        if dev:
+            # Catalyst
+            cmds.pip_install(
+                build_venv.python,
+                "--upgrade",
+                "--extra-index-url",
+                "https://test.pypi.org/simple/",
+                "PennyLane-Catalyst",
+                use_uv=False,
+                quiet=False,
+                pre=True,
+            )
+            # Lightning
+            cmds.pip_install(
+                build_venv.python,
+                "--upgrade",
+                "--extra-index-url",
+                "https://test.pypi.org/simple/",
+                "PennyLane-Lightning",
+                use_uv=False,
+                quiet=False,
+                pre=True,
+            )
+    if dev:
+        # Need dev version of PennyLane to build, whether or not we're executing
+        cmds.pip_install(
+            build_venv.python,
+            "--upgrade",
+            "git+https://github.com/PennyLaneAI/pennylane.git#egg=pennylane",
+            use_uv=False,
+            quiet=False,
         )
 
     stage_dir = ctx.build_dir / "demonstrations"
@@ -296,6 +346,7 @@ def _build_demo(
         "GALLERY_OUTPUT_DIR": str(out_dir.resolve().relative_to(ctx.repo_root)),
         # Make sure demos can find scripts installed in the build venv
         "PATH": f"{os.environ['PATH']}:{build_venv.path / 'bin'}",
+        "CURRENT_DEMO": str(demo.name),
     }
     if quiet:
         stdout, stderr, text = subprocess.PIPE, subprocess.STDOUT, True
@@ -317,21 +368,7 @@ def _build_demo(
 
     # Move the objects.inv file so we can merge them once all the demos are built
     if target is BuildTarget.HTML:
-        fs.copy_any(ctx.build_dir / "html/objects.inv", out_dir)
-
-
-def _install_build_dependencies(venv: Virtualenv, build_dir: Path):
-    """Install dependencies for running sphinx-build into `venv`."""
-    logger.info("Installing sphinx-build dependencies")
-
-    build_requirements_file = build_dir / "requirements-build.txt"
-    cmds.poetry_export(
-        sys.executable,
-        build_requirements_file,
-        groups=("base",),
-        format="requirements.txt",
-    )
-    cmds.pip_install(venv.python, "-r", build_requirements_file, use_uv=False)
+        fs.copy_any(ctx.build_dir / "html/objects.inv", ctx.build_dir / f"{demo.name}_objects.inv")
 
 
 def _package_demo(
@@ -355,7 +392,7 @@ def _package_demo(
     fs.clean_dir(dest)
 
     with open(
-        (sphinx_output / "demos" / demo.name / demo.name).with_suffix(".fjson"), "r"
+        (sphinx_output / "demos" / demo.name).with_suffix(".fjson"), "r"
     ) as f:
         html_body = json.load(f)["body"]
 

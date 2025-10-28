@@ -8,8 +8,10 @@
             "username": "rdraskic"
         }
     ],
+    "executable_stable": false,
+    "executable_latest": false,
     "dateOfPublication": "2022-12-05T00:00:00+00:00",
-    "dateOfLastModification": "2025-05-27T00:00:00+00:00",
+    "dateOfLastModification": "2025-09-22T15:48:14+00:00",
     "categories": [
         "Quantum Hardware",
         "Quantum Computing"

@@ -20,7 +20,6 @@ Adjoint Differentiation
 """
 
 ##############################################################################
-# *Author: Christina Lee. Posted: 23 Nov 2021. Last updated: 20 Jun 2023.*
 #
 # `Classical automatic differentiation <https://en.wikipedia.org/wiki/Automatic_differentiation#The_chain_rule,_forward_and_reverse_accumulation>`__
 # has two methods of calculation: forward and reverse.
@@ -71,24 +70,21 @@ Adjoint Differentiation
 # To start, we import PennyLane and Jax's numpy:
 
 import pennylane as qml
-import jax
-from jax import numpy as np
-
-jax.config.update("jax_platform_name", "cpu")
+import pennylane.numpy as pnp
 
 
 ##############################################################################
 # We also need a circuit to simulate:
 #
 
-dev = qml.device('default.qubit', wires=2)
+dev = qml.device("default.qubit", wires=2)
 
-x = np.array([0.1, 0.2, 0.3])
+x = pnp.array([0.1, 0.2, 0.3], requires_grad=True)
 
 @qml.qnode(dev, diff_method="adjoint")
 def circuit(a):
     qml.RX(a[0], wires=0)
-    qml.CNOT(wires=(0,1))
+    qml.CNOT(wires=(0, 1))
     qml.RY(a[1], wires=1)
     qml.RZ(a[2], wires=1)
     return qml.expval(qml.PauliX(wires=1))
@@ -107,20 +103,20 @@ n_params = 3
 
 ops = [
     qml.RX(x[0], wires=0),
-    qml.CNOT(wires=(0,1)),
+    qml.CNOT(wires=(0, 1)),
     qml.RY(x[1], wires=1),
-    qml.RZ(x[2], wires=1)
+    qml.RZ(x[2], wires=1),
 ]
 M = qml.PauliX(wires=1)
 
 ##############################################################################
 # We will be using internal functions to manipulate the nuts and bolts of a statevector
 # simulation.
-# 
+#
 # Internally, the statevector simulation uses a 2x2x2x... array to represent the state, whereas
 # the result of a measurement ``qml.state()`` flattens this internal representation. Each dimension
 # in the statevector corresponds to a different qubit.
-# 
+#
 # The internal functions ``create_initial_state`` and ``apply_operation``
 # make additional assumptions about their inputs, and will fail or give incorrect results
 # if those assumptions are not met. To work with these simulation tools, all operations should provide
@@ -161,7 +157,7 @@ ket = state
 # Now we use ``np.vdot`` to take their inner product.  ``np.vdot`` sums over all dimensions
 # and takes the complex conjugate of the first input.
 
-M_expval = np.vdot(bra, ket)
+M_expval = pnp.vdot(bra, ket)
 print("vdot  : ", M_expval)
 print("QNode : ", circuit(x))
 
@@ -189,10 +185,10 @@ bra_n = apply_operation(qml.adjoint(ops[-1]), bra_n)
 
 ket_n = create_initial_state((0, 1))
 
-for op in ops[:-1]: # don't apply last operation
+for op in ops[:-1]:  # don't apply last operation
     ket_n = apply_operation(op, ket_n)
 
-M_expval_n = np.vdot(bra_n, ket_n)
+M_expval_n = pnp.vdot(bra_n, ket_n)
 print(M_expval_n)
 
 ##############################################################################
@@ -227,7 +223,7 @@ adj_op = qml.adjoint(ops[-1])
 bra_n_v2 = apply_operation(adj_op, bra_n_v2)
 ket_n_v2 = apply_operation(adj_op, ket_n_v2)
 
-M_expval_n_v2 = np.vdot(bra_n_v2, ket_n_v2)
+M_expval_n_v2 = pnp.vdot(bra_n_v2, ket_n_v2)
 print(M_expval_n_v2)
 
 ##############################################################################
@@ -256,7 +252,7 @@ for op in reversed(ops):
     adj_op = qml.adjoint(op)
     bra_loop = apply_operation(adj_op, bra_loop)
     ket_loop = apply_operation(adj_op, ket_loop)
-    print(np.vdot(bra_loop, ket_loop))
+    print(pnp.vdot(bra_loop, ket_loop))
 
 ##############################################################################
 # Finally to Derivatives!
@@ -370,7 +366,7 @@ for op in reversed(ops):
         dU = qml.operation.operation_derivative(op)
         ket_temp = apply_operation(qml.QubitUnitary(dU, op.wires), ket)
 
-        dM = 2 * np.real(np.vdot(bra, ket_temp))
+        dM = 2 * pnp.real(pnp.vdot(bra, ket_temp))
         grads.append(dM)
 
     bra = apply_operation(adj_op, bra)
@@ -382,7 +378,7 @@ grads = grads[::-1]
 
 print("our calculation: ", [float(grad) for grad in grads])
 
-grad_compare = jax.grad(circuit)(x)
+grad_compare = qml.grad(circuit)(x)
 print("comparison: ", grad_compare)
 
 ##############################################################################
@@ -393,17 +389,17 @@ print("comparison: ", grad_compare)
 # ``"default.qubit"`` or PennyLane's fast C++ simulator ``"lightning.qubit"``.
 
 
-dev_lightning = qml.device('lightning.qubit', wires=2)
+dev_lightning = qml.device("lightning.qubit", wires=2)
 
 @qml.qnode(dev_lightning, diff_method="adjoint")
 def circuit_adjoint(a):
     qml.RX(a[0], wires=0)
-    qml.CNOT(wires=(0,1))
+    qml.CNOT(wires=(0, 1))
     qml.RY(a[1], wires=1)
     qml.RZ(a[2], wires=1)
     return qml.expval(M)
 
-print(jax.grad(circuit_adjoint)(x))
+print(qml.grad(circuit_adjoint)(x))
 
 ##############################################################################
 # Performance
@@ -452,7 +448,4 @@ print(jax.grad(circuit_adjoint)(x))
 #
 # Xiu-Zhe Luo, Jin-Guo Liu, Pan Zhang, and Lei Wang. Yao.jl: `Extensible, efficient framework for quantum
 # algorithm design <https://quantum-journal.org/papers/q-2020-10-11-341/>`__ , 2019
-#
-# About the author
-# ----------------
 #

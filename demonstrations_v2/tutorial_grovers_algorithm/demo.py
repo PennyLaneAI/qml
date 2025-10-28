@@ -12,8 +12,6 @@ Grover's Algorithm
 
     tutorial_qft_arithmetics Basic arithmetic with the quantum Fourier transform (QFT)
 
-*Author: Ludmila Botelho. — Posted: 3 July 2023.*
-
 
 `Grover's algorithm </codebook/#05-grovers-algorithm>`__ is an `oracle </codebook/04-basic-quantum-algorithms/02-the-magic-8-ball/>`__-based quantum
 algorithm, proposed by Lov Grover [#Grover1996]_. In the original description, the author approaches the
@@ -390,6 +388,3 @@ plt.show()
 #     M. A. Nielsen, and I. L. Chuang (2000) "Quantum Computation and Quantum Information",
 #     Cambridge University Press.
 # 
-# About the author
-# ----------------
-#

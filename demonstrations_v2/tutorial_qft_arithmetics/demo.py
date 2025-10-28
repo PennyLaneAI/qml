@@ -11,9 +11,6 @@ Basic arithmetic with the quantum Fourier transform (QFT)
     tutorial_qubit_rotation Basis tutorial: qubit rotation 
 
 
-
-*Author: Guillermo Alonso-Linaje — Posted: 07 November 2022.*
-
 Arithmetic is a fundamental branch of mathematics that consists of the study of the main operations with numbers such as
 addition, multiplication, subtraction and division. Using arithmetic operations we can understand the world around us
 and solve many of our daily tasks.
@@ -175,12 +172,13 @@ import pennylane as qml
 import numpy as np
 
 n_wires = 4
-dev = qml.device("default.qubit", wires=n_wires, shots=1)
+dev = qml.device("default.qubit", wires=n_wires)
 
 def add_k_fourier(k, wires):
     for j in range(len(wires)):
         qml.RZ(k * np.pi / (2**j), wires=wires[j])
 
+@qml.set_shots(1)
 @qml.qnode(dev)
 def sum(m, k):
     qml.BasisEmbedding(m, wires=range(n_wires))  # m encoding
@@ -235,7 +233,7 @@ wires_m = [0, 1, 2]             # qubits needed to encode m
 wires_k = [3, 4, 5]             # qubits needed to encode k
 wires_solution = [6, 7, 8, 9]   # qubits needed to encode the solution
 
-dev = qml.device("default.qubit", wires=wires_m + wires_k + wires_solution, shots=1)
+dev = qml.device("default.qubit", wires=wires_m + wires_k + wires_solution)
 
 n_wires = len(dev.wires) # total number of qubits used
 
@@ -254,6 +252,7 @@ def addition(wires_m, wires_k, wires_solution):
     # return to computational basis
     qml.adjoint(qml.QFT)(wires=wires_solution)
 
+@qml.set_shots(1)
 @qml.qnode(dev)
 def sum2(m, k, wires_m, wires_k, wires_solution):
     # m and k codification
@@ -301,7 +300,7 @@ wires_m = [0, 1, 2]           # qubits needed to encode m
 wires_k = [3, 4, 5]           # qubits needed to encode k
 wires_solution = [6, 7, 8, 9, 10]  # qubits needed to encode the solution
 
-dev = qml.device("default.qubit", wires=wires_m + wires_k + wires_solution, shots=1)
+dev = qml.device("default.qubit", wires=wires_m + wires_k + wires_solution)
 
 n_wires = len(dev.wires)
 
@@ -318,6 +317,7 @@ def multiplication(wires_m, wires_k, wires_solution):
     # return to computational basis
     qml.adjoint(qml.QFT)(wires=wires_solution)
 
+@qml.set_shots(1)
 @qml.qnode(dev)
 def mul(m, k):
     # m and k codification
@@ -426,8 +426,4 @@ plt.show()
 # .. [#Draper2000]
 #
 #     Thomas G. Draper, "Addition on a Quantum Computer". `arXiv:quant-ph/0008033 <https://arxiv.org/abs/quant-ph/0008033>`__.
-#
-#
-# About the author
-# ----------------
 #

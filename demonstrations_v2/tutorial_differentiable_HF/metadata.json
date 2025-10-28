@@ -5,8 +5,10 @@
             "username": "soran"
         }
     ],
+    "executable_stable": true,
+    "executable_latest": true,
     "dateOfPublication": "2022-05-09T00:00:00+00:00",
-    "dateOfLastModification": "2024-12-13T00:00:00+00:00",
+    "dateOfLastModification": "2025-09-22T15:48:14+00:00",
     "categories": [
         "Quantum Chemistry"
     ],

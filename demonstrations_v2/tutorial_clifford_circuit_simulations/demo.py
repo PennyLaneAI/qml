@@ -22,7 +22,7 @@ In classical computation, one can define a universal set of logic gate operation
 ``{AND, NOT, OR}`` that can be used to perform any boolean function. A similar analogue
 in quantum computation is to have a set of quantum gates that can approximate any unitary
 transformation up to the desired accuracy. One such universal quantum gate set is the
-:math:`\textrm{Clifford + T}` set, ``{H, S, CNOT, T}``, where the gates ``H``, ``S`,` and
+:math:`\textrm{Clifford + T}` set, ``{H, S, CNOT, T}``, where the gates ``H``, ``S``, and
 ``CNOT`` are the generators of the *Clifford group*. The elements of this group are
 called *Clifford gates*, which transform *Pauli* words to *Pauli* words under
 `conjugation <https://mathworld.wolfram.com/Conjugation.html>`__. This means an
@@ -163,7 +163,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Get the results with 10000 shots and assert them
-shot_result = circuit(return_state=False, shots=10000)
+shot_result = qml.set_shots(circuit, shots=10000)(return_state=False)
 shot_exp, shot_var, shot_probs = shot_result
 assert qml.math.allclose([shot_exp, shot_var], [expval, var], atol=1e-3)
 
@@ -232,7 +232,7 @@ shots_times = np.zeros((len(num_shots), len(num_wires)))
 for ind, num_shot in enumerate(num_shots):
     for idx, num_wire in enumerate(num_wires):
         shots_times[ind][idx] = timeit(
-            "GHZStatePrep(num_wire, shots=num_shot)", number=5, globals=globals()
+            "qml.set_shots(GHZStatePrep, shots=num_shot)(num_wire)", number=5, globals=globals()
         ) / 5 # average over 5 trials
 
 # Figure set up
@@ -511,7 +511,3 @@ print(resources_lst[0])
 #    "Stim: a fast stabilizer circuit simulator"
 #    `Quantum 5, 497 <https://doi.org/10.22331/q-2021-07-06-497>`__, 2021.
 #
-
-######################################################################
-# About the author
-# ----------------

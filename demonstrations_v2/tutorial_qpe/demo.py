@@ -140,7 +140,7 @@ With six qubits, an example would be
 Note that 010111 is 23 in binary.
 
 So we have the answer: apply :math:`U^{2^m}` controlled on the `m`-th estimation qubit.
-This operator facilitates, among other things, performing :doc:`arithmetics in quantum computers <tutorial_qft_arithmetics>`.
+This operator facilitates, among other things, performing :doc:`arithmetics in quantum computers <demos/tutorial_qft_arithmetics>`.
 
 Bringing it all together, here is the quantum phase estimation algorithm in all its glory:
 
@@ -187,7 +187,7 @@ QPE outputs the eigenphase :math:`\theta_i` with probability :math:`|c_i|^2.`
 Most of the heavy lifting is done by the controlled sequence step. Control-U operations are the heart of the algorithm,
 coupled with a clever use of quantum Fourier transforms. This feature is crucial for quantum chemistry applications,
 where preparing good initial states is essential [#initial_state]_.
-If you want to learn more about this check out our :doc:`demo <tutorial_initial_state_preparation>`.
+If you want to learn more about this check out our :doc:`demo <demos/tutorial_initial_state_preparation>`.
 
 One more point of importance. Generally it is not possible to represent a given phase exactly using a limited number of
 estimation qubits. Thus, there is typically a distribution of possible
@@ -197,7 +197,7 @@ The error *decreases* exponentially with the number of estimation qubits, but th
 with error :math:`\varepsilon` is proportional to :math:`1/\varepsilon.`
 
 All the previous ideas help to also understand the Phase KickBack algorithm in the case of one qubit.
-If you want to learn more about this subroutine, take a look at this :doc:`demo <tutorial_phase_kickback>`.
+If you want to learn more about this subroutine, take a look at this :doc:`demo <demos/tutorial_phase_kickback>`.
 
 Time to code!
 -------------
@@ -288,8 +288,4 @@ plt.show()
 #
 #    Stepan Fomichev et al. "Initial state preparation for quantum chemistry on quantum computers",
 #    `Arxiv <https://arxiv.org/pdf/2310.18410.pdf>`__, 2023
-#
-#
-# About the authors
-# -----------------
 #

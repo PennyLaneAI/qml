@@ -13,11 +13,9 @@ Is quantum computing useful before fault tolerance?
     tutorial_noisy_circuits Noisy circuits
     gbs Quantum advantage with Gaussian Boson Sampling
 
-*Author: Korbinian Kottmann — Posted: 16  June 2023.*
-
 Can we use contemporary quantum computers for tasks that are both useful *and* hard to classically simulate?
 A recent `Nature paper <https://www.nature.com/articles/s41586-023-06096-3>`__ from the team at IBM claims that we can! See how they managed to faithfully estimate expectation
-values of reasonably large and reasonably deep quantum circuits using an exciting new :doc:`zero noise extrapolation <tutorial_diffable-mitigation>`
+values of reasonably large and reasonably deep quantum circuits using an exciting new :doc:`zero noise extrapolation <demos/tutorial_diffable-mitigation>`
 technique for error mitigation in this demo.
 
 Introduction
@@ -79,7 +77,7 @@ We start by setting up the circuits for the time evolution and a noise model con
 :class:`~pennylane.DepolarizingChannel` applied to each gate the circuit executes. Physically, this corresponds to applying either of the 
 single qubit Pauli gates :math:`\{X, Y, Z\}` with probability :math:`p/3` after each gate in the circuit. In simulation, we can simply look
 at the classical mixtures introduced by the Kraus operators of the noise channel. That is why we need to use the mixed state simulator.
-For more information see e.g. our :doc:`demo on simulating noisy circuits <tutorial_noisy_circuits>`.
+For more information see e.g. our :doc:`demo on simulating noisy circuits <demos/tutorial_noisy_circuits>`.
 """
 import pennylane as qml
 import jax
@@ -95,7 +93,7 @@ p = 0.005
 
 # Load devices
 dev_ideal = qml.device("default.mixed", wires=n_wires)
-dev_noisy = qml.transforms.insert(dev_ideal, noise_gate, p, position="all")
+dev_noisy = qml.noise.insert(dev_ideal, noise_gate, p, position="all")
 
 # 3x3 grid with nearest neighbors
 connections = [(0, 1), (1, 2),
@@ -144,7 +142,7 @@ plt.show()
 # Error mitigation via zero noise extrapolation
 # ---------------------------------------------
 # 
-# :doc:`Error mitigation <tutorial_error_mitigation>` is the process of retrieving more accurate information via classical post-processing
+# :doc:`Error mitigation <demos/tutorial_error_mitigation>` is the process of retrieving more accurate information via classical post-processing
 # of noisy quantum executions. The authors in [#ibm]_ employ zero noise extrapolation (ZNE), which serves as
 # a biased estimator of expectation values. The idea of ZNE is fairly straightforward: Imagine we want to
 # obtain the exact quantum function :math:`f` that estimates an expectation value under noiseless evolution.
@@ -155,7 +153,7 @@ plt.show()
 # 
 # In order to perform ZNE, we need a control knob that increases the noise of our circuit execution.
 # One such method is described in our
-# :doc:`demo on differentiable error mitigation <tutorial_diffable-mitigation>` using circuit folding.
+# :doc:`demo on differentiable error mitigation <demos/tutorial_diffable-mitigation>` using circuit folding.
 # 
 # Noise-aware ZNE
 # ~~~~~~~~~~~~~~~
@@ -169,8 +167,8 @@ plt.show()
 # our model by an appropriate gain factor. Here, :math:`G=(1, 1.2, 1.6)` in accordance with [#ibm]_. In order to do this in PennyLane, we simply
 # set up two new noisy devices with the appropriately attenuated noise parameters.
 
-dev_noisy1 = qml.transforms.insert(dev_ideal, noise_gate, p*1.2, position="all")
-dev_noisy2 = qml.transforms.insert(dev_ideal, noise_gate, p*1.6, position="all")
+dev_noisy1 = qml.noise.insert(dev_ideal, noise_gate, p*1.2, position="all")
+dev_noisy2 = qml.noise.insert(dev_ideal, noise_gate, p*1.6, position="all")
 
 qnode_noisy1 = qml.QNode(time_evolution, dev_noisy1, interface="jax")
 qnode_noisy2 = qml.QNode(time_evolution, dev_noisy2, interface="jax")
@@ -197,9 +195,9 @@ plt.show()
 
 ##############################################################################
 # We now repeat this procedure for all values of :math:`\theta_h` and see how the results are much improved.
-# We can use :func:`~pennylane.transforms.richardson_extrapolate` that performs a polynomial fit of a degree matching the input data size.
+# We can use :func:`~pennylane.noise.richardson_extrapolate` that performs a polynomial fit of a degree matching the input data size.
 
-res_mitigated = [qml.transforms.richardson_extrapolate(Gs, [res_noisy[i], res_noisy1[i], res_noisy2[i]]) for i in range(len(res_ideal))]
+res_mitigated = [qml.noise.richardson_extrapolate(Gs, [res_noisy[i], res_noisy1[i], res_noisy2[i]]) for i in range(len(res_ideal))]
 
 plt.plot(thetas, res_ideal, label="exact")
 plt.plot(thetas, res_mitigated, label="mitigated")
@@ -271,8 +269,4 @@ plt.show()
 #     Ewout van den Berg, Zlatko K. Minev, Abhinav Kandala, Kristan Temme
 #     "Probabilistic error cancellation with sparse Pauli-Lindblad models on noisy quantum processors"
 #     `arXiv:2201.09866 <https://arxiv.org/abs/2201.09866>`__, 2022.
-#
-#
-# About the author
-# ----------------
 #

@@ -21,10 +21,10 @@ with Qrack with significant performance boosts.
 You'll learn certain suggested cases of use where Qrack might particularly excel
 at delivering lightning-fast performance or minimizing required memory resources
 — for example, special cases of the quantum or discrete :doc:`Fourier transform
-</demos/tutorial_qft/>`, circuits with predominantly :doc:`Clifford
-</demos/tutorial_clifford_circuit_simulations/>` or classical preambles,
+<demos/tutorial_qft/>`, circuits with predominantly :doc:`Clifford
+<demos/tutorial_clifford_circuit_simulations/>` or classical preambles,
 circuits with :doc:`mid-circuit measurement
-</demos/tutorial_mcm_introduction/>`, and high-width circuits with
+<demos/tutorial_mcm_introduction/>`, and high-width circuits with
 low-complexity representations in terms of a QBDD (quantum binary decision
 diagram). However, Qrack is a general-purpose simulator, so you might
 employ it for all their applications and still see parity with or improvement
@@ -82,7 +82,7 @@ state vectors in a manner similar to matrix product state (MPS) simulation.
 Demonstrating Qrack with the quantum Fourier transform
 ------------------------------------------------------
 
-The :doc:`quantum Fourier transform (QFT) <tutorial_qft>` is a building-block
+The :doc:`quantum Fourier transform (QFT) <demos/tutorial_qft>` is a building-block
 subroutine of many other quantum algorithms. Qrack exhibits unique capability
 for many cases of the QFT algorithm, and its worst-case performance is
 competitive with other popular quantum computer simulators [#QCEReport]_. In this
@@ -103,9 +103,10 @@ import matplotlib.pyplot as plt
 import random
 
 qubits = 60
-dev = qml.device("qrack.simulator", qubits, shots=8)
+dev = qml.device("qrack.simulator", qubits)
 
 @qjit
+@qml.set_shots(8)
 @qml.qnode(dev)
 def circuit():
     for i in range(qubits):
@@ -159,9 +160,10 @@ plt.show()
 # `GHZ state <https://en.wikipedia.org/wiki/Greenberger%E2%80%93Horne%E2%80%93Zeilinger_state>`__ initialization).
 
 qubits = 12
-dev = qml.device("qrack.simulator", qubits, shots=8)
+dev = qml.device("qrack.simulator", qubits)
 
 @qjit
+@qml.set_shots(8)
 @qml.qnode(dev)
 def circuit():
     for i in range(qubits):
@@ -199,13 +201,13 @@ qubits = 60
 dev = qml.device(
     "qrack.simulator",
     qubits,
-    shots=8,
     isBinaryDecisionTree=False,
     isStabilizerHybrid=True,
     isSchmidtDecompose=False,
 )
 
 @qjit
+@qml.set_shots(8)
 @qml.qnode(dev)
 def circuit():
     qml.Hadamard(0)
@@ -241,10 +243,11 @@ plt.show()
 
 qubits = 24
 dev = qml.device(
-    "qrack.simulator", qubits, shots=8, isBinaryDecisionTree=True, isStabilizerHybrid=False
+    "qrack.simulator", qubits, isBinaryDecisionTree=True, isStabilizerHybrid=False
 )
 
 @qjit
+@qml.set_shots(8)
 @qml.qnode(dev)
 def circuit():
     qml.Hadamard(0)
@@ -293,9 +296,10 @@ import time
 
 def bench(n, results):
     for device in ["qrack.simulator", "lightning.qubit"]:
-        dev = qml.device(device, n, shots=1)
+        dev = qml.device(device, n)
 
         @qjit
+        @qml.set_shots(1)
         @qml.qnode(dev)
         def circuit():
             for i in range(n):
@@ -344,9 +348,10 @@ plt.show()
 # `Lightning <https://docs.pennylane.ai/projects/lightning>`__. How does Qrack with QJIT compare to Qrack without it?
 
 def bench(n, results):
-    dev = qml.device("qrack.simulator", n, shots=1)
+    dev = qml.device("qrack.simulator", n)
 
     @qjit
+    @qml.set_shots(1)
     @qml.qnode(dev)
     def circuit():
         for i in range(n):
@@ -361,6 +366,7 @@ def bench(n, results):
     circuit()
     results[f"QJIT Qrack ({n} qb)"] = time.perf_counter_ns() - start_ns
 
+    @qml.set_shots(1)
     @qml.qnode(dev)
     def circuit():
         for i in range(n):
@@ -408,7 +414,7 @@ plt.show()
 def validate(n):
     results = []
     for device in ["qrack.simulator", "lightning.qubit"]:
-        dev = qml.device(device, n, shots=None)
+        dev = qml.device(device, n)
 
         @qjit
         @qml.qnode(dev)
@@ -458,8 +464,4 @@ print("Qrack cross entropy with Lightning:", validate(12), "out of 1.0")
 #     Robert Wille, Stefan Hillmich, Lukas Burgholzer
 #     "Decision Diagrams for Quantum Computing"
 #     `arXiv:2302.04687 <https://arxiv.org/abs/2302.04687>`__, 2023.
-
-##############################################################################
-# About the author
-# ----------------
 #

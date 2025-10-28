@@ -136,7 +136,7 @@ visualize_data(x_vis, y_vis)
 # Building the QML circuit for classification
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# We will make use of a :doc:`data-reuploading <tutorial_data_reuploading_classifier>` scheme to encode the 256 input pixels into the latent space
+# We will make use of a :doc:`data-reuploading <demos/tutorial_data_reuploading_classifier>` scheme to encode the 256 input pixels into the latent space
 # of the quantum classifier. To this end, the :class:`~pennylane.StronglyEntanglingLayers` template provides an
 # easy-to-use structure for the circuit design. The output of our classifier is a four-dimensional
 # vector resulting from Pauli Z oberservables along the first four qubits. These outputs (unnormalized
@@ -460,8 +460,3 @@ visualize_data(perturbed_x.reshape(-1, 16, 16), y_vis, adversarial_class_output)
 #     "Quantum Adversarial Machine Learning"
 #     `arXiv:2001.00030 <https://arxiv.org/abs/2001.00030>`__, 2019
 #
-#
-
-######################################################################
-# About the authors
-# -----------------

@@ -11,8 +11,6 @@ Building molecular Hamiltonians
 .. related::
    tutorial_vqe A brief overview of VQE
 
-*Author: Alain Delgado — Posted: 02 August 2020. Last updated: 29 August 2023.*
-
 .. note::
 
     A wide variety of molecular data, including Hamiltonians, is
@@ -285,7 +283,7 @@ print(H)
 # You have completed the tutorial! Now, select your favorite molecule and build its electronic
 # Hamiltonian.
 # To see how simple it is to implement the VQE algorithm to compute the ground-state energy of
-# your molecule using PennyLane, take a look at the tutorial :doc:`tutorial_vqe`.
+# your molecule using PennyLane, take a look at the tutorial :doc:`demos/tutorial_vqe`.
 #
 # References
 # ----------
@@ -325,7 +323,4 @@ print(H)
 #     Active Space for Calculating Electronic Excitation Spectra by MS-CASPT2 or MC-PDFT".
 #     `Journal of Chemical Theory and Computation 14, 2017 (2018).
 #     <https://pubs.acs.org/doi/abs/10.1021/acs.jctc.8b00032>`_
-#
-# About the author
-# ----------------
 #

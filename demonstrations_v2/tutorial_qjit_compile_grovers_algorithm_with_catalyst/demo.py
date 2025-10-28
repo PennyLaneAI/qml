@@ -37,7 +37,7 @@ How to quantum just-in-time (QJIT) compile Grover's algorithm with Catalyst
 # Generalized Grover's algorithm with PennyLane
 # ---------------------------------------------
 #
-# In the :doc:`Grover's Algorithm <tutorial_grovers_algorithm>` tutorial, we saw how to implement
+# In the :doc:`Grover's Algorithm <demos/tutorial_grovers_algorithm>` tutorial, we saw how to implement
 # the generalized Grover's algorithm in PennyLane. The procedure is as follows:
 #
 # #. Initialize the system to an equal superposition over all states.
@@ -61,7 +61,7 @@ How to quantum just-in-time (QJIT) compile Grover's algorithm with Catalyst
 # containing all possible :math:`n`-qubit states.
 #
 # First, we'll import the required packages and define the Grover's algorithm circuit, as we did in
-# the :doc:`previous tutorial <tutorial_grovers_algorithm>`.
+# the :doc:`previous tutorial <demos/tutorial_grovers_algorithm>`.
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -397,7 +397,4 @@ plt.show()
 #
 #     The performance improvements that can be achieved with QJIT compilation will depend on the
 #     specific size and topology of your PennyLane circuit.
-
-######################################################################
-# About the author
-# ----------------
+#

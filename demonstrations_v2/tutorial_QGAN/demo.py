@@ -9,7 +9,13 @@ Quantum generative adversarial networks with Cirq + TensorFlow
         Generative Adversarial Network (QGAN) using PennyLane, Cirq, and TensorFlow.
     :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/qgan3.png
 
-*Author: Nathan Killoran — Posted: 11 October 2019. Last updated: 30 January 2023.*
+
+.. warning::
+    This demo uses TensorFlow, which is a deprecated interface with PennyLane v0.42.
+    Interfacing with TensorFlow will no longer be supported with PennyLane v0.43 and higher.
+    Consider switching to a different machine learning interface with PennyLane, like
+    :doc:`PyTorch <demos/tutorial_qnn_module_torch>` or
+    :doc:`JAX <demos/tutorial_How_to_optimize_QML_model_using_JAX_and_Optax>`.
 
 This demo constructs a Quantum Generative Adversarial Network (QGAN)
 (`Lloyd and Weedbrook
@@ -212,9 +218,12 @@ opt.build([disc_weights, gen_weights])
 cost = lambda: disc_cost(disc_weights)
 
 for step in range(50):
-    opt.minimize(cost, [disc_weights])
+    with tf.GradientTape() as tape:
+        loss_value = cost()
+    gradients = tape.gradient(loss_value, [disc_weights])
+    opt.apply_gradients(zip(gradients, [disc_weights]))
     if step % 5 == 0:
-        cost_val = cost().numpy()
+        cost_val = loss_value.numpy()
         print("Step {}: cost = {}".format(step, cost_val))
 
 
@@ -242,9 +251,12 @@ print("Prob(fake classified as real): ", prob_fake_true(gen_weights, disc_weight
 cost = lambda: gen_cost(gen_weights)
 
 for step in range(50):
-    opt.minimize(cost, [gen_weights])
+    with tf.GradientTape() as tape:
+        loss_value = cost()
+    gradients = tape.gradient(loss_value, [gen_weights])
+    opt.apply_gradients(zip(gradients, [gen_weights]))
     if step % 5 == 0:
-        cost_val = cost().numpy()
+        cost_val = loss_value.numpy()
         print("Step {}: cost = {}".format(step, cost_val))
 
 
@@ -285,8 +297,3 @@ def bloch_vector_generator(angles):
 
 print(f"Real Bloch vector: {bloch_vector_real([phi, theta, omega])}")
 print(f"Generator Bloch vector: {bloch_vector_generator(gen_weights)}")
-
-##############################################################################
-# About the author
-# ----------------
-#

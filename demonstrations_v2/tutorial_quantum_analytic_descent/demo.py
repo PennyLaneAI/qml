@@ -17,11 +17,9 @@ Quantum analytic descent
    tutorial_stochastic_parameter_shift The stochastic parameter-shift rule
 
 
-*Authors: Elies Gil-Fuster, David Wierichs (Xanadu Residents) — Posted: 30 June 2021. Last updated: 18 November 2021*
-
 One of the main problems of many-body physics is that of finding the ground
 state and ground state energy of a given Hamiltonian.
-`The Variational Quantum Eigensolver (VQE) <https://pennylane.ai/qml/demos/tutorial_vqe.html>`_ combines smart circuit
+`The Variational Quantum Eigensolver (VQE) <https://pennylane.ai/qml/demos/tutorial_vqe>`_ combines smart circuit
 design with gradient-based optimization to solve this task.
 Several practical demonstrations have shown how near-term quantum
 devices may be suitable for VQE and other variational quantum algorithms.
@@ -85,7 +83,7 @@ That is, for each parameter :math:`\theta_i` there exist :math:`a_i`, :math:`b_i
 
 All parameters but :math:`\theta_i` are absorbed in the coefficients :math:`a_i,` :math:`b_i` and :math:`c_i.`
 Another technique using this structure of :math:`E(\boldsymbol{\theta})` are the
-Rotosolve/Rotoselect algorithms [#Rotosolve]_ for which there also is `a PennyLane demo <https://pennylane.ai/qml/demos/tutorial_rotoselect.html>`__.
+Rotosolve/Rotoselect algorithms [#Rotosolve]_ for which there also is `a PennyLane demo <https://pennylane.ai/qml/demos/tutorial_rotoselect>`__.
 
 Let's look at a toy example to illustrate this structure of the cost function.
 """
@@ -297,7 +295,7 @@ line2 = ax.plot(
 #   E^{(D)}_{kl} &= \frac{\partial^2 E(\boldsymbol{\theta})}{\partial\theta_k\partial\theta_l}\Bigg|_{\boldsymbol{\theta}=0}
 #
 # In PennyLane, computing the gradient of a cost function with respect to an array of parameters can be easily done
-# with the `parameter-shift rule <https://pennylane.ai/qml/glossary/parameter_shift.html>`_.
+# with the `parameter-shift rule <https://pennylane.ai/qml/glossary/parameter_shift>`_.
 # By iterating the rule, we can obtain the second derivatives – the Hessian (see for example [#higher_order_diff]_).
 # Let us implement a function that does just that and prepares the coefficients :math:`E^{(A/B/C/D)}:`
 
@@ -705,8 +703,4 @@ leg = ax.legend()
 #     "Estimating the gradient and higher-order derivatives on quantum hardware".
 #     `Phys. Rev. A 103, 012405 <https://journals.aps.org/pra/abstract/10.1103/PhysRevA.103.012405>`__, 2021.
 #     `arXiv preprint arXiv:2008.06517 <https://arxiv.org/abs/2008.06517>`__.
-#
-#
-# About the author
-# ----------------
 #

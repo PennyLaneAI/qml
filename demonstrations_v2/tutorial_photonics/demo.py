@@ -13,8 +13,6 @@ Photonic quantum computers
    tutorial_sc_qubits Quantum computing with superconducting qubits
    gbs Quantum advantage with Gaussian Boson Sampling
 
-*Author: Alvaro Ballon — Posted: 31 May 2022. Last updated: 16 June 2022.*
-
 To create a functional quantum computer, we need to produce and control a 
 large number of qubits. This feat has proven difficult, although significant 
 progress has been made using trapped ions, superconducting circuits, 
@@ -139,7 +137,7 @@ import matplotlib.pyplot as plt
 #
 # and define the device.
 
-dev = qml.device("default.gaussian", wires=1, shots=1000)
+dev = qml.device("default.gaussian", wires=1)
 
 ##############################################################################
 #
@@ -157,11 +155,13 @@ dev = qml.device("default.gaussian", wires=1, shots=1000)
 # We plot 1000 measurement results for both :math:`x` and :math:`p.`
 
 
+@qml.set_shots(1000)
 @qml.qnode(dev)
 def vacuum_measure_x():
     return qml.sample(qml.QuadX(0))  # Samples X quadratures
 
 
+@qml.set_shots(1000)
 @qml.qnode(dev)
 def vacuum_measure_p():
     return qml.sample(qml.QuadP(0))  # Samples P quadrature
@@ -274,12 +274,14 @@ print("Variance of p-quadrature: {}".format(vacuum_var_p()))
 # Let us plot sample quadrature measurements for a coherent state.
 
 
+@qml.set_shots(1000)
 @qml.qnode(dev)
 def measure_coherent_x(alpha, phi):
     qml.CoherentState(alpha, phi, wires=0)  # Prepares coherent state
     return qml.sample(qml.QuadX(0))  # Measures X quadrature
 
 
+@qml.set_shots(1000)
 @qml.qnode(dev)
 def measure_coherent_p(alpha, phi):
     qml.CoherentState(alpha, phi, wires=0)  # Prepares coherent state
@@ -356,6 +358,7 @@ plt.show()
 # Let's see the effect of this operation on an intial coherent state.
 
 
+@qml.set_shots(1000)
 @qml.qnode(dev)
 def displace_coherent_x(alpha, phi, x):
     qml.CoherentState(alpha, phi, wires = 0)  # Create coherent state
@@ -363,6 +366,7 @@ def displace_coherent_x(alpha, phi, x):
     return qml.sample(qml.QuadX(0))
 
 
+@qml.set_shots(1000)
 @qml.qnode(dev)
 def displace_coherent_p(alpha, phi, x):
     qml.CoherentState(alpha, phi, wires = 0)
@@ -421,9 +425,10 @@ plt.show()
 # Let us be mindful that this will only work when the amplitude of the input state is much smaller
 # than that of the auxiliary coherent state.
 
-dev2 = qml.device("default.gaussian", wires=2, shots=1000)
+dev2 = qml.device("default.gaussian", wires=2)
 
 
+@qml.set_shots(1000)
 @qml.qnode(dev2)
 def disp_optics(z, x):
     qml.CoherentState(z, 0, wires = 0)  # High-amplitude auxiliary coherent state
@@ -432,6 +437,7 @@ def disp_optics(z, x):
     return qml.sample(qml.QuadX(1))  # Measure x quadrature
 
 
+@qml.set_shots(1000)
 @qml.qnode(dev2)
 def mom_optics(z, x):
     qml.CoherentState(z, 0, wires = 0)
@@ -501,12 +507,14 @@ plt.show()
 # of quadrature measurements.
 
 
+@qml.set_shots(1000)
 @qml.qnode(dev)
 def measure_squeezed_x(r):
     qml.Squeezing(r, 0, wires = 0)
     return qml.sample(qml.QuadX(0))
 
 
+@qml.set_shots(1000)
 @qml.qnode(dev)
 def measure_squeezed_p(r):
     qml.Squeezing(r, 0, wires = 0)
@@ -690,7 +698,7 @@ print(
 #    A Gaussian Boson Sampling circuit. The beamsplitters here may include phase shifts.
 #
 # Gaussian boson sampling (GBS) is interesting on its own
-# (see :doc:`this tutorial </demos/gbs>` for an in-depth discussion).
+# (see :doc:`this tutorial <demos/gbs>` for an in-depth discussion).
 # So far, two quantum devices have used large-scale versions of this circuit
 # to achieve quantum advantage on a particular computation, which involves sampling from
 # a probability distribution that classical computers take too long to simulate. In 2019, USTC's Jiuzhang device took 200 seconds
@@ -836,7 +844,7 @@ print(
 # small chips, which we can stack and connect together using optical fibers. Moreover, compared to other implementations where
 # low temperatures are needed everywhere, in photonic quantum computers we only need them for the PNRs to work.
 # Since cryogenics are a bulky part of quantum computing architectures, photonic technology promises to be more scalable than, for example,
-# :doc:`trapped ion </demos/tutorial_trapped_ions>` or :doc:`superconducting </demos/tutorial_sc_qubits>` devices.
+# :doc:`trapped ion <demos/tutorial_trapped_ions>` or :doc:`superconducting <demos/tutorial_sc_qubits>` devices.
 #
 # The second criterion, the ability to prepare a qubit, is clearly a challenge. We need GKP states,
 # but these cannot be prepared deterministically; we need to get a bit lucky.
@@ -960,7 +968,4 @@ print(
 #     `Quantum 5, 392
 #     <https://quantum-journal.org/papers/q-2021-02-04-392/>`__.
 #     (`arXiv <https://arxiv.org/abs/2010.02905>`__)
-#
-# About the author
-# ----------------
 #

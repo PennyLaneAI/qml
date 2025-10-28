@@ -36,7 +36,7 @@ Hence, we mainly care about performing measurements on qubits in arbitrary bases
 We also note that the patches that represent qubits correspond to surface code qubits.
 There is a detailed explanation in Appendix A in [#Litinski]_ that describes the surface code realizations of all operations that we are going to see.
 These are useful to know in order to grasp the full depth of the game, but are not essential to understanding its rules and concluding design principles that we cover in this demo.
-For further reading on these subjects, we recommend the `blog posts on the surface code and quantum error correction <https://arthurpesah.me/blog/>`__ by Arthur Pesah, our :doc:`demo on the toric code <tutorial_toric_code>`, as well as the three-part series on the `toric code <https://decodoku.blogspot.com/2016/03/6-toric-code.html>`__ by James Wooton.
+For further reading on these subjects, we recommend the `blog posts on the surface code and quantum error correction <https://arthurpesah.me/blog/>`__ by Arthur Pesah, our :doc:`demo on the toric code <demos/tutorial_toric_code>`, as well as the three-part series on the `toric code <https://decodoku.blogspot.com/2016/03/6-toric-code.html>`__ by James Wooton.
 
 Rules of the game
 -----------------
@@ -412,7 +412,3 @@ With this knowledge, we should be able to follow the more involved tricks discus
 #
 # Images from `Game of Surface Codes <https://quantum-journal.org/papers/q-2019-03-05-128/>`__ by Daniel Litinski [#Litinski]_, `CC BY 4.0 <https://creativecommons.org/licenses/by/4.0/>`__
 #
-
-##############################################################################
-# About the author
-# ----------------

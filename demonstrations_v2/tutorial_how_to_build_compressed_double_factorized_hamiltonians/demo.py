@@ -386,6 +386,3 @@ print(f"Fidelity of two states: {fidelity_statevector(circuit_state, evolved_sta
 #     "Trotter error bounds and dynamic multi-product formulas for Hamiltonian simulation",
 #     `arXiv:2306.12569 <https://arxiv.org/abs/2306.12569>`__, 2023.
 #
-# About the author
-# ----------------
-#

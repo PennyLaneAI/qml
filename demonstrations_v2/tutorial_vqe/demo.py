@@ -15,8 +15,6 @@ A brief overview of VQE
    tutorial_vqe_spin_sectors VQE in different spin sectors
    tutorial_vqt Variational quantum thermalizer
 
-*Author: Alain Delgado — Posted: 08 February 2020. Last updated: 29 August 2023.*
-
 The Variational Quantum Eigensolver (VQE) is a flagship algorithm for quantum chemistry
 using near-term quantum computers [#peruzzo2014]_. It is an application of the
 `Ritz variational principle <https://en.wikipedia.org/wiki/Ritz_method>`_, where a quantum
@@ -77,7 +75,7 @@ print("The Hamiltonian is ", H)
 # the Hamiltonian.
 #
 # For a more comprehensive discussion on how to build the Hamiltonian of more
-# complicated molecules, see the tutorial :doc:`tutorial_quantum_chemistry`.
+# complicated molecules, see the tutorial :doc:`demos/tutorial_quantum_chemistry`.
 #
 # .. note::
 #
@@ -130,10 +128,10 @@ dev = qml.device("lightning.qubit", wires=qubits)
 # the four-qubit states :math:`\vert 1100 \rangle` and :math:`\vert 0011 \rangle.`
 # For more details on how to use the excitation operations to build
 # quantum circuits for quantum chemistry applications see the
-# tutorial :doc:`tutorial_givens_rotations`.
+# tutorial :doc:`demos/tutorial_givens_rotations`.
 #
 # Implementing the circuit above using PennyLane is straightforward. First, we use the
-# :func:`hf_state` function to generate the vector representing the Hartree-Fock state.
+# :func:`~.pennylane.qchem.hf_state` function to generate the vector representing the Hartree-Fock state.
 
 electrons = 2
 hf = qml.qchem.hf_state(electrons, qubits)
@@ -144,7 +142,7 @@ print(hf)
 # the qubit register. Then, we just act with the :class:`~.pennylane.DoubleExcitation` operation
 # on the four qubits. The next step is to compute the expectation value
 # of the molecular Hamiltonian in the trial state prepared by the circuit.
-# We do this using the :func:`~.expval` function. The decorator syntax allows us to
+# We do this using the :func:`~.pennylane.expval` function. The decorator syntax allows us to
 # run the cost function as an executable QNode with the gate parameter :math:`\theta:`
 
 @qml.qnode(dev, interface="jax")
@@ -265,13 +263,13 @@ plt.show()
 # molecular Hamiltonian in the trial state.
 #
 # The VQE algorithm can be used to simulate other chemical phenomena.
-# In the tutorial :doc:`tutorial_vqe_bond_dissociation`, we use VQE to explore the
+# In the tutorial :doc:`demos/tutorial_chemical_reactions`, we use VQE to explore the
 # potential energy surface of molecules to simulate chemical reactions.
 # Another interesting application is to probe the lowest-lying states of molecules
 # in specific sectors of the Hilbert space. For example, see the tutorial
-# :doc:`tutorial_vqe_spin_sectors`. Furthermore, the algorithm presented here can be
+# :doc:`demos/tutorial_vqe_spin_sectors`. Furthermore, the algorithm presented here can be
 # generalized to find the equilibrium geometry of a molecule as it is demonstrated in the
-# tutorial :doc:`tutorial_mol_geo_opt`.
+# tutorial :doc:`demos/tutorial_mol_geo_opt`.
 #
 # .. _vqe_references:
 #
@@ -289,7 +287,4 @@ plt.show()
 #     Jacob T. Seeley, Martin J. Richard, Peter J. Love. "The Bravyi-Kitaev transformation for
 #     quantum computation of electronic structure". `Journal of Chemical Physics 137, 224109 (2012).
 #     <https://aip.scitation.org/doi/abs/10.1063/1.4768229>`__
-#
-# About the author
-# ----------------
 #

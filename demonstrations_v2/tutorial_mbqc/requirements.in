@@ -1,3 +1,6 @@
-flamingpy
+### NOTE: FlamingPy is incompatible with the required version of Python.
+### Therefore this demo has been marked non-executable, until FlamingPy supports Python 3.11.
+### See https://app.shortcut.com/xanaduai/story/97632/track-non-executable-demos-removed-dependencies-following-python-version-upgrade-in-qml
+# flamingpy
 networkx
 plotly

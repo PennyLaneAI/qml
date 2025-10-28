@@ -8,8 +8,10 @@
             "username": "georgepwhuang"
         }
     ],
+    "executable_stable": true,
+    "executable_latest": true,
     "dateOfPublication": "2024-10-07T00:00:00+00:00",
-    "dateOfLastModification": "2024-10-07T00:00:00+00:00",
+    "dateOfLastModification": "2025-09-22T15:48:14+00:00",
     "categories": [
         "Quantum Machine Learning",
         "Algorithms",
@@ -19,11 +21,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_post-variational_quantum_neural_networks.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_post-variational_quantum_neural_networks.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_post-variational_quantum_neural_networks.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_post-variational_quantum_neural_networks.png"
         }
     ],
     "seoDescription": "Learn about post-variational quantum neural networks",
@@ -92,7 +94,9 @@
             "url": "https://doi.org/10.1038/s41567-020-0932-7"
         }
     ],
-    "basedOnPapers": ["https://arxiv.org/abs/2307.10560"],
+    "basedOnPapers": [
+        "https://arxiv.org/abs/2307.10560"
+    ],
     "referencedByPapers": [],
     "relatedContent": [
         {

@@ -15,7 +15,6 @@ Beyond classical computing with qsim
     tutorial_noisy_circuit_optimization Optimizing noisy circuits with Cirq
     quantum_volume Quantum volume
 
-*Author: Theodor Isacsson — Posted: 30 November 2020. Last updated: 10 September 2021.*
 
 .. figure:: ../_static/demonstration_assets/qsim_beyond_classical/qc.png
     :align: right
@@ -125,7 +124,7 @@ qb2wire = {i: j for i, j in zip(qubits, range(wires))}
 #
 
 shots = 500000
-dev = qml.device('cirq.qsim', wires=wires, qubits=qubits, shots=shots)
+dev = qml.device('cirq.qsim', wires=wires, qubits=qubits)
 
 
 ######################################################################
@@ -302,6 +301,7 @@ def generate_single_qubit_gate_list():
 # :math:`\left|0\right>` and :math:`\left|1\right>.`
 #
 
+@qml.set_shots(shots)
 @qml.qnode(dev)
 def circuit(seed=42, return_probs=False):
     np.random.seed(seed)
@@ -579,8 +579,4 @@ print("\rObserved:", f"{np.mean(f_circuit):.7f}".rjust(27))
 #
 #     Sohaib, Alam M. and Zeng, W., `Unpacking the Quantum Supremacy Benchmark with Python
 #     <https://medium.com/@sohaib.alam/unpacking-the-quantum-supremacy-benchmark-with-python-67a46709d>`__
-#
-#
-# About the author
-# ----------------
 #

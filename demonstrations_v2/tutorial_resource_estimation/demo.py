@@ -13,11 +13,9 @@ Resource estimation for quantum chemistry
     tutorial_vqe A brief overview of VQE
 
 
-*Author: Soran Jahangiri — Posted: 21 November 2022.*
-
 Quantum algorithms such as
 `quantum phase estimation <https://docs.pennylane.ai/en/stable/code/api/pennylane.QuantumPhaseEstimation.html>`_
-(QPE) and the `variational quantum eigensolver <https://pennylane.ai/qml/demos/tutorial_vqe.html>`_ (VQE)
+(QPE) and the `variational quantum eigensolver <https://pennylane.ai/qml/demos/tutorial_vqe>`_ (VQE)
 are widely studied in quantum chemistry as potential avenues to tackle problems that are intractable
 for conventional computers. However, we currently do not have quantum computers or simulators
 capable of implementing large-scale
@@ -58,7 +56,7 @@ QPE cost for simulating molecules
 We study the double low-rank Hamiltonian factorization algorithm of [#vonburg2021]_ and use its cost
 equations as provided in APPENDIX C of [#lee2021]_.
 This algorithm requires the one- and two-electron
-`integrals <https://pennylane.ai/qml/demos/tutorial_differentiable_HF.html#the-hartree-fock-method>`_
+`integrals <https://pennylane.ai/qml/demos/tutorial_differentiable_HF#the-hartree-fock-method>`_
 as input. These integrals can be obtained in different ways and here we use PennyLane to compute
 them. We first need to define the atomic symbols and coordinates for the given molecule. Let's use
 the water molecule at its equilibrium geometry with the
@@ -316,6 +314,4 @@ fig.tight_layout()
 #     "Simulating key properties of lithium-ion batteries with a fault-tolerant quantum computer".
 #     `Phys. Rev. A 106, 032428 (2022)
 #     <https://journals.aps.org/pra/abstract/10.1103/PhysRevA.106.032428>`__
-# About the author
-# ----------------
 #
