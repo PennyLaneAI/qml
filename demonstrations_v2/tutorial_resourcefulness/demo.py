@@ -25,7 +25,7 @@ of different "order".
 The GFD Purities then serve as a measure of how much of a state "lives" in each of these subspaces.
 More resourceful states have large projections in higher-order subspaces and vice versa.
 
-To clarify this terminology, we will begin with a didactic example, and see that the standard Fourier
+To clarify these concepts, in this demo, we will begin with a didactic example, and see that the standard Fourier
 transform can be seen as a special case of this framework: here
 the GFD purities are the absolute squares of the standard Fourier coefficients,
 which is also known as the *power spectrum* (and GFD Purities can therefore be seen as a "generalised power spectrum") .
