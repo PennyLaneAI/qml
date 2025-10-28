@@ -113,10 +113,10 @@ core_shift, one_shift, two_shift = qml.qchem.symmetry_shift(
 # Then we can use these shifted terms to obtain a double-factorized representation of
 # the Hamiltonian that has a lower one-norm than the original one. For instance, we can
 # compare the improvement in the one-norm of the shifted Hamiltonian over the original one
-# by accessing the :class:`~.pennylane.resource.DoubleFactorization`'s ``lamb`` attribute:
+# by accessing the :class:`~.pennylane.estimator.qpe_resources.DoubleFactorization`'s ``lamb`` attribute:
 #
 
-from pennylane.resource import DoubleFactorization as DF
+from pennylane.estimator.qpe_resources import DoubleFactorization as DF
 
 DF_chem_norm = DF(one_chem, two_chem, chemist_notation=True).lamb
 DF_shift_norm =  DF(one_shift, two_shift, chemist_notation=True).lamb
