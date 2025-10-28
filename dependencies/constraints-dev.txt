@@ -23,8 +23,6 @@ aiohttp==3.9.5
 fastapi<1.0.0
 fsspec==2024.6.1
 h5py==3.11.0
-openfermionpyscf==0.5
-openqaoa-core==0.2.5
 qiskit>=2.0
 qiskit-aer>=0.17
 qiskit_ibm_runtime==0.41.1
