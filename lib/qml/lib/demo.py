@@ -347,6 +347,7 @@ def _build_demo(
         # Make sure demos can find scripts installed in the build venv
         "PATH": f"{os.environ['PATH']}:{build_venv.path / 'bin'}",
         "CURRENT_DEMO": str(demo.name),
+        "DEV": str(dev),
     }
     if quiet:
         stdout, stderr, text = subprocess.PIPE, subprocess.STDOUT, True
