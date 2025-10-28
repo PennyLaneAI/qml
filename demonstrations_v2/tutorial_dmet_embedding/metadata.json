@@ -5,6 +5,8 @@
             "username": "ddhawan"
         }
     ],
+    "executable_stable": false,
+    "executable_latest": false,
     "dateOfPublication": "2025-05-21T00:00:00+00:00",
     "dateOfLastModification": "2025-05-21T00:00:00+00:00",
     "categories": [

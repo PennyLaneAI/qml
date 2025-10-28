@@ -436,11 +436,11 @@ efficient level of theory.
 #    one_elec = one_particle(h1[0])
 #    two_elec = two_particle(np.swapaxes(h2, 1, 3)) # swap to physicist's notation
 #    qubit_op = observable([one_elec,two_elec], mapping="jordan_wigner")
-#    print("Qubit Hamiltonian:", qubit_op)
+#    print("Qubit Hamiltonian: ", qubit_op)
 #
 # .. code-block:: text
 #
-#    0.6230307293797223 * I(0) + -0.4700529413255728 * Z(0) + -0.4700529413255728 * Z(1) + -0.21375048863111926 * (Y(0) @ Z(1) @ Y(2)) + -0.21375048863111926 * (X(0) @ Z(1) @ X(2)) + -0.21375048863111926 * (Y(1) @ Z(2) @ Y(3)) + ...
+#    Qubit Hamiltonian:  0.6230307293797223 * I(0) + -0.4700529413255728 * Z(0) + -0.4700529413255728 * Z(1) + -0.21375048863111926 * (Y(0) @ Z(1) @ Y(2)) + ...
 #
 # This Hamiltonian can be used in a quantum algorithm such as quantum phase estimation. We can get
 # ground state energy for the system by solving for the full system as done above in the
