@@ -225,7 +225,7 @@ H_coeffs, H_ops = H.terms()
 
 ##############################################################################
 # The number of measurements needed to compute :math:`\left \langle H \right \rangle` can be
-# obtained with the :func:`~.pennylane.estimator.estimate_shots` function, which requires the
+# obtained with the :func:`~.pennylane.estimator.measurement.estimate_shots` function, which requires the
 # Hamiltonian coefficients as input. The number of measurements required to compute
 # :math:`\left \langle H \right \rangle` with a target error set to the chemical accuracy, 0.0016
 # :math:`\text{Ha},` is obtained as follows.
