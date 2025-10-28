@@ -54,6 +54,12 @@ extensions = [
     "extension",
 ]
 
+dev = os.getenv("DEV", "False")
+if dev == "True":
+    dev = True
+else:
+    dev = False
+
 html_baseurl = "https://pennylane.ai/qml/"
 demo_staging_dir = os.getenv("DEMO_STAGING_DIR", "demonstrations")
 
@@ -213,8 +219,8 @@ htmlhelp_basename = "QMLdoc"
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
-    "pennylane": ("https://docs.pennylane.ai/en/stable/", None),
-    "catalyst": ("https://docs.pennylane.ai/projects/catalyst/en/stable", None),
+    "pennylane": ("https://docs.pennylane.ai/en/" + ("latest/" if dev else "stable/"), None),
+    "catalyst": ("https://docs.pennylane.ai/projects/catalyst/en/" + ("latest/" if dev else "stable/"), None),
     "demo": ("https://pennylane.ai/qml", None),
 }
 
