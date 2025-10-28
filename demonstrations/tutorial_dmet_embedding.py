@@ -1,9 +1,6 @@
 r"""Density Matrix Embedding Theory (DMET)
 =========================================
-Quantum chemistry's biggest hurdle lies in materials simulation. Mean-field methods, though
-efficient, consistently misrepresent electron correlation in strongly correlated systems due
-to inherent limitations. Consequently, accurate simulations demand computationally intensive
-wavefunction approaches such as configuration interaction or coupled cluster.
+Computer simulations of materials are very challenging. Mean-field methods are inexpensive, but they are unreliable and inconsistent in describing strongly correlated systems. More accurate simulations can be obtained with wavefunction approaches such as configuration interaction or coupled cluster, but these are extremely expensive, becoming prohibitive even for relatively small systems.
 
 Embedding theories provide a path to simulate materials with a balance of accuracy and efficiency.
 The core idea is to divide the system
