@@ -23,9 +23,9 @@ h5py==3.11.0
 qiskit>=2.0
 qiskit-aer>=0.17
 qiskit_ibm_runtime==0.41.1
-torch==2.1.2+cpu ; sys_platform != 'darwin'
-torch==2.1.2 ; sys_platform == 'darwin'
-torchvision==0.16.2+cpu ; sys_platform != 'darwin'
-torchvision==0.16.2 ; sys_platform == 'darwin'
+torch==2.9.0+cpu ; sys_platform != 'darwin'
+torch==2.9.0 ; sys_platform == 'darwin'
+torchvision==0.24.0+cpu ; sys_platform != 'darwin'
+torchvision==0.24.0 ; sys_platform == 'darwin'
 optax==0.2.4
 ipython==8.16.1
