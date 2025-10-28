@@ -10,8 +10,6 @@ VQE in different spin sectors
    tutorial_vqe A brief overview of VQE
    vqe_parallel VQE with parallel QPUs with Rigetti
 
-*Author: Alain Delgado — Posted: 13 October 2020. Last updated: 25 June 2022.*
-
 The Variational Quantum Eigensolver (VQE) algorithm is an approach for finding the
 lowest-energy state of a molecule using a quantum computer [#peruzzo2014]_.
 
@@ -78,7 +76,7 @@ print("The Hamiltonian is ", H)
 #
 # The :func:`~.pennylane.qchem.molecular_hamiltonian` function allows us to define
 # additional keyword arguments to simulate more complicated molecules. For more details
-# take a look at the tutorial :doc:`tutorial_quantum_chemistry`.
+# take a look at the tutorial :doc:`demos/tutorial_quantum_chemistry`.
 #
 # We also want to build the total spin operator :math:`\hat{S}^2,`
 #
@@ -114,7 +112,7 @@ print(S2)
 # all possible single and double excitations of the Hartree-Fock reference state. The indices
 # of the qubits they act on correspond to the spin-orbitals involved in each excitation.
 # For more details on how to use the excitation operations see the
-# tutorial :doc:`tutorial_givens_rotations`.
+# tutorial :doc:`demos/tutorial_givens_rotations`.
 #
 # First, we use the :func:`~.pennylane.qchem.hf_state`
 # function to generate the vector representing the Hartree-Fock state
@@ -379,7 +377,4 @@ print("\n" f"Optimal value of the circuit parameters = {params}")
 #     J.M. Arrazola, O. Di Matteo, N. Quesada, S. Jahangiri, A. Delgado, N. Killoran.
 #     "Universal quantum circuits for quantum chemistry". `arXiv:2106.13839, (2021)
 #     <https://arxiv.org/abs/2106.13839>`__
-#
-# About the author
-# ----------------
 #

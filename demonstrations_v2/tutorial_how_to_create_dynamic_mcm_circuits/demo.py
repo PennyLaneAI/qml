@@ -3,9 +3,9 @@ r"""How to create dynamic circuits with mid-circuit measurements
 
 Measuring qubits in the middle of a quantum circuit execution can be useful in many ways.
 From understanding the inner workings of a circuit, hardware characterization,
-modeling and :doc:`error mitigation </demos/tutorial_diffable-mitigation>`, to error correction,
-:doc:`quantum teleportation </demos/tutorial_teleportation>`, algorithmic improvements and even up to full
-computations encoded as measurements in :doc:`measurement-based quantum computation (MBQC) </demos/tutorial_mbqc>`.
+modeling and :doc:`error mitigation <demos/tutorial_diffable-mitigation>`, to error correction,
+:doc:`quantum teleportation <demos/tutorial_teleportation>`, algorithmic improvements and even up to full
+computations encoded as measurements in :doc:`measurement-based quantum computation (MBQC) <demos/tutorial_mbqc>`.
 
 Before turning to any of these advanced topics, it is worthwhile to familiarize ourselves with
 the syntax and features around mid-circuit measurements (MCMs). In this how-to, we will focus on
@@ -14,7 +14,7 @@ Most of the advanced concepts mentioned above incorporate MCMs in this way, maki
 key ingredient to scalable quantum computing.
 
 If you want to learn more or are looking for how to collect statistics of mid-circuit measurements,
-have a read of the :doc:`how-to on MCM statistics </demos/tutorial_how_to_collect_mcm_stats>`.
+have a read of the :doc:`how-to on MCM statistics <demos/tutorial_how_to_collect_mcm_stats>`.
 
 .. figure:: ../_static/demonstration_assets/how_to_create_dynamic_mcm_circuits/socialthumbnail_how_to_create_dynamic_mcm_circuits.png
     :align: center
@@ -102,9 +102,10 @@ def init_state(x):
 #
 
 shots = 100
-dev = qml.device("default.qubit", shots=shots)
+dev = qml.device("default.qubit")
 
 
+@qml.set_shots(shots)
 @qml.qnode(dev)
 def create_half_filled_state(x):
     init_state(x)
@@ -152,6 +153,7 @@ for key, val in counts.items():
 #
 
 
+@qml.set_shots(shots)
 @qml.qnode(dev)
 def postselect_half_filled_state(x, selection):
     init_state(x)
@@ -201,6 +203,7 @@ for key, val in counts.items():
 #
 
 
+@qml.set_shots(shots)
 @qml.qnode(dev)
 def create_selected_half_filled_state(x, selection):
     init_state(x)
@@ -249,7 +252,4 @@ for key, val in counts.items():
 # and the documentation of :func:`~.pennylane.measure`.
 #
 # And this is how to create dynamic circuits in PennyLane with mid-circuit measurements!
-#
-# About the author
-# ----------------
 #

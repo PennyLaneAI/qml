@@ -10,8 +10,6 @@ Quantum natural SPSA optimizer
 
    tutorial_spsa Simultaneous perturbation stochastic approximation (SPSA) optimizer
 
-*Author: Yiheng Duan — Posted: 18 July 2022. Last updated: 05 September 2022.*
-
 In this tutorial, we show how we can implement the
 `quantum natural simultaneous perturbation stochastic approximation (QN-SPSA) optimizer
 <https://quantum-journal.org/papers/q-2021-10-20-567/>`__
@@ -61,7 +59,7 @@ for noisy intermediate-scale quantum (NISQ) devices.
 # circuits.
 #
 # To address this unsatisfying scaling, the :doc:`simultaneous perturbation
-# stochastic approximation (SPSA) optimizer </demos/tutorial_spsa>`
+# stochastic approximation (SPSA) optimizer <demos/tutorial_spsa>`
 # replaces this dimensionwise gradient estimation with a stochastic one [#SPSA]_.
 # In SPSA, a random direction :math:`\mathbf{h} \in \mathcal{U}(\{-1, 1\}^d)`
 # in the parameter space is sampled, where :math:`\mathcal{U}(\{-1, 1\}^d)` is a
@@ -90,13 +88,13 @@ for noisy intermediate-scale quantum (NISQ) devices.
 # over multiple optimization steps.
 #
 # On the other hand, :doc:`quantum natural gradient descent (QNG)
-# </demos/tutorial_quantum_natural_gradient>` [#Stokes2020]_
+# <demos/tutorial_quantum_natural_gradient>` [#Stokes2020]_
 # is a variant of gradient descent. It introduces the Fubini-Study metric tensor
 # :math:`\boldsymbol{g}`  into the optimization to account for the
 # structure of the non-Euclidean parameter space [#FS]_. The
 # :math:`d \times d` metric tensor is defined as
 #
-# .. math:: \boldsymbol{g}_{ij}(\mathbf{x}) = -\frac{1}{2} \frac{\partial}{\partial \mathbf{x}_i} \frac{\partial}{\partial \mathbf{x}_j} F(\mathbf{x}', \mathbf{x})\biggr\rvert_{\mathbf{x}'=\mathbf{x}},tag{5}
+# .. math:: \boldsymbol{g}_{ij}(\mathbf{x}) = -\frac{1}{2} \frac{\partial}{\partial \mathbf{x}_i} \frac{\partial}{\partial \mathbf{x}_j} F(\mathbf{x}', \mathbf{x})\biggr\rvert_{\mathbf{x}'=\mathbf{x}},\tag{5}
 #
 # where
 # :math:`F(\mathbf{x}', \mathbf{x}) = \bigr\rvert\langle \phi(\mathbf{x}') | \phi(\mathbf{x}) \rangle \bigr\rvert ^ 2,`
@@ -199,7 +197,7 @@ g = nx.gnm_random_graph(nodes, edges, seed=seed)
 cost_h, mixer_h = qaoa.maxcut(g)
 depth = 2
 # define device to be the PennyLane lightning local simulator
-dev = qml.device("lightning.qubit", wires=n_qubits, shots=1000)
+dev = qml.device("lightning.qubit", wires=n_qubits)
 
 
 def qaoa_layer(gamma, alpha):
@@ -218,6 +216,7 @@ def qaoa_circuit(params, n_qubits, depth):
 
 
 # define ansatz and loss function
+@qml.set_shots(1000)
 @qml.qnode(dev)
 def cost_function(params):
     qaoa_circuit(params, n_qubits, depth)
@@ -357,8 +356,8 @@ print("Estimated SPSA gradient:\n", grad)
 #
 
 def get_overlap_tape(qnode, params1, params2):
-    tape_forward = qml.workflow.construct_tape(qnode)(*params1)
-    tape_inv = qml.workflow.construct_tape(qnode)(*params2)
+    tape_forward = qml.workflow.construct_tape(qnode)(params1)
+    tape_inv = qml.workflow.construct_tape(qnode)(params2)
 
     ops = tape_forward.operations + list(qml.adjoint(op) for op in reversed(tape_inv.operations))
     return qml.tape.QuantumTape(ops, [qml.probs(wires=tape_forward.wires)])
@@ -819,8 +818,8 @@ class QNSPSA:
         # used to estimate the gradient per optimization step. The sampled
         # direction is of the shape of the input parameter.
         direction = self.__get_perturbation_direction(params)
-        tape_forward = qml.workflow.construct_tape(cost)(*[params + self.finite_diff_step * direction])
-        tape_backward = qml.workflow.construct_tape(cost)(*[params - self.finite_diff_step * direction])
+        tape_forward = qml.workflow.construct_tape(cost)(params + self.finite_diff_step * direction)
+        tape_backward = qml.workflow.construct_tape(cost)(params - self.finite_diff_step * direction)
         return [tape_forward, tape_backward], direction
 
     def __update_tensor(self, tensor_raw):
@@ -863,8 +862,8 @@ class QNSPSA:
 
     def __apply_blocking(self, cost, params_curr, params_next):
         # For numerical stability: apply the blocking condition on the parameter update.
-        tape_loss_curr = qml.workflow.construct_tape(cost)(*[params_curr])
-        tape_loss_next = qml.workflow.construct_tape(cost)(*[params_next])
+        tape_loss_curr = qml.workflow.construct_tape(cost)(params_curr)
+        tape_loss_next = qml.workflow.construct_tape(cost)(params_next)
 
         loss_curr, loss_next = qml.execute([tape_loss_curr, tape_loss_next], cost.device, None)
         # self.k has been updated earlier.
@@ -913,9 +912,9 @@ for i in range(300):
 # The optimizer performs reasonably well: the loss drops over optimization
 # steps and converges finally. We then reproduce the benchmarking test
 # between the gradient descent, quantum natural gradient descent, SPSA and
-# QN-SPSA in Fig. 1(b) of reference [#Gacon2021]_ with the following job. 
+# QN-SPSA in Fig. 1(b) of reference [#Gacon2021]_ with the following job.
 #
-# .. warning:: 
+# .. warning::
 #   The code required to plot the results of the example below is not provided, but a similar
 #   example can be found in this
 #   `notebook <https://github.com/aws/amazon-braket-examples/blob/main/examples/hybrid_jobs/6_QNSPSA_optimizer_with_embedded_simulator/qnspsa_with_embedded_simulator.ipynb>`__,
@@ -1008,7 +1007,4 @@ job = AwsQuantumJob.create(
 #    optimization using only function measurements*. `In Proceedings of the
 #    36th IEEE Conference on Decision and Control (Vol. 2, pp. 1417-1424).
 #    IEEE <https://ieeexplore.ieee.org/document/657661>`__.
-#
-# About the author
-# ----------------
 #

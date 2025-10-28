@@ -18,12 +18,12 @@ import warnings
 import numpy as np
 from jinja2 import FileSystemLoader, Environment
 import yaml
-from pennylane import PennyLaneDeprecationWarning
 from pathlib import Path
 
 sys.path.insert(0, os.path.abspath("."))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
 
+from pennylane.exceptions import PennyLaneDeprecationWarning
 
 # -- Project information -----------------------------------------------------
 # General information about the project.
@@ -44,7 +44,7 @@ release = ""
 
 # If your documentation needs a minimal Sphinx version, state it here.
 #
-needs_sphinx = "1.8.5"
+needs_sphinx = "8.1"
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
@@ -75,8 +75,14 @@ sphinx_gallery_conf = {
     # execute files that match the following filename pattern,
     # and skip those that don't. If the following option is not provided,
     # all example scripts in the 'examples_dirs' folder will be skiped.
-    "filename_pattern": r"tutorial",
-    "pypandoc": True,
+    "filename_pattern": r"\.py$",
+    "pypandoc": {
+        "filters": [
+            "./lib/filter_directives.py", 
+            "./lib/filter_figures.py",
+            "./lib/filter_links.py"
+        ]
+    },
     # first notebook cell in generated Jupyter notebooks
     "first_notebook_cell": (
         "# This cell is added by sphinx-gallery\n"
@@ -211,5 +217,9 @@ htmlhelp_basename = "QMLdoc"
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
     "pennylane": ("https://docs.pennylane.ai/en/stable/", None),
-    "catalyst": ("https://docs.pennylane.ai/projects/catalyst/en/stable", None)
+    "catalyst": ("https://docs.pennylane.ai/projects/catalyst/en/stable", None),
+    "demo": ("https://pennylane.ai/qml", None),
 }
+
+# Enable :doc: references for intersphinx (disabled by default in Sphinx 5.0+)
+intersphinx_disabled_reftypes = []

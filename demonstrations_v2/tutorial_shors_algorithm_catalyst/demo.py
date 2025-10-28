@@ -164,7 +164,7 @@ def shors_algorithm(N):
 #
 # In standard PennyLane, quantum circuit execution can be JIT compiled with
 # JAX. To learn more, check out the JAX documentation [#JAXJIT]_ and the
-# :doc:`PennyLane demo </demos/tutorial_jax_transformations>` on the
+# :doc:`PennyLane demo <demos/tutorial_jax_transformations>` on the
 # subject. But this only compiles a single circuit. What about all the other
 # code around it? What if you also wanted to optimize that quantum circuit,
 # based on contextual information?
@@ -215,7 +215,7 @@ def shors_algorithm(N, n_bits):
 # + 1` are for computation and :math:`n + 2` are auxiliary.
 #
 # Order finding is an application of *quantum phase estimation*
-# (:doc:`QPE </demos/tutorial_qpe>`) for the operator
+# (:doc:`QPE <demos/tutorial_qpe>`) for the operator
 #
 # .. math::
 #
@@ -783,8 +783,9 @@ def shors_algorithm(N, key, a, n_bits, n_trials):
     target_wires = jnp.arange(n_bits) + 1
     aux_wires = jnp.arange(n_bits + 2) + n_bits + 1
 
-    dev = qml.device("lightning.qubit", wires=2 * n_bits + 3, shots=1)
+    dev = qml.device("lightning.qubit", wires=2 * n_bits + 3)
 
+    @qml.set_shots(1)
     @qml.qnode(dev)
     def run_qpe():
         meas_results = jnp.zeros((n_bits,), dtype=jnp.int32)
@@ -973,8 +974,9 @@ def shors_algorithm_no_qjit(N, key, a, n_bits, n_trials):
     target_wires = list(range(1, n_bits + 1))
     aux_wires = list(range(n_bits + 1, 2 * n_bits + 3))
 
-    dev = qml.device("lightning.qubit", wires=2 * n_bits + 3, shots=1)
+    dev = qml.device("lightning.qubit", wires=2 * n_bits + 3)
 
+    @qml.set_shots(1)
     @qml.qnode(dev)
     def run_qpe():
         a_mask = jnp.zeros(n_bits, dtype=jnp.int64)
@@ -1430,7 +1432,4 @@ plt.show()
 #    :width: 800
 #    :align: center
 #    :alt: QPE circuit with one estimation qubit.
-#
-# About the author
-# ----------------
 #

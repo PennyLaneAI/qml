@@ -15,8 +15,6 @@ Kernel-based training of quantum models with scikit-learn
 
     tutorial_variational_classifier Variational classifier
 
-*Author: Maria Schuld — Posted: 03 February 2021. Last updated: 3 February 2021.*
-
 Over the last few years, quantum machine learning research has provided a lot of insights on
 how we can understand and train quantum circuits as machine learning models.
 While many connections to neural networks have been made, it becomes increasingly clear that
@@ -30,13 +28,13 @@ and, for a systematic summary which we will follow here,
 `Schuld (2021) <https://arxiv.org/abs/2101.11020>`__).
 
 The link between quantum models and kernel methods has important practical implications:
-we can replace the common `variational approach <https://pennylane.ai/qml/glossary/variational_circuit.html>`__
+we can replace the common `variational approach <https://pennylane.ai/qml/glossary/variational_circuit>`__
 to quantum machine learning with a classical kernel method where the kernel—a small building block
 of the overall algorithm—is computed by a quantum device. In many situations there are
 guarantees that we get better or at least equally good results.
 
 This demonstration explores how kernel-based training compares with
-`variational training <https://pennylane.ai/qml/demos/tutorial_variational_classifier.html>`__ in terms of the number of quantum
+:doc:`variational training <demos/tutorial_variational_classifier>` in terms of the number of quantum
 circuits that have to be evaluated. For this we train a quantum machine
 learning model with a kernel-based approach using a combination of PennyLane
 and the `scikit-learn <https://scikit-learn.org/>`__ machine
@@ -86,7 +84,7 @@ After working through this demo, you will:
 #
 # where :math:`| \phi(x)\rangle` is prepared
 # by a fixed `embedding
-# circuit <https://pennylane.ai/qml/glossary/quantum_embedding.html>`__ that
+# circuit <https://pennylane.ai/qml/glossary/quantum_embedding>`__ that
 # encodes data inputs :math:`x,`
 # and :math:`\mathcal{M}` is an arbitrary observable. This model includes variational
 # quantum machine learning models, since the observable can
@@ -371,7 +369,7 @@ circuit_evals_kernel(n_data=len(X), split=len(X_train) / (len(X_train) + len(X_t
 # as possible. For this we use a bias term in the quantum model, and train
 # on the hinge loss.
 #
-# We also explicitly use the `parameter-shift <https://pennylane.ai/qml/glossary/parameter_shift.html>`__
+# We also explicitly use the `parameter-shift <https://pennylane.ai/qml/glossary/parameter_shift>`__
 # differentiation method in the quantum node, since this is a method which works on hardware as well.
 # While ``diff_method='backprop'`` or ``diff_method='adjoint'`` would reduce the number of
 # circuit evaluations significantly, they are based on tricks that are only suitable for simulators,
@@ -682,9 +680,4 @@ plt.show()
 # larger quantum computers will most likely enable us to reduce
 # the quadratic scaling of kernel methods to linear scaling, which may make classical as well as quantum kernel methods a
 # strong alternative to neural networks for big data processing one day.
-#
-
-##############################################################################
-# About the author
-# ----------------
 #

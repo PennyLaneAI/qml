@@ -10,7 +10,12 @@ Quantum computation with neutral atoms
 .. related::
    ahs_aquila Pulse programming on neutral atom hardware
 
-*Author: Nathan Killoran — Posted: 13 October 2020. Last updated: 21 January 2021.*
+.. warning::
+    This demo uses TensorFlow, which is a deprecated interface with PennyLane v0.42.
+    Interfacing with TensorFlow will no longer be supported with PennyLane v0.43 and higher.
+    Consider switching to a different machine learning interface with PennyLane, like
+    :doc:`PyTorch <demos/tutorial_qnn_module_torch>` or
+    :doc:`JAX <demos/tutorial_How_to_optimize_QML_model_using_JAX_and_Optax>`.
 
 Quantum computing architectures come in many flavours: superconducting qubits, ion traps,
 photonics, silicon, and more. One very interesting physical substrate is *neutral atoms*. These
@@ -320,10 +325,13 @@ def cost():
     output = (-circuit(weights, data) + 1) / 2
     return tf.abs(output - label) ** 2
 
-opt = tf.keras.optimizers.Adam(learning_rate=0.1)
+opt = tf.optimizers.Adam(learning_rate=0.1)
 
 for step in range(100):
-    opt.minimize(cost, [weights])
+    with tf.GradientTape() as tape:
+        loss_value = cost()
+    gradients = tape.gradient(loss_value, [weights])
+    opt.apply_gradients(zip(gradients, [weights]))
     if step % 5 == 0:
         print("Step {}: cost={}".format(step, cost()))
 
@@ -356,7 +364,4 @@ print("Final cost value: {}".format(cost()))
 #    `arXiv:1712.02727
 #    <https://arxiv.org/abs/1712.02727>`__, 2017.
 #
-#
-# About the author
-# ----------------
-#
+

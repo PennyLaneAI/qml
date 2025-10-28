@@ -4,7 +4,7 @@ r"""How to use Qiskit 1.0 with PennyLane
 The PennyLane-Qiskit plugin enables you to integrate your existing Qiskit code and run circuits on IBM 
 devices with PennyLane, encompassing two real-world scenarios: (1) working in PennyLane from the start 
 and executing your work on an IBM device and (2) converting your existing Qiskit code to PennyLane and 
-executing that on *any* device, including IBM devices, :doc:`Amazon Braket </demos/getting_started_with_hybrid_jobs>` 
+executing that on *any* device, including IBM devices, :doc:`Amazon Braket <demos/getting_started_with_hybrid_jobs>` 
 — you name it!
 
 With the `first stable release of Qiskit <https://www.ibm.com/quantum/blog/qiskit-1-0-release-summary>`__ in February 2024, we subsequently shipped some
@@ -98,8 +98,9 @@ print(counts)
 
 import pennylane as qml
 
-dev = qml.device("qiskit.basicsim", wires=2, shots=1024)
+dev = qml.device("qiskit.basicsim", wires=2)
 
+@qml.set_shots(1024)
 @qml.qnode(dev)
 def circuit():
     qml.Hadamard(0)
@@ -113,7 +114,7 @@ print(circuit())
 #
 #   .. code-block:: none
 #
-#     {'0': tensor(474, requires_grad=True), '1': tensor(550, requires_grad=True)}
+#     {'0': 474, '1': 550}
 #
 
 ######################################################################
@@ -255,7 +256,7 @@ print(pl_circuit())
 ######################################################################
 # What’s really useful about being able to append measurements to the end of a circuit with
 # :func:`~pennylane.from_qiskit` is being able to measure something that isn’t available in Qiskit 1.0 but is
-# available in PennyLane, like the :doc:`classical shadow </demos/tutorial_classical_shadows/>` measurement protocol, for example. In PennyLane,
+# available in PennyLane, like the :doc:`classical shadow <demos/tutorial_classical_shadows/>` measurement protocol, for example. In PennyLane,
 # you can measure this with :func:`~pennylane.classical_shadow`.
 #
 
@@ -263,7 +264,7 @@ measurements = [qml.classical_shadow(wires=range(n))]
 pl_qfunc = qml.from_qiskit(qc, measurements=measurements)
 
 pl_circuit = qml.QNode(pl_qfunc, device=qml.device("default.qubit", wires=n))
-print(pl_circuit(shots=5))
+print(qml.set_shots(pl_circuit, shots=5)())
 
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
@@ -403,7 +404,7 @@ print(f"Optimized cost function value: {new_loss}")
 #   .. code-block:: none
 #
 #     Optimized parameters: phis = [3.12829384 3.12823583], theta = [3.1310224]
-#     Optimized cost function val: -2.999796472821245
+#     Optimized cost function value: -2.999796472821245
 #
 
 ######################################################################
@@ -429,9 +430,4 @@ print(f"Optimized cost function value: {new_loss}")
 # the latest and greatest `PennyLane features </features/>`__, `Demos </qml/demonstrations/>`__ and our `blog posts </blog/>`__, and follow us on
 # `LinkedIn <https://www.linkedin.com/company/pennylaneai/>`__ or `X (formerly
 # Twitter) <https://twitter.com/PennyLaneAI>`__ to stay updated!
-#
-
-######################################################################
-# About the author
-# ----------------
 #

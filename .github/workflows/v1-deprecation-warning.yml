@@ -1,0 +1,64 @@
+name: V1 Deprecation Warning Check
+permissions:
+  contents: read
+  pull-requests: write
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+jobs:
+  check-directory:
+    runs-on: ubuntu-latest
+    outputs:
+      demonstrations-v1-changes-detected: ${{ steps.determine-changes.outputs.demonstrations-v1-changes-detected }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check for deprecated directory changes
+        id: check
+        uses: tj-actions/changed-files@v46
+        with:
+          files: 'demonstrations/**'
+          token: ${{ secrets.github_token }}
+
+      - name: Determine if changes were made
+        id: determine-changes
+        run: |
+            any_changed="${{ steps.check.outputs.any_changed }}"
+            any_added="${{ steps.check.outputs.added_files_count }}"
+
+            if [[ "$any_changed" == "true" || "$any_added" -ne 0 ]]; then
+            echo "Changes detected in the demonstrations directory."
+            echo "demonstrations-v1-changes-detected=true" >> $GITHUB_OUTPUT
+
+            else
+            echo "No changes detected in the demonstrations directory."
+            echo "demonstrations-v1-changes-detected=false" >> $GITHUB_OUTPUT
+            fi
+
+
+      - name: Comment on PR
+        if: steps.determine-changes.outputs.demonstrations-v1-changes-detected == 'true'
+        uses: XanaduAI/cloud-actions/create-and-update-pull-request-comment@main
+        with:
+          github_token: ${{ secrets.github_token }}
+          comment_uid: v1-deprecation-warning
+          pull_request_number: ${{ github.event.pull_request.number }}
+          comment_body: |
+            ### ⚠️ Deprecation Warning ⚠️ 
+            You are modifying files in the \`demonstrations/\` directory. This directory is no longer in use.
+
+            Please add or move your files to \`demonstrations_v2/\`, and use the following [format](./CONTRIBUTING.md#manually-creating-a-demo):
+
+            \`\`\`
+            your_demo_name/
+                - demo.py
+                - metadata.json
+                - requirements.in (optional)
+            \`\`\`
+
+            For additional information, please refer to the [contributing guidelines](./CONTRIBUTING.md)

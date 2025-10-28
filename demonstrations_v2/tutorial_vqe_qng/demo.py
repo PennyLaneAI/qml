@@ -12,16 +12,14 @@ Accelerating VQEs with quantum natural gradient
    tutorial_vqe A brief overview of VQE
    tutorial_quantum_natural_gradient Quantum natural gradient
 
-*Authors: Maggie Li, Lana Bozanic, Sukin Sim — Posted: 06 November 2020. Last updated: 29 August 2023.*
-
 This tutorial showcases how one can apply quantum natural gradients (QNG) [#stokes2019]_ [#yamamoto2019]_
 to accelerate the optimization step of the Variational Quantum Eigensolver (VQE) algorithm [#peruzzo2014]_.
 We will implement two small examples: estimating the ground state energy of a single-qubit VQE
 problem, which we can visualize using the Bloch sphere, and the hydrogen molecule.
 
 Before going through this tutorial, we recommend that readers refer to the
-:doc:`QNG tutorial </demos/tutorial_quantum_natural_gradient>` and
-:doc:`VQE tutorial </demos/tutorial_vqe>` for overviews
+:doc:`QNG tutorial <demos/tutorial_quantum_natural_gradient>` and
+:doc:`VQE tutorial <demos/tutorial_vqe>` for overviews
 of quantum natural gradient and the variational quantum eigensolver algorithm, respectively.
 Let's get started!
 
@@ -46,7 +44,7 @@ dev = qml.device("default.qubit", wires=1)
 
 ##############################################################################
 # For the variational ansatz, we use two single-qubit rotations, which the user may recognize
-# from a previous :doc:`tutorial </demos/tutorial_qubit_rotation>` on qubit rotations.
+# from a previous :doc:`tutorial <demos/tutorial_qubit_rotation>` on qubit rotations.
 
 
 def circuit(params, wires=0):
@@ -270,7 +268,7 @@ print("Number of qubits = ", qubits)
 
 ##############################################################################
 # For our ansatz, we use the circuit from the
-# `VQE tutorial <https://pennylane.ai/qml/demos/tutorial_vqe.html>`__
+# `VQE tutorial <https://pennylane.ai/qml/demos/tutorial_vqe>`__
 # but expand out the arbitrary single-qubit rotations to elementary
 # gates (RZ-RY-RZ).
 
@@ -471,8 +469,4 @@ plt.show()
 #     Alberto Peruzzo, Jarrod McClean *et al.*, "A variational eigenvalue solver on a photonic
 #     quantum processor". `Nature Communications 5, 4213 (2014).
 #     <https://www.nature.com/articles/ncomms5213?origin=ppub>`__
-#
-#
-# About the author
-# ----------------
 #

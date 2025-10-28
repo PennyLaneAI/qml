@@ -12,15 +12,13 @@ Optimizing a quantum optical neural network
 
    quantum_neural_net Function fitting with a photonic quantum neural network
 
-*Author: Theodor Isacsson — Posted: 05 August 2020. Last updated: 08 March 2022.*
-
 .. warning::
     This demo is only compatible with PennyLane version ``0.29`` or below.
 
 This tutorial is based on a paper from `Steinbrecher et al. (2019)
 <https://www.nature.com/articles/s41534-019-0174-7>`__ which explores a Quantum Optical Neural
 Network (QONN) based on Fock states. Similar to the continuous-variable :doc:`quantum neural network
-</demos/quantum_neural_net>` (CV QNN) model described by `Killoran et al. (2018)
+<demos/quantum_neural_net>` (CV QNN) model described by `Killoran et al. (2018)
 <https://journals.aps.org/prresearch/abstract/10.1103/PhysRevResearch.1.033063>`__, the QONN
 attempts to apply neural networks and deep learning theory to the quantum case, using quantum data
 as well as a quantum hardware-based architecture.
@@ -470,8 +468,4 @@ print(qml.draw(quantum_neural_net)(var_init, X[0]))
 #        ───R(0.00)─────────Kerr(1.57)─────────────┤  <n>
 #        ──╭BS(-3.48,1.40)──R(0.00)─────Kerr(1.57)─┤  <n>
 #        ──╰BS(-3.48,1.40)──R(0.00)─────Kerr(1.57)─┤  <n>
-#
-#
-# About the author
-# ----------------
 #

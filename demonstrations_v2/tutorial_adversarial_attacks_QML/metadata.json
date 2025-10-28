@@ -6,13 +6,22 @@
         },
         {
             "username": "kil"
-
         }
     ],
+    "executable_stable": true,
+    "executable_latest": true,
     "dateOfPublication": "2024-09-16T00:00:00+00:00",
-    "dateOfLastModification": "2024-11-08T00:00:00+00:00",
-    "categories": ["Quantum Machine Learning", "Quantum Computing"],
-    "tags": ["Quantum machine learning", "QML", "Adversarial attacks", "Quantum security"],
+    "dateOfLastModification": "2025-09-22T15:48:14+00:00",
+    "categories": [
+        "Quantum Machine Learning",
+        "Quantum Computing"
+    ],
+    "tags": [
+        "Quantum machine learning",
+        "QML",
+        "Adversarial attacks",
+        "Quantum security"
+    ],
     "previewImages": [
         {
             "type": "thumbnail",
@@ -43,7 +52,6 @@
             "year": "2014",
             "doi": "10.48550/arXiv.1412.6572",
             "url": "https://arxiv.org/abs/1412.6572"
-
         },
         {
             "id": "Liu2020",
@@ -53,7 +61,6 @@
             "year": "2020",
             "doi": "10.48550/arXiv.2010.02174",
             "url": "https://arxiv.org/abs/2010.02174"
-
         },
         {
             "id": "Lu2019",
@@ -63,10 +70,11 @@
             "year": "2019",
             "doi": "10.48550/arXiv.2001.00030",
             "url": "https://arxiv.org/abs/2001.00030"
-
         }
     ],
-    "basedOnPapers": ["10.48550/arXiv.2404.16154"],
+    "basedOnPapers": [
+        "10.48550/arXiv.2404.16154"
+    ],
     "referencedByPapers": [],
     "relatedContent": [
         {

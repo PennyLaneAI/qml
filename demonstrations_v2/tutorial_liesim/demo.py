@@ -1,8 +1,8 @@
 r"""g-sim: Lie-algebraic classical simulations for variational quantum computing
 ================================================================================
 
-For the most part, we now know the phenomenon of :doc:`barren plateaus </demos/tutorial_local_cost_functions>`
-can be reduced to the dimension of the circuit's :doc:`dynamical Lie algebra (DLA) </demos/tutorial_liealgebra>`.
+For the most part, we now know the phenomenon of :doc:`barren plateaus <demos/tutorial_local_cost_functions>`
+can be reduced to the dimension of the circuit's :doc:`dynamical Lie algebra (DLA) <demos/tutorial_liealgebra>`.
 In particular, exponentially sized DLAs lead to exponentially vanishing gradients (barren plateaus).
 Conversely, it has been realized that circuits with polynomially sized DLAs can be efficiently simulated using a technique called :math:`\mathfrak{g}`-sim,
 leading to discussions on whether all trainable parametrized circuits are also efficiently classically simulable.
@@ -16,7 +16,7 @@ Introduction
 Lie algebras are tightly connected to quantum physics [#Kottmann]_.
 While Lie algebra theory is an integral part of high energy and condensed matter physics,
 recent developments have shown connections to quantum simulation and quantum computing.
-In particular, the infamous :doc:`barren plateau problem </demos/tutorial_barren_plateaus/>` has been fully characterized by the underlying
+In particular, the infamous :doc:`barren plateau problem <demos/tutorial_barren_plateaus/>` has been fully characterized by the underlying
 :doc:`dynamical Lie algebra (DLA) <demos/tutorial_liealgebra/>` [#Fontana]_ [#Ragone]_.
 The main result of these works is that the dimension of the circuit's DLA is inversely proportional to the variance of the mean of the gradient
 (over a uniform parameter distribution), leading to exponentially vanishing gradients in the uniform average case whenever the 
@@ -38,7 +38,7 @@ Lie algebra basics
 Before going into the specifics of Lie algebra simulation (:math:`\mathfrak{g}`-sim),
 we want to briefly recap the most important concepts of Lie algebra theory that are relevant for us.
 More info can be found in our 
-:doc:`Intro to (Dynamical) Lie Algebras for quantum practitioners </demos/tutorial_liealgebra/>`.
+:doc:`Intro to (Dynamical) Lie Algebras for quantum practitioners <demos/tutorial_liealgebra/>`.
 
 Given Hermitian operators :math:`G = \{h_i\}` (think Hermitian observables like terms of a Hamiltonian),
 the dynamical Lie algebra :math:`\mathfrak{g}`
@@ -305,10 +305,10 @@ plt.show()
 # VQE
 # ~~~
 # 
-# Let us do a quick run of the :doc:`variational quantum eigensolver (VQE) </demos/tutorial_vqe/>` on the system at hand.
+# Let us do a quick run of the :doc:`variational quantum eigensolver (VQE) <demos/tutorial_vqe/>` on the system at hand.
 #
 # First, we define our optimization loop in jax. Consider this boilerplate code and see our demo
-# on :doc:`how to optimize a QML model using JAX and Optax </demos/tutorial_How_to_optimize_QML_model_using_JAX_and_Optax>`
+# on :doc:`how to optimize a QML model using JAX and Optax <demos/tutorial_How_to_optimize_QML_model_using_JAX_and_Optax>`
 # for details.
 
 import optax
@@ -403,7 +403,7 @@ plt.show()
 # and saw how this connection can be used for classical simulation. In particular, for specific systems like the TFIM we can efficiently simulate circuit 
 # expectation values.
 #
-# In case you are more curious about Lie algebraic simulation techniques, check out the follow-up demo on :doc:`(g+P)-sim </demos/tutorial_liesim_extension>`
+# In case you are more curious about Lie algebraic simulation techniques, check out the follow-up demo on :doc:`(g+P)-sim <demos/tutorial_liesim_extension>`
 # an extension of :math:`\mathfrak{g}`-sim.
 
 
@@ -478,9 +478,4 @@ plt.show()
 #     Chae-Yeun Park, Minhyeok Kang, Joonsuk Huh
 #     "Hardware-efficient ansatz without barren plateaus in any depth"
 #     `arXiv:2403.04844 <https://arxiv.org/abs/2403.04844>`__, 2024.
-#
-
-##############################################################################
-# About the author
-# ----------------
 #

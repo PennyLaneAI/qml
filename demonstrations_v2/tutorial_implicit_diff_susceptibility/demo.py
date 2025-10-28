@@ -12,8 +12,6 @@ Implicit differentiation of variational quantum algorithms
     tutorial_backprop Quantum gradients with backpropagation
     tutorial_jax_transformations Using JAX with PennyLane
 
-*Authors: Shahnawaz Ahmed and Juan Felipe Carrasquilla Álvarez — Posted: 28 November 2022. Last updated: 28 November 2022.*
-
 
 In 1638, René Descartes, intrigued by (then amateur) Pierre de Fermat's method
 of computing tangents, challenged Fermat to find the tangent to
@@ -417,7 +415,7 @@ plt.show()
 #
 # In PennyLane, we can implement a variational state in different ways, by
 # defining a quantum circuit. There are also useful template circuits available, such as
-# :class:`~pennylane.SimplifiedTwoDesign`, which implements the :doc:`two-design ansatz <tutorial_unitary_designs>`.
+# :class:`~pennylane.SimplifiedTwoDesign`, which implements the :doc:`two-design ansatz <demos/tutorial_unitary_designs>`.
 # The ansatz consists of layers of Pauli-Y rotations with
 # controlled-Z gates. In each layer there are ``N - 1`` parameters for the Pauli-Y gates.
 # Therefore, the ansatz is efficient as long as we have enough layers for it
@@ -438,7 +436,7 @@ variational_ansatz = qml.SimplifiedTwoDesign
 n_layers = 5
 weights_shape = variational_ansatz.shape(n_layers, N)
 
-dev = qml.device("default.qubit", wires=N, shots=None)
+dev = qml.device("default.qubit", wires=N)
 
 
 @jax.jit
@@ -476,7 +474,7 @@ print("Energy", energy(z_init, a))
 # modular implicit differentiation for various cases; e.g., for fixed-point
 # functions or optimization. We can directly use ``jaxopt`` to optimize our loss
 # function and then compute implicit gradients through it.
-# It all works due to :doc:`PennyLane's integration with JAX <tutorial_jax_transformations>`.
+# It all works due to :doc:`PennyLane's integration with JAX <demos/tutorial_jax_transformations>`.
 #
 # The implicit differentiation formulas can even be `implemented manually with JAX <https://jax.readthedocs.io/en/latest/notebooks/Custom_derivative_rules_for_Python_code.html#implicit-function-differentiation-of-iterative-implementations>`__.
 # These formulas are implemented in a modular way, using the
@@ -651,7 +649,4 @@ print(qml.about())
 #    Chang, Hung-Chieh, Wei He, and Nagabhushana Prabhu.
 #    "The analytic domain in the implicit function theorem."
 #    `JIPAM. J. Inequal. Pure Appl. Math 4.1 <http://emis.icm.edu.pl/journals/JIPAM/v4n1/061_02_www.pdf>`__,  (2003).
-#
-# About the author
-# ----------------
 #

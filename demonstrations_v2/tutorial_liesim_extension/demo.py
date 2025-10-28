@@ -1,9 +1,9 @@
 r"""(g + P)-sim: Extending g-sim by non-DLA observables and gates
 =================================================================
 
-In a :doc:`previous demo </demos/tutorial_liesim>`, we introduced the core concepts of
+In a :doc:`previous demo <demos/tutorial_liesim>`, we introduced the core concepts of
 Lie-algebraic simulation techniques [#Somma]_ [#Somma2]_ [#Galitski]_, such as :math:`\mathfrak{g}`-sim [#Goh]_.
-With that, we can compute quantum circuit expectation values using the so-called :doc:`dynamical Lie algebra (DLA) </demos/tutorial_liealgebra>` of the circuit.
+With that, we can compute quantum circuit expectation values using the so-called :doc:`dynamical Lie algebra (DLA) <demos/tutorial_liealgebra>` of the circuit.
 The complexity of :math:`\mathfrak{g}`-sim is determined by the dimension of the corresponding Lie algebra, :math:`\mathfrak{g}.`
 Adding operators to :math:`\mathfrak{g}` can transform a polynomially sized DLA to an exponentially sized, but we show here that
 when one is using only a few of a specific kind of non-DLA gates, the increase in size is polynomial.
@@ -11,19 +11,19 @@ when one is using only a few of a specific kind of non-DLA gates, the increase i
 .. note::
     
     The contents of this demo are self-contained. However, familiarity with
-    :doc:`dynamical Lie algebras </demos/tutorial_liealgebra>` and :doc:`g-sim in PennyLane </demos/tutorial_liesim>` is advised.
+    :doc:`dynamical Lie algebras <demos/tutorial_liealgebra>` and :doc:`g-sim in PennyLane <demos/tutorial_liesim>` is advised.
 
 Introduction
 ------------
 
 Lie-algebraic simulation techniques such as :math:`\mathfrak{g}`-sim can be handy in the niche cases where the
-:doc:`dynamical Lie algebra (DLA) </demos/tutorial_liealgebra>` scales polynomially with
+:doc:`dynamical Lie algebra (DLA) <demos/tutorial_liealgebra>` scales polynomially with
 the number of qubits. Because those cases essentially boil down to the transverse field Ising model (TFIM) and variants thereof in 1D [#Wiersema]_,
 we will do a case study on its DLA specifically.
 
 We are interested in the case where we want to extend the DLA :math:`\mathfrak{g}` by a few additional gates
 that are outside the DLA. For :math:`n` qubits we get a DLA dimension of
-:math:`\text{dim}(\mathfrak{g}) = 2n(2n-1)/2` for the TFIM (see :doc:`here </demos/tutorial_liealgebra/#ising-type-lie-algebras>`).
+:math:`\text{dim}(\mathfrak{g}) = 2n(2n-1)/2` for the TFIM (see :doc:`here <demos/tutorial_liealgebra/#ising-type-lie-algebras>`).
 Suppose we want to expand the DLA by a single operator :math:`p` in order to use it as a gate, 
 and let us assume that :math:`p` is the product of two DLA operators that, itself, is not part of the DLA.
 Adding product operators to the TFIM DLA and computing their new Lie closure can lead to an exponential increase with a new dimension up to :math:`2(2^{2n-2}-1).`
@@ -37,7 +37,7 @@ the highest moment order considered in the computation, :math:`m_\text{comp}`. T
 
 In the worst case, each moment expands the space of operators by a factor :math:`\text{dim}(\mathfrak{g}),` such that for :math:`m` moments,
 we are dealing with a :math:`\text{dim}(\mathfrak{g})^{m+2}` dimensional space. In that sense, this is similar to
-:doc:`Clifford+T simulators </demos/tutorial_clifford_circuit_simulations>` where
+:doc:`Clifford+T simulators <demos/tutorial_clifford_circuit_simulations>` where
 expensive :math:`T` gates come with an exponential cost.
 A key difference is that for a finite dimensional DLA, there is a maximum moment :math:`m_\text{max}.` This corresponds to simply constructing the full associative algebra again.
 In the case that the required :math:`m_\text{comp} = m_\text{max},` we can just perform regular :math:`\mathfrak{g}`-sim with the associative algebra. Here we will consider
@@ -100,8 +100,8 @@ def TFIM(n):
     generators = [op.pauli_rep for op in generators]
 
     dla = qml.lie_closure(generators, pauli=True)
-    dim_dla = len(dla)
-    return generators, dla, dim_dla
+    dim_g = len(dla)
+    return generators, dla, dim_g
 
 generators, dla, dim_g = TFIM(n=4)
 
@@ -533,9 +533,4 @@ plt.show()
 #     Roeland Wiersema, Efekan Kökcü, Alexander F. Kemper, Bojko N. Bakalov
 #     "Classification of dynamical Lie algebras for translation-invariant 2-local spin systems in one dimension"
 #     `arXiv:2309.05690 <https://arxiv.org/abs/2309.05690>`__, 2023.
-#
-
-##############################################################################
-# About the author
-# ----------------
 #

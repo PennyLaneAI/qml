@@ -206,7 +206,7 @@ print(D.shape)
 # 
 # .. note::
 # 
-#   More generally, we can find decompositions of multi-qubit gates into local tensors employing the ubiquitous singular value decomposition (`SVD <https://docs.pennylane.ai/en/stable/code/api/pennylane.math.svd.html>`__). This method is explained in detail in our :doc:`introduction to matrix product states for quantum practitioners demo </demos/tutorial_mps>`. This decomposition is helpful when contracting non-local tensors, as is often required in quantum circuits.
+#   More generally, we can find decompositions of multi-qubit gates into local tensors employing the ubiquitous singular value decomposition (`SVD <https://docs.pennylane.ai/en/stable/code/api/pennylane.math.svd.html>`__). This method is explained in detail in our :doc:`introduction to matrix product states for quantum practitioners demo <demos/tutorial_mps>`. This decomposition is helpful when contracting non-local tensors, as is often required in quantum circuits.
 
 ##############################################################################
 # The cost of contracting a network
@@ -573,11 +573,4 @@ dev = qml.device("default.tensor", method="tn", contraction_optimizer="auto-hq")
 #    U. Schollwöck.  
 #    "The density-matrix renormalization group in the age of matrix product states,"  
 #    `<https://doi.org/10.1016/j.aop.2010.09.012>`__, Annals of Physics, vol. 326, no. 1, pp. 96–192, Jan 2011.
-
-
-
-##############################################################################
-# About the author
-# ----------------
-# 
-# 
+#

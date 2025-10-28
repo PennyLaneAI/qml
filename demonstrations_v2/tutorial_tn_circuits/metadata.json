@@ -14,8 +14,10 @@
             "username": "ixfoduap"
         }
     ],
+    "executable_stable": true,
+    "executable_latest": true,
     "dateOfPublication": "2022-03-29T00:00:00+00:00",
-    "dateOfLastModification": "2024-11-06T00:00:00+00:00",
+    "dateOfLastModification": "2025-09-22T15:48:14+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
@@ -48,7 +50,9 @@
             "url": "https://www.sciencedirect.com/science/article/pii/S0003491614001596"
         }
     ],
-    "basedOnPapers": ["10.1088/2058-9565/aaea94"],
+    "basedOnPapers": [
+        "10.1088/2058-9565/aaea94"
+    ],
     "referencedByPapers": [],
     "relatedContent": [
         {

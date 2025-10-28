@@ -5,10 +5,19 @@
             "username": "fscala"
         }
     ],
+    "executable_stable": true,
+    "executable_latest": true,
     "dateOfPublication": "2024-03-12T00:00:00+00:00",
-    "dateOfLastModification": "2024-11-06T00:00:00+00:00",
-    "categories": ["Quantum Machine Learning"],
-    "tags": ["QNN", "overfitting", "dropout", "regularization"],
+    "dateOfLastModification": "2025-09-22T15:48:14+00:00",
+    "categories": [
+        "Quantum Machine Learning"
+    ],
+    "tags": [
+        "QNN",
+        "overfitting",
+        "dropout",
+        "regularization"
+    ],
     "previewImages": [
         {
             "type": "thumbnail",
@@ -52,7 +61,9 @@
             "doi": "10.1038/s43588-023-00467-6"
         }
     ],
-    "basedOnPapers": ["10.1002/qute.202300220"],
+    "basedOnPapers": [
+        "10.1002/qute.202300220"
+    ],
     "referencedByPapers": [],
     "relatedContent": [],
     "hardware": []

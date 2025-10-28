@@ -12,8 +12,6 @@ Classical shadows
     quantum_volume Quantum volume
     tutorial_quantum_metrology Variationally optimizing measurement protocols
 
-*Authors: Roeland Wiersema and Brian Doolittle (Xanadu Residents) — Posted: 14 June 2021. Last updated: 14 June 2021.*
-
 .. figure:: ../_static/demonstration_assets/classical_shadows/atom_shadow.png
     :align: center
     :width: 75%
@@ -196,10 +194,11 @@ def calculate_classical_shadow(circuit_template, params, shadow_size, num_qubits
 num_qubits = 2
 
 # set up a two-qubit device with shots = 1 to ensure that we only get a single measurement
-dev = qml.device("lightning.qubit", wires=num_qubits, shots=1)
+dev = qml.device("lightning.qubit", wires=num_qubits)
 
 
 # simple circuit to prepare rho
+@qml.set_shots(1)
 @qml.qnode(dev)
 def local_qubit_rotation_circuit(params, **kwargs):
     observables = kwargs.pop("observable")
@@ -351,11 +350,12 @@ def shadow_state_reconstruction(shadow):
 
 num_qubits = 2
 
-dev = qml.device("lightning.qubit", wires=num_qubits, shots=1)
+dev = qml.device("lightning.qubit", wires=num_qubits)
 
 
 # circuit to create a Bell state and measure it in
 # the bases specified by the 'observable' keyword argument.
+@qml.set_shots(1)
 @qml.qnode(dev)
 def bell_state_circuit(params, **kwargs):
     observables = kwargs.pop("observable")
@@ -582,7 +582,7 @@ def shadow_bound(error, observables, failure_rate=0.01):
 # We first create a simple circuit
 
 num_qubits = 10
-dev = qml.device("lightning.qubit", wires=num_qubits, shots=1)
+dev = qml.device("lightning.qubit", wires=num_qubits)
 
 
 def circuit_base(params, **kwargs):
@@ -597,7 +597,7 @@ def circuit_base(params, **kwargs):
     return [qml.expval(o) for o in observables]
 
 
-circuit = qml.QNode(circuit_base, dev)
+circuit = qml.set_shots(qml.QNode(circuit_base, dev), shots = 1)
 
 params = np.random.randn(2 * num_qubits)
 
@@ -712,7 +712,4 @@ plt.show()
 #             `"Stabilizer Codes and Quantum Error Correction", <https://arxiv.org/abs/quant-ph/9705052>`_
 #             Ph.D. thesis, Caltech, eprint quantph/9705052.
 #
-#
-# About the author
-# ----------------
 #

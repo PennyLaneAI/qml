@@ -107,7 +107,7 @@ to highlight Catalyst with Lightning-GPU features.
 #
 #  .. code-block:: none
 #
-#    1.7712995142661776
+#    1.2454125296886156
 #
 # Lightning-GPU has feature parity with `the rest of Lightning state-vector simulators <https://docs.pennylane.ai/projects/lightning/en/stable>`__,
 # providing native support for many PennyLane's operations and measurement processes with
@@ -141,7 +141,7 @@ to highlight Catalyst with Lightning-GPU features.
 #
 #  .. code-block:: none
 #
-#    [ 8.8817842e-16 ... -6.2915415e-01  0.0000000e+00]
+#    [ -1.1102230e-16 ... -7.2645772e-01  0.0000000e+00]
 #
 #
 # Note that in the above example, we didn't use ``method="adjoint"``.
@@ -194,7 +194,7 @@ to highlight Catalyst with Lightning-GPU features.
 #    Step = 7
 #    Step = 8
 #    Step = 9
-#    [1.24479175e-01 ... 9.45755959e-01 4.64060426e-01]
+#    [0.947667 ... 3.093198 0.8401809 ]
 #
 #
 # We used `Optax <https://github.com/google-deepmind/optax>`__,
@@ -215,8 +215,4 @@ to highlight Catalyst with Lightning-GPU features.
 #
 # To learn more about all the integrated devices,
 # check out the :doc:`Catalyst Devices <catalyst:dev/devices>` guide.
-
-##############################################################################
-# About the authors
-# ----------------
-# 
+#

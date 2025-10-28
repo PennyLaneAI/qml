@@ -7,9 +7,7 @@ Quantum detection of time series anomalies
     :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/thumbnail_tutorial_univariate_qvr.jpg
 
 .. related::
-   tutorial_qaoa_intro Intro to QAOA
-
-*Authors: Jack Stephen Baker, Santosh Kumar Radha — Posted: 7 February 2023.*
+    tutorial_qaoa_intro Intro to QAOA
 
 Systems producing observable characteristics which evolve with time are 
 almost everywhere we look. The temperature changes as day turns to night, 
@@ -233,16 +231,10 @@ Before getting into the technical details of the algorithm, let's get a high-lev
 import covalent as ct
 import os
 import time
-import subprocess
-import sys
-from pathlib import Path
 
 # Set up Covalent server
 os.environ["COVALENT_SERVER_IFACE_ANY"] = "1"
-subprocess.run(
-    ["covalent", "start"],
-    env=os.environ).check_returncode()
-
+os.system("covalent start")
 # If you run into any out-of-memory issues with Dask when running this notebook,
 # Try reducing the number of workers and making a specific memory request. I.e.:
 # os.system("covalent start -m "2GiB" -n 2")
@@ -271,7 +263,7 @@ import torch
 # Seed Torch for reproducibility and set default tensor type
 GLOBAL_SEED = 1989
 torch.manual_seed(GLOBAL_SEED)
-torch.set_default_tensor_type(torch.DoubleTensor)
+torch.set_default_dtype(torch.float64)
 
 
 @ct.electron
@@ -478,7 +470,7 @@ def D(gamma: torch.Tensor, n_qubits: int, k: int = None, get_probs: bool = False
 # qubit in this tutorial, the resulting circuit is merely a single :math:`R_z(\theta)` gate.
 
 n_qubits = 1
-dev = qml.device("default.qubit", wires=n_qubits, shots=None)
+dev = qml.device("default.qubit", wires=n_qubits)
 D_one_qubit = qml.qnode(dev)(D)
 _ = qml.draw_mpl(D_one_qubit, decimals=2)(torch.tensor([1, 0]), 1, 1, True)
 
@@ -840,9 +832,6 @@ tr_dispatch_id = ct.dispatch(training_workflow)(**training_options)
 #
 
 ct_tr_results = ct.get_result(dispatch_id=tr_dispatch_id, wait=True)
-if ct_tr_results.error:
-    raise RuntimeError(ct_tr_results.error)
-
 results_dict = ct_tr_results.result
 
 
@@ -1221,9 +1210,7 @@ leg = plt.legend()
 #
 
 # Shut down the covalent server
-subprocess.run(
-    ["covalent", "stop"],
-    env=os.environ).check_returncode()
+stop = os.system("covalent stop")
 
 ######################################################################
 # Conclusions
@@ -1274,7 +1261,4 @@ subprocess.run(
 #   `doi:10.1038/s41534-020-00302-0 <https://doi.org/10.1038/s41534-020-00302-0>`__,
 #   (2020)
 #
-#
-# About the author
-# ----------------
-#
+

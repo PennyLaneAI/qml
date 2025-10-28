@@ -14,8 +14,6 @@ Frugal shot optimization with Rosalin
    tutorial_doubly_stochastic Doubly stochastic gradient descent
    tutorial_rotoselect Quantum circuit structure learning
 
-*Author: Josh Izaac — Posted: 19 May 2020. Last updated: 30 January 2023.*
-
 In this tutorial we investigate and implement the Rosalin (Random Operator Sampling for
 Adaptive Learning with Individual Number of shots) from
 Arrasmith et al. [#arrasmith2020]_. In this paper, a strategy
@@ -40,7 +38,7 @@ quantum resource dependence—is not as frequently considered. Instead, common
 'out-of-the-box' classical optimization techniques, such as gradient-free
 methods (COBLYA, Nelder-Mead), gradient-descent, and Hessian-free methods (L-BFGS) tend to be used.
 
-However, for variational algorithms such as :doc:`VQE </demos/tutorial_vqe>`, which involve evaluating
+However, for variational algorithms such as :doc:`VQE <demos/tutorial_vqe>`, which involve evaluating
 a large number of non-commuting operators in the cost function, decreasing the number of
 quantum evaluations required for convergence, while still minimizing statistical noise, can
 be a delicate balance.
@@ -48,14 +46,15 @@ be a delicate balance.
 Recent work has highlighted that 'quantum-aware' optimization techniques
 can lead to marked improvements when training variational quantum algorithms:
 
-* :doc:`/demos/tutorial_quantum_natural_gradient` descent by Stokes et al. [#stokes2019]_, which
+* :doc:`demos/tutorial_quantum_natural_gradient` descent by Stokes et al. [#stokes2019]_, which
+
   takes into account the quantum geometry during the gradient-descent update step.
 
 * The work of Sweke et al. [#sweke2019]_, which shows
   that quantum gradient descent with a finite number of shots is equivalent to
   `stochastic gradient descent <https://en.wikipedia.org/wiki/Stochastic_gradient_descent>`_,
   and has guaranteed convergence. Furthermore, combining a finite number of shots with
-  weighted sampling of the cost function terms leads to :doc:`/demos/tutorial_doubly_stochastic`.
+  weighted sampling of the cost function terms leads to :doc:`demos/tutorial_doubly_stochastic`.
 
 * The iCANS (individual Coupled Adaptive Number of Shots) optimization technique by
   Jonas Kuebler et al. [#kubler2020]_ adapts the number
@@ -83,7 +82,7 @@ can be expressed as the weighted sum of each individual term:
 
 .. math:: \langle H\rangle = \sum_{i=1}^N c_i \langle h_i\rangle.
 
-In the :doc:`doubly stochastic gradient descent demonstration </demos/tutorial_doubly_stochastic>`,
+In the :doc:`doubly stochastic gradient descent demonstration <demos/tutorial_doubly_stochastic>`,
 we estimated this expectation value by **uniformly sampling** a subset of the terms
 at each optimization step, and evaluating each term by using the same finite number of shots
 :math:`N.`
@@ -136,10 +135,10 @@ num_layers = 2
 num_wires = 2
 
 # create a device that estimates expectation values using a finite number of shots
-non_analytic_dev = qml.device("default.qubit", wires=num_wires, shots=100, seed=432423)
+non_analytic_dev = qml.device("default.qubit", wires=num_wires, seed=432423)
 
 # create a device that calculates exact expectation values
-analytic_dev = qml.device("default.qubit", wires=num_wires, shots=None)
+analytic_dev = qml.device("default.qubit", wires=num_wires)
 
 ##############################################################################
 # Now, let's set the total number of shots, and determine the probability
@@ -186,6 +185,7 @@ print(sum(samples))
 from pennylane.templates.layers import StronglyEntanglingLayers
 
 
+@qml.set_shots(100)
 @qml.qnode(non_analytic_dev, diff_method="parameter-shift", interface="autograd")
 def qnode(weights, observable):
     StronglyEntanglingLayers(weights, wires=non_analytic_dev.wires)
@@ -200,7 +200,7 @@ def cost(params):
     for o, c, s in zip(obs, coeffs, shots_per_term):
         # evaluate the QNode corresponding to
         # the Hamiltonian term, and add it on to our running sum
-        result += c * qnode(params, o, shots=int(s))
+        result += c * qml.set_shots(qnode, shots=int(s))(params, o)
 
     return result
 
@@ -235,6 +235,7 @@ for i in range(100):
 # Here, we will split the 8000 total shots evenly across all Hamiltonian terms,
 # also known as *uniform deterministic sampling*.
 
+@qml.set_shots(100)
 @qml.qnode(non_analytic_dev, diff_method="parameter-shift", interface="autograd")
 def qnode(weights, obs):
     StronglyEntanglingLayers(weights, wires=non_analytic_dev.wires)
@@ -249,7 +250,7 @@ def cost(params):
 
         # evaluate the QNode corresponding to
         # the Hamiltonian term, and add it on to our running sum
-        result += c * qnode(params, o, shots=shots_per_term)
+        result += c * qml.set_shots(qnode, shots=shots_per_term)(params, o)
 
     return result
 
@@ -308,7 +309,7 @@ plt.show()
 # will always have a minimum shot value required per expectation value, as below
 # this threshold they become biased estimators. This is not the case with random
 # sampling; as we saw in the
-# :doc:`doubly stochastic gradient descent demonstration </demos/tutorial_doubly_stochastic>`,
+# :doc:`doubly stochastic gradient descent demonstration <demos/tutorial_doubly_stochastic>`,
 # the introduction of randomness allows for as little
 # as a single shot per expectation term, while still remaining an unbiased estimator.
 #
@@ -437,7 +438,7 @@ class Rosalin:
         set to 'sample' mode.
         """
         # note that convergence depends on seed for random number generation
-        rosalin_device = qml.device("default.qubit", wires=num_wires, shots=100, seed=93754352)
+        rosalin_device = qml.device("default.qubit", wires=num_wires, seed=93754352)
 
         # determine the shot probability per term
         prob_shots = np.abs(coeffs) / np.sum(np.abs(coeffs))
@@ -449,6 +450,7 @@ class Rosalin:
 
         results = []
 
+        @qml.set_shots(100)
         @qml.qnode(rosalin_device, diff_method="parameter-shift", interface="autograd")
         def qnode(weights, observable):
             StronglyEntanglingLayers(weights, wires=rosalin_device.wires)
@@ -462,10 +464,7 @@ class Rosalin:
 
             # evaluate the QNode corresponding to
             # the Hamiltonian term
-            res = qnode(params, o, shots=int(s))
-
-            if s == 1:
-                res = np.array([res])
+            res = qml.set_shots(qnode, shots=int(s))(params, o)
 
             # Note that, unlike above, we divide each term by the
             # probability per shot. This is because we are sampling one at a time.
@@ -592,8 +591,9 @@ print(adam_shots_per_step)
 params = init_params
 opt = qml.AdamOptimizer(0.07)
 
-adam_dev = qml.device('default.qubit', shots=adam_shots_per_eval, seed=595905)
+adam_dev = qml.device('default.qubit', seed=595905)
 
+@qml.set_shots(adam_shots_per_eval)
 @qml.qnode(adam_dev, diff_method="parameter-shift", interface="autograd")
 def cost(weights):
     StronglyEntanglingLayers(weights, wires=non_analytic_dev.wires)
@@ -659,8 +659,4 @@ plt.show()
 #     Jonas M. Kübler, Andrew Arrasmith, Lukasz Cincio, and Patrick J. Coles. "An Adaptive Optimizer
 #     for Measurement-Frugal Variational Algorithms." `Quantum 4, 263
 #     <https://quantum-journal.org/papers/q-2020-05-11-263/>`__ (2020).
-#
-#
-# About the author
-# ----------------
 #

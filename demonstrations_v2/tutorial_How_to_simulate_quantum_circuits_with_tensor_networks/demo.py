@@ -1,7 +1,7 @@
 r"""How to simulate quantum circuits with tensor networks
 ====================================================================
 
-:doc:`Tensor networks </demos/tutorial_tn_circuits>` are a powerful computational tool for simulating quantum circuits.
+:doc:`Tensor networks <demos/tutorial_tn_circuits>` are a powerful computational tool for simulating quantum circuits.
 They provide a way to represent quantum states and operations in a compact form. 
 Unlike the state-vector approach, tensor networks are particularly useful for large-scale simulations of `quantum circuits <https://docs.pennylane.ai/en/stable/introduction/circuits.html>`__.
 
@@ -208,8 +208,4 @@ dev.draw(color="auto", show_inds=True, return_fig=True)
 #
 #    R. Orús, Annals of Physics 349, 117 (2014), ISSN 0003-
 #    4916, URL https://www.sciencedirect.com/science/article/pii/S0003491614001596.
-
-######################################################################
-# About the author
-# ----------------
 #

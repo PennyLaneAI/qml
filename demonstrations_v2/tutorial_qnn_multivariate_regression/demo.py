@@ -287,6 +287,3 @@ plt.tight_layout(pad=3.7)
 #    "How to optimize a QML model using JAX and Optax",
 #    `Pennylane: How to optimize a QML model using JAX and Optax  <https://pennylane.ai/qml/demos/tutorial_How_to_optimize_QML_model_using_JAX_and_Optax/>`__, 2024
 #
-# About the authors
-# -----------------
-

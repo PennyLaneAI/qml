@@ -305,7 +305,7 @@ plt.show()
 
 ##############################################################################
 # Next, we are going to run optimizations for each :math:`V_i` to find a local inversion.
-# For that we need some boilerplate code, see our :doc:`demo <tutorial_How_to_optimize_QML_model_using_JAX_and_Optax>`
+# For that we need some boilerplate code, see our :doc:`demo <demos/tutorial_How_to_optimize_QML_model_using_JAX_and_Optax>`
 # on optimizing quantum circuits in jax.
 
 import optax
@@ -460,9 +460,4 @@ print(np.allclose(sewing_test(), np.outer(psi0, psi0), atol=1e-1))
 #     Vivek V. Shende, Stephen S. Bullock, Igor L. Markov
 #     "Synthesis of Quantum Logic Circuits"
 #     `arXiv:quant-ph/0406176 <https://arxiv.org/abs/quant-ph/0406176>`__, 2004.
-#
-
-##############################################################################
-# About the author
-# ----------------
 #

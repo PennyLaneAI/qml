@@ -10,8 +10,6 @@ Turning quantum nodes into Torch Layers
 
    qnn_module_tf Turning quantum nodes into Keras Layers
 
-*Author: Tom Bromley — Posted: 02 November 2020. Last updated: 28 January 2021.*
-
 Creating neural networks in `PyTorch <https://pytorch.org/>`__ is easy using the
 `nn module <https://pytorch.org/docs/stable/nn.html>`__. Models are constructed from elementary
 *layers* and can be trained using the PyTorch API. For example, the following code defines a
@@ -37,7 +35,7 @@ model = torch.nn.Sequential(*layers)
 # .. note::
 #
 #     A similar demo explaining how to
-#     :doc:`turn quantum nodes into Keras layers <qnn_module_tf>`
+#     :doc:`turn quantum nodes into Keras layers <demos/qnn_module_tf>`
 #     is also available.
 #
 # Fixing the dataset and problem
@@ -287,8 +285,4 @@ print(f"Accuracy: {accuracy * 100}%")
 # Great! We've mastered the basics of constructing hybrid classical-quantum models using
 # PennyLane and Torch. Can you think of any interesting hybrid models to construct? How do they
 # perform on realistic datasets?
-
-##############################################################################
-# About the author
-# ----------------
 #
