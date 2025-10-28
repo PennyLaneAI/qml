@@ -338,12 +338,12 @@ print("GFD Purity and power spectrum coincide:", np.isclose(power_spectrum[3], p
 # Fourier analysis of entanglement
 # --------------------------------
 #
-# We want to apply what we learnt so far to the most popular resource of quantum states: multipartite entanglement.
+# We want to apply what we have learned so far to the most popular resource of quantum states: multipartite entanglement.
 # One can think of multipartite entanglement as a resource of the state of a quantum system that measures how "wiggly"
 # the correlations between its constituents are.
 # While this is a general statement, we will restrict our attention to systems made of our favourite quantum objects, qubits.
 # Just like smoother functions have Fourier spectra concentrated in the low-order frequencies,
-# quantum states with simpler entanglement structures, or no entanglement at all like in the case of product states,
+# quantum states with simpler entanglement structures, or no entanglement at all such as product states,
 # have generalized Fourier spectra with large lower-order coefficients.
 #
 # First, we can define a few states with different entanglement properties that we will use below:
@@ -354,7 +354,7 @@ print("GFD Purity and power spectrum coincide:", np.isclose(power_spectrum[3], p
 # * **Random (Haar) state**: Highly complex state, but without structured entanglement patterns.
 #
 # In the code examples we'll show shortly, you'll see how the different entanglement properties reflect in the GFD Purity spectrum.
-# But for now, let us create
+# But for now, let's create
 # example states for these categories:
 #
 
@@ -396,7 +396,7 @@ labels = [ "Product", "Haar", "GHZ"]
 #    are already in the form of vectors. It's easy to define the set of free states for multipartite entanglement:
 #    product states, or tensor products of single-qubit quantum states.
 #
-# 2. **Identify free unitary transformations**. Now, what unitary transformation of a quantum state does not generate
+# 2. **Identify free unitary transformations**. What unitary transformation of a quantum state does not generate
 #    entanglement? You guessed it right, "non-entangling" circuits that consist only of single-qubit
 #    gates :math:`U=\bigotimes_j U_j` for  :math:`U_j \in SU(2)`.
 #
@@ -432,7 +432,7 @@ print(U_bdiag)
 # Technically speaking, the representation is *irreducible* over the Hilbert space :math:`H`.
 # As a consequence, the invariant subspace is :math:`H` itself, and the single GFD Purity is simply the purity of
 # the state :math:`|\psi\rangle`, which is 1.
-# This, of course, is not a very informative fingerprint -- one that is much too coarse!
+# This, of course, is not a very informative fingerprint---one that is much too coarse!
 #
 # However, we have freedom to define the vector spaces for the fingerprint.
 # It turns out that considering the space :math:`B(H)` of bounded linear operators, in which density matrices live, leads to
@@ -442,7 +442,7 @@ print(U_bdiag)
 # this is exactly what we will do in all numerical simulations.
 #
 # So, let us walk the steps from above once more, but this time with density matrices.
-# First, we turn the example states into density matrices.
+# Prior to that, we turn the example states into density matrices.
 #
 
 states = [np.outer(state, state.conj()) for state in states]
@@ -452,7 +452,7 @@ states = [np.outer(state, state.conj()) for state in states]
 #
 # 1. **Identify free vectors**.
 #    Our free vectors are still product states, only that now we represent them as density matrices :math:`\rho = \bigotimes_j \rho_j`.
-#    But to use the linear algebra tricks from before we have
+#    But to use the linear algebra tricks from before, we have
 #    to "vectorize" density matrices :math:`\rho=\sum_{i,j} c_{i,j} |i\rangle \langle j|`
 #    to have the form :math:`|\rho\rangle \rangle = \sum_{i,j} c_{i,j} |i\rangle |j\rangle \in H \otimes H^*` (something
 #    you might have encountered before in the *Choi formalism*, where the "double bracket notation" stems from).
@@ -473,7 +473,7 @@ rho_vec = rho.flatten(order='F')
 #
 # 2. **Identify free unitary transformations**.
 #    The free operations are still given by non-entangling unitaries, but
-#    of course, they act on density matrices via :math:`\rho' = U \rho U^{\dagger}`.
+#    now they act on density matrices via :math:`\rho' = U \rho U^{\dagger}`.
 #    We can also vectorise this operation by defining the matrix :math:`U_{\mathrm{vec}} = U \otimes U^*`.
 #    We then have that :math:`|\rho'\rangle \rangle = U_{\mathrm{vec}} |\rho\rangle \rangle`.
 #    To demonstrate:
@@ -498,7 +498,7 @@ print(np.allclose(rho_out, U @ rho @ U.conj().T ))
 #    and this time there is a basis transformation that properly block-diagonalises all matrices in the representation.
 #
 # 4. **Find the basis that block-diagonalises the representation**.
-#    To find this basis we compute the eigendecomposition of an arbitrary linear combination
+#    To find this basis, we compute the eigendecomposition of an arbitrary linear combination
 #    of a set of matrices in the representation.
 #
 rng = np.random.default_rng(42)
@@ -603,15 +603,15 @@ for data, label in zip(purities, labels):
         print(f" - Block {k+1}: ", val)
 
 ######################################################################
-# Note that the GFD Purities of quantum states are normalised, and can hence be interpreted as probabilities.
+# Note that the GFD Purities of quantum states are normalised, and can therefore be interpreted as probabilities.
 #
 
 for data, label in zip(purities, labels):
     print(f"{label} state has total purity: ", np.sum(data).item())
 
 ######################################################################
-# We can now reproduce Figure 2 in [#Bermejo_Braccia]_, by aggregating the GFD Purities
-# by the corresponding block's size
+# We can now reproduce Figure 2 in [#Bermejo_Braccia]_ by aggregating the GFD Purities
+# by the corresponding block's size:
 #
 
 agg_purities = [[p[0], p[1]+p[2], p[3]] for p in purities]
