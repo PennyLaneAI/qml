@@ -185,8 +185,10 @@ sections.
 #
 # We use the WEST program to compute these parameters. WEST will first compute the
 # quasiparticle energies, then the partially screened Coulomb potential, and finally
-# the parameters of the effective Hamiltonian. The input file for such a calculations is
-# shown below:
+# the parameters of the effective Hamiltonian. The software offers several execution modes through the
+# :code:`wfreq_calculation` keyword. We choose `XWGQH` to ensure the full workflow is executed, which computes
+# both the quasiparticle corrections and the final parameters for the QDET effective Hamiltonian. The input file
+# for such a calculation is shown below:
 #
 # .. code-block:: text
 #
@@ -271,7 +273,7 @@ sections.
 #
 # Quantum Simulation
 # ^^^^^^^^^^^^^^^^^^
-# We now map the effective Hamiltonian to the qubit basis. Note that the two-electron obtained
+# We now map the effective Hamiltonian to the qubit basis. Note that the two-electron integrals obtained
 # before are represented in chemists' notation and need to be converted to the physicists' notation
 # for compatibility with PennyLane. Here's how to construct the qubit Hamiltonian:
 #
@@ -287,6 +289,11 @@ sections.
 #    t = one_particle(one_e[0])
 #    v = two_particle(np.swapaxes(two_e[0][0], 1, 3))
 #    qubit_op = observable([t, v], mapping="jordan_wigner")
+#    print("Qubit Hamiltonian: ", qubit_op)
+#
+# .. code-block:: text
+#
+#    Qubit Hamiltonian:  (2.40331309905556+0j) * I(0) + (-0.12208093833046951+0j) * Z(0) + (-0.12208093833046951+0j) * Z(1) + (-0.003330743747901097+0j) * (Y(0) @ Z(1) @ Y(2)) +  ...
 #
 # We can use this Hamiltonian in a quantum algorithm such as quantum phase estimation (QPE).
 # As an exercise, you can compare the results and verify that the computed energies from quantum algorithm
