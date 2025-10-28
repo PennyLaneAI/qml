@@ -55,10 +55,7 @@ extensions = [
 ]
 
 dev = os.getenv("DEV", "False")
-if dev == "True":
-    dev = True
-else:
-    dev = False
+dev = True if dev == "True" else False
 
 html_baseurl = "https://pennylane.ai/qml/"
 demo_staging_dir = os.getenv("DEMO_STAGING_DIR", "demonstrations")
