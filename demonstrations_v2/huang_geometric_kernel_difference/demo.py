@@ -438,7 +438,7 @@ print(f"g (RBF vs PQK‑E2):   {g_PQK_E2:.4f}")
 #
 # This intuition is understandable — after all, a larger :math:`g` suggests that the quantum kernel
 # perceives the data very differently from a classical one.
-# But as we’ll see, **a higher :math:`g` doesn’t always translate into better accuracy, it just
+# But as we’ll see, **a higher** :math:`g` **doesn’t always translate into better accuracy, it just
 # means there’s higher potential for an improvement over the classical model**.
 #
 # In fact, a higher :math:`g` can sometimes correspond to worse performance on the original task.
