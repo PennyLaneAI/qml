@@ -258,7 +258,7 @@ def generate_requirements(
         *requirements_in,
         constraints_files=constraints,
         quiet=False,
-        prerelease=dev,
+        prerelease=False,
     )
 
 
@@ -282,7 +282,7 @@ def _build_demo(
             "--upgrade",
             requirements=out_dir / "requirements.txt",
             quiet=False,
-            pre=dev,
+            pre=False,
         )
 
         # If dev, we need to re-install the latest Catalyst, then Lightning, then PennyLane
