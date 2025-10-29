@@ -232,7 +232,7 @@ plt.show()
 # Each entry :math:`K_{ij}` measures how similar two data points are, and the full matrix :math:`K`
 # provides a **global view** of the data in the kernel’s feature space.
 #
-# We compute five such matrices, one for each kernel defined above:
+# We compute five such matrices, one for each kernel defined above.
 #
 # :math:`K_{\text{RBF}}` obtained from:
 #
