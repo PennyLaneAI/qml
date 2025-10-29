@@ -543,7 +543,7 @@ plt.show()
 # potential solution because it offers a potential for an improvement on our classification problem.
 # This way, we have an important diagnostic tool to filter out bad quantum kernels for our data.
 #
-# 🧠 Conclusion: A practical perspective on the Geometric difference :math:`g`
+# 🧠 Conclusion: A practical perspective on the Geometric difference g
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # In this notebook, we explored a fundamental question in quantum machine learning:
