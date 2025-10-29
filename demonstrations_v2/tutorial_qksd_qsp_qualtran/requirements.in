@@ -2,3 +2,4 @@ qualtran
 openfermion
 openfermionpyscf
 scipy
+numpy>=1.26
