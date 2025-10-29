@@ -2,4 +2,3 @@ jax
 jaxlib
 optax
 scikit-learn
-numpy<2.2
