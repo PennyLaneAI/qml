@@ -86,7 +86,7 @@ Demonstration setup:
 
 3. **Our approach**: Calculate :math:`g` values between the classical kernel and each quantum
    kernel—giving us an immediate assessment of which quantum approaches might be worth pursuing
-   across any kernel-based method
+   across any kernel-based method.
 """
 
 # We first start by generating and visualizing the artificial data
