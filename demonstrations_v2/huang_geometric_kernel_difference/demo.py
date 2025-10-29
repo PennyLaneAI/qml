@@ -73,7 +73,7 @@ compared to classical kernels on this specific dataset.
 Demonstration setup:
 --------------------
 
-1. **Dataset**: Synthetic two-moons data generated with ``scikit-learn``
+1. **Dataset**: Synthetic two-moons data generated with ``scikit-learn``.
 2. **Five kernels to compare**:
 
    - **Classical baseline**: Gaussian-RBF kernel
