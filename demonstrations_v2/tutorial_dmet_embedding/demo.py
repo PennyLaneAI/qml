@@ -65,7 +65,7 @@ efficient level of theory.
 # Implementation
 # --------------
 # The DMET procedure starts by getting an approximate description of the system's wavefunction.
-# Subsequently, this approximate wavefunction is partitioned with Schmidt decomposition to get
+# Subsequently, this approximate wavefunction is partitioned with the Schmidt decomposition to get
 # the impurity and bath orbitals. These orbitals are then employed to define an approximate projector
 # :math:`P`, which is used to construct the embedded Hamiltonian. Then, accurate methods such as
 # quantum algorithms are employed
