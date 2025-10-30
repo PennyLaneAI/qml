@@ -303,7 +303,7 @@ sections.
 # ----------
 # Quantum defect embedding theory is a novel framework for simulating strongly correlated
 # quantum systems and has been successfully used for studying defects in solids. Applicability of
-# QDET however is not limited to defects, it can be used for other systems where a strongly
+# QDET however is not limited to defects: it can be used for other systems where a strongly
 # correlated subsystem is embedded in a weakly correlated environment. Additionally, QDET is able to
 # correct the interaction double counting issue within the active space faced by a variety of
 # other embedding theories. The Green's function based formulation of QDET ensures
