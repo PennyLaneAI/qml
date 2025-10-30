@@ -452,7 +452,7 @@ efficient level of theory.
 #
 # Conclusion
 # ^^^^^^^^^^
-# The density matrix embedding theory is a robust method designed to tackle simulation of complex
+# Density matrix embedding theory is a robust method designed to tackle simulation of complex
 # systems by partitioning them into manageable subsystems. It is particularly well suited for
 # studying the ground state properties of strongly correlated materials and molecules. DMET offers a
 # compelling alternative to dynamic quantum embedding schemes such as dynamic mean field theory. By
