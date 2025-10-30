@@ -457,7 +457,7 @@ efficient level of theory.
 # studying the ground state properties of strongly correlated materials and molecules. DMET offers a
 # compelling alternative to dynamic quantum embedding schemes such as dynamic mean field theory. By
 # employing the density matrix for embedding instead of the Green's function and
-# utilizing Schmidt decomposition to get a limited number of bath orbitals, DMET achieves a
+# utilizing the Schmidt decomposition to get a limited number of bath orbitals, DMET achieves a
 # significant reduction in computational resources. Furthermore, a major strength lies in its
 # compatibility with quantum algorithms, enabling the accurate study of smaller, strongly correlated
 # subsystems on quantum computers while the environment is studied classically. Its successful
