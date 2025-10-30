@@ -443,7 +443,7 @@ efficient level of theory.
 #    Qubit Hamiltonian:  0.6230307293797223 * I(0) + -0.4700529413255728 * Z(0) + -0.4700529413255728 * Z(1) + -0.21375048863111926 * (Y(0) @ Z(1) @ Y(2)) + ...
 #
 # This Hamiltonian can be used in a quantum algorithm such as quantum phase estimation. We can get
-# ground state energy for the system by solving for the full system as done above in the
+# the ground state energy for the system by solving for the full system as done above in the
 # self-consistency loop using the ``solve_full_system`` function. The qubit Hamiltonian is
 # particularly relevant for a hybrid version of DMET, where classical mean field calculations are
 # coupled with a post-HF classical solver for the iterative
