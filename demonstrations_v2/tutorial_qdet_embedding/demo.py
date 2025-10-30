@@ -63,7 +63,7 @@ sections.
 #
 # Next, we need to create the input file for running QUANTUM ESPRESSO. This contains
 # information about the system and the DFT calculations. More details on how to construct the input
-# file can be found in QUANTUM ESPRESSO `documentation <https://www.quantum-espresso.org/Doc/INPUT_PW.html>`_
+# file can be found in the QUANTUM ESPRESSO `documentation <https://www.quantum-espresso.org/Doc/INPUT_PW.html>`_
 # page. For the system taken here, the input file can be downloaded with
 #
 # .. code-block:: bash
