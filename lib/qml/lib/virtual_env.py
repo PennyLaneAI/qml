@@ -25,4 +25,4 @@ class Virtualenv:
         """Initialize a virtual environment."""
         self.path.parent.mkdir(exist_ok=True)
 
-        subprocess.run([sys.executable, "-m", "venv", self.path]).check_returncode()
+        subprocess.run([sys.executable, "-m", "venv", "--clear", self.path]).check_returncode()
