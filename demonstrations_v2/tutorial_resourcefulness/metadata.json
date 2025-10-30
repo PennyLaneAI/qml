@@ -44,7 +44,12 @@
         {
             "type": "demonstration",
             "id": "tutorial_qft_and_groups",
-            "weight": 1.0
+            "weight": 0.5
+        },
+        {
+        "type": "demonstration",
+        "id": "tutorial_period_finding",
+        "weight": 0.5
         }
     ]
 }
