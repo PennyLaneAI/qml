@@ -219,7 +219,7 @@ efficient level of theory.
 #        return rho, mu, scf_result, impHam, basis
 #
 # Next, we solve this impurity Hamiltonian with a high-level method. The following function defines
-# the electronic structure solver for the impurity, provides an initial point for the calculation
+# the electronic structure solver for the impurity, provides an initial point for the calculation,
 # and passes the ``Lattice`` information to the solver. The solver then calculates the energy and
 # density matrix for the impurity.
 #
