@@ -181,10 +181,12 @@ efficient level of theory.
 # Self-Consistent DMET
 # ^^^^^^^^^^^^^^^^^^^^
 # The DMET calculations are performed by repeating four steps iteratively:
-#  - Construct an impurity Hamiltonian
-#  - Solve the impurity Hamiltonian
-#  - Compute the full system energy
-#  - Update the interactions between the impurity and its environment
+#
+# 1) Construct an impurity Hamiltonian.
+# 2) Solve the impurity Hamiltonian.
+# 3) Compute the full system energy.
+# 4) Update the interactions between the impurity and its environment.
+#
 # To simplify the calculations, we create dedicated functions for each step and implement them in a
 # self-consistent loop. If we only perform one iteration, the process is referred to as single-shot DMET.
 #
