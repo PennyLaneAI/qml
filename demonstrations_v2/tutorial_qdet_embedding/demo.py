@@ -307,7 +307,7 @@ sections.
 # correlated subsystem is embedded in a weakly correlated environment. Additionally, QDET is able to
 # correct the interaction double counting issue within the active space faced by a variety of
 # other embedding theories. The Green's function based formulation of QDET ensures
-# exact removal of double counting corrections at GW level of theory, thus removing the
+# exact removal of double counting corrections at the GW level of theory, thus removing the
 # approximation present in the initial DFT based formulation. This formulation also helps to capture
 # the response properties and provides access to excited state properties. Another major advantage
 # of QDET is the ease with which it can be used with quantum computers in a hybrid framework [#Baker]_.
