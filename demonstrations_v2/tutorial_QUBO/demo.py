@@ -352,9 +352,10 @@ from collections import defaultdict
 import pennylane as qml
 
 shots = 5000  # Number of samples used
-dev = qml.device("default.qubit", shots=shots)
+dev = qml.device("default.qubit")
 
 
+@qml.set_shots(shots)
 @qml.qnode(dev)
 def qaoa_circuit(gammas, betas, h, J, num_qubits):
     wmax = max(

@@ -485,8 +485,9 @@ c_probs = (x / np.linalg.norm(x)) ** 2
 # For this task, we initialize a new PennyLane device and define the associated
 # QNode.
 
-dev_x = qml.device("default.qubit", wires=n_qubits, shots=n_shots)
+dev_x = qml.device("default.qubit", wires=n_qubits)
 
+@qml.set_shots(n_shots)
 @qml.qnode(dev_x, interface="autograd")
 def prepare_and_sample(weights):
 

@@ -176,11 +176,11 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: '3.11'
 
       - name: Install dependencies
         run: pip install . && poetry config warnings.export false
-      
+
       - name: Make demo name list
         id: demo-name-list
         run: printf "demo-names=%s" "$(jq -nc '${{ needs.generate-build-variables.outputs.chunk-array }}[${{ matrix.chunk-index }}][]' | tr -s '\n"' ' ')" >> $GITHUB_OUTPUT

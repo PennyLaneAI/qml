@@ -334,7 +334,7 @@ circuit(x)
 # collection of unitaries such that the average of any degree 2 polynomial
 # function of a linear operator over the design is exactly the same as the
 # average over Haar random measure. For further explanation of this measure read
-# the `Haar Measure demo <https://pennylane.ai/qml/demos/tutorial_haar_measure.html>`__.
+# the :doc:`Haar Measure demo <demos/tutorial_haar_measure>`.
 #
 # More precisely, let :math:`P(U)` be a polynomial with homogeneous degree at most two in
 # the entries of a unitary matrix :math:`U,` and degree two in the complex
@@ -345,8 +345,7 @@ circuit(x)
 #
 # The elements of the Clifford group over the qubits being cut are an
 # example of a 2-design. We don’t have a lot of space here to go into too
-# many details. But fear not - there is an `entire
-# demo <https://pennylane.ai/qml/demos/tutorial_unitary_designs.html>`__
+# many details. But fear not - there is an :doc:`entire demo <demos/tutorial_unitary_designs>`
 # dedicated to this wonderful topic!
 #
 # .. figure:: ../_static/demonstration_assets/quantum_circuit_cutting/flowchart.svg
@@ -405,8 +404,7 @@ circuit(x)
 # We have seen that looking at circuit cutting through the lens of
 # 2-designs can be a source of considerable speedups. A good test case
 # where one may care about accurately estimating an observable is the
-# `Quantum Approximate Optimization
-# Algorithm <https://pennylane.ai/qml/demos/tutorial_qaoa_intro.html>`__
+# :doc:`Quantum Approximate Optimization Algorithm <demos/tutorial_qaoa_intro>`
 # (QAOA). In its simplest form, QAOA concerns itself with finding a
 # lowest energy state of a *cost Hamiltonian* :math:`H_{\mathcal{C}}:`
 #
@@ -582,7 +580,7 @@ shot_counts = np.logspace(1, 4, num=20, dtype=int, requires_grad=False)
 pauli_cost_values = np.zeros_like(shot_counts, dtype=float)
 
 for i, shots in enumerate(shot_counts):
-    pauli_cost_values[i] = qaoa(optimal_params, shots=shots)
+    pauli_cost_values[i] = qml.set_shots(qaoa, int(shots))(optimal_params)
 
 
 ######################################################################
@@ -841,8 +839,7 @@ _ = ax.legend(frameon=True, loc="lower right", fontsize=20)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # Careful readers may have noticed that QAOA at depth :math:`p=1` has a
-# specific structure of a `Matrix Product
-# State <https://pennylane.ai/qml/demos/tutorial_tn_circuits.html>`__
+# specific structure of a :doc:`Matrix Product State <demos/tutorial_tn_circuits>`
 # (MPS) circuit. However, in order to cut a :math:`p=2` QAOA circuit, we
 # would need 2 cuts. This introduces some subtleties within the context of
 # classical simulation that we point out here.

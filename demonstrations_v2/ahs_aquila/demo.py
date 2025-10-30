@@ -57,7 +57,7 @@ is implemented via the functionality provided in the Pennylane :mod:`~pennylane.
 more information on pulse programming in PennyLane, see the
 `PennyLane docs <https://docs.pennylane.ai/en/stable/code/qml_pulse.html>`__, or check out the demo
 about
-`running a ctrl-VQE algorithm with pulse control <https://pennylane.ai/qml/demos/tutorial_pulse_programming101.html>`__ on the PennyLane `default.qubit` simulator.
+:doc:`running a ctrl-VQE algorithm with pulse control <demos/tutorial_pulse_programming101>` on the PennyLane `default.qubit` simulator.
 
 
 
@@ -66,7 +66,7 @@ The QuEra Aquila device
 
 The Aquila QPU works with programmable arrays of up to 256 Rubidium-87 atoms (Rb-87), trapped in vacuum by tightly
 focused laser beams. These atoms can be arranged in (almost)
-`arbitrary user-specified geometries <https://pennylane.ai/qml/demos/tutorial_pasqal.html>`_ to determine
+:doc:`arbitrary user-specified geometries <demos/tutorial_pasqal>` to determine
 inter-qubit interactions. On the Aquila device, it is possible to specify 1D and 2D atom arrangements. Atom
 positions may be slightly shifted to accommodate hardware limitations, and must obey lattice constraints
 for spacing. This will be explored in more detail below.
@@ -520,9 +520,10 @@ amplitude_params = [max_amplitude, displacement, sigma]
 params = [amplitude_params]
 ts = [0.0, 1.75]
 
-default_qubit = qml.device("default.qubit", wires=3, shots=1000)
+default_qubit = qml.device("default.qubit", wires=3)
 
 
+@qml.set_shots(1000)
 @qml.qnode(default_qubit, interface="jax")
 def circuit(parameters):
     qml.evolve(global_drive)(parameters, ts)
@@ -554,7 +555,7 @@ def circuit(params):
     return qml.counts()
 
 
-circuit_qml = qml.QNode(circuit, default_qubit, interface="jax")
+circuit_qml = qml.set_shots(qml.QNode(circuit, default_qubit, interface="jax"), shots = 1000)
 circuit_ahs = qml.QNode(circuit, rydberg_simulator)
 
 print(f"PennyLane simulation: {circuit_qml(params)}")

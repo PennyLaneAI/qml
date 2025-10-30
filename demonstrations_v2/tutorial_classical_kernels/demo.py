@@ -43,7 +43,7 @@ classical machine learning.
 Two functions can only have the same Fourier spectrum if they are the same
 function. It turns out that, for certain classes of quantum circuits, `we can
 theoretically describe the Fourier spectrum rather well
-<https://pennylane.ai/qml/demos/tutorial_expressivity_fourier_series.html>`_.
+:doc:`demos/tutorial_expressivity_fourier_series`.
 
 Using this theory, together with some good old-fashioned convex optimization, we
 will derive a quantum circuit that approximates the famous Gaussian kernel.
@@ -78,8 +78,8 @@ come from, why they're important, and how we can use them (e.g. with
 PennyLane), check out the following demos, which cover different
 aspects extensively:
 
-#. `Training and evaluating quantum kernels <https://pennylane.ai/qml/demos/tutorial_kernels_module.html>`_
-#. `Kernel-based training of quantum models with scikit-learn <https://pennylane.ai/qml/demos/tutorial_kernel_based_training.html>`_
+#. :doc:`Training and evaluating quantum kernels <demos/tutorial_kernels_module>`
+#. :doc:`Kernel-based training of quantum models with scikit-learn <demos/tutorial_kernel_based_training>`
 
 For the purposes of this demo, a *kernel* is a real-valued function of two
 variables :math:`k(x_1,x_2)` from a given data domain :math:`x_1,
@@ -313,7 +313,7 @@ plt.show()
 #     The quantum kernel considered in this demo.
 #
 # We construct the quantum kernel from a quantum embedding (see the demo on
-# `Quantum Embedding Kernels <pennylane.ai/qml/demos/tutorial_kernels_module.html>`_).
+# :doc:`Quantum Embedding Kernels <demos/tutorial_kernels_module>`).
 # The quantum embedding circuit will consist of two parts.
 # The first one, trainable, will be a parametrized general state preparation
 # scheme :math:`W_a,` with parameters :math:`a.` 
@@ -409,7 +409,7 @@ n_wires = 5
 ###############################################################################
 # We initialize the quantum simulator:
 
-dev = qml.device("lightning.qubit", wires = n_wires, shots = None)
+dev = qml.device("lightning.qubit", wires = n_wires)
 
 ###############################################################################
 # Next, we construct the quantum node:

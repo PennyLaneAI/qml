@@ -13,8 +13,11 @@ Learning to learn with quantum neural networks
 
 
 .. warning::
-    This demo is only compatible with TensorFlow version ``2.9`` or below.
-    Otherwise, the output of some cells and plots may differ.
+    This demo uses TensorFlow, which is a deprecated interface with PennyLane v0.42.
+    Interfacing with TensorFlow will no longer be supported with PennyLane v0.43 and higher.
+    Consider switching to a different machine learning interface with PennyLane, like
+    :doc:`PyTorch <demos/tutorial_qnn_module_torch>` or
+    :doc:`JAX <demos/tutorial_How_to_optimize_QML_model_using_JAX_and_Optax>`.
 
 In this demo we recreate the architecture proposed
 in *Learning to learn with quantum neural networks via
@@ -119,7 +122,7 @@ the shape of the variational circuit is the one dictated by the QAOA
 ansatz, and such a quantum circuit is used to evaluate the cost
 Hamiltonian :math:`H` of the MaxCut problem.
 You can check out a great tutorial on
-[how to use QAOA for solving graph problems](https://pennylane.ai/qml/demos/tutorial_qaoa_intro.html).
+:doc:`how to use QAOA for solving graph problems <demos/tutorial_qaoa_intro>`.
 
 .. note::
    Running the tutorial (excluding the Appendix) requires approx. ~13m.
@@ -783,7 +786,7 @@ plt.show()
 #
 # .. [#maxcut]
 #
-#       MaxCut problem: `https://pennylane.ai/qml/demos/tutorial_qaoa_maxcut/ <PennyLane Demo — QAOA for MaxCut>`__.
+#       MaxCut problem: :doc:`demos/tutorial_qaoa_maxcut`.
 #
 #
 #
