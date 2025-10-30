@@ -11,7 +11,7 @@
     "executable_stable": true,
     "executable_latest": true,
     "dateOfPublication": "2025-10-30T09:00:00+00:00",
-    "dateOfLastModification": "2025-10-30T09:00:00+00:00",
+    "dateOfLastModification": "2025-10-31T09:00:00+00:00",
     "categories": [
         "Quantum Computing"
     ],
@@ -43,13 +43,13 @@
     "relatedContent": [
         {
             "type": "demonstration",
-            "id": "tutorial_resourcefulness",
-            "weight": 1.0
-        }, 
+            "id": "tutorial_qft_and_groups",
+            "weight": 0.5
+        },
         {
-            "type": "demonstration",
-            "id": "tutorial_resourcefulness_with_fourier_transform",
-            "weight": 1.0
+        "type": "demonstration",
+        "id": "tutorial_period_finding",
+        "weight": 0.5
         }
     ]
 }
