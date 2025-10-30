@@ -296,7 +296,7 @@ sections.
 #    Qubit Hamiltonian:  (2.40331309905556+0j) * I(0) + (-0.12208093833046951+0j) * Z(0) + (-0.12208093833046951+0j) * Z(1) + (-0.003330743747901097+0j) * (Y(0) @ Z(1) @ Y(2)) +  ...
 #
 # We can use this Hamiltonian in a quantum algorithm such as quantum phase estimation (QPE).
-# As an exercise, you can compare the results and verify that the computed energies from quantum algorithm
+# You can compare the results and verify that the computed energies from quantum algorithm
 # match those that we obtained before.
 #
 # Conclusion
