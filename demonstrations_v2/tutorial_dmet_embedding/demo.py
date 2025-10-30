@@ -162,7 +162,7 @@ efficient level of theory.
 # bath by looking at the labels. We achieve this by utilizing a minimal basis
 # to categorize orbitals: those present in the minimal basis are identified as valence,
 # while the remaining orbitals are deemed virtual. In this example, we choose to keep the :math:`1s` orbitals in the
-# central :math:`H_4` chain in the impurity, while the bath contains the :math:`2s` orbitals, and
+# central :math:`H_4` chain in the impurity, while the bath contains the :math:`2s` orbitals and
 # the orbitals belonging to the terminal Hydrogen molecules form the environment.
 #
 # .. code-block:: python
