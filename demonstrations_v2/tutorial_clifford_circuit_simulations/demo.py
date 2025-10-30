@@ -97,7 +97,7 @@ similar set referred to as ``destabilizer`` set :math:`\mathcal{D}.`
 
 The stabilizer tableau for an :math:`n`-qubit state is made of binary variables representing
 the Pauli words for the ``generators`` of stabilizer :math:`\mathcal{S}` and destabilizer
-:math:`\mathcal{D}`and their ``phases`.` These are generally arranged as the following
+:math:`\mathcal{D}` and their ``phases``. These are generally arranged as the following
 tabulated structure [#lowrank_2019]_:
 
 .. figure:: ../_static/demonstration_assets/clifford_simulation/stabilizer-tableau.jpeg
