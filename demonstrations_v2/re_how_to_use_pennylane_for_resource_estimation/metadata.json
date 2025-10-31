@@ -1,0 +1,55 @@
+{
+    "title": "How to use PennyLane for Resource Estimation",
+    "authors": [
+        {
+            "username": "Jay"
+        },
+        {
+            "username": "ANT0N"
+        }
+    ],
+    "executable_stable": true,
+    "executable_latest": true,
+    "dateOfPublication": "2025-11-01T10:00:00+00:00",
+    "dateOfLastModification": "2025-11-01T15:48:14+00:00",
+    "categories": [
+        "Algorithms"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "IMAGENAME.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "IMAGENAME.png"
+        }
+    ],
+    "seoDescription": "WRITE AN SEO DESCRIPTION HERE",
+    "doi": "",
+    "references": [
+        {
+
+        },
+        {
+
+        }
+    ],
+    "basedOnPapers": [
+        ""
+    ],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "...",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "...",
+            "weight": 1.0
+        }
+    ]
+}
