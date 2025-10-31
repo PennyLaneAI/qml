@@ -14,9 +14,7 @@ class Virtualenv:
                 if it does not exist.
         """
         self.path = path.resolve()
-
-        if not self.python.exists():
-            self._init()
+        self._init()
 
     @property
     def python(self) -> Path:
@@ -27,4 +25,4 @@ class Virtualenv:
         """Initialize a virtual environment."""
         self.path.parent.mkdir(exist_ok=True)
 
-        subprocess.run([sys.executable, "-m", "venv", self.path]).check_returncode()
+        subprocess.run([sys.executable, "-m", "venv", "--clear", self.path]).check_returncode()
