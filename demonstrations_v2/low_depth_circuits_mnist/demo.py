@@ -218,8 +218,7 @@ fidelities_01 = np.asarray(dataset_params.fidelities_d4)[selection]
 # To investigate how well the low-depth circuits reproduce the target images, we first **reconstruct**
 # the pictures encoded in each quantum state. The histogram below reports the *fidelity*
 # :math:`F = \left|\langle \psi_{\text{exact}} \mid \psi_{\text{circ.}} \rangle\right|^{2}`, i.e. the
-# overlap between the exact FRQI state $
-# \|:raw-latex:`\psi`\_{:raw-latex:`\text{exact}`}:raw-latex:`\rangle `$ and its 4-layer
+# overlap between the exact FRQI state :math:`|\psi\_{\text{exact}}\rangle` and its 4-layer
 # center-sequential approximation :math:`|\psi_{\text{circ.}}\rangle`.
 #
 # - **Digit 1** samples (orange) cluster at a fidelity :math:`F` close to 1, indicating that four
