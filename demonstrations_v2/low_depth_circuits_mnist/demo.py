@@ -499,8 +499,7 @@ ax[1].set_ylabel("Accuracy")
 # and contribute back insights on how these benchmark datasets can best support the development of
 # practical quantum machine learning approaches.
 #
-
-######################################################################
+#
 # References
 # ----------
 #
