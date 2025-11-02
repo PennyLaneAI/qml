@@ -486,11 +486,11 @@ ax[1].set_ylabel("Accuracy")
 # Conclusion
 # ~~~~~~~~~~
 #
-# | In this notebook we have demonstrated the use of low-depth quantum circuits to load and
-#   subsequently classify (a subset of) the MNIST dataset.
-# | By filtering to specific target labels, constructing parametrized circuits from the provided
-#   layouts, and evaluating their states and fidelities, we have gained hands-on experience with
-#   quantum machine learning workflows on real data encodings.
+# In this notebook we have demonstrated the use of low-depth quantum circuits to load and
+# subsequently classify (a subset of) the MNIST dataset.
+# By filtering to specific target labels, constructing parametrized circuits from the provided
+# layouts, and evaluating their states and fidelities, we have gained hands-on experience with
+# quantum machine learning workflows on real data encodings.
 #
 # Explore the full set of `provided
 # datasets <https://pennylane.ai/datasets/collection/low-depth-image-circuits>`__—they contain a
