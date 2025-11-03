@@ -37,15 +37,15 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # Instantaneously deep quantum neural networks
 # --------------------------------------------
 # Instantaneously deep quantum neural networks, or IDQNNs, are a particular type of shallow
-# parameterized quantum circuit. The qubits of the circuit live on a lattice, which we’ll take to be a
+# parameterized quantum circuits. The qubits of the circuit live on a lattice, which we’ll take to be a
 # 2D lattice, and index the qubits by their lattice positions :math:`(i,j)`. To sample from the
-# circuit one does the following, which we also depict below
+# circuit one does the following, which we also depict below.
 #
 # Recipe for sampling from an IDQNN
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # 1. Prepare each qubit on the lattice in the :math:`\ket{+}` state.
-# 2. Entangle the qubits by performing controlled-Z gates between some pairs of nearest neighbour
+# 2. Entangle the qubits by performing controlled-Z gates between some pairs of nearest-neighbour
 #    qubits on the lattice. If the qubits are horizontal neighbours on the lattice, a CZ is always
 #    applied.
 # 3. Perform a single qubit Z rotation :math:`U_{z}(\theta_{ij})=\exp(-\frac{i}{2}\theta_{ij}Z)` with
@@ -60,7 +60,7 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # 
 # Note that this is not a circuit diagram, but a graphical representation of the circuit description
 # above: qubits are denoted by black dots, CZ gates are lines between dots, the angles specify the
-# single qubit rotations, and the blue :math:`y_{ij}` are the X-measurement outcomes. We’ll also use
+# single-qubit rotations, and the blue :math:`y_{ij}` are the X-measurement outcomes. We’ll also use
 # the vector :math:`\boldsymbol{y}` from now on to denote all the :math:`y_{ij}`.
 # 
 # Remember that the above corresponds to a circuit acting on a 2D lattice of 12 qubits, and is a
@@ -94,8 +94,8 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # 1. Generate all bits :math:`y_{ij}` for :math:`i<4` uniformly at random.
-# 2. Run the above circuit, controlling the Z gates on these bits. 3. Measure the
-#    output of the circuit to obtain the final three bits :math:`y_{41}`, :math:`y_{42}`, :math:`y_{43}`
+# 2. Run the above circuit, controlling the Z gates on these bits. 
+# 3. Measure the output of the circuit to obtain the final three bits :math:`y_{41}`, :math:`y_{42}`, :math:`y_{43}`.
 # 
 # One can show that the distribution :math:`p(\boldsymbol{y})` obtained with the above recipe is
 # identical to the one we described for the IDQNN, and so the two methods are indistinguishable if
@@ -105,7 +105,7 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # qubit counts on quantum hardware are still limited, so that by implementing the deep 1D circuit on a
 # few qubits, you can simulate the distribution of a 2D shallow circuit on many more qubits. The
 # authors used this trick to simulate a shallow IDQNN circuit on 816 qubits using a deep circuit with
-# 68 qubits. To do this they actually work with a deep circuit on a 2D lattice, and map it to a
+# 68 qubits. To do this, they actually work with a deep circuit on a 2D lattice, and map it to a
 # shallow circuit on a 3D lattice. This obviously complicates things a bit (and makes drawing pictures
 # a lot harder!) so we will stick to the 2D vs 1D example above; in the end, it will contain
 # everything we need to understand the result for higher dimensional lattices.
@@ -115,13 +115,13 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # -----------------------------
 # 
 # It turns out that—if we remove the classically controlled Z gates for now—the circuit structure of
-# the deep circuit above is universal. That is, any :math:`n` qubit circuit with two qubit gates can
-# be efficiently approximated by sequential layers of Hadamards, Z rotations and controlled Z gates on
+# the deep circuit above is universal. That is, any :math:`n`-qubit circuit with two qubit gates can
+# be efficiently approximated by sequential layers of Hadamards, Z rotations and controlled-Z gates on
 # an :math:`n` qubit computational basis input. We can therefore use this fact to define a circuit
 # that is hard to sample from classically; simply take your favourite pre-existing hardness results
 # for sampling (for example, [#sample]_) and compile the circuit to the H, RZ, CZ gateset. We can then embed this
-# into the precise structure we had above by inserting the classically controlled Z gates at every
-# layer. If we happen to sample the all zero bitstring for :math:`y_{ij}` values that control these
+# into the precise structure we had above by inserting the classically controlled-Z gates at every
+# layer. If we happen to sample the all-zero bitstring for :math:`y_{ij}` values that control these
 # gates, then we will sample from this hard distribution. In this sense the distribution
 # :math:`p(\boldsymbol{y})` is ‘hard’ since any classical algorithm will fail to reproduce this part
 # of the distribution. Moreover, since the distribution of the IDQNN is identical, it follows that the
@@ -131,7 +131,7 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # Adding inputs states
 # --------------------
 # 
-# At this point we have a shallow circuit called an IDQNN, a way to map it to a deep circuit
+# At this point, we have a shallow circuit called an IDQNN, a way to map it to a deep circuit
 # structure, and an argument that the distributions :math:`p(\boldsymbol{y})` resulting from these
 # circuits are hard to sample from classically. However, we don’t yet have everything in order to be
 # able to learn. The last ingredient we need comes in the form of an input :math:`x`. This will mean
@@ -148,17 +148,17 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 #
 # 1. Prepare each qubit in either the :math:`\vert + \rangle` or :math:`\vert - \rangle` state, depending on
 #    :math:`x`.
-# 2. Perform steps 2-4 as before
+# 2. Perform steps 2-4 as before.
 # 
 # In order to be able to prove the result, the choice and distribution of possible input states must
 # satisfy a particular property called ‘local decoupling’ (see Appendix C2 of the paper). One
 # particularly simple choice that will work for our 2D IDQNN is the following choice of three inputs,
-# :math:`x=0,1,2` (in the paper a different choice is used, but the result will be the same)
+# :math:`x=0,1,2` (in the paper a different choice is used, but the result will be the same).
 # 
-# If :math:`x=0` all input qubits are prepared in the :math:`\vert + \rangle` state If :math:`x=1` all
+# If :math:`x=0`, all input qubits are prepared in the :math:`\vert + \rangle` state. If :math:`x=1`, all
 # qubits on the ‘even diagonals’ of the lattice are prepared in :math:`\vert + \rangle`, the remaining
-# are prepared in :math:`\vert 0 \rangle` If :math:`x=2` all qubits on the ‘odd diagonals’ of the lattice
-# are prepared in :math:`\vert + \rangle`, the remaining are prepared in :math:`\vert 0 \rangle`
+# are prepared in :math:`\vert 0 \rangle`. If :math:`x=2`, all qubits on the ‘odd diagonals’ of the lattice
+# are prepared in :math:`\vert + \rangle`, the remaining are prepared in :math:`\vert 0 \rangle`.
 # 
 # Pictorially, the choice looks like this.
 #
@@ -169,9 +169,9 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 #
 # If the input is 0, we already know what happens; this is just the IDQNN described in the previous
 # section. If the input is 1 or 2, things get very simple. Note that the CZ gate is symmetric, and can
-# be written
+# be written as
 # 
-# .. math:: CZ = \vert 0 \rangle\langle 0 \vert \otimes \mathbb{I} +  \vert 1 \rangle\langle 1 \vert \otimes Z =  \mathbb{I} \otimes  \vert 0 \rangle\langle 0 \vert + Z \otimes  \vert 1 \rangle\langle 1 \vert
+# .. math:: CZ = \vert 0 \rangle\langle 0 \vert \otimes \mathbb{I} +  \vert 1 \rangle\langle 1 \vert \otimes Z =  \mathbb{I} \otimes  \vert 0 \rangle\langle 0 \vert + Z \otimes  \vert 1 \rangle\langle 1 \vert.
 # 
 # Thus, if a CZ gate acts on the state :math:`\vert 0 \rangle` on either side, the effect is that it becomes
 # the identity. Since every CZ gate hits a qubit in the :math:`\vert 0 \rangle` state for these inputs, we can
@@ -216,24 +216,24 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # The precise definition of learning is given by definition 13 in the Appendix:
 # 
 #   *Definition 13 (The task of learning to generate classical bitstrings). We are given a dataset of
-#   input-output bitstring pairs (x,y). Each output bitstring
+#   input-output bitstring pairs :math:`(x,y)`. Each output bitstring
 #   y is sampled according to an unknown conditional distribution
-#   p(\boldsymbol{y}|x). The goal is to learn a model from the dataset that can generate new
+#   :math:`p(\boldsymbol{y}|x)`. The goal is to learn a model from the dataset that can generate new
 #   output bitstrings y according to the unknown distribution
-#   p(\boldsymbol{y}|x) for any given new input bitstring x.*
+#   :math:`p(\boldsymbol{y}|x)` for any given new input bitstring x.*
 # 
 # Although the above suggests the conditional distribution is unknown, we actually know a lot about
 # it. In particular, we need to work under the assumption that we know the exact structure of the
 # quantum circuits that produce the data, except for the rotation angles :math:`\theta_{ij}`
 # (i.e. this is included in the \`prior knowledge’ of the problem). To learn, we therefore just need
 # to infer the parameters :math:`\theta_{ij}` from the data, which will allow us to generate new data by
-# simply implementing the resulting circuits. This is very different from real world problems the
+# simply implementing the resulting circuits. This is very different from real world problems, the
 # typical situation in classical generative machine learning, where a precise parametric form of the
 # ground truth distribution is not known.
 # 
 # So how do we infer the parameters :math:`\theta_{ij}` from data? Consider for example the data for
 # input :math:`x=1`, and the outcome :math:`y_{12}`. From the above circuit we see that in this case the
-# outcome is produced by this single qubit circuit
+# outcome is produced by this single qubit circuit:
 #
 # .. figure:: ../_static/demonstration_assets/generative_quantum_advantage/tomography.png
 #    :alt: The single qubit circuit that is used to infer the parameter \theta_{12}
@@ -250,7 +250,7 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # :math:`\theta_{12} = \frac{1}{2} \arccos(1 - 2\langle y_{12} \rangle)`.
 # 
 # All we have to do to infer :math:`\theta_{12}` is to look at the data for :math:`x=1`, estimate the
-# expectation :math:`\langle y_{12} \rangle` from the corresponding :math:`y_12` values, and use the above formula; no
+# expectation :math:`\langle y_{12} \rangle` from the corresponding :math:`y_{12}` values, and use the above formula; no
 # gradients or training required (so clearly no barren plateaus either)! Note that all we are doing
 # here is a form of single qubit tomography, which you might encounter in a first course of quantum
 # information.
@@ -305,7 +305,7 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # :math:`p(\boldsymbol{y})`. Suppose we want to learn the parameters :math:`\theta` from data. To do
 # this we construct a conditional distribution :math:`p(\boldsymbol{y}|x)` which does the following:
 # 
-# - For :math:`x=0` the model samples the generative model distribution :math:`p(\boldsymbol{y})`
+# - For :math:`x=0`, the model samples the generative model distribution :math:`p(\boldsymbol{y})`
 # - For :math:`x=1`, :math:`\boldsymbol{y}` just returns the parameters :math:`\theta`
 # 
 # Obviously, we can learn the parameters of the model from :math:`p(\boldsymbol{y}|x)`: we just look
@@ -318,7 +318,7 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # neural networks. We note that the specific example in the paper is more involved than this, and uses
 # a higher dimensional lattice and a different set of inputs, but the strategy is the same: for each
 # parameter, there is a reasonable fraction of the inputs that leaves the relevant qubit unentangled
-# from the rest, and single qubit statistics reveals the desired value.
+# from the rest, and single-qubit statistics reveals the desired value.
 # 
 # What can lead us to genuine usefulness?
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
