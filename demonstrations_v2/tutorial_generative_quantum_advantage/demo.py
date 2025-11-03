@@ -25,7 +25,7 @@ informally stated as:
 To show the above, we need to do a couple of things:
 
 - Identify a classically ‘hard’ conditional distribution p(y|x) that corresponds to a family of
-  quantum circuits. For this we can leverage some existing results about the hardness of sampling.
+  quantum circuits. For this, we can leverage some existing results about the hardness of sampling.
 - Show that, with access to a dataset obtained by querying and sampling from p(y|x), we can infer
   the circuits that produced the data, and can therefore generate more data.
 
