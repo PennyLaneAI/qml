@@ -195,7 +195,7 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 #
 # The authors argue that the conditional distribution :math:`p(\boldsymbol{y}|x)` should also be
 # considered hard to sample from classically, since for the input :math:`x=0` we can use the argument
-# of the previous section. For the inputs :math:`x=1` and :math:`x=2` however the resulting
+# of the previous section. For the inputs :math:`x=1` and :math:`x=2`, however, the resulting
 # distribution has an efficient classical simulation since it corresponds to measurements made on
 # unentangled single qubits.
 # 
