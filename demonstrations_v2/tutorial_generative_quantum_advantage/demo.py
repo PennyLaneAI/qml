@@ -22,7 +22,7 @@ informally stated as:
     to m-bit strings that a quantum computer can efficiently learn to generate using classical data
     samples, but are hard to generate with classical computers.*
 
-To show the above, we need to do a couple of things
+To show the above, we need to do a couple of things:
 
 - Identify a classically ‘hard’ conditional distribution p(y|x) that corresponds to a family of
   quantum circuits. For this we can leverage some existing results about the hardness of sampling.
