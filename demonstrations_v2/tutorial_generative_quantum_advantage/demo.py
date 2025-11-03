@@ -10,12 +10,14 @@ generative machine learning should not only require the ability to sample from a
 but also to be able to learn it efficiently from data, and they investigate a specific scenario in
 which this is possible.
 
-In this demo we will unpack one of the main results of the paper to understand its core mechanics.
+In this demo we will unpack one of their main results of the paper to understand its core mechanics.
 We will see that the problem is constructed so that learning the hard distribution boils down to
-performing single qubit tomography, and we will debate the scope of this technique in relation to
+performing single-qubit tomography, and we will debate the scope of this technique in relation to
 practical AI. In particular, we will focus on the first theorem (Theorem 1) of the paper, since it
 aligns closest with the notion of generative machine learning in the classical literature. It is
 informally stated as:
+
+ .. admonition::
 
     *Theorem 1 (Informal: Classically hard, quantumly easy generative models). Under standard
     complexity-theoretic conjectures, there exist distributions p(y|x) mapping classical n-bit strings
@@ -48,7 +50,7 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # 2. Entangle the qubits by performing controlled-Z gates between some pairs of nearest-neighbour
 #    qubits on the lattice. If the qubits are horizontal neighbours on the lattice, a CZ is always
 #    applied.
-# 3. Perform a single qubit Z rotation :math:`U_{z}(\theta_{ij})=\exp(-\frac{i}{2}\theta_{ij}Z)` with
+# 3. Perform a single-qubit Z rotation :math:`U_{z}(\theta_{ij})=\exp(-\frac{i}{2}\theta_{ij}Z)` with
 #    parameter :math:`\theta_{ij}` on each of the qubits
 # 4. Measure all qubits in the X basis to produce outcomes :math:`y_{ij}`
 #
@@ -74,7 +76,7 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # measurement outcomes :math:`y_{11}`, :math:`y_{12}`, :math:`y_{13}`). Repeating this process until
 # we arrive at the end of the lattice therefore defines a type of stochastic quantum circuit acting on
 # three qubits. The precise way to make this mapping is well known from MBQC theory, and is a bit
-# tricky (see Appendix H2 of the paper), so we won’t bore you with the details here.
+# tricky (see Appendix H2 of their paper [#genquantumadv]_), so we won’t bore you with the details here.
 # 
 # If you apply the mapping to our example IDQNN, you find the following circuit:
 #
@@ -140,7 +142,7 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # 
 # For each :math:`x`, the probability distribution :math:`p(\boldsymbol{y}|x)` corresponds to a IDQNN
 # where—rather than all qubits being in the :math:`\vert + \rangle` state—each input qubit can be prepared in either the
-# :math:`\vert 0 \rangle` or :math:`\vert + \rangle` state, which is determined by the input :math:`x`. We therefore adapt the first step of
+# :math:`\vert + \rangle` or :math:`\vert 0 \rangle` state, which is determined by the input :math:`x`. We therefore adapt the first step of
 # our recipe for the IDQNN:
 # 
 # Recipe for sampling from an IDQNN with inputs
@@ -151,7 +153,7 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # 2. Perform steps 2-4 as before.
 # 
 # In order to be able to prove the result, the choice and distribution of possible input states must
-# satisfy a particular property called ‘local decoupling’ (see Appendix C2 of the paper). One
+# satisfy a particular property called ‘local decoupling’ (see Appendix C2 of their paper  [#genquantumadv]_). One
 # particularly simple choice that will work for our 2D IDQNN is the following choice of three inputs,
 # :math:`x=0,1,2` (in the paper a different choice is used, but the result will be the same).
 # 
@@ -236,23 +238,23 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # outcome is produced by this single qubit circuit:
 #
 # .. figure:: ../_static/demonstration_assets/generative_quantum_advantage/tomography.png
-#    :alt: The single qubit circuit that is used to infer the parameter \theta_{12}
+#    :alt: The single-qubit circuit that is used to infer the parameter \theta_{12}
 #    :width: 60.0%
 #    :align: center
 #
-# This is a measurement on a rotated single qubit state, for which the expectation value for
+# This is a measurement on a rotated single-qubit state, for which the expectation value for
 # :math:`y_{12}` is
 # 
-# :math:`\langle y_{12} \rangle = (1-\cos(\theta_{12}))/2`.
+# .. math:: \langle y_{12} \rangle = (1-\cos(\theta_{12}))/2.
 # 
 # Rearranging this equation we have
 # 
-# :math:`\theta_{12} = \frac{1}{2} \arccos(1 - 2\langle y_{12} \rangle)`.
+# .. math:: \theta_{12} = \frac{1}{2} \arccos(1 - 2\langle y_{12} \rangle).
 # 
 # All we have to do to infer :math:`\theta_{12}` is to look at the data for :math:`x=1`, estimate the
 # expectation :math:`\langle y_{12} \rangle` from the corresponding :math:`y_{12}` values, and use the above formula; no
 # gradients or training required (so clearly no barren plateaus either)! Note that all we are doing
-# here is a form of single qubit tomography, which you might encounter in a first course of quantum
+# here is a form of single-qubit tomography, which you might encounter in a first course of quantum
 # information.
 # 
 # The remaining parameters can be estimated in a similar way depending on whether they live on the
@@ -311,7 +313,7 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # Obviously, we can learn the parameters of the model from :math:`p(\boldsymbol{y}|x)`: we just look
 # at the data for :math:`x=1` and read them off directly from :math:`\boldsymbol{y}`. Our quantum
 # example is not dramatically different from this, since for the inputs :math:`x=1,2` we have a simple
-# method to read off the parameters from the statistics (single qubit tomography), and this method is
+# method to read off the parameters from the statistics (single-qubit tomography), and this method is
 # known beforehand rather than being learned from the data. In effect, we have set up the problem so
 # that inferring parameters is straightforward for some inputs, whilst sampling is hard for others,
 # and this process of learning is very different from the complex process that occurs in modern
