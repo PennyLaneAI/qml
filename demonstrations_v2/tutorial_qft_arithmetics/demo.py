@@ -404,7 +404,7 @@ def factorization(n, wires_m, wires_k, wires_solution):
 
 
 plt.bar(range(2 ** len(wires_m)), factorization(n, wires_m, wires_k, wires_solution))
-plt.xlabel("Basic states")
+plt.xlabel("Basis states")
 plt.ylabel("Probability")
 plt.show()
 
@@ -427,5 +427,6 @@ plt.show()
 #
 #     Thomas G. Draper, "Addition on a Quantum Computer". `arXiv:quant-ph/0008033 <https://arxiv.org/abs/quant-ph/0008033>`__.
 #
+
 
 
