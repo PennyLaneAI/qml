@@ -286,12 +286,12 @@ plt.show()
 #
 # To understand the multiplication process, let's work with the binary decomposition of
 # :math:`k:=\sum_{i=0}^{n-1}2^{n-i-1}k_i` and
-# :math:`m:=\sum_{j=0}^{l-1}2^{l-j-1}m_i.` In this case, the product would
+# :math:`m:=\sum_{j=0}^{l-1}2^{l-j-1}m_j.` In this case, the product would
 # be:
 #
-# .. math:: k \cdot m = \sum_{i=0}^{n-1}\sum_{j = 0}^{l-1}m_ik_i (2^{n-i-1} \cdot 2^{l-j-1}).
+# .. math:: k \cdot m = \sum_{i=0}^{n-1}\sum_{j = 0}^{l-1} k_i m_j (2^{n-i-1} \cdot 2^{l-j-1}).
 #
-# In other words, if :math:`k_i = 1` and :math:`m_i = 1,` we would add
+# In other words, if :math:`k_i = 1` and :math:`m_j = 1,` we would add
 # :math:`2^{n-i-1} \cdot 2^{l-j-1}` units to the counter, where :math:`n` and :math:`l`
 # are the number of qubits with which we encode :math:`m` and :math:`k` respectively.
 # Let's code to see how it works!
@@ -427,4 +427,5 @@ plt.show()
 #
 #     Thomas G. Draper, "Addition on a Quantum Computer". `arXiv:quant-ph/0008033 <https://arxiv.org/abs/quant-ph/0008033>`__.
 #
+
 
