@@ -409,7 +409,7 @@ plt.ylabel("Probability")
 plt.show()
 
 ######################################################################
-# By plotting the probabilities of obtaining each basic state we see that
+# By plotting the probabilities of obtaining each basis state we see that
 # prime factors have been amplified! Factorization via Grover’s algorithm
 # does not achieve exponential improvement that
 # `Shor's algorithm <https://en.wikipedia.org/wiki/Shor%27s_algorithm>`_ does, but we
@@ -427,6 +427,7 @@ plt.show()
 #
 #     Thomas G. Draper, "Addition on a Quantum Computer". `arXiv:quant-ph/0008033 <https://arxiv.org/abs/quant-ph/0008033>`__.
 #
+
 
 
 
