@@ -351,7 +351,7 @@ plt.show()
 # Let’s imagine now that we want just the opposite: to factor the
 # number :math:`21` as a product of two terms. Is this something we could do
 # using our previous reasoning? The answer is yes! We can make use of
-# `Grover's algorithm <https://en.wikipedia.org/wiki/Grover%27s_algorithm>`_ to
+# `Grover's algorithm </qml/demos/tutorial_grovers_algorithm>`__ to
 # amplify the states whose product is the number we
 # are looking for. All we would need is to construct the oracle :math:`U,` i.e., an
 # operator such that
@@ -427,6 +427,7 @@ plt.show()
 #
 #     Thomas G. Draper, "Addition on a Quantum Computer". `arXiv:quant-ph/0008033 <https://arxiv.org/abs/quant-ph/0008033>`__.
 #
+
 
 
 
