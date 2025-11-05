@@ -152,6 +152,7 @@ qml.eigvals(qml.SparseHamiltonian(h.sparse_matrix(), wires=h.wires))
 h = qml.qchem.molecular_hamiltonian(mol)[0]
 qml.eigvals(qml.SparseHamiltonian(h.sparse_matrix(), wires=h.wires))
 
+##############################################################################
 # Chemists' notation
 # ------------------
 # This notation is commonly used by quantum chemistry software libraries such as PySCF. The two-
@@ -248,8 +249,8 @@ sentence.simplify()
 ##############################################################################
 # Note that the order of the indices for the fermionic operators match those of the electron
 # integral coefficients. Also note that the two-body operator has the order
-# :math:`a^{\dagger} a a^{\dagger} a'. Let's now validate the Hamiltonian by computing the ground-
-# state energy.
+# :math:`a^{\dagger} a a^{\dagger} a'. Let's now validate the Hamiltonian by computing the
+# ground-state energy.
 
 h = qml.jordan_wigner(sentence)
 qml.eigvals(qml.SparseHamiltonian(h.sparse_matrix(), wires=h.wires))
@@ -323,9 +324,7 @@ def transform_two(g_mo: np.ndarray, notation) -> np.ndarray:
         g_so[beta, alpha, beta, alpha] = g_mo
         return g_so
 
-    ##############################################################################
-
-
+##############################################################################
 # The new tensor can then be used to construct the Hamiltonian
 
 one_so = transform_one(one_mo)
