@@ -40,7 +40,8 @@ different representations of the molecular Hamiltonian without re-calculating th
 #
 # where :math:`h_{pq}` denotes the one-electron integral. We have skipped the spin indices and
 # the core constant for brevity. Note that the order of the creation and annihilation operator
-# indices matches the order of the coefficient indices for both :math:`h_{pq}` and h_{pqrs} terms.
+# indices matches the order of the coefficient indices for both :math:`h_{pq}` and :math:`h_{pqrs}`
+# terms.
 #
 # We will now construct the Hamiltonian using PennyLane. PennyLane employs the quantum computing
 # convention for the two-electron integral tensor, which can be efficiently computed via the
@@ -62,16 +63,25 @@ core_constant, one_mo, two_mo = qml.qchem.electron_integrals(mol)()
 
 ##############################################################################
 # These integrals are obtained over spatial molecular orbitals. That means, for water, we have
-# only reported the integrals over the 1s, 2s, and the 2p_x, 2p_y and 2p_z orbitals, without
+# only reported the integrals over the :math:`1s`, :math:`2s`, and the :math:`2p_x`, :math:`2p_y`
+# and :math:`2p_z` orbitals, without
 # accounting for the spin component. To construct the full
-# Hamiltonian, the integrals objects need to be expanded to include spin orbitals, i.e., 1s_alpha,
-# 1s_beta etc. Assuming an interleaved convention for the order of spin orbitals, i.e.,
-# |alpha, beta, alpha, beta, ...>, the following functions give the expanded one-electron and
+# Hamiltonian, the integrals objects need to be expanded to include spin orbitals, i.e., :math:`1s_alpha`,
+# :math:`1s_beta` etc. Assuming an interleaved convention for the order of spin orbitals, i.e.,
+# :math:`|\alpha, \beta, \alpha, \beta, ...>`, the following functions give the expanded one-electron and
 # two-electron objects.
 
 def transform_one(h_mo: np.ndarray) -> np.ndarray:
+    """Converts a one-electron integral matrix from the molecular orbital (MO) basis to the
+     spin-orbital (SO) basis.
+
+    Args:
+        h_mo (array): The one-electron matrix with shape (n, n) where n is the number of spatial orbitals.
+
+    Returns:
+        The one-electron matrix with shape (2n, 2n) where n is the number of spatial orbitals.
     """
-    """
+
     n_so = 2 * h_mo.shape[0]
     h_so = np.zeros((n_so, n_so))
 
@@ -83,9 +93,17 @@ def transform_one(h_mo: np.ndarray) -> np.ndarray:
     return h_so
 
 
-def transform_two(g_mo: np.ndarray) -> np.ndarray:
+def transform_two(g_mo):
+    """Converts a two-electron integral tensor from the molecular orbital (MO) basis to the
+     spin-orbital (SO) basis.
+
+    Args:
+        g_mo (array): The two-electron tensor with shape (n, n, n, n) where n is the number of spatial orbitals.
+
+    Returns:
+        The two-electron matrix with shape (2n, 2n, 2n, 2n) where n is the number of spatial orbitals.
     """
-    """
+
     n_so = 2 * g_mo.shape[0]
 
     g_so = np.zeros((n_so, n_so, n_so, n_so))
@@ -100,14 +118,13 @@ def transform_two(g_mo: np.ndarray) -> np.ndarray:
 
     return g_so
 
-
 ##############################################################################
 # Note that the transformation must respect the spin-selection rules. For instance, the integral
 # :math:`\langle \chi_p | \hat{h} | \chi_q \rangle = \langle \phi_i | \hat{h}^{\text{spatial}} | \phi_j \rangle \cdot \langle \sigma_p | \sigma_q \rangle`
 # must be zero if the spins of the initial and final spin orbitals are different. For the
 # one-electron integrals, only αα or ββ combinations have a non-zero
-# value. Similarly, the two-electron operator 1/r_{12} is spin-independent and if we use the
-# compact notation '1221' to represent the order in the two-electron integral, the non-zero
+# value. Similarly, the two-electron operator :math:`1/r_{12}` is spin-independent and if we use the
+# compact notation ``'1221'`` to represent the order in the two-electron integral, the non-zero
 # combinations are: αααα, αββα, βααβ and ββββ. The integrals computed using molecular orbitals
 # can be expanded to include spin orbitals using these combination rules. We now obtain the full
 # electron integrals in the basis of spin orbitals.
@@ -140,7 +157,7 @@ sentence.simplify()
 ##############################################################################
 # Note that the order of indices for the fermionic creation and annihilation operators matches
 # the order of indices in the integral objects. We finally map the fermionic Hamiltonian to the
-# qubit bases and compute its ground-state energy, which should match the value -75.01562736 a.u.
+# qubit bases and compute its ground-state energy, which should match the value :math:`-75.01562736` a.u.
 
 h = qml.jordan_wigner(sentence)
 qml.eigvals(qml.SparseHamiltonian(h.sparse_matrix(), wires=h.wires))
@@ -194,12 +211,20 @@ core_constant = np.array([rhf.energy_nuc()])
 ##############################################################################
 # These integrals are also obtained for the spatial orbitals and we need to expand them to include
 # spin orbitals. To do that, we need to slightly upgrade our transform_two_interleaved function
-# because the allowed spin combination in the chemists' notation, also denoted by '1122', are
+# because the allowed spin combination in the chemists' notation, also denoted by ``'1122'``, are
 # αααα, ααββ, ββαα and ββββ.
 
-def transform_two(g_mo: np.ndarray, notation) -> np.ndarray:
+def transform_two(g_mo, notation):
+    """Converts a two-electron integral tensor from the molecular orbital (MO) basis to the
+     spin-orbital (SO) basis.
+
+    Args:
+        g_mo (array): The two-electron tensor with shape (n, n, n, n) where n is the number of spatial orbitals.
+
+    Returns:
+        The two-electron matrix with shape (2n, 2n, 2n, 2n) where n is the number of spatial orbitals.
     """
-    """
+
     n = g_mo.shape[0]
     n_so = 2 * n
 
@@ -211,12 +236,12 @@ def transform_two(g_mo: np.ndarray, notation) -> np.ndarray:
     g_so[alpha, alpha, alpha, alpha] = g_mo
     g_so[beta, beta, beta, beta] = g_mo
 
-    if notation == '1221':
+    if notation == 'quantum':  # '1221'
         g_so[alpha, beta, beta, alpha] = g_mo
         g_so[beta, alpha, alpha, beta] = g_mo
         return g_so
 
-    if notation == '1122':
+    if notation == 'chemist':  # '1122'
         g_so[alpha, alpha, beta, beta] = g_mo
         g_so[beta, beta, alpha, alpha] = g_mo
         return g_so
@@ -226,7 +251,7 @@ def transform_two(g_mo: np.ndarray, notation) -> np.ndarray:
 # We can compute the full integrals objects and add the one-body correction term
 
 one_so = transform_one(one_mo)
-two_so = transform_two(two_mo, '1122')
+two_so = transform_two(two_mo, 'chemist')
 
 one_so_corrected = one_so - 0.5 * np.einsum('pssq->pq', two_so)
 
@@ -293,11 +318,19 @@ two_mo = two_mo.transpose(0, 2, 1, 3)
 # We intentionally converted the integrals obtained for the spatial orbitals, so we need to expand
 # them to include spin orbitals. To do that, we need to again slightly upgrade our
 # transform_two_interleaved function to include the allowed spin combination in the physicists'
-# notation, denoted by '1212', as αααα, αβαβ, βαβα and ββββ.
+# notation, denoted by ``'1212'``, as αααα, αβαβ, βαβα and ββββ.
 
-def transform_two(g_mo: np.ndarray, notation) -> np.ndarray:
+def transform_two(g_mo, notation):
+    """Converts a two-electron integral tensor from the molecular orbital (MO) basis to the
+     spin-orbital (SO) basis.
+
+    Args:
+        g_mo (array): The two-electron tensor with shape (n, n, n, n) where n is the number of spatial orbitals.
+
+    Returns:
+        The two-electron matrix with shape (2n, 2n, 2n, 2n) where n is the number of spatial orbitals.
     """
-    """
+
     n = g_mo.shape[0]
     n_so = 2 * n
 
@@ -309,17 +342,17 @@ def transform_two(g_mo: np.ndarray, notation) -> np.ndarray:
     g_so[alpha, alpha, alpha, alpha] = g_mo
     g_so[beta, beta, beta, beta] = g_mo
 
-    if notation == '1221':
+    if notation == 'quantum':  # '1221'
         g_so[alpha, beta, beta, alpha] = g_mo
         g_so[beta, alpha, alpha, beta] = g_mo
         return g_so
 
-    if notation == '1122':
+    if notation == 'chemist':  # '1122'
         g_so[alpha, alpha, beta, beta] = g_mo
         g_so[beta, beta, alpha, alpha] = g_mo
         return g_so
 
-    if notation == '1212':
+    if notation == 'physicist':  # '1212'
         g_so[alpha, beta, alpha, beta] = g_mo
         g_so[beta, alpha, beta, alpha] = g_mo
         return g_so
@@ -328,7 +361,7 @@ def transform_two(g_mo: np.ndarray, notation) -> np.ndarray:
 # The new tensor can then be used to construct the Hamiltonian
 
 one_so = transform_one(one_mo)
-two_so = transform_two(two_mo, '1212')
+two_so = transform_two(two_mo, 'physicist')
 
 one_operators = qml.math.argwhere(abs(one_so) >= 1e-12)
 two_operators = qml.math.argwhere(abs(two_so) >= 1e-12)
@@ -396,22 +429,19 @@ def hamiltonian(one_body, two_body, notation, cutoff=1e-12):
     sentence = FermiSentence({FermiWord({}): core_constant[0]})
 
     for o in op_one:
-        sentence.update({FermiWord({(0, o[0]): "+", (1, o[1]): "-"}): one_body[*o]})
+        sentence.update({from_string(f'{o[0]}+ {o[1]}-'): one_body[*o]})
 
     if notation == "quantum":
         for o in op_two:
-            sentence.update({FermiWord(
-                {(0, o[0]): "+", (1, o[1]): "+", (2, o[2]): "-", (3, o[3]): "-"}): two_body[*o] / 2})
+            sentence.update({from_string(f'{o[0]}+ {o[1]}+ {o[2]}- {o[3]}-'): two_body[*o] / 2})
 
     if notation == "chemist":
         for o in op_two:
-            sentence.update({FermiWord(
-                {(0, o[0]): "+", (1, o[1]): "-", (2, o[2]): "+", (3, o[3]): "-"}): two_body[*o] / 2})
+            sentence.update({from_string(f'{o[0]}+ {o[1]}- {o[2]}+ {o[3]}-'): two_body[*o] / 2})
 
     if notation == "physicist":
         for o in op_two:
-            sentence.update({FermiWord(
-                {(0, o[0]): "+", (1, o[1]): "+", (2, o[3]): "-", (3, o[2]): "-"}): two_body[*o] / 2})
+            sentence.update({from_string(f'{o[0]}+ {o[1]}+ {o[3]}- {o[2]}-'): two_body[*o] / 2})
 
     sentence.simplify()
 
@@ -432,7 +462,7 @@ def hamiltonian(one_body, two_body, notation, cutoff=1e-12):
 
 core_constant, one_mo, two_mo = qml.qchem.electron_integrals(mol)()
 one_so = transform_one(one_mo)
-two_so = transform_two(two_mo, '1221')
+two_so = transform_two(two_mo, 'quantum')
 
 two_so_converted = convert_integrals(two_so, 'quantum', 'physicist')
 
@@ -456,7 +486,7 @@ two_mo = ao2mo.incore.full(two_ao, rhf.mo_coeff)
 core_constant = np.array([rhf.energy_nuc()])
 
 one_so = transform_one(one_mo)
-two_so = transform_two(two_mo, '1122')
+two_so = transform_two(two_mo, 'chemist')
 
 two_so_converted = convert_integrals(two_so, 'chemist', 'quantum')
 
