@@ -21,7 +21,7 @@ quantum Fourier transform (QFT), which we will demonstrate on a basic level.
 
 In this demo we will not focus on understanding how the QFT is built,
 as we can find a great explanation in the
-`PennyLane Codebook </codebook/08-quantum-fourier-transform/01-changing-perspectives/>`__. Instead, we will develop the
+`PennyLane Codebook </codebook/quantum-fourier-transform/changing-perspectives/>`__. Instead, we will develop the
 intuition for how it works and how we can best take advantage of it.
 
 Motivation
@@ -411,8 +411,8 @@ plt.show()
 ######################################################################
 # By plotting the probabilities of obtaining each basis state we see that
 # prime factors have been amplified! Factorization via Grover’s algorithm
-# does not achieve exponential improvement that
-# `Shor's algorithm <https://en.wikipedia.org/wiki/Shor%27s_algorithm>`_ does, but we
+# does not achieve the exponential improvement that
+# `Shor's algorithm </codebook/shors-algorithm/shors-algorithm/>`__ does, but we
 # can see that this construction is simple and a great example to
 # illustrate basic arithmetic!
 #
@@ -427,6 +427,7 @@ plt.show()
 #
 #     Thomas G. Draper, "Addition on a Quantum Computer". `arXiv:quant-ph/0008033 <https://arxiv.org/abs/quant-ph/0008033>`__.
 #
+
 
 
 
