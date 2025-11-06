@@ -547,6 +547,21 @@ Unsupported directives:
 #     </center>
 
 # %%
+# DocTable directive
+# -------------------
+# 
+# This directive is used to create a table.
+#
+# .. rst-class:: docstable
+#
+#     +---------------------+--------------------------------------------+------------------------------+
+#     | .. centered::       | .. centered::                              | .. centered::                |
+#     |  Element            |  Diagram                                   |   Description                |
+#     +=====================+============================================+==============================+
+#     | Waveguide           | This is where a diagram would go.          | Some description here.       |
+#     +---------------------+--------------------------------------------+------------------------------+
+
+# %%
 # NOTES, TIPS, WARNINGS, AND ADMONITIONS
 # --------------------------------------
 #
@@ -636,3 +651,16 @@ def circuit():
     return qml.state()
 
 print(circuit())
+
+# %%
+# Sphinx Gallery Code Block
+# -------------------------
+#
+# These should be converted to regular code blocks.
+#
+# .. rst-class:: sphx-glr-script-out
+#
+#     .. code-block:: none
+#
+#         Some output from sphinx gallery execution goes here.
+#
