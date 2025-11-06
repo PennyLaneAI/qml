@@ -14,10 +14,11 @@ Molecular Hamiltonian Representations
 Molecular Hamiltonians can be constructed in different ways depending on the arrangement of
 the two-electron integral tensor. Here, we review the common ways to construct a fermionic molecular
 Hamiltonian using two-electron integral notations that are referred to as the ``Physicist's`` and
-``Chemist's`` notations as well as a notation that is used in the quantum computing community. We
-the term ``Quantum`` notation for the latter. The two-electron integrals computed with any of these
+``Chemist's`` notations as well as a notation that is used in the quantum computing community, which
+we refer to as ``Quantum`` notation here. The two-electron integrals computed with any of these
 conventions can be easily converted to the other notations. The conversions allow constructing
 different representations of the molecular Hamiltonian without re-calculating the integrals.
+
 """
 
 ##############################################################################
@@ -132,7 +133,7 @@ def transform_two(g_mo):
 #
 # For the one-electron integrals, only the :math:`\alpha \alpha` and :math:`\beta \beta`
 # combinations have a non-zero value. Similarly, the two-electron operator :math:`1/r_{12}` is
-# spin-independent and if we use the compact notation ``'1221'`` to represent the order in the
+# spin-independent and if we use the compact notation ``1221`` to represent the order in the
 # two-electron integral, the non-zero combinations are:
 # :math:`\alpha \alpha \alpha \alpha`, :math:`\alpha \beta \beta \alpha`, :math:`\beta \alpha \alpha\beta` and :math:`\beta \beta \beta \beta`.
 # The integrals computed using molecular orbitals can be expanded to include spin orbitals using
@@ -222,7 +223,7 @@ core_constant = np.array([rhf.energy_nuc()])
 ##############################################################################
 # These integrals are also obtained for the spatial orbitals, so we need to expand them to account
 # for spin orbitals. To do that, we need to slightly upgrade our ``transform_two`` function
-# because the allowed spin combination in the Chemist's notation, denoted by ``'1122'``, are
+# because the allowed spin combination in the Chemist's notation, denoted by ``1122``, are
 # :math:`\alpha \alpha \alpha \alpha`, :math:`\alpha \alpha \beta \beta`,
 # :math:`\beta \beta \alpha \alpha` and :math:`\beta \beta \beta \beta`.
 
@@ -331,7 +332,7 @@ two_mo = two_mo.transpose(0, 2, 1, 3)
 ##############################################################################
 # Now we need to expand the integrals to the spin orbital basis. To do that, we need to again
 # slightly upgrade our ``transform_two`` function to include the allowed spin combination in the
-# Physicist's notation, denoted by ``'1212'``, as :math:`\alpha \alpha \alpha \alpha`,
+# Physicist's notation, denoted by ``1212``, as :math:`\alpha \alpha \alpha \alpha`,
 # :math:`\alpha \beta \alpha \beta`, :math:`\beta \alpha \beta \alpha`
 # and :math:`\beta \beta \beta \beta`.
 
@@ -413,10 +414,11 @@ def convert_integrals(two_body, in_notation, out_notation):
     """Converts a two-electron integral tensor between different conventions.
 
     Args:
-        two_body (array): The two-electron tensor with shape (2n, 2n, 2n, 2n) where n is the number
-            of spatial orbitals.
+        two_body (array): The two-electron tensor with shape (2n, 2n, 2n, 2n) where n is
+            the number of spatial orbitals.
         in_notation (str): The notation used to compute the two-electron integrals tensor.
-        out_notation (str): The desired notation to represent the two-electron integrals tensor.
+        out_notation (str): The desired notation to represent the two-electron
+            integrals tensor.
 
     Returns:
         The two-electron matrix with shape (2n, 2n, 2n, 2n) where n is the number of
@@ -451,10 +453,10 @@ def hamiltonian(one_body, two_body, notation, cutoff=1e-12):
     """Converts a two-electron integral tensor between different conventions.
 
     Args:
-        one_body (array): The one-electron tensor with shape (2n, 2n) where n is the number
-            of spatial orbitals.
-        two_body (array): The two-electron tensor with shape (2n, 2n, 2n, 2n) where n is the number
-            of spatial orbitals.
+        one_body (array): The one-electron tensor with shape (2n, 2n) where n is
+            the number of spatial orbitals.
+        two_body (array): The two-electron tensor with shape (2n, 2n, 2n, 2n) where
+            n is the number of spatial orbitals.
         notation (str): The notation used to compute the two-electron integrals tensor.
         cutoff (float). The tolerance for neglecting an integral. Defaults is 1e-12.
 
