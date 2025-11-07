@@ -15,9 +15,12 @@ Molecular Hamiltonians can be constructed in different ways depending on the arr
 the two-electron integral tensor. Here, we review the common ways to construct a fermionic molecular
 Hamiltonian using two-electron integral notations that are referred to as the ``Physicist's`` and
 ``Chemist's`` notations as well as a notation that is used in the quantum computing community, which
-we refer to as ``Quantum`` notation here. The two-electron integrals computed with any of these
+we refer to as the ``Quantum`` notation here. The two-electron integrals computed with any of these
 conventions can be easily converted to the other notations. The conversions allow constructing
-different representations of the molecular Hamiltonian without re-calculating the integrals.
+different representations of the molecular Hamiltonian without re-calculating the integrals. We
+start by a detailed step-by-step construction of the integrals and their corresponding Hamiltonians
+and at the end provide compact functions that automate the conversion of the integrals and the
+construction of the Hamiltonains.
 
 """
 
