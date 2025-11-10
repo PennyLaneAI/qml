@@ -55,11 +55,11 @@ def make_markdown_table(table_content, caption):
     table_string += "|---" * len(header_text) + "|\n"
     for row in row_content:
         for cell in row:
-            table_string += f"| {cell}"
+            table_string += f"| {cell} "
         table_string += "|\n"
 
     if caption:
-        caption_string = f"Table: {stringify(caption)}"
+        caption_string = f"Table: {process_text(caption)}"
         table_string = f"{table_string}\n{caption_string}"
 
     return [{"t": "RawBlock", "c": ["markdown", table_string]}]

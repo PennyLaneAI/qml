@@ -40,7 +40,7 @@ def process_text(text):
         elif key == 'Code':
             result.append(val[1])
         elif key == 'Math':
-            result.append(f"$${val[1]}$$")
+            result.append(f"${val[1]}$")
         elif key == 'LineBreak':
             result.append(" ")
         elif key == 'SoftBreak':
