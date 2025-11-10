@@ -3,7 +3,7 @@
 """
 Pandoc filter to convert grid tables to simple markdowntables.
 """
-from pandocfilters import stringify, toJSONFilter
+from pandocfilters import toJSONFilter
 from filter_helpers import process_text
 
 
