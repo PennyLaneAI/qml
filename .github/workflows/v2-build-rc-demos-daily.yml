@@ -15,6 +15,11 @@ jobs:
         with:
           repository: PennyLaneAI/pennylane
 
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
       - name: Install latest setuptools 
         run: |
           python -m pip install --upgrade pip
@@ -31,7 +36,7 @@ jobs:
             echo "branch_exists=true" >> $GITHUB_OUTPUT
             echo "rc_branch=$RC_BRANCH" >> $GITHUB_OUTPUT
           else
-            echo "branch_exists=false" >> $GITHUB_OUTPUT
+            echo "branch_exists=true" >> $GITHUB_OUTPUT  # TODO change to false
             echo "No RC branch found."
           fi
 
@@ -78,7 +83,7 @@ jobs:
           sed -i "s/PennyLane-Lightning/pennylane-lightning<=${{ steps.setup-rc-versions.outputs.lightning-version }}/" lib/qml/lib/demo.py
           sed -i "s/PennyLane-Catalyst/pennylane-catalyst<=${{ steps.setup-rc-versions.outputs.catalyst-version }}/" lib/qml/lib/demo.py
           git commit -am "Set up RC versions for demo builds"
-          git push --set-upstream origin ${{ steps.setup-rc-versions.outputs.rc-build-branch }}
+          # git push --set-upstream origin ${{ steps.setup-rc-versions.outputs.rc-build-branch }}
           
   build-demos:
     needs: build-demos-with-rc-branches
@@ -107,4 +112,4 @@ jobs:
       - name: Cleanup branch
         run: |
           echo "Cleaning up branch '${{ needs.build-demos-with-rc-branches.outputs.rc-build-branch }}'"
-          git push origin --delete '${{ needs.build-demos-with-rc-branches.outputs.rc-build-branch }}'|| true
+          # git push origin --delete '${{ needs.build-demos-with-rc-branches.outputs.rc-build-branch }}'|| true
