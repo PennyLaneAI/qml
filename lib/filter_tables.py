@@ -63,9 +63,11 @@ def process_block(block):
     return ''.join(result)
 
 def make_markdown_table(table_content):
-    # Parse the table into headers and cells.
-    # Table structure in Pandoc AST:
-    # [attr, caption, colspecs, head, bodies, foot]
+    """Make a markdown table from a table block.
+    Returns a markdown text string for the table.
+    The format for the table block is a list containing six elements:
+    [attr, caption, colspecs, head, bodies, foot]
+    """
     [_, _, _, header_rows, bodies, _] = table_content
     
     header_row = header_rows[1][0]
