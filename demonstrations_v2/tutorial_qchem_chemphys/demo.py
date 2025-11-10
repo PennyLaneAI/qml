@@ -11,6 +11,7 @@ Molecular Hamiltonian Representations
 .. related::
     tutorial_quantum_chemistry Quantum chemistry with PennyLane
     tutorial_fermionic_operators Fermionic operators
+    tutorial_mapping Mapping fermionic operators to qubit operators
 
 Molecular Hamiltonians in second quantization can be constructed in different ways depending on the
 arrangement of the two-electron integral tensor. Here, we show you how to construct a fermionic
@@ -31,7 +32,7 @@ integrals and the construction of the Hamiltonains.
 # the ``Chemist's`` and ``Physicist's`` notations.
 #
 # Quantum notation
-# ----------------
+# ~~~~~~~~~~~~~~~~
 # The two-electron integrals in this notation are defined as
 #
 # .. math::
@@ -192,7 +193,7 @@ qml.eigvals(qml.SparseHamiltonian(h.sparse_matrix(), wires=h.wires))
 
 ##############################################################################
 # Chemist's notation
-# ------------------
+# ~~~~~~~~~~~~~~~~~~
 # This notation is commonly used by quantum chemistry software libraries such as ``PySCF``. The
 # two-electron integral tensor in this notation is defined as
 #
@@ -308,7 +309,7 @@ qml.eigvals(qml.SparseHamiltonian(h.sparse_matrix(), wires=h.wires))
 
 ##############################################################################
 # Physicist's notation
-# --------------------
+# ~~~~~~~~~~~~~~~~~~~~
 # The two-electron integral tensor in this notation is defined as
 #
 # .. math::
@@ -558,6 +559,24 @@ qml.eigvals(qml.SparseHamiltonian(h.sparse_matrix(), wires=h.wires))
 
 ##############################################################################
 # The other possible conversions follow a similar logic.
+#
+# Appendix
+# --------
+# We use the molecular Hamiltonian corresponding to Physicist's convention to derive the Hamiltonian
+# corresponding to the Chemist's convention. Recall the following anti-commutation rules for the
+# fermionic creation and annihilation operators,
+#
+# .. math::
+#
+#     [a^{\dagger}_i, a^{\dagger}_j]_+ = 0, \:\:\:\:\:\:\: [a_i, a_j]_+=0, \:\:\:\:\:\:\: [a_i, a^{\dagger}_j]_+ = \delta_{ij} I,,
+#
+# where :math:`\delta_{ij}` and :math:`I` are the Kronecker delta and the identity operator,
+# respectively. In the Hamiltonian represented by the Physicist's convention, we use these
+# anti-commutation rules to move the :math:`a_r` operator from right to left. We first swap the
+# operator with :math:`a_s` and then swap it again with :math:`a_q^{\dagger}`. This gives us the
+# two-body term :math:`a_p^{\dagger} a_r a_q^{\dagger} a_s` and the one-body operator
+# :math:`a_p^{\dagger} a_s`. We can re-arrange the indices to get the Hamiltonian in the Chemist's
+# convention.
 #
 # References
 # ----------
