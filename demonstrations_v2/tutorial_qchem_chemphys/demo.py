@@ -458,11 +458,12 @@ def convert_integrals(two_body, in_notation, out_notation):
 ##############################################################################
 # We can also create a versatile function that computes the Hamiltonian for each convention.
 
-def hamiltonian(core_constant, one_body, two_body, notation, cutoff=1e-12):
+def fermionic_observable(core_constant, one_body, two_body, notation, cutoff=1e-12):
     """Converts a two-electron integral tensor between different conventions.
 
     Args:
-        core_constant (float): The core constant of the Hamiltonian
+        core_constant (float): The core constant containing the contribution of the
+            core orbitals and nuclei
         one_body (array): The one-electron tensor with shape (2n, 2n) where n is
             the number of spatial orbitals.
         two_body (array): The two-electron tensor with shape (2n, 2n, 2n, 2n) where
@@ -519,7 +520,7 @@ two_so = transform_two(two_mo, 'quantum')
 
 two_so_converted = convert_integrals(two_so, 'quantum', 'physicist')
 
-h = hamiltonian(core_constant[0], one_so, two_so_converted, 'physicist')
+h = fermionic_observable(core_constant[0], one_so, two_so_converted, 'physicist')
 qml.eigvals(qml.SparseHamiltonian(h.sparse_matrix(), wires=h.wires))
 
 ##############################################################################
@@ -529,7 +530,7 @@ qml.eigvals(qml.SparseHamiltonian(h.sparse_matrix(), wires=h.wires))
 
 two_so_converted = convert_integrals(two_so, 'quantum', 'chemist')
 
-h = hamiltonian(core_constant[0], one_so, two_so_converted, 'chemist')
+h = fermionic_observable(core_constant[0], one_so, two_so_converted, 'chemist')
 qml.eigvals(qml.SparseHamiltonian(h.sparse_matrix(), wires=h.wires))
 
 ##############################################################################
@@ -544,7 +545,7 @@ two_so = transform_two(two_mo, 'chemist')
 
 two_so_converted = convert_integrals(two_so, 'chemist', 'quantum')
 
-h = hamiltonian(core_constant[0], one_so, two_so_converted, 'quantum')
+h = fermionic_observable(core_constant[0], one_so, two_so_converted, 'quantum')
 qml.eigvals(qml.SparseHamiltonian(h.sparse_matrix(), wires=h.wires))
 
 ##############################################################################
@@ -552,7 +553,7 @@ qml.eigvals(qml.SparseHamiltonian(h.sparse_matrix(), wires=h.wires))
 
 two_so_converted = convert_integrals(two_so, 'chemist', 'physicist')
 
-h = hamiltonian(one_so, two_so_converted, 'physicist')
+h = fermionic_observable(one_so, two_so_converted, 'physicist')
 qml.eigvals(qml.SparseHamiltonian(h.sparse_matrix(), wires=h.wires))
 
 ##############################################################################
