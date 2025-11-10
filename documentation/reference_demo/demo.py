@@ -554,12 +554,28 @@ Unsupported directives:
 #
 # .. rst-class:: docstable
 #
-#     +---------------------+--------------------------------------------+------------------------------+
-#     | .. centered::       | .. centered::                              | .. centered::                |
-#     |  Element            |  Diagram                                   |   Description                |
-#     +=====================+============================================+==============================+
-#     | Waveguide           | This is where a diagram would go.          | Some description here.       |
-#     +---------------------+--------------------------------------------+------------------------------+
+#    +---------------------+----------------------------------------------------------------------------+----------------------------------------------------------------------------+
+#    | .. centered::       | .. centered::                                                              | .. centered::                                                              |
+#    |  Element            |  Diagram                                                                   |   Description                                                              |
+#    +=====================+============================================================================+============================================================================+
+#    | Waveguide           | .. figure:: ../_static/demonstration_assets/reference_demo/xanadu_x.png    | A long strip of material that contains and guides                          |
+#    |                     |    :align: center                                                          | electromagentic waves. For example, an optical fibre is a type             |
+#    |                     |    :width: 70%                                                             | of waveguide.                                                              |
+#    +---------------------+----------------------------------------------------------------------------+----------------------------------------------------------------------------+
+#    | Phase-shifter       | .. figure:: ../_static/demonstration_assets/reference_demo/xanadu_x.png    | A piece of material that changes the phase of light. The figure            |
+#    |                     |    :align: center                                                          | shows a particular implementation known as a thermo-optic phase            |
+#    |                     |    :width: 70%                                                             | shifter [#Sabouri2021]_, which is a (sometimes curved) waveguide           |
+#    |                     |                                                                            | that changes properties when heated up using a resistor.                   |
+#    |                     |                                                                            | This allows us to control the applied phase difference.                    |
+#    +---------------------+----------------------------------------------------------------------------+----------------------------------------------------------------------------+
+#    | Beamsplitter        | .. figure:: ../_static/demonstration_assets/reference_demo/xanadu_x.png    | An element with two input and two output qumodes. It transmits a           |
+#    |                     |    :align: center                                                          | fraction :math:`T` of the photons coming in through either entry           |
+#    |                     |    :width: 100%                                                            | port, and reflects a fraction :math:`R=1-T.` The input qumodes can         |
+#    |                     |                                                                            | be combined to create entangled states across the output ports.            |
+#    |                     |                                                                            | In a photonic quantum computing chip, a `directional coupler               |
+#    |                     |                                                                            | <https://en.wikipedia.org/wiki/Power_dividers_and_directional_couplers>`__ |
+#    |                     |                                                                            | is used.                                                                   |
+#    +---------------------+----------------------------------------------------------------------------+----------------------------------------------------------------------------+
 
 # %%
 # NOTES, TIPS, WARNINGS, AND ADMONITIONS
