@@ -3,7 +3,7 @@
 """
 Pandoc filter to convert grid tables to simple markdowntables.
 """
-from pandocfilters import toJSONFilter, walk
+from pandocfilters import stringify, toJSONFilter, walk
 from filter_helpers import make_markdown_figure, make_markdown_link
 
 
@@ -14,7 +14,7 @@ def process_header(header_cells):
     header_text = []
     for cell in header_cells:
         [_, _, _, _, blocks] = cell
-        text = blocks[0].get("c")[0].get("c")[0].get("c")
+        text = stringify(blocks)
         header_text.append(text)
     return header_text
 
