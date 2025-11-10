@@ -1,26 +1,22 @@
 r""" Reference Demo - a.k.a. the kitchen sink
 =============================================
 
-All the restructured text directives we support appear in this demo. If you find a new one, please add it here.
+All the restructured text directives we handle appear in this demo. If you find a new one, please add it here.
 
-Complete list of reStructuredText directive types covered in this demo:  
+Currently handled reStructuredText directives covered in this demo:  
 
-5. math
-3. figure
-6. meta
-9. related
-7. note
-11. tip
-13. warning
+1. math
+2. figure
+3. meta
+4. related
+5. note
+6. tip
+7. warning
 8. raw
-1. admonition
+9. admonition
 
-Unsupported directives:  
-
-4. image(7) -> change to figure  
-12. topic (1) -> change to admonition with class note(?)  
-2. container (3) -> Doesn't work. Remove?  
-10. role (5) -> Remove?  
+Note that we say "handle" rather than "support" because in some cases there are no equivalent markdown constructs.
+In those cases the directive will not appear 1-to-1 in the rendered demo.
 """
 
 # %%
