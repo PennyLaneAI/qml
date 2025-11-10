@@ -3,10 +3,12 @@
 """
 Pandoc filter to convert grid tables to simple markdowntables.
 """
-import json
-from pandocfilters import toJSONFilter, RawInline
+from pandocfilters import toJSONFilter
 
 def process_header(header_cells):
+    """Process the header cells of a table.
+    Return a list of text strings for each header cell.
+    """
     header_text = []
     for cell in header_cells:
         [_, _, _, _, blocks] = cell
@@ -15,6 +17,9 @@ def process_header(header_cells):
     return header_text
 
 def process_rows(rows):
+    """Process the rows of a table.
+    Return a list of lists of text strings for each cell in each row.
+    """
     row_content_buffer = []
     cell_content_buffer = []
     for row in rows:
@@ -40,32 +45,18 @@ def make_markdown_table(table_content):
     [_, _, _, rows] = body
     row_content = process_rows(rows)
 
-    # Build the header row
-    lineblock_c = []
-    header_list = []
-    header_div = []
-    space = {"t": "Space"}
-    bar = {"t": "Str", "c": "|"}
-    div = {"t": "Str", "c": "---"}
+    table_string = ""
     for header in header_text:
-        header_list.append({
-            "t": "Str",
-            "c": header
-        })
-        header_list.append(space)
-        header_list.append(bar)
-        header_list.append(space)
+        table_string += f"| {header} "
+    table_string += "|\n"
+    table_string += "|---" * len(header_text) + "|\n"
+    for row in row_content:
+        for cell in row:
+            table_string += f"| {cell}"
+        table_string += "|\n"
 
-        header_div.append(div)
-        header_div.append(space)
-        header_div.append(bar)
-        header_div.append(space)
+    return [{"t": "RawBlock", "c": ["markdown", table_string]}]
 
-    header_list.pop(-1)
-    header_div.pop(-1)
-    lineblock_c.append(header_list)
-    lineblock_c.append(header_div)
-    return [{"t": "LineBlock", "c": lineblock_c}]
 
 def filter_tables(key, value, format, _):
     if key == 'Div':
