@@ -552,7 +552,7 @@ In those cases the directive will not appear 1-to-1 in the rendered demo.
 #
 #    +---------------------+----------------------------------------------------------------------------+----------------------------------------------------------------------------+
 #    | .. centered::       | .. centered::                                                              | .. centered::                                                              |
-#    |  Element            |  Diagram                                                                   |   Description                                                              |
+#    |  Element Name       |  Diagram Column Here                                                       |   Description of the Thing                                                 |
 #    +=====================+============================================================================+============================================================================+
 #    | Waveguide           | .. figure:: ../_static/demonstration_assets/reference_demo/xanadu_x.png    | A long strip of material that contains and guides                          |
 #    |                     |    :align: center                                                          | electromagentic waves. For example, an optical fibre is a type             |
