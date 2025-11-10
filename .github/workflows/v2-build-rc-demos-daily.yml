@@ -3,6 +3,7 @@ on:
   schedule:
     - cron: '0 11 * * 1-5'  # Runs weekdays 6 am ET
   workflow_dispatch:
+  push:
 
 jobs:
   check-for-rc-branches:
@@ -43,7 +44,7 @@ jobs:
   build-demos-with-rc-branches:
     runs-on: ubuntu-latest
     needs: check-for-rc-branches
-    if: needs.check-for-rc-branches.outputs.branch_exists == 'true'
+    # if: needs.check-for-rc-branches.outputs.branch_exists == 'true'
     outputs:
       pennylane-version: ${{ steps.setup-rc-versions.outputs.pennylane-version }}
       lightning-version: ${{ steps.setup-rc-versions.outputs.lightning-version }}
