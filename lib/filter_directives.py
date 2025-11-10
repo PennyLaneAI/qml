@@ -6,7 +6,7 @@ Also convert reference links to links to the online demo's references section.
 Code, link URLs, etc. are not affected.
 """
 import os
-from pandocfilters import toJSONFilter, BlockQuote, Link, Table, CodeBlock
+from pandocfilters import toJSONFilter, BlockQuote, Link
 
 DEMOS_URL = "https://pennylane.ai/qml/demos/"
 
