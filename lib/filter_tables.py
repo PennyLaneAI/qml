@@ -3,8 +3,8 @@
 """
 Pandoc filter to convert grid tables to simple markdowntables.
 """
-from pandocfilters import stringify, toJSONFilter, walk
-from filter_helpers import make_markdown_figure, make_markdown_link
+from pandocfilters import stringify, toJSONFilter
+from filter_helpers import process_text
 
 
 def process_header(header_cells):
@@ -14,8 +14,7 @@ def process_header(header_cells):
     header_text = []
     for cell in header_cells:
         [_, _, _, _, blocks] = cell
-        text = stringify(blocks)
-        header_text.append(text)
+        header_text.append(process_text(blocks))
     return header_text
 
 def process_rows(rows):
@@ -28,41 +27,12 @@ def process_rows(rows):
         row_content = row[1]
         for cell in row_content:
             [_, _, _, _, block] = cell
-            cell_content_buffer.append(process_block(block))
+            cell_content_buffer.append(process_text(block))
         row_content_buffer.append(cell_content_buffer)
         cell_content_buffer = []
     return row_content_buffer
 
-def process_block(block):
-    """Process a block of a table.
-    Return a markdown text string for the content in the block.
-    """
-    result = []
-    def parse_block(key, val, format, meta):
-        if key in ['Str', 'MetaString']:
-            result.append(val)
-        elif key == 'Code':
-            result.append(val[1])
-        elif key == 'Math':
-            result.append(val[1])
-        elif key == 'LineBreak':
-            result.append(" ")
-        elif key == 'SoftBreak':
-            result.append(" ")
-        elif key == 'Space':
-            result.append(" ")
-        elif key == 'Image':
-            result.append(make_markdown_figure(val))
-            # Don't process the rest of the block
-            return []
-        elif key == 'Link':
-            result.append(make_markdown_link(val))
-            # Don't process the rest of the block
-            return []
-    walk(block, parse_block, "", {})
-    return ''.join(result)
-
-def make_markdown_table(table_content):
+def make_markdown_table(table_content, caption):
     """Make a markdown table from a table block.
     Returns a markdown text string for the table.
     The format for the table block is a list containing six elements:
@@ -88,6 +58,10 @@ def make_markdown_table(table_content):
             table_string += f"| {cell}"
         table_string += "|\n"
 
+    if caption:
+        caption_string = f"Table: {stringify(caption)}"
+        table_string = f"{table_string}\n{caption_string}"
+
     return [{"t": "RawBlock", "c": ["markdown", table_string]}]
 
 
@@ -95,10 +69,14 @@ def filter_tables(key, value, format, _):
     if key == 'Div':
         [[_, classes, _], body] = value
         if  "rst-class" in classes:
-            [metadata, content] = body
+            metadata = body[0]
+            content = body[1]
             rst_class_type = metadata.get("c")[0].get("c")
             if rst_class_type == "docstable":
-                return make_markdown_table(content.get("c"))
+                caption = []
+                if len(body) > 2:
+                    caption.append(body[2])
+                return make_markdown_table(content.get("c"), caption)
 
 if __name__ == '__main__':
     toJSONFilter(filter_tables)
