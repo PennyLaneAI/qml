@@ -572,6 +572,8 @@ In those cases the directive will not appear 1-to-1 in the rendered demo.
 #    |                     |                                                                            | <https://en.wikipedia.org/wiki/Power_dividers_and_directional_couplers>`__ |
 #    |                     |                                                                            | is used.                                                                   |
 #    +---------------------+----------------------------------------------------------------------------+----------------------------------------------------------------------------+
+#
+#    This is a caption for the table. It's optional.
 
 # %%
 # NOTES, TIPS, WARNINGS, AND ADMONITIONS
