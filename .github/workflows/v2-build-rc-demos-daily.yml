@@ -84,7 +84,7 @@ jobs:
           sed -i "s/PennyLane-Lightning/pennylane-lightning<=${{ steps.setup-rc-versions.outputs.lightning-version }}/" lib/qml/lib/demo.py
           sed -i "s/PennyLane-Catalyst/pennylane-catalyst<=${{ steps.setup-rc-versions.outputs.catalyst-version }}/" lib/qml/lib/demo.py
           git commit -am "Set up RC versions for demo builds"
-          # git push --set-upstream origin ${{ steps.setup-rc-versions.outputs.rc-build-branch }}
+          git push --set-upstream origin ${{ steps.setup-rc-versions.outputs.rc-build-branch }}
           
   build-demos:
     needs: build-demos-with-rc-branches
@@ -113,4 +113,4 @@ jobs:
       - name: Cleanup branch
         run: |
           echo "Cleaning up branch '${{ needs.build-demos-with-rc-branches.outputs.rc-build-branch }}'"
-          # git push origin --delete '${{ needs.build-demos-with-rc-branches.outputs.rc-build-branch }}'|| true
+          git push origin --delete '${{ needs.build-demos-with-rc-branches.outputs.rc-build-branch }}'|| true
