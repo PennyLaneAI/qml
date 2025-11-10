@@ -4,47 +4,50 @@ Molecular Hamiltonian Representations
 =====================================
 
 .. meta::
-    :property="og:description": Learn how to use chemist, physicist and quantum notations
+    :property="og:description": Learn how to construct a Hamiltonian using use chemist, physicist and quantum conventions
     :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/thumbnail_tutorial_external_libs.png
 
 
 .. related::
     tutorial_quantum_chemistry Quantum chemistry with PennyLane
+    tutorial_fermionic_operators Fermionic operators
 
-Molecular Hamiltonians can be constructed in different ways depending on the arrangement of
-the two-electron integral tensor. Here, we review the common ways to construct a fermionic molecular
-Hamiltonian using two-electron integral notations that are referred to as the ``Physicist's`` and
-``Chemist's`` notations as well as a notation that is used in the quantum computing community, which
-we refer to as the ``Quantum`` notation here. The two-electron integrals computed with any of these
-conventions can be easily converted to the other notations. The conversions allow constructing
-different representations of the molecular Hamiltonian without re-calculating the integrals. We
-start by a detailed step-by-step construction of the integrals and their corresponding Hamiltonians
-and at the end provide compact functions that automate the conversion of the integrals and the
-construction of the Hamiltonains.
-
+Molecular Hamiltonians in second quantization can be constructed in different ways depending on the
+arrangement of the two-electron integral tensor. Here, we show you how to construct a fermionic
+molecular Hamiltonian from two-electron integral tensors represented in different conventions. The
+integrals computed with any of these conventions can be easily converted to the others. This allows
+constructing any desired representation of the molecular Hamiltonian without re-calculating the
+integrals. We start by a detailed step-by-step construction of the integrals, and the corresponding
+Hamiltonians, and then provide compact helper functions that automate the conversion of the
+integrals and the construction of the Hamiltonains.
 """
 
 ##############################################################################
+# Integral Notations
+# ------------------
+# We use three common notations for two-electron integrals. First, we look at a notation that is
+# commonly used in the quantum computing community and quantum software libraries, which we refer to
+# as the ``Quantum`` notation. Then we review two other notations that are typically referred to as
+# the ``Chemist's`` and ``Physicist's`` notations.
+#
 # Quantum notation
 # ----------------
-# This notation is commonly used in the quantum computing literature and quantum computing
-# software libraries.
-#
-# The two-electron integral tensor in this notation is defined as
+# The two-electron integrals in this notation are defined as
 #
 # .. math::
 #
-#     \langle \langle pq | rs \rangle \rangle = \int dr_1 dr_2 \phi_p^*(r_1) \phi_q^*(r_2) \frac{1}{r_{12}} \phi_r(r_2) \phi_s(r_1).
+#     \langle \langle pq | rs \rangle \rangle = \int dr_1 dr_2 \phi_p^*(r_1) \phi_q^*(r_2) \frac{1}{r_{12}} \phi_r(r_2) \phi_s(r_1),
 #
-# The double bracket :math:`\langle \langle \cdot  \rangle \rangle` is used to distinguish from
-# another notation that will be introduced later. The corresponding Hamiltonian in second
-# quantization is defined in terms of the fermionic creation and annihilation operators as
+# where :math:`\phi` is a spatial molecular orbital. We have used the double bracket
+# :math:`\langle \langle \cdot  \rangle \rangle` to distinguish this notation from the others. The
+# corresponding Hamiltonian in second quantization is defined in terms of the fermionic creation and
+# annihilation operators, :math:`a^{\dagger}` and :math:`a`, as
 #
 # .. math::
 #
 #     H = \sum_{pq} h_{pq} a_p^{\dagger} a_q + \frac{1}{2} \sum_{pqrs} h_{pqrs} a_p^{\dagger} a_q^{\dagger} a_r a_s.
 #
-# where :math:`h_{pq}` denotes the one-electron integral. We have skipped the spin indices and
+# where :math:`h_{pq}` denotes a one-electron integral. We have skipped the spin indices and
 # the core constant for brevity. Note that the order of the creation and annihilation operator
 # indices matches the order of the coefficient indices for both :math:`h_{pq}` and :math:`h_{pqrs}`
 # terms.
@@ -67,13 +70,15 @@ mol = qml.qchem.Molecule(symbols, geometry)
 core_constant, one_mo, two_mo = qml.qchem.electron_integrals(mol)()
 
 ##############################################################################
-# These integrals are obtained over spatial molecular orbitals. That means, for the water molecule,
-# we have computed the integrals over the :math:`1s`, :math:`2s`, and the :math:`2p_x`, :math:`2p_y`
-# and :math:`2p_z` orbitals, without accounting for the spin component. To construct the full
-# Hamiltonian, the integrals objects need to be expanded to include spin orbitals, i.e.,
-# :math:`1s_{\alpha}`, :math:`1s_{\beta}` etc. Assuming an interleaved convention for the order of
-# spin orbitals, i.e., :math:`|\alpha, \beta, \alpha, \beta, ...>`, the following functions give the
-# expanded one-electron and two-electron objects.
+# PennyLane uses the restricted Hartree-Fock method by default which returns the integrals in the
+# basis of spatial molecular orbitals. That means, for the water molecule, we have computed the
+# integrals over the :math:`1s`, :math:`2s`, and the :math:`2p_x, 2p_y, 2p_z` orbitals without
+# accounting for spin. To construct the full Hamiltonian, the integrals objects need to be expanded
+# to include spin orbitals, i.e., :math:`1s_{\alpha}`, :math:`1s_{\beta}` etc. Assuming an
+# interleaved convention for the order of spin orbitals, i.e., :math:`|\alpha, \beta, \alpha, \beta, ...>`,
+# the following functions give the expanded one-electron and two-electron objects. Note using the
+# unrestricted Hartree-Fock method provides the full integrals objects in the basis of spin orbitals
+# and the expansion is not needed.
 
 def transform_one(h_mo: np.ndarray) -> np.ndarray:
     """Converts a one-electron integral matrix from the molecular orbital (MO) basis to the
@@ -127,29 +132,31 @@ def transform_two(g_mo):
     return g_so
 
 ##############################################################################
-# Note that the transformation must respect the spin-selection rules. For instance, the following
-# integral must be zero if the spins of the initial and final spin orbitals are different.
+# The transformation to the spin orbital basis must respect the spin-selection rules. For instance,
+# the following integral over spin orbitals :math:`\chi` must be zero if the spins :math:`\sigma` of
+# the initial and final spin orbitals are different.
 #
 # .. math::
 #
-#     \langle \chi_p | \hat{h} | \chi_q \rangle = \langle \phi_i | \hat{h}^{\text{spatial}} | \phi_j \rangle \cdot \langle \sigma_p | \sigma_q \rangle.
+#     \langle \chi_p | \hat{h} | \chi_q \rangle = \langle \phi_i | \hat{h} | \phi_j \rangle \cdot \langle \sigma_p | \sigma_q \rangle,
 #
-# For the one-electron integrals, only the :math:`\alpha \alpha` and :math:`\beta \beta`
-# combinations have a non-zero value. Similarly, the two-electron operator :math:`1/r_{12}` is
-# spin-independent and if we use the compact notation ``1221`` to represent the order in the
-# two-electron integral, the non-zero combinations are:
-# :math:`\alpha \alpha \alpha \alpha`, :math:`\alpha \beta \beta \alpha`, :math:`\beta \alpha \alpha\beta` and :math:`\beta \beta \beta \beta`.
-# The integrals computed using molecular orbitals can be expanded to include spin orbitals using
-# these combination rules. We now obtain the full electron integrals in the basis of spin orbitals.
+# since the one-electron operator :math:`\hat{h}` is spin-independent. For the one-electron
+# integrals, only the :math:`\alpha \alpha` and :math:`\beta \beta` combinations have a non-zero
+# value. Similarly, the two-electron operator :math:`1/r_{12}` is spin-independent and if we use the
+# compact notation ``1221`` to represent the order in the two-electron integral, the non-zero
+# combinations are: :math:`\alpha \alpha \alpha \alpha`, :math:`\alpha \beta \beta \alpha`, :math:`\beta \alpha \alpha\beta` and :math:`\beta \beta \beta \beta`.
+# These combination rules are used in our functions.
+#
+# We now obtain the full electron integrals in the basis of spin orbitals.
 
 one_so = transform_one(one_mo)
 two_so = transform_two(two_mo)
 
 ##############################################################################
 # Having the electron integrals objects, computing the Hamiltonian is straightforward. We simply
-# loop over the elements of the tensors and multiply them by the fermionic operators with the
-# indices matching those of the integral elements. For better performance, we can skip the zero
-# integral elements and just obtain the operator indices for the non-zero integrals.
+# loop over the elements of the tensors and multiply them by the corresponding fermionic operators.
+# For better performance, we can skip the negligible integral components and just obtain the
+# operator indices for the non-zero integrals.
 
 one_operators = qml.math.argwhere(abs(one_so) >= 1e-12)
 two_operators = qml.math.argwhere(abs(two_so) >= 1e-12)
@@ -159,19 +166,19 @@ two_operators = qml.math.argwhere(abs(two_so) >= 1e-12)
 
 sentence = FermiSentence({FermiWord({}): core_constant[0]})
 
-for o in one_operators:
-    sentence.update({from_string(f'{o[0]}+ {o[1]}-'): one_so[*o]})
+for p, q in one_operators:
+    sentence.update({from_string(f'{p}+ {q}-'): one_so[p, q]})
 
-for o in two_operators:
-    sentence.update({from_string(f'{o[0]}+ {o[1]}+ {o[2]}- {o[3]}-'): two_so[*o] / 2})
+for p, q, r, s in two_operators:
+    sentence.update({from_string(f'{p}+ {q}+ {r}- {s}-'): two_so[p, q, r, s] / 2})
 
 sentence.simplify()
 
 ##############################################################################
 # Note that the order of indices for the fermionic creation and annihilation operators matches
-# the order of indices in the integral objects. We finally map the fermionic Hamiltonian to the
-# qubit bases and compute its ground-state energy, which should match the reference value
-# :math:`-75.01562736 \ \text{H}`.
+# the order of indices in the integral objects, i.e., :math:`pq` and :math:`pqrs`. We finally map
+# the fermionic Hamiltonian to the qubit basis and compute its ground-state energy, which should
+# match the reference value :math:`-75.01562736 \ \text{H}`.
 
 h = qml.jordan_wigner(sentence)
 qml.eigvals(qml.SparseHamiltonian(h.sparse_matrix(), wires=h.wires))
@@ -186,7 +193,7 @@ qml.eigvals(qml.SparseHamiltonian(h.sparse_matrix(), wires=h.wires))
 ##############################################################################
 # Chemist's notation
 # ------------------
-# This notation is commonly used by quantum chemistry software libraries such as PySCF. The
+# This notation is commonly used by quantum chemistry software libraries such as ``PySCF``. The
 # two-electron integral tensor in this notation is defined as
 #
 # .. math::
@@ -205,7 +212,7 @@ qml.eigvals(qml.SparseHamiltonian(h.sparse_matrix(), wires=h.wires))
 #
 # Let's now build the Hamiltonian using electron integrals computed by ``PySCF`` which adopts the
 # Chemist's notation. Note that ``PySCF`` one-body integral does not include the correction term
-# mentioned above for the Hamiltonian.
+# mentioned above for the Hamiltonian and we need to add it manually.
 
 from pyscf import gto, ao2mo, scf
 
@@ -224,9 +231,9 @@ two_mo = ao2mo.incore.full(two_ao, rhf.mo_coeff)
 core_constant = np.array([rhf.energy_nuc()])
 
 ##############################################################################
-# These integrals are also obtained for the spatial orbitals, so we need to expand them to account
+# We used the restricted Hartree-Fock method and need to expand the integrals to account
 # for spin orbitals. To do that, we need to slightly upgrade our ``transform_two`` function
-# because the allowed spin combination in the Chemist's notation, denoted by ``1122``, are
+# because the allowed spin combinations in the Chemist's notation, denoted by ``1122``, are
 # :math:`\alpha \alpha \alpha \alpha`, :math:`\alpha \alpha \beta \beta`,
 # :math:`\beta \beta \alpha \alpha` and :math:`\beta \beta \beta \beta`.
 
@@ -282,11 +289,11 @@ two_operators = qml.math.argwhere(abs(two_so) >= 1e-12)
 
 sentence = FermiSentence({FermiWord({}): core_constant[0]})
 
-for o in one_operators:
-    sentence.update({from_string(f'{o[0]}+ {o[1]}-'): one_so_corrected[*o]})
+for p, q in one_operators:
+    sentence.update({from_string(f'{p}+ {q}-'): one_so_corrected[p, q]})
 
-for o in two_operators:
-    sentence.update({from_string(f'{o[0]}+ {o[1]}- {o[2]}+ {o[3]}-'): two_so[*o] / 2})
+for p, q, r, s in two_operators:
+    sentence.update({from_string(f'{p}+ {q}- {r}+ {s}-'): two_so[p, q, r, s]/2})
 
 sentence.simplify()
 
@@ -322,15 +329,12 @@ qml.eigvals(qml.SparseHamiltonian(h.sparse_matrix(), wires=h.wires))
 # Let's now build this Hamiltonian step-by-step. There is not a commonly-used software library
 # to compute integrals in this notation. However, we can easily convert the integrals we already
 # computed in other notations to the Physicist's notation. For instance, we use ``PySCF`` integrals
-# and convert them to Physicist's notation. We can do this in two different ways: converting the
-# integrals in the spatial orbital basis or converting them in the spin orbital basis.
+# and convert them to the Physicist's notation.
 #
 # The conversion can be done by the transformation :math:`(pq | rs) \to (pr | qs)` where we have
 # swapped the :math:`1,2` indices. This transformation can be done with
 
-one_mo = one_mo.copy()
 two_mo = two_mo.transpose(0, 2, 1, 3)
-
 
 ##############################################################################
 # Now we need to expand the integrals to the spin orbital basis. To do that, we need to again
@@ -390,17 +394,18 @@ two_operators = qml.math.argwhere(abs(two_so) >= 1e-12)
 
 sentence = FermiSentence({FermiWord({}): core_constant[0]})
 
-for o in one_operators:
-    sentence.update({from_string(f'{o[0]}+ {o[1]}-'): one_so[*o]})
+for p, q in one_operators:
+    sentence.update({from_string(f'{p}+ {q}-'): one_so[p, q]})
 
-for o in two_operators:
-    sentence.update({from_string(f'{o[0]}+ {o[1]}+ {o[3]}- {o[2]}-'): two_so[*o] / 2})
+for p, q, r, s in two_operators:
+    sentence.update({from_string(f'{p}+ {q}+ {s}- {r}-'): two_so[p, q, r, s]/2})
 
 sentence.simplify()
 
 ##############################################################################
-# Note the order of the creation and annihilation operator indices. Now we compute the ground
-# state energy to validate the Hamiltonian.
+# Note the order of the creation and annihilation operator indices, which is
+# :math:`a_p^{\dagger} a_q^{\dagger} a_s a_r`. Now we compute the ground state energy to validate
+# the Hamiltonian.
 
 h = qml.jordan_wigner(sentence)
 qml.eigvals(qml.SparseHamiltonian(h.sparse_matrix(), wires=h.wires))
@@ -409,9 +414,10 @@ qml.eigvals(qml.SparseHamiltonian(h.sparse_matrix(), wires=h.wires))
 # Integral conversion
 # -------------------
 # The two-electron integrals computed with one convention can be easily converted to the other
-# conventions as we already did for the Chemist's to Physicist's conversion. Such conversions allow
-# constructing different representations of the molecular Hamiltonian without re-calculating the
-# integrals. The following function applies the conversion rules for all three conventions.
+# conventions, as we already did to convert the Chemist's notation to the Physicist's one. Such
+# conversions allow constructing different representations of the molecular Hamiltonian without
+# re-calculating the integrals. The following function applies the conversion rules for all three
+# conventions.
 
 def convert_integrals(two_body, in_notation, out_notation):
     """Converts a two-electron integral tensor between different conventions.
@@ -452,10 +458,11 @@ def convert_integrals(two_body, in_notation, out_notation):
 ##############################################################################
 # We can also create a versatile function that computes the Hamiltonian for each convention.
 
-def hamiltonian(one_body, two_body, notation, cutoff=1e-12):
+def hamiltonian(core_constant, one_body, two_body, notation, cutoff=1e-12):
     """Converts a two-electron integral tensor between different conventions.
 
     Args:
+        core_constant (float): The core constant of the Hamiltonian
         one_body (array): The one-electron tensor with shape (2n, 2n) where n is
             the number of spatial orbitals.
         two_body (array): The two-electron tensor with shape (2n, 2n, 2n, 2n) where
@@ -472,22 +479,22 @@ def hamiltonian(one_body, two_body, notation, cutoff=1e-12):
     op_one = qml.math.argwhere(abs(one_body) >= cutoff)
     op_two = qml.math.argwhere(abs(two_body) >= cutoff)
 
-    sentence = FermiSentence({FermiWord({}): core_constant[0]})
+    sentence = FermiSentence({FermiWord({}): core_constant})
 
-    for o in op_one:
-        sentence.update({from_string(f'{o[0]}+ {o[1]}-'): one_body[*o]})
+    for p, q in op_one:
+        sentence.update({from_string(f'{p}+ {q}-'): one_body[p, q]})
 
     if notation == "quantum":
-        for o in op_two:
-            sentence.update({from_string(f'{o[0]}+ {o[1]}+ {o[2]}- {o[3]}-'): two_body[*o] / 2})
+        for p, q, r, s in op_two:
+            sentence.update({from_string(f'{p}+ {q}+ {r}- {s}-'): two_body[p, q, r, s] / 2})
 
     if notation == "chemist":
-        for o in op_two:
-            sentence.update({from_string(f'{o[0]}+ {o[1]}- {o[2]}+ {o[3]}-'): two_body[*o] / 2})
+        for p, q, r, s in op_two:
+            sentence.update({from_string(f'{p}+ {q}+ {r}- {s}-'): two_body[p, q, r, s] / 2})
 
     if notation == "physicist":
-        for o in op_two:
-            sentence.update({from_string(f'{o[0]}+ {o[1]}+ {o[3]}- {o[2]}-'): two_body[*o] / 2})
+        for p, q, r, s in op_two:
+            sentence.update({from_string(f'{p}+ {q}+ {s}- {r}-'): two_body[p, q, r, s] / 2})
 
     sentence.simplify()
 
@@ -498,13 +505,13 @@ def hamiltonian(one_body, two_body, notation, cutoff=1e-12):
 # We now have all the necessary tools in our arsenal to convert the integrals to a desired
 # notation and construct the corresponding Hamiltonian automatically. Let's look at a few examples.
 #
-# First we convert the integrals obtained with PennyLane in ```quantum'`` notation to the
-# ``'chemist'`` notation and compute the corresponding Hamiltonian. This conversion can be done by
-# the transformation :math:`<pq | rs> \to <pq | sr> \to <ps | qr)`. We have first swapped
-# the :math:`2,3` indices to go from the Quantum notation to the Physicist's notation and then swap
-# :math:`1,2` indices to get the integrals in the Chemist's notation. This transformation can be
-# done with :math:`transpose(0, 3, 1, 2)`. Let's now use our versatile functions for the full
-# workflow.
+# First we convert the integrals obtained with PennyLane in the Quantum notation to the Chemist's
+# notation and compute the corresponding Hamiltonian. This conversion can be done by the
+# transformation :math:`\langle pq | rs \rangle \ \to \ \langle pq | sr \rangle \ \to \ \langle ps | qr \rangle`.
+# We have first swapped the :math:`2,3` indices to go from the Quantum notation to the Physicist's
+# notation and then swap :math:`1,2` indices to get the integrals in the Chemist's notation. This
+# transformation can be done with :math:`transpose(0, 3, 1, 2)`. Let's now use our helper functions
+# for the full workflow.
 
 core_constant, one_mo, two_mo = qml.qchem.electron_integrals(mol)()
 one_so = transform_one(one_mo)
@@ -512,7 +519,7 @@ two_so = transform_two(two_mo, 'quantum')
 
 two_so_converted = convert_integrals(two_so, 'quantum', 'physicist')
 
-h = hamiltonian(one_so, two_so_converted, 'physicist')
+h = hamiltonian(core_constant[0], one_so, two_so_converted, 'physicist')
 qml.eigvals(qml.SparseHamiltonian(h.sparse_matrix(), wires=h.wires))
 
 ##############################################################################
@@ -522,7 +529,7 @@ qml.eigvals(qml.SparseHamiltonian(h.sparse_matrix(), wires=h.wires))
 
 two_so_converted = convert_integrals(two_so, 'quantum', 'chemist')
 
-h = hamiltonian(one_so, two_so_converted, 'chemist')
+h = hamiltonian(core_constant[0], one_so, two_so_converted, 'chemist')
 qml.eigvals(qml.SparseHamiltonian(h.sparse_matrix(), wires=h.wires))
 
 ##############################################################################
@@ -537,7 +544,7 @@ two_so = transform_two(two_mo, 'chemist')
 
 two_so_converted = convert_integrals(two_so, 'chemist', 'quantum')
 
-h = hamiltonian(one_so, two_so_converted, 'quantum')
+h = hamiltonian(core_constant[0], one_so, two_so_converted, 'quantum')
 qml.eigvals(qml.SparseHamiltonian(h.sparse_matrix(), wires=h.wires))
 
 ##############################################################################
