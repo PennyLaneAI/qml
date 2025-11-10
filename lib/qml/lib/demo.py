@@ -25,19 +25,22 @@ def parse_extra_args():
     parser.add_argument(
         "--lightning-version",
         type=str,
-        default="PennyLane-Lightning",
-        help="Specify the version of PennyLane-Lightning to install (default: PennyLane-Lightning)",
+        default="pennylane-lightning<=0.43.0",
+        help="Specify the version of pennylane-lightning<=0.43.0 to install (default: PennyLane-Lightning)",
     )
     parser.add_argument(
         "--catalyst-version",
         type=str,
-        default="PennyLane-Catalyst",
-        help="Specify the version of PennyLane-Catalyst to install (default: PennyLane-Catalyst)",
+        default="pennylane-catalyst<=0.13.0",
+        help="Specify the version of pennylane-catalyst<=0.13.0 to install (default: PennyLane-Catalyst)",
     )
     parser.add_argument(
         "--pennylane-version",
         type=str,
-        default="git+https://github.com/PennyLaneAI/pennylane.git#egg=pennylane",
+        default="pennylane<=0.43.1",
+			"—extra-index-url",
+			"https://test.pypi.org/simple/",
+			pre=True,
         help="Specify the version of PennyLane to install (default: git+https://github.com/PennyLaneAI/pennylane.git#egg=pennylane)"
     )
     parser.add_argument(
