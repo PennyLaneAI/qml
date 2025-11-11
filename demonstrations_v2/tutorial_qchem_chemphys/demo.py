@@ -492,7 +492,7 @@ def fermionic_observable(core_constant, one_body, two_body, notation, cutoff=1e-
 
     if notation == "chemist":
         for p, q, r, s in op_two:
-            sentence.update({from_string(f'{p}+ {q}+ {r}- {s}-'): two_body[p, q, r, s] / 2})
+            sentence.update({from_string(f'{p}+ {q} {r}+ {s}-'): two_body[p, q, r, s] / 2})
 
     if notation == "physicist":
         for p, q, r, s in op_two:
@@ -554,7 +554,7 @@ qml.eigvals(qml.SparseHamiltonian(h.sparse_matrix(), wires=h.wires))
 
 two_so_converted = convert_integrals(two_so, 'chemist', 'physicist')
 
-h = fermionic_observable(one_so, two_so_converted, 'physicist')
+h = fermionic_observable(core_constant[0], one_so, two_so_converted, 'physicist')
 qml.eigvals(qml.SparseHamiltonian(h.sparse_matrix(), wires=h.wires))
 
 ##############################################################################
@@ -564,19 +564,31 @@ qml.eigvals(qml.SparseHamiltonian(h.sparse_matrix(), wires=h.wires))
 # --------
 # We use the molecular Hamiltonian corresponding to Physicist's convention to derive the Hamiltonian
 # corresponding to the Chemist's convention. Recall the following anti-commutation rules for the
-# fermionic creation and annihilation operators,
+# fermionic creation and annihilation operators
 #
 # .. math::
 #
-#     [a^{\dagger}_i, a^{\dagger}_j]_+ = 0, \:\:\:\:\:\:\: [a_i, a_j]_+=0, \:\:\:\:\:\:\: [a_i, a^{\dagger}_j]_+ = \delta_{ij} I,,
+#     [a^{\dagger}_i, a^{\dagger}_j]_+ = 0, \:\:\:\:\:\:\: [a_i, a_j]_+=0, \:\:\:\:\:\:\: [a_i, a^{\dagger}_j]_+ = \delta_{ij} I,
 #
 # where :math:`\delta_{ij}` and :math:`I` are the Kronecker delta and the identity operator,
 # respectively. In the Hamiltonian represented by the Physicist's convention, we use these
 # anti-commutation rules to move the :math:`a_r` operator from right to left. We first swap the
 # operator with :math:`a_s` and then swap it again with :math:`a_q^{\dagger}`. This gives us the
 # two-body term :math:`a_p^{\dagger} a_r a_q^{\dagger} a_s` and the one-body operator
-# :math:`a_p^{\dagger} a_s`. We can re-arrange the indices to get the Hamiltonian in the Chemist's
+# :math:`a_p^{\dagger} a_s`. Re-arranging the indices gives the Hamiltonian in the Chemist's
 # convention.
+#
+# Conclusions
+# -----------
+# We recommend the following upgrades to PennyLane.
+#
+# 1. Add functions to convert one- and two-electron integral tensor from the molecular orbital (MO)
+#    basis to the spin-orbital (SO) basis.
+#
+# 2. Add a function that converts a two-electron integral tensor between different conventions.
+#
+# 3. Upgrade the qchem.fermionic_observable function to support the Chemist's and Physicist's
+#    conventions.
 #
 # References
 # ----------
