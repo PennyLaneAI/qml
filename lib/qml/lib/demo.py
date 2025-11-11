@@ -342,7 +342,7 @@ def _build_demo(
                 "--upgrade",
                 "--extra-index-url",
                 "https://test.pypi.org/simple/",
-                parse_extra_args().catalyst_version, # TODO
+                parse_extra_args().catalyst_version,
                 use_uv=False,
                 quiet=False,
                 pre=True,
@@ -363,7 +363,7 @@ def _build_demo(
         cmds.pip_install(
             build_venv.python,
             "--upgrade",
-            parse_extra_args().pennylane_version, # TODO
+            parse_extra_args().pennylane_version,
             parse_extra_args().testpypi,
             parse_extra_args().extra_index_url,            
             use_uv=False,
