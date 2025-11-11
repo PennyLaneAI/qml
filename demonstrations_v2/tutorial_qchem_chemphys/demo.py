@@ -494,7 +494,7 @@ def fermionic_observable(core_constant, one_body, two_body, notation, cutoff=1e-
 
     if notation == "chemist":
         for p, q, r, s in op_two:
-            sentence.update({from_string(f'{p}+ {q} {r}+ {s}-'): two_body[p, q, r, s] / 2})
+            sentence.update({from_string(f'{p}+ {q}- {r}+ {s}-'): two_body[p, q, r, s] / 2})
 
     if notation == "physicist":
         for p, q, r, s in op_two:
