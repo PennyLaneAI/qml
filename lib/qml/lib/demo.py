@@ -27,36 +27,42 @@ def parse_extra_args():
         type=str,
         default="PennyLane-Lightning",
         help="Specify the version of PennyLane-Lightning to install (default: PennyLane-Lightning)",
+        nargs='?'
     )
     parser.add_argument(
         "--catalyst-version",
         type=str,
         default="PennyLane-Catalyst",
         help="Specify the version of PennyLane-Catalyst to install (default: PennyLane-Catalyst)",
+        nargs='?'
     )
     parser.add_argument(
         "--pennylane-version",
         type=str,
         default="git+https://github.com/PennyLaneAI/pennylane.git#egg=pennylane",
-        help="Specify the version of PennyLane to install (default: git+https://github.com/PennyLaneAI/pennylane.git#egg=pennylane)"
+        help="Specify the version of PennyLane to install (default: git+https://github.com/PennyLaneAI/pennylane.git#egg=pennylane)",
+        nargs='?'
     )
     parser.add_argument(
         "--extra-index-url",
         type=str,
         default=None,
         help="Specify an additional index URL for pip to use (default: None)",
+        nargs='?'
     )
     parser.add_argument(
         "--testpypi",
         type=str,
         default=None,
         help="Use TestPyPI as an additional package index (default: False)",
+        nargs='?'
     )
     parser.add_argument(
         "--prerelease-packages",
         type=bool,
         default=False,
         help="Allow installation of pre-release packages (default: False)",
+        nargs='?'
     )
     return parser.parse_args()
 
