@@ -20,7 +20,7 @@ integrals computed with any of these conventions can be easily converted to the 
 constructing any desired representation of the molecular Hamiltonian without re-calculating the
 integrals. We start by a detailed step-by-step construction of the integrals, and the corresponding
 Hamiltonians, and then provide compact helper functions that automate the conversion of the
-integrals and the construction of the Hamiltonains.
+integrals and the construction of the Hamiltonians.
 """
 
 ##############################################################################
@@ -71,15 +71,17 @@ mol = qml.qchem.Molecule(symbols, geometry)
 core_constant, one_mo, two_mo = qml.qchem.electron_integrals(mol)()
 
 ##############################################################################
-# PennyLane uses the restricted Hartree-Fock method by default which returns the integrals in the
+# PennyLane uses the restricted `Hartree-Fock <https://en.wikipedia.org/wiki/Hartree%E2%80%93Fock_method>`__
+# method by default which returns the integrals in the
 # basis of spatial molecular orbitals. That means, for the water molecule, we have computed the
 # integrals over the :math:`1s`, :math:`2s`, and the :math:`2p_x, 2p_y, 2p_z` orbitals without
 # accounting for spin. To construct the full Hamiltonian, the integrals objects need to be expanded
 # to include spin orbitals, i.e., :math:`1s_{\alpha}`, :math:`1s_{\beta}` etc. Assuming an
 # interleaved convention for the order of spin orbitals, i.e., :math:`|\alpha, \beta, \alpha, \beta, ...>`,
 # the following functions give the expanded one-electron and two-electron objects. Note using the
-# unrestricted Hartree-Fock method provides the full integrals objects in the basis of spin orbitals
-# and the expansion is not needed.
+# `unrestricted Hartree-Fock <https://en.wikipedia.org/wiki/Unrestricted_Hartree%E2%80%93Fock>`__
+# method provides the full integrals objects in the basis of spin orbitals and the expansion is not
+# needed.
 
 def transform_one(h_mo: np.ndarray) -> np.ndarray:
     """Converts a one-electron integral matrix from the molecular orbital (MO) basis to the
@@ -587,7 +589,7 @@ qml.eigvals(qml.SparseHamiltonian(h.sparse_matrix(), wires=h.wires))
 #
 # 2. Add a function that converts a two-electron integral tensor between different conventions.
 #
-# 3. Upgrade the qchem.fermionic_observable function to support the Chemist's and Physicist's
+# 3. Upgrade the ``qchem.fermionic_observable`` function to support the Chemist's and Physicist's
 #    conventions.
 #
 # References
