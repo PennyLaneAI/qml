@@ -186,7 +186,7 @@ sections.
 # We use the WEST program to compute these parameters. WEST will first compute the
 # quasiparticle energies, then the partially screened Coulomb potential, and finally
 # the parameters of the effective Hamiltonian. The software offers several execution modes through the
-# :code:`wfreq_calculation` keyword. We choose `XWGQH` to ensure the full workflow is executed, which computes
+# :code:`wfreq_calculation` keyword. We choose ``XWGQH`` to ensure the full workflow is executed, which computes
 # both the quasiparticle corrections and the final parameters for the QDET effective Hamiltonian. The input file
 # for such a calculation is shown below:
 #
