@@ -274,8 +274,8 @@ sections.
 # Quantum Simulation
 # ^^^^^^^^^^^^^^^^^^
 # We now map the effective Hamiltonian to the qubit basis. Note that the two-electron integrals obtained
-# before are represented in chemists' notation and need to be converted to the physicists' notation
-# for compatibility with PennyLane. Here's how to construct the qubit Hamiltonian:
+# before are represented in Chemists' notation and need to be converted to a notation
+# that is compatible with PennyLane. Here's how to construct the qubit Hamiltonian:
 #
 # .. code-block:: python
 #
