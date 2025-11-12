@@ -4,7 +4,7 @@
     "executable_stable": true,
     "executable_latest": true,
     "dateOfPublication": "2024-08-15T00:00:00+00:00",
-    "dateOfLastModification": "2025-10-15T00:00:00+00:00",
+    "dateOfLastModification": "2025-11-05T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning",
         "How-to"
@@ -13,7 +13,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_learning_dynamics_incoherently.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_learning_dynamics_incoherently.png"
         },
         {
             "type": "large_thumbnail",
