@@ -291,9 +291,11 @@ sections.
 #    qubit_op = observable([t, v], mapping="jordan_wigner")
 #    print("Qubit Hamiltonian: ", qubit_op)
 #
-# .. code-block:: text
+# .. rst-class:: sphx-glr-script-out
 #
-#    Qubit Hamiltonian:  (2.40331309905556+0j) * I(0) + (-0.12208093833046951+0j) * Z(0) + (-0.12208093833046951+0j) * Z(1) + (-0.003330743747901097+0j) * (Y(0) @ Z(1) @ Y(2)) +  ...
+#   .. code-block:: none
+#
+#       Qubit Hamiltonian:  (2.40331309905556+0j) * I(0) + (-0.12208093833046951+0j) * Z(0) + (-0.12208093833046951+0j) * Z(1) + (-0.003330743747901097+0j) * (Y(0) @ Z(1) @ Y(2)) +  ...
 #
 # We can use this Hamiltonian in a quantum algorithm such as quantum phase estimation (QPE).
 # You can compare the results and verify that the computed energies from quantum algorithm
