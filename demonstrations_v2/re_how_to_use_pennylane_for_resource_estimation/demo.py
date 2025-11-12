@@ -1,20 +1,22 @@
-r"""How To: Resource Estimation
----------------------------
+r"""How to use PennyLane for Resource Estimation
+============================================
 """
 
-import time
-import math
-import numpy as np
+######################################################################
+# < Insert Elevator Pitch for RE >
+# 
+# Let’s import our quantum resource estimator.
+# 
 
 import pennylane as qml
 import pennylane.estimator as qre
 
+import numpy as np
+import matplotlib.pyplot as plt
+import time
+import math
+
 ######################################################################
-# 1. Introduction:
-# ~~~~~~~~~~~~~~~~
-# 
-# < Insert Elevator Pitch for RE >
-# 
 # We will be using the Kitaev model as an example to explore resource estimation. See `these
 # docs <https://docs.pennylane.ai/en/stable/code/api/pennylane.spin.kitaev.html>`__ for more
 # information about the Kitaev hamiltonian. The hamiltonian is defined through nearest neighbor
@@ -47,25 +49,16 @@ print("Total number of qubits:", len(spin_ham.wires))
 # 
 # .. code-block:: none
 # 
-#    Processing time: ~ 11 sec
+#    Processing time: ~ 5 sec
 #    Total number of terms: 2640
 #    Total number of qubits: 1800
 
 ######################################################################
-# Notice that it took some time to generate this hamiltonian. Resource estimation is important because
-# even generating a full description of the hamiltonian can be quite computationally expensive. In
-# this case it would take about 1 hour just to generate the dense description of the hamiltonian!
+# | Notice that it took some time to generate this hamiltonian.
+# | Resource estimation is important because even generating a full description of the hamiltonian can
+#   be quite computationally expensive. In this case it would take about 15 minutes just to generate
+#   the dense description of the hamiltonian!
 # 
-
-######################################################################
-# [Optional] Show how long it would take:
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# 
-# Show how long it would take to generate the full description of the hamiltonian
-# 
-
-# [Optional]
-import matplotlib.pyplot as plt
 
 n_lst = [i for i in range(6,32)]
 time_lst = []
@@ -77,43 +70,23 @@ for n in n_lst:
     spin_ham = qml.spin.kitaev(n_cells, coupling=np.array([kx, ky, kz]))
     t2 = time.time()
     time_lst.append(t2-t1)
-    print(f"Finished n = {n} in ~ {time_lst[-1]} sec")
+    if n % 5 == 0:
+        print(f"Finished n = {n} in ~ {time_lst[-1]} sec")
 
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 # 
 # .. code-block:: none
 # 
-#    Finished n = 6 in ~ 0.04488110542297363 sec
-#    Finished n = 7 in ~ 0.06234097480773926 sec
-#    Finished n = 8 in ~ 0.09322404861450195 sec
-#    Finished n = 9 in ~ 0.21576905250549316 sec
-#    Finished n = 10 in ~ 0.21580290794372559 sec
-#    Finished n = 11 in ~ 0.30110788345336914 sec
-#    Finished n = 12 in ~ 0.35100388526916504 sec
-#    Finished n = 13 in ~ 0.4110829830169678 sec
-#    Finished n = 14 in ~ 0.6779649257659912 sec
-#    Finished n = 15 in ~ 0.7971811294555664 sec
-#    Finished n = 16 in ~ 1.0414037704467773 sec
-#    Finished n = 17 in ~ 1.6982488632202148 sec
-#    Finished n = 18 in ~ 1.8217010498046875 sec
-#    Finished n = 19 in ~ 1.890824794769287 sec
-#    Finished n = 20 in ~ 2.2494540214538574 sec
-#    Finished n = 21 in ~ 2.927581787109375 sec
-#    Finished n = 22 in ~ 3.3197081089019775 sec
-#    Finished n = 23 in ~ 3.985456705093384 sec
-#    Finished n = 24 in ~ 4.6444091796875 sec
-#    Finished n = 25 in ~ 5.6554481983184814 sec
-#    Finished n = 26 in ~ 6.637783050537109 sec
-#    Finished n = 27 in ~ 7.614826202392578 sec
-#    Finished n = 28 in ~ 9.7729651927948 sec
-#    Finished n = 29 in ~ 11.51502013206482 sec
-#    Finished n = 30 in ~ 11.752906799316406 sec
-#    Finished n = 31 in ~ 13.435622215270996 sec
+#    Finished n = 10 in ~ 0.0780797004699707 sec
+#    Finished n = 15 in ~ 0.48148012161254883 sec
+#    Finished n = 20 in ~ 1.0496199131011963 sec
+#    Finished n = 25 in ~ 2.62518310546875 sec
+#    Finished n = 30 in ~ 5.784091949462891 sec
 
 plt.plot(n_lst, time_lst, ".", label="Measured processing times")
 
-a, b = (0.000016, 4)
+a, b = (0.0000076, 4)
 fit_lst = [
     a * n**b for n in (n_lst + [110])
 ]
@@ -137,9 +110,11 @@ plt.show()
 #    :width: 80%
 
 ######################################################################
-# 2. Compact Hamiltonian Representation
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Making it Easy
+# ~~~~~~~~~~~~~~
 # 
+
+######################################################################
 # Thankfully we don’t need a detailed description of our hamiltonian to estimate its resources! The
 # geometry of the honeycomb lattice and the structure of the hamiltonian allows us to calculate some
 # important quantities directly:
@@ -151,7 +126,7 @@ plt.show()
 # \end{align}`
 # 
 # We can capture the key information of our hamiltonian in a compact representation using the
-# ``qre.PauliHamiltonian`` class!
+# ``qre.PauliHamiltonian`` class.
 # 
 
 n_cell = 100
@@ -172,8 +147,7 @@ kitaev_H = qre.PauliHamiltonian(
 )
 
 ######################################################################
-# 3. Estimate:
-# ~~~~~~~~~~~~
+# Now, ``qre.estimate`` provides us with our circuit resources!
 # 
 
 order = 2
@@ -197,12 +171,12 @@ print(qre.estimate(circuit)(kitaev_H))
 #       allocated wires: 0
 #         zero state: 0
 #         any state: 0
-#     Total gates : 2.862E+7
+#     Total gates : 3.022E+7
 #       'T': 2.622E+7,
 #       'CNOT': 1.192E+6,
 #       'Z': 3.960E+5,
 #       'S': 7.920E+5,
-#       'Hadamard': 2.000E+4
+#       'Hadamard': 1.612E+6
 
 # We can estimate the resources of individual operators as well! 
 resources_without_grouping = qre.estimate(qre.TrotterPauli(kitaev_H, num_steps, order))
@@ -242,8 +216,8 @@ print("Without grouping:", f"\n T counts: {resources_without_grouping.gate_count
 #     T counts: 2.622E+07
 
 ######################################################################
-# 4. Gatesets & Config
-# ~~~~~~~~~~~~~~~~~~~~
+# Gatesets & Configurations
+# ~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # The cost of an algorithm is quantified by the number of logical qubits required and the number of
 # gates used. Different hardware will natively support different gatesets. The default gateset used by
@@ -264,7 +238,7 @@ print(f"\n{res}")
 # .. code-block:: none
 # 
 #    Default gateset:
-#     frozenset({'Hadamard', 'CNOT', 'Y', 'Toffoli', 'T', 'X', 'Z', 'S'})
+#     frozenset({'Hadamard', 'X', 'S', 'Y', 'T', 'CNOT', 'Toffoli', 'Z'})
 #    
 #    --- Resources: ---
 #     Total wires: 2.000E+4
@@ -272,12 +246,12 @@ print(f"\n{res}")
 #       allocated wires: 0
 #         zero state: 0
 #         any state: 0
-#     Total gates : 1.993E+7
+#     Total gates : 2.116E+7
 #       'T': 1.791E+7,
 #       'CNOT': 8.140E+5,
 #       'Z': 3.960E+5,
 #       'S': 7.920E+5,
-#       'Hadamard': 2.000E+4
+#       'Hadamard': 1.252E+6
 
 # Customize gateset: 
 
@@ -320,14 +294,12 @@ print(f"Low-level resources:\n{low_res}")
 #       allocated wires: 0
 #         zero state: 0
 #         any state: 0
-#     Total gates : 2.429E+6
-#       'RX': 1.100E+5,
-#       'RY': 1.980E+5,
-#       'RZ': 9.900E+4,
+#     Total gates : 3.661E+6
+#       'RZ': 4.070E+5,
 #       'CNOT': 8.140E+5,
 #       'Z': 3.960E+5,
 #       'S': 7.920E+5,
-#       'Hadamard': 2.000E+4
+#       'Hadamard': 1.252E+6
 #    
 #    Low-level resources:
 #    --- Resources: ---
@@ -336,10 +308,10 @@ print(f"Low-level resources:\n{low_res}")
 #       allocated wires: 0
 #         zero state: 0
 #         any state: 0
-#     Total gates : 2.191E+7
+#     Total gates : 2.314E+7
 #       'T': 2.108E+7,
 #       'CNOT': 8.140E+5,
-#       'Hadamard': 2.000E+4
+#       'Hadamard': 1.252E+6
 
 ######################################################################
 # When decomposing our algorithms to a gateset, it is often the case that we only have some
@@ -387,11 +359,11 @@ print("High precision (1e-15):", f"\n T counts: {res.gate_counts["T"]:.3E}")    
 #     T counts: 2.108E+07
 #    
 #    High precision (1e-15):
-#     T counts: 2.325E+07
+#     T counts: 2.108E+07
 
 ######################################################################
-# 5. Swapping Decompositions
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Swapping Decompositions
+# ~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # There are many ways to decompose a quantum gate into our target gateset. Selecting an alternate
 # decomposition is a great way to optimize the cost of your quantum workflow. This can be done easily
@@ -490,8 +462,8 @@ print("Mixed Fallback decomposition", f"T counts: {mixed_fallback_cost_RZ.gate_c
 #    Mixed Fallback decomposition T counts: 22
 
 ######################################################################
-# 6. Wrapping it all up
-# ~~~~~~~~~~~~~~~~~~~~~
+# Putting it All Together
+# ~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # We can combine all of the features we have seen so far to optimize the cost of Trotterized time
 # evolution of the Kitaev hamiltonian:
@@ -523,14 +495,14 @@ print(resources)
 #       allocated wires: 0
 #         zero state: 0
 #         any state: 0
-#     Total gates : 2.033E+7
-#       'T': 1.949E+7,
+#     Total gates : 1.419E+7
+#       'T': 1.212E+7,
 #       'CNOT': 8.140E+5,
-#       'Hadamard': 2.000E+4
+#       'Hadamard': 1.252E+6
 
 ######################################################################
-# 7. [Optional] Mapping
-# ~~~~~~~~~~~~~~~~~~~~~
+# Mapping your PennyLane circuits to ``estimator``
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # If we already had executable circuits / workflows, we could just call estimate on them directly!
 # 
@@ -540,7 +512,7 @@ print(resources)
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 # 
 
-n_cell = 30
+n_cell = 10
 n_cells = [n_cell, n_cell]
 kx, ky, kz = (0.5, 0.6, 0.7)
 
@@ -583,19 +555,6 @@ print(f"Processing time: ~ {(t4 - t3):.3E} sec")
 print("Total number of terms:", compact_hamiltonian.num_pauli_words)
 print("Total number of qubits:", compact_hamiltonian.num_qubits)
 
-######################################################################
-# .. rst-class:: sphx-glr-script-out
-# 
-# .. code-block:: none
-# 
-#    Processing time: ~ 9.193E+01 sec
-#    Total number of terms: 2640
-#    Total number of qubits: 1800
-#    
-#    Processing time: ~ 5.877E-04 sec
-#    Total number of terms: 2640
-#    Total number of qubits: 1800
-
 order = 2
 num_trotter_steps = 1
 
@@ -620,50 +579,12 @@ t6 = time.time()
 print(f"Processing time: ~ {(t6 - t5):.3E} sec")
 print(resources_exec)
 
-######################################################################
-# .. rst-class:: sphx-glr-script-out
-# 
-# .. code-block:: none
-# 
-#    Processing time: ~ 1.734E+01 sec
-#    --- Resources: ---
-#     Total wires: 1800
-#       algorithmic wires: 1800
-#       allocated wires: 0
-#         zero state: 0
-#         any state: 0
-#     Total gates : 2.151E+5
-#       'T': 1.940E+5,
-#       'CNOT': 8.820E+3,
-#       'Z': 3.480E+3,
-#       'S': 6.960E+3,
-#       'Hadamard': 1.800E+3
-
 t5 = time.time()
 resources_compact = qre.estimate(circuit)(compact_hamiltonian)
 t6 = time.time()
 
 print(f"Processing time: ~ {(t6 - t5):.3E} sec")
 print(resources_compact)
-
-######################################################################
-# .. rst-class:: sphx-glr-script-out
-# 
-# .. code-block:: none
-# 
-#    Processing time: ~ 4.470E-04 sec
-#    --- Resources: ---
-#     Total wires: 1800
-#       algorithmic wires: 1800
-#       allocated wires: 0
-#         zero state: 0
-#         any state: 0
-#     Total gates : 2.151E+5
-#       'T': 1.940E+5,
-#       'CNOT': 8.820E+3,
-#       'Z': 3.480E+3,
-#       'S': 6.960E+3,
-#       'Hadamard': 1.800E+3
 
 ######################################################################
 # <Option 2>: code up the example from another demo:
@@ -763,30 +684,7 @@ params = np.random.rand(len(gates)) # random parameters for all the gates (remem
 penn_op_expval = penn_iqp_op_expval(params, gates, op, n_qubits)
 print("Expectation value: ", penn_op_expval)
 
-######################################################################
-# .. rst-class:: sphx-glr-script-out
-# 
-# .. code-block:: none
-# 
-#    Expectation value:  0.28808431394517564
-
 ## Estimate Resource for this demo: 
 
 res = qre.estimate(penn_iqp_circuit)(params, gates, op, n_qubits)
 print(res)
-
-######################################################################
-# .. rst-class:: sphx-glr-script-out
-# 
-# .. code-block:: none
-# 
-#    --- Resources: ---
-#     Total wires: 3
-#       algorithmic wires: 3
-#       allocated wires: 0
-#         zero state: 0
-#         any state: 0
-#     Total gates : 276
-#       'T': 264,
-#       'CNOT': 6,
-#       'Hadamard': 6
