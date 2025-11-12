@@ -512,7 +512,7 @@ print(resources)
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 # 
 
-n_cell = 10
+n_cell = 25
 n_cells = [n_cell, n_cell]
 kx, ky, kz = (0.5, 0.6, 0.7)
 
@@ -547,13 +547,26 @@ compact_hamiltonian = qre.PauliHamiltonian(
 )
 t4 = time.time()
 
-print(f"Processing time: ~ {(t2 - t1):.3E} sec")
+print(f"Processing time: ~ {(t2 - t1):.3} sec")
 print("Total number of terms:", len(flat_hamiltonian.operands))
 print("Total number of qubits:", len(flat_hamiltonian.wires), "\n")
 
-print(f"Processing time: ~ {(t4 - t3):.3E} sec")
+print(f"Processing time: ~ {(t4 - t3):.3} sec")
 print("Total number of terms:", compact_hamiltonian.num_pauli_words)
 print("Total number of qubits:", compact_hamiltonian.num_qubits)
+
+######################################################################
+# .. rst-class:: sphx-glr-script-out
+# 
+# .. code-block:: none
+# 
+#    Processing time: ~ 4.66 sec
+#    Total number of terms: 1825
+#    Total number of qubits: 1250
+#    
+#    Processing time: ~ 0.00028 sec
+#    Total number of terms: 1825
+#    Total number of qubits: 1250
 
 order = 2
 num_trotter_steps = 1
@@ -576,15 +589,53 @@ t5 = time.time()
 resources_exec = qre.estimate(executable_circuit)(grouped_hamiltonian)
 t6 = time.time()
 
-print(f"Processing time: ~ {(t6 - t5):.3E} sec")
+print(f"Processing time: ~ {(t6 - t5):.3} sec")
 print(resources_exec)
+
+######################################################################
+# .. rst-class:: sphx-glr-script-out
+# 
+# .. code-block:: none
+# 
+#    Processing time: ~ 3.97 sec
+#    --- Resources: ---
+#     Total wires: 1250
+#       algorithmic wires: 1250
+#       allocated wires: 0
+#         zero state: 0
+#         any state: 0
+#     Total gates : 1.763E+5
+#       'T': 1.606E+5,
+#       'CNOT': 7.298E+3,
+#       'Z': 2.400E+3,
+#       'S': 4.800E+3,
+#       'Hadamard': 1.250E+3
 
 t5 = time.time()
 resources_compact = qre.estimate(circuit)(compact_hamiltonian)
 t6 = time.time()
 
-print(f"Processing time: ~ {(t6 - t5):.3E} sec")
+print(f"Processing time: ~ {(t6 - t5):.3} sec")
 print(resources_compact)
+
+######################################################################
+# .. rst-class:: sphx-glr-script-out
+# 
+# .. code-block:: none
+# 
+#    Processing time: ~ 0.000271 sec
+#    --- Resources: ---
+#     Total wires: 1250
+#       algorithmic wires: 1250
+#       allocated wires: 0
+#         zero state: 0
+#         any state: 0
+#     Total gates : 1.586E+5
+#       'T': 1.342E+5,
+#       'CNOT': 6.100E+3,
+#       'Z': 2.400E+3,
+#       'S': 4.800E+3,
+#       'Hadamard': 1.105E+4
 
 ######################################################################
 # <Option 2>: code up the example from another demo:
@@ -684,7 +735,30 @@ params = np.random.rand(len(gates)) # random parameters for all the gates (remem
 penn_op_expval = penn_iqp_op_expval(params, gates, op, n_qubits)
 print("Expectation value: ", penn_op_expval)
 
+######################################################################
+# .. rst-class:: sphx-glr-script-out
+# 
+# .. code-block:: none
+# 
+#    Expectation value:  0.6587754743385652
+
 ## Estimate Resource for this demo: 
 
 res = qre.estimate(penn_iqp_circuit)(params, gates, op, n_qubits)
 print(res)
+
+######################################################################
+# .. rst-class:: sphx-glr-script-out
+# 
+# .. code-block:: none
+# 
+#    --- Resources: ---
+#     Total wires: 3
+#       algorithmic wires: 3
+#       allocated wires: 0
+#         zero state: 0
+#         any state: 0
+#     Total gates : 276
+#       'T': 264,
+#       'CNOT': 6,
+#       'Hadamard': 6
