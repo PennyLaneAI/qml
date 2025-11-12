@@ -8,10 +8,10 @@
             "username": "ANT0N"
         }
     ],
-    "executable_stable": true,
+    "executable_stable": false,
     "executable_latest": true,
-    "dateOfPublication": "2025-11-01T10:00:00+00:00",
-    "dateOfLastModification": "2025-11-01T15:48:14+00:00",
+    "dateOfPublication": "2025-12-01T10:00:00+00:00",
+    "dateOfLastModification": "2025-12-01T10:00:00+00:01",
     "categories": [
         "Algorithms"
     ],
@@ -19,37 +19,17 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "IMAGENAME.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/IMAGENAME.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "IMAGENAME.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/IMAGENAME.png"
         }
     ],
-    "seoDescription": "WRITE AN SEO DESCRIPTION HERE",
+    "seoDescription": "Learn how to perform logical resource estimation in PennyLane with our new Estimator!",
     "doi": "",
-    "references": [
-        {
-
-        },
-        {
-
-        }
-    ],
-    "basedOnPapers": [
-        ""
-    ],
+    "references": [],
+    "basedOnPapers": [],
     "referencedByPapers": [],
-    "relatedContent": [
-        {
-            "type": "demonstration",
-            "id": "...",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "...",
-            "weight": 1.0
-        }
-    ]
+    "relatedContent": []
 }
