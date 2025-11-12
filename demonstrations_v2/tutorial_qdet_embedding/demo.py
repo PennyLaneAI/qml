@@ -109,7 +109,7 @@ sections.
 #      - 6.28
 #      - 10.28
 #
-# The calculation can now be performed by running the westpp.x executable from WEST using mpirun to
+# The calculation can now be performed by running the ``westpp.x`` executable from WEST using mpirun to
 # parallelize it across two cores.
 #
 # .. code-block:: bash
