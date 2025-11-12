@@ -155,7 +155,7 @@ sections.
 #
 # From this plot, it is easy to see that the orbitals can be categorized as orbitals with low and
 # high localization factors. For the purpose of defining an impurity, we need highly localized
-# orbitals, so we set a cutoff of :math:`0.06` , illustrated by the red dashed line, and choose the orbitals that have a localization
+# orbitals, so we set a cutoff of :math:`0.06`, illustrated by the red dashed line, and choose the orbitals that have a localization
 # factor larger than :math:`0.06`. We'll use these orbitals for the calculation of the parameters
 # needed to construct the effective Hamiltonian.
 #
