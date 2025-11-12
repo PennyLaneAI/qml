@@ -1,26 +1,22 @@
 r""" Reference Demo - a.k.a. the kitchen sink
 =============================================
 
-All the restructured text directives we support appear in this demo. If you find a new one, please add it here.
+All the restructured text directives we handle appear in this demo. If you find a new one, please add it here.
 
-Complete list of reStructuredText directive types covered in this demo:  
+Currently handled reStructuredText directives covered in this demo:  
 
-5. math
-3. figure
-6. meta
-9. related
-7. note
-11. tip
-13. warning
+1. math
+2. figure
+3. meta
+4. related
+5. note
+6. tip
+7. warning
 8. raw
-1. admonition
+9. admonition
 
-Unsupported directives:  
-
-4. image(7) -> change to figure  
-12. topic (1) -> change to admonition with class note(?)  
-2. container (3) -> Doesn't work. Remove?  
-10. role (5) -> Remove?  
+Note that we say "handle" rather than "support" because in some cases there are no equivalent markdown constructs.
+In those cases the directive will not appear 1-to-1 in the rendered demo.
 """
 
 # %%
@@ -28,7 +24,7 @@ Unsupported directives:
 # ---------------------------------------------
 #
 # This document contains a comprehensive collection of all mathematical symbols and notations
-# used across the PennyLane quantum machine learning demonstrations.
+# used across the PennyLane demonstrations and tutorials.
 
 # %%
 # QUANTUM MECHANICS NOTATION
@@ -547,6 +543,39 @@ Unsupported directives:
 #     </center>
 
 # %%
+# DocTable directive
+# -------------------
+# 
+# This directive is used to create a table.
+#
+# .. rst-class:: docstable
+#
+#    +---------------------+----------------------------------------------------------------------------+----------------------------------------------------------------------------+
+#    | .. centered::       | .. centered::                                                              | .. centered::                                                              |
+#    |  Element Name       |  Diagram Column Here                                                       |   Description of the Thing                                                 |
+#    +=====================+============================================================================+============================================================================+
+#    | Waveguide           | .. figure:: ../_static/demonstration_assets/reference_demo/xanadu_x.png    | A long strip of material that contains and guides                          |
+#    |                     |    :align: center                                                          | electromagentic waves. For example, an optical fibre is a type             |
+#    |                     |    :width: 70%                                                             | of waveguide.                                                              |
+#    +---------------------+----------------------------------------------------------------------------+----------------------------------------------------------------------------+
+#    | Phase-shifter       | .. figure:: ../_static/demonstration_assets/reference_demo/xanadu_x.png    | A piece of material that changes the phase of light. The figure            |
+#    |                     |    :align: center                                                          | shows a particular implementation known as a thermo-optic phase            |
+#    |                     |    :width: 70%                                                             | shifter [#Sabouri2021]_, which is a (sometimes curved) waveguide           |
+#    |                     |                                                                            | that changes properties when heated up using a resistor.                   |
+#    |                     |                                                                            | This allows us to control the applied phase difference.                    |
+#    +---------------------+----------------------------------------------------------------------------+----------------------------------------------------------------------------+
+#    | Beamsplitter        | .. figure:: ../_static/demonstration_assets/reference_demo/xanadu_x.png    | An element with two input and two output qumodes. It transmits a           |
+#    |                     |    :align: center                                                          | fraction :math:`T` of the photons coming in through either entry           |
+#    |                     |    :width: 100%                                                            | port, and reflects a fraction :math:`R=1-T.` The input qumodes can         |
+#    |                     |                                                                            | be combined to create entangled states across the output ports.            |
+#    |                     |                                                                            | In a photonic quantum computing chip, a `directional coupler               |
+#    |                     |                                                                            | <https://en.wikipedia.org/wiki/Power_dividers_and_directional_couplers>`__ |
+#    |                     |                                                                            | is used.                                                                   |
+#    +---------------------+----------------------------------------------------------------------------+----------------------------------------------------------------------------+
+#
+#    This is a caption for the table. It's optional.
+
+# %%
 # NOTES, TIPS, WARNINGS, AND ADMONITIONS
 # --------------------------------------
 #
@@ -636,3 +665,16 @@ def circuit():
     return qml.state()
 
 print(circuit())
+
+# %%
+# Sphinx Gallery Code Block
+# -------------------------
+#
+# These should be converted to regular code blocks.
+#
+# .. rst-class:: sphx-glr-script-out
+#
+#     .. code-block:: none
+#
+#         Some output from sphinx gallery execution goes here.
+#

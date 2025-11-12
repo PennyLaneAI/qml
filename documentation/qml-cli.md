@@ -125,8 +125,8 @@ Once all required inputs are provided, a new subdirectory will be created under 
 Compiles one or more demonstrations, preparing them for local execution or packaging.
 
 ```bash
-# Provide demo names or directories separated by spaces.
-# If no demo names are provided, all demonstrations within `demonstrations-v2` will be built.
+# Provide demo names (directories) separated by spaces.
+# If no demo names are provided, all demonstrations within `demonstrations_v2` will be built.
 
 # Example: Building all demonstrations
 qml build
@@ -142,7 +142,7 @@ qml build demo_one demo_two
 
 ##### `--execute`
 
-Executes the specified demos using Sphinx Gallery. This flag is effective only for demos whose directory names are prefixed with `tutorial__`, marking them as executable tutorials.
+Executes the specified demos using Sphinx Gallery. This flag is effective only for demos whose metadata fields `executable_stable` (uses the most recent release versions of packages in the PennyLane ecosystem) or `executable_latest` (uses the latest development versions of the PennyLane ecosystem) are set to "true". Historically, directory names prefixed with `tutorial__` marked them as executable tutorials. This is the fallback behaviour if either of the aforementioned metadata fields are missing for that demonstration.
 
 ```bash
 qml build --execute

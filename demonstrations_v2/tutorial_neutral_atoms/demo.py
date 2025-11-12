@@ -676,21 +676,6 @@ print(
 #
 # The net effect of the sequence of pulses is summarized in the following table.
 #
-# .. raw:: html
-#
-#     <style>
-#         .docstable {
-#             max-width: 300px;
-#         }
-#         .docstable tr.row-even th, .docstable tr.row-even td {
-#             text-align: center;
-#         }
-#         .docstable tr.row-odd th, .docstable tr.row-odd td {
-#             text-align: center;
-#         }
-#     </style>
-#     <div class="d-flex justify-content-center">
-#
 # .. rst-class:: docstable
 #
 #     +-------------------------+-------------------------------+
@@ -704,10 +689,6 @@ print(
 #     +-------------------------+-------------------------------+
 #     | :math:`\vert 11\rangle` | :math:`\vert 11\rangle`       |
 #     +-------------------------+-------------------------------+
-#
-# .. raw:: html
-#
-#     </div>
 #
 # Up to a global phase, this corresponds to the :math:`CZ` gate. Together with the :math:`RX` and :math:`RY` gates, we have a universal set of gates,
 # since the `CNOT` gate can be expressed in terms of :math:`CZ` via the equation
