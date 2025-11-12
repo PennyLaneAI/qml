@@ -92,7 +92,7 @@ sections.
 # `WEST <https://pubs.acs.org/doi/10.1021/ct500958p>`_ program to compute the localization factor.
 # This requires the ``westpp.in`` input file, example for which is shown below. Here, we specify the
 # box parameters within which the localization factor is being computed; the vectors for this box are provided in
-# in atomic units as [x_start, x_end, y_start, y_end, z_start, z_end].
+# in atomic units as [``x_start``, ``x_end``, ``y_start``, ``y_end``, ``z_start``, ``z_end``].
 #
 # .. code-block:: text
 #
