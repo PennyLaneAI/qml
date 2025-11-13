@@ -92,7 +92,7 @@ sections.
 # `WEST <https://pubs.acs.org/doi/10.1021/ct500958p>`_ program to compute the localization factor.
 # This requires the ``westpp.in`` input file, example for which is shown below. Here, we specify the
 # box parameters within which the localization factor is being computed; the vectors for this box are provided in
-# in atomic units as [``x_start``, ``x_end``, ``y_start``, ``y_end``, ``z_start``, ``z_end``].
+# in atomic units as ``[x_start, x_end, y_start, y_end, z_start, z_end]``.
 #
 # .. rst-class:: sphx-glr-script-out
 #
@@ -281,7 +281,7 @@ sections.
 # ^^^^^^^^^^^^^^^^^^
 # We now map the effective Hamiltonian to the qubit basis. Note that the two-electron integrals obtained
 # before are represented in Chemists' notation and need to be converted to a notation
-# that is compatible with PennyLane. Here's how to construct the qubit Hamiltonian:
+# that is compatible with PennyLane. Here's how to construct the `qubit Hamiltonian <https://pennylane.ai/qml/demos/tutorial_fermionic_operators>`__:
 #
 # .. code-block:: python
 #
@@ -303,7 +303,7 @@ sections.
 #
 #       Qubit Hamiltonian:  (2.40331309905556+0j) * I(0) + (-0.12208093833046951+0j) * Z(0) + (-0.12208093833046951+0j) * Z(1) + (-0.003330743747901097+0j) * (Y(0) @ Z(1) @ Y(2)) +  ...
 #
-# We can use this Hamiltonian in a quantum algorithm such as quantum phase estimation (QPE).
+# We can use this Hamiltonian in a quantum algorithm such as `quantum phase estimation (QPE) <https://pennylane.ai/qml/demos/tutorial_qpe>`__.
 # You can compare the results and verify that the computed energies from quantum algorithm
 # match those that we obtained before.
 #
@@ -319,6 +319,9 @@ sections.
 # approximation present in the initial DFT based formulation. This formulation also helps to capture
 # the response properties and provides access to excited state properties. Another major advantage
 # of QDET is the ease with which it can be used with quantum computers in a hybrid framework [#Baker]_.
+# Given its ability to access excited states and its hybrid quantum compatibility, potential future extensions
+# could involve applying QDET to the wider field of spectroscopy, such as investigating
+# core-level excited states relevant to `X-ray Absorption Spectroscopy (XAS) <https://pennylane.ai/qml/demos/tutorial_xas>`__.
 # In conclusion, QDET is a powerful embedding approach for simulating complex quantum systems.
 #
 # References
