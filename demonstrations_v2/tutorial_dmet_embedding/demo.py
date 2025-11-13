@@ -399,14 +399,12 @@ efficient level of theory.
 #        if dVcorr_per_ele < vcorr_tol and abs(dE) < energy_tol:
 #            print("DMET Converged")
 #            print("DMET Energy per cell: ", energy)
-#            break
+# .. rst-class:: sphx-glr-script-out
 #
-# This concludes the DMET procedure and returns the converged DMET energy.
+#   .. code-block:: none
 #
-# .. code-block:: text
-#
-#    DMET Converged
-#    DMET Energy per cell:  -8.203518641937336
+#     DMET Converged
+#     DMET Energy per cell:  -8.203518641937336
 #
 # Quantum DMET
 # ^^^^^^^^^^^^
