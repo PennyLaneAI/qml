@@ -79,7 +79,8 @@ sphinx_gallery_conf = {
         "filters": [
             "./lib/filter_directives.py", 
             "./lib/filter_figures.py",
-            "./lib/filter_links.py"
+            "./lib/filter_links.py",
+            "./lib/filter_tables.py"
         ]
     },
     # first notebook cell in generated Jupyter notebooks
