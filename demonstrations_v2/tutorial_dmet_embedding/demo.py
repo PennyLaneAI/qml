@@ -438,7 +438,9 @@ efficient level of theory.
 #    qubit_op = observable([one_elec,two_elec], mapping="jordan_wigner")
 #    print("Qubit Hamiltonian: ", qubit_op)
 #
-# .. code-block:: text
+# .. rst-class:: sphx-glr-script-out
+#
+#   .. code-block:: none
 #
 #    Qubit Hamiltonian:  0.6230307293797223 * I(0) + -0.4700529413255728 * Z(0) + -0.4700529413255728 * Z(1) + -0.21375048863111926 * (Y(0) @ Z(1) @ Y(2)) + ...
 #
