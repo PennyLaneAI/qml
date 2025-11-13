@@ -70,8 +70,8 @@ sections.
 #
 #    wget -N -q https://west-code.org/doc/training/nv_diamond_63/pw.in
 #
-# DFT calculations can now be initiated using the `pw.x` executable in `WEST`, taking `pw.in` as the input file
-# and directing the output to `pw.out`. This process is parallelized across 2 cores using mpirun.
+# DFT calculations can now be initiated using the ``pw.x`` executable in ``WEST``, taking ``pw.in`` as the input file
+# and directing the output to ``pw.out``. This process is parallelized across 2 cores using ``mpirun``.
 #
 # .. code-block:: bash
 #
