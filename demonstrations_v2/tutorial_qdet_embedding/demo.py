@@ -94,7 +94,9 @@ sections.
 # box parameters within which the localization factor is being computed; the vectors for this box are provided in
 # in atomic units as [``x_start``, ``x_end``, ``y_start``, ``y_end``, ``z_start``, ``z_end``].
 #
-# .. code-block:: text
+# .. rst-class:: sphx-glr-script-out
+#
+#   .. code-block:: none
 #
 #    westpp_control:
 #      westpp_calculation: L # triggers the calculation of the localization factor
@@ -190,7 +192,9 @@ sections.
 # both the quasiparticle corrections and the final parameters for the QDET effective Hamiltonian. The input file
 # for such a calculation is shown below:
 #
-# .. code-block:: text
+# .. rst-class:: sphx-glr-script-out
+#
+#   .. code-block:: none
 #
 #    wstat_control:
 #      wstat_calculation: S           # starts the calculation from scratch
@@ -243,7 +247,9 @@ sections.
 # Using :code:`solve()` prints the excitation energies, spin multiplicity and relative occupation of
 # the active orbitals.
 #
-# .. code-block:: text
+# .. rst-class:: sphx-glr-script-out
+#
+#   .. code-block:: none
 #
 #    ======================================================================
 #    Building effective Hamiltonian...
