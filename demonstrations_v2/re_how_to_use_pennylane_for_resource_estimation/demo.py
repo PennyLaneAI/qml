@@ -504,15 +504,11 @@ print(resources)
 # Mapping your PennyLane circuits to ``estimator``
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
-# If we already had executable circuits / workflows, we could just call estimate on them directly!
+# If you’ve already written your workflow for execution, we can call estimate on it directly. No need
+# to write it again!
 # 
 
-######################################################################
-# <Option 1>: code up the example from above:
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-# 
-
-n_cell = 25
+n_cell = 30
 n_cells = [n_cell, n_cell]
 kx, ky, kz = (0.5, 0.6, 0.7)
 
@@ -547,11 +543,11 @@ compact_hamiltonian = qre.PauliHamiltonian(
 )
 t4 = time.time()
 
-print(f"Processing time: ~ {(t2 - t1):.3} sec")
+print(f"Processing time: ~ {(t2 - t1):.3E} sec")
 print("Total number of terms:", len(flat_hamiltonian.operands))
 print("Total number of qubits:", len(flat_hamiltonian.wires), "\n")
 
-print(f"Processing time: ~ {(t4 - t3):.3} sec")
+print(f"Processing time: ~ {(t4 - t3):.3E} sec")
 print("Total number of terms:", compact_hamiltonian.num_pauli_words)
 print("Total number of qubits:", compact_hamiltonian.num_qubits)
 
@@ -560,13 +556,13 @@ print("Total number of qubits:", compact_hamiltonian.num_qubits)
 # 
 # .. code-block:: none
 # 
-#    Processing time: ~ 4.66 sec
-#    Total number of terms: 1825
-#    Total number of qubits: 1250
+#    Processing time: ~ 9.193E+01 sec
+#    Total number of terms: 2640
+#    Total number of qubits: 1800
 #    
-#    Processing time: ~ 0.00028 sec
-#    Total number of terms: 1825
-#    Total number of qubits: 1250
+#    Processing time: ~ 5.877E-04 sec
+#    Total number of terms: 2640
+#    Total number of qubits: 1800
 
 order = 2
 num_trotter_steps = 1
@@ -589,7 +585,7 @@ t5 = time.time()
 resources_exec = qre.estimate(executable_circuit)(grouped_hamiltonian)
 t6 = time.time()
 
-print(f"Processing time: ~ {(t6 - t5):.3} sec")
+print(f"Processing time: ~ {(t6 - t5):.3E} sec")
 print(resources_exec)
 
 ######################################################################
@@ -597,25 +593,25 @@ print(resources_exec)
 # 
 # .. code-block:: none
 # 
-#    Processing time: ~ 3.97 sec
+#    Processing time: ~ 1.734E+01 sec
 #    --- Resources: ---
-#     Total wires: 1250
-#       algorithmic wires: 1250
+#     Total wires: 1800
+#       algorithmic wires: 1800
 #       allocated wires: 0
 #         zero state: 0
 #         any state: 0
-#     Total gates : 1.763E+5
-#       'T': 1.606E+5,
-#       'CNOT': 7.298E+3,
-#       'Z': 2.400E+3,
-#       'S': 4.800E+3,
-#       'Hadamard': 1.250E+3
+#     Total gates : 2.151E+5
+#       'T': 1.940E+5,
+#       'CNOT': 8.820E+3,
+#       'Z': 3.480E+3,
+#       'S': 6.960E+3,
+#       'Hadamard': 1.800E+3
 
 t5 = time.time()
 resources_compact = qre.estimate(circuit)(compact_hamiltonian)
 t6 = time.time()
 
-print(f"Processing time: ~ {(t6 - t5):.3} sec")
+print(f"Processing time: ~ {(t6 - t5):.3E} sec")
 print(resources_compact)
 
 ######################################################################
@@ -623,142 +619,16 @@ print(resources_compact)
 # 
 # .. code-block:: none
 # 
-#    Processing time: ~ 0.000271 sec
+#    Processing time: ~ 4.470E-04 sec
 #    --- Resources: ---
-#     Total wires: 1250
-#       algorithmic wires: 1250
+#     Total wires: 1800
+#       algorithmic wires: 1800
 #       allocated wires: 0
 #         zero state: 0
 #         any state: 0
-#     Total gates : 1.586E+5
-#       'T': 1.342E+5,
-#       'CNOT': 6.100E+3,
-#       'Z': 2.400E+3,
-#       'S': 4.800E+3,
-#       'Hadamard': 1.105E+4
-
-######################################################################
-# <Option 2>: code up the example from another demo:
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-# 
-# Here we copy the code blocks in order from the `IQPOpt
-# demo <https://pennylane.ai/qml/demos/tutorial_iqp_circuit_optimization_jax>`__:
-# 
-
-gates = [[[0]], [[1]], [[2]], [[0,1]], [[0,2]], [[1,2]]]
-
-import pennylane as qml
-import numpy as np
-
-# Suppress the warning caused by iqpopt
-import warnings
-from pennylane.exceptions import PennyLaneDeprecationWarning
-warnings.filterwarnings("ignore", category=PennyLaneDeprecationWarning)
-
-
-def penn_iqp_gates(params: np.ndarray, gates: list, n_qubits: int):
-    """IQP circuit in PennyLane form.
-
-    Args:
-        params (np.ndarray): The parameters of the IQP gates.
-        gates (list): The gates representation of the IQP circuit.
-        n_qubits (int): The total number of qubits in the circuit.
-    """
-
-    for i in range(n_qubits):
-        qml.Hadamard(i)
-
-    for par, gate in zip(params, gates):
-        for gen in gate:
-            qml.MultiRZ(2*par, wires=gen)
-
-    for i in range(n_qubits):
-        qml.Hadamard(i)
-
-def penn_obs(op: np.ndarray) -> qml.operation.Operator:
-    """Returns a PennyLane observable from a bitstring representation.
-
-    Args:
-        op (np.ndarray): Bitstring representation of the Z operator.
-
-    Returns:
-        qml.Observable: PennyLane observable.
-    """
-    for i, z in enumerate(op):
-        if i==0:
-            if z:
-                obs = qml.Z(i)
-            else:
-                obs = qml.I(i)
-        else:
-            if z:
-                obs @= qml.Z(i)
-    return obs
-
-
-def penn_iqp_circuit(params: np.ndarray, gates: list, op: np.ndarray, n_qubits: int) -> qml.measurements.ExpectationMP:
-    """Defines the circuit that calculates the expectation value of the operator with the IQP circuit with PennyLane tools.
-
-    Args:
-        params (np.ndarray): The parameters of the IQP gates.
-        gates (list): The gates representation of the IQP circuit.
-        op (np.ndarray): Bitstring representation of the Z operator.
-        n_qubits (int): The total number of qubits in the circuit.
-
-    Returns:
-        qml.measurements.ExpectationMP: PennyLane circuit with an expectation value.
-    """
-    penn_iqp_gates(params, gates, n_qubits)
-    obs = penn_obs(op)
-    return qml.expval(obs)
-
-def penn_iqp_op_expval(params: np.ndarray, gates: list, op: np.ndarray, n_qubits: int) -> float:
-    """Calculates the expectation value of the operator with the IQP circuit with PennyLane tools.
-
-    Args:
-        params (np.ndarray): The parameters of the IQP gates.
-        gates (list): The gates representation of the IQP circuit.
-        op (np.ndarray): Bitstring representation of the Z operator.
-        n_qubits (int): The total number of qubits in the circuit.
-
-    Returns:
-        float: Expectation value.
-    """
-    dev = qml.device("lightning.qubit", wires=n_qubits)
-    penn_iqp_circuit_exe = qml.QNode(penn_iqp_circuit, dev)
-    return penn_iqp_circuit_exe(params, gates, op, n_qubits)
-
-n_qubits = 3
-op = np.array([1,0,1]) # operator ZIZ
-params = np.random.rand(len(gates)) # random parameters for all the gates (remember we have 5 gates with 6 generators in total)
-
-penn_op_expval = penn_iqp_op_expval(params, gates, op, n_qubits)
-print("Expectation value: ", penn_op_expval)
-
-######################################################################
-# .. rst-class:: sphx-glr-script-out
-# 
-# .. code-block:: none
-# 
-#    Expectation value:  0.6587754743385652
-
-## Estimate Resource for this demo: 
-
-res = qre.estimate(penn_iqp_circuit)(params, gates, op, n_qubits)
-print(res)
-
-######################################################################
-# .. rst-class:: sphx-glr-script-out
-# 
-# .. code-block:: none
-# 
-#    --- Resources: ---
-#     Total wires: 3
-#       algorithmic wires: 3
-#       allocated wires: 0
-#         zero state: 0
-#         any state: 0
-#     Total gates : 276
-#       'T': 264,
-#       'CNOT': 6,
-#       'Hadamard': 6
+#     Total gates : 2.151E+5
+#       'T': 1.940E+5,
+#       'CNOT': 8.820E+3,
+#       'Z': 3.480E+3,
+#       'S': 6.960E+3,
+#       'Hadamard': 1.800E+3
