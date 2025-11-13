@@ -15,10 +15,56 @@ import json
 import lxml.html
 from qml.context import Context
 import sphobjinv as soi
+import argparse
 
 
 logger = getLogger("qml")
 
+def parse_extra_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--lightning-version",
+        type=str,
+        default="PennyLane-Lightning",
+        help="Specify the version of PennyLane-Lightning to install (default: PennyLane-Lightning)",
+        nargs='?'
+    )
+    parser.add_argument(
+        "--catalyst-version",
+        type=str,
+        default="PennyLane-Catalyst",
+        help="Specify the version of PennyLane-Catalyst to install (default: PennyLane-Catalyst)",
+        nargs='?'
+    )
+    parser.add_argument(
+        "--pennylane-version",
+        type=str,
+        default="git+https://github.com/PennyLaneAI/pennylane.git#egg=pennylane",
+        help="Specify the version of PennyLane to install (default: git+https://github.com/PennyLaneAI/pennylane.git#egg=pennylane)",
+        nargs='?'
+    )
+    parser.add_argument(
+        "--extra-index-url",
+        type=str,
+        default=None,
+        help="Specify an additional index URL for pip to use (default: None)",
+        nargs='?'
+    )
+    parser.add_argument(
+        "--testpypi",
+        type=str,
+        default=None,
+        help="Use TestPyPI as an additional package index (default: False)",
+        nargs='?'
+    )
+    parser.add_argument(
+        "--prerelease-packages",
+        type=bool,
+        default=False,
+        help="Allow installation of pre-release packages (default: False)",
+        nargs='?'
+    )
+    return parser.parse_args()
 
 class BuildTarget(Enum):
     """Sphinx-build targets."""
@@ -296,7 +342,7 @@ def _build_demo(
                 "--upgrade",
                 "--extra-index-url",
                 "https://test.pypi.org/simple/",
-                "PennyLane-Catalyst",
+                parse_extra_args().catalyst_version,
                 use_uv=False,
                 quiet=False,
                 pre=True,
@@ -307,7 +353,7 @@ def _build_demo(
                 "--upgrade",
                 "--extra-index-url",
                 "https://test.pypi.org/simple/",
-                "PennyLane-Lightning",
+                parse_extra_args().lightning_version,
                 use_uv=False,
                 quiet=False,
                 pre=True,
@@ -317,9 +363,12 @@ def _build_demo(
         cmds.pip_install(
             build_venv.python,
             "--upgrade",
-            "git+https://github.com/PennyLaneAI/pennylane.git#egg=pennylane",
+            parse_extra_args().pennylane_version,
+            parse_extra_args().testpypi,
+            parse_extra_args().extra_index_url,            
             use_uv=False,
             quiet=False,
+            pre=parse_extra_args().prerelease_packages,
         )
 
     stage_dir = ctx.build_dir / "demonstrations"
