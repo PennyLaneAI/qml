@@ -67,7 +67,7 @@ print("Total number of qubits:", len(spin_ham.wires))
 # 
 # .. code-block:: none
 # 
-#    Processing time: ~ 5 sec
+#    Processing time: ~ 6 sec
 #    Total number of terms: 2640
 #    Total number of qubits: 1800
 
@@ -95,13 +95,13 @@ for n in n_lst:
 # 
 # .. code-block:: none
 # 
-#    Finished n = 5 in ~ 0.021773815155029297 sec
-#    Finished n = 10 in ~ 0.20119547843933105 sec
-#    Finished n = 15 in ~ 0.3500974178314209 sec
-#    Finished n = 20 in ~ 1.0353116989135742 sec
-#    Finished n = 25 in ~ 2.6901512145996094 sec
-#    Finished n = 30 in ~ 5.53239107131958 sec
-#    Finished n = 35 in ~ 10.584278345108032 sec
+#    Finished n = 5 in ~ 0.013249397277832031 sec
+#    Finished n = 10 in ~ 0.08349990844726562 sec
+#    Finished n = 15 in ~ 0.4231240749359131 sec
+#    Finished n = 20 in ~ 1.0640604496002197 sec
+#    Finished n = 25 in ~ 2.6067121028900146 sec
+#    Finished n = 30 in ~ 5.484071731567383 sec
+#    Finished n = 35 in ~ 10.278346300125122 sec
 
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
@@ -130,7 +130,7 @@ plt.show()
 #    :width: 80%
 
 ######################################################################
-# It could take around 15 minutes just to generate the Hamiltonian for a 100 x 100 unit honeycomb
+# It would take around 15 minutes just to generate the Hamiltonian for a 100 x 100 unit honeycomb
 # lattice! Even after that, we would still be stuck with expensive processing tasks.
 # 
 
@@ -211,12 +211,12 @@ print(qre.estimate(circuit)(kitaev_H))
 #       allocated wires: 0
 #         zero state: 0
 #         any state: 0
-#     Total gates : 3.022E+7
+#     Total gates : 2.862E+7
 #       'T': 2.622E+7,
 #       'CNOT': 1.192E+6,
 #       'Z': 3.960E+5,
 #       'S': 7.920E+5,
-#       'Hadamard': 1.612E+6
+#       'Hadamard': 2.000E+4
 
 ######################################################################
 # | We can also analyze the resources of an individual ``ResourceOperator``.
@@ -270,10 +270,14 @@ print(f"Difference: {100*reduction:.3}% reduction")
 # Gatesets & Configurations
 # ~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
-# The cost of an algorithm is quantified by the number of logical qubits required and the number of
-# gates used. Different hardware will natively support different gatesets. The default gateset used by
-# ``estimate`` is ``'Toffoli', 'Hadamard', 'X', 'T', 'S', 'Y', 'Z', 'CNOT'``. We can configure the
-# gateset to obtain resource estimates at various levels of abstraction
+
+######################################################################
+# | The cost of an algorithm is typically quantified by the number of logical qubits required and the
+#   number of gates used. Different hardware will natively support different gatesets.
+# | The default gateset used by ``estimate`` is:
+# | ``{'Hadamard', 'S', 'CNOT', 'T', 'Toffoli', 'X', 'Y', 'Z'}``.
+# 
+# Here are the resources using our updated Hamiltonian, with the default gateset:
 # 
 
 from pennylane.estimator.resources_base import DefaultGateSet
@@ -289,7 +293,7 @@ print(f"\n{res}")
 # .. code-block:: none
 # 
 #    Default gateset:
-#     frozenset({'Toffoli', 'S', 'Y', 'Hadamard', 'CNOT', 'Z', 'X', 'T'})
+#     frozenset({'Y', 'S', 'X', 'Hadamard', 'Toffoli', 'T', 'CNOT', 'Z'})
 #    
 #    --- Resources: ---
 #     Total wires: 2.000E+4
@@ -297,40 +301,38 @@ print(f"\n{res}")
 #       allocated wires: 0
 #         zero state: 0
 #         any state: 0
-#     Total gates : 2.116E+7
+#     Total gates : 1.993E+7
 #       'T': 1.791E+7,
 #       'CNOT': 8.140E+5,
 #       'Z': 3.960E+5,
 #       'S': 7.920E+5,
-#       'Hadamard': 1.252E+6
+#       'Hadamard': 2.000E+4
+
+######################################################################
+# | We can configure the gateset to obtain resource estimates at various levels of abstraction.
+# | Here, we configure a high-level gateset which adds gate types such as rotations, and a low
+#   level-gateset limited to just ``Hadamard``, ``CNOT``, ``S``, and ``T`` gates.
+# 
+# We can see how the resources manifest at these different levels.
+# 
 
 # Customize gateset: 
 
-highlevel_gateset = {
-    'RX',
-    'RY',
-    'RZ',
-    'Toffoli', 
-    'Hadamard', 
-    'X', 
-    'T',
-    'S', 
-    'Y', 
-    'Z', 
-    'CNOT',
+highlvl_gateset = {
+    'RX', 'RY', 'RZ',
+    'Toffoli',
+    'X', 'Y', 'Z', 
+    'Adjoint(S)', 'Adjoint(T)',
+    'Hadamard', 'S', 'CNOT', 'T'
 }
 
-high_res = qre.estimate(circuit, gate_set=highlevel_gateset)(kitaev_H_with_grouping)
-print(f"High-level resources:\n{high_res}\n")
+highlvl_res = qre.estimate(circuit, gate_set=highlvl_gateset)(kitaev_H_with_grouping)
+print(f"High-level resources:\n{highlvl_res}\n")
 
-lowlevel_gateset = {
-    'T',
-    'CNOT',
-    'Hadamard', 
-}
+lowlvl_gateset = {'Hadamard', 'S', 'CNOT', 'T'}
 
-low_res = qre.estimate(circuit, gate_set=lowlevel_gateset)(kitaev_H_with_grouping)
-print(f"Low-level resources:\n{low_res}")
+lowlvl_res = qre.estimate(circuit, gate_set=lowlvl_gateset)(kitaev_H_with_grouping)
+print(f"Low-level resources:\n{lowlvl_res}")
 
 
 ######################################################################
@@ -345,12 +347,14 @@ print(f"Low-level resources:\n{low_res}")
 #       allocated wires: 0
 #         zero state: 0
 #         any state: 0
-#     Total gates : 3.661E+6
-#       'RZ': 4.070E+5,
+#     Total gates : 2.033E+6
+#       'RX': 1.100E+5,
+#       'RY': 1.980E+5,
+#       'Adjoint(S)': 3.960E+5,
+#       'RZ': 9.900E+4,
 #       'CNOT': 8.140E+5,
-#       'Z': 3.960E+5,
-#       'S': 7.920E+5,
-#       'Hadamard': 1.252E+6
+#       'S': 3.960E+5,
+#       'Hadamard': 2.000E+4
 #    
 #    Low-level resources:
 #    --- Resources: ---
@@ -359,58 +363,51 @@ print(f"Low-level resources:\n{low_res}")
 #       allocated wires: 0
 #         zero state: 0
 #         any state: 0
-#     Total gates : 2.314E+7
-#       'T': 2.108E+7,
+#     Total gates : 2.033E+7
+#       'T': 1.791E+7,
 #       'CNOT': 8.140E+5,
-#       'Hadamard': 1.252E+6
+#       'S': 1.584E+6,
+#       'Hadamard': 2.000E+4
 
 ######################################################################
-# When decomposing our algorithms to a gateset, it is often the case that we only have some
-# approximate decomposition of our building-block into the target gateset (e.g approximate state
-# loading to some precision, or rotation synthesis within some precision of the rotation angle.
+# When decomposing our algorithms to a particular gateset, it is often the case that we only have some
+# approximate decomposition of our building-block into the target gateset. For example: approximate
+# state loading to some precision, or rotation synthesis within some precision of the rotation angle.
 # 
-# These approximate decompositions are accurate to within some error threshold; tuning this error
-# threshold determines the resource cost of the algorithm. We can set and tune these errors using
-# ``ResourceConfig``.
+# These approximate decompositions are accurate within some error threshold; tuning this error
+# threshold determines the resource cost of the algorithm. We can set and tune these errors using a
+# resource configuration: ``qre.ResourceConfig``.
 # 
 
-custom_rc = qre.ResourceConfig()
-# print(custom_rc)  # This print looks pretty ugly :( 
+custom_rc = qre.ResourceConfig() # generate a resource configuration
 
 rz_precisions = custom_rc.resource_op_precisions[qre.RZ]
-print(rz_precisions)  # Notice that the default precision for RZ is 1e-9
+print(f"Default setting: {rz_precisions}\n")  # Notice that the default precision for RZ is 1e-9
 
-######################################################################
-# .. rst-class:: sphx-glr-script-out
-# 
-# .. code-block:: none
-# 
-#    {'precision': 1e-09}
-
-custom_rc.set_precision(qre.RZ, 1e-15)  # setting the required precision from 1e-9 --> 1e-15
+custom_rc.set_precision(qre.RZ, 1e-15)  # setting the required precision from the default --> 1e-15
 
 res = qre.estimate(
     circuit, 
-    gate_set=lowlevel_gateset,
+    gate_set=lowlvl_gateset,
     config=custom_rc,
 )(kitaev_H_with_grouping)
 
-# print(f"New low-level resources:\n{res}")  # [Optionally show this?]
-
 # Just compare T gates: 
-print("Low precision (1e-9):", f"\n T counts: {low_res.gate_counts["T"]:.3E}\n")
-print("High precision (1e-15):", f"\n T counts: {res.gate_counts["T"]:.3E}")     # Notice that a more precise estimate requires more T-gates! 
+print("--- Low precision (1e-9) ---", f"\n T counts: {lowlvl_res.gate_counts["T"]:.3E}\n")
+print("--- High precision (1e-15) ---", f"\n T counts: {res.gate_counts["T"]:.3E}")     # Notice that a more precise estimate requires more T-gates! 
 
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 # 
 # .. code-block:: none
 # 
-#    Low precision (1e-9):
-#     T counts: 2.108E+07
+#    Default setting: {'precision': 1e-09}
 #    
-#    High precision (1e-15):
-#     T counts: 2.108E+07
+#    --- Low precision (1e-9) ---
+#     T counts: 1.791E+07
+#    
+#    --- High precision (1e-15) ---
+#     T counts: 2.009E+07
 
 ######################################################################
 # Swapping Decompositions
