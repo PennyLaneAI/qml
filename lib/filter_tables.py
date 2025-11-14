@@ -70,10 +70,10 @@ def filter_tables(key, value, format, _):
         [[_, classes, _], body] = value
         if  "rst-class" in classes:
             metadata = body[0]
-            content = body[1]
             rst_class_type = metadata.get("c")[0].get("c")
             if rst_class_type == "docstable":
                 caption = []
+                content = body[1]
                 if len(body) > 2:
                     caption.append(body[2])
                 return make_markdown_table(content.get("c"), caption)

@@ -18,10 +18,13 @@ def filter_directives(key, value, format, _):
             return []
         elif "rst-class" in classes:
             metadata = body[0]
-            content = body[1]
             rst_class_type = metadata.get("c")[0].get("c")
             if rst_class_type == "sphx-glr-script-out":
-                return content
+                if len(body) == 1:
+                # This is the new format for sphx-glr-script-out.
+                # Just discard this block.
+                    return []
+                return body[1]
             else:
                 return
         else:
