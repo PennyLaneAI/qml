@@ -72,10 +72,9 @@ print("Total number of qubits:", len(spin_ham.wires))
 #    Total number of qubits: 1800
 
 ######################################################################
-# It took a few seconds to generate that Hamiltonian. What happens when we are working with even
-# larger systems?
-# 
-# Let’s see how this scales.
+# | It took a few seconds to generate that Hamiltonian. What happens when we are working with even
+#   larger systems?
+# | Let’s see how this scales.
 # 
 
 n_lst = [i for i in range(5,36)]
@@ -141,10 +140,10 @@ plt.show()
 # 
 
 ######################################################################
-# Thanks to ``estimator``, we don’t need a detailed description of our hamiltonian to estimate its
+# Thanks to ``estimator``, we don’t need a detailed description of our Hamiltonian to estimate its
 # resources!
 # 
-# The geometry of the honeycomb lattice and the structure of the hamiltonian allows us to calculate
+# The geometry of the honeycomb lattice and the structure of the Hamiltonian allows us to calculate
 # some important quantities directly:
 # 
 # :raw-latex:`\begin{align}
@@ -153,8 +152,12 @@ plt.show()
 #   n_{XX} = n^{2}, \\
 # \end{align}`
 # 
-# We can capture the key information of our hamiltonian in a compact representation using the
-# ``qre.PauliHamiltonian`` class.
+# | ``estimator`` provides
+#   `classes <https://docs.pennylane.ai/en/latest/code/qml_estimator.html#resource-hamiltonians>`__
+#   which allow us to investigate the resources of Hamiltonian simulation without needing to generate
+#   them.
+# | In this case, we can capture the key information of our Hamiltonian in a compact representation
+#   using the ``qre.PauliHamiltonian`` class.
 # 
 
 n_cell = 100
@@ -175,7 +178,10 @@ kitaev_H = qre.PauliHamiltonian(
 )
 
 ######################################################################
-# Now, ``qre.estimate`` provides us with our circuit resources!
+# We can then use existing resource
+# `operators <https://docs.pennylane.ai/en/latest/code/qml_estimator.html#id1>`__ and
+# `templates <https://docs.pennylane.ai/en/latest/code/qml_estimator.html#resource-templates>`__ to
+# express our circuit.
 # 
 
 order = 2
@@ -185,6 +191,12 @@ def circuit(hamiltonian):
     qre.UniformStatePrep(num_states = 2**n_q)    # Prepare a uniform superposition over all 2^num_qubit basis states
     qre.TrotterPauli(hamiltonian, num_steps, order)
     return
+
+######################################################################
+# So, how do we figure out our quantum resources?
+# 
+# It’s simple: just call ``qre.estimate``!
+# 
 
 print(qre.estimate(circuit)(kitaev_H))
 
@@ -206,9 +218,13 @@ print(qre.estimate(circuit)(kitaev_H))
 #       'S': 7.920E+5,
 #       'Hadamard': 1.612E+6
 
-# We can estimate the resources of individual operators as well! 
-resources_without_grouping = qre.estimate(qre.TrotterPauli(kitaev_H, num_steps, order))
+######################################################################
+# | We can also analyze the resources of an individual ``ResourceOperator``.
+# | Let’s see how the cost of ``qre.TrotterPauli`` changes when we split our terms into groups of
+#   commuting terms:
+# 
 
+resources_without_grouping = qre.estimate(qre.TrotterPauli(kitaev_H, num_steps, order))
 
 # Commuting groups:
 commuting_groups = [    # Alternatively we can split our terms into groups
@@ -224,24 +240,31 @@ kitaev_H_with_grouping = qre.PauliHamiltonian(
 
 resources_with_grouping = qre.estimate(qre.TrotterPauli(kitaev_H_with_grouping, num_steps, order))
 
-
-# print("Without grouping:", f"\n{resources_without_grouping}\n")  # [Optionally show this?]
-# print("With grouping:", f"\n{resources_with_grouping}")
-
-# Just compare T gates: 
-print("With grouping:", f"\n T counts: {resources_with_grouping.gate_counts["T"]:.3E}\n")
-print("Without grouping:", f"\n T counts: {resources_without_grouping.gate_counts["T"]:.3E}")
+# Just compare T gates:
+t_count_1 = resources_without_grouping.gate_counts["T"]
+t_count_2 = resources_with_grouping.gate_counts["T"]
+reduction = abs((t_count_2-t_count_1)/t_count_1)
+print("--- With grouping ---", f"\n T gate count: {t_count_1:.3E}\n")
+print("--- Without grouping ---", f"\n T gate count: {t_count_2:.3E}\n")
+print(f"Difference: {100*reduction:.3}% reduction")
 
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 # 
 # .. code-block:: none
 # 
-#    With grouping:
-#     T counts: 1.791E+07
+#    --- With grouping ---
+#     T gate count: 2.622E+07
 #    
-#    Without grouping:
-#     T counts: 2.622E+07
+#    --- Without grouping ---
+#     T gate count: 1.791E+07
+#    
+#    Difference: 31.7% reduction
+
+######################################################################
+# By splitting our terms into groups, we’ve managed to reduce the ``T`` gate count of our
+# Trotterization by over 30%!
+# 
 
 ######################################################################
 # Gatesets & Configurations
