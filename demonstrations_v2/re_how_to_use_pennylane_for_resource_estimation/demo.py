@@ -27,16 +27,13 @@ r"""How to use PennyLane for Resource Estimation
 import pennylane as qml
 import pennylane.estimator as qre
 
-import numpy as np
-import matplotlib.pyplot as plt
-import time
-import math
-
 ######################################################################
-# We will be using the Kitaev model as an example to explore resource estimation. See `these
-# docs <https://docs.pennylane.ai/en/stable/code/api/pennylane.spin.kitaev.html>`__ for more
-# information about the Kitaev hamiltonian. The hamiltonian is defined through nearest neighbor
-# interactions on a honeycomb shaped lattice as follows:
+# We will be using the Kitaev model as an example to explore resource estimation. For more information
+# about the Kitaev Hamiltonian, check out `our
+# documentation <https://docs.pennylane.ai/en/stable/code/api/pennylane.spin.kitaev.html>`__.
+# 
+# This Hamiltonian is defined through nearest neighbor interactions on a honeycomb shaped lattice as
+# follows:
 # 
 # :raw-latex:`\begin{align*}
 #   \hat{H} = K_X \sum_{\langle i,j \rangle \in X}\sigma_i^x\sigma_j^x +
@@ -44,11 +41,16 @@ import math
 #   \:\: K_Z \sum_{\langle i,j \rangle \in Z}\sigma_i^z\sigma_j^z
 # \end{align*}`
 # 
-# In this demo we will estimate the quantum resources required to evolve the quantum state of a 100 x
-# 100 unit honeycomb lattice of spins (thats 20,000 spins!) under the Kitaev hamiltonian.
+# In this demo we will estimate the quantum resources necessary to evolve the quantum state of a 100 x
+# 100 unit honeycomb lattice of spins under the Kitaev Hamiltonian.
+# 
+# **Thats 20,000 spins!**
 # 
 
-# Construct the hamiltonian on a 30 units x 30 units lattice
+import numpy as np
+import time
+
+# Construct the Hamiltonian on a 30 units x 30 units lattice
 n_cells = [30, 30]
 kx, ky, kz = (0.5, 0.6, 0.7)
 
@@ -70,13 +72,13 @@ print("Total number of qubits:", len(spin_ham.wires))
 #    Total number of qubits: 1800
 
 ######################################################################
-# | Notice that it took some time to generate this hamiltonian.
-# | Resource estimation is important because even generating a full description of the hamiltonian can
-#   be quite computationally expensive. In this case it would take about 15 minutes just to generate
-#   the dense description of the hamiltonian!
+# It took a few seconds to generate that Hamiltonian. What happens when we are working with even
+# larger systems?
+# 
+# Let’s see how this scales.
 # 
 
-n_lst = [i for i in range(6,32)]
+n_lst = [i for i in range(5,36)]
 time_lst = []
 for n in n_lst:
     n_cells = [n, n]
@@ -94,36 +96,44 @@ for n in n_lst:
 # 
 # .. code-block:: none
 # 
-#    Finished n = 10 in ~ 0.0780797004699707 sec
-#    Finished n = 15 in ~ 0.48148012161254883 sec
-#    Finished n = 20 in ~ 1.0496199131011963 sec
-#    Finished n = 25 in ~ 2.62518310546875 sec
-#    Finished n = 30 in ~ 5.784091949462891 sec
+#    Finished n = 5 in ~ 0.021773815155029297 sec
+#    Finished n = 10 in ~ 0.20119547843933105 sec
+#    Finished n = 15 in ~ 0.3500974178314209 sec
+#    Finished n = 20 in ~ 1.0353116989135742 sec
+#    Finished n = 25 in ~ 2.6901512145996094 sec
+#    Finished n = 30 in ~ 5.53239107131958 sec
+#    Finished n = 35 in ~ 10.584278345108032 sec
 
-plt.plot(n_lst, time_lst, ".", label="Measured processing times")
+import matplotlib.pyplot as plt
+from scipy.optimize import curve_fit
 
-a, b = (0.0000076, 4)
-fit_lst = [
-    a * n**b for n in (n_lst + [110])
-]
-projected_time = a * (100**b)
+power_law = lambda n, a, b: a * n**b
 
-plt.plot(n_lst + [110], fit_lst, "--g", label="Best-fit")
-plt.plot([100], [projected_time], "*r", label=f"n={100}, time ~ {round(projected_time / 60)} mins")
+a_fit, b_fit = curve_fit(power_law, n_lst, time_lst, p0=[0.000007, 4])[0]
+fit_n = np.concatenate([n_lst, [110]])
+projected_n = 100
+projected_time = power_law(projected_n, a_fit, b_fit)
 
-plt.xscale("log")
-plt.xlabel("Number of unit cells")
-plt.yscale("log")
-plt.ylabel("Processing time (sec)")
-
+plt.plot(n_lst, time_lst, ".", label="Measured generation times")
+plt.plot(fit_n, power_law(fit_n, a_fit, b_fit), "--g", 
+         label=f"Best-fit")
+plt.plot([projected_n], [projected_time], "*r", 
+         label=f"n={projected_n}, time: ~{round(projected_time / 60)} mins")
+plt.xscale("log"); plt.xlabel("Number of unit cells")
+plt.yscale("log"); plt.ylabel("Processing time (sec)")
 plt.legend()
 plt.show()
 
 ######################################################################
 #
-# .. figure:: ../_static/demonstration_assets/re_how_to_use_pennylane_for_resource_estimation/re_how_to_use_pennylane_for_resource_estimation_28ac98fd-aa4c-478c-9142-5340c86c4fdf_1.png
+# .. figure:: ../_static/demonstration_assets/re_how_to_use_pennylane_for_resource_estimation/re_how_to_use_pennylane_for_resource_estimation_a2adf0b7_1.png
 #    :align: center
 #    :width: 80%
+
+######################################################################
+# It could take around 15 minutes just to generate the Hamiltonian for a 100 x 100 unit honeycomb
+# lattice! Even after that, we would still be stuck with expensive processing tasks.
+# 
 
 ######################################################################
 # Making it Easy
@@ -131,9 +141,11 @@ plt.show()
 # 
 
 ######################################################################
-# Thankfully we don’t need a detailed description of our hamiltonian to estimate its resources! The
-# geometry of the honeycomb lattice and the structure of the hamiltonian allows us to calculate some
-# important quantities directly:
+# Thanks to ``estimator``, we don’t need a detailed description of our hamiltonian to estimate its
+# resources!
+# 
+# The geometry of the honeycomb lattice and the structure of the hamiltonian allows us to calculate
+# some important quantities directly:
 # 
 # :raw-latex:`\begin{align}
 #   n_{q} = 2 n^{2}, \\
@@ -254,7 +266,7 @@ print(f"\n{res}")
 # .. code-block:: none
 # 
 #    Default gateset:
-#     frozenset({'Hadamard', 'X', 'S', 'Y', 'T', 'CNOT', 'Toffoli', 'Z'})
+#     frozenset({'Toffoli', 'S', 'Y', 'Hadamard', 'CNOT', 'Z', 'X', 'T'})
 #    
 #    --- Resources: ---
 #     Total wires: 2.000E+4
@@ -415,12 +427,12 @@ print(default_cost_RZ)
 # According to paper by Ross & Selinger, we can decompose RZ rotations into T-gates according to: 
 
 def gridsynth_t_cost(error):
-    return round(3 * math.log2(1/error))
+    return round(3 * qml.math.log2(1/error))
 
 # According to paper by Kliuchnikov et al, we can decompose RZ rotations into T-gates according to: 
 
 def mixed_fallback_t_cost(error):
-    return round(0.56 * math.log2(1/error) + 5.3)
+    return round(0.56 * qml.math.log2(1/error) + 5.3)
 
 
 # In order to define a resource decomposition we first need to know what the resource_keys are for 
@@ -648,3 +660,12 @@ print(resources_compact)
 #       'Z': 3.480E+3,
 #       'S': 6.960E+3,
 #       'Hadamard': 1.800E+3
+
+######################################################################
+# Your turn!
+# ~~~~~~~~~~
+# 
+# Now that you’ve seen how powerful PennyLane’s ``estimator`` is, go try it out yourself!
+# 
+# Reason about the costs of your quantum algorithm without any of the headaches.
+# 
