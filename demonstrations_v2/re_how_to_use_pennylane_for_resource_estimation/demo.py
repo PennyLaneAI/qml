@@ -35,11 +35,10 @@ import pennylane.estimator as qre
 # This Hamiltonian is defined through nearest neighbor interactions on a honeycomb shaped lattice as
 # follows:
 # 
-# :raw-latex:`\begin{align*}
+# .. math::
 #   \hat{H} = K_X \sum_{\langle i,j \rangle \in X}\sigma_i^x\sigma_j^x +
 #   \:\: K_Y \sum_{\langle i,j \rangle \in Y}\sigma_i^y\sigma_j^y +
 #   \:\: K_Z \sum_{\langle i,j \rangle \in Z}\sigma_i^z\sigma_j^z
-# \end{align*}`
 # 
 # In this demo we will estimate the quantum resources necessary to evolve the quantum state of a 100 x
 # 100 unit honeycomb lattice of spins under the Kitaev Hamiltonian.
@@ -146,11 +145,10 @@ plt.show()
 # The geometry of the honeycomb lattice and the structure of the Hamiltonian allows us to calculate
 # some important quantities directly:
 # 
-# :raw-latex:`\begin{align}
+# .. math::
 #   n_{q} = 2 n^{2}, \\
 #   n_{YY} = n_{ZZ} = n * (n - 1), \\
 #   n_{XX} = n^{2}, \\
-# \end{align}`
 # 
 # | ``estimator`` provides
 #   `classes <https://docs.pennylane.ai/en/latest/code/qml_estimator.html#resource-hamiltonians>`__
