@@ -55,7 +55,7 @@ def build(
         bool, typer.Option(help="Continue if sphinx-build fails for a demo")
     ] = False,
     dev: Annotated[bool, typer.Option(help="Whether to use dev dependencies")] = False,
-    venv_name: Annotated[Optional[str], typer.Option(help="Name of the virtual environment to install build dependencies")] = None,
+    venv: Annotated[Optional[str], typer.Option(help="Name of the virtual environment to install build dependencies")] = None,
 ) -> None:
     """
     Build the named demos.
@@ -67,7 +67,7 @@ def build(
         quiet: Suppress sphinx output if True.
         keep_going: Continue building even if some demos fail.
         dev: Use development dependencies.
-        venv_name: Name of the virtual environment to install build dependencies.
+        venv: Name of the virtual environment to install build dependencies.
     Raises:
         typer.Exit: If build process fails.
     """
@@ -105,7 +105,7 @@ def build(
             quiet=quiet,
             keep_going=keep_going,
             dev=dev,
-            venv_name=venv_name,
+            venv=venv,
         )
 
     except Exception as e:
