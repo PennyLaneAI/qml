@@ -19,11 +19,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/IMAGENAME.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_resource_estimation_QChem.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/IMAGENAME.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_iqp_circuit_optimization_jax.png"
         }
     ],
     "seoDescription": "Learn how to perform logical resource estimation in PennyLane with our new Estimator!",
