@@ -1,26 +1,28 @@
 r"""How to use PennyLane for Resource Estimation
-===========================================================
-
-Fault tolerant quantum computing is on its way. But are there useful algorithms which are ready for
-it? The development of meaningful applications of quantum computing is an active area of research,
-and one of the major challenges in the process of assessing a potential quantum algorithm is
-determining the amount of resources required to execute it on hardware. An algorithm may still be
-helpful even when it cannot be executed, but is only truly helpful when it can.
-
-PennyLane is here to make that process easy, with our new resource estimation module:
-`pennylane.estimator <https://docs.pennylane.ai/en/latest/code/qml_estimator.html>`__.
-
-`pennylane.estimator <https://docs.pennylane.ai/en/latest/code/qml_estimator.html>`__ is meant to:
-
-- Make reasoning about quantum algorithms *quick* and painless - no complicated inputs, just tell
-  ``estimator`` what you know.
-- Keep you up to *speed* - ``estimator`` leverages the latest results from the literature to make
-  sure you’re as efficient as can be.
-- Get you moving *even faster* - in the blink of an eye ``estimator`` provides you with resource
-  estimates, and enables effortless customization to enhance your research.
-
-Let’s import our quantum resource estimator.
+============================================
 """
+
+######################################################################
+# Fault tolerant quantum computing is on its way. But are there useful algorithms which are ready for
+# it? The development of meaningful applications of quantum computing is an active area of research,
+# and one of the major challenges in the process of assessing a potential quantum algorithm is
+# determining the amount of resources required to execute it on hardware. An algorithm may still be
+# helpful even when it cannot be executed, but is only truly helpful when it can.
+# 
+# PennyLane is here to make that process easy, with our new resource estimation module:
+# `pennylane.estimator <https://docs.pennylane.ai/en/latest/code/qml_estimator.html>`__.
+# 
+# `pennylane.estimator <https://docs.pennylane.ai/en/latest/code/qml_estimator.html>`__ is meant to:
+# 
+# - Make reasoning about quantum algorithms *quick* and painless - no complicated inputs, just tell
+#   ``estimator`` what you know.
+# - Keep you up to *speed* - ``estimator`` leverages the latest results from the literature to make
+#   sure you’re as efficient as can be.
+# - Get you moving *even faster* - in the blink of an eye ``estimator`` provides you with resource
+#   estimates, and enables effortless customization to enhance your research.
+# 
+# Let’s import our quantum resource estimator.
+# 
 
 import pennylane as qml
 import pennylane.estimator as qre
@@ -56,7 +58,7 @@ t1 = time.time()
 spin_ham = qml.spin.kitaev(n_cells, coupling=np.array([kx, ky, kz]))
 t2 = time.time()
 
-print(f"Processing time: ~ {round(t2 - t1)} sec")
+print(f"Generation time: ~ {round(t2 - t1)} sec")
 print("Total number of terms:", len(spin_ham.operands))
 print("Total number of qubits:", len(spin_ham.wires))
 
@@ -65,7 +67,7 @@ print("Total number of qubits:", len(spin_ham.wires))
 # 
 # .. code-block:: none
 # 
-#    Processing time: ~ 6 sec
+#    Generation time: ~ 5 sec
 #    Total number of terms: 2640
 #    Total number of qubits: 1800
 
@@ -93,13 +95,13 @@ for n in n_lst:
 # 
 # .. code-block:: none
 # 
-#    Finished n = 5 in ~ 0.013249397277832031 sec
-#    Finished n = 10 in ~ 0.08349990844726562 sec
-#    Finished n = 15 in ~ 0.4231240749359131 sec
-#    Finished n = 20 in ~ 1.0640604496002197 sec
-#    Finished n = 25 in ~ 2.6067121028900146 sec
-#    Finished n = 30 in ~ 5.484071731567383 sec
-#    Finished n = 35 in ~ 10.278346300125122 sec
+#    Finished n = 5 in ~ 0.01563405990600586 sec
+#    Finished n = 10 in ~ 0.08188867568969727 sec
+#    Finished n = 15 in ~ 0.43582606315612793 sec
+#    Finished n = 20 in ~ 1.0403099060058594 sec
+#    Finished n = 25 in ~ 2.650714874267578 sec
+#    Finished n = 30 in ~ 5.526278495788574 sec
+#    Finished n = 35 in ~ 10.387336492538452 sec
 
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
@@ -128,7 +130,7 @@ plt.show()
 #    :width: 80%
 
 ######################################################################
-# It would take around 15 minutes just to generate the Hamiltonian for a 100 x 100 unit honeycomb
+# It would take around 15 minutes just to *generate* the Hamiltonian for a 100 x 100 unit honeycomb
 # lattice! Even after that, we would still be stuck with expensive processing tasks.
 # 
 
@@ -196,13 +198,20 @@ def circuit(hamiltonian):
 # It’s simple: just call ``qre.estimate``!
 # 
 
-print(qre.estimate(circuit)(kitaev_H))
+t1 = time.time()
+res = qre.estimate(circuit)(kitaev_H)
+t2 = time.time()
+
+print(f"Processing time: ~ {t2 - t1:.3} sec\n")
+print(res)
 
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 # 
 # .. code-block:: none
 # 
+#    Processing time: ~ 0.000364 sec
+#    
 #    --- Resources: ---
 #     Total wires: 2.000E+4
 #       algorithmic wires: 20000
@@ -217,6 +226,8 @@ print(qre.estimate(circuit)(kitaev_H))
 #       'Hadamard': 2.000E+4
 
 ######################################################################
+# Our resource estimate was generated in the blink of an eye.
+# 
 # | We can also analyze the resources of an individual ``ResourceOperator``.
 # | Let’s see how the cost of ``qre.TrotterPauli`` changes when we split our terms into groups of
 #   commuting terms:
@@ -439,10 +450,12 @@ print(default_cost_RZ)
 #       'T': 44
 
 ######################################################################
-# These are other state of the art methods we could use instead: - `Optimal ancilla-free Cliﬀord+T
-# approximation of z-rotations (Ross, Selinger) <https://arxiv.org/pdf/1403.2975>`__ - `Shorter
-# quantum circuits via single-qubit gate approximation (Kliuchnikov et
-# al) <https://arxiv.org/abs/2203.10064v2>`__
+# These are other state of the art methods we could use instead:
+# 
+# - `Optimal ancilla-free Cliﬀord+T approximation of z-rotations (Ross,
+#   Selinger) <https://arxiv.org/pdf/1403.2975>`__
+# - `Shorter quantum circuits via single-qubit gate approximation (Kliuchnikov et
+#   al) <https://arxiv.org/abs/2203.10064v2>`__
 # 
 
 # According to paper by Ross & Selinger, we can decompose RZ rotations into T-gates according to: 
@@ -550,8 +563,8 @@ print(resources)
 #       'Hadamard': 2.000E+4
 
 ######################################################################
-# Mapping your PennyLane circuits to ``estimator``
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Estimating the Resources of your PennyLane Circuits
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # If you’ve already written your workflow for execution, we can call estimate on it directly. No need
 # to write it again!
