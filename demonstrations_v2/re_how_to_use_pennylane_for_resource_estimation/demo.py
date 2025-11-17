@@ -1,4 +1,5 @@
-r"""How to use PennyLane for Resource Estimation
+r"""
+How to use PennyLane for Resource Estimation
 ============================================
 
 Fault tolerant quantum computing is on its way. But are there useful algorithms which are ready for
