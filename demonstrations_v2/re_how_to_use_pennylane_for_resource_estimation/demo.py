@@ -1,5 +1,4 @@
-r"""
-How to use PennyLane for Resource Estimation
+r"""How to use PennyLane for Resource Estimation
 ============================================
 
 Fault tolerant quantum computing is on its way. But are there useful algorithms which are ready for
@@ -19,11 +18,9 @@ PennyLane is here to make that process easy, with our new resource estimation mo
   sure you’re as efficient as can be.
 - Get you moving *even faster* - in the blink of an eye ``estimator`` provides you with resource
   estimates, and enables effortless customization to enhance your research.
-"""
 
-######################################################################
-# Let’s import our quantum resource estimator.
-# 
+Let’s import our quantum resource estimator.
+"""
 
 import pennylane as qml
 import pennylane.estimator as qre
@@ -471,7 +468,7 @@ print(qre.RZ.resource_keys)  # this tells us all of the REQUIRED arguments our f
 #    {'precision'}
 
 ######################################################################
-# Now that we know which arguments we nee, we can define our resource decomposition.
+# Now that we know which arguments we need, we can define our resource decomposition.
 # 
 
 def gridsynth_decomp(precision):
