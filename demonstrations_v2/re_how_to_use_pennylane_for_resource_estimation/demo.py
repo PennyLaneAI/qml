@@ -12,12 +12,14 @@ r"""How to use PennyLane for Resource Estimation
 # PennyLane is here to make that process easy, with our new resource estimation module:
 # `pennylane.estimator <https://docs.pennylane.ai/en/latest/code/qml_estimator.html>`__.
 # 
-# `pennylane.estimator <https://docs.pennylane.ai/en/latest/code/qml_estimator.html>`__ is meant to: -
-# Make reasoning about quantum algorithms *quick* and painless - no complicated inputs, just tell
-# ``estimator`` what you know. - Keep you up to *speed* - ``estimator`` leverages the latest results
-# from the literature to make sure you’re as efficient as can be. - Get you moving *even faster* - in
-# the blink of an eye ``estimator`` provides you with resource estimates, and enables effortless
-# customization to enhance your research.
+# `pennylane.estimator <https://docs.pennylane.ai/en/latest/code/qml_estimator.html>`__ is meant to:
+# 
+# - Make reasoning about quantum algorithms *quick* and painless - no complicated inputs, just tell
+#   ``estimator`` what you know.
+# - Keep you up to *speed* - ``estimator`` leverages the latest results from the literature to make
+#   sure you’re as efficient as can be.
+# - Get you moving *even faster* - in the blink of an eye ``estimator`` provides you with resource
+#   estimates, and enables effortless customization to enhance your research.
 # 
 
 ######################################################################
