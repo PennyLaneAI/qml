@@ -9,6 +9,7 @@ import sys
 from logging import getLogger
 import subprocess
 from enum import Enum
+from typing import Optional
 import functools
 import requirements
 import json
@@ -152,6 +153,7 @@ def build(
     quiet: bool = False,
     keep_going: bool = False,
     dev: bool = False,
+    venv: Optional[str] = None,
 ) -> None:
     """Build the provided demos using 'sphinx-build', optionally
     executing them to generate plots and cell outputs.
@@ -169,7 +171,8 @@ def build(
     done = 0
     logger.info("Building %d demos", len(demos))
 
-    build_venv = Virtualenv(ctx.build_venv_path)
+    build_venv = Virtualenv(ctx.repo_root / venv) if venv else Virtualenv(ctx.build_venv_path)
+    logger.info("Using build environment: %s", build_venv.path)
     cmds.pip_install(
         build_venv.python,
         requirements=ctx.build_requirements_file,
