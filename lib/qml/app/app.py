@@ -129,9 +129,9 @@ def build(
             catalyst_version=final_catalyst_version,
             pennylane_version=final_pennylane_version,
             lightning_version=final_lightning_version,
-            # extra_index_url=extra_index_url,
-            # testpypi=testpypi,
-            # prerelease_packages=prerelease_packages,
+            extra_index_url=extra_index_url,
+            testpypi=testpypi,
+            prerelease_packages=prerelease_packages,
         )
 
     except Exception as e:
