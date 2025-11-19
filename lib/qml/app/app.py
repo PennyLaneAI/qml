@@ -55,6 +55,24 @@ def build(
         bool, typer.Option(help="Continue if sphinx-build fails for a demo")
     ] = False,
     dev: Annotated[bool, typer.Option(help="Whether to use dev dependencies")] = False,
+    lightning_version: Annotated[
+        Optional[str], typer.Option(help="Version of Lightning to use")
+    ] = "PennyLane-Lightning",
+    catalyst_version: Annotated[
+        Optional[str], typer.Option(help="Version of Catalyst to use")
+    ] = "PennyLane-Catalyst",
+    pennylane_version: Annotated[
+        Optional[str], typer.Option(help="Version of PennyLane to use")
+    ] = "git+https://github.com/PennyLaneAI/pennylane.git#egg=pennylane",
+    extra_index_url: Annotated[
+        Optional[str], typer.Option(help="Extra PyPI index URL for dependencies")
+    ] = "",
+    testpypi: Annotated[
+        Optional[str], typer.Option(help="TestPyPI URL for dependencies")
+    ] = "",
+    prerelease_packages: Annotated[
+        bool, typer.Option(help="Allow installation of pre-release packages")
+    ] = False,
 ) -> None:
     """
     Build the named demos.
@@ -96,6 +114,10 @@ def build(
             logger.error(f"Failed to copy static files: {e}")
             raise typer.Exit(1)
 
+        final_pennylane_version = pennylane_version or "pennylane"
+        final_catalyst_version = catalyst_version or "pennylane-catalyst"
+        final_lightning_version = lightning_version or "pennylane-lightning"
+
         demo.build(
             ctx,
             demos=demos,
@@ -104,6 +126,12 @@ def build(
             quiet=quiet,
             keep_going=keep_going,
             dev=dev,
+            catalyst_version=final_catalyst_version,
+            pennylane_version=final_pennylane_version,
+            lightning_version=final_lightning_version,
+            # extra_index_url=extra_index_url,
+            # testpypi=testpypi,
+            # prerelease_packages=prerelease_packages,
         )
 
     except Exception as e:

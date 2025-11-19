@@ -76,30 +76,36 @@ jobs:
           echo "rc-build-branch=$rc_build_branch" >> $GITHUB_OUTPUT
           echo "PennyLane version: $pennylane_version, PennyLane-Lightning version: $lightning_version, PennyLane-Catalyst version: $catalyst_version"
 
-      - name: Update demo versions
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          sed -i -E "s#git\+https://github.com/PennyLaneAI/pennylane.git\#egg=pennylane\",#pennylane<=${{ steps.setup-rc-versions.outputs.pennylane-version }}\",\\n\\t\\t\\t\"—extra-index-url\",\\n\\t\\t\\t\"https://test.pypi.org/simple/\",\\n\\t\\t\\tpre=True,#" lib/qml/lib/demo.py
-          sed -i "s/PennyLane-Lightning/pennylane-lightning<=${{ steps.setup-rc-versions.outputs.lightning-version }}/" lib/qml/lib/demo.py
-          sed -i "s/PennyLane-Catalyst/pennylane-catalyst<=${{ steps.setup-rc-versions.outputs.catalyst-version }}/" lib/qml/lib/demo.py
-          git commit -am "Set up RC versions for demo builds"
-          git push --set-upstream origin ${{ steps.setup-rc-versions.outputs.rc-build-branch }}
+      # - name: Update demo versions
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   run: |
+      #     sed -i -E "s#git\+https://github.com/PennyLaneAI/pennylane.git\#egg=pennylane\",#pennylane<=${{ steps.setup-rc-versions.outputs.pennylane-version }}\",\\n\\t\\t\\t\"—extra-index-url\",\\n\\t\\t\\t\"https://test.pypi.org/simple/\",\\n\\t\\t\\tpre=True,#" lib/qml/lib/demo.py
+      #     sed -i "s/PennyLane-Lightning/pennylane-lightning<=${{ steps.setup-rc-versions.outputs.lightning-version }}/" lib/qml/lib/demo.py
+      #     sed -i "s/PennyLane-Catalyst/pennylane-catalyst<=${{ steps.setup-rc-versions.outputs.catalyst-version }}/" lib/qml/lib/demo.py
+      #     git commit -am "Set up RC versions for demo builds"
+      #     git push --set-upstream origin ${{ steps.setup-rc-versions.outputs.rc-build-branch }}
           
   build-demos:
     needs: build-demos-with-rc-branches
     uses: ./.github/workflows/v2-build-demos.yml
     with:
-      ref: '${{ needs.build-demos-with-rc-branches.outputs.rc-build-branch }}'
+      ref: sc-101692-dailyrcbuild #'${{ needs.build-demos-with-rc-branches.outputs.rc-build-branch }}'
       demo-names: ''
       execute: true
-      dev: false
+      dev: true
       save-artifact: true
       artifact-name: 'demo-build-use-rc'
       artifact-retention: 10
       keep-going: false
       quiet: false
       batch_size: 10
+      pennylane-version: '${{ needs.build-demos-with-rc-branches.outputs.pennylane-version }}'
+      lightning-version: '${{ needs.build-demos-with-rc-branches.outputs.lightning-version }}'
+      catalyst-version: '${{ needs.build-demos-with-rc-branches.outputs.catalyst-version }}'
+      extra-index-url: 'https://test.pypi.org/simple/'
+      testpypi: true
+      prerelease-packages: true
 
   cleanup:
     runs-on: ubuntu-latest

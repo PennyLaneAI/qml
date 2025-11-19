@@ -20,52 +20,6 @@ import argparse
 
 logger = getLogger("qml")
 
-def parse_extra_args():
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--lightning-version",
-        type=str,
-        default="PennyLane-Lightning",
-        help="Specify the version of PennyLane-Lightning to install (default: PennyLane-Lightning)",
-        nargs='?'
-    )
-    parser.add_argument(
-        "--catalyst-version",
-        type=str,
-        default="PennyLane-Catalyst",
-        help="Specify the version of PennyLane-Catalyst to install (default: PennyLane-Catalyst)",
-        nargs='?'
-    )
-    parser.add_argument(
-        "--pennylane-version",
-        type=str,
-        default="git+https://github.com/PennyLaneAI/pennylane.git#egg=pennylane",
-        help="Specify the version of PennyLane to install (default: git+https://github.com/PennyLaneAI/pennylane.git#egg=pennylane)",
-        nargs='?'
-    )
-    parser.add_argument(
-        "--extra-index-url",
-        type=str,
-        default=None,
-        help="Specify an additional index URL for pip to use (default: None)",
-        nargs='?'
-    )
-    parser.add_argument(
-        "--testpypi",
-        type=str,
-        default=None,
-        help="Use TestPyPI as an additional package index (default: False)",
-        nargs='?'
-    )
-    parser.add_argument(
-        "--prerelease-packages",
-        type=bool,
-        default=False,
-        help="Allow installation of pre-release packages (default: False)",
-        nargs='?'
-    )
-    return parser.parse_args()
-
 class BuildTarget(Enum):
     """Sphinx-build targets."""
 
@@ -198,6 +152,12 @@ def build(
     quiet: bool = False,
     keep_going: bool = False,
     dev: bool = False,
+    lightning_version: str = "PennyLane-Lightning",
+    catalyst_version: str = "PennyLane-Catalyst",
+    pennylane_version: str = "git+https://github.com/PennyLaneAI/pennylane.git#egg=pennylane",
+    extra_index_url: str = None,
+    testpypi: str = None,
+    prerelease_packages: bool = False,    
 ) -> None:
     """Build the provided demos using 'sphinx-build', optionally
     executing them to generate plots and cell outputs.
@@ -235,6 +195,7 @@ def build(
         )
 
         try:
+            logger.info("lightning_version:- ", lightning_version)
             _build_demo(
                 ctx,
                 build_venv=build_venv,
@@ -244,6 +205,12 @@ def build(
                 package=target is BuildTarget.JSON,
                 quiet=quiet,
                 dev=dev,
+                lightning_version=lightning_version,
+                catalyst_version=catalyst_version,
+                pennylane_version=pennylane_version,
+                extra_index_url=extra_index_url,
+                testpypi=testpypi,
+                prerelease_packages=prerelease_packages,                
             )
         except subprocess.CalledProcessError as exc:
             if not keep_going:
@@ -288,9 +255,10 @@ def build(
 
 
 def generate_requirements(
-    ctx: Context, demo: Demo, dev: bool, output_file: Path
+    ctx: Context, demo: Demo, dev: bool, output_file: Path, pennylane_version: str, catalyst_version: str, lightning_version: str,
 ) -> None:
     constraints = [ctx.build_requirements_file]
+    
     if dev:
         constraints.append(ctx.dev_constraints_file)
     else:
@@ -306,7 +274,7 @@ def generate_requirements(
         *requirements_in,
         constraints_files=constraints,
         quiet=False,
-        prerelease=dev,
+        prerelease=dev,    
     )
 
 
@@ -319,11 +287,17 @@ def _build_demo(
     package: bool,
     quiet: bool,
     dev: bool,
+    lightning_version: str,
+    catalyst_version: str,
+    pennylane_version: str,
+    extra_index_url: str,
+    testpypi: str,
+    prerelease_packages: bool,    
 ):
     out_dir = ctx.repo_root / "demos"
     fs.clean_dir(out_dir)
 
-    generate_requirements(ctx, demo, dev, out_dir / "requirements.txt")
+    generate_requirements(ctx, demo, dev, out_dir / "requirements.txt", pennylane_version, catalyst_version, lightning_version)
     if execute:
         cmds.pip_install(
             build_venv.python,
@@ -332,17 +306,20 @@ def _build_demo(
             quiet=False,
             pre=dev,
         )
-
+        logger.info("lightning_version inside _build_demo:- ", lightning_version)
         # If dev, we need to re-install the latest Catalyst, then Lightning, then PennyLane
         # in that order, regardless of conflicts/warnings. 
         if dev:
             # Catalyst
+            logger.info("lightning_version inside dev:-", lightning_version)
             cmds.pip_install(
                 build_venv.python,
                 "--upgrade",
                 "--extra-index-url",
                 "https://test.pypi.org/simple/",
-                parse_extra_args().catalyst_version,
+                "sphinx==8.1",
+                # catalyst_version,
+                "pennylane-catalyst<=0.13.0",
                 use_uv=False,
                 quiet=False,
                 pre=True,
@@ -353,7 +330,8 @@ def _build_demo(
                 "--upgrade",
                 "--extra-index-url",
                 "https://test.pypi.org/simple/",
-                parse_extra_args().lightning_version,
+                # lightning_version,
+                "pennylane-lightning<=0.43.0",
                 use_uv=False,
                 quiet=False,
                 pre=True,
@@ -363,12 +341,16 @@ def _build_demo(
         cmds.pip_install(
             build_venv.python,
             "--upgrade",
-            parse_extra_args().pennylane_version,
-            parse_extra_args().testpypi,
-            parse_extra_args().extra_index_url,            
+            "sphinx==8.1",
+            # "pennylane<=0.43.0",
+            "--extra-index-url",
+            "https://test.pypi.org/simple/",
+            "pennylane<=0.43.0",
+            # testpypi,
+            # extra_index_url,            
             use_uv=False,
             quiet=False,
-            pre=parse_extra_args().prerelease_packages,
+            pre=True,
         )
 
     stage_dir = ctx.build_dir / "demonstrations"
