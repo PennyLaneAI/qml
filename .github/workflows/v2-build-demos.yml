@@ -228,11 +228,8 @@ jobs:
             ${{ inputs.dev && '--dev' || '--no-dev' }} \
             --lightning-version "${{ inputs.lightning-version }}" \
             --catalyst-version "${{ inputs.catalyst-version }}" \
-            --pennylane-version "${{ inputs.pennylane-version }}" \
-            --extra-index-url "${{ inputs.extra-index-url }}" \
-            --testpypi "${{ inputs.testpypi }}"
-            --prerelease-packages "${{ inputs.prerelease-packages }}"
-      
+            --pennylane-version "${{ inputs.pennylane-version }}" 
+            
       - name: Upload artifacts
         id: upload-artifacts
         if: ${{ inputs.save-artifact }}
