@@ -1,4 +1,7 @@
 r"""
+How to use PennyLane for Resource Estimation
+===========================================================
+
 Fault tolerant quantum computing is on its way. But are there useful algorithms which are ready for
 it? The development of meaningful applications of quantum computing is an active area of research,
 and one of the major challenges in the process of assessing a potential quantum algorithm is
