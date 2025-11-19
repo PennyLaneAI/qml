@@ -227,8 +227,13 @@ We can also move (or rotate?) the type of the edges within :math:`d` error corre
   
 Here we show an extended single qubit patch and three example re-orientations of the type of edges.
 The smaller images are guides to the eye to indicate the settings, with X edges as solid lines and Z edges as dotted lines.
+Note that the important property is for neighboring X and Z edges to overlap on two data qubits for the corresponding stabilizers to commute.
 
 
+twist based lattice surgery stuff
+---------------------------------
+
+is that whats happening in Y measurements?
 
 """
 
