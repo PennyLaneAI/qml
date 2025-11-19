@@ -1,24 +1,24 @@
-######################################################################
-# Fault tolerant quantum computing is on its way. But are there useful algorithms which are ready for
-# it? The development of meaningful applications of quantum computing is an active area of research,
-# and one of the major challenges in the process of assessing a potential quantum algorithm is
-# determining the amount of resources required to execute it on hardware. An algorithm may still be
-# helpful even when it cannot be executed, but is only truly helpful when it can.
-# 
-# PennyLane is here to make that process easy, with our new resource estimation module:
-# `pennylane.estimator <https://docs.pennylane.ai/en/latest/code/qml_estimator.html>`__.
-# 
-# `pennylane.estimator <https://docs.pennylane.ai/en/latest/code/qml_estimator.html>`__ is meant to:
-# 
-# - Make reasoning about quantum algorithms *quick* and painless - no complicated inputs, just tell
-#   ``estimator`` what you know.
-# - Keep you up to *speed* - ``estimator`` leverages the latest results from the literature to make
-#   sure you’re as efficient as can be.
-# - Get you moving *even faster* - in the blink of an eye ``estimator`` provides you with resource
-#   estimates, and enables effortless customization to enhance your research.
-# 
-# Let’s import our quantum resource estimator.
-# 
+r"""
+Fault tolerant quantum computing is on its way. But are there useful algorithms which are ready for
+it? The development of meaningful applications of quantum computing is an active area of research,
+and one of the major challenges in the process of assessing a potential quantum algorithm is
+determining the amount of resources required to execute it on hardware. An algorithm may still be
+helpful even when it cannot be executed, but is only truly helpful when it can.
+
+PennyLane is here to make that process easy, with our new resource estimation module:
+`pennylane.estimator <https://docs.pennylane.ai/en/latest/code/qml_estimator.html>`__.
+
+`pennylane.estimator <https://docs.pennylane.ai/en/latest/code/qml_estimator.html>`__ is meant to:
+
+- Make reasoning about quantum algorithms *quick* and painless - no complicated inputs, just tell
+  ``estimator`` what you know.
+- Keep you up to *speed* - ``estimator`` leverages the latest results from the literature to make
+  sure you’re as efficient as can be.
+- Get you moving *even faster* - in the blink of an eye ``estimator`` provides you with resource
+  estimates, and enables effortless customization to enhance your research.
+
+Let’s import our quantum resource estimator.
+"""
 
 import pennylane as qml
 import pennylane.estimator as qre
