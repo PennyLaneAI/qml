@@ -343,8 +343,6 @@ def _build_demo(
             "--extra-index-url",
             "https://test.pypi.org/simple/",
             pennylane_version,
-            testpypi,
-            extra_index_url,            
             use_uv=False,
             quiet=False,
             pre=True,
