@@ -154,10 +154,7 @@ def build(
     dev: bool = False,
     lightning_version: str = "PennyLane-Lightning",
     catalyst_version: str = "PennyLane-Catalyst",
-    pennylane_version: str = "git+https://github.com/PennyLaneAI/pennylane.git#egg=pennylane",
-    extra_index_url: str = None,
-    testpypi: str = None,
-    prerelease_packages: bool = False,    
+    pennylane_version: str = "git+https://github.com/PennyLaneAI/pennylane.git#egg=pennylane", 
 ) -> None:
     """Build the provided demos using 'sphinx-build', optionally
     executing them to generate plots and cell outputs.
@@ -207,10 +204,7 @@ def build(
                 dev=dev,
                 lightning_version=lightning_version,
                 catalyst_version=catalyst_version,
-                pennylane_version=pennylane_version,
-                extra_index_url=extra_index_url,
-                testpypi=testpypi,
-                prerelease_packages=prerelease_packages,                
+                pennylane_version=pennylane_version,              
             )
         except subprocess.CalledProcessError as exc:
             if not keep_going:
@@ -289,10 +283,7 @@ def _build_demo(
     dev: bool,
     lightning_version: str,
     catalyst_version: str,
-    pennylane_version: str,
-    extra_index_url: str,
-    testpypi: str,
-    prerelease_packages: bool,    
+    pennylane_version: str,   
 ):
     out_dir = ctx.repo_root / "demos"
     fs.clean_dir(out_dir)

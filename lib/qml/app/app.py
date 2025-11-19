@@ -64,15 +64,6 @@ def build(
     pennylane_version: Annotated[
         Optional[str], typer.Option(help="Version of PennyLane to use")
     ] = "git+https://github.com/PennyLaneAI/pennylane.git#egg=pennylane",
-    extra_index_url: Annotated[
-        Optional[str], typer.Option(help="Extra PyPI index URL for dependencies")
-    ] = "",
-    testpypi: Annotated[
-        Optional[str], typer.Option(help="TestPyPI URL for dependencies")
-    ] = "",
-    prerelease_packages: Annotated[
-        bool, typer.Option(help="Allow installation of pre-release packages")
-    ] = False,
 ) -> None:
     """
     Build the named demos.
@@ -129,9 +120,6 @@ def build(
             catalyst_version=final_catalyst_version,
             pennylane_version=final_pennylane_version,
             lightning_version=final_lightning_version,
-            extra_index_url=extra_index_url,
-            testpypi=testpypi,
-            prerelease_packages=prerelease_packages,
         )
 
     except Exception as e:
