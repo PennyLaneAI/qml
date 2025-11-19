@@ -140,36 +140,6 @@ on:
         description: Number of demos to build per job.
         type: number
         default: 10
-      lightning-version:
-        description: Specify the version of PennyLane-Lightning to install (default PennyLane-Lightning).
-        required: false
-        type: string
-        default: "PennyLane-Lightning"
-      catalyst-version:
-        description: Specify the version of PennyLane-Catalyst to install (default PennyLane-Catalyst).
-        required: false
-        type: string
-        default: "PennyLane-Catalyst"
-      pennylane-version:
-        description: Specify the version of PennyLane to install (default git+https://github.com/PennyLaneAI/pennylane.git#egg=pennylane).
-        required: false
-        type: string
-        default: "git+https://github.com/PennyLaneAI/pennylane.git#egg=pennylane"
-      extra-index-url:
-        description: Specify an additional index URL for pip to use (default None).
-        required: false
-        type: string
-        default: null
-      testpypi:
-        description: Use TestPyPI as an additional package index (default None).
-        required: false
-        type: string
-        default: null
-      prerelease-packages:
-        description: Allow installation of pre-release packages (default False).
-        required: false
-        type: boolean
-        default: false
 
 jobs:
   generate-build-variables:
