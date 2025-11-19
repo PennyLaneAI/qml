@@ -100,9 +100,9 @@ jobs:
       keep-going: false
       quiet: false
       batch_size: 10
-      pennylane-version: '${{ needs.build-demos-with-rc-branches.outputs.pennylane-version }}'
-      lightning-version: '${{ needs.build-demos-with-rc-branches.outputs.lightning-version }}'
-      catalyst-version: '${{ needs.build-demos-with-rc-branches.outputs.catalyst-version }}'
+      pennylane-version: 'pennylane<=${{ needs.build-demos-with-rc-branches.outputs.pennylane-version }}'
+      lightning-version: 'pennylane-lightning<=${{ needs.build-demos-with-rc-branches.outputs.lightning-version }}'
+      catalyst-version: 'pennylane-catalyst<=${{ needs.build-demos-with-rc-branches.outputs.catalyst-version }}'
       extra-index-url: 'https://test.pypi.org/simple/'
       testpypi: true
       prerelease-packages: true
