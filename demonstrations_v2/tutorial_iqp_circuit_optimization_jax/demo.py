@@ -113,6 +113,7 @@ gates = [[[0]], [[1]], [[2]], [[0,1]], [[0,2]], [[1,2]]]
 # :math:`\vert 0 \rangle`) is therefore the following.
 #
 import pennylane as qml
+qml.capture.enable()
 import numpy as np
 
 # Suppress the warning caused by iqpopt

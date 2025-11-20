@@ -96,6 +96,7 @@ the target polynomial.
 """
 
 import pennylane as qml
+qml.capture.enable()
 import numpy as np
 import matplotlib.pyplot as plt
 
