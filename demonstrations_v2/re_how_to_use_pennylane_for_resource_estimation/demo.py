@@ -56,7 +56,7 @@ t1 = time.time()
 spin_ham = qml.spin.kitaev(n_cells, coupling=np.array([kx, ky, kz]))
 t2 = time.time()
 
-print(f"Generation time: ~ {round(t2 - t1)} sec")
+print(f"Generation time: ~ {round(t2 - t1)} seconds")
 print("Total number of terms:", len(spin_ham.operands))
 print("Total number of qubits:", len(spin_ham.wires))
 
@@ -65,7 +65,7 @@ print("Total number of qubits:", len(spin_ham.wires))
 # 
 # .. code-block:: none
 # 
-#    Generation time: ~ 5 sec
+#    Generation time: ~ 5 seconds
 #    Total number of terms: 2640
 #    Total number of qubits: 1800
 
@@ -86,20 +86,20 @@ for n in n_lst:
     t2 = time.time()
     time_lst.append(t2-t1)
     if n % 5 == 0:
-        print(f"Finished n = {n} in ~ {time_lst[-1]} sec")
+        print(f"Finished n = {n} in {time_lst[-1]:.3f} seconds")
 
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 # 
 # .. code-block:: none
 # 
-#    Finished n = 5 in ~ 0.01563405990600586 sec
-#    Finished n = 10 in ~ 0.08188867568969727 sec
-#    Finished n = 15 in ~ 0.43582606315612793 sec
-#    Finished n = 20 in ~ 1.0403099060058594 sec
-#    Finished n = 25 in ~ 2.650714874267578 sec
-#    Finished n = 30 in ~ 5.526278495788574 sec
-#    Finished n = 35 in ~ 10.387336492538452 sec
+#    Finished n = 5 in 0.012 seconds
+#    Finished n = 10 in 0.079 seconds
+#    Finished n = 15 in 0.343 seconds
+#    Finished n = 20 in 1.034 seconds
+#    Finished n = 25 in 2.771 seconds
+#    Finished n = 30 in 5.598 seconds
+#    Finished n = 35 in 11.006 seconds
 
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
@@ -115,9 +115,9 @@ plt.plot(n_lst, time_lst, ".", label="Measured generation times")
 plt.plot(fit_n, power_law(fit_n, a_fit, b_fit), "--g", 
          label=f"Best-fit")
 plt.plot([projected_n], [projected_time], "*r", 
-         label=f"n={projected_n}, time: ~{round(projected_time / 60)} mins")
+         label=f"n={projected_n}, time: ~{round(projected_time / 60)} minutes")
 plt.xscale("log"); plt.xlabel("Number of unit cells")
-plt.yscale("log"); plt.ylabel("Processing time (sec)")
+plt.yscale("log"); plt.ylabel("Processing time (seconds)")
 plt.legend()
 plt.show()
 
