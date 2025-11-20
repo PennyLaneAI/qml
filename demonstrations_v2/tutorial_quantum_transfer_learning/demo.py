@@ -64,17 +64,17 @@ summarized in following table:
 
 .. rst-class:: docstable
 
-+-----------+-----------+-----------------------------------------------------+
-| Network A | Network B | Transfer learning scheme                            |
-+===========+===========+=====================================================+
-| Classical | Classical | CC - Standard classical method. See e.g., Ref. [2]. |
-+-----------+-----------+-----------------------------------------------------+
-| Classical | Quantum   | CQ - **Hybrid model presented in this tutorial.**   |
-+-----------+-----------+-----------------------------------------------------+
-| Quantum   | Classical | QC - Model studied in Ref. [1].                     |
-+-----------+-----------+-----------------------------------------------------+
-| Quantum   | Quantum   | QQ - Model studied in Ref. [1].                     |
-+-----------+-----------+-----------------------------------------------------+
+    +-----------+-----------+-----------------------------------------------------+
+    | Network A | Network B | Transfer learning scheme                            |
+    +===========+===========+=====================================================+
+    | Classical | Classical | CC - Standard classical method. See e.g., Ref. [2]. |
+    +-----------+-----------+-----------------------------------------------------+
+    | Classical | Quantum   | CQ - **Hybrid model presented in this tutorial.**   |
+    +-----------+-----------+-----------------------------------------------------+
+    | Quantum   | Classical | QC - Model studied in Ref. [1].                     |
+    +-----------+-----------+-----------------------------------------------------+
+    | Quantum   | Quantum   | QQ - Model studied in Ref. [1].                     |
+    +-----------+-----------+-----------------------------------------------------+
 
 Classical-to-quantum transfer learning
 --------------------------------------
