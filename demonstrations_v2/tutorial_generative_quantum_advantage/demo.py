@@ -18,6 +18,7 @@ aligns closest with the notion of generative machine learning in the classical l
 informally stated as:
 
  .. admonition::
+    :class: note
 
     *Theorem 1 (Informal: Classically hard, quantumly easy generative models). Under standard
     complexity-theoretic conjectures, there exist distributions p(y|x) mapping classical n-bit strings
@@ -54,7 +55,7 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 #    parameter :math:`\theta_{ij}` on each of the qubits
 # 4. Measure all qubits in the X basis to produce outcomes :math:`y_{ij}`
 #
-# .. figure:: ../_static/demonstration_assets/generative_quantum_advantage/IDQNN.png
+# .. figure:: ../_static/demonstration_assets/generative_quantum_advantage/pennylane-demo-generative-quantum-advantage-fig1.png
 #    :alt: Depiction of a IDQNN circuit.
 #    :width: 60.0%
 #    :align: center
@@ -80,7 +81,7 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # 
 # If you apply the mapping to our example IDQNN, you find the following circuit:
 #
-# .. figure:: ../_static/demonstration_assets/generative_quantum_advantage/deepcircuit1.png
+# .. figure:: ../_static/demonstration_assets/generative_quantum_advantage/pennylane-demo-generative-quantum-advantage-fig2.png
 #    :alt: Equivalent deep circuit that reproduces the IDQNN statistics
 #    :width: 60.0%
 #    :align: center
@@ -164,7 +165,7 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # 
 # Pictorially, the choice looks like this.
 #
-# .. figure:: ../_static/demonstration_assets/generative_quantum_advantage/inputs.png
+# .. figure:: ../_static/demonstration_assets/generative_quantum_advantage/pennylane-demo-generative-quantum-advantage-fig3.png
 #    :alt: Input choices for out example
 #    :width: 60.0%
 #    :align: center
@@ -180,7 +181,7 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # actually remove them all. For example, the input :math:`x=1` actually just corresponds to an
 # unentangled product state:
 #
-# .. figure:: ../_static/demonstration_assets/generative_quantum_advantage/IDQNN2.png
+# .. figure:: ../_static/demonstration_assets/generative_quantum_advantage/pennylane-demo-generative-quantum-advantage-fig4.png
 #    :alt: Resulting IDQNN when the input is x=1
 #    :width: 60.0%
 #    :align: center
@@ -190,7 +191,7 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # removed the rotation gates for the qubits prepared in :math:`\vert 0 \rangle` since this results in a global
 # phase only).
 #
-# .. figure:: ../_static/demonstration_assets/generative_quantum_advantage/deepcircuit2.png
+# .. figure:: ../_static/demonstration_assets/generative_quantum_advantage/pennylane-demo-generative-quantum-advantage-fig5.png
 #    :alt: The deep circuit with mid-circuit measurements that reproduces the IDQNN for x=1
 #    :width: 60.0%
 #    :align: center
@@ -237,7 +238,7 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # input :math:`x=1`, and the outcome :math:`y_{12}`. From the above circuit we see that in this case the
 # outcome is produced by this single qubit circuit:
 #
-# .. figure:: ../_static/demonstration_assets/generative_quantum_advantage/tomography.png
+# .. figure:: ../_static/demonstration_assets/generative_quantum_advantage/pennylane-demo-generative-quantum-advantage-fig6.png
 #    :alt: The single-qubit circuit that is used to infer the parameter \theta_{12}
 #    :width: 60.0%
 #    :align: center
@@ -340,34 +341,29 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # ----------
 #
 # .. [#genquantumadv]
-#
-#     H. Huang, M. Broughton, N. Eassa, H. Neven, R. Babbush, J. R. McClean
-#     "Generative quantum advantage for classical and quantum problems."
-#     `arXiv:2509.09033 <https://arxiv.org/abs/2509.09033>`__, 2025.
+#    H. Huang, M. Broughton, N. Eassa, H. Neven, R. Babbush, J. R. McClean
+#    "Generative quantum advantage for classical and quantum problems."
+#    `arXiv:2509.09033 <https://arxiv.org/abs/2509.09033>`__, 2025.
 #
 # .. [#sample]
-#
-#     T. Bergamaschi; C. Chen; Y. Liu
-#     "Quantum Computational Advantage with Constant-Temperature Gibbs Sampling."
-#     `2024 IEEE 65th Annual Symposium on Foundations of Computer Science (FOCS) <https://ieeexplore.ieee.org/document/10756075>`__, 2024.
+#    T. Bergamaschi; C. Chen; Y. Liu
+#    "Quantum Computational Advantage with Constant-Temperature Gibbs Sampling."
+#    `2024 IEEE 65th Annual Symposium on Foundations of Computer Science (FOCS) <https://ieeexplore.ieee.org/document/10756075>`__, 2024.
 #
 # .. [#goal]
-#
-#     M. Schuld, N. Killoran
-#     "Is Quantum Advantage the Right Goal for Quantum Machine Learning?."
-#     `PRX Quantum 3, 030101 <https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.3.030101>`__, 2022.
+#    M. Schuld, N. Killoran
+#    "Is Quantum Advantage the Right Goal for Quantum Machine Learning?."
+#    `PRX Quantum 3, 030101 <https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.3.030101>`__, 2022.
 #
 # .. [#qft]
-#
-#     D. Wakeham, M Schuld
-#     "Inference, interference and invariance: How the Quantum Fourier Transform can help to learn from data."
-#     `arXiv:2409.00172 <https://arxiv.org/abs/2409.00172>`__, 2024.
+#    D. Wakeham, M Schuld
+#    "Inference, interference and invariance: How the Quantum Fourier Transform can help to learn from data."
+#    `arXiv:2409.00172 <https://arxiv.org/abs/2409.00172>`__, 2024.
 #
 # .. [#iqp]
-#
-#     E. Recio-Armengol, S. Ahmed, J. Bowles
-#     "Train on classical, deploy on quantum: scaling generative quantum machine learning to a thousand qubits."
-#     `arXiv:2503.02934 <https://arxiv.org/abs/2503.02934>`__, 2025.
+#    E. Recio-Armengol, S. Ahmed, J. Bowles
+#    "Train on classical, deploy on quantum: scaling generative quantum machine learning to a thousand qubits."
+#    `arXiv:2503.02934 <https://arxiv.org/abs/2503.02934>`__, 2025.
 #
 
 
