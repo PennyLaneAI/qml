@@ -1,5 +1,5 @@
-r"""Demo: generative quantum advantage for classical and quantum problems
-=====================================================================
+r"""Generative quantum advantage for classical and quantum problems
+===================================================================
 
 Generative machine learning is all about inferring and sampling from probability distributions, and
 sampling output distributions of quantum computers is known to be classically hard. So proving
@@ -17,11 +17,10 @@ practical AI. In particular, we will focus on the first theorem (Theorem 1) of t
 aligns closest with the notion of generative machine learning in the classical literature. It is
 informally stated as:
 
-.. admonition::
+.. admonition:: Theorem 1 (Informal: Classically hard, quantumly easy generative models)
     :class: note
 
-    Theorem 1 (Informal: Classically hard, quantumly easy generative models). Under standard
-    complexity-theoretic conjectures, there exist distributions p(y|x) mapping classical n-bit strings
+    Under standard complexity-theoretic conjectures, there exist distributions p(y|x) mapping classical n-bit strings
     to m-bit strings that a quantum computer can efficiently learn to generate using classical data
     samples, but are hard to generate with classical computers.
 
@@ -193,7 +192,7 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 #
 # .. figure:: ../_static/demonstration_assets/generative_quantum_advantage/pennylane-demo-generative-quantum-advantage-fig5.png
 #    :alt: The deep circuit with mid-circuit measurements that reproduces the IDQNN for x=1
-#    :width: 60.0%
+#    :width: 100.0%
 #    :align: center
 #
 # The authors argue that the conditional distribution :math:`p(\boldsymbol{y}|x)` should also be
@@ -218,10 +217,10 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # 
 # The precise definition of learning is given by definition 13 in the Appendix:
 #
-# .. admonition:: Hadamard transform
+# .. admonition:: Definition 13 (The task of learning to generate classical bitstrings)
 #     :class: note
 # 
-#     Definition 13 (The task of learning to generate classical bitstrings). We are given a dataset of
+#     We are given a dataset of
 #     input-output bitstring pairs :math:`(x,y)`. Each output bitstring
 #     :math:`y` is sampled according to an unknown conditional distribution
 #     :math:`p(\boldsymbol{y}|x)`. The goal is to learn a model from the dataset that can generate new
