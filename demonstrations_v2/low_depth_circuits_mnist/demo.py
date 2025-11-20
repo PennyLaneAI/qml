@@ -116,7 +116,7 @@ def FRQI_decoding(states):
 
 ######################################################################
 # Downloading the quantum image dataset
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# -------------------------------------
 #
 # The dataset configuration sets the name as ``'low-depth-mnist'`` and constructs the dataset path as
 # ``datasets/low-depth-mnist/low-depth-mnist.h5``. For dataset loading, if the file exists locally, it
