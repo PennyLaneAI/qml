@@ -244,7 +244,9 @@ kitaev_H_with_grouping = qre.PauliHamiltonian(
     commuting_groups = commuting_groups,
 )
 
-resources_with_grouping = qre.estimate(qre.TrotterPauli(kitaev_H_with_grouping, num_steps, order))
+resources_with_grouping = qre.estimate(
+    qre.TrotterPauli(kitaev_H_with_grouping, num_steps, order)
+)
 
 # Just compare T gates:
 t_count_1 = resources_without_grouping.gate_counts["T"]
