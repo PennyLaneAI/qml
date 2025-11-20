@@ -1,6 +1,6 @@
 import typer
 from qml.context import Context
-from qml.lib import demo, repo, cli, fs, template
+from qml.lib import demo, cli, template
 import shutil
 import logging
 from typing import Annotated, Optional
