@@ -20,15 +20,15 @@ informally stated as:
 .. admonition:: Theorem 1 (Informal: Classically hard, quantumly easy generative models)
     :class: note
 
-    Under standard complexity-theoretic conjectures, there exist distributions p(y|x) mapping classical n-bit strings
+    Under standard complexity-theoretic conjectures, there exist distributions :math:`p(y|x)` mapping classical n-bit strings
     to m-bit strings that a quantum computer can efficiently learn to generate using classical data
     samples, but are hard to generate with classical computers.
 
 To show the above, we need to do a couple of things:
 
-- Identify a classically ‘hard’ conditional distribution p(y|x) that corresponds to a family of
+- Identify a classically ‘hard’ conditional distribution :math:`p(y|x)` that corresponds to a family of
   quantum circuits. For this, we can leverage some existing results about the hardness of sampling.
-- Show that, with access to a dataset obtained by querying and sampling from p(y|x), we can infer
+- Show that, with access to a dataset obtained by querying and sampling from :math:`p(y|x)`, we can infer
   the circuits that produced the data, and can therefore generate more data.
 
 The paper gives a couple of circuit structures that can be used. We will focus on the simplest,

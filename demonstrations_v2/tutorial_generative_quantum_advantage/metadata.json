@@ -16,11 +16,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/contextuality/thumbnail_tutorial_Contextuality.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/pennylane-demo-generative-quantum-advantage-thumbnail.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_Contextuality.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/pennylane-demo-generative-quantum-advantage-large-thumbnail.png"
         }
     ],
     "seoDescription": "Learn the parameters of a hard-to-sample circuit",
