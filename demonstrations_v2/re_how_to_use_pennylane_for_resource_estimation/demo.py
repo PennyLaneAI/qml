@@ -185,7 +185,7 @@ order = 2
 num_steps = 10
 
 def circuit(hamiltonian):
-    qre.UniformStatePrep(num_states = 2**n_q)    # Prepare a uniform superposition over all 2^num_qubit basis states
+    qre.UniformStatePrep(num_states = 2**n_q)    # uniform superposition over all basis states
     qre.TrotterPauli(hamiltonian, num_steps, order)
     return
 
