@@ -128,7 +128,7 @@ We will first code the classical solution. We will do this inside a quantum circ
 
 import pennylane as qml
 
-dev = qml.device("default.qubit", wires = 4, shots = 1)
+dev = qml.device("default.qubit", wires = 4)
 
 def Uf():
     # The oracle in charge of encoding a hidden "a" value.
@@ -136,6 +136,7 @@ def Uf():
     qml.CNOT(wires=[2 ,3])
 
 
+@qml.set_shots(1)
 @qml.qnode(dev)
 def circuit0():
     """Circuit used to derive a0"""
@@ -151,6 +152,7 @@ def circuit0():
     # We measure the last qubit
     return qml.sample(wires = 3)
 
+@qml.set_shots(1)
 @qml.qnode(dev)
 def circuit1():
     # Circuit used to derive a1
@@ -164,6 +166,7 @@ def circuit1():
     # We measure the last qubit
     return qml.sample(wires = 3)
 
+@qml.set_shots(1)
 @qml.qnode(dev)
 def circuit2():
     # Circuit used to derive a2
@@ -192,6 +195,7 @@ print(f"The value of 'a' is [{a0},{a1},{a2}]")
 # In this case, with 3 queries (:math:`n=3`), we have discovered the value of :math:`\vec{a}.` Let's run the Bernstein–Vazirani subroutine (using qubits as qubits this time) to check that one call is enough:
 
 
+@qml.set_shots(1)
 @qml.qnode(dev)
 def circuit():
 
@@ -244,7 +248,7 @@ print(f"The value of a is {a}")
 # These generalizations simply adjust the addition operation to be performed in modulo 3 instead of modulo 2.
 # So, with these ingredients, we are ready to go to the code.
 
-dev = qml.device("default.qutrit", wires=4, shots=1)
+dev = qml.device("default.qutrit", wires=4)
 
 def Uf():
     # The oracle in charge of encoding a hidden "a" value.
@@ -252,6 +256,7 @@ def Uf():
     qml.TAdd(wires = [1,3])
     qml.TAdd(wires = [2,3])
 
+@qml.set_shots(1)
 @qml.qnode(dev)
 def circuit0():
 
@@ -264,6 +269,7 @@ def circuit0():
     # We measure the last qutrit
     return qml.sample(wires = 3)
 
+@qml.set_shots(1)
 @qml.qnode(dev)
 def circuit1():
 
@@ -276,6 +282,7 @@ def circuit1():
     # We measure the last qutrit
     return qml.sample(wires = 3)
 
+@qml.set_shots(1)
 @qml.qnode(dev)
 def circuit2():
 
@@ -314,6 +321,7 @@ print(f"The value of a is [{a0},{a1},{a2}]")
 # Let's go to the code and see how to run this in PennyLane.
 
 
+@qml.set_shots(1)
 @qml.qnode(dev)
 def circuit():
 

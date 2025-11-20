@@ -103,9 +103,10 @@ import matplotlib.pyplot as plt
 import random
 
 qubits = 60
-dev = qml.device("qrack.simulator", qubits, shots=8)
+dev = qml.device("qrack.simulator", qubits)
 
 @qjit
+@qml.set_shots(8)
 @qml.qnode(dev)
 def circuit():
     for i in range(qubits):
@@ -159,9 +160,10 @@ plt.show()
 # `GHZ state <https://en.wikipedia.org/wiki/Greenberger%E2%80%93Horne%E2%80%93Zeilinger_state>`__ initialization).
 
 qubits = 12
-dev = qml.device("qrack.simulator", qubits, shots=8)
+dev = qml.device("qrack.simulator", qubits)
 
 @qjit
+@qml.set_shots(8)
 @qml.qnode(dev)
 def circuit():
     for i in range(qubits):
@@ -199,13 +201,13 @@ qubits = 60
 dev = qml.device(
     "qrack.simulator",
     qubits,
-    shots=8,
     isBinaryDecisionTree=False,
     isStabilizerHybrid=True,
     isSchmidtDecompose=False,
 )
 
 @qjit
+@qml.set_shots(8)
 @qml.qnode(dev)
 def circuit():
     qml.Hadamard(0)
@@ -241,10 +243,11 @@ plt.show()
 
 qubits = 24
 dev = qml.device(
-    "qrack.simulator", qubits, shots=8, isBinaryDecisionTree=True, isStabilizerHybrid=False
+    "qrack.simulator", qubits, isBinaryDecisionTree=True, isStabilizerHybrid=False
 )
 
 @qjit
+@qml.set_shots(8)
 @qml.qnode(dev)
 def circuit():
     qml.Hadamard(0)
@@ -293,9 +296,10 @@ import time
 
 def bench(n, results):
     for device in ["qrack.simulator", "lightning.qubit"]:
-        dev = qml.device(device, n, shots=1)
+        dev = qml.device(device, n)
 
         @qjit
+        @qml.set_shots(1)
         @qml.qnode(dev)
         def circuit():
             for i in range(n):
@@ -344,9 +348,10 @@ plt.show()
 # `Lightning <https://docs.pennylane.ai/projects/lightning>`__. How does Qrack with QJIT compare to Qrack without it?
 
 def bench(n, results):
-    dev = qml.device("qrack.simulator", n, shots=1)
+    dev = qml.device("qrack.simulator", n)
 
     @qjit
+    @qml.set_shots(1)
     @qml.qnode(dev)
     def circuit():
         for i in range(n):
@@ -361,6 +366,7 @@ def bench(n, results):
     circuit()
     results[f"QJIT Qrack ({n} qb)"] = time.perf_counter_ns() - start_ns
 
+    @qml.set_shots(1)
     @qml.qnode(dev)
     def circuit():
         for i in range(n):
@@ -408,7 +414,7 @@ plt.show()
 def validate(n):
     results = []
     for device in ["qrack.simulator", "lightning.qubit"]:
-        dev = qml.device(device, n, shots=None)
+        dev = qml.device(device, n)
 
         @qjit
         @qml.qnode(dev)

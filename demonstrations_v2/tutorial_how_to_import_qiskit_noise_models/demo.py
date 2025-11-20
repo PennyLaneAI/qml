@@ -112,8 +112,8 @@ print(model_pl)
 
 # Preparing the devices
 n_shots = int(2e6)
-dev_pl_ideal = qml.device("default.mixed", wires=n_qubits, shots=n_shots)
-dev_qk_noisy = qml.device("qiskit.aer", wires=n_qubits, shots=n_shots, noise_model=model_qk)
+dev_pl_ideal = qml.device("default.mixed", wires=n_qubits)
+dev_qk_noisy = qml.device("qiskit.aer", wires=n_qubits, noise_model=model_qk)
 
 def GHZcircuit():
     qml.U2(0, np.pi, wires=[0])
@@ -122,9 +122,9 @@ def GHZcircuit():
     return qml.counts(wires=range(n_qubits), all_outcomes=True)
 
 # Preparing the circuits
-pl_ideal_circ = qml.QNode(GHZcircuit, dev_pl_ideal)
+pl_ideal_circ = qml.set_shots(qml.QNode(GHZcircuit, dev_pl_ideal), shots = n_shots)
 pl_noisy_circ = qml.add_noise(pl_ideal_circ, noise_model=model_pl)
-qk_noisy_circ = qml.QNode(GHZcircuit, dev_qk_noisy)
+qk_noisy_circ = qml.set_shots(qml.QNode(GHZcircuit, dev_qk_noisy), shots = n_shots)
 
 # Preparing the results
 pl_noisy_res, qk_noisy_res = pl_noisy_circ(), qk_noisy_circ()

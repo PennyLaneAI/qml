@@ -125,7 +125,7 @@ print(H)
 # on hardware. Let's generate the cost function to check this.
 
 # Create a 4 qubit simulator
-dev = qml.device("default.qubit", shots=1000, seed=904932)
+dev = qml.device("default.qubit", seed=904932)
 
 # number of electrons
 electrons = 2
@@ -141,6 +141,7 @@ ansatz = functools.partial(
 )
 
 # generate the cost function
+@qml.set_shots(1000)
 @qml.qnode(dev, interface="jax")
 def cost_circuit(params):
     ansatz(params, wires=range(num_qubits))
@@ -334,21 +335,6 @@ print("\n", H)
 # find the gates to rotate the circuit into the shared eigenbasis. To do so, we simply rotate
 # each qubit one-by-one depending on the Pauli operator we are measuring on that wire:
 #
-# .. raw:: html
-#
-#     <style>
-#         .docstable {
-#             max-width: 300px;
-#         }
-#         .docstable tr.row-even th, .docstable tr.row-even td {
-#             text-align: center;
-#         }
-#         .docstable tr.row-odd th, .docstable tr.row-odd td {
-#             text-align: center;
-#         }
-#     </style>
-#     <div class="d-flex justify-content-center">
-#
 # .. rst-class:: docstable
 #
 #     +------------------+-------------------------------+
@@ -362,10 +348,6 @@ print("\n", H)
 #     +------------------+-------------------------------+
 #     | :math:`I`        | :math:`I`                     |
 #     +------------------+-------------------------------+
-#
-# .. raw:: html
-#
-#     </div>
 #
 # Therefore, in this particular example:
 #

@@ -97,7 +97,7 @@ similar set referred to as ``destabilizer`` set :math:`\mathcal{D}.`
 
 The stabilizer tableau for an :math:`n`-qubit state is made of binary variables representing
 the Pauli words for the ``generators`` of stabilizer :math:`\mathcal{S}` and destabilizer
-:math:`\mathcal{D}`and their ``phases`.` These are generally arranged as the following
+:math:`\mathcal{D}` and their ``phases``. These are generally arranged as the following
 tabulated structure [#lowrank_2019]_:
 
 .. figure:: ../_static/demonstration_assets/clifford_simulation/stabilizer-tableau.jpeg
@@ -163,7 +163,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Get the results with 10000 shots and assert them
-shot_result = circuit(return_state=False, shots=10000)
+shot_result = qml.set_shots(circuit, shots=10000)(return_state=False)
 shot_exp, shot_var, shot_probs = shot_result
 assert qml.math.allclose([shot_exp, shot_var], [expval, var], atol=1e-3)
 
@@ -232,7 +232,7 @@ shots_times = np.zeros((len(num_shots), len(num_wires)))
 for ind, num_shot in enumerate(num_shots):
     for idx, num_wire in enumerate(num_wires):
         shots_times[ind][idx] = timeit(
-            "GHZStatePrep(num_wire, shots=num_shot)", number=5, globals=globals()
+            "qml.set_shots(GHZStatePrep, shots=num_shot)(num_wire)", number=5, globals=globals()
         ) / 5 # average over 5 trials
 
 # Figure set up

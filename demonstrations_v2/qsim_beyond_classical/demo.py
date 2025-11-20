@@ -124,7 +124,7 @@ qb2wire = {i: j for i, j in zip(qubits, range(wires))}
 #
 
 shots = 500000
-dev = qml.device('cirq.qsim', wires=wires, qubits=qubits, shots=shots)
+dev = qml.device('cirq.qsim', wires=wires, qubits=qubits)
 
 
 ######################################################################
@@ -301,6 +301,7 @@ def generate_single_qubit_gate_list():
 # :math:`\left|0\right>` and :math:`\left|1\right>.`
 #
 
+@qml.set_shots(shots)
 @qml.qnode(dev)
 def circuit(seed=42, return_probs=False):
     np.random.seed(seed)

@@ -520,9 +520,10 @@ amplitude_params = [max_amplitude, displacement, sigma]
 params = [amplitude_params]
 ts = [0.0, 1.75]
 
-default_qubit = qml.device("default.qubit", wires=3, shots=1000)
+default_qubit = qml.device("default.qubit", wires=3)
 
 
+@qml.set_shots(1000)
 @qml.qnode(default_qubit, interface="jax")
 def circuit(parameters):
     qml.evolve(global_drive)(parameters, ts)
@@ -554,7 +555,7 @@ def circuit(params):
     return qml.counts()
 
 
-circuit_qml = qml.QNode(circuit, default_qubit, interface="jax")
+circuit_qml = qml.set_shots(qml.QNode(circuit, default_qubit, interface="jax"), shots = 1000)
 circuit_ahs = qml.QNode(circuit, rydberg_simulator)
 
 print(f"PennyLane simulation: {circuit_qml(params)}")

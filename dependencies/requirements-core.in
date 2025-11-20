@@ -7,7 +7,7 @@ jax
 jaxlib
 matplotlib
 numpy
-pennylane
-pennylane-lightning
 pennylane-catalyst
+pennylane-lightning
+pennylane
 optax

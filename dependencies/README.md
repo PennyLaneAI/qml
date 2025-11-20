@@ -23,7 +23,9 @@ The following files define the various dependency sets:
 
 ### `constraints-dev.txt`
 
-This file specifies the allowed versions of dependencies for building and running demonstrations when targeting the most recent **development builds** of PennyLane and its associated plugins. The actual dependencies are defined in the requirements files; the constraints file only restricts which versions can be installed. This ensures compatibility with cutting-edge features and ongoing development.
+**NOTE**: The development versions of Lightning, Catalyst, and PennyLane require a specific installation order, and as such their versions are not controlled by this file.
+
+This file specifies the allowed versions of dependencies for building and running demonstrations when targeting the most recent **development builds** of PennyLane and its associated plugins. The actual dependencies are defined in the requirements files; the constraints file only restricts which versions can be installed. This ensures compatibility with cutting-edge features and ongoing development. Unless a new global development dependency is being added, you likely don't need to modify this file.
 
 *   **Location:** `./constraints-dev.txt`
 *   **Purpose:** Defines dependencies for the `qml build --dev` command.
