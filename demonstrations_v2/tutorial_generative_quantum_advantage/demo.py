@@ -17,13 +17,13 @@ practical AI. In particular, we will focus on the first theorem (Theorem 1) of t
 aligns closest with the notion of generative machine learning in the classical literature. It is
 informally stated as:
 
- .. admonition::
+.. admonition::
     :class: note
 
-    *Theorem 1 (Informal: Classically hard, quantumly easy generative models). Under standard
+    Theorem 1 (Informal: Classically hard, quantumly easy generative models). Under standard
     complexity-theoretic conjectures, there exist distributions p(y|x) mapping classical n-bit strings
     to m-bit strings that a quantum computer can efficiently learn to generate using classical data
-    samples, but are hard to generate with classical computers.*
+    samples, but are hard to generate with classical computers.
 
 To show the above, we need to do a couple of things:
 
@@ -57,7 +57,7 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 #
 # .. figure:: ../_static/demonstration_assets/generative_quantum_advantage/pennylane-demo-generative-quantum-advantage-fig1.png
 #    :alt: Depiction of a IDQNN circuit.
-#    :width: 60.0%
+#    :width: 100.0%
 #    :align: center
 #
 # 
@@ -83,7 +83,7 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 #
 # .. figure:: ../_static/demonstration_assets/generative_quantum_advantage/pennylane-demo-generative-quantum-advantage-fig2.png
 #    :alt: Equivalent deep circuit that reproduces the IDQNN statistics
-#    :width: 60.0%
+#    :width: 100.0%
 #    :align: center
 # 
 # The circuit structure for layers 2 and 3 is the same as for layer 1, where the CZ structure is
@@ -167,7 +167,7 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 #
 # .. figure:: ../_static/demonstration_assets/generative_quantum_advantage/pennylane-demo-generative-quantum-advantage-fig3.png
 #    :alt: Input choices for out example
-#    :width: 60.0%
+#    :width: 80.0%
 #    :align: center
 #
 # If the input is 0, we already know what happens; this is just the IDQNN described in the previous
@@ -183,7 +183,7 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 #
 # .. figure:: ../_static/demonstration_assets/generative_quantum_advantage/pennylane-demo-generative-quantum-advantage-fig4.png
 #    :alt: Resulting IDQNN when the input is x=1
-#    :width: 60.0%
+#    :width: 100.0%
 #    :align: center
 #
 # By performing mid-circuit measurements and resetting qubits, we can easily reproduce the statistics
@@ -217,18 +217,21 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 #   :math:`\boldsymbol{y}` Add the pair :math:`(x,\boldsymbol{y})`\ to the dataset
 # 
 # The precise definition of learning is given by definition 13 in the Appendix:
+#
+# .. admonition:: Hadamard transform
+#     :class: note
 # 
-#   *Definition 13 (The task of learning to generate classical bitstrings). We are given a dataset of
-#   input-output bitstring pairs :math:`(x,y)`. Each output bitstring
-#   y is sampled according to an unknown conditional distribution
-#   :math:`p(\boldsymbol{y}|x)`. The goal is to learn a model from the dataset that can generate new
-#   output bitstrings y according to the unknown distribution
-#   :math:`p(\boldsymbol{y}|x)` for any given new input bitstring x.*
+#     Definition 13 (The task of learning to generate classical bitstrings). We are given a dataset of
+#     input-output bitstring pairs :math:`(x,y)`. Each output bitstring
+#     :math:`y` is sampled according to an unknown conditional distribution
+#     :math:`p(\boldsymbol{y}|x)`. The goal is to learn a model from the dataset that can generate new
+#     output bitstrings y according to the unknown distribution
+#     :math:`p(\boldsymbol{y}|x)` for any given new input bitstring :math:`x`.
 # 
 # Although the above suggests the conditional distribution is unknown, we actually know a lot about
 # it. In particular, we need to work under the assumption that we know the exact structure of the
 # quantum circuits that produce the data, except for the rotation angles :math:`\theta_{ij}`
-# (i.e. this is included in the \`prior knowledge’ of the problem). To learn, we therefore just need
+# (i.e. this is included in the \`prior knowledge’ of the problem). To learn, we therefore just need
 # to infer the parameters :math:`\theta_{ij}` from the data, which will allow us to generate new data by
 # simply implementing the resulting circuits. This is very different from real world problems, the
 # typical situation in classical generative machine learning, where a precise parametric form of the
@@ -240,7 +243,7 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 #
 # .. figure:: ../_static/demonstration_assets/generative_quantum_advantage/pennylane-demo-generative-quantum-advantage-fig6.png
 #    :alt: The single-qubit circuit that is used to infer the parameter \theta_{12}
-#    :width: 60.0%
+#    :width: 80.0%
 #    :align: center
 #
 # This is a measurement on a rotated single-qubit state, for which the expectation value for
