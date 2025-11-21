@@ -213,7 +213,7 @@ fidelities_01 = np.asarray(dataset_params.fidelities_d4)[selection]
 
 ######################################################################
 # Reconstructing images from quantum states
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# -----------------------------------------
 #
 # To investigate how well the low-depth circuits reproduce the target images, we first **reconstruct**
 # the pictures encoded in each quantum state. The histogram below reports the *fidelity*
@@ -278,7 +278,7 @@ for ax in [ax00, ax01, ax10, ax11]:
 
 ######################################################################
 # 3. Quantum classifiers
-# ----------------------
+# ~~~~~~~~~~~~~~~~~~~~~~
 #
 # In this demo, we train a **variational quantum circuit** as a classifier. Our datasets require
 # ``N_QUBITS = 11``, therefore we use the same number of qubits for the classifier. Given a data state
@@ -380,7 +380,7 @@ def loader(X, y, batch_size, rng_key):
 
 ######################################################################
 # Preparing the training / validation split
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ------------------------------------------
 #
 # We start by **casting** the FRQI amplitude vectors and their digit labels into JAX arrays. Next, the
 # states and labels are shuffled from a pseudorandom key derived from the global ``SEED``. Then, the
@@ -409,7 +409,7 @@ X_val, y_val = X_all[val_idx], y_all[val_idx]
 
 ######################################################################
 # Training setup and loop
-# ~~~~~~~~~~~~~~~~~~~~~~~
+# -----------------------
 #
 # We begin by **initializing** the network weights ``params`` with values drawn uniformly from
 # :math:`[0, 2\pi]` and initialize the **Adam optimizer** with a learning rate of
