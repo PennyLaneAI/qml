@@ -585,7 +585,7 @@ qml.eigvals(qml.SparseHamiltonian(h.sparse_matrix(), wires=h.wires))
 #
 # .. math::
 #
-#     h^{eff}_{pq} = h_{pq} + \sum_{c \in C} 2 h_{piiq} - h_{piqi}.
+#     h^{eff}_{pq} = h_{pq} + \sum_{i \in C} 2 h_{piiq} - h_{piqi}.
 #
 # For the Chemist notation, we can write similar corrections terms as
 #
@@ -597,7 +597,7 @@ qml.eigvals(qml.SparseHamiltonian(h.sparse_matrix(), wires=h.wires))
 #
 # .. math::
 #
-#     h^{eff}_{pq} = h_{pq} + \sum_{c \in C} 2 h_{pqii} - h_{piiq}.
+#     h^{eff}_{pq} = h_{pq} + \sum_{i \in C} 2 h_{pqii} - h_{piiq}.
 #
 # The corrections for the Physicist notation can be written similarly as
 #
@@ -609,7 +609,7 @@ qml.eigvals(qml.SparseHamiltonian(h.sparse_matrix(), wires=h.wires))
 #
 # .. math::
 #
-#     h^{eff}_{pq} = h_{pq} + \sum_{c \in C} 2 h_{piqi} - h_{piiq}.
+#     h^{eff}_{pq} = h_{pq} + \sum_{i \in C} 2 h_{piqi} - h_{piiq}.
 #
 # Now we define a function that implements the correction for each convention.
 
