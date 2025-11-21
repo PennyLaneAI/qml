@@ -562,6 +562,78 @@ qml.eigvals(qml.SparseHamiltonian(h.sparse_matrix(), wires=h.wires))
 ##############################################################################
 # The other possible conversions follow a similar logic.
 #
+# Active space
+# ------------
+# The computations performed so far explicitly correlate all electrons. A common approximation
+# treats the core electrons as a static mean-field potential restricting the explicit correlation
+# treatment to the valence orbitals. When we define such an active space, we need to include the
+# effect of the core orbitals as corrections to the core constant term and the one-electron
+# integrals. These corrections also depend on the original conventions we used to compute the
+# integrals objects. Now we define a function that implements the correction for each convention.
+
+def active_space(core_constant, one, two, core, active, notation):
+
+    if notation == 'quantum':
+        for i in core:
+            core_constant = core_constant + 2 * one[i][i]
+            for j in core:
+                core_constant = core_constant + 2 * two[i][j][j][i] - two[i][j][i][j]
+
+        for p in active:
+            for q in active:
+                for i in core:
+                    one[p, q] += 2 * two[p][i][i][q] - two[p][i][q][i]
+
+    if notation == 'chemist':
+        for i in core:
+            core_constant = core_constant + 2 * one[i][i]
+            for j in core:
+                core_constant = core_constant + 2 * two[i][i][j][j] - two[i][j][j][i]
+
+        for p in active:
+            for q in active:
+                for i in core:
+                    one[p, q] += 2 * two[p][q][i][i] - two[p][i][i][q]
+
+    if notation == 'physicist':
+        for i in core:
+            core_constant = core_constant + 2 * one[i][i]
+            for j in core:
+                core_constant = core_constant + 2 * two[i][j][i][j] - two[i][j][j][i]
+
+        for p in active:
+            for q in active:
+                for i in core:
+                    one[p, q] += 2 * two[p][q][i][i] - two[p][i][i][q]
+
+    one = one[qml.math.ix_(active, active)]
+    two = two[qml.math.ix_(active, active, active, active)]
+
+    return core_constant, one, two
+
+##############################################################################
+# We can now use this function to perform computations in an active space where the first two
+# orbitals are frozen.
+
+core_constant, one, two = qml.qchem.electron_integrals(mol)
+
+one_chem = one.copy()
+two_chem = convert_integrals(two, 'quantum', 'chemist')
+
+core, active = [0, 1], [2, 3, 4, 5, 6]
+
+core_constant, one, two = active_space(core_constant, one_chem, two_chem, core, active, 'chemist')
+
+one_so = transform_one(one)
+two_so = transform_two(two, 'chemist')
+
+h = fermionic_observable(core_constant[0], one_so, two_so, 'chemist')
+qml.eigvals(qml.SparseHamiltonian(h.sparse_matrix(), wires=h.wires))
+
+##############################################################################
+# The resulting ground state energy :math:`-74.99989932` is slightly higher because of the frozen
+# orbital approximation we used.
+#
 # Appendix
 # --------
 # We use the molecular Hamiltonian corresponding to Physicist's convention to derive the Hamiltonian
