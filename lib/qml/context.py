@@ -50,5 +50,9 @@ class Context:
         return self.repo_root / "dependencies" / "constraints-dev.txt"
 
     @property
+    def plc_dev_constraints_file(self) -> Path:
+        return self.repo_root / "dependencies" / "constraints-plc-dev.txt"
+
+    @property
     def build_requirements_file(self) -> Path:
         return self.repo_root / "dependencies" / "requirements-build.txt"
