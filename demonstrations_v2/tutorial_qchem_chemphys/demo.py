@@ -615,7 +615,7 @@ def active_space(core_constant, one, two, core, active, notation):
 # We can now use this function to perform computations in an active space where the first two
 # orbitals are frozen.
 
-core_constant, one, two = qml.qchem.electron_integrals(mol)
+core_constant, one, two = qml.qchem.electron_integrals(mol)()
 
 one_chem = one.copy()
 two_chem = convert_integrals(two, 'quantum', 'chemist')
