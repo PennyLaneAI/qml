@@ -500,7 +500,7 @@ ax[1].set_ylabel("Accuracy")
 #
 #
 # References
-# ----------
+# ~~~~~~~~~~
 #
 # .. [#Kiwit] 
 # 
@@ -542,7 +542,7 @@ ax[1].set_ylabel("Accuracy")
 
 ######################################################################
 # Appendix
-# --------
+# ~~~~~~~~~
 #
 
 # The CIFAR-10 and Imagenette datasets use the following MCRQI color encoding and decoding [4,5]
