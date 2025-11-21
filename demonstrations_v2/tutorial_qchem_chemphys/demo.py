@@ -569,7 +569,49 @@ qml.eigvals(qml.SparseHamiltonian(h.sparse_matrix(), wires=h.wires))
 # treatment to the valence orbitals. When we define such an active space, we need to include the
 # effect of the core orbitals as corrections to the core constant term and the one-electron
 # integrals. These corrections also depend on the original conventions we used to compute the
-# integrals objects. Now we define a function that implements the correction for each convention.
+# integrals objects. Here we list the corrections that need to be included for each convention. Note
+# that after applying the corrections, the Hamiltonians are constructed as before, except that the
+# sums go over the active orbitals only.
+#
+# For the Quantum notation, the corrections to the core constant and the one-electron integrals are
+#
+# .. math::
+#
+#     E_{core} = E_0 + \sum_{i \in C} 2h_{ii}  + \sum_{ij \in C} 2 h_{ijji} - h_{ijij},
+#
+# where :math:`E_0` is the original nuclear repulsion constant and  :math:`C` denotes core
+# molecular orbitals. Note that the sums are over molecular orbitals but can be simply extended to
+# be on spin orbitals. Similarly, the one-electron integrals can be corrected with
+#
+# .. math::
+#
+#     h^{eff}_{pq} = h_{pq} + \sum_{c \in C} 2 h_{piiq} - h_{piqi}.
+#
+# For the Chemist notation, we can write similar corrections terms as
+#
+# .. math::
+#
+#     E_{core} = E_0 + \sum_{i \in C} 2h_{ii}  + \sum_{ij \in C} 2 h_{iijj} - h_{ijji},
+#
+# and
+#
+# .. math::
+#
+#     h^{eff}_{pq} = h_{pq} + \sum_{c \in C} 2 h_{pqii} - h_{piiq}.
+#
+# The corrections for the Physicist notation can be written similarly as
+#
+# .. math::
+#
+#     E_{core} = E_0 + \sum_{i \in C} 2h_{ii}  + \sum_{ij \in C} 2 h_{ijij} - h_{ijji},
+#
+# and
+#
+# .. math::
+#
+#     h^{eff}_{pq} = h_{pq} + \sum_{c \in C} 2 h_{piqi} - h_{piiq}.
+#
+# Now we define a function that implements the correction for each convention.
 
 def active_space(core_constant, one, two, core, active, notation):
 
@@ -604,7 +646,7 @@ def active_space(core_constant, one, two, core, active, notation):
         for p in active:
             for q in active:
                 for i in core:
-                    one[p, q] += 2 * two[p][q][i][i] - two[p][i][i][q]
+                    one[p, q] += 2 * two[p][i][q][i] - two[p][i][i][q]
 
     one = one[qml.math.ix_(active, active)]
     two = two[qml.math.ix_(active, active, active, active)]
