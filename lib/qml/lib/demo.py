@@ -290,30 +290,24 @@ def _build_demo(
         # If dev, we need to re-install the latest Catalyst, then Lightning, then PennyLane
         # in that order, regardless of conflicts/warnings. 
         if dev:
-            # Catalyst
-            cmds.pip_install(
-                build_venv.python,
-                "--upgrade",
-                "--extra-index-url",
-                "https://test.pypi.org/simple/",
-                "PennyLane-Catalyst",
-                use_uv=False,
-                quiet=False,
-                pre=True,
-            )
-            # Lightning
-            cmds.pip_install(
-                build_venv.python,
-                "--upgrade",
-                "--extra-index-url",
-                "https://test.pypi.org/simple/",
-                "PennyLane-Lightning",
-                use_uv=False,
-                quiet=False,
-                pre=True,
-            )
-    if dev:
-        # Need dev version of PennyLane to build, whether or not we're executing
+            with open(ctx.plc_dev_constraints_file, "r") as f:
+                packages = f.readlines()
+                for package in packages:
+                    package = package.strip()
+                    if package and not package.startswith("#"):
+                        cmds.pip_install(
+                            build_venv.python,
+                            "--upgrade",
+                            "--extra-index-url",
+                            "https://test.pypi.org/simple/",
+                            package,
+                            use_uv=False,
+                            quiet=False,
+                            pre=True,
+                        )
+
+    elif dev:
+        # Need latest version of PennyLane to build, whether or not we're executing
         cmds.pip_install(
             build_venv.python,
             "--upgrade",
