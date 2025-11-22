@@ -228,7 +228,7 @@ fidelities_01 = np.asarray(dataset_params.fidelities_d4)[selection]
 #
 # On the right we decode the states back into pixel space. In line with the histogram, the
 # reconstructed “1” is virtually indistinguishable from its original, whereas the reconstructed “0”
-# shows minor blurring. By selecting a deeper circuit the quality of the reconstructed images could be
+# shows minor blurring. By selecting a deeper circuit, the quality of the reconstructed images could be
 # improved by trading quality for efficiency.
 #
 
