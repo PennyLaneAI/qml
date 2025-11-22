@@ -13,8 +13,8 @@
   ],
   "executable_stable": true,
   "executable_latest": true,
-  "dateOfPublication": "2025-09-21T00:00:00+00:00",
-  "dateOfLastModification": "2025-09-21T00:00:00+00:00",
+  "dateOfPublication": "2025-11-25T00:00:00+00:00",
+  "dateOfLastModification": "2025-11-17T00:00:00+00:00",
   "categories": [
     "Quantum Machine Learning"
   ],
@@ -22,7 +22,11 @@
   "previewImages": [
     {
       "type": "thumbnail",
-      "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_placeholder.png"
+      "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/pennylane-demo-loading-data-low-depth-thumbnail.png"
+    },
+    {
+      "type": "large_thumbnail",
+      "uri": "/_static/demo_thumbnails/opengraph_demo_thumbnails/pennylane-demo-loading-data-low-depth-open-graph.png"
     }
   ],
   "seoDescription": "This demo shows how to efficiently encode classical image data into quantum states using low-depth circuits, and train a variational quantum classifier on a low-depth MNIST dataset.",
