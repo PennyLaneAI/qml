@@ -508,7 +508,7 @@ def bias_inv_layer(weights, x):
 #
 
 dev = qml.device("default.qubit", wires=3)
-
+"lightning.qubit"
 
 @qml.qnode(dev)
 def model(weights, x):
@@ -542,7 +542,7 @@ def generic_layer(weights, x):
 
 
 dev = qml.device("default.qubit", wires=3)
-
+"lightning.qubit"
 
 @qml.qnode(dev)
 def generic_model(weights, x):

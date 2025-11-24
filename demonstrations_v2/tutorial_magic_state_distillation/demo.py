@@ -247,7 +247,7 @@ import matplotlib.pyplot as plt
 import os
 
 dev_5_qubits = qml.device("default.qubit", wires=5)
-
+"lightning.qubit"
 @jax.jit
 @qml.qnode(dev_5_qubits, interface="jax")
 def T0_state():

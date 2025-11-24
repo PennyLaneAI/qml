@@ -66,7 +66,7 @@ key = jax.random.PRNGKey(42)
 
 # create a device to execute the circuit on
 dev = qml.device("default.qubit", wires=3)
-
+"lightning.qubit"
 
 def CNOT_ring(wires):
     """Apply CNOTs in a ring pattern"""
@@ -177,7 +177,7 @@ print(jnp.stack(qml.gradients.param_shift(circuit)(params)))
 # to make a more complicated QNode.
 
 dev = qml.device("default.qubit", wires=4)
-
+"lightning.qubit"
 @qml.qnode(dev, diff_method="parameter-shift")
 def circuit(params):
     qml.StronglyEntanglingLayers(params, wires=[0, 1, 2, 3])
@@ -269,7 +269,7 @@ print(2 * forward_time * params.size)
 # In this demo, we will use the JAX interface.
 
 dev = qml.device("default.qubit", wires=4)
-
+"lightning.qubit"
 ##############################################################################
 # When defining the QNode, we specify ``diff_method="backprop"`` to ensure that
 # we are using backpropagation mode. Note that this is the *default differentiation
@@ -321,7 +321,7 @@ print(f"Backward pass (best of {reps}): {backward_time} sec per loop")
 # computation as the number of layers is allowed to increase.
 
 dev = qml.device("default.qubit", wires=4)
-
+"lightning.qubit"
 def circuit(params):
     qml.StronglyEntanglingLayers(params, wires=[0, 1, 2, 3])
     return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1) @ qml.PauliZ(2) @ qml.PauliZ(3))

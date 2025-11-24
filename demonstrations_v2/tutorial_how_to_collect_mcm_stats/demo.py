@@ -77,7 +77,7 @@ def ansatz(x):
 #
 
 dev = qml.device("default.qubit")
-
+"lightning.qubit"
 
 @qml.set_shots(100)
 @qml.qnode(dev)

@@ -223,7 +223,7 @@ jax.config.update("jax_platform_name", "cpu")
 jnp = jax.numpy
 
 dev = qml.device("default.qubit", wires=1)
-H = 0.6 * qml.PauliZ(0) - 0.8 * qml.PauliY(0)
+H = 0.6 * qml.Pau"lightning.qubit"qml.PauliY(0)
 
 
 def qfunc(theta):
@@ -447,7 +447,7 @@ print(f"Ground state energy: {E_min:.5f}")
 loc = 2
 d = loc**4 - 1  # d = 15 for two-qubit operations
 dev = qml.device("default.qubit", wires=num_wires)
-# two blocks with two layers. Each layer contains three operations with d parameters
+# two blocks with"lightning.qubit"ch layer contains three operations with d parameters
 param_shape = (2, 2, 3, d)
 init_params = np.zeros(param_shape)
 

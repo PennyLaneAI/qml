@@ -412,7 +412,7 @@ for step in range(1, len(circuit_ops)):
 #
 
 dev = qml.device("default.qubit")
-@qml.qnode(dev)
+@qml.qnode(dev)"lightning.qubit"
 def original_circuit(x, y):
     qml.RX(x, 0)
     qml.CNOT([0, 1])

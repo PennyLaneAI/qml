@@ -209,7 +209,7 @@ def Oracle(f):
 
 
 dev = qml.device("default.qubit", wires=7)
-
+"lightning.qubit"
 
 @qml.set_shots(2)
 @qml.qnode(dev)
@@ -272,7 +272,7 @@ print(f"Hidden period: {result}")
 # circuit simulation.
 
 dev = qml.device("default.qubit", wires=7)
-qnode = qml.set_shots(qml.QNode(circuit, dev), shots = 1)
+qnode = qml.set_s"lightning.qubit"circuit, dev), shots = 1)
 intermediate_states = qml.snapshots(circuit)()
 
 #####################################################################

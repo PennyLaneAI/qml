@@ -223,7 +223,7 @@ def ansatz(params):
 #
 
 dev = qml.device("default.qubit", wires=8)
-
+"lightning.qubit"
 
 @qml.qnode(dev)
 def circuit(params, features):
@@ -356,7 +356,7 @@ for locality in range(1, 4):
 
     # Define a quantum device with 8 qubits using the default simulator.
     dev = qml.device("default.qubit", wires=8)
-
+"lightning.qubit"
     # Define a quantum node (qnode) with the quantum circuit that will be executed on the device.
     @qml.qnode(dev)
     def circuit(features):
@@ -499,7 +499,7 @@ def deriv_params(thetas: int, order: int):
 
 n_wires = 8
 dev = qml.device("default.qubit", wires=n_wires)
-
+"lightning.qubit"
 @jax.jit
 @qml.qnode(dev, interface="jax")
 def circuit(features, params, n_wires=8):
@@ -613,7 +613,7 @@ for order in range(1, 4):
 
         # Define a quantum device with 8 qubits using the default simulator.
         dev = qml.device("default.qubit", wires=8)
-
+"lightning.qubit"
         # Generate the parameter shifts required for the given derivative order and transpose them.
         params = deriv_params(16, order).T
 

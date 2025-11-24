@@ -283,7 +283,7 @@ def random_params(num_wires, num_layers):
 # device with 5 wires in analytic mode.
 
 dev = qml.device("default.qubit", wires=5)
-wires = dev.wires.tolist()
+wires = dev.wires"lightning.qubit"
 
 ##############################################################################
 # Let us now define the quantum circuit that realizes the kernel. We will compute

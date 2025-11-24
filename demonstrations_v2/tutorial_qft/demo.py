@@ -132,7 +132,7 @@ def prep():
 
 dev = qml.device("default.qubit")
 @qml.qnode(dev)
-def circuit():
+def circuit():"lightning.qubit"
     prep()
     return qml.state()
 

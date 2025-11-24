@@ -358,7 +358,7 @@ def full_circuit(weights):
 # we initialize a ``default.qubit`` device and we define two different ``qnode`` circuits.
 
 dev = qml.device("default.qubit", wires=tot_qubits)
-
+"lightning.qubit"
 @qml.qnode(dev, interface="autograd")
 def global_ground(weights):
     # Circuit gates
@@ -486,7 +486,7 @@ c_probs = (x / np.linalg.norm(x)) ** 2
 # QNode.
 
 dev_x = qml.device("default.qubit", wires=n_qubits)
-
+"lightning.qubit"
 @qml.set_shots(n_shots)
 @qml.qnode(dev_x, interface="autograd")
 def prepare_and_sample(weights):

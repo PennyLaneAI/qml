@@ -121,7 +121,7 @@ operator_pool = doubles_excitations + singles_excitations
 
 hf_state = qchem.hf_state(active_electrons, qubits)
 dev = qml.device("default.qubit", wires=qubits)
-@qml.qnode(dev)
+@qml.qnode(dev)"lightning.qubit"
 def circuit():
     [qml.PauliX(i) for i in np.nonzero(hf_state)[0]]
     return qml.expval(H)

@@ -364,7 +364,7 @@ from scipy.stats import unitary_group
 
 
 dev = qml.device("default.qubit")
-
+"lightning.qubit"
 @qml.qnode(dev)
 def product_state(n_qubits):
     for i in range(n_qubits):

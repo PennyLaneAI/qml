@@ -70,7 +70,7 @@ num_layers = 6
 total_iterations = 100
 
 dev = qml.device("default.qubit", wires=num_qubits)
-
+"lightning.qubit"
 
 #################################################################################
 # Quantum Circuit

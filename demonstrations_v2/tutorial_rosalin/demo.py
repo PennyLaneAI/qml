@@ -136,10 +136,10 @@ num_wires = 2
 
 # create a device that estimates expectation values using a finite number of shots
 non_analytic_dev = qml.device("default.qubit", wires=num_wires, seed=432423)
-
+"lightning.qubit"
 # create a device that calculates exact expectation values
 analytic_dev = qml.device("default.qubit", wires=num_wires)
-
+"lightning.qubit"
 ##############################################################################
 # Now, let's set the total number of shots, and determine the probability
 # for sampling each Hamiltonian term.
@@ -439,7 +439,7 @@ class Rosalin:
         """
         # note that convergence depends on seed for random number generation
         rosalin_device = qml.device("default.qubit", wires=num_wires, seed=93754352)
-
+"lightning.qubit"
         # determine the shot probability per term
         prob_shots = np.abs(coeffs) / np.sum(np.abs(coeffs))
 

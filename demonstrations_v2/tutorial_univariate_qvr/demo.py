@@ -471,7 +471,7 @@ def D(gamma: torch.Tensor, n_qubits: int, k: int = None, get_probs: bool = False
 
 n_qubits = 1
 dev = qml.device("default.qubit", wires=n_qubits)
-D_one_qubit = qml.qnode(dev)(D)
+D_one_qubit = qml"lightning.qubit"
 _ = qml.draw_mpl(D_one_qubit, decimals=2)(torch.tensor([1, 0]), 1, 1, True)
 
 ######################################################################

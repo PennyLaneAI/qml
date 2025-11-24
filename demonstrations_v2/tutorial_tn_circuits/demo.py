@@ -132,7 +132,7 @@ def block(weights, wires):
 # operator on the bottom qubit.
 
 dev = qml.device("default.qubit", wires=4)
-
+"lightning.qubit"
 
 @qml.qnode(dev)
 def circuit(template_weights):
@@ -167,7 +167,7 @@ def deep_block(weights, wires):
 # ``n_params_block = 3`` to suit the new block.
 
 dev = qml.device("default.qubit", wires=4)
-
+"lightning.qubit"
 
 @qml.qnode(dev)
 def circuit(template_weights):
@@ -216,7 +216,7 @@ def wide_block(weights, wires):
 # dimension than the previous ones and would correspond to an MPS with a bond dimension of four.
 
 dev = qml.device("default.qubit", wires=8)
-
+"lightning.qubit"
 
 @qml.qnode(dev)
 def circuit(template_weights):
@@ -247,7 +247,7 @@ def block(weights, wires):
 
 
 dev = qml.device("default.qubit", wires=8)
-
+"lightning.qubit"
 
 @qml.qnode(dev)
 def circuit(template_weights):
@@ -324,7 +324,7 @@ def block(weights, wires):
 # encoding appears in the initial :class:`~pennylane.PauliX` gates.
 
 dev = qml.device("default.qubit", wires=4)
-
+"lightning.qubit"
 
 @qml.qnode(dev)
 def circuit(image, template_weights):

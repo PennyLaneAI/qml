@@ -88,7 +88,7 @@ np.random.seed(42)
 
 num_qubits = 4
 dev = qml.device("default.qubit", wires=num_qubits)
-gate_set = [qml.RX, qml.RY, qml.RZ]
+gate_set = [qml.R"lightning.qubit"RZ]
 
 
 def rand_circuit(params, random_gate_sequence=None, num_qubits=None):
@@ -159,7 +159,7 @@ for num_qubits in qubits:
     grad_vals = []
     for i in range(num_samples):
         dev = qml.device("default.qubit", wires=num_qubits)
-        qcircuit = qml.QNode(rand_circuit, dev, interface="autograd")
+        qcircuit = qml.QN"lightning.qubit"t, dev, interface="autograd")
         grad = qml.grad(qcircuit, argnums=0)
 
         gate_set = [qml.RX, qml.RY, qml.RZ]

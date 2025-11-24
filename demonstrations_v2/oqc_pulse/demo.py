@@ -111,7 +111,7 @@ H += amp(omega) * qml.PauliY(0)
 # Hamiltonian H.
 @jax.jit
 @qml.qnode(qml.device("default.qubit", wires=1), interface="jax")
-def trajectory(params, t):
+def trajectory(params,"lightning.qubit"
     qml.evolve(H)((params,), t, return_intermediate=True)
     return [qml.expval(op) for op in [X, Y, Z]]
 
@@ -163,7 +163,7 @@ H1 += amp(omega) * Y
 # return_intermediate=False is the default, so we dont have to set it explicitly.
 @jax.jit
 @qml.qnode(qml.device("default.qubit", wires=1), interface="jax")
-def trajectory(Omega0, phi):
+def trajectory(Omega0,"lightning.qubit"
     qml.evolve(H1)([[Omega0, phi]], 20.0)
     return [qml.expval(op) for op in [X, Y, Z]]
 
@@ -218,7 +218,7 @@ ax.legend()
 
 wire = 5
 dev_sim = qml.device("default.qubit", wires=[wire])
-dev_lucy = qml.device(
+dev_lucy = qml.device"lightning.qubit"
     "braket.aws.qubit",
     device_arn="arn:aws:braket:eu-west-2::device/qpu/oqc/Lucy",
     wires=range(8))

@@ -147,7 +147,7 @@ test_images = np.array(test_images[..., tf.newaxis], requires_grad=False)
 
 
 dev = qml.device("default.qubit", wires=4)
-# Random circuit parameters
+# Random circuit "lightning.qubit"
 rand_params = np.random.uniform(high=2 * np.pi, size=(n_layers, 4))
 
 @qml.qnode(dev)

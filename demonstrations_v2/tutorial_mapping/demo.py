@@ -295,7 +295,7 @@ for op in doubles_fermi:
 params = jnp.array([0.22347661, 0.0, 0.0])
 
 dev = qml.device("default.qubit", wires=qubits)
-
+"lightning.qubit"
 @qml.qnode(dev)
 def circuit(params):
     qml.BasisState(hf_state, wires=range(qubits))

@@ -341,7 +341,7 @@ def project_measure(wire_0, wire_1):
 
 
 dev = qml.device("default.qubit")
-
+"lightning.qubit"
 
 @qml.qnode(dev)
 def sequential_circuit(N, g):
@@ -492,7 +492,7 @@ def two_qubit_mps_by_fusion(g):
 
 
 @qml.qnode(qml.device("default.qubit", wires=6))
-def prepare_and_unprepare(g):
+def prepare_and_unprep"lightning.qubit"
     two_qubit_mps_by_fusion(g)
     # The bond qubits for a sequential preparation are just 0 and 5
     # The bond qubits 2 and 3 have been measured out in the fusion protocol

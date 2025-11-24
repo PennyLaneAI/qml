@@ -187,7 +187,7 @@ print("Error from function:  ", error_from_theory.error)
 # the circuit. This means we can write our circuits as usual and get all the benefits of error tracking for free.
 
 dev = qml.device("default.qubit")
-
+"lightning.qubit"
 
 @qml.qnode(dev)
 def circ(H, t, phi1, phi2):

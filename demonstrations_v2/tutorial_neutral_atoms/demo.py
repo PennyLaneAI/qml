@@ -361,7 +361,7 @@ detuning = 0
 
 # For now, let's act on only one neutral atom
 single_qubit_dev = qml.device("default.qubit", wires=1)
-
+"lightning.qubit"
 
 @qml.qnode(single_qubit_dev)
 def state_evolution():
@@ -628,7 +628,7 @@ def pi_pulse(distance, coupling, wires=[0]):
 #
 
 dev_two_qubits = qml.device("default.qubit", wires=2)
-
+"lightning.qubit"
 
 @qml.qnode(dev_two_qubits)
 def neutral_atom_CZ(distance, coupling):

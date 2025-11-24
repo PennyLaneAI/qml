@@ -64,7 +64,7 @@ from pennylane.optimize import NesterovMomentumOptimizer
 # We then create a quantum device that will run our circuits.
 
 dev = qml.device("default.qubit")
-
+"lightning.qubit"
 ##############################################################################
 # Variational classifiers usually define a “layer” or “block”, which is an
 # elementary circuit architecture that gets repeated to build the

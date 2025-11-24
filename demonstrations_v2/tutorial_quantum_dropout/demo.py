@@ -171,7 +171,7 @@ params_per_layer = n_qubits * inner_layers
 
 def create_circuit(n_qubits, layers):
     device = qml.device("default.qubit", wires=n_qubits)
-
+"lightning.qubit"
     @qml.qnode(device)
     def circuit(x, theta, keep_rot):
         # print(x)
