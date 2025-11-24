@@ -187,7 +187,7 @@ order = 2
 num_steps = 10
 
 def circuit(hamiltonian):
-    qre.UniformStatePrep(num_states = 2**n_q)    # uniform superposition over all basis states
+    qre.UniformStatePrep(num_states = 2**n_q) # uniform superposition over all basis states
     qre.TrotterPauli(hamiltonian, num_steps, order)
     return
 
@@ -339,11 +339,6 @@ highlvl_gateset = {
 highlvl_res = qre.estimate(circuit, gate_set=highlvl_gateset)(kitaev_H_with_grouping)
 print(f"High-level resources:\n{highlvl_res}\n")
 
-lowlvl_gateset = {'Hadamard', 'S', 'CNOT', 'T'}
-
-lowlvl_res = qre.estimate(circuit, gate_set=lowlvl_gateset)(kitaev_H_with_grouping)
-print(f"Low-level resources:\n{lowlvl_res}")
-
 
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
@@ -365,7 +360,17 @@ print(f"Low-level resources:\n{lowlvl_res}")
 #       'CNOT': 8.140E+5,
 #       'S': 3.960E+5,
 #       'Hadamard': 2.000E+4
-#    
+
+lowlvl_gateset = {'Hadamard', 'S', 'CNOT', 'T'}
+
+lowlvl_res = qre.estimate(circuit, gate_set=lowlvl_gateset)(kitaev_H_with_grouping)
+print(f"Low-level resources:\n{lowlvl_res}")
+
+######################################################################
+# .. rst-class:: sphx-glr-script-out
+# 
+# .. code-block:: none
+# 
 #    Low-level resources:
 #    --- Resources: ---
 #     Total wires: 2.000E+4
@@ -451,21 +456,13 @@ print(default_cost_RZ)
 #       'T': 44
 
 ######################################################################
-# These are other state of the art methods we could use instead:
-# 
-# - `Optimal ancilla-free Cliﬀord+T approximation of z-rotations (Ross,
-#   Selinger) <https://arxiv.org/pdf/1403.2975>`__
-# - `Shorter quantum circuits via single-qubit gate approximation (Kliuchnikov et
-#   al) <https://arxiv.org/abs/2203.10064v2>`__
+# These are other state of the art methods we could use instead, such as
+# `Optimal ancilla-free Cliﬀord+T approximation of z-rotations (Ross,Selinger) <https://arxiv.org/pdf/1403.2975>`__.
 # 
 
 # According to paper by Ross & Selinger, we can decompose RZ rotations into T-gates according to: 
 def gridsynth_t_cost(error):
     return round(3 * qml.math.log2(1/error))
-
-# According to paper by Kliuchnikov et al, we can decompose RZ rotations into T-gates according to: 
-def mixed_fallback_t_cost(error):
-    return round(0.56 * qml.math.log2(1/error) + 5.3)
 
 ######################################################################
 # In order to define a resource decomposition, we first need to know the resource_keys for the
@@ -493,15 +490,6 @@ def gridsynth_decomp(precision):
     
     return [t_gate_counts]   # We return a list because there could have been other gates that appear in the decomposition
 
-
-def mixed_fallback_decomp(precision):
-    t_resource_rep = qre.resource_rep(qre.T) 
-    t_counts = mixed_fallback_t_cost(precision)
-    
-    t_gate_counts = qre.GateCount(t_resource_rep, t_counts)  # The GateCounts tell us how many of this type of gate is used in the decomposition
-    
-    return [t_gate_counts]   # We return a list because there could have been other gates that appear in the decomposition
-
 ######################################################################
 # Finally, we set the new decomposition in our ``ResourceConfig``.
 # 
@@ -510,13 +498,8 @@ grisynth_rc = qre.ResourceConfig()
 grisynth_rc.set_decomp(qre.RZ, gridsynth_decomp)
 grisynth_cost_RZ = qre.estimate(qre.RZ(precision=1e-9), config=grisynth_rc)
 
-mixed_fallback_rc = qre.ResourceConfig()
-mixed_fallback_rc.set_decomp(qre.RZ, mixed_fallback_decomp)
-mixed_fallback_cost_RZ = qre.estimate(qre.RZ(precision=1e-9), config=mixed_fallback_rc)
-
 print("GridSynth decomposition -", f"\tT count: {grisynth_cost_RZ.gate_counts["T"]}")
 print("Default decomposition (RUS) -", f"\tT count: {default_cost_RZ.gate_counts["T"]}")
-print("Mixed Fallback decomposition -", f"\tT count: {mixed_fallback_cost_RZ.gate_counts["T"]}")
 
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
@@ -525,7 +508,6 @@ print("Mixed Fallback decomposition -", f"\tT count: {mixed_fallback_cost_RZ.gat
 # 
 #    GridSynth decomposition - 	T count: 90
 #    Default decomposition (RUS) - 	T count: 44
-#    Mixed Fallback decomposition - 	T count: 22
 
 ######################################################################
 # Putting it All Together
@@ -541,7 +523,6 @@ custom_gateset = lowlvl_gateset # use the low-level gateset
 
 custom_config = qre.ResourceConfig()
 custom_config.set_precision(qre.RZ, precision=1e-12)     # set higher precision 1e-9 --> 1e-12
-custom_config.set_decomp(qre.RZ, mixed_fallback_decomp)  # set alternate decomposition 
 
 resources = qre.estimate(circuit, gate_set = custom_gateset, config = custom_config)(kitaev_hamiltonian)
 print(resources)
@@ -557,11 +538,11 @@ print(resources)
 #       allocated wires: 0
 #         zero state: 0
 #         any state: 0
-#     Total gates : 1.874E+7
-#       'T': 1.632E+7,
-#       'CNOT': 8.140E+5,
-#       'S': 1.584E+6,
-#       'Hadamard': 2.000E+4
+#     Total gates : 2.142E+7
+#      'T': 1.900E+7,
+#      'CNOT': 8.140E+5,
+#      'S': 1.584E+6,
+#      'Hadamard': 2.000E+4
 
 ######################################################################
 # Estimating the Resources of your PennyLane Circuits
