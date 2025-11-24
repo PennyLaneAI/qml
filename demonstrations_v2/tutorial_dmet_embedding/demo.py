@@ -454,7 +454,7 @@ efficient level of theory.
 # impurity Hamiltonian with a quantum algorithm.
 #
 # Conclusion
-# ^^^^^^^^^^
+# ----------
 # Density matrix embedding theory is a robust method designed to tackle simulation of complex
 # systems by partitioning them into manageable subsystems. It is particularly well suited for
 # studying the ground state properties of strongly correlated materials and molecules. DMET offers a
