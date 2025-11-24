@@ -130,9 +130,9 @@ def prep():
     qml.ControlledSequence(qml.PhaseShift(-2 * np.pi / 10, wires=0), control=range(1, 6))
     qml.PauliX(wires=0)
 
-dev = qml.device("default.qubit")
+dev = qml.device("lightning.qubit")
 @qml.qnode(dev)
-def circuit():"lightning.qubit"
+def circuit():
     prep()
     return qml.state()
 

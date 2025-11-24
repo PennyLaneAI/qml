@@ -411,8 +411,8 @@ for step in range(1, len(circuit_ops)):
 # Let's see this in action for the following two-qubit parameterized circuit:
 #
 
-dev = qml.device("default.qubit")
-@qml.qnode(dev)"lightning.qubit"
+dev = qml.device("lightning.qubit")
+@qml.qnode(dev)
 def original_circuit(x, y):
     qml.RX(x, 0)
     qml.CNOT([0, 1])

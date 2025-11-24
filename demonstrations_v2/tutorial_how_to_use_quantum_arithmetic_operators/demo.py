@@ -80,8 +80,8 @@ def product_basis_state(x=0,y=0):
     qml.BasisState(x, wires=wires["x"])
     qml.BasisState(y, wires=wires["y"])
 
-dev = qml.device("default.qubit")
-@qml.set_shots(1)"lightning.qubit"
+dev = qml.device("lightning.qubit")
+@qml.set_shots(1)
 @qml.qnode(dev)
 def circuit(x,y):
     product_basis_state(x, y)

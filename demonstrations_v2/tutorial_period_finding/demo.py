@@ -208,8 +208,7 @@ def Oracle(f):
 # reason we define a device with 2 shots. We also add some snapshots to the circuit that we will look at later.
 
 
-dev = qml.device("default.qubit", wires=7)
-"lightning.qubit"
+dev = qml.device("lightning.qubit", wires=7)
 
 @qml.set_shots(2)
 @qml.qnode(dev)
@@ -271,8 +270,8 @@ print(f"Hidden period: {result}")
 # look at the states that were prepared by making use of the snapshots we recorded during the
 # circuit simulation.
 
-dev = qml.device("default.qubit", wires=7)
-qnode = qml.set_s"lightning.qubit"circuit, dev), shots = 1)
+dev = qml.device("lightning.qubit", wires=7)
+qnode = qml.set_shots(qml.QNode(circuit, dev), shots = 1)
 intermediate_states = qml.snapshots(circuit)()
 
 #####################################################################
