@@ -77,31 +77,31 @@ print("Total number of qubits:", len(spin_ham.wires))
 # | Let’s see how this scales.
 #
 
-n_lst = [i for i in range(5, 36)]
+n_lst = [i for i in range(5,36)]
 time_lst = []
 for n in n_lst:
     n_cells = [n, n]
     kx, ky, kz = (0.5, 0.6, 0.7)
-
+    
     t1 = time.time()
     spin_ham = qml.spin.kitaev(n_cells, coupling=np.array([kx, ky, kz]))
     t2 = time.time()
-    time_lst.append(t2 - t1)
+    time_lst.append(t2-t1)
     if n % 5 == 0:
-        print(f"Finished n = {n} in {time_lst[-1]:.3f} seconds")
+        print(f"Finished n = {n} in\t{time_lst[-1]:.3g}\tseconds")
 
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
 # .. code-block:: none
 #
-#    Finished n = 5 in 0.012 seconds
-#    Finished n = 10 in 0.079 seconds
-#    Finished n = 15 in 0.343 seconds
-#    Finished n = 20 in 1.034 seconds
-#    Finished n = 25 in 2.771 seconds
-#    Finished n = 30 in 5.598 seconds
-#    Finished n = 35 in 11.006 seconds
+#    Finished n = 5 in	0.0233	seconds
+#    Finished n = 10 in	0.0773	seconds
+#    Finished n = 15 in	0.361	seconds
+#    Finished n = 20 in	1.05	seconds
+#    Finished n = 25 in	2.58	seconds
+#    Finished n = 30 in	5.57	seconds
+#    Finished n = 35 in	10.5	seconds
 
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
@@ -208,7 +208,7 @@ t1 = time.time()
 res = qre.estimate(circuit)(kitaev_H)
 t2 = time.time()
 
-print(f"Processing time: ~ {t2 - t1:.3} sec\n")
+print(f"Processing time: {t2 - t1:.3g} seconds\n")
 print(res)
 
 ######################################################################
@@ -216,7 +216,7 @@ print(res)
 #
 # .. code-block:: none
 #
-#    Processing time: ~ 0.000364 sec
+#    Processing time: 0.000349 sec
 #
 #    --- Resources: ---
 #     Total wires: 2.000E+4
@@ -543,20 +543,27 @@ print("Default decomposition (RUS) -", f"\tT count: {default_cost_RZ.gate_counts
 # evolution of the Kitaev hamiltonian:
 #
 
+t1 = time.time()
 kitaev_hamiltonian = kitaev_H_with_grouping  # use compact hamiltonian with grouping
 
-custom_gateset = lowlvl_gateset  # use the low-level gateset
+custom_gateset = lowlvl_gateset # use the low-level gateset
 
 custom_config = qre.ResourceConfig()
-custom_config.set_precision(qre.RZ, precision=1e-12)  # set higher precision 1e-9 --> 1e-12
+custom_config.set_precision(qre.RZ, precision=1e-12)     # set higher precision 1e-9 --> 1e-12
 
-resources = qre.estimate(circuit, gate_set=custom_gateset, config=custom_config)(kitaev_hamiltonian)
+resources = qre.estimate(circuit, gate_set = custom_gateset, config = custom_config)(kitaev_hamiltonian)
+t2 = time.time()
+
+print(f"Processing time: {t2 - t1:.3g} seconds\n")
+
 print(resources)
 
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
 # .. code-block:: none
+#
+#    Processing time: 0.000747 seconds
 #
 #    --- Resources: ---
 #     Total wires: 2.000E+4
