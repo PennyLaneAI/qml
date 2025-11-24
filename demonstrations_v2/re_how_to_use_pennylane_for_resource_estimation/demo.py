@@ -253,7 +253,9 @@ kitaev_H_with_grouping = qre.PauliHamiltonian(
     commuting_groups=commuting_groups,
 )
 
-resources_with_grouping = qre.estimate(qre.TrotterPauli(kitaev_H_with_grouping, num_steps, order))
+resources_with_grouping = qre.estimate(
+    qre.TrotterPauli(kitaev_H_with_grouping, num_steps, order)
+)
 
 # Just compare T gates:
 t_count_1 = resources_without_grouping.gate_counts["T"]
@@ -411,9 +413,9 @@ print(f"Low-level resources:\n{lowlvl_res}")
 custom_rc = qre.ResourceConfig()  # generate a resource configuration
 
 rz_precisions = custom_rc.resource_op_precisions[qre.RZ]
-print(f"Default setting: {rz_precisions}\n")  # Notice that the default precision for RZ is 1e-9
+print(f"Default setting: {rz_precisions}\n")
 
-custom_rc.set_precision(qre.RZ, 1e-15)  # setting the required precision from the default --> 1e-15
+custom_rc.set_precision(qre.RZ, 1e-15)
 
 res = qre.estimate(
     circuit,
@@ -477,17 +479,17 @@ print(default_cost_RZ)
 #
 
 
-# According to paper by Ross & Selinger, we can decompose RZ rotations into T-gates according to:
+# As per the paper by Ross & Selinger:
 def gridsynth_t_cost(error):
     return round(3 * qml.math.log2(1 / error))
 
 
 ######################################################################
-# In order to define a resource decomposition, we first need to know the resource_keys for the
+# In order to define a resource decomposition, we first need to know the `resource_keys` for the
 # operator whose decomposition we want to add:
 #
 
-print(qre.RZ.resource_keys)  # this tells us all of the REQUIRED arguments our function must take
+print(qre.RZ.resource_keys)  # these are the required arguments
 
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
@@ -537,7 +539,7 @@ print("Default decomposition (RUS) -", f"\tT count: {default_cost_RZ.gate_counts
 # Putting it All Together
 # ~~~~~~~~~~~~~~~~~~~~~~~
 #
-# We can combine all of the features we have seen so far to optimize the cost of Trotterized time
+# We can combine the features we have seen so far to optimize the cost of Trotterized time
 # evolution of the Kitaev hamiltonian:
 #
 
