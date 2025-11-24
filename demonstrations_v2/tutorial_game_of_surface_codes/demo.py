@@ -34,7 +34,7 @@ The remaining non-Clifford gates are realized by `magic state injection <https:/
 Hence, we mainly care about performing measurements on qubits in arbitrary bases and efficiently distilling and injecting magic states.
 
 We also note that the patches that represent qubits correspond to surface code qubits.
-There is a detailed explanation in Appendix A that describes the surface code realizations of all operations that we are going to see.
+There is a detailed explanation in Appendix A of the paper that describes the surface code realizations of all operations that we are going to see.
 These are useful to know in order to grasp the full depth of the game, but are not essential to understanding its rules and concluding design principles that we cover in this demo.
 For further reading on these subjects, we recommend the `blog posts on the surface code and quantum error correction <https://arthurpesah.me/blog/>`__ by Arthur Pesah, our :doc:`demo on the toric code <demos/tutorial_toric_code>`, as well as the three-part series on the `toric code <https://decodoku.blogspot.com/2016/03/6-toric-code.html>`__ by James Wooton.
 
@@ -388,7 +388,7 @@ Conclusion
 
 We've been introduced to a high-level description of quantum computing that allows us to reason about space-time trade-offs in FTQC architecture designs.
 We have seen some basic prototypes that allow computations involving :math:`10^8` T gates in orders of hours using :math:`55k` or :math:`75k` physical qubits.
-With this knowledge, we should be able to follow the more involved tricks discussed in sections 4 and 5, that we have not covered in this demo yet.
+With this knowledge, we should be able to follow the more involved tricks discussed in sections 4 and 5 of the Game of Surface Codes paper, that we have not covered in this demo yet.
 
 """
 
