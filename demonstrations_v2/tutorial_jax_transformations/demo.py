@@ -48,8 +48,8 @@ import pennylane as qml
 # Added to silence some warnings.
 jax.config.update("jax_enable_x64", True)
 
-dev = qml.device("default.qubit", wires=2)
-"lightning.qubit"
+dev = qml.device("lightning.qubit", wires=2)
+
 ##############################################################################
 # Let's start with a simple example circuit that generates a two-qubit entangled state,
 # then evaluates the expectation value of the Pauli-Z operator on the first wire.
@@ -271,8 +271,8 @@ print("----------")
 @jax.jit
 def circuit(key, param):
     # Notice how the device construction now happens within the jitted method.
-    dev = qml.device("default.qubit", wires=2, seed=key)
-"lightning.qubit"
+    dev = qml.device("lightning.qubit", wires=2, seed=key)
+
     # Now we can create our qnode within the circuit function.
     @qml.set_shots(10)
     @qml.qnode(dev, interface="jax", diff_method=None)

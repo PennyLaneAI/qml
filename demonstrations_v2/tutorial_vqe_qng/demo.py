@@ -39,8 +39,8 @@ import pennylane as qml
 #
 # We define the device:
 
-dev = qml.device("default.qubit", wires=1)
-"lightning.qubit"
+dev = qml.device("lightning.qubit", wires=1)
+
 
 ##############################################################################
 # For the variational ansatz, we use two single-qubit rotations, which the user may recognize
@@ -272,8 +272,8 @@ print("Number of qubits = ", qubits)
 # but expand out the arbitrary single-qubit rotations to elementary
 # gates (RZ-RY-RZ).
 
-dev = qml.device("default.qubit", wires=qubits)
-hf_state = np.arr"lightning.qubit", requires_grad=False)
+dev = qml.device("lightning.qubit", wires=qubits)
+hf_state = np.array([1, 1, 0, 0], requires_grad=False)
 
 def ansatz(params, wires=[0, 1, 2, 3]):
     qml.BasisState(hf_state, wires=wires)
