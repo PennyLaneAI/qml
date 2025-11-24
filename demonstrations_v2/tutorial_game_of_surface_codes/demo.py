@@ -304,7 +304,7 @@ We are going to go through the simplest protocol in a 15-to-1 distillation block
 ^^^^^^^^^^^^^^^^^^^^
 
 This protocol uses 15 imperfect magic states with infidelity :math:`p` and outputs a single magic state with infidelity of :math:`35p^3`. 
-The distillation circuit is shown below, with the details described in section 3.1:
+The distillation circuit is shown below, with the details described in section 3.1 of the paper:
 
 .. figure:: ../_static/demonstration_assets/game_of_surface_codes/15-to-1.png
     :align: center
