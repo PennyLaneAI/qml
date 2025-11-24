@@ -358,6 +358,3 @@ sections.
 #    "Simulating optically-active spin defects with a quantum computer"
 #    `arXiv:2405.13115 <https://arxiv.org/abs/2405.13115>`__.
 #
-# About the authors
-# -----------------
-#
