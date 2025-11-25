@@ -10,11 +10,23 @@ from pandocfilters import toJSONFilter, BlockQuote, Link
 
 DEMOS_URL = "https://pennylane.ai/qml/demos/"
 
+
 def filter_directives(key, value, format, _):
     if key == 'Div':
         [[_, classes, _], body] = value
         if "related" in classes or "meta" in classes:
             return []
+        elif "rst-class" in classes:
+            metadata = body[0]
+            rst_class_type = metadata.get("c")[0].get("c")
+            if rst_class_type == "sphx-glr-script-out":
+                if len(body) == 1:
+                # This is the new format for sphx-glr-script-out.
+                # Just discard this block.
+                    return []
+                return body[1]
+            else:
+                return
         else:
             return BlockQuote(body)
 

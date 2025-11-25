@@ -4,16 +4,9 @@
 Pandoc filter to convert figure directives to images.
 """
 
-import os
 from pandocfilters import toJSONFilter, Image
+from filter_helpers import parse_img_source
 
-ASSETS_DIR = "https://blog-assets.cloud.pennylane.ai/demos/"
-
-def parse_img_source(src: str) -> str:
-    if "../_static/" in src:
-        return src.replace("../_", ASSETS_DIR + os.getenv("CURRENT_DEMO") + "/main/_assets/")
-    else:
-        return src
 
 def filter_images(key, value, format, _):
     if key == 'Image':
