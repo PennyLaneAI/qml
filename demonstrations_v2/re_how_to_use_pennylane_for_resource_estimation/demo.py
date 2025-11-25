@@ -263,7 +263,7 @@ t_count_2 = resources_with_grouping.gate_counts["T"]
 reduction = abs((t_count_2 - t_count_1) / t_count_1)
 print("--- With grouping ---", f"\n T gate count: {t_count_1:.3E}\n")
 print("--- Without grouping ---", f"\n T gate count: {t_count_2:.3E}\n")
-print(f"Difference: {100*reduction:.3}% reduction")
+print(f"Difference: {100*reduction:.1f}% reduction")
 
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
@@ -478,7 +478,6 @@ print(default_cost_RZ)
 # `Optimal ancilla-free Cliﬀord+T approximation of z-rotations (Ross,Selinger) <https://arxiv.org/pdf/1403.2975>`__.
 #
 
-
 # As per the paper by Ross & Selinger:
 def gridsynth_t_cost(error):
     return round(3 * qml.math.log2(1 / error))
@@ -509,11 +508,11 @@ def gridsynth_decomp(precision):
 
     t_gate_counts = qre.GateCount(
         t_resource_rep, t_counts
-    )  # The GateCounts tell us how many of this type of gate is used in the decomposition
+    )  # GateCounts tell us how many of this type of gate are used
 
     return [
         t_gate_counts
-    ]  # We return a list because there could have been other gates that appear in the decomposition
+    ]  # We return a list of GateCounts for all relevant gate types
 
 
 ######################################################################
@@ -544,18 +543,22 @@ print("Default decomposition (RUS) -", f"\tT count: {default_cost_RZ.gate_counts
 #
 
 t1 = time.time()
+
 kitaev_hamiltonian = kitaev_H_with_grouping  # use compact hamiltonian with grouping
 
 custom_gateset = lowlvl_gateset # use the low-level gateset
 
 custom_config = qre.ResourceConfig()
-custom_config.set_precision(qre.RZ, precision=1e-12)     # set higher precision 1e-9 --> 1e-12
+custom_config.set_precision(qre.RZ, precision=1e-12) # set higher precision
 
-resources = qre.estimate(circuit, gate_set = custom_gateset, config = custom_config)(kitaev_hamiltonian)
+resources = qre.estimate(
+    circuit,
+    gate_set = custom_gateset,
+    config = custom_config
+)(kitaev_hamiltonian)
+
 t2 = time.time()
-
 print(f"Processing time: {t2 - t1:.3g} seconds\n")
-
 print(resources)
 
 ######################################################################
@@ -660,15 +663,13 @@ num_trotter_steps = 1
 
 @qml.qnode(qml.device("default.qubit"))
 def executable_circuit(hamiltonian):
-    
-    for wire in hamiltonian.wires:  # Uniform State prep
+    for wire in hamiltonian.wires: # uniform superposition over all basis states
         qml.Hadamard(wire)
-
     qml.TrotterProduct(hamiltonian, time=1.0, n=num_trotter_steps, order=order)
     return qml.state()
 
 def estimation_circuit(hamiltonian):
-    qre.UniformStatePrep(num_states = 2**n_q)    # Prepare a uniform superposition over all 2^num_qubit basis states
+    qre.UniformStatePrep(num_states = 2**n_q)
     qre.TrotterPauli(hamiltonian, num_trotter_steps, order)
     return
 
