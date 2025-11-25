@@ -584,14 +584,17 @@ print(resources)
 # If you’ve already written your workflow for execution, we can call estimate on it directly. No need
 # to write it again!
 #
+# Let's continue with the same example, but with a 25 x 25 unit honeycomb lattice of spins.  
+# Here, we generate the Hamiltonian ourselves:
+#
 
-n_cell = 30
+n_cell = 25
 n_cells = [n_cell, n_cell]
 kx, ky, kz = (0.5, 0.6, 0.7)
 
 t1 = time.time()
 flat_hamiltonian = qml.spin.kitaev(n_cells, coupling=np.array([kx, ky, kz]))
-flat_hamiltonian.compute_grouping()  # compute the qubitize commuting groups!
+flat_hamiltonian.compute_grouping()  # compute the qubitize commuting groups! 
 
 groups = []
 for group_indices in flat_hamiltonian.grouping_indices:
@@ -601,11 +604,14 @@ for group_indices in flat_hamiltonian.grouping_indices:
 grouped_hamiltonian = qml.sum(*groups)
 t2 = time.time()
 
+######################################################################
+# We'll use `estimator` in parallel to make sure everything matches.
+#
 
 t3 = time.time()
 n_q = 2 * n_cell**2
 n_xx = n_cell**2
-n_yy = n_cell * (n_cell - 1)
+n_yy = n_cell*(n_cell-1)
 n_zz = n_yy
 
 commuting_groups = [
@@ -615,16 +621,20 @@ commuting_groups = [
 ]
 
 compact_hamiltonian = qre.PauliHamiltonian(
-    num_qubits=n_q,
-    commuting_groups=commuting_groups,
+    num_qubits = n_q,
+    commuting_groups = commuting_groups,
 )
 t4 = time.time()
 
-print(f"Processing time: ~ {(t2 - t1):.3E} sec")
+######################################################################
+# The resulting data can be easily compared for a sanity check.
+#
+
+print(f"Processing time for Hamiltonian generation: ~ {(t2 - t1):.3g} seconds")
 print("Total number of terms:", len(flat_hamiltonian.operands))
 print("Total number of qubits:", len(flat_hamiltonian.wires), "\n")
 
-print(f"Processing time: ~ {(t4 - t3):.3E} sec")
+print(f"Processing time for Hamiltonian estimation: ~ {(t4 - t3):.3g} seconds")
 print("Total number of terms:", compact_hamiltonian.num_pauli_words)
 print("Total number of qubits:", compact_hamiltonian.num_qubits)
 
@@ -633,41 +643,45 @@ print("Total number of qubits:", compact_hamiltonian.num_qubits)
 #
 # .. code-block:: none
 #
-#    Processing time: ~ 9.193E+01 sec
-#    Total number of terms: 2640
-#    Total number of qubits: 1800
+#    Processing time for Hamiltonian generation: ~ 4.56 seconds
+#    Total number of terms: 1825
+#    Total number of qubits: 1250 
+# 
+#    Processing time for Hamiltonian estimation: ~ 0.000112 seconds
+#    Total number of terms: 1825
+#    Total number of qubits: 1250
+
+######################################################################
+# Now we can define our circuits for Hamiltonian simulation.
 #
-#    Processing time: ~ 5.877E-04 sec
-#    Total number of terms: 2640
-#    Total number of qubits: 1800
 
 order = 2
 num_trotter_steps = 1
 
-
 @qml.qnode(qml.device("default.qubit"))
 def executable_circuit(hamiltonian):
-
+    
     for wire in hamiltonian.wires:  # Uniform State prep
         qml.Hadamard(wire)
 
     qml.TrotterProduct(hamiltonian, time=1.0, n=num_trotter_steps, order=order)
     return qml.state()
 
-
-def circuit(hamiltonian):
-    qre.UniformStatePrep(
-        num_states=2**n_q
-    )  # Prepare a uniform superposition over all 2^num_qubit basis states
+def estimation_circuit(hamiltonian):
+    qre.UniformStatePrep(num_states = 2**n_q)    # Prepare a uniform superposition over all 2^num_qubit basis states
     qre.TrotterPauli(hamiltonian, num_trotter_steps, order)
     return
 
+######################################################################
+# As usual, just call `qre.estimate` to generate a state-of-the-art
+# resource estimate for your PennyLane circuit!
+#
 
 t5 = time.time()
 resources_exec = qre.estimate(executable_circuit)(grouped_hamiltonian)
 t6 = time.time()
 
-print(f"Processing time: ~ {(t6 - t5):.3E} sec")
+print(f"Processing time: ~ {(t6 - t5):.3g} seconds")
 print(resources_exec)
 
 ######################################################################
@@ -675,25 +689,29 @@ print(resources_exec)
 #
 # .. code-block:: none
 #
-#    Processing time: ~ 1.734E+01 sec
+#    Processing time: ~ 1.37 seconds
 #    --- Resources: ---
-#     Total wires: 1800
-#       algorithmic wires: 1800
+#     Total wires: 1250
+#       algorithmic wires: 1250
 #       allocated wires: 0
 #         zero state: 0
 #         any state: 0
-#     Total gates : 2.151E+5
-#       'T': 1.940E+5,
-#       'CNOT': 8.820E+3,
-#       'Z': 3.480E+3,
-#       'S': 6.960E+3,
-#       'Hadamard': 1.800E+3
+#     Total gates : 1.488E+5
+#       'T': 1.342E+5,
+#       'CNOT': 6.100E+3,
+#       'Z': 2.400E+3,
+#       'S': 4.800E+3,
+#       'Hadamard': 1.250E+3
+
+######################################################################
+# Let's validate the results by comparing with our resource *estimation* circuit.
+#
 
 t5 = time.time()
 resources_compact = qre.estimate(circuit)(compact_hamiltonian)
 t6 = time.time()
 
-print(f"Processing time: ~ {(t6 - t5):.3E} sec")
+print(f"Processing time: ~ {(t6 - t5):.3g} seconds")
 print(resources_compact)
 
 ######################################################################
@@ -701,19 +719,23 @@ print(resources_compact)
 #
 # .. code-block:: none
 #
-#    Processing time: ~ 4.470E-04 sec
+#    Processing time: ~ 0.000257 seconds
 #    --- Resources: ---
-#     Total wires: 1800
-#       algorithmic wires: 1800
+#     Total wires: 1250
+#       algorithmic wires: 1250
 #       allocated wires: 0
 #         zero state: 0
 #         any state: 0
-#     Total gates : 2.151E+5
-#       'T': 1.940E+5,
-#       'CNOT': 8.820E+3,
-#       'Z': 3.480E+3,
-#       'S': 6.960E+3,
-#       'Hadamard': 1.800E+3
+#     Total gates : 1.218E+6
+#       'T': 1.094E+6,
+#       'CNOT': 4.975E+4,
+#       'Z': 2.400E+4,
+#       'S': 4.800E+4,
+#       'Hadamard': 1.250E+3
+
+######################################################################
+# The numbers check out!
+#
 
 ######################################################################
 # Your turn!
