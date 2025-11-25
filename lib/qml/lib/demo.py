@@ -153,7 +153,7 @@ def build(
     quiet: bool = False,
     keep_going: bool = False,
     dev: bool = False,
-    venv: Optional[str] = None,
+    venv: str | None = None,
 ) -> None:
     """Build the provided demos using 'sphinx-build', optionally
     executing them to generate plots and cell outputs.
