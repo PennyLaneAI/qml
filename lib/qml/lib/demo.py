@@ -9,7 +9,6 @@ import sys
 from logging import getLogger
 import subprocess
 from enum import Enum
-from typing import Optional
 import functools
 import requirements
 import json
