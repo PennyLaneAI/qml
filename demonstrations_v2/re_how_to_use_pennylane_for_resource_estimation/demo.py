@@ -103,7 +103,6 @@ def circuit(hamiltonian):
     qre.UniformStatePrep(num_states=2**n_q)  # uniform superposition over all basis states
     qre.TrotterPauli(hamiltonian, num_steps, order)
 
-
 ######################################################################
 # The cost of an algorithm is typically quantified by the number of logical qubits required and the
 # number of gates used. Different hardware will natively support different gatesets.
