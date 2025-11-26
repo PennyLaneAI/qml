@@ -11,15 +11,15 @@ How to use PennyLane for Resource Estimation
 # helpful even when it cannot be executed, but is only truly helpful when it can.
 #
 # PennyLane is here to make that process easy, with our new resource estimation module:
-# `pennylane.estimator <https://docs.pennylane.ai/en/latest/code/qml_estimator.html>`__.
+# :mod:`~.estimator`.
 #
-# `pennylane.estimator <https://docs.pennylane.ai/en/latest/code/qml_estimator.html>`__ is meant to:
+# PennyLane's :mod:`~.estimator` module:
 #
-# - Make reasoning about quantum algorithms *quick* and painless - no complicated inputs, just tell
-#   ``estimator`` what you know.
-# - Keep you up to *speed* - ``estimator`` leverages the latest results from the literature to make
+# - Makes reasoning about quantum algorithms *quick* and painless - no complicated inputs, just tell
+#   :mod:`~.estimator` what you know.
+# - Keeps you up to *speed* - :mod:`~.estimator` leverages the latest results from the literature to make
 #   sure you’re as efficient as can be.
-# - Get you moving *even faster* - in the blink of an eye ``estimator`` provides you with resource
+# - Gets you moving *even faster* - in the blink of an eye :mod:`~.estimator` provides you with resource
 #   estimates, and enables effortless customization to enhance your research.
 #
 # Let’s import our quantum resource estimator.
@@ -30,8 +30,7 @@ import pennylane.estimator as qre
 
 ######################################################################
 # We will be using the Kitaev model as an example to explore resource estimation. For more information
-# about the Kitaev Hamiltonian, check out `our
-# documentation <https://docs.pennylane.ai/en/stable/code/api/pennylane.spin.kitaev.html>`__.
+# about the Kitaev Hamiltonian, check out `our documentation <~.spin.kitaev>`.
 #
 # This Hamiltonian is defined through nearest neighbor interactions on a honeycomb shaped lattice as
 # follows:
@@ -152,9 +151,9 @@ plt.show()
 # some important quantities directly:
 #
 # .. math::
-#   n_{q} = 2 n^{2}, \\
-#   n_{YY} = n_{ZZ} = n * (n - 1), \\
-#   n_{XX} = n^{2}, \\
+#   n_{q} &= 2 n^{2}, \\
+#   n_{YY} &= n_{ZZ} = n * (n - 1), \\
+#   n_{XX} &= n^{2}, \\
 #
 # | ``estimator`` provides
 #   `classes <https://docs.pennylane.ai/en/latest/code/qml_estimator.html#resource-hamiltonians>`__
@@ -448,12 +447,11 @@ print(
 #
 # There are many ways to decompose a quantum gate into our target gateset. Selecting an alternate
 # decomposition is a great way to optimize the cost of your quantum workflow. This can be done easily
-# with the ``ResourceConfig`` class.
+# with the :class:`ResourceConfig <~.estimator.resource_config.ResourceConfig>` class.
 #
-# | Let’s explore decompositions for the ``RZ`` gate:
-# | Current decomposition for ``RZ``, or single qubit rotation synthesis in general is: `Efficient
-#   Synthesis of Universal Repeat-Until-Success Circuits (Bocharov, et
-#   al) <https://arxiv.org/abs/1404.5320>`__
+# Let’s explore decompositions for the ``RZ`` gate:
+# Current decomposition for ``RZ``, or single qubit rotation synthesis in general is
+# defined in Bocharov et al. [#bocharov]_.
 #
 
 default_cost_RZ = qre.estimate(qre.RZ(precision=1e-9))  # Manually set the precision
@@ -474,8 +472,8 @@ print(default_cost_RZ)
 #       'T': 44
 
 ######################################################################
-# These are other state of the art methods we could use instead, such as
-# `Optimal ancilla-free Cliﬀord+T approximation of z-rotations (Ross,Selinger) <https://arxiv.org/pdf/1403.2975>`__.
+# These are other state of the art methods we could use instead, such as that
+# defined in Ross & Selinger [#ross].
 #
 
 # As per the paper by Ross & Selinger:
@@ -746,4 +744,19 @@ print(resources_compact)
 # yourself <https://docs.pennylane.ai/en/latest/code/qml_estimator.html>`__!
 #
 # Reason about the costs of your quantum algorithm without any of the headaches.
+#
+# References
+# ----------
+#
+# .. [#bocharov]
+#
+#    Bocharov, Alex, Martin Roetteler, and Krysta M. Svore. 
+#    "Efficient synthesis of universal repeat-until-success quantum circuits."
+#    Physical review letters 114.8 (2015): 080502. `arXiv <https://arxiv.org/abs/1404.5320>`__.
+#
+# .. [#ross]
+#
+#    Ross, Neil J., and Peter Selinger. 
+#    "Optimal ancilla-free Clifford+T approximation of z-rotations."
+#    Quantum information and computation 16.11–12 (2016): 901–953. `arXiv <https://arxiv.org/abs/1403.2975>`__.
 #
