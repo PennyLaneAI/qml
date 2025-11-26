@@ -38,7 +38,7 @@ The objective function we are aiming to maximize is
 where :math:`\mathbf{b_i}` is the :math:`i`-th row of matrix :math:`B`. You can verify that this
 function represents the number of satisfied equations minus the number of unsatisfied ones by
 considering that when the equation is satisfied, the exponent
-:math:`v_i+\mathbf{b_i}\cdot\mathbf{x}` is always even, and that it is odd in the opposite case.
+:math:`v_i+\mathbf{b_i}\cdot\mathbf{x}` is always even, and odd in the opposite case.
 
 Let’s define the conditions for our specific max-XORSAT problem and visualize the objective
 function in a histogram when randomly sampling bit strings :math:`\mathbf{x}` from a uniform distribution.
@@ -311,7 +311,7 @@ def SCS(m, k):
     """Implements the Split & Cycle shift unitary."""
 
     # To address the correct set of wires
-    m_angle = m 
+    m_angle = m
     m = m + num_weight_qubits - 1 
 
     # Two-qubit gate
@@ -372,7 +372,7 @@ pprint(formatted_state)
 # :math:`1` and :math:`2` using the ``generate_bit_strings`` function. We then applied controlled bit flips to the
 # qubits in the :math:`1` state of the weight register. We did not need to perform any action for bit strings with
 # a Hamming weight of :math:`0`, as the qubit state was already :math:`|00\rangle`. From now on, we can 
-# choose to disregard the weight register.
+# disregard the weight register.
 # 
 
 from itertools import combinations
@@ -398,11 +398,16 @@ def uncompute_weight(m, k):
     """Uncomputes weight register."""
     bit_strings_dicke = list(generate_bit_strings(m, k))
     binary_string_weight = bin(k)[2:].zfill(num_weight_qubits)
+
     for i in range(comb(m, k)):
         for j in range(len(binary_string_weight)):
             bit = int(binary_string_weight[j])
             if bit == 1:
-                qml.ctrl(qml.X, m_register, control_values=bit_strings_dicke[i])(weight_register[j])
+                qml.ctrl(
+                    qml.X, 
+                    m_register, 
+                    control_values=bit_strings_dicke[i]
+                )(weight_register[j])
 
 
 ######################################################################
