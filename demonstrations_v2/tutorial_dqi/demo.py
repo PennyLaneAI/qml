@@ -104,7 +104,7 @@ plt.show()
 #     :class: note
 #
 #     The `Hadamard transform <https://lucatrevisan.github.io/teaching/cs259q-12/lecture07b.pdf>`__ can be thought of as a version of the discrete Fourier transform. You have likely used it  
-#     several times when applying a Hadamard gate at the beginning of a circuit to prepare an equal superposition of all basis states. 
+#     several times when applying a layer of Hadamard gates at the beginning of a circuit to prepare an equal superposition of all basis states. 
 #     For :math:`n` qubits and a basis state :math:`|\mathbf{x}\rangle`, we can write the  
 #     transformation as
 # 
@@ -123,7 +123,7 @@ plt.show()
 # where the coefficients :math:`w_k` are carefully chosen (see Section 8.1 of [#Jordan2024]_ for more about this result).
 # 
 # The DQI algorithm for solving the max-XORSAT problem involves three qubit registers: a weight, an
-# error, and a syndrome register, with dimensions :math:`\left \lceil \log_{2} \ell \right \rceil`,
+# error, and a syndrome register, with dimensions :math:`\left \lceil \log_{2} (\ell+1) \right \rceil`,
 # :math:`m`, and :math:`n`, respectively. The algorithm’s steps are outlined below and summarized in Figure 1.
 # 
 # 1. **Embed weight coefficients:** prepare the state :math:`\sum_{k=0}^{\ell} w_k|k\rangle` in the
@@ -161,10 +161,10 @@ plt.show()
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # We are going to prepare the superposition :math:`\sum_{k=0}^{\ell} w_k|k\rangle`. As previously stated,
-# the weight register is made up of :math:`\left \lceil \log_{2} \ell \right \rceil` qubits, which means
+# the weight register is made up of :math:`\left \lceil \log_{2} (\ell+1) \right \rceil` qubits, which means
 # that the index :math:`k` is being binary encoded. The coefficients :math:`w_k` are chosen such that
 # they maximize the number of satisfied linear equations. These optimal weights are the components 
-# of the principal eigenvector of an :math:`(\ell+1)\times(\ell+1)` symmetric tridiagonal matrix [#Jordan2024]_:
+# of the principal eigenvector of an :math:`(\ell+1)\times(\ell+1)` symmetric tridiagonal matrix:
 # 
 # .. math::
 # 
@@ -183,8 +183,7 @@ plt.show()
 # in this step.
 # 
 # In this demo, we will use a polynomial of degree :math:`2` for a reason that will become clear during
-# the decoding step. For now, you might be wondering if :math:`\left \lceil \log_{2} 2\right \rceil=1`
-# qubit will be enough to encode :math:`k=0,1,2`. Well, let’s examine what we obtain for the
+# the decoding step. For now, let’s examine what we obtain for the
 # coefficients vector :math:`\mathbf{w}`.
 # 
 
@@ -193,16 +192,16 @@ r = 1
 d = (p - 2 * r) / pnp.sqrt(r * (p - r))
 l = 2
 # Define registers
-num_weight_qubits = int(pnp.ceil(pnp.log2(l)))
+num_weight_qubits = int(pnp.ceil(pnp.log2(l+1)))
 weight_register = range(num_weight_qubits)
 m_register = range(num_weight_qubits, m + num_weight_qubits)
 n_register = range(m + num_weight_qubits, n + m + num_weight_qubits)
 
 
 def w_k_optimal(m, l):
-    """Calculates optimal weights for superposition: principal vector of tridiagonal matrix."""
+    """Calculates optimal weights: principal vector of tridiagonal matrix."""
     diag_main = pnp.diag(pnp.arange(l + 1) * d)
-    diag_sup = pnp.diag(pnp.sqrt(pnp.arange(l) * (m - pnp.arange(l) + 1)), 1)
+    diag_sup = pnp.diag(pnp.sqrt(pnp.arange(1, l + 1) * (m - pnp.arange(1, l + 1) + 1)), 1)
     A = diag_main + diag_sup + pnp.transpose(diag_sup)
     _, eigenvectors = pnp.linalg.eigh(A)
     return eigenvectors[:, -1]
@@ -213,16 +212,14 @@ print("The optimal values for w are", w_k)
 
 
 ######################################################################
-# Since :math:`w_0=0`, a single qubit is sufficient to encode the remaining non-zero coefficients. The
-# explicit form of this state will be the uniform superposition
-# :math:`\frac{1}{\sqrt{2}}(|0\rangle+|1\rangle)`, which can be readily prepared by a Hadamard gate. However,
-# to make our code more versatile, we will use ``qml.StatePrep`` in our ``embed_weights`` function shown below.
-# For subsequent steps. Let’s just keep in mind that the :math:`k` values we are encoding are :math:`1` and :math:`2`.
+# We will need two qubits to encode :math:`w_k` for :math:`k=0,1,2`. The state is given by a weighted superposition
+# of the basis states :math:`|00\rangle, |01\rangle, |10\rangle`.
+# To prepare it, we will use ``qml.StatePrep`` in our ``embed_weights`` function shown below.
 #
 
 def embed_weights(w_k, weight_register):
-    """Prepares the weight register to be in superposition given coefficients."""
-    qml.StatePrep(w_k[1:], wires=weight_register, pad_with=0)
+    """Prepares the weight register in superposition of given coefficients."""
+    qml.StatePrep(w_k, wires=weight_register, pad_with=0)
 
 
 ######################################################################
@@ -313,23 +310,28 @@ def format_state_vector(state_vector, tol: float = 1e-6):
 def SCS(m, k):
     """Implements the Split & Cycle shift unitary."""
 
+    # To address the correct set of wires
+    m_angle = m 
+    m = m + num_weight_qubits - 1 
+
     # Two-qubit gate
     qml.CNOT(wires=[m - 1, m])
-    qml.CRY(2 * pnp.arccos(pnp.sqrt(1 / m)), wires=[m, m - 1])
+    qml.CRY(2 * pnp.arccos(pnp.sqrt(1 / m_angle)), wires=[m, m - 1])
     qml.CNOT(wires=[m - 1, m])
 
     # k-1 three-qubit gates
     for l in range(2, k + 1):
         qml.CNOT(wires=[m - l, m])
-        qml.ctrl(qml.RY, (m, m - l + 1))(2 * pnp.arccos(pnp.sqrt(l / m)), wires=m - l)
+        qml.ctrl(qml.RY, (m, m - l + 1))(2 * pnp.arccos(pnp.sqrt(l / m_angle)), wires=m - l)
         qml.CNOT(wires=[m - l, m])
+
 
 
 def prepare_dicke_state(m, k):
     """Prepares a Dicke state with m qubits and k excitations in a inductive form."""
 
     # Prepares input state
-    for wire_idx in range(m - k + 1, m + 1):
+    for wire_idx in range(m - k + num_weight_qubits, m + num_weight_qubits):
         qml.X(wires=wire_idx)
 
     # Applies the SCS unitaries
@@ -350,8 +352,8 @@ def weight_error_prep(m, n, l):
     embed_weights(w_k, weight_register)
 
     # Prepare Dicke states conditioned on k values
-    qml.ctrl(prepare_dicke_state, (0,), control_values=0)(m, k=1)
-    qml.ctrl(prepare_dicke_state, (0,), control_values=1)(m, k=2)
+    qml.ctrl(prepare_dicke_state, weight_register, control_values=(0,1))(m, k=1)
+    qml.ctrl(prepare_dicke_state, weight_register, control_values=(1,0))(m, k=2)
 
     return qml.state()
 
@@ -366,10 +368,10 @@ pprint(formatted_state)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # After preparing the Dicke states, we uncompute and discard the state of the weight register. In
 # general, this is a straightforward process, as the Hamming weights encoded are known.
-# We accomplished this by generating bit strings of length :math:`m` with Hamming weight of
-# :math:`2` using the ``generate_bit_strings`` function. We then applied a controlled bit flip to the
-# weight register for these specific cases. We did not need to perform any action for bit strings with
-# a Hamming weight of :math:`1`, as the qubit state was already :math:`|0\rangle`. From now on, we can 
+# We accomplished this by generating bit strings of length :math:`m` with Hamming weights of
+# :math:`1` and :math:`2` using the ``generate_bit_strings`` function. We then applied controlled bit flips to the
+# qubits in the :math:`1` state of the weight register. We did not need to perform any action for bit strings with
+# a Hamming weight of :math:`0`, as the qubit state was already :math:`|00\rangle`. From now on, we can 
 # choose to disregard the weight register.
 # 
 
@@ -393,10 +395,14 @@ def generate_bit_strings(length, hamming_weight):
 
 
 def uncompute_weight(m, k):
-    """Uncomputes weight register when l=2"""
-    bit_strings = list(generate_bit_strings(m, k))
+    """Uncomputes weight register."""
+    bit_strings_dicke = list(generate_bit_strings(m, k))
+    binary_string_weight = bin(k)[2:].zfill(num_weight_qubits)
     for i in range(comb(m, k)):
-        qml.ctrl(qml.X, m_register, control_values=bit_strings[i])(0)
+        for j in range(len(binary_string_weight)):
+            bit = int(binary_string_weight[j])
+            if bit == 1:
+                qml.ctrl(qml.X, m_register, control_values=bit_strings_dicke[i])(weight_register[j])
 
 
 ######################################################################
@@ -405,14 +411,14 @@ def uncompute_weight(m, k):
 # 
 # To impart a phase :math:`(-1)^{\mathbf{v}\cdot\mathbf{y}}`, we perform a Pauli-Z on each qubit for
 # which :math:`v_i=1`. This is simply a conditional operation within a
-# ``for`` loop in the ``phase_Z`` function. Let’s now implement this step, together with the weight 
+# ``for`` loop in the ``phase_Z`` function. Let’s now implement this step, together with the weight register
 # uncomputation, in a function ``encode_v``, and output the resulting quantum state.
 # 
 
 def phase_Z(v):
     """Imparts a phase (-1)^{vy}."""
     for i in range(len(v)):
-        qml.cond(v[i],qml.Z)(wires=i + 1)
+        qml.cond(v[i],qml.Z)(wires=i + num_weight_qubits)
 
 
 @qml.qnode(dev)
@@ -420,9 +426,10 @@ def encode_v(m, n, l):
     """Quantum circuit uncomputing weight register and encoding vector of constraints."""
 
     # Load the previous state
-    qml.StatePrep(raw_state_vector, wires=range(0, m + 1))
+    qml.StatePrep(raw_state_vector, wires=range(0, m + num_weight_qubits))
 
     # Uncompute weight register
+    uncompute_weight(m, k=1)
     uncompute_weight(m, k=2)
 
     # Impart phase
@@ -462,10 +469,10 @@ def B_T_multiplication(B_T, n_register):
 
 @qml.qnode(dev)
 def syndrome_prep(m, n, l):
-    """Quantum circuit preparing syndrome register"""
+    """Quantum circuit preparing syndrome register."""
 
     # Load the previous state
-    qml.StatePrep(raw_state_vector, wires=range(0, m + 1))
+    qml.StatePrep(raw_state_vector, wires=range(0, m + num_weight_qubits))
 
     # Compute s = B^T y into the syndrome register
     B_T_multiplication(B_T, n_register)
@@ -551,7 +558,7 @@ def decoding(m, n, l):
     """Quantum circuit decoding and uncomputing error register"""
 
     # Load the previous state
-    qml.StatePrep(raw_state_vector, wires=range(0, m + n + 1))
+    qml.StatePrep(raw_state_vector, wires=range(0, m + n + num_weight_qubits))
 
     # Uncompute syndrome register using a Lookup table
     for syndrome, error in decoding_table:
@@ -569,7 +576,7 @@ pprint(decoding(m, n, l))
 # Hadamard transform and sample
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
-# After the previous step, we obtained the Hadamard transform of the state we are looking for. The final
+# After the previous step, we obtained the Hadamard transform of the state we were looking for. The final
 # step is to apply the Hadamard transform to this state to obtain
 # :math:`|P(f)\rangle=\sum_{\mathbf{x}} P(f(\mathbf{x}))|\mathbf{x}\rangle`. 
 # Let's write a ``DQI`` quantum function containing all the steps of the algorithm previously described. 
@@ -578,16 +585,17 @@ pprint(decoding(m, n, l))
 @partial(qml.set_shots, shots=n_samples)
 @qml.qnode(dev)
 def DQI(m, n, l):
-    """Quantum circuit implementing DQI algorithm to solve max-XORSAT."""
+    """Quantum circuit implementing the DQI algorithm to solve max-XORSAT."""
 
     # Prepare weight register
-    qml.Hadamard(wires=0)
+    embed_weights(w_k,weight_register)
 
     # Prepare Dicke states conditioned on k values
-    qml.ctrl(prepare_dicke_state, (0), control_values=0)(m, 1)
-    qml.ctrl(prepare_dicke_state, (0), control_values=1)(m, 2)
+    qml.ctrl(prepare_dicke_state, weight_register, control_values=(0,1))(m, k=1)
+    qml.ctrl(prepare_dicke_state, weight_register, control_values=(1,0))(m, k=2)
 
     # Uncompute weight register
+    uncompute_weight(m, k=1)
     uncompute_weight(m, k=2)
 
     # Impart phase
