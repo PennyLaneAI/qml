@@ -35,110 +35,13 @@ import pennylane.estimator as qre
 # We will be using the Kitaev model as an example to explore resource estimation. For more information
 # about the Kitaev Hamiltonian, check out :func:`our documentation <pennylane.spin.kitaev>`.
 #
-# This Hamiltonian is defined through nearest neighbor interactions on a honeycomb shaped lattice as
-# follows:
-#
-# .. math::
-#   \hat{H} = K_X \sum_{\langle i,j \rangle \in X}\sigma_i^x\sigma_j^x +
-#   \:\: K_Y \sum_{\langle i,j \rangle \in Y}\sigma_i^y\sigma_j^y +
-#   \:\: K_Z \sum_{\langle i,j \rangle \in Z}\sigma_i^z\sigma_j^z
-#
 # In this demo we will estimate the quantum resources necessary to evolve the quantum state of a 100 x
 # 100 unit honeycomb lattice of spins under the Kitaev Hamiltonian.
 #
 # **Thats 20,000 spins!**
 #
-
-import numpy as np
-import time
-
-# Construct the Hamiltonian on a 30 units x 30 units lattice
-n_cells = [30, 30]
-kx, ky, kz = (0.5, 0.6, 0.7)
-
-t1 = time.time()
-spin_ham = qml.spin.kitaev(n_cells, coupling=np.array([kx, ky, kz]))
-t2 = time.time()
-
-print(f"Generation time: ~ {round(t2 - t1)} seconds")
-print("Total number of terms:", len(spin_ham.operands))
-print("Total number of qubits:", len(spin_ham.wires))
-
-######################################################################
-# .. rst-class:: sphx-glr-script-out
-#
-# .. code-block:: none
-#
-#    Generation time: ~ 5 seconds
-#    Total number of terms: 2640
-#    Total number of qubits: 1800
-
-######################################################################
-# It took a few seconds to generate that Hamiltonian. What happens when we are working with even
-# larger systems?
-# Let’s see how this scales.
-#
-
-n_lst = [i for i in range(5,36)]
-time_lst = []
-for n in n_lst:
-    n_cells = [n, n]
-    kx, ky, kz = (0.5, 0.6, 0.7)
-    
-    t1 = time.time()
-    spin_ham = qml.spin.kitaev(n_cells, coupling=np.array([kx, ky, kz]))
-    t2 = time.time()
-    time_lst.append(t2-t1)
-    if n % 5 == 0:
-        print(f"Finished n = {n} in\t{time_lst[-1]:.3g}\tseconds")
-
-######################################################################
-# .. rst-class:: sphx-glr-script-out
-#
-# .. code-block:: none
-#
-#    Finished n = 5 in	0.0233	seconds
-#    Finished n = 10 in	0.0773	seconds
-#    Finished n = 15 in	0.361	seconds
-#    Finished n = 20 in	1.05	seconds
-#    Finished n = 25 in	2.58	seconds
-#    Finished n = 30 in	5.57	seconds
-#    Finished n = 35 in	10.5	seconds
-
-import matplotlib.pyplot as plt
-from scipy.optimize import curve_fit
-
-power_law = lambda n, a, b: a * n**b
-
-a_fit, b_fit = curve_fit(power_law, n_lst, time_lst, p0=[0.000007, 4])[0]
-fit_n = np.concatenate([n_lst, [110]])
-projected_n = 100
-projected_time = power_law(projected_n, a_fit, b_fit)
-
-plt.plot(n_lst, time_lst, ".", label="Measured generation times")
-plt.plot(fit_n, power_law(fit_n, a_fit, b_fit), "--g", label=f"Best-fit")
-plt.plot(
-    [projected_n],
-    [projected_time],
-    "*r",
-    label=f"n={projected_n}, time: ~{round(projected_time / 60)} minutes",
-)
-plt.xscale("log")
-plt.xlabel("Number of unit cells")
-plt.yscale("log")
-plt.ylabel("Processing time (seconds)")
-plt.legend()
-plt.show()
-
-######################################################################
-#
-# .. figure:: ../_static/demonstration_assets/re_how_to_use_pennylane_for_resource_estimation/re_how_to_use_pennylane_for_resource_estimation_a2adf0b7_1.png
-#    :align: center
-#    :width: 80%
-
-######################################################################
-# It would take around 15 minutes just to *generate* the Hamiltonian for a 100 x 100 unit honeycomb
-# lattice! Even after that, we would still be stuck with expensive processing tasks.
+# Generating such Hamiltonians quickly becomes a bottleneck.
+# See the :ref:`appendix-label` for a demonstration of how scaling up can be problematic.
 #
 
 ######################################################################
@@ -159,11 +62,13 @@ plt.show()
 #   n_{XX} &= n^{2}, \\
 #
 # :mod:`estimator <pennylane.estimator>` provides
-# `classes <https://docs.pennylane.ai/en/latest/code/qml_estimator.html#resource-hamiltonians>`__
+# `classes <https://docs.pennylane.ai/en/stable/code/qml_estimator.html#resource-hamiltonians>`__
 # which allow us to investigate the resources of Hamiltonian simulation without needing to generate
 # them.
 # In this case, we can capture the key information of our Hamiltonian in a compact representation
-# using the ``qre.PauliHamiltonian`` class.
+# using the
+# :class:`qre.PauliHamiltonian <pennylane.estimator.compact_hamiltonian.CDFHamiltonian>`
+# class.
 #
 
 n_cell = 100
@@ -185,14 +90,13 @@ kitaev_H = qre.PauliHamiltonian(
 
 ######################################################################
 # We can then use existing resource
-# `operators <https://docs.pennylane.ai/en/latest/code/qml_estimator.html#id1>`__ and
-# `templates <https://docs.pennylane.ai/en/latest/code/qml_estimator.html#resource-templates>`__
+# `operators <https://docs.pennylane.ai/en/stable/code/qml_estimator.html#id1>`__ and
+# `templates <https://docs.pennylane.ai/en/stable/code/qml_estimator.html#resource-templates>`__
 # to express our circuit.
 #
 
 order = 2
 num_steps = 10
-
 
 def circuit(hamiltonian):
     qre.UniformStatePrep(num_states=2**n_q)  # uniform superposition over all basis states
@@ -204,6 +108,8 @@ def circuit(hamiltonian):
 #
 # It’s simple: just call :func:`qre.estimate <pennylane.estimator.estimate.estimate>`!
 #
+
+import time
 
 t1 = time.time()
 res = qre.estimate(circuit)(kitaev_H)
@@ -593,6 +499,8 @@ print(resources)
 # Here, we generate the Hamiltonian ourselves:
 #
 
+import numpy as np
+
 n_cell = 25
 n_cells = [n_cell, n_cell]
 kx, ky, kz = (0.5, 0.6, 0.7)
@@ -768,8 +676,108 @@ print(resources_compact)
 #
 
 ######################################################################
+#
+# .. _appendix-label:
+#
 # Appendix
-# ~~~~~~~~~~
+# ~~~~~~~~
 #
+# Generating the Kitaev Hamiltonian
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
+# The :func:`Kitaev Hamiltonian <pennylane.spin.kitaev>` is defined through
+# nearest neighbor interactions on a honeycomb shaped lattice as follows:
+#
+# .. math::
+#   \hat{H} = K_X \sum_{\langle i,j \rangle \in X}\sigma_i^x\sigma_j^x +
+#   \:\: K_Y \sum_{\langle i,j \rangle \in Y}\sigma_i^y\sigma_j^y +
+#   \:\: K_Z \sum_{\langle i,j \rangle \in Z}\sigma_i^z\sigma_j^z
+#
+
+n_cells = [30, 30] # 30 units x 30 units lattice
+kx, ky, kz = (0.5, 0.6, 0.7)
+
+t1 = time.time()
+spin_ham = qml.spin.kitaev(n_cells, coupling=np.array([kx, ky, kz]))
+t2 = time.time()
+
+print(f"Generation time: ~ {round(t2 - t1)} seconds")
+print("Total number of terms:", len(spin_ham.operands))
+print("Total number of qubits:", len(spin_ham.wires))
+
+######################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+# .. code-block:: none
+#
+#    Generation time: ~ 5 seconds
+#    Total number of terms: 2640
+#    Total number of qubits: 1800
+
+######################################################################
+# It took a few seconds to generate that Hamiltonian. What happens when we are working with even
+# larger systems?
+# Let’s see how this scales.
+#
+
+n_lst = [i for i in range(5,36)]
+time_lst = []
+for n in n_lst:
+    n_cells = [n, n]
+    kx, ky, kz = (0.5, 0.6, 0.7)
+    
+    t1 = time.time()
+    spin_ham = qml.spin.kitaev(n_cells, coupling=np.array([kx, ky, kz]))
+    t2 = time.time()
+    time_lst.append(t2-t1)
+    if n % 5 == 0:
+        print(f"Finished n = {n} in\t{time_lst[-1]:.3g}\tseconds")
+
+######################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+# .. code-block:: none
+#
+#    Finished n = 5 in	0.0233	seconds
+#    Finished n = 10 in	0.0773	seconds
+#    Finished n = 15 in	0.361	seconds
+#    Finished n = 20 in	1.05	seconds
+#    Finished n = 25 in	2.58	seconds
+#    Finished n = 30 in	5.57	seconds
+#    Finished n = 35 in	10.5	seconds
+
+import matplotlib.pyplot as plt
+from scipy.optimize import curve_fit
+
+power_law = lambda n, a, b: a * n**b
+
+a_fit, b_fit = curve_fit(power_law, n_lst, time_lst, p0=[0.000007, 4])[0]
+fit_n = np.concatenate([n_lst, [110]])
+projected_n = 100
+projected_time = power_law(projected_n, a_fit, b_fit)
+
+plt.plot(n_lst, time_lst, ".", label="Measured generation times")
+plt.plot(fit_n, power_law(fit_n, a_fit, b_fit), "--g", label=f"Best-fit")
+plt.plot(
+    [projected_n],
+    [projected_time],
+    "*r",
+    label=f"n={projected_n}, time: ~{round(projected_time / 60)} minutes",
+)
+plt.xscale("log")
+plt.xlabel("Number of unit cells")
+plt.yscale("log")
+plt.ylabel("Processing time (seconds)")
+plt.legend()
+plt.show()
+
+######################################################################
+#
+# .. figure:: ../_static/demonstration_assets/re_how_to_use_pennylane_for_resource_estimation/re_how_to_use_pennylane_for_resource_estimation_a2adf0b7_1.png
+#    :align: center
+#    :width: 80%
+
+######################################################################
+# It would take around 15 minutes just to *generate* the Hamiltonian for a 100 x 100 unit honeycomb
+# lattice! Even after that, we would still be stuck with expensive processing tasks.
 #
