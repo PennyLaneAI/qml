@@ -121,6 +121,7 @@ print("Default gateset:\n", DefaultGateSet)
 #    Default gateset:
 #     frozenset({'Y', 'S', 'X', 'Hadamard', 'Toffoli', 'T', 'CNOT', 'Z'})
 
+######################################################################
 # So, how do we figure out our quantum resources?
 #
 # It’s simple: just call :func:`qre.estimate <pennylane.estimator.estimate.estimate>`!
@@ -164,12 +165,12 @@ print(res)
 
 resources_without_grouping = qre.estimate(qre.TrotterPauli(kitaev_H, num_steps, order))
 
+######################################################################
 # Providing additional information can help to produce more accurate resource estimates.
 # In the case of our
 # :class:`qre.PauliHamiltonian <pennylane.estimator.compact_hamiltonian.PauliHamiltonian>`,
 # we can split the terms into groups of commuting terms:
 
-# Commuting groups:
 commuting_groups = [{"XX": n_xx}, {"YY": n_yy}, {"ZZ": n_zz}]
 
 kitaev_H_with_grouping = qre.PauliHamiltonian(
@@ -177,6 +178,7 @@ kitaev_H_with_grouping = qre.PauliHamiltonian(
     commuting_groups=commuting_groups,
 )
 
+######################################################################
 # Let’s see how the cost of ``qre.TrotterPauli`` differs in these two cases!
 
 resources_with_grouping = qre.estimate(
@@ -206,7 +208,7 @@ print(f"Difference: {100*reduction:.1f}% reduction")
 
 ######################################################################
 # By splitting our terms into groups, we’ve managed to reduce the ``T`` gate count of our
-# Trotterization by over 30%!
+# Trotterization by over 30 percent!
 #
 
 ######################################################################
@@ -250,19 +252,11 @@ print(f"\n{res}")
 # Customize gateset:
 
 highlvl_gateset = {
-    "RX",
-    "RY",
-    "RZ",
+    "RX","RY","RZ",
     "Toffoli",
-    "X",
-    "Y",
-    "Z",
-    "Adjoint(S)",
-    "Adjoint(T)",
-    "Hadamard",
-    "S",
-    "CNOT",
-    "T",
+    "X","Y","Z",
+    "Adjoint(S)","Adjoint(T)",
+    "Hadamard","S","CNOT","T",
 }
 
 highlvl_res = qre.estimate(circuit, gate_set=highlvl_gateset)(kitaev_H_with_grouping)
@@ -315,12 +309,14 @@ print(f"Low-level resources:\n{lowlvl_res}")
 
 ######################################################################
 # When decomposing our algorithms to a particular gateset, it is often the case that we only have some
-# approximate decomposition of our building-block into the target gateset. For example: approximate
+# approximate decomposition of our building-block into the target gateset. For example, approximate
 # state loading to some precision, or rotation synthesis within some precision of the rotation angle.
 #
 # These approximate decompositions are accurate within some error threshold; tuning this error
 # threshold determines the resource cost of the algorithm. We can set and tune these errors using a
 # resource configuration: :class:`ResourceConfig <pennylane.estimator.resource_config.ResourceConfig>`.
+#
+# Notice that a more precise estimate requires more T-gates!
 #
 
 custom_rc = qre.ResourceConfig()  # generate a resource configuration
@@ -338,9 +334,7 @@ res = qre.estimate(
 
 # Just compare T gates:
 print("--- Low precision (1e-9) ---", f"\n T counts: {lowlvl_res.gate_counts["T"]:.3E}\n")
-print(
-    "--- High precision (1e-15) ---", f"\n T counts: {res.gate_counts["T"]:.3E}"
-)  # Notice that a more precise estimate requires more T-gates!
+print("--- High precision (1e-15) ---", f"\n T counts: {res.gate_counts["T"]:.3E}")
 
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
@@ -412,6 +406,10 @@ print(qre.RZ.resource_keys)  # these are the required arguments
 ######################################################################
 # Now that we know which arguments we need, we can define our resource decomposition.
 #
+# Each :class:`ResourceOperator <pennylane.estimator.resource_operator.ResourceOperator>`
+# has a ``resource_rep``, serving as an even more compact representation
+# to be used when defining resource decompositions.
+#
 
 
 def gridsynth_decomp(precision):
@@ -436,7 +434,7 @@ grisynth_rc = qre.ResourceConfig()
 grisynth_rc.set_decomp(qre.RZ, gridsynth_decomp)
 grisynth_cost_RZ = qre.estimate(qre.RZ(precision=1e-9), config=grisynth_rc)
 
-print("GridSynth decomposition -", f"\tT count: {grisynth_cost_RZ.gate_counts["T"]}")
+print("GridSynth decomposition -", f"\t\tT count: {grisynth_cost_RZ.gate_counts["T"]}")
 print("Default decomposition (RUS) -", f"\tT count: {default_cost_RZ.gate_counts["T"]}")
 
 ######################################################################
@@ -444,7 +442,7 @@ print("Default decomposition (RUS) -", f"\tT count: {default_cost_RZ.gate_counts
 #
 # .. code-block:: none
 #
-#    GridSynth decomposition - 	T count: 90
+#    GridSynth decomposition - 	    T count: 90
 #    Default decomposition (RUS) - 	T count: 44
 
 ######################################################################
@@ -589,7 +587,7 @@ def estimation_circuit(hamiltonian):
     return
 
 ######################################################################
-# As usual, just call :func:`qre.estimate <pennylane.estimator.estimate.estimate>
+# As usual, just call :func:`qre.estimate <pennylane.estimator.estimate.estimate>`
 # to generate a state-of-the-art
 # resource estimate for your PennyLane circuit!
 #
@@ -662,7 +660,8 @@ print(resources_compact)
 # quantum resource :mod:`estimator <pennylane.estimator>` is,
 # go try it out yourself!
 #
-# Reason about the costs of your quantum algorithm without any of the headaches.
+# Use PennyLane to eason about the costs of your quantum algorithm
+# without any of the headaches.
 #
 # References
 # ----------
@@ -687,7 +686,7 @@ print(resources_compact)
 # Appendix: Generating the Kitaev Hamiltonian
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# Let's take a lookt at how generating Hamiltonians can quickly become inconvenient.
+# Let's take a look at how generating Hamiltonians can quickly become inconvenient.
 #
 # The :func:`Kitaev Hamiltonian <pennylane.spin.kitaev>` is defined through
 # nearest neighbor interactions on a honeycomb shaped lattice as follows:
