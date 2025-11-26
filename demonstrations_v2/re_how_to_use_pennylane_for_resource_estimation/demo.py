@@ -14,7 +14,8 @@ How to use PennyLane for Resource Estimation
 # :mod:`estimator <pennylane.estimator>`.
 #
 # In this demo, we will show you how to perform resource estimation
-# for a simple Hamiltonian simulation workflow.  
+# for a simple Hamiltonian simulation workflow.
+#
 # Let’s import our quantum resource estimator.
 #
 
@@ -32,6 +33,13 @@ import pennylane.estimator as qre
 # - Gets you moving *even faster* - in the blink of an eye :mod:`estimator <pennylane.estimator>`
 #   provides you with resource estimates, and enables effortless customization to enhance your research.
 #
+
+######################################################################
+# Making it Easy
+# ~~~~~~~~~~~~~~
+#
+
+######################################################################
 # We will be using the Kitaev model as an example to explore resource estimation. For more information
 # about the Kitaev Hamiltonian, check out :func:`our documentation <pennylane.spin.kitaev>`.
 #
@@ -43,13 +51,6 @@ import pennylane.estimator as qre
 # Generating such Hamiltonians quickly becomes a bottleneck.
 # See the :ref:`appendix-label` for a demonstration of how scaling up can be problematic.
 #
-
-######################################################################
-# Making it Easy
-# ~~~~~~~~~~~~~~
-#
-
-######################################################################
 # Thanks to :mod:`estimator <pennylane.estimator>`,
 # we don’t need a detailed description of our Hamiltonian to estimate its resources!
 #
@@ -67,7 +68,7 @@ import pennylane.estimator as qre
 # them.
 # In this case, we can capture the key information of our Hamiltonian in a compact representation
 # using the
-# :class:`qre.PauliHamiltonian <pennylane.estimator.compact_hamiltonian.CDFHamiltonian>`
+# :class:`qre.PauliHamiltonian <pennylane.estimator.compact_hamiltonian.PauliHamiltonian>`
 # class.
 #
 
@@ -77,11 +78,7 @@ n_xx = n_cell**2
 n_yy = n_cell * (n_cell - 1)
 n_zz = n_yy
 
-distribution_of_pauli_words = {
-    "XX": n_xx,
-    "YY": n_yy,
-    "ZZ": n_zz,
-}
+distribution_of_pauli_words = {"XX": n_xx, "YY": n_yy, "ZZ": n_zz}
 
 kitaev_H = qre.PauliHamiltonian(
     num_qubits=n_q,
@@ -92,7 +89,11 @@ kitaev_H = qre.PauliHamiltonian(
 # We can then use existing resource
 # `operators <https://docs.pennylane.ai/en/stable/code/qml_estimator.html#id1>`__ and
 # `templates <https://docs.pennylane.ai/en/stable/code/qml_estimator.html#resource-templates>`__
-# to express our circuit.
+# from the :mod:`estimator <pennylane.estimator>` module to express our circuit.
+# These
+# :class:`ResourceOperator <pennylane.estimator.resource_operator.ResourceOperator>`
+# classes are designed to require minimal information
+# while still providing trustworthy estimates.
 #
 
 order = 2
@@ -104,6 +105,22 @@ def circuit(hamiltonian):
 
 
 ######################################################################
+# The cost of an algorithm is typically quantified by the number of logical qubits required and the
+# number of gates used. Different hardware will natively support different gatesets.
+# The default gateset used by ``estimate`` is:
+# ``{'Hadamard', 'S', 'CNOT', 'T', 'Toffoli', 'X', 'Y', 'Z'}``.
+
+from pennylane.estimator.resources_base import DefaultGateSet
+print("Default gateset:\n", DefaultGateSet)
+
+######################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+# .. code-block:: none
+#
+#    Default gateset:
+#     frozenset({'Y', 'S', 'X', 'Hadamard', 'Toffoli', 'T', 'CNOT', 'Z'})
+
 # So, how do we figure out our quantum resources?
 #
 # It’s simple: just call :func:`qre.estimate <pennylane.estimator.estimate.estimate>`!
@@ -143,23 +160,24 @@ print(res)
 #
 # We can also analyze the resources of an individual
 # :class:`ResourceOperator <pennylane.estimator.resource_operator.ResourceOperator>`.
-# Let’s see how the cost of ``qre.TrotterPauli`` changes when we split our terms into groups of
-# commuting terms:
-#
+# This can be helpful in determining which operators in a workflow demand the most resources.
 
 resources_without_grouping = qre.estimate(qre.TrotterPauli(kitaev_H, num_steps, order))
 
+# Providing additional information can help to produce more accurate resource estimates.
+# In the case of our
+# :class:`qre.PauliHamiltonian <pennylane.estimator.compact_hamiltonian.PauliHamiltonian>`,
+# we can split the terms into groups of commuting terms:
+
 # Commuting groups:
-commuting_groups = [  # Alternatively we can split our terms into groups
-    {"XX": n_xx},  # of commuting terms, this will help reduce the
-    {"YY": n_yy},  # cost of Trotterization as we will see:
-    {"ZZ": n_zz},
-]
+commuting_groups = [{"XX": n_xx}, {"YY": n_yy}, {"ZZ": n_zz}]
 
 kitaev_H_with_grouping = qre.PauliHamiltonian(
     num_qubits=n_q,
     commuting_groups=commuting_groups,
 )
+
+# Let’s see how the cost of ``qre.TrotterPauli`` differs in these two cases!
 
 resources_with_grouping = qre.estimate(
     qre.TrotterPauli(kitaev_H_with_grouping, num_steps, order)
@@ -197,17 +215,7 @@ print(f"Difference: {100*reduction:.1f}% reduction")
 #
 
 ######################################################################
-# The cost of an algorithm is typically quantified by the number of logical qubits required and the
-# number of gates used. Different hardware will natively support different gatesets.
-# The default gateset used by ``estimate`` is:
-# ``{'Hadamard', 'S', 'CNOT', 'T', 'Toffoli', 'X', 'Y', 'Z'}``.
-#
-# Here are the resources using our updated Hamiltonian, with the default gateset:
-#
-
-from pennylane.estimator.resources_base import DefaultGateSet
-
-print("Default gateset:\n", DefaultGateSet)
+# Here are the resources for our circuit using our updated Hamiltonian:
 
 res = qre.estimate(circuit)(kitaev_H_with_grouping)
 print(f"\n{res}")
@@ -217,9 +225,6 @@ print(f"\n{res}")
 # .. rst-class:: sphx-glr-script-out
 #
 # .. code-block:: none
-#
-#    Default gateset:
-#     frozenset({'Y', 'S', 'X', 'Hadamard', 'Toffoli', 'T', 'CNOT', 'Z'})
 #
 #    --- Resources: ---
 #     Total wires: 2.000E+4
@@ -363,7 +368,7 @@ print(
 # defined in Bocharov et al. [#bocharov]_.
 #
 
-default_cost_RZ = qre.estimate(qre.RZ(precision=1e-9))  # Manually set the precision
+default_cost_RZ = qre.estimate(qre.RZ())
 print(default_cost_RZ)
 
 ######################################################################
@@ -679,11 +684,10 @@ print(resources_compact)
 #
 # .. _appendix-label:
 #
-# Appendix
-# ~~~~~~~~
+# Appendix: Generating the Kitaev Hamiltonian
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# Generating the Kitaev Hamiltonian
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# Let's take a lookt at how generating Hamiltonians can quickly become inconvenient.
 #
 # The :func:`Kitaev Hamiltonian <pennylane.spin.kitaev>` is defined through
 # nearest neighbor interactions on a honeycomb shaped lattice as follows:
