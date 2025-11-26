@@ -13,7 +13,7 @@ How to use PennyLane for Resource Estimation
 # PennyLane is here to make that process easy, with our new resource estimation module:
 # :mod:`~.estimator`.
 #
-# PennyLane's :mod:`~.estimator` module:
+# PennyLane's :mod:`estimator <pennylane.estimator>` module:
 #
 # - Makes reasoning about quantum algorithms *quick* and painless - no complicated inputs, just tell
 #   :mod:`~.estimator` what you know.
