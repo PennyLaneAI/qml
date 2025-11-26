@@ -11,17 +11,10 @@ How to use PennyLane for Resource Estimation
 # helpful even when it cannot be executed, but is only truly helpful when it can.
 #
 # PennyLane is here to make that process easy, with our new resource estimation module:
-# :mod:`~.estimator`.
+# :mod:`estimator <pennylane.estimator>`.
 #
-# PennyLane's :mod:`estimator <pennylane.estimator>` module:
-#
-# - Makes reasoning about quantum algorithms *quick* and painless - no complicated inputs, just tell
-#   :mod:`~.estimator` what you know.
-# - Keeps you up to *speed* - :mod:`~.estimator` leverages the latest results from the literature to make
-#   sure you’re as efficient as can be.
-# - Gets you moving *even faster* - in the blink of an eye :mod:`~.estimator` provides you with resource
-#   estimates, and enables effortless customization to enhance your research.
-#
+# In this demo, we will show you how to perform resource estimation
+# for a simple Hamiltonian simulation workflow.  
 # Let’s import our quantum resource estimator.
 #
 
@@ -29,6 +22,16 @@ import pennylane as qml
 import pennylane.estimator as qre
 
 ######################################################################
+#
+# PennyLane's :mod:`estimator <pennylane.estimator>` module:
+#
+# - Makes reasoning about quantum algorithms *quick* and painless - no complicated inputs, just tell
+#   :mod:`estimator <pennylane.estimator>` what you know.
+# - Keeps you up to *speed* - :mod:`estimator <pennylane.estimator>` leverages the latest results from the literature to make
+#   sure you’re as efficient as can be.
+# - Gets you moving *even faster* - in the blink of an eye :mod:`estimator <pennylane.estimator>`
+#   provides you with resource estimates, and enables effortless customization to enhance your research.
+#
 # We will be using the Kitaev model as an example to explore resource estimation. For more information
 # about the Kitaev Hamiltonian, check out :func:`our documentation <pennylane.spin.kitaev>`.
 #
@@ -71,9 +74,9 @@ print("Total number of qubits:", len(spin_ham.wires))
 #    Total number of qubits: 1800
 
 ######################################################################
-# | It took a few seconds to generate that Hamiltonian. What happens when we are working with even
-#   larger systems?
-# | Let’s see how this scales.
+# It took a few seconds to generate that Hamiltonian. What happens when we are working with even
+# larger systems?
+# Let’s see how this scales.
 #
 
 n_lst = [i for i in range(5,36)]
@@ -144,8 +147,8 @@ plt.show()
 #
 
 ######################################################################
-# Thanks to :mod:`~.estimator`, we don’t need a detailed description of our Hamiltonian to estimate its
-# resources!
+# Thanks to :mod:`estimator <pennylane.estimator>`,
+# we don’t need a detailed description of our Hamiltonian to estimate its resources!
 #
 # The geometry of the honeycomb lattice and the structure of the Hamiltonian allows us to calculate
 # some important quantities directly:
@@ -155,7 +158,7 @@ plt.show()
 #   n_{YY} &= n_{ZZ} = n * (n - 1), \\
 #   n_{XX} &= n^{2}, \\
 #
-# :mod:`~.estimator` provides
+# :mod:`estimator <pennylane.estimator>` provides
 # `classes <https://docs.pennylane.ai/en/latest/code/qml_estimator.html#resource-hamiltonians>`__
 # which allow us to investigate the resources of Hamiltonian simulation without needing to generate
 # them.
@@ -194,7 +197,6 @@ num_steps = 10
 def circuit(hamiltonian):
     qre.UniformStatePrep(num_states=2**n_q)  # uniform superposition over all basis states
     qre.TrotterPauli(hamiltonian, num_steps, order)
-    return
 
 
 ######################################################################
@@ -233,10 +235,10 @@ print(res)
 ######################################################################
 # Our resource estimate was generated in the blink of an eye.
 #
-# | We can also analyze the resources of an individual
+# We can also analyze the resources of an individual
 # :class:`ResourceOperator <pennylane.estimator.resource_operator.ResourceOperator>`.
-# | Let’s see how the cost of ``qre.TrotterPauli`` changes when we split our terms into groups of
-#   commuting terms:
+# Let’s see how the cost of ``qre.TrotterPauli`` changes when we split our terms into groups of
+# commuting terms:
 #
 
 resources_without_grouping = qre.estimate(qre.TrotterPauli(kitaev_H, num_steps, order))
@@ -289,10 +291,10 @@ print(f"Difference: {100*reduction:.1f}% reduction")
 #
 
 ######################################################################
-# | The cost of an algorithm is typically quantified by the number of logical qubits required and the
-#   number of gates used. Different hardware will natively support different gatesets.
-# | The default gateset used by ``estimate`` is:
-# | ``{'Hadamard', 'S', 'CNOT', 'T', 'Toffoli', 'X', 'Y', 'Z'}``.
+# The cost of an algorithm is typically quantified by the number of logical qubits required and the
+# number of gates used. Different hardware will natively support different gatesets.
+# The default gateset used by ``estimate`` is:
+# ``{'Hadamard', 'S', 'CNOT', 'T', 'Toffoli', 'X', 'Y', 'Z'}``.
 #
 # Here are the resources using our updated Hamiltonian, with the default gateset:
 #
@@ -327,9 +329,9 @@ print(f"\n{res}")
 #       'Hadamard': 2.000E+4
 
 ######################################################################
-# | We can configure the gateset to obtain resource estimates at various levels of abstraction.
-# | Here, we configure a high-level gateset which adds gate types such as rotations, and a low
-#   level-gateset limited to just ``Hadamard``, ``CNOT``, ``S``, and ``T`` gates.
+# We can configure the gateset to obtain resource estimates at various levels of abstraction.
+# Here, we configure a high-level gateset which adds gate types such as rotations, and a low
+# level-gateset limited to just ``Hadamard``, ``CNOT``, ``S``, and ``T`` gates.
 #
 # We can see how the resources manifest at these different levels.
 #
@@ -407,7 +409,7 @@ print(f"Low-level resources:\n{lowlvl_res}")
 #
 # These approximate decompositions are accurate within some error threshold; tuning this error
 # threshold determines the resource cost of the algorithm. We can set and tune these errors using a
-# resource configuration: :class:`ResourceConfig <~.estimator.resource_config.ResourceConfig>`.
+# resource configuration: :class:`ResourceConfig <pennylane.estimator.resource_config.ResourceConfig>`.
 #
 
 custom_rc = qre.ResourceConfig()  # generate a resource configuration
@@ -448,7 +450,7 @@ print(
 #
 # There are many ways to decompose a quantum gate into our target gateset. Selecting an alternate
 # decomposition is a great way to optimize the cost of your quantum workflow. This can be done easily
-# with the :class:`ResourceConfig <~.estimator.resource_config.ResourceConfig>` class.
+# with the :class:`ResourceConfig <pennylane.estimator.resource_config.ResourceConfig>` class.
 #
 # Let’s explore decompositions for the ``RZ`` gate:
 # Current decomposition for ``RZ``, or single qubit rotation synthesis in general is
@@ -516,7 +518,7 @@ def gridsynth_decomp(precision):
 
 ######################################################################
 # Finally, we set the new decomposition in our
-# :class:`ResourceConfig <~.estimator.resource_config.ResourceConfig>`.
+# :class:`ResourceConfig <pennylane.estimator.resource_config.ResourceConfig>`.
 #
 
 grisynth_rc = qre.ResourceConfig()
@@ -608,7 +610,7 @@ grouped_hamiltonian = qml.sum(*groups)
 t2 = time.time()
 
 ######################################################################
-# We'll use :mod:`~.estimator` in parallel to make sure everything matches.
+# We'll use :mod:`estimator <pennylane.estimator>` in parallel to make sure everything matches.
 #
 
 t3 = time.time()
@@ -743,7 +745,9 @@ print(resources_compact)
 # Your turn!
 # ~~~~~~~~~~
 #
-# Now that you’ve seen how powerful PennyLane’s :mod:`~.estimator` is, go try it out yourself!
+# Now that you’ve seen how powerful PennyLane’s
+# quantum resource :mod:`estimator <pennylane.estimator>` is,
+# go try it out yourself!
 #
 # Reason about the costs of your quantum algorithm without any of the headaches.
 #
@@ -761,4 +765,11 @@ print(resources_compact)
 #    Ross, Neil J., and Peter Selinger. 
 #    "Optimal ancilla-free Clifford+T approximation of z-rotations."
 #    Quantum information and computation 16.11–12 (2016): 901–953. `arXiv <https://arxiv.org/abs/1403.2975>`__.
+#
+
+######################################################################
+# Appendix
+# ~~~~~~~~~~
+#
+#
 #
