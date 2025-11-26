@@ -190,6 +190,8 @@ Measuring :math:`Z_L \otimes Z_L` works in the same fashion, but with reversed r
 :math:`Y_L` measurements
 ------------------------
 
+At this point we can measure arbitrary :math:`X_L`- and :math:`Z_L`- Pauli product measurements. The last missing ingredient for universality is measuring :math:`Y_L` operators.
+
 Introducing discontinuous operations on the surface code does not exclude that we can still use the continuous transformations of the code.
 In particular, we can always extend a qubit to a larger surface or move the edges of it. These are important operations if we want to include logical :math:`Y_L` measurements.
 
@@ -214,7 +216,7 @@ To remove part of the extended patch again, we perform :math:`Z` measurements on
     :width: 50%
     :target: javascript:void(0)
 
-(Recall from earlier that green and red lines mreely indicate representatives of the logical :math:`Z_L` and :math:`X_L` operators, so moving the red line to the right is free with the error correction cycles)
+(Recall from earlier that green and red lines merely indicate representatives of the logical :math:`Z_L` and :math:`X_L` operators, so moving the red line to the right is free with the error correction cycles)
 
 Extending the qubit on the rough :math:`X` edge works similarly, but moving vertically, initializing in :math:`|+\rangle` and measuing :math:`X` on the data qubits.
 
@@ -226,46 +228,54 @@ We can also move (or rotate?) the type of the edges within :math:`d` error corre
     :target: javascript:void(0)
   
 Here we show an extended single qubit patch and three example re-orientations of the type of edges.
-The smaller images are guides to the eye to indicate the settings, with X edges as solid lines and Z edges as dotted lines.
+The smaller images are guides to the eye to indicate the settings, with X edges as solid lines and Z edges as dotted lines (i.e. the same as the logical measurements moved to the edges).
 Note that the important property is for neighboring X and Z edges to overlap on two data qubits for the corresponding stabilizers to commute.
 
+Finally, to measure $Y$ we perform the following procedure:
 
-twist based lattice surgery stuff
----------------------------------
+.. figure:: ../_static/demonstration_assets/lattice_surgery/y_measurement.png
+    :align: center
+    :width: 90%
+    :target: javascript:void(0)
 
-is that whats happening in Y measurements?
+Here, one extends and orients a qubit such that it has both :math:`X` and :math:`Z` edges on the same side. 
+At the same time, an auxiliary qubit is initialized in :math:`|0\rangle` parallel to our extended qubit.
+This is intentionally done such that there is a mismatch between the boundary stabilizers which introduces a so-called twist defect, highlighted in purple.
+When we perform lattice merging the two qubits, we obtain new stabilizers, some of which are mixed Z and X!
+This is fine because they still commute with all other stabilizers. This can be shown by checking that :math:`[ZZ, XY] = [YZ,XX] = [XZ, ZX] = 0`.
+
+Some of these are trivial in the sense that they are simply the product of the already-measured stabilizers from each of the qubits. 
+The non-trivial new ones are highlighted in red and correspond to the measurement of :math:`Y \otimes Z` of the joint state :math:`|\psi\rangle \otimes |0\rangle`
+between the qubit and the auxiliary qubit in :math:`|0\rangle`, effectively measuring :math:`\langle Y \rangle = \langle \psi | Y |\psi \rangle = \langle \psi 0 | Y \otimes Z |\psi 0 \rangle`.
+A more intuitive way to view this is that we simultaneously measured the X and Z edge of our extended qubit, yielding the :math:`Y \propto X Z` measurement (modulo some global phase). This is exactly the perspective in the game of surface codes [#Litinski]_.
+
+Measuring :math:`Y_L` inside a Pauli product measurement, e.g. :math:`Y_L \otimes Z_L` works in the same fashion
+as above with lattice merging and splitting while making sure a twist defect is introduced. This corresponds to having
+the first qubit facing the other with both X and Z edges.
+
+More details on twist-based lattice surgery can be found in [#Litinski2]_.
 
 """
 
-import pennylane as qml
-
 
 ##############################################################################
-#
-# Universal Gate set in the surface code using lattice surgery
-# ------------------------------------------------------------
 # 
-# asd
-
-##############################################################################
-#
-
-##############################################################################
-#
-
-##############################################################################
-#
-
-##############################################################################
-#
-
-
-##############################################################################
-# text
 #
 # Conclusion
 # ----------
-# text
+#
+# Lattice surgery is the answer to performing error-corrected quantum computing on planar codes
+# with local connectivity as it allows for non-transversal gates. We introduced its basics
+# exemplified on the surface code and by realizing arbitrary Pauli product measurements.
+# These are performed by merging and splitting qubits in such a way that the logical operators "topologically" align.
+# In this process of merging and splitting, we only ever change which stabilizers we measure, but we never perform a strict projective measurement of the logical operator.
+# In a sense, we are reading out parity information from the stabilizer measurements in a non-pertubative way.
+# The parity on the other hand provides us only with the topological information of what the logical string is connecting,
+# which is why this process is called homological measurement.
+#
+# Note that the introduction of the higher weight twist-defect stabilizer with 5 Pauli operators can be problematic,
+# which is why twist-free alternatives are also being proposed [#Chamberland]_.
+# 
 #
 # References
 # ----------
@@ -310,6 +320,13 @@ import pennylane as qml
 #     Christopher Chamberland, Earl T. Campbell
 #     "Universal quantum computing with twist-free and temporally encoded lattice surgery",
 #     `arXiv:2109.02746 <https://arxiv.org/abs/2109.02746>`__, 2021
+#
+#
+# .. [#Litinski2]
+#
+#     Daniel Litinski, Felix von Oppen
+#     "Lattice Surgery with a Twist: Simplifying Clifford Gates of Surface Codes",
+#     `arXiv:1709.02318 <https://arxiv.org/abs/1709.02318>`__, 2017
 #
 #
 # Disclaimer
