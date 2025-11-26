@@ -30,7 +30,7 @@ import pennylane.estimator as qre
 
 ######################################################################
 # We will be using the Kitaev model as an example to explore resource estimation. For more information
-# about the Kitaev Hamiltonian, check out `our documentation <~.spin.kitaev>`.
+# about the Kitaev Hamiltonian, check out :func:`our documentation <pennylane.spin.kitaev>`.
 #
 # This Hamiltonian is defined through nearest neighbor interactions on a honeycomb shaped lattice as
 # follows:
@@ -144,7 +144,7 @@ plt.show()
 #
 
 ######################################################################
-# Thanks to ``estimator``, we don’t need a detailed description of our Hamiltonian to estimate its
+# Thanks to :mod:`~.estimator`, we don’t need a detailed description of our Hamiltonian to estimate its
 # resources!
 #
 # The geometry of the honeycomb lattice and the structure of the Hamiltonian allows us to calculate
@@ -155,12 +155,12 @@ plt.show()
 #   n_{YY} &= n_{ZZ} = n * (n - 1), \\
 #   n_{XX} &= n^{2}, \\
 #
-# | ``estimator`` provides
-#   `classes <https://docs.pennylane.ai/en/latest/code/qml_estimator.html#resource-hamiltonians>`__
-#   which allow us to investigate the resources of Hamiltonian simulation without needing to generate
-#   them.
-# | In this case, we can capture the key information of our Hamiltonian in a compact representation
-#   using the ``qre.PauliHamiltonian`` class.
+# :mod:`~.estimator` provides
+# `classes <https://docs.pennylane.ai/en/latest/code/qml_estimator.html#resource-hamiltonians>`__
+# which allow us to investigate the resources of Hamiltonian simulation without needing to generate
+# them.
+# In this case, we can capture the key information of our Hamiltonian in a compact representation
+# using the ``qre.PauliHamiltonian`` class.
 #
 
 n_cell = 100
@@ -183,8 +183,8 @@ kitaev_H = qre.PauliHamiltonian(
 ######################################################################
 # We can then use existing resource
 # `operators <https://docs.pennylane.ai/en/latest/code/qml_estimator.html#id1>`__ and
-# `templates <https://docs.pennylane.ai/en/latest/code/qml_estimator.html#resource-templates>`__ to
-# express our circuit.
+# `templates <https://docs.pennylane.ai/en/latest/code/qml_estimator.html#resource-templates>`__
+# to express our circuit.
 #
 
 order = 2
@@ -200,7 +200,7 @@ def circuit(hamiltonian):
 ######################################################################
 # So, how do we figure out our quantum resources?
 #
-# It’s simple: just call ``qre.estimate``!
+# It’s simple: just call :func:`qre.estimate <pennylane.estimator.estimate.estimate>`!
 #
 
 t1 = time.time()
@@ -233,7 +233,8 @@ print(res)
 ######################################################################
 # Our resource estimate was generated in the blink of an eye.
 #
-# | We can also analyze the resources of an individual ``ResourceOperator``.
+# | We can also analyze the resources of an individual
+# :class:`ResourceOperator <pennylane.estimator.resource_operator.ResourceOperator>`.
 # | Let’s see how the cost of ``qre.TrotterPauli`` changes when we split our terms into groups of
 #   commuting terms:
 #
@@ -406,7 +407,7 @@ print(f"Low-level resources:\n{lowlvl_res}")
 #
 # These approximate decompositions are accurate within some error threshold; tuning this error
 # threshold determines the resource cost of the algorithm. We can set and tune these errors using a
-# resource configuration: ``qre.ResourceConfig``.
+# resource configuration: :class:`ResourceConfig <~.estimator.resource_config.ResourceConfig>`.
 #
 
 custom_rc = qre.ResourceConfig()  # generate a resource configuration
@@ -473,7 +474,7 @@ print(default_cost_RZ)
 
 ######################################################################
 # These are other state of the art methods we could use instead, such as that
-# defined in Ross & Selinger [#ross].
+# defined in Ross & Selinger [#ross]_.
 #
 
 # As per the paper by Ross & Selinger:
@@ -514,7 +515,8 @@ def gridsynth_decomp(precision):
 
 
 ######################################################################
-# Finally, we set the new decomposition in our ``ResourceConfig``.
+# Finally, we set the new decomposition in our
+# :class:`ResourceConfig <~.estimator.resource_config.ResourceConfig>`.
 #
 
 grisynth_rc = qre.ResourceConfig()
@@ -606,7 +608,7 @@ grouped_hamiltonian = qml.sum(*groups)
 t2 = time.time()
 
 ######################################################################
-# We'll use `estimator` in parallel to make sure everything matches.
+# We'll use :mod:`~.estimator` in parallel to make sure everything matches.
 #
 
 t3 = time.time()
@@ -672,7 +674,8 @@ def estimation_circuit(hamiltonian):
     return
 
 ######################################################################
-# As usual, just call `qre.estimate` to generate a state-of-the-art
+# As usual, just call :func:`qre.estimate <pennylane.estimator.estimate.estimate>
+# to generate a state-of-the-art
 # resource estimate for your PennyLane circuit!
 #
 
@@ -740,8 +743,7 @@ print(resources_compact)
 # Your turn!
 # ~~~~~~~~~~
 #
-# Now that you’ve seen how powerful PennyLane’s ``estimator`` is, go `try it out
-# yourself <https://docs.pennylane.ai/en/latest/code/qml_estimator.html>`__!
+# Now that you’ve seen how powerful PennyLane’s :mod:`~.estimator` is, go try it out yourself!
 #
 # Reason about the costs of your quantum algorithm without any of the headaches.
 #
