@@ -1,9 +1,9 @@
 import typer
 from qml.context import Context
-from qml.lib import demo, repo, cli, fs, template
+from qml.lib import demo, cli, template
 import shutil
 import logging
-from typing import Annotated, Optional
+from typing import Annotated
 import typing
 import re
 import json
@@ -39,7 +39,7 @@ def help():
 @app.command()
 def build(
     demo_names: Annotated[
-        Optional[list[str]],
+        list[str] | None,
         typer.Argument(
             help="Names of demos to build. If not provided, build all demos."
         ),
@@ -55,6 +55,7 @@ def build(
         bool, typer.Option(help="Continue if sphinx-build fails for a demo")
     ] = False,
     dev: Annotated[bool, typer.Option(help="Whether to use dev dependencies")] = False,
+    venv: Annotated[str | None, typer.Option(help="Name of the virtual environment to install build dependencies")] = None,
 ) -> None:
     """
     Build the named demos.
@@ -66,7 +67,7 @@ def build(
         quiet: Suppress sphinx output if True.
         keep_going: Continue building even if some demos fail.
         dev: Use development dependencies.
-
+        venv: Name of the virtual environment to install build dependencies.
     Raises:
         typer.Exit: If build process fails.
     """
@@ -104,6 +105,7 @@ def build(
             quiet=quiet,
             keep_going=keep_going,
             dev=dev,
+            venv=venv,
         )
 
     except Exception as e:
@@ -165,8 +167,8 @@ def _collect_authors() -> list[dict]:
 
 
 def _setup_thumbnails(
-    demo_dir: Path, small_thumb: Optional[Path], large_thumb: Optional[Path]
-) -> tuple[Optional[str], Optional[str]]:
+    demo_dir: Path, small_thumb: Path | None, large_thumb: Path | None
+) -> tuple[str | None, str | None]:
     """Verify thumbnail files exist and return their paths."""
     small_thumbnail_path = None
     large_thumbnail_path = None
@@ -184,8 +186,8 @@ def _create_demo_files(
     title: str,
     description: str,
     authors: list[str],
-    small_thumbnail: Optional[str],
-    large_thumbnail: Optional[str],
+    small_thumbnail: str | None,
+    large_thumbnail: str | None,
 ) -> None:
     """Create demo.py and metadata.json files."""
     try:
