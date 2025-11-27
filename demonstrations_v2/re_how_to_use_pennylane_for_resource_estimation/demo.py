@@ -605,7 +605,7 @@ print(resources_exec)
 #
 # .. code-block:: none
 #
-#    Processing time: ~ 1.37 seconds
+#    Processing time: 3.22 seconds
 #    --- Resources: ---
 #     Total wires: 1250
 #       algorithmic wires: 1250
@@ -624,7 +624,7 @@ print(resources_exec)
 #
 
 t5 = time.time()
-resources_compact = qre.estimate(circuit)(compact_hamiltonian)
+resources_compact = qre.estimate(estimation_circuit)(compact_hamiltonian)
 t6 = time.time()
 
 print(f"Processing time: ~ {(t6 - t5):.3g} seconds")
@@ -635,18 +635,18 @@ print(resources_compact)
 #
 # .. code-block:: none
 #
-#    Processing time: ~ 0.000257 seconds
+#    Processing time: 0.000365 seconds
 #    --- Resources: ---
 #     Total wires: 1250
 #       algorithmic wires: 1250
 #       allocated wires: 0
 #         zero state: 0
 #         any state: 0
-#     Total gates : 1.218E+6
-#       'T': 1.094E+6,
-#       'CNOT': 4.975E+4,
-#       'Z': 2.400E+4,
-#       'S': 4.800E+4,
+#     Total gates : 1.488E+5
+#       'T': 1.342E+5,
+#       'CNOT': 6.100E+3,
+#       'Z': 2.400E+3,
+#       'S': 4.800E+3,
 #       'Hadamard': 1.250E+3
 
 ######################################################################
