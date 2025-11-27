@@ -10,7 +10,7 @@ In this demo, we are going to see how the basic operations, lattice merging and 
 enable parity measurements of arbitrary Pauli operators, which unlock universal fault
 tolerant quantum computing.
 
-.. figure:: ../_static/demonstration_assets/block_encoding/thumbnail_Block_Encodings_Matrix_Oracle.png
+.. figure:: _static/hero_illustrations/pennylane-demo-lattice-surgery-hero.png
     :align: center
     :width: 50%
     :target: javascript:void(0)
