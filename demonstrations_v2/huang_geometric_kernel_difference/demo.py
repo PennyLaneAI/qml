@@ -15,28 +15,23 @@ geometries defined by two kernels represent your data. The formula for :math:`g`
 
 where :math:`K_q` and :math:`K_c` are quantum and classical Gram matrices, respectively.
 
-Kernel refresher
-----------------
 
-A **kernel** is a function :math:`k(x, x')` that measures similarity between data points without
-explicitly computing their feature representations in high-dimensional spaces, thus lowering the
-computational cost.
+.. admonition:: Kernel refresher
+    :class: note
 
-Classical kernels
-~~~~~~~~~~~~~~~~~
+    A **kernel** is a function :math:`k(x, x')` that measures similarity between data points without
+    explicitly computing their feature representations in high-dimensional spaces, thus lowering the
+    computational cost.
 
-- Example: RBF (Radial Basis Function) kernel
-- Formula: :math:`k(x, x') = \exp(-\gamma \|x - x'\|^2)`
-- Implicitly computes: :math:`k(x, x') = \langle\phi(x), \phi(x')\rangle`
-- The feature map :math:`\phi(x)` projects to infinite dimensions but is never calculated directly
+    An example of a classical kernel is the Radial Basis Function (RBF) kernel given by 
+    :math:`k(x, x') = \exp(-\gamma \|x - x'\|^2)`. It implicitly computes the inner product 
+    :math:`k(x, x') = \langle\phi(x), \phi(x')\rangle`. The feature map :math:`\phi(x)` projects 
+    to infinite dimensions, but it is never calculated directly.
 
-Quantum kernels
-~~~~~~~~~~~~~~~
-
-- Formula: :math:`k(x, x') = |\langle\psi(x)|\psi(x')\rangle|^2`
-- :math:`|\psi(x)\rangle` is the quantum state encoding the classical data :math:`x`
-- For :math:`n` qubits, the quantum state lives in a :math:`2^n`-dimensional Hilbert space that is
-  implicitly manipulated
+    Quantum kernels are similar but leverage the Hilbert space of a quantum computer. It is defined by 
+    :math:`k(x, x') = |\langle\psi(x)|\psi(x')\rangle|^2`, where :math:`|\psi(x)\rangle` is the quantum 
+    state encoding the classical data :math:`x`. For :math:`n` qubits, the quantum state lives in a 
+    :math:`2^n`-dimensional Hilbert space that is implicitly manipulated.
 
 Key concepts
 ~~~~~~~~~~~~
