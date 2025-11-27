@@ -176,6 +176,14 @@ Instructs the build process to use the latest development (unreleased) versions 
 qml build --dev demo_name
 ```
 
+##### `--venv`
+
+Specify a new or existing virtual environment to use for installing the demo dependencies. If omitted, the defaul virtual environment name of `.venv-build` will be used.
+
+```bash
+qml build --venv .my_env
+```
+
 
 ## Viewing Build Outputs
 

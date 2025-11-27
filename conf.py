@@ -30,7 +30,7 @@ from pennylane.exceptions import PennyLaneDeprecationWarning
 
 project = "PennyLane"
 
-copyright = "2022, Xanadu Quantum Technologies, Inc."
+copyright = "2025, Xanadu Quantum Technologies, Inc."
 
 author = "Xanadu Inc."
 
@@ -38,7 +38,6 @@ author = "Xanadu Inc."
 version = ""
 # The full version, including alpha/beta/rc tags
 release = ""
-
 
 # -- General configuration ---------------------------------------------------
 
@@ -80,7 +79,8 @@ sphinx_gallery_conf = {
         "filters": [
             "./lib/filter_directives.py", 
             "./lib/filter_figures.py",
-            "./lib/filter_links.py"
+            "./lib/filter_links.py",
+            "./lib/filter_tables.py"
         ]
     },
     # first notebook cell in generated Jupyter notebooks
@@ -143,7 +143,7 @@ master_doc = "index"
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-language = None
+language = "en"
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
