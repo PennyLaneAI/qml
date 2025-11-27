@@ -3,11 +3,12 @@ r"""
 Lattice Surgery
 ===============
 
-Lattice surgery is a way to fault-tolerantly perform operations on two-dimensional topological QEC codes
-such as the surface code. These concepts can be generalized to other codes such as color codes or folded surface codes.
-In this demo we are going to introduce the basic operations in lattice surgery and see how they enable fault tolerant quantum computing
-on the surface code. We note that some of these routines may already be superseded by more efficient alternatives, but shall suffice for the
-educational purpose of this demo.
+Lattice surgery is a way to fault-tolerantly perform operations on two-dimensional platforms
+with local physical connectivity. It enables lower spatial overheads for topological quantum
+error correction codes such as surface codes or color codes.
+In this demo, we are going to see how the basic operations, lattice merging and lattice splitting,
+enable parity measurements of arbitrary Pauli operators, which unlock universal fault
+tolerant quantum computing.
 
 .. figure:: ../_static/demonstration_assets/block_encoding/thumbnail_Block_Encodings_Matrix_Oracle.png
     :align: center
