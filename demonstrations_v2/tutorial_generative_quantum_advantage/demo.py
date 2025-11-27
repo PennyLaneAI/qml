@@ -227,7 +227,7 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 #     output bitstrings y according to the unknown distribution
 #     :math:`p(\boldsymbol{y}|x)` for any given new input bitstring :math:`x`.
 # 
-# Although the above suggests the conditional distribution is unknown, we actually know a lot about
+# Although the above definition suggests the conditional distribution is unknown, we actually know a lot about
 # it. In particular, we need to work under the assumption that we know the exact structure of the
 # quantum circuits that produce the data, except for the rotation angles :math:`\theta_{ij}`
 # (i.e. this is included in the \`prior knowledge’ of the problem). To learn, we therefore just need
