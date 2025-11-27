@@ -95,7 +95,7 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # Recipe for sampling from the deep circuit
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# 1. Generate all bits :math:`y_{ij}` for :math:`i<4` uniformly at random.
+# 1. Generate all bits :math:`y_{ij}` for :math:`i<4` uniformly at random using a classical random number generator.
 # 2. Run the above circuit, controlling the Z gates on these bits. 
 # 3. Measure the output of the circuit to obtain the final three bits :math:`y_{41}`, :math:`y_{42}`, :math:`y_{43}`.
 # 
@@ -108,9 +108,9 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # few qubits, you can simulate the distribution of a 2D shallow circuit on many more qubits. The
 # authors used this trick to simulate a shallow IDQNN circuit on 816 qubits using a deep circuit with
 # 68 qubits. To do this, they actually work with a deep circuit on a 2D lattice, and map it to a
-# shallow circuit on a 3D lattice. This obviously complicates things a bit (and makes drawing pictures
-# a lot harder!) so we will stick to the 2D vs 1D example above; in the end, it will contain
-# everything we need to understand the result for higher dimensional lattices.
+# shallow circuit on a 3D lattice (they call this circuit 'compression'). This obviously complicates things a
+# bit (and makes drawing pictures a lot harder!) so we will stick to the 2D vs 1D example above; in
+# the end, it will contain everything we need to understand the result for higher dimensional lattices.
 # 
 #
 # Proving hardness for sampling
@@ -120,13 +120,13 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # the deep circuit above is universal. That is, any :math:`n`-qubit circuit with two qubit gates can
 # be efficiently approximated by sequential layers of Hadamards, Z rotations and controlled-Z gates on
 # an :math:`n` qubit computational basis input. We can therefore use this fact to define a circuit
-# that is hard to sample from classically; simply take your favourite pre-existing hardness results
+# that is hard to sample from classically: simply take your favourite pre-existing hardness results
 # for sampling (for example, [#sample]_) and compile the circuit to the H, RZ, CZ gateset. We can then embed this
 # into the precise structure we had above by inserting the classically controlled-Z gates at every
 # layer. If we happen to sample the all-zero bitstring for :math:`y_{ij}` values that control these
 # gates, then we will sample from this hard distribution. In this sense the distribution
-# :math:`p(\boldsymbol{y})` is ‘hard’ since any classical algorithm will fail to reproduce this part
-# of the distribution. Moreover, since the distribution of the IDQNN is identical, it follows that the
+# :math:`p(\boldsymbol{y})` is ‘hard’ since any classical algorithm will fail to reproduce this statistics in this
+# case. Moreover, since the distribution of the IDQNN is identical, it follows that the
 # corresponding IDQNN is also hard to sample from.
 # 
 #
@@ -170,7 +170,7 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 #    :align: center
 #
 # If the input is 0, we already know what happens; this is just the IDQNN described in the previous
-# section. If the input is 1 or 2, things get very simple. Note that the CZ gate is symmetric, and can
+# sections. If the input is 1 or 2, things get very simple. Note that the CZ gate is symmetric, and can
 # be written as
 # 
 # .. math:: CZ = \vert 0 \rangle\langle 0 \vert \otimes \mathbb{I} +  \vert 1 \rangle\langle 1 \vert \otimes Z =  \mathbb{I} \otimes  \vert 0 \rangle\langle 0 \vert + Z \otimes  \vert 1 \rangle\langle 1 \vert.
@@ -196,9 +196,9 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 #    :align: center
 #
 # The authors argue that the conditional distribution :math:`p(\boldsymbol{y}|x)` should also be
-# considered hard to sample from classically, since for the input :math:`x=0` we can use the argument
-# of the previous section. For the inputs :math:`x=1` and :math:`x=2`, however, the resulting
-# distribution has an efficient classical simulation since it corresponds to measurements made on
+# considered hard to sample from classically, since the input :math:`x=0` corresponds to the case of the 'no input'
+# IDQNN of the previous sections, for which we have already argued hardness. For the inputs :math:`x=1` and :math:`x=2`,
+# however, the resulting distribution has an efficient classical simulation since it corresponds to measurements made on
 # unentangled single qubits.
 # 
 #
@@ -232,9 +232,9 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # quantum circuits that produce the data, except for the rotation angles :math:`\theta_{ij}`
 # (i.e. this is included in the \`prior knowledge’ of the problem). To learn, we therefore just need
 # to infer the parameters :math:`\theta_{ij}` from the data, which will allow us to generate new data by
-# simply implementing the resulting circuits. This is very different from real world problems, the
-# typical situation in classical generative machine learning, where a precise parametric form of the
-# ground truth distribution is not known.
+# simply implementing the resulting circuits. This is very different from real world machine learning problems.
+# In particular, such a precise parametric form of the ground truth distribution is not known in essentially all practical
+# applications of classical generative machine learning.
 # 
 # So how do we infer the parameters :math:`\theta_{ij}` from data? Consider for example the data for
 # input :math:`x=1`, and the outcome :math:`y_{12}`. From the above circuit we see that in this case the
@@ -331,12 +331,9 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # In order to uncover genuine usefulness in quantum machine learning we therefore need to move to scenarios that
 # mirror the assumptions of realistic learning problems. If the flipside of this is that proving
 # complexity theoretic separations becomes seemingly impossible, then perhaps they are not the right
-# goals to be pursuing [#goal]_? At Xanadu, we are taking a different method of attack:
-# understand what properties of quantum theory can be potential game-changers for
-# machine learning [#qft]_, and use them to construct powerful and genuinely scalable algorithms that can be applied to real
-# world learning problems [#iqp]_. Although we might have to wave goodbye to the possibility of proving
-# formal complexity theoretic separations, this freedom might just lead us to useful quantum machine learning
-# algorithms.
+# goals to be pursuing [#goal]_? A more fruitful may be to instead look for other tools to evaluate the
+# performance of quantum models. Although this means waving goodbye to computational complexity theory,
+# this freedom just might be the fresh perspective we need to uncover genuinely useful quantum machine learning algorithms.
 #
 #
 # References
