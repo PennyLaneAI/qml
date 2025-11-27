@@ -28,30 +28,25 @@ where :math:`K_q` and :math:`K_c` are quantum and classical Gram matrices, respe
     :math:`k(x, x') = \langle\phi(x), \phi(x')\rangle`. The feature map :math:`\phi(x)` projects 
     to infinite dimensions, but it is never calculated directly.
 
-    Quantum kernels are similar but leverage the Hilbert space of a quantum computer. It is defined by 
+    Quantum kernels are similar but leverage the Hilbert space of a quantum computer. A quantum kernel is defined by 
     :math:`k(x, x') = |\langle\psi(x)|\psi(x')\rangle|^2`, where :math:`|\psi(x)\rangle` is the quantum 
     state encoding the classical data :math:`x`. For :math:`n` qubits, the quantum state lives in a 
     :math:`2^n`-dimensional Hilbert space that is implicitly manipulated.
 
-Key concepts
-~~~~~~~~~~~~
-
-The **kernel matrix** (Gram matrix) :math:`K` has entries :math:`K_{ij} = k(x_i, x_j)` that store
+**Key concepts**: The **kernel matrix** (Gram matrix) :math:`K` has entries :math:`K_{ij} = k(x_i, x_j)` that store
 all pairwise similarities between data points.
 
-What g tells us:
-------------------------
+What g tells us
+---------------
 
-- **If** :math:`g \approx 1:` The quantum kernel’s geometry is essentially the same as a good classical
-  kernel’s → the quantum kernel offers no geometric advantage, making it unlikely to outperform the
-  classical kernel **in any kernel-based learning algorithm** (e.g., SVM, Gaussian Processes). Huang
-  et al. proved this concept in a rigorous mathematical way in their paper.
+When :math:`g \approx 1:`, the quantum kernel’s geometry is essentially the same as a good classical
+kernel’s. The quantum kernel offers no geometric advantage, making it unlikely to outperform the 
+classical kernel **in any kernel-based learning algorithm** (e.g., SVM, Gaussian Processes). Huang 
+et al. proved this concept in a rigorous mathematical way in their paper. Conversely, if :math:`g >> 1:`, 
+the quantum geometry is genuinely different. A kernel method using the quantum kernel *might* offer an advantage.
 
-- **If** :math:`g >> 1:` The quantum geometry is genuinely different → **a kernel method using the
-  quantum kernel** *might* offer an advantage.
-
-Why this matters:
------------------
+Why this matters
+----------------
 
 This approach focuses on ruling out underperforming quantum kernels before investing in training.
 From a complexity theory point of view, computing :math:`g` scales as :math:`O(n^3)` due to the
