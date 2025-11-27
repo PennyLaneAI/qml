@@ -4,11 +4,13 @@ How to use PennyLane for Resource Estimation
 """
 
 ######################################################################
-# Fault tolerant quantum computing is on its way. But are there useful algorithms which are ready for
-# it? The development of meaningful applications of quantum computing is an active area of research,
+# Fault tolerant quantum computing is on its way.
+# But are there useful algorithms which are ready for it?
+# The development of meaningful applications of quantum computing is an active area of research,
 # and one of the major challenges in the process of assessing a potential quantum algorithm is
-# determining the amount of resources required to execute it on hardware. An algorithm may still be
-# helpful even when it cannot be executed, but is only truly helpful when it can.
+# determining the amount of resources required for hardware execution.
+# An algorithm may still be helpful even when it cannot be executed,
+# but is only truly helpful when it can.
 #
 # PennyLane is here to make that process easy, with our new resource estimation module:
 # :mod:`estimator <pennylane.estimator>`.
@@ -49,7 +51,7 @@ import pennylane.estimator as qre
 # **Thats 20,000 spins!**
 #
 # Generating such Hamiltonians quickly becomes a bottleneck.
-# See the :ref:`appendix-label` for a demonstration of how scaling up can be problematic.
+# See the :ref:`Appendix <appendix-label>` for a demonstration of how scaling up can be problematic.
 #
 # Thanks to :mod:`estimator <pennylane.estimator>`,
 # we don’t need a detailed description of our Hamiltonian to estimate its resources!
@@ -106,7 +108,7 @@ def circuit(hamiltonian):
 ######################################################################
 # The cost of an algorithm is typically quantified by the number of logical qubits required and the
 # number of gates used. Different hardware will natively support different gatesets.
-# The default gateset used by ``estimate`` is:
+# The default gateset used by :mod:`estimator <pennylane.estimator>` is:
 # ``{'Hadamard', 'S', 'CNOT', 'T', 'Toffoli', 'X', 'Y', 'Z'}``.
 
 from pennylane.estimator.resources_base import DefaultGateSet
@@ -177,12 +179,12 @@ kitaev_H_with_grouping = qre.PauliHamiltonian(
     commuting_groups=commuting_groups,
 )
 
-######################################################################
-# Let’s see how the cost of ``qre.TrotterPauli`` differs in these two cases!
-
 resources_with_grouping = qre.estimate(
     qre.TrotterPauli(kitaev_H_with_grouping, num_steps, order)
 )
+
+######################################################################
+# Let’s see how the cost of ``qre.TrotterPauli`` differs in these two cases!
 
 # Just compare T gates:
 t_count_1 = resources_without_grouping.gate_counts["T"]
@@ -221,7 +223,6 @@ print(f"Difference: {100*reduction:.1f}% reduction")
 res = qre.estimate(circuit)(kitaev_H_with_grouping)
 print(f"\n{res}")
 
-
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
@@ -247,8 +248,6 @@ print(f"\n{res}")
 #
 # We can see how the resources manifest at these different levels.
 #
-
-# Customize gateset:
 
 highlvl_gateset = {
     "RX","RY","RZ",
@@ -308,14 +307,14 @@ print(f"Low-level resources:\n{lowlvl_res}")
 
 ######################################################################
 # When decomposing our algorithms to a particular gateset, it is often the case that we only have some
-# approximate decomposition of our building-block into the target gateset. For example, approximate
+# approximate decomposition of a building-block into the target gateset. For example, approximate
 # state loading to some precision, or rotation synthesis within some precision of the rotation angle.
 #
 # These approximate decompositions are accurate within some error threshold; tuning this error
 # threshold determines the resource cost of the algorithm. We can set and tune these errors using a
 # resource configuration: :class:`ResourceConfig <pennylane.estimator.resource_config.ResourceConfig>`.
 #
-# Notice that a more precise estimate requires more T-gates!
+# Notice that a more precise estimate requires more ``T`` gates!
 #
 
 custom_rc = qre.ResourceConfig()  # generate a resource configuration
@@ -352,9 +351,11 @@ print("--- High precision (1e-15) ---", f"\n T counts: {res.gate_counts["T"]:.3E
 # Swapping Decompositions
 # ~~~~~~~~~~~~~~~~~~~~~~~
 #
-# There are many ways to decompose a quantum gate into our target gateset. Selecting an alternate
-# decomposition is a great way to optimize the cost of your quantum workflow. This can be done easily
-# with the :class:`ResourceConfig <pennylane.estimator.resource_config.ResourceConfig>` class.
+# There are many ways to decompose a quantum gate into our target gateset.
+# Selecting an alternate decomposition is a great way to compare the costs of different techniques,
+# and thereby optimize your quantum workflow.
+# This can be done easily with the
+# :class:`ResourceConfig <pennylane.estimator.resource_config.ResourceConfig>` class.
 #
 # Let’s explore decompositions for the ``RZ`` gate:
 # Current decomposition for ``RZ``, or single qubit rotation synthesis in general is
@@ -389,7 +390,7 @@ def gridsynth_t_cost(error):
 
 
 ######################################################################
-# In order to define a resource decomposition, we first need to know the `resource_keys` for the
+# In order to define a resource decomposition, we first need to know the ``resource_keys`` for the
 # operator whose decomposition we want to add:
 #
 
@@ -494,8 +495,10 @@ print(resources)
 # Estimating the Resources of your PennyLane Circuits
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# If you’ve already written your workflow for execution, we can call estimate on it directly. No need
-# to write it again!
+# If you’ve already written your workflow for execution, we can invoke
+# :func:`qre.estimate <pennylane.estimator.estimate.estimate>`
+# on it directly.
+# No need to write it again!
 #
 # Let's continue with the same example, but with a 25 x 25 unit honeycomb lattice of spins.  
 # Here, we generate the Hamiltonian ourselves:
@@ -567,7 +570,7 @@ print("Total number of qubits:", compact_hamiltonian.num_qubits)
 #    Total number of qubits: 1250
 
 ######################################################################
-# Now we can define our circuits for Hamiltonian simulation.
+# Now we can define our circuit for Hamiltonian simulation.
 #
 
 order = 2
@@ -587,8 +590,7 @@ def estimation_circuit(hamiltonian):
 
 ######################################################################
 # As usual, just call :func:`qre.estimate <pennylane.estimator.estimate.estimate>`
-# to generate a state-of-the-art
-# resource estimate for your PennyLane circuit!
+# to generate a state-of-the-art resource estimate for your PennyLane circuit!
 #
 
 t5 = time.time()
