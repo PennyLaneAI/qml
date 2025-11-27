@@ -3,7 +3,7 @@
 # ---------------------------
 [project]
 name = "qml"
-version = "0.0.0"
+version = "0.1.0"
 description = "Introductions to key concepts in quantum computing, as well as tutorials and implementations from cutting-edge quantum computing research."
 readme = "README.md"
 license = "Apache-2.0"
