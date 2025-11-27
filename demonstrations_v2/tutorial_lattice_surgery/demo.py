@@ -5,8 +5,8 @@ Lattice Surgery
 
 Lattice surgery is a way to fault-tolerantly perform operations on two-dimensional platforms
 with local physical connectivity. It enables lower spatial overheads for topological quantum
-error correction codes such as surface codes or color codes.
-In this demo, we are going to see how the basic operations, lattice merging and lattice splitting,
+error correction codes such as surface codes or color codes by introducing discontinuous code operations: lattice merging and splitting.
+In this demo, we are going to see how lattice merging and splitting
 enable parity measurements of arbitrary Pauli operators, which unlock universal fault
 tolerant quantum computing.
 
@@ -37,14 +37,17 @@ These extra qubits are sometimes called measurement qubits or syndrome qubits an
 Note that this representation of a qubit is in the so-called rotated surface code due to its :math:`45^\circ` rotation with respect to the original planar surface code.
 Here we indicate the underlying data and syndrome qubits with black and red dots, respectively. 
 The vertical lines do not correspond to physical connections, but are a mere guide to the eye that differentiate X vertex and Z face syndromes. In principle, all
-nearest neighbor qubits are physically connected and can perform noisy (Clifford + T) gates.
+nearest neighbor qubits are physically connected and can perform universal gates in a noisy fashion.
 
 .. figure:: ../_static/demonstration_assets/lattice_surgery/surface_code_qubit2.png
     :align: center
     :width: 50%
     :target: javascript:void(0)
 
-One such :math:`d \times d` patch represents a logical qubit. An important feature is that it has two X and two Z edges, as this enables the error-corrected encoding of the qubit (more on logical operators below).
+One such :math:`d \times d` patch represents a logical qubit. An important feature is that we sides with X arches and Z arches,
+as this enables the error-corrected encoding of the qubit. Note that the edge with X arches is called a Z edge, because measuring along that edge
+corresponds to a logical Z operator, i.e. connecting the two sides with Z arches (more on logical X and Z operators that define the qubit further below).
+
 We are interested in performing `logical` operations like a CNOT gate between two such patches that represent a logical qubit, each.
 The most straight-forward way to compute a logical CNOT is by performing physical CNOT gates between the data qubits
 of each logical qubit patch, indicated here by the red line exemplarily for one pair:
@@ -73,7 +76,7 @@ Further, we need to be able to reliably inject states to enable `magic state inj
 This is a bottom-up way to show that lattice surgery enables universal quantum computing and done so in its original introduction [#latticesurgery]_. 
 
 Let us alternatively take a top-down approach here and show that we can perform arbitrary `Pauli product measurements <https://pennylane.ai/compilation/pauli-product-measurement>`__ (PPMs), 
-because we know this enables universal quantum computing, as illustrated in, e.g., the :doc:`Game of Surface Codes <demos/tutorial_gosc>` [#Litinski]_).
+because we know this enables universal quantum computing, as illustrated in, e.g., the :doc:`Game of Surface Codes <demos/tutorial_game_of_surface_codes>` [#Litinski]_).
 The gist of it is that `Pauli product rotations <https://pennylane.ai/compilation/pauli-product-rotations>`__ (PPRs) like :math:`e^{-i \tfrac{\theta}{2} P}`, represented as
 
 .. figure:: ../_static/demonstration_assets/lattice_surgery/PPR.png
