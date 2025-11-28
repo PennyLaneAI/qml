@@ -4,13 +4,18 @@ How to use PennyLane for Resource Estimation
 """
 
 ######################################################################
-# Fault tolerant quantum computing is on its way.
-# But are there useful algorithms which are ready for it?
-# The development of meaningful applications of quantum computing is an active area of research,
-# and one of the major challenges in the process of assessing a potential quantum algorithm is
-# determining the amount of resources required for hardware execution.
-# An algorithm may still be helpful even when it cannot be executed,
-# but is only truly helpful when it can.
+# Fault tolerant quantum computers are on their way.
+# But how do we ensure that useful algorithms can actually run on them?
+# An algorithm is hardly helpful when it cannot be executed;
+# but only truly helpful when it can.
+#
+# This is a major challenge in quantum algorithm development,
+# especially since we are often working at scales where simulation is no longer feasible.
+# We therefore need to analyze our algorithms to perform **resource estimation**
+# to get an idea of how many logical qubits and gates an algorithm requires.
+# In turn, this gives us an indication of how long the algorithm will take to execute
+# on a given quantum hardware architecture,
+# or if it will even fit in memory to begin with.
 #
 # PennyLane is here to make that process easy, with our new resource estimation module:
 # :mod:`estimator <pennylane.estimator>`.
@@ -18,7 +23,7 @@ How to use PennyLane for Resource Estimation
 # In this demo, we will show you how to perform resource estimation
 # for a simple Hamiltonian simulation workflow.
 #
-# Let’s import our quantum resource estimator.
+# Let’s import our quantum resource :mod:`estimator <pennylane.estimator>`.
 #
 
 import pennylane as qml
