@@ -41,7 +41,7 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # Instantaneously deep quantum neural networks, or IDQNNs, are a particular type of shallow
 # parameterized quantum circuits. The qubits of the circuit live on a lattice, which we’ll take to be a
 # 2D lattice, and index the qubits by their lattice positions :math:`(i,j)`. To sample from the
-# circuit one does the following, which we also depict below.
+# circuit one does the following.
 #
 # Recipe for sampling from an IDQNN
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -54,6 +54,8 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 #    parameter :math:`\theta_{ij}` on each of the qubits
 # 4. Measure all qubits in the X basis to produce outcomes :math:`y_{ij}`
 #
+# We can depict this graphically as follows.
+#
 # .. figure:: ../_static/demonstration_assets/generative_quantum_advantage/pennylane-demo-generative-quantum-advantage-fig1.png
 #    :alt: Depiction of a IDQNN circuit.
 #    :width: 100.0%
@@ -65,13 +67,13 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # single-qubit rotations, and the blue :math:`y_{ij}` are the X-measurement outcomes. We’ll also use
 # the vector :math:`\boldsymbol{y}` from now on to denote all the :math:`y_{ij}`.
 # 
-# Remember that the above corresponds to a circuit acting on a 2D lattice of 12 qubits, and is a
+# The above corresponds to a circuit acting on a 2D lattice of 12 qubits, and this structure corresponds to a
 # shallow circuit since the circuit depth does not depend on the size of the lattice. However, we can
 # map this onto an equivalent deep 1D circuit with only 3 qubits by viewing the circuit as a
 # measurement based quantum computation (MBQC) recipe. When viewed from this perspective, the
 # horizontal dimension of the lattice becomes a time axis, so that at time 0, the system consists of
 # just three qubits (the first vertical axis) prepared in the :math:`\ket{+}` state. After applying
-# all rotation gates and CZ gates that involve these qubits and measuring them in the X basis, the
+# all CZ and rotation gates that involve these qubits and measuring them in the X basis, the
 # state is teleported to the next line of three qubits (the precise state will depend on the
 # measurement outcomes :math:`y_{11}`, :math:`y_{12}`, :math:`y_{13}`). Repeating this process until
 # we arrive at the end of the lattice therefore defines a type of stochastic quantum circuit acting on
@@ -104,11 +106,12 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # just given samples :math:`\boldsymbol{y}`.
 # 
 # If these two circuits lead to the same distribution then why did we do this? The reason is that
-# qubit counts on quantum hardware are still limited, so that by implementing the deep 1D circuit on a
-# few qubits, you can simulate the distribution of a 2D shallow circuit on many more qubits. The
-# authors used this trick to simulate a shallow IDQNN circuit on 816 qubits using a deep circuit with
+# qubit counts on quantum hardware are still limited. By implementing the deep 1D circuit on a
+# few qubits however, you can simulate the distribution of a 2D shallow circuit on many more qubits
+# (the authors call this circuit 'compression'). This trick is used to simulate a shallow IDQNN circuit on
+# 816 qubits using a deep circuit with just
 # 68 qubits. To do this, they actually work with a deep circuit on a 2D lattice, and map it to a
-# shallow circuit on a 3D lattice (they call this circuit 'compression'). This obviously complicates things a
+# shallow circuit on a 3D lattice. This obviously complicates things a
 # bit (and makes drawing pictures a lot harder!) so we will stick to the 2D vs 1D example above; in
 # the end, it will contain everything we need to understand the result for higher dimensional lattices.
 # 
@@ -123,9 +126,9 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # that is hard to sample from classically: simply take your favourite pre-existing hardness results
 # for sampling (for example, [#sample]_) and compile the circuit to the H, RZ, CZ gateset. We can then embed this
 # into the precise structure we had above by inserting the classically controlled-Z gates at every
-# layer. If we happen to sample the all-zero bitstring for :math:`y_{ij}` values that control these
+# layer. If we happen to sample the all-zero bitstring for the :math:`y_{ij}` values that control these
 # gates, then we will sample from this hard distribution. In this sense the distribution
-# :math:`p(\boldsymbol{y})` is ‘hard’ since any classical algorithm will fail to reproduce this statistics in this
+# :math:`p(\boldsymbol{y})` is ‘hard’ since any classical algorithm will fail to reproduce the full statistics in this
 # case. Moreover, since the distribution of the IDQNN is identical, it follows that the
 # corresponding IDQNN is also hard to sample from.
 # 
@@ -144,7 +147,7 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # where—rather than all qubits being in the :math:`\vert + \rangle` state—each input qubit can be prepared in either the
 # :math:`\vert + \rangle` or :math:`\vert 0 \rangle` state, which is determined by the input :math:`x`. We therefore adapt the first step of
 # our recipe for the IDQNN:
-# 
+#
 # Recipe for sampling from an IDQNN with inputs
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
@@ -211,9 +214,9 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # 
 # We first need a dataset, which we create by repeating the following :math:`N` times
 # 
-# - Randomly sample an input :math:`x=0,1,2`
+# - Randomly sample an input :math:`x=0,1,2`.
 # - Implement the deep circuit that simulates the IDQNN for this input to generate a set of outcomes
-#   :math:`\boldsymbol{y}` Add the pair :math:`(x,\boldsymbol{y})`\ to the dataset
+#   :math:`\boldsymbol{y}`. Add the pair :math:`(x,\boldsymbol{y})`\ to the dataset.
 # 
 # The precise definition of learning is given by definition 13 in the Appendix:
 #
@@ -221,10 +224,10 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 #     :class: note
 # 
 #     We are given a dataset of
-#     input-output bitstring pairs :math:`(x,y)`. Each output bitstring
-#     :math:`y` is sampled according to an unknown conditional distribution
+#     input-output bitstring pairs :math:`(x,(\boldsymbol{y})`. Each output bitstring
+#     :math:`(\boldsymbol{y}` is sampled according to an unknown conditional distribution
 #     :math:`p(\boldsymbol{y}|x)`. The goal is to learn a model from the dataset that can generate new
-#     output bitstrings y according to the unknown distribution
+#     output bitstrings :math:`(\boldsymbol{y}` according to the unknown distribution
 #     :math:`p(\boldsymbol{y}|x)` for any given new input bitstring :math:`x`.
 # 
 # Although the above definition suggests the conditional distribution is unknown, we actually know a lot about
@@ -232,9 +235,8 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # quantum circuits that produce the data, except for the rotation angles :math:`\theta_{ij}`
 # (i.e. this is included in the \`prior knowledge’ of the problem). To learn, we therefore just need
 # to infer the parameters :math:`\theta_{ij}` from the data, which will allow us to generate new data by
-# simply implementing the resulting circuits. This is very different from real world machine learning problems.
-# In particular, such a precise parametric form of the ground truth distribution is not known in essentially all practical
-# applications of classical generative machine learning.
+# simply implementing the resulting circuits. This is very different from real world machine learning problems,
+# where such a precise parametric form of the ground truth distribution is rarely known.
 # 
 # So how do we infer the parameters :math:`\theta_{ij}` from data? Consider for example the data for
 # input :math:`x=1`, and the outcome :math:`y_{12}`. From the above circuit we see that in this case the
@@ -288,9 +290,7 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # required knowledge of the circuit. That is, precise knowledge of the circuit structures that
 # produced the data was necessary in order to learn. In reality, such a precise form of the
 # ground truth distribution is not known and models have to be learnt with vastly less prior
-# knowledge. To evoke the eternal cat picture analogy, it is like we are provided with a model that
-# generates near perfect pictures of cats, and all we need to do is find the right parameters for the
-# colors of the fur. In their current form, these techniques therefore only appear useful for tasks
+# knowledge. In their current form, these techniques therefore only appear useful for tasks
 # related to quantum circuit tomography, where such knowledge is part of the problem description.
 # 
 # Learning from simple statistics
@@ -331,7 +331,7 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # In order to uncover genuine usefulness in quantum machine learning we therefore need to move to scenarios that
 # mirror the assumptions of realistic learning problems. If the flipside of this is that proving
 # complexity theoretic separations becomes seemingly impossible, then perhaps they are not the right
-# goals to be pursuing [#goal]_? A more fruitful may be to instead look for other tools to evaluate the
+# goals to be pursuing [#goal]_? A more fruitful direction may be to instead look for other tools to evaluate the
 # performance of quantum models. Although this means waving goodbye to computational complexity theory,
 # this freedom just might be the fresh perspective we need to uncover genuinely useful quantum machine learning algorithms.
 #
