@@ -1,0 +1,92 @@
+{
+    "title": "Quantum Defect Embedding Theory",
+    "authors": [
+        {
+            "username": "ddhawan"
+        }
+    ],
+    "dateOfPublication": "2025-11-25T00:00:00+00:00",
+    "dateOfLastModification": "2025-11-25T00:00:00+00:00",
+    "categories": [
+        "Quantum Chemistry",
+        "How-to"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_how_to_build_qdet_hamiltonian.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_how_to_build_qdet_hamiltonian.png"
+        }
+    ],
+    "seoDescription": "Learn how to build a Quantum Defect Embedding Theory (QDET) Hamiltonian.",
+    "doi": "",
+    "references": [
+        {
+            "id": "Galli",
+            "type": "article",
+            "title": "Discovery of atomic clock-like spin defects in simple oxides from first principles",
+            "authors": "Davidsson, Joel and Onizhuk, Mykyta and Vorwerk, Christian and Galli, Giulia",
+            "journal": "",
+            "year": "2024",
+            "url": "https://arxiv.org/pdf/2302.07523"
+        },
+        {
+            "id": "SJRLee",
+            "type": "article",
+            "title": "Analytical gradients for projection-based wavefunction-in-DFT embedding",
+            "authors": "Lee, Sebastian JR and Ding, Feizhi and Manby, Frederick R and Miller, Thomas F",
+            "year": "2019",
+            "journal": "",
+            "url": "https://arxiv.org/pdf/1903.05830"
+        },
+        {
+            "id": "Gagliardi",
+            "type": "article",
+            "title": "Periodic density matrix embedding for co adsorption on the mgo (001) surface",
+            "authors": "Mitra, Abhishek and Hermes, Matthew R and Cho, Minsik and Agarawal, Valay and Gagliardi, Laura",
+            "year": "2022",
+            "journal": "",
+            "url": "https://chemrxiv.org/engage/chemrxiv/article-details/62b0b0c40bba5d82606d2cae"
+        },
+        {
+            "id": "Galli2",
+            "type": "article",
+            "title": "Green’s function formulation of quantum defect embedding theory",
+            "authors": "Sheng, Nan and Vorwerk, Christian and Govoni, Marco and Galli, Giulia",
+            "year": "2022",
+            "journal": "",
+            "url": "https://arxiv.org/pdf/2203.05493"
+        },
+        {
+            "id": "Modji",
+            "type": "article",
+            "title": "Quantum simulation of battery materials using ionic pseudopotentials",
+            "authors": "Zini, Modjtaba Shokrian and Delgado, Alain and dos Reis, Roberto and Casares, Pablo Antonio Moreno and Mueller, Jonathan E and Voigt, Arne-Christian and Arrazola, Juan Miguel",
+            "year": "2023",
+            "journal": "",
+            "url": "https://arxiv.org/pdf/2302.07981"
+        },
+        {
+            "id": "Baker",
+            "type": "article",
+            "title": "Simulating optically active spin defects with a quantum computer",
+            "authors": "Baker, Jack S and Casares, Pablo AM and Zini, Modjtaba Shokrian and Thik, Jaydeep and Banerjee, Debasish and Ling, Chen and Delgado, Alain and Arrazola, Juan Miguel",
+            "year": "2024",
+            "journal": "",
+            "url": "https://arxiv.org/pdf/2405.13115"
+        }	
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_quantum_chemistry",
+            "weight": 1.0
+        }
+    ]
+}
