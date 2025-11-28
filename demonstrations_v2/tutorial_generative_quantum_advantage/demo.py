@@ -10,7 +10,7 @@ generative machine learning should not only require the ability to sample from a
 but also to be able to learn it efficiently from data, and they investigate a specific scenario in
 which this is possible.
 
-In this demo we will unpack one of their main results of the paper to understand its core mechanics.
+In this demo we will unpack one of the main results of their paper to understand its core mechanics.
 We will see that the problem is constructed so that learning the hard distribution boils down to
 performing single-qubit tomography, and we will debate the scope of this technique in relation to
 practical AI. In particular, we will focus on the first theorem (Theorem 1) of the paper, since it
@@ -151,7 +151,7 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # Recipe for sampling from an IDQNN with inputs
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# 1. Prepare each qubit in either the :math:`\vert + \rangle` or :math:`\vert - \rangle` state, depending on
+# 1. Prepare each qubit in either the :math:`\vert + \rangle` or :math:`\vert 0 \rangle` state, depending on
 #    :math:`x`.
 # 2. Perform steps 2-4 as before.
 # 
@@ -218,16 +218,16 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # - Implement the deep circuit that simulates the IDQNN for this input to generate a set of outcomes
 #   :math:`\boldsymbol{y}`. Add the pair :math:`(x,\boldsymbol{y})`\ to the dataset.
 # 
-# The precise definition of learning is given by definition 13 in the Appendix:
+# The precise definition of learning is given by definition 13 in the Appendix of the paper:
 #
 # .. admonition:: Definition 13 (The task of learning to generate classical bitstrings)
 #     :class: note
 # 
 #     We are given a dataset of
-#     input-output bitstring pairs :math:`(x,(\boldsymbol{y})`. Each output bitstring
-#     :math:`(\boldsymbol{y}` is sampled according to an unknown conditional distribution
+#     input-output bitstring pairs :math:`(x,\boldsymbol{y})`. Each output bitstring
+#     :math:`\boldsymbol{y}` is sampled according to an unknown conditional distribution
 #     :math:`p(\boldsymbol{y}|x)`. The goal is to learn a model from the dataset that can generate new
-#     output bitstrings :math:`(\boldsymbol{y}` according to the unknown distribution
+#     output bitstrings :math:`\boldsymbol{y}` according to the unknown distribution
 #     :math:`p(\boldsymbol{y}|x)` for any given new input bitstring :math:`x`.
 # 
 # Although the above definition suggests the conditional distribution is unknown, we actually know a lot about
