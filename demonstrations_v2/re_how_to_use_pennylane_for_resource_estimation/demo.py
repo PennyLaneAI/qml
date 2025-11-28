@@ -110,19 +110,7 @@ def circuit(hamiltonian):
 # number of gates used. Different hardware will natively support different gatesets.
 # The default gateset used by :mod:`estimator <pennylane.estimator>` is:
 # ``{'Hadamard', 'S', 'CNOT', 'T', 'Toffoli', 'X', 'Y', 'Z'}``.
-
-from pennylane.estimator.resources_base import DefaultGateSet
-print("Default gateset:\n", DefaultGateSet)
-
-######################################################################
-# .. rst-class:: sphx-glr-script-out
 #
-# .. code-block:: none
-#
-#    Default gateset:
-#     frozenset({'Y', 'S', 'X', 'Hadamard', 'Toffoli', 'T', 'CNOT', 'Z'})
-
-######################################################################
 # So, how do we figure out our quantum resources?
 #
 # It’s simple: just call :func:`qre.estimate <pennylane.estimator.estimate.estimate>`!
@@ -430,11 +418,11 @@ def gridsynth_decomp(precision):
 # :class:`ResourceConfig <pennylane.estimator.resource_config.ResourceConfig>`.
 #
 
-grisynth_rc = qre.ResourceConfig()
-grisynth_rc.set_decomp(qre.RZ, gridsynth_decomp)
-grisynth_cost_RZ = qre.estimate(qre.RZ(precision=1e-9), config=grisynth_rc)
+gridsynth_rc = qre.ResourceConfig()
+gridsynth_rc.set_decomp(qre.RZ, gridsynth_decomp)
+gridsynth_cost_RZ = qre.estimate(qre.RZ(precision=1e-9), config=gridsynth_rc)
 
-print("GridSynth decomposition -", f"\t\tT count: {grisynth_cost_RZ.gate_counts["T"]}")
+print("GridSynth decomposition -", f"\t\tT count: {gridsynth_cost_RZ.gate_counts["T"]}")
 print("Default decomposition (RUS) -", f"\tT count: {default_cost_RZ.gate_counts["T"]}")
 
 ######################################################################
@@ -532,11 +520,7 @@ n_xx = n_cell**2
 n_yy = n_cell*(n_cell-1)
 n_zz = n_yy
 
-commuting_groups = [
-    {"XX": n_xx},
-    {"YY": n_yy},
-    {"ZZ": n_zz},
-]
+commuting_groups = [{"XX": n_xx}, {"YY": n_yy}, {"ZZ": n_zz}]
 
 compact_hamiltonian = qre.PauliHamiltonian(
     num_qubits = n_q,
