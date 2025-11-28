@@ -1,5 +1,4 @@
 covalent==0.227.0rc0
-fastapi<0.122
 networkx<3.6
 torch
 dask[delayed]
