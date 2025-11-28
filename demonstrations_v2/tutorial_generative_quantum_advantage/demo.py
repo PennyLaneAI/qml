@@ -12,7 +12,7 @@ which this is possible.
 
 In this demo we will unpack one of the main results of their paper to understand its core mechanics.
 We will see that the problem is constructed so that learning the hard distribution boils down to
-performing single-qubit tomography, and we will debate the scope of this technique in relation to
+performing single-qubit tomography, and we will discuss the scope of this technique in relation to
 practical AI. In particular, we will focus on the first theorem (Theorem 1) of the paper, since it
 aligns closest with the notion of generative machine learning in the classical literature. It is
 informally stated as:
@@ -275,8 +275,8 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # 
 # Now that the technicalities are out of the way, we can ask the really important question: does this
 # bring us closer to genuinely useful QML algorithms? This question is speculated on briefly in the
-# conclusion of the paper where it is admitted that *\`the precise remaining steps towards useful
-# generative quantum advantage remain an open question’*. But why is usefulness so enigmatic? As we
+# conclusion of the paper where it is admitted that "the precise remaining steps towards useful
+# generative quantum advantage remain an open question". But why is usefulness so enigmatic? As we
 # explain below, a large part of the reason is due to the fact that the setup we considered is
 # significantly different to that of real-world generative machine learning problems.
 # 
