@@ -83,11 +83,11 @@ n_xx = n_cell**2
 n_yy = n_cell * (n_cell - 1)
 n_zz = n_yy
 
-distribution_of_pauli_words = {"XX": n_xx, "YY": n_yy, "ZZ": n_zz}
+pauli_word_distribution = {"XX": n_xx, "YY": n_yy, "ZZ": n_zz}
 
 kitaev_H = qre.PauliHamiltonian(
     num_qubits=n_q,
-    pauli_dist=distribution_of_pauli_words,
+    pauli_dist=pauli_word_distribution,
 )
 
 ######################################################################
@@ -313,17 +313,17 @@ custom_rc = qre.ResourceConfig()  # generate a resource configuration
 rz_precisions = custom_rc.resource_op_precisions[qre.RZ]
 print(f"Default setting: {rz_precisions}\n")
 
-custom_rc.set_precision(qre.RZ, 1e-15)
+custom_rc.set_precision(qre.RZ, 1e-15) # customize precision
 
 res = qre.estimate(
     circuit,
     gate_set=lowlvl_gateset,
-    config=custom_rc,
+    config=custom_rc, # provide our custom configuration
 )(kitaev_H_with_grouping)
 
 # Just compare T gates:
-print("--- Low precision (1e-9) ---", f"\n T counts: {lowlvl_res.gate_counts["T"]:.3E}\n")
-print("--- High precision (1e-15) ---", f"\n T counts: {res.gate_counts["T"]:.3E}")
+print("--- Lower precision (1e-9) ---", f"\n T counts: {lowlvl_res.gate_counts["T"]:.3E}\n")
+print("--- Higher precision (1e-15) ---", f"\n T counts: {res.gate_counts["T"]:.3E}")
 
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
@@ -332,10 +332,10 @@ print("--- High precision (1e-15) ---", f"\n T counts: {res.gate_counts["T"]:.3E
 #
 #    Default setting: {'precision': 1e-09}
 #
-#    --- Low precision (1e-9) ---
+#    --- Lower precision (1e-9) ---
 #     T counts: 1.791E+07
 #
-#    --- High precision (1e-15) ---
+#    --- Higher precision (1e-15) ---
 #     T counts: 2.009E+07
 
 ######################################################################
@@ -374,13 +374,6 @@ print(default_cost_RZ)
 # These are other state of the art methods we could use instead, such as that
 # defined in Ross & Selinger [#ross]_.
 #
-
-# As per the paper by Ross & Selinger:
-def gridsynth_t_cost(error):
-    return round(3 * qml.math.log2(1 / error))
-
-
-######################################################################
 # In order to define a resource decomposition, we first need to know the ``resource_keys`` for the
 # operator whose decomposition we want to add:
 #
@@ -402,10 +395,9 @@ print(qre.RZ.resource_keys)  # these are the required arguments
 # to be used when defining resource decompositions.
 #
 
-
 def gridsynth_decomp(precision):
     t_resource_rep = qre.resource_rep(qre.T)
-    t_counts = gridsynth_t_cost(precision)
+    t_counts = round(3 * qml.math.log2(1/precision)) # as per Ross & Selinger
 
     t_gate_counts = qre.GateCount(
         t_resource_rep, t_counts
@@ -423,7 +415,7 @@ def gridsynth_decomp(precision):
 
 gridsynth_rc = qre.ResourceConfig()
 gridsynth_rc.set_decomp(qre.RZ, gridsynth_decomp)
-gridsynth_cost_RZ = qre.estimate(qre.RZ(precision=1e-9), config=gridsynth_rc)
+gridsynth_cost_RZ = qre.estimate(qre.RZ(), config=gridsynth_rc)
 
 print("GridSynth decomposition -", f"\t\tT count: {gridsynth_cost_RZ.gate_counts["T"]}")
 print("Default decomposition (RUS) -", f"\tT count: {default_cost_RZ.gate_counts["T"]}")
@@ -515,6 +507,7 @@ t2 = time.time()
 
 ######################################################################
 # We'll use :mod:`estimator <pennylane.estimator>` in parallel to make sure everything matches.
+# It's a lot easier to prepare for resource estimation than for execution!
 #
 
 t3 = time.time()
@@ -535,11 +528,11 @@ t4 = time.time()
 # The resulting data can be easily compared for a sanity check.
 #
 
-print(f"Processing time for Hamiltonian generation: ~ {(t2 - t1):.3g} seconds")
+print(f"Processing time for Hamiltonian generation: {(t2 - t1):.3g} seconds")
 print("Total number of terms:", len(flat_hamiltonian.operands))
 print("Total number of qubits:", len(flat_hamiltonian.wires), "\n")
 
-print(f"Processing time for Hamiltonian estimation: ~ {(t4 - t3):.3g} seconds")
+print(f"Processing time for Hamiltonian estimation: {(t4 - t3):.3g} seconds")
 print("Total number of terms:", compact_hamiltonian.num_pauli_words)
 print("Total number of qubits:", compact_hamiltonian.num_qubits)
 
@@ -548,11 +541,11 @@ print("Total number of qubits:", compact_hamiltonian.num_qubits)
 #
 # .. code-block:: none
 #
-#    Processing time for Hamiltonian generation: ~ 4.56 seconds
+#    Processing time for Hamiltonian generation: 4.56 seconds
 #    Total number of terms: 1825
 #    Total number of qubits: 1250 
 # 
-#    Processing time for Hamiltonian estimation: ~ 0.000112 seconds
+#    Processing time for Hamiltonian estimation: 0.000112 seconds
 #    Total number of terms: 1825
 #    Total number of qubits: 1250
 
@@ -584,7 +577,7 @@ t5 = time.time()
 resources_exec = qre.estimate(executable_circuit)(grouped_hamiltonian)
 t6 = time.time()
 
-print(f"Processing time: ~ {(t6 - t5):.3g} seconds")
+print(f"Processing time: {(t6 - t5):.3g} seconds")
 print(resources_exec)
 
 ######################################################################
@@ -614,7 +607,7 @@ t5 = time.time()
 resources_compact = qre.estimate(estimation_circuit)(compact_hamiltonian)
 t6 = time.time()
 
-print(f"Processing time: ~ {(t6 - t5):.3g} seconds")
+print(f"Processing time: {(t6 - t5):.3g} seconds")
 print(resources_compact)
 
 ######################################################################
