@@ -275,7 +275,7 @@ which they term instantaneously deep quantum neural networks (IDQNNs).
 # 
 # Now that the technicalities are out of the way, we can ask the really important question: does this
 # bring us closer to genuinely useful QML algorithms? This question is speculated on briefly in the
-# conclusion of the paper where it is admitted that "the precise remaining steps towards useful
+# conclusion of the paper where it is mentioned that "the precise remaining steps towards useful
 # generative quantum advantage remain an open question". But why is usefulness so enigmatic? As we
 # explain below, a large part of the reason is due to the fact that the setup we considered is
 # significantly different to that of real-world generative machine learning problems.
