@@ -515,10 +515,8 @@ plt.show()
 # 🧠 Conclusion: A practical perspective on the Geometric difference g
 # --------------------------------------------------------------------
 #
-# In this notebook, we explored a fundamental question in quantum machine learning:
-#
-# **Can we anticipate, before training, whether a quantum kernel might outperform a classical
-# one?**
+# In this notebook, we explored a fundamental question in quantum machine learning: **Can we anticipate, 
+# before training, whether a quantum kernel might outperform a classical one?**
 #
 # To address this, we used the **geometric difference** :math:`g`, a pre-training metric introduced by
 # Huang et al. that quantifies how *differently* a quantum kernel organizes the data compared to a
