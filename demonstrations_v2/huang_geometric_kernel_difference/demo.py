@@ -118,11 +118,11 @@ plt.show()
 # Quantum kernels: fidelity-based and projected variants
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# We consider **five different kernels**, derived from three sources: a classical RBF kernel and two
-# quantum embedding circuits — **E1** and **E2**.
+# We consider **five different kernels** derived from three sources: a classical RBF kernel and two
+# quantum embedding circuits—**E1** and **E2**.
 # Each kernel defines a different geometry for measuring similarity between data points.
 #
-# - **RBF – Classical radial basis function kernel**
+# - **RBF – Classical radial basis function kernel.**
 #   A classical baseline defined as:
 #
 #   .. math:: k_{\text{RBF}}(x, x') = \exp(-\gamma \|x - x'\|^2)
@@ -131,29 +131,29 @@ plt.show()
 #   ones become nearly orthogonal.
 #   It captures a **geometric**, distance-based notion of similarity in input space.
 #
-# - **E1 – Separable RX rotations**
+# - **E1 – Separable RX rotations.**
 #   Each input feature :math:`x_j` is encoded into a single qubit using an :math:`RX(x_j)` gate.
 #   The circuit is fully separable (no entanglement), producing the quantum state
 #   :math:`\lvert \psi_{\text{E1}}(x) \rangle`.
 #
-# - **E2 – IQP embedding**
+# - **E2 – IQP embedding.**
 #   PennyLane’s ``qml.IQPEmbedding`` applies Hadamards, parameterized :math:`RZ(x_j)` rotations, and
 #   entangling ZZ gates.
 #   This creates an entangled quantum state :math:`\lvert \psi_{\text{E2}}(x) \rangle`, inspired by
 #   Instantaneous Quantum Polynomial (IQP) circuits.
 #
-# - **QK – Standard quantum kernels**
+# - **QK – Standard quantum kernels.**
 #   For both E1 and E2, the kernel is defined by the **fidelity** between quantum states:
 #
-#   .. math:: k_{\text{QK-E1}}(x, x') = |\langle \psi_{\text{E1}}(x) \mid \psi_{\text{E1}}(x') \rangle|^2
+#   .. math:: k_{\text{QK-E1}}(x, x') = |\langle \psi_{\text{E1}}(x) \mid \psi_{\text{E1}}(x') \rangle|^2,
 #
-#   .. math:: k_{\text{QK-E2}}(x, x') = |\langle \psi_{\text{E2}}(x) \mid \psi_{\text{E2}}(x') \rangle|^2
+#   .. math:: k_{\text{QK-E2}}(x, x') = |\langle \psi_{\text{E2}}(x) \mid \psi_{\text{E2}}(x') \rangle|^2,
 #
 #   where :math:`\psi_{\text{E1}}(x)` and :math:`\psi_{\text{E2}}(x)` are the quantum states generated
 #   by E1 and E2 respectively. These kernels reflect how aligned two quantum feature states are in
 #   Hilbert space.
 #
-# - **PQK – Projected quantum kernels (PQK-E1 / PQK-E2)**
+# - **PQK – Projected quantum kernels (PQK-E1 / PQK-E2).**
 #   For a projected quantum kernel, instead of computing fidelity, the output quantum state
 #   :math:`|\psi(x)\rangle`
 #   is **measured** to extract the expectation values of Pauli operators:
@@ -162,16 +162,16 @@ plt.show()
 #
 #   A classical **RBF kernel** is then applied to these real-valued vectors:
 #
-#   .. math:: k_{\text{PQK}}(x, x') = \exp\left( -\gamma \| v(x) - v(x') \|^2 \right)
+#   .. math:: k_{\text{PQK}}(x, x') = \exp\left( -\gamma \| v(x) - v(x') \|^2 \right).
 #
 #   We obtain two different projected quantum kernels from E1 and E1:
 #
-#   .. math:: k_{\text{PQK-E1}}(x, x') = \exp\left( -\gamma \|v_{\text{E1}}(x) - v_{\text{E1}}(x')\|^2 \right)
+#   .. math:: k_{\text{PQK-E1}}(x, x') = \exp\left( -\gamma \|v_{\text{E1}}(x) - v_{\text{E1}}(x')\|^2 \right),
 #
-#   .. math:: k_{\text{PQK-E2}}(x, x') = \exp\left( -\gamma \|v_{\text{E2}}(x) - v_{\text{E2}}(x')\|^2 \right)
+#   .. math:: k_{\text{PQK-E2}}(x, x') = \exp\left( -\gamma \|v_{\text{E2}}(x) - v_{\text{E2}}(x')\|^2 \right),
 #
 #   where :math:`v_{\text{E1 }}(x)` and :math:`v_{\text{E2}}(x)` are the Pauli expectation vector from
-#   E1 and E2 respectively.
+#   E1 and E2, respectively.
 #
 
 # We define the embedding circuits E1 and E2, and we visualize them.
@@ -224,27 +224,7 @@ plt.show()
 #
 # We compute five such matrices, one for each kernel defined above.
 #
-# :math:`K_{\text{RBF}}` obtained from:
-#
-# .. math:: k_{\text{RBF}}(x, x') = \exp(-\gamma \|x - x'\|^2)
-#
-# :math:`K_{\text{QK-E1}}` obtained from:
-#
-# .. math:: k_{\text{QK-E1}}(x, x') = |\langle \psi_{\text{E1}}(x) \mid \psi_{\text{E1}}(x') \rangle|^2
-#
-# :math:`K_{\text{QK-E2}}` obtained from:
-#
-# .. math:: k_{\text{QK-E2}}(x, x') = |\langle \psi_{\text{E2}}(x) \mid \psi_{\text{E2}}(x') \rangle|^2
-#
-# :math:`K_{\text{PQK-E1}}` obtained from:
-#
-# .. math:: k_{\text{PQK-E1}}(x, x') = \exp\left( -\gamma \|v_{\text{E1}}(x) - v_{\text{E1}}(x')\|^2 \right)
-#
-# :math:`K_{\text{PQK-E2}}` obtained from:
-#
-# .. math:: k_{\text{PQK-E2}}(x, x') = \exp\left( -\gamma \|v_{\text{E2}}(x) - v_{\text{E2}}(x')\|^2 \right)
-#
-# The gram matrices will be used in downstream evaluations to compare kernel geometries and analyze
+# The Gram matrices will be used in downstream evaluations to compare kernel geometries and analyze
 # expressivity and generalization metrics like :math:`g`.
 #
 
@@ -426,7 +406,7 @@ print(f"g (RBF vs PQK‑E2):   {g_PQK_E2:.4f}")
 # classification performance, which might lead us to believe, for example, that in terms of final
 # accuracy, the ranking will also be PQK-E1 > PQK-E2 > QK-E1 > QK-E2.
 #
-# This intuition is understandable — after all, a larger :math:`g` suggests that the quantum kernel
+# This intuition is understandable—after all, a larger :math:`g` suggests that the quantum kernel
 # perceives the data very differently from a classical one.
 # But as we’ll see, **a higher** :math:`g` **doesn’t always translate into better accuracy, it just
 # means there’s higher potential for an improvement over the classical model**.
@@ -518,7 +498,6 @@ plt.show()
 #
 # Our test results reveal an important subtlety:
 # **A higher geometric difference** :math:`g` **does not guarantee better classification accuracy.**
-#
 # For instance, **PQK‑E2** achieved perfect test accuracy (:math:`100\%`), despite having a lower
 # :math:`g` than PQK‑E1.
 #
@@ -534,7 +513,7 @@ plt.show()
 # This way, we have an important diagnostic tool to filter out bad quantum kernels for our data.
 #
 # 🧠 Conclusion: A practical perspective on the Geometric difference g
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# --------------------------------------------------------------------
 #
 # In this notebook, we explored a fundamental question in quantum machine learning:
 #
@@ -546,7 +525,7 @@ plt.show()
 # classical kernel.
 #
 # 🔑 Key takeaways:
-# ~~~~~~~~~~~~~~~~~
+# -----------------
 #
 # - :math:`g` **is a diagnostic, not a performance predictor.**
 #   A large :math:`g` indicates that the quantum kernel induces a very different geometry from the
