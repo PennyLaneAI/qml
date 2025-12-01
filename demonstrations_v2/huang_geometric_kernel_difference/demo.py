@@ -15,29 +15,11 @@ geometries defined by two kernels represent your data. The formula for :math:`g`
 
 where :math:`K_q` and :math:`K_c` are quantum and classical Gram matrices, respectively.
 
+The following demonstration is designed to perform a pre-screening test on several 
+kernel methods—both classical and quantum—on a simple classification task.
 
-.. admonition:: Kernel refresher
-    :class: note
-
-    A **kernel** is a function :math:`k(x, x')` that measures similarity between data points without
-    explicitly computing their feature representations in high-dimensional spaces, thus lowering the
-    computational cost.
-
-    An example of a classical kernel is the Radial Basis Function (RBF) kernel given by 
-    :math:`k(x, x') = \exp(-\gamma \|x - x'\|^2)`. It implicitly computes the inner product 
-    :math:`k(x, x') = \langle\phi(x), \phi(x')\rangle`. The feature map :math:`\phi(x)` projects 
-    to infinite dimensions, but it is never calculated directly.
-
-    Quantum kernels are similar but leverage the Hilbert space of a quantum computer. A quantum kernel is defined by 
-    :math:`k(x, x') = |\langle\psi(x)|\psi(x')\rangle|^2`, where :math:`|\psi(x)\rangle` is the quantum 
-    state encoding the classical data :math:`x`. For :math:`n` qubits, the quantum state lives in a 
-    :math:`2^n`-dimensional Hilbert space that is implicitly manipulated.
-
-**Key concepts**: The **kernel matrix** (Gram matrix) :math:`K` has entries :math:`K_{ij} = k(x_i, x_j)` that store
-all pairwise similarities between data points.
-
-What g tells us
----------------
+What g tells us and why it is important
+---------------------------------------
 
 When :math:`g \approx 1`, the quantum kernel’s geometry is essentially the same as a good classical
 kernel’s. The quantum kernel offers no geometric advantage, making it unlikely to outperform the 
@@ -45,10 +27,7 @@ classical kernel **in any kernel-based learning algorithm** (e.g., SVM, Gaussian
 et al. proved this concept in a rigorous mathematical way in their paper. Conversely, if :math:`g >> 1`, 
 the quantum geometry is genuinely different. A kernel method using the quantum kernel *might* offer an advantage.
 
-Why this matters
-----------------
-
-This approach focuses on ruling out underperforming quantum kernels before investing in training.
+The approach presented in this demo focuses on ruling out underperforming quantum kernels before investing in training.
 From a complexity theory point of view, computing :math:`g` scales as :math:`O(n^3)` due to the
 matrix inversion, and the most expensive training algorithms such as Gaussian Processes also scale
 as :math:`O(n^3)` so we might think we are not saving any computational time. However, from a
@@ -60,11 +39,30 @@ you immediately know the quantum kernel’s geometry offers no advantage---it’
 not your algorithm choice, and not a hyperparameter issue. The kernel is fundamentally limited
 compared to classical kernels on this specific dataset.
 
+
+Background context: kernels
+---------------------------
+
+A **kernel** is a function :math:`k(x, x')` that measures similarity between data points without
+explicitly computing their feature representations in high-dimensional spaces, thus lowering the
+computational cost.
+
+An example of a classical kernel is the Radial Basis Function (RBF) kernel given by 
+:math:`k(x, x') = \exp(-\gamma \|x - x'\|^2)`. It implicitly computes the inner product 
+:math:`k(x, x') = \langle\phi(x), \phi(x')\rangle`. The feature map :math:`\phi(x)` projects 
+to infinite dimensions, but it is never calculated directly.
+
+Quantum kernels are similar but leverage the Hilbert space of a quantum computer. A quantum kernel is defined by 
+:math:`k(x, x') = |\langle\psi(x)|\psi(x')\rangle|^2`, where :math:`|\psi(x)\rangle` is the quantum 
+state encoding the classical data :math:`x`. For :math:`n` qubits, the quantum state lives in a 
+:math:`2^n`-dimensional Hilbert space that is implicitly manipulated.
+
+**Key concept**: The **kernel matrix** (Gram matrix) :math:`K` has entries :math:`K_{ij} = k(x_i, x_j)` that store
+all pairwise similarities between data points.
+
+
 Demonstration setup
 -------------------
-
-The following demonstration is designed to perform a pre-screening test on several 
-kernel methods—both classical and quantum—on a simple classification task.
 
 1. **Dataset**: Synthetic two-moons data generated with ``scikit-learn``.
 2. **Five kernels to compare**:
@@ -516,10 +514,7 @@ plt.show()
 #
 # To address this, we used the **geometric difference** :math:`g`, a pre-training metric introduced by
 # Huang et al. that quantifies how *differently* a quantum kernel organizes the data compared to a
-# classical kernel.
-#
-# 🔑 Key takeaways
-# ----------------
+# classical kernel. The main takeaways from this demonstration are: 
 #
 # - :math:`g` **is a diagnostic, not a performance predictor.**
 #   A large :math:`g` indicates that the quantum kernel induces a very different geometry from the
