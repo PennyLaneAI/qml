@@ -523,10 +523,10 @@ plt.show()
 #
 # - :math:`g` **is a diagnostic, not a performance predictor.**
 #   A large :math:`g` indicates that the quantum kernel induces a very different geometry from the
-#   classical one — a *necessary*, but not *sufficient*, condition for quantum advantage.
+#   classical one—a *necessary*, but not *sufficient*, condition for quantum advantage.
 #
 # - **Higher** :math:`g` **does not imply higher accuracy.**
-#   In our results, **PQK‑E2** had a high :math:`g` and achieved perfect accuracy — but **PQK‑E1**,
+#   In our results, **PQK‑E2** had a high :math:`g` and achieved perfect accuracy—but **PQK‑E1**,
 #   with a higher :math:`g`, obtained a lower accuracy on the original task. This confirms that
 #   :math:`g` measures *potential*, not realized performance.
 #
