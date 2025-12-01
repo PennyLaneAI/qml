@@ -60,8 +60,8 @@ you immediately know the quantum kernel’s geometry offers no advantage---it’
 not your algorithm choice, and not a hyperparameter issue. The kernel is fundamentally limited
 compared to classical kernels on this specific dataset.
 
-Demonstration setup:
---------------------
+Demonstration setup
+-------------------
 
 1. **Dataset**: Synthetic two-moons data generated with ``scikit-learn``.
 2. **Five kernels to compare**:
@@ -105,7 +105,7 @@ X_test = scaler.transform(X_test_raw)
 print(f"Train size: {X_train.shape[0]}    Test size: {X_test.shape[0]}")
 
 # visualize it using a scatter plot
-plt.figure(figsize=(4, 4))
+plt.figure(figsize=(3, 3))
 plt.scatter(X_train[y_train == 0, 0], X_train[y_train == 0, 1], s=15, alpha=0.8, label="class 0")
 plt.scatter(X_train[y_train == 1, 0], X_train[y_train == 1, 1], s=15, alpha=0.8, label="class 1")
 plt.axis("equal")
@@ -396,7 +396,7 @@ print(f"g (RBF vs PQK‑E2):   {g_PQK_E2:.4f}")
 
 ######################################################################
 # What does a high g really tell us?
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # We can see that in terms of :math:`g`:
 #
@@ -522,8 +522,8 @@ plt.show()
 # Huang et al. that quantifies how *differently* a quantum kernel organizes the data compared to a
 # classical kernel.
 #
-# 🔑 Key takeaways:
-# -----------------
+# 🔑 Key takeaways
+# ----------------
 #
 # - :math:`g` **is a diagnostic, not a performance predictor.**
 #   A large :math:`g` indicates that the quantum kernel induces a very different geometry from the
