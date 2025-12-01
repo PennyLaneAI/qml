@@ -105,7 +105,7 @@ X_test = scaler.transform(X_test_raw)
 print(f"Train size: {X_train.shape[0]}    Test size: {X_test.shape[0]}")
 
 # visualize it using a scatter plot
-plt.figure(figsize=(3, 3))
+plt.figure(figsize=(4, 4))
 plt.scatter(X_train[y_train == 0, 0], X_train[y_train == 0, 1], s=15, alpha=0.8, label="class 0")
 plt.scatter(X_train[y_train == 1, 0], X_train[y_train == 1, 1], s=15, alpha=0.8, label="class 1")
 plt.axis("equal")
