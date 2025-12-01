@@ -39,10 +39,10 @@ all pairwise similarities between data points.
 What g tells us
 ---------------
 
-When :math:`g \approx 1:`, the quantum kernel’s geometry is essentially the same as a good classical
+When :math:`g \approx 1`, the quantum kernel’s geometry is essentially the same as a good classical
 kernel’s. The quantum kernel offers no geometric advantage, making it unlikely to outperform the 
 classical kernel **in any kernel-based learning algorithm** (e.g., SVM, Gaussian Processes). Huang 
-et al. proved this concept in a rigorous mathematical way in their paper. Conversely, if :math:`g >> 1:`, 
+et al. proved this concept in a rigorous mathematical way in their paper. Conversely, if :math:`g >> 1`, 
 the quantum geometry is genuinely different. A kernel method using the quantum kernel *might* offer an advantage.
 
 Why this matters
@@ -62,6 +62,9 @@ compared to classical kernels on this specific dataset.
 
 Demonstration setup
 -------------------
+
+The following demonstration is designed to perform a pre-screening test on several 
+kernel methods—both classical and quantum—on a simple classification task.
 
 1. **Dataset**: Synthetic two-moons data generated with ``scikit-learn``.
 2. **Five kernels to compare**:
@@ -125,7 +128,7 @@ plt.show()
 # - **RBF – Classical radial basis function kernel.**
 #   A classical baseline defined as:
 #
-#   .. math:: k_{\text{RBF}}(x, x') = \exp(-\gamma \|x - x'\|^2)
+#   .. math:: k_{\text{RBF}}(x, x') = \exp(-\gamma \|x - x'\|^2).
 #
 #   This maps data into an infinite-dimensional space where closer inputs remain close, and distant
 #   ones become nearly orthogonal.
@@ -212,25 +215,21 @@ plt.show()
 # ~~~~~~~~~~~~~~~~~~~~~~~
 #
 # Using the kernels defined above, we now build the **Gram (kernel) matrices** required to compute the
-# practitioner’s metric :math:`g`.
-#
-# For a dataset of :math:`N` samples and a kernel function :math:`k(\cdot, \cdot)`, the Gram matrix
+# practitioner’s metric :math:`g`. For a dataset of :math:`N` samples and a kernel function :math:`k(\cdot, \cdot)`, the Gram matrix
 # :math:`K \in \mathbb{R}^{N \times N}` is defined entrywise as:
 #
-# .. math:: K_{ij} = k(x_i, x_j)
+# .. math:: K_{ij} = k(x_i, x_j).
 #
 # Each entry :math:`K_{ij}` measures how similar two data points are, and the full matrix :math:`K`
-# provides a **global view** of the data in the kernel’s feature space.
-#
+# provides a **global view** of the data in the kernel’s feature space. 
 # We compute five such matrices, one for each kernel defined above.
 #
 # The Gram matrices will be used in downstream evaluations to compare kernel geometries and analyze
 # expressivity and generalization metrics like :math:`g`.
 #
-
 # The following code builds all five Gram (kernel) matrices: Classical, QK-E1, QK-E2, PQK-E1, PQK-E2
-from sklearn.metrics.pairwise import rbf_kernel
 
+from sklearn.metrics.pairwise import rbf_kernel
 
 # ---------------------------------------------------------------------------#
 # Classical RBF Gram matrix                                                  #
@@ -317,8 +316,8 @@ print(f"K_PQK_E2 shape: {K_pqk_E2.shape}")
 
 ######################################################################
 #
+# Let's now visualize the Gram Matrices
 
-# Visualizing the Gram Matrices
 import matplotlib.pyplot as plt
 
 # Visualize first 20x20 subset of each Gram matrix for clarity
@@ -398,9 +397,7 @@ print(f"g (RBF vs PQK‑E2):   {g_PQK_E2:.4f}")
 # What does a high g really tell us?
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# We can see that in terms of :math:`g`:
-#
-# PQK-E1 > PQK-E2 > QK-E1 > QK-E2.
+# We can see that in terms of :math:`g`: PQK-E1 > PQK-E2 > QK-E1 > QK-E2.
 #
 # A common misconception is that a higher geometric difference :math:`g` automatically means better
 # classification performance, which might lead us to believe, for example, that in terms of final
@@ -410,7 +407,6 @@ print(f"g (RBF vs PQK‑E2):   {g_PQK_E2:.4f}")
 # perceives the data very differently from a classical one.
 # But as we’ll see, **a higher** :math:`g` **doesn’t always translate into better accuracy, it just
 # means there’s higher potential for an improvement over the classical model**.
-#
 # In fact, a higher :math:`g` can sometimes correspond to worse performance on the original task.
 #
 # Let’s see this in action.
