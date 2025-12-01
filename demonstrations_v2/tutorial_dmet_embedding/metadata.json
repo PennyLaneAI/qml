@@ -1,0 +1,94 @@
+{
+    "title": "Density Matrix Embedding Theory",
+    "authors": [
+        {
+            "username": "ddhawan"
+        }
+    ],
+    "executable_stable": false,
+    "executable_latest": false,
+    "dateOfPublication": "2025-11-25T00:00:00+00:00",
+    "dateOfLastModification": "2025-11-25T00:00:00+00:00",
+    "categories": [
+        "Quantum Chemistry",
+        "How-to"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_how_to_build_dmet_hamiltonian.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_how_to_build_dmet_hamiltonian.png"
+        }
+    ],
+    "seoDescription": "Learn how to build a Density Matrix Embedding Theory (DMET) Hamiltonian.",
+    "doi": "",
+    "references": [
+        {
+            "id": "SWouters",
+            "type": "article",
+            "title": "A practical guide to density matrix embedding theory in quantum chemistry",
+            "authors": "Wouters, Sebastian and Jimenez-Hoyos, Carlos A and Sun, Qiming and Chan, Garnet K-L",
+            "journal": "",
+            "year": "2016",
+            "url": "https://arxiv.org/pdf/1603.08443"
+        },
+        {
+            "id": "Mineh",
+            "type": "article",
+            "title": "Solving the Hubbard model using density matrix embedding theory and the variational quantum eigensolver",
+            "authors": "Mineh, Lana and Montanaro, Ashley",
+            "journal": "",
+            "year": "2021",
+            "url": "https://arxiv.org/abs/2108.08611"
+        },
+        {
+            "id": "pyscf",
+            "type": "article",
+            "title": "Recent developments in the PySCF program package",
+            "authors": "Sun, Qiming and Zhang, Xing and Banerjee, Samragni and Bao, Peng and Barbry, and others",
+            "journal": "",
+            "year": "2020",
+            "url": "https://arxiv.org/pdf/2002.12531"
+        },
+        {
+            "id": "libdmet",
+            "type": "article",
+            "title": "Efficient Implementation of Ab Initio Quantum Embedding in Periodic Systems: Density Matrix Embedding Theory",
+            "authors": "Cui, Zhi-Hao and Zhu, Tianyu and Chan, Garnet Kin-Lic",
+            "journal": "",
+            "year": "2020",
+            "url": "https://arxiv.org/pdf/1909.08596"
+        },
+        {
+            "id": "libdmet2",
+            "type": "article",
+            "title": "Efficient formulation of ab initio quantum embedding in periodic systems: Dynamical mean-field theory",
+            "authors": "Zhu, Tianyu and Cui, Zhi-Hao and Chan, Garnet Kin-Lic",
+            "journal": "",
+            "year": "2019",
+            "url": "https://arxiv.org/pdf/1909.08592"
+        },
+        {
+            "id": "DMETQC",
+            "type": "article",
+            "title": "Ab initio simulation of complex solids on a quantum computer with orbital-based multifragment density matrix embedding",
+            "authors": "Cao, Changsu and Sun, Jinzhao and Yuan, Xiao and Hu, Han-Shi and Pham, Hung Q and Lv, Dingshun",
+            "journal": "",
+            "year": "2023",
+            "url": "https://arxiv.org/pdf/2209.03202"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_quantum_chemistry",
+            "weight": 1.0
+        }
+    ]
+}

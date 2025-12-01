@@ -152,6 +152,7 @@ def build(
     quiet: bool = False,
     keep_going: bool = False,
     dev: bool = False,
+    venv: str | None = None,
 ) -> None:
     """Build the provided demos using 'sphinx-build', optionally
     executing them to generate plots and cell outputs.
@@ -168,6 +169,15 @@ def build(
     failed: list[str] = []
     done = 0
     logger.info("Building %d demos", len(demos))
+
+    build_venv = Virtualenv(ctx.repo_root / venv) if venv else Virtualenv(ctx.build_venv_path)
+    logger.info("Using build environment: %s", build_venv.path)
+    cmds.pip_install(
+        build_venv.python,
+        requirements=ctx.build_requirements_file,
+        use_uv=False,
+        quiet=False,
+    )
 
     for demo in demos:
         execute_demo = execute and (demo.executable_latest if dev else demo.executable_stable)
