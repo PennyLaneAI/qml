@@ -14,10 +14,14 @@
   ],
   "tags": [],
   "previewImages": [
-    {
-      "type": "thumbnail",
-      "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_placeholder.png"
-    }
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/pennylane-demo-geometric-kernel-difference-thumbnail.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/pennylane-demo-geometric-kernel-difference-large-thumbnail.png"
+        }
   ],
   "seoDescription": "Learn how to pre-screen quantum kernels using the geometric difference metric (g) before training. This tutorial implements the approach from Huang et al. (2021) to assess whether a quantum kernel offers any geometric advantage over classical kernels. Using synthetic data and multiple quantum embeddings, we demonstrate how to calculate g values and interpret them to identify promising quantum kernels worth pursuing. This saves valuable research time by ruling out fundamentally limited approaches early.",
   "doi": "",
