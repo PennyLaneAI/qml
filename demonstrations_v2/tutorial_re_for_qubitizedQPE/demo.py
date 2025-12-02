@@ -1,14 +1,16 @@
 r"""Exploring Qubit and T-gate Trade-offs in Qubitized Quantum Phase Estimation
 ===============================================================================
 
-Understanding how a quantum system evolves over time has emerged as one of the fundamental applications
-of quantum computing. Whether the goal is extracting static properties via Quantum Phase Estimation (QPE)
-or exploring dynamical properties directly, the core requirement is the efficient implementation of the
-time-evolution operator :math:`U(t) = e^{-iHt}`.
-The challenge lies in realizing this exponential operation efficiently on the quantum computer.
-Qubitization stands as one of the methods to construct this operator in the form of a Quantum walk ($W$), which serves
-as the input unitary for Quantum Phase Estimation (QPE). For a detailed theoretical background on constructing $W$, refer to our
-`Qubitization demo <https://pennylane.ai/qml/demos/tutorial_qubitization>`__.
+The description of any chemical system begins with its Hamiltonian, :math:`\hat{H}`. While Quantum Phase Estimation (QPE)
+is the primary algorithm for resolving the energy spectra of such systems, it faces a fundamental constraint: quantum processors
+execute Unitary operations, not Hermitian ones. To extract the energy spectrum, whether the ground state or excited states,
+we must bridge this mathematical divide.
+
+Qubitization provides the solution to this problem via Block Encoding. Conceptually, this technique fits the Hamiltonian
+into a subspace of a larger Unitary matrix, the "Quantum Walk" operator :math:`W`. This operator encodes the spectrum of :math:`H`
+into its own eigenphases via the rigorous map :math:`e^{\pm i \arccos(E_k/\lambda)}`. This transformation is exact,
+allowing us to query the system's energy levels without the approximation errors inherent in simulating time evolution.
+For a detailed theoretical background on constructing :math:`W`, refer to our `Qubitization demo <https://pennylane.ai/qml/demos/tutorial_qubitization>`__.
 
 However, constructing the operator is only half the battle; we also need to know what it costs to run. In this demo, we move from
 abstract scaling to concrete costs using logical resource estimation tools in PennyLane.
@@ -29,9 +31,15 @@ abstract scaling to concrete costs using logical resource estimation tools in Pe
 #    V_{pqrs} \approx \sum_{\mu, \nu}^{M} \chi_{p\mu} \chi_{q\mu} \zeta_{\mu\nu} \chi_{r\nu} \chi_{s\nu},
 #
 # where :math:`M` is the factorization rank, and :math:`\chi` and :math:`\zeta` are the factorized tensors.
-# However, this demo is more than just a static cost report. We demonstrate how PennyLane exposes the tunable knobs of the circuit implementation,
-# allowing us to actively navigate the circuit design and trade off spatial resources (logical qubits) against temporal resources
-# (T-gates) to suit different constraints.
+# To implement this decomposition on a quantum computer, the Walk operator is constructed from two primary subroutines:
+# the ``Prepare`` oracle, which encodes the coefficients into an ancillary register, and the ``Select`` oracle,
+# which applies the Hamiltonian terms controlled by that register.
+#
+#
+# Standard resource estimates often treat these oracles as fixed "black boxes,"
+# yielding a single cost number. However, this demo is more than just a static cost report. We demonstrate how PennyLane exposes the
+# tunable knobs of the circuit implementation, allowing us to actively navigate the circuit design and trade off between T-gates and
+# logical qubits to suit different constraints.
 #
 #
 # Resource Estimation for FeMoco
@@ -88,21 +96,21 @@ femoco_76 = qre.THCHamiltonian(num_orbitals=76, tensor_rank=450, one_norm=1201.5
 # :class:`~.pennylane.templates.QubitizeTHC` template:
 
 import numpy as np
+
 epsilon_qpe = 0.001  # Ha
 walk_operators = []
 
 for hamiltonian in [femoco_54, femoco_76]:
 
     # Calculate number of bits for coefficient approximation
-    n_coeff = int(np.ceil(2.5 + np.log2(10*hamiltonian.one_norm / epsilon_qpe)))
+    n_coeff = int(np.ceil(2.5 + np.log2(10 * hamiltonian.one_norm / epsilon_qpe)))
 
     # Calculate number of bits for rotation angle approximation
-    n_angle = int(np.ceil(5.652 + np.log2(20*hamiltonian.one_norm*hamiltonian.num_orbitals/ epsilon_qpe)))
+    n_angle = int(
+        np.ceil(5.652 + np.log2(20 * hamiltonian.one_norm * hamiltonian.num_orbitals / epsilon_qpe))
+    )
 
-    wo_femoco = qre.QubitizeTHC(hamiltonian,
-                                coeff_precision=n_coeff,
-                                rotation_precision=n_angle
-                                )
+    wo_femoco = qre.QubitizeTHC(hamiltonian, coeff_precision=n_coeff, rotation_precision=n_angle)
 
     walk_operators.append(wo_femoco)
 
@@ -111,7 +119,9 @@ for hamiltonian in [femoco_54, femoco_76]:
 
 for wo in walk_operators:
     walk_cost = qre.estimate(wo)
-    print(f"Resources for implementing the walk operator for FeMoco({wo.hamiltonian.num_orbitals}): \n {walk_cost}\n")
+    print(
+        f"Resources for implementing the walk operator for FeMoco({wo.thc_ham.num_orbitals}): \n {walk_cost}\n"
+    )
 
 ######################################################################
 # Estimating Qubitized QPE Cost
@@ -126,8 +136,10 @@ for wo in walk_operators:
 #
 # The circuit for QPE will thus look like this:
 
+
 def qpe_circuit(unitary, estimation_wires):
     qre.QPE(unitary, num_estimation_wires=estimation_wires)
+
 
 ######################################################################
 # Note that the QubitizeTHC template doesn't include the cost of preparation of
@@ -145,13 +157,13 @@ for wo in walk_operators:
     n_est = int(np.ceil(np.log2(2 * np.pi * wo.thc_ham.one_norm / epsilon_qpe)))
 
     # Estimate Phase Gradient State cost
-    phase_grad_cost = qre.estimate(qre.PhaseGradientState(wo.rotation_precision))
+    phase_grad_cost = qre.estimate(qre.PhaseGradient(wo.rotation_precision))
 
     # Estimate QPE cost
     qpe_cost = qre.estimate(qpe_circuit)(wo, n_est)
 
     # Qubitized QPE total cost
-    total_cost = qpe_cost + phase_grad_cost
+    total_cost = qpe_cost.add_parallel(phase_grad_cost)
 
     print(f"Resources for Qubitized QPE for FeMoco({wo.thc_ham.num_orbitals}): \n {total_cost}\n")
 
@@ -162,70 +174,89 @@ for wo in walk_operators:
 # of 2000 qubits and over 40 trillion (:math:`4 \times 10^{13}`) total gates.
 #
 # In the fault-tolerant era, logical qubits will be a precious resource. What if our hardware only supports
-# 500 logical qubits? Are we unable to simulate this system?
+# 500 logical qubits? Are we unable to simulate this system? Not necessarily. We can actively trade **Space**
+# (Qubits) for **Time** (T-gates) by modifying the circuit architecture.
 #
-# Not necessarily. We can always explore trading **Space** (Qubits) for **Time** (T-gates) by modifying the circuit architecture.
-# As promised in the introduction, we now move beyond static cost reporting to active design space exploration.
+# To see how this works in practice, let's switch gears and investigate these trade-offs on a different system:
+# **Cytochrome P450**. This molecule is a standard benchmark in the literature and provides a fresh context
+# for exploring our architectural knobs.
+#
+# First, we create the compact Hamiltonian for the :math:`N=58` active space of Cytochrome P450 using the data provided
+# in the literature [Goings2022]_. We work with the largest thc rank that the paper uses for the resource estimates i.e 320.
+
+p450 = qre.THCHamiltonian(num_orbitals=58, tensor_rank=320, one_norm=388.9)
 
 ######################################################################
-# Exploring Qubit Vs T-gate Trade-offs
-# ---------------------------------
+# With the target system defined, we can now turn our attention to the specific architectural
+# choices that allow us to balance our resource budget.
 #
-# In the THC algorithm, this trade-off between qubits and T-gates in the walk operator is governed by several architectural "knobs" distributed
-# across the ``Prepare`` and ``Select`` subroutines:
+# Exploring Qubit Vs T-gate Trade-offs
+# ------------------------------------
+#
+# In the THC algorithm, this trade-off between qubits and T-gates in the walk operator is governed by several architectural
+# "knobs" distributed across the ``Prepare`` and ``Select`` subroutines:
 #
 # Knob 1: Batched Givens Rotations
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 # In the ``Select`` operator, we need to implement a series of Givens rotations to change the basis.
-# Instead of loading all the rotation angles at once, which needs :math:` N \times (n_{rotations})` qubits
-# for storing the angles, we can load fewer angles at a time reducing the register size (saving Qubits) but
-# repeating the QROM subroutine multiple times (costing T-gates).
+# Naively, this requires a quantum register of size :math:`N \times n_{rotations}` to store all angles simultaneously.
+# Here, we can choose to load fewer angles at a time instead of loading all the rotation angles at once. This leads to reduction
+# in the register size, thus saving qubits, but necessitates repetition of the QROM subroutine for each batch and hence costs T-gates.
 #
 # We can illustrate this trade-off by varying the number of angles loaded in each batch. This particular knob
-# argument is accessible via the :class:`~.pennylane.estimator.SelectTHC` operator as ``batched_rotations``.
-# Let's see how the resources change for FeMoco(76) as we vary this parameter:
+# argument is accessible through the :class:`~.pennylane.estimator.SelectTHC` operator as ``batched_rotations``.
+# Let's see how the resources change for P450 as we vary this parameter:
 
-batch_sizes = [1, 10, 20, 30, 40, 50, 60, 70, 75]
+batch_sizes = [1, 10, 20, 30, 40, 50]
 qubit_counts = []
 tgate_counts = []
 
+n_coeff = int(
+    np.ceil(2.5 + np.log2(10 * p450.one_norm / epsilon_qpe))
+)  # coefficient precision bits
+n_angle = int(
+    np.ceil(5.652 + np.log2(20 * p450.one_norm * p450.num_orbitals / epsilon_qpe))
+)  # rotation precision bits
+
 for i in batch_sizes:
 
-    select_thc = qre.SelectTHC(femoco_76,
-                                 rotation_precision=walk_operators[1].rotation_precision,
-                                 batched_rotations=i
-                                 )
-    wo_batched = qre.QubitizeTHC(femoco_76,
-                                 select_operator=select_thc,
-                                 coeff_precision=walk_operators[1].coeff_precision,
-                                )
-    n_est = int(np.ceil(np.log2(2 * np.pi * wo_batched.thc_ham.one_norm / epsilon_qpe)))
-    phase_grad_cost = qre.estimate(qre.PhaseGradientState(wo_batched.rotation_precision))
+    select_thc = qre.SelectTHC(p450, rotation_precision=n_angle, batched_rotations=i)
+    wo_batched = qre.QubitizeTHC(
+        p450,
+        select_op=select_thc,
+        coeff_precision=n_coeff,
+    )
+    n_est = int(np.ceil(np.log2(2 * np.pi * p450.one_norm / epsilon_qpe)))
+
+    phase_grad_cost = qre.estimate(qre.PhaseGradient(num_wires=n_angle))
     qpe_cost = qre.estimate(qpe_circuit)(wo_batched, n_est)
-    total_cost = qpe_cost + phase_grad_cost
-    qubit_counts.append(total_cost.algo_wires + total_cost.zero_state_wires+ total_cost.any_state_wires)
-    tgate_counts.append(total_cost.gate_counts['Toffoli'])
+    total_cost = qpe_cost.add_parallel(phase_grad_cost)
+    qubit_counts.append(
+        total_cost.algo_wires + total_cost.zeroed_wires + total_cost.any_state_wires
+    )
+    tgate_counts.append(total_cost.gate_counts["Toffoli"])
 
 # Plotting the trade-off curve
 import matplotlib.pyplot as plt
 
 fig, ax1 = plt.subplots(figsize=(10, 6))
 
-ax1.set_xlabel('Batch Size (Givens Rotations per Step)')
-ax1.set_ylabel('Logical Qubits (Space)')
-ax1.plot(batch_sizes, qubit_counts, marker='o', linestyle='-', linewidth=1.5)
-ax1.tick_params(axis='y')
-ax1.set_xscale('log')
-ax1.grid(True, which='both', linestyle='--', alpha=0.5)
+ax1.set_xlabel("Batch Size (Givens Rotations per Step)")
+ax1.set_ylabel("Logical Qubits (Space)")
+ax1.plot(batch_sizes, qubit_counts, marker="o", linestyle="-", linewidth=1.5)
+ax1.tick_params(axis="y")
+ax1.set_xscale("log")
+ax1.grid(True, which="both", linestyle="--", alpha=0.5)
 
 ax2 = ax1.twinx()
-ax2.set_ylabel('T-Count (Time)')
-ax2.plot(batch_sizes, tgate_counts, marker='s', linestyle='--', linewidth=1.5)
-ax2.tick_params(axis='y')
-ax2.set_yscale('log')
+ax2.set_ylabel("T-Count (Time)")
+ax2.plot(batch_sizes, tgate_counts, marker="s", linestyle="--", linewidth=1.5)
+ax2.tick_params(axis="y")
+ax2.set_yscale("log")
 
-plt.title('FeMoco (76): Batching Trade-off', fontsize=14)
+plt.title("Cytochrome P450: Batching Trade-off", fontsize=14)
 plt.tight_layout()
+plt.legend()
 plt.show()
 
 #################################################################################
@@ -239,37 +270,38 @@ plt.show()
 # Let's see how the cost changes for the most qubit efficient circuit found above, when we use the plain QROM instead of Select-Swap QROM.
 # This can be achieved by setting the ``select_swap_depth`` argument to ``1`` in both the ``PrepareTHC`` and ``SelectTHC`` operators.
 
-select_thc_qrom = qre.SelectTHC(femoco_76,
-                                 rotation_precision=walk_operators[1].rotation_precision,
-                                 batched_rotations=75,
-                                 select_swap_depth=1  # Use plain QROM
-                                 )
-prepare_thc_qrom = qre.PrepareTHC(femoco_76,
-                                   coeff_precision=walk_operators[1].coeff_precision,
-                                   select_swap_depth=1  # Use plain QROM
-                                   )
-wo_qrom = qre.QubitizeTHC(femoco_76,
-                          select_operator=select_thc_qrom,
-                          prepare_operator=prepare_thc_qrom,
-                          )
-n_est = int(np.ceil(np.log2(2 * np.pi * wo_qrom.thc_ham.one_norm / epsilon_qpe)))
+select_thc_qrom = qre.SelectTHC(
+    p450, rotation_precision=n_angle, batched_rotations=57, select_swap_depth=1
+)
+prepare_thc_qrom = qre.PrepTHC(p450, coeff_precision=n_coeff, select_swap_depth=1)
+wo_qrom = qre.QubitizeTHC(
+    p450,
+    select_op=select_thc_qrom,
+    prepare_op=prepare_thc_qrom,
+)
+n_est = int(np.ceil(np.log2(2 * np.pi * p450.one_norm / epsilon_qpe)))
 qpe_cost = qre.estimate(qpe_circuit)(wo_qrom, n_est)
 total_cost = qpe_cost.add_parallel(phase_grad_cost)
 
-print(f"Resources for Qubitized QPE for FeMoco(76): \n {total_cost}\n")
-
-
+print(f"Resources for Qubitized QPE for P450: \n {total_cost}\n")
 
 ######################################################################
 # Conclusion
 # ----------
-# In this demo, we estimated the logical resources for the qubitization of **FeMoco**, demonstrating that
-# a naive implementation requires ~2000 logical qubits and :math:`4 \times 10^{13}` gates.
 #
-# However, we showed that these numbers are not fixed. By actively tuning architectural knobs like
-# rotation batching and QROM strategies we can trade **space for time** to fit the algorithm onto
-# constrained hardware. This workflow enables researchers to audit the true cost of quantum chemistry
-# algorithms today.
+# In this demo, we tackled the logical resource estimation for two of the most important systems in chemistry:
+# **FeMoco** and **Cytochrome P450**. Our initial baseline for FeMoco revealed a requirement of ~2000 logical qubits, which
+# underscores the magnitude of the challenge facing early fault-tolerant hardware.
+#
+# However, naive calculations tell only half the story. As we demonstrated with Cytochrome P450, these resource counts are not
+# immutable constants. By actively navigating the architectural trade-offs between logical qubits
+# and T-gates we can significantly reshape the cost profile of the algorithm.
+#
+# This is where the flexibility of PennyLane's resource estimation framework becomes crucial. Rather than treating subroutines
+# like ``Prepare`` and ``Select`` as black boxes, PennyLane allows us to tune the internal circuit
+# configurations. This transforms resource estimation from a passive reporting tool into an active design process, enabling
+# researchers to optimize their algorithm implementation even before the hardware is available.
+#
 #
 # References
 # ----------
@@ -280,4 +312,9 @@ print(f"Resources for Qubitized QPE for FeMoco(76): \n {total_cost}\n")
 #     "Even More Efficient Quantum Computations of Chemistry Through Tensor Hypercontraction."
 #     `PRX Quantum 2, 030305 (2021). <https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.2.030305>`__
 #
+# .. [#Goings2022]
+#
+#     Joshua J Goings et al.
+#     "Reliably assessing the electronic structure of cytochrome P450 on today’s classical computers and tomorrow’s quantum computers"
+#     `Proceedings of the National Academy of Sciences 119.38 (2022). <https://www.pnas.org/doi/abs/10.1073/pnas.2203533119>`__
 #

@@ -28,15 +28,26 @@
     "doi": "",
     "references": [
         {
-            "id": "jovanovic",
+            "id": "lee2020",
             "type": "article",
-            "title": "Refraction and band isotropy in 2D square-like Archimedean photonic crystal lattices",
-            "authors": "D. Jovanovic, R. Gajic, K. Hingerl",
-            "journal": "Opt. Express",
-            "volume": "16",
-            "pages": "4048--4058",
-            "year": "2008",
-            "url": "https://opg.optica.org/oe/fulltext.cfm?uri=oe-16-6-4048&id=154856"
+            "title": "Even More Efficient Quantum Computations of Chemistry Through Tensor Hypercontraction.",
+            "authors": "Joonhoo Lee",
+            "journal": "PRX Quantum",
+            "volume": "2",
+            "pages": "030305",
+            "year": "2021",
+            "url": "https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.2.030305"
+        },
+        {
+            "id": "Goings2022",
+            "type": "article",
+            "title": "Reliably assessing the electronic structure of cytochrome P450 on today’s classical computers and tomorrow’s quantum computers",
+            "authors": "Goings, Joshua J and White, Alec and Lee, Joonho and Tautermann, Christofer S and Degroote, Matthias and Gidney, Craig and Shiozaki, Toru and Babbush, Ryan and Rubin, Nicholas C",
+            "journal": "Proceedings of the National Academy of Sciences",
+            "volume": "119",
+            "pages": "e2203533119",
+            "year": "2022",
+            "url": "https://www.pnas.org/doi/abs/10.1073/pnas.2203533119"
         }
     ],
     "basedOnPapers": [],
@@ -46,6 +57,11 @@
             "type": "demonstration",
             "id": "tutorial_qubitization",
             "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_qrom",
+            "weight":1.0
         },
         {
             "type": "demonstration",
