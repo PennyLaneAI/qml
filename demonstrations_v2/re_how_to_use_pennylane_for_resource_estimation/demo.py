@@ -339,94 +339,11 @@ print("--- Higher precision (1e-15) ---", f"\n T counts: {res.gate_counts["T"]:.
 #     T counts: 2.009E+07
 
 ######################################################################
-# Swapping Decompositions
-# ~~~~~~~~~~~~~~~~~~~~~~~
-#
-# There are many ways to decompose a quantum gate into our target gateset.
-# Selecting an alternate decomposition is a great way to compare the costs of different techniques,
-# and thereby optimize your quantum workflow.
-# This can be done easily with the
-# :class:`ResourceConfig <pennylane.estimator.resource_config.ResourceConfig>` class.
-#
-# Let’s explore decompositions for the ``RZ`` gate:
-# Current decomposition for ``RZ``, or single qubit rotation synthesis in general is
-# defined in Bocharov et al. [#bocharov]_.
-#
-
-default_cost_RZ = qre.estimate(qre.RZ())
-print(default_cost_RZ)
-
-######################################################################
-# .. rst-class:: sphx-glr-script-out
-#
-# .. code-block:: none
-#
-#    --- Resources: ---
-#     Total wires: 1
-#       algorithmic wires: 1
-#       allocated wires: 0
-#         zero state: 0
-#         any state: 0
-#     Total gates : 44
-#       'T': 44
-
-######################################################################
-# These are other state of the art methods we could use instead, such as that
-# defined in Ross & Selinger [#ross]_.
-#
-# In order to define a resource decomposition, we first need to know the ``resource_keys`` for the
-# operator whose decomposition we want to add:
-#
-
-print(qre.RZ.resource_keys)  # these are the required arguments
-
-######################################################################
-# .. rst-class:: sphx-glr-script-out
-#
-# .. code-block:: none
-#
-#    {'precision'}
-
-######################################################################
-# Now that we know which arguments we need, we can define our resource decomposition.
-#
-# Each :class:`ResourceOperator <pennylane.estimator.resource_operator.ResourceOperator>`
-# has a ``resource_rep``, serving as an even more compact representation
-# to be used when defining resource decompositions.
-#
-
-def gridsynth_decomp(precision):
-    t_resource_rep = qre.resource_rep(qre.T)
-    t_counts = round(3 * qml.math.log2(1/precision)) # as per Ross & Selinger
-
-    t_gate_counts = qre.GateCount(
-        t_resource_rep, t_counts
-    )  # GateCounts tell us how many of this type of gate are used
-
-    return [
-        t_gate_counts
-    ]  # We return a list of GateCounts for all relevant gate types
-
-
-######################################################################
-# Finally, we set the new decomposition in our
-# :class:`ResourceConfig <pennylane.estimator.resource_config.ResourceConfig>`.
-#
-
-gridsynth_rc = qre.ResourceConfig()
-gridsynth_rc.set_decomp(qre.RZ, gridsynth_decomp)
-gridsynth_cost_RZ = qre.estimate(qre.RZ(), config=gridsynth_rc)
-
-print("GridSynth decomposition -", f"\t\tT count: {gridsynth_cost_RZ.gate_counts["T"]}")
-print("Default decomposition (RUS) -", f"\tT count: {default_cost_RZ.gate_counts["T"]}")
-
-######################################################################
-# .. rst-class:: sphx-glr-script-out
-#
-# .. code-block:: none
-#
-#    GridSynth decomposition - 	    T count: 90
-#    Default decomposition (RUS) - 	T count: 44
+# The :mod:`estimator <pennylane.estimator>` module also provides functionality for
+# writing custom decompositions, and custom resource operators.
+# To find out how, check out our documentation for
+# :class:`ResourceConfig <pennylane.estimator.resource_config.ResourceConfig>`
+# and :class:`ResourceOperator <pennylane.estimator.resource_operator.ResourceOperator>`!
 
 ######################################################################
 # Putting it All Together
