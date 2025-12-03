@@ -84,7 +84,7 @@ print("The Hamiltonian is ", H)
 #     .. code-block:: python
 #
 #         symbols = ["H", "H"]
-#         coordinates = np.array([[0.0, 0.0, -0.6614], [0.0, 0.0, 0.6614]])
+#         coordinates = np.array([[-0.70108983, 0.0, 0.0], [0.70108983, 0.0, 0.0]])
 #         molecule = qml.qchem.Molecule(symbols, coordinates)
 #         H, qubits = qml.qchem.molecular_hamiltonian(molecule)
 #
@@ -220,7 +220,7 @@ fig.set_figheight(5)
 fig.set_figwidth(12)
 
 # Full configuration interaction (FCI) energy computed classically
-E_fci = -1.136189454088
+E_fci = dataset.fci_energy
 
 # Add energy plot on column 1
 ax1 = fig.add_subplot(121)
