@@ -9,7 +9,7 @@ Circuits”** (2025) [#Kiwit]_ develops an efficient algorithm for finding low-d
 quantum circuits to load classical image data into quantum states.
 
 This demo gives an introduction to the paper **“Typical Machine Learning Datasets as
-Low‑Depth Quantum Circuits”** (2025). We will discuss the following three steps:
+Low‑Depth Quantum Circuits”** (2025). We will do the following:
 
 1. **Define** how classical images can be encoded as quantum states.
 2. **Construct** low-depth quantum circuits that efficiently generate these image states.
