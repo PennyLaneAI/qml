@@ -102,5 +102,21 @@
   ],
   "basedOnPapers": ["10.1088/2058-9565/ae0123"],
   "referencedByPapers": [],
-  "relatedContent": []
+  "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_constant_depth_mps_prep",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_adversarial_attacks_QML",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_initial_state_preparation",
+            "weight": 0.8
+        }
+    ]
 }
