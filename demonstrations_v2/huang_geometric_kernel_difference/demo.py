@@ -392,7 +392,7 @@ print(f"g (RBF vs PQK‑E1):   {g_PQK_E1:.4f}")
 print(f"g (RBF vs PQK‑E2):   {g_PQK_E2:.4f}")
 
 ######################################################################
-# What does a high g really tell us?
+# What does a high g mean?
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # We can see that in terms of :math:`g`: PQK-E1 > PQK-E2 > QK-E1 > QK-E2.
