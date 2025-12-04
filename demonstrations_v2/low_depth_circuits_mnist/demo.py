@@ -55,7 +55,8 @@ def FRQI_encoding(images):
     n = 2 * int(np.log2(N))
     # reorder pixels hierarchically
     states = np.reshape(images, (batchsize, *(2,) * n))
-    states = np.transpose(states, [0] + [ax + 1 for q in range(n // 2) for ax in (q, q + n // 2)])
+    states = np.transpose(states,
+                          [0] + [ax + 1 for q in range(n // 2) for ax in (q, q + n // 2)])
     # FRQI encoding by stacking cos and sin components
     states = np.stack([np.cos(np.pi / 2 * states), np.sin(np.pi / 2 * states)], axis=1)
     # normalize and reshape
@@ -128,7 +129,8 @@ import os
 import jax
 import pennylane as qml
 
-# JAX supports the single-precision numbers by default. The following line enables double-precision.
+# JAX supports the single-precision numbers by default.
+# The following line enables double-precision.
 jax.config.update("jax_enable_x64", True)
 # Set JAX to use CPU, simply set this to 'gpu' or 'tpu' to use those devices.
 jax.config.update("jax_platform_name", "cpu")
@@ -165,8 +167,10 @@ def get_circuit(circuit_layout):
     The circuit only contains RY rotation gates and CNOT gates, designed for efficient
     state preparation with low circuit depth.
 
-    :param circuit_layout: List of tuples containing gate types ('RY' or 'CNOT') and their target wires.
-    :return circuit: A JAX-compiled quantum circuit function that takes parameters and returns the quantum state.
+    :param circuit_layout: List of tuples containing gate types ('RY' or 'CNOT')
+    and their target wires.
+    :return circuit: A JAX-compiled quantum circuit function that takes parameters and
+    returns the quantum state.
     """
     dev = qml.device("default.qubit", wires=11)
 
@@ -244,7 +248,8 @@ orig_1 = FRQI_decoding(exact_state[labels_01 == 1][idx_1][None, :])[0]
 rec_0 = FRQI_decoding(states_01[labels_01 == 0][idx_0][None, :])[0]
 rec_1 = FRQI_decoding(states_01[labels_01 == 1][idx_1][None, :])[0]
 
-# Create a grid of figures to show both the fidelity distribution and the original and reconstructed images
+# Create a grid of figures to show both the fidelity distribution and the original
+# and reconstructed images
 fig = plt.figure(figsize=(9, 5))
 gs = fig.add_gridspec(2, 3, width_ratios=[1.2, 1, 1], wspace=0.05)
 
@@ -363,7 +368,8 @@ def loss_acc(params, batch_x, batch_y):
 # training step
 @jax.jit
 def train_step(params, opt_state, batch_x, batch_y):
-    (loss, acc), grads = jax.value_and_grad(lambda p: loss_acc(p, batch_x, batch_y), has_aux=True)(
+    func = lambda p: loss_acc(p, batch_x, batch_y)
+    (loss, acc), grads = jax.value_and_grad(func, has_aux=True)(
         params
     )
     updates, opt_state = opt.update(grads, opt_state, params)
@@ -394,7 +400,8 @@ from jax import numpy as jnp
 
 X_all = jnp.asarray(
     states_01.real, dtype=jnp.float64
-)  # we select the real part only, as the the imaginary part is zero since we only use RY and CNOT gates
+)  # we select the real part only
+# the imaginary part is zero since we only use RY and CNOT gates
 y_all = jnp.asarray(labels_01, dtype=jnp.int32)
 
 key_split, key_perm = jax.random.split(jax.random.PRNGKey(SEED))
