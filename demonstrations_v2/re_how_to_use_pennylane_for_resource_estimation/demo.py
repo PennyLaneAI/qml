@@ -40,6 +40,98 @@ import pennylane.estimator as qre
 # - Gets you moving *even faster* - in the blink of an eye :mod:`estimator <pennylane.estimator>`
 #   provides you with resource estimates, and enables effortless customization to enhance your research.
 #
+# We will estimate the quantum resources necessary to evolve the quantum state of a
+# honeycomb lattice of spins under the Kitaev Hamiltonian.
+# For more information about the Kitaev Hamiltonian,
+# check out :func:`our documentation <pennylane.spin.kitaev>`.
+#
+
+######################################################################
+# Estimating the Resources of your PennyLane Circuits
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+# Let's say you've already written your workflow as a PennyLane circuit.
+# There's no need to write it again!
+# To estimate its resources, you can simply invoke
+# :func:`qre.estimate <pennylane.estimator.estimate.estimate>`
+# on it directly.
+#
+# Let's demonstrate this with a 25 x 25 unit honeycomb lattice of spins.  
+# Here, we generate the Hamiltonian ourselves:
+#
+
+import numpy as np
+
+n_cell = 25
+n_cells = [n_cell, n_cell]
+kx, ky, kz = (0.5, 0.6, 0.7)
+
+t1 = time.time()
+flat_hamiltonian = qml.spin.kitaev(n_cells, coupling=np.array([kx, ky, kz]))
+flat_hamiltonian.compute_grouping()  # compute the qubitize commuting groups! 
+
+groups = []
+for group_indices in flat_hamiltonian.grouping_indices:
+    grouped_term = qml.sum(*(flat_hamiltonian.operands[index] for index in group_indices))
+    groups.append(grouped_term)
+
+grouped_hamiltonian = qml.sum(*groups)
+t2 = time.time()
+t_generation = t2 - t1
+
+print(f"Processing time for Hamiltonian generation: {(t_generation):.3g} seconds")
+
+######################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+# .. code-block:: none
+#
+#    Processing time for Hamiltonian generation: 7.74 seconds
+
+######################################################################
+# Here we define our circuit for Hamiltonian simulation.
+#
+
+num_steps = 10
+order = 6
+
+@qml.qnode(qml.device("default.qubit"))
+def executable_circuit(hamiltonian, num_steps, order):
+    for wire in hamiltonian.wires: # uniform superposition over all basis states
+        qml.Hadamard(wire)
+    qml.TrotterProduct(hamiltonian, time=1.0, n=num_steps, order=order)
+    return qml.state()
+
+######################################################################
+# Now, just call :func:`qre.estimate <pennylane.estimator.estimate.estimate>`
+# to generate a state-of-the-art resource estimate for your PennyLane circuit!
+#
+
+t1 = time.time()
+resources_exec = qre.estimate(executable_circuit)(grouped_hamiltonian, num_steps, order)
+t2 = time.time()
+
+print(f"Processing time: {(t2 - t1):.3g} seconds")
+print(resources_exec)
+
+######################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+# .. code-block:: none
+#
+#    Processing time: 2.32 seconds
+#    --- Resources: ---
+#     Total wires: 1250
+#       algorithmic wires: 1250
+#       allocated wires: 0
+#         zero state: 0
+#         any state: 0
+#     Total gates : 2.972E+7
+#       'T': 2.670E+7,
+#       'CNOT': 1.214E+6,
+#       'Z': 6.000E+5,
+#       'S': 1.200E+6,
+#       'Hadamard': 1.250E+3
 
 ######################################################################
 # Making it Easy
@@ -47,11 +139,8 @@ import pennylane.estimator as qre
 #
 
 ######################################################################
-# We will be using the Kitaev model as an example to explore resource estimation. For more information
-# about the Kitaev Hamiltonian, check out :func:`our documentation <pennylane.spin.kitaev>`.
-#
-# In this demo we will estimate the quantum resources necessary to evolve the quantum state of a 100 x
-# 100 unit honeycomb lattice of spins under the Kitaev Hamiltonian.
+# What if we wanted to estimate the quantum resources necessary to evolve the quantum state of a 100 x
+# 100 unit honeycomb lattice of spins under the Kitaev Hamiltonian?
 #
 # **Thats 20,000 spins!**
 #
@@ -100,9 +189,6 @@ kitaev_H = qre.PauliHamiltonian(
 # classes are designed to require minimal information
 # while still providing trustworthy estimates.
 #
-
-num_steps = 10
-order = 6
 
 def circuit(hamiltonian, num_steps, order):
     qre.UniformStatePrep(num_states=2**n_q)  # uniform superposition over all basis states
@@ -255,7 +341,6 @@ highlvl_res = qre.estimate(
 
 print(f"High-level resources:\n{highlvl_res}\n")
 
-
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
@@ -401,43 +486,22 @@ print(resources)
 #       'Hadamard': 2.000E+4
 
 ######################################################################
-# Estimating the Resources of your PennyLane Circuits
+# A Final Comparison
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# If you’ve already written your workflow for execution,
-# there's no need to write it again!
-# You can invoke
-# :func:`qre.estimate <pennylane.estimator.estimate.estimate>`
-# on it directly.
+# We've shown that you can estimate your workflow's resources
+# using both typical PennyLane circuits, and circuits written with
+# :class:`ResourceOperator <pennylane.estimator.resource_operator.ResourceOperator>`s.
 #
-# Let's continue with the same example, but with a 25 x 25 unit honeycomb lattice of spins.  
-# Here, we generate the Hamiltonian ourselves:
+# Now, we'll demonstrate that the resource estimates are consistent across both of these cases!
 #
-
-import numpy as np
-
-n_cell = 25
-n_cells = [n_cell, n_cell]
-kx, ky, kz = (0.5, 0.6, 0.7)
-
-t1 = time.time()
-flat_hamiltonian = qml.spin.kitaev(n_cells, coupling=np.array([kx, ky, kz]))
-flat_hamiltonian.compute_grouping()  # compute the qubitize commuting groups! 
-
-groups = []
-for group_indices in flat_hamiltonian.grouping_indices:
-    grouped_term = qml.sum(*(flat_hamiltonian.operands[index] for index in group_indices))
-    groups.append(grouped_term)
-
-grouped_hamiltonian = qml.sum(*groups)
-t2 = time.time()
-
-######################################################################
-# We'll use :mod:`estimator <pennylane.estimator>` in parallel to make sure everything matches.
+# Let's return to a 25 x 25 unit honeycomb lattice of spins.  
+# We'll use :mod:`estimator <pennylane.estimator>` to make sure everything matches.
 # It's a lot easier to prepare for resource estimation than for execution!
 #
 
-t3 = time.time()
+t1 = time.time()
+n_cell = 25
 n_q = 2 * n_cell**2
 n_xx = n_cell**2
 n_yy = n_cell*(n_cell-1)
@@ -449,17 +513,18 @@ compact_hamiltonian = qre.PauliHamiltonian(
     num_qubits = n_q,
     commuting_groups = commuting_groups,
 )
-t4 = time.time()
+t2 = time.time()
+t_estimation = t2 - t1
 
 ######################################################################
 # The resulting data can be easily compared for a sanity check.
 #
 
-print(f"Processing time for Hamiltonian generation: {(t2 - t1):.3g} seconds")
+print(f"Processing time for Hamiltonian generation: {(t_generation):.3g} seconds")
 print("Total number of terms:", len(flat_hamiltonian.operands))
 print("Total number of qubits:", len(flat_hamiltonian.wires), "\n")
 
-print(f"Processing time for Hamiltonian estimation: {(t4 - t3):.3g} seconds")
+print(f"Processing time for Hamiltonian estimation: {(t_estimation):.3g} seconds")
 print("Total number of terms:", compact_hamiltonian.num_pauli_words)
 print("Total number of qubits:", compact_hamiltonian.num_qubits)
 
@@ -477,34 +542,9 @@ print("Total number of qubits:", compact_hamiltonian.num_qubits)
 #    Total number of qubits: 1250
 
 ######################################################################
-# Now we can define our circuit for Hamiltonian simulation.
+# Here's the resource estimate from our earlier *execution* circuit.
 #
 
-order = 6
-num_steps = 10
-
-@qml.qnode(qml.device("default.qubit"))
-def executable_circuit(hamiltonian):
-    for wire in hamiltonian.wires: # uniform superposition over all basis states
-        qml.Hadamard(wire)
-    qml.TrotterProduct(hamiltonian, time=1.0, n=num_steps, order=order)
-    return qml.state()
-
-def estimation_circuit(hamiltonian):
-    qre.UniformStatePrep(num_states = 2**n_q)
-    qre.TrotterPauli(hamiltonian, num_steps, order)
-    return
-
-######################################################################
-# As usual, just call :func:`qre.estimate <pennylane.estimator.estimate.estimate>`
-# to generate a state-of-the-art resource estimate for your PennyLane circuit!
-#
-
-t5 = time.time()
-resources_exec = qre.estimate(executable_circuit)(grouped_hamiltonian)
-t6 = time.time()
-
-print(f"Processing time: {(t6 - t5):.3g} seconds")
 print(resources_exec)
 
 ######################################################################
@@ -530,11 +570,11 @@ print(resources_exec)
 # Let's validate the results by comparing with our resource *estimation* circuit.
 #
 
-t5 = time.time()
-resources_est = qre.estimate(estimation_circuit)(compact_hamiltonian)
-t6 = time.time()
+t1 = time.time()
+resources_est = qre.estimate(circuit)(compact_hamiltonian, num_steps, order)
+t2 = time.time()
 
-print(f"Processing time: {(t6 - t5):.3g} seconds")
+print(f"Processing time: {(t2 - t1):.3g} seconds")
 print(resources_est)
 
 ######################################################################
