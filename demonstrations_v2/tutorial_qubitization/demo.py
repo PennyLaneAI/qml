@@ -111,7 +111,7 @@ control_wires = [2, 3]
 estimation_wires = [4, 5, 6, 7, 8, 9]
 
 dev = qml.device("default.qubit")
-
+"lightning.qubit"
 
 @qml.qnode(dev)
 def circuit():

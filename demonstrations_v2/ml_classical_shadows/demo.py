@@ -187,7 +187,7 @@ psi0 = eigvecs[:, np.argmin(eigvals)]
 #
 
 dev_exact = qml.device("default.qubit", wires=num_qubits) # for exact simulation
-
+"lightning.qubit"
 def circuit(psi, observables):
     psi = psi / np.linalg.norm(psi) # normalize the state
     qml.StatePrep(psi, wires=range(num_qubits))
@@ -285,7 +285,7 @@ plt.show()
 #
 
 dev_oshot = qml.device("default.qubit", wires=num_qubits)
-circuit_oshot = qml.set_shots(qml.QNode(circuit, dev_oshot), shots = 1)
+circuit_oshot = qml.set"lightning.qubit"e(circuit, dev_oshot), shots = 1)
 
 
 ######################################################################

@@ -143,7 +143,7 @@ print(f"Unitaries:\n {LCU_ops}")
 # the normalized target state as input:
 
 dev1 = qml.device("default.qubit", wires=1)
-
+"lightning.qubit"
 # normalized square roots of coefficients
 alphas = (np.sqrt(LCU_coeffs) / np.linalg.norm(np.sqrt(LCU_coeffs)))
 
@@ -166,7 +166,7 @@ print("Output state: ", np.real(prep_circuit()))
 import matplotlib.pyplot as plt
 
 dev2 = qml.device("default.qubit", wires=3)
-
+"lightning.qubit"
 # unitaries
 ops = LCU_ops
 # relabeling wires: 0 → 1, and 1 → 2

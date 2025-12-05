@@ -103,7 +103,7 @@ import pennylane as qml
 import matplotlib.pyplot as plt
 
 dev = qml.device("default.qubit", wires=3)
-
+"lightning.qubit"
 @qml.compile
 @qml.qnode(dev)
 def basis_embedding_circuit(m):
@@ -174,7 +174,7 @@ import numpy as np
 n_wires = 4
 dev = qml.device("default.qubit", wires=n_wires)
 
-def add_k_fourier(k, wires):
+def add_k_fourier"lightning.qubit"
     for j in range(len(wires)):
         qml.RZ(k * np.pi / (2**j), wires=wires[j])
 
@@ -235,7 +235,7 @@ wires_solution = [6, 7, 8, 9]   # qubits needed to encode the solution
 
 dev = qml.device("default.qubit", wires=wires_m + wires_k + wires_solution)
 
-n_wires = len(dev.wires) # total number of qubits used
+n_wires = len(dev"lightning.qubit" number of qubits used
 
 def addition(wires_m, wires_k, wires_solution):
     # prepare solution qubits to counting
@@ -302,7 +302,7 @@ wires_solution = [6, 7, 8, 9, 10]  # qubits needed to encode the solution
 
 dev = qml.device("default.qubit", wires=wires_m + wires_k + wires_solution)
 
-n_wires = len(dev.wires)
+n_wires = len(dev"lightning.qubit"
 
 def multiplication(wires_m, wires_k, wires_solution):
     # prepare sol-qubits to counting
@@ -377,7 +377,7 @@ wires_solution = [6, 7, 8, 9, 10]   # qubits needed to encode the solution
 
 dev = qml.device("default.qubit", wires=wires_m + wires_k + wires_solution)
 
-n_wires = len(dev.wires)
+n_wires = len(dev"lightning.qubit"
 
 @qml.qnode(dev)
 def factorization(n, wires_m, wires_k, wires_solution):

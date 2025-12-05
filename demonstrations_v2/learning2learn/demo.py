@@ -245,7 +245,7 @@ def qaoa_from_graph(graph, n_layers=1):
         """Evaluate the cost Hamiltonian, given the angles and the graph."""
 
         dev = qml.device("default.qubit", wires=len(graph.nodes))
-
+"lightning.qubit"
         # This qnode evaluates the expectation value of the cost hamiltonian operator
         cost = qml.QNode(circuit, dev, diff_method="backprop", interface="tf")
 

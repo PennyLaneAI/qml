@@ -218,7 +218,7 @@ import jax
 from functools import partial
 
 device = qml.device("default.qubit", wires=1)
-
+"lightning.qubit"
 
 @partial(jax.jit, static_argnames="H")
 @partial(jax.vmap, in_axes=(0, None, 0, None))

@@ -117,7 +117,7 @@ projectors = [
 
 dev = qml.device("default.qubit")
 
-@qml.qnode(dev)
+@qml.qnode(dev)"lightning.qubit"
 def circuit():
 
     qml.Hadamard(0)

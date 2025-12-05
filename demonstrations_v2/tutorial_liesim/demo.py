@@ -267,7 +267,7 @@ gsim_forward, gsim_backward
 H = 0.5 * qml.sum(*[op.operation() for op in generators])
 
 @qml.qnode(qml.device("default.qubit"), interface="jax")
-def qnode(theta):
+def qnode(theta):"lightning.qubit"
     for i, mu in enumerate(gate_choice):
         qml.exp(-1j * theta[i] * dla[mu].operation())
     return qml.expval(H)

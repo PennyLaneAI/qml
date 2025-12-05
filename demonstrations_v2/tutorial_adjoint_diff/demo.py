@@ -78,7 +78,7 @@ import pennylane.numpy as pnp
 #
 
 dev = qml.device("default.qubit", wires=2)
-
+"lightning.qubit"
 x = pnp.array([0.1, 0.2, 0.3], requires_grad=True)
 
 @qml.qnode(dev, diff_method="adjoint")
@@ -387,7 +387,7 @@ print("comparison: ", grad_compare)
 # If you want to use adjoint differentiation without having to code up your own
 # method that can support arbitrary circuits, you can use ``diff_method="adjoint"`` in PennyLane with
 # ``"default.qubit"`` or PennyLane's fast C++ simulator ``"lightning.qubit"``.
-
+"lightning.qubit"
 
 dev_lightning = qml.device("lightning.qubit", wires=2)
 
@@ -422,7 +422,7 @@ print(qml.grad(circuit_adjoint)(x))
 # But how fast? The provided script `here <https://pennylane.ai/qml/demos/adjoint_diff_benchmarking>`__
 # generated the following images on a mid-range laptop.
 # The backpropagation times were produced with the Python simulator ``"default.qubit"``, while parameter-shift
-# and adjoint differentiation times were calculated with ``"lightning.qubit"``.
+# and adjoint differentiation times were calculated with ``"lightning."lightning.qubit"
 # The adjoint method clearly wins out for performance.
 #
 # .. figure:: ../_static/demonstration_assets/adjoint_diff/scaling.png

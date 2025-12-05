@@ -266,7 +266,7 @@ def qcnn_ansatz(num_qubits, params):
 
 num_params, output_wires = qcnn_ansatz(num_qubits, [0]*100)
 
-@qml.qnode(qml.device("default.qubit", wires=num_qubits))
+@qml.qnode(qml.device("lightning.qubit", wires=num_qubits))
 def qcnn_circuit(params, state):
     """QNode with QCNN ansatz and probabilities of unmeasured qubits as output"""
     # Input ground state from diagonalization
@@ -488,7 +488,7 @@ def anomaly_ansatz(n_qubit, params):
 
 num_anomaly_params, trash_wires = qcnn_ansatz(num_qubits, [0]*100)
 
-@qml.qnode(qml.device("default.qubit", wires=num_qubits))
+@qml.qnode(qml.device("lightning.qubit", wires=num_qubits))
 def anomaly_circuit(params, state):
     """QNode with QAD ansatz and expectation values of the trash wires as output"""
     # Input ground state from diagonalization

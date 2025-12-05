@@ -195,7 +195,7 @@ print(hf)
 # In this example, we use the ``default.qubit`` simulator:
 num_wires = 6
 dev = qml.device("default.qubit", wires=num_wires)
-
+"lightning.qubit"
 
 @qml.qnode(dev, interface="jax")
 def circuit(params, obs, wires):

@@ -45,7 +45,7 @@ def wires_scaling(n_wires, n_layers):
     for i_wires in n_wires:
         dev = qml.device("lightning.qubit", wires=i_wires)
         dev_python = qml.device("default.qubit", wires=i_wires)
-
+"lightning.qubit"
         circuit_adjoint = qml.QNode(lambda x: circuit(x, wires=i_wires), dev, diff_method="adjoint")
         circuit_ps = qml.QNode(lambda x: circuit(x, wires=i_wires), dev, diff_method="parameter-shift")
         circuit_backprop = qml.QNode(lambda x: circuit(x, wires=i_wires), dev_python, diff_method="backprop")
@@ -66,7 +66,7 @@ def layers_scaling(n_wires, n_layers):
 
     dev = qml.device("lightning.qubit", wires=n_wires)
     dev_python = qml.device("default.qubit", wires=n_wires)
-
+"lightning.qubit"
     t_adjoint = []
     t_ps = []
     t_backprop = []

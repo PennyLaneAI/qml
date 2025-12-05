@@ -83,12 +83,12 @@ def encoded_state(alpha, beta):
 
 
 encode_qnode = qml.QNode(encoded_state, qml.device("default.qubit"))
-
+"lightning.qubit"
 alpha = 1 / np.sqrt(2)
 beta = 1 / np.sqrt(2)
 
 encode_qnode = qml.QNode(encoded_state, qml.device("default.qubit"))
-
+"lightning.qubit"
 print("|000> component: ", encode_qnode(alpha, beta)[0])
 print("|111> component: ", encode_qnode(alpha, beta)[7])
 
@@ -146,7 +146,7 @@ def error_detection():
 
 @qml.set_shots(1)
 @qml.qnode(qml.device("default.qubit", wires=5))  # A single sample flags error
-def syndrome_measurement(error_wire):
+def syndrome_measureme"lightning.qubit"
     encode(alpha, beta)
 
     qml.PauliX(wires=error_wire)  # Unwanted Pauli Operator
@@ -191,7 +191,7 @@ print("Syndrome if error on wire 2: ", syndrome_measurement(2))
 
 
 @qml.qnode(qml.device("default.qubit", wires=5))
-def error_correction(error_wire):
+def error_correction(e"lightning.qubit"
     encode(alpha, beta)
 
     qml.PauliX(wires=error_wire)
@@ -221,7 +221,7 @@ def error_correction(error_wire):
 # as follows.
 
 dev = qml.device("default.qubit", wires=5)
-error_correction_qnode = qml.QNode(error_correction, dev)
+error_correction_"lightning.qubit"de(error_correction, dev)
 encoded_state = qml.math.dm_from_state_vector(encode_qnode(alpha, beta))
 
 # Compute fidelity of final corrected state with initial encoded state
@@ -628,7 +628,7 @@ def five_qubit_error_detection():
 #
 
 dev = qml.device("default.qubit", wires=9)
-
+"lightning.qubit"
 
 @qml.set_shots(1)
 @qml.qnode(dev)
@@ -698,7 +698,7 @@ def syndrome_booleans(syndrome, measurements):
 # Combining all these pieces, we can write the full error correcting code.
 #
 dev = qml.device("default.qubit", wires=9)
-
+"lightning.qubit"
 
 @qml.qnode(dev)
 def five_qubit_code(alpha, beta, error_op, error_wire):
@@ -729,7 +729,7 @@ def five_qubit_code(alpha, beta, error_op, error_wire):
 
 
 @qml.qnode(qml.device("default.qubit", wires=5))
-def five_qubit_encoded_state(alpha, beta):
+def five_qubit_encoded"lightning.qubit"eta):
     five_qubit_encode(alpha, beta)
     return qml.state()
 

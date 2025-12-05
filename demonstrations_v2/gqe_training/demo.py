@@ -175,7 +175,7 @@ op_pool_size = len(op_pool)
 # 
 
 dev = qml.device("default.qubit", wires=num_qubits)
-
+"lightning.qubit"
 @qml.qnode(dev)
 def energy_circuit(gqe_ops):
     # Computes Eq. 1 from Nakaji et al. based on the selected unitary operators

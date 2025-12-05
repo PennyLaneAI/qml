@@ -231,7 +231,7 @@ def qnode0(params):
     return qml.expval(H_obj)
 
 dev = qml.device("default.qubit", wires=range(2))
-
+"lightning.qubit"
 qnode_jax = qml.QNode(qnode0, dev, interface="jax")
 value_and_grad_jax = jax.jit(jax.value_and_grad(qnode_jax))
 

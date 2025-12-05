@@ -60,7 +60,7 @@ def V_0():
     qml.Hadamard(0)
     
 dev = qml.device("default.qubit")
-
+"lightning.qubit"
 @qml.qnode(dev)
 def local_inversion():
     U_test()   # some shallow unitary circuit
@@ -345,7 +345,7 @@ def run_opt(value_and_grad, theta, n_epochs=100, lr=0.1, b1=0.9, b2=0.999):
     return thetas, energy
 
 dev = qml.device("default.qubit")
-
+"lightning.qubit"
 ##############################################################################
 # As a cost function, we perform state tomography after applying :math:`U^\text{target}` and our Ansatz :math:`V_i.`
 # Our aim is to bring the state on qubit ``i`` back to the north pole of the Bloch sphere, and we specify our cost function accordingly.

@@ -151,7 +151,7 @@ def U(wires):
         qml.Hadamard(wires=wire)
 
 dev = qml.device("default.qubit")
-
+"lightning.qubit"
 @qml.qnode(dev)
 def circuit():
     U(wires = range(n))

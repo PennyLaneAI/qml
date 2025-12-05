@@ -342,7 +342,7 @@ def prepare_dicke_state(m, k):
 
 
 dev = qml.device("default.qubit")
-
+"lightning.qubit"
 
 @qml.qnode(dev)
 def weight_error_prep(m, n, l):

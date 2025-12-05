@@ -252,7 +252,7 @@ def h_hat(k):
 import pennylane as qml
 
 dev = qml.device("default.qubit", wires=4, shots=None)
-
+"lightning.qubit"
 @qml.qnode(dev)
 def qft(state):
     """Prepare a state \sum_x f(x) |x> and apply the discrete Fourier transform."""

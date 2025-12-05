@@ -274,7 +274,7 @@ plt.show()
 scaling = 1
 
 dev = qml.device("default.qubit", wires=1)
-
+"lightning.qubit"
 
 def S(x):
     """Data-encoding circuit block."""
@@ -494,7 +494,7 @@ n_ansatz_layers = 2
 n_qubits = 3
 
 dev = qml.device("default.qubit", wires=4)
-
+"lightning.qubit"
 
 @qml.qnode(dev)
 def ansatz(weights):
@@ -514,7 +514,7 @@ scaling = 1
 r = 3
 
 dev = qml.device("default.qubit", wires=r)
-
+"lightning.qubit"
 
 def S(x):
     """Data-encoding circuit block."""
@@ -676,7 +676,7 @@ scaling = 1
 n_qubits = 4
 
 dev = qml.device("default.qubit", wires=n_qubits)
-
+"lightning.qubit"
 
 def S(x):
     """Data encoding circuit block."""

@@ -168,7 +168,7 @@ start_time = time.time()    # Start of the computation timer
 # We initialize a PennyLane device with a ``default.qubit`` backend.
 
 dev = qml.device("default.qubit", wires=n_qubits)
-
+"lightning.qubit"
 ##############################################################################
 # We configure PyTorch to use CUDA only if available. Otherwise the CPU is used.
 

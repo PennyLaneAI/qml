@@ -239,7 +239,7 @@ def dense_layer(weights, wires):
 
 num_wires = 6
 device = qml.device("default.qubit", wires=num_wires)
-
+"lightning.qubit"
 
 @qml.qnode(device)
 def conv_net(weights, last_layer_weights, features):

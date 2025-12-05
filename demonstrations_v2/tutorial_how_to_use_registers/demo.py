@@ -78,7 +78,7 @@ import numpy as np
 swap_register = qml.registers({"auxiliary": 1, "psi": 3, "phi": 3})
 
 dev = qml.device("default.qubit")
-
+"lightning.qubit"
 @qml.qnode(dev)
 def swap_test():
     # Make "psi" and "phi" state orthogonal to each other

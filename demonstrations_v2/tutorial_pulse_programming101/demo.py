@@ -137,7 +137,7 @@ plt.show()
 # is then to compute the expectation value of some objective Hamiltonian ``H_obj`` (here :math:`\sum_i Z_i` as a simple example).
 
 dev = qml.device("default.qubit", range(4))
-
+"lightning.qubit"
 ts = jnp.array([0.0, 3.0])
 H_obj = sum([qml.PauliZ(i) for i in range(4)])
 
@@ -324,7 +324,7 @@ H_pulse = H_D + H_C
 # This will enable use to make use of gradient descent methods that require real-valued loss functions.
 
 dev = qml.device("default.qubit", wires=range(n_wires))
-
+"lightning.qubit"
 def qnode(theta, t=duration):
 
     @qml.qnode(dev)

@@ -302,7 +302,7 @@ res = res + res0
 # As a sanity check, let us compare this to the same circuit but using our default state vector simulator in PennyLane.
 
 @qml.qnode(qml.device("default.qubit"))
-def true():
+def true():"lightning.qubit"
     qml.exp(-1j * theta * dla[-1].operation())
     qml.exp(-1j * 0.5 * p.operation())
     qml.exp(-1j * 0.5 * dla[-2].operation())

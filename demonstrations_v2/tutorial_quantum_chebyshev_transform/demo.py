@@ -248,7 +248,7 @@ def QChT():
 
 
 dev = qml.device("default.qubit")
-
+"lightning.qubit"
 
 @qml.qnode(dev)
 def circuit(state=0):
