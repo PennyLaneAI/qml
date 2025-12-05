@@ -78,7 +78,7 @@ Universal quantum computing with Pauli product measurements
 
 To achieve universal quantum computing, we need to be able to perform all Clifford gates, and, in particular, CNOT gates.
 Further, we need to be able to reliably inject states to enable `magic state injection <https://pennylane.ai/qml/glossary/what-are-magic-states>`__.
-This is a bottom-up way to show that lattice surgery enables universal quantum computing and done so in its original introduction [#latticesurgery]_.
+This is a bottom-up way to show that lattice surgery enables universal quantum computing, which was done in its original introduction [#latticesurgery]_.
 
 Let us alternatively take a top-down approach here and show that we can perform arbitrary `Pauli product measurements <https://pennylane.ai/compilation/pauli-product-measurement>`__ (PPMs), 
 because we know this enables universal quantum computing, as illustrated in, e.g., the :doc:`Game of Surface Codes <demos/tutorial_game_of_surface_codes>` [#Litinski]_).
@@ -147,7 +147,7 @@ the distinctive Z and X boundaries, which enable the definition of the logical o
 We also note that logical :math:`Y_L` measurement is a topic on its own. In principle, one could measure :math:`Y_L` by simultaneously measuring the logical
 :math:`X_L` and :math:`Z_L` with a physical :math:`Y` measurement on the intersecting data qubit.
 However, this is not a properly defined logical operator anymore as it does not commute with the stabilizers, and thus moves the qubit out of the code space.
-Measuring (and applying, same same really) logical :math:`Y_L` operators is still possible, just a little more complicated as we will show further below.
+Measuring (and applying, it's the same really) logical :math:`Y_L` operators is still possible, just a little more complicated as we will show further below.
 
 Arbitrary Pauli product measurements via lattice merging and splitting
 ----------------------------------------------------------------------
