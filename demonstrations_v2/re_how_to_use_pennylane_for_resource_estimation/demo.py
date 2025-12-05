@@ -101,10 +101,10 @@ kitaev_H = qre.PauliHamiltonian(
 # while still providing trustworthy estimates.
 #
 
-order = 2
 num_steps = 10
+order = 6
 
-def circuit(hamiltonian):
+def circuit(hamiltonian, num_steps, order):
     qre.UniformStatePrep(num_states=2**n_q)  # uniform superposition over all basis states
     qre.TrotterPauli(hamiltonian, num_steps, order)
 
@@ -122,7 +122,7 @@ def circuit(hamiltonian):
 import time
 
 t1 = time.time()
-res = qre.estimate(circuit)(kitaev_H)
+res = qre.estimate(circuit)(kitaev_H, num_steps, order)
 t2 = time.time()
 
 print(f"Processing time: {t2 - t1:.3g} seconds\n")
@@ -133,7 +133,7 @@ print(res)
 #
 # .. code-block:: none
 #
-#    Processing time: 0.000349 sec
+#    Processing time: 0.00213 seconds
 #
 #    --- Resources: ---
 #     Total wires: 2.000E+4
@@ -141,11 +141,11 @@ print(res)
 #       allocated wires: 0
 #         zero state: 0
 #         any state: 0
-#     Total gates : 2.862E+7
-#       'T': 2.622E+7,
-#       'CNOT': 1.192E+6,
-#       'Z': 3.960E+5,
-#       'S': 7.920E+5,
+#     Total gates : 7.151E+8
+#       'T': 6.556E+8,
+#       'CNOT': 2.980E+7,
+#       'Z': 9.900E+6,
+#       'S': 1.980E+7,
 #       'Hadamard': 2.000E+4
 
 ######################################################################
@@ -190,13 +190,13 @@ print(f"Difference: {100*reduction:.1f}% reduction")
 #
 # .. code-block:: none
 #
-#    --- With grouping ---
-#     T gate count: 2.622E+07
-#
-#    --- Without grouping ---
-#     T gate count: 1.791E+07
-#
-#    Difference: 31.7% reduction
+#    --- With grouping --- 
+#     T gate count: 6.556E+08
+#   
+#    --- Without grouping --- 
+#     T gate count: 4.371E+08
+#   
+#    Difference: 33.3% reduction
 
 ######################################################################
 # By splitting our terms into groups, we’ve managed to reduce the ``T`` gate count of our
@@ -211,7 +211,7 @@ print(f"Difference: {100*reduction:.1f}% reduction")
 ######################################################################
 # Here are the resources for our circuit using our updated Hamiltonian:
 
-res = qre.estimate(circuit)(kitaev_H_with_grouping)
+res = qre.estimate(circuit)(kitaev_H_with_grouping, num_steps, order)
 print(f"\n{res}")
 
 ######################################################################
@@ -225,11 +225,11 @@ print(f"\n{res}")
 #       allocated wires: 0
 #         zero state: 0
 #         any state: 0
-#     Total gates : 1.993E+7
-#       'T': 1.791E+7,
-#       'CNOT': 8.140E+5,
-#       'Z': 3.960E+5,
-#       'S': 7.920E+5,
+#     Total gates : 4.867E+8
+#       'T': 4.371E+8,
+#       'CNOT': 1.987E+7,
+#       'Z': 9.900E+6,
+#       'S': 1.980E+7,
 #       'Hadamard': 2.000E+4
 
 ######################################################################
@@ -248,7 +248,11 @@ highlvl_gateset = {
     "Hadamard","S","CNOT","T",
 }
 
-highlvl_res = qre.estimate(circuit, gate_set=highlvl_gateset)(kitaev_H_with_grouping)
+highlvl_res = qre.estimate(
+    circuit,
+    gate_set=highlvl_gateset,
+)(kitaev_H_with_grouping, num_steps, order)
+
 print(f"High-level resources:\n{highlvl_res}\n")
 
 
@@ -264,18 +268,22 @@ print(f"High-level resources:\n{highlvl_res}\n")
 #       allocated wires: 0
 #         zero state: 0
 #         any state: 0
-#     Total gates : 2.033E+6
-#       'RX': 1.100E+5,
-#       'RY': 1.980E+5,
-#       'Adjoint(S)': 3.960E+5,
-#       'RZ': 9.900E+4,
-#       'CNOT': 8.140E+5,
-#       'S': 3.960E+5,
+#     Total gates : 4.962E+7
+#       'RX': 2.510E+6,
+#       'RY': 4.950E+6,
+#       'Adjoint(S)': 9.900E+6,
+#       'RZ': 2.475E+6,
+#       'CNOT': 1.987E+7,
+#       'S': 9.900E+6,
 #       'Hadamard': 2.000E+4
 
 lowlvl_gateset = {"Hadamard", "S", "CNOT", "T"}
 
-lowlvl_res = qre.estimate(circuit, gate_set=lowlvl_gateset)(kitaev_H_with_grouping)
+lowlvl_res = qre.estimate(
+    circuit,
+    gate_set=lowlvl_gateset,
+)(kitaev_H_with_grouping, num_steps, order)
+
 print(f"Low-level resources:\n{lowlvl_res}")
 
 ######################################################################
@@ -290,10 +298,10 @@ print(f"Low-level resources:\n{lowlvl_res}")
 #       allocated wires: 0
 #         zero state: 0
 #         any state: 0
-#     Total gates : 2.033E+7
-#       'T': 1.791E+7,
-#       'CNOT': 8.140E+5,
-#       'S': 1.584E+6,
+#     Total gates : 4.966E+8
+#       'T': 4.371E+8,
+#       'CNOT': 1.987E+7,
+#       'S': 3.960E+7,
 #       'Hadamard': 2.000E+4
 
 ######################################################################
@@ -319,7 +327,7 @@ res = qre.estimate(
     circuit,
     gate_set=lowlvl_gateset,
     config=custom_rc, # provide our custom configuration
-)(kitaev_H_with_grouping)
+)(kitaev_H_with_grouping, num_steps, order)
 
 # Just compare T gates:
 print("--- Lower precision (1e-9) ---", f"\n T counts: {lowlvl_res.gate_counts["T"]:.3E}\n")
@@ -331,12 +339,12 @@ print("--- Higher precision (1e-15) ---", f"\n T counts: {res.gate_counts["T"]:.
 # .. code-block:: none
 #
 #    Default setting: {'precision': 1e-09}
-#
-#    --- Lower precision (1e-9) ---
-#     T counts: 1.791E+07
-#
-#    --- Higher precision (1e-15) ---
-#     T counts: 2.009E+07
+#    
+#    --- Lower precision (1e-9) --- 
+#     T counts: 4.371E+08
+#    
+#    --- Higher precision (1e-15) --- 
+#     T counts: 4.916E+08
 
 ######################################################################
 # The :mod:`estimator <pennylane.estimator>` module also provides functionality for
@@ -366,7 +374,7 @@ resources = qre.estimate(
     circuit,
     gate_set = custom_gateset,
     config = custom_config
-)(kitaev_hamiltonian)
+)(kitaev_hamiltonian, num_steps, order)
 
 t2 = time.time()
 print(f"Processing time: {t2 - t1:.3g} seconds\n")
@@ -377,19 +385,19 @@ print(resources)
 #
 # .. code-block:: none
 #
-#    Processing time: 0.000747 seconds
-#
+#    Processing time: 0.000425 seconds
+#    
 #    --- Resources: ---
 #     Total wires: 2.000E+4
 #       algorithmic wires: 20000
 #       allocated wires: 0
 #         zero state: 0
 #         any state: 0
-#     Total gates : 2.142E+7
-#      'T': 1.900E+7,
-#      'CNOT': 8.140E+5,
-#      'S': 1.584E+6,
-#      'Hadamard': 2.000E+4
+#     Total gates : 5.239E+8
+#       'T': 4.644E+8,
+#       'CNOT': 1.987E+7,
+#       'S': 3.960E+7,
+#       'Hadamard': 2.000E+4
 
 ######################################################################
 # Estimating the Resources of your PennyLane Circuits
@@ -458,11 +466,11 @@ print("Total number of qubits:", compact_hamiltonian.num_qubits)
 #
 # .. code-block:: none
 #
-#    Processing time for Hamiltonian generation: 4.56 seconds
+#    Processing time for Hamiltonian generation: 7.74 seconds
 #    Total number of terms: 1825
 #    Total number of qubits: 1250 
-# 
-#    Processing time for Hamiltonian estimation: 0.000112 seconds
+#    
+#    Processing time for Hamiltonian estimation: 0.000191 seconds
 #    Total number of terms: 1825
 #    Total number of qubits: 1250
 
@@ -470,19 +478,19 @@ print("Total number of qubits:", compact_hamiltonian.num_qubits)
 # Now we can define our circuit for Hamiltonian simulation.
 #
 
-order = 2
-num_trotter_steps = 1
+order = 6
+num_steps = 10
 
 @qml.qnode(qml.device("default.qubit"))
 def executable_circuit(hamiltonian):
     for wire in hamiltonian.wires: # uniform superposition over all basis states
         qml.Hadamard(wire)
-    qml.TrotterProduct(hamiltonian, time=1.0, n=num_trotter_steps, order=order)
+    qml.TrotterProduct(hamiltonian, time=1.0, n=num_steps, order=order)
     return qml.state()
 
 def estimation_circuit(hamiltonian):
     qre.UniformStatePrep(num_states = 2**n_q)
-    qre.TrotterPauli(hamiltonian, num_trotter_steps, order)
+    qre.TrotterPauli(hamiltonian, num_steps, order)
     return
 
 ######################################################################
@@ -502,18 +510,18 @@ print(resources_exec)
 #
 # .. code-block:: none
 #
-#    Processing time: 3.22 seconds
+#    Processing time: 2.32 seconds
 #    --- Resources: ---
 #     Total wires: 1250
 #       algorithmic wires: 1250
 #       allocated wires: 0
 #         zero state: 0
 #         any state: 0
-#     Total gates : 1.488E+5
-#       'T': 1.342E+5,
-#       'CNOT': 6.100E+3,
-#       'Z': 2.400E+3,
-#       'S': 4.800E+3,
+#     Total gates : 2.972E+7
+#       'T': 2.670E+7,
+#       'CNOT': 1.214E+6,
+#       'Z': 6.000E+5,
+#       'S': 1.200E+6,
 #       'Hadamard': 1.250E+3
 
 ######################################################################
@@ -532,18 +540,18 @@ print(resources_compact)
 #
 # .. code-block:: none
 #
-#    Processing time: 0.000365 seconds
+#    Processing time: 0.000371 seconds
 #    --- Resources: ---
 #     Total wires: 1250
 #       algorithmic wires: 1250
 #       allocated wires: 0
 #         zero state: 0
 #         any state: 0
-#     Total gates : 1.488E+5
-#       'T': 1.342E+5,
-#       'CNOT': 6.100E+3,
-#       'Z': 2.400E+3,
-#       'S': 4.800E+3,
+#     Total gates : 2.972E+7
+#       'T': 2.670E+7,
+#       'CNOT': 1.214E+6,
+#       'Z': 6.000E+5,
+#       'S': 1.200E+6,
 #       'Hadamard': 1.250E+3
 
 ######################################################################
@@ -558,7 +566,7 @@ print(resources_compact)
 # quantum resource :mod:`estimator <pennylane.estimator>` is,
 # go try it out yourself!
 #
-# Use PennyLane to eason about the costs of your quantum algorithm
+# Use PennyLane to reason about the costs of your quantum algorithm
 # without any of the headaches.
 #
 # References
