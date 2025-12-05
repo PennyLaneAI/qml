@@ -1,0 +1,72 @@
+{
+    "title": "Exploring Qubit and T-gate Trade-offs in Qubitizated Quantum Phase Estimation",
+    "authors": [
+        {
+            "username": "ddhawan"
+        }
+    ],
+    "executable_stable": false,
+    "executable_latest": false,
+    "dateOfPublication": "2026-1-15T00:00:00+00:00",
+    "dateOfLastModification": "2026-1-15T15:48:14+00:00",
+    "categories": [
+        "Getting Started",
+        "How-to"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_how_to_build_spin_hamiltonians.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_how_to_build_spin_hamiltonians.png"
+        }
+    ],
+    "seoDescription": "Exploring Qubit and T-gate Trade-offs in Qubitizated Quantum Phase Estimation",
+    "doi": "",
+    "references": [
+        {
+            "id": "lee2020",
+            "type": "article",
+            "title": "Even More Efficient Quantum Computations of Chemistry Through Tensor Hypercontraction.",
+            "authors": "Joonhoo Lee",
+            "journal": "PRX Quantum",
+            "volume": "2",
+            "pages": "030305",
+            "year": "2021",
+            "url": "https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.2.030305"
+        },
+        {
+            "id": "Goings2022",
+            "type": "article",
+            "title": "Reliably assessing the electronic structure of cytochrome P450 on today’s classical computers and tomorrow’s quantum computers",
+            "authors": "Goings, Joshua J and White, Alec and Lee, Joonho and Tautermann, Christofer S and Degroote, Matthias and Gidney, Craig and Shiozaki, Toru and Babbush, Ryan and Rubin, Nicholas C",
+            "journal": "Proceedings of the National Academy of Sciences",
+            "volume": "119",
+            "pages": "e2203533119",
+            "year": "2022",
+            "url": "https://www.pnas.org/doi/abs/10.1073/pnas.2203533119"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_qubitization",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_qrom",
+            "weight":1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_howto_re",
+            "weight": 1.0
+        }
+    ]
+}
