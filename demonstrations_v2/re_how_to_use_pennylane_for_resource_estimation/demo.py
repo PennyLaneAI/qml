@@ -56,11 +56,12 @@ import pennylane.estimator as qre
 # :func:`qre.estimate <pennylane.estimator.estimate.estimate>`
 # on it directly.
 #
-# Let's demonstrate this with a 25 x 25 unit honeycomb lattice of spins.  
+# We will demonstrate this with a 25 x 25 unit honeycomb lattice of spins.  
 # Here, we generate the Hamiltonian ourselves:
 #
 
 import numpy as np
+import time
 
 n_cell = 25
 n_cells = [n_cell, n_cell]
@@ -204,8 +205,6 @@ def circuit(hamiltonian, num_steps, order):
 #
 # It’s simple: just call :func:`qre.estimate <pennylane.estimator.estimate.estimate>`!
 #
-
-import time
 
 t1 = time.time()
 res = qre.estimate(circuit)(kitaev_H, num_steps, order)
@@ -491,7 +490,8 @@ print(resources)
 #
 # We've shown that you can estimate your workflow's resources
 # using both typical PennyLane circuits, and circuits written with
-# :class:`ResourceOperator <pennylane.estimator.resource_operator.ResourceOperator>`s.
+# :class:`ResourceOperator <pennylane.estimator.resource_operator.ResourceOperator>`
+# classes.
 #
 # Now, we'll demonstrate that the resource estimates are consistent across both of these cases!
 #
@@ -518,6 +518,7 @@ t_estimation = t2 - t1
 
 ######################################################################
 # The resulting data can be easily compared for a sanity check.
+# Notice how much faster it was to prepare our Hamiltonian for estimation!
 #
 
 print(f"Processing time for Hamiltonian generation: {(t_generation):.3g} seconds")
