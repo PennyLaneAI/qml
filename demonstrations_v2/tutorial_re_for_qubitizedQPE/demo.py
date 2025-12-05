@@ -32,11 +32,11 @@ abstract scaling to concrete costs using logical resource estimation tools in Pe
 #
 # where :math:`M` is the factorization rank, and :math:`\chi` and :math:`\zeta` are the factorized tensors.
 # To implement this decomposition on a quantum computer, the Walk operator is constructed from two primary subroutines:
-# the ``Prepare`` oracle, which encodes the coefficients into an ancillary register, and the ``Select`` oracle,
-# which applies the Hamiltonian terms controlled by that register.
+# the ``Prepare`` oracle, which prepares the state, whose amplitudes encode the Hamiltonian coefficients, and the
+# ``Select`` oracle, which applies the Hamiltonian terms controlled by that state.
 #
 #
-# Standard resource estimates often treat these oracles as fixed "black boxes,"
+# Standard resource estimates often treat these oracles as fixed "black boxes",
 # yielding a single cost number. However, this demo is more than just a static cost report. We demonstrate how PennyLane exposes the
 # tunable knobs of the circuit implementation, allowing us to actively navigate the circuit design and trade off between T-gates and
 # logical qubits to suit different constraints.
