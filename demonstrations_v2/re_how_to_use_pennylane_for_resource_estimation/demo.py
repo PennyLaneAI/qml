@@ -11,8 +11,8 @@ How to use PennyLane for Resource Estimation
 #
 # This is a major challenge in quantum algorithm development,
 # especially since we are often working at scales where simulation is no longer feasible.
-# We therefore need to analyze our algorithms to perform **resource estimation**
-# to get an idea of how many logical qubits and gates an algorithm requires.
+# We therefore need to analyze our algorithms to perform **resource estimation**:
+# getting an idea of how many resources an algorithm requires, such as logical qubits and gates.
 # In turn, this gives us an indication of how long the algorithm will take to execute
 # on a given quantum hardware architecture,
 # or if it will even fit in memory to begin with.
@@ -57,9 +57,9 @@ import pennylane.estimator as qre
 #
 # Generating such Hamiltonians quickly becomes a bottleneck.
 # However, thanks to :mod:`estimator <pennylane.estimator>`,
-# we don’t need a detailed description of our Hamiltonian to estimate its resources!
+# we don’t need a detailed description of our Hamiltonian to estimate our algorithm's resources!
 #
-# The geometry of the honeycomb lattice and the structure of the Hamiltonian allows us to calculate
+# The geometry of the honeycomb lattice and the structure of the Hamiltonian allow us to calculate
 # some important quantities directly:
 #
 # .. math::
@@ -67,7 +67,7 @@ import pennylane.estimator as qre
 #   n_{YY} &= n_{ZZ} = n * (n - 1), \\
 #   n_{XX} &= n^{2}, \\
 #
-# :mod:`estimator <pennylane.estimator>` provides
+# Our quantum resource :mod:`estimator <pennylane.estimator>` provides
 # `classes <https://docs.pennylane.ai/en/stable/code/qml_estimator.html#resource-hamiltonians>`__
 # which allow us to investigate the resources of Hamiltonian simulation without needing to generate
 # them.
@@ -110,7 +110,7 @@ def circuit(hamiltonian, num_steps, order):
 
 ######################################################################
 # The cost of an algorithm is typically quantified by the number of logical qubits required and the
-# number of gates used. Different hardware will natively support different gatesets.
+# number of gates used. Different hardware may natively support different gatesets.
 # The default gateset used by :mod:`estimator <pennylane.estimator>` is:
 # ``{'Hadamard', 'S', 'CNOT', 'T', 'Toffoli', 'X', 'Y', 'Z'}``.
 #
@@ -209,7 +209,7 @@ print(f"Difference: {100*reduction:.1f}% reduction")
 #
 
 ######################################################################
-# Here are the resources for our circuit using our updated Hamiltonian:
+# Here are the resources for our entire circuit using our updated Hamiltonian:
 
 res = qre.estimate(circuit)(kitaev_H_with_grouping, num_steps, order)
 print(f"\n{res}")
@@ -310,7 +310,7 @@ print(f"Low-level resources:\n{lowlvl_res}")
 # state loading to some precision, or rotation synthesis within some precision of the rotation angle.
 #
 # These approximate decompositions are accurate within some error threshold; tuning this error
-# threshold determines the resource cost of the algorithm. We can set and tune these errors using a
+# threshold impacts the required resources. We can set and tune these errors using a
 # resource configuration: :class:`ResourceConfig <pennylane.estimator.resource_config.ResourceConfig>`.
 #
 # Notice that a more precise estimate requires more ``T`` gates!
@@ -330,8 +330,8 @@ res = qre.estimate(
 )(kitaev_H_with_grouping, num_steps, order)
 
 # Just compare T gates:
-print("--- Lower precision (1e-9) ---", f"\n T counts: {lowlvl_res.gate_counts["T"]:.3E}\n")
-print("--- Higher precision (1e-15) ---", f"\n T counts: {res.gate_counts["T"]:.3E}")
+print("--- Lower precision (1e-9) ---", f"\n T counts: {lowlvl_res.gate_counts["T"]:.3E}")
+print("\n--- Higher precision (1e-15) ---", f"\n T counts: {res.gate_counts["T"]:.3E}")
 
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
@@ -348,7 +348,7 @@ print("--- Higher precision (1e-15) ---", f"\n T counts: {res.gate_counts["T"]:.
 
 ######################################################################
 # The :mod:`estimator <pennylane.estimator>` module also provides functionality for
-# writing custom decompositions, and custom resource operators.
+# writing custom decompositions and custom resource operators.
 # To find out how, check out our documentation for
 # :class:`ResourceConfig <pennylane.estimator.resource_config.ResourceConfig>`
 # and :class:`ResourceOperator <pennylane.estimator.resource_operator.ResourceOperator>`!
@@ -357,13 +357,14 @@ print("--- Higher precision (1e-15) ---", f"\n T counts: {res.gate_counts["T"]:.
 # Putting it All Together
 # ~~~~~~~~~~~~~~~~~~~~~~~
 #
-# We can combine the features we have seen so far to optimize the cost of Trotterized time
-# evolution of the Kitaev hamiltonian:
+# We can combine all of the features we have seen so far to determine
+# the cost of Trotterized time evolution of the Kitaev Hamiltonian
+# in our preferred setting:
 #
 
 t1 = time.time()
 
-kitaev_hamiltonian = kitaev_H_with_grouping  # use compact hamiltonian with grouping
+kitaev_hamiltonian = kitaev_H_with_grouping  # use compact Hamiltonian with grouping
 
 custom_gateset = lowlvl_gateset # use the low-level gateset
 
@@ -403,10 +404,11 @@ print(resources)
 # Estimating the Resources of your PennyLane Circuits
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# If you’ve already written your workflow for execution, we can invoke
+# If you’ve already written your workflow for execution,
+# there's no need to write it again!
+# You can invoke
 # :func:`qre.estimate <pennylane.estimator.estimate.estimate>`
 # on it directly.
-# No need to write it again!
 #
 # Let's continue with the same example, but with a 25 x 25 unit honeycomb lattice of spins.  
 # Here, we generate the Hamiltonian ourselves:
@@ -529,11 +531,11 @@ print(resources_exec)
 #
 
 t5 = time.time()
-resources_compact = qre.estimate(estimation_circuit)(compact_hamiltonian)
+resources_est = qre.estimate(estimation_circuit)(compact_hamiltonian)
 t6 = time.time()
 
 print(f"Processing time: {(t6 - t5):.3g} seconds")
-print(resources_compact)
+print(resources_est)
 
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
