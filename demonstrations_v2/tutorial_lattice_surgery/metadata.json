@@ -20,7 +20,7 @@
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/pennylane-demo-lattice-surgery-large-thumbnail.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_Block_Encodings_Matrix_Oracle.png"
         }
     ],
     "seoDescription": "Learn about lattice surgery for fault tolerant quantum computing with tolopological codes such as the surface code.",
@@ -56,6 +56,11 @@
         {
             "type": "demonstration",
             "id": "tutorial_toric_code",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_stabilizer_codes",
             "weight": 1.0
         }
     ]

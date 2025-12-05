@@ -1,12 +1,13 @@
 r"""
 
-Lattice Surgery
-===============
+Introducing Lattice Surgery
+===========================
 
-Lattice surgery is a way to fault-tolerantly perform operations on two-dimensional platforms
-with local physical connectivity. It enables lower spatial overheads for topological quantum
-error correction codes such as surface codes or color codes by introducing discontinuous code operations: lattice merging and splitting.
-In this demo, we are going to see how lattice merging and splitting
+Lattice surgery is a way to fault-tolerantly perform operations on two-dimensional quantum computers
+with local physical connectivity. Its introduction improved spatial overheads in topological quantum
+error correction codes such as surface codes by replacing continuous code operations 
+with discontinuous ones: lattice spliting and merging.
+In this demo, we are going to see how these operations
 enable parity measurements of arbitrary Pauli operators, which unlock universal fault
 tolerant quantum computing.
 
@@ -15,11 +16,15 @@ tolerant quantum computing.
     :width: 50%
     :target: javascript:void(0)
 
+For self-consistency, we are going to briefly recap the basic concepts of the surface code and explain how `Pauli product measurements <https://pennylane.ai/compilation/pauli-product-measurement>`__ are the sufficient 
+for universal computing. We are then going to explain how to perform such 
+`homological measurements <https://arxiv.org/abs/2410.02753>`__ using lattice splitting and merging.
+
 Surface code quantum computing
 ------------------------------
 
-Topological quantum error correction codes like the surface code [#surfacecode]_ protect quantum information of logical qubits by
-ensuring the underlying physical qubits are kept in the code space, defined by the :math:`+1` eigenspace of a set of stabilizer measurements.
+Topological quantum error correction codes like the surface code [#surfacecode]_ protect quantum information stored in logical qubits by
+ensuring the underlying physical qubits are kept in the code space, defined by the :math:`+1` eigenspace of a set of :doc:`stabilizer measurements <demos/tutorial_stabilizer_codes>`.
 A logical qubit is then represented by a patch of physical qubits, called data qubits, on a square lattice like so:
 
 .. figure:: ../_static/demonstration_assets/lattice_surgery/surface_code_qubit1.png
@@ -32,7 +37,7 @@ On yellow surfaces, we continually measure X stabilizers, which simply are the :
 on the four data qubits of the corners. Similarly, Z stabilizers are measured on white surfaces. 
 These stabilizer measurements are not performed directly on the data qubits, but via another kind of qubit that sits at the center of each square surface
 as well as the center of each arch (not shown here, see below). 
-These extra qubits are sometimes called measurement qubits or syndrome qubits and the measurement is performed by entangling the data qubits with the syndrome qubit and measuring it in the corresponding basis (see Fig. 1 in [#surfacecode]_).
+These extra qubits are sometimes called measurement qubits or syndrome qubits and the measurement is performed by entangling the data qubits with the syndrome qubit and measuring it (see Fig. 1 in [#surfacecode]_).
 
 Note that this representation of a qubit is in the so-called rotated surface code due to its :math:`45^\circ` rotation with respect to the original planar surface code.
 Here we indicate the underlying data and syndrome qubits with black and red dots, respectively. 
@@ -44,9 +49,9 @@ nearest neighbor qubits are physically connected and can perform universal gates
     :width: 50%
     :target: javascript:void(0)
 
-One such :math:`d \times d` patch represents a logical qubit. An important feature is that we sides with X arches and Z arches,
+One such :math:`d \times d` patch represents a logical qubit. An important feature is that we have sides with X arches and Z arches,
 as this enables the error-corrected encoding of the qubit. Note that the edge with X arches is called a Z edge, because measuring along that edge
-corresponds to a logical Z operator, i.e. connecting the two sides with Z arches (more on logical X and Z operators that define the qubit further below).
+corresponds to a logical Z operator (more on logical X and Z operators that define the qubit further below).
 
 We are interested in performing `logical` operations like a CNOT gate between two such patches that represent a logical qubit, each.
 The most straight-forward way to compute a logical CNOT is by performing physical CNOT gates between the data qubits
@@ -64,8 +69,8 @@ a concept commonly encountered in algebraic topology.
 In this setting, qubits are encoded by defects in the code, and operations via continuous deformations of the code.
 However, defect based qubits suffer from requiring significantly more physical qubits per logical qubit.
 
-This is where lattice surgery [#latticesurgery]_ comes into play, as it has been shown to enable error-corrected logical operations
-with significantly lower space resources with comparable time requirements [#Fowler]_ [#Litinski]_ [#Chamberland]_. The fundamental operations in lattice
+This is where lattice surgery [#latticesurgery]_ comes into play: It has been shown to enable error-corrected logical operations
+with significantly lower space overhead and comparable time requirements [#Fowler]_ [#Litinski]_ [#Chamberland]_. The fundamental operations in lattice
 surgery are discontinuous deformations of the lattice, in particular lattice merging and lattice splitting, common in geometric topology.
 
 Universal quantum computing with Pauli product measurements
@@ -84,8 +89,8 @@ The gist of it is that `Pauli product rotations <https://pennylane.ai/compilatio
     :width: 50%
     :target: javascript:void(0)
 
-for arbitrary :class:`Pauli words <~.pauli.PauliWord>` :math:`P`
-with Clifford and non-Clifford angles :math:`\theta \in \{k \tfrac{\pi}{4} | k \in \mathbb{Z} \}` cover the `(Clifford + T) <https://pennylane.ai/compilation/clifford-t-gate-set>`__ gate set, and thus allow for universal quantum computing.
+for arbitrary Pauli words :math:`P`
+with Clifford and non-Clifford angles :math:`\theta \in \{(2k+1) \tfrac{\pi}{4} | k \in \mathbb{Z} \}` reproduce the `(Clifford + T) <https://pennylane.ai/compilation/clifford-t-gate-set>`__ gate set, and thus allow for universal quantum computing.
 These PPRs can be directly executed using PPMs in the following way, so all we need to show is that the lattice surgery based quantum computer can perform arbitrary PPMs. Typically, this involves an auxiliary qubit in a specific state.
 Clifford angles that are odd multiples of :math:`\frac{\pi}{2}` can be performed with an auxiliary qubit in :math:`|0\rangle` like so:
 
@@ -95,7 +100,7 @@ Clifford angles that are odd multiples of :math:`\frac{\pi}{2}` can be performed
     :target: javascript:void(0)
 
 We use the color coding from [#Litinski]_, where orange boxes correspond to Clifford gates, 
-gray boxes to Pauli operators (as :math:`e^{-i \tfrac{(2k+1)\pi}{2}P} \propto P`), green boxes to non-Clifford gates, and
+gray boxes to Pauli operators (note that :math:`\exp\left(-i \tfrac{(2k+1)\pi}{2}P\right) \propto P`), green boxes to non-Clifford gates, and
 blue boxes to measurements.
 Non-clifford PPRs can be realized using a magic resource state in the following way:
 
@@ -113,7 +118,7 @@ For our purposes here it suffices to note that realizing PPRs via PPMs is possib
 Single qubit measurements
 -------------------------
 
-Before we get to the meat of performing arbitrary PPMs with lattice surgery, let us recal how to perform single qubit measurements (and thus single qubit gates).
+Before we get to the meat of performing arbitrary PPMs with lattice surgery, let us recall how to perform single qubit measurements (and thus single qubit gates).
 In the orientation we previously used, logical operators :math:`Z_L` and :math:`X_L` of the logical qubit are defined by a horizontal line of :math:`Z` and vertical line of :math:`X` measurements
 on the data qubits:
 
@@ -127,7 +132,7 @@ Any such operator represents the logical operators :math:`Z_L` and :math:`X_L`. 
 leads to the somewhat confusing scenario where the edge with Z arches is called an X edge, and vice versa.
 
 Because we only care about the homology of the measurement
-(i.e., that it connects the two opposite edges), which is why this is also called *homological measurement*.
+(i.e., that it in the same equivalence class of the corresponding X and Z edges), this is also called a *homological measurement*.
 It does not really matter which operator of the equivalence class we measure, and in principle we have access to any of them without extra effort because they are related to each other via stabilizer measurements, 
 which we anyway perform during the continually performed error correction cycles.
 So for the following, we will just consider those that are convenient for illustrational purposes.
@@ -147,22 +152,22 @@ Measuring (and applying, same same really) logical :math:`Y_L` operators is stil
 Arbitrary Pauli product measurements via lattice merging and splitting
 ----------------------------------------------------------------------
 
-We now want to show how to perform the two fundamental operations of measuring :math:`Z_L \otimes Z_L` and :math:`X_L \otimes X_L` between two surface code qubits via lattice surgery.
-The operation is fairly simple in principle: merge the two patches, and split them again. We just need to make sure that the qubits are facing each other with the correct edges,
-and use the correct state preparation and measurements for the merging and splitting operations, respectively.
+We now want to show how to perform the two fundamental operations of measuring 
+:math:`Z_L \otimes Z_L` and :math:`X_L \otimes X_L` between two surface code qubits via lattice surgery.
+The operation is fairly simple in principle: merge the two patches, and split them again. 
+We just need to make sure that the qubits are connected along the corresponding edges.
 
-Let us walk through the process of measuring :math:`X_L \otimes X_L` first. 
-Conceptually, it is rather simple: we merge and split two qubits on their X edges.
-For simplicity, let us assume that the two qubits are already facing each other on their X edges. 
-For lattice merging, we start by preparing the intermediate data qubits in :math:`|0\rangle`.
+In particular, for measuring :math:`X_L \otimes X_L`, we merge and split two qubits on their X edges.
+For simplicity, let us assume that the two qubits are already facing each other on their X edges with a column of
+unused data qubits separating them. In principle we can have a larger area separating them, we just need to be able to make the boundaries match.
+The lattice merging is started by preparing the intermediate data qubits in :math:`|0\rangle`.
 
 .. figure:: ../_static/demonstration_assets/lattice_surgery/XX1.png
     :align: center
     :width: 50%
     :target: javascript:void(0)
 
-Note that here we left just a single column of data qubits between the two patches, but in principle we can have a larger area, as long as we can make the boundaries match.
-The actual merging is then done by simply by including the intermediate X and Z stabilizers in the error correction cycles.
+The actual merging is then done simply by including the intermediate X and Z stabilizers in the error correction cycles.
 
 .. figure:: ../_static/demonstration_assets/lattice_surgery/XX2.png
     :align: center
@@ -170,7 +175,6 @@ The actual merging is then done by simply by including the intermediate X and Z 
     :target: javascript:void(0)
 
 Conveniently, the product of all stabilizers between the two logical :math:`X_L` operators, indicated by the red dots below, corresponds to the eigenvalue of :math:`X_L \otimes X_L`.
-In case any of the two :math:`X_L` operators were carrying a sign, we need to make sure to include those in the product.
 
 .. figure:: ../_static/demonstration_assets/lattice_surgery/XX3.png
     :align: center
@@ -189,7 +193,7 @@ In case the green Z measurement in the middle yields a negative sign,
 we need to assign it to one of the two logical :math:`Z_L` operators, 
 on top of the product of the sign of the original two :math:`Z_L` operators we originally started from.
 
-Measuring :math:`Z_L \otimes Z_L` works in the same fashion, but with reversed roles: We Z edges towards each other, initialize in :math:`|+\rangle` to merge and measure in :math:`X` to split again:
+Measuring :math:`Z_L \otimes Z_L` works in the same fashion, but with reversed roles: We connect the Z edges with each other, initialize in :math:`|+\rangle` to merge and measure in :math:`X` to split again:
 
 .. figure:: ../_static/demonstration_assets/lattice_surgery/ZZ.png
     :align: center
@@ -197,6 +201,7 @@ Measuring :math:`Z_L \otimes Z_L` works in the same fashion, but with reversed r
     :target: javascript:void(0)
 
 The rules for arbitrary products like, e.g., :math:`X_L \otimes Z_L` are relatively simple: Merge and split the qubit patches on the corresponding edges and keep track of any signs you pick up on the way.
+Note that we can also rotate patches to get the correct orientation, as we will see below.
 
 Y measurements
 --------------
@@ -231,7 +236,9 @@ Recall from earlier that green and red lines merely indicate representatives of 
 
 Extending the qubit along the X edge works similarly, but moving vertically, initializing in :math:`|+\rangle` and measuing :math:`X` on the data qubits.
 
-We can also move (or rotate?) the type of the edges within :math:`d` error correction code cycles. This makes most sense on an already extended qubit because this way we do not change the code distance.
+We can also move (or rotate?) the type of the edges within :math:`d` error correction code cycles.
+This makes most sense on an already extended qubit because this way we do not change the code distance.
+As we can see, the bulk of the qubit is untouched and all that is changed is the set of stabilizers we measure on the boundaries (for :math:`d` code cycles to take effect).
 
 .. figure:: ../_static/demonstration_assets/lattice_surgery/corner_moving.png
     :align: center
@@ -240,7 +247,8 @@ We can also move (or rotate?) the type of the edges within :math:`d` error corre
   
 Here we show an extended single qubit patch and three example re-orientations of the type of edges.
 The smaller images are guides to the eye to indicate the settings, with X edges as solid lines and Z edges as dotted lines (i.e. the same as the logical measurements moved to the edges).
-Note that the important property is for neighboring X and Z edges to overlap on two data qubits for the corresponding stabilizers to commute.
+Note that the important property is for neighboring X and Z edges to overlap on two data qubits for the corresponding stabilizers to commute. 
+This is why the right patches introduce the triangle-shaped stabiliers of three :math:`Z` operators.
 
 Finally, to measure $Y$ we perform the following procedure:
 
@@ -252,8 +260,9 @@ Finally, to measure $Y$ we perform the following procedure:
 Here, one extends and orients a qubit such that it has both :math:`X` and :math:`Z` edges on the same side. 
 At the same time, an auxiliary qubit is initialized in :math:`|0\rangle` parallel to our extended qubit.
 This is intentionally done such that there is a mismatch between the boundary stabilizers which introduces a so-called twist defect, highlighted in purple.
-When we perform lattice merging the two qubits, we obtain new stabilizers, some of which are mixed Z and X!
-This is fine because they still commute with all other stabilizers. This can be shown by checking that :math:`[ZZ, XY] = [YZ,XX] = [XZ, ZX] = 0`.
+When we perform lattice merging between the two qubits, we obtain new stabilizers, some of which are mixed Z and X!
+This is because they still need to commute with all other stabilizers. That this is indeed the case can be shown by checking that 
+:math:`[ZZ, XY] = [YZ,XX] = [XZ, ZX] = 0`.
 
 Some of these are trivial in the sense that they are simply the product of the already-measured stabilizers from each of the qubits. 
 The non-trivial new ones are highlighted in red and correspond to the measurement of :math:`Y \otimes Z` of the joint state :math:`|\psi\rangle \otimes |0\rangle`
