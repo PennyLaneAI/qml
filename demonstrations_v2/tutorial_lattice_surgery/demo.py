@@ -141,7 +141,10 @@ An important feature of the logical operators is that they are not stabilizers, 
 state out of the code space (:math:`O_L S |\psi\rangle_L = S O_L |\psi\rangle_L`).
 The commutation can be seen from the fact
 that the logical operator only ever overlaps with an even multiple of X or Z operators, and thus commutes with any other stabilizer.
-Stabilizers are topologically trivial (loops), whereas logical operators are topologically non-trivial (cycles). This differentiation is only possible due to
+Stabilizers are topologically trivial (loops), whereas logical operators are topologically non-trivial (cycles). 
+Note that these topological concepts are easier grasped in the non-rotated surface code on a torus. For that, see the excellent `interactive blog post <https://arthurpesah.me/blog/2023-05-13-surface-code/>`__ by Arthur Pesah.
+The important thing to note here is 
+This differentiation is only possible due to
 the distinctive Z and X boundaries, which enable the definition of the logical operators without being stabilizers themselves.
 
 We also note that logical :math:`Y_L` measurement is a topic on its own. In principle, one could measure :math:`Y_L` by simultaneously measuring the logical
