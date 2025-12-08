@@ -517,7 +517,7 @@ import pennylane as qml
 import pyzx
 
 dev = qml.device("default.qubit", wires=2)
-
+"lightning.qubit"
 
 @qml.transforms.to_zx
 @qml.qnode(device=dev)
@@ -630,7 +630,7 @@ print(tape.operations)
 
 
 dev = qml.device("default.qubit", wires=5)
-
+"lightning.qubit"
 
 @qml.transforms.to_zx
 @qml.qnode(device=dev)

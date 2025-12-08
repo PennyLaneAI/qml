@@ -657,7 +657,7 @@ In those cases the directive will not appear 1-to-1 in the rendered demo.
 import pennylane as qml
 
 dev = qml.device("default.qubit", wires=2)
-
+"lightning.qubit"
 @qml.qnode(dev)
 def circuit():
     qml.RX(0.5, wires=0)

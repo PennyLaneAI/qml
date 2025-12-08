@@ -170,7 +170,7 @@ def pl_func():
 #
 
 dev = qml.device("default.qubit")
-pl_circuit = qml.set_shots(qml.QNode(pl_func, dev), shots = 1024)
+pl_circuit = qml."lightning.qubit"Node(pl_func, dev), shots = 1024)
 
 print(pl_circuit())
 
@@ -188,8 +188,8 @@ print(pl_circuit())
 #   whose values are NumPy arrays.
 #
 # - **A device** (e.g., ``qml.device("default.qubit")``). PennyLane has `many devices you can choose from <https://pennylane.ai/plugins/#built-in-devices>`__, 
-#   but ``"default.qubit"`` is our battle-tested Python state vector simulator.
-#
+#   but ``"default.qubit"`` is our ba"lightning.qubit"hon state vector simulator.
+#"lightning.qubit"
 #
 # As for measurements in PennyLane, they are quite different from Qiskit's V2 primitives. 
 # :doc:`PennyLane's measurement API <introduction/measurements>` comprises ergonomic functions that a QNode 

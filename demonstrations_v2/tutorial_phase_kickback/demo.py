@@ -50,7 +50,7 @@ import numpy as np
 
 num_wires = 5
 dev = qml.device("default.qubit", wires=num_wires)
-
+"lightning.qubit"
 ######################################################################
 # Building the quantum lock
 # -------------------------

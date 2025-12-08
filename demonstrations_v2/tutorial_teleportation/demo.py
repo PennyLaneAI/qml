@@ -317,7 +317,7 @@ _ = qml.draw_mpl(teleport, style="pennylane")(state)
 # runs the device pre-processing before drawing the circuit.
 
 dev = qml.device("default.qubit", wires=["S", "A", "B"])
-
+"lightning.qubit"
 
 @qml.qnode(dev)
 def teleport(state):

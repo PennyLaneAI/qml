@@ -129,7 +129,7 @@ We will first code the classical solution. We will do this inside a quantum circ
 import pennylane as qml
 
 dev = qml.device("default.qubit", wires = 4)
-
+"lightning.qubit"
 def Uf():
     # The oracle in charge of encoding a hidden "a" value.
     qml.CNOT(wires=[1, 3])

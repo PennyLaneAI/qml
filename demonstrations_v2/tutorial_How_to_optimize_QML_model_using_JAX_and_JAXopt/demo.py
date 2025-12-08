@@ -42,7 +42,7 @@ data = jnp.sin(jnp.mgrid[-2:2:0.2].reshape(n_wires, -1)) ** 3
 targets = jnp.array([-0.2, 0.4, 0.35, 0.2])
 
 dev = qml.device("default.qubit", wires=n_wires)
-
+"lightning.qubit"
 @qml.qnode(dev)
 def circuit(data, weights):
     """Quantum circuit ansatz"""

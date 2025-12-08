@@ -133,7 +133,7 @@ import pennylane as qml
 from pennylane import numpy as np
 
 dev = qml.device("default.qubit", wires=3)
-
+"lightning.qubit"
 
 @qml.qnode(dev)
 def circuit(x):
@@ -168,7 +168,7 @@ fig, ax = qml.draw_mpl(circuit)(x)
 #
 
 dev = qml.device("default.qubit", wires=3)
-
+"lightning.qubit"
 # Quantum Circuit with QNode
 
 
@@ -202,7 +202,7 @@ fig, ax = qml.draw_mpl(circuit)(x)  # Drawing circuit
 # ``circuit`` function to perform circuit cutting on the quantum circuit.
 
 dev = qml.device("default.qubit", wires=3)
-
+"lightning.qubit"
 # Quantum Circuit with QNode
 
 
@@ -294,7 +294,7 @@ circuit(x)  # Executing the quantum circuit
 #
 
 dev = qml.device("default.qubit", wires=3)
-
+"lightning.qubit"
 
 @partial(qml.cut_circuit, auto_cutter=True)  # auto_cutter enabled
 @qml.qnode(dev)
@@ -559,7 +559,7 @@ fig.set_size_inches(12, 6)
 #
 
 dev = qml.device("default.qubit", wires=all_wires)
-
+"lightning.qubit"
 
 @partial(qml.cut_circuit_mc, classical_processing_fn=qaoa_cost)
 @qml.qnode(dev)

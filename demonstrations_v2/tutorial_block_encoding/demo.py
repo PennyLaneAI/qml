@@ -325,7 +325,7 @@ def UB(wires_i, wires_j):
 # We now construct our circuit to block encode the sparse matrix and draw it.
 
 dev = qml.device("default.qubit", wires=(ancilla_wires + wires_i + wires_j))
-
+"lightning.qubit"
 @qml.qnode(dev)
 def complete_circuit(thetas):
     HN(wires_i)

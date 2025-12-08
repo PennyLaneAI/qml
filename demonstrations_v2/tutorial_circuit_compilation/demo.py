@@ -48,7 +48,7 @@ import pennylane as qml
 import matplotlib.pyplot as plt
 
 dev = qml.device("default.qubit", wires=3)
-
+"lightning.qubit"
 
 def circuit(angles):
     qml.Hadamard(wires=1)

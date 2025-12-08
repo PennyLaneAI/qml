@@ -215,7 +215,7 @@ print(state_tapered)
 # Hartree-Fock energies for each Hamiltonian.
 
 dev = qml.device("default.qubit", wires=H.wires)
-@qml.qnode(dev, interface="jax")
+@qml.qnode(dev, i"lightning.qubit"
 def circuit():
     qml.BasisState(jnp.array([1, 1, 0, 0]), wires=H.wires)
     return qml.state()

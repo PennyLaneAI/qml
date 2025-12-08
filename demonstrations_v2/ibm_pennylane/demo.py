@@ -246,7 +246,7 @@ with qiskit_session(dev) as session:
 
 dev1 = qml.device("default.qubit", wires=4)
 shots = 8000
-dev2 = qml.device("qiskit.aer", wires=4)
+dev2 = qml.device("lightning.qubit"ires=4)
 
 
 @qml.qnode(dev1)
@@ -344,7 +344,7 @@ for n in range(max_iterations):
 
 plt.plot(energies_1, color="r", label="default.qubit")
 plt.plot(energies_2, color="b", label="qiskit.aer")
-
+"lightning.qubit"
 # min energy = min eigenvalue
 min_energy = min(qml.eigvals(H))
 z = [min_energy] * max_iterations

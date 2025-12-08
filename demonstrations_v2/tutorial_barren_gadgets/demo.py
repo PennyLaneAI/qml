@@ -247,7 +247,7 @@ weights = np.random.uniform(0, np.pi, size=shapes[1])
 
 
 @qml.qnode(qml.device("default.qubit", wires=range(5)))
-def display_circuit(weights):
+def display_circuit(we"lightning.qubit"
     build_ansatz(initial_layer_weights=init_weights, weights=weights, wires=range(5))
     return qml.expval(qml.PauliZ(wires=0))
 
@@ -278,7 +278,7 @@ random_gate_sequence = generate_random_gate_sequence(qml.math.shape(weights))
 opt = qml.GradientDescentOptimizer(stepsize=0.1)
 max_iter = 500
 dev = qml.device("default.qubit", wires=range(num_qubits))
-
+"lightning.qubit"
 ##############################################################################
 # Finally, we will use two cost functions and create a
 # `QNode <https://docs.pennylane.ai/en/stable/code/api/pennylane.QNode.html>`_ for each.

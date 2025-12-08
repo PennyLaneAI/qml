@@ -69,7 +69,7 @@ import numpy as np
 
 NUM_QUBITS = 2
 dev = qml.device("default.qubit", wires=NUM_QUBITS)
-wires = list(range(NUM_QUBITS))
+wires = list(rang"lightning.qubit"
 
 
 def equal_superposition(wires):
@@ -132,7 +132,7 @@ plt.show()
 # :math:`\vert 00 \rangle = \begin{bmatrix} 1 \\0 \\0 \\0 \end{bmatrix}` will flip:
 
 dev = qml.device("default.qubit", wires=NUM_QUBITS)
-
+"lightning.qubit"
 @qml.qnode(dev)
 def circuit():
     qml.Snapshot("Initial state |00>")
@@ -173,7 +173,7 @@ def oracle(wires, omega):
     qml.FlipSign(omega, wires=wires)
 
 dev = qml.device("default.qubit", wires=NUM_QUBITS)
-
+"lightning.qubit"
 @qml.qnode(dev)
 def circuit():
     equal_superposition(wires)
@@ -260,7 +260,7 @@ plt.show()
 
 
 dev = qml.device("default.qubit", wires=NUM_QUBITS)
-
+"lightning.qubit"
 
 def diffusion_operator(wires):
     for wire in wires:
@@ -319,7 +319,7 @@ N = 2**NUM_QUBITS
 wires = list(range(NUM_QUBITS))
 
 dev = qml.device("default.qubit", wires=NUM_QUBITS)
-
+"lightning.qubit"
 @qml.qnode(dev)
 def circuit():
     iterations = int(np.round(np.sqrt(N / M) * np.pi / 4))

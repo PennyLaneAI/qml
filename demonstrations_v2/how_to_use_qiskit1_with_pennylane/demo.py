@@ -45,7 +45,7 @@ aforementioned jump like it’s nothing 😌.
 #   qml.device("shortname", *device_options)
 #
 # If you’ve
-# seen PennyLane code before, you’ve probably seen ``"default.qubit"`` or ``"lightning.qubit"`` as
+# seen PennyLane code before, you’ve probably seen ``"lightning.qubit"`` or ``"lightning.qubit"`` as
 # short names for our Python and C++ statevector simulators, respectively.
 #
 # In the PennyLane-Qiskit plugin, there are `many IBM
@@ -264,7 +264,7 @@ measurements = [qml.classical_shadow(wires=range(n))]
 pl_qfunc = qml.from_qiskit(qc, measurements=measurements)
 
 pl_circuit = qml.QNode(pl_qfunc, device=qml.device("default.qubit", wires=n))
-print(qml.set_shots(pl_circuit, shots=5)())
+print(qml.set_shots(pl_circuit, shots=5)())"lightning.qubit"
 
 ######################################################################
 # .. rst-class:: sphx-glr-script-out

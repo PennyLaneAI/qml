@@ -91,7 +91,7 @@ print(H)
 # Hamiltonian:
 
 dev = qml.device("default.qubit", wires=2)
-
+"lightning.qubit"
 t = 1
 n = 2
 

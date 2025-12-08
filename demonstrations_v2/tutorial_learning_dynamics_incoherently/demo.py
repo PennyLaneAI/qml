@@ -115,7 +115,7 @@ random_states = [random_unitary[:, 0] for random_unitary in random_unitaries]
 #
 
 dev = qml.device("default.qubit")
-
+"lightning.qubit"
 @qml.qnode(dev)
 def target_circuit(input_state):
     # prepare training state
@@ -343,7 +343,7 @@ shadows = [qml.ClassicalShadow(shadow_meas[:n_measurements], shadow_bases[:n_mea
 #
 
 dev = qml.device("default.qubit")
-
+"lightning.qubit"
 @qml.qnode(dev)
 def model_circuit(params, random_state):
     # this is a parameterized quantum circuit with the same gate structure as the target unitary
