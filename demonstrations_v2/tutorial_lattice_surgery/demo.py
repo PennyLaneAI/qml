@@ -262,9 +262,14 @@ At the same time, an auxiliary qubit is initialized in :math:`|0\rangle` paralle
 This is intentionally done such that there is a mismatch between the boundary stabilizers which introduces a so-called twist defect, highlighted in purple.
 When we perform lattice merging between the two qubits, we obtain new stabilizers, some of which are mixed Z and X!
 This is because they still need to commute with all other stabilizers. That this is indeed the case can be shown by checking that 
-:math:`[ZZ, XY] = [YZ,XX] = [XZ, ZX] = 0`.
+:math:`[ZZ, XY] = [XX, YZ,] = [XZ, ZX] = 0` on top of the previously discussed :math:`[XX, ZZ] = 0`:
 
-Some of these are trivial in the sense that they are simply the product of the already-measured stabilizers from each of the qubits. 
+.. figure:: ../_static/demonstration_assets/lattice_surgery/twist_boundaries.png
+    :align: center
+    :width: 50%
+    :target: javascript:void(0)
+
+Some of the new stabilizers are trivial in the sense that they are simply the product of the already-measured stabilizers from each of the qubits. 
 The non-trivial new ones are highlighted in red and correspond to the measurement of :math:`Y \otimes Z` of the joint state :math:`|\psi\rangle \otimes |0\rangle`
 between the qubit and the auxiliary qubit in :math:`|0\rangle`, effectively measuring :math:`\langle Y \rangle = \langle \psi | Y |\psi \rangle = \langle \psi 0 | Y \otimes Z |\psi 0 \rangle`.
 A more intuitive way to view this is that we simultaneously measured the X and Z edge of our extended qubit, yielding the :math:`Y \propto X Z` measurement (modulo some global phase). This is exactly the perspective in the game of surface codes [#Litinski]_.
@@ -293,8 +298,9 @@ More details on twist-based lattice surgery can be found in [#Litinski2]_.
 # The parity on the other hand provides us only with the topological information of what the logical string is connecting,
 # which is why this process is called homological measurement.
 #
-# Note that the introduction of the higher weight twist-defect stabilizer with 5 Pauli operators can be problematic,
-# which is why twist-free alternatives are also being proposed [#Chamberland]_.
+# Note that the introduction of the higher weight twist-defect stabilizer with 5 Pauli operators break the nearest-neighbor connectivity the surface code requires.
+# This leads to deeper physical CNOT circuits for syndrome extraction, and thus leads to a higher error probability.
+# This is why twist-free alternatives are being proposed at higher resource costs (time or space) [#Chamberland]_.
 # 
 #
 # References
