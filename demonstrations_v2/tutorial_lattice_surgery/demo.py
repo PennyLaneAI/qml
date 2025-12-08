@@ -288,7 +288,7 @@ More details on twist-based lattice surgery can be found in [#Litinski2]_.
 # Conclusion
 # ----------
 #
-# Lattice surgery is the answer to performing error-corrected quantum computing on planar codes
+# Lattice surgery is enabling error-corrected quantum computing on planar codes
 # with local connectivity as it allows for non-transversal gates. We introduced its basics
 # exemplified on the surface code and by realizing arbitrary Pauli product measurements.
 # These are performed by merging and splitting qubits in such a way that the logical operators "topologically" align.
