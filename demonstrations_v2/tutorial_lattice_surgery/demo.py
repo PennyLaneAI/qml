@@ -201,6 +201,7 @@ Measuring :math:`Z_L \otimes Z_L` works in the same fashion, but with reversed r
     :target: javascript:void(0)
 
 The rules for arbitrary products like, e.g., :math:`X_L \otimes Z_L` are relatively simple: Merge and split the qubit patches on the corresponding edges and keep track of any signs you pick up on the way.
+The same goes for measuring more than two operators (see, e.g., Figure 41 in [#Litinski]_ for an example of measuring :math:`Y_L \otimes X_L \otimes Z_L \otimes X_L`).
 Note that we can also rotate patches to get the correct orientation, as we will see below.
 
 Y measurements
