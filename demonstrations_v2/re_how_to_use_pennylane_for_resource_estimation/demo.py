@@ -17,49 +17,34 @@ How to use PennyLane for Resource Estimation
 # on a given quantum hardware architecture,
 # or if it will even fit in memory to begin with.
 #
-# PennyLane is here to make that process easy, with our new resource estimation module:
-# :mod:`estimator <pennylane.estimator>`.
+# PennyLane is here to make that process easy, with our new resource estimation module
+# :mod:`estimator <pennylane.estimator>`. `estimator` leverages
+# the latest resource estimates, decompositions, and compilation
+# techniques from the literature, and is designed to do so as
+# quickly as possible.
 #
-# In this demo, we will show you how to perform resource estimation
-# for a simple Hamiltonian simulation workflow.
-#
-# Let’s import our quantum resource :mod:`estimator <pennylane.estimator>`.
-#
-
-import pennylane as qml
-import pennylane.estimator as qre
-
-######################################################################
-#
-# PennyLane's :mod:`estimator <pennylane.estimator>` module:
-#
-# - Makes reasoning about quantum algorithms *quick* and painless - no complicated inputs, just tell
-#   :mod:`estimator <pennylane.estimator>` what you know.
-# - Keeps you up to *speed* - :mod:`estimator <pennylane.estimator>` leverages the latest results from the literature to make
-#   sure you’re as efficient as can be.
-# - Gets you moving *even faster* - in the blink of an eye :mod:`estimator <pennylane.estimator>`
-#   provides you with resource estimates, and enables effortless customization to enhance your research.
-#
-# We will estimate the quantum resources necessary to evolve the quantum state of a
-# honeycomb lattice of spins under the Kitaev Hamiltonian.
-# For more information about the Kitaev Hamiltonian,
-# check out :func:`our documentation <pennylane.spin.kitaev>`.
-#
+# In this demo, we will estimate the quantum resources necessary 
+# for a simple Hamiltonian workflow: evolve the quantum state of a 
+# honeycomb lattice of spins under the
+# :func:`Kitaev Hamiltonian <pennylane.spin.kitaev>`.
 
 ######################################################################
-# Estimating the Resources of your PennyLane Circuits
+# Estimating the Resources of existing PennyLane workflows
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # Let's say you've already written your workflow as a PennyLane circuit.
-# There's no need to write it again!
-# To estimate its resources, you can simply invoke
+# To estimate the resources of PennyLane workflows, you can simply invoke
 # :func:`qre.estimate <pennylane.estimator.estimate.estimate>`
-# on it directly.
+# directly on the QNode.
 #
 # We will demonstrate this with a 25 x 25 unit honeycomb lattice of spins.  
-# Here, we generate the Hamiltonian ourselves:
+# Here, we generate the Hamiltonian ourselves, using the
+# :func:`qml.spin.kitaev <pennylane.spin.kitaev>` function,
+# as well as grouping the Hamiltonian terms into qubit-wise
+# commuting groups:
 #
 
+import pennylane as qml
 import numpy as np
 import time
 
@@ -80,15 +65,6 @@ grouped_hamiltonian = qml.sum(*groups)
 t2 = time.time()
 t_generation = t2 - t1
 
-print(f"Processing time for Hamiltonian generation: {(t_generation):.3g} seconds")
-
-######################################################################
-# .. rst-class:: sphx-glr-script-out
-#
-# .. code-block:: none
-#
-#    Processing time for Hamiltonian generation: 7.74 seconds
-
 ######################################################################
 # Here we define our circuit for Hamiltonian simulation.
 #
@@ -104,8 +80,13 @@ def executable_circuit(hamiltonian, num_steps, order):
     return qml.state()
 
 ######################################################################
-# Now, just call :func:`qre.estimate <pennylane.estimator.estimate.estimate>`
-# to generate a state-of-the-art resource estimate for your PennyLane circuit!
+# Now, let’s import our quantum resource :mod:`estimator <pennylane.estimator>`.
+
+import pennylane.estimator as qre
+
+######################################################################
+# Just call :func:`qre.estimate <pennylane.estimator.estimate.estimate>`
+# to generate the resource estimates:
 #
 
 t1 = time.time()
@@ -135,8 +116,8 @@ print(resources_exec)
 #       'Hadamard': 1.250E+3
 
 ######################################################################
-# Making it Easy
-# ~~~~~~~~~~~~~~
+# Fast estimation with less information
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 
 ######################################################################
@@ -146,32 +127,37 @@ print(resources_exec)
 # **Thats 20,000 spins!**
 #
 # Generating such Hamiltonians quickly becomes a bottleneck.
-# However, thanks to :mod:`estimator <pennylane.estimator>`,
-# we don’t need a detailed description of our Hamiltonian to estimate our algorithm's resources!
+# However, :mod:`estimator <pennylane.estimator>`,
+# doesn't require detailed descriptions of Hamiltonians
+# for estimation; instead, we can define 
+# `resource Hamiltonians <https://docs.pennylane.ai/en/stable/code/qml_estimator.html#resource-hamiltonians>`__
+# which capture the resources required for Hamiltonian simulation
+# without the need to compute costly Hamiltonians.
 #
-# The geometry of the honeycomb lattice and the structure of the Hamiltonian allow us to calculate
-# some important quantities directly:
+# In the particular case of the Kitaev Hamiltonian on a honeycomb
+# lattice, we can directly compute some important quantities:
 #
 # .. math::
 #   n_{q} &= 2 n^{2}, \\
 #   n_{YY} &= n_{ZZ} = n * (n - 1), \\
 #   n_{XX} &= n^{2}, \\
-#
-# Our quantum resource :mod:`estimator <pennylane.estimator>` provides
-# `classes <https://docs.pennylane.ai/en/stable/code/qml_estimator.html#resource-hamiltonians>`__
-# which allow us to investigate the resources of Hamiltonian simulation without needing to generate
-# them.
-# In this case, we can capture the key information of our Hamiltonian in a compact representation
-# using the
-# :class:`qre.PauliHamiltonian <pennylane.estimator.compact_hamiltonian.PauliHamiltonian>`
-# class.
-#
 
 n_cell = 100
-n_q = 2 * n_cell**2
-n_xx = n_cell**2
-n_yy = n_cell * (n_cell - 1)
-n_zz = n_yy
+
+def pauli_quantities(n_cell):
+    n_q = 2 * n_cell**2
+    n_xx = n_cell**2
+    n_yy = n_cell * (n_cell - 1)
+    n_zz = n_yy
+    return n_q, n_xx, n_yy, n_zz
+
+n_q, n_xx, n_yy, n_zz = pauli_quantities(n_cell)
+
+######################################################################
+# We can capture this information in a compact representation
+# using the
+# :class:`qre.PauliHamiltonian <pennylane.estimator.compact_hamiltonian.PauliHamiltonian>`
+# class:
 
 pauli_word_distribution = {"XX": n_xx, "YY": n_yy, "ZZ": n_zz}
 
@@ -181,13 +167,14 @@ kitaev_H = qre.PauliHamiltonian(
 )
 
 ######################################################################
-# We can then use existing resource
+# Similarly, we can then use existing resource
 # `operators <https://docs.pennylane.ai/en/stable/code/qml_estimator.html#id1>`__ and
 # `templates <https://docs.pennylane.ai/en/stable/code/qml_estimator.html#resource-templates>`__
 # from the :mod:`estimator <pennylane.estimator>` module to express our circuit.
 # These
 # :class:`ResourceOperator <pennylane.estimator.resource_operator.ResourceOperator>`
-# classes are designed to require minimal information
+# classes, like the `PauliHamiltonian` above, are designed to require minimal information
+# --- avoiding costly compute ---
 # while still providing trustworthy estimates.
 #
 
@@ -201,9 +188,10 @@ def circuit(hamiltonian, num_steps, order):
 # The default gateset used by :mod:`estimator <pennylane.estimator>` is:
 # ``{'Hadamard', 'S', 'CNOT', 'T', 'Toffoli', 'X', 'Y', 'Z'}``.
 #
-# So, how do we figure out our quantum resources?
-#
-# It’s simple: just call :func:`qre.estimate <pennylane.estimator.estimate.estimate>`!
+# We now have a representation of our workflow using resource
+# operators and a resource Hamiltonian. As before, we simply call
+# :func:`qre.estimate <pennylane.estimator.estimate.estimate>`
+# to estimate the resources:
 #
 
 t1 = time.time()
@@ -239,6 +227,10 @@ print(res)
 # We can also analyze the resources of an individual
 # :class:`ResourceOperator <pennylane.estimator.resource_operator.ResourceOperator>`.
 # This can be helpful in determining which operators in a workflow demand the most resources.
+#
+# For example, let's consider the resource estimates of
+# ``qre.TrotterPauli``, and see how it changes as we provide additional
+# information:
 
 resources_without_grouping = qre.estimate(qre.TrotterPauli(kitaev_H, num_steps, order))
 
@@ -289,7 +281,7 @@ print(f"Difference: {100*reduction:.1f}% reduction")
 #
 
 ######################################################################
-# Gatesets & Configurations
+# Changing gatesets and precision
 # ~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 
@@ -438,8 +430,8 @@ print("\n--- Higher precision (1e-15) ---", f"\n T counts: {res.gate_counts["T"]
 # and :class:`ResourceOperator <pennylane.estimator.resource_operator.ResourceOperator>`!
 
 ######################################################################
-# Putting it All Together
-# ~~~~~~~~~~~~~~~~~~~~~~~
+# Tailored resource estimates for your needs
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # We can combine all of the features we have seen so far to determine
 # the cost of Trotterized time evolution of the Kitaev Hamiltonian
@@ -485,27 +477,23 @@ print(resources)
 #       'Hadamard': 2.000E+4
 
 ######################################################################
-# A Final Comparison
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Comparing estimates: full vs. resource workflows
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # We've shown that you can estimate your workflow's resources
 # using both typical PennyLane circuits, and circuits written with
 # :class:`ResourceOperator <pennylane.estimator.resource_operator.ResourceOperator>`
 # classes.
 #
-# Now, we'll demonstrate that the resource estimates are consistent across both of these cases!
+# Now, we'll demonstrate that the resource estimates are consistent across both of these cases.
 #
 # Let's return to a 25 x 25 unit honeycomb lattice of spins.  
 # We'll use :mod:`estimator <pennylane.estimator>` to make sure everything matches.
-# It's a lot easier to prepare for resource estimation than for execution!
 #
 
 t1 = time.time()
 n_cell = 25
-n_q = 2 * n_cell**2
-n_xx = n_cell**2
-n_yy = n_cell*(n_cell-1)
-n_zz = n_yy
+n_q, n_xx, n_yy, n_zz = pauli_quantities(n_cell)
 
 commuting_groups = [{"XX": n_xx}, {"YY": n_yy}, {"ZZ": n_zz}]
 
@@ -518,7 +506,6 @@ t_estimation = t2 - t1
 
 ######################################################################
 # The resulting data can be easily compared for a sanity check.
-# Notice how much faster it was to prepare our Hamiltonian for estimation!
 #
 
 print(f"Processing time for Hamiltonian generation: {(t_generation):.3g} seconds")
@@ -543,6 +530,9 @@ print("Total number of qubits:", compact_hamiltonian.num_qubits)
 #    Total number of qubits: 1250
 
 ######################################################################
+# Notice how much faster it was to prepare
+# the resource Hamiltonian for estimation!
+#
 # Here's the resource estimate from our earlier *execution* circuit.
 #
 
