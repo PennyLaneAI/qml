@@ -130,6 +130,7 @@ can be performed using these tools. Let's get started!
 #
 
 import pennylane as qml
+qml.capture.enable()
 from pennylane import numpy as np
 import matplotlib.pyplot as plt
 
