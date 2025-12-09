@@ -6,7 +6,7 @@ Introducing Lattice Surgery
 Lattice surgery is a way to fault-tolerantly perform operations on two-dimensional quantum computers
 with local physical connectivity. Its introduction improved spatial overheads in topological quantum
 error correction codes such as surface codes by replacing continuous code operations 
-with discontinuous ones: lattice spliting and merging.
+with discontinuous ones: lattice splitting and merging.
 In this demo, we are going to see how these operations
 enable parity measurements of arbitrary Pauli operators, which unlock universal fault
 tolerant quantum computing.
@@ -16,7 +16,7 @@ tolerant quantum computing.
     :width: 50%
     :target: javascript:void(0)
 
-For self-consistency, we are going to briefly recap the basic concepts of the surface code and explain how `Pauli product measurements <https://pennylane.ai/compilation/pauli-product-measurement>`__ are the sufficient 
+For self-consistency, we are going to briefly recap the basic concepts of the surface code and explain why `Pauli product measurements <https://pennylane.ai/compilation/pauli-product-measurement>`__ are sufficient 
 for universal computing. We are then going to explain how to perform such 
 `homological measurements <https://arxiv.org/abs/2410.02753>`__ using lattice splitting and merging.
 
@@ -63,7 +63,7 @@ of each logical qubit patch, indicated here by the red line exemplarily for one 
     :target: javascript:void(0)
 
 This is called a transversal operation, which is problematic as it requires non-local physical connections between data qubits.
-Most quantum hardware architectures only allow for nearest neighbor interactions, and thus do not allow for transversal gate operations.
+Most quantum hardware architectures, like those built of `superconducting qubits <https://pennylane.ai/qml/demos/tutorial_sc_qubits>`__, only allow for nearest neighbor interactions, and thus do not allow for transversal gate operations.
 Instead, we want to perform CNOT gates non-transversally. In the early days, this was achieved via braiding [#braiding]_, 
 a concept commonly encountered in algebraic topology.
 In this setting, qubits are encoded by defects in the code, and operations via continuous deformations of the code.
@@ -91,7 +91,7 @@ The gist of it is that `Pauli product rotations <https://pennylane.ai/compilatio
 
 for arbitrary Pauli words :math:`P`
 with Clifford and non-Clifford angles :math:`\theta \in \{(2k+1) \tfrac{\pi}{4} | k \in \mathbb{Z} \}` reproduce the `(Clifford + T) <https://pennylane.ai/compilation/clifford-t-gate-set>`__ gate set, and thus allow for universal quantum computing.
-These PPRs can be directly executed using PPMs in the following way, so all we need to show is that the lattice surgery based quantum computer can perform arbitrary PPMs. Typically, this involves an auxiliary qubit in a specific state.
+These PPRs can be directly executed using PPMs in the following way, so all we will need to show below is that the lattice surgery based quantum computer can perform arbitrary PPMs. Typically, this involves an auxiliary qubit in a specific state.
 Clifford angles that are odd multiples of :math:`\frac{\pi}{2}` can be performed with an auxiliary qubit in :math:`|0\rangle` like so:
 
 .. figure:: ../_static/demonstration_assets/lattice_surgery/clifford_PPM.png
@@ -102,7 +102,7 @@ Clifford angles that are odd multiples of :math:`\frac{\pi}{2}` can be performed
 We use the color coding from [#Litinski]_, where orange boxes correspond to Clifford gates, 
 gray boxes to Pauli operators (note that :math:`\exp\left(-i \tfrac{(2k+1)\pi}{2}P\right) \propto P`), green boxes to non-Clifford gates, and
 blue boxes to measurements.
-Non-clifford PPRs can be realized using a magic resource state in the following way:
+Non-Clifford PPRs can be realized using a magic resource state in the following way:
 
 .. figure:: ../_static/demonstration_assets/lattice_surgery/non_clifford_PPM.png
     :align: center
@@ -133,7 +133,7 @@ leads to the somewhat confusing scenario where the edge with Z arches is called 
 
 Because we only care about the homology of the measurement
 (i.e., that it in the same equivalence class of the corresponding X and Z edges), this is also called a *homological measurement*.
-It does not really matter which operator of the equivalence class we measure, and in principle we have access to any of them without extra effort because they are related to each other via stabilizer measurements, 
+It does not really matter which operator of the equivalence class we measure. We have access to any of them without extra effort because they are related to each other via stabilizer measurements, 
 which we anyway perform during the continually performed error correction cycles.
 So for the following, we will just consider those that are convenient for illustrational purposes.
 
@@ -233,7 +233,7 @@ To remove part of the extended patch again, we perform :math:`Z` measurements on
 
 Recall from earlier that green and red lines merely indicate representatives of the logical :math:`Z_L` and :math:`X_L` operators, so moving the red line to the right is free within the error correction cycles.
 
-Extending the qubit along the X edge works similarly, but moving vertically, initializing in :math:`|+\rangle` and measuing :math:`X` on the data qubits.
+Extending the qubit along the X edge works similarly, but moving vertically, initializing in :math:`|+\rangle` and measuring :math:`X` on the data qubits.
 
 We can also move (or rotate?) the type of the edges within :math:`d` error correction code cycles.
 This makes most sense on an already extended qubit because this way we do not change the code distance.
@@ -247,7 +247,7 @@ As we can see, the bulk of the qubit is untouched and all that is changed is the
 Here we show an extended single qubit patch and three example re-orientations of the type of edges.
 The smaller images are guides to the eye to indicate the settings, with X edges as solid lines and Z edges as dotted lines (i.e. the same as the logical measurements moved to the edges).
 Note that the important property is for neighboring X and Z edges to overlap on two data qubits for the corresponding stabilizers to commute. 
-This is why the right patches introduce the triangle-shaped stabiliers of three :math:`Z` operators.
+This is why the right patches introduce the triangle-shaped stabilizers of three :math:`Z` operators.
 
 Finally, to measure $Y$ we perform the following procedure:
 
@@ -293,11 +293,11 @@ More details on twist-based lattice surgery can be found in [#Litinski2]_.
 # exemplified on the surface code and by realizing arbitrary Pauli product measurements.
 # These are performed by merging and splitting qubits in such a way that the logical operators "topologically" align.
 # In this process of merging and splitting, we only ever change which stabilizers we measure, but we never perform a strict projective measurement of the logical operator.
-# In a sense, we are reading out parity information from the stabilizer measurements in a non-pertubative way.
+# In a sense, we are reading out parity information from the stabilizer measurements in a non-perturbative way.
 # The parity on the other hand provides us only with the topological information of what the logical string is connecting,
 # which is why this process is called homological measurement.
 #
-# Note that the introduction of the higher weight twist-defect stabilizer with 5 Pauli operators break the nearest-neighbor connectivity the surface code requires.
+# Note that the introduction of the higher weight twist-defect stabilizer with 5 Pauli operators breaks the nearest-neighbor connectivity the surface code requires.
 # This leads to deeper physical CNOT circuits for syndrome extraction, and thus leads to a higher error probability.
 # This is why twist-free alternatives are being proposed at higher resource costs (time or space) [#Chamberland]_.
 # 
@@ -323,7 +323,7 @@ More details on twist-based lattice surgery can be found in [#Litinski2]_.
 #
 #     Dominic Horsman, Austin G. Fowler, Simon Devitt, Rodney Van Meter,
 #     "Surface code quantum computing by lattice surgery",
-#     `arXiv:1111.40226 <https://arxiv.org/abs/1111.4022>`__, 2011
+#     `arXiv:1111.4022 <https://arxiv.org/abs/1111.4022>`__, 2011
 #
 #
 # .. [#Fowler]
