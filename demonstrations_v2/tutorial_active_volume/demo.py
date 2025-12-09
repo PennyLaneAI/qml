@@ -212,11 +212,11 @@ giving them an N-orientation:
 
 Here we indicated the orientation of the vertices with internal lines, serving as a mnemonic that
 these ports are "occupied" already.
-Now we can use the N and S ports of the central vertices to route the last edge. We choose both
-N ports, because this will be a convenient choice below, and arrive at the oriented ZX diagram
-for a single CNOT:
+Now we can use the U and D ports of the central vertices to route the last edge. We choose both
+U ports, because this will be a convenient choice below, and arrive at the following oriented
+ZX diagram for a single CNOT:
 
-.. figure:: ../_static/demonstration_assets/active_volume/cnot_oriented_zx_extended_1.png
+.. figure:: ../_static/demonstration_assets/active_volume/cnot_oriented_zx_complete.png
     :align: center
     :width: 25%
     :target: javascript:void(0)
