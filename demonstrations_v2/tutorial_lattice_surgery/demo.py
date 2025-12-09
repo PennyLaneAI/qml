@@ -36,7 +36,7 @@ Each intersection of a line corresponds to a data qubit. Here we have a code dis
 On yellow surfaces, we continually measure X stabilizers, which simply are the :math:`X_a X_b X_c X_d` operators
 on the four data qubits of the corners. Similarly, Z stabilizers are measured on white surfaces. 
 These stabilizer measurements are not performed directly on the data qubits, but via another kind of qubit that sits at the center of each square surface
-as well as the center of each arch (not shown here, see below). 
+as well as the center of each arch (shown below). 
 These extra qubits are sometimes called measurement qubits or syndrome qubits and the measurement is performed by entangling the data qubits with the syndrome qubit and measuring it (see Fig. 1 in [#surfacecode]_).
 
 Note that this representation of a qubit is in the so-called rotated surface code due to its :math:`45^\circ` rotation with respect to the original planar surface code.
