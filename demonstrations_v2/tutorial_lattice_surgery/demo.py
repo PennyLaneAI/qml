@@ -90,7 +90,7 @@ The gist of it is that `Pauli product rotations <https://pennylane.ai/compilatio
     :target: javascript:void(0)
 
 for arbitrary Pauli words :math:`P`
-with Clifford and non-Clifford angles :math:`\theta \in \{(2k+1) \tfrac{\pi}{4} | k \in \mathbb{Z} \}` reproduce the `(Clifford + T) <https://pennylane.ai/compilation/clifford-t-gate-set>`__ gate set, and thus allow for universal quantum computing.
+with Clifford angles (multiples of :math:`\pi/2`) and non-Clifford angles (odd multiples of :math:`\pi/4`) reproduce the `(Clifford + T) <https://pennylane.ai/compilation/clifford-t-gate-set>`__ gate set, and thus allow for universal quantum computing.
 These PPRs can be directly executed using PPMs in the following way, so all we will need to show below is that the lattice surgery based quantum computer can perform arbitrary PPMs. Typically, this involves an auxiliary qubit in a specific state.
 Clifford angles that are odd multiples of :math:`\frac{\pi}{2}` can be performed with an auxiliary qubit in :math:`|0\rangle` like so:
 
