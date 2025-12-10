@@ -7,7 +7,7 @@ potential to beat a classical one across all kernel methods?
 From a practitioner’s perspective, such a **pre-screening test** is invaluable: it lets us rule out
 quantum kernels that don’t offer any potential quantum advantage right from the start.
 
-Huang *et al.* (https://arxiv.org/abs/2011.01938) introduced exactly this test. Their proposed
+Huang *et al.* [#Huang2021]_ introduced exactly this test. Their proposed
 **geometric difference** :math:`g` metric is a single scalar that quantifies how differently the
 geometries defined by two kernels represent your data. The formula for :math:`g` is:
 
@@ -270,9 +270,13 @@ K_quantum_E2 = quantum_kernel_matrix(X_train, embed=embedding_E2)
 print(f"K_QK_E1 shape: {K_quantum_E1.shape}")
 print(f"K_QK_E2 shape: {K_quantum_E2.shape}")
 
+######################################################################
+#
+# Next, we compute the projected quantum kernels (Pauli vectors + classical RBF).
+#
 
 # ---------------------------------------------------------------------------#
-# Projected quantum kernels (Pauli vectors + classical RBF)                  #
+# Projected quantum kernels                                                  #
 # ---------------------------------------------------------------------------#
 def get_pauli_vectors(embedding_func, X):
     """Returns Pauli expectation vectors for each input using the given embedding."""
@@ -530,6 +534,13 @@ plt.show()
 #   methods—meaning the quantum kernel introduces no genuinely new distinctions beyond what a
 #   classical RBF can produce. By contrast, a high :math:`g` only tells us that *some advantage may
 #   be possible*—not that it will be realized.
+#
+# References
+# ----------
+#
+# .. [#Huang2021]
+#
+#     Huang, Hsin-Yuan, Michael Broughton, Masoud Mohseni, Ryan Babbush, Sergio Boixo, Hartmut Neven, and Jarrod R. McClean. "Power of data in quantum machine learning." Nature Communications 12, no. 1 (2021): 2631. `arXiv:2011.01938 <https://arxiv.org/abs/2011.01938>`__
 #
 # Appendix: What if we take the labels into account?
 # --------------------------------------------------
