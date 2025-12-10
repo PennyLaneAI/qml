@@ -25,7 +25,7 @@
             "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_pulse_programming.png"
         }
     ],
-    "seoDescription": "Simulating differentialble pulse programs in PennyLane with qubits",
+    "seoDescription": "Simulating differentiable pulse programs in PennyLane with qubits",
     "doi": "",
     "references": [
         {
