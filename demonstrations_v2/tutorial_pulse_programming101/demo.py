@@ -2,7 +2,7 @@ r"""Differentiable pulse programming with qubits in PennyLane
 =============================================================
 
 .. meta::
-    :property="og:description": Simulating differentialble pulse programs in PennyLane with qubits
+    :property="og:description": Simulating differentiable pulse programs in PennyLane with qubits
     :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/thumbnail_tutorial_pulse_programming.png
 
 .. related::
@@ -26,13 +26,13 @@ ctrl-VQE algorithm [#Mitei]_ on a two-qubit Hamiltonian for the :math:`\text{HeH
 Pulses in quantum computers
 ---------------------------
 
-In many quantum computing architectures such as :doc:`superconducting <demos/tutorial_sc_qubits>`, :doc:`ion trap <demos/tutorial_trapped_ions>` 
+In many quantum computing architectures such as :doc:`superconducting <demos/tutorial_sc_qubits>`, :doc:`ion trap <demos/tutorial_trapped_ions>`
 and :doc:`neutral atom Rydberg <demos/tutorial_pasqal>` systems,
 qubits are realized through physical systems with a discrete set of energy levels.
 For example, transmon qubits realize an anharmonic oscillator whose ground and first excited states can serve as the two energy
 levels of a qubit. Such a qubit can be controlled via an electromagnetic field tuned to its energy gap. In general, this
 electromagnetic field can be altered in time, leading to a time-dependent Hamiltonian :math:`H(t)` describing the effect of the field on the qubits.
-We call driving the system with such an electromagnetic field for a fixed time window :math:`[t_0, t_1]` a *pulse sequence*. 
+We call driving the system with such an electromagnetic field for a fixed time window :math:`[t_0, t_1]` a *pulse sequence*.
 During a pulse sequence, the state evolves according to the time-dependent Schrödinger equation
 
 .. math:: \frac{d}{dt}|\psi\rangle = -i H(t) |\psi\rangle
