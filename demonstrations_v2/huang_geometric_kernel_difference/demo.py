@@ -534,8 +534,7 @@ plt.show()
 #   be possible*—not that it will be realized.
 #
 # What if we took labels into account? The authors proposed a method to artificially construct new labels 
-# that align with a quantum kernel’s geometry. The authors proposed a method to artificially construct new 
-# labels that align with a quantum kernel’s geometry. This is a toy construction, but pretty fun to play around with.
+# that align with a quantum kernel’s geometry. This is a toy construction, but pretty fun to play around with.
 # Feel free to do so!
 #
 # References
