@@ -49,7 +49,7 @@ computational cost.
 
 An example of a classical kernel is the Radial Basis Function (RBF) kernel given by 
 :math:`k(x, x') = \exp(-\gamma \|x - x'\|^2)`. It implicitly computes the inner product 
-:math:`k(x, x') = \langle\phi(x), \phi(x')\rangle`. The feature map :math:`\phi(x)` projects 
+:math:`\langle\phi(x), \phi(x')\rangle`. The feature map :math:`\phi(x)` projects 
 to infinite dimensions, but it is never calculated directly.
 
 Quantum kernels are similar but leverage the Hilbert space of a quantum computer. A quantum kernel is defined by 
@@ -120,7 +120,7 @@ plt.show()
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # We consider **five different kernels** derived from three sources: a classical RBF kernel and two
-# quantum embedding circuits—**E1** and **E2**.
+# quantum embedding circuits, **E1** and **E2**.
 # Each kernel defines a different geometry for measuring similarity between data points.
 #
 # - **RBF – Classical radial basis function kernel.**
@@ -397,10 +397,9 @@ print(f"g (RBF vs PQK‑E2):   {g_PQK_E2:.4f}")
 
 ######################################################################
 # What does a high g mean?
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # We can see that in terms of :math:`g`: PQK-E1 > PQK-E2 > QK-E1 > QK-E2.
-#
 # A common misconception is that a higher geometric difference :math:`g` automatically means better
 # classification performance, which might lead us to believe, for example, that in terms of final
 # accuracy, the ranking will also be PQK-E1 > PQK-E2 > QK-E1 > QK-E2.
@@ -499,10 +498,9 @@ plt.show()
 # For instance, **PQK‑E2** achieved perfect test accuracy (:math:`100\%`), despite having a lower
 # :math:`g` than PQK‑E1.
 #
-# This highlights a key message from the paper:
-#
-# - The role of :math:`g` is *not* to predict which kernel will perform best on a given task, but
-#   rather to obtain a collection of kernels that have the *potential* to offer an advantage.
+# This highlights a key message from the paper: The role of :math:`g` is *not* to predict which kernel 
+# will perform best on a given task, but rather to obtain a collection of kernels that have the *potential* 
+# to offer an advantage.
 #
 # Here, PQK-E1 and PQK-E2 both had the potential for an advantage over classical, but PQK-E2 is the
 # only one that actually achieved the advantage. As a simple practical rule, if :math:`g` is low, then
@@ -513,10 +511,10 @@ plt.show()
 # Conclusion: A practical perspective on the Geometric difference g
 # -----------------------------------------------------------------
 #
-# In this notebook, we explored a fundamental question in quantum machine learning: **Can we anticipate, 
-# before training, whether a quantum kernel might outperform a classical one?**
+# In this notebook, we explored a fundamental question in quantum machine learning: Can we anticipate, 
+# before training, whether a quantum kernel might outperform a classical one?
 #
-# To address this, we used the **geometric difference** :math:`g`, a pre-training metric introduced by
+# To address this, we used the geometric difference :math:`g`, a pre-training metric introduced by
 # Huang et al. that quantifies how *differently* a quantum kernel organizes the data compared to a
 # classical kernel. The main takeaways from this demonstration are: 
 #
@@ -535,6 +533,11 @@ plt.show()
 #   classical RBF can produce. By contrast, a high :math:`g` only tells us that *some advantage may
 #   be possible*—not that it will be realized.
 #
+# What if we took labels into account? The authors proposed a method to artificially construct new labels 
+# that align with a quantum kernel’s geometry. The authors proposed a method to artificially construct new 
+# labels that align with a quantum kernel’s geometry. This is a toy construction, but pretty fun to play around with.
+# Feel free to do so!
+#
 # References
 # ----------
 #
@@ -542,201 +545,3 @@ plt.show()
 #
 #     Huang, Hsin-Yuan, Michael Broughton, Masoud Mohseni, Ryan Babbush, Sergio Boixo, Hartmut Neven, and Jarrod R. McClean. "Power of data in quantum machine learning." Nature Communications 12, no. 1 (2021): 2631. `arXiv:2011.01938 <https://arxiv.org/abs/2011.01938>`__
 #
-# Appendix: What if we take the labels into account?
-# --------------------------------------------------
-#
-# The cells above explore the importance of :math:`g` in a practical setting. However, as an appendix,
-# we also present a construction from the paper that’s pretty fun to play around with. We mentioned
-# that a high :math:`g` does not necessarily mean that a quantum kernel will outperform a classical
-# kernel, such as the case of PQK-E1. This is because :math:`g` does not take the dataset *labels*
-# into account in a supervised learning setting (such as the SVM we are exploring in the paper), and
-# it could be that the specific labels we have are not a good fit for the geometry of the kernel. The
-# authors proposed a method to artificially construct new labels that align with a quantum kernel’s
-# geometry. This guarantees that if :math:`g` is large enough, we will get an improvement since both
-# the input features and labels now match the geometry of the kernel. This is a toy construction; it’s
-# not practical because we usually care about the actual dataset labels we have rather than the fake
-# labels, but it’s good for getting more intuition about the role of :math:`g` and why it sometimes
-# fails in predicting performance.
-#
-# How label re-engineering works:
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#
-# Given :math:`K_Q` and :math:`K_C`, the process generates new labels that maximize quantum kernel
-# advantage:
-#
-# 1. Compute the matrix :math:`M = \sqrt{K_Q}(K_C)^{-1}\sqrt{K_Q}`
-# 2. Find the eigenvector :math:`v` corresponding to the largest eigenvalue :math:`g^2` of :math:`M`
-# 3. Project this eigenvector through :math:`\sqrt{K_Q}` to get new continuous labels:
-#    :math:`y = \sqrt{K_Q}v`
-# 4. Binarize using the median as threshold to create classification labels
-#
-# The new labels match the geometry of :math:`K_Q` and provide an advantage which is proportional to
-# :math:`g`.
-#
-# Let’s do this!
-#
-
-# Engineer labels for PQK-E1
-# ---------------------------------------------------------------------------#
-# Rebuild full X, y used in kernel computations #
-# ---------------------------------------------------------------------------#
-X_all = np.vstack([X_train, X_test])
-y_all = np.concatenate([y_train, y_test])
-n_samples = X_all.shape[0]
-# ---------------------------------------------------------------------------#
-# Recompute kernels on full dataset #
-# ---------------------------------------------------------------------------#
-print("Recomputing QK‑E1 and classical kernel on full dataset...")
-K_qk_E1_full = quantum_kernel_matrix(X_all, embed=embedding_E1)
-K_classical_full = rbf_kernel(X_all)
-# ---------------------------------------------------------------------------#
-# Generate engineered labels using eigendecomposition of quantum kernel
-# ---------------------------------------------------------------------------#
-print("Generating engineered labels to favor QK‑E1...")
-# Compute matrix square roots and inverse
-KQ_sqrt = sqrtm(K_qk_E1_full)
-KC_reg = K_classical_full + 1e-7 * np.eye(K_classical_full.shape[0])
-KC_inv = np.linalg.inv(KC_reg)
-
-# Solve eigenvalue problem: √KQ(KC)^(-1)√KQ
-M = KQ_sqrt @ KC_inv @ KQ_sqrt
-eigvals, eigvecs = np.linalg.eigh(M)
-v_max = eigvecs[:, -1]  # Largest eigenvalue's eigenvector
-
-# Apply square root transformation: y = √KQ v
-y_engineered_continuous = KQ_sqrt @ v_max
-
-# Threshold at median to create binary labels
-median_val = np.median(y_engineered_continuous)
-label_low, label_high = np.min(y_all), np.max(y_all)
-y_engineered = np.where(y_engineered_continuous > median_val, label_high, label_low).astype(
-    y_all.dtype
-)
-print("✅ Engineered labels generated successfully.")
-print(f"Class {label_low}: {np.sum(y_engineered == label_low)}")
-print(f"Class {label_high}: {np.sum(y_engineered == label_high)}")
-# -----------------------------------------------------------------------#
-# Resplit into train/test using original index split #
-# -----------------------------------------------------------------------#
-y_train_eng = y_engineered[: len(y_train)]
-y_test_eng = y_engineered[len(y_train) :]
-
-######################################################################
-#
-# We plot the newly re-engineered dataset for PQK-E1
-#
-
-plt.figure(figsize=(4, 4))
-plt.scatter(
-    X_train[y_train_eng == 0, 0],
-    X_train[y_train_eng == 0, 1],
-    s=15,
-    alpha=0.8,
-    label="Engineered Class 0",
-)
-plt.scatter(
-    X_train[y_train_eng == 1, 0],
-    X_train[y_train_eng == 1, 1],
-    s=15,
-    alpha=0.8,
-    label="Engineered Class 1",
-)
-plt.axis("equal")
-plt.title("QK‑E1 engineered labels (training set)")
-plt.legend(frameon=False)
-plt.show()
-
-######################################################################
-#
-# We train SVMs using each kernel and compare test accuracy on the new engineered labels.
-#
-
-from sklearn.svm import SVC
-from sklearn.metrics import accuracy_score
-from sklearn.metrics.pairwise import rbf_kernel
-
-results_engineered = {}
-
-# Classical RBF
-K_rbf_test = rbf_kernel(X_test, X_train)
-results_engineered["Classical RBF"] = train_evaluate_svm(
-    K_classical, K_rbf_test, y_train_eng, y_test_eng, "Classical RBF"
-)
-
-# Quantum Kernel E1
-K_qk_e1_test = qml.kernels.kernel_matrix(
-    X_test, X_train, lambda x, y: overlap_prob(x, y, embedding_E1)
-)
-results_engineered["QK-E1"] = train_evaluate_svm(
-    K_quantum_E1, K_qk_e1_test, y_train_eng, y_test_eng, "Quantum E1"
-)
-
-# Quantum Kernel E2
-K_qk_e2_test = qml.kernels.kernel_matrix(
-    X_test, X_train, lambda x, y: overlap_prob(x, y, embedding_E2)
-)
-results_engineered["QK-E2"] = train_evaluate_svm(
-    K_quantum_E2, K_qk_e2_test, y_train_eng, y_test_eng, "Quantum E2"
-)
-
-# PQK E1
-pauli_test_E1 = get_pauli_vectors(embedding_E1, X_test)
-gamma_E1 = calculate_gamma(np.vstack((get_pauli_vectors(embedding_E1, X_train), pauli_test_E1)))
-K_pqk_e1_test = rbf_kernel(pauli_test_E1, get_pauli_vectors(embedding_E1, X_train), gamma=gamma_E1)
-results_engineered["PQK-E1"] = train_evaluate_svm(
-    K_pqk_E1, K_pqk_e1_test, y_train_eng, y_test_eng, "PQK E1"
-)
-
-# PQK E2
-pauli_test_E2 = get_pauli_vectors(embedding_E2, X_test)
-gamma_E2 = calculate_gamma(np.vstack((get_pauli_vectors(embedding_E2, X_train), pauli_test_E2)))
-K_pqk_e2_test = rbf_kernel(pauli_test_E2, get_pauli_vectors(embedding_E2, X_train), gamma=gamma_E2)
-results_engineered["PQK-E2"] = train_evaluate_svm(
-    K_pqk_E2, K_pqk_e2_test, y_train_eng, y_test_eng, "PQK E2"
-)
-
-# Summary
-print("\n--- Accuracy Comparison (Engineered Labels) ---")
-for model, acc in results_engineered.items():
-    print(f"{model:>15}: {acc:.4f}")
-
-######################################################################
-#
-# Accuracy comparison — side-by-side bars (Original vs Engineered) for PQK-E1
-#
-
-import matplotlib.pyplot as plt
-import numpy as np
-
-model_names = list(results.keys())
-x = np.arange(len(model_names))  # the label locations
-width = 0.35  # width of each bar
-
-# Get accuracy values
-acc_orig = [results[name] for name in model_names]
-acc_eng = [results_engineered[name] for name in model_names]
-
-# Plot
-plt.figure(figsize=(10, 5))
-bars1 = plt.bar(x - width / 2, acc_orig, width, label="Original", color="tab:blue")
-bars2 = plt.bar(x + width / 2, acc_eng, width, label="Engineered", color="tab:orange")
-
-# Labels and ticks
-plt.ylabel("Test Accuracy")
-plt.title("SVM Accuracy by Kernel (Original vs Engineered Labels)")
-plt.xticks(x, model_names, rotation=15)
-plt.ylim(0, 1.05)
-plt.grid(axis="y", linestyle="--", alpha=0.4)
-plt.legend()
-
-# Annotate bars
-for bar in bars1:
-    yval = bar.get_height()
-    plt.text(bar.get_x() + bar.get_width() / 2, yval + 0.015, f"{yval:.2f}", ha="center")
-
-for bar in bars2:
-    yval = bar.get_height()
-    plt.text(bar.get_x() + bar.get_width() / 2, yval + 0.015, f"{yval:.2f}", ha="center")
-
-plt.tight_layout()
-plt.show()
