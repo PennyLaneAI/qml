@@ -1,32 +1,25 @@
-r"""
-How to use PennyLane for Resource Estimation
+r"""How to use PennyLane for Resource Estimation
 ============================================
-"""
 
-######################################################################
-# Fault tolerant quantum computers are on their way.
-# But how do we ensure that useful algorithms can actually run on them?
-# An algorithm is hardly helpful when it cannot be executed;
-# but only truly helpful when it can.
-#
-# This is a major challenge in quantum algorithm development,
-# especially since we are often working at scales where simulation is no longer feasible.
-# We therefore need to analyze our algorithms to perform **resource estimation**:
-# getting an idea of how many resources an algorithm requires, such as logical qubits and gates.
-# In turn, this gives us an indication of how long the algorithm will take to execute
-# on a given quantum hardware architecture,
-# or if it will even fit in memory to begin with.
-#
-# PennyLane is here to make that process easy, with our new resource estimation module
-# :mod:`estimator <pennylane.estimator>`. `estimator` leverages
-# the latest resource estimates, decompositions, and compilation
-# techniques from the literature, and is designed to do so as
-# quickly as possible.
-#
-# In this demo, we will estimate the quantum resources necessary 
-# for a simple Hamiltonian workflow: evolve the quantum state of a 
-# honeycomb lattice of spins under the
-# :func:`Kitaev Hamiltonian <pennylane.spin.kitaev>`.
+Fault tolerant quantum computers are on their way. But how do we ensure that useful algorithms can
+actually run on them? An algorithm is hardly helpful when it cannot be executed; but only truly
+helpful when it can.
+
+This is a major challenge in quantum algorithm development, especially since we are often working at
+scales where simulation is no longer feasible. We therefore need to analyze our algorithms to 
+perform **resource estimation**: getting an idea of how many resources an algorithm requires, such
+as logical qubits and gates. In turn, this gives us an indication of how long the algorithm will take
+to execute on a given quantum hardware architecture, or if it will even fit in memory to begin with.
+
+PennyLane is here to make that process easy, with our new resource estimation module
+:mod:`estimator <pennylane.estimator>`. `estimator` leverages the latest resource estimates,
+decompositions, and compilation techniques from the literature, and is designed to do so as
+quickly as possible.
+
+In this demo, we will estimate the quantum resources necessary for a simple Hamiltonian workflow:
+evolve the quantum state of a honeycomb lattice of spins under the
+:func:`Kitaev Hamiltonian <pennylane.spin.kitaev>`.
+"""
 
 ######################################################################
 # Estimating the Resources of existing PennyLane workflows
