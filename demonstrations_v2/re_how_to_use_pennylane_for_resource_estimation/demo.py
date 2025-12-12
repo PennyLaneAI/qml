@@ -144,7 +144,7 @@ pauli_word_distribution = {"XX": n_xx, "YY": n_yy, "ZZ": n_zz}
 
 kitaev_H = qre.PauliHamiltonian(
     num_qubits=n_q,
-    pauli_dist=pauli_word_distribution,
+    pauli_terms=pauli_word_distribution,
 )
 
 ######################################################################
@@ -205,7 +205,7 @@ commuting_groups = [{"XX": n_xx}, {"YY": n_yy}, {"ZZ": n_zz}]
 
 kitaev_H_with_grouping = qre.PauliHamiltonian(
     num_qubits=n_q,
-    commuting_groups=commuting_groups,
+    pauli_terms=commuting_groups,
 )
 
 resources_with_grouping = qre.estimate(
@@ -361,7 +361,7 @@ commuting_groups = [{"XX": n_xx}, {"YY": n_yy}, {"ZZ": n_zz}]
 
 compact_hamiltonian = qre.PauliHamiltonian(
     num_qubits = n_q,
-    commuting_groups = commuting_groups,
+    pauli_terms = commuting_groups,
 )
 t2 = time.time()
 t_estimation = t2 - t1
@@ -375,7 +375,7 @@ print("Total number of terms:", len(flat_hamiltonian.operands))
 print("Total number of qubits:", len(flat_hamiltonian.wires), "\n")
 
 print(f"Processing time for Hamiltonian estimation: {(t_estimation):.3g} seconds")
-print("Total number of terms:", compact_hamiltonian.num_pauli_words)
+print("Total number of terms:", compact_hamiltonian.num_terms)
 print("Total number of qubits:", compact_hamiltonian.num_qubits)
 
 ######################################################################
