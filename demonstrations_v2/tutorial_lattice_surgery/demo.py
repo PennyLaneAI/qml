@@ -3,7 +3,7 @@ r"""
 Introducing Lattice Surgery
 ===========================
 
-Lattice surgery is a way to fault-tolerantly perform operations on two-dimensional quantum computers
+Lattice surgery is a way to perform fault-tolerant operations on two-dimensional quantum computer architectures
 with local physical connectivity. Its introduction improved spatial overheads in topological quantum
 error correction codes such as surface codes by replacing continuous code operations 
 with discontinuous ones: lattice splitting and merging.
