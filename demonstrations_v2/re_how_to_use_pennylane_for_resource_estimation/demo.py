@@ -237,7 +237,7 @@ print(f"Difference: {100*reduction:.1f}% reduction")
 # Here are the resources for our entire circuit using our updated Hamiltonian:
 
 res = qre.estimate(circuit)(kitaev_H_with_grouping, num_steps, order)
-print(f"\n{res}")
+print(f"{res}")
 
 ######################################################################
 # We can configure the gateset to obtain resource estimates at various levels of abstraction.
