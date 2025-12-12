@@ -300,8 +300,8 @@ res = qre.estimate(
 )(kitaev_H_with_grouping, num_steps, order)
 
 # Just compare T gates:
-print("--- Lower precision (1e-9) ---", f"\n T counts: {lowlvl_res.gate_counts["T"]:.3E}")
-print("\n--- Higher precision (1e-15) ---", f"\n T counts: {res.gate_counts["T"]:.3E}")
+print("--- Lower precision (1e-9) ---", f"\n T counts: {lowlvl_res.gate_counts['T']:.3E}")
+print("\n--- Higher precision (1e-15) ---", f"\n T counts: {res.gate_counts['T']:.3E}")
 
 ######################################################################
 # The :mod:`estimator <pennylane.estimator>` module also provides functionality for
