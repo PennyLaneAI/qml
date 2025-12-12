@@ -5,11 +5,10 @@ Introducing Lattice Surgery
 
 Lattice surgery is a way to perform fault-tolerant operations on two-dimensional quantum computer architectures
 with local physical connectivity. Its introduction improved spatial overheads in topological quantum
-error correction codes such as surface codes by replacing continuous code operations 
+error correction codes, such as surface codes, by replacing continuous code operations 
 with discontinuous ones: lattice splitting and merging.
 In this demo, we are going to see how these operations
-enable parity measurements of arbitrary Pauli operators, which unlock universal fault
-tolerant quantum computing.
+enable parity measurements of arbitrary Pauli operators, which unlock universal fault-tolerant quantum computing.
 
 .. figure:: _static/hero_illustrations/pennylane-demo-lattice-surgery-hero.png
     :align: center
@@ -23,7 +22,7 @@ for universal computing. We are then going to explain how to perform such
 Surface code quantum computing
 ------------------------------
 
-Topological quantum error correction codes like the surface code [#surfacecode]_ protect quantum information stored in logical qubits by
+Topological quantum error correction codes, like the surface code [#surfacecode]_, protect quantum information stored in logical qubits by
 ensuring the underlying physical qubits are kept in the code space, defined by the :math:`+1` eigenspace of a set of :doc:`stabilizer measurements <demos/tutorial_stabilizer_codes>`.
 A logical qubit is then represented by a patch of physical qubits, called data qubits, on a square lattice like so:
 
@@ -76,12 +75,12 @@ surgery are discontinuous deformations of the lattice, in particular lattice mer
 Universal quantum computing with Pauli product measurements
 -----------------------------------------------------------
 
-To achieve universal quantum computing, we need to be able to perform all Clifford gates, and, in particular, CNOT gates.
-Further, we need to be able to reliably inject states to enable `magic state injection <https://pennylane.ai/qml/glossary/what-are-magic-states>`__.
-This is a bottom-up way to show that lattice surgery enables universal quantum computing, which was done in its original introduction [#latticesurgery]_.
+To achieve universal quantum computing, we need to be able to perform all Clifford gates, particularly CNOT gates.
+Furthermore, we need to be able to reliably inject states to enable `magic state injection <https://pennylane.ai/qml/glossary/what-are-magic-states>`__.
+This line of reasoning is a bottom-up way to show that lattice surgery enables universal quantum computing, which was done in its original introduction [#latticesurgery]_.
 
 Let us alternatively take a top-down approach here and show that we can perform arbitrary `Pauli product measurements <https://pennylane.ai/compilation/pauli-product-measurement>`__ (PPMs), 
-because we know this enables universal quantum computing, as illustrated in, e.g., the :doc:`Game of Surface Codes <demos/tutorial_game_of_surface_codes>` [#Litinski]_).
+because we know this enables universal quantum computing, as illustrated in, e.g., the :doc:`Game of Surface Codes <demos/tutorial_game_of_surface_codes>` [#Litinski]_.
 The gist of it is that `Pauli product rotations <https://pennylane.ai/compilation/pauli-product-rotations>`__ (PPRs) like :math:`e^{-i \tfrac{\theta}{2} P}`, represented as
 
 .. figure:: ../_static/demonstration_assets/lattice_surgery/PPR.png
@@ -112,13 +111,13 @@ Non-Clifford PPRs can be realized using a magic resource state in the following 
 Here, we injected a magic state :math:`T|+\rangle = \tfrac{1}{\sqrt{2}} \left(|0\rangle + e^{-i \tfrac{1}{4}} |1\rangle\right)` that was produced separately via `magic state distillation <https://pennylane.ai/qml/demos/tutorial_magic_state_distillation>`__.
 Note that Pauli operations that have angles that are multiples of 
 :math:`\pi` do not need to be executed on hardware, but can be tracked in software.
-Further, we stress that there are different circuit identities to realize PPRs via PPMs, with the ones shown here just the basic examples taken from [#Litinski]_.
+In addition, we stress that there are different circuit identities to realize PPRs via PPMs. Here, we showed just the basic examples from [#Litinski]_.
 For our purposes here it suffices to note that realizing PPRs via PPMs is possible, so the only thing left to show is how to perform arbitrary PPMs using lattice surgery.
 
-Single qubit measurements
+Single-qubit measurements
 -------------------------
 
-Before we get to the meat of performing arbitrary PPMs with lattice surgery, let us recall how to perform single qubit measurements (and thus single qubit gates).
+Before we get to the meat of performing arbitrary PPMs with lattice surgery, let us recall how to perform single-qubit measurements (and thus single-qubit gates).
 In the orientation we previously used, logical operators :math:`Z_L` and :math:`X_L` of the logical qubit are defined by a horizontal line of :math:`Z` and vertical line of :math:`X` measurements
 on the data qubits:
 
@@ -134,7 +133,7 @@ leads to the somewhat confusing scenario where the edge with Z arches is called 
 Because we only care about the homology of the measurement
 (i.e., that it in the same equivalence class of the corresponding X and Z edges), this is also called a *homological measurement*.
 It does not really matter which operator of the equivalence class we measure. We have access to any of them without extra effort because they are related to each other via stabilizer measurements, 
-which we anyway perform during the continually performed error correction cycles.
+which we perform anyway during the continually performed error correction cycles.
 So for the following, we will just consider those that are convenient for illustrational purposes.
 
 An important feature of the logical operators is that they are not stabilizers, but commute with all stabilizers to ensure that the logical operator does not move the 
@@ -142,7 +141,7 @@ state out of the code space (:math:`O_L S |\psi\rangle_L = S O_L |\psi\rangle_L`
 The commutation can be seen from the fact
 that the logical operator only ever overlaps with an even multiple of X or Z operators, and thus commutes with any other stabilizer.
 
-We also note that logical :math:`Y_L` measurement is a topic on its own. In principle, one could measure :math:`Y_L` by simultaneously measuring the logical
+We also note that the logical :math:`Y_L` measurement is a topic on its own. In principle, one could measure :math:`Y_L` by simultaneously measuring the logical
 :math:`X_L` and :math:`Z_L` with a physical :math:`Y` measurement on the intersecting data qubit.
 However, this is not a properly defined logical operator anymore as it does not commute with the stabilizers, and thus moves the qubit out of the code space.
 Measuring (and applying, it's the same really) logical :math:`Y_L` operators is still possible, just a little more complicated as we will show further below.
@@ -191,7 +190,7 @@ In case the green Z measurement in the middle yields a negative sign,
 we need to assign it to one of the two logical :math:`Z_L` operators, 
 on top of the product of the sign of the original two :math:`Z_L` operators we originally started from.
 
-Measuring :math:`Z_L \otimes Z_L` works in the same fashion, but with reversed roles: We connect the Z edges with each other, initialize in :math:`|+\rangle` to merge and measure in :math:`X` to split again:
+Measuring :math:`Z_L \otimes Z_L` works in the same fashion, but with reversed roles: We connect the Z edges with each other, initialize in :math:`|+\rangle` to merge, and measure in :math:`X` to split again:
 
 .. figure:: ../_static/demonstration_assets/lattice_surgery/ZZ.png
     :align: center
@@ -207,7 +206,7 @@ Y measurements
 
 At this point we can measure arbitrary :math:`X_L` and :math:`Z_L` Pauli product measurements. The last missing ingredient for universality is measuring :math:`Y_L` operators.
 
-Introducing discontinuous operations on the surface code does not exclude that we can still use the continuous transformations of the code.
+Introducing discontinuous operations on the surface code does not exclude the usage of continuous transformations of the code.
 In particular, we can always extend a qubit to a larger surface or move the edges of it. These are important operations if we want to include logical :math:`Y_L` measurements.
 
 The operations are very similar to the merging and splitting operations. To extend a qubit patch along its Z edge, we initialize the neighboring data qubits in :math:`|0\rangle` 
@@ -244,8 +243,8 @@ As we can see, the bulk of the qubit is untouched and all that is changed is the
     :width: 70%
     :target: javascript:void(0)
   
-Here we show an extended single qubit patch and three example re-orientations of the type of edges.
-The smaller images are guides to the eye to indicate the settings, with X edges as solid lines and Z edges as dotted lines (i.e. the same as the logical measurements moved to the edges).
+Here we show an extended single-qubit patch and three example re-orientations of the type of edges.
+The smaller images are guides to the eye to indicate the settings, with X edges as solid lines and Z edges as dashed lines (i.e. the same as the logical measurements moved to the edges).
 Note that the important property is for neighboring X and Z edges to overlap on two data qubits for the corresponding stabilizers to commute. 
 This is why the right patches introduce the triangle-shaped stabilizers of three :math:`Z` operators.
 
