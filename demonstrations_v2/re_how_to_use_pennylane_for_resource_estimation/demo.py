@@ -97,25 +97,6 @@ print(f"Processing time: {(t2 - t1):.3g} seconds")
 print(resources_exec)
 
 ######################################################################
-# .. rst-class:: sphx-glr-script-out
-#
-# .. code-block:: none
-#
-#    Processing time: 2.32 seconds
-#    --- Resources: ---
-#     Total wires: 1250
-#       algorithmic wires: 1250
-#       allocated wires: 0
-#         zero state: 0
-#         any state: 0
-#     Total gates : 2.972E+7
-#       'T': 2.670E+7,
-#       'CNOT': 1.214E+6,
-#       'Z': 6.000E+5,
-#       'S': 1.200E+6,
-#       'Hadamard': 1.250E+3
-
-######################################################################
 # Fast estimation with less information
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
@@ -202,26 +183,6 @@ print(f"Processing time: {t2 - t1:.3g} seconds\n")
 print(res)
 
 ######################################################################
-# .. rst-class:: sphx-glr-script-out
-#
-# .. code-block:: none
-#
-#    Processing time: 0.00213 seconds
-#
-#    --- Resources: ---
-#     Total wires: 2.000E+4
-#       algorithmic wires: 20000
-#       allocated wires: 0
-#         zero state: 0
-#         any state: 0
-#     Total gates : 7.151E+8
-#       'T': 6.556E+8,
-#       'CNOT': 2.980E+7,
-#       'Z': 9.900E+6,
-#       'S': 1.980E+7,
-#       'Hadamard': 2.000E+4
-
-######################################################################
 # Our resource estimate was generated in the blink of an eye.
 #
 # We can also analyze the resources of an individual
@@ -263,19 +224,6 @@ print("--- Without grouping ---", f"\n T gate count: {t_count_2:.3E}\n")
 print(f"Difference: {100*reduction:.1f}% reduction")
 
 ######################################################################
-# .. rst-class:: sphx-glr-script-out
-#
-# .. code-block:: none
-#
-#    --- With grouping --- 
-#     T gate count: 6.556E+08
-#   
-#    --- Without grouping --- 
-#     T gate count: 4.371E+08
-#   
-#    Difference: 33.3% reduction
-
-######################################################################
 # By splitting our terms into groups, we’ve managed to reduce the ``T`` gate count of our
 # Trotterization by over 30 percent!
 #
@@ -290,24 +238,6 @@ print(f"Difference: {100*reduction:.1f}% reduction")
 
 res = qre.estimate(circuit)(kitaev_H_with_grouping, num_steps, order)
 print(f"\n{res}")
-
-######################################################################
-# .. rst-class:: sphx-glr-script-out
-#
-# .. code-block:: none
-#
-#    --- Resources: ---
-#     Total wires: 2.000E+4
-#       algorithmic wires: 20000
-#       allocated wires: 0
-#         zero state: 0
-#         any state: 0
-#     Total gates : 4.867E+8
-#       'T': 4.371E+8,
-#       'CNOT': 1.987E+7,
-#       'Z': 9.900E+6,
-#       'S': 1.980E+7,
-#       'Hadamard': 2.000E+4
 
 ######################################################################
 # We can configure the gateset to obtain resource estimates at various levels of abstraction.
@@ -333,25 +263,7 @@ highlvl_res = qre.estimate(
 print(f"High-level resources:\n{highlvl_res}\n")
 
 ######################################################################
-# .. rst-class:: sphx-glr-script-out
 #
-# .. code-block:: none
-#
-#    High-level resources:
-#    --- Resources: ---
-#     Total wires: 2.000E+4
-#       algorithmic wires: 20000
-#       allocated wires: 0
-#         zero state: 0
-#         any state: 0
-#     Total gates : 4.962E+7
-#       'RX': 2.510E+6,
-#       'RY': 4.950E+6,
-#       'Adjoint(S)': 9.900E+6,
-#       'RZ': 2.475E+6,
-#       'CNOT': 1.987E+7,
-#       'S': 9.900E+6,
-#       'Hadamard': 2.000E+4
 
 lowlvl_gateset = {"Hadamard", "S", "CNOT", "T"}
 
@@ -361,24 +273,6 @@ lowlvl_res = qre.estimate(
 )(kitaev_H_with_grouping, num_steps, order)
 
 print(f"Low-level resources:\n{lowlvl_res}")
-
-######################################################################
-# .. rst-class:: sphx-glr-script-out
-#
-# .. code-block:: none
-#
-#    Low-level resources:
-#    --- Resources: ---
-#     Total wires: 2.000E+4
-#       algorithmic wires: 20000
-#       allocated wires: 0
-#         zero state: 0
-#         any state: 0
-#     Total gates : 4.966E+8
-#       'T': 4.371E+8,
-#       'CNOT': 1.987E+7,
-#       'S': 3.960E+7,
-#       'Hadamard': 2.000E+4
 
 ######################################################################
 # When decomposing our algorithms to a particular gateset, it is often the case that we only have some
@@ -408,19 +302,6 @@ res = qre.estimate(
 # Just compare T gates:
 print("--- Lower precision (1e-9) ---", f"\n T counts: {lowlvl_res.gate_counts["T"]:.3E}")
 print("\n--- Higher precision (1e-15) ---", f"\n T counts: {res.gate_counts["T"]:.3E}")
-
-######################################################################
-# .. rst-class:: sphx-glr-script-out
-#
-# .. code-block:: none
-#
-#    Default setting: {'precision': 1e-09}
-#    
-#    --- Lower precision (1e-9) --- 
-#     T counts: 4.371E+08
-#    
-#    --- Higher precision (1e-15) --- 
-#     T counts: 4.916E+08
 
 ######################################################################
 # The :mod:`estimator <pennylane.estimator>` module also provides functionality for
@@ -456,25 +337,6 @@ resources = qre.estimate(
 t2 = time.time()
 print(f"Processing time: {t2 - t1:.3g} seconds\n")
 print(resources)
-
-######################################################################
-# .. rst-class:: sphx-glr-script-out
-#
-# .. code-block:: none
-#
-#    Processing time: 0.000425 seconds
-#    
-#    --- Resources: ---
-#     Total wires: 2.000E+4
-#       algorithmic wires: 20000
-#       allocated wires: 0
-#         zero state: 0
-#         any state: 0
-#     Total gates : 5.239E+8
-#       'T': 4.644E+8,
-#       'CNOT': 1.987E+7,
-#       'S': 3.960E+7,
-#       'Hadamard': 2.000E+4
 
 ######################################################################
 # Comparing estimates: full vs. resource workflows
@@ -517,19 +379,6 @@ print("Total number of terms:", compact_hamiltonian.num_pauli_words)
 print("Total number of qubits:", compact_hamiltonian.num_qubits)
 
 ######################################################################
-# .. rst-class:: sphx-glr-script-out
-#
-# .. code-block:: none
-#
-#    Processing time for Hamiltonian generation: 7.74 seconds
-#    Total number of terms: 1825
-#    Total number of qubits: 1250 
-#    
-#    Processing time for Hamiltonian estimation: 0.000191 seconds
-#    Total number of terms: 1825
-#    Total number of qubits: 1250
-
-######################################################################
 # Notice how much faster it was to prepare
 # the resource Hamiltonian for estimation!
 #
@@ -537,25 +386,6 @@ print("Total number of qubits:", compact_hamiltonian.num_qubits)
 #
 
 print(resources_exec)
-
-######################################################################
-# .. rst-class:: sphx-glr-script-out
-#
-# .. code-block:: none
-#
-#    Processing time: 2.32 seconds
-#    --- Resources: ---
-#     Total wires: 1250
-#       algorithmic wires: 1250
-#       allocated wires: 0
-#         zero state: 0
-#         any state: 0
-#     Total gates : 2.972E+7
-#       'T': 2.670E+7,
-#       'CNOT': 1.214E+6,
-#       'Z': 6.000E+5,
-#       'S': 1.200E+6,
-#       'Hadamard': 1.250E+3
 
 ######################################################################
 # Let's validate the results by comparing with our resource *estimation* circuit.
@@ -567,25 +397,6 @@ t2 = time.time()
 
 print(f"Processing time: {(t2 - t1):.3g} seconds")
 print(resources_est)
-
-######################################################################
-# .. rst-class:: sphx-glr-script-out
-#
-# .. code-block:: none
-#
-#    Processing time: 0.000371 seconds
-#    --- Resources: ---
-#     Total wires: 1250
-#       algorithmic wires: 1250
-#       allocated wires: 0
-#         zero state: 0
-#         any state: 0
-#     Total gates : 2.972E+7
-#       'T': 2.670E+7,
-#       'CNOT': 1.214E+6,
-#       'Z': 6.000E+5,
-#       'S': 1.200E+6,
-#       'Hadamard': 1.250E+3
 
 ######################################################################
 # The numbers check out!

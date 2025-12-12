@@ -9,7 +9,7 @@
         }
     ],
     "executable_stable": false,
-    "executable_latest": false,
+    "executable_latest": true,
     "dateOfPublication": "2025-12-08T10:00:00+00:00",
     "dateOfLastModification": "2025-12-08T10:00:00+00:01",
     "categories": [
