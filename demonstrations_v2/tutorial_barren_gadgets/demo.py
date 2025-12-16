@@ -11,8 +11,6 @@ Perturbative Gadgets for Variational Quantum Algorithms
     tutorial_barren_plateaus Barren plateaus in quantum neural networks¶
     tutorial_local_cost_functions Alleviating barren plateaus with local cost functions
 
-*Author: Simon Cichy  — Posted: 09 December 2022. Last updated: 09 December 2022.*
-
 Variational quantum algorithms are seen as one of the most primising candidates
 for useful applications of quantum computers in the near term, but there are 
 still a few hurdles to overcome when it comes to practical implementation.
@@ -33,8 +31,8 @@ That is a problem because increasing the precision of the cost
 function requires more measurements from the quantum device due to shot noise, 
 and an exponential number of measurements would render the algorithm impractical.
 If you are not familiar yet with the concept of barren plateaus, I recommend you
-first check out the demonstrations on :doc:`barren plateaus </demos/tutorial_barren_plateaus>`
-and :doc:`avoiding barren plateaus with local cost functions </demos/tutorial_local_cost_functions>`.
+first check out the demonstrations on :doc:`barren plateaus <demos/tutorial_barren_plateaus>`
+and :doc:`avoiding barren plateaus with local cost functions <demos/tutorial_local_cost_functions>`.
 
 As presented in the second aforementioned demo, barren plateaus are more severe when using global
 cost functions compared to local ones. 
@@ -336,7 +334,7 @@ for it in range(max_iter):
     costs_lists["monitoring"].append(monitoring_cost(weights))
 
 
-plt.style.use("seaborn")
+plt.style.use("seaborn-v0_8")
 
 plt.figure()
 plt.plot(costs_lists["training"])
@@ -384,7 +382,4 @@ plt.show()
 #    Cerezo, M., Sone, A., Volkoff, T. et al.
 #    "Cost function dependent barren plateaus in shallow parametrized quantum circuits." `Nat Commun 12, 1791
 #    <https://doi.org/10.1038/s41467-021-21728-w>`__, 2021.
-#
-# About the author
-# ----------------
 #

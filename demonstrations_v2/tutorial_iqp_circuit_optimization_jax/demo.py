@@ -115,6 +115,12 @@ gates = [[[0]], [[1]], [[2]], [[0,1]], [[0,2]], [[1,2]]]
 import pennylane as qml
 import numpy as np
 
+# Suppress the warning caused by iqpopt
+import warnings
+from pennylane.exceptions import PennyLaneDeprecationWarning
+warnings.filterwarnings("ignore", category=PennyLaneDeprecationWarning)
+
+
 def penn_iqp_gates(params: np.ndarray, gates: list, n_qubits: int):
     """IQP circuit in PennyLane form.
 
@@ -611,7 +617,4 @@ plt.show()
 #    Suman Ravuri, Mélanie Rey, Shakir Mohamed, Marc Peter Deisenroth.
 #    "Understanding Deep Generative Models with Generalized Empirical Likelihoods"
 #    `arXiv:2306.09780 <https://arxiv.org/abs/2306.09780>`__, 2023.
-#
-# About the authors
-# ----------------
 #

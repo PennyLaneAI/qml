@@ -5,9 +5,13 @@
             "username": "shossein"
         }
     ],
+    "executable_stable": true,
+    "executable_latest": true,
     "dateOfPublication": "2020-04-09T00:00:00+00:00",
-    "dateOfLastModification": "2024-11-06T00:00:00+00:00",
-    "categories": ["Algorithms"],
+    "dateOfLastModification": "2025-09-22T15:48:14+00:00",
+    "categories": [
+        "Algorithms"
+    ],
     "tags": [],
     "previewImages": [
         {

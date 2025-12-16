@@ -2,7 +2,7 @@ r"""
 Digital zero-noise extrapolation (ZNE) with Catalyst
 ====================================================
 
-In this tutorial, you will learn how to use :doc:`error mitigation <tutorial_error_mitigation>`, and in particular 
+In this tutorial, you will learn how to use :doc:`error mitigation <demos/tutorial_error_mitigation>`, and in particular 
 the zero-noise extrapolation (ZNE) technique, in combination with 
 `Catalyst <https://docs.pennylane.ai/projects/catalyst>`_, a framework for quantum 
 just-in-time (JIT) compilation with PennyLane. 
@@ -14,14 +14,14 @@ leveraging JIT compilation through Catalyst.
     :width: 70%
     :align: center
 
-The demo :doc:`Error mitigation with Mitiq and PennyLane <tutorial_error_mitigation>`
+The demo :doc:`Error mitigation with Mitiq and PennyLane <demos/tutorial_error_mitigation>`
 shows how ZNE, along with other error mitigation techniques, can be carried out in PennyLane
 by using `Mitiq <https://github.com/unitaryfund/mitiq>`__, a Python library developed 
 by `Unitary Fund <https://unitary.fund/>`__.
 
 ZNE in particular is also offered out of the box in PennyLane as a *differentiable* error mitigation technique,
 for usage in combination with variational workflows. More on this in the tutorial
-:doc:`Differentiating quantum error mitigation transforms <tutorial_diffable-mitigation>`.
+:doc:`Differentiating quantum error mitigation transforms <demos/tutorial_diffable-mitigation>`.
 
 On top of the error mitigation routines offered in PennyLane, ZNE is also available for just-in-time
 (JIT) compilation. In this tutorial we see how an error mitigation routine can be
@@ -59,7 +59,7 @@ Once noise-scaled circuits are created, they need to be run! These can be execut
 quantum hardware or a noisy quantum simulator. In this tutorial, we'll use the
 `Qrack quantum simulator <https://qrack.readthedocs.io/>`_, which is both compatible with Catalyst,
 and implements a noise model. For more about the integration of Qrack and Catalyst, see
-the demo :doc:`QJIT compilation with Qrack and Catalyst <qrack>`.
+the demo :doc:`QJIT compilation with Qrack and Catalyst <demos/qrack>`.
 
 Stage 3: Combining the results
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -98,6 +98,10 @@ the noise scaling method, and the extrapolation method. The rest is taken care o
 import numpy as np
 import pennylane as qml
 from catalyst import mitigate_with_zne
+
+import warnings
+from pennylane.exceptions import PennyLaneDeprecationWarning
+warnings.filterwarnings("ignore", category=PennyLaneDeprecationWarning)
 
 n_wires = 3
 
@@ -162,11 +166,11 @@ scale_factors = [1, 3, 5]
 
 ##############################################################################
 # Finally, we'll choose the extrapolation technique. Both exponential and polynomial extrapolation
-# is available in the :mod:`qml.transforms <pennylane.transforms>` module, and both of these functions can be passed directly
+# is available in the :mod:`qml.noise <pennylane.noise>` module, and both of these functions can be passed directly
 # into Catalyst's :func:`catalyst.mitigate_with_zne` function. In this tutorial we use polynomial extrapolation,
 # which we hypothesize best models the behavior of the noise scenario we are considering.
 
-from pennylane.transforms import poly_extrapolate
+from pennylane.noise import poly_extrapolate
 from functools import partial
 
 extrapolation_method = partial(poly_extrapolate, order=2)
@@ -205,11 +209,11 @@ print(f"Error with ZNE in Catalyst: {abs(ideal_value - zne_value):.3f}")
 
 
 def mitigated_circuit(w1, w2):
-    return qml.transforms.mitigate_with_zne(
+    return qml.noise.mitigate_with_zne(
         noisy_qnode,
         scale_factors=scale_factors,
         extrapolate=extrapolation_method,
-        folding=qml.transforms.fold_global,
+        folding=qml.noise.fold_global,
     )(w1, w2)
 
 

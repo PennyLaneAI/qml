@@ -5,7 +5,7 @@ Machine learning for quantum many-body problems
 Storing and processing a complete description of an :math:`n`-qubit quantum mechanical
 system is challenging because the amount of memory required generally scales exponentially
 with the number of qubits. The quantum community has recently addressed this challenge by using
-the :doc:`classical shadow <tutorial_classical_shadows>` formalism, which allows us to build more
+the :doc:`classical shadow <demos/tutorial_classical_shadows>` formalism, which allows us to build more
 concise classical descriptions of quantum states using randomized single-qubit measurements.
 It was argued in Ref. [#preskill]_ that combining classical shadows with classical machine learning
 enables using learning models that efficiently predict properties of the quantum systems, such as
@@ -23,7 +23,7 @@ In this demo, we describe one of the ideas presented in Ref. [#preskill]_ for us
 shadow formalism and machine learning to predict the ground-state properties of the
 2D antiferromagnetic Heisenberg model. We begin by learning how to build the Heisenberg model,
 calculate its ground-state properties, and compute its classical shadow. Finally, we demonstrate
-how to use :doc:`kernel-based learning models <tutorial_kernels_module>` to predict ground-state
+how to use :doc:`kernel-based learning models <demos/tutorial_kernels_module>` to predict ground-state
 properties from the learned classical shadows. So let's get started!
 
 .. note::
@@ -252,7 +252,7 @@ plt.show()
 
 ######################################################################
 # Now that we have built the Heisenberg model, the next step is to construct
-# a :doc:`classical shadow <tutorial_classical_shadows>` representation for its ground state. To construct an
+# a :doc:`classical shadow <demos/tutorial_classical_shadows>` representation for its ground state. To construct an
 # approximate classical representation of an :math:`n`-qubit quantum state :math:`\rho,`
 # we perform randomized single-qubit measurements on :math:`T`-copies of
 # :math:`\rho.` Each measurement is chosen randomly among the Pauli bases
@@ -267,7 +267,7 @@ plt.show()
 # state :math:`\rho,` and the :math:`nT` measurements yield the complete
 # set :math:`S_{T},` which requires just :math:`3nT` bits to be stored
 # in classical memory. This is discussed in further detail in our previous
-# demo about :doc:`classical shadows <tutorial_classical_shadows>`.
+# demo about :doc:`classical shadows <demos/tutorial_classical_shadows>`.
 #
 
 ######################################################################
@@ -284,8 +284,8 @@ plt.show()
 # a ``QNode`` utilizing a device that performs single-shot measurements.
 #
 
-dev_oshot = qml.device("default.qubit", wires=num_qubits, shots=1)
-circuit_oshot = qml.QNode(circuit, dev_oshot)
+dev_oshot = qml.device("default.qubit", wires=num_qubits)
+circuit_oshot = qml.set_shots(qml.QNode(circuit, dev_oshot), shots = 1)
 
 
 ######################################################################
@@ -500,7 +500,7 @@ plt.show()
 # the classical representation of quantum systems based on some system
 # parameter, estimating a property from such learned classical representations,
 # or a combination of both. In our case, we consider the problem of using
-# :doc:`kernel-based models <tutorial_kernel_based_training>` to learn the ground-state representation of the
+# :doc:`kernel-based models <demos/tutorial_kernel_based_training>` to learn the ground-state representation of the
 # Heisenberg model Hamiltonian :math:`H(x_l)` from the coupling vector :math:`x_l,`
 # where :math:`x_l = [J_{i,j} \text{ for } i < j].` The goal is to predict the
 # correlation functions :math:`C_{ij}:`
@@ -859,6 +859,3 @@ plt.show()
 #    Convergence and generalization in neural networks". `NeurIPS, 8571–8580
 #    <https://proceedings.neurips.cc/paper/2018/file/5a4be1fa34e62bb8a6ec6b91d2462f5a-Paper.pdf>`__ (2018)
 #
-#
-# About the author
-# ----------------

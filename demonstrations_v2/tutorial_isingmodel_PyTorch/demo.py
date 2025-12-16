@@ -14,8 +14,6 @@ r"""
    tutorial_state_preparation Training a quantum circuit with PyTorch
    pytorch_noise PyTorch and noisy devices
 
-*Author: Aroosa Ijaz — Posted: 16 October 2019. Last updated: 26 October 2020.*
-
 The interacting spins with variable coupling strengths of an `Ising model <https://en.wikipedia.org/wiki/Ising_model>`__
 can be used to simulate various machine learning concepts like `Hopfield networks <https://en.wikipedia.org/wiki/Hopfield_network>`__
 and `Boltzmann machines <https://en.wikipedia.org/wiki/Boltzmann_machine>`__
@@ -247,8 +245,4 @@ with torch.no_grad():
 #
 # 3. Gary Kochenberger et al. "The Unconstrained Binary Quadratic Programming Problem: A Survey."
 # `Journal of Combinatorial Optimization <https://link.springer.com/article/10.1007/s10878-014-9734-0>`__, 2014.
-#
-#
-# About the author
-# ----------------
 #

@@ -6,8 +6,6 @@ Quantum advantage in learning from experiments
     :property="og:description": Learn how quantum memory can boost quantum machine learning algorithms
     :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/learning_from_exp_thumbnail.png
 
-*Author: Joseph Bowles — Posted: 18 April 2022. Last updated: 30 June 2022.*
-
 This demo is based on the article `Quantum advantage in learning from
 experiments <https://arxiv.org/abs/2112.00778>`__ `[1] <#ref1>`__ by
 Hsin-Yuan Huang and co-authors. The article investigates the following
@@ -175,8 +173,9 @@ def generate_circuit(shots):
     generate a random circuit that returns a number of measuement samples
     given by shots
     """
-    dev = qml.device("lightning.qubit", wires=qubits, shots=shots)
+    dev = qml.device("lightning.qubit", wires=qubits)
 
+    @qml.set_shots(shots)
     @qml.qnode(dev)
     def circuit(ts=False):
 
@@ -343,7 +342,7 @@ plt.show()
 n_shots = 50
 qubits = 8
 
-dev = qml.device("lightning.qubit", wires=qubits * 2, shots=n_shots)
+dev = qml.device("lightning.qubit", wires=qubits * 2)
 
 
 def CNOT_sequence(control_wires, target_wires):
@@ -352,6 +351,7 @@ def CNOT_sequence(control_wires, target_wires):
         qml.CNOT([c_wire, t_wire])
 
 
+@qml.set_shots(n_shots)
 @qml.qnode(dev)
 def enhanced_circuit(ts=False):
     "implement the enhanced circuit, using a random unitary"
@@ -466,6 +466,7 @@ def noise_layer(epsilon):
 #
 
 
+@qml.set_shots(n_shots)
 @qml.qnode(dev)
 def enhanced_circuit(ts=False):
     "implement the enhanced circuit, using a random unitary with a noise layer"
@@ -535,8 +536,4 @@ plt.show()
 # [2] *Exponential separations between learning with and without quantum
 # memory*, Sitan Chen, Jordan Cotler, Hsin-Yuan Huang, Jerry Li,
 # `arxiv:2111.05881 <https://arxiv.org/abs/2111.05881>`__ (2021)
-#
-#
-# About the author
-# ----------------
 #

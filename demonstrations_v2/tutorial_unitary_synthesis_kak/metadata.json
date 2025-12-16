@@ -5,9 +5,12 @@
             "username": "dwierichs"
         }
     ],
+    "executable_stable": true,
+    "executable_latest": true,
     "dateOfPublication": "2025-05-30T09:00:00+00:00",
-    "dateOfLastModification": "2025-06-03T09:00:00+00:00",
+    "dateOfLastModification": "2025-12-10T00:00:00+00:00",
     "categories": [
+        "Compilation",
         "Quantum Computing"
     ],
     "tags": [],
@@ -100,14 +103,16 @@
             "url": "https://doi.org/10.48550/arXiv.quant-ph/0308033"
         }
     ],
-    "basedOnPapers": ["10.48550/arXiv.2503.19014"],
+    "basedOnPapers": [
+        "10.48550/arXiv.2503.19014"
+    ],
     "referencedByPapers": [],
     "relatedContent": [
         {
             "type": "demonstration",
             "id": "tutorial_kak_decomposition",
             "weight": 1.0
-        }, 
+        },
         {
             "type": "demonstration",
             "id": "tutorial_fixed_depth_hamiltonian_simulation_via_cartan_decomposition",

@@ -1,7 +1,7 @@
 r"""Intro to quantum read-only memory (QROM)
 =============================================================
 
-Managing data is a crucial task, and quantum computers are no exception: efficient data management is vital in `quantum machine learning <https://pennylane.ai/qml/quantum-machine-learning/>`__, search algorithms, and :doc:`state preparation </demos/tutorial_initial_state_preparation/>`.
+Managing data is a crucial task, and quantum computers are no exception: efficient data management is vital in `quantum machine learning <https://pennylane.ai/qml/quantum-machine-learning/>`__, search algorithms, and :doc:`state preparation <demos/tutorial_initial_state_preparation/>`.
 In this demonstration, we will discuss the concept of a quantum read-only memory (QROM), a data structure designed to load classical data into a quantum computer.
 This is a valuable tool in quantum machine learning or for preparing quantum states among others.
 We also explain how to use this operator in PennyLane using the :class:`~.pennylane.QROM` template.
@@ -71,12 +71,12 @@ target_wires = [3, 4]
 
 Ui = [qml.BasisState(int(bitstring, 2), target_wires) for bitstring in bitstrings]
 
-dev = qml.device("default.qubit", shots=1)
+dev = qml.device("default.qubit")
 
 
 # This line is included for drawing purposes only.
 @partial(qml.transforms.decompose, max_expansion=1)
-
+@qml.set_shots(1)
 @qml.qnode(dev)
 def circuit(index):
     qml.BasisState(index, wires=control_wires)
@@ -91,7 +91,7 @@ plt.show()
 # Now we can check that all the outputs are as expected:
 
 for i in range(8):
-    print(f"The bitstring stored in index {i} is: {circuit(i)}")
+    print(f"The bitstring stored in index {i} is: {circuit(i)[0]}")
 
 
 ##############################################################################
@@ -100,10 +100,6 @@ for i in range(8):
 # The :class:`~.pennylane.QROM` template can be used to implement the previous circuit using directly the bitstring
 # without having to calculate the :math:`U_i` gates:
 
-import warnings
-# This line will suppress ComplexWarnings for output visibility
-warnings.filterwarnings(action="ignore", category=np.ComplexWarning)
-
 bitstrings = ["01", "11", "11", "00", "01", "11", "11", "00"]
 
 control_wires = [0, 1, 2]
@@ -111,6 +107,7 @@ target_wires = [3, 4]
 
 
 @partial(qml.compile, basis_set="CNOT")  # Line added for resource estimation purposes only.
+@qml.set_shots(1)
 @qml.qnode(dev)
 def circuit(index):
     qml.BasisState(index, wires=control_wires)
@@ -119,7 +116,7 @@ def circuit(index):
 
 
 for i in range(8):
-    print(f"The bitstring stored in index {i} is: {circuit(i)}")
+    print(f"The bitstring stored in index {i} is: {circuit(i)[0]}")
 
 ##############################################################################
 # Although this approach works correctly, the number of multicontrol gates is high — gates with a costly decomposition.
@@ -152,6 +149,7 @@ work_wires = [5, 6]
 
 
 @partial(qml.compile, basis_set="CNOT") 
+@qml.set_shots(1)
 @qml.qnode(dev)
 def circuit(index):
     qml.BasisState(index, wires=control_wires)
@@ -198,7 +196,7 @@ print("Two-qubit gates: ", qml.specs(circuit)(0)["resources"].gate_sizes[2])
 # Now we run the circuit with our initial data list: :math:`[01, 11, 11, 00, 01, 11, 11, 00].`
 
 index = 5
-output = circuit(index)
+output = circuit(index)[0]
 print(f"control wires: {output[:3]}")
 print(f"target wires: {output[3:5]}")
 print(f"work wires: {output[5:7]}")
@@ -226,7 +224,8 @@ work_wires = [5, 6, 7, 8, 9, 10, 11, 12]
 
 # Line added for drawing purposes only
 @partial(qml.transforms.decompose, max_expansion=2)
-@qml.qnode(qml.device("default.qubit", shots=1))
+@qml.set_shots(1)
+@qml.qnode(qml.device("default.qubit"))
 def circuit(index):
     qml.BasisState(index, wires=control_wires)
     qml.QROM(bitstrings, control_wires, target_wires, work_wires, clean=False)
@@ -255,6 +254,7 @@ target_wires = [3, 4]
 work_wires = [5, 6]
 
 
+@qml.set_shots(1)
 @qml.qnode(dev)
 def circuit(index):
     qml.BasisState(index, wires=control_wires)
@@ -263,8 +263,8 @@ def circuit(index):
 
 
 for i in range(8):
-    print(f"The bitstring stored in index {i} is: {circuit(i)[:2]}")
-    print(f"The work wires for that index are in the state: {circuit(i)[2:4]}\n")
+    print(f"The bitstring stored in index {i} is: {circuit(i)[0, :2]}")
+    print(f"The work wires for that index are in the state: {circuit(i)[0, 2:4]}\n")
 
 
 ##############################################################################
@@ -350,5 +350,3 @@ for i in range(8):
 #       "Creating superpositions that correspond to efficiently integrable probability distributions",
 #       `arXiv:quant-ph/0208112 <https://arxiv.org/abs/quant-ph/0208112>`__, 2002
 #
-# About the authors
-# -----------------

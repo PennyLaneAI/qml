@@ -28,9 +28,9 @@ In the appendix, we will derive the CNOT and rotation gate counts for all three 
 both in their generic form and after applying manual optimizations.
 
 We recommend that readers first familiarize themselves with KAK decompositions,
-for example using :doc:`our introductory demo </demos/tutorial_kak_decomposition>` or our
+for example using :doc:`our introductory demo <demos/tutorial_kak_decomposition>` or our
 :doc:`demo on compiling Hamiltonian simulation variationally
-</demos/tutorial_fixed_depth_hamiltonian_simulation_via_cartan_decomposition>`,
+<demos/tutorial_fixed_depth_hamiltonian_simulation_via_cartan_decomposition>`,
 which follows reference [#Kökcü_FDHS]_.
 
 
@@ -920,9 +920,3 @@ for ax, ylabel in zip(axs, ylabels):
     ax.legend()
     ax.set_xlabel("Number of qubits $n$")
     ax.set_ylabel(ylabel)
-
-######################################################################
-#
-# About the author
-# ----------------
-#

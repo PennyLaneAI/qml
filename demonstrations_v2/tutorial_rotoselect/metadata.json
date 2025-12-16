@@ -5,10 +5,13 @@
             "username": "alowe"
         }
     ],
+    "executable_stable": true,
+    "executable_latest": true,
     "dateOfPublication": "2019-10-16T00:00:00+00:00",
-    "dateOfLastModification": "2024-11-06T00:00:00+00:00",
+    "dateOfLastModification": "2025-12-10T00:00:00+00:00",
     "categories": [
-        "Optimization"
+        "Optimization",
+        "Compilation"
     ],
     "tags": [],
     "previewImages": [
@@ -30,7 +33,9 @@
             "url": "https://arxiv.org/abs/1905.09692"
         }
     ],
-    "basedOnPapers": ["10.48550/arXiv.1905.09692"],
+    "basedOnPapers": [
+        "10.48550/arXiv.1905.09692"
+    ],
     "referencedByPapers": [],
     "relatedContent": [
         {

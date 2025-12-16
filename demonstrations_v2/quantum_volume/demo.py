@@ -12,8 +12,6 @@ Quantum volume
 
     qsim_beyond_classical Beyond classical computing with qsim
 
-*Author: Olivia Di Matteo — Posted: 15 December 2020. Last updated: 15 April 2021.*
-
 .. warning::
     The data in this demo was originally generated using system calibration data from the ``ibmq_lima`` device,
     which has since been retired. While the code now uses a fake version of the Lima device, the noise and calibration
@@ -599,7 +597,7 @@ transpile_args = {
     "routing_method": "sabre",
 }
 
-dev_noisy = qml.device("qiskit.remote", wires=5, shots=1000, backend=FakeLimaV2(), **transpile_args)
+dev_noisy = qml.device("qiskit.remote", wires=5, backend=FakeLimaV2(), **transpile_args)
 
 
 ##############################################################################
@@ -641,7 +639,7 @@ for m in range(min_m, max_m + 1):
         device_heavy_outputs = np.sum(
             [counts[x] if x[:m] in heavy_outputs else 0 for x in counts.keys()]
         )
-        fraction_device_heavy_output = device_heavy_outputs / dev_noisy.shots.total_shots
+        fraction_device_heavy_output = device_heavy_outputs / tape_counts.shots.total_shots
 
         probs_ideal[m - min_m, trial] = prob_heavy_output
         probs_noisy[m - min_m, trial] = fraction_device_heavy_output

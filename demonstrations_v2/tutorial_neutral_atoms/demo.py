@@ -15,8 +15,6 @@ Neutral-atom quantum computers
    tutorial_sc_qubits Quantum computing with superconducting qubits
    tutorial_photonics Photonic quantum computing
 
-*Author: Alvaro Ballon — Posted: 30 May 2023.*
-
 In the last few years, a new quantum technology has gained the attention of the quantum computing
 community. Thanks to recent developments in optical-tweezer technology,
 neutral atoms can be used as robust and versatile qubits. In 2022, a collaboration between QuEra and
@@ -29,7 +27,7 @@ discuss their strengths and weaknesses in terms of DiVincenzo's criteria, introd
 By the end of this tutorial, you will have obtained a high-level understanding of neutral atom technologies
 and be able to follow the new exciting developments that are bound to come.
 
-.. container:: alert alert-block alert-info
+.. tip::
     
     **DiVincenzo's criteria**: In the year 2000, David DiVincenzo proposed a
     wishlist for the experimental characteristics of a quantum computer [#DiVincenzo2000]_.
@@ -66,7 +64,7 @@ the work that still needs to be done to scale this technology even further.
 # Trapping individual atoms
 # -------------------------
 #
-# In our :doc:`cousin demo </demos/tutorial_trapped_ions>` about trapped-ion technologies, we learn that we can trap individual charged
+# In our :doc:`cousin demo <demos/tutorial_trapped_ions>` about trapped-ion technologies, we learn that we can trap individual charged
 # atoms by carefully controlled electric fields. But neutral atoms, by definition, have no charge,
 # so they can't be affected by electric fields. How can we even hope to manipulate them individually?
 # It turns out that the technology to do this has been around for decades [#Tweezers1985]_.
@@ -99,7 +97,7 @@ the work that still needs to be done to scale this technology even further.
 # electric fields is also necessary to implemenent some quantum gates.
 #
 # In the last decade, optical tweezer technology has evolved to the point where we can move atoms around
-# into customizable arrays (check out :doc:`this tutorial </demos/tutorial_pasqal>` and have some fun doing this!).
+# into customizable arrays (check out :doc:`this tutorial <demos/tutorial_pasqal>` and have some fun doing this!).
 # This means that we have a lot of freedom in how and when our atom-encoded qubits interact with each other. Sounds
 # like a dream come true! However, there *are* some big challenges to address—we'll learn about these later.
 # To get started, let's understand how neutral atoms can be used as qubits.
@@ -127,7 +125,7 @@ the work that still needs to be done to scale this technology even further.
 # energy state using lasers. If you need a refresher on how we change the electronic energy levels of atoms, do take
 # a look at the blue box below!
 #
-# .. container:: alert alert-block alert-info
+# .. tip::
 #
 #    **Atomic Physics Primer:** Atoms consist of a positively charged nucleus
 #    and negative electrons around it. The electrons inhabit energy
@@ -287,7 +285,7 @@ the work that still needs to be done to scale this technology even further.
 # on other parameters that describe the pulse. PennyLane's
 # :class:`pennylane.pulse.ParametrizedHamiltonian` class will help us deal with such a mathematical object.
 # You can learn more about Parametrized Hamiltonians in our `documentation <https://docs.pennylane.ai/en/latest/code/api/pennylane.pulse.ParametrizedHamiltonian.html>`_
-# and in this :doc:`pulse Programming demo </demos/tutorial_pulse_programming101>`.
+# and in this :doc:`pulse Programming demo <demos/tutorial_pulse_programming101>`.
 #
 # Driving excitations with pulses
 # -------------------------------
@@ -587,7 +585,7 @@ plt.show()
 #
 #    We are not using any realistic values for either the amplitude or the coupling strength. These have been chosen in arbitrary
 #    units for visualization purposes. If you would like to know more about the specifications for real quantum hardware, check out
-#    :doc:`this demo </demos/ahs_aquila>`.
+#    :doc:`this demo <demos/ahs_aquila>`.
 #
 # This phenomenon is called the **Rydberg blockade.** When the distance between two atoms is below a certain distance known as
 # the **blockade radius,** one atom being in the Rydberg state "blocks" the other one from reaching its Rydberg state. Let's see
@@ -678,21 +676,6 @@ print(
 #
 # The net effect of the sequence of pulses is summarized in the following table.
 #
-# .. raw:: html
-#
-#     <style>
-#         .docstable {
-#             max-width: 300px;
-#         }
-#         .docstable tr.row-even th, .docstable tr.row-even td {
-#             text-align: center;
-#         }
-#         .docstable tr.row-odd th, .docstable tr.row-odd td {
-#             text-align: center;
-#         }
-#     </style>
-#     <div class="d-flex justify-content-center">
-#
 # .. rst-class:: docstable
 #
 #     +-------------------------+-------------------------------+
@@ -706,10 +689,6 @@ print(
 #     +-------------------------+-------------------------------+
 #     | :math:`\vert 11\rangle` | :math:`\vert 11\rangle`       |
 #     +-------------------------+-------------------------------+
-#
-# .. raw:: html
-#
-#     </div>
 #
 # Up to a global phase, this corresponds to the :math:`CZ` gate. Together with the :math:`RX` and :math:`RY` gates, we have a universal set of gates,
 # since the `CNOT` gate can be expressed in terms of :math:`CZ` via the equation
@@ -768,8 +747,8 @@ print(
 # easily create custom qubit topologies and the coherence time of the atoms are its main strong points, and its weaknesses are
 # actually no too different from other qubit-based architectures. We can easily program neutral-atom devices using pulses,
 # for which PennyLane is of great help. If you want to
-# learn more, check out our tutorials on the :doc:`Aquila device, </demos/ahs_aquila>` :doc:`neutral atom configurations, </demos/tutorial_pasqal>` and
-# :doc:`pulse programming </demos/tutorial_pulse_programming101>`. And do take a look
+# learn more, check out our tutorials on the :doc:`Aquila device, <demos/ahs_aquila>` :doc:`neutral atom configurations, <demos/tutorial_pasqal>` and
+# :doc:`pulse programming <demos/tutorial_pulse_programming101>`. And do take a look
 # at the references below to dive into much more detail about the topics introduced here.
 #
 # References
@@ -817,7 +796,4 @@ print(
 #
 #    K. Wintersperger et al. (2023) "Neutral Atom Quantum Computing Hardware: Performance and End-User Perspective",
 #    (`arXiv <https://arxiv.org/abs/2304.14360>`__)
-#
-# About the author
-# ----------------
 #

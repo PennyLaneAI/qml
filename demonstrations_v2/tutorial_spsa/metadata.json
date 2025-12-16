@@ -8,8 +8,10 @@
             "username": "dwierichs"
         }
     ],
+    "executable_stable": true,
+    "executable_latest": true,
     "dateOfPublication": "2023-03-19T00:00:00+00:00",
-    "dateOfLastModification": "2024-11-06T00:00:00+00:00",
+    "dateOfLastModification": "2025-10-15T00:00:00+00:00",
     "categories": [
         "Optimization"
     ],

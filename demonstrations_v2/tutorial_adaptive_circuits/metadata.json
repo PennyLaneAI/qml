@@ -5,8 +5,10 @@
             "username": "soran"
         }
     ],
+    "executable_stable": true,
+    "executable_latest": true,
     "dateOfPublication": "2021-09-13T00:00:00+00:00",
-    "dateOfLastModification": "2024-12-13T00:00:00+00:00",
+    "dateOfLastModification": "2025-09-22T15:48:14+00:00",
     "categories": [
         "Quantum Chemistry"
     ],
@@ -59,7 +61,7 @@
             "authors": "Juan Miguel Arrazola",
             "year": "2021",
             "journal": "",
-            "url": "https://pennylane.ai/qml/demos/tutorial_givens_rotations.html"
+            "url": "https://pennylane.ai/qml/demos/tutorial_givens_rotations"
         },
         {
             "id": "grimsley2019",
@@ -72,7 +74,9 @@
             "url": "https://www.nature.com/articles/s41467-019-10988-2"
         }
     ],
-    "basedOnPapers": ["10.1038/s41467-019-10988-2"],
+    "basedOnPapers": [
+        "10.1038/s41467-019-10988-2"
+    ],
     "referencedByPapers": [],
     "relatedContent": [
         {

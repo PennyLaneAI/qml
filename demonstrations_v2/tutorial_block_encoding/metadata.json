@@ -1,18 +1,20 @@
 {
     "title": "Block encoding with matrix access oracles",
     "authors": [
-      {
+        {
             "username": "Jay"
         },
-      {
+        {
             "username": "Diego"
         },
-      {
+        {
             "username": "soran"
         }
     ],
+    "executable_stable": true,
+    "executable_latest": true,
     "dateOfPublication": "2023-11-28T00:00:00+00:00",
-    "dateOfLastModification": "2025-06-02T00:00:00+00:00",
+    "dateOfLastModification": "2025-09-22T15:48:14+00:00",
     "categories": [
         "Quantum Computing",
         "Algorithms"

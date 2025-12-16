@@ -64,7 +64,7 @@ side = 20      # Discretization of the Phase Diagram
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
 # In PennyLane, we can easily build the ANNNI's spin Hamiltonian following the same approach as the 
-# :doc:`demo on spin Hamiltonians </demos/tutorial_how_to_build_spin_hamiltonians>`:
+# :doc:`demo on spin Hamiltonians <demos/tutorial_how_to_build_spin_hamiltonians>`:
 
 def get_H(num_spins, k, h):
     """Construction function the ANNNI Hamiltonian (J=1)"""
@@ -142,7 +142,7 @@ def get_phase(k, h):
 # State preparation
 # -----------------
 #
-# In this section, we prepare the ground states of the system, which will serve as inputs for both QML models. Several methods can be used, including **Variational Quantum Eigensolver (VQE)**, introduced in [#Peruzzo]_ and demonstrated in the :doc:`demo on VQE </demos/tutorial_vqe>`, and **Matrix Product States (MPS)**, illustrated in the :doc:`demo on Constant-depth preparation of MPS with dynamic circuits </demos/tutorial_constant_depth_mps_prep>`.  
+# In this section, we prepare the ground states of the system, which will serve as inputs for both QML models. Several methods can be used, including **Variational Quantum Eigensolver (VQE)**, introduced in [#Peruzzo]_ and demonstrated in the :doc:`demo on VQE <demos/tutorial_vqe>`, and **Matrix Product States (MPS)**, illustrated in the :doc:`demo on Constant-depth preparation of MPS with dynamic circuits <demos/tutorial_constant_depth_mps_prep>`.  
 # For simplicity, in this demo, we compute the ground state directly by finding the *eigenvector* corresponding to the lowest eigenvalue of the Hamiltonian. The resulting states are then loaded into the quantum circuits using PennyLane’s :class:`~pennylane.StatePrep`.  
 #
 # It is important to note that this approach is only feasible within the classically simulable regime, as it becomes quickly intractable for larger system sizes.
@@ -657,7 +657,4 @@ plt.show()
 #     Matthias C. Caro, Hsin-Yuan Huang, Marco Cerezo, Kunal Sharma, Andrew Sornborger, Lukasz Cincio, Patrick J. Coles,
 #     "Generalization in quantum machine learning from few training data",
 #     `Nat. Commun. 13, 4919 <https://www.nature.com/articles/s41467-022-32550-3>`__, 2022.
-#
-# About the author
-# ----------------
 #

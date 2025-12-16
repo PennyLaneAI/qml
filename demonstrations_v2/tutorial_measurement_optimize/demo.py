@@ -12,14 +12,12 @@ Measurement optimization
    tutorial_quantum_chemistry Building molecular Hamiltonians
    tutorial_qaoa_intro Intro to QAOA
 
-*Author: Josh Izaac — Posted: 18 January 2021. Last updated: 29 August 2023.*
-
 The variational quantum eigensolver (VQE) is the OG variational quantum algorithm. Harnessing
 near-term quantum hardware to solve for the electronic structure of molecules, VQE is *the*
 algorithm that sparked the variational circuit craze of the last 5 years, and holds great
 promise for showcasing a quantum advantage on near-term quantum hardware. It has also inspired
 other quantum algorithms such as the :doc:`Quantum Approximate Optimization Algorithm (QAOA)
-</demos/tutorial_qaoa_intro>`.
+<demos/tutorial_qaoa_intro>`.
 
 To scale VQE beyond the regime of classical computation, however, we need to solve for the
 ground state of increasingly larger molecules. A consequence is that the number of
@@ -46,13 +44,13 @@ Revisiting VQE
 --------------
 
 The study of :doc:`variational quantum algorithms </glossary/variational_circuit>` was spearheaded
-by the introduction of the :doc:`variational quantum eigensolver <tutorial_vqe>` (VQE) algorithm in
+by the introduction of the :doc:`variational quantum eigensolver <demos/tutorial_vqe>` (VQE) algorithm in
 2014 [#peruzzo2014]_. While classical variational techniques have been known for decades to estimate
 the ground state energy of a molecule, VQE allowed this variational technique to be applied using
 quantum computers. Since then, the field of variational quantum algorithms has evolved
 significantly, with larger and more complex models being proposed (such as
-:doc:`quantum neural networks </demos/quantum_neural_net>`, :doc:`QGANs </demos/tutorial_QGAN>`, and
-:doc:`variational classifiers </demos/tutorial_variational_classifier>`). However, quantum chemistry
+:doc:`quantum neural networks <demos/quantum_neural_net>`, :doc:`QGANs <demos/tutorial_QGAN>`, and
+:doc:`variational classifiers <demos/tutorial_variational_classifier>`). However, quantum chemistry
 remains one of the flagship use-cases for variational quantum algorithms, and VQE the standard-bearer.
 
 Part of the appeal of VQE lies within its simplicity. A circuit ansatz :math:`U(\theta)` is chosen
@@ -93,7 +91,7 @@ the Hamiltonian as its summation, resulting in separate expectation values that 
     and then performing a fermionic-to-qubit mapping such as the Jordan-Wigner or Bravyi-Kitaev
     transformations.
 
-    For more details on this process, check out the :doc:`/demos/tutorial_quantum_chemistry`
+    For more details on this process, check out the :doc:`demos/tutorial_quantum_chemistry`
     tutorial.
 
 The measurement problem
@@ -127,7 +125,7 @@ print(H)
 # on hardware. Let's generate the cost function to check this.
 
 # Create a 4 qubit simulator
-dev = qml.device("default.qubit", shots=1000, seed=904932)
+dev = qml.device("default.qubit", seed=904932)
 
 # number of electrons
 electrons = 2
@@ -143,6 +141,7 @@ ansatz = functools.partial(
 )
 
 # generate the cost function
+@qml.set_shots(1000)
 @qml.qnode(dev, interface="jax")
 def cost_circuit(params):
     ansatz(params, wires=range(num_qubits))
@@ -336,21 +335,6 @@ print("\n", H)
 # find the gates to rotate the circuit into the shared eigenbasis. To do so, we simply rotate
 # each qubit one-by-one depending on the Pauli operator we are measuring on that wire:
 #
-# .. raw:: html
-#
-#     <style>
-#         .docstable {
-#             max-width: 300px;
-#         }
-#         .docstable tr.row-even th, .docstable tr.row-even td {
-#             text-align: center;
-#         }
-#         .docstable tr.row-odd th, .docstable tr.row-odd td {
-#             text-align: center;
-#         }
-#     </style>
-#     <div class="d-flex justify-content-center">
-#
 # .. rst-class:: docstable
 #
 #     +------------------+-------------------------------+
@@ -364,10 +348,6 @@ print("\n", H)
 #     +------------------+-------------------------------+
 #     | :math:`I`        | :math:`I`                     |
 #     +------------------+-------------------------------+
-#
-# .. raw:: html
-#
-#     </div>
 #
 # Therefore, in this particular example:
 #
@@ -837,8 +817,4 @@ print("Number of required measurements after optimization:", len(groups))
 #     Vladyslav Verteletskyi, Tzu-Ching Yen, and Artur F. Izmaylov. "Measurement optimization in the
 #     variational quantum eigensolver using a minimum clique cover." `The Journal of Chemical Physics
 #     152.12 (2020): 124114. <https://aip.scitation.org/doi/10.1063/1.5141458>`__
-#
-#
-# About the author
-# ----------------
 #

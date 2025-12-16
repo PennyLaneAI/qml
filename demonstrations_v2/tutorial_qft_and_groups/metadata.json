@@ -1,0 +1,92 @@
+{
+    "title": "It's all about groups: From Fast Fourier Transforms to QFTs",
+    "authors": [
+        {
+            "username": "mariaschuld"
+        }
+    ],
+    "executable_stable": true,
+    "executable_latest": true,
+    "dateOfPublication": "2025-09-18T10:00:00+00:00",
+    "dateOfLastModification": "2025-09-22T15:48:14+00:00",
+    "categories": [
+        "Algorithms"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/pennylane-demo-groups-qft-thumbnail.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/pennylane-demo-groups-qft-large-thumbnail.png"
+        }
+    ],
+    "seoDescription": "Explore the fascinating links between (quantum) Fourier transforms and group theory.",
+    "doi": "",
+    "references": [
+        {
+            "id": "Diaconis, P.",
+            "type": "book",
+            "title": "Group representations in probability and statistics",
+            "authors": "Parsi Diaconis",
+            "year": "1988"
+        },
+        {
+            "id": "Moore",
+            "type": "article",
+            "title": "Generic quantum Fourier transforms",
+            "authors": "Moore, C., Rockmore, D. and Russell, A.",
+            "year": "2006",
+            "journal": "ACM Transactions on Algorithms (TALG), 2(4), pp.707-723"
+        },
+        {
+            "id": "Maslen",
+            "type": "article",
+            "title": "The Cooley-Tukey FFT and group theory",
+            "authors": "Maslen, D.K. and Rockmore, D.N",
+            "year": "2001",
+            "journal": "Notices of the AMS, 48(10), pp.1151-1160",
+            "url": "https://library2.msri.org/books/Book46/files/11maslen.pdf"
+        },
+        {
+            "id": "Rockmore",
+            "type": "article",
+            "title": "Recent progress and applications in group FFTs",
+            "authors": " Rockmore, D.N.",
+            "year": "2002",
+            "journal": "Conference Record of the Thirty-Sixth Asilomar Conference on Signals, Systems and Computers",
+            "url": "https://www.cs.dartmouth.edu/~rockmore/nato-1.pdf"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_qft",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_qft_arithmetics",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_period_finding",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_hidden_cut",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_quantum_chebyshev_transform",
+            "weight": 1.0
+        }
+    ]
+}

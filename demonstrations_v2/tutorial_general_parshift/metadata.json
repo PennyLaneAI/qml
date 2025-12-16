@@ -5,8 +5,10 @@
             "username": "dwierichs"
         }
     ],
+    "executable_stable": true,
+    "executable_latest": true,
     "dateOfPublication": "2021-08-23T00:00:00+00:00",
-    "dateOfLastModification": "2024-11-06T00:00:00+00:00",
+    "dateOfLastModification": "2025-09-22T15:48:14+00:00",
     "categories": [
         "Optimization"
     ],
@@ -66,7 +68,9 @@
             "url": "https://arxiv.org/abs/2108.01218"
         }
     ],
-    "basedOnPapers": ["10.48550/arXiv.2107.12390"],
+    "basedOnPapers": [
+        "10.48550/arXiv.2107.12390"
+    ],
     "referencedByPapers": [],
     "relatedContent": [
         {

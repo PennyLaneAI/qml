@@ -16,8 +16,6 @@ Quantum circuit structure learning
    tutorial_vqe_qng Accelerating VQEs with quantum natural gradient
    tutorial_rosalin Frugal shot optimization with Rosalin
 
-*Author: Angus Lowe — Posted: 16 October 2019. Last updated: 20 January 2021.*
-
 """
 ##############################################################################
 # This example shows how to learn a good selection of rotation
@@ -131,7 +129,7 @@ np.random.seed(9432092)
 
 n_wires = 2
 
-dev = qml.device("lightning.qubit", shots=1000, wires=2)
+dev = qml.device("lightning.qubit", wires=2)
 
 ##############################################################################
 # Creating a fixed quantum circuit
@@ -154,12 +152,14 @@ def ansatz(params):
     qml.CNOT(wires=[0, 1])
 
 
+@qml.set_shots(1000)
 @qml.qnode(dev)
 def circuit(params):
     ansatz(params)
     return qml.expval(qml.PauliZ(0)), qml.expval(qml.PauliY(1))
 
 
+@qml.set_shots(1000)
 @qml.qnode(dev)
 def circuit2(params):
     ansatz(params)
@@ -329,12 +329,14 @@ def ansatz_rsel(params, generators):
     qml.CNOT(wires=[0, 1])
 
 
+@qml.set_shots(1000)
 @qml.qnode(dev)
 def circuit_rsel(params, generators):
     ansatz_rsel(params, generators)
     return qml.expval(qml.PauliZ(0)), qml.expval(qml.PauliY(1))
 
 
+@qml.set_shots(1000)
 @qml.qnode(dev)
 def circuit_rsel2(params, generators):
     ansatz_rsel(params, generators)
@@ -463,8 +465,4 @@ plt.show()
 #
 # 1. Mateusz Ostaszewski, Edward Grant, Marcello Bendetti. "Quantum circuit structure learning."
 #    `arxiv:1905.09692 <https://arxiv.org/abs/1905.09692>`__, 2019.
-
-##############################################################################
-# About the author
-# ----------------
 #

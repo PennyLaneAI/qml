@@ -127,7 +127,7 @@ def draper_adder(wires_a, wires_b, kind="fixed", include_qft=True, include_iqft=
         qml.adjoint(qml.QFT)(wires=wires_sum)
 
 # Using a guest token here. Replace it with your own token for a better experience.
-dev = qml.device("bluequbit.cpu", wires = 26, shots = None, token="3hmIGLWGKzKdWmxLoJ5F24P3rivGL04d")
+dev = qml.device("bluequbit.cpu", wires = 26, token="3hmIGLWGKzKdWmxLoJ5F24P3rivGL04d")
 
 @qml.qnode(dev)
 def add_4_6qubit_uniforms():
@@ -174,8 +174,4 @@ plt.tick_params(axis='y', labelsize=30)
 # .. [#Draper2000]
 #
 #     Thomas G. Draper, "Addition on a Quantum Computer". `arXiv:quant-ph/0008033 <https://arxiv.org/abs/quant-ph/0008033>`__.
-
-##############################################################################
-# About the author
-# ----------------
 #

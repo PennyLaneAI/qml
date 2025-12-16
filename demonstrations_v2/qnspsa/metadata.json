@@ -5,8 +5,10 @@
             "username": "yduan"
         }
     ],
+    "executable_stable": false,
+    "executable_latest": false,
     "dateOfPublication": "2022-07-18T00:00:00+00:00",
-    "dateOfLastModification": "2025-07-11T00:00:00+00:00",
+    "dateOfLastModification": "2025-10-15T00:00:00+00:00",
     "categories": [
         "Optimization"
     ],

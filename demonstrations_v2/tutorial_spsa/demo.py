@@ -14,8 +14,6 @@ Optimization using SPSA
    tutorial_vqe_qng Accelerating VQEs with quantum natural gradient
    qnspsa Quantum natural SPSA optimizer
 
-*Authors: Antal Szava & David Wierichs — Posted: 19 March 2021. Last updated: 23 February 2023.*
-
 In this tutorial, we investigate using a stochastic optimizer called
 the Simultaneous Perturbation Stochastic Approximation (SPSA) algorithm to optimize quantum
 circuits. This optimizer is built into PennyLane as :class:`~pennylane.SPSAOptimizer`.
@@ -171,7 +169,7 @@ from pennylane import numpy as np
 num_wires = 4
 num_layers = 5
 
-device = qml.device("qiskit.aer", wires=num_wires, shots=1000)
+device = qml.device("qiskit.aer", wires=num_wires)
 
 ansatz = qml.StronglyEntanglingLayers
 
@@ -183,7 +181,7 @@ def circuit(param):
     return qml.expval(all_pauliz_tensor_prod)
 
 
-cost_function = qml.QNode(circuit, device)
+cost_function = qml.set_shots(qml.QNode(circuit, device), shots = 1000)
 
 np.random.seed(50)
 
@@ -332,7 +330,7 @@ print(f"Circuit execution ratio: {np.round(grad_execs_to_prec/spsa_execs_to_prec
 # toy problem optimization, let's use it
 # to optimize a real chemical system, namely that of the hydrogen molecule :math:`H_2.`
 # This molecule was studied previously in the :doc:`introductory variational quantum
-# eigensolver (VQE) demo </demos/tutorial_vqe>`, and so we will reuse some of
+# eigensolver (VQE) demo <demos/tutorial_vqe>`, and so we will reuse some of
 # that machinery below to set up the problem.
 #
 # The :math:`H_2` Hamiltonian uses 4 qubits, contains 15 terms, and has a ground
@@ -380,13 +378,13 @@ def ansatz(param, wires):
 # IBMProvider().backends()  # List all available backends
 # dev = qml.device("qiskit.ibmq", wires=num_qubits, backend="ibmq_lima")
 
-from qiskit_ibm_runtime.fake_provider import FakeLima
+from qiskit_ibm_runtime.fake_provider import FakeLimaV2 as FakeLima
 from qiskit_aer import noise
 
 # Load a fake backed to create a noise model, and create a device using that model
 noise_model = noise.NoiseModel.from_backend(FakeLima())
 noisy_device = qml.device(
-    "qiskit.aer", wires=num_qubits, shots=1000, noise_model=noise_model
+    "qiskit.aer", wires=num_qubits, noise_model=noise_model
 )
 
 
@@ -395,7 +393,7 @@ def circuit(param):
     return qml.expval(h2_ham)
 
 
-cost_function = qml.QNode(circuit, noisy_device)
+cost_function = qml.set_shots(qml.QNode(circuit, noisy_device), shots = 1000)
 
 # This random seed was used in the original VQE demo and is known to allow the
 # gradient descent algorithm to converge to the global minimum.
@@ -521,7 +519,7 @@ plt.show()
 # In addition, there is a proposal to use an SPSA variant of the quantum natural
 # gradient [#qnspsa]_.
 # This is implemented in PennyLane as well and we discuss it in the
-# :doc:`demo on QNSPSA </demos/qnspsa>`.
+# :doc:`demo on QNSPSA <demos/qnspsa>`.
 #
 # References
 # ----------
@@ -550,8 +548,4 @@ plt.show()
 #    J. Gacon, C. Zoufal, G. Carleo, and S. Woerner "Simultaneous Perturbation
 #    Stochastic Approximation of the Quantum Fisher Information",
 #    `Quantum, 5, 567 <https://quantum-journal.org/papers/q-2021-10-20-567/>`__, Oct 2021
-
-##############################################################################
-# About the author
-# ----------------
 #

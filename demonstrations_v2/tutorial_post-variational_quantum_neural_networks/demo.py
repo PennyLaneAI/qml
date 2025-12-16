@@ -53,7 +53,7 @@ Post-variational quantum neural networks
 #
 
 ######################################################################
-# We compare the post-variational strategies to the conventional variational :doc:`quantum neural network </demos/tutorial_variational_classifier/>` in the
+# We compare the post-variational strategies to the conventional variational :doc:`quantum neural network <demos/tutorial_variational_classifier/>` in the
 # table below.
 #
 
@@ -810,9 +810,4 @@ plt.show()
 #     Predicting many properties of a quantum system from very few measurements,
 #     `Nat. Phys. 16, 1050–1057 (2020) <https://doi.org/10.1038/s41567-020-0932-7>`__.
 #
-#
-
-##############################################################################
-# About the authors
-# ---------------------
 #

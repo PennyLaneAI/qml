@@ -5,9 +5,15 @@
             "username": "lillian_frederiksen"
         }
     ],
+    "executable_stable": false,
+    "executable_latest": false,
     "dateOfPublication": "2023-05-16T00:00:00+00:00",
-    "dateOfLastModification": "2025-07-11T00:00:00+00:00",
-    "categories": ["Quantum Hardware", "Devices and Performance", "Quantum Computing"],
+    "dateOfLastModification": "2025-11-10T00:00:00+00:00",
+    "categories": [
+        "Quantum Hardware",
+        "Devices and Performance",
+        "Quantum Computing"
+    ],
     "tags": [],
     "previewImages": [
         {

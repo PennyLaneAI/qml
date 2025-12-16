@@ -5,8 +5,10 @@
             "username": "amari"
         }
     ],
+    "executable_stable": true,
+    "executable_latest": true,
     "dateOfPublication": "2019-12-19T00:00:00+00:00",
-    "dateOfLastModification": "2024-11-06T00:00:00+00:00",
+    "dateOfLastModification": "2025-11-10T11:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],

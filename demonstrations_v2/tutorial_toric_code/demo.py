@@ -7,7 +7,6 @@ Modeling the toric code on a quantum computer
     :property="og:description": Investigation of the toric code degenerate ground state and anyon excitations
     :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/types_of_loops.png
 
-*Author: Christina Lee. Posted: 08 August 2022.*
 
 Introduction
 ------------
@@ -1011,7 +1010,4 @@ print("Move x excitation around z excitation: ", x_around_z)
 #    Araujo de Resende, M. F. "A pedagogical overview on 2D and 3D Toric Codes and the origin of their topological orders."
 #    `Reviews in Mathematical Physics 32.02 (2020): 2030002. <https://doi.org/10.1142/S0129055X20300022>`__
 #    (`arXiv <https://arxiv.org/pdf/1712.01258.pdf>`__)
-#
-# About the author
-# ----------------
 #

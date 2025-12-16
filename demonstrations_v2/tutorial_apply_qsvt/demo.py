@@ -11,8 +11,6 @@ QSVT in Practice
     tutorial_intro_qsvt Intro to QSVT
     function_fitting_qsp Function Fitting using Quantum Signal Processing
 
-*Authors: Jay Soni, Jarrett Smalley [Rolls-Royce] — Posted: 22 August 2023.*
-
 The Quantum Singular Value Transformation (QSVT) is a quantum algorithm that
 allows us to apply arbitrary polynomial transformations to the singular values
 of a matrix [#qsvt]_. This demo, written in collaboration between Xanadu and
@@ -30,7 +28,7 @@ by solving a linear system of equations (LSE) as a guiding example.
 
 Preliminaries
 -------------
-For a refresher on the basics of QSVT check out our :doc:`Intro to QSVT </demos/tutorial_intro_qsvt>`
+For a refresher on the basics of QSVT check out our :doc:`Intro to QSVT <demos/tutorial_intro_qsvt>`
 tutorial. Let's recall how to apply QSVT in a circuit. This requires two pieces of information
 as input: the block encoding of the matrix to be transformed and a set of projectors which determine the polynomial
 transformation. For now, we use placeholder values for the phase angles; we'll later describe
@@ -411,8 +409,4 @@ print("computed x:", np.round(normalized_computed_x, 3))
 #    Haah J,
 #    "Product decomposition of periodic functions in quantum signal processing",
 #    `Quantum 3, 190 <https://quantum-journal.org/papers/q-2019-10-07-190/>`__, 2019
-
-##############################################################################
-# About the author
-# ----------------
 #

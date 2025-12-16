@@ -12,8 +12,6 @@ Quantum computing with superconducting qubits
    tutorial_trapped_ions Trapped ion quantum computers
    tutorial_photonics Photonic quantum computers
 
-*Author: Alvaro Ballon — Posted: 22 March 2022. Last updated: 26 August 2022.*
-
 **Superconducting qubits** are among the most promising approaches to building quantum computers.
 It is no surprise that this technology is being used by well-known tech companies in their quest
 to pioneer the quantum era. Google's Sycamore claimed quantum advantage back in 2019 [#Google2019]_ and, in 2021,
@@ -408,7 +406,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Call the default.gaussian device with 50 shots
-dev = qml.device("default.gaussian", wires=1, shots=50)
+dev = qml.device("default.gaussian", wires=1)
 
 # Fix parameters
 epsilon, chi = 1.0, 0.1
@@ -416,6 +414,7 @@ epsilon, chi = 1.0, 0.1
 # Implement displacement and rotation and measure both X and P observables
 
 
+@qml.set_shots(50)
 @qml.qnode(dev)
 def measure_P_shots(time, state):
     qml.Displacement(epsilon * time, 0, wires=0)
@@ -423,6 +422,7 @@ def measure_P_shots(time, state):
     return qml.sample(qml.QuadP(0))
 
 
+@qml.set_shots(50)
 @qml.qnode(dev)
 def measure_X_shots(time, state):
     qml.Displacement(epsilon * time, 0, wires=0)
@@ -873,7 +873,4 @@ def H_evolve(state, phi, time):
 #     `"The IBM Quantum heavy hex lattice"
 #     <https://research.ibm.com/blog/heavy-hex-lattice>`__.
 #     IBM Research Blog. Retrieved 2022-03-15
-#
-# About the author
-# ----------------
 #

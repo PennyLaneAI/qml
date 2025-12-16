@@ -1,6 +1,6 @@
 r"""
 .. role:: html(raw)
-   :format: html
+    :format: html
 
 .. _variational_classifier:
 
@@ -13,11 +13,9 @@ Variational classifier
 
 .. related::
 
-   tutorial_data_reuploading_classifier Data-reuploading classifier
-   tutorial_multiclass_classification Multiclass margin classifier
-   ensemble_multi_qpu Ensemble classification with Rigetti and Qiskit devices
-
-*Author: Maria Schuld — Posted: 11 October 2019. Last updated: 11 December 2023.*
+    tutorial_data_reuploading_classifier Data-reuploading classifier
+    tutorial_multiclass_classification Multiclass margin classifier
+    ensemble_multi_qpu Ensemble classification with Rigetti and Qiskit devices
 
 In this tutorial, we show how to use PennyLane to implement variational
 quantum classifiers - quantum circuits that can be trained from labelled
@@ -550,7 +548,4 @@ plt.show()
 # We find that the variational classifier learnt a separating line between the datapoints of
 # the two different classes, which allows it to classify even the unseen validation data with
 # perfect accuracy.
-#
-# About the author
-# ----------------
 #

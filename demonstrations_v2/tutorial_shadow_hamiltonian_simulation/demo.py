@@ -2,7 +2,7 @@ r"""Shadow Hamiltonian simulation
 =================================
 
 Shadow Hamiltonian simulation is a new approach (published last week) to quantum simulation on quantum computers [#SommaShadow]_.
-Despite its name, it has little to do with :doc:`classical shadows </demos/tutorial_diffable_shadows>`.
+Despite its name, it has little to do with :doc:`classical shadows <demos/tutorial_diffable_shadows>`.
 In quantum simulation, the goal is typically to simulate the time evolution of expectation values
 of :math:`M` observables :math:`O_m,` for :math:`m=1,\ldots ,M.`
 The common approach is to evolve the wave function :math:`|\psi\rangle` and then measure the desired observables after the evolution.
@@ -27,7 +27,7 @@ On the other hand, this gives us entirely new possibilities by letting us sample
 :math:`p_m = |\langle O_m \rangle|^2` and measure the absolute value of all observables simultaneously in the standard Z basis.
 
 In this demo, we are going to introduce the basic concepts of shadow Hamiltonian simulation alongside some easy-to-follow code snippets.
-We will also see later how shadow Hamiltonian simulation comes down to :doc:`g-sim </demos/tutorial_liesim>`, 
+We will also see later how shadow Hamiltonian simulation comes down to :doc:`g-sim <demos/tutorial_liesim>`, 
 a Lie-algebraic classical simulation tool, but run on a quantum computer with some simplifications specifically due to considering Hamiltonian simulation.
 
 Shadow Hamiltonian simulation — Definition
@@ -80,13 +80,13 @@ In the paper this is called the **invariance property**.
 
     Take for example :math:`H = X` and :math:`S = \{Y\}`. Then :math:`[H, Y] = iZ,` so there is no linear combination of elements in :math:`S` that can decompose :math:`[H, Y].`
     We need to extend the list such that we have :math:`S = \{Y, Z\}`. Now all results from commutation, :math:`[H, Y] = iZ` and :math:`[H, Z] = -iY,` are supported by :math:`S.` This is similar
-    to the Lie closure that we discuss in our :doc:`intro to Lie algebras for quantum practitioners </demos/tutorial_liesim>`, but the requirements are not as strict because
+    to the Lie closure that we discuss in our :doc:`intro to Lie algebras for quantum practitioners <demos/tutorial_liesim>`, but the requirements are not as strict because
     we only need support with respect to commentators with :math:`H,` and not among all elements in :math:`S.`
 
 How this relates to g-sim
 -------------------------
 
-In :doc:`g-sim </demos/tutorial_liesim>`
+In :doc:`g-sim <demos/tutorial_liesim>`
 [#Somma]_ [#Somma2]_ [#Galitski]_ [#Goh]_, we have operators :math:`\{ g_i \}` that are generators or observables for a parametrized quantum circuit,
 e.g. :math:`U(\theta) = \prod_\ell \exp(-i \theta_\ell g_\ell)` and :math:`\langle g_i \rangle.`
 For that, we are looking at the so-called dynamical Lie algebra (DLA) of the circuit,
@@ -105,7 +105,7 @@ in which case we can drop the denominator. Further, by means of the cyclic prope
 
 From this, we see how :math:`H_S` corresponds to the adjoint representation :math:`i \text{ad}_H` (but we don't require the full Lie algebra here, see below).
 For further details on the concept of the adjoint representation, see our
-:doc:`demo on g-sim </demos/tutorial_liesim>` that makes extensive use of it.
+:doc:`demo on g-sim <demos/tutorial_liesim>` that makes extensive use of it.
 
 In g-sim, we also evolve expectation vectors :math:`(\vec{g})_i = \langle g_i \rangle.`
 In particular, the circuit of evolving a state according to :math:`U(\theta)` and computing expectation values 
@@ -227,7 +227,7 @@ O_t = expm(-1j * t * H_S) @ O_0
 O_t
 
 ##############################################################################
-# Up to this point, this is equivalent to :doc:`g-sim </demos/tutorial_liesim>` if we were doing classical simulation.
+# Up to this point, this is equivalent to :doc:`g-sim <demos/tutorial_liesim>` if we were doing classical simulation.
 # Now, the main novelty for shadow Hamiltonian simulation is to perform this on a quantum computer by encoding the 
 # expectation values of :math:`\langle O_m \rangle` in the amplitude of a quantum state, and to translate :math:`H_S`
 # accordingly.
@@ -357,10 +357,4 @@ print(O_t_shadow)
 #     Alice Barthe, M. Cerezo, Andrew T. Sornborger, Martin Larocca, Diego García-Martín
 #     "Gate-based quantum simulation of Gaussian bosonic circuits on exponentially many modes"
 #     `arXiv:2407.06290 <https://arxiv.org/abs/2407.06290>`__, 2024.
-#
-
-
-##############################################################################
-# About the author
-# ----------------
 #
