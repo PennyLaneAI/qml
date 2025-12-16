@@ -12,8 +12,13 @@ a function of evolution time and target errors. Well, at least it used to be cha
 In this demo, we showcase how to use PennyLane's estimator module to compute the cost of Hamiltonian simulation
 with QSP, making it simple to determine how useful it is for your application of interest. We focus 
 on the modern framework of **generalized quantum signal processing (GQSP)** and study examples of resource estimation
-for a simple spin model and a Heisenberg Hamiltonian for NMR spectral prediction. More information on QSP can be found
-in our other demos .
+for a simple spin model and for a Heisenberg Hamiltonian for NMR spectral prediction. More information on QSP 
+can be found in our other demos:
+
+    - `Function Fitting using Quantum Signal Processing <https://pennylane.ai/qml/demos/tutorial_qksd_qsp_qualtran>`_
+    - `Using PennyLane and Qualtran to analyze how QSP can improve measurements of molecular properties 
+       <https://pennylane.ai/qml/demos/function_fitting_qsp>`_
+    - `Intro to QSVT <https://pennylane.ai/qml/demos/tutorial_intro_qsvt>`_
 
 
 Hamiltonian simulation with GQSP
@@ -25,20 +30,21 @@ GQSP expands on the original approach by considering signal-processing operators
 :math:`SU(2)` transformations; this removes restrictions on available polynomial transformations
 and facilitates solving for the :math:`SU(2)` *phase factors*, making it the modern method of choice [#gqsp]_.
  
-Hamiltonian simulation is the problem of implementing the time-evolution operator :math:`e^{-iHt}`
-for an input Hamiltonian :math:`H` and a target evolution time :math:`t`, subject to a target error 
+Hamiltonian simulation is the task of implementing the time-evolution operator :math:`e^{-iHt}`.
+We do this for an input Hamiltonian :math:`H` and a target evolution time :math:`t`, subject to a target error 
 :math:`\varepsilon`.
-GQSP solves this challenge by expressing the complex exponential :math:`e^{-iHt}` as a polynomial that is 
+GQSP solves this challenge by expressing the complex exponential :math:`e^{-iHt}` as a polynomial, 
 truncated to a degree determined by :math:`t` and :math:`\varepsilon`. The corresponding 
-transformation is then implemented on a block-encoding of :math:`H`. In practice it is customary to instead
-block-encode :math:`e^{-i\arccos (H)t}` and approximate the function :math:`e^{-i\cos (H)t}` through the 
-rapidly-converging Jacobi-Anger expansion [#gqsp]_. This type of block-encoding is a **qubitization** of the
-Hamiltonian, and can be implemented by a sequence of Prepare and Select operators that are induced by
-a linear combination of unitaries (LCU) decomposition. We refer to this block encoding as a 
-**walk operator**.
+transformation is then implemented on a block-encoding of :math:`H`. 
 
-Let's explore how to use PennyLane to estimate the cost of this quantum algorithm 
-for a simple spin Hamiltonian.
+In practice it is customary to instead block-encode :math:`e^{-i\arccos (H)t}` and approximate the 
+function :math:`e^{-i\cos (H)t}` through the rapidly-converging Jacobi-Anger expansion [#gqsp]_. 
+This type of block-encoding is a **qubitization** of the Hamiltonian. It can be implemented by a 
+sequence of Prepare and Select operators that are induced by a `linear combination of unitaries 
+(LCU) decomposition <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding>`_. 
+We refer to this block encoding as a **walk operator**.
+
+Let's explore how to use PennyLane to estimate the cost of Hamiltonian simulation with GQSP.
 
 #####################################################################
 Spin dynamics
@@ -52,17 +58,16 @@ We focus on the XX model Hamiltonian with no external field, defined as
 where :math:`X,Y` are Pauli matrices acting on a given spin site and :math:`N` is the number of spins. 
 The coefficients :math:`J_{ij}` can be interpreted as the adjacency matrix of a graph that defines the
 coupling between spins. Generating samples from a time-evolved state under this Hamiltonian (as well as 
-many spin models) is widely believed to be an intractable classical problem, especially when
-the couplings are defined by a bipartite clique graph [#spin]. **But what is the cost of performing this simulation
-on a quantum computer?** Let's study a concrete example: how many qubits 
+many other spin models) is widely believed to be an intractable classical problem [#spin]. **But what is 
+the cost of performing this simulation on a quantum computer?** More specifically: how many qubits 
 and gates are needed to perform Hamiltonian simulation with GQSP on a square 
 grid of :math:`100\times 100` spins?
 
-Let's first define the Hamiltonian. For the purpose of resource estimation, the specific coupling coefficients are
-unimportant since the algorithm works identically regardless of their specific value. This allows us to define 
-**compact Hamiltonians** that are easy to instantiate by just specifying the type and number of Pauli operators.
+To answer this, we first define the Hamiltonian. For the purpose of resource estimation, the specific coupling coefficients are
+unimportant since the algorithm works identically regardless of their concrete value. This allows us to define 
+**compact Hamiltonians** that are easy to instantiate by specifying only the type and number of Pauli operators.
 With periodic boundary conditions, each spin site on the lattice is coupled to four nearest neighbours, so
-we have 10,000 qubits with 4*100*100 XX and YY couplings, respectively. This information is defined as a
+we have 10,000 qubits with 40,000 XX and YY couplings respectively. This information is defined as a
 dictionary and passed directly to the `PauliHamiltonian` resource operator:
 """
 
@@ -83,9 +88,10 @@ print(f"Compact spin Hamiltonian")
 print(xx_hamiltonian.pauli_dist)
 
 ################################### 
-# We now construct the walk operator, consisting of a sequence
+# We now construct the walk operator, which consists of a sequence
 # of Prepare and Select operators. For Prepare, we need extra qubits to load the coefficients, and will employ a 
-# standard state preparation algorithm based on QROM, which is natively supported in PennyLane:
+# standard state preparation algorithm based on `QROM <https://pennylane.ai/qml/demos/tutorial_intro_qrom>`_`,
+# which is natively supported in PennyLane:
 
 
 num_terms = xx_hamiltonian.num_pauli_words  # number of terms in the Hamiltonian
@@ -120,7 +126,7 @@ print(qre.estimate(W))
 # This can be calculated with the built-in PennyLane function `HamSimGQSP`. Under the hood, it constructs the GQSP
 # sequence and determines the required polynomial degree in the GQSP transformation to simulate the desired dynamics. 
 # 
-# As an example, we assume the Hamiltonian is normalized and calculate the degree needed to evolve for a given time
+# As an example, we assume the Hamiltonian is normalized and calculate the degree needed to evolve for
 #  :math:`t=100` and a target error of :math:`epsilon=0.1\%`.
 
 HamSim = qre.HamSimGQSP(W, time=100, one_norm=1, approximation_error=0.001)
@@ -130,7 +136,7 @@ print(f"Resources for Hamiltonian simulation with GQSP {qre.estimate(HamSim)}")
 
 ################################### 
 # This is a large system with non-trivial dynamics, yet we can analyze its requirements straightforardly using PennyLane. 
-# We now study a more practical example applying spin dynamics to Nuclear Magnetic Resonance (NMR) spectroscopy.
+# We now study a more practical example applying spin dynamics to NMR spectroscopy.
 #
 #
 # Heisenberg model for NMR spectral prediction
@@ -143,12 +149,12 @@ print(f"Resources for Hamiltonian simulation with GQSP {qre.estimate(HamSim)}")
 #   - \sum_k\vec{h}_k\cdot \vec{\sigma}_k,
 #
 # where the sums over :math:`k,l` run over spin sites, and the sum over :math:`\alpha, beta` run through
-# spatial direction x,y, and z. We're using the notation
+# spatial directions :math:`x,y`, and :math:`z``. We're using the notation
 #
 # .. math::
 #   \vec{\sigma}\cdot \vec{\sigma} = \sigma_{x}\sigma_{x}+\sigma_{y}\sigma_{y}+\sigma_{z}\sigma_{z}.
 #
-# As before, we can build a compact Hamiltonian representation by counting the number of Pauli operators of
+# As before, we build a compact Hamiltonian representation by counting the number of Pauli operators of
 # each kind, which is straightforward from expanding the Hamiltonian. For :math:`N` spins, sums over :math:`k\neq l`
 # run over :math:`N(N-1)/2` terms, and there are 6 possible pairs of Pauli matrices when we account for 
 # anti-commutation. The last sum over :math:`k` contains :math:`N` terms of 3 different Paulis. 
@@ -175,7 +181,7 @@ print(f"Compact NMR Hamiltonian")
 print(nmr_hamiltonian.pauli_dist)
 
 #################################### 
-# Once again, we build Prepare and Select operators that are used to define the walk operator. For Prepare,
+# We build Prepare and Select operators that are used to define the walk operator. For Prepare,
 # PennyLane defaults to choices that minimize gate count at the expense of extra qubits, but this time
 # we enforce a minimal use of ancilla qubits through the `select_swap_depths` argument. 
 
@@ -198,7 +204,7 @@ print(qre.estimate(W_nmr))
 
 
 ##################################### 
-# We now explore how different choices of evolution time and error affect cost. From theoretical arguments,
+# Let's explore how different choices of evolution time and error affect cost. From theoretical arguments,
 # we expect linear growth in cost with time, and logarithmic increase in inverse error. We build a dedicated 
 # function that computes the total number of non-Clifford gates (T+Toffoli) depending on the choice of these parameters.
 # The attribute `gate_counts` is a dictionary that can be used to extract specific gates.
@@ -214,9 +220,9 @@ def nmr_resources(time, one_norm, error):
     return int(T_gates + Toffoli_gates)
 
 ##################################### 
-# We plot the non-Clifford gate cost of the algorithm for different values of total evolution time. We consider
-# two cases where the one-norm differs by a factor of 2 --- this is to illustrate the linear increase in cost 
-# as a function of one-norm, which is equivalent to a rescaling of the units of time by a factor of 1/2. 
+# We plot the non-Clifford gate cost of the algorithm for different values of total evolution time. This includes
+# two cases where the one-norm differs by a factor of 2, to illustrate the linear increase in cost 
+# as a function of one-norm. This is equivalent to rescaling the units of time by a factor of 1/2. 
 
 import matplotlib
 import matplotlib.pyplot as plt
@@ -254,11 +260,12 @@ plt.show()
 # Conclusion
 # ----------
 # Hamiltonian simulation with GQSP is a well-established quantum algorithm with many useful applications. 
-# It consists of multiple subroutines that may require time to master, but it is possible to elegantly aggregate them into 
-# easy-to-use operations. This is precisely what we do in PennyLane. These operations be used to rapidly and accurately quantify
-# resources for specific use cases. You also have the flexibility to customize the algorithm by leveraging the full breadth of capabilities
-# offered as part of PennyLane's `estimator` module, for example by constructing custom Prepare and Select operators. This
-# includes studying other systems of interest, for example electronic structure, vibrational, and vibronic Hamiltonians. 
+# It consists of multiple subroutines that may require time to master, but PennyLane elegantly aggregates them into 
+# easy-to-use operations. These allows us to rapidly and accurately quantify
+# resources for specific use cases. Users also have the flexibility to customize the algorithm by leveraging
+# the full breadth of capabilities offered as part of PennyLane's `estimator` module, for example by constructing
+# custom Prepare and Select operators and studying other systems of interest, such as electronic structure, 
+# vibrational, and vibronic Hamiltonians. 
 #
 ## References
 # ----------
