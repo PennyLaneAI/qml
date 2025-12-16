@@ -102,9 +102,10 @@ def init_state(x):
 #
 
 shots = 100
-dev = qml.device("default.qubit", shots=shots)
+dev = qml.device("default.qubit")
 
 
+@qml.set_shots(shots)
 @qml.qnode(dev)
 def create_half_filled_state(x):
     init_state(x)
@@ -152,6 +153,7 @@ for key, val in counts.items():
 #
 
 
+@qml.set_shots(shots)
 @qml.qnode(dev)
 def postselect_half_filled_state(x, selection):
     init_state(x)
@@ -201,6 +203,7 @@ for key, val in counts.items():
 #
 
 
+@qml.set_shots(shots)
 @qml.qnode(dev)
 def create_selected_half_filled_state(x, selection):
     init_state(x)
@@ -249,7 +252,4 @@ for key, val in counts.items():
 # and the documentation of :func:`~.pennylane.measure`.
 #
 # And this is how to create dynamic circuits in PennyLane with mid-circuit measurements!
-#
-# About the author
-# ----------------
 #

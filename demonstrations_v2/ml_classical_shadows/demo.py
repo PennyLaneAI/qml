@@ -284,8 +284,8 @@ plt.show()
 # a ``QNode`` utilizing a device that performs single-shot measurements.
 #
 
-dev_oshot = qml.device("default.qubit", wires=num_qubits, shots=1)
-circuit_oshot = qml.QNode(circuit, dev_oshot)
+dev_oshot = qml.device("default.qubit", wires=num_qubits)
+circuit_oshot = qml.set_shots(qml.QNode(circuit, dev_oshot), shots = 1)
 
 
 ######################################################################
@@ -859,6 +859,3 @@ plt.show()
 #    Convergence and generalization in neural networks". `NeurIPS, 8571–8580
 #    <https://proceedings.neurips.cc/paper/2018/file/5a4be1fa34e62bb8a6ec6b91d2462f5a-Paper.pdf>`__ (2018)
 #
-#
-# About the author
-# ----------------

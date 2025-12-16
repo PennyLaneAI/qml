@@ -304,7 +304,10 @@ def update_step(params, opt_state):
     (loss_val, qcbm_probs), grads = jax.value_and_grad(qcbm.mmd_loss, has_aux=True)(params)
     updates, opt_state = opt.update(grads, opt_state)
     params = optax.apply_updates(params, updates)
-    kl_div = -jnp.sum(qcbm.py * jnp.nan_to_num(jnp.log(qcbm_probs / qcbm.py)))
+
+    log_ratio = jnp.where(qcbm.py == 0, 0, jnp.log(qcbm_probs / qcbm.py))
+
+    kl_div = -jnp.sum(qcbm.py *  log_ratio)
     return params, opt_state, loss_val, kl_div
 
 
@@ -386,8 +389,8 @@ def circuit(weights):
 
 
 for N in [2000, 20000]:
-    dev = qml.device("default.qubit", wires=n_qubits, shots=N)
-    circ = qml.QNode(circuit, device=dev)
+    dev = qml.device("default.qubit", wires=n_qubits)
+    circ = qml.set_shots(qml.QNode(circuit, device=dev), shots = N)
     preds = circ(weights)
     mask = np.any(np.all(preds[:, None] == data, axis=2), axis=1)  # Check for row-wise equality
     chi = np.sum(mask) / N
@@ -466,6 +469,7 @@ wshape = qml.StronglyEntanglingLayers.shape(n_layers=n_layers, n_wires=n_qubits)
 weights = np.random.random(size=wshape)
 
 
+@qml.set_shots(N)
 @qml.qnode(dev)
 def circuit(weights):
     qml.StronglyEntanglingLayers(
@@ -571,8 +575,3 @@ plt.show()
 #    Kullback, Solomon, and Richard A. Leibler. "On information and sufficiency." The annals
 #    of mathematical statistics 22.1 (1951): 79-86.
 #
-#
-
-######################################################################
-# About the author
-# ----------------

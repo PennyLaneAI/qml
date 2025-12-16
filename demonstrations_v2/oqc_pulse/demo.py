@@ -9,7 +9,6 @@ r"""Pulse programming on OQC Lucy in PennyLane
    ahs_aquila Pulse programming on Rydberg atom hardware
    tutorial_pulse_programming101 Differentiable pulse programming with qubits in PennyLane
 
-*Author: Korbinian Kottmann — Posted: 30 October 2023.*
 
 .. warning::
     The OQC Lucy device is no longer available on Amazon Braket. As there is no alternative at this time, this
@@ -222,9 +221,7 @@ dev_sim = qml.device("default.qubit", wires=[wire])
 dev_lucy = qml.device(
     "braket.aws.qubit",
     device_arn="arn:aws:braket:eu-west-2::device/qpu/oqc/Lucy",
-    wires=range(8),
-    shots=1000,
-)
+    wires=range(8))
 
 qubit_freq = dev_lucy.pulse_settings["qubit_freq"][wire]
 
@@ -258,7 +255,7 @@ def circuit(params, duration):
 # We create two qunodes, one that executes on the remote device
 # and one in simulation for comparison.
 qnode_sim = jax.jit(qml.QNode(circuit, dev_sim, interface="jax"))
-qnode_lucy = qml.QNode(circuit, dev_lucy, interface="jax")
+qnode_lucy = qml.set_shots(qml.QNode(circuit, dev_lucy, interface="jax"), shots = 1000)
 
 ##############################################################################
 # We are going to fit the resulting Rabi oscillations to a sinusoid. For this we use
@@ -444,6 +441,7 @@ def qnode_sim(params, duration=15.0):
     ]
 
 
+@qml.set_shots(1000)
 @qml.qnode(dev_lucy, interface="jax")
 def qnode_lucy(params, duration=15.0):
     qml.evolve(H0 + Hd0)(params, t=duration)
@@ -545,8 +543,4 @@ ax.set_ylim((-1.05, 1.05))
 #     Korbinian Kottmann, Nathan Killoran
 #     "Evaluating analytic gradients of pulse programs on quantum computers"
 #     `arXiv:2309.16756 <https://arxiv.org/abs/2309.16756>`__, 2023.
-#
-#
-# About the author
-# ----------------
 #

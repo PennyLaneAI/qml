@@ -152,6 +152,7 @@ def build(
     quiet: bool = False,
     keep_going: bool = False,
     dev: bool = False,
+    venv: str | None = None,
 ) -> None:
     """Build the provided demos using 'sphinx-build', optionally
     executing them to generate plots and cell outputs.
@@ -169,7 +170,8 @@ def build(
     done = 0
     logger.info("Building %d demos", len(demos))
 
-    build_venv = Virtualenv(ctx.build_venv_path)
+    build_venv = Virtualenv(ctx.repo_root / venv) if venv else Virtualenv(ctx.build_venv_path)
+    logger.info("Using build environment: %s", build_venv.path)
     cmds.pip_install(
         build_venv.python,
         requirements=ctx.build_requirements_file,
@@ -226,7 +228,7 @@ def build(
         for demo in demos:
             logger.info("Loading objects.inv for '%s'", demo.name)
             demo_inv = soi.Inventory(
-                ctx.repo_root / "demos" / demo.name / "objects.inv"
+                ctx.build_dir / f"{demo.name}_objects.inv"
             )
 
             # Only add entries that don't already exist in the merged inventory file
@@ -274,7 +276,7 @@ def _build_demo(
     quiet: bool,
     dev: bool,
 ):
-    out_dir = ctx.repo_root / "demos" / demo.name
+    out_dir = ctx.repo_root / "demos"
     fs.clean_dir(out_dir)
 
     generate_requirements(ctx, demo, dev, out_dir / "requirements.txt")
@@ -287,82 +289,40 @@ def _build_demo(
             pre=dev,
         )
 
-    # For dev, follow the same install procedure and order as in the Makefile.
-    # This is critical to get the proper versions of PennyLane, Catalyst,
-    # and various plugins.
-    # TODO: See if we can clean this up and streamline in the future...
-    # TODO: Remove RC branch for PennyLane install post-release.
-    # if dev and execute:
-    #     # Cirq
-    #     cmds.pip_install(
-    #         build_venv.python,
-    #         "--upgrade",
-    #         "git+https://github.com/PennyLaneAI/pennylane-cirq.git#egg=pennylane-cirq",
-    #         use_uv=False,
-    #         quiet=False,
-    #     )
-    #     # Qiskit
-    #     cmds.pip_install(
-    #         build_venv.python,
-    #         "--upgrade",
-    #         "git+https://github.com/PennyLaneAI/pennylane-qiskit.git#egg=pennylane-qiskit",
-    #         use_uv=False,
-    #         quiet=False,
-    #     )
-    #     # Qulacs
-    #     cmds.pip_install(
-    #         build_venv.python,
-    #         "--upgrade",
-    #         "git+https://github.com/PennyLaneAI/pennylane-qulacs.git#egg=pennylane-qulacs",
-    #         use_uv=False,
-    #         quiet=False,
-    #     )
-    #     # Catalyst
-    #     cmds.pip_install(
-    #         build_venv.python,
-    #         "--upgrade",
-    #         "--extra-index-url",
-    #         "https://test.pypi.org/simple/",
-    #         "PennyLane-Catalyst",
-    #         use_uv=False,
-    #         quiet=False,
-    #         pre=True,
-    #     )
-    #     # Lightning
-    #     cmds.pip_install(
-    #         build_venv.python,
-    #         "--upgrade",
-    #         "--extra-index-url",
-    #         "https://test.pypi.org/simple/",
-    #         "PennyLane-Lightning",
-    #         use_uv=False,
-    #         quiet=False,
-    #         pre=True,
-    #     )
-    #     # PennyLane
-    #     cmds.pip_install(
-    #         build_venv.python,
-    #         "--upgrade",
-    #         "git+https://github.com/PennyLaneAI/pennylane.git@v0.42.0-rc0#egg=pennylane",
-    #         use_uv=False,
-    #         quiet=False,
-    #     )
-    #     # Iqpopt
-    #     cmds.pip_install(
-    #         build_venv.python,
-    #         "--upgrade",
-    #         "git+https://github.com/XanaduAI/iqpopt.git#egg=iqpopt",
-    #         use_uv=False,
-    #         quiet=False,
-    #     )
-    #     # We need to bump flax here, after Jax has been bumped by Catalyst
-    #     cmds.pip_install(
-    #         build_venv.python,
-    #         "--upgrade",
-    #         "flax==0.10.6",
-    #         use_uv=False,
-    #         quiet=False,
-    #     )
+        # If dev, we need to re-install the latest Catalyst, then Lightning, then PennyLane
+        # in that order, regardless of conflicts/warnings. 
+        if dev:
+            # Catalyst
+            cmds.pip_install(
+                build_venv.python,
+                "--upgrade",
+                "--extra-index-url",
+                "https://test.pypi.org/simple/",
+                "PennyLane-Catalyst",
+                use_uv=False,
+                quiet=False,
+                pre=True,
+            )
+            # Lightning
+            cmds.pip_install(
+                build_venv.python,
+                "--upgrade",
+                "--extra-index-url",
+                "https://test.pypi.org/simple/",
+                "PennyLane-Lightning",
+                use_uv=False,
+                quiet=False,
+                pre=True,
+            )
+    if dev:
+        # Need dev version of PennyLane to build, whether or not we're executing
+        cmds.pip_install(
+            build_venv.python,
+            "--upgrade",
+            "git+https://github.com/PennyLaneAI/pennylane.git#egg=pennylane",
+            use_uv=False,
+            quiet=False,
+        )
 
     stage_dir = ctx.build_dir / "demonstrations"
     fs.clean_dir(stage_dir)
@@ -388,6 +348,7 @@ def _build_demo(
         "GALLERY_OUTPUT_DIR": str(out_dir.resolve().relative_to(ctx.repo_root)),
         # Make sure demos can find scripts installed in the build venv
         "PATH": f"{os.environ['PATH']}:{build_venv.path / 'bin'}",
+        "CURRENT_DEMO": str(demo.name),
     }
     if quiet:
         stdout, stderr, text = subprocess.PIPE, subprocess.STDOUT, True
@@ -409,21 +370,7 @@ def _build_demo(
 
     # Move the objects.inv file so we can merge them once all the demos are built
     if target is BuildTarget.HTML:
-        fs.copy_any(ctx.build_dir / "html/objects.inv", out_dir)
-
-
-def _install_build_dependencies(venv: Virtualenv, build_dir: Path):
-    """Install dependencies for running sphinx-build into `venv`."""
-    logger.info("Installing sphinx-build dependencies")
-
-    build_requirements_file = build_dir / "requirements-build.txt"
-    cmds.poetry_export(
-        sys.executable,
-        build_requirements_file,
-        groups=("base",),
-        format="requirements.txt",
-    )
-    cmds.pip_install(venv.python, "-r", build_requirements_file, use_uv=False)
+        fs.copy_any(ctx.build_dir / "html/objects.inv", ctx.build_dir / f"{demo.name}_objects.inv")
 
 
 def _package_demo(
@@ -447,7 +394,7 @@ def _package_demo(
     fs.clean_dir(dest)
 
     with open(
-        (sphinx_output / "demos" / demo.name / demo.name).with_suffix(".fjson"), "r"
+        (sphinx_output / "demos" / demo.name).with_suffix(".fjson"), "r"
     ) as f:
         html_body = json.load(f)["body"]
 

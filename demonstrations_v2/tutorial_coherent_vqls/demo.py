@@ -13,8 +13,6 @@ Coherent Variational Quantum Linear Solver
 
    tutorial_vqls Variational Quantum Linear Solver
 
-*Author: Andrea Mari — 06 November 2019. Last updated: 15 January 2021.*
-
 In this tutorial we propose and implement an algorithm that we call
 *coherent variational quantum linear solver* (CVQLS).
 This is inspired by the VQLS proposed in Ref. [1] (implemented in a :doc:`previous demo <demos/tutorial_vqls>`), with an important difference:
@@ -425,7 +423,7 @@ for it in range(steps):
 # since it also represents a bound for the error between the generated state
 # and the exact solution of the problem.
 
-plt.style.use("seaborn")
+plt.style.use("seaborn-v0_8")
 plt.plot(cost_history, "g")
 plt.ylabel("Cost function")
 plt.xlabel("Optimization steps")
@@ -487,8 +485,9 @@ c_probs = (x / np.linalg.norm(x)) ** 2
 # For this task, we initialize a new PennyLane device and define the associated
 # QNode.
 
-dev_x = qml.device("default.qubit", wires=n_qubits, shots=n_shots)
+dev_x = qml.device("default.qubit", wires=n_qubits)
 
+@qml.set_shots(n_shots)
 @qml.qnode(dev_x, interface="autograd")
 def prepare_and_sample(weights):
 
@@ -555,7 +554,4 @@ plt.show()
 #    "Efficient algorithms in quantum query complexity."
 #    PhD thesis, University of Waterloo, 2014.
 #
-#
-# About the author
-# ----------------
 #

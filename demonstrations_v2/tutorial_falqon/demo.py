@@ -11,12 +11,11 @@ Feedback-Based Quantum Optimization (FALQON)
    tutorial_qaoa_intro Intro to QAOA
    tutorial_qaoa_maxcut QAOA for MaxCut
 
-*Authors: David Wakeham and Jack Ceroni — Posted: 21 May 2021. Last updated: 21 May 2021.*
 
 -----------------------------
 
 While the
-`Quantum Approximate Optimization Algorithm (QAOA) <https://pennylane.ai/qml/demos/tutorial_qaoa_intro.html>`__
+:doc:`Quantum Approximate Optimization Algorithm (QAOA) <demos/tutorial_qaoa_intro>`
 is one of the best-known processes for solving combinatorial optimization problems with quantum computers,
 it has a major drawback: convergence isn't guaranteed, as the optimization procedure can become "stuck" in local minima.
 
@@ -33,7 +32,7 @@ combine FALQON with QAOA to create a powerful optimization procedure.
 
 .. note::
     If you are not familiar with QAOA, we recommend checking out the
-    `Intro to QAOA tutorial <https://pennylane.ai/qml/demos/tutorial_qaoa_intro.html>`__,
+    `Intro to QAOA tutorial <https://pennylane.ai/qml/demos/tutorial_qaoa_intro>`__,
     since many of the same ideas carry over and will be used throughout this demonstration.
 
 Theory
@@ -477,8 +476,4 @@ plt.show()
 # ----------
 #
 # Magann, A. B., Rudinger, K. M., Grace, M. D., & Sarovar, M. (2021). Feedback-based quantum optimization. arXiv preprint `arXiv:2103.08619 <https://arxiv.org/abs/2103.08619>`__.
-#
-#
-# About the author
-# ----------------
 #

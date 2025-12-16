@@ -76,9 +76,10 @@ def ansatz(x):
 # To implement the ``QNode``, we also define a shot-based qubit device.
 #
 
-dev = qml.device("default.qubit", shots=100)
+dev = qml.device("default.qubit")
 
 
+@qml.set_shots(100)
 @qml.qnode(dev)
 def simple_node(x):
     # apply the ansatz, and collect mid-circuit measurements. mcm1 is the measurement
@@ -118,6 +119,7 @@ print(f"Bit string counts on other qubits: {counts}")
 #
 
 
+@qml.set_shots(100)
 @qml.qnode(dev)
 def interesting_qnode(x):
     first_mcms = ansatz(x)
@@ -172,7 +174,7 @@ print(qml.defer_measurements(interesting_qnode)(x))
 #
 
 num_shots = 10000
-counts = qml.defer_measurements(interesting_qnode)(x, shots=num_shots)
+counts = qml.set_shots(qml.defer_measurements(interesting_qnode), shots=num_shots)(x)
 p_yes = counts[True] / num_shots
 p_no = counts[False] / num_shots
 print(f'The probability to answer with "yes" / "no" is {p_yes:.5f} / {p_no:.5f}')
@@ -193,7 +195,7 @@ print(f'The probability to answer with "yes" / "no" is {p_yes:.5f} / {p_no:.5f}'
 # never see bit strings with differing second and third bits.
 # Sampling more shots eventually reveals this, even though they remain rare:
 
-probs, counts = qml.defer_measurements(simple_node)(x, shots=10000)
+probs, counts = qml.set_shots(qml.defer_measurements(simple_node), shots=10000)(x)
 print(f"Bit string counts on last three qubits: {counts}")
 
 ######################################################################
@@ -224,7 +226,4 @@ print(f"Bit string counts on last three qubits: {counts}")
 # For more details also consider the
 # `measurements quickstart page <https://docs.pennylane.ai/en/stable/introduction/measurements.html#mid-circuit-measurements-and-conditional-operations>`_
 # and the documentation of :func:`~.pennylane.measure`.
-#
-# About the author
-# ----------------
 #

@@ -10,8 +10,6 @@ Optimizing noisy circuits with Cirq
 
    pytorch_noise PyTorch and noisy devices
 
-*Author: Nathan Killoran — Posted: 01 June 2020.  Last updated: 16 June 2021.*
-
 .. figure:: ../_static/demonstration_assets/noisy_circuit_optimization/noisy_qubit.png
     :align: center
     :width: 90%
@@ -85,7 +83,7 @@ import pennylane as qml
 from pennylane import numpy as np
 import matplotlib.pyplot as plt
 
-dev = qml.device("cirq.mixedsimulator", wires=2, shots=1000)
+dev = qml.device("cirq.mixedsimulator", wires=2)
 
 # CHSH observables
 A1 = qml.PauliZ(0)
@@ -102,24 +100,28 @@ def bell_pair():
 
 
 # circuits for measuring each distinct observable
+@qml.set_shots(1000)
 @qml.qnode(dev)
 def measure_A1B1():
     bell_pair()
     return qml.expval(A1 @ B1)
 
 
+@qml.set_shots(1000)
 @qml.qnode(dev)
 def measure_A1B2():
     bell_pair()
     return qml.expval(A1 @ B2)
 
 
+@qml.set_shots(1000)
 @qml.qnode(dev)
 def measure_A2B1():
     bell_pair()
     return qml.expval(A2 @ B1)
 
 
+@qml.set_shots(1000)
 @qml.qnode(dev)
 def measure_A2B2():
     bell_pair()
@@ -259,6 +261,7 @@ plt.show()
 #           situations.
 
 
+@qml.set_shots(1000)
 @qml.qnode(dev)
 def circuit(gate_params, noise_param=0.0):
     qml.RX(gate_params[0], wires=0)
@@ -539,8 +542,4 @@ plt.show()
 #    "A variational toolbox for quantum multi-parameter estimation."
 #    `arXiv:2006.06303
 #    <https://arxiv.org/abs/2006.06303>`__, 2020.
-#
-#
-# About the author
-# ----------------
 #

@@ -345,10 +345,9 @@ def qpu_qubit_rotation_hybrid_job(num_steps=10, stepsize=0.5):
     device = qml.device(
         "braket.aws.qubit",
         device_arn=device_arn.value,  # Make sure the device ARN matches the hybrid job device ARN
-        wires=2,
-        shots=1_000,
-    )
+        wires=2)
 
+    @qml.set_shots(1_000)
     @qml.qnode(device)
     def circuit(params):
         qml.RX(params[0], wires=0)
@@ -427,10 +426,4 @@ plt.show()
 # In this tutorial, we showed how to migrate from local Python functions to running algorithms on simulators and QPUs on Amazon Braket.
 # We adapted the simple example of rotating a qubit using gradient descent, running this on both a local simulator and a real QPU.
 # Using Amazon Braket Hybrid Jobs allowed us to run algorithms asynchronously, scale classical compute using AWS, and obtain priority access to the selected QPU for the duration of our algorithm.
-#
-
-
-##############################################################################
-# About the author
-# ----------------
 #

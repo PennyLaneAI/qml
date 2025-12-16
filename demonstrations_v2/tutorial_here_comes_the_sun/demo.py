@@ -29,7 +29,7 @@ In this tutorial, you will learn about the :math:`\mathrm{SU}(N)` gate
 can act like *any* gate on its qubits by choosing the parameters accordingly.
 We will look at a custom derivative rule [#wiersema]_ for this gate and compare it to two
 alternative differentiation strategies, namely finite differences and the `stochastic
-parameter-shift rule <https://pennylane.ai/qml/demos/tutorial_stochastic_parameter_shift.html>`_.
+parameter-shift rule <https://pennylane.ai/qml/demos/tutorial_stochastic_parameter_shift>`_.
 Finally, we will compare the performance of
 ``qml.SpecialUnitary`` for a toy minimization problem to that of two other general
 local gates. That is, we compare the trainability of equally expressive ansätze.
@@ -570,7 +570,4 @@ plt.show()
 #     Leonardo Banchi and Gavin E. Crooks. "Measuring Analytic Gradients of
 #     General Quantum Evolution with the Stochastic Parameter Shift Rule."
 #     `Quantum 5, 386 <https://quantum-journal.org/papers/q-2021-01-25-386/>`__ (2021).
-#
-# About the author
-# ----------------
 #

@@ -373,8 +373,3 @@ plt.show()
 #     "Calibration of the cross-resonance two-qubit gate between directly-coupled transmons"
 #     `arXiv:1905.05670 <https://arxiv.org/abs/1905.05670>`__, 2019
 #
-
-##############################################################################
-# About the author
-# ----------------
-#

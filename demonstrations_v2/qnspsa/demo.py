@@ -10,8 +10,6 @@ Quantum natural SPSA optimizer
 
    tutorial_spsa Simultaneous perturbation stochastic approximation (SPSA) optimizer
 
-*Author: Yiheng Duan — Posted: 18 July 2022. Last updated: 05 September 2022.*
-
 In this tutorial, we show how we can implement the
 `quantum natural simultaneous perturbation stochastic approximation (QN-SPSA) optimizer
 <https://quantum-journal.org/papers/q-2021-10-20-567/>`__
@@ -199,7 +197,7 @@ g = nx.gnm_random_graph(nodes, edges, seed=seed)
 cost_h, mixer_h = qaoa.maxcut(g)
 depth = 2
 # define device to be the PennyLane lightning local simulator
-dev = qml.device("lightning.qubit", wires=n_qubits, shots=1000)
+dev = qml.device("lightning.qubit", wires=n_qubits)
 
 
 def qaoa_layer(gamma, alpha):
@@ -218,6 +216,7 @@ def qaoa_circuit(params, n_qubits, depth):
 
 
 # define ansatz and loss function
+@qml.set_shots(1000)
 @qml.qnode(dev)
 def cost_function(params):
     qaoa_circuit(params, n_qubits, depth)
@@ -1008,7 +1007,4 @@ job = AwsQuantumJob.create(
 #    optimization using only function measurements*. `In Proceedings of the
 #    36th IEEE Conference on Decision and Control (Vol. 2, pp. 1417-1424).
 #    IEEE <https://ieeexplore.ieee.org/document/657661>`__.
-#
-# About the author
-# ----------------
 #

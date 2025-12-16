@@ -10,8 +10,6 @@ r"""Training and evaluating quantum kernels
     tutorial_kernel_based_training Kernel-based training with scikit-learn
     tutorial_data_reuploading_classifier Data-reuploading classifier
 
-*Authors: Peter-Jan Derks, Paul K. Faehrmann, Elies Gil-Fuster, Tom
-Hubregtsen, Johannes Jakob Meyer and David Wierichs — Posted: 24 June 2021. Last updated: 18 November 2021.*
 
 Kernel methods are one of the cornerstones of classical machine learning.
 Here we are concerned with kernels that can be evaluated on quantum computers,
@@ -284,7 +282,7 @@ def random_params(num_wires, num_layers):
 # For the purpose of this tutorial we will use PennyLane's ``default.qubit``
 # device with 5 wires in analytic mode.
 
-dev = qml.device("default.qubit", wires=5, shots=None)
+dev = qml.device("default.qubit", wires=5)
 wires = dev.wires.tolist()
 
 ##############################################################################
@@ -318,7 +316,7 @@ def kernel(x1, x2, params):
 #     to use the observable type
 #     `Projector <https://pennylane.readthedocs.io/en/latest/code/api/pennylane.Projector.html>`__.
 #     This is shown in the
-#     `demo on kernel-based training of quantum models <https://pennylane.ai/qml/demos/tutorial_kernel_based_training.html>`__, where you will also find more
+#     :doc:`demo on kernel-based training of quantum models <demos/tutorial_kernel_based_training>`, where you will also find more
 #     background information on the kernel circuit structure itself.
 #
 # Before focusing on the kernel values we have to provide values for the
@@ -626,8 +624,4 @@ trained_plot_data = plot_decision_boundaries(svm_trained, plt.gca())
 #     Wang, Tinghua, Dongyan Zhao, and Shengfeng Tian.
 #     "An overview of kernel alignment and its applications."
 #     `Artificial Intelligence Review 43.2: 179-192 <https://link.springer.com/article/10.1007/s10462-012-9369-4>`__, 2015.
-#
-#
-# About the author
-# ----------------
 #

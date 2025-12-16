@@ -690,9 +690,3 @@ plt.show()
 #     "The density-matrix renormalization group in the age of Matrix Product States"
 #     `arXiv:1008.3477 <https://arxiv.org/abs/1008.3477>`__, 2010.
 #
-
-
-##############################################################################
-# About the author
-# ----------------
-#

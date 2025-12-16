@@ -140,7 +140,7 @@ n_measurements = 10000
 
 shadows = []
 for random_state in random_states:
-    bits, recipes = target_circuit(random_state, shots=n_measurements)
+    bits, recipes = qml.set_shots(target_circuit, shots=n_measurements)(random_state)
     shadow = qml.ClassicalShadow(bits, recipes)
     shadows.append(shadow)
 
@@ -428,8 +428,4 @@ print("Target output state\n", target_matrices_shadow[0])
 #     "Quantum advantage in learning from experiments"
 #     `Science <http://dx.doi.org/10.1126/science.abn7293>`__, 2022
 #
-
-##############################################################################
-# About the author
-# ------------------
 #

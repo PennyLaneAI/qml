@@ -352,9 +352,10 @@ from collections import defaultdict
 import pennylane as qml
 
 shots = 5000  # Number of samples used
-dev = qml.device("default.qubit", shots=shots)
+dev = qml.device("default.qubit")
 
 
+@qml.set_shots(shots)
 @qml.qnode(dev)
 def qaoa_circuit(gammas, betas, h, J, num_qubits):
     wmax = max(
@@ -736,9 +737,4 @@ fig.show()
 # [3] Montanez-Barrera, J. A., Heuvel, P. van den, Willsch, D., & Michielsen, K. (2023). Improving
 # Performance in Combinatorial Optimization Problems with Inequality Constraints: An Evaluation of the
 # Unbalanced Penalization Method on D-Wave Advantage. https://doi.org/10.1109/QCE57702.2023.00067
-#
-
-######################################################################
-# About the author
-# ----------------
 #

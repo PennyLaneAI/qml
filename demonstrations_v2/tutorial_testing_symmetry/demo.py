@@ -11,8 +11,6 @@ Testing for symmetry with quantum computers
 
     tutorial_geometric_qml Intro to geometric quantum machine learning
 
-*Author: David Wakeham. Posted: 24 January 2023.*
-
 Symmetries are transformations that leave something looking the same.
 They are not only pretty — think of geometric patterns and shapes — but
 a great labour-saving device for the lazy physicist!
@@ -55,7 +53,7 @@ It is sensible to ask that the unitary operators preserve the structure of the g
 
    U(g_1)U(g_2) = U(g_1 \circ g_2).
 
-For more on groups and how to represent them with matrices, see our `demo on geometric learning <https://pennylane.ai/qml/demos/tutorial_geometric_qml.html>`__.
+For more on groups and how to represent them with matrices, see our `demo on geometric learning <https://pennylane.ai/qml/demos/tutorial_geometric_qml>`__.
 For the Hamiltonian to respect the symmetries encoded in the group :math:`G` it means that it commutes with the matrices,
 
 .. math::
@@ -460,9 +458,4 @@ print("The asymmetry for Hasym is", asymm(Hasym, 1e-4), ".")
 # 1. LaBorde, M. L and Wilde, M.M. `Quantum Algorithms for Testing
 #    Hamiltonian Symmetry <https://arxiv.org/pdf/2203.10017.pdf>`__
 #    (2022).
-#
-
-##############################################################################
-# About the author
-# ----------------
 #

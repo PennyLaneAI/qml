@@ -98,8 +98,9 @@ print(counts)
 
 import pennylane as qml
 
-dev = qml.device("qiskit.basicsim", wires=2, shots=1024)
+dev = qml.device("qiskit.basicsim", wires=2)
 
+@qml.set_shots(1024)
 @qml.qnode(dev)
 def circuit():
     qml.Hadamard(0)
@@ -263,7 +264,7 @@ measurements = [qml.classical_shadow(wires=range(n))]
 pl_qfunc = qml.from_qiskit(qc, measurements=measurements)
 
 pl_circuit = qml.QNode(pl_qfunc, device=qml.device("default.qubit", wires=n))
-print(pl_circuit(shots=5))
+print(qml.set_shots(pl_circuit, shots=5)())
 
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
@@ -321,7 +322,6 @@ plt.show()
 
 
 ######################################################################
-# .. rst-class:: image-no-text-wrap
 #
 # .. figure:: ../_static/demonstration_assets/how_to_use_qiskit_1_with_pennylane/qiskit_parameterized_circuit.png
 #     :align: center
@@ -364,7 +364,6 @@ plt.show()
 #
 
 ######################################################################
-# .. rst-class:: image-no-text-wrap
 #
 # .. figure:: ../_static/demonstration_assets/how_to_use_qiskit_1_with_pennylane/pl_real_world_example.png
 #     :align: center
@@ -429,9 +428,4 @@ print(f"Optimized cost function value: {new_loss}")
 # the latest and greatest `PennyLane features </features/>`__, `Demos </qml/demonstrations/>`__ and our `blog posts </blog/>`__, and follow us on
 # `LinkedIn <https://www.linkedin.com/company/pennylaneai/>`__ or `X (formerly
 # Twitter) <https://twitter.com/PennyLaneAI>`__ to stay updated!
-#
-
-######################################################################
-# About the author
-# ----------------
 #

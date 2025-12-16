@@ -257,8 +257,9 @@ print(f'Created {n} qubit state with qubits {partitions[0]} unentangled from {pa
 # array ``M``:
 # 
 
-dev = qml.device('default.qubit', shots=100)
+dev = qml.device('default.qubit')
 
+@qml.set_shots(100)
 @qml.qnode(dev)
 def circuit():
     # Initialize psi x psi in registers 2 and 3
@@ -388,8 +389,4 @@ M.null_space()
 #    
 #     Adam Bouland, Tudor Giurgică-Tiron, John Wright, "The State Hidden Subgroup Problem and an Efficient Algorithm for Locating Unentanglement",  
 #     `STOC '25 p.463-470. <https://doi.org/10.1145/3717823.3718118>`__, 2025
-
-######################################################################
-# About the author
-# ----------------
-# 
+#

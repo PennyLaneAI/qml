@@ -75,24 +75,24 @@ print(qv.qs)
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-# .. code-block:: none
+#   .. code-block:: none
 #
-#    QuantumCircuit:
-#    ---------------
-#            ┌───┐┌───┐
-#    qv_0.0: ┤ H ├┤ Z ├──■──
-#            ├───┤└───┘  │
-#    qv_0.1: ┤ Z ├───────┼──
-#            ├───┤       │
-#    qv_0.2: ┤ Z ├───────┼──
-#            ├───┤     ┌─┴─┐
-#    qv_0.3: ┤ Z ├─────┤ X ├
-#            ├───┤     └───┘
-#    qv_0.4: ┤ Z ├──────────
-#            └───┘
-#    Live QuantumVariables:
-#    ----------------------
-#    QuantumVariable qv_0
+#      QuantumCircuit:
+#      ---------------
+#              ┌───┐┌───┐
+#      qv_0.0: ┤ H ├┤ Z ├──■──
+#              ├───┤└───┘  │
+#      qv_0.1: ┤ Z ├───────┼──
+#              ├───┤       │
+#      qv_0.2: ┤ Z ├───────┼──
+#              ├───┤     ┌─┴─┐
+#      qv_0.3: ┤ Z ├─────┤ X ├
+#              ├───┤     └───┘
+#      qv_0.4: ┤ Z ├──────────
+#              └───┘
+#      Live QuantumVariables:
+#      ----------------------
+#      QuantumVariable qv_0
 
 ######################################################################
 # So far, this doesn’t seem that different from what you are used to, but it provides the
@@ -112,9 +112,9 @@ print(a)
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-# .. code-block:: none
+#   .. code-block:: none
 #
-#    {0.0: 0.125, 0.25: 0.125, 0.5: 0.125, 0.75: 0.125, 1.0: 0.125, 1.25: 0.125, 1.5: 0.125, 1.75: 0.125}
+#     {0.0: 0.125, 0.25: 0.125, 0.5: 0.125, 0.75: 0.125, 1.0: 0.125, 1.25: 0.125, 1.5: 0.125, 1.75: 0.125}
 
 ######################################################################
 # Here, ``msize=3`` indicates the amount of mantissa qubits, which represent the significant digits of
@@ -154,12 +154,12 @@ print(f)
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-# .. code-block:: none
+#   .. code-block:: none
 #
-#    {7: 1.0}
-#    {-2: 1.0}
-#    {-4: 1.0}
-#    {2.5: 1.0}
+#     {7: 1.0}
+#     {-2: 1.0}
+#     {-4: 1.0}
+#     {2.5: 1.0}
 
 ######################################################################
 # Another QuantumType we will use in this demo are the QuantumBools, representing boolean truth
@@ -174,9 +174,9 @@ print(qb)
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-# .. code-block:: none
+#   .. code-block:: none
 #
-#    {False: 0.5, True: 0.5}
+#     {False: 0.5, True: 0.5}
 
 ######################################################################
 # With a second QuantumBool, we can demonstrate and evaluate some logical functions:
@@ -190,11 +190,11 @@ print(qb & qb_1)
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-# .. code-block:: none
+#   .. code-block:: none
 #
-#    {False: 1.0}
-#    {False: 0.5, True: 0.5}
-#    {False: 1.0}
+#     {False: 1.0}
+#     {False: 0.5, True: 0.5}
+#     {False: 1.0}
 
 ######################################################################
 # Comparisons, however, are not limited to only QuantumBools, but also for other types, like the
@@ -211,11 +211,11 @@ print(qb_3.qs.statevector())
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-# .. code-block:: none
+#   .. code-block:: none
 #
-#    {0: 0.5, 8: 0.5}
-#    {False: 0.5, True: 0.5}
-#    sqrt(2)*(|0>*|False> + |8>*|True>)/2
+#     {0: 0.5, 8: 0.5}
+#     {False: 0.5, True: 0.5}
+#     sqrt(2)*(|0>*|False> + |8>*|True>)/2
 
 ######################################################################
 # We can also compare one QuantumFloat to another:
@@ -229,9 +229,9 @@ print(comparison.qs.statevector())
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-# .. code-block:: none
+#   .. code-block:: none
 #
-#    sqrt(2)*(|0>*|False>*|4>*|True> + |8>*|True>*|4>*|False>)/2
+#     sqrt(2)*(|0>*|False>*|4>*|True> + |8>*|True>*|4>*|False>)/2
 
 ######################################################################
 # Jasp
@@ -356,9 +356,9 @@ print(qrisp.multi_measurement([psi, res]))
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-# .. code-block:: none
+#   .. code-block:: none
 #
-#    {(0, 0.0): 0.25, (1, 0.5): 0.25, (2, 0.125): 0.25, (3, 0.625): 0.25}
+#     {(0, 0.0): 0.25, (1, 0.5): 0.25, (2, 0.125): 0.25, (3, 0.625): 0.25}
 
 ######################################################################
 # Here, the measurement results are given by a dictionary, where the keys are are tuples representing
@@ -382,9 +382,9 @@ main()
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-# .. code-block:: none
+#   .. code-block:: none
 #
-#    {0.625: 1.0}
+#     {0.625: 1.0}
 
 ######################################################################
 # Executing the ``main`` function with the ``terminal_sampling`` decorator returns the measurement
@@ -506,9 +506,9 @@ print(qrisp.multi_measurement([qf, res]))
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-# .. code-block:: none
+#   .. code-block:: none
 #
-#    {(0.125, 8): 0.3333333333333333, (0.25, 4): 0.3333333333333333, (0.5, 2): 0.3333333333333333}
+#      {(0.125, 8): 0.3333333333333333, (0.25, 4): 0.3333333333333333, (0.5, 2): 0.3333333333333333}
 
 ######################################################################
 # Next, we define the function ``HHL_encoding`` that performs **Steps 1-4** and prepares the state
@@ -652,9 +652,9 @@ print(res_dict)
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-# .. code-block:: none
+#   .. code-block:: none
 #
-#    {0.0: 0.7071067811865476, 1.0: 0.7071067811865476}
+#     {0.0: 0.7071067811865476, 1.0: 0.7071067811865476}
 
 ######################################################################
 # Finally, let’s compare to the classical result.
@@ -666,9 +666,9 @@ print(x)
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-# .. code-block:: none
+#   .. code-block:: none
 #
-#    [0.70710678 0.70710678]
+#     [0.70710678 0.70710678]
 
 ######################################################################
 # Et voila! Now, let’s tackle some more complicated examples! Next, we try some randomly generated
@@ -717,29 +717,29 @@ print(b)
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-# .. code-block:: none
+#   .. code-block:: none
 #
-#    Hermitian matrix A:
-#    [[ 0.19252221  0.03518761 -0.08725666  0.02288045  0.04538538  0.03247052
-#      -0.06519315 -0.06229545]
-#     [ 0.03518761  0.28758984  0.03595881  0.06702119  0.03489919  0.07145221
-#       0.07085617 -0.10555209]
-#     [-0.08725666  0.03595881  0.28859598  0.00165777 -0.05503796 -0.03801707
-#       0.13179087  0.03443008]
-#     [ 0.02288045  0.06702119  0.00165777  0.26810863 -0.12651043  0.00385685
-#      -0.01492278 -0.10505962]
-#     [ 0.04538538  0.03489919 -0.05503796 -0.12651043  0.34469893  0.07605711
-#       0.01253655  0.02660667]
-#     [ 0.03247052  0.07145221 -0.03801707  0.00385685  0.07605711  0.31567327
-#       0.080171   -0.01770181]
-#     [-0.06519315  0.07085617  0.13179087 -0.01492278  0.01253655  0.080171
-#       0.30119828  0.03446737]
-#     [-0.06229545 -0.10555209  0.03443008 -0.10505962  0.02660667 -0.01770181
-#       0.03446737  0.25161286]]
-#    Eigenvalues:
-#    [0.25  0.5   0.5   0.125 0.125 0.5   0.125 0.125]
-#    b:
-#    [1 0 0 0 0 0 0 1]
+#     Hermitian matrix A:
+#     [[ 0.19252221  0.03518761 -0.08725666  0.02288045  0.04538538  0.03247052
+#       -0.06519315 -0.06229545]
+#      [ 0.03518761  0.28758984  0.03595881  0.06702119  0.03489919  0.07145221
+#        0.07085617 -0.10555209]
+#      [-0.08725666  0.03595881  0.28859598  0.00165777 -0.05503796 -0.03801707
+#        0.13179087  0.03443008]
+#      [ 0.02288045  0.06702119  0.00165777  0.26810863 -0.12651043  0.00385685
+#       -0.01492278 -0.10505962]
+#      [ 0.04538538  0.03489919 -0.05503796 -0.12651043  0.34469893  0.07605711
+#        0.01253655  0.02660667]
+#      [ 0.03247052  0.07145221 -0.03801707  0.00385685  0.07605711  0.31567327
+#        0.080171   -0.01770181]
+#      [-0.06519315  0.07085617  0.13179087 -0.01492278  0.01253655  0.080171
+#        0.30119828  0.03446737]
+#      [-0.06229545 -0.10555209  0.03443008 -0.10505962  0.02660667 -0.01770181
+#        0.03446737  0.25161286]]
+#     Eigenvalues:
+#     [0.25  0.5   0.5   0.125 0.125 0.5   0.125 0.125]
+#     b:
+#     [1 0 0 0 0 0 0 1]
 
 
 @qrisp.terminal_sampling
@@ -758,10 +758,10 @@ np.array([res_dict[key] for key in sorted(res_dict)])
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-# .. code-block:: none
+#   .. code-block:: none
 #
-#    array([0.73688311, 0.11916253, 0.09056467, 0.11650071, 0.09336856,
-#           0.04641304, 0.04607175, 0.63877596])
+#     array([0.73688311, 0.11916253, 0.09056467, 0.11650071, 0.09336856,
+#            0.04641304, 0.04607175, 0.63877596])
 
 ######################################################################
 # Let’s compare to the classical solution:
@@ -773,10 +773,10 @@ print(x)
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-# .. code-block:: none
+#   .. code-block:: none
 #
-#    [ 0.73761732  0.11838953  0.08853343  0.11632373 -0.09299411 -0.04581715
-#      0.04179596  0.63878104]
+#     [ 0.73761732  0.11838953  0.08853343  0.11632373 -0.09299411 -0.04581715
+#       0.04179596  0.63878104]
 
 ######################################################################
 # First of all, kudos for making it to this point of the demo. Prior to proceeding to the final
@@ -848,34 +848,34 @@ print(qir_str[:2000])
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-# .. code-block:: none
+#   .. code-block:: none
 #
-#    ; ModuleID = 'LLVMDialectModule'
-#    source_filename = "LLVMDialectModule"
-#    target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
-#    target triple = "x86_64-unknown-linux-gnu"
+#     ; ModuleID = 'LLVMDialectModule'
+#     source_filename = "LLVMDialectModule"
+#     target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
+#     target triple = "x86_64-unknown-linux-gnu"
 #
-#    @"{'shots': 0, 'mcmc': False, 'num_burnin': 0, 'kernel_name': None}" = internal constant [66 x i8] c"{'shots': 0, 'mcmc': False, 'num_burnin': 0, 'kernel_name': None}\00"
-#    @LightningSimulator = internal constant [19 x i8] c"LightningSimulator\00"
-#    @"/home/positr0nium/miniforge3/envs/qrisp/lib/python3.10/site-packages/pennylane_lightning/liblightning_qubit_catalyst.so" = internal constant [120 x i8] c"/home/positr0nium/miniforge3/envs/qrisp/lib/python3.10/site-packages/pennylane_lightning/liblightning_qubit_catalyst.so\00"
-#    @__constant_xi64_3 = private constant i64 -4
-#    @__constant_1024xi64 = private constant [1024 x i64] zeroinitializer
-#    @__constant_xi1 = private constant i1 false
-#    @__constant_xi64_2 = private constant i64 4
-#    @__constant_xi64_1 = private constant i64 3
-#    @__constant_xi64_0 = private constant i64 30
-#    @__constant_30xi64 = private constant [30 x i64] [i64 30, i64 29, i64 28, i64 27, i64 26, i64 25, i64 24, i64 23, i64 22, i64 21, i64 20, i64 19, i64 18, i64 17, i64 16, i64 15, i64 14, i64 13, i64 12, i64 11, i64 10, i64 9, i64 8, i64 7, i64 6, i64 5, i64 4, i64 3, i64 2, i64 1]
-#    @__constant_xf64_34 = private constant double 0xBF919CF5D85DB47A
-#    @__constant_xf64_33 = private constant double 0xBF89C4C2643A2DEA
-#    @__constant_xf64_32 = private constant double 0xBF8696E980F4B09E
-#    @__constant_xf64_31 = private constant double 0x3F69A6304F46D56B
-#    @__constant_xf64_30 = private constant double 0xBF97F300BE6AA82E
-#    @__constant_xf64_29 = private constant double 0x3F75120CFFA6C0C9
-#    @__constant_xf64_28 = private constant double 0x3FA0EEDA934AC632
-#    @__constant_xf64_27 = private constant double 0x3F9B793155FE33E5
-#    @__constant_xf64_26 = private constant double 0x3EFEF5A8835D9B8E
-#    @__constant_xf64_25 = private constant double 0xBF826D7D6D20BB88
-#    @__constant_xf64_24 = private const
+#     @"{'shots': 0, 'mcmc': False, 'num_burnin': 0, 'kernel_name': None}" = internal constant [66 x i8] c"{'shots': 0, 'mcmc': False, 'num_burnin': 0, 'kernel_name': None}\00"
+#     @LightningSimulator = internal constant [19 x i8] c"LightningSimulator\00"
+#     @"/home/positr0nium/miniforge3/envs/qrisp/lib/python3.10/site-packages/pennylane_lightning/liblightning_qubit_catalyst.so" = internal constant [120 x i8] c"/home/positr0nium/miniforge3/envs/qrisp/lib/python3.10/site-packages/pennylane_lightning/liblightning_qubit_catalyst.so\00"
+#     @__constant_xi64_3 = private constant i64 -4
+#     @__constant_1024xi64 = private constant [1024 x i64] zeroinitializer
+#     @__constant_xi1 = private constant i1 false
+#     @__constant_xi64_2 = private constant i64 4
+#     @__constant_xi64_1 = private constant i64 3
+#     @__constant_xi64_0 = private constant i64 30
+#     @__constant_30xi64 = private constant [30 x i64] [i64 30, i64 29, i64 28, i64 27, i64 26, i64 25, i64 24, i64 23, i64 22, i64 21, i64 20, i64 19, i64 18, i64 17, i64 16, i64 15, i64 14, i64 13, i64 12, i64 11, i64 10, i64 9, i64 8, i64 7, i64 6, i64 5, i64 4, i64 3, i64 2, i64 1]
+#     @__constant_xf64_34 = private constant double 0xBF919CF5D85DB47A
+#     @__constant_xf64_33 = private constant double 0xBF89C4C2643A2DEA
+#     @__constant_xf64_32 = private constant double 0xBF8696E980F4B09E
+#     @__constant_xf64_31 = private constant double 0x3F69A6304F46D56B
+#     @__constant_xf64_30 = private constant double 0xBF97F300BE6AA82E
+#     @__constant_xf64_29 = private constant double 0x3F75120CFFA6C0C9
+#     @__constant_xf64_28 = private constant double 0x3FA0EEDA934AC632
+#     @__constant_xf64_27 = private constant double 0x3F9B793155FE33E5
+#     @__constant_xf64_26 = private constant double 0x3EFEF5A8835D9B8E
+#     @__constant_xf64_25 = private constant double 0xBF826D7D6D20BB88
+#     @__constant_xf64_24 = private const
 
 ######################################################################
 # The Catalyst runtime
@@ -915,9 +915,9 @@ print(samples)
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-# .. code-block:: none
+#   .. code-block:: none
 #
-#    [1.0, 1.0, 0.0, 1.0, 0.0]
+#     [1.0, 1.0, 0.0, 1.0, 0.0]
 
 ######################################################################
 # Scrolling back to the :ref:`terminal_sampling` cell, we see that the
@@ -969,10 +969,4 @@ print(samples)
 #     Y. R. Sanders, G. H. Low, A. Scherer, D. W. Berry,
 #     "Black-Box Quantum State Preparation without Arithmetic",
 #     `Physical review letters 122(2), 020502 <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.122.020502>`__, 2019.
-
-
-##############################################################################
-# About the authors
-# ----------------
-#
 #

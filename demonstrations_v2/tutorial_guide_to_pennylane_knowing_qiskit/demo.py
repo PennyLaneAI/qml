@@ -169,8 +169,8 @@ def pl_func():
 # the device with the quantum function with :class:`~pennylane.QNode`.
 #
 
-dev = qml.device("default.qubit", shots=1024)
-pl_circuit = qml.QNode(pl_func, dev)
+dev = qml.device("default.qubit")
+pl_circuit = qml.set_shots(qml.QNode(pl_func, dev), shots = 1024)
 
 print(pl_circuit())
 
@@ -208,6 +208,7 @@ print(pl_circuit())
 # function with :class:`qml.QNode <pennylane.QNode>` is the same as *decorating* it with :func:`@qml.qnode(dev) <pennylane.qnode>`:
 #
 
+@qml.set_shots(1024)
 @qml.qnode(dev)
 def pl_circuit():
     """
@@ -248,9 +249,4 @@ def pl_circuit():
 # `pennylane.ai <https://pennylane.ai>`__, to see the latest and greatest PennyLane features, demos,
 # and blogs, receive the `monthly Xanadu newsletter <https://xanadu.us17.list-manage.com/subscribe?u=725f07a1d1a4337416c3129fd&id=294b062630>`__, or follow us on `LinkedIn <https://www.linkedin.com/company/pennylaneai/>`__ or `X
 # (formerly Twitter) <https://twitter.com/PennyLaneAI>`__ to stay updated!
-#
-
-######################################################################
-# About the author
-# ----------------
 #

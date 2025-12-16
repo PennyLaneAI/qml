@@ -9,7 +9,12 @@ Quanvolutional Neural Networks
         to classify MNIST images.
     :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/circuit.png
 
-*Author: Andrea Mari — Posted: 24 March 2020. Last updated: 15 January 2021.*
+.. warning::
+    This demo uses TensorFlow, which is a deprecated interface with PennyLane v0.42.
+    Interfacing with TensorFlow will no longer be supported with PennyLane v0.43 and higher.
+    Consider switching to a different machine learning interface with PennyLane, like
+    :doc:`PyTorch <demos/tutorial_qnn_module_torch>` or
+    :doc:`JAX <demos/tutorial_How_to_optimize_QML_model_using_JAX_and_Optax>`.
 
 In this demo we implement the *Quanvolutional Neural Network*, a quantum
 machine learning model originally introduced in
@@ -340,7 +345,7 @@ c_history = c_model.fit(
 
 import matplotlib.pyplot as plt
 
-plt.style.use("seaborn")
+plt.style.use("seaborn-v0_8")
 fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(6, 9))
 
 ax1.plot(q_history.history["val_accuracy"], "-ob", label="With quantum layer")
@@ -367,8 +372,4 @@ plt.show()
 # 1. Maxwell Henderson, Samriddhi Shakya, Shashindra Pradhan, Tristan Cook.
 #    "Quanvolutional Neural Networks: Powering Image Recognition with Quantum Circuits."
 #    `arXiv:1904.04767 <https://arxiv.org/abs/1904.04767>`__, 2019.
-#
-#
-# About the author
-# ----------------
 #

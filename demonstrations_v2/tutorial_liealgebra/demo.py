@@ -245,7 +245,7 @@ for i, op1 in enumerate(dla.basis.copy()):
 ##############################################################################
 # The only new operator here is :math:`iY_0 Y_1,` which we add to the list of the DLA.
 # We could continue this process with a second nesting layer but will find that no new operators are added past this point.
-# We finally end up with the DLA :math:`\{X_0 X_1, Z_0, Z_1, iY_0 X_1, iX_0 Y_1, iY_0 Y_1\}`
+# We finally end up with the DLA :math:`\{iX_0 X_1, iZ_0, iZ_1, iY_0 X_1, iX_0 Y_1, iY_0 Y_1\}`
 
 for op in dla.basis:      
     print(op)
@@ -453,9 +453,4 @@ print(qml.commutator(SY, SZ) == (2j*SX).simplify())
 #     "Quantum Computation, Complexity, and Many-Body Physics"
 #     `arXiv:quant-ph/0512209 <https://arxiv.org/abs/quant-ph/0512209>`__, 2005.
 #
-#
-
-##############################################################################
-# About the author
-# ----------------
 #

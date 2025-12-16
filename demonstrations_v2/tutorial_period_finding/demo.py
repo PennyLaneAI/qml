@@ -208,9 +208,10 @@ def Oracle(f):
 # reason we define a device with 2 shots. We also add some snapshots to the circuit that we will look at later.
 
 
-dev = qml.device("default.qubit", wires=7, shots=2)
+dev = qml.device("default.qubit", wires=7)
 
 
+@qml.set_shots(2)
 @qml.qnode(dev)
 def circuit():
     """Circuit to implement the period finding algorithm."""
@@ -270,8 +271,8 @@ print(f"Hidden period: {result}")
 # look at the states that were prepared by making use of the snapshots we recorded during the
 # circuit simulation.
 
-dev = qml.device("default.qubit", wires=7, shots=1)
-qnode = qml.QNode(circuit, dev)
+dev = qml.device("default.qubit", wires=7)
+qnode = qml.set_shots(qml.QNode(circuit, dev), shots = 1)
 intermediate_states = qml.snapshots(circuit)()
 
 #####################################################################
@@ -381,7 +382,4 @@ for k in range(16):
 #    
 #     Andrew Childs, Vim van Dam, "Quantum algorithms for algebraic problems", 
 #     `Reviews of Modern Physics 82.1: 1-52. <https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.82.1>`__, 2010
-#
-# About the author
-# ----------------
 #

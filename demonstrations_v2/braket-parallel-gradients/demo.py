@@ -12,7 +12,6 @@ Computing gradients in parallel with Amazon Braket
     vqe_parallel VQE with parallel QPUs with Rigetti
 
 
-*Authors: Tom Bromley and Maria Schuld — Posted: 08 December 2020. Last updated: 30 September 2021.*
 
 PennyLane integrates with `Amazon Braket <https://aws.amazon.com/braket/>`__ to enable quantum
 machine learning and optimization on high-performance simulators and quantum processing
@@ -603,9 +602,4 @@ df.sort_values(by=["iteration_number"]).plot(x="iteration_number", y="cost")
 #
 # For more examples of how to use hybrid jobs, see the
 # `Amazon Braket examples GitHub <https://github.com/amazon-braket/amazon-braket-examples/tree/main/examples/hybrid_jobs>`__.
-#
-
-##############################################################################
-# About the authors
-# -----------------
 #
