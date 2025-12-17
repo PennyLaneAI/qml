@@ -299,6 +299,7 @@ def _build_demo(
                     if package and not package.startswith("#"):
                         cmds.pip_install(
                             build_venv.python,
+                            "--no-cache-dir",
                             "--upgrade",
                             "--index-url",
                             "https://test.pypi.org/simple/",
