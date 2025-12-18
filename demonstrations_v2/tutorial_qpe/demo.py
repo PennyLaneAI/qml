@@ -203,7 +203,7 @@ Time to code!
 -------------
 We already know the three building blocks of QPE; it is time to put them to practice.
 We use a single-qubit :class:`~pennylane.PhaseShift` operator :math:`U = R_{\phi}(2 \pi / 5)`
-and its eigenstate :math:`|1\rangle`` with corresponding phase :math:`\theta=0.2.`
+and its eigenstate :math:`|1\rangle` with corresponding phase :math:`\theta=0.2`.
 
 """
 
