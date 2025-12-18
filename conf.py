@@ -85,8 +85,6 @@ sphinx_gallery_conf = {
     },
     # first notebook cell in generated Jupyter notebooks
     "first_notebook_cell": (
-        "# This cell is added by sphinx-gallery\n"
-        "# It can be customized to whatever you like\n"
         "%matplotlib inline"
     ),
     # thumbnail size
