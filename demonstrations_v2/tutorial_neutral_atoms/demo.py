@@ -1,5 +1,4 @@
-r""".. _neutral:
-
+r"""
 Neutral-atom quantum computers
 =============================
 
