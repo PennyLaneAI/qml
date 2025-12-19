@@ -3,12 +3,12 @@ from pandocfilters import stringify, walk
 
 ASSETS_DIR = "https://blog-assets.cloud.pennylane.ai/demos/"
 
-def make_html_figure(src: str, width: int = 800, height: int = 500) -> str:
+def make_html_figure(src: str, width: int = 50) -> str:
     """Make an HTML figure from a source string.
     Returns an HTML string for the figure.
     """
     cleaned_url = parse_img_source(src)
-    return f"<img src='{cleaned_url}' alt='' width='{width}' height='{height}' style='display:block; margin:auto;'/>"
+    return f"<img src='{cleaned_url}' alt='' style='display:block; margin:auto; width:{width}%;'/>"
 
 def parse_img_source(src: str) -> str:
     if "/_static/demonstration_assets/" in src or "/_static/demo_thumbnails/" in src:
@@ -48,7 +48,7 @@ def process_text(text):
             result.append(" ")
         elif key == 'Image':
             _, _, [url, _] = val
-            result.append(make_html_figure(url, width=400, height=250))
+            result.append(make_html_figure(url, width=25))
             # Don't process the rest of the block
             return []
         elif key == 'Link':
