@@ -90,7 +90,9 @@ def filter_links(key, value, format, _):
                 else:
                     name, link = process_link(text, key)
 
-                return Link(["",[],[]], pandocify_string(name), [link,""])
+                # Some links end with a dollar sign for some reason, but this is interpreted as math. 
+                # Remove it to avoid this.
+                return Link(["",[],[]], pandocify_string(name), [link.removesuffix("$"),""])
 
 if __name__ == '__main__':
     pl_obj_inv = make_named_inventory(load_inventory_with_retry(PL_OBJ_INV_URL+"objects.inv"))
