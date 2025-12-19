@@ -1,6 +1,6 @@
 r"""
 Neutral-atom quantum computers
-=============================
+==============================
 
 .. meta::
     :property="og:description": Learn how neutral atom quantum devices work using code
