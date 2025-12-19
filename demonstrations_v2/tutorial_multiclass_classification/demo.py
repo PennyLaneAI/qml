@@ -1,6 +1,4 @@
 r"""
-.. _multiclass_margin_classifier:
-
 Multiclass margin classifier
 ============================
 
