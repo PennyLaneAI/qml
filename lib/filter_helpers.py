@@ -48,7 +48,7 @@ def process_text(text):
             result.append(" ")
         elif key == 'Image':
             _, _, [url, _] = val
-            result.append(make_html_figure(url))
+            result.append(make_html_figure(url, width=400, height=250))
             # Don't process the rest of the block
             return []
         elif key == 'Link':
