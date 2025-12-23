@@ -1,5 +1,4 @@
-r""".. _photonics:
-
+r"""
 Photonic quantum computers
 =============================
 
