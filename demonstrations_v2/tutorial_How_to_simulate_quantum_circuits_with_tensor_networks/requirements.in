@@ -1,2 +1,2 @@
 # Specifys a range of versions for the quimb package required for this demonstration.
-quimb>=1.8.2,<1.12.0
+quimb
