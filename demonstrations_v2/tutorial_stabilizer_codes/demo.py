@@ -5,7 +5,7 @@ Stabilizer codes for quantum error correction
 State-of-the-art quantum devices, such as IBM's Condor and Atom Computing's optical lattices, contain more than
 a thousand qubits. Does this qubit count suffice for valuable quantum algorithms with clear speedups?
 The reality is that there is more to the story than the sheer number of qubits. As we currently stand, quantum
-devices are still prone to errors that increase with device size. For this reason, **quantum error correction**--one of the most important domains in the universe of quantum computing--has
+devices are still prone to errors that increase with device size. For this reason, **quantum error correction**-one of the most important domains in the universe of quantum computing-has
 been gaining traction.
 
 Quantum error correction is implemented through **error correction codes,** which come in many varieties that address different error types.
@@ -506,7 +506,7 @@ print(classify_pauli(X(0) @ Y(1) @ Z(2), logical_ops, generators, 3))
 # -----------------------------------
 #
 # The 5-qubit code, also called as Laflamme's code [#Laflamme1996]_, holds a special place as the smallest
-# error correcting code capable of correcting arbitrary Pauli Errors--unwanted applications of :math:`X,` :math:`Y,` or :math:`Z`
+# error correcting code capable of correcting arbitrary Pauli Errors---unwanted applications of :math:`X,` :math:`Y,` or :math:`Z`
 # gates on a single qubit. In this section, we will build and implement the complete error correction procedure
 # starting from its stabilizer generators:
 #
@@ -558,7 +558,7 @@ print(classify_pauli(X(0) @ Y(1) @ Z(2), logical_ops, generators, 3))
 #
 #     \vert \bar{1}\rangle = X_1 X_2 X_3 X_4 X_5 \vert \bar{0} \rangle.
 #
-# The logical operators bit-flip and phase-flip are for this code are :math:`\bar{X}= X^{\otimes 5}` and :math:`\bar{Z}=Z^{\otimes 5}.``
+# The logical operators bit-flip and phase-flip are for this code are :math:`\bar{X}= X^{\otimes 5}` and :math:`\bar{Z}=Z^{\otimes 5}.`
 #
 # Let us implement this encoding circuit in PennyLane.
 
