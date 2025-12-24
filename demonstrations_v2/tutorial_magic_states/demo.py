@@ -31,7 +31,7 @@ Where is the magic?
 -------------------
 
 Let's beging with a little but of history. Bravyi and Kitaev formalized the idea and coined the term 
-"magic states" in [#Bravyi]_. 
+"magic states" in [#Bravyi2005]_. 
 They proved that the capability of preparing magic states in combination with Clifford operations 
 access a set ideal Clifford gates, the creation of ancillas :math:`0` and measurements capabilities 
 in the Z-basis on all qubits are enough to enable UQC. 
@@ -85,7 +85,7 @@ print(t_gate_teleportation_circuit(np.pi/3))
 ######################################################################
 # We see from the output that ...
 # 
-# **Why "magic"?** In their paper [#Bravyi]_, Bravyi and Kitaev not only presented a way to achieve 
+# **Why "magic"?** In their paper [#Bravyi2005]_, Bravyi and Kitaev not only presented a way to achieve 
 # UQC using magic states, but also proposed a method to distill them starting with imperfect copies
 # of magic states and then on using only Clifford operations, which we will detail below. 
 # These two properties are the reason why they called them "magic states".
@@ -104,7 +104,7 @@ print(t_gate_teleportation_circuit(np.pi/3))
 # produces fewer but higher-fidelity magic states. This cycle can be repeated to achieve an arbitrarily 
 # low error rate. However, as you might suspect, there is a strict distillation threshold:
 # the initial noisy states :math:`\rho` must have a fidelity above a certain limit for the process 
-# to converge toward a pure state [#Bravyi]_. If the initial states are too noisy, the protocol will 
+# to converge toward a pure state [#Bravyi2005]_. If the initial states are too noisy, the protocol will 
 # fail to improve them.
 #
 # A typical protocol follows these steps:
@@ -154,7 +154,7 @@ print(t_gate_teleportation_circuit(np.pi/3))
 # References
 # ----------
 #
-# .. [#bravyi2005]
+# .. [#Bravyi2005]
 #
 #    Sergey Bravyi and Alexei Kitaev. "Universal quantum computation with
 #    ideal Clifford gates and noisy ancillas." `Physical Review A 71.2 (2005).
