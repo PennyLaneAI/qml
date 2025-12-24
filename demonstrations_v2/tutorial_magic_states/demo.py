@@ -108,6 +108,7 @@ print(t_gate_teleportation_circuit(np.pi/3))
 # fail to improve them.
 #
 # A typical protocol follows these steps:
+#
 # 1. Preparation of the initial imperfect states using non-Clifford gates (starting the "magic"). 
 # 2. Several copies of these states are processed using Clifford operations to map them onto an 
 # error-correcting code.
@@ -142,7 +143,8 @@ print(t_gate_teleportation_circuit(np.pi/3))
 # 2. Cultivation: gradually improve the magic state by performing Clifford checks and postselection. 
 # However, as the fault distance of the state increases, the code needs to be improved as well 
 # so it can hold a more fault-tolerant state. For this reason, this stage also includes a "grow" 
-# phase that increases the size of the code. Several cycles of check, grow, and stabilize take place.
+# phase that increases the size of the code. Several cycles of check, grow, and stabilize 
+# take place.
 # 3. Escape: after the cultivation stage, the magic state reaches its target fidelity,
 # and becomes too good for the code that holds it. The cultivated state needs to **escape** into a 
 # much larger code as fast as possible to ensure that such high fidelity is preserved and it
