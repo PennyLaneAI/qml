@@ -109,12 +109,12 @@ print(t_gate_teleportation_circuit(np.pi/3))
 #
 # A typical protocol follows these steps:
 #
-# 1. Preparation of the initial imperfect states using non-Clifford gates (starting the "magic"). 
+# 1. Preparation of the initial imperfect states using non-Clifford gates (starting the "magic").
 # 2. Several copies of these states are processed using Clifford operations to map them onto an 
 # error-correcting code.
 # 3. Perform measurements (akin to syndrome measurements) on the auxiliary qubits. These consist on
-# performing the controlled `stabilizer <https://pennylane.ai/qml/demos/tutorial_stabilizer_codes>`__ generators. 
-# 4. The measurement results indicate whether the state is still in the "clean" codespace. 
+# performing the controlled `stabilizer <https://pennylane.ai/qml/demos/tutorial_stabilizer_codes>`__ generators.
+# 4. The measurement results indicate whether the state is still in the "clean" codespace.
 # If the syndrome is trivial, the remaining qubit is kept as a higher-purity state; if an error is 
 # detected, the state is discarded.
 #
@@ -139,8 +139,8 @@ print(t_gate_teleportation_circuit(np.pi/3))
 #
 # The protocol consists of four primary stages:
 #
-# 1. Injection: prepare a magic state encoded in a small code of distance 3 or better. 
-# 2. Cultivation: gradually improve the magic state by performing Clifford checks and postselection. 
+# 1. Injection: prepare a magic state encoded in a small code of distance 3 or better.
+# 2. Cultivation: gradually improve the magic state by performing Clifford checks and postselection.
 # However, as the fault distance of the state increases, the code needs to be improved as well 
 # so it can hold a more fault-tolerant state. For this reason, this stage also includes a "grow" 
 # phase that increases the size of the code. Several cycles of check, grow, and stabilize 
