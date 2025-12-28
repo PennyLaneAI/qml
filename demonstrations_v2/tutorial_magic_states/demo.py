@@ -139,16 +139,14 @@ print(t_gate_teleportation_circuit(np.pi/3))
 #
 # The protocol consists of four primary stages:
 #
-# 1. Injection: prepare a magic state encoded in a small code of distance 3 or better.
-# 2. Cultivation: gradually improve the magic state by performing Clifford checks and postselection.
-#    However, as the fault distance of the state increases, the code needs to be improved as well 
-#    so it can hold a more fault-tolerant state. For this reason, this stage also includes a "grow" 
-#    phase that increases the size of the code. Several cycles of check, grow, and stabilize 
-#    take place.
+# 1. Injection: prepare an initial, noisy magic state encoded in a small code of distance 3 or better.
+# 2. Cultivation: gradually improve the magic state through repeated Clifford checks and postselection.
+#    To reach higher fidelities, the code distance must be increased; otherwise, the "noise floor" 
+#    of the small code would limit the state's purity. For this reason, this stage should also include
+#    a "grow" phase that increases the size of the code. 
 # 3. Escape: after the cultivation stage, the magic state reaches its target fidelity,
-#    and becomes too good for the code that holds it. The cultivated state needs to **escape** into a 
-#    much larger code as fast as possible to ensure that such high fidelity is preserved and it
-#    can be used in a computation.
+#    and becomes "too good for the code". The cultivated state needs to **escape** into a 
+#    much larger code as fast as possible to ensure that such high fidelity is preserved.
 #
 # Perspective on magic states: current research
 # ---------------------------------------------
