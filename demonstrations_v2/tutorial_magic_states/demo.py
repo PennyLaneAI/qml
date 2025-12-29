@@ -24,21 +24,22 @@ distillation and cultivation, and outline the current research challenges and op
 Where is the magic?
 -------------------
 
-Let's beging with a little but of history. Bravyi and Kitaev formalized the idea and coined the term 
-"magic states" in [#Bravyi2005]_. 
-They proved that the capability of preparing magic states in combination with Clifford operations 
-access a set ideal Clifford gates, the creation of ancillas :math:`0` and measurements capabilities 
-in the Z-basis on all qubits are enough to enable UQC. 
+Let's beging with a little bit of history. Bravyi and Kitaev formalized the concept and coined the
+term "magic states" in [#Bravyi2005]_. 
+In this work, they proved that the capability to prepare magic states, when combined with a set of ideal Clifford 
+gates, the preparation of :math:`0` ancillas, and Z-basis measurements capabilities 
+in the on all qubits, is sufficient to enable UQC. Essentially, magic states are a class of states 
+that when injected into a circuit implement a specific non-Clifford gate. 
 
-In short, magic states are a class of states whose injection into a circuit results in the same 
-output as implementing a determined non-Clifford gate. 
-There are several kinds of magic states, unfortunately their nomenclature is not consistent across papers
+There are different types of magic states and their nomenclature often varies across the literature. 
+Let’s examine a specific state, which we will denote as :math:`|H\rangle`, to see it in action: 
+:math:`|H\rangle=\frac{1}{\sqrt{2}}(|0\rangle+e^{i\pi/4}|1\rangle)=T|+\rangle.`
+Notice that this state is obtained by applying a T gate to the :math:`|+\rangle` state 
+(the +1 eigenstate of the Pauli X operator).  
+Using magic state injection (see the circuit illustration),  we can apply a T operation to an 
+arbitrary single-qubit state (wire 0 in the code). A detailed step-by-step breakdown of this process 
+can be found in this PennyLane `glossary page <https://pennylane.ai/qml/glossary/what-are-magic-states>`__.
 
-Let's choose one and see it in action. We will use the magic state 
-:math:`|H\rangle=\frac{1}{\sqrt{2}}(|0\rangle+e^{i\pi/4}|1\rangle)` and perform gate teleportation
-(see the figure below) to perform the T operation to an arbitrary 
-one-qubit state defined in code. The process can be found explicitly in this PennyLane
-`glossary page <https://pennylane.ai/qml/glossary/what-are-magic-states>`__. 
 """
 
 import pennylane as qml
@@ -54,7 +55,7 @@ def prepare_magic_state():
 
 dev = qml.device("default.qubit")
 
-@partial(qml.set_shots, shots=10000)
+
 @qml.qnode(dev)
 def t_gate_teleportation_circuit(target_state_params):
 
@@ -69,12 +70,13 @@ def t_gate_teleportation_circuit(target_state_params):
 
     m_1 = qml.measure(1)
     # The outcome of M_a dictates the final correction
-    qml.cond(m_1 == 1, qml.S)(wires=0) 
+    qml.cond(m_1 == 1, qml.S)(wires=0)
+
+    return qml.density_matrix(wires=[0])
 
 
-    return qml.probs()
-
-print(t_gate_teleportation_circuit(np.pi/3))
+print(qml.draw(t_gate_teleportation_circuit)(np.pi / 3))
+print(t_gate_teleportation_circuit(np.pi / 3))
 
 ######################################################################
 # We see from the output that ...
