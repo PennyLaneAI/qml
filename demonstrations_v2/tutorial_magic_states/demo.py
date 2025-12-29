@@ -1,31 +1,25 @@
 r"""What are magic states?
 ==========================
 
-Quantum computers rely on very fragile physical systems. They are easily disturbed, leading to errors 
-being produced and propagated. In order to scale and harness the capabilities of quantum computing, 
-we need to develop fault-tolerant arquitectures (FTQC). 
-For this purpose, besides being able to detect and correct errors, we must be able to implement gates 
-that can correctly perform their intended operations without creating or spreading existing errors 
-across the encoded information.
+Quantum computers rely on very fragile physical systems. They are easily disturbed, leading to 
+the rapid generation and propagation of errors. In order to scale and harness the full potential 
+of quantum computing, we must develop fault-tolerant architectures (FTQC). For this purpose, besides 
+simply detecting and correcting errors, we must be able to realize gates that correctly perform their 
+intended operations without introducing or spreading noise across the encoded information.
 
-To achieve universal quantum computing (UQC), we must be able to implement a universal gate set, such as
+To achieve universal quantum computing (UQC), we need to have access to a universal gate set, such as
 the :math:`\textrm{Clifford + T}` set, ``{H, S, CNOT, T}``. As previously stated, all these gates must be 
-implemented in a fault-tolerant manner. 
+executed in a fault-tolerant manner. 
 For most quantum error correction architectures, gates of the Clifford group are much 
-simpler to implement, often using transversal operations, than their non-Clifford 
-counterparts. 
+simpler to implement, often using `transversal operations <https://arthurpesah.me/blog/2023-12-25-transversal-gates/>`__, 
+than their non-Clifford counterparts. 
 
-This means that when you implement a logical gate, the physical gates that compose it only affect one 
-physical qubit at most such that the errors stay localized and do not propagate within each code block. 
-Still could write something about NC gates not being applied transversal (Eastin-Knill) to reduce error 
-propagation. 
+This is where magic states become essential: they provide a mechanism to build non-Clifford gates in a 
+fault-tolerant manner. The idea is to effectively apply such a gate by consuming a special, pre-prepared 
+quantum state, called "magic state", and teleporting its logical action into the circuit.
 
-This is where magic states appear: they provide a way to implement FT non-Clifford gates. The idea is to
-effectively implement such a gate by consuming a special, pre-prepared quantum state, called "magic state", 
-and teleporting it to the circuit. 
-
-In this demo, we will explore what is so magic about magic states, how they are prepared through 
-distillation and cultivation, and outline the current research and open problems that concern them.
+In this demo, we will explore the unique properties of magic states, how they are prepared through 
+distillation and cultivation, and outline the current research challenges and open problems in the field.
 
 Where is the magic?
 -------------------
@@ -142,12 +136,17 @@ print(t_gate_teleportation_circuit(np.pi/3))
 # 1. Injection: prepare an initial, noisy magic state encoded in a small code of distance 3 or better.
 # 2. Cultivation: gradually improve the magic state through repeated Clifford checks and postselection.
 #    To reach higher fidelities, the code distance must be increased; otherwise, the "noise floor" 
-#    of the small code would limit the state's purity. For this reason, this stage should also include
-#    a "grow" phase that increases the size of the code. 
-# 3. Escape: after the cultivation stage, the magic state reaches its target fidelity,
-#    and becomes "too good for the code". The cultivated state needs to **escape** into a 
-#    much larger code as fast as possible to ensure that such high fidelity is preserved.
-#
+#    of the small code would limit the state's purity. This stage then includes cycles of growing
+#    the code, stabilizing it, and checking the magic state. 
+# 3. Escape: rapidly expand the code hosting the state. After the cultivation stage, the magic state 
+#    reaches its target fidelity, and becomes "too good for the code". 
+#    To preserve such high fidelity, the state needs to **escape** 
+#    into a much larger code as fast as possible. This can be achieved via code-morphing or lattice surgery.
+# 4. Decoding: decide whether to accept the final state using standard error correction. Post-selection is 
+#    no longer used since the circuit is too large. The decoder computes a threshold called complementary gap
+#    that acts as a confidence score of the final state and accept or discard the state accordingly. 
+#     
+#    
 # Perspective on magic states: current research
 # ---------------------------------------------
 #
