@@ -32,8 +32,10 @@ in the on all qubits, is sufficient to enable UQC. Essentially, magic states are
 that when injected into a circuit implement a specific non-Clifford gate. 
 
 There are different types of magic states and their nomenclature often varies across the literature. 
-Let’s examine a specific state, which we will denote as :math:`|H\rangle`, to see it in action: 
-:math:`|H\rangle=\frac{1}{\sqrt{2}}(|0\rangle+e^{i\pi/4}|1\rangle)=T|+\rangle.`
+Let’s examine a specific state, which we will denote as :math:`|H\rangle`, to see it in action:
+
+.. math:: |H\rangle=\frac{1}{\sqrt{2}}(|0\rangle+e^{i\pi/4}|1\rangle)=T|+\rangle.
+
 Notice that this state is obtained by applying a T gate to the :math:`|+\rangle` state 
 (the +1 eigenstate of the Pauli X operator).  
 Using magic state injection (see the circuit illustration),  we can apply a T operation to an 
