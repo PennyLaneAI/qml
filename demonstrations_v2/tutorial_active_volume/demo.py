@@ -28,8 +28,8 @@ total error-corrected qubits (space) taken up by the computation, times the tota
 correction cycles (time) required to perform it.
 
 To understand the impact of different quantum architectures and compilation strategies, we’ll
-often put an _algorithmic cost_ metric (e.g. circuit volume) in relation to its
-_implementation cost_ on hardware (i.e. the spacetime volume). For instance, the strategies
+often put an *algorithmic cost* metric (e.g. circuit volume) in relation to its
+*implementation cost* on hardware (i.e. the spacetime volume). For instance, the strategies
 described by Litinski’s :doc:`Game of Surface Codes <demos/tutorial_game_of_surface_codes>`
 incur a spacetime volume cost of roughly twice the circuit volume.
 
@@ -38,16 +38,16 @@ circuit, as depicted below. The crucial insight in the concept of **active volum
 the idea that not all of this “area” is dedicated to performing useful computation. In fact,
 ladder circuits like those used in reversible arithmetic may consist to a large portion
 (if not the majority) of idling qubits!
-We can thus partition a circuit into computationally _active_ volume and _idle_ volume:
+We can thus partition a circuit into computationally *active* volume and *idle* volume:
 
 .. figure:: _static/demonstration_assets/active_volume/active_vs_idle.png
     :align: center
-    :width: 65%
+    :width: 85%
     :target: javascript:void(0)
 
-    Active and idle volumes are represented by areas occupied by gates (beige) and areas
-    without gates (red), respectively, in a standard circuit diagram.
-    Adapted from [#Litinski2022]_.
+    | Active and idle volumes are represented by areas occupied by gates (green)
+    | and areas without gates (red), respectively, in a standard circuit diagram.
+    | Adapted from [#Litinski2022]_.
 
 In this demo, we will look at how to obtain the active volume of a quantum circuit
 (in terms of so-called “logical blocks”), and the systematic compilation framework introduced by
@@ -106,7 +106,7 @@ To make matters concrete, we will be concerned with compiling the following circ
 
 .. figure:: _static/demonstration_assets/active_volume/example_circuit.png
     :align: center
-    :width: 50%
+    :width: 35%
     :target: javascript:void(0)
 
 The labels :math:`|a\rangle` through :math:`|d\rangle` for the four input and output
@@ -129,7 +129,7 @@ Some basic examples are summarized in the following overview figure.
 
 .. figure:: _static/demonstration_assets/active_volume/zx-calculus-overview.png
     :align: center
-    :width: 75%
+    :width: 95%
     :target: javascript:void(0)
 
     Basic building blocks and transformation rules of the ZX calculus.
@@ -153,7 +153,7 @@ our CNOT ladder into a ZX diagram:
 
 .. figure:: _static/demonstration_assets/active_volume/example_zx_basic.png
     :align: center
-    :width: 50%
+    :width: 35%
     :target: javascript:void(0)
 
 We find six spiders, three of each type, with three legs each.
@@ -167,7 +167,7 @@ This allows us to rewrite our diagram as follows (rotating it to make it easier 
 
 .. figure:: _static/demonstration_assets/active_volume/example_zx_flat.png
     :align: center
-    :width: 70%
+    :width: 55%
     :target: javascript:void(0)
 
 Note how the inherent time ordering of the CNOT ladder is no longer represented in this diagram.
@@ -222,7 +222,7 @@ Due to the input/output constraint, the qubit state labels go into the U and D p
 
 .. figure:: _static/demonstration_assets/active_volume/cnot_oriented_zx_incomplete.png
     :align: center
-    :width: 40%
+    :width: 20%
     :target: javascript:void(0)
 
 Now, we may choose any of the remaining ports (N, E, S, W) of the Z spider (orange) for
@@ -278,7 +278,7 @@ the single CNOT, we find that we need to insert six nodes overall, arriving at t
 
 .. figure:: _static/demonstration_assets/active_volume/example_oriented_zx_complete.png
     :align: center
-    :width: 70%
+    :width: 90%
     :target: javascript:void(0)
 
 In order to connect the “individual” CNOT networks side-by-side, we have moved some of the input
@@ -321,7 +321,7 @@ with vertex labels then leads us to a valid logical network:
 
 .. figure:: _static/demonstration_assets/active_volume/example_logical_network.png
     :align: center
-    :width: 75%
+    :width: 95%
     :target: javascript:void(0)
 
 And this already concludes the compilation process of this simple Clifford operation, arriving at
@@ -335,7 +335,7 @@ Why logical networks?
 The properties of logical blocks and the set of rules we impose on logical networks are made
 such that any valid logical network can be realized with surface code-corrected logical qubits,
 i.e., it will be consistent with an arrangement in (2+1) dimensions.
-While this is _in principle_ true for quantum circuit diagrams as well, logical networks allow
+While this is *in principle* true for quantum circuit diagrams as well, logical networks allow
 us to trade space and time against each other. In a sense, logical networks distill the best out
 of the two worlds of quantum circuits and ZX diagrams; ZX diagrams allow for continuous
 deformations where "rigid" quantum circuits do not, but the additional structure of logical
@@ -412,7 +412,7 @@ For the parallelization, we first insert a state teleportation circuit between :
 
 .. figure:: _static/demonstration_assets/active_volume/teleportation_insert_teleport.png
     :align: center
-    :width: 50%
+    :width: 55%
     :target: javascript:void(0)
 
 Next, we pull the classically controlled correction gates, which are Pauli operators, through
@@ -421,7 +421,7 @@ the gate :math:`B`, and obtain new correction gates :math:`C_Z=B^\dagger X B` an
 
 .. figure:: _static/demonstration_assets/active_volume/teleportation_commuted.png
     :align: center
-    :width: 40%
+    :width: 45%
     :target: javascript:void(0)
 
 At this point, we pulled :math:`B` to the front, effectively parallelizing it with :math:`A`.
@@ -432,7 +432,7 @@ simultaneously, without violating any physical laws or causal dependencies.
 Practical usefulness
 ~~~~~~~~~~~~~~~~~~~~
 
-The previous discussion shows that it is _possible_ to parallelize non-commuting gates at the cost
+The previous discussion shows that it is *possible* to parallelize non-commuting gates at the cost
 of two additional qubits (we need two copies of the original qubit, plus a communication channel
 "back in time"), a Bell state preparation and Bell basis measurement (we need to entangle the
 communication channel), and classical compute (we need to transform the correction gates
@@ -464,7 +464,7 @@ We begin by inserting 2 teleportation circuits:
 
 .. figure:: _static/demonstration_assets/active_volume/manual_parallel_0.png
     :align: center
-    :width: 75%
+    :width: 60%
     :target: javascript:void(0)
 
 Then, we pull the second and third CNOT through the Pauli corrections, turning :math:`X` into
@@ -472,19 +472,19 @@ Then, we pull the second and third CNOT through the Pauli corrections, turning :
 
 .. figure:: _static/demonstration_assets/active_volume/manual_parallel_1.png
     :align: center
-    :width: 65%
+    :width: 50%
     :target: javascript:void(0)
 
 In the last step, we pull the second factor :math:`X^{(c)}` of the first :math:`X\otimes X`
 correction (purple) through the second pair of measurements, leading to a simple classical
 postprocessing step. Here we used the general fact that Pauli operations (or corrections) will
-only affect the measurement _result_ of a Pauli measurement, but not its measurement _basis_,
+only affect the measurement *result* of a Pauli measurement, but not its measurement *basis*,
 marked as a classical wire between the two :math:`Z\otimes Z` measurement instruments in
 magenta below:
 
 .. figure:: _static/demonstration_assets/active_volume/manual_parallel_2.png
     :align: center
-    :width: 55%
+    :width: 40%
     :target: javascript:void(0)
 
 We fully parallelized the CNOT ladder, using :math:`8` instead of the original :math:`4` qubits.
@@ -496,14 +496,14 @@ occupied, marked in green):
 
 .. figure:: _static/demonstration_assets/active_volume/example_parallelized_explicitly.png
     :align: center
-    :width: 75%
+    :width: 95%
     :target: javascript:void(0)
 
 However, recall the logical network into which we compiled the CNOT ladder earlier:
 
 .. figure:: _static/demonstration_assets/active_volume/example_logical_network.png
     :align: center
-    :width: 75%
+    :width: 95%
     :target: javascript:void(0)
 
 As we can see, we require only :math:`12` qubits to realize the network of :math:`12` blocks,
@@ -529,7 +529,7 @@ section:
 
 .. figure:: _static/demonstration_assets/active_volume/post-processed_measurement.png
     :align: center
-    :width: 20%
+    :width: 15%
     :target: javascript:void(0)
 
 The Bell state measurements determine whether Pauli corrections need to be applied, which in
@@ -538,7 +538,7 @@ determines whether Pauli corrections need to be applied, and so on. But since we
 Pauli corrections in software [cite pauli frame tracker], there is no immediate need to do
 anything with the Bell measurement results, and we can happily continue to apply operations
 in parallel or any other order without worrying about data dependencies between them. So do we
-_ever_ need to affect the quantum state using the information from measurements and Pauli
+*ever* need to affect the quantum state using the information from measurements and Pauli
 corrections?
 
 To answer this question, we need to consider non-Clifford operations. As mentioned further up,
@@ -557,7 +557,7 @@ order non-Clifford gates require 1st order ones, and so on.
     Clifford hierarchy: Pauli gates (or pi/2 rotations) in gray, Clifford gates (or pi/4 rotations) in
     orange, (1st order) non-Clifford gates (or pi/8 rotations) in green, and measurements in blue.
     Both diagrams show the decomposition of Pauli rotations into Pauli measurements plus associated
-    corrections of the lower hierarchy orders. Image source: Daniel Litinski [#Litinski2020]_.
+    corrections of the lower hierarchy orders. Image source: Daniel Litinski [#Litinski2018]_.
 
 This is where we quickly run into issues, as Clifford corrections are generally already considered
 too complex to be tracked classically. That means that we’ll have to physically implement them,
@@ -602,7 +602,7 @@ difference, intuitively, is that Litinski’s earlier techniques provide the add
 in the trade-off as brand new qubits, since each operation is in principle, and through
 techniques presented in the paper, assumed to take up the full width of a circuit. Meanwhile,
 Active Volume computation tries to reuse already available, but idle, qubit space at a
-fine-grained level, and to thus maximize the _efficiency_ of the computer.
+fine-grained level, and to thus maximize the *efficiency* of the computer.
 
 Conclusion
 ----------
