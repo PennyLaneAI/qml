@@ -40,8 +40,8 @@ ladder circuits like those used in reversible arithmetic may consist to a large 
 (if not the majority) of idling qubits!
 We can thus partition a circuit into computationally _active_ volume and _idle_ volume:
 
-    to do: redraw
-.. figure:: _static/demonstration_assets/active_volume/active_vs_idle_volume_original.png
+todo: redraw
+.. figure:: _static/demonstration_assets/active_volume/active_vs_idle.png
     :align: center
     :width: 65%
     :target: javascript:void(0)
@@ -107,7 +107,7 @@ To make matters concrete, we will be concerned with compiling the following circ
 
 .. figure:: _static/demonstration_assets/active_volume/example_circuit.png
     :align: center
-    :width: 65%
+    :width: 50%
     :target: javascript:void(0)
 
 The labels :math:`|a\rangle` through :math:`|d\rangle` for the four input and output
@@ -130,7 +130,7 @@ Some basic examples are summarized in the following overview figure.
 
 .. figure:: _static/demonstration_assets/active_volume/zx-calculus-overview.png
     :align: center
-    :width: 65%
+    :width: 75%
     :target: javascript:void(0)
 
     Basic building blocks and transformation rules of the ZX calculus.
@@ -154,7 +154,7 @@ our CNOT ladder into a ZX diagram:
 
 .. figure:: _static/demonstration_assets/active_volume/example_zx_basic.png
     :align: center
-    :width: 65%
+    :width: 50%
     :target: javascript:void(0)
 
 We find six spiders, three of each type, with three legs each.
@@ -168,7 +168,7 @@ This allows us to rewrite our diagram as follows (rotating it to make it easier 
 
 .. figure:: _static/demonstration_assets/active_volume/example_zx_flat.png
     :align: center
-    :width: 65%
+    :width: 70%
     :target: javascript:void(0)
 
 Note how the inherent time ordering of the CNOT ladder is no longer represented in this diagram.
@@ -223,7 +223,7 @@ Due to the input/output constraint, the qubit state labels go into the U and D p
 
 .. figure:: _static/demonstration_assets/active_volume/cnot_oriented_zx_incomplete.png
     :align: center
-    :width: 65%
+    :width: 40%
     :target: javascript:void(0)
 
 Now, we may choose any of the remaining ports (N, E, S, W) of the Z spider (orange) for
@@ -240,7 +240,7 @@ and we need to insert two vertices:
 
 .. figure:: _static/demonstration_assets/active_volume/cnot_oriented_zx_extended.png
     :align: center
-    :width: 65%
+    :width: 50%
     :target: javascript:void(0)
 
 Let us try to connect the edges again. We connect the two Z spiders with a (S-N) edge, giving
@@ -249,7 +249,7 @@ them both an E-orientation. Coming from the right side, we connect the X spiders
 
 .. figure:: _static/demonstration_assets/active_volume/cnot_oriented_zx_extended_1.png
     :align: center
-    :width: 65%
+    :width: 50%
     :target: javascript:void(0)
 
 Here we indicated the orientation of the vertices with internal lines, serving as a mnemonic
@@ -260,7 +260,7 @@ oriented ZX diagram for a single CNOT:
 
 .. figure:: _static/demonstration_assets/active_volume/cnot_oriented_zx_complete.png
     :align: center
-    :width: 65%
+    :width: 50%
     :target: javascript:void(0)
 
 Note that we could also connect the input state :math:`|b\rangle` to the D port of the left X spider.
@@ -279,7 +279,7 @@ the single CNOT, we find that we need to insert six nodes overall, arriving at t
 
 .. figure:: _static/demonstration_assets/active_volume/example_oriented_zx_complete.png
     :align: center
-    :width: 65%
+    :width: 70%
     :target: javascript:void(0)
 
 In order to connect the “individual” CNOT networks side-by-side, we have moved some of the input
@@ -322,7 +322,7 @@ with vertex labels then leads us to a valid logical network:
 
 .. figure:: _static/demonstration_assets/active_volume/example_logical_network.png
     :align: center
-    :width: 65%
+    :width: 75%
     :target: javascript:void(0)
 
 And this already concludes the compilation process of this simple Clifford operation, arriving at
@@ -399,7 +399,7 @@ in [#Litinski2022]_. Suppose we want to sequentially execute two two-qubit gates
 
 .. figure:: _static/demonstration_assets/active_volume/teleportation_start.png
     :align: center
-    :width: 65%
+    :width: 40%
     :target: javascript:void(0)
 
 We also assume that we can track the impact that :math:`B` has on Pauli operators, i.e., what
@@ -413,7 +413,7 @@ For the parallelization, we first insert a state teleportation circuit between :
 
 .. figure:: _static/demonstration_assets/active_volume/teleportation_insert_teleport.png
     :align: center
-    :width: 65%
+    :width: 50%
     :target: javascript:void(0)
 
 Next, we pull the classically controlled correction gates, which are Pauli operators, through
@@ -422,7 +422,7 @@ the gate :math:`B`, and obtain new correction gates :math:`C_Z=B^\dagger X B` an
 
 .. figure:: _static/demonstration_assets/active_volume/teleportation_commuted.png
     :align: center
-    :width: 65%
+    :width: 40%
     :target: javascript:void(0)
 
 At this point, we pulled :math:`B` to the front, effectively parallelizing it with :math:`A`.
@@ -465,7 +465,7 @@ We begin by inserting 2 teleportation circuits:
 
 .. figure:: _static/demonstration_assets/active_volume/manual_parallel_0.png
     :align: center
-    :width: 65%
+    :width: 75%
     :target: javascript:void(0)
 
 Then, we pull the second and third CNOT through the Pauli corrections, turning :math:`X` into
@@ -485,7 +485,7 @@ magenta below:
 
 .. figure:: _static/demonstration_assets/active_volume/manual_parallel_2.png
     :align: center
-    :width: 65%
+    :width: 55%
     :target: javascript:void(0)
 
 We fully parallelized the CNOT ladder, using :math:`8` instead of the original :math:`4` qubits.
@@ -497,14 +497,14 @@ occupied, marked in green):
 
 .. figure:: _static/demonstration_assets/active_volume/example_parallelized_explicitly.png
     :align: center
-    :width: 65%
+    :width: 75%
     :target: javascript:void(0)
 
 However, recall the logical network into which we compiled the CNOT ladder earlier:
 
 .. figure:: _static/demonstration_assets/active_volume/example_logical_network.png
     :align: center
-    :width: 65%
+    :width: 75%
     :target: javascript:void(0)
 
 As we can see, we require only :math:`12` qubits to realize the network of :math:`12` blocks,
@@ -530,7 +530,7 @@ section:
 
 .. figure:: _static/demonstration_assets/active_volume/post-processed_measurement.png
     :align: center
-    :width: 65%
+    :width: 20%
     :target: javascript:void(0)
 
 The Bell state measurements determine whether Pauli corrections need to be applied, which in
@@ -549,16 +549,9 @@ So Clifford gates require a Pauli correction (similar to our corrections in the 
 circuit), 1st order non-Clifford gates like T and Toffoli require a Clifford correction, 2nd
 order non-Clifford gates require 1st order ones, and so on.
 
-TODO: HOW TO PUT FIGURES NEXT TO EACH OTHER?
-
-.. figure:: _static/demonstration_assets/active_volume/ppr_clifford.png
+.. figure:: _static/demonstration_assets/active_volume/pprs.png
     :align: center
-    :width: 35%
-    :target: javascript:void(0)
-
-.. figure:: _static/demonstration_assets/active_volume/ppr_non_clifford.png
-    :align: center
-    :width: 55%
+    :width: 90%
     :target: javascript:void(0)
 
     The circuit style used in Litinski’s papers color-codes the different members of the
@@ -598,6 +591,7 @@ computer. An execution scheme for quantum programs that is limited by these reac
 measurements–rather than, say, the circuit depth–is thus known as implementing
 **reaction-limited computation**.
 
+todo
 [additional figure to show reaction-limited example circuit]
 
 If you are familiar with the Game of Surface Codes paper referenced earlier, you may wonder
