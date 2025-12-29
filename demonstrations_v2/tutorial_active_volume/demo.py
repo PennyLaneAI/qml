@@ -40,7 +40,6 @@ ladder circuits like those used in reversible arithmetic may consist to a large 
 (if not the majority) of idling qubits!
 We can thus partition a circuit into computationally _active_ volume and _idle_ volume:
 
-todo: redraw
 .. figure:: _static/demonstration_assets/active_volume/active_vs_idle.png
     :align: center
     :width: 65%
@@ -48,7 +47,7 @@ todo: redraw
 
     Active and idle volumes are represented by areas occupied by gates (beige) and areas
     without gates (red), respectively, in a standard circuit diagram.
-    Image source: Daniel Litinski [#Litinski2022]_.
+    Adapted from [#Litinski2022]_.
 
 In this demo, we will look at how to obtain the active volume of a quantum circuit
 (in terms of so-called “logical blocks”), and the systematic compilation framework introduced by
