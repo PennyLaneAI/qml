@@ -38,7 +38,7 @@ Let’s examine a specific state, which we will denote as :math:`|H\rangle`, to 
 
 Notice that this state is obtained by applying a T gate to the :math:`|+\rangle` state 
 (the +1 eigenstate of the Pauli X operator).  
-Using magic state injection (see the circuit illustration),  we can apply a T operation to an 
+Using magic state injection (see the circuit illustration below),  we can apply a T operation to an 
 arbitrary single-qubit state (wire 0 in the code). A detailed step-by-step breakdown of this process 
 can be found in this PennyLane `glossary page <https://pennylane.ai/qml/glossary/what-are-magic-states>`__.
 
@@ -83,41 +83,44 @@ print(t_gate_teleportation_circuit(np.pi / 3))
 ######################################################################
 # We see from the output that ...
 # 
-# **Why "magic"?** In their paper [#Bravyi2005]_, Bravyi and Kitaev not only presented a way to achieve 
-# UQC using magic states, but also proposed a method to distill them starting with imperfect copies
-# of magic states and then on using only Clifford operations, which we will detail below. 
-# These two properties are the reason why they called them "magic states".
+# **Why "magic"?** In their influential paper [#Bravyi2005]_, Bravyi and Kitaev not only presented a path to  
+# UQC via magic states but also proposed a method to prepare them starting from imperfect copies
+# of magic states. This purification process relies solely on Clifford operations. 
+# The synergy of these two properties-enabling universality and being distillable through restricted 
+# (Clifford) operations-is precisely why they were named "magic states".
 #
 # Preparing magic states 
 # ----------------------
 #
-# It is exciting that magic states offer a workaround for complicated non-Clifford gate implementations. 
-# However, they are still remain expensive to prepare. Let's see two examples of methods to prepare them.
+# While magic states offer an elegant workaround for complex non-Clifford gate implementations, 
+# they remain computationally expensive to prepare. Let's examine two methods for their preparation.
 #
 # Magic state distillation
 # ~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # As the name suggests, distillation protocols rely on using multiple copies of noisy 
 # magic states to "purify" them. By consuming these noisy inputs, the protocol
-# produces fewer but higher-fidelity magic states. This cycle can be repeated to achieve an arbitrarily 
-# low error rate. However, as you might suspect, there is a strict distillation threshold:
+# produces a smaller number of higher-fidelity magic states. This cycle can be repeated to achieve 
+# an arbitrarily low error rate. 
+#
+# However, as one might suspect, there is a strict distillation threshold:
 # the initial noisy states :math:`\rho` must have a fidelity above a certain limit for the process 
 # to converge toward a pure state [#Bravyi2005]_. If the initial states are too noisy, the protocol will 
 # fail to improve them.
 #
 # A typical protocol follows these steps:
 #
-# 1. Preparation of the initial imperfect states using non-Clifford gates (starting the "magic").
-# 2. Several copies of these states are processed using Clifford operations to map them onto an 
+# 1. Prepare initial, imperfect states using non-Clifford gates (starting the "magic").
+# 2. Process several copies of these states using Clifford operations to map them onto an 
 #    error-correcting code.
-# 3. Perform measurements (akin to syndrome measurements) on the auxiliary qubits. These consist on
-#    performing the controlled `stabilizer <https://pennylane.ai/qml/demos/tutorial_stabilizer_codes>`__ generators.
-# 4. The measurement results indicate whether the state is still in the "clean" codespace.
+# 3. Perform measurements (akin to syndrome measurements) on the auxiliary qubits by executing 
+#    controlled `stabilizer <https://pennylane.ai/qml/demos/tutorial_stabilizer_codes>`__ generators.
+# 4. The measurement results indicate whether the state remains in the "clean" codespace.
 #    If the syndrome is trivial, the remaining qubit is kept as a higher-purity state; if an error is 
 #    detected, the state is discarded.
 #
-# It is worth noticing that the main operations used in distillation are logical. This means that 
-# they are executed across several error correcting codes resulting in a big overhead of resources. 
+# It is worth noting that the main operations in a distillation protocol are logical. This means that 
+# they are executed across multiple error-correcting blocks, resulting in a significant resource overhead. 
 #
 # See this `demo <https://pennylane.ai/qml/demos/tutorial_magic_state_distillation>`__ 
 # for a practical implementation of a distillation protocol using Catalyst. 
@@ -125,7 +128,7 @@ print(t_gate_teleportation_circuit(np.pi / 3))
 # Magic state cultivation
 # ~~~~~~~~~~~~~~~~~~~~~~~
 #
-# It is currently considered the state-of-the-art for preparing high-fidelity magic states. 
+# It is currently considered the state-of-the-art method for preparing high-fidelity magic states. 
 # Formulated by Gidney et al [#Gidney2024]_, 
 # it as a way to improve magic state preparation from a practical perspective. 
 # This means that the objective is to find an efficient way to prepare magic states with acceptable 
