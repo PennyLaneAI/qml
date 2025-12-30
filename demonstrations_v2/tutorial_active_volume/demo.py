@@ -324,7 +324,13 @@ executing a CNOT with lattice surgery also requires two additional logical qubit
 bridge space. Thus, the oriented ZX diagram simply reproduces the true cost for a CNOT in this
 type of architecture.
 
-Note that we could also connect the input state :math:`|b\rangle` to the D port of the left X spider.
+Note that we could also connect the input state :math:`|b\rangle` to the D port of the left X spider:
+
+.. figure:: _static/demonstration_assets/active_volume/cnot-oriented-zx-alternative.png
+    :align: center
+    :width: 50%
+    :target: javascript:void(0)
+
 This is because we could have inserted the additional blue spider on the output leg of the existing
 one, rather than between the inserted orange and the existing blue spiders.
 For this, the orientation of the spiders could be kept as-is.
