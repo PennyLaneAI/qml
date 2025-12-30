@@ -62,6 +62,7 @@ the active volume rather than the circuit volume, provided that we operate with 
 but only outline its rough characteristics.
 
 .. admonition:: Active volume computer
+    :class: note
 
     The cost model used by active volume compilation is founded on an abstract error-corrected
     quantum computer, the active volume computer.
