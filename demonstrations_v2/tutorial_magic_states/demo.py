@@ -16,7 +16,7 @@ than their non-Clifford counterparts.
 
 This is where magic states become essential: they provide a mechanism to build non-Clifford gates in a 
 fault-tolerant manner. The idea is to effectively apply such a gate by consuming a special, pre-prepared 
-quantum state, called "magic state", and teleporting its logical action into the circuit.
+quantum state, called magic state, and teleporting its logical action into the circuit.
 
 In this demo, we will explore the unique properties of magic states, how they are prepared through 
 distillation and cultivation, and outline the current research challenges and open problems in the field.
@@ -27,7 +27,7 @@ Where is the magic?
 Let's beging with a little bit of history. Bravyi and Kitaev formalized the concept and coined the
 term "magic states" in [#Bravyi2005]_. 
 In this work, they proved that the capability to prepare magic states, when combined with a set of ideal Clifford 
-gates, the preparation of :math:`0` ancillas, and Z-basis measurements capabilities 
+gates, the preparation of :math:`|0\rangle` ancillas, and Z-basis measurements capabilities 
 in the on all qubits, is sufficient to enable UQC. Essentially, magic states are a class of states 
 that when injected into a circuit implement a specific non-Clifford gate. 
 
@@ -99,7 +99,7 @@ print(t_gate_teleportation_circuit(np.pi / 3))
 # ~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # As the name suggests, distillation protocols rely on using multiple copies of noisy 
-# magic states to "purify" them. By consuming these noisy inputs, the protocol
+# magic states to purify them. By consuming these noisy inputs, the protocol
 # produces a smaller number of higher-fidelity magic states. This cycle can be repeated to achieve 
 # an arbitrarily low error rate. 
 #
@@ -135,7 +135,7 @@ print(t_gate_teleportation_circuit(np.pi / 3))
 # The primary objective is to synthesize magic states with the specific fidelities required 
 # for large-scale quantum computations as efficiently as possible.
 #
-# Unlike distillation, which consumes numerous noisy states to "filter" out a clean one, cultivation 
+# Unlike distillation, which consumes numerous noisy states to filter out a clean one, cultivation 
 # starts with a single *seed* state and improves it "in-place." The entire process occurs 
 # within a single code patch using physical-level operations.
 #
@@ -143,12 +143,12 @@ print(t_gate_teleportation_circuit(np.pi / 3))
 #
 # 1. Injection: prepare an initial, noisy magic state encoded in a small code of distance 3 or better.
 # 2. Cultivation: gradually improve the state through repeated Clifford checks and postselection.
-#    To reach higher fidelities, the code distance must be increased; otherwise, the "noise floor" 
+#    To reach higher fidelities, the code distance must be increased; otherwise, the noise floor 
 #    of the small code would limit the state's purity. This stage then involves cycles of growing
 #    the code, stabilizing it, and checking the magic state. 
 # 3. Escape: rapidly expand the code hosting the state. Once the cultivation stage is complete, the magic state 
 #    reaches its target fidelity, and becomes "too good for the code". 
-#    To preserve this high fidelity, the state needs to **escape** 
+#    To preserve this high fidelity, the state needs to *escape*
 #    into a much larger code as quickly as possible, typically via code-morphing or lattice surgery.
 # 4. Decoding: determine whether to accept the final state using standard error correction. Since the circuit 
 #    is now too large for efficient post-selection, a decoder computes a complementary gap. This metric acts as 
