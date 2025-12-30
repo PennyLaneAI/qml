@@ -14,7 +14,7 @@ For most quantum error correction architectures, gates of the Clifford group are
 simpler to implement, often using `transversal operations <https://arthurpesah.me/blog/2023-12-25-transversal-gates/>`__, 
 than their non-Clifford counterparts. 
 
-This is where magic states become essential: they provide a mechanism to build non-Clifford gates in a 
+This is where magic states enter the picture: they provide a mechanism to build non-Clifford gates in a 
 fault-tolerant manner. The idea is to effectively apply such a gate by consuming a special, pre-prepared 
 quantum state, called magic state, and teleporting its logical action into the circuit.
 
@@ -28,7 +28,7 @@ Let's beging with a little bit of history. Bravyi and Kitaev formalized the conc
 term "magic states" in [#Bravyi2005]_. 
 In this work, they proved that the capability to prepare magic states, when combined with a set of ideal Clifford 
 gates, the preparation of :math:`|0\rangle` ancillas, and Z-basis measurements capabilities 
-in the on all qubits, is sufficient to enable UQC. Essentially, magic states are a class of states 
+on all qubits, is sufficient to enable UQC. Essentially, magic states are a class of states 
 that when injected into a circuit implement a specific non-Clifford gate. 
 
 There are different types of magic states and their nomenclature often varies across the literature. 
@@ -46,7 +46,6 @@ can be found in this PennyLane `glossary page <https://pennylane.ai/qml/glossary
 
 import pennylane as qml
 from pennylane import numpy as np
-from functools import partial
 
 
 def prepare_magic_state():
@@ -172,6 +171,7 @@ print(t_gate_teleportation_circuit(np.pi / 3))
 # While traditional distillation provided the theoretical foundation for universality, the shift 
 # toward cultivation reflects a new era of practical fault-tolerance focused on resource efficiency.
 # As we move toward large-scale implementations, the challenge lies in optimizing these "magic state factories."
+# 
 # For those interested in the deeper math, there is a nice geometric perspective of magic states 
 # involving the stabilizer polytope on the Bloch sphere [#Heinrich2019]_. In this framework, magic states 
 # emerge as the maximal non-stabilizer states, lying as far as possible from the
