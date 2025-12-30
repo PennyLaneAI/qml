@@ -26,8 +26,8 @@ Where is the magic?
 
 Let's beging with a little bit of history. Bravyi and Kitaev formalized the concept and coined the
 term "magic states" in [#Bravyi2005]_. 
-In this work, they proved that the capability to prepare magic states, when combined with a set of ideal Clifford 
-gates, the preparation of :math:`|0\rangle` ancillas, and Z-basis measurements capabilities 
+In this work, they proved that the ability to prepare magic states, when combined with a set of ideal Clifford 
+gates, the preparation of :math:`|0\rangle` ancillas, and Z-basis measurement capabilities 
 on all qubits, is sufficient to enable UQC. Essentially, magic states are a class of states 
 that when injected into a circuit implement a specific non-Clifford gate. 
 
