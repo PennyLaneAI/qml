@@ -153,7 +153,7 @@ print(t_gate_teleportation_circuit(np.pi / 3))
 # 3. Escape: rapidly expand the code hosting the state. Once the cultivation stage is complete, the magic state 
 #    reaches its target fidelity, and becomes "too good for the code". 
 #    To preserve this high fidelity, the state needs to *escape*
-#    into a much larger code as quickly as possible, typically via `code morphing <https://arxiv.org/abs/2112.01446>` or 
+#    into a much larger code as quickly as possible, typically via `code morphing <https://arxiv.org/abs/2112.01446>`__ or 
 #    `lattice surgery <https://pennylane.ai/qml/demos/tutorial_lattice_surgery>`__.
 # 4. Decoding: determine whether to accept the final state using standard error correction. Since the circuit 
 #    is now too large for efficient post-selection, a decoder computes a complementary gap. This metric acts as 
