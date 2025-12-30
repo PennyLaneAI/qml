@@ -111,16 +111,18 @@ print(t_gate_teleportation_circuit(np.pi / 3))
 # A typical protocol follows these steps:
 #
 # 1. Prepare initial, imperfect states using non-Clifford gates (starting the "magic").
-# 2. Process several copies of these states using Clifford operations to map them onto an 
-#    error-correcting code.
-# 3. Perform measurements (akin to syndrome measurements) on the auxiliary qubits by executing 
-#    controlled `stabilizer <https://pennylane.ai/qml/demos/tutorial_stabilizer_codes>`__ generators.
+#    These input states are encoded in error-correcting (inner) codes such as surface code. 
+# 2. Process several copies of these logical qubits using Clifford operations to map them onto an 
+#    error-correcting (outer) code such as the Reed-Muller code.
+# 3. Perform a syndrome measurement by measuring certain `stabilizers <https://pennylane.ai/qml/demos/tutorial_stabilizer_codes>`__
+#    across this multi-block structure.
 # 4. The measurement results indicate whether the state remains in the "clean" codespace.
-#    If the syndrome is trivial, the remaining qubit is kept as a higher-purity state; if an error is 
+#    If the syndrome is trivial, the reduced state is kept as a higher-purity state; if an error is 
 #    detected, the state is discarded.
 #
-# It is worth noting that the main operations in a distillation protocol are logical. This means that 
-# they are executed across multiple error-correcting blocks, resulting in a significant resource overhead. 
+# It is worth noting that there is an underlying structure of code concatenation; there is an outer code and 
+# several smaller inner codes (hosting the input states). As such, the main operations in a distillation protocol are 
+# logical, being executed across multiple error-correcting blocks, resulting in a significant resource overhead. 
 #
 # See this `demo <https://pennylane.ai/qml/demos/tutorial_magic_state_distillation>`__ 
 # for a practical implementation of a distillation protocol using Catalyst. 
@@ -128,30 +130,29 @@ print(t_gate_teleportation_circuit(np.pi / 3))
 # Magic state cultivation
 # ~~~~~~~~~~~~~~~~~~~~~~~
 #
-# It is currently considered the state-of-the-art method for preparing high-fidelity magic states. 
-# Formulated by Gidney et al [#Gidney2024]_, 
-# it as a way to improve magic state preparation from a practical perspective. 
-# This means that the objective is to find an efficient way to prepare magic states with acceptable 
-# fidelities suitable for relevant quantum computations. 
+# Currently considered the state-of-the-art method for generating high-fidelity magic states, 
+# formulated by Gidney et al [#Gidney2024]_ as a practical optimization. 
+# The primary objective is to synthesize magic states with the specific fidelities required 
+# for large-scale quantum computations as efficiently as possible.
 #
-# Unlike distillation, which consumes many noisy states to "filter" out a clean one, cultivation 
-# starts with a single seed state and improves it "in-place." The entire process occurs 
+# Unlike distillation, which consumes numerous noisy states to "filter" out a clean one, cultivation 
+# starts with a single *seed* state and improves it "in-place." The entire process occurs 
 # within a single code patch using physical-level operations.
 #
 # The protocol consists of four primary stages:
 #
 # 1. Injection: prepare an initial, noisy magic state encoded in a small code of distance 3 or better.
-# 2. Cultivation: gradually improve the magic state through repeated Clifford checks and postselection.
+# 2. Cultivation: gradually improve the state through repeated Clifford checks and postselection.
 #    To reach higher fidelities, the code distance must be increased; otherwise, the "noise floor" 
-#    of the small code would limit the state's purity. This stage then includes cycles of growing
+#    of the small code would limit the state's purity. This stage then involves cycles of growing
 #    the code, stabilizing it, and checking the magic state. 
-# 3. Escape: rapidly expand the code hosting the state. After the cultivation stage, the magic state 
+# 3. Escape: rapidly expand the code hosting the state. Once the cultivation stage is complete, the magic state 
 #    reaches its target fidelity, and becomes "too good for the code". 
-#    To preserve such high fidelity, the state needs to **escape** 
-#    into a much larger code as fast as possible. This can be achieved via code-morphing or lattice surgery.
-# 4. Decoding: decide whether to accept the final state using standard error correction. Post-selection is 
-#    no longer used since the circuit is too large. The decoder computes a threshold called complementary gap
-#    that acts as a confidence score of the final state and accept or discard the state accordingly. 
+#    To preserve this high fidelity, the state needs to **escape** 
+#    into a much larger code as quickly as possible, typically via code-morphing or lattice surgery.
+# 4. Decoding: determine whether to accept the final state using standard error correction. Since the circuit 
+#    is now too large for efficient post-selection, a decoder computes a complementary gap. This metric acts as 
+#    a confidence score for the final state, allowing the system to accept or discard the state accordingly.
 #     
 #    
 # Perspective on magic states: current research
