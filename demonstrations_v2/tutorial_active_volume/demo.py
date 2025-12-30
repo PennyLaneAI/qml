@@ -1,8 +1,11 @@
 r"""Active volume
 =================
 
-In this demo, we will explore the concept of active volume of a quantum computation, and how compilation can exploit this concept to reduce the resources required to execute the computation on a suitable machine, an active volume quantum computer.
-We will look at circuits, ZX diagrams, and a new type of circuit representation called logical networks.
+In this demo, we will explore the concept of active volume of a quantum computation,
+and how compilation can exploit this concept to reduce the resources required to execute the
+computation on a suitable machine–an active volume quantum computer.
+We will look at circuits, :doc:`ZX diagrams <demos/tutorial_zx_calculus>`, and a new type of
+circuit representation called logical networks.
 This demo is directly based on a seminal paper by Litinski and Nickerson [#Litinski2022]_. As the original work already does a great job at presenting the concepts and compilation techniques at multiple levels of detail and with plenty of visualizations, we will aim to take a complementary perspective, and walk slowly through a specific compilation example.
 
 For readers unfamiliar with ZX diagrams, it will be useful (but not necessary) to take a look at
@@ -16,7 +19,8 @@ is not a requirement either.
     :width: 65%
     :target: javascript:void(0)
 
-Quantum compilation is fundamentally about bridging the gap between high-level descriptions of
+`Quantum compilation <https://pennylane.ai/compilation>`__ is fundamentally about bridging the
+gap between high-level descriptions of
 quantum algorithms, and low-level instructions that are actually executable on quantum hardware.
 In addition to the bare translation between those representations, it also aims to optimize
 numerous key metrics of the quantum program during the compilation process. Typically, these
@@ -27,11 +31,13 @@ the **spacetime volume** cost, which in fault-tolerant architectures can be unde
 total error-corrected qubits (space) taken up by the computation, times the total error
 correction cycles (time) required to perform it.
 
+todo: What to do with this paragraph?
 To understand the impact of different quantum architectures and compilation strategies, we’ll
-often put an *algorithmic cost* metric (e.g. circuit volume) in relation to its
-*implementation cost* on hardware (i.e. the spacetime volume). For instance, the strategies
+often put an *algorithmic cost* metric in relation to its
+*implementation cost* on hardware. For instance, the strategies
 described by Litinski’s :doc:`Game of Surface Codes <demos/tutorial_game_of_surface_codes>`
-incur a spacetime volume cost of roughly twice the circuit volume.
+incur an implementation cost–measured in terms of spacetime volume–of roughly twice the
+algorithmic cost–measured in **circuit volume**.
 
 Intuitively, the **circuit volume** can be understood as the total “area” taken up by a
 circuit, as depicted below. The crucial insight in the concept of **active volume** then is
@@ -47,7 +53,7 @@ We can thus partition a circuit into computationally *active* volume and *idle* 
 
     | Active and idle volumes are represented by areas occupied by gates (green)
     | and areas without gates (red), respectively, in a standard circuit diagram.
-    | Adapted from [#Litinski2022]_.
+    | Adapted from [1].
 
 In this demo, we will look at how to obtain the active volume of a quantum circuit
 (in terms of so-called “logical blocks”), and the systematic compilation framework introduced by
@@ -73,7 +79,7 @@ result to the derived logical network.
 The concepts are presented in a bottom-up approach and focus on the required steps to compile
 our concrete Clifford circuit example. We will look at another important concept,
 the **reaction time**, towards the end of the demo. For a top-down overview of the active
-volume framework, section 1 of [#Litinski2022]_ is a great source, while
+volume framework, section 1 of [1] is a great source, while
 sections 2-6 work through the compilation of increasingly complex circuit components.
 
 Without further a-do, let's get started!
@@ -92,7 +98,7 @@ While this already enables the compiler to handle universal quantum circuits, co
 via an intermediate representation in terms of Pauli product measurements (PPMs) allows for
 a smooth integration with other compilation techniques such as those in the
 Game of Surface Codes by Litinski. Correspondingly, you will find many circuits re-expressed
-in terms of PPMs in [#Litinski2022]_.
+in terms of PPMs in the active volume paper.
 
 Our example circuit: CNOT ladder
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -129,11 +135,11 @@ Some basic examples are summarized in the following overview figure.
 
 .. figure:: _static/demonstration_assets/active_volume/zx-calculus-overview.png
     :align: center
-    :width: 95%
+    :width: 100%
     :target: javascript:void(0)
 
     Basic building blocks and transformation rules of the ZX calculus.
-    Adapted from [#Litinski2022]_.
+    Adapted from [1].
 
 ZX diagrams in principle can express universal quantum circuits (and even more maps that are
 not circuits), but for active volume compilation we only need to express Clifford circuits
@@ -182,7 +188,7 @@ Expressing the quantum circuit as a ZX diagram with little structure allows for
 convenient manipulation, but it also causes trouble: ultimately we want to compile the circuit
 for a quantum computer that operates with logical qubits implemented as surface
 code-corrected patches of physical qubits, so we will need to gain back some structure.
-For this, [#Litinski2022]_ introduces **oriented ZX diagrams**, which must satisfy the following rules:
+For this, Litinski and Nickerson introduce **oriented ZX diagrams**, which must satisfy the following rules:
 
 #. Each spider must have two, three or four legs.
 #. Each vertex has six ports (north (N), up (U), east (E), south (S), down (D), and west (W))
@@ -452,7 +458,7 @@ tradeoff will often be beneficial.
 
 As we can see, parallelization via state teleportation thus is a very good fit for active
 volume computers and the goal of our compilation. This is why the framework by Litinski and
-Nickerson [#Litinski2022]_ promotes this technique to a first-class transformation, allowing
+Nickerson promotes this technique to a first-class transformation, allowing
 us to parallelize networks without having to recompile them.
 
 Teleportation in the CNOT ladder
@@ -618,7 +624,7 @@ machine, an active volume computer, in our hands, to which the compilation is ta
 forms the second key component of the framework, making the new representation of quantum
 computation as logical networks useful. For details on this machine abstraction, many additional
 compilation examples, and details about the implementation in a photonic quantum computer,
-we recommend to read the original paper [#Litinski2022]_ as well.
+we recommend to read the original paper as well.
 Additionally, you may want to
 
 - dive into the background of :doc:`lattice surgery <demos/tutorial_lattice_surgery>`,
