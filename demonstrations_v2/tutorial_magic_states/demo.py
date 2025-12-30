@@ -84,9 +84,9 @@ print(t_gate_teleportation_circuit(np.pi / 3))
 # The output displays the density matrix of the target state after the T gate has been applied via
 # teleportation:
 # 
-# .. math:: T|\psi\rangle=T \textrm{RY}(\pi/3)|0\rangle=\frac{sqrt{3}}{2}|0\rangle+\frac{1}{2}e^{i\pi/4}|1\rangle.
+# .. math:: T|\psi\rangle=T (R_y(\pi/3))|0\rangle=\frac{\sqrt{3}}{2}|0\rangle+\frac{1}{2}e^{i\pi/4}|1\rangle.
 #
-# This confirms the intended effect of applying a non-Clifford rotation by consuming the magic state :math:`|H\rangle`
+# This confirms the intended effect of applying a non-Clifford rotation by consuming the magic state :math:`|H\rangle`.
 # 
 # **Why "magic"?** In their influential paper [#Bravyi2005]_, Bravyi and Kitaev not only presented a path to  
 # UQC via magic states but also proposed a method to prepare them starting from imperfect copies
@@ -125,12 +125,12 @@ print(t_gate_teleportation_circuit(np.pi / 3))
 #    If the syndrome is trivial, the reduced state is kept as a higher-purity state; if an error is 
 #    detected, the state is discarded.
 #
-# It is worth noting that there is an underlying structure of code concatenation; there is an outer code and 
+# It is worth noting the underlying structure of code concatenation; there is an outer code and 
 # several smaller inner codes. As such, the main operations in a distillation protocol are 
 # logical, being executed across multiple error-correcting blocks, resulting in a significant resource overhead. 
 #
 # See this `demo <https://pennylane.ai/qml/demos/tutorial_magic_state_distillation>`__ 
-# for a practical implementation of a distillation protocol using Catalyst. 
+# for an implementation of a distillation protocol using Catalyst. 
 #
 # Magic state cultivation
 # ~~~~~~~~~~~~~~~~~~~~~~~
@@ -154,7 +154,8 @@ print(t_gate_teleportation_circuit(np.pi / 3))
 # 3. Escape: rapidly expand the code hosting the state. Once the cultivation stage is complete, the magic state 
 #    reaches its target fidelity, and becomes "too good for the code". 
 #    To preserve this high fidelity, the state needs to *escape*
-#    into a much larger code as quickly as possible, typically via code-morphing or lattice surgery.
+#    into a much larger code as quickly as possible, typically via code-morphing or 
+#    `lattice surgery <https://pennylane.ai/qml/demos/tutorial_lattice_surgery>`__.
 # 4. Decoding: determine whether to accept the final state using standard error correction. Since the circuit 
 #    is now too large for efficient post-selection, a decoder computes a complementary gap. This metric acts as 
 #    a confidence score for the final state, allowing the system to accept or discard the state accordingly.
