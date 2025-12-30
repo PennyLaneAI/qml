@@ -86,8 +86,8 @@ print(t_gate_teleportation_circuit(np.pi / 3))
 # **Why "magic"?** In their influential paper [#Bravyi2005]_, Bravyi and Kitaev not only presented a path to  
 # UQC via magic states but also proposed a method to prepare them starting from imperfect copies
 # of magic states. This purification process relies solely on Clifford operations. 
-# The synergy of these two properties-enabling universality and being distillable through restricted 
-# (Clifford) operations-is precisely why they were named "magic states".
+# The synergy of these two properties---enabling universality and being distillable through restricted 
+# (Clifford) operations---is precisely why they were named "magic states".
 #
 # Preparing magic states 
 # ----------------------
@@ -121,7 +121,7 @@ print(t_gate_teleportation_circuit(np.pi / 3))
 #    detected, the state is discarded.
 #
 # It is worth noting that there is an underlying structure of code concatenation; there is an outer code and 
-# several smaller inner codes (hosting the input states). As such, the main operations in a distillation protocol are 
+# several smaller inner codes. As such, the main operations in a distillation protocol are 
 # logical, being executed across multiple error-correcting blocks, resulting in a significant resource overhead. 
 #
 # See this `demo <https://pennylane.ai/qml/demos/tutorial_magic_state_distillation>`__ 
