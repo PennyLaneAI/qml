@@ -22,7 +22,10 @@ is not a requirement either.
     :width: 65%
     :target: javascript:void(0)
 
-:doc:`Quantum compilation <compilation/>` is fundamentally about bridging the
+Introduction
+------------
+
+`Quantum compilation <https://pennylane.ai/compilation/>`__ is fundamentally about bridging the
 gap between high-level descriptions of
 quantum algorithms, and low-level instructions that are actually executable on quantum hardware.
 In addition to the bare translation between those representations, it also aims to optimize
@@ -41,7 +44,7 @@ ladder circuits like those used in reversible arithmetic may consist to a large 
 (if not the majority) of idling qubits!
 We can thus partition a circuit into computationally *active* volume and *idle* volume:
 
-.. figure:: _static/demonstration_assets/active_volume/active_vs_idle.png
+.. figure:: _static/demonstration_assets/active_volume/active-vs-idle.png
     :align: center
     :width: 85%
     :target: javascript:void(0)
@@ -89,7 +92,7 @@ but only outline its rough characteristics.
     #. Qubit modules can be grouped and occupied for some time to distil magic states. This is
        a slow/expensive operation as well.
 
-    A more detailed characterization is provided in Sec. 1 of [1].
+    A more detailed characterization is provided in Sec. 1 of [#Litinski2022]_.
 
     Given the characterization above, active volume compilation aims to maximize the utilization
     of the computational qubit modules, because they execute the slow operations (logical blocks
@@ -113,8 +116,8 @@ result to the derived logical network.
 The concepts are presented in a bottom-up approach and focus on the required steps to compile
 our concrete Clifford circuit example. We will look at another important concept,
 the **reaction time**, towards the end of the demo. For a top-down overview of the active
-volume framework, section 1 of [1] is a great source, while
-sections 2-6 work through the compilation of increasingly complex circuit components.
+volume framework, Sec. 1 of [#Litinski2022]_ is a great source, while
+Secs. 2-6 work through the compilation of increasingly complex circuit components.
 
 Without further a-do, let's get started!
 
@@ -130,7 +133,7 @@ are supported via standard discretization techniques like
 `Gridsynth <https://arxiv.org/abs/1403.2975v3>`__,
 `repeat-until-success circuits <https://arxiv.org/abs/1404.5320>`__,
 `channel mixing <https://quantum-journal.org/papers/q-2023-12-18-1208/>`__, or
-:doc:`phase gradient decompositions <compilation/phase-gradient>`.
+`phase gradient decompositions <https://pennylane.ai/compilation/phase-gradient>`__.
 While this already enables the compiler to handle universal quantum circuits, compilation
 via an intermediate representation in terms of Pauli product measurements (PPMs) allows for
 a smooth integration with other compilation techniques such as those in the
@@ -147,7 +150,7 @@ volume compilation into logical networks. We will later compare the compilation 
 composition of the networks for each individual CNOT, parallelized via **state teleportation**.
 To make matters concrete, we will be concerned with compiling the following circuit:
 
-.. figure:: _static/demonstration_assets/active_volume/example_circuit.png
+.. figure:: _static/demonstration_assets/active_volume/example-circuit.png
     :align: center
     :width: 35%
     :target: javascript:void(0)
@@ -195,7 +198,7 @@ As we can see in the previous figure, the CNOT gate is easily expressed in terms
 with one X and one Z spider, each with three legs. This means that we can just as easily rewrite
 our CNOT ladder into a ZX diagram:
 
-.. figure:: _static/demonstration_assets/active_volume/example_zx_basic.png
+.. figure:: _static/demonstration_assets/active_volume/example-zx-basic.png
     :align: center
     :width: 35%
     :target: javascript:void(0)
@@ -209,7 +212,7 @@ graph carries meaningful information, as long as we associate the unconnected le
 diagram with fixed inputs and outputs.
 This allows us to rewrite our diagram as follows (rotating it to make it easier to display):
 
-.. figure:: _static/demonstration_assets/active_volume/example_zx_flat.png
+.. figure:: _static/demonstration_assets/active_volume/example-zx-flat.png
     :align: center
     :width: 55%
     :target: javascript:void(0)
@@ -243,7 +246,7 @@ following rules, illustrated below:
    of different types and different orientations. (For Hadamarded edges, same (different) types
    with different (same) orientations must be connected.)
 
-.. figure:: _static/demonstration_assets/active_volume/oriented_zx_rules.png
+.. figure:: _static/demonstration_assets/active_volume/oriented-zx-rules.png
     :align: center
     :width: 100%
     :target: javascript:void(0)
@@ -270,7 +273,7 @@ CNOT as a warmup exercise. The standard ZX diagram has two spiders, so we are te
 simply take this diagram and assign ports to each of the three legs, at each spider.
 Due to the input/output constraint, the qubit state labels go into the U and D ports:
 
-.. figure:: _static/demonstration_assets/active_volume/cnot_oriented_zx_incomplete.png
+.. figure:: _static/demonstration_assets/active_volume/cnot-oriented-zx-incomplete.png
     :align: center
     :width: 20%
     :target: javascript:void(0)
@@ -287,7 +290,7 @@ before switching between spider types.
 As it turns out, inserting a single spider in the CNOT diagram is not sufficient,
 and we need to insert two spiders:
 
-.. figure:: _static/demonstration_assets/active_volume/cnot_oriented_zx_extended.png
+.. figure:: _static/demonstration_assets/active_volume/cnot-oriented-zx-extended.png
     :align: center
     :width: 50%
     :target: javascript:void(0)
@@ -296,7 +299,7 @@ Let us try to connect the edges again. We connect the two Z spiders with a (S-N)
 them both an E-orientation. Coming from the right side, we connect the X spiders with an
 (E-W) edge, giving them an N-orientation:
 
-.. figure:: _static/demonstration_assets/active_volume/cnot_oriented_zx_extended_1.png
+.. figure:: _static/demonstration_assets/active_volume/cnot-oriented-zx-extended-1.png
     :align: center
     :width: 50%
     :target: javascript:void(0)
@@ -307,7 +310,7 @@ Now we can use the U and D ports of the central spiders to route the last edge. 
 both U ports, because this will be a convenient choice below, and arrive at the following
 oriented ZX diagram for a single CNOT:
 
-.. figure:: _static/demonstration_assets/active_volume/cnot_oriented_zx_complete.png
+.. figure:: _static/demonstration_assets/active_volume/cnot-oriented-zx-complete.png
     :align: center
     :width: 50%
     :target: javascript:void(0)
@@ -338,7 +341,7 @@ This would lead to an arrangement with "depth" three.
 However, here we want to keep the full circuit in a single layer. With a similar reasoning as for
 the single CNOT, we find that we need to insert six nodes overall, arriving at the oriented ZX diagram:
 
-.. figure:: _static/demonstration_assets/active_volume/example_oriented_zx_complete.png
+.. figure:: _static/demonstration_assets/active_volume/example-oriented-zx-complete.png
     :align: center
     :width: 90%
     :target: javascript:void(0)
@@ -378,15 +381,29 @@ Logical network for the CNOT ladder
 
 Looking at the oriented ZX diagram of the CNOT ladder above, we see that the inserted spiders
 with two legs are connected to the original three-legged spiders with edges that do not satisfy
-the modified rule (4'.) yet. However, in each case, we may simply use the opposite port of those
-two-legged spiders. We then arrive at a valid logical network by performing a few cosmetic
+the modified rule (4'.) yet, indicated in red below.
+
+.. figure:: _static/demonstration_assets/active_volume/example-oriented-zx-redline.png
+    :align: center
+    :width: 90%
+    :target: javascript:void(0)
+
+However, in each case, we may simply use the opposite port of those
+two-legged spiders:
+
+.. figure:: _static/demonstration_assets/active_volume/example-oriented-zx-greenline.png
+    :align: center
+    :width: 90%
+    :target: javascript:void(0)
+
+We then arrive at a valid logical network by performing a few cosmetic
 changes: first, change the shape of the spiders to hexagons, with each corner corresponding
 to a port. Second, enumerate the hexagons for referencing. Any labels work, really. Third and last,
 cut the edges between hexagons and instead draw shortened legs, annotated by the label of the
 hexagon they connect to.
 For our example, we find the logical network
 
-.. figure:: _static/demonstration_assets/active_volume/example_logical_network.png
+.. figure:: _static/demonstration_assets/active_volume/example-logical-network.png
     :align: center
     :width: 95%
     :target: javascript:void(0)
@@ -410,7 +427,7 @@ the oriented ZX diagrams for the three individual CNOT gates, or parallelized on
 we had less computational space available. Abstractly, we can draw this as sequences of
 logical networks that make up different shapes:
 
-.. figure:: _static/demonstration_assets/active_volume/reshaped_networks.png
+.. figure:: _static/demonstration_assets/active_volume/reshaped-networks.png
     :align: center
     :width: 100%
     :target: javascript:void(0)
@@ -431,7 +448,7 @@ Under the hood of parallelization: state teleportation
 In the CNOT ladder example circuit, which has a fundamentally sequential appearance in the
 circuit picture, logical network compilation achieved its parallelization by combining the
 effects of the three CNOTs into a single effect, creating a “CNOT ladder subroutine”.
-If we want to parallelize multiple blocks,
+If we want to parallelize multiple subroutines,
 without having to re-compile their joint logical network, we can do this procedurally through
 state teleportation, using a so-called bridge qubit. This technique parallelizes non-commuting
 operations without breaking physics, and it pays off because Bell state preparation and
@@ -444,7 +461,7 @@ For the first point, let's consider a somewhat more abstract setup, as is done i
 in [#Litinski2022]_. Suppose we want to sequentially execute two two-qubit gates :math:`A` and
 :math:`B` that overlap on one qubit and do not commute:
 
-.. figure:: _static/demonstration_assets/active_volume/teleportation_start.png
+.. figure:: _static/demonstration_assets/active_volume/teleportation-start.png
     :align: center
     :width: 40%
     :target: javascript:void(0)
@@ -459,7 +476,7 @@ For the parallelization, we first insert a state teleportation circuit between :
 :math:`|\phi\rangle=\tfrac{1}{\sqrt{2}}(|0\rangle +|1\rangle)`, see the
 :doc:`demo on state teleportation <tutorial_teleportation>` for details:
 
-.. figure:: _static/demonstration_assets/active_volume/teleportation_insert_teleport.png
+.. figure:: _static/demonstration_assets/active_volume/teleportation-insert-teleport.png
     :align: center
     :width: 55%
     :target: javascript:void(0)
@@ -468,7 +485,7 @@ Next, we pull the classically controlled correction gates, which are Pauli opera
 the gate :math:`B`, and obtain new correction gates :math:`C_Z=B^\dagger X B` and
 :math:`C_X=B^\dagger Z B`:
 
-.. figure:: _static/demonstration_assets/active_volume/teleportation_commuted.png
+.. figure:: _static/demonstration_assets/active_volume/teleportation-commuted.png
     :align: center
     :width: 45%
     :target: javascript:void(0)
@@ -515,7 +532,7 @@ To understand the teleportation technique from above in the context of logical n
 let’s consider our example CNOT ladder and perform the parallelization in the circuit picture.
 We begin by inserting 2 teleportation circuits:
 
-.. figure:: _static/demonstration_assets/active_volume/manual_parallel_0.png
+.. figure:: _static/demonstration_assets/active_volume/manual-parallel-0.png
     :align: center
     :width: 60%
     :target: javascript:void(0)
@@ -523,7 +540,7 @@ We begin by inserting 2 teleportation circuits:
 Then, we pull the second and third CNOT through the Pauli corrections, turning :math:`X` into
 :math:`X\otimes X` and leaving :math:`Z` unchanged:
 
-.. figure:: _static/demonstration_assets/active_volume/manual_parallel_1.png
+.. figure:: _static/demonstration_assets/active_volume/manual-parallel-1.png
     :align: center
     :width: 50%
     :target: javascript:void(0)
@@ -535,7 +552,7 @@ only affect the measurement *result* of a Pauli measurement, but not its measure
 marked as a classical wire between the two :math:`Z\otimes Z` measurement instruments in
 magenta below:
 
-.. figure:: _static/demonstration_assets/active_volume/manual_parallel_2.png
+.. figure:: _static/demonstration_assets/active_volume/manual-parallel-2.png
     :align: center
     :width: 40%
     :target: javascript:void(0)
@@ -548,7 +565,7 @@ another :math:`3\cdot 2` additional qubits, arriving at :math:`12` logical block
 blocks (blocks with only U and D ports occupied that can be executed by memory modules),
 acting on :math:`14` qubits:
 
-.. figure:: _static/demonstration_assets/active_volume/example_parallelized_explicitly.png
+.. figure:: _static/demonstration_assets/active_volume/example-parallelized-explicitly.png
     :align: center
     :width: 95%
     :target: javascript:void(0)
@@ -556,7 +573,7 @@ acting on :math:`14` qubits:
 The idling blocks are marked in green.
 However, recall the logical network into which we compiled the CNOT ladder earlier:
 
-.. figure:: _static/demonstration_assets/active_volume/example_logical_network.png
+.. figure:: _static/demonstration_assets/active_volume/example-logical-network.png
     :align: center
     :width: 95%
     :target: javascript:void(0)
@@ -583,7 +600,7 @@ While the compilation techniques presented above are very powerful, there is an 
 restriction we haven’t considered so far. Consider the teleportation circuit from the previous
 section:
 
-.. figure:: _static/demonstration_assets/active_volume/post-processed_measurement.png
+.. figure:: _static/demonstration_assets/active_volume/post-processed-measurement.png
     :align: center
     :width: 15%
     :target: javascript:void(0)
