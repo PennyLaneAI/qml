@@ -39,7 +39,7 @@ Let’s examine a specific state, which we will denote as :math:`|H\rangle`, to 
 Notice that this state is obtained by applying a T gate to the :math:`|+\rangle` state 
 (the +1 eigenstate of the Pauli X operator).  
 Using **magic state injection** (see the circuit illustration below), we can apply a T operation to an 
-arbitrary single-qubit state (wire 0 in the code). A detailed step-by-step breakdown of this process 
+arbitrary single-qubit state (wire 0 in the code). A step-by-step breakdown of this process 
 can be found in this PennyLane `glossary page <https://pennylane.ai/qml/glossary/what-are-magic-states>`__.
 
 """
@@ -153,7 +153,7 @@ print(t_gate_teleportation_circuit(np.pi / 3))
 # 3. Escape: rapidly expand the code hosting the state. Once the cultivation stage is complete, the magic state 
 #    reaches its target fidelity, and becomes "too good for the code". 
 #    To preserve this high fidelity, the state needs to *escape*
-#    into a much larger code as quickly as possible, typically via code-morphing or 
+#    into a much larger code as quickly as possible, typically via `code morphing <https://arxiv.org/abs/2112.01446>` or 
 #    `lattice surgery <https://pennylane.ai/qml/demos/tutorial_lattice_surgery>`__.
 # 4. Decoding: determine whether to accept the final state using standard error correction. Since the circuit 
 #    is now too large for efficient post-selection, a decoder computes a complementary gap. This metric acts as 
@@ -163,6 +163,12 @@ print(t_gate_teleportation_circuit(np.pi / 3))
 # Perspective on magic states: current research
 # ---------------------------------------------
 #
+# Despite the theoretical foundations of magic states being well-established, translating them into 
+# scalable hardware remains a challenge. Current research in the field focuses on developing more 
+# efficient protocols for generating high-fidelity magic states and achieving robust experimental 
+# implementations across various qubit architectures. 
+#
+# 
 #
 # Conclusion
 # ----------

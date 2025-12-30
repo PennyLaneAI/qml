@@ -7,8 +7,8 @@
     ],
     "executable_stable": true,
     "executable_latest": true,
-    "dateOfPublication": "2025-12-23T10:00:00+00:00",
-    "dateOfLastModification": "2025-12-23T15:48:14+00:00",
+    "dateOfPublication": "2025-12-31T10:00:00+00:00",
+    "dateOfLastModification": "2025-12-31T15:48:14+00:00",
     "categories": [
         "Quantum Computing"
     ],
@@ -27,13 +27,31 @@
     "doi": "",
     "references": [
         {
-            "id": "Kitaev2004",
+            "id": "Bravyi2004",
             "type": "article",
             "title": "Universal Quantum Computation with ideal Clifford gates and noisy ancillas",
             "authors": "Sergei Bravyi and Alexei Kitaev",
             "year": "2004",
             "journal": "arXiv",
             "url": "https://arxiv.org/abs/quant-ph/0403025"
+        },
+        {
+            "id": "Gidney2024",
+            "type": "article",
+            "title": "Magic state cultivation: growing T states as cheap as CNOT gates",
+            "authors": "Craig Gidney, Noah Shutty, and Cody Jones",
+            "year": "2024",
+            "journal": "arXiv",
+            "url": "https://arxiv.org/abs/2409.17595"
+        },
+        {
+            "id": "Heinrich2019",
+            "type": "article",
+            "title": "Robustness of Magic and Symmetries of the Stabiliser Polytope",
+            "authors": "Markus Heinrich and David Gross",
+            "year": "2019",
+            "journal": "Quantum",
+            "url": "https://quantum-journal.org/papers/q-2019-04-08-132"
         }
     ],
     "basedOnPapers": [],
