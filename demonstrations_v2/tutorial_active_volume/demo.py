@@ -243,7 +243,10 @@ following rules, illustrated below:
    of different types and different orientations. (For Hadamarded edges, same (different) types
    with different (same) orientations must be connected.)
 
-[insert image: visualization of rules]
+.. figure:: _static/demonstration_assets/active_volume/oriented_zx_rules.png
+    :align: center
+    :width: 100%
+    :target: javascript:void(0)
 
 These rules may seem quite artificial and confusing. This is because they impose constraints
 on the--otherwise quite unstructured--ZX diagram that originate in the structure of the surface
@@ -405,9 +408,12 @@ For our example circuit, this idea of gradual parallelization generalizes the id
 not forced to maximize parallelization; as we mentioned above, we instead could have concatenated
 the oriented ZX diagrams for the three individual CNOT gates, or parallelized only two of them, if
 we had less computational space available. Abstractly, we can draw this as sequences of
-logicel networks that make up different shapes:
+logical networks that make up different shapes:
 
-[insert image: tetris-like options for the shape of a network]
+.. figure:: _static/demonstration_assets/active_volume/reshaped_networks.png
+    :align: center
+    :width: 100%
+    :target: javascript:void(0)
 
 Logical networks thus form a much more flexible representation of operations on an error-correct
 quantum computer, allowing them to be adjusted to available hardware resources and promoting
