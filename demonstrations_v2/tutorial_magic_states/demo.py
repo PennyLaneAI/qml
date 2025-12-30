@@ -84,7 +84,7 @@ print(t_gate_teleportation_circuit(np.pi / 3))
 # The output displays the density matrix of the target state after the T gate has been applied via
 # teleportation:
 # 
-# .. math:: T|\psi\rangle=T RY(\pi/3)|0\rangle=\frac{1}{2}(\sqrt{3}|0\rangle+e^{i\pi/4}|1\rangle).
+# .. math:: T|\psi\rangle=T \textrm{RY}(\pi/3)|0\rangle=\frac{sqrt{3}}{2}|0\rangle+\frac{1}{2}e^{i\pi/4}|1\rangle.
 #
 # This confirms the intended effect of applying a non-Clifford rotation by consuming the magic state :math:`|H\rangle`
 # 
