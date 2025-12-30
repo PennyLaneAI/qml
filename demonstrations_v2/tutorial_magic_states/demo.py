@@ -84,7 +84,7 @@ print(t_gate_teleportation_circuit(np.pi / 3))
 # The output displays the density matrix of the target state after the T gate has been applied via
 # teleportation:
 # 
-# .. math:: T|\psi\rangle=T (R_y(\pi/3))|0\rangle=\frac{\sqrt{3}}{2}|0\rangle+\frac{1}{2}e^{i\pi/4}|1\rangle.
+# .. math:: T|\psi\rangle=T (R_y(\pi/3)|0\rangle)=\frac{\sqrt{3}}{2}|0\rangle+\frac{1}{2}e^{i\pi/4}|1\rangle.
 #
 # This confirms the intended effect of applying a non-Clifford rotation by consuming the magic state :math:`|H\rangle`.
 # 
@@ -164,6 +164,19 @@ print(t_gate_teleportation_circuit(np.pi / 3))
 # Perspective on magic states: current research
 # ---------------------------------------------
 #
+#
+# Conclusion
+# ----------
+#
+# In this tutorial, we reviewed the concept of magic states, an essential and creative tool for achieving FTQC and UQC.
+# While traditional distillation provided the theoretical foundation for universality, the shift 
+# toward cultivation reflects a new era of practical fault-tolerance focused on resource efficiency.
+# As we move toward large-scale implementations, the challenge lies in optimizing these "magic state factories."
+# For those interested in the deeper math, there is a nice geometric perspective of magic states 
+# involving the stabilizer polytope on the Bloch sphere [#Heinrich2019]_. In this framework, magic states 
+# emerge as the maximal non-stabilizer states, lying as far as possible from the
+# classically-simulatable region defined by the Clifford group.
+#
 # References
 # ----------
 #
@@ -179,3 +192,8 @@ print(t_gate_teleportation_circuit(np.pi / 3))
 #    as cheap as CNOT gates."
 #    `arXiv preprint arXiv:2409.17595 (2024) <https://arxiv.org/abs/2409.17595>`__.
 #
+# .. [#Heinrich2019]
+#
+#    Markus Heinrich and David Gross. "Robustness of Magic and Symmetries of the Stabiliser 
+#    Polytope."
+#    `Quantum 3, 132 (2019) <https://quantum-journal.org/papers/q-2019-04-08-132>`__.
