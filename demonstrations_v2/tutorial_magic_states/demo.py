@@ -38,7 +38,7 @@ Let’s examine a specific state, which we will denote as :math:`|H\rangle`, to 
 
 Notice that this state is obtained by applying a T gate to the :math:`|+\rangle` state 
 (the +1 eigenstate of the Pauli X operator).  
-Using magic state injection (see the circuit illustration below),  we can apply a T operation to an 
+Using **magic state injection** (see the circuit illustration below), we can apply a T operation to an 
 arbitrary single-qubit state (wire 0 in the code). A detailed step-by-step breakdown of this process 
 can be found in this PennyLane `glossary page <https://pennylane.ai/qml/glossary/what-are-magic-states>`__.
 
@@ -70,8 +70,8 @@ def t_gate_teleportation_circuit(target_state_params):
     # Apply the Clifford operations for injection
     qml.CNOT(wires=[0, 1])
 
+    # The outcome of m_1 dictates the final correction
     m_1 = qml.measure(1)
-    # The outcome of M_a dictates the final correction
     qml.cond(m_1 == 1, qml.S)(wires=0)
 
     return qml.density_matrix(wires=[0])
@@ -81,7 +81,12 @@ print(qml.draw(t_gate_teleportation_circuit)(np.pi / 3))
 print(t_gate_teleportation_circuit(np.pi / 3))
 
 ######################################################################
-# We see from the output that ...
+# The output displays the density matrix of the target state after the T gate has been applied via
+# teleportation:
+# 
+# .. math:: T|\psi\rangle=T RY(\pi/3)|0\rangle=\frac{1}{2}(\sqrt{3}|0\rangle+e^{i\pi/4}|1\rangle).
+#
+# This confirms the intended effect of applying a non-Clifford rotation by consuming the magic state :math:`|H\rangle`
 # 
 # **Why "magic"?** In their influential paper [#Bravyi2005]_, Bravyi and Kitaev not only presented a path to  
 # UQC via magic states but also proposed a method to prepare them starting from imperfect copies
