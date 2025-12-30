@@ -1,12 +1,15 @@
-r"""Active volume
-=================
+r"""Active volume compilation
+=============================
 
 In this demo, we will explore the concept of active volume of a quantum computation,
 and how compilation can exploit this concept to reduce the resources required to execute the
 computation on a suitable machine–an active volume quantum computer.
 We will look at circuits, :doc:`ZX diagrams <demos/tutorial_zx_calculus>`, and a new type of
 circuit representation called logical networks.
-This demo is directly based on a seminal paper by Litinski and Nickerson [#Litinski2022]_. As the original work already does a great job at presenting the concepts and compilation techniques at multiple levels of detail and with plenty of visualizations, we will aim to take a complementary perspective, and walk slowly through a specific compilation example.
+This demo is directly based on a seminal paper by Litinski and Nickerson [#Litinski2022]_.
+As the original work already does a great job at presenting the concepts and compilation
+techniques at multiple levels of detail and with plenty of visualizations, we will aim to
+take a complementary perspective, and walk slowly through a specific compilation example.
 
 For readers unfamiliar with ZX diagrams, it will be useful (but not necessary) to take a look at
 our :doc:`introduction to ZX calculus <demos/tutorial_zx_calculus>` first.
@@ -14,12 +17,12 @@ Further, it can be instructive to get a :doc:`primer on lattice surgery <demos/t
 and dive into the :doc:`Game of Surface Codes <demos/tutorial_game_of_surface_codes>`, but this
 is not a requirement either.
 
-.. figure:: _static/demo_thumbnails/large_demo_thumbnails/pennylane-demo-active-volume-large-thumbnail.png
+.. figure:: _static/demo_thumbnails/opengraph_demo_thumbnails/pennylane-demo-active-volume-open-graph.png
     :align: center
     :width: 65%
     :target: javascript:void(0)
 
-`Quantum compilation <https://pennylane.ai/compilation>`__ is fundamentally about bridging the
+:doc:`Quantum compilation <compilation/>` is fundamentally about bridging the
 gap between high-level descriptions of
 quantum algorithms, and low-level instructions that are actually executable on quantum hardware.
 In addition to the bare translation between those representations, it also aims to optimize
@@ -30,14 +33,6 @@ metric that expresses the combined cost of all resources used by a program. One 
 the **spacetime volume** cost, which in fault-tolerant architectures can be understood as the
 total error-corrected qubits (space) taken up by the computation, times the total error
 correction cycles (time) required to perform it.
-
-todo: What to do with this paragraph?
-To understand the impact of different quantum architectures and compilation strategies, we’ll
-often put an *algorithmic cost* metric in relation to its
-*implementation cost* on hardware. For instance, the strategies
-described by Litinski’s :doc:`Game of Surface Codes <demos/tutorial_game_of_surface_codes>`
-incur an implementation cost–measured in terms of spacetime volume–of roughly twice the
-algorithmic cost–measured in **circuit volume**.
 
 Intuitively, the **circuit volume** can be understood as the total “area” taken up by a
 circuit, as depicted below. The crucial insight in the concept of **active volume** then is
@@ -51,9 +46,9 @@ We can thus partition a circuit into computationally *active* volume and *idle* 
     :width: 85%
     :target: javascript:void(0)
 
-    | Active and idle volumes are represented by areas occupied by gates (green)
-    | and areas without gates (red), respectively, in a standard circuit diagram.
-    | Adapted from [1].
+    Active and idle volumes are represented by areas occupied by gates (green)
+    and areas without gates (red), respectively, in a standard circuit diagram.
+    Adapted from [1].
 
 In this demo, we will look at how to obtain the active volume of a quantum circuit
 (in terms of so-called “logical blocks”), and the systematic compilation framework introduced by
@@ -64,18 +59,56 @@ inherently-quantum technique of state teleportation.
 The result is a powerful approach to make the cost of quantum computations proportional to
 the active volume rather than the circuit volume, provided that we operate with a so-called
 **active volume computer**. We will not go into detail about the definition of such a computer,
-but emphasize that the compilation framework presented in this demo is specifically
-tailored to this type of quantum computer.
+but only outline its rough characteristics.
+
+.. admonition:: Active volume computer
+
+    The cost model used by active volume compilation is founded on an abstract error-corrected
+    quantum computer, the active volume computer.
+    It is made up of a fixed number of *qubit modules*, each of which stores a logical qubit.
+    Half of the modules are designated computation modules, in which information is processed,
+    while the other half consists of dedicated memory modules, which allow for intermediate
+    storage and routing of information between computational steps.
+    The following characteristics are crucial assumptions about the computer that shape the cost
+    model:
+
+    #. The information content of two qubit modules within range can be
+       exchanged quickly/cheaply. They are "quickswappable".
+    #. Single qubit modules can be prepared quickly/cheaply in the state :math:`|0\rangle` or :math:`|+\rangle`.
+       They can also be measured quickly/cheaply in the Pauli-:math:`X` or Pauli-:math:`Z` basis.
+    #. Two qubit modules within some specified range :math:`r` can be prepared quickly/cheaply in the Bell
+       state :math:`|\phi\rangle = \tfrac{1}{\sqrt{2}} (|0\rangle +|1\rangle)`.
+       They can also be measured quickly/cheaply in the Bell basis.
+    #. Choosing the measurement basis of one or two qubits dynamically costs one *reaction time*
+       unit. The relation between the reaction time and the time taken by the above cheap
+       operations is a property of the computer.
+    #. Qubit modules can execute so-called logical blocks, which is a slow/expensive operation.
+       Computations are represented by logical networks (see below) made up of connected logical
+       blocks. The qubit modules executing connected blocks must be within range.
+    #. Qubit modules can be grouped and occupied for some time to distil magic states. This is
+       a slow/expensive operation as well.
+
+    A more detailed characterization is provided in Sec. 1 of [1].
+
+    Given the characterization above, active volume compilation aims to maximize the utilization
+    of the computational qubit modules, because they execute the slow operations (logical blocks
+    and magic state distillation). Memory qubit modules are allowed to sit idle, providing
+    intermediate storage and space for routing information through quickswaps. Note that
+    long-range communication in the active volume computer is achieved through layers
+    of quickswaps, which remain cheap in the above cost model.
 
 In the following, we will demonstrate how to compile the circuit of a subroutine
 step-by-step into a so-called **logical network**, which is a representation that allows
 the active volume computer to use its computing resources with high efficiency.
 For this, we will transform the circuit into a ZX diagram, impose a set of rules that
 lead us to an **oriented** ZX diagram, and then rewrite it into the aforementioned
-logical network. To put this rather formal process into context, we will analyze the same
+logical network. This representation will allow us to capture the essence of quantum information
+processing without the restrictive representation as quantum circuits, while enforcing enough
+structure to arrive at a program that can be executed by an active volume computer.
+
+To put this rather formal process into context, we will analyze the same
 circuit under the lens of parallelization via quantum state teleportation, and relate the
 result to the derived logical network.
-
 The concepts are presented in a bottom-up approach and focus on the required steps to compile
 our concrete Clifford circuit example. We will look at another important concept,
 the **reaction time**, towards the end of the demo. For a top-down overview of the active
@@ -92,8 +125,11 @@ be the input; Clifford gates are supported directly, as we will see for our exam
 Discrete non-Clifford gates such as ``T`` or ``Toffoli`` are implemented in a surface
 code-corrected quantum computer by ingesting magic states via multi-qubit measurements.
 And continuous non-Clifford gates such as arbitrary-angle Pauli product rotations (PPRs)
-are supported via standard discretization techniques like Gridsynth, repeat-until-success
-circuits, channel mixing, or phase gradient decompositions.
+are supported via standard discretization techniques like
+`Gridsynth <https://arxiv.org/abs/1403.2975v3>`__,
+`repeat-until-success circuits <https://arxiv.org/abs/1404.5320>`__,
+`channel mixing <https://quantum-journal.org/papers/q-2023-12-18-1208/>`__, or
+:doc:`phase gradient decompositions <compilation/phase-gradient>`.
 While this already enables the compiler to handle universal quantum circuits, compilation
 via an intermediate representation in terms of Pauli product measurements (PPMs) allows for
 a smooth integration with other compilation techniques such as those in the
@@ -128,8 +164,8 @@ to the linked tutorial and its references for more details.
 
 The elementary building blocks of a ZX diagram are so-called spiders, drawn as a
 blue (X-type spider) or orange (Z-type spider) vertex and a number of legs. Each spider
-represents a linear map itself and composing them into diagrams is as easy as connecting legs
-of multiple spiders, turning them into edges between the vertices. Unconnected legs of a
+represents a linear map itself and composing spiders into diagrams is as easy as connecting their
+legs, creating edges between the vertices. Unconnected legs of a
 diagram symbolize inputs and outputs of the represented linear map.
 Some basic examples are summarized in the following overview figure.
 
@@ -146,15 +182,16 @@ not circuits), but for active volume compilation we only need to express Cliffor
 and Pauli product measurements (PPMs), whose measurement bases could be classically conditioned.
 Therefore, we may restrict ourselves to phase-free spiders and in particular the building blocks
 shown above. The main reason for this is that non-Clifford operations, such as T or Toffoli
-gates, are realized via magic state injection in surface code computations, and that
-classical mixtures in the form of classically conditioned operations can be translated
-into PPMs with a conditionally chosen basis.
+gates, are realized via
+:doc:`magic state injection <demos/tutorial_mcm_introduction#t-gadget-in-pennylane>`
+in surface code computations, and that classical mixtures in the form of classically
+conditioned operations can be translated into PPMs with a conditionally chosen basis.
 
 ZX diagram for the CNOT ladder
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-As we can see in the previous figure, the CNOT gate is easily expressed in terms of an
-X and a Z spider, each with three legs. This means that we can just as easily rewrite
+As we can see in the previous figure, the CNOT gate is easily expressed in terms of a diagram
+with one X and one Z spider, each with three legs. This means that we can just as easily rewrite
 our CNOT ladder into a ZX diagram:
 
 .. figure:: _static/demonstration_assets/active_volume/example_zx_basic.png
@@ -187,22 +224,25 @@ Imposing structure: oriented ZX diagrams
 Expressing the quantum circuit as a ZX diagram with little structure allows for
 convenient manipulation, but it also causes trouble: ultimately we want to compile the circuit
 for a quantum computer that operates with logical qubits implemented as surface
-code-corrected patches of physical qubits, so we will need to gain back some structure.
-For this, Litinski and Nickerson introduce **oriented ZX diagrams**, which must satisfy the following rules:
+code corrected patches of physical qubits, so we will need to gain back some structure.
+For this, Litinski and Nickerson introduce **oriented ZX diagrams**, which must satisfy the
+following rules, illustrated below:
 
 #. Each spider must have two, three or four legs.
-#. Each vertex has six ports (north (N), up (U), east (E), south (S), down (D), and west (W))
+#. Each spider has six ports (north (N), up (U), east (E), south (S), down (D), and west (W))
    and at most one leg can be connected to each port.
-   For each vertex, the two ports in one of three pairs (N, S), (U, D), and (E, W) must both
-   be unoccupied. This pair is called the **orientation** of the vertex/spider and we denote it
+   For each spider, the two ports in one of three pairs (N, S), (U, D), and (E, W) must both
+   be unoccupied. This pair is called the **orientation** of the spider and we denote it
    by N, U or E accordingly.
-#. Input (output) legs must connect to the down (up) port of a vertex.
-#. Edges (internal legs) must connect to ports at both vertices from the same of the three pairs.
-   That is, they must connect to the same port of the two vertices they connect, or to
+#. Input (output) legs must connect to the down (up) port of a spider.
+#. Edges (internal legs) must connect to ports from the same of the three pairs at both spiders.
+   That is, they must connect to the same port of the two spiders they connect, or to
    opposite ports.
-#. Edges (internal legs) must connect vertices of the same type (X/Z) and same orientation, or
+#. Edges (internal legs) must connect spiders of the same type (X/Z) and same orientation, or
    of different types and different orientations. (For Hadamarded edges, same (different) types
    with different (same) orientations must be connected.)
+
+[insert image: visualization of rules]
 
 These rules may seem quite artificial and confusing. This is because they impose constraints
 on the--otherwise quite unstructured--ZX diagram that originate in the structure of the surface
@@ -222,8 +262,8 @@ Exercise: oriented ZX diagram of a CNOT
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Before we turn to our example circuit, let's produce a valid oriented ZX diagram for a single
-CNOT as a warmup exercise. The standard ZX diagram has two vertices, so we are tempted to
-simply take this diagram and assign ports to each of the three legs, at each vertex.
+CNOT as a warmup exercise. The standard ZX diagram has two spiders, so we are tempted to
+simply take this diagram and assign ports to each of the three legs, at each spider.
 Due to the input/output constraint, the qubit state labels go into the U and D ports:
 
 .. figure:: _static/demonstration_assets/active_volume/cnot_oriented_zx_incomplete.png
@@ -237,11 +277,11 @@ the internal edge. We know that it must connect to the same or opposite port at 
 However, as they differ in type (X vs. Z), such a connection is forbidden by rule (5.).
 We thus already run out of options for the internal edge. What can we do to fix this issue?
 The solution lies in the identity ``─●─ = ──`` for ZX diagrams; before we orient the diagram,
-we may insert additional vertices with two legs, in place of a simple leg. This allows us to
-gain more room in order to gradually change the occupied ports of the oriented vertices,
-before switching between vertex types.
-As it turns out, inserting a single vertex in the CNOT diagram is not sufficient,
-and we need to insert two vertices:
+we may insert additional spiders with two legs, in place of a simple leg. This allows us to
+gain more room in order to gradually change the occupied ports of the oriented spiders,
+before switching between spider types.
+As it turns out, inserting a single spider in the CNOT diagram is not sufficient,
+and we need to insert two spiders:
 
 .. figure:: _static/demonstration_assets/active_volume/cnot_oriented_zx_extended.png
     :align: center
@@ -257,9 +297,9 @@ them both an E-orientation. Coming from the right side, we connect the X spiders
     :width: 50%
     :target: javascript:void(0)
 
-Here we indicated the orientation of the vertices with internal lines, serving as a mnemonic
+Here we indicated the orientation of the spiders with internal lines, serving as a mnemonic
 that these ports are "occupied" already.
-Now we can use the U and D ports of the central vertices to route the last edge. We choose
+Now we can use the U and D ports of the central spiders to route the last edge. We choose
 both U ports, because this will be a convenient choice below, and arrive at the following
 oriented ZX diagram for a single CNOT:
 
@@ -268,7 +308,19 @@ oriented ZX diagram for a single CNOT:
     :width: 50%
     :target: javascript:void(0)
 
+This is a valid oriented ZX diagram for a single CNOT gate. Note that the spiders we had
+to insert above directly correspond to additional information processing steps, and will take up
+additional qubits in the execution of the CNOT. This may come as a surprise, given that
+CNOT is a simple two-qubit Clifford gate. However, note that the active volume computer
+architecture operates with :doc:`lattice surgery <demos/tutorial_lattice_surgery>`, and
+executing a CNOT with lattice surgery also requires two additional logical qubits as intermediate
+bridge space. Thus, the oriented ZX diagram simply reproduces the true cost for a CNOT in this
+type of architecture.
+
 Note that we could also connect the input state :math:`|b\rangle` to the D port of the left X spider.
+This is because we could have inserted the additional blue spider on the output leg of the existing
+one, rather than between the inserted orange and the existing blue spiders.
+For this, the orientation of the spiders could be kept as-is.
 
 Oriented ZX diagram of the CNOT ladder
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -309,12 +361,13 @@ drawn as hexagons to mark the six ports more clearly, with a modification of rul
 
 Depending on the concrete circuit we are compiling, this change might just lead to minor
 modifications such as relabeling the ports of two connected blocks, or it might lead to cascades of
-re-routing that eventually force us to insert new blocks, even.
+re-routing that eventually force us to insert a new block, even.
 **Logical networks** are diagrams, or networks, of logical blocks. We label the logical blocks
 uniquely and replace drawing edges between them by annotating the ports with the labels of the
 blocks they connect to. This allows us to separate logical blocks, which represent computation
 and are considered expensive, from the block connectivity, which represents communication between
-blocks and is considered cheaper because it is implemented via fast SWAP connections.
+blocks and is considered cheaper because it is implemented via fast SWAP connections (also see
+active volume computer info box).
 
 Logical network for the CNOT ladder
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -322,8 +375,12 @@ Logical network for the CNOT ladder
 Looking at the oriented ZX diagram of the CNOT ladder above, we see that the inserted spiders
 with two legs are connected to the original three-legged spiders with edges that do not satisfy
 the modified rule (4'.) yet. However, in each case, we may simply use the opposite port of those
-two-legged spiders. Changing the shape of the vertices, labeling them, and replacing drawn edges
-with vertex labels then leads us to a valid logical network:
+two-legged spiders. We then arrive at a valid logical network by performing a few cosmetic
+changes: first, change the shape of the spiders to hexagons, with each corner corresponding
+to a port. Second, enumerate the hexagons for referencing. Any labels work, really. Third and last,
+cut the edges between hexagons and instead draw shortened legs, annotated by the label of the
+hexagon they connect to.
+For our example, we find the logical network
 
 .. figure:: _static/demonstration_assets/active_volume/example_logical_network.png
     :align: center
@@ -331,69 +388,47 @@ with vertex labels then leads us to a valid logical network:
     :target: javascript:void(0)
 
 And this already concludes the compilation process of this simple Clifford operation, arriving at
-a fully parallelized computation. You may ask what we do with the logical network representation,
+a fully parallelized computation.
+
+You may ask what we do with the logical network representation,
 and why we would prefer twelve custom blocks--with new complicated rules governing them--over a
-good old circuit diagram with three CNOTs. We turn to those questions next.
+good old circuit diagram with three CNOTs.
+A key advantage of the logical network representation lies in its homogeneous expression of
+computational steps within the active volume computer, c.f. the info box at the top;
+all computation is made up of logical blocks that can be scheduled densely in the computational
+qubit modules of the computer in order to remove idle volume. If logical networks turn out too
+large for the space available at a given time step, they can be split into two networks that
+are executed sequentially.
 
-Why logical networks?
----------------------
+For our example circuit, this idea of gradual parallelization generalizes the idea that we are
+not forced to maximize parallelization; as we mentioned above, we instead could have concatenated
+the oriented ZX diagrams for the three individual CNOT gates, or parallelized only two of them, if
+we had less computational space available. Abstractly, we can draw this as sequences of
+logicel networks that make up different shapes:
 
-The properties of logical blocks and the set of rules we impose on logical networks are made
-such that any valid logical network can be realized with surface code-corrected logical qubits,
-i.e., it will be consistent with an arrangement in (2+1) dimensions.
-While this is *in principle* true for quantum circuit diagrams as well, logical networks allow
-us to trade space and time against each other. In a sense, logical networks distill the best out
-of the two worlds of quantum circuits and ZX diagrams; ZX diagrams allow for continuous
+[insert image: tetris-like options for the shape of a network]
+
+Logical networks thus form a much more flexible representation of operations on an error-correct
+quantum computer, allowing them to be adjusted to available hardware resources and promoting
+space-time tradeoffs to first-class program transformations.
+
+From a mathematical perspective, logical networks distill the best out of the two worlds of
+quantum circuits and ZX diagrams; ZX diagrams allow for continuous
 deformations where "rigid" quantum circuits do not, but the additional structure of logical
 networks that resembles quantum circuits ensures that we do not venture too far into the space
 of abstract representations, as could happen with pure ZX diagrams.
-
-We saw above that a single CNOT gate leads to four vertices in the oriented ZX diagram, and its
-logical network has four blocks too, requiring four qubits for execution in a single time step.
-While this may seem counterintuitive, it reproduces the footprint of a CNOT implemented via
-lattice surgery; there, we need to bring both the X and the Z boundaries of the two surface-code
-patches that encode the input qubits into contact, leading to a 2-by-2 square of patches overall.
-
-For the example of the CNOT ladder, we saw how a sequence of three Clifford gates can be
-transformed into a layer of simultaneously applied logical blocks, i.e., we **parallelized** the
-computation even though the individual operations **do not commute**.
-This is possible because the logical network compilation combines all parts of the input circuit
-into a single effect, creating a “CNOT ladder subroutine”, rather than keeping the three CNOTs
-as individual building blocks that must be executed in sequence.
-
-Parallelizing and splitting logical networks
---------------------------------------------
-
-While logical network synthesis allows us to parallelize and condense subroutines as much as
-possible, we will usually not want to compile a large-scale algorithm as one monolithic network,
-simply because this would not remain tractable. Instead, commonly used subroutines are compiled
-once and the full computation is encoded by composing their logical networks.
-To do this without re-introducing idle volume, we need to arrange the logical networks on the
-active volume computer such that they fill up the computational qubits at each time step.
-This can be done by procedurally parallelizing networks via state teleportation, and by splitting
-networks into multiple pieces that are executed sequentially to make them fit into the available
-computational space. We describe teleportation in more detail below but will not dwell on the
-splitting procedure here.
-
-Note that because we had to add vertices to orient the ZX diagram, we require eight additional
-qubits in order to execute the fully parallelized logical network. However, we are not forced
-to maximize the parallelization; as we mentioned above, we instead could have concatenated the
-oriented ZX diagrams for the three individual CNOT gates, or parallelized only two of them, if
-we had less computational space available. This flexibility allows active volume compilation
-to adjust the logical network to the available hardware. In this sense, logical networks form
-a much more flexible representation of operations on an error-correct quantum computer,
-promoting space-time tradeoffs to first-class program transformations.
 
 Under the hood of parallelization: state teleportation
 ------------------------------------------------------
 
 In the CNOT ladder example circuit, which has a fundamentally sequential appearance in the
 circuit picture, logical network compilation achieved its parallelization by combining the
-effects of the three CNOTs into one. If we want to parallelize multiple blocks,
+effects of the three CNOTs into a single effect, creating a “CNOT ladder subroutine”.
+If we want to parallelize multiple blocks,
 without having to re-compile their joint logical network, we can do this procedurally through
 state teleportation, using a so-called bridge qubit. This technique parallelizes non-commuting
 operations without breaking physics, and it pays off because Bell state preparation and
-measurements are assumed to be fast on an active volume computer.
+measurements are assumed to be fast on an active volume computer (see info box at the top).
 
 Physical soundness
 ~~~~~~~~~~~~~~~~~~
@@ -413,7 +448,8 @@ easily satisfied, because :math:`B` will be a Clifford operation that simply tur
 new Pauli operators.
 
 For the parallelization, we first insert a state teleportation circuit between :math:`A` and
-:math:`B` using a pair of auxiliary qubits prepared in an entangled Bell state, see the
+:math:`B` using a pair of auxiliary qubits prepared in an entangled Bell state
+:math:`|\phi\rangle=\tfrac{1}{\sqrt{2}}(|0\rangle +|1\rangle)`, see the
 :doc:`demo on state teleportation <tutorial_teleportation>` for details:
 
 .. figure:: _static/demonstration_assets/active_volume/teleportation_insert_teleport.png
@@ -441,16 +477,15 @@ Practical usefulness
 The previous discussion shows that it is *possible* to parallelize non-commuting gates at the cost
 of two additional qubits (we need two copies of the original qubit, plus a communication channel
 "back in time"), a Bell state preparation and Bell basis measurement (we need to entangle the
-communication channel), and classical compute (we need to transform the correction gates
-by :math:`\text{Ad}_B`). However, it is not so clear whether this is a useful tradeoff.
+communication channel), and classical compute. However, it is not so clear whether this is a useful tradeoff.
 For example, we could apply the same technique when using a NISQ computer, but we would
 potentially even increase the two-qubit gate depth, and additional qubits are quite
 expensive to come by.
 
 For the surface code corrected quantum computer, and specifically for the active volume computer,
 the creation of qubit pairs in a Bell state and the Bell basis measurement are assumed to be
-much cheaper than arbitrary logical operations, because they can just be woven into the
-measurements, i.e., the code cycles, of the error correction code via lattice surgery.
+much cheaper than arbitrary logical operations (see info box), because they can just be woven into
+the measurements, i.e., the code cycles, of the error correction code via lattice surgery.
 Similarly, Pauli correction gates are anyway tracked in software throughout, so that the only
 true price we are paying for the parallelization is the extra memory.
 As we are trying to condense a computation by parallelizing it and reducing idle volume, this
@@ -463,6 +498,11 @@ us to parallelize networks without having to recompile them.
 
 Teleportation in the CNOT ladder
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If teleportation is easily integrated in our compilation framework, one might be tempted
+to translate only a minimalistic universal gate set into logical networks and compile any other
+subroutines by combining those networks–just like we do with quantum circuits.
+However, we will find in the following that this approach will miss out on further optimizations.
 
 To understand the teleportation technique from above in the context of logical networks,
 let’s consider our example CNOT ladder and perform the parallelization in the circuit picture.
@@ -495,16 +535,18 @@ magenta below:
 
 We fully parallelized the CNOT ladder, using :math:`8` instead of the original :math:`4` qubits.
 
-Note how naively plugging in the logical network for a single CNOT from above would lead to yet
-another :math:`3\cdot 2` additional qubits, arriving at :math:`12` logical blocks acting on
-:math:`14` qubits and creating two blocks of idling space (blocks with only U and D ports
-occupied, marked in green):
+Following the approach mentioned above, we now could
+naively plug in the logical network for a single CNOT from earlier. This would lead to yet
+another :math:`3\cdot 2` additional qubits, arriving at :math:`12` logical blocks and two idling
+blocks (blocks with only U and D ports occupied that can be executed by memory modules),
+acting on :math:`14` qubits:
 
 .. figure:: _static/demonstration_assets/active_volume/example_parallelized_explicitly.png
     :align: center
     :width: 95%
     :target: javascript:void(0)
 
+The idling blocks are marked in green.
 However, recall the logical network into which we compiled the CNOT ladder earlier:
 
 .. figure:: _static/demonstration_assets/active_volume/example_logical_network.png
@@ -522,9 +564,10 @@ network (the additional memory is the bridge qubit that idles throughout the exe
 network).
 Thus, even though the number of computational blocks is the same, resynthesizing the composed
 network of three CNOTs leads to a slightly cheaper network in terms of routing. It is noteworthy
-that this kind of optimization is of second order, because an active volume computer is assumed
-to be very fast at routing. However, for larger computations, e.g., already for a Toffoli gate
-realized via state injection, the number of computational blocks itself will be reduced, too.
+that this kind of optimization is of second order, because the active volume computer is assumed
+to be very fast at routing (see info box at the top). However, for larger computations, e.g.,
+already for a Toffoli gate realized via state injection, the number of computational blocks
+itself will be reduced, too.
 
 Reactive measurements and reaction time
 ---------------------------------------
