@@ -454,11 +454,15 @@ Under the hood of parallelization: state teleportation
 In the CNOT ladder example circuit, which has a fundamentally sequential appearance in the
 circuit picture, logical network compilation achieved its parallelization by combining the
 effects of the three CNOTs into a single effect, creating a “CNOT ladder subroutine”.
-If we want to parallelize multiple subroutines,
+If we want to parallelize multiple subroutines, however,
 without having to re-compile their joint logical network, we can do this procedurally through
 state teleportation, using a so-called bridge qubit. This technique parallelizes non-commuting
 operations without breaking physics, and it pays off because Bell state preparation and
 measurements are assumed to be fast on an active volume computer (see info box at the top).
+
+We will showcase this type of parallelization without resynthesizing the logical network(s) at the
+circuit level for convenience, and will then compare the resulting "procedurally parallelized"
+networks for the 3 CNOTs to the monolithic network that we obtained from synthesis earlier.
 
 Physical soundness
 ~~~~~~~~~~~~~~~~~~
@@ -517,14 +521,16 @@ the creation of qubit pairs in a Bell state and the Bell basis measurement are a
 much cheaper than arbitrary logical operations (see info box), because they can just be woven into
 the measurements, i.e., the code cycles, of the error correction code via lattice surgery.
 Similarly, Pauli correction gates are anyway tracked in software throughout, so that the only
-true price we are paying for the parallelization is the extra memory.
+true price we are paying for the parallelization is the extra memory. Finally,
+additional memory space to store the bridge qubit is usually available in the memory qubit modules
+making up half of the computer.
 As we are trying to condense a computation by parallelizing it and reducing idle volume, this
 tradeoff will often be beneficial.
 
 As we can see, parallelization via state teleportation thus is a very good fit for active
 volume computers and the goal of our compilation. This is why the framework by Litinski and
 Nickerson promotes this technique to a first-class transformation, allowing
-us to parallelize networks without having to recompile them.
+us to parallelize networks *without having to recompile them.*
 
 Teleportation in the CNOT ladder
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
