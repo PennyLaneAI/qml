@@ -37,6 +37,14 @@ the **spacetime volume** cost, which in fault-tolerant architectures can be unde
 total error-corrected qubits (space) taken up by the computation, times the total error
 correction cycles (time) required to perform it.
 
+To understand the impact of different quantum architectures and compilation strategies, we’ll
+often put an *algorithmic cost* metric in relation to its
+*implementation cost* on hardware. For instance, the strategies
+described by Litinski’s :doc:`Game of Surface Codes <demos/tutorial_game_of_surface_codes>`
+incur an implementation cost, specified by the **spacetime volume** of the compiled program,
+of roughly twice the algorithmic cost, given by the **circuit volume** of the original quantum
+circuit.
+
 Intuitively, the **circuit volume** can be understood as the total “area” taken up by a
 circuit, as depicted below. The crucial insight in the concept of **active volume** then is
 the idea that not all of this “area” is dedicated to performing useful computation. In fact,
@@ -376,7 +384,7 @@ is already done with the orientation of the ZX diagram.
 We introduce **logical blocks**, which are just the nodes from an oriented ZX diagram,
 drawn as hexagons to mark the six ports more clearly, with a modification of rule (4.) above:
 
-    4'. Edges (internal legs) must connect to **the same port** at both logical blocks.
+    4'. Edges between two logical blocks must connect to **the same port** of both blocks.
 
 Depending on the concrete circuit we are compiling, this change might just lead to minor
 modifications such as relabeling the ports of two connected blocks, or it might lead to cascades of
