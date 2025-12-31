@@ -48,7 +48,7 @@ circuit.
 Intuitively, the **circuit volume** can be understood as the total “area” taken up by a
 circuit, as depicted below. The crucial insight in the concept of **active volume** then is
 the idea that not all of this “area” is dedicated to performing useful computation. In fact,
-ladder circuits like those used in reversible arithmetic may consist to a large portion
+ladder circuits like those used in reversible arithmetic may consist in large part
 (if not the majority) of idling qubits!
 We can thus partition a circuit into computationally *active* volume and *idle* volume:
 
@@ -133,7 +133,7 @@ the **reaction time**, towards the end of the demo. For a top-down overview of t
 volume framework, Sec. 1 of [#Litinski2022]_ is a great source, while
 Secs. 2-6 work through the compilation of increasingly complex circuit components.
 
-Without further a-do, let's get started!
+Without further ado, let's get started!
 
 The input: a quantum circuit
 ----------------------------
@@ -219,7 +219,7 @@ our CNOT ladder into a ZX diagram:
 
 We find six spiders, three of each type, with three legs each.
 
-At this point, we didn’t only exchange circuit symbols for colored circles, though. In the
+At this point, we didn’t only exchange circuit symbols for coloured circles, though. In the
 language of the ZX calculus, the internal edges that connect vertices no longer have a temporal
 meaning, so that the geometry of the diagram becomes irrelevant. Only the represented
 graph carries meaningful information, as long as we associate the unconnected legs of the
@@ -525,7 +525,7 @@ Practical usefulness
 The previous discussion shows that it is *possible* to parallelize non-commuting gates at the cost
 of two additional qubits (we need two copies of the original qubit, plus a communication channel
 "back in time"), a Bell state preparation and Bell basis measurement (we need to entangle the
-communication channel), and classical compute. However, it is not so clear whether this is a useful tradeoff.
+communication channel), and classical compute. However, it is not clear whether this is a useful tradeoff.
 For example, we could apply the same technique when using a NISQ computer, but we would
 potentially even increase the two-qubit gate depth, and additional qubits are quite
 expensive to come by.
@@ -611,12 +611,12 @@ removing the idle memory blocks. This is because the logical network compilation
 use of simplifications that could be made to the naively composed network.
 
 We see that logical network compilation achieves parallelization without the need for bridge
-qubits, making the resulting network more memory efficient than a procedurally parallelized
+qubits, making the resulting network more memory-efficient than a procedurally parallelized
 network (the additional memory is the bridge qubit that idles throughout the execution of the
 network).
 Thus, even though the number of computational blocks is the same, resynthesizing the composed
 network of three CNOTs leads to a slightly cheaper network in terms of routing. It is noteworthy
-that this kind of optimization is of second order, because the active volume computer is assumed
+that this kind of optimization is of second-order, because the active volume computer is assumed
 to be very fast at routing (see info box at the top). However, for larger computations, e.g.,
 already for a Toffoli gate realized via state injection, the number of computational blocks
 itself will be reduced, too.
@@ -653,11 +653,12 @@ order non-Clifford gates require 1st order ones, and so on.
     :width: 90%
     :target: javascript:void(0)
 
-    The circuit style used in Litinski’s papers color-codes the different members of the
-    Clifford hierarchy: Pauli gates (or pi/2 rotations) in gray, Clifford gates (or pi/4 rotations) in
-    orange, (1st order) non-Clifford gates (or pi/8 rotations) in green, and measurements in blue.
-    Both diagrams show the decomposition of Pauli rotations into Pauli measurements plus associated
-    corrections of the lower hierarchy orders. Image source: Daniel Litinski [#Litinski2018]_.
+    The circuit style used in Litinski’s papers colour-codes the different members of the
+    Clifford hierarchy: Pauli gates (or :math:`\pi/2` rotations) in gray, (non-Pauli) Clifford gates
+    (or :math:`\pi/4` rotations) in orange, (1st order) non-Clifford gates (or :math:`\pi/8` rotations)
+    in green, and measurements in blue. Both diagrams show the decomposition of Pauli rotations
+    into Pauli measurements plus associated corrections of the lower hierarchy orders.
+    Image source: Daniel Litinski [#Litinski2018]_.
 
 This is where we quickly run into issues, as Clifford corrections are generally already considered
 too complex to be tracked classically. That means that we’ll have to physically implement them,
@@ -710,7 +711,7 @@ additional space as brand new qubits, since each operation is assumed to in prin
 width of a circuit (a characteristic that is reinforced by the techniques presented in the paper).
 Parallelization thus happens on the *layer structure*, where whole circuit layers are executed
 simultaneously using multiple times the original qubit count.
-Meanwhile, Active Volume computation tries to reuse already available, but idle, qubit space at a
+Meanwhile, active volume computation tries to reuse already available, but idle, qubit space at a
 fine-grained *operation level*, and in doing so maximizes the *efficiency* of the computer.
 
 Conclusion
