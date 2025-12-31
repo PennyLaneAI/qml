@@ -73,6 +73,12 @@ but only outline its rough characteristics.
     Half of the modules are designated computation modules, in which information is processed,
     while the other half consists of dedicated memory modules, which allow for intermediate
     storage and routing of information between computational steps.
+
+    .. figure:: _static/demonstration_assets/active_volume/active-volume-computer.png
+        :align: center
+        :width: 65%
+        :target: javascript:void(0)
+
     The following characteristics are crucial assumptions about the computer that shape the cost
     model:
 
