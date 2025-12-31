@@ -1,7 +1,7 @@
 r"""A Game of Surface Codes: Large-Scale Quantum Computing with Lattice Surgery
 ===============================================================================
 
-In surface-code based fault tolerant quantum computing architectures,
+In surface-code based fault tolerant quantum computing architectures, 
 T gates are typically implemented via injected `magic states <https://pennylane.ai/qml/glossary/what-are-magic-states>`__.
 The layout and design of the architecture plays a crucial role in how fast a magic state can be reliably produced and consumed for computation.
 The game of surface codes [#Litinski]_ allows us to reason about such space-time tradeoffs in architecture designs, without having to get into
@@ -18,18 +18,18 @@ Introduction
 
 The game of surface codes is a high-level framework for designing surface code quantum computing architectures.
 The game helps us understand space-time trade-offs, where designs with a higher qubit overhead allow for faster computations and vice versa.
-For example, a space-efficient design might allow a computation with :math:`10^8` T gates to run in :math:`4` hours using :math:`55k` physical qubits,
-whereas an intermediate design may run the same computation in :math:`22` minutes using :math:`120k` physical qubits,
+For example, a space-efficient design might allow a computation with :math:`10^8` T gates to run in :math:`4` hours using :math:`55k` physical qubits, 
+whereas an intermediate design may run the same computation in :math:`22` minutes using :math:`120k` physical qubits, 
 or a time-optimized design in :math:`1` second using :math:`1500` interconnected quantum computers with :math:`220k` physical qubits, each.
 
-One can draw a rough comparison to microchip design in classical computing,
+One can draw a rough comparison to microchip design in classical computing, 
 where the equivalent game would be about how to arrange the transistors of a chip to perform fast and efficient computations.
 
-The game can be understood entirely from the rules described in the next section.
+The game can be understood entirely from the rules described in the next section. 
 However, it still helps to understand the correspondences in physical fault tolerant quantum computing (FTQC) architectures.
 First of all it is important to note that we consider surface codes that implement `(Clifford + T) <https://pennylane.ai/compilation/clifford-t-gate-set>`__ circuits.
 In particular, these circuits can be compiled to circuits that just perform `Pauli product measurements <https://pennylane.ai/compilation/pauli-product-measurement>`__.
-This is because all Clifford operations can be moved to the end of the circuit and merged with measurements.
+This is because all Clifford operations can be moved to the end of the circuit and merged with measurements. 
 The remaining non-Clifford gates are realized by `magic state injection <https://pennylane.ai/qml/glossary/what-are-magic-states>`__ and more Clifford operations, which can be merged with measurements again.
 Hence, we mainly care about performing measurements on qubits in arbitrary bases and efficiently distilling and injecting magic states.
 
@@ -55,7 +55,7 @@ This is shown in the figure below.
     :width: 50%
     :target: javascript:void(0)
 
-    Qubits are defined as patches of tiles on the board.
+    Qubits are defined as patches of tiles on the board. 
     A single qubit can occupy one tile (a) or multiple tiles (b), where dotted lines correspond to X and solid lines to Z operators.
     Image source: Daniel Litinski [1].
 
@@ -99,7 +99,7 @@ The entire protocol costs 2🕒 and is shown below:
     The protocol for measuring a single qubit in the Y basis involves deforming the patch (Step 2, 1🕒), initializing an auxillary qubit in :math:`|0\rangle` (0🕒), simultaneously measuring both patches (1🕒) and deforming the qubit back again (0🕒).
     Image source: Daniel Litinski [1].
 
-Auxiliary qubits play an important role as they allow measuring products of Pauli operators on different qubits,
+Auxiliary qubits play an important role as they allow measuring products of Pauli operators on different qubits, 
 which is the most crucial operation in this framework, since everything is mapped to `Pauli product measurements <https://pennylane.ai/compilation/pauli-product-measurement>`__.
 
 .. figure:: ../_static/demonstration_assets/game_of_surface_codes/PPM.png
@@ -115,7 +115,7 @@ Non-Clifford Pauli rotations
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Non-Clifford Pauli rotations :math:`e^{-i \frac{\pi}{8} P}` for some Pauli word :math:`P` are realized via `magic state distillation and injection <https://pennylane.ai/qml/glossary/what-are-magic-states>`__.
-Magic state distillation blocks are a crucial part of the architecture design that we are going to cover later.
+Magic state distillation blocks are a crucial part of the architecture design that we are going to cover later. 
 For the moment we assume that we have means to prepare magic states :math:`|m\rangle = |0\rangle + e^{-i \frac{\pi}{4}} |1\rangle` on special qubit tiles (distillation blocks).
 Magic state injection in this case then refers to the following protocol:
 
@@ -129,7 +129,7 @@ Magic state injection in this case then refers to the following protocol:
     The additional classically controlled Clifford rotations can be merged again with the measurements at the end of the circuit.
     Image source: Daniel Litinski [1].
 
-Take for example the Pauli word :math:`P = Z_1 Y_2 X_4` on the architecture layout below.
+Take for example the Pauli word :math:`P = Z_1 Y_2 X_4` on the architecture layout below. 
 This design allows one to directly perform :math:`e^{-i \frac{\pi}{8} P}` as we have access to all of :math:`X, Y, Z` on each qubit, as well as the :math:`Z` edge for the magic state qubit.
 
 .. figure:: ../_static/demonstration_assets/game_of_surface_codes/non_clifford_rotation.png
@@ -176,11 +176,11 @@ we can perform a patch rotation at a cost of 3🕒:
     A patch rotation can be used to expose the :math:`X` edge to the auxiliary qubit region.
     Image source: Daniel Litinski [1].
 
-The worst thing that can happen is to have two opposite qubits require an X measurement,
+The worst thing that can happen is to have two opposite qubits require an X measurement, 
 e.g. qubits (3 and 4) or (5 and 6). If either or both occurs, it takes a total of 6🕒 to rotate the patches.
 
 An additional problem of this design is the fact that there are no tiles for qubits to expand to in order to perform Y measurements.
-This can be remedied by making use of the identity
+This can be remedied by making use of the identity 
 
 .. math:: e^{i \frac{\pi}{8} Y} = e^{-i \frac{\pi}{4} Z} e^{i \frac{\pi}{8} X} e^{i \frac{\pi}{4} Z}.
 
@@ -279,9 +279,9 @@ With this extra trick up our sleeve, we can construct the fast data block consis
     Fast data block design.
     Image source: Daniel Litinski [1].
 
-Here, all 15 distinct Pauli operators are readily available. This is because we have
+Here, all 15 distinct Pauli operators are readily available. This is because we have 
 :math:`X_1`, :math:`X_1 \otimes X_2`, :math:`Z_2`, :math:`Z_1 \otimes Z_2` and all products thereof available.
-For example, we can realize :math:`X_2` via :math:`X_1 (X_1 \otimes X_2)` and we have
+For example, we can realize :math:`X_2` via :math:`X_1 (X_1 \otimes X_2)` and we have 
 :math:`Y_1 \propto (X_1) (Z_1) = (X_1) (Z_1 \otimes Z_2) (Z_2)`. With the same logic we can obtain :math:`Y_2` and :math:`Z_1`.
 Further, we have operators like :math:`X_1 Y_1 \propto (X_1 \otimes X_2) Z_2`, :math:`Z_1 \otimes X_2 = X_1 (X_1 \otimes X_2) Z_2 (Z_1 \otimes Z_2)` and :math:`Y_1 X_2 \propto (X_1 \otimes X_2) (Z_2) (Z_1 \otimes Z_2)`.
 
@@ -303,7 +303,7 @@ We are going to go through the simplest protocol in a 15-to-1 distillation block
 15-to-1 distillation
 ^^^^^^^^^^^^^^^^^^^^
 
-This protocol uses 15 imperfect magic states with infidelity :math:`p` and outputs a single magic state with infidelity of :math:`35p^3`.
+This protocol uses 15 imperfect magic states with infidelity :math:`p` and outputs a single magic state with infidelity of :math:`35p^3`. 
 The distillation circuit is shown below, with the details described in section 3.1 of the paper:
 
 .. figure:: ../_static/demonstration_assets/game_of_surface_codes/15-to-1.png
@@ -316,7 +316,7 @@ The distillation circuit is shown below, with the details described in section 3
     fifth qubit with infidelity :math:`35p^3`.
     Image source: Daniel Litinski [1].
 
-Because all operations in the protocol are Z measurements, we can use the compact data block design to perform the distillation.
+Because all operations in the protocol are Z measurements, we can use the compact data block design to perform the distillation. 
 Another trick the author of [#Litinski]_ proposes is to use the auto-corrected magic state injection protocol below that avoids the additional Clifford :math:`\frac{\pi}{4}` Pauli rotation (and to note that the :math:`\frac{\pi}{2}` Pauli rotation is just a sign flip that can be tracked classically).
 
 .. figure:: ../_static/demonstration_assets/game_of_surface_codes/auto-corrected-non-clifford.png
@@ -325,7 +325,7 @@ Another trick the author of [#Litinski]_ proposes is to use the auto-corrected m
     :target: javascript:void(0)
 
     The auto-corrected magic state injection protocol avoids the additional Clifford :math:`\frac{\pi}{4}` Pauli rotation from above at the cost of having an additional qubit that is measured.
-    However, note that the first two measurements commute and can be performed simultaneously.
+    However, note that the first two measurements commute and can be performed simultaneously. 
     Image source: Daniel Litinski [1].
 
 Using this injection protocol to perform the non-Clifford :math:`\frac{\pi}{8}` rotations using the error prone magic states, the 15-to-1 protocol on a compact data block is performed in the following way:
@@ -335,7 +335,7 @@ Using this injection protocol to perform the non-Clifford :math:`\frac{\pi}{8}` 
     :width: 99%
     :target: javascript:void(0)
 
-    The 15-to-1 protocol executed on a compact data block using the auto-corrected magic state injection subroutine in each of the repeating steps.
+    The 15-to-1 protocol executed on a compact data block using the auto-corrected magic state injection subroutine in each of the repeating steps. 
     Note that both :math:`P \otimes Z_m` and :math:`Z_m \otimes Y_{|0\rangle}` measurements are performed simultaneously.
     If all :math:`X` measurements on qubits 1-4 in step 23 yield a :math:`+1` result, a magic state is successfully prepared on qubit 5. The probability for failure is roughly :math:`(1-p)^n`.
     Image source: Daniel Litinski [1].
