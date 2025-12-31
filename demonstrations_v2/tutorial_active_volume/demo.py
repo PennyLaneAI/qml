@@ -622,11 +622,10 @@ section:
 The Bell state measurements determine whether Pauli corrections need to be applied, which in
 turn affects the outcome (and only the outcome) of other Bell state measurements, which
 determines whether Pauli corrections need to be applied, and so on. But since we’re tracking
-Pauli corrections in software [cite pauli frame tracker], there is no immediate need to do
-anything with the Bell measurement results, and we can happily continue to apply operations
-in parallel or any other order without worrying about data dependencies between them. So do we
-*ever* need to affect the quantum state using the information from measurements and Pauli
-corrections?
+Pauli corrections in software [#PauliFrame], there is no immediate need to do anything with the
+Bell measurement results, and we can happily continue to apply operations in parallel or any
+other order without worrying about data dependencies between them. So do we *ever* need to affect
+the quantum state using the information from measurements and Pauli corrections?
 
 To answer this question, we need to consider non-Clifford operations. As mentioned further up,
 these are implemented via magic state injection. As a general rule, operations implemented via
@@ -688,15 +687,17 @@ measurements–rather than, say, the circuit depth–is thus known as implementi
     dynamically chosen measurement bases. The limiting path is marked in magenta.
 
 If you are familiar with the Game of Surface Codes paper referenced earlier, you may wonder
-how the scheme presented there differs from what has been presented here. After all, Litinski
-already used teleportation back then to parallelize Pauli circuits and achieve reaction-limited
-computation (also referred to as “Fowler’s time-optimal scheme”).
-Fundamentally, teleportation always trades (execution) time for (memory) space. The crucial
-difference, intuitively, is that Litinski’s earlier techniques provide the additional space
-in the trade-off as brand new qubits, since each operation is in principle, and through
-techniques presented in the paper, assumed to take up the full width of a circuit. Meanwhile,
-Active Volume computation tries to reuse already available, but idle, qubit space at a
-fine-grained level, and to thus maximize the *efficiency* of the computer.
+how the scheme described there differs from what has been presented here. After all, Litinski
+already used teleportation then (cf. fig. 25 in [#Litinski2018]_) to parallelize Pauli circuits
+and achieve reaction-limited computation (also referred to as “Fowler's time-optimal scheme”).
+Fundamentally, parallelization via teleportation always trades (execution) time for (memory) space.
+The crucial difference, intuitively, is that Litinski's earlier techniques have to provide the
+additional space as brand new qubits, since each operation is assumed to in principle span the full
+width of a circuit (a characteristic that is reinforced by the techniques presented in the paper).
+Parallelization thus happens on the *layer structure*, where whole circuit layers are executed
+simultaneously using multiple times the original qubit count.
+Meanwhile, Active Volume computation tries to reuse already available, but idle, qubit space at a
+fine-grained *operation level*, and in doing so maximizes the *efficiency* of the computer.
 
 Conclusion
 ----------
@@ -741,6 +742,12 @@ References
    Craig Gidney. "Halving the cost of quantum addition",
    `Quantum 2, 74 <https://quantum-journal.org/papers/q-2018-06-18-74/>`__, 2018,
    `arXiv:1709.06648 <https://arxiv.org/abs/1709.06648>`__, 2017.
+
+.. [#PauliFrame]
+
+   Riesebos et al. "Pauli Frames for Quantum Computer Architectures",
+   Proceedings of the 54th Annual Design Automation Conference 2017 (DAC '17),
+   `doi:10.1145/3061639.3062300 <https://doi.org/10.1145/3061639.3062300>`__, 2017.
 
 Attributions
 ------------
