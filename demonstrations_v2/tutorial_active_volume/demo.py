@@ -622,11 +622,10 @@ section:
 The Bell state measurements determine whether Pauli corrections need to be applied, which in
 turn affects the outcome (and only the outcome) of other Bell state measurements, which
 determines whether Pauli corrections need to be applied, and so on. But since we’re tracking
-Pauli corrections in software [cite pauli frame tracker], there is no immediate need to do
-anything with the Bell measurement results, and we can happily continue to apply operations
-in parallel or any other order without worrying about data dependencies between them. So do we
-*ever* need to affect the quantum state using the information from measurements and Pauli
-corrections?
+Pauli corrections in software [#PauliFrame], there is no immediate need to do anything with the
+Bell measurement results, and we can happily continue to apply operations in parallel or any
+other order without worrying about data dependencies between them. So do we *ever* need to affect
+the quantum state using the information from measurements and Pauli corrections?
 
 To answer this question, we need to consider non-Clifford operations. As mentioned further up,
 these are implemented via magic state injection. As a general rule, operations implemented via
@@ -736,6 +735,12 @@ References
    Craig Gidney. "Halving the cost of quantum addition",
    `Quantum 2, 74 <https://quantum-journal.org/papers/q-2018-06-18-74/>`__, 2018,
    `arXiv:1709.06648 <https://arxiv.org/abs/1709.06648>`__, 2017.
+
+.. [#PauliFrame]
+
+   Riesebos et al. "Pauli Frames for Quantum Computer Architectures",
+   Proceedings of the 54th Annual Design Automation Conference 2017 (DAC '17),
+   `doi:10.1145/3061639.3062300 <https://doi.org/10.1145/3061639.3062300>`__, 2017.
 
 Attributions
 ------------
