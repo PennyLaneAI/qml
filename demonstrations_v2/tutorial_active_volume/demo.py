@@ -583,7 +583,7 @@ acting on :math:`14` qubits:
     :target: javascript:void(0)
 
 The idling blocks are marked in green and connect to the three CNOT networks via Bell states
-:math:`|\phi_i\rangle`. (We denote the two components of the Bell state as 
+:math:`|\phi_i\rangle`. (We denote the two components of the Bell state as
 :math:`|\phi_i\rangle_{0,1}` even though it is not a product state.)
 However, recall the logical network into which we compiled the CNOT ladder earlier:
 
@@ -677,8 +677,15 @@ computer. An execution scheme for quantum programs that is limited by these reac
 measurements–rather than, say, the circuit depth–is thus known as implementing
 **reaction-limited computation**.
 
-todo
-[additional figure to show reaction-limited example circuit]
+.. figure:: _static/demonstration_assets/active_volume/reaction-limited-computation.png
+    :align: center
+    :width: 90%
+    :target: javascript:void(0)
+
+    Example circuit with four gates, translated to state injections, teleportation-based
+    parallelization and Pauli product measurements. The duration of the computation is
+    fundamentally limited through the reaction time needed to process classical bits into
+    dynamically chosen measurement bases. The limiting path is marked in magenta.
 
 If you are familiar with the Game of Surface Codes paper referenced earlier, you may wonder
 how the scheme presented there differs from what has been presented here. After all, Litinski
