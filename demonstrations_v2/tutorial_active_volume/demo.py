@@ -583,7 +583,7 @@ acting on :math:`14` qubits:
     :target: javascript:void(0)
 
 The idling blocks are marked in green and connect to the three CNOT networks via Bell states
-:math:`|\phi_i\rangle`. (We denote the two components of the Bell state as 
+:math:`|\phi_i\rangle`. (We denote the two components of the Bell state as
 :math:`|\phi_i\rangle_{0,1}` even though it is not a product state.)
 However, recall the logical network into which we compiled the CNOT ladder earlier:
 
@@ -681,15 +681,17 @@ todo
 [additional figure to show reaction-limited example circuit]
 
 If you are familiar with the Game of Surface Codes paper referenced earlier, you may wonder
-how the scheme presented there differs from what has been presented here. After all, Litinski
-already used teleportation back then to parallelize Pauli circuits and achieve reaction-limited
-computation (also referred to as “Fowler’s time-optimal scheme”).
-Fundamentally, teleportation always trades (execution) time for (memory) space. The crucial
-difference, intuitively, is that Litinski’s earlier techniques provide the additional space
-in the trade-off as brand new qubits, since each operation is in principle, and through
-techniques presented in the paper, assumed to take up the full width of a circuit. Meanwhile,
-Active Volume computation tries to reuse already available, but idle, qubit space at a
-fine-grained level, and to thus maximize the *efficiency* of the computer.
+how the scheme described there differs from what has been presented here. After all, Litinski
+already used teleportation then (cf. fig. 25 in [#Litinski2018]_) to parallelize Pauli circuits
+and achieve reaction-limited computation (also referred to as “Fowler's time-optimal scheme”).
+Fundamentally, parallelization via teleportation always trades (execution) time for (memory) space.
+The crucial difference, intuitively, is that Litinski's earlier techniques have to provide the
+additional space as brand new qubits, since each operation is assumed to in principle span the full
+width of a circuit (a characteristic that is reinforced by the techniques presented in the paper).
+Parallelization thus happens on the *layer structure*, where whole circuit layers are executed
+simultaneously using multiple times the original qubit count.
+Meanwhile, Active Volume computation tries to reuse already available, but idle, qubit space at a
+fine-grained *operation level*, and in doing so maximizes the *efficiency* of the computer.
 
 Conclusion
 ----------
