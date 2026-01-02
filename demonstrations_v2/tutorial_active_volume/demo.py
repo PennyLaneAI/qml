@@ -67,18 +67,9 @@ of an algorithm to being proportional to the active volume of the circuit. This 
 the framework of [#Litinski2018]_, where the implementation cost is proportional to the circuit volume.
 The active volume is always less than or equal to the circuit volume, so that this typically
 implies a cost reduction.
-This approach assumes that we execute on a so-called **active volume computer**:
-
-In this demo, we will look at how to obtain the active volume of a quantum circuit
-(in terms of so-called “logical blocks”), and the systematic compilation framework introduced by
-Litinski and Nickerson [#Litinski2022]_, which then can be used to maximize the use of available
-computational resources. This framework combines the language of the ZX-calculus with an
-abstraction of topologically error-corrected quantum computers, as well as the
-inherently-quantum technique of state teleportation.
-The result is a powerful approach to make the cost of quantum computations proportional to
-the active volume rather than the circuit volume, provided that we operate with a so-called
-**active volume computer**. We will not go into detail about the definition of such a computer,
-but only outline its rough characteristics.
+This framwork combines the language of the ZX-calculus with the inherently-quantum technique of
+state teleportation, as well as an abstraction of topologically error-corrected quantum computers.
+Concretely, the approach assumes that we execute on a so-called **active volume computer**.
 
 .. admonition:: Active volume computer
     :class: note
@@ -100,7 +91,7 @@ but only outline its rough characteristics.
     The following characteristics are crucial assumptions about the computer that
     determine our cost model:
 
-    #. The information content of two qubit modules within range can be
+    #. The information content of logarithmically-distanced qubit modules within range can be
        exchanged quickly/cheaply. They are "quickswappable".
     #. Individual qubit modules can be prepared quickly/cheaply in the state :math:`|0\rangle` or :math:`|+\rangle`.
        They can also be measured quickly/cheaply in the Pauli-:math:`X` or Pauli-:math:`Z` basis.
@@ -122,8 +113,8 @@ but only outline its rough characteristics.
     of the computational qubit modules, because they execute the slow operations (logical blocks
     and magic state distillation). Memory qubit modules are allowed to sit idle, providing
     intermediate storage and space for routing information through quickswaps. Note that
-    long-range communication in the active volume computer is achieved through layers
-    of quickswaps, which remain cheap in the above cost model.
+    arbitrary long-range communication in the active volume computer is achieved through layers
+    of quickswaps, which in typical scenarios remain low-depth and thus cheap in the above cost model.
 
 In the following, we will demonstrate how to compile the circuit of a subroutine
 step by step into a so-called **logical network**, which is a representation that allows
@@ -368,7 +359,11 @@ will again need to insert more nodes.
 One way to do this would be to simply copy the oriented diagram for the single CNOT three times
 in the vertical (time) direction, and to route outputs of one copy into the inputs of the next.
 This would lead to an arrangement with "depth" three.
-However, here we want to keep the full circuit in a single layer. With a similar reasoning as for
+However, since we want to maximize the qubit utilization on our computer and avoid idling qubits,
+we can leverage the flexibility offered by the ZX-calculus to instead express the computation in a
+single logical step, and in doing so generate an optimized, parallelized version of the CNOT ladder.
+With a similar reasoning as for
+
 the single CNOT, we find that we need to insert six nodes overall, arriving at the oriented ZX-diagram:
 
 .. figure:: _static/demonstration_assets/active_volume/example-oriented-zx-complete.png
@@ -381,7 +376,7 @@ qubit legs to what was previously an “internal” node. This is allowed as the
 for where to place logical inputs and outputs in a network. Note how some of the qubits appear
 to be routed laterally through the network, hinting at the parallelization of what were previously
 sequential gates. As for the single CNOT, this is not a unique solution.
-We are almost done with the parallelization of the CNOT ladder; one last step will be needed to
+We are almost done with the compilation of the CNOT ladder; one last step will be needed to
 transform the oriented ZX-diagram into a logical network, which can then be executed on an
 active volume computer.
 
@@ -441,7 +436,8 @@ For our example, we find the logical network
     :target: javascript:void(0)
 
 And this already concludes the compilation process of this simple Clifford operation, arriving at
-a fully parallelized computation.
+an optimized construction for the CNOT ladder subroutine, which was even parallelized
+into a single time step.
 
 You may ask what we do with the logical network representation,
 and why we would prefer twelve custom blocks--with new complicated rules governing them--over a
@@ -511,7 +507,7 @@ new Pauli operators.
 
 For the parallelization, we first insert a state teleportation circuit between :math:`A` and
 :math:`B` using a pair of auxiliary qubits prepared in an entangled Bell state
-:math:`|\phi\rangle=\tfrac{1}{\sqrt{2}}(|0\rangle +|1\rangle)`, see the
+:math:`|\phi\rangle=\tfrac{1}{\sqrt{2}}(|00\rangle +|11\rangle)`, see the
 :doc:`demo on state teleportation <demos/tutorial_teleportation>` for details:
 
 .. figure:: _static/demonstration_assets/active_volume/teleportation-insert-teleport.png
