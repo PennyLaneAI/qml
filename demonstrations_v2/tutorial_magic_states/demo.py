@@ -115,7 +115,7 @@ print(t_gate_teleportation_circuit(np.pi / 3))
 # A typical protocol follows these steps:
 #
 # 1. Prepare initial, imperfect states using non-Clifford gates (starting the "magic").
-#    These input states are encoded in error-correcting (inner) codes such as surface code. 
+#    These input states are encoded in error-correcting (inner) codes such as surface codes. 
 # 2. Process several copies of these logical qubits using Clifford operations to map them onto an 
 #    error-correcting (outer) code such as the Reed-Muller code.
 # 3. Perform a syndrome measurement by measuring certain `stabilizers <https://pennylane.ai/qml/demos/tutorial_stabilizer_codes>`__
@@ -168,7 +168,13 @@ print(t_gate_teleportation_circuit(np.pi / 3))
 # efficient protocols for generating high-fidelity magic states and achieving robust experimental 
 # implementations across various qubit architectures. 
 #
-# 
+# A distillation protocol was recently implemented at the logical level on a neutral-atom quantum 
+# computer [#QuEra2025]_, leveraging the parallel control and high connectivity offered by atom platforms. 
+# Additionally, a pathway for improving distillation methods is to perform it, at least portions of it, at
+# the physical level [#Ruiz2025,#Itogawa2025]_. In [#Ruiz2025]_, for example, the authors leverage 
+# the biased-noise properties of cat-qubits to "unfold" a 3D outer code into a 2D layout. 
+#
+# Parallel to these efforts, 
 #
 # Conclusion
 # ----------
@@ -203,3 +209,22 @@ print(t_gate_teleportation_circuit(np.pi / 3))
 #    Markus Heinrich and David Gross. "Robustness of Magic and Symmetries of the Stabiliser 
 #    Polytope."
 #    `Quantum 3, 132 (2019) <https://quantum-journal.org/papers/q-2019-04-08-132>`__.
+#
+# .. [#QuEra2025]
+#
+#    Pedro Sales Rodriguez, et al. "Experimental demonstration of logical magic state distillation."
+#    `Nature 645, 620–625 (2025) <https://www.nature.com/articles/s41586-025-09367-3>`__.
+#
+# .. [#Ruiz2025]
+#
+#    Diego Ruiz, Jérémie Guillaud, Christophe Vuillot, and Mazyar Mirrahimi. 
+#    "Unfolded distillation: very low-cost magic state preparation for biased-noise qubits."
+#    `arXiv preprint arXiv:2507.12511 <https://https://arxiv.org/abs/2507.12511>`__.
+#
+# .. [#Itogawa2025]
+#
+#    Tomohiro Itogawa, Yugo Takada, Yutaka Hirano, and Keisuke Fujii. 
+#    "Efficient magic state distillation by zero-Level distillation."
+#    `PRX Quantum 6, 020356 (2025) <https://journals.aps.org/prxquantum/abstract/10.1103/thxx-njr6>`__.
+#
+
