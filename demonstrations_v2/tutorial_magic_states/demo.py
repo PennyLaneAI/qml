@@ -120,7 +120,8 @@ print(t_gate_teleportation_circuit(np.pi / 3))
 #    error-correcting (outer) code such as the Reed-Muller code.
 # 3. Perform a syndrome measurement by measuring certain `stabilizers <https://pennylane.ai/qml/demos/tutorial_stabilizer_codes>`__
 #    across this multi-block structure.
-# 4. The measurement results indicate whether the state remains in the "clean" codespace.
+# 4. Decide whether to keep or discard the state by looking at the measurement results that indicate 
+#    if the state remains in the "clean" codespace.
 #    If the syndrome is trivial, the reduced state is kept as a higher-purity state; if an error is 
 #    detected, the state is discarded.
 #
