@@ -236,6 +236,12 @@ print(t_gate_teleportation_circuit(np.pi / 3))
 #    "Efficient magic state distillation by zero-Level distillation."
 #    `PRX Quantum 6, 020356 (2025) <https://journals.aps.org/prxquantum/abstract/10.1103/thxx-njr6>`__.
 #
+# .. [#Google2025]
+#
+#    Emma Rosenfeld, et al.
+#    "Magic state cultivation on a superconducting quantum processor."
+#    `arXiv preprint arXiv:2512.13908 <https://arxiv.org/abs/2512.13908>`__.
+#
 # .. [#Chen2025]
 #
 #    Zi-Han Chen, Ming-Cheng Chen, Chao-Yang Lu, and Jian-Wei Pan. 
@@ -248,9 +254,4 @@ print(t_gate_teleportation_circuit(np.pi / 3))
 #    "Efficient magic state cultivation with lattice surgery."
 #    `arXiv preprint arXiv:2510.24615 <https://arxiv.org/abs/2510.24615>`__.
 #
-# .. [#Google2025]
-#
-#    Emma Rosenfeld, et al.
-#    "Magic state cultivation on a superconducting quantum processor."
-#    `arXiv preprint arXiv:2512.13908 <https://arxiv.org/abs/2512.13908>`__.
-#
+
