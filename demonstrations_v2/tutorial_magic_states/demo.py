@@ -153,15 +153,16 @@ print(t_gate_teleportation_circuit(np.pi / 3))
 # 3. Escape: rapidly expand the code hosting the state. Once the cultivation stage is complete, the magic state 
 #    reaches its target fidelity, and becomes "too good for the code". 
 #    To preserve this high fidelity, the state needs to *escape*
-#    into a much larger code as quickly as possible, typically via `code morphing <https://arxiv.org/abs/2112.01446>`__ or 
+#    into a much larger code as quickly as possible, typically via `grafting <https://arxiv.org/abs/2409.17595>`__
+#    `code morphing <https://arxiv.org/abs/2112.01446>`__ or 
 #    `lattice surgery <https://pennylane.ai/qml/demos/tutorial_lattice_surgery>`__.
 # 4. Decoding: determine whether to accept the final state using standard error correction. Since the circuit 
 #    is now too large for efficient post-selection, a decoder computes a complementary gap. This metric acts as 
 #    a confidence score for the final state, allowing the system to accept or discard the state accordingly.
 #     
 #    
-# Perspective on magic states: current research
-# ---------------------------------------------
+# Current research
+# ----------------
 #
 # Despite the theoretical foundations of magic states being well-established, translating them into 
 # scalable hardware remains a challenge. Current research in the field focuses on developing more 
@@ -170,11 +171,18 @@ print(t_gate_teleportation_circuit(np.pi / 3))
 #
 # A distillation protocol was recently implemented at the logical level on a neutral-atom quantum 
 # computer [#QuEra2025]_, leveraging the parallel control and high connectivity offered by atom platforms. 
-# Additionally, a pathway for improving distillation methods is to perform it, at least portions of it, at
-# the physical level [#Ruiz2025,#Itogawa2025]_. In [#Ruiz2025]_, for example, the authors leverage 
-# the biased-noise properties of cat-qubits to "unfold" a 3D outer code into a 2D layout. 
+# Additionally, a pathway for optimizing these methods involves performing distillation, or at least 
+# portions of it, at the physical level [#Ruiz2025]_, [#Itogawa2025]_. In [#Ruiz2025]_, for example, 
+# the authors exploit the biased-noise properties of cat qubits to "unfold" a 3D outer code 
+# into a 2D layout, improving both the time and qubit overhead. 
 #
-# Parallel to these efforts, 
+# Parallel to these efforts, the first experimental verification and characterization of a cultivation 
+# protocol was recently achieved on a superconducting-qubit architecture [#Google2025]_. 
+# However, this is only the beginning; multiple proposals are currently being developed to further 
+# improve magic state cultivation (MSC). For instance, addressing the complexity
+# of the Escape stage by introducing easier-to-decode expansion methods [#Chen2024]_, and 
+# providing alternatives to the "grafting" method, used in the original MSC proposal, such as 
+# lattice surgery [#Hirano2025]_.  
 #
 # Conclusion
 # ----------
@@ -219,7 +227,7 @@ print(t_gate_teleportation_circuit(np.pi / 3))
 #
 #    Diego Ruiz, Jérémie Guillaud, Christophe Vuillot, and Mazyar Mirrahimi. 
 #    "Unfolded distillation: very low-cost magic state preparation for biased-noise qubits."
-#    `arXiv preprint arXiv:2507.12511 <https://https://arxiv.org/abs/2507.12511>`__.
+#    `arXiv preprint arXiv:2507.12511 <https://arxiv.org/abs/2507.12511>`__.
 #
 # .. [#Itogawa2025]
 #
@@ -227,4 +235,15 @@ print(t_gate_teleportation_circuit(np.pi / 3))
 #    "Efficient magic state distillation by zero-Level distillation."
 #    `PRX Quantum 6, 020356 (2025) <https://journals.aps.org/prxquantum/abstract/10.1103/thxx-njr6>`__.
 #
-
+# .. [#Chen2025]
+#
+#    Zi-Han Chen, Ming-Cheng Chen, Chao-Yang Lu, and Jian-Wei Pan. 
+#    "Efficient Magic State Cultivation on ℝℙ2."
+#    `arXiv preprint arXiv:2503.18657 <https://arxiv.org/abs/2503.18657>`__.
+#
+# .. [#Hirano2025]
+#
+#    Yutaka Hirano, Riki Toshio, Tomohiro Itogawa, and Keisuke Fujii.
+#    "Efficient magic state cultivation with lattice surgery."
+#    `arXiv preprint arXiv:2510.24615 <https://arxiv.org/abs/2510.24615>`__.
+#
