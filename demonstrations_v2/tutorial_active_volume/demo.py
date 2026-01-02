@@ -381,10 +381,12 @@ Oriented ZX diagram to logical network
 The last step required to arrive at logical networks is comparatively small; the major effort
 is already done with the orientation of the ZX diagram.
 
-We introduce **logical blocks**, which are just the nodes from an oriented ZX diagram,
+We introduce **logical networks**, which are just oriented ZX diagrams with spiders
 drawn as hexagons to mark the six ports more clearly, with a modification of rule (4.) above:
 
-    4'. Edges between two logical blocks must connect to **the same port** of both blocks.
+    4'. Edges between two oriented spiders must connect to **the same port** of both spiders.
+
+From now on, we refer to these hexagonal spiders inside a logical network as **logical blocks**.
 
 Depending on the concrete circuit we are compiling, this change might just lead to minor
 modifications such as relabeling the ports of two connected blocks, or it might lead to cascades of
