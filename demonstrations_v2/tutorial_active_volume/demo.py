@@ -607,8 +607,9 @@ acting on :math:`14` qubits:
     :target: javascript:void(0)
 
 The idling blocks are marked in green and connect to the three CNOT networks via Bell states
-:math:`|\phi_i\rangle`. (We denote the two components of the Bell state as
-:math:`|\phi_i\rangle_{0,1}` even though it is not a product state.)
+:math:`|\phi_i\rangle` and state that are measured in the Bell basis :math:`|\psi_i\rangle`.
+(We denote the two components of these states as :math:`|\phi_i\rangle_{0,1}`
+and :math:`|\psi_i\rangle_{0,1}` even though they are not product states.)
 However, recall the logical network into which we compiled the CNOT ladder earlier:
 
 .. figure:: _static/demonstration_assets/active_volume/example-logical-network.png
