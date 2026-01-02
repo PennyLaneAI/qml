@@ -392,7 +392,7 @@ is already done with the orientation of the ZX-diagram.
 We introduce **logical networks**, which are just oriented ZX-diagrams with spiders
 drawn as hexagons to mark the six ports more clearly, with a modification of rule (4.) above:
 
-    4'. Edges between two oriented spiders must connect to **the same port** of both spiders.
+4'. Edges between two oriented spiders must connect to **the same port** of both spiders.
 
 From now on, we refer to these hexagonal spiders inside a logical network as **logical blocks**.
 
@@ -476,8 +476,8 @@ Under the hood of parallelization: state teleportation
 ------------------------------------------------------
 
 In the CNOT ladder example circuit, which has a fundamentally sequential appearance in the
-circuit picture, logical network compilation achieved its parallelization by combining the
-effects of the three CNOTs into a single effect, creating a “CNOT ladder subroutine”.
+circuit picture, logical network compilation parallelized it by exploiting the lack of time
+ordering in ZX-diagrams, combining the effects of the three CNOTs into a single effect.
 If we want to parallelize multiple subroutines, however,
 without having to re-compile their joint logical network, we can do this procedurally through
 state teleportation, using a so-called bridge qubit. This technique parallelizes non-commuting
