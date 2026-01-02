@@ -174,13 +174,13 @@ print(t_gate_teleportation_circuit(np.pi / 3))
 # Additionally, a pathway for optimizing these methods involves performing distillation, or at least 
 # portions of it, at the physical level [#Ruiz2025]_, [#Itogawa2025]_. In [#Ruiz2025]_, for example, 
 # the authors exploit the biased-noise properties of cat qubits to "unfold" a 3D outer code 
-# into a 2D layout, improving both the time and qubit overhead. 
+# into a 2D layout, improving both the time and qubit overheads. 
 #
 # Parallel to these efforts, the first experimental verification and characterization of a cultivation 
 # protocol was recently achieved on a superconducting-qubit architecture [#Google2025]_. 
 # However, this is only the beginning; multiple proposals are currently being developed to further 
 # improve magic state cultivation (MSC). For instance, addressing the complexity
-# of the Escape stage by introducing easier-to-decode expansion methods [#Chen2024]_, and 
+# of the Escape stage by introducing easier-to-decode expansion methods [#Chen2025]_, and 
 # providing alternatives to the "grafting" method, used in the original MSC proposal, such as 
 # lattice surgery [#Hirano2025]_.  
 #
@@ -246,4 +246,10 @@ print(t_gate_teleportation_circuit(np.pi / 3))
 #    Yutaka Hirano, Riki Toshio, Tomohiro Itogawa, and Keisuke Fujii.
 #    "Efficient magic state cultivation with lattice surgery."
 #    `arXiv preprint arXiv:2510.24615 <https://arxiv.org/abs/2510.24615>`__.
+#
+# .. [#Google2025]
+#
+#    Emma Rosenfeld, et al.
+#    "Magic state cultivation on a superconducting quantum processor."
+#    `arXiv preprint arXiv:2512.13908 <https://arxiv.org/abs/2512.13908>`__.
 #
