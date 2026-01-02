@@ -83,6 +83,8 @@ but only outline its rough characteristics.
 .. admonition:: Active volume computer
     :class: note
 
+    .. _AV info box:
+
     The cost model used by active volume compilation is founded on an abstract error-corrected
     quantum computer, the active volume computer.
     It is made up of a fixed number of *qubit modules*, each of which stores a logical qubit.
@@ -404,7 +406,7 @@ uniquely and replace drawing edges between them by annotating the ports with the
 blocks they connect to. This allows us to separate logical blocks, which represent computation
 and are considered expensive, from the block connectivity, which represents communication between
 blocks and is considered cheaper because it is implemented via fast SWAP connections (also see
-active volume computer info box).
+the `active volume computer info box <AV info box_>`_).
 
 Logical network for the CNOT ladder
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -445,7 +447,7 @@ You may ask what we do with the logical network representation,
 and why we would prefer twelve custom blocks--with new complicated rules governing them--over a
 good old circuit diagram with three CNOTs.
 A key advantage of the logical network representation lies in its homogeneous expression of
-computational steps within the active volume computer, c.f. the info box at the top;
+computational steps within the active volume computer, c.f. the `info box at the top <AV info box_>`_;
 all computation is made up of logical blocks that can be scheduled densely in the computational
 qubit modules of the computer in order to remove idle volume. If logical networks turn out too
 large for the space available at a given time step, they can be split into two networks that
@@ -482,7 +484,7 @@ If we want to parallelize multiple subroutines, however,
 without having to re-compile their joint logical network, we can do this procedurally through
 state teleportation, using a so-called bridge qubit. This technique parallelizes non-commuting
 operations without breaking physics, and it pays off because Bell state preparation and
-measurements are assumed to be fast on an active volume computer (see info box at the top).
+measurements are assumed to be fast on an active volume computer (see `info box at the top <AV info box_>`_).
 
 We will showcase this type of parallelization by treating the three CNOT gates in our ladder
 example as three individual subroutines. For convenience, we do this at the circuit level, in order
@@ -544,7 +546,7 @@ expensive to come by.
 
 For the quantum computer corrected with the surface code, and specifically for the active volume computer,
 the creation of qubit pairs in a Bell state and the Bell basis measurement are assumed to be
-much cheaper than arbitrary logical operations (see info box), because they can just be woven into
+much cheaper than arbitrary logical operations (see `info box <AV info box_>`_), because they can just be woven into
 the measurements, i.e., the code cycles of the error correction code via lattice surgery.
 Similarly, Pauli correction gates are tracked in software throughout, so that the only
 true price we are paying for the parallelization is the extra qubits. Finally,
@@ -629,7 +631,7 @@ network).
 Thus, even though the number of computational blocks is the same, resynthesizing the composed
 network of three CNOTs leads to a slightly cheaper network in terms of routing. It is noteworthy
 that this kind of optimization is of second-order, because the active volume computer is assumed
-to be very fast at routing (see info box at the top). However, for larger computations, e.g.,
+to be very fast at routing (see `info box at the top <AV info box_>`_). However, for larger computations, e.g.,
 already for a Toffoli gate realized via state injection, the number of computational blocks
 itself will be reduced, too.
 
