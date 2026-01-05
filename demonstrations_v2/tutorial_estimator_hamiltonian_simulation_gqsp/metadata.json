@@ -1,0 +1,57 @@
+{
+    "title": "Resource estimation for Hamiltonian simulation with GQSP",
+    "authors": [
+        {
+            "username": "ixfoduap"
+        }
+    ],
+    "executable_stable": true,
+    "executable_latest": true,
+    "dateOfPublication": "2026-01-05T00:00:00+00:00",
+    "dateOfLastModification": "2026-01-05T15:48:14+00:00",
+    "categories": [
+        "Algorithms"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/pennylane-demo-generative-quantum-advantage-thumbnail.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/pennylane-demo-generative-quantum-advantage-large-thumbnail.png"
+        }
+    ],
+    "seoDescription": "Learn how to use PennyLane's estimator module to compute the cost of Hamiltonian simulation with Generalized quantum signal processing (GQSP)",
+    "doi": "",
+    "references": [
+        {
+            "id": "paper",
+            "type": "article",
+            "title": "Generative quantum advantage for classical and quantum problems.",
+            "authors": "H. Huang, M. Broughton, N. Eassa, H. Neven, R. Babbush, J. R. McClean",
+            "year": "2025",
+            "journal": "",
+            "url": "https://arxiv.org/abs/2509.09033"
+        },
+        {
+            "id": "paper",
+            "type": "article",
+            "title": "Quantum Computational Advantage with Constant-Temperature Gibbs Sampling.",
+            "authors": "T. Bergamaschi; C. Chen; Y. Liu",
+            "year": "2024",
+            "journal": "",
+            "url": "https://ieeexplore.ieee.org/document/10756075"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_intro_qsvt",
+            "weight": 1.0
+        }
+    ]
+}
