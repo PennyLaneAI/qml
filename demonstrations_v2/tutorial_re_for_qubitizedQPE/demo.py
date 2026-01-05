@@ -52,9 +52,9 @@ In this demo, we show how to get concrete costs using logical resource estimatio
 #    :class: borderless
 #
 #    * - .. image:: ../_static/demonstration_assets/qrom/select_swap.jpeg
-#           :width: 100%
+#           :width: 90%
 #      - .. image:: ../_static/demonstration_assets/qrom/select_swap_4.jpeg
-#           :width: 100%
+#           :width: 90%
 #
 # Standard resource estimates often treat these oracles as fixed "black boxes", yielding a single cost number.
 # However, this demo is more than just a static cost report. We demonstrate how PennyLane exposes these
