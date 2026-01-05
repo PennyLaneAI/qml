@@ -62,11 +62,9 @@ We can thus partition a circuit into computationally *active* volume and *idle* 
     Adapted from [1].
 
 In this demo, we will discuss the active volume compilation framework introduced by
-Litinski and Nickerson [#Litinski2022]_ that allows one to reduce the **implementation cost**
+Litinski and Nickerson [#Litinski2022]_ that allows one to reduce the implementation cost
 of an algorithm to being proportional to the active volume of the circuit. This is in contrast to
 the framework of [#Litinski2018]_, where the implementation cost is proportional to the circuit volume.
-The active volume is always less than or equal to the circuit volume, so that this typically
-implies a cost reduction.
 This framwork combines the language of the ZX-calculus with the inherently-quantum technique of
 state teleportation, as well as an abstraction of topologically error-corrected quantum computers.
 Concretely, the approach assumes that we execute on a so-called **active volume computer**.
