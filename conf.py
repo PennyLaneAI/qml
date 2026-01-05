@@ -76,17 +76,15 @@ sphinx_gallery_conf = {
     # all example scripts in the 'examples_dirs' folder will be skiped.
     "filename_pattern": r"\.py$",
     "pypandoc": {
-        "filters": [
+        "filters": [ # These are applied in order
             "./lib/filter_directives.py", 
-            "./lib/filter_figures.py",
             "./lib/filter_links.py",
-            "./lib/filter_tables.py"
+            "./lib/filter_tables.py",
+            "./lib/filter_figures.py",
         ]
     },
     # first notebook cell in generated Jupyter notebooks
     "first_notebook_cell": (
-        "# This cell is added by sphinx-gallery\n"
-        "# It can be customized to whatever you like\n"
         "%matplotlib inline"
     ),
     # thumbnail size
