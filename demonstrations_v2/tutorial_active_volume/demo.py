@@ -689,7 +689,7 @@ rotations:
     :width: 55%
     :target: javascript:void(0)
 
-    Auto-corrected non-Clifford Pauli rotation. Image source: Daniel Litinski [#Litinski2018]_.
+    Auto-corrected non-Clifford Pauli rotation. Adapted from [1,2].
 
 In essence, we have swapped the Clifford correction for a multiplexed measurement, where the
 measurement basis is adaptively chosen based on some classical input. A measurement whose basis
