@@ -49,7 +49,7 @@ In this demo, we show how to get concrete costs using logical resource estimatio
 # .. list-table::
 #    :widths: 50 50
 #    :header-rows: 0
-#    :class: borderless
+#    :class: plain
 #
 #    * - .. image:: ../_static/demonstration_assets/qrom/select_swap.jpeg
 #           :width: 90%
