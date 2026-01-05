@@ -90,7 +90,7 @@ print(xx_hamiltonian.pauli_terms)
 ################################### 
 # We now construct the walk operator, which consists of a sequence
 # of Prepare and Select operators. For Prepare, we need extra qubits to load the coefficients, and will employ a 
-# standard state preparation algorithm based on `QROM <https://pennylane.ai/qml/demos/tutorial_intro_qrom>`_`,
+# standard state preparation algorithm based on `QROM <https://pennylane.ai/qml/demos/tutorial_intro_qrom>`_,
 # which is natively supported in PennyLane:
 
 
