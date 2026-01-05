@@ -53,7 +53,7 @@ In this demo, we show how to get concrete costs using logical resource estimatio
 #
 #    * - .. image:: ../_static/demonstration_assets/qrom/select_swap.jpeg
 #           :width: 100%
-#      - .. image:: ../_static/demonstration_assets/qrom/select_swap_4.jpeg
+#    * - .. image:: ../_static/demonstration_assets/qrom/select_swap_4.jpeg
 #           :width: 100%
 #
 # Standard resource estimates often treat these oracles as fixed "black boxes", yielding a single cost number.
