@@ -129,7 +129,7 @@ print(qre.estimate(W))
 # As an example, we assume the Hamiltonian is normalized and calculate the degree needed to evolve for
 #  :math:`t=100` and a target error of :math:`epsilon=0.1\%`.
 
-HamSim = qre.GQSPTimeEvolution(W, time=100, one_norm=1, approximation_error=0.001)
+HamSim = qre.GQSPTimeEvolution(W, time=100, one_norm=1, poly_approx_precision=0.001)
 
 print(f"Resources for Hamiltonian simulation with GQSP {qre.estimate(HamSim)}")
 
