@@ -437,39 +437,10 @@ And this already concludes the compilation process of this simple Clifford opera
 an optimized construction for the CNOT ladder subroutine, which was even parallelized
 into a single time step.
 
-You may ask what we do with the logical network representation,
-and why we would prefer twelve custom blocks--with new complicated rules governing them--over a
-good old circuit diagram with three CNOTs.
-A key advantage of the logical network representation lies in its homogeneous expression of
-computational steps within the active volume computer, c.f. the `info box at the top <AV info box_>`_;
-all computation is made up of logical blocks that can be scheduled densely in the computational
-qubit modules of the computer in order to remove idle volume. If logical networks turn out too
-large for the space available at a given time step, they can be split into two networks that
-are executed sequentially.
+TODO: INSERT PROPER WRAPUP SENTENCE
 
-For our example circuit, this idea of gradual parallelization generalizes the idea that we are
-not forced to maximize parallelization; as we mentioned above, we instead could have concatenated
-the oriented ZX-diagrams for the three individual CNOT gates, or parallelized only two of them, if
-we had less computational space available. Abstractly, we can draw this as sequences of
-logical networks that make up different shapes:
-
-.. figure:: _static/demonstration_assets/active_volume/reshaped-networks.png
-    :align: center
-    :width: 100%
-    :target: javascript:void(0)
-
-Logical networks thus form a much more flexible representation of operations on an error-corrected
-quantum computer, allowing them to be adjusted to available hardware resources and promoting
-space-time tradeoffs to first-class program transformations.
-
-From a mathematical perspective, logical networks distill the best out of the two worlds of
-quantum circuits and ZX-diagrams; ZX-diagrams allow for continuous
-deformations where "rigid" quantum circuits do not, but the additional structure of logical
-networks that resembles quantum circuits ensures that we obtain instructions that can be executed
-on the computer.
-
-Under the hood of parallelization: state teleportation
-------------------------------------------------------
+Parallelizing logical networks with state teleportation
+-------------------------------------------------------
 
 In the CNOT ladder example circuit, which has a fundamentally sequential appearance in the
 circuit picture, logical network compilation parallelized it by exploiting the lack of time
@@ -527,6 +498,15 @@ As we can see, the state teleportation together with the ability to track correc
 :math:`B` makes it possible to implement the two non-commuting operations :math:`A` and :math:`B`
 simultaneously, without violating any physical laws or causal dependencies.
 
+TODO: MERGE WITH SECTION FURTHER DOWN
+- logical networks encode the capabilities and restrictions of the active volume computer running
+the surface code
+- they capture the essence of the desired computation on such a computer
+- they can be parallelized easily via teleportation
+- they can be cut up
+- altogether, they can be scheduled densely on the AV computer, removing almost all idle volume.
+    -> callback to beginning
+
 Practical usefulness
 ~~~~~~~~~~~~~~~~~~~~
 
@@ -554,81 +534,41 @@ volume computers and the goal of our compilation. This is why the framework by L
 Nickerson promotes this technique to a first-class transformation, allowing
 us to parallelize networks *without having to recompile them.*
 
-Teleportation in the CNOT ladder
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+TODO  THIS IS THE SECTION TO MERGE WITH
 
-If teleportation is easily integrated in our compilation framework, one might be tempted
-to translate only a minimalistic universal gate set into logical networks and compile any other
-subroutines by combining those networks–just like we do with quantum circuits.
-However, we will find in the following that this approach will miss out on further optimizations.
+You may ask what we do with the logical network representation,
+and why we would prefer twelve custom blocks--with new complicated rules governing them--over a
+good old circuit diagram with three CNOTs.
+A key advantage of the logical network representation lies in its homogeneous expression of
+computational steps within the active volume computer, c.f. the `info box at the top <AV info box_>`_;
+all computation is made up of logical blocks that can be scheduled densely in the computational
+qubit modules of the computer in order to remove idle volume. If logical networks turn out too
+large for the space available at a given time step, they can be split into two networks that
+are executed sequentially.
 
-To understand the teleportation technique from above in the context of logical networks,
-let’s consider our example CNOT ladder and perform the parallelization in the circuit picture.
-We begin by inserting 2 teleportation circuits:
+For our example circuit, this idea of gradual parallelization generalizes the idea that we are
+not forced to maximize parallelization; as we mentioned above, we instead could have concatenated
+the oriented ZX-diagrams for the three individual CNOT gates, or parallelized only two of them, if
+we had less computational space available. Abstractly, we can draw this as sequences of
+logical networks that make up different shapes:
 
-.. figure:: _static/demonstration_assets/active_volume/manual-parallel-0.png
+.. figure:: _static/demonstration_assets/active_volume/reshaped-networks.png
     :align: center
-    :width: 60%
+    :width: 100%
     :target: javascript:void(0)
 
-Then, we pull the second and third CNOT through the Pauli corrections, turning :math:`X` into
-:math:`X\otimes X` and leaving :math:`Z` unchanged:
+Logical networks thus form a much more flexible representation of operations on an error-corrected
+quantum computer, allowing them to be adjusted to available hardware resources and promoting
+space-time tradeoffs to first-class program transformations.
 
-.. figure:: _static/demonstration_assets/active_volume/manual-parallel-1.png
-    :align: center
-    :width: 50%
-    :target: javascript:void(0)
+From a mathematical perspective, logical networks distill the best out of the two worlds of
+quantum circuits and ZX-diagrams; ZX-diagrams allow for continuous
+deformations where "rigid" quantum circuits do not, but the additional structure of logical
+networks that resembles quantum circuits ensures that we obtain instructions that can be executed
+on the computer.
 
-In the last step, we pull the second factor :math:`X^{(c)}` of the first :math:`X\otimes X`
-correction (purple) through the second pair of measurements, leading to a simple classical
-postprocessing step. Here we used the general fact that Pauli operations (or corrections) will
-only affect the measurement *result* of a Pauli measurement, but not its measurement *basis*,
-marked as a classical wire between the two :math:`Z\otimes Z` measurement instruments in
-magenta below:
+TODO: END OF SECTION TO BE MERGED
 
-.. figure:: _static/demonstration_assets/active_volume/manual-parallel-2.png
-    :align: center
-    :width: 40%
-    :target: javascript:void(0)
-
-We fully parallelized the CNOT ladder, using :math:`8` instead of the original :math:`4` qubits.
-
-Following the approach mentioned above, we now could
-naively plug in the logical network for a single CNOT from earlier. This would lead to yet
-another :math:`3\cdot 2` additional qubits, arriving at :math:`12` logical blocks and two idling
-blocks (blocks with only U and D ports occupied that can be executed by memory modules),
-acting on :math:`14` qubits:
-
-.. figure:: _static/demonstration_assets/active_volume/example-parallelized-explicitly.png
-    :align: center
-    :width: 95%
-    :target: javascript:void(0)
-
-The idling blocks are marked in green and connect to the three CNOT networks via Bell states
-:math:`|\phi_i\rangle` and state that are measured in the Bell basis :math:`|\psi_i\rangle`.
-(We denote the two components of these states as :math:`|\phi_i\rangle_{0,1}`
-and :math:`|\psi_i\rangle_{0,1}` even though they are not product states.)
-However, recall the logical network into which we compiled the CNOT ladder earlier:
-
-.. figure:: _static/demonstration_assets/active_volume/example-logical-network.png
-    :align: center
-    :width: 95%
-    :target: javascript:void(0)
-
-As we can see, we require only :math:`12` qubits to realize the network of :math:`12` blocks,
-removing the idle memory blocks. This is because the logical network compilation already made
-use of simplifications that could be made to the naively composed network.
-
-We see that logical network compilation achieves parallelization without the need for bridge
-qubits, making the resulting network more memory-efficient than a procedurally parallelized
-network (the additional memory is the bridge qubit that idles throughout the execution of the
-network).
-Thus, even though the number of computational blocks is the same, resynthesizing the composed
-network of three CNOTs leads to a slightly cheaper network in terms of routing. It is noteworthy
-that this kind of optimization is of second-order, because the active volume computer is assumed
-to be very fast at routing (see `info box at the top <AV info box_>`_). However, for larger computations, e.g.,
-already for a Toffoli gate realized via state injection, the number of computational blocks
-itself will be reduced, too.
 
 Reactive measurements and reaction time
 ---------------------------------------
