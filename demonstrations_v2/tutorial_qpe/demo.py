@@ -81,7 +81,7 @@ The second clever part of the algorithm is to follow advice given to many physic
 "When in doubt, take the Fourier transform"; or in our case, "When in doubt, take the quantum Fourier transform (QFT)".
 
 .. math::
-   \text{QFT}|\theta\rangle = \frac{1}{\sqrt{2^n}}\sum_{k=0} e^{2 \pi i\theta k} |k\rangle.
+   \text{QFT}|\theta\rangle = \frac{1}{\sqrt{2^n}}\sum^{2^n-1}_{k=0} e^{2 \pi i\theta k} |k\rangle.
 
 Note that this results in a uniform superposition, where each basis state has an additional phase.
 If we can prepare that state, then applying the *inverse* QFT would give
@@ -203,7 +203,7 @@ Time to code!
 -------------
 We already know the three building blocks of QPE; it is time to put them to practice.
 We use a single-qubit :class:`~pennylane.PhaseShift` operator :math:`U = R_{\phi}(2 \pi / 5)`
-and its eigenstate :math:`|1\rangle`` with corresponding phase :math:`\theta=0.2.`
+and its eigenstate :math:`|1\rangle` with corresponding phase :math:`\theta=0.2`.
 
 """
 
