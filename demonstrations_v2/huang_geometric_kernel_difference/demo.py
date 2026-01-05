@@ -225,7 +225,7 @@ plt.show()
 # The Gram matrices will be used in downstream evaluations to compare kernel geometries and analyze
 # expressivity and generalization metrics like :math:`g`.
 #
-# The following code builds all five Gram (kernel) matrices: Classical, QK-E1, QK-E2, PQK-E1, PQK-E2
+# The following code builds all five Gram (kernel) matrices: Classical, QK-E1, QK-E2, PQK-E1, PQK-E2.
 
 from sklearn.metrics.pairwise import rbf_kernel
 
@@ -318,7 +318,7 @@ print(f"K_PQK_E2 shape: {K_pqk_E2.shape}")
 
 ######################################################################
 #
-# Let's now visualize the Gram Matrices
+# Let's now visualize the Gram Matrices.
 
 import matplotlib.pyplot as plt
 
