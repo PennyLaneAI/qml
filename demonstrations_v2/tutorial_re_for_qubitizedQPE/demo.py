@@ -46,12 +46,12 @@ In this demo, we show how to get concrete costs using logical resource estimatio
 # rely on QROM to access Hamiltonian coefficients and rotation angles respectively. We can use
 # the select-swap variant of the QROM, which allows us to trade the depth of the circuit for width as shown in the circuit diagrams.
 #
-# .. rst-class:: side-by-side
+# .. container:: side-by-side
 #
 #    .. image:: ../_static/demonstration_assets/qrom/select_swap.jpeg
-#       :width: 48%
+#       :width: 45%
 #    .. image:: ../_static/demonstration_assets/qrom/select_swap_4.jpeg
-#       :width: 48%
+#       :width: 45%
 #
 # Standard resource estimates often treat these oracles as fixed "black boxes", yielding a single cost number.
 # However, this demo is more than just a static cost report. We demonstrate how PennyLane exposes these
