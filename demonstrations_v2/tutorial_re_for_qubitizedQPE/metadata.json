@@ -6,9 +6,9 @@
         }
     ],
     "executable_stable": false,
-    "executable_latest": false,
-    "dateOfPublication": "2026-1-15T00:00:00+00:00",
-    "dateOfLastModification": "2026-1-15T15:48:14+00:00",
+    "executable_latest": true,
+    "dateOfPublication": "2026-01-15T00:00:00+00:00",
+    "dateOfLastModification": "2026-01-15T15:48:14+00:00",
     "categories": [
         "Getting Started",
         "How-to"
