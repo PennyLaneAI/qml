@@ -9,8 +9,9 @@ yet chemical Hamiltonians :math:`\hat{H}` are Hermitian.
 In this demo, we use the **Tensor Hypercontraction (THC)** representation, a state of the art LCU decomposition for quantum chemistry
 that approximates the interaction tensor via a low-rank factorization.
 
-However, constructing the operator is only half the battle; we also need to know what it costs to run. In this demo, we move from
-abstract scaling to concrete costs using logical resource estimation tools in PennyLane.
+In order to get an understanding if this algorithm will run on first generation FTQC with X qubits,
+we need to know what the resources look like.
+In this demo, we show how to get concrete costs using logical resource estimation tools in PennyLane and find a version that will fit on FTQC hardware.
 
 .. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_how_to_build_spin_hamiltonians.png
     :align: center
@@ -30,7 +31,7 @@ abstract scaling to concrete costs using logical resource estimation tools in Pe
 # In the ``Select`` operator, we need to implement a series of Givens rotations to change the basis.
 # Naively, this requires a quantum register of size :math:`N \times \beth` to store all angles simultaneously, where
 # ``N`` is the number of rotations, and :math:`\beth` is the rotation precision.
-# Here, we can choose to load fewer angles at a time instead of loading all the rotation angles at once. This leads to reduction
+# Here, we can choose to load these angles in batches instead of loading all the rotation angles at once. This leads to reduction
 # in the register size, thus saving qubits, but necessitates repetition of the QROM(Quantum Read-Only Memory) subroutine for each batch
 # and hence costs T-gates.
 #
@@ -45,14 +46,15 @@ abstract scaling to concrete costs using logical resource estimation tools in Pe
 # rely on QROM to access Hamiltonian coefficients and rotation angles respectively. We can use
 # the select-swap variant of the QROM, which allows us to trade the depth of the circuit for width as shown in the circuit diagrams.
 #
-# .. container:: side-by-side
+# .. list-table::
+#    :widths: 50 50
+#    :header-rows: 0
+#    :class: borderless
 #
-#    .. image:: ../_static/demonstration_assets/qrom/select_swap.jpeg
-#       :width: 48%
-#       :align: left
-#    .. image:: ../_static/demonstration_assets/qrom/select_swap_4.jpeg
-#       :width: 48%
-#       :align: right
+#    * - .. image:: ../_static/demonstration_assets/qrom/select_swap.jpeg
+#           :width: 100%
+#      - .. image:: ../_static/demonstration_assets/qrom/select_swap_4.jpeg
+#           :width: 100%
 #
 # Standard resource estimates often treat these oracles as fixed "black boxes", yielding a single cost number.
 # However, this demo is more than just a static cost report. We demonstrate how PennyLane exposes these
