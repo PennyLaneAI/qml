@@ -81,11 +81,11 @@ pauli_dictionary = {
 
 xx_hamiltonian = qre.PauliHamiltonian(
     num_qubits = 10000, # 100*100
-    pauli_dist = pauli_dictionary,
+    pauli_terms = pauli_dictionary,
 )
 
 print(f"Compact spin Hamiltonian")
-print(xx_hamiltonian.pauli_dist)
+print(xx_hamiltonian.pauli_terms)
 
 ################################### 
 # We now construct the walk operator, which consists of a sequence
@@ -94,7 +94,7 @@ print(xx_hamiltonian.pauli_dist)
 # which is natively supported in PennyLane:
 
 
-num_terms = xx_hamiltonian.num_pauli_words  # number of terms in the Hamiltonian
+num_terms = xx_hamiltonian.num_terms  # number of terms in the Hamiltonian
 num_state_prep_qubits = int(np.ceil(np.log2(num_terms)))
 
 Prep = qre.QROMStatePreparation(
@@ -115,21 +115,21 @@ print(qre.estimate(Sel))
 
 ################################### 
 # We use Prepare and Select to construct the walk operator, which can be built directly using the dedicated 
-# `QuantumWalk` operation
+# `Qubitization` operation
 
-W = qre.QuantumWalk(Prep, Sel)
+W = qre.Qubitization(Prep, Sel)
 print(f"Resources for Walk operator")
 print(qre.estimate(W))
 
 ################################### 
 # Finally, these pieces are brought together to estimate the cost of performing Hamiltonian simulation with GQSP. 
-# This can be calculated with the built-in PennyLane function `HamSimGQSP`. Under the hood, it constructs the GQSP
+# This can be calculated with the built-in PennyLane function `GQSPTimeEvolution`. Under the hood, it constructs the GQSP
 # sequence and determines the required polynomial degree in the GQSP transformation to simulate the desired dynamics. 
 # 
 # As an example, we assume the Hamiltonian is normalized and calculate the degree needed to evolve for
 #  :math:`t=100` and a target error of :math:`epsilon=0.1\%`.
 
-HamSim = qre.HamSimGQSP(W, time=100, one_norm=1, approximation_error=0.001)
+HamSim = qre.GQSPTimeEvolution(W, time=100, one_norm=1, approximation_error=0.001)
 
 print(f"Resources for Hamiltonian simulation with GQSP {qre.estimate(HamSim)}")
 
@@ -174,11 +174,11 @@ pauli_dictionary = {
 
 nmr_hamiltonian = qre.PauliHamiltonian(
     num_qubits = 32,
-    pauli_dist = pauli_dictionary,
+    pauli_terms = pauli_dictionary,
 )
 
 print(f"Compact NMR Hamiltonian")
-print(nmr_hamiltonian.pauli_dist)
+print(nmr_hamiltonian.pauli_terms)
 
 #################################### 
 # We build Prepare and Select operators that are used to define the walk operator. For Prepare,
@@ -186,8 +186,8 @@ print(nmr_hamiltonian.pauli_dist)
 # we enforce a minimal use of ancilla qubits through the `select_swap_depths` argument. 
 
 
-num_terms = nmr_hamiltonian.num_pauli_words  # number of terms in the Hamiltonian
-num_state_prep_qubits = int(np.ceil(np.log2(nmr_hamiltonian.num_pauli_words)))
+num_terms = nmr_hamiltonian.num_terms  # number of terms in the Hamiltonian
+num_state_prep_qubits = int(np.ceil(np.log2(num_terms)))
 
 Prep_nmr = qre.QROMStatePreparation(
     num_state_qubits = num_state_prep_qubits,
@@ -196,7 +196,7 @@ Prep_nmr = qre.QROMStatePreparation(
 )
 Sel_nmr = qre.SelectPauli(nmr_hamiltonian) 
 
-W_nmr = qre.QuantumWalk(Prep_nmr, Sel_nmr)
+W_nmr = qre.Qubitization(Prep_nmr, Sel_nmr)
 
 
 print(f"Resources for NMR Walk operator")
@@ -212,7 +212,7 @@ print(qre.estimate(W_nmr))
 def nmr_resources(time, one_norm, error):
 
  
-    gqsp = qre.HamSimGQSP(W_nmr, time, one_norm, error)
+    gqsp = qre.GQSPTimeEvolution(W_nmr, time, one_norm, error)
     resources = qre.estimate(gqsp)
     T_gates = resources.gate_counts['T'] 
     Toffoli_gates = resources.gate_counts['Toffoli']
