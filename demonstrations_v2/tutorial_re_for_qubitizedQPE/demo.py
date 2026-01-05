@@ -1,5 +1,5 @@
 r"""Qubit and T-gate Trade-offs in Qubitized Quantum Phase Estimation
-===============================================================================
+======================================================================
 
 `Quantum Phase Estimation (QPE) <https://pennylane.ai/qml/demos/tutorial_qpe>`_ relies on unitary evolution,
 yet chemical Hamiltonians :math:`\hat{H}` are Hermitian.
@@ -63,7 +63,7 @@ In this demo, we show how to get concrete costs using logical resource estimatio
 # which plays a crucial role in biological nitrogen fixation.
 #
 # Resource Estimation for FeMoco
-# ------------------------------
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 # Estimating resources for large-scale chemical systems is often bottlenecked by the challenge of constructing and storing the full Hamiltonian tensor.
 # But why carry the entire building when a blueprint will do? The resource estimator allows us to sidestep this bottleneck for a quick estimation.
 # By using a `compact representation <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.compact_hamiltonian.THCHamiltonian.html>`__ of the THC
