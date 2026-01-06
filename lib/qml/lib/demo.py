@@ -189,7 +189,13 @@ def build(
             len(demos),
             execute_demo,
         )
-
+        build_venv = Virtualenv(ctx.build_venv_path)
+        cmds.pip_install(
+            build_venv.python,
+            requirements=ctx.build_requirements_file,
+            use_uv=False,
+            quiet=False,
+        )
         try:
             _build_demo(
                 ctx,
@@ -262,7 +268,7 @@ def generate_requirements(
         *requirements_in,
         constraints_files=constraints,
         quiet=False,
-        prerelease=dev,
+        prerelease=False,
     )
 
 
@@ -286,7 +292,7 @@ def _build_demo(
             "--upgrade",
             requirements=out_dir / "requirements.txt",
             quiet=False,
-            pre=dev,
+            pre=False,
         )
 
         # If dev, we need to re-install the latest Catalyst, then Lightning, then PennyLane
@@ -344,6 +350,7 @@ def _build_demo(
         # Make sure demos can find scripts installed in the build venv
         "PATH": f"{os.environ['PATH']}:{build_venv.path / 'bin'}",
         "CURRENT_DEMO": str(demo.name),
+        "DEV": str(dev),
     }
     if quiet:
         stdout, stderr, text = subprocess.PIPE, subprocess.STDOUT, True
