@@ -93,7 +93,7 @@ plt.show()
 # transform, which removes consecutive inverse operations.
 #
 
-cancelled_circuit = qml.transforms.cancel_inverses(commuted_circuit)
+cancelled_circuit = qml.transforms.cancel_inverses(commuted_circuit, recursive=False)
 
 
 qnode = qml.QNode(cancelled_circuit, dev)
@@ -129,7 +129,7 @@ plt.show()
 @qml.qnode(dev)
 @partial(qml.transforms.merge_rotations, atol=1e-8, include_gates=None)
 @qml.transforms.cancel_inverses
-@partial(qml.transforms.commute_controlled, direction="right")
+@partial(qml.transforms.commute_controlled, direction="right", recursive=False)
 def q_fun(angles):
     qml.Hadamard(wires=1)
     qml.Hadamard(wires=2)
@@ -197,7 +197,7 @@ compiled_circuit = qml.compile(
     pipeline=[
         partial(qml.transforms.commute_controlled, direction="left"),  # Opposite direction
         partial(qml.transforms.merge_rotations, include_gates=["RZ"]),  # Different threshold
-        qml.transforms.cancel_inverses,  # Cancel inverses after rotations
+        partial(qml.transforms.cancel_inverses, recursive=False),  # Cancel inverses after rotations
     ],
     num_passes=3,
 )
