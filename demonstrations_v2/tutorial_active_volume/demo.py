@@ -551,14 +551,13 @@ Reactive measurements and reaction time
 ---------------------------------------
 
 While the compilation techniques presented above are very powerful, there is an important
-restriction we haven’t considered so far. Consider the teleportation circuit from the previous
-section:
-
-The Bell state measurements determine whether Pauli corrections need to be applied, which in
-turn affects the outcome (and only the outcome) of other Bell state measurements, which
-determines whether Pauli corrections need to be applied, and so on. But since we’re tracking
-Pauli corrections in software [#PauliFrame]_, there is no immediate need to do anything with the
-Bell measurement results, and we can happily continue to apply operations in parallel or any
+restriction we haven’t considered so far.
+For Clifford operations, we will only ever encounter Pauli corrections that need to be applied
+conditioned on measurement outcomes. Such corrections in
+turn affect the outcome (and only the outcome) of other measurements, which
+then determine whether Pauli corrections need to be applied, and so on. But since we’re tracking
+Pauli corrections in software [#PauliFrame]_, there is no immediate need to do anything with
+measurement results, and we can happily continue to apply operations in parallel or any
 other order without worrying about data dependencies between them. So do we *ever* need to affect
 the quantum state using the information from measurements and Pauli corrections?
 
