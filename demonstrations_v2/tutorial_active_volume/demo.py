@@ -533,7 +533,7 @@ We may sketch the idea behind the scheduling via splitting and parallelization:
 
 .. figure:: _static/demonstration_assets/active_volume/scheduling.png
     :align: center
-    :width: 100%
+    :width: 90%
     :target: javascript:void(0)
 
 As we can see, the combined effect of these features of logical networks allows us to
