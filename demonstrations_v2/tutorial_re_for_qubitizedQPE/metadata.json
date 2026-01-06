@@ -1,11 +1,11 @@
 {
-    "title": "Exploring Qubit and T-gate Trade-offs in Qubitizated Quantum Phase Estimation",
+    "title": "Exploring Qubit and T-gate Trade-offs in Qubitized Quantum Phase Estimation",
     "authors": [
         {
             "username": "ddhawan"
         }
     ],
-    "executable_stable": true,
+    "executable_stable": false,
     "executable_latest": true,
     "dateOfPublication": "2026-01-15T00:00:00+00:00",
     "dateOfLastModification": "2026-01-15T15:48:14+00:00",
@@ -24,7 +24,7 @@
             "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_how_to_build_spin_hamiltonians.png"
         }
     ],
-    "seoDescription": "Exploring Qubit and T-gate Trade-offs in Qubitizated Quantum Phase Estimation",
+    "seoDescription": "Exploring Qubit and T-gate Trade-offs in Qubitized Quantum Phase Estimation",
     "doi": "",
     "references": [
         {
