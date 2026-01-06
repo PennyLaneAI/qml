@@ -554,11 +554,6 @@ While the compilation techniques presented above are very powerful, there is an 
 restriction we haven’t considered so far. Consider the teleportation circuit from the previous
 section:
 
-.. figure:: _static/demonstration_assets/active_volume/post-processed-measurement.png
-    :align: center
-    :width: 15%
-    :target: javascript:void(0)
-
 The Bell state measurements determine whether Pauli corrections need to be applied, which in
 turn affects the outcome (and only the outcome) of other Bell state measurements, which
 determines whether Pauli corrections need to be applied, and so on. But since we’re tracking
