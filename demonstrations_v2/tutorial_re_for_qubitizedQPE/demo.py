@@ -197,7 +197,7 @@ plt.show()
 # and :class:`~.pennylane.estimator.SelectTHC` operators:
 
 select_thc_qrom = qre.SelectTHC(
-    femoco, rotation_precision=n_angle, batched_rotations=38, select_swap_depth=1
+    femoco, rotation_precision=n_angle, num_batches=38, select_swap_depth=1
 )
 prepare_thc_qrom = qre.PrepTHC(femoco, coeff_precision=n_coeff, select_swap_depth=1)
 wo_qrom = qre.QubitizeTHC(
