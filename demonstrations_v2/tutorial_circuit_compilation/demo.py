@@ -197,7 +197,7 @@ compiled_circuit = qml.compile(
     pipeline=[
         partial(qml.transforms.commute_controlled, direction="left"),  # Opposite direction
         partial(qml.transforms.merge_rotations, include_gates=["RZ"]),  # Different threshold
-        qml.transforms.cancel_inverses(recursive=False),  # Cancel inverses after rotations
+        partial(qml.transforms.cancel_inverses, recursive=False),  # Cancel inverses after rotations
     ],
     num_passes=3,
 )
