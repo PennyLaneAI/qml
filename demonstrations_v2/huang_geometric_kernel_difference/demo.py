@@ -139,13 +139,13 @@ plt.show()
 #   The circuit is fully separable (no entanglement), producing the quantum state
 #   :math:`\lvert \psi_{\text{E1}}(x) \rangle`.
 #
-# And the two quantum kernels are defined as follows. 
-#
 # - **E2 – IQP embedding.**
 #   PennyLane’s ``qml.IQPEmbedding`` applies Hadamards, parameterized :math:`RZ(x_j)` rotations, and
 #   entangling ZZ gates.
 #   This creates an entangled quantum state :math:`\lvert \psi_{\text{E2}}(x) \rangle`, inspired by
 #   Instantaneous Quantum Polynomial (IQP) circuits.
+#
+# And the two quantum kernels are defined as follows. 
 #
 # - **QK – Standard quantum kernels.**
 #   For both E1 and E2, the kernel is defined by the **fidelity** between quantum states:
