@@ -16,8 +16,7 @@ for a simple spin model and for a Heisenberg Hamiltonian for NMR spectral predic
 can be found in our other demos:
 
     - `Function Fitting using Quantum Signal Processing <https://pennylane.ai/qml/demos/tutorial_qksd_qsp_qualtran>`_
-    - `Using PennyLane and Qualtran to analyze how QSP can improve measurements of molecular properties 
-       <https://pennylane.ai/qml/demos/function_fitting_qsp>`_
+    - `Using PennyLane and Qualtran to analyze how QSP can improve measurements of molecular properties <https://pennylane.ai/qml/demos/function_fitting_qsp>`_
     - `Intro to QSVT <https://pennylane.ai/qml/demos/tutorial_intro_qsvt>`_
 
 
@@ -58,7 +57,7 @@ We focus on the XX model Hamiltonian with no external field, defined as
 where :math:`X,Y` are Pauli matrices acting on a given spin site and :math:`N` is the number of spins. 
 The coefficients :math:`J_{ij}` can be interpreted as the adjacency matrix of a graph that defines the
 coupling between spins. Generating samples from a time-evolved state under this Hamiltonian (as well as 
-many other spin models) is widely believed to be an intractable classical problem [#spin]. **But what is 
+many other spin models) is widely believed to be an intractable classical problem [#spin]_. **But what is 
 the cost of performing this simulation on a quantum computer?** More specifically: how many qubits 
 and gates are needed to perform Hamiltonian simulation with GQSP on a square 
 grid of :math:`100\times 100` spins?
@@ -90,7 +89,7 @@ print(xx_hamiltonian.pauli_terms)
 ################################### 
 # We now construct the walk operator, which consists of a sequence
 # of Prepare and Select operators. For Prepare, we need extra qubits to load the coefficients, and will employ a 
-# standard state preparation algorithm based on `QROM <https://pennylane.ai/qml/demos/tutorial_intro_qrom>`_,
+# standard state preparation algorithm based on `QROM <https://pennylane.ai/qml/demos/tutorial_intro_qrom>`_
 # which is natively supported in PennyLane:
 
 
@@ -127,7 +126,7 @@ print(qre.estimate(W))
 # sequence and determines the required polynomial degree in the GQSP transformation to simulate the desired dynamics. 
 # 
 # As an example, we assume the Hamiltonian is normalized and calculate the degree needed to evolve for
-#  :math:`t=100` and a target error of :math:`epsilon=0.1\%`.
+#  :math:`t=100` and a target error of :math:`\epsilon=0.1\%`.
 
 HamSim = qre.GQSPTimeEvolution(W, time=100, one_norm=1, poly_approx_precision=0.001)
 
@@ -141,15 +140,15 @@ print(f"Resources for Hamiltonian simulation with GQSP {qre.estimate(HamSim)}")
 #
 # Heisenberg model for NMR spectral prediction
 # --------------------------------------------
-# We follow work presented in Ref. [#nmr] describing quantum simulation of NMR in the zero-to-ultralow field regime. 
+# We follow work presented in Ref. [#nmr]_ describing quantum simulation of NMR in the zero-to-ultralow field regime. 
 # The main computational task is to simulate time evolution under a Heisienberg Hamiltonian of the form
 #
 # .. math::
 #   H = \sum_{k\neq l} J_{kl}\vec{\sigma}_k\cdot \vec{\sigma}_l + D_{kl}^{\alpha \beta}\sigma^\alpha_k\sigma^\beta_l 
 #   - \sum_k\vec{h}_k\cdot \vec{\sigma}_k,
 #
-# where the sums over :math:`k,l` run over spin sites, and the sum over :math:`\alpha, beta` run through
-# spatial directions :math:`x,y`, and :math:`z``. We're using the notation
+# where the sums over :math:`k,l` run over spin sites, and the sum over :math:`\alpha, \beta` run through
+# spatial directions :math:`x,y`, and :math:`z`. We're using the notation
 #
 # .. math::
 #   \vec{\sigma}\cdot \vec{\sigma} = \sigma_{x}\sigma_{x}+\sigma_{y}\sigma_{y}+\sigma_{z}\sigma_{z}.
@@ -256,6 +255,7 @@ plt.show()
 
 
 ######################################################################
+#
 # Conclusion
 # ----------
 # Hamiltonian simulation with GQSP is a well-established quantum algorithm with many useful applications. 
@@ -266,7 +266,7 @@ plt.show()
 # custom Prepare and Select operators and studying other systems of interest, such as electronic structure, 
 # vibrational, and vibronic Hamiltonians. 
 #
-## References
+# References
 # ----------
 #
 # .. [#qsp]
@@ -295,5 +295,3 @@ plt.show()
 #     "The hardness of quantum spin dynamics",
 #     `arXiv:2312.07658 <https://arxiv.org/abs/2312.07658>`__, 2023
 #
-#
-
