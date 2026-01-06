@@ -243,3 +243,8 @@ print(f"Resources for Qubitized QPE for FeMoco(76): \n {total_cost}\n")
 #     "Reliably assessing the electronic structure of cytochrome P450 on today’s classical computers and tomorrow’s quantum computers"
 #     `Proceedings of the National Academy of Sciences 119.38 (2022). <https://www.pnas.org/doi/abs/10.1073/pnas.2203533119>`__
 #
+# .. [#vonburg]
+#     Vera von Burg et al.
+#     "Quantum computing enhanced computational catalysis"
+#     `arXiv:2007.14460 (2020). <https://arxiv.org/abs/2007.14460>`__
+#
