@@ -123,6 +123,8 @@ plt.show()
 # quantum embedding circuits, **E1** and **E2**.
 # Each kernel defines a different geometry for measuring similarity between data points.
 #
+# The three classical kernels are the following.
+#
 # - **RBF – Classical radial basis function kernel.**
 #   A classical baseline defined as:
 #
@@ -136,6 +138,8 @@ plt.show()
 #   Each input feature :math:`x_j` is encoded into a single qubit using an :math:`RX(x_j)` gate.
 #   The circuit is fully separable (no entanglement), producing the quantum state
 #   :math:`\lvert \psi_{\text{E1}}(x) \rangle`.
+#
+# And the two quantum kernels are defined as follows. 
 #
 # - **E2 – IQP embedding.**
 #   PennyLane’s ``qml.IQPEmbedding`` applies Hadamards, parameterized :math:`RZ(x_j)` rotations, and
