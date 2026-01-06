@@ -203,7 +203,7 @@ prepare_thc_qrom = qre.PrepTHC(femoco, coeff_precision=n_coeff, select_swap_dept
 wo_qrom = qre.QubitizeTHC(
     femoco,
     select_op=select_thc_qrom,
-    prepare_op=prepare_thc_qrom,
+    prep_op=prepare_thc_qrom,
 )
 qpe_cost = qre.estimate(qre.QPE(wo_qrom, n_iter), gate_set)
 total_cost = qpe_cost.add_parallel(phase_grad_cost)
