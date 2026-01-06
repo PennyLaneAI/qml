@@ -1,8 +1,11 @@
 r"""Qubit and T-gate Trade-offs in Qubitized Quantum Phase Estimation
 ======================================================================
 
-`Quantum Phase Estimation (QPE) <https://pennylane.ai/qml/demos/tutorial_qpe>`_ relies on unitary evolution,
-yet chemical Hamiltonians :math:`\hat{H}` are Hermitian.
+Unlocking the full potential of quantum computing for chemistry, from designing better battery materials to discovering
+new drugs, requires simulating the quantum dynamics of molecular systems.
+To achieve this, we rely on `Quantum Phase Estimation (QPE) <https://pennylane.ai/qml/demos/tutorial_qpe>`_,
+which allows us to estimate the energy eigenstates of a Hamiltonian with high precision.
+QPE, however, relies on unitary evolution, and chemical Hamiltonians :math:`\hat{H}` are Hermitian.
 `Qubitization <https://pennylane.ai/qml/demos/tutorial_qubitization>`_ bridges this gap via
 `Block Encoding <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding>`_, embedding :math:`\hat{H}` into a larger
 "Quantum Walk" unitary :math:`W`. To construct this block encoding, we decompose the Hamiltonian into a Linear Combination of Unitaries (LCU).
@@ -131,7 +134,7 @@ print(f"Resources for Qubitized QPE for FeMoco(76): \n {total_cost}\n")
 # Analyzing the Results
 # ^^^^^^^^^^^^^^^^^^^^^
 # Let's look at the results we just generated. For FeMoco (76), the resource estimator predicts a requirement
-# of 2000 qubits and over 40 trillion (:math:`4 \times 10^{13}`) total gates.
+# of over 3000 qubits and 1 trillion (:math:`1.06 \times 10^{12}`) total gates.
 #
 # In the fault-tolerant era, logical qubits will be a precious resource. What if our hardware only supports
 # 500 logical qubits? Are we unable to simulate this system? Not necessarily. We can actively trade **Space**
@@ -144,21 +147,23 @@ print(f"Resources for Qubitized QPE for FeMoco(76): \n {total_cost}\n")
 # Exploring Trade-offs
 # --------------------
 #
-# Let's first explore the impact of **Batched Givens Rotations**, by varying the number of rotation angles loaded
-# simultaneously. This particular argument is accessible through the :class:`~.pennylane.estimator.SelectTHC` operator as
-# ``batched_rotations``. Let's see how the resources change for FeMoco as we vary this parameter:
+# Let's first explore the impact of **Batched Givens Rotations**, by varying the number of batches in which rotation angles
+# loaded. This particular argument is accessible through the :class:`~.pennylane.estimator.SelectTHC` operator as
+# ``num_batches``. Let's see how the resources change for FeMoco as we vary this parameter:
 
-batch_sizes = [1, 2, 3, 4, 5, 75]
+batch_sizes = [1, 2, 3, 5, 10, 75]
 qubit_counts = []
 tgate_counts = []
 
 for i in batch_sizes:
-
+    prep_thc = qre.PrepTHC(femoco, coeff_precision=n_coeff, select_swap_depth=1)
     select_thc = qre.SelectTHC(femoco, rotation_precision=n_angle, num_batches=i)
     wo_batched = qre.QubitizeTHC(
         femoco,
+        prep_op=prep_thc,
         select_op=select_thc,
         coeff_precision=n_coeff,
+        rotation_precision=n_angle,
     )
 
     qpe_cost = qre.estimate(qre.QPE(wo_batched, n_iter), gate_set=gate_set)
@@ -168,38 +173,27 @@ for i in batch_sizes:
     )
     tgate_counts.append(total_cost.gate_counts["T"])
 
-# Plotting the trade-off curve
-import matplotlib.pyplot as plt
-
-fig, ax1 = plt.subplots(figsize=(10, 6))
-
-ax1.set_xlabel("Batch Size (Givens Rotations per Step)")
-ax1.set_ylabel("Logical Qubits (Space)")
-ax1.plot(batch_sizes, qubit_counts, marker="o", linestyle="-", linewidth=1.5)
-ax1.tick_params(axis="y")
-ax1.set_xscale("log")
-ax1.grid(True, which="both", linestyle="--", alpha=0.5)
-
-ax2 = ax1.twinx()
-ax2.set_ylabel("T-Count (Time)")
-ax2.plot(batch_sizes, tgate_counts, marker="s", linestyle="--", linewidth=1.5)
-ax2.tick_params(axis="y")
-ax2.set_yscale("log")
-
-plt.title("FeMoco(76): Batching Trade-off", fontsize=14)
-plt.tight_layout()
-plt.legend()
-plt.show()
-
-#################################################################################
+######################################################################
+# Let's visualize the results by plotting the qubit and T-gate counts against the batch size:
+#
+# .. figure:: ../_static/demonstration_assets/qubitization/batching_tradeoff.jpeg
+#    :align: center
+#    :width: 100%
+#    :target: javascript:void(0)
+#
+# The plot illustrates a clear crossover in resource requirements. At the left extreme (a single batch),
+# we minimize T-gates but pay a massive penalty in qubits, requiring over 3000 logical qubits, which far exceeds
+# our hypothetical 500-qubit limit.
 # Now, if we need to control the resources even further, we can combine batching with our second strategy: **Select-Swap QROM**.
-# Let's see how the resources change if we set the select_swap_depth to 1, for both :class:`~.pennylane.estimator.PrepTHC`,
-# and :class:`~.pennylane.estimator.SelectTHC` operators:
+# Note that the qubit register storing angles in the :class:`~.pennylane.estimator.SelectTHC` operator can be reused for doing the select-swap
+# trick in the QROM. Let's see how the resources change if we change the select_swap depth for the :class:`~.pennylane.estimator.PrepareTHC`
+# subroutine to a power of 2.
+
 
 select_thc_qrom = qre.SelectTHC(
-    femoco, rotation_precision=n_angle, num_batches=38, select_swap_depth=1
+    femoco, rotation_precision=n_angle, num_batches=10, select_swap_depth=1
 )
-prepare_thc_qrom = qre.PrepTHC(femoco, coeff_precision=n_coeff, select_swap_depth=1)
+prepare_thc_qrom = qre.PrepTHC(femoco, coeff_precision=n_coeff, select_swap_depth=4)
 wo_qrom = qre.QubitizeTHC(
     femoco,
     select_op=select_thc_qrom,
@@ -244,6 +238,7 @@ print(f"Resources for Qubitized QPE for FeMoco(76): \n {total_cost}\n")
 #     `Proceedings of the National Academy of Sciences 119.38 (2022). <https://www.pnas.org/doi/abs/10.1073/pnas.2203533119>`__
 #
 # .. [#vonburg]
+#
 #     Vera von Burg et al.
 #     "Quantum computing enhanced computational catalysis"
 #     `arXiv:2007.14460 (2020). <https://arxiv.org/abs/2007.14460>`__
