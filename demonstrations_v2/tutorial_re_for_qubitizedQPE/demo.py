@@ -148,13 +148,13 @@ print(f"Resources for Qubitized QPE for FeMoco(76): \n {total_cost}\n")
 # simultaneously. This particular argument is accessible through the :class:`~.pennylane.estimator.SelectTHC` operator as
 # ``batched_rotations``. Let's see how the resources change for FeMoco as we vary this parameter:
 
-batch_sizes = [1, 10, 20, 30, 40, 50]
+batch_sizes = [1, 2, 3, 4, 5, 75]
 qubit_counts = []
 tgate_counts = []
 
 for i in batch_sizes:
 
-    select_thc = qre.SelectTHC(femoco, rotation_precision=n_angle, batched_rotations=i)
+    select_thc = qre.SelectTHC(femoco, rotation_precision=n_angle, num_batches=i)
     wo_batched = qre.QubitizeTHC(
         femoco,
         select_op=select_thc,
