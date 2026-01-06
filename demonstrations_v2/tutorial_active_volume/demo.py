@@ -398,7 +398,8 @@ re-routing that eventually force us to insert a new block, even.
 uniquely and replace drawing edges between them by annotating the ports with the labels of the
 blocks they connect to. This allows us to separate logical blocks, which represent computation
 and are considered expensive, from the block connectivity, which represents communication between
-blocks and is considered cheaper because it is implemented via fast SWAP connections (also see
+blocks and is considered cheaper because it is natively supported by modules within range of
+each other, or can be implemented via fast SWAP connections (also see
 the `active volume computer info box <AV info box_>`_).
 
 Logical network for the CNOT ladder
@@ -434,10 +435,12 @@ For our example, we find the logical network
     :target: javascript:void(0)
 
 And this already concludes the compilation process of this simple Clifford operation, arriving at
-an optimized construction for the CNOT ladder subroutine, which was even parallelized
-into a single time step.
+an optimized construction for the CNOT ladder subroutine, which was parallelized
+into a single time step and can now be used as a building block for a computation executed
+on the active volume computer.
 
-TODO: INSERT PROPER WRAPUP SENTENCE
+In order to schedule multiple logical networks in a resource-efficient manner, we will need a
+second ingredient: state teleportation.
 
 Parallelizing logical networks with state teleportation
 -------------------------------------------------------
@@ -498,77 +501,51 @@ As we can see, the state teleportation together with the ability to track correc
 :math:`B` makes it possible to implement the two non-commuting operations :math:`A` and :math:`B`
 simultaneously, without violating any physical laws or causal dependencies.
 
-TODO: MERGE WITH SECTION FURTHER DOWN
-- logical networks encode the capabilities and restrictions of the active volume computer running
-the surface code
-- they capture the essence of the desired computation on such a computer
-- they can be parallelized easily via teleportation
-- they can be cut up
-- altogether, they can be scheduled densely on the AV computer, removing almost all idle volume.
-    -> callback to beginning
-
-Practical usefulness
-~~~~~~~~~~~~~~~~~~~~
-
-The previous discussion shows that it is *possible* to parallelize non-commuting gates at the cost
-of two additional qubits (we need two copies of the original qubit, plus a communication channel
-"back in time", the idling qubit), a Bell state preparation and Bell basis measurement (we need to entangle the
-communication channel), and classical compute. However, it is not clear whether this is a useful tradeoff.
-For example, we could apply the same technique when using a NISQ computer, but we would
-potentially even increase the two-qubit gate depth, and additional qubits are quite
-expensive to come by.
-
-For the quantum computer corrected with the surface code, and specifically for the active volume computer,
-the creation of qubit pairs in a Bell state and the Bell basis measurement are assumed to be
-much cheaper than arbitrary logical operations (see `info box <AV info box_>`_), because they can just be woven into
-the measurements, i.e., the code cycles of the error correction code via lattice surgery.
+In the context of active volume compilation, this parallelization technique allows us to schedule
+multiple logical networks at the same time step, even if they act on overlapping qubits and
+do not commute. This is essential to remove idle volume from the computation, and it can be done
+at low cost; the creation of qubit pairs in a Bell state and the Bell basis measurement are
+assumed to be much cheaper than arbitrary logical operations (see `info box <AV info box_>`_),
+because they can just be woven into the measurements, i.e., the code cycles of the error
+correction code via lattice surgery.
 Similarly, Pauli correction gates are tracked in software throughout, so that the only
 true price we are paying for the parallelization is the extra qubits. Finally,
 additional memory space to store the bridge qubit is usually available in the memory qubit modules
-making up half of the computer.
-As we are trying to condense a computation by parallelizing it and reducing idle volume, this
-tradeoff will often be beneficial.
+making up half of the active volume computer.
 
-As we can see, parallelization via state teleportation is a natural fit for active
-volume computers and the goal of our compilation. This is why the framework by Litinski and
-Nickerson promotes this technique to a first-class transformation, allowing
-us to parallelize networks *without having to recompile them.*
+What did we gain?
+-----------------
 
-TODO  THIS IS THE SECTION TO MERGE WITH
+You may ask what we gained by translating a quantum circuit to the logical network representation,
+and why we would prefer custom blocks--with new complicated rules governing them--over a
+good old circuit diagram.
+First, logical networks encode the capabilities and restrictions of the
+`active volume computer <AV info box_>`_, which is protected by the surface code and
+utilizes lattice surgery. This compatibility sets logical networks apart from other representations.
+Second, logical networks can be parallelized via state teleportation, as we just discussed. While
+this is true for components of a quantum circuit as well, there is a third feature that makes
+parallelization more useful:
+third, logical networks can be divided into multiple networks, which then can be executed in
+sequence. We will not go into detail about this, but refer to Sec. 2 and Fig. 11 of
+[#Litinski2022]_. This allows us to split up a network that otherwise would be too large to be
+executed in parallel with a previous network.
+We may sketch the idea behind the scheduling via splitting and parallelization:
 
-You may ask what we do with the logical network representation,
-and why we would prefer twelve custom blocks--with new complicated rules governing them--over a
-good old circuit diagram with three CNOTs.
-A key advantage of the logical network representation lies in its homogeneous expression of
-computational steps within the active volume computer, c.f. the `info box at the top <AV info box_>`_;
-all computation is made up of logical blocks that can be scheduled densely in the computational
-qubit modules of the computer in order to remove idle volume. If logical networks turn out too
-large for the space available at a given time step, they can be split into two networks that
-are executed sequentially.
-
-For our example circuit, this idea of gradual parallelization generalizes the idea that we are
-not forced to maximize parallelization; as we mentioned above, we instead could have concatenated
-the oriented ZX-diagrams for the three individual CNOT gates, or parallelized only two of them, if
-we had less computational space available. Abstractly, we can draw this as sequences of
-logical networks that make up different shapes:
-
-.. figure:: _static/demonstration_assets/active_volume/reshaped-networks.png
+.. figure:: _static/demonstration_assets/active_volume/scheduling.png
     :align: center
     :width: 100%
     :target: javascript:void(0)
 
-Logical networks thus form a much more flexible representation of operations on an error-corrected
-quantum computer, allowing them to be adjusted to available hardware resources and promoting
-space-time tradeoffs to first-class program transformations.
+As we can see, the combined effect of these features of logical networks allows us to
+(almost) fill the computational region of the active volume computer with logical blocks at
+each time step, creating a dense computation pattern and thus removing (almost) all idle volume.
+We thus solve the crucial shortcoming of circuit diagrams discussed at the beginning of the demo!
 
-From a mathematical perspective, logical networks distill the best out of the two worlds of
-quantum circuits and ZX-diagrams; ZX-diagrams allow for continuous
-deformations where "rigid" quantum circuits do not, but the additional structure of logical
-networks that resembles quantum circuits ensures that we obtain instructions that can be executed
-on the computer.
-
-TODO: END OF SECTION TO BE MERGED
-
+Another feature of logical network synthesis is the reduction of the computation to its essential
+logical effects. As a consequence, resynthesizing combinations of networks into a single new
+network can reduce the number of logical blocks that need to be executed. This
+already happens when compiling a Toffoli gate that is realized via CCZ state injection
+(see Fig. 14 in [1]).
 
 Reactive measurements and reaction time
 ---------------------------------------
