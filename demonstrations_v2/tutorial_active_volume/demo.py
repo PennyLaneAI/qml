@@ -454,12 +454,6 @@ state teleportation, using a so-called bridge qubit. This technique parallelizes
 operations without breaking physics, and it pays off because Bell state preparation and
 measurements are assumed to be fast on an active volume computer (see `info box at the top <AV info box_>`_).
 
-We will showcase this type of parallelization by treating the three CNOT gates in our ladder
-example as three individual subroutines. For convenience, we do this at the circuit level, in order
-to showcase the use of state teleportation. We then compare the resulting "procedurally
-parallelized" circuit for the three CNOTs to the monolithic network that we obtained
-from synthesis earlier.
-
 Physical soundness
 ~~~~~~~~~~~~~~~~~~
 
