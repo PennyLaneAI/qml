@@ -129,7 +129,7 @@ plt.show()
 @qml.qnode(dev)
 @partial(qml.transforms.merge_rotations, atol=1e-8, include_gates=None)
 @qml.transforms.cancel_inverses
-@partial(qml.transforms.commute_controlled, direction="right", recursive=False)
+@partial(qml.transforms.commute_controlled, direction="right")
 def q_fun(angles):
     qml.Hadamard(wires=1)
     qml.Hadamard(wires=2)
