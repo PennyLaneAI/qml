@@ -128,7 +128,7 @@ plt.show()
 
 @qml.qnode(dev)
 @partial(qml.transforms.merge_rotations, atol=1e-8, include_gates=None)
-@qml.transforms.cancel_inverses
+@qml.transforms.cancel_inverses(recursive=False)
 @partial(qml.transforms.commute_controlled, direction="right")
 def q_fun(angles):
     qml.Hadamard(wires=1)
@@ -197,7 +197,7 @@ compiled_circuit = qml.compile(
     pipeline=[
         partial(qml.transforms.commute_controlled, direction="left"),  # Opposite direction
         partial(qml.transforms.merge_rotations, include_gates=["RZ"]),  # Different threshold
-        partial(qml.transforms.cancel_inverses, recursive=False),  # Cancel inverses after rotations
+        qml.transforms.cancel_inverses(recursive=False),  # Cancel inverses after rotations
     ],
     num_passes=3,
 )
