@@ -39,17 +39,6 @@
             "url": "https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.2.030305"
         },
         {
-            "id": "Goings2022",
-            "type": "article",
-            "title": "Reliably assessing the electronic structure of cytochrome P450 on today’s classical computers and tomorrow’s quantum computers",
-            "authors": "Goings, Joshua J and White, Alec and Lee, Joonho and Tautermann, Christofer S and Degroote, Matthias and Gidney, Craig and Shiozaki, Toru and Babbush, Ryan and Rubin, Nicholas C",
-            "journal": "Proceedings of the National Academy of Sciences",
-            "volume": "119",
-            "pages": "e2203533119",
-            "year": "2022",
-            "url": "https://www.pnas.org/doi/abs/10.1073/pnas.2203533119"
-        },
-        {
             "id": "vonburg",
             "type": "article",
             "title": "Quantum computing enhanced computational catalysis",

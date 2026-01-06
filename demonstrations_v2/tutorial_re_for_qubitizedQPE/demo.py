@@ -12,13 +12,13 @@ QPE, however, relies on unitary evolution, and chemical Hamiltonians :math:`\hat
 In this demo, we use the **Tensor Hypercontraction (THC)** representation, a state of the art LCU decomposition for quantum chemistry
 that approximates the interaction tensor via a low-rank factorization.
 
-In order to get an understanding if this algorithm will run on first generation FTQC with X qubits,
-we need to know what the resources look like.
-In this demo, we show how to get concrete costs using logical resource estimation tools in PennyLane and find a version that will fit on FTQC hardware.
+**But is this feasible on early fault-tolerant hardware?**
+To answer this, we must move beyond asymptotic scaling and determine the concrete resource requirements.
+In this demo, we use PennyLane's logical resource estimation tools to calculate the precise costs and
+demonstrate how to optimize the algorithm to fit on constrained devices.
 
 .. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_how_to_build_spin_hamiltonians.png
     :align: center
-
     :width: 70%
     :target: javascript:void(0)
 """
@@ -27,16 +27,17 @@ In this demo, we show how to get concrete costs using logical resource estimatio
 # To implement this decomposition on a quantum computer, the Walk operator is constructed from two primary subroutines:
 # the ``Prepare`` oracle, which prepares the state, whose amplitudes encode the Hamiltonian coefficients, and the
 # ``Select`` oracle, which applies the Hamiltonian terms controlled by that state. The implementation of these subroutines
-# offers some architectural flexibility to go with higher qubits or T-gates. These architectural knobs can be defined as:
+# offers some architectural flexibility to go with higher qubits or T-gates. Specifically, we can tune two architectural knobs:
 #
 # Knob 1: Batched Givens Rotations
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 # In the ``Select`` operator, we need to implement a series of Givens rotations to change the basis.
 # Naively, this requires a quantum register of size :math:`N \times \beth` to store all angles simultaneously, where
 # ``N`` is the number of rotations, and :math:`\beth` is the rotation precision.
-# Here, we can choose to load these angles in batches instead of loading all the rotation angles at once. This leads to reduction
-# in the register size, thus saving qubits, but necessitates repetition of the QROM(Quantum Read-Only Memory) subroutine for each batch
-# and hence costs T-gates.
+# Here, we can choose to load these angles in batches instead of loading all the rotation angles at once.
+# The tunable knob here is the **number of batches** in which the rotation angles are loaded. By increasing the number of batches,
+# we save the qubits by reducing the register size, but necessitate repetition of the QROM(Quantum Read-Only Memory) subroutine for each batch
+# and hence increase T-gates.
 #
 # .. figure:: ../_static/demonstration_assets/qubitization/batching.jpeg
 #    :align: center
@@ -83,7 +84,7 @@ femoco = qre.THCHamiltonian(num_orbitals=76, tensor_rank=450, one_norm=1201.5)
 # Next we need to determine the precision with which we want to simulate these systems, and how it translates to the circuit parameters.
 #
 # Defining the error budget
-# ^^^^^^^^^^^^^^^^^^^^^^^^^
+# -------------------------
 # We begin by fixing the target accuracy for the Quantum Phase Estimation (QPE) routine to :math:`\epsilon_{QPE} = 0.001` Hartree,
 # which dictates the total number of QPE iterations required:
 #
@@ -102,12 +103,12 @@ femoco = qre.THCHamiltonian(num_orbitals=76, tensor_rank=450, one_norm=1201.5)
 #    n_{angle} = \left\lceil 5.652 + \log_2\left(\frac{20 \lambda N}{\epsilon_{QPE}}\right) \right\rceil
 #
 # Estimating Qubitized QPE Cost
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# -----------------------------
 # With these parameters in hand, we can esimate the total resources. The full algorithm consists of the Walk Operator,
 # constructed via :class:`~.pennylane.templates.templates.QubitizeTHC` running within a QPE routine.
 #
 # We must note that :class:`~.pennylane.estimator.templates.SelectTHC` oracle implementation is based on the description in
-# von Burg et al. [vonburg]_. This work uses the phase gradient technique to implement Givens rotations, and thus requires an
+# von Burg et al. [#vonburg]_. This work uses the phase gradient technique to implement Givens rotations, and thus requires an
 # auxiliary resource state for addition of phase. The ``SelectTHC`` template doesn't include the cost of preparation of this
 # phase gradient state, so we must explicitly estimate this overhead and add it to the final cost of QPE circuit.
 #
@@ -132,7 +133,7 @@ print(f"Resources for Qubitized QPE for FeMoco(76): \n {total_cost}\n")
 
 ######################################################################
 # Analyzing the Results
-# ^^^^^^^^^^^^^^^^^^^^^
+# ---------------------
 # Let's look at the results we just generated. For FeMoco (76), the resource estimator predicts a requirement
 # of over 3000 qubits and 1 trillion (:math:`1.06 \times 10^{12}`) total gates.
 #
@@ -145,8 +146,10 @@ print(f"Resources for Qubitized QPE for FeMoco(76): \n {total_cost}\n")
 # choices that allow us to balance our resource budget.
 #
 # Exploring Trade-offs
-# --------------------
+# ^^^^^^^^^^^^^^^^^^^^
 #
+# Step 1: Reducing Qubits with Batching
+# -------------------------------------
 # Let's first explore the impact of **Batched Givens Rotations**, by varying the number of batches in which rotation angles
 # loaded. This particular argument is accessible through the :class:`~.pennylane.estimator.SelectTHC` operator as
 # ``num_batches``. Let's see how the resources change for FeMoco as we vary this parameter:
@@ -173,42 +176,76 @@ for i in batch_sizes:
     )
     tgate_counts.append(total_cost.gate_counts["T"])
 
+
 ######################################################################
 # Let's visualize the results by plotting the qubit and T-gate counts against the batch size:
 #
-# .. figure:: ../_static/demonstration_assets/qubitization/batching_tradeoff.jpeg
+# .. figure:: ../_static/demonstration_assets/qubitization_re/batching_tradeoff.jpeg
 #    :align: center
-#    :width: 100%
+#    :width: 85%
 #    :target: javascript:void(0)
 #
 # The plot illustrates a clear crossover in resource requirements. At the left extreme (a single batch),
 # we minimize T-gates but pay a massive penalty in qubits, requiring over 3000 logical qubits, which far exceeds
 # our hypothetical 500-qubit limit.
-# Now, if we need to control the resources even further, we can combine batching with our second strategy: **Select-Swap QROM**.
-# Note that the qubit register storing angles in the :class:`~.pennylane.estimator.SelectTHC` operator can be reused for doing the select-swap
-# trick in the QROM. Let's see how the resources change if we change the select_swap depth for the :class:`~.pennylane.estimator.PrepareTHC`
-# subroutine to a power of 2.
+# As we increase the number of batches, the qubit count plummets, eventually dipping below
+# our 500-qubit limit. However, there is no free lunch: the T-gate count rises steadily because we must
+# repeat the QROM readout for every additional batch.
+# We have successfully brought the qubit count down using batching. Now, can we optimize the gate count
+# without incurring extra qubit costs?
+#
+# Step 2: Finding a "Free Lunch" with Select-Swap
+# -----------------------------------------------
+# We have successfully brought the qubit count down using batching. Now, can we optimize the gate count
+# without incurring extra qubit costs?
+# To do this, we use the **Select-Swap QROM** strategy. Normally, this involves trading qubits for T-gates.
+# But here is the trick: the register used to store rotation angles in the :class:`~.pennylane.resource.SelectTHC`
+# operator is idle during the Prepare step. We can reuse these idle qubits to implement the
+# ``QROM`` for the :class:`~.pennylane.resource.PrepareTHC` operator.
+# This should allow us to decrease the T-gates without increasing the logical
+# qubit count, effectively providing a "free lunch" of optimization, at least until we run out of reusable space.
+#
+# Let's verify this by sweeping through different ``select_swap_depth`` values:
 
-select_thc_qrom = qre.SelectTHC(
-    femoco, rotation_precision=n_angle, num_batches=10, select_swap_depth=1
-)
-prepare_thc_qrom = qre.PrepTHC(femoco, coeff_precision=n_coeff, select_swap_depth=4)
-wo_qrom = qre.QubitizeTHC(
-    femoco,
-    select_op=select_thc_qrom,
-    prep_op=prepare_thc_qrom,
-)
-qpe_cost = qre.estimate(qre.QPE(wo_qrom, n_iter), gate_set)
-total_cost = qpe_cost.add_parallel(phase_grad_cost)
+swap_depths = [1, 2, 4, 8, 16]
+qubit_counts = []
+t_counts = []
 
-print(f"Resources for Qubitized QPE for FeMoco(76): \n {total_cost}\n")
+for depth in swap_depths:
+    select_thc_qrom = qre.SelectTHC(
+        femoco, rotation_precision=n_angle, num_batches=10, select_swap_depth=1
+    )
+    prepare_thc_qrom = qre.PrepTHC(femoco, coeff_precision=n_coeff, select_swap_depth=depth)
+
+    wo_qrom = qre.QubitizeTHC(
+        femoco,
+        select_op=select_thc_qrom,
+        prep_op=prepare_thc_qrom,
+    )
+
+    qpe_cost = qre.estimate(qre.QPE(wo_qrom, n_iter), gate_set=gate_set)
+    total_cost = qpe_cost.add_parallel(phase_grad_cost)
+
+    qubit_counts.append(total_cost.algo_wires + total_cost.zeroed_wires + total_cost.any_state_wires)
+    t_counts.append(total_cost.gate_counts["T"])
 
 ######################################################################
+#
+# .. figure:: ../_static/demonstration_assets/qubitization_re/qrom_selswap.jpeg
+#    :align: center
+#    :width: 85%
+#    :target: javascript:void(0)
+#
+# The plot confirms our intuition. For depths 1, 2, and 4, the logical qubit count stays exactly the same, while the
+# T-count decreases. However, moving to depth 8, the qubit count jumps as the swap network becomes too large to fit
+# entirely within the reused register, forcing the allocation of additional qubits. This marks
+# the point where the "free" optimization ends and the standard trade-off resumes.
+#
 # Conclusion
-# ----------
+# ^^^^^^^^^^
 #
 # In this demo, we tackled the logical resource estimation for FeMoco, a complex molecule central to understanding
-# biological nitrogen fixation. Our initial baseline for FeMoco revealed a requirement of ~2000 logical qubits, which
+# biological nitrogen fixation. Our initial baseline for FeMoco revealed a requirement of ~3000 logical qubits, which
 # underscores the magnitude of the challenge facing early fault-tolerant hardware.
 #
 # However, naive calculations tell only half the story. As we demonstrated later, these resource counts are not
@@ -229,12 +266,6 @@ print(f"Resources for Qubitized QPE for FeMoco(76): \n {total_cost}\n")
 #     Joonho Lee et al.
 #     "Even More Efficient Quantum Computations of Chemistry Through Tensor Hypercontraction."
 #     `PRX Quantum 2, 030305 (2021). <https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.2.030305>`__
-#
-# .. [#Goings2022]
-#
-#     Joshua J Goings et al.
-#     "Reliably assessing the electronic structure of cytochrome P450 on today’s classical computers and tomorrow’s quantum computers"
-#     `Proceedings of the National Academy of Sciences 119.38 (2022). <https://www.pnas.org/doi/abs/10.1073/pnas.2203533119>`__
 #
 # .. [#vonburg]
 #
