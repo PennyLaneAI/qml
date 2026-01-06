@@ -163,7 +163,12 @@ plt.show()
 # :func:`~pennylane.compile` function, which yields the same final circuit.
 #
 
-compiled_circuit = qml.compile(circuit)
+pipelines = [
+    partial(qml.transforms.commute_controlled, direction="right"),
+    partial(qml.transforms.cancel_inverses, recursive=False),
+    partial(qml.transforms.merge_rotations, atol=1e-8, include_gates=None),
+]
+compiled_circuit = qml.compile(circuit, pipeline=pipelines)
 
 qnode = qml.QNode(compiled_circuit, dev)
 qml.draw_mpl(qnode, decimals=1, style="sketch")(angles)
@@ -178,7 +183,7 @@ plt.show()
 # Let us see the resulting circuit with two passes.
 #
 
-compiled_circuit = qml.compile(circuit, num_passes=2)
+compiled_circuit = qml.compile(circuit, pipeline=pipelines, num_passes=2)
 
 qnode = qml.QNode(compiled_circuit, dev)
 qml.draw_mpl(qnode, decimals=1, style="sketch")(angles)
