@@ -189,7 +189,6 @@ for i in batch_sizes:
 # trick in the QROM. Let's see how the resources change if we change the select_swap depth for the :class:`~.pennylane.estimator.PrepareTHC`
 # subroutine to a power of 2.
 
-
 select_thc_qrom = qre.SelectTHC(
     femoco, rotation_precision=n_angle, num_batches=10, select_swap_depth=1
 )
