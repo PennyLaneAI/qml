@@ -226,7 +226,6 @@ def nmr_resources(time, one_norm, error):
 
 import matplotlib
 import matplotlib.pyplot as plt
-matplotlib.use('TkAgg')
 
 one_norm = 1.0
 error = 0.001
