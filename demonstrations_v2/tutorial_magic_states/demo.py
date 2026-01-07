@@ -24,7 +24,7 @@ distillation and cultivation, and outline the current research challenges and op
 Where is the magic?
 -------------------
 
-Let's beging with a little bit of history. Bravyi and Kitaev formalized the concept and coined the
+Let's begin with a little bit of history. Bravyi and Kitaev formalized the concept and coined the
 term "magic states" in [#Bravyi2005]_. 
 In this work, they proved that the ability to prepare magic states, when combined with a set of ideal Clifford 
 gates, the preparation of :math:`|0\rangle` ancillas, and Z-basis measurement capabilities 
