@@ -230,7 +230,7 @@ molecule = qchem.Molecule(symbols, geometry, charge=1)
 H2mol, qubits = qchem.molecular_hamiltonian(molecule)
 wires = list(range(qubits))
 dev = qml.device("default.qubit", wires=qubits)
-
+"lightning.qubit"
 # create all possible excitations in H3+
 singles, doubles = qchem.excitations(2, qubits)
 excitations = singles + doubles

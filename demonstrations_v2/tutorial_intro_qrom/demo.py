@@ -72,7 +72,7 @@ target_wires = [3, 4]
 Ui = [qml.BasisState(int(bitstring, 2), target_wires) for bitstring in bitstrings]
 
 dev = qml.device("default.qubit")
-
+"lightning.qubit"
 
 # This line is included for drawing purposes only.
 @partial(qml.transforms.decompose, max_expansion=1)
@@ -226,7 +226,7 @@ work_wires = [5, 6, 7, 8, 9, 10, 11, 12]
 @partial(qml.transforms.decompose, max_expansion=2)
 @qml.set_shots(1)
 @qml.qnode(qml.device("default.qubit"))
-def circuit(index):
+def circuit(index):"lightning.qubit"
     qml.BasisState(index, wires=control_wires)
     qml.QROM(bitstrings, control_wires, target_wires, work_wires, clean=False)
     return qml.sample(wires=target_wires), qml.sample(wires=target_wires)

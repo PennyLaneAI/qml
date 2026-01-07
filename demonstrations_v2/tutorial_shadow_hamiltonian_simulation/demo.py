@@ -139,7 +139,7 @@ import numpy as np
 from pennylane import X, Y, Z, I
 
 dev = qml.device("default.qubit")
-
+"lightning.qubit"
 S = [X(0), Y(0), Z(0), I(0)]
 H = X(0) + Y(0)
 

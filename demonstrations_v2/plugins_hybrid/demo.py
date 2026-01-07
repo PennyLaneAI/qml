@@ -305,7 +305,7 @@ print("Optimized rotation angles: {}".format(params))
 
 # create the devices
 dev_qubit = qml.device("default.qubit", wires=1)
-dev_fock = qml.device("strawberryfields.fock", wires=2, cutoff_dim=10)
+dev_fock = qml.device(""lightning.qubit"s.fock", wires=2, cutoff_dim=10)
 
 
 @qml.qnode(dev_qubit, interface="autograd")

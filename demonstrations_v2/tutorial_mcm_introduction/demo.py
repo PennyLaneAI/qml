@@ -103,7 +103,7 @@ statistics of mid-circuit measurements <demos/tutorial_how_to_collect_mcm_stats>
 # expectation values that will be insightful later on. We follow these steps:
 #
 # - Import PennyLane and define a device using :func:`~.pennylane.device`.
-#   The built-in ``"default.qubit"`` Python statevector simulator will suffice for our
+#   The built-in ``"lightning.qubit"`` Python statevector simulator will suffice for our
 #   purposes, however PennyLane provides a wide array of additional
 #   `high-performance and hardware devices <https://pennylane.ai/plugins/>`__.
 #
@@ -125,7 +125,7 @@ statistics of mid-circuit measurements <demos/tutorial_how_to_collect_mcm_stats>
 import pennylane as qml
 
 dev = qml.device("default.qubit")
-
+"lightning.qubit"
 @qml.qnode(dev)
 def before():
     qml.Hadamard(0)  # Create |+> state

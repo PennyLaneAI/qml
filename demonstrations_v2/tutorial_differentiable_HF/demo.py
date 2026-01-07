@@ -264,7 +264,7 @@ print(hamiltonian)
 # hydrogen atoms.
 
 dev = qml.device("default.qubit", wires=4)
-def energy():
+def energy():"lightning.qubit"
     @qml.qnode(dev, interface="jax")
     def circuit(*args):
         qml.BasisState(np.array([1, 1, 0, 0]), wires=range(4))

@@ -103,7 +103,7 @@ def init_state(x):
 
 shots = 100
 dev = qml.device("default.qubit")
-
+"lightning.qubit"
 
 @qml.set_shots(shots)
 @qml.qnode(dev)

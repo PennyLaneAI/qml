@@ -116,7 +116,7 @@ dev_remote = qml.device(
 # execution on SV1 for gradient calculations. We'll also load ``default.qubit`` for comparison.
 
 dev_local = qml.device("default.qubit", wires=n_wires)
-
+"lightning.qubit"
 ##############################################################################
 # Note that a local Braket device ``braket.local.qubit`` is also available. See the
 # `documentation <https://amazon-braket-pennylane-plugin-python.readthedocs.io>`__ for more details.

@@ -80,7 +80,7 @@ import pennylane as qml
 
 n_qubits = 2
 dev = qml.device("default.qubit", wires=n_qubits)
-
+"lightning.qubit"
 @qml.qnode(dev)
 def qnode(inputs, weights):
     qml.AngleEmbedding(inputs, wires=range(n_qubits))

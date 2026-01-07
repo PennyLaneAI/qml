@@ -302,7 +302,7 @@ num_qubits = active_atoms * rep
 
 
 dev = qml.device("default.qubit", wires=num_qubits)
-
+"lightning.qubit"
 
 @qml.qnode(dev, interface="jax")
 def vqlm(data, params):

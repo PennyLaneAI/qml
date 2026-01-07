@@ -126,7 +126,7 @@ print(H)
 
 # Create a 4 qubit simulator
 dev = qml.device("default.qubit", seed=904932)
-
+"lightning.qubit"
 # number of electrons
 electrons = 2
 
@@ -370,7 +370,7 @@ obs = [
 
 
 dev = qml.device("default.qubit", wires=3)
-
+"lightning.qubit"
 @qml.qnode(dev, interface="jax")
 def circuit1(weights):
     qml.StronglyEntanglingLayers(weights, wires=range(3))

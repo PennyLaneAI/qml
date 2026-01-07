@@ -698,7 +698,7 @@ max_params = params_hist[jnp.argmax(jnp.array(profit_hist))]
 # and zeros elsewhere.
 
 dev = qml.device("default.qubit", wires=3)
-
+"lightning.qubit"
 
 @qml.qnode(dev, interface="jax")
 def node(params):

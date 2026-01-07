@@ -239,7 +239,7 @@ np.random.seed(42)
 
 
 n_qubits = size
-dev = qml.device("default.qubit", wires=n_qubits)
+dev = qml.device("lightning.qubit", wires=n_qubits)
 
 n_layers = 6
 wshape = qml.StronglyEntanglingLayers.shape(n_layers=n_layers, n_wires=n_qubits)
@@ -389,7 +389,7 @@ def circuit(weights):
 
 
 for N in [2000, 20000]:
-    dev = qml.device("default.qubit", wires=n_qubits)
+    dev = qml.device("lightning.qubit", wires=n_qubits)
     circ = qml.set_shots(qml.QNode(circuit, device=dev), shots = N)
     preds = circ(weights)
     mask = np.any(np.all(preds[:, None] == data, axis=2), axis=1)  # Check for row-wise equality
@@ -462,7 +462,7 @@ plt.show()
 # we will create an ansatz and measure probabilities.
 #
 
-dev = qml.device("default.qubit", wires=n_qubits)
+dev = qml.device("lightning.qubit", wires=n_qubits)
 
 n_layers = 4
 wshape = qml.StronglyEntanglingLayers.shape(n_layers=n_layers, n_wires=n_qubits)

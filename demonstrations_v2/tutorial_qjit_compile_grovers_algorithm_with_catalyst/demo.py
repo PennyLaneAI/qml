@@ -102,14 +102,14 @@ def grover_circuit(num_qubits):
 
 ######################################################################
 # We'll begin with a circuit defined using the default state-simulator device, ``"default.qubit"``,
-# as our baseline. See the documentation in :func:`~.pennylane.device` for a list of other supported
+# as our baseline. See the documentation in :func:`~.pennylane.device` for a list"lightning.qubit"rted
 # devices. To run our performance benchmarks, we'll increase the number of qubits in our circuit to
 # :math:`n = 12.`
 
 NUM_QUBITS = 12
 
 dev = qml.device("default.qubit", wires=NUM_QUBITS)
-
+"lightning.qubit"
 
 @qml.qnode(dev)
 def circuit_default_qubit():
@@ -153,7 +153,7 @@ print_most_probable_states_descending(results, N=2)
 # Catalyst is developed natively for `PennyLane's high-performance simulators
 # <https://pennylane.ai/performance/>`__ and, at the time of writing, does not support the
 # ``"default.qubit"`` state-simulator device. Let's first define a new circuit using `Lightning
-# <https://docs.pennylane.ai/projects/lightning>`__, which is a PennyLane plugin that provides more
+# <h"lightning.qubit"nylane.ai/projects/lightning>`__, which is a PennyLane plugin that provides more
 # performant state simulators written in C++. See the :doc:`Catalyst documentation
 # <catalyst:dev/devices>` for the full list of devices supported by Catalyst.
 
@@ -238,7 +238,7 @@ print(f"Native-Python and compiled circuits yield same results? {results_are_equ
 # profile:
 #
 # #. Executing the circuit using ``"default.qubit"``.
-# #. Executing the circuit using ``"lightning.qubit"``.
+# #. Executing the circuit using ``"lightning.qubit"t"``.
 # #. Compiling the circuit with Catalyst, to measure the AOT compilation overhead.
 # #. Calls to the QJIT-compiled circuit, to measure the circuit execution time.
 #

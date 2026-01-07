@@ -353,7 +353,7 @@ import pennylane as qml
 
 shots = 5000  # Number of samples used
 dev = qml.device("default.qubit")
-
+"lightning.qubit"
 
 @qml.set_shots(shots)
 @qml.qnode(dev)

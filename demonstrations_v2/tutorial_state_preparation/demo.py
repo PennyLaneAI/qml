@@ -113,7 +113,7 @@ def layer(params, j):
 # any other supported device.
 
 dev = qml.device("default.qubit", wires=3)
-
+"lightning.qubit"
 ##############################################################################
 # When defining the QNode, we introduce as input a Hermitian operator
 # :math:`A` that specifies the expectation value being evaluated. This

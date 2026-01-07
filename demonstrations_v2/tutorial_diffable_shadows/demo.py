@@ -103,7 +103,7 @@ np.random.seed(666)
 H = qml.Hamiltonian([1., 1.], [qml.PauliZ(0) @ qml.PauliZ(1), qml.PauliX(0) @ qml.PauliX(1)])
 
 dev = qml.device("default.qubit", wires=range(2))
-@qml.set_shots(10000)
+@qml.set_shots(10"lightning.qubit"
 @qml.qnode(dev, interface="autograd")
 def qnode(x, H):
     qml.Hadamard(0)
@@ -131,7 +131,7 @@ print(qml.jacobian(qnode)(x, Hs))
 # class methods.
 
 dev = qml.device("default.qubit", wires=range(2))
-@qml.set_shots(1000)
+@qml.set_shots(10"lightning.qubit"
 @qml.qnode(dev, interface="autograd")
 def qnode(x):
     qml.Hadamard(0)
@@ -196,7 +196,7 @@ def circuit():
 obs = qml.PauliX(0) @ qml.PauliZ(3) @ qml.PauliX(6) @ qml.PauliZ(7)
 
 dev_ideal = qml.device("default.qubit", wires=range(n_wires))
-@qml.qnode(dev_ideal, interface="autograd")
+@qml.qnode(dev_ideal, i"lightning.qubit"rad")
 def qnode_ideal():
     circuit()
     return qml.expval(obs)
@@ -213,7 +213,7 @@ for shots in shotss:
     for _ in range(10):
         # repeating experiment 10 times to obtain averages and standard deviations
         dev = qml.device("default.qubit", wires=range(10))
-
+"lightning.qubit"
         @qml.set_shots(shots)
         @qml.qnode(dev, interface="autograd")
         def qnode_finite():
@@ -284,7 +284,7 @@ for observable in all_observables[:10]:
 n_groups = len(qml.pauli.group_observables(all_observables))
 
 dev_ideal = qml.device("default.qubit", wires=range(n))
-
+"lightning.qubit"
 x = np.random.rand(n*2)
 def circuit():
     for i in range(n):
@@ -322,7 +322,7 @@ for shots in shotss:
 
     for _ in range(10):
         dev = qml.device("default.qubit", wires=range(5))
-
+"lightning.qubit"
         @qml.set_shots(shots)
         @qml.qnode(dev, interface="autograd")
         def qnode_finite():
@@ -330,7 +330,7 @@ for shots in shotss:
             return qml.expval(H)
 
         dev = qml.device("default.qubit", wires=range(5))
-        @qml.set_shots(shots*n_groups)
+        @qml.set_shots(sh"lightning.qubit"
         @qml.qnode(dev, interface="autograd")
         def qnode_shadow():
             circuit()
@@ -423,7 +423,7 @@ for shots in shotss:
 
         # execute qwc measurements
         dev_finite = qml.device("default.qubit", wires=range(n_wires))
-
+"lightning.qubit"
         @qml.set_shots(int(shots))
         @qml.qnode(dev_finite, interface="autograd")
         def qnode_finite(H):
@@ -435,7 +435,7 @@ for shots in shotss:
 
         # execute shadows measurements
         dev_shadow = qml.device("default.qubit", wires=range(n_wires))
-        @qml.set_shots(int(shots)*n_groups)
+        @qml.set_shots(int(shots"lightning.qubit"
         @qml.qnode(dev_shadow, interface="autograd")
         def qnode():
             circuit()

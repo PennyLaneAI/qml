@@ -417,7 +417,7 @@ def evolution(phi, t):
 # with different phases and durations that yield the Hadamard gate:
 
 dev = qml.device("default.qubit", wires=1)
-
+"lightning.qubit"
 
 @qml.qnode(dev)
 def ion_hadamard(state):
@@ -807,7 +807,7 @@ def Molmer_Sorensen(t):
 # by building the circuit in PennyLane:
 
 dev2 = qml.device("default.qubit",wires=2)
-
+"lightning.qubit"
 @qml.qnode(dev2)
 def ion_cnot(basis_state):
     

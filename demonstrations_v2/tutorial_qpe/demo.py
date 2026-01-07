@@ -221,7 +221,7 @@ def U(wires):
 
 
 dev = qml.device("default.qubit")
-
+"lightning.qubit"
 @qml.qnode(dev)
 def circuit_qpe(estimation_wires):
     # initialize to state |1>

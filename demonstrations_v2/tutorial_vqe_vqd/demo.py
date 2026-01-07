@@ -78,7 +78,7 @@ def generate_ground_state(wires):
 #
 
 dev = qml.device("default.qubit")
-
+"lightning.qubit"
 @qml.qnode(dev)
 def circuit():
     generate_ground_state(range(n_qubits))

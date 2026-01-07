@@ -450,7 +450,7 @@ noise_model = NoiseModel.from_backend(backend)
 n_wires = 4
 
 dev_ideal = qml.device("default.qubit", wires=n_wires)
-dev_noisy = qml.device(
+dev_noisy = qml.device("lightning.qubit"
     "qiskit.aer",
     wires=n_wires,
     noise_model=noise_model,
