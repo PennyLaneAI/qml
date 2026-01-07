@@ -1,0 +1,8 @@
+# Specifies constraints for PennyLane, Lightning, and Catalyst dev builds.
+# These need to be installed separately, and in a specific order, and as such are not controlled 
+# by the constraints-dev.txt file. Please do not change the order of these constraints.
+# Use upper bounds targeting the next-to-next stable release so we continue to build RC branches during feature freeze.
+
+pennylane-catalyst<0.15.0
+pennylane-lightning<0.45.0
+pennylane<0.45.0
