@@ -410,6 +410,10 @@ print(resources_est)
 # Now that you’ve seen how powerful PennyLane’s
 # quantum resource :mod:`estimator <pennylane.estimator>` is,
 # go try it out yourself!
+# :mod:`estimator <pennylane.estimator>` includes a host of resource operators, templates, and Hamiltonians
+# which serve to make resource estimation a breeze for a wide variety of algorithms.
+# If you're interested in exact resource tracking of compiled programs, :func:`pennylane.specs` provides
+# resource information throughout compilation for programs compiled using :func:`~.qjit`.
 #
 # Use PennyLane to reason about the costs of your quantum algorithm
 # without any of the headaches.
