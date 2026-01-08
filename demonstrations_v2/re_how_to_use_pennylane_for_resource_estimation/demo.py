@@ -161,10 +161,9 @@ def circuit(hamiltonian, num_steps, order):
     qre.TrotterPauli(hamiltonian, num_steps, order)
 
 ######################################################################
-# It's important to remember that this circuit is purely for resource estimation
-# and thus it **cannot be executed for simulation**. :class:`ResourceOperator <pennylane.estimator.resource_operator.ResourceOperator>`
-# are not designed to be executable like regular PennyLane operators. Thats what 
-# makes resource estimation so fast ⚡
+# This circuit is purely for resource estimation and it **cannot be executed for simulation**.
+# :class:`ResourceOperator <pennylane.estimator.resource_operator.ResourceOperator>`
+# is not designed to be executable. Thats what makes resource estimation so fast ⚡.
 #
 # The cost of an algorithm is typically quantified by the number of logical qubits required and the
 # number of gates used. Different hardware may natively support different gatesets.
@@ -221,8 +220,8 @@ resources_with_grouping = qre.estimate(
 t_count_1 = resources_without_grouping.gate_counts["T"]
 t_count_2 = resources_with_grouping.gate_counts["T"]
 reduction = abs((t_count_2 - t_count_1) / t_count_1)
-print("--- With grouping ---", f"\n T gate count: {t_count_1:.3E}\n")
-print("--- Without grouping ---", f"\n T gate count: {t_count_2:.3E}\n")
+print("--- Without grouping ---", f"\n T gate count: {t_count_1:.3E}\n")
+print("--- With grouping ---", f"\n T gate count: {t_count_2:.3E}\n")
 print(f"Difference: {100*reduction:.1f}% reduction")
 
 ######################################################################
