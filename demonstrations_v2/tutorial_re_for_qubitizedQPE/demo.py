@@ -24,6 +24,7 @@ demonstrate how to optimize the algorithm to fit on constrained devices.
 """
 
 ######################################################################
+# The key to this optimization lies in the specific circuit architecture used to build the Quantum Walk.
 # To implement this decomposition on a quantum computer, the Walk operator is constructed from two primary subroutines:
 # the ``Prepare`` oracle, which prepares the state, whose amplitudes encode the Hamiltonian coefficients, and the
 # ``Select`` oracle, which applies the Hamiltonian terms controlled by that state. The implementation of these subroutines
