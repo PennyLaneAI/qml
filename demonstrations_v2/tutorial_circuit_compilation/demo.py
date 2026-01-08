@@ -206,7 +206,6 @@ plt.show()
 # Combining simple circuit transforms that are applied repeatedly during each pass of the compiler, we can
 # significantly reduce the complexity of our quantum circuits.
 #
-# To continue learning, you can explore other circuit transformations present in the PennyLane
-# :mod:`~pennylane.transforms` module. Furthermore, you can even learn how to create your own in
-# `this guide <https://docs.pennylane.ai/en/stable/introduction/compiling_circuits.html>`__.
+# To continue learning, you can explore the documentation for the :mod:`~pennylane.transforms` module, which
+# contains other circuit transformations present in the PennyLane. You can even learn how to create your own transform!
 #
