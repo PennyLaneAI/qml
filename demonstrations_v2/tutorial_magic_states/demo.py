@@ -3,7 +3,7 @@ r"""What are magic states?
 
 Quantum computers rely on very fragile physical systems. They are easily disturbed, leading to 
 the rapid generation and propagation of errors. In order to scale and harness the full potential 
-of quantum computing, we must develop fault-tolerant architectures (FTQC). For this purpose, besides 
+of quantum computing, we must develop fault-tolerant quantum computers (FTQC). For this purpose, besides 
 simply detecting and correcting errors, we must be able to realize gates that correctly perform their 
 intended operations without introducing or spreading noise across the encoded information.
 
@@ -89,7 +89,7 @@ print(t_gate_teleportation_circuit(np.pi / 3))
 # 
 # **Why "magic"?** In their influential paper [#Bravyi2005]_, Bravyi and Kitaev not only presented a path to  
 # UQC via magic states but also proposed a method to prepare them starting from imperfect copies
-# of magic states. This purification process relies solely on Clifford operations. 
+# of magic states. This purification process relies solely on Clifford operations and Pauli basis measurements. 
 # The synergy of these two properties---enabling universality and being distillable through restricted 
 # (Clifford) operations---is precisely why they were named "magic states".
 #
