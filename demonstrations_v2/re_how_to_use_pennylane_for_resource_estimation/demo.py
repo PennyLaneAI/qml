@@ -117,8 +117,8 @@ print(resources_exec)
 #
 # .. math::
 #   n_{q} &= 2 n^{2}, \\
-#   n_{YY} &= n_{ZZ} = n (n - 1), \\
 #   n_{XX} &= n^{2}, \\
+#   n_{YY} = n_{ZZ} &= n (n - 1), \\
 
 n_cell = 100
 
@@ -161,6 +161,11 @@ def circuit(hamiltonian, num_steps, order):
     qre.TrotterPauli(hamiltonian, num_steps, order)
 
 ######################################################################
+# It's important to remember that this circuit is purely for resource estimation
+# and thus it **cannot be executed for simulation**. :class:`ResourceOperator <pennylane.estimator.resource_operator.ResourceOperator>`
+# are not designed to be executable like regular PennyLane operators. Thats what 
+# makes resource estimation so fast ⚡
+#
 # The cost of an algorithm is typically quantified by the number of logical qubits required and the
 # number of gates used. Different hardware may natively support different gatesets.
 # The default gateset used by :mod:`estimator <pennylane.estimator>` is:
