@@ -2,8 +2,7 @@ r"""How to use PennyLane for Resource Estimation
 ============================================
 
 Fault-tolerant quantum computers are on their way. However, how do we ensure that useful algorithms can
-actually run on them? An algorithm is hardly helpful when it cannot be executed, but only truly
-helpful when it can.
+actually run on them? An algorithm is hardly helpful when it cannot be executed.
 
 This is a major challenge in quantum algorithm development, especially since we are often working at
 scales where simulation is no longer feasible. We therefore need to analyze our algorithms to 
@@ -11,8 +10,8 @@ perform **resource estimation**: getting an idea of how many resources an algori
 as logical qubits and gates. In turn, this gives us an indication of how long the algorithm will take
 to execute on a given quantum hardware architecture, or if it will even fit in memory to begin with.
 
-PennyLane is here to make that process easy, with our new resource estimation module
-:mod:`estimator <pennylane.estimator>`. ``estimator`` leverages the latest resource estimates,
+PennyLane is here to make that process easy, with our new resource estimation module.
+:mod:`estimator <pennylane.estimator>` leverages the latest resource estimates,
 decompositions, and compilation techniques from the literature, and is designed to do so as
 quickly as possible.
 
@@ -47,7 +46,7 @@ kx, ky, kz = (0.5, 0.6, 0.7)
 
 t1 = time.time()
 flat_hamiltonian = qml.spin.kitaev(n_cells, coupling=np.array([kx, ky, kz]))
-flat_hamiltonian.compute_grouping()  # compute the qubitize commuting groups! 
+flat_hamiltonian.compute_grouping()  # compute the qubit-wise commuting groups!
 
 groups = []
 for group_indices in flat_hamiltonian.grouping_indices:
@@ -109,11 +108,16 @@ print(resources_exec)
 # without the need to compute costly Hamiltonians.
 #
 # In the particular case of the Kitaev Hamiltonian on a honeycomb
-# lattice, we can directly compute some important quantities:
+# lattice, we can directly compute some important quantities about the
+# hamiltonian. Based on the number of lattice cells :math:`n` we can
+# determine the number of qubits :math:`n_{q}` the hamiltonian acts on,
+# the number of :math:`XX`-type interactions :math:`n_{XX}`,
+# the number of :math:`YY`-type interactions :math:`n_{YY}`,
+# and the number of :math:`ZZ`-type interactions :math:`n_{ZZ}`.
 #
 # .. math::
 #   n_{q} &= 2 n^{2}, \\
-#   n_{YY} &= n_{ZZ} = n * (n - 1), \\
+#   n_{YY} &= n_{ZZ} = n (n - 1), \\
 #   n_{XX} &= n^{2}, \\
 
 n_cell = 100
