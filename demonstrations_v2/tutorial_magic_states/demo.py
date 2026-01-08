@@ -213,12 +213,6 @@ print(t_gate_teleportation_circuit(np.pi / 3))
 #    as cheap as CNOT gates."
 #    `arXiv preprint arXiv:2409.17595 (2024) <https://arxiv.org/abs/2409.17595>`__.
 #
-# .. [#Heinrich2019]
-#
-#    Markus Heinrich and David Gross. "Robustness of Magic and Symmetries of the Stabiliser 
-#    Polytope."
-#    `Quantum 3, 132 (2019) <https://quantum-journal.org/papers/q-2019-04-08-132>`__.
-#
 # .. [#QuEra2025]
 #
 #    Pedro Sales Rodriguez, et al. "Experimental demonstration of logical magic state distillation."
@@ -254,4 +248,9 @@ print(t_gate_teleportation_circuit(np.pi / 3))
 #    "Efficient magic state cultivation with lattice surgery."
 #    `arXiv preprint arXiv:2510.24615 <https://arxiv.org/abs/2510.24615>`__.
 #
-
+# .. [#Heinrich2019]
+#
+#    Markus Heinrich and David Gross. "Robustness of Magic and Symmetries of the Stabiliser 
+#    Polytope."
+#    `Quantum 3, 132 (2019) <https://quantum-journal.org/papers/q-2019-04-08-132>`__.
+#
