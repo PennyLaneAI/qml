@@ -258,7 +258,7 @@ print(wrapped_qpe_bloq)
 #
 #     show_call_graph(wrapped_qpe_bloq, max_depth=1)
 #
-# .. figure:: ../_static/demonstration_assets/how_to_use_qualtran_with_pennylane/wrapped_qpe_bloq.png
+# .. figure:: ../_static/demonstration_assets/how_to_use_qualtran_with_pennylane/wrapped_qpe_bloq.svg
 #     :align: center
 #     :width: 50%
 
