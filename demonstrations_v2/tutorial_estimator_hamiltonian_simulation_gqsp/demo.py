@@ -130,7 +130,8 @@ print(qre.estimate(W))
 
 HamSim = qre.GQSPTimeEvolution(W, time=100, one_norm=1, poly_approx_precision=0.001)
 
-print(f"Resources for Hamiltonian simulation with GQSP {qre.estimate(HamSim)}")
+print(f"Resources for Hamiltonian simulation with GQSP")
+print(qre.estimate(HamSim))
 
 
 ################################### 
