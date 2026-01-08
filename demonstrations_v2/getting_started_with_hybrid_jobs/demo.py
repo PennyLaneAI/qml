@@ -62,6 +62,7 @@ Let’s setup an algorithm that makes use of both classical and quantum resource
 #
 
 import pennylane as qml
+qml.capture.enable()
 from pennylane import numpy as np
 
 
