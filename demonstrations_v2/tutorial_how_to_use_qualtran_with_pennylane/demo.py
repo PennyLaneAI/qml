@@ -282,7 +282,7 @@ for gate, count in wrapped_sigma.items():
 # When Qualtran computes the resource counts for a ``ToBloq``, it first checks if there is a call
 # graph defined. If it is defined, Qualtran uses that call graph to compute the resource count
 # estimates. If it is not defined, Qualtran uses the PennyLane decomposition or the PennyLane 
-# :mod:~estimator module to compute the resource count estimates.
+# :mod:`~.estimator` module to compute the resource count estimates.
 #
 # Since computing the PennyLane decompositions is expensive, many PennyLane templates such as QPE
 # have call graphs defined when wrapped as a ``ToBloq`` object. By defining these call graphs,
