@@ -1,8 +1,8 @@
 r"""How to use PennyLane for Resource Estimation
 ============================================
 
-Fault tolerant quantum computers are on their way. But how do we ensure that useful algorithms can
-actually run on them? An algorithm is hardly helpful when it cannot be executed; but only truly
+Fault-tolerant quantum computers are on their way. However, how do we ensure that useful algorithms can
+actually run on them? An algorithm is hardly helpful when it cannot be executed, but only truly
 helpful when it can.
 
 This is a major challenge in quantum algorithm development, especially since we are often working at
@@ -12,12 +12,12 @@ as logical qubits and gates. In turn, this gives us an indication of how long th
 to execute on a given quantum hardware architecture, or if it will even fit in memory to begin with.
 
 PennyLane is here to make that process easy, with our new resource estimation module
-:mod:`estimator <pennylane.estimator>`. `estimator` leverages the latest resource estimates,
+:mod:`estimator <pennylane.estimator>`. ``estimator`` leverages the latest resource estimates,
 decompositions, and compilation techniques from the literature, and is designed to do so as
 quickly as possible.
 
 In this demo, we will estimate the quantum resources necessary for a simple Hamiltonian workflow:
-evolve the quantum state of a honeycomb lattice of spins under the
+evolving the quantum state of a honeycomb lattice of spins under the
 :func:`Kitaev Hamiltonian <pennylane.spin.kitaev>`.
 """
 
@@ -101,7 +101,7 @@ print(resources_exec)
 # **Thats 20,000 spins!**
 #
 # Generating such Hamiltonians quickly becomes a bottleneck.
-# However, :mod:`estimator <pennylane.estimator>`,
+# However, :mod:`estimator <pennylane.estimator>`
 # doesn't require detailed descriptions of Hamiltonians
 # for estimation; instead, we can define 
 # `resource Hamiltonians <https://docs.pennylane.ai/en/stable/code/qml_estimator.html#resource-hamiltonians>`__
@@ -147,7 +147,7 @@ kitaev_H = qre.PauliHamiltonian(
 # from the :mod:`estimator <pennylane.estimator>` module to express our circuit.
 # These
 # :class:`ResourceOperator <pennylane.estimator.resource_operator.ResourceOperator>`
-# classes, like the `PauliHamiltonian` above, are designed to require minimal information
+# classes, like the ``PauliHamiltonian`` above, are designed to require minimal information
 # --- avoiding costly compute ---
 # while still providing trustworthy estimates.
 #
@@ -176,7 +176,7 @@ print(f"Processing time: {t2 - t1:.3g} seconds\n")
 print(res)
 
 ######################################################################
-# Our resource estimate was generated in the blink of an eye.
+# Our resource estimate was generated in the blink of an eye 👁️
 #
 # We can also analyze the resources of an individual
 # :class:`ResourceOperator <pennylane.estimator.resource_operator.ResourceOperator>`.
@@ -206,7 +206,7 @@ resources_with_grouping = qre.estimate(
 )
 
 ######################################################################
-# Let’s see how the cost of ``qre.TrotterPauli`` differs in these two cases!
+# Let’s see how the cost of ``qre.TrotterPauli`` differs in these two cases:
 
 # Just compare T gates:
 t_count_1 = resources_without_grouping.gate_counts["T"]
@@ -407,7 +407,7 @@ print(resources_est)
 # without any of the headaches.
 #
 # References
-# ----------
+# ~~~~~~~~~~
 #
 # .. [#bocharov]
 #
