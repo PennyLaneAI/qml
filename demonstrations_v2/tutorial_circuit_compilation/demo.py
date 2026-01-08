@@ -208,5 +208,5 @@ plt.show()
 #
 # To continue learning, you can explore other circuit transformations present in the PennyLane
 # :mod:`~pennylane.transforms` module. Furthermore, you can even learn how to create your own in
-# `this blogpost <https://pennylane.ai/blog/2021/08/how-to-write-quantum-function-transforms-in-pennylane/>`__.
+# `this guide <https://docs.pennylane.ai/en/stable/introduction/compiling_circuits.html>`__.
 #
