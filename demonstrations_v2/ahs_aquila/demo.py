@@ -749,8 +749,8 @@ plt.show()
 #
 #  .. warning::
 #
-#      Note that running on hardware is a paid service and will incur a fee. Ensure that you are aware of
-#      these costs and comfortable with them before proceeding.
+#      Note that running on hardware is a paid service and running the below code on hardware will result in
+#      fees charged to your AWS account. We recommend monitoring your usage on the AWS Braket dashboard.
 #
 
 
