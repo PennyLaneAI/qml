@@ -16,7 +16,7 @@ estimating expectation values of certain observables is easy.
 
 .. note::
     The IQP circuit and expectation values estimator are directly implemented and
-    available in PennyLane via the :class:`~.IQP` template
+    available in PennyLane v0.44 via the :class:`~.IQP` template
     and :func:`~.pennylane.qnn.iqp_expval`, respectively.
 
 Parameterized IQP circuits
