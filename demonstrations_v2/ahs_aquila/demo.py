@@ -226,7 +226,7 @@ aquila = qml.device(
 #
 #      pennylane/devices/legacy_facade.py:194: PennyLaneDeprecationWarning: Setting shots on device is deprecated.
 #      Please use the `set_shots` transform on the respective QNode instead.
-# .       warnings.warn(
+#        warnings.warn(
 #
 
 rydberg_simulator = qml.device("braket.local.ahs", wires=3)
