@@ -306,8 +306,9 @@ def _build_demo(
                         cmds.pip_install(
                             build_venv.python,
                             "--no-cache-dir",
+                            "--no-deps",
                             "--upgrade",
-                            "--extra-index-url",
+                            "--index-url",
                             "https://test.pypi.org/simple/",
                             package,
                             use_uv=False,
