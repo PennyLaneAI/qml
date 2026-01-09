@@ -5,17 +5,17 @@ Fault-tolerant quantum computers are on their way. However, how do we ensure tha
 actually run on them? An algorithm is hardly helpful when it cannot be executed.
 
 This is a major challenge in quantum algorithm development, especially since we are often working at
-scales where simulation is no longer feasible. We therefore need to analyze our algorithms to 
-perform **resource estimation**: getting an idea of how many resources an algorithm requires, such
+scales where simulation is no longer feasible. We therefore need to analyze our algorithms
+through **resource estimation**: getting an idea of how many resources an algorithm requires, such
 as logical qubits and gates. In turn, this gives us an indication of how long the algorithm will take
 to execute on a given quantum hardware architecture, or if it will even fit in memory to begin with.
 
 PennyLane is here to make that process easy, with our new resource estimation module.
-:mod:`estimator <pennylane.estimator>` leverages the latest resource estimates,
+The :mod:`estimator <pennylane.estimator>` module leverages the latest resource estimates,
 decompositions, and compilation techniques from the literature, and is designed to do so as
 quickly as possible.
 
-In this demo, we will estimate the quantum resources necessary for a simple Hamiltonian workflow:
+In this demo, we will estimate the quantum resources necessary for a simple Hamiltonian simulation workflow:
 evolving the quantum state of a honeycomb lattice of spins under the
 :func:`Kitaev Hamiltonian <pennylane.spin.kitaev>`.
 """
@@ -29,10 +29,10 @@ evolving the quantum state of a honeycomb lattice of spins under the
 # :func:`qre.estimate <pennylane.estimator.estimate.estimate>`
 # directly on the QNode.
 #
-# We will demonstrate this with a :math:`25 \times 25` unit honeycomb lattice of spins.  
+# We demonstrate this with a :math:`25 \times 25` honeycomb lattice of spins.  
 # Here, we generate the Hamiltonian ourselves, using the
 # :func:`qml.spin.kitaev <pennylane.spin.kitaev>` function,
-# as well as grouping the Hamiltonian terms into qubit-wise
+# and group the Hamiltonian terms into qubit-wise
 # commuting groups:
 #
 
@@ -40,8 +40,7 @@ import pennylane as qml
 import numpy as np
 import time
 
-n_cell = 25
-n_cells = [n_cell, n_cell]
+n_cells = [25, 25]
 kx, ky, kz = (0.5, 0.6, 0.7)
 
 t1 = time.time()
@@ -95,11 +94,11 @@ print(resources_exec)
 
 ######################################################################
 # What if we wanted to estimate the quantum resources necessary to evolve the quantum state of a
-# :math:`100 \times 100` unit honeycomb lattice of spins under the Kitaev Hamiltonian?
+# :math:`100 \times 100` honeycomb lattice of spins under the Kitaev Hamiltonian?
 #
-# **Thats 20,000 spins!**
+# **That's 20,000 spins!**
 #
-# Generating such Hamiltonians quickly becomes a bottleneck.
+# Generating such Hamiltonians becomes a bottleneck quickly as the system size increases.
 # However, :mod:`estimator <pennylane.estimator>`
 # doesn't require detailed descriptions of Hamiltonians
 # for estimation; instead, we can define 
@@ -109,8 +108,8 @@ print(resources_exec)
 #
 # In the particular case of the Kitaev Hamiltonian on a honeycomb
 # lattice, we can directly compute some important quantities about the
-# hamiltonian. Based on the number of lattice cells :math:`n` we can
-# determine the number of qubits :math:`n_{q}` the hamiltonian acts on,
+# Hamiltonian. Based on the number of lattice cells :math:`n` we can
+# determine the number of qubits :math:`n_{q}` the Hamiltonian acts on,
 # the number of :math:`XX`-type interactions :math:`n_{XX}`,
 # the number of :math:`YY`-type interactions :math:`n_{YY}`,
 # and the number of :math:`ZZ`-type interactions :math:`n_{ZZ}`.
@@ -134,8 +133,7 @@ n_q, n_xx, n_yy, n_zz = pauli_quantities(n_cell)
 ######################################################################
 # We can capture this information in a compact representation
 # using the
-# :class:`qre.PauliHamiltonian <pennylane.estimator.compact_hamiltonian.PauliHamiltonian>`
-# class:
+# :class:`qre.PauliHamiltonian <pennylane.estimator.compact_hamiltonian.PauliHamiltonian>`:
 
 pauli_word_distribution = {"XX": n_xx, "YY": n_yy, "ZZ": n_zz}
 
@@ -162,12 +160,12 @@ def circuit(hamiltonian, num_steps, order):
 
 ######################################################################
 # This circuit is purely for resource estimation and it **cannot be executed for simulation**.
-# :class:`ResourceOperator <pennylane.estimator.resource_operator.ResourceOperator>`
-# is not designed to be executable. Thats what makes resource estimation so fast ⚡.
+# That's what makes resource estimation so fast ⚡.
 #
 # The cost of an algorithm is typically quantified by the number of logical qubits required and the
-# number of gates used. Different hardware may natively support different gatesets.
-# The default gateset used by :mod:`estimator <pennylane.estimator>` is:
+# number of gates used.
+# While different hardware may natively support different gatesets,
+# the default gateset used by :mod:`estimator <pennylane.estimator>` is:
 # ``{'Hadamard', 'S', 'CNOT', 'T', 'Toffoli', 'X', 'Y', 'Z'}``.
 #
 # We now have a representation of our workflow using resource
@@ -231,17 +229,17 @@ print(f"Difference: {100*reduction:.1f}% reduction")
 
 ######################################################################
 # Changing gatesets and precision
-# ~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 
 ######################################################################
-# Here are the resources for our entire circuit using our updated Hamiltonian:
+# Here are the resources for our entire circuit using the updated Hamiltonian:
 
 res = qre.estimate(circuit)(kitaev_H_with_grouping, num_steps, order)
 print(f"{res}")
 
 ######################################################################
-# We can configure the gateset to obtain resource estimates at various levels of abstraction.
+# We can also configure the gateset to obtain resource estimates at various levels of abstraction.
 # Here, we configure a high-level gateset which adds gate types such as rotations, and a low
 # level-gateset limited to just ``Hadamard``, ``CNOT``, ``S``, and ``T`` gates.
 #
@@ -340,7 +338,7 @@ print(f"Processing time: {t2 - t1:.3g} seconds\n")
 print(resources)
 
 ######################################################################
-# Comparing estimates: full vs. resource workflows
+# Comparing estimates: Full vs. Resource workflows
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # We've shown that you can estimate your workflow's resources
