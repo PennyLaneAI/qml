@@ -405,9 +405,8 @@ for step in range(1, len(circuit_ops)):
 # on their own. In PennyLane, any quantum circuit can be decomposed in a universal basis
 # using the :func:`~pennylane.clifford_t_decomposition`. This transform, under the hood,
 # decomposes the entire circuit up to a desired operator norm error :math:`\epsilon \geq 0`
-# using :func:`~pennylane.ops.sk_decomposition` that employs an iter-recursive variant
-# of the original Solovay-Kitaev algorithm described in
-# `Dawson and Nielsen (2005) <https://arxiv.org/abs/quant-ph/0505030>`__.
+# using :func:`~pennylane.ops.rs_decomposition` that employs the algorithm proposed in
+# `Ross and Selinger (2016) <https://arxiv.org/abs/1403.2975v3>`__.
 # Let's see this in action for the following two-qubit parameterized circuit:
 #
 
