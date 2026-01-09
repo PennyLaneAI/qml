@@ -52,7 +52,8 @@ Let’s setup an algorithm that makes use of both classical and quantum resource
 
 .. warning::
 
-    The following demo is only compatible with Python version 3.10.
+    The following demo is only compatible with Python version 3.10. Consequently, the latest supported PennyLane
+    version is ``pennylane==0.42``.
 
 """
 
@@ -64,17 +65,7 @@ Let’s setup an algorithm that makes use of both classical and quantum resource
 import pennylane as qml
 from pennylane import numpy as np
 
-
 device = qml.device("braket.local.qubit", wires=1)
-
-##############################################################################
-# .. rst-class:: sphx-glr-script-out
-#
-#  .. code-block:: none
-#
-#       pennylane/__init__.py:200: PennyLaneDeprecationWarning: pennylane.QuantumFunctionError is no longer accessible at top-level
-#       and must be imported as pennylane.exceptions.QuantumFunctionError. Support for top-level access will be removed in v0.43.
-#         warnings.warn(
 
 ######################################################################
 # Now we define a circuit with two rotation gates and measure the expectation value in the
@@ -272,8 +263,8 @@ while len(job.metrics()) == 0:
     pass
 
 
-import pandas as pd
 import matplotlib.pyplot as plt
+import pandas as pd
 from braket.jobs.metrics_data.definitions import MetricType
 
 df = pd.DataFrame(job.metrics(metric_type=MetricType.ITERATION_NUMBER))
@@ -345,7 +336,8 @@ def qpu_qubit_rotation_hybrid_job(num_steps=10, stepsize=0.5):
     device = qml.device(
         "braket.aws.qubit",
         device_arn=device_arn.value,  # Make sure the device ARN matches the hybrid job device ARN
-        wires=2)
+        wires=2,
+    )
 
     @qml.set_shots(1_000)
     @qml.qnode(device)
