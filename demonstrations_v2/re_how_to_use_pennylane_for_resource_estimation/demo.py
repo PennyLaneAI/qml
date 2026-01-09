@@ -184,7 +184,7 @@ print(f"Processing time: {t2 - t1:.3g} seconds\n")
 print(res)
 
 ######################################################################
-# Our resource estimate was generated in the blink of an eye 👁️
+# Our resource estimate was generated in the blink of an eye 👁️.
 #
 # We can also analyze the resources of an individual
 # :class:`ResourceOperator <pennylane.estimator.resource_operator.ResourceOperator>`.
