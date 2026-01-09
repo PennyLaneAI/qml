@@ -29,7 +29,7 @@ evolving the quantum state of a honeycomb lattice of spins under the
 # :func:`qre.estimate <pennylane.estimator.estimate.estimate>`
 # directly on the QNode.
 #
-# We will demonstrate this with a 25 x 25 unit honeycomb lattice of spins.  
+# We will demonstrate this with a :math:`25 \times 25` unit honeycomb lattice of spins.  
 # Here, we generate the Hamiltonian ourselves, using the
 # :func:`qml.spin.kitaev <pennylane.spin.kitaev>` function,
 # as well as grouping the Hamiltonian terms into qubit-wise
@@ -94,8 +94,8 @@ print(resources_exec)
 #
 
 ######################################################################
-# What if we wanted to estimate the quantum resources necessary to evolve the quantum state of a 100 x
-# 100 unit honeycomb lattice of spins under the Kitaev Hamiltonian?
+# What if we wanted to estimate the quantum resources necessary to evolve the quantum state of a
+# :math:`100 \times 100` unit honeycomb lattice of spins under the Kitaev Hamiltonian?
 #
 # **Thats 20,000 spins!**
 #
@@ -350,7 +350,7 @@ print(resources)
 #
 # Now, we'll demonstrate that the resource estimates are consistent across both of these cases.
 #
-# Let's return to a 25 x 25 unit honeycomb lattice of spins.  
+# Let's return to a :math:`25 \times 25` unit honeycomb lattice of spins.  
 # We'll use :mod:`estimator <pennylane.estimator>` to make sure everything matches.
 #
 
