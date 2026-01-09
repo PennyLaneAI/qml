@@ -67,15 +67,6 @@ from pennylane import numpy as np
 
 device = qml.device("braket.local.qubit", wires=1)
 
-##############################################################################
-# .. rst-class:: sphx-glr-script-out
-#
-#  .. code-block:: none
-#
-#       pennylane/__init__.py:200: PennyLaneDeprecationWarning: pennylane.QuantumFunctionError is no longer accessible at top-level
-#       and must be imported as pennylane.exceptions.QuantumFunctionError. Support for top-level access will be removed in v0.43.
-#         warnings.warn(
-
 ######################################################################
 # Now we define a circuit with two rotation gates and measure the expectation value in the
 # :math:`Z`-basis.
