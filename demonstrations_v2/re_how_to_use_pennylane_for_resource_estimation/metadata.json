@@ -1,0 +1,35 @@
+{
+    "title": "How to use PennyLane for Resource Estimation",
+    "authors": [
+        {
+            "username": "Jay"
+        },
+        {
+            "username": "ANT0N"
+        }
+    ],
+    "executable_stable": true,
+    "executable_latest": true,
+    "dateOfPublication": "2026-01-13T10:00:00+00:00",
+    "dateOfLastModification": "2026-01-13T10:00:00+00:01",
+    "categories": [
+        "Algorithms"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_re_how_to_use_pennylane_for_resource_estimation.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_re_how_to_use_pennylane_for_resource_estimation.png"
+        }
+    ],
+    "seoDescription": "Learn how to perform logical resource estimation in PennyLane with our new Estimator!",
+    "doi": "",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": []
+}
