@@ -418,7 +418,7 @@ print(resources_est)
 # which serve to make resource estimation a breeze for a wide variety of algorithms.
 # If you're also interested in exact resource tracking of programs compiled for *execution*,
 # take a look at :func:`pennylane.specs`, which provides
-# resource information throughout compilation for programs compiled using :func:`~.qjit`.
+# resource information throughout compilation for programs compiled using :func:`pennylane.qjit`.
 #
 #
 # References
