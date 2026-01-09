@@ -419,18 +419,3 @@ print(resources_est)
 # resource information throughout compilation for programs compiled using :func:`pennylane.qjit`.
 #
 #
-# References
-# ~~~~~~~~~~
-#
-# .. [#bocharov]
-#
-#    Bocharov, Alex, Martin Roetteler, and Krysta M. Svore. 
-#    "Efficient synthesis of universal repeat-until-success quantum circuits."
-#    Physical review letters 114.8 (2015): 080502. `arXiv <https://arxiv.org/abs/1404.5320>`__.
-#
-# .. [#ross]
-#
-#    Ross, Neil J., and Peter Selinger. 
-#    "Optimal ancilla-free Clifford+T approximation of z-rotations."
-#    Quantum information and computation 16.11–12 (2016): 901–953. `arXiv <https://arxiv.org/abs/1403.2975>`__.
-#

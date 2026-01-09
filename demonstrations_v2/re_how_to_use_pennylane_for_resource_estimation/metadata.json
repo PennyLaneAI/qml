@@ -28,26 +28,7 @@
     ],
     "seoDescription": "Learn how to perform logical resource estimation in PennyLane with our new Estimator!",
     "doi": "",
-    "references": [
-        {
-            "id": "bocharov",
-            "type": "article",
-            "title": "Efficient Synthesis of Universal Repeat-Until-Success Quantum Circuits",
-            "authors": "Bocharov, Alex and Roetteler, Martin and Svore, Krysta M.",
-            "year": "2015",
-            "publisher": "American Physical Society",
-            "url": "https://link.aps.org/doi/10.1103/PhysRevLett.114.080502"
-        },
-        {
-            "id": "ross",
-            "type": "article",
-            "title": "Optimal ancilla-free Clifford+T approximation of z-rotations",
-            "authors": "Ross, Neil J. and Selinger, Peter",
-            "year": "2016",
-            "publisher": "Rinton Press, Incorporated",
-            "url": "https://dl.acm.org/doi/abs/10.5555/3179330.3179331"
-        }
-    ],
+    "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],
     "relatedContent": []
