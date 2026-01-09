@@ -307,7 +307,7 @@ def _build_demo(
                             build_venv.python,
                             "--no-cache-dir",
                             "--upgrade",
-                            "--index-url",
+                            "--extra-index-url",
                             "https://test.pypi.org/simple/",
                             package,
                             use_uv=False,
