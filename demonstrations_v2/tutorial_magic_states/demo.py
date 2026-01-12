@@ -1,14 +1,12 @@
 r"""What are magic states?
 ==========================
 
-Quantum computers rely on very fragile physical systems. They are easily disturbed, leading to 
+Quantum computers rely on very fragile physical systems that are easily disturbed, leading to 
 the rapid generation and propagation of errors. In order to scale and harness the full potential 
-of quantum computing, we must develop fault-tolerant quantum computers (FTQC). For this purpose, besides 
-simply detecting and correcting errors, we must be able to realize gates that correctly perform their 
-intended operations without introducing or spreading noise across the encoded information.
+of quantum computing, we must develop fault-tolerant quantum computers (FTQC). 
 
 To achieve universal quantum computing (UQC), we need to have access to a universal gate set, such as
-the :math:`\textrm{Clifford + T}` set, ``{H, S, CNOT, T}``. As previously stated, all these gates must be 
+the :math:`\textrm{Clifford + T}` set, ``{H, S, CNOT, T}``, and it is crucial that all these gates are 
 executed in a fault-tolerant manner. 
 For most quantum error correction architectures, gates of the Clifford group are much 
 simpler to implement, often using `transversal operations <https://arthurpesah.me/blog/2023-12-25-transversal-gates/>`__, 
@@ -42,6 +40,11 @@ Using **magic state injection** (see the circuit illustration below), we can app
 arbitrary single-qubit state (wire 0 in the code). A step-by-step breakdown of this process 
 can be found in this PennyLane `glossary page <https://pennylane.ai/qml/glossary/what-are-magic-states>`__.
 
+.. figure:: _static/demonstration_assets/magic_states/magic-state-injection.png
+    :alt: Magic state injection protocol for an H magic state
+    :align: center
+    :width: 50%
+
 """
 
 import pennylane as qml
@@ -58,7 +61,7 @@ dev = qml.device("default.qubit")
 
 
 @qml.qnode(dev)
-def t_gate_teleportation_circuit(target_state_params):
+def magic_state_injection_circuit(target_state_params):
 
     # Prepare the initial target state (e.g., Ry rotation)
     qml.RY(target_state_params, wires=0)
@@ -76,12 +79,12 @@ def t_gate_teleportation_circuit(target_state_params):
     return qml.density_matrix(wires=[0])
 
 
-print(qml.draw(t_gate_teleportation_circuit)(np.pi / 3))
-print(t_gate_teleportation_circuit(np.pi / 3))
+print(qml.draw(magic_state_injection_circuit)(np.pi / 3))
+print(magic_state_injection_circuit(np.pi / 3))
 
 ######################################################################
 # The output displays the density matrix of the target state after the T gate has been applied via
-# teleportation:
+# magic state injection:
 # 
 # .. math:: T|\psi\rangle=T (R_y(\pi/3)|0\rangle)=\frac{\sqrt{3}}{2}|0\rangle+\frac{1}{2}e^{i\pi/4}|1\rangle.
 #
