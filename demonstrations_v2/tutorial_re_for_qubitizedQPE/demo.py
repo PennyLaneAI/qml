@@ -39,7 +39,7 @@ to calculate the precise costs and demonstrate how to optimize the algorithm to 
 # Here, we can choose to load these angles in batches instead of loading all the rotation angles at once.
 # The tunable knob here is the **number of batches** in which the rotation angles are loaded. By increasing the number of batches,
 # we save the qubits by reducing the register size, but necessitate repetition of the QROM(Quantum Read-Only Memory) subroutine for each batch
-# and hence increase T-gates.
+# and hence increase the T-gate count.
 #
 # .. figure:: ../_static/demonstration_assets/qubitization/batching.jpeg
 #    :align: center
