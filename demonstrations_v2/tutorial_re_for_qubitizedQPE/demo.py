@@ -50,7 +50,7 @@ to calculate the precise costs and demonstrate how to optimize the algorithm to 
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 # The second major optimization strategy is through `QROM <https://pennylane.ai/qml/demos/tutorial_intro_qrom>`_. Crucially, both ``Prepare`` and ``Select``
 # rely on QROM to access Hamiltonian coefficients and rotation angles respectively. We can use
-# the select-swap variant of the QROM, which allows us to trade the depth of the circuit for width as shown in the circuit diagrams.
+# the select-swap variant of the QROM, which allows us to trade the depth of the circuit for width as shown in the diagrams below:
 #
 # .. list-table::
 #    :widths: 50 50
