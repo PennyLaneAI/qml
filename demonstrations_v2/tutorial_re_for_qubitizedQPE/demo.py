@@ -14,8 +14,8 @@ that approximates the interaction tensor via a low-rank factorization.
 
 **But is this feasible on early fault-tolerant hardware?**
 To answer this, we must move beyond asymptotic scaling and determine the concrete resource requirements.
-In this demo, we use PennyLane's logical resource estimation tools to calculate the precise costs and
-demonstrate how to optimize the algorithm to fit on constrained devices.
+In this demo, we use PennyLane's logical resource :mod:`estimator <pennylane.estimator>`
+to calculate the precise costs and demonstrate how to optimize the algorithm to fit on constrained devices.
 
 .. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_how_to_build_spin_hamiltonians.png
     :align: center
