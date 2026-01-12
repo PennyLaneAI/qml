@@ -8,7 +8,8 @@ which allows us to estimate the energy eigenstates of a Hamiltonian with high pr
 QPE, however, relies on unitary evolution, and chemical Hamiltonians :math:`\hat{H}` are Hermitian.
 `Qubitization <https://pennylane.ai/qml/demos/tutorial_qubitization>`_ bridges this gap via
 `Block Encoding <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding>`_, embedding :math:`\hat{H}` into a larger
-"Quantum Walk" unitary :math:`W`. To construct this block encoding, we decompose the Hamiltonian into a Linear Combination of Unitaries (LCU).
+"Quantum Walk" unitary :math:`W`. To construct this block encoding, we decompose the Hamiltonian into a
+`Linear Combination of Unitaries (LCU) <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding>`_.
 In this demo, we use the **Tensor Hypercontraction (THC)** representation, a state of the art LCU decomposition for quantum chemistry
 that approximates the interaction tensor via a low-rank factorization.
 
