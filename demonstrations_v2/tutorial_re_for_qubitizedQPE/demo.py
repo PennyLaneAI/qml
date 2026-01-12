@@ -64,7 +64,7 @@ to calculate the precise costs and demonstrate how to optimize the algorithm to 
 #
 # Standard resource estimates often treat these oracles as fixed "black boxes", yielding a single cost number.
 # However, this demo is more than just a static cost report. We demonstrate how PennyLane exposes these
-# tunable knobs of the circuit implementation, allowing us to actively navigate the circuit design and trade off between T-gates and
+# tunable knobs of the circuit implementation, allowing us to actively navigate the circuit design and trade-off between T-gates and
 # logical qubits to suit different constraints. As a concrete example, let's perform resource estimation for the FeMoco molecule,
 # which plays a crucial role in biological nitrogen fixation.
 #
