@@ -209,7 +209,7 @@ for i in batch_sizes:
 # operator is idle during the Prepare step. We can reuse these idle qubits to implement the
 # ``QROM`` for the :class:`~.pennylane.resource.PrepareTHC` operator.
 # This should allow us to decrease the T-gates without increasing the logical
-# qubit count, effectively providing a "free lunch" of optimization, at least until we run out of reusable space.
+# qubit count, at least until we run out of reusable space.
 #
 # Let's verify this by sweeping through different ``select_swap_depth`` values:
 
