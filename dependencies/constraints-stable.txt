@@ -11,7 +11,6 @@ chex<1.0.0
 pyqrack==1.32.12
 numpy~=1.24
 matplotlib==3.8.0
-jax==0.6.2
 jax==0.7.1
 jaxlib==0.7.1
 jaxopt==0.8.5
