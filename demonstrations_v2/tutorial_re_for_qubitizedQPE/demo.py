@@ -157,7 +157,7 @@ print(f"Resources for Qubitized QPE for FeMoco(76): \n {total_cost}\n")
 # Step 1: Reducing Qubits with Batching
 # -------------------------------------
 # Let's first explore the impact of **Batched Givens Rotations**, by varying the number of batches in which rotation angles
-# loaded. This particular argument is accessible through the :class:`~.pennylane.estimator.SelectTHC` operator as
+# are loaded. This particular argument is accessible through the :class:`~.pennylane.estimator.SelectTHC` operator as
 # ``num_batches``. Let's see how the resources change for FeMoco as we vary this parameter:
 
 batch_sizes = [1, 2, 3, 5, 10, 75]
