@@ -36,10 +36,10 @@ to calculate the precise costs and demonstrate how to optimize the algorithm to 
 # In the ``Select`` operator, we need to implement a series of Givens rotations to change the basis.
 # Naively, this requires a quantum register of size :math:`N \times \beth` to store all angles simultaneously, where
 # ``N`` is the number of rotations, and :math:`\beth` is the rotation precision.
-# Here, we can choose to load these angles in batches instead of loading all the rotation angles at once.
+# Here, we can choose to load these angles in batches instead of loading all of them at once.
 # The tunable knob here is the **number of batches** in which the rotation angles are loaded. By increasing the number of batches,
-# we save the qubits by reducing the register size, but necessitate repetition of the QROM(Quantum Read-Only Memory) subroutine for each batch
-# and hence increase the T-gate count.
+# we save the qubits by reducing the register size, but need a longer repetition of the Quantum Read-Only Memory (QROM) subroutine for each batch, which
+# increases the T-gate count.
 #
 # .. figure:: ../_static/demonstration_assets/qubitization/batching.jpeg
 #    :align: center
