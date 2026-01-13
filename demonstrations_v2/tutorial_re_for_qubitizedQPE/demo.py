@@ -4,7 +4,7 @@ r"""Qubit and gate trade-offs in Qubitized Quantum Phase Estimation
 From designing better battery materials to discovering
 new drugs, unlocking the full potential of quantum computing requires simulating the properties of molecular systems.
 To achieve this, a powerful algorithm is `Quantum Phase Estimation (QPE) <https://pennylane.ai/qml/demos/tutorial_qpe>`_,
-which allows us to estimate the energy eigenstates of a Hamiltonian with high precision.
+which allows us to estimate the eigenvalues of a Hamiltonian with high precision.
 QPE, however, relies on unitary evolution, and chemical Hamiltonians :math:`\hat{H}` are Hermitian.
 `Qubitization <https://pennylane.ai/qml/demos/tutorial_qubitization>`_ bridges this gap via
 `Block Encoding <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding>`_, embedding :math:`\hat{H}` into a larger
