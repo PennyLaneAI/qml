@@ -37,13 +37,13 @@ Let’s examine a specific state, which we will denote as :math:`|H\rangle`, to 
 Notice that this state is obtained by applying a T gate to the :math:`|+\rangle` state 
 (the +1 eigenstate of the Pauli X operator).  
 Using **magic state injection** (see the circuit illustration below), we can apply a T operation to an 
-arbitrary single-qubit state (wire 0 in the code). A step-by-step breakdown of this process 
+arbitrary single-qubit state :math:`|\psi\rangle` (wire 0 in the code). A step-by-step breakdown of this process 
 can be found in this PennyLane `glossary page <https://pennylane.ai/qml/glossary/what-are-magic-states>`__.
 
 .. figure:: _static/demonstration_assets/magic_states/magic-state-injection.png
     :alt: Magic state injection protocol for an H magic state
     :align: center
-    :width: 50%
+    :width: 70%
 
 """
 
@@ -79,12 +79,13 @@ def magic_state_injection_circuit(target_state_params):
     return qml.density_matrix(wires=[0])
 
 
-print(qml.draw(magic_state_injection_circuit)(np.pi / 3))
 print(magic_state_injection_circuit(np.pi / 3))
 
 ######################################################################
-# The output displays the density matrix of the target state after the T gate has been applied via
-# magic state injection:
+# At the time of writing this demo, PennyLane circuits with mid-circuit 
+# measurements cannot return a state vector, so we output the density matrix instead. 
+# This is the density matrix of the target state after the T gate has been applied via
+# magic state injection and can be verified against the calculated state vector: 
 # 
 # .. math:: T|\psi\rangle=T (R_y(\pi/3)|0\rangle)=\frac{\sqrt{3}}{2}|0\rangle+\frac{1}{2}e^{i\pi/4}|1\rangle.
 #
