@@ -1,11 +1,11 @@
 # Specifies global constraints for the stable build
 --extra-index-url https://download.pytorch.org/whl/cpu
-pennylane==0.43.*
-pennylane-cirq==0.43.*
-pennylane-qiskit==0.43.*
-pennylane-qulacs==0.43.*
-pennylane-catalyst==0.13.*
-pennylane-qrack==0.11.*
+pennylane==0.44.*
+pennylane-cirq==0.44.*
+pennylane-qiskit==0.44.*
+pennylane-qulacs==0.44.*
+pennylane-catalyst==0.14.*
+pennylane-qrack==0.12.*
 
 chex<1.0.0
 pyqrack==1.32.12
