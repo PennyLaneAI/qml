@@ -113,7 +113,7 @@ femoco = qre.THCHamiltonian(num_orbitals=76, tensor_rank=450, one_norm=1201.5)
 # With these parameters in hand, we can esimate the total resources. The full algorithm consists of the Walk Operator,
 # constructed via :class:`~.pennylane.templates.templates.QubitizeTHC`, running within a QPE routine.
 #
-# We must note that :class:`~.pennylane.estimator.templates.SelectTHC` oracle implementation is based on the description in
+# We  note that :class:`~.pennylane.estimator.templates.SelectTHC` oracle implementation is based on the description in
 # von Burg et al. [#vonburg]_. This work uses the phase gradient technique to implement Givens rotations, and thus requires an
 # auxiliary resource state for addition of phase. The ``SelectTHC`` template doesn't include the cost of preparation of this
 # phase gradient state, so we must explicitly estimate this overhead and add it to the final cost of QPE circuit.
