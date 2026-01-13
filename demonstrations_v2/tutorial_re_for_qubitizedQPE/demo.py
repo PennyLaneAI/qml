@@ -15,7 +15,8 @@ that approximates the interaction tensor via a low-rank factorization.
 **But is implementing this quantum algorithm feasible on early fault-tolerant hardware?** 
 To answer this, we must move beyond asymptotic scaling and determine the concrete resource requirements.
 In this demo, we use PennyLane's logical resource :mod:`estimator <pennylane.estimator>`
-to calculate the precise costs and demonstrate how to optimize the algorithm to fit on constrained devices.
+to calculate the precise costs and demonstrate how to optimize the algorithm to fit on constrained devices with
+a few hundred logical qubits.
 
 .. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_how_to_build_spin_hamiltonians.png
     :align: center
@@ -37,8 +38,8 @@ to calculate the precise costs and demonstrate how to optimize the algorithm to 
 # ``N`` is the number of rotations, and :math:`\beth` is the rotation precision.
 # Here, we can choose to load these angles in batches instead of loading all of them at once.
 # The tunable knob here is the **number of batches** in which the rotation angles are loaded. By increasing the number of batches,
-# we save the qubits by reducing the register size, but need a longer repetition of the Quantum Read-Only Memory (QROM) subroutine for each batch, which
-# increases the T-gate count.
+# we save the qubits by reducing the register size, but need a longer repetition of the `Quantum Read-Only Memory (QROM) <https://pennylane.ai/qml/demos/tutorial_intro_qrom>`_
+# subroutine for each batch, which increases the T-gate count.
 #
 # .. figure:: ../_static/demonstration_assets/qubitization/batching.jpeg
 #    :align: center
@@ -47,7 +48,7 @@ to calculate the precise costs and demonstrate how to optimize the algorithm to 
 #
 # Knob-2: QROM SelectSwap:
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-# The second major optimization strategy is through `QROM <https://pennylane.ai/qml/demos/tutorial_intro_qrom>`_. Crucially, both ``Prepare`` and ``Select``
+# The second major optimization strategy is through `QROM <https://pennylane.ai/qml/demos/tutorial_intro_qrom>`_ itself. Crucially, both ``Prepare`` and ``Select``
 # rely on QROM to access Hamiltonian coefficients and rotation angles respectively. We can use
 # the select-swap variant of the QROM, which allows us to trade the depth of the circuit for width as shown in the diagrams below:
 #
@@ -60,6 +61,10 @@ to calculate the precise costs and demonstrate how to optimize the algorithm to 
 #           :width: 90%
 #      - .. image:: ../_static/demonstration_assets/qrom/select_swap_4.jpeg
 #           :width: 90%
+#
+# The configuration on the right achieves lower gate complexity by employing auxiliary work wires to enable block-wise data loading.
+# This approach replaces expensive multi-controlled operations with simpler controlled-swap gates, significantly reducing the T-gate
+# count while requiring additional qubits.
 #
 # Standard resource estimates often treat these oracles as fixed "black boxes", yielding a single cost value.
 # However, our quantum resource :mod:`estimator <pennylane.estimator>` provides us with much more than a static cost report.
