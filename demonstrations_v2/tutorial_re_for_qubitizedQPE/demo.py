@@ -200,7 +200,7 @@ for i in batch_sizes:
 # We have successfully brought the qubit count down using batching. Now, can we optimize the gate count
 # without incurring extra qubit costs?
 #
-# Step 2: Finding a "Free Lunch" with Select-Swap
+# Step 2: Circuit optimization with Select-Swap
 # -----------------------------------------------
 # We have successfully brought the qubit count down using batching. Now, can we optimize the gate count
 # without incurring extra qubit costs?
