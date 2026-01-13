@@ -95,7 +95,7 @@ femoco = qre.THCHamiltonian(num_orbitals=76, tensor_rank=450, one_norm=1201.5)
 # which dictates the total number of QPE iterations required:
 #
 # .. math::
-#     n_{iter} = \lceil \log_2\left(\frac{2\pi \lambda}{\epsilon_{QPE}}\right) \rceil
+#     n_{iter} = \lceil \log_2\left(\frac{2\pi \lambda}{\epsilon_{QPE}}\right) \rceil.
 #
 # This choice also dictates the required bit-precision for the circuit's subroutines. Specifically, to maintain this
 # overall accuracy, we must quantize the Hamiltonian coefficients in ``Prepare`` and the rotation angles in ``Select``
