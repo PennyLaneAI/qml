@@ -25,11 +25,11 @@ to calculate the precise costs and demonstrate how to optimize the algorithm to 
 """
 
 ######################################################################
-# The key to this optimization lies in the specific circuit architecture used to build the Quantum Walk.
-# To implement this decomposition on a quantum computer, the Walk operator is constructed from two primary subroutines:
+# The key to this optimization lies in the specific method to build the Walk operator, .
+# which is constructed from two primary subroutines:
 # the ``Prepare`` oracle, which prepares the state, whose amplitudes encode the Hamiltonian coefficients, and the
 # ``Select`` oracle, which applies the Hamiltonian terms controlled by that state. The implementation of these subroutines
-# offers some architectural flexibility to go with higher qubits or T-gates. Specifically, we can tune two architectural knobs:
+# offers the flexibility to trade off qubits for gates, and vice versa. Specifically, we can tune two algorithmic knobs to perform this trade-off:
 #
 # Knob 1: Batched Givens Rotations
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
