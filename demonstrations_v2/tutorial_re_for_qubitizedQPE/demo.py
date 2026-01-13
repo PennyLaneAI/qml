@@ -80,7 +80,7 @@ a few hundred logical qubits.
 # Hamiltonian, we capture only the essential structural parameters for the Hamiltonian: the number of spatial orbitals (:math:`N`),
 # the THC factorization rank (:math:`M`), and the Hamiltonian one-norm (:math:`\lambda`).
 #
-# Let's initialize the THC representation of the FeMoco Hamiltonian with a 76 orbital active space, with parameters obtained from the literature [#lee2020]_:
+# Let's initialize the THC representation of the FeMoco Hamiltonian with a 76-orbital active space, with parameters obtained from the literature [#lee2020]_:
 
 from pennylane import estimator as qre
 
