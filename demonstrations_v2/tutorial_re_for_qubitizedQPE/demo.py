@@ -1,4 +1,4 @@
-r"""Qubit and T-gate Trade-offs in Qubitized Quantum Phase Estimation
+r"""Qubit and gate trade-offs in Qubitized Quantum Phase Estimation
 ======================================================================
 
 From designing better battery materials to discovering
