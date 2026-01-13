@@ -12,7 +12,7 @@ The most advanced versions of QPE rely on
 In this demo, we use the **Tensor Hypercontraction (THC)** representation, a state-of-the-art LCU decomposition for quantum chemistry
 that approximates the interaction tensor via a low-rank factorization.
 
-**But is implementing this quantum algorithm feasible on early fault-tolerant hardware?** 
+**But is implementing this quantum algorithm feasible on early fault-tolerant hardware?**
 To answer this, we must move beyond asymptotic scaling and determine the concrete resource requirements.
 In this demo, we use PennyLane's logical resource :mod:`estimator <pennylane.estimator>`
 to calculate the precise costs and demonstrate how to optimize the algorithm to fit on constrained devices with
@@ -34,8 +34,7 @@ a few hundred logical qubits.
 # Knob 1: Batched Givens Rotations
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 # In the ``Select`` operator, we need to implement a series of Givens rotations to change the basis.
-# Naively, this requires a quantum register of size :math:`N \times \beth` to store all angles simultaneously, where
-# ``N`` is the number of rotations, and :math:`\beth` is the rotation precision.
+# Naively, to store all angles simultaneously, we require a register size defined by the number of rotations times the bits of precision per angle.
 # Here, we can choose to load these angles in batches instead of loading all of them at once.
 # The tunable knob here is the **number of batches** in which the rotation angles are loaded. By increasing the number of batches,
 # we save the qubits by reducing the register size, but need a longer repetition of the `Quantum Read-Only Memory (QROM) <https://pennylane.ai/qml/demos/tutorial_intro_qrom>`_
