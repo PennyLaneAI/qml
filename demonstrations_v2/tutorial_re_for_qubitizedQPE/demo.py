@@ -116,7 +116,7 @@ femoco = qre.THCHamiltonian(num_orbitals=76, tensor_rank=450, one_norm=1201.5)
 # We  note that :class:`~.pennylane.estimator.templates.SelectTHC` oracle implementation is based on the description in
 # von Burg et al. [#vonburg]_. This work uses the phase gradient technique to implement Givens rotations, and thus requires an
 # auxiliary resource state for addition of phase. The ``SelectTHC`` template doesn't include the cost of preparation of this
-# phase gradient state, so we must explicitly estimate this overhead and add it to the final cost of QPE circuit.
+# phase gradient state, so we must explicitly estimate this overhead and add it to the final cost of the QPE circuit.
 #
 # Let's estimate the total resources for Qubitized QPE for FeMoco:
 
