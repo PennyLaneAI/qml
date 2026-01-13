@@ -12,7 +12,7 @@ The most advanced versions of QPE rely on
 In this demo, we use the **Tensor Hypercontraction (THC)** representation, a state-of-the-art LCU decomposition for quantum chemistry
 that approximates the interaction tensor via a low-rank factorization.
 
-**But is this feasible on early fault-tolerant hardware?**
+**But is implementing this quantum algorithm feasible on early fault-tolerant hardware?** 
 To answer this, we must move beyond asymptotic scaling and determine the concrete resource requirements.
 In this demo, we use PennyLane's logical resource :mod:`estimator <pennylane.estimator>`
 to calculate the precise costs and demonstrate how to optimize the algorithm to fit on constrained devices.
