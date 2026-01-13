@@ -12,7 +12,8 @@ pyqrack==1.32.12
 numpy~=1.24
 matplotlib==3.8.0
 jax==0.6.2
-jaxlib==0.6.2
+jax==0.7.1
+jaxlib==0.7.1
 jaxopt==0.8.5
 aiohttp==3.9.5
 fsspec==2024.6.1
