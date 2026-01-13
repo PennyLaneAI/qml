@@ -7,7 +7,7 @@ version = "0.1.0"
 description = "Introductions to key concepts in quantum computing, as well as tutorials and implementations from cutting-edge quantum computing research."
 readme = "README.md"
 license = "Apache-2.0"
-requires-python = ">=3.11.0,<=3.14.0"
+requires-python = ">=3.11.0,<3.15.0"
 authors = [
   { name = "PennyLaneAI", email = "info@pennylane.ai" }
 ]
@@ -69,7 +69,7 @@ markupsafe = "2.1.1"
 pyyaml = "^6.0.1"
 pennylane-sphinx-theme = "0.25.0"
 pypandoc = "1.5"
-pennylane = "0.43.0"
+pennylane = "0.44.0"
 uv = "^0.7.18"
 
 # Metadata validation dependencies (optional)
