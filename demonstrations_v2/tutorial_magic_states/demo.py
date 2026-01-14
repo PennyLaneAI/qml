@@ -82,10 +82,10 @@ def magic_state_injection_circuit(target_state_params):
 print(magic_state_injection_circuit(np.pi / 3))
 
 ######################################################################
-# At the time of writing this demo, PennyLane circuits with mid-circuit 
-# measurements cannot return a state vector, so we output the density matrix instead. 
+# At the time of writing, PennyLane circuits with mid-circuit 
+# measurements cannot return a state vector; therefore, we output the density matrix instead. 
 # This is the density matrix of the target state after the T gate has been applied via
-# magic state injection and can be verified against the calculated state vector: 
+# magic state injection. This result can be verified against the calculated state vector: 
 # 
 # .. math:: T|\psi\rangle=T (R_y(\pi/3)|0\rangle)=\frac{\sqrt{3}}{2}|0\rangle+\frac{1}{2}e^{i\pi/4}|1\rangle.
 #
@@ -101,7 +101,7 @@ print(magic_state_injection_circuit(np.pi / 3))
 # ----------------------
 #
 # While magic states offer an elegant workaround for complex non-Clifford gate implementations, 
-# they remain computationally expensive to prepare. Let's examine two methods for their preparation.
+# their preparation remains resource-intensive, as will be shown below. Let's examine two methods for their preparation.
 #
 # Magic state distillation
 # ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -110,11 +110,6 @@ print(magic_state_injection_circuit(np.pi / 3))
 # magic states to purify them. By consuming these noisy inputs, the protocol
 # produces a smaller number of higher-fidelity magic states. This cycle can be repeated to achieve 
 # an arbitrarily low error rate. 
-#
-# However, as one might suspect, there is a strict distillation threshold:
-# the initial noisy states :math:`\rho` must have a fidelity above a certain limit for the process 
-# to converge toward a pure state [#Bravyi2005]_. If the initial states are too noisy, the protocol will 
-# fail to improve them.
 #
 # A typical protocol follows these steps:
 #
@@ -164,8 +159,12 @@ print(magic_state_injection_circuit(np.pi / 3))
 # 4. Decoding: determine whether to accept the final state using standard error correction. Since the circuit 
 #    is now too large for efficient post-selection, a decoder computes a complementary gap. This metric acts as 
 #    a confidence score for the final state, allowing the system to accept or discard the state accordingly.
-#     
-#    
+#
+# It is also worth noticing that, as one might suspect, there is a strict threshold fidelity for these preparation
+# protocols: the initial noisy state(s) :math:`\rho` must have a fidelity above a certain limit for the process 
+# to converge toward a pure state [#Bravyi2005]_. If the initial states are too noisy, the protocol will 
+# fail to improve them.
+#      
 # Current research
 # ----------------
 #
