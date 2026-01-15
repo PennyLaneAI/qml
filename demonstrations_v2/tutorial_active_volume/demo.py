@@ -639,7 +639,7 @@ Conclusion
 
 With this, we conclude our introduction to active volume compilation.
 We saw how it combines the best of ZX-diagrams and quantum circuits into a neat abstraction for
-quantum computation, arriving at logical networks, made of logical blocks, as central object to
+quantum computation, arriving at logical blocks and networks as the central objects to
 represent the computation. The compilation is thus tailored to the second key component of
 the framework, an active volume computer that is able to execute logical networks.
 After compiling standard gates and subroutines to logical networks,
