@@ -128,12 +128,13 @@ logical network. This representation will allow us to capture the essence of qua
 processing without the restrictive representation as quantum circuits, while enforcing enough
 structure to arrive at a program that can be executed by an active volume computer.
 
-To put this rather formal process into context, we will analyze the same
-circuit under the lens of parallelization via quantum state teleportation, and relate the
-result to the derived logical network.
+After compiling to an exemplary logical network, we will discuss teleportation-based
+parallelization, to be used between multiple networks, as well as the **reaction time**,
+another important concept to understand the interaction between logical networks effecting
+non-Clifford gates.
+
 The concepts are presented in a bottom-up approach and focus on the required steps to compile
-our concrete Clifford circuit example. We will look at another important concept,
-the **reaction time**, towards the end of the demo. For a top-down overview of the active
+our concrete Clifford circuit example.  For a top-down overview of the active
 volume framework, Sec. 1 of [#Litinski2022]_ is a great source, while
 Secs. 2-6 work through the compilation of increasingly complex circuit components.
 
@@ -164,8 +165,7 @@ Our example circuit: CNOT ladder
 The subroutine we will compile step by step is a ladder of CNOT gates, which may be used
 to create multi-qubit GHZ states, for example. As the CNOT gate is part of the Clifford group,
 so is the full ladder. This simple example will allow us to focus on the formalization of active
-volume compilation into logical networks. We will later compare the compilation result to the
-composition of the networks for each individual CNOT, parallelized via **state teleportation**.
+volume compilation into logical networks.
 To make matters concrete, we will be concerned with compiling the following circuit:
 
 .. figure:: _static/demonstration_assets/active_volume/example-circuit.png
@@ -401,11 +401,9 @@ modifications such as relabeling the ports of two connected blocks, or it might 
 re-routing that eventually force us to insert a new block, even.
 **Logical networks** are diagrams, or networks, of logical blocks. We label the logical blocks
 uniquely and replace drawing edges between them by annotating the ports with the labels of the
-blocks they connect to. This allows us to separate logical blocks, which represent computation
-and are considered expensive, from the block connectivity, which represents communication between
-blocks and is considered cheaper because it is natively supported by modules within range of
-each other, or can be implemented via fast SWAP connections (also see
-the `active volume computer info box <AV info box_>`_).
+blocks they connect to. This way, logical blocks can be arranged, or scheduled, more freely, as
+long as they respect the connectivity specified by the range of the active volume computer model
+(also see the `active volume computer info box <AV info box_>`_).
 
 Logical network for the CNOT ladder
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -641,14 +639,18 @@ Conclusion
 
 With this, we conclude our introduction to active volume compilation.
 We saw how it combines the best of ZX-diagrams and quantum circuits into a neat abstraction for
-logical compilation steps, to which we can then compile standard circuit components, compressing
-them to their essential logic and parallelizing them at the same time. As a consequence, the only
-idle volume left in the compiled computation is due to reaction-limited computation that encodes
-the fundamental causal structures in the compiled logic.
-This compression of quantum circuits reduces their cost dramatically, if we have the right
-machine, an active volume computer, in our hands, to which the compilation is tailored. It
-forms the second key component of the framework, making the new representation of quantum
-computation as logical networks useful. For details on this machine abstraction, many additional
+quantum computation, arriving at logical networks, made of logical blocks, as central object to
+represent the computation. The compilation is thus tailored to the second key component of
+the framework, an active volume computer that is able to execute logical networks.
+After compiling standard gates and subroutines to logical networks,
+as we did here for the CNOT ladder, a quantum computation can be expressed by the combination of
+those networks, which can be scheduled in parallel via teleportation, even if they act on the
+same logical qubits and do not commute. As a consequence, the only
+idle volume left in the compiled computation is due to memory modules, which take up half of
+the layout of an active volume computer, and are used for intermediate caching and routing
+of information only. This compression of quantum circuits reduces the cost of the computation
+dramatically.
+For details on the abstraction of the active volume computer, many additional
 compilation examples, and details about the implementation in a photonic quantum computer,
 we recommend to read the original paper as well.
 Additionally, you may want to
