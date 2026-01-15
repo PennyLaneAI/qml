@@ -64,7 +64,8 @@ We can thus partition a circuit into computationally *active* volume and *idle* 
 In this demo, we will discuss the active volume compilation framework introduced by
 Litinski and Nickerson [#Litinski2022]_ that allows one to reduce the implementation cost
 of an algorithm to being proportional to the active volume of the circuit. This is in contrast to
-the framework of [#Litinski2018]_, where the implementation cost is proportional to the circuit volume.
+the framework of [#Litinski2018]_, where the implementation cost is proportional to the circuit
+volume.
 This framework combines the language of the ZX-calculus with the inherently-quantum technique of
 state teleportation, as well as an abstraction of topologically error-corrected quantum computers.
 Concretely, the approach assumes that we execute on a so-called **active volume computer**.
@@ -91,10 +92,11 @@ Concretely, the approach assumes that we execute on a so-called **active volume 
 
     #. The information content of logarithmically-distanced qubit modules can be
        exchanged quickly/cheaply. They are "quickswappable".
-    #. Individual qubit modules can be prepared quickly/cheaply in the state :math:`|0\rangle` or :math:`|+\rangle`.
+    #. Individual qubit modules can be prepared quickly/cheaply in the state :math:`|0\rangle` or
+       :math:`|+\rangle`.
        They can also be measured quickly/cheaply in the Pauli-:math:`X` or Pauli-:math:`Z` basis.
-    #. Pairs of qubit modules within some specified range :math:`r` can be prepared quickly/cheaply in the Bell
-       state :math:`|\phi\rangle = \tfrac{1}{\sqrt{2}} (|00\rangle +|11\rangle)`.
+    #. Pairs of qubit modules within some specified range :math:`r` can be prepared quickly/cheaply
+       in the Bell state :math:`|\phi\rangle = \tfrac{1}{\sqrt{2}} (|00\rangle +|11\rangle)`.
        They can also be measured quickly/cheaply in the Bell basis.
     #. Choosing the measurement basis of one or two qubits dynamically costs one *reaction time*
        unit. The relation between the reaction time and the time taken by the above cheap
@@ -114,7 +116,8 @@ Concretely, the approach assumes that we execute on a so-called **active volume 
     and magic state distillation). Memory qubit modules are allowed to sit idle, providing
     intermediate storage and space for routing information through quickswaps. Note that
     arbitrary long-range communication in the active volume computer is achieved through layers
-    of quickswaps, which in typical scenarios remain low-depth and thus cheap in the above cost model.
+    of quickswaps, which in typical scenarios remain low-depth and thus cheap in the above cost
+    model.
 
 In the following, we will demonstrate how to compile the circuit of a subroutine
 step by step into a so-called **logical network**, which is a representation that allows
@@ -339,7 +342,8 @@ executing a CNOT with lattice surgery also requires two additional logical qubit
 bridge space. Thus, the oriented ZX-diagram simply reproduces the true cost for a CNOT in this
 type of architecture.
 
-Note that we could also connect the input state :math:`|b\rangle` to the D port of the left X spider:
+Note that we could also connect the input state :math:`|b\rangle` to the D port of the left
+X spider:
 
 .. figure:: _static/demonstration_assets/active_volume/cnot-oriented-zx-alternative.png
     :align: center
@@ -572,9 +576,9 @@ order non-Clifford gates require 1st order ones, and so on.
 
     The circuit style used in Litinski's papers colour-codes the different members of the
     Clifford hierarchy: Pauli gates (or :math:`\pi/2` rotations) in gray, (non-Pauli) Clifford gates
-    (or :math:`\pi/4` rotations) in orange, (1st order) non-Clifford gates (or :math:`\pi/8` rotations)
-    in green, and measurements in blue. Both diagrams show the decomposition of Pauli rotations
-    into Pauli measurements plus associated corrections of the lower hierarchy orders.
+    (or :math:`\pi/4` rotations) in orange, (1st order) non-Clifford gates (or :math:`\pi/8`
+    rotations) in green, and measurements in blue. Both diagrams show the decomposition of Pauli
+    rotations into Pauli measurements plus associated corrections of the lower hierarchy orders.
     Image source: Daniel Litinski [#Litinski2018]_.
 
 This is where we quickly run into issues, as Clifford corrections are generally already considered
@@ -583,8 +587,8 @@ and it is at this point that we require a concrete value of the measurement resu
 for any prior Pauli corrections). In this sense, the Clifford corrections impose a limit on the
 ability to parallelize, as part of the computation will still need to happen sequentially.
 
-Doing corrections in-line as depicted in the above circuits has actually been shown to be inefficient,
-so a key optimization is to move the correction away from the data qubits and onto
+Doing corrections in-line as depicted in the above circuits has actually been shown to be
+inefficient, so a key optimization is to move the correction away from the data qubits and onto
 the auxiliary magic states. This gives us significantly more flexibility to schedule computation
 efficiently as we don't have to do the corrections right away. We can hold on to the consumed
 magic state until it is convenient (or necessary) to apply the correction. Such gate
@@ -624,8 +628,9 @@ already used teleportation then (cf. fig. 25 in [#Litinski2018]_) to parallelize
 and achieve reaction-limited computation (also referred to as “Fowler's time-optimal scheme”).
 Fundamentally, parallelization via teleportation always trades (execution) time for (memory) space.
 The crucial difference, intuitively, is that Litinski's earlier techniques have to provide the
-additional space as brand new qubits, since each operation is assumed, in principle, to span the full
-width of a circuit (a characteristic that is reinforced by the techniques presented in the paper).
+additional space as brand new qubits, since each operation is assumed, in principle, to span the
+full width of a circuit (a characteristic that is reinforced by the techniques presented in the
+paper).
 Parallelization thus happens on the *layer structure*, where entire circuit layers are executed
 simultaneously using multiple times the original qubit count.
 Meanwhile, active volume computation tries to reuse already available, but idle, qubit space at a
@@ -635,10 +640,10 @@ Conclusion
 ----------
 
 With this, we conclude our introduction to active volume compilation.
-We saw how it combines the best of ZX-diagrams and quantum circuits into a neat abstraction for logical
-compilation steps, to which we then can compile standard circuit components, compressing them to
-their essential logic and parallelizing them at the same time. As a consequence, the only idle
-volume left in the compiled computation is due to reaction-limited computation that encodes
+We saw how it combines the best of ZX-diagrams and quantum circuits into a neat abstraction for
+logical compilation steps, to which we can then compile standard circuit components, compressing
+them to their essential logic and parallelizing them at the same time. As a consequence, the only
+idle volume left in the compiled computation is due to reaction-limited computation that encodes
 the fundamental causal structures in the compiled logic.
 This compression of quantum circuits reduces their cost dramatically, if we have the right
 machine, an active volume computer, in our hands, to which the compilation is tailored. It
