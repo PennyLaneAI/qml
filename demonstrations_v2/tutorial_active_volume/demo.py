@@ -1,9 +1,9 @@
 r"""Active volume compilation
 =============================
 
-In this demo, we will explore the concept of active volume of a quantum computation,
+In this demo, we will explore the concept of an "active volume" of a quantum computation,
 and how compilation can exploit this concept to reduce the resources required to execute the
-computation on a suitable machine–an active volume quantum computer.
+computation on a suitable machine—an active volume quantum computer.
 We will look at circuits, :doc:`ZX-diagrams <demos/tutorial_zx_calculus>`, and a new type of
 circuit representation called logical networks.
 This demo is directly based on a seminal paper by Litinski and Nickerson [#Litinski2022]_.
@@ -30,17 +30,17 @@ gap between high-level descriptions of
 quantum algorithms and low-level instructions that are actually executable on quantum hardware.
 In addition to the bare translation between those representations, it also aims to optimize
 numerous key metrics of the quantum program during the compilation process. Typically, these
-metrics focus on specific properties of the program such as qubit count, and various gate counts,
-which often stand in contention against each other. To optimize those cose metrics effectively,
-we’d ideally like a metric that expresses the combined cost of all resources used by a program.
+metrics focus on specific properties of the program such as qubit count and various gate counts,
+which often stand in contention against each other. To optimize the program cost effectively,
+we'd ideally like a metric that expresses the combined cost of all resources used by a program.
 One such metric is the **spacetime volume** cost, which in fault-tolerant architectures can be
 understood as the total error-corrected qubits (space) taken up by the computation, times the
 total error correction cycles (time) required to perform it.
 
-To understand the impact of different quantum architectures and compilation strategies, we’ll
+To understand the impact of different quantum architectures and compilation strategies, we'll
 often put an *algorithmic cost* metric in relation to its
 *implementation cost* on hardware. For instance, the strategies
-described by Litinski’s :doc:`Game of Surface Codes <demos/tutorial_game_of_surface_codes>`
+described by Litinski's :doc:`Game of Surface Codes <demos/tutorial_game_of_surface_codes>`
 incur an implementation cost, specified by the **spacetime volume** of the compiled program,
 of roughly twice the algorithmic cost, given by the **circuit volume** of the original quantum
 circuit.
@@ -65,7 +65,7 @@ In this demo, we will discuss the active volume compilation framework introduced
 Litinski and Nickerson [#Litinski2022]_ that allows one to reduce the implementation cost
 of an algorithm to being proportional to the active volume of the circuit. This is in contrast to
 the framework of [#Litinski2018]_, where the implementation cost is proportional to the circuit volume.
-This framwork combines the language of the ZX-calculus with the inherently-quantum technique of
+This framework combines the language of the ZX-calculus with the inherently-quantum technique of
 state teleportation, as well as an abstraction of topologically error-corrected quantum computers.
 Concretely, the approach assumes that we execute on a so-called **active volume computer**.
 
@@ -89,7 +89,7 @@ Concretely, the approach assumes that we execute on a so-called **active volume 
     The following characteristics are crucial assumptions about the computer that
     determine our cost model:
 
-    #. The information content of logarithmically-distanced qubit modules within range can be
+    #. The information content of logarithmically-distanced qubit modules can be
        exchanged quickly/cheaply. They are "quickswappable".
     #. Individual qubit modules can be prepared quickly/cheaply in the state :math:`|0\rangle` or :math:`|+\rangle`.
        They can also be measured quickly/cheaply in the Pauli-:math:`X` or Pauli-:math:`Z` basis.
@@ -106,6 +106,8 @@ Concretely, the approach assumes that we execute on a so-called **active volume 
        a slow/expensive operation as well.
 
     A more detailed characterization is provided in Sec. 1 of [#Litinski2022]_.
+
+    |
 
     Given the characterization above, active volume compilation aims to maximize the utilization
     of the computational qubit modules, because they execute the slow operations (logical blocks
@@ -218,7 +220,7 @@ our CNOT ladder into a ZX-diagram:
 
 We find six spiders, three of each type, with three legs each.
 
-At this point, we didn’t only exchange circuit symbols for coloured circles, though. In the
+At this point, we didn't only exchange circuit symbols for coloured circles, though. In the
 language of the ZX-calculus, the internal edges that connect vertices no longer have a temporal
 meaning, so that the geometry of the diagram becomes irrelevant. Only the represented
 graph carries meaningful information, as long as we associate the unconnected legs of the
@@ -265,7 +267,7 @@ following rules, illustrated below:
     :target: javascript:void(0)
 
 These rules may seem quite artificial and confusing. This is because they impose constraints
-on the--otherwise quite unstructured--ZX-diagram that originate in the structure of the surface
+on the—otherwise quite unstructured—ZX-diagram that originate in the structure of the surface
 code and the arrangement of the overall computation in space and time.
 Concretely, the ports named after cardinal directions (N, E, S, W) correspond to the four
 directions in which a square patch encoding a logical surface code qubit can interact with
@@ -360,9 +362,8 @@ This would lead to an arrangement with "depth" three.
 However, since we want to maximize the qubit utilization on our computer and avoid idling qubits,
 we can leverage the flexibility offered by the ZX-calculus to instead express the computation in a
 single logical step, and in doing so generate an optimized, parallelized version of the CNOT ladder.
-With a similar reasoning as for
-
-the single CNOT, we find that we need to insert six nodes overall, arriving at the oriented ZX-diagram:
+With a similar reasoning as for the single CNOT, we find that we need to insert six nodes overall,
+arriving at the oriented ZX-diagram:
 
 .. figure:: _static/demonstration_assets/active_volume/example-oriented-zx-complete.png
     :align: center
@@ -452,7 +453,8 @@ If we want to parallelize multiple subroutines, however,
 without having to re-compile their joint logical network, we can do this procedurally through
 state teleportation, using a so-called bridge qubit. This technique parallelizes non-commuting
 operations without breaking physics, and it pays off because Bell state preparation and
-measurements are assumed to be fast on an active volume computer (see `info box at the top <AV info box_>`_).
+measurements are assumed to be fast on an active volume computer
+(see `info box at the top <AV info box_>`_).
 
 Physical soundness
 ~~~~~~~~~~~~~~~~~~
@@ -511,7 +513,7 @@ What did we gain?
 -----------------
 
 You may ask what we gained by translating a quantum circuit to the logical network representation,
-and why we would prefer custom blocks--with new complicated rules governing them--over a
+and why we would prefer custom blocks—with new complicated rules governing them—over a
 good old circuit diagram.
 First, logical networks encode the capabilities and restrictions of the
 `active volume computer <AV info box_>`_, which is protected by the surface code and
@@ -519,7 +521,7 @@ utilizes lattice surgery. This compatibility sets logical networks apart from ot
 Second, logical networks can be parallelized via state teleportation, as we just discussed. While
 this is true for components of a quantum circuit as well, there is a third feature that makes
 parallelization more useful:
-third, logical networks can be divided into multiple networks, which then can be executed in
+Logical networks can be divided into multiple networks, which then can be executed in
 sequence. We will not go into detail about this, but refer to Sec. 2 and Fig. 11 of
 [#Litinski2022]_. This allows us to split up a network that otherwise would be too large to be
 executed in parallel with a previous network.
@@ -536,7 +538,7 @@ each time step, creating a dense computation pattern and thus removing (almost) 
 We thus solve the crucial shortcoming of circuit diagrams discussed at the beginning of the demo!
 
 Another feature of logical network synthesis is the reduction of the computation to its essential
-logical effects. As a consequence, resynthesizing combinations of networks into a single new
+logical effects. As a consequence, re-synthesizing combinations of networks into a single new
 network can reduce the number of logical blocks that need to be executed. This
 already happens when compiling a Toffoli gate that is realized via CCZ state injection
 (see Fig. 14 in [1]).
@@ -545,11 +547,11 @@ Reactive measurements and reaction time
 ---------------------------------------
 
 While the compilation techniques presented above are very powerful, there is an important
-restriction we haven’t considered so far.
+restriction we haven't considered so far.
 For Clifford operations, we will only ever encounter Pauli corrections that need to be applied
 conditioned on measurement outcomes. Such corrections in
 turn affect the outcome (and only the outcome) of other measurements, which
-then determine whether Pauli corrections need to be applied, and so on. But since we’re tracking
+then determine whether Pauli corrections need to be applied, and so on. But since we're tracking
 Pauli corrections in software [#PauliFrame]_, there is no immediate need to do anything with
 measurement results, and we can happily continue to apply operations in parallel or any
 other order without worrying about data dependencies between them. So do we *ever* need to affect
@@ -568,7 +570,7 @@ order non-Clifford gates require 1st order ones, and so on.
     :width: 90%
     :target: javascript:void(0)
 
-    The circuit style used in Litinski’s papers colour-codes the different members of the
+    The circuit style used in Litinski's papers colour-codes the different members of the
     Clifford hierarchy: Pauli gates (or :math:`\pi/2` rotations) in gray, (non-Pauli) Clifford gates
     (or :math:`\pi/4` rotations) in orange, (1st order) non-Clifford gates (or :math:`\pi/8` rotations)
     in green, and measurements in blue. Both diagrams show the decomposition of Pauli rotations
@@ -576,7 +578,7 @@ order non-Clifford gates require 1st order ones, and so on.
     Image source: Daniel Litinski [#Litinski2018]_.
 
 This is where we quickly run into issues, as Clifford corrections are generally already considered
-too complex to be tracked classically. That means that we’ll have to physically implement them,
+too complex to be tracked classically. That means that we'll have to physically implement them,
 and it is at this point that we require a concrete value of the measurement result (accounting
 for any prior Pauli corrections). In this sense, the Clifford corrections impose a limit on the
 ability to parallelize, as part of the computation will still need to happen sequentially.
@@ -584,7 +586,7 @@ ability to parallelize, as part of the computation will still need to happen seq
 Doing corrections in-line as depicted in the above circuits has actually been shown to be inefficient,
 so a key optimization is to move the correction away from the data qubits and onto
 the auxiliary magic states. This gives us significantly more flexibility to schedule computation
-efficiently as we don’t have to do the corrections right away. We can hold on to the consumed
+efficiently as we don't have to do the corrections right away. We can hold on to the consumed
 magic state until it is convenient (or necessary) to apply the correction. Such gate
 implementations are called “auto-corrected”, and will look as follows for non-Clifford Pauli
 rotations:
@@ -603,7 +605,7 @@ these measurements, and associated classical processing, can be performed is a f
 factor to how fast a computation can be executed, regardless of how many qubits are available
 for parallelism. This limitation is captured in the **reaction time** of an (active volume) quantum
 computer. An execution scheme for quantum programs that is limited by these reactive
-measurements–rather than, say, the circuit depth–is thus known as implementing
+measurements—rather than, say, the circuit depth—is thus known as implementing
 **reaction-limited computation**.
 
 .. figure:: _static/demonstration_assets/active_volume/reaction-limited-computation.png
