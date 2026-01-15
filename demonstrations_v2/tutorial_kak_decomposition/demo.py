@@ -701,7 +701,7 @@ print(f"Under theta_Y, the operators\n{su2}\nhave the eigenvalues\n{eigvals}")
 # .. math::
 #
 #     \exp(y)\mathfrak{a}_x\exp(-y)=\mathfrak{a}
-#     \quad\Rightarrow\quad x\in(\exp(-y) \mathfrak{a}\exp(y).
+#     \quad\Rightarrow\quad x\in \exp(-y) \mathfrak{a}\exp(y).
 #
 # Generalizing this statement across all horizontal elements :math:`x\in\mathfrak{p},` we find
 #
@@ -767,7 +767,8 @@ print(f"Under theta_Y, the operators\n{su2}\nhave the eigenvalues\n{eigvals}")
 
 x = 0.2j * su2[0] - 0.1j * su2[1] - 0.2j * su2[2]
 G = qml.math.linalg.expm(qml.matrix(x))
-print(qml.ops.one_qubit_decomposition(G, 0, rotations="ZYZ"))
+print("Decomposition:")
+print(*qml.ops.one_qubit_decomposition(G, 0, rotations="ZYZ"), sep="\n")
 
 ######################################################################
 # If we pick a *horizontal gate*, i.e., a gate :math:`G\in\mathcal{P}`, we obtain the same
@@ -778,7 +779,7 @@ horizontal_x = -0.1j * p[0] - 4.1j * p[1]
 print(horizontal_x)
 P = qml.math.linalg.expm(qml.matrix(horizontal_x))
 decomp = qml.ops.one_qubit_decomposition(P, 0, rotations="ZYZ")
-print(decomp)
+print("Decomposition:", *decomp, sep="\n")
 angle_match = np.isclose((decomp[0].data[0] + decomp[-1].data[0]) % (2 * np.pi), 0.0)
 print(f"First and last rotation angle match up to sign and shift by 2kπ: {angle_match}")
 
@@ -927,13 +928,13 @@ fig, ax = qml.draw_mpl(su4_gate, wire_order=[0, 1])(params)
 #
 #     Andreas Arvanitogeorgos
 #     "An Introduction to Lie Groups and the Geometry of Homogeneous Spaces"
-#     `Student Mathematical Library **22** <https://bookstore.ams.org/stml-22>`__, 2003
+#     `Student Mathematical Library 22 <https://bookstore.ams.org/stml-22>`__, 2003
 #
 # .. [#helgason]
 #
 #     Sigurdur Helgason
 #     "Differential geometry, Lie groups, and symmetric spaces"
-#     `Graduate Studies in Mathematics **34** <https://bookstore.ams.org/gsm-34/>`__, 2001
+#     `Graduate Studies in Mathematics 34 <https://bookstore.ams.org/gsm-34/>`__, 2001
 #
 # .. [#goh]
 #
@@ -965,23 +966,23 @@ fig, ax = qml.draw_mpl(su4_gate, wire_order=[0, 1])(params)
 #
 #     Shouzhen Gu, Rolando D. Somma, Burak Şahinoğlu
 #     "Fast-forwarding quantum evolution"
-#     `Quantum **5** <https://quantum-journal.org/papers/q-2021-11-15-577/>`__, 2021.
+#     `Quantum 5 <https://quantum-journal.org/papers/q-2021-11-15-577/>`__, 2021.
 #
 # .. [#dirr]
 #
 #     G. Dirr, U. Helmke
 #     "Lie Theory for Quantum Control"
-#     `GAMM-Mitteilungen **31** <https://onlinelibrary.wiley.com/doi/abs/10.1002/gamm.200890003>`__, 2008.
+#     `GAMM-Mitteilungen 31 <https://onlinelibrary.wiley.com/doi/abs/10.1002/gamm.200890003>`__, 2008.
 #
 # .. [#fontana]
 #
 #     Enrico Fontana, Dylan Herman, Shouvanik Chakrabarti, Niraj Kumar, Romina Yalovetzky, Jamie Heredge, Shree Hari Sureshbabu, Marco Pistoia
 #     "The Adjoint Is All You Need: Characterizing Barren Plateaus in Quantum Ansätze"
-#     `Nat. Commun. **15** <https://www.nature.com/articles/s41467-024-49910-w>`__, 2024.
+#     `Nat. Commun. 15 <https://www.nature.com/articles/s41467-024-49910-w>`__, 2024.
 #
 # .. [#ragone]
 #
 #     Michael Ragone, Bojko N. Bakalov, Frédéric Sauvage, Alexander F. Kemper, Carlos Ortiz Marrero, Martin Larocca, M. Cerezo
 #     "A Unified Theory of Barren Plateaus for Deep Parametrized Quantum Circuits"
-#     `Nat. Commun. **15** <https://www.nature.com/articles/s41467-024-49909-3>`__, 2024.
+#     `Nat. Commun. 15 <https://www.nature.com/articles/s41467-024-49909-3>`__, 2024.
 #
