@@ -64,6 +64,12 @@ all pairwise similarities between data points.
 Demonstration setup
 -------------------
 
+The demonstration uses the synthetic two-moons dataset from scikit-learn to perform a
+pre-screening test on four quantum kernel variants against a classical RBF kernel. By
+calculating the geometric difference and then training SVMs with each kernel, we illustrate
+how this metric can filter out unpromising quantum kernels before investing in extensive
+hyperparameter tuning and training.
+
 1. **Dataset**: Synthetic two-moons data generated with ``scikit-learn``.
 2. **Five kernels to compare**:
 
@@ -199,15 +205,33 @@ def embedding_E2(features):
     qml.IQPEmbedding(features, wires=range(n_features))
 
 
-# E1 circuit with a visible title
-fig, ax = qml.draw_mpl(embedding_E1)(np.zeros(n_qubits))
-fig.suptitle("E1 Embedding Circuit", fontsize=12, y=0.98)
-plt.show()
+def draw_circuits_side_by_side(circuits, titles, figsize=(14, 4)):
+    """Display multiple PennyLane circuits side by side."""
+    from io import BytesIO
+    import matplotlib.image as mpimg
 
-# E2 circuit with a visible title
-fig, ax = qml.draw_mpl(embedding_E2)(np.zeros(n_qubits))
-fig.suptitle("E2 Embedding Circuit", fontsize=12, y=0.98)
-plt.show()
+    images = []
+    for circuit in circuits:
+        fig, _ = qml.draw_mpl(circuit)(np.zeros(n_qubits))
+        buf = BytesIO()
+        fig.savefig(buf, format='png', bbox_inches='tight', dpi=100)
+        buf.seek(0)
+        images.append(mpimg.imread(buf))
+        plt.close(fig)
+
+    fig, axes = plt.subplots(1, len(circuits), figsize=figsize)
+    for ax, img, title in zip(axes, images, titles):
+        ax.imshow(img)
+        ax.axis('off')
+        ax.set_title(title, fontsize=12)
+    plt.tight_layout()
+    plt.show()
+
+
+draw_circuits_side_by_side(
+    [embedding_E1, embedding_E2],
+    ["E1 Embedding Circuit", "E2 Embedding Circuit"]
+)
 
 
 
