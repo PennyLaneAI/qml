@@ -701,7 +701,7 @@ print(f"Under theta_Y, the operators\n{su2}\nhave the eigenvalues\n{eigvals}")
 # .. math::
 #
 #     \exp(y)\mathfrak{a}_x\exp(-y)=\mathfrak{a}
-#     \quad\Rightarrow\quad x\in(\exp(-y) \mathfrak{a}\exp(y).
+#     \quad\Rightarrow\quad x\in \exp(-y) \mathfrak{a}\exp(y).
 #
 # Generalizing this statement across all horizontal elements :math:`x\in\mathfrak{p},` we find
 #
