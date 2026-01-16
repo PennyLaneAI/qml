@@ -210,7 +210,7 @@ from utils import draw_circuits_side_by_side
 
 draw_circuits_side_by_side(
     [embedding_E1, embedding_E2],
-    ["E1 Embedding Circuit", "E2 Embedding Circuit"]
+    ["E1 Embedding Circuit", "E2 Embedding Circuit"],n_qubits
 )
 
 

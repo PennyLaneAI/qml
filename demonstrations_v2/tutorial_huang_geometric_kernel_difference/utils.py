@@ -9,7 +9,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def draw_circuits_side_by_side(circuits, titles, figsize=(14, 4)):
+def draw_circuits_side_by_side(circuits, titles, n_qubits, figsize=(14, 4)):
     """Display multiple PennyLane circuits side by side."""
 
     images = []
