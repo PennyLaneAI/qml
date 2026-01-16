@@ -137,7 +137,7 @@ plt.show()
 # ones become nearly orthogonal.
 # It captures a **geometric**, distance-based notion of similarity in input space.
 #
-# The four quantum kernels are defined as follows. 
+# The two quantum embedding circuits are:
 #
 # - **E1 – Separable RX rotations.**
 #   Each input feature :math:`x_j` is encoded into a single qubit using an :math:`RX(x_j)` gate.
@@ -149,6 +149,8 @@ plt.show()
 #   entangling ZZ gates.
 #   This creates an entangled quantum state :math:`\lvert \psi_{\text{E2}}(x) \rangle`, inspired by
 #   Instantaneous Quantum Polynomial (IQP) circuits.
+#
+# The four quantum kernels derived from the embedding circuits are defined in the following way. 
 #
 # - **QK – Standard quantum kernels.**
 #   For both E1 and E2, the kernel is defined by the **fidelity** between quantum states:
