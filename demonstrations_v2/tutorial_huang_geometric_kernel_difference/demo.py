@@ -183,8 +183,8 @@ plt.show()
 #   where :math:`v_{\text{E1 }}(x)` and :math:`v_{\text{E2}}(x)` are the Pauli expectation vector from
 #   E1 and E2, respectively.
 #
+# Let's define the embedding circuits E1 and E2, and visualize using an auxiliary drawing function. 
 
-# We define the embedding circuits E1 and E2, and we visualize them.
 import numpy as np
 import pennylane as qml
 import matplotlib.pyplot as plt
@@ -205,7 +205,6 @@ def embedding_E2(features):
 
 
 from utils import draw_circuits_side_by_side
-
 
 draw_circuits_side_by_side(
     [embedding_E1, embedding_E2],
