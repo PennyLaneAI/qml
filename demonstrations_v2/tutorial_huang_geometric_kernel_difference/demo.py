@@ -64,11 +64,11 @@ all pairwise similarities between data points.
 Demonstration setup
 -------------------
 
-The demonstration uses the synthetic two-moons dataset from scikit-learn to perform a
+This demonstration uses the synthetic two-moons dataset from scikit-learn to perform a
 pre-screening test on four quantum kernel variants against a classical RBF kernel. By
 calculating the geometric difference and then training SVMs with each kernel, we illustrate
 how this metric can filter out unpromising quantum kernels before investing in extensive
-hyperparameter tuning and training.
+hyperparameter tuning and training. This procedure is summarized as:  
 
 1. **Dataset**: Synthetic two-moons data generated with ``scikit-learn``.
 2. **Five kernels to compare**:
@@ -82,8 +82,7 @@ hyperparameter tuning and training.
      - Projected kernel from E2
 
 3. **Our approach**: Calculate :math:`g` values between the classical kernel and each quantum
-   kernel—giving us an immediate assessment of which quantum approaches might be worth pursuing
-   across any kernel-based method.
+   kernel—giving.
 """
 
 # We first start by generating and visualizing the artificial data
@@ -129,16 +128,16 @@ plt.show()
 # quantum embedding circuits, **E1** and **E2**.
 # Each kernel defines a different geometry for measuring similarity between data points.
 #
-# The three classical kernels are the following.
+# The classical kernel is the **Radial basis function kernel (RBF).**
+# This classical baseline is defined as:
 #
-# - **RBF – Classical radial basis function kernel.**
-#   A classical baseline defined as:
+# .. math:: k_{\text{RBF}}(x, x') = \exp(-\gamma \|x - x'\|^2).
 #
-#   .. math:: k_{\text{RBF}}(x, x') = \exp(-\gamma \|x - x'\|^2).
+# This maps data into an infinite-dimensional space where closer inputs remain close, and distant
+# ones become nearly orthogonal.
+# It captures a **geometric**, distance-based notion of similarity in input space.
 #
-#   This maps data into an infinite-dimensional space where closer inputs remain close, and distant
-#   ones become nearly orthogonal.
-#   It captures a **geometric**, distance-based notion of similarity in input space.
+# The four quantum kernels are defined as follows. 
 #
 # - **E1 – Separable RX rotations.**
 #   Each input feature :math:`x_j` is encoded into a single qubit using an :math:`RX(x_j)` gate.
@@ -150,8 +149,6 @@ plt.show()
 #   entangling ZZ gates.
 #   This creates an entangled quantum state :math:`\lvert \psi_{\text{E2}}(x) \rangle`, inspired by
 #   Instantaneous Quantum Polynomial (IQP) circuits.
-#
-# And the two quantum kernels are defined as follows. 
 #
 # - **QK – Standard quantum kernels.**
 #   For both E1 and E2, the kernel is defined by the **fidelity** between quantum states:
@@ -540,7 +537,7 @@ plt.show()
 #   classical RBF can produce. By contrast, a high :math:`g` only tells us that *some advantage may
 #   be possible*—not that it will be realized.
 #
-# What if we took labels into account? The authors proposed a method to artificially construct new labels 
+# What if we took labels into account? The authors in [#Huang2021]_ proposed a method to artificially construct new labels 
 # that align with a quantum kernel’s geometry. This is a toy construction, but pretty fun to play around with.
 # Feel free to do so!
 #
