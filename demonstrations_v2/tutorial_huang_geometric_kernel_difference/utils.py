@@ -4,6 +4,7 @@ Utility function that displays multiple PennyLane circuits side by side
 
 from io import BytesIO
 import matplotlib.image as mpimg
+import pennylane as qml
 
 
 def draw_circuits_side_by_side(circuits, titles, figsize=(14, 4)):
