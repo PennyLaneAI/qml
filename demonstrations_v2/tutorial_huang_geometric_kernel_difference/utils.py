@@ -1,7 +1,9 @@
+from io import BytesIO
+import matplotlib.image as mpimg
+
+
 def draw_circuits_side_by_side(circuits, titles, figsize=(14, 4)):
     """Display multiple PennyLane circuits side by side."""
-    from io import BytesIO
-    import matplotlib.image as mpimg
 
     images = []
     for circuit in circuits:
