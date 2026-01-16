@@ -1,3 +1,7 @@
+"""
+Utility function that displays multiple PennyLane circuits side by side
+"""
+
 from io import BytesIO
 import matplotlib.image as mpimg
 
