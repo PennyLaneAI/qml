@@ -147,7 +147,7 @@ print(f"Expectation values before any measurement: {b[0]:.1f}, {b[1]:.1f}")
 # .. math::
 #
 #     M[\rho]
-#     &= \Pi_0 \rho_0 \Pi_0 + \Pi_1\rho_1 \Pi_1\\
+#     &= \Pi_0 \rho \Pi_0 + \Pi_1\rho \Pi_1\\
 #     &= |0\rangle\langle 0|+\rangle\langle +|0\rangle\langle 0|
 #     \ +\ |1\rangle\langle 1|+\rangle\langle +|1\rangle\langle 1|\\
 #     &= \frac{1}{2}\mathbb{I}.

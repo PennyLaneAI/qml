@@ -210,12 +210,12 @@ print(f"The minimum cost is  {min_cost}")
 # where :math:`0 \le S \le 26.` But let’s take this slowly because we can get lost here, so let’s see
 # this with some examples:
 #
-# -  Imagine this case. No item is selected {:math:`x_0`: :math:`0`, :math:`x_1`: :math:`0`, :math:`x_2:` :math:`0,`
-#    :math:`x_3`: :math:`0,` :math:`x_4:` :math:`0`}, so the overall weight is zero (a valid solution) and the equality
+# -  Imagine this case. No item is selected {:math:`x_0`: :math:`0`, :math:`x_1`: :math:`0`, :math:`x_2`: :math:`0,`
+#    :math:`x_3`: :math:`0,` :math:`x_4`: :math:`0`}, so the overall weight is zero (a valid solution) and the equality
 #    constraint Eq.(4) must be fulfilled. So we select our slack variable to be 26.
 #
-# -  Now, what if we bring ⚽️ and 📚 {:math:`x_0`: :math:`1`, :math:`x_1`: :math:`0`, :math:`x_2`: :math:`0`, :math:`x_3:` :math:`1,`
-#    :math:`x_4:`0}. In this case, the overall weight is :math:`3 + 19 = 22` (a valid solution) and the equality
+# -  Now, what if we bring ⚽️ and 📚 {:math:`x_0`: :math:`1`, :math:`x_1`: :math:`0`, :math:`x_2`: :math:`0`, :math:`x_3`: :math:`1,`
+#    :math:`x_4`: :math:`0`}. In this case, the overall weight is :math:`3+19=22` (a valid solution) and the equality
 #    constraint is fulfilled if :math:`22 + S = 26 \rightarrow S = 4.`
 #
 # -  Finally, what if we try to bring all the items {:math:`x_0`: :math:`1`, :math:`x_1`: :math:`1`, :math:`x_2:` :math:`1,`

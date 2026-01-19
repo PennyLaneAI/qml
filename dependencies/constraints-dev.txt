@@ -19,8 +19,8 @@ h5py==3.11.0
 ipython==8.16.1
 
 chex<1.0.0
-jax==0.6.2
-jaxlib==0.6.2
+jax==0.7.1
+jaxlib==0.7.1
 jaxopt==0.8.5
 
 torch==2.9.0+cpu ; sys_platform != 'darwin'
