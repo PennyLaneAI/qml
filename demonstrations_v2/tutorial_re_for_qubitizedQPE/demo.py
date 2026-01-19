@@ -151,7 +151,7 @@ print(f"Resources for Qubitized QPE for FeMoco(76): \n {total_cost}\n")
 #
 # In the fault-tolerant era, logical qubits will be a precious resource. What if our hardware only supports
 # 500 logical qubits? Are we unable to simulate this system? Not necessarily. We can actively trade **Space**
-# (Qubits) for **Time** (Toffoli gates) by modifying the circuit architecture. Let's apply the "tunable knobs" we discussed
+# (Qubits) for **Time** (gates) by modifying the circuit architecture. Let's apply the "tunable knobs" we discussed
 # earlier to fit FeMoco onto this constrained device.
 #
 # With the target system defined, we can now turn our attention to the specific architectural
