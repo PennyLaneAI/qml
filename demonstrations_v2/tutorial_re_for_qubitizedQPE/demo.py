@@ -65,7 +65,7 @@ a few hundred logical qubits.
 # count while requiring additional qubits.
 #
 # Standard resource estimates often treat these oracles as fixed "black boxes", yielding a single cost value.
-# However, our quantum resource :mod:`estimator <pennylane.estimator>` provides us with much more than a static cost report.
+# However, our quantum resource :mod:`estimator <pennylane.estimator>` provides much more than a static cost report.
 # We demonstrate how PennyLane exposes these
 # tunable knobs of the circuit implementation, allowing us to actively navigate the circuit design and trade-off between gates and
 # logical qubits to suit different constraints. As a concrete example, let's perform resource estimation for the FeMoco molecule,
