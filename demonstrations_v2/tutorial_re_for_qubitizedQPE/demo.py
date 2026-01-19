@@ -38,7 +38,7 @@ a few hundred logical qubits.
 # Here, we can choose to load these angles in batches instead of loading all of them at once.
 # The tunable knob here is the **number of batches** in which the rotation angles are loaded. By increasing the number of batches,
 # we save the qubits by reducing the register size, but need a longer repetition of the `Quantum Read-Only Memory (QROM) <https://pennylane.ai/qml/demos/tutorial_intro_qrom>`_
-# subroutine for each batch, which increases the T-gate count.
+# subroutine for each batch, which increases the Toffoli count.
 #
 # .. figure:: ../_static/demonstration_assets/qubitization/batching.jpeg
 #    :align: center
@@ -62,13 +62,13 @@ a few hundred logical qubits.
 #           :width: 90%
 #
 # The configuration on the right achieves lower gate complexity by employing auxiliary work wires to enable block-wise data loading.
-# This approach replaces expensive multi-controlled operations with simpler controlled-swap gates, significantly reducing the T-gate
+# This approach replaces expensive multi-controlled operations with simpler controlled-swap gates, significantly reducing the Toffoli
 # count while requiring additional qubits.
 #
 # Standard resource estimates often treat these oracles as fixed "black boxes", yielding a single cost value.
 # However, our quantum resource :mod:`estimator <pennylane.estimator>` provides us with much more than a static cost report.
 # We demonstrate how PennyLane exposes these
-# tunable knobs of the circuit implementation, allowing us to actively navigate the circuit design and trade-off between T-gates and
+# tunable knobs of the circuit implementation, allowing us to actively navigate the circuit design and trade-off between gates and
 # logical qubits to suit different constraints. As a concrete example, let's perform resource estimation for the FeMoco molecule,
 # which plays a crucial role in biological nitrogen fixation.
 #
@@ -122,17 +122,16 @@ femoco = qre.THCHamiltonian(num_orbitals=76, tensor_rank=450, one_norm=1201.5)
 
 import numpy as np
 
-epsilon_qpe = 0.001  # Ha
-n_iter = int(np.ceil(np.log2(2 * np.pi * femoco.one_norm / epsilon_qpe))) # QPE iterations
-n_coeff = int(np.ceil(2.5 + np.log2(10 * femoco.one_norm / epsilon_qpe)))
-n_angle = int(np.ceil(5.652 + np.log2(20 * femoco.one_norm * femoco.num_orbitals / epsilon_qpe)))
+epsilon_qpe = 0.0016  # Ha
+n_iter = int(np.ceil(2 * np.pi * femoco.one_norm / epsilon_qpe))  # QPE iterations
+n_coeff = 10
+n_angle = 20
 
 wo_femoco = qre.QubitizeTHC(femoco, coeff_precision=n_coeff, rotation_precision=n_angle)
 
 phase_grad_cost = qre.estimate(qre.PhaseGradient(n_angle))
 
-gate_set = {"T", "CNOT", "X", "Y", "Z", "S", "Hadamard"}
-qpe_cost = qre.estimate(qre.QPE(wo_femoco, num_estimation_wires=n_iter), gate_set=gate_set)
+qpe_cost = qre.estimate(qre.UnaryIterationQPE(wo_femoco, num_iterations=n_iter))
 
 total_cost = qpe_cost.add_parallel(phase_grad_cost)
 print(f"Resources for Qubitized QPE for FeMoco(76): \n {total_cost}\n")
@@ -141,11 +140,11 @@ print(f"Resources for Qubitized QPE for FeMoco(76): \n {total_cost}\n")
 # Analyzing the Results
 # ---------------------
 # Let's look at the results we just generated. For FeMoco (76), the resource estimator predicts a requirement
-# of over 3000 qubits and 1 trillion (:math:`1.06 \times 10^{12}`) total gates.
+# of over 2000 qubits and 11 trillion (:math:`11.5 \times 10^{12}`) total gates.
 #
 # In the fault-tolerant era, logical qubits will be a precious resource. What if our hardware only supports
 # 500 logical qubits? Are we unable to simulate this system? Not necessarily. We can actively trade **Space**
-# (Qubits) for **Time** (T-gates) by modifying the circuit architecture. Let's apply the "tunable knobs" we discussed
+# (Qubits) for **Time** (Toffoli gates) by modifying the circuit architecture. Let's apply the "tunable knobs" we discussed
 # earlier to fit FeMoco onto this constrained device.
 #
 # With the target system defined, we can now turn our attention to the specific architectural
@@ -162,7 +161,7 @@ print(f"Resources for Qubitized QPE for FeMoco(76): \n {total_cost}\n")
 
 batch_sizes = [1, 2, 3, 5, 10, 75]
 qubit_counts = []
-tgate_counts = []
+toffoli_counts = []
 
 for i in batch_sizes:
     prep_thc = qre.PrepTHC(femoco, coeff_precision=n_coeff, select_swap_depth=1)
@@ -175,16 +174,14 @@ for i in batch_sizes:
         rotation_precision=n_angle,
     )
 
-    qpe_cost = qre.estimate(qre.QPE(wo_batched, n_iter), gate_set=gate_set)
+    qpe_cost = qre.estimate(qre.UnaryIterationQPE(wo_batched, n_iter))
     total_cost = qpe_cost.add_parallel(phase_grad_cost)
-    qubit_counts.append(
-        total_cost.algo_wires + total_cost.zeroed_wires + total_cost.any_state_wires
-    )
-    tgate_counts.append(total_cost.gate_counts["T"])
+    qubit_counts.append(total_cost.total_wires)
+    toffoli_counts.append(total_cost.gate_counts["Toffoli"])
 
 
 ######################################################################
-# Let's visualize the results by plotting the qubit and T-gate counts against the batch size:
+# Let's visualize the results by plotting the qubit and Toffoli counts against the batch size:
 #
 # .. figure:: ../_static/demonstration_assets/qubitization_re/batching_tradeoff.jpeg
 #    :align: center
@@ -192,10 +189,10 @@ for i in batch_sizes:
 #    :target: javascript:void(0)
 #
 # The plot illustrates a clear crossover in resource requirements. At the left extreme (a single batch),
-# we minimize T-gates but pay a massive penalty in qubits, requiring over 3000 logical qubits, which far exceeds
+# we minimize Toffolis but pay a massive penalty in qubits, requiring over 3000 logical qubits, which far exceeds
 # our hypothetical 500-qubit limit.
 # As we increase the number of batches, the qubit count plummets, eventually dipping below
-# our 500-qubit limit. However, there is no free lunch: the T-gate count rises steadily because we must
+# our 500-qubit limit. However, there is no free lunch: the Toffolis count rises steadily because we must
 # repeat the QROM readout for every additional batch.
 # We have successfully brought the qubit count down using batching. Now, can we optimize the gate count
 # without incurring extra qubit costs?
@@ -204,18 +201,18 @@ for i in batch_sizes:
 # -----------------------------------------------
 # We have successfully brought the qubit count down using batching. Now, can we optimize the gate count
 # without incurring extra qubit costs?
-# To do this, we use the **Select-Swap QROM** strategy. Normally, this involves trading qubits for T-gates.
+# To do this, we use the **Select-Swap QROM** strategy. Normally, this involves trading qubits for Toffolis.
 # But here is the trick: the register used to store rotation angles in the :class:`~.pennylane.resource.SelectTHC`
 # operator is idle during the Prepare step. We can reuse these idle qubits to implement the
 # ``QROM`` for the :class:`~.pennylane.resource.PrepareTHC` operator.
-# This should allow us to decrease the T-gates without increasing the logical
+# This should allow us to decrease the Toffolis without increasing the logical
 # qubit count, at least until we run out of reusable space.
 #
 # Let's verify this by sweeping through different ``select_swap_depth`` values:
 
 swap_depths = [1, 2, 4, 8, 16]
 qubit_counts = []
-t_counts = []
+toffoli_counts = []
 
 for depth in swap_depths:
     select_thc_qrom = qre.SelectTHC(
@@ -229,21 +226,21 @@ for depth in swap_depths:
         prep_op=prepare_thc_qrom,
     )
 
-    qpe_cost = qre.estimate(qre.QPE(wo_qrom, n_iter), gate_set=gate_set)
+    qpe_cost = qre.estimate(qre.UnaryIterationQPE(wo_qrom, n_iter))
     total_cost = qpe_cost.add_parallel(phase_grad_cost)
 
-    qubit_counts.append(total_cost.algo_wires + total_cost.zeroed_wires + total_cost.any_state_wires)
-    t_counts.append(total_cost.gate_counts["T"])
+    qubit_counts.append(total_cost.total_wires)
+    toffoli_counts.append(total_cost.gate_counts["Toffoli"])
 
 ######################################################################
 #
 # .. figure:: ../_static/demonstration_assets/qubitization_re/qrom_selswap.jpeg
 #    :align: center
-#    :width: 85%
+#    :width: 90%
 #    :target: javascript:void(0)
 #
 # The plot confirms our intuition. For depths 1, 2, and 4, the logical qubit count stays exactly the same, while the
-# T-count decreases. However, moving to depth 8, the qubit count jumps as the swap network becomes too large to fit
+# Toffoli count decreases. However, moving to depth 8, the qubit count jumps as the swap network becomes too large to fit
 # entirely within the reused register, forcing the allocation of additional qubits. This marks
 # the point where the "free" optimization ends and the standard trade-off resumes.
 #
@@ -256,7 +253,7 @@ for depth in swap_depths:
 #
 # However, naive calculations tell only half the story. As we demonstrated later, these resource counts are not
 # immutable constants. By actively navigating the architectural trade-offs between logical qubits
-# and T-gates we can significantly reshape the cost profile of the algorithm.
+# and Toffolis we can significantly reshape the cost profile of the algorithm.
 #
 # This is where the flexibility of PennyLane's resource estimation framework becomes crucial. Rather than treating subroutines
 # like ``Prepare`` and ``Select`` as black boxes, PennyLane allows us to tune the internal circuit
