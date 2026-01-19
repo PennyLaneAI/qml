@@ -26,7 +26,7 @@ a few hundred logical qubits.
 ######################################################################
 # The key to this optimization lies in the specific method to build the Walk operator,
 # which is constructed from two primary subroutines:
-# the ``Prepare`` oracle, which prepares the state, whose amplitudes encode the Hamiltonian coefficients, and the
+# the ``Prepare`` oracle, which prepares a state encoding the Hamiltonian coefficients, and the
 # ``Select`` oracle, which applies the Hamiltonian terms controlled by that state. The implementation of these subroutines
 # offers the flexibility to trade off qubits for gates, and vice versa. Specifically, we can tune two algorithmic knobs to perform this trade-off:
 #
