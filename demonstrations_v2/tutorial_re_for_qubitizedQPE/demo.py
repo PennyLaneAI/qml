@@ -75,7 +75,7 @@ a few hundred logical qubits.
 # Resource Estimation for FeMoco
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 # Estimating resources for large-scale chemical systems is often bottlenecked by the challenge of constructing and storing the full Hamiltonian tensor.
-# The resource estimator allows us to sidestep this bottleneck for a quick estimation.
+# PennyLane's resource estimator allows us to sidestep this bottleneck for a quick estimation.
 # By using a `compact representation <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.compact_hamiltonian.THCHamiltonian.html>`__ of the THC
 # Hamiltonian, we capture only the essential structural parameters for the Hamiltonian: the number of spatial orbitals (:math:`N`),
 # the THC factorization rank (:math:`M`), and the Hamiltonian one-norm (:math:`\lambda`).
