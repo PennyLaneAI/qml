@@ -206,7 +206,7 @@ for i in batch_sizes:
 # we minimize toffolis but pay a massive penalty in qubits, requiring over 2000 logical qubits, which far exceeds
 # our hypothetical 500-qubit limit.
 # As we increase the number of batches, the qubit count plummets, eventually dipping below
-# our 500-qubit limit. However, there is no free lunch: the toffoli count rises steadily because we must
+# the 500-qubit limit. However, there is no free lunch: the Toffoli count rises steadily because we must
 # repeat the QROM readout for every additional batch. To verify the feasibility, let's print the
 # concrete numbers for the two extremes:
 #
