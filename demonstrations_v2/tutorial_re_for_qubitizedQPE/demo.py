@@ -57,9 +57,9 @@ a few hundred logical qubits.
 #    :class: plain
 #
 #    * - .. image:: ../_static/demonstration_assets/qrom/select_swap.jpeg
-#           :width: 90%
+#           :width: 100%
 #      - .. image:: ../_static/demonstration_assets/qrom/select_swap_4.jpeg
-#           :width: 90%
+#           :width: 100%
 #
 # The configuration on the right achieves lower gate complexity by employing auxiliary work wires to enable block-wise data loading.
 # This approach replaces expensive multi-controlled operations with simpler controlled-swap gates, significantly reducing the Toffoli
@@ -75,12 +75,12 @@ a few hundred logical qubits.
 # Resource Estimation for FeMoco
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 # Estimating resources for large-scale chemical systems is often bottlenecked by the challenge of constructing and storing the full Hamiltonian tensor.
-# But why carry the entire building when a blueprint will do? The resource estimator allows us to sidestep this bottleneck for a quick estimation.
+# The resource estimator allows us to sidestep this bottleneck for a quick estimation.
 # By using a `compact representation <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.compact_hamiltonian.THCHamiltonian.html>`__ of the THC
 # Hamiltonian, we capture only the essential structural parameters for the Hamiltonian: the number of spatial orbitals (:math:`N`),
 # the THC factorization rank (:math:`M`), and the Hamiltonian one-norm (:math:`\lambda`).
 #
-# Let's initialize the THC representation of the FeMoco Hamiltonian with a 76-orbital active space, with parameters obtained from the literature [#lee2020]_:
+# Let's initialize the THC representation of the FeMoco Hamiltonian with a 76-orbital active space, with parameters obtained from the literature [#lee2021]_:
 
 from pennylane import estimator as qre
 
@@ -102,12 +102,22 @@ femoco = qre.THCHamiltonian(num_orbitals=76, tensor_rank=450, one_norm=1201.5)
 # with sufficient precision.
 #
 # Using the error bounds derived in `Lee et al. (2021) <https://journals.aps.org/prxquantum/pdf/10.1103/PRXQuantum.2.030305>`__ (Appendix C),
-# we calculate the required number of bits for loading coefficients (:math:`n_{coeff}`) and rotation angles (:math:`n_{angle}`) as:
+# you can calculate the required number of bits for loading coefficients (:math:`n_{coeff}`) and rotation angles (:math:`n_{angle}`) as:
 #
 # .. math::
 #    n_{coeff} = \left\lceil 2.5 + \log_2\left(\frac{10 \lambda}{\epsilon_{QPE}}\right) \right\rceil, \quad
 #    n_{angle} = \left\lceil 5.652 + \log_2\left(\frac{20 \lambda N}{\epsilon_{QPE}}\right) \right\rceil.
 #
+# Since we are following the analysis in Lee et al. (2021), we use the same constants as the reference
+
+import numpy as np
+
+epsilon_qpe = 0.0016  # Ha
+n_iter = int(np.ceil(2 * np.pi * femoco.one_norm / epsilon_qpe))  # QPE iterations
+n_coeff = 10
+n_angle = 20
+
+########################################################################
 # Estimating Qubitized QPE Cost
 # -----------------------------
 # With these parameters in hand, we can esimate the total resources. The full algorithm consists of the Walk Operator,
@@ -119,13 +129,6 @@ femoco = qre.THCHamiltonian(num_orbitals=76, tensor_rank=450, one_norm=1201.5)
 # phase gradient state, so we must explicitly estimate this overhead and add it to the final cost of the QPE circuit.
 #
 # Let's estimate the total resources for Qubitized QPE for FeMoco:
-
-import numpy as np
-
-epsilon_qpe = 0.0016  # Ha
-n_iter = int(np.ceil(2 * np.pi * femoco.one_norm / epsilon_qpe))  # QPE iterations
-n_coeff = 10
-n_angle = 20
 
 wo_femoco = qre.QubitizeTHC(femoco, coeff_precision=n_coeff, rotation_precision=n_angle)
 
@@ -264,7 +267,7 @@ for depth in swap_depths:
 # References
 # ----------
 #
-# .. [#lee2020]
+# .. [#lee2021]
 #
 #     Joonho Lee et al.
 #     "Even More Efficient Quantum Computations of Chemistry Through Tensor Hypercontraction."
