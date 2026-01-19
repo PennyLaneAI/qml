@@ -195,7 +195,7 @@ for i in batch_sizes:
 
 
 ######################################################################
-# Let's visualize the results by plotting the qubit and toffoli counts against the batch size:
+# Let's visualize the results by plotting the qubit and Toffoli counts against the batch size:
 #
 # .. figure:: ../_static/demonstration_assets/qubitization_re/batching_tradeoff.jpeg
 #    :align: center
