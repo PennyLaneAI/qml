@@ -25,13 +25,13 @@ a few hundred logical qubits.
 """
 
 ######################################################################
-# The key to this optimization lies in the specific method to build the Walk operator, .
+# The key to this optimization lies in the specific method to build the Walk operator,
 # which is constructed from two primary subroutines:
 # the ``Prepare`` oracle, which prepares the state, whose amplitudes encode the Hamiltonian coefficients, and the
 # ``Select`` oracle, which applies the Hamiltonian terms controlled by that state. The implementation of these subroutines
 # offers the flexibility to trade off qubits for gates, and vice versa. Specifically, we can tune two algorithmic knobs to perform this trade-off:
 #
-# Knob 1: Batched Givens Rotations
+# Knob-1: Batched Givens Rotations
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 # In the ``Select`` operator, we need to implement a series of Givens rotations to change the basis.
 # Naively, to store all angles simultaneously, we require a register size defined by the number of rotations times the bits of precision per angle.
@@ -80,6 +80,11 @@ a few hundred logical qubits.
 # Hamiltonian, we capture only the essential structural parameters for the Hamiltonian: the number of spatial orbitals (:math:`N`),
 # the THC factorization rank (:math:`M`), and the Hamiltonian one-norm (:math:`\lambda`).
 #
+# While calculating the exact one-norm typically requires constructing the Hamiltonian, this compact form is particularly
+# useful for well-known benchmarks where these values are already reported in the literature. Furthermore, it allows
+# us to rapidly generate quick estimates for different ranges of one-norms, enabling sensitivity analysis without
+# needing to build the full operator for every case.
+#
 # Let's initialize the THC representation of the FeMoco Hamiltonian with a 76-orbital active space, with parameters obtained from the literature [#lee2021]_:
 
 from pennylane import estimator as qre
@@ -98,8 +103,8 @@ femoco = qre.THCHamiltonian(num_orbitals=76, tensor_rank=450, one_norm=1201.5)
 #     n_{iter} = \lceil \log_2\left(\frac{2\pi \lambda}{\epsilon_{QPE}}\right) \rceil.
 #
 # This choice also dictates the required bit-precision for the circuit's subroutines. Specifically, to maintain this
-# overall accuracy, we must quantize the Hamiltonian coefficients in ``Prepare`` and the rotation angles in ``Select``
-# with sufficient precision.
+# overall accuracy, we must fix the numerical precision for expressing the Hamiltonian coefficients in ``Prepare``
+# and the rotation angles in ``Select``.
 #
 # Using the error bounds derived in `Lee et al. (2021) <https://journals.aps.org/prxquantum/pdf/10.1103/PRXQuantum.2.030305>`__ (Appendix C),
 # you can calculate the required number of bits for loading coefficients (:math:`n_{coeff}`) and rotation angles (:math:`n_{angle}`) as:
@@ -159,7 +164,14 @@ print(f"Resources for Qubitized QPE for FeMoco(76): \n {total_cost}\n")
 # Step 1: Reducing Qubits with Batching
 # -------------------------------------
 # Let's first explore the impact of **Batched Givens Rotations**, by varying the number of batches in which rotation angles
-# are loaded. This particular argument is accessible through the :class:`~.pennylane.estimator.SelectTHC` operator as
+# are loaded.
+#
+# .. note::
+#    To strictly isolate the effect of batching, we fix the ``select_swap_depth`` to 1 here.
+#    While this does not represent the optimal gate count, it allows us to
+#    observe the pure trade-off between batch size and qubit count without confounding factors.
+#
+# This particular argument is accessible through the :class:`~.pennylane.estimator.SelectTHC` operator as
 # ``num_batches``. Let's see how the resources change for FeMoco as we vary this parameter:
 
 batch_sizes = [1, 2, 3, 5, 10, 75]
@@ -184,7 +196,7 @@ for i in batch_sizes:
 
 
 ######################################################################
-# Let's visualize the results by plotting the qubit and Toffoli counts against the batch size:
+# Let's visualize the results by plotting the qubit and toffoli counts against the batch size:
 #
 # .. figure:: ../_static/demonstration_assets/qubitization_re/batching_tradeoff.jpeg
 #    :align: center
@@ -192,11 +204,26 @@ for i in batch_sizes:
 #    :target: javascript:void(0)
 #
 # The plot illustrates a clear crossover in resource requirements. At the left extreme (a single batch),
-# we minimize Toffolis but pay a massive penalty in qubits, requiring over 3000 logical qubits, which far exceeds
+# we minimize toffolis but pay a massive penalty in qubits, requiring over 2000 logical qubits, which far exceeds
 # our hypothetical 500-qubit limit.
 # As we increase the number of batches, the qubit count plummets, eventually dipping below
-# our 500-qubit limit. However, there is no free lunch: the Toffolis count rises steadily because we must
-# repeat the QROM readout for every additional batch.
+# our 500-qubit limit. However, there is no free lunch: the toffoli count rises steadily because we must
+# repeat the QROM readout for every additional batch. To verify the feasibility, let's print the
+# concrete numbers for the two extremes:
+#
+print("Resource counts with batch size: 1")
+print(f"  Qubits: {qubit_counts[0]}")
+print(f"  Toffolis: {toffoli_counts[0]:.3e}\n")
+print("Resource counts with batch size: 75")
+print(f"  Qubits: {qubit_counts[-1]}")
+print(f"  Toffolis: {toffoli_counts[-1]:.3e}\n")
+
+######################################################################
+#
+# Crucially, while the qubit requirements drop by nearly a factor of 5, the Toffoli count stays in the same order of magnitude.
+# This favorable trade-off allows us to fit the algorithm on constrained hardware without
+# making the runtime prohibitively long.
+#
 # We have successfully brought the qubit count down using batching. Now, can we optimize the gate count
 # without incurring extra qubit costs?
 #
@@ -204,11 +231,11 @@ for i in batch_sizes:
 # -----------------------------------------------
 # We have successfully brought the qubit count down using batching. Now, can we optimize the gate count
 # without incurring extra qubit costs?
-# To do this, we use the **Select-Swap QROM** strategy. Normally, this involves trading qubits for Toffolis.
+# To do this, we use the **Select-Swap QROM** strategy. Normally, this involves trading qubits for toffolis.
 # But here is the trick: the register used to store rotation angles in the :class:`~.pennylane.resource.SelectTHC`
 # operator is idle during the Prepare step. We can reuse these idle qubits to implement the
 # ``QROM`` for the :class:`~.pennylane.resource.PrepareTHC` operator.
-# This should allow us to decrease the Toffolis without increasing the logical
+# This should allow us to decrease the toffolis without increasing the logical
 # qubit count, at least until we run out of reusable space.
 #
 # Let's verify this by sweeping through different ``select_swap_depth`` values:
@@ -246,12 +273,22 @@ for depth in swap_depths:
 # Toffoli count decreases. However, moving to depth 8, the qubit count jumps as the swap network becomes too large to fit
 # entirely within the reused register, forcing the allocation of additional qubits. This marks
 # the point where the "free" optimization ends and the standard trade-off resumes.
+# Let's look at the exact resources for the optimized configuration (Batch Size = 10, Select-Swap Depth = 4):
+
+print(f"Optimized Configuration (Batch=10, Depth=4):")
+print(f"Logical Qubits: {qubit_counts[2]}")
+print(f"Toffoli Gates:  {toffoli_counts[2]:.2e}")
+
+#######################################################################
+# By applying these optimizations, we have successfully reduced the qubit requirements by a factor of 4,
+# bringing the count down from ~2200 to 466. Crucially, this massive spatial saving comes with a relatively
+# manageable cost: the Toffoli gate count increases from ~8.8e10 to ~3.5e11, which is less than one order of magnitude.
 #
 # Conclusion
 # ^^^^^^^^^^
 #
 # In this demo, we tackled the logical resource estimation for FeMoco, a complex molecule central to understanding
-# biological nitrogen fixation. Our initial baseline for FeMoco revealed a requirement of ~3000 logical qubits, which
+# biological nitrogen fixation. Our initial baseline for FeMoco revealed a requirement of ~2000 logical qubits, which
 # underscores the magnitude of the challenge facing early fault-tolerant hardware.
 #
 # However, naive calculations tell only half the story. As we demonstrated later, these resource counts are not
