@@ -114,11 +114,11 @@ print(magic_state_injection_circuit(np.pi / 3))
 # A typical protocol follows these steps:
 #
 # 1. **Preparation:** Prepare initial, imperfect magic states using non-Clifford gates. These input states are encoded 
-#    in error-correcting (inner) codes such as surface codes.
+#    in error-correcting (inner) codes.
 #    A common way to do this is starting with physical magic states and use Clifford 
 #    operations and Pauli-based measurements to obtain the same states in an encoded form.  
 # 2. **Encoding:** Process several copies of these logical qubits using Clifford operations to map them onto an 
-#    error-correcting (outer) code such as the Reed-Muller code.
+#    error-correcting (outer) code.
 # 3. **Check:** Perform a syndrome measurement by measuring certain `stabilizers <https://pennylane.ai/qml/demos/tutorial_stabilizer_codes>`__
 #    across this multi-block structure.
 # 4. **Results:** Decide whether to keep or discard the state by looking at the measurement results that indicate 
@@ -126,9 +126,12 @@ print(magic_state_injection_circuit(np.pi / 3))
 #    If the syndrome is trivial, the reduced state is kept as a higher-purity state; if an error is 
 #    detected, the state is discarded.
 #
-# It is worth noting the underlying structure of code concatenation; there is an outer code and 
+# Notice the underlying structure of code concatenation: there is an outer code and 
 # several smaller inner codes. As such, the main operations in a distillation protocol are 
-# logical, being executed across multiple error-correcting blocks, resulting in a significant resource overhead. 
+# logical, executed across multiple error-correcting blocks, resulting in a significant resource overhead. 
+# For instance, in a 15-to-1 distillation protocol [#Fowler]_, fifteen logical qubits---each already
+# protected by an inner surface code---are further encoded into a single block of a Reed-Muller 
+# code (outer code) to distill just one magic state of higher purity.
 #
 # See this `demo <https://pennylane.ai/qml/demos/tutorial_magic_state_distillation>`__ 
 # for an implementation of a distillation protocol using Catalyst. 
@@ -162,7 +165,7 @@ print(magic_state_injection_circuit(np.pi / 3))
 #    is now too large for efficient post-selection, a decoder computes a complementary gap. This metric acts as 
 #    a confidence score for the final state, allowing the system to accept or discard the state accordingly.
 #
-# It is also worth noticing that, as one might suspect, there is a strict threshold fidelity for these preparation
+# An important detail is that, as one might suspect, there is a strict threshold fidelity for these preparation
 # protocols: the initial noisy state(s) :math:`\rho` must have a fidelity above a certain limit for the process 
 # to converge toward a pure state [#Bravyi2005]_. If the initial states are too noisy, the protocol will 
 # fail to improve them.
@@ -211,6 +214,12 @@ print(magic_state_injection_circuit(np.pi / 3))
 #    Sergey Bravyi and Alexei Kitaev. "Universal quantum computation with
 #    ideal Clifford gates and noisy ancillas." `Physical Review A 71.2 (2005).
 #    <https://journals.aps.org/pra/abstract/10.1103/PhysRevA.71.022316>`__
+#
+# .. [#Fowler]
+#
+#    Austin G. Fowler, Matteo Mariantoni, John M. Martinis, and Andrew N. Cleland. 
+#    "Surface codes: Towards practical large-scale quantum computation."
+#    `Phys. Rev. A 86, 032324 (2012) <https://journals.aps.org/pra/abstract/10.1103/PhysRevA.86.032324>`__.
 #
 # .. [#Gidney2024]
 #
