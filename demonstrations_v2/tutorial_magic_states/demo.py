@@ -113,13 +113,15 @@ print(magic_state_injection_circuit(np.pi / 3))
 #
 # A typical protocol follows these steps:
 #
-# 1. Prepare initial, imperfect states using non-Clifford gates (starting the "magic").
-#    These input states are encoded in error-correcting (inner) codes such as surface codes. 
-# 2. Process several copies of these logical qubits using Clifford operations to map them onto an 
+# 1. **Preparation:** Prepare initial, imperfect magic states using non-Clifford gates. These input states are encoded 
+#    in error-correcting (inner) codes such as surface codes.
+#    A common way to do this is starting with physical magic states and use Clifford 
+#    operations and Pauli-based measurements to obtain the same states in an encoded form.  
+# 2. **Encoding:** Process several copies of these logical qubits using Clifford operations to map them onto an 
 #    error-correcting (outer) code such as the Reed-Muller code.
-# 3. Perform a syndrome measurement by measuring certain `stabilizers <https://pennylane.ai/qml/demos/tutorial_stabilizer_codes>`__
+# 3. **Check:** Perform a syndrome measurement by measuring certain `stabilizers <https://pennylane.ai/qml/demos/tutorial_stabilizer_codes>`__
 #    across this multi-block structure.
-# 4. Decide whether to keep or discard the state by looking at the measurement results that indicate 
+# 4. **Results:** Decide whether to keep or discard the state by looking at the measurement results that indicate 
 #    if the state remains in the "clean" codespace.
 #    If the syndrome is trivial, the reduced state is kept as a higher-purity state; if an error is 
 #    detected, the state is discarded.
@@ -145,18 +147,18 @@ print(magic_state_injection_circuit(np.pi / 3))
 #
 # The protocol consists of four primary stages:
 #
-# 1. Injection: prepare an initial, noisy magic state encoded in a small code of distance 3 or better.
-# 2. Cultivation: gradually improve the state through repeated Clifford checks and postselection.
+# 1. **Injection:** prepare an initial, noisy magic state encoded in a small code of distance 3 or better.
+# 2. **Cultivation:** gradually improve the state through repeated Clifford checks and postselection.
 #    To reach higher fidelities, the code distance must be increased; otherwise, the noise floor 
 #    of the small code would limit the state's purity. This stage then involves cycles of growing
 #    the code, stabilizing it, and checking the magic state. 
-# 3. Escape: rapidly expand the code hosting the state. Once the cultivation stage is complete, the magic state 
+# 3. **Escape:** rapidly expand the code hosting the state. Once the cultivation stage is complete, the magic state 
 #    reaches its target fidelity, and becomes "too good for the code". 
 #    To preserve this high fidelity, the state needs to *escape*
 #    into a much larger code as quickly as possible, typically via `grafting <https://arxiv.org/abs/2409.17595>`__
 #    `code morphing <https://arxiv.org/abs/2112.01446>`__ or 
 #    `lattice surgery <https://pennylane.ai/qml/demos/tutorial_lattice_surgery>`__.
-# 4. Decoding: determine whether to accept the final state using standard error correction. Since the circuit 
+# 4. **Decoding:** determine whether to accept the final state using standard error correction. Since the circuit 
 #    is now too large for efficient post-selection, a decoder computes a complementary gap. This metric acts as 
 #    a confidence score for the final state, allowing the system to accept or discard the state accordingly.
 #
