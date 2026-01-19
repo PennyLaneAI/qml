@@ -139,18 +139,19 @@ print(magic_state_injection_circuit(np.pi / 3))
 # Magic state cultivation
 # ~~~~~~~~~~~~~~~~~~~~~~~
 #
-# Currently considered the state-of-the-art method for generating high-fidelity magic states, 
-# formulated by Gidney et al [#Gidney2024]_ as a practical optimization. 
-# The primary objective is to synthesize magic states with the specific fidelities required 
-# for large-scale quantum computations as efficiently as possible.
-#
 # Unlike distillation, which consumes numerous noisy states to filter out a clean one, cultivation 
 # starts with a single *seed* state and improves it "in-place." The entire process occurs 
 # within a single code patch using physical-level operations.
 #
+# It is currently considered the state-of-the-art method for generating high-fidelity magic states, 
+# formulated by Gidney et al [#Gidney2024]_ to optimize preparation techniques with
+# practical purposes. In other words, the primary objective is to synthesize magic states with the 
+# specific fidelities required for large-scale quantum computations as efficiently as possible; 
+# this technique prioritizes engineering efficiency over theoretical elegance or asymptotic behavior.
+#
 # The protocol consists of four primary stages:
 #
-# 1. **Injection:** prepare an initial, noisy magic state encoded in a small code of distance 3 or better.
+# 1. **Injection:** prepare an initial, noisy magic state encoded in a small code of distance 3 or slightly better.
 # 2. **Cultivation:** gradually improve the state through repeated Clifford checks and postselection.
 #    To reach higher fidelities, the code distance must be increased; otherwise, the noise floor 
 #    of the small code would limit the state's purity. This stage then involves cycles of growing
@@ -165,6 +166,7 @@ print(magic_state_injection_circuit(np.pi / 3))
 #    is now too large for efficient post-selection, a decoder computes a complementary gap. This metric acts as 
 #    a confidence score for the final state, allowing the system to accept or discard the state accordingly.
 #
+# 
 # An important detail is that, as one might suspect, there is a strict threshold fidelity for these preparation
 # protocols: the initial noisy state(s) :math:`\rho` must have a fidelity above a certain limit for the process 
 # to converge toward a pure state [#Bravyi2005]_. If the initial states are too noisy, the protocol will 

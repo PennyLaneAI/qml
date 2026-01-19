@@ -7,8 +7,8 @@
     ],
     "executable_stable": true,
     "executable_latest": true,
-    "dateOfPublication": "2025-12-31T10:00:00+00:00",
-    "dateOfLastModification": "2025-12-31T15:48:14+00:00",
+    "dateOfPublication": "2026-01-20T10:00:00+00:00",
+    "dateOfLastModification": "2026-01-20T15:48:14+00:00",
     "categories": [
         "Quantum Computing"
     ],
@@ -23,7 +23,7 @@
             "uri": "/_static/demo_thumbnails/large_demo_thumbnails/pennylane-demo-magic-states-large-thumbnail.png"
         }
     ],
-    "seoDescription": "Learn what magic states are and why they are so important for Fault-tolerant quantum computing",
+    "seoDescription": "Learn what magic states are and why they are so important for Fault-tolerant quantum computing (FTQC)",
     "doi": "",
     "references": [
         {
