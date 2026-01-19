@@ -201,7 +201,7 @@ print(magic_state_injection_circuit(np.pi / 3))
 # In this tutorial, we reviewed the concept of magic states, an essential and creative tool for achieving FTQC and UQC.
 # While traditional distillation provided the theoretical foundation for universality, the shift 
 # toward cultivation reflects a new era of practical fault-tolerance focused on resource efficiency.
-# As we move toward large-scale implementations, the challenge lies in optimizing these "magic state factories."
+# As we move toward large-scale implementations, the challenge lies in optimizing the "magic state factories."
 # 
 # For those interested in the deeper math, there is a nice geometric perspective of magic states 
 # involving the stabilizer polytope on the Bloch sphere [#Heinrich2019]_. In this framework, magic states 
