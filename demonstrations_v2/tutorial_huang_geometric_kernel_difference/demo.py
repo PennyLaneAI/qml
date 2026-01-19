@@ -180,10 +180,10 @@ plt.show()
 #
 #   .. math:: k_{\text{PQK-E2}}(x, x') = \exp\left( -\gamma \|v_{\text{E2}}(x) - v_{\text{E2}}(x')\|^2 \right),
 #
-#   where :math:`v_{\text{E1 }}(x)` and :math:`v_{\text{E2}}(x)` are the Pauli expectation vector from
+#   where :math:`v_{\text{E1 }}(x)` and :math:`v_{\text{E2}}(x)` are the Pauli expectation vectors from
 #   E1 and E2, respectively.
 #
-# Let's define the embedding circuits E1 and E2, and visualize using an auxiliary drawing function. 
+# Let's define the embedding circuits E1 and E2, and visualize them using an auxiliary drawing function. 
 
 import numpy as np
 import pennylane as qml
@@ -230,7 +230,7 @@ draw_circuits_side_by_side(
 # The Gram matrices will be used in downstream evaluations to compare kernel geometries and analyze
 # expressivity and generalization metrics like :math:`g`.
 #
-# The following code builds all five Gram (kernel) matrices: Classical, QK-E1, QK-E2, PQK-E1, PQK-E2.
+# The following code builds all five Gram (kernel) matrices: Classical, QK-E1, QK-E2, PQK-E1, and PQK-E2.
 
 from sklearn.metrics.pairwise import rbf_kernel
 
@@ -528,13 +528,13 @@ plt.show()
 #   classical one—a *necessary*, but not *sufficient*, condition for quantum advantage.
 #
 # - **Higher** :math:`g` **does not imply higher accuracy.**
-#   In our results, **PQK‑E2** had a high :math:`g` and achieved perfect accuracy—but **PQK‑E1**,
+#   In our results, **PQK‑E2** had a high :math:`g` and achieved perfect accuracy, but **PQK‑E1**,
 #   with a higher :math:`g`, obtained a lower accuracy on the original task. This confirms that
 #   :math:`g` measures *potential*, not realized performance.
 #
 # - :math:`g`\ ’s **value is in ruling out unpromising kernels.**
 #   Kernels with very small :math:`g` are unlikely to offer any meaningful advantage over classical
-#   methods—meaning the quantum kernel introduces no genuinely new distinctions beyond what a
+#   methods—the quantum kernel introduces no genuinely new distinctions beyond what a
 #   classical RBF can produce. By contrast, a high :math:`g` only tells us that *some advantage may
 #   be possible*—not that it will be realized.
 #
