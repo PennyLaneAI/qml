@@ -536,7 +536,7 @@ plt.show()
 #   Kernels with very small :math:`g` are unlikely to offer any meaningful advantage over classical
 #   methods—the quantum kernel introduces no genuinely new distinctions beyond what a
 #   classical RBF can produce. By contrast, a high :math:`g` only tells us that *some advantage may
-#   be possible*—not that it will be realized.
+#   be possible*, not that it will be realized.
 #
 # What if we took labels into account? The authors in [#Huang2021]_ proposed a method to artificially construct new labels 
 # that align with a quantum kernel’s geometry. This is a toy construction, but pretty fun to play around with.
