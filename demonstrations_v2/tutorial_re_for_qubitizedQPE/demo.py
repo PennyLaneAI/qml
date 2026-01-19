@@ -281,7 +281,7 @@ print(f"Toffoli Gates:  {toffoli_counts[2]:.2e}")
 #######################################################################
 # By applying these optimizations, we have successfully reduced the qubit requirements by a factor of 4,
 # bringing the count down from ~2200 to 466. Crucially, this massive spatial saving comes with a relatively
-# manageable cost: the Toffoli gate count increases from ~8.8e10 to ~3.5e11, which is less than one order of magnitude.
+# manageable cost: the Toffoli gate count increases from ~8.8e10 to ~3.5e11, which is also roughly a factor of 4.
 #
 # Conclusion
 # ^^^^^^^^^^
