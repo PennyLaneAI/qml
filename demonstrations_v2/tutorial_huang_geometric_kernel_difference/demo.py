@@ -82,7 +82,7 @@ hyperparameter tuning and training. This procedure is summarized as:
      - Projected kernel from E2
 
 3. **Our approach**: Calculate :math:`g` values between the classical kernel and each quantum
-   kernel—giving.
+   kernel.
 """
 
 # We first start by generating and visualizing the artificial data
