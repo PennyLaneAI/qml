@@ -39,7 +39,7 @@ a few hundred logical qubits. In particular, we show that it is possible to perf
 # we save the qubits by reducing the register size, but need a longer repetition of the `Quantum Read-Only Memory (QROM) <https://pennylane.ai/qml/demos/tutorial_intro_qrom>`_
 # subroutine for each batch, which increases the Toffoli count.
 #
-# .. figure:: ../_static/demonstration_assets/qubitization/pennylane-demo-image-circuit-batching-fig.png
+# .. figure:: ../_static/demonstration_assets/qubitization_re/pennylane-demo-image-circuit-batching-fig.png
 #    :align: center
 #    :width: 70%
 #    :target: javascript:void(0)
@@ -50,15 +50,10 @@ a few hundred logical qubits. In particular, we show that it is possible to perf
 # rely on QROM to access Hamiltonian coefficients and rotation angles respectively. We can use
 # the select-swap variant of the QROM, which allows us to trade the depth of the circuit for width, as shown in the diagrams below:
 #
-# .. list-table::
-#    :widths: 50 50
-#    :header-rows: 0
-#    :class: plain
-#
-#    * - .. image:: ../_static/demonstration_assets/qrom/select_swap.jpeg
-#           :width: 100%
-#      - .. image:: ../_static/demonstration_assets/qrom/select_swap_4.jpeg
-#           :width: 100%
+# .. figure:: ../_static/demonstration_assets/qubitization_re/selswap_combine.jpeg
+#    :align: center
+#    :width: 70%
+#    :target: javascript:void(0)
 #
 # The configuration on the right achieves lower gate complexity by employing auxiliary work wires to enable block-wise data loading.
 # This approach replaces expensive multi-controlled operations with simpler controlled-swap gates, significantly reducing the Toffoli
