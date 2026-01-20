@@ -56,8 +56,10 @@ jobs:
     steps:
       - name: Configure AWS credentials from build branch
         if: github.event_name == 'workflow_run'
+        env:
+          HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
         run: |
-          branch="${{ github.event.workflow_run.head_branch }}"
+          branch="$HEAD_BRANCH"
           if [ "$branch" = "dev" ]; then
             echo "AWS_ACCESS_KEY_ID=${{ secrets.PL_SITE_DEV_NON_REACT_ACCESS_KEY_ID }}" >> "$GITHUB_ENV"
             echo "AWS_SECRET_ACCESS_KEY=${{ secrets.PL_SITE_DEV_NON_REACT_SECRET_ACCESS_KEY }}" >> "$GITHUB_ENV"
