@@ -135,7 +135,7 @@ phase_grad_cost = qre.estimate(qre.PhaseGradient(n_angle))
 
 qpe_cost = qre.estimate(qre.UnaryIterationQPE(wo_femoco, num_iterations=n_iter))
 
-total_cost = qpe_cost.add_parallel(phase_grad_cost)
+total_cost = qpe_cost.add_parallel(phase_grad_cost)  # add cost of phase gradient
 print(f"Resources for Qubitized QPE for FeMoco(76): \n {total_cost}\n")
 
 ######################################################################
