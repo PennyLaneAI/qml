@@ -48,6 +48,7 @@ jobs:
     uses: ./.github/workflows/v2-build-demos.yml
     needs: 
       - identify-changed-demos
+      - validate-metadata
     with:
       ref: ${{ github.event.pull_request.head.sha }}
       demo-names: ${{ needs.identify-changed-demos.outputs.updated }}

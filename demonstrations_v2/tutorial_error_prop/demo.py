@@ -214,7 +214,7 @@ phi1, phi2 = (0.12, 3.45)
 print("State:")
 print(circ(Hamiltonian, time, phi1, phi2), "\n")
 
-errors_dict = qml.specs(circ)(Hamiltonian, time, phi1, phi2)["errors"]
+errors_dict = qml.resource.algo_error(circ)(Hamiltonian, time, phi1, phi2)
 error = errors_dict["SpectralNormError"]
 print("Error:")
 print(error)

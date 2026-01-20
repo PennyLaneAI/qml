@@ -7,6 +7,7 @@ This directory houses the files that specify and constrain the dependencies requ
 *   [Overview](#overview)
 *   [Dependency Files](#dependency-files)
     *   [`constraints-dev.txt`](#constraints-devtxt)
+    *   [`constraints-plc-dev.txt`](#constraints-plc-devtxt)
     *   [`constraints-stable.txt`](#constraints-stabletxt)
     *   [`requirements-build.txt`](#requirements-buildtxt)
     *   [`requirements-core.in`](#requirements-corein)
@@ -23,12 +24,19 @@ The following files define the various dependency sets:
 
 ### `constraints-dev.txt`
 
-**NOTE**: The development versions of Lightning, Catalyst, and PennyLane require a specific installation order, and as such their versions are not controlled by this file.
+**NOTE**: The development versions of Lightning, Catalyst, and PennyLane require a specific installation order, and as such their versions are not controlled by this file. See the next section for their installation.
 
 This file specifies the allowed versions of dependencies for building and running demonstrations when targeting the most recent **development builds** of PennyLane and its associated plugins. The actual dependencies are defined in the requirements files; the constraints file only restricts which versions can be installed. This ensures compatibility with cutting-edge features and ongoing development. Unless a new global development dependency is being added, you likely don't need to modify this file.
 
 *   **Location:** `./constraints-dev.txt`
 *   **Purpose:** Defines dependencies for the `qml build --dev` command.
+
+### `constraints-plc-dev.txt`
+
+This file specifies the allowed versions of PennyLane, Lightning, and Catalyst for **development builds**. These files are currently installed **onyl if the demo is set to be executed** (`qml build --execute --dev`). These versions are pulled from test-pypi so that the release candidate versions are used during feature freeze. Unless you're a release manager, you likely don't need to modify this file. 
+
+*   **Location:** `./constraints-plc-dev.txt`
+*   **Purpose:** Defines PennyLane, Lightning, and Catalyst versions for the `qml build --execute --dev` command.
 
 ### `constraints-stable.txt`
 

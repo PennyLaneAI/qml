@@ -55,7 +55,7 @@ import pennylane as qml
 import numpy as np
 
 import warnings
-warnings.filterwarnings(action="ignore", category=np.ComplexWarning)
+warnings.filterwarnings(action="ignore", category=np.exceptions.ComplexWarning)
 
 # Load the dataset
 h2 = qml.data.load("qchem", molname="H2", bondlength=0.742, basis="STO-3G")[0]
