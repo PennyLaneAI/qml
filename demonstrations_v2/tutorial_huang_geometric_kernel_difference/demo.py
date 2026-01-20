@@ -323,7 +323,8 @@ print(f"K_PQK_E2 shape: {K_pqk_E2.shape}")
 
 ######################################################################
 #
-# Let's now visualize the Gram Matrices.
+# Let's now visualize the Gram Matrices. Each matrix shows how similar data points are to each other:
+# brighter colors indicate higher similarity and different patterns indicate different geometries.
 
 import matplotlib.pyplot as plt
 
@@ -351,13 +352,7 @@ for j in range(len(matrices), len(axes)):
     axes[j].axis("off")
 
 plt.tight_layout()
-plt.suptitle(f"Gram Matrix Visualizations (first {subset_size}×{subset_size} entries)", y=1.02)
 plt.show()
-
-
-print("Each matrix shows how similar data points are to each other:")
-print("- Brighter colors = higher similarity")
-print("- Different patterns indicate different geometries")
 
 ######################################################################
 # 
