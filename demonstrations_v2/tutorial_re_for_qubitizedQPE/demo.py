@@ -34,7 +34,7 @@ a few hundred logical qubits. In particular, we show how to implement **QPE for 
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 # In the ``Select`` operator, we need to implement a series of Givens rotations to change the basis.
 # Naively, to store all angles simultaneously, we require a register size equal to the number of rotations times the bits of precision per angle.
-# Here, we can choose to load these angles in batches instead of loading all of them at once. [#Caesura]_
+# However, we can choose to load these angles in batches instead of loading all of them at once. [#Caesura]_
 # The tunable knob here is the **number of batches** in which the rotation angles are loaded. By increasing the number of batches,
 # we save the qubits by reducing the register size, but need a longer repetition of the `Quantum Read-Only Memory (QROM) <https://pennylane.ai/qml/demos/tutorial_intro_qrom>`_
 # subroutine for each batch, which increases the Toffoli count.
