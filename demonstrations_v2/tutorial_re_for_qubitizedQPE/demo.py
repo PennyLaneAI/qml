@@ -218,8 +218,6 @@ print(f"  Toffolis: {toffoli_counts[-1]:.3e}\n")
 # This favorable trade-off allows us to fit the algorithm on constrained hardware without
 # making the runtime prohibitively long.
 #
-# We have successfully brought the qubit count down using batching. Now, can we optimize the gate count
-# without incurring extra qubit costs?
 #
 # Step 2: Circuit optimization with Select-Swap
 # -----------------------------------------------
