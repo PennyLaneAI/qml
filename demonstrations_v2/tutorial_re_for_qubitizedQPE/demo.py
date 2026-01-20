@@ -5,8 +5,8 @@ r"""Qubit and gate trade-offs in Qubitized Quantum Phase Estimation
 `Quantum Phase Estimation (QPE) <https://pennylane.ai/qml/demos/tutorial_qpe>`_ is a powerful quantum algorithm
 that allows us to estimate the eigenvalues of a Hamiltonian with high precision.
 The most advanced versions of QPE rely on
-`Qubitization <https://pennylane.ai/qml/demos/tutorial_qubitization>`_  to encode chemical Hamiltonians :math:`H` as unitary operators. This leverages a `Linear Combination of Unitaries (LCU) <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding>`_ decomposition to create a
-`Block Encoding <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding>`_ of :math:`H` , which is then used to construct a "Quantum Walk" operator :math:`W` that is used as input to QPE.
+`qubitization <https://pennylane.ai/qml/demos/tutorial_qubitization>`_  to encode chemical Hamiltonians  as unitary operators. This leverages a `linear combination of unitaries (LCU) <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding>`_ decomposition to create a
+`block encoding <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding>`_ of the Hamiltonian , which is then used to construct a "quantum walk" operator that is used as input to QPE.
 
 We focus on the Tensor Hypercontraction (THC) representation, a state-of-the-art LCU decomposition for quantum chemistry
 that approximates the interaction tensor via a low-rank factorization.
