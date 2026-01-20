@@ -63,8 +63,7 @@ a few hundred logical qubits. In particular, we show how to implement **QPE for 
 # However, our quantum resource :mod:`estimator <pennylane.estimator>` provides much more than a static cost report.
 # We demonstrate how PennyLane exposes these
 # tunable knobs of the circuit implementation, allowing us to actively navigate the circuit design and trade-off between gates and
-# logical qubits to suit different constraints. As a concrete example, let's perform resource estimation for the FeMoco molecule,
-# which plays a crucial role in biological nitrogen fixation.
+# logical qubits to suit different constraints. As a concrete example, let's perform resource estimation for the FeMoco molecule.
 #
 # Resource Estimation for FeMoco
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
