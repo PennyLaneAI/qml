@@ -146,8 +146,6 @@ print(f"Resources for Qubitized QPE for FeMoco(76): \n {total_cost}\n")
 # 500 logical qubits? Yes!  We can actively trade qubits for gates by modifying the circuit architecture using the "tunable knobs" we discussed
 # earlier.
 #
-# With the target system defined, we can now turn our attention to the specific architectural
-# choices that allow us to balance our resource budget.
 #
 # Exploring Trade-offs
 # ^^^^^^^^^^^^^^^^^^^^
