@@ -11,7 +11,7 @@ In this demo, we analyze the scalability of such key spectroscopy algorithms.
 
 .. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_how_to_build_spin_hamiltonians.png
     :align: center
-    :width: 70%0
+    :width: 70%
     :target: javascript:void(0)
 
 Hadamard Test Circuit
@@ -57,7 +57,7 @@ The first step to determining the resources for this simulation is to define the
 Here, we must note that the resource requirements for the simulation are independent of the specific integral values,
 and depend rather on the structural parameters of the Hamiltonian, specifically
 the number of orbitals and the number of fragments. We leverage this by utilizing the specialized
-`compact Hamiltonian <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.compact_hamiltonian.CDFHamiltonian.html>`_ representation feature
+`compact Hamiltonian <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.compact_hamiltonian.CDFHamiltonian.html>`__ representation feature
 offered by PennyLane, skipping the expensive Hamiltonian construction while retaining the exact cost topology required for analysis.
 """
 
@@ -202,9 +202,9 @@ plt.show()
 # Fortunately, we can bridge this gap by further customizing the :class:`~.pennylane.estimator.ResourceConfig`.
 # We can teach the estimator the specific cost models used in the paper by using custom decompositions for key
 # operations, similar to how we changed the rotation gate synthesis decomposition above.
-
+#
 # Let's start by customizing the basis rotation decomposition to use the one from `Kivlichan et al. (2018)
-# https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.120.110501`_.
+# <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.120.110501>`_.
 
 def basis_rotation_cost(dim):
     """Custom basis rotation decomposition from Kivlichan et al. (2018)"""
@@ -277,7 +277,7 @@ plt.show()
 #
 # To achieve this efficiently, the algorithm utilizes a **Walk Operator** constructed from the **Tensor Hypercontraction (THC)**
 # Hamiltonian, which allows for a highly compact block encoding. Similar to the XAS example, we can use the
-# `compact Hamiltonian <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.compact_hamiltonian.THCHamiltonian.html>`_
+# `compact Hamiltonian <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.compact_hamiltonian.THCHamiltonian.html>`__
 # representation to skip the expensive Hamiltonian construction. Let's verify our model using the 11-orbital BODIPY system from the reference.
 
 bodipy_ham = qre.THCHamiltonian(num_orbitals=11, tensor_rank=22, one_norm=6.48)
