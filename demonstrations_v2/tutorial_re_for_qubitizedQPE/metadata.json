@@ -17,18 +17,27 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_how_to_build_spin_hamiltonians.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/pennylane-demo-re-qubitization-qpe-thumbnail.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_how_to_build_spin_hamiltonians.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/pennylane-demo-re-qubitization-qpe-large-thumbnail.png"
         }
     ],
     "seoDescription": "Exploring Qubit and T-gate Trade-offs in Qubitized Quantum Phase Estimation",
     "doi": "",
     "references": [
         {
-            "id": "lee2020",
+            "id": "Caesura",
+            "type": "article",
+            "title": "Faster quantum chemistry simulations on a quantum computer with improved tensor factorization and active volume compilation",
+            "authors": "Athena Caesura, Cristian L. Cortes, William Pol, Sukin Sim, Mark Steudtner, Gian-Luca R. Anselmetti, Matthias Degroote, Nikolaj Moll, Raffaele Santagati, Michael Streif, Christofer S. Tautermann",
+            "journal": "arXiv",
+            "year": "2025",
+            "url": "https://arxiv.org/abs/2501.06165"
+        },
+        {
+            "id": "lee2021",
             "type": "article",
             "title": "Even More Efficient Quantum Computations of Chemistry Through Tensor Hypercontraction.",
             "authors": "Joonhoo Lee",

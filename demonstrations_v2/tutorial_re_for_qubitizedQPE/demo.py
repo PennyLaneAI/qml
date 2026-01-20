@@ -17,7 +17,7 @@ In this demo, we use PennyLane's logical resource :mod:`estimator <pennylane.est
 to calculate the precise costs and demonstrate how to optimize the algorithm to fit on constrained devices with
 a few hundred logical qubits. In particular, we show that it is possible to perform **QPE for the 76-orbital active space of FeMoco with fewer than 500 logical qubits**.
 
-.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_how_to_build_spin_hamiltonians.png
+.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_re_for_qubitization.png
     :align: center
     :width: 70%
     :target: javascript:void(0)
@@ -34,12 +34,12 @@ a few hundred logical qubits. In particular, we show that it is possible to perf
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 # In the ``Select`` operator, we need to implement a series of Givens rotations to change the basis.
 # Naively, to store all angles simultaneously, we require a register size defined by the number of rotations times the bits of precision per angle.
-# Here, we can choose to load these angles in batches instead of loading all of them at once.
+# Here, we can choose to load these angles in batches instead of loading all of them at once. [#Caesura]_
 # The tunable knob here is the **number of batches** in which the rotation angles are loaded. By increasing the number of batches,
 # we save the qubits by reducing the register size, but need a longer repetition of the `Quantum Read-Only Memory (QROM) <https://pennylane.ai/qml/demos/tutorial_intro_qrom>`_
 # subroutine for each batch, which increases the Toffoli count.
 #
-# .. figure:: ../_static/demonstration_assets/qubitization/batching.jpeg
+# .. figure:: ../_static/demonstration_assets/qubitization/pennylane-demo-image-circuit-batching-fig.png
 #    :align: center
 #    :width: 70%
 #    :target: javascript:void(0)
@@ -147,11 +147,11 @@ print(f"Resources for Qubitized QPE for FeMoco(76): \n {total_cost}\n")
 # Analyzing the Results
 # ---------------------
 # Let's look at the results we just generated. For FeMoco (76), the resource estimator predicts a requirement
-# of over 2000 qubits and 11 trillion (:math:`11.5 \times 10^{12}`) total gates.
+# of over 2188 qubits and 8.8e10 trillion Toffoli gates.
 #
 # In the fault-tolerant era, logical qubits will be a precious resource. What if our hardware only supports
 # 500 logical qubits? Are we unable to simulate this system? Not necessarily. We can actively trade **Space**
-# (Qubits) for **Time** (gates) by modifying the circuit architecture. Let's apply the "tunable knobs" we discussed
+# (Qubits) for **Time** (Toffoli gates) by modifying the circuit architecture. Let's apply the "tunable knobs" we discussed
 # earlier to fit FeMoco onto this constrained device.
 #
 # With the target system defined, we can now turn our attention to the specific architectural
@@ -166,7 +166,7 @@ print(f"Resources for Qubitized QPE for FeMoco(76): \n {total_cost}\n")
 # are loaded.
 #
 # .. note::
-#    To strictly isolate the effect of batching, we fix the ``select_swap_depth`` to 1 here.
+#    To strictly isolate the effect of batching, we fix the ``select_swap_depth`` to 4 here.
 #    While this does not represent the optimal gate count, it allows us to
 #    observe the pure trade-off between batch size and qubit count without confounding factors.
 #
@@ -178,7 +178,7 @@ qubit_counts = []
 toffoli_counts = []
 
 for i in batch_sizes:
-    prep_thc = qre.PrepTHC(femoco, coeff_precision=n_coeff, select_swap_depth=1)
+    prep_thc = qre.PrepTHC(femoco, coeff_precision=n_coeff, select_swap_depth=4)
     select_thc = qre.SelectTHC(femoco, rotation_precision=n_angle, num_batches=i)
     wo_batched = qre.QubitizeTHC(
         femoco,
@@ -203,7 +203,7 @@ for i in batch_sizes:
 #    :target: javascript:void(0)
 #
 # The plot illustrates a clear crossover in resource requirements. At the left extreme (a single batch),
-# we minimize toffolis but pay a massive penalty in qubits, requiring over 2000 logical qubits, which far exceeds
+# we minimize Toffoli counts but pay a massive penalty in qubits, requiring around 1800 logical qubits, which far exceeds
 # our hypothetical 500-qubit limit.
 # As we increase the number of batches, the qubit count plummets, eventually dipping below
 # the 500-qubit limit. However, there is no free lunch: the Toffoli count rises steadily because we must
@@ -230,11 +230,11 @@ print(f"  Toffolis: {toffoli_counts[-1]:.3e}\n")
 # -----------------------------------------------
 # We have successfully brought the qubit count down using batching. Now, can we optimize the gate count
 # without incurring extra qubit costs?
-# To do this, we use the **Select-Swap QROM** strategy. Normally, this involves trading qubits for toffolis.
+# To do this, we use the **Select-Swap QROM** strategy. Normally, this involves trading qubits for Toffoli gates.
 # But here is the trick: the register used to store rotation angles in the :class:`~.pennylane.resource.SelectTHC`
 # operator is idle during the Prepare step. We can reuse these idle qubits to implement the
 # ``QROM`` for the :class:`~.pennylane.resource.PrepareTHC` operator.
-# This should allow us to decrease the toffolis without increasing the logical
+# This should allow us to decrease the Toffoli gates without increasing the logical
 # qubit count, at least until we run out of reusable space.
 #
 # Let's verify this by sweeping through different ``select_swap_depth`` values:
@@ -292,7 +292,7 @@ print(f"Toffoli Gates:  {toffoli_counts[2]:.2e}")
 #
 # However, naive calculations tell only half the story. As we demonstrated later, these resource counts are not
 # immutable constants. By actively navigating the architectural trade-offs between logical qubits
-# and Toffolis we can significantly reshape the cost profile of the algorithm.
+# and Toffoli gates we can significantly reshape the cost profile of the algorithm.
 #
 # This is where the flexibility of PennyLane's resource estimation framework becomes crucial. Rather than treating subroutines
 # like ``Prepare`` and ``Select`` as black boxes, PennyLane allows us to tune the internal circuit
@@ -302,6 +302,12 @@ print(f"Toffoli Gates:  {toffoli_counts[2]:.2e}")
 #
 # References
 # ----------
+#
+# .. [#Caesura]
+#
+#    A Caesura et al.
+#    Faster quantum chemistry simulations on a quantum computer with improved tensor factorization and active volume compilation
+#    `arXiv:2501.06165 (2025), <https://arxiv.org/abs/2501.06165>`__
 #
 # .. [#lee2021]
 #
