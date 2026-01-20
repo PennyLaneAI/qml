@@ -123,7 +123,6 @@ Start importing the usual suspects:
 import pennylane as qml
 from pennylane import numpy as np
 import matplotlib.pyplot as plt
-import math
 np.random.seed(53173)
 
 ###############################################################################
@@ -150,7 +149,7 @@ np.random.seed(53173)
 # Now let's write a few lines to plot the Gaussian kernel:
 
 def gaussian_kernel(delta):
-    return math.exp(-delta ** 2)
+    return qml.math.exp(-delta ** 2)
 
 def make_data(n_samples, lower=-np.pi, higher=np.pi):
     x = np.linspace(lower, higher, n_samples)

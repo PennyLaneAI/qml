@@ -1,5 +1,4 @@
-r""".. _superconducting_qubits:
-
+r"""
 Quantum computing with superconducting qubits
 =============================================
 

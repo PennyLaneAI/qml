@@ -152,7 +152,7 @@ def param_shift(theta):
     r_minus = rotation_circuit(theta - np.pi / 2)
     return 0.5 * (r_plus - r_minus)
 
-gradient = qml.grad(rotation_circuit, argnum=0)
+gradient = qml.grad(rotation_circuit, argnums=0)
 
 expvals = [rotation_circuit(theta) for theta in angles]
 grad_vals = [gradient(theta) for theta in angles]
