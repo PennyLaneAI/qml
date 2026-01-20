@@ -141,13 +141,10 @@ print(f"Resources for Qubitized QPE for FeMoco(76): \n {total_cost}\n")
 ######################################################################
 # Analyzing the Results
 # ---------------------
-# Let's look at the results we just generated. For FeMoco (76), the resource estimator predicts a requirement
-# of over 2188 qubits and 8.8e10 trillion Toffoli gates.
-#
-# In the fault-tolerant era, logical qubits will be a precious resource. What if our hardware only supports
-# 500 logical qubits? Are we unable to simulate this system? Not necessarily. We can actively trade **Space**
-# (Qubits) for **Time** (Toffoli gates) by modifying the circuit architecture. Let's apply the "tunable knobs" we discussed
-# earlier to fit FeMoco onto this constrained device.
+# This version of QPE thus requires 2188 qubits and 8.8e10 trillion Toffoli gates (not to mention around 1e13 CNOT gates, which are often ignored). 
+# But logical qubits are a precious resource. Could we implement a variant of the algorithm that uses only
+# 500 logical qubits? Yes!  We can actively trade qubits for gates by modifying the circuit architecture using the "tunable knobs" we discussed
+# earlier.
 #
 # With the target system defined, we can now turn our attention to the specific architectural
 # choices that allow us to balance our resource budget.
