@@ -270,24 +270,23 @@ plt.show()
 # apply these tools to a different application, i.e. **Photodynamic Therapy (PDT)**, where we need to
 # estimate the cumulative absorption rates for a transition-metal photosensitizer.[#Zhou2025]_
 #
-# A key algorithmic difference from the XAS section is the shift from **Trotterization**
-# to **Generalized Quantum Signal Processing (GQSP)**. Instead of resolving individual eigenstates,
-# which is computationally expensive, this algorithm works by applying a sharp spectral filter to the Hamiltonian.
-# To achieve this efficiently, the algorithm utilizes a **Walk Operator** constructed from the **Tensor Hypercontraction (THC)**
-# factorization, which enables a compact block encoding.
+# This application requires a fundamental shift in algorithmic strategy. While XAS simulates the system's time evolution to
+# observe dynamic changes (Trotterization), PDT employs a spectral filtering approach. Here, rather than resolving individual
+# eigenstates, we use **Generalized Quantum Signal Processing (GQSP)** to isolate and measure the total signal within a specific
+# therapeutic energy window (typically 700–850 nm).
 #
-# Similar to the XAS example, we can use the `compact Hamiltonian <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.compact_hamiltonian.THCHamiltonian.html>`_
-# representation to skip the expensive Hamiltonian construction. Let's take the bodipy system with 11 orbital active space as an example:
+# To achieve this efficiently, the algorithm utilizes a **Walk Operator** constructed from the **Tensor Hypercontraction (THC)**
+# Hamiltonian, which allows for a highly compact block encoding. Similar to the XAS example, we can use the
+# `compact Hamiltonian <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.compact_hamiltonian.THCHamiltonian.html>`_
+# representation to skip the expensive Hamiltonian construction. Let's verify our model using the 11-orbital BODIPY system from the reference.
 
-bodipy_ham = qre.THCHamiltonian(num_orbitals=11, tensor_rank=22, one_norm=6.08)
+bodipy_ham = qre.THCHamiltonian(num_orbitals=11, tensor_rank=22, one_norm=6.48)
 
 ##################################################################
-# The next step is to construct the `Walk Operator from the THC Hamiltonian <https://pennylane.ai/qml/demos/tutorial_re_for_qubitizedQPE>`_
-# using the `~.pennylane.estimator.templates.QubitizeTHC` template. The walk operator construction
-# requires two key subroutines: the `Prepare <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.templates.PrepTHC.html>`_
-# oracle and the `Select <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.templates.SelectTHC.html>`_
-# oracle, which further requires setting the precision for coefficient and angle encoding. Let's define these precision parameters
-# based on the error budget from reference and construct the walk operator accordingly:
+# We now construct the `Walk Operator from the Hamiltonian <https://pennylane.ai/qml/demos/tutorial_re_for_qubitizedQPE>`_
+# using the `~.pennylane.estimator.templates.QubitizeTHC` template. For comprehensive details on how to construct and configure this operator,
+# we recommend the `Resource Estimation for Qubitization <https://pennylane.ai/qml/demos/tutorial_re_for_qubitizedQPE>`_ demo.
+# Let's define the precision parameters based on the error budget from reference and construct the walk operator accordingly:
 
 error = 0.0016  # Error budget from Zhou et al. (2025)
 n_coeff = int(np.ceil(2.5 + np.log2(10*bodipy_ham.one_norm/error))) # Coefficient precision
@@ -300,8 +299,7 @@ walk_op = qre.QubitizeTHC(bodipy_ham, prep_op=prep_op, select_op=select_op)
 ##################################################################
 # Next, we need to set up the GQSP parameters to construct the spectral filter. The filter is defined by a polynomial
 # whose degree determines the sharpness of the filter. Following Zhou et al. (2025) [#Zhou2025]_, we set the polynomial
-# degree using Figure 7 from the paper, which relates the degree to the desired spectral resolution. Let's define a
-# function to calculate the polynomial degree based on the one-norm of the Hamiltonian:
+# degree using Figure 7 from the paper, which relates the degree to the desired spectral resolution.
 
 def polynomial_degree(one_norm):
     """Calculate polynomial degree parameters from Zhou et al. (2025)"""
@@ -323,7 +321,7 @@ def pdt_circuit(walk_op, poly_degree, num_slaters=1e4):
             positive_and_real = False,
         )
     qre.QROM(num_bitstrings=2**num_qubits, size_bitstring=num_qubits, select_swap_depth=1)
-    # Controlled time evolution
+    # GQSP Spectral Filter
     qre.GQSP(walk_op,
             d_plus=poly_degree,
             d_minus=0
@@ -352,15 +350,24 @@ resource_counts = qre.estimate(pdt_circuit, config=cfg)(walk_op, poly_deg, num_s
 print(resource_counts)
 
 ######################################################################
-# The output compares to the numbers presented in the reference, validating our resource estimation workflow for the PDT application.
-# We encourage users to explore further by testing different systems from the reference and analyzing how the resources scale
-# as different tunable parameters are varied as shown in our `Qubitiization demo <https://pennylane.ai/qml/demos/tutorial_re_for_qubitizedQPE>`_.
+# The estimated resources of **174 qubits** and **:math:`1.96 \times 10^7` Toffoli gates**.
+# align with the reference values of **177 qubits** and **:math:`2.72 \times 10^7` Toffoli gates**.
+# The small differences can be attributed to different tunable parameters being used.
+# We encourage users to explore further by testing other systems from the reference or analyzing how the resources scale
+# with different error budgets, using the parameter tuning techniques detailed in our `Qubitization demo <https://pennylane.ai/qml/demos/tutorial_re_for_qubitizedQPE>`_.
 #
 # Conclusion
 # ----------
-# In this demo, we see the power of configurable resource estimation: by simply swapping
-# out decomposition rules in the ``ResourceConfig``, we can validate highly specific
-# algorithmic optimizations without needing to rewrite the high-level circuit code.
+# In this demo, we successfully validated our resource estimation workflow by reproducing results from
+# cutting-edge spectroscopy literature. We showed that PennyLane provides logical resource counts that
+# align closely with theoretical benchmarks across distinct algorithmic paradigms, ranging from standard
+# time-evolution to advanced spectral filtering.
+#
+# Beyond verification, a key takeaway is the flexibility of the estimation framework. We demonstrated how
+# differences in gate counts—often arising from differing compilation assumptions—can be resolved by
+# customizing the :class:`~.pennylane.resource.ResourceConfig`. This allows researchers to seamlessly
+# swap out decomposition rules to match specific
+# hardware constraints or theoretical models without needing to rewrite the high-level circuit logic.
 #
 # References
 # ----------
