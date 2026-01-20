@@ -96,7 +96,7 @@ femoco = qre.THCHamiltonian(num_orbitals=76, tensor_rank=450, one_norm=1201.5)
 #     n_{iter} = \lceil \log_2\left(\frac{2\pi \lambda}{\epsilon_{QPE}}\right) \rceil.
 #
 # This choice also dictates the required bit-precision for the circuit's subroutines. Specifically, to maintain this
-# overall accuracy, we must fix the numerical precision for expressing the Hamiltonian coefficients in ``Prepare``
+# overall accuracy, we fix the numerical precision for expressing the Hamiltonian coefficients in ``Prepare``
 # and the rotation angles in ``Select``.
 #
 # Using the error bounds derived in `Lee et al. (2021) <https://journals.aps.org/prxquantum/pdf/10.1103/PRXQuantum.2.030305>`__ (Appendix C),
