@@ -78,14 +78,15 @@ limno_ham = [qre.CDFHamiltonian(num_orbitals=i, num_fragments=i) for i in active
 # is derived from the error budget.
 
 import numpy as np
-eta = 0.05    # Lorentzian width (experimental resolution) in Hartree
-jmax = 100    # Number of time points (determines resolution limit)
-Hnorm = 2.0   # Maximum final state eigenvalue used to determine tau.
 
-tau = np.pi / (2*Hnorm) # Sampling interval
-trotter_error = 1 #Hartree
-delta = np.sqrt(eta/trotter_error) # Trotter step size
-num_trotter_steps = int(np.ceil(2*jmax+1) * tau / delta) # Number of Trotter steps
+eta = 0.05  # Lorentzian width (experimental resolution) in Hartree
+jmax = 100  # Number of time points (determines resolution limit)
+Hnorm = 2.0  # Maximum final state eigenvalue used to determine tau.
+
+tau = np.pi / (2 * Hnorm)  # Sampling interval
+trotter_error = 1  # Hartree
+delta = np.sqrt(eta / trotter_error)  # Trotter step size
+num_trotter_steps = int(np.ceil(2 * jmax + 1) * tau / delta)  # Number of Trotter steps
 
 ######################################################################
 # XAS Circuit Construction
@@ -105,15 +106,16 @@ num_trotter_steps = int(np.ceil(2*jmax+1) * tau / delta) # Number of Trotter ste
 # superposition.
 #
 
+
 def xas_circuit(hamiltonian, num_trotter_steps, measure_imaginary=False, num_slaters=1e4):
 
     # State preparation
     num_qubits = int(np.ceil(np.log2(num_slaters)))
     qre.QROMStatePreparation(
-            num_state_qubits = num_qubits,
-            positive_and_real = False,
-            select_swap_depths=1,
-        )
+        num_state_qubits=num_qubits,
+        positive_and_real=False,
+        select_swap_depths=1,
+    )
     qre.QROM(num_bitstrings=2**num_qubits, size_bitstring=num_qubits, select_swap_depth=1)
 
     # Hadamard and S gates
@@ -123,17 +125,24 @@ def xas_circuit(hamiltonian, num_trotter_steps, measure_imaginary=False, num_sla
         qre.Adjoint(qre.S())
 
     # Controlled time evolution
-    qre.Controlled(qre.TrotterCDF(hamiltonian, num_trotter_steps, order=2), num_ctrl_wires=1, num_zero_ctrl=0)
+    qre.Controlled(
+        qre.TrotterCDF(hamiltonian, num_trotter_steps, order=2), num_ctrl_wires=1, num_zero_ctrl=0
+    )
 
     qre.Hadamard()
 
     # Uncompute state preparation
-    qre.Adjoint(qre.QROMStatePreparation(
-            num_state_qubits = num_qubits,
-            positive_and_real = False,
+    qre.Adjoint(
+        qre.QROMStatePreparation(
+            num_state_qubits=num_qubits,
+            positive_and_real=False,
             select_swap_depths=1,
-        ))
-    qre.Adjoint(qre.QROM(num_bitstrings=2**num_qubits, size_bitstring=num_qubits, select_swap_depth=1))
+        )
+    )
+    qre.Adjoint(
+        qre.QROM(num_bitstrings=2**num_qubits, size_bitstring=num_qubits, select_swap_depth=1)
+    )
+
 
 ######################################################################
 # Resource Estimation
@@ -151,10 +160,12 @@ def xas_circuit(hamiltonian, num_trotter_steps, measure_imaginary=False, num_sla
 # a custom decomposition that models single-qubit rotations using the required phase gradient arithmetic.
 #
 
+
 def single_qubit_rotation(precision=None):
     """Gidney-Adder based decomposition for single qubit rotations"""
-    num_bits = int(np.ceil(np.log2(1/precision)))
-    return [qre.GateCount(qre.resource_rep(qre.SemiAdder, {"max_register_size": num_bits+1}))]
+    num_bits = int(np.ceil(np.log2(1 / precision)))
+    return [qre.GateCount(qre.resource_rep(qre.SemiAdder, {"max_register_size": num_bits + 1}))]
+
 
 ######################################################
 # We can now set up the resource estimation with this custom decomposition using the ``set_decomp`` function and set the precision
@@ -172,8 +183,9 @@ cfg.set_single_qubit_rot_precision(1e-3)
 xas_resources = []
 toffolis = []
 for ham in limno_ham:
-    resource_counts = qre.estimate(
-        xas_circuit, config=cfg)(hamiltonian=ham,num_trotter_steps=num_trotter_steps,measure_imaginary=False)
+    resource_counts = qre.estimate(xas_circuit, config=cfg)(
+        hamiltonian=ham, num_trotter_steps=num_trotter_steps, measure_imaginary=False
+    )
     xas_resources.append(resource_counts)
     toffolis.append(resource_counts.gate_counts["Toffoli"])
 
@@ -181,13 +193,14 @@ for ham in limno_ham:
 # Let's visualize how these estimates compare to the results reported in the literature.
 
 import matplotlib.pyplot as plt
-toffolis_lit = [7.12e7, 1.46e8, 2.18e8, 3.11e8]  # From Fomichev et al. (2025) [#Fomichev2025]_
-plt.plot(active_spaces, toffolis, 'o-', label='Estimated Resources', color="fuchsia")
-plt.plot(active_spaces, toffolis_lit, 's--', label='Literature Resources', color="gold")
 
-plt.xlabel('Number of Orbitals')
-plt.ylabel('Toffoli Count')
-plt.title('XAS Resource Estimation Comparison')
+toffolis_lit = [7.12e7, 1.46e8, 2.18e8, 3.11e8]  # From Fomichev et al. (2025) [#Fomichev2025]_
+plt.plot(active_spaces, toffolis, "o-", label="Estimated Resources", color="fuchsia")
+plt.plot(active_spaces, toffolis_lit, "s--", label="Literature Resources", color="gold")
+
+plt.xlabel("Number of Orbitals")
+plt.ylabel("Toffoli Count")
+plt.title("XAS Resource Estimation Comparison")
 plt.legend()
 plt.show()
 
@@ -206,6 +219,7 @@ plt.show()
 # Let's start by customizing the basis rotation decomposition to use the one from `Kivlichan et al. (2018)
 # <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.120.110501>`_.
 
+
 def basis_rotation_cost(dim):
     """Custom basis rotation decomposition from Kivlichan et al. (2018)"""
 
@@ -222,9 +236,9 @@ def basis_rotation_cost(dim):
     ]
 
     return [
-        qre.GateCount(qre.resource_rep(op, params or {}), count)
-        for op, count, params in ops_data
+        qre.GateCount(qre.resource_rep(op, params or {}), count) for op, count, params in ops_data
     ]
+
 
 cfg.set_decomp(qre.BasisRotation, basis_rotation_cost)
 
@@ -232,12 +246,14 @@ cfg.set_decomp(qre.BasisRotation, basis_rotation_cost)
 # Next, we use the double phase trick for CRZ decomposition as described in Section III A of Fomichev et al. (2025) [#Fomichev2025]_.
 # This optimization reduces the cost of the controlled rotations inside the Trotter steps.
 
+
 def custom_CRZ_decomposition(precision):
     """Decomposition of CRZ gate using double phase trick"""
-    rz = qre.resource_rep(qre.RZ, {"precision":precision})  # resource representation of RZ
+    rz = qre.resource_rep(qre.RZ, {"precision": precision})  # resource representation of RZ
     cnot = qre.resource_rep(qre.CNOT)
 
     return [qre.GateCount(cnot, 2), qre.GateCount(rz, 1)]
+
 
 cfg.set_decomp(qre.CRZ, custom_CRZ_decomposition)
 
@@ -246,17 +262,20 @@ cfg.set_decomp(qre.CRZ, custom_CRZ_decomposition)
 
 xas_resources_custom = []
 for ham in limno_ham:
-    resource_counts = qre.estimate(
-        xas_circuit, config=cfg)(hamiltonian=ham,num_trotter_steps=num_trotter_steps,measure_imaginary=False)
+    resource_counts = qre.estimate(xas_circuit, config=cfg)(
+        hamiltonian=ham, num_trotter_steps=num_trotter_steps, measure_imaginary=False
+    )
     xas_resources_custom.append(resource_counts)
 
-toffolis_custom = [resource_counts.gate_counts["Toffoli"] for resource_counts in xas_resources_custom]
-plt.plot(active_spaces, toffolis_custom, 'o-', label='Estimated Resources', color="fuchsia")
-plt.plot(active_spaces, toffolis_lit, 's--', label='Literature Resources', color="gold")
+toffolis_custom = [
+    resource_counts.gate_counts["Toffoli"] for resource_counts in xas_resources_custom
+]
+plt.plot(active_spaces, toffolis_custom, "o-", label="Estimated Resources", color="fuchsia")
+plt.plot(active_spaces, toffolis_lit, "s--", label="Literature Resources", color="gold")
 
-plt.xlabel('Number of Orbitals')
-plt.ylabel('Toffoli Gate Count')
-plt.title('XAS Resource Estimation Comparison')
+plt.xlabel("Number of Orbitals")
+plt.ylabel("Toffoli Gate Count")
+plt.title("XAS Resource Estimation Comparison")
 plt.legend()
 plt.show()
 
@@ -289,8 +308,10 @@ bodipy_ham = qre.THCHamiltonian(num_orbitals=11, tensor_rank=22, one_norm=6.48)
 # Let's define the precision parameters based on the error budget from reference and construct the walk operator accordingly:
 
 error = 0.0016  # Error budget from Zhou et al. (2025)
-n_coeff = int(np.ceil(2.5 + np.log2(10*bodipy_ham.one_norm/error))) # Coefficient precision
-n_angle = int(np.ceil(5.652 + np.log2(10*bodipy_ham.one_norm*2*bodipy_ham.num_orbitals/error))) # Rotation angle precision
+n_coeff = int(np.ceil(2.5 + np.log2(10 * bodipy_ham.one_norm / error)))  # Coeff precision
+n_angle = int(
+    np.ceil(5.652 + np.log2(10 * bodipy_ham.one_norm * 2 * bodipy_ham.num_orbitals / error))
+)  # Rotation angle precision
 
 prep_op = qre.PrepTHC(bodipy_ham, coeff_precision=n_coeff, select_swap_depth=4)
 select_op = qre.SelectTHC(bodipy_ham, rotation_precision=n_angle, num_batches=5)
@@ -301,42 +322,47 @@ walk_op = qre.QubitizeTHC(bodipy_ham, prep_op=prep_op, select_op=select_op)
 # whose degree determines the sharpness of the filter. Following Zhou et al. (2025) [#Zhou2025]_, we set the polynomial
 # degree using Figure 7 from the paper, which relates the degree to the desired spectral resolution.
 
+
 def polynomial_degree(one_norm):
     """Calculate polynomial degree parameters from Zhou et al. (2025)"""
-    e_hi = 0.0701 # Ha
-    e_lo = 0.0507 # Ha
-    d_hi = 4.7571 * (one_norm + e_hi)/ 0.01  + 321.2051
-    d_lo = 4.7571 * (one_norm + e_lo)/ 0.01  + 321.2051
+    e_hi = 0.0701  # Ha
+    e_lo = 0.0507  # Ha
+    d_hi = 4.7571 * (one_norm + e_hi) / 0.01 + 321.2051
+    d_lo = 4.7571 * (one_norm + e_lo) / 0.01 + 321.2051
     poly_degree = int(np.ceil(d_hi + d_lo))
     return poly_degree
+
 
 ##################################################################
 # We can now set up the resource estimation for the PDT algorithm by defining the circuit as shown in Figure 4
 # of our reference.
 
+
 def pdt_circuit(walk_op, poly_degree, num_slaters=1e4):
     num_qubits = int(np.ceil(np.log2(num_slaters)))
     qre.QROMStatePreparation(
-            num_state_qubits = num_qubits,
-            positive_and_real = False,
-        )
+        num_state_qubits=num_qubits,
+        positive_and_real=False,
+    )
     qre.QROM(num_bitstrings=2**num_qubits, size_bitstring=num_qubits, select_swap_depth=1)
     # GQSP Spectral Filter
-    qre.GQSP(walk_op,
-            d_plus=poly_degree,
-            d_minus=0
-            )
+    qre.GQSP(walk_op, d_plus=poly_degree, d_minus=0)
     # Multi-Controlled-X
     qre.MultiControlledX(
-            num_ctrl_wires=2,
-            num_zero_ctrl=1,
+        num_ctrl_wires=2,
+        num_zero_ctrl=1,
     )
     # Uncompute state preparation
-    qre.Adjoint(qre.QROMStatePreparation(
-            num_state_qubits = num_qubits,
-            positive_and_real = False,
-        ))
-    qre.Adjoint(qre.QROM(num_bitstrings=2**num_qubits, size_bitstring=num_qubits, select_swap_depth=1))
+    qre.Adjoint(
+        qre.QROMStatePreparation(
+            num_state_qubits=num_qubits,
+            positive_and_real=False,
+        )
+    )
+    qre.Adjoint(
+        qre.QROM(num_bitstrings=2**num_qubits, size_bitstring=num_qubits, select_swap_depth=1)
+    )
+
 
 ##################################################################
 # Now, that we have all the components set up, we can run the resource estimation for the PDT algorithm
@@ -345,7 +371,7 @@ def pdt_circuit(walk_op, poly_degree, num_slaters=1e4):
 qubits_pdt = []
 toffolis_pdt = []
 
-poly_deg = polynomial_degree(bodipy_ham.one_norm) # Calculate polynomial degree
+poly_deg = polynomial_degree(bodipy_ham.one_norm)  # Calculate polynomial degree
 resource_counts = qre.estimate(pdt_circuit, config=cfg)(walk_op, poly_deg, num_slaters=1e4)
 print(resource_counts)
 
