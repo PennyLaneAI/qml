@@ -15,7 +15,7 @@ that approximates the interaction tensor via a low-rank factorization.
 To answer this, we must move beyond asymptotic scaling and determine the concrete resource requirements.
 In this demo, we use PennyLane's logical resource :mod:`estimator <pennylane.estimator>`
 to calculate the precise costs and demonstrate how to optimize the algorithm to fit on constrained devices with
-a few hundred logical qubits. In particular, we show that it is possible to perform **QPE for the 76-orbital active space of FeMoco with fewer than 500 logical qubits**.
+a few hundred logical qubits. In particular, we show how to implement **QPE for the 76-orbital active space of FeMoco, using fewer than 500 logical qubits**.
 
 .. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_re_for_qubitization.png
     :align: center
