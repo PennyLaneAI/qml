@@ -172,25 +172,25 @@ print(magic_state_injection_circuit(np.pi / 3))
 # to converge toward a pure state [#Bravyi2005]_. If the initial states are too noisy, the protocol will 
 # fail to improve them.
 #      
-# Current research
-# ----------------
+# Outlook and recent developments
+# -------------------------------
 #
-# Current research in the field focuses on developing more 
+# Current research in the field focuses of magic states on developing more 
 # efficient protocols for generating high-fidelity magic states and achieving robust experimental 
-# implementations across various qubit architectures. 
+# implementations across various qubit architectures.
 #
 # A 5-to-1 distillation protocol was recently implemented as a proof-of-principle at the logical level 
 # on a neutral-atom quantum computer [#QuEra2025]_. This achievement leverage the parallel control and 
 # reconfigurability offered by atom platforms. However, in order to run deep computations, 
 # further improvements regarding both the fidelity and the speed of the distillation are required.  
 # Meanwhile, on the theoretical front, a pathway for optimizing MSD methods involves performing 
-# the protocol, or at least portions of it, at the physical level [#Ruiz2025]_, [#Itogawa2025]_. 
+# the protocol, or at least portions of it, at the physical level [#Ruiz2025]_, [#Itogawa2025]_, [#Hirano2024]_. 
 # In [#Ruiz2025]_, for example, the authors exploit the biased-noise properties of cat qubits 
 # to "unfold" a 3D outer code into a 2D layout, improving both the time and qubit overheads. 
 #
 # Parallel to these efforts, the first experimental verification and characterization of a cultivation 
 # protocol was recently achieved on a superconducting-qubit architecture [#Google2025]_. 
-# However, this is only the beginning; multiple proposals are currently being developed to further 
+# But this is only the beginning; multiple proposals are currently being developed to further 
 # improve cultivation protocols. For instance, addressing the complexity
 # of the **Escape** stage by introducing easier-to-decode expansion methods [#Chen2025]_, and 
 # providing alternatives to the "grafting" method, used in the original MSC proposal, such as 
@@ -246,6 +246,12 @@ print(magic_state_injection_circuit(np.pi / 3))
 #    Tomohiro Itogawa, Yugo Takada, Yutaka Hirano, and Keisuke Fujii. 
 #    "Efficient magic state distillation by zero-Level distillation."
 #    `PRX Quantum 6, 020356 (2025) <https://journals.aps.org/prxquantum/abstract/10.1103/thxx-njr6>`__.
+#
+# .. [#Hirano2024]
+#
+#    Yutaka Hirano, Tomohiro Itogawa, and Keisuke Fujii.
+#    "Leveraging Zero-Level Distillation to Generate High-Fidelity Magic States."
+#    `arXiv preprint arXiv:2404.09740 <https://arxiv.org/abs/2404.09740>`__.
 #
 # .. [#Google2025]
 #
