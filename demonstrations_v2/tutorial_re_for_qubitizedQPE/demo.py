@@ -8,7 +8,7 @@ The most advanced versions of QPE rely on
 `Qubitization <https://pennylane.ai/qml/demos/tutorial_qubitization>`_  to encode chemical Hamiltonians :math:`H` as unitary operators. This leverages a `Linear Combination of Unitaries (LCU) <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding>`_ decomposition to create a
 `Block Encoding <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding>`_ of :math:`H` , which is then used to construct a "Quantum Walk" operator :math:`W` that is used as input to QPE.
 
-In this demo, we use the **Tensor Hypercontraction (THC)** representation, a state-of-the-art LCU decomposition for quantum chemistry
+We focus on the Tensor Hypercontraction (THC) representation, a state-of-the-art LCU decomposition for quantum chemistry
 that approximates the interaction tensor via a low-rank factorization.
 
 **But is implementing this quantum algorithm feasible on early fault-tolerant hardware?**
