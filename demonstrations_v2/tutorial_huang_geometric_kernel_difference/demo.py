@@ -542,5 +542,7 @@ plt.show()
 #
 # .. [#Huang2021]
 #
-#     Huang, Hsin-Yuan, Michael Broughton, Masoud Mohseni, Ryan Babbush, Sergio Boixo, Hartmut Neven, and Jarrod R. McClean. "Power of data in quantum machine learning." Nature Communications 12, no. 1 (2021): 2631. `arXiv:2011.01938 <https://arxiv.org/abs/2011.01938>`__
+#     Huang, Hsin-Yuan, Michael Broughton, Masoud Mohseni, Ryan Babbush, Sergio Boixo, Hartmut Neven, and Jarrod R. McClean. 
+#     "Power of data in quantum machine learning." 
+#     `Nature Communications 12, 2631 (2021) <https://www.nature.com/articles/s41467-021-22539-9>`__.
 #
