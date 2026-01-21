@@ -130,9 +130,10 @@ n_angle = 20
 # Estimating Qubitized QPE Cost
 # -----------------------------
 # With these parameters in hand, we can esimate the total resources. The full algorithm consists of the Walk Operator,
-# constructed via :class:`~.pennylane.estimator.templates.QubitizeTHC`, running within a QPE routine.
+# constructed via `QubitizeTHC <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.templates.QubitizeTHC.html>`_, running within a QPE routine.
 #
-# We  note that :class:`~.pennylane.estimator.templates.SelectTHC` oracle implementation is based on the description in
+# We  note that `SelectTHC <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.templates.SelectTHC.html>`_
+# oracle implementation is based on the description in
 # von Burg et al. [#vonburg]_. This work uses the phase gradient technique to implement Givens rotations, and thus requires an
 # auxiliary resource state for addition of phase. The ``SelectTHC`` template doesn't include the cost of preparation of this
 # phase gradient state, so we must explicitly estimate this overhead and add it to the final cost of the QPE circuit.
@@ -170,7 +171,7 @@ print(f"Resources for Qubitized QPE for FeMoco(76): \n {total_cost}\n")
 #    While this does not represent the optimal gate count, it allows us to
 #    observe the pure trade-off between batch size and qubit count without confounding factors.
 #
-# This particular argument is accessible through the :class:`~.pennylane.estimator.SelectTHC` operator as
+# This particular argument is accessible through the :class:`~.pennylane.estimator.templates.SelectTHC` operator as
 # ``num_batches``. Let's see how the resources change for FeMoco as we vary this parameter:
 
 batch_sizes = [1, 2, 3, 5, 10, 75]
