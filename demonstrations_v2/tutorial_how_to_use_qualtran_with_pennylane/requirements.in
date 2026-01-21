@@ -1,3 +1,4 @@
 qualtran
 cairosvg
 Pillow
+numpy<=2.3
