@@ -15,7 +15,8 @@
         }
     ],
     "executable_stable": true,
-    "executable_latest": true,
+    "_comment_executable_latest": "Qualtran>0.6.1 needs to release in order to have compatibility with PL>0.46.",
+    "executable_latest": false,
     "dateOfPublication": "2025-08-29T00:00:00+00:00",
     "dateOfLastModification": "2026-01-21T15:48:14+00:00",
     "categories": [

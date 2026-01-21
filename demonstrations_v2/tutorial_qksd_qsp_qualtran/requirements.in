@@ -1,3 +1,4 @@
-qualtran
+# qualtran>0.6.1 added NumPy 2.x support
+qualtran>0.6.1
 # openfermion 1.7.1 added NumPy 2.x support
 openfermion==1.7.1
